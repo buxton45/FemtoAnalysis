@@ -1,0 +1,18 @@
+##Files to be ignored by Git
+
+*~
+*.o
+*.so
+*.d
+*.root
+*.txt
+*.pdf
+*.eps
+*.xml
+*.jdl
+AutoDict*
+test*
+trash*
+analysis_*
+Old Stuff/*
+SuccessRates*

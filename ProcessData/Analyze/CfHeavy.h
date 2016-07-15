@@ -1,0 +1,107 @@
+///////////////////////////////////////////////////////////////////////////
+// CfHeavy:                                                              //
+//                                                                       //
+//    A collection of CfLite* to be combined via a weighted              //
+//    average routine, hence the name "Heavy".  This class will contain  //
+//    a vector<CfLite*>                                                  //
+//                                                                       //
+///////////////////////////////////////////////////////////////////////////
+
+#ifndef CFHEAVY_H
+#define CFHEAVY_H
+
+#include <iostream>
+#include <iomanip>
+#include <math.h>
+#include <vector>
+#include <assert.h>
+
+#include "TF1.h"
+#include "TH1F.h"
+#include "TFile.h"
+#include "TCanvas.h"
+#include "TApplication.h"
+#include "TPaveText.h"
+#include "TStyle.h"
+#include "TAxis.h"
+#include "TGraph.h"
+#include "TMath.h"
+
+using std::cout;
+using std::endl;
+using std::vector;
+
+#include "CfLite.h"
+class CfLite;
+
+class CfHeavy {
+
+public:
+
+
+  CfHeavy(TString aHeavyCfName, TString aHeavyCfTitle, vector<CfLite*> &aCfLiteCollection, double aMinNorm, double aMaxNorm);
+  virtual ~CfHeavy();
+
+  CfHeavy(const CfHeavy &aHeavy);
+  CfHeavy& operator=(const CfHeavy& aHeavy);
+
+  void CombineCfs();
+  void CombineCfs(TString aReturnName, TString aReturnTitle);
+  void Rebin(int aRebinFactor);
+  void Rebin(int aRebinFactor, double aMinNorm, double aMaxNorm);
+
+  void AddCfLite(CfLite* aCfLite);
+
+  TObjArray* GetNumCollection();
+  TObjArray* GetDenCollection();
+  TObjArray* GetCfCollection();
+
+  void SaveAllCollectionsAndCf(TString aPreName, TString aPostName, TFile *aFile);
+
+
+  //inline-----------------------
+  TH1* GetHeavyCf();
+  TH1* GetHeavyCfClone();
+
+
+private:
+
+  TString fHeavyCfName;
+  TString fHeavyCfTitle;
+
+  vector<CfLite*> fCfLiteCollection;
+  int fCollectionSize;
+
+  TH1* fHeavyCf;
+  double fMinNorm, fMaxNorm;
+
+
+
+
+
+#ifdef __ROOT__
+  ClassDef(CfHeavy, 1)
+#endif
+};
+
+
+inline TH1* CfHeavy::GetHeavyCf() {return fHeavyCf;}
+inline TH1* CfHeavy::GetHeavyCfClone() {return (TH1*)fHeavyCf->Clone();}
+
+
+
+
+
+
+#endif
+
+
+
+
+
+
+
+
+
+
+
