@@ -38,23 +38,23 @@ int main(int argc, char **argv)
 
   //-----Data
 
-  TString FileLocationBase = "~/Analysis/K0Lam/Results_cXicKch_20160202/Results_cXicKch_20160202";
+  TString FileLocationBase = "~/Analysis/FemtoAnalysis/Results/Results_cXicKch_20160202/Results_cXicKch_20160202";
   Analysis* XiKchP = new Analysis(FileLocationBase,kXiKchP,k0010);
   Analysis* AXiKchP = new Analysis(FileLocationBase,kAXiKchP,k0010);
   Analysis* XiKchM = new Analysis(FileLocationBase,kXiKchM,k0010);
   Analysis* AXiKchM = new Analysis(FileLocationBase,kAXiKchM,k0010);
 
-  TString SaveFileName = "~/Analysis/K0Lam/Results_cXicKch_20160202/0010/Results_cXicKch_20160202_0010.root";
+  TString SaveFileName = "~/Analysis/FemtoAnalysis/Results/Results_cXicKch_20160202/0010/Results_cXicKch_20160202_0010.root";
 
   //-----MC
 /*
-  TString FileLocationBaseMC = "~/Analysis/K0Lam/Results_cXicKch_20160125/Results_cXicKch_MC_20160125";
+  TString FileLocationBaseMC = "~/Analysis/FemtoAnalysis/Results/Results_cXicKch_20160125/Results_cXicKch_MC_20160125";
   Analysis* XiKchPMC = new Analysis(FileLocationBaseMC,kXiKchP,k0010);
   Analysis* AXiKchPMC = new Analysis(FileLocationBaseMC,kAXiKchP,k0010);
   Analysis* XiKchMMC = new Analysis(FileLocationBaseMC,kXiKchM,k0010);
   Analysis* AXiKchMMC = new Analysis(FileLocationBaseMC,kAXiKchM,k0010);
 
-  TString FileLocationBaseMCd = "~/Analysis/K0Lam/Results_cXicKch_20160125/Results_cXicKch_MCd_20160125";
+  TString FileLocationBaseMCd = "~/Analysis/FemtoAnalysis/Results/Results_cXicKch_20160125/Results_cXicKch_MCd_20160125";
   Analysis* XiKchPMCd = new Analysis(FileLocationBaseMCd,kXiKchP,k0010);
   Analysis* AXiKchPMCd = new Analysis(FileLocationBaseMCd,kAXiKchP,k0010);
   Analysis* XiKchMMCd = new Analysis(FileLocationBaseMCd,kXiKchM,k0010);
@@ -127,7 +127,7 @@ int main(int argc, char **argv)
   bool bDrawMC = false;
 
   bool bSaveFigures = true;
-  TString tSaveFiguresLocation = "~/Analysis/K0Lam/Results_cXicKch_20160202/0010/";
+  TString tSaveFiguresLocation = "~/Analysis/FemtoAnalysis/Results/Results_cXicKch_20160202/0010/";
   //-------------------------------------------------------------------
 
   if(bContainsKStarCfs)

@@ -71,7 +71,7 @@ public:
   double GetBohrRadius(AnalysisType aAnalysisType);
   void CheckIfAllOfSameCoulombType();
 
-  void LoadLednickyHFunctionFile(TString aFileBaseName="~/Analysis/MathematicaNumericalIntegration/LednickyHFunction");
+  void LoadLednickyHFunctionFile(TString aFileBaseName="~/Analysis/FemtoAnalysis/ProcessData/CoulombFitter/LednickyHFunction");
   void MakeNiceScattLenVectors();
   void MakeOtherVectors();
   void LoadInterpHistFile(TString aFileBaseName);  //TODO should this be a virtual function?

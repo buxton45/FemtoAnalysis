@@ -39,8 +39,8 @@ int main(int argc, char **argv)
 
 //-----------------------------------------------------------------------------
 
-  TString FileLocationBaseNew = "/home/jesse/FemtoAnalysis/Results/Results_cLamcKch_AsRc_KchAndLamFix2_20160229/Results_cLamcKch_AsRc_KchAndLamFix2_20160229";
-  TString FileLocationBaseOld = "/home/jesse/FemtoAnalysis/Results/Results_cLamcKch_AsRc_20151007/Results_cLamcKch_AsRc_20151007";
+  TString FileLocationBaseNew = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_AsRc_KchAndLamFix2_20160229/Results_cLamcKch_AsRc_KchAndLamFix2_20160229";
+  TString FileLocationBaseOld = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_AsRc_20151007/Results_cLamcKch_AsRc_20151007";
 
 
   bool bSaveFigures = true;

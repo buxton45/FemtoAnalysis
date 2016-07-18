@@ -37,8 +37,8 @@ int main(int argc, char **argv)
 //-----------------------------------------------------------------------------
 
   //-----Data
-  //TString FileLocationBase = "~/Analysis/K0Lam/Results_cLamcKch_AsRc_20151007/Results_cLamcKch_AsRc_20151007";
-  TString FileLocationBase = "~/Analysis/K0Lam/Results_cLamcKch_AsRc_KchAndLamFix2_20160229/Results_cLamcKch_AsRc_KchAndLamFix2_20160229";
+  //TString FileLocationBase = "~/Analysis/FemtoAnalysis/Results/Results_cLamcKch_AsRc_20151007/Results_cLamcKch_AsRc_20151007";
+  TString FileLocationBase = "~/Analysis/FemtoAnalysis/Results/Results_cLamcKch_AsRc_KchAndLamFix2_20160229/Results_cLamcKch_AsRc_KchAndLamFix2_20160229";
   Analysis* LamKchP = new Analysis(FileLocationBase,kLamKchP,k0010);
   Analysis* ALamKchP = new Analysis(FileLocationBase,kALamKchP,k0010);
   Analysis* LamKchM = new Analysis(FileLocationBase,kLamKchM,k0010);
@@ -68,7 +68,7 @@ int main(int argc, char **argv)
   bool bContainsKStar2dCfs = false;
 
   bool bSaveFigures = false;
-//  TString tSaveFiguresLocation = "~/Analysis/K0Lam/Results_cLamcKch_AsRc_20151007/0010/";
+//  TString tSaveFiguresLocation = "~/Analysis/FemtoAnalysis/Results/Results_cLamcKch_AsRc_20151007/0010/";
   TString tSaveFiguresLocation = "~/Poster2016/";
   //-------------------------------------------------------------------
 

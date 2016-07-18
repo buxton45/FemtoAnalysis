@@ -83,7 +83,7 @@ int main(int argc, char **argv)
 
 //-----------------------------------------------------------------------------
 
-  TString tFileLocationBase = "/home/jesse/FemtoAnalysis/Results/Results_cLamcKch_AsRc_20151007/Results_cLamcKch_AsRc_20151007";
+  TString tFileLocationBase = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_AsRc_20151007/Results_cLamcKch_AsRc_20151007";
 
   AnalysisType tAnType = kLamKchP;
   AnalysisType tConjType = kALamKchM;

@@ -95,13 +95,13 @@ int main(int argc, char **argv)
   //the program ends and closes everything
 //-----------------------------------------------------------------------------
 
-  TString FileLocationBaseMC = "~/Analysis/K0Lam/Results_cLamcKch_AsRcMC_KchAndLamFix2_20160229/Results_cLamcKch_AsRcMC_KchAndLamFix2_20160229";
+  TString FileLocationBaseMC = "~/Analysis/FemtoAnalysis/Results/Results_cLamcKch_AsRcMC_KchAndLamFix2_20160229/Results_cLamcKch_AsRcMC_KchAndLamFix2_20160229";
   Analysis* LamKchPMC = new Analysis(FileLocationBaseMC,kLamKchP,k0010);
   Analysis* ALamKchPMC = new Analysis(FileLocationBaseMC,kALamKchP,k0010);
   Analysis* LamKchMMC = new Analysis(FileLocationBaseMC,kLamKchM,k0010);
   Analysis* ALamKchMMC = new Analysis(FileLocationBaseMC,kALamKchM,k0010);
 /*
-  TString FileLocationBaseMCd = "~/Analysis/K0Lam/Results_cLamcKch_AsRcMCd_KchAndLamFix2_20160229/Results_cLamcKch_AsRcMCd_KchAndLamFix2_20160229";
+  TString FileLocationBaseMCd = "~/Analysis/FemtoAnalysis/Results/Results_cLamcKch_AsRcMCd_KchAndLamFix2_20160229/Results_cLamcKch_AsRcMCd_KchAndLamFix2_20160229";
   Analysis* LamKchPMCd = new Analysis(FileLocationBaseMCd,kLamKchP,k0010);
   Analysis* ALamKchPMCd = new Analysis(FileLocationBaseMCd,kALamKchP,k0010);
   Analysis* LamKchMMCd = new Analysis(FileLocationBaseMCd,kLamKchM,k0010);

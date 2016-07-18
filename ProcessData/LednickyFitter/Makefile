@@ -1,5 +1,5 @@
-ANALYZE_DIR = /home/jesse/FemtoAnalysis/ProcessData/Analyze
-UTILITIES_DIR = /home/jesse/FemtoAnalysis/ProcessData/Utilities
+ANALYZE_DIR = /home/jesse/Analysis/FemtoAnalysis/ProcessData/Analyze
+UTILITIES_DIR = /home/jesse/Analysis/FemtoAnalysis/ProcessData/Utilities
 
 LIBS   = $(shell root-config --libs) -lMinuit
 CFLAGS = $(shell root-config --cflags) -Wall -I${ANALYZE_DIR} -I${UTILITIES_DIR} -g -O0

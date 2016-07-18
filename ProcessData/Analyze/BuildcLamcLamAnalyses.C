@@ -37,7 +37,7 @@ int main(int argc, char **argv)
 //-----------------------------------------------------------------------------
 
 
-  TString FileLocationBase = "~/Analysis/K0Lam/Results_cLamcLam_AsRc_20150923/Results_cLamcLam_AsRc_20150923";
+  TString FileLocationBase = "~/Analysis/FemtoAnalysis/Results/Results_cLamcLam_AsRc_20150923/Results_cLamcLam_AsRc_20150923";
 
   Analysis* LamLam = new Analysis(FileLocationBase,kLamLam,k0010);
   Analysis* ALamALam = new Analysis(FileLocationBase,kALamALam,k0010);
@@ -45,7 +45,7 @@ int main(int argc, char **argv)
 
 
   //--------Jai's Plots-----------------------------------------------------------------------------
-  TString JaiLamLamLocation = "~/Analysis/K0Lam/Results_cLamcLam_AsRc_20150923/JaicfsLamLam.root";
+  TString JaiLamLamLocation = "~/Analysis/FemtoAnalysis/Results/Results_cLamcLam_AsRc_20150923/JaicfsLamLam.root";
   TFile tFileJaiLamLam(JaiLamLamLocation);
   TH1D* tJaiLamLam0010 = (TH1D*)tFileJaiLamLam.Get("LamLam0-10");
   tJaiLamLam0010->SetDirectory(0);
@@ -54,7 +54,7 @@ int main(int argc, char **argv)
     tJaiLamLam0010->SetMarkerColor(2);
     tJaiLamLam0010->SetLineColor(2);
 
-  TString JaiALamALamLocation = "~/Analysis/K0Lam/Results_cLamcLam_AsRc_20150923/JaicfsALamALam.root";
+  TString JaiALamALamLocation = "~/Analysis/FemtoAnalysis/Results/Results_cLamcLam_AsRc_20150923/JaicfsALamALam.root";
   TFile tFileJaiALamALam(JaiALamALamLocation);
   TH1D* tJaiALamALam0010 = (TH1D*)tFileJaiALamALam.Get("ALamALam0-10");
   tJaiALamALam0010->SetDirectory(0);
@@ -63,7 +63,7 @@ int main(int argc, char **argv)
     tJaiALamALam0010->SetMarkerColor(2);
     tJaiALamALam0010->SetLineColor(2);
 
-  TString JaiLamALamLocation = "~/Analysis/K0Lam/Results_cLamcLam_AsRc_20150923/JaicfsLamALamKstarMomCorrected.root";
+  TString JaiLamALamLocation = "~/Analysis/FemtoAnalysis/Results/Results_cLamcLam_AsRc_20150923/JaicfsLamALamKstarMomCorrected.root";
   TFile tFileJaiLamALam(JaiLamALamLocation);
   TH1D* tJaiLamALam0010 = (TH1D*)tFileJaiLamALam.Get("LamALam0-10centrality_varBin5BothFieldsKstarMomCorrected");
   tJaiLamALam0010->SetDirectory(0);

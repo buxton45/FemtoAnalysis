@@ -38,7 +38,7 @@ int main(int argc, char **argv)
 
 //-----------------------------------------------------------------------------
 
-  TString FileLocationBase = "/home/jesse/FemtoAnalysis/Results/Results_cLamcKch_AsRc_KchAndLamFix2_20160229/Results_cLamcKch_AsRc_KchAndLamFix2_20160229";
+  TString FileLocationBase = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_AsRc_KchAndLamFix2_20160229/Results_cLamcKch_AsRc_KchAndLamFix2_20160229";
 
   bool bRunLamKchP = false;
   bool bRunALamKchM = false;

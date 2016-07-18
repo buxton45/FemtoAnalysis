@@ -37,21 +37,21 @@ int main(int argc, char **argv)
 //-----------------------------------------------------------------------------
 
   //-----Data
-  TString FileLocationBase = "~/Analysis/K0Lam/Results_cLamK0_AsRc_20150923/Results_cLamK0_AsRc_20150923";
-  //TString FileLocationBase = "~/Analysis/K0Lam/Results_cLamK0_AsRc";
+  TString FileLocationBase = "~/Analysis/FemtoAnalysis/Results/Results_cLamK0_AsRc_20150923/Results_cLamK0_AsRc_20150923";
+  //TString FileLocationBase = "~/Analysis/FemtoAnalysis/Results/Results_cLamK0_AsRc";
   Analysis* LamK0 = new Analysis(FileLocationBase,kLamK0,k0010);
   Analysis* ALamK0 = new Analysis(FileLocationBase,kALamK0,k0010);
 
-  TString SaveFileName = "~/Analysis/K0Lam/Results_cLamK0_AsRc_20150923/0010/Results_cLamK0_AsRc_20150923_0010TEST.root";
+  TString SaveFileName = "~/Analysis/FemtoAnalysis/Results/Results_cLamK0_AsRc_20150923/0010/Results_cLamK0_AsRc_20150923_0010TEST.root";
 
 
   //-----MC
 
-  TString FileLocationBaseMC = "~/Analysis/K0Lam/Results_cLamK0_AsRc_20150923/Results_cLamK0_AsRcMC_20150923";
+  TString FileLocationBaseMC = "~/Analysis/FemtoAnalysis/Results/Results_cLamK0_AsRc_20150923/Results_cLamK0_AsRcMC_20150923";
   Analysis* LamK0MC = new Analysis(FileLocationBaseMC,kLamK0,k0010);
   Analysis* ALamK0MC = new Analysis(FileLocationBaseMC,kALamK0,k0010);
 
-  TString FileLocationBaseMCd = "~/Analysis/K0Lam/Results_cLamK0_AsRc_20150923/Results_cLamK0_AsRcMCd_20150923";
+  TString FileLocationBaseMCd = "~/Analysis/FemtoAnalysis/Results/Results_cLamK0_AsRc_20150923/Results_cLamK0_AsRcMCd_20150923";
   Analysis* LamK0MCd = new Analysis(FileLocationBaseMCd,kLamK0,k0010);
   Analysis* ALamK0MCd = new Analysis(FileLocationBaseMCd,kALamK0,k0010);
 
@@ -99,7 +99,7 @@ int main(int argc, char **argv)
   bool bDrawMC = true;
 
   bool bSaveFigures = true;
-  TString tSaveFiguresLocation = "~/Analysis/K0Lam/Results_cLamK0_AsRc_20150923/0010/";
+  TString tSaveFiguresLocation = "~/Analysis/FemtoAnalysis/Results/Results_cLamK0_AsRc_20150923/0010/";
   //-------------------------------------------------------------------
 
   if(bContainsKStarCfs)

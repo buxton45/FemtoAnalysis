@@ -98,10 +98,10 @@ int main(int argc, char **argv)
   //This allows the user a chance to look at and manipulate a TBrowser before
   //the program ends and closes everything
 //-----------------------------------------------------------------------------
-  TString FileLocationBase = "~/Analysis/K0Lam/Results_cLamcKch_AsRc_KchAndLamFix2_20160229/Results_cLamcKch_AsRc_KchAndLamFix2_20160229";
+  TString FileLocationBase = "~/Analysis/FemtoAnalysis/Results/Results_cLamcKch_AsRc_KchAndLamFix2_20160229/Results_cLamcKch_AsRc_KchAndLamFix2_20160229";
     Analysis* LamKchP = new Analysis(FileLocationBase,kLamKchP,k0010);
 
-  TString FileLocationBaseMC = "~/Analysis/K0Lam/Results_cLamcKch_AsRcMC_KchAndLamFix2_20160229/Results_cLamcKch_AsRcMC_KchAndLamFix2_20160229";
+  TString FileLocationBaseMC = "~/Analysis/FemtoAnalysis/Results/Results_cLamcKch_AsRcMC_KchAndLamFix2_20160229/Results_cLamcKch_AsRcMC_KchAndLamFix2_20160229";
     Analysis* LamKchPMCTot = new Analysis(FileLocationBaseMC,kLamKchP,k0010);
 //-----------------------------------------------------------------------------
 

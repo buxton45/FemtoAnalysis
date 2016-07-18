@@ -45,7 +45,7 @@ int main(int argc, char **argv)
     Share45[1] = 5;
 //-----------------------------------------------------------------------------
 
-  TString FileLocationBase = "/home/jesse/FemtoAnalysis/Results/Results_cLamcKch_AsRc_20151007/Results_cLamcKch_AsRc_20151007";
+  TString FileLocationBase = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_AsRc_20151007/Results_cLamcKch_AsRc_20151007";
 
   bool bRunLamKchP = false;
   bool bRunALamKchM = false;

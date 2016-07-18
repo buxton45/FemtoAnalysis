@@ -40,19 +40,19 @@ int main(int argc, char **argv)
 //-----------------------------------------------------------------------------
 
   //-----Data
-  TString FileLocationBaseNoFix = "~/Analysis/K0Lam/Results_cLamcKch_AsRc_20151007/Results_cLamcKch_AsRc_20151007";
+  TString FileLocationBaseNoFix = "~/Analysis/FemtoAnalysis/Results/Results_cLamcKch_AsRc_20151007/Results_cLamcKch_AsRc_20151007";
     Analysis* LamKchPNoFix = new Analysis(FileLocationBaseNoFix,kLamKchP,k0010);
     Analysis* ALamKchPNoFix = new Analysis(FileLocationBaseNoFix,kALamKchP,k0010);
     Analysis* LamKchMNoFix = new Analysis(FileLocationBaseNoFix,kLamKchM,k0010);
     Analysis* ALamKchMNoFix = new Analysis(FileLocationBaseNoFix,kALamKchM,k0010);
 
-  TString FileLocationBaseFix1 = "~/Analysis/K0Lam/Results_cLamcKch_AsRc_KchAndLamFix1_20160229/Results_cLamcKch_AsRc_KchAndLamFix1_20160229";
+  TString FileLocationBaseFix1 = "~/Analysis/FemtoAnalysis/Results/Results_cLamcKch_AsRc_KchAndLamFix1_20160229/Results_cLamcKch_AsRc_KchAndLamFix1_20160229";
     Analysis* LamKchPFix1 = new Analysis(FileLocationBaseFix1,kLamKchP,k0010);
     Analysis* ALamKchPFix1 = new Analysis(FileLocationBaseFix1,kALamKchP,k0010);
     Analysis* LamKchMFix1 = new Analysis(FileLocationBaseFix1,kLamKchM,k0010);
     Analysis* ALamKchMFix1 = new Analysis(FileLocationBaseFix1,kALamKchM,k0010);
 
-  TString FileLocationBaseFix2 = "~/Analysis/K0Lam/Results_cLamcKch_AsRc_KchAndLamFix2_20160229/Results_cLamcKch_AsRc_KchAndLamFix2_20160229";
+  TString FileLocationBaseFix2 = "~/Analysis/FemtoAnalysis/Results/Results_cLamcKch_AsRc_KchAndLamFix2_20160229/Results_cLamcKch_AsRc_KchAndLamFix2_20160229";
     Analysis* LamKchPFix2 = new Analysis(FileLocationBaseFix2,kLamKchP,k0010);
     Analysis* ALamKchPFix2 = new Analysis(FileLocationBaseFix2,kALamKchP,k0010);
     Analysis* LamKchMFix2 = new Analysis(FileLocationBaseFix2,kLamKchM,k0010);

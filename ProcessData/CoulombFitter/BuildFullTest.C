@@ -7,8 +7,8 @@ CoulombFitter *myFitter = NULL;
 //______________________________________________________________________________
 void fcn(Int_t &npar, Double_t *gin, Double_t &f, Double_t *par, Int_t iflag)
 {
-//  myFitter->CalculateChi2PML(npar,f,par);
-  myFitter->CalculateChi2(npar,f,par);
+  myFitter->CalculateChi2PML(npar,f,par);
+//  myFitter->CalculateChi2(npar,f,par);
 //  myFitter->CalculateFakeChi2(npar,f,par);
 }
 
@@ -35,7 +35,7 @@ int main(int argc, char **argv)
 
 //-----------------------------------------------------------------------------
 
-  TString tFileLocationBase = "/home/jesse/FemtoAnalysis/Results/Results_cXicKch_20160202/Results_cXicKch_20160202";
+  TString tFileLocationBase = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cXicKch_20160202/Results_cXicKch_20160202";
 
 //  AnalysisType tAnType = kAXiKchP;
 //  AnalysisType tConjType = kXiKchM;
@@ -111,7 +111,7 @@ int main(int argc, char **argv)
 
   tSharedAn->RebinAnalyses(2);
 
-  tSharedAn->SetFitType(kChi2);
+//  tSharedAn->SetFitType(kChi2);
 
   tSharedAn->CreateMinuitParameters();
 
@@ -127,14 +127,14 @@ int main(int argc, char **argv)
   tFitter->LoadInterpHistFile(tFileLocationInterpHistos);
 
 /*
-  TString tFileLocationNtupleBase = "~/Analysis/K0Lam/Results_cXicKch_20160414/Results_cXicKch_20160414";
+  TString tFileLocationNtupleBase = "~/Analysis/FemtoAnalysis/Results/Results_cXicKch_20160414/Results_cXicKch_20160414";
 //  tFitter->BuildPairKStar3dVec(tFileLocationNtupleBase,kAXiKchP,k0010,kBp2,62,0.,0.31);
 //  tFitter->BuildPairKStar3dVec(tFileLocationNtupleBase,kAXiKchP,k0010,kBp2,31,0.,0.155);
   tFitter->BuildPairKStar3dVec(tFileLocationNtupleBase,kAXiKchP,k0010,kBp2,16,0.,0.16);
 */
 
   //-------------------------------------------
-  TString tPairKStarNtupleDirName = "/home/jesse/FemtoAnalysis/ProcessData/CoulombFitter/NTuples/Roman";
+  TString tPairKStarNtupleDirName = "/home/jesse/Analysis/FemtoAnalysis/ProcessData/CoulombFitter/NTuples/Roman";
   TString tFileBaseName = "Results_cXicKch_20160610";
   TString tOutputName = "PairKStar3dVec_20160610_";
   int tNFiles = 27;
@@ -229,7 +229,7 @@ cout << "tSampleHist1: " << tSampleHist1->GetNbinsX() << endl;
   tPairAn0010->GetKStarCf()->SetMarkerStyle(20);
   tPairAn0010->GetKStarCf()->Draw("same");
 
-//  TString tFileLocationBaseLamKchP = "~/Analysis/K0Lam/Results_cLamcKch_AsRc_20151007/Results_cLamcKch_AsRc_20151007";
+//  TString tFileLocationBaseLamKchP = "~/Analysis/FemtoAnalysis/Results/Results_cLamcKch_AsRc_20151007/Results_cLamcKch_AsRc_20151007";
 //  FitPairAnalysis* tLamKchP0010 = new FitPairAnalysis(tFileLocationBaseLamKchP,kLamKchP,k0010);
 //  tLamKchP0010->GetKStarCf()->SetMarkerStyle(20);
 //  tLamKchP0010->GetKStarCf()->Draw("same");
@@ -507,7 +507,7 @@ cout << "tSampleHist1: " << tSampleHist1->GetNbinsX() << endl;
       }
       tSampleHist1->Draw("p");
 
-      TString tFileLocationBaseLamKchP = "/home/jesse/FemtoAnalysis/Results/Results_cLamcKch_AsRc_20151007/Results_cLamcKch_AsRc_20151007";
+      TString tFileLocationBaseLamKchP = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_AsRc_20151007/Results_cLamcKch_AsRc_20151007";
       FitPairAnalysis* tLamKchP0010 = new FitPairAnalysis(tFileLocationBaseLamKchP,tLamType,k0010);
       tLamKchP0010->GetKStarCf()->SetMarkerStyle(20);
       tLamKchP0010->GetKStarCf()->Draw("same");

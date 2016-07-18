@@ -40,8 +40,8 @@ int main(int argc, char **argv)
 //-----------------------------------------------------------------------------
 //Be sure to set the following...
 
-  TString FileLocationBase_cLamK0 = "/home/jesse/FemtoAnalysis/Results/Results_cLamK0_AsRc_20151228_Old/Results_cLamK0_AsRc_20151228_Old";
-  TString FileLocationBase_cLamcKch = "/home/jesse/FemtoAnalysis/Results/Results_cLamcKch_AsRc_20151007/Results_cLamcKch_AsRc_20151007";
+  TString FileLocationBase_cLamK0 = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamK0_AsRc_20151228_Old/Results_cLamK0_AsRc_20151228_Old";
+  TString FileLocationBase_cLamcKch = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_AsRc_20151007/Results_cLamcKch_AsRc_20151007";
 
   //Choose one
   //tConjPairType is automatically set

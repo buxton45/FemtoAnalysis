@@ -1,4 +1,4 @@
-UTILITIES_DIR = /home/jesse/FemtoAnalysis/ProcessData/Utilities
+UTILITIES_DIR = /home/jesse/Analysis/FemtoAnalysis/ProcessData/Utilities
 
 LIBS   = $(shell root-config --libs)
 CFLAGS = $(shell root-config --cflags) -Wall -I${UTILITIES_DIR} -g -O0

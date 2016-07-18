@@ -61,18 +61,18 @@ int main(int argc, char **argv)
   //the program ends and closes everything
 //-----------------------------------------------------------------------------
   //-----Data
-  TString FileLocationBase = "~/Analysis/K0Lam/Results_cLamcKch_AsRc_KchAndLamFix2_20160229/Results_cLamcKch_AsRc_KchAndLamFix2_20160229";
-  //TString FileLocationBase = "~/Analysis/K0Lam/Results_cLamcKch_As";
+  TString FileLocationBase = "~/Analysis/FemtoAnalysis/Results/Results_cLamcKch_AsRc_KchAndLamFix2_20160229/Results_cLamcKch_AsRc_KchAndLamFix2_20160229";
+  //TString FileLocationBase = "~/Analysis/FemtoAnalysis/Results/Results_cLamcKch_As";
 
 
   //-----MC
-  //TString FileLocationBaseMC = "~/Analysis/K0Lam/Results_cLamcKch_AsRcMC_KchAndLamFix2_20160229/Results_cLamcKch_AsRcMC_KchAndLamFix2_20160229";
-  //TString FileLocationBaseMCd = "~/Analysis/K0Lam/Results_cLamcKch_AsRcMC_KchAndLamFix2_20160229/Results_cLamcKch_AsRcMCd_KchAndLamFix2_20160229";
+  //TString FileLocationBaseMC = "~/Analysis/FemtoAnalysis/Results/Results_cLamcKch_AsRcMC_KchAndLamFix2_20160229/Results_cLamcKch_AsRcMC_KchAndLamFix2_20160229";
+  //TString FileLocationBaseMCd = "~/Analysis/FemtoAnalysis/Results/Results_cLamcKch_AsRcMC_KchAndLamFix2_20160229/Results_cLamcKch_AsRcMCd_KchAndLamFix2_20160229";
 
-  TString FileLocationBaseMC = "~/Analysis/K0Lam/Results_cLamcKch_AsRcMC_RmMisID_20160225/Results_cLamcKch_AsRcMC_RmMisID_20160225";
-  TString FileLocationBaseMCd = "~/Analysis/K0Lam/Results_cLamcKch_AsRcMC_RmMisID_20160225/Results_cLamcKch_AsRcMCd_RmMisID_20160225";
+  TString FileLocationBaseMC = "~/Analysis/FemtoAnalysis/Results/Results_cLamcKch_AsRcMC_RmMisID_20160225/Results_cLamcKch_AsRcMC_RmMisID_20160225";
+  TString FileLocationBaseMCd = "~/Analysis/FemtoAnalysis/Results/Results_cLamcKch_AsRcMC_RmMisID_20160225/Results_cLamcKch_AsRcMCd_RmMisID_20160225";
 
-  TString FileLocationBaseMCFine = "~/Analysis/K0Lam/Results_cLamcKch_AsRcMC_RmMisID_20160225/Results_cLamcKch_AsRcMC_RmMisIDFine_20160225";
+  TString FileLocationBaseMCFine = "~/Analysis/FemtoAnalysis/Results/Results_cLamcKch_AsRcMC_RmMisID_20160225/Results_cLamcKch_AsRcMC_RmMisIDFine_20160225";
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------

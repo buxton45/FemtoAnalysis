@@ -20,9 +20,9 @@ WSTPLIB = WSTP64i4
 WSPREP = ${CADDSDIR}/wsprep
 RM = rm
 
-ANALYZE_DIR = /home/jesse/FemtoAnalysis/ProcessData/Analyze
-LEDNICKYFITTER_DIR = /home/jesse/FemtoAnalysis/ProcessData/LednickyFitter
-UTILITIES_DIR = /home/jesse/FemtoAnalysis/ProcessData/Utilities
+ANALYZE_DIR = /home/jesse/Analysis/FemtoAnalysis/ProcessData/Analyze
+LEDNICKYFITTER_DIR = /home/jesse/Analysis/FemtoAnalysis/ProcessData/LednickyFitter
+UTILITIES_DIR = /home/jesse/Analysis/FemtoAnalysis/ProcessData/Utilities
 
 LIBS   = $(shell root-config --libs) -lMinuit
 #CFLAGS = $(shell root-config --cflags) -Wall -g -O0

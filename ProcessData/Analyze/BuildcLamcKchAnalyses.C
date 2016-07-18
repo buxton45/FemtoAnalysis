@@ -40,24 +40,24 @@ int main(int argc, char **argv)
 //-----------------------------------------------------------------------------
 
   //-----Data
-  TString FileLocationBase = "~/Analysis/K0Lam/Results_cLamcKch_AsRc_KchAndLamFix2_20160229/Results_cLamcKch_AsRc_KchAndLamFix2_20160229";
-  //TString FileLocationBase = "~/Analysis/K0Lam/Results_cLamcKch_As";
+  TString FileLocationBase = "~/Analysis/FemtoAnalysis/Results/Results_cLamcKch_AsRc_KchAndLamFix2_20160229/Results_cLamcKch_AsRc_KchAndLamFix2_20160229";
+  //TString FileLocationBase = "~/Analysis/FemtoAnalysis/Results/Results_cLamcKch_As";
   Analysis* LamKchP = new Analysis(FileLocationBase,kLamKchP,k0010);
   Analysis* ALamKchP = new Analysis(FileLocationBase,kALamKchP,k0010);
   Analysis* LamKchM = new Analysis(FileLocationBase,kLamKchM,k0010);
   Analysis* ALamKchM = new Analysis(FileLocationBase,kALamKchM,k0010);
 
-  TString SaveFileName = "~/Analysis/K0Lam/Results_cLamcKch_AsRc_20151007/0010/Results_cLamcKch_AsRc_20151007_0010TEST.root";
+  TString SaveFileName = "~/Analysis/FemtoAnalysis/Results/Results_cLamcKch_AsRc_20151007/0010/Results_cLamcKch_AsRc_20151007_0010TEST.root";
 
   //-----MC
 
-  TString FileLocationBaseMC = "~/Analysis/K0Lam/Results_cLamcKch_AsRcMC_KchAndLamFix2_20160229/Results_cLamcKch_AsRcMC_KchAndLamFix2_20160229";
+  TString FileLocationBaseMC = "~/Analysis/FemtoAnalysis/Results/Results_cLamcKch_AsRcMC_KchAndLamFix2_20160229/Results_cLamcKch_AsRcMC_KchAndLamFix2_20160229";
   Analysis* LamKchPMC = new Analysis(FileLocationBaseMC,kLamKchP,k0010);
   Analysis* ALamKchPMC = new Analysis(FileLocationBaseMC,kALamKchP,k0010);
   Analysis* LamKchMMC = new Analysis(FileLocationBaseMC,kLamKchM,k0010);
   Analysis* ALamKchMMC = new Analysis(FileLocationBaseMC,kALamKchM,k0010);
 /*
-  TString FileLocationBaseMCd = "~/Analysis/K0Lam/Results_cLamcKch_AsRcMCd_KchAndLamFix2_20160229/Results_cLamcKch_AsRcMCd_KchAndLamFix2_20160229";
+  TString FileLocationBaseMCd = "~/Analysis/FemtoAnalysis/Results/Results_cLamcKch_AsRcMCd_KchAndLamFix2_20160229/Results_cLamcKch_AsRcMCd_KchAndLamFix2_20160229";
   Analysis* LamKchPMCd = new Analysis(FileLocationBaseMCd,kLamKchP,k0010);
   Analysis* ALamKchPMCd = new Analysis(FileLocationBaseMCd,kALamKchP,k0010);
   Analysis* LamKchMMCd = new Analysis(FileLocationBaseMCd,kLamKchM,k0010);
@@ -136,7 +136,7 @@ int main(int argc, char **argv)
   bool bDrawAllKStarTrueVsRec = true;
 
   bool bSaveFigures = false;
-  TString tSaveFiguresLocation = "~/Analysis/K0Lam/Results_cLamcKch_AsRc_20151007/0010/";
+  TString tSaveFiguresLocation = "~/Analysis/FemtoAnalysis/Results/Results_cLamcKch_AsRc_20151007/0010/";
   //-------------------------------------------------------------------
 
   if(bContainsKStarCfs)

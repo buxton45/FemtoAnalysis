@@ -37,7 +37,7 @@ int main(int argc, char **argv)
 //-----------------------------------------------------------------------------
 
   //-----Data
-  TString FileLocationBase = "~/Analysis/K0Lam/Results_cLamK0_AsRc_20150923/Results_cLamK0_AsRc_20150923";
+  TString FileLocationBase = "~/Analysis/FemtoAnalysis/Results/Results_cLamK0_AsRc_20150923/Results_cLamK0_AsRc_20150923";
   Analysis* LamK0 = new Analysis(FileLocationBase,kLamK0,k0010);
   Analysis* ALamK0 = new Analysis(FileLocationBase,kALamK0,k0010);
 
@@ -58,7 +58,7 @@ int main(int argc, char **argv)
   bool bContainsKStar2dCfs = true;
 
   bool bSaveFigures = true;
-  TString tSaveFiguresLocation = "~/Analysis/K0Lam/Results_cLamK0_AsRc_20150923/0010/";
+  TString tSaveFiguresLocation = "~/Analysis/FemtoAnalysis/Results/Results_cLamK0_AsRc_20150923/0010/";
   //-------------------------------------------------------------------
 
   if(bContainsKStar2dCfs)
