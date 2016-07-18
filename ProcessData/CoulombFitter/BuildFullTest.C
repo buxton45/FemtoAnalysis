@@ -37,11 +37,11 @@ int main(int argc, char **argv)
 
   TString tFileLocationBase = "/home/jesse/FemtoAnalysis/Results/Results_cXicKch_20160202/Results_cXicKch_20160202";
 
-  AnalysisType tAnType = kAXiKchP;
-  AnalysisType tConjType = kXiKchM;
+//  AnalysisType tAnType = kAXiKchP;
+//  AnalysisType tConjType = kXiKchM;
 
-//  AnalysisType tAnType = kXiKchP;
-//  AnalysisType tConjType = kAXiKchM;
+  AnalysisType tAnType = kXiKchP;
+  AnalysisType tConjType = kAXiKchM;
    
   TString tAnBaseName = TString(cAnalysisBaseTags[tAnType]);
   TString tAnName0010 = tAnBaseName + TString(cCentralityTags[0]);
