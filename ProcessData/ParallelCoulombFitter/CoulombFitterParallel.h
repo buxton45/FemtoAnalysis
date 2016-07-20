@@ -40,6 +40,7 @@ public:
 
   void UpdatePairRadiusParameters(double aNewRadius);
   void SetUseStaticPairs(bool aUseStaticPairs=true, int aNPairsPerKStarBin=16384);
+  bool CanInterpAllSamplePairs();
 
   void CreateScattLenSubs(double aReF0, double aImF0, double aD0);
 
@@ -47,7 +48,10 @@ public:
 
   td4dVec Get3dPairs(double aKStarMagMin, double aKStarMagMax, int aNbinsK, double *par, int aAnalysisNumber); //One 3dvec for GPU pairs and 1 3dvec for CPU pairs
   td1dVec GetEntireFitCfContent(double aKStarMagMin, double aKStarMagMax, int aNbinsK, double *par, int aAnalysisNumber);
+
   td1dVec GetEntireFitCfContentComplete(double aKStarMagMin, double aKStarMagMax, int aNbinsK, double *par, int aAnalysisNumber);
+  td1dVec GetEntireFitCfContentCompletewStaticPairs(double aKStarMagMin, double aKStarMagMax, double *par, int aAnalysisNumber);
+
   td1dVec GetEntireFitCfContentComplete2(int aNSimPairsPerBin, double aKStarMagMin, double aKStarMagMax, int aNbinsK, double *par);
 
   //void CalculateChi2(int &npar, double &chi2, double *par);

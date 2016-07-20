@@ -88,8 +88,12 @@ public:
 
 //  double* RunInterpolateWfSquared(td2dVec &aPairs, double aReF0, double aImF0, double aD0);
   vector<double> RunInterpolateWfSquared(td2dVec &aPairs, double aReF0, double aImF0, double aD0);
+
   vector<double> RunInterpolateEntireCf(td3dVec &aPairs, double aReF0, double aImF0, double aD0);
+
   vector<double> RunInterpolateEntireCfComplete(td3dVec &aPairs, double aReF0s, double aImF0s, double aD0s, double aReF0t, double aImF0t, double aD0t);
+  vector<double> RunInterpolateEntireCfCompletewStaticPairs(int aAnalysisNumber, double aReF0s, double aImF0s, double aD0s, double aReF0t, double aImF0t, double aD0t);
+
   vector<double> RunInterpolateEntireCfComplete2(int aNSimPairsPerBin, double aKStarMin, double aKStarMax, double aNbinsK, double aR, double aReF0s, double aImF0s, double aD0s, double aReF0t, double aImF0t, double aD0t);
 
 
@@ -103,9 +107,13 @@ private:
   double *fHyperGeo1F1Real, *fHyperGeo1F1Imag;
   double *fCoulombScatteringLengthReal, *fCoulombScatteringLengthImag;
 
+/*
   BinInfoGTilde *fGTildeInfo;
   BinInfoHyperGeo1F1 *fHyperGeo1F1Info;
   BinInfoScattLen *fScattLenInfo;
+*/
+  BinInfoSamplePairs fSamplePairsBinInfo;
+
 
 };
 

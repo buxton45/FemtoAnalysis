@@ -245,6 +245,26 @@ void CoulombFitterParallel::SetUseStaticPairs(bool aUseStaticPairs, int aNPairsP
 
 
 //________________________________________________________________________________________________________________
+bool CoulombFitterParallel::CanInterpAllSamplePairs()
+{
+  for(int iAnaly=0; iAnaly<fNAnalyses; iAnaly++)
+  {
+    for(int iKStarBin=0; iKStarBin<(int)fPairSample4dVec[iAnaly].size(); iKStarBin++)
+    {
+      for(int iPair=0; iPair<(int)fPairSample4dVec[iAnaly][iKStarBin].size(); iPair++)
+      {
+        if(!CanInterpKStar(fPairSample4dVec[iAnaly][iKStarBin][iPair][0])) return false;
+        if(!CanInterpRStar(fPairSample4dVec[iAnaly][iKStarBin][iPair][1])) return false;
+        if(!CanInterpTheta(fPairSample4dVec[iAnaly][iKStarBin][iPair][2])) return false;
+      }
+    }
+  }
+  return true;
+}
+
+
+
+//________________________________________________________________________________________________________________
 void CoulombFitterParallel::CreateScattLenSubs(double aReF0, double aImF0, double aD0)
 {
   int tLowBinReF0 = GetInterpLowBin(kScattLen,kReF0axis,aReF0);
@@ -408,7 +428,7 @@ SerialTimer.PrintInterval();
 ChronoTimer ParallelTimer;
 ParallelTimer.Start();
   //--------Do parallel calculations!----------
-  vector<double> tGPUResults = fParallelWaveFunction->RunInterpolateWfSquared(aPairs,aReF0,aImF0,aD0);
+  vector<double> tGPUResults = fParallelWaveFunction->RunInterpolateWfSquared(tPairsGPU,par[2],par[3],par[4]);
 
   for(int i=0; i<(int)tGPUResults.size(); i++)
   {
@@ -665,6 +685,59 @@ td1dVec CoulombFitterParallel::GetEntireFitCfContentComplete(double aKStarMagMin
 
 
 //________________________________________________________________________________________________________________
+td1dVec CoulombFitterParallel::GetEntireFitCfContentCompletewStaticPairs(double aKStarMagMin, double aKStarMagMax, double *par, int aAnalysisNumber)
+{
+  //par[0] = kLambda
+  //par[1] = kRadius
+  //par[2] = kRef0
+  //par[3] = kImf0
+  //par[4] = kd0
+  //par[5] = kRef02
+  //par[6] = kImf02
+  //par[7] = kd02
+  //par[8] = kNorm
+
+
+//ChronoTimer tUpdateTimer;
+//tUpdateTimer.Start();
+
+  UpdatePairRadiusParameters(par[1]);
+
+//tUpdateTimer.Stop();
+//cout << "tUpdateTimer: ";
+//tUpdateTimer.PrintInterval();
+
+//TODO figure out how to stop this crash
+//Check to make sure all pairs can be interpolated, otherwise the parallal calculation will crash
+  assert(CanInterpAllSamplePairs());
+
+
+//ChronoTimer CfParallelTimer;
+//CfParallelTimer.Start();
+
+  //--------Do parallel calculations!----------
+  td1dVec tResultsGPU = fParallelWaveFunction->RunInterpolateEntireCfCompletewStaticPairs(aAnalysisNumber,par[2],par[3],par[4],par[5],par[6],par[7]);
+  int tNPairsPerBinGPU = fPairSample4dVec[aAnalysisNumber][0].size();  //TODO make this work if I have varying number of pairs per bin
+
+//CfParallelTimer.Stop();
+//cout << "CfParallelTimer in GetEntireFitCfContent: ";
+//CfParallelTimer.PrintInterval();
+
+  td1dVec tReturnVec(tResultsGPU.size());
+  for(int i=0; i<(int)tResultsGPU.size(); i++)
+  {
+    tReturnVec[i] = tResultsGPU[i]/tNPairsPerBinGPU;
+//    tReturnVec[i] = par[8]*(par[0]*tReturnVec[i] + (1.0-par[0]));  //C = Norm*(Lam*C_gen + (1-Lam));
+    tReturnVec[i] = (par[0]*tReturnVec[i] + (1.0-par[0]));  //C = (Lam*C_gen + (1-Lam));
+  }
+
+  return tReturnVec;
+
+}
+
+
+
+//________________________________________________________________________________________________________________
 td1dVec CoulombFitterParallel::GetEntireFitCfContentComplete2(int aNSimPairsPerBin, double aKStarMagMin, double aKStarMagMax, int aNbinsK, double *par)
 {
 //ChronoTimer CfParallelTimer;
@@ -824,7 +897,12 @@ tTotalTimer.Start();
       double tmp;
 
       bool tAreParamsSame = AreParamsSame(tCurrentFitPar,tPar,tNFitParPerAnalysis);
-      if(!tAreParamsSame) tCfContentUnNorm = GetEntireFitCfContentComplete(0.,fMaxFitKStar,tNbinsXToFit,tPar,iAnaly);  //TODO include fMinFitKStar
+      if(!tAreParamsSame) 
+      {
+        if(fUseStaticPairs && fIncludeSingletAndTriplet) tCfContentUnNorm = GetEntireFitCfContentCompletewStaticPairs(0.,fMaxFitKStar,tPar,iAnaly);
+        else if(fIncludeSingletAndTriplet) tCfContentUnNorm = GetEntireFitCfContentComplete(0.,fMaxFitKStar,tNbinsXToFit,tPar,iAnaly);  //TODO include fMinFitKStar
+        else assert(0); //TODO include else if(fUseStaticPairs) and else
+      }
 
 //      int tNPairsPerBin = 16384;
 //      if(!tAreParamsSame) tCfContentUnNorm = GetEntireFitCfContentComplete2(tNPairsPerBin,0.,fMaxFitKStar,tNbinsXToFit,tPar);
@@ -1114,7 +1192,7 @@ TH1* CoulombFitterParallel::CreateFitHistogramParallel(TString aName, int aAnaly
     tKStarMin = tReturnHist->GetBinLowEdge(ix);
     tKStarMax = tReturnHist->GetBinLowEdge(ix+1);
 
-    tCfContent = par[5]*GetFitCfContentParallel(tKStarMin,tKStarMax,tPar,aAnalysisNumber);
+    tCfContent = tPar[5]*GetFitCfContentParallel(tKStarMin,tKStarMax,tPar,aAnalysisNumber);
     tReturnHist->SetBinContent(ix,tCfContent);
   }
 
@@ -1261,7 +1339,10 @@ CfParallelTimer.Start();
 
 //  int tNPairsPerBin = 16384;
 //  td1dVec tCfUnNorm = GetEntireFitCfContentComplete2(tNPairsPerBin,aKMin,aKMax,aNbinsK,tPar);
-  td1dVec tCfUnNorm = GetEntireFitCfContentComplete(aKMin,aKMax,aNbinsK,tPar,tAnalysisNumber);
+  td1dVec tCfUnNorm;
+  if(fUseStaticPairs && fIncludeSingletAndTriplet) tCfUnNorm = GetEntireFitCfContentCompletewStaticPairs(aKMin,aKMax,tPar,tAnalysisNumber);
+  else if(fIncludeSingletAndTriplet) tCfUnNorm = GetEntireFitCfContentComplete(aKMin,aKMax,aNbinsK,tPar,tAnalysisNumber);
+  else assert(0); //TODO include other else if and else
 
 CfParallelTimer.Stop();
 cout << "CfParallelTimer in CreateFitHistogramSampleCompleteParallel: ";

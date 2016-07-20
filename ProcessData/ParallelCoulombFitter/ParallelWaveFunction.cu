@@ -1152,6 +1152,75 @@ __global__ void GetEntireCfComplete(double *aKStarMag, double *aRStarMag, double
   if(tid == 0) g_odata[blockIdx.x+aOffsetOutput] = sdata[0];
 }
 
+//________________________________________________________________________________________________________________
+__device__ int GetSamplePairOffset(int aAnalysis, int aBinK, int aPair)
+{
+  int tNBinsK = d_fPairSample4dVecInfo->nBinsK;
+  int tNPairsPerBin = d_fPairSample4dVecInfo->nPairsPerBin;
+  int tNElementsPerPair = d_fPairSample4dVecInfo->nElementsPerPair;
+
+  int tIndex = aPair*tNElementsPerPair + aBinK*tNPairsPerBin*tNElementsPerPair + aAnalysis*tNBinsK*tNPairsPerBin*tNElementsPerPair;
+  return tIndex;
+}
+
+//________________________________________________________________________________________________________________
+__global__ void GetEntireCfCompletewStaticPairs(double aReF0s, double aImF0s, double aD0s, double aReF0t, double aImF0t, double aD0t, double *g_odata, int aAnalysisNumber, int aBinKNumber, int aOffsetOutput, bool aInterpScattLen)
+{
+//  int idx = threadIdx.x + blockIdx.x*blockDim.x;
+
+  extern __shared__ double sdata[];
+
+  unsigned int tid = threadIdx.x;
+  unsigned int tPairNumber = blockIdx.x*blockDim.x + threadIdx.x;
+  unsigned int i = GetSamplePairOffset(aAnalysisNumber,aBinKNumber,tPairNumber);
+
+  double tWfSqSinglet, tWfSqTriplet, tWfSq;
+
+  if(aInterpScattLen)
+  {
+    tWfSqSinglet = InterpolateWfSquaredInterpScattLen(d_fPairSample4dVec[i],d_fPairSample4dVec[i+1],d_fPairSample4dVec[i+2],aReF0s,aImF0s,aD0s);
+    tWfSqTriplet = InterpolateWfSquaredInterpScattLen(d_fPairSample4dVec[i],d_fPairSample4dVec[i+1],d_fPairSample4dVec[i+2],aReF0t,aImF0t,aD0t);
+  }
+  else
+  {
+    tWfSqSinglet = InterpolateWfSquared(d_fPairSample4dVec[i],d_fPairSample4dVec[i+1],d_fPairSample4dVec[i+2],aReF0s,aImF0s,aD0s);
+    tWfSqTriplet = InterpolateWfSquared(d_fPairSample4dVec[i],d_fPairSample4dVec[i+1],d_fPairSample4dVec[i+2],aReF0t,aImF0t,aD0t);
+  }
+
+  tWfSq = 0.25*tWfSqSinglet + 0.75*tWfSqTriplet;
+  sdata[tid] = tWfSq;
+
+  __syncthreads();
+
+  //do reduction in shared mem
+  //strided
+  for(unsigned int s=1; s<blockDim.x; s*=2)
+  {
+    int index = 2*s*tid;
+
+    if(index < blockDim.x)
+    {
+      sdata[index] += sdata[index+s];
+    }
+    __syncthreads();
+  }
+/*
+  //sequential
+  for(unsigned int s=blockDim.x/2; s>0; s>>=1) //>>= is bitwise shift, here reducing s in powers of 2
+  {
+    if(tid < s)
+    {
+      sdata[tid] += sdata[tid + s];
+    }
+    __syncthreads();
+  }
+*/
+  //write result for this block to global mem
+  if(tid == 0) g_odata[blockIdx.x+aOffsetOutput] = sdata[0];
+}
+
+
+
 
 //________________________________________________________________________________________________________________
 __global__ void RandInit(curandState *state, unsigned long seed, int aOffset)
@@ -1254,10 +1323,6 @@ __global__ void GetEntireCfComplete2(curandState *state1, curandState *state2, c
   if(tid == 0) g_odata[blockIdx.x+aOffsetOutput] = sdata[0];
 }
 
-
-
-
-
 //________________________________________________________________________________________________________________
 //****************************************************************************************************************
 //________________________________________________________________________________________________________________
@@ -1295,7 +1360,7 @@ ParallelWaveFunction::~ParallelWaveFunction()
 
 
 //________________________________________________________________________________________________________________
-void ParallelWaveFunction::LoadPairSample4dVec(td4dVec &aPairSample4dVec, BinInfoKStar &aBinInfo)
+void ParallelWaveFunction::LoadPairSample4dVec(td4dVec &aPairSample4dVec, BinInfoSamplePairs &aBinInfo)
 {
   //------ Load bin info first ---------------------------
   checkCudaErrors(cudaMallocManaged(&d_fPairSample4dVecInfo, sizeof(BinInfoSamplePairs)));
@@ -1308,10 +1373,26 @@ void ParallelWaveFunction::LoadPairSample4dVec(td4dVec &aPairSample4dVec, BinInf
   d_fPairSample4dVecInfo->binWidthK = aBinInfo.binWidthK;
   d_fPairSample4dVecInfo->nElementsPerPair = aBinInfo.nElementsPerPair;
   //------------------------------------------------------
+  fSamplePairsBinInfo.nAnalyses = aBinInfo.nAnalyses;
+  fSamplePairsBinInfo.nBinsK = aBinInfo.nBinsK;
+  fSamplePairsBinInfo.nPairsPerBin = aBinInfo.nPairsPerBin;
+  fSamplePairsBinInfo.minK = aBinInfo.minK;
+  fSamplePairsBinInfo.maxK = aBinInfo.maxK;
+  fSamplePairsBinInfo.binWidthK = aBinInfo.binWidthK;
+  fSamplePairsBinInfo.nElementsPerPair = aBinInfo.nElementsPerPair;
+  //------------------------------------------------------
   assert((int)aPairSample4dVec.size() == d_fPairSample4dVecInfo->nAnalyses);
   assert((int)aPairSample4dVec[0].size() == d_fPairSample4dVecInfo->nBinsK);
   assert(d_fPairSample4dVecInfo->nElementsPerPair == 3);
   //------------------------------------------------------
+
+  int tTotalPairs = 0;
+  for(int iAnaly=0; iAnaly<(int)aPairSample4dVec.size(); iAnaly++)
+  {
+    for(int iK=0; iK<(int)aPairSample4dVec[iAnaly].size(); iK++) tTotalPairs += aPairSample4dVec[iAnaly][iK].size();
+  }
+  int tSize = tTotalPairs*fSamplePairsBinInfo.nElementsPerPair*sizeof(double);
+  checkCudaErrors(cudaMallocManaged(&d_fPairSample4dVec, tSize));
 
   int tIndex=0;
   for(int iAnaly=0; iAnaly<(int)aPairSample4dVec.size(); iAnaly++)
@@ -1983,6 +2064,83 @@ vector<double> ParallelWaveFunction::RunInterpolateEntireCfComplete(td3dVec &aPa
 
   return tReturnVec;
 }
+
+
+
+//________________________________________________________________________________________________________________
+vector<double> ParallelWaveFunction::RunInterpolateEntireCfCompletewStaticPairs(int aAnalysisNumber, double aReF0s, double aImF0s, double aD0s, double aReF0t, double aImF0t, double aD0t)
+{
+//  GpuTimer timerPre;
+//  timerPre.Start();
+  int tNBins = fSamplePairsBinInfo.nBinsK;
+  int tNPairsPerBin = fSamplePairsBinInfo.nPairsPerBin;
+  int tSizeOutput = tNBins*fNBlocks*sizeof(double); //the kernel reduces the values for tNPairs bins down to fNBlocks bins
+  int tSizeShared = fNThreadsPerBlock*sizeof(double);
+
+  const int tNStreams = tNBins;
+
+  //---Host arrays and allocations
+  double * h_Cf;
+
+  checkCudaErrors(cudaMallocManaged(&h_Cf, tSizeOutput));
+
+  cudaStream_t tStreams[tNStreams];
+
+  for(int i=0; i<tNBins; i++)
+  {
+    cudaStreamCreate(&tStreams[i]);
+  }
+
+//  timerPre.Stop();
+//  std::cout << " timerPre: " << timerPre.Elapsed() << " ms" << std::endl;
+
+
+  //----------Run the kernels-----------------------------------------------
+//  GpuTimer timer;
+//  timer.Start();
+
+  //TODO this doesn't work with fInterpScattLen = true.  If I want this to work, I need to add singlet and triplet interpolation vectors
+  assert(!fInterpScattLen);
+
+  for(int i=0; i<tNBins; i++)
+  {
+    int tOffsetOutput = i*fNBlocks;
+    GetEntireCfCompletewStaticPairs<<<fNBlocks,fNThreadsPerBlock,tSizeShared,tStreams[i]>>>(aReF0s, aImF0s, aD0s, aReF0t, aImF0t, aD0t, h_Cf, aAnalysisNumber, i, tOffsetOutput, fInterpScattLen);
+  }
+//  timer.Stop();
+//  std::cout << "GetEntireCf kernel finished in " << timer.Elapsed() << " ms" << std::endl;
+
+//  GpuTimer timerPost;
+//  timerPost.Start();
+
+  //The following is necessary for the host to be able to "see" the changes that have been done
+  checkCudaErrors(cudaDeviceSynchronize());
+
+  // return the CF
+  vector<double> tReturnVec(tNBins);
+  double tSum = 0.0;
+  for(int i=0; i<tNBins; i++)
+  {
+    tSum=0.0;
+    for(int j=0; j<fNBlocks; j++)
+    {
+      tSum += h_Cf[j+i*fNBlocks]; 
+    }
+    tReturnVec[i] = tSum;
+  }
+
+  checkCudaErrors(cudaFree(h_Cf));
+
+  for(int i=0; i<tNStreams; i++) cudaStreamDestroy(tStreams[i]);
+
+//  timerPost.Stop();
+//  std::cout << " timerPost: " << timerPost.Elapsed() << " ms" << std::endl;
+
+  return tReturnVec;
+}
+
+
+
 
 
 //________________________________________________________________________________________________________________
