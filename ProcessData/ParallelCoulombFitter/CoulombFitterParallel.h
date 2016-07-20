@@ -33,9 +33,6 @@ public:
 
   void LoadInterpHistFile(TString aFileBaseName);  //TODO should this be a vritual function?
 
-  td3dVec BuildPairKStar3dVec(TString aPairKStarNtupleLocationBase, AnalysisType aAnalysisType, CentralityType aCentralityType, BFieldType aBFieldType, int aNbinsKStar, double aKStarMin, double aKStarMax);  //TODO fix the fPairKStar3dVecInfo and should this be a virtual function?
-
-  td3dVec BuildPairKStar3dVecFull(TString aPairKStarNtupleDirName, TString aFileBaseName, vector<int> &aNFilesPerSubDir, AnalysisType aAnalysisType, CentralityType aCentralityType, int aNbinsKStar, double aKStarMin, double aKStarMax);  //TODO fix the fPairKStar3dVecInfo and should this be a virtual function?
   td3dVec BuildPairKStar3dVecFull(TString aPairKStarNtupleDirName, TString aFileBaseName, int aNFiles, AnalysisType aAnalysisType, CentralityType aCentralityType, int aNbinsKStar, double aKStarMin, double aKStarMax);  //TODO fix the fPairKStar3dVecInfo and should this be a virtual function?
 
   td3dVec BuildPairKStar3dVecFromTxt(TString aFileName);  //TODO fix the fPairKStar3dVecInfo and should this be a virtual function?
@@ -43,14 +40,13 @@ public:
 
 
   void CreateScattLenSubs(double aReF0, double aImF0, double aD0);
-  vector<double> InterpolateWfSquaredParallel(vector<vector<double> > &aPairs, double aReF0, double aImF0, double aD0);
+
+  double GetFitCfContentParallel(double aKStarMagMin, double aKStarMagMax, double *par, int aAnalysisNumber);  //TODO!!!!!
 
   td4dVec Get3dPairs(double aKStarMagMin, double aKStarMagMax, int aNbinsK, double *par, int aAnalysisNumber); //One 3dvec for GPU pairs and 1 3dvec for CPU pairs
   td1dVec GetEntireFitCfContent(double aKStarMagMin, double aKStarMagMax, int aNbinsK, double *par, int aAnalysisNumber);
   td1dVec GetEntireFitCfContentComplete(double aKStarMagMin, double aKStarMagMax, int aNbinsK, double *par, int aAnalysisNumber);
   td1dVec GetEntireFitCfContentComplete2(int aNSimPairsPerBin, double aKStarMagMin, double aKStarMagMax, int aNbinsK, double *par);
-
-  double GetFitCfContentParallel(double aKStarMagMin, double aKStarMagMax, double *par);  //TODO!!!!!
 
   //void CalculateChi2(int &npar, double &chi2, double *par);
 
@@ -69,7 +65,6 @@ private:
   BinInfoKStar fPairKStar3dVecInfo;
   ParallelWaveFunction* fParallelWaveFunction;
 
-  td3dVec fPairKStar3dVec;  //TODO delete this
   //---------------------------
 
 #ifdef __ROOT__

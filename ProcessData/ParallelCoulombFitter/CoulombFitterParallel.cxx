@@ -26,8 +26,7 @@ double gMaxFitKStar;
 //________________________________________________________________________________________________________________
 CoulombFitterParallel::CoulombFitterParallel():
   CoulombFitter(),
-  fParallelWaveFunction(0),
-  fPairKStar3dVec(0)
+  fParallelWaveFunction(0)
 
 {
   fParallelWaveFunction = new ParallelWaveFunction(fUseScattLenHists);
@@ -38,8 +37,7 @@ CoulombFitterParallel::CoulombFitterParallel():
 //________________________________________________________________________________________________________________
 CoulombFitterParallel::CoulombFitterParallel(FitSharedAnalyses* aFitSharedAnalyses, double aMaxFitKStar, bool aCreateInterpVectors, bool aUseScattLenHists):
   CoulombFitter(aFitSharedAnalyses,aMaxFitKStar,aCreateInterpVectors,aUseScattLenHists),
-  fParallelWaveFunction(0),
-  fPairKStar3dVec(0)
+  fParallelWaveFunction(0)
 
 {
   fParallelWaveFunction = new ParallelWaveFunction(fUseScattLenHists);
@@ -120,80 +118,6 @@ void CoulombFitterParallel::LoadInterpHistFile(TString aFileBaseName)
 
 }
 
-
-//________________________________________________________________________________________________________________
-td3dVec CoulombFitterParallel::BuildPairKStar3dVec(TString aPairKStarNtupleLocationBase, AnalysisType aAnalysisType, CentralityType aCentralityType, BFieldType aBFieldType, int aNbinsKStar, double aKStarMin, double aKStarMax)
-{
-  td3dVec tPairKStar3dVec = CoulombFitter::BuildPairKStar3dVec(aPairKStarNtupleLocationBase,aAnalysisType,aCentralityType,aBFieldType,aNbinsKStar,aKStarMin,aKStarMax);
-
-  //----****----****----****----****----****----****
-  //TODO make this automated
-  //TODO add centrality selection to this
-  //Also, this is basically FitPartialAnalysis::ConnectAnalysisDirectory
-
-  //--Set the fPairKStar3dVecInfo
-  fPairKStar3dVecInfo.nBinsK = aNbinsKStar;
-  fPairKStar3dVecInfo.minK = aKStarMin;
-  fPairKStar3dVecInfo.maxK = aKStarMax;
-  fPairKStar3dVecInfo.binWidthK = ((aKStarMax-aKStarMin)/aNbinsKStar);
-  //---------------------------
-
-
-  //TODO!!!!!!!!!
-/*
-  assert(aNbinsKStar == (int)fPairKStar3dVec.size());
-  int tOffset=0;
-  for(int i=0; i<aNbinsKStar; i++)
-  {
-    fPairKStar3dVecInfo.nPairsPerBin[i] = fPairKStar3dVec[i].size();
-    fPairKStar3dVecInfo.binOffset[i] = tOffset;
-    tOffset += 4*fPairKStar3dVec[i].size();
-  }
-
-  fParallelWaveFunction->LoadPairKStar3dVec(fPairKStar3dVec,fPairKStar3dVecInfo);
-*/
-  return tPairKStar3dVec;
-}
-
-
-//________________________________________________________________________________________________________________
-td3dVec CoulombFitterParallel::BuildPairKStar3dVecFull(TString aPairKStarNtupleDirName, TString aFileBaseName, vector<int> &aNFilesPerSubDir, AnalysisType aAnalysisType, CentralityType aCentralityType, int aNbinsKStar, double aKStarMin, double aKStarMax)
-{
-  td3dVec tPairKStar3dVec = CoulombFitter::BuildPairKStar3dVecFull(aPairKStarNtupleDirName,aFileBaseName,aNFilesPerSubDir,aAnalysisType,aCentralityType,aNbinsKStar,aKStarMin,aKStarMax);
-
-  //----****----****----****----****----****----****
-  //TODO make this automated
-  //TODO add centrality selection to this
-  //Also, this is basically FitPartialAnalysis::ConnectAnalysisDirectory
-
-
-  //--Set the fPairKStar3dVecInfo
-  fPairKStar3dVecInfo.nBinsK = aNbinsKStar;
-  fPairKStar3dVecInfo.minK = aKStarMin;
-  fPairKStar3dVecInfo.maxK = aKStarMax;
-  fPairKStar3dVecInfo.binWidthK = ((aKStarMax-aKStarMin)/aNbinsKStar);
-  //---------------------------
-
-  //---------------------------------------------------
-//TODO
-/*
-  assert(aNbinsKStar == (int)fPairKStar3dVec.size());
-  int tOffset=0;
-  for(int i=0; i<aNbinsKStar; i++)
-  {
-    fPairKStar3dVecInfo.nPairsPerBin[i] = fPairKStar3dVec[i].size();
-    fPairKStar3dVecInfo.binOffset[i] = tOffset;
-    tOffset += 4*fPairKStar3dVec[i].size();
-  }
-
-  fParallelWaveFunction->LoadPairKStar3dVec(fPairKStar3dVec,fPairKStar3dVecInfo);
-*/
-
-  return tPairKStar3dVec;
-}
-
-
-
 //________________________________________________________________________________________________________________
 td3dVec CoulombFitterParallel::BuildPairKStar3dVecFull(TString aPairKStarNtupleDirName, TString aFileBaseName, int aNFiles, AnalysisType aAnalysisType, CentralityType aCentralityType, int aNbinsKStar, double aKStarMin, double aKStarMax)
 {
@@ -214,16 +138,16 @@ td3dVec CoulombFitterParallel::BuildPairKStar3dVecFull(TString aPairKStarNtupleD
 
 //TODO
 /*
-  assert(aNbinsKStar == (int)fPairKStar3dVec.size());
+  assert(aNbinsKStar == (int)tPairKStar3dVec.size());
   int tOffset=0;
   for(int i=0; i<aNbinsKStar; i++)
   {
-    fPairKStar3dVecInfo.nPairsPerBin[i] = fPairKStar3dVec[i].size();
+    fPairKStar3dVecInfo.nPairsPerBin[i] = tPairKStar3dVec[i].size();
     fPairKStar3dVecInfo.binOffset[i] = tOffset;
-    tOffset += 4*fPairKStar3dVec[i].size();
+    tOffset += 4*tPairKStar3dVec[i].size();
   }
 
-  fParallelWaveFunction->LoadPairKStar3dVec(fPairKStar3dVec,fPairKStar3dVecInfo);
+  fParallelWaveFunction->LoadPairKStar3dVec(tPairKStar3dVec,fPairKStar3dVecInfo);
 */
   //---------------------------------------------------
 
@@ -261,10 +185,10 @@ cout << "tKStarMax = " << tKStarMax << endl;
   {
     fPairKStar3dVecInfo.nPairsPerBin[i] = tPairKStar3dVec[i].size();
     fPairKStar3dVecInfo.binOffset[i] = tOffset;
-    tOffset += 4*fPairKStar3dVec[i].size();
+    tOffset += 4*tPairKStar3dVec[i].size();
   }
 
-  fParallelWaveFunction->LoadPairKStar3dVec(fPairKStar3dVec,fPairKStar3dVecInfo);
+  fParallelWaveFunction->LoadPairKStar3dVec(tPairKStar3dVec,fPairKStar3dVecInfo);
 */
   //---------------------------------------------------
 
@@ -353,32 +277,43 @@ void CoulombFitterParallel::CreateScattLenSubs(double aReF0, double aImF0, doubl
 
 }
 
-
 //________________________________________________________________________________________________________________
-vector<double> CoulombFitterParallel::InterpolateWfSquaredParallel(vector<vector<double> > &aPairs, double aReF0, double aImF0, double aD0)
+double CoulombFitterParallel::GetFitCfContentParallel(double aKStarMagMin, double aKStarMagMax, double *par, int aAnalysisNumber)
 {
-/*
-  vector<double> tReturnVector;
-    tReturnVector.clear();
+  // par[0] = Lambda 
+  // par[1] = Radius
+  // par[2] = Ref0
+  // par[3] = Imf0
+  // par[4] = d0
+  // par[5] = Norm
 
-  tReturnVector = fParallelWaveFunction->RunInterpolateWfSquaredParallel(aPairs,aReF0,aImF0,aD0);
-  return tReturnVector;
-*/
-  return fParallelWaveFunction->RunInterpolateWfSquared(aPairs,aReF0,aImF0,aD0);
-}
-
+  //should probably do x[0] /= hbarc, but let me test first
 
 
-/*
-//________________________________________________________________________________________________________________
-td4dVec CoulombFitterParallel::Get3dPairs(double aKStarMagMin, double aKStarMagMax, int aNbinsK, double *par)
-{
-//  double tBinSize = (aKStarMagMax-aKStarMagMin)/aNbinsK;
+  //TODO make this general
+  //This is messing up around aKStarMagMin = 0.29, or bin 57/58
+  double tBinSize = 0.01;
+  int tBin = aKStarMagMin/tBinSize;
 
-  td3dVec tPairsGPU(aNbinsK);
-  td3dVec tPairsCPU(aNbinsK);
+  //KStarMag = fPairKStar4dVec[aAnalysisNumber][tBin][i][0]
+  //KStarOut = fPairKStar4dVec[aAnalysisNumber][tBin][i][1]
+  //KStarSide = fPairKStar4dVec[aAnalysisNumber][tBin][i][2]
+  //KStarLong = fPairKStar4dVec[aAnalysisNumber][tBin][i][3]
 
+  int tCounter = 0;
+  double tReturnCfContent = 0.;
+
+  int tCounterGPU = 0;
+  double tCfContentGPU = 0.;
+
+  int tCounterCPU = 0;
+  double tCfContentCPU = 0.;
+
+//  int tMaxKStarCalls = 10000;
   int tMaxKStarCalls = 16384; //==2^14
+
+ChronoTimer InitTimer;
+InitTimer.Start();
 
   //Create the source Gaussians
   std::default_random_engine generator (std::clock());  //std::clock() is seed
@@ -386,34 +321,37 @@ td4dVec CoulombFitterParallel::Get3dPairs(double aKStarMagMin, double aKStarMagM
   std::normal_distribution<double> tRSideSource(0.,par[1]);
   std::normal_distribution<double> tRLongSource(0.,par[1]);
 
+  std::uniform_int_distribution<int> tRandomKStarElement(0.0, fPairKStar4dVec[aAnalysisNumber][tBin].size()-1);
+
   TVector3* tKStar3Vec = new TVector3(0.,0.,0.);
   TVector3* tSource3Vec = new TVector3(0.,0.,0.);
 
   int tI;
-  double tTheta, tKStarMag, tRStarMag;
+  double tTheta, tKStarMag, tRStarMag, tWaveFunctionSq;
+  complex<double> tWaveFunction;
+
+  vector<vector<double> > tPairsGPU;
+  vector<vector<double> > tPairsCPU;
   vector<double> tTempPair(3);
 
-  int tNGood = 0;
+InitTimer.Stop();
+cout << "InitTimer: ";
+InitTimer.PrintInterval();
 
-  double tBinSize = (aKStarMagMax-aKStarMagMin)/aNbinsK;
-  if(tBinSize != fPairKStar3dVecInfo.binWidthK) cout << "Imminent CRASH in CoulombFitterParallel::Get3dPairs due to enequal bin sizes!!!!!!!!" << endl;
-  assert(tBinSize == fPairKStar3dVecInfo.binWidthK);  //Life is much easier when these are equal
-                                                      //TODO in future, maybe make method to allow for unequal bin sizes
+  int tNGood=0;
 
-  for(int iBin=0; iBin<aNbinsK; iBin++)
+
+ChronoTimer PairGenTimer;
+PairGenTimer.Start();
+  while(tNGood<tMaxKStarCalls)
+//  for(int i=0; i<tMaxKStarCalls; i++)
   {
-    tNGood=0;
-
-    std::uniform_int_distribution<int> tRandomKStarElement(0.0, fPairKStar3dVec[iBin].size()-1);  //TODO could possible be drawing from multiple
-                                                                                                  //iBins, depending on size
-    while(tNGood<tMaxKStarCalls)
-    {
-      tI = tRandomKStarElement(generator);
-      tKStar3Vec->SetXYZ(fPairKStar3dVec[iBin][tI][1],fPairKStar3dVec[iBin][tI][2],fPairKStar3dVec[iBin][tI][3]);
-        tKStarMag = tKStar3Vec->Mag();
-      tSource3Vec->SetXYZ(tROutSource(generator),tRSideSource(generator),tRLongSource(generator)); //TODO: for now, spherically symmetric
-        tRStarMag = tSource3Vec->Mag();
-      tTheta = tKStar3Vec->Angle(*tSource3Vec);
+    tI = tRandomKStarElement(generator);
+    tKStar3Vec->SetXYZ(fPairKStar4dVec[aAnalysisNumber][tBin][tI][1],fPairKStar4dVec[aAnalysisNumber][tBin][tI][2],fPairKStar4dVec[aAnalysisNumber][tBin][tI][3]);
+      tKStarMag = tKStar3Vec->Mag();
+    tSource3Vec->SetXYZ(tROutSource(generator),tRSideSource(generator),tRLongSource(generator)); //TODO: for now, spherically symmetric
+      tRStarMag = tSource3Vec->Mag();
+    tTheta = tKStar3Vec->Angle(*tSource3Vec);
 
 //    tTempPair.clear();  //TODO NEVER CLEAR A VECTOR IF YOU WANT IT TO MAINTAIN ITS SIZE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
       tTempPair[0] = tKStarMag;
@@ -421,24 +359,59 @@ td4dVec CoulombFitterParallel::Get3dPairs(double aKStarMagMin, double aKStarMagM
       tTempPair[2] = tTheta;
 
 
-      if(CanInterpAll(tKStarMag,tRStarMag,tTheta,par[2],par[3],par[4]))
-      {
-        tPairsGPU[iBin].push_back(tTempPair);
-        tNGood++;
-      }
-      else tPairsCPU[iBin].push_back(tTempPair);
+    if(CanInterpAll(tKStarMag,tRStarMag,tTheta,par[2],par[3],par[4]))
+    {
+      tPairsGPU.push_back(tTempPair);
+      tNGood++;
     }
+    else tPairsCPU.push_back(tTempPair);
   }
   delete tKStar3Vec;
   delete tSource3Vec;
+PairGenTimer.Stop();
+cout << "PairGenTimer: ";
+PairGenTimer.PrintInterval();
 
-  td4dVec tReturnVec(2);
-    tReturnVec[0] = tPairsGPU;
-    tReturnVec[1] = tPairsCPU;
 
-  return tReturnVec;  
+ChronoTimer SerialTimer;
+SerialTimer.Start();
+  //---------Do serial calculations------------
+  for(int i=0; i<(int)tPairsCPU.size(); i++)
+  {
+    tWaveFunction = fWaveFunction->GetWaveFunction(tPairsCPU[i][0],tPairsCPU[i][1],tPairsCPU[i][2],par[2],par[3],par[4]);
+    tWaveFunctionSq = norm(tWaveFunction);
+
+    tCfContentCPU += tWaveFunctionSq;
+    tCounterCPU++;
+  }
+SerialTimer.Stop();
+cout << "SerialTimer: ";
+SerialTimer.PrintInterval();
+
+
+ChronoTimer ParallelTimer;
+ParallelTimer.Start();
+  //--------Do parallel calculations!----------
+  vector<double> tGPUResults = fParallelWaveFunction->RunInterpolateWfSquared(aPairs,aReF0,aImF0,aD0);
+
+  for(int i=0; i<(int)tGPUResults.size(); i++)
+  {
+    tCfContentGPU += tGPUResults[i];
+    tCounterGPU++;
+  }
+ParallelTimer.Stop();
+cout << "ParallelTimer: ";
+ParallelTimer.PrintInterval();
+cout << endl;
+
+  tReturnCfContent = (tCfContentCPU + tCfContentGPU)/(tCounterCPU+tCounterGPU);
+//  tReturnCfContent = par[5]*(par[0]*tReturnCfContent + (1.-par[0]));  //C = Norm*(Lam*C_gen + (1-Lam));
+  tReturnCfContent = (par[0]*tReturnCfContent + (1.-par[0]));  //C = (Lam*C_gen + (1-Lam));
+
+  return tReturnCfContent;
 }
-*/
+
+
 
 //________________________________________________________________________________________________________________
 td4dVec CoulombFitterParallel::Get3dPairs(double aKStarMagMin, double aKStarMagMax, int aNbinsK, double *par, int aAnalysisNumber)
@@ -573,7 +546,8 @@ td1dVec CoulombFitterParallel::GetEntireFitCfContent(double aKStarMagMin, double
   for(int i=0; i<(int)tResultsGPU.size(); i++)
   {
     tReturnVec[i] = (tResultsGPU[i] + tResultsCPU[i])/(tNPairsPerBinGPU + tPairsCPU[i].size());
-    tReturnVec[i] = par[5]*(par[0]*tReturnVec[i] + (1.0-par[0]));  //C = Norm*(Lam*C_gen + (1-Lam));
+//    tReturnVec[i] = par[5]*(par[0]*tReturnVec[i] + (1.0-par[0]));  //C = Norm*(Lam*C_gen + (1-Lam));
+    tReturnVec[i] = (par[0]*tReturnVec[i] + (1.0-par[0]));  //C = (Lam*C_gen + (1-Lam));
   }
 
 //CfCombineTimer.Stop();
@@ -698,139 +672,6 @@ td1dVec CoulombFitterParallel::GetEntireFitCfContentComplete2(int aNSimPairsPerB
 
 }
 
-
-//________________________________________________________________________________________________________________
-double CoulombFitterParallel::GetFitCfContentParallel(double aKStarMagMin, double aKStarMagMax, double *par)
-{
-  // par[0] = Lambda 
-  // par[1] = Radius
-  // par[2] = Ref0
-  // par[3] = Imf0
-  // par[4] = d0
-  // par[5] = Norm
-
-  //should probably do x[0] /= hbarc, but let me test first
-
-
-  //TODO make this general
-  //This is messing up around aKStarMagMin = 0.29, or bin 57/58
-  double tBinSize = 0.01;
-  int tBin = aKStarMagMin/tBinSize;
-
-  //KStarMag = fPairKStar3dVec[tBin][i][0]
-  //KStarOut = fPairKStar3dVec[tBin][i][1]
-  //KStarSide = fPairKStar3dVec[tBin][i][2]
-  //KStarLong = fPairKStar3dVec[tBin][i][3]
-
-  int tCounter = 0;
-  double tReturnCfContent = 0.;
-
-  int tCounterGPU = 0;
-  double tCfContentGPU = 0.;
-
-  int tCounterCPU = 0;
-  double tCfContentCPU = 0.;
-
-//  int tMaxKStarCalls = 10000;
-  int tMaxKStarCalls = 16384; //==2^14
-
-ChronoTimer InitTimer;
-InitTimer.Start();
-
-  //Create the source Gaussians
-  std::default_random_engine generator (std::clock());  //std::clock() is seed
-  std::normal_distribution<double> tROutSource(0.,par[1]);
-  std::normal_distribution<double> tRSideSource(0.,par[1]);
-  std::normal_distribution<double> tRLongSource(0.,par[1]);
-
-  std::uniform_int_distribution<int> tRandomKStarElement(0.0, fPairKStar3dVec[tBin].size()-1);
-
-  TVector3* tKStar3Vec = new TVector3(0.,0.,0.);
-  TVector3* tSource3Vec = new TVector3(0.,0.,0.);
-
-  int tI;
-  double tTheta, tKStarMag, tRStarMag, tWaveFunctionSq;
-  complex<double> tWaveFunction;
-
-  vector<vector<double> > tPairsGPU;
-  vector<vector<double> > tPairsCPU;
-  vector<double> tTempPair(3);
-
-InitTimer.Stop();
-cout << "InitTimer: ";
-InitTimer.PrintInterval();
-
-  int tNGood=0;
-
-
-ChronoTimer PairGenTimer;
-PairGenTimer.Start();
-  while(tNGood<tMaxKStarCalls)
-//  for(int i=0; i<tMaxKStarCalls; i++)
-  {
-    tI = tRandomKStarElement(generator);
-    tKStar3Vec->SetXYZ(fPairKStar3dVec[tBin][tI][1],fPairKStar3dVec[tBin][tI][2],fPairKStar3dVec[tBin][tI][3]);
-      tKStarMag = tKStar3Vec->Mag();
-    tSource3Vec->SetXYZ(tROutSource(generator),tRSideSource(generator),tRLongSource(generator)); //TODO: for now, spherically symmetric
-      tRStarMag = tSource3Vec->Mag();
-    tTheta = tKStar3Vec->Angle(*tSource3Vec);
-
-//    tTempPair.clear();  //TODO NEVER CLEAR A VECTOR IF YOU WANT IT TO MAINTAIN ITS SIZE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-      tTempPair[0] = tKStarMag;
-      tTempPair[1] = tRStarMag;
-      tTempPair[2] = tTheta;
-
-
-    if(CanInterpAll(tKStarMag,tRStarMag,tTheta,par[2],par[3],par[4]))
-    {
-      tPairsGPU.push_back(tTempPair);
-      tNGood++;
-    }
-    else tPairsCPU.push_back(tTempPair);
-  }
-  delete tKStar3Vec;
-  delete tSource3Vec;
-PairGenTimer.Stop();
-cout << "PairGenTimer: ";
-PairGenTimer.PrintInterval();
-
-
-ChronoTimer SerialTimer;
-SerialTimer.Start();
-  //---------Do serial calculations------------
-  for(int i=0; i<(int)tPairsCPU.size(); i++)
-  {
-    tWaveFunction = fWaveFunction->GetWaveFunction(tPairsCPU[i][0],tPairsCPU[i][1],tPairsCPU[i][2],par[2],par[3],par[4]);
-    tWaveFunctionSq = norm(tWaveFunction);
-
-    tCfContentCPU += tWaveFunctionSq;
-    tCounterCPU++;
-  }
-SerialTimer.Stop();
-cout << "SerialTimer: ";
-SerialTimer.PrintInterval();
-
-
-ChronoTimer ParallelTimer;
-ParallelTimer.Start();
-  //--------Do parallel calculations!----------
-  vector<double> tGPUResults = InterpolateWfSquaredParallel(tPairsGPU,par[2],par[3],par[4]);
-
-  for(int i=0; i<(int)tGPUResults.size(); i++)
-  {
-    tCfContentGPU += tGPUResults[i];
-    tCounterGPU++;
-  }
-ParallelTimer.Stop();
-cout << "ParallelTimer: ";
-ParallelTimer.PrintInterval();
-cout << endl;
-
-  tReturnCfContent = (tCfContentCPU + tCfContentGPU)/(tCounterCPU+tCounterGPU);
-  tReturnCfContent = par[5]*(par[0]*tReturnCfContent + (1.-par[0]));  //C = Norm*(Lam*C_gen + (1-Lam));
-
-  return tReturnCfContent;
-}
 
 //________________________________________________________________________________________________________________
 void CoulombFitterParallel::CalculateChi2PMLParallel(int &npar, double &chi2, double *par)
@@ -1124,7 +965,8 @@ void CoulombFitterParallel::CalculateChi2Parallel(int &npar, double &chi2, doubl
         double tKStarMin = tXaxis->GetBinLowEdge(ix);
         double tKStarMax = tXaxis->GetBinLowEdge(ix+1);
 
-        double tCfContent = GetFitCfContentParallel(tKStarMin,tKStarMax,tPar);
+        double tCfContentUnNorm = GetFitCfContentParallel(tKStarMin,tKStarMax,tPar,iAnaly);
+        double tCfContent = par[5]*tCfContentUnNorm;
 
         if(tCfToFit->GetBinContent(ix)!=0 && tCfContent!=0) //even if only in one single bin, t*Content=0 causes fChi2->nan
         {
@@ -1168,6 +1010,7 @@ void CoulombFitterParallel::CalculateFakeChi2Parallel(int &npar, double &chi2, d
   double tKStarMin, tKStarMax;
 
   int tNbinsK = fFakeCf->GetNbinsX();
+  int tAnalysisNumber = 0;  //TODO
 
     //-----
   if(fUseScattLenHists)
@@ -1186,7 +1029,7 @@ void CoulombFitterParallel::CalculateFakeChi2Parallel(int &npar, double &chi2, d
     tKStarMin = tXaxis->GetBinLowEdge(ix);
     tKStarMax = tXaxis->GetBinLowEdge(ix+1);
 
-    tmp = (fFakeCf->GetBinContent(ix) - GetFitCfContentParallel(tKStarMin,tKStarMax,par))/fFakeCf->GetBinError(ix);
+    tmp = (fFakeCf->GetBinContent(ix) - par[5]*GetFitCfContentParallel(tKStarMin,tKStarMax,par,tAnalysisNumber))/fFakeCf->GetBinError(ix);
     tChi2 += tmp*tmp;
     tNpfits++;
   }
@@ -1255,7 +1098,7 @@ TH1* CoulombFitterParallel::CreateFitHistogramParallel(TString aName, int aAnaly
     tKStarMin = tReturnHist->GetBinLowEdge(ix);
     tKStarMax = tReturnHist->GetBinLowEdge(ix+1);
 
-    tCfContent = GetFitCfContentParallel(tKStarMin,tKStarMax,tPar);
+    tCfContent = par[5]*GetFitCfContentParallel(tKStarMin,tKStarMax,tPar,aAnalysisNumber);
     tReturnHist->SetBinContent(ix,tCfContent);
   }
 

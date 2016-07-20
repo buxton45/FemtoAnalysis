@@ -126,13 +126,6 @@ int main(int argc, char **argv)
   else if(tAnType==kXiKchP || tAnType==kAXiKchM) tFileLocationInterpHistos = "InterpHistsAttractive";
   tFitter->LoadInterpHistFile(tFileLocationInterpHistos);
 
-/*
-  TString tFileLocationNtupleBase = "~/Analysis/FemtoAnalysis/Results/Results_cXicKch_20160414/Results_cXicKch_20160414";
-//  tFitter->BuildPairKStar3dVec(tFileLocationNtupleBase,kAXiKchP,k0010,kBp2,62,0.,0.31);
-//  tFitter->BuildPairKStar3dVec(tFileLocationNtupleBase,kAXiKchP,k0010,kBp2,31,0.,0.155);
-  tFitter->BuildPairKStar3dVec(tFileLocationNtupleBase,kAXiKchP,k0010,kBp2,16,0.,0.16);
-*/
-
   //-------------------------------------------
   TString tPairKStarNtupleDirName = "/home/jesse/Analysis/FemtoAnalysis/ProcessData/CoulombFitter/NTuples/Roman";
   TString tFileBaseName = "Results_cXicKch_20160610";
