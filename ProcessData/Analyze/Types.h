@@ -53,6 +53,15 @@ using std::vector;
     int binOffset[100] = {};
   };
 
+  struct BinInfoSamplePairs
+  {
+    int nAnalyses;
+    int nBinsK;
+    int nPairsPerBin;
+    double minK, maxK, binWidthK;
+    int nElementsPerPair;
+  };
+
   //------------------
   struct BinInfoGTilde
   {

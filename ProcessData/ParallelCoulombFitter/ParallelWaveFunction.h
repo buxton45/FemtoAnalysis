@@ -37,6 +37,9 @@ extern __managed__ BinInfoScattLen *d_fScattLenInfo;
 extern __managed__ double *d_fPairKStar3dVec;
 extern __managed__ BinInfoKStar *d_fPairKStar3dVecInfo;
 
+extern __managed__ double *d_fPairSample4dVec;
+extern __managed__ BinInfoSamplePairs *d_fPairSample4dVecInfo;
+
 /*
 __device__ double d_gBohrRadius = parallel_gBohrRadiusXiK;
 __device__ double d_hbarc = parallel_hbarc;
@@ -52,6 +55,9 @@ public:
   virtual ~ParallelWaveFunction();
 
   //--------------Load the arrays from c++ program dealing with the histograms
+  void LoadPairSample4dVec(td4dVec &aPairSample4dVec, BinInfoSamplePairs &aBinInfo);
+  void UpdatePairSampleRadii(double aScaleFactor);
+
   void LoadPairKStar3dVec(td3dVec &aPairKStar3dVec, BinInfoKStar &aBinInfo);
 
   void LoadLednickyHFunction(td1dVec &aHFunc);

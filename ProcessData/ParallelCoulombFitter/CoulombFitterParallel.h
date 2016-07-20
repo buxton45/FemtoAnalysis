@@ -38,6 +38,8 @@ public:
   td3dVec BuildPairKStar3dVecFromTxt(TString aFileName);  //TODO fix the fPairKStar3dVecInfo and should this be a virtual function?
   void BuildPairKStar4dVecFromTxt(TString aFileBaseName);  //TODO fix the fPairKStar3dVecInfo and should this be a virtual function?
 
+  void UpdatePairRadiusParameters(double aNewRadius);
+  void SetUseStaticPairs(bool aUseStaticPairs=true, int aNPairsPerKStarBin=16384);
 
   void CreateScattLenSubs(double aReF0, double aImF0, double aD0);
 

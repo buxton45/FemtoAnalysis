@@ -170,6 +170,7 @@ protected:
   BinInfoGTilde fGTildeInfo;
   BinInfoHyperGeo1F1 fHyperGeo1F1Info;
   BinInfoScattLen fScattLenInfo;
+  BinInfoSamplePairs fSamplePairsBinInfo;
 
 
   int fNCalls;  //TODO delete this

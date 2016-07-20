@@ -1119,6 +1119,19 @@ tTimer.Start();
   delete tKStar3Vec;
   delete tSource3Vec;
 
+
+  //----Set the bin info
+  fSamplePairsBinInfo.nAnalyses = fNAnalyses;
+  fSamplePairsBinInfo.nBinsK = tNBinsKStar;
+  fSamplePairsBinInfo.nPairsPerBin = fNPairsPerKStarBin;
+
+  fSamplePairsBinInfo.minK = 0.; //TODO
+  fSamplePairsBinInfo.maxK = fMaxFitKStar;
+  fSamplePairsBinInfo.binWidthK = tBinSize;
+  fSamplePairsBinInfo.nElementsPerPair = fPairSample4dVec[0][0][0].size();
+  //--------------------
+
+
 tTimer.Stop();
 cout << "BuildPairSample4dVec finished: ";
 tTimer.PrintInterval();

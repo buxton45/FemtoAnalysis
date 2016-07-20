@@ -227,6 +227,22 @@ void CoulombFitterParallel::BuildPairKStar4dVecFromTxt(TString aFileBaseName)
   }
 }
 
+//________________________________________________________________________________________________________________
+void CoulombFitterParallel::UpdatePairRadiusParameters(double aNewRadius)
+{
+  double tScaleFactor = aNewRadius/fCurrentRadiusParameter;
+  CoulombFitter::UpdatePairRadiusParameters(aNewRadius);
+  fParallelWaveFunction->UpdatePairSampleRadii(tScaleFactor);
+}
+
+
+//________________________________________________________________________________________________________________
+void CoulombFitterParallel::SetUseStaticPairs(bool aUseStaticPairs, int aNPairsPerKStarBin)
+{
+  CoulombFitter::SetUseStaticPairs(aUseStaticPairs,aNPairsPerKStarBin);
+  fParallelWaveFunction->LoadPairSample4dVec(fPairSample4dVec,fSamplePairsBinInfo);
+}
+
 
 //________________________________________________________________________________________________________________
 void CoulombFitterParallel::CreateScattLenSubs(double aReF0, double aImF0, double aD0)

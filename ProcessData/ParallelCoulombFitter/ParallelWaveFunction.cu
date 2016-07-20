@@ -1293,6 +1293,55 @@ ParallelWaveFunction::~ParallelWaveFunction()
   checkCudaErrors(cudaFree(d_fScattLenInfo));
 }
 
+
+//________________________________________________________________________________________________________________
+void ParallelWaveFunction::LoadPairSample4dVec(td4dVec &aPairSample4dVec, BinInfoKStar &aBinInfo)
+{
+  //------ Load bin info first ---------------------------
+  checkCudaErrors(cudaMallocManaged(&d_fPairSample4dVecInfo, sizeof(BinInfoSamplePairs)));
+
+  d_fPairSample4dVecInfo->nAnalyses = aBinInfo.nAnalyses;
+  d_fPairSample4dVecInfo->nBinsK = aBinInfo.nBinsK;
+  d_fPairSample4dVecInfo->nPairsPerBin = aBinInfo.nPairsPerBin;
+  d_fPairSample4dVecInfo->minK = aBinInfo.minK;
+  d_fPairSample4dVecInfo->maxK = aBinInfo.maxK;
+  d_fPairSample4dVecInfo->binWidthK = aBinInfo.binWidthK;
+  d_fPairSample4dVecInfo->nElementsPerPair = aBinInfo.nElementsPerPair;
+  //------------------------------------------------------
+  assert((int)aPairSample4dVec.size() == d_fPairSample4dVecInfo->nAnalyses);
+  assert((int)aPairSample4dVec[0].size() == d_fPairSample4dVecInfo->nBinsK);
+  assert(d_fPairSample4dVecInfo->nElementsPerPair == 3);
+  //------------------------------------------------------
+
+  int tIndex=0;
+  for(int iAnaly=0; iAnaly<(int)aPairSample4dVec.size(); iAnaly++)
+  {
+    for(int iK=0; iK<(int)aPairSample4dVec[iAnaly].size(); iK++)
+    {
+      for(int iPair=0; iPair<(int)aPairSample4dVec[iAnaly][iK].size(); iPair++)
+      {
+        d_fPairSample4dVec[tIndex] = aPairSample4dVec[iAnaly][iK][iPair][0];
+        d_fPairSample4dVec[tIndex+1] = aPairSample4dVec[iAnaly][iK][iPair][1];
+        d_fPairSample4dVec[tIndex+2] = aPairSample4dVec[iAnaly][iK][iPair][2];
+        tIndex += 3;
+      }
+    }
+  }
+
+}
+
+//________________________________________________________________________________________________________________
+void ParallelWaveFunction::UpdatePairSampleRadii(double aScaleFactor)
+{
+  //TODO make this more general, and probably is better way to do this
+  int tTotalEntries = d_fPairSample4dVecInfo->nAnalyses * d_fPairSample4dVecInfo->nBinsK * d_fPairSample4dVecInfo->nPairsPerBin * d_fPairSample4dVecInfo->nElementsPerPair;
+  for(int i=0; i<tTotalEntries; i++)
+  {
+    if(i%3 == 1) d_fPairSample4dVec[i] *= aScaleFactor;
+  }
+}
+
+
 //________________________________________________________________________________________________________________
 void ParallelWaveFunction::LoadPairKStar3dVec(td3dVec &aPairKStar3dVec, BinInfoKStar &aBinInfo)
 {
