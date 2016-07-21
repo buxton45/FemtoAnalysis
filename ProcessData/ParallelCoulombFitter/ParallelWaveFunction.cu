@@ -1164,11 +1164,27 @@ __device__ int GetSamplePairOffset(int aAnalysis, int aBinK, int aPair)
 }
 
 //________________________________________________________________________________________________________________
-__global__ void GetEntireCfCompletewStaticPairs(double aReF0s, double aImF0s, double aD0s, double aReF0t, double aImF0t, double aD0t, double *g_odata, int aAnalysisNumber, int aBinKNumber, int aOffsetOutput, bool aInterpScattLen)
+__device__ bool CanInterpPair(double aKStar, double aRStar, double aTheta)
+{
+  if(aKStar < d_fHyperGeo1F1Info->minInterpK) return false;
+  if(aKStar > d_fHyperGeo1F1Info->maxInterpK) return false;
+
+  if(aRStar < d_fHyperGeo1F1Info->minInterpR) return false;
+  if(aRStar > d_fHyperGeo1F1Info->maxInterpR) return false;
+
+  if(aTheta < d_fHyperGeo1F1Info->minInterpTheta) return false;
+  if(aTheta > d_fHyperGeo1F1Info->maxInterpTheta) return false;
+
+  return true;
+}
+
+
+//________________________________________________________________________________________________________________
+__global__ void GetEntireCfCompletewStaticPairs(double aReF0s, double aImF0s, double aD0s, double aReF0t, double aImF0t, double aD0t, double *g_odata, double *g_odata2, int aAnalysisNumber, int aBinKNumber, int aOffsetOutput, bool aInterpScattLen)
 {
 //  int idx = threadIdx.x + blockIdx.x*blockDim.x;
 
-  extern __shared__ double sdata[];
+  extern __shared__ double sdata2[][2];
 
   unsigned int tid = threadIdx.x;
   unsigned int tPairNumber = blockIdx.x*blockDim.x + threadIdx.x;
@@ -1176,19 +1192,29 @@ __global__ void GetEntireCfCompletewStaticPairs(double aReF0s, double aImF0s, do
 
   double tWfSqSinglet, tWfSqTriplet, tWfSq;
 
-  if(aInterpScattLen)
+  if(CanInterpPair(d_fPairSample4dVec[i],d_fPairSample4dVec[i+1],d_fPairSample4dVec[i+2]))
   {
-    tWfSqSinglet = InterpolateWfSquaredInterpScattLen(d_fPairSample4dVec[i],d_fPairSample4dVec[i+1],d_fPairSample4dVec[i+2],aReF0s,aImF0s,aD0s);
-    tWfSqTriplet = InterpolateWfSquaredInterpScattLen(d_fPairSample4dVec[i],d_fPairSample4dVec[i+1],d_fPairSample4dVec[i+2],aReF0t,aImF0t,aD0t);
-  }
-  else
-  {
-    tWfSqSinglet = InterpolateWfSquared(d_fPairSample4dVec[i],d_fPairSample4dVec[i+1],d_fPairSample4dVec[i+2],aReF0s,aImF0s,aD0s);
-    tWfSqTriplet = InterpolateWfSquared(d_fPairSample4dVec[i],d_fPairSample4dVec[i+1],d_fPairSample4dVec[i+2],aReF0t,aImF0t,aD0t);
+    if(aInterpScattLen)
+    {
+      tWfSqSinglet = InterpolateWfSquaredInterpScattLen(d_fPairSample4dVec[i],d_fPairSample4dVec[i+1],d_fPairSample4dVec[i+2],aReF0s,aImF0s,aD0s);
+      tWfSqTriplet = InterpolateWfSquaredInterpScattLen(d_fPairSample4dVec[i],d_fPairSample4dVec[i+1],d_fPairSample4dVec[i+2],aReF0t,aImF0t,aD0t);
+    }
+    else
+    {
+      tWfSqSinglet = InterpolateWfSquared(d_fPairSample4dVec[i],d_fPairSample4dVec[i+1],d_fPairSample4dVec[i+2],aReF0s,aImF0s,aD0s);
+      tWfSqTriplet = InterpolateWfSquared(d_fPairSample4dVec[i],d_fPairSample4dVec[i+1],d_fPairSample4dVec[i+2],aReF0t,aImF0t,aD0t);
+    }
+
+    tWfSq = 0.25*tWfSqSinglet + 0.75*tWfSqTriplet;
+    sdata2[tid][0] = tWfSq;
+    sdata2[tid][1] = 1.;
   }
 
-  tWfSq = 0.25*tWfSqSinglet + 0.75*tWfSqTriplet;
-  sdata[tid] = tWfSq;
+  else
+  {
+    sdata2[tid][0] = 0.;
+    sdata2[tid][1] = 0.;
+  }
 
   __syncthreads();
 
@@ -1200,7 +1226,8 @@ __global__ void GetEntireCfCompletewStaticPairs(double aReF0s, double aImF0s, do
 
     if(index < blockDim.x)
     {
-      sdata[index] += sdata[index+s];
+      sdata2[index][0] += sdata2[index+s][0];
+      sdata2[index][1] += sdata2[index+s][1];
     }
     __syncthreads();
   }
@@ -1216,7 +1243,11 @@ __global__ void GetEntireCfCompletewStaticPairs(double aReF0s, double aImF0s, do
   }
 */
   //write result for this block to global mem
-  if(tid == 0) g_odata[blockIdx.x+aOffsetOutput] = sdata[0];
+  if(tid == 0) 
+  {
+    g_odata[blockIdx.x+aOffsetOutput] = sdata2[0][0];
+    g_odata2[blockIdx.x+aOffsetOutput] = sdata2[0][1];
+  }
 }
 
 
@@ -2068,7 +2099,7 @@ vector<double> ParallelWaveFunction::RunInterpolateEntireCfComplete(td3dVec &aPa
 
 
 //________________________________________________________________________________________________________________
-vector<double> ParallelWaveFunction::RunInterpolateEntireCfCompletewStaticPairs(int aAnalysisNumber, double aReF0s, double aImF0s, double aD0s, double aReF0t, double aImF0t, double aD0t)
+td2dVec ParallelWaveFunction::RunInterpolateEntireCfCompletewStaticPairs(int aAnalysisNumber, double aReF0s, double aImF0s, double aD0s, double aReF0t, double aImF0t, double aD0t)
 {
 //  GpuTimer timerPre;
 //  timerPre.Start();
@@ -2076,13 +2107,16 @@ vector<double> ParallelWaveFunction::RunInterpolateEntireCfCompletewStaticPairs(
   int tNPairsPerBin = fSamplePairsBinInfo.nPairsPerBin;
   int tSizeOutput = tNBins*fNBlocks*sizeof(double); //the kernel reduces the values for tNPairs bins down to fNBlocks bins
   int tSizeShared = fNThreadsPerBlock*sizeof(double);
+  tSizeShared *= 2; //to account for Cf values and counts
 
   const int tNStreams = tNBins;
 
   //---Host arrays and allocations
-  double * h_Cf;
+  double * h_CfSums;
+  double * h_CfCounts;
 
-  checkCudaErrors(cudaMallocManaged(&h_Cf, tSizeOutput));
+  checkCudaErrors(cudaMallocManaged(&h_CfSums, tSizeOutput));
+  checkCudaErrors(cudaMallocManaged(&h_CfCounts, tSizeOutput));
 
   cudaStream_t tStreams[tNStreams];
 
@@ -2105,7 +2139,7 @@ vector<double> ParallelWaveFunction::RunInterpolateEntireCfCompletewStaticPairs(
   for(int i=0; i<tNBins; i++)
   {
     int tOffsetOutput = i*fNBlocks;
-    GetEntireCfCompletewStaticPairs<<<fNBlocks,fNThreadsPerBlock,tSizeShared,tStreams[i]>>>(aReF0s, aImF0s, aD0s, aReF0t, aImF0t, aD0t, h_Cf, aAnalysisNumber, i, tOffsetOutput, fInterpScattLen);
+    GetEntireCfCompletewStaticPairs<<<fNBlocks,fNThreadsPerBlock,tSizeShared,tStreams[i]>>>(aReF0s, aImF0s, aD0s, aReF0t, aImF0t, aD0t, h_CfSums, h_CfCounts, aAnalysisNumber, i, tOffsetOutput, fInterpScattLen);
   }
 //  timer.Stop();
 //  std::cout << "GetEntireCf kernel finished in " << timer.Elapsed() << " ms" << std::endl;
@@ -2117,19 +2151,25 @@ vector<double> ParallelWaveFunction::RunInterpolateEntireCfCompletewStaticPairs(
   checkCudaErrors(cudaDeviceSynchronize());
 
   // return the CF
-  vector<double> tReturnVec(tNBins);
+  td2dVec tReturnVec;
+    tReturnVec.resize(tNBins,td1dVec(2));
   double tSum = 0.0;
+  int tCounts = 0;
   for(int i=0; i<tNBins; i++)
   {
     tSum=0.0;
+    tCounts = 0;
     for(int j=0; j<fNBlocks; j++)
     {
-      tSum += h_Cf[j+i*fNBlocks]; 
+      tSum += h_CfSums[j+i*fNBlocks]; 
+      tCounts += h_CfCounts[j+i*fNBlocks]; 
     }
-    tReturnVec[i] = tSum;
+    tReturnVec[i][0] = tSum;
+    tReturnVec[i][1] = tCounts;
   }
 
-  checkCudaErrors(cudaFree(h_Cf));
+  checkCudaErrors(cudaFree(h_CfSums));
+  checkCudaErrors(cudaFree(h_CfCounts));
 
   for(int i=0; i<tNStreams; i++) cudaStreamDestroy(tStreams[i]);
 

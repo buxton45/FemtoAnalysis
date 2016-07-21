@@ -41,6 +41,7 @@ public:
   void UpdatePairRadiusParameters(double aNewRadius);
   void SetUseStaticPairs(bool aUseStaticPairs=true, int aNPairsPerKStarBin=16384);
   bool CanInterpAllSamplePairs();
+  td3dVec GetCPUSamplePairs(int aAnalysisNumber);
 
   void CreateScattLenSubs(double aReF0, double aImF0, double aD0);
 

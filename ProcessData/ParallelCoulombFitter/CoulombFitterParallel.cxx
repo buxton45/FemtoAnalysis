@@ -262,6 +262,34 @@ bool CoulombFitterParallel::CanInterpAllSamplePairs()
   return true;
 }
 
+//________________________________________________________________________________________________________________
+td3dVec CoulombFitterParallel::GetCPUSamplePairs(int aAnalysisNumber)
+{
+  td3dVec tReturnVec;
+
+  td2dVec tTempKStarBinVec;
+  td1dVec tTempPairVec;
+
+  for(int iKStarBin=0; iKStarBin<(int)fPairSample4dVec[aAnalysisNumber].size(); iKStarBin++)
+  {
+    tTempKStarBinVec.clear();
+    for(int iPair=0; iPair<(int)fPairSample4dVec[aAnalysisNumber][iKStarBin].size(); iPair++)
+    {
+      tTempPairVec.clear();
+      if(!CanInterpKStar(fPairSample4dVec[aAnalysisNumber][iKStarBin][iPair][0]) || !CanInterpRStar(fPairSample4dVec[aAnalysisNumber][iKStarBin][iPair][1]) || !CanInterpTheta(fPairSample4dVec[aAnalysisNumber][iKStarBin][iPair][2]))
+      {
+        tTempPairVec.push_back(fPairSample4dVec[aAnalysisNumber][iKStarBin][iPair][0]);
+        tTempPairVec.push_back(fPairSample4dVec[aAnalysisNumber][iKStarBin][iPair][1]);
+        tTempPairVec.push_back(fPairSample4dVec[aAnalysisNumber][iKStarBin][iPair][2]);
+
+        tTempKStarBinVec.push_back(tTempPairVec);
+      }
+    }
+    tReturnVec.push_back(tTempKStarBinVec);
+  }
+
+  return tReturnVec;
+}
 
 
 //________________________________________________________________________________________________________________
@@ -707,26 +735,57 @@ td1dVec CoulombFitterParallel::GetEntireFitCfContentCompletewStaticPairs(double 
 //cout << "tUpdateTimer: ";
 //tUpdateTimer.PrintInterval();
 
-//TODO figure out how to stop this crash
-//Check to make sure all pairs can be interpolated, otherwise the parallal calculation will crash
-  assert(CanInterpAllSamplePairs());
-
 
 //ChronoTimer CfParallelTimer;
 //CfParallelTimer.Start();
 
   //--------Do parallel calculations!----------
-  td1dVec tResultsGPU = fParallelWaveFunction->RunInterpolateEntireCfCompletewStaticPairs(aAnalysisNumber,par[2],par[3],par[4],par[5],par[6],par[7]);
-  int tNPairsPerBinGPU = fPairSample4dVec[aAnalysisNumber][0].size();  //TODO make this work if I have varying number of pairs per bin
+  td2dVec tResultsGPU = fParallelWaveFunction->RunInterpolateEntireCfCompletewStaticPairs(aAnalysisNumber,par[2],par[3],par[4],par[5],par[6],par[7]);
 
 //CfParallelTimer.Stop();
 //cout << "CfParallelTimer in GetEntireFitCfContent: ";
 //CfParallelTimer.PrintInterval();
 
+
+
+
+//ChronoTimer CfSerialTimer;
+//CfSerialTimer.Start();
+
+  td3dVec tPairsCPU = GetCPUSamplePairs(aAnalysisNumber);
+  td1dVec tResultsCPU(tPairsCPU.size());
+  complex<double> tWaveFunctionSinglet, tWaveFunctionTriplet;
+  double tWaveFunctionSq;
+  double tCPUContent;
+  //---------Do serial calculations------------
+  assert(tResultsGPU.size() == tResultsCPU.size());
+  for(int i=0; i<(int)tPairsCPU.size(); i++)
+  {
+    assert( ((int)tPairsCPU[i].size() + (int)tResultsGPU[i][1]) == fNPairsPerKStarBin);
+    tCPUContent = 0.0;
+    for(int j=0; j<(int)tPairsCPU[i].size(); j++)
+    {
+      tWaveFunctionSinglet = fWaveFunction->GetWaveFunction(tPairsCPU[i][j][0],tPairsCPU[i][j][1],tPairsCPU[i][j][2],par[2],par[3],par[4]);
+      tWaveFunctionTriplet = fWaveFunction->GetWaveFunction(tPairsCPU[i][j][0],tPairsCPU[i][j][1],tPairsCPU[i][j][2],par[5],par[6],par[7]);
+
+      tWaveFunctionSq = 0.25*norm(tWaveFunctionSinglet) + 0.75*norm(tWaveFunctionTriplet);
+
+      tCPUContent += tWaveFunctionSq;
+    }
+    tResultsCPU[i] = tCPUContent;
+  }
+
+//CfSerialTimer.Stop();
+//cout << "CfSerialTimer in GetEntireFitCfContent: ";
+//CfSerialTimer.PrintInterval();
+
+//ChronoTimer CfCombineTimer;
+//CfCombineTimer.Start();
+
   td1dVec tReturnVec(tResultsGPU.size());
   for(int i=0; i<(int)tResultsGPU.size(); i++)
   {
-    tReturnVec[i] = tResultsGPU[i]/tNPairsPerBinGPU;
+    tReturnVec[i] = (tResultsGPU[i][0] + tResultsCPU[i])/(tResultsGPU[i][1] + tPairsCPU[i].size());
 //    tReturnVec[i] = par[8]*(par[0]*tReturnVec[i] + (1.0-par[0]));  //C = Norm*(Lam*C_gen + (1-Lam));
     tReturnVec[i] = (par[0]*tReturnVec[i] + (1.0-par[0]));  //C = (Lam*C_gen + (1-Lam));
   }
