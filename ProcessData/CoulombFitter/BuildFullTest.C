@@ -115,8 +115,8 @@ int main(int argc, char **argv)
 
   tSharedAn->CreateMinuitParameters();
 
-  CoulombFitter* tFitter = new CoulombFitter(tSharedAn,0.15);
-//  CoulombFitter* tFitter = new CoulombFitter(tSharedAn,0.30);
+//  CoulombFitter* tFitter = new CoulombFitter(tSharedAn,0.15);
+  CoulombFitter* tFitter = new CoulombFitter(tSharedAn,0.30);
 //  CoulombFitter* tFitter = new CoulombFitter(tSharedAn,0.02);
     tFitter->SetIncludeSingletAndTriplet(true);
 
