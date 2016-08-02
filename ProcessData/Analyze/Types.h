@@ -35,6 +35,20 @@ using std::vector;
   enum InterpAxisType {kKaxis=0, kRaxis=1, kThetaaxis=2, kReF0axis=3, kImF0axis=4, kD0axis=5};
 
   enum CoulombType {kAttractive=0, kRepulsive=1, kNeutral=2};
+
+//----------------------------------------------------------
+  //TODO Don't forget, when adding new particle, add int value to cPDGValues array
+  enum ParticlePDGType {kPDGProt   = 2212,  kPDGAntiProt = -2212, 
+		        kPDGPiP    = 211,   kPDGPiM      = -211, 
+                        kPDGK0     = 310,
+                        kPDGKchP   = 321,   kPDGKchM     = -321,
+		        kPDGLam    = 3122,  kPDGALam     = -3122,
+		        kPDGSigma  = 3212,  kPDGASigma   = -3212,
+		        kPDGXiC    = 3312,  kPDGAXiC     = -3312,
+		        kPDGXi0    = 3322,  kPDGAXi0     = -3322,
+		        kPDGOmega  = 3334,  kPDGAOmega   = -3334,
+                        kPDGNull      = 0                          };
+  extern const int cPDGValues[18];
   //----------------------------------------------------------
 
 

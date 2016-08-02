@@ -5,6 +5,9 @@
 #ifndef THERMEVENTSCOLLECTION
 #define THERMEVENTSCOLLECTION
 
+#include "TSystemDirectory.h"
+#include "TSystemFile.h"
+
 #include "ThermEvent.h"
 class ThermEvent;
 
@@ -17,8 +20,10 @@ public:
 
   bool IsParticleOfInterest(ParticleCoor* tParticle);
   void ExtractEventsFromRootFile(TString aFileLocation);
+  void GetAllFileNames(const char *aDirName);
 
 private:
+  vector<TString> fFileNameCollection;
   vector<ThermEvent*> fEventsCollection;
 
 

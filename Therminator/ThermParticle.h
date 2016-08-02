@@ -25,6 +25,7 @@
 #include <assert.h>
 
 #include <TMath.h>
+#include <TLorentzVector.h>
 
 using std::cout;
 using std::endl;
@@ -39,14 +40,16 @@ using std::vector;
 class ThermParticle {
 
 public:
-  ThermParticle(ParticleType aType);
+  ThermParticle();
   ThermParticle(ParticleCoor* aParticleCoor);
   ThermParticle(const ThermParticle& aParticle);
   ThermParticle& operator=(ThermParticle& aParticle);
 
   virtual ~ThermParticle();
 
-  void SetParticleType();
+  bool IsIntPDGValue(int aInt);
+  void SetParticlePDGType();
+  ParticlePDGType GetPDGType(int aPID);
 
   double GetTau();
   double GetR();
@@ -65,16 +68,28 @@ public:
   void TransformRotateZ(double aPhi);
   void TransformToPRF(double aBetaT);
 
+  TLorentzVector* GetFourPosition();
+  TLorentzVector* GetFourMomentum();
+
   //inline
-  void SetParticleType(ParticleType aType);
-  ParticleType GetParticleType();
+  void SetParticlePDGType(ParticlePDGType aType);
+  ParticlePDGType GetParticlePDGType();
+  int GetEID();
+
+  ParticlePDGType GetFatherPDGType();
+  int GetFatherEID();
 
   int GetDecayed();
   void SetDecayed(int aDecayed);
 
+  double GetMass();
+
+  int GetPID();
+  int GetFatherPID();
 
 private:
-  ParticleType fParticleType;
+  ParticlePDGType fParticlePDGType;
+  ParticlePDGType fFatherPDGType;
 
   double fMass;
   double fT, fX, fY, fZ;
@@ -96,10 +111,19 @@ private:
 
 
 //inline stuff
-inline void ThermParticle::SetParticleType(ParticleType aType) {fParticleType = aType;}
-inline ParticleType ThermParticle::GetParticleType() {return fParticleType;}
+inline void ThermParticle::SetParticlePDGType(ParticlePDGType aType) {fParticlePDGType = aType;}
+inline ParticlePDGType ThermParticle::GetParticlePDGType() {return fParticlePDGType;}
+inline int ThermParticle::GetEID() {return fEID;}
+
+inline ParticlePDGType ThermParticle::GetFatherPDGType() {return fFatherPDGType;}
+inline int ThermParticle::GetFatherEID() {return fFatherEID;}
 
 inline int ThermParticle::GetDecayed() {return fDecayed;}
 inline void ThermParticle::SetDecayed(int aDecayed) {fDecayed = aDecayed;}
+
+inline double ThermParticle::GetMass() {return fMass;}
+
+inline int ThermParticle::GetPID() {return fPID;}
+inline int ThermParticle::GetFatherPID() {return fFatherPID;}
 
 #endif

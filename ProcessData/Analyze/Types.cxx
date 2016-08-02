@@ -9,6 +9,9 @@
 
 
 //________________________________________________________________________________________________________________
+//enum ParticlePDGType
+const int cPDGValues[18] = {2212,-2212,211,-211,310,321,-321,3122,-3122,3212,-3212,3312,-3312,3322,-3322,3334,-3334,0};
+
 
 //enum AnalysisType
 const char* const cAnalysisBaseTags[17] = {"LamK0", "ALamK0", "LamKchP", "ALamKchP", "LamKchM", "ALamKchM", "XiKchP", "AXiKchP", "XiKchM", "AXiKchM", "LamLam", "ALamALam", "LamALam", "LamPiP", "ALamPiP", "LamPiM", "ALamPiM"};

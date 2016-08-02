@@ -16,8 +16,9 @@ ClassImp(ThermParticle)
 
 
 //________________________________________________________________________________________________________________
-ThermParticle::ThermParticle(ParticleType aType) :
-  fParticleType(aType),
+ThermParticle::ThermParticle() :
+  fParticlePDGType(kPDGNull),
+  fFatherPDGType(kPDGNull),
   fMass(0), 
   fT(0), fX(0), fY(0), fZ(0),
   fE(0), fPx(0), fPy(0), fPz(0),
@@ -36,13 +37,14 @@ ThermParticle::ThermParticle(ParticleCoor* aParticle) :
   fDecayed(aParticle->decayed), fPID(aParticle->pid), fFatherPID(aParticle->fatherpid), fRootPID(aParticle->rootpid),
   fEID(aParticle->eid), fFatherEID(aParticle->fathereid), fEventID(aParticle->eventid)
 {
-  SetParticleType();
+  SetParticlePDGType();
+  fFatherPDGType = GetPDGType(fFatherPID);
 }
 
 
 //________________________________________________________________________________________________________________
 ThermParticle::ThermParticle(const ThermParticle& aParticle) :
-  fParticleType(aParticle.fParticleType), fMass(aParticle.fMass), 
+  fParticlePDGType(aParticle.fParticlePDGType), fFatherPDGType(aParticle.fFatherPDGType), fMass(aParticle.fMass), 
   fT(aParticle.fT), fX(aParticle.fX), fY(aParticle.fY), fZ(aParticle.fZ),
   fE(aParticle.fE), fPx(aParticle.fPx), fPy(aParticle.fPy), fPz(aParticle.fPz),
   fDecayed(aParticle.fDecayed), fPID(aParticle.fPID), fFatherPID(aParticle.fFatherPID), fRootPID(aParticle.fRootPID),
@@ -56,7 +58,8 @@ ThermParticle& ThermParticle::operator=(ThermParticle& aParticle)
 {
   if(this == &aParticle) return *this;
 
-  fParticleType = aParticle.fParticleType;
+  fParticlePDGType = aParticle.fParticlePDGType;
+  fFatherPDGType = aParticle.fFatherPDGType;
   fMass = aParticle.fMass; 
   fT = aParticle.fT;
   fX = aParticle.fX;
@@ -84,20 +87,37 @@ ThermParticle::~ThermParticle()
 }
 
 //________________________________________________________________________________________________________________
-void ThermParticle::SetParticleType()
+bool ThermParticle::IsIntPDGValue(int aInt)
 {
-  if(fPID == 3122) SetParticleType(kLam);
-  else if(fPID == -3122) SetParticleType(kALam);
+  //Make sure aInt is in fact a correct PDG value
+  //  I need this function because ParticlePDGType tType = static_cast<ParticlePDGType>(aInt)
+  //  works even if aInt is not a correct PDG value
 
-  else if(fPID == 310) SetParticleType(kK0);
+  if(aInt == 0) return false;  //I only have kPDGNull=0 for initialization purposes, it is not a real PDG value
+  for(unsigned int i=0; i<sizeof(cPDGValues)/sizeof(int); i++)
+  {
+    if(aInt == cPDGValues[i]) return true;
+  }
 
-  else if(fPID == 321) SetParticleType(kKchP);
-  else if(fPID == -321) SetParticleType(kKchM);
-
-  else assert(0); //TODO
+  return false;
 }
 
+//________________________________________________________________________________________________________________
+void ThermParticle::SetParticlePDGType()
+{
+  //first, make sure aInt is in fact a correct PDG value
+  assert(IsIntPDGValue(fPID));
+  fParticlePDGType = static_cast<ParticlePDGType>(fPID);
+}
 
+//________________________________________________________________________________________________________________
+ParticlePDGType ThermParticle::GetPDGType(int aPID)
+{
+  //first, make sure aInt is in fact a correct PDG value
+  assert(IsIntPDGValue(fPID));
+  ParticlePDGType tParticlePDGType = static_cast<ParticlePDGType>(fPID);
+  return tParticlePDGType;
+}
 
 //________________________________________________________________________________________________________________
 double ThermParticle::GetTau()
@@ -215,8 +235,20 @@ void ThermParticle::TransformToPRF(double aBetaT)
 }
 
 
+//________________________________________________________________________________________________________________
+TLorentzVector* ThermParticle::GetFourPosition()
+{
+  TLorentzVector* tFourPosition = new TLorentzVector(fT,fX,fY,fZ);
+  return tFourPosition;
+}
 
 
+//________________________________________________________________________________________________________________
+TLorentzVector* ThermParticle::GetFourMomentum()
+{
+  TLorentzVector* tFourMomentum = new TLorentzVector(fE,fPx,fPy,fPz);
+  return tFourMomentum;
+}
 
 
 

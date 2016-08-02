@@ -16,6 +16,7 @@ ClassImp(ThermEventsCollection)
 
 //________________________________________________________________________________________________________________
 ThermEventsCollection::ThermEventsCollection() :
+  fFileNameCollection(0),
   fEventsCollection(0)
 {
 
@@ -66,6 +67,7 @@ void ThermEventsCollection::ExtractEventsFromRootFile(TString aFileLocation)
 
     if(tParticleEntry->eventid != tEventID)
     {
+      tThermEvent->MatchAllDaughtersWithFathers();
       fEventsCollection.push_back(tThermEvent);
       tThermEvent->ClearThermEvent();
 
@@ -80,10 +82,12 @@ void ThermEventsCollection::ExtractEventsFromRootFile(TString aFileLocation)
     }
 
   }
+  tThermEvent->MatchAllDaughtersWithFathers();
   fEventsCollection.push_back(tThermEvent);
 
-cout << "tNEvents = " << tNEvents << endl;
-cout << "fEventsCollection.size() = " << fEventsCollection.size() << endl;
+//cout << "aFileLocation = " << aFileLocation << endl;
+//cout << "tNEvents = " << tNEvents << endl;
+//cout << "fEventsCollection.size() = " << fEventsCollection.size() << endl << endl;
 
   tFile->Close();
   delete tFile;
@@ -93,7 +97,41 @@ cout << "fEventsCollection.size() = " << fEventsCollection.size() << endl;
 }
 
 
+//________________________________________________________________________________________________________________
+void ThermEventsCollection::GetAllFileNames(const char *aDirName)
+{
+  fFileNameCollection.clear();
+  TString tCompleteFilePath;
 
+  TSystemDirectory tDir(aDirName,aDirName);
+  TList* tFiles = tDir.GetListOfFiles();
+
+  const char* tBeginningText = "event";
+  const char* tEndingText = ".root";
+
+  int tNFiles = 0;
+
+  if(tFiles)
+  {
+    TSystemFile* tFile;
+    TString tName;
+    TIter tIterNext(tFiles);
+
+    while((tFile=(TSystemFile*)tIterNext()))
+    {
+      tName = tFile->GetName();
+      if(!tFile->IsDirectory() && tName.BeginsWith(tBeginningText) && tName.EndsWith(tEndingText))
+      {
+        tNFiles++;
+        fFileNameCollection.push_back(tName);
+        tCompleteFilePath = TString(aDirName) + tName;
+        ExtractEventsFromRootFile(tCompleteFilePath);
+      }
+    }
+  }
+  cout << "Total number of files = " << tNFiles << endl;
+  cout << "Total number of events = " << fEventsCollection.size() << endl << endl;
+}
 
 
 

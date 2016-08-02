@@ -30,14 +30,25 @@ public:
   void PushBackThermParticle(ThermParticle* aParticle);
   void ClearThermEvent();
 
+  void FindFatherandLoadDaughter(ThermParticle* aDaughterParticle);
+  bool IsDaughterOfInterest(ParticlePDGType aFatherOfDaughterType);
+  void MatchDaughtersWithFathers(ParticlePDGType aDaughterType);
+  void MatchAllDaughtersWithFathers();
+  void AssertAllFathersFoundDaughters();
+
 private:
 
 
   vector<ThermLambdaParticle*> fLambdaCollection;
   vector<ThermLambdaParticle*> fAntiLambdaCollection;
   vector<ThermLambdaParticle*> fK0ShortCollection;
+
+  vector<ThermParticle*> fPiPCollection;
+  vector<ThermParticle*> fPiMCollection;
   vector<ThermParticle*> fKchPCollection;
   vector<ThermParticle*> fKchMCollection;
+  vector<ThermParticle*> fProtCollection;
+  vector<ThermParticle*> fAProtCollection;
 
 
 
