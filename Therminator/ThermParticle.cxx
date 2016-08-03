@@ -17,8 +17,7 @@ ClassImp(ThermParticle)
 
 //________________________________________________________________________________________________________________
 ThermParticle::ThermParticle() :
-  fParticlePDGType(kPDGNull),
-  fFatherPDGType(kPDGNull),
+  fParticleOfInterest(false),
   fMass(0), 
   fT(0), fX(0), fY(0), fZ(0),
   fE(0), fPx(0), fPy(0), fPz(0),
@@ -31,20 +30,20 @@ ThermParticle::ThermParticle() :
 //________________________________________________________________________________________________________________
 ThermParticle::ThermParticle(ParticleCoor* aParticle) :
 //  fParticleType(aType),
+  fParticleOfInterest(false),
   fMass(aParticle->mass), 
   fT(aParticle->t), fX(aParticle->x), fY(aParticle->y), fZ(aParticle->z),
   fE(aParticle->e), fPx(aParticle->px), fPy(aParticle->py), fPz(aParticle->pz),
   fDecayed(aParticle->decayed), fPID(aParticle->pid), fFatherPID(aParticle->fatherpid), fRootPID(aParticle->rootpid),
   fEID(aParticle->eid), fFatherEID(aParticle->fathereid), fEventID(aParticle->eventid)
 {
-  SetParticlePDGType();
-  fFatherPDGType = GetPDGType(fFatherPID);
+  SetIsParticleOfInterest();
 }
 
 
 //________________________________________________________________________________________________________________
 ThermParticle::ThermParticle(const ThermParticle& aParticle) :
-  fParticlePDGType(aParticle.fParticlePDGType), fFatherPDGType(aParticle.fFatherPDGType), fMass(aParticle.fMass), 
+  fParticleOfInterest(aParticle.fParticleOfInterest), fMass(aParticle.fMass), 
   fT(aParticle.fT), fX(aParticle.fX), fY(aParticle.fY), fZ(aParticle.fZ),
   fE(aParticle.fE), fPx(aParticle.fPx), fPy(aParticle.fPy), fPz(aParticle.fPz),
   fDecayed(aParticle.fDecayed), fPID(aParticle.fPID), fFatherPID(aParticle.fFatherPID), fRootPID(aParticle.fRootPID),
@@ -58,8 +57,7 @@ ThermParticle& ThermParticle::operator=(ThermParticle& aParticle)
 {
   if(this == &aParticle) return *this;
 
-  fParticlePDGType = aParticle.fParticlePDGType;
-  fFatherPDGType = aParticle.fFatherPDGType;
+  fParticleOfInterest = aParticle.fParticleOfInterest;
   fMass = aParticle.fMass; 
   fT = aParticle.fT;
   fX = aParticle.fX;
@@ -86,37 +84,19 @@ ThermParticle::~ThermParticle()
   cout << "ThermParticle object is being deleted!!!" << endl;
 }
 
-//________________________________________________________________________________________________________________
-bool ThermParticle::IsIntPDGValue(int aInt)
-{
-  //Make sure aInt is in fact a correct PDG value
-  //  I need this function because ParticlePDGType tType = static_cast<ParticlePDGType>(aInt)
-  //  works even if aInt is not a correct PDG value
-
-  if(aInt == 0) return false;  //I only have kPDGNull=0 for initialization purposes, it is not a real PDG value
-  for(unsigned int i=0; i<sizeof(cPDGValues)/sizeof(int); i++)
-  {
-    if(aInt == cPDGValues[i]) return true;
-  }
-
-  return false;
-}
 
 //________________________________________________________________________________________________________________
-void ThermParticle::SetParticlePDGType()
+void ThermParticle::SetIsParticleOfInterest()
 {
-  //first, make sure aInt is in fact a correct PDG value
-  assert(IsIntPDGValue(fPID));
-  fParticlePDGType = static_cast<ParticlePDGType>(fPID);
-}
+  if(fPID == 3122) fParticleOfInterest = true;        //Lam
+  else if(fPID == -3122) fParticleOfInterest = true;  //ALam
 
-//________________________________________________________________________________________________________________
-ParticlePDGType ThermParticle::GetPDGType(int aPID)
-{
-  //first, make sure aInt is in fact a correct PDG value
-  assert(IsIntPDGValue(fPID));
-  ParticlePDGType tParticlePDGType = static_cast<ParticlePDGType>(fPID);
-  return tParticlePDGType;
+  else if(fPID == 311) fParticleOfInterest = true;    //K0 (K0s = 310, but apparently there are no K0s)
+
+  else if(fPID == 321) fParticleOfInterest = true;    //KchP
+  else if(fPID == -321) fParticleOfInterest = true;   //KchM 
+
+  else fParticleOfInterest = false;
 }
 
 //________________________________________________________________________________________________________________

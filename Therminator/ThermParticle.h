@@ -47,9 +47,7 @@ public:
 
   virtual ~ThermParticle();
 
-  bool IsIntPDGValue(int aInt);
-  void SetParticlePDGType();
-  ParticlePDGType GetPDGType(int aPID);
+  void SetIsParticleOfInterest();
 
   double GetTau();
   double GetR();
@@ -72,11 +70,9 @@ public:
   TLorentzVector* GetFourMomentum();
 
   //inline
-  void SetParticlePDGType(ParticlePDGType aType);
-  ParticlePDGType GetParticlePDGType();
+  bool IsParticleOfInterest();
   int GetEID();
 
-  ParticlePDGType GetFatherPDGType();
   int GetFatherEID();
 
   int GetDecayed();
@@ -88,8 +84,7 @@ public:
   int GetFatherPID();
 
 private:
-  ParticlePDGType fParticlePDGType;
-  ParticlePDGType fFatherPDGType;
+  bool fParticleOfInterest;
 
   double fMass;
   double fT, fX, fY, fZ;
@@ -111,11 +106,9 @@ private:
 
 
 //inline stuff
-inline void ThermParticle::SetParticlePDGType(ParticlePDGType aType) {fParticlePDGType = aType;}
-inline ParticlePDGType ThermParticle::GetParticlePDGType() {return fParticlePDGType;}
+inline bool ThermParticle::IsParticleOfInterest() {return fParticleOfInterest;}
 inline int ThermParticle::GetEID() {return fEID;}
 
-inline ParticlePDGType ThermParticle::GetFatherPDGType() {return fFatherPDGType;}
 inline int ThermParticle::GetFatherEID() {return fFatherEID;}
 
 inline int ThermParticle::GetDecayed() {return fDecayed;}

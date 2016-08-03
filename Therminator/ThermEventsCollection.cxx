@@ -30,27 +30,6 @@ ThermEventsCollection::~ThermEventsCollection()
 }
 
 //________________________________________________________________________________________________________________
-bool ThermEventsCollection::IsParticleOfInterest(ParticleCoor* tParticle)
-{
-  if(tParticle->pid == 3122) return true;
-  else if(tParticle->pid == -3122) return true;
-
-  else if(tParticle->pid == 311) return true;
-
-  else if(tParticle->pid == 211) return true;
-  else if(tParticle->pid == -211) return true;
-
-  else if(tParticle->pid == 321) return true;
-  else if(tParticle->pid == -321) return true;
-
-  else if(tParticle->pid == 2212) return true;
-  else if(tParticle->pid == -2212) return true;
-
-  return false;
-}
-
-
-//________________________________________________________________________________________________________________
 void ThermEventsCollection::ExtractEventsFromRootFile(TString aFileLocation)
 {
   TFile *tFile = TFile::Open(aFileLocation);
@@ -73,8 +52,7 @@ void ThermEventsCollection::ExtractEventsFromRootFile(TString aFileLocation)
 
     if(tParticleEntry->eventid != tEventID)
     {
-      tThermEvent->MatchAllDaughtersWithFathers();
-      tThermEvent->AssertAllFathersFoundDaughters();
+      tThermEvent->MatchDaughtersWithFathers();
       fEventsCollection.push_back(tThermEvent);
       tThermEvent->ClearThermEvent();
 
@@ -84,15 +62,14 @@ void ThermEventsCollection::ExtractEventsFromRootFile(TString aFileLocation)
 
     ThermParticle *tThermParticle = new ThermParticle(tParticleEntry);
     tThermEvent->PushBackThermParticle(tThermParticle);
-    if(IsParticleOfInterest(tParticleEntry))
+    if(tThermParticle->IsParticleOfInterest())
     {
 //      ThermParticle *tThermParticle = new ThermParticle(tParticleEntry);
       tThermEvent->PushBackThermParticleOfInterest(tThermParticle);
     }
 
   }
-  tThermEvent->MatchAllDaughtersWithFathers();
-  tThermEvent->AssertAllFathersFoundDaughters();
+  tThermEvent->MatchDaughtersWithFathers();
   fEventsCollection.push_back(tThermEvent);
 
 //cout << "aFileLocation = " << aFileLocation << endl;

@@ -18,7 +18,6 @@ public:
   ThermEventsCollection();
   virtual ~ThermEventsCollection();
 
-  bool IsParticleOfInterest(ParticleCoor* tParticle);
   void ExtractEventsFromRootFile(TString aFileLocation);
   void ExtractFromAllFiles(const char *aDirName);
 

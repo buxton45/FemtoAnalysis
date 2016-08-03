@@ -20,10 +20,6 @@ public:
   void LoadDaughter(ThermParticle* aDaughter);
 
   //inline
-  void SetPosDaughterPDGType(int aPID);
-  void SetNegDaughterPDGType(int aPID);
-  ParticlePDGType GetPosDaughterPDGType();
-  ParticlePDGType GetNegDaughterPDGType();
 
   void SetPosDaughterPID(int aPID);
   void SetNegDaughterPID(int aPID);
@@ -42,9 +38,6 @@ private:
   int fPosDaughterPID;
   int fNegDaughterPID;
 
-  ParticlePDGType fPosDaughterPDGType;
-  ParticlePDGType fNegDaughterPDGType;
-
   double fMassPos;
   double fTPos, fXPos, fYPos, fZPos;
   double fEPos, fPxPos, fPyPos, fPzPos;
@@ -61,13 +54,9 @@ private:
 
 
 //inline stuff
-inline void ThermV0Particle::SetPosDaughterPDGType(int aPID) {fPosDaughterPDGType = GetPDGType(aPID);}
-inline void ThermV0Particle::SetNegDaughterPDGType(int aPID) {fNegDaughterPDGType = GetPDGType(aPID);}
-inline ParticlePDGType ThermV0Particle::GetPosDaughterPDGType() {return fPosDaughterPDGType;}
-inline ParticlePDGType ThermV0Particle::GetNegDaughterPDGType() {return fNegDaughterPDGType;}
 
-inline void ThermV0Particle::SetPosDaughterPID(int aPID) {fPosDaughterPID = aPID; SetPosDaughterPDGType(fPosDaughterPID);}
-inline void ThermV0Particle::SetNegDaughterPID(int aPID) {fNegDaughterPID = aPID; SetPosDaughterPDGType(fNegDaughterPID);}
+inline void ThermV0Particle::SetPosDaughterPID(int aPID) {fPosDaughterPID = aPID;}
+inline void ThermV0Particle::SetNegDaughterPID(int aPID) {fNegDaughterPID = aPID;}
 inline int ThermV0Particle::GetPosDaughterPID() {return fPosDaughterPID;}
 inline int ThermV0Particle::GetNegDaughterPID() {return fNegDaughterPID;}
 

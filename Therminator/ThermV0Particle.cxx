@@ -24,8 +24,6 @@ ThermV0Particle::ThermV0Particle() :
   fGoodLambda(false),
   fPosDaughterPID(0),
   fNegDaughterPID(0),
-  fPosDaughterPDGType(kPDGNull),
-  fNegDaughterPDGType(kPDGNull),
 
   fMassPos(0), fTPos(0), fXPos(0), fYPos(0), fZPos(0), fEPos(0), fPxPos(0), fPyPos(0), fPzPos(0),
   fMassNeg(0), fTNeg(0), fXNeg(0), fYNeg(0), fZNeg(0), fENeg(0), fPxNeg(0), fPyNeg(0), fPzNeg(0)
@@ -42,8 +40,6 @@ ThermV0Particle::ThermV0Particle(const ThermV0Particle& aParticle) :
   fGoodLambda(aParticle.fGoodLambda),
   fPosDaughterPID(aParticle.fPosDaughterPID),
   fNegDaughterPID(aParticle.fNegDaughterPID),
-  fPosDaughterPDGType(aParticle.fPosDaughterPDGType),
-  fNegDaughterPDGType(aParticle.fNegDaughterPDGType),
 
   fMassPos(aParticle.fMassPos), 
   fTPos(aParticle.fTPos), fXPos(aParticle.fXPos), fYPos(aParticle.fYPos), fZPos(aParticle.fZPos),
@@ -70,9 +66,6 @@ ThermV0Particle& ThermV0Particle::operator=(ThermV0Particle& aParticle)
 
   fPosDaughterPID = aParticle.fPosDaughterPID;
   fNegDaughterPID = aParticle.fNegDaughterPID;
-
-  fPosDaughterPDGType = aParticle.fPosDaughterPDGType;
-  fNegDaughterPDGType = aParticle.fNegDaughterPDGType;
 
   fMassPos = aParticle.fMassPos; 
   fTPos = aParticle.fTPos;
@@ -110,7 +103,6 @@ ThermV0Particle::~ThermV0Particle()
 void ThermV0Particle::LoadDaughter(ThermParticle* aDaughter)
 {
   int tPID = aDaughter->GetPID();
-  ParticlePDGType tPDGType = aDaughter->GetParticlePDGType();
   double tMass = aDaughter->GetMass();
 
   TLorentzVector* tFourPosition = aDaughter->GetFourPosition();
@@ -129,7 +121,7 @@ void ThermV0Particle::LoadDaughter(ThermParticle* aDaughter)
   {
     assert(!fPosDaughterFound);  //should not have already found positive daughter
 
-    SetPosDaughterPID(tPID); //also sets fPosDaughterPDGType
+    SetPosDaughterPID(tPID);
 
     fMassPos =tMass;
 
@@ -150,7 +142,7 @@ void ThermV0Particle::LoadDaughter(ThermParticle* aDaughter)
   {
     assert(!fNegDaughterFound);  //should not have already found negative daughter
 
-    SetNegDaughterPID(tPID); //also sets fNegDaughterPDGType
+    SetNegDaughterPID(tPID);
 
     fMassNeg =tMass;
 
