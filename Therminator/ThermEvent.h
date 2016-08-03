@@ -15,8 +15,8 @@
 #include "ThermParticle.h"
 class ThermParticle;
 
-#include "ThermLambdaParticle.h"
-class ThermLambdaParticle;
+#include "ThermV0Particle.h"
+class ThermV0Particle;
 
 #include "ParticleCoor.h"
 
@@ -28,6 +28,7 @@ public:
   virtual ~ThermEvent();
 
   void PushBackThermParticle(ThermParticle* aParticle);
+  void PushBackThermParticleOfInterest(ThermParticle* aParticle);
   void ClearThermEvent();
 
   void FindFatherandLoadDaughter(ThermParticle* aDaughterParticle);
@@ -36,12 +37,16 @@ public:
   void MatchAllDaughtersWithFathers();
   void AssertAllFathersFoundDaughters();
 
+  vector<ThermV0Particle*> GetLambdaParticleCollection(ParticlePDGType aPDGType);
+  vector<ThermParticle*> GetParticleCollection(ParticlePDGType aPDGType);
+
 private:
 
+  vector<ThermParticle*> fAllParticlesCollection;
 
-  vector<ThermLambdaParticle*> fLambdaCollection;
-  vector<ThermLambdaParticle*> fAntiLambdaCollection;
-  vector<ThermLambdaParticle*> fK0ShortCollection;
+  vector<ThermV0Particle*> fLambdaCollection;
+  vector<ThermV0Particle*> fAntiLambdaCollection;
+  vector<ThermV0Particle*> fK0ShortCollection;
 
   vector<ThermParticle*> fPiPCollection;
   vector<ThermParticle*> fPiMCollection;

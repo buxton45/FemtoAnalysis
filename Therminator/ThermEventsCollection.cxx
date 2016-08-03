@@ -35,10 +35,16 @@ bool ThermEventsCollection::IsParticleOfInterest(ParticleCoor* tParticle)
   if(tParticle->pid == 3122) return true;
   else if(tParticle->pid == -3122) return true;
 
-  else if(tParticle->pid == 310) return true;
+  else if(tParticle->pid == 311) return true;
+
+  else if(tParticle->pid == 211) return true;
+  else if(tParticle->pid == -211) return true;
 
   else if(tParticle->pid == 321) return true;
   else if(tParticle->pid == -321) return true;
+
+  else if(tParticle->pid == 2212) return true;
+  else if(tParticle->pid == -2212) return true;
 
   return false;
 }
@@ -68,6 +74,7 @@ void ThermEventsCollection::ExtractEventsFromRootFile(TString aFileLocation)
     if(tParticleEntry->eventid != tEventID)
     {
       tThermEvent->MatchAllDaughtersWithFathers();
+      tThermEvent->AssertAllFathersFoundDaughters();
       fEventsCollection.push_back(tThermEvent);
       tThermEvent->ClearThermEvent();
 
@@ -75,14 +82,17 @@ void ThermEventsCollection::ExtractEventsFromRootFile(TString aFileLocation)
       tEventID = tParticleEntry->eventid;
     }
 
+    ThermParticle *tThermParticle = new ThermParticle(tParticleEntry);
+    tThermEvent->PushBackThermParticle(tThermParticle);
     if(IsParticleOfInterest(tParticleEntry))
     {
-      ThermParticle *tThermParticle = new ThermParticle(tParticleEntry);
-      tThermEvent->PushBackThermParticle(tThermParticle);
+//      ThermParticle *tThermParticle = new ThermParticle(tParticleEntry);
+      tThermEvent->PushBackThermParticleOfInterest(tThermParticle);
     }
 
   }
   tThermEvent->MatchAllDaughtersWithFathers();
+  tThermEvent->AssertAllFathersFoundDaughters();
   fEventsCollection.push_back(tThermEvent);
 
 //cout << "aFileLocation = " << aFileLocation << endl;
@@ -92,13 +102,13 @@ void ThermEventsCollection::ExtractEventsFromRootFile(TString aFileLocation)
   tFile->Close();
   delete tFile;
 
-  delete tParticleEntry;
-  delete tThermEvent;
+//  delete tParticleEntry;
+//  delete tThermEvent;
 }
 
 
 //________________________________________________________________________________________________________________
-void ThermEventsCollection::GetAllFileNames(const char *aDirName)
+void ThermEventsCollection::ExtractFromAllFiles(const char *aDirName)
 {
   fFileNameCollection.clear();
   TString tCompleteFilePath;

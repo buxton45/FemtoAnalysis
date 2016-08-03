@@ -40,7 +40,7 @@ using std::vector;
   //TODO Don't forget, when adding new particle, add int value to cPDGValues array
   enum ParticlePDGType {kPDGProt   = 2212,  kPDGAntiProt = -2212, 
 		        kPDGPiP    = 211,   kPDGPiM      = -211, 
-                        kPDGK0     = 310,
+                        kPDGK0     = 311,
                         kPDGKchP   = 321,   kPDGKchM     = -321,
 		        kPDGLam    = 3122,  kPDGALam     = -3122,
 		        kPDGSigma  = 3212,  kPDGASigma   = -3212,

@@ -20,7 +20,7 @@ public:
 
   bool IsParticleOfInterest(ParticleCoor* tParticle);
   void ExtractEventsFromRootFile(TString aFileLocation);
-  void GetAllFileNames(const char *aDirName);
+  void ExtractFromAllFiles(const char *aDirName);
 
 private:
   vector<TString> fFileNameCollection;

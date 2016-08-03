@@ -1,12 +1,12 @@
 ///////////////////////////////////////////////////////////////////////////
-// ThermLambdaParticle:                                                  //
+// ThermV0Particle:                                                      //
 ///////////////////////////////////////////////////////////////////////////
 
 
-#include "ThermLambdaParticle.h"
+#include "ThermV0Particle.h"
 
 #ifdef __ROOT__
-ClassImp(ThermLambdaParticle)
+ClassImp(ThermV0Particle)
 #endif
 
 
@@ -16,7 +16,7 @@ ClassImp(ThermLambdaParticle)
 
 
 //________________________________________________________________________________________________________________
-ThermLambdaParticle::ThermLambdaParticle() :
+ThermV0Particle::ThermV0Particle() :
   ThermParticle(),
   fPosDaughterFound(false),
   fNegDaughterFound(false),
@@ -34,7 +34,7 @@ ThermLambdaParticle::ThermLambdaParticle() :
 }
 
 //________________________________________________________________________________________________________________
-ThermLambdaParticle::ThermLambdaParticle(const ThermLambdaParticle& aParticle) :
+ThermV0Particle::ThermV0Particle(const ThermV0Particle& aParticle) :
   ThermParticle(aParticle),
   fPosDaughterFound(aParticle.fPosDaughterFound),
   fNegDaughterFound(aParticle.fNegDaughterFound),
@@ -57,7 +57,7 @@ ThermLambdaParticle::ThermLambdaParticle(const ThermLambdaParticle& aParticle) :
 }
 
 //________________________________________________________________________________________________________________
-ThermLambdaParticle& ThermLambdaParticle::operator=(ThermLambdaParticle& aParticle)
+ThermV0Particle& ThermV0Particle::operator=(ThermV0Particle& aParticle)
 {
   if(this == &aParticle) return *this;
 
@@ -100,14 +100,14 @@ ThermLambdaParticle& ThermLambdaParticle::operator=(ThermLambdaParticle& aPartic
 
 
 //________________________________________________________________________________________________________________
-ThermLambdaParticle::~ThermLambdaParticle()
+ThermV0Particle::~ThermV0Particle()
 {
-  cout << "ThermLambdaParticle object is being deleted!!!" << endl;
+  cout << "ThermV0Particle object is being deleted!!!" << endl;
 }
 
 
 //________________________________________________________________________________________________________________
-void ThermLambdaParticle::LoadDaughter(ThermParticle* aDaughter)
+void ThermV0Particle::LoadDaughter(ThermParticle* aDaughter)
 {
   int tPID = aDaughter->GetPID();
   ParticlePDGType tPDGType = aDaughter->GetParticlePDGType();

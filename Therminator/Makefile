@@ -6,7 +6,7 @@ CFLAGS = $(shell root-config --cflags) -Wall -std=c++11 -I${ANALYZE_DIR} -I${UTI
 #IFLAGS = -I$(ROOTSYS)/include
 #.PHONY: clean
 
-MY_LIBS = $(addprefix build/, Types.o ThermParticle.o ThermLambdaParticle.o ThermEvent.o ThermEventsCollection.o)
+MY_LIBS = $(addprefix build/, Types.o ThermParticle.o ThermV0Particle.o ThermEvent.o ThermEventsCollection.o)
 
 
 all: runTest

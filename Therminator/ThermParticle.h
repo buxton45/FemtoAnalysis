@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////
 // ThermParticle:                                                        //
 //             Basically just a ParticleCoor object, but this allows me  //
-// to also add objects if I want.  ThermLambdaParticle will be built     //
+// to also add objects if I want.  ThermV0Particle will be built         //
 // ontop of this                                                         //
 ///////////////////////////////////////////////////////////////////////////
 
