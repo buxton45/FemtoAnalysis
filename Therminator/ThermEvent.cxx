@@ -16,6 +16,7 @@ ClassImp(ThermEvent)
 
 //________________________________________________________________________________________________________________
 ThermEvent::ThermEvent() :
+  fEventID(0),
   fAllParticlesCollection(0),
   fAllDaughtersCollection(0),
 
@@ -32,6 +33,7 @@ ThermEvent::ThermEvent() :
 
 //________________________________________________________________________________________________________________
 ThermEvent::ThermEvent(TTree* aThermEventsTree, int aEntryNumber) :
+  fEventID(0),
   fAllParticlesCollection(0),
   fAllDaughtersCollection(0),
 
@@ -49,6 +51,7 @@ ThermEvent::ThermEvent(TTree* aThermEventsTree, int aEntryNumber) :
 
 //________________________________________________________________________________________________________________
 ThermEvent::ThermEvent(const ThermEvent& aEvent) :
+  fEventID(aEvent.fEventID),
   fAllParticlesCollection(aEvent.fAllParticlesCollection),
   fAllDaughtersCollection(aEvent.fAllDaughtersCollection),
   fLambdaCollection(aEvent.fLambdaCollection),
@@ -64,6 +67,8 @@ ThermEvent::ThermEvent(const ThermEvent& aEvent) :
 ThermEvent& ThermEvent::operator=(ThermEvent& aEvent)
 {
   if(this == &aEvent) return *this;
+
+  fEventID = aEvent.fEventID;
 
   fAllParticlesCollection = aEvent.fAllParticlesCollection;
   fAllDaughtersCollection = aEvent.fAllDaughtersCollection;
@@ -262,6 +267,36 @@ void ThermEvent::MatchDaughtersWithFathers()
   AssertAllK0FathersFound0or2Daughters();
 }
 
+//________________________________________________________________________________________________________________
+void ThermEvent::FindV0Father(ThermV0Particle &aV0Particle)
+{
+  if(!aV0Particle.IsPrimordial())
+  {
+    int tFatherEID = aV0Particle.GetFatherEID();
+
+    int tFatherLocation = -1;
+    for(unsigned int i=0; i<fAllParticlesCollection.size(); i++)
+    {
+      if(fAllParticlesCollection[i].GetEID() == tFatherEID)
+      {
+        tFatherLocation = i;
+        aV0Particle.LoadFather(fAllParticlesCollection[i]);
+        break;
+      }
+    }
+    assert(tFatherLocation >= 0);
+
+  }
+}
+
+
+//________________________________________________________________________________________________________________
+void ThermEvent::FindAllV0sFathers()
+{
+  for(unsigned int i=0; i<fLambdaCollection.size(); i++) FindV0Father(fLambdaCollection[i]);
+  for(unsigned int i=0; i<fAntiLambdaCollection.size(); i++) FindV0Father(fAntiLambdaCollection[i]);
+  for(unsigned int i=0; i<fK0ShortCollection.size(); i++) FindV0Father(fK0ShortCollection[i]);
+}
 
 //________________________________________________________________________________________________________________
 vector<ThermV0Particle> ThermEvent::GetV0ParticleCollection(ParticlePDGType aPDGType)
@@ -284,4 +319,226 @@ vector<ThermParticle> ThermEvent::GetParticleCollection(ParticlePDGType aPDGType
   else assert(0);
 }
 
+//________________________________________________________________________________________________________________
+void ThermEvent::SetV0ParticleCollection(int aEventID, ParticlePDGType aPDGType, vector<ThermV0Particle> &aCollection)
+{
+  assert(aEventID == fEventID);  //make sure I'm setting the collection for the correct event
+
+  if(aPDGType == kPDGLam) fLambdaCollection = aCollection;
+  else if(aPDGType == kPDGALam) fAntiLambdaCollection = aCollection;
+  else if(aPDGType == kPDGK0) fK0ShortCollection = aCollection;
+
+  else assert(0);
+}
+
+
+//________________________________________________________________________________________________________________
+void ThermEvent::SetParticleCollection(int aEventID, ParticlePDGType aPDGType, vector<ThermParticle> &aCollection)
+{
+  assert(aEventID == fEventID);  //make sure I'm setting the collection for the correct event
+
+  if(aPDGType == kPDGKchP) fKchPCollection = aCollection;
+  else if(aPDGType == kPDGKchM) fKchMCollection = aCollection;
+
+  else assert(0);
+}
+
+//________________________________________________________________________________________________________________
+bool ThermEvent::DoubleCheckLamAttributes(ThermV0Particle &aV0)
+{
+  if(!aV0.GoodV0()) return false;
+  if(aV0.GetPID()!= kPDGLam) return false;
+  if(!aV0.BothDaughtersFound()) return false;
+  if(aV0.GetDaughter1PID() != kPDGProt) return false;
+  if(aV0.GetDaughter2PID() != kPDGPiM) return false;
+
+  if(aV0.GetEID() != aV0.GetDaughter1EID()) return false;
+  if(aV0.GetEID() != aV0.GetDaughter2EID()) return false;
+  if(aV0.GetEID() != aV0.GetFatherEID()) return false;
+
+  if(aV0.GetDaughter1Mass()==0) return false;
+  if(aV0.GetDaughter1T()==0 || aV0.GetDaughter1X()==0 || aV0.GetDaughter1Y()==0 ||aV0.GetDaughter1Z()==0) return false;
+  if(aV0.GetDaughter1E()==0 || aV0.GetDaughter1Px()==0 || aV0.GetDaughter1Py()==0 ||aV0.GetDaughter1Pz()==0) return false;
+
+  if(aV0.GetDaughter2Mass()==0) return false;
+  if(aV0.GetDaughter2T()==0 || aV0.GetDaughter2X()==0 || aV0.GetDaughter2Y()==0 ||aV0.GetDaughter2Z()==0) return false;
+  if(aV0.GetDaughter2E()==0 || aV0.GetDaughter2Px()==0 || aV0.GetDaughter2Py()==0 ||aV0.GetDaughter2Pz()==0) return false;
+
+  if(aV0.GetFatherMass()==0) return false;
+  if(aV0.GetFatherT()==0 || aV0.GetFatherX()==0 || aV0.GetFatherY()==0 ||aV0.GetFatherZ()==0) return false;
+  if(aV0.GetFatherE()==0 || aV0.GetFatherPx()==0 || aV0.GetFatherPy()==0 ||aV0.GetFatherPz()==0) return false;
+
+
+  return true;
+}
+
+//________________________________________________________________________________________________________________
+bool ThermEvent::DoubleCheckV0Attributes(ThermV0Particle &aV0)
+{
+  bool tReturn;
+
+  if(aV0.GetPID() == kPDGLam) tReturn = DoubleCheckLamAttributes(aV0);
+//  else if(aV0.GetPID() == kPDGALam) tReturn = DoubleCheckALamAttributes(aV0);
+//  else if(aV0.GetPID() == kPDGK0) tReturn = DoubleCheckK0Attributes(aV0);
+  else assert(0);
+
+  return tReturn;
+}
+
+//________________________________________________________________________________________________________________
+double ThermEvent::GetKStar(ThermParticle &aParticle, ThermV0Particle &aV0)
+{
+  double px1, py1, pz1, mass1, E1;
+  double px2, py2, pz2, mass2, E2;
+
+  px1 = aParticle.GetPx();
+  py1 = aParticle.GetPy();
+  pz1 = aParticle.GetPz();
+  mass1 = aParticle.GetMass();
+  E1 = aParticle.GetE();
+
+  px2 = aV0.GetPx();
+  py2 = aV0.GetPy();
+  pz2 = aV0.GetPz();
+  mass2 = aV0.GetMass();
+  E2 = aV0.GetE();
+
+  double tMinvSq = (E1+E2)*(E1+E2) - (px1+px2)*(px1+px2) - (py1+py2)*(py1+py2) - (pz1+pz2)*(pz1+pz2);
+  double tQinvSq = ((mass1*mass1 - mass2*mass2)*(mass1*mass1 - mass2*mass2))/tMinvSq + tMinvSq - 2.0*(mass1*mass1 + mass2*mass2);
+  double tKStar = 0.5*sqrt(tQinvSq);
+
+  return tKStar;
+}
+
+//________________________________________________________________________________________________________________
+double ThermEvent::GetKStar(ThermV0Particle &aV01, ThermV0Particle &aV02)
+{
+  double px1, py1, pz1, mass1, E1;
+  double px2, py2, pz2, mass2, E2;
+
+  px1 = aV01.GetPx();
+  py1 = aV01.GetPy();
+  pz1 = aV01.GetPz();
+  mass1 = aV01.GetMass();
+  E1 = aV01.GetE();
+
+  px2 = aV02.GetPx();
+  py2 = aV02.GetPy();
+  pz2 = aV02.GetPz();
+  mass2 = aV02.GetMass();
+  E2 = aV02.GetE();
+
+  double tMinvSq = (E1+E2)*(E1+E2) - (px1+px2)*(px1+px2) - (py1+py2)*(py1+py2) - (pz1+pz2)*(pz1+pz2);
+  double tQinvSq = ((mass1*mass1 - mass2*mass2)*(mass1*mass1 - mass2*mass2))/tMinvSq + tMinvSq - 2.0*(mass1*mass1 + mass2*mass2);
+  double tKStar = 0.5*sqrt(tQinvSq);
+
+  return tKStar;
+}
+
+//________________________________________________________________________________________________________________
+double ThermEvent::GetFatherKStar(ThermParticle &aParticle, ThermV0Particle &aV0)
+{
+  double px1, py1, pz1, mass1, E1;
+  double px2, py2, pz2, mass2, E2;
+
+  px1 = aParticle.GetPx();
+  py1 = aParticle.GetPy();
+  pz1 = aParticle.GetPz();
+  mass1 = aParticle.GetMass();
+  E1 = aParticle.GetE();
+
+  px2 = aV0.GetFatherPx();
+  py2 = aV0.GetFatherPy();
+  pz2 = aV0.GetFatherPz();
+  mass2 = aV0.GetFatherMass();
+  E2 = aV0.GetFatherE();
+
+  double tMinvSq = (E1+E2)*(E1+E2) - (px1+px2)*(px1+px2) - (py1+py2)*(py1+py2) - (pz1+pz2)*(pz1+pz2);
+  double tQinvSq = ((mass1*mass1 - mass2*mass2)*(mass1*mass1 - mass2*mass2))/tMinvSq + tMinvSq - 2.0*(mass1*mass1 + mass2*mass2);
+  double tKStar = 0.5*sqrt(tQinvSq);
+
+  return tKStar;
+}
+
+//________________________________________________________________________________________________________________
+double ThermEvent::GetFatherKStar(ThermV0Particle &aV01, ThermV0Particle &aV02)
+{
+  double px1, py1, pz1, mass1, E1;
+  double px2, py2, pz2, mass2, E2;
+
+  px1 = aV01.GetPx();
+  py1 = aV01.GetPy();
+  pz1 = aV01.GetPz();
+  mass1 = aV01.GetMass();
+  E1 = aV01.GetE();
+
+  px2 = aV02.GetFatherPx();
+  py2 = aV02.GetFatherPy();
+  pz2 = aV02.GetFatherPz();
+  mass2 = aV02.GetFatherMass();
+  E2 = aV02.GetFatherE();
+
+  double tMinvSq = (E1+E2)*(E1+E2) - (px1+px2)*(px1+px2) - (py1+py2)*(py1+py2) - (pz1+pz2)*(pz1+pz2);
+  double tQinvSq = ((mass1*mass1 - mass2*mass2)*(mass1*mass1 - mass2*mass2))/tMinvSq + tMinvSq - 2.0*(mass1*mass1 + mass2*mass2);
+  double tKStar = 0.5*sqrt(tQinvSq);
+
+  return tKStar;
+}
+
+/*
+//________________________________________________________________________________________________________________
+void ThermEvent::FillTransformMatrix(TH2* aMatrix)
+{
+  ThermV0Particle tV0;
+  ThermParticle tParticle;
+  double tKStar, tFatherKStar;
+
+  for(unsigned int iV0=0; iV0<fLambdaCollection.size(); iV0++)
+  {
+    tV0 = fLambdaCollection[iV0];
+    if(tV0.GetFatherPID() == kPDGSigma && tV0.GoodV0())
+    {
+      for(unsigned int iPar=0; iPar<fKchPCollection.size(); iPar++)
+      {
+        tParticle = fKchPCollection[iPar];
+        
+        tKStar = GetKStar(tParticle,tV0);
+        tFatherKStar = GetFatherKStar(tParticle,tV0);
+
+        aMatrix->Fill(tKStar,tFatherKStar);
+      }
+    }
+  }
+}
+*/
+
+//________________________________________________________________________________________________________________
+void ThermEvent::FillTransformMatrix(TH2* aMatrix)
+{
+  ThermV0Particle tV01, tV02;
+  double tKStar, tFatherKStar;
+
+  for(unsigned int iV02=0; iV02<fLambdaCollection.size(); iV02++)
+  {
+    tV02 = fLambdaCollection[iV02];
+    if(tV02.GetFatherPID() == kPDGSigma && tV02.GoodV0())
+    {
+      for(unsigned int iV01=0; iV01<fLambdaCollection.size(); iV01++)
+      {
+        tV01 = fLambdaCollection[iV01];
+        
+        if(tV01.GoodV0())
+        {
+          tKStar = GetKStar(tV01,tV02);
+          tFatherKStar = GetFatherKStar(tV01,tV02);
+
+          if(DoubleCheckV0Attributes(tV02) && DoubleCheckV0Attributes(tV01))
+          {
+            aMatrix->Fill(tKStar,tFatherKStar);
+          }
+        }
+      }
+    }
+  }
+}
 

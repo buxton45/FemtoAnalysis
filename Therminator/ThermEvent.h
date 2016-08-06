@@ -11,6 +11,7 @@
 
 #include "TTree.h"
 #include "TFile.h"
+#include "TH2.h"
 
 #include "ThermParticle.h"
 class ThermParticle;
@@ -49,11 +50,33 @@ public:
   void FindFatherandLoadDaughter(ThermParticle &aDaughterParticle);
   void MatchDaughtersWithFathers();
 
+  void FindV0Father(ThermV0Particle &aV0Particle);
+  void FindAllV0sFathers();
+
 
   vector<ThermV0Particle> GetV0ParticleCollection(ParticlePDGType aPDGType);
   vector<ThermParticle> GetParticleCollection(ParticlePDGType aPDGType);
 
+  void SetV0ParticleCollection(int aEventID, ParticlePDGType aPDGType, vector<ThermV0Particle> &aCollection);
+  void SetParticleCollection(int aEventID, ParticlePDGType aPDGType, vector<ThermParticle> &aCollection);
+
+  bool DoubleCheckLamAttributes(ThermV0Particle &aV0);
+  bool DoubleCheckALamAttributes(ThermV0Particle &aV0);
+  bool DoubleCheckK0Attributes(ThermV0Particle &aV0);
+  bool DoubleCheckV0Attributes(ThermV0Particle &aV0);//TODO
+
+  double GetKStar(ThermParticle &aParticle, ThermV0Particle &aV0);
+  double GetKStar(ThermV0Particle &aV01, ThermV0Particle &aV02);
+  double GetFatherKStar(ThermParticle &aParticle, ThermV0Particle &aV0);
+  double GetFatherKStar(ThermV0Particle &aV02, ThermV0Particle &aV0);
+  void FillTransformMatrix(TH2* aMatrix);  //TODO
+
+  //inline stuff
+  void SetEventID(int aEventID);
+  int GetEventID();
+
 private:
+  int fEventID;
 
   vector<ThermParticle> fAllParticlesCollection;
   vector<ThermParticle> fAllDaughtersCollection;
@@ -75,7 +98,8 @@ private:
 
 
 //inline stuff
-
+inline void ThermEvent::SetEventID(int aEventID) {fEventID = aEventID;}
+inline int ThermEvent::GetEventID() {return fEventID;}
 
 #endif
 

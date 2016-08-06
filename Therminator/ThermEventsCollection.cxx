@@ -17,7 +17,8 @@ ClassImp(ThermEventsCollection)
 //________________________________________________________________________________________________________________
 ThermEventsCollection::ThermEventsCollection() :
   fFileNameCollection(0),
-  fEventsCollection(0)
+  fEventsCollection(0),
+  fSigLamKchPTransform(0)
 {
 
 }
@@ -27,6 +28,22 @@ ThermEventsCollection::ThermEventsCollection() :
 ThermEventsCollection::~ThermEventsCollection()
 {
   cout << "ThermEventsCollection object is being deleted!!!" << endl;
+}
+
+//________________________________________________________________________________________________________________
+int ThermEventsCollection::ReturnEventIndex(int aEventID)
+{
+  int tEventIndex = -1;
+  for(unsigned int i=0; i<fEventsCollection.size(); i++)
+  {
+    if(fEventsCollection[i]->GetEventID() == aEventID)
+    {
+      tEventIndex = i;
+      break;
+    }
+  }
+
+  return tEventIndex;
 }
 
 //________________________________________________________________________________________________________________
@@ -48,8 +65,8 @@ void ThermEventsCollection::WriteRow(ostream &aOutput, vector<double> &aRow)
 vector<double> ThermEventsCollection::PackageV0ParticleForWriting(ThermV0Particle &aV0)
 {
   vector<double> tReturnVector;
-    tReturnVector.resize(44);
-    // 18(ThermParticle) + 26(ThermV0Particle) = 44 total
+    tReturnVector.resize(53);
+    // 18(ThermParticle) + 35(ThermV0Particle) = 53 total
 
   //------ThermParticle
   tReturnVector[0] = aV0.IsPrimordial();
@@ -80,7 +97,7 @@ vector<double> ThermEventsCollection::PackageV0ParticleForWriting(ThermV0Particl
   tReturnVector[19] = aV0.Daughter2Found();
   tReturnVector[20] = aV0.BothDaughtersFound();
 
-  tReturnVector[21] = aV0.GoodLambda();
+  tReturnVector[21] = aV0.GoodV0();
 
   tReturnVector[22] = aV0.GetDaughter1PID();
   tReturnVector[23] = aV0.GetDaughter2PID();
@@ -112,6 +129,18 @@ vector<double> ThermEventsCollection::PackageV0ParticleForWriting(ThermV0Particl
   tReturnVector[42] = aV0.GetDaughter2Py();
   tReturnVector[43] = aV0.GetDaughter2Pz();
 
+  tReturnVector[44] = aV0.GetFatherMass();
+
+  tReturnVector[45] = aV0.GetFatherT();
+  tReturnVector[46] = aV0.GetFatherX();
+  tReturnVector[47] = aV0.GetFatherY();
+  tReturnVector[48] = aV0.GetFatherZ();
+
+  tReturnVector[49] = aV0.GetFatherE();
+  tReturnVector[50] = aV0.GetFatherPx();
+  tReturnVector[51] = aV0.GetFatherPy();
+  tReturnVector[52] = aV0.GetFatherPz();
+
   return tReturnVector;
 }
 
@@ -119,7 +148,7 @@ vector<double> ThermEventsCollection::PackageV0ParticleForWriting(ThermV0Particl
 vector<double> ThermEventsCollection::PackageParticleForWriting(ThermParticle &aParticle)
 {
   vector<double> tReturnVector;
-    tReturnVector.resize(44);
+    tReturnVector.resize(18);
     // 18(ThermParticle)
 
   //------ThermParticle
@@ -155,7 +184,7 @@ void ThermEventsCollection::WriteThermEventV0s(ostream &aOutput, ParticlePDGType
   vector<ThermV0Particle> tV0ParticleVec = aThermEvent->GetV0ParticleCollection(aParticleType);
   vector<double> tTempVec;
 
-  aOutput << aParticleType << " " << tV0ParticleVec.size() << endl;
+  aOutput << aThermEvent->GetEventID() << " " << aParticleType << " " << tV0ParticleVec.size() << endl;
   for(unsigned int i=0; i<tV0ParticleVec.size(); i++)
   {
     tTempVec = PackageV0ParticleForWriting(tV0ParticleVec[i]);
@@ -169,7 +198,7 @@ void ThermEventsCollection::WriteThermEventParticles(ostream &aOutput, ParticleP
   vector<ThermParticle> tParticleVec = aThermEvent->GetParticleCollection(aParticleType);
   vector<double> tTempVec;
 
-  aOutput << aParticleType << " " << tParticleVec.size() << endl;
+  aOutput << aThermEvent->GetEventID() << " " << aParticleType << " " << tParticleVec.size() << endl;
   for(unsigned int i=0; i<tParticleVec.size(); i++)
   {
     tTempVec = PackageParticleForWriting(tParticleVec[i]);
@@ -221,16 +250,185 @@ void ThermEventsCollection::WriteAllEvents(TString aOutputNameBase)
 
 
 //________________________________________________________________________________________________________________
-void ThermEventsCollection::ExtractEventsFromTxtFile(TString aFileName, ParticlePDGType aPDGType)
+void ThermEventsCollection::ExtractV0ParticleCollectionsFromTxtFile(TString aFileName, ParticlePDGType aPDGType)
 {
+  assert(aPDGType == kPDGLam || aPDGType == kPDGALam || aPDGType == kPDGK0);
+
   ifstream tFileIn(aFileName);
+
+  vector<ThermV0Particle> tTempV0Collection;
+  vector<double> tTempParticle1dVec;
+
+  int tEventID = 0;
+  int tEventIndex;
+  unsigned int tEntrySize = 53;  //size of V0 particle vector
+
+  string tString;
+  int tCount = 0;
+  while(getline(tFileIn, tString))
+  {
+    tTempParticle1dVec.clear();
+    istringstream tStream(tString);
+    string tElement;
+    while(tStream >> tElement)
+    {
+      stringstream ss (tElement);
+      double dbl;
+      ss >> dbl;
+      tTempParticle1dVec.push_back(dbl);
+    }
+
+    if(tTempParticle1dVec.size() == 3)  //event header
+    {           
+      tCount++;
+      
+      if(tCount==1) tEventID = tTempParticle1dVec[0];
+      else
+      {
+        tEventIndex = ReturnEventIndex(tEventID);
+        if(tEventIndex == -1)  //Event does not already exist in fEventsCollection
+        {
+          ThermEvent* tThermEvent = new ThermEvent();
+          tThermEvent->SetEventID(tEventID);
+          tThermEvent->SetV0ParticleCollection(tEventID,aPDGType,tTempV0Collection);
+          fEventsCollection.push_back(tThermEvent);
+        }
+        else  //Event already exists in fEventsCollection, so simply add particle collection to it
+        {
+          fEventsCollection[tEventIndex]->SetV0ParticleCollection(tEventID,aPDGType,tTempV0Collection);
+        }
+        tTempV0Collection.clear();
+      }
+    tEventID = tTempParticle1dVec[0];
+    }
+    else if(tTempParticle1dVec.size() == tEntrySize)  //a V0 particle
+    {
+      tTempV0Collection.emplace_back(tTempParticle1dVec);
+    }
+    else
+    {
+      cout << "ERROR: Incorrect row size in ExtractV0ParticleCollectionsFromTxtFile" << endl;
+      assert(0);
+    }
+  }
+  tEventIndex = ReturnEventIndex(tEventID);
+  if(tEventIndex == -1)
+  {
+    ThermEvent* tThermEvent = new ThermEvent();
+    tThermEvent->SetEventID(tEventID);
+    tThermEvent->SetV0ParticleCollection(tEventID,aPDGType,tTempV0Collection);
+    fEventsCollection.push_back(tThermEvent);
+  }
+  else
+  {
+    fEventsCollection[tEventIndex]->SetV0ParticleCollection(tEventID,aPDGType,tTempV0Collection);
+  }
+  tTempV0Collection.clear();
+
+}
+
+//________________________________________________________________________________________________________________
+void ThermEventsCollection::ExtractParticleCollectionsFromTxtFile(TString aFileName, ParticlePDGType aPDGType)
+{
+  assert(aPDGType == kPDGKchP || aPDGType == kPDGKchM);
+
+  ifstream tFileIn(aFileName);
+
+  vector<ThermParticle> tTempCollection;
+  vector<double> tTempParticle1dVec;
+
+  int tEventID = 0;
+  int tEventIndex;
+  unsigned int tEntrySize = 18;  //size of particle vector
+
+  string tString;
+  int tCount = 0;
+  while(getline(tFileIn, tString))
+  {
+    tTempParticle1dVec.clear();
+    istringstream tStream(tString);
+    string tElement;
+    while(tStream >> tElement)
+    {
+      stringstream ss (tElement);
+      double dbl;
+      ss >> dbl;
+      tTempParticle1dVec.push_back(dbl);
+    }
+
+    if(tTempParticle1dVec.size() == 3)  //event header
+    {           
+      tCount++;
+      
+      if(tCount==1) tEventID = tTempParticle1dVec[0];
+      else
+      {
+        tEventIndex = ReturnEventIndex(tEventID);
+        if(tEventIndex == -1)  //Event does not already exist in fEventsCollection
+        {
+          ThermEvent* tThermEvent = new ThermEvent();
+          tThermEvent->SetEventID(tEventID);
+          tThermEvent->SetParticleCollection(tEventID,aPDGType,tTempCollection);
+          fEventsCollection.push_back(tThermEvent);
+        }
+        else  //Event already exists in fEventsCollection, so simply add particle collection to it
+        {
+          fEventsCollection[tEventIndex]->SetParticleCollection(tEventID,aPDGType,tTempCollection);
+        }
+        tTempCollection.clear();
+      }
+    tEventID = tTempParticle1dVec[0];
+    }
+    else if(tTempParticle1dVec.size() == tEntrySize)  //a particle
+    {
+      tTempCollection.emplace_back(tTempParticle1dVec);
+    }
+    else
+    {
+      cout << "ERROR: Incorrect row size in ExtractParticleCollectionsFromTxtFile" << endl;
+      assert(0);
+    }
+  }
+  tEventIndex = ReturnEventIndex(tEventID);
+  if(tEventIndex == -1)
+  {
+    ThermEvent* tThermEvent = new ThermEvent();
+    tThermEvent->SetEventID(tEventID);
+    tThermEvent->SetParticleCollection(tEventID,aPDGType,tTempCollection);
+    fEventsCollection.push_back(tThermEvent);
+  }
+  else
+  {
+    fEventsCollection[tEventIndex]->SetParticleCollection(tEventID,aPDGType,tTempCollection);
+  }
+  tTempCollection.clear();
+
 }
 
 
 //________________________________________________________________________________________________________________
 void ThermEventsCollection::ExtractEventsFromAllTxtFiles(TString aFileLocationBase)
 {
+  TString tNameLam = aFileLocationBase + TString("Lambda.txt");
+  TString tNameALam = aFileLocationBase + TString("AntiLambda.txt");
+  TString tNameK0 = aFileLocationBase + TString("K0.txt");
+  TString tNameKchP = aFileLocationBase + TString("KchP.txt");
+  TString tNameKchM = aFileLocationBase + TString("KchM.txt");
 
+  ExtractV0ParticleCollectionsFromTxtFile(tNameLam,kPDGLam);
+    cout << "Done reading file: " << tNameLam << endl;
+
+  ExtractV0ParticleCollectionsFromTxtFile(tNameALam,kPDGALam);
+    cout << "Done reading file: " << tNameALam << endl;
+
+  ExtractV0ParticleCollectionsFromTxtFile(tNameK0,kPDGK0);
+    cout << "Done reading file: " << tNameK0 << endl;
+
+  ExtractParticleCollectionsFromTxtFile(tNameKchP,kPDGKchP);
+    cout << "Done reading file: " << tNameKchP << endl;
+
+  ExtractParticleCollectionsFromTxtFile(tNameKchM,kPDGKchM);
+    cout << "Done reading file: " << tNameKchM << endl;
 }
 
 
@@ -259,6 +457,8 @@ void ThermEventsCollection::ExtractEventsFromRootFile(TString aFileLocation)
     if(tParticleEntry->eventid != tEventID)
     {
       tThermEvent->MatchDaughtersWithFathers();
+      tThermEvent->FindAllV0sFathers();
+      tThermEvent->SetEventID(tEventID);
       fEventsCollection.push_back(tThermEvent);
       tThermEvent->ClearThermEvent();
 
@@ -271,6 +471,8 @@ void ThermEventsCollection::ExtractEventsFromRootFile(TString aFileLocation)
     if(tThermEvent->IsParticleOfInterest(tParticleEntry)) tThermEvent->PushBackThermParticleOfInterest(tParticleEntry);
   }
   tThermEvent->MatchDaughtersWithFathers();
+  tThermEvent->FindAllV0sFathers();
+  tThermEvent->SetEventID(tEventID);
   fEventsCollection.push_back(tThermEvent);
 
 cout << "aFileLocation = " << aFileLocation << endl;
@@ -322,7 +524,18 @@ void ThermEventsCollection::ExtractFromAllRootFiles(const char *aDirName)
 }
 
 
+//________________________________________________________________________________________________________________
+void ThermEventsCollection::BuildTransformMatrices()
+{
+  fSigLamKchPTransform = new TH2D("fSigLamKchPTransform","fSigLamKchPTransform",200,0.,1.,200,0.,1.);
 
+  for(unsigned int iEv=0; iEv < fEventsCollection.size(); iEv++)
+  {
+    fEventsCollection[iEv]->FillTransformMatrix(fSigLamKchPTransform);
+  }
+
+  fSigLamKchPTransform->Draw("colz");
+}
 
 
 

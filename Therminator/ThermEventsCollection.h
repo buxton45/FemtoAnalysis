@@ -13,16 +13,23 @@
 
 #include "TSystemDirectory.h"
 #include "TSystemFile.h"
+#include "TH2.h"
+#include "TH2D.h"
 
 #include "ThermEvent.h"
 class ThermEvent;
 
+using std::string;
+using std::stringstream;
+using std::istringstream;
 
 class ThermEventsCollection {
 
 public:
   ThermEventsCollection();
   virtual ~ThermEventsCollection();
+
+  int ReturnEventIndex(int aEventID);
 
   void WriteRow(ostream &aOutput, vector<double> &aRow);
   vector<double> PackageV0ParticleForWriting(ThermV0Particle &aV0);
@@ -32,17 +39,20 @@ public:
   void WriteAllEventsParticlesOfType(TString aOutputName, ParticlePDGType aParticleType);
   void WriteAllEvents(TString aOutputNameBase);
 
-  void ExtractEventsFromTxtFile(TString aFileName, ParticlePDGType aPDGType);
+  void ExtractV0ParticleCollectionsFromTxtFile(TString aFileName, ParticlePDGType aPDGType);
+  void ExtractParticleCollectionsFromTxtFile(TString aFileName, ParticlePDGType aPDGType);
   void ExtractEventsFromAllTxtFiles(TString aFileLocationBase);
 
   void ExtractEventsFromRootFile(TString aFileLocation);
   void ExtractFromAllRootFiles(const char *aDirName);
 
+  void BuildTransformMatrices();  //TODO
+
 private:
   vector<TString> fFileNameCollection;
   vector<ThermEvent*> fEventsCollection;
 
-
+  TH2* fSigLamKchPTransform;
 
 #ifdef __ROOT__
   ClassDef(ThermEventsCollection, 1)

@@ -42,6 +42,44 @@ ThermParticle::ThermParticle(ParticleCoor* aParticle) :
   if(fFatherEID == -1) fPrimordial = true;
 }
 
+//________________________________________________________________________________________________________________
+ThermParticle::ThermParticle(vector<double> &aVecFromTxt) :
+  fPrimordial(false),
+  fParticleOfInterest(false),
+  fMass(0), 
+  fT(0), fX(0), fY(0), fZ(0),
+  fE(0), fPx(0), fPy(0), fPz(0),
+  fDecayed(0), fPID(0), fFatherPID(0), fRootPID(0),
+  fEID(0), fFatherEID(0), fEventID(0)
+{
+  assert(aVecFromTxt.size() == 18);
+
+  fPrimordial = aVecFromTxt[0];
+  fParticleOfInterest = aVecFromTxt[1];
+
+  fMass = aVecFromTxt[2];
+
+  fT = aVecFromTxt[3];
+  fX = aVecFromTxt[4];
+  fY = aVecFromTxt[5];
+  fZ = aVecFromTxt[6];
+
+  fE = aVecFromTxt[7];
+  fPx = aVecFromTxt[8];
+  fPy = aVecFromTxt[9];
+  fPz = aVecFromTxt[10];
+
+  fDecayed = aVecFromTxt[11];
+  fPID = aVecFromTxt[12];
+  fFatherPID = aVecFromTxt[13];
+  fRootPID = aVecFromTxt[14];
+  fEID = aVecFromTxt[15];
+  fFatherEID = aVecFromTxt[16];
+  fEventID = aVecFromTxt[17];
+
+}
+
+
 
 //________________________________________________________________________________________________________________
 ThermParticle::ThermParticle(const ThermParticle& aParticle) :

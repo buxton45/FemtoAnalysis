@@ -42,6 +42,7 @@ class ThermParticle {
 public:
   ThermParticle();
   ThermParticle(ParticleCoor* aParticleCoor);
+  ThermParticle(vector<double> &aVecFromTxt);
   ThermParticle(const ThermParticle& aParticle);
   ThermParticle& operator=(const ThermParticle& aParticle);
   virtual ThermParticle* clone();
