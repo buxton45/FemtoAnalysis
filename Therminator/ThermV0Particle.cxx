@@ -18,150 +18,234 @@ ClassImp(ThermV0Particle)
 //________________________________________________________________________________________________________________
 ThermV0Particle::ThermV0Particle() :
   ThermParticle(),
-  fPosDaughterFound(false),
-  fNegDaughterFound(false),
+  fDaughter1Found(false),
+  fDaughter2Found(false),
   fBothDaughtersFound(false),
   fGoodLambda(false),
-  fPosDaughterPID(0),
-  fNegDaughterPID(0),
+  fDaughter1PID(0),
+  fDaughter2PID(0),
+  fDaughter1EID(0),
+  fDaughter2EID(0),
 
-  fMassPos(0), fTPos(0), fXPos(0), fYPos(0), fZPos(0), fEPos(0), fPxPos(0), fPyPos(0), fPzPos(0),
-  fMassNeg(0), fTNeg(0), fXNeg(0), fYNeg(0), fZNeg(0), fENeg(0), fPxNeg(0), fPyNeg(0), fPzNeg(0)
+  fDaughter1Mass(0), fDaughter1T(0), fDaughter1X(0), fDaughter1Y(0), fDaughter1Z(0), fDaughter1E(0), fDaughter1Px(0), fDaughter1Py(0), fDaughter1Pz(0),
+  fDaughter2Mass(0), fDaughter2T(0), fDaughter2X(0), fDaughter2Y(0), fDaughter2Z(0), fDaughter2E(0), fDaughter2Px(0), fDaughter2Py(0), fDaughter2Pz(0)
 {
 
 }
+
+
+//________________________________________________________________________________________________________________
+ThermV0Particle::ThermV0Particle(ParticleCoor* aParticle) :
+  ThermParticle(aParticle),
+  fDaughter1Found(false),
+  fDaughter2Found(false),
+  fBothDaughtersFound(false),
+  fGoodLambda(false),
+  fDaughter1PID(),
+  fDaughter2PID(0),
+  fDaughter1EID(0),
+  fDaughter2EID(0),
+
+  fDaughter1Mass(0), fDaughter1T(0), fDaughter1X(0), fDaughter1Y(0), fDaughter1Z(0), fDaughter1E(0), fDaughter1Px(0), fDaughter1Py(0), fDaughter1Pz(0),
+  fDaughter2Mass(0), fDaughter2T(0), fDaughter2X(0), fDaughter2Y(0), fDaughter2Z(0), fDaughter2E(0), fDaughter2Px(0), fDaughter2Py(0), fDaughter2Pz(0)
+{
+
+}
+
 
 //________________________________________________________________________________________________________________
 ThermV0Particle::ThermV0Particle(const ThermV0Particle& aParticle) :
   ThermParticle(aParticle),
-  fPosDaughterFound(aParticle.fPosDaughterFound),
-  fNegDaughterFound(aParticle.fNegDaughterFound),
+  fDaughter1Found(aParticle.fDaughter1Found),
+  fDaughter2Found(aParticle.fDaughter2Found),
   fBothDaughtersFound(aParticle.fBothDaughtersFound),
   fGoodLambda(aParticle.fGoodLambda),
-  fPosDaughterPID(aParticle.fPosDaughterPID),
-  fNegDaughterPID(aParticle.fNegDaughterPID),
+  fDaughter1PID(aParticle.fDaughter1PID),
+  fDaughter2PID(aParticle.fDaughter2PID),
+  fDaughter1EID(aParticle.fDaughter1EID),
+  fDaughter2EID(aParticle.fDaughter2EID),
 
-  fMassPos(aParticle.fMassPos), 
-  fTPos(aParticle.fTPos), fXPos(aParticle.fXPos), fYPos(aParticle.fYPos), fZPos(aParticle.fZPos),
-  fEPos(aParticle.fEPos), fPxPos(aParticle.fPxPos), fPyPos(aParticle.fPyPos), fPzPos(aParticle.fPzPos),
+  fDaughter1Mass(aParticle.fDaughter1Mass), 
+  fDaughter1T(aParticle.fDaughter1T), fDaughter1X(aParticle.fDaughter1X), fDaughter1Y(aParticle.fDaughter1Y), fDaughter1Z(aParticle.fDaughter1Z),
+  fDaughter1E(aParticle.fDaughter1E), fDaughter1Px(aParticle.fDaughter1Px), fDaughter1Py(aParticle.fDaughter1Py), fDaughter1Pz(aParticle.fDaughter1Pz),
 
-  fMassNeg(aParticle.fMassNeg), 
-  fTNeg(aParticle.fTNeg), fXNeg(aParticle.fXNeg), fYNeg(aParticle.fYNeg), fZNeg(aParticle.fZNeg),
-  fENeg(aParticle.fENeg), fPxNeg(aParticle.fPxNeg), fPyNeg(aParticle.fPyNeg), fPzNeg(aParticle.fPzNeg)
+  fDaughter2Mass(aParticle.fDaughter2Mass), 
+  fDaughter2T(aParticle.fDaughter2T), fDaughter2X(aParticle.fDaughter2X), fDaughter2Y(aParticle.fDaughter2Y), fDaughter2Z(aParticle.fDaughter2Z),
+  fDaughter2E(aParticle.fDaughter2E), fDaughter2Px(aParticle.fDaughter2Px), fDaughter2Py(aParticle.fDaughter2Py), fDaughter2Pz(aParticle.fDaughter2Pz)
 {
 
 }
 
 //________________________________________________________________________________________________________________
-ThermV0Particle& ThermV0Particle::operator=(ThermV0Particle& aParticle)
+ThermV0Particle& ThermV0Particle::operator=(const ThermV0Particle& aParticle)
 {
   if(this == &aParticle) return *this;
 
   ThermParticle::operator=(aParticle);
 
-  fPosDaughterFound = aParticle.fPosDaughterFound;
-  fNegDaughterFound = aParticle.fNegDaughterFound;
+  fDaughter1Found = aParticle.fDaughter1Found;
+  fDaughter2Found = aParticle.fDaughter2Found;
   fBothDaughtersFound = aParticle.fBothDaughtersFound;
   fGoodLambda = aParticle.fGoodLambda;
 
-  fPosDaughterPID = aParticle.fPosDaughterPID;
-  fNegDaughterPID = aParticle.fNegDaughterPID;
+  fDaughter1PID = aParticle.fDaughter1PID;
+  fDaughter2PID = aParticle.fDaughter2PID;
+  fDaughter1EID = aParticle.fDaughter1EID;
+  fDaughter2EID = aParticle.fDaughter2EID;
 
-  fMassPos = aParticle.fMassPos; 
-  fTPos = aParticle.fTPos;
-  fXPos = aParticle.fXPos;
-  fYPos = aParticle.fYPos;
-  fZPos = aParticle.fZPos;
-  fEPos = aParticle.fEPos;
-  fPxPos = aParticle.fPxPos;
-  fPyPos = aParticle.fPyPos;
-  fPzPos = aParticle.fPzPos;
+  fDaughter1Mass = aParticle.fDaughter1Mass; 
+  fDaughter1T = aParticle.fDaughter1T;
+  fDaughter1X = aParticle.fDaughter1X;
+  fDaughter1Y = aParticle.fDaughter1Y;
+  fDaughter1Z = aParticle.fDaughter1Z;
+  fDaughter1E = aParticle.fDaughter1E;
+  fDaughter1Px = aParticle.fDaughter1Px;
+  fDaughter1Py = aParticle.fDaughter1Py;
+  fDaughter1Pz = aParticle.fDaughter1Pz;
 
-  fMassNeg = aParticle.fMassNeg; 
-  fTNeg = aParticle.fTNeg;
-  fXNeg = aParticle.fXNeg;
-  fYNeg = aParticle.fYNeg;
-  fZNeg = aParticle.fZNeg;
-  fENeg = aParticle.fENeg;
-  fPxNeg = aParticle.fPxNeg;
-  fPyNeg = aParticle.fPyNeg;
-  fPzNeg = aParticle.fPzNeg;
+  fDaughter2Mass = aParticle.fDaughter2Mass; 
+  fDaughter2T = aParticle.fDaughter2T;
+  fDaughter2X = aParticle.fDaughter2X;
+  fDaughter2Y = aParticle.fDaughter2Y;
+  fDaughter2Z = aParticle.fDaughter2Z;
+  fDaughter2E = aParticle.fDaughter2E;
+  fDaughter2Px = aParticle.fDaughter2Px;
+  fDaughter2Py = aParticle.fDaughter2Py;
+  fDaughter2Pz = aParticle.fDaughter2Pz;
 
   return *this;
 }
 
 
-
 //________________________________________________________________________________________________________________
-ThermV0Particle::~ThermV0Particle()
+ThermV0Particle* ThermV0Particle::clone()
 {
-  cout << "ThermV0Particle object is being deleted!!!" << endl;
+  return(new ThermV0Particle(*this));
 }
 
 
 //________________________________________________________________________________________________________________
-void ThermV0Particle::LoadDaughter(ThermParticle* aDaughter)
+ThermV0Particle::~ThermV0Particle()
 {
-  int tPID = aDaughter->GetPID();
-  double tMass = aDaughter->GetMass();
+//  cout << "ThermV0Particle object is being deleted!!!" << endl;
+}
 
-  TLorentzVector* tFourPosition = aDaughter->GetFourPosition();
+//________________________________________________________________________________________________________________
+void ThermV0Particle::LoadDaughter1(ThermParticle& aDaughter)
+{
+  assert(!fDaughter1Found);
+
+  int tPID = aDaughter.GetPID();
+  int tEID = aDaughter.GetEID();
+  double tMass = aDaughter.GetMass();
+
+  TLorentzVector* tFourPosition = aDaughter.GetFourPosition();
     double tT = tFourPosition->T();
     double tX = tFourPosition->X();
     double tY = tFourPosition->Y();
     double tZ = tFourPosition->Z();
 
-  TLorentzVector* tFourMomentum = aDaughter->GetFourMomentum();
+  TLorentzVector* tFourMomentum = aDaughter.GetFourMomentum();
     double tE = tFourMomentum->E();
     double tPx = tFourMomentum->Px();
     double tPy = tFourMomentum->Py();
     double tPz = tFourMomentum->Pz();
 
-  if(tPID > 0)
+  //-----------------------------------------------------------
+
+  SetDaughter1PID(tPID);
+  fDaughter1EID = tEID;
+
+  fDaughter1Mass =tMass;
+
+  fDaughter1T = tT; 
+  fDaughter1X = tX; 
+  fDaughter1Y = tY; 
+  fDaughter1Z = tZ;
+
+  fDaughter1E = tE; 
+  fDaughter1Px = tPx;
+  fDaughter1Py = tPy;
+  fDaughter1Pz = tPz;
+
+  fDaughter1Found = true;
+}
+
+//________________________________________________________________________________________________________________
+void ThermV0Particle::LoadDaughter2(ThermParticle& aDaughter)
+{
+  assert(!fDaughter2Found);
+
+  int tPID = aDaughter.GetPID();
+  int tEID = aDaughter.GetEID();
+  double tMass = aDaughter.GetMass();
+
+  TLorentzVector* tFourPosition = aDaughter.GetFourPosition();
+    double tT = tFourPosition->T();
+    double tX = tFourPosition->X();
+    double tY = tFourPosition->Y();
+    double tZ = tFourPosition->Z();
+
+  TLorentzVector* tFourMomentum = aDaughter.GetFourMomentum();
+    double tE = tFourMomentum->E();
+    double tPx = tFourMomentum->Px();
+    double tPy = tFourMomentum->Py();
+    double tPz = tFourMomentum->Pz();
+
+  //-----------------------------------------------------------
+
+  SetDaughter2PID(tPID);
+  fDaughter2EID = tEID;
+
+  fDaughter2Mass =tMass;
+
+  fDaughter2T = tT; 
+  fDaughter2X = tX; 
+  fDaughter2Y = tY; 
+  fDaughter2Z = tZ;
+
+  fDaughter2E = tE; 
+  fDaughter2Px = tPx;
+  fDaughter2Py = tPy;
+  fDaughter2Pz = tPz;
+
+  fDaughter2Found = true;
+}
+
+//________________________________________________________________________________________________________________
+void ThermV0Particle::LoadDaughter(ThermParticle& aDaughter)
+{
+if(fBothDaughtersFound)
+{
+cout << "aDaughter.GetPID() = " << aDaughter.GetPID() << endl;
+cout << "PID = " << fPID << endl;
+cout << "fDaughter1PID = " << fDaughter1PID << endl;
+cout << "fDaughter2PID = " << fDaughter2PID << endl;
+}
+
+  assert(!fBothDaughtersFound);
+
+  int tPID = aDaughter.GetPID();
+
+  if(abs(tPID) == 111 || abs(tPID) == 2112)  //if daughter is pi0 or neutron
   {
-    assert(!fPosDaughterFound);  //should not have already found positive daughter
+    if(fDaughter1Found) LoadDaughter2(aDaughter);
+    else LoadDaughter1(aDaughter);
+  }
 
-    SetPosDaughterPID(tPID);
-
-    fMassPos =tMass;
-
-    fTPos = tT; 
-    fXPos = tX; 
-    fYPos = tY; 
-    fZPos = tZ;
-
-    fEPos = tE; 
-    fPxPos = tPx;
-    fPyPos = tPy;
-    fPzPos = tPz;
-
-    fPosDaughterFound = true;
+  else if(tPID > 0)
+  {
+    LoadDaughter1(aDaughter);
   }
 
   else if(tPID < 0)
   {
-    assert(!fNegDaughterFound);  //should not have already found negative daughter
-
-    SetNegDaughterPID(tPID);
-
-    fMassNeg =tMass;
-
-    fTNeg = tT; 
-    fXNeg = tX; 
-    fYNeg = tY; 
-    fZNeg = tZ;
-
-    fENeg = tE; 
-    fPxNeg = tPx;
-    fPyNeg = tPy;
-    fPzNeg = tPz;
-
-    fNegDaughterFound = true;
+    LoadDaughter2(aDaughter);
   }
 
   else assert(0);
 
-  if(fPosDaughterFound && fNegDaughterFound) fBothDaughtersFound = true;
+  if(fDaughter1Found && fDaughter2Found) fBothDaughtersFound = true;
 
 }
 

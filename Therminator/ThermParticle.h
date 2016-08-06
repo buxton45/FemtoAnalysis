@@ -43,24 +43,25 @@ public:
   ThermParticle();
   ThermParticle(ParticleCoor* aParticleCoor);
   ThermParticle(const ThermParticle& aParticle);
-  ThermParticle& operator=(ThermParticle& aParticle);
+  ThermParticle& operator=(const ThermParticle& aParticle);
+  virtual ThermParticle* clone();
 
   virtual ~ThermParticle();
 
   void SetIsParticleOfInterest();
 
-  double GetTau();
-  double GetR();
-  double GetRho();
-  double GetPhiS();
-  double GetRapidityS();
+  double GetTau() const;
+  double GetR() const;
+  double GetRho() const;
+  double GetPhiS() const;
+  double GetRapidityS() const;
 
-  double GetP();
-  double GetPt();
-  double GetMt();
-  double GetPhiP();
-  double GetRapidityP();
-  double GetEtaP();
+  double GetP() const;
+  double GetPt() const;
+  double GetMt() const;
+  double GetPhiP() const;
+  double GetRapidityP() const;
+  double GetEtaP() const;
 
   void TransformToLCMS(double aBetaZ);
   void TransformRotateZ(double aPhi);
@@ -69,21 +70,37 @@ public:
   TLorentzVector* GetFourPosition();
   TLorentzVector* GetFourMomentum();
 
-  //inline
+  //inline-----------------------------
+  bool IsPrimordial();
   bool IsParticleOfInterest();
-  int GetEID();
-
-  int GetFatherEID();
-
-  int GetDecayed();
-  void SetDecayed(int aDecayed);
 
   double GetMass();
 
+  double GetT();
+  double GetX();
+  double GetY();
+  double GetZ();
+
+  double GetE();
+  double GetPx();
+  double GetPy();
+  double GetPz();
+
+  int GetDecayed();
   int GetPID();
   int GetFatherPID();
+  int GetRootPID();
+  int GetEID();
+  int GetFatherEID();
+  int GetEventID();
 
-private:
+  //----------
+
+  void SetDecayed(int aDecayed);
+
+
+protected:
+  bool fPrimordial;
   bool fParticleOfInterest;
 
   double fMass;
@@ -106,17 +123,37 @@ private:
 
 
 //inline stuff
+inline bool ThermParticle::IsPrimordial() {return fPrimordial;}
 inline bool ThermParticle::IsParticleOfInterest() {return fParticleOfInterest;}
-inline int ThermParticle::GetEID() {return fEID;}
-
-inline int ThermParticle::GetFatherEID() {return fFatherEID;}
-
-inline int ThermParticle::GetDecayed() {return fDecayed;}
-inline void ThermParticle::SetDecayed(int aDecayed) {fDecayed = aDecayed;}
 
 inline double ThermParticle::GetMass() {return fMass;}
 
+inline double ThermParticle::GetT() {return fT;}
+inline double ThermParticle::GetX() {return fX;}
+inline double ThermParticle::GetY() {return fY;}
+inline double ThermParticle::GetZ() {return fZ;}
+
+inline double ThermParticle::GetE() {return fE;}
+inline double ThermParticle::GetPx() {return fPx;}
+inline double ThermParticle::GetPy() {return fPy;}
+inline double ThermParticle::GetPz() {return fPz;}
+
+inline int ThermParticle::GetDecayed() {return fDecayed;}
 inline int ThermParticle::GetPID() {return fPID;}
 inline int ThermParticle::GetFatherPID() {return fFatherPID;}
+inline int ThermParticle::GetRootPID() {return fRootPID;}
+inline int ThermParticle::GetEID() {return fEID;}
+inline int ThermParticle::GetFatherEID() {return fFatherEID;}
+inline int ThermParticle::GetEventID() {return fEventID;}
+
+//----------
+inline void ThermParticle::SetDecayed(int aDecayed) {fDecayed = aDecayed;}
+
+
+
+
+
+
+
 
 #endif

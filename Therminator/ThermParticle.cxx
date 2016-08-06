@@ -17,6 +17,7 @@ ClassImp(ThermParticle)
 
 //________________________________________________________________________________________________________________
 ThermParticle::ThermParticle() :
+  fPrimordial(false),
   fParticleOfInterest(false),
   fMass(0), 
   fT(0), fX(0), fY(0), fZ(0),
@@ -29,7 +30,7 @@ ThermParticle::ThermParticle() :
 
 //________________________________________________________________________________________________________________
 ThermParticle::ThermParticle(ParticleCoor* aParticle) :
-//  fParticleType(aType),
+  fPrimordial(false),
   fParticleOfInterest(false),
   fMass(aParticle->mass), 
   fT(aParticle->t), fX(aParticle->x), fY(aParticle->y), fZ(aParticle->z),
@@ -38,12 +39,13 @@ ThermParticle::ThermParticle(ParticleCoor* aParticle) :
   fEID(aParticle->eid), fFatherEID(aParticle->fathereid), fEventID(aParticle->eventid)
 {
   SetIsParticleOfInterest();
+  if(fFatherEID == -1) fPrimordial = true;
 }
 
 
 //________________________________________________________________________________________________________________
 ThermParticle::ThermParticle(const ThermParticle& aParticle) :
-  fParticleOfInterest(aParticle.fParticleOfInterest), fMass(aParticle.fMass), 
+  fPrimordial(aParticle.fPrimordial), fParticleOfInterest(aParticle.fParticleOfInterest), fMass(aParticle.fMass), 
   fT(aParticle.fT), fX(aParticle.fX), fY(aParticle.fY), fZ(aParticle.fZ),
   fE(aParticle.fE), fPx(aParticle.fPx), fPy(aParticle.fPy), fPz(aParticle.fPz),
   fDecayed(aParticle.fDecayed), fPID(aParticle.fPID), fFatherPID(aParticle.fFatherPID), fRootPID(aParticle.fRootPID),
@@ -53,10 +55,11 @@ ThermParticle::ThermParticle(const ThermParticle& aParticle) :
 }
 
 //________________________________________________________________________________________________________________
-ThermParticle& ThermParticle::operator=(ThermParticle& aParticle)
+ThermParticle& ThermParticle::operator=(const ThermParticle& aParticle)
 {
   if(this == &aParticle) return *this;
 
+  fPrimordial = aParticle.fPrimordial;
   fParticleOfInterest = aParticle.fParticleOfInterest;
   fMass = aParticle.fMass; 
   fT = aParticle.fT;
@@ -79,9 +82,15 @@ ThermParticle& ThermParticle::operator=(ThermParticle& aParticle)
 }
 
 //________________________________________________________________________________________________________________
+ThermParticle* ThermParticle::clone()
+{
+  return(new ThermParticle(*this));
+}
+
+//________________________________________________________________________________________________________________
 ThermParticle::~ThermParticle()
 {
-  cout << "ThermParticle object is being deleted!!!" << endl;
+//  cout << "ThermParticle object is being deleted!!!" << endl;
 }
 
 
@@ -100,67 +109,67 @@ void ThermParticle::SetIsParticleOfInterest()
 }
 
 //________________________________________________________________________________________________________________
-double ThermParticle::GetTau()
+double ThermParticle::GetTau() const
 {
   return TMath::Sqrt(fT*fT - fZ*fZ)*kHbarC;
 }
 
 //________________________________________________________________________________________________________________
-double ThermParticle::GetR()
+double ThermParticle::GetR() const
 {
   return TMath::Sqrt(fX*fX + fY*fY + fZ*fZ)*kHbarC;
 }
 
 //________________________________________________________________________________________________________________
-double ThermParticle::GetRho()
+double ThermParticle::GetRho() const
 {
   return TMath::Sqrt(fX*fX + fY*fY)*kHbarC;
 }
 
 //________________________________________________________________________________________________________________
-double ThermParticle::GetPhiS()
+double ThermParticle::GetPhiS() const
 {
   return TMath::ATan2(fY,fX);
 }
 
 //________________________________________________________________________________________________________________
-double ThermParticle::GetRapidityS()
+double ThermParticle::GetRapidityS() const
 {
   return 0.5 * TMath::Log( (fT + fZ) / (fT - fZ) );
 }
 
 //________________________________________________________________________________________________________________
-double ThermParticle::GetP()
+double ThermParticle::GetP() const
 {
   return TMath::Sqrt(fPx*fPx + fPy*fPy + fPz*fPz);
 }
 
 //________________________________________________________________________________________________________________
-double ThermParticle::GetPt()
+double ThermParticle::GetPt() const
 {
   return TMath::Sqrt(fPx*fPx + fPy*fPy);
 }
 
 //________________________________________________________________________________________________________________
-double ThermParticle::GetMt()
+double ThermParticle::GetMt() const
 {
   return TMath::Sqrt(fMass*fMass + fPx*fPx + fPy*fPy);
 }
 
 //________________________________________________________________________________________________________________
-double ThermParticle::GetPhiP()
+double ThermParticle::GetPhiP() const
 {
   return TMath::ATan2(fPy,fPx);
 }
 
 //________________________________________________________________________________________________________________
-double ThermParticle::GetRapidityP()
+double ThermParticle::GetRapidityP() const
 {
   return 0.5 * TMath::Log( (fE + fPz) / (fE - fPz) );
 }
 
 //________________________________________________________________________________________________________________
-double ThermParticle::GetEtaP()
+double ThermParticle::GetEtaP() const
 {
   double tP = GetP();
   return 0.5 * TMath::Log( (tP + fPz) / (tP - fPz) );

@@ -19,37 +19,51 @@ class ThermParticle;
 class ThermV0Particle;
 
 #include "ParticleCoor.h"
-
+//TODO emplace_back
 class ThermEvent {
 
 public:
   ThermEvent();
   ThermEvent(TTree* aThermEventsTree, int aEntryNumber);
+  ThermEvent(const ThermEvent& aEvent);  //TODO make this deep copy
+  ThermEvent& operator=(ThermEvent& aEvent);  //TODO make this deep copy
+  virtual ThermEvent* clone();
   virtual ~ThermEvent();
 
-  void PushBackThermParticle(ThermParticle* aParticle);
-  void PushBackThermParticleOfInterest(ThermParticle* aParticle);
+  bool IsParticleOfInterest(ParticleCoor* aParticle);
+  bool IsDaughterOfInterest(ThermParticle& aDaughterParticle);
+  bool IsDaughterOfInterest(ParticleCoor* aDaughterParticle);
+
+  void PushBackThermParticle(ParticleCoor *aParticle);
+  void PushBackThermDaughterOfInterest(ParticleCoor *aParticle);
+  void PushBackThermParticleOfInterest(ParticleCoor *aParticle);
+
+  void ClearCollection(vector<ThermParticle> &aCollection);
+  void ClearCollection(vector<ThermV0Particle> &aCollection);
   void ClearThermEvent();
 
-  void AssertAllFathersFoundDaughters();
-  void FindFatherandLoadDaughter(ThermParticle* aDaughterParticle);
-  bool IsDaughterOfInterest(ThermParticle* aDaughterParticle);
+  bool CheckCollectionForRedundancies();
+
+  void AssertAllLambdaFathersFoundDaughters();  //Not all K0 have daughters (those without likely K0L, those with likely K0s
+  void AssertAllK0FathersFound0or2Daughters();
+  void FindFatherandLoadDaughter(ThermParticle &aDaughterParticle);
   void MatchDaughtersWithFathers();
 
 
-  vector<ThermV0Particle*> GetV0ParticleCollection(ParticlePDGType aPDGType);
-  vector<ThermParticle*> GetParticleCollection(ParticlePDGType aPDGType);
+  vector<ThermV0Particle> GetV0ParticleCollection(ParticlePDGType aPDGType);
+  vector<ThermParticle> GetParticleCollection(ParticlePDGType aPDGType);
 
 private:
 
-  vector<ThermParticle*> fAllParticlesCollection;
+  vector<ThermParticle> fAllParticlesCollection;
+  vector<ThermParticle> fAllDaughtersCollection;
 
-  vector<ThermV0Particle*> fLambdaCollection;
-  vector<ThermV0Particle*> fAntiLambdaCollection;
-  vector<ThermV0Particle*> fK0ShortCollection;
+  vector<ThermV0Particle> fLambdaCollection;
+  vector<ThermV0Particle> fAntiLambdaCollection;
+  vector<ThermV0Particle> fK0ShortCollection;
 
-  vector<ThermParticle*> fKchPCollection;
-  vector<ThermParticle*> fKchMCollection;
+  vector<ThermParticle> fKchPCollection;
+  vector<ThermParticle> fKchMCollection;
 
 
 
