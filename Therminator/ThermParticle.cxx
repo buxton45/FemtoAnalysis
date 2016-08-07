@@ -265,7 +265,7 @@ void ThermParticle::TransformToPRF(double aBetaT)
 //________________________________________________________________________________________________________________
 TLorentzVector* ThermParticle::GetFourPosition()
 {
-  TLorentzVector* tFourPosition = new TLorentzVector(fT,fX,fY,fZ);
+  TLorentzVector* tFourPosition = new TLorentzVector(fX,fY,fZ,fT);
   return tFourPosition;
 }
 
@@ -273,7 +273,7 @@ TLorentzVector* ThermParticle::GetFourPosition()
 //________________________________________________________________________________________________________________
 TLorentzVector* ThermParticle::GetFourMomentum()
 {
-  TLorentzVector* tFourMomentum = new TLorentzVector(fE,fPx,fPy,fPz);
+  TLorentzVector* tFourMomentum = new TLorentzVector(fPx,fPy,fPz,fE);
   return tFourMomentum;
 }
 

@@ -458,7 +458,7 @@ void ThermV0Particle::LoadFather(ThermParticle& aFather)
 
   //-----------------------------------------------------------
 
-  fFatherMass =tMass;
+  fFatherMass = tMass;
 
   fFatherT = tT; 
   fFatherX = tX; 
