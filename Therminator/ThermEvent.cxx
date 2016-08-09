@@ -352,32 +352,56 @@ bool ThermEvent::DoubleCheckLamAttributes(ThermV0Particle &aV0)
   if(aV0.GetDaughter1PID() != kPDGProt) {cout << "DoubleCheckLamAttributes Fail 4" << endl; return false;}
   if(aV0.GetDaughter2PID() != kPDGPiM) {cout << "DoubleCheckLamAttributes Fail 5" << endl; return false;}
 
-  if(aV0.GetDaughter1Mass()==0) {cout << "DoubleCheckLamAttributes Fail 6" << endl; return false;}
-  if(aV0.GetDaughter1T()==0 || aV0.GetDaughter1X()==0 || aV0.GetDaughter1Y()==0 ||aV0.GetDaughter1Z()==0) {cout << "DoubleCheckLamAttributes Fail 7" << endl; return false;}
-  if(aV0.GetDaughter1E()==0 || aV0.GetDaughter1Px()==0 || aV0.GetDaughter1Py()==0 ||aV0.GetDaughter1Pz()==0) {cout << "DoubleCheckLamAttributes Fail 8" << endl; return false;}
+  return true;
+}
 
-  if(aV0.GetDaughter2Mass()==0) {cout << "DoubleCheckLamAttributes Fail 9" << endl; return false;}
-  if(aV0.GetDaughter2T()==0 || aV0.GetDaughter2X()==0 || aV0.GetDaughter2Y()==0 ||aV0.GetDaughter2Z()==0) {cout << "DoubleCheckLamAttributes Fail 10" << endl; return false;}
-  if(aV0.GetDaughter2E()==0 || aV0.GetDaughter2Px()==0 || aV0.GetDaughter2Py()==0 ||aV0.GetDaughter2Pz()==0) {cout << "DoubleCheckLamAttributes Fail 11" << endl; return false;}
-
-  if(aV0.GetFatherT()==0 || aV0.GetFatherX()==0 || aV0.GetFatherY()==0 ||aV0.GetFatherZ()==0) {cout << "DoubleCheckLamAttributes Fail 12" << endl; return false;}
-  if(aV0.GetFatherE()==0 || aV0.GetFatherPx()==0 || aV0.GetFatherPy()==0 ||aV0.GetFatherPz()==0) {cout << "DoubleCheckLamAttributes Fail 13" << endl; return false;}
-
+//________________________________________________________________________________________________________________
+bool ThermEvent::DoubleCheckALamAttributes(ThermV0Particle &aV0)
+{
+  if(!aV0.GoodV0()) {cout << "DoubleCheckALamAttributes Fail 1" << endl; return false;}
+  if(aV0.GetPID()!= kPDGALam) {cout << "DoubleCheckALamAttributes Fail 2" << endl; return false;}
+  if(!aV0.BothDaughtersFound()) {cout << "DoubleCheckALamAttributes Fail 3" << endl; return false;}
+  if(aV0.GetDaughter1PID() != kPDGPiP) {cout << "DoubleCheckALamAttributes Fail 4" << endl; return false;}
+  if(aV0.GetDaughter2PID() != kPDGAntiProt) {cout << "DoubleCheckALamAttributes Fail 5" << endl; return false;}
 
   return true;
 }
 
 //________________________________________________________________________________________________________________
+bool ThermEvent::DoubleCheckK0Attributes(ThermV0Particle &aV0)
+{
+  if(!aV0.GoodV0()) {cout << "DoubleCheckK0Attributes Fail 1" << endl; return false;}
+  if(aV0.GetPID()!= kPDGK0) {cout << "DoubleCheckK0Attributes Fail 2" << endl; return false;}
+  if(!aV0.BothDaughtersFound()) {cout << "DoubleCheckK0Attributes Fail 3" << endl; return false;}
+  if(aV0.GetDaughter1PID() != kPDGPiP) {cout << "DoubleCheckK0Attributes Fail 4" << endl; return false;}
+  if(aV0.GetDaughter2PID() != kPDGPiM) {cout << "DoubleCheckK0Attributes Fail 5" << endl; return false;}
+
+  return true;
+}
+
+
+
+//________________________________________________________________________________________________________________
 bool ThermEvent::DoubleCheckV0Attributes(ThermV0Particle &aV0)
 {
-  bool tReturn;
+  //------------------------------
+  if(aV0.GetDaughter1Mass()==0) {cout << "DoubleCheckV0Attributes Fail 1" << endl; return false;}
+  if(aV0.GetDaughter1T()==0 || aV0.GetDaughter1X()==0 || aV0.GetDaughter1Y()==0 ||aV0.GetDaughter1Z()==0) {cout << "DoubleCheckV0Attributes Fail 2" << endl; return false;}
+  if(aV0.GetDaughter1E()==0 || aV0.GetDaughter1Px()==0 || aV0.GetDaughter1Py()==0 ||aV0.GetDaughter1Pz()==0) {cout << "DoubleCheckV0Attributes Fail 3" << endl; return false;}
 
-  if(aV0.GetPID() == kPDGLam) tReturn = DoubleCheckLamAttributes(aV0);
-//  else if(aV0.GetPID() == kPDGALam) tReturn = DoubleCheckALamAttributes(aV0);
-//  else if(aV0.GetPID() == kPDGK0) tReturn = DoubleCheckK0Attributes(aV0);
+  if(aV0.GetDaughter2Mass()==0) {cout << "DoubleCheckV0Attributes Fail 4" << endl; return false;}
+  if(aV0.GetDaughter2T()==0 || aV0.GetDaughter2X()==0 || aV0.GetDaughter2Y()==0 ||aV0.GetDaughter2Z()==0) {cout << "DoubleCheckV0Attributes Fail 5" << endl; return false;}
+  if(aV0.GetDaughter2E()==0 || aV0.GetDaughter2Px()==0 || aV0.GetDaughter2Py()==0 ||aV0.GetDaughter2Pz()==0) {cout << "DoubleCheckV0Attributes Fail 6" << endl; return false;}
+
+  if(aV0.GetFatherT()==0 || aV0.GetFatherX()==0 || aV0.GetFatherY()==0 ||aV0.GetFatherZ()==0) {cout << "DoubleCheckV0Attributes Fail 7" << endl; return false;}
+  if(aV0.GetFatherE()==0 || aV0.GetFatherPx()==0 || aV0.GetFatherPy()==0 ||aV0.GetFatherPz()==0) {cout << "DoubleCheckV0Attributes Fail 8" << endl; return false;}
+
+  //------------------------------
+  if(aV0.GetPID() == kPDGLam) return DoubleCheckLamAttributes(aV0);
+  else if(aV0.GetPID() == kPDGALam) return DoubleCheckALamAttributes(aV0);
+  else if(aV0.GetPID() == kPDGK0) return DoubleCheckK0Attributes(aV0);
   else assert(0);
 
-  return tReturn;
 }
 
 //________________________________________________________________________________________________________________
@@ -482,24 +506,38 @@ double ThermEvent::GetFatherKStar(ThermV0Particle &aV01, ThermV0Particle &aV02)
 
 
 //________________________________________________________________________________________________________________
-void ThermEvent::FillTransformMatrix(TH2* aMatrix)
+void ThermEvent::FillTransformMatrixParticleV0(ParticlePDGType aParticleType, ParticlePDGType aV0Type, ParticlePDGType aFatherType, TH2* aMatrix)
 {
-  ThermV0Particle tV0;
   ThermParticle tParticle;
+  ThermV0Particle tV0;
+
   double tKStar, tFatherKStar;
 
-  for(unsigned int iV0=0; iV0<fLambdaCollection.size(); iV0++)
+  vector<ThermParticle> aParticleCollection;
+  vector<ThermV0Particle> aV0Collection;
+
+  if(aParticleType == kPDGKchP) aParticleCollection = fKchPCollection;
+  else if(aParticleType == kPDGKchM) aParticleCollection = fKchMCollection;
+  else assert(0);
+
+  if(aV0Type == kPDGLam) aV0Collection = fLambdaCollection;
+  else if(aV0Type == kPDGALam) aV0Collection = fAntiLambdaCollection;
+  else if(aV0Type == kPDGK0) aV0Collection = fK0ShortCollection;
+  else assert(0);
+
+  for(unsigned int iV0=0; iV0<aV0Collection.size(); iV0++)
   {
-    tV0 = fLambdaCollection[iV0];
-    if(tV0.GetFatherPID() == kPDGSigma && tV0.GoodV0())
+    tV0 = aV0Collection[iV0];
+    if(tV0.GetFatherPID() == aFatherType && tV0.GoodV0())
     {
-      for(unsigned int iPar=0; iPar<fKchPCollection.size(); iPar++)
+      for(unsigned int iPar=0; iPar<aParticleCollection.size(); iPar++)
       {
-        tParticle = fKchPCollection[iPar];
+        tParticle = aParticleCollection[iPar];
         
         tKStar = GetKStar(tParticle,tV0);
         tFatherKStar = GetFatherKStar(tParticle,tV0);
 
+        assert(DoubleCheckV0Attributes(tV0));
         aMatrix->Fill(tKStar,tFatherKStar);
       }
     }
@@ -508,34 +546,42 @@ void ThermEvent::FillTransformMatrix(TH2* aMatrix)
 
 
 //________________________________________________________________________________________________________________
-/*
-void ThermEvent::FillTransformMatrix(TH2* aMatrix)
+void ThermEvent::FillTransformMatrixV0V0(ParticlePDGType aV0wFatherType, ParticlePDGType aV0Type, ParticlePDGType aFatherType, TH2* aMatrix)
 {
   ThermV0Particle tV01, tV02;
   double tKStar, tFatherKStar;
+  vector<ThermV0Particle> aV0wFatherCollection;
+  vector<ThermV0Particle> aV0Collection;
 
-  for(unsigned int iV01=0; iV01<fLambdaCollection.size(); iV01++)
+  if(aV0wFatherType == kPDGLam) aV0wFatherCollection = fLambdaCollection;
+  else if(aV0wFatherType == kPDGALam) aV0wFatherCollection = fAntiLambdaCollection;
+  else if(aV0wFatherType == kPDGK0) aV0wFatherCollection = fK0ShortCollection;
+  else assert(0);
+
+  if(aV0Type == kPDGLam) aV0Collection = fLambdaCollection;
+  else if(aV0Type == kPDGALam) aV0Collection = fAntiLambdaCollection;
+  else if(aV0Type == kPDGK0) aV0Collection = fK0ShortCollection;
+  else assert(0);
+
+  for(unsigned int iV01=0; iV01<aV0wFatherCollection.size(); iV01++)
   {
-    tV01 = fLambdaCollection[iV01];
-    if(tV01.GetFatherPID() == kPDGSigma && tV01.GoodV0())
+    tV01 = aV0wFatherCollection[iV01];
+    if(tV01.GetFatherPID() == aFatherType && tV01.GoodV0())
     {
-      for(unsigned int iV02=0; iV02<fLambdaCollection.size(); iV02++)
+      for(unsigned int iV02=0; iV02<aV0Collection.size(); iV02++)
       {
-        tV02 = fLambdaCollection[iV02];
+        tV02 = aV0Collection[iV02];
         
-        if(tV02.GoodV0() && tV02.GetEID() != tV01.GetEID())
+        if(tV02.GoodV0() && tV02.GetEID() != tV01.GetEID())  //In case, for instance, I am doing LamLam 
         {
           tKStar = GetKStar(tV01,tV02);
           tFatherKStar = GetFatherKStar(tV01,tV02);
 
-          if(DoubleCheckV0Attributes(tV01) && DoubleCheckV0Attributes(tV02))
-          {
-            aMatrix->Fill(tKStar,tFatherKStar);
-          }
+          assert(DoubleCheckV0Attributes(tV01) && DoubleCheckV0Attributes(tV02));
+          aMatrix->Fill(tKStar,tFatherKStar);
         }
       }
     }
   }
 }
-*/
 

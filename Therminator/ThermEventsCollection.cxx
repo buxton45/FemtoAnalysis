@@ -18,9 +18,59 @@ ClassImp(ThermEventsCollection)
 ThermEventsCollection::ThermEventsCollection() :
   fFileNameCollection(0),
   fEventsCollection(0),
-  fSigLamKchPTransform(0)
-{
 
+  fKStarMin(0.),
+  fKStarMax(1.),
+  fNBinsKStar(200),
+
+  //LamKchP
+  fSigToLamKchPTransform(0),
+  fXiCToLamKchPTransform(0),
+  fXi0ToLamKchPTransform(0),
+  fOmegaToLamKchPTransform(0),
+
+  //ALamKchP
+  fASigToALamKchPTransform(0),
+  fAXiCToALamKchPTransform(0),
+  fAXi0ToALamKchPTransform(0),
+  fAOmegaToALamKchPTransform(0),
+
+  //LamKchM
+  fSigToLamKchMTransform(0),
+  fXiCToLamKchMTransform(0),
+  fXi0ToLamKchMTransform(0),
+  fOmegaToLamKchMTransform(0),
+
+  //ALamKchM
+  fASigToALamKchMTransform(0),
+  fAXiCToALamKchMTransform(0),
+  fAXi0ToALamKchMTransform(0),
+  fAOmegaToALamKchMTransform(0)
+
+{
+  //LamKchP
+  fSigToLamKchPTransform = new TH2D("fSigToLamKchPTransform","fSigToLamKchPTransform",fNBinsKStar,fKStarMin,fKStarMax,fNBinsKStar,fKStarMin,fKStarMax);
+  fXiCToLamKchPTransform = new TH2D("fXiCToLamKchPTransform","fXiCToLamKchPTransform",fNBinsKStar,fKStarMin,fKStarMax,fNBinsKStar,fKStarMin,fKStarMax);
+  fXi0ToLamKchPTransform = new TH2D("fXi0ToLamKchPTransform","fXi0ToLamKchPTransform",fNBinsKStar,fKStarMin,fKStarMax,fNBinsKStar,fKStarMin,fKStarMax);
+  fOmegaToLamKchPTransform = new TH2D("fOmegaToLamKchPTransform","fOmegaToLamKchPTransform",fNBinsKStar,fKStarMin,fKStarMax,fNBinsKStar,fKStarMin,fKStarMax);
+
+  //ALamKchP
+  fASigToALamKchPTransform = new TH2D("fASigToALamKchPTransform","fASigToALamKchPTransform",fNBinsKStar,fKStarMin,fKStarMax,fNBinsKStar,fKStarMin,fKStarMax);
+  fAXiCToALamKchPTransform = new TH2D("fAXiCToALamKchPTransform","fAXiCToALamKchPTransform",fNBinsKStar,fKStarMin,fKStarMax,fNBinsKStar,fKStarMin,fKStarMax);
+  fAXi0ToALamKchPTransform = new TH2D("fAXi0ToALamKchPTransform","fAXi0ToALamKchPTransform",fNBinsKStar,fKStarMin,fKStarMax,fNBinsKStar,fKStarMin,fKStarMax);
+  fAOmegaToALamKchPTransform = new TH2D("fAOmegaToALamKchPTransform","fAOmegaToALamKchPTransform",fNBinsKStar,fKStarMin,fKStarMax,fNBinsKStar,fKStarMin,fKStarMax);
+
+  //LamKchM
+  fSigToLamKchMTransform = new TH2D("fSigToLamKchMTransform","fSigToLamKchMTransform",fNBinsKStar,fKStarMin,fKStarMax,fNBinsKStar,fKStarMin,fKStarMax);
+  fXiCToLamKchMTransform = new TH2D("fXiCToLamKchMTransform","fXiCToLamKchMTransform",fNBinsKStar,fKStarMin,fKStarMax,fNBinsKStar,fKStarMin,fKStarMax);
+  fXi0ToLamKchMTransform = new TH2D("fXi0ToLamKchMTransform","fXi0ToLamKchMTransform",fNBinsKStar,fKStarMin,fKStarMax,fNBinsKStar,fKStarMin,fKStarMax);
+  fOmegaToLamKchMTransform = new TH2D("fOmegaToLamKchMTransform","fOmegaToLamKchMTransform",fNBinsKStar,fKStarMin,fKStarMax,fNBinsKStar,fKStarMin,fKStarMax);
+
+  //ALamKchM
+  fASigToALamKchMTransform = new TH2D("fASigToALamKchMTransform","fASigToALamKchMTransform",fNBinsKStar,fKStarMin,fKStarMax,fNBinsKStar,fKStarMin,fKStarMax);
+  fAXiCToALamKchMTransform = new TH2D("fAXiCToALamKchMTransform","fAXiCToALamKchMTransform",fNBinsKStar,fKStarMin,fKStarMax,fNBinsKStar,fKStarMin,fKStarMax);
+  fAXi0ToALamKchMTransform = new TH2D("fAXi0ToALamKchMTransform","fAXi0ToALamKchMTransform",fNBinsKStar,fKStarMin,fKStarMax,fNBinsKStar,fKStarMin,fKStarMax);
+  fAOmegaToALamKchMTransform = new TH2D("fAOmegaToALamKchMTransform","fAOmegaToALamKchMTransform",fNBinsKStar,fKStarMin,fKStarMax,fNBinsKStar,fKStarMin,fKStarMax);
 }
 
 
@@ -525,22 +575,64 @@ void ThermEventsCollection::ExtractFromAllRootFiles(const char *aDirName)
 
 
 //________________________________________________________________________________________________________________
-void ThermEventsCollection::BuildTransformMatrices()
+void ThermEventsCollection::BuildTransformMatrixParticleV0(ParticlePDGType aParticleType, ParticlePDGType aV0Type, ParticlePDGType aFatherType, TH2* aMatrix, TFile* aSaveFile)
 {
-  fSigLamKchPTransform = new TH2D("fSigLamKchPTransform","fSigLamKchPTransform",200,0.,1.,200,0.,1.);
-
   for(unsigned int iEv=0; iEv < fEventsCollection.size(); iEv++)
   {
-    fEventsCollection[iEv]->FillTransformMatrix(fSigLamKchPTransform);
+    fEventsCollection[iEv]->FillTransformMatrixParticleV0(aParticleType,aV0Type,aFatherType,aMatrix);
   }
 
-  fSigLamKchPTransform->Draw("colz");
+  assert(aSaveFile->IsOpen());
+  aMatrix->Write();
+}
+
+//________________________________________________________________________________________________________________
+void ThermEventsCollection::BuildTransformMatrixV0V0(ParticlePDGType aV0wFatherType, ParticlePDGType aV0Type, ParticlePDGType aFatherType, TH2* aMatrix, TFile* aSaveFile)
+{
+  for(unsigned int iEv=0; iEv < fEventsCollection.size(); iEv++)
+  {
+    fEventsCollection[iEv]->FillTransformMatrixV0V0(aV0wFatherType,aV0Type,aFatherType,aMatrix);
+  }
+
+  assert(aSaveFile->IsOpen());
+  aMatrix->Write();
 }
 
 
 
 
 
+//________________________________________________________________________________________________________________
+void ThermEventsCollection::BuildAllTransformMatrices(TString aSaveFileLocation)
+{
+  TFile *tFile = new TFile(aSaveFileLocation, "RECREATE");
+
+  //LamKchP
+  BuildTransformMatrixParticleV0(kPDGKchP, kPDGLam, kPDGSigma, fSigToLamKchPTransform, tFile);
+  BuildTransformMatrixParticleV0(kPDGKchP, kPDGLam, kPDGXiC, fXiCToLamKchPTransform, tFile);
+  BuildTransformMatrixParticleV0(kPDGKchP, kPDGLam, kPDGXi0, fXi0ToLamKchPTransform, tFile);
+  BuildTransformMatrixParticleV0(kPDGKchP, kPDGLam, kPDGOmega, fOmegaToLamKchPTransform, tFile);
+
+  //ALamKchP
+  BuildTransformMatrixParticleV0(kPDGKchP, kPDGALam, kPDGASigma, fASigToALamKchPTransform, tFile);
+  BuildTransformMatrixParticleV0(kPDGKchP, kPDGALam, kPDGAXiC, fAXiCToALamKchPTransform, tFile);
+  BuildTransformMatrixParticleV0(kPDGKchP, kPDGALam, kPDGAXi0, fAXi0ToALamKchPTransform, tFile);
+  BuildTransformMatrixParticleV0(kPDGKchP, kPDGALam, kPDGAOmega, fAOmegaToALamKchPTransform, tFile);
+
+  //LamKchM
+  BuildTransformMatrixParticleV0(kPDGKchM, kPDGLam, kPDGSigma, fSigToLamKchMTransform, tFile);
+  BuildTransformMatrixParticleV0(kPDGKchM, kPDGLam, kPDGXiC, fXiCToLamKchMTransform, tFile);
+  BuildTransformMatrixParticleV0(kPDGKchM, kPDGLam, kPDGXi0, fXi0ToLamKchMTransform, tFile);
+  BuildTransformMatrixParticleV0(kPDGKchM, kPDGLam, kPDGOmega, fOmegaToLamKchMTransform, tFile);
+
+  //ALamKchM
+  BuildTransformMatrixParticleV0(kPDGKchM, kPDGALam, kPDGASigma, fASigToALamKchMTransform, tFile);
+  BuildTransformMatrixParticleV0(kPDGKchM, kPDGALam, kPDGAXiC, fAXiCToALamKchMTransform, tFile);
+  BuildTransformMatrixParticleV0(kPDGKchM, kPDGALam, kPDGAXi0, fAXi0ToALamKchMTransform, tFile);
+  BuildTransformMatrixParticleV0(kPDGKchM, kPDGALam, kPDGAOmega, fAOmegaToALamKchMTransform, tFile);
+
+  tFile->Close();
+}
 
 
 
