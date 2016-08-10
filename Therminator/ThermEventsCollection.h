@@ -79,6 +79,7 @@ private:
 
   bool fMixEvents;
   unsigned int fNEventsToMix;
+  vector<ThermEvent> fMixingEventsCollection;
 
   double fKStarMin, fKStarMax;
   int fNBinsKStar;
@@ -105,7 +106,6 @@ private:
   TH2* fASigToALamKchMTransform;
   TH2* fAXiCToALamKchMTransform;
   TH2* fAXi0ToALamKchMTransform;
-  TH2* fOmegaToALamKchMTransform;
   TH2* fAOmegaToALamKchMTransform;
 
   //LamLam to check with Jai

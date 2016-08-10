@@ -21,6 +21,7 @@ ThermEventsCollection::ThermEventsCollection() :
 
   fMixEvents(false),
   fNEventsToMix(5),
+  fMixingEventsCollection(0),
 
   fKStarMin(0.),
   fKStarMax(1.),
@@ -807,33 +808,31 @@ void ThermEventsCollection::BuildTransformMatrixParticleV0(ParticlePDGType aPart
 {
   vector<ThermParticle> aParticleCollection;
   vector<ThermV0Particle> aV0Collection;
-  vector<int> tMixingEventsIndices;
 
   for(unsigned int iEv=0; iEv < fEventsCollection.size(); iEv++)
   {
     aV0Collection =  fEventsCollection[iEv].GetV0ParticleCollection(aV0Type);
     if(!fMixEvents)
     {
-      tMixingEventsIndices.clear();
-      tMixingEventsIndices.push_back(iEv);
+      fMixingEventsCollection.clear();
+      fMixingEventsCollection.push_back(fEventsCollection[iEv]);
     }
-    for(unsigned int iMixEv=0; iMixEv < tMixingEventsIndices.size(); iMixEv++)
+    for(unsigned int iMixEv=0; iMixEv < fMixingEventsCollection.size(); iMixEv++)
     {
-      aParticleCollection = fEventsCollection[tMixingEventsIndices[iMixEv]].GetParticleCollection(aParticleType);  //TODO this is kind of hacky, but I have had many issues
+      aParticleCollection = fMixingEventsCollection[iMixEv].GetParticleCollection(aParticleType);
       FillTransformMatrixParticleV0(aParticleCollection,aV0Collection,aFatherType,aMatrix);
     }
 
     if(fMixEvents)
     {
-      assert(tMixingEventsIndices.size() <= fNEventsToMix);
-      if(tMixingEventsIndices.size() == fNEventsToMix)
+      assert(fMixingEventsCollection.size() <= fNEventsToMix);
+      if(fMixingEventsCollection.size() == fNEventsToMix)
       {
-        //delete tMixingEventsIndices.back();
-        tMixingEventsIndices.pop_back();
+        //delete fMixingEventsCollection.back();
+        fMixingEventsCollection.pop_back();
       }
 
-      tMixingEventsIndices.insert(tMixingEventsIndices.begin(), ReturnEventIndex(fEventsCollection[iEv].GetEventID()));
-      // Or simply... tMixingEventsIndices.insert(tMixingEventsIndices.begin(), iEv);
+      fMixingEventsCollection.insert(fMixingEventsCollection.begin(), fEventsCollection[iEv]);
     }
   }
 
@@ -846,33 +845,31 @@ void ThermEventsCollection::BuildTransformMatrixV0V0(ParticlePDGType aV0wFatherT
 {
   vector<ThermV0Particle> aV0wFatherCollection;
   vector<ThermV0Particle> aV0Collection;
-  vector<int> tMixingEventsIndices;
 
   for(unsigned int iEv=0; iEv < fEventsCollection.size(); iEv++)
   {
     aV0wFatherCollection =  fEventsCollection[iEv].GetV0ParticleCollection(aV0wFatherType);
     if(!fMixEvents)
     {
-      tMixingEventsIndices.clear();
-      tMixingEventsIndices.push_back(iEv);
+      fMixingEventsCollection.clear();
+      fMixingEventsCollection.push_back(fEventsCollection[iEv]);
     }
-    for(unsigned int iMixEv=0; iMixEv < tMixingEventsIndices.size(); iMixEv++)
+    for(unsigned int iMixEv=0; iMixEv < fMixingEventsCollection.size(); iMixEv++)
     {
-      aV0Collection = fEventsCollection[tMixingEventsIndices[iMixEv]].GetV0ParticleCollection(aV0Type);  //TODO this is kind of hacky, but I have had many issues
+      aV0Collection = fMixingEventsCollection[iMixEv].GetV0ParticleCollection(aV0Type);
       FillTransformMatrixV0V0(aV0wFatherCollection,aV0Collection,aFatherType,aMatrix);
     }
 
     if(fMixEvents)
     {
-      assert(tMixingEventsIndices.size() <= fNEventsToMix);
-      if(tMixingEventsIndices.size() == fNEventsToMix)
+      assert(fMixingEventsCollection.size() <= fNEventsToMix);
+      if(fMixingEventsCollection.size() == fNEventsToMix)
       {
-        //delete tMixingEventsIndices.back();
-        tMixingEventsIndices.pop_back();
+        //delete fMixingEventsCollection.back();
+        fMixingEventsCollection.pop_back();
       }
 
-      tMixingEventsIndices.insert(tMixingEventsIndices.begin(), ReturnEventIndex(fEventsCollection[iEv].GetEventID()));
-      // Or simply... tMixingEventsIndices.insert(tMixingEventsIndices.begin(), iEv);
+      fMixingEventsCollection.insert(fMixingEventsCollection.begin(), fEventsCollection[iEv]);
     }
   }
 }
@@ -939,7 +936,6 @@ void ThermEventsCollection::SaveAllTransformMatrices(TString aSaveFileLocation)
   fASigToALamKchMTransform->Write();
   fAXiCToALamKchMTransform->Write();
   fAXi0ToALamKchMTransform->Write();
-  fOmegaToALamKchMTransform->Write();
   fAOmegaToALamKchMTransform->Write();
 
   //LamLam to check with Jai

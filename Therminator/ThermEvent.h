@@ -27,7 +27,7 @@ public:
   ThermEvent();
   ThermEvent(TTree* aThermEventsTree, int aEntryNumber);
   ThermEvent(const ThermEvent& aEvent);  //TODO make this deep copy
-  ThermEvent& operator=(ThermEvent& aEvent);  //TODO make this deep copy
+  ThermEvent& operator=(const ThermEvent& aEvent);  //TODO make this deep copy
   virtual ThermEvent* clone();
   virtual ~ThermEvent();
 

@@ -64,7 +64,7 @@ ThermEvent::ThermEvent(const ThermEvent& aEvent) :
 }
 
 //________________________________________________________________________________________________________________
-ThermEvent& ThermEvent::operator=(ThermEvent& aEvent)
+ThermEvent& ThermEvent::operator=(const ThermEvent& aEvent)
 {
   if(this == &aEvent) return *this;
 
