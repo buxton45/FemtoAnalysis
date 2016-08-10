@@ -68,8 +68,8 @@ public:
   void TransformRotateZ(double aPhi);
   void TransformToPRF(double aBetaT);
 
-  TLorentzVector* GetFourPosition();
-  TLorentzVector* GetFourMomentum();
+  TLorentzVector GetFourPosition();
+  TLorentzVector GetFourMomentum();
 
   //inline-----------------------------
   bool IsPrimordial();

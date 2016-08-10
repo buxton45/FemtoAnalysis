@@ -16,6 +16,8 @@ ClassImp(ThermEventsCollection)
 
 //________________________________________________________________________________________________________________
 ThermEventsCollection::ThermEventsCollection() :
+  fNFiles(0),
+  fNEvents(0),
   fFileNameCollection(0),
   fEventsCollection(0),
 
@@ -510,7 +512,6 @@ void ThermEventsCollection::ExtractEventsFromRootFile(TString aFileLocation)
   {
     tParticleBranch->GetEntry(i);
 
-
     if(i==0) tEventID = tParticleEntry->eventid;
 
     if(tParticleEntry->eventid != tEventID)
@@ -534,15 +535,17 @@ void ThermEventsCollection::ExtractEventsFromRootFile(TString aFileLocation)
   tThermEvent.SetEventID(tEventID);
   fEventsCollection.push_back(tThermEvent);
 
+  fNEvents += tNEvents;
+
 cout << "aFileLocation = " << aFileLocation << endl;
-cout << "tNEvents = " << tNEvents << endl;
-cout << "fEventsCollection.size() = " << fEventsCollection.size() << endl << endl;
+cout << "fEventsCollection.size() = " << fEventsCollection.size() << endl;
+cout << "fNEvents = " << fNEvents << endl;
+
 
   tFile->Close();
   delete tFile;
 
-//  delete tParticleEntry;
-//  delete tThermEvent;
+  delete tParticleEntry;
 }
 
 
@@ -558,7 +561,7 @@ void ThermEventsCollection::ExtractFromAllRootFiles(const char *aDirName)
   const char* tBeginningText = "event";
   const char* tEndingText = ".root";
 
-  int tNFiles = 0;
+  fNFiles = 0;
 
   if(tFiles)
   {
@@ -571,7 +574,7 @@ void ThermEventsCollection::ExtractFromAllRootFiles(const char *aDirName)
       tName = tFile->GetName();
       if(!tFile->IsDirectory() && tName.BeginsWith(tBeginningText) && tName.EndsWith(tEndingText))
       {
-        tNFiles++;
+        fNFiles++;
         fFileNameCollection.push_back(tName);
         tCompleteFilePath = TString(aDirName) + tName;
         ExtractEventsFromRootFile(tCompleteFilePath);
@@ -579,11 +582,13 @@ void ThermEventsCollection::ExtractFromAllRootFiles(const char *aDirName)
         BuildAllTransformMatrices();
         fEventsCollection.clear();
         fEventsCollection.shrink_to_fit();
+
+        cout << "fNFiles = " << fNFiles << endl << endl;
       }
     }
   }
-  cout << "Total number of files = " << tNFiles << endl;
-  cout << "Total number of events = " << fEventsCollection.size() << endl << endl;
+  cout << "Total number of files = " << fNFiles << endl;
+  cout << "Total number of events = " << fNEvents << endl << endl;
 }
 
 

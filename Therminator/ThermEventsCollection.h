@@ -74,6 +74,8 @@ public:
   void SetNEventsToMix(int aNEventsToMix);
 
 private:
+  int fNFiles;
+  int fNEvents;
   vector<TString> fFileNameCollection;
   vector<ThermEvent> fEventsCollection;
 

@@ -325,17 +325,17 @@ void ThermV0Particle::LoadDaughter1(ThermParticle& aDaughter)
   int tEID = aDaughter.GetEID();
   double tMass = aDaughter.GetMass();
 
-  TLorentzVector* tFourPosition = aDaughter.GetFourPosition();
-    double tT = tFourPosition->T();
-    double tX = tFourPosition->X();
-    double tY = tFourPosition->Y();
-    double tZ = tFourPosition->Z();
+  TLorentzVector tFourPosition = aDaughter.GetFourPosition();
+    double tT = tFourPosition.T();
+    double tX = tFourPosition.X();
+    double tY = tFourPosition.Y();
+    double tZ = tFourPosition.Z();
 
-  TLorentzVector* tFourMomentum = aDaughter.GetFourMomentum();
-    double tE = tFourMomentum->E();
-    double tPx = tFourMomentum->Px();
-    double tPy = tFourMomentum->Py();
-    double tPz = tFourMomentum->Pz();
+  TLorentzVector tFourMomentum = aDaughter.GetFourMomentum();
+    double tE = tFourMomentum.E();
+    double tPx = tFourMomentum.Px();
+    double tPy = tFourMomentum.Py();
+    double tPz = tFourMomentum.Pz();
 
   //-----------------------------------------------------------
 
@@ -366,17 +366,17 @@ void ThermV0Particle::LoadDaughter2(ThermParticle& aDaughter)
   int tEID = aDaughter.GetEID();
   double tMass = aDaughter.GetMass();
 
-  TLorentzVector* tFourPosition = aDaughter.GetFourPosition();
-    double tT = tFourPosition->T();
-    double tX = tFourPosition->X();
-    double tY = tFourPosition->Y();
-    double tZ = tFourPosition->Z();
+  TLorentzVector tFourPosition = aDaughter.GetFourPosition();
+    double tT = tFourPosition.T();
+    double tX = tFourPosition.X();
+    double tY = tFourPosition.Y();
+    double tZ = tFourPosition.Z();
 
-  TLorentzVector* tFourMomentum = aDaughter.GetFourMomentum();
-    double tE = tFourMomentum->E();
-    double tPx = tFourMomentum->Px();
-    double tPy = tFourMomentum->Py();
-    double tPz = tFourMomentum->Pz();
+  TLorentzVector tFourMomentum = aDaughter.GetFourMomentum();
+    double tE = tFourMomentum.E();
+    double tPx = tFourMomentum.Px();
+    double tPy = tFourMomentum.Py();
+    double tPz = tFourMomentum.Pz();
 
   //-----------------------------------------------------------
 
@@ -444,17 +444,17 @@ void ThermV0Particle::LoadFather(ThermParticle& aFather)
 
   double tMass = aFather.GetMass();
 
-  TLorentzVector* tFourPosition = aFather.GetFourPosition();
-    double tT = tFourPosition->T();
-    double tX = tFourPosition->X();
-    double tY = tFourPosition->Y();
-    double tZ = tFourPosition->Z();
+  TLorentzVector tFourPosition = aFather.GetFourPosition();
+    double tT = tFourPosition.T();
+    double tX = tFourPosition.X();
+    double tY = tFourPosition.Y();
+    double tZ = tFourPosition.Z();
 
-  TLorentzVector* tFourMomentum = aFather.GetFourMomentum();
-    double tE = tFourMomentum->E();
-    double tPx = tFourMomentum->Px();
-    double tPy = tFourMomentum->Py();
-    double tPz = tFourMomentum->Pz();
+  TLorentzVector tFourMomentum = aFather.GetFourMomentum();
+    double tE = tFourMomentum.E();
+    double tPx = tFourMomentum.Px();
+    double tPy = tFourMomentum.Py();
+    double tPz = tFourMomentum.Pz();
 
   //-----------------------------------------------------------
 
