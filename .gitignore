@@ -19,4 +19,12 @@ SuccessRates*
 Old*
 *Old*
 run*
-*JaiNote*
+
+##LaTex stuff
+*.log
+*.gz
+*.toc
+*.aux
+*.cls
+*.lof
+*.out

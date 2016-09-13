@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2016.4.26)  13 SEP 2016 15:20
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2016.4.26)  13 SEP 2016 15:31
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -509,12 +509,15 @@ been already used, duplicate ignored
                    \relax 
 l.16 \newpage
               [2] (./1_Introduction.tex) (./2_DataSampleAndSoftware.tex
-(./2.1_DataSample.tex) (./2.2_Software.tex)) (./3_DataSelection.tex
-(./3.1_EventSelection.tex) (./3.2_TrackSelection.tex
-(./3.2.1_ChargedKaonIdentification.tex
+(./2.1_DataSample.tex) (./2.2_Software.tex))
+(./3_DataSelection/3_DataSelection.tex
+(./3_DataSelection/3.1_EventSelection.tex)
+(./3_DataSelection/3.2_TrackSelection.tex
+(./3_DataSelection/3.2.1_ChargedKaonIdentification.tex
 LaTeX Font Info:    Font shape `OT1/ptm/bx/it' in size <10.95> not available
 (Font)              Font shape `OT1/ptm/b/it' tried instead on input line 1.
-) (./3.2.2_V0Selection.tex [3]
+)
+(./3_DataSelection/3.2.2_V0Selection.tex [3]
 \openout2 = `3.2.2.1_LambdaReconstruction.tex.aux'.
 
 
@@ -522,9 +525,10 @@ No file 3.2.2.1_LambdaReconstruction.tex.tex.
 \openout2 = `3.2.2.2_K0sReconstruction.tex.aux'.
 
 No file 3.2.2.2_K0sReconstruction.tex.tex.
-) (./3.2.3_CascadeReconstruction.tex)) (./3.3_PairSelection.tex))
-(./4_CorrelationFunctions.tex) (./5_Fitting.tex) (./6_SystematicErrors.tex)
-(./7_ResultsAndDiscussion.tex) (./8_ToDo.tex))
+) (./3_DataSelection/3.2.3_CascadeReconstruction.tex))
+(./3_DataSelection/3.3_PairSelection.tex)) (./4_CorrelationFunctions.tex)
+(./5_Fitting.tex) (./6_SystematicErrors.tex) (./7_ResultsAndDiscussion.tex)
+(./8_ToDo.tex))
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 62.
  [4
 
@@ -542,8 +546,8 @@ Package rerunfilecheck Info: File `AnalysisNoteJBuxton.out' has not changed.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 62.
  ) 
 Here is how much of TeX's memory you used:
- 6868 strings out of 494910
- 98475 string characters out of 6179836
+ 6869 strings out of 494910
+ 98715 string characters out of 6179836
  181261 words of memory out of 5000000
  9948 multiletter control sequences out of 15000+600000
  37172 words of font info for 78 fonts, out of 8000000 for 9000
