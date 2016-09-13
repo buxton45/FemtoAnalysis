@@ -1,0 +1,16 @@
+\contentsline {section}{\numberline {1}Introduction}{3}{section.1}
+\contentsline {section}{\numberline {2}Data Sample and Software}{3}{section.2}
+\contentsline {subsection}{\numberline {2.1}Data Sample}{3}{subsection.2.1}
+\contentsline {subsection}{\numberline {2.2}Software}{3}{subsection.2.2}
+\contentsline {section}{\numberline {3}Data Selection}{3}{section.3}
+\contentsline {subsection}{\numberline {3.1}Event Selection}{3}{subsection.3.1}
+\contentsline {subsection}{\numberline {3.2}Track Selection}{3}{subsection.3.2}
+\contentsline {subsubsection}{\numberline {3.2.1}Charged Kaon Identification}{3}{subsubsection.3.2.1}
+\contentsline {subsubsection}{\numberline {3.2.2}V0 Selection}{3}{subsubsection.3.2.2}
+\contentsline {subsubsection}{\numberline {3.2.3}Cascade Reconstruction}{4}{subsubsection.3.2.3}
+\contentsline {subsection}{\numberline {3.3}Pair Selection}{4}{subsection.3.3}
+\contentsline {section}{\numberline {4}Correlation Functions}{4}{section.4}
+\contentsline {section}{\numberline {5}Fitting}{4}{section.5}
+\contentsline {section}{\numberline {6}Systematic Errors}{4}{section.6}
+\contentsline {section}{\numberline {7}Results and Discussion}{4}{section.7}
+\contentsline {section}{\numberline {8}To Do}{4}{section.8}

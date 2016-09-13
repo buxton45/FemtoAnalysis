@@ -135,7 +135,10 @@ public:
 
   //void CalculateChi2(int &npar, double &chi2, double *par);
   bool AreParamsSame(double *aCurrent, double *aNew, int aNEntries);
-  void CalculateChi2PML(int &npar, double &chi2, double *par);
+  void CalculateChi2PML(int &npar, double &chi2, double *par);  //TODO change default to true when matrices are ready
+  vector<double> ApplyMomResCorrection(vector<double> &aCf, vector<double> &aKStarBinCenters, TH2* aMomResMatrix);
+  void CalculateChi2PMLwMomResCorrection(int &npar, double &chi2, double *par);
+
   void CalculateChi2(int &npar, double &chi2, double *par);
   void CalculateFakeChi2(int &npar, double &chi2, double *par);
   double GetChi2(TH1* aFitHistogram);
@@ -156,6 +159,7 @@ public:
 
   void SetIncludeSingletAndTriplet(bool aIncludeSingletAndTriplet);
   void SetUseRandomKStarVectors(bool aUseRandomKStarVectors);
+  void SetApplyMomResCorrection(bool aApplyMomResCorrection);
 
 protected:
   bool fCreateInterpVectors;
@@ -165,6 +169,7 @@ protected:
   bool fIncludeSingletAndTriplet;
   bool fUseRandomKStarVectors;
   bool fUseStaticPairs;
+  bool fApplyMomResCorrection;
 
   int MasterRepeat;
   BinInfoGTilde fGTildeInfo;
@@ -278,5 +283,6 @@ inline void CoulombFitter::SetTurnOffCoulomb(bool aTurnOffCoulomb) {fTurnOffCoul
 
 inline void CoulombFitter::SetIncludeSingletAndTriplet(bool aIncludeSingletAndTriplet) {fIncludeSingletAndTriplet = aIncludeSingletAndTriplet;}
 inline void CoulombFitter::SetUseRandomKStarVectors(bool aUseRandomKStarVectors) {fUseRandomKStarVectors = aUseRandomKStarVectors;}
+inline void CoulombFitter::SetApplyMomResCorrection(bool aApplyMomResCorrection) {fApplyMomResCorrection = aApplyMomResCorrection;}
 
 #endif

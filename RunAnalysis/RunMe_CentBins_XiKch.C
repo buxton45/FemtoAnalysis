@@ -83,16 +83,16 @@
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 int *use_runs;
-use_runs = runs_BmXIV;
+use_runs = runs_Bp1;
 
 bool RunGrid = true;
 bool RunFull = false;  //set to false when merging
-bool RunMC = false;
+bool RunMC = true;
 TString aConfigMacro = "ConfigFemtoAnalysis_CentBins_XiKch.C";
 TString AdditionalLibs = "libPWGCFfemtoscopy.so libPWGCFfemtoscopyUser.so myAliFemtoV0TrackCut.h myAliFemtoV0TrackCut.cxx myAliFemtoESDTrackCut.h myAliFemtoESDTrackCut.cxx myAliFemtoKStarCorrFctn.h myAliFemtoKStarCorrFctn.cxx myAliFemtoAvgSepCorrFctn.h myAliFemtoAvgSepCorrFctn.cxx myAliFemtoSepCorrFctns.h myAliFemtoSepCorrFctns.cxx myAliFemtoAvgSepCorrFctnCowboysAndSailors.h myAliFemtoAvgSepCorrFctnCowboysAndSailors.cxx myAliFemtoKStarCorrFctn2D.h myAliFemtoKStarCorrFctn2D.cxx myAliFemtoKStarCorrFctnMC.h myAliFemtoKStarCorrFctnMC.cxx AliFemtoModelWeightGeneratorBasicLednicky.h AliFemtoModelWeightGeneratorBasicLednicky.cxx myAliFemtoModelCorrFctnKStar.h myAliFemtoModelCorrFctnKStar.cxx myAnalysisConstructor.h myAnalysisConstructor.cxx ConfigFemtoAnalysis_CentBins_XiKch.C";
-TString aGridWorkingDir = "Results_cXicKch_20160610/BmXIV";
+TString aGridWorkingDir = "Results_cXicKch_MC_20160912/Bp1";
 TString aGridOutputDir = "output_data";
-TString outputname = "Results_cXicKch_20160610_BmXIV.root";
+TString outputname = "Results_cXicKch_MC_20160912_Bp1.root";
 
 
 
@@ -149,8 +149,8 @@ void RunMe_CentBins_XiKch()
 
         alienHandler->SetAPIVersion("V1.1x");
 //        alienHandler->SetROOTVersion("v5-34-30-alice-8");  //apparently this is no longer needed
-        alienHandler->SetAliROOTVersion("v5-07-20-4");
-        alienHandler->SetAliPhysicsVersion("vAN-20160210-1");
+        alienHandler->SetAliROOTVersion("v5-08-09-1");
+        alienHandler->SetAliPhysicsVersion("vAN-20160430-1");
 
         alienHandler->SetAnalysisSource("myAliFemtoV0TrackCut.cxx myAliFemtoESDTrackCut.cxx myAliFemtoKStarCorrFctn.cxx myAliFemtoAvgSepCorrFctn.cxx myAliFemtoSepCorrFctns.cxx myAliFemtoAvgSepCorrFctnCowboysAndSailors.cxx myAliFemtoKStarCorrFctn2D.cxx myAliFemtoKStarCorrFctnMC.cxx AliFemtoModelWeightGeneratorBasicLednicky.cxx myAliFemtoModelCorrFctnKStar.cxx myAnalysisConstructor.cxx"); // Add any cxx files which need compiled here (.cxx files)
         alienHandler->SetAdditionalLibs(AdditionalLibs); // Add any files which need copied to grid here (.h,.cxx,.C files)
@@ -251,23 +251,23 @@ void RunMe_CentBins_XiKch()
     TChain *input_files = new TChain("aodTree");
     if(!RunMC)
     {
-      input_files->Add("/alice/data/2011/LHC11h_2/000170593/ESDs/pass2/AOD145/0001/AliAOD.root");
-      input_files->Add("/alice/data/2011/LHC11h_2/000170593/ESDs/pass2/AOD145/0002/AliAOD.root");
-      input_files->Add("/alice/data/2011/LHC11h_2/000170572/ESDs/pass2/AOD145/0001/AliAOD.root");
-      input_files->Add("/alice/data/2011/LHC11h_2/000170572/ESDs/pass2/AOD145/0002/AliAOD.root");
-      input_files->Add("/alice/data/2011/LHC11h_2/000170388/ESDs/pass2/AOD145/0001/AliAOD.root");
-      input_files->Add("/alice/data/2011/LHC11h_2/000170388/ESDs/pass2/AOD145/0002/AliAOD.root");
+      input_files->Add("/aliceData/data/2011/LHC11h_2/000170593/ESDs/pass2/AOD145/0001/AliAOD.root");
+      input_files->Add("/aliceData/data/2011/LHC11h_2/000170593/ESDs/pass2/AOD145/0002/AliAOD.root");
+      input_files->Add("/aliceData/data/2011/LHC11h_2/000170572/ESDs/pass2/AOD145/0001/AliAOD.root");
+      input_files->Add("/aliceData/data/2011/LHC11h_2/000170572/ESDs/pass2/AOD145/0002/AliAOD.root");
+      input_files->Add("/aliceData/data/2011/LHC11h_2/000170388/ESDs/pass2/AOD145/0001/AliAOD.root");
+      input_files->Add("/aliceData/data/2011/LHC11h_2/000170388/ESDs/pass2/AOD145/0002/AliAOD.root");
 
     }
     if(RunMC)
     {
-      input_files->Add("/alice/sim/2012/LHC12a17a_fix/170593/AOD149/0001/AliAOD.root");
+      input_files->Add("/aliceData/sim/2012/LHC12a17a_fix/170593/AOD149/0001/AliAOD.root");
 /*
-      input_files->Add("/alice/sim/2012/LHC12a17a_fix/170593/AOD149/0002/AliAOD.root");
-      input_files->Add("/alice/sim/2012/LHC12a17a_fix/170572/AOD149/0001/AliAOD.root");
-      input_files->Add("/alice/sim/2012/LHC12a17a_fix/170572/AOD149/0002/AliAOD.root");
-      input_files->Add("/alice/sim/2012/LHC12a17a_fix/170388/AOD149/0001/AliAOD.root");
-      input_files->Add("/alice/sim/2012/LHC12a17a_fix/170388/AOD149/0002/AliAOD.root");
+      input_files->Add("/aliceData/sim/2012/LHC12a17a_fix/170593/AOD149/0002/AliAOD.root");
+      input_files->Add("/aliceData/sim/2012/LHC12a17a_fix/170572/AOD149/0001/AliAOD.root");
+      input_files->Add("/aliceData/sim/2012/LHC12a17a_fix/170572/AOD149/0002/AliAOD.root");
+      input_files->Add("/aliceData/sim/2012/LHC12a17a_fix/170388/AOD149/0001/AliAOD.root");
+      input_files->Add("/aliceData/sim/2012/LHC12a17a_fix/170388/AOD149/0002/AliAOD.root");
 */
     }
 

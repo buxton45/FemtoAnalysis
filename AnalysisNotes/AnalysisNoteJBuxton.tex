@@ -1,0 +1,62 @@
+\documentclass[ALICE,manyauthors]{ALICE_analysis_notes}
+%\documentclass[ALICE,manyauthors]{ALICE_scientific_notes}
+%
+%\newcommand{\jpsi}{\rm J/$\psi$}
+%\newcommand{\psip}{$\psi^\prime$}
+%\newcommand{\jpsiDY}{\rm J/$\psi$\,/\,DY}
+%\newcommand{\dd}{\mathrm{d}}
+%\newcommand{\chic}{$\chi_{\rm c}$}
+%\newcommand{\ezdc}{$E_{\rm ZDC}$}
+%\newcommand{\red}{\textcolor{red}}
+%\newcommand{\blue}{\textcolor{blue}}
+\newcommand{\slfrac}[2]{\left.#1\right/#2}
+\usepackage{rotating}
+\usepackage{comment} 
+
+\usepackage{color}	%May be necessary for colored links
+\usepackage{hyperref}
+\hypersetup{
+	colorlinks=true, %set true if you want colored links
+	linktoc=all, %set to all for both sections and subsections linked
+	linkcolor=red, %choose some color for links
+	anchorcolor=black,
+	citecolor=green,
+	filecolor=cyan,
+	menucolor=red,
+	runcolor=cyan,
+	urlcolor=magenta
+}
+
+
+%
+\begin{document}%
+%%%%%%%%%%%%% ptdr definitions %%%%%%%%%%%%%%%%%%%%%
+%
+%%%%%%%%%%%%%%%  Title page %%%%%%%%%%%%%%%%%%%%%%%%
+%
+\begin{titlepage}
+%
+\PHnumber{ALICE-ANA-2016-xxx} 
+\PHdate{\today}
+%
+%%% Put your own title + short title here:
+\title{Lambda-Kaon and Cascade-Kaon Femtoscopy in Pb-Pb Collisions at $\sqrt{s_{NN}}=2.76$ TeV from the LHC ALICE Experiment}
+\ShortTitle{$\Lambda$-K and $\Xi$-K Femtoscopy with ALICE}   % appears on right page headers
+%
+\author{Jesse T. Buxton$^{1}$}
+\author{
+1. Department of Physics, The Ohio State University, Columbus, Ohio, USA\\
+}
+\author{Email: jesse.thomas.buxton@cern.ch}
+%
+\ShortAuthor{ALICE Analysis Note 2016}      % appears on left page headers, do not change
+%
+\begin{abstract}
+My abstract will be contained here.  The abstract will introduce my study and inform the reader about the content of this paper.  I will state the problem I tackle, and summarize (in one sentence) why no one else has yet to adequately answered the research question.  Next, I will explain (again, in one sentence) how I tackled the research question, and (in one sentence) how I went about doing the research which followed from this big idea (i.e. elaborate on previous sentence).  Finally, as a single sentence, I will state the key impact of my research.
+\end{abstract}
+\end{titlepage}
+%
+%\input{alice_mynote.tex}               %%%%%%%%%%% put the body of the article here
+\input{0_Contents.tex}
+
+\end{document}

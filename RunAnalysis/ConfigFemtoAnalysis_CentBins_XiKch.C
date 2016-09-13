@@ -53,9 +53,9 @@ AliFemtoManager* ConfigFemtoAnalysis()
   gROOT->LoadMacro("myAnalysisConstructor.cxx+g");
 
   bool ImplementAvgSepCuts = false;
-  bool WritePairKinematics = true;
+  bool WritePairKinematics = false;
   bool ImplementVertexCorrection = false;
-  bool RunMC = false;
+  bool RunMC = true;
 
   //-----17/12/2015
   bool UseAliFemtoV0TrackCutNSigmaFilter = false;
