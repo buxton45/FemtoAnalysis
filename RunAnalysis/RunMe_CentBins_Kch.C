@@ -36,14 +36,14 @@
 int *use_runs;
 use_runs = runs_Bm2;
 
-bool RunGrid = true;
-bool RunFull = false;  //set to false when merging
-bool RunMC = true;
+bool RunGrid = false;
+bool RunFull = true;  //set to false when merging
+bool RunMC = false;
 TString aConfigMacro = "ConfigFemtoAnalysis_CentBins_Kch.C";
 TString AdditionalLibs = "libPWGCFfemtoscopy.so libPWGCFfemtoscopyUser.so myAliFemtoV0TrackCut.h myAliFemtoV0TrackCut.cxx myAliFemtoESDTrackCut.h myAliFemtoESDTrackCut.cxx myAliFemtoKStarCorrFctn.h myAliFemtoKStarCorrFctn.cxx myAliFemtoAvgSepCorrFctn.h myAliFemtoAvgSepCorrFctn.cxx myAliFemtoSepCorrFctns.h myAliFemtoSepCorrFctns.cxx myAliFemtoAvgSepCorrFctnCowboysAndSailors.h myAliFemtoAvgSepCorrFctnCowboysAndSailors.cxx myAliFemtoKStarCorrFctn2D.h myAliFemtoKStarCorrFctn2D.cxx myAliFemtoKStarCorrFctnMC.h myAliFemtoKStarCorrFctnMC.cxx AliFemtoModelWeightGeneratorBasicLednicky.h AliFemtoModelWeightGeneratorBasicLednicky.cxx myAliFemtoModelCorrFctnKStar.h myAliFemtoModelCorrFctnKStar.cxx myAnalysisConstructor.h myAnalysisConstructor.cxx ConfigFemtoAnalysis_CentBins_Kch.C";
 TString aGridWorkingDir = "Results_cLamcKch_AsRcMC_RmMisIDFine_20160225/Bm2";
 TString aGridOutputDir = "output_data";
-TString outputname = "Results_cLamcKch_AsRcMC_RmMisIDFine_20160225_Bm2.root";
+TString outputname = "TestLamKch.root";
 
 
 
@@ -201,12 +201,13 @@ void RunMe_CentBins_Kch()
     if(!RunMC)
     {
       input_files->Add("/aliceData/data/2011/LHC11h_2/000170593/ESDs/pass2/AOD145/0001/AliAOD.root");
+/*
       input_files->Add("/aliceData/data/2011/LHC11h_2/000170593/ESDs/pass2/AOD145/0002/AliAOD.root");
       input_files->Add("/aliceData/data/2011/LHC11h_2/000170572/ESDs/pass2/AOD145/0001/AliAOD.root");
       input_files->Add("/aliceData/data/2011/LHC11h_2/000170572/ESDs/pass2/AOD145/0002/AliAOD.root");
       input_files->Add("/aliceData/data/2011/LHC11h_2/000170388/ESDs/pass2/AOD145/0001/AliAOD.root");
       input_files->Add("/aliceData/data/2011/LHC11h_2/000170388/ESDs/pass2/AOD145/0002/AliAOD.root");
-
+*/
     }
     if(RunMC)
     {

@@ -30,8 +30,8 @@ public:
 
   virtual void Finish();
 
-  void CalculateDetaDphis(Bool_t, Double_t);
-  void CalculatePairKinematics(Bool_t);
+  void SetCalculateDetaDphis(Bool_t, Double_t);
+  void SetCalculatePairKinematics(Bool_t);
 
   TH1D* Numerator();
   TH1D* Denominator();

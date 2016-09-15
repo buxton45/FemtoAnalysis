@@ -347,11 +347,11 @@ TList* myAliFemtoKStarCorrFctn::GetOutputList()
   return tOutputList;
 }
 
-void myAliFemtoKStarCorrFctn::CalculateDetaDphis(Bool_t dedpsc, Double_t rad) {
+void myAliFemtoKStarCorrFctn::SetCalculateDetaDphis(Bool_t dedpsc, Double_t rad) {
   fDetaDphiscal = dedpsc;
   fRaddedps = rad;
 }
 
-void myAliFemtoKStarCorrFctn::CalculatePairKinematics(Bool_t pk) {
+void myAliFemtoKStarCorrFctn::SetCalculatePairKinematics(Bool_t pk) {
   fPairKinematics = pk;
 }

@@ -1208,13 +1208,13 @@ TList* myAnalysisConstructor::GetOutputList()
   if(p1cut)
     {
       tOutputList->Add(p1cut->GetPurityHisto());
-      tOutputList->Add(p1cut->GetMisIDHisto());
+      tOutputList->Add(p1cut->GetMisIDHistos());
     }
   myAliFemtoV0TrackCut* p2cut = dynamic_cast <myAliFemtoV0TrackCut*> (fSecondParticleCut);
   if(p2cut)
     {
       tOutputList->Add(p2cut->GetPurityHisto());
-      tOutputList->Add(p2cut->GetMisIDHisto());
+      tOutputList->Add(p2cut->GetMisIDHistos());
     }
 
   tOutputList->Add(GetMultHist());
@@ -1272,11 +1272,14 @@ myAliFemtoV0TrackCut* myAnalysisConstructor::CreateLambdaCut()
     v0cut1->SetMass(LambdaMass);
     v0cut1->SetInvariantMassLambda(LambdaMass-0.0038,LambdaMass+0.0038);   //m_inv criteria for lambda's
     v0cut1->SetRemoveMisidentified(kTRUE);
-    v0cut1->SetInvMassMisidentified(K0ShortMass-0.003677,K0ShortMass+0.003677);  //m_inv criteria to remove all lambda candidates fulfilling K0short hypothesis
-    //v0cut1->SetInvMassMisidentified(K0ShortMass-0.013677,K0ShortMass+0.013677);  //m_inv criteria to remove all lambda candidates fulfilling K0short hypothesis
-    v0cut1->SetMisIDHisto("MisIDLambdas",100,LambdaMass-0.035,LambdaMass+0.035);
+    v0cut1->SetInvMassReject(myAliFemtoV0TrackCut::kK0s, K0ShortMass-0.003677,K0ShortMass+0.003677);  //m_inv criteria to remove all lambda candidates fulfilling K0short hypothesis
+    //v0cut1->SetInvMassReject(K0ShortMass-0.013677,K0ShortMass+0.013677);  //m_inv criteria to remove all lambda candidates fulfilling K0short hypothesis
+    //v0cut1->SetMisIDHisto("MisIDLambdas",100,LambdaMass-0.035,LambdaMass+0.035);
+    v0cut1->SetBuildMisIDHistograms(true);
+    v0cut1->SetMisIDHisto(myAliFemtoV0TrackCut::kLambda,100,LambdaMass-0.035,LambdaMass+0.035);
+    v0cut1->SetMisIDHisto(myAliFemtoV0TrackCut::kK0s,100,K0ShortMass-0.070,K0ShortMass+0.070);
     v0cut1->SetCalculatePurity(kTRUE);
-    v0cut1->SetLooseInvMassCut(LambdaMass-0.035,LambdaMass+0.035);
+    v0cut1->SetLooseInvMassCut(true, LambdaMass-0.035,LambdaMass+0.035);
     v0cut1->SetUseLooseInvMassCut(kTRUE);
     v0cut1->SetPurityHisto("LambdaPurity",100,LambdaMass-0.035,LambdaMass+0.035);
     v0cut1->SetEta(0.8); //|eta|<0.8 for V0s
@@ -1364,11 +1367,14 @@ myAliFemtoV0TrackCut* myAnalysisConstructor::CreateAntiLambdaCut()
     v0cut2->SetMass(LambdaMass);
     v0cut2->SetInvariantMassLambda(LambdaMass-0.0038,LambdaMass+0.0038);   //m_inv criteria for anti-lambda's
     v0cut2->SetRemoveMisidentified(kTRUE);
-    v0cut2->SetInvMassMisidentified(K0ShortMass-0.003677,K0ShortMass+0.003677);  //m_inv criteria to remove all anti-lambda candidates fulfilling K0short hypothesis
-    //v0cut2->SetInvMassMisidentified(K0ShortMass-0.013677,K0ShortMass+0.013677);  //m_inv criteria to remove all anti-lambda candidates fulfilling K0short hypothesis
-    v0cut2->SetMisIDHisto("MisIDAntiLambdas",100,LambdaMass-0.035,LambdaMass+0.035);
+    v0cut2->SetInvMassReject(myAliFemtoV0TrackCut::kK0s, K0ShortMass-0.003677,K0ShortMass+0.003677);  //m_inv criteria to remove all anti-lambda candidates fulfilling K0short hypothesis
+    //v0cut2->SetInvMassReject(K0ShortMass-0.013677,K0ShortMass+0.013677);  //m_inv criteria to remove all anti-lambda candidates fulfilling K0short hypothesis
+    //v0cut2->SetMisIDHisto("MisIDAntiLambdas",100,LambdaMass-0.035,LambdaMass+0.035);
+    v0cut2->SetBuildMisIDHistograms(true);
+    v0cut2->SetMisIDHisto(myAliFemtoV0TrackCut::kAntiLambda,100,LambdaMass-0.035,LambdaMass+0.035);
+    v0cut2->SetMisIDHisto(myAliFemtoV0TrackCut::kK0s,100,K0ShortMass-0.070,K0ShortMass+0.070);
     v0cut2->SetCalculatePurity(kTRUE);
-    v0cut2->SetLooseInvMassCut(LambdaMass-0.035,LambdaMass+0.035);
+    v0cut2->SetLooseInvMassCut(true, LambdaMass-0.035,LambdaMass+0.035);
     v0cut2->SetUseLooseInvMassCut(kTRUE);
     v0cut2->SetPurityHisto("AntiLambdaPurity",100,LambdaMass-0.035,LambdaMass+0.035);
     v0cut2->SetEta(0.8);
@@ -1455,12 +1461,17 @@ myAliFemtoV0TrackCut* myAnalysisConstructor::CreateK0ShortCut()
   myAliFemtoV0TrackCut* k0cut1 = new myAliFemtoV0TrackCut();
     k0cut1->SetParticleType(2);  //  2=K0Short -> daughters = pi+ and pi-
     k0cut1->SetMass(K0ShortMass);
-    k0cut1->SetInvariantMassK0Short(K0ShortMass-0.013677,K0ShortMass+0.020323);  //m_inv criteria for K0shorts
+    k0cut1->SetInvariantMassK0s(K0ShortMass-0.013677,K0ShortMass+0.020323);  //m_inv criteria for K0shorts
     k0cut1->SetRemoveMisidentified(kTRUE);
-    k0cut1->SetInvMassMisidentified(LambdaMass-0.005683,LambdaMass+0.005683);  //m_inv criteria to remove all K0short candidates fulfilling (anti-)lambda hypothesis
-    k0cut1->SetMisIDHisto("MisIDK0Short1",100,K0ShortMass-0.070,K0ShortMass+0.070);
+    k0cut1->SetInvMassReject(myAliFemtoV0TrackCut::kLambda, LambdaMass-0.005683,LambdaMass+0.005683);  //m_inv criteria to remove all K0short candidates fulfilling (anti-)lambda hypothesis
+    k0cut1->SetInvMassReject(myAliFemtoV0TrackCut::kAntiLambda, LambdaMass-0.005683,LambdaMass+0.005683);  //m_inv criteria to remove all K0short candidates fulfilling (anti-)lambda hypothesis
+    //k0cut1->SetMisIDHisto("MisIDK0Short1",100,K0ShortMass-0.070,K0ShortMass+0.070);
+    k0cut1->SetBuildMisIDHistograms(true);
+    k0cut1->SetMisIDHisto(myAliFemtoV0TrackCut::kLambda,100,LambdaMass-0.035,LambdaMass+0.035);
+    k0cut1->SetMisIDHisto(myAliFemtoV0TrackCut::kAntiLambda,100,LambdaMass-0.035,LambdaMass+0.035);
+    k0cut1->SetMisIDHisto(myAliFemtoV0TrackCut::kK0s,100,K0ShortMass-0.070,K0ShortMass+0.070);
     k0cut1->SetCalculatePurity(kTRUE);
-    k0cut1->SetLooseInvMassCut(K0ShortMass-0.070,K0ShortMass+0.070);
+    k0cut1->SetLooseInvMassCut(true, K0ShortMass-0.070,K0ShortMass+0.070);
     k0cut1->SetUseLooseInvMassCut(kTRUE);
     k0cut1->SetPurityHisto("K0ShortPurity1",100,K0ShortMass-0.070,K0ShortMass+0.070);
     k0cut1->SetEta(0.8); //|eta|<0.8 for V0s
@@ -2184,7 +2195,7 @@ AliFemtoXiTrackPairCut* myAnalysisConstructor::CreateXiTrackPairCut()
 myAliFemtoKStarCorrFctn* myAnalysisConstructor::CreateKStarCorrFctn(const char* name, unsigned int bins, double min, double max)
 {
   myAliFemtoKStarCorrFctn *cf = new myAliFemtoKStarCorrFctn(name,bins,min,max);
-  cf->CalculatePairKinematics(fWritePairKinematics);
+  cf->SetCalculatePairKinematics(fWritePairKinematics);
   return cf;
 }
 

@@ -63,9 +63,11 @@ AliFemtoManager* ConfigFemtoAnalysis()
   bool RunMC = false;
 
   //-----17/12/2015
-  bool UseAliFemtoV0TrackCutNSigmaFilter = true;
-  bool UseCustomNSigmaFilters = true;
+  bool UseAliFemtoV0TrackCutNSigmaFilter = false;
+  bool UseCustomNSigmaFilters = false;
 
+  //-----25/02/2016
+  bool RemoveMisidentifiedMCParticles = true;
 
   //Setup the event reader for ALICE AOD
   AliFemtoEventReaderAODChain *rdr = new AliFemtoEventReaderAODChain();
@@ -89,22 +91,26 @@ AliFemtoManager* ConfigFemtoAnalysis()
   myAnalysisConstructor *analy_LamK0 = new myAnalysisConstructor(myAnalysisConstructor::kLamK0, "LamK0",10,-10.,10., 20, 0, 1000, RunMC, ImplementAvgSepCuts);
     analy_LamK0->SetUseAliFemtoV0TrackCutNSigmaFilter(UseAliFemtoV0TrackCutNSigmaFilter);
     analy_LamK0->SetUseCustomNSigmaFilters(UseCustomNSigmaFilters);
+    analy_LamK0->SetRemoveMisidentifiedMCParticles(RemoveMisidentifiedMCParticles);
     analy_LamK0->SetCorrectAnalysis();
 
     //_______Centrality dependent______________________________________________________
     myAnalysisConstructor *analy_LamK0_0010 = new myAnalysisConstructor(myAnalysisConstructor::kLamK0, "LamK0_0010",10,-10.,10., 2, 0, 100, RunMC, ImplementAvgSepCuts);
       analy_LamK0_0010->SetUseAliFemtoV0TrackCutNSigmaFilter(UseAliFemtoV0TrackCutNSigmaFilter);
       analy_LamK0_0010->SetUseCustomNSigmaFilters(UseCustomNSigmaFilters);
+      analy_LamK0_0010->SetRemoveMisidentifiedMCParticles(RemoveMisidentifiedMCParticles);
       analy_LamK0_0010->SetCorrectAnalysis();
 
     myAnalysisConstructor *analy_LamK0_1030 = new myAnalysisConstructor(myAnalysisConstructor::kLamK0, "LamK0_1030",10,-10.,10., 4, 100, 300, RunMC, ImplementAvgSepCuts);
       analy_LamK0_1030->SetUseAliFemtoV0TrackCutNSigmaFilter(UseAliFemtoV0TrackCutNSigmaFilter);
       analy_LamK0_1030->SetUseCustomNSigmaFilters(UseCustomNSigmaFilters);
+      analy_LamK0_1030->SetRemoveMisidentifiedMCParticles(RemoveMisidentifiedMCParticles);
       analy_LamK0_1030->SetCorrectAnalysis();
 
     myAnalysisConstructor *analy_LamK0_3050 = new myAnalysisConstructor(myAnalysisConstructor::kLamK0, "LamK0_3050",10,-10.,10., 4, 300, 500, RunMC, ImplementAvgSepCuts);
       analy_LamK0_3050->SetUseAliFemtoV0TrackCutNSigmaFilter(UseAliFemtoV0TrackCutNSigmaFilter);
       analy_LamK0_3050->SetUseCustomNSigmaFilters(UseCustomNSigmaFilters);
+      analy_LamK0_3050->SetRemoveMisidentifiedMCParticles(RemoveMisidentifiedMCParticles);
       analy_LamK0_3050->SetCorrectAnalysis();
 
 
@@ -112,22 +118,26 @@ AliFemtoManager* ConfigFemtoAnalysis()
   myAnalysisConstructor *analy_ALamK0 = new myAnalysisConstructor(myAnalysisConstructor::kALamK0, "ALamK0",10,-10.,10., 20, 0, 1000, RunMC, ImplementAvgSepCuts);
     analy_ALamK0->SetUseAliFemtoV0TrackCutNSigmaFilter(UseAliFemtoV0TrackCutNSigmaFilter);
     analy_ALamK0->SetUseCustomNSigmaFilters(UseCustomNSigmaFilters);
+    analy_ALamK0->SetRemoveMisidentifiedMCParticles(RemoveMisidentifiedMCParticles);
     analy_ALamK0->SetCorrectAnalysis();
 
     //_______Centrality dependent______________________________________________________
     myAnalysisConstructor *analy_ALamK0_0010 = new myAnalysisConstructor(myAnalysisConstructor::kALamK0, "ALamK0_0010",10,-10.,10., 2, 0, 100, RunMC, ImplementAvgSepCuts);
       analy_ALamK0_0010->SetUseAliFemtoV0TrackCutNSigmaFilter(UseAliFemtoV0TrackCutNSigmaFilter);
       analy_ALamK0_0010->SetUseCustomNSigmaFilters(UseCustomNSigmaFilters);
+      analy_ALamK0_0010->SetRemoveMisidentifiedMCParticles(RemoveMisidentifiedMCParticles);
       analy_ALamK0_0010->SetCorrectAnalysis();
 
     myAnalysisConstructor *analy_ALamK0_1030 = new myAnalysisConstructor(myAnalysisConstructor::kALamK0, "ALamK0_1030",10,-10.,10., 4, 100, 300, RunMC, ImplementAvgSepCuts);
       analy_ALamK0_1030->SetUseAliFemtoV0TrackCutNSigmaFilter(UseAliFemtoV0TrackCutNSigmaFilter);
       analy_ALamK0_1030->SetUseCustomNSigmaFilters(UseCustomNSigmaFilters);
+      analy_ALamK0_1030->SetRemoveMisidentifiedMCParticles(RemoveMisidentifiedMCParticles);
       analy_ALamK0_1030->SetCorrectAnalysis();
 
     myAnalysisConstructor *analy_ALamK0_3050 = new myAnalysisConstructor(myAnalysisConstructor::kALamK0, "ALamK0_3050",10,-10.,10., 4, 300, 500, RunMC, ImplementAvgSepCuts);
       analy_ALamK0_3050->SetUseAliFemtoV0TrackCutNSigmaFilter(UseAliFemtoV0TrackCutNSigmaFilter);
       analy_ALamK0_3050->SetUseCustomNSigmaFilters(UseCustomNSigmaFilters);
+      analy_ALamK0_3050->SetRemoveMisidentifiedMCParticles(RemoveMisidentifiedMCParticles);
       analy_ALamK0_3050->SetCorrectAnalysis();
 
 

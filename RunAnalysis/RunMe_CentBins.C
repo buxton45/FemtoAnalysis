@@ -202,12 +202,13 @@ void RunMe_CentBins()
     {
 
       input_files->Add("/aliceData/data/2011/LHC11h_2/000170593/ESDs/pass2/AOD145/0001/AliAOD.root");
+/*
       input_files->Add("/aliceData/data/2011/LHC11h_2/000170593/ESDs/pass2/AOD145/0002/AliAOD.root");
       input_files->Add("/aliceData/data/2011/LHC11h_2/000170572/ESDs/pass2/AOD145/0001/AliAOD.root");
       input_files->Add("/aliceData/data/2011/LHC11h_2/000170572/ESDs/pass2/AOD145/0002/AliAOD.root");
       input_files->Add("/aliceData/data/2011/LHC11h_2/000170388/ESDs/pass2/AOD145/0001/AliAOD.root");
       input_files->Add("/aliceData/data/2011/LHC11h_2/000170388/ESDs/pass2/AOD145/0002/AliAOD.root");
-
+*/
 
       //input_files->Add("~/Analysis/K0Lam/Data/LHC11h/000169846_ESDs_pass2_AOD145_1262/AliAOD.root");  //Jai Baseline
     }

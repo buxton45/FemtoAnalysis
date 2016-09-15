@@ -60,7 +60,7 @@ AliFemtoManager* ConfigFemtoAnalysis()
 
   bool ImplementAvgSepCuts = true;
   bool ImplementVertexCorrection = true;
-  bool RunMC = true;
+  bool RunMC = false;
 
   //-----17/12/2015
   bool UseAliFemtoV0TrackCutNSigmaFilter = false;

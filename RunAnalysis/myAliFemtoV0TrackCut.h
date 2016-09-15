@@ -1,12 +1,10 @@
-///////////////////////////////////////////////////////////////////////////
-//                                                                       //
-// AliFemtoESDTrackCut: A basic track cut that used information from     //
-// ALICE ESD to accept or reject the track.                              //  
-// Enables the selection on charge, transverse momentum, rapidity,       //
-// pid probabilities, number of ITS and TPC clusters                     //
-// Author: Marek Chojnacki (WUT), mchojnacki@knf.pw.edu.pl               //
-//                                                                       //
-///////////////////////////////////////////////////////////////////////////
+/// \class AliFemtoV0TrackCut
+
+#ifndef MYALIFEMTOV0TRACKCUT_H
+#define MYALIFEMTOV0TRACKCUT_H
+
+#include <TH1D.h>
+#include "AliFemtoTrackCut.h"
 
 //  Purpose:  extend applicability of AliFemtoV0TrackCut class
 //	Specifically:
@@ -14,16 +12,11 @@
 //		2.  Change SetMinDaughtersToPrimVertex to accept two arguments,
 //		    corresponding to cuts for the positive and negative daughters, separately (DONE in vAN-20141013)
 
-#ifndef MYALIFEMTOV0TRACKCUT_H
-#define MYALIFEMTOV0TRACKCUT_H
-
-#include <TH1F.h>
-#include "AliFemtoTrackCut.h"
 
 class myAliFemtoV0TrackCut : public AliFemtoParticleCut 
 {
   public:
-  enum V0Type {kLambda = 0, kAntiLambda=1, kK0Short=2, kAll=99, kLambdaMC=101, kAntiLambdaMC=102};
+  enum V0Type {kLambda = 0, kAntiLambda=1, kK0s=2, kAll=99, kLambdaMC=101, kAntiLambdaMC=102};
   typedef enum V0Type AliFemtoV0Type;
 
 
@@ -40,7 +33,7 @@ class myAliFemtoV0TrackCut : public AliFemtoParticleCut
   virtual AliFemtoParticleType Type(){return hbtV0;}
   
   void SetInvariantMassLambda(double,double);
-  void SetInvariantMassK0Short(double,double);
+  void SetInvariantMassK0s(double,double);
   void SetMinDaughtersToPrimVertex(double,double);
   void SetMaxDcaV0Daughters(double);
   void SetMaxDcaV0(double);
@@ -67,15 +60,19 @@ class myAliFemtoV0TrackCut : public AliFemtoParticleCut
 
   //-----23/10/2014------------------
   void SetRemoveMisidentified(bool aRemove);
-  void SetInvMassMisidentified(double aInvMassMin, double aInvMassMax);
-  void SetMisIDHisto(const char* title, const int& nbins, const float& aInvMassMin, const float& aInvMassMax);
-  TH1F *GetMisIDHisto();
+  void SetUseSimpleMisIDCut(bool aUse);
+  void SetInvMassReject(AliFemtoV0Type aV0Type, double aInvMassMin, double aInvMassMax);
+  void SetBuildMisIDHistograms(bool aBuild);
+  void SetMisIDHisto(AliFemtoV0Type aMisIDV0Type, const int& nbins, const float& aInvMassMin, const float& aInvMassMax);  //allows control over binning
+  void SetDefaultMisIDHistos();
+  TObjArray *GetMisIDHistos();
+
   void SetCalculatePurity(bool aCalc);
-  void SetLooseInvMassCut(double aInvMassMin, double aInvMassMax);
+  void SetLooseInvMassCut(bool aUseCut, double aInvMassMin, double aInvMassMax);
   void SetPurityHisto(const char* title, const int& nbins, const float& aInvMassMin, const float& aInvMassMax);
-  TH1F *GetPurityHisto();
+  TH1D *GetPurityHisto();
   //-----03/11/2014------------------
-  bool IsMisIDK0Short(const AliFemtoV0* aV0);
+  bool IsMisIDK0s(const AliFemtoV0* aV0);
   bool IsMisIDLambda(const AliFemtoV0* aV0);
   bool IsMisIDAntiLambda(const AliFemtoV0* aV0);
   //-----06/11/2014------------------
@@ -85,8 +82,8 @@ class myAliFemtoV0TrackCut : public AliFemtoParticleCut
 
   double            fInvMassLambdaMin;   //invariant mass lambda min
   double            fInvMassLambdaMax;   //invariant mass lambda max
-  double            fInvMassK0ShortMin;   //invariant mass K0 min
-  double            fInvMassK0ShortMax;   //invariant mass K0 max
+  double            fInvMassK0sMin;   //invariant mass K0 min
+  double            fInvMassK0sMax;   //invariant mass K0 max
   double            fMinDcaDaughterPosToVert; //DCA of positive daughter to primary vertex
   double            fMinDcaDaughterNegToVert; //DCA of negative daughter to primary vertex
   double            fMaxDcaV0Daughters;     //Max DCA of v0 daughters at Decay vertex
@@ -111,14 +108,25 @@ class myAliFemtoV0TrackCut : public AliFemtoParticleCut
   double fMinAvgSepDaughters;
 
   //-----23/10/2014------------------
-  bool fRemoveMisidentified;   //remove POI candidates that fulfill the misidentified mass hypothesis within a given Minv range
-  double fInvMassMisidentifiedMin;
-  double fInvMassMisidentifiedMax;
-  TH1F *fMisIDHisto;
+  //For more control over the misidentification cut, use AliFemtoV0TrackCutNSigmaFilter class
+  bool fRemoveMisidentified;         // attempt to remove V0 candidates (K0s, Lambda and AntiLambda) which are misidentified
+                                     //   i.e. check if Lambda or AntiLambda could be misidentified K0s,
+                                     //        or if K0s could be misidentified Lambda or AntiLambda
+                                     // Uses methods IsMisIDK0s, IsMisIDLambda, IsMisIDAntiLambda
+  bool fUseSimpleMisIDCut;	     // If set to true, the misidentification cut is based soley off of the invariant mass
+                                     // If set to false, it also considers the NSigma of the daughter particles when cutting
+  bool fBuildMisIDHistograms;
+
+  double fInvMassRejectLambdaMin, fInvMassRejectLambdaMax;
+  double fInvMassRejectAntiLambdaMin, fInvMassRejectAntiLambdaMax;
+  double fInvMassRejectK0sMin, fInvMassRejectK0sMax;
+  TH1D *fLambdaMassOfMisIDV0;          // Mass assuming Lambda hypothesis for V0s rejected by misidentification cut
+  TH1D *fAntiLambdaMassOfMisIDV0;      // Mass assuming AntiLambda hypothesis for V0s rejected by misidentification cut
+  TH1D *fK0sMassOfMisIDV0;         // Mass asumming K0s hypothesis for V0s rejected by misidentification cut
   bool fCalculatePurity;
   double fLooseInvMassMin;
   double fLooseInvMassMax;
-  TH1F *fPurity;   //InvMass histogram to be used in purity calculation
+  TH1D *fPurity;   //InvMass histogram to be used in purity calculation
   //-----06/11/2014------------------
   bool fUseLooseInvMassCut;
 
