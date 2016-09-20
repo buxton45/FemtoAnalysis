@@ -20,6 +20,9 @@ const char* const myTrainAnalysisConstructor::fAnalysisTags[] = {"LamK0", "ALamK
 myTrainAnalysisConstructor::myTrainAnalysisConstructor() : 
   AliFemtoVertexMultAnalysis(),
   fAnalysisType(kLamK0),
+  fGeneralAnalysisType(kV0V0),
+  fParticle1Type(kLam),
+  fParticle2Type(kK0),
   fCollectionOfCfs(0),
   fOutputName("Analysis"),
   fMultHist(0),
@@ -35,10 +38,11 @@ myTrainAnalysisConstructor::myTrainAnalysisConstructor() :
   ALamCut(0),
   KStarCf(0),
   AvgSepCf(0),
+/*
   SepCfs(0),
   AvgSepCfCowboysAndSailors(0),
   KStarCf2D(0),
-  KStarCfMC(0),
+*/
   KStarModelCfs(0),
   K0Cut(0),
   V0PairCut(0),
@@ -57,6 +61,7 @@ myTrainAnalysisConstructor::myTrainAnalysisConstructor() :
   fUseAliFemtoV0TrackCutNSigmaFilter(false),
   fUseCustomNSigmaFilters(false)
 {
+  SetParticleTypes(AnalysisType fAnalysisType)
   SetVerboseMode(kFALSE);
   fMultHist = new TH1F("MultHist","MultHist",30,0,3000);
   fCollectionOfCfs = new AliFemtoCorrFctnCollection;
@@ -67,6 +72,9 @@ myTrainAnalysisConstructor::myTrainAnalysisConstructor() :
 myTrainAnalysisConstructor::myTrainAnalysisConstructor(AnalysisType aAnalysisType, const char* name, bool aIsMCRun, bool aImplementAvgSepCuts, bool aWritePairKinematics) : 
   AliFemtoVertexMultAnalysis(),
   fAnalysisType(aAnalysisType),
+  fGeneralAnalysisType(0),
+  fParticle1Type(0),
+  fParticle2Type(0),
   fCollectionOfCfs(0),
   fOutputName(name),
   fMultHist(0),
@@ -82,10 +90,11 @@ myTrainAnalysisConstructor::myTrainAnalysisConstructor(AnalysisType aAnalysisTyp
   ALamCut(0),
   KStarCf(0),
   AvgSepCf(0),
+/*
   SepCfs(0),
   AvgSepCfCowboysAndSailors(0),
   KStarCf2D(0),
-  KStarCfMC(0),
+*/
   KStarModelCfs(0),
   K0Cut(0),
   V0PairCut(0),
@@ -104,6 +113,7 @@ myTrainAnalysisConstructor::myTrainAnalysisConstructor(AnalysisType aAnalysisTyp
   fUseAliFemtoV0TrackCutNSigmaFilter(false),
   fUseCustomNSigmaFilters(false)
 {
+  SetParticleTypes(AnalysisType fAnalysisType)
   SetVerboseMode(kFALSE);
   SetNumEventsToMix(5);
   SetMinSizePartCollection(1);
@@ -121,6 +131,9 @@ myTrainAnalysisConstructor::myTrainAnalysisConstructor(AnalysisType aAnalysisTyp
 myTrainAnalysisConstructor::myTrainAnalysisConstructor(AnalysisType aAnalysisType, const char* name, unsigned int binsVertex, double minVertex, double maxVertex, unsigned int binsMult, double minMult, double maxMult, bool aIsMCRun, bool aImplementAvgSepCuts, bool aWritePairKinematics) : 
   AliFemtoVertexMultAnalysis(binsVertex,minVertex,maxVertex,binsMult,minMult,maxMult),
   fAnalysisType(aAnalysisType),
+  fGeneralAnalysisType(0),
+  fParticle1Type(0),
+  fParticle2Type(0),
   fCollectionOfCfs(0),
   fOutputName(name),
   fIsMCRun(aIsMCRun),
@@ -136,10 +149,11 @@ myTrainAnalysisConstructor::myTrainAnalysisConstructor(AnalysisType aAnalysisTyp
   ALamCut(0),
   KStarCf(0),
   AvgSepCf(0),
+/*
   SepCfs(0),
   AvgSepCfCowboysAndSailors(0),
   KStarCf2D(0),
-  KStarCfMC(0),
+*/
   KStarModelCfs(0),
   K0Cut(0),
   V0PairCut(0),
@@ -158,6 +172,7 @@ myTrainAnalysisConstructor::myTrainAnalysisConstructor(AnalysisType aAnalysisTyp
   fUseAliFemtoV0TrackCutNSigmaFilter(false),
   fUseCustomNSigmaFilters(false)
 {
+  SetParticleTypes(AnalysisType fAnalysisType)
   SetVerboseMode(kFALSE);
   SetNumEventsToMix(5);
   SetMinSizePartCollection(1);
@@ -182,6 +197,7 @@ myTrainAnalysisConstructor::myTrainAnalysisConstructor(AnalysisType aAnalysisTyp
   strncat(tTitAvgSepCf,fAnalysisTags[aAnalysisType],100);
   AvgSepCf = CreateAvgSepCorrFctn(tTitAvgSepCf,200,0.,20.);
 
+/*
   char tTitSepCfs[101] = "SepCfs_";
   strncat(tTitSepCfs,fAnalysisTags[aAnalysisType],100);
   SepCfs = CreateSepCorrFctns(tTitSepCfs,10,0.,10.,200,0.,20.);
@@ -193,10 +209,7 @@ myTrainAnalysisConstructor::myTrainAnalysisConstructor(AnalysisType aAnalysisTyp
   char tTitKStarCf2D[101] = "KStarCf2D_";
   strncat(tTitKStarCf2D,fAnalysisTags[aAnalysisType],100);
   KStarCf2D = CreateKStarCorrFctn2D(tTitKStarCf2D,200,0.,1.0,2,-2.,2.);
-
-  char tTitKStarCfMC[101] = "KStarCfTrue_";
-  strncat(tTitKStarCfMC,fAnalysisTags[aAnalysisType],100);
-  KStarCfMC = CreateKStarCorrFctnMC(tTitKStarCfMC,200,0.,1.0);
+*/
 
   //-----04/02/2016
   char tTitModelCorrFctnKStar[101] = "KStarModelCf_";
@@ -214,14 +227,15 @@ myTrainAnalysisConstructor::myTrainAnalysisConstructor(AnalysisType aAnalysisTyp
     //fMultHist is added in myTrainAnalysisConstructor::ProcessEvent
     fCollectionOfCfs->push_back((AliFemtoCorrFctn*)KStarCf);
     fCollectionOfCfs->push_back((AliFemtoCorrFctn*)AvgSepCf);
+/*
     //fCollectionOfCfs->push_back((AliFemtoCorrFctn*)SepCfs);
     //fCollectionOfCfs->push_back((AliFemtoCorrFctn*)AvgSepCfCowboysAndSailors);
     fCollectionOfCfs->push_back((AliFemtoCorrFctn*)KStarCf2D);
+*/
   }
 
   if(fIsMCRun) 
   {
-    fCollectionOfCfs->push_back((AliFemtoCorrFctn*)KStarCfMC);
     fCollectionOfCfs->push_back((AliFemtoCorrFctn*)KStarModelCfs);
   }
 
@@ -274,10 +288,11 @@ myTrainAnalysisConstructor::myTrainAnalysisConstructor(const myTrainAnalysisCons
   ALamCut(0),
   KStarCf(0),
   AvgSepCf(0),
+/*
   SepCfs(0),
   AvgSepCfCowboysAndSailors(0),
   KStarCf2D(0),
-  KStarCfMC(0),
+*/
   KStarModelCfs(0),
   K0Cut(0),
   V0PairCut(0),
@@ -330,10 +345,11 @@ myTrainAnalysisConstructor& myTrainAnalysisConstructor::operator=(const myTrainA
   ALamCut = 0;
   KStarCf = 0;
   AvgSepCf = 0;
+/*
   SepCfs = 0;
   AvgSepCfCowboysAndSailors = 0;
   KStarCf2D = 0;
-  KStarCfMC = 0;
+*/
   KStarModelCfs = 0;
   K0Cut = 0;
   V0PairCut = 0;
@@ -377,6 +393,182 @@ myTrainAnalysisConstructor::~myTrainAnalysisConstructor()
 
 }
 
+//____________________________
+void myTrainAnalysisConstructor::SetParticleTypes(AnalysisType aAnType)
+{
+  switch(aAnType) {
+  case: kLamK0:
+    fGeneralAnalysisType = kV0V0;
+    fParticle1Type = kLam;
+    fParticle2Type = kK0;
+    break;
+
+  case: kALamK0:
+    fGeneralAnalysisType = kV0V0;
+    fParticle1Type = kALam;
+    fParticle2Type = kK0;
+    break;
+
+  case: kLamKchP:
+    fGeneralAnalysisType = kV0Track;
+    fParticle1Type = kLam;
+    fParticle2Type = kKchP;
+    break;
+
+  case: kALamKchP:
+    fGeneralAnalysisType = kV0Track;
+    fParticle1Type = kALam;
+    fParticle2Type = kKchP;
+    break;
+
+  case: kLamKchM:
+    fGeneralAnalysisType = kV0Track;
+    fParticle1Type = kLam;
+    fParticle2Type = kKchM;
+    break;
+
+  case: kALamKchM:
+    fGeneralAnalysisType = kV0Track;
+    fParticle1Type = kALam;
+    fParticle2Type = kKchM;
+    break;
+
+  case: kLamLam:
+    fGeneralAnalysisType = kV0V0;
+    fParticle1Type = kLam;
+    fParticle2Type = kLam;
+    break;
+
+  case: kALamALam:
+    fGeneralAnalysisType = kV0V0;
+    fParticle1Type = kALam;
+    fParticle2Type = kALam;
+    break;
+
+  case: kLamALam:
+    fGeneralAnalysisType = kV0V0;
+    fParticle1Type = kLam;
+    fParticle2Type = kALam;
+    break;
+
+  case: kLamPiP:
+    fGeneralAnalysisType = kV0Track;
+    fParticle1Type = kLam;
+    fParticle2Type = kPiP;
+    break;
+
+  case: kALamPiP:
+    fGeneralAnalysisType = kV0Track;
+    fParticle1Type = kALam;
+    fParticle2Type = kPiP;
+    break;
+
+  case: kLamPiM:
+    fGeneralAnalysisType = kV0Track;
+    fParticle1Type = kLam;
+    fParticle2Type = kPiP;
+    break;
+
+  case: kALamPiM:
+    fGeneralAnalysisType = kV0Track;
+    fParticle1Type = kALam;
+    fParticle2Type = kPiP;
+    break;
+
+  case: kXiKchP:
+    fGeneralAnalysisType = kXiTrack;
+    fParticle1Type = kXi;
+    fParticle2Type = kKchP;
+    break;
+
+  case: kAXiKchP:
+    fGeneralAnalysisType = kXiTrack;
+    fParticle1Type = kAXi;
+    fParticle2Type = kKchP;
+    break;
+
+  case: kXiKchM:
+    fGeneralAnalysisType = kXiTrack;
+    fParticle1Type = kXi;
+    fParticle2Type = kKchM;
+    break;
+
+  case: kAXiKchM:
+    fGeneralAnalysisType = kXiTrack;
+    fParticle1Type = kAXi;
+    fParticle2Type = kKchM;
+    break;
+
+  default:
+    cerr << "E-myTrainAnalysisConstructor::SetParticleTypes: Invalid AnalysisType"
+            "selection '" << aAnType << endl;
+  }
+
+  switch(fGeneralAnalysisType) {
+  case: kV0V0:
+    fGeneralParticle1Type = kV0;
+    fGeneralParticle2Type = kV0;
+    break;
+
+  case: kV0Track:
+    fGeneralParticle1Type = kV0;
+    fGeneralParticle2Type = kTrack;
+    break;
+
+  case: kXiTrack:
+    fGeneralParticle1Type = kCascade;
+    fGeneralParticle2Type = kTrack;
+    break;
+
+  default:
+    cerr << "E-myTrainAnalysisConstructor::SetParticleTypes" << endl;
+  }
+
+
+
+}
+
+
+//____________________________
+void myTrainAnalysisConstructor::SetParticleCut1(ParticleType aParticleType, bool aUseCustom)
+{
+  switch(aParticleType) {
+  case: kLam || kALam || kK0:
+    V0Cut1 = CreateV0Cut(aParticleType, aUseCustom);
+    break;
+
+  case: kXi:
+    XiCut1 = CreateXiCut();
+    break;
+
+  case: kAXi:
+    XiCut1 = CreateAntiXiCut();
+    break;
+
+  default:
+    cerr << "E-myTrainAnalysisConstructor::SetParticleCut1"
+            "selection '" << iParticle << "," << aParticleType << endl;
+  }
+}
+
+//____________________________
+void myTrainAnalysisConstructor::SetParticleCut2(ParticleType aParticleType, bool aUseCustom)
+{
+  switch(aParticleType) {
+  case: kLam || kALam || kK0:
+    V0Cut2 = CreateV0Cut(aParticleType, aUseCustom);
+    break;
+
+  case: kKchP || kKchM || kPiP || kPiM:
+    TrackCut2 = CreateTrackCut(aParticleType);
+    break;
+
+  default:
+    cerr << "E-myTrainAnalysisConstructor::SetParticleCut2"
+            "selection '" << iParticle << "," << aParticleType << endl;
+  }
+}
+
 
 //____________________________
 void myTrainAnalysisConstructor::CreateLamK0Analysis()
@@ -414,615 +606,6 @@ void myTrainAnalysisConstructor::SetLamK0Analysis()
   else SetAnalysis(EvCutEst,LamCut,K0Cut,V0PairCut,fCollectionOfCfs);
 }
 
-
-
-//____________________________
-void myTrainAnalysisConstructor::CreateALamK0Analysis()
-{ 
-  //-----ALamK0 analysis-----------------------------------------------------------------
-  cout << "Setting up ALamK0 analysis for " << fOutputName << endl;
-
-  ALamCut = CreateAntiLambdaCut(fUseCustomNSigmaFilters);
-  K0Cut = CreateK0ShortCut(fUseCustomNSigmaFilters);
-
-  if(fImplementAvgSepCuts){V0PairCut = CreateV0PairCut(6.,0.,0.,6.);}
-  else{V0PairCut = CreateV0PairCut(0.,0.,0.,0.);}
-
-
-  //Check to see if min bias (-> CreateBasicEventCut) or centrality dependent (-> CreateEventCutEstimators)
-  if(!strcmp(fOutputName,"ALamK0"))  //strcmp returns 0 if the contents of both strings are equal
-  {
-    //Min-bias analysis, i.e. no centrality tag in name
-    if( (fMinCent != 0.) && (fMaxCent != 100.)) {cout << "WARNING!!!!!!!!!!!" << endl << "Centrality limits imply this analysis (" << fOutputName << ") is NOT min bias!!!!!" << endl;}
-    BasicEvCut = CreateBasicEventCut();
-    fIsMBAnalysis = kTRUE;
-  }
-  else
-  {
-    //Centrality dependent analysis
-    EvCutEst = CreateEventCutEstimators(fMinCent,fMaxCent);
-    fIsMBAnalysis = kFALSE;
-  }
-
-}
-
-//____________________________
-void myTrainAnalysisConstructor::SetALamK0Analysis()
-{
-  if(fIsMBAnalysis) SetAnalysis(BasicEvCut,ALamCut,K0Cut,V0PairCut,fCollectionOfCfs);
-  else SetAnalysis(EvCutEst,ALamCut,K0Cut,V0PairCut,fCollectionOfCfs);
-}
-
-
-
-//____________________________
-void myTrainAnalysisConstructor::CreateLamKchPAnalysis()
-{ 
-  //-----LamKchP analysis-----------------------------------------------------------------
-  cout << "Setting up LamKchP analysis for " << fOutputName << endl;
-
-  LamCut = CreateLambdaCut(fUseCustomNSigmaFilters);
-  KchPCut = CreateKchCut(1);
-
-  if(fImplementAvgSepCuts){V0TrackPairCut = CreateV0TrackPairCut(8.,0.);}
-  else{V0TrackPairCut = CreateV0TrackPairCut(0.,0.);}
-
-  //Check to see if min bias (-> CreateBasicEventCut) or centrality dependent (-> CreateEventCutEstimators)
-  if(!strcmp(fOutputName,"LamKchP"))  //strcmp returns 0 if the contents of both strings are equal
-  {
-    //Min-bias analysis, i.e. no centrality tag in name
-    if( (fMinCent != 0.) && (fMaxCent != 100.)) {cout << "WARNING!!!!!!!!!!!" << endl << "Centrality limits imply this analysis (" << fOutputName << ") is NOT min bias!!!!!" << endl;}
-    BasicEvCut = CreateBasicEventCut();
-    fIsMBAnalysis = kTRUE;
-  }
-  else
-  {
-    //Centrality dependent analysis
-    EvCutEst = CreateEventCutEstimators(fMinCent,fMaxCent);
-    fIsMBAnalysis = kFALSE;
-  }
-
-}
-
-//____________________________
-void myTrainAnalysisConstructor::SetLamKchPAnalysis()
-{
-  if(fIsMBAnalysis) SetAnalysis(BasicEvCut,LamCut,KchPCut,V0TrackPairCut,fCollectionOfCfs);
-  else SetAnalysis(EvCutEst,LamCut,KchPCut,V0TrackPairCut,fCollectionOfCfs);
-
-}
-
-//____________________________
-void myTrainAnalysisConstructor::CreateALamKchPAnalysis()
-{ 
-  //-----ALamKchP analysis-----------------------------------------------------------------
-  cout << "Setting up ALamKchP analysis for " << fOutputName << endl;
-
-  ALamCut = CreateAntiLambdaCut(fUseCustomNSigmaFilters);
-  KchPCut = CreateKchCut(1);
-
-  if(fImplementAvgSepCuts){V0TrackPairCut = CreateV0TrackPairCut(8.,0.);}
-  else{V0TrackPairCut = CreateV0TrackPairCut(0.,0.);}
-
-  //Check to see if min bias (-> CreateBasicEventCut) or centrality dependent (-> CreateEventCutEstimators)
-  if(!strcmp(fOutputName,"ALamKchP"))  //strcmp returns 0 if the contents of both strings are equal
-  {
-    //Min-bias analysis, i.e. no centrality tag in name
-    if( (fMinCent != 0.) && (fMaxCent != 100.)) {cout << "WARNING!!!!!!!!!!!" << endl << "Centrality limits imply this analysis (" << fOutputName << ") is NOT min bias!!!!!" << endl;}
-    BasicEvCut = CreateBasicEventCut();
-    fIsMBAnalysis = kTRUE;
-  }
-  else
-  {
-    //Centrality dependent analysis
-    EvCutEst = CreateEventCutEstimators(fMinCent,fMaxCent);
-    fIsMBAnalysis = kFALSE;
-  }
-
-}
-
-//____________________________
-void myTrainAnalysisConstructor::SetALamKchPAnalysis()
-{
-  if(fIsMBAnalysis) SetAnalysis(BasicEvCut,ALamCut,KchPCut,V0TrackPairCut,fCollectionOfCfs);
-  else SetAnalysis(EvCutEst,ALamCut,KchPCut,V0TrackPairCut,fCollectionOfCfs);
-
-}
-
-
-//____________________________
-void myTrainAnalysisConstructor::CreateLamKchMAnalysis()
-{ 
-  //-----LamKchM analysis-----------------------------------------------------------------
-  cout << "Setting up LamKchM analysis for " << fOutputName << endl;
-
-  LamCut = CreateLambdaCut(fUseCustomNSigmaFilters);
-  KchMCut = CreateKchCut(-1);
-
-  if(fImplementAvgSepCuts){V0TrackPairCut = CreateV0TrackPairCut(0.,8.);}
-  else{V0TrackPairCut = CreateV0TrackPairCut(0.,0.);}
-
-  //Check to see if min bias (-> CreateBasicEventCut) or centrality dependent (-> CreateEventCutEstimators)
-  if(!strcmp(fOutputName,"LamKchM"))  //strcmp returns 0 if the contents of both strings are equal
-  {
-    //Min-bias analysis, i.e. no centrality tag in name
-    if( (fMinCent != 0.) && (fMaxCent != 100.)) {cout << "WARNING!!!!!!!!!!!" << endl << "Centrality limits imply this analysis (" << fOutputName << ") is NOT min bias!!!!!" << endl;}
-    BasicEvCut = CreateBasicEventCut();
-    fIsMBAnalysis = kTRUE;
-  }
-  else
-  {
-    //Centrality dependent analysis
-    EvCutEst = CreateEventCutEstimators(fMinCent,fMaxCent);
-    fIsMBAnalysis = kFALSE;
-  }
-
-}
-
-//____________________________
-void myTrainAnalysisConstructor::SetLamKchMAnalysis()
-{
-  if(fIsMBAnalysis) SetAnalysis(BasicEvCut,LamCut,KchMCut,V0TrackPairCut,fCollectionOfCfs);
-  else SetAnalysis(EvCutEst,LamCut,KchMCut,V0TrackPairCut,fCollectionOfCfs);
-}
-
-
-//____________________________
-void myTrainAnalysisConstructor::CreateALamKchMAnalysis()
-{ 
-  //-----ALamKchM analysis-----------------------------------------------------------------
-  cout << "Setting up ALamKchM analysis for " << fOutputName << endl;
-
-  ALamCut = CreateAntiLambdaCut(fUseCustomNSigmaFilters);
-  KchMCut = CreateKchCut(-1);
-
-  if(fImplementAvgSepCuts){V0TrackPairCut = CreateV0TrackPairCut(0.,8.);}
-  else{V0TrackPairCut = CreateV0TrackPairCut(0.,0.);}
-
-  //Check to see if min bias (-> CreateBasicEventCut) or centrality dependent (-> CreateEventCutEstimators)
-  if(!strcmp(fOutputName,"ALamKchM"))  //strcmp returns 0 if the contents of both strings are equal
-  {
-    //Min-bias analysis, i.e. no centrality tag in name
-    if( (fMinCent != 0.) && (fMaxCent != 100.)) {cout << "WARNING!!!!!!!!!!!" << endl << "Centrality limits imply this analysis (" << fOutputName << ") is NOT min bias!!!!!" << endl;}
-    BasicEvCut = CreateBasicEventCut();
-    fIsMBAnalysis = kTRUE;
-  }
-  else
-  {
-    //Centrality dependent analysis
-    EvCutEst = CreateEventCutEstimators(fMinCent,fMaxCent);
-    fIsMBAnalysis = kFALSE;
-  }
-
-}
-
-//____________________________
-void myTrainAnalysisConstructor::SetALamKchMAnalysis()
-{
-  if(fIsMBAnalysis) SetAnalysis(BasicEvCut,ALamCut,KchMCut,V0TrackPairCut,fCollectionOfCfs);
-  else SetAnalysis(EvCutEst,ALamCut,KchMCut,V0TrackPairCut,fCollectionOfCfs);
-}
-
-
-//____________________________
-void myTrainAnalysisConstructor::CreateLamLamAnalysis()
-{ 
-  //-----LamLam analysis-----------------------------------------------------------------
-  cout << "Setting up LamLam analysis for " << fOutputName << endl;
-
-  LamCut = CreateLambdaCut(fUseCustomNSigmaFilters);
-
-  if(fImplementAvgSepCuts){V0PairCut = CreateV0PairCut(3.,0.,0.,4.);}
-  else{V0PairCut = CreateV0PairCut(0.,0.,0.,0.);}
-
-  //Check to see if min bias (-> CreateBasicEventCut) or centrality dependent (-> CreateEventCutEstimators)
-  if(!strcmp(fOutputName,"LamLam"))  //strcmp returns 0 if the contents of both strings are equal
-  {
-    //Min-bias analysis, i.e. no centrality tag in name
-    if( (fMinCent != 0.) && (fMaxCent != 100.)) {cout << "WARNING!!!!!!!!!!!" << endl << "Centrality limits imply this analysis (" << fOutputName << ") is NOT min bias!!!!!" << endl;}
-    BasicEvCut = CreateBasicEventCut();
-    fIsMBAnalysis = kTRUE;
-  }
-  else
-  {
-    //Centrality dependent analysis
-    EvCutEst = CreateEventCutEstimators(fMinCent,fMaxCent);
-    fIsMBAnalysis = kFALSE;
-  }
-
-}
-
-//____________________________
-void myTrainAnalysisConstructor::SetLamLamAnalysis()
-{
-  if(fIsMBAnalysis) SetAnalysis(BasicEvCut,LamCut,LamCut,V0PairCut,fCollectionOfCfs);
-  else SetAnalysis(EvCutEst,LamCut,LamCut,V0PairCut,fCollectionOfCfs);
-}
-
-//____________________________
-void myTrainAnalysisConstructor::CreateALamALamAnalysis()
-{ 
-  //-----ALamALam analysis-----------------------------------------------------------------
-  cout << "Setting up ALamALam analysis for " << fOutputName << endl;
-
-  ALamCut = CreateAntiLambdaCut(fUseCustomNSigmaFilters);
-
-  if(fImplementAvgSepCuts){V0PairCut = CreateV0PairCut(4.,0.,0.,3.);}
-  else{V0PairCut = CreateV0PairCut(0.,0.,0.,0.);}
-
-  //Check to see if min bias (-> CreateBasicEventCut) or centrality dependent (-> CreateEventCutEstimators)
-  if(!strcmp(fOutputName,"ALamALam"))  //strcmp returns 0 if the contents of both strings are equal
-  {
-    //Min-bias analysis, i.e. no centrality tag in name
-    if( (fMinCent != 0.) && (fMaxCent != 100.)) {cout << "WARNING!!!!!!!!!!!" << endl << "Centrality limits imply this analysis (" << fOutputName << ") is NOT min bias!!!!!" << endl;}
-    BasicEvCut = CreateBasicEventCut();
-    fIsMBAnalysis = kTRUE;
-  }
-  else
-  {
-    //Centrality dependent analysis
-    EvCutEst = CreateEventCutEstimators(fMinCent,fMaxCent);
-    fIsMBAnalysis = kFALSE;
-  }
-
-}
-
-//____________________________
-void myTrainAnalysisConstructor::SetALamALamAnalysis()
-{
-  if(fIsMBAnalysis) SetAnalysis(BasicEvCut,ALamCut,ALamCut,V0PairCut,fCollectionOfCfs);
-  else SetAnalysis(EvCutEst,ALamCut,ALamCut,V0PairCut,fCollectionOfCfs);
-}
-
-
-//____________________________
-void myTrainAnalysisConstructor::CreateLamALamAnalysis()
-{ 
-  //-----LamALam analysis-----------------------------------------------------------------
-  cout << "Setting up LamALam analysis for " << fOutputName << endl;
-
-  LamCut = CreateLambdaCut(fUseCustomNSigmaFilters);
-  ALamCut = CreateAntiLambdaCut(fUseCustomNSigmaFilters);
-
-  if(fImplementAvgSepCuts){V0PairCut = CreateV0PairCut(3.5,0.,0.,3.5);}
-  else{V0PairCut = CreateV0PairCut(0.,0.,0.,0.);}
-
-  //Check to see if min bias (-> CreateBasicEventCut) or centrality dependent (-> CreateEventCutEstimators)
-  if(!strcmp(fOutputName,"LamALam"))  //strcmp returns 0 if the contents of both strings are equal
-  {
-    //Min-bias analysis, i.e. no centrality tag in name
-    if( (fMinCent != 0.) && (fMaxCent != 100.)) {cout << "WARNING!!!!!!!!!!!" << endl << "Centrality limits imply this analysis (" << fOutputName << ") is NOT min bias!!!!!" << endl;}
-    BasicEvCut = CreateBasicEventCut();
-    fIsMBAnalysis = kTRUE;
-  }
-  else
-  {
-    //Centrality dependent analysis
-    EvCutEst = CreateEventCutEstimators(fMinCent,fMaxCent);
-    fIsMBAnalysis = kFALSE;
-  }
-
-}
-
-//____________________________
-void myTrainAnalysisConstructor::SetLamALamAnalysis()
-{
-  if(fIsMBAnalysis) SetAnalysis(BasicEvCut,LamCut,ALamCut,V0PairCut,fCollectionOfCfs);
-  else SetAnalysis(EvCutEst,LamCut,ALamCut,V0PairCut,fCollectionOfCfs);
-}
-
-//____________________________
-void myTrainAnalysisConstructor::CreateLamPiPAnalysis()
-{ 
-  //-----LamPiP analysis-----------------------------------------------------------------
-  cout << "Setting up LamPiP analysis for " << fOutputName << endl;
-
-  LamCut = CreateLambdaCut(fUseCustomNSigmaFilters);
-  PiPCut = CreatePiCut(1);
-
-  if(fImplementAvgSepCuts){V0TrackPairCut = CreateV0TrackPairCut(8.,0.);}
-  else{V0TrackPairCut = CreateV0TrackPairCut(0.,0.);}
-
-  //Check to see if min bias (-> CreateBasicEventCut) or centrality dependent (-> CreateEventCutEstimators)
-  if(!strcmp(fOutputName,"LamPiP"))  //strcmp returns 0 if the contents of both strings are equal
-  {
-    //Min-bias analysis, i.e. no centrality tag in name
-    if( (fMinCent != 0.) && (fMaxCent != 100.)) {cout << "WARNING!!!!!!!!!!!" << endl << "Centrality limits imply this analysis (" << fOutputName << ") is NOT min bias!!!!!" << endl;}
-    BasicEvCut = CreateBasicEventCut();
-    fIsMBAnalysis = kTRUE;
-  }
-  else
-  {
-    //Centrality dependent analysis
-    EvCutEst = CreateEventCutEstimators(fMinCent,fMaxCent);
-    fIsMBAnalysis = kFALSE;
-  }
-
-}
-
-//____________________________
-void myTrainAnalysisConstructor::SetLamPiPAnalysis()
-{
-  if(fIsMBAnalysis) SetAnalysis(BasicEvCut,LamCut,PiPCut,V0TrackPairCut,fCollectionOfCfs);
-  else SetAnalysis(EvCutEst,LamCut,PiPCut,V0TrackPairCut,fCollectionOfCfs);
-}
-
-//____________________________
-void myTrainAnalysisConstructor::CreateALamPiPAnalysis()
-{ 
-  //-----ALamPiP analysis-----------------------------------------------------------------
-  cout << "Setting up ALamPiP analysis for " << fOutputName << endl;
-
-  ALamCut = CreateAntiLambdaCut(fUseCustomNSigmaFilters);
-  PiPCut = CreatePiCut(1);
-
-  if(fImplementAvgSepCuts){V0TrackPairCut = CreateV0TrackPairCut(8.,0.);}
-  else{V0TrackPairCut = CreateV0TrackPairCut(0.,0.);}
-
-  //Check to see if min bias (-> CreateBasicEventCut) or centrality dependent (-> CreateEventCutEstimators)
-  if(!strcmp(fOutputName,"ALamPiP"))  //strcmp returns 0 if the contents of both strings are equal
-  {
-    //Min-bias analysis, i.e. no centrality tag in name
-    if( (fMinCent != 0.) && (fMaxCent != 100.)) {cout << "WARNING!!!!!!!!!!!" << endl << "Centrality limits imply this analysis (" << fOutputName << ") is NOT min bias!!!!!" << endl;}
-    BasicEvCut = CreateBasicEventCut();
-    fIsMBAnalysis = kTRUE;
-  }
-  else
-  {
-    //Centrality dependent analysis
-    EvCutEst = CreateEventCutEstimators(fMinCent,fMaxCent);
-    fIsMBAnalysis = kFALSE;
-  }
-
-}
-
-//____________________________
-void myTrainAnalysisConstructor::SetALamPiPAnalysis()
-{
-  if(fIsMBAnalysis) SetAnalysis(BasicEvCut,ALamCut,PiPCut,V0TrackPairCut,fCollectionOfCfs);
-  else SetAnalysis(EvCutEst,ALamCut,PiPCut,V0TrackPairCut,fCollectionOfCfs);
-}
-
-
-//____________________________
-void myTrainAnalysisConstructor::CreateLamPiMAnalysis()
-{ 
-  //-----LamPiM analysis-----------------------------------------------------------------
-  cout << "Setting up LamPiM analysis for " << fOutputName << endl;
-
-  LamCut = CreateLambdaCut(fUseCustomNSigmaFilters);
-  PiMCut = CreatePiCut(-1);
-
-  if(fImplementAvgSepCuts){V0TrackPairCut = CreateV0TrackPairCut(0.,8.);}
-  else{V0TrackPairCut = CreateV0TrackPairCut(0.,0.);}
-
-  //Check to see if min bias (-> CreateBasicEventCut) or centrality dependent (-> CreateEventCutEstimators)
-  if(!strcmp(fOutputName,"LamPiM"))  //strcmp returns 0 if the contents of both strings are equal
-  {
-    //Min-bias analysis, i.e. no centrality tag in name
-    if( (fMinCent != 0.) && (fMaxCent != 100.)) {cout << "WARNING!!!!!!!!!!!" << endl << "Centrality limits imply this analysis (" << fOutputName << ") is NOT min bias!!!!!" << endl;}
-    BasicEvCut = CreateBasicEventCut();
-    fIsMBAnalysis = kTRUE;
-  }
-  else
-  {
-    //Centrality dependent analysis
-    EvCutEst = CreateEventCutEstimators(fMinCent,fMaxCent);
-    fIsMBAnalysis = kFALSE;
-  }
-
-}
-
-//____________________________
-void myTrainAnalysisConstructor::SetLamPiMAnalysis()
-{
-  if(fIsMBAnalysis) SetAnalysis(BasicEvCut,LamCut,PiMCut,V0TrackPairCut,fCollectionOfCfs);
-  else SetAnalysis(EvCutEst,LamCut,PiMCut,V0TrackPairCut,fCollectionOfCfs);
-}
-
-//____________________________
-void myTrainAnalysisConstructor::CreateALamPiMAnalysis()
-{ 
-  //-----ALamPiM analysis-----------------------------------------------------------------
-  cout << "Setting up ALamPiM analysis for " << fOutputName << endl;
-
-  ALamCut = CreateAntiLambdaCut(fUseCustomNSigmaFilters);
-  PiMCut = CreatePiCut(-1);
-
-  if(fImplementAvgSepCuts){V0TrackPairCut = CreateV0TrackPairCut(0.,8.);}
-  else{V0TrackPairCut = CreateV0TrackPairCut(0.,0.);}
-
-
-  //Check to see if min bias (-> CreateBasicEventCut) or centrality dependent (-> CreateEventCutEstimators)
-  if(!strcmp(fOutputName,"ALamPiM"))  //strcmp returns 0 if the contents of both strings are equal
-  {
-    //Min-bias analysis, i.e. no centrality tag in name
-    if( (fMinCent != 0.) && (fMaxCent != 100.)) {cout << "WARNING!!!!!!!!!!!" << endl << "Centrality limits imply this analysis (" << fOutputName << ") is NOT min bias!!!!!" << endl;}
-    BasicEvCut = CreateBasicEventCut();
-    fIsMBAnalysis = kTRUE;
-  }
-  else
-  {
-    //Centrality dependent analysis
-    EvCutEst = CreateEventCutEstimators(fMinCent,fMaxCent);
-    fIsMBAnalysis = kFALSE;
-  }
-
-}
-
-//____________________________
-void myTrainAnalysisConstructor::SetALamPiMAnalysis()
-{
-  if(fIsMBAnalysis) SetAnalysis(BasicEvCut,ALamCut,PiMCut,V0TrackPairCut,fCollectionOfCfs);
-  else SetAnalysis(EvCutEst,ALamCut,PiMCut,V0TrackPairCut,fCollectionOfCfs);
-}
-
-
-
-//____________________________
-void myTrainAnalysisConstructor::CreateXiKchPAnalysis()
-{ 
-  //-----XiKchP analysis-----------------------------------------------------------------
-  cout << "Setting up XiKchP analysis for " << fOutputName << endl;
-
-  XiCut = CreateXiCut();
-  KchPCut = CreateKchCut(1);
-
-  XiTrackPairCut = CreateXiTrackPairCut();
-
-  //Check to see if min bias (-> CreateBasicEventCut) or centrality dependent (-> CreateEventCutEstimators)
-  if(!strcmp(fOutputName,"XiKchP"))  //strcmp returns 0 if the contents of both strings are equal
-  {
-    //Min-bias analysis, i.e. no centrality tag in name
-    if( (fMinCent != 0.) && (fMaxCent != 100.)) {cout << "WARNING!!!!!!!!!!!" << endl << "Centrality limits imply this analysis (" << fOutputName << ") is NOT min bias!!!!!" << endl;}
-    BasicEvCut = CreateBasicEventCut();
-    fIsMBAnalysis = kTRUE;
-  }
-  else
-  {
-    //Centrality dependent analysis
-    EvCutEst = CreateEventCutEstimators(fMinCent,fMaxCent);
-    fIsMBAnalysis = kFALSE;
-  }
-
-}
-
-//____________________________
-void myTrainAnalysisConstructor::SetXiKchPAnalysis()
-{
-  if(fIsMBAnalysis)
-  {
-    SetAnalysis(BasicEvCut,XiCut,KchPCut,XiTrackPairCut,fCollectionOfCfs);
-  }
-  else
-  {
-    SetAnalysis(EvCutEst,XiCut,KchPCut,XiTrackPairCut,fCollectionOfCfs);
-  }
-}
-
-//____________________________
-void myTrainAnalysisConstructor::CreateAXiKchPAnalysis()
-{ 
-  //-----AXiKchP analysis-----------------------------------------------------------------
-  cout << "Setting up AXiKchP analysis for " << fOutputName << endl;
-
-  AXiCut = CreateAntiXiCut();
-  KchPCut = CreateKchCut(1);
-
-  XiTrackPairCut = CreateXiTrackPairCut();
-
-  //Check to see if min bias (-> CreateBasicEventCut) or centrality dependent (-> CreateEventCutEstimators)
-  if(!strcmp(fOutputName,"AXiKchP"))  //strcmp returns 0 if the contents of both strings are equal
-  {
-    //Min-bias analysis, i.e. no centrality tag in name
-    if( (fMinCent != 0.) && (fMaxCent != 100.)) {cout << "WARNING!!!!!!!!!!!" << endl << "Centrality limits imply this analysis (" << fOutputName << ") is NOT min bias!!!!!" << endl;}
-    BasicEvCut = CreateBasicEventCut();
-    fIsMBAnalysis = kTRUE;
-  }
-  else
-  {
-    //Centrality dependent analysis
-    EvCutEst = CreateEventCutEstimators(fMinCent,fMaxCent);
-    fIsMBAnalysis = kFALSE;
-  }
-
-}
-
-//____________________________
-void myTrainAnalysisConstructor::SetAXiKchPAnalysis()
-{
-  if(fIsMBAnalysis)
-  {
-    SetAnalysis(BasicEvCut,AXiCut,KchPCut,XiTrackPairCut,fCollectionOfCfs);
-  }
-  else
-  {
-    SetAnalysis(EvCutEst,AXiCut,KchPCut,XiTrackPairCut,fCollectionOfCfs);
-  }
-}
-
-
-//____________________________
-void myTrainAnalysisConstructor::CreateXiKchMAnalysis()
-{ 
-  //-----XiKchM analysis-----------------------------------------------------------------
-  cout << "Setting up XiKchM analysis for " << fOutputName << endl;
-
-  XiCut = CreateXiCut();
-  KchMCut = CreateKchCut(-1);
-
-  XiTrackPairCut = CreateXiTrackPairCut();
-
-  //Check to see if min bias (-> CreateBasicEventCut) or centrality dependent (-> CreateEventCutEstimators)
-  if(!strcmp(fOutputName,"XiKchM"))  //strcmp returns 0 if the contents of both strings are equal
-  {
-    //Min-bias analysis, i.e. no centrality tag in name
-    if( (fMinCent != 0.) && (fMaxCent != 100.)) {cout << "WARNING!!!!!!!!!!!" << endl << "Centrality limits imply this analysis (" << fOutputName << ") is NOT min bias!!!!!" << endl;}
-    BasicEvCut = CreateBasicEventCut();
-    fIsMBAnalysis = kTRUE;
-  }
-  else
-  {
-    //Centrality dependent analysis
-    EvCutEst = CreateEventCutEstimators(fMinCent,fMaxCent);
-    fIsMBAnalysis = kFALSE;
-  }
-
-}
-
-//____________________________
-void myTrainAnalysisConstructor::SetXiKchMAnalysis()
-{
-  if(fIsMBAnalysis)
-  {
-    SetAnalysis(BasicEvCut,XiCut,KchMCut,XiTrackPairCut,fCollectionOfCfs);
-  }
-  else
-  {
-    SetAnalysis(EvCutEst,XiCut,KchMCut,XiTrackPairCut,fCollectionOfCfs);
-  }
-}
-
-//____________________________
-void myTrainAnalysisConstructor::CreateAXiKchMAnalysis()
-{ 
-  //-----AXiKchM analysis-----------------------------------------------------------------
-  cout << "Setting up AXiKchM analysis for " << fOutputName << endl;
-
-  AXiCut = CreateAntiXiCut();
-  KchMCut = CreateKchCut(-1);
-
-  XiTrackPairCut = CreateXiTrackPairCut();
-
-  //Check to see if min bias (-> CreateBasicEventCut) or centrality dependent (-> CreateEventCutEstimators)
-  if(!strcmp(fOutputName,"AXiKchM"))  //strcmp returns 0 if the contents of both strings are equal
-  {
-    //Min-bias analysis, i.e. no centrality tag in name
-    if( (fMinCent != 0.) && (fMaxCent != 100.)) {cout << "WARNING!!!!!!!!!!!" << endl << "Centrality limits imply this analysis (" << fOutputName << ") is NOT min bias!!!!!" << endl;}
-    BasicEvCut = CreateBasicEventCut();
-    fIsMBAnalysis = kTRUE;
-  }
-  else
-  {
-    //Centrality dependent analysis
-    EvCutEst = CreateEventCutEstimators(fMinCent,fMaxCent);
-    fIsMBAnalysis = kFALSE;
-  }
-
-}
-
-//____________________________
-void myTrainAnalysisConstructor::SetAXiKchMAnalysis()
-{
-  if(fIsMBAnalysis)
-  {
-    SetAnalysis(BasicEvCut,AXiCut,KchMCut,XiTrackPairCut,fCollectionOfCfs);
-  }
-  else
-  {
-    SetAnalysis(EvCutEst,AXiCut,KchMCut,XiTrackPairCut,fCollectionOfCfs);
-  }
-}
 
 
 
@@ -1308,7 +891,30 @@ AliFemtoV0TrackCutNSigmaFilter* myTrainAnalysisConstructor::CreateK0ShortCut(boo
   return k0cut1;
 }
 
+//____________________________
+AliFemtoV0TrackCutNSigmaFilter* myTrainAnalysisConstructor::CreateV0Cut(ParticleType aType, bool aUseCustom)
+{
+  AliFemtoV0TrackCutNSigmaFilter* tReturnCut;
+  switch(aType) {
+  case: kLam:
+    tReturnCut = CreateLambdaCut(aUseCustom);
+    break;
 
+  case: kALam:
+    tReturnCut = CreateAntiLambdaCut(aUseCustom);
+    break;
+
+  case: kK0:
+    tReturnCut = CreateK0ShortCut(aUseCustom);
+    break;
+
+  default:
+    cerr << "E-myTrainAnalysisConstructor::CreateV0Cut: Invalid ParticleType"
+            "selection '" << aType << endl;
+  }
+
+  return tReturnCut;
+}
 
 //____________________________
 myAliFemtoESDTrackCut* myTrainAnalysisConstructor::CreateKchCut(const int aCharge)
@@ -1410,6 +1016,34 @@ myAliFemtoESDTrackCut* myTrainAnalysisConstructor::CreatePiCut(const int aCharge
   return piontc1;
 }
 
+
+AliFemtoESDTrackCutNSigmaFilter* myTrainAnalysisConstructor::CreateTrackCut(ParticleType aType)
+{
+  AliFemtoESDTrackCutNSigmaFilter* tReturnCut;
+  switch(aType) {
+  case: kKchP:
+    tReturnCut = CreateKchCut(1);
+    break;
+
+  case: kKchM:
+    tReturnCut = CreateKchCut(-1);
+    break;
+
+  case: kPiP:
+    tReturnCut = CreatePiCut(1);
+    break;
+
+  case: kPiM:
+    tReturnCut = CreatePiCut(-1);
+    break;
+
+  default:
+    cerr << "E-myTrainAnalysisConstructor::CreateTrackCut: Invalid ParticleType"
+            "selection '" << aType << endl;
+  }
+
+  return tReturnCut;
+}
 
 //____________________________
 AliFemtoXiTrackCut* myTrainAnalysisConstructor::CreateXiCut()
@@ -1591,6 +1225,29 @@ AliFemtoXiTrackPairCut* myTrainAnalysisConstructor::CreateXiTrackPairCut()
 }
 
 
+//____________________________
+void myTrainAnalysisConstructor::CreatePairCut(double aArg1=0.0, double aArg2=0.0, double aArg3=0.0, double aArg4=0.0)
+{
+  switch(GeneralAnalysisType) {
+  case: kV0V0:
+    V0PairCut CreateV0PairCut(aArg1,aArg2,aArg3,aArg4);
+    break;
+
+  case: kV0Track:
+    V0TrackPairCut CreateV0TrackPairCut(aArg1,aArg2);
+    break;
+
+  case: kXiTrack:
+    XiTrackPairCut CreateXiTrackPairCut();
+    break;
+
+
+  default:
+    cerr << "E-myTrainAnalysisConstructor::CreatePairCut" << endl;
+  }
+
+
+}
 
 
 //____________________________

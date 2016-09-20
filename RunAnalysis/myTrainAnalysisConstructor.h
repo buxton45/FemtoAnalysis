@@ -66,6 +66,10 @@ class myTrainAnalysisConstructor : public AliFemtoVertexMultAnalysis {
 
 public:
   enum AnalysisType {kLamK0=0, kALamK0=1, kLamKchP=2, kALamKchP=3, kLamKchM=4, kALamKchM=5, kLamLam=6, kALamALam=7, kLamALam=8, kLamPiP=9, kALamPiP=10, kLamPiM=11, kALamPiM=12, kXiKchP=13, kAXiKchP=14, kXiKchM=15, kAXiKchM=16};
+  enum GeneralAnalysisType {kV0V0=0, kV0Track=1, kXiTrack=2};
+
+  enum ParticleType {kLam=0, kALam=1, kK0=2, kKchP=3, kKchM=4, kXi=5, kAXi=6, kPiP=7, kPiM=8, kProton=9, kAntiProton=10};
+  enum GeneralParticleType {kV0=0, kTrack=1, kCascade=2};
 
   myTrainAnalysisConstructor();
   myTrainAnalysisConstructor(AnalysisType aAnalysisType, const char* name, bool aIsMCRun, bool aImplementAvgSepCuts, bool aWritePairKinematics=false);
@@ -86,47 +90,15 @@ public:
   virtual void ProcessEvent(const AliFemtoEvent* ProcessThisEvent);  //will add fMultHist to the process event of AliFemtoVertexMultAnalysis
   virtual TList* GetOutputList();
 
+  void SetParticleTypes(AnalysisType aAnType);
+  void SetParticleCut1(ParticleType aParticleType, bool aUseCustom);
+  void SetParticleCut2(ParticleType aParticleType, bool aUseCustom);
 
   //I want to create the analysis BEFORE I set the analysis.  Once I set the analysis, things cannot be changed.
   //This allows me to tweak the cuts before finalizing everything (the lesson I learned from SetImplementAvgSepCuts)
   void CreateLamK0Analysis();
     void SetLamK0Analysis();
-  void CreateALamK0Analysis();
-    void SetALamK0Analysis();
-
-  void CreateLamKchPAnalysis();
-    void SetLamKchPAnalysis();
-  void CreateALamKchPAnalysis();
-    void SetALamKchPAnalysis();
-  void CreateLamKchMAnalysis();
-    void SetLamKchMAnalysis();
-  void CreateALamKchMAnalysis();
-    void SetALamKchMAnalysis();
-
-  void CreateLamLamAnalysis();
-    void SetLamLamAnalysis();
-  void CreateALamALamAnalysis();
-    void SetALamALamAnalysis();
-  void CreateLamALamAnalysis();
-    void SetLamALamAnalysis();
-
-  void CreateLamPiPAnalysis();
-    void SetLamPiPAnalysis();
-  void CreateALamPiPAnalysis();
-    void SetALamPiPAnalysis();
-  void CreateLamPiMAnalysis();
-    void SetLamPiMAnalysis();
-  void CreateALamPiMAnalysis();
-    void SetALamPiMAnalysis();
-
-  void CreateXiKchPAnalysis();
-    void SetXiKchPAnalysis();
-  void CreateAXiKchPAnalysis();
-    void SetAXiKchPAnalysis();
-  void CreateXiKchMAnalysis();
-    void SetXiKchMAnalysis();
-  void CreateAXiKchMAnalysis();
-    void SetAXiKchMAnalysis();
+ 
 
   void SetCorrectAnalysis();
 
@@ -136,18 +108,19 @@ public:
   AliFemtoV0TrackCutNSigmaFilter* CreateLambdaCut(bool aUseCustom);
   AliFemtoV0TrackCutNSigmaFilter* CreateAntiLambdaCut(bool aUseCustom);
   AliFemtoV0TrackCutNSigmaFilter* CreateK0ShortCut(bool aUseCustom);
+  AliFemtoV0TrackCutNSigmaFilter* CreateV0Cut(ParticleType aType, bool aUseCustom);
+
   myAliFemtoESDTrackCut* CreateKchCut(const int aCharge);
   myAliFemtoESDTrackCut* CreatePiCut(const int aCharge);
-
-
+  AliFemtoESDTrackCutNSigmaFilter* CreateTrackCut(ParticleType aType);
 
   AliFemtoXiTrackCut* CreateXiCut();
   AliFemtoXiTrackCut* CreateAntiXiCut();
 
-
   AliFemtoV0PairCut* CreateV0PairCut(double aMinAvgSepPosPos, double aMinAvgSepPosNeg, double aMinAvgSepNegPos, double aMinAvgSepNegNeg);
   AliFemtoV0TrackPairCut* CreateV0TrackPairCut(double aMinAvgSepTrackPos, double aMinAvgSepTrackNeg);
   AliFemtoXiTrackPairCut* CreateXiTrackPairCut();
+  void CreatePairCut(double aArg1=0.0, double aArg2=0.0, double aArg3=0.0, double aArg4=0.0); 
 
   myAliFemtoKStarCorrFctn* CreateKStarCorrFctn(const char* name, unsigned int bins, double min, double max);
   myAliFemtoAvgSepCorrFctn* CreateAvgSepCorrFctn(const char* name, unsigned int bins, double min, double max);
@@ -157,7 +130,6 @@ public:
   myAliFemtoKStarCorrFctnMC* CreateKStarCorrFctnMC(const char* name, unsigned int bins, double min, double max);
 
   myAliFemtoModelCorrFctnKStar* CreateModelCorrFctnKStar(const char* name, unsigned int bins, double min, double max);  //-----04/02/2016
-
 
   void SetAnalysis(AliFemtoEventCut* aEventCut, AliFemtoParticleCut* aPartCut1, AliFemtoParticleCut* aPartCut2, AliFemtoPairCut* aPairCut, AliFemtoCorrFctnCollection* aCollectionOfCfs);
 
@@ -177,6 +149,9 @@ protected:
   static const char* const fAnalysisTags[];
 
   AnalysisType fAnalysisType;
+  GeneralAnalysisType fGeneralAnalysisType;
+  ParticleType fParticle1Type, fParticle2Type;
+  GeneralParticleType fGeneralParticle1Type, fGeneralParticle2Type;
   const char* fOutputName;		      /* name given to output directory for specific analysis*/
   TH1F* fMultHist;			      //histogram of event multiplicities to ensure event cuts are properly implemented
   bool fImplementAvgSepCuts;		      //Self-explanatory, set to kTRUE when I want Avg Sep cuts implemented
@@ -189,38 +164,30 @@ protected:
   AliFemtoCorrFctnCollection* fCollectionOfCfs;
 
   //----------------------------------------
-  //-----Variables common to all analyses
+  //-Event cuts
   AliFemtoBasicEventCut *BasicEvCut;
   AliFemtoEventCutEstimators *EvCutEst;
 
-  myAliFemtoV0TrackCut *LamCut;
-  myAliFemtoV0TrackCut *ALamCut;
+  AliFemtoXiTrackCut *XiCut1, *XiCut2;
+  AliFemtoV0TrackCutNSigmaFilter *V0Cut1, *V0Cut2;
+  AliFemtoESDTrackCutNSigmaFilter *TrackCut1, *TrackCut2;
 
-  myAliFemtoKStarCorrFctn *KStarCf;
-  myAliFemtoAvgSepCorrFctn *AvgSepCf;
-  myAliFemtoSepCorrFctns *SepCfs;
+  AliFemtoV0PairCut *V0PairCut;
+  AliFemtoV0TrackPairCut *V0TrackPairCut;
+  AliFemtoXiTrackPairCut *XiTrackPairCut;
+
+  AliFemtoCorrFctnKStar *KStarCf;
+  AliFemtoAvgSepCorrFctn *AvgSepCf;
+
+  /* Not yet built
+  AliFemtoSepCorrFctns *SepCfs;
   myAliFemtoAvgSepCorrFctnCowboysAndSailors *AvgSepCfCowboysAndSailors;
   myAliFemtoKStarCorrFctn2D *KStarCf2D;
-  myAliFemtoKStarCorrFctnMC *KStarCfMC;
+*/
   myAliFemtoModelCorrFctnKStar *KStarModelCfs;  //-----04/02/2016
-  //-----Specific for (A)LamK0 analyses
-  myAliFemtoV0TrackCut *K0Cut;
-  AliFemtoV0PairCut *V0PairCut;
 
-  //-----Specific for (A)LamKchPM analyses
-  myAliFemtoESDTrackCut *KchPCut;
-  myAliFemtoESDTrackCut *KchMCut;
 
-  //-----Specific for (A)LamPiPM analyses
-  myAliFemtoESDTrackCut *PiPCut;
-  myAliFemtoESDTrackCut *PiMCut;
 
-  AliFemtoV0TrackPairCut *V0TrackPairCut;
-
-  //-----Specific for (A)XiKchPM analyses
-  AliFemtoXiTrackCut *XiCut;
-  AliFemtoXiTrackCut *AXiCut;
-  AliFemtoXiTrackPairCut *XiTrackPairCut;
 
   //-----17/12/2015
   AliFemtoV0TrackCutNSigmaFilter *LamCutNSigmaFilter;
