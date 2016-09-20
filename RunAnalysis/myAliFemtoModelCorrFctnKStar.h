@@ -5,8 +5,8 @@
 //  Author: Jesse Buxton jesse.thomas.buxton@cern.ch                          //
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef ALIFEMTOMODELCORRFCTNKSTAR_H
-#define ALIFEMTOMODELCORRFCTNKSTAR_H
+#ifndef MYALIFEMTOMODELCORRFCTNKSTAR_H
+#define MYALIFEMTOMODELCORRFCTNKSTAR_H
 
 #include "AliFemtoCorrFctn.h"
 #include "AliFemtoModelCorrFctn.h"
@@ -53,16 +53,33 @@ protected:
 
   int fPart1ID, fPart2ID;
 
-  TH1D *fNumeratorUnitWeightTrue;
-  TH1D *fNumeratorUnitWeightTrueIdeal;
+  //----- Defined in AliFemtoModelCorrFctn.h -----//
+  /*
+   *  TH1D *fNumeratorTrue;      // Numerator made with RECONSTRUCTED k* of pairs from SAME event
+                                 //   Weight from fManager, if exists (otherwise weight = 1)
+   *  TH1D *fNumeratorFake;      // Numerator made with RECONSTRUCTED k* of pairs from MIXED events
+                                 //   Weight from fManager, if exists (otherwise weight = 1)
+   *  TH1D *fDenominator;        // Denominator made with RECONSTRUCTED k* of pairs from MIXED events
+                                 //   Weight = 1 always 
 
-  TH2D *fKTrueKRecSame;
-  TH2D *fKTrueKRecMixed;
+   *  TH1D *fNumeratorTrueIdeal; // Numerator made with TRUE k* of pairs from SAME event
+                                 //   Weight from fManager, if exists (otherwise weight = 1)
+   *  TH1D *fNumeratorFakeIdeal; // Numerator made with TRUE k* of pairs from MIXED events
+                                 //   Weight from fManager, if exists (otherwise weight = 1)
+   *  TH1D *fDenominatorIdeal;   // Denominator made with TRUE k* of pairs from MIXED events
+                                 //   Weight = 1 always
+  */
+  //----- END: Defined in AliFemtoModelCorrFctn.h -----//
 
-  TH2D *fKTrueKRecRotSame;
-  TH2D *fKTrueKRecRotMixed;
 
+  TH1D *fNumTrueUnitWeights;      // Numerator made with RECONSTRUCTED k* of pairs from SAME event with unit weights
+  TH1D *fNumTrueIdealUnitWeights; // Numerator made with TRUE k* of pairs from SAME event with unit weights
 
+  TH2D *fKTrueKRecSame;           // 2D histogram of k*_{True} vs k*_{Reconstructed} of pairs from SAME event
+  TH2D *fKTrueKRecMixed;          // 2D histogram of k*_{True} vs k*_{Reconstructed} of pairs from MIXED events
+
+  TH2D *fKTrueKRecRotSame;        // fKTrueVsKRecSame rotated by 45 degrees
+  TH2D *fKTrueKRecRotMixed;       // fKTrueVsKRecMixed rotated by 45 degrees
 
 
 #ifdef __ROOT__

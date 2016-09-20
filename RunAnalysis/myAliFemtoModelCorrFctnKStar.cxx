@@ -21,16 +21,16 @@ myAliFemtoModelCorrFctnKStar::myAliFemtoModelCorrFctnKStar() :
   fAnalysisType(kLamK0),
   fPart1ID(3122),
   fPart2ID(310),
-  fNumeratorUnitWeightTrue(0),
-  fNumeratorUnitWeightTrueIdeal(0),
+  fNumTrueUnitWeights(0),
+  fNumTrueIdealUnitWeights(0),
   fKTrueKRecSame(0),
   fKTrueKRecMixed(0),
   fKTrueKRecRotSame(0),
   fKTrueKRecRotMixed(0)
 {
   //default constructor
-  fNumeratorUnitWeightTrue = new TH1D("NumTrueKStarModelCfUnitWeights","NumTrueKStarModelCfUnitWeights",200,0.,1.);
-  fNumeratorUnitWeightTrueIdeal = new TH1D("NumTrueIdealKStarModelCfUnitWeights","NumTrueIdealKStarModelCfUnitWeights",200,0.,1.);
+  fNumTrueUnitWeights = new TH1D("NumTrueUnitWeights","NumTrueUnitWeights",200,0.,1.);
+  fNumTrueIdealUnitWeights = new TH1D("NumTrueIdealUnitWeights","NumTrueIdealUnitWeights",200,0.,1.);
 
   fKTrueKRecSame = new TH2D("fKTrueKRecSame","fKTrueKRecSame",200,0.,1.,200,0.,1.);
   fKTrueKRecMixed = new TH2D("fKTrueKRecMixed","fKTrueKRecMixed",200,0.,1.,200,0.,1.);
@@ -39,8 +39,8 @@ myAliFemtoModelCorrFctnKStar::myAliFemtoModelCorrFctnKStar() :
 
   //-----------------
 
-  fNumeratorUnitWeightTrue->Sumw2();
-  fNumeratorUnitWeightTrueIdeal->Sumw2();
+  fNumTrueUnitWeights->Sumw2();
+  fNumTrueIdealUnitWeights->Sumw2();
 
   fKTrueKRecSame->Sumw2();
   fKTrueKRecMixed->Sumw2();
@@ -54,8 +54,8 @@ myAliFemtoModelCorrFctnKStar::myAliFemtoModelCorrFctnKStar(const char *title, in
   fAnalysisType(kLamK0),
   fPart1ID(3122),
   fPart2ID(310),
-  fNumeratorUnitWeightTrue(0),
-  fNumeratorUnitWeightTrueIdeal(0),
+  fNumTrueUnitWeights(0),
+  fNumTrueIdealUnitWeights(0),
   fKTrueKRecSame(0),
   fKTrueKRecMixed(0),
   fKTrueKRecRotSame(0),
@@ -63,10 +63,10 @@ myAliFemtoModelCorrFctnKStar::myAliFemtoModelCorrFctnKStar(const char *title, in
 {
   //normal constructor
   char buf[100];
-  snprintf(buf , 100,  "NumTrueKStarModelCfUnitWeights%s", title);
-  fNumeratorUnitWeightTrue = new TH1D(buf,buf,aNbins,aKStarLo,aKStarHi);
-  snprintf(buf , 100,  "NumTrueIdealKStarModelCfUnitWeights%s", title);
-  fNumeratorUnitWeightTrueIdeal = new TH1D(buf,buf,aNbins,aKStarLo,aKStarHi);
+  snprintf(buf , 100,  "NumTrueUnitWeights%s", title);
+  fNumTrueUnitWeights = new TH1D(buf,buf,aNbins,aKStarLo,aKStarHi);
+  snprintf(buf , 100,  "NumTrueIdealUnitWeights%s", title);
+  fNumTrueIdealUnitWeights = new TH1D(buf,buf,aNbins,aKStarLo,aKStarHi);
 
   double tYRange = aKStarHi-aKStarLo;
   double tRotYMin = -0.5*tYRange;
@@ -84,8 +84,8 @@ myAliFemtoModelCorrFctnKStar::myAliFemtoModelCorrFctnKStar(const char *title, in
 
   //-----------------
 
-  fNumeratorUnitWeightTrue->Sumw2();
-  fNumeratorUnitWeightTrueIdeal->Sumw2();
+  fNumTrueUnitWeights->Sumw2();
+  fNumTrueIdealUnitWeights->Sumw2();
 
   fKTrueKRecSame->Sumw2();
   fKTrueKRecMixed->Sumw2();
@@ -108,13 +108,13 @@ myAliFemtoModelCorrFctnKStar::myAliFemtoModelCorrFctnKStar(const myAliFemtoModel
   fPart2ID(aCorrFctn.fPart2ID)
 {
   //copy constructor
-  if (aCorrFctn.fNumeratorUnitWeightTrue)
-    fNumeratorUnitWeightTrue = new TH1D(*(aCorrFctn.fNumeratorUnitWeightTrue));
-  else fNumeratorUnitWeightTrue = 0;
+  if (aCorrFctn.fNumTrueUnitWeights)
+    fNumTrueUnitWeights = new TH1D(*(aCorrFctn.fNumTrueUnitWeights));
+  else fNumTrueUnitWeights = 0;
 
-  if (aCorrFctn.fNumeratorUnitWeightTrueIdeal)
-    fNumeratorUnitWeightTrueIdeal = new TH1D(*(aCorrFctn.fNumeratorUnitWeightTrueIdeal));
-  else fNumeratorUnitWeightTrueIdeal = 0;
+  if (aCorrFctn.fNumTrueIdealUnitWeights)
+    fNumTrueIdealUnitWeights = new TH1D(*(aCorrFctn.fNumTrueIdealUnitWeights));
+  else fNumTrueIdealUnitWeights = 0;
 
   if (aCorrFctn.fKTrueKRecSame)
     fKTrueKRecSame = new TH2D(*(aCorrFctn.fKTrueKRecSame));
@@ -147,13 +147,13 @@ myAliFemtoModelCorrFctnKStar& myAliFemtoModelCorrFctnKStar::operator=(const myAl
   fPart1ID = aCorrFctn.fPart1ID;
   fPart2ID = aCorrFctn.fPart2ID;
 
-  if (aCorrFctn.fNumeratorUnitWeightTrue)
-    fNumeratorUnitWeightTrue = new TH1D(*(aCorrFctn.fNumeratorUnitWeightTrue));
-  else fNumeratorUnitWeightTrue = 0;
+  if (aCorrFctn.fNumTrueUnitWeights)
+    fNumTrueUnitWeights = new TH1D(*(aCorrFctn.fNumTrueUnitWeights));
+  else fNumTrueUnitWeights = 0;
 
-  if (aCorrFctn.fNumeratorUnitWeightTrueIdeal)
-    fNumeratorUnitWeightTrueIdeal = new TH1D(*(aCorrFctn.fNumeratorUnitWeightTrueIdeal));
-  else fNumeratorUnitWeightTrueIdeal = 0;
+  if (aCorrFctn.fNumTrueIdealUnitWeights)
+    fNumTrueIdealUnitWeights = new TH1D(*(aCorrFctn.fNumTrueIdealUnitWeights));
+  else fNumTrueIdealUnitWeights = 0;
 
   if (aCorrFctn.fKTrueKRecSame)
     fKTrueKRecSame = new TH2D(*(aCorrFctn.fKTrueKRecSame));
@@ -282,7 +282,10 @@ double myAliFemtoModelCorrFctnKStar::GetKStarTrue(AliFemtoPair* aPair)
 //_________________________________________
 void myAliFemtoModelCorrFctnKStar::AddRealPair(AliFemtoPair* aPair)
 {
-  double tWeight = fManager->GetWeight(aPair);
+  double tWeight;
+  if(fManager) tWeight = fManager->GetWeight(aPair);
+  else tWeight = 1.0;
+
   double tKStarTrue = GetKStarTrue(aPair);
   double tKStarRec = aPair->KStar();
 
@@ -292,8 +295,8 @@ void myAliFemtoModelCorrFctnKStar::AddRealPair(AliFemtoPair* aPair)
     fNumeratorTrue->Fill(tKStarRec,tWeight);
     fNumeratorTrueIdeal->Fill(tKStarTrue,tWeight);
 
-    fNumeratorUnitWeightTrue->Fill(tKStarRec,1.0);
-    fNumeratorUnitWeightTrueIdeal->Fill(tKStarTrue,1.0);
+    fNumTrueUnitWeights->Fill(tKStarRec,1.0);
+    fNumTrueIdealUnitWeights->Fill(tKStarTrue,1.0);
 
     fKTrueKRecSame->Fill(tKStarTrue,tKStarRec);
 
@@ -307,7 +310,10 @@ void myAliFemtoModelCorrFctnKStar::AddRealPair(AliFemtoPair* aPair)
 //_________________________________________
 void myAliFemtoModelCorrFctnKStar::AddMixedPair(AliFemtoPair* aPair)
 {
-  double tWeight = fManager->GetWeight(aPair);
+  double tWeight;
+  if(fManager) tWeight = fManager->GetWeight(aPair);
+  else tWeight = 1.0;
+
   double tKStarTrue = GetKStarTrue(aPair);
   double tKStarRec = aPair->KStar();
 
@@ -344,8 +350,8 @@ void myAliFemtoModelCorrFctnKStar::Write()
   fNumeratorFakeIdeal->Write();
   fDenominatorIdeal->Write();
 
-  fNumeratorUnitWeightTrue->Write();
-  fNumeratorUnitWeightTrueIdeal->Write();
+  fNumTrueUnitWeights->Write();
+  fNumTrueIdealUnitWeights->Write();
 
 //  fQgenQrec->Write();
 
@@ -369,8 +375,8 @@ TList* myAliFemtoModelCorrFctnKStar::GetOutputList()
   tOutputList->Add(fNumeratorFakeIdeal);
   tOutputList->Add(fDenominatorIdeal);
 
-  tOutputList->Add(fNumeratorUnitWeightTrue);
-  tOutputList->Add(fNumeratorUnitWeightTrueIdeal);
+  tOutputList->Add(fNumTrueUnitWeights);
+  tOutputList->Add(fNumTrueIdealUnitWeights);
 
 //  tOutputList->Add(fQgenQrec);
 
