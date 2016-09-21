@@ -92,8 +92,8 @@ public:
 
 
 
-  myTrainAnalysisConstructor(const myTrainAnalysisConstructor& TheOriginalAnalysis);  //copy constructor - 30 June 2015
-  myTrainAnalysisConstructor& operator=(const myTrainAnalysisConstructor& TheOriginalAnalysis);  //assignment operator - 30 June 2015
+  //myTrainAnalysisConstructor(const myTrainAnalysisConstructor& TheOriginalAnalysis);  //copy constructor - 30 June 2015 //TODO
+  //myTrainAnalysisConstructor& operator=(const myTrainAnalysisConstructor& TheOriginalAnalysis);  //assignment operator - 30 June 2015 //TODO
   virtual ~myTrainAnalysisConstructor();
 
   virtual void ProcessEvent(const AliFemtoEvent* ProcessThisEvent);  //will add fMultHist to the process event of AliFemtoVertexMultAnalysis
@@ -103,14 +103,6 @@ public:
   void SetParticleCut1(ParticlePDGType aParticlePDGType, bool aUseCustom);
   void SetParticleCut2(ParticlePDGType aParticlePDGType, bool aUseCustom);
   void SetParticleCuts(bool aUseCustom1, bool aUseCustom2);
-
-  //I want to create the analysis BEFORE I set the analysis.  Once I set the analysis, things cannot be changed.
-  //This allows me to tweak the cuts before finalizing everything (the lesson I learned from SetImplementAvgSepCuts)
-  void CreateLamK0Analysis();  //TODO
-    void SetLamK0Analysis();   //TODO
- 
-
-  void SetCorrectAnalysis();  //TODO
 
   AliFemtoBasicEventCut* CreateBasicEventCut();
   AliFemtoEventCutEstimators* CreateEventCutEstimators(const float &aCentLow, const float &aCentHigh);
@@ -217,6 +209,6 @@ protected:
 
 
 inline void myTrainAnalysisConstructor::SetRemoveMisidentifiedMCParticles(bool aRemove) {KStarModelCfs->SetRemoveMisidentified(aRemove);}
-inline AliFemtoCorrFctnCollection* GetCollectionOfCfs() {return fCollectionOfCfs;}
+inline AliFemtoCorrFctnCollection* myTrainAnalysisConstructor::GetCollectionOfCfs() {return fCollectionOfCfs;}
 
 #endif

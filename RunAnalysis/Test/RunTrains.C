@@ -39,15 +39,15 @@ use_runs = runs_Bm3;
 bool RunGrid = false;
 bool RunFull = true;  //set to false when merging
 bool RunMC = false;
-TString aConfigMacro = "ConfigFemtoAnalysis_CentBins.C";
-TString AdditionalLibs = "libPWGCFfemtoscopy.so libPWGCFfemtoscopyUser.so myTrainAnalysisConstructor.h myTrainAnalysisConstructor.cxx ConfigFemtoAnalysis_CentBins.C";
+TString aConfigMacro = "ConfigTrainFemtoAnalysis.C";
+TString AdditionalLibs = "libPWGCFfemtoscopy.so libPWGCFfemtoscopyUser.so myTrainAnalysisConstructor.h myTrainAnalysisConstructor.cxx ConfigTrainFemtoAnalysis.C";
 TString aGridWorkingDir = "Results_cLamK0_AsRc_20151228_NSigmaFilter/Bm3";
 TString aGridOutputDir = "output_data";
 TString outputname = "Test_LamK0.root";
 
 
 
-void RunMe_CentBins()
+void RunTrains()
 {
     cout << "[RunMe] Begin\n";
 
@@ -88,8 +88,8 @@ void RunMe_CentBins()
 
         alienHandler->SetAPIVersion("V1.1x");
 //        alienHandler->SetROOTVersion("v5-34-30-alice-8");  //apparently this is no longer needed
-        alienHandler->SetAliROOTVersion("v5-07-20-4");
-        alienHandler->SetAliPhysicsVersion("vAN-20160124-1");
+//        alienHandler->SetAliROOTVersion("v5-07-20-4");
+        alienHandler->SetAliPhysicsVersion("vAN-20160921-1");
 
         alienHandler->SetAnalysisSource("myAnalysisConstructor.cxx"); // Add any cxx files which need compiled here (.cxx files)
         alienHandler->SetAdditionalLibs(AdditionalLibs); // Add any files which need copied to grid here (.h,.cxx,.C files)

@@ -69,7 +69,7 @@ myTrainAnalysisConstructor::myTrainAnalysisConstructor() :
   K0CutNSigmaFilter(NULL)
 
 {
-  SetParticleTypes(AnalysisType fAnalysisType)
+  SetParticleTypes(fAnalysisType);
   SetVerboseMode(kFALSE);
   SetMultHist("");
   fCollectionOfCfs = new AliFemtoCorrFctnCollection;
@@ -81,11 +81,11 @@ myTrainAnalysisConstructor::myTrainAnalysisConstructor(AnalysisType aAnalysisTyp
   AliFemtoVertexMultAnalysis(),
 
   fAnalysisType(aAnalysisType),
-  fGeneralAnalysisType(NULL),
-  fParticlePDGType1(NULL),
-  fParticlePDGType2(NULL),
-  fGeneralParticleType1(NULL),
-  fGeneralParticleType2(NULL),
+  fGeneralAnalysisType(kV0V0),
+  fParticlePDGType1(kPDGLam),
+  fParticlePDGType2(kPDGK0),
+  fGeneralParticleType1(kV0),
+  fGeneralParticleType2(kV0),
 
   fOutputName(name),
   fMultHist(NULL),
@@ -129,7 +129,7 @@ myTrainAnalysisConstructor::myTrainAnalysisConstructor(AnalysisType aAnalysisTyp
   K0CutNSigmaFilter(NULL)
 
 {
-  SetParticleTypes(AnalysisType fAnalysisType)
+  SetParticleTypes(fAnalysisType);
   SetVerboseMode(kFALSE);
   SetNumEventsToMix(5);
   SetMinSizePartCollection(1);
@@ -146,11 +146,11 @@ myTrainAnalysisConstructor::myTrainAnalysisConstructor(AnalysisType aAnalysisTyp
   AliFemtoVertexMultAnalysis(binsVertex,minVertex,maxVertex,binsMult,minMult,maxMult),
 
   fAnalysisType(aAnalysisType),
-  fGeneralAnalysisType(NULL),
-  fParticlePDGType1(NULL),
-  fParticlePDGType2(NULL),
-  fGeneralParticleType1(NULL),
-  fGeneralParticleType2(NULL),
+  fGeneralAnalysisType(kV0V0),
+  fParticlePDGType1(kPDGLam),
+  fParticlePDGType2(kPDGK0),
+  fGeneralParticleType1(kV0),
+  fGeneralParticleType2(kV0),
 
   fOutputName(name),
   fMultHist(NULL),
@@ -194,7 +194,7 @@ myTrainAnalysisConstructor::myTrainAnalysisConstructor(AnalysisType aAnalysisTyp
   K0CutNSigmaFilter(NULL)
 
 {
-  SetParticleTypes(AnalysisType fAnalysisType)
+  SetParticleTypes(fAnalysisType);
   SetVerboseMode(kFALSE);
   SetNumEventsToMix(5);
   SetMinSizePartCollection(1);
@@ -251,35 +251,9 @@ myTrainAnalysisConstructor::myTrainAnalysisConstructor(AnalysisType aAnalysisTyp
     fCollectionOfCfs->push_back((AliFemtoCorrFctn*)KStarModelCfs);
   }
 
-  //Run the CreateXXXXXAnalysis, but do not set the analysis yet
-  //This allows me to tweak the analysis in the Config file
-  if(fAnalysisType == kLamK0) {CreateLamK0Analysis();}
-  else if(fAnalysisType == kALamK0) {CreateALamK0Analysis();}
-
-  else if(fAnalysisType == kLamKchP) {CreateLamKchPAnalysis();}
-  else if(fAnalysisType == kALamKchP) {CreateALamKchPAnalysis();}
-  else if(fAnalysisType == kLamKchM) {CreateLamKchMAnalysis();}
-  else if(fAnalysisType == kALamKchM) {CreateALamKchMAnalysis();}
-
-  else if(fAnalysisType == kLamLam) {CreateLamLamAnalysis();}
-  else if(fAnalysisType == kALamALam) {CreateALamALamAnalysis();}
-  else if(fAnalysisType == kLamALam) {CreateLamALamAnalysis();}
-
-  else if(fAnalysisType == kLamPiP) {CreateLamPiPAnalysis();}
-  else if(fAnalysisType == kALamPiP) {CreateALamPiPAnalysis();}
-  else if(fAnalysisType == kLamPiM) {CreateLamPiMAnalysis();}
-  else if(fAnalysisType == kALamPiM) {CreateALamPiMAnalysis();}
-
-  else if(fAnalysisType == kXiKchP) {CreateXiKchPAnalysis();}
-  else if(fAnalysisType == kAXiKchP) {CreateAXiKchPAnalysis();}
-  else if(fAnalysisType == kXiKchM) {CreateXiKchMAnalysis();}
-  else if(fAnalysisType == kAXiKchM) {CreateAXiKchMAnalysis();}
-
-  else {cout << "ERROR in constructor:  No/Incorrect AnalysisType selected!!!!!!!!" << endl << endl << endl;}
-
-
 }
 
+/*
 //____________________________
 //copy constructor - 30 June 2015
 myTrainAnalysisConstructor::myTrainAnalysisConstructor(const myTrainAnalysisConstructor& a) :
@@ -301,11 +275,11 @@ myTrainAnalysisConstructor::myTrainAnalysisConstructor(const myTrainAnalysisCons
   ALamCut(0),
   KStarCf(0),
   AvgSepCf(0),
-/*
+
   SepCfs(0),
   AvgSepCfCowboysAndSailors(0),
   KStarCf2D(0),
-*/
+
   KStarModelCfs(0),
   K0Cut(0),
   V0PairCut(0),
@@ -332,7 +306,9 @@ myTrainAnalysisConstructor::myTrainAnalysisConstructor(const myTrainAnalysisCons
     else {cout << " myTrainAnalysisConstructor::myTrainAnalysisConstructor(const myTrainAnalysisConstructor& a) - correlation function not found " << endl;}
   }
 }
+*/
 
+/*
 //____________________________
 //assignment operator - 30 June 2015
 myTrainAnalysisConstructor& myTrainAnalysisConstructor::operator=(const myTrainAnalysisConstructor& TheOriginalAnalysis)
@@ -358,11 +334,11 @@ myTrainAnalysisConstructor& myTrainAnalysisConstructor::operator=(const myTrainA
   ALamCut = 0;
   KStarCf = 0;
   AvgSepCf = 0;
-/*
+
   SepCfs = 0;
   AvgSepCfCowboysAndSailors = 0;
   KStarCf2D = 0;
-*/
+
   KStarModelCfs = 0;
   K0Cut = 0;
   V0PairCut = 0;
@@ -390,7 +366,7 @@ myTrainAnalysisConstructor& myTrainAnalysisConstructor::operator=(const myTrainA
 
   return *this;
 }
-
+*/
 //____________________________
 myTrainAnalysisConstructor::~myTrainAnalysisConstructor()
 {
@@ -544,7 +520,9 @@ void myTrainAnalysisConstructor::SetParticleTypes(AnalysisType aAnType)
 void myTrainAnalysisConstructor::SetParticleCut1(ParticlePDGType aParticleType, bool aUseCustom)
 {
   switch(aParticleType) {
-  case kPDGLam || kPDGALam || kPDGK0:
+  case kPDGLam:
+  case kPDGALam:
+  case kPDGK0:
     V0Cut1 = CreateV0Cut(aParticleType, aUseCustom);
     break;
 
@@ -558,7 +536,7 @@ void myTrainAnalysisConstructor::SetParticleCut1(ParticlePDGType aParticleType, 
 
   default:
     cerr << "E-myTrainAnalysisConstructor::SetParticleCut1"
-            "selection '" << iParticle << "," << aParticleType << endl;
+            "selection '" << aParticleType << endl;
   }
 }
 
@@ -566,17 +544,22 @@ void myTrainAnalysisConstructor::SetParticleCut1(ParticlePDGType aParticleType, 
 void myTrainAnalysisConstructor::SetParticleCut2(ParticlePDGType aParticleType, bool aUseCustom)
 {
   switch(aParticleType) {
-  case kPDGLam || kPDGALam || kPDGK0:
+  case kPDGLam:
+  case kPDGALam:
+  case kPDGK0:
     V0Cut2 = CreateV0Cut(aParticleType, aUseCustom);
     break;
 
-  case kPDGKchP || kPDGKchM || kPDGPiP || kPDGPiM:
+  case kPDGKchP:
+  case kPDGKchM:
+  case kPDGPiP:
+  case kPDGPiM:
     TrackCut2 = CreateTrackCut(aParticleType, aUseCustom);
     break;
 
   default:
     cerr << "E-myTrainAnalysisConstructor::SetParticleCut2"
-            "selection '" << iParticle << "," << aParticleType << endl;
+            "selection '" << aParticleType << endl;
   }
 }
 
@@ -586,83 +569,6 @@ void myTrainAnalysisConstructor::SetParticleCuts(bool aUseCustom1, bool aUseCust
   SetParticleCut1(fParticlePDGType1, aUseCustom1);
   SetParticleCut2(fParticlePDGType2, aUseCustom2);
 }
-
-//____________________________
-void myTrainAnalysisConstructor::CreateAnalysis()
-{
-
-}
-
-
-//____________________________
-void myTrainAnalysisConstructor::CreateLamK0Analysis()
-{ 
-  //-----LamK0 analysis-----------------------------------------------------------------
-  cout << "Setting up LamK0 analysis for " << fOutputName << endl;
-
-  LamCut = CreateLambdaCut(fUseCustomNSigmaFilters);
-  K0Cut = CreateK0ShortCut(fUseCustomNSigmaFilters);
-
-  if(fImplementAvgSepCuts){V0PairCut = CreateV0PairCut(6.,0.,0.,6.);}
-  else{V0PairCut = CreateV0PairCut(0.,0.,0.,0.);}
-
-  //Check to see if min bias (-> CreateBasicEventCut) or centrality dependent (-> CreateEventCutEstimators)
-  if(!strcmp(fOutputName,"LamK0"))  //strcmp returns 0 if the contents of both strings are equal
-  {
-    //Min-bias analysis, i.e. no centrality tag in name
-    if( (fMinCent != 0.) && (fMaxCent != 100.)) {cout << "WARNING!!!!!!!!!!!" << endl << "Centrality limits imply this analysis (" << fOutputName << ") is NOT min bias!!!!!" << endl;}
-    BasicEvCut = CreateBasicEventCut();
-    fIsMBAnalysis = kTRUE;
-  }
-  else
-  {
-    //Centrality dependent analysis
-    EvCutEst = CreateEventCutEstimators(fMinCent,fMaxCent);
-    fIsMBAnalysis = kFALSE;
-  }
-
-}
-
-//____________________________
-void myTrainAnalysisConstructor::SetLamK0Analysis()
-{
-  if(fIsMBAnalysis) SetAnalysis(BasicEvCut,LamCut,K0Cut,V0PairCut,fCollectionOfCfs);
-  else SetAnalysis(EvCutEst,LamCut,K0Cut,V0PairCut,fCollectionOfCfs);
-}
-
-
-
-
-//____________________________
-void myTrainAnalysisConstructor::SetCorrectAnalysis()
-{
-  if(fAnalysisType == kLamK0) {SetLamK0Analysis();}
-  else if(fAnalysisType == kALamK0) {SetALamK0Analysis();}
-
-  else if(fAnalysisType == kLamKchP) {SetLamKchPAnalysis();}
-  else if(fAnalysisType == kALamKchP) {SetALamKchPAnalysis();}
-  else if(fAnalysisType == kLamKchM) {SetLamKchMAnalysis();}
-  else if(fAnalysisType == kALamKchM) {SetALamKchMAnalysis();}
-
-  else if(fAnalysisType == kLamLam) {SetLamLamAnalysis();}
-  else if(fAnalysisType == kALamALam) {SetALamALamAnalysis();}
-  else if(fAnalysisType == kLamALam) {SetLamALamAnalysis();}
-
-  else if(fAnalysisType == kLamPiP) {SetLamPiPAnalysis();}
-  else if(fAnalysisType == kALamPiP) {SetALamPiPAnalysis();}
-  else if(fAnalysisType == kLamPiM) {SetLamPiMAnalysis();}
-  else if(fAnalysisType == kALamPiM) {SetALamPiMAnalysis();}
-
-  else if(fAnalysisType == kXiKchP) {SetXiKchPAnalysis();}
-  else if(fAnalysisType == kAXiKchP) {SetAXiKchPAnalysis();}
-  else if(fAnalysisType == kXiKchM) {SetXiKchMAnalysis();}
-  else if(fAnalysisType == kAXiKchM) {SetAXiKchMAnalysis();}
-
-  else {cout << "ERROR in SetCorrectAnalysis:  No/Incorrect AnalysisType selected!!!!!!!!" << endl << endl << endl;}
-}
-
-
-
 
 
 //____________________________
@@ -747,6 +653,7 @@ AliFemtoV0TrackCutNSigmaFilter* myTrainAnalysisConstructor::CreateLambdaCut(bool
     v0cut1->SetInvariantMassLambda(LambdaMass-0.0038,LambdaMass+0.0038);   //m_inv criteria for lambda's
 
     v0cut1->SetRemoveMisidentified(kTRUE);
+    v0cut1->SetUseSimpleMisIDCut(kFALSE);
     v0cut1->SetInvMassReject(AliFemtoV0TrackCut::kK0s, K0ShortMass-0.003677,K0ShortMass+0.003677);  //m_inv criteria to remove all lambda candidates fulfilling K0short hypothesis
     v0cut1->SetBuildMisIDHistograms(true);
     v0cut1->SetMisIDHisto(AliFemtoV0TrackCut::kLambda,100,LambdaMass-0.035,LambdaMass+0.035);
@@ -807,6 +714,7 @@ AliFemtoV0TrackCutNSigmaFilter* myTrainAnalysisConstructor::CreateAntiLambdaCut(
     v0cut2->SetInvariantMassLambda(LambdaMass-0.0038,LambdaMass+0.0038);   //m_inv criteria for anti-lambda's
 
     v0cut2->SetRemoveMisidentified(kTRUE);
+    v0cut2->SetUseSimpleMisIDCut(kFALSE);
     v0cut2->SetInvMassReject(AliFemtoV0TrackCut::kK0s, K0ShortMass-0.003677,K0ShortMass+0.003677);  //m_inv criteria to remove all anti-lambda candidates fulfilling K0short hypothesis
     v0cut2->SetBuildMisIDHistograms(true);
     v0cut2->SetMisIDHisto(AliFemtoV0TrackCut::kAntiLambda,100,LambdaMass-0.035,LambdaMass+0.035);
@@ -867,6 +775,7 @@ AliFemtoV0TrackCutNSigmaFilter* myTrainAnalysisConstructor::CreateK0ShortCut(boo
     k0cut1->SetInvariantMassK0s(K0ShortMass-0.013677,K0ShortMass+0.020323);  //m_inv criteria for K0shorts
 
     k0cut1->SetRemoveMisidentified(kTRUE);
+    k0cut1->SetUseSimpleMisIDCut(kFALSE);
     k0cut1->SetInvMassReject(AliFemtoV0TrackCut::kLambda, LambdaMass-0.005683,LambdaMass+0.005683);  //m_inv criteria to remove all K0short candidates fulfilling (anti-)lambda hypothesis
     k0cut1->SetInvMassReject(AliFemtoV0TrackCut::kAntiLambda, LambdaMass-0.005683,LambdaMass+0.005683);  //m_inv criteria to remove all K0short candidates fulfilling (anti-)lambda hypothesis
     k0cut1->SetBuildMisIDHistograms(true);
@@ -915,7 +824,7 @@ AliFemtoV0TrackCutNSigmaFilter* myTrainAnalysisConstructor::CreateK0ShortCut(boo
 //____________________________
 AliFemtoV0TrackCutNSigmaFilter* myTrainAnalysisConstructor::CreateV0Cut(ParticlePDGType aType, bool aUseCustom)
 {
-  AliFemtoV0TrackCutNSigmaFilter* tReturnCut;
+  AliFemtoV0TrackCutNSigmaFilter* tReturnCut = new AliFemtoV0TrackCutNSigmaFilter();
   switch(aType) {
   case kPDGLam:
     tReturnCut = CreateLambdaCut(aUseCustom);
@@ -1080,7 +989,7 @@ AliFemtoESDTrackCutNSigmaFilter* myTrainAnalysisConstructor::CreatePiCut(const i
 
 AliFemtoESDTrackCutNSigmaFilter* myTrainAnalysisConstructor::CreateTrackCut(ParticlePDGType aType, bool aUseCustom)
 {
-  AliFemtoESDTrackCutNSigmaFilter* tReturnCut;
+  AliFemtoESDTrackCutNSigmaFilter* tReturnCut = new AliFemtoESDTrackCutNSigmaFilter();
   switch(aType) {
   case kPDGKchP:
     tReturnCut = CreateKchCut(1, aUseCustom);
@@ -1228,7 +1137,7 @@ AliFemtoXiTrackCut* myTrainAnalysisConstructor::CreateAntiXiCut()
 //____________________________
 AliFemtoXiTrackCut* myTrainAnalysisConstructor::CreateCascadeCut(ParticlePDGType aType)
 {
-  AliFemtoXiTrackCut *tReturnCut;
+  AliFemtoXiTrackCut *tReturnCut = new AliFemtoXiTrackCut();
   switch(aType) {
   case kPDGXiC:
     tReturnCut = CreateXiCut();
@@ -1309,27 +1218,24 @@ AliFemtoXiTrackPairCut* myTrainAnalysisConstructor::CreateXiTrackPairCut()
 
 
 //____________________________
-void myTrainAnalysisConstructor::CreatePairCut(double aArg1=0.0, double aArg2=0.0, double aArg3=0.0, double aArg4=0.0)
+void myTrainAnalysisConstructor::CreatePairCut(double aArg1, double aArg2, double aArg3, double aArg4)
 {
-  switch(GeneralAnalysisType) {
+  switch(fGeneralAnalysisType) {
   case kV0V0:
-    V0PairCut CreateV0PairCut(aArg1,aArg2,aArg3,aArg4);
+    V0PairCut = CreateV0PairCut(aArg1,aArg2,aArg3,aArg4);
     break;
 
   case kV0Track:
-    V0TrackPairCut CreateV0TrackPairCut(aArg1,aArg2);
+    V0TrackPairCut = CreateV0TrackPairCut(aArg1,aArg2);
     break;
 
   case kXiTrack:
-    XiTrackPairCut CreateXiTrackPairCut();
+    XiTrackPairCut = CreateXiTrackPairCut();
     break;
-
 
   default:
     cerr << "E-myTrainAnalysisConstructor::CreatePairCut" << endl;
   }
-
-
 }
 
 
