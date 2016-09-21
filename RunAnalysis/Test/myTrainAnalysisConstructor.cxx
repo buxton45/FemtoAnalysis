@@ -19,51 +19,59 @@ const char* const myTrainAnalysisConstructor::fAnalysisTags[] = {"LamK0", "ALamK
 //____________________________
 myTrainAnalysisConstructor::myTrainAnalysisConstructor() : 
   AliFemtoVertexMultAnalysis(),
+
   fAnalysisType(kLamK0),
   fGeneralAnalysisType(kV0V0),
-  fParticle1Type(kLam),
-  fParticle2Type(kK0),
-  fCollectionOfCfs(0),
+  fParticlePDGType1(kPDGLam),
+  fParticlePDGType2(kPDGK0),
+  fGeneralParticleType1(kV0),
+  fGeneralParticleType2(kV0),
+
   fOutputName("Analysis"),
-  fMultHist(0),
-  fIsMCRun(kFALSE),
-  fIsMBAnalysis(kFALSE),
+  fMultHist(NULL),
   fImplementAvgSepCuts(kTRUE),
   fWritePairKinematics(kFALSE),
+  fIsMCRun(kFALSE),
+  fIsMBAnalysis(kFALSE),
+  fBuildMultHist(kFALSE),
   fMinCent(-1000),
   fMaxCent(1000),
-  BasicEvCut(0),
-  EvCutEst(0),
-  LamCut(0),
-  ALamCut(0),
-  KStarCf(0),
-  AvgSepCf(0),
+
+  fCollectionOfCfs(NULL),
+
+  BasicEvCut(NULL),
+  EvCutEst(NULL),
+
+  XiCut1(NULL),
+  XiCut2(NULL),
+
+  V0Cut1(NULL),
+  V0Cut2(NULL),
+  
+  TrackCut1(NULL),
+  TrackCut2(NULL),
+  
+  V0PairCut(NULL),
+  V0TrackPairCut(NULL),
+  XiTrackPairCut(NULL),
+
+  KStarCf(NULL),
+  AvgSepCf(NULL),
 /*
   SepCfs(0),
   AvgSepCfCowboysAndSailors(0),
   KStarCf2D(0),
 */
-  KStarModelCfs(0),
-  K0Cut(0),
-  V0PairCut(0),
-  KchPCut(0),
-  KchMCut(0),
-  PiPCut(0),
-  PiMCut(0),
-  V0TrackPairCut(0),
-  XiCut(0),
-  AXiCut(0),
-  XiTrackPairCut(0),
+  KStarModelCfs(NULL),
 
-  LamCutNSigmaFilter(0),
-  ALamCutNSigmaFilter(0),
-  K0CutNSigmaFilter(0),
-  fUseAliFemtoV0TrackCutNSigmaFilter(false),
-  fUseCustomNSigmaFilters(false)
+  LamCutNSigmaFilter(NULL),
+  ALamCutNSigmaFilter(NULL),
+  K0CutNSigmaFilter(NULL)
+
 {
   SetParticleTypes(AnalysisType fAnalysisType)
   SetVerboseMode(kFALSE);
-  fMultHist = new TH1F("MultHist","MultHist",30,0,3000);
+  SetMultHist("");
   fCollectionOfCfs = new AliFemtoCorrFctnCollection;
   SetEnablePairMonitors(fIsMCRun);
 }
@@ -71,47 +79,55 @@ myTrainAnalysisConstructor::myTrainAnalysisConstructor() :
 //____________________________
 myTrainAnalysisConstructor::myTrainAnalysisConstructor(AnalysisType aAnalysisType, const char* name, bool aIsMCRun, bool aImplementAvgSepCuts, bool aWritePairKinematics) : 
   AliFemtoVertexMultAnalysis(),
+
   fAnalysisType(aAnalysisType),
-  fGeneralAnalysisType(0),
-  fParticle1Type(0),
-  fParticle2Type(0),
-  fCollectionOfCfs(0),
+  fGeneralAnalysisType(NULL),
+  fParticlePDGType1(NULL),
+  fParticlePDGType2(NULL),
+  fGeneralParticleType1(NULL),
+  fGeneralParticleType2(NULL),
+
   fOutputName(name),
-  fMultHist(0),
-  fIsMCRun(aIsMCRun),
-  fIsMBAnalysis(kFALSE),
+  fMultHist(NULL),
   fImplementAvgSepCuts(aImplementAvgSepCuts),
   fWritePairKinematics(aWritePairKinematics),
+  fIsMCRun(aIsMCRun),
+  fIsMBAnalysis(kFALSE),
+  fBuildMultHist(kFALSE),
   fMinCent(-1000),
   fMaxCent(1000),
-  BasicEvCut(0),
-  EvCutEst(0),
-  LamCut(0),
-  ALamCut(0),
-  KStarCf(0),
-  AvgSepCf(0),
+
+  fCollectionOfCfs(NULL),
+
+  BasicEvCut(NULL),
+  EvCutEst(NULL),
+
+  XiCut1(NULL),
+  XiCut2(NULL),
+
+  V0Cut1(NULL),
+  V0Cut2(NULL),
+  
+  TrackCut1(NULL),
+  TrackCut2(NULL),
+  
+  V0PairCut(NULL),
+  V0TrackPairCut(NULL),
+  XiTrackPairCut(NULL),
+
+  KStarCf(NULL),
+  AvgSepCf(NULL),
 /*
   SepCfs(0),
   AvgSepCfCowboysAndSailors(0),
   KStarCf2D(0),
 */
-  KStarModelCfs(0),
-  K0Cut(0),
-  V0PairCut(0),
-  KchPCut(0),
-  KchMCut(0),
-  PiPCut(0),
-  PiMCut(0),
-  V0TrackPairCut(0),
-  XiCut(0),
-  AXiCut(0),
-  XiTrackPairCut(0),
+  KStarModelCfs(NULL),
 
-  LamCutNSigmaFilter(0),
-  ALamCutNSigmaFilter(0),
-  K0CutNSigmaFilter(0),
-  fUseAliFemtoV0TrackCutNSigmaFilter(false),
-  fUseCustomNSigmaFilters(false)
+  LamCutNSigmaFilter(NULL),
+  ALamCutNSigmaFilter(NULL),
+  K0CutNSigmaFilter(NULL)
+
 {
   SetParticleTypes(AnalysisType fAnalysisType)
   SetVerboseMode(kFALSE);
@@ -120,9 +136,7 @@ myTrainAnalysisConstructor::myTrainAnalysisConstructor(AnalysisType aAnalysisTyp
   SetV0SharedDaughterCut(kTRUE);
   SetEnablePairMonitors(fIsMCRun);
 
-  char tTitMultHist[101] = "MultHist_";
-  strncat(tTitMultHist,fAnalysisTags[aAnalysisType],100);
-  fMultHist = new TH1F(tTitMultHist,tTitMultHist,30,0,3000);
+  SetMultHist(fAnalysisTags[aAnalysisType]);
 
   fCollectionOfCfs = new AliFemtoCorrFctnCollection;
 }
@@ -130,47 +144,55 @@ myTrainAnalysisConstructor::myTrainAnalysisConstructor(AnalysisType aAnalysisTyp
 //____________________________
 myTrainAnalysisConstructor::myTrainAnalysisConstructor(AnalysisType aAnalysisType, const char* name, unsigned int binsVertex, double minVertex, double maxVertex, unsigned int binsMult, double minMult, double maxMult, bool aIsMCRun, bool aImplementAvgSepCuts, bool aWritePairKinematics) : 
   AliFemtoVertexMultAnalysis(binsVertex,minVertex,maxVertex,binsMult,minMult,maxMult),
+
   fAnalysisType(aAnalysisType),
-  fGeneralAnalysisType(0),
-  fParticle1Type(0),
-  fParticle2Type(0),
-  fCollectionOfCfs(0),
+  fGeneralAnalysisType(NULL),
+  fParticlePDGType1(NULL),
+  fParticlePDGType2(NULL),
+  fGeneralParticleType1(NULL),
+  fGeneralParticleType2(NULL),
+
   fOutputName(name),
-  fIsMCRun(aIsMCRun),
-  fIsMBAnalysis(kFALSE),
+  fMultHist(NULL),
   fImplementAvgSepCuts(aImplementAvgSepCuts),
   fWritePairKinematics(aWritePairKinematics),
+  fIsMCRun(aIsMCRun),
+  fIsMBAnalysis(kFALSE),
+  fBuildMultHist(kFALSE),
   fMinCent(-1000),
   fMaxCent(1000),
-  fMultHist(0),
-  BasicEvCut(0),
-  EvCutEst(0),
-  LamCut(0),
-  ALamCut(0),
-  KStarCf(0),
-  AvgSepCf(0),
+
+  fCollectionOfCfs(NULL),
+
+  BasicEvCut(NULL),
+  EvCutEst(NULL),
+
+  XiCut1(NULL),
+  XiCut2(NULL),
+
+  V0Cut1(NULL),
+  V0Cut2(NULL),
+  
+  TrackCut1(NULL),
+  TrackCut2(NULL),
+  
+  V0PairCut(NULL),
+  V0TrackPairCut(NULL),
+  XiTrackPairCut(NULL),
+
+  KStarCf(NULL),
+  AvgSepCf(NULL),
 /*
   SepCfs(0),
   AvgSepCfCowboysAndSailors(0),
   KStarCf2D(0),
 */
-  KStarModelCfs(0),
-  K0Cut(0),
-  V0PairCut(0),
-  KchPCut(0),
-  KchMCut(0),
-  PiPCut(0),
-  PiMCut(0),
-  V0TrackPairCut(0),
-  XiCut(0),
-  AXiCut(0),
-  XiTrackPairCut(0),
+  KStarModelCfs(NULL),
 
-  LamCutNSigmaFilter(0),
-  ALamCutNSigmaFilter(0),
-  K0CutNSigmaFilter(0),
-  fUseAliFemtoV0TrackCutNSigmaFilter(false),
-  fUseCustomNSigmaFilters(false)
+  LamCutNSigmaFilter(NULL),
+  ALamCutNSigmaFilter(NULL),
+  K0CutNSigmaFilter(NULL)
+
 {
   SetParticleTypes(AnalysisType fAnalysisType)
   SetVerboseMode(kFALSE);
@@ -178,24 +200,17 @@ myTrainAnalysisConstructor::myTrainAnalysisConstructor(AnalysisType aAnalysisTyp
   SetMinSizePartCollection(1);
   SetV0SharedDaughterCut(kTRUE);
   SetEnablePairMonitors(fIsMCRun);
+  SetMultHist(fAnalysisTags[aAnalysisType]);
 
   fMinCent = minMult/10.;
   fMaxCent = maxMult/10.;
 
   fCollectionOfCfs = new AliFemtoCorrFctnCollection;
 
-  char tTitMultHist[101] = "MultHist_";
-  strncat(tTitMultHist,fAnalysisTags[aAnalysisType],100);
-  fMultHist = new TH1F(tTitMultHist,tTitMultHist,30,0,3000);
+  if(fWritePairKinematics) KStarCf = CreateCorrFctnKStar(fAnalysisTags[aAnalysisType],62,0.,0.31); //TNtuple is huge, and I don't need data out to 1 GeV
+  else KStarCf = CreateCorrFctnKStar(fAnalysisTags[aAnalysisType],200,0.,1.0);
 
-  char tTitKStarCf[101] = "KStarCf_";
-  strncat(tTitKStarCf,fAnalysisTags[aAnalysisType],100);
-  if(fWritePairKinematics) KStarCf = CreateKStarCorrFctn(tTitKStarCf,62,0.,0.31); //TNtuple is huge, and I don't need data out to 1 GeV
-  else KStarCf = CreateKStarCorrFctn(tTitKStarCf,200,0.,1.0);
-
-  char tTitAvgSepCf[101] = "AvgSepCf_";
-  strncat(tTitAvgSepCf,fAnalysisTags[aAnalysisType],100);
-  AvgSepCf = CreateAvgSepCorrFctn(tTitAvgSepCf,200,0.,20.);
+  AvgSepCf = CreateAvgSepCorrFctn(fAnalysisTags[aAnalysisType],200,0.,20.);
 
 /*
   char tTitSepCfs[101] = "SepCfs_";
@@ -208,13 +223,10 @@ myTrainAnalysisConstructor::myTrainAnalysisConstructor(AnalysisType aAnalysisTyp
 
   char tTitKStarCf2D[101] = "KStarCf2D_";
   strncat(tTitKStarCf2D,fAnalysisTags[aAnalysisType],100);
-  KStarCf2D = CreateKStarCorrFctn2D(tTitKStarCf2D,200,0.,1.0,2,-2.,2.);
+  KStarCf2D = CreateCorrFctnKStar2D(tTitKStarCf2D,200,0.,1.0,2,-2.,2.);
 */
 
-  //-----04/02/2016
-  char tTitModelCorrFctnKStar[101] = "KStarModelCf_";
-  strncat(tTitModelCorrFctnKStar,fAnalysisTags[aAnalysisType],100);
-  KStarModelCfs = CreateModelCorrFctnKStar(tTitModelCorrFctnKStar,200,0.,1.0);
+  KStarModelCfs = CreateModelCorrFctnKStarFull(fAnalysisTags[aAnalysisType],200,0.,1.0);
 
   if(fWritePairKinematics)
   {
@@ -278,6 +290,7 @@ myTrainAnalysisConstructor::myTrainAnalysisConstructor(const myTrainAnalysisCons
   fMultHist(0),
   fIsMCRun(kFALSE),
   fIsMBAnalysis(kFALSE),
+  fBuildMultHist(kFALSE),
   fImplementAvgSepCuts(kFALSE),
   fWritePairKinematics(kFALSE),
   fMinCent(-1000),
@@ -307,9 +320,8 @@ myTrainAnalysisConstructor::myTrainAnalysisConstructor(const myTrainAnalysisCons
 
   LamCutNSigmaFilter(0),
   ALamCutNSigmaFilter(0),
-  K0CutNSigmaFilter(0),
-  fUseAliFemtoV0TrackCutNSigmaFilter(false),
-  fUseCustomNSigmaFilters(false)
+  K0CutNSigmaFilter(0)
+
 {
   fCollectionOfCfs = new AliFemtoCorrFctnCollection;
   AliFemtoCorrFctnIterator iter;
@@ -335,6 +347,7 @@ myTrainAnalysisConstructor& myTrainAnalysisConstructor::operator=(const myTrainA
   fMultHist = 0;
   fIsMCRun = kFALSE;
   fIsMBAnalysis = kFALSE;
+  fBuildMultHist = kFALSE;
   fImplementAvgSepCuts = kFALSE;
   fWritePairKinematics = kFALSE;
   fMinCent = -1000;
@@ -365,8 +378,6 @@ myTrainAnalysisConstructor& myTrainAnalysisConstructor::operator=(const myTrainA
   LamCutNSigmaFilter = 0;
   ALamCutNSigmaFilter = 0;
   K0CutNSigmaFilter = 0;
-  fUseAliFemtoV0TrackCutNSigmaFilter = false;
-  fUseCustomNSigmaFilters = false;
 
   if(fCollectionOfCfs) delete fCollectionOfCfs;
   fCollectionOfCfs = new AliFemtoCorrFctnCollection;
@@ -397,106 +408,106 @@ myTrainAnalysisConstructor::~myTrainAnalysisConstructor()
 void myTrainAnalysisConstructor::SetParticleTypes(AnalysisType aAnType)
 {
   switch(aAnType) {
-  case: kLamK0:
+  case kLamK0:
     fGeneralAnalysisType = kV0V0;
-    fParticle1Type = kLam;
-    fParticle2Type = kK0;
+    fParticlePDGType1 = kPDGLam;
+    fParticlePDGType2 = kPDGK0;
     break;
 
-  case: kALamK0:
+  case kALamK0:
     fGeneralAnalysisType = kV0V0;
-    fParticle1Type = kALam;
-    fParticle2Type = kK0;
+    fParticlePDGType1 = kPDGALam;
+    fParticlePDGType2 = kPDGK0;
     break;
 
-  case: kLamKchP:
+  case kLamKchP:
     fGeneralAnalysisType = kV0Track;
-    fParticle1Type = kLam;
-    fParticle2Type = kKchP;
+    fParticlePDGType1 = kPDGLam;
+    fParticlePDGType2 = kPDGKchP;
     break;
 
-  case: kALamKchP:
+  case kALamKchP:
     fGeneralAnalysisType = kV0Track;
-    fParticle1Type = kALam;
-    fParticle2Type = kKchP;
+    fParticlePDGType1 = kPDGALam;
+    fParticlePDGType2 = kPDGKchP;
     break;
 
-  case: kLamKchM:
+  case kLamKchM:
     fGeneralAnalysisType = kV0Track;
-    fParticle1Type = kLam;
-    fParticle2Type = kKchM;
+    fParticlePDGType1 = kPDGLam;
+    fParticlePDGType2 = kPDGKchM;
     break;
 
-  case: kALamKchM:
+  case kALamKchM:
     fGeneralAnalysisType = kV0Track;
-    fParticle1Type = kALam;
-    fParticle2Type = kKchM;
+    fParticlePDGType1 = kPDGALam;
+    fParticlePDGType2 = kPDGKchM;
     break;
 
-  case: kLamLam:
+  case kLamLam:
     fGeneralAnalysisType = kV0V0;
-    fParticle1Type = kLam;
-    fParticle2Type = kLam;
+    fParticlePDGType1 = kPDGLam;
+    fParticlePDGType2 = kPDGLam;
     break;
 
-  case: kALamALam:
+  case kALamALam:
     fGeneralAnalysisType = kV0V0;
-    fParticle1Type = kALam;
-    fParticle2Type = kALam;
+    fParticlePDGType1 = kPDGALam;
+    fParticlePDGType2 = kPDGALam;
     break;
 
-  case: kLamALam:
+  case kLamALam:
     fGeneralAnalysisType = kV0V0;
-    fParticle1Type = kLam;
-    fParticle2Type = kALam;
+    fParticlePDGType1 = kPDGLam;
+    fParticlePDGType2 = kPDGALam;
     break;
 
-  case: kLamPiP:
+  case kLamPiP:
     fGeneralAnalysisType = kV0Track;
-    fParticle1Type = kLam;
-    fParticle2Type = kPiP;
+    fParticlePDGType1 = kPDGLam;
+    fParticlePDGType2 = kPDGPiP;
     break;
 
-  case: kALamPiP:
+  case kALamPiP:
     fGeneralAnalysisType = kV0Track;
-    fParticle1Type = kALam;
-    fParticle2Type = kPiP;
+    fParticlePDGType1 = kPDGALam;
+    fParticlePDGType2 = kPDGPiP;
     break;
 
-  case: kLamPiM:
+  case kLamPiM:
     fGeneralAnalysisType = kV0Track;
-    fParticle1Type = kLam;
-    fParticle2Type = kPiP;
+    fParticlePDGType1 = kPDGLam;
+    fParticlePDGType2 = kPDGPiM;
     break;
 
-  case: kALamPiM:
+  case kALamPiM:
     fGeneralAnalysisType = kV0Track;
-    fParticle1Type = kALam;
-    fParticle2Type = kPiP;
+    fParticlePDGType1 = kPDGALam;
+    fParticlePDGType2 = kPDGPiM;
     break;
 
-  case: kXiKchP:
+  case kXiKchP:
     fGeneralAnalysisType = kXiTrack;
-    fParticle1Type = kXi;
-    fParticle2Type = kKchP;
+    fParticlePDGType1 = kPDGXiC;
+    fParticlePDGType2 = kPDGKchP;
     break;
 
-  case: kAXiKchP:
+  case kAXiKchP:
     fGeneralAnalysisType = kXiTrack;
-    fParticle1Type = kAXi;
-    fParticle2Type = kKchP;
+    fParticlePDGType1 = kPDGAXiC;
+    fParticlePDGType2 = kPDGKchP;
     break;
 
-  case: kXiKchM:
+  case kXiKchM:
     fGeneralAnalysisType = kXiTrack;
-    fParticle1Type = kXi;
-    fParticle2Type = kKchM;
+    fParticlePDGType1 = kPDGXiC;
+    fParticlePDGType2 = kPDGKchM;
     break;
 
-  case: kAXiKchM:
+  case kAXiKchM:
     fGeneralAnalysisType = kXiTrack;
-    fParticle1Type = kAXi;
-    fParticle2Type = kKchM;
+    fParticlePDGType1 = kPDGAXiC;
+    fParticlePDGType2 = kPDGKchM;
     break;
 
   default:
@@ -505,19 +516,19 @@ void myTrainAnalysisConstructor::SetParticleTypes(AnalysisType aAnType)
   }
 
   switch(fGeneralAnalysisType) {
-  case: kV0V0:
-    fGeneralParticle1Type = kV0;
-    fGeneralParticle2Type = kV0;
+  case kV0V0:
+    fGeneralParticleType1 = kV0;
+    fGeneralParticleType2 = kV0;
     break;
 
-  case: kV0Track:
-    fGeneralParticle1Type = kV0;
-    fGeneralParticle2Type = kTrack;
+  case kV0Track:
+    fGeneralParticleType1 = kV0;
+    fGeneralParticleType2 = kTrack;
     break;
 
-  case: kXiTrack:
-    fGeneralParticle1Type = kCascade;
-    fGeneralParticle2Type = kTrack;
+  case kXiTrack:
+    fGeneralParticleType1 = kCascade;
+    fGeneralParticleType2 = kTrack;
     break;
 
   default:
@@ -530,18 +541,18 @@ void myTrainAnalysisConstructor::SetParticleTypes(AnalysisType aAnType)
 
 
 //____________________________
-void myTrainAnalysisConstructor::SetParticleCut1(ParticleType aParticleType, bool aUseCustom)
+void myTrainAnalysisConstructor::SetParticleCut1(ParticlePDGType aParticleType, bool aUseCustom)
 {
   switch(aParticleType) {
-  case: kLam || kALam || kK0:
+  case kPDGLam || kPDGALam || kPDGK0:
     V0Cut1 = CreateV0Cut(aParticleType, aUseCustom);
     break;
 
-  case: kXi:
+  case kPDGXiC:
     XiCut1 = CreateXiCut();
     break;
 
-  case: kAXi:
+  case kPDGAXiC:
     XiCut1 = CreateAntiXiCut();
     break;
 
@@ -552,21 +563,34 @@ void myTrainAnalysisConstructor::SetParticleCut1(ParticleType aParticleType, boo
 }
 
 //____________________________
-void myTrainAnalysisConstructor::SetParticleCut2(ParticleType aParticleType, bool aUseCustom)
+void myTrainAnalysisConstructor::SetParticleCut2(ParticlePDGType aParticleType, bool aUseCustom)
 {
   switch(aParticleType) {
-  case: kLam || kALam || kK0:
+  case kPDGLam || kPDGALam || kPDGK0:
     V0Cut2 = CreateV0Cut(aParticleType, aUseCustom);
     break;
 
-  case: kKchP || kKchM || kPiP || kPiM:
-    TrackCut2 = CreateTrackCut(aParticleType);
+  case kPDGKchP || kPDGKchM || kPDGPiP || kPDGPiM:
+    TrackCut2 = CreateTrackCut(aParticleType, aUseCustom);
     break;
 
   default:
     cerr << "E-myTrainAnalysisConstructor::SetParticleCut2"
             "selection '" << iParticle << "," << aParticleType << endl;
   }
+}
+
+//____________________________
+void myTrainAnalysisConstructor::SetParticleCuts(bool aUseCustom1, bool aUseCustom2)
+{
+  SetParticleCut1(fParticlePDGType1, aUseCustom1);
+  SetParticleCut2(fParticlePDGType2, aUseCustom2);
+}
+
+//____________________________
+void myTrainAnalysisConstructor::CreateAnalysis()
+{
+
 }
 
 
@@ -645,7 +669,7 @@ void myTrainAnalysisConstructor::SetCorrectAnalysis()
 void myTrainAnalysisConstructor::ProcessEvent(const AliFemtoEvent* hbtEvent)
 {
   double multiplicity = hbtEvent->UncorrectedNumberOfPrimaries();
-  fMultHist->Fill(multiplicity);
+  if(fBuildMultHist) fMultHist->Fill(multiplicity);
   AliFemtoVertexMultAnalysis::ProcessEvent(hbtEvent);
 }
 
@@ -658,20 +682,8 @@ TList* myTrainAnalysisConstructor::GetOutputList()
   temp->SetName(fOutputName);
 
   TList *tOutputList = AliFemtoSimpleAnalysis::GetOutputList(); 
-  myAliFemtoV0TrackCut* p1cut = dynamic_cast <myAliFemtoV0TrackCut*> (fFirstParticleCut);
-  if(p1cut)
-    {
-      tOutputList->Add(p1cut->GetPurityHisto());
-      tOutputList->Add(p1cut->GetMisIDHistos());
-    }
-  myAliFemtoV0TrackCut* p2cut = dynamic_cast <myAliFemtoV0TrackCut*> (fSecondParticleCut);
-  if(p2cut)
-    {
-      tOutputList->Add(p2cut->GetPurityHisto());
-      tOutputList->Add(p2cut->GetMisIDHistos());
-    }
 
-  tOutputList->Add(GetMultHist());
+  if(fBuildMultHist) tOutputList->Add(GetMultHist());
 
   TListIter next(tOutputList);
   while (TObject *obj = next())
@@ -695,6 +707,15 @@ AliFemtoBasicEventCut* myTrainAnalysisConstructor::CreateBasicEventCut()
     mec->AddCutMonitor(new AliFemtoCutMonitorEventMult("_EvPass"), new AliFemtoCutMonitorEventMult("_EvFail"));
 
   return mec;
+}
+
+//____________________________
+void myTrainAnalysisConstructor::SetMultHist(const char* name, int aNbins, double aMin, double aMax)
+{
+  fMultHist = new TH1F(
+                       TString::Format("MultHist_%s", name), "Multiplicity",
+                       aNbins, aMin, aMax);
+  fBuildMultHist = true;
 }
 
 //____________________________
@@ -726,10 +747,10 @@ AliFemtoV0TrackCutNSigmaFilter* myTrainAnalysisConstructor::CreateLambdaCut(bool
     v0cut1->SetInvariantMassLambda(LambdaMass-0.0038,LambdaMass+0.0038);   //m_inv criteria for lambda's
 
     v0cut1->SetRemoveMisidentified(kTRUE);
-    v0cut1->SetInvMassReject(myAliFemtoV0TrackCut::kK0s, K0ShortMass-0.003677,K0ShortMass+0.003677);  //m_inv criteria to remove all lambda candidates fulfilling K0short hypothesis
+    v0cut1->SetInvMassReject(AliFemtoV0TrackCut::kK0s, K0ShortMass-0.003677,K0ShortMass+0.003677);  //m_inv criteria to remove all lambda candidates fulfilling K0short hypothesis
     v0cut1->SetBuildMisIDHistograms(true);
-    v0cut1->SetMisIDHisto(myAliFemtoV0TrackCut::kLambda,100,LambdaMass-0.035,LambdaMass+0.035);
-    v0cut1->SetMisIDHisto(myAliFemtoV0TrackCut::kK0s,100,K0ShortMass-0.070,K0ShortMass+0.070);
+    v0cut1->SetMisIDHisto(AliFemtoV0TrackCut::kLambda,100,LambdaMass-0.035,LambdaMass+0.035);
+    v0cut1->SetMisIDHisto(AliFemtoV0TrackCut::kK0s,100,K0ShortMass-0.070,K0ShortMass+0.070);
     v0cut1->SetMinvPurityAidHistoV0("LambdaPurityAid","LambdaMinvBeforeFinalCut",100,LambdaMass-0.035,LambdaMass+0.035);
     v0cut1->SetLooseInvMassCut(true, LambdaMass-0.035,LambdaMass+0.035);
 
@@ -786,10 +807,10 @@ AliFemtoV0TrackCutNSigmaFilter* myTrainAnalysisConstructor::CreateAntiLambdaCut(
     v0cut2->SetInvariantMassLambda(LambdaMass-0.0038,LambdaMass+0.0038);   //m_inv criteria for anti-lambda's
 
     v0cut2->SetRemoveMisidentified(kTRUE);
-    v0cut2->SetInvMassReject(myAliFemtoV0TrackCut::kK0s, K0ShortMass-0.003677,K0ShortMass+0.003677);  //m_inv criteria to remove all anti-lambda candidates fulfilling K0short hypothesis
+    v0cut2->SetInvMassReject(AliFemtoV0TrackCut::kK0s, K0ShortMass-0.003677,K0ShortMass+0.003677);  //m_inv criteria to remove all anti-lambda candidates fulfilling K0short hypothesis
     v0cut2->SetBuildMisIDHistograms(true);
-    v0cut2->SetMisIDHisto(myAliFemtoV0TrackCut::kAntiLambda,100,LambdaMass-0.035,LambdaMass+0.035);
-    v0cut2->SetMisIDHisto(myAliFemtoV0TrackCut::kK0s,100,K0ShortMass-0.070,K0ShortMass+0.070);
+    v0cut2->SetMisIDHisto(AliFemtoV0TrackCut::kAntiLambda,100,LambdaMass-0.035,LambdaMass+0.035);
+    v0cut2->SetMisIDHisto(AliFemtoV0TrackCut::kK0s,100,K0ShortMass-0.070,K0ShortMass+0.070);
     v0cut2->SetMinvPurityAidHistoV0("AntiLambdaPurityAid","AntiLambdaMinvBeforeFinalCut",100,LambdaMass-0.035,LambdaMass+0.035);
     v0cut2->SetLooseInvMassCut(true, LambdaMass-0.035,LambdaMass+0.035);
 
@@ -846,12 +867,12 @@ AliFemtoV0TrackCutNSigmaFilter* myTrainAnalysisConstructor::CreateK0ShortCut(boo
     k0cut1->SetInvariantMassK0s(K0ShortMass-0.013677,K0ShortMass+0.020323);  //m_inv criteria for K0shorts
 
     k0cut1->SetRemoveMisidentified(kTRUE);
-    k0cut1->SetInvMassReject(myAliFemtoV0TrackCut::kLambda, LambdaMass-0.005683,LambdaMass+0.005683);  //m_inv criteria to remove all K0short candidates fulfilling (anti-)lambda hypothesis
-    k0cut1->SetInvMassReject(myAliFemtoV0TrackCut::kAntiLambda, LambdaMass-0.005683,LambdaMass+0.005683);  //m_inv criteria to remove all K0short candidates fulfilling (anti-)lambda hypothesis
+    k0cut1->SetInvMassReject(AliFemtoV0TrackCut::kLambda, LambdaMass-0.005683,LambdaMass+0.005683);  //m_inv criteria to remove all K0short candidates fulfilling (anti-)lambda hypothesis
+    k0cut1->SetInvMassReject(AliFemtoV0TrackCut::kAntiLambda, LambdaMass-0.005683,LambdaMass+0.005683);  //m_inv criteria to remove all K0short candidates fulfilling (anti-)lambda hypothesis
     k0cut1->SetBuildMisIDHistograms(true);
-    k0cut1->SetMisIDHisto(myAliFemtoV0TrackCut::kLambda,100,LambdaMass-0.035,LambdaMass+0.035);
-    k0cut1->SetMisIDHisto(myAliFemtoV0TrackCut::kAntiLambda,100,LambdaMass-0.035,LambdaMass+0.035);
-    k0cut1->SetMisIDHisto(myAliFemtoV0TrackCut::kK0s,100,K0ShortMass-0.070,K0ShortMass+0.070);
+    k0cut1->SetMisIDHisto(AliFemtoV0TrackCut::kLambda,100,LambdaMass-0.035,LambdaMass+0.035);
+    k0cut1->SetMisIDHisto(AliFemtoV0TrackCut::kAntiLambda,100,LambdaMass-0.035,LambdaMass+0.035);
+    k0cut1->SetMisIDHisto(AliFemtoV0TrackCut::kK0s,100,K0ShortMass-0.070,K0ShortMass+0.070);
     k0cut1->SetMinvPurityAidHistoV0("K0ShortPurityAid","K0ShortMinvBeforeFinalCut",100,K0ShortMass-0.070,K0ShortMass+0.070);
     k0cut1->SetLooseInvMassCut(true, K0ShortMass-0.070,K0ShortMass+0.070);
 
@@ -892,24 +913,24 @@ AliFemtoV0TrackCutNSigmaFilter* myTrainAnalysisConstructor::CreateK0ShortCut(boo
 }
 
 //____________________________
-AliFemtoV0TrackCutNSigmaFilter* myTrainAnalysisConstructor::CreateV0Cut(ParticleType aType, bool aUseCustom)
+AliFemtoV0TrackCutNSigmaFilter* myTrainAnalysisConstructor::CreateV0Cut(ParticlePDGType aType, bool aUseCustom)
 {
   AliFemtoV0TrackCutNSigmaFilter* tReturnCut;
   switch(aType) {
-  case: kLam:
+  case kPDGLam:
     tReturnCut = CreateLambdaCut(aUseCustom);
     break;
 
-  case: kALam:
+  case kPDGALam:
     tReturnCut = CreateAntiLambdaCut(aUseCustom);
     break;
 
-  case: kK0:
+  case kPDGK0:
     tReturnCut = CreateK0ShortCut(aUseCustom);
     break;
 
   default:
-    cerr << "E-myTrainAnalysisConstructor::CreateV0Cut: Invalid ParticleType"
+    cerr << "E-myTrainAnalysisConstructor::CreateV0Cut: Invalid ParticlePDGType"
             "selection '" << aType << endl;
   }
 
@@ -917,9 +938,9 @@ AliFemtoV0TrackCutNSigmaFilter* myTrainAnalysisConstructor::CreateV0Cut(Particle
 }
 
 //____________________________
-myAliFemtoESDTrackCut* myTrainAnalysisConstructor::CreateKchCut(const int aCharge)
+AliFemtoESDTrackCutNSigmaFilter* myTrainAnalysisConstructor::CreateKchCut(const int aCharge, bool aUseCustom)
 {
-  myAliFemtoESDTrackCut* kaontc1 = new myAliFemtoESDTrackCut();
+  AliFemtoESDTrackCutNSigmaFilter* kaontc1 = new AliFemtoESDTrackCutNSigmaFilter();
     kaontc1->SetPidProbPion(0.0,0.1);
     kaontc1->SetPidProbMuon(0.0,0.8);
     kaontc1->SetPidProbKaon(0.2,1.001);
@@ -944,6 +965,32 @@ myAliFemtoESDTrackCut* myTrainAnalysisConstructor::CreateKchCut(const int aCharg
 
     kaontc1->SetElectronRejection(true);  // 25/02/2016
     kaontc1->SetPionRejection(true);  // 25/02/2016
+
+
+  if(aUseCustom)
+  {
+    //Kaon filter
+    kaontc1->CreateCustomNSigmaFilter(AliFemtoESDTrackCutNSigmaFilter::kKaon);
+      kaontc1->AddTPCNSigmaCut(AliFemtoESDTrackCutNSigmaFilter::kKaon,0.0,0.5,2.0);
+      kaontc1->AddTPCAndTOFNSigmaCut(AliFemtoESDTrackCutNSigmaFilter::kKaon,0.5,0.8,3.0,2.0);
+      kaontc1->AddTPCAndTOFNSigmaCut(AliFemtoESDTrackCutNSigmaFilter::kKaon,0.8,1.0,3.0,1.5);
+      kaontc1->AddTPCAndTOFNSigmaCut(AliFemtoESDTrackCutNSigmaFilter::kKaon,1.0,1.5,3.0,1.0);
+
+    //Electron filter for removing misidentified
+    kaontc1->CreateCustomNSigmaFilter(AliFemtoESDTrackCutNSigmaFilter::kElectron);
+      kaontc1->AddTPCNSigmaCut(AliFemtoESDTrackCutNSigmaFilter::kElectron,0.,99.,3.0);
+
+    //Pion filter for removing misidentified
+    kaontc1->CreateCustomNSigmaFilter(AliFemtoESDTrackCutNSigmaFilter::kPion);
+      kaontc1->AddTPCAndTOFNSigmaCut(AliFemtoESDTrackCutNSigmaFilter::kPion,0.0,0.65,3.0,3.0);
+      kaontc1->AddTPCNSigmaCut(AliFemtoESDTrackCutNSigmaFilter::kPion,0.0,0.35,3.0);
+      kaontc1->AddTPCNSigmaCut(AliFemtoESDTrackCutNSigmaFilter::kPion,0.35,0.5,3.0);
+      kaontc1->AddTPCNSigmaCut(AliFemtoESDTrackCutNSigmaFilter::kPion,0.5,0.65,2.0);
+
+      kaontc1->AddTPCAndTOFNSigmaCut(AliFemtoESDTrackCutNSigmaFilter::kPion,0.65,1.5,5.0,3.0);
+      kaontc1->AddTPCAndTOFNSigmaCut(AliFemtoESDTrackCutNSigmaFilter::kPion,1.5,99.,5.0,2.0);
+  }
+
   //Cut monitor
   char pass[20];
   char fail[20];
@@ -969,9 +1016,9 @@ myAliFemtoESDTrackCut* myTrainAnalysisConstructor::CreateKchCut(const int aCharg
 }
 
 //____________________________
-myAliFemtoESDTrackCut* myTrainAnalysisConstructor::CreatePiCut(const int aCharge)
+AliFemtoESDTrackCutNSigmaFilter* myTrainAnalysisConstructor::CreatePiCut(const int aCharge, bool aUseCustom)
 {
-  myAliFemtoESDTrackCut* piontc1 = new myAliFemtoESDTrackCut();
+  AliFemtoESDTrackCutNSigmaFilter* piontc1 = new AliFemtoESDTrackCutNSigmaFilter();
     piontc1->SetPidProbPion(0.2,1.001);
     piontc1->SetPidProbMuon(0.0,0.8);
     piontc1->SetPidProbKaon(0.0,0.1);
@@ -992,6 +1039,20 @@ myAliFemtoESDTrackCut* myTrainAnalysisConstructor::CreatePiCut(const int aCharge
     piontc1->SetMaxSigmaToVertex(3.0);
     piontc1->SetMaxImpactXY(2.4);
     piontc1->SetMaxImpactZ(3.2);
+
+  if(aUseCustom)
+  {
+    //Pion filter
+    piontc1->CreateCustomNSigmaFilter(AliFemtoESDTrackCutNSigmaFilter::kPion);
+      piontc1->AddTPCAndTOFNSigmaCut(AliFemtoESDTrackCutNSigmaFilter::kPion,0.0,0.65,3.0,3.0);
+      piontc1->AddTPCNSigmaCut(AliFemtoESDTrackCutNSigmaFilter::kPion,0.0,0.35,3.0);
+      piontc1->AddTPCNSigmaCut(AliFemtoESDTrackCutNSigmaFilter::kPion,0.35,0.5,3.0);
+      piontc1->AddTPCNSigmaCut(AliFemtoESDTrackCutNSigmaFilter::kPion,0.5,0.65,2.0);
+
+      piontc1->AddTPCAndTOFNSigmaCut(AliFemtoESDTrackCutNSigmaFilter::kPion,0.65,1.5,5.0,3.0);
+      piontc1->AddTPCAndTOFNSigmaCut(AliFemtoESDTrackCutNSigmaFilter::kPion,1.5,99.,5.0,2.0);
+  }
+
   //Cut monitor
   char pass[20];
   char fail[20];
@@ -1017,24 +1078,24 @@ myAliFemtoESDTrackCut* myTrainAnalysisConstructor::CreatePiCut(const int aCharge
 }
 
 
-AliFemtoESDTrackCutNSigmaFilter* myTrainAnalysisConstructor::CreateTrackCut(ParticleType aType)
+AliFemtoESDTrackCutNSigmaFilter* myTrainAnalysisConstructor::CreateTrackCut(ParticlePDGType aType, bool aUseCustom)
 {
   AliFemtoESDTrackCutNSigmaFilter* tReturnCut;
   switch(aType) {
-  case: kKchP:
-    tReturnCut = CreateKchCut(1);
+  case kPDGKchP:
+    tReturnCut = CreateKchCut(1, aUseCustom);
     break;
 
-  case: kKchM:
-    tReturnCut = CreateKchCut(-1);
+  case kPDGKchM:
+    tReturnCut = CreateKchCut(-1, aUseCustom);
     break;
 
-  case: kPiP:
-    tReturnCut = CreatePiCut(1);
+  case kPDGPiP:
+    tReturnCut = CreatePiCut(1, aUseCustom);
     break;
 
-  case: kPiM:
-    tReturnCut = CreatePiCut(-1);
+  case kPDGPiM:
+    tReturnCut = CreatePiCut(-1, aUseCustom);
     break;
 
   default:
@@ -1164,6 +1225,28 @@ AliFemtoXiTrackCut* myTrainAnalysisConstructor::CreateAntiXiCut()
 }
 
 
+//____________________________
+AliFemtoXiTrackCut* myTrainAnalysisConstructor::CreateCascadeCut(ParticlePDGType aType)
+{
+  AliFemtoXiTrackCut *tReturnCut;
+  switch(aType) {
+  case kPDGXiC:
+    tReturnCut = CreateXiCut();
+    break;
+
+  case kPDGAXiC:
+    tReturnCut = CreateAntiXiCut();
+    break;
+
+  default:
+    cerr << "E-myTrainAnalysisConstructor::CreateCascadeCut: Invalid ParticleType"
+            "selection '" << aType << endl;
+
+  }
+
+  return tReturnCut;
+}
+
 
 //____________________________
 AliFemtoV0PairCut* myTrainAnalysisConstructor::CreateV0PairCut(double aMinAvgSepPosPos, double aMinAvgSepPosNeg, double aMinAvgSepNegPos, double aMinAvgSepNegNeg)
@@ -1229,15 +1312,15 @@ AliFemtoXiTrackPairCut* myTrainAnalysisConstructor::CreateXiTrackPairCut()
 void myTrainAnalysisConstructor::CreatePairCut(double aArg1=0.0, double aArg2=0.0, double aArg3=0.0, double aArg4=0.0)
 {
   switch(GeneralAnalysisType) {
-  case: kV0V0:
+  case kV0V0:
     V0PairCut CreateV0PairCut(aArg1,aArg2,aArg3,aArg4);
     break;
 
-  case: kV0Track:
+  case kV0Track:
     V0TrackPairCut CreateV0TrackPairCut(aArg1,aArg2);
     break;
 
-  case: kXiTrack:
+  case kXiTrack:
     XiTrackPairCut CreateXiTrackPairCut();
     break;
 
@@ -1251,20 +1334,41 @@ void myTrainAnalysisConstructor::CreatePairCut(double aArg1=0.0, double aArg2=0.
 
 
 //____________________________
-myAliFemtoKStarCorrFctn* myTrainAnalysisConstructor::CreateKStarCorrFctn(const char* name, unsigned int bins, double min, double max)
+AliFemtoCorrFctnKStar* myTrainAnalysisConstructor::CreateCorrFctnKStar(const char* name, unsigned int bins, double min, double max)
 {
-  myAliFemtoKStarCorrFctn *cf = new myAliFemtoKStarCorrFctn(name,bins,min,max);
-  cf->SetCalculatePairKinematics(fWritePairKinematics);
+  AliFemtoCorrFctnKStar *cf = new AliFemtoCorrFctnKStar(TString::Format("KStarCf_%s",name),bins,min,max);
+    cf->SetCalculatePairKinematics(fWritePairKinematics);
+    cf->SetBuildkTBinned(false);
+    cf->SetBuildmTBinned(false);
+    cf->SetBuild3d(false);
   return cf;
 }
 
 //____________________________
-myAliFemtoAvgSepCorrFctn* myTrainAnalysisConstructor::CreateAvgSepCorrFctn(const char* name, unsigned int bins, double min, double max)
+AliFemtoAvgSepCorrFctn* myTrainAnalysisConstructor::CreateAvgSepCorrFctn(const char* name, unsigned int bins, double min, double max)
 {
-  myAliFemtoAvgSepCorrFctn *cf = new myAliFemtoAvgSepCorrFctn(name,bins,min,max);
+  AliFemtoAvgSepCorrFctn *cf = new AliFemtoAvgSepCorrFctn(TString::Format("AvgSepCf_%s", name),bins,min,max);
+
+  switch(fGeneralAnalysisType) {
+  case kV0V0:
+    cf->SetPairType(AliFemtoAvgSepCorrFctn::kV0s);
+    break;
+
+  case kV0Track:
+    cf->SetPairType(AliFemtoAvgSepCorrFctn::kTrackV0);
+    break;
+
+  case kXiTrack:
+    cf->SetPairType(AliFemtoAvgSepCorrFctn::kTrackV0); //TODO
+    break;
+
+  default:
+    cerr << "E-myTrainAnalysisConstructor::CreateAvgSepCorrFctn" << endl;
+  }
   return cf;
 }
 
+/*
 //____________________________
 myAliFemtoSepCorrFctns* myTrainAnalysisConstructor::CreateSepCorrFctns(const char* name, unsigned int binsX, double minX, double maxX, unsigned int binsY, double minY, double maxY)
 {
@@ -1280,21 +1384,15 @@ myAliFemtoAvgSepCorrFctnCowboysAndSailors* myTrainAnalysisConstructor::CreateAvg
 }
 
 //____________________________
-myAliFemtoKStarCorrFctn2D* myTrainAnalysisConstructor::CreateKStarCorrFctn2D(const char* name, unsigned int nbinsKStar, double KStarLo, double KStarHi, unsigned int nbinsY, double YLo, double YHi)
+myAliFemtoKStarCorrFctn2D* myTrainAnalysisConstructor::CreateCorrFctnKStar2D(const char* name, unsigned int nbinsKStar, double KStarLo, double KStarHi, unsigned int nbinsY, double YLo, double YHi)
 {
   myAliFemtoKStarCorrFctn2D *cf = new myAliFemtoKStarCorrFctn2D(name,nbinsKStar,KStarLo,KStarHi,nbinsY,YLo,YHi);
   return cf;
 }
+*/
 
 //____________________________
-myAliFemtoKStarCorrFctnMC* myTrainAnalysisConstructor::CreateKStarCorrFctnMC(const char* name, unsigned int bins, double min, double max)
-{
-  myAliFemtoKStarCorrFctnMC *cf = new myAliFemtoKStarCorrFctnMC(name,bins,min,max);
-  return cf;
-}
-
-//____________________________
-myAliFemtoModelCorrFctnKStar* myTrainAnalysisConstructor::CreateModelCorrFctnKStar(const char* name, unsigned int bins, double min, double max)
+AliFemtoModelCorrFctnKStarFull* myTrainAnalysisConstructor::CreateModelCorrFctnKStarFull(const char* name, unsigned int bins, double min, double max)
 {
   AliFemtoModelWeightGeneratorBasicLednicky *tGenerator = new AliFemtoModelWeightGeneratorBasicLednicky();
   tGenerator->SetIdenticalParticles(false);
@@ -1321,10 +1419,10 @@ myAliFemtoModelCorrFctnKStar* myTrainAnalysisConstructor::CreateModelCorrFctnKSt
   AliFemtoModelManager *tManager = new AliFemtoModelManager();
   tManager->AcceptWeightGenerator((AliFemtoModelWeightGenerator*)tGenerator);
 
-  myAliFemtoModelCorrFctnKStar *cf = new myAliFemtoModelCorrFctnKStar(name,bins,min,max);
-    cf->SetAnalysisType(fAnalysisType);
+  AliFemtoModelCorrFctnKStarFull *cf = new AliFemtoModelCorrFctnKStarFull(TString::Format("KStarModelCf_%s",name),bins,min,max);
+    cf->SetRemoveMisidentified(false);
+    cf->SetExpectedPDGCodes((int)fParticlePDGType1,(int)fParticlePDGType2);
   cf->ConnectToManager(tManager);
-
   return cf;
 }
 
@@ -1348,6 +1446,20 @@ void myTrainAnalysisConstructor::SetAnalysis(AliFemtoEventCut* aEventCut, AliFem
   }
 }
 
+//____________________________
+void myTrainAnalysisConstructor::SetAnalysis(AliFemtoEventCut* aEventCut, AliFemtoParticleCut* aPartCut1, AliFemtoParticleCut* aPartCut2, AliFemtoPairCut* aPairCut)
+{
+  SetEventCut(aEventCut);
+  SetFirstParticleCut(aPartCut1);
+  SetSecondParticleCut(aPartCut2);
+  SetPairCut(aPairCut);
+
+  AliFemtoCorrFctnIterator iter;
+  for(iter=fCollectionOfCfs->begin(); iter!=fCollectionOfCfs->end(); iter++)
+  {
+    AddCorrFctn(*iter);
+  }
+}
 
 //____________________________
 void myTrainAnalysisConstructor::SetImplementAvgSepCuts(bool aImplementAvgSepCuts)

@@ -22,10 +22,9 @@
 #include "AliFemtoCutMonitorXi.h"
 
 #include "AliFemtoParticleCut.h"
-#include "myAliFemtoV0TrackCut.h"
+
 #include "AliFemtoBasicTrackCut.h"
 #include "AliFemtoESDTrackCut.h"
-#include "myAliFemtoESDTrackCut.h"
 #include "AliFemtoAODTrackCut.h"
 #include "AliFemtoCutMonitorParticleYPt.h"
 #include "AliFemtoCutMonitorParticlePID.h"
@@ -40,23 +39,24 @@
 
 #include "AliFemtoCorrFctn.h"
 #include "AliFemtoCorrFctnCollection.h"
-#include "myAliFemtoKStarCorrFctn.h"
-#include "myAliFemtoAvgSepCorrFctn.h"
+#include "AliFemtoCorrFctnKStar.h"
+#include "AliFemtoAvgSepCorrFctn.h"
+/*
 #include "myAliFemtoSepCorrFctns.h"
 #include "myAliFemtoAvgSepCorrFctnCowboysAndSailors.h"
 #include "myAliFemtoKStarCorrFctn2D.h"
-#include "myAliFemtoKStarCorrFctnMC.h"
+*/
 
-//-----17/12/2015----------------------
+
 #include "AliFemtoV0TrackCutNSigmaFilter.h"
 #include "AliFemtoNSigmaFilter.h"
+#include "AliFemtoESDTrackCutNSigmaFilter.h"
 
-//-----01/02/2016
 #include "AliFemtoCutMonitorEventPartCollSize.h"
 
-//-----04/02/2016
+
 #include "AliFemtoModelWeightGeneratorBasicLednicky.h"
-#include "myAliFemtoModelCorrFctnKStar.h"
+#include "AliFemtoModelCorrFctnKStarFull.h"
 
 #include <string>
 #include <iostream>
@@ -68,7 +68,16 @@ public:
   enum AnalysisType {kLamK0=0, kALamK0=1, kLamKchP=2, kALamKchP=3, kLamKchM=4, kALamKchM=5, kLamLam=6, kALamALam=7, kLamALam=8, kLamPiP=9, kALamPiP=10, kLamPiM=11, kALamPiM=12, kXiKchP=13, kAXiKchP=14, kXiKchM=15, kAXiKchM=16};
   enum GeneralAnalysisType {kV0V0=0, kV0Track=1, kXiTrack=2};
 
-  enum ParticleType {kLam=0, kALam=1, kK0=2, kKchP=3, kKchM=4, kXi=5, kAXi=6, kPiP=7, kPiM=8, kProton=9, kAntiProton=10};
+  enum ParticlePDGType {kPDGProt   = 2212,  kPDGAntiProt = -2212, 
+		        kPDGPiP    = 211,   kPDGPiM      = -211, 
+                        kPDGK0     = 311,
+                        kPDGKchP   = 321,   kPDGKchM     = -321,
+		        kPDGLam    = 3122,  kPDGALam     = -3122,
+		        kPDGSigma  = 3212,  kPDGASigma   = -3212,
+		        kPDGXiC    = 3312,  kPDGAXiC     = -3312,
+		        kPDGXi0    = 3322,  kPDGAXi0     = -3322,
+		        kPDGOmega  = 3334,  kPDGAOmega   = -3334,
+                        kPDGNull      = 0                          };
   enum GeneralParticleType {kV0=0, kTrack=1, kCascade=2};
 
   myTrainAnalysisConstructor();
@@ -91,16 +100,17 @@ public:
   virtual TList* GetOutputList();
 
   void SetParticleTypes(AnalysisType aAnType);
-  void SetParticleCut1(ParticleType aParticleType, bool aUseCustom);
-  void SetParticleCut2(ParticleType aParticleType, bool aUseCustom);
+  void SetParticleCut1(ParticlePDGType aParticlePDGType, bool aUseCustom);
+  void SetParticleCut2(ParticlePDGType aParticlePDGType, bool aUseCustom);
+  void SetParticleCuts(bool aUseCustom1, bool aUseCustom2);
 
   //I want to create the analysis BEFORE I set the analysis.  Once I set the analysis, things cannot be changed.
   //This allows me to tweak the cuts before finalizing everything (the lesson I learned from SetImplementAvgSepCuts)
-  void CreateLamK0Analysis();
-    void SetLamK0Analysis();
+  void CreateLamK0Analysis();  //TODO
+    void SetLamK0Analysis();   //TODO
  
 
-  void SetCorrectAnalysis();
+  void SetCorrectAnalysis();  //TODO
 
   AliFemtoBasicEventCut* CreateBasicEventCut();
   AliFemtoEventCutEstimators* CreateEventCutEstimators(const float &aCentLow, const float &aCentHigh);
@@ -108,56 +118,57 @@ public:
   AliFemtoV0TrackCutNSigmaFilter* CreateLambdaCut(bool aUseCustom);
   AliFemtoV0TrackCutNSigmaFilter* CreateAntiLambdaCut(bool aUseCustom);
   AliFemtoV0TrackCutNSigmaFilter* CreateK0ShortCut(bool aUseCustom);
-  AliFemtoV0TrackCutNSigmaFilter* CreateV0Cut(ParticleType aType, bool aUseCustom);
+  AliFemtoV0TrackCutNSigmaFilter* CreateV0Cut(ParticlePDGType aType, bool aUseCustom);
 
-  myAliFemtoESDTrackCut* CreateKchCut(const int aCharge);
-  myAliFemtoESDTrackCut* CreatePiCut(const int aCharge);
-  AliFemtoESDTrackCutNSigmaFilter* CreateTrackCut(ParticleType aType);
+  AliFemtoESDTrackCutNSigmaFilter* CreateKchCut(const int aCharge, bool aUseCustom);
+  AliFemtoESDTrackCutNSigmaFilter* CreatePiCut(const int aCharge, bool aUseCustom);
+  AliFemtoESDTrackCutNSigmaFilter* CreateTrackCut(ParticlePDGType aType, bool aUseCustom);
 
   AliFemtoXiTrackCut* CreateXiCut();
   AliFemtoXiTrackCut* CreateAntiXiCut();
+  AliFemtoXiTrackCut* CreateCascadeCut(ParticlePDGType aType);
 
   AliFemtoV0PairCut* CreateV0PairCut(double aMinAvgSepPosPos, double aMinAvgSepPosNeg, double aMinAvgSepNegPos, double aMinAvgSepNegNeg);
   AliFemtoV0TrackPairCut* CreateV0TrackPairCut(double aMinAvgSepTrackPos, double aMinAvgSepTrackNeg);
   AliFemtoXiTrackPairCut* CreateXiTrackPairCut();
   void CreatePairCut(double aArg1=0.0, double aArg2=0.0, double aArg3=0.0, double aArg4=0.0); 
 
-  myAliFemtoKStarCorrFctn* CreateKStarCorrFctn(const char* name, unsigned int bins, double min, double max);
-  myAliFemtoAvgSepCorrFctn* CreateAvgSepCorrFctn(const char* name, unsigned int bins, double min, double max);
+  AliFemtoCorrFctnKStar* CreateCorrFctnKStar(const char* name, unsigned int bins, double min, double max);
+  AliFemtoAvgSepCorrFctn* CreateAvgSepCorrFctn(const char* name, unsigned int bins, double min, double max);
+/*
   myAliFemtoSepCorrFctns* CreateSepCorrFctns(const char* name, unsigned int binsX, double minX, double maxX, unsigned int binsY, double minY, double maxY);
   myAliFemtoAvgSepCorrFctnCowboysAndSailors *CreateAvgSepCorrFctnCowboysAndSailors(const char* name, unsigned int binsX, double minX, double maxX, unsigned int binsY, double minY, double maxY);
-  myAliFemtoKStarCorrFctn2D* CreateKStarCorrFctn2D(const char* name, unsigned int nbinsKStar, double KStarLo, double KStarHi, unsigned int nbinsY, double YLo, double YHi);
-  myAliFemtoKStarCorrFctnMC* CreateKStarCorrFctnMC(const char* name, unsigned int bins, double min, double max);
+  myAliFemtoKStarCorrFctn2D* CreateCorrFctnKStar2D(const char* name, unsigned int nbinsKStar, double KStarLo, double KStarHi, unsigned int nbinsY, double YLo, double YHi);
+*/
 
-  myAliFemtoModelCorrFctnKStar* CreateModelCorrFctnKStar(const char* name, unsigned int bins, double min, double max);  //-----04/02/2016
+  AliFemtoModelCorrFctnKStarFull* CreateModelCorrFctnKStarFull(const char* name, unsigned int bins, double min, double max);    //TODO check that enum to int is working
 
   void SetAnalysis(AliFemtoEventCut* aEventCut, AliFemtoParticleCut* aPartCut1, AliFemtoParticleCut* aPartCut2, AliFemtoPairCut* aPairCut, AliFemtoCorrFctnCollection* aCollectionOfCfs);
+  void SetAnalysis(AliFemtoEventCut* aEventCut, AliFemtoParticleCut* aPartCut1, AliFemtoParticleCut* aPartCut2, AliFemtoPairCut* aPairCut);
 
+  void SetMultHist(const char* name, int aNbins=30, double aMin=0., double aMax=3000);
   TH1F *GetMultHist();
 
   void SetImplementAvgSepCuts(bool aImplementAvgSepCuts);
 
-  //-----17/12/2015
-  void SetUseAliFemtoV0TrackCutNSigmaFilter(bool aUse);
-  void SetUseCustomNSigmaFilters(bool aUseCustom);
-
   //-----25/02/2016
   void SetRemoveMisidentifiedMCParticles(bool aRemove);
-
+  AliFemtoCorrFctnCollection* GetCollectionOfCfs();
 
 protected:
   static const char* const fAnalysisTags[];
 
   AnalysisType fAnalysisType;
   GeneralAnalysisType fGeneralAnalysisType;
-  ParticleType fParticle1Type, fParticle2Type;
-  GeneralParticleType fGeneralParticle1Type, fGeneralParticle2Type;
+  ParticlePDGType fParticlePDGType1, fParticlePDGType2;
+  GeneralParticleType fGeneralParticleType1, fGeneralParticleType2;
   const char* fOutputName;		      /* name given to output directory for specific analysis*/
   TH1F* fMultHist;			      //histogram of event multiplicities to ensure event cuts are properly implemented
   bool fImplementAvgSepCuts;		      //Self-explanatory, set to kTRUE when I want Avg Sep cuts implemented
   bool fWritePairKinematics;
   bool fIsMCRun;
   bool fIsMBAnalysis;
+  bool fBuildMultHist;
 
   double fMinCent, fMaxCent;
 
@@ -184,7 +195,7 @@ protected:
   myAliFemtoAvgSepCorrFctnCowboysAndSailors *AvgSepCfCowboysAndSailors;
   myAliFemtoKStarCorrFctn2D *KStarCf2D;
 */
-  myAliFemtoModelCorrFctnKStar *KStarModelCfs;  //-----04/02/2016
+  AliFemtoModelCorrFctnKStarFull *KStarModelCfs;
 
 
 
@@ -194,8 +205,7 @@ protected:
   AliFemtoV0TrackCutNSigmaFilter *ALamCutNSigmaFilter;
   AliFemtoV0TrackCutNSigmaFilter *K0CutNSigmaFilter;
 
-  bool fUseAliFemtoV0TrackCutNSigmaFilter;
-  bool fUseCustomNSigmaFilters;
+
 
 
 
@@ -205,9 +215,8 @@ protected:
 
 };
 
-inline void myTrainAnalysisConstructor::SetUseAliFemtoV0TrackCutNSigmaFilter(bool aUse) {fUseAliFemtoV0TrackCutNSigmaFilter = aUse;}
-inline void myTrainAnalysisConstructor::SetUseCustomNSigmaFilters(bool aUseCustom) {fUseCustomNSigmaFilters = aUseCustom;}
 
 inline void myTrainAnalysisConstructor::SetRemoveMisidentifiedMCParticles(bool aRemove) {KStarModelCfs->SetRemoveMisidentified(aRemove);}
+inline AliFemtoCorrFctnCollection* GetCollectionOfCfs() {return fCollectionOfCfs;}
 
 #endif
