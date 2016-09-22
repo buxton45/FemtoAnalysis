@@ -647,19 +647,40 @@ AliFemtoEventCutEstimators* myTrainAnalysisConstructor::CreateEventCutEstimators
 //____________________________
 AliFemtoV0TrackCutNSigmaFilter* myTrainAnalysisConstructor::CreateLambdaCut(bool aUseCustom)
 {
+  bool tRemoveMisID = true;
+  bool tUseSimpleMisID = true;
+  bool tUseCustomMisID = false;
+
   AliFemtoV0TrackCutNSigmaFilter* v0cut1 = new AliFemtoV0TrackCutNSigmaFilter();
     v0cut1->SetParticleType(0);  //  0=lambda -> daughters = proton(+) and pi-
     v0cut1->SetMass(LambdaMass);
     v0cut1->SetInvariantMassLambda(LambdaMass-0.0038,LambdaMass+0.0038);   //m_inv criteria for lambda's
 
-    v0cut1->SetRemoveMisidentified(kTRUE);
-    v0cut1->SetUseSimpleMisIDCut(kFALSE);
-    v0cut1->SetInvMassReject(AliFemtoV0TrackCut::kK0s, K0ShortMass-0.003677,K0ShortMass+0.003677);  //m_inv criteria to remove all lambda candidates fulfilling K0short hypothesis
-    v0cut1->SetBuildMisIDHistograms(true);
-    v0cut1->SetMisIDHisto(AliFemtoV0TrackCut::kLambda,100,LambdaMass-0.035,LambdaMass+0.035);
-    v0cut1->SetMisIDHisto(AliFemtoV0TrackCut::kK0s,100,K0ShortMass-0.070,K0ShortMass+0.070);
-    v0cut1->SetMinvPurityAidHistoV0("LambdaPurityAid","LambdaMinvBeforeFinalCut",100,LambdaMass-0.035,LambdaMass+0.035);
     v0cut1->SetLooseInvMassCut(true, LambdaMass-0.035,LambdaMass+0.035);
+    v0cut1->SetMinvPurityAidHistoV0("LambdaPurityAid","LambdaMinvBeforeFinalCut",100,LambdaMass-0.035,LambdaMass+0.035);
+
+    //Misidentification cuts -----*****-----*****-----*****-----*****-----*****-----*****
+    v0cut1->SetRemoveMisidentified(tRemoveMisID);
+    v0cut1->SetInvMassReject(AliFemtoV0TrackCut::kK0s, K0ShortMass-0.003677,K0ShortMass+0.003677, tRemoveMisID);  //m_inv criteria to remove all lambda candidates fulfilling K0short hypothesis
+    v0cut1->SetUseSimpleMisIDCut(tUseSimpleMisID);
+    if(!tUseSimpleMisID && tUseCustomMisID)
+    {
+      v0cut1->CreateCustomV0Rejection(AliFemtoV0TrackCut::kK0s);
+      v0cut1->AddTPCNSigmaCutToV0Rejection(AliFemtoV0TrackCut::kK0s,
+                                           0.,0.8,3.,  //positive daughter
+                                           0.,0.8,3.); //negative daughter
+      v0cut1->AddTPCAndTOFNSigmaCutToV0Rejection(AliFemtoV0TrackCut::kK0s,
+                                                 0.8,1000.,3.,3.,  //positive daughter
+                                                 0.8,1000.,3.,3.); //negative daughter
+      v0cut1->AddTPCNSigmaCutToV0Rejection(AliFemtoV0TrackCut::kK0s,
+                                           0.8,1000.,3.,  //positive daughter
+                                           0.8,1000.,3.); //negative daughter
+    }
+    v0cut1->SetBuildMisIDHistograms(true);
+      v0cut1->SetMisIDHisto(AliFemtoV0TrackCut::kLambda,100,LambdaMass-0.035,LambdaMass+0.035);
+      v0cut1->SetMisIDHisto(AliFemtoV0TrackCut::kK0s,100,K0ShortMass-0.070,K0ShortMass+0.070);
+
+    //-----*****-----*****-----*****-----*****-----*****-----*****-----*****-----*****-----*****
 
     v0cut1->SetEta(0.8); //|eta|<0.8 for V0s
     v0cut1->SetPt(0.4, 100);
@@ -679,6 +700,7 @@ AliFemtoV0TrackCutNSigmaFilter* myTrainAnalysisConstructor::CreateLambdaCut(bool
 
     if(aUseCustom)
     {
+      //--Proton(+) daughter selection filter
       //for now, the custom filters will match the standard cuts in AliFemtoV0TrackCut
       //these also match my personal (proton) cuts in myAliFemtoV0TrackCut
       v0cut1->CreateCustomProtonNSigmaFilter();
@@ -687,6 +709,7 @@ AliFemtoV0TrackCutNSigmaFilter* myTrainAnalysisConstructor::CreateLambdaCut(bool
       v0cut1->AddProtonTPCNSigmaCut(0.8,1000.,3.);
 
 
+      //--Pion(-) daughter selection filter
       //the standard cuts in AliFemtoV0TrackCut
 /*
       v0cut1->CreateCustomPionNSigmaFilter();
@@ -708,19 +731,39 @@ AliFemtoV0TrackCutNSigmaFilter* myTrainAnalysisConstructor::CreateLambdaCut(bool
 //____________________________
 AliFemtoV0TrackCutNSigmaFilter* myTrainAnalysisConstructor::CreateAntiLambdaCut(bool aUseCustom)
 {
+  bool tRemoveMisID = true;
+  bool tUseSimpleMisID = true;
+  bool tUseCustomMisID = false;
+
   AliFemtoV0TrackCutNSigmaFilter* v0cut2 = new AliFemtoV0TrackCutNSigmaFilter();
     v0cut2->SetParticleType(1);  //1=anti-lambda -> daughters = anti-proton(-) and pi+
     v0cut2->SetMass(LambdaMass);
     v0cut2->SetInvariantMassLambda(LambdaMass-0.0038,LambdaMass+0.0038);   //m_inv criteria for anti-lambda's
 
-    v0cut2->SetRemoveMisidentified(kTRUE);
-    v0cut2->SetUseSimpleMisIDCut(kFALSE);
-    v0cut2->SetInvMassReject(AliFemtoV0TrackCut::kK0s, K0ShortMass-0.003677,K0ShortMass+0.003677);  //m_inv criteria to remove all anti-lambda candidates fulfilling K0short hypothesis
-    v0cut2->SetBuildMisIDHistograms(true);
-    v0cut2->SetMisIDHisto(AliFemtoV0TrackCut::kAntiLambda,100,LambdaMass-0.035,LambdaMass+0.035);
-    v0cut2->SetMisIDHisto(AliFemtoV0TrackCut::kK0s,100,K0ShortMass-0.070,K0ShortMass+0.070);
-    v0cut2->SetMinvPurityAidHistoV0("AntiLambdaPurityAid","AntiLambdaMinvBeforeFinalCut",100,LambdaMass-0.035,LambdaMass+0.035);
     v0cut2->SetLooseInvMassCut(true, LambdaMass-0.035,LambdaMass+0.035);
+    v0cut2->SetMinvPurityAidHistoV0("AntiLambdaPurityAid","AntiLambdaMinvBeforeFinalCut",100,LambdaMass-0.035,LambdaMass+0.035);
+
+    //Misidentification cuts -----*****-----*****-----*****-----*****-----*****-----*****
+    v0cut2->SetRemoveMisidentified(tRemoveMisID);
+    v0cut2->SetInvMassReject(AliFemtoV0TrackCut::kK0s, K0ShortMass-0.003677,K0ShortMass+0.003677, tRemoveMisID);  //m_inv criteria to remove all anti-lambda candidates fulfilling K0short hypothesis
+    v0cut2->SetUseSimpleMisIDCut(tUseSimpleMisID);
+    if(!tUseSimpleMisID && tUseCustomMisID)
+    {
+      v0cut2->CreateCustomV0Rejection(AliFemtoV0TrackCut::kK0s);
+      v0cut2->AddTPCNSigmaCutToV0Rejection(AliFemtoV0TrackCut::kK0s,
+                                           0.,0.8,3.,  //positive daughter
+                                           0.,0.8,3.); //negative daughter
+      v0cut2->AddTPCAndTOFNSigmaCutToV0Rejection(AliFemtoV0TrackCut::kK0s,
+                                                 0.8,1000.,3.,3.,  //positive daughter
+                                                 0.8,1000.,3.,3.); //negative daughter
+      v0cut2->AddTPCNSigmaCutToV0Rejection(AliFemtoV0TrackCut::kK0s,
+                                           0.8,1000.,3.,  //positive daughter
+                                           0.8,1000.,3.); //negative daughter
+    }
+    v0cut2->SetBuildMisIDHistograms(true);
+      v0cut2->SetMisIDHisto(AliFemtoV0TrackCut::kAntiLambda,100,LambdaMass-0.035,LambdaMass+0.035);
+      v0cut2->SetMisIDHisto(AliFemtoV0TrackCut::kK0s,100,K0ShortMass-0.070,K0ShortMass+0.070);
+    //-----*****-----*****-----*****-----*****-----*****-----*****-----*****-----*****-----*****
 
     v0cut2->SetEta(0.8);
     v0cut2->SetPt(0.4,100);
@@ -740,6 +783,7 @@ AliFemtoV0TrackCutNSigmaFilter* myTrainAnalysisConstructor::CreateAntiLambdaCut(
 
     if(aUseCustom)
     {
+      //--(Anti)Proton(-) daughter selection filter
       //for now, the custom filters will match the standard cuts in AliFemtoV0TrackCut
       //these also match my personal (proton) cuts in myAliFemtoV0TrackCut
       v0cut2->CreateCustomProtonNSigmaFilter();
@@ -753,7 +797,7 @@ AliFemtoV0TrackCutNSigmaFilter* myTrainAnalysisConstructor::CreateAntiLambdaCut(
       v0cut2->CreateCustomPionNSigmaFilter();
       v0cut2->AddPionTPCNSigmaCut(0.,1000.,3.);
 */
-
+      //--Pion(+) daughter selection filter
       //personal cuts in myAliFemtoV0TrackCut
       v0cut2->CreateCustomPionNSigmaFilter();
       v0cut2->AddPionTPCNSigmaCut(0.,0.8,3.);
@@ -769,21 +813,48 @@ AliFemtoV0TrackCutNSigmaFilter* myTrainAnalysisConstructor::CreateAntiLambdaCut(
 //____________________________
 AliFemtoV0TrackCutNSigmaFilter* myTrainAnalysisConstructor::CreateK0ShortCut(bool aUseCustom)
 {
+  bool tRemoveMisID = true;
+  bool tUseSimpleMisID = true;
+  bool tUseCustomMisID = false;
+
   AliFemtoV0TrackCutNSigmaFilter* k0cut1 = new AliFemtoV0TrackCutNSigmaFilter();
     k0cut1->SetParticleType(2);  //  2=K0Short -> daughters = pi+ and pi-
     k0cut1->SetMass(K0ShortMass);
     k0cut1->SetInvariantMassK0s(K0ShortMass-0.013677,K0ShortMass+0.020323);  //m_inv criteria for K0shorts
 
-    k0cut1->SetRemoveMisidentified(kTRUE);
-    k0cut1->SetUseSimpleMisIDCut(kFALSE);
-    k0cut1->SetInvMassReject(AliFemtoV0TrackCut::kLambda, LambdaMass-0.005683,LambdaMass+0.005683);  //m_inv criteria to remove all K0short candidates fulfilling (anti-)lambda hypothesis
-    k0cut1->SetInvMassReject(AliFemtoV0TrackCut::kAntiLambda, LambdaMass-0.005683,LambdaMass+0.005683);  //m_inv criteria to remove all K0short candidates fulfilling (anti-)lambda hypothesis
-    k0cut1->SetBuildMisIDHistograms(true);
-    k0cut1->SetMisIDHisto(AliFemtoV0TrackCut::kLambda,100,LambdaMass-0.035,LambdaMass+0.035);
-    k0cut1->SetMisIDHisto(AliFemtoV0TrackCut::kAntiLambda,100,LambdaMass-0.035,LambdaMass+0.035);
-    k0cut1->SetMisIDHisto(AliFemtoV0TrackCut::kK0s,100,K0ShortMass-0.070,K0ShortMass+0.070);
-    k0cut1->SetMinvPurityAidHistoV0("K0ShortPurityAid","K0ShortMinvBeforeFinalCut",100,K0ShortMass-0.070,K0ShortMass+0.070);
     k0cut1->SetLooseInvMassCut(true, K0ShortMass-0.070,K0ShortMass+0.070);
+    k0cut1->SetMinvPurityAidHistoV0("K0ShortPurityAid","K0ShortMinvBeforeFinalCut",100,K0ShortMass-0.070,K0ShortMass+0.070);
+
+    //Misidentification cuts -----*****-----*****-----*****-----*****-----*****-----*****
+    k0cut1->SetRemoveMisidentified(tRemoveMisID);
+    k0cut1->SetInvMassReject(AliFemtoV0TrackCut::kLambda, LambdaMass-0.005683,LambdaMass+0.005683, tRemoveMisID);  //m_inv criteria to remove all K0short candidates fulfilling (anti-)lambda hypothesis
+    k0cut1->SetInvMassReject(AliFemtoV0TrackCut::kAntiLambda, LambdaMass-0.005683,LambdaMass+0.005683, tRemoveMisID);  //m_inv criteria to remove all K0short candidates fulfilling (anti-)lambda hypothesis
+    k0cut1->SetUseSimpleMisIDCut(tUseSimpleMisID);
+    if(!tUseSimpleMisID && tUseCustomMisID)
+    {
+      //Lambda rejection
+      k0cut1->CreateCustomV0Rejection(AliFemtoV0TrackCut::kLambda);
+        //Positive daughter (Proton)
+        k0cut1->AddTPCNSigmaCutToV0Rejection(AliFemtoV0TrackCut::kLambda,1,0.,0.8,3.);
+        k0cut1->AddTPCNSigmaCutToV0Rejection(AliFemtoV0TrackCut::kLambda,1,0.8,1000.,3.);
+        //Negative daughter (Pion)
+        k0cut1->AddTPCNSigmaCutToV0Rejection(AliFemtoV0TrackCut::kLambda,-1,0.,0.5,3.);
+        k0cut1->AddTPCNSigmaCutToV0Rejection(AliFemtoV0TrackCut::kLambda,-1,0.5,1000.,3.);
+
+      //AntiLambda rejection
+      k0cut1->CreateCustomV0Rejection(AliFemtoV0TrackCut::kAntiLambda);
+        //Positive daughter (Pion)
+        k0cut1->AddTPCNSigmaCutToV0Rejection(AliFemtoV0TrackCut::kAntiLambda,1,0.,0.5,3.);
+        k0cut1->AddTPCNSigmaCutToV0Rejection(AliFemtoV0TrackCut::kAntiLambda,1,0.5,1000.,3.);
+        //Negative daughter (AntiProton)
+        k0cut1->AddTPCNSigmaCutToV0Rejection(AliFemtoV0TrackCut::kAntiLambda,-1,0.,0.8,3.);
+        k0cut1->AddTPCNSigmaCutToV0Rejection(AliFemtoV0TrackCut::kAntiLambda,-1,0.8,1000.,3.);
+    }
+    k0cut1->SetBuildMisIDHistograms(true);
+      k0cut1->SetMisIDHisto(AliFemtoV0TrackCut::kLambda,100,LambdaMass-0.035,LambdaMass+0.035);
+      k0cut1->SetMisIDHisto(AliFemtoV0TrackCut::kAntiLambda,100,LambdaMass-0.035,LambdaMass+0.035);
+      k0cut1->SetMisIDHisto(AliFemtoV0TrackCut::kK0s,100,K0ShortMass-0.070,K0ShortMass+0.070);
+    //-----*****-----*****-----*****-----*****-----*****-----*****-----*****-----*****-----*****
 
     k0cut1->SetEta(0.8); //|eta|<0.8 for V0s
     k0cut1->SetPt(0.2, 100);
@@ -803,6 +874,7 @@ AliFemtoV0TrackCutNSigmaFilter* myTrainAnalysisConstructor::CreateK0ShortCut(boo
 
     if(aUseCustom)
     {
+      //--Pion(+) daughter selection filter
       //the standard cuts in AliFemtoV0TrackCut
 /*
       k0cut1->CreateCustomPionNSigmaFilter();

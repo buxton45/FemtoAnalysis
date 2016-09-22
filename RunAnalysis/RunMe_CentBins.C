@@ -43,7 +43,7 @@ TString aConfigMacro = "ConfigFemtoAnalysis_CentBins.C";
 TString AdditionalLibs = "libPWGCFfemtoscopy.so libPWGCFfemtoscopyUser.so myAliFemtoV0TrackCut.h myAliFemtoV0TrackCut.cxx myAliFemtoESDTrackCut.h myAliFemtoESDTrackCut.cxx myAliFemtoKStarCorrFctn.h myAliFemtoKStarCorrFctn.cxx myAliFemtoAvgSepCorrFctn.h myAliFemtoAvgSepCorrFctn.cxx myAliFemtoSepCorrFctns.h myAliFemtoSepCorrFctns.cxx myAliFemtoAvgSepCorrFctnCowboysAndSailors.h myAliFemtoAvgSepCorrFctnCowboysAndSailors.cxx myAliFemtoKStarCorrFctn2D.h myAliFemtoKStarCorrFctn2D.cxx myAliFemtoKStarCorrFctnMC.h myAliFemtoKStarCorrFctnMC.cxx AliFemtoModelWeightGeneratorBasicLednicky.h AliFemtoModelWeightGeneratorBasicLednicky.cxx myAliFemtoModelCorrFctnKStar.h myAliFemtoModelCorrFctnKStar.cxx myAnalysisConstructor.h myAnalysisConstructor.cxx ConfigFemtoAnalysis_CentBins.C";
 TString aGridWorkingDir = "Results_cLamK0_AsRc_20151228_NSigmaFilter/Bm3";
 TString aGridOutputDir = "output_data";
-TString outputname = "Test_LamK0.root";
+TString outputname = "Test_LamK0_Old.root";
 
 
 
