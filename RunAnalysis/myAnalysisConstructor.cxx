@@ -1584,8 +1584,8 @@ myAliFemtoESDTrackCut* myAnalysisConstructor::CreateKchCut(const int aCharge)
     sprintf(pass, "_KchM_Pass");
     sprintf(fail, "_KchM_Fail");
   }
-  AliFemtoCutMonitorParticleYPt *cutPass = new AliFemtoCutMonitorParticleYPt(pass, 0.13957);
-  AliFemtoCutMonitorParticleYPt *cutFail = new AliFemtoCutMonitorParticleYPt(fail, 0.13957);
+  AliFemtoCutMonitorParticleYPt *cutPass = new AliFemtoCutMonitorParticleYPt(pass, 0.493677);
+  AliFemtoCutMonitorParticleYPt *cutFail = new AliFemtoCutMonitorParticleYPt(fail, 0.493677);
   kaontc1->AddCutMonitor(cutPass, cutFail);
 
   AliFemtoCutMonitorParticlePID *cutPIDPass = new AliFemtoCutMonitorParticlePID(pass, 1);

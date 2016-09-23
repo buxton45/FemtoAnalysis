@@ -61,6 +61,7 @@
 #include <string>
 #include <iostream>
 #include <stdio.h>
+#include <typeinfo>
 
 class myTrainAnalysisConstructor : public AliFemtoVertexMultAnalysis {
 
@@ -111,6 +112,8 @@ public:
   AliFemtoV0TrackCutNSigmaFilter* CreateAntiLambdaCut(bool aUseCustom);
   AliFemtoV0TrackCutNSigmaFilter* CreateK0ShortCut(bool aUseCustom);
   AliFemtoV0TrackCutNSigmaFilter* CreateV0Cut(ParticlePDGType aType, bool aUseCustom);
+  template<typename T>
+  T* CloneV0Cut(T* aCut);
 
   AliFemtoESDTrackCutNSigmaFilter* CreateKchCut(const int aCharge, bool aUseCustom);
   AliFemtoESDTrackCutNSigmaFilter* CreatePiCut(const int aCharge, bool aUseCustom);
@@ -135,6 +138,7 @@ public:
 
   AliFemtoModelCorrFctnKStarFull* CreateModelCorrFctnKStarFull(const char* name, unsigned int bins, double min, double max);    //TODO check that enum to int is working
 
+  void AddCutMonitors(AliFemtoEventCut* aEventCut, AliFemtoParticleCut* aPartCut1, AliFemtoParticleCut* aPartCut2, AliFemtoPairCut* aPairCut);
   void SetAnalysis(AliFemtoEventCut* aEventCut, AliFemtoParticleCut* aPartCut1, AliFemtoParticleCut* aPartCut2, AliFemtoPairCut* aPairCut, AliFemtoCorrFctnCollection* aCollectionOfCfs);
   void SetAnalysis(AliFemtoEventCut* aEventCut, AliFemtoParticleCut* aPartCut1, AliFemtoParticleCut* aPartCut2, AliFemtoPairCut* aPairCut);
 

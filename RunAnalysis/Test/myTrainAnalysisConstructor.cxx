@@ -609,9 +609,6 @@ AliFemtoBasicEventCut* myTrainAnalysisConstructor::CreateBasicEventCut()
     mec->SetEventMult(0,100000);
     //and z-vertex distance to the center of the TPC
     mec->SetVertZPos(-10.0,10.0);
-
-    mec->AddCutMonitor(new AliFemtoCutMonitorEventMult("_EvPass"), new AliFemtoCutMonitorEventMult("_EvFail"));
-
   return mec;
 }
 
@@ -636,11 +633,6 @@ AliFemtoEventCutEstimators* myTrainAnalysisConstructor::CreateEventCutEstimators
   AliFemtoEventCutEstimators* EvCutEst = new AliFemtoEventCutEstimators();
     EvCutEst->SetCentEst1Range(aCentLow,aCentHigh);
     EvCutEst->SetVertZPos(-8.0,8.0);
-
-    EvCutEst->AddCutMonitor(new AliFemtoCutMonitorEventMult("_EvPass"), new AliFemtoCutMonitorEventMult("_EvFail"));
-
-    EvCutEst->AddCutMonitor(new AliFemtoCutMonitorEventPartCollSize("_Part1",100,0,100,"_Part2",100,0,100));
-
   return EvCutEst;
 }
 
@@ -649,7 +641,7 @@ AliFemtoV0TrackCutNSigmaFilter* myTrainAnalysisConstructor::CreateLambdaCut(bool
 {
   bool tRemoveMisID = true;
   bool tUseSimpleMisID = true;
-  bool tUseCustomMisID = false;
+  bool tUseCustomMisID = true;
 
   AliFemtoV0TrackCutNSigmaFilter* v0cut1 = new AliFemtoV0TrackCutNSigmaFilter();
     v0cut1->SetParticleType(0);  //  0=lambda -> daughters = proton(+) and pi-
@@ -723,8 +715,6 @@ AliFemtoV0TrackCutNSigmaFilter* myTrainAnalysisConstructor::CreateLambdaCut(bool
       v0cut1->AddPionTPCNSigmaCut(0.8,1000.,3.);
     }
 
-    v0cut1->AddCutMonitor(new AliFemtoCutMonitorV0("_Lam_Pass"),new AliFemtoCutMonitorV0("_Lam_Fail"));
-
   return v0cut1;
 }
 
@@ -733,7 +723,7 @@ AliFemtoV0TrackCutNSigmaFilter* myTrainAnalysisConstructor::CreateAntiLambdaCut(
 {
   bool tRemoveMisID = true;
   bool tUseSimpleMisID = true;
-  bool tUseCustomMisID = false;
+  bool tUseCustomMisID = true;
 
   AliFemtoV0TrackCutNSigmaFilter* v0cut2 = new AliFemtoV0TrackCutNSigmaFilter();
     v0cut2->SetParticleType(1);  //1=anti-lambda -> daughters = anti-proton(-) and pi+
@@ -805,8 +795,6 @@ AliFemtoV0TrackCutNSigmaFilter* myTrainAnalysisConstructor::CreateAntiLambdaCut(
       v0cut2->AddPionTPCNSigmaCut(0.8,1000.,3.);
     }
 
-    v0cut2->AddCutMonitor(new AliFemtoCutMonitorV0("_ALam_Pass"),new AliFemtoCutMonitorV0("_ALam_Fail"));
-
   return v0cut2;
 }
 
@@ -815,7 +803,7 @@ AliFemtoV0TrackCutNSigmaFilter* myTrainAnalysisConstructor::CreateK0ShortCut(boo
 {
   bool tRemoveMisID = true;
   bool tUseSimpleMisID = true;
-  bool tUseCustomMisID = false;
+  bool tUseCustomMisID = true;
 
   AliFemtoV0TrackCutNSigmaFilter* k0cut1 = new AliFemtoV0TrackCutNSigmaFilter();
     k0cut1->SetParticleType(2);  //  2=K0Short -> daughters = pi+ and pi-
@@ -888,8 +876,6 @@ AliFemtoV0TrackCutNSigmaFilter* myTrainAnalysisConstructor::CreateK0ShortCut(boo
       k0cut1->AddPionTPCNSigmaCut(0.8,1000.,3.);
     }
 
-    k0cut1->AddCutMonitor(new AliFemtoCutMonitorV0("_K0_Pass"),new AliFemtoCutMonitorV0("_K0_Fail"));
-
   return k0cut1;
 }
 
@@ -916,6 +902,15 @@ AliFemtoV0TrackCutNSigmaFilter* myTrainAnalysisConstructor::CreateV0Cut(Particle
   }
 
   return tReturnCut;
+}
+
+//____________________________
+template<typename T>
+T* myTrainAnalysisConstructor::CloneV0Cut(T* aCut)
+{
+  T* tReturnCut = aCut->Clone();
+  return tReturnCut;
+
 }
 
 //____________________________
@@ -972,27 +967,6 @@ AliFemtoESDTrackCutNSigmaFilter* myTrainAnalysisConstructor::CreateKchCut(const 
       kaontc1->AddTPCAndTOFNSigmaCut(AliFemtoESDTrackCutNSigmaFilter::kPion,1.5,99.,5.0,2.0);
   }
 
-  //Cut monitor
-  char pass[20];
-  char fail[20];
-  if(aCharge == 1)
-  {
-    sprintf(pass, "_KchP_Pass");
-    sprintf(fail, "_KchP_Fail");
-  }
-  else
-  {
-    sprintf(pass, "_KchM_Pass");
-    sprintf(fail, "_KchM_Fail");
-  }
-  AliFemtoCutMonitorParticleYPt *cutPass = new AliFemtoCutMonitorParticleYPt(pass, 0.13957);
-  AliFemtoCutMonitorParticleYPt *cutFail = new AliFemtoCutMonitorParticleYPt(fail, 0.13957);
-  kaontc1->AddCutMonitor(cutPass, cutFail);
-
-  AliFemtoCutMonitorParticlePID *cutPIDPass = new AliFemtoCutMonitorParticlePID(pass, 1);
-  AliFemtoCutMonitorParticlePID *cutPIDFail = new AliFemtoCutMonitorParticlePID(fail, 1);
-  kaontc1->AddCutMonitor(cutPIDPass, cutPIDFail);
-
   return kaontc1;
 }
 
@@ -1033,27 +1007,6 @@ AliFemtoESDTrackCutNSigmaFilter* myTrainAnalysisConstructor::CreatePiCut(const i
       piontc1->AddTPCAndTOFNSigmaCut(AliFemtoESDTrackCutNSigmaFilter::kPion,0.65,1.5,5.0,3.0);
       piontc1->AddTPCAndTOFNSigmaCut(AliFemtoESDTrackCutNSigmaFilter::kPion,1.5,99.,5.0,2.0);
   }
-
-  //Cut monitor
-  char pass[20];
-  char fail[20];
-  if(aCharge == 1)
-  {
-    sprintf(pass, "_PiP_Pass");
-    sprintf(fail, "_PiP_Fail");
-  }
-  else
-  {
-    sprintf(pass, "_PiM_Pass");
-    sprintf(fail, "_PiM_Fail");
-  }
-  AliFemtoCutMonitorParticleYPt *cutPass = new AliFemtoCutMonitorParticleYPt(pass, 0.13957);
-  AliFemtoCutMonitorParticleYPt *cutFail = new AliFemtoCutMonitorParticleYPt(fail, 0.13957);
-  piontc1->AddCutMonitor(cutPass, cutFail);
-
-  AliFemtoCutMonitorParticlePID *cutPIDPass = new AliFemtoCutMonitorParticlePID(pass, 0);
-  AliFemtoCutMonitorParticlePID *cutPIDFail = new AliFemtoCutMonitorParticlePID(fail, 0);
-  piontc1->AddCutMonitor(cutPIDPass, cutPIDFail);
 
   return piontc1;
 }
@@ -1141,8 +1094,6 @@ AliFemtoXiTrackCut* myTrainAnalysisConstructor::CreateXiCut()
   tXiCut->SetMinvPurityAidHistoXi("XiPurityAid","XiMinvBeforeFinalCut",100,XiMass-0.035,XiMass+0.035);
   tXiCut->SetMinvPurityAidHistoV0("LambdaPurityAid","LambdaMinvBeforeFinalCut",100,LambdaMass-0.035,LambdaMass+0.035);
 
-  tXiCut->AddCutMonitor(new AliFemtoCutMonitorXi("_Xi_Pass"),new AliFemtoCutMonitorXi("_Xi_Fail"));
-
   return tXiCut;
 }
 
@@ -1200,8 +1151,6 @@ AliFemtoXiTrackCut* myTrainAnalysisConstructor::CreateAntiXiCut()
   tAXiCut->SetMinvPurityAidHistoXi("AXiPurityAid","AXiMinvBeforeFinalCut",100,XiMass-0.035,XiMass+0.035);
   tAXiCut->SetMinvPurityAidHistoV0("AntiLambdaPurityAid","AntiLambdaMinvBeforeFinalCut",100,LambdaMass-0.035,LambdaMass+0.035);
 
-  tAXiCut->AddCutMonitor(new AliFemtoCutMonitorXi("_AXi_Pass"),new AliFemtoCutMonitorXi("_AXi_Fail"));
-
   return tAXiCut;
 }
 
@@ -1243,12 +1192,6 @@ AliFemtoV0PairCut* myTrainAnalysisConstructor::CreateV0PairCut(double aMinAvgSep
   v0pc1->SetMinAvgSeparation(2,aMinAvgSepNegPos);
   v0pc1->SetMinAvgSeparation(3,aMinAvgSepNegNeg);
 
-  if(fIsMCRun)
-  {
-    AliFemtoPairOriginMonitor *cutPass = new AliFemtoPairOriginMonitor("Pass");
-    v0pc1->AddCutMonitorPass(cutPass);
-  }
-
   return v0pc1;
 }
 
@@ -1269,12 +1212,6 @@ AliFemtoV0TrackPairCut* myTrainAnalysisConstructor::CreateV0TrackPairCut(double 
 
   v0TrackPairCut1->SetMinAvgSeparation(0,aMinAvgSepTrackPos);
   v0TrackPairCut1->SetMinAvgSeparation(1,aMinAvgSepTrackNeg);
-
-  if(fIsMCRun)
-  {
-    AliFemtoPairOriginMonitor *cutPass = new AliFemtoPairOriginMonitor("Pass");
-    v0TrackPairCut1->AddCutMonitorPass(cutPass);
-  }
 
   return v0TrackPairCut1;
 }
@@ -1405,8 +1342,114 @@ AliFemtoModelCorrFctnKStarFull* myTrainAnalysisConstructor::CreateModelCorrFctnK
 }
 
 
+//____________________________
+void myTrainAnalysisConstructor::AddCutMonitors(AliFemtoEventCut* aEventCut, AliFemtoParticleCut* aPartCut1, AliFemtoParticleCut* aPartCut2, AliFemtoPairCut* aPairCut)
+{
+  aEventCut->AddCutMonitor(new AliFemtoCutMonitorEventMult("_EvPass"), new AliFemtoCutMonitorEventMult("_EvFail"));
+  aEventCut->AddCutMonitor(new AliFemtoCutMonitorEventPartCollSize("_Part1",100,0,100,"_Part2",100,0,100));
+
+  TString tPartName1, tPartName2;
+
+  switch(fParticlePDGType1) {
+  case kPDGLam:
+    tPartName1 = TString("_Lam");
+    break;
+  case kPDGALam:
+    tPartName1 = TString("_ALam");
+    break;
+  case kPDGK0:
+    tPartName1 = TString("_K0");
+    break;
+  case kPDGXiC:
+    tPartName1 = TString("_Xi");
+    break;
+  case kPDGAXiC:
+    tPartName1 = TString("_AXi");
+    break;
+  default:
+    cerr << "E-myTrainAnalysisConstructor::AddCutMonitors" << endl;
+  }
 
 
+  int tPartType2 = -1;
+  double tPartMass2 = 0;
+
+  switch(fParticlePDGType2) {
+  case kPDGLam:
+    tPartName2 = TString("_Lam");
+    break;
+  case kPDGALam:
+    tPartName2 = TString("_ALam");
+    break;
+  case kPDGK0:
+    tPartName2 = TString("_K0");
+    break;
+  case kPDGXiC:
+    tPartName2 = TString("_Xi");
+    break;
+  case kPDGAXiC:
+    tPartName2 = TString("_AXi");
+    break;
+  case kPDGKchP:
+    tPartName2 = TString("_KchP");
+    tPartType2 = 1;
+    tPartMass2 = 0.493677;
+    break;
+  case kPDGKchM:
+    tPartName2 = TString("_KchM");
+    tPartType2 = 1;
+    tPartMass2 = 0.493677;
+    break;
+  case kPDGPiP:
+    tPartName2 = TString("_PiP");
+    tPartType2 = 0;
+    tPartMass2 = 0.13957;
+    break;
+  case kPDGPiM:
+    tPartName2 = TString("_PiM");
+    tPartType2 = 0;
+    tPartMass2 = 0.13957;
+    break;
+  default:
+    cerr << "E-myTrainAnalysisConstructor::AddCutMonitors" << endl;
+  }
+
+  //------------------------------------------------
+
+  TString tNamePass1 = tPartName1 + TString("_Pass");
+  TString tNameFail1 = tPartName1 + TString("_Fail");
+
+  TString tNamePass2 = tPartName2 + TString("_Pass");
+  TString tNameFail2 = tPartName2 + TString("_Fail");
+
+  switch(fGeneralAnalysisType) {
+  case kV0V0:
+    aPartCut1->AddCutMonitor(new AliFemtoCutMonitorV0(tNamePass1),new AliFemtoCutMonitorV0(tNameFail1));
+    aPartCut2->AddCutMonitor(new AliFemtoCutMonitorV0(tNamePass2),new AliFemtoCutMonitorV0(tNameFail2));
+    break;
+
+  case kV0Track:
+    aPartCut1->AddCutMonitor(new AliFemtoCutMonitorV0(tNamePass1),new AliFemtoCutMonitorV0(tNameFail1));
+
+    aPartCut2->AddCutMonitor(new AliFemtoCutMonitorParticleYPt(tNamePass2,tPartMass2), new AliFemtoCutMonitorParticleYPt(tNameFail2,tPartMass2));
+    aPartCut2->AddCutMonitor(new AliFemtoCutMonitorParticlePID(tNamePass2,tPartType2), new AliFemtoCutMonitorParticlePID(tNameFail2,tPartType2));
+    break;
+
+  case kXiTrack:
+    aPartCut1->AddCutMonitor(new AliFemtoCutMonitorXi(tNamePass1),new AliFemtoCutMonitorXi(tNamePass1));
+
+    aPartCut2->AddCutMonitor(new AliFemtoCutMonitorParticleYPt(tNamePass2,tPartMass2), new AliFemtoCutMonitorParticleYPt(tNameFail2,tPartMass2));
+    aPartCut2->AddCutMonitor(new AliFemtoCutMonitorParticlePID(tNamePass2,tPartType2), new AliFemtoCutMonitorParticlePID(tNameFail2,tPartType2));
+    break;
+
+  default:
+    cerr << "E-myTrainAnalysisConstructor::AddCutMonitors" << endl;
+  }
+
+  //------------------------------------------------
+  if(fIsMCRun) aPairCut->AddCutMonitorPass(new AliFemtoPairOriginMonitor("Pass"));
+
+}
 
 
 //____________________________
@@ -1427,10 +1470,20 @@ void myTrainAnalysisConstructor::SetAnalysis(AliFemtoEventCut* aEventCut, AliFem
 //____________________________
 void myTrainAnalysisConstructor::SetAnalysis(AliFemtoEventCut* aEventCut, AliFemtoParticleCut* aPartCut1, AliFemtoParticleCut* aPartCut2, AliFemtoPairCut* aPairCut)
 {
-  SetEventCut(aEventCut);
-  SetFirstParticleCut(aPartCut1);
-  SetSecondParticleCut(aPartCut2);
-  SetPairCut(aPairCut);
+  //AliFemtoCutMonitorHandler does not implement deep-copying on the AliFemtoCutMonitorCollection objects
+  //Therefore, it is necessary to create the cut monitors uniquely for each analysis, making it impossible to simple throw pre-made particle cuts, etc. into
+  //new analysis objects.  The cut monitors would be shared thorughout all analyses
+  AliFemtoEventCut* tEventCut = aEventCut->Clone();
+  AliFemtoParticleCut* tPartCut1 = aPartCut1->Clone(); 
+  AliFemtoParticleCut* tPartCut2 = aPartCut2->Clone(); 
+  AliFemtoPairCut* tPairCut = aPairCut->Clone();
+
+  AddCutMonitors(tEventCut,tPartCut1,tPartCut2,tPairCut);
+
+  SetEventCut(tEventCut);
+  SetFirstParticleCut(tPartCut1);
+  SetSecondParticleCut(tPartCut2);
+  SetPairCut(tPairCut);
 
   AliFemtoCorrFctnIterator iter;
   for(iter=fCollectionOfCfs->begin(); iter!=fCollectionOfCfs->end(); iter++)

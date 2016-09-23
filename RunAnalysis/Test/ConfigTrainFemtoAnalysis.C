@@ -99,15 +99,15 @@ AliFemtoManager* ConfigFemtoAnalysis()
     //_______Centrality dependent______________________________________________________
     myTrainAnalysisConstructor *analy_LamK0_0010 = new myTrainAnalysisConstructor(myTrainAnalysisConstructor::kLamK0, "LamK0_0010",10,-10.,10., 2, 0, 100, RunMC, ImplementAvgSepCuts);
       analy_LamK0_0010->SetRemoveMisidentifiedMCParticles(RemoveMisidentifiedMCParticles);
-      analy_LamK0_0010->SetAnalysis(tEvCutEst_0010,new AliFemtoV0TrackCutNSigmaFilter(*tLamCut),tK0Cut,tV0PairCut);
+      analy_LamK0_0010->SetAnalysis(tEvCutEst_0010,tLamCut,tK0Cut,tV0PairCut);
 
     myTrainAnalysisConstructor *analy_LamK0_1030 = new myTrainAnalysisConstructor(myTrainAnalysisConstructor::kLamK0, "LamK0_1030",10,-10.,10., 4, 100, 300, RunMC, ImplementAvgSepCuts);
       analy_LamK0_1030->SetRemoveMisidentifiedMCParticles(RemoveMisidentifiedMCParticles);
-      analy_LamK0_1030->SetAnalysis(tEvCutEst_1030,new AliFemtoV0TrackCutNSigmaFilter(*tLamCut),tK0Cut,tV0PairCut);
+      analy_LamK0_1030->SetAnalysis(tEvCutEst_1030,tLamCut,tK0Cut,tV0PairCut);
 
     myTrainAnalysisConstructor *analy_LamK0_3050 = new myTrainAnalysisConstructor(myTrainAnalysisConstructor::kLamK0, "LamK0_3050",10,-10.,10., 4, 300, 500, RunMC, ImplementAvgSepCuts);
       analy_LamK0_3050->SetRemoveMisidentifiedMCParticles(RemoveMisidentifiedMCParticles);
-      analy_LamK0_3050->SetAnalysis(tEvCutEst_3050,new AliFemtoV0TrackCutNSigmaFilter(*tLamCut),tK0Cut,tV0PairCut);
+      analy_LamK0_3050->SetAnalysis(tEvCutEst_3050,tLamCut,tK0Cut,tV0PairCut);
 
 
   //------------------------------- AntiLambda-K0Short -----------------------------------------------
