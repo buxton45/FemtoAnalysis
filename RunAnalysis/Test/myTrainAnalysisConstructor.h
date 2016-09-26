@@ -71,7 +71,7 @@ public:
 
   enum ParticlePDGType {kPDGProt   = 2212,  kPDGAntiProt = -2212, 
 		        kPDGPiP    = 211,   kPDGPiM      = -211, 
-                        kPDGK0     = 311,
+                        kPDGK0     = 310,
                         kPDGKchP   = 321,   kPDGKchM     = -321,
 		        kPDGLam    = 3122,  kPDGALam     = -3122,
 		        kPDGSigma  = 3212,  kPDGASigma   = -3212,
@@ -107,6 +107,10 @@ public:
 
   AliFemtoBasicEventCut* CreateBasicEventCut();
   AliFemtoEventCutEstimators* CreateEventCutEstimators(const float &aCentLow, const float &aCentHigh);
+
+  AliFemtoV0TrackCut* CreateLambdaCut();
+  AliFemtoV0TrackCut* CreateAntiLambdaCut();
+  AliFemtoV0TrackCut* CreateK0ShortCut();
 
   AliFemtoV0TrackCutNSigmaFilter* CreateLambdaCut(bool aUseCustom);
   AliFemtoV0TrackCutNSigmaFilter* CreateAntiLambdaCut(bool aUseCustom);

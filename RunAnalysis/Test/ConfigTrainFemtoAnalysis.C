@@ -50,7 +50,7 @@ AliFemtoManager* ConfigFemtoAnalysis()
 
   bool ImplementAvgSepCuts = true;
   bool ImplementVertexCorrection = true;
-  bool RunMC = false;
+  bool RunMC = true;
 
   //-----17/12/2015
 
@@ -88,10 +88,15 @@ AliFemtoManager* ConfigFemtoAnalysis()
   AliFemtoEventCutEstimators* tEvCutEst_1030 = analy_LamK0->CreateEventCutEstimators(10.,30.);
   AliFemtoEventCutEstimators* tEvCutEst_3050 = analy_LamK0->CreateEventCutEstimators(30.,50.);
 
+  AliFemtoV0TrackCut* tLamCut = analy_LamK0->CreateLambdaCut();
+  AliFemtoV0TrackCut* tALamCut = analy_LamK0->CreateAntiLambdaCut();
+  AliFemtoV0TrackCut* tK0Cut = analy_LamK0->CreateK0ShortCut();
+
+/*
   AliFemtoV0TrackCutNSigmaFilter* tLamCut = analy_LamK0->CreateLambdaCut(UseCustomNSigmaFiltersLambda);
   AliFemtoV0TrackCutNSigmaFilter* tALamCut = analy_LamK0->CreateAntiLambdaCut(UseCustomNSigmaFiltersAntiLambda);
   AliFemtoV0TrackCutNSigmaFilter* tK0Cut = analy_LamK0->CreateK0ShortCut(UseCustomNSigmaFiltersK0Short);
-
+*/
   AliFemtoV0PairCut* tV0PairCut = analy_LamK0->CreateV0PairCut(6.,0.,0.,6.);
 
     analy_LamK0->SetAnalysis(tEvCut,tLamCut,tK0Cut,tV0PairCut);

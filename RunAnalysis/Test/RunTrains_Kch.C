@@ -38,16 +38,16 @@ use_runs = runs_Bm3;
 
 bool RunGrid = false;
 bool RunFull = true;  //set to false when merging
-bool RunMC = true;
-TString aConfigMacro = "ConfigTrainFemtoAnalysis.C";
-TString AdditionalLibs = "libPWGCFfemtoscopy.so libPWGCFfemtoscopyUser.so myTrainAnalysisConstructor.h myTrainAnalysisConstructor.cxx ConfigTrainFemtoAnalysis.C";
-TString aGridWorkingDir = "Results_cLamK0_AsRc_20151228_NSigmaFilter/Bm3";
+bool RunMC = false;
+TString aConfigMacro = "ConfigTrainFemtoAnalysis_Kch.C";
+TString AdditionalLibs = "libPWGCFfemtoscopy.so libPWGCFfemtoscopyUser.so myTrainAnalysisConstructor.h myTrainAnalysisConstructor.cxx ConfigTrainFemtoAnalysis_Kch.C";
+TString aGridWorkingDir = "Results_cLamcKch_AsRc_20151228_NSigmaFilter/Bm3";
 TString aGridOutputDir = "output_data";
-TString outputname = "Test_LamK0_OldMC.root";
+TString outputname = "Test_LamKch_New.root";
 
 
 
-void RunTrains()
+void RunTrains_Kch()
 {
     cout << "[RunMe] Begin\n";
 
