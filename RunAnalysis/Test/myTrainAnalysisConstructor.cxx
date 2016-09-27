@@ -1111,6 +1111,16 @@ AliFemtoESDTrackCutNSigmaFilter* myTrainAnalysisConstructor::CreateKchCut(const 
       kaontc1->AddTPCAndTOFNSigmaCut(AliFemtoESDTrackCutNSigmaFilter::kKaon,0.8,1.0,3.0,1.5);
       kaontc1->AddTPCAndTOFNSigmaCut(AliFemtoESDTrackCutNSigmaFilter::kKaon,1.0,1.5,3.0,1.0);
 
+    //New Kaon filter (Konstantin Mikhaylov)
+/*
+    kaontc1->CreateCustomNSigmaFilter(AliFemtoESDTrackCutNSigmaFilter::kKaon);
+      kaontc1->AddTPCNSigmaCut(AliFemtoESDTrackCutNSigmaFilter::kKaon,0.0,0.4,2.0);
+      kaontc1->AddTPCNSigmaCut(AliFemtoESDTrackCutNSigmaFilter::kKaon,0.4,0.45,1.0);
+      kaontc1->AddTPCAndTOFNSigmaCut(AliFemtoESDTrackCutNSigmaFilter::kKaon,0.45,0.8,3.0,2.0);
+      kaontc1->AddTPCAndTOFNSigmaCut(AliFemtoESDTrackCutNSigmaFilter::kKaon,0.8,1.0,3.0,1.5);
+      kaontc1->AddTPCAndTOFNSigmaCut(AliFemtoESDTrackCutNSigmaFilter::kKaon,1.0,99.,3.0,1.0);
+*/
+
     //Electron filter for removing misidentified
     kaontc1->CreateCustomNSigmaFilter(AliFemtoESDTrackCutNSigmaFilter::kElectron);
       kaontc1->AddTPCNSigmaCut(AliFemtoESDTrackCutNSigmaFilter::kElectron,0.,99.,3.0);
