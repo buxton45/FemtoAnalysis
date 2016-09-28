@@ -91,7 +91,7 @@ void RunTrains_Kch()
 //        alienHandler->SetAliROOTVersion("v5-07-20-4");
         alienHandler->SetAliPhysicsVersion("vAN-20160927-1");
 
-        alienHandler->SetAnalysisSource("myAnalysisConstructor.cxx"); // Add any cxx files which need compiled here (.cxx files)
+        alienHandler->SetAnalysisSource("myTrainAnalysisConstructor.cxx"); // Add any cxx files which need compiled here (.cxx files)
         alienHandler->SetAdditionalLibs(AdditionalLibs); // Add any files which need copied to grid here (.h,.cxx,.C files)
 
         alienHandler->AddIncludePath("$ALICE_PHYSICS/include");

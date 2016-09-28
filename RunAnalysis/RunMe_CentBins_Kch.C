@@ -100,8 +100,8 @@ void RunMe_CentBins_Kch()
 
         alienHandler->SetAPIVersion("V1.1x");
 //        alienHandler->SetROOTVersion("v5-34-30-alice-8");  //apparently this is no longer needed
-        alienHandler->SetAliROOTVersion("v5-07-20-4");
-        alienHandler->SetAliPhysicsVersion("vAN-20160210-1");
+        alienHandler->SetAliROOTVersion("v5-08-09-1");
+        alienHandler->SetAliPhysicsVersion("vAN-20160430-1");
 
         alienHandler->SetAnalysisSource("myAliFemtoV0TrackCut.cxx myAliFemtoESDTrackCut.cxx myAliFemtoKStarCorrFctn.cxx myAliFemtoAvgSepCorrFctn.cxx myAliFemtoSepCorrFctns.cxx myAliFemtoAvgSepCorrFctnCowboysAndSailors.cxx myAliFemtoKStarCorrFctn2D.cxx myAliFemtoKStarCorrFctnMC.cxx AliFemtoModelWeightGeneratorBasicLednicky.cxx myAliFemtoModelCorrFctnKStar.cxx myAnalysisConstructor.cxx"); // Add any cxx files which need compiled here (.cxx files)
         alienHandler->SetAdditionalLibs(AdditionalLibs); // Add any files which need copied to grid here (.h,.cxx,.C files)

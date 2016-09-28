@@ -57,7 +57,7 @@ void myAnalysis()
    gSystem->Load("libPWGCFfemtoscopyUser");
 
 // analysis source to be compiled at runtime (if any)
-   gROOT->ProcessLine(".L myAnalysisConstructor.cxx+g");
+   gROOT->ProcessLine(".L myTrainAnalysisConstructor.cxx+g");
 
 // read the analysis manager from file
    AliAnalysisManager *mgr = AliAnalysisAlien::LoadAnalysisManager("analysis.root");

@@ -41,7 +41,7 @@ bool RunFull = true;  //set to false when merging
 bool RunMC = false;
 TString aConfigMacro = "ConfigFemtoAnalysis_CentBins.C";
 TString AdditionalLibs = "libPWGCFfemtoscopy.so libPWGCFfemtoscopyUser.so myAliFemtoV0TrackCut.h myAliFemtoV0TrackCut.cxx myAliFemtoESDTrackCut.h myAliFemtoESDTrackCut.cxx myAliFemtoKStarCorrFctn.h myAliFemtoKStarCorrFctn.cxx myAliFemtoAvgSepCorrFctn.h myAliFemtoAvgSepCorrFctn.cxx myAliFemtoSepCorrFctns.h myAliFemtoSepCorrFctns.cxx myAliFemtoAvgSepCorrFctnCowboysAndSailors.h myAliFemtoAvgSepCorrFctnCowboysAndSailors.cxx myAliFemtoKStarCorrFctn2D.h myAliFemtoKStarCorrFctn2D.cxx myAliFemtoKStarCorrFctnMC.h myAliFemtoKStarCorrFctnMC.cxx AliFemtoModelWeightGeneratorBasicLednicky.h AliFemtoModelWeightGeneratorBasicLednicky.cxx myAliFemtoModelCorrFctnKStar.h myAliFemtoModelCorrFctnKStar.cxx myAnalysisConstructor.h myAnalysisConstructor.cxx ConfigFemtoAnalysis_CentBins.C";
-TString aGridWorkingDir = "Results_cLamK0_AsRc_20151228_NSigmaFilter/Bm3";
+TString aGridWorkingDir = "Test2";
 TString aGridOutputDir = "output_data";
 TString outputname = "Test_LamK0_Old.root";
 
@@ -100,8 +100,8 @@ void RunMe_CentBins()
 
         alienHandler->SetAPIVersion("V1.1x");
 //        alienHandler->SetROOTVersion("v5-34-30-alice-8");  //apparently this is no longer needed
-        alienHandler->SetAliROOTVersion("v5-07-20-4");
-        alienHandler->SetAliPhysicsVersion("vAN-20160131-1");
+        alienHandler->SetAliROOTVersion("v5-08-09-1");
+        alienHandler->SetAliPhysicsVersion("vAN-20160430-1");
 
         alienHandler->SetAnalysisSource("myAliFemtoV0TrackCut.cxx myAliFemtoESDTrackCut.cxx myAliFemtoKStarCorrFctn.cxx myAliFemtoAvgSepCorrFctn.cxx myAliFemtoSepCorrFctns.cxx myAliFemtoAvgSepCorrFctnCowboysAndSailors.cxx myAliFemtoKStarCorrFctn2D.cxx myAliFemtoKStarCorrFctnMC.cxx AliFemtoModelWeightGeneratorBasicLednicky.cxx myAliFemtoModelCorrFctnKStar.cxx myAnalysisConstructor.cxx"); // Add any cxx files which need compiled here (.cxx files)
         alienHandler->SetAdditionalLibs(AdditionalLibs); // Add any files which need copied to grid here (.h,.cxx,.C files)

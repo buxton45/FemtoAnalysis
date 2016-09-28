@@ -22,7 +22,7 @@
 #include "AliFemtoCutMonitorXi.h"
 
 #include "AliFemtoParticleCut.h"
-#include "myAliFemtoV0TrackCut.h"
+#include "AliFemtoV0TrackCut.h"
 #include "AliFemtoBasicTrackCut.h"
 #include "AliFemtoESDTrackCut.h"
 #include "AliFemtoAODTrackCut.h"
@@ -108,8 +108,8 @@ public:
 
 
 
-  //myTrainAnalysisConstructor(const myTrainAnalysisConstructor& TheOriginalAnalysis);  //copy constructor - 30 June 2015 //TODO
-  //myTrainAnalysisConstructor& operator=(const myTrainAnalysisConstructor& TheOriginalAnalysis);  //assignment operator - 30 June 2015 //TODO
+  myTrainAnalysisConstructor(const myTrainAnalysisConstructor& TheOriginalAnalysis);  //copy constructor - 30 June 2015 //TODO
+  myTrainAnalysisConstructor& operator=(const myTrainAnalysisConstructor& TheOriginalAnalysis);  //assignment operator - 30 June 2015 //TODO
   virtual ~myTrainAnalysisConstructor();
 
   virtual void ProcessEvent(const AliFemtoEvent* ProcessThisEvent);  //will add fMultHist to the process event of AliFemtoVertexMultAnalysis
@@ -211,16 +211,6 @@ protected:
   myAliFemtoKStarCorrFctn2D *KStarCf2D;
 */
   AliFemtoModelCorrFctnKStarFull *KStarModelCfs;
-
-
-
-
-  //-----17/12/2015
-  AliFemtoV0TrackCutNSigmaFilter *LamCutNSigmaFilter;
-  AliFemtoV0TrackCutNSigmaFilter *ALamCutNSigmaFilter;
-  AliFemtoV0TrackCutNSigmaFilter *K0CutNSigmaFilter;
-
-
 
 
 

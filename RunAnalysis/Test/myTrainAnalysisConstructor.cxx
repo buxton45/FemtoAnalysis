@@ -62,12 +62,7 @@ myTrainAnalysisConstructor::myTrainAnalysisConstructor() :
   AvgSepCfCowboysAndSailors(0),
   KStarCf2D(0),
 */
-  KStarModelCfs(NULL),
-
-  LamCutNSigmaFilter(NULL),
-  ALamCutNSigmaFilter(NULL),
-  K0CutNSigmaFilter(NULL)
-
+  KStarModelCfs(NULL)
 {
   SetParticleTypes(fAnalysisType);
   SetVerboseMode(kFALSE);
@@ -122,11 +117,7 @@ myTrainAnalysisConstructor::myTrainAnalysisConstructor(AnalysisType aAnalysisTyp
   AvgSepCfCowboysAndSailors(0),
   KStarCf2D(0),
 */
-  KStarModelCfs(NULL),
-
-  LamCutNSigmaFilter(NULL),
-  ALamCutNSigmaFilter(NULL),
-  K0CutNSigmaFilter(NULL)
+  KStarModelCfs(NULL)
 
 {
   SetParticleTypes(fAnalysisType);
@@ -187,11 +178,7 @@ myTrainAnalysisConstructor::myTrainAnalysisConstructor(AnalysisType aAnalysisTyp
   AvgSepCfCowboysAndSailors(0),
   KStarCf2D(0),
 */
-  KStarModelCfs(NULL),
-
-  LamCutNSigmaFilter(NULL),
-  ALamCutNSigmaFilter(NULL),
-  K0CutNSigmaFilter(NULL)
+  KStarModelCfs(NULL)
 
 {
   SetParticleTypes(fAnalysisType);
@@ -253,50 +240,64 @@ myTrainAnalysisConstructor::myTrainAnalysisConstructor(AnalysisType aAnalysisTyp
 
 }
 
-/*
+
 //____________________________
 //copy constructor - 30 June 2015
 myTrainAnalysisConstructor::myTrainAnalysisConstructor(const myTrainAnalysisConstructor& a) :
   AliFemtoVertexMultAnalysis(a),  //call the copy-constructor of the base
-  fAnalysisType(kLamK0),
-  fCollectionOfCfs(0),
-  fOutputName(0),
-  fMultHist(0),
-  fIsMCRun(kFALSE),
-  fIsMBAnalysis(kFALSE),
-  fBuildMultHist(kFALSE),
-  fImplementAvgSepCuts(kFALSE),
-  fWritePairKinematics(kFALSE),
-  fMinCent(-1000),
-  fMaxCent(1000),
-  BasicEvCut(0),
-  EvCutEst(0),
-  LamCut(0),
-  ALamCut(0),
-  KStarCf(0),
-  AvgSepCf(0),
 
-  SepCfs(0),
-  AvgSepCfCowboysAndSailors(0),
-  KStarCf2D(0),
+  fAnalysisType(a.fAnalysisType),
+  fGeneralAnalysisType(a.fGeneralAnalysisType),
+  fParticlePDGType1(a.fParticlePDGType1),
+  fParticlePDGType2(a.fParticlePDGType2),
+  fGeneralParticleType1(a.fGeneralParticleType1),
+  fGeneralParticleType2(a.fGeneralParticleType2),
 
-  KStarModelCfs(0),
-  K0Cut(0),
-  V0PairCut(0),
-  KchPCut(0),
-  KchMCut(0),
-  PiPCut(0),
-  PiMCut(0),
-  V0TrackPairCut(0),
-  XiCut(0),
-  AXiCut(0),
-  XiTrackPairCut(0),
+  fOutputName(NULL),
+  fMultHist(NULL),
+  fImplementAvgSepCuts(a.fImplementAvgSepCuts),
+  fWritePairKinematics(a.fWritePairKinematics),
+  fIsMCRun(a.fIsMCRun),
+  fIsMBAnalysis(a.fIsMBAnalysis),
+  fBuildMultHist(a.fBuildMultHist),
 
-  LamCutNSigmaFilter(0),
-  ALamCutNSigmaFilter(0),
-  K0CutNSigmaFilter(0)
+  fMinCent(a.fMinCent),
+  fMaxCent(a.fMaxCent),
 
+  fCollectionOfCfs(NULL),
+
+  BasicEvCut(NULL),
+  EvCutEst(NULL),
+
+  XiCut1(NULL),
+  XiCut2(NULL),
+
+  V0Cut1(NULL),
+  V0Cut2(NULL),
+  
+  TrackCut1(NULL),
+  TrackCut2(NULL),
+  
+  V0PairCut(NULL),
+  V0TrackPairCut(NULL),
+  XiTrackPairCut(NULL),
+
+  KStarCf(NULL),
+  AvgSepCf(NULL),
+
+  KStarModelCfs(NULL)
 {
+
+  if(a.fOutputName)
+  {
+    fOutputName = new char[strlen(a.fOutputName)+1];
+    strcpy(const_cast<char*>(fOutputName), a.fOutputName);
+  }
+  else fOutputName = 0;
+
+  if(a.fMultHist) fMultHist = new TH1F(*(a.fMultHist));
+  else fMultHist = NULL;
+
   fCollectionOfCfs = new AliFemtoCorrFctnCollection;
   AliFemtoCorrFctnIterator iter;
   for(iter=a.fCollectionOfCfs->begin(); iter!=a.fCollectionOfCfs->end(); iter++)
@@ -305,68 +306,165 @@ myTrainAnalysisConstructor::myTrainAnalysisConstructor(const myTrainAnalysisCons
     if(fctn) {AddCorrFctn(fctn);}
     else {cout << " myTrainAnalysisConstructor::myTrainAnalysisConstructor(const myTrainAnalysisConstructor& a) - correlation function not found " << endl;}
   }
-}
-*/
 
-/*
+  if(a.BasicEvCut) BasicEvCut = new AliFemtoBasicEventCut(*(a.BasicEvCut));
+  else BasicEvCut = NULL;
+
+  if(a.EvCutEst) EvCutEst = new AliFemtoEventCutEstimators(*(a.EvCutEst));
+  else EvCutEst = NULL;
+
+  if(a.XiCut1) XiCut1 = new AliFemtoXiTrackCut(*(a.XiCut1));
+  else XiCut1 = NULL;
+
+  if(a.XiCut2) XiCut2 = new AliFemtoXiTrackCut(*(a.XiCut2));
+  else XiCut2 = NULL;
+
+  if(a.V0Cut1) V0Cut1 = new AliFemtoV0TrackCutNSigmaFilter(*(a.V0Cut1));
+  else V0Cut1 = NULL;
+
+  if(a.V0Cut1) V0Cut2 = new AliFemtoV0TrackCutNSigmaFilter(*(a.V0Cut2));
+  else V0Cut2 = NULL;
+
+  if(a.TrackCut1) TrackCut1 = new AliFemtoESDTrackCutNSigmaFilter(*(a.TrackCut1));
+  else TrackCut1 = NULL;
+
+  if(a.TrackCut2) TrackCut2 = new AliFemtoESDTrackCutNSigmaFilter(*(a.TrackCut2));
+  else TrackCut2 = NULL;
+
+  if(a.V0PairCut) V0PairCut = new AliFemtoV0PairCut(*(a.V0PairCut));
+  else V0PairCut = NULL;
+
+  if(a.V0TrackPairCut) V0TrackPairCut = new AliFemtoV0TrackPairCut(*(a.V0TrackPairCut));
+  else V0TrackPairCut = NULL;
+
+  if(a.XiTrackPairCut) XiTrackPairCut = new AliFemtoXiTrackPairCut(*(a.XiTrackPairCut));
+  else XiTrackPairCut = NULL;
+
+  if(a.KStarCf) KStarCf = new AliFemtoCorrFctnKStar(*(a.KStarCf));
+  else KStarCf = NULL;
+
+  if(a.AvgSepCf) AvgSepCf = new AliFemtoAvgSepCorrFctn(*(a.AvgSepCf));
+  else AvgSepCf = NULL;
+
+  if(a.KStarModelCfs) KStarModelCfs = new AliFemtoModelCorrFctnKStarFull(*(a.KStarModelCfs));
+  else KStarModelCfs = NULL;
+}
+
+
+
 //____________________________
 //assignment operator - 30 June 2015
-myTrainAnalysisConstructor& myTrainAnalysisConstructor::operator=(const myTrainAnalysisConstructor& TheOriginalAnalysis)
+myTrainAnalysisConstructor& myTrainAnalysisConstructor::operator=(const myTrainAnalysisConstructor& a)
 {
-  if(this == &TheOriginalAnalysis) {return *this;}
+  if(this == &a) {return *this;}
 
-  AliFemtoVertexMultAnalysis::operator=(TheOriginalAnalysis);  //call the assignment operator of the base
+  AliFemtoVertexMultAnalysis::operator=(a);  //call the assignment operator of the base
 
-  fAnalysisType = kLamK0;
-  fCollectionOfCfs = 0;
-  fOutputName = "Analysis";
-  fMultHist = 0;
-  fIsMCRun = kFALSE;
-  fIsMBAnalysis = kFALSE;
-  fBuildMultHist = kFALSE;
-  fImplementAvgSepCuts = kFALSE;
-  fWritePairKinematics = kFALSE;
-  fMinCent = -1000;
-  fMaxCent = 1000;
-  BasicEvCut = 0;
-  EvCutEst = 0;
-  LamCut = 0;
-  ALamCut = 0;
-  KStarCf = 0;
-  AvgSepCf = 0;
+  fAnalysisType = a.fAnalysisType;
+  fGeneralAnalysisType = a.fGeneralAnalysisType;
+  fParticlePDGType1 = a.fParticlePDGType1;
+  fParticlePDGType2 = a.fParticlePDGType2;
+  fGeneralParticleType1 = a.fGeneralParticleType1;
+  fGeneralParticleType2 = a.fGeneralParticleType2;
 
-  SepCfs = 0;
-  AvgSepCfCowboysAndSailors = 0;
-  KStarCf2D = 0;
+  fOutputName = NULL;
+  fMultHist = NULL;
+  fImplementAvgSepCuts = a.fImplementAvgSepCuts;
+  fWritePairKinematics = a.fWritePairKinematics;
+  fIsMCRun = a.fIsMCRun;
+  fIsMBAnalysis = a.fIsMBAnalysis;
+  fBuildMultHist = a.fBuildMultHist;
 
-  KStarModelCfs = 0;
-  K0Cut = 0;
-  V0PairCut = 0;
-  KchPCut = 0;
-  KchMCut = 0;
-  PiPCut = 0;
-  PiMCut = 0;
-  V0TrackPairCut = 0;
-  XiCut = 0;
-  AXiCut = 0;
-  XiTrackPairCut = 0;
+  fMinCent = a.fMinCent;
+  fMaxCent = a.fMaxCent;
 
-  LamCutNSigmaFilter = 0;
-  ALamCutNSigmaFilter = 0;
-  K0CutNSigmaFilter = 0;
+  fCollectionOfCfs = NULL;
 
-  if(fCollectionOfCfs) delete fCollectionOfCfs;
+  BasicEvCut = NULL;
+  EvCutEst = NULL;
+
+  XiCut1 = NULL;
+  XiCut2 = NULL;
+
+  V0Cut1 = NULL;
+  V0Cut2 = NULL;
+  
+  TrackCut1 = NULL;
+  TrackCut2 = NULL;
+  
+  V0PairCut = NULL;
+  V0TrackPairCut = NULL;
+  XiTrackPairCut = NULL;
+
+  KStarCf = NULL;
+  AvgSepCf = NULL;
+
+  KStarModelCfs = NULL;
+
+  if(a.fOutputName)
+  {
+    fOutputName = new char[strlen(a.fOutputName)+1];
+    strcpy(const_cast<char*>(fOutputName), a.fOutputName);
+  }
+  else fOutputName = 0;
+
+  if(a.fMultHist) fMultHist = new TH1F(*(a.fMultHist));
+  else fMultHist = NULL;
+
   fCollectionOfCfs = new AliFemtoCorrFctnCollection;
   AliFemtoCorrFctnIterator iter;
-  for(iter=TheOriginalAnalysis.fCollectionOfCfs->begin(); iter!=TheOriginalAnalysis.fCollectionOfCfs->end(); iter++)
+  for(iter=a.fCollectionOfCfs->begin(); iter!=a.fCollectionOfCfs->end(); iter++)
   {
     AliFemtoCorrFctn* fctn = (*iter)->Clone();
-    if(fctn) AddCorrFctn(fctn);
+    if(fctn) {AddCorrFctn(fctn);}
+    else {cout << " myTrainAnalysisConstructor::myTrainAnalysisConstructor(const myTrainAnalysisConstructor& a) - correlation function not found " << endl;}
   }
+
+  if(a.BasicEvCut) BasicEvCut = new AliFemtoBasicEventCut(*(a.BasicEvCut));
+  else BasicEvCut = NULL;
+
+  if(a.EvCutEst) EvCutEst = new AliFemtoEventCutEstimators(*(a.EvCutEst));
+  else EvCutEst = NULL;
+
+  if(a.XiCut1) XiCut1 = new AliFemtoXiTrackCut(*(a.XiCut1));
+  else XiCut1 = NULL;
+
+  if(a.XiCut2) XiCut2 = new AliFemtoXiTrackCut(*(a.XiCut2));
+  else XiCut2 = NULL;
+
+  if(a.V0Cut1) V0Cut1 = new AliFemtoV0TrackCutNSigmaFilter(*(a.V0Cut1));
+  else V0Cut1 = NULL;
+
+  if(a.V0Cut1) V0Cut2 = new AliFemtoV0TrackCutNSigmaFilter(*(a.V0Cut2));
+  else V0Cut2 = NULL;
+
+  if(a.TrackCut1) TrackCut1 = new AliFemtoESDTrackCutNSigmaFilter(*(a.TrackCut1));
+  else TrackCut1 = NULL;
+
+  if(a.TrackCut2) TrackCut2 = new AliFemtoESDTrackCutNSigmaFilter(*(a.TrackCut2));
+  else TrackCut2 = NULL;
+
+  if(a.V0PairCut) V0PairCut = new AliFemtoV0PairCut(*(a.V0PairCut));
+  else V0PairCut = NULL;
+
+  if(a.V0TrackPairCut) V0TrackPairCut = new AliFemtoV0TrackPairCut(*(a.V0TrackPairCut));
+  else V0TrackPairCut = NULL;
+
+  if(a.XiTrackPairCut) XiTrackPairCut = new AliFemtoXiTrackPairCut(*(a.XiTrackPairCut));
+  else XiTrackPairCut = NULL;
+
+  if(a.KStarCf) KStarCf = new AliFemtoCorrFctnKStar(*(a.KStarCf));
+  else KStarCf = NULL;
+
+  if(a.AvgSepCf) AvgSepCf = new AliFemtoAvgSepCorrFctn(*(a.AvgSepCf));
+  else AvgSepCf = NULL;
+
+  if(a.KStarModelCfs) KStarModelCfs = new AliFemtoModelCorrFctnKStarFull(*(a.KStarModelCfs));
+  else KStarModelCfs = NULL;
 
   return *this;
 }
-*/
+
 //____________________________
 myTrainAnalysisConstructor::~myTrainAnalysisConstructor()
 {
