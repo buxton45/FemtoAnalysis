@@ -36,14 +36,14 @@
 int *use_runs;
 use_runs = runs_Bm1;
 
-bool RunGrid = false;
+bool RunGrid = true;
 bool RunFull = true;  //set to false when merging
 bool RunMC = false;
 TString aConfigMacro = "ConfigTrainFemtoAnalysis.C";
 TString AdditionalLibs = "libPWGCFfemtoscopy.so libPWGCFfemtoscopyUser.so myTrainAnalysisConstructor.h myTrainAnalysisConstructor.cxx ConfigTrainFemtoAnalysis.C";
 TString aGridWorkingDir = "Results_cLamK0_20160928/Bm1";
 TString aGridOutputDir = "output_data";
-TString outputname = "Results_cLamK0_20160928_Bm1_Old.root";
+TString outputname = "Results_cLamK0_20160928_Bm1_New.root";
 
 
 
@@ -89,7 +89,7 @@ void RunTrains()
         alienHandler->SetAPIVersion("V1.1x");
 //        alienHandler->SetROOTVersion("v5-34-30-alice-8");  //apparently this is no longer needed
 //        alienHandler->SetAliROOTVersion("v5-07-20-4");
-        alienHandler->SetAliPhysicsVersion("vAN-20160928-1");
+        alienHandler->SetAliPhysicsVersion("vAN-20160929-1");
 
         alienHandler->SetAnalysisSource("myTrainAnalysisConstructor.cxx"); // Add any cxx files which need compiled here (.cxx files)
         alienHandler->SetAdditionalLibs(AdditionalLibs); // Add any files which need copied to grid here (.h,.cxx,.C files)

@@ -89,7 +89,7 @@ void RunTrains_Kch()
         alienHandler->SetAPIVersion("V1.1x");
 //        alienHandler->SetROOTVersion("v5-34-30-alice-8");  //apparently this is no longer needed
 //        alienHandler->SetAliROOTVersion("v5-07-20-4");
-        alienHandler->SetAliPhysicsVersion("vAN-20160927-1");
+        alienHandler->SetAliPhysicsVersion("vAN-20160929-1");
 
         alienHandler->SetAnalysisSource("myTrainAnalysisConstructor.cxx"); // Add any cxx files which need compiled here (.cxx files)
         alienHandler->SetAdditionalLibs(AdditionalLibs); // Add any files which need copied to grid here (.h,.cxx,.C files)
