@@ -25,7 +25,7 @@ bool DEFAULT_DO_KT = kFALSE;
 
 struct MacroParams {
   std::vector<int> centrality_ranges;
-  std::vector<AliFemtoAnalysisLambdaKaon::AnalysisType> pair_codes;
+  std::vector<int> pair_codes;
   float qinv_bin_size_MeV;
   float qinv_max_GeV;
   bool do_qinv_cf;
@@ -58,27 +58,6 @@ BuildConfiguration(
   AliFemtoAnalysisLambdaKaon::EventCutParams &aEvCutParams,
   AliFemtoAnalysisLambdaKaon::PairCutParams &aPairCutParams,
   MacroParams &aMac
-);
-
-void
-BuildParticleConfigurations(
-  const TString &aText,
-  AliFemtoAnalysisLambdaKaon::V0CutParams &aV0CutParams1,
-  AliFemtoAnalysisLambdaKaon::V0CutParams &aV0CutParams2
-);
-
-void
-BuildParticleConfigurations(
-  const TString &aText,
-  AliFemtoAnalysisLambdaKaon::V0CutParams &aV0CutParams1,
-  AliFemtoAnalysisLambdaKaon::ESDCutParams &aESDCutParams2
-);
-
-void
-BuildParticleConfigurations(
-  const TString &aText,
-  AliFemtoAnalysisLambdaKaon::XiCutParams &aXiCutParams1,
-  AliFemtoAnalysisLambdaKaon::ESDCutParams &aESDCutParams2
 );
 
 void
@@ -139,7 +118,7 @@ AliFemtoManager* ConfigFemtoAnalysis(const TString& aParamString="")
     rdr->SetReadV0(1);  //Read V0 information from the AOD and put it into V0Collection
     rdr->SetEPVZERO(kTRUE);  //to get event plane angle from VZERO
     rdr->SetCentralityFlattening(kFALSE);
-    rdr->SetPrimaryVertexCorrectionTPCPoints(tAnalysisConfig.implementVertexCorrection);
+    rdr->SetPrimaryVertexCorrectionTPCPoints(tAnalysisConfig.implementVertexCorrections);
     rdr->SetReadMC(tAnalysisConfig.isMCRun);
   tManager->SetEventReader(rdr);
 
@@ -160,6 +139,12 @@ AliFemtoManager* ConfigFemtoAnalysis(const TString& aParamString="")
     const int tMultLow  = tMacroConfig.centrality_ranges[iCent],
               tMultHigh = tMacroConfig.centrality_ranges[iCent+1];
 
+    tAnalysisConfig.minMult = 10.*tMultLow;
+    tAnalysisConfig.maxMult = 10.*tMultHigh;
+
+    tEventCutConfig.minCentrality = tMultLow;
+    tEventCutConfig.maxCentrality = tMultHigh;
+
     //loop over pair types
     for(unsigned int iPair = 0; iPair < tMacroConfig.pair_codes.size(); iPair++)
     {
@@ -167,12 +152,11 @@ AliFemtoManager* ConfigFemtoAnalysis(const TString& aParamString="")
       //Build unique analysis for each pair type in each centrality bin
       AliFemtoAnalysisLambdaKaon *tAnalysis = CreateCorrectAnalysis(aParamString,tMacroConfig.pair_codes[iPair],tAnalysisConfig,tEventCutConfig,tPairCutConfig);
       //TODO get pair cut to change for LamKchP and LamKchM
+
+      tManager->AddAnalysis(tAnalysis);
     }
 
   }
-
-
-
 
   return tManager;
 }
@@ -230,7 +214,7 @@ void SetPairCodes(AliFemtoAnalysisLambdaKaon::AnalysisType aAnType, MacroParams 
 
 
   default:
-    continue;
+    break;
   }
 }
 
@@ -375,7 +359,7 @@ BuildConfiguration(
   AliFemtoAnalysisLambdaKaon::PairCutParams &aPairCutParams,
   MacroParams &aMac)
 {
-  std::cout << "I-BuildConfiguration:" << TBase64::Encode(text) << " \n";
+//  std::cout << "I-BuildConfiguration:" << TBase64::Encode(text) << " \n";
 
   const TString tAnalysisVarName = "aAnParams",//
                 tEvCutVarName    = "aEvCutParams",
@@ -450,148 +434,13 @@ BuildConfiguration(
 
 }
 
-
-
-
-void
-BuildParticleConfigurations(
-  const TString &aText,
-  AliFemtoAnalysisLambdaKaon::V0CutParams &aV0CutParams1,
-  AliFemtoAnalysisLambdaKaon::V0CutParams &aV0CutParams2
-)
-{
-  std::cout << "I-BuildParticleConfigurations:" << TBase64::Encode(text) << " \n";
-
-  const TString tV0CutVarName1   = "aV0CutParams1",
-                tV0CutVarName2   = "aV0CutParams2";
-
-  TObjArray* tLines = aText.Tokenize("\n;");
-  TIter tNextLine(tLines);
-  TObject *tLineObj = NULL;
-
-  while(tLineObj = tNextLine())
-  {
-    const TString tLine = ((TObjString*)tLineObj)->String().Strip(TString::kBoth, ' ');
-    TString tCmd("");
-
-    switch(tLine[0]) {
-    case '$':  //Particle Cut Params
-      switch(tLine[1]) {
-      case '1':  //Particle 1
-        tCmd = tV0CutVarName1 + "." + tLine(2, tLine.Length() - 1);
-        break;
-
-      case '2':  //Particle 2
-        tCmd = tV0CutVarName2 + "." + tLine(2, tLine.Length() - 1);
-        break;
-      }
-      break;
-
-    default:
-      continue;
-    }
-    tCmd += ";";
-    cout << "I-BuildConfiguration: `" << tCmd << "`\n";
-    gROOT->ProcessLineFast(tCmd);
-  }
-}
-
-void
-BuildParticleConfigurations(
-  const TString &aText,
-  AliFemtoAnalysisLambdaKaon::V0CutParams &aV0CutParams1,
-  AliFemtoAnalysisLambdaKaon::ESDCutParams &aESDCutParams2
-)
-{
-  std::cout << "I-BuildParticleConfigurations:" << TBase64::Encode(text) << " \n";
-
-  const TString tV0CutVarName1    = "aV0CutParams1",
-                tESDCutVarName2   = "aESDCutParams2";
-
-  TObjArray* tLines = aText.Tokenize("\n;");
-  TIter tNextLine(tLines);
-  TObject *tLineObj = NULL;
-
-  while(tLineObj = tNextLine())
-  {
-    const TString tLine = ((TObjString*)tLineObj)->String().Strip(TString::kBoth, ' ');
-    TString tCmd("");
-
-    switch(tLine[0]) {
-    case '$':  //Particle Cut Params
-      switch(tLine[1]) {
-      case '1':  //Particle 1
-        tCmd = tV0CutVarName1 + "." + tLine(2, tLine.Length() - 1);
-        break;
-
-      case '2':  //Particle 2
-        tCmd = tESDCutVarName2 + "." + tLine(2, tLine.Length() - 1);
-        break;
-      }
-      break;
-
-    default:
-      continue;
-    }
-    tCmd += ";";
-    cout << "I-BuildConfiguration: `" << tCmd << "`\n";
-    gROOT->ProcessLineFast(tCmd);
-  }
-}
-
-void
-BuildParticleConfigurations(
-  const TString &aText,
-  AliFemtoAnalysisLambdaKaon::XiCutParams &aXiCutParams1,
-  AliFemtoAnalysisLambdaKaon::ESDCutParams &aESDCutParams2
-)
-{
-  std::cout << "I-BuildParticleConfigurations:" << TBase64::Encode(text) << " \n";
-
-  const TString tXiCutVarName1    = "aXiCutParams1",
-                tESDCutVarName2   = "aESDCutParams2";
-
-  TObjArray* tLines = aText.Tokenize("\n;");
-  TIter tNextLine(tLines);
-  TObject *tLineObj = NULL;
-
-  while(tLineObj = tNextLine())
-  {
-    const TString tLine = ((TObjString*)tLineObj)->String().Strip(TString::kBoth, ' ');
-    TString tCmd("");
-
-    switch(tLine[0]) {
-    case '$':  //Particle Cut Params
-      switch(tLine[1]) {
-      case '1':  //Particle 1
-        tCmd = tXiCutVarName1 + "." + tLine(2, tLine.Length() - 1);
-        break;
-
-      case '2':  //Particle 2
-        tCmd = tESDCutVarName2 + "." + tLine(2, tLine.Length() - 1);
-        break;
-      }
-      break;
-
-    default:
-      continue;
-    }
-    tCmd += ";";
-    cout << "I-BuildConfiguration: `" << tCmd << "`\n";
-    gROOT->ProcessLineFast(tCmd);
-  }
-}
-
-
-
-
 void
 BuildParticleConfiguration(
   const TString &aText,
   AliFemtoAnalysisLambdaKaon::V0CutParams &aV0CutParams
 )
 {
-  std::cout << "I-BuildParticleConfiguration:" << TBase64::Encode(text) << " \n";
+//  std::cout << "I-BuildParticleConfiguration:" << TBase64::Encode(text) << " \n";
 
   const TString tV0CutVarName = "aV0CutParams";
 
@@ -644,7 +493,7 @@ BuildParticleConfiguration(
   AliFemtoAnalysisLambdaKaon::ESDCutParams &aESDCutParams
 )
 {
-  std::cout << "I-BuildParticleConfiguration:" << TBase64::Encode(text) << " \n";
+//  std::cout << "I-BuildParticleConfiguration:" << TBase64::Encode(text) << " \n";
 
   const TString tESDCutVarName = "aESDCutParams";
 
@@ -701,7 +550,7 @@ BuildParticleConfiguration(
   AliFemtoAnalysisLambdaKaon::XiCutParams &aXiCutParams
 )
 {
-  std::cout << "I-BuildParticleConfiguration:" << TBase64::Encode(text) << " \n";
+//  std::cout << "I-BuildParticleConfiguration:" << TBase64::Encode(text) << " \n";
 
   const TString tXiCutVarName = "aXiCutParams";
 

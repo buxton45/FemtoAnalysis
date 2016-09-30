@@ -30,6 +30,11 @@ AliFemtoAnalysisLambdaKaon::AliFemtoAnalysisLambdaKaon(AliFemtoAnalysisLambdaKao
   AliFemtoVertexMultAnalysis(binsVertex,minVertex,maxVertex,binsMult,minMult,maxMult),
   fAnalysisParams(DefaultAnalysisParams()),
   fAnalysisType(aAnalysisType),
+  fGeneralAnalysisType(),
+  fParticlePDGType1(),
+  fParticlePDGType2(),
+  fGeneralParticleType1(),
+  fGeneralParticleType2(),
 
   fOutputName(fAnalysisTags[aAnalysisType]),
   fMultHist(NULL),
@@ -73,7 +78,7 @@ AliFemtoAnalysisLambdaKaon::AliFemtoAnalysisLambdaKaon(AliFemtoAnalysisLambdaKao
   fMinCent = minMult/10.;
   fMaxCent = maxMult/10.;
 
-  fOutputName += TString::Format("_%0.2d%0.2d",fMinCent,fMaxCent);
+  fOutputName += TString::Format("_%0.2f%0.2f",fMinCent,fMaxCent);
 
   fCollectionOfCfs = new AliFemtoCorrFctnCollection;
 
@@ -101,6 +106,11 @@ AliFemtoAnalysisLambdaKaon::AliFemtoAnalysisLambdaKaon(AnalysisParams &aAnParams
                              aAnParams.nBinsMult,aAnParams.minMult,aAnParams.maxMult),
   fAnalysisParams(aAnParams),
   fAnalysisType(aAnParams.analysisType),
+  fGeneralAnalysisType(),
+  fParticlePDGType1(),
+  fParticlePDGType2(),
+  fGeneralParticleType1(),
+  fGeneralParticleType2(),
   fOutputName(fAnalysisTags[fAnalysisType]),
   fMultHist(NULL),
   fImplementAvgSepCuts(aAnParams.implementAvgSepCuts),
@@ -130,27 +140,27 @@ AliFemtoAnalysisLambdaKaon::AliFemtoAnalysisLambdaKaon(AnalysisParams &aAnParams
   fMinCent = aAnParams.minMult/10.;
   fMaxCent = aAnParams.maxMult/10.;
 
-  fOutputName += TString::Format("_%0.2d%0.2d",fMinCent,fMaxCent);
+  fOutputName += TString::Format("_%0.2f%0.2f",fMinCent,fMaxCent);
 
   fCollectionOfCfs = new AliFemtoCorrFctnCollection;
 
 
   if(fWritePairKinematics)
   {
-    KStarCf = CreateCorrFctnKStar(fAnalysisTags[aAnalysisType],62,0.,0.31); //TNtuple is huge, and I don't need data out to 1 GeV
+    KStarCf = CreateCorrFctnKStar(fAnalysisTags[fAnalysisType],62,0.,0.31); //TNtuple is huge, and I don't need data out to 1 GeV
     fCollectionOfCfs->push_back((AliFemtoCorrFctn*)KStarCf);
   }
   else
   {
-    KStarCf = CreateCorrFctnKStar(fAnalysisTags[aAnalysisType],200,0.,1.0);
-    AvgSepCf = CreateAvgSepCorrFctn(fAnalysisTags[aAnalysisType],200,0.,20.);
+    KStarCf = CreateCorrFctnKStar(fAnalysisTags[fAnalysisType],200,0.,1.0);
+    AvgSepCf = CreateAvgSepCorrFctn(fAnalysisTags[fAnalysisType],200,0.,20.);
     fCollectionOfCfs->push_back((AliFemtoCorrFctn*)KStarCf);
     fCollectionOfCfs->push_back((AliFemtoCorrFctn*)AvgSepCf);
   }
 
   if(fIsMCRun)
   {
-    KStarModelCfs = CreateModelCorrFctnKStarFull(fAnalysisTags[aAnalysisType],200,0.,1.0);
+    KStarModelCfs = CreateModelCorrFctnKStarFull(fAnalysisTags[fAnalysisType],200,0.,1.0);
     KStarModelCfs->SetRemoveMisidentified(fAnalysisParams.removeMisidentifiedMCParticles);
     fCollectionOfCfs->push_back((AliFemtoCorrFctn*)KStarModelCfs);
   }
@@ -159,7 +169,7 @@ AliFemtoAnalysisLambdaKaon::AliFemtoAnalysisLambdaKaon(AnalysisParams &aAnParams
 
 
 //___________________________________________________________________
-AliFemtoAnalysisLambdaKaon(AnalysisParams &aAnParams, EventCutParams &aEvCutParams, PairCutParams &aPairCutParams, V0CutParams &aV0CutParams1, V0CutParams &aV0CutParams2) :
+AliFemtoAnalysisLambdaKaon::AliFemtoAnalysisLambdaKaon(AnalysisParams &aAnParams, EventCutParams &aEvCutParams, PairCutParams &aPairCutParams, V0CutParams &aV0CutParams1, V0CutParams &aV0CutParams2) :
   AliFemtoAnalysisLambdaKaon::AliFemtoAnalysisLambdaKaon(aAnParams,aEvCutParams)
 {
   AliFemtoV0TrackCutNSigmaFilter* tV0Cut1 = CreateV0Cut(aV0CutParams1);
@@ -180,7 +190,7 @@ AliFemtoAnalysisLambdaKaon(AnalysisParams &aAnParams, EventCutParams &aEvCutPara
 }
 
 //___________________________________________________________________
-AliFemtoAnalysisLambdaKaon(AnalysisParams &aAnParams, EventCutParams &aEvCutParams, PairCutParams &aPairCutParams, V0CutParams &aV0CutParams1, ESDCutParams &aESDCutParams2) :
+AliFemtoAnalysisLambdaKaon::AliFemtoAnalysisLambdaKaon(AnalysisParams &aAnParams, EventCutParams &aEvCutParams, PairCutParams &aPairCutParams, V0CutParams &aV0CutParams1, ESDCutParams &aESDCutParams2) :
   AliFemtoAnalysisLambdaKaon::AliFemtoAnalysisLambdaKaon(aAnParams,aEvCutParams)
 {
   AliFemtoV0TrackCutNSigmaFilter* tV0Cut1 = CreateV0Cut(aV0CutParams1);
@@ -200,7 +210,7 @@ AliFemtoAnalysisLambdaKaon(AnalysisParams &aAnParams, EventCutParams &aEvCutPara
 }
 
 //___________________________________________________________________
-AliFemtoAnalysisLambdaKaon(AnalysisParams &aAnParams, EventCutParams &aEvCutParams, PairCutParams &aPairCutParams, XiCutParams &aXiCutParams1, ESDCutParams &aESDCutParams2) :
+AliFemtoAnalysisLambdaKaon::AliFemtoAnalysisLambdaKaon(AnalysisParams &aAnParams, EventCutParams &aEvCutParams, PairCutParams &aPairCutParams, XiCutParams &aXiCutParams1, ESDCutParams &aESDCutParams2) :
   AliFemtoAnalysisLambdaKaon::AliFemtoAnalysisLambdaKaon(aAnParams,aEvCutParams)
 {
   AliFemtoXiTrackCut* tXiCut1 = CreateXiCut(aXiCutParams1);
@@ -219,9 +229,114 @@ AliFemtoAnalysisLambdaKaon(AnalysisParams &aAnParams, EventCutParams &aEvCutPara
   }
 }
 
+//___________________________________________________________________
+AliFemtoAnalysisLambdaKaon::AliFemtoAnalysisLambdaKaon(const AliFemtoAnalysisLambdaKaon& a) :
+  AliFemtoVertexMultAnalysis(a),
+
+  fAnalysisParams(a.fAnalysisParams),
+  fAnalysisType(a.fAnalysisType),
+  fGeneralAnalysisType(a.fGeneralAnalysisType),
+  fParticlePDGType1(a.fParticlePDGType1),
+  fParticlePDGType2(a.fParticlePDGType2),
+  fGeneralParticleType1(a.fGeneralParticleType1),
+  fGeneralParticleType2(a.fGeneralParticleType2),
+  fOutputName(a.fOutputName),
+  fMultHist(NULL),
+  fImplementAvgSepCuts(a.fImplementAvgSepCuts),
+  fWritePairKinematics(a.fWritePairKinematics),
+  fIsMCRun(a.fIsMCRun),
+  fIsMBAnalysis(a.fIsMBAnalysis),
+  fBuildMultHist(a.fBuildMultHist),
+  fMinCent(a.fMinCent),
+  fMaxCent(a.fMaxCent),
+
+  fCollectionOfCfs(NULL),
+
+  KStarCf(NULL),
+  AvgSepCf(NULL),
+
+  KStarModelCfs(NULL)
+{
+
+  if(a.fMultHist) fMultHist = new TH1F(*(a.fMultHist));
+  else fMultHist = NULL;
+
+  fCollectionOfCfs = new AliFemtoCorrFctnCollection;
+  AliFemtoCorrFctnIterator iter;
+  for(iter=a.fCollectionOfCfs->begin(); iter!=a.fCollectionOfCfs->end(); iter++)
+  {
+    AliFemtoCorrFctn* fctn = (*iter)->Clone();
+    if(fctn) {AddCorrFctn(fctn);}
+    else {cout << " myTrainAnalysisConstructor::myTrainAnalysisConstructor(const myTrainAnalysisConstructor& a) - correlation function not found " << endl;}
+  }
+
+  if(a.KStarCf) KStarCf = new AliFemtoCorrFctnKStar(*(a.KStarCf));
+  else KStarCf = NULL;
+
+  if(a.AvgSepCf) AvgSepCf = new AliFemtoAvgSepCorrFctn(*(a.AvgSepCf));
+  else AvgSepCf = NULL;
+
+  if(a.KStarModelCfs) KStarModelCfs = new AliFemtoModelCorrFctnKStarFull(*(a.KStarModelCfs));
+  else KStarModelCfs = NULL;
+}
 
 //___________________________________________________________________
-AliFemtoAnalysisLambdaKaon::~AliFemtoAnalysisLambdaKaon() :
+AliFemtoAnalysisLambdaKaon& AliFemtoAnalysisLambdaKaon::operator=(const AliFemtoAnalysisLambdaKaon& a)
+{
+  if(this == &a) {return *this;}
+
+  AliFemtoVertexMultAnalysis::operator=(a);
+
+
+  fAnalysisParams = a.fAnalysisParams;
+  fAnalysisType = a.fAnalysisType;
+  fGeneralAnalysisType = a.fGeneralAnalysisType;
+  fParticlePDGType1 = a.fParticlePDGType1;
+  fParticlePDGType2 = a.fParticlePDGType2;
+  fGeneralParticleType1 = a.fGeneralParticleType1;
+  fGeneralParticleType2 = a.fGeneralParticleType2;
+  fOutputName = a.fOutputName;
+  fMultHist = NULL;
+  fImplementAvgSepCuts = a.fImplementAvgSepCuts;
+  fWritePairKinematics = a.fWritePairKinematics;
+  fIsMCRun = a.fIsMCRun;
+  fIsMBAnalysis = a.fIsMBAnalysis;
+  fBuildMultHist = a.fBuildMultHist;
+  fMinCent = a.fMinCent;
+  fMaxCent = a.fMaxCent;
+  fCollectionOfCfs = NULL;
+  KStarCf = NULL;
+  AvgSepCf = NULL;
+
+  KStarModelCfs = NULL;
+
+  if(a.fMultHist) fMultHist = new TH1F(*(a.fMultHist));
+  else fMultHist = NULL;
+
+  fCollectionOfCfs = new AliFemtoCorrFctnCollection;
+  AliFemtoCorrFctnIterator iter;
+  for(iter=a.fCollectionOfCfs->begin(); iter!=a.fCollectionOfCfs->end(); iter++)
+  {
+    AliFemtoCorrFctn* fctn = (*iter)->Clone();
+    if(fctn) {AddCorrFctn(fctn);}
+    else {cout << " myTrainAnalysisConstructor::myTrainAnalysisConstructor(const myTrainAnalysisConstructor& a) - correlation function not found " << endl;}
+  }
+
+  if(a.KStarCf) KStarCf = new AliFemtoCorrFctnKStar(*(a.KStarCf));
+  else KStarCf = NULL;
+
+  if(a.AvgSepCf) AvgSepCf = new AliFemtoAvgSepCorrFctn(*(a.AvgSepCf));
+  else AvgSepCf = NULL;
+
+  if(a.KStarModelCfs) KStarModelCfs = new AliFemtoModelCorrFctnKStarFull(*(a.KStarModelCfs));
+  else KStarModelCfs = NULL;
+
+  return *this;
+}
+
+
+//___________________________________________________________________
+AliFemtoAnalysisLambdaKaon::~AliFemtoAnalysisLambdaKaon()
 {
 //no-op
 }
@@ -539,14 +654,14 @@ void AliFemtoAnalysisLambdaKaon::AddCustomV0RejectionFilters(ParticlePDGType aV0
 }
 
 //___________________________________________________________________
-AliFemtoAnalysisLambdaKaon::AliFemtoV0TrackCutNSigmaFilter* CreateV0Cut(V0CutParams &aCutParams)
+AliFemtoV0TrackCutNSigmaFilter* AliFemtoAnalysisLambdaKaon::CreateV0Cut(V0CutParams &aCutParams)
 {
   AliFemtoV0TrackCutNSigmaFilter* tV0Cut = new AliFemtoV0TrackCutNSigmaFilter();
 
   tV0Cut->SetParticleType(aCutParams.v0Type);
   tV0Cut->SetMass(aCutParams.mass);
   tV0Cut->SetInvariantMassLambda(aCutParams.minInvariantMass,aCutParams.maxInvariantMass);
-  tV0Cut->SetLooseInvMassCut(aCutParams.useLooseInvMassCut, aCutParams.minLooseInvMassCut, aCutParams.maxLooseInvMassCut);
+  tV0Cut->SetLooseInvMassCut(aCutParams.useLooseInvMassCut, aCutParams.minLooseInvMass, aCutParams.maxLooseInvMass);
 
   tV0Cut->SetEta(aCutParams.eta);
   tV0Cut->SetPt(aCutParams.minPt, aCutParams.maxPt);
@@ -715,8 +830,8 @@ AliFemtoESDTrackCutNSigmaFilter* AliFemtoAnalysisLambdaKaon::CreateESDCut(ESDCut
   tESDCut->SetElectronRejection(aCutParams.useElectronRejection);
   tESDCut->SetPionRejection(aCutParams.usePionRejection);
 
-  if(aCutParams.useCustomFilter) tESDCut->AddCustomESDSelectionFilters(aCutParams.particlePDGType,tESDCut)
-  if(aCutParams.useCustomMisID) tESDCut->AddCustomESDRejectionFilters(aCutParams.particlePDGType,tESDCut)
+  if(aCutParams.useCustomFilter) AddCustomESDSelectionFilters(aCutParams.particlePDGType,tESDCut);
+  if(aCutParams.useCustomMisID) AddCustomESDRejectionFilters(aCutParams.particlePDGType,tESDCut);
 
   return tESDCut;
 }
@@ -809,10 +924,39 @@ AliFemtoV0PairCut* AliFemtoAnalysisLambdaKaon::CreateV0PairCut(PairCutParams &aP
   v0pc1->SetRemoveSameLabel(aPairCutParams.removeSameLabel);
   v0pc1->SetTPCExitSepMinimum(aPairCutParams.tpcExitSepMinimum);  //Default is 0, but for some reason distExitPos(Neg) always end up as 0?
 
-  v0pc1->SetMinAvgSeparation(0,aPairCutParams.minAvgSepPosPos);
-  v0pc1->SetMinAvgSeparation(1,aPairCutParams.minAvgSepPosNeg);
-  v0pc1->SetMinAvgSeparation(2,aPairCutParams.minAvgSepNegPos);
-  v0pc1->SetMinAvgSeparation(3,aPairCutParams.minAvgSepNegNeg);
+  double tPosPos=0., tPosNeg=0., tNegPos=0., tNegNeg=0.;
+  switch(fAnalysisType) {
+  case AliFemtoAnalysisLambdaKaon::kLamK0:
+  case AliFemtoAnalysisLambdaKaon::kLamLam:
+    tPosPos = aPairCutParams.minAvgSepPosPos;
+    tPosNeg = aPairCutParams.minAvgSepPosNeg;
+    tNegPos = aPairCutParams.minAvgSepNegPos;
+    tNegNeg = aPairCutParams.minAvgSepNegNeg;
+    break;
+
+  case AliFemtoAnalysisLambdaKaon::kALamK0:
+  case AliFemtoAnalysisLambdaKaon::kALamALam:
+    tPosPos = aPairCutParams.minAvgSepNegNeg;
+    tPosNeg = aPairCutParams.minAvgSepNegPos;
+    tNegPos = aPairCutParams.minAvgSepPosNeg;
+    tNegNeg = aPairCutParams.minAvgSepPosPos;
+    break;
+
+  case AliFemtoAnalysisLambdaKaon::kLamALam:  //Jai (typically PosNeg=NegPos=0)
+    tPosPos = 0.5*(aPairCutParams.minAvgSepPosPos + aPairCutParams.minAvgSepNegNeg);
+    tPosNeg = 0.5*(aPairCutParams.minAvgSepPosNeg + aPairCutParams.minAvgSepNegPos);
+    tNegPos = 0.5*(aPairCutParams.minAvgSepPosNeg + aPairCutParams.minAvgSepNegPos);
+    tNegNeg = 0.5*(aPairCutParams.minAvgSepPosPos + aPairCutParams.minAvgSepNegNeg);
+    break;
+
+  default:
+    break;
+  }
+
+  v0pc1->SetMinAvgSeparation(0,tPosPos);
+  v0pc1->SetMinAvgSeparation(1,tPosNeg);
+  v0pc1->SetMinAvgSeparation(2,tNegPos);
+  v0pc1->SetMinAvgSeparation(3,tNegNeg);
 
   return v0pc1;
 }
@@ -832,8 +976,32 @@ AliFemtoV0TrackPairCut* AliFemtoAnalysisLambdaKaon::CreateV0TrackPairCut(PairCut
 //    v0TrackPairCut1->SetMinAvgSeparation(1,11);
     v0TrackPairCut1->SetRemoveSameLabel(aPairCutParams.removeSameLabel);
 
-  v0TrackPairCut1->SetMinAvgSeparation(0,aPairCutParams.minAvgSepTrackPos);
-  v0TrackPairCut1->SetMinAvgSeparation(1,aPairCutParams.minAvgSepTrackNeg);
+
+  double tTrackPos=0., tTrackNeg=0.;
+  switch(fAnalysisType) {
+  case AliFemtoAnalysisLambdaKaon::kLamKchP:
+  case AliFemtoAnalysisLambdaKaon::kALamKchP:
+  case AliFemtoAnalysisLambdaKaon::kLamPiP:
+  case AliFemtoAnalysisLambdaKaon::kALamPiP:
+    tTrackPos = aPairCutParams.minAvgSepTrackPos;
+    tTrackNeg = aPairCutParams.minAvgSepTrackNeg;
+    break;
+
+  case AliFemtoAnalysisLambdaKaon::kLamKchM:
+  case AliFemtoAnalysisLambdaKaon::kALamKchM:
+  case AliFemtoAnalysisLambdaKaon::kLamPiM:
+  case AliFemtoAnalysisLambdaKaon::kALamPiM:
+    tTrackPos = aPairCutParams.minAvgSepTrackNeg;
+    tTrackNeg = aPairCutParams.minAvgSepTrackPos;
+    break;
+
+  default:
+    break;
+  }
+
+
+  v0TrackPairCut1->SetMinAvgSeparation(0,tTrackPos);
+  v0TrackPairCut1->SetMinAvgSeparation(1,tTrackNeg);
 
   return v0TrackPairCut1;
 }
@@ -1051,7 +1219,7 @@ void AliFemtoAnalysisLambdaKaon::AddCutMonitors(AliFemtoEventCut* aEventCut, Ali
 }
 
 //___________________________________________________________________
-void SetAnalysis(AliFemtoEventCut* aEventCut, AliFemtoParticleCut* aPartCut1, AliFemtoParticleCut* aPartCut2, AliFemtoPairCut* aPairCut)
+void AliFemtoAnalysisLambdaKaon::SetAnalysis(AliFemtoEventCut* aEventCut, AliFemtoParticleCut* aPartCut1, AliFemtoParticleCut* aPartCut2, AliFemtoPairCut* aPairCut)
 {
   //AliFemtoCutMonitorHandler does not implement deep-copying on the AliFemtoCutMonitorCollection objects
   //Therefore, it is necessary to create the cut monitors uniquely for each analysis, making it impossible to simply throw pre-made particle cuts, etc. into
@@ -1073,6 +1241,15 @@ void SetAnalysis(AliFemtoEventCut* aEventCut, AliFemtoParticleCut* aPartCut1, Al
   {
     AddCorrFctn(*iter);
   }
+}
+
+//___________________________________________________________________
+void AliFemtoAnalysisLambdaKaon::SetMultHist(const char* name, int aNbins, double aMin, double aMax)
+{
+  fMultHist = new TH1F(
+                       TString::Format("MultHist_%s", name), "Multiplicity",
+                       aNbins, aMin, aMax);
+  fBuildMultHist = true;
 }
 
 //___________________________________________________________________

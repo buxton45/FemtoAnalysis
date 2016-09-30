@@ -68,119 +68,7 @@ public:
 
   enum GeneralParticleType {kV0=0, kTrack=1, kCascade=2};
 
-  struct AnalysisParams;
-  struct EventCutParams;
-  struct V0CutParams;
-  struct ESDCutParams;
-  struct XiCutParams;
-  struct PairCutParams;
-
-  AliFemtoAnalysisLambdaKaon(AnalysisType aAnalysisType, unsigned int binsVertex, double minVertex, double maxVertex, unsigned int binsMult, double minMult, double maxMult, bool aIsMCRun, bool aImplementAvgSepCuts, bool aWritePairKinematics=false);
-
-  AliFemtoAnalysisLambdaKaon(AnalysisParams &aAnParams, EventCutParams &aEvCutParams);
-  AliFemtoAnalysisLambdaKaon(AnalysisParams &aAnParams, EventCutParams &aEvCutParams, PairCutParams &aPairCutParams, V0CutParams &aV0CutParams1, V0CutParams &aV0CutParams2);
-  AliFemtoAnalysisLambdaKaon(AnalysisParams &aAnParams, EventCutParams &aEvCutParams, PairCutParams &aPairCutParams, V0CutParams &aV0CutParams1, ESDCutParams &aESDCutParams2);
-  AliFemtoAnalysisLambdaKaon(AnalysisParams &aAnParams, EventCutParams &aEvCutParams, PairCutParams &aPairCutParams, XiCutParams &aXiCutParams1, ESDCutParams &aESDCutParams2);
-
-    //Since I am using rdr->SetUseMultiplicity(AliFemtoEventReaderAOD::kCentrality), 
-      // in AliFemtoEventReaderAOD.cxx this causes tEvent->SetNormalizedMult(lrint(10*cent->GetCentralityPercentile("V0A"))), i.e. fNormalizedMult in [0,1000]
-      // Therefore, since fNormalizedMult is presumably >= -1, in AliFemtoEvent.cxx the call UncorrectedNumberOfPrimaries returns fNormalizedMult
-    //LONG STORY SHORT:  the inputs for multiplicity in the above are actually for 10*centrality (i.e. 0-100 for 0-10% centrality)
-    //Note:  fNormalizedMult is typically in range [0,1000] (as can be seen in AliFemtoEventReaderAOD.cxx).  This appears true when SetUseMultiplicity is set to kCentrality, kCentralityV0A, kCentralityV0C, kCentralityZNA, kCentralityZNC, kCentralityCL1, kCentralityCL0, kCentralityTRK, kCentralityTKL, kCentralityCND, kCentralityNPA, kCentralityFMD.
-      // fNormalizedMult WILL NOT be [0,1000] when SetUseMultiplicity is set to kGlobalCount, kReference, kTPCOnlyRef, and kVZERO 
-
-  virtual ~AliFemtoAnalysisLambdaKaon();
-
-  virtual void ProcessEvent(const AliFemtoEvent* ProcessThisEvent);  //will add fMultHist to the process event of AliFemtoVertexMultAnalysis
-  virtual TList* GetOutputList();
-
-
-  void SetParticleTypes(AnalysisType aAnType);
-
-  AliFemtoBasicEventCut* CreateBasicEventCut(EventCutParams &aEvCutParams);
-  AliFemtoEventCutEstimators* CreateEventCutEstimators(EventCutParams &aEvCutParams);
-
-  void AddCustomV0SelectionFilters(ParticlePDGType aV0Type, AliFemtoV0TrackCutNSigmaFilter* aCut);
-  void AddCustomV0RejectionFilters(ParticlePDGType aV0Type, AliFemtoV0TrackCutNSigmaFilter* aCut);
-  AliFemtoV0TrackCutNSigmaFilter* CreateV0Cut(V0CutParams &aCutParams);
-
-  void AddCustomESDSelectionFilters(ParticlePDGType aESDType, AliFemtoESDTrackCutNSigmaFilter* aCut);
-  void AddCustomESDRejectionFilters(ParticlePDGType aESDType, AliFemtoESDTrackCutNSigmaFilter* aCut);
-  AliFemtoESDTrackCutNSigmaFilter* CreateESDCut(ESDCutParams &aCutParams);
-
-  AliFemtoXiTrackCut* CreateXiCut(XiCutParams &aCutParams);
-
-  AliFemtoV0PairCut* CreateV0PairCut(PairCutParams &aPairCutParams);
-  AliFemtoV0TrackPairCut* CreateV0TrackPairCut(PairCutParams &aPairCutParams);
-  AliFemtoXiTrackPairCut* CreateXiTrackPairCut(PairCutParams &aPairCutParams);
-
-  AliFemtoCorrFctnKStar* CreateCorrFctnKStar(const char* name, unsigned int bins, double min, double max);
-  AliFemtoAvgSepCorrFctn* CreateAvgSepCorrFctn(const char* name, unsigned int bins, double min, double max);
-  AliFemtoModelCorrFctnKStarFull* CreateModelCorrFctnKStarFull(const char* name, unsigned int bins, double min, double max);    //TODO check that enum to int is working
-
-  void AddCutMonitors(AliFemtoEventCut* aEventCut, AliFemtoParticleCut* aPartCut1, AliFemtoParticleCut* aPartCut2, AliFemtoPairCut* aPairCut);
-  void SetAnalysis(AliFemtoEventCut* aEventCut, AliFemtoParticleCut* aPartCut1, AliFemtoParticleCut* aPartCut2, AliFemtoPairCut* aPairCut);
-
-  //------Builders for default cut objects
-  AnalysisParams DefaultAnalysisParams();
-  EventCutParams DefaultEventCutParams();
-
-  V0CutParams DefaultLambdaCutParams();
-  V0CutParams DefaultAntiLambdaCutParams();
-  V0CutParams DefaultK0ShortCutParams();
-
-  ESDCutParams DefaultKchCutParams(int aCharge);
-  ESDCutParams DefaultPiCutParams(int aCharge);
-
-  XiCutParams DefaultXiCutParams();
-  XiCutParams DefaultAXiCutParams();
-
-  PairCutParams DefaultPairParams();
-  //----------------------------------------
-
-
-
-
-
-
-protected:
-  static const char* const fAnalysisTags[];
-
-  AnalysisParams fAnalysisParams;
-  AnalysisType fAnalysisType;
-  GeneralAnalysisType fGeneralAnalysisType;
-  ParticlePDGType fParticlePDGType1, fParticlePDGType2;
-  GeneralParticleType fGeneralParticleType1, fGeneralParticleType2;
-  TString fOutputName;		      /* name given to output directory for specific analysis*/
-  TH1F* fMultHist;			      //histogram of event multiplicities to ensure event cuts are properly implemented
-  bool fImplementAvgSepCuts;		      //Self-explanatory, set to kTRUE when I want Avg Sep cuts implemented
-  bool fWritePairKinematics;
-  bool fIsMCRun;
-  bool fIsMBAnalysis;
-  bool fBuildMultHist;
-
-  double fMinCent, fMaxCent;
-
-  AliFemtoCorrFctnCollection* fCollectionOfCfs;
-
-  //----------------------------------------
-
-  AliFemtoCorrFctnKStar *KStarCf;
-  AliFemtoAvgSepCorrFctn *AvgSepCf;
-
-  AliFemtoModelCorrFctnKStarFull *KStarModelCfs;
-
-
-
-
-
-#ifdef __ROOT__
-  ClassDef(AliFemtoAnalysisLambdaKaon, 0)
-#endif
-
-};
-
-struct AliFemtoAnalysisLambdaKaon::AnalysisParams
+struct AnalysisParams
 {
   unsigned int nBinsVertex;
   double minVertex,
@@ -207,7 +95,7 @@ struct AliFemtoAnalysisLambdaKaon::AnalysisParams
   bool setV0SharedDaughterCut;
 };
 
-struct AliFemtoAnalysisLambdaKaon::EventCutParams
+struct EventCutParams
 {
   double minCentrality,
          maxCentrality;
@@ -219,7 +107,7 @@ struct AliFemtoAnalysisLambdaKaon::EventCutParams
          maxVertexZ;
 };
 
-struct AliFemtoAnalysisLambdaKaon::V0CutParams
+struct V0CutParams
 {
   ParticlePDGType particlePDGType;
   GeneralParticleType generalParticleType;
@@ -268,7 +156,7 @@ struct AliFemtoAnalysisLambdaKaon::V0CutParams
 
 };
 
-struct AliFemtoAnalysisLambdaKaon::ESDCutParams
+struct ESDCutParams
 {
   ParticlePDGType particlePDGType;
   GeneralParticleType generalParticleType;
@@ -276,7 +164,7 @@ struct AliFemtoAnalysisLambdaKaon::ESDCutParams
   double minPidProbPion,
          maxPidProbPion;
   double minPidProbMuon,
-         maxPidPronMuon;
+         maxPidProbMuon;
   double minPidProbKaon,
          maxPidProbKaon;
   double minPidProbProton,
@@ -299,12 +187,12 @@ struct AliFemtoAnalysisLambdaKaon::ESDCutParams
   double maxImpactZ;
 
   bool useCustomFilter;
-  bool useCustomMisID
+  bool useCustomMisID;
   bool useElectronRejection;
   bool usePionRejection;
 };
 
-struct AliFemtoAnalysisLambdaKaon::XiCutParams
+struct XiCutParams
 {
   ParticlePDGType particlePDGType;
   GeneralParticleType generalParticleType;
@@ -352,7 +240,7 @@ struct AliFemtoAnalysisLambdaKaon::XiCutParams
 
 };
 
-struct AliFemtoAnalysisLambdaKaon::PairCutParams
+struct PairCutParams
 {
   bool removeSameLabel;
   double shareQualityMax;
@@ -362,13 +250,128 @@ struct AliFemtoAnalysisLambdaKaon::PairCutParams
   double tpcExitSepMinimum;
   double tpcEntranceSepMinimum;
 
-  double minAvgSepPosPos,
-         minAvgSepPosNeg,
+  double minAvgSepPosPos,  // Set these for V0-V0 pair; V0-AntiV0 and AntiV0-AntiV0 cases
+         minAvgSepPosNeg,  // will automatically be handled by AliFemtoAnalysisLambdaKaon::CreateV0PairCut
          minAvgSepNegPos,
          minAvgSepNegNeg;
 
-  double minAvgSepTrackPos,
-         minAvgSepTrackNeg;
+  double minAvgSepTrackPos,  // Set these for V0-PosTrack; V0-NegTrack, AntiV0-Pos, etc. cases
+         minAvgSepTrackNeg;  // will automatically be handled by AliFemtoAnalysisLambdaKaon::CreateV0TrackPairCut
 };
+
+//----------------------------------------------------------------------------------------------------------------------------------------------------------
+//**********************************************************************************************************************************************************
+//----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+  AliFemtoAnalysisLambdaKaon(AnalysisType aAnalysisType, unsigned int binsVertex, double minVertex, double maxVertex, unsigned int binsMult, double minMult, double maxMult, bool aIsMCRun, bool aImplementAvgSepCuts, bool aWritePairKinematics=false);
+
+  AliFemtoAnalysisLambdaKaon(AnalysisParams &aAnParams, EventCutParams &aEvCutParams);
+  AliFemtoAnalysisLambdaKaon(AnalysisParams &aAnParams, EventCutParams &aEvCutParams, PairCutParams &aPairCutParams, V0CutParams &aV0CutParams1, V0CutParams &aV0CutParams2);
+  AliFemtoAnalysisLambdaKaon(AnalysisParams &aAnParams, EventCutParams &aEvCutParams, PairCutParams &aPairCutParams, V0CutParams &aV0CutParams1, ESDCutParams &aESDCutParams2);
+  AliFemtoAnalysisLambdaKaon(AnalysisParams &aAnParams, EventCutParams &aEvCutParams, PairCutParams &aPairCutParams, XiCutParams &aXiCutParams1, ESDCutParams &aESDCutParams2);
+
+    //Since I am using rdr->SetUseMultiplicity(AliFemtoEventReaderAOD::kCentrality), 
+      // in AliFemtoEventReaderAOD.cxx this causes tEvent->SetNormalizedMult(lrint(10*cent->GetCentralityPercentile("V0A"))), i.e. fNormalizedMult in [0,1000]
+      // Therefore, since fNormalizedMult is presumably >= -1, in AliFemtoEvent.cxx the call UncorrectedNumberOfPrimaries returns fNormalizedMult
+    //LONG STORY SHORT:  the inputs for multiplicity in the above are actually for 10*centrality (i.e. 0-100 for 0-10% centrality)
+    //Note:  fNormalizedMult is typically in range [0,1000] (as can be seen in AliFemtoEventReaderAOD.cxx).  This appears true when SetUseMultiplicity is set to kCentrality, kCentralityV0A, kCentralityV0C, kCentralityZNA, kCentralityZNC, kCentralityCL1, kCentralityCL0, kCentralityTRK, kCentralityTKL, kCentralityCND, kCentralityNPA, kCentralityFMD.
+      // fNormalizedMult WILL NOT be [0,1000] when SetUseMultiplicity is set to kGlobalCount, kReference, kTPCOnlyRef, and kVZERO 
+
+  
+  AliFemtoAnalysisLambdaKaon(const AliFemtoAnalysisLambdaKaon& TheOriginalAnalysis);
+  AliFemtoAnalysisLambdaKaon& operator=(const AliFemtoAnalysisLambdaKaon& TheOriginalAnalysis);
+  virtual ~AliFemtoAnalysisLambdaKaon();
+
+  virtual void ProcessEvent(const AliFemtoEvent* ProcessThisEvent);  //will add fMultHist to the process event of AliFemtoVertexMultAnalysis
+  virtual TList* GetOutputList();
+
+
+  void SetParticleTypes(AnalysisType aAnType);
+
+  AliFemtoBasicEventCut* CreateBasicEventCut(EventCutParams &aEvCutParams);
+  AliFemtoEventCutEstimators* CreateEventCutEstimators(EventCutParams &aEvCutParams);
+
+  void AddCustomV0SelectionFilters(ParticlePDGType aV0Type, AliFemtoV0TrackCutNSigmaFilter* aCut);
+  void AddCustomV0RejectionFilters(ParticlePDGType aV0Type, AliFemtoV0TrackCutNSigmaFilter* aCut);
+  AliFemtoV0TrackCutNSigmaFilter* CreateV0Cut(V0CutParams &aCutParams);
+
+  void AddCustomESDSelectionFilters(ParticlePDGType aESDType, AliFemtoESDTrackCutNSigmaFilter* aCut);
+  void AddCustomESDRejectionFilters(ParticlePDGType aESDType, AliFemtoESDTrackCutNSigmaFilter* aCut);
+  AliFemtoESDTrackCutNSigmaFilter* CreateESDCut(ESDCutParams &aCutParams);
+
+  AliFemtoXiTrackCut* CreateXiCut(XiCutParams &aCutParams);
+
+  AliFemtoV0PairCut* CreateV0PairCut(PairCutParams &aPairCutParams);
+  AliFemtoV0TrackPairCut* CreateV0TrackPairCut(PairCutParams &aPairCutParams);
+  AliFemtoXiTrackPairCut* CreateXiTrackPairCut(PairCutParams &aPairCutParams);
+
+  AliFemtoCorrFctnKStar* CreateCorrFctnKStar(const char* name, unsigned int bins, double min, double max);
+  AliFemtoAvgSepCorrFctn* CreateAvgSepCorrFctn(const char* name, unsigned int bins, double min, double max);
+  AliFemtoModelCorrFctnKStarFull* CreateModelCorrFctnKStarFull(const char* name, unsigned int bins, double min, double max);    //TODO check that enum to int is working
+
+  void AddCutMonitors(AliFemtoEventCut* aEventCut, AliFemtoParticleCut* aPartCut1, AliFemtoParticleCut* aPartCut2, AliFemtoPairCut* aPairCut);
+  void SetAnalysis(AliFemtoEventCut* aEventCut, AliFemtoParticleCut* aPartCut1, AliFemtoParticleCut* aPartCut2, AliFemtoPairCut* aPairCut);
+  void SetMultHist(const char* name, int aNbins=30, double aMin=0., double aMax=3000);
+
+  //------Builders for default cut objects
+  static AnalysisParams DefaultAnalysisParams();
+  static EventCutParams DefaultEventCutParams();
+
+  static V0CutParams DefaultLambdaCutParams();
+  static V0CutParams DefaultAntiLambdaCutParams();
+  static V0CutParams DefaultK0ShortCutParams();
+
+  static ESDCutParams DefaultKchCutParams(int aCharge);
+  static ESDCutParams DefaultPiCutParams(int aCharge);
+
+  static XiCutParams DefaultXiCutParams();
+  static XiCutParams DefaultAXiCutParams();
+
+  static PairCutParams DefaultPairParams();
+  //----------------------------------------
+
+
+
+
+
+
+protected:
+  static const char* const fAnalysisTags[];
+
+  AnalysisParams fAnalysisParams;
+  AnalysisType fAnalysisType;
+  GeneralAnalysisType fGeneralAnalysisType;
+  ParticlePDGType fParticlePDGType1, fParticlePDGType2;
+  GeneralParticleType fGeneralParticleType1, fGeneralParticleType2;
+  TString fOutputName;		      /* name given to output directory for specific analysis*/
+  TH1F* fMultHist;			      //histogram of event multiplicities to ensure event cuts are properly implemented
+  bool fImplementAvgSepCuts;		      //Self-explanatory, set to kTRUE when I want Avg Sep cuts implemented
+  bool fWritePairKinematics;
+  bool fIsMCRun;
+  bool fIsMBAnalysis;
+  bool fBuildMultHist;
+
+  double fMinCent, fMaxCent;
+
+  AliFemtoCorrFctnCollection* fCollectionOfCfs;
+
+  //----------------------------------------
+
+  AliFemtoCorrFctnKStar *KStarCf;
+  AliFemtoAvgSepCorrFctn *AvgSepCf;
+
+  AliFemtoModelCorrFctnKStarFull *KStarModelCfs;
+
+
+
+
+
+#ifdef __ROOT__
+  ClassDef(AliFemtoAnalysisLambdaKaon, 0)
+#endif
+
+};
+
+
 
 #endif

@@ -36,12 +36,12 @@
 int *use_runs;
 use_runs = runs_Bm1;
 
-bool RunGrid = true;
+bool RunGrid = false;
 bool RunFull = true;  //set to false when merging
 bool RunMC = false;
 TString aConfigMacro = "ConfigTrainFemtoAnalysis.C";
 TString AdditionalLibs = "libPWGCFfemtoscopy.so libPWGCFfemtoscopyUser.so myTrainAnalysisConstructor.h myTrainAnalysisConstructor.cxx ConfigTrainFemtoAnalysis.C";
-TString aGridWorkingDir = "Results_cLamK0_20160928/Bm1";
+TString aGridWorkingDir = "Results_cLamK0_20160928/Bm1_New";
 TString aGridOutputDir = "output_data";
 TString outputname = "Results_cLamK0_20160928_Bm1_New.root";
 

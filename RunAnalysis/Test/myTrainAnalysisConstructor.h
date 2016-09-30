@@ -87,14 +87,14 @@ public:
 
   enum GeneralParticleType {kV0=0, kTrack=1, kCascade=2};
 
-
+/*
   struct AnalysisParams;
   struct EventCutParams;
   struct V0CutParams;
   struct ESDCutParams;
   struct XiCutParams;
   struct PairCutParams;
-
+*/
 
   myTrainAnalysisConstructor();
   myTrainAnalysisConstructor(AnalysisType aAnalysisType, const char* name, bool aIsMCRun, bool aImplementAvgSepCuts, bool aWritePairKinematics=false);
@@ -222,6 +222,8 @@ protected:
 
 inline void myTrainAnalysisConstructor::SetRemoveMisidentifiedMCParticles(bool aRemove) {KStarModelCfs->SetRemoveMisidentified(aRemove);}
 inline AliFemtoCorrFctnCollection* myTrainAnalysisConstructor::GetCollectionOfCfs() {return fCollectionOfCfs;}
+
+/*
 struct myTrainAnalysisConstructor::AnalysisParams
 {
   unsigned int nBinsVertex;
@@ -399,5 +401,6 @@ struct myTrainAnalysisConstructor::PairCutParams
   double minAvgSepTrackPos,
          minAvgSepTrackNeg;
 };
+*/
 
 #endif
