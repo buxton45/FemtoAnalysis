@@ -40,43 +40,43 @@ struct MacroParams {
   bool dca_global_track;
 };
 
-void SetPairCodes(AliFemtoAnalysisLambdaKaon::AnalysisType aAnType, MacroParams &aMacroConfig);
+void SetPairCodes(AFALK::AnalysisParams &aAnConfig, MacroParams &aMacroConfig);
 
 AliFemtoAnalysisLambdaKaon* 
 CreateCorrectAnalysis(
   const TString &aText,
-  AliFemtoAnalysisLambdaKaon::AnalysisType aAnType,
-  AliFemtoAnalysisLambdaKaon::AnalysisParams &aAnParams,
-  AliFemtoAnalysisLambdaKaon::EventCutParams &aEvCutParams,
-  AliFemtoAnalysisLambdaKaon::PairCutParams &aPairCutParams
+  AFALK::AnalysisType aAnType,
+  AFALK::AnalysisParams &aAnParams,
+  AFALK::EventCutParams &aEvCutParams,
+  AFALK::PairCutParams &aPairCutParams
 );
 
 void
 BuildConfiguration(
   const TString &aText,
-  AliFemtoAnalysisLambdaKaon::AnalysisParams &aAnParams,
-  AliFemtoAnalysisLambdaKaon::EventCutParams &aEvCutParams,
-  AliFemtoAnalysisLambdaKaon::PairCutParams &aPairCutParams,
+  AFALK::AnalysisParams &aAnParams,
+  AFALK::EventCutParams &aEvCutParams,
+  AFALK::PairCutParams &aPairCutParams,
   MacroParams &aMac
 );
 
 void
 BuildParticleConfiguration(
   const TString &aText,
-  AliFemtoAnalysisLambdaKaon::V0CutParams &aV0CutParams
+  AFALK::V0CutParams &aV0CutParams
 );
 
 void
 BuildParticleConfiguration(
   const TString &aText,
-  AliFemtoAnalysisLambdaKaon::ESDCutParams &aESDCutParams
+  AFALK::ESDCutParams &aESDCutParams
 );
 
 
 void
 BuildParticleConfiguration(
   const TString &aText,
-  AliFemtoAnalysisLambdaKaon::XiCutParams &aXiCutParams
+  AFALK::XiCutParams &aXiCutParams
 );
 
 
@@ -130,7 +130,7 @@ AliFemtoManager* ConfigFemtoAnalysis(const TString& aParamString="")
   }
 
   // Identify all sister analyses that go along with tAnalysisConfig.analysisType
-  SetPairCodes(tAnalysisConfig.analysisType, tMacroConfig);
+  SetPairCodes(tAnalysisConfig, tMacroConfig);
 
 
   // loop over centrality ranges
@@ -141,6 +141,7 @@ AliFemtoManager* ConfigFemtoAnalysis(const TString& aParamString="")
 
     tAnalysisConfig.minMult = 10.*tMultLow;
     tAnalysisConfig.maxMult = 10.*tMultHigh;
+    tAnalysisConfig.nBinsMult = (tMultHigh-tMultLow)/5.0;
 
     tEventCutConfig.minCentrality = tMultLow;
     tEventCutConfig.maxCentrality = tMultHigh;
@@ -163,53 +164,58 @@ AliFemtoManager* ConfigFemtoAnalysis(const TString& aParamString="")
 
 
 
-void SetPairCodes(AliFemtoAnalysisLambdaKaon::AnalysisType aAnType, MacroParams &aMacroConfig)
+void SetPairCodes(AFALK::AnalysisParams &aAnConfig, MacroParams &aMacroConfig)
 {
   aMacroConfig.pair_codes.clear();
 
-  switch(aAnType) {
-  case AliFemtoAnalysisLambdaKaon::kLamK0:
-  case AliFemtoAnalysisLambdaKaon::kALamK0:
-    aMacroConfig.pair_codes.push_back(AliFemtoAnalysisLambdaKaon::kLamK0);
-    aMacroConfig.pair_codes.push_back(AliFemtoAnalysisLambdaKaon::kALamK0);
+  switch(aAnConfig.analysisType) {
+  case AFALK::kLamK0:
+  case AFALK::kALamK0:
+    aMacroConfig.pair_codes.push_back(AFALK::kLamK0);
+    aMacroConfig.pair_codes.push_back(AFALK::kALamK0);
+    aAnConfig.generalAnalysisType = AFALK::kV0V0;
     break;
 
-  case AliFemtoAnalysisLambdaKaon::kLamKchP:
-  case AliFemtoAnalysisLambdaKaon::kALamKchP:
-  case AliFemtoAnalysisLambdaKaon::kLamKchM:
-  case AliFemtoAnalysisLambdaKaon::kALamKchM:
-    aMacroConfig.pair_codes.push_back(AliFemtoAnalysisLambdaKaon::kLamKchP);
-    aMacroConfig.pair_codes.push_back(AliFemtoAnalysisLambdaKaon::kALamKchP);
-    aMacroConfig.pair_codes.push_back(AliFemtoAnalysisLambdaKaon::kLamKchM);
-    aMacroConfig.pair_codes.push_back(AliFemtoAnalysisLambdaKaon::kALamKchM);
+  case AFALK::kLamKchP:
+  case AFALK::kALamKchP:
+  case AFALK::kLamKchM:
+  case AFALK::kALamKchM:
+    aMacroConfig.pair_codes.push_back(AFALK::kLamKchP);
+    aMacroConfig.pair_codes.push_back(AFALK::kALamKchP);
+    aMacroConfig.pair_codes.push_back(AFALK::kLamKchM);
+    aMacroConfig.pair_codes.push_back(AFALK::kALamKchM);
+    aAnConfig.generalAnalysisType = AFALK::kV0Track;
     break;
 
-  case AliFemtoAnalysisLambdaKaon::kLamLam:
-  case AliFemtoAnalysisLambdaKaon::kALamALam:
-  case AliFemtoAnalysisLambdaKaon::kLamALam:
-    aMacroConfig.pair_codes.push_back(AliFemtoAnalysisLambdaKaon::kLamLam);
-    aMacroConfig.pair_codes.push_back(AliFemtoAnalysisLambdaKaon::kALamALam);
-    aMacroConfig.pair_codes.push_back(AliFemtoAnalysisLambdaKaon::kLamALam);
+  case AFALK::kLamLam:
+  case AFALK::kALamALam:
+  case AFALK::kLamALam:
+    aMacroConfig.pair_codes.push_back(AFALK::kLamLam);
+    aMacroConfig.pair_codes.push_back(AFALK::kALamALam);
+    aMacroConfig.pair_codes.push_back(AFALK::kLamALam);
+    aAnConfig.generalAnalysisType = AFALK::kV0V0;
     break;
 
-  case AliFemtoAnalysisLambdaKaon::kLamPiP:
-  case AliFemtoAnalysisLambdaKaon::kALamPiP:
-  case AliFemtoAnalysisLambdaKaon::kLamPiM:
-  case AliFemtoAnalysisLambdaKaon::kALamPiM:
-    aMacroConfig.pair_codes.push_back(AliFemtoAnalysisLambdaKaon::kLamPiP);
-    aMacroConfig.pair_codes.push_back(AliFemtoAnalysisLambdaKaon::kALamPiP);
-    aMacroConfig.pair_codes.push_back(AliFemtoAnalysisLambdaKaon::kLamPiM);
-    aMacroConfig.pair_codes.push_back(AliFemtoAnalysisLambdaKaon::kALamPiM);
+  case AFALK::kLamPiP:
+  case AFALK::kALamPiP:
+  case AFALK::kLamPiM:
+  case AFALK::kALamPiM:
+    aMacroConfig.pair_codes.push_back(AFALK::kLamPiP);
+    aMacroConfig.pair_codes.push_back(AFALK::kALamPiP);
+    aMacroConfig.pair_codes.push_back(AFALK::kLamPiM);
+    aMacroConfig.pair_codes.push_back(AFALK::kALamPiM);
+    aAnConfig.generalAnalysisType = AFALK::kV0Track;
     break;
 
-  case AliFemtoAnalysisLambdaKaon::kXiKchP:
-  case AliFemtoAnalysisLambdaKaon::kAXiKchP:
-  case AliFemtoAnalysisLambdaKaon::kXiKchM:
-  case AliFemtoAnalysisLambdaKaon::kAXiKchM:
-    aMacroConfig.pair_codes.push_back(AliFemtoAnalysisLambdaKaon::kXiKchP);
-    aMacroConfig.pair_codes.push_back(AliFemtoAnalysisLambdaKaon::kAXiKchP);
-    aMacroConfig.pair_codes.push_back(AliFemtoAnalysisLambdaKaon::kXiKchM);
-    aMacroConfig.pair_codes.push_back(AliFemtoAnalysisLambdaKaon::kAXiKchM);
+  case AFALK::kXiKchP:
+  case AFALK::kAXiKchP:
+  case AFALK::kXiKchM:
+  case AFALK::kAXiKchM:
+    aMacroConfig.pair_codes.push_back(AFALK::kXiKchP);
+    aMacroConfig.pair_codes.push_back(AFALK::kAXiKchP);
+    aMacroConfig.pair_codes.push_back(AFALK::kXiKchM);
+    aMacroConfig.pair_codes.push_back(AFALK::kAXiKchM);
+    aAnConfig.generalAnalysisType = AFALK::kXiTrack;
     break;
 
 
@@ -221,10 +227,10 @@ void SetPairCodes(AliFemtoAnalysisLambdaKaon::AnalysisType aAnType, MacroParams 
 AliFemtoAnalysisLambdaKaon* 
 CreateCorrectAnalysis(
   const TString &aText,
-  AliFemtoAnalysisLambdaKaon::AnalysisType aAnType,
-  AliFemtoAnalysisLambdaKaon::AnalysisParams &aAnParams,
-  AliFemtoAnalysisLambdaKaon::EventCutParams &aEvCutParams,
-  AliFemtoAnalysisLambdaKaon::PairCutParams &aPairCutParams
+  AFALK::AnalysisType aAnType,
+  AFALK::AnalysisParams &aAnParams,
+  AFALK::EventCutParams &aEvCutParams,
+  AFALK::PairCutParams &aPairCutParams
 )
 {
   AliFemtoAnalysisLambdaKaon *tAnalysis;
@@ -238,29 +244,29 @@ CreateCorrectAnalysis(
 
   switch(aAnParams.generalAnalysisType) {
 
-  case AliFemtoAnalysisLambdaKaon::kV0V0:
+  case AFALK::kV0V0:
     switch(aAnType) {
-    case AliFemtoAnalysisLambdaKaon::kLamK0:
+    case AFALK::kLamK0:
       tV0CutConfig1 = AFALK::DefaultLambdaCutParams();
       tV0CutConfig2 = AFALK::DefaultK0ShortCutParams();
       break;
 
-    case AliFemtoAnalysisLambdaKaon::kALamK0:
+    case AFALK::kALamK0:
       tV0CutConfig1 = AFALK::DefaultAntiLambdaCutParams();
       tV0CutConfig2 = AFALK::DefaultK0ShortCutParams();
       break;
 
-    case AliFemtoAnalysisLambdaKaon::kLamLam:
+    case AFALK::kLamLam:
       tV0CutConfig1 = AFALK::DefaultLambdaCutParams();
       tV0CutConfig2 = AFALK::DefaultLambdaCutParams();
       break;
 
-    case AliFemtoAnalysisLambdaKaon::kALamALam:
+    case AFALK::kALamALam:
       tV0CutConfig1 = AFALK::DefaultAntiLambdaCutParams();
       tV0CutConfig2 = AFALK::DefaultAntiLambdaCutParams();
       break;
 
-    case AliFemtoAnalysisLambdaKaon::kLamALam:
+    case AFALK::kLamALam:
       tV0CutConfig1 = AFALK::DefaultLambdaCutParams();
       tV0CutConfig2 = AFALK::DefaultAntiLambdaCutParams();
       break;
@@ -271,44 +277,44 @@ CreateCorrectAnalysis(
     break;
 
 
-  case AliFemtoAnalysisLambdaKaon::kV0Track:
+  case AFALK::kV0Track:
     switch(aAnType) {
-    case AliFemtoAnalysisLambdaKaon::kLamKchP:
+    case AFALK::kLamKchP:
       tV0CutConfig1 = AFALK::DefaultLambdaCutParams();
       tESDCutConfig = AFALK::DefaultKchCutParams(1);
       break;
 
-    case AliFemtoAnalysisLambdaKaon::kALamKchP:
+    case AFALK::kALamKchP:
       tV0CutConfig1 = AFALK::DefaultAntiLambdaCutParams();
       tESDCutConfig = AFALK::DefaultKchCutParams(1);
       break;
 
-    case AliFemtoAnalysisLambdaKaon::kLamKchM:
+    case AFALK::kLamKchM:
       tV0CutConfig1 = AFALK::DefaultLambdaCutParams();
       tESDCutConfig = AFALK::DefaultKchCutParams(-1);
       break;
 
-    case AliFemtoAnalysisLambdaKaon::kALamKchM:
+    case AFALK::kALamKchM:
       tV0CutConfig1 = AFALK::DefaultAntiLambdaCutParams();
       tESDCutConfig = AFALK::DefaultKchCutParams(-1);
       break;
 
-    case AliFemtoAnalysisLambdaKaon::kLamPiP:
+    case AFALK::kLamPiP:
       tV0CutConfig1 = AFALK::DefaultLambdaCutParams();
       tESDCutConfig = AFALK::DefaultPiCutParams(1);
       break;
 
-    case AliFemtoAnalysisLambdaKaon::kALamPiP:
+    case AFALK::kALamPiP:
       tV0CutConfig1 = AFALK::DefaultAntiLambdaCutParams();
       tESDCutConfig = AFALK::DefaultPiCutParams(1);
       break;
 
-    case AliFemtoAnalysisLambdaKaon::kLamPiM:
+    case AFALK::kLamPiM:
       tV0CutConfig1 = AFALK::DefaultLambdaCutParams();
       tESDCutConfig = AFALK::DefaultPiCutParams(-1);
       break;
 
-    case AliFemtoAnalysisLambdaKaon::kALamPiM:
+    case AFALK::kALamPiM:
       tV0CutConfig1 = AFALK::DefaultAntiLambdaCutParams();
       tESDCutConfig = AFALK::DefaultPiCutParams(-1);
       break;
@@ -319,24 +325,24 @@ CreateCorrectAnalysis(
     break;
 
 
-  case AliFemtoAnalysisLambdaKaon::kXiTrack:
+  case AFALK::kXiTrack:
     switch(aAnType) {
-    case AliFemtoAnalysisLambdaKaon::kXiKchP:
+    case AFALK::kXiKchP:
       tXiCutConfig = AFALK::DefaultXiCutParams();
       tESDCutConfig = AFALK::DefaultKchCutParams(1);
       break;
 
-    case AliFemtoAnalysisLambdaKaon::kAXiKchP:
+    case AFALK::kAXiKchP:
       tXiCutConfig = AFALK::DefaultAXiCutParams();
       tESDCutConfig = AFALK::DefaultKchCutParams(1);
       break;
 
-    case AliFemtoAnalysisLambdaKaon::kXiKchM:
+    case AFALK::kXiKchM:
       tXiCutConfig = AFALK::DefaultXiCutParams();
       tESDCutConfig = AFALK::DefaultKchCutParams(-1);
       break;
 
-    case AliFemtoAnalysisLambdaKaon::kAXiKchM:
+    case AFALK::kAXiKchM:
       tXiCutConfig = AFALK::DefaultAXiCutParams();
       tESDCutConfig = AFALK::DefaultKchCutParams(-1);
       break;
@@ -354,9 +360,9 @@ CreateCorrectAnalysis(
 void
 BuildConfiguration(
   const TString &aText,
-  AliFemtoAnalysisLambdaKaon::AnalysisParams &aAnParams,
-  AliFemtoAnalysisLambdaKaon::EventCutParams &aEvCutParams,
-  AliFemtoAnalysisLambdaKaon::PairCutParams &aPairCutParams,
+  AFALK::AnalysisParams &aAnParams,
+  AFALK::EventCutParams &aEvCutParams,
+  AFALK::PairCutParams &aPairCutParams,
   MacroParams &aMac)
 {
 //  std::cout << "I-BuildConfiguration:" << TBase64::Encode(text) << " \n";
@@ -413,9 +419,11 @@ BuildConfiguration(
           TString tNext = TString::Format("%0.2d", tSubRange_it->String().Atoi());
 
           tCmd = tMacroVarName + ".centrality_ranges.push_back(" + tPrev + ");";
+          cout << "I-BuildConfiguration: `" << tCmd << "`\n";
           gROOT->ProcessLineFast(tCmd);
 
           tCmd = tMacroVarName + ".centrality_ranges.push_back(" + tNext + ");";
+          cout << "I-BuildConfiguration: `" << tCmd << "`\n";
           gROOT->ProcessLineFast(tCmd);
           tPrev = tNext;
         }
@@ -427,17 +435,20 @@ BuildConfiguration(
       continue;
     }
 
-    tCmd += ";";
-    cout << "I-BuildConfiguration: `" << tCmd << "`\n";
-    gROOT->ProcessLineFast(tCmd);
-  }
+    if(!tCmd.IsNull())
+    {
+      tCmd += ";";
+      cout << "I-BuildConfiguration: `" << tCmd << "`\n";
+      gROOT->ProcessLineFast(tCmd);
+    }
 
+  }
 }
 
 void
 BuildParticleConfiguration(
   const TString &aText,
-  AliFemtoAnalysisLambdaKaon::V0CutParams &aV0CutParams
+  AFALK::V0CutParams &aV0CutParams
 )
 {
 //  std::cout << "I-BuildParticleConfiguration:" << TBase64::Encode(text) << " \n";
@@ -447,15 +458,15 @@ BuildParticleConfiguration(
   TString tDesiredName;
 
   switch(aV0CutParams.particlePDGType) {
-  case AliFemtoAnalysisLambdaKaon::kPDGLam:
+  case AFALK::kPDGLam:
     tDesiredName = TString("Lam");
     break;
 
-  case AliFemtoAnalysisLambdaKaon::kPDGALam:
+  case AFALK::kPDGALam:
     tDesiredName = TString("ALam");
     break;
 
-  case AliFemtoAnalysisLambdaKaon::kPDGK0:
+  case AFALK::kPDGK0:
     tDesiredName = TString("K0s");
     break;
 
@@ -480,9 +491,14 @@ BuildParticleConfiguration(
 
       if(tParticleType.EqualTo(tDesiredName)) tCmd = tV0CutVarName + "." + tParticleCut(0, tParticleCut.Length() - 1);
     }
-    tCmd += ";";
-    cout << "I-BuildConfiguration: `" << tCmd << "`\n";
-    gROOT->ProcessLineFast(tCmd);
+
+    if(!tCmd.IsNull())
+    {
+      tCmd += ";";
+      cout << "I-BuildParticleConfiguration: `" << tCmd << "`\n";
+      gROOT->ProcessLineFast(tCmd);
+    }
+
   }
 }
 
@@ -490,7 +506,7 @@ BuildParticleConfiguration(
 void
 BuildParticleConfiguration(
   const TString &aText,
-  AliFemtoAnalysisLambdaKaon::ESDCutParams &aESDCutParams
+  AFALK::ESDCutParams &aESDCutParams
 )
 {
 //  std::cout << "I-BuildParticleConfiguration:" << TBase64::Encode(text) << " \n";
@@ -500,19 +516,19 @@ BuildParticleConfiguration(
   TString tDesiredName;
 
   switch(aESDCutParams.particlePDGType) {
-  case AliFemtoAnalysisLambdaKaon::kPDGKchP:
+  case AFALK::kPDGKchP:
     tDesiredName = TString("KchP");
     break;
 
-  case AliFemtoAnalysisLambdaKaon::kPDGKchM:
+  case AFALK::kPDGKchM:
     tDesiredName = TString("KchP");
     break;
 
-  case AliFemtoAnalysisLambdaKaon::kPDGPiP:
+  case AFALK::kPDGPiP:
     tDesiredName = TString("PiP");
     break;
 
-  case AliFemtoAnalysisLambdaKaon::kPDGPiM:
+  case AFALK::kPDGPiM:
     tDesiredName = TString("PiM");
     break;
 
@@ -537,9 +553,14 @@ BuildParticleConfiguration(
 
       if(tParticleType.EqualTo(tDesiredName)) tCmd = tESDCutVarName + "." + tParticleCut(0, tParticleCut.Length() - 1);
     }
-    tCmd += ";";
-    cout << "I-BuildConfiguration: `" << tCmd << "`\n";
-    gROOT->ProcessLineFast(tCmd);
+
+    if(!tCmd.IsNull())
+    {   
+      tCmd += ";";
+      cout << "I-BuildParticleConfiguration: `" << tCmd << "`\n";
+      gROOT->ProcessLineFast(tCmd);
+    }
+
   }
 }
 
@@ -547,7 +568,7 @@ BuildParticleConfiguration(
 void
 BuildParticleConfiguration(
   const TString &aText,
-  AliFemtoAnalysisLambdaKaon::XiCutParams &aXiCutParams
+  AFALK::XiCutParams &aXiCutParams
 )
 {
 //  std::cout << "I-BuildParticleConfiguration:" << TBase64::Encode(text) << " \n";
@@ -557,11 +578,11 @@ BuildParticleConfiguration(
   TString tDesiredName;
 
   switch(aXiCutParams.particlePDGType) {
-  case AliFemtoAnalysisLambdaKaon::kPDGXiC:
+  case AFALK::kPDGXiC:
     tDesiredName = TString("Xi");
     break;
 
-  case AliFemtoAnalysisLambdaKaon::kPDGAXiC:
+  case AFALK::kPDGAXiC:
     tDesiredName = TString("AXi");
     break;
 
@@ -586,9 +607,14 @@ BuildParticleConfiguration(
 
       if(tParticleType.EqualTo(tDesiredName)) tCmd = tXiCutVarName + "." + tParticleCut(0, tParticleCut.Length() - 1);
     }
-    tCmd += ";";
-    cout << "I-BuildConfiguration: `" << tCmd << "`\n";
-    gROOT->ProcessLineFast(tCmd);
+
+    if(!tCmd.IsNull())
+    {
+      tCmd += ";";
+      cout << "I-BuildParticleConfiguration: `" << tCmd << "`\n";
+      gROOT->ProcessLineFast(tCmd);
+    }
+
   }
 }
 

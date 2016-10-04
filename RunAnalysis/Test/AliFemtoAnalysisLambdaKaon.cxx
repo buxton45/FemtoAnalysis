@@ -78,7 +78,7 @@ AliFemtoAnalysisLambdaKaon::AliFemtoAnalysisLambdaKaon(AliFemtoAnalysisLambdaKao
   fMinCent = minMult/10.;
   fMaxCent = maxMult/10.;
 
-  fOutputName += TString::Format("_%0.2f%0.2f",fMinCent,fMaxCent);
+  fOutputName += TString::Format("_%0.0f%0.0f",fMinCent,fMaxCent);
 
   fCollectionOfCfs = new AliFemtoCorrFctnCollection;
 
@@ -140,7 +140,7 @@ AliFemtoAnalysisLambdaKaon::AliFemtoAnalysisLambdaKaon(AnalysisParams &aAnParams
   fMinCent = aAnParams.minMult/10.;
   fMaxCent = aAnParams.maxMult/10.;
 
-  fOutputName += TString::Format("_%0.2f%0.2f",fMinCent,fMaxCent);
+  fOutputName += TString::Format("_%0.0f%0.0f",fMinCent,fMaxCent);
 
   fCollectionOfCfs = new AliFemtoCorrFctnCollection;
 
