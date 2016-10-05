@@ -22,6 +22,9 @@ int main(int argc, char **argv)
   //The TApplication object allows the execution of the code to pause.
   //This allows the user a chance to look at and manipulate a TBrowser before
   //the program ends and closes everything
+
+  ChronoTimer tFullTimer(kSec);
+  tFullTimer.Start();
 //-----------------------------------------------------------------------------
 
   //!!!!!!!!!!!!!!!! NOTE:  must set myFitter = to whichever LednickyFitter object I want to use
@@ -363,6 +366,10 @@ int main(int argc, char **argv)
   }
 
 //-------------------------------------------------------------------------------
+  tFullTimer.Stop();
+  cout << "Finished program: ";
+  tFullTimer.PrintInterval();
+
   theApp->Run(kTRUE); //Run the TApp to pause the code.
   // Select "Exit ROOT" from Canvas "File" menu to exit
   // and execute the next statements.

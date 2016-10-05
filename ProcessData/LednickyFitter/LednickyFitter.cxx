@@ -190,6 +190,22 @@ double LednickyFitter::GetLednickyMomResCorrectedPoint(double aKStar, double* aP
 }
 
 
+//________________________________________________________________________________________________________________
+double LednickyFitter::ApplyResidualCorrelationToPoint(double aKStar, double* aPar, TH2* aTransformMatrix)
+{
+  double tKStar[1];
+  int tKStarBinOfInterest = aTransformMatrix->GetXaxis()->FindBin(aKStar);
+
+  double tValue = 0.;
+  for(int j=1; j<=aTransformMatrix->GetNbinsY(); j++)
+  {
+    tKStar[0] = aTransformMatrix->GetYaxis()->GetBinCenter(j);
+    tValue += LednickyEq(tKStar,aPar)*aTransformMatrix->GetBinContent(tKStarBinOfInterest,j);
+  }
+  tValue /= aTransformMatrix->Integral(tKStarBinOfInterest,tKStarBinOfInterest,1,aTransformMatrix->GetNbinsY());
+  return tValue;
+}
+
 
 //________________________________________________________________________________________________________________
 void LednickyFitter::CalculateChi2PML(int &npar, double &chi2, double *par)

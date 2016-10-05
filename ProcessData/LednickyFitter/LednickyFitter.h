@@ -32,6 +32,10 @@
 //const double hbarc = 0.197327;
 const std::complex<double> ImI (0.,1.);
 
+#include <omp.h>
+
+#include "ChronoTimer.h"
+
 using std::cout;
 using std::endl;
 using std::vector;
@@ -54,6 +58,7 @@ public:
   virtual ~LednickyFitter();
 
   double GetLednickyMomResCorrectedPoint(double aKStar, double* aPar, TH2* aMomResMatrix);
+  double ApplyResidualCorrelationToPoint(double aKStar, double* aPar, TH2* aTransformMatrix);
 
   //void CalculateChi2(int &npar, double &chi2, double *par);
   void CalculateChi2PML(int &npar, double &chi2, double *par);

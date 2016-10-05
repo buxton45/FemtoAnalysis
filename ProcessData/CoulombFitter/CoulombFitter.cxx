@@ -3212,7 +3212,7 @@ tTotalTimer.PrintInterval();
 
 
 //________________________________________________________________________________________________________________
-vector<double> CoulombFitter::ApplyMomResCorrection(vector<double> &aCf, vector<double> &aKStarBinCenters,, TH2* aMomResMatrix)
+vector<double> CoulombFitter::ApplyMomResCorrection(vector<double> &aCf, vector<double> &aKStarBinCenters, TH2* aMomResMatrix)
 {
   //TODO probably rebin aMomResMatrix to match bin size of aCf
 

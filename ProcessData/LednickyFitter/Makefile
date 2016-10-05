@@ -2,7 +2,7 @@ ANALYZE_DIR = /home/jesse/Analysis/FemtoAnalysis/ProcessData/Analyze
 UTILITIES_DIR = /home/jesse/Analysis/FemtoAnalysis/ProcessData/Utilities
 
 LIBS   = $(shell root-config --libs) -lMinuit
-CFLAGS = $(shell root-config --cflags) -Wall -std=c++11 -I${ANALYZE_DIR} -I${UTILITIES_DIR} -g -O0
+CFLAGS = $(shell root-config --cflags) -Wall -std=c++11 -I${ANALYZE_DIR} -I${UTILITIES_DIR} -g -O0 -fopenmp
 #IFLAGS = -I$(ROOTSYS)/include
 #.PHONY: clean
 
