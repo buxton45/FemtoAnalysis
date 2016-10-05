@@ -6,7 +6,7 @@ LednickyFitter *myFitter = NULL;
 //______________________________________________________________________________
 void fcn(Int_t &npar, Double_t *gin, Double_t &f, Double_t *par, Int_t iflag)
 {
-  myFitter->CalculateChi2PMLwMomResCorrection(npar,f,par);
+  myFitter->CalculateChi2PMLwMomResCorrectionv2(npar,f,par);
 }
 
 
@@ -55,6 +55,8 @@ int main(int argc, char **argv)
   bool bSaveFigures = false;
   TString tSaveFiguresLocation = "~/Analysis/Presentations/AliFemto/20160330/";
 
+  bool bApplyMomResCorrection = true;
+
   if(bRunLamKchP)
   {
     //-----Find good normalization values LamKchP
@@ -77,6 +79,7 @@ int main(int argc, char **argv)
       
       LednickyFitter* tLamKchPFitter = new LednickyFitter(tFitSharedAnalysesLamKchP);
       tLamKchPFitter->GetFitSharedAnalyses()->GetMinuitObject()->SetFCN(fcn);
+      tLamKchPFitter->SetApplyMomResCorrection(bApplyMomResCorrection);
       myFitter = tLamKchPFitter;
       
       tLamKchPFitter->DoFit();
@@ -129,6 +132,7 @@ int main(int argc, char **argv)
       
       LednickyFitter* tALamKchMFitter = new LednickyFitter(tFitSharedAnalysesALamKchM);
       tALamKchMFitter->GetFitSharedAnalyses()->GetMinuitObject()->SetFCN(fcn);
+      tALamKchMFitter->SetApplyMomResCorrection(bApplyMomResCorrection);
       myFitter = tALamKchMFitter;
       
       tALamKchMFitter->DoFit();
@@ -187,6 +191,7 @@ int main(int argc, char **argv)
       
       LednickyFitter* tLamKchPwConjFitter = new LednickyFitter(tFitSharedAnalysesLamKchPwConj);
       tLamKchPwConjFitter->GetFitSharedAnalyses()->GetMinuitObject()->SetFCN(fcn);
+      tLamKchPwConjFitter->SetApplyMomResCorrection(bApplyMomResCorrection);
       myFitter = tLamKchPwConjFitter;
       
       tLamKchPwConjFitter->DoFit();
@@ -276,6 +281,7 @@ int main(int argc, char **argv)
       
       LednickyFitter* tLamKchMwConjFitter = new LednickyFitter(tFitSharedAnalysesLamKchMwConj);
       tLamKchMwConjFitter->GetFitSharedAnalyses()->GetMinuitObject()->SetFCN(fcn);
+      tLamKchMwConjFitter->SetApplyMomResCorrection(bApplyMomResCorrection);
       myFitter = tLamKchMwConjFitter;
       
       tLamKchMwConjFitter->DoFit();

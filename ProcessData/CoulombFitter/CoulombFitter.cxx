@@ -32,7 +32,7 @@ CoulombFitter::CoulombFitter():
   fIncludeSingletAndTriplet(true),
   fUseRandomKStarVectors(false),
   fUseStaticPairs(false),
-  fApplyMomResCorrection(false), //TODO change default to true
+  fApplyMomResCorrection(false), //TODO change default to true here AND LednickyFitter
 
   fNCalls(0),
   fFakeCf(0),
@@ -3215,10 +3215,13 @@ tTotalTimer.PrintInterval();
 vector<double> CoulombFitter::ApplyMomResCorrection(vector<double> &aCf, vector<double> &aKStarBinCenters, TH2* aMomResMatrix)
 {
   //TODO probably rebin aMomResMatrix to match bin size of aCf
+  //TODO do in both this AND LednickyFitter
 
   unsigned int tKStarRecBin, tKStarTrueBin;
   double tKStarRec, tKStarTrue;
   assert(aCf.size() == aKStarBinCenters.size());
+  assert(aCf.size() == (unsigned int)aMomResMatrix->GetNbinsX());
+  assert(aCf.size() == (unsigned int)aMomResMatrix->GetNbinsY());
 
   vector<double> tReturnCf(aCf.size(),0.);
   vector<double> tNormVec(aCf.size(),0.);  //TODO once I match bin size, I should be able to call /= by integral, instead of tracking normVec
@@ -3314,11 +3317,14 @@ tTotalTimer.Start();
   int tNbinsXToFitGlobal = fFitSharedAnalyses->GetFitPairAnalysis(0)->GetFitPartialAnalysis(0)->GetKStarCfLite()->Num()->FindBin(fMaxFitKStar);
   if(fFitSharedAnalyses->GetFitPairAnalysis(0)->GetFitPartialAnalysis(0)->GetKStarCfLite()->Num()->GetBinLowEdge(tNbinsXToFitGlobal) == fMaxFitKStar) tNbinsXToFitGlobal--;
 
-  vector<double> tCfContentUnNorm(tNbinsXToFitGlobal,0.);
-  vector<double> tCfContent(tNbinsXToFitGlobal,0.);
-  vector<double> tNumContent(tNbinsXToFitGlobal,0.);
-  vector<double> tDenContent(tNbinsXToFitGlobal,0.);
-  vector<double> tKStarBinCenters(tNbinsXToFitGlobal,0.);
+  int tNbinsXToBuildGlobal = fFitSharedAnalyses->GetFitPairAnalysis(0)->GetModelKStarTrueVsRecMixed()->GetNbinsX();  // when applying momentum resolution corrections, many times
+                                                                                                                     // you must go beyond fitting range to apply correction
+
+  vector<double> tCfContentUnNorm(tNbinsXToBuildGlobal,0.);
+  vector<double> tCfContent(tNbinsXToBuildGlobal,0.);
+  vector<double> tNumContent(tNbinsXToBuildGlobal,0.);
+  vector<double> tDenContent(tNbinsXToBuildGlobal,0.);
+  vector<double> tKStarBinCenters(tNbinsXToBuildGlobal,0.);
 
   fChi2 = 0.;
   for(unsigned int i=0; i<fChi2Vec.size(); i++) {fChi2Vec[i] = 0.;}
@@ -3334,6 +3340,8 @@ tTotalTimer.Start();
 
     TH2* tMomResMatrix = tFitPairAnalysis->GetModelKStarTrueVsRecMixed();
     assert(tMomResMatrix);
+    int tNbinsXToBuild = tMomResMatrix->GetNbinsX();
+    assert(tNbinsXToBuild == tNbinsXToBuildGlobal);
 
     if(!fAllOfSameCoulombType)
     {
@@ -3354,14 +3362,15 @@ tTotalTimer.Start();
       TH1* tNum = tKStarCfLite->Num();
       TH1* tDen = tKStarCfLite->Den();
 
+      //make sure tNum and tDen have same bin size as tMomResMatrix
+      assert(tNum->GetXaxis()->GetBinWidth(1) == tDen->GetXaxis()->GetBinWidth(1));
+      assert(tNum->GetXaxis()->GetBinWidth(1) == tMomResMatrix->GetXaxis()->GetBinWidth(1));
+      assert(tNum->GetXaxis()->GetBinWidth(1) == tMomResMatrix->GetYaxis()->GetBinWidth(1));
+
       //make sure tNum and tDen have same number of bins
       assert(tNum->GetNbinsX() == tDen->GetNbinsX());
 
       TAxis* tXaxisNum = tNum->GetXaxis();
-      TAxis* tXaxisDen = tDen->GetXaxis();
-
-      //make sure tNum and tDen have to same bin width
-      assert(tXaxisNum->GetBinWidth(1) == tXaxisDen->GetBinWidth(1));
 
       int tNbinsX = tNum->GetNbinsX();
 
@@ -3426,7 +3435,7 @@ tTotalTimer.Start();
       double tmp;
 
       bool tAreParamsSame = AreParamsSame(tCurrentFitPar,tPar,tNFitParPerAnalysis);
-      for(int ix=1; ix <= tNbinsXToFit; ix++)
+      for(int ix=1; ix <= tNbinsXToBuild; ix++)
       {
         double tKStarMin = tXaxisNum->GetBinLowEdge(ix);
         double tKStarMax = tXaxisNum->GetBinLowEdge(ix+1);

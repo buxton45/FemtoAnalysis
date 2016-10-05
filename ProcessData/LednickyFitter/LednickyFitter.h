@@ -7,10 +7,18 @@
 
 //includes and any constant variable declarations
 #include <iostream>
+#include <sstream>
+#include <fstream>
+#include <string>
 #include <iomanip>
 #include <complex>
 #include <math.h>
 #include <vector>
+#include <ctime>
+#include <random>
+#include <chrono>
+#include <algorithm>
+#include <limits>
 
 #include "Faddeeva.hh"
 
@@ -63,6 +71,13 @@ public:
   //void CalculateChi2(int &npar, double &chi2, double *par);
   void CalculateChi2PML(int &npar, double &chi2, double *par);
   void CalculateChi2PMLwMomResCorrection(int &npar, double &chi2, double *par);
+
+
+  bool AreParamsSame(double *aCurrent, double *aNew, int aNEntries);
+  vector<double> ApplyMomResCorrection(vector<double> &aCf, vector<double> &aKStarBinCenters, TH2* aMomResMatrix);
+  void CalculateChi2PMLwMomResCorrectionv2(int &npar, double &chi2, double *par);
+
+
   void CalculateChi2PMLwCorrectedCfs(int &npar, double &chi2, double *par);
   void DoFit();
   TF1* CreateFitFunction(TString aName, int aAnalysisNumber);
@@ -72,6 +87,8 @@ public:
 
   //inline (i.e. simple) functions
   FitSharedAnalyses* GetFitSharedAnalyses();
+
+  void SetApplyMomResCorrection(bool aApplyMomResCorrection);
 
   vector<double> GetMinParams();
   vector<double> GetParErrors();
@@ -88,8 +105,10 @@ private:
   //vector<double> fMaxFitKStarVec;
 
   bool fRejectOmega;
+  bool fApplyMomResCorrection;
 
   double fChi2;
+  double fChi2GlobalMin;
 
   double fEdm, fErrDef;
   int fNvpar, fNparx, fIcstat;
@@ -117,6 +136,8 @@ private:
 
 //inline stuff
 inline FitSharedAnalyses* LednickyFitter::GetFitSharedAnalyses() {return fFitSharedAnalyses;}
+
+inline void LednickyFitter::SetApplyMomResCorrection(bool aApplyMomResCorrection) {fApplyMomResCorrection = aApplyMomResCorrection;}
 
 inline vector<double> LednickyFitter::GetMinParams() {return fMinParams;}
 inline vector<double> LednickyFitter::GetParErrors() {return fParErrors;}

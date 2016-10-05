@@ -74,7 +74,9 @@ LednickyFitter::LednickyFitter(FitSharedAnalyses* aFitSharedAnalyses, double aMa
   fFits(fNAnalyses),
   fMaxFitKStar(aMaxFitKStar),
   fRejectOmega(false),
+  fApplyMomResCorrection(false), //TODO change deault to true here AND in CoulombFitter
   fChi2(0),
+  fChi2GlobalMin(1000000000),
   fChi2Vec(fNAnalyses),
   fNpFits(0),
   fNpFitsVec(fNAnalyses),
@@ -270,6 +272,7 @@ void LednickyFitter::CalculateChi2PML(int &npar, double &chi2, double *par)
 
       int tNbinsX = tNum->GetNbinsX();
       int tNbinsXToFit = tNum->FindBin(fMaxFitKStar);
+      if(tNum->GetBinLowEdge(tNbinsXToFit) == fMaxFitKStar) tNbinsXToFit--;
       if(tNbinsXToFit > tNbinsX) {tNbinsXToFit = tNbinsX;}  //in case I accidentally include an overflow bin in nbinsXToFit
 
       int tLambdaMinuitParamNumber = tFitPartialAnalysis->GetFitParameter(kLambda)->GetMinuitParamNumber();
@@ -378,6 +381,7 @@ void LednickyFitter::CalculateChi2PMLwMomResCorrection(int &npar, double &chi2, 
 
       int tNbinsX = tNum->GetNbinsX();
       int tNbinsXToFit = tNum->FindBin(fMaxFitKStar);
+      if(tNum->GetBinLowEdge(tNbinsXToFit) == fMaxFitKStar) tNbinsXToFit--;
       if(tNbinsXToFit > tNbinsX) {tNbinsXToFit = tNbinsX;}  //in case I accidentally include an overflow bin in nbinsXToFit
 
       int tLambdaMinuitParamNumber = tFitPartialAnalysis->GetFitParameter(kLambda)->GetMinuitParamNumber();
@@ -445,6 +449,216 @@ void LednickyFitter::CalculateChi2PMLwMomResCorrection(int &npar, double &chi2, 
 }
 
 
+//________________________________________________________________________________________________________________
+bool LednickyFitter::AreParamsSame(double *aCurrent, double *aNew, int aNEntries)
+{
+  bool tAreSame = true;
+  for(int i=0; i<aNEntries; i++)
+  {
+    if(abs(aCurrent[i]-aNew[i]) > std::numeric_limits< double >::min()) tAreSame = false;
+  }
+
+  if(!tAreSame)
+  {
+    for(int i=0; i<aNEntries; i++) aCurrent[i] = aNew[i];
+  }
+
+  return tAreSame;
+}
+
+//________________________________________________________________________________________________________________
+vector<double> LednickyFitter::ApplyMomResCorrection(vector<double> &aCf, vector<double> &aKStarBinCenters, TH2* aMomResMatrix)
+{
+  //TODO probably rebin aMomResMatrix to match bin size of aCf
+  //TODO do in both this AND CoulombFitter
+
+  unsigned int tKStarRecBin, tKStarTrueBin;
+  double tKStarRec, tKStarTrue;
+  assert(aCf.size() == aKStarBinCenters.size());
+  assert(aCf.size() == (unsigned int)aMomResMatrix->GetNbinsX());
+  assert(aCf.size() == (unsigned int)aMomResMatrix->GetNbinsY());
+
+  vector<double> tReturnCf(aCf.size(),0.);
+  vector<double> tNormVec(aCf.size(),0.);  //TODO once I match bin size, I should be able to call /= by integral, instead of tracking normVec
+
+  for(unsigned int i=0; i<aCf.size(); i++)
+  {
+    tKStarRec = aKStarBinCenters[i];
+    tKStarRecBin = aMomResMatrix->GetYaxis()->FindBin(tKStarRec);
+
+    for(unsigned int j=0; j<aCf.size(); j++)
+    {
+      tKStarTrue = aKStarBinCenters[j];
+      tKStarTrueBin = aMomResMatrix->GetXaxis()->FindBin(tKStarTrue);
+
+      tReturnCf[i] += aCf[j]*aMomResMatrix->GetBinContent(tKStarTrueBin,tKStarRecBin);
+      tNormVec[i] += aMomResMatrix->GetBinContent(tKStarTrueBin,tKStarRecBin);
+    }
+    tReturnCf[i] /= tNormVec[i];
+  }
+  return tReturnCf;
+}
+
+
+
+//________________________________________________________________________________________________________________
+void LednickyFitter::CalculateChi2PMLwMomResCorrectionv2(int &npar, double &chi2, double *par)
+{
+  assert(fApplyMomResCorrection);
+
+  double tRejectOmegaLow = 0.19;
+  double tRejectOmegaHigh = 0.23;
+
+  int tNFitParPerAnalysis = 5;
+//  double *tCurrentFitPar = new double[tNFitParPerAnalysis];
+//  for(int i=0; i<tNFitParPerAnalysis; i++) tCurrentFitPar[i] = 0.;
+
+  int tNbinsXToFitGlobal = fFitSharedAnalyses->GetFitPairAnalysis(0)->GetFitPartialAnalysis(0)->GetKStarCfLite()->Num()->FindBin(fMaxFitKStar);
+  if(fFitSharedAnalyses->GetFitPairAnalysis(0)->GetFitPartialAnalysis(0)->GetKStarCfLite()->Num()->GetBinLowEdge(tNbinsXToFitGlobal) == fMaxFitKStar) tNbinsXToFitGlobal--;
+
+  int tNbinsXToBuildGlobal = fFitSharedAnalyses->GetFitPairAnalysis(0)->GetModelKStarTrueVsRecMixed()->GetNbinsX();  // when applying momentum resolution corrections, many times
+                                                                                                                     // you must go beyond fitting range to apply correction
+
+//  vector<double> tCfContentUnNorm(tNbinsXToBuildGlobal,0.);
+  vector<double> tCfContent(tNbinsXToBuildGlobal,0.);
+  vector<double> tNumContent(tNbinsXToBuildGlobal,0.);
+  vector<double> tDenContent(tNbinsXToBuildGlobal,0.);
+  vector<double> tKStarBinCenters(tNbinsXToBuildGlobal,0.);
+
+  fChi2 = 0.;
+  for(unsigned int i=0; i<fChi2Vec.size(); i++) {fChi2Vec[i] = 0.;}
+
+  fNpFits = 0.;
+  fNpFitsVec.resize(fNAnalyses);
+  for(unsigned int i=0; i<fNpFitsVec.size(); i++) {fNpFitsVec[i] = 0.;}
+
+  for(int iAnaly=0; iAnaly<fNAnalyses; iAnaly++)
+  {
+    FitPairAnalysis* tFitPairAnalysis = fFitSharedAnalyses->GetFitPairAnalysis(iAnaly);
+
+    TH2* tMomResMatrix = tFitPairAnalysis->GetModelKStarTrueVsRecMixed();
+    assert(tMomResMatrix);
+    int tNbinsXToBuild = tMomResMatrix->GetNbinsX();
+    assert(tNbinsXToBuild == tNbinsXToBuildGlobal);
+
+    int tNFitPartialAnalysis = tFitPairAnalysis->GetNFitPartialAnalysis();
+    for(int iPartAn=0; iPartAn<tNFitPartialAnalysis; iPartAn++)
+    {
+      FitPartialAnalysis* tFitPartialAnalysis = tFitPairAnalysis->GetFitPartialAnalysis(iPartAn);
+      CfLite* tKStarCfLite = tFitPartialAnalysis->GetKStarCfLite();
+
+      TH1* tNum = tKStarCfLite->Num();
+      TH1* tDen = tKStarCfLite->Den();
+
+      //make sure tNum and tDen have same bin size as tMomResMatrix
+      assert(tNum->GetXaxis()->GetBinWidth(1) == tDen->GetXaxis()->GetBinWidth(1));
+      assert(tNum->GetXaxis()->GetBinWidth(1) == tMomResMatrix->GetXaxis()->GetBinWidth(1));
+      assert(tNum->GetXaxis()->GetBinWidth(1) == tMomResMatrix->GetYaxis()->GetBinWidth(1));
+
+      //make sure tNum and tDen have same number of bins
+      assert(tNum->GetNbinsX() == tDen->GetNbinsX());
+
+      TAxis* tXaxisNum = tNum->GetXaxis();
+
+      int tNbinsX = tNum->GetNbinsX();
+
+      int tNbinsXToFit = tNum->FindBin(fMaxFitKStar);
+      if(tNum->GetBinLowEdge(tNbinsXToFit) == fMaxFitKStar) tNbinsXToFit--;
+
+      if(tNbinsXToFit > tNbinsX) {tNbinsXToFit = tNbinsX;}  //in case I accidentally include an overflow bin in nbinsXToFit
+      assert(tNbinsXToFit == tNbinsXToFitGlobal);
+      int tNFitParams = tFitPartialAnalysis->GetNFitParams() +1;  //the +1 accounts for the normalization parameter
+      assert(tNFitParams = tNFitParPerAnalysis+1);
+
+      int tLambdaMinuitParamNumber = tFitPartialAnalysis->GetFitParameter(kLambda)->GetMinuitParamNumber();
+      int tRadiusMinuitParamNumber = tFitPartialAnalysis->GetFitParameter(kRadius)->GetMinuitParamNumber();
+      int tRef0MinuitParamNumber = tFitPartialAnalysis->GetFitParameter(kRef0)->GetMinuitParamNumber();
+      int tImf0MinuitParamNumber = tFitPartialAnalysis->GetFitParameter(kImf0)->GetMinuitParamNumber();
+      int td0MinuitParamNumber = tFitPartialAnalysis->GetFitParameter(kd0)->GetMinuitParamNumber();
+      int tNormMinuitParamNumber = tFitPartialAnalysis->GetFitNormParameter()->GetMinuitParamNumber();
+
+
+      assert(tNFitParams == 6);
+      double *tPar = new double[tNFitParams];
+
+      tPar[0] = par[tLambdaMinuitParamNumber];
+      tPar[1] = par[tRadiusMinuitParamNumber];
+      tPar[2] = par[tRef0MinuitParamNumber];
+      tPar[3] = par[tImf0MinuitParamNumber];
+      tPar[4] = par[td0MinuitParamNumber];
+      tPar[5] = par[tNormMinuitParamNumber];
+
+      for(int i=0; i<tNFitParams; i++)  //assure all parameters exist
+      {
+        if(std::isnan(tPar[i])) {cout <<"CRASH:  In CalculateChi2PML, a tPar elemement " << i << " DNE!!!!!" << endl;}
+        assert(!std::isnan(tPar[i]));
+      }
+
+      double tmp;
+      double x[1];
+      bool tRejectOmega = tFitPartialAnalysis->RejectOmega();
+      //bool tAreParamsSame = AreParamsSame(tCurrentFitPar,tPar,tNFitParPerAnalysis);
+
+      for(int ix=1; ix <= tNbinsXToBuild; ix++)
+      {
+        tKStarBinCenters[ix-1] = tXaxisNum->GetBinCenter(ix);
+        x[0] = tKStarBinCenters[ix-1];
+
+        tNumContent[ix-1] = tNum->GetBinContent(ix);
+        tDenContent[ix-1] = tDen->GetBinContent(ix);
+
+        tCfContent[ix-1] = LednickyEq(x,tPar);
+      }
+
+      vector<double> tCfContentwMomResCorrection = ApplyMomResCorrection(tCfContent, tKStarBinCenters, tMomResMatrix);
+      for(int ix=0; ix < tNbinsXToFit; ix++)
+      {
+        if(tRejectOmega && (tKStarBinCenters[ix] > tRejectOmegaLow) && (tKStarBinCenters[ix] < tRejectOmegaHigh)) {fChi2+=0;}
+        else
+        {
+          if(tNumContent[ix]!=0 && tDenContent[ix]!=0 && tCfContentwMomResCorrection[ix]!=0) //even if only in one single bin, t*Content=0 causes fChi2->nan
+          {
+            double tTerm1 = tNumContent[ix]*log(  (tCfContentwMomResCorrection[ix]*(tNumContent[ix]+tDenContent[ix])) / (tNumContent[ix]*(tCfContentwMomResCorrection[ix]+1))  );
+            double tTerm2 = tDenContent[ix]*log(  (tNumContent[ix]+tDenContent[ix]) / (tDenContent[ix]*(tCfContentwMomResCorrection[ix]+1))  );
+            tmp = -2.0*(tTerm1+tTerm2);
+  
+            fChi2Vec[iAnaly] += tmp;
+            fChi2 += tmp;
+
+            fNpFitsVec[iAnaly]++;
+            fNpFits++;
+          }
+        }
+
+      }
+
+      delete[] tPar;
+    }
+
+  }
+
+//  delete[] tCurrentFitPar;
+
+  if(std::isnan(fChi2) || std::isinf(fChi2))
+  {
+    cout << "WARNING: fChi2 = nan, setting it equal to 10^9-----------------------------------------" << endl << endl;
+    fChi2 = pow(10,9);
+  }
+
+  chi2 = fChi2;
+  if(fChi2 < fChi2GlobalMin) fChi2GlobalMin = fChi2;
+
+cout << "fChi2 = " << fChi2 << endl;
+cout << "fChi2GlobalMin = " << fChi2GlobalMin << endl << endl;
+/*
+  double *tParamsForHistograms = new double[tNFitParPerAnalysis];
+  for(int i=0; i<tNFitParPerAnalysis; i++) tParamsForHistograms[i] = par[i];
+  fFitSharedAnalyses->GetFitChi2Histograms()->FillHistograms(fChi2,tParamsForHistograms);
+  delete[] tParamsForHistograms;
+*/
+}
+
+
 
 //________________________________________________________________________________________________________________
 void LednickyFitter::CalculateChi2PMLwCorrectedCfs(int &npar, double &chi2, double *par)
@@ -491,6 +705,7 @@ void LednickyFitter::CalculateChi2PMLwCorrectedCfs(int &npar, double &chi2, doub
 
       int tNbinsX = tNum->GetNbinsX();
       int tNbinsXToFit = tNum->FindBin(fMaxFitKStar);
+      if(tNum->GetBinLowEdge(tNbinsXToFit) == fMaxFitKStar) tNbinsXToFit--;
       if(tNbinsXToFit > tNbinsX) {tNbinsXToFit = tNbinsX;}  //in case I accidentally include an overflow bin in nbinsXToFit
 
       int tLambdaMinuitParamNumber = tFitPartialAnalysis->GetFitParameter(kLambda)->GetMinuitParamNumber();
