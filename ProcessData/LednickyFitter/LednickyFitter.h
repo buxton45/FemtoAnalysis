@@ -78,6 +78,10 @@ public:
   vector<double> GetResidualCorrelation(vector<double> &aParentCf, vector<double> &aKStarBinCenters, TH2* aTransformMatrix);
   void CalculateChi2PMLwMomResCorrectionv2(int &npar, double &chi2, double *par);
 
+  double GetChi2Value(int aKStarBin, TH1* aCfToFit, double* aPar);
+  double GetPmlValue(double aNumContent, double aDenContent, double aCfContent);
+  void CalculateFitFunction(int &npar, double &chi2, double *par);
+
 
   void CalculateChi2PMLwCorrectedCfs(int &npar, double &chi2, double *par);
   void DoFit();
@@ -90,6 +94,7 @@ public:
   FitSharedAnalyses* GetFitSharedAnalyses();
 
   void SetApplyMomResCorrection(bool aApplyMomResCorrection);
+  void SetIncludeResidualCorrelations(bool aInclude);
 
   vector<double> GetMinParams();
   vector<double> GetParErrors();
@@ -107,6 +112,7 @@ private:
 
   bool fRejectOmega;
   bool fApplyMomResCorrection;
+  bool fIncludeResidualCorrelations;
 
   double fChi2;
   double fChi2GlobalMin;
@@ -139,6 +145,7 @@ private:
 inline FitSharedAnalyses* LednickyFitter::GetFitSharedAnalyses() {return fFitSharedAnalyses;}
 
 inline void LednickyFitter::SetApplyMomResCorrection(bool aApplyMomResCorrection) {fApplyMomResCorrection = aApplyMomResCorrection;}
+inline void LednickyFitter::SetIncludeResidualCorrelations(bool aInclude) {fIncludeResidualCorrelations = aInclude;}
 
 inline vector<double> LednickyFitter::GetMinParams() {return fMinParams;}
 inline vector<double> LednickyFitter::GetParErrors() {return fParErrors;}

@@ -44,7 +44,8 @@ FitPairAnalysis::FitPairAnalysis(TString aAnalysisName, vector<FitPartialAnalysi
   fModelKStarTrueVsRecMixed(0),
   fModelKStarHeavyCfFake(0),
   fModelKStarHeavyCfFakeIdeal(0),
-  fModelCfFakeIdealCfFakeRatio(0)
+  fModelCfFakeIdealCfFakeRatio(0),
+  fTransformMatrices(0)
 
 {
 
@@ -101,7 +102,8 @@ FitPairAnalysis::FitPairAnalysis(TString aFileLocationBase, AnalysisType aAnalys
   fModelKStarTrueVsRecMixed(0),
   fModelKStarHeavyCfFake(0),
   fModelKStarHeavyCfFakeIdeal(0),
-  fModelCfFakeIdealCfFakeRatio(0)
+  fModelCfFakeIdealCfFakeRatio(0),
+  fTransformMatrices(0)
 
 {
   fAnalysisName = TString(cAnalysisBaseTags[fAnalysisType]) + TString(cCentralityTags[fCentralityType]);
@@ -160,7 +162,8 @@ FitPairAnalysis::FitPairAnalysis(TString aFileLocationBase, TString aFileLocatio
   fModelKStarTrueVsRecMixed(0),
   fModelKStarHeavyCfFake(0),
   fModelKStarHeavyCfFakeIdeal(0),
-  fModelCfFakeIdealCfFakeRatio(0)
+  fModelCfFakeIdealCfFakeRatio(0),
+  fTransformMatrices(0)
 
 {
   fAnalysisName = TString(cAnalysisBaseTags[fAnalysisType]) + TString(cCentralityTags[fCentralityType]);
@@ -569,3 +572,50 @@ TH1F* FitPairAnalysis::GetMomResCorrectedFitHisto()
   delete tUncorrected;
   return tReturnHisto;
 }
+
+
+//________________________________________________________________________________________________________________
+void FitPairAnalysis::LoadTransformMatrices(TString aFileLocation)
+{
+  TFile *tFile = TFile::Open(aFileLocation);
+  TString tName2 = cAnalysisBaseTags[fAnalysisType] + TString("Transform");
+
+  TString tName1Sig   = TString("SigTo");
+  TString tName1XiC   = TString("XiCTo");
+  TString tName1Xi0   = TString("Xi0To");
+  TString tName1Omega = TString("OmegaTo");
+
+  TString tFullNameSig, tFullNameXiC, tFullNameXi0, tFullNameOmega;
+
+  switch(fAnalysisType) {
+  case kLamKchP:
+  case kLamKchM:
+    tFullNameSig = TString("f") + tName1Sig + tName2;
+    tFullNameXiC = TString("f") + tName1XiC + tName2;
+    tFullNameXi0 = TString("f") + tName1Xi0 + tName2;
+    tFullNameOmega = TString("f") + tName1Omega + tName2;
+    break;
+
+  case kALamKchP:
+  case kALamKchM:
+    tFullNameSig = TString("fA") + tName1Sig + tName2;
+    tFullNameXiC = TString("fA") + tName1XiC + tName2;
+    tFullNameXi0 = TString("fA") + tName1Xi0 + tName2;
+    tFullNameOmega = TString("fA") + tName1Omega + tName2;
+    break;
+
+  default:
+    cout << "ERROR:  fAnalysisType = " << fAnalysisType << " is not apropriate" << endl << endl;
+    assert(0);
+  }
+
+  fTransformMatrices.clear();
+  fTransformMatrices.push_back((TH2D*)tFile->Get(tFullNameSig));
+  fTransformMatrices.push_back((TH2D*)tFile->Get(tFullNameXiC));
+  fTransformMatrices.push_back((TH2D*)tFile->Get(tFullNameXi0));
+  fTransformMatrices.push_back((TH2D*)tFile->Get(tFullNameOmega));
+}
+
+
+
+

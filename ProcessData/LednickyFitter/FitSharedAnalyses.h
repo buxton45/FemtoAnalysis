@@ -72,6 +72,7 @@ public:
   int GetNMinuitParams();
 
   void SetFitType(FitType aFitType);
+  FitType GetFitType();
 
   TMinuit* GetMinuitObject();
   int GetNFitPairAnalysis();
@@ -129,6 +130,7 @@ private:
 
 inline int FitSharedAnalyses::GetNMinuitParams() {return fNMinuitParams;}
 inline void FitSharedAnalyses::SetFitType(FitType aFitType) {fFitType = aFitType;}
+inline FitType FitSharedAnalyses::GetFitType() {return fFitType;}
 
 inline TMinuit* FitSharedAnalyses::GetMinuitObject() {return fMinuit;}
 inline int FitSharedAnalyses::GetNFitPairAnalysis() {return fNFitPairAnalysis;}

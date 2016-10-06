@@ -73,6 +73,8 @@ public:
 
   TH1F* GetMomResCorrectedFitHisto();
 
+  void LoadTransformMatrices(TString aFileLocation);
+
   //inline (i.e. simple) functions
   TString GetAnalysisName();
 
@@ -113,6 +115,8 @@ public:
   double GetKStarMinNorm();
   double GetKStarMaxNorm();
 
+  vector<TH2D*> GetTransformMatrices();
+
 private:
   TString fAnalysisName;
   vector<FitPartialAnalysis*> fFitPartialAnalysisCollection;
@@ -151,6 +155,8 @@ private:
   CfHeavy* fModelKStarHeavyCfFake;
   CfHeavy* fModelKStarHeavyCfFakeIdeal;
   TH1* fModelCfFakeIdealCfFakeRatio;
+
+  vector<TH2D*> fTransformMatrices;
 
 #ifdef __ROOT__
   ClassDef(FitPairAnalysis, 1)
@@ -192,6 +198,8 @@ inline TH1* FitPairAnalysis::GetModelCfFakeIdealCfFakeRatio() {return fModelCfFa
 
 inline double FitPairAnalysis::GetKStarMinNorm() {return fKStarMinNorm;}
 inline double FitPairAnalysis::GetKStarMaxNorm() {return fKStarMaxNorm;}
+
+inline vector<TH2D*> FitPairAnalysis::GetTransformMatrices() {return fTransformMatrices;}
 #endif
 
 

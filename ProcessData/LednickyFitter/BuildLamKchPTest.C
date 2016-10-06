@@ -42,14 +42,15 @@ int main(int argc, char **argv)
 
   TString FileLocationBase = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_AsRc_KchAndLamFix2_20160229/Results_cLamcKch_AsRc_KchAndLamFix2_20160229";
   TString FileLocationBaseMC = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_AsRcMC_KchAndLamFix2_20160229/Results_cLamcKch_AsRcMC_KchAndLamFix2_20160229";
+  TString FileLocationTransform = "/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b2/TransformMatrices_Mix5.root";
 
-  bool bRunLamKchP = false;
+  bool bRunLamKchP = true;
   bool bRunALamKchM = false;
-  bool bRunLamKchPwConj = true;
+  bool bRunLamKchPwConj = false;
 
   bool bRunLamKchMwConj = false;
 
-  bool bDoFit = true;
+  bool bDoFit = false;
   bool bDrawCfsOnly = false;
 
   bool bSaveFigures = false;
@@ -61,6 +62,21 @@ int main(int argc, char **argv)
   {
     //-----Find good normalization values LamKchP
     FitPairAnalysis* tLamKchP0010 = new FitPairAnalysis(FileLocationBase,FileLocationBaseMC,kLamKchP,k0010);
+    tLamKchP0010->LoadTransformMatrices(FileLocationTransform);
+
+
+    //TODO delete
+    vector<TH2D*> tTransformMatrices = tLamKchP0010->GetTransformMatrices();
+    cout << "tTransformMatrices.size() = " << tTransformMatrices.size() << endl;
+    TCanvas* tTrashCan = new TCanvas("tTrashCan","tTrashCan");
+    tTrashCan->Divide(2,2);
+    for(unsigned int i=0; i<tTransformMatrices.size(); i++)
+    {
+      tTrashCan->cd(i+1);
+      tTransformMatrices[i]->Draw("lego2");
+    }
+
+    //end TODO delete
     
     vector<FitPairAnalysis*> tVecOfPairAnalysisLamKchP;
     tVecOfPairAnalysisLamKchP.push_back(tLamKchP0010);
