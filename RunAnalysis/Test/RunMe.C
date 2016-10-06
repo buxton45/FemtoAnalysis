@@ -20,14 +20,14 @@
 
 #endif
 
-bool RunMC = true;
+bool RunMC = false;
 TString aConfigMacro = "ConfigTrainFemtoAnalysis.C";
 
 
 TString outputname = "Results_cLamK0_20160928_Bm1_New.root";
 
 TString tConfiguration = "tMacroPath='%%/ConfigFemtoAnalysis.C'; ";
-TString tParams = "@verbose=true; @analysisType=AliFemtoAnalysisLambdaKaon::kLamK0; [0:10:30:50]; $|Lam|maxInvariantMass=1.165683; $|Lam|minInvariantMass=1.065683; $|ALam|minInvariantMass=1.065683; @isMCRun=true; ";
+TString tParams = "@implementVertexCorrections = true; $|Lam|maxInvariantMass=1.165683; ";
 
 void RunMe()
 {

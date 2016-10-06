@@ -500,6 +500,36 @@ vector<double> LednickyFitter::ApplyMomResCorrection(vector<double> &aCf, vector
 }
 
 
+//________________________________________________________________________________________________________________
+vector<double> LednickyFitter::GetResidualCorrelation(vector<double> &aParentCf, vector<double> &aKStarBinCenters, TH2* aTransformMatrix)
+{
+  unsigned int tDaughterPairKStarBin, tParentPairKStarBin;
+  double tDaughterPairKStar, tParentPairKStar;
+  assert(aParentCf.size() == aKStarBinCenters.size());
+  assert(aParentCf.size() == (unsigned int)aTransformMatrix->GetNbinsX());
+  assert(aParentCf.size() == (unsigned int)aTransformMatrix->GetNbinsY());
+
+  vector<double> tReturnResCf(aParentCf.size(),0.);
+  vector<double> tNormVec(aParentCf.size(),0.);  //TODO once I match bin size, I should be able to call /= by integral, instead of tracking normVec
+
+  for(unsigned int i=0; i<aParentCf.size(); i++)
+  {
+    tDaughterPairKStar = aKStarBinCenters[i];
+    tDaughterPairKStarBin = aTransformMatrix->GetXaxis()->FindBin(tDaughterPairKStar);
+
+    for(unsigned int j=0; j<aParentCf.size(); j++)
+    {
+      tParentPairKStar = aKStarBinCenters[j];
+      tParentPairKStarBin = aTransformMatrix->GetYaxis()->FindBin(tParentPairKStar);
+
+      tReturnResCf[i] += aParentCf[j]*aTransformMatrix->GetBinContent(tDaughterPairKStarBin,tParentPairKStarBin);
+      tNormVec[i] += aTransformMatrix->GetBinContent(tDaughterPairKStarBin,tParentPairKStarBin);
+    }
+    tReturnResCf[i] /= tNormVec[i];
+  }
+  return tReturnResCf;
+}
+
 
 //________________________________________________________________________________________________________________
 void LednickyFitter::CalculateChi2PMLwMomResCorrectionv2(int &npar, double &chi2, double *par)

@@ -75,6 +75,7 @@ public:
 
   bool AreParamsSame(double *aCurrent, double *aNew, int aNEntries);
   vector<double> ApplyMomResCorrection(vector<double> &aCf, vector<double> &aKStarBinCenters, TH2* aMomResMatrix);
+  vector<double> GetResidualCorrelation(vector<double> &aParentCf, vector<double> &aKStarBinCenters, TH2* aTransformMatrix);
   void CalculateChi2PMLwMomResCorrectionv2(int &npar, double &chi2, double *par);
 
 
