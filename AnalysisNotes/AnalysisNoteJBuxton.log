@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2016.4.26)  28 SEP 2016 11:17
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2016.10.10)  10 OCT 2016 16:12
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -479,6 +479,8 @@ LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <6> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 46.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 54.
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <7.4> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 57.
  [1
 
 
@@ -532,7 +534,7 @@ No file 3.2.2.2_K0sReconstruction.tex.tex.
 (./4_CorrelationFunctions/4_CorrelationFunctions.tex)
 (./5_Fitting/5_Fitting.tex) (./6_SystematicErrors/6_SystematicErrors.tex)
 (./7_ResultsAndDiscussion/7_ResultsAndDiscussion.tex) (./8_ToDo/8_ToDo.tex))
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 62.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 71.
 
 [4
 
@@ -540,35 +542,36 @@ Package atveryend Info: Empty hook `BeforeClearDocument' on input line 62.
 
 
 ]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 62.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 71.
  (./AnalysisNoteJBuxton.aux (./3.2.2.1_LambdaReconstruction.tex.aux)
 (./3.2.2.2_K0sReconstruction.tex.aux))
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 62.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 62.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 71.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 71.
 Package rerunfilecheck Info: File `AnalysisNoteJBuxton.out' has not changed.
 (rerunfilecheck)             Checksum: 3C5DC952749D68F829F45FF1947C8BAD;955.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 62.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 71.
  ) 
 Here is how much of TeX's memory you used:
- 6876 strings out of 494910
- 99174 string characters out of 6179836
- 181261 words of memory out of 5000000
- 9948 multiletter control sequences out of 15000+600000
- 37172 words of font info for 78 fonts, out of 8000000 for 9000
+ 6904 strings out of 494910
+ 99487 string characters out of 6179835
+ 182261 words of memory out of 5000000
+ 9964 multiletter control sequences out of 15000+600000
+ 48883 words of font info for 105 fonts, out of 8000000 for 9000
  36 hyphenation exceptions out of 8191
  34i,15n,45p,1022b,386s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/share/texliv
 e/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texm
 f-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/
 fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/
-type1/urw/symbol/usyr.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/
-utmb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmbi8a.pfb></u
-sr/share/texlive/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/share/texliv
-e/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on AnalysisNoteJBuxton.pdf (6 pages, 161287 bytes).
+type1/public/amsfonts/symbols/msam10.pfb></usr/share/texlive/texmf-dist/fonts/t
+ype1/urw/symbol/usyr.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/u
+tmb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmbi8a.pfb></us
+r/share/texlive/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/share/texlive
+/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
+Output written on AnalysisNoteJBuxton.pdf (6 pages, 171690 bytes).
 PDF statistics:
- 181 PDF objects out of 1000 (max. 8388607)
- 158 compressed objects within 2 object streams
+ 185 PDF objects out of 1000 (max. 8388607)
+ 161 compressed objects within 2 object streams
  23 named destinations out of 1000 (max. 500000)
  139 words of extra memory for PDF output out of 10000 (max. 10000000)
 

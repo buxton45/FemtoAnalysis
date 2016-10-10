@@ -33,6 +33,7 @@
 #include "TAxis.h"
 #include "TGraph.h"
 #include "TMath.h"
+#include "TDirectoryFile.h"
 
 #include "TSystem.h"
 #include "TMinuit.h"
@@ -55,8 +56,8 @@ class FitPartialAnalysis {
 public:
 
   //Constructor, destructor, copy constructor, assignment operator
-  FitPartialAnalysis(TString aFileLocation, TString aAnalysisName, AnalysisType aAnalysisType, CentralityType aCentralityType, BFieldType aBFieldType);
-  FitPartialAnalysis(TString aFileLocation, TString aFileLocationMC, TString aAnalysisName, AnalysisType aAnalysisType, CentralityType aCentralityType, BFieldType aBFieldType);
+  FitPartialAnalysis(TString aFileLocation, TString aAnalysisName, AnalysisType aAnalysisType, CentralityType aCentralityType, BFieldType aBFieldType, bool aIsTrainResults=false);
+  FitPartialAnalysis(TString aFileLocation, TString aFileLocationMC, TString aAnalysisName, AnalysisType aAnalysisType, CentralityType aCentralityType, BFieldType aBFieldType, bool aIsTrainResults=false);
   virtual ~FitPartialAnalysis();
 
   TObjArray* ConnectAnalysisDirectory(TString aFileLocation, TString aDirectoryName);
@@ -103,6 +104,7 @@ public:
   TH2* GetModelKStarTrueVsRecMixed();
 
 private:
+  bool fTrainResults;
   TString fFileLocation;
   TString fFileLocationMC;
   TString fAnalysisName;

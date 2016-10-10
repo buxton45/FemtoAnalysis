@@ -19,7 +19,7 @@ const char* const cAnalysisBaseTags[17] = {"LamK0", "ALamK0", "LamKchP", "ALamKc
 const char* const cAnalysisRootTags[17] = {"#LambdaK^{0}", "#bar{#Lambda}K^{0}", "#LambdaK+", "#bar{#Lambda}K+", "#LambdaK-", "#bar{#Lambda}K-", "#XiK+", "#bar{#Xi}K+", "#XiK-", "#bar{#Xi}K-", "#Lambda#Lambda", "#bar{#Lambda}#bar{#Lambda}", "#Lambda#bar{#Lambda}", "#Lambda#pi+", "#bar{#Lambda}#pi+", "#Lambda#pi-", "#bar{#Lambda}#pi-"};
 
 //enum BFieldType
-const char* const cBFieldTags[5] = {"_Bp1", "_Bp2", "_Bm1", "_Bm2", "_Bm3"};
+const char* const cBFieldTags[7] = {"_FemtoPlus", "_FemtoMinus", "_Bp1", "_Bp2", "_Bm1", "_Bm2", "_Bm3"};
 
 //enum CentralityType
 const char* const cCentralityTags[4] = {"_0010", "_1030", "_3050", ""};

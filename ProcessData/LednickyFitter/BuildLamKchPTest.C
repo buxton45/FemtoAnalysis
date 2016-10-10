@@ -6,7 +6,8 @@ LednickyFitter *myFitter = NULL;
 //______________________________________________________________________________
 void fcn(Int_t &npar, Double_t *gin, Double_t &f, Double_t *par, Int_t iflag)
 {
-  myFitter->CalculateChi2PMLwMomResCorrectionv2(npar,f,par);
+  //myFitter->CalculateChi2PMLwMomResCorrectionv2(npar,f,par);
+  myFitter->CalculateFitFunction(npar,f,par);
 }
 
 
@@ -44,19 +45,21 @@ int main(int argc, char **argv)
   TString FileLocationBaseMC = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_AsRcMC_KchAndLamFix2_20160229/Results_cLamcKch_AsRcMC_KchAndLamFix2_20160229";
   TString FileLocationTransform = "/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b2/TransformMatrices_Mix5.root";
 
-  bool bRunLamKchP = true;
+  TString FileLocationBaseTrain = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_20161007/Results_cLamcKch_20161007";
+
+  bool bRunLamKchP = false;
   bool bRunALamKchM = false;
-  bool bRunLamKchPwConj = false;
+  bool bRunLamKchPwConj = true;
 
   bool bRunLamKchMwConj = false;
 
-  bool bDoFit = false;
+  bool bDoFit = true;
   bool bDrawCfsOnly = false;
 
   bool bSaveFigures = false;
   TString tSaveFiguresLocation = "~/Analysis/Presentations/AliFemto/20160330/";
 
-  bool bApplyMomResCorrection = true;
+  bool bApplyMomResCorrection = false;
 
   if(bRunLamKchP)
   {
@@ -186,6 +189,9 @@ int main(int argc, char **argv)
   {
     FitPairAnalysis* tLamKchP0010 = new FitPairAnalysis(FileLocationBase,FileLocationBaseMC,kLamKchP,k0010);
     FitPairAnalysis* tALamKchM0010 = new FitPairAnalysis(FileLocationBase,FileLocationBaseMC,kALamKchM,k0010);
+
+//    FitPairAnalysis* tLamKchP0010 = new FitPairAnalysis(FileLocationBaseTrain,kLamKchP,k0010,2,true);
+//    FitPairAnalysis* tALamKchM0010 = new FitPairAnalysis(FileLocationBaseTrain,kALamKchM,k0010,2,true);
 
 
     vector<FitPairAnalysis*> tVecOfPairAnalysisLamKchPwConj;

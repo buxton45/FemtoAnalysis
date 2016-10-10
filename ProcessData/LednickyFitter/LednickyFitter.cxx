@@ -715,8 +715,6 @@ double LednickyFitter::GetPmlValue(double aNumContent, double aDenContent, doubl
 //________________________________________________________________________________________________________________
 void LednickyFitter::CalculateFitFunction(int &npar, double &chi2, double *par)
 {
-  assert(fApplyMomResCorrection);
-
   double tRejectOmegaLow = 0.19;
   double tRejectOmegaHigh = 0.23;
 
@@ -727,8 +725,10 @@ void LednickyFitter::CalculateFitFunction(int &npar, double &chi2, double *par)
   int tNbinsXToFitGlobal = fFitSharedAnalyses->GetFitPairAnalysis(0)->GetFitPartialAnalysis(0)->GetKStarCfLite()->Num()->FindBin(fMaxFitKStar);
   if(fFitSharedAnalyses->GetFitPairAnalysis(0)->GetFitPartialAnalysis(0)->GetKStarCfLite()->Num()->GetBinLowEdge(tNbinsXToFitGlobal) == fMaxFitKStar) tNbinsXToFitGlobal--;
 
-  int tNbinsXToBuildGlobal = fFitSharedAnalyses->GetFitPairAnalysis(0)->GetModelKStarTrueVsRecMixed()->GetNbinsX();  // when applying momentum resolution corrections, many times
-                                                                                                                     // you must go beyond fitting range to apply correction
+  int tNbinsXToBuildGlobal;  // when applying momentum resolution corrections, many times you must go beyond fitting range to apply correction
+  if(fApplyMomResCorrection) tNbinsXToBuildGlobal = fFitSharedAnalyses->GetFitPairAnalysis(0)->GetModelKStarTrueVsRecMixed()->GetNbinsX();
+  else tNbinsXToBuildGlobal = tNbinsXToFitGlobal;
+
 
 //  vector<double> tFitCfContentUnNorm(tNbinsXToBuildGlobal,0.);
   vector<double> tFitCfContent(tNbinsXToBuildGlobal,0.);
@@ -746,11 +746,15 @@ void LednickyFitter::CalculateFitFunction(int &npar, double &chi2, double *par)
   for(int iAnaly=0; iAnaly<fNAnalyses; iAnaly++)
   {
     FitPairAnalysis* tFitPairAnalysis = fFitSharedAnalyses->GetFitPairAnalysis(iAnaly);
-
-    TH2* tMomResMatrix = tFitPairAnalysis->GetModelKStarTrueVsRecMixed();
-    assert(tMomResMatrix);
-    int tNbinsXToBuild = tMomResMatrix->GetNbinsX();
-    assert(tNbinsXToBuild == tNbinsXToBuildGlobal);
+    int tNbinsXToBuild;
+    TH2* tMomResMatrix = NULL;
+    if(fApplyMomResCorrection)
+    {
+      tMomResMatrix = tFitPairAnalysis->GetModelKStarTrueVsRecMixed();
+      assert(tMomResMatrix);
+      tNbinsXToBuild = tMomResMatrix->GetNbinsX();
+      assert(tNbinsXToBuild == tNbinsXToBuildGlobal);
+    }
 
     int tNFitPartialAnalysis = tFitPairAnalysis->GetNFitPartialAnalysis();
     for(int iPartAn=0; iPartAn<tNFitPartialAnalysis; iPartAn++)
@@ -763,9 +767,12 @@ void LednickyFitter::CalculateFitFunction(int &npar, double &chi2, double *par)
       TH1* tCf = tKStarCfLite->Cf();
 
       //make sure tNum and tDen have same bin size as tMomResMatrix
-      assert(tNum->GetXaxis()->GetBinWidth(1) == tDen->GetXaxis()->GetBinWidth(1));
-      assert(tNum->GetXaxis()->GetBinWidth(1) == tMomResMatrix->GetXaxis()->GetBinWidth(1));
-      assert(tNum->GetXaxis()->GetBinWidth(1) == tMomResMatrix->GetYaxis()->GetBinWidth(1));
+      if(fApplyMomResCorrection)
+      {
+        assert(tNum->GetXaxis()->GetBinWidth(1) == tDen->GetXaxis()->GetBinWidth(1));
+        assert(tNum->GetXaxis()->GetBinWidth(1) == tMomResMatrix->GetXaxis()->GetBinWidth(1));
+        assert(tNum->GetXaxis()->GetBinWidth(1) == tMomResMatrix->GetYaxis()->GetBinWidth(1));
+      }
 
       //make sure tNum and tDen have same number of bins
       assert(tNum->GetNbinsX() == tDen->GetNbinsX());
@@ -810,6 +817,7 @@ void LednickyFitter::CalculateFitFunction(int &npar, double &chi2, double *par)
       bool tRejectOmega = tFitPartialAnalysis->RejectOmega();
       //bool tAreParamsSame = AreParamsSame(tCurrentFitPar,tPar,tNFitParPerAnalysis);
 
+      if(!fApplyMomResCorrection) tNbinsXToBuild = tNbinsXToFit;
       for(int ix=1; ix <= tNbinsXToBuild; ix++)
       {
         tKStarBinCenters[ix-1] = tXaxisNum->GetBinCenter(ix);

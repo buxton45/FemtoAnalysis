@@ -46,6 +46,8 @@ int main(int argc, char **argv)
   TString FileLocationBase_cLamK0 = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamK0_AsRc_20151228_Old/Results_cLamK0_AsRc_20151228_Old";
   TString FileLocationBase_cLamcKch = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_AsRc_20151007/Results_cLamcKch_AsRc_20151007";
 
+  TString FileLocationBaseTrain = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_20161007/Results_cLamcKch_20161007";
+
   //Choose one
   //tConjPairType is automatically set
   AnalysisType tPairType;
@@ -56,8 +58,8 @@ int main(int argc, char **argv)
 
   bool bRunPair = false;
   bool bRunConjPair = false;
-  bool bRunPairwConjAll = false;
-  bool bRunPairwConj0010 = true;
+  bool bRunPairwConjAll = true;
+  bool bRunPairwConj0010 = false;
 
   bool bDoFit = true;
   bool bDrawCfsOnly = false;

@@ -462,7 +462,7 @@ void FitSharedAnalyses::CreateMinuitParameter(int aMinuitParamNumber, FitParamet
 
   aParam->SetMinuitParamNumber(aMinuitParamNumber);
 
-  if(aParam->GetType() != kNorm) fFitChi2Histograms->AddParameter(aMinuitParamNumber,aParam);
+//TODO  if(aParam->GetType() != kNorm) fFitChi2Histograms->AddParameter(aMinuitParamNumber,aParam);
 }
 
 
@@ -487,7 +487,7 @@ void FitSharedAnalyses::CreateMinuitParameters()
     }
   }
   
-  fFitChi2Histograms->InitiateHistograms();
+// TODO  fFitChi2Histograms->InitiateHistograms();
 }
 
 

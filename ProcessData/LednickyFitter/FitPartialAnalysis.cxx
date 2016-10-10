@@ -16,7 +16,8 @@ ClassImp(FitPartialAnalysis)
 
 
 //________________________________________________________________________________________________________________
-FitPartialAnalysis::FitPartialAnalysis(TString aFileLocation, TString aAnalysisName, AnalysisType aAnalysisType, CentralityType aCentralityType, BFieldType aBFieldType) : 
+FitPartialAnalysis::FitPartialAnalysis(TString aFileLocation, TString aAnalysisName, AnalysisType aAnalysisType, CentralityType aCentralityType, BFieldType aBFieldType, bool aIsTrainResults) : 
+  fTrainResults(aIsTrainResults),
   fFileLocation(aFileLocation),
   fFileLocationMC(0),
   fAnalysisName(aAnalysisName),
@@ -149,7 +150,8 @@ FitPartialAnalysis::FitPartialAnalysis(TString aFileLocation, TString aAnalysisN
 
 
 //________________________________________________________________________________________________________________
-FitPartialAnalysis::FitPartialAnalysis(TString aFileLocation, TString aFileLocationMC, TString aAnalysisName, AnalysisType aAnalysisType, CentralityType aCentralityType, BFieldType aBFieldType) : 
+FitPartialAnalysis::FitPartialAnalysis(TString aFileLocation, TString aFileLocationMC, TString aAnalysisName, AnalysisType aAnalysisType, CentralityType aCentralityType, BFieldType aBFieldType, bool aIsTrainResults) : 
+  fTrainResults(aIsTrainResults),
   fFileLocation(aFileLocation),
   fFileLocationMC(aFileLocationMC),
   fAnalysisName(aAnalysisName),
@@ -305,9 +307,31 @@ FitPartialAnalysis::~FitPartialAnalysis()
 TObjArray* FitPartialAnalysis::ConnectAnalysisDirectory(TString aFileLocation, TString aDirectoryName)
 {
   TFile *tFile = TFile::Open(aFileLocation);
+  TList *tFemtolist;
+  TString tFemtoListName;
+  TDirectoryFile *tDirFile;
+  if(fTrainResults)
+  {
+    tDirFile = (TDirectoryFile*)tFile->Get("PWG2FEMTO");
+    if(aDirectoryName.Contains("LamKch")) tFemtoListName = "cLamcKch_femtolist";
+    else if(aDirectoryName.Contains("LamK0")) tFemtoListName = "cLamK0_femtolist";
+    else if(aDirectoryName.Contains("XiKch")) tFemtoListName = "cXicKch_femtolist";
+    else
+    {
+      cout << "ERROR in FitPartialAnalysis::ConnectAnalysisDirectory!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
+      cout << "Invalid aDirectoryName for fTrainResults=true:  aDirectoryName = " << aDirectoryName << endl;
+      assert(0);
+    }
+    tFemtolist = (TList*)tDirFile->Get(tFemtoListName);
+    aDirectoryName.ReplaceAll("0010","010");
+  }
+  else
+  {
+    tFemtoListName = "femtolist";
+    tFemtolist = (TList*)tFile->Get(tFemtoListName);
+  }
 
-  TList *tFemtolist = (TList*)tFile->Get("femtolist");
-    tFemtolist->SetOwner();
+  tFemtolist->SetOwner();
 
   TObjArray *ReturnArray = (TObjArray*)tFemtolist->FindObject(aDirectoryName)->Clone();
     ReturnArray->SetOwner();
@@ -329,6 +353,12 @@ TObjArray* FitPartialAnalysis::ConnectAnalysisDirectory(TString aFileLocation, T
 
   tFemtolist->Delete();
   delete tFemtolist;
+
+  if(fTrainResults) 
+  {
+    tDirFile->Close();
+    delete tDirFile;
+  }
 
   tFile->Close();
   delete tFile;
