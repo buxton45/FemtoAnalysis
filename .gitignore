@@ -11,7 +11,7 @@
 *.xml
 *.jdl
 AutoDict*
-test*
+##test*
 trash*
 analysis_*
 Old Stuff/*

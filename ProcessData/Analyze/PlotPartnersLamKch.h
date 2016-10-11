@@ -20,8 +20,9 @@ public:
 
   virtual TCanvas* DrawPurity();
   virtual TCanvas* DrawKStarCfs();
-//  virtual TCanvas* DrawAvgSepCfs();
   virtual TCanvas* DrawKStarTrueVsRec(KStarTrueVsRecType aType=kMixed);  // kSame, kRotSame, kMixed, kRotMixed};
+  virtual TCanvas* DrawAvgSepCfs();
+  virtual TCanvas* ViewPart1MassFail(bool aDrawWideRangeToo);
 
 
 private:

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2016.4.26)  11 OCT 2016 12:50
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2016.10.10)  11 OCT 2016 18:06
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -522,7 +522,7 @@ LaTeX Font Info:    Font shape `OT1/ptm/bx/it' in size <10.95> not available
 )
 (./3_DataSelection/3.2.2_V0Selection.tex
 (./3_DataSelection/3.2.2.1_LambdaReconstruction.tex
-<3_DataSelection/Figures/MassAssumingK0ShortHypothesis.png, id=170, 698.61pt x 
+<3_DataSelection/Figures/MassAssumingK0ShortHypothesis.png, id=173, 698.61pt x 
 475.7775pt>
 File: 3_DataSelection/Figures/MassAssumingK0ShortHypothesis.png Graphic file (t
 ype png)
@@ -531,11 +531,21 @@ Package pdftex.def Info: 3_DataSelection/Figures/MassAssumingK0ShortHypothesis.
 png used on input line 46.
 (pdftex.def)             Requested size: 284.52756pt x 193.77052pt.
 )
-(./3_DataSelection/3.2.2.2_K0sReconstruction.tex))
+(./3_DataSelection/3.2.2.2_K0sReconstruction.tex [4]
+<3_DataSelection/Figures/MassAssumingLambdaHypothesis.png, id=199, 698.61pt x 4
+75.7775pt>
+File: 3_DataSelection/Figures/MassAssumingLambdaHypothesis.png Graphic file (ty
+pe png)
+ <use 3_DataSelection/Figures/MassAssumingLambdaHypothesis.png>
+Package pdftex.def Info: 3_DataSelection/Figures/MassAssumingLambdaHypothesis.p
+ng used on input line 31.
+(pdftex.def)             Requested size: 284.52756pt x 193.77052pt.
+))
 (./3_DataSelection/3.2.3_CascadeReconstruction.tex))
 (./3_DataSelection/3.3_PairSelection.tex))
-(./4_CorrelationFunctions/4_CorrelationFunctions.tex [4])
-(./5_Fitting/5_Fitting.tex (./5_Fitting/5.1_ModelLambdaKaon.tex)
+(./4_CorrelationFunctions/4_CorrelationFunctions.tex)
+(./5_Fitting/5_Fitting.tex (./5_Fitting/5.1_ModelLambdaKaon.tex [5 <./3_DataSel
+ection/Figures/MassAssumingK0ShortHypothesis.png>])
 (./5_Fitting/5.2_ModelCascadeKaon.tex)
 (./5_Fitting/5.3_MomentumResolutionCorrections.tex)
 (./5_Fitting/5.4_ResidualCorrelations.tex))
@@ -543,7 +553,7 @@ png used on input line 46.
 (./7_ResultsAndDiscussion/7_ResultsAndDiscussion.tex) (./8_ToDo/8_ToDo.tex))
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 71.
 
-[5 <./3_DataSelection/Figures/MassAssumingK0ShortHypothesis.png>] [6]
+[6 <./3_DataSelection/Figures/MassAssumingLambdaHypothesis.png>]
 Package atveryend Info: Empty hook `AfterLastShipout' on input line 71.
 
 (./AnalysisNoteJBuxton.aux)
@@ -554,13 +564,13 @@ Package rerunfilecheck Info: File `AnalysisNoteJBuxton.out' has not changed.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 71.
  ) 
 Here is how much of TeX's memory you used:
- 6960 strings out of 494910
- 100500 string characters out of 6179836
- 183774 words of memory out of 5000000
- 9978 multiletter control sequences out of 15000+600000
+ 6981 strings out of 494910
+ 100900 string characters out of 6179835
+ 184821 words of memory out of 5000000
+ 9983 multiletter control sequences out of 15000+600000
  51169 words of font info for 110 fonts, out of 8000000 for 9000
  36 hyphenation exceptions out of 8191
- 34i,15n,45p,1022b,386s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 34i,15n,45p,1022b,485s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/share/texliv
 e/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texm
 f-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/
@@ -571,10 +581,10 @@ usyr.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/
 share/texlive/texmf-dist/fonts/type1/urw/times/utmbi8a.pfb></usr/share/texlive/
 texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/share/texlive/texmf-dist/font
 s/type1/urw/times/utmri8a.pfb>
-Output written on AnalysisNoteJBuxton.pdf (8 pages, 193266 bytes).
+Output written on AnalysisNoteJBuxton.pdf (8 pages, 208022 bytes).
 PDF statistics:
- 255 PDF objects out of 1000 (max. 8388607)
- 226 compressed objects within 3 object streams
- 50 named destinations out of 1000 (max. 500000)
- 176 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 275 PDF objects out of 1000 (max. 8388607)
+ 245 compressed objects within 3 object streams
+ 65 named destinations out of 1000 (max. 500000)
+ 181 words of extra memory for PDF output out of 10000 (max. 10000000)
 

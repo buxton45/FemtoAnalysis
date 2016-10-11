@@ -168,3 +168,64 @@ TCanvas* PlotPartnersLamKch::DrawKStarTrueVsRec(KStarTrueVsRecType aType)
 }
 
 
+
+
+
+//________________________________________________________________________________________________________________
+TCanvas* PlotPartnersLamKch::DrawAvgSepCfs()
+{
+
+  fAnalysis1->BuildAllAvgSepHeavyCfs();
+  fConjAnalysis1->BuildAllAvgSepHeavyCfs();
+  fAnalysis2->BuildAllAvgSepHeavyCfs();
+  fConjAnalysis2->BuildAllAvgSepHeavyCfs();
+
+  TString tCanvasName = TString("canAvgSepCfs") + TString(cAnalysisBaseTags[fAnalysis1->GetAnalysisType()]) + TString(cCentralityTags[fAnalysis1->GetCentralityType()]);
+  TCanvas* tReturnCan = new TCanvas(tCanvasName,tCanvasName);
+  tReturnCan->Divide(2,4);
+
+  fAnalysis1->DrawAvgSepHeavyCf(kTrackPos,(TPad*)tReturnCan->cd(1));
+  fAnalysis1->DrawAvgSepHeavyCf(kTrackNeg,(TPad*)tReturnCan->cd(2));
+
+  fConjAnalysis1->DrawAvgSepHeavyCf(kTrackPos,(TPad*)tReturnCan->cd(3));
+  fConjAnalysis1->DrawAvgSepHeavyCf(kTrackNeg,(TPad*)tReturnCan->cd(4));
+
+  fAnalysis2->DrawAvgSepHeavyCf(kTrackPos,(TPad*)tReturnCan->cd(5));
+  fAnalysis2->DrawAvgSepHeavyCf(kTrackNeg,(TPad*)tReturnCan->cd(6));
+
+  fConjAnalysis2->DrawAvgSepHeavyCf(kTrackPos,(TPad*)tReturnCan->cd(7));
+  fConjAnalysis2->DrawAvgSepHeavyCf(kTrackNeg,(TPad*)tReturnCan->cd(8));
+
+//TODO
+/*
+  //----------------------------------
+  if(bSaveFile)
+  {
+    LamKchP->SaveAllAvgSepHeavyCfs(mySaveFile);
+    LamKchM->SaveAllAvgSepHeavyCfs(mySaveFile);
+    ALamKchP->SaveAllAvgSepHeavyCfs(mySaveFile);
+    ALamKchM->SaveAllAvgSepHeavyCfs(mySaveFile);
+  }
+*/
+
+  return tReturnCan;
+}
+
+
+//________________________________________________________________________________________________________________
+TCanvas* PlotPartnersLamKch::ViewPart1MassFail(bool aDrawWideRangeToo)
+{
+
+  TString tCanvasName = TString("canPart1MassFail") + TString(cAnalysisBaseTags[fAnalysis1->GetAnalysisType()]) + TString(cCentralityTags[fAnalysis1->GetCentralityType()]);
+  TCanvas* tReturnCan = new TCanvas(tCanvasName,tCanvasName);
+  tReturnCan->Divide(2,2);
+
+  fAnalysis1->DrawPart1MassFail((TPad*)tReturnCan->cd(1),aDrawWideRangeToo);
+  fConjAnalysis1->DrawPart1MassFail((TPad*)tReturnCan->cd(2),aDrawWideRangeToo);
+  fAnalysis2->DrawPart1MassFail((TPad*)tReturnCan->cd(3),aDrawWideRangeToo);
+  fConjAnalysis2->DrawPart1MassFail((TPad*)tReturnCan->cd(4),aDrawWideRangeToo);
+
+  return tReturnCan;
+}
+
+

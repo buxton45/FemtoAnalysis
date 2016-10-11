@@ -125,7 +125,7 @@ int main(int argc, char **argv)
   bool bContainsSepHeavyCfs = false;
   bool bContainsAvgSepCowSailCfs = false;
 
-  bool bViewPart1MassFail = false;
+  bool bViewPart1MassFail = true;
 
   bool bDrawMC = true;
 

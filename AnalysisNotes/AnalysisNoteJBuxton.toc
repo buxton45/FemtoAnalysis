@@ -8,15 +8,15 @@
 \contentsline {subsubsection}{\numberline {3.2.1}Charged Kaon Identification}{4}{subsubsection.3.2.1}
 \contentsline {subsubsection}{\numberline {3.2.2}V0 Selection}{4}{subsubsection.3.2.2}
 \contentsline {paragraph}{$\Lambda $ Reconstruction}{4}{section*.3}
-\contentsline {paragraph}{K0s Reconstruction}{4}{section*.4}
+\contentsline {paragraph}{K$^{0}_{S}$ Reconstruction}{5}{section*.4}
 \contentsline {subsubsection}{\numberline {3.2.3}Cascade Reconstruction}{5}{subsubsection.3.2.3}
 \contentsline {subsection}{\numberline {3.3}Pair Selection}{5}{subsection.3.3}
 \contentsline {section}{\numberline {4}Correlation Functions}{5}{section.4}
-\contentsline {section}{\numberline {5}Fitting}{5}{section.5}
-\contentsline {subsection}{\numberline {5.1}Model: Lambda-Kaon}{5}{subsection.5.1}
-\contentsline {subsection}{\numberline {5.2}Model: Cascade-Kaon}{5}{subsection.5.2}
-\contentsline {subsection}{\numberline {5.3}Momentum Resolution Corrections}{5}{subsection.5.3}
-\contentsline {subsection}{\numberline {5.4}Residual Correlations}{5}{subsection.5.4}
-\contentsline {section}{\numberline {6}Systematic Errors}{5}{section.6}
+\contentsline {section}{\numberline {5}Fitting}{6}{section.5}
+\contentsline {subsection}{\numberline {5.1}Model: Lambda-Kaon}{6}{subsection.5.1}
+\contentsline {subsection}{\numberline {5.2}Model: Cascade-Kaon}{6}{subsection.5.2}
+\contentsline {subsection}{\numberline {5.3}Momentum Resolution Corrections}{6}{subsection.5.3}
+\contentsline {subsection}{\numberline {5.4}Residual Correlations}{6}{subsection.5.4}
+\contentsline {section}{\numberline {6}Systematic Errors}{6}{section.6}
 \contentsline {section}{\numberline {7}Results and Discussion}{6}{section.7}
 \contentsline {section}{\numberline {8}To Do}{6}{section.8}
