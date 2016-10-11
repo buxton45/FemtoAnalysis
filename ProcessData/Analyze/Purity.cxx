@@ -285,6 +285,8 @@ void Purity::DrawPurity(TPad *aPad, bool aZoomBg)
 
   //--------------------------------------------------------------------------------------------
   aPad->cd();
+//  gStyle->SetOptStat(0);
+//  gStyle->SetOptTitle(0);
 
   fCombinedPurity->SetLabelSize(0.04, "xy");
 
@@ -304,9 +306,9 @@ void Purity::DrawPurity(TPad *aPad, bool aZoomBg)
     myText->SetBorderSize(1);
     char buffer[50];
     double purity = (*vInfo)(3);
-    const char* title = fCombinedPurity->GetName();
-    //char title[20] = fCombinedPurity->GetName();
-    sprintf(buffer, "%s = %.2f%%",title, 100.*purity);
+    const char* title = cRootParticleTags[fParticleType];
+
+    sprintf(buffer, "%s Purity = %.2f%%",title, 100.*purity);
     myText->AddText(buffer);
     myText->Draw();
 

@@ -16,7 +16,8 @@ ClassImp(PartialAnalysis)
 
 
 //________________________________________________________________________________________________________________
-PartialAnalysis::PartialAnalysis(TString aFileLocation, TString aAnalysisName, AnalysisType aAnalysisType, BFieldType aBFieldType, CentralityType aCentralityType) :
+PartialAnalysis::PartialAnalysis(TString aFileLocation, TString aAnalysisName, AnalysisType aAnalysisType, BFieldType aBFieldType, CentralityType aCentralityType, bool aIsTrainResults) :
+  fTrainResults(aIsTrainResults),
   fFileLocation(aFileLocation),
   fAnalysisName(aAnalysisName),
   fDirectoryName(0),
@@ -146,9 +147,63 @@ PartialAnalysis::~PartialAnalysis()
 //________________________________________________________________________________________________________________
 TObjArray* PartialAnalysis::ConnectAnalysisDirectory(TString aFileLocation, TString aDirectoryName)
 {
-  TFile tFile(aFileLocation);
-  TList *tFemtolist = (TList*)tFile.Get("femtolist");
-  TObjArray *ReturnArray = (TObjArray*)tFemtolist->FindObject(aDirectoryName);
+  TFile *tFile = TFile::Open(aFileLocation);
+  TList *tFemtolist;
+  TString tFemtoListName;
+  TDirectoryFile *tDirFile;
+  if(fTrainResults)
+  {
+    tDirFile = (TDirectoryFile*)tFile->Get("PWG2FEMTO");
+    if(aDirectoryName.Contains("LamKch")) tFemtoListName = "cLamcKch_femtolist";
+    else if(aDirectoryName.Contains("LamK0")) tFemtoListName = "cLamK0_femtolist";
+    else if(aDirectoryName.Contains("XiKch")) tFemtoListName = "cXicKch_femtolist";
+    else
+    {
+      cout << "ERROR in Analysis::ConnectAnalysisDirectory!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
+      cout << "Invalid aDirectoryName for fTrainResults=true:  aDirectoryName = " << aDirectoryName << endl;
+      assert(0);
+    }
+    tFemtolist = (TList*)tDirFile->Get(tFemtoListName);
+    aDirectoryName.ReplaceAll("0010","010");
+  }
+  else
+  {
+    tFemtoListName = "femtolist";
+    tFemtolist = (TList*)tFile->Get(tFemtoListName);
+  }
+
+  tFemtolist->SetOwner();
+
+  TObjArray *ReturnArray = (TObjArray*)tFemtolist->FindObject(aDirectoryName)->Clone();
+    ReturnArray->SetOwner();
+
+
+  //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  //This needs to be done, otherwise the other TObjArrays in TList are
+  //thrown onto the stack (even after calling delete on the tFemtolist object)
+  //which causes the RAM to be used up rapidly!
+  //In short, TLists are stupid
+  TIter next(tFemtolist);
+  TObject *obj = nullptr;
+  while((obj = next()))
+  {
+    TObjArray *arr = dynamic_cast<TObjArray*>(obj);
+    if(arr) arr->Delete();
+  }
+  //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+  tFemtolist->Delete();
+  delete tFemtolist;
+
+  if(fTrainResults) 
+  {
+    tDirFile->Close();
+    delete tDirFile;
+  }
+
+  tFile->Close();
+  delete tFile;
+
 
   return ReturnArray;
 }

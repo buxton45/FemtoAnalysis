@@ -48,7 +48,7 @@ public:
 
   Analysis(TString aAnalysisName, vector<PartialAnalysis*> &aPartialAnalysisCollection, bool aCombineConjugates=false);
 
-  Analysis(TString aFileLocationBase, AnalysisType aAnalysisType, CentralityType aCentralityType, int aNPartialAnalysis=5);
+  Analysis(TString aFileLocationBase, AnalysisType aAnalysisType, CentralityType aCentralityType, int aNPartialAnalysis=5, bool aIsTrainResults=false);
   virtual ~Analysis();
 
   vector<ParticleType> GetCorrectDaughterParticleTypes(DaughterPairType aDaughterPairType);
@@ -169,9 +169,10 @@ public:
   TH1* GetPart1MassFail();
 
   void GetMCKchPurity(bool aBeforePairCut);
+  bool AreTrainResults();
 
 private:
-
+  bool fTrainResults;
   bool fCombineConjugates;
 
   TString fAnalysisName;
@@ -300,6 +301,8 @@ inline double Analysis::GetNPart2Fail() {return fNPart2Fail;}
 inline double Analysis::GetNKStarNumEntries() {return fNKStarNumEntries;}
 
 inline TH1* Analysis::GetPart1MassFail() {return fPart1MassFail;}
+
+inline bool Analysis::AreTrainResults() {return fTrainResults;}
 
 #endif
 

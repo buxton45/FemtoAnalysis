@@ -87,7 +87,7 @@ private:
 
 
 #ifdef __ROOT__
-  ClassDef(PlotPartners, 1)
+  ClassDef(Purity, 1)
 #endif
 };
 

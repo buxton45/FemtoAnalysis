@@ -116,7 +116,7 @@ int main(int argc, char **argv)
   TFile *mySaveFile;
   if(bSaveFile) {mySaveFile = new TFile(SaveFileName, "RECREATE");}
 
-  bool bContainsPurity = false;
+  bool bContainsPurity = true;
   bool bContainsKStarCfs = false;
   bool bContainsAvgSepCfs = false;
 

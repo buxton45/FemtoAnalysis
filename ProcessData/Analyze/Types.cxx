@@ -63,7 +63,7 @@ const char* cModelKStarTrueVsRecRotMixedBaseTag = "fKTrueKRecRotMixedKStarModelC
 
 const char* cLambdaPurityTag = "LambdaPurity";
 const char* cAntiLambdaPurityTag = "AntiLambdaPurity";
-const char* cK0ShortPurityTag = "K0ShortPurity1";
+const char* cK0ShortPurityTag = "K0ShortPurity";
 const char* cXiPurityTag = "XiPurityAid";
 const char* cAXiPurityTag = "AXiPurityAid";
 

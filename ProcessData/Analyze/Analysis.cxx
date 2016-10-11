@@ -138,6 +138,7 @@ double FitGausAndTwoExp(double *x, double *par)
 
 //________________________________________________________________________________________________________________
 Analysis::Analysis(TString aAnalysisName, vector<PartialAnalysis*> &aPartialAnalysisCollection, bool aCombineConjugates) :
+  fTrainResults(false),
   fCombineConjugates(aCombineConjugates),
   fAnalysisName(aAnalysisName),
   fPartialAnalysisCollection(aPartialAnalysisCollection),
@@ -257,7 +258,8 @@ Analysis::Analysis(TString aAnalysisName, vector<PartialAnalysis*> &aPartialAnal
 
 
 //________________________________________________________________________________________________________________
-Analysis::Analysis(TString aFileLocationBase, AnalysisType aAnalysisType, CentralityType aCentralityType, int aNPartialAnalysis) :
+Analysis::Analysis(TString aFileLocationBase, AnalysisType aAnalysisType, CentralityType aCentralityType, int aNPartialAnalysis, bool aIsTrainResults) :
+  fTrainResults(aIsTrainResults),
   fCombineConjugates(false),
   fAnalysisName(0),
   fPartialAnalysisCollection(0),
@@ -335,7 +337,11 @@ Analysis::Analysis(TString aFileLocationBase, AnalysisType aAnalysisType, Centra
 
   fAnalysisName = TString(cAnalysisBaseTags[fAnalysisType]) + TString(cCentralityTags[fCentralityType]);
 
-  for(int i=0; i<fNPartialAnalysis; i++)
+  int iStart;
+  if(fTrainResults) iStart=0;
+  else iStart = 2;
+
+  for(int i=iStart; i<fNPartialAnalysis+iStart; i++)
   {
     BFieldType tBFieldType = static_cast<BFieldType>(i);
 
@@ -344,7 +350,7 @@ Analysis::Analysis(TString aFileLocationBase, AnalysisType aAnalysisType, Centra
 
     TString tPartialAnalysisName = fAnalysisName + cBFieldTags[tBFieldType];
 
-    PartialAnalysis* tPartialAnalysis = new PartialAnalysis(tFileLocation, tPartialAnalysisName, fAnalysisType, tBFieldType, fCentralityType);
+    PartialAnalysis* tPartialAnalysis = new PartialAnalysis(tFileLocation, tPartialAnalysisName, fAnalysisType, tBFieldType, fCentralityType, fTrainResults);
 
     fPartialAnalysisCollection.push_back(tPartialAnalysis);
   } 
@@ -1921,7 +1927,7 @@ void Analysis::BuildPurityCollection()
         tTempVec.push_back(tPurityHisto);
       }
       TString tBaseName = TString(cParticleTags[fParticleTypes[i]]);
-      TString tName = tBaseName + "Purity" + cAnalysisBaseTags[fAnalysisType] + cCentralityTags[fCentralityType];
+      TString tName = tBaseName + "Purity_" + cAnalysisBaseTags[fAnalysisType] + cCentralityTags[fCentralityType];
 
       Purity* tPurity = new Purity(tName,fParticleTypes[i],tTempVec);
 
