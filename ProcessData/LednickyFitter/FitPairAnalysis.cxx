@@ -332,9 +332,18 @@ void FitPairAnalysis::CreateFitNormParameters()
 
   fNFitNormParams = fFitNormParameters.size();
 
-  if(fNFitNormParams != 5)
+  if(!fTrainResults && fNFitNormParams != 5)
   {
     cout << "WARNING:  In FitPairAnalysis (name: " << fAnalysisName << "), fNFitNormParams != 5 (the typical value)" << endl;
+    cout << "Instead, fNFitNormParams = " << fNFitNormParams << endl;
+    cout << "Is this alright?  Choose (1) for yes, (0) for no" << endl; 
+    int tResponse;
+    cin >> tResponse;
+    assert(tResponse);
+  }
+  else if(fTrainResults && fNFitNormParams != 2)
+  {
+    cout << "WARNING:  In FitPairAnalysis (name: " << fAnalysisName << "), fNFitNormParams != 2 (the typical value)" << endl;
     cout << "Instead, fNFitNormParams = " << fNFitNormParams << endl;
     cout << "Is this alright?  Choose (1) for yes, (0) for no" << endl; 
     int tResponse;

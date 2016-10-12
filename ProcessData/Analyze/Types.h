@@ -30,6 +30,7 @@ using std::vector;
   enum KStarTrueVsRecType {kSame=0, kRotSame=1, kMixed=2, kRotMixed=3};
 
   enum FitType {kChi2PML=0, kChi2=1};
+  enum FitGeneratorType {kPair=0, kConjPair=1, kPairwConj=2};
 
   enum InterpType {kGTilde=0, kHyperGeo1F1=1, kScattLen=2};
   enum InterpAxisType {kKaxis=0, kRaxis=1, kThetaaxis=2, kReF0axis=3, kImF0axis=4, kD0axis=5};

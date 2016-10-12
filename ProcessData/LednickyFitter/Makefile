@@ -6,22 +6,16 @@ CFLAGS = $(shell root-config --cflags) -Wall -std=c++11 -I${ANALYZE_DIR} -I${UTI
 #IFLAGS = -I$(ROOTSYS)/include
 #.PHONY: clean
 
-MY_LIBS = $(addprefix build/, FitParameter.o FitChi2Histograms.o FitPartialAnalysis.o FitPairAnalysis.o FitSharedAnalyses.o LednickyFitter.o CfLite.o CfHeavy.o Types.o Faddeeva.o)
+MY_LIBS = $(addprefix build/, FitParameter.o FitChi2Histograms.o FitPartialAnalysis.o FitPairAnalysis.o FitSharedAnalyses.o LednickyFitter.o FitGenerator.o CfLite.o CfHeavy.o Types.o Faddeeva.o)
 
 
-all: runLamKchP runLamKchPTest runLamKchPTest2 runLamKchPTest3 runCompareKchFix2 runFits runTest
+all: runLamKchP runLamKchPTest runCompareKchFix2 runFits runTest runGenerator
 
 runLamKchP: ${MY_LIBS} BuildLamKchP.C
 	g++ BuildLamKchP.C ${MY_LIBS} -o runLamKchP $(LIBS) $(CFLAGS)
 
 runLamKchPTest: ${MY_LIBS} BuildLamKchPTest.C
 	g++ BuildLamKchPTest.C ${MY_LIBS} -o runLamKchPTest $(LIBS) $(CFLAGS)
-
-runLamKchPTest2: ${MY_LIBS} BuildLamKchPTest2.C
-	g++ BuildLamKchPTest2.C ${MY_LIBS} -o runLamKchPTest2 $(LIBS) $(CFLAGS)
-
-runLamKchPTest3: ${MY_LIBS} BuildLamKchPTest3.C
-	g++ BuildLamKchPTest3.C ${MY_LIBS} -o runLamKchPTest3 $(LIBS) $(CFLAGS)
 
 runCompareKchFix2: ${MY_LIBS} CompareKchFix2.C
 	g++ CompareKchFix2.C ${MY_LIBS} -o runCompareKchFix2 $(LIBS) $(CFLAGS)
@@ -31,6 +25,9 @@ runFits: ${MY_LIBS} BuildFits.C
 
 runTest: ${MY_LIBS} test.C
 	g++ test.C ${MY_LIBS} -o runTest $(LIBS) $(CFLAGS)
+
+runGenerator: ${MY_LIBS} testGenerator.C
+	g++ testGenerator.C ${MY_LIBS} -o runGenerator $(LIBS) $(CFLAGS)
 
 build/%.o: ${ANALYZE_DIR}/%.cxx ${ANALYZE_DIR}/%.h
 	g++ -c $< $(CFLAGS) -o $@
@@ -46,4 +43,4 @@ build/%.o: %.cc %.hh
 
 
 clean:
-	rm -f runLamKchP runLamKchPTest runLamKchPTest2 runLamKchPTest3 runCompareKchFix2 runFits runTest ${MY_LIBS}
+	rm -f runLamKchP runLamKchPTest runCompareKchFix2 runFits runTest runGenerator ${MY_LIBS}

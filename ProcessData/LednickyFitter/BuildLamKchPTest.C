@@ -49,8 +49,8 @@ int main(int argc, char **argv)
   TString FileLocationBaseTrainMC = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_20161007/Results_cLamcKchMC_20161007";
 
   bool bRunLamKchP = false;
-  bool bRunALamKchM = false;
-  bool bRunLamKchPwConj = true;
+  bool bRunALamKchM = true;
+  bool bRunLamKchPwConj = false;
 
   bool bRunLamKchMwConj = false;
 
@@ -156,11 +156,19 @@ int main(int argc, char **argv)
       myFitter = tALamKchMFitter;
       
       tALamKchMFitter->DoFit();
-      
+/*      
       vector<double> tNormFitValuesALamKchM;
-     
-      for(unsigned int i=0; i<tNormFitValuesALamKchM.size(); i++) {cout << tNormFitValuesALamKchM[i] << endl;}
       
+      for(int iPairAn=0; iPairAn<3; iPairAn++)
+	{
+	  for(int iPartAn=0; iPartAn<5; iPartAn++)
+	    {
+	      tNormFitValuesALamKchM.push_back(tFitSharedAnalysesALamKchM->GetFitPairAnalysis(iPairAn)->GetFitPartialAnalysis(iPartAn)->GetFitNormParameter()->GetFitValue());
+	    }
+	}
+      
+      for(unsigned int i=0; i<tNormFitValuesALamKchM.size(); i++) {cout << tNormFitValuesALamKchM[i] << endl;}
+*/      
 
       TCanvas* canALamKchM = new TCanvas("canALamKchM","canALamKchM");
       canALamKchM->cd(1);
