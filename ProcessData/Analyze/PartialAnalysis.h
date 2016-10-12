@@ -73,7 +73,7 @@ public:
   void BuildModelKStarCfTrueUnitWeights(double aMinNorm=0.32, double aMaxNorm=0.4);
   void BuildModelKStarCfTrueIdealUnitWeights(double aMinNorm=0.32, double aMaxNorm=0.4);
 
-//  void BuildModelKStarTrueVsRec();  //filled in mixed events, TH2D (KStarTrue,KStar)
+  void BuildModelKStarTrueVsRec(KStarTrueVsRecType aType);
   void BuildAllModelKStarTrueVsRec();
   TH2* GetModelKStarTrueVsRec(KStarTrueVsRecType aType);
 

@@ -55,25 +55,40 @@ const char* cModelKStarCfNumFakeBaseTag = "NumFakeKStarModelCf_";
 const char* cModelKStarCfNumFakeIdealBaseTag = "NumFakeIdealKStarModelCf_";
 
 //const char* cModelKStarTrueVsRecBaseTag = "QgenQrecKStarModelCf_";
+/*
 const char* cModelKStarTrueVsRecSameBaseTag = "fKTrueKRecSameKStarModelCf_";
 const char* cModelKStarTrueVsRecRotSameBaseTag = "fKTrueKRecRotSameKStarModelCf_";
 const char* cModelKStarTrueVsRecMixedBaseTag = "fKTrueKRecMixedKStarModelCf_";
 const char* cModelKStarTrueVsRecRotMixedBaseTag = "fKTrueKRecRotMixedKStarModelCf_";
+*/
+const char* cModelKStarTrueVsRecSameBaseTag = "KTrueVsKRecSameKStarModelCf_";
+const char* cModelKStarTrueVsRecRotSameBaseTag = "KTrueVsKRecRotSameKStarModelCf_";
+const char* cModelKStarTrueVsRecMixedBaseTag = "KTrueVsKRecMixedKStarModelCf_";
+const char* cModelKStarTrueVsRecRotMixedBaseTag = "KTrueVsKRecRotMixedKStarModelCf_";
+
   //
 
+/*
 const char* cLambdaPurityTag = "LambdaPurity";
 const char* cAntiLambdaPurityTag = "AntiLambdaPurity";
 const char* cK0ShortPurityTag = "K0ShortPurity";
+*/
+const char* cLambdaPurityTag = "LambdaPurityAid";
+const char* cAntiLambdaPurityTag = "AntiLambdaPurityAid";
+const char* cK0ShortPurityTag = "K0ShortPurityAid";
+
 const char* cXiPurityTag = "XiPurityAid";
 const char* cAXiPurityTag = "AXiPurityAid";
 
 //enum DaughterPairType----*----*----*----*----*----*----*----*----*----*----*----*----*----*----*----*----*----*----*----*----*
 const char* const cDaughterPairTags[7] = {"PosPos", "PosNeg", "NegPos", "NegNeg", "TrackPos", "TrackNeg", "TrackTrack"};
 
-
+/*
 const char* const cAvgSepCfBaseTagsNum[7] = {"NumPosPosAvgSepCf_", "NumPosNegAvgSepCf_", "NumNegPosAvgSepCf_", "NumNegNegAvgSepCf_", "NumTrackPosAvgSepCf_", "NumTrackNegAvgSepCf_", "NumTrackTrackAvgSepCf_"};
 const char* const cAvgSepCfBaseTagsDen[7] = {"DenPosPosAvgSepCf_", "DenPosNegAvgSepCf_", "DenNegPosAvgSepCf_", "DenNegNegAvgSepCf_", "DenTrackPosAvgSepCf_", "DenTrackNegAvgSepCf_", "DenTrackTrackAvgSepCf_"};
-
+*/
+const char* const cAvgSepCfBaseTagsNum[7] = {"NumV0sPosPosAvgSepCf_", "NumV0sPosNegAvgSepCf_", "NumV0sNegPosAvgSepCf_", "NumV0sNegNegAvgSepCf_", "NumV0TrackPosAvgSepCf_", "NumV0TrackNegAvgSepCf_", "NumTrackTrackAvgSepCf_"};
+const char* const cAvgSepCfBaseTagsDen[7] = {"DenV0sPosPosAvgSepCf_", "DenV0sPosNegAvgSepCf_", "DenV0sNegPosAvgSepCf_", "DenV0sNegNegAvgSepCf_", "DenV0TrackPosAvgSepCf_", "DenV0TrackNegAvgSepCf_", "DenTrackTrackAvgSepCf_"};
 
 
 const char* const cSepCfsBaseTagsNum[7] = {"NumPosPosSepCfs_", "NumPosNegSepCfs_", "NumNegPosSepCfs_", "NumNegNegSepCfs_", "NumTrackPosSepCfs_", "NumTrackNegSepCfs_", "NumTrackTrackSepCfs_"};

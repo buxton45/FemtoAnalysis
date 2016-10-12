@@ -10,13 +10,17 @@ int main(int argc, char **argv)
 //-----------------------------------------------------------------------------
 
   //-----Data
+/*
   TString FileLocationBase = "~/Analysis/FemtoAnalysis/Results/Results_cLamcKch_AsRc_KchAndLamFix2_20160229/Results_cLamcKch_AsRc_KchAndLamFix2_20160229";
   TString FileLocationBaseMC = "~/Analysis/FemtoAnalysis/Results/Results_cLamcKch_AsRcMC_KchAndLamFix2_20160229/Results_cLamcKch_AsRcMC_KchAndLamFix2_20160229";
-//  TString FileLocationBase = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_20161007/Results_cLamcKch_20161007";
-
-//  PlotPartnersLamKch* tLamKch0010 = new PlotPartnersLamKch(FileLocationBase,kLamKchP,k0010);
   PlotPartnersLamKch* tLamKch0010 = new PlotPartnersLamKch(FileLocationBase,FileLocationBaseMC,kLamKchP,k0010);
-//  PlotPartnersLamKch* tLamKch0010 = new PlotPartnersLamKch(FileLocationBase,kLamKchP,k0010,2,true);
+*/
+
+  TString FileLocationBase = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_20161007/Results_cLamcKch_20161007";
+  TString FileLocationBaseMC = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_20161007/Results_cLamcKchMC_20161007";
+  PlotPartnersLamKch* tLamKch0010 = new PlotPartnersLamKch(FileLocationBase,FileLocationBaseMC,kLamKchP,k0010,2,true);
+
+
   TCanvas* tCanPur = tLamKch0010->DrawPurity();
   TCanvas* tCanKStarCf = tLamKch0010->DrawKStarCfs();
   TCanvas* tCanKStarTrueVsRec = tLamKch0010->DrawKStarTrueVsRec(kMixed);

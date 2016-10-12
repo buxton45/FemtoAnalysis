@@ -31,22 +31,22 @@ myAliFemtoAvgSepCorrFctn::myAliFemtoAvgSepCorrFctn(const char* title, const int&
 
 {
   // set up numerators
-  char tTitNumPosPos[101] = "NumPosPos";
+  char tTitNumPosPos[101] = "NumV0sPosPos";
   strncat(tTitNumPosPos,title, 100);
   fNumeratorPosPos = new TH1D(tTitNumPosPos,title,nbins,AvgSepLo,AvgSepHi);
-  char tTitNumPosNeg[101] = "NumPosNeg";
+  char tTitNumPosNeg[101] = "NumV0sPosNeg";
   strncat(tTitNumPosNeg,title, 100);
   fNumeratorPosNeg = new TH1D(tTitNumPosNeg,title,nbins,AvgSepLo,AvgSepHi);
-  char tTitNumNegPos[101] = "NumNegPos";
+  char tTitNumNegPos[101] = "NumV0sNegPos";
   strncat(tTitNumNegPos,title, 100);
   fNumeratorNegPos = new TH1D(tTitNumNegPos,title,nbins,AvgSepLo,AvgSepHi);
-  char tTitNumNegNeg[101] = "NumNegNeg";
+  char tTitNumNegNeg[101] = "NumV0sNegNeg";
   strncat(tTitNumNegNeg,title, 100);
   fNumeratorNegNeg = new TH1D(tTitNumNegNeg,title,nbins,AvgSepLo,AvgSepHi);
-  char tTitNumTrackPos[101] = "NumTrackPos";
+  char tTitNumTrackPos[101] = "NumV0TrackPos";
   strncat(tTitNumTrackPos,title, 100);
   fNumeratorTrackPos = new TH1D(tTitNumTrackPos,title,nbins,AvgSepLo,AvgSepHi);
-  char tTitNumTrackNeg[101] = "NumTrackNeg";
+  char tTitNumTrackNeg[101] = "NumV0TrackNeg";
   strncat(tTitNumTrackNeg,title, 100);
   fNumeratorTrackNeg = new TH1D(tTitNumTrackNeg,title,nbins,AvgSepLo,AvgSepHi);
   char tTitNumTrackTrack[101] = "NumTrackTrack";
@@ -54,22 +54,22 @@ myAliFemtoAvgSepCorrFctn::myAliFemtoAvgSepCorrFctn(const char* title, const int&
   fNumeratorTrackTrack = new TH1D(tTitNumTrackTrack,title,nbins,AvgSepLo,AvgSepHi);
 
   // set up denominators
-  char tTitDenPosPos[101] = "DenPosPos";
+  char tTitDenPosPos[101] = "DenV0sPosPos";
   strncat(tTitDenPosPos,title, 100);
   fDenominatorPosPos = new TH1D(tTitDenPosPos,title,nbins,AvgSepLo,AvgSepHi);
-  char tTitDenPosNeg[101] = "DenPosNeg";
+  char tTitDenPosNeg[101] = "DenV0sPosNeg";
   strncat(tTitDenPosNeg,title, 100);
   fDenominatorPosNeg = new TH1D(tTitDenPosNeg,title,nbins,AvgSepLo,AvgSepHi);
-  char tTitDenNegPos[101] = "DenNegPos";
+  char tTitDenNegPos[101] = "DenV0sNegPos";
   strncat(tTitDenNegPos,title, 100);
   fDenominatorNegPos = new TH1D(tTitDenNegPos,title,nbins,AvgSepLo,AvgSepHi);
-  char tTitDenNegNeg[101] = "DenNegNeg";
+  char tTitDenNegNeg[101] = "DenV0sNegNeg";
   strncat(tTitDenNegNeg,title, 100);
   fDenominatorNegNeg = new TH1D(tTitDenNegNeg,title,nbins,AvgSepLo,AvgSepHi);
-  char tTitDenTrackPos[101] = "DenTrackPos";
+  char tTitDenTrackPos[101] = "DenV0TrackPos";
   strncat(tTitDenTrackPos,title, 100);
   fDenominatorTrackPos = new TH1D(tTitDenTrackPos,title,nbins,AvgSepLo,AvgSepHi);
-  char tTitDenTrackNeg[101] = "DenTrackNeg";
+  char tTitDenTrackNeg[101] = "DenV0TrackNeg";
   strncat(tTitDenTrackNeg,title, 100);
   fDenominatorTrackNeg = new TH1D(tTitDenTrackNeg,title,nbins,AvgSepLo,AvgSepHi);
   char tTitDenTrackTrack[101] = "DenTrackTrack";

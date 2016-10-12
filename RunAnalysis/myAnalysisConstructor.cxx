@@ -1281,7 +1281,7 @@ myAliFemtoV0TrackCut* myAnalysisConstructor::CreateLambdaCut()
     v0cut1->SetCalculatePurity(kTRUE);
     v0cut1->SetLooseInvMassCut(true, LambdaMass-0.035,LambdaMass+0.035);
     v0cut1->SetUseLooseInvMassCut(kTRUE);
-    v0cut1->SetPurityHisto("LambdaPurity",100,LambdaMass-0.035,LambdaMass+0.035);
+    v0cut1->SetPurityHisto("LambdaPurityAid",100,LambdaMass-0.035,LambdaMass+0.035);
     v0cut1->SetEta(0.8); //|eta|<0.8 for V0s
     v0cut1->SetPt(0.4, 100);
     v0cut1->SetOnFlyStatus(kFALSE);
@@ -1376,7 +1376,7 @@ myAliFemtoV0TrackCut* myAnalysisConstructor::CreateAntiLambdaCut()
     v0cut2->SetCalculatePurity(kTRUE);
     v0cut2->SetLooseInvMassCut(true, LambdaMass-0.035,LambdaMass+0.035);
     v0cut2->SetUseLooseInvMassCut(kTRUE);
-    v0cut2->SetPurityHisto("AntiLambdaPurity",100,LambdaMass-0.035,LambdaMass+0.035);
+    v0cut2->SetPurityHisto("AntiLambdaPurityAid",100,LambdaMass-0.035,LambdaMass+0.035);
     v0cut2->SetEta(0.8);
     v0cut2->SetPt(0.4,100);
     v0cut2->SetOnFlyStatus(kFALSE); //kTRUE
@@ -1473,7 +1473,7 @@ myAliFemtoV0TrackCut* myAnalysisConstructor::CreateK0ShortCut()
     k0cut1->SetCalculatePurity(kTRUE);
     k0cut1->SetLooseInvMassCut(true, K0ShortMass-0.070,K0ShortMass+0.070);
     k0cut1->SetUseLooseInvMassCut(kTRUE);
-    k0cut1->SetPurityHisto("K0ShortPurity1",100,K0ShortMass-0.070,K0ShortMass+0.070);
+    k0cut1->SetPurityHisto("K0ShortPurityAid",100,K0ShortMass-0.070,K0ShortMass+0.070);
     k0cut1->SetEta(0.8); //|eta|<0.8 for V0s
     k0cut1->SetPt(0.2, 100);
     k0cut1->SetOnFlyStatus(kFALSE);

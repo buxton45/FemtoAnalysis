@@ -123,10 +123,10 @@ TCanvas* PlotPartnersLamKch::DrawKStarCfs()
 //________________________________________________________________________________________________________________
 TCanvas* PlotPartnersLamKch::DrawKStarTrueVsRec(KStarTrueVsRecType aType)
 {
-  fAnalysisMC1->BuildAllModelKStarTrueVsRecTotal();
-  fConjAnalysisMC1->BuildAllModelKStarTrueVsRecTotal();
-  fAnalysisMC2->BuildAllModelKStarTrueVsRecTotal();
-  fConjAnalysisMC2->BuildAllModelKStarTrueVsRecTotal();
+  fAnalysisMC1->BuildModelKStarTrueVsRecTotal(aType);
+  fConjAnalysisMC1->BuildModelKStarTrueVsRecTotal(aType);
+  fAnalysisMC2->BuildModelKStarTrueVsRecTotal(aType);
+  fConjAnalysisMC2->BuildModelKStarTrueVsRecTotal(aType);
 
   TH2* tTrueVsRecAn1 = fAnalysisMC1->GetModelKStarTrueVsRecTotal(aType);
     SetupAxis(tTrueVsRecAn1->GetXaxis(),"k*_{true} (GeV/c)");

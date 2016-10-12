@@ -46,6 +46,7 @@ int main(int argc, char **argv)
   TString FileLocationTransform = "/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b2/TransformMatrices_Mix5.root";
 
   TString FileLocationBaseTrain = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_20161007/Results_cLamcKch_20161007";
+  TString FileLocationBaseTrainMC = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_20161007/Results_cLamcKchMC_20161007";
 
   bool bRunLamKchP = false;
   bool bRunALamKchM = false;
@@ -187,11 +188,11 @@ int main(int argc, char **argv)
 
   if(bRunLamKchPwConj)
   {
-    FitPairAnalysis* tLamKchP0010 = new FitPairAnalysis(FileLocationBase,FileLocationBaseMC,kLamKchP,k0010);
-    FitPairAnalysis* tALamKchM0010 = new FitPairAnalysis(FileLocationBase,FileLocationBaseMC,kALamKchM,k0010);
+//    FitPairAnalysis* tLamKchP0010 = new FitPairAnalysis(FileLocationBase,FileLocationBaseMC,kLamKchP,k0010);
+//    FitPairAnalysis* tALamKchM0010 = new FitPairAnalysis(FileLocationBase,FileLocationBaseMC,kALamKchM,k0010);
 
-//    FitPairAnalysis* tLamKchP0010 = new FitPairAnalysis(FileLocationBaseTrain,kLamKchP,k0010,2,true);
-//    FitPairAnalysis* tALamKchM0010 = new FitPairAnalysis(FileLocationBaseTrain,kALamKchM,k0010,2,true);
+    FitPairAnalysis* tLamKchP0010 = new FitPairAnalysis(FileLocationBaseTrain,FileLocationBaseTrainMC,kLamKchP,k0010,2,true);
+    FitPairAnalysis* tALamKchM0010 = new FitPairAnalysis(FileLocationBaseTrain,FileLocationBaseTrainMC,kALamKchM,k0010,2,true);
 
 
     vector<FitPairAnalysis*> tVecOfPairAnalysisLamKchPwConj;

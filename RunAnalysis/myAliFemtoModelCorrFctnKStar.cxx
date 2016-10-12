@@ -72,13 +72,13 @@ myAliFemtoModelCorrFctnKStar::myAliFemtoModelCorrFctnKStar(const char *title, in
   double tRotYMin = -0.5*tYRange;
   double tRotYMax = 0.5*tYRange;
 
-  snprintf(buf , 100,  "fKTrueKRecSame%s", title);
+  snprintf(buf , 100,  "KTrueVsKRecSame%s", title);
   fKTrueKRecSame = new TH2D(buf,buf,aNbins,aKStarLo,aKStarHi,aNbins,aKStarLo,aKStarHi);
-  snprintf(buf , 100,  "fKTrueKRecMixed%s", title);
+  snprintf(buf , 100,  "KTrueVsKRecMixed%s", title);
   fKTrueKRecMixed = new TH2D(buf,buf,aNbins,aKStarLo,aKStarHi,aNbins,aKStarLo,aKStarHi);
-  snprintf(buf , 100,  "fKTrueKRecRotSame%s", title);
+  snprintf(buf , 100,  "KTrueVsKRecRotSame%s", title);
   fKTrueKRecRotSame = new TH2D(buf,buf,aNbins,aKStarLo,aKStarHi,aNbins,tRotYMin,tRotYMax);
-  snprintf(buf , 100,  "fKTrueKRecRotMixed%s", title);
+  snprintf(buf , 100,  "KTrueVsKRecRotMixed%s", title);
   fKTrueKRecRotMixed = new TH2D(buf,buf,aNbins,aKStarLo,aKStarHi,aNbins,tRotYMin,tRotYMax);
 
 

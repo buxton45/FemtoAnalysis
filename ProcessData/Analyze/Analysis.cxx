@@ -1065,14 +1065,14 @@ void Analysis::BuildModelKStarTrueVsRecTotal()
 */
 
 //________________________________________________________________________________________________________________
-TH2* Analysis::BuildModelKStarTrueVsRecTotal(KStarTrueVsRecType aType)
+void Analysis::BuildModelKStarTrueVsRecTotal(KStarTrueVsRecType aType)
 {
   TString tName = "ModelKStarTrueVsRec" + TString(cKStarTrueVsRecTypeTags[aType]) + "_" + TString(cAnalysisBaseTags[fAnalysisType]);
 
   TH2* tPre = (TH2*)fPartialAnalysisCollection[0]->GetModelKStarTrueVsRec(aType);
   if(!tPre)
   {
-    fPartialAnalysisCollection[0]->BuildAllModelKStarTrueVsRec();
+    fPartialAnalysisCollection[0]->BuildModelKStarTrueVsRec(aType);
     tPre = (TH2*)fPartialAnalysisCollection[0]->GetModelKStarTrueVsRec(aType);
   }
   TH2* tReturnHisto = (TH2*)tPre->Clone(tName);
@@ -1082,32 +1082,80 @@ TH2* Analysis::BuildModelKStarTrueVsRecTotal(KStarTrueVsRecType aType)
     TH2* tToAdd = (TH2*)fPartialAnalysisCollection[i]->GetModelKStarTrueVsRec(aType);
     if(!tToAdd)
     {
-      fPartialAnalysisCollection[i]->BuildAllModelKStarTrueVsRec();
+      fPartialAnalysisCollection[i]->BuildModelKStarTrueVsRec(aType);
       tToAdd = (TH2*)fPartialAnalysisCollection[i]->GetModelKStarTrueVsRec(aType);
     }
     tReturnHisto->Add(tToAdd);
   }
 
-  return tReturnHisto;
+  switch(aType) {
+  case kSame:
+    fModelKStarTrueVsRecSameTot = tReturnHisto;
+    break;
+
+  case kRotSame:
+    fModelKStarTrueVsRecRotSameTot = tReturnHisto;
+    break;
+
+  case kMixed:
+    fModelKStarTrueVsRecMixedTot = tReturnHisto;
+    break;
+
+  case kRotMixed:
+    fModelKStarTrueVsRecRotMixedTot = tReturnHisto;
+    break;
+
+
+  default:
+    cout << "ERROR: Analysis::BuildModelKStarTrueVsRecTotal:  Invalide KStarTrueVsRecType aType = "
+         << aType << " selected" << endl;
+    assert(0);
+    break;
+  }
+
 }
 
 //________________________________________________________________________________________________________________
 void Analysis::BuildAllModelKStarTrueVsRecTotal()
 {
-  fModelKStarTrueVsRecSameTot = BuildModelKStarTrueVsRecTotal(kSame);
-  fModelKStarTrueVsRecRotSameTot = BuildModelKStarTrueVsRecTotal(kRotSame);
-  fModelKStarTrueVsRecMixedTot = BuildModelKStarTrueVsRecTotal(kMixed);
-  fModelKStarTrueVsRecRotMixedTot = BuildModelKStarTrueVsRecTotal(kRotMixed);
+  BuildModelKStarTrueVsRecTotal(kSame);
+  BuildModelKStarTrueVsRecTotal(kRotSame);
+  BuildModelKStarTrueVsRecTotal(kMixed);
+  BuildModelKStarTrueVsRecTotal(kRotMixed);
 }
 
 //________________________________________________________________________________________________________________
 TH2* Analysis::GetModelKStarTrueVsRecTotal(KStarTrueVsRecType aType)
 {
-  if(aType == kSame) return (TH2*)fModelKStarTrueVsRecSameTot->Clone();
-  else if(aType == kRotSame) return (TH2*)fModelKStarTrueVsRecRotSameTot->Clone();
-  else if(aType == kMixed) return (TH2*)fModelKStarTrueVsRecMixedTot->Clone();
-  else if(aType == kRotMixed) return (TH2*)fModelKStarTrueVsRecRotMixedTot->Clone();
-  else return 0;
+  switch(aType) {
+  case kSame:
+    if(!fModelKStarTrueVsRecSameTot) BuildModelKStarTrueVsRecTotal(aType);
+    return fModelKStarTrueVsRecSameTot;
+    break;
+
+  case kRotSame:
+    if(!fModelKStarTrueVsRecRotSameTot) BuildModelKStarTrueVsRecTotal(aType);
+    return fModelKStarTrueVsRecRotSameTot;
+    break;
+
+  case kMixed:
+    if(!fModelKStarTrueVsRecMixedTot) BuildModelKStarTrueVsRecTotal(aType);
+    return fModelKStarTrueVsRecMixedTot;
+    break;
+
+  case kRotMixed:
+    if(!fModelKStarTrueVsRecRotMixedTot) BuildModelKStarTrueVsRecTotal(aType);
+    return fModelKStarTrueVsRecRotMixedTot;
+    break;
+
+
+  default:
+    cout << "ERROR: Analysis::GetModelKStarTrueVsRecTotal:  Invalide KStarTrueVsRecType aType = "
+         << aType << " selected" << endl;
+    assert(0);
+  }
+
+  return 0;
 }
 
 //________________________________________________________________________________________________________________

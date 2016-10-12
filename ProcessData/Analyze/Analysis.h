@@ -81,7 +81,7 @@ public:
   void NormalizeTH2EachColumn(TH2* aHist);
   void NormalizeTH2EachRow(TH2* aHist);
 
-  TH2* BuildModelKStarTrueVsRecTotal(KStarTrueVsRecType aType);
+  void BuildModelKStarTrueVsRecTotal(KStarTrueVsRecType aType);
   void BuildAllModelKStarTrueVsRecTotal();
   TH2* GetModelKStarTrueVsRecTotal(KStarTrueVsRecType aType);
 

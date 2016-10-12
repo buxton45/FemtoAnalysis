@@ -567,47 +567,92 @@ void PartialAnalysis::BuildModelKStarCfTrueIdealUnitWeights(double aMinNorm, dou
   fModelKStarCfTrueIdealUnitWeights = new CfLite(tCfName,tCfName,tNum,tDen,aMinNorm,aMaxNorm);
 }
 
-/*
+
 //________________________________________________________________________________________________________________
-void PartialAnalysis::BuildModelKStarTrueVsRec()
+void PartialAnalysis::BuildModelKStarTrueVsRec(KStarTrueVsRecType aType)
 {
-  TString tName = cModelKStarTrueVsRecBaseTag + fAnalysisBaseTag;
-  TString tNewName = tName + fBFieldTag;
-  fModelKStarTrueVsRec = Get2dHisto(tName,tNewName);
+  TString tName, tNewName;
+
+  switch(aType) {
+  case kSame:
+    tName = cModelKStarTrueVsRecSameBaseTag;
+      tName += fAnalysisBaseTag;
+    tNewName = tName + fBFieldTag;
+    fModelKStarTrueVsRecSame = Get2dHisto(tName,tNewName);
+    break;
+
+  case kRotSame:
+    tName = cModelKStarTrueVsRecRotSameBaseTag;
+      tName += fAnalysisBaseTag;
+    tNewName = tName + fBFieldTag;
+    fModelKStarTrueVsRecRotSame = Get2dHisto(tName,tNewName);
+    break;
+
+  case kMixed:
+    tName = cModelKStarTrueVsRecMixedBaseTag;
+      tName += fAnalysisBaseTag;
+    tNewName = tName + fBFieldTag;
+    fModelKStarTrueVsRecMixed = Get2dHisto(tName,tNewName);
+    break;
+
+  case kRotMixed:
+    tName = cModelKStarTrueVsRecRotMixedBaseTag;
+      tName += fAnalysisBaseTag;
+    tNewName = tName + fBFieldTag;
+    fModelKStarTrueVsRecRotMixed = Get2dHisto(tName,tNewName);
+    break;
+
+
+  default:
+    cout << "ERROR: PartialAnalysis::BuildModelKStarTrueVsRec:  Invalide KStarTrueVsRecType aType = "
+         << aType << " selected" << endl;
+    assert(0);
+    break;
+  }
 }
-*/
+
 
 //________________________________________________________________________________________________________________
 void PartialAnalysis::BuildAllModelKStarTrueVsRec()
 {
-  TString tName, tNewName;
-  //-----
-  tName = cModelKStarTrueVsRecSameBaseTag + fAnalysisBaseTag;
-  tNewName = tName + fBFieldTag;
-  fModelKStarTrueVsRecSame = Get2dHisto(tName,tNewName);
-  //-----
-  tName = cModelKStarTrueVsRecRotSameBaseTag + fAnalysisBaseTag;
-  tNewName = tName + fBFieldTag;
-  fModelKStarTrueVsRecRotSame = Get2dHisto(tName,tNewName);
-  //-----
-  tName = cModelKStarTrueVsRecMixedBaseTag + fAnalysisBaseTag;
-  tNewName = tName + fBFieldTag;
-  fModelKStarTrueVsRecMixed = Get2dHisto(tName,tNewName);
-  //-----
-  tName = cModelKStarTrueVsRecRotMixedBaseTag + fAnalysisBaseTag;
-  tNewName = tName + fBFieldTag;
-  fModelKStarTrueVsRecRotMixed = Get2dHisto(tName,tNewName);
-
+  BuildModelKStarTrueVsRec(kSame);
+  BuildModelKStarTrueVsRec(kRotSame);
+  BuildModelKStarTrueVsRec(kMixed);
+  BuildModelKStarTrueVsRec(kRotMixed);
 }
 
 //________________________________________________________________________________________________________________
 TH2* PartialAnalysis::GetModelKStarTrueVsRec(KStarTrueVsRecType aType)
 {
-  if(aType == kSame) return fModelKStarTrueVsRecSame;
-  else if(aType == kRotSame) return fModelKStarTrueVsRecRotSame;
-  else if(aType == kMixed) return fModelKStarTrueVsRecMixed;
-  else if(aType == kRotMixed) return fModelKStarTrueVsRecRotMixed;
-  else return 0;
+  switch(aType) {
+  case kSame:
+    if(!fModelKStarTrueVsRecSame) BuildModelKStarTrueVsRec(aType);
+    return fModelKStarTrueVsRecSame;
+    break;
+
+  case kRotSame:
+    if(!fModelKStarTrueVsRecRotSame) BuildModelKStarTrueVsRec(aType);
+    return fModelKStarTrueVsRecRotSame;
+    break;
+
+  case kMixed:
+    if(!fModelKStarTrueVsRecMixed) BuildModelKStarTrueVsRec(aType);
+    return fModelKStarTrueVsRecMixed;
+    break;
+
+  case kRotMixed:
+    if(!fModelKStarTrueVsRecRotMixed) BuildModelKStarTrueVsRec(aType);
+    return fModelKStarTrueVsRecRotMixed;
+    break;
+
+
+  default:
+    cout << "ERROR: PartialAnalysis::GetModelKStarTrueVsRec:  Invalide KStarTrueVsRecType aType = "
+         << aType << " selected" << endl;
+    assert(0);
+  }
+
+  return 0;
 }
 
 
