@@ -41,8 +41,8 @@ struct MacroParams {
 };
 
 struct CutVariations {
-  std::vector<double> valuesToVary;  /*//ex /0.2:0.3:0.4:0.5:0.6\ */
-  TString cutName;  //ex '?$|Lam|maxDcaV0Daughters'
+  std::vector<double> valuesToVary;  //ex ?[0.2:0.3:0.4:0.5:0.6]
+  TString cutName;  //ex ?$|Lam|maxDcaV0Daughters
 };
 
 void SetPairCodes(AFALK::AnalysisParams &aAnConfig, MacroParams &aMacroConfig);
@@ -116,6 +116,7 @@ AliFemtoManager* ConfigFemtoAnalysis(const TString& aParamString="")
   CutVariations tCutVariations;
 
   // Read parameter string and update configurations
+  //Initial call to BuildConfiguration
   BuildConfiguration(aParamString,tAnalysisConfig,tEventCutConfig,tPairCutConfig,tMacroConfig,tCutVariations);
 
   // Begin to build the manager and analyses
@@ -153,7 +154,7 @@ AliFemtoManager* ConfigFemtoAnalysis(const TString& aParamString="")
     TString tDirNameModifier = tCutVariations.cutName(1, tCutVariations.cutName.Length() - 1) + TString("|") + TString::Format("%0.2f",tCutVariations.valuesToVary[iCutVal]);
     tDirNameModifier.ReplaceAll("|","_");
 
-    BuildConfiguration(tNewParamString,tAnalysisConfig,tEventCutConfig,tPairCutConfig,tMacroConfig,tCutVariations);
+
 
     // loop over centrality ranges
     for(unsigned int iCent = 0; iCent+1 < tMacroConfig.centrality_ranges.size(); iCent += 2)
@@ -172,8 +173,12 @@ AliFemtoManager* ConfigFemtoAnalysis(const TString& aParamString="")
       for(unsigned int iPair = 0; iPair < tMacroConfig.pair_codes.size(); iPair++)
       {
         
+        //Update the configuration
+        BuildConfiguration(tNewParamString,tAnalysisConfig,tEventCutConfig,tPairCutConfig,tMacroConfig,tCutVariations);
+
         //Build unique analysis for each pair type in each centrality bin
-        AliFemtoAnalysisLambdaKaon *tAnalysis = CreateCorrectAnalysis(tNewParamString,tMacroConfig.pair_codes[iPair],tAnalysisConfig,tEventCutConfig,tPairCutConfig,tDirNameModifier);  //TODO aParamString or tNewParamString
+        //and update the particle cuts configurations
+        AliFemtoAnalysisLambdaKaon *tAnalysis = CreateCorrectAnalysis(tNewParamString,tMacroConfig.pair_codes[iPair],tAnalysisConfig,tEventCutConfig,tPairCutConfig,tDirNameModifier);
         //TODO get pair cut to change for LamKchP and LamKchM
 
         tManager->AddAnalysis(tAnalysis);
@@ -553,6 +558,8 @@ BuildParticleConfiguration(
       const TString tParticleType = ((TObjString*)tCutFullLine->At(1))->String().Strip(TString::kBoth, ' ');
       const TString tParticleCut = ((TObjString*)tCutFullLine->At(2))->String().Strip(TString::kBoth, ' ');
 
+      if(tParticleType.EqualTo("ALL")) tDesiredName = TString("ALL");
+      if(tParticleType.EqualTo("ALLV0S")) tDesiredName = TString("ALLV0S");
       if(tParticleType.EqualTo(tDesiredName)) tCmd = tV0CutVarName + "." + tParticleCut(0, tParticleCut.Length());
     }
 
@@ -615,6 +622,8 @@ BuildParticleConfiguration(
       const TString tParticleType = ((TObjString*)tCutFullLine->At(1))->String().Strip(TString::kBoth, ' ');
       const TString tParticleCut = ((TObjString*)tCutFullLine->At(2))->String().Strip(TString::kBoth, ' ');
 
+      if(tParticleType.EqualTo("ALL")) tDesiredName = TString("ALL");
+      if(tParticleType.EqualTo("ALLTRACKS")) tDesiredName = TString("ALLTRACKS");
       if(tParticleType.EqualTo(tDesiredName)) tCmd = tESDCutVarName + "." + tParticleCut(0, tParticleCut.Length());
     }
 
@@ -669,6 +678,8 @@ BuildParticleConfiguration(
       const TString tParticleType = ((TObjString*)tCutFullLine->At(1))->String().Strip(TString::kBoth, ' ');
       const TString tParticleCut = ((TObjString*)tCutFullLine->At(2))->String().Strip(TString::kBoth, ' ');
 
+      if(tParticleType.EqualTo("ALL")) tDesiredName = TString("ALL");
+      if(tParticleType.EqualTo("ALLXIS")) tDesiredName = TString("ALLXIS");
       if(tParticleType.EqualTo(tDesiredName)) tCmd = tXiCutVarName + "." + tParticleCut(0, tParticleCut.Length());
     }
 
