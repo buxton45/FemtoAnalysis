@@ -1,0 +1,41 @@
+\subsubsection{\texorpdfstring{K$^{0}_{S}$}{TEXT} Reconstruction}
+\label{K0sReconstruction}
+
+The following cuts were used to select good K$^{0}_{S}$ candidates:
+
+\begin{enumerate}
+ \item{Pion Daughter Cuts}
+ \begin{enumerate}
+  \item $|\eta| < 0.8$
+  \item SetTPCnclsDaughters(80)
+  \item SetStatusDaughters(AliESDtrack::kTPCrefic)
+  \item SetMaxDcaV0Daughters(0.3)
+  \item $p_{T} >$ 0.15
+  \item DCA to prim vertex $>$ 0.3
+ \end{enumerate}
+
+ \item K$^{0}_{S}$ Cuts
+ \begin{enumerate}
+  \item $|\eta| < 0.8$
+  \item $p_{T} > 0.2$
+  \item $m_{PDG} -$ 13.677 MeV $< m_{inv} < m_{PDG} +$ 2.0323 MeV
+  \item Cosine of pointing angle $>$ 0.9993
+  \item OnFlyStatus = false
+  \item Decay Length $<$ 30 cm
+ \end{enumerate}  
+ 
+\end{enumerate}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=100mm]{3_DataSelection/Figures/MassAssumingLambdaHypothesis.png}
+  \caption[$\Lambda$ contamination in K$^{0}_{S}$ collection]{Mass assuming $\Lambda$-hypothesis for V0 candidates passing all K$^{0}_{S}$ cuts, i.e. assume the daughters are $p^{+}\pi^{-}$ instead of $\pi^{+}\pi^{-}$.  The peak around $m_{inv} = $ 1.115 GeV/c$^{2}$ likely contains misidentified $\Lambda$ particles in our K$^{0}_{S}$ collection.  If one simply cuts out the entire peak, some good K$^{0}_{S}$ particles will be lost.  Ideally, the K$^{0}_{S}$ selection and $\Lambda$($\bar{\Lambda}$) misidentification cuts can be selected such that the peak is removed from this plot while leaving the distribution continuous.}
+  \label{fig:MassAssLamHyp}
+\end{figure}
+
+As can be seen in Figure \ref{fig:MassAssLamHyp}, some misidentified $\Lambda$ particles contaminate our K$^{0}_{S}$ sample.  To attempt to remove this contamination without throwing away good K$^{0}_{S}$ particles, the following misidentification cuts are imposed; a K$^{0}_{S}$ candidate is rejected if all of the following criteria are satisfied:
+\begin{itemize}
+ \item $|m_{inv,\Lambda Hypothesis} - m_{PDG,\Lambda}| < $ 9.0 MeV/c$^{2}$
+ \item Positive daughter passes $p^{+}$($\pi^{+}$) daughter cut implemented for $\Lambda$($\bar{\Lambda}$) reconstruction
+ \item Negative daughter passes $\pi^{-}$($\bar{p}^{-}$) daughter cut implemented by $\Lambda$($\bar{\Lambda}$) reconstruction
+\end{itemize} 
