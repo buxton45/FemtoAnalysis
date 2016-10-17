@@ -1366,11 +1366,17 @@ void Analysis::DrawAvgSepHeavyCf(DaughterPairType aDaughterPairType, TPad *aPad)
   tCfToDraw->GetYaxis()->SetRangeUser(-0.5,5.);
   TString tTitle = GetDaughtersHistoTitle(aDaughterPairType);
 
+  tCfToDraw->GetXaxis()->SetTitle("Avg. Sep. (cm)");
+  tCfToDraw->GetYaxis()->SetTitle("C(Avg. Sep)");
+
   tCfToDraw->SetTitle(tTitle);
   tCfToDraw->SetMarkerStyle(20);
   tCfToDraw->Draw();
   line->Draw();
 
+  TLegend *tLeg = new TLegend(0.65,0.65,0.85,0.85);
+    tLeg->AddEntry(tCfToDraw,tTitle,"p");
+    tLeg->Draw();
 }
 
 

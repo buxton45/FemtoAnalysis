@@ -24,7 +24,11 @@ int main(int argc, char **argv)
   TCanvas* tCanPur = tLamKch0010->DrawPurity();
   TCanvas* tCanKStarCf = tLamKch0010->DrawKStarCfs();
   TCanvas* tCanKStarTrueVsRec = tLamKch0010->DrawKStarTrueVsRec(kMixed);
+
   TCanvas* tCanAvgSepCfs = tLamKch0010->DrawAvgSepCfs();
+  TCanvas* tCanAvgSepCfsLamKchP = tLamKch0010->DrawAvgSepCfs(kLamKchP,true);
+  TCanvas* tCanAvgSepCfsLamKchM = tLamKch0010->DrawAvgSepCfs(kLamKchM,true);
+
   TCanvas* tCanPart1MassFail = tLamKch0010->ViewPart1MassFail(false);
 
 //-------------------------------------------------------------------------------

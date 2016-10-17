@@ -180,7 +180,9 @@ TCanvas* PlotPartnersLamKch::DrawAvgSepCfs()
   fAnalysis2->BuildAllAvgSepHeavyCfs();
   fConjAnalysis2->BuildAllAvgSepHeavyCfs();
 
-  TString tCanvasName = TString("canAvgSepCfs") + TString(cAnalysisBaseTags[fAnalysis1->GetAnalysisType()]) + TString(cCentralityTags[fAnalysis1->GetCentralityType()]);
+  TString tCanvasName = TString("canAvgSepCfs") + TString(cAnalysisBaseTags[fAnalysis1->GetAnalysisType()])  + TString("wConjAnd")
+                        + TString(cAnalysisBaseTags[fAnalysis2->GetAnalysisType()])  + TString("wConj")
+                        + TString(cCentralityTags[fAnalysis1->GetCentralityType()]);
   TCanvas* tReturnCan = new TCanvas(tCanvasName,tCanvasName);
   tReturnCan->Divide(2,4);
 
@@ -210,6 +212,88 @@ TCanvas* PlotPartnersLamKch::DrawAvgSepCfs()
 
   return tReturnCan;
 }
+
+//________________________________________________________________________________________________________________
+TCanvas* PlotPartnersLamKch::DrawAvgSepCfs(AnalysisType aAnalysisType, bool aDrawConj)
+{
+
+  fAnalysis1->BuildAllAvgSepHeavyCfs();
+  fConjAnalysis1->BuildAllAvgSepHeavyCfs();
+  fAnalysis2->BuildAllAvgSepHeavyCfs();
+  fConjAnalysis2->BuildAllAvgSepHeavyCfs();
+
+  TString tCanvasName = TString("canAvgSepCfs") + TString(cAnalysisBaseTags[aAnalysisType]);
+  if(aDrawConj) tCanvasName += TString("wConj");
+  tCanvasName += TString(cCentralityTags[fAnalysis1->GetCentralityType()]);
+
+  TCanvas* tReturnCan = new TCanvas(tCanvasName,tCanvasName);
+  if(aDrawConj) tReturnCan->Divide(2,2);
+  else tReturnCan->Divide(2,1);
+
+  switch(aAnalysisType) {
+  case kLamKchP:
+    fAnalysis1->DrawAvgSepHeavyCf(kTrackPos,(TPad*)tReturnCan->cd(1));
+    fAnalysis1->DrawAvgSepHeavyCf(kTrackNeg,(TPad*)tReturnCan->cd(2));
+
+    if(aDrawConj)
+    {
+      fConjAnalysis1->DrawAvgSepHeavyCf(kTrackPos,(TPad*)tReturnCan->cd(3));
+      fConjAnalysis1->DrawAvgSepHeavyCf(kTrackNeg,(TPad*)tReturnCan->cd(4));
+    }
+    break;
+
+  case kALamKchM:
+    fConjAnalysis1->DrawAvgSepHeavyCf(kTrackPos,(TPad*)tReturnCan->cd(1));
+    fConjAnalysis1->DrawAvgSepHeavyCf(kTrackNeg,(TPad*)tReturnCan->cd(2));
+
+    if(aDrawConj)
+    {
+      fAnalysis1->DrawAvgSepHeavyCf(kTrackPos,(TPad*)tReturnCan->cd(3));
+      fAnalysis1->DrawAvgSepHeavyCf(kTrackNeg,(TPad*)tReturnCan->cd(4));
+    }
+    break;
+
+  case kLamKchM:
+    fAnalysis2->DrawAvgSepHeavyCf(kTrackPos,(TPad*)tReturnCan->cd(1));
+    fAnalysis2->DrawAvgSepHeavyCf(kTrackNeg,(TPad*)tReturnCan->cd(2));
+
+    if(aDrawConj)
+    {
+      fConjAnalysis2->DrawAvgSepHeavyCf(kTrackPos,(TPad*)tReturnCan->cd(3));
+      fConjAnalysis2->DrawAvgSepHeavyCf(kTrackNeg,(TPad*)tReturnCan->cd(4));
+    }
+    break;
+
+  case kALamKchP:
+    fConjAnalysis2->DrawAvgSepHeavyCf(kTrackPos,(TPad*)tReturnCan->cd(1));
+    fConjAnalysis2->DrawAvgSepHeavyCf(kTrackNeg,(TPad*)tReturnCan->cd(2));
+
+    if(aDrawConj)
+    {
+      fAnalysis2->DrawAvgSepHeavyCf(kTrackPos,(TPad*)tReturnCan->cd(3));
+      fAnalysis2->DrawAvgSepHeavyCf(kTrackNeg,(TPad*)tReturnCan->cd(4));
+    }
+    break;
+
+  default:
+    cout << "ERROR: PlotPartnersLamKch::DrawAvgSepCfs: Invalid aAnalysisType = " << aAnalysisType << endl;
+  }
+
+//TODO
+/*
+  //----------------------------------
+  if(bSaveFile)
+  {
+    LamKchP->SaveAllAvgSepHeavyCfs(mySaveFile);
+    LamKchM->SaveAllAvgSepHeavyCfs(mySaveFile);
+    ALamKchP->SaveAllAvgSepHeavyCfs(mySaveFile);
+    ALamKchM->SaveAllAvgSepHeavyCfs(mySaveFile);
+  }
+*/
+
+  return tReturnCan;
+}
+
 
 
 //________________________________________________________________________________________________________________
