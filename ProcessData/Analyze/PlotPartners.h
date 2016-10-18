@@ -40,6 +40,9 @@ class Analysis;
 #include "DataAndModel.h"
 class DataAndModel;
 
+#include "MultGraph.h"
+class MultGraph;
+
 class PlotPartners {
 
 public:

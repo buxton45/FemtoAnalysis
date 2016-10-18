@@ -15,11 +15,38 @@ ClassImp(MultGraph)
 
 
 //________________________________________________________________________________________________________________
-MultGraph::MultGraph(int aNx, int aNy) :
+MultGraph::MultGraph(TString aCanvasName, int aNx, int aNy, double aXRangeLow, double aXRangeHigh, double aYRangeLow, double aYRangeHigh, float aMarginLeft, float aMarginRight, float aMarginBottom, float aMarginTop) :
+  fDrawUnityLine(false),
   fNx(aNx),
-  fNy(aNy)
+  fNy(aNy),
+
+  fXaxisRangeLow(aXRangeLow),
+  fXaxisRangeHigh(aXRangeHigh),
+  fYaxisRangeLow(aYRangeLow),
+  fYaxisRangeHigh(aYRangeHigh),
+
+  fMarginLeft(aMarginLeft),
+  fMarginRight(aMarginRight),
+  fMarginBottom(aMarginBottom),
+  fMarginTop(aMarginTop),
+
+  fCanvas(0),
+
+  fGraphs(0),
+  fGraphsPadNames(0),
+
+  fPadArray(0),
+
+  fXScaleFactors(0),
+  fYScaleFactors(0)
 
 {
+  fCanvas = new TCanvas(aCanvasName,aCanvasName);
+  fPadArray = CanvasPartition(fCanvas,aNx,aNy,aMarginLeft,aMarginRight,aMarginBottom,aMarginTop);
+  
+  fXScaleFactors = GetScaleFactors(kXaxis,fPadArray,fNx,fNy);
+  fYScaleFactors = GetScaleFactors(kYaxis,fPadArray,fNx,fNy);
+
   fGraphs = new TObjArray();
   fGraphs->SetName("GraphsCollection");
 
@@ -27,13 +54,10 @@ MultGraph::MultGraph(int aNx, int aNy) :
   {
     TObjArray* tTemp = new TObjArray();
     tTemp->SetName(TString::Format("Graphs_%d",i));
+    fGraphs->Add(tTemp);
   }
 
-
-
-
-
-
+  fGraphsPadNames = vector<TPaveText*>(aNx*aNy);
 
 }
 
@@ -47,7 +71,25 @@ MultGraph::~MultGraph()
 
 
 //________________________________________________________________________________________________________________
-TAxis* MultGraph::SetupAxis(AxisType aAxisType, TGraphAsymmErrors* fGraph, float fXscale, float fYscale)
+void MultGraph::AddGraph(int aNx, int aNy, TH1* aGraph, TString tPadLegendName, int aMarkerStyle, int aMarkerColor, double aMarkerSize)
+{
+  int tPosition = aNx + aNy*fNx;
+
+  SetupAxis(kXaxis,aGraph,fXScaleFactors[aNx][aNy],fYScaleFactors[aNx][aNy]);
+  SetupAxis(kYaxis,aGraph,fXScaleFactors[aNx][aNy],fYScaleFactors[aNx][aNy]);
+
+  aGraph->SetMarkerStyle(aMarkerStyle);
+  aGraph->SetMarkerColor(aMarkerColor);
+  aGraph->SetLineColor(aMarkerColor);
+  aGraph->SetMarkerSize(aMarkerSize);
+
+  fGraphsPadNames[tPosition] = SetupTPaveText(tPadLegendName,aNx,aNy);
+  ((TObjArray*)fGraphs->At(tPosition))->Add(aGraph);
+}
+
+
+//________________________________________________________________________________________________________________
+void MultGraph::SetupAxis(AxisType aAxisType, TH1* fGraph, float fXscale, float fYscale)
 {
   TAxis* tReturnAxis;
 
@@ -71,28 +113,28 @@ TAxis* MultGraph::SetupAxis(AxisType aAxisType, TGraphAsymmErrors* fGraph, float
   {
     tReturnAxis->SetNdivisions(510);
     tReturnAxis->SetTickLength(0.04*fYscale/fXscale);
+    tReturnAxis->SetLimits(fXaxisRangeLow,fXaxisRangeHigh);
   }
   else
   {
     tReturnAxis->SetNdivisions(505);
     tReturnAxis->SetTickLength(0.04*fXscale/fYscale);
+    tReturnAxis->SetRangeUser(fYaxisRangeLow,fYaxisRangeHigh);
   }
 
-  return tReturnAxis;
 }
 
 
 //________________________________________________________________________________________________________________
 //Adapted from $ROOTSYS/tutorials/graphics/canvas2.C
-TPad** MultGraph::CanvasPartition(TCanvas *aCanvas,const Int_t Nx = 2,const Int_t Ny = 2,
-                                  Float_t lMargin = 0.15, Float_t rMargin = 0.05,
-                                  Float_t bMargin = 0.15, Float_t tMargin = 0.05)
+td2dTPadVec MultGraph::CanvasPartition(TCanvas *aCanvas,const Int_t Nx,const Int_t Ny,
+                                  Float_t lMargin, Float_t rMargin,
+                                  Float_t bMargin, Float_t tMargin)
 {
-   if (!aCanvas) return;
-
    //Array of pads to be returned
-   TPad** returnPadArray = 0;
-   returnPadArray = new TPad*[Nx];
+    td2dTPadVec returnPadArray(0);
+
+   if (!aCanvas) return returnPadArray;
 
    // Setup Pad layout:
    Float_t vSpacing = 0.0;
@@ -105,8 +147,7 @@ TPad** MultGraph::CanvasPartition(TCanvas *aCanvas,const Int_t Nx = 2,const Int_
    Float_t hposl,hposr,hmarl,hmarr,hfactor;
 
    for (Int_t i=0;i<Nx;i++) {
-
-      returnPadArray[i] = new TPad[Ny];
+      td1dTPadVec tTempPadVec(0);
 
       if (i==0) {
          hposl = 0.0;
@@ -171,15 +212,16 @@ TPad** MultGraph::CanvasPartition(TCanvas *aCanvas,const Int_t Nx = 2,const Int_
 	 //pad->SetTicks(1,1);
          pad->Draw();
 
-	 returnPadArray[i][j] = pad;
+         tTempPadVec.push_back(pad);
       }
+      returnPadArray.push_back(tTempPadVec);
    }
   return returnPadArray;
 }
 
 
 //________________________________________________________________________________________________________________
-float** MultGraph::GetScaleFactors(AxisType aAxisType, TPad **fPadArray, int Nx, int Ny)
+float** MultGraph::GetScaleFactors(AxisType aAxisType, td2dTPadVec &fPadArray, int Nx, int Ny)
 {
   float** returnScaleFactors = 0;
   returnScaleFactors = new float*[Nx];
@@ -189,8 +231,8 @@ float** MultGraph::GetScaleFactors(AxisType aAxisType, TPad **fPadArray, int Nx,
     returnScaleFactors[i] = new float[Ny];
     for(int j=0; j<Ny; j++)
     {
-      if(aAxisType == kXaxis) returnScaleFactors[i][j] = fPadArray[0][0].GetAbsWNDC()/fPadArray[i][j].GetAbsWNDC();
-      else if(aAxisType == kYaxis) returnScaleFactors[i][j] = fPadArray[0][0].GetAbsHNDC()/fPadArray[i][j].GetAbsHNDC();
+      if(aAxisType == kXaxis) returnScaleFactors[i][j] = fPadArray[0][0]->GetAbsWNDC()/fPadArray[i][j]->GetAbsWNDC();
+      else if(aAxisType == kYaxis) returnScaleFactors[i][j] = fPadArray[0][0]->GetAbsHNDC()/fPadArray[i][j]->GetAbsHNDC();
       else
       {
         cout << "ERROR: MultGraph::GetScaleFactors: Invalid aAxisType = " << aAxisType << endl;
@@ -206,31 +248,33 @@ float** MultGraph::GetScaleFactors(AxisType aAxisType, TPad **fPadArray, int Nx,
 
 
 //________________________________________________________________________________________________________________
-TPaveText* MultGraph::SetupTPaveText(TString fText, double fXminOffset, double fYminOffset, float fXscale, float fYscale)
+TPaveText* MultGraph::SetupTPaveText(TString aText, int aNx, int aNy, double aTextXmin, double aTextYmin, double aTextWidth, double aTextHeight, double aTextFont, double aTextSize)
 {
-  double TextXmin = 0.75;
-  double TextYmin = 0.75;
-  double TextWidth = 0.15;
-  double TextHeight = 0.10;
+  float tLeftMargin = fPadArray[aNx][aNy]->GetLeftMargin();
+  float tRightMargin = fPadArray[aNx][aNy]->GetRightMargin();
+  float tTopMargin = fPadArray[aNx][aNy]->GetTopMargin();
+  float tBottomMargin = fPadArray[aNx][aNy]->GetBottomMargin();
 
-  double xmin,ymin,xmax,ymax;
+  float tReNormalizedWidth = 1. - (tLeftMargin+tRightMargin);
+  float tReNormalizedHeight = 1. - (tTopMargin+tBottomMargin);
 
-  Size_t TextSize = 15;
-  float MarkerSize = 0.75;
-  float TextFont = 63;  //when TextFont prevision >=3, TextSize in pixels, not %pad
+  //------------------------------------
 
-  xmin = TextXmin + fXminOffset;
-  ymin = TextYmin + fYminOffset;
-  xmax = xmin + fXscale*TextWidth;
-  ymax = ymin + fYscale*TextHeight;
+  double tNormalizedTextXmin = tLeftMargin + aTextXmin*tReNormalizedWidth;
+  double tNormalizedTextYmin = tBottomMargin + aTextYmin*tReNormalizedHeight;
 
-  TPaveText* returnText = new TPaveText(xmin,ymin,xmax,ymax,"NDC");
+  double tNormalizedTextXmax = tNormalizedTextXmin + aTextWidth*tReNormalizedWidth;
+  double tNormalizedTextYmax = tNormalizedTextYmin + aTextHeight*tReNormalizedHeight;
+
+  //------------------------------------
+
+  TPaveText* returnText = new TPaveText(tNormalizedTextXmin,tNormalizedTextYmin,tNormalizedTextXmax,tNormalizedTextYmax,"NDC");
     returnText->SetFillColor(0);
     returnText->SetBorderSize(0);
     returnText->SetTextAlign(22);
-    returnText->SetTextFont(TextFont);
-    returnText->SetTextSize(TextSize);
-    returnText->AddText(fText);
+    returnText->SetTextFont(aTextFont);
+    returnText->SetTextSize(aTextSize);
+    returnText->AddText(aText);
 
   return returnText;
 }
@@ -238,16 +282,74 @@ TPaveText* MultGraph::SetupTPaveText(TString fText, double fXminOffset, double f
 
 
 //________________________________________________________________________________________________________________
-void DrawInPad(TPad** fPadArray, int Nx, int Ny, TGraphAsymmErrors* ALICEstat, TGraphAsymmErrors* ALICEsys, TPaveText* text)
+void MultGraph::DrawInPad(int aNx, int aNy)
 {
-  fPadArray[Nx][Ny].cd();
-  ALICEstat->Draw("aep");
-  ALICEsys->Draw("e2psame");
-  text->Draw();
+  fPadArray[aNx][aNy]->cd();
+  gStyle->SetOptStat(0);
+  gStyle->SetOptTitle(0);
 
+  int tPosition = aNx + aNy*fNx;
+  TObjArray* tGraphsToDraw = ((TObjArray*)fGraphs->At(tPosition));
+  TIter tNextGraph(tGraphsToDraw);
+  TObject *tGraphObj = NULL;
+
+  int tCounter = 0;
+  while(tGraphObj = tNextGraph())
+  {
+    if(tCounter == 0) tGraphObj->Draw();
+    else tGraphObj->Draw("same");
+    tCounter++;
+  }
+
+  fGraphsPadNames[tPosition]->Draw();
+
+  if(fDrawUnityLine)
+  {
+    TLine *tLine = new TLine(fXaxisRangeLow,1.,fXaxisRangeHigh,1.);
+    tLine->SetLineColor(14);
+    tLine->Draw();
+  }
+}
+
+//________________________________________________________________________________________________________________
+void MultGraph::DrawAll()
+{
+  for(int i=0; i<fNx; i++)
+  {
+    for(int j=0; j<fNy; j++)
+    {
+      DrawInPad(i,j);
+    }
+  }
 }
 
 
+
+//________________________________________________________________________________________________________________
+void MultGraph::DrawXaxisTitle(TString aTitle, int aTextFont, int aTextSize, double aXLow, double aYLow)
+{
+  fCanvas->cd(0);
+
+  TLatex *tXax = new TLatex(aXLow,aYLow,aTitle);
+  tXax->SetTextFont(aTextFont);
+  tXax->SetTextSize(aTextSize);
+  tXax->SetTextAlign(10);
+//  tXax->Draw();
+  tXax->DrawLatex(0.9-tXax->GetXsize(),aYLow,aTitle);
+}
+
+//________________________________________________________________________________________________________________
+void MultGraph::DrawYaxisTitle(TString aTitle, int aTextFont, int aTextSize, double aXLow, double aYLow)
+{
+  fCanvas->cd(0);
+
+  TLatex *tYax = new TLatex(aXLow,aYLow,aTitle);
+  tYax->SetTextFont(aTextFont);
+  tYax->SetTextSize(aTextSize);
+  tYax->SetTextAngle(90);
+  tYax->SetTextAlign(10);
+  tYax->Draw();
+}
 
 
 

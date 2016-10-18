@@ -20,16 +20,16 @@ int main(int argc, char **argv)
   TString FileLocationBaseMC = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_20161012/Results_cLamcKchMC_20161012";
   PlotPartnersLamKch* tLamKch0010 = new PlotPartnersLamKch(FileLocationBase,FileLocationBaseMC,kLamKchP,k0010,2,true);
 
-
+/*
   TCanvas* tCanPur = tLamKch0010->DrawPurity();
   TCanvas* tCanKStarCf = tLamKch0010->DrawKStarCfs();
   TCanvas* tCanKStarTrueVsRec = tLamKch0010->DrawKStarTrueVsRec(kMixed);
-
+*/
   TCanvas* tCanAvgSepCfs = tLamKch0010->DrawAvgSepCfs();
   TCanvas* tCanAvgSepCfsLamKchP = tLamKch0010->DrawAvgSepCfs(kLamKchP,true);
   TCanvas* tCanAvgSepCfsLamKchM = tLamKch0010->DrawAvgSepCfs(kLamKchM,true);
 
-  TCanvas* tCanPart1MassFail = tLamKch0010->ViewPart1MassFail(false);
+//  TCanvas* tCanPart1MassFail = tLamKch0010->ViewPart1MassFail(false);
 
 //-------------------------------------------------------------------------------
   theApp->Run(kTRUE); //Run the TApp to pause the code.

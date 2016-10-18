@@ -213,6 +213,7 @@ TCanvas* PlotPartnersLamKch::DrawAvgSepCfs()
   return tReturnCan;
 }
 
+/*
 //________________________________________________________________________________________________________________
 TCanvas* PlotPartnersLamKch::DrawAvgSepCfs(AnalysisType aAnalysisType, bool aDrawConj)
 {
@@ -280,18 +281,113 @@ TCanvas* PlotPartnersLamKch::DrawAvgSepCfs(AnalysisType aAnalysisType, bool aDra
   }
 
 //TODO
-/*
+
   //----------------------------------
-  if(bSaveFile)
-  {
-    LamKchP->SaveAllAvgSepHeavyCfs(mySaveFile);
-    LamKchM->SaveAllAvgSepHeavyCfs(mySaveFile);
-    ALamKchP->SaveAllAvgSepHeavyCfs(mySaveFile);
-    ALamKchM->SaveAllAvgSepHeavyCfs(mySaveFile);
-  }
-*/
+//  if(bSaveFile)
+//  {
+//    LamKchP->SaveAllAvgSepHeavyCfs(mySaveFile);
+//    LamKchM->SaveAllAvgSepHeavyCfs(mySaveFile);
+//    ALamKchP->SaveAllAvgSepHeavyCfs(mySaveFile);
+//    ALamKchM->SaveAllAvgSepHeavyCfs(mySaveFile);
+//  }
+
 
   return tReturnCan;
+}
+*/
+
+//________________________________________________________________________________________________________________
+TCanvas* PlotPartnersLamKch::DrawAvgSepCfs(AnalysisType aAnalysisType, bool aDrawConj)
+{
+
+  fAnalysis1->BuildAllAvgSepHeavyCfs();
+  fConjAnalysis1->BuildAllAvgSepHeavyCfs();
+  fAnalysis2->BuildAllAvgSepHeavyCfs();
+  fConjAnalysis2->BuildAllAvgSepHeavyCfs();
+
+  TString tCanvasName = TString("canAvgSepCfs") + TString(cAnalysisBaseTags[aAnalysisType]);
+  if(aDrawConj) tCanvasName += TString("wConj");
+  tCanvasName += TString(cCentralityTags[fAnalysis1->GetCentralityType()]);
+
+  int tNx=2, tNy=1;
+  if(aDrawConj) tNy=2;
+
+
+  double tXLow = -1.;
+  double tXHigh = 19.9;
+
+  double tYLow = -1.;
+  double tYHigh = 5.;
+
+  MultGraph* tMultGraph = new MultGraph(tCanvasName,tNx,tNy,tXLow,tXHigh,tYLow,tYHigh,0.12,0.05,0.13,0.05);
+
+
+  switch(aAnalysisType) {
+  case kLamKchP:
+    tMultGraph->AddGraph(0,tNy-1,fAnalysis1->GetAvgSepHeavyCf(kTrackPos)->GetHeavyCf(),fAnalysis1->GetDaughtersHistoTitle(kTrackPos));
+    tMultGraph->AddGraph(1,tNy-1,fAnalysis1->GetAvgSepHeavyCf(kTrackNeg)->GetHeavyCf(),fAnalysis1->GetDaughtersHistoTitle(kTrackNeg));
+
+    if(aDrawConj)
+    {
+      tMultGraph->AddGraph(0,tNy-2,fConjAnalysis1->GetAvgSepHeavyCf(kTrackPos)->GetHeavyCf(),fConjAnalysis1->GetDaughtersHistoTitle(kTrackPos));
+      tMultGraph->AddGraph(1,tNy-2,fConjAnalysis1->GetAvgSepHeavyCf(kTrackNeg)->GetHeavyCf(),fConjAnalysis1->GetDaughtersHistoTitle(kTrackNeg));
+    }
+    break;
+
+  case kALamKchM:
+    tMultGraph->AddGraph(0,tNy-1,fConjAnalysis1->GetAvgSepHeavyCf(kTrackPos)->GetHeavyCf(),fConjAnalysis1->GetDaughtersHistoTitle(kTrackPos));
+    tMultGraph->AddGraph(1,tNy-1,fConjAnalysis1->GetAvgSepHeavyCf(kTrackNeg)->GetHeavyCf(),fConjAnalysis1->GetDaughtersHistoTitle(kTrackNeg));
+
+    if(aDrawConj)
+    {
+      tMultGraph->AddGraph(0,tNy-2,fAnalysis1->GetAvgSepHeavyCf(kTrackPos)->GetHeavyCf(),fAnalysis1->GetDaughtersHistoTitle(kTrackPos));
+      tMultGraph->AddGraph(1,tNy-2,fAnalysis1->GetAvgSepHeavyCf(kTrackNeg)->GetHeavyCf(),fAnalysis1->GetDaughtersHistoTitle(kTrackNeg));
+    }
+    break;
+
+  case kLamKchM:
+    tMultGraph->AddGraph(0,tNy-1,fAnalysis2->GetAvgSepHeavyCf(kTrackPos)->GetHeavyCf(),fAnalysis2->GetDaughtersHistoTitle(kTrackPos));
+    tMultGraph->AddGraph(1,tNy-1,fAnalysis2->GetAvgSepHeavyCf(kTrackNeg)->GetHeavyCf(),fAnalysis2->GetDaughtersHistoTitle(kTrackNeg));
+
+    if(aDrawConj)
+    {
+      tMultGraph->AddGraph(0,tNy-2,fConjAnalysis2->GetAvgSepHeavyCf(kTrackPos)->GetHeavyCf(),fConjAnalysis2->GetDaughtersHistoTitle(kTrackPos));
+      tMultGraph->AddGraph(1,tNy-2,fConjAnalysis2->GetAvgSepHeavyCf(kTrackNeg)->GetHeavyCf(),fConjAnalysis2->GetDaughtersHistoTitle(kTrackNeg));
+    }
+    break;
+
+  case kALamKchP:
+    tMultGraph->AddGraph(0,tNy-1,fConjAnalysis2->GetAvgSepHeavyCf(kTrackPos)->GetHeavyCf(),fConjAnalysis2->GetDaughtersHistoTitle(kTrackPos));
+    tMultGraph->AddGraph(1,tNy-1,fConjAnalysis2->GetAvgSepHeavyCf(kTrackNeg)->GetHeavyCf(),fConjAnalysis2->GetDaughtersHistoTitle(kTrackNeg));
+
+    if(aDrawConj)
+    {
+      tMultGraph->AddGraph(0,tNy-2,fAnalysis2->GetAvgSepHeavyCf(kTrackPos)->GetHeavyCf(),fAnalysis2->GetDaughtersHistoTitle(kTrackPos));
+      tMultGraph->AddGraph(1,tNy-2,fAnalysis2->GetAvgSepHeavyCf(kTrackNeg)->GetHeavyCf(),fAnalysis2->GetDaughtersHistoTitle(kTrackNeg));
+    }
+    break;
+
+  default:
+    cout << "ERROR: PlotPartnersLamKch::DrawAvgSepCfs: Invalid aAnalysisType = " << aAnalysisType << endl;
+  }
+
+//TODO
+
+  //----------------------------------
+//  if(bSaveFile)
+//  {
+//    LamKchP->SaveAllAvgSepHeavyCfs(mySaveFile);
+//    LamKchM->SaveAllAvgSepHeavyCfs(mySaveFile);
+//    ALamKchP->SaveAllAvgSepHeavyCfs(mySaveFile);
+//    ALamKchM->SaveAllAvgSepHeavyCfs(mySaveFile);
+//  }
+
+  tMultGraph->SetDrawUnityLine(true);
+  tMultGraph->DrawAll();
+  tMultGraph->DrawXaxisTitle("Avg. Sep. (cm)");
+  tMultGraph->DrawYaxisTitle("C(Avg. Sep)");
+
+  return tMultGraph->GetCanvas();
 }
 
 
