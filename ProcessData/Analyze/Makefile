@@ -5,7 +5,7 @@ CFLAGS = $(shell root-config --cflags) -Wall -std=c++11 -I${UTILITIES_DIR} -g -O
 #IFLAGS = -I$(ROOTSYS)/include
 #.PHONY: clean
 
-MY_LIBS = $(addprefix build/, CfLite.o CfHeavy.o Cf2dLite.o Cf2dHeavy.o Types.o Purity.o PartialAnalysis.o Analysis.o DataAndModel.o PlotPartners.o PlotPartnersLamKch.o MultGraph.o)
+MY_LIBS = $(addprefix build/, CfLite.o CfHeavy.o Cf2dLite.o Cf2dHeavy.o Types.o Purity.o PartialAnalysis.o Analysis.o DataAndModel.o PlotPartners.o PlotPartnersLamKch.o CanvasPartition.o)
 
 all: runBuildcLamcKch runBuildcLamK0 runBuildcXicKch runBuildcLamcLam runCombineConjugatesLamKch runCombineConjugatesLamK0 runCombineConjugatesXiKch runBuildMomResMatrix runBuildMomResMatrix2 runCompareFixes runCorrectCfs runTest
 

@@ -40,8 +40,8 @@ class Analysis;
 #include "DataAndModel.h"
 class DataAndModel;
 
-#include "MultGraph.h"
-class MultGraph;
+#include "CanvasPartition.h"
+class CanvasPartition;
 
 class PlotPartners {
 

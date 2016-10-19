@@ -11,8 +11,8 @@
 #include "FitSharedAnalyses.h"
 #include "LednickyFitter.h"
 
-
-
+#include "CanvasPartition.h"
+class CanvasPartition;
 
 
 class FitGenerator {
@@ -51,9 +51,6 @@ protected:
   AnalysisType fPairType, fConjPairType;
   CentralityType fCentralityType;  //Note kMB means include all
 
-  FitPairAnalysis *fPairAn0010, *fConjPairAn0010;
-  FitPairAnalysis *fPairAn1030, *fConjPairAn1030;
-  FitPairAnalysis *fPairAn3050, *fConjPairAn3050;
 
   FitSharedAnalyses* fSharedAn;
   LednickyFitter* fLednickyFitter;

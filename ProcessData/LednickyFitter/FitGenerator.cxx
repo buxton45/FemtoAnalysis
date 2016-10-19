@@ -33,9 +33,6 @@ FitGenerator::FitGenerator(TString aFileLocationBase, TString aFileLocationBaseM
   fGeneratorType(aGeneratorType),
   fPairType(kLamK0), fConjPairType(kALamK0),
   fCentralityType(aCentralityType),
-  fPairAn0010(0), fConjPairAn0010(0),
-  fPairAn1030(0), fConjPairAn1030(0),
-  fPairAn3050(0), fConjPairAn3050(0),
 
   fSharedAn(0),
   fLednickyFitter(0)
@@ -68,25 +65,18 @@ FitGenerator::FitGenerator(TString aFileLocationBase, TString aFileLocationBaseM
   vector<FitPairAnalysis*> tVecOfPairAn;
   switch(fCentralityType) {
   case k0010:
-    fPairAn0010 = new FitPairAnalysis(aFileLocationBase,aFileLocationBaseMC,fPairType,fCentralityType,aNPartialAnalysis,aIsTrainResults);
-    fConjPairAn0010 = new FitPairAnalysis(aFileLocationBase,aFileLocationBaseMC,fConjPairType,fCentralityType,aNPartialAnalysis,aIsTrainResults);
-    fPairAn1030 = NULL;
-    fConjPairAn1030 = NULL;
-    fPairAn3050 = NULL;
-    fConjPairAn3050 = NULL;
-
     switch(fGeneratorType) {
     case kPair:
-      tVecOfPairAn.push_back(fPairAn0010);
+      tVecOfPairAn.push_back(new FitPairAnalysis(aFileLocationBase,aFileLocationBaseMC,fPairType,fCentralityType,aNPartialAnalysis,aIsTrainResults));
       break;
 
     case kConjPair:
-      tVecOfPairAn.push_back(fConjPairAn0010);
+      tVecOfPairAn.push_back(new FitPairAnalysis(aFileLocationBase,aFileLocationBaseMC,fConjPairType,fCentralityType,aNPartialAnalysis,aIsTrainResults));
       break;
 
     case kPairwConj:
-      tVecOfPairAn.push_back(fPairAn0010);
-      tVecOfPairAn.push_back(fConjPairAn0010);
+      tVecOfPairAn.push_back(new FitPairAnalysis(aFileLocationBase,aFileLocationBaseMC,fPairType,fCentralityType,aNPartialAnalysis,aIsTrainResults));
+      tVecOfPairAn.push_back(new FitPairAnalysis(aFileLocationBase,aFileLocationBaseMC,fConjPairType,fCentralityType,aNPartialAnalysis,aIsTrainResults));
       break;
 
     default:
@@ -96,25 +86,18 @@ FitGenerator::FitGenerator(TString aFileLocationBase, TString aFileLocationBaseM
     break;
 
   case k1030:
-    fPairAn0010 = NULL;
-    fConjPairAn0010 = NULL;
-    fPairAn1030 = new FitPairAnalysis(aFileLocationBase,fPairType,fCentralityType,aNPartialAnalysis,aIsTrainResults);
-    fConjPairAn1030 = new FitPairAnalysis(aFileLocationBase,fConjPairType,fCentralityType,aNPartialAnalysis,aIsTrainResults);
-    fPairAn3050 = NULL;
-    fConjPairAn3050 = NULL;
-
     switch(fGeneratorType) {
     case kPair:
-      tVecOfPairAn.push_back(fPairAn1030);
+      tVecOfPairAn.push_back(new FitPairAnalysis(aFileLocationBase,fPairType,fCentralityType,aNPartialAnalysis,aIsTrainResults));
       break;
 
     case kConjPair:
-      tVecOfPairAn.push_back(fConjPairAn1030);
+      tVecOfPairAn.push_back(new FitPairAnalysis(aFileLocationBase,fConjPairType,fCentralityType,aNPartialAnalysis,aIsTrainResults));
       break;
 
     case kPairwConj:
-      tVecOfPairAn.push_back(fPairAn1030);
-      tVecOfPairAn.push_back(fConjPairAn1030);
+      tVecOfPairAn.push_back(new FitPairAnalysis(aFileLocationBase,fPairType,fCentralityType,aNPartialAnalysis,aIsTrainResults));
+      tVecOfPairAn.push_back(new FitPairAnalysis(aFileLocationBase,fConjPairType,fCentralityType,aNPartialAnalysis,aIsTrainResults));
       break;
 
     default:
@@ -124,25 +107,18 @@ FitGenerator::FitGenerator(TString aFileLocationBase, TString aFileLocationBaseM
     break;
 
   case k3050:
-    fPairAn0010 = NULL;
-    fConjPairAn0010 = NULL;
-    fPairAn1030 = NULL;
-    fConjPairAn1030 = NULL;
-    fPairAn3050 = new FitPairAnalysis(aFileLocationBase,fPairType,fCentralityType,aNPartialAnalysis,aIsTrainResults);
-    fConjPairAn3050 = new FitPairAnalysis(aFileLocationBase,fConjPairType,fCentralityType,aNPartialAnalysis,aIsTrainResults);
-
     switch(fGeneratorType) {
     case kPair:
-      tVecOfPairAn.push_back(fPairAn3050);
+      tVecOfPairAn.push_back(new FitPairAnalysis(aFileLocationBase,fPairType,fCentralityType,aNPartialAnalysis,aIsTrainResults));
       break;
 
     case kConjPair:
-      tVecOfPairAn.push_back(fConjPairAn3050);
+      tVecOfPairAn.push_back(new FitPairAnalysis(aFileLocationBase,fConjPairType,fCentralityType,aNPartialAnalysis,aIsTrainResults));
       break;
 
     case kPairwConj:
-      tVecOfPairAn.push_back(fPairAn3050);
-      tVecOfPairAn.push_back(fConjPairAn3050);
+      tVecOfPairAn.push_back(new FitPairAnalysis(aFileLocationBase,fPairType,fCentralityType,aNPartialAnalysis,aIsTrainResults));
+      tVecOfPairAn.push_back(new FitPairAnalysis(aFileLocationBase,fConjPairType,fCentralityType,aNPartialAnalysis,aIsTrainResults));
       break;
 
     default:
@@ -152,33 +128,26 @@ FitGenerator::FitGenerator(TString aFileLocationBase, TString aFileLocationBaseM
     break;
 
   case kMB:
-    fPairAn0010 = new FitPairAnalysis(aFileLocationBase,aFileLocationBaseMC,fPairType,k0010,aNPartialAnalysis,aIsTrainResults);
-    fConjPairAn0010 = new FitPairAnalysis(aFileLocationBase,aFileLocationBaseMC,fConjPairType,k0010,aNPartialAnalysis,aIsTrainResults);
-    fPairAn1030 = new FitPairAnalysis(aFileLocationBase,fPairType,k1030,aNPartialAnalysis,aIsTrainResults);
-    fConjPairAn1030 = new FitPairAnalysis(aFileLocationBase,fConjPairType,k1030,aNPartialAnalysis,aIsTrainResults);
-    fPairAn3050 = new FitPairAnalysis(aFileLocationBase,fPairType,k3050,aNPartialAnalysis,aIsTrainResults);
-    fConjPairAn3050 = new FitPairAnalysis(aFileLocationBase,fConjPairType,k3050,aNPartialAnalysis,aIsTrainResults);
-
     switch(fGeneratorType) {
     case kPair:
-      tVecOfPairAn.push_back(fPairAn0010);
-      tVecOfPairAn.push_back(fPairAn1030);
-      tVecOfPairAn.push_back(fPairAn3050);
+      tVecOfPairAn.push_back(new FitPairAnalysis(aFileLocationBase,aFileLocationBaseMC,fPairType,k0010,aNPartialAnalysis,aIsTrainResults));
+      tVecOfPairAn.push_back(new FitPairAnalysis(aFileLocationBase,fPairType,k1030,aNPartialAnalysis,aIsTrainResults));
+      tVecOfPairAn.push_back(new FitPairAnalysis(aFileLocationBase,fPairType,k3050,aNPartialAnalysis,aIsTrainResults));
       break;
 
     case kConjPair:
-      tVecOfPairAn.push_back(fConjPairAn0010);
-      tVecOfPairAn.push_back(fConjPairAn1030);
-      tVecOfPairAn.push_back(fConjPairAn3050);
+      tVecOfPairAn.push_back(new FitPairAnalysis(aFileLocationBase,aFileLocationBaseMC,fConjPairType,k0010,aNPartialAnalysis,aIsTrainResults));
+      tVecOfPairAn.push_back(new FitPairAnalysis(aFileLocationBase,fConjPairType,k1030,aNPartialAnalysis,aIsTrainResults));
+      tVecOfPairAn.push_back(new FitPairAnalysis(aFileLocationBase,fConjPairType,k3050,aNPartialAnalysis,aIsTrainResults));
       break;
 
     case kPairwConj:
-      tVecOfPairAn.push_back(fPairAn0010);
-      tVecOfPairAn.push_back(fConjPairAn0010);
-      tVecOfPairAn.push_back(fPairAn1030);
-      tVecOfPairAn.push_back(fConjPairAn1030);
-      tVecOfPairAn.push_back(fPairAn3050);
-      tVecOfPairAn.push_back(fConjPairAn3050);
+      tVecOfPairAn.push_back(new FitPairAnalysis(aFileLocationBase,aFileLocationBaseMC,fPairType,k0010,aNPartialAnalysis,aIsTrainResults));
+      tVecOfPairAn.push_back(new FitPairAnalysis(aFileLocationBase,aFileLocationBaseMC,fConjPairType,k0010,aNPartialAnalysis,aIsTrainResults));
+      tVecOfPairAn.push_back(new FitPairAnalysis(aFileLocationBase,fPairType,k1030,aNPartialAnalysis,aIsTrainResults));
+      tVecOfPairAn.push_back(new FitPairAnalysis(aFileLocationBase,fConjPairType,k1030,aNPartialAnalysis,aIsTrainResults));
+      tVecOfPairAn.push_back(new FitPairAnalysis(aFileLocationBase,fPairType,k3050,aNPartialAnalysis,aIsTrainResults));
+      tVecOfPairAn.push_back(new FitPairAnalysis(aFileLocationBase,fConjPairType,k3050,aNPartialAnalysis,aIsTrainResults));
       break;
 
     default:
@@ -202,6 +171,7 @@ FitGenerator::FitGenerator(TString aFileLocationBase, TString aFileLocationBaseM
 //________________________________________________________________________________________________________________
 FitGenerator::~FitGenerator()
 {
+
 }
 
 //________________________________________________________________________________________________________________
@@ -369,7 +339,7 @@ TCanvas* FitGenerator::DrawKStarCfs()
 
   return tReturnCan;
 }
-
+/*
 //________________________________________________________________________________________________________________
 TCanvas* FitGenerator::DrawKStarCfswFits()
 {
@@ -389,8 +359,46 @@ TCanvas* FitGenerator::DrawKStarCfswFits()
 
   return tReturnCan;
 }
+*/
 
+//________________________________________________________________________________________________________________
+TCanvas* FitGenerator::DrawKStarCfswFits()
+{
+  TString tCanvasName = TString("canKStarCfwFits") + TString(cAnalysisBaseTags[fPairType]) + TString("And") 
+                        + TString(cAnalysisBaseTags[fConjPairType]) + TString(cCentralityTags[fCentralityType]);
 
+  int tNx=0, tNy=0;
+  if(fNAnalyses == 6) {tNx=2; tNy=3;}
+  else if(fNAnalyses == 2 || fNAnalyses==1) {tNx=fNAnalyses; tNy=1;}
+  else if(fNAnalyses == 3) {tNx=1; tNy=fNAnalyses;}
+  else assert(0);
+
+  double tXLow = -0.01;
+  double tXHigh = 0.49;
+  double tYLow = 0.9;
+  double tYHigh = 1.04;
+  CanvasPartition* tCanPart = new CanvasPartition(tCanvasName,tNx,tNy,tXLow,tXHigh,tYLow,tYHigh,0.12,0.05,0.13,0.05);
+
+  assert(tNx*tNy == fNAnalyses);
+  int tAnalysisNumber=0;
+  for(int j=0; j<tNy; j++)
+  {
+    for(int i=0; i<tNx; i++)
+    {
+      tAnalysisNumber = j*tNx + i;
+
+      tCanPart->AddGraph(i,j,(TH1*)fSharedAn->GetKStarCfHeavy(tAnalysisNumber)->GetHeavyCf(),"");
+      tCanPart->AddGraph(i,j,(TF1*)fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetFit(),"");
+    }
+  }
+
+  tCanPart->SetDrawUnityLine(true);
+  tCanPart->DrawAll();
+  tCanPart->DrawXaxisTitle("k* (GeV/c)");
+  tCanPart->DrawYaxisTitle("C(k*)");
+
+  return tCanPart->GetCanvas();
+}
 
 
 //________________________________________________________________________________________________________________

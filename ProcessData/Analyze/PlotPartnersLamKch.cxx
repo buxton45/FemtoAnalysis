@@ -319,51 +319,51 @@ TCanvas* PlotPartnersLamKch::DrawAvgSepCfs(AnalysisType aAnalysisType, bool aDra
   double tYLow = -1.;
   double tYHigh = 5.;
 
-  MultGraph* tMultGraph = new MultGraph(tCanvasName,tNx,tNy,tXLow,tXHigh,tYLow,tYHigh,0.12,0.05,0.13,0.05);
+  CanvasPartition* tCanvasPartition = new CanvasPartition(tCanvasName,tNx,tNy,tXLow,tXHigh,tYLow,tYHigh,0.12,0.05,0.13,0.05);
 
 
   switch(aAnalysisType) {
   case kLamKchP:
-    tMultGraph->AddGraph(0,tNy-1,fAnalysis1->GetAvgSepHeavyCf(kTrackPos)->GetHeavyCf(),fAnalysis1->GetDaughtersHistoTitle(kTrackPos));
-    tMultGraph->AddGraph(1,tNy-1,fAnalysis1->GetAvgSepHeavyCf(kTrackNeg)->GetHeavyCf(),fAnalysis1->GetDaughtersHistoTitle(kTrackNeg));
+    tCanvasPartition->AddGraph(0,0,fAnalysis1->GetAvgSepHeavyCf(kTrackPos)->GetHeavyCf(),fAnalysis1->GetDaughtersHistoTitle(kTrackPos));
+    tCanvasPartition->AddGraph(1,0,fAnalysis1->GetAvgSepHeavyCf(kTrackNeg)->GetHeavyCf(),fAnalysis1->GetDaughtersHistoTitle(kTrackNeg));
 
     if(aDrawConj)
     {
-      tMultGraph->AddGraph(0,tNy-2,fConjAnalysis1->GetAvgSepHeavyCf(kTrackPos)->GetHeavyCf(),fConjAnalysis1->GetDaughtersHistoTitle(kTrackPos));
-      tMultGraph->AddGraph(1,tNy-2,fConjAnalysis1->GetAvgSepHeavyCf(kTrackNeg)->GetHeavyCf(),fConjAnalysis1->GetDaughtersHistoTitle(kTrackNeg));
+      tCanvasPartition->AddGraph(0,1,fConjAnalysis1->GetAvgSepHeavyCf(kTrackPos)->GetHeavyCf(),fConjAnalysis1->GetDaughtersHistoTitle(kTrackPos));
+      tCanvasPartition->AddGraph(1,1,fConjAnalysis1->GetAvgSepHeavyCf(kTrackNeg)->GetHeavyCf(),fConjAnalysis1->GetDaughtersHistoTitle(kTrackNeg));
     }
     break;
 
   case kALamKchM:
-    tMultGraph->AddGraph(0,tNy-1,fConjAnalysis1->GetAvgSepHeavyCf(kTrackPos)->GetHeavyCf(),fConjAnalysis1->GetDaughtersHistoTitle(kTrackPos));
-    tMultGraph->AddGraph(1,tNy-1,fConjAnalysis1->GetAvgSepHeavyCf(kTrackNeg)->GetHeavyCf(),fConjAnalysis1->GetDaughtersHistoTitle(kTrackNeg));
+    tCanvasPartition->AddGraph(0,0,fConjAnalysis1->GetAvgSepHeavyCf(kTrackPos)->GetHeavyCf(),fConjAnalysis1->GetDaughtersHistoTitle(kTrackPos));
+    tCanvasPartition->AddGraph(1,0,fConjAnalysis1->GetAvgSepHeavyCf(kTrackNeg)->GetHeavyCf(),fConjAnalysis1->GetDaughtersHistoTitle(kTrackNeg));
 
     if(aDrawConj)
     {
-      tMultGraph->AddGraph(0,tNy-2,fAnalysis1->GetAvgSepHeavyCf(kTrackPos)->GetHeavyCf(),fAnalysis1->GetDaughtersHistoTitle(kTrackPos));
-      tMultGraph->AddGraph(1,tNy-2,fAnalysis1->GetAvgSepHeavyCf(kTrackNeg)->GetHeavyCf(),fAnalysis1->GetDaughtersHistoTitle(kTrackNeg));
+      tCanvasPartition->AddGraph(0,1,fAnalysis1->GetAvgSepHeavyCf(kTrackPos)->GetHeavyCf(),fAnalysis1->GetDaughtersHistoTitle(kTrackPos));
+      tCanvasPartition->AddGraph(1,1,fAnalysis1->GetAvgSepHeavyCf(kTrackNeg)->GetHeavyCf(),fAnalysis1->GetDaughtersHistoTitle(kTrackNeg));
     }
     break;
 
   case kLamKchM:
-    tMultGraph->AddGraph(0,tNy-1,fAnalysis2->GetAvgSepHeavyCf(kTrackPos)->GetHeavyCf(),fAnalysis2->GetDaughtersHistoTitle(kTrackPos));
-    tMultGraph->AddGraph(1,tNy-1,fAnalysis2->GetAvgSepHeavyCf(kTrackNeg)->GetHeavyCf(),fAnalysis2->GetDaughtersHistoTitle(kTrackNeg));
+    tCanvasPartition->AddGraph(0,0,fAnalysis2->GetAvgSepHeavyCf(kTrackPos)->GetHeavyCf(),fAnalysis2->GetDaughtersHistoTitle(kTrackPos));
+    tCanvasPartition->AddGraph(1,0,fAnalysis2->GetAvgSepHeavyCf(kTrackNeg)->GetHeavyCf(),fAnalysis2->GetDaughtersHistoTitle(kTrackNeg));
 
     if(aDrawConj)
     {
-      tMultGraph->AddGraph(0,tNy-2,fConjAnalysis2->GetAvgSepHeavyCf(kTrackPos)->GetHeavyCf(),fConjAnalysis2->GetDaughtersHistoTitle(kTrackPos));
-      tMultGraph->AddGraph(1,tNy-2,fConjAnalysis2->GetAvgSepHeavyCf(kTrackNeg)->GetHeavyCf(),fConjAnalysis2->GetDaughtersHistoTitle(kTrackNeg));
+      tCanvasPartition->AddGraph(0,1,fConjAnalysis2->GetAvgSepHeavyCf(kTrackPos)->GetHeavyCf(),fConjAnalysis2->GetDaughtersHistoTitle(kTrackPos));
+      tCanvasPartition->AddGraph(1,1,fConjAnalysis2->GetAvgSepHeavyCf(kTrackNeg)->GetHeavyCf(),fConjAnalysis2->GetDaughtersHistoTitle(kTrackNeg));
     }
     break;
 
   case kALamKchP:
-    tMultGraph->AddGraph(0,tNy-1,fConjAnalysis2->GetAvgSepHeavyCf(kTrackPos)->GetHeavyCf(),fConjAnalysis2->GetDaughtersHistoTitle(kTrackPos));
-    tMultGraph->AddGraph(1,tNy-1,fConjAnalysis2->GetAvgSepHeavyCf(kTrackNeg)->GetHeavyCf(),fConjAnalysis2->GetDaughtersHistoTitle(kTrackNeg));
+    tCanvasPartition->AddGraph(0,0,fConjAnalysis2->GetAvgSepHeavyCf(kTrackPos)->GetHeavyCf(),fConjAnalysis2->GetDaughtersHistoTitle(kTrackPos));
+    tCanvasPartition->AddGraph(1,0,fConjAnalysis2->GetAvgSepHeavyCf(kTrackNeg)->GetHeavyCf(),fConjAnalysis2->GetDaughtersHistoTitle(kTrackNeg));
 
     if(aDrawConj)
     {
-      tMultGraph->AddGraph(0,tNy-2,fAnalysis2->GetAvgSepHeavyCf(kTrackPos)->GetHeavyCf(),fAnalysis2->GetDaughtersHistoTitle(kTrackPos));
-      tMultGraph->AddGraph(1,tNy-2,fAnalysis2->GetAvgSepHeavyCf(kTrackNeg)->GetHeavyCf(),fAnalysis2->GetDaughtersHistoTitle(kTrackNeg));
+      tCanvasPartition->AddGraph(0,1,fAnalysis2->GetAvgSepHeavyCf(kTrackPos)->GetHeavyCf(),fAnalysis2->GetDaughtersHistoTitle(kTrackPos));
+      tCanvasPartition->AddGraph(1,1,fAnalysis2->GetAvgSepHeavyCf(kTrackNeg)->GetHeavyCf(),fAnalysis2->GetDaughtersHistoTitle(kTrackNeg));
     }
     break;
 
@@ -382,12 +382,12 @@ TCanvas* PlotPartnersLamKch::DrawAvgSepCfs(AnalysisType aAnalysisType, bool aDra
 //    ALamKchM->SaveAllAvgSepHeavyCfs(mySaveFile);
 //  }
 
-  tMultGraph->SetDrawUnityLine(true);
-  tMultGraph->DrawAll();
-  tMultGraph->DrawXaxisTitle("Avg. Sep. (cm)");
-  tMultGraph->DrawYaxisTitle("C(Avg. Sep)");
+  tCanvasPartition->SetDrawUnityLine(true);
+  tCanvasPartition->DrawAll();
+  tCanvasPartition->DrawXaxisTitle("Avg. Sep. (cm)");
+  tCanvasPartition->DrawYaxisTitle("C(Avg. Sep)");
 
-  return tMultGraph->GetCanvas();
+  return tCanvasPartition->GetCanvas();
 }
 
 
