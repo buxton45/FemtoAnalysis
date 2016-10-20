@@ -254,6 +254,33 @@ TPaveText* CanvasPartition::SetupTPaveText(TString aText, int aNx, int aNy, doub
   return returnText;
 }
 
+//________________________________________________________________________________________________________________
+void CanvasPartition::SetupOptStat(int aNx, int aNy, double aStatX, double aStatY, double aStatW, double aStatH)
+{
+  float tLeftMargin = fPadArray[aNx][aNy]->GetLeftMargin();
+  float tRightMargin = fPadArray[aNx][aNy]->GetRightMargin();
+  float tTopMargin = fPadArray[aNx][aNy]->GetTopMargin();
+  float tBottomMargin = fPadArray[aNx][aNy]->GetBottomMargin();
+
+  float tReNormalizedWidth = 1. - (tLeftMargin+tRightMargin);
+  float tReNormalizedHeight = 1. - (tTopMargin+tBottomMargin);
+
+  //------------------------------------
+
+  double tNormalizedTextXmin = tLeftMargin + aStatX*tReNormalizedWidth;
+  double tNormalizedTextYmin = tBottomMargin + aStatY*tReNormalizedHeight;
+
+  tReNormalizedWidth *= aStatW;
+  tReNormalizedHeight *= aStatH;
+  //------------------------------------
+
+  gStyle->SetOptFit();
+  gStyle->SetStatH(tReNormalizedHeight);
+  gStyle->SetStatW(tReNormalizedWidth);
+
+  gStyle->SetStatX(tNormalizedTextXmin);
+  gStyle->SetStatY(tNormalizedTextYmin);
+}
 
 
 //________________________________________________________________________________________________________________
@@ -262,6 +289,8 @@ void CanvasPartition::DrawInPad(int aNx, int aNy)
   fPadArray[aNx][aNy]->cd();
   gStyle->SetOptStat(0);
   gStyle->SetOptTitle(0);
+
+  SetupOptStat(aNx,aNy,0.85,0.60,0.30,0.25);
 
   int tPosition = aNx + aNy*fNx;
   TObjArray* tGraphsToDraw = ((TObjArray*)fGraphs->At(tPosition));

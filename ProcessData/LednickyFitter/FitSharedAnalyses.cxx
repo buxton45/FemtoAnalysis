@@ -114,6 +114,14 @@ FitSharedAnalyses::~FitSharedAnalyses()
   cout << "FitSharedAnalyses object is being deleted!!!" << endl;
 }
 
+//________________________________________________________________________________________________________________
+void FitSharedAnalyses::SetParameter(ParameterType aParamType, int aAnalysisNumber, double aStartValue, double aLowerBound, double aUpperBound)
+{
+  fFitPairAnalysisCollection[aAnalysisNumber]->GetFitParameter(aParamType)->SetStartValue(aStartValue);
+  fFitPairAnalysisCollection[aAnalysisNumber]->GetFitParameter(aParamType)->SetLowerBound(aLowerBound);
+  fFitPairAnalysisCollection[aAnalysisNumber]->GetFitParameter(aParamType)->SetUpperBound(aUpperBound);
+}
+
 
 
 //________________________________________________________________________________________________________________

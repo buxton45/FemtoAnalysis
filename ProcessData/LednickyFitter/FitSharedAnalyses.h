@@ -49,6 +49,8 @@ public:
   FitSharedAnalyses(vector<FitPairAnalysis*> &aVecOfFitPairAnalyses, vector<ParameterType> &aVecOfSharedParameterTypes);
   virtual ~FitSharedAnalyses();
 
+  void SetParameter(ParameterType aParamType, int aAnalysisNumber, double aStartValue, double aLowerBound=0., double aUpperBound=0.);
+
   void CompareParameters(TString aAnalysisName1, FitParameter* aParam1, TString aAnalysisName2, FitParameter* aParam2);
 
   void SetSharedParameter(ParameterType aParamType);  //share amongst all

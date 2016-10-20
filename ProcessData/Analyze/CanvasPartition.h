@@ -47,7 +47,7 @@ public:
   void AddGraph(int aNx, int aNy, T* aGraph, TString tPadLegendName, int aMarkerStyle=20, int aMarkerColor=1, double aMarkerSize=0.75);
 
   template<typename T>
-  void SetupAxis(AxisType aAxisType, T* fGraph, float fXscale, float fYscale);
+  void SetupAxis(AxisType aAxisType, T* aGraph, float aXscale, float aYscale, float aLabelSize=0.15, float aLabelOffSet=0.005);
 
   td2dTPadVec BuildPartition(TCanvas *aCanvas,const Int_t Nx = 2,const Int_t Ny = 2,
                          Float_t lMargin = 0.15, Float_t rMargin = 0.05,
@@ -56,6 +56,8 @@ public:
   float** GetScaleFactors(AxisType aAxisType, td2dTPadVec &fPadArray, int Nx, int Ny);
 
   TPaveText* SetupTPaveText(TString aText, int aNx, int aNy, double aTextXmin=0.75, double aTextYmin=0.75, double aTextWidth=0.15, double aTextHeight=0.10, double aTextFont=63, double aTextSize=15);
+  void SetupOptStat(int aNx, int aNy, double aStatX, double aStatY, double aStatW, double aStatH);
+
   void DrawInPad(int aNx, int aNy);
   void DrawAll();
 
@@ -100,8 +102,13 @@ inline void CanvasPartition::AddGraph(int aNx, int aNy, T* aGraph, TString tPadL
 {
   int tPosition = aNx + aNy*fNx;
 
-  SetupAxis(kXaxis,aGraph,fXScaleFactors[aNx][aNy],fYScaleFactors[aNx][aNy]);
-  SetupAxis(kYaxis,aGraph,fXScaleFactors[aNx][aNy],fYScaleFactors[aNx][aNy]);
+  //TODO: For some reason, when SetupAxis is used with TF1* object, it causes an extra 
+  //border to be drawn in the TCanvas.  For now, disable for TF1
+  if(!(typeid(aGraph) == typeid(TF1*)))
+  {
+    SetupAxis(kXaxis,aGraph,fXScaleFactors[aNx][aNy],fYScaleFactors[aNx][aNy]);
+    SetupAxis(kYaxis,aGraph,fXScaleFactors[aNx][aNy],fYScaleFactors[aNx][aNy]);
+  }
 
   aGraph->SetMarkerStyle(aMarkerStyle);
   aGraph->SetMarkerColor(aMarkerColor);
@@ -115,12 +122,12 @@ inline void CanvasPartition::AddGraph(int aNx, int aNy, T* aGraph, TString tPadL
 
 //________________________________________________________________________________________________________________
 template<typename T>
-inline void CanvasPartition::SetupAxis(AxisType aAxisType, T* fGraph, float fXscale, float fYscale)
+inline void CanvasPartition::SetupAxis(AxisType aAxisType, T* aGraph, float aXscale, float aYscale, float aLabelSize, float aLabelOffSet)
 {
   TAxis* tReturnAxis;
 
-  if(aAxisType == kXaxis) tReturnAxis = fGraph->GetXaxis();
-  else if(aAxisType == kYaxis) tReturnAxis = fGraph->GetYaxis();
+  if(aAxisType == kXaxis) tReturnAxis = aGraph->GetXaxis();
+  else if(aAxisType == kYaxis) tReturnAxis = aGraph->GetYaxis();
   else 
   {
     cout << "ERROR: CanvasPartition::SetupAxis: Invalid aAxisType = " << aAxisType << endl;
@@ -132,19 +139,19 @@ inline void CanvasPartition::SetupAxis(AxisType aAxisType, T* fGraph, float fXsc
   tReturnAxis->SetTitleOffset(0.);
 
   tReturnAxis->SetLabelFont(43);
-  tReturnAxis->SetLabelSize(17);
-  tReturnAxis->SetLabelOffset(0.01);
+  tReturnAxis->SetLabelSize(100*aLabelSize);  //TODO not sure why this needs to be set to 100x the normal input
+  tReturnAxis->SetLabelOffset(aLabelOffSet);
 
   if(aAxisType == kXaxis)
   {
     tReturnAxis->SetNdivisions(510);
-    tReturnAxis->SetTickLength(0.04*fYscale/fXscale);
+    tReturnAxis->SetTickLength(0.04*aYscale/aXscale);
     tReturnAxis->SetRangeUser(fXaxisRangeLow,fXaxisRangeHigh);
   }
   else
   {
     tReturnAxis->SetNdivisions(505);
-    tReturnAxis->SetTickLength(0.04*fXscale/fYscale);
+    tReturnAxis->SetTickLength(0.04*aXscale/aYscale);
     tReturnAxis->SetRangeUser(fYaxisRangeLow,fYaxisRangeHigh);
   }
 

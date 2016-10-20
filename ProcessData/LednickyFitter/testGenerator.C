@@ -23,7 +23,7 @@ int main(int argc, char **argv)
 
 //  TCanvas* tKStarCan = tLamKchP->DrawKStarCfs();
 
-  tLamKchP->SetDefaultSharedParameters();
+  //tLamKchP->SetDefaultSharedParameters();
   tLamKchP->DoFit();
   TCanvas* tKStarwFitsCan = tLamKchP->DrawKStarCfswFits();
 

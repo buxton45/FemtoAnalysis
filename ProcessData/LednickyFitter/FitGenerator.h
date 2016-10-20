@@ -18,7 +18,7 @@ class CanvasPartition;
 class FitGenerator {
 
 public:
-  FitGenerator(TString aFileLocationBase, TString aFileLocationBaseMC, AnalysisType aAnalysisType, int aNPartialAnalysis=5, bool aIsTrainResults=false, CentralityType aCentralityType=kMB, FitGeneratorType aGeneratorType=kPairwConj);
+  FitGenerator(TString aFileLocationBase, TString aFileLocationBaseMC, AnalysisType aAnalysisType, int aNPartialAnalysis=5, bool aIsTrainResults=false, CentralityType aCentralityType=kMB, FitGeneratorType aGeneratorType=kPairwConj, bool aShareLambdaParams=false);
   virtual ~FitGenerator();
 
   void SetNAnalyses();
@@ -32,8 +32,22 @@ public:
   virtual TCanvas* DrawKStarCfs();
   virtual TCanvas* DrawKStarCfswFits();
 
+  void SetUseLimits(vector<FitParameter> &aVec, bool aUse);  //Internal use only
+
+  void SetRadiusStartValue(double aRad, CentralityType aCentType=kMB);  //aCentType only matters when fCentralityType = kMB
+  void SetRadiusStartValues(double aRad0010, double aRad1030, double aRad3050);
+  void SetRadiusLimits(double aMin, double aMax, CentralityType aCentType=kMB);
+  void SetRadiusLimits(double aMin0010, double aMax0010, double aMin1030, double aMax1030, double aMin3050, double aMax3050);
+
+  void SetScattParamStartValues(double aReF0, double aImF0, double aD0);
+  void SetScattParamLimits(double aMinReF0, double aMaxReF0, double aMinImF0, double aMaxImF0, double aMinD0, double aMaxD0);
+
+  void SetLambdaParamStartValue(double aLam, bool tConjPair=false, CentralityType aCentType=kMB);
+  void SetLambdaParamLimits(double aMin, double aMax, bool tConjPair=false, CentralityType aCentType=kMB);
 
   void SetDefaultSharedParameters();
+
+  void SetAllParameters();
   void DoFit();
 
 
@@ -44,6 +58,13 @@ public:
   void SetSharedParameter(ParameterType aParamType, vector<int> &aSharedAnalyses); //share amongst analyses selected in aSharedAnalyses
   void SetSharedParameter(ParameterType aParamType, vector<int> &aSharedAnalyses, double aStartValue, double aLowerBound=0., double aUpperBound=0.);
 
+  void SetParameter(ParameterType aParamType, int aAnalysisNumber, double aStartValue, double aLowerBound=0., double aUpperBound=0.);
+
+  void SetUseRadiusLimits(bool aUse);
+  void SetUseScattParamLimits(bool aUse);
+  void SetUseLambdaLimits(bool aUse);
+
+
 protected:
   bool fContainsMC;
   int fNAnalyses;  //should be 1, 2, 3 or 6
@@ -51,6 +72,10 @@ protected:
   AnalysisType fPairType, fConjPairType;
   CentralityType fCentralityType;  //Note kMB means include all
 
+  vector<FitParameter> fRadiusFitParams;  //size depends on centralities being fit
+  vector<FitParameter> fScattFitParams;  //size = 3; [ReF0,ImF0,D0]
+  vector<FitParameter> fLambdaFitParams; //size depends on centralities being fit and option chosen for Lambda parameter sharing
+  bool fShareLambdaParams; //If true, I will still only share across like centralities
 
   FitSharedAnalyses* fSharedAn;
   LednickyFitter* fLednickyFitter;
@@ -73,10 +98,12 @@ inline void FitGenerator::SetSharedParameter(ParameterType aParamType, vector<in
 inline void FitGenerator::SetSharedParameter(ParameterType aParamType, vector<int> &aSharedAnalyses, double aStartValue, double aLowerBound, double aUpperBound) 
   {fSharedAn->SetSharedParameter(aParamType,aSharedAnalyses,aStartValue,aLowerBound,aUpperBound);}
 
+inline void FitGenerator::SetParameter(ParameterType aParamType, int aAnalysisNumber, double aStartValue, double aLowerBound, double aUpperBound)
+  {fSharedAn->SetParameter(aParamType,aAnalysisNumber,aStartValue,aLowerBound,aUpperBound);}
+
+inline void FitGenerator::SetUseRadiusLimits(bool aUse) {SetUseLimits(fRadiusFitParams,aUse);}
+inline void FitGenerator::SetUseScattParamLimits(bool aUse) {SetUseLimits(fScattFitParams,aUse);}
+inline void FitGenerator::SetUseLambdaLimits(bool aUse) {SetUseLimits(fLambdaFitParams,aUse);}
+
 #endif
-
-
-
-
-
 
