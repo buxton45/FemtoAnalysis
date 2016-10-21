@@ -17,7 +17,7 @@ ClassImp(PlotPartners)
 
 
 //________________________________________________________________________________________________________________
-PlotPartners::PlotPartners(TString aFileLocationBase, AnalysisType aAnalysisType, CentralityType aCentralityType, int aNPartialAnalysis, bool aIsTrainResults) :
+PlotPartners::PlotPartners(TString aFileLocationBase, AnalysisType aAnalysisType, CentralityType aCentralityType, AnalysisRunType aRunType, int aNPartialAnalysis, TString aDirNameModifier) :
   fContainsMC(false),
   fAnalysis1(0),
   fConjAnalysis1(0),
@@ -34,8 +34,8 @@ PlotPartners::PlotPartners(TString aFileLocationBase, AnalysisType aAnalysisType
   switch(aAnalysisType) {
   case kLamK0:
   case kALamK0:
-    fAnalysis1 = new Analysis(aFileLocationBase,kLamK0,aCentralityType,aNPartialAnalysis,aIsTrainResults);
-    fConjAnalysis1 = new Analysis(aFileLocationBase,kALamK0,aCentralityType,aNPartialAnalysis,aIsTrainResults);
+    fAnalysis1 = new Analysis(aFileLocationBase,kLamK0,aCentralityType,aRunType,aNPartialAnalysis,aDirNameModifier);
+    fConjAnalysis1 = new Analysis(aFileLocationBase,kALamK0,aCentralityType,aRunType,aNPartialAnalysis,aDirNameModifier);
     fAnalysis2 = NULL;
     fConjAnalysis2 = NULL;
     break;
@@ -44,20 +44,20 @@ PlotPartners::PlotPartners(TString aFileLocationBase, AnalysisType aAnalysisType
   case kALamKchP:
   case kLamKchM:
   case kALamKchM:
-    fAnalysis1 = new Analysis(aFileLocationBase,kLamKchP,aCentralityType,aNPartialAnalysis,aIsTrainResults);
-    fConjAnalysis1 = new Analysis(aFileLocationBase,kALamKchM,aCentralityType,aNPartialAnalysis,aIsTrainResults);
-    fAnalysis2 = new Analysis(aFileLocationBase,kLamKchM,aCentralityType,aNPartialAnalysis,aIsTrainResults);
-    fConjAnalysis2 = new Analysis(aFileLocationBase,kALamKchP,aCentralityType,aNPartialAnalysis,aIsTrainResults);
+    fAnalysis1 = new Analysis(aFileLocationBase,kLamKchP,aCentralityType,aRunType,aNPartialAnalysis,aDirNameModifier);
+    fConjAnalysis1 = new Analysis(aFileLocationBase,kALamKchM,aCentralityType,aRunType,aNPartialAnalysis,aDirNameModifier);
+    fAnalysis2 = new Analysis(aFileLocationBase,kLamKchM,aCentralityType,aRunType,aNPartialAnalysis,aDirNameModifier);
+    fConjAnalysis2 = new Analysis(aFileLocationBase,kALamKchP,aCentralityType,aRunType,aNPartialAnalysis,aDirNameModifier);
     break;
 
   case kXiKchP:
   case kAXiKchP:
   case kXiKchM:
   case kAXiKchM:
-    fAnalysis1 = new Analysis(aFileLocationBase,kXiKchP,aCentralityType,aNPartialAnalysis,aIsTrainResults);
-    fConjAnalysis1 = new Analysis(aFileLocationBase,kAXiKchM,aCentralityType,aNPartialAnalysis,aIsTrainResults);
-    fAnalysis2 = new Analysis(aFileLocationBase,kXiKchM,aCentralityType,aNPartialAnalysis,aIsTrainResults);
-    fConjAnalysis2 = new Analysis(aFileLocationBase,kAXiKchP,aCentralityType,aNPartialAnalysis,aIsTrainResults);
+    fAnalysis1 = new Analysis(aFileLocationBase,kXiKchP,aCentralityType,aRunType,aNPartialAnalysis,aDirNameModifier);
+    fConjAnalysis1 = new Analysis(aFileLocationBase,kAXiKchM,aCentralityType,aRunType,aNPartialAnalysis,aDirNameModifier);
+    fAnalysis2 = new Analysis(aFileLocationBase,kXiKchM,aCentralityType,aRunType,aNPartialAnalysis,aDirNameModifier);
+    fConjAnalysis2 = new Analysis(aFileLocationBase,kAXiKchP,aCentralityType,aRunType,aNPartialAnalysis,aDirNameModifier);
     break;
 
   default:
@@ -68,7 +68,7 @@ PlotPartners::PlotPartners(TString aFileLocationBase, AnalysisType aAnalysisType
 }
 
 //________________________________________________________________________________________________________________
-PlotPartners::PlotPartners(TString aFileLocationBase, TString aFileLocationBaseMC, AnalysisType aAnalysisType, CentralityType aCentralityType, int aNPartialAnalysis, bool aIsTrainResults) :
+PlotPartners::PlotPartners(TString aFileLocationBase, TString aFileLocationBaseMC, AnalysisType aAnalysisType, CentralityType aCentralityType, AnalysisRunType aRunType, int aNPartialAnalysis, TString aDirNameModifier) :
   fContainsMC(false),
   fAnalysis1(0),
   fConjAnalysis1(0),
@@ -86,13 +86,13 @@ PlotPartners::PlotPartners(TString aFileLocationBase, TString aFileLocationBaseM
   switch(aAnalysisType) {
   case kLamK0:
   case kALamK0:
-    fAnalysis1 = new Analysis(aFileLocationBase,kLamK0,aCentralityType,aNPartialAnalysis,aIsTrainResults);
-    fConjAnalysis1 = new Analysis(aFileLocationBase,kALamK0,aCentralityType,aNPartialAnalysis,aIsTrainResults);
+    fAnalysis1 = new Analysis(aFileLocationBase,kLamK0,aCentralityType,aRunType,aNPartialAnalysis,aDirNameModifier);
+    fConjAnalysis1 = new Analysis(aFileLocationBase,kALamK0,aCentralityType,aRunType,aNPartialAnalysis,aDirNameModifier);
     fAnalysis2 = NULL;
     fConjAnalysis2 = NULL;
 
-    fAnalysisMC1 = new Analysis(aFileLocationBaseMC,kLamK0,aCentralityType,aNPartialAnalysis,aIsTrainResults);
-    fConjAnalysisMC1 = new Analysis(aFileLocationBaseMC,kALamK0,aCentralityType,aNPartialAnalysis,aIsTrainResults);
+    fAnalysisMC1 = new Analysis(aFileLocationBaseMC,kLamK0,aCentralityType,aRunType,aNPartialAnalysis,aDirNameModifier);
+    fConjAnalysisMC1 = new Analysis(aFileLocationBaseMC,kALamK0,aCentralityType,aRunType,aNPartialAnalysis,aDirNameModifier);
     fAnalysisMC2 = NULL;
     fConjAnalysisMC2 = NULL;
 
@@ -103,15 +103,15 @@ PlotPartners::PlotPartners(TString aFileLocationBase, TString aFileLocationBaseM
   case kALamKchP:
   case kLamKchM:
   case kALamKchM:
-    fAnalysis1 = new Analysis(aFileLocationBase,kLamKchP,aCentralityType,aNPartialAnalysis,aIsTrainResults);
-    fConjAnalysis1 = new Analysis(aFileLocationBase,kALamKchM,aCentralityType,aNPartialAnalysis,aIsTrainResults);
-    fAnalysis2 = new Analysis(aFileLocationBase,kLamKchM,aCentralityType,aNPartialAnalysis,aIsTrainResults);
-    fConjAnalysis2 = new Analysis(aFileLocationBase,kALamKchP,aCentralityType,aNPartialAnalysis,aIsTrainResults);
+    fAnalysis1 = new Analysis(aFileLocationBase,kLamKchP,aCentralityType,aRunType,aNPartialAnalysis,aDirNameModifier);
+    fConjAnalysis1 = new Analysis(aFileLocationBase,kALamKchM,aCentralityType,aRunType,aNPartialAnalysis,aDirNameModifier);
+    fAnalysis2 = new Analysis(aFileLocationBase,kLamKchM,aCentralityType,aRunType,aNPartialAnalysis,aDirNameModifier);
+    fConjAnalysis2 = new Analysis(aFileLocationBase,kALamKchP,aCentralityType,aRunType,aNPartialAnalysis,aDirNameModifier);
 
-    fAnalysisMC1 = new Analysis(aFileLocationBaseMC,kLamKchP,aCentralityType,aNPartialAnalysis,aIsTrainResults);
-    fConjAnalysisMC1 = new Analysis(aFileLocationBaseMC,kALamKchM,aCentralityType,aNPartialAnalysis,aIsTrainResults);
-    fAnalysisMC2 = new Analysis(aFileLocationBaseMC,kLamKchM,aCentralityType,aNPartialAnalysis,aIsTrainResults);
-    fConjAnalysisMC2 = new Analysis(aFileLocationBaseMC,kALamKchP,aCentralityType,aNPartialAnalysis,aIsTrainResults);
+    fAnalysisMC1 = new Analysis(aFileLocationBaseMC,kLamKchP,aCentralityType,aRunType,aNPartialAnalysis,aDirNameModifier);
+    fConjAnalysisMC1 = new Analysis(aFileLocationBaseMC,kALamKchM,aCentralityType,aRunType,aNPartialAnalysis,aDirNameModifier);
+    fAnalysisMC2 = new Analysis(aFileLocationBaseMC,kLamKchM,aCentralityType,aRunType,aNPartialAnalysis,aDirNameModifier);
+    fConjAnalysisMC2 = new Analysis(aFileLocationBaseMC,kALamKchP,aCentralityType,aRunType,aNPartialAnalysis,aDirNameModifier);
 
     if(fAnalysisMC1 && fConjAnalysisMC1 && fAnalysisMC2 && fConjAnalysisMC2) fContainsMC = true;
     break;
@@ -120,15 +120,15 @@ PlotPartners::PlotPartners(TString aFileLocationBase, TString aFileLocationBaseM
   case kAXiKchP:
   case kXiKchM:
   case kAXiKchM:
-    fAnalysis1 = new Analysis(aFileLocationBase,kXiKchP,aCentralityType,aNPartialAnalysis,aIsTrainResults);
-    fConjAnalysis1 = new Analysis(aFileLocationBase,kAXiKchM,aCentralityType,aNPartialAnalysis,aIsTrainResults);
-    fAnalysis2 = new Analysis(aFileLocationBase,kXiKchM,aCentralityType,aNPartialAnalysis,aIsTrainResults);
-    fConjAnalysis2 = new Analysis(aFileLocationBase,kAXiKchP,aCentralityType,aNPartialAnalysis,aIsTrainResults);
+    fAnalysis1 = new Analysis(aFileLocationBase,kXiKchP,aCentralityType,aRunType,aNPartialAnalysis,aDirNameModifier);
+    fConjAnalysis1 = new Analysis(aFileLocationBase,kAXiKchM,aCentralityType,aRunType,aNPartialAnalysis,aDirNameModifier);
+    fAnalysis2 = new Analysis(aFileLocationBase,kXiKchM,aCentralityType,aRunType,aNPartialAnalysis,aDirNameModifier);
+    fConjAnalysis2 = new Analysis(aFileLocationBase,kAXiKchP,aCentralityType,aRunType,aNPartialAnalysis,aDirNameModifier);
 
-    fAnalysisMC1 = new Analysis(aFileLocationBaseMC,kXiKchP,aCentralityType,aNPartialAnalysis,aIsTrainResults);
-    fConjAnalysisMC1 = new Analysis(aFileLocationBaseMC,kAXiKchM,aCentralityType,aNPartialAnalysis,aIsTrainResults);
-    fAnalysisMC2 = new Analysis(aFileLocationBaseMC,kXiKchM,aCentralityType,aNPartialAnalysis,aIsTrainResults);
-    fConjAnalysisMC2 = new Analysis(aFileLocationBaseMC,kAXiKchP,aCentralityType,aNPartialAnalysis,aIsTrainResults);
+    fAnalysisMC1 = new Analysis(aFileLocationBaseMC,kXiKchP,aCentralityType,aRunType,aNPartialAnalysis,aDirNameModifier);
+    fConjAnalysisMC1 = new Analysis(aFileLocationBaseMC,kAXiKchM,aCentralityType,aRunType,aNPartialAnalysis,aDirNameModifier);
+    fAnalysisMC2 = new Analysis(aFileLocationBaseMC,kXiKchM,aCentralityType,aRunType,aNPartialAnalysis,aDirNameModifier);
+    fConjAnalysisMC2 = new Analysis(aFileLocationBaseMC,kAXiKchP,aCentralityType,aRunType,aNPartialAnalysis,aDirNameModifier);
 
     if(fAnalysisMC1 && fConjAnalysisMC1 && fAnalysisMC2 && fConjAnalysisMC2) fContainsMC = true;
     break;

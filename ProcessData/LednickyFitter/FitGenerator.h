@@ -18,7 +18,7 @@ class CanvasPartition;
 class FitGenerator {
 
 public:
-  FitGenerator(TString aFileLocationBase, TString aFileLocationBaseMC, AnalysisType aAnalysisType, int aNPartialAnalysis=5, bool aIsTrainResults=false, CentralityType aCentralityType=kMB, FitGeneratorType aGeneratorType=kPairwConj, bool aShareLambdaParams=false);
+  FitGenerator(TString aFileLocationBase, TString aFileLocationBaseMC, AnalysisType aAnalysisType, AnalysisRunType aRunType=kTrain, int aNPartialAnalysis=2, CentralityType aCentralityType=kMB, FitGeneratorType aGeneratorType=kPairwConj, bool aShareLambdaParams=false, TString aDirNameModifier="");
   virtual ~FitGenerator();
 
   void SetNAnalyses();

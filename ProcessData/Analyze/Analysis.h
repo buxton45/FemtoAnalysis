@@ -48,9 +48,10 @@ public:
 
   Analysis(TString aAnalysisName, vector<PartialAnalysis*> &aPartialAnalysisCollection, bool aCombineConjugates=false);
 
-  Analysis(TString aFileLocationBase, AnalysisType aAnalysisType, CentralityType aCentralityType, int aNPartialAnalysis=5, bool aIsTrainResults=false);
+  Analysis(TString aFileLocationBase, AnalysisType aAnalysisType, CentralityType aCentralityType, AnalysisRunType aRunType=kTrain, int aNPartialAnalysis=2, TString aDirNameModifier="");
   virtual ~Analysis();
 
+  TH1* SimpleAddTH1Collection(TString tHistosName);
   vector<ParticleType> GetCorrectDaughterParticleTypes(DaughterPairType aDaughterPairType);
   TString GetDaughtersHistoTitle(DaughterPairType aDaughterPairType);
   //-----
@@ -120,6 +121,11 @@ public:
 
   void DrawPart1MassFail(TPad* aPad, bool aDrawWideRangeToo=false);
 
+  //-----
+  TH1* GetMassAssumingK0ShortHypothesis();
+  TH1* GetMassAssumingLambdaHypothesis();
+  TH1* GetMassAssumingAntiLambdaHypothesis();
+
   //inline
   TString GetAnalysisName();
   AnalysisType GetAnalysisType();
@@ -172,7 +178,7 @@ public:
   bool AreTrainResults();
 
 private:
-  bool fTrainResults;
+  AnalysisRunType fAnalysisRunType;
   bool fCombineConjugates;
 
   TString fAnalysisName;
@@ -302,7 +308,7 @@ inline double Analysis::GetNKStarNumEntries() {return fNKStarNumEntries;}
 
 inline TH1* Analysis::GetPart1MassFail() {return fPart1MassFail;}
 
-inline bool Analysis::AreTrainResults() {return fTrainResults;}
+inline bool Analysis::AreTrainResults() {if(fAnalysisRunType==kTrain || fAnalysisRunType==kTrainSys) return true;}
 
 #endif
 

@@ -55,9 +55,9 @@ int main(int argc, char **argv)
     tPairType = kLamKchP;
     //tPairType = kLamKchM;
 
-  bool bIsTrainAnalysis = true;
+  AnalysisRunType tAnalysisRunType = kTrain;
   int tNPartialAnalysis = 5;
-  if(bIsTrainAnalysis) tNPartialAnalysis = 2;
+  if(tAnalysisRunType==kTrain || tAnalysisRunType==kTrainSys) tNPartialAnalysis = 2;
 
   bool bRunPair = false;
   bool bRunConjPair = false;
@@ -93,9 +93,9 @@ int main(int argc, char **argv)
     TString tAnName1030 = tAnBaseName + TString(cCentralityTags[1]);
     TString tAnName3050 = tAnBaseName + TString(cCentralityTags[2]);
 
-    FitPairAnalysis* tPairAn0010 = new FitPairAnalysis(tFileLocationBase,tAnType,k0010,tNPartialAnalysis,bIsTrainAnalysis);
-    FitPairAnalysis* tPairAn1030 = new FitPairAnalysis(tFileLocationBase,tAnType,k1030,tNPartialAnalysis,bIsTrainAnalysis);
-    FitPairAnalysis* tPairAn3050 = new FitPairAnalysis(tFileLocationBase,tAnType,k3050,tNPartialAnalysis,bIsTrainAnalysis);
+    FitPairAnalysis* tPairAn0010 = new FitPairAnalysis(tFileLocationBase,tAnType,k0010,tAnalysisRunType,tNPartialAnalysis);
+    FitPairAnalysis* tPairAn1030 = new FitPairAnalysis(tFileLocationBase,tAnType,k1030,tAnalysisRunType,tNPartialAnalysis);
+    FitPairAnalysis* tPairAn3050 = new FitPairAnalysis(tFileLocationBase,tAnType,k3050,tAnalysisRunType,tNPartialAnalysis);
 
     vector<FitPairAnalysis*> tVecOfPairAn;
     tVecOfPairAn.push_back(tPairAn0010);
@@ -186,13 +186,13 @@ int main(int argc, char **argv)
       TString tConjPairAnName3050 = tConjPairAnBaseName + TString(cCentralityTags[2]);
 
 
-    FitPairAnalysis* tPairAn0010 = new FitPairAnalysis(tFileLocationBase,tPairType,k0010,tNPartialAnalysis,bIsTrainAnalysis);
-    FitPairAnalysis* tPairAn1030 = new FitPairAnalysis(tFileLocationBase,tPairType,k1030,tNPartialAnalysis,bIsTrainAnalysis);
-    FitPairAnalysis* tPairAn3050 = new FitPairAnalysis(tFileLocationBase,tPairType,k3050,tNPartialAnalysis,bIsTrainAnalysis);
+    FitPairAnalysis* tPairAn0010 = new FitPairAnalysis(tFileLocationBase,tPairType,k0010,tAnalysisRunType,tNPartialAnalysis);
+    FitPairAnalysis* tPairAn1030 = new FitPairAnalysis(tFileLocationBase,tPairType,k1030,tAnalysisRunType,tNPartialAnalysis);
+    FitPairAnalysis* tPairAn3050 = new FitPairAnalysis(tFileLocationBase,tPairType,k3050,tAnalysisRunType,tNPartialAnalysis);
 
-    FitPairAnalysis* tConjPairAn0010 = new FitPairAnalysis(tFileLocationBase,tConjPairType,k0010,tNPartialAnalysis,bIsTrainAnalysis);
-    FitPairAnalysis* tConjPairAn1030 = new FitPairAnalysis(tFileLocationBase,tConjPairType,k1030,tNPartialAnalysis,bIsTrainAnalysis);
-    FitPairAnalysis* tConjPairAn3050 = new FitPairAnalysis(tFileLocationBase,tConjPairType,k3050,tNPartialAnalysis,bIsTrainAnalysis);
+    FitPairAnalysis* tConjPairAn0010 = new FitPairAnalysis(tFileLocationBase,tConjPairType,k0010,tAnalysisRunType,tNPartialAnalysis);
+    FitPairAnalysis* tConjPairAn1030 = new FitPairAnalysis(tFileLocationBase,tConjPairType,k1030,tAnalysisRunType,tNPartialAnalysis);
+    FitPairAnalysis* tConjPairAn3050 = new FitPairAnalysis(tFileLocationBase,tConjPairType,k3050,tAnalysisRunType,tNPartialAnalysis);
 
     vector<FitPairAnalysis*> tVecOfPairAn;
       tVecOfPairAn.push_back(tPairAn0010);
@@ -308,8 +308,8 @@ int main(int argc, char **argv)
     TString tConjPairAnBaseName = TString(cAnalysisBaseTags[tConjPairType]);
       TString tConjPairAnName0010 = tConjPairAnBaseName + TString(cCentralityTags[0]);
 
-    FitPairAnalysis* tPairAn0010 = new FitPairAnalysis(tFileLocationBase,tPairType,k0010,tNPartialAnalysis,bIsTrainAnalysis);
-    FitPairAnalysis* tConjPairAn0010 = new FitPairAnalysis(tFileLocationBase,tConjPairType,k0010,tNPartialAnalysis,bIsTrainAnalysis);
+    FitPairAnalysis* tPairAn0010 = new FitPairAnalysis(tFileLocationBase,tPairType,k0010,tAnalysisRunType,tNPartialAnalysis);
+    FitPairAnalysis* tConjPairAn0010 = new FitPairAnalysis(tFileLocationBase,tConjPairType,k0010,tAnalysisRunType,tNPartialAnalysis);
 
     vector<FitPairAnalysis*> tVecOfPairAn;
       tVecOfPairAn.push_back(tPairAn0010);

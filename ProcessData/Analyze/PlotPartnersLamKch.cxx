@@ -16,16 +16,16 @@ ClassImp(PlotPartnersLamKch)
 //________________________________________________________________________________________________________________
 
 //________________________________________________________________________________________________________________
-PlotPartnersLamKch::PlotPartnersLamKch(TString aFileLocationBase, AnalysisType aAnalysisType, CentralityType aCentralityType, int aNPartialAnalysis, bool aIsTrainResults) :
-  PlotPartners(aFileLocationBase,aAnalysisType,aCentralityType,aNPartialAnalysis,aIsTrainResults)
+PlotPartnersLamKch::PlotPartnersLamKch(TString aFileLocationBase, AnalysisType aAnalysisType, CentralityType aCentralityType, AnalysisRunType aRunType, int aNPartialAnalysis, TString aDirNameModifier) :
+  PlotPartners(aFileLocationBase,aAnalysisType,aCentralityType,aRunType,aNPartialAnalysis,aDirNameModifier)
 
 {
 
 }
 
 //________________________________________________________________________________________________________________
-PlotPartnersLamKch::PlotPartnersLamKch(TString aFileLocationBase, TString aFileLocationBaseMC, AnalysisType aAnalysisType, CentralityType aCentralityType, int aNPartialAnalysis, bool aIsTrainResults) :
-  PlotPartners(aFileLocationBase,aFileLocationBaseMC,aAnalysisType,aCentralityType,aNPartialAnalysis,aIsTrainResults)
+PlotPartnersLamKch::PlotPartnersLamKch(TString aFileLocationBase, TString aFileLocationBaseMC, AnalysisType aAnalysisType, CentralityType aCentralityType, AnalysisRunType aRunType, int aNPartialAnalysis, TString aDirNameModifier) :
+  PlotPartners(aFileLocationBase,aFileLocationBaseMC,aAnalysisType,aCentralityType,aRunType,aNPartialAnalysis,aDirNameModifier)
 
 {
 
@@ -407,5 +407,51 @@ TCanvas* PlotPartnersLamKch::ViewPart1MassFail(bool aDrawWideRangeToo)
 
   return tReturnCan;
 }
+
+
+//________________________________________________________________________________________________________________
+TCanvas* PlotPartnersLamKch::DrawMassAssumingK0ShortHypothesis(AnalysisType aAnalysisType)
+{
+  TH1* tHistToDraw;
+
+  switch(aAnalysisType) {
+  case kLamKchP:
+    tHistToDraw = fAnalysis1->GetMassAssumingK0ShortHypothesis();
+    break;
+
+  case kALamKchM:
+    tHistToDraw = fConjAnalysis1->GetMassAssumingK0ShortHypothesis();
+    break;
+
+  case kLamKchM:
+    tHistToDraw = fAnalysis2->GetMassAssumingK0ShortHypothesis();
+    break;
+
+  case kALamKchP:
+    tHistToDraw = fConjAnalysis2->GetMassAssumingK0ShortHypothesis();
+    break;
+
+  default:
+    cout << "ERROR: PlotPartnersLamKch::DrawMassAssumingK0ShortHypothesis: Invalid aAnalysisType = " << aAnalysisType << endl;
+  }
+
+  //------------------------------------
+  TString tCanvasName = TString("canMassAssK0Hyp_") + TString(cAnalysisBaseTags[aAnalysisType]);
+  TCanvas* tReturnCan = new TCanvas(tCanvasName,tCanvasName);
+  tReturnCan->cd();
+  gStyle->SetOptStat(0);
+
+  tHistToDraw->SetMarkerColor(1);
+  tHistToDraw->SetLineColor(1);
+  tHistToDraw->SetMarkerStyle(20);
+  tHistToDraw->SetMarkerSize(0.5);
+
+  SetupAxis(tHistToDraw->GetXaxis(),0.29,0.58,"Mass Assuming K^{0}_{S} Hypothesis (GeV/c^{2})");
+  SetupAxis(tHistToDraw->GetYaxis(),"dN/dM_{inv}");
+
+  tHistToDraw->DrawCopy();
+  return tReturnCan;
+}
+
 
 

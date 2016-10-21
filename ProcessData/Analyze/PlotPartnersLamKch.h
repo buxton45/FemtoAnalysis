@@ -14,8 +14,8 @@ class PlotPartners;
 class PlotPartnersLamKch : public PlotPartners {
 
 public:
-  PlotPartnersLamKch(TString aFileLocationBase, AnalysisType aAnalysisType, CentralityType aCentralityType, int aNPartialAnalysis=5, bool aIsTrainResults=false);
-  PlotPartnersLamKch(TString aFileLocationBase, TString aFileLocationBaseMC, AnalysisType aAnalysisType, CentralityType aCentralityType, int aNPartialAnalysis=5, bool aIsTrainResults=false);
+  PlotPartnersLamKch(TString aFileLocationBase, AnalysisType aAnalysisType, CentralityType aCentralityType, AnalysisRunType aType=kTrain, int aNPartialAnalysis=2, TString aDirNameModifier="");
+  PlotPartnersLamKch(TString aFileLocationBase, TString aFileLocationBaseMC, AnalysisType aAnalysisType, CentralityType aCentralityType, AnalysisRunType aType=kTrain, int aNPartialAnalysis=2, TString aDirNameModifier="");
   virtual ~PlotPartnersLamKch();
 
   virtual TCanvas* DrawPurity();
@@ -26,6 +26,8 @@ public:
   virtual TCanvas* DrawAvgSepCfs(AnalysisType aAnalysisType, bool aDrawConj);
 
   virtual TCanvas* ViewPart1MassFail(bool aDrawWideRangeToo);
+
+  virtual TCanvas* DrawMassAssumingK0ShortHypothesis(AnalysisType aAnalysisType);
 
 
 private:

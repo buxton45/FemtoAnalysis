@@ -199,8 +199,8 @@ int main(int argc, char **argv)
 //    FitPairAnalysis* tLamKchP0010 = new FitPairAnalysis(FileLocationBase,FileLocationBaseMC,kLamKchP,k0010);
 //    FitPairAnalysis* tALamKchM0010 = new FitPairAnalysis(FileLocationBase,FileLocationBaseMC,kALamKchM,k0010);
 
-    FitPairAnalysis* tLamKchP0010 = new FitPairAnalysis(FileLocationBaseTrain,FileLocationBaseTrainMC,kLamKchP,k0010,2,true);
-    FitPairAnalysis* tALamKchM0010 = new FitPairAnalysis(FileLocationBaseTrain,FileLocationBaseTrainMC,kALamKchM,k0010,2,true);
+    FitPairAnalysis* tLamKchP0010 = new FitPairAnalysis(FileLocationBaseTrain,FileLocationBaseTrainMC,kLamKchP,k0010,kTrain,2);
+    FitPairAnalysis* tALamKchM0010 = new FitPairAnalysis(FileLocationBaseTrain,FileLocationBaseTrainMC,kALamKchM,k0010,kTrain,2);
 
 
     vector<FitPairAnalysis*> tVecOfPairAnalysisLamKchPwConj;

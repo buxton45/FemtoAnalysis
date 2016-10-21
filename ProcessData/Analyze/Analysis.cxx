@@ -138,7 +138,7 @@ double FitGausAndTwoExp(double *x, double *par)
 
 //________________________________________________________________________________________________________________
 Analysis::Analysis(TString aAnalysisName, vector<PartialAnalysis*> &aPartialAnalysisCollection, bool aCombineConjugates) :
-  fTrainResults(false),
+  fAnalysisRunType(kTrain),
   fCombineConjugates(aCombineConjugates),
   fAnalysisName(aAnalysisName),
   fPartialAnalysisCollection(aPartialAnalysisCollection),
@@ -258,8 +258,8 @@ Analysis::Analysis(TString aAnalysisName, vector<PartialAnalysis*> &aPartialAnal
 
 
 //________________________________________________________________________________________________________________
-Analysis::Analysis(TString aFileLocationBase, AnalysisType aAnalysisType, CentralityType aCentralityType, int aNPartialAnalysis, bool aIsTrainResults) :
-  fTrainResults(aIsTrainResults),
+Analysis::Analysis(TString aFileLocationBase, AnalysisType aAnalysisType, CentralityType aCentralityType, AnalysisRunType aRunType, int aNPartialAnalysis, TString aDirNameModifier) :
+  fAnalysisRunType(aRunType),
   fCombineConjugates(false),
   fAnalysisName(0),
   fPartialAnalysisCollection(0),
@@ -338,7 +338,7 @@ Analysis::Analysis(TString aFileLocationBase, AnalysisType aAnalysisType, Centra
   fAnalysisName = TString(cAnalysisBaseTags[fAnalysisType]) + TString(cCentralityTags[fCentralityType]);
 
   int iStart;
-  if(fTrainResults) iStart=0;
+  if(fAnalysisRunType==kTrain || fAnalysisRunType==kTrainSys) iStart=0;
   else iStart = 2;
 
   for(int i=iStart; i<fNPartialAnalysis+iStart; i++)
@@ -350,7 +350,7 @@ Analysis::Analysis(TString aFileLocationBase, AnalysisType aAnalysisType, Centra
 
     TString tPartialAnalysisName = fAnalysisName + cBFieldTags[tBFieldType];
 
-    PartialAnalysis* tPartialAnalysis = new PartialAnalysis(tFileLocation, tPartialAnalysisName, fAnalysisType, tBFieldType, fCentralityType, fTrainResults);
+    PartialAnalysis* tPartialAnalysis = new PartialAnalysis(tFileLocation, tPartialAnalysisName, fAnalysisType, tBFieldType, fCentralityType, fAnalysisRunType, aDirNameModifier);
 
     fPartialAnalysisCollection.push_back(tPartialAnalysis);
   } 
@@ -391,6 +391,18 @@ Analysis::Analysis(TString aFileLocationBase, AnalysisType aAnalysisType, Centra
 Analysis::~Analysis()
 {
   cout << "Analysis object (name: " << fAnalysisName << " ) is being deleted!!!" << endl;
+}
+
+//________________________________________________________________________________________________________________
+TH1* Analysis::SimpleAddTH1Collection(TString tHistosName)
+{
+  TH1* tReturnHist;
+  for(int i=0; i<fNPartialAnalysis; i++)
+  {
+    if(i==0) tReturnHist = (TH1*)fPartialAnalysisCollection[i]->Get1dHisto(tHistosName,tHistosName+TString::Format("_%d",i))->Clone();
+    else tReturnHist->Add((TH1*)fPartialAnalysisCollection[i]->Get1dHisto(tHistosName,tHistosName+TString::Format("_%d",i)));
+  }
+  return tReturnHist;
 }
 
 
@@ -2138,6 +2150,37 @@ void Analysis::GetMCKchPurity(bool aBeforePairCut)
   else{cout << TString(cParticleTags[fParticleTypes[1]]) << " Purity AfterPairCut = " << tKchPurity << endl;}
 
 }
+
+
+//________________________________________________________________________________________________________________
+TH1* Analysis::GetMassAssumingK0ShortHypothesis()
+{
+  //I will want this only for (Anti)Lambda, which is always particle1
+  TString tHistoName = TString("K0ShortMass_") + TString(cParticleTags[fParticleTypes[0]]) + TString("_Pass");
+  TH1* tReturnHist = SimpleAddTH1Collection(tHistoName);
+  return tReturnHist;
+}
+
+
+//________________________________________________________________________________________________________________
+TH1* Analysis::GetMassAssumingLambdaHypothesis()
+{
+  //I will want this only for K0Short, which is always particle2
+  TString tHistoName = TString("LambdaMass_") + TString(cParticleTags[fParticleTypes[1]]) + TString("_Pass");
+  TH1* tReturnHist = SimpleAddTH1Collection(tHistoName);
+  return tReturnHist;
+}
+
+
+//________________________________________________________________________________________________________________
+TH1* Analysis::GetMassAssumingAntiLambdaHypothesis()
+{
+  //I will want this only for K0Short, which is always particle2
+  TString tHistoName = TString("AntiLambdaMass_") + TString(cParticleTags[fParticleTypes[1]]) + TString("_Pass");
+  TH1* tReturnHist = SimpleAddTH1Collection(tHistoName);
+  return tReturnHist;
+}
+
 
 
 

@@ -46,8 +46,8 @@ class CanvasPartition;
 class PlotPartners {
 
 public:
-  PlotPartners(TString aFileLocationBase, AnalysisType aAnalysisType, CentralityType aCentralityType, int aNPartialAnalysis=5, bool aIsTrainResults=false);
-  PlotPartners(TString aFileLocationBase, TString aFileLocationBaseMC, AnalysisType aAnalysisType, CentralityType aCentralityType, int aNPartialAnalysis=5, bool aIsTrainResults=false);
+  PlotPartners(TString aFileLocationBase, AnalysisType aAnalysisType, CentralityType aCentralityType, AnalysisRunType aType=kTrain, int aNPartialAnalysis=2, TString aDirNameModifier="");
+  PlotPartners(TString aFileLocationBase, TString aFileLocationBaseMC, AnalysisType aAnalysisType, CentralityType aCentralityType, AnalysisRunType aType=kTrain, int aNPartialAnalysis=2, TString aDirNameModifier="");
   virtual ~PlotPartners();
 
   void SetupAxis(TAxis* aAxis, double aMin, double aMax, TString aTitle, 

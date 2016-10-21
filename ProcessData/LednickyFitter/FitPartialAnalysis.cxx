@@ -16,8 +16,8 @@ ClassImp(FitPartialAnalysis)
 
 
 //________________________________________________________________________________________________________________
-FitPartialAnalysis::FitPartialAnalysis(TString aFileLocation, TString aAnalysisName, AnalysisType aAnalysisType, CentralityType aCentralityType, BFieldType aBFieldType, bool aIsTrainResults) : 
-  fTrainResults(aIsTrainResults),
+FitPartialAnalysis::FitPartialAnalysis(TString aFileLocation, TString aAnalysisName, AnalysisType aAnalysisType, CentralityType aCentralityType, BFieldType aBFieldType, AnalysisRunType aRunType, TString aDirNameModifier) : 
+  fAnalysisRunType(aRunType),
   fFileLocation(aFileLocation),
   fFileLocationMC(0),
   fAnalysisName(aAnalysisName),
@@ -63,6 +63,7 @@ FitPartialAnalysis::FitPartialAnalysis(TString aFileLocation, TString aAnalysisN
 {
 
   fDirectoryName = TString(cAnalysisBaseTags[fAnalysisType]) + TString(cCentralityTags[fCentralityType]);
+  if(!aDirNameModifier.IsNull()) fDirectoryName += aDirNameModifier;
 
   BuildKStarCf(fKStarMinNorm,fKStarMaxNorm);
 
@@ -150,8 +151,8 @@ FitPartialAnalysis::FitPartialAnalysis(TString aFileLocation, TString aAnalysisN
 
 
 //________________________________________________________________________________________________________________
-FitPartialAnalysis::FitPartialAnalysis(TString aFileLocation, TString aFileLocationMC, TString aAnalysisName, AnalysisType aAnalysisType, CentralityType aCentralityType, BFieldType aBFieldType, bool aIsTrainResults) : 
-  fTrainResults(aIsTrainResults),
+FitPartialAnalysis::FitPartialAnalysis(TString aFileLocation, TString aFileLocationMC, TString aAnalysisName, AnalysisType aAnalysisType, CentralityType aCentralityType, BFieldType aBFieldType, AnalysisRunType aRunType, TString aDirNameModifier) : 
+  fAnalysisRunType(aRunType),
   fFileLocation(aFileLocation),
   fFileLocationMC(aFileLocationMC),
   fAnalysisName(aAnalysisName),
@@ -197,6 +198,7 @@ FitPartialAnalysis::FitPartialAnalysis(TString aFileLocation, TString aFileLocat
 {
 
   fDirectoryName = TString(cAnalysisBaseTags[fAnalysisType]) + TString(cCentralityTags[fCentralityType]);
+  if(!aDirNameModifier.IsNull()) fDirectoryName += aDirNameModifier;
 
   BuildKStarCf(fKStarMinNorm,fKStarMaxNorm);
 
@@ -310,7 +312,7 @@ TObjArray* FitPartialAnalysis::ConnectAnalysisDirectory(TString aFileLocation, T
   TList *tFemtolist;
   TString tFemtoListName;
   TDirectoryFile *tDirFile;
-  if(fTrainResults)
+  if(fAnalysisRunType==kTrain || fAnalysisRunType==kTrainSys)
   {
     tDirFile = (TDirectoryFile*)tFile->Get("PWG2FEMTO");
     if(aDirectoryName.Contains("LamKch")) tFemtoListName = "cLamcKch_femtolist";
@@ -319,7 +321,7 @@ TObjArray* FitPartialAnalysis::ConnectAnalysisDirectory(TString aFileLocation, T
     else
     {
       cout << "ERROR in FitPartialAnalysis::ConnectAnalysisDirectory!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
-      cout << "Invalid aDirectoryName for fTrainResults=true:  aDirectoryName = " << aDirectoryName << endl;
+      cout << "Invalid aDirectoryName for fAnalysisRunType=kTrain||kTrainSys:  aDirectoryName = " << aDirectoryName << endl;
       assert(0);
     }
     tFemtolist = (TList*)tDirFile->Get(tFemtoListName);
@@ -354,7 +356,7 @@ TObjArray* FitPartialAnalysis::ConnectAnalysisDirectory(TString aFileLocation, T
   tFemtolist->Delete();
   delete tFemtolist;
 
-  if(fTrainResults) 
+  if(fAnalysisRunType==kTrain || fAnalysisRunType==kTrainSys) 
   {
     tDirFile->Close();
     delete tDirFile;

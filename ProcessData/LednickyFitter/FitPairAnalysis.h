@@ -53,8 +53,8 @@ public:
 
   //Constructor, destructor, copy constructor, assignment operator
   FitPairAnalysis(TString aAnalysisName, vector<FitPartialAnalysis*> &aFitPartialAnalysisCollection);
-  FitPairAnalysis(TString aFileLocationBase, AnalysisType aAnalysisType, CentralityType aCentralityType, int aNFitPartialAnalysis=5, bool aIsTrainResults=false);
-  FitPairAnalysis(TString aFileLocationBase, TString aFileLocationBaseMC, AnalysisType aAnalysisType, CentralityType aCentralityType, int aNFitPartialAnalysis=5, bool aIsTrainResults=false);
+  FitPairAnalysis(TString aFileLocationBase, AnalysisType aAnalysisType, CentralityType aCentralityType, AnalysisRunType aRunType=kTrain, int aNFitPartialAnalysis=2, TString aDirNameModifier="");
+  FitPairAnalysis(TString aFileLocationBase, TString aFileLocationBaseMC, AnalysisType aAnalysisType, CentralityType aCentralityType, AnalysisRunType aRunType=kTrain, int aNFitPartialAnalysis=2, TString aDirNameModifier="");
   virtual ~FitPairAnalysis();
 
   void BuildModelKStarTrueVsRecMixed();
@@ -120,7 +120,7 @@ public:
   bool AreTrainResults();
 
 private:
-  bool fTrainResults;
+  AnalysisRunType fAnalysisRunType;
   TString fAnalysisName;
   vector<FitPartialAnalysis*> fFitPartialAnalysisCollection;
   int fNFitPartialAnalysis;
@@ -204,7 +204,7 @@ inline double FitPairAnalysis::GetKStarMaxNorm() {return fKStarMaxNorm;}
 
 inline vector<TH2D*> FitPairAnalysis::GetTransformMatrices() {return fTransformMatrices;}
 
-inline bool FitPairAnalysis::AreTrainResults() {return fTrainResults;}
+inline bool FitPairAnalysis::AreTrainResults() {if(fAnalysisRunType==kTrain || fAnalysisRunType==kTrainSys) return true;}
 #endif
 
 

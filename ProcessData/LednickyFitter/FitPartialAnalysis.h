@@ -56,8 +56,8 @@ class FitPartialAnalysis {
 public:
 
   //Constructor, destructor, copy constructor, assignment operator
-  FitPartialAnalysis(TString aFileLocation, TString aAnalysisName, AnalysisType aAnalysisType, CentralityType aCentralityType, BFieldType aBFieldType, bool aIsTrainResults=false);
-  FitPartialAnalysis(TString aFileLocation, TString aFileLocationMC, TString aAnalysisName, AnalysisType aAnalysisType, CentralityType aCentralityType, BFieldType aBFieldType, bool aIsTrainResults=false);
+  FitPartialAnalysis(TString aFileLocation, TString aAnalysisName, AnalysisType aAnalysisType, CentralityType aCentralityType, BFieldType aBFieldType, AnalysisRunType aRunType=kTrain, TString aDirNameModifier="");
+  FitPartialAnalysis(TString aFileLocation, TString aFileLocationMC, TString aAnalysisName, AnalysisType aAnalysisType, CentralityType aCentralityType, BFieldType aBFieldType, AnalysisRunType aRunType=kTrain, TString aDirNameModifier="");
   virtual ~FitPartialAnalysis();
 
   TObjArray* ConnectAnalysisDirectory(TString aFileLocation, TString aDirectoryName);
@@ -104,7 +104,7 @@ public:
   TH2* GetModelKStarTrueVsRecMixed();
 
 private:
-  bool fTrainResults;
+  AnalysisRunType fAnalysisRunType;
   TString fFileLocation;
   TString fFileLocationMC;
   TString fAnalysisName;

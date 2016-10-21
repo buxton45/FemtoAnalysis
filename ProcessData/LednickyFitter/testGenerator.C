@@ -19,7 +19,7 @@ int main(int argc, char **argv)
   TString FileLocationBaseMC_Train = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_20161012/Results_cLamcKchMC_20161012";
 
 
-  FitGenerator* tLamKchP = new FitGenerator(FileLocationBase_Train,FileLocationBaseMC_Train,kLamKchP,2,true);
+  FitGenerator* tLamKchP = new FitGenerator(FileLocationBase_Train,FileLocationBaseMC_Train,kLamKchP,kTrain,2);
 
 //  TCanvas* tKStarCan = tLamKchP->DrawKStarCfs();
 

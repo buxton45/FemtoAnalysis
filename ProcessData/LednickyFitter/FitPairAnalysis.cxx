@@ -19,7 +19,7 @@ ClassImp(FitPairAnalysis)
 
 //________________________________________________________________________________________________________________
 FitPairAnalysis::FitPairAnalysis(TString aAnalysisName, vector<FitPartialAnalysis*> &aFitPartialAnalysisCollection) :
-  fTrainResults(false),
+  fAnalysisRunType(kTrain),
   fAnalysisName(aAnalysisName),
   fFitPartialAnalysisCollection(aFitPartialAnalysisCollection),
   fNFitPartialAnalysis(fFitPartialAnalysisCollection.size()),
@@ -77,8 +77,8 @@ FitPairAnalysis::FitPairAnalysis(TString aAnalysisName, vector<FitPartialAnalysi
 
 
 //________________________________________________________________________________________________________________
-FitPairAnalysis::FitPairAnalysis(TString aFileLocationBase, AnalysisType aAnalysisType, CentralityType aCentralityType, int aNFitPartialAnalysis, bool aIsTrainResults) :
-  fTrainResults(aIsTrainResults),
+FitPairAnalysis::FitPairAnalysis(TString aFileLocationBase, AnalysisType aAnalysisType, CentralityType aCentralityType, AnalysisRunType aRunType, int aNFitPartialAnalysis, TString aDirNameModifier) :
+  fAnalysisRunType(aRunType),
   fAnalysisName(0),
   fFitPartialAnalysisCollection(0),
   fNFitPartialAnalysis(aNFitPartialAnalysis),
@@ -111,7 +111,7 @@ FitPairAnalysis::FitPairAnalysis(TString aFileLocationBase, AnalysisType aAnalys
   fAnalysisName = TString(cAnalysisBaseTags[fAnalysisType]) + TString(cCentralityTags[fCentralityType]);
 
   int iStart;
-  if(fTrainResults) iStart=0;
+  if(fAnalysisRunType==kTrain || fAnalysisRunType==kTrainSys) iStart=0;
   else iStart = 2;
 
   for(int i=iStart; i<fNFitPartialAnalysis+iStart; i++)
@@ -123,7 +123,7 @@ FitPairAnalysis::FitPairAnalysis(TString aFileLocationBase, AnalysisType aAnalys
 
     TString tFitPartialAnalysisName = fAnalysisName + cBFieldTags[tBFieldType];
 
-    FitPartialAnalysis* tFitPartialAnalysis = new FitPartialAnalysis(tFileLocation, tFitPartialAnalysisName, fAnalysisType, fCentralityType, tBFieldType, fTrainResults);
+    FitPartialAnalysis* tFitPartialAnalysis = new FitPartialAnalysis(tFileLocation, tFitPartialAnalysisName, fAnalysisType, fCentralityType, tBFieldType, fAnalysisRunType, aDirNameModifier);
 
     fFitPartialAnalysisCollection.push_back(tFitPartialAnalysis);
   } 
@@ -142,8 +142,8 @@ FitPairAnalysis::FitPairAnalysis(TString aFileLocationBase, AnalysisType aAnalys
 }
 
 //________________________________________________________________________________________________________________
-FitPairAnalysis::FitPairAnalysis(TString aFileLocationBase, TString aFileLocationBaseMC, AnalysisType aAnalysisType, CentralityType aCentralityType, int aNFitPartialAnalysis, bool aIsTrainResults) :
-  fTrainResults(aIsTrainResults),
+FitPairAnalysis::FitPairAnalysis(TString aFileLocationBase, TString aFileLocationBaseMC, AnalysisType aAnalysisType, CentralityType aCentralityType, AnalysisRunType aRunType, int aNFitPartialAnalysis, TString aDirNameModifier) :
+  fAnalysisRunType(aRunType),
   fAnalysisName(0),
   fFitPartialAnalysisCollection(0),
   fNFitPartialAnalysis(aNFitPartialAnalysis),
@@ -176,7 +176,7 @@ FitPairAnalysis::FitPairAnalysis(TString aFileLocationBase, TString aFileLocatio
   fAnalysisName = TString(cAnalysisBaseTags[fAnalysisType]) + TString(cCentralityTags[fCentralityType]);
 
   int iStart;
-  if(fTrainResults) iStart=0;
+  if(fAnalysisRunType==kTrain || fAnalysisRunType==kTrainSys) iStart=0;
   else iStart = 2;
 
   for(int i=iStart; i<fNFitPartialAnalysis+iStart; i++)
@@ -191,7 +191,7 @@ FitPairAnalysis::FitPairAnalysis(TString aFileLocationBase, TString aFileLocatio
 
     TString tFitPartialAnalysisName = fAnalysisName + cBFieldTags[tBFieldType];
 
-    FitPartialAnalysis* tFitPartialAnalysis = new FitPartialAnalysis(tFileLocation, tFileLocationMC, tFitPartialAnalysisName, fAnalysisType, fCentralityType, tBFieldType, fTrainResults);
+    FitPartialAnalysis* tFitPartialAnalysis = new FitPartialAnalysis(tFileLocation, tFileLocationMC, tFitPartialAnalysisName, fAnalysisType, fCentralityType, tBFieldType, fAnalysisRunType, aDirNameModifier);
 
     fFitPartialAnalysisCollection.push_back(tFitPartialAnalysis);
   } 
@@ -332,7 +332,7 @@ void FitPairAnalysis::CreateFitNormParameters()
 
   fNFitNormParams = fFitNormParameters.size();
 
-  if(!fTrainResults && fNFitNormParams != 5)
+  if(fAnalysisRunType==kGrid && fNFitNormParams != 5)
   {
     cout << "WARNING:  In FitPairAnalysis (name: " << fAnalysisName << "), fNFitNormParams != 5 (the typical value)" << endl;
     cout << "Instead, fNFitNormParams = " << fNFitNormParams << endl;
@@ -341,7 +341,7 @@ void FitPairAnalysis::CreateFitNormParameters()
     cin >> tResponse;
     assert(tResponse);
   }
-  else if(fTrainResults && fNFitNormParams != 2)
+  else if(!(fAnalysisRunType==kGrid) && fNFitNormParams != 2)
   {
     cout << "WARNING:  In FitPairAnalysis (name: " << fAnalysisName << "), fNFitNormParams != 2 (the typical value)" << endl;
     cout << "Instead, fNFitNormParams = " << fNFitNormParams << endl;

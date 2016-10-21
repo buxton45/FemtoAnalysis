@@ -16,8 +16,8 @@ ClassImp(PartialAnalysis)
 
 
 //________________________________________________________________________________________________________________
-PartialAnalysis::PartialAnalysis(TString aFileLocation, TString aAnalysisName, AnalysisType aAnalysisType, BFieldType aBFieldType, CentralityType aCentralityType, bool aIsTrainResults) :
-  fTrainResults(aIsTrainResults),
+PartialAnalysis::PartialAnalysis(TString aFileLocation, TString aAnalysisName, AnalysisType aAnalysisType, BFieldType aBFieldType, CentralityType aCentralityType, AnalysisRunType aRunType, TString aDirNameModifier) :
+  fAnalysisRunType(aRunType),
   fFileLocation(aFileLocation),
   fAnalysisName(aAnalysisName),
   fDirectoryName(0),
@@ -88,6 +88,7 @@ PartialAnalysis::PartialAnalysis(TString aFileLocation, TString aAnalysisName, A
 {
 
   fDirectoryName = fAnalysisBaseTag + fCentralityTag;
+  if(!aDirNameModifier.IsNull()) fDirectoryName += aDirNameModifier;
   fDir = ConnectAnalysisDirectory(fFileLocation,fDirectoryName);
 
   BuildKStarCf(/*double aMinNorm=0.32, double aMaxNorm=0.4*/);
@@ -151,7 +152,7 @@ TObjArray* PartialAnalysis::ConnectAnalysisDirectory(TString aFileLocation, TStr
   TList *tFemtolist;
   TString tFemtoListName;
   TDirectoryFile *tDirFile;
-  if(fTrainResults)
+  if(fAnalysisRunType==kTrain || fAnalysisRunType==kTrainSys)
   {
     tDirFile = (TDirectoryFile*)tFile->Get("PWG2FEMTO");
     if(aDirectoryName.Contains("LamKch")) tFemtoListName = "cLamcKch_femtolist";
@@ -160,7 +161,7 @@ TObjArray* PartialAnalysis::ConnectAnalysisDirectory(TString aFileLocation, TStr
     else
     {
       cout << "ERROR in Analysis::ConnectAnalysisDirectory!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
-      cout << "Invalid aDirectoryName for fTrainResults=true:  aDirectoryName = " << aDirectoryName << endl;
+      cout << "Invalid aDirectoryName for fAnalysisRunType==kTrain||kTrainSys:  aDirectoryName = " << aDirectoryName << endl;
       assert(0);
     }
     tFemtolist = (TList*)tDirFile->Get(tFemtoListName);
@@ -195,7 +196,7 @@ TObjArray* PartialAnalysis::ConnectAnalysisDirectory(TString aFileLocation, TStr
   tFemtolist->Delete();
   delete tFemtolist;
 
-  if(fTrainResults) 
+  if(fAnalysisRunType==kTrain || fAnalysisRunType==kTrainSys) 
   {
     tDirFile->Close();
     delete tDirFile;

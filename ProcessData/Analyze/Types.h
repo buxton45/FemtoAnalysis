@@ -16,6 +16,7 @@ using std::vector;
   //-------enum types-----------------------------------------
   enum PartnerAnalysisType {kcLamK0=0, kcLamcKch=1, kcXicKch=2, kcLamcLam=3, kcLamcPi=4};
 
+  enum AnalysisRunType {kTrain=0, kTrainSys=1, kGrid=2};
   enum AnalysisType {kLamK0=0, kALamK0=1, kLamKchP=2, kALamKchP=3, kLamKchM=4, kALamKchM=5, kXiKchP=6, kAXiKchP=7, kXiKchM=8, kAXiKchM=9, kLamLam=10, kALamALam=11, kLamALam=12, kLamPiP=13, kALamPiP=14, kLamPiM=15, kALamPiM=16};
   enum BFieldType {kFemtoPlus=0, kFemtoMinus=1, kBp1=2, kBp2=3, kBm1=4, kBm2=5, kBm3=6};
   enum CentralityType {k0010=0, k1030=1, k3050=2, kMB=3};
