@@ -16,7 +16,8 @@ LednickyFitter *GlobalFitter = NULL;
 //______________________________________________________________________________
 void GlobalFCN(Int_t &npar, Double_t *gin, Double_t &f, Double_t *par, Int_t iflag)
 {
-  GlobalFitter->CalculateChi2PML(npar,f,par);
+//  GlobalFitter->CalculateChi2PML(npar,f,par);
+  GlobalFitter->CalculateFitFunction(npar,f,par);
 }
 
 
@@ -851,7 +852,7 @@ void FitGenerator::SetAllParameters()
 
 
 //________________________________________________________________________________________________________________
-void FitGenerator::DoFit()
+void FitGenerator::DoFit(bool aApplyMomResCorrection)
 {
   SetAllParameters();
 
@@ -859,6 +860,7 @@ void FitGenerator::DoFit()
 
   fLednickyFitter = new LednickyFitter(fSharedAn);
   fLednickyFitter->GetFitSharedAnalyses()->GetMinuitObject()->SetFCN(GlobalFCN);
+  fLednickyFitter->SetApplyMomResCorrection(aApplyMomResCorrection);
   GlobalFitter = fLednickyFitter;
 
   fLednickyFitter->DoFit();

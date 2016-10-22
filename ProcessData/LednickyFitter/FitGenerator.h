@@ -48,7 +48,7 @@ public:
   void SetDefaultSharedParameters();
 
   void SetAllParameters();
-  void DoFit();
+  void DoFit(bool aApplyMomResCorrection=false);
 
 
   //inline 

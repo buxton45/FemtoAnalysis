@@ -19,12 +19,16 @@ int main(int argc, char **argv)
   TString FileLocationBaseMC_Train = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_20161012/Results_cLamcKchMC_20161012";
 
 
-  FitGenerator* tLamKchP = new FitGenerator(FileLocationBase_Train,FileLocationBaseMC_Train,kLamKchP,kTrain,2);
+  FitGenerator* tLamKchP = new FitGenerator(FileLocationBase_Train,FileLocationBaseMC_Train,kLamKchP,kTrain,2,k0010);
+
 
 //  TCanvas* tKStarCan = tLamKchP->DrawKStarCfs();
 
   //tLamKchP->SetDefaultSharedParameters();
-  tLamKchP->DoFit();
+
+//TODO!!!!  If I want to apply mom res correction to full fit, I need to give non-central analyses ability to grab
+//           the matrix from the central analyses
+  tLamKchP->DoFit(true);
   TCanvas* tKStarwFitsCan = tLamKchP->DrawKStarCfswFits();
 
 //  TString FileLocationBase = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_20161007/Results_cLamcKch_20161007";
