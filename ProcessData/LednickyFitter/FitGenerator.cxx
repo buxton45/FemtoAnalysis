@@ -39,6 +39,7 @@ FitGenerator::FitGenerator(TString aFileLocationBase, TString aFileLocationBaseM
   fScattFitParams(),
   fLambdaFitParams(),
   fShareLambdaParams(aShareLambdaParams),
+  fFitParamsPerPad(),
 
   fSharedAn(0),
   fLednickyFitter(0)
@@ -247,7 +248,16 @@ void FitGenerator::SetNAnalyses()
     cout << "ERROR:  FitGenerator::SetNAnalyses():  Invalid fCentralityType = " << fCentralityType << endl;
     assert(0);
   }
-
+  fFitParamsPerPad.clear();
+  fFitParamsPerPad.resize(fNAnalyses);
+  for(int i=0; i<fNAnalyses; i++)
+  {
+    fFitParamsPerPad[i].emplace_back(kLambda,0.);
+    fFitParamsPerPad[i].emplace_back(kRadius,0.);
+    fFitParamsPerPad[i].emplace_back(kRef0,0.);
+    fFitParamsPerPad[i].emplace_back(kImf0,0.);
+    fFitParamsPerPad[i].emplace_back(kd0,0.);
+  }
 }
 
 
@@ -281,6 +291,43 @@ void FitGenerator::SetupAxis(TAxis* aAxis, TString aTitle, float aTitleSize, flo
 
   aAxis->SetNdivisions(aNdivisions);
 
+}
+
+//________________________________________________________________________________________________________________
+void FitGenerator::CreateParamInitValuesText(CanvasPartition *aCanPart, int aNx, int aNy, double aTextXmin, double aTextYmin, double aTextWidth, double aTextHeight, double aTextFont, double aTextSize)
+{
+  int tNx=0, tNy=0;
+  if(fNAnalyses == 6) {tNx=2; tNy=3;}
+  else if(fNAnalyses == 2 || fNAnalyses==1) {tNx=fNAnalyses; tNy=1;}
+  else if(fNAnalyses == 3) {tNx=1; tNy=fNAnalyses;}
+  else assert(0);
+
+  int tPosition = aNx + aNy*tNx;
+
+  double tLambda, tRadius, tReF0, tImF0, tD0;
+
+  tLambda = fFitParamsPerPad[tPosition][0].GetStartValue();
+  tRadius = fFitParamsPerPad[tPosition][1].GetStartValue();
+  tReF0 = fScattFitParams[0].GetStartValue();
+  tImF0 = fScattFitParams[1].GetStartValue();
+  tD0 = fScattFitParams[2].GetStartValue();
+
+  assert(tReF0 == fFitParamsPerPad[tPosition][2].GetStartValue());
+  assert(tImF0 == fFitParamsPerPad[tPosition][3].GetStartValue());
+  assert(tD0 == fFitParamsPerPad[tPosition][4].GetStartValue());
+
+  TPaveText *tText = aCanPart->SetupTPaveText("Initial Values",aNx,aNy,aTextXmin,aTextYmin,aTextWidth,aTextHeight,aTextFont,aTextSize);
+  tText->AddText(TString::Format("#Lambda = %0.3f",tLambda));
+  tText->AddText(TString::Format("R = %0.3f",tRadius));
+  tText->AddText(TString::Format("Re[f0] = %0.3f",tReF0));
+  tText->AddText(TString::Format("Im[f0] = %0.3f",tImF0));
+  tText->AddText(TString::Format("d0 = %0.3f",tD0));
+
+  tText->SetTextAlign(33);
+
+//  tText->GetLine(0)->SetTextSize(0.08);
+  tText->GetLine(0)->SetTextFont(63);
+  aCanPart->AddGraphPadName(tText,aNx,aNy);
 }
 
 
@@ -418,6 +465,8 @@ TCanvas* FitGenerator::DrawKStarCfswFits()
 
       tCanPart->AddGraph(i,j,(TH1*)fSharedAn->GetKStarCfHeavy(tAnalysisNumber)->GetHeavyCf(),"");
       tCanPart->AddGraph(i,j,(TF1*)fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetFit(),"");
+
+      CreateParamInitValuesText(tCanPart,i,j,0.25,0.12,0.15,0.50,43,10);
     }
   }
 
@@ -780,6 +829,9 @@ void FitGenerator::SetAllParameters()
 
     SetSharedParameter(kRadius, fRadiusFitParams[0].GetStartValue(),
                        fRadiusFitParams[0].GetLowerBound(), fRadiusFitParams[0].GetUpperBound());
+
+    fFitParamsPerPad[0][0] = fLambdaFitParams[0];
+    fFitParamsPerPad[0][1] = fRadiusFitParams[0];
   }
   else if(fNAnalyses==2)
   {
@@ -787,6 +839,8 @@ void FitGenerator::SetAllParameters()
     {
       SetSharedParameter(kLambda, Share01, fLambdaFitParams[0].GetStartValue(), 
                          fLambdaFitParams[0].GetLowerBound(), fLambdaFitParams[0].GetUpperBound());
+
+      for(int i=0; i<fNAnalyses; i++) fFitParamsPerPad[i][0] = fLambdaFitParams[0];
     }
     else
     {
@@ -794,10 +848,15 @@ void FitGenerator::SetAllParameters()
                    fLambdaFitParams[0].GetLowerBound(), fLambdaFitParams[0].GetUpperBound());
       SetParameter(kLambda, 1, fLambdaFitParams[1].GetStartValue(),
                    fLambdaFitParams[1].GetLowerBound(), fLambdaFitParams[1].GetUpperBound());
+
+      fFitParamsPerPad[0][0] = fLambdaFitParams[0];
+      fFitParamsPerPad[1][0] = fLambdaFitParams[1];
     }
 
     SetSharedParameter(kRadius, Share01, fRadiusFitParams[0].GetStartValue(),
                        fRadiusFitParams[0].GetLowerBound(), fRadiusFitParams[0].GetUpperBound());
+
+    for(int i=0; i<fNAnalyses; i++) fFitParamsPerPad[i][1] = fRadiusFitParams[0];
   }
   else if(fNAnalyses==3)
   {
@@ -807,6 +866,19 @@ void FitGenerator::SetAllParameters()
                  fLambdaFitParams[1].GetLowerBound(), fLambdaFitParams[1].GetUpperBound());
     SetParameter(kLambda, 2, fLambdaFitParams[2].GetStartValue(),
                  fLambdaFitParams[2].GetLowerBound(), fLambdaFitParams[2].GetUpperBound());
+
+    SetParameter(kRadius, 0, fRadiusFitParams[0].GetStartValue(),
+                 fRadiusFitParams[0].GetLowerBound(), fRadiusFitParams[0].GetUpperBound());
+    SetParameter(kRadius, 1, fRadiusFitParams[1].GetStartValue(),
+                 fRadiusFitParams[1].GetLowerBound(), fRadiusFitParams[1].GetUpperBound());
+    SetParameter(kRadius, 2, fRadiusFitParams[2].GetStartValue(),
+                 fRadiusFitParams[2].GetLowerBound(), fRadiusFitParams[2].GetUpperBound());
+
+    for(int i=0; i<fNAnalyses; i++)
+    {
+      fFitParamsPerPad[i][0] = fLambdaFitParams[i];
+      fFitParamsPerPad[i][1] = fRadiusFitParams[i];
+    }
   }
   else if(fNAnalyses==6)
   {
@@ -817,6 +889,12 @@ void FitGenerator::SetAllParameters()
     SetSharedParameter(kRadius, Share45, fRadiusFitParams[k3050].GetStartValue(),
                        fRadiusFitParams[k3050].GetLowerBound(), fRadiusFitParams[k3050].GetUpperBound());
 
+    for(int i=0; i<(fNAnalyses/2); i++)
+    {
+      fFitParamsPerPad[2*i][1] = fRadiusFitParams[i];
+      fFitParamsPerPad[2*i+1][1] = fRadiusFitParams[i];
+    }
+
     if(fShareLambdaParams)
     {
       SetSharedParameter(kLambda, Share01, fLambdaFitParams[0].GetStartValue(),
@@ -825,6 +903,12 @@ void FitGenerator::SetAllParameters()
                          fLambdaFitParams[1].GetLowerBound(), fLambdaFitParams[1].GetUpperBound());
       SetSharedParameter(kLambda, Share45, fLambdaFitParams[2].GetStartValue(),
                          fLambdaFitParams[2].GetLowerBound(), fLambdaFitParams[2].GetUpperBound());
+
+      for(int i=0; i<(fNAnalyses/2); i++)
+      {
+        fFitParamsPerPad[2*i][0] = fLambdaFitParams[i];
+        fFitParamsPerPad[2*i+1][0] = fLambdaFitParams[i];
+      }
     }
     else
     {
@@ -840,12 +924,21 @@ void FitGenerator::SetAllParameters()
                    fLambdaFitParams[4].GetLowerBound(), fLambdaFitParams[4].GetUpperBound());
       SetParameter(kLambda, 5, fLambdaFitParams[5].GetStartValue(),
                    fLambdaFitParams[5].GetLowerBound(), fLambdaFitParams[5].GetUpperBound());
+
+      for(int i=0; i<fNAnalyses; i++) fFitParamsPerPad[i][0] = fLambdaFitParams[i];
     }
   }
   else
   {
     cout << "ERROR:  FitGenerator::SetAllParameters:: Incorrect fNAnalyses = " << fNAnalyses << endl;
     assert(0);
+  }
+
+  for(int i=0; i<fNAnalyses; i++)
+  {
+    fFitParamsPerPad[i][2] = fScattFitParams[0];
+    fFitParamsPerPad[i][3] = fScattFitParams[1];
+    fFitParamsPerPad[i][4] = fScattFitParams[2];
   }
 
 }

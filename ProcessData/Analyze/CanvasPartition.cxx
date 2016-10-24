@@ -282,6 +282,13 @@ void CanvasPartition::SetupOptStat(int aNx, int aNy, double aStatX, double aStat
   gStyle->SetStatY(tNormalizedTextYmin);
 }
 
+//________________________________________________________________________________________________________________
+void CanvasPartition::AddGraphPadName(TPaveText* aText, int aNx, int aNy)
+{
+  int tPosition = aNx + aNy*fNx;
+  fGraphsPadNames[tPosition] = aText;
+}
+
 
 //________________________________________________________________________________________________________________
 void CanvasPartition::DrawInPad(int aNx, int aNy)
@@ -290,7 +297,7 @@ void CanvasPartition::DrawInPad(int aNx, int aNy)
   gStyle->SetOptStat(0);
   gStyle->SetOptTitle(0);
 
-  SetupOptStat(aNx,aNy,0.85,0.60,0.30,0.25);
+  SetupOptStat(aNx,aNy,0.85,0.60,0.20,0.25);
 
   int tPosition = aNx + aNy*fNx;
   TObjArray* tGraphsToDraw = ((TObjArray*)fGraphs->At(tPosition));

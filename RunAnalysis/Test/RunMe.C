@@ -28,7 +28,7 @@ TString outputname = "Results_cLamK0_20160928_Bm1_New.root";
 
 TString tConfiguration = "tMacroPath='%%/ConfigFemtoAnalysisSystematics.C'; tContainerName = 'cLamK0_femtolist'; ";
 //TString tParams = "@implementVertexCorrections = true; $|Lam|maxInvariantMass=1.165683; ";
-TString tParams = "@implementVertexCorrections = true; $|Lam|maxInvariantMass=1.165683; [0:10:30:50]; @monitorEvCutPassOnly=true; @monitorPart1CutPassOnly=true; @monitorPart2CutPassOnly=true; @monitorPairCutPassOnly=true; ?$|ALLV0S|maxDcaV0Daughters; ?[0.2:0.3:0.4:0.5:0.6]; ";
+TString tParams = "@implementVertexCorrections = true; $|Lam|maxInvariantMass=1.165683; [0:10:30:50]; @monitorEvCutPassOnly=true; @monitorPart1CutPassOnly=true; @monitorPart2CutPassOnly=true; @monitorPairCutPassOnly=true; ?$|Lam|minInvMassReject = [0.494614:0.492614:0.488614]; ?$|Lam|maxInvMassReject = [0.500614:0.502614:0.506614]; ";
 
 void RunMe()
 {

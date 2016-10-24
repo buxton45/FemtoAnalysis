@@ -19,8 +19,8 @@ int main(int argc, char **argv)
   PlotPartnersLamKch* tLamKch0010 = new PlotPartnersLamKch(FileLocationBase,FileLocationBaseMC,kLamKchP,k0010);
 */
 
-  TString FileLocationBase = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_20161020/Results_cLamcKch_20161020";
-  TString FileLocationBaseMC = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_20161020/Results_cLamcKchMC_20161020";
+  TString FileLocationBase = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_20161022/Results_cLamcKch_20161022";
+  TString FileLocationBaseMC = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_20161022/Results_cLamcKchMC_20161022";
   PlotPartnersLamKch* tLamKch0010 = new PlotPartnersLamKch(FileLocationBase,FileLocationBaseMC,kLamKchP,k0010,kTrain,2);
 
 
@@ -39,8 +39,8 @@ int main(int argc, char **argv)
 //-------------------------------------------------------------------------------
 
 
-  TString FileLocationBase_LamK0 = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamK0_20161020/Results_cLamK0_20161020";
-  TString FileLocationBaseMC_LamK0 = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamK0_20161020/Results_cLamK0MC_20161020";
+  TString FileLocationBase_LamK0 = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamK0_20161022/Results_cLamK0_20161022";
+  TString FileLocationBaseMC_LamK0 = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamK0_20161022/Results_cLamK0MC_20161022";
   PlotPartnersLamK0* tLamK00010 = new PlotPartnersLamK0(FileLocationBase_LamK0,FileLocationBaseMC_LamK0,kLamK0,k0010,kTrain,2);
 
 
