@@ -15,8 +15,8 @@ int main(int argc, char **argv)
   TString FileLocationBase_cLamcKch = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_AsRc_20151007/Results_cLamcKch_AsRc_20151007";
   TString FileLocationBaseMC_cLamcKch = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_AsRc_20151007/Results_cLamcKch_AsRcMC_20151007";
 
-  TString FileLocationBase_Train = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_20161012/Results_cLamcKch_20161012";
-  TString FileLocationBaseMC_Train = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_20161012/Results_cLamcKchMC_20161012";
+  TString FileLocationBase_Train = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_20161020/Results_cLamcKch_20161020";
+  TString FileLocationBaseMC_Train = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_20161020/Results_cLamcKchMC_20161020";
 
 
   FitGenerator* tLamKchP = new FitGenerator(FileLocationBase_Train,FileLocationBaseMC_Train,kLamKchP,kTrain,2,k0010);
@@ -28,7 +28,7 @@ int main(int argc, char **argv)
 
 //TODO!!!!  If I want to apply mom res correction to full fit, I need to give non-central analyses ability to grab
 //           the matrix from the central analyses
-  tLamKchP->DoFit(true);
+  tLamKchP->DoFit(false);
   TCanvas* tKStarwFitsCan = tLamKchP->DrawKStarCfswFits();
 
 //  TString FileLocationBase = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_20161007/Results_cLamcKch_20161007";

@@ -20,14 +20,14 @@ int main(int argc, char **argv)
 */
 
   TString FileLocationBase = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_20161020/Results_cLamcKch_20161020";
-  TString FileLocationBaseMC = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_20161012/Results_cLamcKchMC_20161012";
+  TString FileLocationBaseMC = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_20161020/Results_cLamcKchMC_20161020";
   PlotPartnersLamKch* tLamKch0010 = new PlotPartnersLamKch(FileLocationBase,FileLocationBaseMC,kLamKchP,k0010,kTrain,2);
 
-/*
+
   TCanvas* tCanPur = tLamKch0010->DrawPurity();
   TCanvas* tCanKStarCf = tLamKch0010->DrawKStarCfs();
   TCanvas* tCanKStarTrueVsRec = tLamKch0010->DrawKStarTrueVsRec(kMixed);
-*/
+
   TCanvas* tCanAvgSepCfs = tLamKch0010->DrawAvgSepCfs();
   TCanvas* tCanAvgSepCfsLamKchP = tLamKch0010->DrawAvgSepCfs(kLamKchP,true);
   TCanvas* tCanAvgSepCfsLamKchM = tLamKch0010->DrawAvgSepCfs(kLamKchM,true);
@@ -39,8 +39,8 @@ int main(int argc, char **argv)
 //-------------------------------------------------------------------------------
 
 
-  TString FileLocationBase_LamK0 = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_20161012/Results_cLamcKch_20161012";
-  TString FileLocationBaseMC_LamK0 = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_20161012/Results_cLamK0MC_20161012";
+  TString FileLocationBase_LamK0 = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamK0_20161020/Results_cLamK0_20161020";
+  TString FileLocationBaseMC_LamK0 = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamK0_20161020/Results_cLamK0MC_20161020";
   PlotPartnersLamK0* tLamK00010 = new PlotPartnersLamK0(FileLocationBase_LamK0,FileLocationBaseMC_LamK0,kLamK0,k0010,kTrain,2);
 
 
