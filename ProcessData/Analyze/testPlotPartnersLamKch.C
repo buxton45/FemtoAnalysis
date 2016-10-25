@@ -19,22 +19,24 @@ int main(int argc, char **argv)
   PlotPartnersLamKch* tLamKch0010 = new PlotPartnersLamKch(FileLocationBase,FileLocationBaseMC,kLamKchP,k0010);
 */
 
-  TString FileLocationBase = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_20161022/Results_cLamcKch_20161022";
-  TString FileLocationBaseMC = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_20161022/Results_cLamcKchMC_20161022";
+  TString DirectoryBase = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_20161022/";
+  TString FileLocationBase = DirectoryBase+"Results_cLamcKch_20161022";
+  TString FileLocationBaseMC = DirectoryBase+"/Results_cLamcKchMC_20161022";
   PlotPartnersLamKch* tLamKch0010 = new PlotPartnersLamKch(FileLocationBase,FileLocationBaseMC,kLamKchP,k0010,kTrain,2);
+  tLamKch0010->SetSaveLocationBase(DirectoryBase);
+  bool SaveImages = true;
 
+  TCanvas* tCanPur = tLamKch0010->DrawPurity(SaveImages);
+  TCanvas* tCanKStarCf = tLamKch0010->DrawKStarCfs(SaveImages);
+  TCanvas* tCanKStarTrueVsRec = tLamKch0010->DrawKStarTrueVsRec(kMixed,SaveImages);
 
-  TCanvas* tCanPur = tLamKch0010->DrawPurity();
-  TCanvas* tCanKStarCf = tLamKch0010->DrawKStarCfs();
-  TCanvas* tCanKStarTrueVsRec = tLamKch0010->DrawKStarTrueVsRec(kMixed);
+  TCanvas* tCanAvgSepCfs = tLamKch0010->DrawAvgSepCfs(SaveImages);
+  TCanvas* tCanAvgSepCfsLamKchP = tLamKch0010->DrawAvgSepCfs(kLamKchP,true,SaveImages);
+  TCanvas* tCanAvgSepCfsLamKchM = tLamKch0010->DrawAvgSepCfs(kLamKchM,true,SaveImages);
 
-  TCanvas* tCanAvgSepCfs = tLamKch0010->DrawAvgSepCfs();
-  TCanvas* tCanAvgSepCfsLamKchP = tLamKch0010->DrawAvgSepCfs(kLamKchP,true);
-  TCanvas* tCanAvgSepCfsLamKchM = tLamKch0010->DrawAvgSepCfs(kLamKchM,true);
+//  TCanvas* tCanPart1MassFail = tLamKch0010->ViewPart1MassFail(false,SaveImages);
 
-//  TCanvas* tCanPart1MassFail = tLamKch0010->ViewPart1MassFail(false);
-
-  TCanvas* tCanMassAssK0_LamKchP = tLamKch0010->DrawMassAssumingK0ShortHypothesis(kLamKchP);
+  TCanvas* tCanMassAssK0_LamKchP = tLamKch0010->DrawMassAssumingK0ShortHypothesis(kLamKchP,SaveImages);
 
 //-------------------------------------------------------------------------------
 

@@ -18,16 +18,16 @@ public:
   PlotPartnersLamKch(TString aFileLocationBase, TString aFileLocationBaseMC, AnalysisType aAnalysisType, CentralityType aCentralityType, AnalysisRunType aType=kTrain, int aNPartialAnalysis=2, TString aDirNameModifier="");
   virtual ~PlotPartnersLamKch();
 
-  virtual TCanvas* DrawPurity();
-  virtual TCanvas* DrawKStarCfs();
-  virtual TCanvas* DrawKStarTrueVsRec(KStarTrueVsRecType aType=kMixed);  // kSame, kRotSame, kMixed, kRotMixed};
+  virtual TCanvas* DrawPurity(bool aSaveImage=false);
+  virtual TCanvas* DrawKStarCfs(bool aSaveImage=false);
+  virtual TCanvas* DrawKStarTrueVsRec(KStarTrueVsRecType aType=kMixed, bool aSaveImage=false);  // kSame, kRotSame, kMixed, kRotMixed};
 
-  virtual TCanvas* DrawAvgSepCfs();
-  virtual TCanvas* DrawAvgSepCfs(AnalysisType aAnalysisType, bool aDrawConj);
+  virtual TCanvas* DrawAvgSepCfs(bool aSaveImage=false);
+  virtual TCanvas* DrawAvgSepCfs(AnalysisType aAnalysisType, bool aDrawConj, bool aSaveImage=false);
 
-  virtual TCanvas* ViewPart1MassFail(bool aDrawWideRangeToo);
+  virtual TCanvas* ViewPart1MassFail(bool aDrawWideRangeToo, bool aSaveImage=false);
 
-  virtual TCanvas* DrawMassAssumingK0ShortHypothesis(AnalysisType aAnalysisType);
+  virtual TCanvas* DrawMassAssumingK0ShortHypothesis(AnalysisType aAnalysisType, bool aSaveImage=false);
 
 
 private:

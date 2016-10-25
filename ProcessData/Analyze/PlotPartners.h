@@ -60,9 +60,14 @@ public:
 //  virtual TCanvas* DrawAvgSepCfs();
 //  virtual TCanvas* DrawKStarTrueVsRec();
 
+  bool ExistsSaveLocationBase();
+  void SetSaveLocationBase(TString aBase);
+
+
 
 protected:
   bool fContainsMC;
+  TString fSaveLocationBase;
 
   Analysis* fAnalysis1;     //eg LamKchP,  LamK0,  XiKchP
   Analysis* fConjAnalysis1; //eg ALamKchM, ALamK0, AXiKchM
@@ -82,5 +87,6 @@ protected:
 #endif
 };
 
+inline void PlotPartners::SetSaveLocationBase(TString aBase) {fSaveLocationBase=aBase;}
 
 #endif

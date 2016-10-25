@@ -19,6 +19,7 @@ ClassImp(PlotPartners)
 //________________________________________________________________________________________________________________
 PlotPartners::PlotPartners(TString aFileLocationBase, AnalysisType aAnalysisType, CentralityType aCentralityType, AnalysisRunType aRunType, int aNPartialAnalysis, TString aDirNameModifier) :
   fContainsMC(false),
+  fSaveLocationBase(""),
   fAnalysis1(0),
   fConjAnalysis1(0),
   fAnalysis2(0),
@@ -70,6 +71,7 @@ PlotPartners::PlotPartners(TString aFileLocationBase, AnalysisType aAnalysisType
 //________________________________________________________________________________________________________________
 PlotPartners::PlotPartners(TString aFileLocationBase, TString aFileLocationBaseMC, AnalysisType aAnalysisType, CentralityType aCentralityType, AnalysisRunType aRunType, int aNPartialAnalysis, TString aDirNameModifier) :
   fContainsMC(false),
+  fSaveLocationBase(""),
   fAnalysis1(0),
   fConjAnalysis1(0),
   fAnalysis2(0),
@@ -176,6 +178,23 @@ void PlotPartners::SetupAxis(TAxis* aAxis, TString aTitle, float aTitleSize, flo
   aAxis->SetLabelOffset(aLabelOffset);
 
   aAxis->SetNdivisions(aNdivisions);
+
+}
+//________________________________________________________________________________________________________________
+bool PlotPartners::ExistsSaveLocationBase()
+{
+  if(!fSaveLocationBase.IsNull()) return true;
+
+  cout << "fSaveLocationBase is Null!!!!!" << endl;
+  cout << "Create? (0=No 1=Yes)" << endl;
+  int tResponse;
+  cin >> tResponse;
+  if(!tResponse) return false;
+
+  cout << "Enter base:" << endl;
+  cin >> fSaveLocationBase;
+  if(fSaveLocationBase[fSaveLocationBase.Length()] != '/') fSaveLocationBase += TString("/");
+  return true;
 
 }
 
