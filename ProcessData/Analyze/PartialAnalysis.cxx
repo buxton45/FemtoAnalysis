@@ -123,12 +123,17 @@ PartialAnalysis::PartialAnalysis(TString aFileLocation, TString aAnalysisName, A
   SetParticleTypes();
   SetDaughterParticleTypes();
 
-  SetNEventsPassFail();
-  SetNPart1PassFail();
-  SetNPart2PassFail();
+  if(fAnalysisRunType != kTrainSys)  //TrainSys analyses DO NOT include FAIL cut monitors
+  {
+    SetNEventsPassFail();
+    SetNPart1PassFail();
+    SetNPart2PassFail();
+    SetPart1MassFail();
+  }
+
   SetNKStarNumEntries();
 
-  SetPart1MassFail();
+
 }
 
 
@@ -155,15 +160,18 @@ TObjArray* PartialAnalysis::ConnectAnalysisDirectory(TString aFileLocation, TStr
   if(fAnalysisRunType==kTrain || fAnalysisRunType==kTrainSys)
   {
     tDirFile = (TDirectoryFile*)tFile->Get("PWG2FEMTO");
-    if(aDirectoryName.Contains("LamKch")) tFemtoListName = "cLamcKch_femtolist";
-    else if(aDirectoryName.Contains("LamK0")) tFemtoListName = "cLamK0_femtolist";
-    else if(aDirectoryName.Contains("XiKch")) tFemtoListName = "cXicKch_femtolist";
+    if(aDirectoryName.Contains("LamKch")) tFemtoListName = "cLamcKch";
+    else if(aDirectoryName.Contains("LamK0")) tFemtoListName = "cLamK0";
+    else if(aDirectoryName.Contains("XiKch")) tFemtoListName = "cXicKch";
     else
     {
       cout << "ERROR in Analysis::ConnectAnalysisDirectory!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
       cout << "Invalid aDirectoryName for fAnalysisRunType==kTrain||kTrainSys:  aDirectoryName = " << aDirectoryName << endl;
       assert(0);
     }
+
+    if(fAnalysisRunType==kTrainSys) tFemtoListName += TString("_Systematics");
+    tFemtoListName += TString("_femtolist");
     tFemtolist = (TList*)tDirFile->Get(tFemtoListName);
     aDirectoryName.ReplaceAll("0010","010");
   }

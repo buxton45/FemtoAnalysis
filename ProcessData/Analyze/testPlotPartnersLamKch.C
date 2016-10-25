@@ -21,10 +21,10 @@ int main(int argc, char **argv)
 
   TString DirectoryBase = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_20161022/";
   TString FileLocationBase = DirectoryBase+"Results_cLamcKch_20161022";
-  TString FileLocationBaseMC = DirectoryBase+"/Results_cLamcKchMC_20161022";
+  TString FileLocationBaseMC = DirectoryBase+"Results_cLamcKchMC_20161022";
   PlotPartnersLamKch* tLamKch0010 = new PlotPartnersLamKch(FileLocationBase,FileLocationBaseMC,kLamKchP,k0010,kTrain,2);
   tLamKch0010->SetSaveLocationBase(DirectoryBase);
-  bool SaveImages = true;
+  bool SaveImages = false;
 
   TCanvas* tCanPur = tLamKch0010->DrawPurity(SaveImages);
   TCanvas* tCanKStarCf = tLamKch0010->DrawKStarCfs(SaveImages);
@@ -34,21 +34,32 @@ int main(int argc, char **argv)
   TCanvas* tCanAvgSepCfsLamKchP = tLamKch0010->DrawAvgSepCfs(kLamKchP,true,SaveImages);
   TCanvas* tCanAvgSepCfsLamKchM = tLamKch0010->DrawAvgSepCfs(kLamKchM,true,SaveImages);
 
-//  TCanvas* tCanPart1MassFail = tLamKch0010->ViewPart1MassFail(false,SaveImages);
+//  TCanvas* tCanPart1MassFail = tLamKch0010->ViewPart1MassFail(true,SaveImages);
 
   TCanvas* tCanMassAssK0_LamKchP = tLamKch0010->DrawMassAssumingK0ShortHypothesis(kLamKchP,SaveImages);
 
 //-------------------------------------------------------------------------------
 
-
-  TString FileLocationBase_LamK0 = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamK0_20161022/Results_cLamK0_20161022";
-  TString FileLocationBaseMC_LamK0 = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamK0_20161022/Results_cLamK0MC_20161022";
+  TString DirectoryBase_LamK0 = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamK0_20161022/";
+  TString FileLocationBase_LamK0 = DirectoryBase_LamK0+"Results_cLamK0_20161022";
+  TString FileLocationBaseMC_LamK0 = DirectoryBase_LamK0+"Results_cLamK0MC_20161022";
   PlotPartnersLamK0* tLamK00010 = new PlotPartnersLamK0(FileLocationBase_LamK0,FileLocationBaseMC_LamK0,kLamK0,k0010,kTrain,2);
+  tLamK00010->SetSaveLocationBase(DirectoryBase_LamK0);
+  bool SaveImages_LamK0 = true;
 
+  TCanvas* tCanPur_LamK0 = tLamK00010->DrawPurity(SaveImages_LamK0);
+  TCanvas* tCanKStarCf_LamK0 = tLamK00010->DrawKStarCfs(SaveImages_LamK0);
+  TCanvas* tCanKStarTrueVsRec_LamK0 = tLamK00010->DrawKStarTrueVsRec(kMixed,SaveImages_LamK0);
 
-  TCanvas* tCanMassAssK0_LamK0 = tLamK00010->DrawMassAssumingK0ShortHypothesis(kLamK0);
-  TCanvas* tCanMassAssLam_LamK0 = tLamK00010->DrawMassAssumingLambdaHypothesis(kLamK0);
-  TCanvas* tCanMassAssALam_LamK0 = tLamK00010->DrawMassAssumingAntiLambdaHypothesis(kLamK0);
+  TCanvas* tCanAvgSepCfs_LamK0 = tLamK00010->DrawAvgSepCfs(SaveImages_LamK0);
+  TCanvas* tCanAvgSepCfsLamK0 = tLamK00010->DrawAvgSepCfs(kLamK0,SaveImages_LamK0);
+  TCanvas* tCanAvgSepCfsALamK0 = tLamK00010->DrawAvgSepCfs(kALamK0,SaveImages_LamK0);
+
+//  TCanvas* tCanPart1MassFail_LamK0 = tLamK00010->ViewPart1MassFail(false,SaveImages_LamK0);
+
+  TCanvas* tCanMassAssK0_LamK0 = tLamK00010->DrawMassAssumingK0ShortHypothesis(kLamK0,SaveImages_LamK0);
+  TCanvas* tCanMassAssLam_LamK0 = tLamK00010->DrawMassAssumingLambdaHypothesis(kLamK0,SaveImages_LamK0);
+  TCanvas* tCanMassAssALam_LamK0 = tLamK00010->DrawMassAssumingAntiLambdaHypothesis(kLamK0,SaveImages_LamK0);
 
 
 

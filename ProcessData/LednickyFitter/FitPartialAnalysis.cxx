@@ -315,15 +315,18 @@ TObjArray* FitPartialAnalysis::ConnectAnalysisDirectory(TString aFileLocation, T
   if(fAnalysisRunType==kTrain || fAnalysisRunType==kTrainSys)
   {
     tDirFile = (TDirectoryFile*)tFile->Get("PWG2FEMTO");
-    if(aDirectoryName.Contains("LamKch")) tFemtoListName = "cLamcKch_femtolist";
-    else if(aDirectoryName.Contains("LamK0")) tFemtoListName = "cLamK0_femtolist";
-    else if(aDirectoryName.Contains("XiKch")) tFemtoListName = "cXicKch_femtolist";
+    if(aDirectoryName.Contains("LamKch")) tFemtoListName = "cLamcKch";
+    else if(aDirectoryName.Contains("LamK0")) tFemtoListName = "cLamK0";
+    else if(aDirectoryName.Contains("XiKch")) tFemtoListName = "cXicKch";
     else
     {
       cout << "ERROR in FitPartialAnalysis::ConnectAnalysisDirectory!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
       cout << "Invalid aDirectoryName for fAnalysisRunType=kTrain||kTrainSys:  aDirectoryName = " << aDirectoryName << endl;
       assert(0);
     }
+
+    if(fAnalysisRunType==kTrainSys) tFemtoListName += TString("_Systematics");
+    tFemtoListName += TString("_femtolist");
     tFemtolist = (TList*)tDirFile->Get(tFemtoListName);
     aDirectoryName.ReplaceAll("0010","010");
   }

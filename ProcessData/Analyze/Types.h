@@ -120,6 +120,7 @@ using std::vector;
   extern const char* const cAnalysisRootTags[17];
   extern const char* const cBFieldTags[7];
   extern const char* const cCentralityTags[4];
+  extern const char* const cPrettyCentralityTags[4];
   extern const char* const cParticleTags[11];
   extern const char* const cRootParticleTags[11];
   extern const char* const cKStarTrueVsRecTypeTags[4];

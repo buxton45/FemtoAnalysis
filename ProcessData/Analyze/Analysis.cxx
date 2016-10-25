@@ -379,10 +379,13 @@ Analysis::Analysis(TString aFileLocationBase, AnalysisType aAnalysisType, Centra
   if(fParticleTypes[0]==kLam)  {tPart1MassFailName = "LambdaMass_" + TString(cParticleTags[fParticleTypes[0]]) + "_Fail";}
   else if(fParticleTypes[0]==kALam) {tPart1MassFailName = "AntiLambdaMass_" + TString(cParticleTags[fParticleTypes[0]]) + "_Fail";}
 
-  for(int i=0; i<fNPartialAnalysis; i++)
+  if(fAnalysisRunType != kTrainSys)  //TrainSys analyses DO NOT include FAIL cut monitors
   {
-    if(i==0) {fPart1MassFail = (TH1*)fPartialAnalysisCollection[i]->GetPart1MassFail()->Clone(tPart1MassFailName);}
-    else{fPart1MassFail->Add(fPartialAnalysisCollection[i]->GetPart1MassFail());}
+    for(int i=0; i<fNPartialAnalysis; i++)
+    {
+      if(i==0) {fPart1MassFail = (TH1*)fPartialAnalysisCollection[i]->GetPart1MassFail()->Clone(tPart1MassFailName);}
+      else{fPart1MassFail->Add(fPartialAnalysisCollection[i]->GetPart1MassFail());}
+    }
   }
 
 }
@@ -2041,6 +2044,8 @@ void Analysis::OutputPassFailInfo()
 //________________________________________________________________________________________________________________
 void Analysis::DrawPart1MassFail(TPad* aPad, bool aDrawWideRangeToo)
 {
+  assert(fAnalysisRunType != kTrainSys);  //TrainSys analyses DO NOT include FAIL cut monitors
+
   aPad->cd();
 
   if(aDrawWideRangeToo)

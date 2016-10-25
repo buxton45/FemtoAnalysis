@@ -31,7 +31,7 @@ public:
   void DrawSingleKStarCf(TPad* aPad, int aPairAnNumber, double aYmin=0.9, double aYmax=1.1, double aXmin=0.0, double aXmax=0.5, int aMarkerColor=1, TString aOption = "", int aMarkerStyle=20);
   void DrawSingleKStarCfwFit(TPad* aPad, int aPairAnNumber, double aYmin=0.9, double aYmax=1.1, double aXmin=0.0, double aXmax=0.5, int aMarkerColor=1, TString aOption = "", int aMarkerStyle=20);
   virtual TCanvas* DrawKStarCfs();
-  virtual TCanvas* DrawKStarCfswFits();
+  virtual TCanvas* DrawKStarCfswFits(bool aSaveImage=false);
 
   void SetUseLimits(vector<FitParameter> &aVec, bool aUse);  //Internal use only
 
@@ -51,8 +51,11 @@ public:
   void SetAllParameters();
   void DoFit(bool aApplyMomResCorrection=false);
 
+  void ExistsSaveLocationBase();
 
   //inline 
+  void SetSaveLocationBase(TString aBase);
+
   void SetSharedParameter(ParameterType aParamType);  //share amongst all
   void SetSharedParameter(ParameterType aParamType, double aStartValue, double aLowerBound=0., double aUpperBound=0.);  //share amongst all
 
@@ -67,6 +70,7 @@ public:
 
 
 protected:
+  TString fSaveLocationBase;
   bool fContainsMC;
   int fNAnalyses;  //should be 1, 2, 3 or 6
   FitGeneratorType fGeneratorType;
@@ -88,7 +92,7 @@ protected:
   ClassDef(FitGenerator, 1)
 #endif
 };
-
+inline void FitGenerator::SetSaveLocationBase(TString aBase) {fSaveLocationBase=aBase;}
 
 inline void FitGenerator::SetSharedParameter(ParameterType aParamType) 
   {fSharedAn->SetSharedParameter(aParamType);}

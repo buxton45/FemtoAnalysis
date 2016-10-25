@@ -48,6 +48,7 @@ TCanvas* PlotPartnersLamKch::DrawPurity(bool aSaveImage)
   fConjAnalysis2->BuildPurityCollection();
 
   TString tCanvasName = TString("canPurity") + TString(cAnalysisBaseTags[fAnalysis1->GetAnalysisType()]) + TString(cCentralityTags[fAnalysis1->GetCentralityType()]);
+  if(!fDirNameModifier.IsNull()) tCanvasName += fDirNameModifier;
   TCanvas *tReturnCan = new TCanvas(tCanvasName,tCanvasName);
   tReturnCan->Divide(2,2);
 
@@ -56,8 +57,11 @@ TCanvas* PlotPartnersLamKch::DrawPurity(bool aSaveImage)
   fAnalysis2->DrawAllPurityHistos((TPad*)tReturnCan->cd(3));
   fConjAnalysis2->DrawAllPurityHistos((TPad*)tReturnCan->cd(4));
 
-  bool tExistsSaveLocation = ExistsSaveLocationBase();
-  if(aSaveImage) tReturnCan->SaveAs(fSaveLocationBase+tCanvasName+TString(".pdf"));
+  if(aSaveImage)
+  {
+    ExistsSaveLocationBase();
+    tReturnCan->SaveAs(fSaveLocationBase+tCanvasName+TString(".pdf"));
+  }
 
   return tReturnCan;
 }
@@ -95,6 +99,7 @@ TCanvas* PlotPartnersLamKch::DrawKStarCfs(bool aSaveImage)
   fConjAnalysis1->GetKStarHeavyCf()->GetHeavyCf()->SetTitle(tNewNameConjAn12);
 
   TString tCanvasName = TString("canKStarCf") + TString(cAnalysisBaseTags[fAnalysis1->GetAnalysisType()]) + TString(cCentralityTags[fAnalysis1->GetCentralityType()]);
+  if(!fDirNameModifier.IsNull()) tCanvasName += fDirNameModifier;
   TCanvas *tReturnCan = new TCanvas(tCanvasName,tCanvasName);
   tReturnCan->Divide(2,1);
 
@@ -117,8 +122,11 @@ TCanvas* PlotPartnersLamKch::DrawKStarCfs(bool aSaveImage)
   fConjAnalysis2->OutputPassFailInfo();
 
   //----------------------------------
-  bool tExistsSaveLocation = ExistsSaveLocationBase();
-  if(aSaveImage) tReturnCan->SaveAs(fSaveLocationBase+tCanvasName+TString(".pdf"));
+  if(aSaveImage)
+  {
+    ExistsSaveLocationBase();
+    tReturnCan->SaveAs(fSaveLocationBase+tCanvasName+TString(".pdf"));
+  }
 
   return tReturnCan;
 }
@@ -128,6 +136,8 @@ TCanvas* PlotPartnersLamKch::DrawKStarCfs(bool aSaveImage)
 //________________________________________________________________________________________________________________
 TCanvas* PlotPartnersLamKch::DrawKStarTrueVsRec(KStarTrueVsRecType aType, bool aSaveImage)
 {
+  gStyle->SetOptTitle(0);
+
   fAnalysisMC1->BuildModelKStarTrueVsRecTotal(aType);
   fConjAnalysisMC1->BuildModelKStarTrueVsRecTotal(aType);
   fAnalysisMC2->BuildModelKStarTrueVsRecTotal(aType);
@@ -149,6 +159,7 @@ TCanvas* PlotPartnersLamKch::DrawKStarTrueVsRec(KStarTrueVsRecType aType, bool a
 
   TString tCanvasName = TString("canKStarTrueVsRec") + TString(cAnalysisBaseTags[fAnalysis1->GetAnalysisType()]) + TString(cCentralityTags[fAnalysis1->GetCentralityType()])
                          + TString(cKStarTrueVsRecTypeTags[aType]);
+  if(!fDirNameModifier.IsNull()) tCanvasName += fDirNameModifier;
   TCanvas *tReturnCan = new TCanvas(tCanvasName,tCanvasName);
   tReturnCan->Divide(2,2);
   //gStyle->SetOptStat(0);
@@ -156,21 +167,32 @@ TCanvas* PlotPartnersLamKch::DrawKStarTrueVsRec(KStarTrueVsRecType aType, bool a
   tReturnCan->cd(1);
     gPad->SetLogz();
     tTrueVsRecAn1->Draw("colz");
+    PrintAnalysisType((TPad*)tReturnCan->cd(1),fAnalysisMC1->GetAnalysisType(),0.05,0.85,0.15,0.10,63,20);
+    PrintText((TPad*)tReturnCan->cd(1),TString(cKStarTrueVsRecTypeTags[aType]),0.05,0.75,0.15,0.10,63,10);
 
   tReturnCan->cd(2);
     gPad->SetLogz();
     tTrueVsRecConjAn1->Draw("colz");
+    PrintAnalysisType((TPad*)tReturnCan->cd(2),fConjAnalysisMC1->GetAnalysisType(),0.05,0.85,0.15,0.10,63,20);
+    PrintText((TPad*)tReturnCan->cd(2),TString(cKStarTrueVsRecTypeTags[aType]),0.05,0.75,0.15,0.10,63,10);
 
   tReturnCan->cd(3);
     gPad->SetLogz();
     tTrueVsRecAn2->Draw("colz");
+    PrintAnalysisType((TPad*)tReturnCan->cd(3),fAnalysisMC2->GetAnalysisType(),0.05,0.85,0.15,0.10,63,20);
+    PrintText((TPad*)tReturnCan->cd(3),TString(cKStarTrueVsRecTypeTags[aType]),0.05,0.75,0.15,0.10,63,10);
 
   tReturnCan->cd(4);
     gPad->SetLogz();
     tTrueVsRecConjAn2->Draw("colz");
+    PrintAnalysisType((TPad*)tReturnCan->cd(4),fConjAnalysisMC2->GetAnalysisType(),0.05,0.85,0.15,0.10,63,20);
+    PrintText((TPad*)tReturnCan->cd(4),TString(cKStarTrueVsRecTypeTags[aType]),0.05,0.75,0.15,0.10,63,10);
 
-  bool tExistsSaveLocation = ExistsSaveLocationBase();
-  if(aSaveImage) tReturnCan->SaveAs(fSaveLocationBase+tCanvasName+TString(".pdf"));
+  if(aSaveImage)
+  {
+    ExistsSaveLocationBase();
+    tReturnCan->SaveAs(fSaveLocationBase+tCanvasName+TString(".pdf"));
+  }
   return tReturnCan;
 }
 
@@ -190,6 +212,7 @@ TCanvas* PlotPartnersLamKch::DrawAvgSepCfs(bool aSaveImage)
   TString tCanvasName = TString("canAvgSepCfs") + TString(cAnalysisBaseTags[fAnalysis1->GetAnalysisType()])  + TString("wConjAnd")
                         + TString(cAnalysisBaseTags[fAnalysis2->GetAnalysisType()])  + TString("wConj")
                         + TString(cCentralityTags[fAnalysis1->GetCentralityType()]);
+  if(!fDirNameModifier.IsNull()) tCanvasName += fDirNameModifier;
   TCanvas* tReturnCan = new TCanvas(tCanvasName,tCanvasName);
   tReturnCan->Divide(2,4);
 
@@ -217,8 +240,11 @@ TCanvas* PlotPartnersLamKch::DrawAvgSepCfs(bool aSaveImage)
   }
 */
 
-  bool tExistsSaveLocation = ExistsSaveLocationBase();
-  if(aSaveImage) tReturnCan->SaveAs(fSaveLocationBase+tCanvasName+TString(".pdf"));
+  if(aSaveImage)
+  {
+    ExistsSaveLocationBase();
+    tReturnCan->SaveAs(fSaveLocationBase+tCanvasName+TString(".pdf"));
+  }
   return tReturnCan;
 }
 
@@ -300,8 +326,11 @@ TCanvas* PlotPartnersLamKch::DrawAvgSepCfs(AnalysisType aAnalysisType, bool aDra
 //    ALamKchM->SaveAllAvgSepHeavyCfs(mySaveFile);
 //  }
 
-  bool tExistsSaveLocation = ExistsSaveLocationBase();
-  if(aSaveImage) tReturnCan->SaveAs(fSaveLocationBase+tCanvasName+TString(".pdf"));
+  if(aSaveImage)
+  {
+    ExistsSaveLocationBase();
+    tReturnCan->SaveAs(fSaveLocationBase+tCanvasName+TString(".pdf"));
+  }
   return tReturnCan;
 }
 */
@@ -318,6 +347,7 @@ TCanvas* PlotPartnersLamKch::DrawAvgSepCfs(AnalysisType aAnalysisType, bool aDra
   TString tCanvasName = TString("canAvgSepCfs_") + TString(cAnalysisBaseTags[aAnalysisType]);
   if(aDrawConj) tCanvasName += TString("wConj");
   tCanvasName += TString(cCentralityTags[fAnalysis1->GetCentralityType()]);
+  if(!fDirNameModifier.IsNull()) tCanvasName += fDirNameModifier;
 
   int tNx=2, tNy=1;
   if(aDrawConj) tNy=2;
@@ -397,8 +427,11 @@ TCanvas* PlotPartnersLamKch::DrawAvgSepCfs(AnalysisType aAnalysisType, bool aDra
   tCanvasPartition->DrawXaxisTitle("Avg. Sep. (cm)");
   tCanvasPartition->DrawYaxisTitle("C(Avg. Sep)");
 
-  bool tExistsSaveLocation = ExistsSaveLocationBase();
-  if(aSaveImage) tCanvasPartition->GetCanvas()->SaveAs(fSaveLocationBase+tCanvasName+TString(".pdf"));
+  if(aSaveImage)
+  {
+    ExistsSaveLocationBase();
+    tCanvasPartition->GetCanvas()->SaveAs(fSaveLocationBase+tCanvasName+TString(".pdf"));
+  }
 
   return tCanvasPartition->GetCanvas();
 }
@@ -410,6 +443,7 @@ TCanvas* PlotPartnersLamKch::ViewPart1MassFail(bool aDrawWideRangeToo, bool aSav
 {
 
   TString tCanvasName = TString("canPart1MassFail") + TString(cAnalysisBaseTags[fAnalysis1->GetAnalysisType()]) + TString(cCentralityTags[fAnalysis1->GetCentralityType()]);
+  if(!fDirNameModifier.IsNull()) tCanvasName += fDirNameModifier;
   TCanvas* tReturnCan = new TCanvas(tCanvasName,tCanvasName);
   tReturnCan->Divide(2,2);
 
@@ -418,8 +452,11 @@ TCanvas* PlotPartnersLamKch::ViewPart1MassFail(bool aDrawWideRangeToo, bool aSav
   fAnalysis2->DrawPart1MassFail((TPad*)tReturnCan->cd(3),aDrawWideRangeToo);
   fConjAnalysis2->DrawPart1MassFail((TPad*)tReturnCan->cd(4),aDrawWideRangeToo);
 
-  bool tExistsSaveLocation = ExistsSaveLocationBase();
-  if(aSaveImage) tReturnCan->SaveAs(fSaveLocationBase+tCanvasName+TString(".pdf"));
+  if(aSaveImage)
+  {
+    ExistsSaveLocationBase();
+    tReturnCan->SaveAs(fSaveLocationBase+tCanvasName+TString(".pdf"));
+  }
   return tReturnCan;
 }
 
@@ -452,6 +489,7 @@ TCanvas* PlotPartnersLamKch::DrawMassAssumingK0ShortHypothesis(AnalysisType aAna
 
   //------------------------------------
   TString tCanvasName = TString("canMassAssK0Hyp_") + TString(cAnalysisBaseTags[aAnalysisType]);
+  if(!fDirNameModifier.IsNull()) tCanvasName += fDirNameModifier;
   TCanvas* tReturnCan = new TCanvas(tCanvasName,tCanvasName);
   tReturnCan->cd();
   gStyle->SetOptStat(0);
@@ -465,8 +503,13 @@ TCanvas* PlotPartnersLamKch::DrawMassAssumingK0ShortHypothesis(AnalysisType aAna
   SetupAxis(tHistToDraw->GetYaxis(),"dN/dM_{inv}");
 
   tHistToDraw->DrawCopy();
-  bool tExistsSaveLocation = ExistsSaveLocationBase();
-  if(aSaveImage) tReturnCan->SaveAs(fSaveLocationBase+tCanvasName+TString(".pdf"));
+  PrintAnalysisType((TPad*)tReturnCan,aAnalysisType,0.80,0.85,0.15,0.10,63,30);
+
+  if(aSaveImage)
+  {
+    ExistsSaveLocationBase();
+    tReturnCan->SaveAs(fSaveLocationBase+tCanvasName+TString(".pdf"));
+  }
   return tReturnCan;
 }
 

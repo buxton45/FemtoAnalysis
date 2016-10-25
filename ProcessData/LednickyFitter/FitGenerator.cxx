@@ -29,6 +29,7 @@ void GlobalFCN(Int_t &npar, Double_t *gin, Double_t &f, Double_t *par, Int_t ifl
 
 //________________________________________________________________________________________________________________
 FitGenerator::FitGenerator(TString aFileLocationBase, TString aFileLocationBaseMC, AnalysisType aAnalysisType, AnalysisRunType aRunType, int aNPartialAnalysis, CentralityType aCentralityType, FitGeneratorType aGeneratorType, bool aShareLambdaParams, TString aDirNameModifier) :
+  fSaveLocationBase(""),
   fContainsMC(false),
   fNAnalyses(0),
   fGeneratorType(aGeneratorType),
@@ -317,7 +318,7 @@ void FitGenerator::CreateParamInitValuesText(CanvasPartition *aCanPart, int aNx,
   assert(tD0 == fFitParamsPerPad[tPosition][4].GetStartValue());
 
   TPaveText *tText = aCanPart->SetupTPaveText("Initial Values",aNx,aNy,aTextXmin,aTextYmin,aTextWidth,aTextHeight,aTextFont,aTextSize);
-  tText->AddText(TString::Format("#Lambda = %0.3f",tLambda));
+  tText->AddText(TString::Format("#lambda = %0.3f",tLambda));
   tText->AddText(TString::Format("R = %0.3f",tRadius));
   tText->AddText(TString::Format("Re[f0] = %0.3f",tReF0));
   tText->AddText(TString::Format("Im[f0] = %0.3f",tImF0));
@@ -327,7 +328,7 @@ void FitGenerator::CreateParamInitValuesText(CanvasPartition *aCanPart, int aNx,
 
 //  tText->GetLine(0)->SetTextSize(0.08);
   tText->GetLine(0)->SetTextFont(63);
-  aCanPart->AddGraphPadName(tText,aNx,aNy);
+  aCanPart->AddPadPaveText(tText,aNx,aNy);
 }
 
 
@@ -438,7 +439,7 @@ TCanvas* FitGenerator::DrawKStarCfswFits()
 */
 
 //________________________________________________________________________________________________________________
-TCanvas* FitGenerator::DrawKStarCfswFits()
+TCanvas* FitGenerator::DrawKStarCfswFits(bool aSaveImage)
 {
   TString tCanvasName = TString("canKStarCfwFits") + TString(cAnalysisBaseTags[fPairType]) + TString("And") 
                         + TString(cAnalysisBaseTags[fConjPairType]) + TString(cCentralityTags[fCentralityType]);
@@ -449,9 +450,9 @@ TCanvas* FitGenerator::DrawKStarCfswFits()
   else if(fNAnalyses == 3) {tNx=1; tNy=fNAnalyses;}
   else assert(0);
 
-  double tXLow = -0.01;
+  double tXLow = -0.02;
   double tXHigh = 0.49;
-  double tYLow = 0.9;
+  double tYLow = 0.89;
   double tYHigh = 1.04;
   CanvasPartition* tCanPart = new CanvasPartition(tCanvasName,tNx,tNy,tXLow,tXHigh,tYLow,tYHigh,0.12,0.05,0.13,0.05);
 
@@ -466,6 +467,14 @@ TCanvas* FitGenerator::DrawKStarCfswFits()
       tCanPart->AddGraph(i,j,(TH1*)fSharedAn->GetKStarCfHeavy(tAnalysisNumber)->GetHeavyCf(),"");
       tCanPart->AddGraph(i,j,(TF1*)fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetFit(),"");
 
+      TString tTextAnType = TString(cAnalysisRootTags[fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetAnalysisType()]);
+      TPaveText* tAnTypeName = tCanPart->SetupTPaveText(tTextAnType,i,j,0.8,0.85);
+      tCanPart->AddPadPaveText(tAnTypeName,i,j);
+
+      TString tTextCentrality = TString(cPrettyCentralityTags[fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetCentralityType()]);
+      TPaveText* tCentralityName = tCanPart->SetupTPaveText(tTextCentrality,i,j,0.05,0.85);
+      tCanPart->AddPadPaveText(tCentralityName,i,j);
+
       CreateParamInitValuesText(tCanPart,i,j,0.25,0.12,0.15,0.50,43,10);
     }
   }
@@ -473,7 +482,13 @@ TCanvas* FitGenerator::DrawKStarCfswFits()
   tCanPart->SetDrawUnityLine(true);
   tCanPart->DrawAll();
   tCanPart->DrawXaxisTitle("k* (GeV/c)");
-  tCanPart->DrawYaxisTitle("C(k*)");
+  tCanPart->DrawYaxisTitle("C(k*)",43,25,0.05,0.75);
+
+  if(aSaveImage)
+  {
+    ExistsSaveLocationBase();
+    tCanPart->GetCanvas()->SaveAs(fSaveLocationBase+tCanvasName+TString(".pdf"));
+  }
 
   return tCanPart->GetCanvas();
 }
@@ -959,6 +974,22 @@ void FitGenerator::DoFit(bool aApplyMomResCorrection)
   fLednickyFitter->DoFit();
 }
 
+//________________________________________________________________________________________________________________
+void FitGenerator::ExistsSaveLocationBase()
+{
+  if(!fSaveLocationBase.IsNull()) return;
 
+  cout << "fSaveLocationBase is Null!!!!!" << endl;
+  cout << "Create? (0=No 1=Yes)" << endl;
+  int tResponse;
+  cin >> tResponse;
+  if(!tResponse) return;
+
+  cout << "Enter base:" << endl;
+  cin >> fSaveLocationBase;
+  if(fSaveLocationBase[fSaveLocationBase.Length()] != '/') fSaveLocationBase += TString("/");
+  return;
+
+}
 
 

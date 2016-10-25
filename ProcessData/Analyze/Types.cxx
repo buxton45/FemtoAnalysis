@@ -23,6 +23,7 @@ const char* const cBFieldTags[7] = {"_FemtoPlus", "_FemtoMinus", "_Bp1", "_Bp2",
 
 //enum CentralityType
 const char* const cCentralityTags[4] = {"_0010", "_1030", "_3050", ""};
+const char* const cPrettyCentralityTags[4] = {"0-10%", "10-30%", "30-50%", ""};
 
 //enum ParticleType
 const char* const cParticleTags[11] = {"Lam", "ALam", "K0", "KchP", "KchM", "Xi", "AXi", "PiP", "PiM", "Proton", "AntiProton"};
@@ -101,15 +102,11 @@ const char* const cAvgSepCfCowboysAndSailorsBaseTagsDen[7] = {"DenPosPosAvgSepCf
 const char* const cParameterNames[9] = {"Lambda", "Radius", "Ref0", "Imf0", "d0", "Ref02", "Imf02", "d02", "Norm"};
 
 //________________________________________________________________________________________________________________
-//const double cLamK0_0010StartValues[6] = {0.15,1.72,-0.14,0.17,8.9,1.};
-//const double cLamK0_0010StartValues[6] = {0.42,2.07,-0.16,-0.03,7.4,1.};
 const double cLamK0_0010StartValues[6] = {0.15,5.00,-0.14,0.17,8.9,0.2};
 const double cLamK0_1030StartValues[6] = {0.15,4.00,-0.14,0.17,8.9,0.2};
 const double cLamK0_3050StartValues[6] = {0.15,3.00,-0.14,0.17,8.9,0.2};
 const double* cLamK0StartValues[3] = {cLamK0_0010StartValues,cLamK0_1030StartValues,cLamK0_3050StartValues};
 
-//const double cALamK0_0010StartValues[6] = {0.15,1.72,-0.14,0.17,8.9,1.};
-//const double cALamK0_0010StartValues[6] = {0.42,2.07,-0.16,-0.03,7.4,1.};
 const double cALamK0_0010StartValues[6] = {0.15,5.00,-0.14,0.17,8.9,0.2};
 const double cALamK0_1030StartValues[6] = {0.15,4.00,-0.14,0.17,8.9,0.2};
 const double cALamK0_3050StartValues[6] = {0.15,3.00,-0.14,0.17,8.9,0.2};

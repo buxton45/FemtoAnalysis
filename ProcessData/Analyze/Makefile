@@ -7,7 +7,7 @@ CFLAGS = $(shell root-config --cflags) -Wall -std=c++11 -I${UTILITIES_DIR} -g -O
 
 MY_LIBS = $(addprefix build/, CfLite.o CfHeavy.o Cf2dLite.o Cf2dHeavy.o Types.o Purity.o PartialAnalysis.o Analysis.o DataAndModel.o PlotPartners.o PlotPartnersLamKch.o PlotPartnersLamK0.o CanvasPartition.o)
 
-all: runBuildcLamcKch runBuildcLamK0 runBuildcXicKch runBuildcLamcLam runCombineConjugatesLamKch runCombineConjugatesLamK0 runCombineConjugatesXiKch runBuildMomResMatrix runBuildMomResMatrix2 runCompareFixes runCorrectCfs runTest
+all: runBuildcLamcKch runBuildcLamK0 runBuildcXicKch runBuildcLamcLam runCombineConjugatesLamKch runCombineConjugatesLamK0 runCombineConjugatesXiKch runBuildMomResMatrix runBuildMomResMatrix2 runCompareFixes runCorrectCfs runTest runSystematics
 
 runBuildcLamcKch: ${MY_LIBS} BuildcLamcKchAnalyses.C
 	g++ BuildcLamcKchAnalyses.C ${MY_LIBS} -o runBuildcLamcKch $(LIBS) $(CFLAGS)
@@ -45,6 +45,10 @@ runCorrectCfs: ${MY_LIBS} CorrectCfs.C
 runTest: ${MY_LIBS} testPlotPartnersLamKch.C
 	g++ testPlotPartnersLamKch.C ${MY_LIBS} -o runTest $(LIBS) $(CFLAGS)
 
+runSystematics: ${MY_LIBS} BuildSystematics.C
+	g++ BuildSystematics.C ${MY_LIBS} -o runSystematics $(LIBS) $(CFLAGS)
+
+
 
 build/%.o: %.cxx %.h
 	g++ -c $< $(CFLAGS) -o $@
@@ -57,4 +61,4 @@ build/%.o: %.cc %.hh
 
 
 clean:
-	rm -f runBuildcLamcKch runBuildcLamK0 runBuildcXicKch runBuildcLamcLam runCombineConjugatesLamKch runCombineConjugatesLamK0 runCombineConjugatesXiKch runBuildMomResMatrix runBuildMomResMatrix2 runCompareFixes runCorrectCfs runTest ${MY_LIBS}
+	rm -f runBuildcLamcKch runBuildcLamK0 runBuildcXicKch runBuildcLamcLam runCombineConjugatesLamKch runCombineConjugatesLamK0 runCombineConjugatesXiKch runBuildMomResMatrix runBuildMomResMatrix2 runCompareFixes runCorrectCfs runTest runSystematics ${MY_LIBS}

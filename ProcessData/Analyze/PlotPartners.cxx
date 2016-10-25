@@ -20,6 +20,7 @@ ClassImp(PlotPartners)
 PlotPartners::PlotPartners(TString aFileLocationBase, AnalysisType aAnalysisType, CentralityType aCentralityType, AnalysisRunType aRunType, int aNPartialAnalysis, TString aDirNameModifier) :
   fContainsMC(false),
   fSaveLocationBase(""),
+  fDirNameModifier(aDirNameModifier),
   fAnalysis1(0),
   fConjAnalysis1(0),
   fAnalysis2(0),
@@ -35,8 +36,8 @@ PlotPartners::PlotPartners(TString aFileLocationBase, AnalysisType aAnalysisType
   switch(aAnalysisType) {
   case kLamK0:
   case kALamK0:
-    fAnalysis1 = new Analysis(aFileLocationBase,kLamK0,aCentralityType,aRunType,aNPartialAnalysis,aDirNameModifier);
-    fConjAnalysis1 = new Analysis(aFileLocationBase,kALamK0,aCentralityType,aRunType,aNPartialAnalysis,aDirNameModifier);
+    fAnalysis1 = new Analysis(aFileLocationBase,kLamK0,aCentralityType,aRunType,aNPartialAnalysis,fDirNameModifier);
+    fConjAnalysis1 = new Analysis(aFileLocationBase,kALamK0,aCentralityType,aRunType,aNPartialAnalysis,fDirNameModifier);
     fAnalysis2 = NULL;
     fConjAnalysis2 = NULL;
     break;
@@ -45,20 +46,20 @@ PlotPartners::PlotPartners(TString aFileLocationBase, AnalysisType aAnalysisType
   case kALamKchP:
   case kLamKchM:
   case kALamKchM:
-    fAnalysis1 = new Analysis(aFileLocationBase,kLamKchP,aCentralityType,aRunType,aNPartialAnalysis,aDirNameModifier);
-    fConjAnalysis1 = new Analysis(aFileLocationBase,kALamKchM,aCentralityType,aRunType,aNPartialAnalysis,aDirNameModifier);
-    fAnalysis2 = new Analysis(aFileLocationBase,kLamKchM,aCentralityType,aRunType,aNPartialAnalysis,aDirNameModifier);
-    fConjAnalysis2 = new Analysis(aFileLocationBase,kALamKchP,aCentralityType,aRunType,aNPartialAnalysis,aDirNameModifier);
+    fAnalysis1 = new Analysis(aFileLocationBase,kLamKchP,aCentralityType,aRunType,aNPartialAnalysis,fDirNameModifier);
+    fConjAnalysis1 = new Analysis(aFileLocationBase,kALamKchM,aCentralityType,aRunType,aNPartialAnalysis,fDirNameModifier);
+    fAnalysis2 = new Analysis(aFileLocationBase,kLamKchM,aCentralityType,aRunType,aNPartialAnalysis,fDirNameModifier);
+    fConjAnalysis2 = new Analysis(aFileLocationBase,kALamKchP,aCentralityType,aRunType,aNPartialAnalysis,fDirNameModifier);
     break;
 
   case kXiKchP:
   case kAXiKchP:
   case kXiKchM:
   case kAXiKchM:
-    fAnalysis1 = new Analysis(aFileLocationBase,kXiKchP,aCentralityType,aRunType,aNPartialAnalysis,aDirNameModifier);
-    fConjAnalysis1 = new Analysis(aFileLocationBase,kAXiKchM,aCentralityType,aRunType,aNPartialAnalysis,aDirNameModifier);
-    fAnalysis2 = new Analysis(aFileLocationBase,kXiKchM,aCentralityType,aRunType,aNPartialAnalysis,aDirNameModifier);
-    fConjAnalysis2 = new Analysis(aFileLocationBase,kAXiKchP,aCentralityType,aRunType,aNPartialAnalysis,aDirNameModifier);
+    fAnalysis1 = new Analysis(aFileLocationBase,kXiKchP,aCentralityType,aRunType,aNPartialAnalysis,fDirNameModifier);
+    fConjAnalysis1 = new Analysis(aFileLocationBase,kAXiKchM,aCentralityType,aRunType,aNPartialAnalysis,fDirNameModifier);
+    fAnalysis2 = new Analysis(aFileLocationBase,kXiKchM,aCentralityType,aRunType,aNPartialAnalysis,fDirNameModifier);
+    fConjAnalysis2 = new Analysis(aFileLocationBase,kAXiKchP,aCentralityType,aRunType,aNPartialAnalysis,fDirNameModifier);
     break;
 
   default:
@@ -72,6 +73,7 @@ PlotPartners::PlotPartners(TString aFileLocationBase, AnalysisType aAnalysisType
 PlotPartners::PlotPartners(TString aFileLocationBase, TString aFileLocationBaseMC, AnalysisType aAnalysisType, CentralityType aCentralityType, AnalysisRunType aRunType, int aNPartialAnalysis, TString aDirNameModifier) :
   fContainsMC(false),
   fSaveLocationBase(""),
+  fDirNameModifier(aDirNameModifier),
   fAnalysis1(0),
   fConjAnalysis1(0),
   fAnalysis2(0),
@@ -88,13 +90,13 @@ PlotPartners::PlotPartners(TString aFileLocationBase, TString aFileLocationBaseM
   switch(aAnalysisType) {
   case kLamK0:
   case kALamK0:
-    fAnalysis1 = new Analysis(aFileLocationBase,kLamK0,aCentralityType,aRunType,aNPartialAnalysis,aDirNameModifier);
-    fConjAnalysis1 = new Analysis(aFileLocationBase,kALamK0,aCentralityType,aRunType,aNPartialAnalysis,aDirNameModifier);
+    fAnalysis1 = new Analysis(aFileLocationBase,kLamK0,aCentralityType,aRunType,aNPartialAnalysis,fDirNameModifier);
+    fConjAnalysis1 = new Analysis(aFileLocationBase,kALamK0,aCentralityType,aRunType,aNPartialAnalysis,fDirNameModifier);
     fAnalysis2 = NULL;
     fConjAnalysis2 = NULL;
 
-    fAnalysisMC1 = new Analysis(aFileLocationBaseMC,kLamK0,aCentralityType,aRunType,aNPartialAnalysis,aDirNameModifier);
-    fConjAnalysisMC1 = new Analysis(aFileLocationBaseMC,kALamK0,aCentralityType,aRunType,aNPartialAnalysis,aDirNameModifier);
+    fAnalysisMC1 = new Analysis(aFileLocationBaseMC,kLamK0,aCentralityType,aRunType,aNPartialAnalysis,fDirNameModifier);
+    fConjAnalysisMC1 = new Analysis(aFileLocationBaseMC,kALamK0,aCentralityType,aRunType,aNPartialAnalysis,fDirNameModifier);
     fAnalysisMC2 = NULL;
     fConjAnalysisMC2 = NULL;
 
@@ -105,15 +107,15 @@ PlotPartners::PlotPartners(TString aFileLocationBase, TString aFileLocationBaseM
   case kALamKchP:
   case kLamKchM:
   case kALamKchM:
-    fAnalysis1 = new Analysis(aFileLocationBase,kLamKchP,aCentralityType,aRunType,aNPartialAnalysis,aDirNameModifier);
-    fConjAnalysis1 = new Analysis(aFileLocationBase,kALamKchM,aCentralityType,aRunType,aNPartialAnalysis,aDirNameModifier);
-    fAnalysis2 = new Analysis(aFileLocationBase,kLamKchM,aCentralityType,aRunType,aNPartialAnalysis,aDirNameModifier);
-    fConjAnalysis2 = new Analysis(aFileLocationBase,kALamKchP,aCentralityType,aRunType,aNPartialAnalysis,aDirNameModifier);
+    fAnalysis1 = new Analysis(aFileLocationBase,kLamKchP,aCentralityType,aRunType,aNPartialAnalysis,fDirNameModifier);
+    fConjAnalysis1 = new Analysis(aFileLocationBase,kALamKchM,aCentralityType,aRunType,aNPartialAnalysis,fDirNameModifier);
+    fAnalysis2 = new Analysis(aFileLocationBase,kLamKchM,aCentralityType,aRunType,aNPartialAnalysis,fDirNameModifier);
+    fConjAnalysis2 = new Analysis(aFileLocationBase,kALamKchP,aCentralityType,aRunType,aNPartialAnalysis,fDirNameModifier);
 
-    fAnalysisMC1 = new Analysis(aFileLocationBaseMC,kLamKchP,aCentralityType,aRunType,aNPartialAnalysis,aDirNameModifier);
-    fConjAnalysisMC1 = new Analysis(aFileLocationBaseMC,kALamKchM,aCentralityType,aRunType,aNPartialAnalysis,aDirNameModifier);
-    fAnalysisMC2 = new Analysis(aFileLocationBaseMC,kLamKchM,aCentralityType,aRunType,aNPartialAnalysis,aDirNameModifier);
-    fConjAnalysisMC2 = new Analysis(aFileLocationBaseMC,kALamKchP,aCentralityType,aRunType,aNPartialAnalysis,aDirNameModifier);
+    fAnalysisMC1 = new Analysis(aFileLocationBaseMC,kLamKchP,aCentralityType,aRunType,aNPartialAnalysis,fDirNameModifier);
+    fConjAnalysisMC1 = new Analysis(aFileLocationBaseMC,kALamKchM,aCentralityType,aRunType,aNPartialAnalysis,fDirNameModifier);
+    fAnalysisMC2 = new Analysis(aFileLocationBaseMC,kLamKchM,aCentralityType,aRunType,aNPartialAnalysis,fDirNameModifier);
+    fConjAnalysisMC2 = new Analysis(aFileLocationBaseMC,kALamKchP,aCentralityType,aRunType,aNPartialAnalysis,fDirNameModifier);
 
     if(fAnalysisMC1 && fConjAnalysisMC1 && fAnalysisMC2 && fConjAnalysisMC2) fContainsMC = true;
     break;
@@ -122,15 +124,15 @@ PlotPartners::PlotPartners(TString aFileLocationBase, TString aFileLocationBaseM
   case kAXiKchP:
   case kXiKchM:
   case kAXiKchM:
-    fAnalysis1 = new Analysis(aFileLocationBase,kXiKchP,aCentralityType,aRunType,aNPartialAnalysis,aDirNameModifier);
-    fConjAnalysis1 = new Analysis(aFileLocationBase,kAXiKchM,aCentralityType,aRunType,aNPartialAnalysis,aDirNameModifier);
-    fAnalysis2 = new Analysis(aFileLocationBase,kXiKchM,aCentralityType,aRunType,aNPartialAnalysis,aDirNameModifier);
-    fConjAnalysis2 = new Analysis(aFileLocationBase,kAXiKchP,aCentralityType,aRunType,aNPartialAnalysis,aDirNameModifier);
+    fAnalysis1 = new Analysis(aFileLocationBase,kXiKchP,aCentralityType,aRunType,aNPartialAnalysis,fDirNameModifier);
+    fConjAnalysis1 = new Analysis(aFileLocationBase,kAXiKchM,aCentralityType,aRunType,aNPartialAnalysis,fDirNameModifier);
+    fAnalysis2 = new Analysis(aFileLocationBase,kXiKchM,aCentralityType,aRunType,aNPartialAnalysis,fDirNameModifier);
+    fConjAnalysis2 = new Analysis(aFileLocationBase,kAXiKchP,aCentralityType,aRunType,aNPartialAnalysis,fDirNameModifier);
 
-    fAnalysisMC1 = new Analysis(aFileLocationBaseMC,kXiKchP,aCentralityType,aRunType,aNPartialAnalysis,aDirNameModifier);
-    fConjAnalysisMC1 = new Analysis(aFileLocationBaseMC,kAXiKchM,aCentralityType,aRunType,aNPartialAnalysis,aDirNameModifier);
-    fAnalysisMC2 = new Analysis(aFileLocationBaseMC,kXiKchM,aCentralityType,aRunType,aNPartialAnalysis,aDirNameModifier);
-    fConjAnalysisMC2 = new Analysis(aFileLocationBaseMC,kAXiKchP,aCentralityType,aRunType,aNPartialAnalysis,aDirNameModifier);
+    fAnalysisMC1 = new Analysis(aFileLocationBaseMC,kXiKchP,aCentralityType,aRunType,aNPartialAnalysis,fDirNameModifier);
+    fConjAnalysisMC1 = new Analysis(aFileLocationBaseMC,kAXiKchM,aCentralityType,aRunType,aNPartialAnalysis,fDirNameModifier);
+    fAnalysisMC2 = new Analysis(aFileLocationBaseMC,kXiKchM,aCentralityType,aRunType,aNPartialAnalysis,fDirNameModifier);
+    fConjAnalysisMC2 = new Analysis(aFileLocationBaseMC,kAXiKchP,aCentralityType,aRunType,aNPartialAnalysis,fDirNameModifier);
 
     if(fAnalysisMC1 && fConjAnalysisMC1 && fAnalysisMC2 && fConjAnalysisMC2) fContainsMC = true;
     break;
@@ -180,21 +182,92 @@ void PlotPartners::SetupAxis(TAxis* aAxis, TString aTitle, float aTitleSize, flo
   aAxis->SetNdivisions(aNdivisions);
 
 }
+
 //________________________________________________________________________________________________________________
-bool PlotPartners::ExistsSaveLocationBase()
+void PlotPartners::PrintAnalysisType(TPad* aPad, AnalysisType aAnType, double aTextXmin, double aTextYmin, double aTextWidth, double aTextHeight, double aTextFont, double aTextSize)
 {
-  if(!fSaveLocationBase.IsNull()) return true;
+  aPad->cd();
+
+  float tLeftMargin = aPad->GetLeftMargin();
+  float tRightMargin = aPad->GetRightMargin();
+  float tTopMargin = aPad->GetTopMargin();
+  float tBottomMargin = aPad->GetBottomMargin();
+
+  float tReNormalizedWidth = 1. - (tLeftMargin+tRightMargin);
+  float tReNormalizedHeight = 1. - (tTopMargin+tBottomMargin);
+
+  //------------------------------------
+
+  double tNormalizedTextXmin = tLeftMargin + aTextXmin*tReNormalizedWidth;
+  double tNormalizedTextYmin = tBottomMargin + aTextYmin*tReNormalizedHeight;
+
+  double tNormalizedTextXmax = tNormalizedTextXmin + aTextWidth*tReNormalizedWidth;
+  double tNormalizedTextYmax = tNormalizedTextYmin + aTextHeight*tReNormalizedHeight;
+
+  //------------------------------------
+
+  TString tText = TString(cAnalysisRootTags[aAnType]);
+
+  TPaveText* tPaveText = new TPaveText(tNormalizedTextXmin,tNormalizedTextYmin,tNormalizedTextXmax,tNormalizedTextYmax,"NDC");
+    tPaveText->SetFillColor(0);
+    tPaveText->SetBorderSize(0);
+    tPaveText->SetTextAlign(22);
+    tPaveText->SetTextFont(aTextFont);
+    tPaveText->SetTextSize(aTextSize);
+    tPaveText->AddText(tText);
+
+  tPaveText->Draw();
+}
+
+//________________________________________________________________________________________________________________
+void PlotPartners::PrintText(TPad* aPad, TString aText, double aTextXmin, double aTextYmin, double aTextWidth, double aTextHeight, double aTextFont, double aTextSize)
+{
+  aPad->cd();
+
+  float tLeftMargin = aPad->GetLeftMargin();
+  float tRightMargin = aPad->GetRightMargin();
+  float tTopMargin = aPad->GetTopMargin();
+  float tBottomMargin = aPad->GetBottomMargin();
+
+  float tReNormalizedWidth = 1. - (tLeftMargin+tRightMargin);
+  float tReNormalizedHeight = 1. - (tTopMargin+tBottomMargin);
+
+  //------------------------------------
+
+  double tNormalizedTextXmin = tLeftMargin + aTextXmin*tReNormalizedWidth;
+  double tNormalizedTextYmin = tBottomMargin + aTextYmin*tReNormalizedHeight;
+
+  double tNormalizedTextXmax = tNormalizedTextXmin + aTextWidth*tReNormalizedWidth;
+  double tNormalizedTextYmax = tNormalizedTextYmin + aTextHeight*tReNormalizedHeight;
+
+  //------------------------------------
+  TPaveText* tPaveText = new TPaveText(tNormalizedTextXmin,tNormalizedTextYmin,tNormalizedTextXmax,tNormalizedTextYmax,"NDC");
+    tPaveText->SetFillColor(0);
+    tPaveText->SetBorderSize(0);
+    tPaveText->SetTextAlign(22);
+    tPaveText->SetTextFont(aTextFont);
+    tPaveText->SetTextSize(aTextSize);
+    tPaveText->AddText(aText);
+
+  tPaveText->Draw();
+}
+
+
+//________________________________________________________________________________________________________________
+void PlotPartners::ExistsSaveLocationBase()
+{
+  if(!fSaveLocationBase.IsNull()) return;
 
   cout << "fSaveLocationBase is Null!!!!!" << endl;
   cout << "Create? (0=No 1=Yes)" << endl;
   int tResponse;
   cin >> tResponse;
-  if(!tResponse) return false;
+  if(!tResponse) return;
 
   cout << "Enter base:" << endl;
   cin >> fSaveLocationBase;
   if(fSaveLocationBase[fSaveLocationBase.Length()] != '/') fSaveLocationBase += TString("/");
-  return true;
+  return;
 
 }
 

@@ -57,7 +57,7 @@ public:
 
   TPaveText* SetupTPaveText(TString aText, int aNx, int aNy, double aTextXmin=0.75, double aTextYmin=0.75, double aTextWidth=0.15, double aTextHeight=0.10, double aTextFont=63, double aTextSize=15);
   void SetupOptStat(int aNx, int aNy, double aStatX, double aStatY, double aStatW, double aStatH);
-  void AddGraphPadName(TPaveText* aText, int aNx, int aNy);
+  void AddPadPaveText(TPaveText* aText, int aNx, int aNy);
 
   void DrawInPad(int aNx, int aNy);
   void DrawAll();
@@ -80,7 +80,7 @@ protected:
   TCanvas* fCanvas;
 
   TObjArray* fGraphs;
-  vector<TPaveText*> fGraphsPadNames;
+  TObjArray* fPadPaveTexts;
 
   td2dTPadVec fPadArray;
   float** fXScaleFactors;
@@ -116,7 +116,7 @@ inline void CanvasPartition::AddGraph(int aNx, int aNy, T* aGraph, TString tPadL
   aGraph->SetLineColor(aMarkerColor);
   aGraph->SetMarkerSize(aMarkerSize);
 
-  if(!tPadLegendName.IsNull()) fGraphsPadNames[tPosition] = SetupTPaveText(tPadLegendName,aNx,aNy);
+  if(!tPadLegendName.IsNull()) AddPadPaveText(SetupTPaveText(tPadLegendName,aNx,aNy),aNx,aNy);
   ((TObjArray*)fGraphs->At(tPosition))->Add(aGraph);
 }
 

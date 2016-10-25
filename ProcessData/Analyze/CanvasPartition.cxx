@@ -33,7 +33,7 @@ CanvasPartition::CanvasPartition(TString aCanvasName, int aNx, int aNy, double a
   fCanvas(0),
 
   fGraphs(0),
-  fGraphsPadNames(0),
+  fPadPaveTexts(0),
 
   fPadArray(0),
 
@@ -48,16 +48,20 @@ CanvasPartition::CanvasPartition(TString aCanvasName, int aNx, int aNy, double a
   fYScaleFactors = GetScaleFactors(kYaxis,fPadArray,fNx,fNy);
 
   fGraphs = new TObjArray();
-  fGraphs->SetName("GraphsCollection");
+    fGraphs->SetName("GraphsCollection");
+  fPadPaveTexts = new TObjArray();
+    fPadPaveTexts->SetName("PaveTextsCollection");
 
   for(int i=0; i<aNx*aNy; i++)
   {
     TObjArray* tTemp = new TObjArray();
     tTemp->SetName(TString::Format("Graphs_%d",i));
     fGraphs->Add(tTemp);
-  }
 
-  fGraphsPadNames = vector<TPaveText*>(aNx*aNy);
+    TObjArray* tTemp2 = new TObjArray();
+    tTemp2->SetName(TString::Format("PaveTexts_%d",i));
+    fPadPaveTexts->Add(tTemp2);
+  }
 
 }
 
@@ -186,7 +190,11 @@ td2dTPadVec CanvasPartition::BuildPartition(TCanvas *aCanvas,const Int_t Nx,cons
 	 pad->SetFrameFillStyle(4000);
 	 //pad->SetTicks(1,1);
          pad->Draw();
-
+/*
+         pad->Update();
+         pad->cd();
+         pad->DrawFrame(fXaxisRangeLow,fYaxisRangeLow,fXaxisRangeHigh,fYaxisRangeHigh);
+*/
          tTempPadVec.push_back(pad);
       }
       returnPadArray.push_back(tTempPadVec);
@@ -283,10 +291,10 @@ void CanvasPartition::SetupOptStat(int aNx, int aNy, double aStatX, double aStat
 }
 
 //________________________________________________________________________________________________________________
-void CanvasPartition::AddGraphPadName(TPaveText* aText, int aNx, int aNy)
+void CanvasPartition::AddPadPaveText(TPaveText* aText, int aNx, int aNy)
 {
   int tPosition = aNx + aNy*fNx;
-  fGraphsPadNames[tPosition] = aText;
+  ((TObjArray*)fPadPaveTexts->At(tPosition))->Add(aText);
 }
 
 
@@ -304,15 +312,21 @@ void CanvasPartition::DrawInPad(int aNx, int aNy)
   TIter tNextGraph(tGraphsToDraw);
   TObject *tGraphObj = NULL;
 
-  int tCounter = 0;
-  while(tGraphObj = tNextGraph())
-  {
-    if(tCounter == 0) tGraphObj->Draw();
-    else tGraphObj->Draw("same");
-    tCounter++;
-  }
+  //One cannot use SetRangeUser to set xrange below (or, presumably, above) the limits of the histogram
+  //Therefore, I build this tTrash histogram below and use it to draw the correct axes.
+  //  Something similar could have be done on the individual pads themselves in BuildPartition (above),
+  //  but this method makes it easier for me to alter the attributes of the axes.
+  //NOTE: The histograms MUST be drawn with the option "sames" (NOT "same") for the fit parameters to still be drawn
+  TH1F* tTrash = new TH1F("","",1,fXaxisRangeLow,fXaxisRangeHigh);
+    SetupAxis(kXaxis,tTrash,fXScaleFactors[aNx][aNy],fYScaleFactors[aNx][aNy]);
+    SetupAxis(kYaxis,tTrash,fXScaleFactors[aNx][aNy],fYScaleFactors[aNx][aNy]);
+    tTrash->DrawCopy("AXIS");
+  delete tTrash;
 
-  fGraphsPadNames[tPosition]->Draw();
+  while(tGraphObj = tNextGraph()) tGraphObj->Draw("sames");
+
+  TObjArray* tPaveTexts = (TObjArray*)fPadPaveTexts->At(tPosition);
+  for(unsigned int i=0; i<tPaveTexts->GetEntries(); i++) tPaveTexts->At(i)->Draw();
 
   if(fDrawUnityLine)
   {

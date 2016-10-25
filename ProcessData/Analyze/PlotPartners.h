@@ -55,12 +55,15 @@ public:
   void SetupAxis(TAxis* aAxis, TString aTitle, 
                  float aTitleSize=0.05, float aTitleOffset=0.9, bool aCenterTitle=false, float aLabelSize=0.03, float aLabelOffset=0.005, int aNdivisions=510);
 
+  static void PrintAnalysisType(TPad* aPad, AnalysisType aAnType, double aTextXmin=0.75, double aTextYmin=0.75, double aTextWidth=0.15, double aTextHeight=0.10, double aTextFont=63, double aTextSize=15);
+  static void PrintText(TPad* aPad, TString aText, double aTextXmin=0.75, double aTextYmin=0.75, double aTextWidth=0.15, double aTextHeight=0.10, double aTextFont=63, double aTextSize=15);
+
 //  virtual TCanvas* DrawPurity();
 //  virtual TCanvas* DrawKStarCfs();
 //  virtual TCanvas* DrawAvgSepCfs();
 //  virtual TCanvas* DrawKStarTrueVsRec();
 
-  bool ExistsSaveLocationBase();
+  void ExistsSaveLocationBase();
   void SetSaveLocationBase(TString aBase);
 
 
@@ -68,6 +71,7 @@ public:
 protected:
   bool fContainsMC;
   TString fSaveLocationBase;
+  TString fDirNameModifier;
 
   Analysis* fAnalysis1;     //eg LamKchP,  LamK0,  XiKchP
   Analysis* fConjAnalysis1; //eg ALamKchM, ALamK0, AXiKchM
