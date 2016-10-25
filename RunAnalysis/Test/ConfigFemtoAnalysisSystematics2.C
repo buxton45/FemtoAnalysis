@@ -156,12 +156,12 @@ AliFemtoManager* ConfigFemtoAnalysis(const TString& aParamString="")
     //change the configuration
     TString tNewParamString = tParticleCuts;
     tNewParamString += tCutVariationsMin.cutName + TString(" = ") + TString::Format("%f",tCutVariationsMin.valuesToVary[iCutVal]) + TString(";");
-    tNewParamString += tCutVariationsMax.cutName + TString(" = ") + TString::Format("%f",tCutVariationsMax.valuesToVary[iCutVal]) + TString(";");
+    if(!tCutVariationsMax.cutName.IsNull()) tNewParamString += tCutVariationsMax.cutName + TString(" = ") + TString::Format("%f",tCutVariationsMax.valuesToVary[iCutVal]) + TString(";");
 
     int tBeginDirNameModifier = 1;
     if(tCutVariationsMin.cutName[1] == TString("|")) tBeginDirNameModifier = 2;
-    TString tDirNameModifier = tCutVariationsMin.cutName(tBeginDirNameModifier, tCutVariationsMin.cutName.Length() - 1) + TString("|") + TString::Format("%0.6f",tCutVariationsMin.valuesToVary[iCutVal]) + TString("|");
-    tDirNameModifier += tCutVariationsMax.cutName(tBeginDirNameModifier, tCutVariationsMax.cutName.Length() - 1) + TString("|") + TString::Format("%0.6f",tCutVariationsMax.valuesToVary[iCutVal]);
+    TString tDirNameModifier = tCutVariationsMin.cutName(tBeginDirNameModifier, tCutVariationsMin.cutName.Length() - 1) + TString("|") + TString::Format("%0.6f",tCutVariationsMin.valuesToVary[iCutVal]);
+    if(!tCutVariationsMax.cutName.IsNull()) tDirNameModifier += TString("|") + tCutVariationsMax.cutName(tBeginDirNameModifier, tCutVariationsMax.cutName.Length() - 1) + TString("|") + TString::Format("%0.6f",tCutVariationsMax.valuesToVary[iCutVal]);
     tDirNameModifier.ReplaceAll("|","_");
 
     // loop over centrality ranges
@@ -574,6 +574,11 @@ BuildParticleConfiguration(
       if(tParticleType.EqualTo("ALL")) tDesiredName = TString("ALL");
       if(tParticleType.EqualTo("ALLV0S")) tDesiredName = TString("ALLV0S");
       if(tParticleType.EqualTo(tDesiredName)) tCmd = tV0CutVarName + "." + tParticleCut(0, tParticleCut.Length());
+
+      if(tParticleType.EqualTo("CLAM"))  //do for both Lam and ALam
+      {
+        if(aV0CutParams.particlePDGType==AFALK::kPDGLam || aV0CutParams.particlePDGType==AFALK::kPDGALam) tCmd = tV0CutVarName + "." + tParticleCut(0, tParticleCut.Length());
+      }
     }
 
     if(!tCmd.IsNull())
