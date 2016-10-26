@@ -197,20 +197,20 @@ using std::vector;
   extern const double cLamKchP_3050StartValues[6];
   extern const double *cLamKchPStartValues[3];
 
-  extern const double cALamKchP_0010StartValues[6];
-  extern const double cALamKchP_1030StartValues[6];
-  extern const double cALamKchP_3050StartValues[6];
-  extern const double *cALamKchPStartValues[3];
+  extern const double cALamKchM_0010StartValues[6];
+  extern const double cALamKchM_1030StartValues[6];
+  extern const double cALamKchM_3050StartValues[6];
+  extern const double *cALamKchMStartValues[3];
 
   extern const double cLamKchM_0010StartValues[6];
   extern const double cLamKchM_1030StartValues[6];
   extern const double cLamKchM_3050StartValues[6];
   extern const double *cLamKchMStartValues[3];
 
-  extern const double cALamKchM_0010StartValues[6];
-  extern const double cALamKchM_1030StartValues[6];
-  extern const double cALamKchM_3050StartValues[6];
-  extern const double *cALamKchMStartValues[3];
+  extern const double cALamKchP_0010StartValues[6];
+  extern const double cALamKchP_1030StartValues[6];
+  extern const double cALamKchP_3050StartValues[6];
+  extern const double *cALamKchPStartValues[3];
 
   //-----
 

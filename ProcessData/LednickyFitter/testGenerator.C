@@ -14,8 +14,16 @@ int main(int argc, char **argv)
   TString tFileLocationBase = TString::Format("%sResults_cLamcKch_%s",tDirectoryBase.Data(),tResultsDate.Data());
   TString tFileLocationBaseMC = TString::Format("%sResults_cLamcKchMC_%s",tDirectoryBase.Data(),tResultsDate.Data());
 
-  FitGenerator* tLamKchP = new FitGenerator(tFileLocationBase,tFileLocationBaseMC,kLamKchP,kTrain,2);
+  AnalysisType tAnType = kLamKchP;
+  AnalysisRunType tAnRunType = kTrain;
+  int tNPartialAnalysis = 2;
+  CentralityType tCentType = kMB;
+  FitGeneratorType tGenType = kPairwConj;
+  bool tShareLambdaParams = false;
+
+  FitGenerator* tLamKchP = new FitGenerator(tFileLocationBase,tFileLocationBaseMC,tAnType,tAnRunType,tNPartialAnalysis,tCentType,tGenType,tShareLambdaParams);
   tLamKchP->SetSaveLocationBase(tDirectoryBase);
+  //tLamKchP->SetFitType(kChi2);
   bool SaveImages = true;
   bool ApplyMomResCorrection = false;
 

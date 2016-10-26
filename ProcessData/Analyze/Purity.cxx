@@ -316,6 +316,16 @@ void Purity::DrawPurity(TPad *aPad, bool aZoomBg)
     myText->AddText(TString::Format("%s Purity = %0.2f%%",cRootParticleTags[fParticleType],100*purity));
     myText->Draw();
 
+    double tSig = (*vInfo)(2);
+    double tSigpBgd = (*vInfo)(1);
+    TPaveText *myText2 = new TPaveText(0.15,0.54,0.35,0.64,"NDC");
+    myText2->SetFillColor(0);
+    myText2->SetBorderSize(0);
+    myText2->SetTextAlign(33);
+    myText2->AddText(TString::Format("Sig     = %0.3e",tSig));
+    myText2->AddText(TString::Format("Sig+Bgd = %0.3e",tSigpBgd));
+    myText2->Draw();
+
     TLegend *tLeg = new TLegend(0.65,0.50,0.89,0.89);
       tLeg->SetFillColor(0);
       tLeg->AddEntry(fCombinedPurity, "Data", "lp");

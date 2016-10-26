@@ -335,7 +335,17 @@ void LednickyFitter::CalculateChi2PML(int &npar, double &chi2, double *par)
 
   }
 
+  if(std::isnan(fChi2) || std::isinf(fChi2))
+  {
+    cout << "WARNING: fChi2 = nan, setting it equal to 10^9-----------------------------------------" << endl << endl;
+    fChi2 = pow(10,9);
+  }
+
   chi2 = fChi2;
+  if(fChi2 < fChi2GlobalMin) fChi2GlobalMin = fChi2;
+
+cout << "fChi2 = " << fChi2 << endl;
+cout << "fChi2GlobalMin = " << fChi2GlobalMin << endl << endl;
 }
 
 //________________________________________________________________________________________________________________
@@ -446,7 +456,17 @@ void LednickyFitter::CalculateChi2PMLwMomResCorrection(int &npar, double &chi2, 
 
   }
 
+  if(std::isnan(fChi2) || std::isinf(fChi2))
+  {
+    cout << "WARNING: fChi2 = nan, setting it equal to 10^9-----------------------------------------" << endl << endl;
+    fChi2 = pow(10,9);
+  }
+
   chi2 = fChi2;
+  if(fChi2 < fChi2GlobalMin) fChi2GlobalMin = fChi2;
+
+cout << "fChi2 = " << fChi2 << endl;
+cout << "fChi2GlobalMin = " << fChi2GlobalMin << endl << endl;
 }
 
 
@@ -843,7 +863,7 @@ void LednickyFitter::CalculateFitFunction(int &npar, double &chi2, double *par)
           {
             double tChi2 = 0.;
             if(fFitSharedAnalyses->GetFitType() == kChi2PML) tChi2 = GetPmlValue(tNumContent[ix],tDenContent[ix],tCorrectedFitCfContent[ix]);
-            else if(fFitSharedAnalyses->GetFitType() == kChi2) tChi2 = GetChi2Value(ix,tCf,tPar);
+            else if(fFitSharedAnalyses->GetFitType() == kChi2) tChi2 = GetChi2Value(ix+1,tCf,tPar);
             else tChi2 = 0.;
 
             fChi2Vec[iAnaly] += tChi2;
@@ -1008,7 +1028,17 @@ void LednickyFitter::CalculateChi2PMLwCorrectedCfs(int &npar, double &chi2, doub
 
   }
 
+  if(std::isnan(fChi2) || std::isinf(fChi2))
+  {
+    cout << "WARNING: fChi2 = nan, setting it equal to 10^9-----------------------------------------" << endl << endl;
+    fChi2 = pow(10,9);
+  }
+
   chi2 = fChi2;
+  if(fChi2 < fChi2GlobalMin) fChi2GlobalMin = fChi2;
+
+cout << "fChi2 = " << fChi2 << endl;
+cout << "fChi2GlobalMin = " << fChi2GlobalMin << endl << endl;
 }
 
 //________________________________________________________________________________________________________________
@@ -1063,11 +1093,11 @@ void LednickyFitter::DoFit()
   // 0 = economize (many params and/or fcn takes a long time to calculate and/or not interested in precise param erros)
   // 1 = default
   // 2 = Minuit allowed to waste calls in order to ensure precision (fcn evaluated in short time and/or param erros must be reliable)
-  arglist[0] = 1;
+  arglist[0] = 2;
   fMinuit->mnexcm("SET STR", arglist ,1,fErrFlg);
 
   // Now ready for minimization step
-  arglist[0] = 5000;
+  arglist[0] = 50000;
   arglist[1] = 0.01;
   fMinuit->mnexcm("MIGRAD", arglist ,2,fErrFlg);
 

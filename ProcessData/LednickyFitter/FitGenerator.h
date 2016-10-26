@@ -62,11 +62,15 @@ public:
   void SetSharedParameter(ParameterType aParamType, vector<int> &aSharedAnalyses); //share amongst analyses selected in aSharedAnalyses
   void SetSharedParameter(ParameterType aParamType, vector<int> &aSharedAnalyses, double aStartValue, double aLowerBound=0., double aUpperBound=0.);
 
+  void SetSharedAndFixedParameter(ParameterType aParamType, double aFixedValue);
+
   void SetParameter(ParameterType aParamType, int aAnalysisNumber, double aStartValue, double aLowerBound=0., double aUpperBound=0.);
 
   void SetUseRadiusLimits(bool aUse);
   void SetUseScattParamLimits(bool aUse);
   void SetUseLambdaLimits(bool aUse);
+
+  void SetFitType(FitType aFitType);
 
 
 protected:
@@ -104,6 +108,9 @@ inline void FitGenerator::SetSharedParameter(ParameterType aParamType, vector<in
 inline void FitGenerator::SetSharedParameter(ParameterType aParamType, vector<int> &aSharedAnalyses, double aStartValue, double aLowerBound, double aUpperBound) 
   {fSharedAn->SetSharedParameter(aParamType,aSharedAnalyses,aStartValue,aLowerBound,aUpperBound);}
 
+inline void FitGenerator::SetSharedAndFixedParameter(ParameterType aParamType, double aFixedValue)
+  {fSharedAn->SetSharedAndFixedParameter(aParamType,aFixedValue);}
+
 inline void FitGenerator::SetParameter(ParameterType aParamType, int aAnalysisNumber, double aStartValue, double aLowerBound, double aUpperBound)
   {fSharedAn->SetParameter(aParamType,aAnalysisNumber,aStartValue,aLowerBound,aUpperBound);}
 
@@ -111,5 +118,6 @@ inline void FitGenerator::SetUseRadiusLimits(bool aUse) {SetUseLimits(fRadiusFit
 inline void FitGenerator::SetUseScattParamLimits(bool aUse) {SetUseLimits(fScattFitParams,aUse);}
 inline void FitGenerator::SetUseLambdaLimits(bool aUse) {SetUseLimits(fLambdaFitParams,aUse);}
 
+inline void FitGenerator::SetFitType(FitType aFitType) {fSharedAn->SetFitType(aFitType);}
 #endif
 
