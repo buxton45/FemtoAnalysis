@@ -300,6 +300,7 @@ TCanvas* PlotPartnersLamK0::DrawMassAssumingK0ShortHypothesis(AnalysisType aAnal
 
   //------------------------------------
   TString tCanvasName = TString("canMassAssK0Hyp_") + TString(cAnalysisBaseTags[aAnalysisType]);
+  if(!fDirNameModifier.IsNull()) tCanvasName += fDirNameModifier;
   TCanvas* tReturnCan = new TCanvas(tCanvasName,tCanvasName);
   tReturnCan->cd();
   gStyle->SetOptStat(0);
@@ -342,6 +343,7 @@ TCanvas* PlotPartnersLamK0::DrawMassAssumingLambdaHypothesis(AnalysisType aAnaly
   }
   //------------------------------------
   TString tCanvasName = TString("canMassAssLamHyp_") + TString(cAnalysisBaseTags[aAnalysisType]);
+  if(!fDirNameModifier.IsNull()) tCanvasName += fDirNameModifier;
   TCanvas* tReturnCan = new TCanvas(tCanvasName,tCanvasName);
   tReturnCan->cd();
   gStyle->SetOptStat(0);
@@ -397,6 +399,7 @@ TCanvas* PlotPartnersLamK0::DrawMassAssumingAntiLambdaHypothesis(AnalysisType aA
   }
   //------------------------------------
   TString tCanvasName = TString("canMassAssALamHyp_") + TString(cAnalysisBaseTags[aAnalysisType]);
+  if(!fDirNameModifier.IsNull()) tCanvasName += fDirNameModifier;
   TCanvas* tReturnCan = new TCanvas(tCanvasName,tCanvasName);
   tReturnCan->cd();
   gStyle->SetOptStat(0);

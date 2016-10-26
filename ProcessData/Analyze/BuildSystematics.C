@@ -13,15 +13,13 @@ int main(int argc, char **argv)
 //-----------------------------------------------------------------------------
 
   //-----Data
-
+/*
   TString tDirectoryBase = "/home/jesse/Analysis/FemtoAnalysis/Results/Systematics/Results_cLamcKch_20161025/";
   TString tFileLocationBase = tDirectoryBase+"Results_cLamcKch_Systematics_20161025";
   TString tFileLocationBaseMC = tDirectoryBase+"Results_cLamcKchMC_Systematics_20161025";
 
-/*
-  TString tDirNameModifierBase1 = "_ALLV0S_maxDcaV0Daughters_";
-  vector<double> tModifierValues1 = {0.30,0.40,0.50};
-*/
+//  TString tDirNameModifierBase1 = "_ALLV0S_maxDcaV0Daughters_";
+//  vector<double> tModifierValues1 = {0.30,0.40,0.50};
 
   TString tDirNameModifierBase1 = "_ALLV0S_minInvMassReject_";
   vector<double> tModifierValues1 = {0.494614, 0.492614, 0.488614, 0.482614};
@@ -48,16 +46,57 @@ int main(int argc, char **argv)
     TCanvas* tCanKStarCf = tLamKch0010->DrawKStarCfs(SaveImages);
     TCanvas* tCanKStarTrueVsRec = tLamKch0010->DrawKStarTrueVsRec(kMixed,SaveImages);
 
-/*
-    TCanvas* tCanAvgSepCfs = tLamKch0010->DrawAvgSepCfs(SaveImages);
-    TCanvas* tCanAvgSepCfsLamKchP = tLamKch0010->DrawAvgSepCfs(kLamKchP,true,SaveImages);
-    TCanvas* tCanAvgSepCfsLamKchM = tLamKch0010->DrawAvgSepCfs(kLamKchM,true,SaveImages);
-*/
+//    TCanvas* tCanAvgSepCfs = tLamKch0010->DrawAvgSepCfs(SaveImages);
+//    TCanvas* tCanAvgSepCfsLamKchP = tLamKch0010->DrawAvgSepCfs(kLamKchP,true,SaveImages);
+//    TCanvas* tCanAvgSepCfsLamKchM = tLamKch0010->DrawAvgSepCfs(kLamKchM,true,SaveImages);
 
 //    TCanvas* tCanPart1MassFail = tLamKch0010->ViewPart1MassFail(false,SaveImages);
 
     TCanvas* tCanMassAssK0_LamKchP = tLamKch0010->DrawMassAssumingK0ShortHypothesis(kLamKchP,SaveImages);
   }
+*/
+
+
+  TString tDirectoryBase = "/home/jesse/Analysis/FemtoAnalysis/Results/Systematics/Results_cLamK0_20161025/";
+  TString tFileLocationBase = tDirectoryBase+"Results_cLamK0_Systematics_20161025";
+  TString tFileLocationBaseMC = tDirectoryBase+"Results_cLamK0MC_Systematics_20161025";
+
+  TString tDirNameModifierBase1 = "_K0s_minInvMassReject_";
+  vector<double> tModifierValues1 = {1.112683, 1.110683, 1.106683, 1.100683};
+
+  TString tDirNameModifierBase2 = "_K0s_maxInvMassReject_";
+  vector<double> tModifierValues2 = {1.118683, 1.120683, 1.124683, 1.130683};
+
+  bool SaveImages = true;
+
+  for(unsigned int iVal=0; iVal<tModifierValues1.size(); iVal++)
+  {
+    TString tDirNameModifier = tDirNameModifierBase1 + TString::Format("%0.6f",tModifierValues1[iVal]);
+    if(!tDirNameModifierBase2.IsNull() && tModifierValues2.size()==tModifierValues1.size())
+    {
+      tDirNameModifier += tDirNameModifierBase2 + TString::Format("%0.6f",tModifierValues2[iVal]);
+    }
+
+    PlotPartnersLamK0* tLamK00010 = new PlotPartnersLamK0(tFileLocationBase,tFileLocationBaseMC,kLamK0,k0010,kTrainSys,2,tDirNameModifier);
+    tLamK00010->SetSaveLocationBase(tDirectoryBase);
+
+
+    TCanvas* tCanPur = tLamK00010->DrawPurity(SaveImages);
+
+    TCanvas* tCanKStarCf = tLamK00010->DrawKStarCfs(SaveImages);
+    TCanvas* tCanKStarTrueVsRec = tLamK00010->DrawKStarTrueVsRec(kMixed,SaveImages);
+
+    TCanvas* tCanMassAssK0_LamK0 = tLamK00010->DrawMassAssumingK0ShortHypothesis(kLamK0,SaveImages);
+    TCanvas* tCanMassAssLam_LamK0 = tLamK00010->DrawMassAssumingLambdaHypothesis(kLamK0,SaveImages);
+    TCanvas* tCanMassAssALam_LamK0 = tLamK00010->DrawMassAssumingAntiLambdaHypothesis(kLamK0,SaveImages);
+
+    TCanvas* tCanMassAssK0_ALamK0 = tLamK00010->DrawMassAssumingK0ShortHypothesis(kALamK0,SaveImages);
+    TCanvas* tCanMassAssLam_ALamK0 = tLamK00010->DrawMassAssumingLambdaHypothesis(kALamK0,SaveImages);
+    TCanvas* tCanMassAssALam_ALamK0 = tLamK00010->DrawMassAssumingAntiLambdaHypothesis(kALamK0,SaveImages);
+  }
+
+
+
 
 cout << "DONE" << endl;
 //-------------------------------------------------------------------------------
