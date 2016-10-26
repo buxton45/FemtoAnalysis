@@ -12,7 +12,7 @@ ClassImp(Purity)
 
 //GLOBAL!
 
-const double LambdaMass = 1.115683, KaonMass = 0.493677, XiMass = 1.32171;
+const double LambdaMass = 1.115683, KaonMass = 0.497614, XiMass = 1.32171;
 
 //______________________________________________________________________________________________________________
 bool reject;
@@ -116,7 +116,7 @@ void Purity::CombineHistos()
   TH1* tCombinedPurity = (TH1*)fPurityHistos[0]->Clone(fCombinedPurityName);
   if(!tCombinedPurity->GetSumw2N()) {tCombinedPurity->Sumw2();}
 
-  for(unsigned int i=0; i<fPurityHistos.size(); i++)
+  for(unsigned int i=1; i<fPurityHistos.size(); i++)
   {
     tCombinedPurity->Add((TH1*)fPurityHistos[i]);
   }
@@ -154,11 +154,18 @@ void Purity::CalculatePurity()
   fitBgd2->SetParameters(fitBgd->GetParameters());
 
   //--------------------------------------------------------------------------------------------
-  double tBgd = fitBgd2->Integral(fROI[0],fROI[1]);
+  int tBinROILow = fCombinedPurity->FindBin(fROI[0]);
+  int tBinROIHigh = fCombinedPurity->FindBin(fROI[1]);
+  //Using tROILow and tROIHigh ensures fitBgd2 and fCombinedPurity are integrating over exactly the same region
+  //because likely fROI[0] and fROI[1] fall in the middle of a fCombinedPurity bin
+  double tROILow = fCombinedPurity->GetBinLowEdge(tBinROILow);  //lower edge of low bin
+  double tROIHigh = fCombinedPurity->GetBinLowEdge(tBinROIHigh+1);  //upper edge of high bin
+
+  double tBgd = fitBgd2->Integral(tROILow,tROIHigh);
   tBgd /= fCombinedPurity->GetBinWidth(0);  //divide by bin size
   cout << fCombinedPurityName << ": " << "Bgd = " << tBgd << endl;
   //-----
-  double tSigpbgd = fCombinedPurity->Integral(fCombinedPurity->FindBin(fROI[0]),fCombinedPurity->FindBin(fROI[1]));
+  double tSigpbgd = fCombinedPurity->Integral(tBinROILow,tBinROIHigh);
   cout << fCombinedPurityName << ": " << "Sig+Bgd = " << tSigpbgd << endl;
   //-----
   double tSig = tSigpbgd-tBgd;
@@ -285,8 +292,9 @@ void Purity::DrawPurity(TPad *aPad, bool aZoomBg)
 
   //--------------------------------------------------------------------------------------------
   aPad->cd();
-//  gStyle->SetOptStat(0);
-//  gStyle->SetOptTitle(0);
+  gStyle->SetOptStat(0);
+  gStyle->SetOptTitle(0);
+  gStyle->SetOptFit(0);
 
   fCombinedPurity->SetLabelSize(0.04, "xy");
 
@@ -301,15 +309,11 @@ void Purity::DrawPurity(TPad *aPad, bool aZoomBg)
 
   if(!aZoomBg)
   {
+    double purity = (*vInfo)(3);
     TPaveText *myText = new TPaveText(0.12,0.65,0.42,0.85,"NDC");
     myText->SetFillColor(0);
     myText->SetBorderSize(1);
-    char buffer[50];
-    double purity = (*vInfo)(3);
-    const char* title = cRootParticleTags[fParticleType];
-
-    sprintf(buffer, "%s Purity = %.2f%%",title, 100.*purity);
-    myText->AddText(buffer);
+    myText->AddText(TString::Format("%s Purity = %0.2f%%",cRootParticleTags[fParticleType],100*purity));
     myText->Draw();
 
     TLegend *tLeg = new TLegend(0.65,0.50,0.89,0.89);

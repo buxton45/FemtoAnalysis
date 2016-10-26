@@ -19,33 +19,39 @@ int main(int argc, char **argv)
   PlotPartnersLamKch* tLamKch0010 = new PlotPartnersLamKch(FileLocationBase,FileLocationBaseMC,kLamKchP,k0010);
 */
 
-  TString DirectoryBase = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_20161022/";
-  TString FileLocationBase = DirectoryBase+"Results_cLamcKch_20161022";
-  TString FileLocationBaseMC = DirectoryBase+"Results_cLamcKchMC_20161022";
-  PlotPartnersLamKch* tLamKch0010 = new PlotPartnersLamKch(FileLocationBase,FileLocationBaseMC,kLamKchP,k0010,kTrain,2);
-  tLamKch0010->SetSaveLocationBase(DirectoryBase);
-  bool SaveImages = false;
+  TString tResultsDate_LamKch = "20161025";
+  TString tDirectoryBase_LamKch = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_%s/",tResultsDate_LamKch.Data());
 
-  TCanvas* tCanPur = tLamKch0010->DrawPurity(SaveImages);
-  TCanvas* tCanKStarCf = tLamKch0010->DrawKStarCfs(SaveImages);
-  TCanvas* tCanKStarTrueVsRec = tLamKch0010->DrawKStarTrueVsRec(kMixed,SaveImages);
+  //TString tDirectoryBase_LamKch = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_" + tResultsDate_LamKch + "/";
+  TString tFileLocationBase_LamKch = tDirectoryBase_LamKch+"Results_cLamcKch_"+tResultsDate_LamKch;
+  TString tFileLocationBaseMC_LamKch = tDirectoryBase_LamKch+"Results_cLamcKchMC_"+tResultsDate_LamKch;
 
-  TCanvas* tCanAvgSepCfs = tLamKch0010->DrawAvgSepCfs(SaveImages);
-  TCanvas* tCanAvgSepCfsLamKchP = tLamKch0010->DrawAvgSepCfs(kLamKchP,true,SaveImages);
-  TCanvas* tCanAvgSepCfsLamKchM = tLamKch0010->DrawAvgSepCfs(kLamKchM,true,SaveImages);
+  PlotPartnersLamKch* tLamKch0010 = new PlotPartnersLamKch(tFileLocationBase_LamKch,tFileLocationBaseMC_LamKch,kLamKchP,k0010,kTrain,2);
+  tLamKch0010->SetSaveLocationBase(tDirectoryBase_LamKch);
+  bool SaveImages_LamKch = false;
 
-//  TCanvas* tCanPart1MassFail = tLamKch0010->ViewPart1MassFail(true,SaveImages);
+  TCanvas* tCanPur_LamKch = tLamKch0010->DrawPurity(SaveImages_LamKch);
+  TCanvas* tCanKStarCf_LamKch = tLamKch0010->DrawKStarCfs(SaveImages_LamKch);
+  TCanvas* tCanKStarTrueVsRec_LamKch = tLamKch0010->DrawKStarTrueVsRec(kSame,SaveImages_LamKch);
 
-  TCanvas* tCanMassAssK0_LamKchP = tLamKch0010->DrawMassAssumingK0ShortHypothesis(kLamKchP,SaveImages);
+  TCanvas* tCanAvgSepCfs_LamKch = tLamKch0010->DrawAvgSepCfs(SaveImages_LamKch);
+  TCanvas* tCanAvgSepCfsLamKchP_LamKch = tLamKch0010->DrawAvgSepCfs(kLamKchP,true,SaveImages_LamKch);
+  TCanvas* tCanAvgSepCfsLamKchM_LamKch = tLamKch0010->DrawAvgSepCfs(kLamKchM,true,SaveImages_LamKch);
+
+//  TCanvas* tCanPart1MassFail_LamKch = tLamKch0010->ViewPart1MassFail(true,SaveImages_LamKch);
+
+  TCanvas* tCanMassAssK0_LamKchP = tLamKch0010->DrawMassAssumingK0ShortHypothesis(kLamKchP,SaveImages_LamKch);
 
 //-------------------------------------------------------------------------------
 
-  TString DirectoryBase_LamK0 = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamK0_20161022/";
-  TString FileLocationBase_LamK0 = DirectoryBase_LamK0+"Results_cLamK0_20161022";
-  TString FileLocationBaseMC_LamK0 = DirectoryBase_LamK0+"Results_cLamK0MC_20161022";
-  PlotPartnersLamK0* tLamK00010 = new PlotPartnersLamK0(FileLocationBase_LamK0,FileLocationBaseMC_LamK0,kLamK0,k0010,kTrain,2);
-  tLamK00010->SetSaveLocationBase(DirectoryBase_LamK0);
-  bool SaveImages_LamK0 = true;
+  TString tResultsDate_LamK0 = "20161025";
+  TString tDirectoryBase_LamK0 = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamK0_" + tResultsDate_LamK0 + "/";
+  TString tFileLocationBase_LamK0 = tDirectoryBase_LamK0+"Results_cLamK0_" + tResultsDate_LamK0;
+  TString tFileLocationBaseMC_LamK0 = tDirectoryBase_LamK0+"Results_cLamK0MC_" + tResultsDate_LamK0;
+
+  PlotPartnersLamK0* tLamK00010 = new PlotPartnersLamK0(tFileLocationBase_LamK0,tFileLocationBaseMC_LamK0,kLamK0,k0010,kTrain,2);
+  tLamK00010->SetSaveLocationBase(tDirectoryBase_LamK0);
+  bool SaveImages_LamK0 = false;
 
   TCanvas* tCanPur_LamK0 = tLamK00010->DrawPurity(SaveImages_LamK0);
   TCanvas* tCanKStarCf_LamK0 = tLamK00010->DrawKStarCfs(SaveImages_LamK0);

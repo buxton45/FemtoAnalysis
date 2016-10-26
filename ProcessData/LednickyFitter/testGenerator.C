@@ -8,14 +8,14 @@ int main(int argc, char **argv)
   //This allows the user a chance to look at and manipulate a TBrowser before
   //the program ends and closes everything
 //-----------------------------------------------------------------------------
+  TString tResultsDate = "20161025";
 
-  TString DirectoryBase_Train = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_20161020/";
-  TString FileLocationBase_Train = DirectoryBase_Train+"Results_cLamcKch_20161020";
-  TString FileLocationBaseMC_Train = DirectoryBase_Train+"Results_cLamcKchMC_20161020";
+  TString tDirectoryBase = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_%s/",tResultsDate.Data());
+  TString tFileLocationBase = TString::Format("%sResults_cLamcKch_%s",tDirectoryBase.Data(),tResultsDate.Data());
+  TString tFileLocationBaseMC = TString::Format("%sResults_cLamcKchMC_%s",tDirectoryBase.Data(),tResultsDate.Data());
 
-
-  FitGenerator* tLamKchP = new FitGenerator(FileLocationBase_Train,FileLocationBaseMC_Train,kLamKchP,kTrain,2);
-  tLamKchP->SetSaveLocationBase(DirectoryBase_Train);
+  FitGenerator* tLamKchP = new FitGenerator(tFileLocationBase,tFileLocationBaseMC,kLamKchP,kTrain,2);
+  tLamKchP->SetSaveLocationBase(tDirectoryBase);
   bool SaveImages = true;
   bool ApplyMomResCorrection = false;
 
@@ -29,8 +29,6 @@ int main(int argc, char **argv)
   TCanvas* tKStarwFitsCan = tLamKchP->DrawKStarCfswFits(SaveImages);
 
 
-//  TString FileLocationBase = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_20161007/Results_cLamcKch_20161007";
-//  TString FileLocationBaseMC = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_20161007/Results_cLamcKchMC_20161007";
 
 
 //-------------------------------------------------------------------------------
