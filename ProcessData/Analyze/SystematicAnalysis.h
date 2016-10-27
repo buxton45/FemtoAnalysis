@@ -23,10 +23,21 @@ class SystematicAnalysis {
 public:
   SystematicAnalysis(TString aFileLocationBase, AnalysisType aAnalysisType, CentralityType aCentralityType,
                    TString aDirNameModifierBase1, vector<double> &aModifierValues1,
-                   TString aDirNameModifierBase2="", vector<double> &aModifierValues2 = vector<double>());
+                   TString aDirNameModifierBase2, vector<double> &aModifierValues2);
+
+  SystematicAnalysis(TString aFileLocationBase, AnalysisType aAnalysisType, CentralityType aCentralityType,
+                   TString aDirNameModifierBase1, vector<double> &aModifierValues1);
 
   virtual ~SystematicAnalysis();
 
+  int Factorial(int aInput);
+  int nChoosek(int aN, int aK);
+
+  TH1* GetDiffHist(TH1* aHist1, TH1* aHist2);
+  double GetPValueCorrelated(TH1* aHist1, TH1* aHist2);
+  void GetAllPValues();
+  void DrawAll();
+  void DrawAllDiffs();
 
 protected:
   TString fFileLocationBase;

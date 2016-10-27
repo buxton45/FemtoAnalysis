@@ -13,21 +13,47 @@ int main(int argc, char **argv)
 //-----------------------------------------------------------------------------
 
   //-----Data
+
+  TString tResultsDate = "20161026";
+
 /*
-  TString tDirectoryBase = "/home/jesse/Analysis/FemtoAnalysis/Results/Systematics/Results_cLamcKch_20161025/";
-  TString tFileLocationBase = tDirectoryBase+"Results_cLamcKch_Systematics_20161025";
-  TString tFileLocationBaseMC = tDirectoryBase+"Results_cLamcKchMC_Systematics_20161025";
-
-//  TString tDirNameModifierBase1 = "_ALLV0S_maxDcaV0Daughters_";
-//  vector<double> tModifierValues1 = {0.30,0.40,0.50};
-
   TString tDirNameModifierBase1 = "_ALLV0S_minInvMassReject_";
   vector<double> tModifierValues1 = {0.494614, 0.492614, 0.488614, 0.482614};
 
   TString tDirNameModifierBase2 = "_ALLV0S_maxInvMassReject_";
   vector<double> tModifierValues2 = {0.500614, 0.502614, 0.506614, 0.512614};
+*/
 
-  bool SaveImages = true;
+  TString tDirNameModifierBase1 = "_ALLV0S_maxDcaV0Daughters_";
+  vector<double> tModifierValues1 = {0.30,0.40,0.50};
+
+  TString tDirNameModifierBase2 = "";
+  vector<double> tModifierValues2 = {};
+
+
+  TString tDirectoryBase = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Systematics/Results_cLamcKch_Systematics%s",tDirNameModifierBase1.Data());
+  if(!tDirNameModifierBase2.IsNull())
+  {
+    tDirectoryBase.Remove(TString::kTrailing,'_');
+    tDirectoryBase += tDirNameModifierBase2;
+  }
+  tDirectoryBase += TString::Format("%s/",tResultsDate.Data());
+
+  TString tFileLocationBase = tDirectoryBase + TString::Format("Results_cLamcKch_Systematics%s",tDirNameModifierBase1.Data());
+  TString tFileLocationBaseMC = tDirectoryBase + TString::Format("Results_cLamcKchMC_Systematics%s",tDirNameModifierBase1.Data());
+  if(!tDirNameModifierBase2.IsNull())
+  {
+    tFileLocationBase.Remove(TString::kTrailing,'_');
+    tFileLocationBaseMC.Remove(TString::kTrailing,'_');
+
+    tFileLocationBase += tDirNameModifierBase2;
+    tFileLocationBaseMC += tDirNameModifierBase2;
+  }
+  tFileLocationBase += tResultsDate;
+  tFileLocationBaseMC += tResultsDate;
+
+
+  bool SaveImages = false;
 
   for(unsigned int iVal=0; iVal<tModifierValues1.size(); iVal++)
   {
@@ -54,18 +80,39 @@ int main(int argc, char **argv)
 
     TCanvas* tCanMassAssK0_LamKchP = tLamKch0010->DrawMassAssumingK0ShortHypothesis(kLamKchP,SaveImages);
   }
-*/
 
 
-  TString tDirectoryBase = "/home/jesse/Analysis/FemtoAnalysis/Results/Systematics/Results_cLamK0_20161025/";
-  TString tFileLocationBase = tDirectoryBase+"Results_cLamK0_Systematics_20161025";
-  TString tFileLocationBaseMC = tDirectoryBase+"Results_cLamK0MC_Systematics_20161025";
+/*
+  TString tResultsDate = "20161025";
 
   TString tDirNameModifierBase1 = "_K0s_minInvMassReject_";
   vector<double> tModifierValues1 = {1.112683, 1.110683, 1.106683, 1.100683};
 
   TString tDirNameModifierBase2 = "_K0s_maxInvMassReject_";
   vector<double> tModifierValues2 = {1.118683, 1.120683, 1.124683, 1.130683};
+
+  TString tDirectoryBase = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Systematics/Results_cLamK0_Systematics%s",tDirNameModifierBase1.Data());
+  if(!tDirNameModifierBase2.IsNull())
+  {
+    tDirectoryBase.Remove(TString::kTrailing,'_');
+    tDirectoryBase += tDirNameModifierBase2;
+  }
+  tDirectoryBase += TString::Format("%s/",tResultsDate.Data());
+
+  TString tFileLocationBase = tDirectoryBase + TString::Format("Results_cLamK0_Systematics%s",tDirNameModifierBase1.Data());
+  TString tFileLocationBaseMC = tDirectoryBase + TString::Format("Results_cLamK0MC_Systematics%s",tDirNameModifierBase1.Data());
+  if(!tDirNameModifierBase2.IsNull())
+  {
+    tFileLocationBase.Remove(TString::kTrailing,'_');
+    tFileLocationBaseMC.Remove(TString::kTrailing,'_');
+
+    tFileLocationBase += tDirNameModifierBase2;
+    tFileLocationBaseMC += tDirNameModifierBase2;
+  }
+  tFileLocationBase += tResultsDate;
+  tFileLocationBaseMC += tResultsDate;
+
+
 
   bool SaveImages = true;
 
@@ -95,7 +142,7 @@ int main(int argc, char **argv)
     TCanvas* tCanMassAssALam_ALamK0 = tLamK00010->DrawMassAssumingAntiLambdaHypothesis(kALamK0,SaveImages);
   }
 
-
+*/
 
 
 cout << "DONE" << endl;
