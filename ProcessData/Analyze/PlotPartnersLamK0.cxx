@@ -281,22 +281,98 @@ TCanvas* PlotPartnersLamK0::ViewPart1MassFail(bool aDrawWideRangeToo, bool aSave
 }
 
 //________________________________________________________________________________________________________________
-TCanvas* PlotPartnersLamK0::DrawMassAssumingK0ShortHypothesis(AnalysisType aAnalysisType, bool aSaveImage)
+TH1* PlotPartnersLamK0::GetMassAssumingK0ShortHypothesis(AnalysisType aAnalysisType, int aMarkerColor, int aMarkerStyle, double aMarkerSize)
 {
-  TH1* tHistToDraw;
+  TH1* tReturnHist;
 
   switch(aAnalysisType) {
   case kLamK0:
-    tHistToDraw = fAnalysis1->GetMassAssumingK0ShortHypothesis();
+    tReturnHist = fAnalysis1->GetMassAssumingK0ShortHypothesis();
     break;
 
   case kALamK0:
-    tHistToDraw = fConjAnalysis1->GetMassAssumingK0ShortHypothesis();
+    tReturnHist = fConjAnalysis1->GetMassAssumingK0ShortHypothesis();
     break;
 
   default:
-    cout << "ERROR: PlotPartnersLamK0::DrawMassAssumingK0ShortHypothesis: Invalid aAnalysisType = " << aAnalysisType << endl;
+    cout << "ERROR: PlotPartnersLamK0::GetMassAssumingK0ShortHypothesis: Invalid aAnalysisType = " << aAnalysisType << endl;
   }
+
+  tReturnHist->SetMarkerColor(aMarkerColor);
+  tReturnHist->SetLineColor(aMarkerColor);
+  tReturnHist->SetMarkerStyle(aMarkerStyle);
+  tReturnHist->SetMarkerSize(aMarkerSize);
+
+  SetupAxis(tReturnHist->GetXaxis(),0.29,0.58,"Mass Assuming K^{0}_{S} Hypothesis (GeV/c^{2})");
+  SetupAxis(tReturnHist->GetYaxis(),"dN/dM_{inv}");
+
+  return tReturnHist;
+}
+
+//________________________________________________________________________________________________________________
+TH1* PlotPartnersLamK0::GetMassAssumingLambdaHypothesis(AnalysisType aAnalysisType, int aMarkerColor, int aMarkerStyle, double aMarkerSize)
+{
+  TH1* tReturnHist;
+
+  switch(aAnalysisType) {
+  case kLamK0:
+    tReturnHist = fAnalysis1->GetMassAssumingLambdaHypothesis();
+    break;
+
+  case kALamK0:
+    tReturnHist = fConjAnalysis1->GetMassAssumingLambdaHypothesis();
+    break;
+
+  default:
+    cout << "ERROR: PlotPartnersLamK0::GetMassAssumingLambdaHypothesis: Invalid aAnalysisType = " << aAnalysisType << endl;
+  }
+
+  tReturnHist->SetMarkerColor(aMarkerColor);
+  tReturnHist->SetLineColor(aMarkerColor);
+  tReturnHist->SetMarkerStyle(aMarkerStyle);
+  tReturnHist->SetMarkerSize(aMarkerSize);
+
+  SetupAxis(tReturnHist->GetXaxis(),1.0,2.2,"Mass Assuming #Lambda Hypothesis (GeV/c^{2})");
+  SetupAxis(tReturnHist->GetYaxis(),"dN/dM_{inv}");
+
+  return tReturnHist;
+}
+
+//________________________________________________________________________________________________________________
+TH1* PlotPartnersLamK0::GetMassAssumingAntiLambdaHypothesis(AnalysisType aAnalysisType, int aMarkerColor, int aMarkerStyle, double aMarkerSize)
+{
+  TH1* tReturnHist;
+
+  switch(aAnalysisType) {
+  case kLamK0:
+    tReturnHist = fAnalysis1->GetMassAssumingAntiLambdaHypothesis();
+    break;
+
+  case kALamK0:
+    tReturnHist = fConjAnalysis1->GetMassAssumingAntiLambdaHypothesis();
+    break;
+
+  default:
+    cout << "ERROR: PlotPartnersLamK0::GetMassAssumingAntiLambdaHypothesis: Invalid aAnalysisType = " << aAnalysisType << endl;
+  }
+
+  tReturnHist->SetMarkerColor(aMarkerColor);
+  tReturnHist->SetLineColor(aMarkerColor);
+  tReturnHist->SetMarkerStyle(aMarkerStyle);
+  tReturnHist->SetMarkerSize(aMarkerSize);
+
+  SetupAxis(tReturnHist->GetXaxis(),1.0,2.2,"Mass Assuming #bar{#Lambda} Hypothesis (GeV/c^{2})");
+  SetupAxis(tReturnHist->GetYaxis(),"dN/dM_{inv}");
+
+  return tReturnHist;
+}
+
+
+
+//________________________________________________________________________________________________________________
+TCanvas* PlotPartnersLamK0::DrawMassAssumingK0ShortHypothesis(AnalysisType aAnalysisType, bool aSaveImage)
+{
+  TH1* tHistToDraw = GetMassAssumingK0ShortHypothesis(aAnalysisType);
 
   //------------------------------------
   TString tCanvasName = TString("canMassAssK0Hyp_") + TString(cAnalysisBaseTags[aAnalysisType]);
@@ -304,14 +380,6 @@ TCanvas* PlotPartnersLamK0::DrawMassAssumingK0ShortHypothesis(AnalysisType aAnal
   TCanvas* tReturnCan = new TCanvas(tCanvasName,tCanvasName);
   tReturnCan->cd();
   gStyle->SetOptStat(0);
-
-  tHistToDraw->SetMarkerColor(1);
-  tHistToDraw->SetLineColor(1);
-  tHistToDraw->SetMarkerStyle(20);
-  tHistToDraw->SetMarkerSize(0.5);
-
-  SetupAxis(tHistToDraw->GetXaxis(),0.29,0.58,"Mass Assuming K^{0}_{S} Hypothesis (GeV/c^{2})");
-  SetupAxis(tHistToDraw->GetYaxis(),"dN/dM_{inv}");
 
   tHistToDraw->DrawCopy();
   PrintAnalysisType((TPad*)tReturnCan,aAnalysisType,0.80,0.85,0.15,0.10,63,30);
@@ -327,34 +395,14 @@ TCanvas* PlotPartnersLamK0::DrawMassAssumingK0ShortHypothesis(AnalysisType aAnal
 //________________________________________________________________________________________________________________
 TCanvas* PlotPartnersLamK0::DrawMassAssumingLambdaHypothesis(AnalysisType aAnalysisType, bool aSaveImage)
 {
-  TH1* tHistToDraw;
+  TH1* tHistToDraw = GetMassAssumingLambdaHypothesis(aAnalysisType);
 
-  switch(aAnalysisType) {
-  case kLamK0:
-    tHistToDraw = fAnalysis1->GetMassAssumingLambdaHypothesis();
-    break;
-
-  case kALamK0:
-    tHistToDraw = fConjAnalysis1->GetMassAssumingLambdaHypothesis();
-    break;
-
-  default:
-    cout << "ERROR: PlotPartnersLamK0::DrawMassAssumingLambdaHypothesis: Invalid aAnalysisType = " << aAnalysisType << endl;
-  }
   //------------------------------------
   TString tCanvasName = TString("canMassAssLamHyp_") + TString(cAnalysisBaseTags[aAnalysisType]);
   if(!fDirNameModifier.IsNull()) tCanvasName += fDirNameModifier;
   TCanvas* tReturnCan = new TCanvas(tCanvasName,tCanvasName);
   tReturnCan->cd();
   gStyle->SetOptStat(0);
-
-  tHistToDraw->SetMarkerColor(1);
-  tHistToDraw->SetLineColor(1);
-  tHistToDraw->SetMarkerStyle(20);
-  tHistToDraw->SetMarkerSize(0.5);
-
-  SetupAxis(tHistToDraw->GetXaxis(),1.0,2.2,"Mass Assuming #Lambda Hypothesis (GeV/c^{2})");
-  SetupAxis(tHistToDraw->GetYaxis(),"dN/dM_{inv}");
 
   TPad* tPadLarge = new TPad("tPadLarge","tPadLarge",0.0,0.0,1.0,1.0);
     tPadLarge->Draw();
@@ -383,34 +431,14 @@ TCanvas* PlotPartnersLamK0::DrawMassAssumingLambdaHypothesis(AnalysisType aAnaly
 //________________________________________________________________________________________________________________
 TCanvas* PlotPartnersLamK0::DrawMassAssumingAntiLambdaHypothesis(AnalysisType aAnalysisType, bool aSaveImage)
 {
-  TH1* tHistToDraw;
+  TH1* tHistToDraw = GetMassAssumingAntiLambdaHypothesis(aAnalysisType);
 
-  switch(aAnalysisType) {
-  case kLamK0:
-    tHistToDraw = fAnalysis1->GetMassAssumingAntiLambdaHypothesis();
-    break;
-
-  case kALamK0:
-    tHistToDraw = fConjAnalysis1->GetMassAssumingAntiLambdaHypothesis();
-    break;
-
-  default:
-    cout << "ERROR: PlotPartnersLamK0::DrawMassAssumingAntiLambdaHypothesis: Invalid aAnalysisType = " << aAnalysisType << endl;
-  }
   //------------------------------------
   TString tCanvasName = TString("canMassAssALamHyp_") + TString(cAnalysisBaseTags[aAnalysisType]);
   if(!fDirNameModifier.IsNull()) tCanvasName += fDirNameModifier;
   TCanvas* tReturnCan = new TCanvas(tCanvasName,tCanvasName);
   tReturnCan->cd();
   gStyle->SetOptStat(0);
-
-  tHistToDraw->SetMarkerColor(1);
-  tHistToDraw->SetLineColor(1);
-  tHistToDraw->SetMarkerStyle(20);
-  tHistToDraw->SetMarkerSize(0.5);
-
-  SetupAxis(tHistToDraw->GetXaxis(),1.0,2.2,"Mass Assuming #bar{#Lambda} Hypothesis (GeV/c^{2})");
-  SetupAxis(tHistToDraw->GetYaxis(),"dN/dM_{inv}");
 
   TPad* tPadLarge = new TPad("tPadLarge","tPadLarge",0.0,0.0,1.0,1.0);
     tPadLarge->Draw();
@@ -435,5 +463,156 @@ TCanvas* PlotPartnersLamK0::DrawMassAssumingAntiLambdaHypothesis(AnalysisType aA
   }
   return tReturnCan;
 }
+
+//________________________________________________________________________________________________________________
+TCanvas* PlotPartnersLamK0::DrawMassAssumingK0ShortHypothesis(AnalysisType aAnalysisType, TH1* aHist1, TH1* aHist2, bool aSaveImage)
+{
+  TString tCanvasName = TString("canMassAssK0Hyp_") + TString(cAnalysisBaseTags[aAnalysisType]);
+  if(!fDirNameModifier.IsNull()) tCanvasName += fDirNameModifier;
+  TCanvas* tReturnCan = new TCanvas(tCanvasName,tCanvasName);
+  tReturnCan->cd();
+  gStyle->SetOptStat(0);
+
+  aHist1->DrawCopy();
+  aHist2->DrawCopy("same");
+  PrintAnalysisType((TPad*)tReturnCan,aAnalysisType,0.80,0.85,0.15,0.10,63,30);
+
+  TLegend *tLeg = new TLegend(0.15,0.70,0.30,0.85);
+  tLeg->SetFillColor(0);
+  tLeg->AddEntry(aHist1,"No Cut","lp");
+  tLeg->AddEntry(aHist2,"MisID Cut","lp");
+  tLeg->Draw();
+
+  if(aSaveImage)
+  {
+    ExistsSaveLocationBase();
+    tReturnCan->SaveAs(fSaveLocationBase+tCanvasName+TString(".pdf"));
+  }
+  return tReturnCan;
+}
+
+//________________________________________________________________________________________________________________
+TCanvas* PlotPartnersLamK0::DrawMassAssumingLambdaHypothesis(AnalysisType aAnalysisType, TH1* aHist1, TH1* aHist2, bool aSaveImage)
+{
+  TString tCanvasName = TString("canMassAssLamHyp_") + TString(cAnalysisBaseTags[aAnalysisType]);
+  if(!fDirNameModifier.IsNull()) tCanvasName += fDirNameModifier;
+  TCanvas* tReturnCan = new TCanvas(tCanvasName,tCanvasName);
+  tReturnCan->cd();
+  gStyle->SetOptStat(0);
+
+  TPad* tPadLarge = new TPad("tPadLarge","tPadLarge",0.0,0.0,1.0,1.0);
+    tPadLarge->Draw();
+  TPad* tPadSmall = new TPad("tPadLarge","tPadLarge",0.42,0.39,0.9,0.89);
+    tPadSmall->SetMargin(0.08,0.01,0.06,0.0);
+    tPadSmall->Draw();
+
+  tPadLarge->cd();
+  aHist1->DrawCopy();
+  aHist2->DrawCopy("same");
+  PrintAnalysisType(tPadLarge,aAnalysisType,0.80,0.10,0.15,0.10,63,30);
+
+  TLegend *tLeg = new TLegend(0.20,0.70,0.35,0.85);
+  tLeg->SetFillColor(0);
+  tLeg->AddEntry(aHist1,"No Cut","lp");
+  tLeg->AddEntry(aHist2,"MisID Cut","lp");
+  tLeg->Draw();
+
+  tPadSmall->cd();
+  aHist1->SetTitle("");
+  SetupAxis(aHist1->GetXaxis(),1.1,1.13,"");
+  SetupAxis(aHist1->GetYaxis(),"");
+  aHist1->DrawCopy();
+  aHist2->DrawCopy("same");
+
+  if(aSaveImage)
+  {
+    ExistsSaveLocationBase();
+    tReturnCan->SaveAs(fSaveLocationBase+tCanvasName+TString(".pdf"));
+  }
+  return tReturnCan;
+}
+
+//________________________________________________________________________________________________________________
+TCanvas* PlotPartnersLamK0::DrawMassAssumingAntiLambdaHypothesis(AnalysisType aAnalysisType, TH1* aHist1, TH1* aHist2, bool aSaveImage)
+{
+  TString tCanvasName = TString("canMassAssALamHyp_") + TString(cAnalysisBaseTags[aAnalysisType]);
+  if(!fDirNameModifier.IsNull()) tCanvasName += fDirNameModifier;
+  TCanvas* tReturnCan = new TCanvas(tCanvasName,tCanvasName);
+  tReturnCan->cd();
+  gStyle->SetOptStat(0);
+
+  TPad* tPadLarge = new TPad("tPadLarge","tPadLarge",0.0,0.0,1.0,1.0);
+    tPadLarge->Draw();
+  TPad* tPadSmall = new TPad("tPadLarge","tPadLarge",0.42,0.39,0.9,0.89);
+    tPadSmall->SetMargin(0.08,0.01,0.06,0.0);
+    tPadSmall->Draw();
+
+  tPadLarge->cd();
+  aHist1->DrawCopy();
+  aHist2->DrawCopy("same");
+  PrintAnalysisType(tPadLarge,aAnalysisType,0.80,0.10,0.15,0.10,63,30);
+
+  TLegend *tLeg = new TLegend(0.20,0.70,0.35,0.85);
+  tLeg->SetFillColor(0);
+  tLeg->AddEntry(aHist1,"No Cut","lp");
+  tLeg->AddEntry(aHist2,"MisID Cut","lp");
+  tLeg->Draw();
+
+  tPadSmall->cd();
+  aHist1->SetTitle("");
+  SetupAxis(aHist1->GetXaxis(),1.1,1.13,"");
+  SetupAxis(aHist1->GetYaxis(),"");
+  aHist1->DrawCopy();
+  aHist2->DrawCopy("same");
+
+  if(aSaveImage)
+  {
+    ExistsSaveLocationBase();
+    tReturnCan->SaveAs(fSaveLocationBase+tCanvasName+TString(".pdf"));
+  }
+  return tReturnCan;
+}
+
+//________________________________________________________________________________________________________________
+TCanvas* PlotPartnersLamK0::DrawSumMassAssumingLambdaAndAntiLambdaHypotheses(AnalysisType aAnalysisType, bool aSaveImage)
+{
+  TH1* tLamHyp = GetMassAssumingLambdaHypothesis(aAnalysisType);
+  TH1* tALamHyp = GetMassAssumingAntiLambdaHypothesis(aAnalysisType);
+  TString tHistoName = TString("SumMassAssLamAndALamHyp_") + TString(cAnalysisBaseTags[aAnalysisType]);
+  TH1* tHistToDraw = (TH1*)tLamHyp->Clone(tHistoName);
+  tHistToDraw->Add(tALamHyp);
+
+  TString tCanvasName = TString("can") + tHistoName;
+  if(!fDirNameModifier.IsNull()) tCanvasName += fDirNameModifier;
+  TCanvas* tReturnCan = new TCanvas(tCanvasName,tCanvasName);
+  tReturnCan->cd();
+  gStyle->SetOptStat(0);
+
+  TPad* tPadLarge = new TPad("tPadLarge","tPadLarge",0.0,0.0,1.0,1.0);
+    tPadLarge->Draw();
+  TPad* tPadSmall = new TPad("tPadLarge","tPadLarge",0.42,0.39,0.9,0.89);
+    tPadSmall->SetMargin(0.08,0.01,0.06,0.0);
+    tPadSmall->Draw();
+
+  tPadLarge->cd();
+  tHistToDraw->DrawCopy();
+  PrintAnalysisType(tPadLarge,aAnalysisType,0.80,0.10,0.15,0.10,63,30);
+
+  tPadSmall->cd();
+  tHistToDraw->SetTitle("");
+  SetupAxis(tHistToDraw->GetXaxis(),1.1,1.13,"");
+  SetupAxis(tHistToDraw->GetYaxis(),"");
+  tHistToDraw->DrawCopy();
+
+  if(aSaveImage)
+  {
+    ExistsSaveLocationBase();
+    tReturnCan->SaveAs(fSaveLocationBase+tCanvasName+TString(".pdf"));
+  }
+  return tReturnCan;
+
+}
+
+
 
 

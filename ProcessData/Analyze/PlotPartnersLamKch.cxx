@@ -460,32 +460,47 @@ TCanvas* PlotPartnersLamKch::ViewPart1MassFail(bool aDrawWideRangeToo, bool aSav
   return tReturnCan;
 }
 
+//________________________________________________________________________________________________________________
+TH1* PlotPartnersLamKch::GetMassAssumingK0ShortHypothesis(AnalysisType aAnalysisType, int aMarkerColor, int aMarkerStyle, double aMarkerSize)
+{
+  TH1* tReturnHist;
+
+  switch(aAnalysisType) {
+  case kLamKchP:
+    tReturnHist = fAnalysis1->GetMassAssumingK0ShortHypothesis();
+    break;
+
+  case kALamKchM:
+    tReturnHist = fConjAnalysis1->GetMassAssumingK0ShortHypothesis();
+    break;
+
+  case kLamKchM:
+    tReturnHist = fAnalysis2->GetMassAssumingK0ShortHypothesis();
+    break;
+
+  case kALamKchP:
+    tReturnHist = fConjAnalysis2->GetMassAssumingK0ShortHypothesis();
+    break;
+
+  default:
+    cout << "ERROR: PlotPartnersLamKch::GetMassAssumingK0ShortHypothesis: Invalid aAnalysisType = " << aAnalysisType << endl;
+  }
+
+  tReturnHist->SetMarkerColor(aMarkerColor);
+  tReturnHist->SetLineColor(aMarkerColor);
+  tReturnHist->SetMarkerStyle(aMarkerStyle);
+  tReturnHist->SetMarkerSize(aMarkerSize);
+
+  SetupAxis(tReturnHist->GetXaxis(),0.29,0.58,"Mass Assuming K^{0}_{S} Hypothesis (GeV/c^{2})");
+  SetupAxis(tReturnHist->GetYaxis(),"dN/dM_{inv}");
+
+  return tReturnHist;
+}
 
 //________________________________________________________________________________________________________________
 TCanvas* PlotPartnersLamKch::DrawMassAssumingK0ShortHypothesis(AnalysisType aAnalysisType, bool aSaveImage)
 {
-  TH1* tHistToDraw;
-
-  switch(aAnalysisType) {
-  case kLamKchP:
-    tHistToDraw = fAnalysis1->GetMassAssumingK0ShortHypothesis();
-    break;
-
-  case kALamKchM:
-    tHistToDraw = fConjAnalysis1->GetMassAssumingK0ShortHypothesis();
-    break;
-
-  case kLamKchM:
-    tHistToDraw = fAnalysis2->GetMassAssumingK0ShortHypothesis();
-    break;
-
-  case kALamKchP:
-    tHistToDraw = fConjAnalysis2->GetMassAssumingK0ShortHypothesis();
-    break;
-
-  default:
-    cout << "ERROR: PlotPartnersLamKch::DrawMassAssumingK0ShortHypothesis: Invalid aAnalysisType = " << aAnalysisType << endl;
-  }
+  TH1* tHistToDraw = GetMassAssumingK0ShortHypothesis(aAnalysisType);
 
   //------------------------------------
   TString tCanvasName = TString("canMassAssK0Hyp_") + TString(cAnalysisBaseTags[aAnalysisType]);
@@ -493,14 +508,6 @@ TCanvas* PlotPartnersLamKch::DrawMassAssumingK0ShortHypothesis(AnalysisType aAna
   TCanvas* tReturnCan = new TCanvas(tCanvasName,tCanvasName);
   tReturnCan->cd();
   gStyle->SetOptStat(0);
-
-  tHistToDraw->SetMarkerColor(1);
-  tHistToDraw->SetLineColor(1);
-  tHistToDraw->SetMarkerStyle(20);
-  tHistToDraw->SetMarkerSize(0.5);
-
-  SetupAxis(tHistToDraw->GetXaxis(),0.29,0.58,"Mass Assuming K^{0}_{S} Hypothesis (GeV/c^{2})");
-  SetupAxis(tHistToDraw->GetYaxis(),"dN/dM_{inv}");
 
   tHistToDraw->DrawCopy();
   PrintAnalysisType((TPad*)tReturnCan,aAnalysisType,0.80,0.85,0.15,0.10,63,30);
@@ -513,5 +520,31 @@ TCanvas* PlotPartnersLamKch::DrawMassAssumingK0ShortHypothesis(AnalysisType aAna
   return tReturnCan;
 }
 
+//________________________________________________________________________________________________________________
+TCanvas* PlotPartnersLamKch::DrawMassAssumingK0ShortHypothesis(AnalysisType aAnalysisType, TH1* aHist1, TH1* aHist2, bool aSaveImage)
+{
+  TString tCanvasName = TString("canMassAssK0Hyp_") + TString(cAnalysisBaseTags[aAnalysisType]);
+  if(!fDirNameModifier.IsNull()) tCanvasName += fDirNameModifier;
+  TCanvas* tReturnCan = new TCanvas(tCanvasName,tCanvasName);
+  tReturnCan->cd();
+  gStyle->SetOptStat(0);
+
+  aHist1->DrawCopy();
+  aHist2->DrawCopy("same");
+  PrintAnalysisType((TPad*)tReturnCan,aAnalysisType,0.80,0.85,0.15,0.10,63,30);
+
+  TLegend *tLeg = new TLegend(0.15,0.70,0.30,0.85);
+  tLeg->SetFillColor(0);
+  tLeg->AddEntry(aHist1,"No Cut","lp");
+  tLeg->AddEntry(aHist2,"MisID Cut","lp");
+  tLeg->Draw();
+
+  if(aSaveImage)
+  {
+    ExistsSaveLocationBase();
+    tReturnCan->SaveAs(fSaveLocationBase+tCanvasName+TString(".pdf"));
+  }
+  return tReturnCan;
+}
 
 

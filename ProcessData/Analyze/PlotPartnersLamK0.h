@@ -28,9 +28,19 @@ public:
 
   virtual TCanvas* ViewPart1MassFail(bool aDrawWideRangeToo, bool aSaveImage=false);
 
+  TH1* GetMassAssumingK0ShortHypothesis(AnalysisType aAnalysisType, int aMarkerColor=1, int aMarkerStyle=20, double aMarkerSize=0.5);
+  TH1* GetMassAssumingLambdaHypothesis(AnalysisType aAnalysisType, int aMarkerColor=1, int aMarkerStyle=20, double aMarkerSize=0.5);
+  TH1* GetMassAssumingAntiLambdaHypothesis(AnalysisType aAnalysisType, int aMarkerColor=1, int aMarkerStyle=20, double aMarkerSize=0.5);
+
   virtual TCanvas* DrawMassAssumingK0ShortHypothesis(AnalysisType aAnalysisType, bool aSaveImage=false);
   virtual TCanvas* DrawMassAssumingLambdaHypothesis(AnalysisType aAnalysisType, bool aSaveImage=false);
   virtual TCanvas* DrawMassAssumingAntiLambdaHypothesis(AnalysisType aAnalysisType, bool aSaveImage=false);
+
+  virtual TCanvas* DrawMassAssumingK0ShortHypothesis(AnalysisType aAnalysisType, TH1* aHist1, TH1* aHist2, bool aSaveImage=false);
+  virtual TCanvas* DrawMassAssumingLambdaHypothesis(AnalysisType aAnalysisType, TH1* aHist1, TH1* aHist2, bool aSaveImage=false);
+  virtual TCanvas* DrawMassAssumingAntiLambdaHypothesis(AnalysisType aAnalysisType, TH1* aHist1, TH1* aHist2, bool aSaveImage=false);
+
+  virtual TCanvas* DrawSumMassAssumingLambdaAndAntiLambdaHypotheses(AnalysisType aAnalysisType, bool aSaveImage=false);
 
 private:
 
