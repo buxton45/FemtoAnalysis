@@ -523,7 +523,7 @@ TCanvas* PlotPartnersLamKch::DrawMassAssumingK0ShortHypothesis(AnalysisType aAna
 //________________________________________________________________________________________________________________
 TCanvas* PlotPartnersLamKch::DrawMassAssumingK0ShortHypothesis(AnalysisType aAnalysisType, TH1* aHist1, TH1* aHist2, bool aSaveImage)
 {
-  TString tCanvasName = TString("canMassAssK0Hyp_") + TString(cAnalysisBaseTags[aAnalysisType]);
+  TString tCanvasName = TString("canMassAssK0HypCompare_") + TString(cAnalysisBaseTags[aAnalysisType]);
   if(!fDirNameModifier.IsNull()) tCanvasName += fDirNameModifier;
   TCanvas* tReturnCan = new TCanvas(tCanvasName,tCanvasName);
   tReturnCan->cd();
@@ -533,7 +533,7 @@ TCanvas* PlotPartnersLamKch::DrawMassAssumingK0ShortHypothesis(AnalysisType aAna
   aHist2->DrawCopy("same");
   PrintAnalysisType((TPad*)tReturnCan,aAnalysisType,0.80,0.85,0.15,0.10,63,30);
 
-  TLegend *tLeg = new TLegend(0.15,0.70,0.30,0.85);
+  TLegend *tLeg = new TLegend(0.125,0.74,0.275,0.89);
   tLeg->SetFillColor(0);
   tLeg->AddEntry(aHist1,"No Cut","lp");
   tLeg->AddEntry(aHist2,"MisID Cut","lp");

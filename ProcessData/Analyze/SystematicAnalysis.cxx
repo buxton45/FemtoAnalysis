@@ -100,7 +100,7 @@ TH1* SystematicAnalysis::GetDiffHist(TH1* aHist1, TH1* aHist2)
   double tBinError;
   for(int i=0; i<tDiffHist->GetNbinsX(); i++)
   {
-    tBinError = sqrt(abs(pow(aHist1->GetBinError(i),2) - pow(aHist2->GetBinError(i),2)));
+    tBinError = sqrt(TMath::Abs(pow(aHist1->GetBinError(i),2) - pow(aHist2->GetBinError(i),2)));
     tDiffHist->SetBinError(i,tBinError);
   }
 
