@@ -13,7 +13,7 @@ int main(int argc, char **argv)
 
   TString tResultsDate = "20161026";
   AnalysisType tAnType = kLamKchP;
-  CentralityType tCentType = k3050;
+  CentralityType tCentType = k0010;
 
 /*
   TString tDirNameModifierBase1 = "_ALLV0S_minInvMassReject_";
