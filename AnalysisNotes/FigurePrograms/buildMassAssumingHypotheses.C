@@ -12,16 +12,19 @@ int main(int argc, char **argv)
   //the program ends and closes everything
 //-----------------------------------------------------------------------------
 
-  bool bDrawNoCutComparision = false;
+  bool bDrawNoCutComparision = true;
   bool bDrawSum = false;
   TString tSaveLocationBase = "/home/jesse/Analysis/FemtoAnalysis/AnalysisNotes/3_DataSelection/Figures/MassAssHypotheses/";
-  bool bSaveImages = true;
+  bool bSaveImages = false;
+  bool bNormByEvent = true;
+  TString tInfo1 = "No MisID";
+  TString tInfo2 = "MisID w/ M_{inv} Comp. w/o M_{inv} Cut";
 
   AnalysisType tAnTypeLamKch = kLamKchP;
   AnalysisType tAnTypeLamK0 = kLamK0;
 
   //-----Data
-  TString tResultsDate_LamKch = "20161027";
+  TString tResultsDate_LamKch = "20161031";
   TString tDirectoryBase_LamKch = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_%s/",tResultsDate_LamKch.Data());
   TString tFileLocationBase_LamKch = tDirectoryBase_LamKch+"Results_cLamcKch_"+tResultsDate_LamKch;
   TString tFileLocationBaseMC_LamKch = tDirectoryBase_LamKch+"Results_cLamcKchMC_"+tResultsDate_LamKch;
@@ -36,15 +39,15 @@ int main(int argc, char **argv)
     TString tFileLocationBaseMC_LamKch_NoRm = tDirectoryBase_LamKch_NoRm+"Results_cLamcKchMC_"+tResultsDate_LamKch_NoRm;
     PlotPartnersLamKch* tLamKch0010_NoRm = new PlotPartnersLamKch(tFileLocationBase_LamKch_NoRm,tFileLocationBaseMC_LamKch_NoRm,tAnTypeLamKch,k0010,kTrain,2);
 
-    TH1* tMassAssK0Short_LamKchP = tLamKch0010->GetMassAssumingK0ShortHypothesis(tAnTypeLamKch);
-    TH1* tMassAssK0Short_NoRm_LamKchP = tLamKch0010_NoRm->GetMassAssumingK0ShortHypothesis(tAnTypeLamKch,2);
-    TCanvas* tCanMassAssK0_LamKchP = tLamKch0010->DrawMassAssumingK0ShortHypothesis(tAnTypeLamKch,tMassAssK0Short_NoRm_LamKchP,tMassAssK0Short_LamKchP,bSaveImages);
+    TH1* tMassAssK0Short_LamKchP = tLamKch0010->GetMassAssumingK0ShortHypothesis(tAnTypeLamKch,bNormByEvent);
+    TH1* tMassAssK0Short_NoRm_LamKchP = tLamKch0010_NoRm->GetMassAssumingK0ShortHypothesis(tAnTypeLamKch,bNormByEvent,2);
+    TCanvas* tCanMassAssK0_LamKchP = tLamKch0010->DrawMassAssumingK0ShortHypothesis(tAnTypeLamKch,tMassAssK0Short_NoRm_LamKchP,tMassAssK0Short_LamKchP,bSaveImages,tInfo1,tInfo2);
   }
   else TCanvas* tCanMassAssK0_LamKchP = tLamKch0010->DrawMassAssumingK0ShortHypothesis(tAnTypeLamKch,bSaveImages);
 
 //-------------------------------------------------------------------------------
 
-  TString tResultsDate_LamK0 = "20161027";
+  TString tResultsDate_LamK0 = "20161031";
   TString tDirectoryBase_LamK0 = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamK0_" + tResultsDate_LamK0 + "/";
   TString tFileLocationBase_LamK0 = tDirectoryBase_LamK0+"Results_cLamK0_" + tResultsDate_LamK0;
   TString tFileLocationBaseMC_LamK0 = tDirectoryBase_LamK0+"Results_cLamK0MC_" + tResultsDate_LamK0;
@@ -59,17 +62,17 @@ int main(int argc, char **argv)
     TString tFileLocationBaseMC_LamK0_NoRm = tDirectoryBase_LamK0_NoRm+"Results_cLamK0MC_" + tResultsDate_LamK0_NoRm;
     PlotPartnersLamK0* tLamK00010_NoRm = new PlotPartnersLamK0(tFileLocationBase_LamK0_NoRm,tFileLocationBaseMC_LamK0_NoRm,tAnTypeLamK0,k0010,kTrain,2);
 
-    TH1* tMassAssK0Short_LamK0 = tLamK00010->GetMassAssumingK0ShortHypothesis(tAnTypeLamK0);
-    TH1* tMassAssK0Short_NoRm_LamK0 = tLamK00010_NoRm->GetMassAssumingK0ShortHypothesis(tAnTypeLamK0,2);
-    TCanvas* tCanMassAssK0_LamK0 = tLamK00010->DrawMassAssumingK0ShortHypothesis(tAnTypeLamK0,tMassAssK0Short_NoRm_LamK0,tMassAssK0Short_LamK0,bSaveImages);
+    TH1* tMassAssK0Short_LamK0 = tLamK00010->GetMassAssumingK0ShortHypothesis(tAnTypeLamK0,bNormByEvent);
+    TH1* tMassAssK0Short_NoRm_LamK0 = tLamK00010_NoRm->GetMassAssumingK0ShortHypothesis(tAnTypeLamK0,bNormByEvent,2);
+    TCanvas* tCanMassAssK0_LamK0 = tLamK00010->DrawMassAssumingK0ShortHypothesis(tAnTypeLamK0,tMassAssK0Short_NoRm_LamK0,tMassAssK0Short_LamK0,bSaveImages,tInfo1,tInfo2);
 
-    TH1* tMassAssLam_LamK0 = tLamK00010->GetMassAssumingLambdaHypothesis(tAnTypeLamK0);
-    TH1* tMassAssLam_NoRm_LamK0 = tLamK00010_NoRm->GetMassAssumingLambdaHypothesis(tAnTypeLamK0,2);
-    TCanvas* tCanMassAssLam_LamK0 = tLamK00010->DrawMassAssumingLambdaHypothesis(tAnTypeLamK0,tMassAssLam_NoRm_LamK0,tMassAssLam_LamK0,bSaveImages);
+    TH1* tMassAssLam_LamK0 = tLamK00010->GetMassAssumingLambdaHypothesis(tAnTypeLamK0,bNormByEvent);
+    TH1* tMassAssLam_NoRm_LamK0 = tLamK00010_NoRm->GetMassAssumingLambdaHypothesis(tAnTypeLamK0,bNormByEvent,2);
+    TCanvas* tCanMassAssLam_LamK0 = tLamK00010->DrawMassAssumingLambdaHypothesis(tAnTypeLamK0,tMassAssLam_NoRm_LamK0,tMassAssLam_LamK0,bSaveImages,tInfo1,tInfo2);
 
-    TH1* tMassAssALam_LamK0 = tLamK00010->GetMassAssumingAntiLambdaHypothesis(tAnTypeLamK0);
-    TH1* tMassAssALam_NoRm_LamK0 = tLamK00010_NoRm->GetMassAssumingAntiLambdaHypothesis(tAnTypeLamK0,2);
-    TCanvas* tCanMassAssALam_LamK0 = tLamK00010->DrawMassAssumingAntiLambdaHypothesis(tAnTypeLamK0,tMassAssALam_NoRm_LamK0,tMassAssALam_LamK0,bSaveImages);
+    TH1* tMassAssALam_LamK0 = tLamK00010->GetMassAssumingAntiLambdaHypothesis(tAnTypeLamK0,bNormByEvent);
+    TH1* tMassAssALam_NoRm_LamK0 = tLamK00010_NoRm->GetMassAssumingAntiLambdaHypothesis(tAnTypeLamK0,bNormByEvent,2);
+    TCanvas* tCanMassAssALam_LamK0 = tLamK00010->DrawMassAssumingAntiLambdaHypothesis(tAnTypeLamK0,tMassAssALam_NoRm_LamK0,tMassAssALam_LamK0,bSaveImages,tInfo1,tInfo2);
   }
   else
   {

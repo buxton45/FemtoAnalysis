@@ -27,10 +27,10 @@ public:
 
   virtual TCanvas* ViewPart1MassFail(bool aDrawWideRangeToo, bool aSaveImage=false);
 
-  TH1* GetMassAssumingK0ShortHypothesis(AnalysisType aAnalysisType, int aMarkerColor=1, int aMarkerStyle=20, double aMarkerSize=0.5);
+  TH1* GetMassAssumingK0ShortHypothesis(AnalysisType aAnalysisType, bool aNormByNEv=false, int aMarkerColor=1, int aMarkerStyle=20, double aMarkerSize=0.5);
   virtual TCanvas* DrawMassAssumingK0ShortHypothesis(AnalysisType aAnalysisType, bool aSaveImage=false);
-  virtual TCanvas* DrawMassAssumingK0ShortHypothesis(AnalysisType aAnalysisType, TH1* aHist1, TH1* aHist2, bool aSaveImage=false);
-
+  virtual TCanvas* DrawMassAssumingK0ShortHypothesis(AnalysisType aAnalysisType, TH1* aHist1, TH1* aHist2, bool aSaveImage=false, TString aText1="No Cut", TString aText2="MisID Cut");
+  virtual TCanvas* DrawMassAssumingK0ShortHypothesis(AnalysisType aAnalysisType, TObjArray* tHists, vector<TString> &tLegendEntries, bool aSaveImage=false);
 
 private:
 

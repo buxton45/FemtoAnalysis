@@ -7,7 +7,7 @@ CFLAGS = $(shell root-config --cflags) -Wall -std=c++11 -I${UTILITIES_DIR} -g -O
 
 MY_LIBS = $(addprefix build/, CfLite.o CfHeavy.o Cf2dLite.o Cf2dHeavy.o Types.o Purity.o PartialAnalysis.o Analysis.o DataAndModel.o PlotPartners.o PlotPartnersLamKch.o PlotPartnersLamK0.o SystematicAnalysis.o CanvasPartition.o)
 
-all: runBuildcLamcKch runBuildcLamK0 runBuildcXicKch runBuildcLamcLam runCombineConjugatesLamKch runCombineConjugatesLamK0 runCombineConjugatesXiKch runBuildMomResMatrix runBuildMomResMatrix2 runCompareFixes runCorrectCfs runTest runSystematics runTestSys
+all: runBuildcLamcKch runBuildcLamK0 runBuildcXicKch runBuildcLamcLam runCombineConjugatesLamKch runCombineConjugatesLamK0 runCombineConjugatesXiKch runBuildMomResMatrix runBuildMomResMatrix2 runCompareFixes runCorrectCfs runTest runSystematics runTestSys runMassAssHyp
 
 runBuildcLamcKch: ${MY_LIBS} BuildcLamcKchAnalyses.C
 	g++ BuildcLamcKchAnalyses.C ${MY_LIBS} -o runBuildcLamcKch $(LIBS) $(CFLAGS)
@@ -51,6 +51,9 @@ runSystematics: ${MY_LIBS} BuildSystematics.C
 runTestSys: ${MY_LIBS} testSystematics.C
 	g++ testSystematics.C ${MY_LIBS} -o runTestSys $(LIBS) $(CFLAGS)
 
+runMassAssHyp: ${MY_LIBS} BuildMassAssumingHypothesesComparisons.C
+	g++ BuildMassAssumingHypothesesComparisons.C ${MY_LIBS} -o runMassAssHyp $(LIBS) $(CFLAGS)
+
 build/%.o: %.cxx %.h
 	g++ -c $< $(CFLAGS) -o $@
 
@@ -62,4 +65,4 @@ build/%.o: %.cc %.hh
 
 
 clean:
-	rm -f runBuildcLamcKch runBuildcLamK0 runBuildcXicKch runBuildcLamcLam runCombineConjugatesLamKch runCombineConjugatesLamK0 runCombineConjugatesXiKch runBuildMomResMatrix runBuildMomResMatrix2 runCompareFixes runCorrectCfs runTest runSystematics runTestSys ${MY_LIBS}
+	rm -f runBuildcLamcKch runBuildcLamK0 runBuildcXicKch runBuildcLamcLam runCombineConjugatesLamKch runCombineConjugatesLamK0 runCombineConjugatesXiKch runBuildMomResMatrix runBuildMomResMatrix2 runCompareFixes runCorrectCfs runTest runSystematics runTestSys runMassAssHyp ${MY_LIBS}

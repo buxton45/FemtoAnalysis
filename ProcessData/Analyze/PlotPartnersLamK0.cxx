@@ -281,17 +281,20 @@ TCanvas* PlotPartnersLamK0::ViewPart1MassFail(bool aDrawWideRangeToo, bool aSave
 }
 
 //________________________________________________________________________________________________________________
-TH1* PlotPartnersLamK0::GetMassAssumingK0ShortHypothesis(AnalysisType aAnalysisType, int aMarkerColor, int aMarkerStyle, double aMarkerSize)
+TH1* PlotPartnersLamK0::GetMassAssumingK0ShortHypothesis(AnalysisType aAnalysisType, bool aNormByNEv, int aMarkerColor, int aMarkerStyle, double aMarkerSize)
 {
   TH1* tReturnHist;
+  double tNEvents = 0.;
 
   switch(aAnalysisType) {
   case kLamK0:
     tReturnHist = fAnalysis1->GetMassAssumingK0ShortHypothesis();
+    tNEvents = fAnalysis1->GetNEventsPass();
     break;
 
   case kALamK0:
     tReturnHist = fConjAnalysis1->GetMassAssumingK0ShortHypothesis();
+    tNEvents = fConjAnalysis1->GetNEventsPass();
     break;
 
   default:
@@ -306,21 +309,29 @@ TH1* PlotPartnersLamK0::GetMassAssumingK0ShortHypothesis(AnalysisType aAnalysisT
   SetupAxis(tReturnHist->GetXaxis(),0.29,0.58,"Mass Assuming K^{0}_{S} Hypothesis (GeV/c^{2})");
   SetupAxis(tReturnHist->GetYaxis(),"dN/dM_{inv}");
 
+  if(aNormByNEv)
+  {
+    tReturnHist->Scale(1./tNEvents);
+    SetupAxis(tReturnHist->GetYaxis(),"(1/N_{Ev})dN/dM_{inv}");
+  }
   return tReturnHist;
 }
 
 //________________________________________________________________________________________________________________
-TH1* PlotPartnersLamK0::GetMassAssumingLambdaHypothesis(AnalysisType aAnalysisType, int aMarkerColor, int aMarkerStyle, double aMarkerSize)
+TH1* PlotPartnersLamK0::GetMassAssumingLambdaHypothesis(AnalysisType aAnalysisType, bool aNormByNEv, int aMarkerColor, int aMarkerStyle, double aMarkerSize)
 {
   TH1* tReturnHist;
+  double tNEvents = 0.;
 
   switch(aAnalysisType) {
   case kLamK0:
     tReturnHist = fAnalysis1->GetMassAssumingLambdaHypothesis();
+    tNEvents = fAnalysis1->GetNEventsPass();
     break;
 
   case kALamK0:
     tReturnHist = fConjAnalysis1->GetMassAssumingLambdaHypothesis();
+    tNEvents = fConjAnalysis1->GetNEventsPass();
     break;
 
   default:
@@ -335,21 +346,29 @@ TH1* PlotPartnersLamK0::GetMassAssumingLambdaHypothesis(AnalysisType aAnalysisTy
   SetupAxis(tReturnHist->GetXaxis(),1.0,2.2,"Mass Assuming #Lambda Hypothesis (GeV/c^{2})");
   SetupAxis(tReturnHist->GetYaxis(),"dN/dM_{inv}");
 
+  if(aNormByNEv)
+  {
+    tReturnHist->Scale(1./tNEvents);
+    SetupAxis(tReturnHist->GetYaxis(),"(1/N_{Ev})dN/dM_{inv}");
+  }
   return tReturnHist;
 }
 
 //________________________________________________________________________________________________________________
-TH1* PlotPartnersLamK0::GetMassAssumingAntiLambdaHypothesis(AnalysisType aAnalysisType, int aMarkerColor, int aMarkerStyle, double aMarkerSize)
+TH1* PlotPartnersLamK0::GetMassAssumingAntiLambdaHypothesis(AnalysisType aAnalysisType, bool aNormByNEv, int aMarkerColor, int aMarkerStyle, double aMarkerSize)
 {
   TH1* tReturnHist;
+  double tNEvents = 0.;
 
   switch(aAnalysisType) {
   case kLamK0:
     tReturnHist = fAnalysis1->GetMassAssumingAntiLambdaHypothesis();
+    tNEvents = fAnalysis1->GetNEventsPass();
     break;
 
   case kALamK0:
     tReturnHist = fConjAnalysis1->GetMassAssumingAntiLambdaHypothesis();
+    tNEvents = fConjAnalysis1->GetNEventsPass();
     break;
 
   default:
@@ -364,15 +383,20 @@ TH1* PlotPartnersLamK0::GetMassAssumingAntiLambdaHypothesis(AnalysisType aAnalys
   SetupAxis(tReturnHist->GetXaxis(),1.0,2.2,"Mass Assuming #bar{#Lambda} Hypothesis (GeV/c^{2})");
   SetupAxis(tReturnHist->GetYaxis(),"dN/dM_{inv}");
 
+  if(aNormByNEv)
+  {
+    tReturnHist->Scale(1./tNEvents);
+    SetupAxis(tReturnHist->GetYaxis(),"(1/N_{Ev})dN/dM_{inv}");
+  }
   return tReturnHist;
 }
 
 
 
 //________________________________________________________________________________________________________________
-TCanvas* PlotPartnersLamK0::DrawMassAssumingK0ShortHypothesis(AnalysisType aAnalysisType, bool aSaveImage)
+TCanvas* PlotPartnersLamK0::DrawMassAssumingK0ShortHypothesis(AnalysisType aAnalysisType, bool aSaveImage, bool aNormByNEv)
 {
-  TH1* tHistToDraw = GetMassAssumingK0ShortHypothesis(aAnalysisType);
+  TH1* tHistToDraw = GetMassAssumingK0ShortHypothesis(aAnalysisType,aNormByNEv);
 
   //------------------------------------
   TString tCanvasName = TString("canMassAssK0Hyp_") + TString(cAnalysisBaseTags[aAnalysisType]);
@@ -382,7 +406,7 @@ TCanvas* PlotPartnersLamK0::DrawMassAssumingK0ShortHypothesis(AnalysisType aAnal
   gStyle->SetOptStat(0);
 
   tHistToDraw->DrawCopy();
-  PrintAnalysisType((TPad*)tReturnCan,aAnalysisType,0.80,0.85,0.15,0.10,63,30);
+  PrintAnalysisType((TPad*)tReturnCan,aAnalysisType,0.84,0.89,0.15,0.10,63,30);
 
   if(aSaveImage)
   {
@@ -393,9 +417,9 @@ TCanvas* PlotPartnersLamK0::DrawMassAssumingK0ShortHypothesis(AnalysisType aAnal
 }
 
 //________________________________________________________________________________________________________________
-TCanvas* PlotPartnersLamK0::DrawMassAssumingLambdaHypothesis(AnalysisType aAnalysisType, bool aSaveImage)
+TCanvas* PlotPartnersLamK0::DrawMassAssumingLambdaHypothesis(AnalysisType aAnalysisType, bool aSaveImage, bool aNormByNEv)
 {
-  TH1* tHistToDraw = GetMassAssumingLambdaHypothesis(aAnalysisType);
+  TH1* tHistToDraw = GetMassAssumingLambdaHypothesis(aAnalysisType,aNormByNEv);
 
   //------------------------------------
   TString tCanvasName = TString("canMassAssLamHyp_") + TString(cAnalysisBaseTags[aAnalysisType]);
@@ -412,11 +436,11 @@ TCanvas* PlotPartnersLamK0::DrawMassAssumingLambdaHypothesis(AnalysisType aAnaly
 
   tPadLarge->cd();
   tHistToDraw->DrawCopy();
-  PrintAnalysisType(tPadLarge,aAnalysisType,0.80,0.10,0.15,0.10,63,30);
+  PrintAnalysisType(tPadLarge,aAnalysisType,0.85,0.05,0.15,0.10,63,30);
 
   tPadSmall->cd();
   tHistToDraw->SetTitle("");
-  SetupAxis(tHistToDraw->GetXaxis(),1.1,1.13,"");
+  SetupAxis(tHistToDraw->GetXaxis(),1.07,1.17,"");
   SetupAxis(tHistToDraw->GetYaxis(),"");
   tHistToDraw->DrawCopy();
 
@@ -429,9 +453,9 @@ TCanvas* PlotPartnersLamK0::DrawMassAssumingLambdaHypothesis(AnalysisType aAnaly
 }
 
 //________________________________________________________________________________________________________________
-TCanvas* PlotPartnersLamK0::DrawMassAssumingAntiLambdaHypothesis(AnalysisType aAnalysisType, bool aSaveImage)
+TCanvas* PlotPartnersLamK0::DrawMassAssumingAntiLambdaHypothesis(AnalysisType aAnalysisType, bool aSaveImage, bool aNormByNEv)
 {
-  TH1* tHistToDraw = GetMassAssumingAntiLambdaHypothesis(aAnalysisType);
+  TH1* tHistToDraw = GetMassAssumingAntiLambdaHypothesis(aAnalysisType,aNormByNEv);
 
   //------------------------------------
   TString tCanvasName = TString("canMassAssALamHyp_") + TString(cAnalysisBaseTags[aAnalysisType]);
@@ -448,11 +472,11 @@ TCanvas* PlotPartnersLamK0::DrawMassAssumingAntiLambdaHypothesis(AnalysisType aA
 
   tPadLarge->cd();
   tHistToDraw->DrawCopy();
-  PrintAnalysisType(tPadLarge,aAnalysisType,0.80,0.10,0.15,0.10,63,30);
+  PrintAnalysisType(tPadLarge,aAnalysisType,0.85,0.05,0.15,0.10,63,30);
 
   tPadSmall->cd();
   tHistToDraw->SetTitle("");
-  SetupAxis(tHistToDraw->GetXaxis(),1.1,1.13,"");
+  SetupAxis(tHistToDraw->GetXaxis(),1.07,1.17,"");
   SetupAxis(tHistToDraw->GetYaxis(),"");
   tHistToDraw->DrawCopy();
 
@@ -465,7 +489,7 @@ TCanvas* PlotPartnersLamK0::DrawMassAssumingAntiLambdaHypothesis(AnalysisType aA
 }
 
 //________________________________________________________________________________________________________________
-TCanvas* PlotPartnersLamK0::DrawMassAssumingK0ShortHypothesis(AnalysisType aAnalysisType, TH1* aHist1, TH1* aHist2, bool aSaveImage)
+TCanvas* PlotPartnersLamK0::DrawMassAssumingK0ShortHypothesis(AnalysisType aAnalysisType, TH1* aHist1, TH1* aHist2, bool aSaveImage, TString aText1, TString aText2)
 {
   TString tCanvasName = TString("canMassAssK0HypCompare_") + TString(cAnalysisBaseTags[aAnalysisType]);
   if(!fDirNameModifier.IsNull()) tCanvasName += fDirNameModifier;
@@ -475,12 +499,17 @@ TCanvas* PlotPartnersLamK0::DrawMassAssumingK0ShortHypothesis(AnalysisType aAnal
 
   aHist1->DrawCopy();
   aHist2->DrawCopy("same");
-  PrintAnalysisType((TPad*)tReturnCan,aAnalysisType,0.80,0.85,0.15,0.10,63,30);
+  PrintAnalysisType((TPad*)tReturnCan,aAnalysisType,0.84,0.89,0.15,0.10,63,30);
 
-  TLegend *tLeg = new TLegend(0.125,0.74,0.275,0.89);
+  TString tLegModifier = "";
+  if(aHist1->Integral() < 100. && aHist2->Integral() < 100.) tLegModifier = "/N_{Ev}";
+
+  TLegend *tLeg = new TLegend(0.40,0.15,0.65,0.30);
   tLeg->SetFillColor(0);
-  tLeg->AddEntry(aHist1,"No Cut","lp");
-  tLeg->AddEntry(aHist2,"MisID Cut","lp");
+  tLeg->AddEntry(aHist1,aText1,"lp");
+  tLeg->AddEntry((TObject*)0, TString::Format("N_{pass}%s = %0.3e",tLegModifier.Data(),aHist1->Integral()), "");
+  tLeg->AddEntry(aHist2,aText2,"lp");
+  tLeg->AddEntry((TObject*)0, TString::Format("N_{pass}%s = %0.3e",tLegModifier.Data(),aHist2->Integral()), "");
   tLeg->Draw();
 
   if(aSaveImage)
@@ -492,7 +521,7 @@ TCanvas* PlotPartnersLamK0::DrawMassAssumingK0ShortHypothesis(AnalysisType aAnal
 }
 
 //________________________________________________________________________________________________________________
-TCanvas* PlotPartnersLamK0::DrawMassAssumingLambdaHypothesis(AnalysisType aAnalysisType, TH1* aHist1, TH1* aHist2, bool aSaveImage)
+TCanvas* PlotPartnersLamK0::DrawMassAssumingLambdaHypothesis(AnalysisType aAnalysisType, TH1* aHist1, TH1* aHist2, bool aSaveImage, TString aText1, TString aText2)
 {
   TString tCanvasName = TString("canMassAssLamHypCompare_") + TString(cAnalysisBaseTags[aAnalysisType]);
   if(!fDirNameModifier.IsNull()) tCanvasName += fDirNameModifier;
@@ -509,17 +538,22 @@ TCanvas* PlotPartnersLamK0::DrawMassAssumingLambdaHypothesis(AnalysisType aAnaly
   tPadLarge->cd();
   aHist1->DrawCopy();
   aHist2->DrawCopy("same");
-  PrintAnalysisType(tPadLarge,aAnalysisType,0.80,0.10,0.15,0.10,63,30);
+  PrintAnalysisType(tPadLarge,aAnalysisType,0.85,0.05,0.15,0.10,63,30);
 
-  TLegend *tLeg = new TLegend(0.20,0.70,0.35,0.85);
+  TString tLegModifier = "";
+  if(aHist1->Integral() < 100. && aHist2->Integral() < 100.) tLegModifier = "/N_{Ev}";
+
+  TLegend *tLeg = new TLegend(0.65,0.23,0.89,0.38);
   tLeg->SetFillColor(0);
-  tLeg->AddEntry(aHist1,"No Cut","lp");
-  tLeg->AddEntry(aHist2,"MisID Cut","lp");
+  tLeg->AddEntry(aHist1,aText1,"lp");
+  tLeg->AddEntry((TObject*)0, TString::Format("N_{pass}%s = %0.3e",tLegModifier.Data(),aHist1->Integral()), "");
+  tLeg->AddEntry(aHist2,aText2,"lp");
+  tLeg->AddEntry((TObject*)0, TString::Format("N_{pass}%s = %0.3e",tLegModifier.Data(),aHist2->Integral()), "");
   tLeg->Draw();
 
   tPadSmall->cd();
   aHist1->SetTitle("");
-  SetupAxis(aHist1->GetXaxis(),1.1,1.13,"");
+  SetupAxis(aHist1->GetXaxis(),1.07,1.17,"");
   SetupAxis(aHist1->GetYaxis(),"");
   aHist1->DrawCopy();
   aHist2->DrawCopy("same");
@@ -533,7 +567,7 @@ TCanvas* PlotPartnersLamK0::DrawMassAssumingLambdaHypothesis(AnalysisType aAnaly
 }
 
 //________________________________________________________________________________________________________________
-TCanvas* PlotPartnersLamK0::DrawMassAssumingAntiLambdaHypothesis(AnalysisType aAnalysisType, TH1* aHist1, TH1* aHist2, bool aSaveImage)
+TCanvas* PlotPartnersLamK0::DrawMassAssumingAntiLambdaHypothesis(AnalysisType aAnalysisType, TH1* aHist1, TH1* aHist2, bool aSaveImage, TString aText1, TString aText2)
 {
   TString tCanvasName = TString("canMassAssALamHypCompare_") + TString(cAnalysisBaseTags[aAnalysisType]);
   if(!fDirNameModifier.IsNull()) tCanvasName += fDirNameModifier;
@@ -550,17 +584,23 @@ TCanvas* PlotPartnersLamK0::DrawMassAssumingAntiLambdaHypothesis(AnalysisType aA
   tPadLarge->cd();
   aHist1->DrawCopy();
   aHist2->DrawCopy("same");
-  PrintAnalysisType(tPadLarge,aAnalysisType,0.80,0.10,0.15,0.10,63,30);
+  PrintAnalysisType(tPadLarge,aAnalysisType,0.85,0.05,0.15,0.10,63,30);
 
-  TLegend *tLeg = new TLegend(0.20,0.70,0.35,0.85);
+  TString tLegModifier = "";
+  if(aHist1->Integral() < 100. && aHist2->Integral() < 100.) tLegModifier = "/N_{Ev}";
+
+  TLegend *tLeg = new TLegend(0.65,0.23,0.89,0.38);
   tLeg->SetFillColor(0);
-  tLeg->AddEntry(aHist1,"No Cut","lp");
-  tLeg->AddEntry(aHist2,"MisID Cut","lp");
+  tLeg->AddEntry(aHist1,aText1,"lp");
+  tLeg->AddEntry((TObject*)0, TString::Format("N_{pass}%s = %0.3e",tLegModifier.Data(),aHist1->Integral()), "");
+  tLeg->AddEntry(aHist2,aText2,"lp");
+  tLeg->AddEntry((TObject*)0, TString::Format("N_{pass}%s = %0.3e",tLegModifier.Data(),aHist2->Integral()), "");
   tLeg->Draw();
+
 
   tPadSmall->cd();
   aHist1->SetTitle("");
-  SetupAxis(aHist1->GetXaxis(),1.1,1.13,"");
+  SetupAxis(aHist1->GetXaxis(),1.07,1.17,"");
   SetupAxis(aHist1->GetYaxis(),"");
   aHist1->DrawCopy();
   aHist2->DrawCopy("same");
@@ -572,6 +612,192 @@ TCanvas* PlotPartnersLamK0::DrawMassAssumingAntiLambdaHypothesis(AnalysisType aA
   }
   return tReturnCan;
 }
+
+
+
+
+
+
+
+//________________________________________________________________________________________________________________
+TCanvas* PlotPartnersLamK0::DrawMassAssumingK0ShortHypothesis(AnalysisType aAnalysisType, TObjArray* tHists, vector<TString> &tLegendEntries, bool aSaveImage)
+{
+  TString tCanvasName = TString("canMassAssK0HypCompare_") + TString(cAnalysisBaseTags[aAnalysisType]);
+  if(!fDirNameModifier.IsNull()) tCanvasName += fDirNameModifier;
+  TCanvas* tReturnCan = new TCanvas(tCanvasName,tCanvasName);
+  tReturnCan->cd();
+  gStyle->SetOptStat(0);
+
+  TLegend *tLeg = new TLegend(0.40,0.15,0.65,0.30);
+  tLeg->SetFillColor(0);
+
+  assert(tHists->GetEntries() == tLegendEntries.size());
+  int tNEntries = tHists->GetEntries();
+
+  for(int i=0; i<tNEntries; i++)
+  {
+    TH1* tHistToDraw = (TH1*)tHists->At(i);
+    if(i==0) tHistToDraw->DrawCopy();
+    else tHistToDraw->DrawCopy("same");
+
+    tLeg->AddEntry(tHistToDraw,tLegendEntries[i],"lp");
+    TString tLegModifier = "";
+    if(tHistToDraw->Integral() < 100) tLegModifier = "/N_{Ev}";
+    tLeg->AddEntry((TObject*)0, TString::Format("N_{pass}%s = %0.3e",tLegModifier.Data(),tHistToDraw->Integral()), "");
+  }
+  tLeg->Draw();
+  PrintAnalysisType((TPad*)tReturnCan,aAnalysisType,0.84,0.89,0.15,0.10,63,30);
+
+  if(aSaveImage)
+  {
+    ExistsSaveLocationBase();
+    tReturnCan->SaveAs(fSaveLocationBase+tCanvasName+TString(".pdf"));
+  }
+  return tReturnCan;
+}
+
+//________________________________________________________________________________________________________________
+TCanvas* PlotPartnersLamK0::DrawMassAssumingLambdaHypothesis(AnalysisType aAnalysisType, TObjArray* tHists, vector<TString> &tLegendEntries, bool aSaveImage)
+{
+  TString tCanvasName = TString("canMassAssLamHypCompare_") + TString(cAnalysisBaseTags[aAnalysisType]);
+  if(!fDirNameModifier.IsNull()) tCanvasName += fDirNameModifier;
+  TCanvas* tReturnCan = new TCanvas(tCanvasName,tCanvasName);
+  tReturnCan->cd();
+  gStyle->SetOptStat(0);
+
+  TPad* tPadLarge = new TPad("tPadLarge","tPadLarge",0.0,0.0,1.0,1.0);
+    tPadLarge->Draw();
+  TPad* tPadSmall = new TPad("tPadLarge","tPadLarge",0.42,0.39,0.9,0.89);
+    tPadSmall->SetMargin(0.08,0.01,0.06,0.0);
+    tPadSmall->Draw();
+
+  assert(tHists->GetEntries() == tLegendEntries.size());
+  int tNEntries = tHists->GetEntries();
+
+  //-------------------------
+  tPadLarge->cd();
+
+  TLegend *tLeg = new TLegend(0.65,0.23,0.89,0.38);
+  tLeg->SetFillColor(0);
+
+  for(int i=0; i<tNEntries; i++)
+  {
+    TH1* tHistToDraw = (TH1*)tHists->At(i);
+    if(i==0) tHistToDraw->DrawCopy();
+    else tHistToDraw->DrawCopy("same");
+
+    tLeg->AddEntry(tHistToDraw,tLegendEntries[i],"lp");
+    TString tLegModifier = "";
+    if(tHistToDraw->Integral() < 100) tLegModifier = "/N_{Ev}";
+    tLeg->AddEntry((TObject*)0, TString::Format("N_{pass}%s = %0.3e",tLegModifier.Data(),tHistToDraw->Integral()), "");
+  }
+  tLeg->Draw();
+  PrintAnalysisType(tPadLarge,aAnalysisType,0.85,0.05,0.15,0.10,63,30);
+
+  //-------------------------
+  tPadSmall->cd();
+  for(int i=0; i<tNEntries; i++)
+  {
+    TH1* tHistToDraw = (TH1*)tHists->At(i);
+    if(i==0)
+    {
+      tHistToDraw->SetTitle("");
+      SetupAxis(tHistToDraw->GetXaxis(),1.07,1.17,"");
+      SetupAxis(tHistToDraw->GetYaxis(),"");
+      tHistToDraw->DrawCopy();
+    }
+    else tHistToDraw->DrawCopy("same");
+  }
+
+  if(aSaveImage)
+  {
+    ExistsSaveLocationBase();
+    tReturnCan->SaveAs(fSaveLocationBase+tCanvasName+TString(".pdf"));
+  }
+  return tReturnCan;
+}
+
+//________________________________________________________________________________________________________________
+TCanvas* PlotPartnersLamK0::DrawMassAssumingAntiLambdaHypothesis(AnalysisType aAnalysisType, TObjArray* tHists, vector<TString> &tLegendEntries, bool aSaveImage)
+{
+  TString tCanvasName = TString("canMassAssALamHypCompare_") + TString(cAnalysisBaseTags[aAnalysisType]);
+  if(!fDirNameModifier.IsNull()) tCanvasName += fDirNameModifier;
+  TCanvas* tReturnCan = new TCanvas(tCanvasName,tCanvasName);
+  tReturnCan->cd();
+  gStyle->SetOptStat(0);
+
+  TPad* tPadLarge = new TPad("tPadLarge","tPadLarge",0.0,0.0,1.0,1.0);
+    tPadLarge->Draw();
+  TPad* tPadSmall = new TPad("tPadLarge","tPadLarge",0.42,0.39,0.9,0.89);
+    tPadSmall->SetMargin(0.08,0.01,0.06,0.0);
+    tPadSmall->Draw();
+
+  assert(tHists->GetEntries() == tLegendEntries.size());
+  int tNEntries = tHists->GetEntries();
+
+  //-------------------------
+  tPadLarge->cd();
+
+  TLegend *tLeg = new TLegend(0.65,0.23,0.89,0.38);
+  tLeg->SetFillColor(0);
+
+  for(int i=0; i<tNEntries; i++)
+  {
+    TH1* tHistToDraw = (TH1*)tHists->At(i);
+    if(i==0) tHistToDraw->DrawCopy();
+    else tHistToDraw->DrawCopy("same");
+
+    tLeg->AddEntry(tHistToDraw,tLegendEntries[i],"lp");
+    TString tLegModifier = "";
+    if(tHistToDraw->Integral() < 100) tLegModifier = "/N_{Ev}";
+    tLeg->AddEntry((TObject*)0, TString::Format("N_{pass}%s = %0.3e",tLegModifier.Data(),tHistToDraw->Integral()), "");
+  }
+  tLeg->Draw();
+  PrintAnalysisType(tPadLarge,aAnalysisType,0.85,0.05,0.15,0.10,63,30);
+
+  //-------------------------
+  tPadSmall->cd();
+  for(int i=0; i<tNEntries; i++)
+  {
+    TH1* tHistToDraw = (TH1*)tHists->At(i);
+    if(i==0)
+    {
+      tHistToDraw->SetTitle("");
+      SetupAxis(tHistToDraw->GetXaxis(),1.07,1.17,"");
+      SetupAxis(tHistToDraw->GetYaxis(),"");
+      tHistToDraw->DrawCopy();
+    }
+    else tHistToDraw->DrawCopy("same");
+  }
+
+  if(aSaveImage)
+  {
+    ExistsSaveLocationBase();
+    tReturnCan->SaveAs(fSaveLocationBase+tCanvasName+TString(".pdf"));
+  }
+  return tReturnCan;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 //________________________________________________________________________________________________________________
 TCanvas* PlotPartnersLamK0::DrawSumMassAssumingLambdaAndAntiLambdaHypotheses(AnalysisType aAnalysisType, bool aSaveImage)
@@ -600,7 +826,7 @@ TCanvas* PlotPartnersLamK0::DrawSumMassAssumingLambdaAndAntiLambdaHypotheses(Ana
 
   tPadSmall->cd();
   tHistToDraw->SetTitle("");
-  SetupAxis(tHistToDraw->GetXaxis(),1.1,1.13,"");
+  SetupAxis(tHistToDraw->GetXaxis(),1.07,1.17,"");
   SetupAxis(tHistToDraw->GetYaxis(),"");
   tHistToDraw->DrawCopy();
 
