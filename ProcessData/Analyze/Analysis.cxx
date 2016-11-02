@@ -2027,6 +2027,25 @@ void Analysis::DrawAllPurityHistos(TPad* aPad)
 }
 
 
+//________________________________________________________________________________________________________________
+double Analysis::GetPurity(ParticleType aV0Type)
+{
+  double tReturnValue = 0.;
+  assert(fPurityCollection.size() != 0);
+  for(unsigned int i=0; i<fPurityCollection.size(); i++)
+  {
+    if(fPurityCollection[i]->GetParticleType() == aV0Type)
+    {
+      tReturnValue = fPurityCollection[i]->GetPurity();
+      return tReturnValue;
+    }
+  }
+
+  cout << "ERROR: Analysis::GetPurity: for aV0Type = " << aV0Type << " in fAnalysisType = " << fAnalysisType << " no purity was found!" << endl;
+  assert(0);
+  return tReturnValue;
+}
+
 
 //________________________________________________________________________________________________________________
 void Analysis::OutputPassFailInfo()

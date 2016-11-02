@@ -18,7 +18,7 @@ public:
   PlotPartnersLamK0(TString aFileLocationBase, TString aFileLocationBaseMC, AnalysisType aAnalysisType, CentralityType aCentralityType, AnalysisRunType aType=kTrain, int aNPartialAnalysis=2, TString aDirNameModifier="");
   virtual ~PlotPartnersLamK0();
 
-
+  double GetPurity(AnalysisType aAnalysisType, ParticleType aV0Type);
   virtual TCanvas* DrawPurity(bool aSaveImage=false);
   virtual TCanvas* DrawKStarCfs(bool aSaveImage=false);
   virtual TCanvas* DrawKStarTrueVsRec(KStarTrueVsRecType aType=kMixed, bool aSaveImage=false);  // kSame, kRotSame, kMixed, kRotMixed};
@@ -40,9 +40,9 @@ public:
   virtual TCanvas* DrawMassAssumingLambdaHypothesis(AnalysisType aAnalysisType, TH1* aHist1, TH1* aHist2, bool aSaveImage=false, TString aText1="No Cut", TString aText2="MisID Cut");
   virtual TCanvas* DrawMassAssumingAntiLambdaHypothesis(AnalysisType aAnalysisType, TH1* aHist1, TH1* aHist2, bool aSaveImage=false, TString aText1="No Cut", TString aText2="MisID Cut");
 
-  virtual TCanvas* DrawMassAssumingK0ShortHypothesis(AnalysisType aAnalysisType, TObjArray* tHists, vector<TString> &tLegendEntries, bool aSaveImage=false);
-  virtual TCanvas* DrawMassAssumingLambdaHypothesis(AnalysisType aAnalysisType, TObjArray* tHists, vector<TString> &tLegendEntries, bool aSaveImage=false);
-  virtual TCanvas* DrawMassAssumingAntiLambdaHypothesis(AnalysisType aAnalysisType, TObjArray* tHists, vector<TString> &tLegendEntries, bool aSaveImage=false);
+  virtual TCanvas* DrawMassAssumingK0ShortHypothesis(AnalysisType aAnalysisType, TObjArray* tHists, vector<TString> &tLegendEntries, vector<double> &aPurityValues, bool aSaveImage=false);
+  virtual TCanvas* DrawMassAssumingLambdaHypothesis(AnalysisType aAnalysisType, TObjArray* tHists, vector<TString> &tLegendEntries, vector<double> &aPurityValues, bool aSaveImage=false);
+  virtual TCanvas* DrawMassAssumingAntiLambdaHypothesis(AnalysisType aAnalysisType, TObjArray* tHists, vector<TString> &tLegendEntries, vector<double> &aPurityValues, bool aSaveImage=false);
 
   virtual TCanvas* DrawSumMassAssumingLambdaAndAntiLambdaHypotheses(AnalysisType aAnalysisType, bool aSaveImage=false);
 

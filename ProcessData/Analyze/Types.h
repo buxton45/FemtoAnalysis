@@ -105,6 +105,17 @@ using std::vector;
     double minInterpReF0, maxInterpReF0, minInterpImF0, maxInterpImF0, minInterpD0, maxInterpD0, minInterpK, maxInterpK;
   };
 
+//------------------
+  struct SystematicsFileInfo
+  {
+    const char* resultsDate;
+    const char* dirNameModifierBase1;
+    const char* dirNameModifierBase2;
+    vector<double> modifierValues1;
+    vector<double> modifierValues2;
+    bool allCentralities;
+  };
+
   //----------------------------------------------------------
 
   //--------------typedefs------------------------------------------------

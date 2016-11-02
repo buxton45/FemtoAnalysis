@@ -179,6 +179,7 @@ void Purity::CalculatePurity()
     (*vInfo)(1) = tSigpbgd;
     (*vInfo)(2) = tSig;
     (*vInfo)(3) = tPur;
+  fPurityValue = tPur;
 
   TVectorD *vROI = new TVectorD(2);
     (*vROI)(0) = fROI[0];
@@ -200,9 +201,6 @@ void Purity::CalculatePurity()
   temp->Add(vBgFitHigh);
 
   fPurityFitInfo = temp;
-
-
-
 
 }
 

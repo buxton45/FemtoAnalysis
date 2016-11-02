@@ -58,7 +58,8 @@ public:
 
 
   //inline
-
+  double GetPurity();
+  ParticleType GetParticleType();
 
 private:
 
@@ -78,20 +79,13 @@ private:
   TF1* fFitBgd;
 
 
-
-
-
-
-
-
-
-
 #ifdef __ROOT__
   ClassDef(Purity, 1)
 #endif
 };
 
-
+inline double Purity::GetPurity() {return fPurityValue;}
+inline ParticleType Purity::GetParticleType() {return fParticleType;}
 
 #endif
 

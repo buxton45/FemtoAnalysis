@@ -8,10 +8,16 @@ CFLAGS = $(shell root-config --cflags) -Wall -std=c++11 -I${ANALYZE_DIR} -I${UTI
 
 MY_LIBS = $(addprefix build/, CfLite.o CfHeavy.o Cf2dLite.o Cf2dHeavy.o Types.o Purity.o PartialAnalysis.o Analysis.o DataAndModel.o PlotPartners.o PlotPartnersLamKch.o PlotPartnersLamK0.o SystematicAnalysis.o CanvasPartition.o)
 
-all: runMassAssumingHypotheses
+all: runSingleSys runAllSysLamK0 runAllSysLamKch
 
-runMassAssumingHypotheses: ${MY_LIBS} buildMassAssumingHypotheses.C
-	g++ buildMassAssumingHypotheses.C ${MY_LIBS} -o runMassAssumingHypotheses $(LIBS) $(CFLAGS)
+runSingleSys: ${MY_LIBS} BuildSingleSystematics.C
+	g++ BuildSingleSystematics.C ${MY_LIBS} -o runSingleSys $(LIBS) $(CFLAGS)
+
+runAllSysLamK0: ${MY_LIBS} BuildAllSystematicsLamK0.C
+	g++ BuildAllSystematicsLamK0.C ${MY_LIBS} -o runAllSysLamK0 $(LIBS) $(CFLAGS)
+
+runAllSysLamKch: ${MY_LIBS} BuildAllSystematicsLamKch.C
+	g++ BuildAllSystematicsLamKch.C ${MY_LIBS} -o runAllSysLamKch $(LIBS) $(CFLAGS)
 
 build/%.o: ${ANALYZE_DIR}/%.cxx ${ANALYZE_DIR}/%.h
 	g++ -c $< $(CFLAGS) -o $@
@@ -23,4 +29,4 @@ build/%.o: %.cxx %.h
 	g++ -c $< $(CFLAGS) -o $@
 
 clean:
-	rm -f runMassAssumingHypotheses ${MY_LIBS}
+	rm -f runSingleSys runAllSysLamK0 runAllSysLamKch ${MY_LIBS}

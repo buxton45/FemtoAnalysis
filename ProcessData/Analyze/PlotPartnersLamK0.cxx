@@ -40,6 +40,42 @@ PlotPartnersLamK0::~PlotPartnersLamK0()
 
 
 //________________________________________________________________________________________________________________
+double PlotPartnersLamK0::GetPurity(AnalysisType aAnalysisType, ParticleType aV0Type)
+{
+  double tReturnValue = 0.;
+  if(aAnalysisType == kLamK0)
+  {
+    if(aV0Type != kLam && aV0Type != kK0)
+    {
+      cout << "ERROR: PlotPartnersLamK0::GetPurity invalid aV0Type = " << aV0Type << " with aAnalysisType = " << aAnalysisType << endl;
+      assert(0);
+    }
+    if(fAnalysis1->GetPurityCollection().size()==0) fAnalysis1->BuildPurityCollection();
+    tReturnValue = fAnalysis1->GetPurity(aV0Type);
+  }
+
+  else if(aAnalysisType == kALamK0)
+  {
+    if(aV0Type != kALam && aV0Type != kK0)
+    {
+      cout << "ERROR: PlotPartnersLamK0::GetPurity invalid aV0Type = " << aV0Type << " with aAnalysisType = " << aAnalysisType << endl;
+      assert(0);
+    }
+    if(fConjAnalysis1->GetPurityCollection().size()==0) fConjAnalysis1->BuildPurityCollection();
+    tReturnValue = fConjAnalysis1->GetPurity(aV0Type);
+  }
+
+  else
+  {
+    cout << "ERROR: PlotPartnersLamK0::GetPurity invalid aAnalysisType = " << aAnalysisType << endl;
+    assert(0);
+  }
+
+  return tReturnValue;
+}
+
+
+//________________________________________________________________________________________________________________
 TCanvas* PlotPartnersLamK0::DrawPurity(bool aSaveImage)
 {
   fAnalysis1->BuildPurityCollection();
@@ -396,8 +432,8 @@ TH1* PlotPartnersLamK0::GetMassAssumingAntiLambdaHypothesis(AnalysisType aAnalys
 //________________________________________________________________________________________________________________
 TCanvas* PlotPartnersLamK0::DrawMassAssumingK0ShortHypothesis(AnalysisType aAnalysisType, bool aSaveImage, bool aNormByNEv)
 {
+  gStyle->SetOptTitle(0);
   TH1* tHistToDraw = GetMassAssumingK0ShortHypothesis(aAnalysisType,aNormByNEv);
-
   //------------------------------------
   TString tCanvasName = TString("canMassAssK0Hyp_") + TString(cAnalysisBaseTags[aAnalysisType]);
   if(!fDirNameModifier.IsNull()) tCanvasName += fDirNameModifier;
@@ -419,8 +455,8 @@ TCanvas* PlotPartnersLamK0::DrawMassAssumingK0ShortHypothesis(AnalysisType aAnal
 //________________________________________________________________________________________________________________
 TCanvas* PlotPartnersLamK0::DrawMassAssumingLambdaHypothesis(AnalysisType aAnalysisType, bool aSaveImage, bool aNormByNEv)
 {
+  gStyle->SetOptTitle(0);
   TH1* tHistToDraw = GetMassAssumingLambdaHypothesis(aAnalysisType,aNormByNEv);
-
   //------------------------------------
   TString tCanvasName = TString("canMassAssLamHyp_") + TString(cAnalysisBaseTags[aAnalysisType]);
   if(!fDirNameModifier.IsNull()) tCanvasName += fDirNameModifier;
@@ -455,8 +491,8 @@ TCanvas* PlotPartnersLamK0::DrawMassAssumingLambdaHypothesis(AnalysisType aAnaly
 //________________________________________________________________________________________________________________
 TCanvas* PlotPartnersLamK0::DrawMassAssumingAntiLambdaHypothesis(AnalysisType aAnalysisType, bool aSaveImage, bool aNormByNEv)
 {
+  gStyle->SetOptTitle(0);
   TH1* tHistToDraw = GetMassAssumingAntiLambdaHypothesis(aAnalysisType,aNormByNEv);
-
   //------------------------------------
   TString tCanvasName = TString("canMassAssALamHyp_") + TString(cAnalysisBaseTags[aAnalysisType]);
   if(!fDirNameModifier.IsNull()) tCanvasName += fDirNameModifier;
@@ -491,6 +527,7 @@ TCanvas* PlotPartnersLamK0::DrawMassAssumingAntiLambdaHypothesis(AnalysisType aA
 //________________________________________________________________________________________________________________
 TCanvas* PlotPartnersLamK0::DrawMassAssumingK0ShortHypothesis(AnalysisType aAnalysisType, TH1* aHist1, TH1* aHist2, bool aSaveImage, TString aText1, TString aText2)
 {
+  gStyle->SetOptTitle(0);
   TString tCanvasName = TString("canMassAssK0HypCompare_") + TString(cAnalysisBaseTags[aAnalysisType]);
   if(!fDirNameModifier.IsNull()) tCanvasName += fDirNameModifier;
   TCanvas* tReturnCan = new TCanvas(tCanvasName,tCanvasName);
@@ -507,9 +544,9 @@ TCanvas* PlotPartnersLamK0::DrawMassAssumingK0ShortHypothesis(AnalysisType aAnal
   TLegend *tLeg = new TLegend(0.40,0.15,0.65,0.30);
   tLeg->SetFillColor(0);
   tLeg->AddEntry(aHist1,aText1,"lp");
-  tLeg->AddEntry((TObject*)0, TString::Format("N_{pass}%s = %0.3e",tLegModifier.Data(),aHist1->Integral()), "");
+  tLeg->AddEntry((TObject*)0, TString::Format("N_{pass}%s = %0.4e",tLegModifier.Data(),aHist1->Integral()), "");
   tLeg->AddEntry(aHist2,aText2,"lp");
-  tLeg->AddEntry((TObject*)0, TString::Format("N_{pass}%s = %0.3e",tLegModifier.Data(),aHist2->Integral()), "");
+  tLeg->AddEntry((TObject*)0, TString::Format("N_{pass}%s = %0.4e",tLegModifier.Data(),aHist2->Integral()), "");
   tLeg->Draw();
 
   if(aSaveImage)
@@ -523,6 +560,7 @@ TCanvas* PlotPartnersLamK0::DrawMassAssumingK0ShortHypothesis(AnalysisType aAnal
 //________________________________________________________________________________________________________________
 TCanvas* PlotPartnersLamK0::DrawMassAssumingLambdaHypothesis(AnalysisType aAnalysisType, TH1* aHist1, TH1* aHist2, bool aSaveImage, TString aText1, TString aText2)
 {
+  gStyle->SetOptTitle(0);
   TString tCanvasName = TString("canMassAssLamHypCompare_") + TString(cAnalysisBaseTags[aAnalysisType]);
   if(!fDirNameModifier.IsNull()) tCanvasName += fDirNameModifier;
   TCanvas* tReturnCan = new TCanvas(tCanvasName,tCanvasName);
@@ -546,9 +584,9 @@ TCanvas* PlotPartnersLamK0::DrawMassAssumingLambdaHypothesis(AnalysisType aAnaly
   TLegend *tLeg = new TLegend(0.65,0.23,0.89,0.38);
   tLeg->SetFillColor(0);
   tLeg->AddEntry(aHist1,aText1,"lp");
-  tLeg->AddEntry((TObject*)0, TString::Format("N_{pass}%s = %0.3e",tLegModifier.Data(),aHist1->Integral()), "");
+  tLeg->AddEntry((TObject*)0, TString::Format("N_{pass}%s = %0.4e",tLegModifier.Data(),aHist1->Integral()), "");
   tLeg->AddEntry(aHist2,aText2,"lp");
-  tLeg->AddEntry((TObject*)0, TString::Format("N_{pass}%s = %0.3e",tLegModifier.Data(),aHist2->Integral()), "");
+  tLeg->AddEntry((TObject*)0, TString::Format("N_{pass}%s = %0.4e",tLegModifier.Data(),aHist2->Integral()), "");
   tLeg->Draw();
 
   tPadSmall->cd();
@@ -569,6 +607,7 @@ TCanvas* PlotPartnersLamK0::DrawMassAssumingLambdaHypothesis(AnalysisType aAnaly
 //________________________________________________________________________________________________________________
 TCanvas* PlotPartnersLamK0::DrawMassAssumingAntiLambdaHypothesis(AnalysisType aAnalysisType, TH1* aHist1, TH1* aHist2, bool aSaveImage, TString aText1, TString aText2)
 {
+  gStyle->SetOptTitle(0);
   TString tCanvasName = TString("canMassAssALamHypCompare_") + TString(cAnalysisBaseTags[aAnalysisType]);
   if(!fDirNameModifier.IsNull()) tCanvasName += fDirNameModifier;
   TCanvas* tReturnCan = new TCanvas(tCanvasName,tCanvasName);
@@ -592,9 +631,9 @@ TCanvas* PlotPartnersLamK0::DrawMassAssumingAntiLambdaHypothesis(AnalysisType aA
   TLegend *tLeg = new TLegend(0.65,0.23,0.89,0.38);
   tLeg->SetFillColor(0);
   tLeg->AddEntry(aHist1,aText1,"lp");
-  tLeg->AddEntry((TObject*)0, TString::Format("N_{pass}%s = %0.3e",tLegModifier.Data(),aHist1->Integral()), "");
+  tLeg->AddEntry((TObject*)0, TString::Format("N_{pass}%s = %0.4e",tLegModifier.Data(),aHist1->Integral()), "");
   tLeg->AddEntry(aHist2,aText2,"lp");
-  tLeg->AddEntry((TObject*)0, TString::Format("N_{pass}%s = %0.3e",tLegModifier.Data(),aHist2->Integral()), "");
+  tLeg->AddEntry((TObject*)0, TString::Format("N_{pass}%s = %0.4e",tLegModifier.Data(),aHist2->Integral()), "");
   tLeg->Draw();
 
 
@@ -613,25 +652,21 @@ TCanvas* PlotPartnersLamK0::DrawMassAssumingAntiLambdaHypothesis(AnalysisType aA
   return tReturnCan;
 }
 
-
-
-
-
-
-
 //________________________________________________________________________________________________________________
-TCanvas* PlotPartnersLamK0::DrawMassAssumingK0ShortHypothesis(AnalysisType aAnalysisType, TObjArray* tHists, vector<TString> &tLegendEntries, bool aSaveImage)
+TCanvas* PlotPartnersLamK0::DrawMassAssumingK0ShortHypothesis(AnalysisType aAnalysisType, TObjArray* tHists, vector<TString> &tLegendEntries, vector<double> &aPurityValues, bool aSaveImage)
 {
+  gStyle->SetOptTitle(0);
   TString tCanvasName = TString("canMassAssK0HypCompare_") + TString(cAnalysisBaseTags[aAnalysisType]);
   if(!fDirNameModifier.IsNull()) tCanvasName += fDirNameModifier;
   TCanvas* tReturnCan = new TCanvas(tCanvasName,tCanvasName);
   tReturnCan->cd();
   gStyle->SetOptStat(0);
 
-  TLegend *tLeg = new TLegend(0.40,0.15,0.65,0.30);
+  TLegend *tLeg = new TLegend(0.375,0.15,0.625,0.45);
   tLeg->SetFillColor(0);
 
-  assert(tHists->GetEntries() == tLegendEntries.size());
+  assert(tHists->GetEntries() == (int)tLegendEntries.size());
+  assert(tLegendEntries.size() == aPurityValues.size());
   int tNEntries = tHists->GetEntries();
 
   for(int i=0; i<tNEntries; i++)
@@ -643,7 +678,8 @@ TCanvas* PlotPartnersLamK0::DrawMassAssumingK0ShortHypothesis(AnalysisType aAnal
     tLeg->AddEntry(tHistToDraw,tLegendEntries[i],"lp");
     TString tLegModifier = "";
     if(tHistToDraw->Integral() < 100) tLegModifier = "/N_{Ev}";
-    tLeg->AddEntry((TObject*)0, TString::Format("N_{pass}%s = %0.3e",tLegModifier.Data(),tHistToDraw->Integral()), "");
+    tLeg->AddEntry((TObject*)0, TString::Format("N_{pass}%s = %0.4e",tLegModifier.Data(),tHistToDraw->Integral()), "");
+    tLeg->AddEntry((TObject*)0, TString::Format("Purity = %0.4f",aPurityValues[i]), "");
   }
   tLeg->Draw();
   PrintAnalysisType((TPad*)tReturnCan,aAnalysisType,0.84,0.89,0.15,0.10,63,30);
@@ -657,8 +693,9 @@ TCanvas* PlotPartnersLamK0::DrawMassAssumingK0ShortHypothesis(AnalysisType aAnal
 }
 
 //________________________________________________________________________________________________________________
-TCanvas* PlotPartnersLamK0::DrawMassAssumingLambdaHypothesis(AnalysisType aAnalysisType, TObjArray* tHists, vector<TString> &tLegendEntries, bool aSaveImage)
+TCanvas* PlotPartnersLamK0::DrawMassAssumingLambdaHypothesis(AnalysisType aAnalysisType, TObjArray* tHists, vector<TString> &tLegendEntries, vector<double> &aPurityValues, bool aSaveImage)
 {
+  gStyle->SetOptTitle(0);
   TString tCanvasName = TString("canMassAssLamHypCompare_") + TString(cAnalysisBaseTags[aAnalysisType]);
   if(!fDirNameModifier.IsNull()) tCanvasName += fDirNameModifier;
   TCanvas* tReturnCan = new TCanvas(tCanvasName,tCanvasName);
@@ -671,14 +708,35 @@ TCanvas* PlotPartnersLamK0::DrawMassAssumingLambdaHypothesis(AnalysisType aAnaly
     tPadSmall->SetMargin(0.08,0.01,0.06,0.0);
     tPadSmall->Draw();
 
-  assert(tHists->GetEntries() == tLegendEntries.size());
+  assert(tHists->GetEntries() == (int)tLegendEntries.size());
+  assert(tLegendEntries.size() == aPurityValues.size());
   int tNEntries = tHists->GetEntries();
 
   //-------------------------
   tPadLarge->cd();
 
-  TLegend *tLeg = new TLegend(0.65,0.23,0.89,0.38);
-  tLeg->SetFillColor(0);
+  double x1min,y1min,x1max,y1max;
+  double x2min,y2min,x2max,y2max;
+  double width, height;
+
+  width = 0.22;
+  height = 0.15;
+  
+  x1min = 0.45;
+  x1max = x1min + width;
+  y1min = 0.23;
+  y1max = y1min + height;
+
+  x2min = x1max;
+  x2max = x2min + width;
+  y2min = y1min;
+  y2max = y2min + height;
+
+  TLegend* tLeg1 = new TLegend(x1min,y1min,x1max,y1max);
+  tLeg1->SetFillColor(0);
+
+  TLegend* tLeg2 = new TLegend(x2min,y2min,x2max,y2max);
+  tLeg2->SetFillColor(0);
 
   for(int i=0; i<tNEntries; i++)
   {
@@ -686,12 +744,25 @@ TCanvas* PlotPartnersLamK0::DrawMassAssumingLambdaHypothesis(AnalysisType aAnaly
     if(i==0) tHistToDraw->DrawCopy();
     else tHistToDraw->DrawCopy("same");
 
-    tLeg->AddEntry(tHistToDraw,tLegendEntries[i],"lp");
-    TString tLegModifier = "";
-    if(tHistToDraw->Integral() < 100) tLegModifier = "/N_{Ev}";
-    tLeg->AddEntry((TObject*)0, TString::Format("N_{pass}%s = %0.3e",tLegModifier.Data(),tHistToDraw->Integral()), "");
+    if(i < 2)
+    {
+      tLeg1->AddEntry(tHistToDraw,tLegendEntries[i],"lp");
+      TString tLegModifier = "";
+      if(tHistToDraw->Integral() < 100) tLegModifier = "/N_{Ev}";
+      tLeg1->AddEntry((TObject*)0, TString::Format("N_{pass}%s = %0.4e",tLegModifier.Data(),tHistToDraw->Integral()), "");
+      tLeg1->AddEntry((TObject*)0, TString::Format("Purity = %0.4f",aPurityValues[i]), "");
+    }
+    else
+    {
+      tLeg2->AddEntry(tHistToDraw,tLegendEntries[i],"lp");
+      TString tLegModifier = "";
+      if(tHistToDraw->Integral() < 100) tLegModifier = "/N_{Ev}";
+      tLeg2->AddEntry((TObject*)0, TString::Format("N_{pass}%s = %0.4e",tLegModifier.Data(),tHistToDraw->Integral()), "");
+      tLeg2->AddEntry((TObject*)0, TString::Format("Purity = %0.4f",aPurityValues[i]), "");
+    }
   }
-  tLeg->Draw();
+  tLeg1->Draw();
+  tLeg2->Draw();
   PrintAnalysisType(tPadLarge,aAnalysisType,0.85,0.05,0.15,0.10,63,30);
 
   //-------------------------
@@ -718,8 +789,9 @@ TCanvas* PlotPartnersLamK0::DrawMassAssumingLambdaHypothesis(AnalysisType aAnaly
 }
 
 //________________________________________________________________________________________________________________
-TCanvas* PlotPartnersLamK0::DrawMassAssumingAntiLambdaHypothesis(AnalysisType aAnalysisType, TObjArray* tHists, vector<TString> &tLegendEntries, bool aSaveImage)
+TCanvas* PlotPartnersLamK0::DrawMassAssumingAntiLambdaHypothesis(AnalysisType aAnalysisType, TObjArray* tHists, vector<TString> &tLegendEntries, vector<double> &aPurityValues, bool aSaveImage)
 {
+  gStyle->SetOptTitle(0);
   TString tCanvasName = TString("canMassAssALamHypCompare_") + TString(cAnalysisBaseTags[aAnalysisType]);
   if(!fDirNameModifier.IsNull()) tCanvasName += fDirNameModifier;
   TCanvas* tReturnCan = new TCanvas(tCanvasName,tCanvasName);
@@ -732,14 +804,35 @@ TCanvas* PlotPartnersLamK0::DrawMassAssumingAntiLambdaHypothesis(AnalysisType aA
     tPadSmall->SetMargin(0.08,0.01,0.06,0.0);
     tPadSmall->Draw();
 
-  assert(tHists->GetEntries() == tLegendEntries.size());
+  assert(tHists->GetEntries() == (int)tLegendEntries.size());
+  assert(tLegendEntries.size() == aPurityValues.size());
   int tNEntries = tHists->GetEntries();
 
   //-------------------------
   tPadLarge->cd();
 
-  TLegend *tLeg = new TLegend(0.65,0.23,0.89,0.38);
-  tLeg->SetFillColor(0);
+  double x1min,y1min,x1max,y1max;
+  double x2min,y2min,x2max,y2max;
+  double width, height;
+
+  width = 0.22;
+  height = 0.15;
+  
+  x1min = 0.45;
+  x1max = x1min + width;
+  y1min = 0.23;
+  y1max = y1min + height;
+
+  x2min = x1max;
+  x2max = x2min + width;
+  y2min = y1min;
+  y2max = y2min + height;
+
+  TLegend* tLeg1 = new TLegend(x1min,y1min,x1max,y1max);
+  tLeg1->SetFillColor(0);
+
+  TLegend* tLeg2 = new TLegend(x2min,y2min,x2max,y2max);
+  tLeg2->SetFillColor(0);
 
   for(int i=0; i<tNEntries; i++)
   {
@@ -747,12 +840,25 @@ TCanvas* PlotPartnersLamK0::DrawMassAssumingAntiLambdaHypothesis(AnalysisType aA
     if(i==0) tHistToDraw->DrawCopy();
     else tHistToDraw->DrawCopy("same");
 
-    tLeg->AddEntry(tHistToDraw,tLegendEntries[i],"lp");
-    TString tLegModifier = "";
-    if(tHistToDraw->Integral() < 100) tLegModifier = "/N_{Ev}";
-    tLeg->AddEntry((TObject*)0, TString::Format("N_{pass}%s = %0.3e",tLegModifier.Data(),tHistToDraw->Integral()), "");
+    if(i < 2)
+    {
+      tLeg1->AddEntry(tHistToDraw,tLegendEntries[i],"lp");
+      TString tLegModifier = "";
+      if(tHistToDraw->Integral() < 100) tLegModifier = "/N_{Ev}";
+      tLeg1->AddEntry((TObject*)0, TString::Format("N_{pass}%s = %0.4e",tLegModifier.Data(),tHistToDraw->Integral()), "");
+      tLeg1->AddEntry((TObject*)0, TString::Format("Purity = %0.4f",aPurityValues[i]), "");
+    }
+    else
+    {
+      tLeg2->AddEntry(tHistToDraw,tLegendEntries[i],"lp");
+      TString tLegModifier = "";
+      if(tHistToDraw->Integral() < 100) tLegModifier = "/N_{Ev}";
+      tLeg2->AddEntry((TObject*)0, TString::Format("N_{pass}%s = %0.4e",tLegModifier.Data(),tHistToDraw->Integral()), "");
+      tLeg2->AddEntry((TObject*)0, TString::Format("Purity = %0.4f",aPurityValues[i]), "");
+    }
   }
-  tLeg->Draw();
+  tLeg1->Draw();
+  tLeg2->Draw();
   PrintAnalysisType(tPadLarge,aAnalysisType,0.85,0.05,0.15,0.10,63,30);
 
   //-------------------------
@@ -777,27 +883,6 @@ TCanvas* PlotPartnersLamK0::DrawMassAssumingAntiLambdaHypothesis(AnalysisType aA
   }
   return tReturnCan;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 //________________________________________________________________________________________________________________
 TCanvas* PlotPartnersLamK0::DrawSumMassAssumingLambdaAndAntiLambdaHypotheses(AnalysisType aAnalysisType, bool aSaveImage)

@@ -8,6 +8,7 @@
 #define SYSTEMATICANALYSIS_H
 
 #include <iostream>
+#include <fstream>
 #include <iomanip>
 #include <math.h>
 #include <vector>
@@ -35,7 +36,7 @@ public:
 
   TH1* GetDiffHist(TH1* aHist1, TH1* aHist2);
   double GetPValueCorrelated(TH1* aHist1, TH1* aHist2);
-  void GetAllPValues();
+  void GetAllPValues(ostream &aOut=std::cout);
   void DrawAll();
   void DrawAllDiffs();
 

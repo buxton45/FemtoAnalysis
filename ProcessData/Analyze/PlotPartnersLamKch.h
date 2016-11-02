@@ -18,6 +18,7 @@ public:
   PlotPartnersLamKch(TString aFileLocationBase, TString aFileLocationBaseMC, AnalysisType aAnalysisType, CentralityType aCentralityType, AnalysisRunType aType=kTrain, int aNPartialAnalysis=2, TString aDirNameModifier="");
   virtual ~PlotPartnersLamKch();
 
+  double GetPurity(AnalysisType aAnalysisType, ParticleType aV0Type);
   virtual TCanvas* DrawPurity(bool aSaveImage=false);
   virtual TCanvas* DrawKStarCfs(bool aSaveImage=false);
   virtual TCanvas* DrawKStarTrueVsRec(KStarTrueVsRecType aType=kMixed, bool aSaveImage=false);  // kSame, kRotSame, kMixed, kRotMixed};
@@ -30,7 +31,7 @@ public:
   TH1* GetMassAssumingK0ShortHypothesis(AnalysisType aAnalysisType, bool aNormByNEv=false, int aMarkerColor=1, int aMarkerStyle=20, double aMarkerSize=0.5);
   virtual TCanvas* DrawMassAssumingK0ShortHypothesis(AnalysisType aAnalysisType, bool aSaveImage=false);
   virtual TCanvas* DrawMassAssumingK0ShortHypothesis(AnalysisType aAnalysisType, TH1* aHist1, TH1* aHist2, bool aSaveImage=false, TString aText1="No Cut", TString aText2="MisID Cut");
-  virtual TCanvas* DrawMassAssumingK0ShortHypothesis(AnalysisType aAnalysisType, TObjArray* tHists, vector<TString> &tLegendEntries, bool aSaveImage=false);
+  virtual TCanvas* DrawMassAssumingK0ShortHypothesis(AnalysisType aAnalysisType, TObjArray* tHists, vector<TString> &tLegendEntries, vector<double> &aPurityValues, bool aSaveImage=false);
 
 private:
 

@@ -131,10 +131,11 @@ double SystematicAnalysis::GetPValueCorrelated(TH1* aHist1, TH1* aHist2)
 
 
 //________________________________________________________________________________________________________________
-void SystematicAnalysis::GetAllPValues()
+void SystematicAnalysis::GetAllPValues(ostream &aOut)
 {
-  cout << "AnalysisType = " << cAnalysisBaseTags[fAnalyses[0].GetAnalysisType()] << endl;
-  cout << "CentralityType = " << cPrettyCentralityTags[fAnalyses[0].GetCentralityType()] << endl << endl;
+  aOut << "______________________________________________________________________________" << endl;
+  aOut << "AnalysisType = " << cAnalysisBaseTags[fAnalyses[0].GetAnalysisType()] << endl;
+  aOut << "CentralityType = " << cPrettyCentralityTags[fAnalyses[0].GetCentralityType()] << endl << endl;
 
   double tPVal = 0.;
   TString tCutVal1a, tCutVal1b, tCutVal1Tot;
@@ -175,11 +176,12 @@ void SystematicAnalysis::GetAllPValues()
         tCutVal2Tot += TString::Format(" and %s",tCutVal2b.Data());
       }
 
-      cout << tCutVal1Tot << endl;
-      cout << tCutVal2Tot << endl;
-      cout << "p value = " << std::setprecision(6) << tPVal << endl << endl;
+      aOut << tCutVal1Tot << endl;
+      aOut << tCutVal2Tot << endl;
+      aOut << "p value = " << std::setprecision(6) << tPVal << endl << endl;
     }
   }
+  aOut << "______________________________________________________________________________" << endl << endl;
 }
 
 
