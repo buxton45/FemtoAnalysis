@@ -1,4 +1,14 @@
+%Need to following so subdirectories can all find ALICE_analysis_note.cls and
+%other files needed from main directory
+\makeatletter
+\def\input@path{{/home/jesse/Analysis/FemtoAnalysis/AnalysisNotes/}}
+%or: \def\input@path{{/path/to/folder/}{/path/to/other/folder/}}
+\makeatother
+
+%\documentclass[ALICE,manyauthors]{ALICE_analysis_notes}
 \documentclass[ALICE,manyauthors]{ALICE_analysis_notes}
+
+
 %\documentclass[ALICE,manyauthors]{ALICE_scientific_notes}
 %
 %\newcommand{\jpsi}{\rm J/$\psi$}
@@ -12,6 +22,7 @@
 \newcommand{\slfrac}[2]{\left.#1\right/#2}
 \usepackage{rotating}
 \usepackage{comment} 
+\usepackage{subfiles}
 
 \usepackage{color}	%May be necessary for colored links
 \usepackage{hyperref}
@@ -66,6 +77,6 @@ To gain further insight into this hypothesis, we currently are conducting a Casc
 \end{titlepage}
 %
 %\input{alice_mynote.tex}               %%%%%%%%%%% put the body of the article here
-\input{0_Contents.tex}
-
+%\input{0_Contents.tex}
+\subfile{0_Contents.tex}
 \end{document}

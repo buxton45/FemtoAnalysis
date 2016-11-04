@@ -44,12 +44,36 @@ SystematicsFileInfo GetFileInfo(int aNumber)
     gInfo5.allCentralities = true;
 
   SystematicsFileInfo gInfo6;
-    gInfo6.resultsDate = "20161025";
-    gInfo6.dirNameModifierBase1 = "_K0s_minInvMassReject_";
-    gInfo6.modifierValues1 = vector<double> {1.112683, 1.110683, 1.106683, 1.100683};
-    gInfo6.dirNameModifierBase2 = "_K0s_maxInvMassReject_";
-    gInfo6.modifierValues2 = vector<double> {1.118683, 1.120683, 1.124683, 1.130683};
-    gInfo6.allCentralities = false;
+    gInfo6.resultsDate = "20161102";
+    gInfo6.dirNameModifierBase1 = "_K0s_minCosPointingAngle_";
+    gInfo6.modifierValues1 = vector<double> {0.9992, 0.9993, 0.9994};
+    gInfo6.dirNameModifierBase2 = "";
+    gInfo6.modifierValues2 = vector<double> {};
+    gInfo6.allCentralities = true;
+
+  SystematicsFileInfo gInfo7;
+    gInfo7.resultsDate = "20161025";
+    gInfo7.dirNameModifierBase1 = "_K0s_minInvMassReject_";
+    gInfo7.modifierValues1 = vector<double> {1.112683, 1.110683, 1.106683, 1.100683};
+    gInfo7.dirNameModifierBase2 = "_K0s_maxInvMassReject_";
+    gInfo7.modifierValues2 = vector<double> {1.118683, 1.120683, 1.124683, 1.130683};
+    gInfo7.allCentralities = false;
+
+  SystematicsFileInfo gInfo8;
+    gInfo8.resultsDate = "20161103";
+    gInfo8.dirNameModifierBase1 = "_K0s_minNegDaughterToPrimVertex_";
+    gInfo8.modifierValues1 = vector<double> {0.2, 0.3, 0.4};
+    gInfo8.dirNameModifierBase2 = "";
+    gInfo8.modifierValues2 = vector<double> {};
+    gInfo8.allCentralities = true;
+
+  SystematicsFileInfo gInfo9;
+    gInfo9.resultsDate = "20161103";
+    gInfo9.dirNameModifierBase1 = "_K0s_minPosDaughterToPrimVertex_";
+    gInfo9.modifierValues1 = vector<double> {0.2, 0.3, 0.4};
+    gInfo9.dirNameModifierBase2 = "";
+    gInfo9.modifierValues2 = vector<double> {};
+    gInfo9.allCentralities = true;
 
 
 
@@ -59,6 +83,9 @@ SystematicsFileInfo GetFileInfo(int aNumber)
   else if(aNumber==4) return gInfo4;
   else if(aNumber==5) return gInfo5;
   else if(aNumber==6) return gInfo6;
+  else if(aNumber==7) return gInfo7;
+  else if(aNumber==8) return gInfo8;
+  else if(aNumber==9) return gInfo9;
   else
   {
     cout << "ERROR: SystematicsFileInfo GetFileInfo" << endl;
@@ -77,7 +104,7 @@ int main(int argc, char **argv)
   TString tGeneralAnTypeName = "cLamK0";
   bool bWriteToFile = true;
 
-  SystematicsFileInfo tFileInfo = GetFileInfo(1);
+  SystematicsFileInfo tFileInfo = GetFileInfo(9);
     TString tResultsDate = tFileInfo.resultsDate;
     TString tDirNameModifierBase1 = tFileInfo.dirNameModifierBase1;
     vector<double> tModifierValues1 = tFileInfo.modifierValues1;

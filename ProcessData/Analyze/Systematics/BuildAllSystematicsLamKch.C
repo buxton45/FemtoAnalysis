@@ -35,10 +35,28 @@ SystematicsFileInfo GetFileInfo(int aNumber)
     gInfo4.modifierValues2 = vector<double> {};
     gInfo4.allCentralities = true;
 
+  SystematicsFileInfo gInfo5;
+    gInfo5.resultsDate = "20161103";
+    gInfo5.dirNameModifierBase1 = "_Lam_minNegDaughterToPrimVertex_";
+    gInfo5.modifierValues1 = vector<double> {0.2, 0.3, 0.4};
+    gInfo5.dirNameModifierBase2 = "";
+    gInfo5.modifierValues2 = vector<double> {};
+    gInfo5.allCentralities = true;
+
+  SystematicsFileInfo gInfo6;
+    gInfo6.resultsDate = "20161103";
+    gInfo6.dirNameModifierBase1 = "_Lam_minPosDaughterToPrimVertex_";
+    gInfo6.modifierValues1 = vector<double> {0.05, 0.1, 0.2};
+    gInfo6.dirNameModifierBase2 = "";
+    gInfo6.modifierValues2 = vector<double> {};
+    gInfo6.allCentralities = true;
+
   if(aNumber==1) return gInfo1;
   else if(aNumber==2) return gInfo2;
   else if(aNumber==3) return gInfo3;
   else if(aNumber==4) return gInfo4;
+  else if(aNumber==5) return gInfo5;
+  else if(aNumber==6) return gInfo6;
   else
   {
     cout << "ERROR: SystematicsFileInfo GetFileInfo" << endl;
@@ -58,7 +76,7 @@ int main(int argc, char **argv)
   TString tGeneralAnTypeName = "cLamcKch";
   bool bWriteToFile = true;
 
-  SystematicsFileInfo tFileInfo = GetFileInfo(1);
+  SystematicsFileInfo tFileInfo = GetFileInfo(4);
     TString tResultsDate = tFileInfo.resultsDate;
     TString tDirNameModifierBase1 = tFileInfo.dirNameModifierBase1;
     vector<double> tModifierValues1 = tFileInfo.modifierValues1;

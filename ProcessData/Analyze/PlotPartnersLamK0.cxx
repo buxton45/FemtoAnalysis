@@ -475,8 +475,10 @@ TCanvas* PlotPartnersLamK0::DrawMassAssumingLambdaHypothesis(AnalysisType aAnaly
   PrintAnalysisType(tPadLarge,aAnalysisType,0.85,0.05,0.15,0.10,63,30);
 
   tPadSmall->cd();
+  double tXRangeMin = 1.1;
+  double tXRangeMax = 1.13;
   tHistToDraw->SetTitle("");
-  SetupAxis(tHistToDraw->GetXaxis(),1.07,1.17,"");
+  SetupAxis(tHistToDraw->GetXaxis(),tXRangeMin,tXRangeMax,"");
   SetupAxis(tHistToDraw->GetYaxis(),"");
   tHistToDraw->DrawCopy();
 
@@ -511,8 +513,10 @@ TCanvas* PlotPartnersLamK0::DrawMassAssumingAntiLambdaHypothesis(AnalysisType aA
   PrintAnalysisType(tPadLarge,aAnalysisType,0.85,0.05,0.15,0.10,63,30);
 
   tPadSmall->cd();
+  double tXRangeMin = 1.1;
+  double tXRangeMax = 1.13;
   tHistToDraw->SetTitle("");
-  SetupAxis(tHistToDraw->GetXaxis(),1.07,1.17,"");
+  SetupAxis(tHistToDraw->GetXaxis(),tXRangeMin,tXRangeMax,"");
   SetupAxis(tHistToDraw->GetYaxis(),"");
   tHistToDraw->DrawCopy();
 
@@ -590,9 +594,13 @@ TCanvas* PlotPartnersLamK0::DrawMassAssumingLambdaHypothesis(AnalysisType aAnaly
   tLeg->Draw();
 
   tPadSmall->cd();
+  double tXRangeMin = 1.1;
+  double tXRangeMax = 1.13;
   aHist1->SetTitle("");
-  SetupAxis(aHist1->GetXaxis(),1.07,1.17,"");
+  SetupAxis(aHist1->GetXaxis(),tXRangeMin,tXRangeMax,"");
   SetupAxis(aHist1->GetYaxis(),"");
+  //Make sure y-axis goes to 0 for min.
+  aHist1->GetYaxis()->SetRangeUser(0.0,aHist1->GetBinContent(aHist1->FindBin(tXRangeMax)));
   aHist1->DrawCopy();
   aHist2->DrawCopy("same");
 
@@ -638,9 +646,13 @@ TCanvas* PlotPartnersLamK0::DrawMassAssumingAntiLambdaHypothesis(AnalysisType aA
 
 
   tPadSmall->cd();
+  double tXRangeMin = 1.1;
+  double tXRangeMax = 1.13;
   aHist1->SetTitle("");
-  SetupAxis(aHist1->GetXaxis(),1.07,1.17,"");
+  SetupAxis(aHist1->GetXaxis(),tXRangeMin,tXRangeMax,"");
   SetupAxis(aHist1->GetYaxis(),"");
+  //Make sure y-axis goes to 0 for min.
+  aHist1->GetYaxis()->SetRangeUser(0.0,aHist1->GetBinContent(aHist1->FindBin(tXRangeMax)));
   aHist1->DrawCopy();
   aHist2->DrawCopy("same");
 
@@ -695,6 +707,8 @@ TCanvas* PlotPartnersLamK0::DrawMassAssumingK0ShortHypothesis(AnalysisType aAnal
 //________________________________________________________________________________________________________________
 TCanvas* PlotPartnersLamK0::DrawMassAssumingLambdaHypothesis(AnalysisType aAnalysisType, TObjArray* tHists, vector<TString> &tLegendEntries, vector<double> &aPurityValues, bool aSaveImage)
 {
+  bool bDrawFirstTwice = true;
+
   gStyle->SetOptTitle(0);
   TString tCanvasName = TString("canMassAssLamHypCompare_") + TString(cAnalysisBaseTags[aAnalysisType]);
   if(!fDirNameModifier.IsNull()) tCanvasName += fDirNameModifier;
@@ -761,24 +775,30 @@ TCanvas* PlotPartnersLamK0::DrawMassAssumingLambdaHypothesis(AnalysisType aAnaly
       tLeg2->AddEntry((TObject*)0, TString::Format("Purity = %0.4f",aPurityValues[i]), "");
     }
   }
+  if(bDrawFirstTwice) ((TH1*)tHists->At(0))->DrawCopy("same");
   tLeg1->Draw();
   tLeg2->Draw();
   PrintAnalysisType(tPadLarge,aAnalysisType,0.85,0.05,0.15,0.10,63,30);
 
   //-------------------------
   tPadSmall->cd();
+  double tXRangeMin = 1.1;
+  double tXRangeMax = 1.13;
   for(int i=0; i<tNEntries; i++)
   {
     TH1* tHistToDraw = (TH1*)tHists->At(i);
     if(i==0)
     {
       tHistToDraw->SetTitle("");
-      SetupAxis(tHistToDraw->GetXaxis(),1.07,1.17,"");
+      SetupAxis(tHistToDraw->GetXaxis(),tXRangeMin,tXRangeMax,"");
       SetupAxis(tHistToDraw->GetYaxis(),"");
+      //Make sure y-axis goes to 0 for min.
+      tHistToDraw->GetYaxis()->SetRangeUser(0.0,tHistToDraw->GetBinContent(tHistToDraw->FindBin(tXRangeMax)));
       tHistToDraw->DrawCopy();
     }
     else tHistToDraw->DrawCopy("same");
   }
+  if(bDrawFirstTwice) ((TH1*)tHists->At(0))->DrawCopy("same");
 
   if(aSaveImage)
   {
@@ -791,6 +811,8 @@ TCanvas* PlotPartnersLamK0::DrawMassAssumingLambdaHypothesis(AnalysisType aAnaly
 //________________________________________________________________________________________________________________
 TCanvas* PlotPartnersLamK0::DrawMassAssumingAntiLambdaHypothesis(AnalysisType aAnalysisType, TObjArray* tHists, vector<TString> &tLegendEntries, vector<double> &aPurityValues, bool aSaveImage)
 {
+  bool bDrawFirstTwice = true;
+
   gStyle->SetOptTitle(0);
   TString tCanvasName = TString("canMassAssALamHypCompare_") + TString(cAnalysisBaseTags[aAnalysisType]);
   if(!fDirNameModifier.IsNull()) tCanvasName += fDirNameModifier;
@@ -857,24 +879,30 @@ TCanvas* PlotPartnersLamK0::DrawMassAssumingAntiLambdaHypothesis(AnalysisType aA
       tLeg2->AddEntry((TObject*)0, TString::Format("Purity = %0.4f",aPurityValues[i]), "");
     }
   }
+  if(bDrawFirstTwice) ((TH1*)tHists->At(0))->DrawCopy("same");
   tLeg1->Draw();
   tLeg2->Draw();
   PrintAnalysisType(tPadLarge,aAnalysisType,0.85,0.05,0.15,0.10,63,30);
 
   //-------------------------
   tPadSmall->cd();
+  double tXRangeMin = 1.1;
+  double tXRangeMax = 1.13;
   for(int i=0; i<tNEntries; i++)
   {
     TH1* tHistToDraw = (TH1*)tHists->At(i);
     if(i==0)
     {
       tHistToDraw->SetTitle("");
-      SetupAxis(tHistToDraw->GetXaxis(),1.07,1.17,"");
+      SetupAxis(tHistToDraw->GetXaxis(),tXRangeMin,tXRangeMax,"");
       SetupAxis(tHistToDraw->GetYaxis(),"");
+      //Make sure y-axis goes to 0 for min.
+      tHistToDraw->GetYaxis()->SetRangeUser(0.0,tHistToDraw->GetBinContent(tHistToDraw->FindBin(tXRangeMax)));
       tHistToDraw->DrawCopy();
     }
     else tHistToDraw->DrawCopy("same");
   }
+  if(bDrawFirstTwice) ((TH1*)tHists->At(0))->DrawCopy("same");
 
   if(aSaveImage)
   {
@@ -910,8 +938,10 @@ TCanvas* PlotPartnersLamK0::DrawSumMassAssumingLambdaAndAntiLambdaHypotheses(Ana
   PrintAnalysisType(tPadLarge,aAnalysisType,0.80,0.10,0.15,0.10,63,30);
 
   tPadSmall->cd();
+  double tXRangeMin = 1.1;
+  double tXRangeMax = 1.13;
   tHistToDraw->SetTitle("");
-  SetupAxis(tHistToDraw->GetXaxis(),1.07,1.17,"");
+  SetupAxis(tHistToDraw->GetXaxis(),tXRangeMin,tXRangeMax,"");
   SetupAxis(tHistToDraw->GetYaxis(),"");
   tHistToDraw->DrawCopy();
 

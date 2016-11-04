@@ -95,10 +95,10 @@ TH1* SystematicAnalysis::GetDiffHist(TH1* aHist1, TH1* aHist2)
   assert(aHist1->GetNbinsX() == aHist2->GetNbinsX());
 
   TH1* tDiffHist = (TH1*)aHist1->Clone("tDiffHist");
-  tDiffHist->Add(aHist2,-1);
+  tDiffHist->Add(aHist2,-1.0);
 
   double tBinError;
-  for(int i=0; i<tDiffHist->GetNbinsX(); i++)
+  for(int i=1; i<=tDiffHist->GetNbinsX(); i++)
   {
     tBinError = sqrt(TMath::Abs(pow(aHist1->GetBinError(i),2) - pow(aHist2->GetBinError(i),2)));
     tDiffHist->SetBinError(i,tBinError);
@@ -118,7 +118,7 @@ double SystematicAnalysis::GetPValueCorrelated(TH1* aHist1, TH1* aHist2)
   double tMaxFit = 1.;
   TF1* tFit = new TF1("tFit","0",tMinFit,tMaxFit);
 
-  double tChi2 = tDiffHist->Chisquare(tFit);
+  double tChi2 = tDiffHist->Chisquare(tFit,"R");
 
   int tBinLow = tDiffHist->FindBin(tMinFit);
   int tBinHigh = tDiffHist->FindBin(tMaxFit);
@@ -145,8 +145,8 @@ void SystematicAnalysis::GetAllPValues(ostream &aOut)
 
     for(unsigned int j=i+1; j<fAnalyses.size(); j++)
     {
-      TH1* tHist1 = fAnalyses[i].GetKStarHeavyCf()->GetHeavyCf();
-      TH1* tHist2 = fAnalyses[j].GetKStarHeavyCf()->GetHeavyCf();
+      TH1* tHist1 = fAnalyses[i].GetKStarHeavyCf()->GetHeavyCfClone();
+      TH1* tHist2 = fAnalyses[j].GetKStarHeavyCf()->GetHeavyCfClone();
 
       tPVal = GetPValueCorrelated(tHist1,tHist2);
 
@@ -195,7 +195,7 @@ void SystematicAnalysis::DrawAll()
   for(unsigned int i=0; i<fAnalyses.size(); i++)
   {
     tReturnCan->cd(i+1);
-    TH1* tHist1 = fAnalyses[i].GetKStarHeavyCf()->GetHeavyCf();
+    TH1* tHist1 = fAnalyses[i].GetKStarHeavyCf()->GetHeavyCfClone();
     tHist1->Draw();
   }
 
@@ -217,8 +217,8 @@ void SystematicAnalysis::DrawAllDiffs()
     for(unsigned int j=i+1; j<fAnalyses.size(); j++)
     {
       tReturnCan->cd(tPad);
-      TH1* tHist1 = fAnalyses[i].GetKStarHeavyCf()->GetHeavyCf();
-      TH1* tHist2 = fAnalyses[j].GetKStarHeavyCf()->GetHeavyCf();
+      TH1* tHist1 = fAnalyses[i].GetKStarHeavyCf()->GetHeavyCfClone();
+      TH1* tHist2 = fAnalyses[j].GetKStarHeavyCf()->GetHeavyCfClone();
       TH1* tDiffHist = GetDiffHist(tHist1,tHist2);
 
       tDiffHist->Draw();

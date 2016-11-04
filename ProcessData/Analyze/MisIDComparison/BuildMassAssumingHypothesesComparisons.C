@@ -16,7 +16,7 @@ int main(int argc, char **argv)
   TString tSaveLocationBase = "/home/jesse/Analysis/FemtoAnalysis/ProcessData/Analyze/MisIDComparison/";
   bool bSaveImages = false;
   bool bNormByEvent = true;
-  bool bDrawNoMisIDCut = false;
+  bool bDrawNoMisIDCut = true;
 
 
   AnalysisType tAnTypeLamKch = kLamKchP;
@@ -46,19 +46,17 @@ int main(int argc, char **argv)
 
   TString tResultsDate_LamKch_NoMisIDCut = "20161028";
   TString tLegendEntry_LamKch_NoMisIDCut = "NoMisID";
-//  TString tResultsDate_LamKch_NoMisIDCut = "20161102";
-//  TString tLegendEntry_LamKch_NoMisIDCut = "SimpleMisID";
   TString tDirectoryBase_LamKch_NoMisIDCut = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_%s/",tResultsDate_LamKch_NoMisIDCut.Data());
   TString tFileLocationBase_LamKch_NoMisIDCut = tDirectoryBase_LamKch_NoMisIDCut+"Results_cLamcKch_"+tResultsDate_LamKch_NoMisIDCut;
   TString tFileLocationBaseMC_LamKch_NoMisIDCut = tDirectoryBase_LamKch_NoMisIDCut+"Results_cLamcKchMC_"+tResultsDate_LamKch_NoMisIDCut;
   PlotPartnersLamKch* tLamKch_NoMisIDCut = new PlotPartnersLamKch(tFileLocationBase_LamKch_NoMisIDCut,tFileLocationBaseMC_LamKch_NoMisIDCut,tAnTypeLamKch,k0010,kTrain,2);
-  int tColor_LamKch_NoMisIDCut = 1;
-  int tMarkerStyle_LamKch_NoMisIDCut = 20;
+  int tColor_LamKch_NoMisIDCut = 3;
+  int tMarkerStyle_LamKch_NoMisIDCut = 26;
   TH1* tMassAssK0Short_LamKch_NoMisIDCut = tLamKch_NoMisIDCut->GetMassAssumingK0ShortHypothesis(tAnTypeLamKch,bNormByEvent,tColor_LamKch_NoMisIDCut,tMarkerStyle_LamKch_NoMisIDCut);
   double tPurity_LamKch_NoMisIDCut = tLamKch_NoMisIDCut->GetPurity(tAnTypeLamKch,tPurityLamTypeLamKch);
 
   TString tResultsDate_LamKch_MisIDCut_MinvCut_NoMinvComp = "20161025";
-  TString tLegendEntry_LamKch_MisIDCut_MinvCut_NoMinvComp = "MisID_MinvCut_NoMinvComp";
+  TString tLegendEntry_LamKch_MisIDCut_MinvCut_NoMinvComp = "MisID_M_{inv}Cut_NoM_{inv}Comp";
   TString tDirectoryBase_LamKch_MisIDCut_MinvCut_NoMinvComp = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_%s/",tResultsDate_LamKch_MisIDCut_MinvCut_NoMinvComp.Data());
   TString tFileLocationBase_LamKch_MisIDCut_MinvCut_NoMinvComp = tDirectoryBase_LamKch_MisIDCut_MinvCut_NoMinvComp+"Results_cLamcKch_"+tResultsDate_LamKch_MisIDCut_MinvCut_NoMinvComp;
   TString tFileLocationBaseMC_LamKch_MisIDCut_MinvCut_NoMinvComp = tDirectoryBase_LamKch_MisIDCut_MinvCut_NoMinvComp+"Results_cLamcKchMC_"+tResultsDate_LamKch_MisIDCut_MinvCut_NoMinvComp;
@@ -69,13 +67,13 @@ int main(int argc, char **argv)
   double tPurity_LamKch_MisIDCut_MinvCut_NoMinvComp = tLamKch_MisIDCut_MinvCut_NoMinvComp->GetPurity(tAnTypeLamKch,tPurityLamTypeLamKch);
 
   TString tResultsDate_LamKch_MisIDCut_MinvCut_MinvComp = "20161027";
-  TString tLegendEntry_LamKch_MisIDCut_MinvCut_MinvComp = "MisID_MinvCut_MinvComp";
+  TString tLegendEntry_LamKch_MisIDCut_MinvCut_MinvComp = "MisID_M_{inv}Cut_M_{inv}Comp";
   TString tDirectoryBase_LamKch_MisIDCut_MinvCut_MinvComp = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_%s/",tResultsDate_LamKch_MisIDCut_MinvCut_MinvComp.Data());
   TString tFileLocationBase_LamKch_MisIDCut_MinvCut_MinvComp = tDirectoryBase_LamKch_MisIDCut_MinvCut_MinvComp+"Results_cLamcKch_"+tResultsDate_LamKch_MisIDCut_MinvCut_MinvComp;
   TString tFileLocationBaseMC_LamKch_MisIDCut_MinvCut_MinvComp = tDirectoryBase_LamKch_MisIDCut_MinvCut_MinvComp+"Results_cLamcKchMC_"+tResultsDate_LamKch_MisIDCut_MinvCut_MinvComp;
   PlotPartnersLamKch* tLamKch_MisIDCut_MinvCut_MinvComp = new PlotPartnersLamKch(tFileLocationBase_LamKch_MisIDCut_MinvCut_MinvComp,tFileLocationBaseMC_LamKch_MisIDCut_MinvCut_MinvComp,tAnTypeLamKch,k0010,kTrain,2);
-  int tColor_LamKch_MisIDCut_MinvCut_MinvComp = 3;
-  int tMarkerStyle_LamKch_MisIDCut_MinvCut_MinvComp = 26;
+  int tColor_LamKch_MisIDCut_MinvCut_MinvComp = 1;
+  int tMarkerStyle_LamKch_MisIDCut_MinvCut_MinvComp = 20;
   TH1* tMassAssK0Short_LamKch_MisIDCut_MinvCut_MinvComp = tLamKch_MisIDCut_MinvCut_MinvComp->GetMassAssumingK0ShortHypothesis(tAnTypeLamKch,bNormByEvent,tColor_LamKch_MisIDCut_MinvCut_MinvComp,tMarkerStyle_LamKch_MisIDCut_MinvCut_MinvComp);
   double tPurity_LamKch_MisIDCut_MinvCut_MinvComp = tLamKch_MisIDCut_MinvCut_MinvComp->GetPurity(tAnTypeLamKch,tPurityLamTypeLamKch);
 
@@ -90,16 +88,26 @@ int main(int argc, char **argv)
   TH1* tMassAssK0Short_LamKch_MisIDCut_NoMinvCut_MinvComp = tLamKch_MisIDCut_NoMinvCut_MinvComp->GetMassAssumingK0ShortHypothesis(tAnTypeLamKch,bNormByEvent,tColor_LamKch_MisIDCut_NoMinvCut_MinvComp,tMarkerStyle_LamKch_MisIDCut_NoMinvCut_MinvComp);
   double tPurity_LamKch_MisIDCut_NoMinvCut_MinvComp = tLamKch_MisIDCut_NoMinvCut_MinvComp->GetPurity(tAnTypeLamKch,tPurityLamTypeLamKch);
 
+  TString tResultsDate_LamKch_SimpleMisIDCut = "20161102";
+  TString tLegendEntry_LamKch_SimpleMisIDCut = "SimpleMisID";
+  TString tDirectoryBase_LamKch_SimpleMisIDCut = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_%s/",tResultsDate_LamKch_SimpleMisIDCut.Data());
+  TString tFileLocationBase_LamKch_SimpleMisIDCut = tDirectoryBase_LamKch_SimpleMisIDCut+"Results_cLamcKch_"+tResultsDate_LamKch_SimpleMisIDCut;
+  TString tFileLocationBaseMC_LamKch_SimpleMisIDCut = tDirectoryBase_LamKch_SimpleMisIDCut+"Results_cLamcKchMC_"+tResultsDate_LamKch_SimpleMisIDCut;
+  PlotPartnersLamKch* tLamKch_SimpleMisIDCut = new PlotPartnersLamKch(tFileLocationBase_LamKch_SimpleMisIDCut,tFileLocationBaseMC_LamKch_SimpleMisIDCut,tAnTypeLamKch,k0010,kTrain,2);
+  int tColor_LamKch_SimpleMisIDCut = 6;
+  int tMarkerStyle_LamKch_SimpleMisIDCut = 25;
+  TH1* tMassAssK0Short_LamKch_SimpleMisIDCut = tLamKch_SimpleMisIDCut->GetMassAssumingK0ShortHypothesis(tAnTypeLamKch,bNormByEvent,tColor_LamKch_SimpleMisIDCut,tMarkerStyle_LamKch_SimpleMisIDCut);
+  double tPurity_LamKch_SimpleMisIDCut = tLamKch_SimpleMisIDCut->GetPurity(tAnTypeLamKch,tPurityLamTypeLamKch);
+
 
   TObjArray* tHists_LamKch = new TObjArray();
   vector<TString> tLegendEntries_LamKch(0);
   vector<double> tPurities_LamKch(0);
-  if(bDrawNoMisIDCut)
-  {
-    tHists_LamKch->Add(tMassAssK0Short_LamKch_NoMisIDCut);
-    tLegendEntries_LamKch.push_back(tLegendEntry_LamKch_NoMisIDCut);
-    tPurities_LamKch.push_back(tPurity_LamKch_NoMisIDCut);
-  }
+
+  tHists_LamKch->Add(tMassAssK0Short_LamKch_MisIDCut_MinvCut_MinvComp);
+  tLegendEntries_LamKch.push_back(tLegendEntry_LamKch_MisIDCut_MinvCut_MinvComp);
+  tPurities_LamKch.push_back(tPurity_LamKch_MisIDCut_MinvCut_MinvComp);
+
   tHists_LamKch->Add(tMassAssK0Short_LamKch_MisIDCut_MinvCut_NoMinvComp);
   tLegendEntries_LamKch.push_back(tLegendEntry_LamKch_MisIDCut_MinvCut_NoMinvComp);
   tPurities_LamKch.push_back(tPurity_LamKch_MisIDCut_MinvCut_NoMinvComp);
@@ -108,9 +116,16 @@ int main(int argc, char **argv)
   tLegendEntries_LamKch.push_back(tLegendEntry_LamKch_MisIDCut_NoMinvCut_MinvComp);
   tPurities_LamKch.push_back(tPurity_LamKch_MisIDCut_NoMinvCut_MinvComp);
 
-  tHists_LamKch->Add(tMassAssK0Short_LamKch_MisIDCut_MinvCut_MinvComp);
-  tLegendEntries_LamKch.push_back(tLegendEntry_LamKch_MisIDCut_MinvCut_MinvComp);
-  tPurities_LamKch.push_back(tPurity_LamKch_MisIDCut_MinvCut_MinvComp);
+  tHists_LamKch->Add(tMassAssK0Short_LamKch_SimpleMisIDCut);
+  tLegendEntries_LamKch.push_back(tLegendEntry_LamKch_SimpleMisIDCut);
+  tPurities_LamKch.push_back(tPurity_LamKch_SimpleMisIDCut);
+
+  if(bDrawNoMisIDCut)
+  {
+    tHists_LamKch->Add(tMassAssK0Short_LamKch_NoMisIDCut);
+    tLegendEntries_LamKch.push_back(tLegendEntry_LamKch_NoMisIDCut);
+    tPurities_LamKch.push_back(tPurity_LamKch_NoMisIDCut);
+  }
 
 
   TCanvas* tCanMassAssK0_LamKch = tLamKch_MisIDCut_MinvCut_MinvComp->DrawMassAssumingK0ShortHypothesis(tAnTypeLamKch,tHists_LamKch,tLegendEntries_LamKch,tPurities_LamKch,false);
@@ -125,8 +140,8 @@ int main(int argc, char **argv)
   TString tFileLocationBase_LamK0_NoMisIDCut = tDirectoryBase_LamK0_NoMisIDCut+"Results_cLamK0_"+tResultsDate_LamK0_NoMisIDCut;
   TString tFileLocationBaseMC_LamK0_NoMisIDCut = tDirectoryBase_LamK0_NoMisIDCut+"Results_cLamK0MC_"+tResultsDate_LamK0_NoMisIDCut;
   PlotPartnersLamK0* tLamK0_NoMisIDCut = new PlotPartnersLamK0(tFileLocationBase_LamK0_NoMisIDCut,tFileLocationBaseMC_LamK0_NoMisIDCut,tAnTypeLamK0,k0010,kTrain,2);
-  int tColor_LamK0_NoMisIDCut = 1;
-  int tMarkerStyle_LamK0_NoMisIDCut = 20;
+  int tColor_LamK0_NoMisIDCut = 3;
+  int tMarkerStyle_LamK0_NoMisIDCut = 26;
   TH1* tMassAssK0Short_LamK0_NoMisIDCut = tLamK0_NoMisIDCut->GetMassAssumingK0ShortHypothesis(tAnTypeLamK0,bNormByEvent,tColor_LamK0_NoMisIDCut,tMarkerStyle_LamK0_NoMisIDCut);
   TH1* tMassAssLam_LamK0_NoMisIDCut = tLamK0_NoMisIDCut->GetMassAssumingLambdaHypothesis(tAnTypeLamK0,bNormByEvent,tColor_LamK0_NoMisIDCut,tMarkerStyle_LamK0_NoMisIDCut);
   TH1* tMassAssALam_LamK0_NoMisIDCut = tLamK0_NoMisIDCut->GetMassAssumingAntiLambdaHypothesis(tAnTypeLamK0,bNormByEvent,tColor_LamK0_NoMisIDCut,tMarkerStyle_LamK0_NoMisIDCut);
@@ -135,7 +150,7 @@ int main(int argc, char **argv)
 
 
   TString tResultsDate_LamK0_MisIDCut_MinvCut_NoMinvComp = "20161025";
-  TString tLegendEntry_LamK0_MisIDCut_MinvCut_NoMinvComp = "MisID_MinvCut_NoMinvComp";
+  TString tLegendEntry_LamK0_MisIDCut_MinvCut_NoMinvComp = "MisID_M_{inv}Cut_NoM_{inv}Comp";
   TString tDirectoryBase_LamK0_MisIDCut_MinvCut_NoMinvComp = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamK0_%s/",tResultsDate_LamK0_MisIDCut_MinvCut_NoMinvComp.Data());
   TString tFileLocationBase_LamK0_MisIDCut_MinvCut_NoMinvComp = tDirectoryBase_LamK0_MisIDCut_MinvCut_NoMinvComp+"Results_cLamK0_"+tResultsDate_LamK0_MisIDCut_MinvCut_NoMinvComp;
   TString tFileLocationBaseMC_LamK0_MisIDCut_MinvCut_NoMinvComp = tDirectoryBase_LamK0_MisIDCut_MinvCut_NoMinvComp+"Results_cLamK0MC_"+tResultsDate_LamK0_MisIDCut_MinvCut_NoMinvComp;
@@ -149,13 +164,13 @@ int main(int argc, char **argv)
   double tPurityK0_LamK0_MisIDCut_MinvCut_NoMinvComp = tLamK0_MisIDCut_MinvCut_NoMinvComp->GetPurity(tAnTypeLamK0,kK0);
 
   TString tResultsDate_LamK0_MisIDCut_MinvCut_MinvComp = "20161027";
-  TString tLegendEntry_LamK0_MisIDCut_MinvCut_MinvComp = "MisID_MinvCut_MinvComp";
+  TString tLegendEntry_LamK0_MisIDCut_MinvCut_MinvComp = "MisID_M_{inv}Cut_M_{inv}Comp";
   TString tDirectoryBase_LamK0_MisIDCut_MinvCut_MinvComp = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamK0_%s/",tResultsDate_LamK0_MisIDCut_MinvCut_MinvComp.Data());
   TString tFileLocationBase_LamK0_MisIDCut_MinvCut_MinvComp = tDirectoryBase_LamK0_MisIDCut_MinvCut_MinvComp+"Results_cLamK0_"+tResultsDate_LamK0_MisIDCut_MinvCut_MinvComp;
   TString tFileLocationBaseMC_LamK0_MisIDCut_MinvCut_MinvComp = tDirectoryBase_LamK0_MisIDCut_MinvCut_MinvComp+"Results_cLamK0MC_"+tResultsDate_LamK0_MisIDCut_MinvCut_MinvComp;
   PlotPartnersLamK0* tLamK0_MisIDCut_MinvCut_MinvComp = new PlotPartnersLamK0(tFileLocationBase_LamK0_MisIDCut_MinvCut_MinvComp,tFileLocationBaseMC_LamK0_MisIDCut_MinvCut_MinvComp,tAnTypeLamK0,k0010,kTrain,2);
-  int tColor_LamK0_MisIDCut_MinvCut_MinvComp = 3;
-  int tMarkerStyle_LamK0_MisIDCut_MinvCut_MinvComp = 26;
+  int tColor_LamK0_MisIDCut_MinvCut_MinvComp = 1;
+  int tMarkerStyle_LamK0_MisIDCut_MinvCut_MinvComp = 20;
   TH1* tMassAssK0Short_LamK0_MisIDCut_MinvCut_MinvComp = tLamK0_MisIDCut_MinvCut_MinvComp->GetMassAssumingK0ShortHypothesis(tAnTypeLamK0,bNormByEvent,tColor_LamK0_MisIDCut_MinvCut_MinvComp,tMarkerStyle_LamK0_MisIDCut_MinvCut_MinvComp);
   TH1* tMassAssLam_LamK0_MisIDCut_MinvCut_MinvComp = tLamK0_MisIDCut_MinvCut_MinvComp->GetMassAssumingLambdaHypothesis(tAnTypeLamK0,bNormByEvent,tColor_LamK0_MisIDCut_MinvCut_MinvComp,tMarkerStyle_LamK0_MisIDCut_MinvCut_MinvComp);
   TH1* tMassAssALam_LamK0_MisIDCut_MinvCut_MinvComp = tLamK0_MisIDCut_MinvCut_MinvComp->GetMassAssumingAntiLambdaHypothesis(tAnTypeLamK0,bNormByEvent,tColor_LamK0_MisIDCut_MinvCut_MinvComp,tMarkerStyle_LamK0_MisIDCut_MinvCut_MinvComp);
@@ -163,7 +178,7 @@ int main(int argc, char **argv)
   double tPurityK0_LamK0_MisIDCut_MinvCut_MinvComp = tLamK0_MisIDCut_MinvCut_MinvComp->GetPurity(tAnTypeLamK0,kK0);
 
   TString tResultsDate_LamK0_MisIDCut_NoMinvCut_MinvComp = "20161031";
-  TString tLegendEntry_LamK0_MisIDCut_NoMinvCut_MinvComp = "MisID_NoMinvCut_MinvComp";
+  TString tLegendEntry_LamK0_MisIDCut_NoMinvCut_MinvComp = "MisID_NoM_{inv}Cut_M_{inv}Comp";
   TString tDirectoryBase_LamK0_MisIDCut_NoMinvCut_MinvComp = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamK0_%s/",tResultsDate_LamK0_MisIDCut_NoMinvCut_MinvComp.Data());
   TString tFileLocationBase_LamK0_MisIDCut_NoMinvCut_MinvComp = tDirectoryBase_LamK0_MisIDCut_NoMinvCut_MinvComp+"Results_cLamK0_"+tResultsDate_LamK0_MisIDCut_NoMinvCut_MinvComp;
   TString tFileLocationBaseMC_LamK0_MisIDCut_NoMinvCut_MinvComp = tDirectoryBase_LamK0_MisIDCut_NoMinvCut_MinvComp+"Results_cLamK0MC_"+tResultsDate_LamK0_MisIDCut_NoMinvCut_MinvComp;
@@ -175,6 +190,20 @@ int main(int argc, char **argv)
   TH1* tMassAssALam_LamK0_MisIDCut_NoMinvCut_MinvComp = tLamK0_MisIDCut_NoMinvCut_MinvComp->GetMassAssumingAntiLambdaHypothesis(tAnTypeLamK0,bNormByEvent,tColor_LamK0_MisIDCut_NoMinvCut_MinvComp,tMarkerStyle_LamK0_MisIDCut_NoMinvCut_MinvComp);
   double tPurityLam_LamK0_MisIDCut_NoMinvCut_MinvComp = tLamK0_MisIDCut_NoMinvCut_MinvComp->GetPurity(tAnTypeLamK0,tPurityLamTypeLamK0);
   double tPurityK0_LamK0_MisIDCut_NoMinvCut_MinvComp = tLamK0_MisIDCut_NoMinvCut_MinvComp->GetPurity(tAnTypeLamK0,kK0);
+
+  TString tResultsDate_LamK0_SimpleMisIDCut = "20161102";
+  TString tLegendEntry_LamK0_SimpleMisIDCut = "SimpleMisID";
+  TString tDirectoryBase_LamK0_SimpleMisIDCut = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamK0_%s/",tResultsDate_LamK0_SimpleMisIDCut.Data());
+  TString tFileLocationBase_LamK0_SimpleMisIDCut = tDirectoryBase_LamK0_SimpleMisIDCut+"Results_cLamK0_"+tResultsDate_LamK0_SimpleMisIDCut;
+  TString tFileLocationBaseMC_LamK0_SimpleMisIDCut = tDirectoryBase_LamK0_SimpleMisIDCut+"Results_cLamK0MC_"+tResultsDate_LamK0_SimpleMisIDCut;
+  PlotPartnersLamK0* tLamK0_SimpleMisIDCut = new PlotPartnersLamK0(tFileLocationBase_LamK0_SimpleMisIDCut,tFileLocationBaseMC_LamK0_SimpleMisIDCut,tAnTypeLamK0,k0010,kTrain,2);
+  int tColor_LamK0_SimpleMisIDCut = 6;
+  int tMarkerStyle_LamK0_SimpleMisIDCut = 25;
+  TH1* tMassAssK0Short_LamK0_SimpleMisIDCut = tLamK0_SimpleMisIDCut->GetMassAssumingK0ShortHypothesis(tAnTypeLamK0,bNormByEvent,tColor_LamK0_SimpleMisIDCut,tMarkerStyle_LamK0_SimpleMisIDCut);
+  TH1* tMassAssLam_LamK0_SimpleMisIDCut = tLamK0_SimpleMisIDCut->GetMassAssumingLambdaHypothesis(tAnTypeLamK0,bNormByEvent,tColor_LamK0_SimpleMisIDCut,tMarkerStyle_LamK0_SimpleMisIDCut);
+  TH1* tMassAssALam_LamK0_SimpleMisIDCut = tLamK0_SimpleMisIDCut->GetMassAssumingAntiLambdaHypothesis(tAnTypeLamK0,bNormByEvent,tColor_LamK0_SimpleMisIDCut,tMarkerStyle_LamK0_SimpleMisIDCut);
+  double tPurityLam_LamK0_SimpleMisIDCut = tLamK0_SimpleMisIDCut->GetPurity(tAnTypeLamK0,tPurityLamTypeLamK0);
+  double tPurityK0_LamK0_SimpleMisIDCut = tLamK0_SimpleMisIDCut->GetPurity(tAnTypeLamK0,kK0);
 
 
   TObjArray* tHists_LamK0_MassAssK0 = new TObjArray();
@@ -189,21 +218,17 @@ int main(int argc, char **argv)
   vector<TString> tLegendEntries_LamK0_MassAssALam(0);
   vector<double> tPurities_LamK0_MassAssALam(0);
 
+  tHists_LamK0_MassAssK0->Add(tMassAssK0Short_LamK0_MisIDCut_MinvCut_MinvComp);
+    tLegendEntries_LamK0_MassAssK0.push_back(tLegendEntry_LamK0_MisIDCut_MinvCut_MinvComp);
+    tPurities_LamK0_MassAssK0.push_back(tPurityLam_LamK0_MisIDCut_MinvCut_MinvComp);
+  tHists_LamK0_MassAssLam->Add(tMassAssLam_LamK0_MisIDCut_MinvCut_MinvComp);
+    tLegendEntries_LamK0_MassAssLam.push_back(tLegendEntry_LamK0_MisIDCut_MinvCut_MinvComp);
+    tPurities_LamK0_MassAssLam.push_back(tPurityK0_LamK0_MisIDCut_MinvCut_MinvComp);
+  tHists_LamK0_MassAssALam->Add(tMassAssALam_LamK0_MisIDCut_MinvCut_MinvComp);
+    tLegendEntries_LamK0_MassAssALam.push_back(tLegendEntry_LamK0_MisIDCut_MinvCut_MinvComp);
+    tPurities_LamK0_MassAssALam.push_back(tPurityK0_LamK0_MisIDCut_MinvCut_MinvComp);
 
-  if(bDrawNoMisIDCut)
-  {
-    tHists_LamK0_MassAssK0->Add(tMassAssK0Short_LamK0_NoMisIDCut);
-      tLegendEntries_LamK0_MassAssK0.push_back(tLegendEntry_LamK0_NoMisIDCut);
-      tPurities_LamK0_MassAssK0.push_back(tPurityLam_LamK0_NoMisIDCut);
 
-    tHists_LamK0_MassAssLam->Add(tMassAssLam_LamK0_NoMisIDCut);
-      tLegendEntries_LamK0_MassAssLam.push_back(tLegendEntry_LamK0_NoMisIDCut);
-      tPurities_LamK0_MassAssLam.push_back(tPurityK0_LamK0_NoMisIDCut);
-
-    tHists_LamK0_MassAssALam->Add(tMassAssALam_LamK0_NoMisIDCut);
-      tLegendEntries_LamK0_MassAssALam.push_back(tLegendEntry_LamK0_NoMisIDCut);
-      tPurities_LamK0_MassAssALam.push_back(tPurityK0_LamK0_NoMisIDCut);
-  }
 
   tHists_LamK0_MassAssK0->Add(tMassAssK0Short_LamK0_MisIDCut_MinvCut_NoMinvComp);
     tLegendEntries_LamK0_MassAssK0.push_back(tLegendEntry_LamK0_MisIDCut_MinvCut_NoMinvComp);
@@ -225,15 +250,31 @@ int main(int argc, char **argv)
     tLegendEntries_LamK0_MassAssALam.push_back(tLegendEntry_LamK0_MisIDCut_NoMinvCut_MinvComp);
     tPurities_LamK0_MassAssALam.push_back(tPurityK0_LamK0_MisIDCut_NoMinvCut_MinvComp);
 
-  tHists_LamK0_MassAssK0->Add(tMassAssK0Short_LamK0_MisIDCut_MinvCut_MinvComp);
-    tLegendEntries_LamK0_MassAssK0.push_back(tLegendEntry_LamK0_MisIDCut_MinvCut_MinvComp);
-    tPurities_LamK0_MassAssK0.push_back(tPurityLam_LamK0_MisIDCut_MinvCut_MinvComp);
-  tHists_LamK0_MassAssLam->Add(tMassAssLam_LamK0_MisIDCut_MinvCut_MinvComp);
-    tLegendEntries_LamK0_MassAssLam.push_back(tLegendEntry_LamK0_MisIDCut_MinvCut_MinvComp);
-    tPurities_LamK0_MassAssLam.push_back(tPurityK0_LamK0_MisIDCut_MinvCut_MinvComp);
-  tHists_LamK0_MassAssALam->Add(tMassAssALam_LamK0_MisIDCut_MinvCut_MinvComp);
-    tLegendEntries_LamK0_MassAssALam.push_back(tLegendEntry_LamK0_MisIDCut_MinvCut_MinvComp);
-    tPurities_LamK0_MassAssALam.push_back(tPurityK0_LamK0_MisIDCut_MinvCut_MinvComp);
+  tHists_LamK0_MassAssK0->Add(tMassAssK0Short_LamK0_SimpleMisIDCut);
+    tLegendEntries_LamK0_MassAssK0.push_back(tLegendEntry_LamK0_SimpleMisIDCut);
+    tPurities_LamK0_MassAssK0.push_back(tPurityLam_LamK0_SimpleMisIDCut);
+  tHists_LamK0_MassAssLam->Add(tMassAssLam_LamK0_SimpleMisIDCut);
+    tLegendEntries_LamK0_MassAssLam.push_back(tLegendEntry_LamK0_SimpleMisIDCut);
+    tPurities_LamK0_MassAssLam.push_back(tPurityK0_LamK0_SimpleMisIDCut);
+  tHists_LamK0_MassAssALam->Add(tMassAssALam_LamK0_SimpleMisIDCut);
+    tLegendEntries_LamK0_MassAssALam.push_back(tLegendEntry_LamK0_SimpleMisIDCut);
+    tPurities_LamK0_MassAssALam.push_back(tPurityK0_LamK0_SimpleMisIDCut);
+
+  if(bDrawNoMisIDCut)
+  {
+    tHists_LamK0_MassAssK0->Add(tMassAssK0Short_LamK0_NoMisIDCut);
+      tLegendEntries_LamK0_MassAssK0.push_back(tLegendEntry_LamK0_NoMisIDCut);
+      tPurities_LamK0_MassAssK0.push_back(tPurityLam_LamK0_NoMisIDCut);
+
+    tHists_LamK0_MassAssLam->Add(tMassAssLam_LamK0_NoMisIDCut);
+      tLegendEntries_LamK0_MassAssLam.push_back(tLegendEntry_LamK0_NoMisIDCut);
+      tPurities_LamK0_MassAssLam.push_back(tPurityK0_LamK0_NoMisIDCut);
+
+    tHists_LamK0_MassAssALam->Add(tMassAssALam_LamK0_NoMisIDCut);
+      tLegendEntries_LamK0_MassAssALam.push_back(tLegendEntry_LamK0_NoMisIDCut);
+      tPurities_LamK0_MassAssALam.push_back(tPurityK0_LamK0_NoMisIDCut);
+  }
+
 
 
   TCanvas* tCanMassAssK0_LamK0 = tLamK0_MisIDCut_MinvCut_MinvComp->DrawMassAssumingK0ShortHypothesis(tAnTypeLamK0,tHists_LamK0_MassAssK0,tLegendEntries_LamK0_MassAssK0,tPurities_LamK0_MassAssK0,false);
