@@ -14,7 +14,7 @@ int main(int argc, char **argv)
   //the program ends and closes everything
 //-----------------------------------------------------------------------------
   TString tSaveLocationBase = "/home/jesse/Analysis/FemtoAnalysis/ProcessData/Analyze/MisIDComparison/";
-  bool bSaveImages = false;
+  bool bSaveImages = true;
   bool bNormByEvent = true;
   bool bDrawNoMisIDCut = true;
 
@@ -50,8 +50,8 @@ int main(int argc, char **argv)
   TString tFileLocationBase_LamKch_NoMisIDCut = tDirectoryBase_LamKch_NoMisIDCut+"Results_cLamcKch_"+tResultsDate_LamKch_NoMisIDCut;
   TString tFileLocationBaseMC_LamKch_NoMisIDCut = tDirectoryBase_LamKch_NoMisIDCut+"Results_cLamcKchMC_"+tResultsDate_LamKch_NoMisIDCut;
   PlotPartnersLamKch* tLamKch_NoMisIDCut = new PlotPartnersLamKch(tFileLocationBase_LamKch_NoMisIDCut,tFileLocationBaseMC_LamKch_NoMisIDCut,tAnTypeLamKch,k0010,kTrain,2);
-  int tColor_LamKch_NoMisIDCut = 3;
-  int tMarkerStyle_LamKch_NoMisIDCut = 26;
+  int tColor_LamKch_NoMisIDCut = 1;
+  int tMarkerStyle_LamKch_NoMisIDCut = 22;
   TH1* tMassAssK0Short_LamKch_NoMisIDCut = tLamKch_NoMisIDCut->GetMassAssumingK0ShortHypothesis(tAnTypeLamKch,bNormByEvent,tColor_LamKch_NoMisIDCut,tMarkerStyle_LamKch_NoMisIDCut);
   double tPurity_LamKch_NoMisIDCut = tLamKch_NoMisIDCut->GetPurity(tAnTypeLamKch,tPurityLamTypeLamKch);
 
@@ -61,7 +61,7 @@ int main(int argc, char **argv)
   TString tFileLocationBase_LamKch_MisIDCut_MinvCut_NoMinvComp = tDirectoryBase_LamKch_MisIDCut_MinvCut_NoMinvComp+"Results_cLamcKch_"+tResultsDate_LamKch_MisIDCut_MinvCut_NoMinvComp;
   TString tFileLocationBaseMC_LamKch_MisIDCut_MinvCut_NoMinvComp = tDirectoryBase_LamKch_MisIDCut_MinvCut_NoMinvComp+"Results_cLamcKchMC_"+tResultsDate_LamKch_MisIDCut_MinvCut_NoMinvComp;
   PlotPartnersLamKch* tLamKch_MisIDCut_MinvCut_NoMinvComp = new PlotPartnersLamKch(tFileLocationBase_LamKch_MisIDCut_MinvCut_NoMinvComp,tFileLocationBaseMC_LamKch_MisIDCut_MinvCut_NoMinvComp,tAnTypeLamKch,k0010,kTrain,2);
-  int tColor_LamKch_MisIDCut_MinvCut_NoMinvComp = 2;
+  int tColor_LamKch_MisIDCut_MinvCut_NoMinvComp = 3;
   int tMarkerStyle_LamKch_MisIDCut_MinvCut_NoMinvComp = 21;
   TH1* tMassAssK0Short_LamKch_MisIDCut_MinvCut_NoMinvComp = tLamKch_MisIDCut_MinvCut_NoMinvComp->GetMassAssumingK0ShortHypothesis(tAnTypeLamKch,bNormByEvent,tColor_LamKch_MisIDCut_MinvCut_NoMinvComp,tMarkerStyle_LamKch_MisIDCut_MinvCut_NoMinvComp);
   double tPurity_LamKch_MisIDCut_MinvCut_NoMinvComp = tLamKch_MisIDCut_MinvCut_NoMinvComp->GetPurity(tAnTypeLamKch,tPurityLamTypeLamKch);
@@ -72,7 +72,7 @@ int main(int argc, char **argv)
   TString tFileLocationBase_LamKch_MisIDCut_MinvCut_MinvComp = tDirectoryBase_LamKch_MisIDCut_MinvCut_MinvComp+"Results_cLamcKch_"+tResultsDate_LamKch_MisIDCut_MinvCut_MinvComp;
   TString tFileLocationBaseMC_LamKch_MisIDCut_MinvCut_MinvComp = tDirectoryBase_LamKch_MisIDCut_MinvCut_MinvComp+"Results_cLamcKchMC_"+tResultsDate_LamKch_MisIDCut_MinvCut_MinvComp;
   PlotPartnersLamKch* tLamKch_MisIDCut_MinvCut_MinvComp = new PlotPartnersLamKch(tFileLocationBase_LamKch_MisIDCut_MinvCut_MinvComp,tFileLocationBaseMC_LamKch_MisIDCut_MinvCut_MinvComp,tAnTypeLamKch,k0010,kTrain,2);
-  int tColor_LamKch_MisIDCut_MinvCut_MinvComp = 1;
+  int tColor_LamKch_MisIDCut_MinvCut_MinvComp = 2;
   int tMarkerStyle_LamKch_MisIDCut_MinvCut_MinvComp = 20;
   TH1* tMassAssK0Short_LamKch_MisIDCut_MinvCut_MinvComp = tLamKch_MisIDCut_MinvCut_MinvComp->GetMassAssumingK0ShortHypothesis(tAnTypeLamKch,bNormByEvent,tColor_LamKch_MisIDCut_MinvCut_MinvComp,tMarkerStyle_LamKch_MisIDCut_MinvCut_MinvComp);
   double tPurity_LamKch_MisIDCut_MinvCut_MinvComp = tLamKch_MisIDCut_MinvCut_MinvComp->GetPurity(tAnTypeLamKch,tPurityLamTypeLamKch);
@@ -140,8 +140,8 @@ int main(int argc, char **argv)
   TString tFileLocationBase_LamK0_NoMisIDCut = tDirectoryBase_LamK0_NoMisIDCut+"Results_cLamK0_"+tResultsDate_LamK0_NoMisIDCut;
   TString tFileLocationBaseMC_LamK0_NoMisIDCut = tDirectoryBase_LamK0_NoMisIDCut+"Results_cLamK0MC_"+tResultsDate_LamK0_NoMisIDCut;
   PlotPartnersLamK0* tLamK0_NoMisIDCut = new PlotPartnersLamK0(tFileLocationBase_LamK0_NoMisIDCut,tFileLocationBaseMC_LamK0_NoMisIDCut,tAnTypeLamK0,k0010,kTrain,2);
-  int tColor_LamK0_NoMisIDCut = 3;
-  int tMarkerStyle_LamK0_NoMisIDCut = 26;
+  int tColor_LamK0_NoMisIDCut = 1;
+  int tMarkerStyle_LamK0_NoMisIDCut = 22;
   TH1* tMassAssK0Short_LamK0_NoMisIDCut = tLamK0_NoMisIDCut->GetMassAssumingK0ShortHypothesis(tAnTypeLamK0,bNormByEvent,tColor_LamK0_NoMisIDCut,tMarkerStyle_LamK0_NoMisIDCut);
   TH1* tMassAssLam_LamK0_NoMisIDCut = tLamK0_NoMisIDCut->GetMassAssumingLambdaHypothesis(tAnTypeLamK0,bNormByEvent,tColor_LamK0_NoMisIDCut,tMarkerStyle_LamK0_NoMisIDCut);
   TH1* tMassAssALam_LamK0_NoMisIDCut = tLamK0_NoMisIDCut->GetMassAssumingAntiLambdaHypothesis(tAnTypeLamK0,bNormByEvent,tColor_LamK0_NoMisIDCut,tMarkerStyle_LamK0_NoMisIDCut);
@@ -155,7 +155,7 @@ int main(int argc, char **argv)
   TString tFileLocationBase_LamK0_MisIDCut_MinvCut_NoMinvComp = tDirectoryBase_LamK0_MisIDCut_MinvCut_NoMinvComp+"Results_cLamK0_"+tResultsDate_LamK0_MisIDCut_MinvCut_NoMinvComp;
   TString tFileLocationBaseMC_LamK0_MisIDCut_MinvCut_NoMinvComp = tDirectoryBase_LamK0_MisIDCut_MinvCut_NoMinvComp+"Results_cLamK0MC_"+tResultsDate_LamK0_MisIDCut_MinvCut_NoMinvComp;
   PlotPartnersLamK0* tLamK0_MisIDCut_MinvCut_NoMinvComp = new PlotPartnersLamK0(tFileLocationBase_LamK0_MisIDCut_MinvCut_NoMinvComp,tFileLocationBaseMC_LamK0_MisIDCut_MinvCut_NoMinvComp,tAnTypeLamK0,k0010,kTrain,2);
-  int tColor_LamK0_MisIDCut_MinvCut_NoMinvComp = 2;
+  int tColor_LamK0_MisIDCut_MinvCut_NoMinvComp = 3;
   int tMarkerStyle_LamK0_MisIDCut_MinvCut_NoMinvComp = 21;
   TH1* tMassAssK0Short_LamK0_MisIDCut_MinvCut_NoMinvComp = tLamK0_MisIDCut_MinvCut_NoMinvComp->GetMassAssumingK0ShortHypothesis(tAnTypeLamK0,bNormByEvent,tColor_LamK0_MisIDCut_MinvCut_NoMinvComp,tMarkerStyle_LamK0_MisIDCut_MinvCut_NoMinvComp);
   TH1* tMassAssLam_LamK0_MisIDCut_MinvCut_NoMinvComp = tLamK0_MisIDCut_MinvCut_NoMinvComp->GetMassAssumingLambdaHypothesis(tAnTypeLamK0,bNormByEvent,tColor_LamK0_MisIDCut_MinvCut_NoMinvComp,tMarkerStyle_LamK0_MisIDCut_MinvCut_NoMinvComp);
@@ -169,7 +169,7 @@ int main(int argc, char **argv)
   TString tFileLocationBase_LamK0_MisIDCut_MinvCut_MinvComp = tDirectoryBase_LamK0_MisIDCut_MinvCut_MinvComp+"Results_cLamK0_"+tResultsDate_LamK0_MisIDCut_MinvCut_MinvComp;
   TString tFileLocationBaseMC_LamK0_MisIDCut_MinvCut_MinvComp = tDirectoryBase_LamK0_MisIDCut_MinvCut_MinvComp+"Results_cLamK0MC_"+tResultsDate_LamK0_MisIDCut_MinvCut_MinvComp;
   PlotPartnersLamK0* tLamK0_MisIDCut_MinvCut_MinvComp = new PlotPartnersLamK0(tFileLocationBase_LamK0_MisIDCut_MinvCut_MinvComp,tFileLocationBaseMC_LamK0_MisIDCut_MinvCut_MinvComp,tAnTypeLamK0,k0010,kTrain,2);
-  int tColor_LamK0_MisIDCut_MinvCut_MinvComp = 1;
+  int tColor_LamK0_MisIDCut_MinvCut_MinvComp = 2;
   int tMarkerStyle_LamK0_MisIDCut_MinvCut_MinvComp = 20;
   TH1* tMassAssK0Short_LamK0_MisIDCut_MinvCut_MinvComp = tLamK0_MisIDCut_MinvCut_MinvComp->GetMassAssumingK0ShortHypothesis(tAnTypeLamK0,bNormByEvent,tColor_LamK0_MisIDCut_MinvCut_MinvComp,tMarkerStyle_LamK0_MisIDCut_MinvCut_MinvComp);
   TH1* tMassAssLam_LamK0_MisIDCut_MinvCut_MinvComp = tLamK0_MisIDCut_MinvCut_MinvComp->GetMassAssumingLambdaHypothesis(tAnTypeLamK0,bNormByEvent,tColor_LamK0_MisIDCut_MinvCut_MinvComp,tMarkerStyle_LamK0_MisIDCut_MinvCut_MinvComp);

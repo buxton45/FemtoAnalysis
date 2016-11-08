@@ -674,8 +674,9 @@ TCanvas* PlotPartnersLamK0::DrawMassAssumingK0ShortHypothesis(AnalysisType aAnal
   tReturnCan->cd();
   gStyle->SetOptStat(0);
 
-  TLegend *tLeg = new TLegend(0.375,0.15,0.625,0.45);
+  TLegend *tLeg = new TLegend(0.35,0.15,0.60,0.55);
   tLeg->SetFillColor(0);
+  tLeg->SetEntrySeparation(0.25);
 
   assert(tHists->GetEntries() == (int)tLegendEntries.size());
   assert(tLegendEntries.size() == aPurityValues.size());
@@ -690,7 +691,7 @@ TCanvas* PlotPartnersLamK0::DrawMassAssumingK0ShortHypothesis(AnalysisType aAnal
     tLeg->AddEntry(tHistToDraw,tLegendEntries[i],"lp");
     TString tLegModifier = "";
     if(tHistToDraw->Integral() < 100) tLegModifier = "/N_{Ev}";
-    tLeg->AddEntry((TObject*)0, TString::Format("N_{pass}%s = %0.4e",tLegModifier.Data(),tHistToDraw->Integral()), "");
+    tLeg->AddEntry((TObject*)0, TString::Format("N_{pass}%s = %0.4f",tLegModifier.Data(),tHistToDraw->Integral()), "");
     tLeg->AddEntry((TObject*)0, TString::Format("Purity = %0.4f",aPurityValues[i]), "");
   }
   tLeg->Draw();
@@ -730,60 +731,64 @@ TCanvas* PlotPartnersLamK0::DrawMassAssumingLambdaHypothesis(AnalysisType aAnaly
   tPadLarge->cd();
 
   double x1min,y1min,x1max,y1max;
-  double x2min,y2min,x2max,y2max;
   double width, height;
 
-  width = 0.22;
-  height = 0.15;
+  width = 0.20;
+  height = 0.36;
   
-  x1min = 0.45;
+  x1min = 0.20;
   x1max = x1min + width;
-  y1min = 0.23;
+  y1min = 0.52;
   y1max = y1min + height;
-
-  x2min = x1max;
-  x2max = x2min + width;
-  y2min = y1min;
-  y2max = y2min + height;
 
   TLegend* tLeg1 = new TLegend(x1min,y1min,x1max,y1max);
   tLeg1->SetFillColor(0);
+  tLeg1->SetEntrySeparation(0.25);
 
-  TLegend* tLeg2 = new TLegend(x2min,y2min,x2max,y2max);
-  tLeg2->SetFillColor(0);
+  double tYRangeMaxLarge = 0.;
+  for(int i=0; i<tNEntries; i++)
+  {
+    TH1* tHist = (TH1*)tHists->At(i);
+    double tYMaxLarge = tHist->GetMaximum();
+    if(tYMaxLarge > tYRangeMaxLarge) tYRangeMaxLarge = tYMaxLarge;
+  }
+  tYRangeMaxLarge*=1.05;
 
   for(int i=0; i<tNEntries; i++)
   {
     TH1* tHistToDraw = (TH1*)tHists->At(i);
-    if(i==0) tHistToDraw->DrawCopy();
+    if(i==0)
+    {
+      tHistToDraw->GetYaxis()->SetRangeUser(0.0,tYRangeMaxLarge);
+      tHistToDraw->DrawCopy();
+    }
     else tHistToDraw->DrawCopy("same");
 
-    if(i < 2)
-    {
-      tLeg1->AddEntry(tHistToDraw,tLegendEntries[i],"lp");
-      TString tLegModifier = "";
-      if(tHistToDraw->Integral() < 100) tLegModifier = "/N_{Ev}";
-      tLeg1->AddEntry((TObject*)0, TString::Format("N_{pass}%s = %0.4e",tLegModifier.Data(),tHistToDraw->Integral()), "");
-      tLeg1->AddEntry((TObject*)0, TString::Format("Purity = %0.4f",aPurityValues[i]), "");
-    }
-    else
-    {
-      tLeg2->AddEntry(tHistToDraw,tLegendEntries[i],"lp");
-      TString tLegModifier = "";
-      if(tHistToDraw->Integral() < 100) tLegModifier = "/N_{Ev}";
-      tLeg2->AddEntry((TObject*)0, TString::Format("N_{pass}%s = %0.4e",tLegModifier.Data(),tHistToDraw->Integral()), "");
-      tLeg2->AddEntry((TObject*)0, TString::Format("Purity = %0.4f",aPurityValues[i]), "");
-    }
+    tLeg1->AddEntry(tHistToDraw,tLegendEntries[i],"lp");
+    TString tLegModifier = "";
+    if(tHistToDraw->Integral() < 100) tLegModifier = "/N_{Ev}";
+    tLeg1->AddEntry((TObject*)0, TString::Format("     N_{pass}%s = %0.4f",tLegModifier.Data(),tHistToDraw->Integral()), "");
+    tLeg1->AddEntry((TObject*)0, TString::Format("     Purity = %0.4f",aPurityValues[i]), "");
+//    tLeg1->AddEntry((TObject*)0, TString::Format("N_{pass}%s = %0.4f; Purity = %0.4f",tLegModifier.Data(),tHistToDraw->Integral(),aPurityValues[i]), "");
   }
   if(bDrawFirstTwice) ((TH1*)tHists->At(0))->DrawCopy("same");
   tLeg1->Draw();
-  tLeg2->Draw();
   PrintAnalysisType(tPadLarge,aAnalysisType,0.85,0.05,0.15,0.10,63,30);
 
   //-------------------------
   tPadSmall->cd();
   double tXRangeMin = 1.1;
   double tXRangeMax = 1.13;
+
+  double tYRangeMaxSmall = 0.;
+  for(int i=0; i<tNEntries; i++)
+  {
+    TH1* tHist = (TH1*)tHists->At(i);
+    double tYMaxSmall = tHist->GetBinContent(tHist->FindBin(tXRangeMax));
+    if(tYMaxSmall > tYRangeMaxSmall) tYRangeMaxSmall = tYMaxSmall;
+  }
+  tYRangeMaxSmall*=1.01;
+
   for(int i=0; i<tNEntries; i++)
   {
     TH1* tHistToDraw = (TH1*)tHists->At(i);
@@ -793,7 +798,7 @@ TCanvas* PlotPartnersLamK0::DrawMassAssumingLambdaHypothesis(AnalysisType aAnaly
       SetupAxis(tHistToDraw->GetXaxis(),tXRangeMin,tXRangeMax,"");
       SetupAxis(tHistToDraw->GetYaxis(),"");
       //Make sure y-axis goes to 0 for min.
-      tHistToDraw->GetYaxis()->SetRangeUser(0.0,tHistToDraw->GetBinContent(tHistToDraw->FindBin(tXRangeMax)));
+      tHistToDraw->GetYaxis()->SetRangeUser(0.0,tYRangeMaxSmall);
       tHistToDraw->DrawCopy();
     }
     else tHistToDraw->DrawCopy("same");
@@ -834,60 +839,63 @@ TCanvas* PlotPartnersLamK0::DrawMassAssumingAntiLambdaHypothesis(AnalysisType aA
   tPadLarge->cd();
 
   double x1min,y1min,x1max,y1max;
-  double x2min,y2min,x2max,y2max;
   double width, height;
 
-  width = 0.22;
-  height = 0.15;
+  width = 0.20;
+  height = 0.36;
   
-  x1min = 0.45;
+  x1min = 0.20;
   x1max = x1min + width;
-  y1min = 0.23;
+  y1min = 0.52;
   y1max = y1min + height;
-
-  x2min = x1max;
-  x2max = x2min + width;
-  y2min = y1min;
-  y2max = y2min + height;
 
   TLegend* tLeg1 = new TLegend(x1min,y1min,x1max,y1max);
   tLeg1->SetFillColor(0);
+  tLeg1->SetEntrySeparation(0.25);
 
-  TLegend* tLeg2 = new TLegend(x2min,y2min,x2max,y2max);
-  tLeg2->SetFillColor(0);
+  double tYRangeMaxLarge = 0.;
+  for(int i=0; i<tNEntries; i++)
+  {
+    TH1* tHist = (TH1*)tHists->At(i);
+    double tYMaxLarge = tHist->GetMaximum();
+    if(tYMaxLarge > tYRangeMaxLarge) tYRangeMaxLarge = tYMaxLarge;
+  }
+  tYRangeMaxLarge*=1.01;
 
   for(int i=0; i<tNEntries; i++)
   {
     TH1* tHistToDraw = (TH1*)tHists->At(i);
-    if(i==0) tHistToDraw->DrawCopy();
+    if(i==0)
+    {
+      tHistToDraw->GetYaxis()->SetRangeUser(0.0,tYRangeMaxLarge);
+      tHistToDraw->DrawCopy();
+    }
     else tHistToDraw->DrawCopy("same");
 
-    if(i < 2)
-    {
-      tLeg1->AddEntry(tHistToDraw,tLegendEntries[i],"lp");
-      TString tLegModifier = "";
-      if(tHistToDraw->Integral() < 100) tLegModifier = "/N_{Ev}";
-      tLeg1->AddEntry((TObject*)0, TString::Format("N_{pass}%s = %0.4e",tLegModifier.Data(),tHistToDraw->Integral()), "");
-      tLeg1->AddEntry((TObject*)0, TString::Format("Purity = %0.4f",aPurityValues[i]), "");
-    }
-    else
-    {
-      tLeg2->AddEntry(tHistToDraw,tLegendEntries[i],"lp");
-      TString tLegModifier = "";
-      if(tHistToDraw->Integral() < 100) tLegModifier = "/N_{Ev}";
-      tLeg2->AddEntry((TObject*)0, TString::Format("N_{pass}%s = %0.4e",tLegModifier.Data(),tHistToDraw->Integral()), "");
-      tLeg2->AddEntry((TObject*)0, TString::Format("Purity = %0.4f",aPurityValues[i]), "");
-    }
+    tLeg1->AddEntry(tHistToDraw,tLegendEntries[i],"lp");
+    TString tLegModifier = "";
+    if(tHistToDraw->Integral() < 100) tLegModifier = "/N_{Ev}";
+    tLeg1->AddEntry((TObject*)0, TString::Format("     N_{pass}%s = %0.4e",tLegModifier.Data(),tHistToDraw->Integral()), "");
+    tLeg1->AddEntry((TObject*)0, TString::Format("     Purity = %0.4f",aPurityValues[i]), "");
   }
   if(bDrawFirstTwice) ((TH1*)tHists->At(0))->DrawCopy("same");
   tLeg1->Draw();
-  tLeg2->Draw();
   PrintAnalysisType(tPadLarge,aAnalysisType,0.85,0.05,0.15,0.10,63,30);
 
   //-------------------------
   tPadSmall->cd();
   double tXRangeMin = 1.1;
   double tXRangeMax = 1.13;
+
+  double tYRangeMaxSmall = 0.;
+  for(int i=0; i<tNEntries; i++)
+  {
+    TH1* tHist = (TH1*)tHists->At(i);
+    double tYMaxSmall = tHist->GetBinContent(tHist->FindBin(tXRangeMax));
+    if(tYMaxSmall > tYRangeMaxSmall) tYRangeMaxSmall = tYMaxSmall;
+  }
+  tYRangeMaxSmall*=1.01;
+
   for(int i=0; i<tNEntries; i++)
   {
     TH1* tHistToDraw = (TH1*)tHists->At(i);
@@ -897,7 +905,7 @@ TCanvas* PlotPartnersLamK0::DrawMassAssumingAntiLambdaHypothesis(AnalysisType aA
       SetupAxis(tHistToDraw->GetXaxis(),tXRangeMin,tXRangeMax,"");
       SetupAxis(tHistToDraw->GetYaxis(),"");
       //Make sure y-axis goes to 0 for min.
-      tHistToDraw->GetYaxis()->SetRangeUser(0.0,tHistToDraw->GetBinContent(tHistToDraw->FindBin(tXRangeMax)));
+      tHistToDraw->GetYaxis()->SetRangeUser(0.0,tYRangeMaxSmall);
       tHistToDraw->DrawCopy();
     }
     else tHistToDraw->DrawCopy("same");

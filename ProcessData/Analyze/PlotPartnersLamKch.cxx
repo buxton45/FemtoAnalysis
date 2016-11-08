@@ -616,8 +616,9 @@ TCanvas* PlotPartnersLamKch::DrawMassAssumingK0ShortHypothesis(AnalysisType aAna
   tReturnCan->cd();
   gStyle->SetOptStat(0);
 
-  TLegend *tLeg = new TLegend(0.375,0.15,0.625,0.45);
+  TLegend *tLeg = new TLegend(0.35,0.15,0.60,0.55);
   tLeg->SetFillColor(0);
+  tLeg->SetEntrySeparation(0.25);
 
   assert(tHists->GetEntries() == (int)tLegendEntries.size());
   assert(tLegendEntries.size() == aPurityValues.size());
@@ -632,7 +633,7 @@ TCanvas* PlotPartnersLamKch::DrawMassAssumingK0ShortHypothesis(AnalysisType aAna
     tLeg->AddEntry(tHistToDraw,tLegendEntries[i],"lp");
     TString tLegModifier = "";
     if(tHistToDraw->Integral() < 100) tLegModifier = "/N_{Ev}";
-    tLeg->AddEntry((TObject*)0, TString::Format("N_{pass}%s = %0.4e",tLegModifier.Data(),tHistToDraw->Integral()), "");
+    tLeg->AddEntry((TObject*)0, TString::Format("N_{pass}%s = %0.4f",tLegModifier.Data(),tHistToDraw->Integral()), "");
     tLeg->AddEntry((TObject*)0, TString::Format("Purity = %0.4f",aPurityValues[i]), "");
   }
   tLeg->Draw();
