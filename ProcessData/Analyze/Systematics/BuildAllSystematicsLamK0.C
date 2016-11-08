@@ -4,76 +4,108 @@ class SystematicAnalysis;
 SystematicsFileInfo GetFileInfo(int aNumber)
 {
   SystematicsFileInfo gInfo1;
-    gInfo1.resultsDate = "20161026";
-    gInfo1.dirNameModifierBase1 = "_CLAM_maxDcaV0_";
-    gInfo1.modifierValues1 = vector<double> {0.40,0.50,0.60};
+    gInfo1.resultsDate = "20161103";
+    gInfo1.dirNameModifierBase1 = "_ALam_minNegDaughterToPrimVertex_";
+    gInfo1.modifierValues1 = vector<double> {0.05,0.10,0.20};
     gInfo1.dirNameModifierBase2 = "";
     gInfo1.modifierValues2 = vector<double> {};
     gInfo1.allCentralities = true;
 
   SystematicsFileInfo gInfo2;
-    gInfo2.resultsDate = "20161026";
-    gInfo2.dirNameModifierBase1 = "_CLAM_maxDcaV0Daughters_";
-    gInfo2.modifierValues1 = vector<double> {0.30,0.40,0.50};
+    gInfo2.resultsDate = "20161103";
+    gInfo2.dirNameModifierBase1 = "_ALam_minPosDaughterToPrimVertex_";
+    gInfo2.modifierValues1 = vector<double> {0.20,0.30,0.40};
     gInfo2.dirNameModifierBase2 = "";
     gInfo2.modifierValues2 = vector<double> {};
     gInfo2.allCentralities = true;
 
   SystematicsFileInfo gInfo3;
-    gInfo3.resultsDate = "20161031";
-    gInfo3.dirNameModifierBase1 = "_CLAM_minCosPointingAngle_";
-    gInfo3.modifierValues1 = vector<double> {0.9992, 0.9993, 0.9994};
+    gInfo3.resultsDate = "20161026";
+    gInfo3.dirNameModifierBase1 = "_CLAM_maxDcaV0_";
+    gInfo3.modifierValues1 = vector<double> {0.40,0.50,0.60};
     gInfo3.dirNameModifierBase2 = "";
     gInfo3.modifierValues2 = vector<double> {};
     gInfo3.allCentralities = true;
 
   SystematicsFileInfo gInfo4;
     gInfo4.resultsDate = "20161026";
-    gInfo4.dirNameModifierBase1 = "_K0s_maxDcaV0_";
-    gInfo4.modifierValues1 = vector<double> {0.20,0.30,0.40};
+    gInfo4.dirNameModifierBase1 = "_CLAM_maxDcaV0Daughters_";
+    gInfo4.modifierValues1 = vector<double> {0.30,0.40,0.50};
     gInfo4.dirNameModifierBase2 = "";
     gInfo4.modifierValues2 = vector<double> {};
     gInfo4.allCentralities = true;
 
   SystematicsFileInfo gInfo5;
-    gInfo5.resultsDate = "20161026";
-    gInfo5.dirNameModifierBase1 = "_K0s_maxDcaV0Daughters_";
-    gInfo5.modifierValues1 = vector<double> {0.20,0.30,0.40};
+    gInfo5.resultsDate = "20161031";
+    gInfo5.dirNameModifierBase1 = "_CLAM_minCosPointingAngle_";
+    gInfo5.modifierValues1 = vector<double> {0.9992, 0.9993, 0.9994};
     gInfo5.dirNameModifierBase2 = "";
     gInfo5.modifierValues2 = vector<double> {};
     gInfo5.allCentralities = true;
 
   SystematicsFileInfo gInfo6;
-    gInfo6.resultsDate = "20161102";
-    gInfo6.dirNameModifierBase1 = "_K0s_minCosPointingAngle_";
-    gInfo6.modifierValues1 = vector<double> {0.9992, 0.9993, 0.9994};
+    gInfo6.resultsDate = "20161026";
+    gInfo6.dirNameModifierBase1 = "_K0s_maxDcaV0_";
+    gInfo6.modifierValues1 = vector<double> {0.20,0.30,0.40};
     gInfo6.dirNameModifierBase2 = "";
     gInfo6.modifierValues2 = vector<double> {};
     gInfo6.allCentralities = true;
 
   SystematicsFileInfo gInfo7;
-    gInfo7.resultsDate = "20161025";
-    gInfo7.dirNameModifierBase1 = "_K0s_minInvMassReject_";
-    gInfo7.modifierValues1 = vector<double> {1.112683, 1.110683, 1.106683, 1.100683};
-    gInfo7.dirNameModifierBase2 = "_K0s_maxInvMassReject_";
-    gInfo7.modifierValues2 = vector<double> {1.118683, 1.120683, 1.124683, 1.130683};
-    gInfo7.allCentralities = false;
+    gInfo7.resultsDate = "20161026";
+    gInfo7.dirNameModifierBase1 = "_K0s_maxDcaV0Daughters_";
+    gInfo7.modifierValues1 = vector<double> {0.20,0.30,0.40};
+    gInfo7.dirNameModifierBase2 = "";
+    gInfo7.modifierValues2 = vector<double> {};
+    gInfo7.allCentralities = true;
 
   SystematicsFileInfo gInfo8;
-    gInfo8.resultsDate = "20161103";
-    gInfo8.dirNameModifierBase1 = "_K0s_minNegDaughterToPrimVertex_";
-    gInfo8.modifierValues1 = vector<double> {0.2, 0.3, 0.4};
+    gInfo8.resultsDate = "20161102";
+    gInfo8.dirNameModifierBase1 = "_K0s_minCosPointingAngle_";
+    gInfo8.modifierValues1 = vector<double> {0.9992, 0.9993, 0.9994};
     gInfo8.dirNameModifierBase2 = "";
     gInfo8.modifierValues2 = vector<double> {};
     gInfo8.allCentralities = true;
 
   SystematicsFileInfo gInfo9;
-    gInfo9.resultsDate = "20161103";
-    gInfo9.dirNameModifierBase1 = "_K0s_minPosDaughterToPrimVertex_";
-    gInfo9.modifierValues1 = vector<double> {0.2, 0.3, 0.4};
-    gInfo9.dirNameModifierBase2 = "";
-    gInfo9.modifierValues2 = vector<double> {};
-    gInfo9.allCentralities = true;
+    gInfo9.resultsDate = "20161025";
+    gInfo9.dirNameModifierBase1 = "_K0s_minInvMassReject_";
+    gInfo9.modifierValues1 = vector<double> {1.112683, 1.110683, 1.106683, 1.100683};
+    gInfo9.dirNameModifierBase2 = "_K0s_maxInvMassReject_";
+    gInfo9.modifierValues2 = vector<double> {1.118683, 1.120683, 1.124683, 1.130683};
+    gInfo9.allCentralities = false;
+
+  SystematicsFileInfo gInfo10;
+    gInfo10.resultsDate = "20161103";
+    gInfo10.dirNameModifierBase1 = "_K0s_minNegDaughterToPrimVertex_";
+    gInfo10.modifierValues1 = vector<double> {0.2, 0.3, 0.4};
+    gInfo10.dirNameModifierBase2 = "";
+    gInfo10.modifierValues2 = vector<double> {};
+    gInfo10.allCentralities = true;
+
+  SystematicsFileInfo gInfo11;
+    gInfo11.resultsDate = "20161103";
+    gInfo11.dirNameModifierBase1 = "_K0s_minPosDaughterToPrimVertex_";
+    gInfo11.modifierValues1 = vector<double> {0.2, 0.3, 0.4};
+    gInfo11.dirNameModifierBase2 = "";
+    gInfo11.modifierValues2 = vector<double> {};
+    gInfo11.allCentralities = true;
+
+  SystematicsFileInfo gInfo12;
+    gInfo12.resultsDate = "20161103";
+    gInfo12.dirNameModifierBase1 = "_Lam_minNegDaughterToPrimVertex_";
+    gInfo12.modifierValues1 = vector<double> {0.2, 0.3, 0.4};
+    gInfo12.dirNameModifierBase2 = "";
+    gInfo12.modifierValues2 = vector<double> {};
+    gInfo12.allCentralities = true;
+
+  SystematicsFileInfo gInfo13;
+    gInfo13.resultsDate = "20161103";
+    gInfo13.dirNameModifierBase1 = "_Lam_minPosDaughterToPrimVertex_";
+    gInfo13.modifierValues1 = vector<double> {0.05, 0.1, 0.2};
+    gInfo13.dirNameModifierBase2 = "";
+    gInfo13.modifierValues2 = vector<double> {};
+    gInfo13.allCentralities = true;
 
 
 
@@ -86,6 +118,10 @@ SystematicsFileInfo GetFileInfo(int aNumber)
   else if(aNumber==7) return gInfo7;
   else if(aNumber==8) return gInfo8;
   else if(aNumber==9) return gInfo9;
+  else if(aNumber==10) return gInfo10;
+  else if(aNumber==11) return gInfo11;
+  else if(aNumber==12) return gInfo12;
+  else if(aNumber==13) return gInfo13;
   else
   {
     cout << "ERROR: SystematicsFileInfo GetFileInfo" << endl;
@@ -104,7 +140,7 @@ int main(int argc, char **argv)
   TString tGeneralAnTypeName = "cLamK0";
   bool bWriteToFile = true;
 
-  SystematicsFileInfo tFileInfo = GetFileInfo(9);
+  SystematicsFileInfo tFileInfo = GetFileInfo(13);
     TString tResultsDate = tFileInfo.resultsDate;
     TString tDirNameModifierBase1 = tFileInfo.dirNameModifierBase1;
     vector<double> tModifierValues1 = tFileInfo.modifierValues1;
