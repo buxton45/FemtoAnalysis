@@ -107,6 +107,22 @@ SystematicsFileInfo GetFileInfo(int aNumber)
     gInfo13.modifierValues2 = vector<double> {};
     gInfo13.allCentralities = true;
 
+  SystematicsFileInfo gInfo14;
+    gInfo14.resultsDate = "20161106";
+    gInfo14.dirNameModifierBase1 = "_minAvgSepNegNeg_";
+    gInfo14.modifierValues1 = vector<double> {5.0, 6.0, 7.0};
+    gInfo14.dirNameModifierBase2 = "";
+    gInfo14.modifierValues2 = vector<double> {};
+    gInfo14.allCentralities = true;
+
+  SystematicsFileInfo gInfo15;
+    gInfo15.resultsDate = "20161106";
+    gInfo15.dirNameModifierBase1 = "_minAvgSepPosPos_";
+    gInfo15.modifierValues1 = vector<double> {5.0, 6.0, 7.0};
+    gInfo15.dirNameModifierBase2 = "";
+    gInfo15.modifierValues2 = vector<double> {};
+    gInfo15.allCentralities = true;
+
 
 
   if(aNumber==1) return gInfo1;
@@ -122,6 +138,8 @@ SystematicsFileInfo GetFileInfo(int aNumber)
   else if(aNumber==11) return gInfo11;
   else if(aNumber==12) return gInfo12;
   else if(aNumber==13) return gInfo13;
+  else if(aNumber==14) return gInfo14;
+  else if(aNumber==15) return gInfo15;
   else
   {
     cout << "ERROR: SystematicsFileInfo GetFileInfo" << endl;
@@ -140,7 +158,7 @@ int main(int argc, char **argv)
   TString tGeneralAnTypeName = "cLamK0";
   bool bWriteToFile = true;
 
-  SystematicsFileInfo tFileInfo = GetFileInfo(13);
+  SystematicsFileInfo tFileInfo = GetFileInfo(15);
     TString tResultsDate = tFileInfo.resultsDate;
     TString tDirNameModifierBase1 = tFileInfo.dirNameModifierBase1;
     vector<double> tModifierValues1 = tFileInfo.modifierValues1;
