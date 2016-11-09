@@ -55,6 +55,7 @@ public:
 
   //inline 
   void SetSaveLocationBase(TString aBase);
+  TString GetSaveLocationBase();
 
   void SetSharedParameter(ParameterType aParamType);  //share amongst all
   void SetSharedParameter(ParameterType aParamType, double aStartValue, double aLowerBound=0., double aUpperBound=0.);  //share amongst all
@@ -97,6 +98,7 @@ protected:
 #endif
 };
 inline void FitGenerator::SetSaveLocationBase(TString aBase) {fSaveLocationBase=aBase;}
+inline TString FitGenerator::GetSaveLocationBase() {return fSaveLocationBase;}
 
 inline void FitGenerator::SetSharedParameter(ParameterType aParamType) 
   {fSharedAn->SetSharedParameter(aParamType);}

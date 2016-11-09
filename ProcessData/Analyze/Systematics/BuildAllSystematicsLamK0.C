@@ -116,12 +116,28 @@ SystematicsFileInfo GetFileInfo(int aNumber)
     gInfo14.allCentralities = true;
 
   SystematicsFileInfo gInfo15;
-    gInfo15.resultsDate = "20161106";
-    gInfo15.dirNameModifierBase1 = "_minAvgSepPosPos_";
-    gInfo15.modifierValues1 = vector<double> {5.0, 6.0, 7.0};
+    gInfo15.resultsDate = "20161108";
+    gInfo15.dirNameModifierBase1 = "_minAvgSepNegNeg_";
+    gInfo15.modifierValues1 = vector<double> {5.5, 6.0, 6.5};
     gInfo15.dirNameModifierBase2 = "";
     gInfo15.modifierValues2 = vector<double> {};
     gInfo15.allCentralities = true;
+
+  SystematicsFileInfo gInfo16;
+    gInfo16.resultsDate = "20161106";
+    gInfo16.dirNameModifierBase1 = "_minAvgSepPosPos_";
+    gInfo16.modifierValues1 = vector<double> {5.0, 6.0, 7.0};
+    gInfo16.dirNameModifierBase2 = "";
+    gInfo16.modifierValues2 = vector<double> {};
+    gInfo16.allCentralities = true;
+
+  SystematicsFileInfo gInfo17;
+    gInfo17.resultsDate = "20161108";
+    gInfo17.dirNameModifierBase1 = "_minAvgSepPosPos_";
+    gInfo17.modifierValues1 = vector<double> {5.5, 6.0, 6.5};
+    gInfo17.dirNameModifierBase2 = "";
+    gInfo17.modifierValues2 = vector<double> {};
+    gInfo17.allCentralities = true;
 
 
 
@@ -140,6 +156,8 @@ SystematicsFileInfo GetFileInfo(int aNumber)
   else if(aNumber==13) return gInfo13;
   else if(aNumber==14) return gInfo14;
   else if(aNumber==15) return gInfo15;
+  else if(aNumber==16) return gInfo16;
+  else if(aNumber==17) return gInfo17;
   else
   {
     cout << "ERROR: SystematicsFileInfo GetFileInfo" << endl;
@@ -158,7 +176,7 @@ int main(int argc, char **argv)
   TString tGeneralAnTypeName = "cLamK0";
   bool bWriteToFile = true;
 
-  SystematicsFileInfo tFileInfo = GetFileInfo(15);
+  SystematicsFileInfo tFileInfo = GetFileInfo(17);
     TString tResultsDate = tFileInfo.resultsDate;
     TString tDirNameModifierBase1 = tFileInfo.dirNameModifierBase1;
     vector<double> tModifierValues1 = tFileInfo.modifierValues1;

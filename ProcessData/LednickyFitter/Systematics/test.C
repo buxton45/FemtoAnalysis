@@ -1,5 +1,5 @@
-#include "SystematicAnalysis.h"
-class SystematicAnalysis;
+#include "FitSystematicAnalysis.h"
+class FitSystematicAnalysis;
 
 SystematicsFileInfo GetFileInfo(int aNumber)
 {
@@ -110,19 +110,18 @@ int main(int argc, char **argv)
   //the program ends and closes everything
 //-----------------------------------------------------------------------------
   TString tGeneralAnTypeName = "cLamcKch";
-  bool bWriteToFile = true;
+  AnalysisType tAnType = kLamKchP;
+  CentralityType tCentalityType = kMB;
+  FitGeneratorType tFitGeneratorType = kPairwConj;
+  bool tShareLambdaParameters = false;
 
-  SystematicsFileInfo tFileInfo = GetFileInfo(10);
+  SystematicsFileInfo tFileInfo = GetFileInfo(5);
     TString tResultsDate = tFileInfo.resultsDate;
     TString tDirNameModifierBase1 = tFileInfo.dirNameModifierBase1;
     vector<double> tModifierValues1 = tFileInfo.modifierValues1;
     TString tDirNameModifierBase2 = tFileInfo.dirNameModifierBase2;
     vector<double> tModifierValues2 = tFileInfo.modifierValues2;
     bool tAllCent = tFileInfo.allCentralities;
-
-  CentralityType tMaxCentType = kMB;
-  if(!tAllCent) tMaxCentType = k1030;
-
 
   TString tDirectoryBase = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Systematics/Results_%s_Systematics%s",tGeneralAnTypeName.Data(),tDirNameModifierBase1.Data());
   if(!tDirNameModifierBase2.IsNull())
@@ -131,10 +130,6 @@ int main(int argc, char **argv)
     tDirectoryBase += tDirNameModifierBase2;
   }
   tDirectoryBase += TString::Format("%s/",tResultsDate.Data());
-
-  TString tOutputFileName = tDirectoryBase + TString("AllPValues.txt");
-  std::ofstream tOutputFile;
-  if(bWriteToFile) tOutputFile.open(tOutputFileName);
 
   TString tFileLocationBase = tDirectoryBase + TString::Format("Results_%s_Systematics%s",tGeneralAnTypeName.Data(),tDirNameModifierBase1.Data());
   TString tFileLocationBaseMC = tDirectoryBase + TString::Format("Results_%sMC_Systematics%s",tGeneralAnTypeName.Data(),tDirNameModifierBase1.Data());
@@ -149,17 +144,10 @@ int main(int argc, char **argv)
   tFileLocationBase += tResultsDate;
   tFileLocationBaseMC += tResultsDate;
 
-  for(int iAnType=kLamKchP; iAnType<kXiKchP; iAnType++)
-  {
-    for(int iCent=k0010; iCent<tMaxCentType; iCent++)
-    {
-      SystematicAnalysis* tSysAn = new SystematicAnalysis(tFileLocationBase, static_cast<AnalysisType>(iAnType), static_cast<CentralityType>(iCent), tDirNameModifierBase1, tModifierValues1, tDirNameModifierBase2, tModifierValues2);
-      if(bWriteToFile) tSysAn->GetAllPValues(tOutputFile);
-      else tSysAn->GetAllPValues();
-    //tSysAn->DrawAll();
-    //tSysAn->DrawAllDiffs();
-    }
-  }
+
+  FitSystematicAnalysis* tFitSysAn = new FitSystematicAnalysis(tFileLocationBase, tFileLocationBaseMC, tAnType, tDirNameModifierBase1, tModifierValues1, tDirNameModifierBase2, tModifierValues2, tCentalityType, tFitGeneratorType, tShareLambdaParameters);
+  tFitSysAn->SetSaveDirectory(tDirectoryBase);
+  tFitSysAn->RunAllFits(true);
 
 cout << "DONE" << endl;
 //-------------------------------------------------------------------------------
