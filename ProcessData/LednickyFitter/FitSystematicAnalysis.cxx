@@ -26,6 +26,7 @@ FitSystematicAnalysis::FitSystematicAnalysis(TString aFileLocationBase, TString 
   fCentralityType(aCentralityType),
   fFitGeneratorType(aGeneratorType),
   fShareLambdaParams(aShareLambdaParams),
+  fApplyNonFlatBackgroundCorrection(false),
   fApplyMomResCorrection(false),
   fSaveDirectory(""),
 
@@ -49,6 +50,7 @@ FitSystematicAnalysis::FitSystematicAnalysis(TString aFileLocationBase, TString 
   fCentralityType(aCentralityType),
   fFitGeneratorType(aGeneratorType),
   fShareLambdaParams(aShareLambdaParams),
+  fApplyNonFlatBackgroundCorrection(false),
   fApplyMomResCorrection(false),
   fSaveDirectory(""),
 
@@ -81,7 +83,7 @@ void FitSystematicAnalysis::RunAllFits(bool aSave)
 
     FitGenerator* tFitGenerator = new FitGenerator(fFileLocationBase, fFileLocationBaseMC, fAnalysisType, kTrainSys, 2, fCentralityType, fFitGeneratorType, fShareLambdaParams, tDirNameModifier);
 
-    tFitGenerator->DoFit(fApplyMomResCorrection);
+    tFitGenerator->DoFit(fApplyMomResCorrection,fApplyNonFlatBackgroundCorrection);
 
     TCanvas* tKStarwFitsCan = tFitGenerator->DrawKStarCfswFits(false);
     if(aSave)

@@ -319,6 +319,13 @@ void FitPairAnalysis::DrawKStarCfHeavy(TPad* aPad, int aMarkerColor, TString aOp
 }
 
 
+//________________________________________________________________________________________________________________
+TF1* FitPairAnalysis::GetNonFlatBackground(double aMinFit, double aMaxFit)
+{
+  TF1* tNonFlatBackground = FitPartialAnalysis::FitNonFlatBackground(fKStarCfHeavy->GetHeavyCfClone(),aMinFit,aMaxFit);
+  return tNonFlatBackground;
+}
+
 
 //________________________________________________________________________________________________________________
 void FitPairAnalysis::CreateFitNormParameters()

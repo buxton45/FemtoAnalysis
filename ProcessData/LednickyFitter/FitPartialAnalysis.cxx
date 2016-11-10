@@ -10,6 +10,14 @@ ClassImp(FitPartialAnalysis)
 
 
 //________________________________________________________________________________________________________________
+double NonFlatBackgroundFitFunction(double *x, double *par)
+{
+  return par[0]*x[0]*x[0] + par[1]*x[0] + par[2];
+//  return par[0]*x[0] + par[1];
+}
+
+
+//________________________________________________________________________________________________________________
 //****************************************************************************************************************
 //________________________________________________________________________________________________________________
 
@@ -57,7 +65,9 @@ FitPartialAnalysis::FitPartialAnalysis(TString aFileLocation, TString aAnalysisN
 
   fModelKStarTrueVsRecMixed(0),
   fModelKStarCfFake(0),
-  fModelKStarCfFakeIdeal(0)
+  fModelKStarCfFakeIdeal(0),
+
+  fNonFlatBackground(0)
 
 
 {
@@ -192,7 +202,9 @@ FitPartialAnalysis::FitPartialAnalysis(TString aFileLocation, TString aFileLocat
 
   fModelKStarTrueVsRecMixed(0),
   fModelKStarCfFake(0),
-  fModelKStarCfFakeIdeal(0)
+  fModelKStarCfFakeIdeal(0),
+
+  fNonFlatBackground(0)
 
 
 {
@@ -273,10 +285,14 @@ FitPartialAnalysis::FitPartialAnalysis(TString aFileLocation, TString aFileLocat
   if( (fAnalysisType == kLamKchM) || (fAnalysisType == kALamKchP) /*|| (fAnalysisType == kLamKchMwConjugate)*/ ) {fRejectOmega = true;}
 
 //---***---***---***---***---***---***---***---***---***---***---***---***---***---***---***---***---***
-  TObjArray* tDirMC = ConnectAnalysisDirectory(fFileLocationMC,fDirectoryName);
+//  I only have MC data for 0-10% centrality.  So other centralities must share the data
+  TString tDirectoryNameMC = TString(cAnalysisBaseTags[fAnalysisType]) + TString(cCentralityTags[k0010]);
+  if(!aDirNameModifier.IsNull()) tDirectoryNameMC += aDirNameModifier;
+
   TString tTempName = cModelKStarTrueVsRecMixedBaseTag + TString(cAnalysisBaseTags[fAnalysisType]);
-  TString tTempNameNew = tTempName + TString(cCentralityTags[fCentralityType]);
-  TH2* tTempHisto = (TH2*)tDirMC->FindObject(tTempName);
+  TString tTempNameNew = tTempName + TString(cCentralityTags[k0010]);
+  TH2* tTempHisto = Get2dHisto(fFileLocationMC,tDirectoryNameMC,tTempName,tTempNameNew);
+
   //-----make sure tHisto is retrieved
   if(!tTempHisto) {cout << "2dHisto NOT FOUND!!!:  Name:  " << tTempName << endl;}
   assert(tTempHisto);
@@ -289,9 +305,6 @@ FitPartialAnalysis::FitPartialAnalysis(TString aFileLocation, TString aFileLocat
   if(!fModelKStarTrueVsRecMixed->GetSumw2N()) {fModelKStarTrueVsRecMixed->Sumw2();}
 
   delete tTempHisto;
-
-  tDirMC->Delete();
-  delete tDirMC;
 //---***---***---***---***---***---***---***---***---***---***---***---***---***---***---***---***---***
 
 
@@ -481,6 +494,28 @@ TH2* FitPartialAnalysis::Get2dHisto(TString aHistoName, TString aNewName)
   return (TH2*)ReturnHisto;
 }
 
+//________________________________________________________________________________________________________________
+TH2* FitPartialAnalysis::Get2dHisto(TString aFileLocation, TString aDirectoryName, TString aHistoName, TString aNewName)
+{
+  TObjArray* tDir = ConnectAnalysisDirectory(aFileLocation,aDirectoryName);
+
+  TH2 *tHisto = (TH2*)tDir->FindObject(aHistoName);
+
+  //-----make sure tHisto is retrieved
+  if(!tHisto) {cout << "2dHisto NOT FOUND!!!:  Name:  " << aHistoName << endl;}
+  assert(tHisto);
+  //----------------------------------
+
+  TH2 *ReturnHisto = (TH2*)tHisto->Clone(aNewName);
+  ReturnHisto->SetDirectory(0);
+
+  //-----Check to see if Sumw2 has already been called, and if not, call it
+  if(!ReturnHisto->GetSumw2N()) {ReturnHisto->Sumw2();}
+
+  return (TH2*)ReturnHisto;
+}
+
+
 
 //________________________________________________________________________________________________________________
 void FitPartialAnalysis::BuildKStarCf(double aMinNorm, double aMaxNorm)
@@ -524,6 +559,28 @@ void FitPartialAnalysis::RebinKStarCf(int aRebinFactor, double aMinNorm, double 
   fKStarNumScale = fKStarCfLite->GetNumScale();
   fKStarDenScale = fKStarCfLite->GetDenScale();
 
+}
+
+//________________________________________________________________________________________________________________
+TF1* FitPartialAnalysis::FitNonFlatBackground(TH1* aCf, double aMinFit, double aMaxFit)
+{
+  TString tFitName = TString("NonFlatBackgroundFit_") + TString(aCf->GetTitle());
+  TF1* tNonFlatBackground = new TF1(tFitName,NonFlatBackgroundFitFunction,aMinFit,aMaxFit,3);
+  aCf->Fit(tFitName,"0q");
+
+  TF1* tReturn = new TF1(tFitName,NonFlatBackgroundFitFunction,0.,aMaxFit,3);
+  tReturn->SetParameters(tNonFlatBackground->GetParameters());
+
+  return tReturn;
+}
+
+//________________________________________________________________________________________________________________
+TF1* FitPartialAnalysis::GetNonFlatBackground(double aMinFit, double aMaxFit)
+{
+  if(fNonFlatBackground) return fNonFlatBackground;
+
+  fNonFlatBackground = FitNonFlatBackground(fKStarCf,aMinFit,aMaxFit);
+  return fNonFlatBackground;
 }
 
 

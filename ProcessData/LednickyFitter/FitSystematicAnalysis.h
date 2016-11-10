@@ -31,6 +31,7 @@ public:
   void RunAllFits(bool aSave=false);
 
   //inline
+  void SetApplyNonFlatBackgroundCorrection(bool aApply);
   void SetApplyMomResCorrection(bool aApply);
   void SetSaveDirectory(TString aDirectory);
 
@@ -41,6 +42,7 @@ protected:
   CentralityType fCentralityType;
   FitGeneratorType fFitGeneratorType;
   bool fShareLambdaParams;
+  bool fApplyNonFlatBackgroundCorrection;
   bool fApplyMomResCorrection;
   TString fSaveDirectory;
 
@@ -55,6 +57,7 @@ protected:
 #endif
 };
 
+inline void FitSystematicAnalysis::SetApplyNonFlatBackgroundCorrection(bool aApply) {fApplyNonFlatBackgroundCorrection=aApply;}
 inline void FitSystematicAnalysis::SetApplyMomResCorrection(bool aApply) {fApplyMomResCorrection=aApply;}
 inline void FitSystematicAnalysis::SetSaveDirectory(TString aDirectory) {fSaveDirectory = aDirectory;}
 

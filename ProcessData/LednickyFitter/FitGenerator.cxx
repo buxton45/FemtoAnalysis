@@ -106,16 +106,16 @@ FitGenerator::FitGenerator(TString aFileLocationBase, TString aFileLocationBaseM
   case k1030:
     switch(fGeneratorType) {
     case kPair:
-      tVecOfPairAn.push_back(new FitPairAnalysis(aFileLocationBase,fPairType,fCentralityType,aRunType,aNPartialAnalysis,aDirNameModifier));
+      tVecOfPairAn.push_back(new FitPairAnalysis(aFileLocationBase,aFileLocationBaseMC,fPairType,fCentralityType,aRunType,aNPartialAnalysis,aDirNameModifier));
       break;
 
     case kConjPair:
-      tVecOfPairAn.push_back(new FitPairAnalysis(aFileLocationBase,fConjPairType,fCentralityType,aRunType,aNPartialAnalysis,aDirNameModifier));
+      tVecOfPairAn.push_back(new FitPairAnalysis(aFileLocationBase,aFileLocationBaseMC,fConjPairType,fCentralityType,aRunType,aNPartialAnalysis,aDirNameModifier));
       break;
 
     case kPairwConj:
-      tVecOfPairAn.push_back(new FitPairAnalysis(aFileLocationBase,fPairType,fCentralityType,aRunType,aNPartialAnalysis,aDirNameModifier));
-      tVecOfPairAn.push_back(new FitPairAnalysis(aFileLocationBase,fConjPairType,fCentralityType,aRunType,aNPartialAnalysis,aDirNameModifier));
+      tVecOfPairAn.push_back(new FitPairAnalysis(aFileLocationBase,aFileLocationBaseMC,fPairType,fCentralityType,aRunType,aNPartialAnalysis,aDirNameModifier));
+      tVecOfPairAn.push_back(new FitPairAnalysis(aFileLocationBase,aFileLocationBaseMC,fConjPairType,fCentralityType,aRunType,aNPartialAnalysis,aDirNameModifier));
       break;
 
     default:
@@ -127,16 +127,16 @@ FitGenerator::FitGenerator(TString aFileLocationBase, TString aFileLocationBaseM
   case k3050:
     switch(fGeneratorType) {
     case kPair:
-      tVecOfPairAn.push_back(new FitPairAnalysis(aFileLocationBase,fPairType,fCentralityType,aRunType,aNPartialAnalysis,aDirNameModifier));
+      tVecOfPairAn.push_back(new FitPairAnalysis(aFileLocationBase,aFileLocationBaseMC,fPairType,fCentralityType,aRunType,aNPartialAnalysis,aDirNameModifier));
       break;
 
     case kConjPair:
-      tVecOfPairAn.push_back(new FitPairAnalysis(aFileLocationBase,fConjPairType,fCentralityType,aRunType,aNPartialAnalysis,aDirNameModifier));
+      tVecOfPairAn.push_back(new FitPairAnalysis(aFileLocationBase,aFileLocationBaseMC,fConjPairType,fCentralityType,aRunType,aNPartialAnalysis,aDirNameModifier));
       break;
 
     case kPairwConj:
-      tVecOfPairAn.push_back(new FitPairAnalysis(aFileLocationBase,fPairType,fCentralityType,aRunType,aNPartialAnalysis,aDirNameModifier));
-      tVecOfPairAn.push_back(new FitPairAnalysis(aFileLocationBase,fConjPairType,fCentralityType,aRunType,aNPartialAnalysis,aDirNameModifier));
+      tVecOfPairAn.push_back(new FitPairAnalysis(aFileLocationBase,aFileLocationBaseMC,fPairType,fCentralityType,aRunType,aNPartialAnalysis,aDirNameModifier));
+      tVecOfPairAn.push_back(new FitPairAnalysis(aFileLocationBase,aFileLocationBaseMC,fConjPairType,fCentralityType,aRunType,aNPartialAnalysis,aDirNameModifier));
       break;
 
     default:
@@ -151,23 +151,23 @@ FitGenerator::FitGenerator(TString aFileLocationBase, TString aFileLocationBaseM
     switch(fGeneratorType) {
     case kPair:
       tVecOfPairAn.push_back(new FitPairAnalysis(aFileLocationBase,aFileLocationBaseMC,fPairType,k0010,aRunType,aNPartialAnalysis,aDirNameModifier));
-      tVecOfPairAn.push_back(new FitPairAnalysis(aFileLocationBase,fPairType,k1030,aRunType,aNPartialAnalysis,aDirNameModifier));
-      tVecOfPairAn.push_back(new FitPairAnalysis(aFileLocationBase,fPairType,k3050,aRunType,aNPartialAnalysis,aDirNameModifier));
+      tVecOfPairAn.push_back(new FitPairAnalysis(aFileLocationBase,aFileLocationBaseMC,fPairType,k1030,aRunType,aNPartialAnalysis,aDirNameModifier));
+      tVecOfPairAn.push_back(new FitPairAnalysis(aFileLocationBase,aFileLocationBaseMC,fPairType,k3050,aRunType,aNPartialAnalysis,aDirNameModifier));
       break;
 
     case kConjPair:
       tVecOfPairAn.push_back(new FitPairAnalysis(aFileLocationBase,aFileLocationBaseMC,fConjPairType,k0010,aRunType,aNPartialAnalysis,aDirNameModifier));
-      tVecOfPairAn.push_back(new FitPairAnalysis(aFileLocationBase,fConjPairType,k1030,aRunType,aNPartialAnalysis,aDirNameModifier));
-      tVecOfPairAn.push_back(new FitPairAnalysis(aFileLocationBase,fConjPairType,k3050,aRunType,aNPartialAnalysis,aDirNameModifier));
+      tVecOfPairAn.push_back(new FitPairAnalysis(aFileLocationBase,aFileLocationBaseMC,fConjPairType,k1030,aRunType,aNPartialAnalysis,aDirNameModifier));
+      tVecOfPairAn.push_back(new FitPairAnalysis(aFileLocationBase,aFileLocationBaseMC,fConjPairType,k3050,aRunType,aNPartialAnalysis,aDirNameModifier));
       break;
 
     case kPairwConj:
       tVecOfPairAn.push_back(new FitPairAnalysis(aFileLocationBase,aFileLocationBaseMC,fPairType,k0010,aRunType,aNPartialAnalysis,aDirNameModifier));
       tVecOfPairAn.push_back(new FitPairAnalysis(aFileLocationBase,aFileLocationBaseMC,fConjPairType,k0010,aRunType,aNPartialAnalysis,aDirNameModifier));
-      tVecOfPairAn.push_back(new FitPairAnalysis(aFileLocationBase,fPairType,k1030,aRunType,aNPartialAnalysis,aDirNameModifier));
-      tVecOfPairAn.push_back(new FitPairAnalysis(aFileLocationBase,fConjPairType,k1030,aRunType,aNPartialAnalysis,aDirNameModifier));
-      tVecOfPairAn.push_back(new FitPairAnalysis(aFileLocationBase,fPairType,k3050,aRunType,aNPartialAnalysis,aDirNameModifier));
-      tVecOfPairAn.push_back(new FitPairAnalysis(aFileLocationBase,fConjPairType,k3050,aRunType,aNPartialAnalysis,aDirNameModifier));
+      tVecOfPairAn.push_back(new FitPairAnalysis(aFileLocationBase,aFileLocationBaseMC,fPairType,k1030,aRunType,aNPartialAnalysis,aDirNameModifier));
+      tVecOfPairAn.push_back(new FitPairAnalysis(aFileLocationBase,aFileLocationBaseMC,fConjPairType,k1030,aRunType,aNPartialAnalysis,aDirNameModifier));
+      tVecOfPairAn.push_back(new FitPairAnalysis(aFileLocationBase,aFileLocationBaseMC,fPairType,k3050,aRunType,aNPartialAnalysis,aDirNameModifier));
+      tVecOfPairAn.push_back(new FitPairAnalysis(aFileLocationBase,aFileLocationBaseMC,fConjPairType,k3050,aRunType,aNPartialAnalysis,aDirNameModifier));
       break;
 
     default:
@@ -466,6 +466,7 @@ TCanvas* FitGenerator::DrawKStarCfswFits(bool aSaveImage)
 
       tCanPart->AddGraph(i,j,(TH1*)fSharedAn->GetKStarCfHeavy(tAnalysisNumber)->GetHeavyCf(),"");
       tCanPart->AddGraph(i,j,(TF1*)fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetFit(),"");
+      tCanPart->AddGraph(i,j,(TF1*)fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetNonFlatBackground(),"",20,2);
 
       TString tTextAnType = TString(cAnalysisRootTags[fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetAnalysisType()]);
       TPaveText* tAnTypeName = tCanPart->SetupTPaveText(tTextAnType,i,j,0.8,0.85);
@@ -960,7 +961,7 @@ void FitGenerator::SetAllParameters()
 
 
 //________________________________________________________________________________________________________________
-void FitGenerator::DoFit(bool aApplyMomResCorrection)
+void FitGenerator::DoFit(bool aApplyMomResCorrection, bool aApplyNonFlatBackgroundCorrection)
 {
   SetAllParameters();
 
@@ -969,6 +970,7 @@ void FitGenerator::DoFit(bool aApplyMomResCorrection)
   fLednickyFitter = new LednickyFitter(fSharedAn);
   fLednickyFitter->GetFitSharedAnalyses()->GetMinuitObject()->SetFCN(GlobalFCN);
   fLednickyFitter->SetApplyMomResCorrection(aApplyMomResCorrection);
+  fLednickyFitter->SetApplyNonFlatBackgroundCorrection(aApplyNonFlatBackgroundCorrection);
   GlobalFitter = fLednickyFitter;
 
   fLednickyFitter->DoFit();

@@ -74,6 +74,7 @@ public:
 
 
   bool AreParamsSame(double *aCurrent, double *aNew, int aNEntries);
+  void ApplyNonFlatBackgroundCorrection(vector<double> &aCf, vector<double> &aKStarBinCenters, TF1* aNonFlatBgd);
   vector<double> ApplyMomResCorrection(vector<double> &aCf, vector<double> &aKStarBinCenters, TH2* aMomResMatrix);
   vector<double> GetResidualCorrelation(vector<double> &aParentCf, vector<double> &aKStarBinCenters, TH2* aTransformMatrix);
   void CalculateChi2PMLwMomResCorrectionv2(int &npar, double &chi2, double *par);
@@ -93,6 +94,7 @@ public:
   //inline (i.e. simple) functions
   FitSharedAnalyses* GetFitSharedAnalyses();
 
+  void SetApplyNonFlatBackgroundCorrection(bool aApply);
   void SetApplyMomResCorrection(bool aApplyMomResCorrection);
   void SetIncludeResidualCorrelations(bool aInclude);
 
@@ -111,6 +113,7 @@ private:
   //vector<double> fMaxFitKStarVec;
 
   bool fRejectOmega;
+  bool fApplyNonFlatBackgroundCorrection;
   bool fApplyMomResCorrection;
   bool fIncludeResidualCorrelations;
 
@@ -144,6 +147,7 @@ private:
 //inline stuff
 inline FitSharedAnalyses* LednickyFitter::GetFitSharedAnalyses() {return fFitSharedAnalyses;}
 
+inline void LednickyFitter::SetApplyNonFlatBackgroundCorrection(bool aApply) {fApplyNonFlatBackgroundCorrection = aApply;}
 inline void LednickyFitter::SetApplyMomResCorrection(bool aApplyMomResCorrection) {fApplyMomResCorrection = aApplyMomResCorrection;}
 inline void LednickyFitter::SetIncludeResidualCorrelations(bool aInclude) {fIncludeResidualCorrelations = aInclude;}
 

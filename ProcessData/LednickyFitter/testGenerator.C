@@ -19,13 +19,14 @@ int main(int argc, char **argv)
   int tNPartialAnalysis = 2;
   CentralityType tCentType = kMB;
   FitGeneratorType tGenType = kPairwConj;
-  bool tShareLambdaParams = false;
+  bool tShareLambdaParams = true;
 
   FitGenerator* tLamKchP = new FitGenerator(tFileLocationBase,tFileLocationBaseMC,tAnType,tAnRunType,tNPartialAnalysis,tCentType,tGenType,tShareLambdaParams);
   tLamKchP->SetSaveLocationBase(tDirectoryBase);
   //tLamKchP->SetFitType(kChi2);
   bool SaveImages = true;
-  bool ApplyMomResCorrection = false;
+  bool ApplyMomResCorrection = true;
+  bool ApplyNonFlatBackgroundCorrection = true;
 
 //  TCanvas* tKStarCan = tLamKchP->DrawKStarCfs();
 
@@ -33,7 +34,7 @@ int main(int argc, char **argv)
 
 //TODO!!!!  If I want to apply mom res correction to full fit, I need to give non-central analyses ability to grab
 //           the matrix from the central analyses
-  tLamKchP->DoFit(ApplyMomResCorrection);
+  tLamKchP->DoFit(ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection);
   TCanvas* tKStarwFitsCan = tLamKchP->DrawKStarCfswFits(SaveImages);
 
 

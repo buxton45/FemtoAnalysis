@@ -74,6 +74,7 @@ LednickyFitter::LednickyFitter(FitSharedAnalyses* aFitSharedAnalyses, double aMa
   fFits(fNAnalyses),
   fMaxFitKStar(aMaxFitKStar),
   fRejectOmega(false),
+  fApplyNonFlatBackgroundCorrection(false), //TODO change deault to true here AND in CoulombFitter
   fApplyMomResCorrection(false), //TODO change deault to true here AND in CoulombFitter
   fIncludeResidualCorrelations(false),  //TODO change deault to true here AND in CoulombFitter
   fChi2(0),
@@ -487,6 +488,19 @@ bool LednickyFitter::AreParamsSame(double *aCurrent, double *aNew, int aNEntries
   return tAreSame;
 }
 
+
+
+//________________________________________________________________________________________________________________
+void LednickyFitter::ApplyNonFlatBackgroundCorrection(vector<double> &aCf, vector<double> &aKStarBinCenters, TF1* aNonFlatBgd)
+{
+  assert(aCf.size() == aKStarBinCenters.size());
+  for(unsigned int i=0; i<aCf.size(); i++)
+  {
+    aCf[i] = aCf[i]*aNonFlatBgd->Eval(aKStarBinCenters[i]);
+  }
+}
+
+
 //________________________________________________________________________________________________________________
 vector<double> LednickyFitter::ApplyMomResCorrection(vector<double> &aCf, vector<double> &aKStarBinCenters, TH2* aMomResMatrix)
 {
@@ -847,6 +861,12 @@ void LednickyFitter::CalculateFitFunction(int &npar, double &chi2, double *par)
         tDenContent[ix-1] = tDen->GetBinContent(ix);
 
         tFitCfContent[ix-1] = LednickyEq(x,tPar);
+      }
+
+      if(fApplyNonFlatBackgroundCorrection)
+      {
+        TF1* tNonFlatBgd = tFitPartialAnalysis->GetNonFlatBackground(/*0.40,0.90*/);
+        ApplyNonFlatBackgroundCorrection(tFitCfContent, tKStarBinCenters, tNonFlatBgd);
       }
 
       vector<double> tCorrectedFitCfContent;

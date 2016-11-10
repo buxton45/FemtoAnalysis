@@ -49,7 +49,7 @@ public:
   void SetDefaultSharedParameters();
 
   void SetAllParameters();
-  void DoFit(bool aApplyMomResCorrection=false);
+  void DoFit(bool aApplyMomResCorrection=false, bool aApplyNonFlatBackgroundCorrection=false);
 
   void ExistsSaveLocationBase();
 

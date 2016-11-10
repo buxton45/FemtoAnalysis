@@ -67,9 +67,12 @@ public:
   TH1* Get1dHisto(TString aHistoName, TString aNewName);
   TH1* Get1dHisto(TString aFileLocation, TString aHistoName, TString aNewName);
   TH2* Get2dHisto(TString aHistoName, TString aNewName);
+  TH2* Get2dHisto(TString aFileLocation, TString aDirectoryName, TString aHistoName, TString aNewName);
 
   void BuildKStarCf(double aMinNorm=0.32, double aMaxNorm=0.4);
   void RebinKStarCf(int aRebinFactor, double aMinNorm=0.32, double aMaxNorm=0.4);
+  static TF1* FitNonFlatBackground(TH1* aCf, double aMinFit=0.40, double aMaxFit=0.90);
+  TF1* GetNonFlatBackground(double aMinFit=0.40, double aMaxFit=0.90);
 
   void SetFitParameter(FitParameter* aParam);
 
@@ -140,6 +143,8 @@ private:
   TH2* fModelKStarTrueVsRecMixed;
   CfLite* fModelKStarCfFake;
   CfLite* fModelKStarCfFakeIdeal;
+
+  TF1* fNonFlatBackground;
 
 #ifdef __ROOT__
   ClassDef(FitPartialAnalysis, 1)
