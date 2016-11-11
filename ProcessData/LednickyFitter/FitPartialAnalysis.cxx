@@ -12,8 +12,8 @@ ClassImp(FitPartialAnalysis)
 //________________________________________________________________________________________________________________
 double NonFlatBackgroundFitFunction(double *x, double *par)
 {
-  return par[0]*x[0]*x[0] + par[1]*x[0] + par[2];
-//  return par[0]*x[0] + par[1];
+//  return par[0]*x[0]*x[0] + par[1]*x[0] + par[2];
+  return par[0]*x[0] + par[1];
 }
 
 
@@ -565,13 +565,13 @@ void FitPartialAnalysis::RebinKStarCf(int aRebinFactor, double aMinNorm, double 
 TF1* FitPartialAnalysis::FitNonFlatBackground(TH1* aCf, double aMinFit, double aMaxFit)
 {
   TString tFitName = TString("NonFlatBackgroundFit_") + TString(aCf->GetTitle());
-  TF1* tNonFlatBackground = new TF1(tFitName,NonFlatBackgroundFitFunction,aMinFit,aMaxFit,3);
-  aCf->Fit(tFitName,"0q");
+  TF1* tNonFlatBackground = new TF1(tFitName,NonFlatBackgroundFitFunction,0.,1.,3);
+  aCf->Fit(tFitName,"0q","",aMinFit,aMaxFit);
 
-  TF1* tReturn = new TF1(tFitName,NonFlatBackgroundFitFunction,0.,aMaxFit,3);
-  tReturn->SetParameters(tNonFlatBackground->GetParameters());
+//  TF1* tReturn = new TF1(tFitName,NonFlatBackgroundFitFunction,0.,aMaxFit,3);
+//  tReturn->SetParameters(tNonFlatBackground->GetParameters());
 
-  return tReturn;
+  return tNonFlatBackground;
 }
 
 //________________________________________________________________________________________________________________

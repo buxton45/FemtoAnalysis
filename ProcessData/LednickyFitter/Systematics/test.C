@@ -110,10 +110,13 @@ int main(int argc, char **argv)
   //the program ends and closes everything
 //-----------------------------------------------------------------------------
   TString tGeneralAnTypeName = "cLamcKch";
-  AnalysisType tAnType = kLamKchP;
+  AnalysisType tAnType = kLamKchM;
   CentralityType tCentalityType = kMB;
   FitGeneratorType tFitGeneratorType = kPairwConj;
   bool tShareLambdaParameters = false;
+
+  bool ApplyMomResCorrection = true;
+  bool ApplyNonFlatBackgroundCorrection = true;
 
   SystematicsFileInfo tFileInfo = GetFileInfo(5);
     TString tResultsDate = tFileInfo.resultsDate;
@@ -147,6 +150,8 @@ int main(int argc, char **argv)
 
   FitSystematicAnalysis* tFitSysAn = new FitSystematicAnalysis(tFileLocationBase, tFileLocationBaseMC, tAnType, tDirNameModifierBase1, tModifierValues1, tDirNameModifierBase2, tModifierValues2, tCentalityType, tFitGeneratorType, tShareLambdaParameters);
   tFitSysAn->SetSaveDirectory(tDirectoryBase);
+  tFitSysAn->SetApplyNonFlatBackgroundCorrection(ApplyNonFlatBackgroundCorrection);
+  tFitSysAn->SetApplyMomResCorrection(ApplyMomResCorrection);
   tFitSysAn->RunAllFits(true);
 
 cout << "DONE" << endl;

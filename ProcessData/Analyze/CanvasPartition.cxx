@@ -257,7 +257,7 @@ TPaveText* CanvasPartition::SetupTPaveText(TString aText, int aNx, int aNy, doub
     returnText->SetTextAlign(22);
     returnText->SetTextFont(aTextFont);
     returnText->SetTextSize(aTextSize);
-    returnText->AddText(aText);
+    if(!aText.IsNull()) returnText->AddText(aText);
 
   return returnText;
 }
@@ -323,7 +323,7 @@ void CanvasPartition::DrawInPad(int aNx, int aNy)
     tTrash->DrawCopy("AXIS");
   delete tTrash;
 
-  while(tGraphObj = tNextGraph()) tGraphObj->Draw("sames");
+  while(tGraphObj = tNextGraph()) tGraphObj->Draw("psames");
 
   TObjArray* tPaveTexts = (TObjArray*)fPadPaveTexts->At(tPosition);
   for(unsigned int i=0; i<tPaveTexts->GetEntries(); i++) tPaveTexts->At(i)->Draw();

@@ -7,6 +7,9 @@ int main(int argc, char **argv)
   //The TApplication object allows the execution of the code to pause.
   //This allows the user a chance to look at and manipulate a TBrowser before
   //the program ends and closes everything
+
+  ChronoTimer tFullTimer(kSec);
+  tFullTimer.Start();
 //-----------------------------------------------------------------------------
   TString tResultsDate = "20161025";
 
@@ -19,7 +22,7 @@ int main(int argc, char **argv)
   int tNPartialAnalysis = 2;
   CentralityType tCentType = kMB;
   FitGeneratorType tGenType = kPairwConj;
-  bool tShareLambdaParams = true;
+  bool tShareLambdaParams = false;
 
   FitGenerator* tLamKchP = new FitGenerator(tFileLocationBase,tFileLocationBaseMC,tAnType,tAnRunType,tNPartialAnalysis,tCentType,tGenType,tShareLambdaParams);
   tLamKchP->SetSaveLocationBase(tDirectoryBase);
@@ -35,12 +38,16 @@ int main(int argc, char **argv)
 //TODO!!!!  If I want to apply mom res correction to full fit, I need to give non-central analyses ability to grab
 //           the matrix from the central analyses
   tLamKchP->DoFit(ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection);
-  TCanvas* tKStarwFitsCan = tLamKchP->DrawKStarCfswFits(SaveImages);
+  TCanvas* tKStarwFitsCan = tLamKchP->DrawKStarCfswFits(ApplyMomResCorrection,ApplyNonFlatBackgroundCorrection,SaveImages);
 
 
 
 
 //-------------------------------------------------------------------------------
+  tFullTimer.Stop();
+  cout << "Finished program: ";
+  tFullTimer.PrintInterval();
+
   theApp->Run(kTRUE); //Run the TApp to pause the code.
   // Select "Exit ROOT" from Canvas "File" menu to exit
   // and execute the next statements.

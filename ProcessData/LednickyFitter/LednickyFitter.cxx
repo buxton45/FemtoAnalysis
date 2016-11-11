@@ -66,7 +66,7 @@ double LednickyEq(double *x, double *par)
 //****************************************************************************************************************
 //________________________________________________________________________________________________________________
 LednickyFitter::LednickyFitter(FitSharedAnalyses* aFitSharedAnalyses, double aMaxFitKStar):
-
+  fVerbose(false),
   fFitSharedAnalyses(aFitSharedAnalyses),
   fMinuit(fFitSharedAnalyses->GetMinuitObject()),
   fNAnalyses(fFitSharedAnalyses->GetNFitPairAnalysis()),
@@ -214,24 +214,27 @@ double LednickyFitter::ApplyResidualCorrelationToPoint(double aKStar, double* aP
 //________________________________________________________________________________________________________________
 void LednickyFitter::CalculateChi2PML(int &npar, double &chi2, double *par)
 {
-  cout << "\t\tParameter update: " << endl;
-  cout << "\t\t\tpar[0] = Lambda = " << par[0] << endl;
-  cout << "\t\t\tpar[1] = Radius = " << par[1] << endl;
+  if(fVerbose)
+  {
+    cout << "\t\tParameter update: " << endl;
+    cout << "\t\t\tpar[0] = Lambda = " << par[0] << endl;
+    cout << "\t\t\tpar[1] = Radius = " << par[1] << endl;
 
-  cout << "\t\t\tpar[2] = ReF0  = " << par[2] << endl;
-  cout << "\t\t\tpar[3] = ImF0  = " << par[3] << endl;
-  cout << "\t\t\tpar[4] = D0    = " << par[4] << endl;
+    cout << "\t\t\tpar[2] = ReF0  = " << par[2] << endl;
+    cout << "\t\t\tpar[3] = ImF0  = " << par[3] << endl;
+    cout << "\t\t\tpar[4] = D0    = " << par[4] << endl;
 
-  cout << "\t\t\tpar[8] = Norm1  = " << par[5] << endl;
-  cout << "\t\t\tpar[9] = Norm2  = " << par[6] << endl;
-  cout << "\t\t\tpar[10] = Norm3 = " << par[7] << endl;
-  cout << "\t\t\tpar[11] = Norm4 = " << par[8] << endl;
-  cout << "\t\t\tpar[12] = Norm5 = " << par[9] << endl;
-  cout << "\t\t\tpar[13] = Norm6 = " << par[10] << endl;
-  cout << "\t\t\tpar[14] = Norm7 = " << par[11] << endl;
-  cout << "\t\t\tpar[15] = Norm8 = " << par[12] << endl;
-  cout << "\t\t\tpar[16] = Norm9 = " << par[13] << endl;
-  cout << "\t\t\tpar[17] = Norm10= " << par[14] << endl << endl;
+    cout << "\t\t\tpar[8] = Norm1  = " << par[5] << endl;
+    cout << "\t\t\tpar[9] = Norm2  = " << par[6] << endl;
+    cout << "\t\t\tpar[10] = Norm3 = " << par[7] << endl;
+    cout << "\t\t\tpar[11] = Norm4 = " << par[8] << endl;
+    cout << "\t\t\tpar[12] = Norm5 = " << par[9] << endl;
+    cout << "\t\t\tpar[13] = Norm6 = " << par[10] << endl;
+    cout << "\t\t\tpar[14] = Norm7 = " << par[11] << endl;
+    cout << "\t\t\tpar[15] = Norm8 = " << par[12] << endl;
+    cout << "\t\t\tpar[16] = Norm9 = " << par[13] << endl;
+    cout << "\t\t\tpar[17] = Norm10= " << par[14] << endl << endl;
+  }
 
   //---------------------------------------------------------
 
@@ -345,8 +348,11 @@ void LednickyFitter::CalculateChi2PML(int &npar, double &chi2, double *par)
   chi2 = fChi2;
   if(fChi2 < fChi2GlobalMin) fChi2GlobalMin = fChi2;
 
-cout << "fChi2 = " << fChi2 << endl;
-cout << "fChi2GlobalMin = " << fChi2GlobalMin << endl << endl;
+  if(fVerbose)
+  {
+    cout << "fChi2 = " << fChi2 << endl;
+    cout << "fChi2GlobalMin = " << fChi2GlobalMin << endl << endl;
+  }
 }
 
 //________________________________________________________________________________________________________________
@@ -466,8 +472,11 @@ void LednickyFitter::CalculateChi2PMLwMomResCorrection(int &npar, double &chi2, 
   chi2 = fChi2;
   if(fChi2 < fChi2GlobalMin) fChi2GlobalMin = fChi2;
 
-cout << "fChi2 = " << fChi2 << endl;
-cout << "fChi2GlobalMin = " << fChi2GlobalMin << endl << endl;
+  if(fVerbose)
+  {
+    cout << "fChi2 = " << fChi2 << endl;
+    cout << "fChi2GlobalMin = " << fChi2GlobalMin << endl << endl;
+  }
 }
 
 
@@ -713,8 +722,11 @@ void LednickyFitter::CalculateChi2PMLwMomResCorrectionv2(int &npar, double &chi2
   chi2 = fChi2;
   if(fChi2 < fChi2GlobalMin) fChi2GlobalMin = fChi2;
 
-cout << "fChi2 = " << fChi2 << endl;
-cout << "fChi2GlobalMin = " << fChi2GlobalMin << endl << endl;
+  if(fVerbose)
+  {
+    cout << "fChi2 = " << fChi2 << endl;
+    cout << "fChi2GlobalMin = " << fChi2GlobalMin << endl << endl;
+  }
 /*
   double *tParamsForHistograms = new double[tNFitParPerAnalysis];
   for(int i=0; i<tNFitParPerAnalysis; i++) tParamsForHistograms[i] = par[i];
@@ -863,16 +875,15 @@ void LednickyFitter::CalculateFitFunction(int &npar, double &chi2, double *par)
         tFitCfContent[ix-1] = LednickyEq(x,tPar);
       }
 
-      if(fApplyNonFlatBackgroundCorrection)
-      {
-        TF1* tNonFlatBgd = tFitPartialAnalysis->GetNonFlatBackground(/*0.40,0.90*/);
-        ApplyNonFlatBackgroundCorrection(tFitCfContent, tKStarBinCenters, tNonFlatBgd);
-      }
-
       vector<double> tCorrectedFitCfContent;
       if(fApplyMomResCorrection) tCorrectedFitCfContent = ApplyMomResCorrection(tFitCfContent, tKStarBinCenters, tMomResMatrix);
       else tCorrectedFitCfContent = tFitCfContent;
 
+      if(fApplyNonFlatBackgroundCorrection)
+      {
+        TF1* tNonFlatBgd = tFitPartialAnalysis->GetNonFlatBackground(/*0.40,0.90*/);
+        ApplyNonFlatBackgroundCorrection(tCorrectedFitCfContent, tKStarBinCenters, tNonFlatBgd);
+      }
 
       for(int ix=0; ix < tNbinsXToFit; ix++)
       {
@@ -912,8 +923,11 @@ void LednickyFitter::CalculateFitFunction(int &npar, double &chi2, double *par)
   chi2 = fChi2;
   if(fChi2 < fChi2GlobalMin) fChi2GlobalMin = fChi2;
 
-cout << "fChi2 = " << fChi2 << endl;
-cout << "fChi2GlobalMin = " << fChi2GlobalMin << endl << endl;
+  if(fVerbose)
+  {
+    cout << "fChi2 = " << fChi2 << endl;
+    cout << "fChi2GlobalMin = " << fChi2GlobalMin << endl << endl;
+  }
 /*
   double *tParamsForHistograms = new double[tNFitParPerAnalysis];
   for(int i=0; i<tNFitParPerAnalysis; i++) tParamsForHistograms[i] = par[i];
@@ -921,20 +935,6 @@ cout << "fChi2GlobalMin = " << fChi2GlobalMin << endl << endl;
   delete[] tParamsForHistograms;
 */
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -1057,8 +1057,11 @@ void LednickyFitter::CalculateChi2PMLwCorrectedCfs(int &npar, double &chi2, doub
   chi2 = fChi2;
   if(fChi2 < fChi2GlobalMin) fChi2GlobalMin = fChi2;
 
-cout << "fChi2 = " << fChi2 << endl;
-cout << "fChi2GlobalMin = " << fChi2GlobalMin << endl << endl;
+  if(fVerbose)
+  {
+    cout << "fChi2 = " << fChi2 << endl;
+    cout << "fChi2GlobalMin = " << fChi2GlobalMin << endl << endl;
+  }
 }
 
 //________________________________________________________________________________________________________________

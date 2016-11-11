@@ -93,7 +93,7 @@ protected:
 #endif
 };
 
-inline TCanvas* CanvasPartition::GetCanvas() {return fCanvas;}
+inline TCanvas* CanvasPartition::GetCanvas() {fCanvas->Update(); return fCanvas;}
 inline TPad* CanvasPartition::GetPad(int aNx, int aNy) {return fPadArray[aNx][aNy];}
 inline void CanvasPartition::SetDrawUnityLine(bool aDraw) {fDrawUnityLine = aDraw;}
 

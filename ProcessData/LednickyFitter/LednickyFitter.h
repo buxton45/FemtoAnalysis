@@ -101,8 +101,10 @@ public:
   vector<double> GetMinParams();
   vector<double> GetParErrors();
 
-private:
+  void SetVerbose(bool aSet);
 
+private:
+  bool fVerbose;
   FitSharedAnalyses* fFitSharedAnalyses;
   TMinuit* fMinuit;
   int fNAnalyses;
@@ -153,6 +155,8 @@ inline void LednickyFitter::SetIncludeResidualCorrelations(bool aInclude) {fIncl
 
 inline vector<double> LednickyFitter::GetMinParams() {return fMinParams;}
 inline vector<double> LednickyFitter::GetParErrors() {return fParErrors;}
+
+inline void LednickyFitter::SetVerbose(bool aSet) {fVerbose=aSet;}
 
 
 #endif

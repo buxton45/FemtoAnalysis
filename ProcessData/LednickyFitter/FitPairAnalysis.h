@@ -61,7 +61,7 @@ public:
   void BuildKStarCfHeavy(double aMinNorm=0.32, double aMaxNorm=0.4);
   void RebinKStarCfHeavy(int aRebinFactor, double aMinNorm=0.32, double aMaxNorm=0.4);
   void DrawKStarCfHeavy(TPad* aPad, int aMarkerColor=1, TString aOption = "", int aMarkerStyle=20);
-  TF1* GetNonFlatBackground(double aMinFit=0.40, double aMaxFit=0.90);
+  TF1* GetNonFlatBackground(double aMinFit=0.45, double aMaxFit=0.95);
 
   void CreateFitNormParameters();
   void ShareFitParameters();
@@ -72,7 +72,7 @@ public:
   void BuildModelKStarHeavyCfFakeIdeal(double aMinNorm, double aMaxNorm, int aRebin=1);
   void BuildModelCfFakeIdealCfFakeRatio(double aMinNorm=0.32, double aMaxNorm=0.4, int aRebinFactor=1);
 
-  TH1F* GetMomResCorrectedFitHisto();
+  TH1F* GetCorrectedFitHisto(bool aMomResCorrection=true, bool aNonFlatBgdCorrection=true);
 
   void LoadTransformMatrices(TString aFileLocation);
 

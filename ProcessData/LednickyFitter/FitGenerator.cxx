@@ -331,7 +331,17 @@ void FitGenerator::CreateParamInitValuesText(CanvasPartition *aCanPart, int aNx,
   aCanPart->AddPadPaveText(tText,aNx,aNy);
 }
 
+//________________________________________________________________________________________________________________
+void FitGenerator::AddTextCorrectionInfo(CanvasPartition *aCanPart, int aNx, int aNy, bool aMomResCorrect, bool aNonFlatCorrect, double aTextXmin, double aTextYmin, double aTextWidth, double aTextHeight, double aTextFont, double aTextSize)
+{
+  if(!aMomResCorrect && !aNonFlatCorrect) return;
 
+  TPaveText *tText = aCanPart->SetupTPaveText("",aNx,aNy,aTextXmin,aTextYmin,aTextWidth,aTextHeight,aTextFont,aTextSize);
+  if(aMomResCorrect) tText->AddText("Mom. Res. Correction");
+  if(aNonFlatCorrect) tText->AddText("Non-flat Bgd Correction");
+  tText->SetTextAlign(33);
+  aCanPart->AddPadPaveText(tText,aNx,aNy);
+}
 
 //________________________________________________________________________________________________________________
 void FitGenerator::DrawSingleKStarCf(TPad* aPad, int aPairAnNumber, double aYmin, double aYmax, double aXmin, double aXmax, int aMarkerColor, TString aOption, int aMarkerStyle)
@@ -339,7 +349,7 @@ void FitGenerator::DrawSingleKStarCf(TPad* aPad, int aPairAnNumber, double aYmin
   aPad->cd();
   gStyle->SetOptStat(0);
 
-  TH1* tCfToDraw = fSharedAn->GetKStarCfHeavy(aPairAnNumber)->GetHeavyCf();
+  TH1* tCfToDraw = fSharedAn->GetKStarCfHeavy(aPairAnNumber)->GetHeavyCfClone();
     SetupAxis(tCfToDraw->GetXaxis(),"k* (GeV/c)");
     SetupAxis(tCfToDraw->GetYaxis(),"C(k*)");
 
@@ -373,7 +383,7 @@ void FitGenerator::DrawSingleKStarCfwFit(TPad* aPad, int aPairAnNumber, double a
   gStyle->SetStatY(0.60);
 
 
-  TH1* tCfToDraw = fSharedAn->GetKStarCfHeavy(aPairAnNumber)->GetHeavyCf();
+  TH1* tCfToDraw = fSharedAn->GetKStarCfHeavy(aPairAnNumber)->GetHeavyCfClone();
     SetupAxis(tCfToDraw->GetXaxis(),"k* (GeV/c)");
     SetupAxis(tCfToDraw->GetYaxis(),"C(k*)");
 
@@ -439,7 +449,7 @@ TCanvas* FitGenerator::DrawKStarCfswFits()
 */
 
 //________________________________________________________________________________________________________________
-TCanvas* FitGenerator::DrawKStarCfswFits(bool aSaveImage)
+TCanvas* FitGenerator::DrawKStarCfswFits(bool aMomResCorrectFit, bool aNoFlatBgdCorrectFit, bool aSaveImage)
 {
   TString tCanvasName = TString("canKStarCfwFits") + TString(cAnalysisBaseTags[fPairType]) + TString("And") 
                         + TString(cAnalysisBaseTags[fConjPairType]) + TString(cCentralityTags[fCentralityType]);
@@ -451,7 +461,7 @@ TCanvas* FitGenerator::DrawKStarCfswFits(bool aSaveImage)
   else assert(0);
 
   double tXLow = -0.02;
-  double tXHigh = 0.49;
+  double tXHigh = 0.99;
   double tYLow = 0.89;
   double tYHigh = 1.04;
   CanvasPartition* tCanPart = new CanvasPartition(tCanvasName,tNx,tNy,tXLow,tXHigh,tYLow,tYHigh,0.12,0.05,0.13,0.05);
@@ -464,8 +474,9 @@ TCanvas* FitGenerator::DrawKStarCfswFits(bool aSaveImage)
     {
       tAnalysisNumber = j*tNx + i;
 
-      tCanPart->AddGraph(i,j,(TH1*)fSharedAn->GetKStarCfHeavy(tAnalysisNumber)->GetHeavyCf(),"");
+      tCanPart->AddGraph(i,j,(TH1*)fSharedAn->GetKStarCfHeavy(tAnalysisNumber)->GetHeavyCfClone(),"");
       tCanPart->AddGraph(i,j,(TF1*)fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetFit(),"");
+      tCanPart->AddGraph(i,j,(TH1*)fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetCorrectedFitHisto(aMomResCorrectFit,aNoFlatBgdCorrectFit),"",20,4,0.5);
       tCanPart->AddGraph(i,j,(TF1*)fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetNonFlatBackground(),"",20,2);
 
       TString tTextAnType = TString(cAnalysisRootTags[fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetAnalysisType()]);
@@ -476,7 +487,8 @@ TCanvas* FitGenerator::DrawKStarCfswFits(bool aSaveImage)
       TPaveText* tCentralityName = tCanPart->SetupTPaveText(tTextCentrality,i,j,0.05,0.85);
       tCanPart->AddPadPaveText(tCentralityName,i,j);
 
-      CreateParamInitValuesText(tCanPart,i,j,0.25,0.12,0.15,0.50,43,10);
+      CreateParamInitValuesText(tCanPart,i,j,0.25,0.20,0.15,0.45,43,10);
+      AddTextCorrectionInfo(tCanPart,i,j,aMomResCorrectFit,aNoFlatBgdCorrectFit,0.25,0.08,0.15,0.10,43,7.5);
     }
   }
 
@@ -769,6 +781,10 @@ void FitGenerator::SetDefaultSharedParameters()
       SetLambdaParamStartValue(tStartValuesPair[k0010][0],false,k0010);
       SetLambdaParamStartValue(tStartValuesPair[k1030][0],false,k1030);
       SetLambdaParamStartValue(tStartValuesPair[k3050][0],false,k3050);
+
+      SetLambdaParamLimits(0.,1.,false,k0010);
+      SetLambdaParamLimits(0.,1.,false,k1030);
+      SetLambdaParamLimits(0.,1.,false,k3050);
     }
 
     else if(fGeneratorType==kConjPair)
@@ -782,6 +798,10 @@ void FitGenerator::SetDefaultSharedParameters()
       SetLambdaParamStartValue(tStartValuesConjPair[k0010][0],false,k0010);
       SetLambdaParamStartValue(tStartValuesConjPair[k1030][0],false,k1030);
       SetLambdaParamStartValue(tStartValuesConjPair[k3050][0],false,k3050);
+
+      SetLambdaParamLimits(0.,1.,false,k0010);
+      SetLambdaParamLimits(0.,1.,false,k1030);
+      SetLambdaParamLimits(0.,1.,false,k3050);
     }
 
     else if(fGeneratorType==kPairwConj)
@@ -795,11 +815,20 @@ void FitGenerator::SetDefaultSharedParameters()
       SetLambdaParamStartValue(tStartValuesPair[k0010][0],false,k0010);
       SetLambdaParamStartValue(tStartValuesPair[k1030][0],false,k1030);
       SetLambdaParamStartValue(tStartValuesPair[k3050][0],false,k3050);
+
+      SetLambdaParamLimits(0.,1.,false,k0010);
+      SetLambdaParamLimits(0.,1.,false,k1030);
+      SetLambdaParamLimits(0.,1.,false,k3050);
+
       if(!fShareLambdaParams)
       {
         SetLambdaParamStartValue(tStartValuesConjPair[k0010][0],true,k0010);
         SetLambdaParamStartValue(tStartValuesConjPair[k1030][0],true,k1030);
         SetLambdaParamStartValue(tStartValuesConjPair[k3050][0],true,k3050);
+
+        SetLambdaParamLimits(0.,1.,true,k0010);
+        SetLambdaParamLimits(0.,1.,true,k1030);
+        SetLambdaParamLimits(0.,1.,true,k3050);
       }
     }
 

@@ -85,7 +85,7 @@ void FitSystematicAnalysis::RunAllFits(bool aSave)
 
     tFitGenerator->DoFit(fApplyMomResCorrection,fApplyNonFlatBackgroundCorrection);
 
-    TCanvas* tKStarwFitsCan = tFitGenerator->DrawKStarCfswFits(false);
+    TCanvas* tKStarwFitsCan = tFitGenerator->DrawKStarCfswFits(fApplyMomResCorrection,fApplyNonFlatBackgroundCorrection,false);
     if(aSave)
     {
       TString tSaveName = fSaveDirectory;

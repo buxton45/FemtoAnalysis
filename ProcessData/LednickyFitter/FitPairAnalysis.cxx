@@ -504,7 +504,7 @@ void FitPairAnalysis::DrawFit(const char* aTitle)
   line->SetLineColor(14);
   line->Draw();
 /*
-  TH1F* tMomResCorrectedFitHisto = GetMomResCorrectedFitHisto();
+  TH1F* tMomResCorrectedFitHisto = GetCorrectedFitHisto(true,false);
   tMomResCorrectedFitHisto->SetLineColor(2);
   tMomResCorrectedFitHisto->Draw("Lsame");
 */
@@ -566,7 +566,7 @@ void FitPairAnalysis::BuildModelCfFakeIdealCfFakeRatio(double aMinNorm, double a
 
 
 //________________________________________________________________________________________________________________
-TH1F* FitPairAnalysis::GetMomResCorrectedFitHisto()
+TH1F* FitPairAnalysis::GetCorrectedFitHisto(bool aMomResCorrection, bool aNonFlatBgdCorrection)
 {
   int tNbinsX = fKStarCf->GetNbinsX();
   double tKStarMin = fKStarCf->GetBinLowEdge(1);
@@ -579,21 +579,40 @@ TH1F* FitPairAnalysis::GetMomResCorrectedFitHisto()
     tUncorrected->SetBinError(i,0.);
   }
 
-  TString tName = "MomResCorrectedFitHisto_" + TString(cAnalysisBaseTags[fAnalysisType]) + TString(cCentralityTags[fCentralityType]);
+  if(aNonFlatBgdCorrection)
+  {
+    TF1* tNonFlatBgd = FitPairAnalysis::GetNonFlatBackground();
+    for(int i=1; i<=tUncorrected->GetNbinsX(); i++)
+    {
+      double tVal = tUncorrected->GetBinContent(i)*tNonFlatBgd->Eval(tUncorrected->GetBinCenter(i));
+      tUncorrected->SetBinContent(i,tVal);
+    }
+  }
+
+  TString tName = "CorrectedFitHisto_" + TString(cAnalysisBaseTags[fAnalysisType]) + TString(cCentralityTags[fCentralityType]);
   TH1F* tReturnHisto = new TH1F(tName,tName,tNbinsX,tKStarMin,tKStarMax);
+
   for(int j=1; j<=tUncorrected->GetNbinsX(); j++)
   {
-    double tValue = 0.;
-    assert(tUncorrected->GetBinCenter(j) == fModelKStarTrueVsRecMixed->GetYaxis()->GetBinCenter(j));
-    for(int i=1; i<=fModelKStarTrueVsRecMixed->GetNbinsX(); i++)
+    if(aMomResCorrection)
     {
-      assert(tUncorrected->GetBinCenter(i) == fModelKStarTrueVsRecMixed->GetXaxis()->GetBinCenter(i));
-      assert(tUncorrected->GetBinContent(i) > 0.);
-      tValue += tUncorrected->GetBinContent(i)*fModelKStarTrueVsRecMixed->GetBinContent(i,j);
+      double tValue = 0.;
+      assert(tUncorrected->GetBinCenter(j) == fModelKStarTrueVsRecMixed->GetYaxis()->GetBinCenter(j));
+      for(int i=1; i<=fModelKStarTrueVsRecMixed->GetNbinsX(); i++)
+      {
+        assert(tUncorrected->GetBinCenter(i) == fModelKStarTrueVsRecMixed->GetXaxis()->GetBinCenter(i));
+        assert(tUncorrected->GetBinContent(i) > 0.);
+        tValue += tUncorrected->GetBinContent(i)*fModelKStarTrueVsRecMixed->GetBinContent(i,j);
+      }
+      tValue /= fModelKStarTrueVsRecMixed->Integral(1,fModelKStarTrueVsRecMixed->GetNbinsX(),j,j);
+      tReturnHisto->SetBinContent(j,tValue);
+      tReturnHisto->SetBinError(j,0.);
     }
-    tValue /= fModelKStarTrueVsRecMixed->Integral(1,fModelKStarTrueVsRecMixed->GetNbinsX(),j,j);
-    tReturnHisto->SetBinContent(j,tValue);
-    tReturnHisto->SetBinError(j,0.);
+    else
+    {
+      tReturnHisto->SetBinContent(j,tUncorrected->GetBinContent(j));
+      tReturnHisto->SetBinError(j,0);
+    }
   }
 
   delete tUncorrected;
