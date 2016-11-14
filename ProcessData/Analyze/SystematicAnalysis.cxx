@@ -9,16 +9,33 @@
 ClassImp(SystematicAnalysis)
 #endif
 
+
+//________________________________________________________________________________________________________________
+double DampedHarmonicOscillator(double *x, double *par)
+{
+  double tGamma = par[1];
+  double tOmega0 = par[2];
+  double tOmega = sqrt(tOmega0*tOmega0 - tGamma*tGamma);
+
+  return par[0]*exp(-TMath::Abs(tGamma*x[0]))*cos(tOmega*x[0] - par[3]) + par[4];
+}
+
+//________________________________________________________________________________________________________________
+double ExponentialDecay(double *x, double *par)
+{
+  return par[0]*exp(-TMath::Abs(par[1]*x[0])) + par[2];
+}
+
+
 //________________________________________________________________________________________________________________
 //****************************************************************************************************************
 //________________________________________________________________________________________________________________
-
-
 
 //________________________________________________________________________________________________________________
 SystematicAnalysis::SystematicAnalysis(TString aFileLocationBase, AnalysisType aAnalysisType, CentralityType aCentralityType,
                                        TString aDirNameModifierBase1, vector<double> &aModifierValues1,
                                        TString aDirNameModifierBase2, vector<double> &aModifierValues2) :
+  fSaveDirectory(""),
   fFileLocationBase(aFileLocationBase),
   fAnalysisType(aAnalysisType),
   fCentralityType(aCentralityType),
@@ -184,6 +201,98 @@ void SystematicAnalysis::GetAllPValues(ostream &aOut)
   aOut << "______________________________________________________________________________" << endl << endl;
 }
 
+//________________________________________________________________________________________________________________
+TF1* SystematicAnalysis::FitDiffHist(TH1* aDiffHist, DiffHistFitType aFitType)
+{
+  double tMinFit = 0.;
+  double tMaxFit = 1.;
+  TF1* tReturnFit;
+  TString tFitName = "tReturnFit";
+  if(aFitType == kExpDecay)
+  {
+    tReturnFit = new TF1(tFitName,ExponentialDecay,0.,1.,3);
+    tReturnFit->SetParameter(0,aDiffHist->GetBinContent(1));
+    tReturnFit->SetParameter(2,0.);
+  }
+  else
+  {
+    tReturnFit = new TF1(tFitName,DampedHarmonicOscillator,0.,1.,5);
+    tReturnFit->SetParameter(0,aDiffHist->GetBinContent(1));
+    tReturnFit->SetParameter(4,0.);
+  }
+
+  aDiffHist->Fit(tFitName,"0q","",tMinFit,tMaxFit);
+  return tReturnFit;
+}
+
+//________________________________________________________________________________________________________________
+void SystematicAnalysis::GetAllFits(ostream &aOut, double aNSigma)
+{
+  aOut << "______________________________________________________________________________" << endl;
+  aOut << "AnalysisType = " << cAnalysisBaseTags[fAnalyses[0].GetAnalysisType()] << endl;
+  aOut << "CentralityType = " << cPrettyCentralityTags[fAnalyses[0].GetCentralityType()] << endl << endl;
+
+  TF1* tFit;
+  bool tIsSignificant = false;
+  TString tCutVal1a, tCutVal1b, tCutVal1Tot;
+  TString tCutVal2a, tCutVal2b, tCutVal2Tot;
+  for(unsigned int i=0; i<fAnalyses.size(); i++)
+  {
+
+    for(unsigned int j=i+1; j<fAnalyses.size(); j++)
+    {
+      TH1* tHist1 = fAnalyses[i].GetKStarHeavyCf()->GetHeavyCfClone();
+      TH1* tHist2 = fAnalyses[j].GetKStarHeavyCf()->GetHeavyCfClone();
+      TH1* tDiffHist = GetDiffHist(tHist1,tHist2);
+      tFit = FitDiffHist(tDiffHist);
+
+      tCutVal1a = fDirNameModifierBase1;
+        tCutVal1a.Remove(TString::kBoth,'_');
+        tCutVal1a += TString::Format(" = %0.6f",fModifierValues1[i]);
+
+      tCutVal2a = fDirNameModifierBase1;
+        tCutVal2a.Remove(TString::kBoth,'_');
+        tCutVal2a += TString::Format(" = %0.6f",fModifierValues1[j]);
+
+
+      tCutVal1Tot = tCutVal1a;
+      tCutVal2Tot = tCutVal2a;
+
+      if(!fDirNameModifierBase2.IsNull())
+      {
+        tCutVal1b = fDirNameModifierBase2;
+          tCutVal1b.Remove(TString::kBoth,'_');
+          tCutVal1b += TString::Format(" = %0.6f",fModifierValues2[i]);
+
+        tCutVal2b = fDirNameModifierBase2;
+          tCutVal2b.Remove(TString::kBoth,'_');
+          tCutVal2b += TString::Format(" = %0.6f",fModifierValues2[j]);
+
+        tCutVal1Tot += TString::Format(" and %s",tCutVal1b.Data());
+        tCutVal2Tot += TString::Format(" and %s",tCutVal2b.Data());
+      }
+
+      aOut << tCutVal1Tot << endl;
+      aOut << tCutVal2Tot << endl;
+      if(TMath::Abs(tFit->GetParameter(0)/tFit->GetParError(0)) > aNSigma) tIsSignificant = true;
+      for(int iPar=0; iPar<tFit->GetNpar(); iPar++)
+      {
+        aOut << "par[" << iPar << "]: Value = " << tFit->GetParameter(iPar) << "\t Error = " << tFit->GetParError(iPar) << endl;
+      }
+      aOut << "Is Signficant? " << tIsSignificant << endl;
+
+      if(TMath::Abs(tFit->GetParameter(tFit->GetNpar())/tFit->GetParError(tFit->GetNpar())) > aNSigma)
+      {
+        aOut << "WARNING!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
+        aOut << "Baseline is not consistent with 0!" << endl;
+      }
+
+      aOut << endl;
+    }
+  }
+  aOut << "______________________________________________________________________________" << endl << endl;
+}
+
 
 //________________________________________________________________________________________________________________
 void SystematicAnalysis::DrawAll()
@@ -202,7 +311,7 @@ void SystematicAnalysis::DrawAll()
 }
 
 //________________________________________________________________________________________________________________
-void SystematicAnalysis::DrawAllDiffs()
+void SystematicAnalysis::DrawAllDiffs(bool aDrawFits, bool aSaveImages)
 {
   gStyle->SetOptFit();
 
@@ -222,9 +331,18 @@ void SystematicAnalysis::DrawAllDiffs()
       TH1* tDiffHist = GetDiffHist(tHist1,tHist2);
 
       tDiffHist->Draw();
+
+      if(aDrawFits)
+      {
+        TF1* tFit = FitDiffHist(tDiffHist);
+        tFit->SetLineColor(2);
+        tFit->Draw("same");
+      }
+
       tPad++;
     }
   }
+  if(aSaveImages) tReturnCan->SaveAs(fSaveDirectory+tCanTitle+TString(".pdf"));
 }
 
 

@@ -11,7 +11,7 @@ int main(int argc, char **argv)
   ChronoTimer tFullTimer(kSec);
   tFullTimer.Start();
 //-----------------------------------------------------------------------------
-  TString tResultsDate = "20161025";
+  TString tResultsDate = "20161027";
 
   TString tDirectoryBase = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_%s/",tResultsDate.Data());
   TString tFileLocationBase = TString::Format("%sResults_cLamcKch_%s",tDirectoryBase.Data(),tResultsDate.Data());
@@ -24,12 +24,17 @@ int main(int argc, char **argv)
   FitGeneratorType tGenType = kPairwConj;
   bool tShareLambdaParams = false;
 
-  FitGenerator* tLamKchP = new FitGenerator(tFileLocationBase,tFileLocationBaseMC,tAnType,tAnRunType,tNPartialAnalysis,tCentType,tGenType,tShareLambdaParams);
-  tLamKchP->SetSaveLocationBase(tDirectoryBase);
-  //tLamKchP->SetFitType(kChi2);
-  bool SaveImages = true;
-  bool ApplyMomResCorrection = true;
+
+  bool SaveImages = false;
+  bool ApplyMomResCorrection = false;
   bool ApplyNonFlatBackgroundCorrection = true;
+  TString tSaveNameModifier = "";
+  if(ApplyMomResCorrection) tSaveNameModifier += TString("_MomResCrctn");
+  if(ApplyNonFlatBackgroundCorrection) tSaveNameModifier += TString("_NonFlatBgdCrctn");
+  FitGenerator* tLamKchP = new FitGenerator(tFileLocationBase,tFileLocationBaseMC,tAnType,tAnRunType,tNPartialAnalysis,tCentType,tGenType,tShareLambdaParams);
+  tLamKchP->SetSaveLocationBase(tDirectoryBase,tSaveNameModifier);
+  //tLamKchP->SetFitType(kChi2);
+
 
 //  TCanvas* tKStarCan = tLamKchP->DrawKStarCfs();
 
@@ -39,7 +44,7 @@ int main(int argc, char **argv)
 //           the matrix from the central analyses
   tLamKchP->DoFit(ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection);
   TCanvas* tKStarwFitsCan = tLamKchP->DrawKStarCfswFits(ApplyMomResCorrection,ApplyNonFlatBackgroundCorrection,SaveImages);
-
+//  TCanvas* tKStarCfs = tLamKchP->DrawKStarCfs(SaveImages);
 
 
 

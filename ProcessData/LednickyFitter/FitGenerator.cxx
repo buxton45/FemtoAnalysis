@@ -30,6 +30,7 @@ void GlobalFCN(Int_t &npar, Double_t *gin, Double_t &f, Double_t *par, Int_t ifl
 //________________________________________________________________________________________________________________
 FitGenerator::FitGenerator(TString aFileLocationBase, TString aFileLocationBaseMC, AnalysisType aAnalysisType, AnalysisRunType aRunType, int aNPartialAnalysis, CentralityType aCentralityType, FitGeneratorType aGeneratorType, bool aShareLambdaParams, TString aDirNameModifier) :
   fSaveLocationBase(""),
+  fSaveNameModifier(""),
   fContainsMC(false),
   fNAnalyses(0),
   fGeneratorType(aGeneratorType),
@@ -406,12 +407,12 @@ void FitGenerator::DrawSingleKStarCfwFit(TPad* aPad, int aPairAnNumber, double a
   line->Draw();
 }
 
-
+/*
 //________________________________________________________________________________________________________________
 TCanvas* FitGenerator::DrawKStarCfs()
 {
-  TString tCanvasName = TString("canKStarCf") + TString(cAnalysisBaseTags[fPairType]) + TString("&") 
-                        + TString(cAnalysisBaseTags[fConjPairType]) + TString(cCentralityTags[fCentralityType]);
+  TString tCanvasName = TString("canKStarCf") + TString(cAnalysisBaseTags[fPairType]) + TString("wConj") 
+                        + TString(cCentralityTags[fCentralityType]);
 
   TCanvas* tReturnCan = new TCanvas(tCanvasName,tCanvasName);
   if(fNAnalyses == 6) tReturnCan->Divide(2,3);
@@ -426,6 +427,71 @@ TCanvas* FitGenerator::DrawKStarCfs()
 
   return tReturnCan;
 }
+*/
+
+//________________________________________________________________________________________________________________
+TCanvas* FitGenerator::DrawKStarCfs(bool aSaveImage)
+{
+  TString tCanvasName = TString("canKStarCfs") + TString(cAnalysisBaseTags[fPairType]) + TString("wConj") 
+                      + TString(cCentralityTags[fCentralityType]);
+
+  int tNx=0, tNy=0;
+  if(fNAnalyses == 6) {tNx=2; tNy=3;}
+  else if(fNAnalyses == 2 || fNAnalyses==1) {tNx=fNAnalyses; tNy=1;}
+  else if(fNAnalyses == 3) {tNx=1; tNy=fNAnalyses;}
+  else assert(0);
+
+  double tXLow = -0.02;
+  double tXHigh = 0.99;
+  double tYLow = 0.89;
+  double tYHigh = 1.04;
+  CanvasPartition* tCanPart = new CanvasPartition(tCanvasName,tNx,tNy,tXLow,tXHigh,tYLow,tYHigh,0.12,0.05,0.13,0.05);
+
+  assert(tNx*tNy == fNAnalyses);
+  int tAnalysisNumber=0;
+
+  int tMarkerStyle = 20;
+  int tMarkerColor = 1;
+  double tMarkerSize = 0.75;
+
+  if(fPairType==kLamK0 || fPairType==kALamK0) tMarkerColor = 1;
+  else if(fPairType==kLamKchP || fPairType==kALamKchM) tMarkerColor = 2;
+  else if(fPairType==kLamKchM || fPairType==kALamKchP) tMarkerColor = 4;
+  else tMarkerColor=1;
+
+  for(int j=0; j<tNy; j++)
+  {
+    for(int i=0; i<tNx; i++)
+    {
+      tAnalysisNumber = j*tNx + i;
+
+      tCanPart->AddGraph(i,j,(TH1*)fSharedAn->GetKStarCfHeavy(tAnalysisNumber)->GetHeavyCfClone(),"",tMarkerStyle,tMarkerColor,tMarkerSize);
+
+      TString tTextAnType = TString(cAnalysisRootTags[fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetAnalysisType()]);
+      TPaveText* tAnTypeName = tCanPart->SetupTPaveText(tTextAnType,i,j,0.8,0.85);
+      tCanPart->AddPadPaveText(tAnTypeName,i,j);
+
+      TString tTextCentrality = TString(cPrettyCentralityTags[fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetCentralityType()]);
+      TPaveText* tCentralityName = tCanPart->SetupTPaveText(tTextCentrality,i,j,0.05,0.85);
+      tCanPart->AddPadPaveText(tCentralityName,i,j);
+    }
+  }
+
+  tCanPart->SetDrawUnityLine(true);
+  tCanPart->DrawAll();
+  tCanPart->DrawXaxisTitle("k* (GeV/c)");
+  tCanPart->DrawYaxisTitle("C(k*)",43,25,0.05,0.75);
+
+  if(aSaveImage)
+  {
+    ExistsSaveLocationBase();
+    tCanPart->GetCanvas()->SaveAs(fSaveLocationBase+tCanvasName+fSaveNameModifier+TString(".pdf"));
+  }
+
+  return tCanPart->GetCanvas();
+}
+
+
 /*
 //________________________________________________________________________________________________________________
 TCanvas* FitGenerator::DrawKStarCfswFits()
@@ -451,8 +517,8 @@ TCanvas* FitGenerator::DrawKStarCfswFits()
 //________________________________________________________________________________________________________________
 TCanvas* FitGenerator::DrawKStarCfswFits(bool aMomResCorrectFit, bool aNoFlatBgdCorrectFit, bool aSaveImage)
 {
-  TString tCanvasName = TString("canKStarCfwFits") + TString(cAnalysisBaseTags[fPairType]) + TString("And") 
-                        + TString(cAnalysisBaseTags[fConjPairType]) + TString(cCentralityTags[fCentralityType]);
+  TString tCanvasName = TString("canKStarCfwFits") + TString(cAnalysisBaseTags[fPairType]) + TString("wConj") 
+                      + TString(cCentralityTags[fCentralityType]);
 
   int tNx=0, tNy=0;
   if(fNAnalyses == 6) {tNx=2; tNy=3;}
@@ -500,7 +566,7 @@ TCanvas* FitGenerator::DrawKStarCfswFits(bool aMomResCorrectFit, bool aNoFlatBgd
   if(aSaveImage)
   {
     ExistsSaveLocationBase();
-    tCanPart->GetCanvas()->SaveAs(fSaveLocationBase+tCanvasName+TString(".pdf"));
+    tCanPart->GetCanvas()->SaveAs(fSaveLocationBase+tCanvasName+fSaveNameModifier+TString(".pdf"));
   }
 
   return tCanPart->GetCanvas();
@@ -1003,6 +1069,14 @@ void FitGenerator::DoFit(bool aApplyMomResCorrection, bool aApplyNonFlatBackgrou
   GlobalFitter = fLednickyFitter;
 
   fLednickyFitter->DoFit();
+}
+
+
+//________________________________________________________________________________________________________________
+void FitGenerator::SetSaveLocationBase(TString aBase, TString aSaveNameModifier)
+{
+  fSaveLocationBase=aBase;
+  if(!aSaveNameModifier.IsNull()) fSaveNameModifier = aSaveNameModifier;
 }
 
 //________________________________________________________________________________________________________________

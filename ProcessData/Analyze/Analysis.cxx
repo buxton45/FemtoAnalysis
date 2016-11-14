@@ -517,18 +517,24 @@ void Analysis::DrawKStarHeavyCf(TPad* aPad, int aMarkerColor, TString aOption, i
 
   TH1* tCfToDraw = fKStarHeavyCf->GetHeavyCf();
 
+  double tXmin = 0.;
+  double tXmax = 0.5;
+
+  double tYmin = 0.82;
+  double tYmax = 1.02;
+
   TAxis *xax1 = tCfToDraw->GetXaxis();
     xax1->SetTitle("k* (GeV/c)");
     xax1->SetTitleSize(0.05);
     xax1->SetTitleOffset(1.0);
     //xax1->CenterTitle();
-    xax1->SetRangeUser(0.,0.5);
+    xax1->SetRangeUser(tXmin,tXmax);
   TAxis *yax1 = tCfToDraw->GetYaxis();
-    yax1->SetRangeUser(0.9,1.1);
+    yax1->SetRangeUser(tYmin,tYmax);
     yax1->SetTitle("C(k*)");
-    yax1->SetTitleSize(0.05);
-    yax1->SetTitleOffset(1.0);
-    yax1->CenterTitle();
+    yax1->SetTitleSize(0.04);
+    yax1->SetTitleOffset(1.2);
+    //yax1->CenterTitle();
 
 
   //------------------------------------------------------
@@ -543,7 +549,7 @@ void Analysis::DrawKStarHeavyCf(TPad* aPad, int aMarkerColor, TString aOption, i
 
 
   //------------------------------------------------------
-  TLine *line = new TLine(0,1,1,1);
+  TLine *line = new TLine(tXmin,1,tXmax,1);
   line->SetLineColor(14);
 
   tCfToDraw->Draw(aOption);

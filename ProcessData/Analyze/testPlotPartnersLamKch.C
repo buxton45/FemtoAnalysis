@@ -19,7 +19,7 @@ int main(int argc, char **argv)
   PlotPartnersLamKch* tLamKch0010 = new PlotPartnersLamKch(FileLocationBase,FileLocationBaseMC,kLamKchP,k0010);
 */
 
-  TString tResultsDate_LamKch = "20161102";
+  TString tResultsDate_LamKch = "20161027";
   TString tDirectoryBase_LamKch = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_%s/",tResultsDate_LamKch.Data());
 
   //TString tDirectoryBase_LamKch = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_" + tResultsDate_LamKch + "/";
@@ -44,7 +44,7 @@ int main(int argc, char **argv)
 
 //-------------------------------------------------------------------------------
 
-  TString tResultsDate_LamK0 = "20161102";
+  TString tResultsDate_LamK0 = "20161027";
   TString tDirectoryBase_LamK0 = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamK0_" + tResultsDate_LamK0 + "/";
   TString tFileLocationBase_LamK0 = tDirectoryBase_LamK0+"Results_cLamK0_" + tResultsDate_LamK0;
   TString tFileLocationBaseMC_LamK0 = tDirectoryBase_LamK0+"Results_cLamK0MC_" + tResultsDate_LamK0;
@@ -54,7 +54,7 @@ int main(int argc, char **argv)
   bool SaveImages_LamK0 = false;
 
   TCanvas* tCanPur_LamK0 = tLamK00010->DrawPurity(SaveImages_LamK0);
-  TCanvas* tCanKStarCf_LamK0 = tLamK00010->DrawKStarCfs(SaveImages_LamK0);
+  TCanvas* tCanKStarCf_LamK0 = tLamK00010->DrawKStarCfs(SaveImages_LamKch);
   TCanvas* tCanKStarTrueVsRec_LamK0 = tLamK00010->DrawKStarTrueVsRec(kMixed,SaveImages_LamK0);
 
   TCanvas* tCanAvgSepCfs_LamK0 = tLamK00010->DrawAvgSepCfs(SaveImages_LamK0);
