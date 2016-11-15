@@ -130,7 +130,7 @@ int main(int argc, char **argv)
   TString tGeneralAnTypeName = "cLamcKch";
   bool bWriteToFile = true;
 
-  SystematicsFileInfo tFileInfo = GetFileInfo(4);
+  SystematicsFileInfo tFileInfo = GetFileInfo(12);
     TString tResultsDate = tFileInfo.resultsDate;
     TString tDirNameModifierBase1 = tFileInfo.dirNameModifierBase1;
     vector<double> tModifierValues1 = tFileInfo.modifierValues1;
@@ -176,7 +176,7 @@ int main(int argc, char **argv)
       if(bWriteToFile) tSysAn->GetAllFits(tOutputFile);
       else tSysAn->GetAllFits();
     //tSysAn->DrawAll();
-    tSysAn->DrawAllDiffs(true,false);
+    //tSysAn->DrawAllDiffs(true,false);
     }
   }
 
