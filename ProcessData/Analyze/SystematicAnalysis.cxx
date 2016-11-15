@@ -277,7 +277,7 @@ void SystematicAnalysis::GetAllFits(ostream &aOut, double aNSigma)
       if(TMath::Abs(tFit->GetParameter(0)/tFit->GetParError(0)) > aNSigma) tIsSignificant = true;
       for(int iPar=0; iPar<tFit->GetNpar(); iPar++)
       {
-        aOut << "par[" << iPar << "]: Value = " << tFit->GetParameter(iPar) << "\t Error = " << tFit->GetParError(iPar) << endl;
+        aOut << std::scientific << "par[" << iPar << "]: Value = " << tFit->GetParameter(iPar) << "\t Error = " << tFit->GetParError(iPar) << endl;
       }
       aOut << "Is Signficant? " << tIsSignificant << endl;
 

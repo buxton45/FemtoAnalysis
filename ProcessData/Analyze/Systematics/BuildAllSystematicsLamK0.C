@@ -176,7 +176,7 @@ int main(int argc, char **argv)
   TString tGeneralAnTypeName = "cLamK0";
   bool bWriteToFile = true;
 
-  SystematicsFileInfo tFileInfo = GetFileInfo(17);
+  SystematicsFileInfo tFileInfo = GetFileInfo(3);
     TString tResultsDate = tFileInfo.resultsDate;
     TString tDirNameModifierBase1 = tFileInfo.dirNameModifierBase1;
     vector<double> tModifierValues1 = tFileInfo.modifierValues1;
@@ -196,7 +196,7 @@ int main(int argc, char **argv)
   }
   tDirectoryBase += TString::Format("%s/",tResultsDate.Data());
 
-  TString tOutputFileName = tDirectoryBase + TString("AllPValues.txt");
+  TString tOutputFileName = tDirectoryBase + TString("AllFitValues.txt");
   std::ofstream tOutputFile;
   if(bWriteToFile) tOutputFile.open(tOutputFileName);
 
@@ -218,10 +218,11 @@ int main(int argc, char **argv)
     for(int iCent=k0010; iCent<tMaxCentType; iCent++)
     {
       SystematicAnalysis* tSysAn = new SystematicAnalysis(tFileLocationBase, static_cast<AnalysisType>(iAnType), static_cast<CentralityType>(iCent), tDirNameModifierBase1, tModifierValues1, tDirNameModifierBase2, tModifierValues2);
-      if(bWriteToFile) tSysAn->GetAllPValues(tOutputFile);
-      else tSysAn->GetAllPValues();
+      tSysAn->SetSaveDirectory(tDirectoryBase);
+      if(bWriteToFile) tSysAn->GetAllFits(tOutputFile);
+      else tSysAn->GetAllFits();
     //tSysAn->DrawAll();
-    //tSysAn->DrawAllDiffs();
+    tSysAn->DrawAllDiffs(true,false);
     }
   }
 
