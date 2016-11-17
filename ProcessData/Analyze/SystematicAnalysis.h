@@ -35,15 +35,15 @@ public:
   int Factorial(int aInput);
   int nChoosek(int aN, int aK);
 
-  TH1* GetDiffHist(TH1* aHist1, TH1* aHist2);
+  static TH1* GetDiffHist(TH1* aHist1, TH1* aHist2);
   double GetPValueCorrelated(TH1* aHist1, TH1* aHist2);
   void GetAllPValues(ostream &aOut=std::cout);
 
-  TF1* FitDiffHist(TH1* aDiffHist, DiffHistFitType aFitType=kExpDecay);
-  void GetAllFits(ostream &aOut=std::cout, double aNSigma=2.);
+  static TF1* FitDiffHist(TH1* aDiffHist, DiffHistFitType aFitType=kExpDecay, bool aFixOffsetParam=false);
+  void GetAllFits(DiffHistFitType aFitType=kExpDecay, bool aFixOffsetParam=false, ostream &aOut=std::cout, double aNSigma=2.);
 
   void DrawAll();
-  void DrawAllDiffs(bool aDrawFits=false, bool aSaveImages=false);
+  void DrawAllDiffs(bool aDrawFits=false, DiffHistFitType aFitType=kExpDecay, bool aFixOffsetParam=false, bool aSaveImages=false);
 
 
   void SetSaveDirectory(TString aDirectory);

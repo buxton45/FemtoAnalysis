@@ -202,10 +202,10 @@ void SystematicAnalysis::GetAllPValues(ostream &aOut)
 }
 
 //________________________________________________________________________________________________________________
-TF1* SystematicAnalysis::FitDiffHist(TH1* aDiffHist, DiffHistFitType aFitType)
+TF1* SystematicAnalysis::FitDiffHist(TH1* aDiffHist, DiffHistFitType aFitType, bool aFixOffsetParam)
 {
   double tMinFit = 0.;
-  double tMaxFit = 1.;
+  double tMaxFit = 1.0;
   TF1* tReturnFit;
   TString tFitName = "tReturnFit";
   if(aFitType == kExpDecay)
@@ -213,12 +213,14 @@ TF1* SystematicAnalysis::FitDiffHist(TH1* aDiffHist, DiffHistFitType aFitType)
     tReturnFit = new TF1(tFitName,ExponentialDecay,0.,1.,3);
     tReturnFit->SetParameter(0,aDiffHist->GetBinContent(1));
     tReturnFit->SetParameter(2,0.);
+    if(aFixOffsetParam) tReturnFit->FixParameter(2,0.);
   }
   else
   {
     tReturnFit = new TF1(tFitName,DampedHarmonicOscillator,0.,1.,5);
     tReturnFit->SetParameter(0,aDiffHist->GetBinContent(1));
     tReturnFit->SetParameter(4,0.);
+    if(aFixOffsetParam) tReturnFit->FixParameter(4,0.);
   }
 
   aDiffHist->Fit(tFitName,"0q","",tMinFit,tMaxFit);
@@ -226,11 +228,13 @@ TF1* SystematicAnalysis::FitDiffHist(TH1* aDiffHist, DiffHistFitType aFitType)
 }
 
 //________________________________________________________________________________________________________________
-void SystematicAnalysis::GetAllFits(ostream &aOut, double aNSigma)
+void SystematicAnalysis::GetAllFits(DiffHistFitType aFitType, bool aFixOffsetParam, ostream &aOut, double aNSigma)
 {
   aOut << "______________________________________________________________________________" << endl;
   aOut << "AnalysisType = " << cAnalysisBaseTags[fAnalyses[0].GetAnalysisType()] << endl;
   aOut << "CentralityType = " << cPrettyCentralityTags[fAnalyses[0].GetCentralityType()] << endl << endl;
+
+const char* const cNoYes[2] = {"No","Yes"};
 
   TF1* tFit;
   bool tIsSignificant = false;
@@ -244,7 +248,7 @@ void SystematicAnalysis::GetAllFits(ostream &aOut, double aNSigma)
       TH1* tHist1 = fAnalyses[i].GetKStarHeavyCf()->GetHeavyCfClone();
       TH1* tHist2 = fAnalyses[j].GetKStarHeavyCf()->GetHeavyCfClone();
       TH1* tDiffHist = GetDiffHist(tHist1,tHist2);
-      tFit = FitDiffHist(tDiffHist);
+      tFit = FitDiffHist(tDiffHist,aFitType,aFixOffsetParam);
 
       tCutVal1a = fDirNameModifierBase1;
         tCutVal1a.Remove(TString::kBoth,'_');
@@ -275,11 +279,16 @@ void SystematicAnalysis::GetAllFits(ostream &aOut, double aNSigma)
       aOut << tCutVal1Tot << endl;
       aOut << tCutVal2Tot << endl;
       if(TMath::Abs(tFit->GetParameter(0)/tFit->GetParError(0)) > aNSigma) tIsSignificant = true;
+      else if(!aFixOffsetParam && TMath::Abs(tFit->GetParameter(tFit->GetNpar()-1)/tFit->GetParError(tFit->GetNpar()-1)) > aNSigma) tIsSignificant = true;
       else tIsSignificant = false;
+
+      aOut << std::scientific << std::setprecision(3) << "\tpar[0]: " << tFit->GetParameter(0) << " & " << tFit->GetParError(0) << " & " << cNoYes[tIsSignificant] << endl;
       for(int iPar=0; iPar<tFit->GetNpar(); iPar++)
       {
-        aOut << std::scientific << "par[" << iPar << "]: Value = " << tFit->GetParameter(iPar) << "\t Error = " << tFit->GetParError(iPar) << endl;
+        if(iPar==0) aOut << "\t";
+        aOut << std::scientific << std::setprecision(3) << tFit->GetParameter(iPar) << " $\\pm$ " << tFit->GetParError(iPar) << " & ";
       }
+      aOut << cNoYes[tIsSignificant] << endl;
       aOut << "Is Signficant? " << tIsSignificant << endl;
 
       if(TMath::Abs(tFit->GetParameter(tFit->GetNpar())/tFit->GetParError(tFit->GetNpar())) > aNSigma)
@@ -312,7 +321,7 @@ void SystematicAnalysis::DrawAll()
 }
 
 //________________________________________________________________________________________________________________
-void SystematicAnalysis::DrawAllDiffs(bool aDrawFits, bool aSaveImages)
+void SystematicAnalysis::DrawAllDiffs(bool aDrawFits, DiffHistFitType aFitType, bool aFixOffsetParam, bool aSaveImages)
 {
   gStyle->SetOptFit();
 
@@ -335,7 +344,7 @@ void SystematicAnalysis::DrawAllDiffs(bool aDrawFits, bool aSaveImages)
 
       if(aDrawFits)
       {
-        TF1* tFit = FitDiffHist(tDiffHist);
+        TF1* tFit = FitDiffHist(tDiffHist,aFitType,aFixOffsetParam);
         tFit->SetLineColor(2);
         tFit->Draw("same");
       }

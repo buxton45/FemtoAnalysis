@@ -175,6 +175,8 @@ int main(int argc, char **argv)
 //-----------------------------------------------------------------------------
   TString tGeneralAnTypeName = "cLamK0";
   bool bWriteToFile = true;
+  SystematicAnalysis::DiffHistFitType tFitType = SystematicAnalysis::kExpDecay;
+  bool tFixOffsetParam = false;  
 
   SystematicsFileInfo tFileInfo = GetFileInfo(17);
     TString tResultsDate = tFileInfo.resultsDate;
@@ -219,10 +221,10 @@ int main(int argc, char **argv)
     {
       SystematicAnalysis* tSysAn = new SystematicAnalysis(tFileLocationBase, static_cast<AnalysisType>(iAnType), static_cast<CentralityType>(iCent), tDirNameModifierBase1, tModifierValues1, tDirNameModifierBase2, tModifierValues2);
       tSysAn->SetSaveDirectory(tDirectoryBase);
-      if(bWriteToFile) tSysAn->GetAllFits(tOutputFile);
-      else tSysAn->GetAllFits();
+      if(bWriteToFile) tSysAn->GetAllFits(tFitType,tFixOffsetParam,tOutputFile);
+      else tSysAn->GetAllFits(tFitType,tFixOffsetParam);
     //tSysAn->DrawAll();
-    //tSysAn->DrawAllDiffs(true,false);
+    //tSysAn->DrawAllDiffs(true,tFitType,tFixOffsetParam,false);
     }
   }
 
