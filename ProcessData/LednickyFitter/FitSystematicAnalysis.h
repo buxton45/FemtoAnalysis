@@ -26,9 +26,12 @@ public:
                    CentralityType aCentralityType=kMB, FitGeneratorType aGeneratorType=kPairwConj, bool aShareLambdaParams=false);
 
   virtual ~FitSystematicAnalysis();
+  TString GetCutValues(int aIndex);
+  void OutputCutValues(int aIndex, ostream &aOut=std::cout);
 
 
-  void RunAllFits(bool aSave=false);
+  void PrintText2dVec(vector<vector<TString> > &a2dVec, ostream &aOut=std::cout);
+  void RunAllFits(bool aSaveImages=false, ostream &aOut=std::cout);
 
   //inline
   void SetApplyNonFlatBackgroundCorrection(bool aApply);

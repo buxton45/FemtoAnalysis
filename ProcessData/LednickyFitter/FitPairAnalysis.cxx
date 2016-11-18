@@ -425,6 +425,30 @@ void FitPairAnalysis::ShareFitParameters()
   }
 
 }
+
+
+//________________________________________________________________________________________________________________
+void FitPairAnalysis::WriteFitParameters(ostream &aOut)
+{
+  for(unsigned int i=0; i<fFitParameters.size(); i++)
+  {
+    aOut << fFitParameters[i]->GetName() << ": " << fFitParameters[i]->GetFitValue() << " +- " << fFitParameters[i]->GetFitValueError() << endl;
+  }
+}
+
+//________________________________________________________________________________________________________________
+vector<TString> FitPairAnalysis::GetFitParametersVector()
+{
+  vector<TString> tReturnVec(0);
+  TString tLine;
+  for(unsigned int i=0; i<fFitParameters.size(); i++)
+  {
+    tLine = TString::Format("%s: %f +- %f",fFitParameters[i]->GetName().Data(),fFitParameters[i]->GetFitValue(),fFitParameters[i]->GetFitValueError());
+    tReturnVec.push_back(tLine);
+  }
+  return tReturnVec;
+}
+
 /*
 //________________________________________________________________________________________________________________
 void FitPairAnalysis::SetFitParameter(FitParameter* aParam)

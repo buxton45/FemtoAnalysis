@@ -65,6 +65,8 @@ public:
 
   void CreateFitNormParameters();
   void ShareFitParameters();
+  void WriteFitParameters(ostream &aOut=std::cout);
+  vector<TString> GetFitParametersVector();
 
   void SetFitParameter(FitParameter* aParam);
 

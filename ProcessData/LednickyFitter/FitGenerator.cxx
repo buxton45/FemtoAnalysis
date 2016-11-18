@@ -1071,6 +1071,40 @@ void FitGenerator::DoFit(bool aApplyMomResCorrection, bool aApplyNonFlatBackgrou
   fLednickyFitter->DoFit();
 }
 
+//________________________________________________________________________________________________________________
+void FitGenerator::WriteAllFitParameters(ostream &aOut)
+{
+  for(int iAn=0; iAn<fSharedAn->GetNFitPairAnalysis(); iAn++)
+  {
+    aOut << "______________________________" << endl;
+    aOut << "AnalysisType = " << cAnalysisBaseTags[fSharedAn->GetFitPairAnalysis(iAn)->GetAnalysisType()] << endl;
+    aOut << "CentralityType = " << cPrettyCentralityTags[fSharedAn->GetFitPairAnalysis(iAn)->GetCentralityType()] << endl << endl;
+    fSharedAn->GetFitPairAnalysis(iAn)->WriteFitParameters(aOut);
+    aOut << endl;
+  }
+}
+
+//________________________________________________________________________________________________________________
+vector<TString> FitGenerator::GetAllFitParametersVector()
+{
+  vector<TString> tReturnVec(0);
+
+  for(int iAn=0; iAn<fSharedAn->GetNFitPairAnalysis(); iAn++)
+  {
+    tReturnVec.push_back("______________________________");
+    TString tAnLine = TString("AnalysisType = ") + TString(cAnalysisBaseTags[fSharedAn->GetFitPairAnalysis(iAn)->GetAnalysisType()]);
+      tReturnVec.push_back(tAnLine);
+    TString tCentLine = TString("CentralityType = ") + TString(cPrettyCentralityTags[fSharedAn->GetFitPairAnalysis(iAn)->GetCentralityType()]);
+      tReturnVec.push_back(tCentLine);
+    tReturnVec.push_back(TString(""));
+
+    vector<TString> tParamVec = fSharedAn->GetFitPairAnalysis(iAn)->GetFitParametersVector();
+    for(unsigned int iPar=0; iPar<tParamVec.size(); iPar++) tReturnVec.push_back(tParamVec[iPar]);
+    tReturnVec.push_back(TString(""));
+  }
+  return tReturnVec;
+}
+
 
 //________________________________________________________________________________________________________________
 void FitGenerator::SetSaveLocationBase(TString aBase, TString aSaveNameModifier)

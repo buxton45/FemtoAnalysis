@@ -111,12 +111,15 @@ int main(int argc, char **argv)
 //-----------------------------------------------------------------------------
   TString tGeneralAnTypeName = "cLamcKch";
   AnalysisType tAnType = kLamKchM;
-  CentralityType tCentalityType = kMB;
+  CentralityType tCentralityType = kMB;
   FitGeneratorType tFitGeneratorType = kPairwConj;
   bool tShareLambdaParameters = false;
 
-  bool ApplyMomResCorrection = true;
+  bool ApplyMomResCorrection = false;
   bool ApplyNonFlatBackgroundCorrection = true;
+
+  bool bWriteToFile = true;
+  bool bSaveImages = true;
 
   SystematicsFileInfo tFileInfo = GetFileInfo(5);
     TString tResultsDate = tFileInfo.resultsDate;
@@ -147,12 +150,21 @@ int main(int argc, char **argv)
   tFileLocationBase += tResultsDate;
   tFileLocationBaseMC += tResultsDate;
 
+  TString tOutputFileName = tDirectoryBase + TString("CfFitValues_") + TString(cAnalysisBaseTags[tAnType]) + TString(cCentralityTags[tCentralityType]);
+  if(ApplyMomResCorrection) tOutputFileName += TString("_MomResCrctn");
+  if(ApplyNonFlatBackgroundCorrection) tOutputFileName += TString("_NonFlatBgdCrctn");
+  tOutputFileName += TString(".txt");
+  std::ofstream tOutputFile;
+  if(bWriteToFile) tOutputFile.open(tOutputFileName);
 
-  FitSystematicAnalysis* tFitSysAn = new FitSystematicAnalysis(tFileLocationBase, tFileLocationBaseMC, tAnType, tDirNameModifierBase1, tModifierValues1, tDirNameModifierBase2, tModifierValues2, tCentalityType, tFitGeneratorType, tShareLambdaParameters);
+
+  FitSystematicAnalysis* tFitSysAn = new FitSystematicAnalysis(tFileLocationBase, tFileLocationBaseMC, tAnType, tDirNameModifierBase1, tModifierValues1, tDirNameModifierBase2, tModifierValues2, tCentralityType, tFitGeneratorType, tShareLambdaParameters);
   tFitSysAn->SetSaveDirectory(tDirectoryBase);
   tFitSysAn->SetApplyNonFlatBackgroundCorrection(ApplyNonFlatBackgroundCorrection);
   tFitSysAn->SetApplyMomResCorrection(ApplyMomResCorrection);
-  tFitSysAn->RunAllFits(true);
+  if(bWriteToFile) tFitSysAn->RunAllFits(bSaveImages,tOutputFile);
+  else tFitSysAn->RunAllFits(bSaveImages);
+
 
 cout << "DONE" << endl;
 //-------------------------------------------------------------------------------

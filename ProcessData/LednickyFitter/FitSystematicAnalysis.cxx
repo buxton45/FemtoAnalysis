@@ -74,8 +74,56 @@ FitSystematicAnalysis::~FitSystematicAnalysis()
 }
 
 //________________________________________________________________________________________________________________
-void FitSystematicAnalysis::RunAllFits(bool aSave)
+TString FitSystematicAnalysis::GetCutValues(int aIndex)
 {
+  TString tCutVal1a, tCutVal1b, tCutVal1Tot;
+
+  tCutVal1a = fDirNameModifierBase1;
+    tCutVal1a.Remove(TString::kBoth,'_');
+    tCutVal1a += TString::Format(" = %0.6f",fModifierValues1[aIndex]);
+
+  tCutVal1Tot = tCutVal1a;
+
+  if(!fDirNameModifierBase2.IsNull())
+  {
+    tCutVal1b = fDirNameModifierBase2;
+      tCutVal1b.Remove(TString::kBoth,'_');
+      tCutVal1b += TString::Format(" = %0.6f",fModifierValues2[aIndex]);
+
+    tCutVal1Tot += TString::Format(" and %s",tCutVal1b.Data());
+  }
+  return tCutVal1Tot;
+}
+
+
+//________________________________________________________________________________________________________________
+void FitSystematicAnalysis::OutputCutValues(int aIndex, ostream &aOut)
+{
+  aOut << "______________________________________________________________________________" << endl;
+  aOut << GetCutValues(aIndex) << endl;
+}
+
+//________________________________________________________________________________________________________________
+void FitSystematicAnalysis::PrintText2dVec(vector<vector<TString> > &a2dVec, ostream &aOut)
+{
+  int tNCuts = (int)a2dVec.size();
+  for(unsigned int i=1; i<a2dVec.size(); i++) assert(a2dVec[i-1].size() == a2dVec[i].size());
+  int tSize = a2dVec[0].size();
+  for(int iLineNumber=0; iLineNumber<tSize; iLineNumber++)
+  {
+    for(int iCut=0; iCut<tNCuts; iCut++)
+    {
+      aOut << std::setw(35) << TString(a2dVec[iCut][iLineNumber]) << " | ";
+    }
+    aOut << endl;
+  }
+}
+
+//________________________________________________________________________________________________________________
+void FitSystematicAnalysis::RunAllFits(bool aSave, ostream &aOut)
+{
+  vector<vector<TString> > tText2dVector(0);
+
   for(unsigned int i=0; i<fModifierValues1.size(); i++)
   {
     TString tDirNameModifier = fDirNameModifierBase1 + TString::Format("%0.6f",fModifierValues1[i]);
@@ -85,6 +133,13 @@ void FitSystematicAnalysis::RunAllFits(bool aSave)
 
     tFitGenerator->DoFit(fApplyMomResCorrection,fApplyNonFlatBackgroundCorrection);
 
+//    OutputCutValues(i,aOut);
+//    tFitGenerator->WriteAllFitParameters(aOut);
+    TString tCutValue = GetCutValues(i);
+    vector<TString> tFitParamsVec = tFitGenerator->GetAllFitParametersVector();
+    tFitParamsVec.insert(tFitParamsVec.begin(),tCutValue);
+    tText2dVector.push_back(tFitParamsVec);
+
     TCanvas* tKStarwFitsCan = tFitGenerator->DrawKStarCfswFits(fApplyMomResCorrection,fApplyNonFlatBackgroundCorrection,false);
     if(aSave)
     {
@@ -93,11 +148,16 @@ void FitSystematicAnalysis::RunAllFits(bool aSave)
       TString tDirNameModifier = fDirNameModifierBase1 + TString::Format("%0.6f",fModifierValues1[i]);
       if(!fDirNameModifierBase2.IsNull()) tDirNameModifier += fDirNameModifierBase2 + TString::Format("%0.6f",fModifierValues2[i]);
 
-      tSaveName += tDirNameModifier + TString(".pdf");
+      tSaveName += tDirNameModifier;
+      if(fApplyMomResCorrection) tSaveName += TString("_MomResCrctn");
+      if(fApplyNonFlatBackgroundCorrection) tSaveName += TString("_NonFlatBgdCrctn");
+      tSaveName += TString(".pdf");
       tKStarwFitsCan->SaveAs(tSaveName);
     }
 
   }
+
+  PrintText2dVec(tText2dVector,aOut);
 }
 
 

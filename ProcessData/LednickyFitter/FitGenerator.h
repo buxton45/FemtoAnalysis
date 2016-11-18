@@ -7,6 +7,9 @@
 #ifndef FITGENERATOR_H
 #define FITGENERATOR_H
 
+#include <iostream>
+#include <fstream>
+#include <iomanip>
 
 #include "FitSharedAnalyses.h"
 #include "LednickyFitter.h"
@@ -52,6 +55,8 @@ public:
 
   void SetAllParameters();
   void DoFit(bool aApplyMomResCorrection=false, bool aApplyNonFlatBackgroundCorrection=false);
+  void WriteAllFitParameters(ostream &aOut=std::cout);
+  vector<TString> GetAllFitParametersVector();
 
   void SetSaveLocationBase(TString aBase, TString aSaveNameModifier="");
   void ExistsSaveLocationBase();
