@@ -875,7 +875,7 @@ TCanvas* PlotPartnersLamK0::DrawMassAssumingAntiLambdaHypothesis(AnalysisType aA
     tLeg1->AddEntry(tHistToDraw,tLegendEntries[i],"lp");
     TString tLegModifier = "";
     if(tHistToDraw->Integral() < 100) tLegModifier = "/N_{Ev}";
-    tLeg1->AddEntry((TObject*)0, TString::Format("     N_{pass}%s = %0.4e",tLegModifier.Data(),tHistToDraw->Integral()), "");
+    tLeg1->AddEntry((TObject*)0, TString::Format("     N_{pass}%s = %0.4f",tLegModifier.Data(),tHistToDraw->Integral()), "");
     tLeg1->AddEntry((TObject*)0, TString::Format("     Purity = %0.4f",aPurityValues[i]), "");
   }
   if(bDrawFirstTwice) ((TH1*)tHists->At(0))->DrawCopy("same");

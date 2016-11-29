@@ -56,7 +56,7 @@ int main(int argc, char **argv)
   double tPurity_LamKch_NoMisIDCut = tLamKch_NoMisIDCut->GetPurity(tAnTypeLamKch,tPurityLamTypeLamKch);
 
   TString tResultsDate_LamKch_MisIDCut_MinvCut_NoMinvComp = "20161025";
-  TString tLegendEntry_LamKch_MisIDCut_MinvCut_NoMinvComp = "MisID_M_{inv}Cut_NoM_{inv}Comp";
+  TString tLegendEntry_LamKch_MisIDCut_MinvCut_NoMinvComp = /*"MisID_M_{inv}Cut_NoM_{inv}Comp"*/"MisID_NoM_{inv}Comp";
   TString tDirectoryBase_LamKch_MisIDCut_MinvCut_NoMinvComp = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_%s/",tResultsDate_LamKch_MisIDCut_MinvCut_NoMinvComp.Data());
   TString tFileLocationBase_LamKch_MisIDCut_MinvCut_NoMinvComp = tDirectoryBase_LamKch_MisIDCut_MinvCut_NoMinvComp+"Results_cLamcKch_"+tResultsDate_LamKch_MisIDCut_MinvCut_NoMinvComp;
   TString tFileLocationBaseMC_LamKch_MisIDCut_MinvCut_NoMinvComp = tDirectoryBase_LamKch_MisIDCut_MinvCut_NoMinvComp+"Results_cLamcKchMC_"+tResultsDate_LamKch_MisIDCut_MinvCut_NoMinvComp;
@@ -67,7 +67,7 @@ int main(int argc, char **argv)
   double tPurity_LamKch_MisIDCut_MinvCut_NoMinvComp = tLamKch_MisIDCut_MinvCut_NoMinvComp->GetPurity(tAnTypeLamKch,tPurityLamTypeLamKch);
 
   TString tResultsDate_LamKch_MisIDCut_MinvCut_MinvComp = "20161027";
-  TString tLegendEntry_LamKch_MisIDCut_MinvCut_MinvComp = "MisID_M_{inv}Cut_M_{inv}Comp";
+  TString tLegendEntry_LamKch_MisIDCut_MinvCut_MinvComp = /*"MisID_M_{inv}Cut_M_{inv}Comp"*/"MisID_M_{inv}Comp";
   TString tDirectoryBase_LamKch_MisIDCut_MinvCut_MinvComp = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_%s/",tResultsDate_LamKch_MisIDCut_MinvCut_MinvComp.Data());
   TString tFileLocationBase_LamKch_MisIDCut_MinvCut_MinvComp = tDirectoryBase_LamKch_MisIDCut_MinvCut_MinvComp+"Results_cLamcKch_"+tResultsDate_LamKch_MisIDCut_MinvCut_MinvComp;
   TString tFileLocationBaseMC_LamKch_MisIDCut_MinvCut_MinvComp = tDirectoryBase_LamKch_MisIDCut_MinvCut_MinvComp+"Results_cLamcKchMC_"+tResultsDate_LamKch_MisIDCut_MinvCut_MinvComp;
@@ -76,9 +76,9 @@ int main(int argc, char **argv)
   int tMarkerStyle_LamKch_MisIDCut_MinvCut_MinvComp = 20;
   TH1* tMassAssK0Short_LamKch_MisIDCut_MinvCut_MinvComp = tLamKch_MisIDCut_MinvCut_MinvComp->GetMassAssumingK0ShortHypothesis(tAnTypeLamKch,bNormByEvent,tColor_LamKch_MisIDCut_MinvCut_MinvComp,tMarkerStyle_LamKch_MisIDCut_MinvCut_MinvComp);
   double tPurity_LamKch_MisIDCut_MinvCut_MinvComp = tLamKch_MisIDCut_MinvCut_MinvComp->GetPurity(tAnTypeLamKch,tPurityLamTypeLamKch);
-
+/*
   TString tResultsDate_LamKch_MisIDCut_NoMinvCut_MinvComp = "20161031";
-  TString tLegendEntry_LamKch_MisIDCut_NoMinvCut_MinvComp = "MisID_NoMinvCut_MinvComp";
+  TString tLegendEntry_LamKch_MisIDCut_NoMinvCut_MinvComp = "MisID_NoM_{inv}Cut_M_{inv}Comp";
   TString tDirectoryBase_LamKch_MisIDCut_NoMinvCut_MinvComp = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_%s/",tResultsDate_LamKch_MisIDCut_NoMinvCut_MinvComp.Data());
   TString tFileLocationBase_LamKch_MisIDCut_NoMinvCut_MinvComp = tDirectoryBase_LamKch_MisIDCut_NoMinvCut_MinvComp+"Results_cLamcKch_"+tResultsDate_LamKch_MisIDCut_NoMinvCut_MinvComp;
   TString tFileLocationBaseMC_LamKch_MisIDCut_NoMinvCut_MinvComp = tDirectoryBase_LamKch_MisIDCut_NoMinvCut_MinvComp+"Results_cLamcKchMC_"+tResultsDate_LamKch_MisIDCut_NoMinvCut_MinvComp;
@@ -87,7 +87,7 @@ int main(int argc, char **argv)
   int tMarkerStyle_LamKch_MisIDCut_NoMinvCut_MinvComp = 29;
   TH1* tMassAssK0Short_LamKch_MisIDCut_NoMinvCut_MinvComp = tLamKch_MisIDCut_NoMinvCut_MinvComp->GetMassAssumingK0ShortHypothesis(tAnTypeLamKch,bNormByEvent,tColor_LamKch_MisIDCut_NoMinvCut_MinvComp,tMarkerStyle_LamKch_MisIDCut_NoMinvCut_MinvComp);
   double tPurity_LamKch_MisIDCut_NoMinvCut_MinvComp = tLamKch_MisIDCut_NoMinvCut_MinvComp->GetPurity(tAnTypeLamKch,tPurityLamTypeLamKch);
-
+*/
   TString tResultsDate_LamKch_SimpleMisIDCut = "20161102";
   TString tLegendEntry_LamKch_SimpleMisIDCut = "SimpleMisID";
   TString tDirectoryBase_LamKch_SimpleMisIDCut = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_%s/",tResultsDate_LamKch_SimpleMisIDCut.Data());
@@ -111,11 +111,11 @@ int main(int argc, char **argv)
   tHists_LamKch->Add(tMassAssK0Short_LamKch_MisIDCut_MinvCut_NoMinvComp);
   tLegendEntries_LamKch.push_back(tLegendEntry_LamKch_MisIDCut_MinvCut_NoMinvComp);
   tPurities_LamKch.push_back(tPurity_LamKch_MisIDCut_MinvCut_NoMinvComp);
-
+/*
   tHists_LamKch->Add(tMassAssK0Short_LamKch_MisIDCut_NoMinvCut_MinvComp);
   tLegendEntries_LamKch.push_back(tLegendEntry_LamKch_MisIDCut_NoMinvCut_MinvComp);
   tPurities_LamKch.push_back(tPurity_LamKch_MisIDCut_NoMinvCut_MinvComp);
-
+*/
   tHists_LamKch->Add(tMassAssK0Short_LamKch_SimpleMisIDCut);
   tLegendEntries_LamKch.push_back(tLegendEntry_LamKch_SimpleMisIDCut);
   tPurities_LamKch.push_back(tPurity_LamKch_SimpleMisIDCut);
@@ -149,7 +149,7 @@ int main(int argc, char **argv)
 
 
   TString tResultsDate_LamK0_MisIDCut_MinvCut_NoMinvComp = "20161025";
-  TString tLegendEntry_LamK0_MisIDCut_MinvCut_NoMinvComp = "MisID_M_{inv}Cut_NoM_{inv}Comp";
+  TString tLegendEntry_LamK0_MisIDCut_MinvCut_NoMinvComp = /*"MisID_M_{inv}Cut_NoM_{inv}Comp"*/"MisID_NoM_{inv}Comp";
   TString tDirectoryBase_LamK0_MisIDCut_MinvCut_NoMinvComp = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamK0_%s/",tResultsDate_LamK0_MisIDCut_MinvCut_NoMinvComp.Data());
   TString tFileLocationBase_LamK0_MisIDCut_MinvCut_NoMinvComp = tDirectoryBase_LamK0_MisIDCut_MinvCut_NoMinvComp+"Results_cLamK0_"+tResultsDate_LamK0_MisIDCut_MinvCut_NoMinvComp;
   TString tFileLocationBaseMC_LamK0_MisIDCut_MinvCut_NoMinvComp = tDirectoryBase_LamK0_MisIDCut_MinvCut_NoMinvComp+"Results_cLamK0MC_"+tResultsDate_LamK0_MisIDCut_MinvCut_NoMinvComp;
@@ -163,7 +163,7 @@ int main(int argc, char **argv)
   double tPurityK0_LamK0_MisIDCut_MinvCut_NoMinvComp = tLamK0_MisIDCut_MinvCut_NoMinvComp->GetPurity(tAnTypeLamK0,kK0);
 
   TString tResultsDate_LamK0_MisIDCut_MinvCut_MinvComp = "20161027";
-  TString tLegendEntry_LamK0_MisIDCut_MinvCut_MinvComp = "MisID_M_{inv}Cut_M_{inv}Comp";
+  TString tLegendEntry_LamK0_MisIDCut_MinvCut_MinvComp = /*"MisID_M_{inv}Cut_M_{inv}Comp"*/"MisID_M_{inv}Comp";
   TString tDirectoryBase_LamK0_MisIDCut_MinvCut_MinvComp = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamK0_%s/",tResultsDate_LamK0_MisIDCut_MinvCut_MinvComp.Data());
   TString tFileLocationBase_LamK0_MisIDCut_MinvCut_MinvComp = tDirectoryBase_LamK0_MisIDCut_MinvCut_MinvComp+"Results_cLamK0_"+tResultsDate_LamK0_MisIDCut_MinvCut_MinvComp;
   TString tFileLocationBaseMC_LamK0_MisIDCut_MinvCut_MinvComp = tDirectoryBase_LamK0_MisIDCut_MinvCut_MinvComp+"Results_cLamK0MC_"+tResultsDate_LamK0_MisIDCut_MinvCut_MinvComp;
@@ -175,7 +175,7 @@ int main(int argc, char **argv)
   TH1* tMassAssALam_LamK0_MisIDCut_MinvCut_MinvComp = tLamK0_MisIDCut_MinvCut_MinvComp->GetMassAssumingAntiLambdaHypothesis(tAnTypeLamK0,bNormByEvent,tColor_LamK0_MisIDCut_MinvCut_MinvComp,tMarkerStyle_LamK0_MisIDCut_MinvCut_MinvComp);
   double tPurityLam_LamK0_MisIDCut_MinvCut_MinvComp = tLamK0_MisIDCut_MinvCut_MinvComp->GetPurity(tAnTypeLamK0,tPurityLamTypeLamK0);
   double tPurityK0_LamK0_MisIDCut_MinvCut_MinvComp = tLamK0_MisIDCut_MinvCut_MinvComp->GetPurity(tAnTypeLamK0,kK0);
-
+/*
   TString tResultsDate_LamK0_MisIDCut_NoMinvCut_MinvComp = "20161031";
   TString tLegendEntry_LamK0_MisIDCut_NoMinvCut_MinvComp = "MisID_NoM_{inv}Cut_M_{inv}Comp";
   TString tDirectoryBase_LamK0_MisIDCut_NoMinvCut_MinvComp = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamK0_%s/",tResultsDate_LamK0_MisIDCut_NoMinvCut_MinvComp.Data());
@@ -189,7 +189,7 @@ int main(int argc, char **argv)
   TH1* tMassAssALam_LamK0_MisIDCut_NoMinvCut_MinvComp = tLamK0_MisIDCut_NoMinvCut_MinvComp->GetMassAssumingAntiLambdaHypothesis(tAnTypeLamK0,bNormByEvent,tColor_LamK0_MisIDCut_NoMinvCut_MinvComp,tMarkerStyle_LamK0_MisIDCut_NoMinvCut_MinvComp);
   double tPurityLam_LamK0_MisIDCut_NoMinvCut_MinvComp = tLamK0_MisIDCut_NoMinvCut_MinvComp->GetPurity(tAnTypeLamK0,tPurityLamTypeLamK0);
   double tPurityK0_LamK0_MisIDCut_NoMinvCut_MinvComp = tLamK0_MisIDCut_NoMinvCut_MinvComp->GetPurity(tAnTypeLamK0,kK0);
-
+*/
   TString tResultsDate_LamK0_SimpleMisIDCut = "20161102";
   TString tLegendEntry_LamK0_SimpleMisIDCut = "SimpleMisID";
   TString tDirectoryBase_LamK0_SimpleMisIDCut = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamK0_%s/",tResultsDate_LamK0_SimpleMisIDCut.Data());
@@ -238,7 +238,7 @@ int main(int argc, char **argv)
   tHists_LamK0_MassAssALam->Add(tMassAssALam_LamK0_MisIDCut_MinvCut_NoMinvComp);
     tLegendEntries_LamK0_MassAssALam.push_back(tLegendEntry_LamK0_MisIDCut_MinvCut_NoMinvComp);
     tPurities_LamK0_MassAssALam.push_back(tPurityK0_LamK0_MisIDCut_MinvCut_NoMinvComp);
-
+/*
   tHists_LamK0_MassAssK0->Add(tMassAssK0Short_LamK0_MisIDCut_NoMinvCut_MinvComp);
     tLegendEntries_LamK0_MassAssK0.push_back(tLegendEntry_LamK0_MisIDCut_NoMinvCut_MinvComp);
     tPurities_LamK0_MassAssK0.push_back(tPurityLam_LamK0_MisIDCut_NoMinvCut_MinvComp);
@@ -248,7 +248,7 @@ int main(int argc, char **argv)
   tHists_LamK0_MassAssALam->Add(tMassAssALam_LamK0_MisIDCut_NoMinvCut_MinvComp);
     tLegendEntries_LamK0_MassAssALam.push_back(tLegendEntry_LamK0_MisIDCut_NoMinvCut_MinvComp);
     tPurities_LamK0_MassAssALam.push_back(tPurityK0_LamK0_MisIDCut_NoMinvCut_MinvComp);
-
+*/
   tHists_LamK0_MassAssK0->Add(tMassAssK0Short_LamK0_SimpleMisIDCut);
     tLegendEntries_LamK0_MassAssK0.push_back(tLegendEntry_LamK0_SimpleMisIDCut);
     tPurities_LamK0_MassAssK0.push_back(tPurityLam_LamK0_SimpleMisIDCut);

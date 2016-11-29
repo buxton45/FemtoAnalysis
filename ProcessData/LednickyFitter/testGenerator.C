@@ -26,7 +26,7 @@ int main(int argc, char **argv)
 
 
   bool SaveImages = false;
-  bool ApplyMomResCorrection = false;
+  bool ApplyMomResCorrection = true;
   bool ApplyNonFlatBackgroundCorrection = true;
   TString tSaveNameModifier = "";
   if(ApplyMomResCorrection) tSaveNameModifier += TString("_MomResCrctn");

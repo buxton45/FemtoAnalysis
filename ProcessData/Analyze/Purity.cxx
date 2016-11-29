@@ -227,6 +227,11 @@ void Purity::DrawPurity(TPad *aPad, bool aZoomBg)
 
   if(!aZoomBg)
   {
+    fCombinedPurity->GetXaxis()->SetTitle("M_{inv} (GeV/c^{2})");
+    fCombinedPurity->GetYaxis()->SetTitle("dN/dM_{inv}");
+    fCombinedPurity->SetLabelSize(0.04, "xy");
+    fCombinedPurity->SetTitleSize(0.04, "xy");
+
     double tHistoMaxValue = fCombinedPurity->GetMaximum();
     lROImin = new TLine((*vROI)(0),0,(*vROI)(0),tHistoMaxValue);
     lROImax = new TLine((*vROI)(1),0,(*vROI)(1),tHistoMaxValue);
@@ -240,6 +245,10 @@ void Purity::DrawPurity(TPad *aPad, bool aZoomBg)
 
   if(aZoomBg)
   {
+    fCombinedPurity->GetXaxis()->SetTitle("");
+    fCombinedPurity->GetYaxis()->SetTitle("");
+    fCombinedPurity->SetLabelSize(0.08, "xy");
+
     fCombinedPurity->GetXaxis()->SetRange(fCombinedPurity->FindBin((*vBgFitLow)(0)),fCombinedPurity->FindBin((*vBgFitLow)(1)));
       double tMaxLow = fCombinedPurity->GetMaximum();
       double tMinLow = fCombinedPurity->GetMinimum();
@@ -293,8 +302,6 @@ void Purity::DrawPurity(TPad *aPad, bool aZoomBg)
   gStyle->SetOptStat(0);
   gStyle->SetOptTitle(0);
   gStyle->SetOptFit(0);
-
-  fCombinedPurity->SetLabelSize(0.04, "xy");
 
   fCombinedPurity->DrawCopy("Ehist");
   fitBgd->Draw("same");
