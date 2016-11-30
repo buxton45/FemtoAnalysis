@@ -7,31 +7,26 @@
 The following cuts were used to select good $\Lambda$ ($\bar{\Lambda}$) candidates:
 
 \begin{enumerate}
- \item{Cuts Common to Both Daughters}
+ \item Daughter Particle Cuts
  \begin{enumerate}
-  \item $|\eta| < 0.8$
-  \item SetTPCnclsDaughters(80)
-  \item SetStatusDaughters(AliESDtrack::kTPCrefic)
-  \item SetMaxDcaV0Daughters(0.4)
- \end{enumerate}
-
-
- \item Pion Specific Daughter Cuts
- \begin{enumerate}
-  \item $p_{T} > 0.16$
-  \item DCA to prim vertex $>$ 0.3
- \end{enumerate} 
- 
- \item Proton Specific Daughter Cuts
+  \item{Cuts Common to Both Daughters}
   \begin{enumerate}
-  \item $p_{T} > $
-  \begin{itemize}
-   \item 0.5 ($p$)
-   \item 0.3 ($\bar{p}$)
-  \end{itemize}
+   \item $|\eta| < 0.8$
+   \item SetTPCnclsDaughters(80)
+   \item SetStatusDaughters(AliESDtrack::kTPCrefic)
+   \item SetMaxDcaV0Daughters(0.4)
+  \end{enumerate}
+  \item Pion Specific Daughter Cuts 
+  \begin{enumerate}
+   \item $p_{T} > 0.16$
+   \item DCA to prim vertex $>$ 0.3
+  \end{enumerate}
+  \item Proton Specific Daughter Cuts
+  \begin{enumerate}
+   \item $p_{T} > $ 0.5($p$) [0.3($\bar{p}$)] GeV/c
    \item DCA to prim vertex $>$ 0.1 
- \end{enumerate} 
- 
+  \end{enumerate}
+ \end{enumerate}
  \item V0 Cuts
  \begin{enumerate}
   \item $|\eta| < 0.8$
@@ -40,10 +35,8 @@ The following cuts were used to select good $\Lambda$ ($\bar{\Lambda}$) candidat
   \item Cosine of pointing angle $>$ 0.9993
   \item OnFlyStatus = false
   \item Decay Length $<$ 60 cm
- \end{enumerate}  
- 
-\end{enumerate}
-
+ \end{enumerate}
+\end{enumerate} 
 
 
 \begin{figure}[h!]
@@ -81,7 +74,7 @@ Ideally, the $\Lambda$ selection and K$^{0}_{S}$ misidentification cuts are sele
     \label{fig:cLamPurity:b}
     \includegraphics[width=0.49\textwidth]{3_DataSelection/Figures/ALamPurity_LamKch_0010.pdf}}
   %%----overall caption----
-  \caption[$\Lambda$ and $\bar{\Lambda}$ Purity]{$\Lambda$ and $\bar{\Lambda}$ Purity}
+  \caption[$\Lambda$ and $\bar{\Lambda}$ Purity]{Invariant mass (M$_{inv}$) distribution of all $\Lambda$($\bar{\Lambda}$) candidates immediately before the final invariant mass cut.  These distributions are used to calculate the collection purities, Purity($\Lambda$) $\approx$ Purity($\bar{\Lambda}$) $\approx$ 95\%.}
   \label{fig:cLamPurity}
 \end{figure}
 

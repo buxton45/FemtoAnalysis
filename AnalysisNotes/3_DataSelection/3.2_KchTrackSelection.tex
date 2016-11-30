@@ -6,53 +6,81 @@
 
 Charged kaons are identified using the AliFemtoESDTrackCutNSigmaFilter class.  The specific cuts used in this analysis are as follows:
 
-\begin{itemize}
- \itemsep0em
- \item PID Probabilities:
+ Track Selection:
  \begin{itemize}
   \itemsep0em
-  \item K: $>$ 0.2  
-  \item $\pi$: $<$ 0.1 
-  \item $\mu$: $<$ 0.8
-  \item p: $<$ 0.1
- \end{itemize}
- \item Most probable particle type must be Kaon (fMostProbable=3)
- \item 0.14 $<$ p$_{T} <$ 1.5
- \item $|\eta| < 0.8$
- \item Minimum number of clusters in the TPC (fminTPCncls) = 80
- \item Remove particles with any kink labels (fRemoveKinks = true)
- \item Maximum allowed $\chi^{2}/N_{DOF}$ for ITS clusters = 3.0
- \item Maximum allowed $\chi^{2}/N_{DOF}$ for TPC clusters = 4.0 
- \item Maximum allowed sigma to primary vertex (fMaxSigmaToVertex) = 3.0
- \item Maximum XY impact parameter = 2.4
- \item Maximum Z impact parameter = 3.0
- \item TPC and TOF N$_{\sigma}$ cuts:
+  \item Kinematic range:
   \begin{itemize}
-  \itemsep0em
-  \item p $<$ 0.4 GeV/c: N$_{\sigma K,TPC} <$ 2
-  \item 0.4 $<$ p $<$ 0.45 GeV/c: N$_{\sigma K,TPC} <$ 1
-  \item 0.45 $<$ p $<$ 0.8 GeV/c: N$_{\sigma K,TPC} <$ 3 \& N$_{\sigma K,TOF} <$ 2
-  \item 0.8 $<$ p $<$ 1.0 GeV/c: N$_{\sigma K,TPC} <$ 3 \& N$_{\sigma K,TOF} <$ 1.5
-  \item p $>$ 1.0 GeV/c: N$_{\sigma K,TPC} <$ 3 \& N$_{\sigma K,TOF} <$ 1    
-  \end{itemize}
- \item Electron Rejection: Reject if N$_{\sigma e-,TPC} < $ 3
- \item Pion Rejection:  Reject if: 
-  \begin{itemize}
-  \itemsep0em
-  \item p $<$ 0.65
-   \begin{itemize}
    \itemsep0em
-   \item if TOF and TPC available: N$_{\sigma \pi,TPC} <$ 3 \& N$_{\sigma \pi,TOF} <$ 3
-   \item else
-    \begin{itemize}
+   \item 0.14 $<$ p$_{T} <$ 1.5
+   \item $|\eta| < 0.8$
+  \end{itemize}
+  \item FilterBit8
+  \begin{itemize}
+   \item TPC tracks
+  \end{itemize}
+  \item Track Quality
+  \begin{itemize}
+   \item Minimum number of clusters in the TPC (fminTPCncls) = 80
+   \item Maximum allowed $\chi^{2}/N_{DOF}$ for ITS clusters = 3.0
+   \item Maximum allowed $\chi^{2}/N_{DOF}$ for TPC clusters = 4.0 
+  \end{itemize}
+  \item Primary Particle Selection:
+  \begin{itemize} 
+   \item Maximum XY impact parameter = 2.4
+   \item Maximum Z impact parameter = 3.0
+  \end{itemize} 
+  \item Remove particles with any kink labels (fRemoveKinks = true)
+  \item Maximum allowed sigma to primary vertex (fMaxSigmaToVertex) = 3.0
+ \end{itemize} 
+ 
+ K$^{\pm}$ Identification:
+ \begin{itemize} 
+  \item PID Probabilities:
+  \begin{itemize}
+   \itemsep0em
+   \item K: $>$ 0.2  
+   \item $\pi$: $<$ 0.1 
+   \item $\mu$: $<$ 0.8
+   \item p: $<$ 0.1
+  \end{itemize}
+  \item Most probable particle type must be Kaon (fMostProbable=3)
+  \item TPC and TOF N$_{\sigma}$ cuts:
+  \begin{itemize}
+   \itemsep0em
+   \item p $<$ 0.4 GeV/c: N$_{\sigma K,TPC} <$ 2
+   \item 0.4 $<$ p $<$ 0.45 GeV/c: N$_{\sigma K,TPC} <$ 1
+   \item 0.45 $<$ p $<$ 0.8 GeV/c: N$_{\sigma K,TPC} <$ 3 \& N$_{\sigma K,TOF} <$ 2
+   \item 0.8 $<$ p $<$ 1.0 GeV/c: N$_{\sigma K,TPC} <$ 3 \& N$_{\sigma K,TOF} <$ 1.5
+   \item p $>$ 1.0 GeV/c: N$_{\sigma K,TPC} <$ 3 \& N$_{\sigma K,TOF} <$ 1    
+  \end{itemize}
+  \item Electron Rejection: Reject if N$_{\sigma e-,TPC} < $ 3
+  \item Pion Rejection:  Reject if: 
+  \begin{itemize}
+   \itemsep0em
+   \item p $<$ 0.65
+   \begin{itemize}
     \itemsep0em
-    \item p $<$ 0.5: N$_{\sigma \pi,TPC} <$ 3
-    \item 0.5 $<$ p $<$ 0.65: N$_{\sigma \pi,TPC} <$ 2
+    \item if TOF and TPC available: N$_{\sigma \pi,TPC} <$ 3 \& N$_{\sigma \pi,TOF} <$ 3
+    \item else
+    \begin{itemize}
+     \itemsep0em
+     \item p $<$ 0.5: N$_{\sigma \pi,TPC} <$ 3
+     \item 0.5 $<$ p $<$ 0.65: N$_{\sigma \pi,TPC} <$ 2
     \end{itemize}
    \end{itemize}
-  \item 0.65 $<$ p $<$ 1.5: N$_{\sigma \pi,TPC} <$ 5 \& N$_{\sigma \pi,TOF} <$ 3
-  \item p $>$ 1.5: N$_{\sigma \pi,TPC} <$ 5 \& N$_{\sigma \pi,TOF} <$ 2  
+   \item 0.65 $<$ p $<$ 1.5: N$_{\sigma \pi,TPC} <$ 5 \& N$_{\sigma \pi,TOF} <$ 3
+   \item p $>$ 1.5: N$_{\sigma \pi,TPC} <$ 5 \& N$_{\sigma \pi,TOF} <$ 2  
   \end{itemize} 
-\end{itemize}
+ \end{itemize}
+
+The purity of the K$^{\pm}$ collections was estimated using the MC data, for which the true identity of each reconstructed K$^{\pm}$ particle is known.  Therefore, the purity may be estimated as:
+
+\begin{equation}
+ Purity(K^{\pm}) = \frac{N_{true}}{N_{reconstructed}} \\
+\label{eqn:KchPurity}
+\end{equation}
+
+Purity(K$^{+}$) $\approx$ Purity(K$^{-}$) $\approx$ 97\%
 
 \end{document}
