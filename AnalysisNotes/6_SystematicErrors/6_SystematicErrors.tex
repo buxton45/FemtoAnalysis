@@ -4,7 +4,22 @@
 \section{Systematic Errors}
 \label{SystematicErrors}
 
-This study is currently ongoing.  See Table \ref{tab:LamDcaLamK0_500MeVMaxFit_SimpleExp}.
+This study is currently ongoing, and an estimate of my systematic uncertainties should be complete within a week.
+In order to understand my systematic uncertainties, the analysis code was run many times using slightly different values for a number of important cuts, and the results were compared.
+To quantify the effect, the difference in two correlation functions obtained using different values for a given cut was fit with a simple exponential decay function:
+
+\begin{equation}
+  \Delta C(k^{*}) = Ae^{-Bk^{*}}
+\label{eqn:ExpDecay}
+\end{equation}
+
+The amplitude, $A$, and its associated uncertainty for the various cuts can be found in Tables \ref{tab:LamDcaLamK0} through \ref{tab:AvgSepLamKch}.
+The systematic effect of the variation is marked as significant (``Sig" column) if the amplitude is not withih 2$\sigma$ of 0.
+Although this proves qualitatively useful, these fits will likely not be used to quantify the systematic effects.
+
+In order to quantify the systematic errors on the correlation functions, all correlations will be averaged, and the resulting variance will be taken as the systematic error.
+Similarly, the fit parameters extracted from all of these correlation functions will be averaged, and they resulting variances will be taken as the systematic errors for the fit parameters.
+
 
 \subfile{6_SystematicErrors/6.1_SysErrsLamK0.tex}
 \subfile{6_SystematicErrors/6.2_SysErrsLamKch.tex}
