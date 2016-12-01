@@ -9,6 +9,19 @@ This process is illustrated in Figure \ref{fig:V0Reconstruction}.
 In general, particles which are topologically reconstructed in this fashion are called V0 particles.
 The class AliFemtoV0TrackCutNSigmaFilter (which is an extension of AliFemtoV0TrackCut) is used to reconstruct the V0s.
 
+In order to obtain a true and reliable signal, one must ensure good purity of the V0 collection.  The purity of the collection is calculated as:
+
+\begin{equation}
+ Purity = \frac{Signal}{Signal + Background}
+\label{eqn:Purity}
+\end{equation}
+
+In order to obtain both the signal and background, the invariant mass distribution (M$_{inv}$) of all V0 candidates must be constructed immediately before the final invariant mass cut.
+Examples of such distribtions can be found in Figures \ref{fig:cLamPurity} and \ref{fig:K0Purity}.
+It is vital that this distribution be constructed immediately before the final M$_{inv}$ cut, otherwise it would be impossible to estimate the background.
+As shown in Figures \ref{fig:cLamPurity} and \ref{fig:K0Purity}, the background is fit (with a polynomial) outside of the peak region of interest to obtain an estimate for the backfround within the region.
+Within the M$_{inv}$ cut limits, the background is the region below the fit while the signal is the region above the fit.
+
 \begin{figure}[h]
   \centering
   \includegraphics[width=0.5\textwidth]{3_DataSelection/Figures/V0CutsGeneral.pdf}

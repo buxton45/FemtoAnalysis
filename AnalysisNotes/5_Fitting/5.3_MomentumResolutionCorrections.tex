@@ -4,11 +4,100 @@
 \subsection{Momentum Resolution Corrections}
 \label{MomentumResolutionCorrections}
 
-Talk about Momentum resolution corrections
+Finite track momentum resolution causes the reconstructed momentum of a particle to smear around the true value.
+This, of course, also holds true for V0 particles.
+The effect is propagated up to the pairs of interest, which causes the reconstructed relative momentum ($k^{*}_{Rec}$) to differ from the true momentum ($k^{*}_{True}$).
+Smearing of the momentum typically will result in a suppression of the signal.
+
+The effect of finite momentum resolution can be investigated using the MC data, for which both the true and reconstructed momenta are available.
+Figure \ref{fig:TrueVsRecLamKchP} shows sample $k^{*}_{True}$ vs. $k^{*}_{Rec}$ plots for $\Lambda$($\bar{\Lambda}$)K$^{\pm}$ 0-10\% analyses; Figure \ref{fig:TrueVsRecLamKchP:a} was generated using same-event pairs, while Figure \ref{fig:TrueVsRecLamKchP:b} was generated using mixed-event pairs (with N$_{mix}$ = 5).  
+
+
+If there are no contaminations in our particle collection, the plots in Figure \ref{fig:TrueVsRecLamKchP} should be smeared around $k^{*}_{True} = k^{*}_{Rec}$; this is mostly true in our analyses.
+However, there are some interesting features of our results which demonstrate a small (notice the log-scale on the z-axis) contamination in our particle collection.
+The structure around $k^{*}_{Rec} = k^{*}_{True}-0.15$ is mainly caused by K$^{0}_{S}$ contamination in our $\Lambda$($\bar{\Lambda}$) sample.
+The remaining structure not distributed about $k^{*}_{Rec} = k^{*}_{True}$ is due to $\pi$ and $e$ contamination in our K$^{\pm}$ sample.
+These contaminations are more visible in Figure \ref{fig:TrueVsRecLamKchP_MisID}, which show $k^{*}_{Rec}$ vs. $k^{*}_{True}$ plots (for a small sample of the $\Lambda$K$^{+}$ 0-10\% central analysis), for which the MC truth (i.e. true, known identity of the particle) was used to eliminate misidentified particles in the K$^{+}$(a) and $\Lambda$(b) collections. (NOTE: This is an old figure and is for a small sample of the data.  A new version will be generated shortly.  It, nonetheless, demonstrates the point well).
+
+Information gained from looking at $k^{*}_{Rec}$ vs $k^{*}_{True}$ can be used to apply corrections to account for the effects of finite momentum resolution on the correlation functions.
+A typical method involves using the MC HIJING data to build two correlation functions, $C_{Rec}(k^{*})$ and $C_{True}(k^{*})$, using the generator-level momentum ($k^{*}_{True}$) and the measured detector-level momentum ($k^{*}_{Rec}$).
+The data is then corrected by multiplying by the ratio, $C_{True}/C_{Rec}$, before fitting.
+This essentially unsmears the data, which that can be compared directly to theoretical predictions and fits.
+Although this is conceptually simple, there are a couple of big disadvantages to this method.
+First, HIJING does not incorporate final-state interactions, so weights must be used when building same-event (numerator) distributions.
+These weights account for the interactions, and, in the absence of Coulomb interactions, can be calculated using Eq. \ref{eqn:LednickyEqn}.
+Of course, these weights are valid only for a particular set of fit parameters.
+Therefore, in the fitting process, during which the fitter explores a large parameter set, the corrections will not remain valid.
+As such, applying the momentum resolution correction and fitting becomes a long and drawn out iterative process.
+An ititial parameter set is obtained (through fitting without momentum resolution corrections, theoretical models, or a good guess), then the MC data is run over to obtain the correction factor, the data is fit using the correction factor, a refined parameter set is extracted, the MC data is run over again to obtain the new correction factor, etc.
+This process continues until the parameter set stabilizes.
+The second issue concerns statistics.
+With the MC data available on the grid, we were not able to generate the statistics necessary to use the raw $C_{True}/C_{Rec}$ ratio.
+The ratio was not stable, and when applied to the data, obscured the signal.
+Attempting to fit the ratioto use to generate the corrections also proved problematic.
+However, as HIJING does not include final-state interactions, the same-event and mixed-event pairs are very similiar (with the exception of things like energy and momentum conservation, etc).
+Therefore, one may build the numerator distribution using mixed-event pairs.
+This corresponds, more or less, to simply running a the weight generator through the detector framework.
+
+A second approach is to use information gained from plots like those in Figure \ref{fig:TrueVsRecLamKchP}, which can be considered response matrices.
+The reponse matrix describes quantitatively how each $k^{*}_{Rec}$ bin receives contributions from multiple $k^{*}_{True}$ bins, and can be used to account for the effects of finite momentum resolution.
+With this approach, the resolution correction is applied on-the-fly during the fitting process by propagating the theoretical (fit) correlation function through the response matrix, according to:  
 
 \begin{equation}
   C_{fit}(k^{*}_{Rec}) = \dfrac{\sum\limits_{k^{*}_{True}}M_{k^{*}_{Rec},k^{*}_{True}}C_{fit}(k^{*}_{True})}{\sum\limits_{k^{*}_{True}}M_{k^{*}_{Rec},k^{*}_{True}}}
 \label{eqn:MomResCorrection}
 \end{equation}
+
+where $M_{k^{*}_{Rec},k^{*}_{True}}$ is the response matrix (Figure \ref{fig:TrueVsRecLamKchP}), $C_{fit}(k^{*}_{True})$ is the fit binned in $k^{*}_{True}$, and the denominator normalizes the result.
+
+Equation \ref{eqn:MomResCorrection} describes that, for a given $k^{*}_{Rec}$ bin, the observed value of $C(k^{*}_{Rec})$ is a weighted average of all $C(k^{*}_{True})$ values, where the weights are the normalized number of counts in the [$k^{*}_{Rec}$, $k^{*}_{True}$] bin.
+As seen in Figure \ref{fig:TrueVsRecLamKchP}, overwhelmingly the main contributions comes from the $k^{*}_{Rec}$ = $k^{*}_{True}$ bins.
+Although the correction is small, it is non-negligible for the low-k$^{*}$ region of the correlation function.
+
+Here, the momentum resolution correction is applied to the fit, not the data.
+In other words, during fitting, the theoretical correlation function is smeared just as real data would be, instead of unsmearing the data.
+This may not be ideal for the theorist attempting to compare a model to experimental data, but it leaves the experimental data unadulterated.
+The current analyses use this second approach to applying momentum resolution corrections because of two major advantages.  First, the MC data must be analyzed only once, and no assumptions about the fit are needed.  Secondly, the momentum resolution correction is applied on-the-fly by the fitter, delegating the iterative process to a computer instead of the user, as with the first method.
+
+\begin{figure}[h!]
+  \centering
+  %%----start of first subfigure---  
+  \subfloat[Same Event Pairs ($\Lambda$($\bar{\Lambda}$)K$^{\pm}$, 0-10\% Centrality)]{
+    \label{fig:TrueVsRecLamKchP:a}
+    \includegraphics[width=0.7\textwidth]{5_Fitting/Figures/canKStarTrueVsRecLamKchP_0010Same.pdf}}\\
+  %%----start of second subfigure---
+  \subfloat[Mixed Event Pairs ($\Lambda$($\bar{\Lambda}$)K$^{\pm}$, 0-10\% Centrality)]{
+    \label{fig:TrueVsRecLamKchP:b}
+    \includegraphics[width=0.7\textwidth]{5_Fitting/Figures/canKStarTrueVsRecLamKchP_0010Mixed.pdf}}
+  %%----overall caption----
+  \caption[Momentum Resolution: Sample $k^{*}_{True}$ vs. $k^{*}_{Rec}$]{Sample $k^{*}_{True}$ vs. $k^{*}_{Rec}$ plot for $\Lambda$($\bar{\Lambda}$)K$^{\pm}$ 0-10\% analyses.  The structure which appears around $k^{*}_{Rec} = k^{*}_{True}-0.15$ is mainly caused by K$^{0}_{S}$ contamination in our $\Lambda$($\bar{\Lambda}$) sample.  The remaining structure not distributed about $k^{*}_{Rec} = k^{*}_{True}$ is due to $\pi$ and $e$ contamination in our K$^{\pm}$ sample.  These contaminations are more clearly visible in Figure \ref{fig:TrueVsRecLamKchP_MisID}}
+  \label{fig:TrueVsRecLamKchP}
+\end{figure}
+
+
+
+\begin{figure}[h!]
+  \centering
+  %%----start of first subfigure---  
+  \subfloat[(Top Left) All misidentified K$^{+}$ excluded.  (Bottom Left) All misidentified $\Lambda$ and K$^{+}$ excluded.  (Right) The difference of (Top Left) - (Bottom Left), which reveals the contamination in our $\Lambda$ collection. The structure which appears around $k^{*}_{Rec} = k^{*}_{True}-0.15$ is mainly caused by K$^{0}_{S}$ contamination in our $\Lambda$($\bar{\Lambda}$) sample.]{
+    \label{fig:TrueVsRecLamKchP_MisID:a}
+    \includegraphics[width=0.7\textwidth]{5_Fitting/Figures/RmKchVsRmAll.pdf}}\\
+  %%----start of second subfigure---
+  \subfloat[(Top Left) All misidentified $\Lambda$ excluded.  (Bottom Left) All misidentified $\Lambda$ and K$^{+}$ excluded. (Right) The difference of (Top Left) - (Bottom Left), which reveals the contamination in our K$^{+}$ collection. The structure not distributed about $k^{*}_{Rec} = k^{*}_{True}$ is due to $\pi$ and $e$ contamination in our K$^{+}$ sample.]{
+    \label{fig:TrueVsRecLamKchP_MisID:b}
+    \includegraphics[width=0.7\textwidth]{5_Fitting/Figures/RmLamVsRmAll.pdf}}
+  %%----overall caption----
+  \caption[Particle Contaminations Visible in $k^{*}_{True}$ vs. $k^{*}_{Rec}$]{Note:  This is an old figure and is for a small sample of the data.  A new version will be generated shortly.  y-axis = $k^{*}_{Rec}$, x-axis = $k^{*}_{True}$. \\  
+(Left) $k^{*}_{Rec}$ vs. $k^{*}_{True}$ plots for a small sample of the $\Lambda$K$^{+}$ 0-10\% central analysis, MC truth was used to eliminate misidentified particles in the K$^{+}$(a) and $\Lambda$(b) collections. 
+(Right) The difference of the top left and bottom left plots.
+Contaminations in our particle collections are clearly visible. Figure (a) demonstrates a K$^{0}_{S}$ contamination in our $\Lambda$ collection; Figure (b) demonstrates a $\pi$ and $e^{-}$ contamination in our K$^{\pm}$ collection.}
+  \label{fig:TrueVsRecLamKchP_MisID}
+\end{figure}
+
+
+
+
+
+
 
 \end{document}

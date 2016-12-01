@@ -52,16 +52,23 @@ The following cuts were used to select good $\Lambda$ ($\bar{\Lambda}$) candidat
   %%----overall caption----
   \caption[K$^{0}_{S}$ contamination in $\Lambda$($\bar{\Lambda}$) collection]{Mass assuming K$^{0}_{S}$-hypothesis for V0 candidates passing all $\Lambda$ (\ref{fig:MassAssK0ShortHyp_cLamK0:a}) and $\bar{\Lambda}$ (\ref{fig:MassAssK0ShortHyp_cLamK0:b}) cuts.
   The ``NoMisID" distribution (black triangles) uses the V0 finder without any attempt to remove misidentified K$^{0}_{S}$.
-  The slight peak in the ``NoMisID" distribution around $m_{inv}$ = 0.5 GeV/c$^{2}$ likely contains misidentified K$^{0}_{S}$ particles in our $\Lambda$ collection.  
+  The slight peak in the ``NoMisID" distribution around $m_{inv}$ = 0.5 GeV/c$^{2}$ contains misidentified K$^{0}_{S}$ particles in our $\Lambda$($\bar{\Lambda}$) collection.  
   ``SimpleMisID" (pink squares) simply cuts out the entire peak, which throws away some good $\Lambda$ and $\bar{\Lambda}$ particles.
   ``MisID\_NoM$_{inv}$Comp" (green squares) uses the misidentification cut outlined in the text, but does not utilize the invariant mass comparison method.
   ``MisID\_M$_{inv}$Comp" (red circles) utilizes the full misidentification methods, and is currently used for this analysis.  
-  ``N$_{pass}$/N$_{ev}$" is the total number of $\Lambda$($\bar{\Lambda}$) particles found, normalized by the total number of events.  The purity of the collection is also listed.   
-If one simply cuts out the entire peak, good $\Lambda$ particles will be lost.
-Ideally, the $\Lambda$ selection and K$^{0}_{S}$ misidentification cuts are selected such that the peak is removed from this plot while leaving the distribution continuous.}
+  ``N$_{pass}$/N$_{ev}$" is the total number of $\Lambda$($\bar{\Lambda}$) particles found, normalized by the total number of events.  The purity of the collection is also listed.}
   \label{fig:MassAssK0ShortHyp_cLamK0}
 \end{figure}
 
+Figure \ref{fig:MassAssK0ShortHyp_cLamK0:a} shows the mass assuming K$^{0}_{S}$ hypothesis for the $\Lambda$ collection, i.e. assume the daughters are $\pi^{+}\pi^{-}$ instead of $\pi^{+}\bar{p}^{-}$.
+Figure \ref{fig:MassAssK0ShortHyp_cLamK0:b} is a similar plot, but is for the $\bar{\Lambda}$ collection, i.e. assume the daughters are $\pi^{+}\pi^{-}$ instead of $\pi^{+}\bar{p}^{-}$.
+The K$^{0}_{S}$ contamination is visible, although not profound, in both in the slight peaks around $m_{inv}$ = 0.497 GeV/c$^{2}$.
+If one simply cuts out the entire peak, good $\Lambda$ particles will be lost.
+Ideally, the $\Lambda$ selection and K$^{0}_{S}$ misidentification cuts are selected such that the peak is removed from this plot while leaving the distribution continuous.
+
+Figure \ref{fig:cLamPurity} shows the invariant mass (M$_{inv}$) distribution of all $\Lambda$($\bar{\Lambda}$) candidates immediately before the final invariant mass cut.
+These distributions are used to calculate the collection purities.
+The $\Lambda$ and $\bar{\Lambda}$ purities are found to be: Purity($\Lambda$) $\approx$ Purity($\bar{\Lambda}$) $\approx$ 95\%.
 
 \begin{figure}[h!]
   \centering
@@ -74,7 +81,7 @@ Ideally, the $\Lambda$ selection and K$^{0}_{S}$ misidentification cuts are sele
     \label{fig:cLamPurity:b}
     \includegraphics[width=0.49\textwidth]{3_DataSelection/Figures/ALamPurity_LamKch_0010.pdf}}
   %%----overall caption----
-  \caption[$\Lambda$ and $\bar{\Lambda}$ Purity]{Invariant mass (M$_{inv}$) distribution of all $\Lambda$($\bar{\Lambda}$) candidates immediately before the final invariant mass cut.  These distributions are used to calculate the collection purities, Purity($\Lambda$) $\approx$ Purity($\bar{\Lambda}$) $\approx$ 95\%.}
+  \caption[$\Lambda$ and $\bar{\Lambda}$ Purity]{Invariant mass (M$_{inv}$) distribution of all $\Lambda$ (a) and $\bar{\Lambda}$ (b) candidates immediately before the final invariant mass cut.  The bottom figures are zoomed to show the background with fit.  The vertical green lines represent the M$_{inv}$ cuts used in the analyses, the red vertical lines delineate the region over which the background was fit, and the blue line shows the background fit.  These distributions are used to calculate the collection purities, Purity($\Lambda$) $\approx$ Purity($\bar{\Lambda}$) $\approx$ 95\%.}
   \label{fig:cLamPurity}
 \end{figure}
 
