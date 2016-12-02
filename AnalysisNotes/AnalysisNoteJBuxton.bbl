@@ -1,8 +1,18 @@
 \begin{thebibliography}{1}
 
+\bibitem{Lednicky:82}
+R.~Lednicky and V.~L. Lyuboshitz.
+\newblock {\em Sov. J. Nucl. Phys.}, 35:770, 1982.
+
 \bibitem{Lisa:2005dd}
 Michael~Annan Lisa, Scott Pratt, Ron Soltz, and Urs Wiedemann.
 \newblock {Femtoscopy in relativistic heavy ion collisions}.
 \newblock {\em Ann. Rev. Nucl. Part. Sci.}, 55:357--402, 2005.
+
+\bibitem{Lednicky:2005tb}
+Richard Lednicky.
+\newblock {Finite-size effects on two-particle production in continuous and
+  discrete spectrum}.
+\newblock {\em Phys. Part. Nucl.}, 40:307--352, 2009.
 
 \end{thebibliography}

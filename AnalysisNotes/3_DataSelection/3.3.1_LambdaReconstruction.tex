@@ -36,6 +36,10 @@ The following cuts were used to select good $\Lambda$ ($\bar{\Lambda}$) candidat
   \item OnFlyStatus = false
   \item Decay Length $<$ 60 cm
  \end{enumerate}
+ \item Shared Daughter Cut for V0 Collection
+ \begin{itemize}
+  \item Iterate through V0 collection to ensure that no daughter is used in more than one V0 candidate
+ \end{itemize}
 \end{enumerate} 
 
 
@@ -65,6 +69,13 @@ Figure \ref{fig:MassAssK0ShortHyp_cLamK0:b} is a similar plot, but is for the $\
 The K$^{0}_{S}$ contamination is visible, although not profound, in both in the slight peaks around $m_{inv}$ = 0.497 GeV/c$^{2}$.
 If one simply cuts out the entire peak, good $\Lambda$ particles will be lost.
 Ideally, the $\Lambda$ selection and K$^{0}_{S}$ misidentification cuts are selected such that the peak is removed from this plot while leaving the distribution continuous.
+To attempt to remove these K$^{0}_{S}$ contaminations without throwing away good $\Lambda$ and $\bar{\Lambda}$ particles, the following misidentification cuts are imposed; a $\Lambda$($\bar{\Lambda}$) candidate is rejected if all of the following criteria are satisfied:
+\begin{itemize}
+ \item $\left|m_{inv,~ K^{0}_{S}~ Hypothesis} - m_{PDG,~ K^{0}_{S}}\right| < $ 9.0 MeV/c$^{2}$
+ \item Positive and negative daughters pass $\pi$ daughter cut implemented for K$^{0}_{S}$ reconstruction
+ \item $\left|m_{inv,~ K^{0}_{S}~ Hypothesis} - m_{PDG,~ K^{0}_{S}}\right|~ < ~\left|m_{inv,~ \Lambda(\bar{\Lambda})~ Hypothesis} - m_{PDG,~ \Lambda(\bar{\Lambda})}\right|$
+\end{itemize} 
+
 
 Figure \ref{fig:cLamPurity} shows the invariant mass (M$_{inv}$) distribution of all $\Lambda$($\bar{\Lambda}$) candidates immediately before the final invariant mass cut.
 These distributions are used to calculate the collection purities.

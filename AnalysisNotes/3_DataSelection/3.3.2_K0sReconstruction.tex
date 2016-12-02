@@ -26,7 +26,10 @@ The following cuts were used to select good K$^{0}_{S}$ candidates:
   \item OnFlyStatus = false
   \item Decay Length $<$ 30 cm
  \end{enumerate}  
- 
+ \item Shared Daughter Cut for V0 Collection
+ \begin{itemize}
+  \item Iterate through V0 collection to ensure that no daughter is used in more than one V0 candidate
+ \end{itemize} 
 \end{enumerate}
 
 \begin{figure}[h!]
@@ -34,11 +37,11 @@ The following cuts were used to select good K$^{0}_{S}$ candidates:
   %%----start of first subfigure---  
   \subfloat[Mass assuming $\Lambda$-hypothesis for K$^{0}_{S}$ collection, i.e. assume the daughters are $p^{+}\pi^{-}$ instead of $\pi^{+}\pi^{-}$.]{
     \label{fig:MassAsscLamHyp:a}
-    \includegraphics[width=0.9\textwidth]{3_DataSelection/Figures/MassAssHypotheses/canMassAssLamHypCompare_LamK0_wNoMisID.pdf}}\\
+    \includegraphics[width=0.7\textwidth]{3_DataSelection/Figures/MassAssHypotheses/canMassAssLamHypCompare_LamK0_wNoMisID.pdf}}\\
   %%----start of second subfigure---
   \subfloat[Mass assuming $\bar{\Lambda}$-hypothesis for K$^{0}_{S}$ collection, i.e. assume the daughters are $\pi^{+}\bar{p}^{-}$ instead of $\pi^{+}\pi^{-}$.]{
     \label{fig:MassAsscLamHyp:b}
-    \includegraphics[width=0.9\textwidth]{3_DataSelection/Figures/MassAssHypotheses/canMassAssALamHypCompare_LamK0_wNoMisID.pdf}}
+    \includegraphics[width=0.7\textwidth]{3_DataSelection/Figures/MassAssHypotheses/canMassAssALamHypCompare_LamK0_wNoMisID.pdf}}
   %%----overall caption----
   \caption[$\Lambda$($\bar{\Lambda}$) contamination in K$^{0}_{S}$ collection]{Mass assuming $\Lambda$-hypothesis (\ref{fig:MassAsscLamHyp:a}) and $\bar{\Lambda}$-hypothesis (\ref{fig:MassAsscLamHyp:b}) for K$^{0}_{S}$ collection.
   The ``NoMisID" distribution (black triangles) uses the V0 finder without any attempt to remove misidentified $\Lambda$ and $\bar{\Lambda}$.
@@ -63,17 +66,18 @@ This is confirmed as the number of misidentified $\Lambda$ particles in the shar
 The peaks around $m_{inv} = $ 1.115 GeV/c$^{2}$ in Figure \ref{fig:MassAsscLamHyp} contain both misidentified $\Lambda$ ($\bar{\Lambda}$) particles and good K$^{0}_{S}$.
 If one simply cuts out the entire peak, some good K$^{0}_{S}$ particles will be lost.
 Ideally, the K$^{0}_{S}$ selection and $\Lambda$($\bar{\Lambda}$) misidentification cuts can be selected such that the peak is removed from this plot while leaving the distribution continuous.
-To attempt to remove these $\Lambda$ and $\bar{\Lambda}$ contaminations without throwing away good K$^{0}_{S}$ particles, the following misidentification cuts are imposed; a K$^{0}_{S}$ candidate is rejected if all of the following criteria are satisfied:
+To attempt to remove these $\Lambda$ and $\bar{\Lambda}$ contaminations without throwing away good K$^{0}_{S}$ particles, the following misidentification cuts are imposed; a K$^{0}_{S}$ candidate is rejected if all of the following criteria are satisfied (for either $\Lambda$ or $\bar{\Lambda}$ hypothesis):
 \begin{itemize}
- \item $|m_{inv, \ \Lambda(\bar{\Lambda}) \ Hypothesis} - m_{PDG,\ \Lambda(\bar{\Lambda})}| < $ 9.0 MeV/c$^{2}$
+ \item $\left|m_{inv, \ \Lambda(\bar{\Lambda}) \ Hypothesis} - m_{PDG,\ \Lambda(\bar{\Lambda})}\right| < $ 9.0 MeV/c$^{2}$
  \item Positive daughter passes $p^{+}$($\pi^{+}$) daughter cut implemented for $\Lambda$($\bar{\Lambda}$) reconstruction
  \item Negative daughter passes $\pi^{-}$($\bar{p}^{-}$) daughter cut implemented by $\Lambda$($\bar{\Lambda}$) reconstruction
+ \item $\left|m_{inv, \ \Lambda(\bar{\Lambda}) \ Hypothesis} - m_{PDG,\ \Lambda(\bar{\Lambda})}\right|~ < ~\left|m_{inv,~ K^{0}_{S}~ Hypothesis} - m_{PDG,~ K^{0}_{S}}\right|$
 \end{itemize} 
 
 
 \begin{figure}[h]
   \centering
-  \includegraphics[width=100mm]{3_DataSelection/Figures/K0Purity_LamK0.pdf}
+  \includegraphics[width=0.5\textwidth]{3_DataSelection/Figures/K0Purity_LamK0.pdf}
   \caption[K$^{0}_{S}$ Purity]{Invariant mass (M$_{inv}$) distribution of all K$^{0}_{S}$ candidates immediately before the final invariant mass cut.  The bottom figure is zoomed to show the background with fit.  The vertical green lines represent the M$_{inv}$ cut used in the analyses, the red vertical lines delineate the region over which the background was fit, and the blue line shows the background fit.  This distribution is used to calculate the collection purity, Purity(K$^{0}_{S}$) $\approx$ 98\%.}
   \label{fig:K0Purity}
 \end{figure}

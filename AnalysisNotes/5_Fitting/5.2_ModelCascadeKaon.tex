@@ -1,11 +1,46 @@
 \documentclass[../AnalysisNoteJBuxton.tex]{subfiles}
 \begin{document}
 
-\subsection{Model: Cascade-Kaon}
+\subsection{Model: \texorpdfstring{$\Xi^{ch}K^{ch}$}{TEXT}}
 \label{ModelCascadeKaon}
 
-Talk about model
+When fitting the $\Xi^{-}$($\bar{\Xi}^{+}$)K$^{\pm}$ results, it is necessary to include both strong and Coulomb effects.
+In this case, Equation \ref{eqn:LednickyEqn} is no longer valid, and, in fact, there is no analytical form with which to fit.
+Therefore, we must begin with the wave function describing the pair interaction, and simulate many particle pairs to obtain a theoretical fit correlation function.
+The code developed to achieve this functionality is called ``CoulombFitter".
+Currently, in order to generate the statistics needed for a stable fit, we find that $\sim 10^{4}$ simulated pairs per 10 MeV bin are necessary.
+Unfortunately, the nature of this process means that the ``CoulombFitter" takes much longer to run than the ``LednickyFitter" of Section \ref{ModelLambdaKaon}.
 
+The two-particle correlation function may be written as:
+
+\begin{equation}
+ C(\mathbf{k^{*}}) = \sum\limits_{S}\rho_{S}\int S(\mathbf{r^{*}})|\Psi^{S}_{\mathbf{k^{*}}}(\mathbf{r^{*}})|^{2}d^{3}\mathbf{r^{*}}
+\label{eqn:GenCfEqn}
+\end{equation}
+
+where $\rho_{S}$ is the normalized emission probability of particles in a state with spin S, $S(\mathbf{r}^{*})$ is the pair emission source distribution (assumed to be Gaussian), and $\Psi^{S}_{\mathbf{k}^{*}}(\mathbf{r}^{*})$ is the two-particle wave-function including both strong and Coulomb interactions \cite{Lednicky:2005tb}:
+
+\begin{equation}
+ \Psi_{\mathbf{k^{*}}}(\mathbf{r^{*}}) = e^{i\delta_{c}}\sqrt{A_{c}(\eta)}[e^{i\mathbf{k^{*}} \cdot \mathbf{r^{*}}}F(-i\eta,1,i\xi) + f_{c}(k^{*})\frac{\tilde{G}(\rho,\eta)}{r^{*}}]
+\label{eqn:CoulombWaveFcn}
+\end{equation}
+
+where $\rho = k^{*}r^{*}$, $\eta = (k^{*}a_{c})^{-1}$, $\xi = \mathbf{k^{*}} \cdot \mathbf{r^{*}} + k^{*}r^{*} \equiv \rho(1+\cos\theta^{*})$, and $a_{c} = (\mu z_{1}z_{2}e^{2})^{-1}$ is the two-particle Bohr radius (including the sign of the interaction).  $\delta_{c}$ is the Coulomb s-wave phase shift, $A_{c}(\eta)$ is the Coulomb penetration factor, $\tilde{G} = \sqrt{A_{c}}(G_{0} + iF_{0})$ is a combination of the regular ($F_{0}$) and singular ($G_{0}$) s-wave Coulomb functions.  $f_{c}(k^{*})$ is the s-wave scattering amplitude:
+
+\begin{equation}
+ f_{c}(k^{*}) = [\frac{1}{f_{0}} + \frac{1}{2}d_{0}k^{*2} - \frac{2}{a_{c}}h(\eta) - ik^{*}A_{c}(\eta)]^{-1}
+\label{eqn:CoulombScattAmp}
+\end{equation}
+
+where, the ``h-function", $h(\eta$), is expressed through the digamma function, $\psi(z)$ = $\Gamma'(z)/\Gamma(z)$ as:
+
+\begin{equation}
+ h(\eta) = 0.5[\psi(i\eta) + \psi(-i\eta) - \ln(\eta^{2})]
+\label{eqn:LednickyHFunction}
+\end{equation} 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{comment}
 \begin{equation}
 \begin{array}{l}
 \vspace{2mm}
@@ -15,13 +50,16 @@ Talk about model
 \vspace{3mm}
   ~~~~~f_{c}(k^{*}) = [\frac{1}{f_{0}} + \frac{1}{2}d_{0}k^{*2} - \frac{2}{a_{c}}h(\eta) - ik^{*}A_{c}(\eta)]^{-1} \\
 \vspace{3mm}
-  ~~~~~\rho = k^{*}r^{*};~ \eta = (k^{*}a)^{-1};~ a = (\mu z_{1}z_{2}e^{2})^{-1} \\  
+  ~~~~~\rho = k^{*}r^{*};~ \eta = (k^{*}a)^{-1};~ a_{c} = (\mu z_{1}z_{2}e^{2})^{-1} \\  
 \vspace{2mm}
   ~~~~~\xi = \mathbf{k^{*}} \cdot \mathbf{r^{*}} + k^{*}r^{*} \equiv \rho(1+\cos\theta^{*}) \\
 \end{array}
 \label{eqn:CoulombEqn}
 \end{equation}
+\end{comment}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+As stated before, to generate a fit correlation function, we must simulate a large number of pairs, calculate the wave-function, and average $\Psi^{2}$ over all pairs in a given k$^{*}$ bin.  Essentially, we calculate Equation \ref{eqn:GenCfEqn} by hand:
 
 \begin{equation}
 \begin{array}{l}
@@ -35,6 +73,24 @@ Talk about model
 \end{array}
 \label{eqn:CoulombEqn2}
 \end{equation}
+
+where $\langle \rangle_{i}$ represents an average over all pairs in a given k$^{*}$ bin.
+
+In summary, for a given k$^{*}$ bin, we must draw $N_{pairs} \sim 10^{4}$ pairs, and for each pair:
+
+\begin{enumerate}
+ \item Draw a random $\mathbf{r}^{*}$ vector according to our Gaussian source distribution $S(\mathbf{r}^{*})$
+ \item Draw a random $\mathbf{k}^{*}$ vector satisfying the $|\mathbf{k}^{*}|$ restriction of the bin
+ \begin{itemize}
+  \item We draw from real $k^{*}$ vectors obtained from the data
+  \item However, we find that drawing from a distribution flat in $k^{*}$ gives similar results
+ \end{itemize}
+ \item Construct the wave-function $\Psi$
+\end{enumerate}
+
+After all pairs for a given k$^{*}$ bin are simulated and wave-functions obtained, the results are averaged to give the fit result.
+
+Construction of the wave-functions, Equation \ref{eqn:CoulombWaveFcn}, involves a number of complex functions not included in standard C++ or ROOT libraries (namely, $h(\eta$), $\tilde{G}(\rho,\eta)$), and $F(-i\eta,1,i\xi)$.  These functions were even difficult to find and implement from elsewhere.  Our solution was to embed a Mathematica kernel into our C++ code to evaluate these functions.  However, having Mathematica work on-the-fly with the fitter was far too time consuming (fitter would have taken day, maybe weeks to finish).  Our solution was to use Mathematica to create matrices representing these functions for different parameter values.  During fitting, these matrices were then interpolated and the results used to build the wave-functions.  This method decreased the running time dramatically, and we are not able to generate results in under $\sim$ 1 hour. This process will be explained in more detail in future versions of the note.
 
 
 \end{document}
