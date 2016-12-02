@@ -71,8 +71,8 @@ public:
 
   void BuildKStarCf(double aMinNorm=0.32, double aMaxNorm=0.4);
   void RebinKStarCf(int aRebinFactor, double aMinNorm=0.32, double aMaxNorm=0.4);
-  static TF1* FitNonFlatBackground(TH1* aCf, double aMinFit=0.45, double aMaxFit=0.95);
-  TF1* GetNonFlatBackground(double aMinFit=0.40, double aMaxFit=0.90);
+  static TF1* FitNonFlatBackground(TH1* aCf, double aMinFit=0.6, double aMaxFit=0.9);
+  TF1* GetNonFlatBackground(double aMinFit=0.60, double aMaxFit=0.90);
 
   void SetFitParameter(FitParameter* aParam);
 

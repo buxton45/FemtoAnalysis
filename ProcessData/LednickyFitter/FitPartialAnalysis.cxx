@@ -566,6 +566,8 @@ TF1* FitPartialAnalysis::FitNonFlatBackground(TH1* aCf, double aMinFit, double a
 {
   TString tFitName = TString("NonFlatBackgroundFit_") + TString(aCf->GetTitle());
   TF1* tNonFlatBackground = new TF1(tFitName,NonFlatBackgroundFitFunction,0.,1.,3);
+    tNonFlatBackground->SetParameter(0,0.);
+    tNonFlatBackground->SetParameter(1,0.);
   aCf->Fit(tFitName,"0q","",aMinFit,aMaxFit);
 
 //  TF1* tReturn = new TF1(tFitName,NonFlatBackgroundFitFunction,0.,aMaxFit,3);
