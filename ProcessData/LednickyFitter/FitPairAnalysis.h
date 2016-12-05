@@ -78,8 +78,11 @@ public:
 
   void LoadTransformMatrices(TString aFileLocation);
 
+  TH1* GetCfwSysErrors();
+
   //inline (i.e. simple) functions
   TString GetAnalysisName();
+  TString GetAnalysisDirectoryName();
 
   vector<FitPartialAnalysis*> GetFitPartialAnalysisCollection();
   FitPartialAnalysis* GetFitPartialAnalysis(int aPartialAnalysisNumber);
@@ -125,6 +128,7 @@ public:
 private:
   AnalysisRunType fAnalysisRunType;
   TString fAnalysisName;
+  TString fAnalysisDirectoryName;
   vector<FitPartialAnalysis*> fFitPartialAnalysisCollection;
   int fNFitPartialAnalysis;
 
@@ -172,6 +176,7 @@ private:
 
 //inline stuff
 inline TString FitPairAnalysis::GetAnalysisName() {return fAnalysisName;}
+inline TString FitPairAnalysis::GetAnalysisDirectoryName() {return fAnalysisDirectoryName;}
 
 inline vector<FitPartialAnalysis*> FitPairAnalysis::GetFitPartialAnalysisCollection() {return fFitPartialAnalysisCollection;}
 inline FitPartialAnalysis* FitPairAnalysis::GetFitPartialAnalysis(int aPartialAnalysisNumber) {return fFitPartialAnalysisCollection[aPartialAnalysisNumber];}

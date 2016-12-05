@@ -8,7 +8,7 @@ CFLAGS = $(shell root-config --cflags) -Wall -std=c++11 -I${ANALYZE_DIR} -I${UTI
 
 MY_LIBS = $(addprefix build/, CfLite.o CfHeavy.o Cf2dLite.o Cf2dHeavy.o Types.o Purity.o PartialAnalysis.o Analysis.o DataAndModel.o PlotPartners.o PlotPartnersLamKch.o PlotPartnersLamK0.o SystematicAnalysis.o CanvasPartition.o)
 
-all: runSingleSys runAllSysLamK0 runAllSysLamKch runCompare
+all: runSingleSys runAllSysLamK0 runAllSysLamKch runCompare runBuildErrorBars
 
 runSingleSys: ${MY_LIBS} BuildSingleSystematics.C
 	g++ BuildSingleSystematics.C ${MY_LIBS} -o runSingleSys $(LIBS) $(CFLAGS)
@@ -22,6 +22,9 @@ runAllSysLamKch: ${MY_LIBS} BuildAllSystematicsLamKch.C
 runCompare: ${MY_LIBS} CompareDiffFitResults.C
 	g++ CompareDiffFitResults.C ${MY_LIBS} -o runCompare $(LIBS) $(CFLAGS)
 
+runBuildErrorBars: ${MY_LIBS} BuildErrorBars.C
+	g++ BuildErrorBars.C ${MY_LIBS} -o runBuildErrorBars $(LIBS) $(CFLAGS)
+
 build/%.o: ${ANALYZE_DIR}/%.cxx ${ANALYZE_DIR}/%.h
 	g++ -c $< $(CFLAGS) -o $@
 
@@ -32,4 +35,4 @@ build/%.o: %.cxx %.h
 	g++ -c $< $(CFLAGS) -o $@
 
 clean:
-	rm -f runSingleSys runAllSysLamK0 runAllSysLamKch runCompare ${MY_LIBS}
+	rm -f runSingleSys runAllSysLamK0 runAllSysLamKch runCompare runBuildErrorBars ${MY_LIBS}

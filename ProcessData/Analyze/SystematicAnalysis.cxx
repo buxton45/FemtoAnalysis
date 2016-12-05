@@ -356,3 +356,25 @@ void SystematicAnalysis::DrawAllDiffs(bool aDrawFits, DiffHistFitType aFitType, 
 }
 
 
+//________________________________________________________________________________________________________________
+td2dVec SystematicAnalysis::GetAllCfValues()
+{
+  int tNBins = fAnalyses[0].GetKStarHeavyCf()->GetHeavyCfClone()->GetNbinsX();
+  int tNAnalyses = (int)fAnalyses.size();
+
+  td2dVec tReturnVec(0);
+
+  for(int iBin=1; iBin<=tNBins; iBin++)
+  {
+    td1dVec tTempVec(0);
+    for(int iAn=0; iAn<tNAnalyses; iAn++)
+    {
+      if(iBin==1) assert(fAnalyses[iAn].GetKStarHeavyCf()->GetHeavyCfClone()->GetNbinsX() == tNBins);
+      tTempVec.push_back(fAnalyses[iAn].GetKStarHeavyCf()->GetHeavyCfClone()->GetBinContent(iBin));
+    }
+    tReturnVec.push_back(tTempVec);
+  }
+  return tReturnVec;
+}
+
+

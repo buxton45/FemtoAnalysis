@@ -59,6 +59,7 @@ public:
   void SetupOptStat(int aNx, int aNy, double aStatX, double aStatY, double aStatW, double aStatH);
   void AddPadPaveText(TPaveText* aText, int aNx, int aNy);
 
+  void DrawHistInPad(int aNx, int aNy, TH1* aHist, TString aDrawOption);
   void DrawInPad(int aNx, int aNy);
   void DrawAll();
 

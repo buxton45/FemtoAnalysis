@@ -570,6 +570,35 @@ TCanvas* FitGenerator::DrawKStarCfswFits(bool aMomResCorrectFit, bool aNoFlatBgd
   tCanPart->DrawXaxisTitle("k* (GeV/c)");
   tCanPart->DrawYaxisTitle("C(k*)",43,25,0.05,0.75);
 
+
+//TODO Add these above, using AddGraph method, and figure out how to get error bar boxes to be drawn
+  //Draw the plots with error bars---------------------------
+  for(int j=0; j<tNy; j++)
+  {
+    for(int i=0; i<tNx; i++)
+    {
+      tAnalysisNumber = j*tNx + i;
+
+      int tColor;
+      AnalysisType tAnType = fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetAnalysisType();
+      if(tAnType==kLamK0 || tAnType==kALamK0) tColor=1;
+      else if(tAnType==kLamKchP || tAnType==kALamKchM) tColor=2;
+      else if(tAnType==kLamKchM || tAnType==kALamKchP) tColor=4;
+      else tColor=1;
+
+      TH1* tHistToPlot = (TH1*)fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetCfwSysErrors();
+        tHistToPlot->SetMarkerStyle(20);
+        tHistToPlot->SetMarkerColor(tColor);
+        tHistToPlot->SetLineColor(tColor);
+        tHistToPlot->SetFillStyle(0);
+      
+      TString tDrawOption = "e2psame";
+      tCanPart->DrawHistInPad(i,j,tHistToPlot,tDrawOption);
+    }
+  }
+  //---------------------------------------------------------
+
+
   if(aSaveImage)
   {
     ExistsSaveLocationBase();

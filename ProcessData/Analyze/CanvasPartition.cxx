@@ -299,6 +299,14 @@ void CanvasPartition::AddPadPaveText(TPaveText* aText, int aNx, int aNy)
 
 
 //________________________________________________________________________________________________________________
+void CanvasPartition::DrawHistInPad(int aNx, int aNy, TH1* aHist, TString aDrawOption)
+{
+  fPadArray[aNx][aNy]->cd();
+  aHist->Draw(aDrawOption);
+}
+
+
+//________________________________________________________________________________________________________________
 void CanvasPartition::DrawInPad(int aNx, int aNy)
 {
   fPadArray[aNx][aNy]->cd();

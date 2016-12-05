@@ -45,8 +45,11 @@ public:
   void DrawAll();
   void DrawAllDiffs(bool aDrawFits=false, DiffHistFitType aFitType=kExpDecay, bool aFixOffsetParam=false, bool aSaveImages=false);
 
+  td2dVec GetAllCfValues();
+
 
   void SetSaveDirectory(TString aDirectory);
+  int GetNAnalyses();
 protected:
   TString fSaveDirectory;
   TString fFileLocationBase;
@@ -61,16 +64,13 @@ protected:
 
   vector<Analysis> fAnalyses;
 
-
-
-
-
 #ifdef __ROOT__
   ClassDef(SystematicAnalysis, 1)
 #endif
 };
 
 inline void SystematicAnalysis::SetSaveDirectory(TString aDirectory) {fSaveDirectory = aDirectory;}
+inline int SystematicAnalysis::GetNAnalyses(){return (int)fAnalyses.size();}
 
 
 #endif

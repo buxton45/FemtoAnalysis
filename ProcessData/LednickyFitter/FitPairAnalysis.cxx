@@ -21,6 +21,7 @@ ClassImp(FitPairAnalysis)
 FitPairAnalysis::FitPairAnalysis(TString aAnalysisName, vector<FitPartialAnalysis*> &aFitPartialAnalysisCollection) :
   fAnalysisRunType(kTrain),
   fAnalysisName(aAnalysisName),
+  fAnalysisDirectoryName(""),
   fFitPartialAnalysisCollection(aFitPartialAnalysisCollection),
   fNFitPartialAnalysis(fFitPartialAnalysisCollection.size()),
 
@@ -80,6 +81,7 @@ FitPairAnalysis::FitPairAnalysis(TString aAnalysisName, vector<FitPartialAnalysi
 FitPairAnalysis::FitPairAnalysis(TString aFileLocationBase, AnalysisType aAnalysisType, CentralityType aCentralityType, AnalysisRunType aRunType, int aNFitPartialAnalysis, TString aDirNameModifier) :
   fAnalysisRunType(aRunType),
   fAnalysisName(0),
+  fAnalysisDirectoryName(""),
   fFitPartialAnalysisCollection(0),
   fNFitPartialAnalysis(aNFitPartialAnalysis),
 
@@ -109,6 +111,11 @@ FitPairAnalysis::FitPairAnalysis(TString aFileLocationBase, AnalysisType aAnalys
 
 {
   fAnalysisName = TString(cAnalysisBaseTags[fAnalysisType]) + TString(cCentralityTags[fCentralityType]);
+
+  fAnalysisDirectoryName = aFileLocationBase;
+    int tLastSlash = fAnalysisDirectoryName.Last('/');
+    int tLength = fAnalysisDirectoryName.Length();
+    fAnalysisDirectoryName.Remove(tLastSlash+1, tLength-tLastSlash-1);
 
   int iStart;
   if(fAnalysisRunType==kTrain || fAnalysisRunType==kTrainSys) iStart=0;
@@ -145,6 +152,7 @@ FitPairAnalysis::FitPairAnalysis(TString aFileLocationBase, AnalysisType aAnalys
 FitPairAnalysis::FitPairAnalysis(TString aFileLocationBase, TString aFileLocationBaseMC, AnalysisType aAnalysisType, CentralityType aCentralityType, AnalysisRunType aRunType, int aNFitPartialAnalysis, TString aDirNameModifier) :
   fAnalysisRunType(aRunType),
   fAnalysisName(0),
+  fAnalysisDirectoryName(""),
   fFitPartialAnalysisCollection(0),
   fNFitPartialAnalysis(aNFitPartialAnalysis),
 
@@ -174,6 +182,11 @@ FitPairAnalysis::FitPairAnalysis(TString aFileLocationBase, TString aFileLocatio
 
 {
   fAnalysisName = TString(cAnalysisBaseTags[fAnalysisType]) + TString(cCentralityTags[fCentralityType]);
+
+  fAnalysisDirectoryName = aFileLocationBase;
+    int tLastSlash = fAnalysisDirectoryName.Last('/');
+    int tLength = fAnalysisDirectoryName.Length();
+    fAnalysisDirectoryName.Remove(tLastSlash+1, tLength-tLastSlash-1);
 
   int iStart;
   if(fAnalysisRunType==kTrain || fAnalysisRunType==kTrainSys) iStart=0;
@@ -687,5 +700,22 @@ void FitPairAnalysis::LoadTransformMatrices(TString aFileLocation)
 }
 
 
+//________________________________________________________________________________________________________________
+TH1* FitPairAnalysis::GetCfwSysErrors()
+{
+  TString tDate = fAnalysisDirectoryName;
+    int tLastUnderline = tDate.Last('_');
+    tDate.Remove(0,tLastUnderline);
+    tDate.Remove(tDate.Length()-1);
+
+  TString tFileLocation = TString::Format("%sSystematicResults_%s%s%s.root",fAnalysisDirectoryName.Data(),cAnalysisBaseTags[fAnalysisType],cCentralityTags[fCentralityType],tDate.Data());
+  TString tHistName = TString(cAnalysisBaseTags[fAnalysisType]) + TString(cCentralityTags[fCentralityType]) + TString("_wSysErrors");
+
+  TFile tFile(tFileLocation);
+  TH1* tReturnHist = (TH1*)tFile.Get(tHistName);
+    tReturnHist->SetDirectory(0);
+
+  return tReturnHist;
+}
 
 
