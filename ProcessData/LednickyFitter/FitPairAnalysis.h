@@ -57,7 +57,7 @@ public:
   FitPairAnalysis(TString aFileLocationBase, TString aFileLocationBaseMC, AnalysisType aAnalysisType, CentralityType aCentralityType, AnalysisRunType aRunType=kTrain, int aNFitPartialAnalysis=2, TString aDirNameModifier="");
   virtual ~FitPairAnalysis();
 
-  void BuildModelKStarTrueVsRecMixed();
+  void BuildModelKStarTrueVsRecMixed(int aRebinFactor=1);
   void BuildKStarCfHeavy(double aMinNorm=0.32, double aMaxNorm=0.4);
   void RebinKStarCfHeavy(int aRebinFactor, double aMinNorm=0.32, double aMaxNorm=0.4);
   void DrawKStarCfHeavy(TPad* aPad, int aMarkerColor=1, TString aOption = "", int aMarkerStyle=20);

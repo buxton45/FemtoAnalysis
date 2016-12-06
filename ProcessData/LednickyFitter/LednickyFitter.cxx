@@ -812,10 +812,11 @@ void LednickyFitter::CalculateFitFunction(int &npar, double &chi2, double *par)
       TH1* tDen = tKStarCfLite->Den();
       TH1* tCf = tKStarCfLite->Cf();
 
-      //make sure tNum and tDen have same bin size as tMomResMatrix
+      //make sure tNum and tDen and tCf have same bin size as tMomResMatrix
       if(fApplyMomResCorrection)
       {
         assert(tNum->GetXaxis()->GetBinWidth(1) == tDen->GetXaxis()->GetBinWidth(1));
+        assert(tNum->GetXaxis()->GetBinWidth(1) == tCf->GetXaxis()->GetBinWidth(1));
         assert(tNum->GetXaxis()->GetBinWidth(1) == tMomResMatrix->GetXaxis()->GetBinWidth(1));
         assert(tNum->GetXaxis()->GetBinWidth(1) == tMomResMatrix->GetYaxis()->GetBinWidth(1));
       }
@@ -1202,26 +1203,28 @@ vector<double> LednickyFitter::FindGoodInitialValues()
     tRef0Values[4] = 0.5;
     tRef0Values[5] = 1.;
 
-  const int nValuesImf0 = 4;
+  const int nValuesImf0 = 6;
   vector<double> tImf0Values(nValuesImf0);
-    tImf0Values[0] = 0.1;
-    tImf0Values[1] = 0.3;
-    tImf0Values[2] = 0.5;
-    tImf0Values[3] = 1.;
+    tImf0Values[0] = -1.;
+    tImf0Values[1] = -0.5;
+    tImf0Values[2] = -0.1;
+    tImf0Values[3] = 0.1;
+    tImf0Values[4] = 0.5;
+    tImf0Values[5] = 1.;
 
-  const int nValuesd0 = 7;
+  const int nValuesd0 = 1;
   vector<double> td0Values(nValuesd0);
-    td0Values[0] = -10.;
-    td0Values[1] = -1.;
-    td0Values[2] = -0.1;
-    td0Values[3] = 0.;
-    td0Values[4] = 0.1;
-    td0Values[5] = 1.;
-    td0Values[6] = 10.;
+//    td0Values[0] = -10.;
+//    td0Values[1] = -1.;
+//    td0Values[2] = -0.1;
+    td0Values[0] = 0.;
+//    td0Values[4] = 0.1;
+//    td0Values[5] = 1.;
+//    td0Values[6] = 10.;
 
   const int nValuesNorm = 1;
   vector<double> tNormValues(nValuesNorm);
-    tNormValues[0] = 1.;
+    tNormValues[0] = 0.1;
 
   //---------------------------------------------------------------
 

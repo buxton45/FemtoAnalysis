@@ -58,6 +58,8 @@ public:
   void WriteAllFitParameters(ostream &aOut=std::cout);
   vector<TString> GetAllFitParametersVector();
 
+  void FindGoodInitialValues(bool aApplyMomResCorrection=false, bool aApplyNonFlatBackgroundCorrection=false);
+
   void SetSaveLocationBase(TString aBase, TString aSaveNameModifier="");
   void ExistsSaveLocationBase();
 

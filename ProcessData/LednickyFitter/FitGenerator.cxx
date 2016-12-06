@@ -443,8 +443,8 @@ TCanvas* FitGenerator::DrawKStarCfs(bool aSaveImage)
 
   double tXLow = -0.02;
   double tXHigh = 0.99;
-  double tYLow = 0.89;
-  double tYHigh = 1.04;
+  double tYLow = 0.71;
+  double tYHigh = 1.09;
   CanvasPartition* tCanPart = new CanvasPartition(tCanvasName,tNx,tNy,tXLow,tXHigh,tYLow,tYHigh,0.12,0.05,0.13,0.05);
 
   assert(tNx*tNy == fNAnalyses);
@@ -452,7 +452,7 @@ TCanvas* FitGenerator::DrawKStarCfs(bool aSaveImage)
 
   int tMarkerStyle = 20;
   int tMarkerColor = 1;
-  double tMarkerSize = 0.75;
+  double tMarkerSize = 0.5;
 
   if(fPairType==kLamK0 || fPairType==kALamK0) tMarkerColor = 1;
   else if(fPairType==kLamKchP || fPairType==kALamKchM) tMarkerColor = 2;
@@ -465,7 +465,37 @@ TCanvas* FitGenerator::DrawKStarCfs(bool aSaveImage)
     {
       tAnalysisNumber = j*tNx + i;
 
+      //Include the Cf with statistical errors, and make sure the binning is the same as the fitted Cf ----------
+      TH1* tHistToPlot = (TH1*)fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetCfwSysErrors();
+        tHistToPlot->SetFillStyle(0);  //for box error bars to draw correctly
+
+//TODO 
+//If the binnings are unequal, I must regenerate the plots with Analyze/Systematics/BuildErrorBars.C
+//This is because a Cf should not simply be rebinned, but rather the Num and Den should be rebinned, and the Cf rebuilt
+//Ths incorrect method would be Cf->Rebin(aRebin); Cf->Scale(1./aRebin);
+/*
+      double tDesiredBinWidth, tBinWidth;
+      tDesiredBinWidth = ((TH1*)fSharedAn->GetKStarCfHeavy(tAnalysisNumber)->GetHeavyCfClone())->GetBinWidth(1);
+      tBinWidth = tHistToPlot->GetBinWidth(1);
+
+      if( (tDesiredBinWidth != tBinWidth) && (fmod(tDesiredBinWidth,tBinWidth) == 0) )
+      {
+        int tScale = tDesiredBinWidth/tBinWidth;
+        tHistToPlot->Rebin(tScale);
+      }
+      else if(tDesiredBinWidth != tBinWidth)
+      {
+        cout << "ERROR: FitGenerator::DrawKStarCfswFits: Histogram containing systematic error bars does not have the correct bin size and" << endl;
+        cout << "DNE an appropriate scale to resolve the issue" << endl;
+        assert(0);
+      }
+*/
+//      assert(tHistToPlot->GetBinWidth(1) == tDesiredBinWidth);
+      assert(tHistToPlot->GetBinWidth(1) == ((TH1*)fSharedAn->GetKStarCfHeavy(tAnalysisNumber)->GetHeavyCfClone())->GetBinWidth(1));
+      //---------------------------------------------------------------------------------------------------------
+
       tCanPart->AddGraph(i,j,(TH1*)fSharedAn->GetKStarCfHeavy(tAnalysisNumber)->GetHeavyCfClone(),"",tMarkerStyle,tMarkerColor,tMarkerSize);
+      tCanPart->AddGraph(i,j,tHistToPlot,"",tMarkerStyle,tMarkerColor,tMarkerSize,"e2psame");
 
       TString tTextAnType = TString(cAnalysisRootTags[fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetAnalysisType()]);
       TPaveText* tAnTypeName = tCanPart->SetupTPaveText(tTextAnType,i,j,0.8,0.85);
@@ -528,8 +558,9 @@ TCanvas* FitGenerator::DrawKStarCfswFits(bool aMomResCorrectFit, bool aNoFlatBgd
 
   double tXLow = -0.02;
   double tXHigh = 0.99;
-  double tYLow = 0.89;
-  double tYHigh = 1.04;
+  double tYLow = 0.71;
+  double tYHigh = 1.09;
+
   CanvasPartition* tCanPart = new CanvasPartition(tCanvasName,tNx,tNy,tXLow,tXHigh,tYLow,tYHigh,0.12,0.05,0.13,0.05);
 
   assert(tNx*tNy == fNAnalyses);
@@ -547,10 +578,45 @@ TCanvas* FitGenerator::DrawKStarCfswFits(bool aMomResCorrectFit, bool aNoFlatBgd
       else if(tAnType==kLamKchM || tAnType==kALamKchP) tColor=4;
       else tColor=1;
 
-      tCanPart->AddGraph(i,j,(TH1*)fSharedAn->GetKStarCfHeavy(tAnalysisNumber)->GetHeavyCfClone(),"",20,tColor);
+      TH1* tCorrectedFitHisto = (TH1*)fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetCorrectedFitHisto(aMomResCorrectFit,aNoFlatBgdCorrectFit);
+        tCorrectedFitHisto->SetLineWidth(2);
+
+      //Include the Cf with statistical errors, and make sure the binning is the same as the fitted Cf ----------
+      TH1* tHistToPlot = (TH1*)fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetCfwSysErrors();
+        tHistToPlot->SetFillStyle(0);  //for box error bars to draw correctly
+
+//TODO 
+//If the binnings are unequal, I must regenerate the plots with Analyze/Systematics/BuildErrorBars.C
+//This is because a Cf should not simply be rebinned, but rather the Num and Den should be rebinned, and the Cf rebuilt
+//Ths incorrect method would be Cf->Rebin(aRebin); Cf->Scale(1./aRebin);
+/*
+      double tDesiredBinWidth, tBinWidth;
+      tDesiredBinWidth = ((TH1*)fSharedAn->GetKStarCfHeavy(tAnalysisNumber)->GetHeavyCfClone())->GetBinWidth(1);
+      tBinWidth = tHistToPlot->GetBinWidth(1);
+
+      if( (tDesiredBinWidth != tBinWidth) && (fmod(tDesiredBinWidth,tBinWidth) == 0) )
+      {
+        int tScale = tDesiredBinWidth/tBinWidth;
+        tHistToPlot->Rebin(tScale);
+      }
+      else if(tDesiredBinWidth != tBinWidth)
+      {
+        cout << "ERROR: FitGenerator::DrawKStarCfswFits: Histogram containing systematic error bars does not have the correct bin size and" << endl;
+        cout << "DNE an appropriate scale to resolve the issue" << endl;
+        assert(0);
+      }
+*/
+//      assert(tHistToPlot->GetBinWidth(1) == tDesiredBinWidth);
+      assert(tHistToPlot->GetBinWidth(1) == ((TH1*)fSharedAn->GetKStarCfHeavy(tAnalysisNumber)->GetHeavyCfClone())->GetBinWidth(1));
+      //---------------------------------------------------------------------------------------------------------
+
+      tCanPart->AddGraph(i,j,(TH1*)fSharedAn->GetKStarCfHeavy(tAnalysisNumber)->GetHeavyCfClone(),"",20,tColor,0.6);
+      tCanPart->AddGraph(i,j,tHistToPlot,"",20,tColor,0.6,"e2psame");
       tCanPart->AddGraph(i,j,(TF1*)fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetFit(),"");
-      tCanPart->AddGraph(i,j,(TH1*)fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetCorrectedFitHisto(aMomResCorrectFit,aNoFlatBgdCorrectFit),"",20,6,0.5);
+      tCanPart->AddGraph(i,j,tCorrectedFitHisto,"",20,6,0.5,"lsame");
       tCanPart->AddGraph(i,j,(TF1*)fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetNonFlatBackground(),"",20,3);
+
+
 
       TString tTextAnType = TString(cAnalysisRootTags[fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetAnalysisType()]);
       TPaveText* tAnTypeName = tCanPart->SetupTPaveText(tTextAnType,i,j,0.8,0.85);
@@ -569,35 +635,6 @@ TCanvas* FitGenerator::DrawKStarCfswFits(bool aMomResCorrectFit, bool aNoFlatBgd
   tCanPart->DrawAll();
   tCanPart->DrawXaxisTitle("k* (GeV/c)");
   tCanPart->DrawYaxisTitle("C(k*)",43,25,0.05,0.75);
-
-
-//TODO Add these above, using AddGraph method, and figure out how to get error bar boxes to be drawn
-  //Draw the plots with error bars---------------------------
-  for(int j=0; j<tNy; j++)
-  {
-    for(int i=0; i<tNx; i++)
-    {
-      tAnalysisNumber = j*tNx + i;
-
-      int tColor;
-      AnalysisType tAnType = fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetAnalysisType();
-      if(tAnType==kLamK0 || tAnType==kALamK0) tColor=1;
-      else if(tAnType==kLamKchP || tAnType==kALamKchM) tColor=2;
-      else if(tAnType==kLamKchM || tAnType==kALamKchP) tColor=4;
-      else tColor=1;
-
-      TH1* tHistToPlot = (TH1*)fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetCfwSysErrors();
-        tHistToPlot->SetMarkerStyle(20);
-        tHistToPlot->SetMarkerColor(tColor);
-        tHistToPlot->SetLineColor(tColor);
-        tHistToPlot->SetFillStyle(0);
-      
-      TString tDrawOption = "e2psame";
-      tCanPart->DrawHistInPad(i,j,tHistToPlot,tDrawOption);
-    }
-  }
-  //---------------------------------------------------------
-
 
   if(aSaveImage)
   {
@@ -1139,6 +1176,24 @@ vector<TString> FitGenerator::GetAllFitParametersVector()
     tReturnVec.push_back(TString(""));
   }
   return tReturnVec;
+}
+
+//________________________________________________________________________________________________________________
+void FitGenerator::FindGoodInitialValues(bool aApplyMomResCorrection, bool aApplyNonFlatBackgroundCorrection)
+{
+  SetAllParameters();
+
+  fSharedAn->CreateMinuitParameters();
+
+  fLednickyFitter = new LednickyFitter(fSharedAn);
+  fLednickyFitter->GetFitSharedAnalyses()->GetMinuitObject()->SetFCN(GlobalFCN);
+  fLednickyFitter->SetApplyMomResCorrection(aApplyMomResCorrection);
+  fLednickyFitter->SetApplyNonFlatBackgroundCorrection(aApplyNonFlatBackgroundCorrection);
+  GlobalFitter = fLednickyFitter;
+
+  vector<double> tValues = fLednickyFitter->FindGoodInitialValues();
+
+  for(unsigned int i=0; i<tValues.size(); i++) cout << "i = " << i << ": " << tValues[i] << endl;
 }
 
 

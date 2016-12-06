@@ -33,6 +33,7 @@ CanvasPartition::CanvasPartition(TString aCanvasName, int aNx, int aNy, double a
   fCanvas(0),
 
   fGraphs(0),
+  fGraphsDrawOptions(aNx*aNy),
   fPadPaveTexts(0),
 
   fPadArray(0),
@@ -299,14 +300,6 @@ void CanvasPartition::AddPadPaveText(TPaveText* aText, int aNx, int aNy)
 
 
 //________________________________________________________________________________________________________________
-void CanvasPartition::DrawHistInPad(int aNx, int aNy, TH1* aHist, TString aDrawOption)
-{
-  fPadArray[aNx][aNy]->cd();
-  aHist->Draw(aDrawOption);
-}
-
-
-//________________________________________________________________________________________________________________
 void CanvasPartition::DrawInPad(int aNx, int aNy)
 {
   fPadArray[aNx][aNy]->cd();
@@ -317,6 +310,8 @@ void CanvasPartition::DrawInPad(int aNx, int aNy)
 
   int tPosition = aNx + aNy*fNx;
   TObjArray* tGraphsToDraw = ((TObjArray*)fGraphs->At(tPosition));
+  assert(tGraphsToDraw->GetEntries() == fGraphsDrawOptions[tPosition].size());
+
   TIter tNextGraph(tGraphsToDraw);
   TObject *tGraphObj = NULL;
 
@@ -331,7 +326,12 @@ void CanvasPartition::DrawInPad(int aNx, int aNy)
     tTrash->DrawCopy("AXIS");
   delete tTrash;
 
-  while(tGraphObj = tNextGraph()) tGraphObj->Draw("psames");
+  int tCounter = 0;
+  while(tGraphObj = tNextGraph())
+  {
+    tGraphObj->Draw(fGraphsDrawOptions[tPosition][tCounter]);
+    tCounter++;
+  }
 
   TObjArray* tPaveTexts = (TObjArray*)fPadPaveTexts->At(tPosition);
   for(unsigned int i=0; i<tPaveTexts->GetEntries(); i++) tPaveTexts->At(i)->Draw();

@@ -212,7 +212,8 @@ FitPairAnalysis::FitPairAnalysis(TString aFileLocationBase, TString aFileLocatio
   fParticleTypes = fFitPartialAnalysisCollection[0]->GetParticleTypes();
 
   BuildKStarCfHeavy(fKStarMinNorm,fKStarMaxNorm);
-  BuildModelKStarTrueVsRecMixed();
+  RebinKStarCfHeavy(2,fKStarMinNorm,fKStarMaxNorm);
+  BuildModelKStarTrueVsRecMixed(2);
 //  BuildModelCfFakeIdealCfFakeRatio(fKStarMinNorm,fKStarMaxNorm,1);
 
   if(fAnalysisType == kXiKchP || fAnalysisType == kAXiKchP || fAnalysisType == kXiKchM || fAnalysisType == kAXiKchM)
@@ -236,7 +237,7 @@ FitPairAnalysis::~FitPairAnalysis()
 
 
 //________________________________________________________________________________________________________________
-void FitPairAnalysis::BuildModelKStarTrueVsRecMixed()
+void FitPairAnalysis::BuildModelKStarTrueVsRecMixed(int aRebinFactor)
 {
   TString tName = "ModelKStarTrueVsRecMixed_" + TString(cAnalysisBaseTags[fAnalysisType]);
 
@@ -248,6 +249,8 @@ void FitPairAnalysis::BuildModelKStarTrueVsRecMixed()
     TH2* tToAdd = (TH2*)fFitPartialAnalysisCollection[i]->GetModelKStarTrueVsRecMixed();
     fModelKStarTrueVsRecMixed->Add(tToAdd);
   }
+
+  fModelKStarTrueVsRecMixed->Rebin2D(aRebinFactor);
 
 }
 
@@ -651,6 +654,10 @@ TH1F* FitPairAnalysis::GetCorrectedFitHisto(bool aMomResCorrection, bool aNonFla
       tReturnHisto->SetBinError(j,0);
     }
   }
+
+  //Root is stupid and draws a line connected the underflow bin, which is at 0
+  tReturnHisto->SetBinContent(0,tReturnHisto->GetBinContent(1));
+  tReturnHisto->GetBinError(0,0.);
 
   delete tUncorrected;
   return tReturnHisto;

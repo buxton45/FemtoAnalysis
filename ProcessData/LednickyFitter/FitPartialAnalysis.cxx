@@ -233,7 +233,7 @@ FitPartialAnalysis::FitPartialAnalysis(TString aFileLocation, TString aFileLocat
 
     fNorm = new FitParameter(kNorm, cStartValues[fAnalysisType][fCentralityType][kNorm],false,0.,0.,0.1);
     fNorm->SetStartValue(fKStarNumScale/fKStarDenScale);
-    fNorm->SetFixed(true);
+//    fNorm->SetFixed(true);
 
 //TODO give these their own unique start values
     fRef02 = new FitParameter(kRef02, cStartValues[fAnalysisType][fCentralityType][kRef0],false,0.,0.,1.);

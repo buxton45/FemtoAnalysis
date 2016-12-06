@@ -56,7 +56,7 @@ SystematicAnalysis::SystematicAnalysis(TString aFileLocationBase, AnalysisType a
     if(!fDirNameModifierBase2.IsNull()) tDirNameModifier += fDirNameModifierBase2 + TString::Format("%0.6f",fModifierValues2[i]);
 
     fAnalyses.emplace_back(fFileLocationBase,fAnalysisType,fCentralityType,kTrainSys,2,tDirNameModifier);
-    fAnalyses[i].BuildKStarHeavyCf();
+    fAnalyses[i].BuildKStarHeavyCf(0.32,0.4,2);
   }
 
 

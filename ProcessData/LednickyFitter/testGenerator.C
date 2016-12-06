@@ -13,10 +13,6 @@ int main(int argc, char **argv)
 //-----------------------------------------------------------------------------
   TString tResultsDate = "20161027";
 
-  TString tDirectoryBase = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_%s/",tResultsDate.Data());
-  TString tFileLocationBase = TString::Format("%sResults_cLamcKch_%s",tDirectoryBase.Data(),tResultsDate.Data());
-  TString tFileLocationBaseMC = TString::Format("%sResults_cLamcKchMC_%s",tDirectoryBase.Data(),tResultsDate.Data());
-
   AnalysisType tAnType = kLamKchP;
   AnalysisRunType tAnRunType = kTrain;
   int tNPartialAnalysis = 2;
@@ -28,6 +24,18 @@ int main(int argc, char **argv)
   bool SaveImages = false;
   bool ApplyMomResCorrection = true;
   bool ApplyNonFlatBackgroundCorrection = true;
+
+  TString tGeneralAnTypeName;
+  if(tAnType==kLamK0 || tAnType==kALamK0) tGeneralAnTypeName = "cLamK0";
+  else if(tAnType==kLamKchP || tAnType==kALamKchM || tAnType==kLamKchM || tAnType==kALamKchP) tGeneralAnTypeName = "cLamcKch";
+  else assert(0);
+
+
+  TString tDirectoryBase = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_%s_%s/",tGeneralAnTypeName.Data(),tResultsDate.Data());
+  TString tFileLocationBase = TString::Format("%sResults_%s_%s",tDirectoryBase.Data(),tGeneralAnTypeName.Data(),tResultsDate.Data());
+  TString tFileLocationBaseMC = TString::Format("%sResults_%sMC_%s",tDirectoryBase.Data(),tGeneralAnTypeName.Data(),tResultsDate.Data());
+
+
   TString tSaveNameModifier = "";
   if(ApplyMomResCorrection) tSaveNameModifier += TString("_MomResCrctn");
   if(ApplyNonFlatBackgroundCorrection) tSaveNameModifier += TString("_NonFlatBgdCrctn");
@@ -46,7 +54,7 @@ int main(int argc, char **argv)
   TCanvas* tKStarwFitsCan = tLamKchP->DrawKStarCfswFits(ApplyMomResCorrection,ApplyNonFlatBackgroundCorrection,SaveImages);
 //  TCanvas* tKStarCfs = tLamKchP->DrawKStarCfs(SaveImages);
 
-
+//  tLamKchP->FindGoodInitialValues(ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection);
 
 //-------------------------------------------------------------------------------
   tFullTimer.Stop();

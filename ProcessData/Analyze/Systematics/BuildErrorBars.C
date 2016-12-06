@@ -414,7 +414,7 @@ int main(int argc, char **argv)
 
 //-------------------------------------------------------------------------------
   Analysis* tSaveAnalysis = new Analysis(tFileLocationBase_Save,tAnType,tCentType);
-    tSaveAnalysis->BuildKStarHeavyCf();
+    tSaveAnalysis->BuildKStarHeavyCf(0.32,0.4,2);
   TH1* tCfwErrors = tSaveAnalysis->GetKStarHeavyCf()->GetHeavyCfClone();
   TString tCfwErrorsTitle = TString(cAnalysisRootTags[tAnType])+TString(cCentralityTags[tCentType])+TString("_wSysErrors");
   TString tCfwErrorsName = TString(cAnalysisBaseTags[tAnType])+TString(cCentralityTags[tCentType])+TString("_wSysErrors");

@@ -44,7 +44,7 @@ public:
 
   //Since I am using templates, the following functions need to be defined in this header, i.e. below
   template<typename T>
-  void AddGraph(int aNx, int aNy, T* aGraph, TString tPadLegendName, int aMarkerStyle=20, int aMarkerColor=1, double aMarkerSize=0.75);
+  void AddGraph(int aNx, int aNy, T* aGraph, TString tPadLegendName, int aMarkerStyle=20, int aMarkerColor=1, double aMarkerSize=0.75, TString aDrawOption="psames");
 
   template<typename T>
   void SetupAxis(AxisType aAxisType, T* aGraph, float aXscale, float aYscale, float aLabelSize=0.15, float aLabelOffSet=0.005);
@@ -59,7 +59,6 @@ public:
   void SetupOptStat(int aNx, int aNy, double aStatX, double aStatY, double aStatW, double aStatH);
   void AddPadPaveText(TPaveText* aText, int aNx, int aNy);
 
-  void DrawHistInPad(int aNx, int aNy, TH1* aHist, TString aDrawOption);
   void DrawInPad(int aNx, int aNy);
   void DrawAll();
 
@@ -81,6 +80,7 @@ protected:
   TCanvas* fCanvas;
 
   TObjArray* fGraphs;
+  vector<vector<TString> > fGraphsDrawOptions;
   TObjArray* fPadPaveTexts;
 
   td2dTPadVec fPadArray;
@@ -100,7 +100,7 @@ inline void CanvasPartition::SetDrawUnityLine(bool aDraw) {fDrawUnityLine = aDra
 
 //________________________________________________________________________________________________________________
 template<typename T>
-inline void CanvasPartition::AddGraph(int aNx, int aNy, T* aGraph, TString tPadLegendName, int aMarkerStyle, int aMarkerColor, double aMarkerSize)
+inline void CanvasPartition::AddGraph(int aNx, int aNy, T* aGraph, TString tPadLegendName, int aMarkerStyle, int aMarkerColor, double aMarkerSize, TString aDrawOption)
 {
   int tPosition = aNx + aNy*fNx;
 
@@ -119,6 +119,7 @@ inline void CanvasPartition::AddGraph(int aNx, int aNy, T* aGraph, TString tPadL
 
   if(!tPadLegendName.IsNull()) AddPadPaveText(SetupTPaveText(tPadLegendName,aNx,aNy),aNx,aNy);
   ((TObjArray*)fGraphs->At(tPosition))->Add(aGraph);
+  fGraphsDrawOptions[tPosition].push_back(aDrawOption);
 }
 
 
