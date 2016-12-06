@@ -9,10 +9,13 @@ CFLAGS = $(shell root-config --cflags) -Wall -std=c++11 -I${ANALYZE_DIR} -I${LED
 
 MY_LIBS = $(addprefix build/, FitParameter.o FitChi2Histograms.o FitPartialAnalysis.o FitPairAnalysis.o FitSharedAnalyses.o LednickyFitter.o FitGenerator.o CfLite.o CfHeavy.o Types.o Faddeeva.o FitSystematicAnalysis.o CanvasPartition.o)
 
-all: runTest
+all: runTest runRead
 
 runTest: ${MY_LIBS} test.C
 	g++ test.C ${MY_LIBS} -o runTest $(LIBS) $(CFLAGS)
+
+runRead: ${MY_LIBS} ReadSystematicFitResults.C
+	g++ ReadSystematicFitResults.C ${MY_LIBS} -o runRead $(LIBS) $(CFLAGS)
 
 build/%.o: ${ANALYZE_DIR}/%.cxx ${ANALYZE_DIR}/%.h
 	g++ -c $< $(CFLAGS) -o $@
@@ -27,4 +30,4 @@ build/%.o: %.cxx %.h
 	g++ -c $< $(CFLAGS) -o $@
 
 clean:
-	rm -f runTest ${MY_LIBS}
+	rm -f runTest runRead ${MY_LIBS}
