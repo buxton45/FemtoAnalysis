@@ -29,7 +29,8 @@ public:
   TString GetCutValues(int aIndex);
   void OutputCutValues(int aIndex, ostream &aOut=std::cout);
 
-
+  double ExtractParamValue(TString aString);
+  void AppendDifference(vector<vector<TString> > &a2dVec, int aCut, int aLineNumber);
   void PrintText2dVec(vector<vector<TString> > &a2dVec, ostream &aOut=std::cout);
   void RunAllFits(bool aSaveImages=false, ostream &aOut=std::cout);
 

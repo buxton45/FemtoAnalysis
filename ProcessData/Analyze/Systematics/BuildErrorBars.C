@@ -322,8 +322,9 @@ int main(int argc, char **argv)
   //The TApplication object allows the execution of the code to pause.
   //This allows the user a chance to look at and manipulate a TBrowser before
   //the program ends and closes everything
-//-----------------------------------------------------------------------------
 
+  bool bPlayCompletionBeep = true;
+//-----------------------------------------------------------------------------
   AnalysisType tAnType = kLamKchP;
   CentralityType tCentType = k0010;
 
@@ -442,6 +443,7 @@ int main(int argc, char **argv)
 
 
 cout << "DONE" << endl;
+if(bPlayCompletionBeep) system("( speaker-test -t sine -f 1000 )& pid=$! ; sleep 0.5s ; kill -9 $pid");
 //-------------------------------------------------------------------------------
   theApp->Run(kTRUE); //Run the TApp to pause the code.
   // Select "Exit ROOT" from Canvas "File" menu to exit

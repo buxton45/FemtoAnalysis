@@ -582,8 +582,8 @@ TCanvas* FitGenerator::DrawKStarCfswFits(bool aMomResCorrectFit, bool aNoFlatBgd
         tCorrectedFitHisto->SetLineWidth(2);
 
       //Include the Cf with statistical errors, and make sure the binning is the same as the fitted Cf ----------
-      TH1* tHistToPlot = (TH1*)fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetCfwSysErrors();
-        tHistToPlot->SetFillStyle(0);  //for box error bars to draw correctly
+//      TH1* tHistToPlot = (TH1*)fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetCfwSysErrors();
+//        tHistToPlot->SetFillStyle(0);  //for box error bars to draw correctly
 
 //TODO 
 //If the binnings are unequal, I must regenerate the plots with Analyze/Systematics/BuildErrorBars.C
@@ -607,11 +607,11 @@ TCanvas* FitGenerator::DrawKStarCfswFits(bool aMomResCorrectFit, bool aNoFlatBgd
       }
 */
 //      assert(tHistToPlot->GetBinWidth(1) == tDesiredBinWidth);
-      assert(tHistToPlot->GetBinWidth(1) == ((TH1*)fSharedAn->GetKStarCfHeavy(tAnalysisNumber)->GetHeavyCfClone())->GetBinWidth(1));
+//      assert(tHistToPlot->GetBinWidth(1) == ((TH1*)fSharedAn->GetKStarCfHeavy(tAnalysisNumber)->GetHeavyCfClone())->GetBinWidth(1));
       //---------------------------------------------------------------------------------------------------------
 
       tCanPart->AddGraph(i,j,(TH1*)fSharedAn->GetKStarCfHeavy(tAnalysisNumber)->GetHeavyCfClone(),"",20,tColor,0.6);
-      tCanPart->AddGraph(i,j,tHistToPlot,"",20,tColor,0.6,"e2psame");
+//      tCanPart->AddGraph(i,j,tHistToPlot,"",20,tColor,0.6,"e2psame");
       tCanPart->AddGraph(i,j,(TF1*)fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetFit(),"");
       tCanPart->AddGraph(i,j,tCorrectedFitHisto,"",20,6,0.5,"lsame");
       tCanPart->AddGraph(i,j,(TF1*)fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetNonFlatBackground(),"",20,3);
@@ -1158,7 +1158,7 @@ void FitGenerator::WriteAllFitParameters(ostream &aOut)
 }
 
 //________________________________________________________________________________________________________________
-vector<TString> FitGenerator::GetAllFitParametersVector()
+vector<TString> FitGenerator::GetAllFitParametersTStringVector()
 {
   vector<TString> tReturnVec(0);
 
@@ -1171,7 +1171,7 @@ vector<TString> FitGenerator::GetAllFitParametersVector()
       tReturnVec.push_back(tCentLine);
     tReturnVec.push_back(TString(""));
 
-    vector<TString> tParamVec = fSharedAn->GetFitPairAnalysis(iAn)->GetFitParametersVector();
+    vector<TString> tParamVec = fSharedAn->GetFitPairAnalysis(iAn)->GetFitParametersTStringVector();
     for(unsigned int iPar=0; iPar<tParamVec.size(); iPar++) tReturnVec.push_back(tParamVec[iPar]);
     tReturnVec.push_back(TString(""));
   }

@@ -453,7 +453,7 @@ void FitPairAnalysis::WriteFitParameters(ostream &aOut)
 }
 
 //________________________________________________________________________________________________________________
-vector<TString> FitPairAnalysis::GetFitParametersVector()
+vector<TString> FitPairAnalysis::GetFitParametersTStringVector()
 {
   vector<TString> tReturnVec(0);
   TString tLine;
@@ -461,6 +461,17 @@ vector<TString> FitPairAnalysis::GetFitParametersVector()
   {
     tLine = TString::Format("%s: %f +- %f",fFitParameters[i]->GetName().Data(),fFitParameters[i]->GetFitValue(),fFitParameters[i]->GetFitValueError());
     tReturnVec.push_back(tLine);
+  }
+  return tReturnVec;
+}
+
+//________________________________________________________________________________________________________________
+vector<double> FitPairAnalysis::GetFitParametersVector()
+{
+  vector<double> tReturnVec(0);
+  for(unsigned int i=0; i<fFitParameters.size(); i++)
+  {
+    tReturnVec.push_back(fFitParameters[i]->GetFitValue());
   }
   return tReturnVec;
 }

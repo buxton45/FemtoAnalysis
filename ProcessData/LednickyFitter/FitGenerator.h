@@ -56,7 +56,7 @@ public:
   void SetAllParameters();
   void DoFit(bool aApplyMomResCorrection=false, bool aApplyNonFlatBackgroundCorrection=false);
   void WriteAllFitParameters(ostream &aOut=std::cout);
-  vector<TString> GetAllFitParametersVector();
+  vector<TString> GetAllFitParametersTStringVector();
 
   void FindGoodInitialValues(bool aApplyMomResCorrection=false, bool aApplyNonFlatBackgroundCorrection=false);
 

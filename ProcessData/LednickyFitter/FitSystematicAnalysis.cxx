@@ -104,16 +104,49 @@ void FitSystematicAnalysis::OutputCutValues(int aIndex, ostream &aOut)
 }
 
 //________________________________________________________________________________________________________________
+double FitSystematicAnalysis::ExtractParamValue(TString aString)
+{
+  TString tString = TString(aString);
+
+  int tBeg = tString.First(":");
+  tString.Remove(0,tBeg+1);
+
+  int tEnd = tString.First("+");
+  tString.Remove(tEnd,tString.Length()-tEnd);
+  tString.Strip(TString::kBoth, ' ');
+
+  return tString.Atof();  
+}
+
+//________________________________________________________________________________________________________________
+void FitSystematicAnalysis::AppendDifference(vector<vector<TString> > &a2dVec, int aCut, int aLineNumber)
+{
+  TString tValString = a2dVec[aCut][aLineNumber];
+  TString tDefaultValString = a2dVec[1][aLineNumber];
+
+  double tVal = ExtractParamValue(tValString);
+  double tDefaultVal = ExtractParamValue(tDefaultValString);
+
+  double tDiff = (tVal-tDefaultVal)/tDefaultVal;
+  tDiff *= 100;
+
+  a2dVec[aCut][aLineNumber] += TString::Format(" (%f%%) ",tDiff);
+}
+
+
+//________________________________________________________________________________________________________________
 void FitSystematicAnalysis::PrintText2dVec(vector<vector<TString> > &a2dVec, ostream &aOut)
 {
   int tNCuts = (int)a2dVec.size();
+  assert(tNCuts==3);
   for(unsigned int i=1; i<a2dVec.size(); i++) assert(a2dVec[i-1].size() == a2dVec[i].size());
   int tSize = a2dVec[0].size();
   for(int iLineNumber=0; iLineNumber<tSize; iLineNumber++)
   {
     for(int iCut=0; iCut<tNCuts; iCut++)
     {
-      aOut << std::setw(35) << TString(a2dVec[iCut][iLineNumber]) << " | ";
+      if(a2dVec[iCut][iLineNumber].Contains("+-")) AppendDifference(a2dVec, iCut, iLineNumber);
+      aOut << std::setw(50) << TString(a2dVec[iCut][iLineNumber]) << " | ";
     }
     aOut << endl;
   }
@@ -136,7 +169,7 @@ void FitSystematicAnalysis::RunAllFits(bool aSave, ostream &aOut)
 //    OutputCutValues(i,aOut);
 //    tFitGenerator->WriteAllFitParameters(aOut);
     TString tCutValue = GetCutValues(i);
-    vector<TString> tFitParamsVec = tFitGenerator->GetAllFitParametersVector();
+    vector<TString> tFitParamsVec = tFitGenerator->GetAllFitParametersTStringVector();
     tFitParamsVec.insert(tFitParamsVec.begin(),tCutValue);
     tText2dVector.push_back(tFitParamsVec);
 
@@ -154,7 +187,7 @@ void FitSystematicAnalysis::RunAllFits(bool aSave, ostream &aOut)
       tSaveName += TString(".pdf");
       tKStarwFitsCan->SaveAs(tSaveName);
     }
-
+    delete tFitGenerator;
   }
 
   PrintText2dVec(tText2dVector,aOut);
