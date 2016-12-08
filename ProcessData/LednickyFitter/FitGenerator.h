@@ -54,7 +54,7 @@ public:
   void SetDefaultSharedParameters();
 
   void SetAllParameters();
-  void DoFit(bool aApplyMomResCorrection=false, bool aApplyNonFlatBackgroundCorrection=false);
+  void DoFit(bool aApplyMomResCorrection=false, bool aApplyNonFlatBackgroundCorrection=false, double aMaxFitKStar=0.3);
   void WriteAllFitParameters(ostream &aOut=std::cout);
   vector<TString> GetAllFitParametersTStringVector();
 
@@ -81,6 +81,8 @@ public:
   void SetUseLambdaLimits(bool aUse);
 
   void SetFitType(FitType aFitType);
+
+  double GetChi2();
 
 
 protected:
@@ -131,5 +133,7 @@ inline void FitGenerator::SetUseScattParamLimits(bool aUse) {SetUseLimits(fScatt
 inline void FitGenerator::SetUseLambdaLimits(bool aUse) {SetUseLimits(fLambdaFitParams,aUse);}
 
 inline void FitGenerator::SetFitType(FitType aFitType) {fSharedAn->SetFitType(aFitType);}
+
+inline double FitGenerator::GetChi2() {return fLednickyFitter->GetChi2();}
 #endif
 

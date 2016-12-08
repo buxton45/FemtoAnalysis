@@ -25,6 +25,9 @@ public:
                    TString aDirNameModifierBase1, vector<double> &aModifierValues1,
                    CentralityType aCentralityType=kMB, FitGeneratorType aGeneratorType=kPairwConj, bool aShareLambdaParams=false);
 
+  FitSystematicAnalysis(TString aFileLocationBase, TString aFileLocationBaseMC, AnalysisType aAnalysisType,
+                   CentralityType aCentralityType=kMB, FitGeneratorType aGeneratorType=kPairwConj, bool aShareLambdaParams=false);
+
   virtual ~FitSystematicAnalysis();
   TString GetCutValues(int aIndex);
   void OutputCutValues(int aIndex, ostream &aOut=std::cout);
@@ -32,7 +35,9 @@ public:
   double ExtractParamValue(TString aString);
   void AppendDifference(vector<vector<TString> > &a2dVec, int aCut, int aLineNumber);
   void PrintText2dVec(vector<vector<TString> > &a2dVec, ostream &aOut=std::cout);
-  void RunAllFits(bool aSaveImages=false, ostream &aOut=std::cout);
+  void RunAllFits(bool aSave=false, ostream &aOut=std::cout);
+
+  void RunVaryFitRange(bool aSave=false, ostream &aOut=std::cout, double aMaxKStar1=0.225, double aMaxKStar2=0.300, double aMaxKStar3=0.375);
 
   //inline
   void SetApplyNonFlatBackgroundCorrection(bool aApply);

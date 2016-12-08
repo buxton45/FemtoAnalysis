@@ -1122,7 +1122,7 @@ void LednickyFitter::DoFit()
 
   // Now ready for minimization step
   arglist[0] = 50000;
-  arglist[1] = 0.01;
+  arglist[1] = 0.001;
   fMinuit->mnexcm("MIGRAD", arglist ,2,fErrFlg);
 
   if(fErrFlg != 0)

@@ -300,7 +300,7 @@ int main(int argc, char **argv)
   bool bWriteToFile = true;
   bool bSaveImages = true;
 
-  SystematicsFileInfo tFileInfo = GetFileInfo(-3);
+  SystematicsFileInfo tFileInfo = GetFileInfo(-11);
     TString tResultsDate = tFileInfo.resultsDate;
     TString tDirNameModifierBase1 = tFileInfo.dirNameModifierBase1;
     vector<double> tModifierValues1 = tFileInfo.modifierValues1;

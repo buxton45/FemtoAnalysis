@@ -9,13 +9,19 @@ CFLAGS = $(shell root-config --cflags) -Wall -std=c++11 -I${ANALYZE_DIR} -I${LED
 
 MY_LIBS = $(addprefix build/, FitParameter.o FitChi2Histograms.o FitPartialAnalysis.o FitPairAnalysis.o FitSharedAnalyses.o LednickyFitter.o FitGenerator.o CfLite.o CfHeavy.o Types.o Faddeeva.o FitSystematicAnalysis.o CanvasPartition.o)
 
-all: runTest runRead
+all: runSingleSystematics RunAllSystematics runRead runFitRange
 
-runTest: ${MY_LIBS} test.C
-	g++ test.C ${MY_LIBS} -o runTest $(LIBS) $(CFLAGS)
+runSingleSystematics: ${MY_LIBS} BuildSingleCutSystematics.C
+	g++ BuildSingleCutSystematics.C ${MY_LIBS} -o runSingleSystematics $(LIBS) $(CFLAGS)
+
+RunAllSystematics: ${MY_LIBS} BuildAllCutsSystematics.C
+	g++ BuildAllCutsSystematics.C ${MY_LIBS} -o RunAllSystematics $(LIBS) $(CFLAGS)
 
 runRead: ${MY_LIBS} ReadSystematicFitResults.C
 	g++ ReadSystematicFitResults.C ${MY_LIBS} -o runRead $(LIBS) $(CFLAGS)
+
+runFitRange: ${MY_LIBS} FitRangeSystematics.C
+	g++ FitRangeSystematics.C ${MY_LIBS} -o runFitRange $(LIBS) $(CFLAGS)
 
 build/%.o: ${ANALYZE_DIR}/%.cxx ${ANALYZE_DIR}/%.h
 	g++ -c $< $(CFLAGS) -o $@
@@ -30,4 +36,4 @@ build/%.o: %.cxx %.h
 	g++ -c $< $(CFLAGS) -o $@
 
 clean:
-	rm -f runTest runRead ${MY_LIBS}
+	rm -f runSingleSystematics RunAllSystematics runRead runFitRange ${MY_LIBS}

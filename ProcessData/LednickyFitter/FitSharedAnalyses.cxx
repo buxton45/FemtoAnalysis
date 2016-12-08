@@ -421,7 +421,7 @@ vector<FitParameter*> FitSharedAnalyses::GetDistinctParamsOfCommonType(Parameter
 //________________________________________________________________________________________________________________
 void FitSharedAnalyses::CreateMinuitParametersMatrix()
 {
-
+  fMinuitFitParametersMatrix.clear();  //TODO added so I could run ScattParamValues.C without creating tons of FitGenerator objects
   for(int iPar=0; iPar<fNFitParamsPerAnalysis; iPar++)
   {
     ParameterType tParamType = static_cast<ParameterType>(iPar);

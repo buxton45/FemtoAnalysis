@@ -871,37 +871,37 @@ void FitGenerator::SetDefaultSharedParameters()
     if(fGeneratorType==kPair)
     {
       SetRadiusStartValue(tStartValuesPair[fCentralityType][1],fCentralityType);
-      SetRadiusLimits(0.,0.,fCentralityType);
+      SetRadiusLimits(2.,8.,fCentralityType);
 
       SetScattParamStartValues(tStartValuesPair[fCentralityType][2],tStartValuesPair[fCentralityType][3],tStartValuesPair[fCentralityType][4]);
       SetScattParamLimits(0.,0.,0.,0.,0.,0.);
 
       SetLambdaParamStartValue(tStartValuesPair[fCentralityType][0]);
-      SetLambdaParamLimits(0.,1.);
+      SetLambdaParamLimits(0.1,0.8);
     }
 
     else if(fGeneratorType==kConjPair)
     {
       SetRadiusStartValue(tStartValuesConjPair[fCentralityType][1],fCentralityType);
-      SetRadiusLimits(0.,0.,fCentralityType);
+      SetRadiusLimits(2.,8.,fCentralityType);
 
       SetScattParamStartValues(tStartValuesConjPair[fCentralityType][2],tStartValuesConjPair[fCentralityType][3],tStartValuesConjPair[fCentralityType][4]);
       SetScattParamLimits(0.,0.,0.,0.,0.,0.);
 
       SetLambdaParamStartValue(tStartValuesConjPair[fCentralityType][0]);
-      SetLambdaParamLimits(0.,1.);
+      SetLambdaParamLimits(0.1,0.8);
     }
 
     else if(fGeneratorType==kPairwConj)
     {
       SetRadiusStartValue(tStartValuesPair[fCentralityType][1],fCentralityType);
-      SetRadiusLimits(0.,0.,fCentralityType);
+      SetRadiusLimits(2.,8.,fCentralityType);
 
       SetScattParamStartValues(tStartValuesPair[fCentralityType][2],tStartValuesPair[fCentralityType][3],tStartValuesPair[fCentralityType][4]);
       SetScattParamLimits(0.,0.,0.,0.,0.,0.);
 
       SetLambdaParamStartValue(tStartValuesPair[fCentralityType][0]);
-      SetLambdaParamLimits(0.,1.);
+      SetLambdaParamLimits(0.1,0.8);
       if(!fShareLambdaParams) SetLambdaParamStartValue(tStartValuesConjPair[fCentralityType][0],true);
     }
 
@@ -912,7 +912,7 @@ void FitGenerator::SetDefaultSharedParameters()
     if(fGeneratorType==kPair)
     {
       SetRadiusStartValues(tStartValuesPair[k0010][1],tStartValuesPair[k1030][1],tStartValuesPair[k3050][1]);
-      SetRadiusLimits(0.,0.,0.,0.,0.,0.);
+      SetRadiusLimits(2.,8.,2.,8.,2.,8.);
 
       SetScattParamStartValues(tStartValuesPair[k0010][2],tStartValuesPair[k0010][3],tStartValuesPair[k0010][4]);
       SetScattParamLimits(0.,0.,0.,0.,0.,0.);
@@ -921,15 +921,15 @@ void FitGenerator::SetDefaultSharedParameters()
       SetLambdaParamStartValue(tStartValuesPair[k1030][0],false,k1030);
       SetLambdaParamStartValue(tStartValuesPair[k3050][0],false,k3050);
 
-      SetLambdaParamLimits(0.,1.,false,k0010);
-      SetLambdaParamLimits(0.,1.,false,k1030);
-      SetLambdaParamLimits(0.,1.,false,k3050);
+      SetLambdaParamLimits(0.1,0.8,false,k0010);
+      SetLambdaParamLimits(0.1,0.8,false,k1030);
+      SetLambdaParamLimits(0.1,0.8,false,k3050);
     }
 
     else if(fGeneratorType==kConjPair)
     {
       SetRadiusStartValues(tStartValuesConjPair[k0010][1],tStartValuesConjPair[k1030][1],tStartValuesConjPair[k3050][1]);
-      SetRadiusLimits(0.,0.,0.,0.,0.,0.);
+      SetRadiusLimits(2.,8.,2.,8.,2.,8.);
 
       SetScattParamStartValues(tStartValuesConjPair[k0010][2],tStartValuesConjPair[k0010][3],tStartValuesConjPair[k0010][4]);
       SetScattParamLimits(0.,0.,0.,0.,0.,0.);
@@ -938,15 +938,15 @@ void FitGenerator::SetDefaultSharedParameters()
       SetLambdaParamStartValue(tStartValuesConjPair[k1030][0],false,k1030);
       SetLambdaParamStartValue(tStartValuesConjPair[k3050][0],false,k3050);
 
-      SetLambdaParamLimits(0.,1.,false,k0010);
-      SetLambdaParamLimits(0.,1.,false,k1030);
-      SetLambdaParamLimits(0.,1.,false,k3050);
+      SetLambdaParamLimits(0.1,0.8,false,k0010);
+      SetLambdaParamLimits(0.1,0.8,false,k1030);
+      SetLambdaParamLimits(0.1,0.8,false,k3050);
     }
 
     else if(fGeneratorType==kPairwConj)
     {
       SetRadiusStartValues(tStartValuesPair[k0010][1],tStartValuesPair[k1030][1],tStartValuesPair[k3050][1]);
-      SetRadiusLimits(0.,0.,0.,0.,0.,0.);
+      SetRadiusLimits(2.,8.,2.,8.,2.,8.);
 
       SetScattParamStartValues(tStartValuesPair[k0010][2],tStartValuesPair[k0010][3],tStartValuesPair[k0010][4]);
       SetScattParamLimits(0.,0.,0.,0.,0.,0.);
@@ -955,9 +955,9 @@ void FitGenerator::SetDefaultSharedParameters()
       SetLambdaParamStartValue(tStartValuesPair[k1030][0],false,k1030);
       SetLambdaParamStartValue(tStartValuesPair[k3050][0],false,k3050);
 
-      SetLambdaParamLimits(0.,1.,false,k0010);
-      SetLambdaParamLimits(0.,1.,false,k1030);
-      SetLambdaParamLimits(0.,1.,false,k3050);
+      SetLambdaParamLimits(0.1,0.8,false,k0010);
+      SetLambdaParamLimits(0.1,0.8,false,k1030);
+      SetLambdaParamLimits(0.1,0.8,false,k3050);
 
       if(!fShareLambdaParams)
       {
@@ -965,9 +965,9 @@ void FitGenerator::SetDefaultSharedParameters()
         SetLambdaParamStartValue(tStartValuesConjPair[k1030][0],true,k1030);
         SetLambdaParamStartValue(tStartValuesConjPair[k3050][0],true,k3050);
 
-        SetLambdaParamLimits(0.,1.,true,k0010);
-        SetLambdaParamLimits(0.,1.,true,k1030);
-        SetLambdaParamLimits(0.,1.,true,k3050);
+        SetLambdaParamLimits(0.1,0.8,true,k0010);
+        SetLambdaParamLimits(0.1,0.8,true,k1030);
+        SetLambdaParamLimits(0.1,0.8,true,k3050);
       }
     }
 
@@ -979,9 +979,6 @@ void FitGenerator::SetDefaultSharedParameters()
     assert(0);
   }
 
-  vector<FitParameter> fRadiusFitParams;  //size depends on centralities being fit
-  vector<FitParameter> fScattFitParams;  //size = 3; [ReF0,ImF0,D0]
-  vector<FitParameter> fLambdaFitParams;
 }
 
 
@@ -1129,13 +1126,13 @@ void FitGenerator::SetAllParameters()
 
 
 //________________________________________________________________________________________________________________
-void FitGenerator::DoFit(bool aApplyMomResCorrection, bool aApplyNonFlatBackgroundCorrection)
+void FitGenerator::DoFit(bool aApplyMomResCorrection, bool aApplyNonFlatBackgroundCorrection, double aMaxFitKStar)
 {
   SetAllParameters();
 
   fSharedAn->CreateMinuitParameters();
 
-  fLednickyFitter = new LednickyFitter(fSharedAn);
+  fLednickyFitter = new LednickyFitter(fSharedAn,aMaxFitKStar);
   fLednickyFitter->GetFitSharedAnalyses()->GetMinuitObject()->SetFCN(GlobalFCN);
   fLednickyFitter->SetApplyMomResCorrection(aApplyMomResCorrection);
   fLednickyFitter->SetApplyNonFlatBackgroundCorrection(aApplyNonFlatBackgroundCorrection);
