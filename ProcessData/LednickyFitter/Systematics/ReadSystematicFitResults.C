@@ -395,13 +395,13 @@ void ReadFile(TString aFileLocation, td4dVec &aAll)
   ParameterType tCurrentParameterType;
 
   std::string tStdString;
-  TString tLine;\
+  TString tLine;
   while(getline(tFileIn, tStdString))
   {
     tLine = TString(tStdString);
 
     if(tLine.Contains("AnalysisType")) tCurrentAnType = GetAnalysisType(tLine);
-    if(tLine.Contains("Centrality Type")) tCurrentCentralityType = GetCentralityType(tLine);
+    if(tLine.Contains("CentralityType")) tCurrentCentralityType = GetCentralityType(tLine);
     if(tLine.Contains("Lambda") || tLine.Contains("Radius") || tLine.Contains("Ref0") || tLine.Contains("Imf0") || tLine.Contains("d0"))
     {
       td1dVec tValuesVec = ReadParameterValue(tLine);
@@ -415,6 +415,7 @@ void ReadFile(TString aFileLocation, td4dVec &aAll)
       FillCutsVector(aAll, tValuesVec, tCurrentParameterType, tCurrentAnType, tCurrentCentralityType);
     }
   }
+  tFileIn.close();
 }
 
 
@@ -456,6 +457,38 @@ td4dVec ReduceCutsVector(td4dVec &aAll)
   return tReturnVec;
 }
 
+
+//----------------------------------------------------------------------
+td4dVec CombineCutSyswFitSys(td4dVec &aCutSys, td4dVec &aFitSys)
+{
+  //TODO implement a better comparison
+  assert(aCutSys.size() == aFitSys.size());
+  for(unsigned int i=0; i<aCutSys.size(); i++) assert(aCutSys[i].size()==aFitSys[i].size());
+  for(unsigned int i=0; i<aCutSys[0].size(); i++) assert(aCutSys[0][i].size()==aFitSys[0][i].size());
+  for(unsigned int i=0; i<aCutSys[0][0].size(); i++) assert(aCutSys[0][0][i].size()==aFitSys[0][0][i].size());
+
+  td4dVec tReturnVec(0);
+  tReturnVec.resize(aCutSys.size(), td3dVec(aCutSys[0].size(), td2dVec(aCutSys[0][0].size(), td1dVec(2,0))));
+
+  for(unsigned int iAnType=0; iAnType<aCutSys.size(); iAnType++)
+  {
+    for(unsigned int iCentType=0; iCentType<aCutSys[iAnType].size(); iCentType++)
+    {
+      for(unsigned int iParamType=0; iParamType<aCutSys[iAnType][iCentType].size(); iParamType++)
+      {
+        double tSum = 0.5*(aCutSys[iAnType][iCentType][iParamType][0] + aFitSys[iAnType][iCentType][iParamType][0]);
+        double tError = pow(aCutSys[iAnType][iCentType][iParamType][1],2) + pow(aFitSys[iAnType][iCentType][iParamType][1],2);
+        tError = sqrt(tError);
+
+        tReturnVec[iAnType][iCentType][iParamType][0] = tSum;
+        tReturnVec[iAnType][iCentType][iParamType][1] = tError;
+      }
+    }
+  }
+  return tReturnVec;
+}
+
+/*
 //----------------------------------------------------------------------
 void PrintFinalVec(td4dVec &aFinal)
 {
@@ -471,13 +504,47 @@ void PrintFinalVec(td4dVec &aFinal)
         cout << "ParamType = " << cParameterNames[iParamType] << endl;
         cout << "\tAverage = " << aFinal[iAnType][iCentType][iParamType][0] << endl;
         cout << "\tError   = " << aFinal[iAnType][iCentType][iParamType][1] << endl;
+	cout << "\t\t Percent Error = " << 100*aFinal[iAnType][iCentType][iParamType][1]/fabs(aFinal[iAnType][iCentType][iParamType][0]) << "%" << endl;
         cout << endl;
       }
       cout << "------------------------------------------------------------" << endl;
     }
   }
 }
+*/
+//----------------------------------------------------------------------
 
+void PrintFinalVec(td4dVec &aFinal, ostream &aOut=std::cout)
+{
+  for(unsigned int iAnType=0; iAnType<aFinal.size(); iAnType++)
+  {
+    unsigned int tNCent = aFinal[iAnType].size();
+    for(unsigned int i=1; i<tNCent; i++) assert(aFinal[iAnType][i-1].size() == aFinal[iAnType][i].size());
+    unsigned int tNParams = aFinal[iAnType][0].size();
+    for(unsigned int i=0; i<tNCent; i++) aOut << std::setw(50) << "--------------------------------------------- | ";
+    aOut << endl;
+    for(unsigned int i=0; i<tNCent; i++) aOut << TString::Format("AnalysisType = %s", cAnalysisBaseTags[iAnType]) << std::setw(50-TString::Format("AnalysisType = %s", cAnalysisBaseTags[iAnType]).Sizeof()+1) << " | ";
+    aOut << endl;
+    for(unsigned int i=0; i<tNCent; i++) aOut << TString::Format("CentralityType = %s", cPrettyCentralityTags[i]) << std::setw(50-TString::Format("CentralityType = %s", cPrettyCentralityTags[i]).Sizeof()+1) << " | ";
+    aOut << endl;
+    for(unsigned int iPar=0; iPar<tNParams; iPar++)
+    {
+      for(unsigned int iCent=0; iCent<tNCent; iCent++) aOut << TString::Format("\tParamType = %s", cParameterNames[iPar]) << std::setw(50-TString::Format("\tParamType = %s", cParameterNames[iPar]).Sizeof()+1-7+iCent) << " | ";
+      aOut << endl;
+      for(unsigned int iCent=0; iCent<tNCent; iCent++) aOut << TString::Format("\t\tAverage = %f", aFinal[iAnType][iCent][iPar][0]) << std::setw(50-TString::Format("\t\tAverage = %f", aFinal[iAnType][iCent][iPar][0]).Sizeof()+1-14+iCent) << " | ";
+      aOut << endl;
+      for(unsigned int iCent=0; iCent<tNCent; iCent++) aOut << TString::Format("\t\tError   = %f", aFinal[iAnType][iCent][iPar][1]) << std::setw(50-TString::Format("\t\tError   = %f", aFinal[iAnType][iCent][iPar][1]).Sizeof()+1-14+iCent) << " | ";
+      aOut << endl;
+      for(unsigned int iCent=0; iCent<tNCent; iCent++) aOut << TString::Format("\t\t\t%%Error = %f%%",100*aFinal[iAnType][iCent][iPar][1]/fabs(aFinal[iAnType][iCent][iPar][0])) << std::setw(50-TString::Format("\t\t\t%%Error = %f%%",100*aFinal[iAnType][iCent][iPar][1]/fabs(aFinal[iAnType][iCent][iPar][0])).Sizeof()+1-21+iCent) << " | ";
+      aOut << endl;
+      aOut << std::setw(50) << " | " << std::setw(50) << " | " << std::setw(50) << " | " << endl;
+    }
+  }
+}
+
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//********************************************************************************************************************************************************************************
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 int main(int argc, char **argv) 
 {
@@ -486,87 +553,22 @@ int main(int argc, char **argv)
   //This allows the user a chance to look at and manipulate a TBrowser before
   //the program ends and closes everything
 //-----------------------------------------------------------------------------
-/*
-  td2dVec tLamK00010(5);
-  td2dVec tLamK01030(5);
-  td2dVec tLamK03050(5);
 
-  td2dVec tALamK00010(5);
-  td2dVec tALamK01030(5);
-  td2dVec tALamK03050(5);
-
-  td2dVec tLamKchP0010(5);
-  td2dVec tLamKchP1030(5);
-  td2dVec tLamKchP3050(5);
-
-  td2dVec tALamKchM0010(5);
-  td2dVec tALamKchM1030(5);
-  td2dVec tALamKchM3050(5);
-
-  td2dVec tLamKchM0010(5);
-  td2dVec tLamKchM1030(5);
-  td2dVec tLamKchM3050(5);
-
-  td2dVec tALamKchP0010(5);
-  td2dVec tALamKchP1030(5);
-  td2dVec tALamKchP3050(5);
-
-  //-------------------------------
-  td3dVec tLamK0;
-    tLamK0.push_back(tLamK00010);
-    tLamK0.push_back(tLamK01030);
-    tLamK0.push_back(tLamK03050);
-
-  td3dVec tALamK0;
-    tALamK0.push_back(tALamK00010);
-    tALamK0.push_back(tALamK01030);
-    tALamK0.push_back(tALamK03050);
-
-  td3dVec tLamKchP;
-    tLamKchP.push_back(tLamKchP0010);
-    tLamKchP.push_back(tLamKchP1030);
-    tLamKchP.push_back(tLamKchP3050);
-
-  td3dVec tALamKchM;
-    tALamKchM.push_back(tALamKchM0010);
-    tALamKchM.push_back(tALamKchM1030);
-    tALamKchM.push_back(tALamKchM3050);
-
-  td3dVec tLamKchM;
-    tLamKchM.push_back(tLamKchM0010);
-    tLamKchM.push_back(tLamKchM1030);
-    tLamKchM.push_back(tLamKchM3050);
-
-  td3dVec tALamKchP;
-    tALamKchP.push_back(tALamKchP0010);
-    tALamKchP.push_back(tALamKchP1030);
-    tALamKchP.push_back(tALamKchP3050);
-
-  //-------------------------------
-  td4dVec tAll;
-    tAll.push_back(tLamK0);
-    tAll.push_back(tALamK0);
-    tAll.push_back(tLamKchP);
-    tAll.push_back(tALamKchP);
-    tAll.push_back(tLamKchM);
-    tAll.push_back(tALamKchM);
-
-  //-------------------------------
-*/
 
   //-------------------------------
   int tNAnalysisTypes = 6; //kLamK0, kALamK0, kLamKchP, kALamKchP, kLamKchM, kALamKchM
   int tNCentralityTypes = 3; //k0010, k1030, k3050
   int tNParameterTypes = 5; //kLambda, kRadius, kRef0, kImf0, kd0
 
-  td4dVec tAll(0);
-    tAll.resize(tNAnalysisTypes, td3dVec(tNCentralityTypes, td2dVec(tNParameterTypes, td1dVec(0))));
+  td4dVec tAllCutSys(0);
+    tAllCutSys.resize(tNAnalysisTypes, td3dVec(tNCentralityTypes, td2dVec(tNParameterTypes, td1dVec(0))));
 
-  TString tFileName = "/home/jesse/Analysis/FemtoAnalysis/Results/Systematics/Results_cLamcKch_Systematics_CLAM_maxDcaV0_20161026/CfFitValues_LamKchP_MomResCrctn_NonFlatBgdCrctn.txt";
+  bool bIncludeFitRangeSys = true;
+  bool bWriteToFile = true;
 
   for(int iCut=1; iCut<=12; iCut++)
   {
-    if(iCut==6) continue;
+    if(iCut==6 || iCut==12) continue;
     cout << "iCut = " << iCut << endl;
 
     SystematicsFileInfo tFileInfo = GetFileInfo(iCut);
@@ -587,14 +589,15 @@ int main(int argc, char **argv)
     TString tFileLocationBase1 = tDirectoryBase + TString::Format("CfFitValues_%s_MomResCrctn_NonFlatBgdCrctn.txt","LamKchP");
     TString tFileLocationBase2 = tDirectoryBase + TString::Format("CfFitValues_%s_MomResCrctn_NonFlatBgdCrctn.txt","LamKchM");
 
-    ReadFile(tFileLocationBase1,tAll);
-    ReadFile(tFileLocationBase2,tAll);
+    ReadFile(tFileLocationBase1,tAllCutSys);
+    ReadFile(tFileLocationBase2,tAllCutSys);
   }
 
+  //-----------------------------------------------------------------------------------------
 
   for(int iCut=1; iCut<=17; iCut++)
   {
-    if(iCut==9) continue;
+    if(iCut==9 || iCut==15 || iCut==17) continue;
     int tCut = -1*iCut;
     cout << "tCut = " << tCut << endl;
 
@@ -615,12 +618,62 @@ int main(int argc, char **argv)
 
     TString tFileLocationBase = tDirectoryBase + TString::Format("CfFitValues_%s_MomResCrctn_NonFlatBgdCrctn.txt","LamK0");
 
-    ReadFile(tFileLocationBase,tAll);
+    ReadFile(tFileLocationBase,tAllCutSys);
   }
 
+  td4dVec tFinalCutSysVec = ReduceCutsVector(tAllCutSys);
 
-  td4dVec tFinalVec = ReduceCutsVector(tAll);
-  PrintFinalVec(tFinalVec);
+  //-----------------------------------------------------------------------------------------
+  td4dVec tFinalVec;
+  if(bIncludeFitRangeSys)
+  {
+    TString tFileLocationFitRangeSysLamK0 = TString("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamK0_20161027/CfFitValues_VaryMaxFitKStar_LamK0_MomResCrctn_NonFlatBgdCrctn.txt");
+    TString tFileLocationFitRangeSysLamKchP = TString("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_20161027/CfFitValues_VaryMaxFitKStar_LamKchP_MomResCrctn_NonFlatBgdCrctn.txt");
+    TString tFileLocationFitRangeSysLamKchM = TString("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_20161027/CfFitValues_VaryMaxFitKStar_LamKchM_MomResCrctn_NonFlatBgdCrctn.txt");
+
+    td4dVec tAllFitSys(0);
+      tAllFitSys.resize(tNAnalysisTypes, td3dVec(tNCentralityTypes, td2dVec(tNParameterTypes, td1dVec(0))));
+
+    ReadFile(tFileLocationFitRangeSysLamK0,tAllFitSys);
+    ReadFile(tFileLocationFitRangeSysLamKchP,tAllFitSys);
+    ReadFile(tFileLocationFitRangeSysLamKchM,tAllFitSys);
+
+    td4dVec tFinalFitSysVec = ReduceCutsVector(tAllFitSys);
+
+    tFinalVec = CombineCutSyswFitSys(tFinalCutSysVec,tFinalFitSysVec);
+  }
+  else tFinalVec = tFinalCutSysVec;
+
+
+
+
+  //-----------------------------------------------------------------------------------------
+
+
+
+  if(bWriteToFile)
+  {
+    TString tOutputLamKchName = TString("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_20161027/FinalFitSystematics_");
+    if(bIncludeFitRangeSys) tOutputLamKchName += TString("wFitRangeSys_");
+    tOutputLamKchName += TString("cLamcKch.txt");
+
+    TString tOutputLamK0Name = TString("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamK0_20161027/FinalFitSystematics_");
+    if(bIncludeFitRangeSys) tOutputLamK0Name += TString("wFitRangeSys_");
+    tOutputLamK0Name += TString("cLamK0.txt");
+
+    std::ofstream tOutputLamKch;
+    tOutputLamKch.open(tOutputLamKchName);
+
+    std::ofstream tOutputLamK0;
+    tOutputLamK0.open(tOutputLamK0Name);
+
+    PrintFinalVec(tFinalVec, tOutputLamKch);
+    PrintFinalVec(tFinalVec, tOutputLamK0);
+
+    tOutputLamKch.close();
+    tOutputLamK0.close();
+  }
+  else PrintFinalVec(tFinalVec);
 
 
 

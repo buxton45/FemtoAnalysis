@@ -430,7 +430,7 @@ TCanvas* FitGenerator::DrawKStarCfs()
 */
 
 //________________________________________________________________________________________________________________
-TCanvas* FitGenerator::DrawKStarCfs(bool aSaveImage)
+TCanvas* FitGenerator::DrawKStarCfs(bool aSaveImage, bool aDrawSysErrors)
 {
   TString tCanvasName = TString("canKStarCfs") + TString(cAnalysisBaseTags[fPairType]) + TString("wConj") 
                       + TString(cCentralityTags[fCentralityType]);
@@ -466,8 +466,12 @@ TCanvas* FitGenerator::DrawKStarCfs(bool aSaveImage)
       tAnalysisNumber = j*tNx + i;
 
       //Include the Cf with statistical errors, and make sure the binning is the same as the fitted Cf ----------
-      TH1* tHistToPlot = (TH1*)fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetCfwSysErrors();
-        tHistToPlot->SetFillStyle(0);  //for box error bars to draw correctly
+      TH1* tHistToPlot;
+      if(aDrawSysErrors)
+      {
+        TH1* tHistToPlot = (TH1*)fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetCfwSysErrors();
+          tHistToPlot->SetFillStyle(0);  //for box error bars to draw correctly
+      }
 
 //TODO 
 //If the binnings are unequal, I must regenerate the plots with Analyze/Systematics/BuildErrorBars.C
@@ -482,20 +486,21 @@ TCanvas* FitGenerator::DrawKStarCfs(bool aSaveImage)
       {
         int tScale = tDesiredBinWidth/tBinWidth;
         tHistToPlot->Rebin(tScale);
+        tHistToPlot->Scale(1./tScale);
       }
       else if(tDesiredBinWidth != tBinWidth)
       {
-        cout << "ERROR: FitGenerator::DrawKStarCfswFits: Histogram containing systematic error bars does not have the correct bin size and" << endl;
+        cout << "ERROR: FitGenerator::DrawKStarCfs: Histogram containing systematic error bars does not have the correct bin size and" << endl;
         cout << "DNE an appropriate scale to resolve the issue" << endl;
         assert(0);
       }
 */
 //      assert(tHistToPlot->GetBinWidth(1) == tDesiredBinWidth);
-      assert(tHistToPlot->GetBinWidth(1) == ((TH1*)fSharedAn->GetKStarCfHeavy(tAnalysisNumber)->GetHeavyCfClone())->GetBinWidth(1));
+      if(aDrawSysErrors) assert(tHistToPlot->GetBinWidth(1) == ((TH1*)fSharedAn->GetKStarCfHeavy(tAnalysisNumber)->GetHeavyCfClone())->GetBinWidth(1));
       //---------------------------------------------------------------------------------------------------------
 
       tCanPart->AddGraph(i,j,(TH1*)fSharedAn->GetKStarCfHeavy(tAnalysisNumber)->GetHeavyCfClone(),"",tMarkerStyle,tMarkerColor,tMarkerSize);
-      tCanPart->AddGraph(i,j,tHistToPlot,"",tMarkerStyle,tMarkerColor,tMarkerSize,"e2psame");
+      if(aDrawSysErrors) tCanPart->AddGraph(i,j,tHistToPlot,"",tMarkerStyle,tMarkerColor,tMarkerSize,"e2psame");
 
       TString tTextAnType = TString(cAnalysisRootTags[fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetAnalysisType()]);
       TPaveText* tAnTypeName = tCanPart->SetupTPaveText(tTextAnType,i,j,0.8,0.85);
@@ -545,7 +550,7 @@ TCanvas* FitGenerator::DrawKStarCfswFits()
 */
 
 //________________________________________________________________________________________________________________
-TCanvas* FitGenerator::DrawKStarCfswFits(bool aMomResCorrectFit, bool aNoFlatBgdCorrectFit, bool aSaveImage)
+TCanvas* FitGenerator::DrawKStarCfswFits(bool aMomResCorrectFit, bool aNoFlatBgdCorrectFit, bool aSaveImage, bool aDrawSysErrors)
 {
   TString tCanvasName = TString("canKStarCfwFits") + TString(cAnalysisBaseTags[fPairType]) + TString("wConj") 
                       + TString(cCentralityTags[fCentralityType]);
@@ -582,8 +587,12 @@ TCanvas* FitGenerator::DrawKStarCfswFits(bool aMomResCorrectFit, bool aNoFlatBgd
         tCorrectedFitHisto->SetLineWidth(2);
 
       //Include the Cf with statistical errors, and make sure the binning is the same as the fitted Cf ----------
-//      TH1* tHistToPlot = (TH1*)fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetCfwSysErrors();
-//        tHistToPlot->SetFillStyle(0);  //for box error bars to draw correctly
+      TH1* tHistToPlot;
+      if(aDrawSysErrors)
+      {
+        tHistToPlot = (TH1*)fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetCfwSysErrors();
+          tHistToPlot->SetFillStyle(0);  //for box error bars to draw correctly
+      }
 
 //TODO 
 //If the binnings are unequal, I must regenerate the plots with Analyze/Systematics/BuildErrorBars.C
@@ -598,6 +607,7 @@ TCanvas* FitGenerator::DrawKStarCfswFits(bool aMomResCorrectFit, bool aNoFlatBgd
       {
         int tScale = tDesiredBinWidth/tBinWidth;
         tHistToPlot->Rebin(tScale);
+        tHistToPlot->Scale(1./tScale);
       }
       else if(tDesiredBinWidth != tBinWidth)
       {
@@ -607,11 +617,11 @@ TCanvas* FitGenerator::DrawKStarCfswFits(bool aMomResCorrectFit, bool aNoFlatBgd
       }
 */
 //      assert(tHistToPlot->GetBinWidth(1) == tDesiredBinWidth);
-//      assert(tHistToPlot->GetBinWidth(1) == ((TH1*)fSharedAn->GetKStarCfHeavy(tAnalysisNumber)->GetHeavyCfClone())->GetBinWidth(1));
+      if(aDrawSysErrors) assert(tHistToPlot->GetBinWidth(1) == ((TH1*)fSharedAn->GetKStarCfHeavy(tAnalysisNumber)->GetHeavyCfClone())->GetBinWidth(1));
       //---------------------------------------------------------------------------------------------------------
 
-      tCanPart->AddGraph(i,j,(TH1*)fSharedAn->GetKStarCfHeavy(tAnalysisNumber)->GetHeavyCfClone(),"",20,tColor,0.6);
-//      tCanPart->AddGraph(i,j,tHistToPlot,"",20,tColor,0.6,"e2psame");
+      tCanPart->AddGraph(i,j,(TH1*)fSharedAn->GetKStarCfHeavy(tAnalysisNumber)->GetHeavyCfClone(),"",20,tColor,0.5);
+      if(aDrawSysErrors) tCanPart->AddGraph(i,j,tHistToPlot,"",20,tColor,0.5,"e2psame");
       tCanPart->AddGraph(i,j,(TF1*)fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetFit(),"");
       tCanPart->AddGraph(i,j,tCorrectedFitHisto,"",20,6,0.5,"lsame");
       tCanPart->AddGraph(i,j,(TF1*)fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetNonFlatBackground(),"",20,3);

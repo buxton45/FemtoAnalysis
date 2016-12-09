@@ -18,8 +18,8 @@ int main(int argc, char **argv)
   bool ApplyMomResCorrection = true;
   bool ApplyNonFlatBackgroundCorrection = true;
 
-  bool bWriteToFile = false;
-  bool bSaveImages = false;
+  bool bWriteToFile = true;
+  bool bSaveImages = true;
 
   TString tResultsDate = "20161027";
 

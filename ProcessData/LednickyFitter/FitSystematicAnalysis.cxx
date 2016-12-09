@@ -198,7 +198,7 @@ void FitSystematicAnalysis::RunAllFits(bool aSave, ostream &aOut)
     tFitParamsVec.insert(tFitParamsVec.begin(),tCutValue);
     tText2dVector.push_back(tFitParamsVec);
 
-    TCanvas* tKStarwFitsCan = tFitGenerator->DrawKStarCfswFits(fApplyMomResCorrection,fApplyNonFlatBackgroundCorrection,false);
+    TCanvas* tKStarwFitsCan = tFitGenerator->DrawKStarCfswFits(fApplyMomResCorrection,fApplyNonFlatBackgroundCorrection,false,false);
     if(aSave)
     {
       TString tSaveName = fSaveDirectory;
@@ -238,7 +238,7 @@ void FitSystematicAnalysis::RunVaryFitRange(bool aSave, ostream &aOut, double aM
     tFitParamsVec.insert(tFitParamsVec.begin(),tRangeValue);
     tText2dVector.push_back(tFitParamsVec);
 
-    TCanvas* tKStarwFitsCan = tFitGenerator->DrawKStarCfswFits(fApplyMomResCorrection,fApplyNonFlatBackgroundCorrection,false);
+    TCanvas* tKStarwFitsCan = tFitGenerator->DrawKStarCfswFits(fApplyMomResCorrection,fApplyNonFlatBackgroundCorrection,false,false);
     if(aSave)
     {
       TString tSaveName = fSaveDirectory;

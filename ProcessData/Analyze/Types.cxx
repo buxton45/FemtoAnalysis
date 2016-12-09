@@ -102,6 +102,7 @@ const char* const cAvgSepCfCowboysAndSailorsBaseTagsDen[7] = {"DenPosPosAvgSepCf
 const char* const cParameterNames[9] = {"Lambda", "Radius", "Ref0", "Imf0", "d0", "Ref02", "Imf02", "d02", "Norm"};
 
 //________________________________________________________________________________________________________________
+
 const double cLamK0_0010StartValues[6] = {0.3,4.5,-0.25,0.25,0.0,0.2};
 const double cLamK0_1030StartValues[6] = {0.3,4.0,-0.25,0.25,0.0,0.2};
 const double cLamK0_3050StartValues[6] = {0.3,3.5,-0.25,0.25,0.0,0.2};
@@ -111,9 +112,27 @@ const double cALamK0_0010StartValues[6] = {0.3,4.5,-0.25,0.25,0.0,0.2};
 const double cALamK0_1030StartValues[6] = {0.3,4.0,-0.25,0.25,0.0,0.2};
 const double cALamK0_3050StartValues[6] = {0.3,3.5,-0.25,0.25,0.0,0.2};
 const double* cALamK0StartValues[3] = {cALamK0_0010StartValues,cALamK0_1030StartValues,cALamK0_3050StartValues};
+/*
+const double cLamK0_0010StartValues[6] = {0.35,3.81,-0.22,0.43,3.16,0.1};
+const double cLamK0_1030StartValues[6] = {0.15,2.00,-0.22,0.43,3.16,0.1};
+const double cLamK0_3050StartValues[6] = {0.67,3.52,-0.22,0.43,3.16,0.1};
+const double* cLamK0StartValues[3] = {cLamK0_0010StartValues,cLamK0_1030StartValues,cLamK0_3050StartValues};
 
-//-----
+const double cALamK0_0010StartValues[6] = {0.25,3.81,-0.22,0.43,3.16,0.1};
+const double cALamK0_1030StartValues[6] = {0.16,2.00,-0.22,0.43,3.16,0.1};
+const double cALamK0_3050StartValues[6] = {0.23,3.52,-0.22,0.43,3.16,0.1};
+const double* cALamK0StartValues[3] = {cALamK0_0010StartValues,cALamK0_1030StartValues,cALamK0_3050StartValues};
+*/
+//________________________________________________________________________________________________________________
+const double cLamKchP_0010StartValues[6] = {0.3,4.5,-0.5,0.5,0.0,0.2};
+const double cLamKchP_1030StartValues[6] = {0.3,4.5,-0.5,0.5,0.0,0.2};
+const double cLamKchP_3050StartValues[6] = {0.3,4.5,-0.5,0.5,0.0,0.2};
+const double* cLamKchPStartValues[3] = {cLamKchP_0010StartValues,cLamKchP_1030StartValues,cLamKchP_3050StartValues};
 
+const double cALamKchM_0010StartValues[6] = {0.3,4.5,-0.5,0.5,0.0,0.2};
+const double cALamKchM_1030StartValues[6] = {0.3,4.5,-0.5,0.5,0.0,0.2};
+const double cALamKchM_3050StartValues[6] = {0.3,4.5,-0.5,0.5,0.0,0.2};
+/*
 const double cLamKchP_0010StartValues[6] = {0.2,4.00,-1.315,0.5159,0.0,0.2};
 const double cLamKchP_1030StartValues[6] = {0.2,3.75,-1.315,0.5159,0.0,0.2};
 const double cLamKchP_3050StartValues[6] = {0.2,3.50,-1.315,0.5159,0.0,0.2};
@@ -122,8 +141,24 @@ const double* cLamKchPStartValues[3] = {cLamKchP_0010StartValues,cLamKchP_1030St
 const double cALamKchM_0010StartValues[6] = {0.2,4.00,-1.315,0.5159,0.0,0.2};
 const double cALamKchM_1030StartValues[6] = {0.2,3.75,-1.315,0.5159,0.0,0.2};
 const double cALamKchM_3050StartValues[6] = {0.2,3.50,-1.315,0.5159,0.0,0.2};
+*/
+/*
+const double cLamKchP_0010StartValues[6] = {0.38,4.05,-0.69,0.39,0.64,0.1};
+const double cLamKchP_1030StartValues[6] = {0.48,3.92,-0.69,0.39,0.64,0.1};
+const double cLamKchP_3050StartValues[6] = {0.64,3.72,-0.69,0.39,0.64,0.1};
+const double* cLamKchPStartValues[3] = {cLamKchP_0010StartValues,cLamKchP_1030StartValues,cLamKchP_3050StartValues};
+
+const double cALamKchM_0010StartValues[6] = {0.37,4.05,-0.69,0.39,0.64,0.1};
+const double cALamKchM_1030StartValues[6] = {0.41,3.92,-0.69,0.39,0.64,0.1};
+const double cALamKchM_3050StartValues[6] = {0.62,3.72,-0.69,0.39,0.64,0.1};
+
+//const double cALamKchM_0010StartValues[6] = {0.37,cLamKchP_0010StartValues[1],cLamKchP_0010StartValues[2],cLamKchP_0010StartValues[3],cLamKchP_0010StartValues[4],cLamKchP_0010StartValues[5]};
+//const double cALamKchM_1030StartValues[6] = {0.41,cLamKchP_1030StartValues[1],cLamKchP_1030StartValues[2],cLamKchP_1030StartValues[3],cLamKchP_1030StartValues[4],cLamKchP_1030StartValues[5]};
+//const double cALamKchM_3050StartValues[6] = {0.62,cLamKchP_3050StartValues[1],cLamKchP_3050StartValues[2],cLamKchP_3050StartValues[3],cLamKchP_3050StartValues[4],cLamKchP_3050StartValues[5]};
+*/
 const double* cALamKchMStartValues[3] = {cALamKchM_0010StartValues,cALamKchM_1030StartValues,cALamKchM_3050StartValues};
 
+//--------------------------------------
 
 const double cLamKchM_0010StartValues[6] = {0.3,4.5,0.5,0.5,0.0,0.2};
 const double cLamKchM_1030StartValues[6] = {0.3,4.0,0.5,0.5,0.0,0.2};
@@ -134,9 +169,18 @@ const double cALamKchP_0010StartValues[6] = {0.3,4.5,0.5,0.5,0.0,0.2};
 const double cALamKchP_1030StartValues[6] = {0.3,4.0,0.5,0.5,0.0,0.2};
 const double cALamKchP_3050StartValues[6] = {0.3,3.5,0.5,0.5,0.0,0.2};
 const double* cALamKchPStartValues[3] = {cALamKchP_0010StartValues,cALamKchP_1030StartValues,cALamKchP_3050StartValues};
+/*
+const double cLamKchM_0010StartValues[6] = {0.45,4.79,0.18,0.45,-5.0,0.1};
+const double cLamKchM_1030StartValues[6] = {0.40,4.00,0.18,0.45,-5.0,0.1};
+const double cLamKchM_3050StartValues[6] = {0.20,2.11,0.18,0.45,-5.0,0.1};
+const double* cLamKchMStartValues[3] = {cLamKchM_0010StartValues,cLamKchM_1030StartValues,cLamKchM_3050StartValues};
 
-
-//-----
+const double cALamKchP_0010StartValues[6] = {0.48,4.79,0.18,0.45,-5.0,0.1};
+const double cALamKchP_1030StartValues[6] = {0.49,4.00,0.18,0.45,-5.0,0.1};
+const double cALamKchP_3050StartValues[6] = {0.22,2.11,0.18,0.45,-5.0,0.1};
+const double* cALamKchPStartValues[3] = {cALamKchP_0010StartValues,cALamKchP_1030StartValues,cALamKchP_3050StartValues};
+*/
+//________________________________________________________________________________________________________________
 
 const double cXiKchP_0010StartValues[6] = {0.19,4.36,-1.28,0.69,1.79,0.2};
 const double cXiKchP_1030StartValues[6] = {0.19,4.00,-1.28,0.69,1.79,0.2};

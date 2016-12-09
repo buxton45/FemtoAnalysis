@@ -26,8 +26,8 @@ runFits: ${MY_LIBS} BuildFits.C
 runTest: ${MY_LIBS} test.C
 	g++ test.C ${MY_LIBS} -o runTest $(LIBS) $(CFLAGS)
 
-runGenerator: ${MY_LIBS} testGenerator.C
-	g++ testGenerator.C ${MY_LIBS} -o runGenerator $(LIBS) $(CFLAGS)
+runGenerator: ${MY_LIBS} GenerateFits.C
+	g++ GenerateFits.C ${MY_LIBS} -o runGenerator $(LIBS) $(CFLAGS)
 
 runScattParamValues: ${MY_LIBS} ScattParamValues.C
 	g++ ScattParamValues.C ${MY_LIBS} -o runScattParamValues $(LIBS) $(CFLAGS)

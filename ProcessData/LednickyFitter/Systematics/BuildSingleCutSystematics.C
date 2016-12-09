@@ -289,7 +289,7 @@ int main(int argc, char **argv)
 
   bool bPlayCompletionBeep = true;
 //-----------------------------------------------------------------------------
-  AnalysisType tAnType = kLamK0;
+  AnalysisType tAnType = kLamKchP;
   CentralityType tCentralityType = kMB;
   FitGeneratorType tFitGeneratorType = kPairwConj;
   bool tShareLambdaParameters = false;
@@ -300,7 +300,7 @@ int main(int argc, char **argv)
   bool bWriteToFile = true;
   bool bSaveImages = true;
 
-  SystematicsFileInfo tFileInfo = GetFileInfo(-11);
+  SystematicsFileInfo tFileInfo = GetFileInfo(1);
     TString tResultsDate = tFileInfo.resultsDate;
     TString tDirNameModifierBase1 = tFileInfo.dirNameModifierBase1;
     vector<double> tModifierValues1 = tFileInfo.modifierValues1;

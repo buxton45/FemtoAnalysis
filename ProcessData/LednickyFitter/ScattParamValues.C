@@ -48,15 +48,28 @@ int main(int argc, char **argv)
   double tGlobalChi2 = 1000000;
   double tChi2;
 
-  double tTolerance = 0.00000000001;
+  double tTolerance = 0.00001;
 
-  td1dVec tTestVec;
-  if(tGlobalChi2 == 1000000) tTestVec = td1dVec {0.1,0.2,0.3};
-  else tTestVec = td1dVec {0.4,0.5,0.6};
+  td1dVec tRef0Values, tImf0Values, td0Values;
+  if(tAnType==kLamKchP || tAnType==kALamKchM)
+  {
+    tRef0Values = td1dVec {-2.0, -1.0, -0.5, -0.25, -0.1, 0.0, 0.1, 0.25, 0.5, 1.0, 2.0};
+    tImf0Values = td1dVec {-2.0, -1.0, -0.5, -0.25, -0.1, 0.0, 0.1, 0.25, 0.5, 1.0, 2.0};
+    td0Values = td1dVec {-2.0, -1.0, 0.0, 1.0, 2.0};
+  }
+  else if(tAnType==kLamKchM || tAnType==kALamKchP)
+  {
+    tRef0Values = td1dVec {-0.2,0.0};
+    tImf0Values = td1dVec {-0.2,0.0};
+    td0Values = td1dVec {-0.2,0.0};
+  }
+  else if(tAnType==kLamK0 || tAnType==kALamK0)
+  {
+    tRef0Values = td1dVec {-0.2,0.0};
+    tImf0Values = td1dVec {-0.2,0.0};
+    td0Values = td1dVec {-0.2,0.0};
+  }
 
-  td1dVec tRef0Values {-0.2,0.0};
-  td1dVec tImf0Values {-0.2,0.0};
-  td1dVec td0Values {-0.2,0.0};
   vector<int> tWinningIndices {0,0,0};
   vector<vector<int> > tTyingWinningIndices;
 
@@ -87,9 +100,9 @@ int main(int argc, char **argv)
         {
           cout << "We have a TIE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
           vector<int> tTempVec;
-          tTempVec.push_back(tWinningIndices[0]);
-          tTempVec.push_back(tWinningIndices[1]);
-          tTempVec.push_back(tWinningIndices[2]);
+          tTempVec.push_back(iRe);
+          tTempVec.push_back(iIm);
+          tTempVec.push_back(id0);
           tTempVec.push_back(tChi2);
 
           tTyingWinningIndices.push_back(tTempVec);

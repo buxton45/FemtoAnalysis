@@ -35,8 +35,8 @@ public:
 
   void DrawSingleKStarCf(TPad* aPad, int aPairAnNumber, double aYmin=0.9, double aYmax=1.1, double aXmin=0.0, double aXmax=0.5, int aMarkerColor=1, TString aOption = "", int aMarkerStyle=20);
   void DrawSingleKStarCfwFit(TPad* aPad, int aPairAnNumber, double aYmin=0.9, double aYmax=1.1, double aXmin=0.0, double aXmax=0.5, int aMarkerColor=1, TString aOption = "", int aMarkerStyle=20);
-  virtual TCanvas* DrawKStarCfs(bool aSaveImage=false);
-  virtual TCanvas* DrawKStarCfswFits(bool aMomResCorrectFit, bool aNoFlatBgdCorrectFit, bool aSaveImage=false);
+  virtual TCanvas* DrawKStarCfs(bool aSaveImage=false, bool aDrawSysErrors=true);
+  virtual TCanvas* DrawKStarCfswFits(bool aMomResCorrectFit, bool aNoFlatBgdCorrectFit, bool aSaveImage=false, bool aDrawSysErrors=true);
 
   void SetUseLimits(vector<FitParameter> &aVec, bool aUse);  //Internal use only
 

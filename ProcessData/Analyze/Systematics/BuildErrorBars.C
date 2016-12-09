@@ -350,8 +350,8 @@ int main(int argc, char **argv)
 
   for(int iCut=1; iCut<=tMaxCut; iCut++)
   {
-    if(tGeneralAnTypeName=="cLamcKch" && iCut==6) continue;
-    if(tGeneralAnTypeName=="cLamK0" && iCut==9) continue;
+    if(tGeneralAnTypeName=="cLamcKch" && (iCut==6 || iCut==12)) continue;
+    if(tGeneralAnTypeName=="cLamK0" && (iCut==9 || iCut==15 || iCut==17)) continue;
 
     int tCut = iCut;
     if(tAnType==kLamK0 || tAnType==kALamK0) tCut *= -1;
