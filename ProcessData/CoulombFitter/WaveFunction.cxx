@@ -127,7 +127,7 @@ double WaveFunction::GetLednickyHFunction(double aKStar)
 
     //Note:  tReturnValueCmplx will be real, but the silly compiler yells about returning a real using complex (GetDiGamma) functions
     //Nonetheless, let's be absolutely certain that the imaginary part is zero
-    if(imag(tReturnValueCmplx) > std::numeric_limits< double >::min()) cout << "\t\t\t !!!!!!!!! Imaginary value in WaveFunction::GetLednickyHFunction !!!!!" << endl;
+    if(std::abs(imag(tReturnValueCmplx)) > std::numeric_limits< double >::min()) cout << "\t\t\t !!!!!!!!! Imaginary value in WaveFunction::GetLednickyHFunction !!!!!" << endl;
     assert(imag(tReturnValueCmplx) < std::numeric_limits< double >::min());
 
     double tReturnValue = real(tReturnValueCmplx);

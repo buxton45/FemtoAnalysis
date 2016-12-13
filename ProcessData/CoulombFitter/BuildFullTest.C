@@ -36,7 +36,7 @@ int main(int argc, char **argv)
 
 //-----------------------------------------------------------------------------
 
-  TString tFileLocationBase = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cXicKch_20160202/Results_cXicKch_20160202";
+  TString tFileLocationBase = "/home/jesse/Analysis/FemtoAnalysis/Results/PreTrain/Results_cXicKch_20160202/Results_cXicKch_20160202";
 
 //  AnalysisType tAnType = kAXiKchP;
 //  AnalysisType tConjType = kXiKchM;
@@ -47,8 +47,8 @@ int main(int argc, char **argv)
   TString tAnBaseName = TString(cAnalysisBaseTags[tAnType]);
   TString tAnName0010 = tAnBaseName + TString(cCentralityTags[0]);
 
-  FitPairAnalysis* tPairAn0010 = new FitPairAnalysis(tFileLocationBase,tAnType,k0010);
-  FitPairAnalysis* tPairConjAn0010 = new FitPairAnalysis(tFileLocationBase,tConjType,k0010);
+  FitPairAnalysis* tPairAn0010 = new FitPairAnalysis(tFileLocationBase,tAnType,k0010,kGrid,5);
+  FitPairAnalysis* tPairConjAn0010 = new FitPairAnalysis(tFileLocationBase,tConjType,k0010,kGrid,5);
 
   vector<FitPairAnalysis*> tVecOfPairAn;
   tVecOfPairAn.push_back(tPairAn0010);
