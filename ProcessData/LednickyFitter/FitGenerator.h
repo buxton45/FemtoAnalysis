@@ -54,7 +54,7 @@ public:
   void SetDefaultSharedParameters();
 
   void SetAllParameters();
-  void DoFit(bool aApplyMomResCorrection=false, bool aApplyNonFlatBackgroundCorrection=false, double aMaxFitKStar=0.3);
+  void DoFit(bool aApplyMomResCorrection=false, bool aApplyNonFlatBackgroundCorrection=false, bool aIncludeResiduals=false, double aMaxFitKStar=0.3);
   void WriteAllFitParameters(ostream &aOut=std::cout);
   vector<TString> GetAllFitParametersTStringVector();
 

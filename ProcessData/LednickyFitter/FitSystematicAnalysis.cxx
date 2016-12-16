@@ -28,6 +28,7 @@ FitSystematicAnalysis::FitSystematicAnalysis(TString aFileLocationBase, TString 
   fShareLambdaParams(aShareLambdaParams),
   fApplyNonFlatBackgroundCorrection(false),
   fApplyMomResCorrection(false),
+  fIncludeResiduals(false),
   fSaveDirectory(""),
 
   fDirNameModifierBase1(aDirNameModifierBase1),
@@ -52,6 +53,7 @@ FitSystematicAnalysis::FitSystematicAnalysis(TString aFileLocationBase, TString 
   fShareLambdaParams(aShareLambdaParams),
   fApplyNonFlatBackgroundCorrection(false),
   fApplyMomResCorrection(false),
+  fIncludeResiduals(false),
   fSaveDirectory(""),
 
   fDirNameModifierBase1(aDirNameModifierBase1),
@@ -77,6 +79,7 @@ FitSystematicAnalysis::FitSystematicAnalysis(TString aFileLocationBase, TString 
   fShareLambdaParams(aShareLambdaParams),
   fApplyNonFlatBackgroundCorrection(false),
   fApplyMomResCorrection(false),
+  fIncludeResiduals(false),
   fSaveDirectory(""),
 
   fDirNameModifierBase1(0),
@@ -189,7 +192,7 @@ void FitSystematicAnalysis::RunAllFits(bool aSave, ostream &aOut)
 
     FitGenerator* tFitGenerator = new FitGenerator(fFileLocationBase, fFileLocationBaseMC, fAnalysisType, kTrainSys, 2, fCentralityType, fFitGeneratorType, fShareLambdaParams, tDirNameModifier);
 
-    tFitGenerator->DoFit(fApplyMomResCorrection,fApplyNonFlatBackgroundCorrection);
+    tFitGenerator->DoFit(fApplyMomResCorrection,fApplyNonFlatBackgroundCorrection,fIncludeResiduals);
 
 //    OutputCutValues(i,aOut);
 //    tFitGenerator->WriteAllFitParameters(aOut);
@@ -231,7 +234,7 @@ void FitSystematicAnalysis::RunVaryFitRange(bool aSave, ostream &aOut, double aM
   for(int i=0; i<tNRangeValues; i++)
   {
     FitGenerator* tFitGenerator = new FitGenerator(fFileLocationBase, fFileLocationBaseMC, fAnalysisType, kTrain, 2, fCentralityType, fFitGeneratorType, fShareLambdaParams);
-    tFitGenerator->DoFit(fApplyMomResCorrection,fApplyNonFlatBackgroundCorrection,tRangeVec[i]);
+    tFitGenerator->DoFit(fApplyMomResCorrection,fApplyNonFlatBackgroundCorrection,fIncludeResiduals,tRangeVec[i]);
 
     TString tRangeValue = TString::Format("Max KStar for Fit = %0.4f",tRangeVec[i]);
     vector<TString> tFitParamsVec = tFitGenerator->GetAllFitParametersTStringVector();

@@ -1136,7 +1136,7 @@ void FitGenerator::SetAllParameters()
 
 
 //________________________________________________________________________________________________________________
-void FitGenerator::DoFit(bool aApplyMomResCorrection, bool aApplyNonFlatBackgroundCorrection, double aMaxFitKStar)
+void FitGenerator::DoFit(bool aApplyMomResCorrection, bool aApplyNonFlatBackgroundCorrection, bool aIncludeResiduals, double aMaxFitKStar)
 {
   SetAllParameters();
 
@@ -1146,6 +1146,7 @@ void FitGenerator::DoFit(bool aApplyMomResCorrection, bool aApplyNonFlatBackgrou
   fLednickyFitter->GetFitSharedAnalyses()->GetMinuitObject()->SetFCN(GlobalFCN);
   fLednickyFitter->SetApplyMomResCorrection(aApplyMomResCorrection);
   fLednickyFitter->SetApplyNonFlatBackgroundCorrection(aApplyNonFlatBackgroundCorrection);
+  fLednickyFitter->SetIncludeResidualCorrelations(aIncludeResiduals);
   GlobalFitter = fLednickyFitter;
 
   fLednickyFitter->DoFit();

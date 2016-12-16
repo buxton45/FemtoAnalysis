@@ -676,8 +676,10 @@ TH1F* FitPairAnalysis::GetCorrectedFitHisto(bool aMomResCorrection, bool aNonFla
 
 
 //________________________________________________________________________________________________________________
-void FitPairAnalysis::LoadTransformMatrices(TString aFileLocation)
+void FitPairAnalysis::LoadTransformMatrices(int aRebin, TString aFileLocation)
 {
+  if(aFileLocation.IsNull()) aFileLocation = "/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b2/TransformMatrices_Mix5.root";
+
   TFile *tFile = TFile::Open(aFileLocation);
   TString tName2 = cAnalysisBaseTags[fAnalysisType] + TString("Transform");
 
@@ -710,11 +712,38 @@ void FitPairAnalysis::LoadTransformMatrices(TString aFileLocation)
     assert(0);
   }
 
+  TH2D* tSig = (TH2D*)tFile->Get(tFullNameSig);
+    tSig->SetDirectory(0);
+    tSig->Rebin2D(aRebin);
+  TH2D* tXiC = (TH2D*)tFile->Get(tFullNameXiC);
+    tXiC->SetDirectory(0);
+    tXiC->Rebin2D(aRebin);
+  TH2D* tXi0 = (TH2D*)tFile->Get(tFullNameXi0);
+    tXi0->SetDirectory(0);
+    tXi0->Rebin2D(aRebin);
+  TH2D* tOmega = (TH2D*)tFile->Get(tFullNameOmega);
+    tOmega->SetDirectory(0);
+    tOmega->Rebin2D(aRebin);
+
   fTransformMatrices.clear();
-  fTransformMatrices.push_back((TH2D*)tFile->Get(tFullNameSig));
-  fTransformMatrices.push_back((TH2D*)tFile->Get(tFullNameXiC));
-  fTransformMatrices.push_back((TH2D*)tFile->Get(tFullNameXi0));
-  fTransformMatrices.push_back((TH2D*)tFile->Get(tFullNameOmega));
+  fTransformMatrices.push_back((TH2D*)tSig);
+  fTransformMatrices.push_back((TH2D*)tXiC);
+  fTransformMatrices.push_back((TH2D*)tXi0);
+  fTransformMatrices.push_back((TH2D*)tOmega);
+}
+
+//________________________________________________________________________________________________________________
+vector<TH2D*> FitPairAnalysis::GetTransformMatrices(int aRebin, TString aFileLocation)
+{
+  if(fTransformMatrices.size()==0) LoadTransformMatrices(aRebin, aFileLocation);
+  return fTransformMatrices;
+}
+
+//________________________________________________________________________________________________________________
+TH2D* FitPairAnalysis::GetTransformMatrix(int aIndex, int aRebin, TString aFileLocation)
+{
+  if(fTransformMatrices.size()==0) LoadTransformMatrices(aRebin, aFileLocation);
+  return fTransformMatrices[aIndex];
 }
 
 

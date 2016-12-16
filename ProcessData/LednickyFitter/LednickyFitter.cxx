@@ -55,7 +55,7 @@ double LednickyEq(double *x, double *par)
   double C_FSI = (1+Alpha)*( 0.5*norm(ScattAmp)/(par[1]*par[1])*(1.-1./(2*sqrt(TMath::Pi()))*(par[4]/par[1])) + 2.*real(ScattAmp)/(par[1]*sqrt(TMath::Pi()))*GetLednickyF1(z) - (imag(ScattAmp)/par[1])*GetLednickyF2(z));
 
   double Cf = 1. + par[0]*(C_QuantumStat + C_FSI);
-  Cf *= par[5];
+  //Cf *= par[5];
 
   return Cf;
   
@@ -497,6 +497,16 @@ bool LednickyFitter::AreParamsSame(double *aCurrent, double *aNew, int aNEntries
   return tAreSame;
 }
 
+//________________________________________________________________________________________________________________
+double* LednickyFitter::AdjustLambdaParam(double *aParamSet, double aNewLambda, int aNEntries)
+{
+  double *tReturnArray = new double[aNEntries];
+  tReturnArray[0] = aNewLambda;
+  for(int i=1; i<aNEntries; i++) tReturnArray[i] = aParamSet[i];
+
+  return tReturnArray;
+}
+
 
 
 //________________________________________________________________________________________________________________
@@ -545,33 +555,66 @@ vector<double> LednickyFitter::ApplyMomResCorrection(vector<double> &aCf, vector
 
 
 //________________________________________________________________________________________________________________
-vector<double> LednickyFitter::GetResidualCorrelation(vector<double> &aParentCf, vector<double> &aKStarBinCenters, TH2* aTransformMatrix)
+vector<double> LednickyFitter::GetResidualCorrelation(double *aParentCfParams, vector<double> &aKStarBinCenters, TH2* aTransformMatrix)
 {
+  vector<double> tParentCf(aKStarBinCenters.size(),0.);
+  double tKStar[1];
+  for(unsigned int i=0; i<aKStarBinCenters.size(); i++)
+  {
+    tKStar[0] = aKStarBinCenters[i];
+    tParentCf[i] = LednickyEq(tKStar,aParentCfParams);
+  }
+
   unsigned int tDaughterPairKStarBin, tParentPairKStarBin;
   double tDaughterPairKStar, tParentPairKStar;
-  assert(aParentCf.size() == aKStarBinCenters.size());
-  assert(aParentCf.size() == (unsigned int)aTransformMatrix->GetNbinsX());
-  assert(aParentCf.size() == (unsigned int)aTransformMatrix->GetNbinsY());
+  assert(tParentCf.size() == aKStarBinCenters.size());
+  assert(tParentCf.size() == (unsigned int)aTransformMatrix->GetNbinsX());
+  assert(tParentCf.size() == (unsigned int)aTransformMatrix->GetNbinsY());
 
-  vector<double> tReturnResCf(aParentCf.size(),0.);
-  vector<double> tNormVec(aParentCf.size(),0.);  //TODO once I match bin size, I should be able to call /= by integral, instead of tracking normVec
+  vector<double> tReturnResCf(tParentCf.size(),0.);
+  vector<double> tNormVec(tParentCf.size(),0.);  //TODO once I match bin size, I should be able to call /= by integral, instead of tracking normVec
 
-  for(unsigned int i=0; i<aParentCf.size(); i++)
+  for(unsigned int i=0; i<tParentCf.size(); i++)
   {
     tDaughterPairKStar = aKStarBinCenters[i];
     tDaughterPairKStarBin = aTransformMatrix->GetXaxis()->FindBin(tDaughterPairKStar);
 
-    for(unsigned int j=0; j<aParentCf.size(); j++)
+    for(unsigned int j=0; j<tParentCf.size(); j++)
     {
       tParentPairKStar = aKStarBinCenters[j];
       tParentPairKStarBin = aTransformMatrix->GetYaxis()->FindBin(tParentPairKStar);
 
-      tReturnResCf[i] += aParentCf[j]*aTransformMatrix->GetBinContent(tDaughterPairKStarBin,tParentPairKStarBin);
+      tReturnResCf[i] += tParentCf[j]*aTransformMatrix->GetBinContent(tDaughterPairKStarBin,tParentPairKStarBin);
       tNormVec[i] += aTransformMatrix->GetBinContent(tDaughterPairKStarBin,tParentPairKStarBin);
     }
     tReturnResCf[i] /= tNormVec[i];
   }
   return tReturnResCf;
+}
+
+//________________________________________________________________________________________________________________
+vector<double> LednickyFitter::CombinePrimaryWithResiduals(td1dVec &aLambdaValues, td2dVec &aCfs)
+{
+  assert(aLambdaValues.size()==aCfs.size());
+  for(unsigned int i=1; i<aCfs.size(); i++) assert(aCfs[i-1].size()==aCfs[i].size());
+
+  vector<double> tReturnCf(aCfs[0].size(),0.);
+  for(unsigned int iBin=0; iBin<tReturnCf.size(); iBin++)
+  {
+    tReturnCf[iBin] = 1.;
+    for(unsigned int iCf=0; iCf<aCfs.size(); iCf++)
+    {
+      //NOTE:  //TODO confusing definitions of Cf and whatnot in Jai's analysis
+      tReturnCf[iBin] += aLambdaValues[iCf]*((aCfs[iCf][iBin]-1.0)/aLambdaValues[iCf]);
+    }
+  }
+  return tReturnCf;
+}
+
+//________________________________________________________________________________________________________________
+void LednickyFitter::ApplyNormalization(double aNorm, td1dVec &aCf)
+{
+  for(unsigned int i=0; i<aCf.size(); i++) aCf[i] *= aNorm;
 }
 
 
@@ -771,13 +814,15 @@ void LednickyFitter::CalculateFitFunction(int &npar, double &chi2, double *par)
   int tNbinsXToFitGlobal = fFitSharedAnalyses->GetFitPairAnalysis(0)->GetFitPartialAnalysis(0)->GetKStarCfLite()->Num()->FindBin(fMaxFitKStar);
   if(fFitSharedAnalyses->GetFitPairAnalysis(0)->GetFitPartialAnalysis(0)->GetKStarCfLite()->Num()->GetBinLowEdge(tNbinsXToFitGlobal) == fMaxFitKStar) tNbinsXToFitGlobal--;
 
+
+  int tNbinsXToBuildMomResCrctn=0, tNbinsXToBuildResiduals=0;
   int tNbinsXToBuildGlobal;  // when applying momentum resolution corrections, many times you must go beyond fitting range to apply correction
-  if(fApplyMomResCorrection) tNbinsXToBuildGlobal = fFitSharedAnalyses->GetFitPairAnalysis(0)->GetModelKStarTrueVsRecMixed()->GetNbinsX();
-  else tNbinsXToBuildGlobal = tNbinsXToFitGlobal;
+  if(fApplyMomResCorrection) tNbinsXToBuildMomResCrctn = fFitSharedAnalyses->GetFitPairAnalysis(0)->GetModelKStarTrueVsRecMixed()->GetNbinsX();
+  if(fIncludeResidualCorrelations) tNbinsXToBuildResiduals = fFitSharedAnalyses->GetFitPairAnalysis(0)->GetTransformMatrices()[0]->GetNbinsX();
+  tNbinsXToBuildGlobal = std::max({tNbinsXToBuildMomResCrctn, tNbinsXToBuildResiduals, tNbinsXToFitGlobal});
 
-
-//  vector<double> tFitCfContentUnNorm(tNbinsXToBuildGlobal,0.);
-  vector<double> tFitCfContent(tNbinsXToBuildGlobal,0.);
+//  vector<double> tPrimaryFitCfContentUnNorm(tNbinsXToBuildGlobal,0.);
+  vector<double> tPrimaryFitCfContent(tNbinsXToBuildGlobal,0.);
   vector<double> tNumContent(tNbinsXToBuildGlobal,0.);
   vector<double> tDenContent(tNbinsXToBuildGlobal,0.);
   vector<double> tKStarBinCenters(tNbinsXToBuildGlobal,0.);
@@ -812,13 +857,19 @@ void LednickyFitter::CalculateFitFunction(int &npar, double &chi2, double *par)
       TH1* tDen = tKStarCfLite->Den();
       TH1* tCf = tKStarCfLite->Cf();
 
+      assert(tNum->GetXaxis()->GetBinWidth(1) == tDen->GetXaxis()->GetBinWidth(1));
+      assert(tNum->GetXaxis()->GetBinWidth(1) == tCf->GetXaxis()->GetBinWidth(1));
       //make sure tNum and tDen and tCf have same bin size as tMomResMatrix
       if(fApplyMomResCorrection)
       {
-        assert(tNum->GetXaxis()->GetBinWidth(1) == tDen->GetXaxis()->GetBinWidth(1));
-        assert(tNum->GetXaxis()->GetBinWidth(1) == tCf->GetXaxis()->GetBinWidth(1));
         assert(tNum->GetXaxis()->GetBinWidth(1) == tMomResMatrix->GetXaxis()->GetBinWidth(1));
         assert(tNum->GetXaxis()->GetBinWidth(1) == tMomResMatrix->GetYaxis()->GetBinWidth(1));
+      }
+      //make sure tNum and tDen and tCf have same bin size as residuals
+      if(fIncludeResidualCorrelations)
+      {
+        assert(tNum->GetXaxis()->GetBinWidth(1) == tFitPairAnalysis->GetTransformMatrices()[0]->GetXaxis()->GetBinWidth(1));
+        assert(tNum->GetXaxis()->GetBinWidth(1) == tFitPairAnalysis->GetTransformMatrices()[0]->GetYaxis()->GetBinWidth(1));
       }
 
       //make sure tNum and tDen have same number of bins
@@ -845,6 +896,7 @@ void LednickyFitter::CalculateFitFunction(int &npar, double &chi2, double *par)
 
 
       assert(tNFitParams == 6);
+      //NOTE: CANNOT use sizeof(tPar)/sizeof(tPar[0]) trick here becasue tPar is pointer
       double *tPar = new double[tNFitParams];
 
       tPar[0] = par[tLambdaMinuitParamNumber];
@@ -864,7 +916,7 @@ void LednickyFitter::CalculateFitFunction(int &npar, double &chi2, double *par)
       bool tRejectOmega = tFitPartialAnalysis->RejectOmega();
       //bool tAreParamsSame = AreParamsSame(tCurrentFitPar,tPar,tNFitParPerAnalysis);
 
-      if(!fApplyMomResCorrection) tNbinsXToBuild = tNbinsXToFit;
+      if(!fApplyMomResCorrection && !fIncludeResidualCorrelations) tNbinsXToBuild = tNbinsXToFit;
       for(int ix=1; ix <= tNbinsXToBuild; ix++)
       {
         tKStarBinCenters[ix-1] = tXaxisNum->GetBinCenter(ix);
@@ -873,8 +925,29 @@ void LednickyFitter::CalculateFitFunction(int &npar, double &chi2, double *par)
         tNumContent[ix-1] = tNum->GetBinContent(ix);
         tDenContent[ix-1] = tDen->GetBinContent(ix);
 
-        tFitCfContent[ix-1] = LednickyEq(x,tPar);
+        tPrimaryFitCfContent[ix-1] = LednickyEq(x,tPar);
       }
+
+      vector<double> tFitCfContent;
+      if(fIncludeResidualCorrelations) 
+      {
+        double tLambda_SigK = 0.78*tPar[0];  //for now, primary lambda scaled by some factor
+        double *tPar_SigK = AdjustLambdaParam(tPar,tLambda_SigK,tNFitParams);
+        td1dVec tResidual_SigK = GetResidualCorrelation(tPar_SigK,tKStarBinCenters,tFitPairAnalysis->GetTransformMatrices()[0]);
+
+        double tLambda_Xi0K = 0.52*tPar[0];  //for now, primary lambda scaled by some factor
+        double *tPar_Xi0K = AdjustLambdaParam(tPar,tLambda_Xi0K,tNFitParams);
+        td1dVec tResidual_Xi0K = GetResidualCorrelation(tPar_Xi0K,tKStarBinCenters,tFitPairAnalysis->GetTransformMatrices()[2]);
+
+
+        vector<double> tLambdas{tPar[0],tLambda_SigK,tLambda_Xi0K};
+        td2dVec tAllCfs{tPrimaryFitCfContent,tResidual_SigK,tResidual_Xi0K};
+        tFitCfContent = CombinePrimaryWithResiduals(tLambdas, tAllCfs);
+
+        delete[] tPar_SigK;
+        delete[] tPar_Xi0K;
+      }
+      else tFitCfContent = tPrimaryFitCfContent;
 
       vector<double> tCorrectedFitCfContent;
       if(fApplyMomResCorrection) tCorrectedFitCfContent = ApplyMomResCorrection(tFitCfContent, tKStarBinCenters, tMomResMatrix);
@@ -885,6 +958,8 @@ void LednickyFitter::CalculateFitFunction(int &npar, double &chi2, double *par)
         TF1* tNonFlatBgd = tFitPartialAnalysis->GetNonFlatBackground(/*0.40,0.90*/);
         ApplyNonFlatBackgroundCorrection(tCorrectedFitCfContent, tKStarBinCenters, tNonFlatBgd);
       }
+
+      ApplyNormalization(tPar[5], tCorrectedFitCfContent);
 
       for(int ix=0; ix < tNbinsXToFit; ix++)
       {

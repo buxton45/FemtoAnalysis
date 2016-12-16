@@ -66,7 +66,7 @@ int main(int argc, char **argv)
   {
     //-----Find good normalization values LamKchP
     FitPairAnalysis* tLamKchP0010 = new FitPairAnalysis(FileLocationBase,FileLocationBaseMC,kLamKchP,k0010);
-    tLamKchP0010->LoadTransformMatrices(FileLocationTransform);
+    tLamKchP0010->LoadTransformMatrices(2,FileLocationTransform);
 
 
     //TODO delete

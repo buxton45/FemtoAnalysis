@@ -77,7 +77,9 @@ public:
 
   TH1F* GetCorrectedFitHisto(bool aMomResCorrection=true, bool aNonFlatBgdCorrection=true);
 
-  void LoadTransformMatrices(TString aFileLocation);
+  void LoadTransformMatrices(int aRebin=2, TString aFileLocation="");
+  vector<TH2D*> GetTransformMatrices(int aRebin=2, TString aFileLocation="");
+  TH2D* GetTransformMatrix(int aIndex, int aRebin=2, TString aFileLocation="");
 
   TH1* GetCfwSysErrors();
 
@@ -121,8 +123,6 @@ public:
 
   double GetKStarMinNorm();
   double GetKStarMaxNorm();
-
-  vector<TH2D*> GetTransformMatrices();
 
   bool AreTrainResults();
 
@@ -210,8 +210,6 @@ inline TH1* FitPairAnalysis::GetModelCfFakeIdealCfFakeRatio() {return fModelCfFa
 
 inline double FitPairAnalysis::GetKStarMinNorm() {return fKStarMinNorm;}
 inline double FitPairAnalysis::GetKStarMaxNorm() {return fKStarMaxNorm;}
-
-inline vector<TH2D*> FitPairAnalysis::GetTransformMatrices() {return fTransformMatrices;}
 
 inline bool FitPairAnalysis::AreTrainResults() {if(fAnalysisRunType==kTrain || fAnalysisRunType==kTrainSys) return true;}
 #endif

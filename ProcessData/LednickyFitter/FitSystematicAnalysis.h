@@ -53,6 +53,7 @@ protected:
   bool fShareLambdaParams;
   bool fApplyNonFlatBackgroundCorrection;
   bool fApplyMomResCorrection;
+  bool fIncludeResiduals;
   TString fSaveDirectory;
 
   TString fDirNameModifierBase1;

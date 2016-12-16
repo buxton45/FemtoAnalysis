@@ -74,9 +74,12 @@ public:
 
 
   bool AreParamsSame(double *aCurrent, double *aNew, int aNEntries);
+  double* AdjustLambdaParam(double *aParamSet, double aNewLambda, int aNEntries);
   void ApplyNonFlatBackgroundCorrection(vector<double> &aCf, vector<double> &aKStarBinCenters, TF1* aNonFlatBgd);
   vector<double> ApplyMomResCorrection(vector<double> &aCf, vector<double> &aKStarBinCenters, TH2* aMomResMatrix);
-  vector<double> GetResidualCorrelation(vector<double> &aParentCf, vector<double> &aKStarBinCenters, TH2* aTransformMatrix);
+  vector<double> GetResidualCorrelation(double *aParentCfParams, vector<double> &aKStarBinCenters, TH2* aTransformMatrix);
+  vector<double> CombinePrimaryWithResiduals(td1dVec &aLambdaValues, td2dVec &aCfs);
+  void ApplyNormalization(double aNorm, td1dVec &aCf);
   void CalculateChi2PMLwMomResCorrectionv2(int &npar, double &chi2, double *par);
 
   double GetChi2Value(int aKStarBin, TH1* aCfToFit, double* aPar);
