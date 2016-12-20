@@ -16,11 +16,9 @@ trash*
 analysis_*
 Old Stuff/*
 SuccessRates*
-
-Old*
-*Old*
-!LednickyFitter/Old*
-
+#Old*
+#*Old*
+OldResults
 run*
 
 ##LaTex stuff
