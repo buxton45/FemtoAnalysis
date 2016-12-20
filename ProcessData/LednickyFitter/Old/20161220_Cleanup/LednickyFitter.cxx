@@ -441,7 +441,7 @@ void LednickyFitter::CalculateChi2PMLwMomResCorrection(int &npar, double &chi2, 
           double tDenContent = tDen->GetBinContent(ix);
 //          double tCfContent = LednickyEq(x,tPar);
           double tCfContent = GetLednickyMomResCorrectedPoint(x[0],tPar,tMomResMatrix);
-
+          tCfContent*=tPar[5];  //Normalization
 
           if(tNumContent!=0 && tDenContent!=0 && tCfContent!=0) //even if only in one single bin, t*Content=0 causes fChi2->nan
           {
@@ -728,6 +728,8 @@ void LednickyFitter::CalculateChi2PMLwMomResCorrectionv2(int &npar, double &chi2
       }
 
       vector<double> tCfContentwMomResCorrection = ApplyMomResCorrection(tCfContent, tKStarBinCenters, tMomResMatrix);
+      ApplyNormalization(tPar[5], tCfContentwMomResCorrection);
+
       for(int ix=0; ix < tNbinsXToFit; ix++)
       {
         if(tRejectOmega && (tKStarBinCenters[ix] > tRejectOmegaLow) && (tKStarBinCenters[ix] < tRejectOmegaHigh)) {fChi2+=0;}
@@ -1103,6 +1105,7 @@ void LednickyFitter::CalculateChi2PMLwCorrectedCfs(int &npar, double &chi2, doub
           double tDenContent = tDen->GetBinContent(ix);
           double tCfContent = LednickyEq(x,tPar);
           tCfContent /= tCorrectionHist->GetBinContent(tCorrectionHist->FindBin(x[0]));
+          tCfContent *= tPar[5];  //Normalization
 
           if(tNumContent!=0 && tDenContent!=0 && tCfContent!=0) //even if only in one single bin, t*Content=0 causes fChi2->nan
           {

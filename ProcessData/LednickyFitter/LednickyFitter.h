@@ -51,27 +51,17 @@ using std::vector;
 #include "FitSharedAnalyses.h"
 class FitSharedAnalyses;
 
-
-
-
 class LednickyFitter {
 
 public:
   //Any enum types
 
-
-
   //Constructor, destructor, copy constructor, assignment operator
   LednickyFitter(FitSharedAnalyses* aFitSharedAnalyses, double aMaxFitKStar = 0.3);
   virtual ~LednickyFitter();
 
-  double GetLednickyMomResCorrectedPoint(double aKStar, double* aPar, TH2* aMomResMatrix);
-  double ApplyResidualCorrelationToPoint(double aKStar, double* aPar, TH2* aTransformMatrix);
 
-  //void CalculateChi2(int &npar, double &chi2, double *par);
-  void CalculateChi2PML(int &npar, double &chi2, double *par);
-  void CalculateChi2PMLwMomResCorrection(int &npar, double &chi2, double *par);
-
+  void PrintCurrentParamValues(int &aNpar, double* aPar);
 
   bool AreParamsSame(double *aCurrent, double *aNew, int aNEntries);
   double* AdjustLambdaParam(double *aParamSet, double aNewLambda, int aNEntries);
@@ -80,19 +70,15 @@ public:
   vector<double> GetResidualCorrelation(double *aParentCfParams, vector<double> &aKStarBinCenters, TH2* aTransformMatrix);
   vector<double> CombinePrimaryWithResiduals(td1dVec &aLambdaValues, td2dVec &aCfs);
   void ApplyNormalization(double aNorm, td1dVec &aCf);
-  void CalculateChi2PMLwMomResCorrectionv2(int &npar, double &chi2, double *par);
 
   double GetChi2Value(int aKStarBin, TH1* aCfToFit, double* aPar);
   double GetPmlValue(double aNumContent, double aDenContent, double aCfContent);
   void CalculateFitFunction(int &npar, double &chi2, double *par);
 
-
-  void CalculateChi2PMLwCorrectedCfs(int &npar, double &chi2, double *par);
   void DoFit();
   TF1* CreateFitFunction(TString aName, int aAnalysisNumber);
 
   vector<double> FindGoodInitialValues();
-
 
   //inline (i.e. simple) functions
   FitSharedAnalyses* GetFitSharedAnalyses();
@@ -113,7 +99,6 @@ private:
   FitSharedAnalyses* fFitSharedAnalyses;
   TMinuit* fMinuit;
   int fNAnalyses;
-  vector<TH1F*> fCfsToFit;
   vector<TF1*> fFits;
 
   double fMaxFitKStar;
@@ -126,19 +111,15 @@ private:
 
   double fChi2;
   double fChi2GlobalMin;
+  vector<double> fChi2Vec;
 
   double fEdm, fErrDef;
   int fNvpar, fNparx, fIcstat;
-
-  vector<double> fChi2Vec;
-
-
 
   int fNpFits;
   vector<int> fNpFitsVec;
 
   int fNDF;
-
   int fErrFlg;
 
   vector<double> fMinParams;

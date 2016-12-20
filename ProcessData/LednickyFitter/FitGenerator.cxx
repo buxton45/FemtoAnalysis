@@ -16,7 +16,6 @@ LednickyFitter *GlobalFitter = NULL;
 //______________________________________________________________________________
 void GlobalFCN(Int_t &npar, Double_t *gin, Double_t &f, Double_t *par, Int_t iflag)
 {
-//  GlobalFitter->CalculateChi2PML(npar,f,par);
   GlobalFitter->CalculateFitFunction(npar,f,par);
 }
 
