@@ -320,15 +320,18 @@ void CanvasPartition::DrawInPad(int aNx, int aNy)
   //  Something similar could have be done on the individual pads themselves in BuildPartition (above),
   //  but this method makes it easier for me to alter the attributes of the axes.
   //NOTE: The histograms MUST be drawn with the option "sames" (NOT "same") for the fit parameters to still be drawn
+/*
   TH1F* tTrash = new TH1F("","",1,fXaxisRangeLow,fXaxisRangeHigh);
     SetupAxis(kXaxis,tTrash,fXScaleFactors[aNx][aNy],fYScaleFactors[aNx][aNy]);
     SetupAxis(kYaxis,tTrash,fXScaleFactors[aNx][aNy],fYScaleFactors[aNx][aNy]);
     tTrash->DrawCopy("AXIS");
   delete tTrash;
+*/
 
   int tCounter = 0;
   while(tGraphObj = tNextGraph())
   {
+    if(tCounter==0) tGraphObj->Draw("AXIS");
     tGraphObj->Draw(fGraphsDrawOptions[tPosition][tCounter]);
     tCounter++;
   }

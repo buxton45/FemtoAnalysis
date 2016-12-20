@@ -549,10 +549,12 @@ TCanvas* FitGenerator::DrawKStarCfswFits()
 */
 
 //________________________________________________________________________________________________________________
-TCanvas* FitGenerator::DrawKStarCfswFits(bool aMomResCorrectFit, bool aNoFlatBgdCorrectFit, bool aSaveImage, bool aDrawSysErrors)
+TCanvas* FitGenerator::DrawKStarCfswFits(bool aMomResCorrectFit, bool aNoFlatBgdCorrectFit, bool aSaveImage, bool aDrawSysErrors, bool aZoomROP)
 {
   TString tCanvasName = TString("canKStarCfwFits") + TString(cAnalysisBaseTags[fPairType]) + TString("wConj") 
                       + TString(cCentralityTags[fCentralityType]);
+
+  if(!aZoomROP) tCanvasName += TString("UnZoomed");
 
   int tNx=0, tNy=0;
   if(fNAnalyses == 6) {tNx=2; tNy=3;}
@@ -564,6 +566,13 @@ TCanvas* FitGenerator::DrawKStarCfswFits(bool aMomResCorrectFit, bool aNoFlatBgd
   double tXHigh = 0.99;
   double tYLow = 0.71;
   double tYHigh = 1.09;
+  if(aZoomROP)
+  {
+    tXLow = -0.02;
+    tXHigh = 0.309;
+    tYLow = 0.85;
+    tYHigh = 1.07;
+  }
 
   CanvasPartition* tCanPart = new CanvasPartition(tCanvasName,tNx,tNy,tXLow,tXHigh,tYLow,tYHigh,0.12,0.05,0.13,0.05);
 
@@ -625,8 +634,6 @@ TCanvas* FitGenerator::DrawKStarCfswFits(bool aMomResCorrectFit, bool aNoFlatBgd
       tCanPart->AddGraph(i,j,tCorrectedFitHisto,"",20,6,0.5,"lsame");
       tCanPart->AddGraph(i,j,(TF1*)fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetNonFlatBackground(),"",20,3);
 
-
-
       TString tTextAnType = TString(cAnalysisRootTags[fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetAnalysisType()]);
       TPaveText* tAnTypeName = tCanPart->SetupTPaveText(tTextAnType,i,j,0.8,0.85);
       tCanPart->AddPadPaveText(tAnTypeName,i,j);
@@ -635,7 +642,8 @@ TCanvas* FitGenerator::DrawKStarCfswFits(bool aMomResCorrectFit, bool aNoFlatBgd
       TPaveText* tCentralityName = tCanPart->SetupTPaveText(tTextCentrality,i,j,0.05,0.85);
       tCanPart->AddPadPaveText(tCentralityName,i,j);
 
-      CreateParamInitValuesText(tCanPart,i,j,0.25,0.20,0.15,0.45,43,10);
+      if(aZoomROP) CreateParamInitValuesText(tCanPart,i,j,0.35,0.20,0.10,0.40,43,9);
+      else CreateParamInitValuesText(tCanPart,i,j,0.25,0.20,0.15,0.45,43,10);
       AddTextCorrectionInfo(tCanPart,i,j,aMomResCorrectFit,aNoFlatBgdCorrectFit,0.25,0.08,0.15,0.10,43,7.5);
     }
   }

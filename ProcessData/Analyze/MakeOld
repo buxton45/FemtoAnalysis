@@ -1,0 +1,35 @@
+
+
+LIBS   = $(shell root-config --libs)
+CFLAGS = $(shell root-config --cflags) -Wall
+#IFLAGS = -I$(ROOTSYS)/include
+#.PHONY: clean
+
+all: main
+
+main: utilities BuildcLamcKchAnalyses.C BuildcLamK0Analyses.C BuildcXicKchAnalyses.C BuildcLamcLamAnalyses.C CombineConjugatesLamKch.C CombineConjugatesLamK0.C CombineConjugatesXiKch.C BuildMomResMatrix.C CompareFixes.C CorrectCfs.C
+	g++ BuildcLamcKchAnalyses.C CfLite.o CfHeavy.o Cf2dLite.o Cf2dHeavy.o Types.o Purity.o PartialAnalysis.o Analysis.o DataAndModel.o -o runBuildcLamcKch $(LIBS) $(CFLAGS)
+	g++ BuildcLamK0Analyses.C CfLite.o CfHeavy.o Cf2dLite.o Cf2dHeavy.o Types.o Purity.o PartialAnalysis.o Analysis.o -o runBuildcLamK0 $(LIBS) $(CFLAGS)
+	g++ BuildcXicKchAnalyses.C CfLite.o CfHeavy.o Cf2dLite.o Cf2dHeavy.o Types.o Purity.o PartialAnalysis.o Analysis.o -o runBuildcXicKch $(LIBS) $(CFLAGS)
+	g++ BuildcLamcLamAnalyses.C CfLite.o CfHeavy.o Cf2dLite.o Cf2dHeavy.o Types.o Purity.o PartialAnalysis.o Analysis.o -o runBuildcLamcLam $(LIBS) $(CFLAGS)
+	g++ CombineConjugatesLamKch.C CfLite.o CfHeavy.o Cf2dLite.o Cf2dHeavy.o Types.o Purity.o PartialAnalysis.o Analysis.o -o runCombineConjugatesLamKch $(LIBS) $(CFLAGS)
+	g++ CombineConjugatesLamK0.C CfLite.o CfHeavy.o Cf2dLite.o Cf2dHeavy.o Types.o Purity.o PartialAnalysis.o Analysis.o -o runCombineConjugatesLamK0 $(LIBS) $(CFLAGS)
+	g++ CombineConjugatesXiKch.C CfLite.o CfHeavy.o Cf2dLite.o Cf2dHeavy.o Types.o Purity.o PartialAnalysis.o Analysis.o -o runCombineConjugatesXiKch $(LIBS) $(CFLAGS)
+	g++ BuildMomResMatrix.C CfLite.o CfHeavy.o Cf2dLite.o Cf2dHeavy.o Types.o Purity.o PartialAnalysis.o Analysis.o DataAndModel.o -o runBuildMomResMatrix $(LIBS) $(CFLAGS)
+	g++ BuildMomResMatrix2.C CfLite.o CfHeavy.o Cf2dLite.o Cf2dHeavy.o Types.o Purity.o PartialAnalysis.o Analysis.o DataAndModel.o -o runBuildMomResMatrix2 $(LIBS) $(CFLAGS)
+	g++ CompareFixes.C CfLite.o CfHeavy.o Cf2dLite.o Cf2dHeavy.o Types.o Purity.o PartialAnalysis.o Analysis.o DataAndModel.o -o runCompareFixes $(LIBS) $(CFLAGS)
+	g++ CorrectCfs.C CfLite.o CfHeavy.o Cf2dLite.o Cf2dHeavy.o Types.o Purity.o PartialAnalysis.o Analysis.o DataAndModel.o -o runCorrectCfs $(LIBS) $(CFLAGS)
+
+utilities: CfLite.cxx CfHeavy.cxx Cf2dLite.cxx Cf2dHeavy.cxx Types.cxx Purity.cxx PartialAnalysis.cxx Analysis.cxx DataAndModel.cxx
+	g++ -c CfLite.cxx $(CFLAGS)
+	g++ -c CfHeavy.cxx $(CFLAGS)
+	g++ -c Cf2dLite.cxx $(CFLAGS)
+	g++ -c Cf2dHeavy.cxx $(CFLAGS)
+	g++ -c Types.cxx $(CFLAGS)
+	g++ -c Purity.cxx $(CFLAGS)
+	g++ -c PartialAnalysis.cxx $(CFLAGS)
+	g++ -c Analysis.cxx $(CFLAGS)
+	g++ -c DataAndModel.cxx $(CFLAGS)
+
+clean:
+	rm -f runBuildcLamcKch runBuildcLamK0 runBuildcXicKch runBuildcLamcLam runCombineConjugatesLamKch runCombineConjugatesLamK0 runCombineConjugatesXiKch CfLite.o CfHeavy.o Cf2dLite.o Types.o Purity.o Cf2dHeavy.o PartialAnalysis.o Analysis.o DataAndModel.o runBuildMomResMatrix runBuildMomResMatrix2 runCompareFixes runCorrectCfs
