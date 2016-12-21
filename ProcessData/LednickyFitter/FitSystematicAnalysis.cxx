@@ -190,7 +190,7 @@ void FitSystematicAnalysis::RunAllFits(bool aSave, ostream &aOut)
     TString tDirNameModifier = fDirNameModifierBase1 + TString::Format("%0.6f",fModifierValues1[i]);
     if(!fDirNameModifierBase2.IsNull()) tDirNameModifier += fDirNameModifierBase2 + TString::Format("%0.6f",fModifierValues2[i]);
 
-    FitGenerator* tFitGenerator = new FitGenerator(fFileLocationBase, fFileLocationBaseMC, fAnalysisType, kTrainSys, 2, fCentralityType, fFitGeneratorType, fShareLambdaParams, tDirNameModifier);
+    FitGenerator* tFitGenerator = new FitGenerator(fFileLocationBase, fFileLocationBaseMC, fAnalysisType, fCentralityType, kTrainSys, 2, fFitGeneratorType, fShareLambdaParams, tDirNameModifier);
 
     tFitGenerator->DoFit(fApplyMomResCorrection,fApplyNonFlatBackgroundCorrection,fIncludeResiduals);
 
@@ -233,7 +233,7 @@ void FitSystematicAnalysis::RunVaryFitRange(bool aSave, ostream &aOut, double aM
 
   for(int i=0; i<tNRangeValues; i++)
   {
-    FitGenerator* tFitGenerator = new FitGenerator(fFileLocationBase, fFileLocationBaseMC, fAnalysisType, kTrain, 2, fCentralityType, fFitGeneratorType, fShareLambdaParams);
+    FitGenerator* tFitGenerator = new FitGenerator(fFileLocationBase, fFileLocationBaseMC, fAnalysisType, fCentralityType, kTrain, 2, fFitGeneratorType, fShareLambdaParams);
     tFitGenerator->DoFit(fApplyMomResCorrection,fApplyNonFlatBackgroundCorrection,fIncludeResiduals,tRangeVec[i]);
 
     TString tRangeValue = TString::Format("Max KStar for Fit = %0.4f",tRangeVec[i]);

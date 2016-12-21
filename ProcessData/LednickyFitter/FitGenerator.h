@@ -21,7 +21,9 @@ class CanvasPartition;
 class FitGenerator {
 
 public:
-  FitGenerator(TString aFileLocationBase, TString aFileLocationBaseMC, AnalysisType aAnalysisType, AnalysisRunType aRunType=kTrain, int aNPartialAnalysis=2, CentralityType aCentralityType=kMB, FitGeneratorType aGeneratorType=kPairwConj, bool aShareLambdaParams=false, TString aDirNameModifier="");
+  FitGenerator(TString aFileLocationBase, TString aFileLocationBaseMC, AnalysisType aAnalysisType, const vector<CentralityType> &aCentralityTypes, AnalysisRunType aRunType=kTrain, int aNPartialAnalysis=2, FitGeneratorType aGeneratorType=kPairwConj, bool aShareLambdaParams=false, TString aDirNameModifier="");
+
+  FitGenerator(TString aFileLocationBase, TString aFileLocationBaseMC, AnalysisType aAnalysisType, CentralityType aCentralityType=kMB, AnalysisRunType aRunType=kTrain, int aNPartialAnalysis=2, FitGeneratorType aGeneratorType=kPairwConj, bool aShareLambdaParams=false, TString aDirNameModifier="");
   virtual ~FitGenerator();
 
   void SetNAnalyses();
@@ -40,14 +42,17 @@ public:
 
   void SetUseLimits(vector<FitParameter> &aVec, bool aUse);  //Internal use only
 
-  void SetRadiusStartValue(double aRad, CentralityType aCentType=kMB);  //aCentType only matters when fCentralityType = kMB
-  void SetRadiusStartValues(double aRad0010, double aRad1030, double aRad3050);
-  void SetRadiusLimits(double aMin, double aMax, CentralityType aCentType=kMB);
-  void SetRadiusLimits(double aMin0010, double aMax0010, double aMin1030, double aMax1030, double aMin3050, double aMax3050);
+  void SetRadiusStartValue(double aRad, int aIndex=0);
+  void SetRadiusStartValues(const vector<double> &aStartValues);
+  void SetRadiusLimits(double aMin, double aMax, int aIndex=0);
+  void SetRadiusLimits(const td2dVec &aMinMax2dVec);
 
+  void SetScattParamStartValue(double aVal, ParameterType aParamType);
   void SetScattParamStartValues(double aReF0, double aImF0, double aD0);
-  void SetScattParamLimits(double aMinReF0, double aMaxReF0, double aMinImF0, double aMaxImF0, double aMinD0, double aMaxD0);
+  void SetScattParamLimits(double aMin, double aMax, ParameterType aParamType);
+  void SetScattParamLimits(const td2dVec &aMinMax2dVec);
 
+  int GetLambdaBinNumber(bool tConjPair=false, CentralityType aCentType=k0010);  //ex. tConjPair=false for kLamK0 and tConjPair=true for kALamK0
   void SetLambdaParamStartValue(double aLam, bool tConjPair=false, CentralityType aCentType=kMB);
   void SetLambdaParamLimits(double aMin, double aMax, bool tConjPair=false, CentralityType aCentType=kMB);
 
@@ -93,6 +98,7 @@ protected:
   FitGeneratorType fGeneratorType;
   AnalysisType fPairType, fConjPairType;
   CentralityType fCentralityType;  //Note kMB means include all
+  vector<CentralityType> fCentralityTypes;
 
   vector<FitParameter> fRadiusFitParams;  //size depends on centralities being fit
   vector<FitParameter> fScattFitParams;  //size = 3; [ReF0,ImF0,D0]

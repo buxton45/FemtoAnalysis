@@ -24,7 +24,7 @@ int main(int argc, char **argv)
   bool SaveImages = false;
   bool ApplyMomResCorrection = true;
   bool ApplyNonFlatBackgroundCorrection = true;
-  bool IncludeResiduals = true;
+  bool IncludeResiduals = false;
 
   TString tGeneralAnTypeName;
   if(tAnType==kLamK0 || tAnType==kALamK0) tGeneralAnTypeName = "cLamK0";
@@ -40,7 +40,10 @@ int main(int argc, char **argv)
   TString tSaveNameModifier = "";
   if(ApplyMomResCorrection) tSaveNameModifier += TString("_MomResCrctn");
   if(ApplyNonFlatBackgroundCorrection) tSaveNameModifier += TString("_NonFlatBgdCrctn");
-  FitGenerator* tLamKchP = new FitGenerator(tFileLocationBase,tFileLocationBaseMC,tAnType,tAnRunType,tNPartialAnalysis,tCentType,tGenType,tShareLambdaParams);
+//  FitGenerator* tLamKchP = new FitGenerator(tFileLocationBase,tFileLocationBaseMC,tAnType, tCentType,tAnRunType,tNPartialAnalysis,tGenType,tShareLambdaParams);
+  FitGenerator* tLamKchP = new FitGenerator(tFileLocationBase,tFileLocationBaseMC,tAnType,{k0010,k1030},tAnRunType,tNPartialAnalysis,tGenType,tShareLambdaParams);
+//  tLamKchP->SetRadiusStartValues({3.0,4.0,5.0});
+//  tLamKchP->SetRadiusLimits({{0.,10.},{0.,10.},{0.,10.}});
   tLamKchP->SetSaveLocationBase(tDirectoryBase,tSaveNameModifier);
   //tLamKchP->SetFitType(kChi2);
 

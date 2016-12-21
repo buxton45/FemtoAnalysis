@@ -39,7 +39,7 @@ int main(int argc, char **argv)
   TString tSaveNameModifier = "";
   if(ApplyMomResCorrection) tSaveNameModifier += TString("_MomResCrctn");
   if(ApplyNonFlatBackgroundCorrection) tSaveNameModifier += TString("_NonFlatBgdCrctn");
-  FitGenerator* tFitGen = new FitGenerator(tFileLocationBase,tFileLocationBaseMC,tAnType,tAnRunType,tNPartialAnalysis,tCentType,tGenType,tShareLambdaParams);
+  FitGenerator* tFitGen = new FitGenerator(tFileLocationBase,tFileLocationBaseMC,tAnType,tCentType,tAnRunType,tNPartialAnalysis,tGenType,tShareLambdaParams);
 //  tFitGen->SetSaveLocationBase(tDirectoryBase,tSaveNameModifier);
 
   //Set any limits:
