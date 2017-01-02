@@ -210,6 +210,7 @@ const double** cStartValues[10] = {cLamK0StartValues, cALamK0StartValues, cLamKc
 //-----
 const double hbarc = 0.197327;
 const double gBohrRadiusXiK = 75.23349845;
+const double gBohrRadiusOmegaK = 70.94291278;
 
 //________________________________________________________________________________________________________________
 //****************************************************************************************************************

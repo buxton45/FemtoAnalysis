@@ -255,6 +255,8 @@ using std::vector;
   //-----
   extern const double hbarc;
   extern const double gBohrRadiusXiK;
+  extern const double gBohrRadiusOmegaK;
+
 
 #endif
 
