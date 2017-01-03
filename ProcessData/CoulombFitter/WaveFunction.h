@@ -43,6 +43,7 @@ public:
   virtual ~WaveFunction();
 
   void SetCurrentAnalysisType(AnalysisType aAnalysisType);
+  void SetCurrentBohrRadius(ResidualType aResidualType);
 
   complex<double> GetTest(complex<double> aCmplx);
 

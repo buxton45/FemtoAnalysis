@@ -25,8 +25,6 @@ double gMaxFitKStar;
 
 //________________________________________________________________________________________________________________
 CoulombFitter::CoulombFitter():
-  fCreateInterpVectors(false),
-  fUseScattLenHists(false),
   fTurnOffCoulomb(false),
   fInterpHistsLoaded(false),
   fIncludeSingletAndTriplet(true),
@@ -49,7 +47,7 @@ CoulombFitter::CoulombFitter():
   fNPairsPerKStarBin(16384),
   fCurrentRadiusParameter(1.),
   fPairSample4dVec(0),
-  fInterpHistFile(0), fInterpHistFileScatLenReal1(0), fInterpHistFileScatLenImag1(0), fInterpHistFileScatLenReal2(0), fInterpHistFileScatLenImag2(0), fInterpHistFileLednickyHFunction(0),
+  fInterpHistFile(0), fInterpHistFileLednickyHFunction(0),
 
   fLednickyHFunctionHist(0),
 
@@ -59,28 +57,9 @@ CoulombFitter::CoulombFitter():
   fHyperGeo1F1RealHist(0),
   fHyperGeo1F1ImagHist(0),
 
-  fCoulombScatteringLengthRealHist1(0),
-  fCoulombScatteringLengthImagHist1(0),
+  fMinInterpKStar(0), fMinInterpRStar(0), fMinInterpTheta(0),
+  fMaxInterpKStar(0), fMaxInterpRStar(0), fMaxInterpTheta(0),
 
-  fCoulombScatteringLengthRealHist2(0),
-  fCoulombScatteringLengthImagHist2(0),
-
-  fMinInterpKStar1(0), fMinInterpKStar2(0), fMinInterpRStar(0), fMinInterpTheta(0), fMinInterpReF0(0), fMinInterpImF0(0), fMinInterpD0(0),
-  fMaxInterpKStar1(0), fMaxInterpKStar2(0), fMaxInterpRStar(0), fMaxInterpTheta(0), fMaxInterpReF0(0), fMaxInterpImF0(0), fMaxInterpD0(0),
-
-  fLednickyHFunction(0),
-
-  fGTildeReal(0),
-  fGTildeImag(0),
-
-  fHyperGeo1F1Real(0),
-  fHyperGeo1F1Imag(0),
-
-  fCoulombScatteringLengthReal(0),
-  fCoulombScatteringLengthImag(0),
-
-  fCoulombScatteringLengthRealSub(0),
-  fCoulombScatteringLengthImagSub(0),
 
   fCfsToFit(0),
   fFits(0),
@@ -98,9 +77,7 @@ CoulombFitter::CoulombFitter():
 
 {
   gRandom->SetSeed();
-
   fWaveFunction = new WaveFunction();
-
   omp_set_num_threads(3);
 
 }
@@ -108,9 +85,7 @@ CoulombFitter::CoulombFitter():
 
 
 //________________________________________________________________________________________________________________
-CoulombFitter::CoulombFitter(FitSharedAnalyses* aFitSharedAnalyses, double aMaxFitKStar, bool aCreateInterpVectors, bool aUseScattLenHists):
-  fCreateInterpVectors(aCreateInterpVectors),
-  fUseScattLenHists(aUseScattLenHists),
+CoulombFitter::CoulombFitter(FitSharedAnalyses* aFitSharedAnalyses, double aMaxFitKStar):
   fTurnOffCoulomb(false),
   fInterpHistsLoaded(false),
   fIncludeSingletAndTriplet(true),
@@ -133,7 +108,7 @@ CoulombFitter::CoulombFitter(FitSharedAnalyses* aFitSharedAnalyses, double aMaxF
   fNPairsPerKStarBin(16384),
   fCurrentRadiusParameter(1.),
   fPairSample4dVec(0),
-  fInterpHistFile(0), fInterpHistFileScatLenReal1(0), fInterpHistFileScatLenImag1(0), fInterpHistFileScatLenReal2(0), fInterpHistFileScatLenImag2(0), fInterpHistFileLednickyHFunction(0),
+  fInterpHistFile(0), fInterpHistFileLednickyHFunction(0),
 
   fLednickyHFunctionHist(0),
 
@@ -143,28 +118,8 @@ CoulombFitter::CoulombFitter(FitSharedAnalyses* aFitSharedAnalyses, double aMaxF
   fHyperGeo1F1RealHist(0),
   fHyperGeo1F1ImagHist(0),
 
-  fCoulombScatteringLengthRealHist1(0),
-  fCoulombScatteringLengthImagHist1(0),
-
-  fCoulombScatteringLengthRealHist2(0),
-  fCoulombScatteringLengthImagHist2(0),
-
-  fMinInterpKStar1(0), fMinInterpKStar2(0), fMinInterpRStar(0), fMinInterpTheta(0), fMinInterpReF0(0), fMinInterpImF0(0), fMinInterpD0(0),
-  fMaxInterpKStar1(0), fMaxInterpKStar2(0), fMaxInterpRStar(0), fMaxInterpTheta(0), fMaxInterpReF0(0), fMaxInterpImF0(0), fMaxInterpD0(0),
-
-  fLednickyHFunction(0),
-
-  fGTildeReal(0),
-  fGTildeImag(0),
-
-  fHyperGeo1F1Real(0),
-  fHyperGeo1F1Imag(0),
-
-  fCoulombScatteringLengthReal(0),
-  fCoulombScatteringLengthImag(0),
-
-  fCoulombScatteringLengthRealSub(0),
-  fCoulombScatteringLengthImagSub(0),
+  fMinInterpKStar(0), fMinInterpRStar(0), fMinInterpTheta(0),
+  fMaxInterpKStar(0), fMaxInterpRStar(0), fMaxInterpTheta(0),
 
   fCfsToFit(fNAnalyses),
   fFits(fNAnalyses),
@@ -202,7 +157,7 @@ CoulombFitter::~CoulombFitter()
   cout << "CoulombFitter object is being deleted!!!" << endl;
 
   //---Clean up
-  if(!fCreateInterpVectors && fInterpHistsLoaded)
+  if(fInterpHistsLoaded)
   {
     delete fLednickyHFunctionHist;
 
@@ -217,27 +172,6 @@ CoulombFitter::~CoulombFitter()
 
     fInterpHistFile->Close();
     delete fInterpHistFile;
-
-    delete fCoulombScatteringLengthRealHist1;
-    delete fCoulombScatteringLengthImagHist1;
-
-    delete fCoulombScatteringLengthRealHist2;
-    delete fCoulombScatteringLengthImagHist2;
-
-    if(fUseScattLenHists)
-    {
-      fInterpHistFileScatLenReal1->Close();
-      delete fInterpHistFileScatLenReal1;
-
-      fInterpHistFileScatLenImag1->Close();
-      delete fInterpHistFileScatLenImag1;
-
-      fInterpHistFileScatLenReal2->Close();
-      delete fInterpHistFileScatLenReal2;
-
-      fInterpHistFileScatLenImag2->Close();
-      delete fInterpHistFileScatLenImag2;
-    }
   }
 
 }
@@ -317,197 +251,11 @@ void CoulombFitter::LoadLednickyHFunctionFile(TString aFileBaseName)
 }
 
 //________________________________________________________________________________________________________________
-void CoulombFitter::MakeNiceScattLenVectors()
-{
-ChronoTimer tTimer(kSec);
-tTimer.Start();
-  cout << "Starting MakeNiceScattLenVectors" << endl;
-  //--------------------------------------------------------------
-  fScattLenInfo.nBinsK = fCoulombScatteringLengthRealHist1->GetAxis(0)->GetNbins();
-  fScattLenInfo.binWidthK = fCoulombScatteringLengthRealHist1->GetAxis(0)->GetBinWidth(1);
-  fScattLenInfo.minK = fCoulombScatteringLengthRealHist1->GetAxis(0)->GetBinLowEdge(1);
-  fScattLenInfo.minInterpK = fCoulombScatteringLengthRealHist1->GetAxis(0)->GetBinCenter(1);
-  fScattLenInfo.maxK = fCoulombScatteringLengthRealHist2->GetAxis(0)->GetBinUpEdge(fCoulombScatteringLengthRealHist2->GetAxis(0)->GetNbins());
-  fScattLenInfo.maxInterpK = fCoulombScatteringLengthRealHist2->GetAxis(0)->GetBinCenter(fCoulombScatteringLengthRealHist2->GetAxis(0)->GetNbins());
-
-  fScattLenInfo.nBinsReF0 = fCoulombScatteringLengthRealHist1->GetAxis(1)->GetNbins();
-  fScattLenInfo.binWidthReF0 = fCoulombScatteringLengthRealHist1->GetAxis(1)->GetBinWidth(1);
-  fScattLenInfo.minReF0 = fCoulombScatteringLengthRealHist1->GetAxis(1)->GetBinLowEdge(1);
-  fScattLenInfo.minInterpReF0 = fCoulombScatteringLengthRealHist1->GetAxis(1)->GetBinCenter(1);
-  fScattLenInfo.maxReF0 = fCoulombScatteringLengthRealHist1->GetAxis(1)->GetBinUpEdge(fCoulombScatteringLengthRealHist1->GetAxis(1)->GetNbins());
-  fScattLenInfo.maxInterpReF0 = fCoulombScatteringLengthRealHist1->GetAxis(1)->GetBinCenter(fCoulombScatteringLengthRealHist1->GetAxis(1)->GetNbins());
-
-  fScattLenInfo.nBinsImF0 = fCoulombScatteringLengthRealHist1->GetAxis(2)->GetNbins();
-  fScattLenInfo.binWidthImF0 = fCoulombScatteringLengthRealHist1->GetAxis(2)->GetBinWidth(1);
-  fScattLenInfo.minImF0 = fCoulombScatteringLengthRealHist1->GetAxis(2)->GetBinLowEdge(1);
-  fScattLenInfo.minInterpImF0 = fCoulombScatteringLengthRealHist1->GetAxis(2)->GetBinCenter(1);
-  fScattLenInfo.maxImF0 = fCoulombScatteringLengthRealHist1->GetAxis(2)->GetBinUpEdge(fCoulombScatteringLengthRealHist1->GetAxis(2)->GetNbins());
-  fScattLenInfo.maxInterpImF0 = fCoulombScatteringLengthRealHist1->GetAxis(2)->GetBinCenter(fCoulombScatteringLengthRealHist1->GetAxis(2)->GetNbins());
-
-  fScattLenInfo.nBinsD0 = fCoulombScatteringLengthRealHist1->GetAxis(3)->GetNbins();
-  fScattLenInfo.binWidthD0 = fCoulombScatteringLengthRealHist1->GetAxis(3)->GetBinWidth(1);
-  fScattLenInfo.minD0 = fCoulombScatteringLengthRealHist1->GetAxis(3)->GetBinLowEdge(1);
-  fScattLenInfo.minInterpD0 = fCoulombScatteringLengthRealHist1->GetAxis(3)->GetBinCenter(1);
-  fScattLenInfo.maxD0 = fCoulombScatteringLengthRealHist1->GetAxis(3)->GetBinUpEdge(fCoulombScatteringLengthRealHist1->GetAxis(3)->GetNbins());
-  fScattLenInfo.maxInterpD0 = fCoulombScatteringLengthRealHist1->GetAxis(3)->GetBinCenter(fCoulombScatteringLengthRealHist1->GetAxis(3)->GetNbins());
-  //--------------------------------------------------------------
-
-  int tNbinsReF0 = fCoulombScatteringLengthRealHist1->GetAxis(1)->GetNbins();
-  int tNbinsImF0 = fCoulombScatteringLengthRealHist1->GetAxis(2)->GetNbins();
-  int tNbinsD0 = fCoulombScatteringLengthRealHist1->GetAxis(3)->GetNbins();
-  int tNbinsK = 2*fCoulombScatteringLengthRealHist1->GetAxis(0)->GetNbins();
-
-  fCoulombScatteringLengthReal.resize(tNbinsReF0, td3dVec(tNbinsImF0, td2dVec(tNbinsD0, td1dVec(tNbinsK,0))));
-  fCoulombScatteringLengthImag.resize(tNbinsReF0, td3dVec(tNbinsImF0, td2dVec(tNbinsD0, td1dVec(tNbinsK,0))));
-
-cout << "fCoulombScatteringLengthReal.size() = " << fCoulombScatteringLengthReal.size() << endl;
-cout << "fCoulombScatteringLengthReal[0].size() = " << fCoulombScatteringLengthReal[0].size() << endl;
-cout << "fCoulombScatteringLengthReal[0][0].size() = " << fCoulombScatteringLengthReal[0][0].size() << endl;
-cout << "fCoulombScatteringLengthReal[0][0][0].size() = " << fCoulombScatteringLengthReal[0][0][0].size() << endl;
-
-  int tBin[4];
-  int iK, iReF0, iImF0, iD0;
-  #pragma omp parallel for private(iK,iReF0,iImF0,iD0) firstprivate(tBin)
-  for(iK=1; iK<=tNbinsK; iK++)
-  {
-    for(iReF0=1; iReF0<=tNbinsReF0; iReF0++)
-    {
-      for(iImF0=1; iImF0<=tNbinsImF0; iImF0++)
-      {
-        for(iD0=1; iD0<=tNbinsD0; iD0++)
-        {
-          tBin[0] = iK;
-          tBin[1] = iReF0;
-          tBin[2] = iImF0;
-          tBin[3] = iD0;
-
-          if(iK <= tNbinsK/2)
-          {
-            fCoulombScatteringLengthReal[iReF0-1][iImF0-1][iD0-1][iK-1] = fCoulombScatteringLengthRealHist1->GetBinContent(tBin);
-            fCoulombScatteringLengthImag[iReF0-1][iImF0-1][iD0-1][iK-1] = fCoulombScatteringLengthImagHist1->GetBinContent(tBin);
-          }
-          else
-          {
-	    tBin[0] = iK-tNbinsK/2;
-            fCoulombScatteringLengthReal[iReF0-1][iImF0-1][iD0-1][iK-1] = fCoulombScatteringLengthRealHist2->GetBinContent(tBin);
-            fCoulombScatteringLengthImag[iReF0-1][iImF0-1][iD0-1][iK-1] = fCoulombScatteringLengthImagHist2->GetBinContent(tBin);
-          }
-        }
-      }
-    }
-  }
-//  delete[] tBin;  //TODO NO!!!!!!!!!!!!!!! This causes "double free or corruption"!!!!!!!!!
-
-//--------------------------------------------------------------
-tTimer.Stop();
-cout << "MakeNiceScattLenVectors: ";
-tTimer.PrintInterval();
-}
-
-
-//________________________________________________________________________________________________________________
-void CoulombFitter::MakeOtherVectors()
-{
-ChronoTimer tTimer(kSec);
-tTimer.Start();
-cout << "Starting MakeOtherVectors" << endl;
-
-//--------------------------------------------------------------
-  fHyperGeo1F1Info.nBinsK = fHyperGeo1F1RealHist->GetXaxis()->GetNbins();
-  fHyperGeo1F1Info.binWidthK = fHyperGeo1F1RealHist->GetXaxis()->GetBinWidth(1);
-  fHyperGeo1F1Info.minK = fHyperGeo1F1RealHist->GetXaxis()->GetBinLowEdge(1);
-  fHyperGeo1F1Info.minInterpK = fHyperGeo1F1RealHist->GetXaxis()->GetBinCenter(1);
-  fHyperGeo1F1Info.maxK = fHyperGeo1F1RealHist->GetXaxis()->GetBinUpEdge(fHyperGeo1F1RealHist->GetNbinsX());
-  fHyperGeo1F1Info.maxInterpK = fHyperGeo1F1RealHist->GetXaxis()->GetBinCenter(fHyperGeo1F1RealHist->GetNbinsX());
-
-  fHyperGeo1F1Info.nBinsR = fHyperGeo1F1RealHist->GetYaxis()->GetNbins();
-  fHyperGeo1F1Info.binWidthR = fHyperGeo1F1RealHist->GetYaxis()->GetBinWidth(1);
-  fHyperGeo1F1Info.minR = fHyperGeo1F1RealHist->GetYaxis()->GetBinLowEdge(1);
-  fHyperGeo1F1Info.minInterpR = fHyperGeo1F1RealHist->GetYaxis()->GetBinCenter(1);
-  fHyperGeo1F1Info.maxR = fHyperGeo1F1RealHist->GetYaxis()->GetBinUpEdge(fHyperGeo1F1RealHist->GetNbinsY());
-  fHyperGeo1F1Info.maxInterpR = fHyperGeo1F1RealHist->GetYaxis()->GetBinCenter(fHyperGeo1F1RealHist->GetNbinsY());
-
-  fHyperGeo1F1Info.nBinsTheta = fHyperGeo1F1RealHist->GetZaxis()->GetNbins();
-  fHyperGeo1F1Info.binWidthTheta = fHyperGeo1F1RealHist->GetZaxis()->GetBinWidth(1);
-  fHyperGeo1F1Info.minTheta = fHyperGeo1F1RealHist->GetZaxis()->GetBinLowEdge(1);
-  fHyperGeo1F1Info.minInterpTheta = fHyperGeo1F1RealHist->GetZaxis()->GetBinCenter(1);
-  fHyperGeo1F1Info.maxTheta = fHyperGeo1F1RealHist->GetZaxis()->GetBinUpEdge(fHyperGeo1F1RealHist->GetNbinsZ());
-  fHyperGeo1F1Info.maxInterpTheta = fHyperGeo1F1RealHist->GetZaxis()->GetBinCenter(fHyperGeo1F1RealHist->GetNbinsZ());
-
-  //-----
-
-  fGTildeInfo.nBinsK = fGTildeRealHist->GetXaxis()->GetNbins();
-  fGTildeInfo.binWidthK = fGTildeRealHist->GetXaxis()->GetBinWidth(1);
-  fGTildeInfo.minK = fGTildeRealHist->GetXaxis()->GetBinLowEdge(1);
-  fGTildeInfo.minInterpK = fGTildeRealHist->GetXaxis()->GetBinCenter(1);
-  fGTildeInfo.maxK = fGTildeRealHist->GetXaxis()->GetBinUpEdge(fGTildeRealHist->GetNbinsX());
-  fGTildeInfo.maxInterpK = fGTildeRealHist->GetXaxis()->GetBinCenter(fGTildeRealHist->GetNbinsX());
-
-  fGTildeInfo.nBinsR = fGTildeRealHist->GetYaxis()->GetNbins();
-  fGTildeInfo.binWidthR = fGTildeRealHist->GetYaxis()->GetBinWidth(1);
-  fGTildeInfo.minR = fGTildeRealHist->GetYaxis()->GetBinLowEdge(1);
-  fGTildeInfo.minInterpR = fGTildeRealHist->GetYaxis()->GetBinCenter(1);
-  fGTildeInfo.maxR = fGTildeRealHist->GetYaxis()->GetBinUpEdge(fGTildeRealHist->GetNbinsY());
-  fGTildeInfo.maxInterpR = fGTildeRealHist->GetYaxis()->GetBinCenter(fGTildeRealHist->GetNbinsY());
-
-//--------------------------------------------------------------
-
-  int tNbinsK = fHyperGeo1F1RealHist->GetXaxis()->GetNbins();
-  int tNbinsR = fHyperGeo1F1RealHist->GetYaxis()->GetNbins();
-  int tNbinsTheta = fHyperGeo1F1RealHist->GetZaxis()->GetNbins();
-
-  fHyperGeo1F1Real.resize(tNbinsK, td2dVec(tNbinsR, td1dVec(tNbinsTheta,0)));
-  fHyperGeo1F1Imag.resize(tNbinsK, td2dVec(tNbinsR, td1dVec(tNbinsTheta,0)));
-
-  int iK, iR, iTheta;
-  #pragma omp parallel for private(iK,iR,iTheta)
-  for(iK=1; iK<=tNbinsK; iK++)
-  {
-    for(iR=1; iR<=tNbinsR; iR++)
-    {
-      for(iTheta=1; iTheta<=tNbinsTheta; iTheta++)
-      {
-        fHyperGeo1F1Real[iK-1][iR-1][iTheta-1] = fHyperGeo1F1RealHist->GetBinContent(iK,iR,iTheta);
-        fHyperGeo1F1Imag[iK-1][iR-1][iTheta-1] = fHyperGeo1F1ImagHist->GetBinContent(iK,iR,iTheta);
-      }
-    }
-  }
-
-  fGTildeReal.resize(tNbinsK, td1dVec(tNbinsR,0));
-  fGTildeImag.resize(tNbinsK, td1dVec(tNbinsR,0));
-
-  #pragma omp parallel for private(iK,iR)
-  for(iK=1; iK<=tNbinsK; iK++)
-  {
-    for(iR=1; iR<=tNbinsR; iR++)
-    {
-      fGTildeReal[iK-1][iR-1] = fGTildeRealHist->GetBinContent(iK,iR);
-      fGTildeImag[iK-1][iR-1] = fGTildeImagHist->GetBinContent(iK,iR);
-    }
-  }
-
-  fLednickyHFunction.resize(tNbinsK,0.);
-  #pragma omp parallel for private(iK)
-  for(iK=1; iK<=tNbinsK; iK++)
-  {
-    fLednickyHFunction[iK-1] = fLednickyHFunctionHist->GetBinContent(iK);
-  }
-
-//--------------------------------------------------------------
-tTimer.Stop();
-cout << "MakeOtherVectors: ";
-tTimer.PrintInterval();
-}
-
-
-//________________________________________________________________________________________________________________
 void CoulombFitter::LoadInterpHistFile(TString aFileBaseName)
 {
 ChronoTimer tTimer(kSec);
 tTimer.Start();
 cout << "Starting LoadInterpHistFile" << endl;
-cout << "\t fCreateInterpVectors = " << fCreateInterpVectors << endl;
-cout << "\t fUseScattLenHists    = " << fUseScattLenHists << endl;
 
 //--------------------------------------------------------------
 
@@ -528,98 +276,14 @@ cout << "\t fUseScattLenHists    = " << fUseScattLenHists << endl;
 
 //  fInterpHistFile->Close();
 
-  fMinInterpKStar1 = fLednickyHFunctionHist->GetXaxis()->GetBinCenter(1);
-  fMaxInterpKStar2 = fLednickyHFunctionHist->GetXaxis()->GetBinCenter(fLednickyHFunctionHist->GetNbinsX());
+  fMinInterpKStar = fLednickyHFunctionHist->GetXaxis()->GetBinCenter(1);
+  fMaxInterpKStar = fLednickyHFunctionHist->GetXaxis()->GetBinCenter(fLednickyHFunctionHist->GetNbinsX());
 
   fMinInterpRStar = fHyperGeo1F1RealHist->GetYaxis()->GetBinCenter(1);
   fMaxInterpRStar = fHyperGeo1F1RealHist->GetYaxis()->GetBinCenter(fHyperGeo1F1RealHist->GetNbinsY());
 
   fMinInterpTheta = fHyperGeo1F1RealHist->GetZaxis()->GetBinCenter(1);
   fMaxInterpTheta = fHyperGeo1F1RealHist->GetZaxis()->GetBinCenter(fHyperGeo1F1RealHist->GetNbinsZ());
-
-//--------------------------------------------------------------
-
-
-  //--------------------------------------------------------------
-  if(fUseScattLenHists)
-  {
-    //No SetDirectory call for THn, so unfortunately these files must remain open 
-
-    TString aFileNameScatLenReal1 = aFileBaseName+"ScatLenReal1.root";  // 0. < k* < 0.2
-    TString aFileNameScatLenImag1 = aFileBaseName+"ScatLenImag1.root";
-
-    TString aFileNameScatLenReal2 = aFileBaseName+"ScatLenReal2.root";  // 0.2 < k* < 0.4
-    TString aFileNameScatLenImag2 = aFileBaseName+"ScatLenImag2.root";
-
-    fInterpHistFileScatLenReal1 = TFile::Open(aFileNameScatLenReal1);
-    fCoulombScatteringLengthRealHist1 = (THnD*)fInterpHistFileScatLenReal1->Get("CoulombScatteringLengthReal");
-
-    fInterpHistFileScatLenImag1 = TFile::Open(aFileNameScatLenImag1);
-    fCoulombScatteringLengthImagHist1 = (THnD*)fInterpHistFileScatLenImag1->Get("CoulombScatteringLengthImag");
-
-    fInterpHistFileScatLenReal2 = TFile::Open(aFileNameScatLenReal2);
-    fCoulombScatteringLengthRealHist2 = (THnD*)fInterpHistFileScatLenReal2->Get("CoulombScatteringLengthReal");
-
-    fInterpHistFileScatLenImag2 = TFile::Open(aFileNameScatLenImag2);
-    fCoulombScatteringLengthImagHist2 = (THnD*)fInterpHistFileScatLenImag2->Get("CoulombScatteringLengthImag");
-
-    //--------------------------------------------------------------
-
-    fMinInterpKStar1 = fCoulombScatteringLengthRealHist1->GetAxis(0)->GetBinCenter(1);
-    fMaxInterpKStar1 = fCoulombScatteringLengthRealHist1->GetAxis(0)->GetBinCenter(fCoulombScatteringLengthRealHist1->GetAxis(0)->GetNbins());
-
-    fMinInterpKStar2 = fCoulombScatteringLengthRealHist2->GetAxis(0)->GetBinCenter(1);
-    fMaxInterpKStar2 = fCoulombScatteringLengthRealHist2->GetAxis(0)->GetBinCenter(fCoulombScatteringLengthRealHist2->GetAxis(0)->GetNbins());
-
-    fMinInterpReF0 = fCoulombScatteringLengthRealHist1->GetAxis(1)->GetBinCenter(1);
-    fMaxInterpReF0 = fCoulombScatteringLengthRealHist1->GetAxis(1)->GetBinCenter(fCoulombScatteringLengthRealHist1->GetAxis(1)->GetNbins());
-
-    fMinInterpImF0 = fCoulombScatteringLengthRealHist1->GetAxis(2)->GetBinCenter(1);
-    fMaxInterpImF0 = fCoulombScatteringLengthRealHist1->GetAxis(2)->GetBinCenter(fCoulombScatteringLengthRealHist1->GetAxis(2)->GetNbins());
-
-    fMinInterpD0 = fCoulombScatteringLengthRealHist1->GetAxis(3)->GetBinCenter(1);
-    fMaxInterpD0 = fCoulombScatteringLengthRealHist1->GetAxis(3)->GetBinCenter(fCoulombScatteringLengthRealHist1->GetAxis(3)->GetNbins());
- 
-    //--------------------------------------------------------------
-  }
-
-  if(fCreateInterpVectors)
-  {
-    MakeOtherVectors();
-
-    delete fHyperGeo1F1RealHist;
-    delete fHyperGeo1F1ImagHist;
-
-    delete fGTildeRealHist;
-    delete fGTildeImagHist;
-
-    fInterpHistFile->Close();
-    delete fInterpHistFile;
-    
-    if(fUseScattLenHists)
-    {
-      MakeNiceScattLenVectors();
-
-      delete fCoulombScatteringLengthRealHist1;
-      delete fCoulombScatteringLengthImagHist1;
-
-      delete fCoulombScatteringLengthRealHist2;
-      delete fCoulombScatteringLengthImagHist2;
-
-      fInterpHistFileScatLenReal1->Close();
-      delete fInterpHistFileScatLenReal1;
-
-      fInterpHistFileScatLenImag1->Close();
-      delete fInterpHistFileScatLenImag1;
-
-      fInterpHistFileScatLenReal2->Close();
-      delete fInterpHistFileScatLenReal2;
-
-      fInterpHistFileScatLenImag2->Close();
-      delete fInterpHistFileScatLenImag2;
-    }
-  }
-
 
 //--------------------------------------------------------------
   cout << "Interpolation histograms LOADED!" << endl;
@@ -1122,18 +786,6 @@ tTimer.Start();
   delete tSource3Vec;
 
 
-  //----Set the bin info
-  fSamplePairsBinInfo.nAnalyses = fNAnalyses;
-  fSamplePairsBinInfo.nBinsK = tNBinsKStar;
-  fSamplePairsBinInfo.nPairsPerBin = fNPairsPerKStarBin;
-
-  fSamplePairsBinInfo.minK = 0.; //TODO
-  fSamplePairsBinInfo.maxK = fMaxFitKStar;
-  fSamplePairsBinInfo.binWidthK = tBinSize;
-  fSamplePairsBinInfo.nElementsPerPair = fPairSample4dVec[0][0][0].size();
-  //--------------------
-
-
 tTimer.Stop();
 cout << "BuildPairSample4dVec finished: ";
 tTimer.PrintInterval();
@@ -1167,336 +819,6 @@ void CoulombFitter::SetUseStaticPairs(bool aUseStaticPairs, int aNPairsPerKStarB
   fUseStaticPairs = aUseStaticPairs;
   BuildPairSample4dVec(aNPairsPerKStarBin);
 }
-
-
-//________________________________________________________________________________________________________________
-int CoulombFitter::GetInterpLowBin(InterpType aInterpType, InterpAxisType aAxisType, double aVal)
-{
-  int tReturnBin = -2;
-
-  int tNbins, tBin;
-  double tMin, tMax, tBinWidth, tBinCenter;
-
-  bool tErrorFlag = false;
-
-  switch(aInterpType)
-  {
-    case kGTilde:
-      switch(aAxisType)
-      {
-        case kKaxis:
-          tNbins = fGTildeInfo.nBinsK;
-          tBinWidth = fGTildeInfo.binWidthK;
-          tMin = fGTildeInfo.minK;
-          tMax = fGTildeInfo.maxK;
-          break;
-
-        case kRaxis:
-          tNbins = fGTildeInfo.nBinsR;
-          tBinWidth = fGTildeInfo.binWidthR;
-          tMin = fGTildeInfo.minR;
-          tMax = fGTildeInfo.maxR;
-          break;
-
-        //Invalid axis selection
-        case kThetaaxis:
-          tErrorFlag = true;
-          break;
-        case kReF0axis:
-          tErrorFlag = true;
-          break;
-        case kImF0axis:
-          tErrorFlag = true;
-          break;
-        case kD0axis:
-          tErrorFlag = true;
-          break;
-      }
-      break;
-
-    case kHyperGeo1F1:
-      switch(aAxisType)
-      {
-        case kKaxis:
-          tNbins = fHyperGeo1F1Info.nBinsK;
-          tBinWidth = fHyperGeo1F1Info.binWidthK;
-          tMin = fHyperGeo1F1Info.minK;
-          tMax = fHyperGeo1F1Info.maxK;
-          break;
-
-        case kRaxis:
-          tNbins = fHyperGeo1F1Info.nBinsR;
-          tBinWidth = fHyperGeo1F1Info.binWidthR;
-          tMin = fHyperGeo1F1Info.minR;
-          tMax = fHyperGeo1F1Info.maxR;
-          break;
-
-        case kThetaaxis:
-          tNbins = fHyperGeo1F1Info.nBinsTheta;
-          tBinWidth = fHyperGeo1F1Info.binWidthTheta;
-          tMin = fHyperGeo1F1Info.minTheta;
-          tMax = fHyperGeo1F1Info.maxTheta;
-          break;
-
-        //Invalid axis selection
-        case kReF0axis:
-          tErrorFlag = true;
-          break;
-        case kImF0axis:
-          tErrorFlag = true;
-          break;
-        case kD0axis:
-          tErrorFlag = true;
-          break;
-      }
-      break;
-
-    case kScattLen:
-      switch(aAxisType)
-      {
-        case kReF0axis:
-          tNbins = fScattLenInfo.nBinsReF0;
-          tBinWidth = fScattLenInfo.binWidthReF0;
-          tMin = fScattLenInfo.minReF0;
-          tMax = fScattLenInfo.maxReF0;
-          break;
-
-        case kImF0axis:
-          tNbins = fScattLenInfo.nBinsImF0;
-          tBinWidth = fScattLenInfo.binWidthImF0;
-          tMin = fScattLenInfo.minImF0;
-          tMax = fScattLenInfo.maxImF0;
-          break;
-
-        case kD0axis:
-          tNbins = fScattLenInfo.nBinsD0;
-          tBinWidth = fScattLenInfo.binWidthD0;
-          tMin = fScattLenInfo.minD0;
-          tMax = fScattLenInfo.maxD0;
-          break;
-
-        case kKaxis:
-          tNbins = fScattLenInfo.nBinsK;
-          tBinWidth = fScattLenInfo.binWidthK;
-          tMin = fScattLenInfo.minK;
-          tMax = fScattLenInfo.maxK;
-          break;
-
-
-        //Invalid axis selection
-        case kRaxis:
-          tErrorFlag = true;
-          break;
-        case kThetaaxis:
-          tErrorFlag = true;
-          break;
-
-      }
-      break;
-  }
-
-  //Check error
-  if(tErrorFlag) return -2;
-
-  //---------------------------------
-  tBin = GetBinNumber(tNbins,tMin,tMax,aVal);
-  tBinCenter = tMin + (tBin+0.5)*tBinWidth;
-  if(aVal < tBinCenter) tReturnBin = tBin-1;
-  else tReturnBin = tBin;
-
-  if(tReturnBin<0 || tReturnBin >= tNbins) return -2;
-  else return tReturnBin;
-
-}
-
-//________________________________________________________________________________________________________________
-double CoulombFitter::GetInterpLowBinCenter(InterpType aInterpType, InterpAxisType aAxisType, double aVal)
-{
-  double tReturnValue;
-  int tReturnBin = -2;
-
-  int tNbins, tBin;
-  double tMin, tMax, tBinWidth, tBinCenter;
-
-  bool tErrorFlag = false;
-
-  switch(aInterpType)
-  {
-    case kGTilde:
-      switch(aAxisType)
-      {
-        case kKaxis:
-          tNbins = fGTildeInfo.nBinsK;
-          tBinWidth = fGTildeInfo.binWidthK;
-          tMin = fGTildeInfo.minK;
-          tMax = fGTildeInfo.maxK;
-          break;
-
-        case kRaxis:
-          tNbins = fGTildeInfo.nBinsR;
-          tBinWidth = fGTildeInfo.binWidthR;
-          tMin = fGTildeInfo.minR;
-          tMax = fGTildeInfo.maxR;
-          break;
-
-        //Invalid axis selection
-        case kThetaaxis:
-          tErrorFlag = true;
-          break;
-        case kReF0axis:
-          tErrorFlag = true;
-          break;
-        case kImF0axis:
-          tErrorFlag = true;
-          break;
-        case kD0axis:
-          tErrorFlag = true;
-          break;
-      }
-      break;
-
-    case kHyperGeo1F1:
-      switch(aAxisType)
-      {
-        case kKaxis:
-          tNbins = fHyperGeo1F1Info.nBinsK;
-          tBinWidth = fHyperGeo1F1Info.binWidthK;
-          tMin = fHyperGeo1F1Info.minK;
-          tMax = fHyperGeo1F1Info.maxK;
-          break;
-
-        case kRaxis:
-          tNbins = fHyperGeo1F1Info.nBinsR;
-          tBinWidth = fHyperGeo1F1Info.binWidthR;
-          tMin = fHyperGeo1F1Info.minR;
-          tMax = fHyperGeo1F1Info.maxR;
-          break;
-
-        case kThetaaxis:
-          tNbins = fHyperGeo1F1Info.nBinsTheta;
-          tBinWidth = fHyperGeo1F1Info.binWidthTheta;
-          tMin = fHyperGeo1F1Info.minTheta;
-          tMax = fHyperGeo1F1Info.maxTheta;
-          break;
-
-        //Invalid axis selection
-        case kReF0axis:
-          tErrorFlag = true;
-          break;
-        case kImF0axis:
-          tErrorFlag = true;
-          break;
-        case kD0axis:
-          tErrorFlag = true;
-          break;
-      }
-      break;
-
-    case kScattLen:
-      switch(aAxisType)
-      {
-        case kReF0axis:
-          tNbins = fScattLenInfo.nBinsReF0;
-          tBinWidth = fScattLenInfo.binWidthReF0;
-          tMin = fScattLenInfo.minReF0;
-          tMax = fScattLenInfo.maxReF0;
-          break;
-
-        case kImF0axis:
-          tNbins = fScattLenInfo.nBinsImF0;
-          tBinWidth = fScattLenInfo.binWidthImF0;
-          tMin = fScattLenInfo.minImF0;
-          tMax = fScattLenInfo.maxImF0;
-          break;
-
-        case kD0axis:
-          tNbins = fScattLenInfo.nBinsD0;
-          tBinWidth = fScattLenInfo.binWidthD0;
-          tMin = fScattLenInfo.minD0;
-          tMax = fScattLenInfo.maxD0;
-          break;
-
-        case kKaxis:
-          tNbins = fScattLenInfo.nBinsK;
-          tBinWidth = fScattLenInfo.binWidthK;
-          tMin = fScattLenInfo.minK;
-          tMax = fScattLenInfo.maxK;
-          break;
-
-
-        //Invalid axis selection
-        case kRaxis:
-          tErrorFlag = true;
-          break;
-        case kThetaaxis:
-          tErrorFlag = true;
-          break;
-
-      }
-      break;
-  }
-
-  //Check error
-  if(tErrorFlag) return -2;
-
-  //---------------------------------
-  tBin = GetBinNumber(tNbins,tMin,tMax,aVal);
-  tBinCenter = tMin + (tBin+0.5)*tBinWidth;
-  if(aVal < tBinCenter) tReturnBin = tBin-1;
-  else tReturnBin = tBin;
-
-  if(tReturnBin<0 || tReturnBin >= tNbins) return -2;
-
-  tReturnValue = tMin + (tReturnBin+0.5)*tBinWidth;
-  return tReturnValue;
-}
-
-
-/*
-//________________________________________________________________________________________________________________
-//TODO fix the entire functions
-vector<int> CoulombFitter::GetRelevantKStarBinNumbers(double aKStarMagMin, double aKStarMagMax)
-{
-  int tMinBin = GetInterpLowBin(kScattLen,kKaxis,aKStarMagMin);
-  int tMaxBin = GetInterpLowBin(kScattLen,kKaxis,aKStarMagMax);
-
-  if(tMaxBin<(fScattLenInfo.nBinsK-1)) tMaxBin++;  //must include first bin over range
-                                                   //Note:  GetInterpLowBin already return first underneath bin (if exists)
-  //TODO fix this shit
-  if(tMinBin<0) tMinBin=0;
-
-  int tNbins = (tMaxBin-tMinBin)+1;  //+1 because inclusive, i.e. if bins 3,4,5,6,7,8 -> (8-3)+1 = 6 bins 
-  vector<int> tReturnVector(tNbins);
-  for(int i=0; i<tNbins; i++)
-  {
-    tReturnVector[i] = tMinBin+i;
-  }
-  return tReturnVector;
-}
-*/
-
-//________________________________________________________________________________________________________________
-//TODO fix the entire functions
-vector<int> CoulombFitter::GetRelevantKStarBinNumbers(double aKStarMagMin, double aKStarMagMax)
-{
-  int tMinBin = GetBinNumber(fScattLenInfo.binWidthK,fScattLenInfo.minK,fScattLenInfo.maxK,aKStarMagMin);
-  int tMaxBin = GetBinNumber(fScattLenInfo.binWidthK,fScattLenInfo.minK,fScattLenInfo.maxK,aKStarMagMax);
-
-  if(tMaxBin<(fScattLenInfo.nBinsK-1)) tMaxBin++;  //must include first bin over range
-                                                   //Note:  GetInterpLowBin already return first underneath bin (if exists)
-  //TODO fix this shit
-  if(tMinBin>0) tMinBin--;
-
-  int tNbins = (tMaxBin-tMinBin)+1;  //+1 because inclusive, i.e. if bins 3,4,5,6,7,8 -> (8-3)+1 = 6 bins 
-  vector<int> tReturnVector(tNbins);
-  for(int i=0; i<tNbins; i++)
-  {
-    tReturnVector[i] = tMinBin+i;
-  }
-  return tReturnVector;
-}
-
-
 
 
 //________________________________________________________________________________________________________________
@@ -1920,72 +1242,6 @@ double CoulombFitter::QuadrilinearInterpolate(THn* a4dHisto, double aT, double a
 
 
 //________________________________________________________________________________________________________________
-double CoulombFitter::ScattLenInterpolate(vector<vector<vector<vector<double> > > > &aScatLen4dSubVec, double aReF0, double aImF0, double aD0, double aKStarMin, double aKStarMax, double aKStarVal)
-{
-  double tBinWidthK = fScattLenInfo.binWidthK;
-  int tLocalBinNumberK = GetBinNumber(tBinWidthK,aKStarMin,aKStarMax,aKStarVal);
-  double tBinLowCenterK = GetInterpLowBinCenter(kScattLen,kKaxis,aKStarVal);
-
-  double tBinWidthReF0 = fScattLenInfo.binWidthReF0;
-  double tBinLowCenterReF0 = GetInterpLowBinCenter(kScattLen,kReF0axis,aReF0);
-
-  double tBinWidthImF0 = fScattLenInfo.binWidthImF0;
-  double tBinLowCenterImF0 = GetInterpLowBinCenter(kScattLen,kImF0axis,aImF0);
-
-  double tBinWidthD0 = fScattLenInfo.binWidthD0;
-  double tBinLowCenterD0 = GetInterpLowBinCenter(kScattLen,kD0axis,aD0);
-
-  //--------------------------------
-  if(aKStarVal < tBinLowCenterK) tLocalBinNumberK--;
-  int tLocalBinNumbersK[2] = {tLocalBinNumberK, tLocalBinNumberK+1};
-  
-
-  //--------------------------------
-  double tDiffReF0 = (aReF0 - tBinLowCenterReF0)/tBinWidthReF0;
-  double tDiffImF0 = (aImF0 - tBinLowCenterImF0)/tBinWidthImF0;
-  double tDiffD0 = (aD0 - tBinLowCenterD0)/tBinWidthD0;
-  double tDiffK = (aKStarVal - tBinLowCenterK)/tBinWidthK;
-
-  //--------------------------------
-
-  //Interpolate along ReF0
-  double tC000 = aScatLen4dSubVec[0][0][0][tLocalBinNumbersK[0]]*(1.- tDiffReF0) + aScatLen4dSubVec[1][0][0][tLocalBinNumbersK[0]]*tDiffReF0;
-  double tC100 = aScatLen4dSubVec[0][1][0][tLocalBinNumbersK[0]]*(1.- tDiffReF0) + aScatLen4dSubVec[1][1][0][tLocalBinNumbersK[0]]*tDiffReF0;
-
-  double tC010 = aScatLen4dSubVec[0][0][1][tLocalBinNumbersK[0]]*(1.- tDiffReF0) + aScatLen4dSubVec[1][0][1][tLocalBinNumbersK[0]]*tDiffReF0;
-  double tC110 = aScatLen4dSubVec[0][1][1][tLocalBinNumbersK[0]]*(1.- tDiffReF0) + aScatLen4dSubVec[1][1][1][tLocalBinNumbersK[0]]*tDiffReF0;
-
-  double tC001 = aScatLen4dSubVec[0][0][0][tLocalBinNumbersK[1]]*(1.- tDiffReF0) + aScatLen4dSubVec[1][0][0][tLocalBinNumbersK[1]]*tDiffReF0;
-  double tC101 = aScatLen4dSubVec[0][1][0][tLocalBinNumbersK[1]]*(1.- tDiffReF0) + aScatLen4dSubVec[1][1][0][tLocalBinNumbersK[1]]*tDiffReF0;
-
-  double tC011 = aScatLen4dSubVec[0][0][1][tLocalBinNumbersK[1]]*(1.- tDiffReF0) + aScatLen4dSubVec[1][0][1][tLocalBinNumbersK[1]]*tDiffReF0;
-  double tC111 = aScatLen4dSubVec[0][1][1][tLocalBinNumbersK[1]]*(1.- tDiffReF0) + aScatLen4dSubVec[1][1][1][tLocalBinNumbersK[1]]*tDiffReF0;
-
-
-  //--------------------------------
-
-  //Interpolate along ImF0
-  double tC00 = tC000*(1.-tDiffImF0) + tC100*tDiffImF0;
-  double tC10 = tC010*(1.-tDiffImF0) + tC110*tDiffImF0;
-  double tC01 = tC001*(1.-tDiffImF0) + tC101*tDiffImF0;
-  double tC11 = tC011*(1.-tDiffImF0) + tC111*tDiffImF0;
-
-  //--------------------------------
-
-  //Interpolate along D0
-  double tC0 = tC00*(1.-tDiffD0) + tC10*tDiffD0;
-  double tC1 = tC01*(1.-tDiffD0) + tC11*tDiffD0;
-
-  //--------------------------------
-
-  //Interpolate along KStar
-  double tC = tC0*(1.-tDiffK) + tC1*tDiffK;
-
-  return tC;
-}
-
-
-//________________________________________________________________________________________________________________
 double CoulombFitter::GetEta(double aKStar)
 {
   if(fTurnOffCoulomb) return 0.;
@@ -2047,7 +1303,8 @@ double CoulombFitter::InterpolateWfSquared(double aKStarMag, double aRStarMag, d
   bool tDebug = true; //debug means use personal interpolation methods, instead of standard root ones
 
   //TODO put check to make sure file is open, not sure if assert(fInterpHistFile->IsOpen works);
-    if(!fCreateInterpVectors && fInterpHistsLoaded) assert(fInterpHistFile->IsOpen());
+  assert(fInterpHistsLoaded);
+  assert(fInterpHistFile->IsOpen());
 
   double tGamow = GetGamowFactor(aKStarMag);
   complex<double> tExpTermComplex = GetExpTerm(aKStarMag,aRStarMag,aTheta);
@@ -2082,37 +1339,9 @@ double CoulombFitter::InterpolateWfSquared(double aKStarMag, double aRStarMag, d
     tHyperGeo1F1Complex = complex<double> (tHyperGeo1F1Real,tHyperGeo1F1Imag);
     tGTildeComplexConj = complex<double> (tGTildeReal,-tGTildeImag);
     //-------------------------------------
-    if(fUseScattLenHists)
-    {
-      double tScattLenReal, tScattLenImag;
-      if(aKStarMag >= 0. && aKStarMag < 0.2)
-      {
-//cout << "In 0-0.2" << endl;
-//cout << "\taKStarMag = " << aKStarMag << "\taReF0 = " << aReF0 << "\taImF0 = " << aImF0 << "\taD0 = " << aD0 << endl;
-        tScattLenReal = QuadrilinearInterpolate(fCoulombScatteringLengthRealHist1,aKStarMag,aReF0,aImF0,aD0);
-        tScattLenImag = QuadrilinearInterpolate(fCoulombScatteringLengthImagHist1,aKStarMag,aReF0,aImF0,aD0);
-      }
-      else if(aKStarMag >= 0.2 && aKStarMag < 0.4)
-      {
-//cout << "In 0.2-0.4" << endl;
-//cout << "\taKStarMag = " << aKStarMag << "\taReF0 = " << aReF0 << "\taImF0 = " << aImF0 << "\taD0 = " << aD0 << endl;
-        tScattLenReal = QuadrilinearInterpolate(fCoulombScatteringLengthRealHist2,aKStarMag,aReF0,aImF0,aD0);
-        tScattLenImag = QuadrilinearInterpolate(fCoulombScatteringLengthImagHist2,aKStarMag,aReF0,aImF0,aD0);
-      }
-      else
-      {
-        cout << "In CoulombFitter::InterpolateWfSquared, aKStarMag is outside of limits!!!!!!!!!!" << endl;
-        assert(0);
-      }
 
-      tScattLenComplexConj = complex<double>(tScattLenReal,-tScattLenImag);
-    }
-
-    else
-    {
-      complex<double> tScattLenComplex = BuildScatteringLength(aKStarMag,aReF0,aImF0,aD0);
-      tScattLenComplexConj = std::conj(tScattLenComplex);
-    }
+    complex<double> tScattLenComplex = BuildScatteringLength(aKStarMag,aReF0,aImF0,aD0);
+    tScattLenComplexConj = std::conj(tScattLenComplex);
   }
 
   else
@@ -2145,51 +1374,6 @@ vector<double> CoulombFitter::InterpolateWfSquaredSerialv2(vector<vector<double>
   vector<vector<vector<vector<double> > > > tRelevantScattLengthReal;
   vector<vector<vector<vector<double> > > > tRelevantScattLengthImag;
 
-  if(fUseScattLenHists && fCreateInterpVectors)
-  {
-    vector<int> tRelevantKBins = GetRelevantKStarBinNumbers(aKStarMagMin,aKStarMagMax);
-
-    int tLowBinReF0 = GetInterpLowBin(kScattLen,kReF0axis,aReF0);
-    int tLowBinImF0 = GetInterpLowBin(kScattLen,kImF0axis,aImF0);
-    int tLowBinD0 = GetInterpLowBin(kScattLen,kD0axis,aD0);
-
-    int tNbinsReF0 = 2;
-    int tNbinsImF0 = 2;
-    int tNbinsD0 = 2;
-    int tNbinsK = tRelevantKBins.size();
-
-    vector<int> tRelevantReF0Bins(2);
-      tRelevantReF0Bins[0] = tLowBinReF0;
-      tRelevantReF0Bins[1] = tLowBinReF0+1;
-
-    vector<int> tRelevantImF0Bins(2);
-      tRelevantImF0Bins[0] = tLowBinImF0;
-      tRelevantImF0Bins[1] = tLowBinImF0+1;
-
-    vector<int> tRelevantD0Bins(2);
-      tRelevantD0Bins[0] = tLowBinD0;
-      tRelevantD0Bins[1] = tLowBinD0+1;
-
-    tRelevantScattLengthReal.resize(tNbinsReF0, vector<vector<vector<double> > > (tNbinsImF0, vector<vector<double> > (tNbinsD0, vector<double> (tNbinsK,0))));
-    tRelevantScattLengthImag.resize(tNbinsReF0, vector<vector<vector<double> > > (tNbinsImF0, vector<vector<double> > (tNbinsD0, vector<double> (tNbinsK,0))));
-
-    for(int iReF0=0; iReF0<2; iReF0++)
-    {
-      for(int iImF0=0; iImF0<2; iImF0++)
-      {
-        for(int iD0=0; iD0<2; iD0++)
-        {
-          for(int iK=0; iK<(int)tRelevantKBins.size(); iK++)
-          {
-            tRelevantScattLengthReal[iReF0][iImF0][iD0][iK] = fCoulombScatteringLengthReal[tRelevantReF0Bins[iReF0]][tRelevantImF0Bins[iImF0]][tRelevantD0Bins[iD0]][tRelevantKBins[iK]];
-            tRelevantScattLengthImag[iReF0][iImF0][iD0][iK] = fCoulombScatteringLengthImag[tRelevantReF0Bins[iReF0]][tRelevantImF0Bins[iImF0]][tRelevantD0Bins[iD0]][tRelevantKBins[iK]];
-          }
-        }
-      }
-    }
-
-  }
-
   //-----------------------------------------------
 
   double tGamow;
@@ -2213,7 +1397,7 @@ vector<double> CoulombFitter::InterpolateWfSquaredSerialv2(vector<vector<double>
 
     if(!fTurnOffCoulomb)
     {
-      double tHyperGeo1F1Real, tHyperGeo1F1Imag, tGTildeReal, tGTildeImag, tScattLenReal, tScattLenImag;
+      double tHyperGeo1F1Real, tHyperGeo1F1Imag, tGTildeReal, tGTildeImag;
 
       tHyperGeo1F1Real = TrilinearInterpolate(fHyperGeo1F1RealHist,aKStarMag,aRStarMag,aTheta);
       tHyperGeo1F1Imag = TrilinearInterpolate(fHyperGeo1F1ImagHist,aKStarMag,aRStarMag,aTheta);
@@ -2224,37 +1408,9 @@ vector<double> CoulombFitter::InterpolateWfSquaredSerialv2(vector<vector<double>
       tHyperGeo1F1Complex = complex<double> (tHyperGeo1F1Real,tHyperGeo1F1Imag);
       tGTildeComplexConj = complex<double> (tGTildeReal,-tGTildeImag);
 
-      if(fUseScattLenHists && fCreateInterpVectors)
-      {
-        tScattLenReal = ScattLenInterpolate(tRelevantScattLengthReal,aReF0,aImF0,aD0,aKStarMagMin,aKStarMagMax,aKStarMag);
-        tScattLenImag = ScattLenInterpolate(tRelevantScattLengthImag,aReF0,aImF0,aD0,aKStarMagMin,aKStarMagMax,aKStarMag);
+      complex<double> tScattLenComplex = BuildScatteringLength(aKStarMag,aReF0,aImF0,aD0);
+      tScattLenComplexConj = std::conj(tScattLenComplex);
 
-        tScattLenComplexConj = complex<double>(tScattLenReal,-tScattLenImag);
-      }
-      else if(fUseScattLenHists)
-      {
-        if(aKStarMag >= 0. && aKStarMag < 0.2)
-        {
-          tScattLenReal = QuadrilinearInterpolate(fCoulombScatteringLengthRealHist1,aKStarMag,aReF0,aImF0,aD0);
-          tScattLenImag = QuadrilinearInterpolate(fCoulombScatteringLengthImagHist1,aKStarMag,aReF0,aImF0,aD0);
-        }
-        else if(aKStarMag >= 0.2 && aKStarMag < 0.4)
-        {
-          tScattLenReal = QuadrilinearInterpolate(fCoulombScatteringLengthRealHist2,aKStarMag,aReF0,aImF0,aD0);
-          tScattLenImag = QuadrilinearInterpolate(fCoulombScatteringLengthImagHist2,aKStarMag,aReF0,aImF0,aD0);
-        }
-        else
-        {
-          cout << "In CoulombFitter::InterpolateWfSquaredSerialv2, aKStarMag is outside of limits!!!!!!!!!!" << endl;
-          assert(0);
-        }
-        tScattLenComplexConj = complex<double>(tScattLenReal,-tScattLenImag);
-      }
-      else
-      {
-        complex<double> tScattLenComplex = BuildScatteringLength(aKStarMag,aReF0,aImF0,aD0);
-        tScattLenComplexConj = std::conj(tScattLenComplex);
-      }
 
     }
     else
@@ -2282,9 +1438,8 @@ vector<double> CoulombFitter::InterpolateWfSquaredSerialv2(vector<vector<double>
 //________________________________________________________________________________________________________________
 bool CoulombFitter::CanInterpKStar(double aKStar)
 {
-  if(aKStar < fMinInterpKStar1) return false;
-  if(aKStar > fMaxInterpKStar2) return false;
-  if(fUseScattLenHists && aKStar > fMaxInterpKStar1 && aKStar < fMinInterpKStar2) return false;  //awkward non-overlapping scenarios  TODO fix this in InterpolationHistograms.cxx
+  if(aKStar < fMinInterpKStar) return false;
+  if(aKStar > fMaxInterpKStar) return false;
   return true;
 }
 
@@ -2302,39 +1457,12 @@ bool CoulombFitter::CanInterpTheta(double aTheta)
   return true;
 }
 
-//________________________________________________________________________________________________________________
-bool CoulombFitter::CanInterpReF0(double aReF0)
-{
-  if(aReF0 < fMinInterpReF0 || aReF0 > fMaxInterpReF0) return false;
-  return true;
-}
 
-//________________________________________________________________________________________________________________
-bool CoulombFitter::CanInterpImF0(double aImF0)
-{
-  if(aImF0 < fMinInterpImF0 || aImF0 > fMaxInterpImF0) return false;
-  return true;
-}
-
-//________________________________________________________________________________________________________________
-bool CoulombFitter::CanInterpD0(double aD0)
-{
-  if(aD0 < fMinInterpD0 || aD0 > fMaxInterpD0) return false;
-  return true;
-}
 
 //________________________________________________________________________________________________________________
 bool CoulombFitter::CanInterpAll(double aKStar, double aRStar, double aTheta, double aReF0, double aImF0, double aD0)
 {
-  if(fUseScattLenHists)
-  {
-    if(CanInterpKStar(aKStar) && CanInterpRStar(aRStar) && CanInterpTheta(aTheta) && CanInterpReF0(aReF0) && CanInterpImF0(aImF0) && CanInterpD0(aD0)) return true;
-  }
-  else
-  {
-    if(CanInterpKStar(aKStar) && CanInterpRStar(aRStar) && CanInterpTheta(aTheta)) return true;
-  }
-
+  if(CanInterpKStar(aKStar) && CanInterpRStar(aRStar) && CanInterpTheta(aTheta)) return true;
   return false;
 }
 
@@ -2861,7 +1989,6 @@ double CoulombFitter::GetFitCfContentSerialv2(double aKStarMagMin, double aKStar
   //KStarSide = fPairKStar4dVec[aAnalysisNumber][tBin][i][2]
   //KStarLong = fPairKStar4dVec[aAnalysisNumber][tBin][i][3]
 
-  int tCounter = 0;
   double tReturnCfContent = 0.;
 
   int tCounterGPU = 0;
@@ -2969,6 +2096,25 @@ bool CoulombFitter::AreParamsSame(double *aCurrent, double *aNew, int aNEntries)
   return tAreSame;
 }
 
+/*
+//________________________________________________________________________________________________________________
+double CoulombFitter::GetChi2Value(int aKStarBin, TH1* aCfToFit, double* aPar)
+{
+    double tKStar[1];
+    tKStar[0] = aCfToFit->GetXaxis()->GetBinCenter(aKStarBin);
+    double tChi = (aCfToFit->GetBinContent(aKStarBin) - LednickyEq(tKStar,aPar))/aCfToFit->GetBinError(aKStarBin);
+    return tChi*tChi;
+}
+
+//________________________________________________________________________________________________________________
+double CoulombFitter::GetPmlValue(double aNumContent, double aDenContent, double aCfContent)
+{
+  double tTerm1 = aNumContent*log(  (aCfContent*(aNumContent+aDenContent)) / (aNumContent*(aCfContent+1))  );
+  double tTerm2 = aDenContent*log(  (aNumContent+aDenContent) / (aDenContent*(aCfContent+1))  );
+  double tChi2PML = -2.0*(tTerm1+tTerm2);
+  return tChi2PML;
+}
+*/
 
 //________________________________________________________________________________________________________________
 void CoulombFitter::CalculateChi2PML(int &npar, double &chi2, double *par)
@@ -3910,7 +3056,6 @@ double CoulombFitter::GetChi2(TH1* aFitHistogram)
   for(int iAnaly=0; iAnaly<fNAnalyses; iAnaly++)
   {
     FitPairAnalysis* tFitPairAnalysis = fFitSharedAnalyses->GetFitPairAnalysis(iAnaly);
-    AnalysisType tAnalysisType = tFitPairAnalysis->GetAnalysisType();
 
     int tNFitPartialAnalysis = tFitPairAnalysis->GetNFitPartialAnalysis();
     for(int iPartAn=0; iPartAn<tNFitPartialAnalysis; iPartAn++)
@@ -3933,9 +3078,6 @@ double CoulombFitter::GetChi2(TH1* aFitHistogram)
       double tmp;
       for(int ix=1; ix <= tNbinsXToFit; ix++)
       {
-        double tKStarMin = tXaxis->GetBinLowEdge(ix);
-        double tKStarMax = tXaxis->GetBinLowEdge(ix+1);
-
         double tCfContent = aFitHistogram->GetBinContent(ix);
 
         if(tCfToFit->GetBinContent(ix)!=0 && tCfContent!=0) //even if only in one single bin, t*Content=0 causes fChi2->nan
@@ -4188,6 +3330,97 @@ tTimer.PrintInterval();
   return tReturnHist;
 }
 
+
+
+//________________________________________________________________________________________________________________
+td1dVec CoulombFitter::GetCoulombResidualCorrelation(ResidualType aResidualType, double *aParentCfParams, vector<double> &aKStarBinCenters, TH2* aTransformMatrix)
+{
+  TString tFileLocationBase = "/home/jesse/Analysis/FemtoAnalysis/ProcessData/CoulombFitter/";
+  TString tFileName, tFullFileName;
+  TString tFileNameHFunction, tFullFileNameHFunction;
+
+  switch(aResidualType) {
+  case kXiCKchP:
+  case kAXiCKchM:
+    tFileName = TString("InterpHistsAttractive.root");
+    tFileNameHFunction = TString("LednickyHFunction.root");
+    fBohrRadius = -gBohrRadiusXiK;
+    break;
+
+  case kXiCKchM:
+  case kAXiCKchP:
+    tFileName = TString("InterpHistsRepulsive.root");
+    tFileNameHFunction = TString("LednickyHFunction.root");
+    fBohrRadius = gBohrRadiusXiK;
+    break;
+
+
+  case kOmegaKchP:
+  case kAOmegaKchM:
+    tFileName = TString("InterpHists_OmegaKchP.root");
+    tFileNameHFunction = TString("LednickyHFunction_OmegaKchP.root");
+    fBohrRadius = -gBohrRadiusOmegaK;
+    break;
+
+
+  case kOmegaKchM:
+  case kAOmegaKchP:
+    tFileName = TString("InterpHists_OmegaKchM.root");
+    tFileNameHFunction = TString("LednickyHFunction_OmegaKchM.root");
+    fBohrRadius = gBohrRadiusOmegaK;
+    break;
+
+
+  default:
+    cout << "ERROR: CoulombFitter::GetCoulombResidualCorrelation: Invalid aResidualType = " << aResidualType << endl;
+  }
+
+  tFullFileName = tFileLocationBase + tFileName;
+  tFullFileNameHFunction = tFileLocationBase + tFileNameHFunction;
+
+  fWaveFunction->SetCurrentBohrRadius(aResidualType);
+  LoadInterpHistFile(tFullFileName);
+  LoadLednickyHFunctionFile(tFullFileNameHFunction);
+
+  double tKStarBinWidth = aKStarBinCenters[1]-aKStarBinCenters[0];
+  int tAnalysisNumber = 0;  //TODO
+
+  vector<double> tParentCf(aKStarBinCenters.size(),0.);
+  double tKStarMin, tKStarMax;
+  for(unsigned int i=0; i<aKStarBinCenters.size(); i++)
+  {
+    tKStarMin = aKStarBinCenters[0]-tKStarBinWidth/2.;
+    tKStarMax = aKStarBinCenters[0]+tKStarBinWidth/2.;
+
+    tParentCf[i] = GetFitCfContent(tKStarMin,tKStarMax,aParentCfParams,tAnalysisNumber);
+  }
+
+  unsigned int tDaughterPairKStarBin, tParentPairKStarBin;
+  double tDaughterPairKStar, tParentPairKStar;
+  assert(tParentCf.size() == aKStarBinCenters.size());
+  assert(tParentCf.size() == (unsigned int)aTransformMatrix->GetNbinsX());
+  assert(tParentCf.size() == (unsigned int)aTransformMatrix->GetNbinsY());
+
+  vector<double> tReturnResCf(tParentCf.size(),0.);
+  vector<double> tNormVec(tParentCf.size(),0.);  //TODO once I match bin size, I should be able to call /= by integral, instead of tracking normVec
+
+  for(unsigned int i=0; i<tParentCf.size(); i++)
+  {
+    tDaughterPairKStar = aKStarBinCenters[i];
+    tDaughterPairKStarBin = aTransformMatrix->GetXaxis()->FindBin(tDaughterPairKStar);
+
+    for(unsigned int j=0; j<tParentCf.size(); j++)
+    {
+      tParentPairKStar = aKStarBinCenters[j];
+      tParentPairKStarBin = aTransformMatrix->GetYaxis()->FindBin(tParentPairKStar);
+
+      tReturnResCf[i] += tParentCf[j]*aTransformMatrix->GetBinContent(tDaughterPairKStarBin,tParentPairKStarBin);
+      tNormVec[i] += aTransformMatrix->GetBinContent(tDaughterPairKStarBin,tParentPairKStarBin);
+    }
+    tReturnResCf[i] /= tNormVec[i];
+  }
+  return tReturnResCf;
+}
 
 //________________________________________________________________________________________________________________
 void CoulombFitter::DoFit()

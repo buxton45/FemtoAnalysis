@@ -38,6 +38,8 @@ using std::vector;
 
   enum CoulombType {kAttractive=0, kRepulsive=1, kNeutral=2};
 
+  enum ResidualType {kSig0KchP=0, kASig0KchP=1, kSig0KchM=2, kASig0KchM=3, kXi0KchP=4, kAXi0KchP=5, kXi0KchM=6, kAXi0KchM=7, kXiCKchP=8, kAXiCKchP=9, kXiCKchM=10, kAXiCKchM=11, kOmegaKchP=12, kAOmegaKchP=13, kOmegaKchM=14, kAOmegaKchM=15}; 
+
 //----------------------------------------------------------
   //TODO Don't forget, when adding new particle, add int value to cPDGValues array
   enum ParticlePDGType {kPDGProt   = 2212,  kPDGAntiProt = -2212, 
