@@ -208,7 +208,7 @@ void FitParameter::SetSharedGlobal(bool aIsShared, int aSharedAnalysis)
 
 
 //________________________________________________________________________________________________________________
-void FitParameter::SetSharedGlobal(bool aIsShared, vector<int> &aSharedAnalyses)
+void FitParameter::SetSharedGlobal(bool aIsShared, const vector<int> &aSharedAnalyses)
 {
   std::sort(fSharedWithGlobal.begin(), fSharedWithGlobal.end());
 

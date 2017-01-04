@@ -29,7 +29,7 @@ LIBS   = $(shell root-config --libs) -lMinuit
 CFLAGS = $(shell root-config --cflags) -pthread -Wno-deprecated-declarations -std=c++11 -m64 -Wall -I${ANALYZE_DIR} -I${LEDNICKYFITTER_DIR} -I${UTILITIES_DIR} -g -O0 -fopenmp
 #CFLAGS = -pthread -Wno-deprecated-declarations -m64 -Wall -I${ANALYZE_DIR} -I${LEDNICKYFITTER_DIR} -g -O0 -I/opt/alice/root/alice_v5-34-30/inst/include #because I have to use c++ 99 
 
-MY_LIBS = $(addprefix build/, MathematicaSession.o WaveFunction.o CoulombFitter.o SimpleFitter.o InterpolationHistograms.o FitChi2Histograms.o FitParameter.o FitPartialAnalysis.o FitPairAnalysis.o FitSharedAnalyses.o CfLite.o CfHeavy.o Types.o Faddeeva.o)
+MY_LIBS = $(addprefix build/, MathematicaSession.o WaveFunction.o CoulombFitter.o LednickyFitter.o GeneralFitter.o SimpleFitter.o InterpolationHistograms.o FitChi2Histograms.o FitParameter.o FitPartialAnalysis.o FitPairAnalysis.o FitSharedAnalyses.o CfLite.o CfHeavy.o Types.o Faddeeva.o)
 
 BINARIES = runTest runFullTest runBuildInterpolationHistograms runFitLambda runSimpleFitter runProtonCascade runManualFitting
 

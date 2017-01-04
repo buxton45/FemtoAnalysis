@@ -10,6 +10,7 @@
 //#include "TString.h"
 
 #include <vector>
+#include <complex>
 using std::vector;
 
 
@@ -35,6 +36,8 @@ using std::vector;
 
   enum InterpType {kGTilde=0, kHyperGeo1F1=1, kScattLen=2};
   enum InterpAxisType {kKaxis=0, kRaxis=1, kThetaaxis=2, kReF0axis=3, kImF0axis=4, kD0axis=5};
+
+  enum GeneralFitterType {kLedEq=0, kLedViaSimPairs=1, kCoulomb=2};
 
   enum CoulombType {kAttractive=0, kRepulsive=1, kNeutral=2};
 
@@ -258,6 +261,8 @@ using std::vector;
   extern const double hbarc;
   extern const double gBohrRadiusXiK;
   extern const double gBohrRadiusOmegaK;
+
+  static const std::complex<double> ImI (0.,1.);
 
 
 #endif

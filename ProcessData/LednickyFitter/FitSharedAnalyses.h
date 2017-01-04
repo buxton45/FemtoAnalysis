@@ -56,8 +56,8 @@ public:
   void SetSharedParameter(ParameterType aParamType);  //share amongst all
   void SetSharedParameter(ParameterType aParamType, double aStartValue, double aLowerBound=0., double aUpperBound=0.);  //share amongst all
 
-  void SetSharedParameter(ParameterType aParamType, vector<int> &aSharedAnalyses); //share amongst analyses selected in aSharedAnalyses
-  void SetSharedParameter(ParameterType aParamType, vector<int> &aSharedAnalyses, double aStartValue, double aLowerBound=0., double aUpperBound=0.);
+  void SetSharedParameter(ParameterType aParamType, const vector<int> &aSharedAnalyses); //share amongst analyses selected in aSharedAnalyses
+  void SetSharedParameter(ParameterType aParamType, const vector<int> &aSharedAnalyses, double aStartValue, double aLowerBound=0., double aUpperBound=0.);
 
   void SetSharedAndFixedParameter(ParameterType aParamType, double aFixedValue);
 

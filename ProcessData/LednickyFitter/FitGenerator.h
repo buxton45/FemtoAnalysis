@@ -74,8 +74,8 @@ public:
   void SetSharedParameter(ParameterType aParamType);  //share amongst all
   void SetSharedParameter(ParameterType aParamType, double aStartValue, double aLowerBound=0., double aUpperBound=0.);  //share amongst all
 
-  void SetSharedParameter(ParameterType aParamType, vector<int> &aSharedAnalyses); //share amongst analyses selected in aSharedAnalyses
-  void SetSharedParameter(ParameterType aParamType, vector<int> &aSharedAnalyses, double aStartValue, double aLowerBound=0., double aUpperBound=0.);
+  void SetSharedParameter(ParameterType aParamType, const vector<int> &aSharedAnalyses); //share amongst analyses selected in aSharedAnalyses
+  void SetSharedParameter(ParameterType aParamType, const vector<int> &aSharedAnalyses, double aStartValue, double aLowerBound=0., double aUpperBound=0.);
 
   void SetSharedAndFixedParameter(ParameterType aParamType, double aFixedValue);
 
@@ -123,9 +123,9 @@ inline void FitGenerator::SetSharedParameter(ParameterType aParamType)
 inline void FitGenerator::SetSharedParameter(ParameterType aParamType, double aStartValue, double aLowerBound, double aUpperBound) 
   {fSharedAn->SetSharedParameter(aParamType,aStartValue,aLowerBound,aUpperBound);}
 
-inline void FitGenerator::SetSharedParameter(ParameterType aParamType, vector<int> &aSharedAnalyses) 
+inline void FitGenerator::SetSharedParameter(ParameterType aParamType, const vector<int> &aSharedAnalyses) 
   {fSharedAn->SetSharedParameter(aParamType,aSharedAnalyses);}
-inline void FitGenerator::SetSharedParameter(ParameterType aParamType, vector<int> &aSharedAnalyses, double aStartValue, double aLowerBound, double aUpperBound) 
+inline void FitGenerator::SetSharedParameter(ParameterType aParamType, const vector<int> &aSharedAnalyses, double aStartValue, double aLowerBound, double aUpperBound) 
   {fSharedAn->SetSharedParameter(aParamType,aSharedAnalyses,aStartValue,aLowerBound,aUpperBound);}
 
 inline void FitGenerator::SetSharedAndFixedParameter(ParameterType aParamType, double aFixedValue)

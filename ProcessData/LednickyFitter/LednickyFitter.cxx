@@ -18,49 +18,6 @@ vector<int> gNpfitsVec;
 double gMaxFitKStar;
 */
 
-//________________________________________________________________________
-double GetLednickyF1(double z)
-{
-  double result = (1./z)*Faddeeva::Dawson(z);
-  return result;
-}
-
-//________________________________________________________________________
-double GetLednickyF2(double z)
-{
-  double result = (1./z)*(1.-exp(-z*z));
-  return result;
-}
-
-//________________________________________________________________________
-double LednickyEq(double *x, double *par)
-{
-  // par[0] = Lambda 
-  // par[1] = Radius
-  // par[2] = Ref0
-  // par[3] = Imf0
-  // par[4] = d0
-  // par[5] = Norm
-
-  //should probably do x[0] /= hbarc, but let me test first
-
-  std::complex<double> f0 (par[2],par[3]);
-  double Alpha = 0.; // alpha = 0 for non-identical
-  double z = 2.*(x[0]/hbarc)*par[1];  //z = 2k*R, to be fed to GetLednickyF1(2)
-
-  double C_QuantumStat = Alpha*exp(-z*z);  // will be zero for my analysis
-
-  std::complex<double> ScattAmp = pow( (1./f0) + 0.5*par[4]*(x[0]/hbarc)*(x[0]/hbarc) - ImI*(x[0]/hbarc),-1);
-
-  double C_FSI = (1+Alpha)*( 0.5*norm(ScattAmp)/(par[1]*par[1])*(1.-1./(2*sqrt(TMath::Pi()))*(par[4]/par[1])) + 2.*real(ScattAmp)/(par[1]*sqrt(TMath::Pi()))*GetLednickyF1(z) - (imag(ScattAmp)/par[1])*GetLednickyF2(z));
-
-  double Cf = 1. + par[0]*(C_QuantumStat + C_FSI);
-  //Cf *= par[5];
-
-  return Cf;
-  
-}
-
 
 //________________________________________________________________________________________________________________
 //****************************************************************************************************************
@@ -97,6 +54,47 @@ LednickyFitter::~LednickyFitter()
   cout << "LednickyFitter object is being deleted!!!" << endl;
 }
 
+//________________________________________________________________________
+double LednickyFitter::GetLednickyF1(double z)
+{
+  double result = (1./z)*Faddeeva::Dawson(z);
+  return result;
+}
+
+//________________________________________________________________________
+double LednickyFitter::GetLednickyF2(double z)
+{
+  double result = (1./z)*(1.-exp(-z*z));
+  return result;
+}
+
+//________________________________________________________________________
+double LednickyFitter::LednickyEq(double *x, double *par)
+{
+  // par[0] = Lambda 
+  // par[1] = Radius
+  // par[2] = Ref0
+  // par[3] = Imf0
+  // par[4] = d0
+  // par[5] = Norm
+
+  //should probably do x[0] /= hbarc, but let me test first
+
+  std::complex<double> f0 (par[2],par[3]);
+  double Alpha = 0.; // alpha = 0 for non-identical
+  double z = 2.*(x[0]/hbarc)*par[1];  //z = 2k*R, to be fed to GetLednickyF1(2)
+
+  double C_QuantumStat = Alpha*exp(-z*z);  // will be zero for my analysis
+
+  std::complex<double> ScattAmp = pow( (1./f0) + 0.5*par[4]*(x[0]/hbarc)*(x[0]/hbarc) - ImI*(x[0]/hbarc),-1);
+
+  double C_FSI = (1+Alpha)*( 0.5*norm(ScattAmp)/(par[1]*par[1])*(1.-1./(2*sqrt(TMath::Pi()))*(par[4]/par[1])) + 2.*real(ScattAmp)/(par[1]*sqrt(TMath::Pi()))*GetLednickyF1(z) - (imag(ScattAmp)/par[1])*GetLednickyF2(z));
+
+  double Cf = 1. + par[0]*(C_QuantumStat + C_FSI);
+  //Cf *= par[5];
+
+  return Cf;
+}
 
 //________________________________________________________________________________________________________________
 void LednickyFitter::PrintCurrentParamValues(int &aNpar, double* aPar)
@@ -181,7 +179,7 @@ vector<double> LednickyFitter::ApplyMomResCorrection(vector<double> &aCf, vector
 
 
 //________________________________________________________________________________________________________________
-vector<double> LednickyFitter::GetResidualCorrelation(double *aParentCfParams, vector<double> &aKStarBinCenters, TH2* aTransformMatrix)
+vector<double> LednickyFitter::GetNeutralResidualCorrelation(double *aParentCfParams, vector<double> &aKStarBinCenters, TH2* aTransformMatrix)
 {
   vector<double> tParentCf(aKStarBinCenters.size(),0.);
   double tKStar[1];
@@ -406,11 +404,11 @@ void LednickyFitter::CalculateFitFunction(int &npar, double &chi2, double *par)
       {
         double tLambda_SigK = 0.78*tPar[0];  //for now, primary lambda scaled by some factor
         double *tPar_SigK = AdjustLambdaParam(tPar,tLambda_SigK,tNFitParams);
-        td1dVec tResidual_SigK = GetResidualCorrelation(tPar_SigK,tKStarBinCenters,tFitPairAnalysis->GetTransformMatrices()[0]);
+        td1dVec tResidual_SigK = GetNeutralResidualCorrelation(tPar_SigK,tKStarBinCenters,tFitPairAnalysis->GetTransformMatrices()[0]);
 
         double tLambda_Xi0K = 0.52*tPar[0];  //for now, primary lambda scaled by some factor
         double *tPar_Xi0K = AdjustLambdaParam(tPar,tLambda_Xi0K,tNFitParams);
-        td1dVec tResidual_Xi0K = GetResidualCorrelation(tPar_Xi0K,tKStarBinCenters,tFitPairAnalysis->GetTransformMatrices()[2]);
+        td1dVec tResidual_Xi0K = GetNeutralResidualCorrelation(tPar_Xi0K,tKStarBinCenters,tFitPairAnalysis->GetTransformMatrices()[2]);
 
 
         vector<double> tLambdas{tPar[0],tLambda_SigK,tLambda_Xi0K};

@@ -33,7 +33,7 @@ class MathematicaSession;
 
 #include "Types.h"
 
-const std::complex<double> ImI (0.,1.);
+//const std::complex<double> ImI (0.,1.);
 
 class WaveFunction {
 

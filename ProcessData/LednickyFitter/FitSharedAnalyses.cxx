@@ -300,7 +300,7 @@ void FitSharedAnalyses::SetSharedParameter(ParameterType aParamType, double aSta
 
 
 //________________________________________________________________________________________________________________
-void FitSharedAnalyses::SetSharedParameter(ParameterType aParamType, vector<int> &aSharedAnalyses)
+void FitSharedAnalyses::SetSharedParameter(ParameterType aParamType, const vector<int> &aSharedAnalyses)
 {
   vector<FitParameter*> tempSharedParameters (aSharedAnalyses.size());
 
@@ -324,7 +324,7 @@ void FitSharedAnalyses::SetSharedParameter(ParameterType aParamType, vector<int>
 
 
 //________________________________________________________________________________________________________________
-void FitSharedAnalyses::SetSharedParameter(ParameterType aParamType, vector<int> &aSharedAnalyses, double aStartValue, double aLowerBound, double aUpperBound)
+void FitSharedAnalyses::SetSharedParameter(ParameterType aParamType, const vector<int> &aSharedAnalyses, double aStartValue, double aLowerBound, double aUpperBound)
 {
   vector<FitParameter*> tempSharedParameters (aSharedAnalyses.size());
 

@@ -38,7 +38,7 @@
 #include "TVirtualFitter.h"
 
 //const double hbarc = 0.197327;
-const std::complex<double> ImI (0.,1.);
+//const std::complex<double> ImI (0.,1.);
 
 #include <omp.h>
 
@@ -60,6 +60,10 @@ public:
   LednickyFitter(FitSharedAnalyses* aFitSharedAnalyses, double aMaxFitKStar = 0.3);
   virtual ~LednickyFitter();
 
+  static double GetLednickyF1(double z);
+  static double GetLednickyF2(double z);
+  static double LednickyEq(double *x, double *par);
+
 
   void PrintCurrentParamValues(int &aNpar, double* aPar);
 
@@ -67,7 +71,7 @@ public:
   double* AdjustLambdaParam(double *aParamSet, double aNewLambda, int aNEntries);
   void ApplyNonFlatBackgroundCorrection(vector<double> &aCf, vector<double> &aKStarBinCenters, TF1* aNonFlatBgd);
   vector<double> ApplyMomResCorrection(vector<double> &aCf, vector<double> &aKStarBinCenters, TH2* aMomResMatrix);
-  vector<double> GetResidualCorrelation(double *aParentCfParams, vector<double> &aKStarBinCenters, TH2* aTransformMatrix);
+  vector<double> GetNeutralResidualCorrelation(double *aParentCfParams, vector<double> &aKStarBinCenters, TH2* aTransformMatrix);
   vector<double> CombinePrimaryWithResiduals(td1dVec &aLambdaValues, td2dVec &aCfs);
   void ApplyNormalization(double aNorm, td1dVec &aCf);
 
@@ -85,7 +89,7 @@ public:
 
   void SetApplyNonFlatBackgroundCorrection(bool aApply);
   void SetApplyMomResCorrection(bool aApplyMomResCorrection);
-  void SetIncludeResidualCorrelations(bool aInclude);
+  virtual void SetIncludeResidualCorrelations(bool aInclude);
 
   vector<double> GetMinParams();
   vector<double> GetParErrors();
@@ -94,7 +98,7 @@ public:
 
   double GetChi2();
 
-private:
+protected:
   bool fVerbose;
   FitSharedAnalyses* fFitSharedAnalyses;
   TMinuit* fMinuit;

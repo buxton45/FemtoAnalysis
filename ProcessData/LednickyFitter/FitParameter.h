@@ -41,7 +41,7 @@ public:
   vector<int> GetSharedWithLocal();
 
   void SetSharedGlobal(bool aIsShared, int aSharedAnalysis);
-  void SetSharedGlobal(bool aIsShared, vector<int> &aSharedAnalyses);
+  void SetSharedGlobal(bool aIsShared, const vector<int> &aSharedAnalyses);
   vector<int> GetSharedWithGlobal();
 
   //inline (i.e. simple) functions
