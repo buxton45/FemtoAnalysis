@@ -160,9 +160,22 @@ double WaveFunction::GetLednickyHFunction(double aKStar)
 
     //Note:  tReturnValueCmplx will be real, but the silly compiler yells about returning a real using complex (GetDiGamma) functions
     //Nonetheless, let's be absolutely certain that the imaginary part is zero
-    if(std::abs(imag(tReturnValueCmplx)) > std::numeric_limits< double >::min()) cout << "\t\t\t !!!!!!!!! Imaginary value in WaveFunction::GetLednickyHFunction !!!!!" << endl;
-    if(std::isnan(std::abs(imag(tReturnValueCmplx)))) cout << "\t\t\t !!!!!!!!! NaN Imaginary value in WaveFunction::GetLednickyHFunction !!!!!" << endl;
+    bool tFail = false;
+    if(std::abs(imag(tReturnValueCmplx)) > std::numeric_limits< double >::min()) {cout << "\t\t\t !!!!!!!!! Imaginary value in WaveFunction::GetLednickyHFunction !!!!!" << endl; tFail=true;}
+    if(std::isnan(std::abs(imag(tReturnValueCmplx)))) {cout << "\t\t\t !!!!!!!!! NaN Imaginary value in WaveFunction::GetLednickyHFunction !!!!!" << endl; tFail=true;}
+    if(tFail)
+    {
+      cout << "aKStar = " << aKStar << endl;
+      cout << "tEta = " << tEta << endl;
+      cout << "fSession->GetDiGamma(tEtaCmplxPos) = " << fSession->GetDiGamma(tEtaCmplxPos) << endl;
+      cout << "fSession->GetDiGamma(tEtaCmplxNeg) = " << fSession->GetDiGamma(tEtaCmplxNeg) << endl;
+      cout << "log(tEta*tEta) = " << log(tEta*tEta) << endl;
+      cout << "real(tReturnValueCmplx) = " << real(tReturnValueCmplx) << endl;
+      cout << "imag(tReturnValueCmplx) = " << imag(tReturnValueCmplx) << endl;
+      cout << endl;
+    }
     assert(std::abs(imag(tReturnValueCmplx)) < std::numeric_limits< double >::min());
+    assert(!std::isnan(std::abs(imag(tReturnValueCmplx))));
 
     double tReturnValue = real(tReturnValueCmplx);
     return tReturnValue;

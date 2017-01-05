@@ -63,7 +63,7 @@ public:
   int GetBinNumber(double aBinWidth, double aMin, double aMax, double aValue);
 
 
-  void BuildPairSample3dVec(double aMaxFitKStar=0.3, int aNPairsPerKStarBin=16384);
+  void BuildPairSample3dVec(double aMaxFitKStar=1.0, int aNPairsPerKStarBin=16384);
   void UpdatePairRadiusParameters(double aNewRadius);
 
   //Note:  Linear, Bilinear, and Trilinear will essentially be copies of TH1::, TH2::, and TH3::Interpolate

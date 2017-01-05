@@ -6,7 +6,7 @@
 # Portions of this makefile require the use of GNU make.
 # see http://www.gnu.org/software/make for more information.
 
-VERSION=10.4
+VERSION=11.0
 WSTPLINKDIR = /usr/local/Wolfram/Mathematica/10.4/SystemFiles/Links/WSTP/DeveloperKit
 SYS = Linux-x86-64
 CADDSDIR = ${WSTPLINKDIR}/${SYS}/CompilerAdditions

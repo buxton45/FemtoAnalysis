@@ -198,6 +198,8 @@ complex<double> MathematicaSession::GetGamma(complex<double> aCmplx)
     WSGetDouble( lp, &tGammaReal);
     WSGetDouble( lp, &tGammaImag);
 
+    if (WSError( lp)) error( lp);
+
     WSReleaseSymbol(lp,tStringPtr);  //WSGetFunction allocated memory, this disowns the memory
   }
 
@@ -254,6 +256,8 @@ complex<double> MathematicaSession::GetDiGamma(complex<double> aCmplx)
   {
     WSGetDouble( lp, &tDiGammaReal);
     WSGetDouble( lp, &tDiGammaImag);
+
+    if (WSError( lp)) error( lp);
 
     WSReleaseSymbol(lp,tStringPtr);  //WSGetFunction allocated memory, this disowns the memory
   }
@@ -322,6 +326,8 @@ complex<double> MathematicaSession::GetHyperGeo1F1(complex<double> aA, complex<d
     WSGetDouble( lp, &tHyperGeoReal);
     WSGetDouble( lp, &tHyperGeoImag);
 
+    if (WSError( lp)) error( lp);
+
     WSReleaseSymbol(lp,tStringPtr);  //WSGetFunction allocated memory, this disowns the memory
   }
 
@@ -376,6 +382,23 @@ complex<double> MathematicaSession::GetCoulombHpmFunction(double aPhaseShift, do
   {
     WSGetDouble( lp, &tWhittWReal);
     WSGetDouble( lp, &tWhittWImag);
+
+    if(WSError(lp))  //TODO
+    {
+      if(std::abs(tWhittWReal) < std::numeric_limits< double >::min())
+      {
+        tWhittWReal = 0.;
+        WSClearError(lp);
+        WSNewPacket(lp);
+      }
+      else if(std::abs(tWhittWImag) < std::numeric_limits< double >::min())
+      {
+        tWhittWImag = 0.;
+        WSClearError(lp);
+        WSNewPacket(lp);
+      }
+      else error(lp);
+    }
 
     WSReleaseSymbol(lp,tStringPtr);  //WSGetFunction allocated memory, this disowns the memory
   }
