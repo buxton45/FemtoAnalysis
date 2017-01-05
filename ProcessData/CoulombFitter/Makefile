@@ -29,14 +29,17 @@ LIBS   = $(shell root-config --libs) -lMinuit
 CFLAGS = $(shell root-config --cflags) -pthread -Wno-deprecated-declarations -std=c++11 -m64 -Wall -I${ANALYZE_DIR} -I${LEDNICKYFITTER_DIR} -I${UTILITIES_DIR} -g -O0 -fopenmp
 #CFLAGS = -pthread -Wno-deprecated-declarations -m64 -Wall -I${ANALYZE_DIR} -I${LEDNICKYFITTER_DIR} -g -O0 -I/opt/alice/root/alice_v5-34-30/inst/include #because I have to use c++ 99 
 
-MY_LIBS = $(addprefix build/, MathematicaSession.o WaveFunction.o CoulombFitter.o LednickyFitter.o GeneralFitter.o SimpleFitter.o InterpolationHistograms.o FitChi2Histograms.o FitParameter.o FitPartialAnalysis.o FitPairAnalysis.o FitSharedAnalyses.o CfLite.o CfHeavy.o Types.o Faddeeva.o)
+MY_LIBS = $(addprefix build/, MathematicaSession.o WaveFunction.o ChargedResidualCf.o CoulombFitter.o LednickyFitter.o GeneralFitter.o SimpleFitter.o InterpolationHistograms.o FitChi2Histograms.o FitParameter.o FitPartialAnalysis.o FitPairAnalysis.o FitSharedAnalyses.o CfLite.o CfHeavy.o Types.o Faddeeva.o)
 
-BINARIES = runTest runFullTest runBuildInterpolationHistograms runFitLambda runSimpleFitter runProtonCascade runManualFitting
+BINARIES = runTest runTest2 runFullTest runBuildInterpolationHistograms runFitLambda runSimpleFitter runProtonCascade runManualFitting
 
 all : $(BINARIES)
 
 runTest: ${MY_LIBS} test.C	
 	${CXX} test.C ${MY_LIBS} -I${INCDIR} -o runTest -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS) -o $@
+
+runTest2: ${MY_LIBS} test2.C	
+	${CXX} test2.C ${MY_LIBS} -I${INCDIR} -o runTest2 -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS) -o $@
 
 runFullTest: ${MY_LIBS} BuildFullTest.C	
 	${CXX} BuildFullTest.C ${MY_LIBS} -I${INCDIR} -o runFullTest -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS) -o $@
