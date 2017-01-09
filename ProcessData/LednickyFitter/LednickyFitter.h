@@ -51,6 +51,9 @@ using std::vector;
 #include "FitSharedAnalyses.h"
 class FitSharedAnalyses;
 
+#include "ChargedResidualCf.h"
+class ChargedResidualCf;
+
 class LednickyFitter {
 
 public:
@@ -72,6 +75,7 @@ public:
   void ApplyNonFlatBackgroundCorrection(vector<double> &aCf, vector<double> &aKStarBinCenters, TF1* aNonFlatBgd);
   vector<double> ApplyMomResCorrection(vector<double> &aCf, vector<double> &aKStarBinCenters, TH2* aMomResMatrix);
   vector<double> GetNeutralResidualCorrelation(double *aParentCfParams, vector<double> &aKStarBinCenters, TH2* aTransformMatrix);
+  vector<double> GetChargedResidualCorrelation(ResidualType aResidualType, double *aParentCfParams, vector<double> &aKStarBinCenters);
   vector<double> CombinePrimaryWithResiduals(td1dVec &aLambdaValues, td2dVec &aCfs);
   void ApplyNormalization(double aNorm, td1dVec &aCf);
 
@@ -112,6 +116,12 @@ protected:
   bool fApplyNonFlatBackgroundCorrection;
   bool fApplyMomResCorrection;
   bool fIncludeResidualCorrelations;
+  bool fResidualsInitiated;
+
+  ChargedResidualCf* fResXiCK;
+  ChargedResidualCf* fResOmegaK;
+  ChargedResidualCf* fResAXiCK;
+  ChargedResidualCf* fResAOmegaK;
 
   double fChi2;
   double fChi2GlobalMin;

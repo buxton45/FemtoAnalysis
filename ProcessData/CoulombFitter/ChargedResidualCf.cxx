@@ -21,14 +21,14 @@ ChargedResidualCf::ChargedResidualCf(ResidualType aResidualType, TString aInterp
   fResidualType(aResidualType),
   fTransformMatrix(),
   fTurnOffCoulomb(false),
-  fIncludeSingletAndTriplet(true),
+  fIncludeSingletAndTriplet(false),
   fUseRandomKStarVectors(true),
 
   fCoulombType(kRepulsive),
   fWaveFunction(0),
   fBohrRadius(1000000000),
 
-  fNPairsPerKStarBin(163),
+  fNPairsPerKStarBin(1000),
   fCurrentRadiusParameter(1.),
   fPairSample3dVec(0),
   fInterpHistFile(0), fInterpHistFileLednickyHFunction(0),
@@ -49,13 +49,13 @@ ChargedResidualCf::ChargedResidualCf(ResidualType aResidualType, TString aInterp
   fWaveFunction = new WaveFunction();
   omp_set_num_threads(3);
 
-//TODO as is now, LoadLednickyHFunctionFile must come before LoadInterpHistFile
-  LoadLednickyHFunctionFile(aLednickyHFunctionFileBaseName);
   LoadInterpHistFile(aInterpHistFileBaseName);
+  LoadLednickyHFunctionFile(aLednickyHFunctionFileBaseName);
+
   LoadTransformMatrix(aTransRebin,aTransformMatricesLocation);
   SetBohrRadius();
 
-  BuildPairSample3dVec();  //TODO
+  BuildPairSample3dVec();  //TODO if !fUseRandomKStarVectors, then I can only build out to k* = 0.3 GeV/c
 }
 
 
@@ -230,6 +230,17 @@ void ChargedResidualCf::LoadLednickyHFunctionFile(TString aFileBaseName)
     fLednickyHFunctionHist->SetDirectory(0);
 
   fInterpHistFileLednickyHFunction->Close();
+
+  if(fMinInterpKStar==0 && fMaxInterpKStar==0)
+  {
+    fMinInterpKStar = fLednickyHFunctionHist->GetXaxis()->GetBinCenter(1);
+    fMaxInterpKStar = fLednickyHFunctionHist->GetXaxis()->GetBinCenter(fLednickyHFunctionHist->GetNbinsX());
+  }
+  else
+  {
+    assert(fMinInterpKStar == fLednickyHFunctionHist->GetXaxis()->GetBinCenter(1));
+    assert(fMaxInterpKStar == fLednickyHFunctionHist->GetXaxis()->GetBinCenter(fLednickyHFunctionHist->GetNbinsX()));
+  }
 }
 
 //________________________________________________________________________________________________________________
@@ -256,8 +267,16 @@ cout << "Starting LoadInterpHistFile" << endl;
 
   fInterpHistFile->Close();
 
-  fMinInterpKStar = fLednickyHFunctionHist->GetXaxis()->GetBinCenter(1);
-  fMaxInterpKStar = fLednickyHFunctionHist->GetXaxis()->GetBinCenter(fLednickyHFunctionHist->GetNbinsX());
+  if(fMinInterpKStar==0 && fMaxInterpKStar==0)
+  {
+    fMinInterpKStar = fHyperGeo1F1RealHist->GetXaxis()->GetBinCenter(1);
+    fMaxInterpKStar = fHyperGeo1F1RealHist->GetXaxis()->GetBinCenter(fHyperGeo1F1RealHist->GetNbinsX());
+  }
+  else
+  {
+    assert(fMinInterpKStar == fHyperGeo1F1RealHist->GetXaxis()->GetBinCenter(1));
+    assert(fMaxInterpKStar == fHyperGeo1F1RealHist->GetXaxis()->GetBinCenter(fHyperGeo1F1RealHist->GetNbinsX()));
+  }
 
   fMinInterpRStar = fHyperGeo1F1RealHist->GetYaxis()->GetBinCenter(1);
   fMaxInterpRStar = fHyperGeo1F1RealHist->GetYaxis()->GetBinCenter(fHyperGeo1F1RealHist->GetNbinsY());
@@ -328,10 +347,40 @@ int ChargedResidualCf::GetBinNumber(double aBinWidth, double aMin, double aMax, 
 }
 
 //________________________________________________________________________________________________________________
-td3dVec ChargedResidualCf::BuildPairKStar3dVecFromTxt(double aMaxFitKStar, TString aFileName)
+td3dVec ChargedResidualCf::BuildPairKStar3dVecFromTxt(double aMaxFitKStar, TString aFileBaseName)
 {
 ChronoTimer tTimer;
 tTimer.Start();
+
+  TString aFileName = aFileBaseName;
+
+  //----------------------------------------------
+  switch(fResidualType) {
+  case kXiCKchP:
+  case kOmegaKchP:
+    aFileName += TString("XiKchP_0010.txt");
+    break;
+
+  case kXiCKchM:
+  case kOmegaKchM:
+    aFileName += TString("XiKchM_0010.txt");
+    break;
+
+  case kAXiCKchP:
+  case kAOmegaKchP:
+    aFileName += TString("AXiKchP_0010.txt");
+    break;
+
+  case kAXiCKchM:
+  case kAOmegaKchM:
+    aFileName += TString("AXiKchM_0010.txt");
+    break;
+
+  default:
+    cout << "ERROR: ChargedResidualCf::BuildPairKStar3dVecFromTxt:  fResidualType = " << fResidualType << " is not apropriate" << endl << endl;
+    assert(0);
+  }
+  //----------------------------------------------
 
   ifstream tFileIn(aFileName);
 
@@ -427,7 +476,7 @@ tTimer.Start();
   fNPairsPerKStarBin = aNPairsPerKStarBin;
 
   double tBinSize = 0.01;  //TODO make this automated
-  int tNBinsKStar = aMaxFitKStar/tBinSize;  //TODO make this general, ie subtract 1 if aMaxFitKStar is on bin edge (maybe, maybe not bx of iKStarBin<tNBinsKStar)
+  int tNBinsKStar = std::round(aMaxFitKStar/tBinSize);  //TODO make this general, ie subtract 1 if aMaxFitKStar is on bin edge (maybe, maybe not bx of iKStarBin<tNBinsKStar)
 
   fPairSample3dVec.resize(tNBinsKStar, td2dVec(0, td1dVec(0)));
 
@@ -453,20 +502,40 @@ tTimer.Start();
 
   //------------------------------------
   td3dVec tPairKStar3dVec (0);
-  if(!fUseRandomKStarVectors) tPairKStar3dVec = BuildPairKStar3dVecFromTxt(aMaxFitKStar); //TODO automatically set second parameter, default used for now
+  double tMaxBuildKStar = 0.3;  //TODO for now, only possible to use real pairs out to 0.3 GeV/c
+                                //Generating file to go beyond this would be difficult, probably need to
+                                //generate multiple files, but probably not necessary because uniform dist should
+                                //be alright far out in k* space (really only seems to matter for lowest k* bin)
+  int tNbinKStar_3dVecFromTxt=0;
+  double tKStarMin_3dVecFromTxt=0., tKStarMax_3dVecFromTxt=0., tBinWidth_3dVecFromTxt=0.;
+  if(aMaxFitKStar < 0.3) tMaxBuildKStar = aMaxFitKStar;
+  if(!fUseRandomKStarVectors)
+  {
+    tPairKStar3dVec = BuildPairKStar3dVecFromTxt(tMaxBuildKStar);
+
+    tNbinKStar_3dVecFromTxt = tPairKStar3dVec[tPairKStar3dVec.size()-1][0][0];
+    tKStarMin_3dVecFromTxt = tPairKStar3dVec[tPairKStar3dVec.size()-1][0][1];
+    tKStarMax_3dVecFromTxt = tPairKStar3dVec[tPairKStar3dVec.size()-1][0][2];
+
+    tBinWidth_3dVecFromTxt = (tKStarMax_3dVecFromTxt-tKStarMin_3dVecFromTxt)/tNbinKStar_3dVecFromTxt;
+    assert(tBinWidth_3dVecFromTxt==tBinSize);
+
+    tPairKStar3dVec.pop_back();  //strip off the binning information
+  }
 //TODO Check randomization
 //TODO Make sure I am grabbing from correct tBin.  Must work even when I rebin things
   for(int iKStarBin=0; iKStarBin<tNBinsKStar; iKStarBin++)
   {
-    if(!fUseRandomKStarVectors) tRandomKStarElement = std::uniform_int_distribution<int>(0.0, tPairKStar3dVec[iKStarBin].size()-1);
     tKStarMagMin = iKStarBin*tBinSize;
+    if(iKStarBin==0) tKStarMagMin=0.004;  //TODO here and in CoulombFitter
     tKStarMagMax = (iKStarBin+1)*tBinSize;
-cout << "tKStarMagMin = " << tKStarMagMin << endl;
-cout << "tKStarMagMax = " << tKStarMagMax << endl << endl;
+
+    if(!fUseRandomKStarVectors && tKStarMagMin<0.3) tRandomKStarElement = std::uniform_int_distribution<int>(0, tPairKStar3dVec[iKStarBin].size()-1);
+
     tTemp2dVec.clear();
     for(int iPair=0; iPair<fNPairsPerKStarBin; iPair++)
     {
-      if(!fUseRandomKStarVectors)
+      if(!fUseRandomKStarVectors && tKStarMagMin<0.3)
       {
         tI = tRandomKStarElement(generator);
         tKStar3Vec->SetXYZ(tPairKStar3dVec[iKStarBin][tI][1],tPairKStar3dVec[iKStarBin][tI][2],tPairKStar3dVec[iKStarBin][tI][3]);
@@ -477,7 +546,6 @@ cout << "tKStarMagMax = " << tKStarMagMax << endl << endl;
 
       tTheta = tKStar3Vec->Angle(*tSource3Vec);
       tKStarMag = tKStar3Vec->Mag();
-cout << "\t\ttKStarMag = " << tKStarMag << endl;
       tRStarMag = tSource3Vec->Mag();
 
       tTempPair[0] = tKStarMag;
@@ -1107,18 +1175,15 @@ void ChargedResidualCf::SetRandomKStar3Vec(TVector3* aKStar3Vec, double aKStarMa
   double tPhi = 2.*M_PI*tU; //azimuthal angle
 
   aKStar3Vec->SetMagThetaPhi(tKStarMag,tTheta,tPhi);
-cout << "\ttKStarMag = " << tKStarMag << endl;
 }
 
 
 
 
 //________________________________________________________________________________________________________________
-double ChargedResidualCf::GetFitCfContentCompletewStaticPairs(double aKStarMagMin, double aKStarMagMax, double *par, TH2D* aTH2)
+double ChargedResidualCf::GetFitCfContentCompletewStaticPairs(double aKStarMagMin, double aKStarMagMax, double *par)
 {
   omp_set_num_threads(6);
-cout << "aKStarMagMin = " << aKStarMagMin << endl;
-if(aKStarMagMin==0.1) cout << "YES" << endl;
 
   // if fIncludeSingletAndTriplet == false
   //    par[0] = Lambda 
@@ -1144,8 +1209,8 @@ if(aKStarMagMin==0.1) cout << "YES" << endl;
   //TODO make this general
   //This is messing up around aKStarMagMin = 0.29, or bin 57/58
   double tBinSize = 0.01;
-  int tBin = aKStarMagMin/tBinSize;
-cout << "tBin = " << tBin << endl;
+  int tBin = std::round(aKStarMagMin/tBinSize);  //IMPORTANT!!!!! w/o using std::round, some bins were being calculated incorrectly
+
   //KStarMag = fPairSample3dVec[tBin][i][0]
   //RStarMag = fPairSample3dVec[tBin][i][1]
   //Theta    = fPairSample3dVec[tBin][i][2]
@@ -1156,10 +1221,6 @@ cout << "tBin = " << tBin << endl;
 
   int tMaxKStarCalls;
   tMaxKStarCalls = fPairSample3dVec[tBin].size();
-//cout << "In GetFitCfContentCompletewStaticPairs: " << endl;
-//cout << "\taKStarMagMin = " << aKStarMagMin << " and tBin = " << tBin << endl;
-//cout << "\ttMaxKStarCalls = " << tMaxKStarCalls << endl;
-
 
   bool tCanInterp;
   double tTheta, tKStarMag, tRStarMag, tWaveFunctionSqSinglet, tWaveFunctionSqTriplet, tWaveFunctionSq;
@@ -1180,9 +1241,6 @@ cout << "tBin = " << tBin << endl;
     tKStarMag = fPairSample3dVec[tBin][i][0];
     tRStarMag = fPairSample3dVec[tBin][i][1];
     tTheta = fPairSample3dVec[tBin][i][2];
-cout << "tKStarMag = " << tKStarMag << endl;
-if(tKStarMag < 0.08 && tKStarMag > 0.07) cout << "In the regime!" << endl;
-aTH2->Fill(tKStarMag,tTheta);
 
     tCanInterp = CanInterpAll(tKStarMag,tRStarMag,tTheta,par[2],par[3],par[4]);
     if(fTurnOffCoulomb || tCanInterp)
@@ -1264,7 +1322,7 @@ aTH2->Fill(tKStarMag,tTheta);
 
 
 //________________________________________________________________________________________________________________
-td1dVec ChargedResidualCf::GetCoulombResidualCorrelation(double *aParentCfParams, vector<double> &aKStarBinCenters, TH2D* aTH2)
+td1dVec ChargedResidualCf::GetCoulombResidualCorrelation(double *aParentCfParams, vector<double> &aKStarBinCenters)
 {
   double tKStarBinWidth = aKStarBinCenters[1]-aKStarBinCenters[0];
 
@@ -1277,9 +1335,9 @@ td1dVec ChargedResidualCf::GetCoulombResidualCorrelation(double *aParentCfParams
 
     if(i==0) tKStarMin = 0.; //TODO this is small, but nonzero
 
-    tParentCf[i] = GetFitCfContentCompletewStaticPairs(tKStarMin,tKStarMax,aParentCfParams,aTH2);
+    tParentCf[i] = GetFitCfContentCompletewStaticPairs(tKStarMin,tKStarMax,aParentCfParams);
   }
-/*
+
   unsigned int tDaughterPairKStarBin, tParentPairKStarBin;
   double tDaughterPairKStar, tParentPairKStar;
   assert(tParentCf.size() == aKStarBinCenters.size());
@@ -1302,11 +1360,9 @@ td1dVec ChargedResidualCf::GetCoulombResidualCorrelation(double *aParentCfParams
       tReturnResCf[i] += tParentCf[j]*fTransformMatrix->GetBinContent(tDaughterPairKStarBin,tParentPairKStarBin);
       tNormVec[i] += fTransformMatrix->GetBinContent(tDaughterPairKStarBin,tParentPairKStarBin);
     }
-    tReturnResCf[i] /= tNormVec[i];
+    if(tNormVec[i]!=0.) tReturnResCf[i] /= tNormVec[i];
   }
   return tReturnResCf;
-*/
-  return tParentCf;
 }
 
 
@@ -1317,13 +1373,9 @@ TH1D* ChargedResidualCf::Convert1dVecToHist(td1dVec &aCfVec, td1dVec &aKStarBinC
 
   double tBinWidth = aKStarBinCenters[1]-aKStarBinCenters[0];
   int tNbins = aKStarBinCenters.size();
-  cout << "tNbins = " << tNbins << endl;
   double tKStarMin = aKStarBinCenters[0]-tBinWidth/2.0;
   tKStarMin=0.;
-  cout << "tKStarMin = " << tKStarMin << endl;
   double tKStarMax = aKStarBinCenters[tNbins-1] + tBinWidth/2.0;
-  cout << "tKStarMax = " << tKStarMax << endl;
-
 
   TH1D* tReturnHist = new TH1D(aTitle, aTitle, tNbins, tKStarMin, tKStarMax);
   for(int i=0; i<tNbins; i++) tReturnHist->SetBinContent(i+1,aCfVec[i]);

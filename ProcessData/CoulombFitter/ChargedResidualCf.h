@@ -63,8 +63,8 @@ public:
   int GetBinNumber(int aNbins, double aMin, double aMax, double aValue);
   int GetBinNumber(double aBinWidth, double aMin, double aMax, double aValue);
 
-  td3dVec BuildPairKStar3dVecFromTxt(double aMaxFitKStar, TString aFileName="/home/jesse/Analysis/FemtoAnalysis/ProcessData/CoulombFitter/PairKStar3dVec_20160610_XiKchP_0010.txt");
-  void BuildPairSample3dVec(double aMaxFitKStar=0.3, int aNPairsPerKStarBin=163);
+  td3dVec BuildPairKStar3dVecFromTxt(double aMaxFitKStar=0.3, TString aFileBaseName="/home/jesse/Analysis/FemtoAnalysis/ProcessData/CoulombFitter/PairKStar3dVec_20160610_");
+  void BuildPairSample3dVec(double aMaxFitKStar=1.0, int aNPairsPerKStarBin=1000);
   void UpdatePairRadiusParameters(double aNewRadius);
 
   //Note:  Linear, Bilinear, and Trilinear will essentially be copies of TH1::, TH2::, and TH3::Interpolate
@@ -88,10 +88,10 @@ public:
 
   void SetRandomKStar3Vec(TVector3* aKStar3Vec, double aKStarMagMin, double aKStarMagMax);
 
-  double GetFitCfContentCompletewStaticPairs(double aKStarMagMin, double aKStarMagMax, double *par, TH2D* aTH2);  //TODO!!!!!
+  double GetFitCfContentCompletewStaticPairs(double aKStarMagMin, double aKStarMagMax, double *par);  //TODO!!!!!
 
 
-  td1dVec GetCoulombResidualCorrelation(double *aParentCfParams, vector<double> &aKStarBinCenters, TH2D* aTH2);
+  td1dVec GetCoulombResidualCorrelation(double *aParentCfParams, vector<double> &aKStarBinCenters);
   TH1D* Convert1dVecToHist(td1dVec &aCfVec, td1dVec &aKStarBinCenters, TString aTitle = "tCf");
 
 

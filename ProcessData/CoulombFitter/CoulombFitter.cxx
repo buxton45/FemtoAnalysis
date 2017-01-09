@@ -249,9 +249,20 @@ void CoulombFitter::LoadLednickyHFunctionFile(TString aFileBaseName)
   fInterpHistFileLednickyHFunction = TFile::Open(tFileName);
 
   fLednickyHFunctionHist = (TH1D*)fInterpHistFileLednickyHFunction->Get("LednickyHFunction");
-//    fLednickyHFunctionHist->SetDirectory(0);
+    fLednickyHFunctionHist->SetDirectory(0);
 
-//  fInterpHistFileLednickyHFunction->Close();
+  fInterpHistFileLednickyHFunction->Close();
+
+  if(fMinInterpKStar==0 && fMaxInterpKStar==0)
+  {
+    fMinInterpKStar = fLednickyHFunctionHist->GetXaxis()->GetBinCenter(1);
+    fMaxInterpKStar = fLednickyHFunctionHist->GetXaxis()->GetBinCenter(fLednickyHFunctionHist->GetNbinsX());
+  }
+  else
+  {
+    assert(fMinInterpKStar == fLednickyHFunctionHist->GetXaxis()->GetBinCenter(1));
+    assert(fMaxInterpKStar == fLednickyHFunctionHist->GetXaxis()->GetBinCenter(fLednickyHFunctionHist->GetNbinsX()));
+  }
 }
 
 //________________________________________________________________________________________________________________
@@ -270,18 +281,26 @@ cout << "Starting LoadInterpHistFile" << endl;
 //--------------------------------------------------------------
   fHyperGeo1F1RealHist = (TH3D*)fInterpHistFile->Get("HyperGeo1F1Real");
   fHyperGeo1F1ImagHist = (TH3D*)fInterpHistFile->Get("HyperGeo1F1Imag");
-//    fHyperGeo1F1RealHist->SetDirectory(0);
-//    fHyperGeo1F1ImagHist->SetDirectory(0);
+    fHyperGeo1F1RealHist->SetDirectory(0);
+    fHyperGeo1F1ImagHist->SetDirectory(0);
 
   fGTildeRealHist = (TH2D*)fInterpHistFile->Get("GTildeReal");
   fGTildeImagHist = (TH2D*)fInterpHistFile->Get("GTildeImag");
-//    fGTildeRealHist->SetDirectory(0);
-//    fGTildeImagHist->SetDirectory(0);
+    fGTildeRealHist->SetDirectory(0);
+    fGTildeImagHist->SetDirectory(0);
 
-//  fInterpHistFile->Close();
+  fInterpHistFile->Close();
 
-  fMinInterpKStar = fLednickyHFunctionHist->GetXaxis()->GetBinCenter(1);
-  fMaxInterpKStar = fLednickyHFunctionHist->GetXaxis()->GetBinCenter(fLednickyHFunctionHist->GetNbinsX());
+  if(fMinInterpKStar==0 && fMaxInterpKStar==0)
+  {
+    fMinInterpKStar = fHyperGeo1F1RealHist->GetXaxis()->GetBinCenter(1);
+    fMaxInterpKStar = fHyperGeo1F1RealHist->GetXaxis()->GetBinCenter(fHyperGeo1F1RealHist->GetNbinsX());
+  }
+  else
+  {
+    assert(fMinInterpKStar == fHyperGeo1F1RealHist->GetXaxis()->GetBinCenter(1));
+    assert(fMaxInterpKStar == fHyperGeo1F1RealHist->GetXaxis()->GetBinCenter(fHyperGeo1F1RealHist->GetNbinsX()));
+  }
 
   fMinInterpRStar = fHyperGeo1F1RealHist->GetYaxis()->GetBinCenter(1);
   fMaxInterpRStar = fHyperGeo1F1RealHist->GetYaxis()->GetBinCenter(fHyperGeo1F1RealHist->GetNbinsY());
@@ -725,7 +744,7 @@ tTimer.Start();
   fPairSample4dVec.resize(fNAnalyses, td3dVec(0, td2dVec(0, td1dVec(0))));
 
   double tBinSize = 0.01;  //TODO make this automated
-  int tNBinsKStar = fMaxFitKStar/tBinSize;  //TODO make this general, ie subtract 1 if fMaxFitKStar is on bin edge (maybe, maybe not bx of iKStarBin<tNBinsKStar)
+  int tNBinsKStar = std::round(fMaxFitKStar/tBinSize);  //TODO make this general, ie subtract 1 if fMaxFitKStar is on bin edge (maybe, maybe not bx of iKStarBin<tNBinsKStar)
 
   //Create the source Gaussians
   double tRoot2 = sqrt(2.);  //need this scale to get 4 on denominator of exp in normal dist instead of 2
@@ -758,6 +777,7 @@ tTimer.Start();
     {
       if(!fUseRandomKStarVectors) tRandomKStarElement = std::uniform_int_distribution<int>(0.0, fPairKStar4dVec[iAnaly][iKStarBin].size()-1);
       tKStarMagMin = iKStarBin*tBinSize;
+      if(iKStarBin==0) tKStarMagMin=0.004;  //TODO here and in ChargedResidualCf
       tKStarMagMax = (iKStarBin+1)*tBinSize;
       tTemp2dVec.clear();
       for(int iPair=0; iPair<fNPairsPerKStarBin; iPair++)
@@ -1307,7 +1327,7 @@ double CoulombFitter::InterpolateWfSquared(double aKStarMag, double aRStarMag, d
 
   //TODO put check to make sure file is open, not sure if assert(fInterpHistFile->IsOpen works);
   assert(fInterpHistsLoaded);
-  assert(fInterpHistFile->IsOpen());
+  //assert(fInterpHistFile->IsOpen());
 
   double tGamow = GetGamowFactor(aKStarMag);
   complex<double> tExpTermComplex = GetExpTerm(aKStarMag,aRStarMag,aTheta);
@@ -1505,8 +1525,9 @@ cout << "\t aKStarMagMax = " << aKStarMagMax << endl;
 
   //TODO make this general
   //This is messing up around aKStarMagMin = 0.29, or bin 57/58
+  //Probably fixed with use of std::round, but need to double check
   double tBinSize = 0.01;
-  int tBin = aKStarMagMin/tBinSize;
+  int tBin = std::round(aKStarMagMin/tBinSize);
 /*
 cout << "In GetFitCfContent....." << endl;
 cout << "\t tBin = " << tBin << endl;
@@ -1632,8 +1653,9 @@ double CoulombFitter::GetFitCfContentwStaticPairs(double aKStarMagMin, double aK
 
   //TODO make this general
   //This is messing up around aKStarMagMin = 0.29, or bin 57/58
+  //Probably fixed with use of std::round, but need to double check
   double tBinSize = 0.01;
-  int tBin = aKStarMagMin/tBinSize;
+  int tBin = std::round(aKStarMagMin/tBinSize);
 
   //KStarMag = fPairSample4dVec[aAnalysisNumber][tBin][i][0]
   //RStarMag = fPairSample4dVec[aAnalysisNumber][tBin][i][1]
@@ -1708,8 +1730,9 @@ double CoulombFitter::GetFitCfContentComplete(double aKStarMagMin, double aKStar
 
   //TODO make this general
   //This is messing up around aKStarMagMin = 0.29, or bin 57/58
+  //Probably fixed with use of std::round, but need to double check
   double tBinSize = 0.01;
-  int tBin = aKStarMagMin/tBinSize;
+  int tBin = std::round(aKStarMagMin/tBinSize);
 
   //KStarMag = fPairKStar4dVec[aAnalysisNumber][tBin][i][0]
   //KStarOut = fPairKStar4dVec[aAnalysisNumber][tBin][i][1]
@@ -1867,8 +1890,9 @@ double CoulombFitter::GetFitCfContentCompletewStaticPairs(double aKStarMagMin, d
 
   //TODO make this general
   //This is messing up around aKStarMagMin = 0.29, or bin 57/58
+  //Probably fixed with use of std::round, but need to double check
   double tBinSize = 0.01;
-  int tBin = aKStarMagMin/tBinSize;
+  int tBin = std::round(aKStarMagMin/tBinSize);
 
   //KStarMag = fPairSample4dVec[aAnalysisNumber][tBin][i][0]
   //RStarMag = fPairSample4dVec[aAnalysisNumber][tBin][i][1]
@@ -1982,8 +2006,9 @@ double CoulombFitter::GetFitCfContentSerialv2(double aKStarMagMin, double aKStar
 
   //TODO make this general
   //This is messing up around aKStarMagMin = 0.29, or bin 57/58
+  //Probably fixed with use of std::round, but need to double check
   double tBinSize = 0.01;
-  int tBin = aKStarMagMin/tBinSize;
+  int tBin = std::round(aKStarMagMin/tBinSize);
 
   //KStarMag = fPairKStar4dVec[aAnalysisNumber][tBin][i][0]
   //KStarOut = fPairKStar4dVec[aAnalysisNumber][tBin][i][1]

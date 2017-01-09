@@ -22,12 +22,11 @@ RM = rm
 
 ANALYZE_DIR = /home/jesse/Analysis/FemtoAnalysis/ProcessData/Analyze
 LEDNICKYFITTER_DIR = /home/jesse/Analysis/FemtoAnalysis/ProcessData/LednickyFitter
-COULOMBFITTER_DIR = /home/jesse/Analysis/FemtoAnalysis/ProcessData/CoulombFitter
 UTILITIES_DIR = /home/jesse/Analysis/FemtoAnalysis/ProcessData/Utilities
 
 LIBS   = $(shell root-config --libs) -lMinuit
 #CFLAGS = $(shell root-config --cflags) -Wall -g -O0
-CFLAGS = $(shell root-config --cflags) -pthread -Wno-deprecated-declarations -std=c++11 -m64 -Wall -I${ANALYZE_DIR} -I${LEDNICKYFITTER_DIR} -I${COULOMBFITTER_DIR} -I${UTILITIES_DIR} -g -O0 -fopenmp
+CFLAGS = $(shell root-config --cflags) -pthread -Wno-deprecated-declarations -std=c++11 -m64 -Wall -I${ANALYZE_DIR} -I${LEDNICKYFITTER_DIR} -I${UTILITIES_DIR} -g -O0 -fopenmp
 #CFLAGS = -pthread -Wno-deprecated-declarations -m64 -Wall -I${ANALYZE_DIR} -I${LEDNICKYFITTER_DIR} -g -O0 -I/opt/alice/root/alice_v5-34-30/inst/include #because I have to use c++ 99 
 
 MY_LIBS = $(addprefix build/, MathematicaSession.o WaveFunction.o ChargedResidualCf.o CoulombFitter.o LednickyFitter.o GeneralFitter.o SimpleFitter.o InterpolationHistograms.o FitChi2Histograms.o FitParameter.o FitPartialAnalysis.o FitPairAnalysis.o FitSharedAnalyses.o CfLite.o CfHeavy.o Types.o Faddeeva.o)
@@ -64,7 +63,7 @@ build/%.o: ${ANALYZE_DIR}/%.cxx ${ANALYZE_DIR}/%.h
 	g++ -c $< $(CFLAGS) -o $@
 
 build/%.o: ${LEDNICKYFITTER_DIR}/%.cxx ${LEDNICKYFITTER_DIR}/%.h
-	g++ -c $< -I${INCDIR} $(CFLAGS) -o $@
+	g++ -c $< $(CFLAGS) -o $@
 
 build/%.o: ${LEDNICKYFITTER_DIR}/%.cc ${LEDNICKYFITTER_DIR}/%.hh
 	g++ -c $< $(CFLAGS) -o $@
