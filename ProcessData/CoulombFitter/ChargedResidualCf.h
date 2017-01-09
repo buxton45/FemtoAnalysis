@@ -19,7 +19,8 @@
 #include <algorithm>
 #include <limits>
 
-
+#include "TH1.h"
+#include "TH1D.h"
 #include "TH2.h"
 #include "TH3.h"
 #include "THn.h"
@@ -62,8 +63,8 @@ public:
   int GetBinNumber(int aNbins, double aMin, double aMax, double aValue);
   int GetBinNumber(double aBinWidth, double aMin, double aMax, double aValue);
 
-
-  void BuildPairSample3dVec(double aMaxFitKStar=1.0, int aNPairsPerKStarBin=16384);
+  td3dVec BuildPairKStar3dVecFromTxt(double aMaxFitKStar, TString aFileName="/home/jesse/Analysis/FemtoAnalysis/ProcessData/CoulombFitter/PairKStar3dVec_20160610_XiKchP_0010.txt");
+  void BuildPairSample3dVec(double aMaxFitKStar=0.3, int aNPairsPerKStarBin=163);
   void UpdatePairRadiusParameters(double aNewRadius);
 
   //Note:  Linear, Bilinear, and Trilinear will essentially be copies of TH1::, TH2::, and TH3::Interpolate
@@ -87,10 +88,11 @@ public:
 
   void SetRandomKStar3Vec(TVector3* aKStar3Vec, double aKStarMagMin, double aKStarMagMax);
 
-  double GetFitCfContentCompletewStaticPairs(double aKStarMagMin, double aKStarMagMax, double *par);  //TODO!!!!!
+  double GetFitCfContentCompletewStaticPairs(double aKStarMagMin, double aKStarMagMax, double *par, TH2D* aTH2);  //TODO!!!!!
 
 
-  td1dVec GetCoulombResidualCorrelation(double *aParentCfParams, vector<double> &aKStarBinCenters);
+  td1dVec GetCoulombResidualCorrelation(double *aParentCfParams, vector<double> &aKStarBinCenters, TH2D* aTH2);
+  TH1D* Convert1dVecToHist(td1dVec &aCfVec, td1dVec &aKStarBinCenters, TString aTitle = "tCf");
 
 
   //inline (i.e. simple) functions
@@ -99,6 +101,7 @@ public:
   void SetTurnOffCoulomb(bool aTurnOffCoulomb);
 
   void SetIncludeSingletAndTriplet(bool aIncludeSingletAndTriplet);
+  void SetUseRandomKStarVectors(bool aUseRandomKStarVectors);
 
 protected:
   ResidualType fResidualType;
@@ -106,6 +109,7 @@ protected:
 
   bool fTurnOffCoulomb;
   bool fIncludeSingletAndTriplet;
+  bool fUseRandomKStarVectors;
 
   CoulombType fCoulombType;
   WaveFunction* fWaveFunction;
@@ -149,5 +153,6 @@ inline WaveFunction* ChargedResidualCf::GetWaveFunctionObject() {return fWaveFun
 inline void ChargedResidualCf::SetTurnOffCoulomb(bool aTurnOffCoulomb) {fTurnOffCoulomb = aTurnOffCoulomb; fWaveFunction->SetTurnOffCoulomb(fTurnOffCoulomb);}
 
 inline void ChargedResidualCf::SetIncludeSingletAndTriplet(bool aIncludeSingletAndTriplet) {fIncludeSingletAndTriplet = aIncludeSingletAndTriplet;}
+inline void ChargedResidualCf::SetUseRandomKStarVectors(bool aUseRandomKStarVectors) {fUseRandomKStarVectors = aUseRandomKStarVectors;}
 
 #endif

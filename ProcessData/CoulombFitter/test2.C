@@ -37,7 +37,7 @@ int main(int argc, char **argv)
 
   double tBinWidth = 0.01;
   double tKStarMin = 0.0;
-  double tKStarMax = 1.0;
+  double tKStarMax = 0.3;
   int tNbins = (tKStarMax-tKStarMin)/tBinWidth;
 
   td1dVec tKStarBinCenters (tNbins,0.);
@@ -47,19 +47,29 @@ int main(int argc, char **argv)
 cout << "tKStarBinCenters[i] = " << tKStarBinCenters[i] << endl;
   }
 
+TH2D* tTest = new TH2D("tTest","tTest",30,0.,0.3,36,0.,3.14159);
+
   tResidualCf->SetIncludeSingletAndTriplet(true);
-  td1dVec tCf = tResidualCf->GetCoulombResidualCorrelation(tParams,tKStarBinCenters);
+  td1dVec tCf = tResidualCf->GetCoulombResidualCorrelation(tParams,tKStarBinCenters,tTest);
+  TCanvas* tCan2 = new TCanvas("tCan2","tCan2");
+  tCan2->cd();
+  tTest->Draw("colz");
 
   assert(tCf.size() == tKStarBinCenters.size());
-
+/*
   for(unsigned int i=0; i<tCf.size(); i++)
   {
     cout << "i = " << i << endl;
-    cout << "tKStarBinCenter = " << tKStarBinCenters[i] << endl;
+    cout << "tKStarBinCenters = " << tKStarBinCenters[i] << endl;
     cout << "tCf = " << tCf[i] << endl;
     cout << endl;
   }
 
+  TH1D* tCfHist = tResidualCf->Convert1dVecToHist(tCf,tKStarBinCenters);
+  TCanvas* tCan = new TCanvas("tCan","tCan");
+  tCan->cd();
+  tCfHist->Draw();
+*/
 //-------------------------------------------------------------------------------
   tFullTimer.Stop();
   cout << "Finished program: ";
