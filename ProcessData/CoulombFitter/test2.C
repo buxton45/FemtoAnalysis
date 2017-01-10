@@ -21,6 +21,7 @@ int main(int argc, char **argv)
   TString tHFunctionLocation = "/home/jesse/Analysis/FemtoAnalysis/ProcessData/CoulombFitter/LednickyHFunction";
 
   ResidualType tResidualType = kXiCKchP;
+  bool tUseExpXiData = false;
 
   ChargedResidualCf* tResidualCf = new ChargedResidualCf(tResidualType,tInterpHistLocation,tHFunctionLocation);
 
@@ -48,7 +49,7 @@ cout << "tKStarBinCenters[i] = " << tKStarBinCenters[i] << endl;
   }
 
   tResidualCf->SetIncludeSingletAndTriplet(true);
-  td1dVec tCf = tResidualCf->GetCoulombResidualCorrelation(tParams,tKStarBinCenters);
+  td1dVec tCf = tResidualCf->GetCoulombResidualCorrelation(tParams,tKStarBinCenters,tUseExpXiData);
 
   assert(tCf.size() == tKStarBinCenters.size());
 
