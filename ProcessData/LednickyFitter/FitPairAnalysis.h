@@ -75,7 +75,7 @@ public:
   void BuildModelKStarHeavyCfFakeIdeal(double aMinNorm, double aMaxNorm, int aRebin=1);
   void BuildModelCfFakeIdealCfFakeRatio(double aMinNorm=0.32, double aMaxNorm=0.4, int aRebinFactor=1);
 
-  TH1F* GetCorrectedFitHisto(bool aMomResCorrection=true, bool aNonFlatBgdCorrection=true, bool aIncludeResiduals=true);
+  TH1F* GetCorrectedFitHisto(bool aMomResCorrection=true, bool aNonFlatBgdCorrection=true, bool aIncludeResiduals=false);
 
   void LoadTransformMatrices(int aRebin=2, TString aFileLocation="");
   vector<TH2D*> GetTransformMatrices(int aRebin=2, TString aFileLocation="");

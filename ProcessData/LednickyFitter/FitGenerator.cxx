@@ -404,7 +404,7 @@ TCanvas* FitGenerator::DrawKStarCfs(bool aSaveImage, bool aDrawSysErrors)
       TH1* tHistToPlot;
       if(aDrawSysErrors)
       {
-        TH1* tHistToPlot = (TH1*)fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetCfwSysErrors();
+        tHistToPlot = (TH1*)fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetCfwSysErrors();
           tHistToPlot->SetFillStyle(0);  //for box error bars to draw correctly
       }
 
@@ -801,10 +801,10 @@ void FitGenerator::SetDefaultSharedParameters()
     if(fGeneratorType==kPair)
     {
       SetRadiusStartValue(tStartValuesPair[fCentralityTypes[iCent]][1],fCentralityTypes[iCent]);
-      SetRadiusLimits(2.,8.);
+      SetRadiusLimits(2.,8.,iCent);
 
       SetScattParamStartValues(tStartValuesPair[fCentralityTypes[iCent]][2],tStartValuesPair[fCentralityTypes[iCent]][3],tStartValuesPair[fCentralityTypes[iCent]][4]);
-      SetScattParamLimits({{0.,0.},{0.,0.},{0.,0.}});
+      SetScattParamLimits({{0.,0.},{0.,0.},{0.,0.}}); //TODO do not need to set scatt params for each centrality!
 
       SetLambdaParamStartValue(tStartValuesPair[fCentralityTypes[iCent]][0],false,fCentralityTypes[iCent]);
       SetLambdaParamLimits(0.1,0.8,false,fCentralityTypes[iCent]);
@@ -813,10 +813,10 @@ void FitGenerator::SetDefaultSharedParameters()
     else if(fGeneratorType==kConjPair)
     {
       SetRadiusStartValue(tStartValuesConjPair[fCentralityTypes[iCent]][1],fCentralityTypes[iCent]);
-      SetRadiusLimits(2.,8.);
+      SetRadiusLimits(2.,8.,iCent);
 
       SetScattParamStartValues(tStartValuesConjPair[fCentralityTypes[iCent]][2],tStartValuesConjPair[fCentralityTypes[iCent]][3],tStartValuesConjPair[fCentralityTypes[iCent]][4]);
-      SetScattParamLimits({{0.,0.},{0.,0.},{0.,0.}});
+      SetScattParamLimits({{0.,0.},{0.,0.},{0.,0.}});  //TODO do not need to set scatt params for each centrality!
 
       SetLambdaParamStartValue(tStartValuesConjPair[fCentralityTypes[iCent]][0],false,fCentralityTypes[iCent]);
       SetLambdaParamLimits(0.1,0.8,false,fCentralityTypes[iCent]);
@@ -825,10 +825,10 @@ void FitGenerator::SetDefaultSharedParameters()
     else if(fGeneratorType==kPairwConj)
     {
       SetRadiusStartValue(tStartValuesPair[fCentralityTypes[iCent]][1],fCentralityTypes[iCent]);
-      SetRadiusLimits(2.,8.);
+      SetRadiusLimits(2.,8.,iCent);
 
       SetScattParamStartValues(tStartValuesPair[fCentralityTypes[iCent]][2],tStartValuesPair[fCentralityTypes[iCent]][3],tStartValuesPair[fCentralityTypes[iCent]][4]);
-      SetScattParamLimits({{0.,0.},{0.,0.},{0.,0.}});
+      SetScattParamLimits({{0.,0.},{0.,0.},{0.,0.}});  //TODO do not need to set scatt params for each centrality!
 
       SetLambdaParamStartValue(tStartValuesPair[fCentralityTypes[iCent]][0],false,fCentralityTypes[iCent]);
       SetLambdaParamLimits(0.1,0.8,false,fCentralityTypes[iCent]);
@@ -1123,6 +1123,12 @@ void FitGenerator::SetAllParameters()
 //________________________________________________________________________________________________________________
 void FitGenerator::DoFit(bool aApplyMomResCorrection, bool aApplyNonFlatBackgroundCorrection, bool aIncludeResiduals, double aMaxFitKStar)
 {
+  if(aIncludeResiduals)  //since this involves the CoulombFitter, I should place limits on parameters used in interpolations
+  {
+    for(unsigned int iCent=0; iCent<fCentralityTypes.size(); iCent++) SetRadiusLimits(1.,15.,iCent);
+    SetScattParamLimits({{-10.,10.},{-10.,10.},{-10.,10.}});
+  }
+
   SetAllParameters();
 
   fSharedAn->CreateMinuitParameters();

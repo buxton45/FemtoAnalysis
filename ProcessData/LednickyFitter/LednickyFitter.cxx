@@ -472,9 +472,13 @@ void LednickyFitter::CalculateFitFunction(int &npar, double &chi2, double *par)
 
       double x[1];
       bool tRejectOmega = tFitPartialAnalysis->RejectOmega();
-      //bool tAreParamsSame = AreParamsSame(tCurrentFitPar,tPar,tNFitParPerAnalysis);
+//      bool tAreParamsSame = AreParamsSame(tCurrentFitPar,tPar,tNFitParPerAnalysis);
 
       if(!fApplyMomResCorrection && !fIncludeResidualCorrelations) tNbinsXToBuild = tNbinsXToFit;
+
+      vector<double> tFitCfContent;
+      vector<double> tCorrectedFitCfContent;
+
       for(int ix=1; ix <= tNbinsXToBuild; ix++)
       {
         tKStarBinCenters[ix-1] = tXaxisNum->GetBinCenter(ix);
@@ -486,7 +490,7 @@ void LednickyFitter::CalculateFitFunction(int &npar, double &chi2, double *par)
         tPrimaryFitCfContent[ix-1] = LednickyEq(x,tPar);
       }
 
-      vector<double> tFitCfContent;
+
       if(fIncludeResidualCorrelations) 
       {
         double tLambda_SigK = 0.20*tOverallLambda;  //for now, primary lambda scaled by some factor
@@ -548,7 +552,7 @@ void LednickyFitter::CalculateFitFunction(int &npar, double &chi2, double *par)
       }
       else tFitCfContent = tPrimaryFitCfContent;
 
-      vector<double> tCorrectedFitCfContent;
+
       if(fApplyMomResCorrection) tCorrectedFitCfContent = ApplyMomResCorrection(tFitCfContent, tKStarBinCenters, tMomResMatrix);
       else tCorrectedFitCfContent = tFitCfContent;
 
@@ -700,6 +704,7 @@ void LednickyFitter::DoFit()
 
     tPar[i] = tempMinParam;
   }
+/*
   if(fErrFlg==0)
   {
     int tNpar;
@@ -709,7 +714,7 @@ void LednickyFitter::DoFit()
     fReturnPrimaryWithResidualsToAnalyses = false;
   }
   delete[] tPar;
-
+*/
   fFitSharedAnalyses->SetMinuitMinParams(fMinParams);
   fFitSharedAnalyses->SetMinuitParErrors(fParErrors);
   fFitSharedAnalyses->ReturnFitParametersToAnalyses();

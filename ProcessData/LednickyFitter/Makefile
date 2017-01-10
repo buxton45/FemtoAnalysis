@@ -26,7 +26,7 @@ CFLAGS = $(shell root-config --cflags) -Wall -std=c++11 -I${ANALYZE_DIR} -I${LED
 MY_LIBS = $(addprefix build/, FitParameter.o FitChi2Histograms.o FitPartialAnalysis.o FitPairAnalysis.o FitSharedAnalyses.o MathematicaSession.o WaveFunction.o ChargedResidualCf.o LednickyFitter.o FitGenerator.o CfLite.o CfHeavy.o Types.o Faddeeva.o FitSystematicAnalysis.o CanvasPartition.o)
 
 
-all: runLamKchP runLamKchPTest runCompareKchFix2 runFits runTest runGenerator runScattParamValues
+all: runLamKchP runLamKchPTest runCompareKchFix2 runFits runTest runGenerator runScattParamValues runLamKchPvsKchM
 
 runLamKchP: ${MY_LIBS} BuildLamKchP.C
 	g++ BuildLamKchP.C ${MY_LIBS} -I${INCDIR} -o runLamKchP -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS)
@@ -48,6 +48,9 @@ runGenerator: ${MY_LIBS} GenerateFits.C
 
 runScattParamValues: ${MY_LIBS} ScattParamValues.C
 	g++ ScattParamValues.C ${MY_LIBS} -I${INCDIR} -o runScattParamValues -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS)
+
+runLamKchPvsKchM: ${MY_LIBS} DrawLamKchPvsLamKchM.C
+	g++ DrawLamKchPvsLamKchM.C ${MY_LIBS} -I${INCDIR} -o runLamKchPvsKchM -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS)
 
 build/%.o: ${ANALYZE_DIR}/%.cxx ${ANALYZE_DIR}/%.h
 	g++ -c $< $(CFLAGS) -o $@

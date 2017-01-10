@@ -23,7 +23,7 @@ ChargedResidualCf::ChargedResidualCf(ResidualType aResidualType, TString aInterp
   fTurnOffCoulomb(false),
   fIncludeSingletAndTriplet(false),
   fUseRandomKStarVectors(true),
-  fUseExpXiData(true),
+  fUseExpXiData(false),
   fExpXiData(0),
 
   fCoulombType(kRepulsive),
