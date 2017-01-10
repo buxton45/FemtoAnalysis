@@ -75,7 +75,7 @@ public:
   void ApplyNonFlatBackgroundCorrection(vector<double> &aCf, vector<double> &aKStarBinCenters, TF1* aNonFlatBgd);
   vector<double> ApplyMomResCorrection(vector<double> &aCf, vector<double> &aKStarBinCenters, TH2* aMomResMatrix);
   vector<double> GetNeutralResidualCorrelation(double *aParentCfParams, vector<double> &aKStarBinCenters, TH2* aTransformMatrix);
-  vector<double> GetChargedResidualCorrelation(ResidualType aResidualType, double *aParentCfParams, vector<double> &aKStarBinCenters);
+  vector<double> GetChargedResidualCorrelation(ResidualType aResidualType, double *aParentCfParams, vector<double> &aKStarBinCenters, bool aUseExpXiData=false);
   vector<double> CombinePrimaryWithResiduals(td1dVec &aLambdaValues, td2dVec &aCfs);
   void ApplyNormalization(double aNorm, td1dVec &aCf);
 
@@ -117,6 +117,7 @@ protected:
   bool fApplyMomResCorrection;
   bool fIncludeResidualCorrelations;
   bool fResidualsInitiated;
+  bool fReturnPrimaryWithResidualsToAnalyses;
 
   ChargedResidualCf* fResXiCK;
   ChargedResidualCf* fResOmegaK;

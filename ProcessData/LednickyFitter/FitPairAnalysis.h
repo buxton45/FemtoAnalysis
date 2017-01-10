@@ -75,7 +75,7 @@ public:
   void BuildModelKStarHeavyCfFakeIdeal(double aMinNorm, double aMaxNorm, int aRebin=1);
   void BuildModelCfFakeIdealCfFakeRatio(double aMinNorm=0.32, double aMaxNorm=0.4, int aRebinFactor=1);
 
-  TH1F* GetCorrectedFitHisto(bool aMomResCorrection=true, bool aNonFlatBgdCorrection=true);
+  TH1F* GetCorrectedFitHisto(bool aMomResCorrection=true, bool aNonFlatBgdCorrection=true, bool aIncludeResiduals=true);
 
   void LoadTransformMatrices(int aRebin=2, TString aFileLocation="");
   vector<TH2D*> GetTransformMatrices(int aRebin=2, TString aFileLocation="");
@@ -126,6 +126,8 @@ public:
 
   bool AreTrainResults();
 
+  void SetPrimaryWithResiduals(td1dVec &aPrimWithResid);
+
 private:
   AnalysisRunType fAnalysisRunType;
   TString fAnalysisName;
@@ -168,6 +170,8 @@ private:
   TH1* fModelCfFakeIdealCfFakeRatio;
 
   vector<TH2D*> fTransformMatrices;
+
+  td1dVec fPrimaryWithResiduals;
 
 #ifdef __ROOT__
   ClassDef(FitPairAnalysis, 1)
@@ -212,6 +216,8 @@ inline double FitPairAnalysis::GetKStarMinNorm() {return fKStarMinNorm;}
 inline double FitPairAnalysis::GetKStarMaxNorm() {return fKStarMaxNorm;}
 
 inline bool FitPairAnalysis::AreTrainResults() {if(fAnalysisRunType==kTrain || fAnalysisRunType==kTrainSys) return true;}
+
+inline void FitPairAnalysis::SetPrimaryWithResiduals(td1dVec &aPrimWithResid) {fPrimaryWithResiduals=aPrimWithResid;}
 #endif
 
 

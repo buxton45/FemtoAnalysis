@@ -47,7 +47,9 @@ FitPairAnalysis::FitPairAnalysis(TString aAnalysisName, vector<FitPartialAnalysi
   fModelKStarHeavyCfFake(0),
   fModelKStarHeavyCfFakeIdeal(0),
   fModelCfFakeIdealCfFakeRatio(0),
-  fTransformMatrices(0)
+  fTransformMatrices(0),
+
+  fPrimaryWithResiduals(0)
 
 {
 
@@ -107,7 +109,9 @@ FitPairAnalysis::FitPairAnalysis(TString aFileLocationBase, AnalysisType aAnalys
   fModelKStarHeavyCfFake(0),
   fModelKStarHeavyCfFakeIdeal(0),
   fModelCfFakeIdealCfFakeRatio(0),
-  fTransformMatrices(0)
+  fTransformMatrices(0),
+
+  fPrimaryWithResiduals(0)
 
 {
   fAnalysisName = TString(cAnalysisBaseTags[fAnalysisType]) + TString(cCentralityTags[fCentralityType]);
@@ -178,7 +182,9 @@ FitPairAnalysis::FitPairAnalysis(TString aFileLocationBase, TString aFileLocatio
   fModelKStarHeavyCfFake(0),
   fModelKStarHeavyCfFakeIdeal(0),
   fModelCfFakeIdealCfFakeRatio(0),
-  fTransformMatrices(0)
+  fTransformMatrices(0),
+
+  fPrimaryWithResiduals(0)
 
 {
   fAnalysisName = TString(cAnalysisBaseTags[fAnalysisType]) + TString(cCentralityTags[fCentralityType]);
@@ -617,17 +623,30 @@ void FitPairAnalysis::BuildModelCfFakeIdealCfFakeRatio(double aMinNorm, double a
 
 
 //________________________________________________________________________________________________________________
-TH1F* FitPairAnalysis::GetCorrectedFitHisto(bool aMomResCorrection, bool aNonFlatBgdCorrection)
+TH1F* FitPairAnalysis::GetCorrectedFitHisto(bool aMomResCorrection, bool aNonFlatBgdCorrection, bool aIncludeResiduals)
 {
   int tNbinsX = fKStarCf->GetNbinsX();
   double tKStarMin = fKStarCf->GetBinLowEdge(1);
   double tKStarMax = fKStarCf->GetBinLowEdge(tNbinsX+1);
 
   TH1F* tUncorrected = new TH1F("tUncorrected","tUncorrected",tNbinsX,tKStarMin,tKStarMax);
-  for(int i=1; i<=tNbinsX; i++)
+
+  if(aIncludeResiduals)
   {
-    tUncorrected->SetBinContent(i,fFit->Eval(tUncorrected->GetBinCenter(i)));
-    tUncorrected->SetBinError(i,0.);
+    assert(tNbinsX==(int)fPrimaryWithResiduals.size());
+    for(int i=1; i<=tNbinsX; i++)
+    {
+      tUncorrected->SetBinContent(i,fPrimaryWithResiduals[i-1]);
+      tUncorrected->SetBinError(i,0.);
+    }
+  }
+  else
+  {
+    for(int i=1; i<=tNbinsX; i++)
+    {
+      tUncorrected->SetBinContent(i,fFit->Eval(tUncorrected->GetBinCenter(i)));
+      tUncorrected->SetBinError(i,0.);
+    }
   }
 
   if(aNonFlatBgdCorrection)

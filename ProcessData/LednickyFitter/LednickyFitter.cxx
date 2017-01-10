@@ -34,6 +34,7 @@ LednickyFitter::LednickyFitter(FitSharedAnalyses* aFitSharedAnalyses, double aMa
   fApplyMomResCorrection(false), //TODO change deault to true here AND in CoulombFitter
   fIncludeResidualCorrelations(false),  //TODO change deault to true here AND in CoulombFitter
   fResidualsInitiated(false),
+  fReturnPrimaryWithResidualsToAnalyses(false),
 
   fResXiCK(),
   fResOmegaK(),
@@ -265,29 +266,29 @@ vector<double> LednickyFitter::GetNeutralResidualCorrelation(double *aParentCfPa
 }
 
 //________________________________________________________________________________________________________________
-vector<double> LednickyFitter::GetChargedResidualCorrelation(ResidualType aResidualType, double *aParentCfParams, vector<double> &aKStarBinCenters)
+vector<double> LednickyFitter::GetChargedResidualCorrelation(ResidualType aResidualType, double *aParentCfParams, vector<double> &aKStarBinCenters, bool aUseExpXiData)
 {
   td1dVec tReturnCfVec;
 
   switch(aResidualType) {
   case kXiCKchP:
   case kXiCKchM:
-    tReturnCfVec = fResXiCK->GetCoulombResidualCorrelation(aParentCfParams,aKStarBinCenters);
+    tReturnCfVec = fResXiCK->GetCoulombResidualCorrelation(aParentCfParams,aKStarBinCenters,aUseExpXiData);
     break;
 
   case kAXiCKchP:
   case kAXiCKchM:
-    tReturnCfVec = fResAXiCK->GetCoulombResidualCorrelation(aParentCfParams,aKStarBinCenters);
+    tReturnCfVec = fResAXiCK->GetCoulombResidualCorrelation(aParentCfParams,aKStarBinCenters,aUseExpXiData);
     break;
 
   case kOmegaKchP:
   case kOmegaKchM:
-    tReturnCfVec = fResOmegaK->GetCoulombResidualCorrelation(aParentCfParams,aKStarBinCenters);
+    tReturnCfVec = fResOmegaK->GetCoulombResidualCorrelation(aParentCfParams,aKStarBinCenters,aUseExpXiData);
     break;
 
   case kAOmegaKchP:
   case kAOmegaKchM:
-    tReturnCfVec = fResAOmegaK->GetCoulombResidualCorrelation(aParentCfParams,aKStarBinCenters);
+    tReturnCfVec = fResAOmegaK->GetCoulombResidualCorrelation(aParentCfParams,aKStarBinCenters,aUseExpXiData);
     break;
 
 
@@ -313,7 +314,7 @@ vector<double> LednickyFitter::CombinePrimaryWithResiduals(td1dVec &aLambdaValue
     for(unsigned int iCf=0; iCf<aCfs.size(); iCf++)
     {
       //NOTE:  //TODO confusing definitions of Cf and whatnot in Jai's analysis
-      tReturnCf[iBin] += aLambdaValues[iCf]*((aCfs[iCf][iBin]-1.0)/aLambdaValues[iCf]);
+      if(aCfs[iCf][iBin] > 0.) tReturnCf[iBin] += aLambdaValues[iCf]*((aCfs[iCf][iBin]-1.0)/aLambdaValues[iCf]);
     }
   }
   return tReturnCf;
@@ -453,8 +454,10 @@ void LednickyFitter::CalculateFitFunction(int &npar, double &chi2, double *par)
       assert(tNFitParams == 6);
       //NOTE: CANNOT use sizeof(tPar)/sizeof(tPar[0]) trick here becasue tPar is pointer
       double *tPar = new double[tNFitParams];
-
-      tPar[0] = par[tLambdaMinuitParamNumber];
+      double tOverallLambda = par[tLambdaMinuitParamNumber];
+      //tPar[0] = par[tLambdaMinuitParamNumber];
+      if(fIncludeResidualCorrelations) tPar[0] = 0.25*tOverallLambda;
+      else tPar[0] = tOverallLambda;
       tPar[1] = par[tRadiusMinuitParamNumber];
       tPar[2] = par[tRef0MinuitParamNumber];
       tPar[3] = par[tImf0MinuitParamNumber];
@@ -486,11 +489,11 @@ void LednickyFitter::CalculateFitFunction(int &npar, double &chi2, double *par)
       vector<double> tFitCfContent;
       if(fIncludeResidualCorrelations) 
       {
-        double tLambda_SigK = 0.78*tPar[0];  //for now, primary lambda scaled by some factor
+        double tLambda_SigK = 0.20*tOverallLambda;  //for now, primary lambda scaled by some factor
         double *tPar_SigK = AdjustLambdaParam(tPar,tLambda_SigK,tNFitParams);
         td1dVec tResidual_SigK = GetNeutralResidualCorrelation(tPar_SigK,tKStarBinCenters,tFitPairAnalysis->GetTransformMatrices()[0]);
 
-        double tLambda_Xi0K = 0.52*tPar[0];  //for now, primary lambda scaled by some factor
+        double tLambda_Xi0K = 0.13*tOverallLambda;  //for now, primary lambda scaled by some factor
         double *tPar_Xi0K = AdjustLambdaParam(tPar,tLambda_Xi0K,tNFitParams);
         td1dVec tResidual_Xi0K = GetNeutralResidualCorrelation(tPar_Xi0K,tKStarBinCenters,tFitPairAnalysis->GetTransformMatrices()[2]);
 
@@ -522,17 +525,21 @@ void LednickyFitter::CalculateFitFunction(int &npar, double &chi2, double *par)
           assert(0);
         }
 
-        double tLambda_XiCK = 0.52*tPar[0];  //for now, primary lambda scaled by some factor
-        double *tPar_XiCK = AdjustLambdaParam(tPar,tLambda_XiCK,tNFitParams);
-        td1dVec tResidual_XiCK = GetChargedResidualCorrelation(tResXiCKType,tPar_XiCK,tKStarBinCenters);
+        bool tUseExpXiData = false;
+        if(tFitPartialAnalysis->GetCentralityType()==k0010) tUseExpXiData=true;
 
-        double tLambda_OmegaK = 0.02*tPar[0];  //for now, primary lambda scaled by some factor
+        double tLambda_XiCK = 0.12*tOverallLambda;  //for now, primary lambda scaled by some factor
+        double *tPar_XiCK = AdjustLambdaParam(tPar,tLambda_XiCK,tNFitParams);
+        td1dVec tResidual_XiCK = GetChargedResidualCorrelation(tResXiCKType,tPar_XiCK,tKStarBinCenters,tUseExpXiData);
+
+        double tLambda_OmegaK = 0.01*tOverallLambda;  //for now, primary lambda scaled by some factor
         double *tPar_OmegaK = AdjustLambdaParam(tPar,tLambda_OmegaK,tNFitParams);
-        td1dVec tResidual_OmegaK = GetChargedResidualCorrelation(tResOmegaKType,tPar_OmegaK,tKStarBinCenters);
+        td1dVec tResidual_OmegaK = GetChargedResidualCorrelation(tResOmegaKType,tPar_OmegaK,tKStarBinCenters,tUseExpXiData);
 
         vector<double> tLambdas{tPar[0],tLambda_SigK,tLambda_Xi0K,tLambda_XiCK,tLambda_OmegaK};
         td2dVec tAllCfs{tPrimaryFitCfContent,tResidual_SigK,tResidual_Xi0K,tResidual_XiCK,tResidual_OmegaK};
         tFitCfContent = CombinePrimaryWithResiduals(tLambdas, tAllCfs);
+        if(fReturnPrimaryWithResidualsToAnalyses) tFitPairAnalysis->SetPrimaryWithResiduals(tFitCfContent);
 
         delete[] tPar_SigK;
         delete[] tPar_Xi0K;
@@ -679,6 +686,8 @@ void LednickyFitter::DoFit()
 
   fNDF = fNpFits-fNvpar;
 
+
+  double *tPar = new double[tNParams];
   //get result
   for(int i=0; i<tNParams; i++)
   {
@@ -688,7 +697,18 @@ void LednickyFitter::DoFit()
     
     fMinParams.push_back(tempMinParam);
     fParErrors.push_back(tempParError);
+
+    tPar[i] = tempMinParam;
   }
+  if(fErrFlg==0)
+  {
+    int tNpar;
+    double tChi2;
+    fReturnPrimaryWithResidualsToAnalyses = true;
+    CalculateFitFunction(tNpar,tChi2,tPar);
+    fReturnPrimaryWithResidualsToAnalyses = false;
+  }
+  delete[] tPar;
 
   fFitSharedAnalyses->SetMinuitMinParams(fMinParams);
   fFitSharedAnalyses->SetMinuitParErrors(fParErrors);

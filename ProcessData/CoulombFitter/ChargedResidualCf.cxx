@@ -23,6 +23,8 @@ ChargedResidualCf::ChargedResidualCf(ResidualType aResidualType, TString aInterp
   fTurnOffCoulomb(false),
   fIncludeSingletAndTriplet(false),
   fUseRandomKStarVectors(true),
+  fUseExpXiData(true),
+  fExpXiData(0),
 
   fCoulombType(kRepulsive),
   fWaveFunction(0),
@@ -1178,6 +1180,60 @@ void ChargedResidualCf::SetRandomKStar3Vec(TVector3* aKStar3Vec, double aKStarMa
 }
 
 
+//________________________________________________________________________________________________________________
+td1dVec ChargedResidualCf::GetExpXiData(double aMaxKStar)
+{
+  if(fExpXiData.size()==0)
+  {
+    TString tFileLocationBase = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cXicKch_20160202/Results_cXicKch_20160202";
+    AnalysisType tAnType;
+    CentralityType tCentType = k0010;
+    AnalysisRunType tRunType=kGrid;
+    int tNFitPartialAnalysis=5;
+
+    switch(fResidualType) {
+    case kXiCKchP:
+    case kOmegaKchP:
+      tAnType = kXiKchP;
+      break;
+
+    case kAXiCKchP:
+    case kAOmegaKchP:
+      tAnType = kAXiKchP;
+      break;
+
+    case kXiCKchM:
+    case kOmegaKchM:
+      tAnType = kXiKchM;
+      break;
+
+    case kAXiCKchM:
+    case kAOmegaKchM:
+      tAnType = kAXiKchM;
+      break;
+
+    default:
+      cout << "ERROR: ChargedResidualCf::GetExpXiData():  fResidualType = " << fResidualType << " is not apropriate" << endl << endl;
+      assert(0);
+    }
+
+    FitPairAnalysis* tPairAn = new FitPairAnalysis(tFileLocationBase,tAnType,tCentType,tRunType,tNFitPartialAnalysis);
+    tPairAn->RebinKStarCfHeavy(2,0.32,0.4);
+    TH1D* tExpHist = (TH1D*)tPairAn->GetKStarCfHeavy()->GetHeavyCfClone();
+    assert(tExpHist->GetXaxis()->GetBinWidth(1)==0.01);  //TODO make general
+    assert(tExpHist->GetNbinsX()==100);
+
+    int tNbins = std::round(aMaxKStar/tExpHist->GetXaxis()->GetBinWidth(1));
+
+    td1dVec tReturnVec(tNbins,0.);
+    for(int i=0; i<tNbins; i++) tReturnVec[i] = tExpHist->GetBinContent(i+1);
+
+    fExpXiData = tReturnVec;
+  }
+
+  return fExpXiData;
+}
+
 
 
 //________________________________________________________________________________________________________________
@@ -1322,20 +1378,27 @@ double ChargedResidualCf::GetFitCfContentCompletewStaticPairs(double aKStarMagMi
 
 
 //________________________________________________________________________________________________________________
-td1dVec ChargedResidualCf::GetCoulombResidualCorrelation(double *aParentCfParams, vector<double> &aKStarBinCenters)
+td1dVec ChargedResidualCf::GetCoulombResidualCorrelation(double *aParentCfParams, vector<double> &aKStarBinCenters, bool aUseExpXiData)
 {
+  fUseExpXiData = aUseExpXiData;
   double tKStarBinWidth = aKStarBinCenters[1]-aKStarBinCenters[0];
 
-  vector<double> tParentCf(aKStarBinCenters.size(),0.);
   double tKStarMin, tKStarMax;
-  for(unsigned int i=0; i<aKStarBinCenters.size(); i++)
+  tKStarMax = aKStarBinCenters[aKStarBinCenters.size()-1]+tKStarBinWidth/2.;
+  vector<double> tParentCf(aKStarBinCenters.size(),0.);
+  if(fUseExpXiData) tParentCf = GetExpXiData(tKStarMax);
+  else
   {
-    tKStarMin = aKStarBinCenters[i]-tKStarBinWidth/2.;
-    tKStarMax = aKStarBinCenters[i]+tKStarBinWidth/2.;
 
-    if(i==0) tKStarMin = 0.; //TODO this is small, but nonzero
+    for(unsigned int i=0; i<aKStarBinCenters.size(); i++)
+    {
+      tKStarMin = aKStarBinCenters[i]-tKStarBinWidth/2.;
+      tKStarMax = aKStarBinCenters[i]+tKStarBinWidth/2.;
 
-    tParentCf[i] = GetFitCfContentCompletewStaticPairs(tKStarMin,tKStarMax,aParentCfParams);
+      if(i==0) tKStarMin = 0.; //TODO this is small, but nonzero
+
+      tParentCf[i] = GetFitCfContentCompletewStaticPairs(tKStarMin,tKStarMax,aParentCfParams);
+    }
   }
 
   unsigned int tDaughterPairKStarBin, tParentPairKStarBin;

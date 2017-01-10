@@ -40,6 +40,9 @@ using std::vector;
 #include "WaveFunction.h"
 class WaveFunction;
 
+#include "FitPairAnalysis.h"
+class FitPairAnalysis;
+
 #include "Types.h"
 
 class ChargedResidualCf {
@@ -87,11 +90,11 @@ public:
   bool CanInterpAll(double aKStar, double aRStar, double aTheta, double aReF0, double aImF0, double aD0);
 
   void SetRandomKStar3Vec(TVector3* aKStar3Vec, double aKStarMagMin, double aKStarMagMax);
-
+  td1dVec GetExpXiData(double aMaxKStar=1.0);
   double GetFitCfContentCompletewStaticPairs(double aKStarMagMin, double aKStarMagMax, double *par);  //TODO!!!!!
 
 
-  td1dVec GetCoulombResidualCorrelation(double *aParentCfParams, vector<double> &aKStarBinCenters);
+  td1dVec GetCoulombResidualCorrelation(double *aParentCfParams, vector<double> &aKStarBinCenters, bool aUseExpXiData=false);
   TH1D* Convert1dVecToHist(td1dVec &aCfVec, td1dVec &aKStarBinCenters, TString aTitle = "tCf");
 
 
@@ -110,6 +113,8 @@ protected:
   bool fTurnOffCoulomb;
   bool fIncludeSingletAndTriplet;
   bool fUseRandomKStarVectors;
+  bool fUseExpXiData;
+  td1dVec fExpXiData;
 
   CoulombType fCoulombType;
   WaveFunction* fWaveFunction;
