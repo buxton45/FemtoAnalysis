@@ -18,13 +18,13 @@ int main(int argc, char **argv)
   int tNPartialAnalysis = 2;
   CentralityType tCentType = kMB;
   FitGeneratorType tGenType = kPairwConj;
-  bool tShareLambdaParams = true;
+  bool tShareLambdaParams = false;
 
 
   bool SaveImages = false;
   bool ApplyMomResCorrection = true;
   bool ApplyNonFlatBackgroundCorrection = true;
-  bool IncludeResiduals = true;
+  bool IncludeResiduals = false;
 
   TString tGeneralAnTypeName;
   if(tAnType==kLamK0 || tAnType==kALamK0) tGeneralAnTypeName = "cLamK0";

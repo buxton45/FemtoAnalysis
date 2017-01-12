@@ -17,6 +17,7 @@ ClassImp(CanvasPartition)
 //________________________________________________________________________________________________________________
 CanvasPartition::CanvasPartition(TString aCanvasName, int aNx, int aNy, double aXRangeLow, double aXRangeHigh, double aYRangeLow, double aYRangeHigh, float aMarginLeft, float aMarginRight, float aMarginBottom, float aMarginTop) :
   fDrawUnityLine(false),
+  fDrawOptStat(true),
   fNx(aNx),
   fNy(aNy),
 
@@ -307,7 +308,7 @@ void CanvasPartition::DrawInPad(int aNx, int aNy)
   gStyle->SetOptStat(0);
   gStyle->SetOptTitle(0);
 
-  SetupOptStat(aNx,aNy,0.85,0.60,0.20,0.25);
+  if(fDrawOptStat) SetupOptStat(aNx,aNy,0.85,0.60,0.20,0.25);
 
   int tPosition = aNx + aNy*fNx;
   TObjArray* tGraphsToDraw = ((TObjArray*)fGraphs->At(tPosition));
@@ -342,7 +343,10 @@ void CanvasPartition::DrawInPad(int aNx, int aNy)
 
   if(fDrawUnityLine)
   {
-    TLine *tLine = new TLine(fXaxisRangeLow,1.,fXaxisRangeHigh,1.);
+    double tXaxisRangeLow;
+    if(fXaxisRangeLow<0) tXaxisRangeLow = 0.;
+    else tXaxisRangeLow = fXaxisRangeLow;
+    TLine *tLine = new TLine(tXaxisRangeLow,1.,fXaxisRangeHigh,1.);
     tLine->SetLineColor(14);
     tLine->Draw();
   }

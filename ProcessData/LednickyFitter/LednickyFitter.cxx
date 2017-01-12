@@ -52,6 +52,7 @@ LednickyFitter::LednickyFitter(FitSharedAnalyses* aFitSharedAnalyses, double aMa
   fParErrors(0)
 
 {
+/*
   AnalysisType tAnType = fFitSharedAnalyses->GetFitPairAnalysis(0)->GetAnalysisType();
   TString tFilesLocationBase = "/home/jesse/Analysis/FemtoAnalysis/ProcessData/CoulombFitter/";
   TString tInterpLocationBase_XiCK, tInterpLocationBase_OmegaK;
@@ -92,7 +93,7 @@ LednickyFitter::LednickyFitter(FitSharedAnalyses* aFitSharedAnalyses, double aMa
     cout << "ERROR: LednickyFitter::LednickyFitter  tAnType = " << tAnType << " is not apropriate" << endl << endl;
     assert(0);
   }
-
+*/
   
 }
 

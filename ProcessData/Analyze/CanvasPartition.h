@@ -68,9 +68,11 @@ public:
   TCanvas* GetCanvas();
   TPad* GetPad(int aNx, int aNy);
   void SetDrawUnityLine(bool aDraw);
+  void SetDrawOptStat(bool aDraw);
 
 protected:
   bool fDrawUnityLine;
+  bool fDrawOptStat;
   int fNx, fNy;
   double fXaxisRangeLow, fXaxisRangeHigh;
   double fYaxisRangeLow, fYaxisRangeHigh;
@@ -97,6 +99,7 @@ protected:
 inline TCanvas* CanvasPartition::GetCanvas() {fCanvas->Update(); return fCanvas;}
 inline TPad* CanvasPartition::GetPad(int aNx, int aNy) {return fPadArray[aNx][aNy];}
 inline void CanvasPartition::SetDrawUnityLine(bool aDraw) {fDrawUnityLine = aDraw;}
+inline void CanvasPartition::SetDrawOptStat(bool aDraw) {fDrawOptStat = aDraw;}
 
 //________________________________________________________________________________________________________________
 template<typename T>

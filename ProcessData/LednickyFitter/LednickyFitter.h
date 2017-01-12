@@ -101,6 +101,7 @@ public:
   void SetVerbose(bool aSet);
 
   double GetChi2();
+  int GetNDF();
 
 protected:
   bool fVerbose;
@@ -160,5 +161,6 @@ inline vector<double> LednickyFitter::GetParErrors() {return fParErrors;}
 inline void LednickyFitter::SetVerbose(bool aSet) {fVerbose=aSet;}
 
 inline double LednickyFitter::GetChi2() {return fChi2;}
+inline int LednickyFitter::GetNDF() {return fNDF;}
 
 #endif
