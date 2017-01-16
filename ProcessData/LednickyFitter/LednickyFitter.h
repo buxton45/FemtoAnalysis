@@ -92,6 +92,7 @@ public:
   FitSharedAnalyses* GetFitSharedAnalyses();
 
   void SetApplyNonFlatBackgroundCorrection(bool aApply);
+  void SetNonFlatBgdFitType(NonFlatBgdFitType aNonFlatBgdFitType);
   void SetApplyMomResCorrection(bool aApplyMomResCorrection);
   virtual void SetIncludeResidualCorrelations(bool aInclude);
 
@@ -119,6 +120,7 @@ protected:
   bool fIncludeResidualCorrelations;
   bool fResidualsInitiated;
   bool fReturnPrimaryWithResidualsToAnalyses;
+  NonFlatBgdFitType fNonFlatBgdFitType;
 
   ChargedResidualCf* fResXiCK;
   ChargedResidualCf* fResOmegaK;
@@ -152,6 +154,7 @@ protected:
 inline FitSharedAnalyses* LednickyFitter::GetFitSharedAnalyses() {return fFitSharedAnalyses;}
 
 inline void LednickyFitter::SetApplyNonFlatBackgroundCorrection(bool aApply) {fApplyNonFlatBackgroundCorrection = aApply;}
+inline void LednickyFitter::SetNonFlatBgdFitType(NonFlatBgdFitType aNonFlatBgdFitType) {fNonFlatBgdFitType = aNonFlatBgdFitType;}
 inline void LednickyFitter::SetApplyMomResCorrection(bool aApplyMomResCorrection) {fApplyMomResCorrection = aApplyMomResCorrection;}
 inline void LednickyFitter::SetIncludeResidualCorrelations(bool aInclude) {fIncludeResidualCorrelations = aInclude;}
 

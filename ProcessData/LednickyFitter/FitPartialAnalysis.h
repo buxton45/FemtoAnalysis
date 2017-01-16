@@ -60,6 +60,9 @@ public:
   FitPartialAnalysis(TString aFileLocation, TString aFileLocationMC, TString aAnalysisName, AnalysisType aAnalysisType, CentralityType aCentralityType, BFieldType aBFieldType, AnalysisRunType aRunType=kTrain, TString aDirNameModifier="");
   virtual ~FitPartialAnalysis();
 
+  static double NonFlatBackgroundFitFunctionLinear(double *x, double *par);
+  static double NonFlatBackgroundFitFunctionQuadratic(double *x, double *par);
+
   TObjArray* ConnectAnalysisDirectory(TString aFileLocation, TString aDirectoryName);
 
   void SetParticleTypes();
@@ -71,8 +74,8 @@ public:
 
   void BuildKStarCf(double aMinNorm=0.32, double aMaxNorm=0.4);
   void RebinKStarCf(int aRebinFactor, double aMinNorm=0.32, double aMaxNorm=0.4);
-  static TF1* FitNonFlatBackground(TH1* aCf, double aMinFit=0.6, double aMaxFit=0.9);
-  TF1* GetNonFlatBackground(double aMinFit=0.60, double aMaxFit=0.90);
+  static TF1* FitNonFlatBackground(TH1* aCf, NonFlatBgdFitType aFitType=kLinear, double aMinFit=0.6, double aMaxFit=0.9);
+  TF1* GetNonFlatBackground(NonFlatBgdFitType aFitType=kLinear, double aMinFit=0.60, double aMaxFit=0.90);
 
   void SetFitParameter(FitParameter* aParam);
 

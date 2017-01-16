@@ -10,14 +10,6 @@ ClassImp(FitPartialAnalysis)
 
 
 //________________________________________________________________________________________________________________
-double NonFlatBackgroundFitFunction(double *x, double *par)
-{
-//  return par[0]*x[0]*x[0] + par[1]*x[0] + par[2];
-  return par[0]*x[0] + par[1];
-}
-
-
-//________________________________________________________________________________________________________________
 //****************************************************************************************************************
 //________________________________________________________________________________________________________________
 
@@ -319,6 +311,20 @@ FitPartialAnalysis::~FitPartialAnalysis()
 
 
 //________________________________________________________________________________________________________________
+double FitPartialAnalysis::NonFlatBackgroundFitFunctionLinear(double *x, double *par)
+{
+  return par[0]*x[0] + par[1];
+}
+
+//________________________________________________________________________________________________________________
+double FitPartialAnalysis::NonFlatBackgroundFitFunctionQuadratic(double *x, double *par)
+{
+  return par[0]*x[0]*x[0] + par[1]*x[0] + par[2];
+}
+
+
+
+//________________________________________________________________________________________________________________
 TObjArray* FitPartialAnalysis::ConnectAnalysisDirectory(TString aFileLocation, TString aDirectoryName)
 {
   TFile *tFile = TFile::Open(aFileLocation);
@@ -562,26 +568,42 @@ void FitPartialAnalysis::RebinKStarCf(int aRebinFactor, double aMinNorm, double 
 }
 
 //________________________________________________________________________________________________________________
-TF1* FitPartialAnalysis::FitNonFlatBackground(TH1* aCf, double aMinFit, double aMaxFit)
+TF1* FitPartialAnalysis::FitNonFlatBackground(TH1* aCf, NonFlatBgdFitType aFitType, double aMinFit, double aMaxFit)
 {
-  TString tFitName = TString("NonFlatBackgroundFit_") + TString(aCf->GetTitle());
-  TF1* tNonFlatBackground = new TF1(tFitName,NonFlatBackgroundFitFunction,0.,1.,3);
-    tNonFlatBackground->SetParameter(0,0.);
-    tNonFlatBackground->SetParameter(1,0.);
-  aCf->Fit(tFitName,"0q","",aMinFit,aMaxFit);
+  TF1* tNonFlatBackground;
 
-//  TF1* tReturn = new TF1(tFitName,NonFlatBackgroundFitFunction,0.,aMaxFit,3);
-//  tReturn->SetParameters(tNonFlatBackground->GetParameters());
+  if(aFitType==kLinear)
+  {
+    TString tFitName = TString("NonFlatBackgroundFitLinear_") + TString(aCf->GetTitle());
+    tNonFlatBackground = new TF1(tFitName,NonFlatBackgroundFitFunctionLinear,0.,1.,2);
+      tNonFlatBackground->SetParameter(0,0.);
+      tNonFlatBackground->SetParameter(1,1.);
+    aCf->Fit(tFitName,"0q","",aMinFit,aMaxFit);
+
+//    TF1* tReturn = new TF1(tFitName,NonFlatBackgroundFitFunctionLinear,0.,aMaxFit,3);
+//    tReturn->SetParameters(tNonFlatBackground->GetParameters());
+  }
+  else if(aFitType == kQuadratic)
+  {
+    TString tFitName = TString("NonFlatBackgroundFitQuadratic_") + TString(aCf->GetTitle());
+    tNonFlatBackground = new TF1(tFitName,NonFlatBackgroundFitFunctionQuadratic,0.,1.,3);
+      tNonFlatBackground->SetParameter(0,0.);
+      tNonFlatBackground->SetParameter(1,0.);
+      tNonFlatBackground->SetParameter(2,1.);
+    aCf->Fit(tFitName,"0q","",aMinFit,aMaxFit);
+  }
+
+  else assert(0);
 
   return tNonFlatBackground;
 }
 
 //________________________________________________________________________________________________________________
-TF1* FitPartialAnalysis::GetNonFlatBackground(double aMinFit, double aMaxFit)
+TF1* FitPartialAnalysis::GetNonFlatBackground(NonFlatBgdFitType aFitType, double aMinFit, double aMaxFit)
 {
   if(fNonFlatBackground) return fNonFlatBackground;
 
-  fNonFlatBackground = FitNonFlatBackground(fKStarCf,aMinFit,aMaxFit);
+  fNonFlatBackground = FitNonFlatBackground(fKStarCf,aFitType,aMinFit,aMaxFit);
   return fNonFlatBackground;
 }
 

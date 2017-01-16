@@ -1521,7 +1521,7 @@ AliFemtoCorrFctnKStar* myTrainAnalysisConstructor::CreateCorrFctnKStar(const cha
   AliFemtoCorrFctnKStar *cf = new AliFemtoCorrFctnKStar(TString::Format("KStarCf_%s",name),bins,min,max);
     cf->SetCalculatePairKinematics(fWritePairKinematics);
     cf->SetBuildkTBinned(false);
-    cf->SetBuildmTBinned(false);
+    cf->SetBuildmTBinned(true);
     cf->SetBuild3d(false);
   return cf;
 }

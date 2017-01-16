@@ -195,7 +195,7 @@ void FitSystematicAnalysis::RunAllFits(bool aSave, ostream &aOut)
 
     FitGenerator* tFitGenerator = new FitGenerator(fFileLocationBase, fFileLocationBaseMC, fAnalysisType, fCentralityType, kTrainSys, 2, fFitGeneratorType, fShareLambdaParams, fAllShareSingleLambdaParam, tDirNameModifier);
 
-    tFitGenerator->DoFit(fApplyMomResCorrection,fApplyNonFlatBackgroundCorrection,fIncludeResiduals);
+    tFitGenerator->DoFit(fApplyMomResCorrection,fApplyNonFlatBackgroundCorrection,fIncludeResiduals,kLinear);
 
 //    OutputCutValues(i,aOut);
 //    tFitGenerator->WriteAllFitParameters(aOut);
@@ -204,7 +204,7 @@ void FitSystematicAnalysis::RunAllFits(bool aSave, ostream &aOut)
     tFitParamsVec.insert(tFitParamsVec.begin(),tCutValue);
     tText2dVector.push_back(tFitParamsVec);
 
-    TCanvas* tKStarwFitsCan = tFitGenerator->DrawKStarCfswFits(fApplyMomResCorrection,fApplyNonFlatBackgroundCorrection,false,false);
+    TCanvas* tKStarwFitsCan = tFitGenerator->DrawKStarCfswFits(fApplyMomResCorrection,fApplyNonFlatBackgroundCorrection,kLinear,false,false);
     if(aSave)
     {
       TString tSaveName = fSaveDirectory;
@@ -237,14 +237,14 @@ void FitSystematicAnalysis::RunVaryFitRange(bool aSave, ostream &aOut, double aM
   for(int i=0; i<tNRangeValues; i++)
   {
     FitGenerator* tFitGenerator = new FitGenerator(fFileLocationBase, fFileLocationBaseMC, fAnalysisType, fCentralityType, kTrain, 2, fFitGeneratorType, fShareLambdaParams, fAllShareSingleLambdaParam);
-    tFitGenerator->DoFit(fApplyMomResCorrection,fApplyNonFlatBackgroundCorrection,fIncludeResiduals,tRangeVec[i]);
+    tFitGenerator->DoFit(fApplyMomResCorrection,fApplyNonFlatBackgroundCorrection,fIncludeResiduals,kLinear,tRangeVec[i]);
 
     TString tRangeValue = TString::Format("Max KStar for Fit = %0.4f",tRangeVec[i]);
     vector<TString> tFitParamsVec = tFitGenerator->GetAllFitParametersTStringVector();
     tFitParamsVec.insert(tFitParamsVec.begin(),tRangeValue);
     tText2dVector.push_back(tFitParamsVec);
 
-    TCanvas* tKStarwFitsCan = tFitGenerator->DrawKStarCfswFits(fApplyMomResCorrection,fApplyNonFlatBackgroundCorrection,false,false);
+    TCanvas* tKStarwFitsCan = tFitGenerator->DrawKStarCfswFits(fApplyMomResCorrection,fApplyNonFlatBackgroundCorrection,kLinear,false,false);
     if(aSave)
     {
       TString tSaveName = fSaveDirectory;

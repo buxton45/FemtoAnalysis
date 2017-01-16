@@ -589,7 +589,7 @@ TCanvas* FitGenerator::DrawKStarCfswFits()
 */
 
 //________________________________________________________________________________________________________________
-TCanvas* FitGenerator::DrawKStarCfswFits(bool aMomResCorrectFit, bool aNoFlatBgdCorrectFit, bool aSaveImage, bool aDrawSysErrors, bool aZoomROP)
+TCanvas* FitGenerator::DrawKStarCfswFits(bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, NonFlatBgdFitType aNonFlatBgdFitType, bool aSaveImage, bool aDrawSysErrors, bool aZoomROP)
 {
   TString tCanvasName = TString("canKStarCfwFits");
   if(fGeneratorType==kPairwConj) tCanvasName += TString(cAnalysisBaseTags[fPairType]) + TString("wConj");
@@ -637,7 +637,7 @@ TCanvas* FitGenerator::DrawKStarCfswFits(bool aMomResCorrectFit, bool aNoFlatBgd
       else if(tAnType==kLamKchM || tAnType==kALamKchP) tColor=4;
       else tColor=1;
 
-      TH1* tCorrectedFitHisto = (TH1*)fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetCorrectedFitHisto(aMomResCorrectFit,aNoFlatBgdCorrectFit);
+      TH1* tCorrectedFitHisto = (TH1*)fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetCorrectedFitHisto(aMomResCorrectFit,aNonFlatBgdCorrectFit,false,aNonFlatBgdFitType);
         tCorrectedFitHisto->SetLineWidth(2);
 
       //Include the Cf with statistical errors, and make sure the binning is the same as the fitted Cf ----------
@@ -678,7 +678,7 @@ TCanvas* FitGenerator::DrawKStarCfswFits(bool aMomResCorrectFit, bool aNoFlatBgd
       if(aDrawSysErrors) tCanPart->AddGraph(i,j,tHistToPlot,"",20,tColor,0.5,"e2psame");
       tCanPart->AddGraph(i,j,(TF1*)fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetFit(),"");
       tCanPart->AddGraph(i,j,tCorrectedFitHisto,"",20,6,0.5,"lsame");
-      tCanPart->AddGraph(i,j,(TF1*)fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetNonFlatBackground(),"",20,3);
+      tCanPart->AddGraph(i,j,(TF1*)fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetNonFlatBackground(aNonFlatBgdFitType),"",20,3);
 
       TString tTextAnType = TString(cAnalysisRootTags[fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetAnalysisType()]);
       TPaveText* tAnTypeName = tCanPart->SetupTPaveText(tTextAnType,i,j,0.8,0.85);
@@ -690,7 +690,7 @@ TCanvas* FitGenerator::DrawKStarCfswFits(bool aMomResCorrectFit, bool aNoFlatBgd
 /*
       if(aZoomROP) CreateParamInitValuesText(tCanPart,i,j,0.35,0.20,0.10,0.40,43,9);
       else CreateParamInitValuesText(tCanPart,i,j,0.25,0.20,0.15,0.45,43,10);
-      AddTextCorrectionInfo(tCanPart,i,j,aMomResCorrectFit,aNoFlatBgdCorrectFit,0.25,0.08,0.15,0.10,43,7.5);
+      AddTextCorrectionInfo(tCanPart,i,j,aMomResCorrectFit,aNonFlatBgdCorrectFit,0.25,0.08,0.15,0.10,43,7.5);
 */
       CreateParamFinalValuesText(tCanPart,i,j,(TF1*)fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetFit(),0.70,0.10,0.25,0.50,43,9);
     }
@@ -874,47 +874,68 @@ void FitGenerator::SetDefaultSharedParameters()
     assert(0);
   }
 
+  //--------------------------------------
+
+  //Kind of unnecessary, since pair and conjugate should have same scattering parameters
+  //Nonetheless, this leaves the option open for them to be different
+  if(fGeneratorType==kPair || fGeneratorType==kPairwConj)
+  {
+    SetScattParamStartValues(tStartValuesPair[fCentralityTypes[0]][2],tStartValuesPair[fCentralityTypes[0]][3],tStartValuesPair[fCentralityTypes[0]][4]);
+  }
+  else if(fGeneratorType==kConjPair)
+  {
+    SetScattParamStartValues(tStartValuesConjPair[fCentralityTypes[0]][2],tStartValuesConjPair[fCentralityTypes[0]][3],tStartValuesConjPair[fCentralityTypes[0]][4]);
+  }
+  else assert(0);
+  SetScattParamLimits({{0.,0.},{0.,0.},{0.,0.}});
+
+  //--------------------------------------
+  double tRadiusMin = 1.;
+  double tRadiusMax = 8.;
+
+  double tLambdaMin = 0.1;
+  double tLambdaMax = 0.8;
+
+  if(fPairType==kLamK0)
+  {
+    tLambdaMin = 0.4;
+    tLambdaMax = 0.6;
+  }
+
+  //--------------------------------------
+
   for(unsigned int iCent=0; iCent<fCentralityTypes.size(); iCent++)
   {
 
     if(fGeneratorType==kPair)
     {
       SetRadiusStartValue(tStartValuesPair[fCentralityTypes[iCent]][1],fCentralityTypes[iCent]);
-      SetRadiusLimits(2.,8.,iCent);
-
-      SetScattParamStartValues(tStartValuesPair[fCentralityTypes[iCent]][2],tStartValuesPair[fCentralityTypes[iCent]][3],tStartValuesPair[fCentralityTypes[iCent]][4]);
-      SetScattParamLimits({{0.,0.},{0.,0.},{0.,0.}}); //TODO do not need to set scatt params for each centrality!
+      SetRadiusLimits(tRadiusMin,tRadiusMax,iCent);
 
       SetLambdaParamStartValue(tStartValuesPair[fCentralityTypes[iCent]][0],false,fCentralityTypes[iCent]);
-      SetLambdaParamLimits(0.1,0.8,false,fCentralityTypes[iCent]);  //TODO if(fAllShareSingleLambdaParam), do not need to set lambda for each!
+      SetLambdaParamLimits(tLambdaMin,tLambdaMax,false,fCentralityTypes[iCent]);  //TODO if(fAllShareSingleLambdaParam), do not need to set lambda for each!
     }
 
     else if(fGeneratorType==kConjPair)
     {
       SetRadiusStartValue(tStartValuesConjPair[fCentralityTypes[iCent]][1],fCentralityTypes[iCent]);
-      SetRadiusLimits(2.,8.,iCent);
-
-      SetScattParamStartValues(tStartValuesConjPair[fCentralityTypes[iCent]][2],tStartValuesConjPair[fCentralityTypes[iCent]][3],tStartValuesConjPair[fCentralityTypes[iCent]][4]);
-      SetScattParamLimits({{0.,0.},{0.,0.},{0.,0.}});  //TODO do not need to set scatt params for each centrality!
+      SetRadiusLimits(tRadiusMin,tRadiusMax,iCent);
 
       SetLambdaParamStartValue(tStartValuesConjPair[fCentralityTypes[iCent]][0],false,fCentralityTypes[iCent]);
-      SetLambdaParamLimits(0.1,0.8,false,fCentralityTypes[iCent]);  //TODO if(fAllShareSingleLambdaParam), do not need to set lambda for each!
+      SetLambdaParamLimits(tLambdaMin,tLambdaMax,false,fCentralityTypes[iCent]);  //TODO if(fAllShareSingleLambdaParam), do not need to set lambda for each!
     }
 
     else if(fGeneratorType==kPairwConj)
     {
       SetRadiusStartValue(tStartValuesPair[fCentralityTypes[iCent]][1],fCentralityTypes[iCent]);
-      SetRadiusLimits(2.,8.,iCent);
-
-      SetScattParamStartValues(tStartValuesPair[fCentralityTypes[iCent]][2],tStartValuesPair[fCentralityTypes[iCent]][3],tStartValuesPair[fCentralityTypes[iCent]][4]);
-      SetScattParamLimits({{0.,0.},{0.,0.},{0.,0.}});  //TODO do not need to set scatt params for each centrality!
+      SetRadiusLimits(tRadiusMin,tRadiusMax,iCent);
 
       SetLambdaParamStartValue(tStartValuesPair[fCentralityTypes[iCent]][0],false,fCentralityTypes[iCent]);
-      SetLambdaParamLimits(0.1,0.8,false,fCentralityTypes[iCent]);  //TODO if(fAllShareSingleLambdaParam), do not need to set lambda for each!
+      SetLambdaParamLimits(tLambdaMin,tLambdaMax,false,fCentralityTypes[iCent]);  //TODO if(fAllShareSingleLambdaParam), do not need to set lambda for each!
       if(!fShareLambdaParams)
       {
         SetLambdaParamStartValue(tStartValuesConjPair[fCentralityTypes[iCent]][0],true,fCentralityTypes[iCent]);
-        SetLambdaParamLimits(0.1,0.8,true,fCentralityTypes[iCent]);  //TODO if(fAllShareSingleLambdaParam), do not need to set lambda for each!
+        SetLambdaParamLimits(tLambdaMin,tLambdaMax,true,fCentralityTypes[iCent]);  //TODO if(fAllShareSingleLambdaParam), do not need to set lambda for each!
       }
     }
 
@@ -925,8 +946,6 @@ void FitGenerator::SetDefaultSharedParameters()
 //________________________________________________________________________________________________________________
 void FitGenerator::SetAllParameters()
 {
-//TODO clean this shit up
-
   vector<int> Share01 {0,1};
   vector<int> Share23 {2,3};
   vector<int> Share45 {4,5};
@@ -1029,7 +1048,7 @@ void FitGenerator::SetAllParameters()
 
 
 //________________________________________________________________________________________________________________
-void FitGenerator::DoFit(bool aApplyMomResCorrection, bool aApplyNonFlatBackgroundCorrection, bool aIncludeResiduals, double aMaxFitKStar)
+void FitGenerator::DoFit(bool aApplyMomResCorrection, bool aApplyNonFlatBackgroundCorrection, bool aIncludeResiduals, NonFlatBgdFitType aNonFlatBgdFitType, double aMaxFitKStar)
 {
   if(aIncludeResiduals)  //since this involves the CoulombFitter, I should place limits on parameters used in interpolations
   {
@@ -1045,6 +1064,7 @@ void FitGenerator::DoFit(bool aApplyMomResCorrection, bool aApplyNonFlatBackgrou
   fLednickyFitter->GetFitSharedAnalyses()->GetMinuitObject()->SetFCN(GlobalFCN);
   fLednickyFitter->SetApplyMomResCorrection(aApplyMomResCorrection);
   fLednickyFitter->SetApplyNonFlatBackgroundCorrection(aApplyNonFlatBackgroundCorrection);
+  fLednickyFitter->SetNonFlatBgdFitType(aNonFlatBgdFitType);
   fLednickyFitter->SetIncludeResidualCorrelations(aIncludeResiduals);
   GlobalFitter = fLednickyFitter;
 

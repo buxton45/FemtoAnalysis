@@ -35,6 +35,7 @@ LednickyFitter::LednickyFitter(FitSharedAnalyses* aFitSharedAnalyses, double aMa
   fIncludeResidualCorrelations(false),  //TODO change deault to true here AND in CoulombFitter
   fResidualsInitiated(false),
   fReturnPrimaryWithResidualsToAnalyses(false),
+  fNonFlatBgdFitType(kLinear),
 
   fResXiCK(),
   fResOmegaK(),
@@ -559,7 +560,7 @@ void LednickyFitter::CalculateFitFunction(int &npar, double &chi2, double *par)
 
       if(fApplyNonFlatBackgroundCorrection)
       {
-        TF1* tNonFlatBgd = tFitPartialAnalysis->GetNonFlatBackground(/*0.40,0.90*/);
+        TF1* tNonFlatBgd = tFitPartialAnalysis->GetNonFlatBackground(fNonFlatBgdFitType/*,0.40,0.90*/);
         ApplyNonFlatBackgroundCorrection(tCorrectedFitCfContent, tKStarBinCenters, tNonFlatBgd);
       }
 
