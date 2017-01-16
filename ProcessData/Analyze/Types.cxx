@@ -125,13 +125,13 @@ const double* cALamK0StartValues[3] = {cALamK0_0010StartValues,cALamK0_1030Start
 */
 //________________________________________________________________________________________________________________
 const double cLamKchP_0010StartValues[6] = {0.3,4.5,-0.5,0.5,0.0,0.2};
-const double cLamKchP_1030StartValues[6] = {0.3,4.5,-0.5,0.5,0.0,0.2};
-const double cLamKchP_3050StartValues[6] = {0.3,4.5,-0.5,0.5,0.0,0.2};
+const double cLamKchP_1030StartValues[6] = {0.3,4.0,-0.5,0.5,0.0,0.2};
+const double cLamKchP_3050StartValues[6] = {0.3,3.5,-0.5,0.5,0.0,0.2};
 const double* cLamKchPStartValues[3] = {cLamKchP_0010StartValues,cLamKchP_1030StartValues,cLamKchP_3050StartValues};
 
 const double cALamKchM_0010StartValues[6] = {0.3,4.5,-0.5,0.5,0.0,0.2};
-const double cALamKchM_1030StartValues[6] = {0.3,4.5,-0.5,0.5,0.0,0.2};
-const double cALamKchM_3050StartValues[6] = {0.3,4.5,-0.5,0.5,0.0,0.2};
+const double cALamKchM_1030StartValues[6] = {0.3,4.0,-0.5,0.5,0.0,0.2};
+const double cALamKchM_3050StartValues[6] = {0.3,3.5,-0.5,0.5,0.0,0.2};
 /*
 const double cLamKchP_0010StartValues[6] = {0.2,4.00,-1.315,0.5159,0.0,0.2};
 const double cLamKchP_1030StartValues[6] = {0.2,3.75,-1.315,0.5159,0.0,0.2};

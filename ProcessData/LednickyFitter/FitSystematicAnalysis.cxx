@@ -19,13 +19,14 @@ ClassImp(FitSystematicAnalysis)
 FitSystematicAnalysis::FitSystematicAnalysis(TString aFileLocationBase, TString aFileLocationBaseMC, AnalysisType aAnalysisType,
                                        TString aDirNameModifierBase1, vector<double> &aModifierValues1,
                                        TString aDirNameModifierBase2, vector<double> &aModifierValues2,
-                                       CentralityType aCentralityType, FitGeneratorType aGeneratorType, bool aShareLambdaParams) :
+                                       CentralityType aCentralityType, FitGeneratorType aGeneratorType, bool aShareLambdaParams, bool aAllShareSingleLambdaParam) :
   fFileLocationBase(aFileLocationBase),
   fFileLocationBaseMC(aFileLocationBaseMC),
   fAnalysisType(aAnalysisType),
   fCentralityType(aCentralityType),
   fFitGeneratorType(aGeneratorType),
   fShareLambdaParams(aShareLambdaParams),
+  fAllShareSingleLambdaParam(aAllShareSingleLambdaParam),
   fApplyNonFlatBackgroundCorrection(false),
   fApplyMomResCorrection(false),
   fIncludeResiduals(false),
@@ -44,13 +45,14 @@ FitSystematicAnalysis::FitSystematicAnalysis(TString aFileLocationBase, TString 
 //________________________________________________________________________________________________________________
 FitSystematicAnalysis::FitSystematicAnalysis(TString aFileLocationBase, TString aFileLocationBaseMC, AnalysisType aAnalysisType,
                                        TString aDirNameModifierBase1, vector<double> &aModifierValues1,
-                                       CentralityType aCentralityType, FitGeneratorType aGeneratorType, bool aShareLambdaParams) :
+                                       CentralityType aCentralityType, FitGeneratorType aGeneratorType, bool aShareLambdaParams, bool aAllShareSingleLambdaParam) :
   fFileLocationBase(aFileLocationBase),
   fFileLocationBaseMC(aFileLocationBaseMC),
   fAnalysisType(aAnalysisType),
   fCentralityType(aCentralityType),
   fFitGeneratorType(aGeneratorType),
   fShareLambdaParams(aShareLambdaParams),
+  fAllShareSingleLambdaParam(aAllShareSingleLambdaParam),
   fApplyNonFlatBackgroundCorrection(false),
   fApplyMomResCorrection(false),
   fIncludeResiduals(false),
@@ -65,18 +67,19 @@ FitSystematicAnalysis::FitSystematicAnalysis(TString aFileLocationBase, TString 
   fDirNameModifierBase2 = "";
   fModifierValues2 = vector<double> (0);
 
-  FitSystematicAnalysis(aFileLocationBase, aFileLocationBaseMC, aAnalysisType, aDirNameModifierBase1, aModifierValues1, fDirNameModifierBase2, fModifierValues2, aCentralityType, aGeneratorType, aShareLambdaParams);
+  FitSystematicAnalysis(aFileLocationBase, aFileLocationBaseMC, aAnalysisType, aDirNameModifierBase1, aModifierValues1, fDirNameModifierBase2, fModifierValues2, aCentralityType, aGeneratorType, aShareLambdaParams, aAllShareSingleLambdaParam);
 }
 
 //________________________________________________________________________________________________________________
 FitSystematicAnalysis::FitSystematicAnalysis(TString aFileLocationBase, TString aFileLocationBaseMC, AnalysisType aAnalysisType,
-                                       CentralityType aCentralityType, FitGeneratorType aGeneratorType, bool aShareLambdaParams) :
+                                       CentralityType aCentralityType, FitGeneratorType aGeneratorType, bool aShareLambdaParams, bool aAllShareSingleLambdaParam) :
   fFileLocationBase(aFileLocationBase),
   fFileLocationBaseMC(aFileLocationBaseMC),
   fAnalysisType(aAnalysisType),
   fCentralityType(aCentralityType),
   fFitGeneratorType(aGeneratorType),
   fShareLambdaParams(aShareLambdaParams),
+  fAllShareSingleLambdaParam(aAllShareSingleLambdaParam),
   fApplyNonFlatBackgroundCorrection(false),
   fApplyMomResCorrection(false),
   fIncludeResiduals(false),
@@ -91,7 +94,7 @@ FitSystematicAnalysis::FitSystematicAnalysis(TString aFileLocationBase, TString 
   fDirNameModifierBase2 = "";
   fModifierValues2 = vector<double> (0);
 
-  FitSystematicAnalysis(aFileLocationBase, aFileLocationBaseMC, aAnalysisType, fDirNameModifierBase1, fModifierValues1, fDirNameModifierBase2, fModifierValues2, aCentralityType, aGeneratorType, aShareLambdaParams);
+  FitSystematicAnalysis(aFileLocationBase, aFileLocationBaseMC, aAnalysisType, fDirNameModifierBase1, fModifierValues1, fDirNameModifierBase2, fModifierValues2, aCentralityType, aGeneratorType, aShareLambdaParams, aAllShareSingleLambdaParam);
 }
 
 
@@ -190,7 +193,7 @@ void FitSystematicAnalysis::RunAllFits(bool aSave, ostream &aOut)
     TString tDirNameModifier = fDirNameModifierBase1 + TString::Format("%0.6f",fModifierValues1[i]);
     if(!fDirNameModifierBase2.IsNull()) tDirNameModifier += fDirNameModifierBase2 + TString::Format("%0.6f",fModifierValues2[i]);
 
-    FitGenerator* tFitGenerator = new FitGenerator(fFileLocationBase, fFileLocationBaseMC, fAnalysisType, fCentralityType, kTrainSys, 2, fFitGeneratorType, fShareLambdaParams, tDirNameModifier);
+    FitGenerator* tFitGenerator = new FitGenerator(fFileLocationBase, fFileLocationBaseMC, fAnalysisType, fCentralityType, kTrainSys, 2, fFitGeneratorType, fShareLambdaParams, fAllShareSingleLambdaParam, tDirNameModifier);
 
     tFitGenerator->DoFit(fApplyMomResCorrection,fApplyNonFlatBackgroundCorrection,fIncludeResiduals);
 
@@ -233,7 +236,7 @@ void FitSystematicAnalysis::RunVaryFitRange(bool aSave, ostream &aOut, double aM
 
   for(int i=0; i<tNRangeValues; i++)
   {
-    FitGenerator* tFitGenerator = new FitGenerator(fFileLocationBase, fFileLocationBaseMC, fAnalysisType, fCentralityType, kTrain, 2, fFitGeneratorType, fShareLambdaParams);
+    FitGenerator* tFitGenerator = new FitGenerator(fFileLocationBase, fFileLocationBaseMC, fAnalysisType, fCentralityType, kTrain, 2, fFitGeneratorType, fShareLambdaParams, fAllShareSingleLambdaParam);
     tFitGenerator->DoFit(fApplyMomResCorrection,fApplyNonFlatBackgroundCorrection,fIncludeResiduals,tRangeVec[i]);
 
     TString tRangeValue = TString::Format("Max KStar for Fit = %0.4f",tRangeVec[i]);

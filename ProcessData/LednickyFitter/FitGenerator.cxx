@@ -27,7 +27,7 @@ void GlobalFCN(Int_t &npar, Double_t *gin, Double_t &f, Double_t *par, Int_t ifl
 
 
 //________________________________________________________________________________________________________________
-FitGenerator::FitGenerator(TString aFileLocationBase, TString aFileLocationBaseMC, AnalysisType aAnalysisType, const vector<CentralityType> &aCentralityTypes, AnalysisRunType aRunType, int aNPartialAnalysis, FitGeneratorType aGeneratorType, bool aShareLambdaParams, TString aDirNameModifier) :
+FitGenerator::FitGenerator(TString aFileLocationBase, TString aFileLocationBaseMC, AnalysisType aAnalysisType, const vector<CentralityType> &aCentralityTypes, AnalysisRunType aRunType, int aNPartialAnalysis, FitGeneratorType aGeneratorType, bool aShareLambdaParams, bool aAllShareSingleLambdaParam, TString aDirNameModifier) :
   fSaveLocationBase(""),
   fSaveNameModifier(""),
   fContainsMC(false),
@@ -41,6 +41,7 @@ FitGenerator::FitGenerator(TString aFileLocationBase, TString aFileLocationBaseM
   fScattFitParams(),
   fLambdaFitParams(),
   fShareLambdaParams(aShareLambdaParams),
+  fAllShareSingleLambdaParam(aAllShareSingleLambdaParam),
   fFitParamsPerPad(),
 
   fSharedAn(0),
@@ -116,7 +117,7 @@ FitGenerator::FitGenerator(TString aFileLocationBase, TString aFileLocationBaseM
 
 
 //________________________________________________________________________________________________________________
-FitGenerator::FitGenerator(TString aFileLocationBase, TString aFileLocationBaseMC, AnalysisType aAnalysisType, CentralityType aCentralityType, AnalysisRunType aRunType, int aNPartialAnalysis, FitGeneratorType aGeneratorType, bool aShareLambdaParams, TString aDirNameModifier) :
+FitGenerator::FitGenerator(TString aFileLocationBase, TString aFileLocationBaseMC, AnalysisType aAnalysisType, CentralityType aCentralityType, AnalysisRunType aRunType, int aNPartialAnalysis, FitGeneratorType aGeneratorType, bool aShareLambdaParams, bool aAllShareSingleLambdaParam, TString aDirNameModifier) :
   fSaveLocationBase(""),
   fSaveNameModifier(""),
   fContainsMC(false),
@@ -130,6 +131,7 @@ FitGenerator::FitGenerator(TString aFileLocationBase, TString aFileLocationBaseM
   fScattFitParams(),
   fLambdaFitParams(),
   fShareLambdaParams(aShareLambdaParams),
+  fAllShareSingleLambdaParam(aAllShareSingleLambdaParam),
   fFitParamsPerPad(),
 
   fSharedAn(0),
@@ -155,7 +157,7 @@ FitGenerator::FitGenerator(TString aFileLocationBase, TString aFileLocationBaseM
     assert(0);
   }
 
-  *this = FitGenerator(aFileLocationBase, aFileLocationBaseMC, aAnalysisType, tCentralityTypes, aRunType, aNPartialAnalysis, aGeneratorType, aShareLambdaParams, aDirNameModifier);
+  *this = FitGenerator(aFileLocationBase, aFileLocationBaseMC, aAnalysisType, tCentralityTypes, aRunType, aNPartialAnalysis, aGeneratorType, aShareLambdaParams, aAllShareSingleLambdaParam, aDirNameModifier);
 }
 
 
@@ -168,10 +170,14 @@ FitGenerator::~FitGenerator()
 //________________________________________________________________________________________________________________
 void FitGenerator::SetNAnalyses()
 {
-  for(unsigned int i=0; i<fCentralityTypes.size(); i++)
+  if(fAllShareSingleLambdaParam) fLambdaFitParams.emplace_back(kLambda,0.0);
+  else
   {
-    fLambdaFitParams.emplace_back(kLambda,0.0);
-    if(!fShareLambdaParams) fLambdaFitParams.emplace_back(kLambda,0.0);
+    for(unsigned int i=0; i<fCentralityTypes.size(); i++)
+    {
+      fLambdaFitParams.emplace_back(kLambda,0.0);
+      if(!fShareLambdaParams) fLambdaFitParams.emplace_back(kLambda,0.0);
+    }
   }
   fNAnalyses = (int)fCentralityTypes.size();
   if(fGeneratorType==kPairwConj) fNAnalyses *= 2;
@@ -802,38 +808,12 @@ int FitGenerator::GetLambdaBinNumber(bool tConjPair, CentralityType aCentType)
 {
   int tBinNumber = -1;
 
-  if(fNAnalyses==1 || fNAnalyses==2) aCentType=k0010;
-  else if(fNAnalyses==4) assert(aCentType < k3050);
-
-  if(fShareLambdaParams) tBinNumber = aCentType;
+  if(fAllShareSingleLambdaParam) tBinNumber = 0;
   else
   {
-    int tRow = aCentType;
-    int tPosition = -1;
-    if(!tConjPair) tPosition = 2*tRow;
-    else tPosition = 2*tRow+1;
+    if(fNAnalyses==1 || fNAnalyses==2) aCentType=k0010;
+    else if(fNAnalyses==4) assert(aCentType < k3050);
 
-    tBinNumber = tPosition;
-  }
-
-
-/*
-  if(fNAnalyses==1) tBinNumber=0;
-
-  else if(fNAnalyses==2)
-  {
-    if(fShareLambdaParams) tBinNumber=0;
-    else
-    {
-      if(!tConjPair) tBinNumber=0;
-      else tBinNumber=1;
-    }
-  }
-
-  else if(fNAnalyses==3) tBinNumber = aCentType;  //This should only occur for one pair type (ie without conj) across all 3 centralities
-
-  else if(fNAnalyses==4 || fNAnalyses==6)
-  {
     if(fShareLambdaParams) tBinNumber = aCentType;
     else
     {
@@ -845,8 +825,6 @@ int FitGenerator::GetLambdaBinNumber(bool tConjPair, CentralityType aCentType)
       tBinNumber = tPosition;
     }
   }
-*/
-
   return tBinNumber;
 
 }
@@ -908,7 +886,7 @@ void FitGenerator::SetDefaultSharedParameters()
       SetScattParamLimits({{0.,0.},{0.,0.},{0.,0.}}); //TODO do not need to set scatt params for each centrality!
 
       SetLambdaParamStartValue(tStartValuesPair[fCentralityTypes[iCent]][0],false,fCentralityTypes[iCent]);
-      SetLambdaParamLimits(0.1,0.8,false,fCentralityTypes[iCent]);
+      SetLambdaParamLimits(0.1,0.8,false,fCentralityTypes[iCent]);  //TODO if(fAllShareSingleLambdaParam), do not need to set lambda for each!
     }
 
     else if(fGeneratorType==kConjPair)
@@ -920,7 +898,7 @@ void FitGenerator::SetDefaultSharedParameters()
       SetScattParamLimits({{0.,0.},{0.,0.},{0.,0.}});  //TODO do not need to set scatt params for each centrality!
 
       SetLambdaParamStartValue(tStartValuesConjPair[fCentralityTypes[iCent]][0],false,fCentralityTypes[iCent]);
-      SetLambdaParamLimits(0.1,0.8,false,fCentralityTypes[iCent]);
+      SetLambdaParamLimits(0.1,0.8,false,fCentralityTypes[iCent]);  //TODO if(fAllShareSingleLambdaParam), do not need to set lambda for each!
     }
 
     else if(fGeneratorType==kPairwConj)
@@ -932,196 +910,17 @@ void FitGenerator::SetDefaultSharedParameters()
       SetScattParamLimits({{0.,0.},{0.,0.},{0.,0.}});  //TODO do not need to set scatt params for each centrality!
 
       SetLambdaParamStartValue(tStartValuesPair[fCentralityTypes[iCent]][0],false,fCentralityTypes[iCent]);
-      SetLambdaParamLimits(0.1,0.8,false,fCentralityTypes[iCent]);
+      SetLambdaParamLimits(0.1,0.8,false,fCentralityTypes[iCent]);  //TODO if(fAllShareSingleLambdaParam), do not need to set lambda for each!
       if(!fShareLambdaParams)
       {
         SetLambdaParamStartValue(tStartValuesConjPair[fCentralityTypes[iCent]][0],true,fCentralityTypes[iCent]);
-        SetLambdaParamLimits(0.1,0.8,true,fCentralityTypes[iCent]);
+        SetLambdaParamLimits(0.1,0.8,true,fCentralityTypes[iCent]);  //TODO if(fAllShareSingleLambdaParam), do not need to set lambda for each!
       }
     }
 
     else assert(0);
   }
 }
-
-/*
-//________________________________________________________________________________________________________________
-void FitGenerator::SetAllParameters()
-{
-//TODO clean this shit up
-
-  vector<int> Share01 {0,1};
-  vector<int> Share23 {2,3};
-  vector<int> Share45 {4,5};
-
-  //Always shared amongst all
-  SetSharedParameter(kRef0,fScattFitParams[0].GetStartValue(),fScattFitParams[0].GetLowerBound(),fScattFitParams[0].GetUpperBound());
-  SetSharedParameter(kImf0,fScattFitParams[1].GetStartValue(),fScattFitParams[1].GetLowerBound(),fScattFitParams[1].GetUpperBound());
-  SetSharedParameter(kd0,fScattFitParams[2].GetStartValue(),fScattFitParams[2].GetLowerBound(),fScattFitParams[2].GetUpperBound());
-
-  if(fNAnalyses==1)
-  {
-    SetSharedParameter(kLambda, fLambdaFitParams[0].GetStartValue(), 
-                       fLambdaFitParams[0].GetLowerBound(), fLambdaFitParams[0].GetUpperBound());
-
-    SetSharedParameter(kRadius, fRadiusFitParams[0].GetStartValue(),
-                       fRadiusFitParams[0].GetLowerBound(), fRadiusFitParams[0].GetUpperBound());
-
-    fFitParamsPerPad[0][0] = fLambdaFitParams[0];
-    fFitParamsPerPad[0][1] = fRadiusFitParams[0];
-  }
-  else if(fNAnalyses==2)
-  {
-    if(fShareLambdaParams)
-    {
-      SetSharedParameter(kLambda, Share01, fLambdaFitParams[0].GetStartValue(), 
-                         fLambdaFitParams[0].GetLowerBound(), fLambdaFitParams[0].GetUpperBound());
-
-      for(int i=0; i<fNAnalyses; i++) fFitParamsPerPad[i][0] = fLambdaFitParams[0];
-    }
-    else
-    {
-      SetParameter(kLambda, 0, fLambdaFitParams[0].GetStartValue(),
-                   fLambdaFitParams[0].GetLowerBound(), fLambdaFitParams[0].GetUpperBound());
-      SetParameter(kLambda, 1, fLambdaFitParams[1].GetStartValue(),
-                   fLambdaFitParams[1].GetLowerBound(), fLambdaFitParams[1].GetUpperBound());
-
-      fFitParamsPerPad[0][0] = fLambdaFitParams[0];
-      fFitParamsPerPad[1][0] = fLambdaFitParams[1];
-    }
-
-    SetSharedParameter(kRadius, Share01, fRadiusFitParams[0].GetStartValue(),
-                       fRadiusFitParams[0].GetLowerBound(), fRadiusFitParams[0].GetUpperBound());
-
-    for(int i=0; i<fNAnalyses; i++) fFitParamsPerPad[i][1] = fRadiusFitParams[0];
-  }
-  else if(fNAnalyses==3)
-  {
-    SetParameter(kLambda, 0, fLambdaFitParams[0].GetStartValue(),
-                 fLambdaFitParams[0].GetLowerBound(), fLambdaFitParams[0].GetUpperBound());
-    SetParameter(kLambda, 1, fLambdaFitParams[1].GetStartValue(),
-                 fLambdaFitParams[1].GetLowerBound(), fLambdaFitParams[1].GetUpperBound());
-    SetParameter(kLambda, 2, fLambdaFitParams[2].GetStartValue(),
-                 fLambdaFitParams[2].GetLowerBound(), fLambdaFitParams[2].GetUpperBound());
-
-    SetParameter(kRadius, 0, fRadiusFitParams[0].GetStartValue(),
-                 fRadiusFitParams[0].GetLowerBound(), fRadiusFitParams[0].GetUpperBound());
-    SetParameter(kRadius, 1, fRadiusFitParams[1].GetStartValue(),
-                 fRadiusFitParams[1].GetLowerBound(), fRadiusFitParams[1].GetUpperBound());
-    SetParameter(kRadius, 2, fRadiusFitParams[2].GetStartValue(),
-                 fRadiusFitParams[2].GetLowerBound(), fRadiusFitParams[2].GetUpperBound());
-
-    for(int i=0; i<fNAnalyses; i++)
-    {
-      fFitParamsPerPad[i][0] = fLambdaFitParams[i];
-      fFitParamsPerPad[i][1] = fRadiusFitParams[i];
-    }
-  }
-
-  else if(fNAnalyses==4)
-  {
-    SetSharedParameter(kRadius, Share01, fRadiusFitParams[k0010].GetStartValue(),
-                       fRadiusFitParams[k0010].GetLowerBound(), fRadiusFitParams[k0010].GetUpperBound());
-    SetSharedParameter(kRadius, Share23, fRadiusFitParams[k1030].GetStartValue(),
-                       fRadiusFitParams[k1030].GetLowerBound(), fRadiusFitParams[k1030].GetUpperBound());
-
-    for(int i=0; i<(fNAnalyses/2); i++)
-    {
-      fFitParamsPerPad[2*i][1] = fRadiusFitParams[i];
-      fFitParamsPerPad[2*i+1][1] = fRadiusFitParams[i];
-    }
-
-    if(fShareLambdaParams)
-    {
-      SetSharedParameter(kLambda, Share01, fLambdaFitParams[0].GetStartValue(),
-                         fLambdaFitParams[0].GetLowerBound(), fLambdaFitParams[0].GetUpperBound());
-      SetSharedParameter(kLambda, Share23, fLambdaFitParams[1].GetStartValue(),
-                         fLambdaFitParams[1].GetLowerBound(), fLambdaFitParams[1].GetUpperBound());
-
-      for(int i=0; i<(fNAnalyses/2); i++)
-      {
-        fFitParamsPerPad[2*i][0] = fLambdaFitParams[i];
-        fFitParamsPerPad[2*i+1][0] = fLambdaFitParams[i];
-      }
-    }
-    else
-    {
-      SetParameter(kLambda, 0, fLambdaFitParams[0].GetStartValue(),
-                   fLambdaFitParams[0].GetLowerBound(), fLambdaFitParams[0].GetUpperBound());
-      SetParameter(kLambda, 1, fLambdaFitParams[1].GetStartValue(),
-                   fLambdaFitParams[1].GetLowerBound(), fLambdaFitParams[1].GetUpperBound());
-      SetParameter(kLambda, 2, fLambdaFitParams[2].GetStartValue(),
-                   fLambdaFitParams[2].GetLowerBound(), fLambdaFitParams[2].GetUpperBound());
-      SetParameter(kLambda, 3, fLambdaFitParams[3].GetStartValue(),
-                   fLambdaFitParams[3].GetLowerBound(), fLambdaFitParams[3].GetUpperBound());
-
-      for(int i=0; i<fNAnalyses; i++) fFitParamsPerPad[i][0] = fLambdaFitParams[i];
-    }
-  }
-
-  else if(fNAnalyses==6)
-  {
-    SetSharedParameter(kRadius, Share01, fRadiusFitParams[k0010].GetStartValue(),
-                       fRadiusFitParams[k0010].GetLowerBound(), fRadiusFitParams[k0010].GetUpperBound());
-    SetSharedParameter(kRadius, Share23, fRadiusFitParams[k1030].GetStartValue(),
-                       fRadiusFitParams[k1030].GetLowerBound(), fRadiusFitParams[k1030].GetUpperBound());
-    SetSharedParameter(kRadius, Share45, fRadiusFitParams[k3050].GetStartValue(),
-                       fRadiusFitParams[k3050].GetLowerBound(), fRadiusFitParams[k3050].GetUpperBound());
-
-    for(int i=0; i<(fNAnalyses/2); i++)
-    {
-      fFitParamsPerPad[2*i][1] = fRadiusFitParams[i];
-      fFitParamsPerPad[2*i+1][1] = fRadiusFitParams[i];
-    }
-
-    if(fShareLambdaParams)
-    {
-      SetSharedParameter(kLambda, Share01, fLambdaFitParams[0].GetStartValue(),
-                         fLambdaFitParams[0].GetLowerBound(), fLambdaFitParams[0].GetUpperBound());
-      SetSharedParameter(kLambda, Share23, fLambdaFitParams[1].GetStartValue(),
-                         fLambdaFitParams[1].GetLowerBound(), fLambdaFitParams[1].GetUpperBound());
-      SetSharedParameter(kLambda, Share45, fLambdaFitParams[2].GetStartValue(),
-                         fLambdaFitParams[2].GetLowerBound(), fLambdaFitParams[2].GetUpperBound());
-
-      for(int i=0; i<(fNAnalyses/2); i++)
-      {
-        fFitParamsPerPad[2*i][0] = fLambdaFitParams[i];
-        fFitParamsPerPad[2*i+1][0] = fLambdaFitParams[i];
-      }
-    }
-    else
-    {
-      SetParameter(kLambda, 0, fLambdaFitParams[0].GetStartValue(),
-                   fLambdaFitParams[0].GetLowerBound(), fLambdaFitParams[0].GetUpperBound());
-      SetParameter(kLambda, 1, fLambdaFitParams[1].GetStartValue(),
-                   fLambdaFitParams[1].GetLowerBound(), fLambdaFitParams[1].GetUpperBound());
-      SetParameter(kLambda, 2, fLambdaFitParams[2].GetStartValue(),
-                   fLambdaFitParams[2].GetLowerBound(), fLambdaFitParams[2].GetUpperBound());
-      SetParameter(kLambda, 3, fLambdaFitParams[3].GetStartValue(),
-                   fLambdaFitParams[3].GetLowerBound(), fLambdaFitParams[3].GetUpperBound());
-      SetParameter(kLambda, 4, fLambdaFitParams[4].GetStartValue(),
-                   fLambdaFitParams[4].GetLowerBound(), fLambdaFitParams[4].GetUpperBound());
-      SetParameter(kLambda, 5, fLambdaFitParams[5].GetStartValue(),
-                   fLambdaFitParams[5].GetLowerBound(), fLambdaFitParams[5].GetUpperBound());
-
-      for(int i=0; i<fNAnalyses; i++) fFitParamsPerPad[i][0] = fLambdaFitParams[i];
-    }
-  }
-  else
-  {
-    cout << "ERROR:  FitGenerator::SetAllParameters:: Incorrect fNAnalyses = " << fNAnalyses << endl;
-    assert(0);
-  }
-
-  for(int i=0; i<fNAnalyses; i++)
-  {
-    fFitParamsPerPad[i][2] = fScattFitParams[0];
-    fFitParamsPerPad[i][3] = fScattFitParams[1];
-    fFitParamsPerPad[i][4] = fScattFitParams[2];
-  }
-
-}
-*/
 
 //________________________________________________________________________________________________________________
 void FitGenerator::SetAllParameters()
@@ -1138,6 +937,7 @@ void FitGenerator::SetAllParameters()
   SetSharedParameter(kRef0,fScattFitParams[0].GetStartValue(),fScattFitParams[0].GetLowerBound(),fScattFitParams[0].GetUpperBound());
   SetSharedParameter(kImf0,fScattFitParams[1].GetStartValue(),fScattFitParams[1].GetLowerBound(),fScattFitParams[1].GetUpperBound());
   SetSharedParameter(kd0,fScattFitParams[2].GetStartValue(),fScattFitParams[2].GetLowerBound(),fScattFitParams[2].GetUpperBound());
+  if(fAllShareSingleLambdaParam) SetSharedParameter(kLambda, fLambdaFitParams[0].GetStartValue(), fLambdaFitParams[0].GetLowerBound(), fLambdaFitParams[0].GetUpperBound());
 
   if(fNAnalyses==1)
   {
@@ -1153,12 +953,15 @@ void FitGenerator::SetAllParameters()
 
   else if(fNAnalyses==3)
   {
-    SetParameter(kLambda, 0, fLambdaFitParams[0].GetStartValue(),
-                 fLambdaFitParams[0].GetLowerBound(), fLambdaFitParams[0].GetUpperBound());
-    SetParameter(kLambda, 1, fLambdaFitParams[1].GetStartValue(),
-                 fLambdaFitParams[1].GetLowerBound(), fLambdaFitParams[1].GetUpperBound());
-    SetParameter(kLambda, 2, fLambdaFitParams[2].GetStartValue(),
-                 fLambdaFitParams[2].GetLowerBound(), fLambdaFitParams[2].GetUpperBound());
+    if(!fAllShareSingleLambdaParam)
+    {
+      SetParameter(kLambda, 0, fLambdaFitParams[0].GetStartValue(),
+                   fLambdaFitParams[0].GetLowerBound(), fLambdaFitParams[0].GetUpperBound());
+      SetParameter(kLambda, 1, fLambdaFitParams[1].GetStartValue(),
+                   fLambdaFitParams[1].GetLowerBound(), fLambdaFitParams[1].GetUpperBound());
+      SetParameter(kLambda, 2, fLambdaFitParams[2].GetStartValue(),
+                   fLambdaFitParams[2].GetLowerBound(), fLambdaFitParams[2].GetUpperBound());
+    }
 
     SetParameter(kRadius, 0, fRadiusFitParams[0].GetStartValue(),
                  fRadiusFitParams[0].GetLowerBound(), fRadiusFitParams[0].GetUpperBound());
@@ -1169,7 +972,7 @@ void FitGenerator::SetAllParameters()
 
     for(int i=0; i<fNAnalyses; i++)
     {
-      fFitParamsPerPad[i][0] = fLambdaFitParams[i];
+      if(!fAllShareSingleLambdaParam) fFitParamsPerPad[i][0] = fLambdaFitParams[i];
       fFitParamsPerPad[i][1] = fRadiusFitParams[i];
     }
   }
@@ -1186,28 +989,30 @@ void FitGenerator::SetAllParameters()
       fFitParamsPerPad[2*i+1][1] = fRadiusFitParams[i];
     }
 
-    if(fShareLambdaParams)
+    if(!fAllShareSingleLambdaParam)
     {
-      for(int i=0; i<(fNAnalyses/2); i++)
+      if(fShareLambdaParams)
       {
-        SetSharedParameter(kLambda, tShares2dVec[i], fLambdaFitParams[i].GetStartValue(),
-                           fLambdaFitParams[i].GetLowerBound(), fLambdaFitParams[i].GetUpperBound());
+        for(int i=0; i<(fNAnalyses/2); i++)
+        {
+          SetSharedParameter(kLambda, tShares2dVec[i], fLambdaFitParams[i].GetStartValue(),
+                             fLambdaFitParams[i].GetLowerBound(), fLambdaFitParams[i].GetUpperBound());
 
-        fFitParamsPerPad[2*i][0] = fLambdaFitParams[i];
-        fFitParamsPerPad[2*i+1][0] = fLambdaFitParams[i];
+          fFitParamsPerPad[2*i][0] = fLambdaFitParams[i];
+          fFitParamsPerPad[2*i+1][0] = fLambdaFitParams[i];
+        }
+      }
+
+      else
+      {
+        for(int i=0; i<fNAnalyses; i++)
+        {
+          SetParameter(kLambda, i, fLambdaFitParams[i].GetStartValue(),
+                       fLambdaFitParams[i].GetLowerBound(), fLambdaFitParams[i].GetUpperBound());
+          fFitParamsPerPad[i][0] = fLambdaFitParams[i];
+        }
       }
     }
-
-    else
-    {
-      for(int i=0; i<fNAnalyses; i++)
-      {
-        SetParameter(kLambda, i, fLambdaFitParams[i].GetStartValue(),
-                     fLambdaFitParams[i].GetLowerBound(), fLambdaFitParams[i].GetUpperBound());
-        fFitParamsPerPad[i][0] = fLambdaFitParams[i];
-      }
-    }
-
   }
 
 
@@ -1216,6 +1021,8 @@ void FitGenerator::SetAllParameters()
     fFitParamsPerPad[i][2] = fScattFitParams[0];
     fFitParamsPerPad[i][3] = fScattFitParams[1];
     fFitParamsPerPad[i][4] = fScattFitParams[2];
+
+    if(fAllShareSingleLambdaParam) fFitParamsPerPad[i][0] = fLambdaFitParams[0];
   }
 
 }

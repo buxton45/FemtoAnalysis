@@ -19,14 +19,14 @@ public:
   FitSystematicAnalysis(TString aFileLocationBase, TString aFileLocationBaseMC, AnalysisType aAnalysisType,
                    TString aDirNameModifierBase1, vector<double> &aModifierValues1,
                    TString aDirNameModifierBase2, vector<double> &aModifierValues2,
-                   CentralityType aCentralityType=kMB, FitGeneratorType aGeneratorType=kPairwConj, bool aShareLambdaParams=false);
+                   CentralityType aCentralityType=kMB, FitGeneratorType aGeneratorType=kPairwConj, bool aShareLambdaParams=false, bool aAllShareSingleLambdaParam=false);
 
   FitSystematicAnalysis(TString aFileLocationBase, TString aFileLocationBaseMC, AnalysisType aAnalysisType,
                    TString aDirNameModifierBase1, vector<double> &aModifierValues1,
-                   CentralityType aCentralityType=kMB, FitGeneratorType aGeneratorType=kPairwConj, bool aShareLambdaParams=false);
+                   CentralityType aCentralityType=kMB, FitGeneratorType aGeneratorType=kPairwConj, bool aShareLambdaParams=false, bool aAllShareSingleLambdaParam=false);
 
   FitSystematicAnalysis(TString aFileLocationBase, TString aFileLocationBaseMC, AnalysisType aAnalysisType,
-                   CentralityType aCentralityType=kMB, FitGeneratorType aGeneratorType=kPairwConj, bool aShareLambdaParams=false);
+                   CentralityType aCentralityType=kMB, FitGeneratorType aGeneratorType=kPairwConj, bool aShareLambdaParams=false, bool aAllShareSingleLambdaParam=false);
 
   virtual ~FitSystematicAnalysis();
   TString GetCutValues(int aIndex);
@@ -51,6 +51,7 @@ protected:
   CentralityType fCentralityType;
   FitGeneratorType fFitGeneratorType;
   bool fShareLambdaParams;
+  bool fAllShareSingleLambdaParam;
   bool fApplyNonFlatBackgroundCorrection;
   bool fApplyMomResCorrection;
   bool fIncludeResiduals;
