@@ -38,6 +38,7 @@ public:
   void RunAllFits(bool aSave=false, ostream &aOut=std::cout);
 
   void RunVaryFitRange(bool aSave=false, ostream &aOut=std::cout, double aMaxKStar1=0.225, double aMaxKStar2=0.300, double aMaxKStar3=0.375);
+  void RunVaryNonFlatBackgroundFit(bool aSave=false, ostream &aOut=std::cout);
 
   //inline
   void SetApplyNonFlatBackgroundCorrection(bool aApply);

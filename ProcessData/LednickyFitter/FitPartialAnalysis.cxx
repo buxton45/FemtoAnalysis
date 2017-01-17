@@ -321,6 +321,11 @@ double FitPartialAnalysis::NonFlatBackgroundFitFunctionQuadratic(double *x, doub
 {
   return par[0]*x[0]*x[0] + par[1]*x[0] + par[2];
 }
+//________________________________________________________________________________________________________________
+double FitPartialAnalysis::NonFlatBackgroundFitFunctionGaussian(double *x, double *par)
+{
+  return par[0]*exp(-0.5*(pow((x[0]-par[1])/par[2],2.0))) + par[3];
+}
 
 
 
@@ -590,6 +595,19 @@ TF1* FitPartialAnalysis::FitNonFlatBackground(TH1* aCf, NonFlatBgdFitType aFitTy
       tNonFlatBackground->SetParameter(0,0.);
       tNonFlatBackground->SetParameter(1,0.);
       tNonFlatBackground->SetParameter(2,1.);
+    aCf->Fit(tFitName,"0q","",aMinFit,aMaxFit);
+  }
+  else if(aFitType == kGaussian)
+  {
+    TString tFitName = TString("NonFlatBackgroundFitGaussian_") + TString(aCf->GetTitle());
+    tNonFlatBackground = new TF1(tFitName,NonFlatBackgroundFitFunctionGaussian,0.,1.,4);
+      tNonFlatBackground->SetParameter(0,0.1);
+      tNonFlatBackground->SetParameter(1,0.);
+      tNonFlatBackground->SetParameter(2,0.5);
+      tNonFlatBackground->SetParameter(3,0.96);
+
+      tNonFlatBackground->SetParLimits(1,-0.05,0.05);
+
     aCf->Fit(tFitName,"0q","",aMinFit,aMaxFit);
   }
 

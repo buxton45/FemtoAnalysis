@@ -62,6 +62,7 @@ public:
 
   static double NonFlatBackgroundFitFunctionLinear(double *x, double *par);
   static double NonFlatBackgroundFitFunctionQuadratic(double *x, double *par);
+  static double NonFlatBackgroundFitFunctionGaussian(double *x, double *par);
 
   TObjArray* ConnectAnalysisDirectory(TString aFileLocation, TString aDirectoryName);
 

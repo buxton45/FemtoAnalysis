@@ -631,12 +631,20 @@ int main(int argc, char **argv)
     TString tFileLocationFitRangeSysLamKchP = TString("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_20161027/CfFitValues_VaryMaxFitKStar_LamKchP_MomResCrctn_NonFlatBgdCrctn.txt");
     TString tFileLocationFitRangeSysLamKchM = TString("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_20161027/CfFitValues_VaryMaxFitKStar_LamKchM_MomResCrctn_NonFlatBgdCrctn.txt");
 
+    TString tFileLocationNonFlatBgdSysLamK0 = TString("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamK0_20161027/CfFitValues_VaryNonFlatBgdFitType_LamK0_MomResCrctn_NonFlatBgdCrctn.txt");
+    TString tFileLocationNonFlatBgdSysLamKchP = TString("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_20161027/CfFitValues_VaryNonFlatBgdFitType_LamKchP_MomResCrctn_NonFlatBgdCrctn.txt");
+    TString tFileLocationNonFlatBgdSysLamKchM = TString("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_20161027/CfFitValues_VaryNonFlatBgdFitType_LamKchM_MomResCrctn_NonFlatBgdCrctn.txt");
+
     td4dVec tAllFitSys(0);
       tAllFitSys.resize(tNAnalysisTypes, td3dVec(tNCentralityTypes, td2dVec(tNParameterTypes, td1dVec(0))));
 
     ReadFile(tFileLocationFitRangeSysLamK0,tAllFitSys);
     ReadFile(tFileLocationFitRangeSysLamKchP,tAllFitSys);
     ReadFile(tFileLocationFitRangeSysLamKchM,tAllFitSys);
+
+    ReadFile(tFileLocationNonFlatBgdSysLamK0,tAllFitSys);
+    ReadFile(tFileLocationNonFlatBgdSysLamKchP,tAllFitSys);
+    ReadFile(tFileLocationNonFlatBgdSysLamKchM,tAllFitSys);
 
     td4dVec tFinalFitSysVec = ReduceCutsVector(tAllFitSys);
 
@@ -653,11 +661,11 @@ int main(int argc, char **argv)
 
   if(bWriteToFile)
   {
-    TString tOutputLamKchName = TString("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_20161027/FinalFitSystematics_");
+    TString tOutputLamKchName = TString("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_20161027/FinalFitSystematicsNEW_");
     if(bIncludeFitRangeSys) tOutputLamKchName += TString("wFitRangeSys_");
     tOutputLamKchName += TString("cLamcKch.txt");
 
-    TString tOutputLamK0Name = TString("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamK0_20161027/FinalFitSystematics_");
+    TString tOutputLamK0Name = TString("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamK0_20161027/FinalFitSystematicsNEW_");
     if(bIncludeFitRangeSys) tOutputLamK0Name += TString("wFitRangeSys_");
     tOutputLamK0Name += TString("cLamK0.txt");
 

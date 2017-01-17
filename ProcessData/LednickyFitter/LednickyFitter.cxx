@@ -23,7 +23,7 @@ double gMaxFitKStar;
 //****************************************************************************************************************
 //________________________________________________________________________________________________________________
 LednickyFitter::LednickyFitter(FitSharedAnalyses* aFitSharedAnalyses, double aMaxFitKStar):
-  fVerbose(true),
+  fVerbose(false),
   fFitSharedAnalyses(aFitSharedAnalyses),
   fMinuit(fFitSharedAnalyses->GetMinuitObject()),
   fNAnalyses(fFitSharedAnalyses->GetNFitPairAnalysis()),
@@ -560,7 +560,7 @@ void LednickyFitter::CalculateFitFunction(int &npar, double &chi2, double *par)
 
       if(fApplyNonFlatBackgroundCorrection)
       {
-        TF1* tNonFlatBgd = tFitPartialAnalysis->GetNonFlatBackground(fNonFlatBgdFitType/*,0.40,0.90*/);
+        TF1* tNonFlatBgd = tFitPartialAnalysis->GetNonFlatBackground(fNonFlatBgdFitType/*,0.60,0.90*/);
         ApplyNonFlatBackgroundCorrection(tCorrectedFitCfContent, tKStarBinCenters, tNonFlatBgd);
       }
 

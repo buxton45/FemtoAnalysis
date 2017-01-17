@@ -293,6 +293,7 @@ int main(int argc, char **argv)
   CentralityType tCentralityType = kMB;
   FitGeneratorType tFitGeneratorType = kPairwConj;
   bool tShareLambdaParameters = false;
+  bool tAllShareSingleLambdaParam = false;
 
   bool ApplyMomResCorrection = true;
   bool ApplyNonFlatBackgroundCorrection = true;
@@ -356,7 +357,7 @@ int main(int argc, char **argv)
     if(bWriteToFile) tOutputFile.open(tOutputFileName);
 
 
-    FitSystematicAnalysis* tFitSysAn = new FitSystematicAnalysis(tFileLocationBase, tFileLocationBaseMC, tAnType, tDirNameModifierBase1, tModifierValues1, tDirNameModifierBase2, tModifierValues2, tCentralityType, tFitGeneratorType, tShareLambdaParameters);
+    FitSystematicAnalysis* tFitSysAn = new FitSystematicAnalysis(tFileLocationBase, tFileLocationBaseMC, tAnType, tDirNameModifierBase1, tModifierValues1, tDirNameModifierBase2, tModifierValues2, tCentralityType, tFitGeneratorType, tShareLambdaParameters, tAllShareSingleLambdaParam);
     tFitSysAn->SetSaveDirectory(tDirectoryBase);
     tFitSysAn->SetApplyNonFlatBackgroundCorrection(ApplyNonFlatBackgroundCorrection);
     tFitSysAn->SetApplyMomResCorrection(ApplyMomResCorrection);

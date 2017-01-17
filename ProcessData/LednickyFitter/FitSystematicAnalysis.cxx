@@ -261,4 +261,38 @@ void FitSystematicAnalysis::RunVaryFitRange(bool aSave, ostream &aOut, double aM
 }
 
 
+//________________________________________________________________________________________________________________
+void FitSystematicAnalysis::RunVaryNonFlatBackgroundFit(bool aSave, ostream &aOut)
+{
+  assert(fModifierValues1.size()==0);  //this is not intended for use with various modifier values, but for the final analysis
+  int tNFitTypeValues = 3;
+  vector<int> tFitTypeVec = {0,1,2};
+
+  vector<vector<TString> > tText2dVector(0);
+
+  for(int i=0; i<tNFitTypeValues; i++)
+  {
+    FitGenerator* tFitGenerator = new FitGenerator(fFileLocationBase, fFileLocationBaseMC, fAnalysisType, fCentralityType, kTrain, 2, fFitGeneratorType, fShareLambdaParams, fAllShareSingleLambdaParam);
+    tFitGenerator->DoFit(fApplyMomResCorrection,fApplyNonFlatBackgroundCorrection,fIncludeResiduals,static_cast<NonFlatBgdFitType>(tFitTypeVec[i]));
+
+    TString tRangeValue = TString::Format("Fit Type = %d",tFitTypeVec[i]);
+    vector<TString> tFitParamsVec = tFitGenerator->GetAllFitParametersTStringVector();
+    tFitParamsVec.insert(tFitParamsVec.begin(),tRangeValue);
+    tText2dVector.push_back(tFitParamsVec);
+
+    TCanvas* tKStarwFitsCan = tFitGenerator->DrawKStarCfswFits(fApplyMomResCorrection,fApplyNonFlatBackgroundCorrection,static_cast<NonFlatBgdFitType>(tFitTypeVec[i]),false,false);
+    if(aSave)
+    {
+      TString tSaveName = fSaveDirectory;
+      tSaveName += tKStarwFitsCan->GetTitle();
+      tSaveName += TString::Format("_FitType_%d",tFitTypeVec[i]);
+      if(fApplyMomResCorrection) tSaveName += TString("_MomResCrctn");
+      if(fApplyNonFlatBackgroundCorrection) tSaveName += TString("_NonFlatBgdCrctn");
+      tSaveName += TString(".pdf");
+      tKStarwFitsCan->SaveAs(tSaveName);
+    }
+    delete tFitGenerator;
+  }
+  PrintText2dVec(tText2dVector,aOut);
+}
 
