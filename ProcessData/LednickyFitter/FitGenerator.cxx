@@ -737,6 +737,7 @@ void FitGenerator::SetUseLimits(vector<FitParameter> &aVec, bool aUse)
 //________________________________________________________________________________________________________________
 void FitGenerator::SetRadiusStartValue(double aRad, int aIndex)
 {
+  if(fRadiusFitParams.size()==1) aIndex=0;  //in case, for instance, I want to run k1030 or k3050 by itself
   assert(aIndex < (int)fRadiusFitParams.size());
   fRadiusFitParams[aIndex].SetStartValue(aRad);
 }

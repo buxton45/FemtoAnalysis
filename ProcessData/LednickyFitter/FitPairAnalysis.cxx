@@ -256,7 +256,7 @@ void FitPairAnalysis::BuildModelKStarTrueVsRecMixed(int aRebinFactor)
     fModelKStarTrueVsRecMixed->Add(tToAdd);
   }
 
-  fModelKStarTrueVsRecMixed->Rebin2D(aRebinFactor);
+  fModelKStarTrueVsRecMixed->Rebin2D(aRebinFactor,aRebinFactor);
 
 }
 
@@ -733,16 +733,16 @@ void FitPairAnalysis::LoadTransformMatrices(int aRebin, TString aFileLocation)
 
   TH2D* tSig = (TH2D*)tFile->Get(tFullNameSig);
     tSig->SetDirectory(0);
-    tSig->Rebin2D(aRebin);
+    tSig->Rebin2D(aRebin,aRebin);
   TH2D* tXiC = (TH2D*)tFile->Get(tFullNameXiC);
     tXiC->SetDirectory(0);
-    tXiC->Rebin2D(aRebin);
+    tXiC->Rebin2D(aRebin,aRebin);
   TH2D* tXi0 = (TH2D*)tFile->Get(tFullNameXi0);
     tXi0->SetDirectory(0);
-    tXi0->Rebin2D(aRebin);
+    tXi0->Rebin2D(aRebin,aRebin);
   TH2D* tOmega = (TH2D*)tFile->Get(tFullNameOmega);
     tOmega->SetDirectory(0);
-    tOmega->Rebin2D(aRebin);
+    tOmega->Rebin2D(aRebin,aRebin);
 
   fTransformMatrices.clear();
   fTransformMatrices.push_back((TH2D*)tSig);
