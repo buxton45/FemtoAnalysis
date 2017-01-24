@@ -847,7 +847,7 @@ void FitGenerator::SetLambdaParamLimits(double aMin, double aMax, bool tConjPair
 }
 
 //________________________________________________________________________________________________________________
-void FitGenerator::SetDefaultSharedParameters()
+void FitGenerator::SetDefaultSharedParameters(bool aSetAllUnbounded)
 {
 //TODO this seems like overkill because this is already handled at the FitPartialAnalysis level
   const double** tStartValuesPair;
@@ -890,8 +890,8 @@ void FitGenerator::SetDefaultSharedParameters()
   SetScattParamLimits({{0.,0.},{0.,0.},{0.,0.}});
 
   //--------------------------------------
-  double tRadiusMin = 1.;
-  double tRadiusMax = 8.;
+  double tRadiusMin = 0.;
+  double tRadiusMax = 0.;
 
   double tLambdaMin = 0.1;
   double tLambdaMax = 0.8;
@@ -900,6 +900,15 @@ void FitGenerator::SetDefaultSharedParameters()
   {
     tLambdaMin = 0.4;
     tLambdaMax = 0.6;
+  }
+
+  if(aSetAllUnbounded)
+  {
+    tRadiusMin = 0.;
+    tRadiusMax = 0.;
+
+    tLambdaMin = 0.;
+    tLambdaMax = 0.;
   }
 
   //--------------------------------------

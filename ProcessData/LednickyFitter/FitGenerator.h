@@ -58,7 +58,7 @@ public:
   void SetLambdaParamStartValue(double aLam, bool tConjPair=false, CentralityType aCentType=kMB);
   void SetLambdaParamLimits(double aMin, double aMax, bool tConjPair=false, CentralityType aCentType=kMB);
 
-  void SetDefaultSharedParameters();
+  void SetDefaultSharedParameters(bool aSetAllUnbounded=false);
 
   void SetAllParameters();
   void DoFit(bool aApplyMomResCorrection=false, bool aApplyNonFlatBackgroundCorrection=false, bool aIncludeResiduals=false, NonFlatBgdFitType aNonFlatBgdFitType=kLinear, double aMaxFitKStar=0.3);

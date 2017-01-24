@@ -13,13 +13,13 @@ int main(int argc, char **argv)
 //-----------------------------------------------------------------------------
   TString tResultsDate = "20161027";
 
-  AnalysisType tAnType = kLamKchM;
+  AnalysisType tAnType = kLamK0;
   AnalysisRunType tAnRunType = kTrain;
   int tNPartialAnalysis = 2;
   CentralityType tCentType = kMB;
   FitGeneratorType tGenType = kPairwConj;
   bool tShareLambdaParams = false;
-  bool tAllShareSingleLambdaParam = false;
+  bool tAllShareSingleLambdaParam = true;
 
   bool SaveImages = false;
   bool ApplyMomResCorrection = true;
@@ -41,6 +41,7 @@ int main(int argc, char **argv)
   TString tSaveNameModifier = "";
   if(ApplyMomResCorrection) tSaveNameModifier += TString("_MomResCrctn");
   if(ApplyNonFlatBackgroundCorrection) tSaveNameModifier += TString("_NonFlatBgdCrctn");
+  if(tAllShareSingleLambdaParam) tSaveNameModifier += TString("_SingleLamParam");
   FitGenerator* tLamKchP = new FitGenerator(tFileLocationBase,tFileLocationBaseMC,tAnType, tCentType,tAnRunType,tNPartialAnalysis,tGenType,tShareLambdaParams,tAllShareSingleLambdaParam);
 //  FitGenerator* tLamKchP = new FitGenerator(tFileLocationBase,tFileLocationBaseMC,tAnType,{k0010,k1030},tAnRunType,tNPartialAnalysis,tGenType,tShareLambdaParams,tAllShareSingleLambdaParam);
 //  tLamKchP->SetRadiusStartValues({3.0,4.0,5.0});
