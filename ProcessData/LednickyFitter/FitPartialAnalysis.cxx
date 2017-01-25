@@ -257,11 +257,11 @@ FitPartialAnalysis::FitPartialAnalysis(TString aFileLocation, TString aFileLocat
   }
   else
   {
-    fLambda = new FitParameter(kLambda, cStartValues[fAnalysisType][fCentralityType][kLambda]);
-    fRadius = new FitParameter(kRadius, cStartValues[fAnalysisType][fCentralityType][kRadius]);
-    fRef0 = new FitParameter(kRef0, cStartValues[fAnalysisType][fCentralityType][kRef0]);
-    fImf0 = new FitParameter(kImf0, cStartValues[fAnalysisType][fCentralityType][kImf0]);
-    fd0 = new FitParameter(kd0, cStartValues[fAnalysisType][fCentralityType][kd0]);
+    fLambda = new FitParameter(kLambda, cStartValues[fAnalysisType][fCentralityType][kLambda]/*,false,0.,0.,0.4*/);
+    fRadius = new FitParameter(kRadius, cStartValues[fAnalysisType][fCentralityType][kRadius]/*,false,0.,0.,5.*/);
+    fRef0 = new FitParameter(kRef0, cStartValues[fAnalysisType][fCentralityType][kRef0]/*,false,0.,0.,1.*/);
+    fImf0 = new FitParameter(kImf0, cStartValues[fAnalysisType][fCentralityType][kImf0]/*,false,0.,0.,1.*/);
+    fd0 = new FitParameter(kd0, cStartValues[fAnalysisType][fCentralityType][kd0]/*,false,0.,0.,5.*/);
     fNorm = new FitParameter(kNorm, cStartValues[fAnalysisType][fCentralityType][kNorm]);
     fNorm->SetStartValue(fKStarNumScale/fKStarDenScale);
     //fNorm->SetFixed(true);

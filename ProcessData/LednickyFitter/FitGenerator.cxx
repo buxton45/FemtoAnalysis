@@ -738,6 +738,15 @@ void FitGenerator::SetUseLimits(vector<FitParameter> &aVec, bool aUse)
 void FitGenerator::SetRadiusStartValue(double aRad, int aIndex)
 {
   if(fRadiusFitParams.size()==1) aIndex=0;  //in case, for instance, I want to run k1030 or k3050 by itself
+  if(aIndex >= (int)fRadiusFitParams.size())  //if, for instance, I want to run k0010 with k3050
+  {
+    cout << "aIndex = " << aIndex << " and fRadiusFitParams.size() = " << fRadiusFitParams.size() << endl;
+    cout << "Setting aIndex = fRadiusFitParams.size()-1....c'est bon? (0 = non, 1 = oui)" << endl;
+    int tResponse;
+    cin >> tResponse;
+    assert(tResponse);
+    aIndex = fRadiusFitParams.size()-1;
+  }
   assert(aIndex < (int)fRadiusFitParams.size());
   fRadiusFitParams[aIndex].SetStartValue(aRad);
 }
@@ -752,6 +761,16 @@ void FitGenerator::SetRadiusStartValues(const vector<double> &aStartValues)
 //________________________________________________________________________________________________________________
 void FitGenerator::SetRadiusLimits(double aMin, double aMax, int aIndex)
 {
+  if(fRadiusFitParams.size()==1) aIndex=0;  //in case, for instance, I want to run k1030 or k3050 by itself
+  if(aIndex >= (int)fRadiusFitParams.size())  //if, for instance, I want to run k0010 with k3050
+  {
+    cout << "aIndex = " << aIndex << " and fRadiusFitParams.size() = " << fRadiusFitParams.size() << endl;
+    cout << "Setting aIndex = fRadiusFitParams.size()-1....c'est bon? (0 = non, 1 = oui)" << endl;
+    int tResponse;
+    cin >> tResponse;
+    assert(tResponse);
+    aIndex = fRadiusFitParams.size()-1;
+  }
   assert(aIndex < (int)fRadiusFitParams.size());
 
   fRadiusFitParams[aIndex].SetLowerBound(aMin);
