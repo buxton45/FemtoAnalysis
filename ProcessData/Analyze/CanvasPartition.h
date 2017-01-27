@@ -70,6 +70,9 @@ public:
   void SetDrawUnityLine(bool aDraw);
   void SetDrawOptStat(bool aDraw);
 
+  double GetXScaleFactor(int aNx, int aNy);
+  double GetYScaleFactor(int aNx, int aNy);
+
 protected:
   bool fDrawUnityLine;
   bool fDrawOptStat;
@@ -100,6 +103,9 @@ inline TCanvas* CanvasPartition::GetCanvas() {fCanvas->Update(); return fCanvas;
 inline TPad* CanvasPartition::GetPad(int aNx, int aNy) {return fPadArray[aNx][aNy];}
 inline void CanvasPartition::SetDrawUnityLine(bool aDraw) {fDrawUnityLine = aDraw;}
 inline void CanvasPartition::SetDrawOptStat(bool aDraw) {fDrawOptStat = aDraw;}
+
+inline double CanvasPartition::GetXScaleFactor(int aNx, int aNy) {return fXScaleFactors[aNx][aNy];}
+inline double CanvasPartition::GetYScaleFactor(int aNx, int aNy) {return fYScaleFactors[aNx][aNy];}
 
 //________________________________________________________________________________________________________________
 template<typename T>
