@@ -318,7 +318,7 @@ void FitGenerator::CreateParamFinalValuesText(CanvasPartition *aCanPart, int aNx
 }
 
 //________________________________________________________________________________________________________________
-void FitGenerator::CreateParamFinalValuesText(CanvasPartition *aCanPart, int aNx, int aNy, TF1* aFit, const double* aSysErrors, double aTextXmin, double aTextYmin, double aTextWidth, double aTextHeight, double aTextFont, double aTextSize)
+void FitGenerator::CreateParamFinalValuesText(CanvasPartition *aCanPart, int aNx, int aNy, TF1* aFit, const double* aSysErrors, double aTextXmin, double aTextYmin, double aTextWidth, double aTextHeight, double aTextFont, double aTextSize, bool aDrawAll)
 {
   int tNx=0, tNy=0;
   if(fNAnalyses == 6) {tNx=2; tNy=3;}
@@ -348,20 +348,99 @@ void FitGenerator::CreateParamFinalValuesText(CanvasPartition *aCanPart, int aNx
   int tNDF = fLednickyFitter->GetNDF();
 
 //  TPaveText *tText = aCanPart->SetupTPaveText("Fit Values",aNx,aNy,aTextXmin,aTextYmin,aTextWidth,aTextHeight,aTextFont,aTextSize);
-  TPaveText *tText = aCanPart->SetupTPaveText("",aNx,aNy,aTextXmin,aTextYmin,aTextWidth,aTextHeight,aTextFont,aTextSize);
+  if(!aDrawAll) {aTextHeight /= 7; aTextHeight *= 3; aTextYmin += 1.25*aTextHeight; if(aNy==2) aTextYmin -= 0.25*aTextHeight;}
+  TPaveText *tText = aCanPart->SetupTPaveText(/*"       stat.     sys."*/"",aNx,aNy,aTextXmin,aTextYmin,aTextWidth,aTextHeight,aTextFont,aTextSize);
   tText->AddText(TString::Format("#lambda = %0.2f #pm %0.2f #pm %0.2f",tLambda,tLambdaErr,aSysErrors[0]));
   tText->AddText(TString::Format("R = %0.2f #pm %0.2f #pm %0.2f",tRadius,tRadiusErr,aSysErrors[1]));
-  tText->AddText(TString::Format("Re[f0] = %0.2f #pm %0.2f #pm %0.2f",tReF0,tReF0Err,aSysErrors[2]));
-  tText->AddText(TString::Format("Im[f0] = %0.2f #pm %0.2f #pm %0.2f",tImF0,tImF0Err,aSysErrors[3]));
-  tText->AddText(TString::Format("d0 = %0.2f #pm %0.2f #pm %0.2f",tD0,tD0Err,aSysErrors[4]));
+  if(aDrawAll)
+  {
+    tText->AddText(TString::Format("Re[f0] = %0.2f #pm %0.2f #pm %0.2f",tReF0,tReF0Err,aSysErrors[2]));
+    tText->AddText(TString::Format("Im[f0] = %0.2f #pm %0.2f #pm %0.2f",tImF0,tImF0Err,aSysErrors[3]));
+    tText->AddText(TString::Format("d0 = %0.2f #pm %0.2f #pm %0.2f",tD0,tD0Err,aSysErrors[4]));
 
-  tText->AddText(TString::Format("#chi^{2}/NDF = %0.1f/%d",tChi2,tNDF));
+//    tText->AddText(TString::Format("#chi^{2}/NDF = %0.1f/%d",tChi2,tNDF));
+  }
 
+/*
+  if(!aDrawAll) {aTextHeight /= 3; aTextYmin += 2*aTextHeight;}
+  TPaveText *tText = aCanPart->SetupTPaveText("",aNx,aNy,aTextXmin,aTextYmin,aTextWidth,aTextHeight,aTextFont,aTextSize);
+  tText->AddText(TString::Format("#lambda = %0.2f #pm %0.2f (stat.) #pm %0.2f (sys.)",tLambda,tLambdaErr,aSysErrors[0]));
+  tText->AddText(TString::Format("R = %0.2f #pm %0.2f (stat.) #pm %0.2f (sys.)",tRadius,tRadiusErr,aSysErrors[1]));
+  if(aDrawAll)
+  {
+    tText->AddText(TString::Format("Re[f0] = %0.2f #pm %0.2f (stat.) #pm %0.2f (sys.)",tReF0,tReF0Err,aSysErrors[2]));
+    tText->AddText(TString::Format("Im[f0] = %0.2f #pm %0.2f (stat.) #pm %0.2f (sys.)",tImF0,tImF0Err,aSysErrors[3]));
+    tText->AddText(TString::Format("d0 = %0.2f #pm %0.2f (stat.) #pm %0.2f (sys.)",tD0,tD0Err,aSysErrors[4]));
+
+    tText->AddText(TString::Format("#chi^{2}/NDF = %0.1f/%d",tChi2,tNDF));
+  }
+*/
   tText->SetTextAlign(33);
 
 //  tText->GetLine(0)->SetTextSize(0.08);
 //  tText->GetLine(0)->SetTextFont(63);
   aCanPart->AddPadPaveText(tText,aNx,aNy);
+
+  //--------------------------------
+  if(aNx==0 && aNy==0)
+  {
+    TPaveText *tText2 = aCanPart->SetupTPaveText(TString::Format("#chi^{2}/NDF = %0.1f/%d",tChi2,tNDF),aNx,aNy,0.125,0.05,aTextWidth,0.10,aTextFont,0.9*aTextSize);
+    aCanPart->AddPadPaveText(tText2,aNx,aNy);
+
+    TPaveText *tText3 = aCanPart->SetupTPaveText("val. #pm stat. #pm sys.",aNx,aNy,0.255,0.48,aTextWidth,0.10,aTextFont,aTextSize);
+    aCanPart->AddPadPaveText(tText3,aNx,aNy);
+  }
+}
+
+//________________________________________________________________________________________________________________
+void FitGenerator::CreateParamFinalValuesTextTwoColumns(CanvasPartition *aCanPart, int aNx, int aNy, TF1* aFit, const double* aSysErrors, double aText1Xmin, double aText1Ymin, double aText1Width, double aText1Height, bool aDrawText1, double aText2Xmin, double aText2Ymin, double aText2Width, double aText2Height, bool aDrawText2, double aTextFont, double aTextSize)
+{
+  int tNx=0, tNy=0;
+  if(fNAnalyses == 6) {tNx=2; tNy=3;}
+  else if(fNAnalyses == 4) {tNx=2; tNy=2;}
+  else if(fNAnalyses == 3) {tNx=1; tNy=fNAnalyses;}
+  else if(fNAnalyses == 2 || fNAnalyses==1) {tNx=fNAnalyses; tNy=1;}
+  else assert(0);
+
+  int tPosition = aNx + aNy*tNx;
+
+  double tLambda, tRadius, tReF0, tImF0, tD0;
+  double tLambdaErr, tRadiusErr, tReF0Err, tImF0Err, tD0Err;
+
+  tLambda = aFit->GetParameter(0);
+  tRadius = aFit->GetParameter(1);
+  tReF0 = aFit->GetParameter(2);
+  tImF0 = aFit->GetParameter(3);
+  tD0 = aFit->GetParameter(4);
+
+  tLambdaErr = aFit->GetParError(0);
+  tRadiusErr = aFit->GetParError(1);
+  tReF0Err = aFit->GetParError(2);
+  tImF0Err = aFit->GetParError(3);
+  tD0Err = aFit->GetParError(4);
+
+  double tChi2 = fLednickyFitter->GetChi2();
+  int tNDF = fLednickyFitter->GetNDF();
+
+  if(aDrawText1)
+  {
+    TPaveText *tText1 = aCanPart->SetupTPaveText("",aNx,aNy,aText1Xmin,aText1Ymin,aText1Width,aText1Height,aTextFont,aTextSize);
+    tText1->AddText(TString::Format("#lambda = %0.2f #pm %0.2f #pm %0.2f",tLambda,tLambdaErr,aSysErrors[0]));
+    tText1->AddText(TString::Format("R = %0.2f #pm %0.2f #pm %0.2f",tRadius,tRadiusErr,aSysErrors[1]));
+    tText1->SetTextAlign(33);
+    aCanPart->AddPadPaveText(tText1,aNx,aNy);
+  }
+
+  if(aDrawText2)
+  {
+    TPaveText *tText2 = aCanPart->SetupTPaveText("",aNx,aNy,aText2Xmin,aText2Ymin,aText2Width,aText2Height,aTextFont,aTextSize);
+    tText2->AddText(TString::Format("Re[f0] = %0.2f #pm %0.2f #pm %0.2f",tReF0,tReF0Err,aSysErrors[2]));
+    tText2->AddText(TString::Format("Im[f0] = %0.2f #pm %0.2f #pm %0.2f",tImF0,tImF0Err,aSysErrors[3]));
+    tText2->AddText(TString::Format("d0 = %0.2f #pm %0.2f #pm %0.2f",tD0,tD0Err,aSysErrors[4]));
+    tText2->AddText(TString::Format("#chi^{2}/NDF = %0.1f/%d",tChi2,tNDF));
+    tText2->SetTextAlign(33);
+    aCanPart->AddPadPaveText(tText2,aNx,aNy);
+  }
 }
 
 //________________________________________________________________________________________________________________
@@ -631,12 +710,17 @@ TCanvas* FitGenerator::DrawKStarCfswFits(bool aMomResCorrectFit, bool aNonFlatBg
     {
       tAnalysisNumber = j*tNx + i;
 
-      int tColor;
+      int tColor, tColorTransparent;
       AnalysisType tAnType = fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetAnalysisType();
-      if(tAnType==kLamK0 || tAnType==kALamK0) tColor=1;
-      else if(tAnType==kLamKchP || tAnType==kALamKchM) tColor=2;
-      else if(tAnType==kLamKchM || tAnType==kALamKchP) tColor=4;
+      if(tAnType==kLamK0 || tAnType==kALamK0) tColor=kBlack;
+      else if(tAnType==kLamKchP || tAnType==kALamKchM) tColor=kRed+1;
+      else if(tAnType==kLamKchM || tAnType==kALamKchP) tColor=kBlue+1;
       else tColor=1;
+
+      tColorTransparent = TColor::GetColorTransparent(tColor,0.2);
+
+      int tColorCorrectFit = kMagenta+1;
+      int tColorNonFlatBgd = kGreen+2;
 
       TH1* tCorrectedFitHisto = (TH1*)fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetCorrectedFitHisto(aMomResCorrectFit,aNonFlatBgdCorrectFit,false,aNonFlatBgdFitType);
         tCorrectedFitHisto->SetLineWidth(2);
@@ -646,7 +730,11 @@ TCanvas* FitGenerator::DrawKStarCfswFits(bool aMomResCorrectFit, bool aNonFlatBg
       if(aDrawSysErrors)
       {
         tHistToPlot = (TH1*)fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetCfwSysErrors();
-          tHistToPlot->SetFillStyle(0);  //for box error bars to draw correctly
+          //tHistToPlot->SetFillStyle(0);  //for box error bars to draw correctly
+          tHistToPlot->SetFillColor(tColorTransparent);
+          tHistToPlot->SetFillStyle(1000);
+          tHistToPlot->SetLineColor(0);
+          tHistToPlot->SetLineWidth(0);
       }
 
 //TODO 
@@ -675,19 +763,38 @@ TCanvas* FitGenerator::DrawKStarCfswFits(bool aMomResCorrectFit, bool aNonFlatBg
       if(aDrawSysErrors) assert(tHistToPlot->GetBinWidth(1) == ((TH1*)fSharedAn->GetKStarCfHeavy(tAnalysisNumber)->GetHeavyCfClone())->GetBinWidth(1));
       //---------------------------------------------------------------------------------------------------------
 
-      tCanPart->AddGraph(i,j,(TH1*)fSharedAn->GetKStarCfHeavy(tAnalysisNumber)->GetHeavyCfClone(),"",20,tColor,0.5);
-      if(aDrawSysErrors) tCanPart->AddGraph(i,j,tHistToPlot,"",20,tColor,0.5,"e2psame");
+      tCanPart->AddGraph(i,j,(TH1*)fSharedAn->GetKStarCfHeavy(tAnalysisNumber)->GetHeavyCfClone(),"",20,tColor,0.5,"ex0");  //ex0 suppresses the error along x
+      tCanPart->AddGraph(i,j,(TF1*)fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetNonFlatBackground(aNonFlatBgdFitType),"",20,tColorNonFlatBgd);
       tCanPart->AddGraph(i,j,(TF1*)fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetFit(),"");
-      tCanPart->AddGraph(i,j,tCorrectedFitHisto,"",20,6,0.5,"lsame");
-      tCanPart->AddGraph(i,j,(TF1*)fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetNonFlatBackground(aNonFlatBgdFitType),"",20,3);
+      tCanPart->AddGraph(i,j,tCorrectedFitHisto,"",20,tColorCorrectFit,0.5,"lsame");
+      if(aDrawSysErrors) tCanPart->AddGraph(i,j,tHistToPlot,"",20,tColorTransparent,0.5,"e2psame");
+      tCanPart->AddGraph(i,j,(TH1*)fSharedAn->GetKStarCfHeavy(tAnalysisNumber)->GetHeavyCfClone(),"",20,tColor,0.5,"ex0same");  //draw again so data on top
 
       TString tTextAnType = TString(cAnalysisRootTags[fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetAnalysisType()]);
-      TPaveText* tAnTypeName = tCanPart->SetupTPaveText(tTextAnType,i,j,0.8,0.85);
+      //TPaveText* tAnTypeName = tCanPart->SetupTPaveText(tTextAnType,i,j,0.89,0.85,0.05);
+      TPaveText* tAnTypeName = tCanPart->SetupTPaveText(tTextAnType,i,j,0.715,0.825,0.05);
       tCanPart->AddPadPaveText(tAnTypeName,i,j);
 
       TString tTextCentrality = TString(cPrettyCentralityTags[fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetCentralityType()]);
-      TPaveText* tCentralityName = tCanPart->SetupTPaveText(tTextCentrality,i,j,0.10,0.85);
+      //TPaveText* tCentralityName = tCanPart->SetupTPaveText(tTextCentrality,i,j,0.12,0.85,0.075);
+      TPaveText* tCentralityName = tCanPart->SetupTPaveText(tTextCentrality,i,j,0.865,0.825,0.075);
       tCanPart->AddPadPaveText(tCentralityName,i,j);
+
+      if(i==0 && j==0)
+      {
+        TString tTextAlicePrelim = TString("ALICE Preliminary");
+        //TPaveText* tAlicePrelim = tCanPart->SetupTPaveText(tTextAlicePrelim,i,j,0.30,0.85,0.40,0.10,43,15);
+        TPaveText* tAlicePrelim = tCanPart->SetupTPaveText(tTextAlicePrelim,i,j,0.075,0.825,0.40,0.10,43,15);
+        tCanPart->AddPadPaveText(tAlicePrelim,i,j);
+      }
+
+      if(i==1 && j==0)
+      {
+        TString tTextSysInfo = TString("Pb-Pb #sqrt{#it{s}_{NN}} = 2.76 TeV");
+        //TPaveText* tSysInfo = tCanPart->SetupTPaveText(tTextSysInfo,i,j,0.30,0.85,0.40,0.10,43,15);
+        TPaveText* tSysInfo = tCanPart->SetupTPaveText(tTextSysInfo,i,j,0.125,0.825,0.40,0.10,43,15);
+        tCanPart->AddPadPaveText(tSysInfo,i,j);
+      }
 /*
       if(aZoomROP) CreateParamInitValuesText(tCanPart,i,j,0.35,0.20,0.10,0.40,43,9);
       else CreateParamInitValuesText(tCanPart,i,j,0.25,0.20,0.15,0.45,43,10);
@@ -695,14 +802,25 @@ TCanvas* FitGenerator::DrawKStarCfswFits(bool aMomResCorrectFit, bool aNonFlatBg
 */
       const double* tSysErrors = cSysErrors[fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetAnalysisType()][fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetCentralityType()];
 
-      CreateParamFinalValuesText(tCanPart,i,j,(TF1*)fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetFit(),tSysErrors,0.70,0.10,0.25,0.50,43,9);
+//      bool bDrawAll = true;
+
+      bool bDrawAll = false;
+      if(i==0 && j==0) bDrawAll = true;
+      CreateParamFinalValuesText(tCanPart,i,j,(TF1*)fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetFit(),tSysErrors,0.73,0.09,0.25,0.53,43,12.0,bDrawAll);
+/*
+      bool bDrawText1 = true;
+      bool bDrawText2 = false;
+      if(j==0 && i==0) bDrawText2 = true;
+//      CreateParamFinalValuesTextTwoColumns(tCanPart,i,j,(TF1*)fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetFit(),tSysErrors,0.24,0.15,0.25,0.25,bDrawText1,0.74,0.10,0.25,0.50,bDrawText2,43,11);
+      CreateParamFinalValuesTextTwoColumns(tCanPart,i,j,(TF1*)fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetFit(),tSysErrors,0.74,0.15,0.25,0.25,bDrawText1,0.37,0.10,0.25,0.50,bDrawText2,43,11);
+*/
     }
   }
 
   tCanPart->SetDrawUnityLine(true);
   tCanPart->DrawAll();
-  tCanPart->DrawXaxisTitle("k* (GeV/c)");
-  tCanPart->DrawYaxisTitle("C(k*)",43,25,0.05,0.85);
+  tCanPart->DrawXaxisTitle("#it{k}* (GeV/#it{c})");
+  tCanPart->DrawYaxisTitle("C(#it{k}*)",43,25,0.05,0.85);
 
   if(aSaveImage)
   {

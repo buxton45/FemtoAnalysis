@@ -149,7 +149,7 @@ td2dTPadVec CanvasPartition::BuildPartition(TCanvas *aCanvas,const Int_t Nx,cons
             vposd = vposu-vStep-tMargin;
             vfactor = vposu-vposd;
             vmard = 0.0;
-            if(Ny==1) vmard = 0.04;  //TODO make more general
+            if(Ny==1) vmard = 0.06;  //TODO make more general
             vmaru = tMargin/vfactor;
 
          } else if (j == Ny-1) {
@@ -312,7 +312,7 @@ void CanvasPartition::DrawInPad(int aNx, int aNy)
 
   int tPosition = aNx + aNy*fNx;
   TObjArray* tGraphsToDraw = ((TObjArray*)fGraphs->At(tPosition));
-  assert(tGraphsToDraw->GetEntries() == fGraphsDrawOptions[tPosition].size());
+  assert(tGraphsToDraw->GetEntries() == (int)fGraphsDrawOptions[tPosition].size());
 
   TIter tNextGraph(tGraphsToDraw);
   TObject *tGraphObj = NULL;
@@ -333,13 +333,15 @@ void CanvasPartition::DrawInPad(int aNx, int aNy)
   int tCounter = 0;
   while(tGraphObj = tNextGraph())
   {
-    if(tCounter==0) tGraphObj->Draw("AXIS");
+    if(tCounter==0) tGraphObj->Draw("AXIS"+fGraphsDrawOptions[tPosition][tCounter]);
+    if(fGraphsDrawOptions[tPosition][tCounter] == TString("lsame")) ((TH1*)tGraphObj)->GetXaxis()->SetRange(1,((TH1*)tGraphObj)->GetNbinsX());  //TODO work-around so stupid 
+                                                                                                                                                //underflow is not drawn
     tGraphObj->Draw(fGraphsDrawOptions[tPosition][tCounter]);
     tCounter++;
   }
 
   TObjArray* tPaveTexts = (TObjArray*)fPadPaveTexts->At(tPosition);
-  for(unsigned int i=0; i<tPaveTexts->GetEntries(); i++) tPaveTexts->At(i)->Draw();
+  for(int i=0; i<tPaveTexts->GetEntries(); i++) tPaveTexts->At(i)->Draw();
 
   if(fDrawUnityLine)
   {
@@ -347,9 +349,11 @@ void CanvasPartition::DrawInPad(int aNx, int aNy)
     if(fXaxisRangeLow<0) tXaxisRangeLow = 0.;
     else tXaxisRangeLow = fXaxisRangeLow;
     TLine *tLine = new TLine(tXaxisRangeLow,1.,fXaxisRangeHigh,1.);
-    tLine->SetLineColor(14);
+    tLine->SetLineColor(TColor::GetColorTransparent(kGray,0.75));
     tLine->Draw();
   }
+
+  tGraphsToDraw->At(0)->Draw("ex0same");
 }
 
 //________________________________________________________________________________________________________________

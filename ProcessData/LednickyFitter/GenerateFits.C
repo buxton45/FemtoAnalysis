@@ -13,13 +13,13 @@ int main(int argc, char **argv)
 //-----------------------------------------------------------------------------
   TString tResultsDate = "20161027";
 
-  AnalysisType tAnType = kLamKchM;
+  AnalysisType tAnType = kLamK0;
   AnalysisRunType tAnRunType = kTrain;
   int tNPartialAnalysis = 2;
   CentralityType tCentType = kMB;
   FitGeneratorType tGenType = kPairwConj;
   bool tShareLambdaParams = false;
-  bool tAllShareSingleLambdaParam = false;
+  bool tAllShareSingleLambdaParam = true;
 
   bool SaveImages = true;
   bool ApplyMomResCorrection = true;
