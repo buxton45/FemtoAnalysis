@@ -47,7 +47,7 @@ public:
   void AddGraph(int aNx, int aNy, T* aGraph, TString tPadLegendName, int aMarkerStyle=20, int aMarkerColor=1, double aMarkerSize=0.75, TString aDrawOption="psames");
 
   template<typename T>
-  void SetupAxis(AxisType aAxisType, T* aGraph, float aXscale, float aYscale, float aLabelSize=0.15, float aLabelOffSet=0.005);
+  void SetupAxis(AxisType aAxisType, T* aGraph, float aXscale, float aYscale, float aLabelSize=0.15/*0.20*/, float aLabelOffSet=0.005);
 
   td2dTPadVec BuildPartition(TCanvas *aCanvas,const Int_t Nx = 2,const Int_t Ny = 2,
                          Float_t lMargin = 0.15, Float_t rMargin = 0.05,

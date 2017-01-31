@@ -218,6 +218,68 @@ const double* cAXiKchMStartValues[3] = {cAXiKchM_0010StartValues,cAXiKchM_1030St
 const double** cStartValues[10] = {cLamK0StartValues, cALamK0StartValues, cLamKchPStartValues, cALamKchPStartValues, cLamKchMStartValues, cALamKchMStartValues, cXiKchPStartValues, cAXiKchPStartValues, cXiKchMStartValues, cAXiKchMStartValues};
 
 
+//________________________________________________________________________________________________________________
+
+const double cLamK0_0010SysErrors[5] = {0.116, 0.329, 0.043, 0.059, 2.836};
+const double cLamK0_1030SysErrors[5] = {0.116, 0.324, 0.043, 0.059, 2.836};
+const double cLamK0_3050SysErrors[5] = {0.116, 0.280, 0.043, 0.059, 2.836};
+const double* cLamK0SysErrors[3] = {cLamK0_0010SysErrors,cLamK0_1030SysErrors,cLamK0_3050SysErrors};
+
+const double cALamK0_0010SysErrors[5] = {0.116, 0.329, 0.043, 0.059, 2.836};
+const double cALamK0_1030SysErrors[5] = {0.116, 0.324, 0.043, 0.059, 2.836};
+const double cALamK0_3050SysErrors[5] = {0.116, 0.280, 0.043, 0.059, 2.836};
+const double* cALamK0SysErrors[3] = {cALamK0_0010SysErrors,cALamK0_1030SysErrors,cALamK0_3050SysErrors};
+
+//________________________________________________________________________________________________________________
+const double cLamKchP_0010SysErrors[5] = {0.220, 0.830, 0.223 ,0.111, 1.621};
+const double cLamKchP_1030SysErrors[5] = {0.241, 0.663, 0.223, 0.111, 1.621};
+const double cLamKchP_3050SysErrors[5] = {0.204, 0.420, 0.223, 0.111, 1.621};
+const double* cLamKchPSysErrors[3] = {cLamKchP_0010SysErrors,cLamKchP_1030SysErrors,cLamKchP_3050SysErrors};
+
+const double cALamKchM_0010SysErrors[5] = {0.217, 0.830, 0.223, 0.111, 1.621};
+const double cALamKchM_1030SysErrors[5] = {0.201, 0.663, 0.223, 0.111, 1.621};
+const double cALamKchM_3050SysErrors[5] = {0.203, 0.420, 0.223, 0.111, 1.621};
+const double* cALamKchMSysErrors[3] = {cALamKchM_0010SysErrors,cALamKchM_1030SysErrors,cALamKchM_3050SysErrors};
+
+//--------------------------------------
+
+const double cLamKchM_0010SysErrors[5] = {0.186, 1.375, 0.095, 0.184, 7.658};
+const double cLamKchM_1030SysErrors[5] = {0.198, 0.978, 0.095, 0.184, 7.658};
+const double cLamKchM_3050SysErrors[5] = {0.132, 0.457, 0.095, 0.184, 7.658};
+const double* cLamKchMSysErrors[3] = {cLamKchM_0010SysErrors,cLamKchM_1030SysErrors,cLamKchM_3050SysErrors};
+
+const double cALamKchP_0010SysErrors[5] = {0.152, 1.375, 0.095, 0.184, 7.658};
+const double cALamKchP_1030SysErrors[5] = {0.148, 0.978, 0.095 ,0.184, 7.658};
+const double cALamKchP_3050SysErrors[5] = {0.106, 0.457, 0.095, 0.184, 7.658};
+const double* cALamKchPSysErrors[3] = {cALamKchP_0010SysErrors,cALamKchP_1030SysErrors,cALamKchP_3050SysErrors};
+//________________________________________________________________________________________________________________
+
+const double cXiKchP_0010SysErrors[5] = {0.,0.,0.,0.,0.};
+const double cXiKchP_1030SysErrors[5] = {0.,0.,0.,0.,0.};
+const double cXiKchP_3050SysErrors[5] = {0.,0.,0.,0.,0.};
+const double* cXiKchPSysErrors[3] = {cXiKchP_0010SysErrors,cXiKchP_1030SysErrors,cXiKchP_3050SysErrors};
+
+const double cAXiKchP_0010SysErrors[5] = {0.,0.,0.,0.,0.};
+const double cAXiKchP_1030SysErrors[5] = {0.,0.,0.,0.,0.};
+const double cAXiKchP_3050SysErrors[5] = {0.,0.,0.,0.,0.};
+const double* cAXiKchPSysErrors[3] = {cAXiKchP_0010SysErrors,cAXiKchP_1030SysErrors,cAXiKchP_3050SysErrors};
+
+const double cXiKchM_0010SysErrors[5] = {0.,0.,0.,0.,0.};
+const double cXiKchM_1030SysErrors[5] = {0.,0.,0.,0.,0.};
+const double cXiKchM_3050SysErrors[5] = {0.,0.,0.,0.,0.};
+const double* cXiKchMSysErrors[3] = {cXiKchM_0010SysErrors,cXiKchM_1030SysErrors,cXiKchM_3050SysErrors};
+
+const double cAXiKchM_0010SysErrors[5] = {0.,0.,0.,0.,0.};
+const double cAXiKchM_1030SysErrors[5] = {0.,0.,0.,0.,0.};
+const double cAXiKchM_3050SysErrors[5] = {0.,0.,0.,0.,0.};
+const double* cAXiKchMSysErrors[3] = {cAXiKchM_0010SysErrors,cAXiKchM_1030SysErrors,cAXiKchM_3050SysErrors};
+
+//-----
+
+const double** cSysErrors[10] = {cLamK0SysErrors, cALamK0SysErrors, cLamKchPSysErrors, cALamKchPSysErrors, cLamKchMSysErrors, cALamKchMSysErrors, cXiKchPSysErrors, cAXiKchPSysErrors, cXiKchMSysErrors, cAXiKchMSysErrors};
+
+
+
 //-----
 const double hbarc = 0.197327;
 const double gBohrRadiusXiK = 75.23349845;

@@ -258,6 +258,69 @@ using std::vector;
                                           //second index = CentralityType
                                           //third index = Parameter value
 
+  //-------------------------------------------------
+  extern const double cLamK0_0010SysErrors[5];
+  extern const double cLamK0_1030SysErrors[5];
+  extern const double cLamK0_3050SysErrors[5];
+  extern const double *cLamK0SysErrors[3];
+
+  extern const double cALamK0_0010SysErrors[5];
+  extern const double cALamK0_1030SysErrors[5];
+  extern const double cALamK0_3050SysErrors[5];
+  extern const double *cALamK0SysErrors[3];
+
+  //-----
+
+  extern const double cLamKchP_0010SysErrors[5];
+  extern const double cLamKchP_1030SysErrors[5];
+  extern const double cLamKchP_3050SysErrors[5];
+  extern const double *cLamKchPSysErrors[3];
+
+  extern const double cALamKchM_0010SysErrors[5];
+  extern const double cALamKchM_1030SysErrors[5];
+  extern const double cALamKchM_3050SysErrors[5];
+  extern const double *cALamKchMSysErrors[3];
+
+  extern const double cLamKchM_0010SysErrors[5];
+  extern const double cLamKchM_1030SysErrors[5];
+  extern const double cLamKchM_3050SysErrors[5];
+  extern const double *cLamKchMSysErrors[3];
+
+  extern const double cALamKchP_0010SysErrors[5];
+  extern const double cALamKchP_1030SysErrors[5];
+  extern const double cALamKchP_3050SysErrors[5];
+  extern const double *cALamKchPSysErrors[3];
+
+  //-----
+
+  extern const double cXiKchP_0010SysErrors[5];
+  extern const double cXiKchP_1030SysErrors[5];
+  extern const double cXiKchP_3050SysErrors[5];
+  extern const double *cXiKchPSysErrors[3];
+
+  extern const double cAXiKchP_0010SysErrors[5];
+  extern const double cAXiKchP_1030SysErrors[5];
+  extern const double cAXiKchP_3050SysErrors[5];
+  extern const double *cAXiKchPSysErrors[3];
+
+  extern const double cXiKchM_0010SysErrors[5];
+  extern const double cXiKchM_1030SysErrors[5];
+  extern const double cXiKchM_3050SysErrors[5];
+  extern const double *cXiKchMSysErrors[3];
+
+  extern const double cAXiKchM_0010SysErrors[5];
+  extern const double cAXiKchM_1030SysErrors[5];
+  extern const double cAXiKchM_3050SysErrors[5];
+  extern const double *cAXiKchMSysErrors[3];
+
+  //-----
+
+  extern const double **cSysErrors[10];  // = fSysErrors[6][3][6]
+                                          //first index = AnalysisType
+                                          //second index = CentralityType
+                                          //third index = Parameter value
+
+
   //-----
   extern const double hbarc;
   extern const double gBohrRadiusXiK;

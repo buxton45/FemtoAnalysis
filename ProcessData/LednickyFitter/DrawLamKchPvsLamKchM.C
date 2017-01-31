@@ -1,4 +1,6 @@
 #include "FitGenerator.h"
+#include "TMarker.h"
+#include "TArrow.h"
 class FitGenerator;
 
 int main(int argc, char **argv) 
@@ -16,7 +18,7 @@ int main(int argc, char **argv)
   AnalysisRunType tAnRunType = kTrain;
   int tNPartialAnalysis = 2;
   CentralityType tCentType = k0010;
-  bool SaveImages = false;
+  bool SaveImages = true;
 
   TString tDirectoryBase = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_%s/",tResultsDate.Data());
   TString tFileLocationBase = TString::Format("%sResults_cLamcKch_%s",tDirectoryBase.Data(),tResultsDate.Data());
@@ -36,13 +38,14 @@ int main(int argc, char **argv)
 
 
   double tXLow = -0.02;
-  double tXHigh = 0.49;
-  double tYLow = 0.85;
+  double tXHigh = 0.29;
+  double tYLow = 0.86;
   double tYHigh = 1.03;
-  CanvasPartition* tCanPart = new CanvasPartition(tCanvasName,tNx,tNy,tXLow,tXHigh,tYLow,tYHigh,0.12,0.05,0.13,0.05);
+  CanvasPartition* tCanPart = new CanvasPartition(tCanvasName,tNx,tNy,tXLow,tXHigh,tYLow,tYHigh,0.10,0.02,0.13,0.02);
+  tCanPart->GetCanvas()->SetCanvasSize(1400,500);
 
   int tMarkerStyle = 20;
-  double tMarkerSize = 0.5;
+  double tMarkerSize = 0.75;
 
   TH1* tCf_LamKchP = tLamKchP->GetKStarCfHeavy()->GetHeavyCfClone();
   TH1* tSysErrs_LamKchP = tLamKchP->GetCfwSysErrors();
@@ -73,7 +76,7 @@ int main(int argc, char **argv)
   tCanPart->AddPadPaveText(tPaveText1a,0,0);
 */
   TString tText1b = TString("0-10%");
-  TPaveText* tPaveText1b = tCanPart->SetupTPaveText(tText1b,0,0,0.05,0.85);
+  TPaveText* tPaveText1b = tCanPart->SetupTPaveText(tText1b,0,0,0.075,0.875,0.15,0.075,63,25);
   tCanPart->AddPadPaveText(tPaveText1b,0,0);
 
 //-------------------------------------------------------------------------------
@@ -89,7 +92,7 @@ int main(int argc, char **argv)
   tCanPart->AddPadPaveText(tPaveText2a,1,0);
 */
   TString tText2b = TString("0-10%");
-  TPaveText* tPaveText2b = tCanPart->SetupTPaveText(tText2b,1,0,0.05,0.85);
+  TPaveText* tPaveText2b = tCanPart->SetupTPaveText(tText2b,1,0,0.075,0.875,0.15,0.075,63,25);
   tCanPart->AddPadPaveText(tPaveText2b,1,0);
 
 //-------------------------------------------------------------------------------
@@ -97,11 +100,51 @@ int main(int argc, char **argv)
 
   tCanPart->SetDrawUnityLine(true);
   tCanPart->DrawAll();
-  tCanPart->DrawXaxisTitle("k* (GeV/c)");
-  tCanPart->DrawYaxisTitle("C(k*)",43,25,0.05,0.75);
+  tCanPart->DrawXaxisTitle("k* (GeV/c)",43,35,0.315,0.03);
+  tCanPart->DrawYaxisTitle("C(k*)",43,45,0.05,0.75);
 
+//-------------------------------------------------------------------------------
+  TPad* tPadLeft = tCanPart->GetPad(0,0);
+  TPad* tPadRight = tCanPart->GetPad(1,0);
 
-  if(SaveImages) tCanPart->GetCanvas()->SaveAs(tDirectoryBase+tCanvasName+TString(".pdf"));
+  TArrow* ar1 = new TArrow(0.225,1.0075,0.26,1.015,0.005,"<|");
+    ar1->SetLineWidth(2);
+
+  TLatex* tex = new TLatex();
+  TMarker *marker = new TMarker();
+    marker->SetMarkerStyle(tMarkerStyle);
+    marker->SetMarkerSize(1.5);
+
+  tex->SetTextFont(42);
+  tex->SetTextSize(0.088);
+  tex->SetLineWidth(2);
+
+  tPadLeft->cd();
+  tex->DrawLatex(0.20,0.905,"#LambdaK+");
+  marker->SetMarkerColor(2);
+  marker->DrawMarker(0.245,0.910);
+
+  tex->DrawLatex(0.20,0.88,"#LambdaK-");
+  marker->SetMarkerColor(4);
+  marker->DrawMarker(0.245,0.885);
+
+  ar1->Draw();
+  tex->DrawLatex(0.265,1.01,"#Omega");
+
+  tPadRight->cd();
+  tex->DrawLatex(0.20,0.905,"#bar{#Lambda}K-");
+  marker->SetMarkerColor(2);
+  marker->DrawMarker(0.245,0.910);
+
+  tex->DrawLatex(0.20,0.88,"#bar{#Lambda}K+");
+  marker->SetMarkerColor(4);
+  marker->DrawMarker(0.245,0.885);
+
+  ar1->Draw();
+  tex->DrawLatex(0.265,1.01,"#bar{#Omega}");
+
+//-------------------------------------------------------------------------------
+  if(SaveImages) tCanPart->GetCanvas()->SaveAs(tDirectoryBase+tCanvasName+TString(".png"));
 //-------------------------------------------------------------------------------
   tFullTimer.Stop();
   cout << "Finished program: ";
