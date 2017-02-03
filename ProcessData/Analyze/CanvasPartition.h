@@ -157,8 +157,8 @@ inline void CanvasPartition::SetupAxis(AxisType aAxisType, T* aGraph, float aXsc
 
   if(aAxisType == kXaxis)
   {
-    tReturnAxis->SetNdivisions(510);
-    tReturnAxis->SetTickLength(0.04*aYscale/aXscale);
+    tReturnAxis->SetNdivisions(505);
+    tReturnAxis->SetTickLength(0.06*aYscale/aXscale);
     tReturnAxis->SetRangeUser(fXaxisRangeLow,fXaxisRangeHigh);
   }
   else
