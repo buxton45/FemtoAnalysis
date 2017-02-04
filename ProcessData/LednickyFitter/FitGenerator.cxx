@@ -824,7 +824,7 @@ TCanvas* FitGenerator::DrawKStarCfswFits(bool aMomResCorrectFit, bool aNonFlatBg
   tCanPart->SetDrawUnityLine(true);
   tCanPart->DrawAll();
   tCanPart->DrawXaxisTitle("#it{k}* (GeV/#it{c})");
-  tCanPart->DrawYaxisTitle("C(#it{k}*)",43,25,0.05,0.85);
+  tCanPart->DrawYaxisTitle("#it{C}(#it{k}*)",43,25,0.05,0.85);
 
   if(aSaveImage)
   {
