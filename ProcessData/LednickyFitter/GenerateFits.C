@@ -59,7 +59,7 @@ int main(int argc, char **argv)
   tLamKchP->DoFit(ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, IncludeResiduals, tNonFlatBgdFitType);
   TCanvas* tKStarwFitsCan = tLamKchP->DrawKStarCfswFits(ApplyMomResCorrection,ApplyNonFlatBackgroundCorrection,tNonFlatBgdFitType,SaveImages);
 //  TCanvas* tKStarCfs = tLamKchP->DrawKStarCfs(SaveImages);
-
+//  TCanvas* tModelKStarCfs = tLamKchP->DrawModelKStarCfs(SaveImages);
 //  tLamKchP->FindGoodInitialValues(ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection);
 
 //-------------------------------------------------------------------------------

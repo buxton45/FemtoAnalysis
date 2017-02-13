@@ -90,6 +90,7 @@ public:
 
   FitPairAnalysis* GetFitPairAnalysis(int aPairAnalysisNumber);
   CfHeavy* GetKStarCfHeavy(int aPairAnalysisNumber);
+  CfHeavy* GetModelKStarCfHeavy(int aPairAnalysisNumber);
 
   void DrawFit(int aAnalysisNumber, const char* aTitle);
 
@@ -149,6 +150,7 @@ inline vector<double> FitSharedAnalyses::GetMinuitParErrors() {return fMinuitPar
 
 inline FitPairAnalysis* FitSharedAnalyses::GetFitPairAnalysis(int aPairAnalysisNumber) {return fFitPairAnalysisCollection[aPairAnalysisNumber];}
 inline CfHeavy* FitSharedAnalyses::GetKStarCfHeavy(int aPairAnalysisNumber) {return fKStarCfHeavyCollection[aPairAnalysisNumber];}
+inline CfHeavy* FitSharedAnalyses::GetModelKStarCfHeavy(int aPairAnalysisNumber) {return fFitPairAnalysisCollection[aPairAnalysisNumber]->GetModelKStarHeavyCf();}
 
 inline void FitSharedAnalyses::DrawFit(int aAnalysisNumber, const char* aTitle) {fFitPairAnalysisCollection[aAnalysisNumber]->DrawFit(aTitle);}
 

@@ -45,6 +45,8 @@ public:
   virtual TCanvas* DrawKStarCfs(bool aSaveImage=false, bool aDrawSysErrors=true);
   virtual TCanvas* DrawKStarCfswFits(bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, NonFlatBgdFitType aNonFlatBgdFitType=kLinear, bool aSaveImage=false, bool aDrawSysErrors=true, bool aZoomROP=true);
 
+  virtual TCanvas* DrawModelKStarCfs(bool aSaveImage=false);  //TODO add option to choose true, fake, no weight, etc.
+
   void SetUseLimits(vector<FitParameter> &aVec, bool aUse);  //Internal use only
 
   void SetRadiusStartValue(double aRad, int aIndex=0);

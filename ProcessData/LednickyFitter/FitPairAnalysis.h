@@ -71,6 +71,7 @@ public:
 
   void SetFitParameter(FitParameter* aParam);
 
+  CfHeavy* GetModelKStarHeavyCf(double aMinNorm=0.32, double aMaxNorm=0.40, int aRebin=4);
   void BuildModelKStarHeavyCfFake(double aMinNorm, double aMaxNorm, int aRebin=1);
   void BuildModelKStarHeavyCfFakeIdeal(double aMinNorm, double aMaxNorm, int aRebin=1);
   void BuildModelCfFakeIdealCfFakeRatio(double aMinNorm=0.32, double aMaxNorm=0.4, int aRebinFactor=1);

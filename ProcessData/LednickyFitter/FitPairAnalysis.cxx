@@ -567,6 +567,25 @@ void FitPairAnalysis::DrawFit(const char* aTitle)
 */
 }
 
+//________________________________________________________________________________________________________________
+CfHeavy* FitPairAnalysis::GetModelKStarHeavyCf(double aMinNorm, double aMaxNorm, int aRebin)
+{
+  vector<CfLite*> tTempCfLiteCollection;
+
+  for(int iAnaly=0; iAnaly<fNFitPartialAnalysis; iAnaly++)
+  {
+    tTempCfLiteCollection.push_back(fFitPartialAnalysisCollection[iAnaly]->GetModelKStarCf(aMinNorm,aMaxNorm,aRebin));
+  }
+
+  TString tCfBaseName = "ModelKStarHeavyCf_";
+  TString tCfName = tCfBaseName + TString(cAnalysisBaseTags[fAnalysisType]) + TString(cCentralityTags[fCentralityType]);
+
+  TString tTitle = TString(cRootParticleTags[fParticleTypes[0]]) + TString(cRootParticleTags[fParticleTypes[1]]);
+
+  CfHeavy* tReturnCfHeavy = new CfHeavy(tCfName,tTitle,tTempCfLiteCollection,aMinNorm,aMaxNorm);
+
+  return tReturnCfHeavy;
+}
 
 //________________________________________________________________________________________________________________
 void FitPairAnalysis::BuildModelKStarHeavyCfFake(double aMinNorm, double aMaxNorm, int aRebin)

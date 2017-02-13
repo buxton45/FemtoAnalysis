@@ -80,6 +80,7 @@ public:
 
   void SetFitParameter(FitParameter* aParam);
 
+  CfLite* GetModelKStarCf(double aMinNorm=0.32, double aMaxNorm=0.40, int aRebin=1);
   CfLite* GetModelKStarCfFake(double aMinNorm, double aMaxNorm, int aRebin=1);
   CfLite* GetModelKStarCfFakeIdeal(double aMinNorm, double aMaxNorm, int aRebin=1);
 

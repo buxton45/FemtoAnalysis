@@ -835,6 +835,73 @@ TCanvas* FitGenerator::DrawKStarCfswFits(bool aMomResCorrectFit, bool aNonFlatBg
   return tCanPart->GetCanvas();
 }
 
+
+//________________________________________________________________________________________________________________
+TCanvas* FitGenerator::DrawModelKStarCfs(bool aSaveImage)
+{
+  TString tCanvasName = TString("canModelKStarCfs");
+  if(fGeneratorType==kPairwConj) tCanvasName += TString(cAnalysisBaseTags[fPairType]) + TString("wConj");
+  else if(fGeneratorType==kPair) tCanvasName += TString(cAnalysisBaseTags[fPairType]);
+  else if(fGeneratorType==kConjPair) tCanvasName += TString(cAnalysisBaseTags[fConjPairType]);
+  else assert(0);
+
+  for(unsigned int i=0; i<fCentralityTypes.size(); i++) tCanvasName += TString(cCentralityTags[fCentralityTypes[i]]);
+
+  int tNx=1, tNy=1;
+  if(fNAnalyses > 1) tNx = 2;
+
+  double tXLow = -0.02;
+  double tXHigh = 0.99;
+  double tYLow = 0.71;
+  double tYHigh = 1.09;
+  CanvasPartition* tCanPart = new CanvasPartition(tCanvasName,tNx,tNy,tXLow,tXHigh,tYLow,tYHigh,0.12,0.05,0.13,0.05);
+
+  int tAnalysisNumber=0;
+
+  int tMarkerStyle = 20;
+  int tMarkerColor = 1;
+  double tMarkerSize = 0.5;
+
+  if(fPairType==kLamK0 || fPairType==kALamK0) tMarkerColor = 1;
+  else if(fPairType==kLamKchP || fPairType==kALamKchM) tMarkerColor = 2;
+  else if(fPairType==kLamKchM || fPairType==kALamKchP) tMarkerColor = 4;
+  else tMarkerColor=1;
+
+  for(int j=0; j<tNy; j++)
+  {
+    for(int i=0; i<tNx; i++)
+    {
+      tAnalysisNumber = j*tNx + i;
+
+      //---------------------------------------------------------------------------------------------------------
+
+      tCanPart->AddGraph(i,j,(TH1*)fSharedAn->GetModelKStarCfHeavy(tAnalysisNumber)->GetHeavyCfClone(),"",tMarkerStyle,tMarkerColor,tMarkerSize);
+
+      TString tTextAnType = TString(cAnalysisRootTags[fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetAnalysisType()]);
+      TPaveText* tAnTypeName = tCanPart->SetupTPaveText(tTextAnType,i,j,0.8,0.85);
+      tCanPart->AddPadPaveText(tAnTypeName,i,j);
+
+      TString tTextCentrality = TString(cPrettyCentralityTags[fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetCentralityType()]);
+      TPaveText* tCentralityName = tCanPart->SetupTPaveText(tTextCentrality,i,j,0.05,0.85);
+      tCanPart->AddPadPaveText(tCentralityName,i,j);
+    }
+  }
+
+  tCanPart->SetDrawUnityLine(true);
+  tCanPart->DrawAll();
+  tCanPart->DrawXaxisTitle("k* (GeV/c)");
+  tCanPart->DrawYaxisTitle("C(k*)",43,25,0.05,0.75);
+
+  if(aSaveImage)
+  {
+    ExistsSaveLocationBase();
+    tCanPart->GetCanvas()->SaveAs(fSaveLocationBase+tCanvasName+fSaveNameModifier+TString(".pdf"));
+  }
+
+  return tCanPart->GetCanvas();
+}
+
+
 //________________________________________________________________________________________________________________
 void FitGenerator::SetUseLimits(vector<FitParameter> &aVec, bool aUse)
 {

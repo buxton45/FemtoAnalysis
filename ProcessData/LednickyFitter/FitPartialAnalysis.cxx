@@ -634,6 +634,25 @@ void FitPartialAnalysis::SetFitParameter(FitParameter* aParam)
 }
 
 //________________________________________________________________________________________________________________
+CfLite* FitPartialAnalysis::GetModelKStarCf(double aMinNorm, double aMaxNorm, int aRebin)
+{
+  TString tNumName = cKStarCfBaseTagNum + TString(cAnalysisBaseTags[fAnalysisType]);
+  TString tNewNumName = tNumName + TString(cBFieldTags[fBFieldType]);
+  TH1* tNum = Get1dHisto(fFileLocationMC,tNumName,tNewNumName);
+
+  TString tDenName = cKStarCfBaseTagDen + TString(cAnalysisBaseTags[fAnalysisType]);
+  TString tNewDenName = tDenName + TString(cBFieldTags[fBFieldType]);
+  TH1* tDen = Get1dHisto(fFileLocationMC,tDenName,tNewDenName);
+
+  TString tCfBaseName = "ModelKStarCf_";
+  TString tCfName = tCfBaseName + TString(cAnalysisBaseTags[fAnalysisType]) + TString(cBFieldTags[fBFieldType]);
+  CfLite* tReturnCfLite = new CfLite(tCfName,tCfName,tNum,tDen,aMinNorm,aMaxNorm);
+  if(aRebin != 1) tReturnCfLite->Rebin(aRebin);
+
+  return tReturnCfLite;
+}
+
+//________________________________________________________________________________________________________________
 CfLite* FitPartialAnalysis::GetModelKStarCfFake(double aMinNorm, double aMaxNorm, int aRebin)
 {
   TString tNumName = cModelKStarCfNumFakeBaseTag + TString(cAnalysisBaseTags[fAnalysisType]);
