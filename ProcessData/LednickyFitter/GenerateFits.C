@@ -13,7 +13,7 @@ int main(int argc, char **argv)
 //-----------------------------------------------------------------------------
   TString tResultsDate = "20161027";
 
-  AnalysisType tAnType = kLamKchM;
+  AnalysisType tAnType = kLamKchP;
   AnalysisRunType tAnRunType = kTrain;
   int tNPartialAnalysis = 2;
   CentralityType tCentType = kMB;
@@ -21,7 +21,7 @@ int main(int argc, char **argv)
   bool tShareLambdaParams = false;
   bool tAllShareSingleLambdaParam = false;
 
-  bool SaveImages = true;
+  bool SaveImages = false;
   bool ApplyMomResCorrection = true;
   bool ApplyNonFlatBackgroundCorrection = true;
   NonFlatBgdFitType tNonFlatBgdFitType = kLinear;
