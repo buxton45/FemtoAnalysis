@@ -38,13 +38,13 @@ int main(int argc, char **argv)
 
   //-----Data
 
-  TString FileLocationBase = "~/Analysis/FemtoAnalysis/Results/Results_cXicKch_20160202/Results_cXicKch_20160202";
+  TString FileLocationBase = "~/Analysis/FemtoAnalysis/Results/Results_cXicKch_20170217/Results_cXicKch_20170217";
   Analysis* XiKchP = new Analysis(FileLocationBase,kXiKchP,k0010);
   Analysis* AXiKchP = new Analysis(FileLocationBase,kAXiKchP,k0010);
   Analysis* XiKchM = new Analysis(FileLocationBase,kXiKchM,k0010);
   Analysis* AXiKchM = new Analysis(FileLocationBase,kAXiKchM,k0010);
 
-  TString SaveFileName = "~/Analysis/FemtoAnalysis/Results/Results_cXicKch_20160202/0010/Results_cXicKch_20160202_0010.root";
+  TString SaveFileName = "~/Analysis/FemtoAnalysis/Results/Results_cXicKch_20170217/0010/Results_cXicKch_2010217_0010.root";
 
   //-----MC
 /*
@@ -126,8 +126,8 @@ int main(int argc, char **argv)
 
   bool bDrawMC = false;
 
-  bool bSaveFigures = true;
-  TString tSaveFiguresLocation = "~/Analysis/FemtoAnalysis/Results/Results_cXicKch_20160202/0010/";
+  bool bSaveFigures = false;
+  TString tSaveFiguresLocation = "~/Analysis/FemtoAnalysis/Results/Results_cXicKch_20170217/0010/";
   //-------------------------------------------------------------------
 
   if(bContainsKStarCfs)

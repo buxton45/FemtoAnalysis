@@ -36,7 +36,7 @@ int main(int argc, char **argv)
 
 //-----------------------------------------------------------------------------
 
-  TString tFileLocationBase = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cXicKch_20160202/Results_cXicKch_20160202";
+  TString tFileLocationBase = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cXicKch_20170217/Results_cXicKch_20170217";
 
 //  AnalysisType tAnType = kAXiKchP;
 //  AnalysisType tConjType = kXiKchM;
@@ -46,13 +46,28 @@ int main(int argc, char **argv)
    
   TString tAnBaseName = TString(cAnalysisBaseTags[tAnType]);
   TString tAnName0010 = tAnBaseName + TString(cCentralityTags[0]);
-
+/*
   FitPairAnalysis* tPairAn0010 = new FitPairAnalysis(tFileLocationBase,tAnType,k0010,kGrid,5);
   FitPairAnalysis* tPairConjAn0010 = new FitPairAnalysis(tFileLocationBase,tConjType,k0010,kGrid,5);
 
   vector<FitPairAnalysis*> tVecOfPairAn;
   tVecOfPairAn.push_back(tPairAn0010);
   tVecOfPairAn.push_back(tPairConjAn0010);
+*/
+  FitPairAnalysis* tPairAn0010 = new FitPairAnalysis(tFileLocationBase,tAnType,k0010);
+  FitPairAnalysis* tPairConjAn0010 = new FitPairAnalysis(tFileLocationBase,tConjType,k0010);
+  FitPairAnalysis* tPairAn1030 = new FitPairAnalysis(tFileLocationBase,tAnType,k1030);
+  FitPairAnalysis* tPairConjAn1030 = new FitPairAnalysis(tFileLocationBase,tConjType,k1030);
+  FitPairAnalysis* tPairAn3050 = new FitPairAnalysis(tFileLocationBase,tAnType,k3050);
+  FitPairAnalysis* tPairConjAn3050 = new FitPairAnalysis(tFileLocationBase,tConjType,k3050);
+
+  vector<FitPairAnalysis*> tVecOfPairAn;
+  tVecOfPairAn.push_back(tPairAn0010);
+  tVecOfPairAn.push_back(tPairConjAn0010);
+  tVecOfPairAn.push_back(tPairAn1030);
+  tVecOfPairAn.push_back(tPairConjAn1030);
+  tVecOfPairAn.push_back(tPairAn3050);
+  tVecOfPairAn.push_back(tPairConjAn3050);
 
   FitSharedAnalyses* tSharedAn = new FitSharedAnalyses(tVecOfPairAn);
 
@@ -99,7 +114,13 @@ int main(int argc, char **argv)
 
     //PhysRevD.80.094006.pdf
     tSharedAn->SetSharedParameter(kLambda,0.5,0.1,1.);
-    tSharedAn->SetSharedParameter(kRadius,5.,1.,10.);
+
+    //tSharedAn->SetSharedParameter(kRadius,5.,1.,10.);
+    tSharedAn->SetSharedParameter(kRadius,{0,1},5.0,2.,12.);
+    tSharedAn->SetSharedParameter(kRadius,{2,3},4.5,2.,12.);
+    tSharedAn->SetSharedParameter(kRadius,{4,5},4.0,2.,12.);
+
+
     tSharedAn->SetSharedParameter(kRef0,1.02,-5.,5.);
     tSharedAn->SetSharedParameter(kImf0,0.14,-5.,5.);
     tSharedAn->SetSharedParameter(kd0,0.,-5.,5.);
@@ -141,8 +162,11 @@ int main(int argc, char **argv)
 //  tFitter->WriteAllPairKStar3dVecFiles(tOutputName,tPairKStarNtupleDirName,tFileBaseName,tNFiles,32,0.,0.32);
 
 //  tFitter->BuildPairKStar3dVecFromTxt(tOutputName);
-  tFitter->BuildPairKStar4dVecFromTxt(tOutputName);
+
+//  tFitter->BuildPairKStar4dVecFromTxt(tOutputName);
+  tFitter->SetUseRandomKStarVectors(true);
   tFitter->SetUseStaticPairs(true,16384);
+
   //-------------------------------------------
 
   tFitter->GetFitSharedAnalyses()->GetMinuitObject()->SetFCN(fcn);

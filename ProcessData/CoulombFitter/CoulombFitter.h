@@ -124,6 +124,7 @@ public:
   double GetFitCfContentSerialv2(double aKStarMagMin, double aKStarMagMax, double *par, int aAnalysisNumber);  //TODO!!!!!
 
   //void CalculateChi2(int &npar, double &chi2, double *par);
+  void PrintCurrentParamValues(int &aNpar, double* aPar);
   bool AreParamsSame(double *aCurrent, double *aNew, int aNEntries);
 
 //TODO  double GetChi2Value(int aKStarBin, TH1* aCfToFit, double* aPar);

@@ -2104,6 +2104,13 @@ double CoulombFitter::GetFitCfContentSerialv2(double aKStarMagMin, double aKStar
   return tReturnCfContent;
 }
 
+//________________________________________________________________________________________________________________
+void CoulombFitter::PrintCurrentParamValues(int &aNpar, double* aPar)
+{
+  for(int i=0; i<aNpar; i++) cout << "par[" << i << "] = " << aPar[i] << endl;
+  cout << endl;
+}
+
 
 //________________________________________________________________________________________________________________
 bool CoulombFitter::AreParamsSame(double *aCurrent, double *aNew, int aNEntries)
@@ -2151,7 +2158,8 @@ tTotalTimer.Start();
   fNCalls++;
 
   cout << "\tfNCalls = " << fNCalls << endl;
-
+  PrintCurrentParamValues(npar,par);
+/*
   if(fIncludeSingletAndTriplet)
   {
     cout << "\t\tParameter update: " << endl;
@@ -2198,7 +2206,7 @@ tTotalTimer.Start();
     cout << "\t\t\tpar[16] = Norm9 = " << par[13] << endl;
     cout << "\t\t\tpar[17] = Norm10= " << par[14] << endl;
   }
-
+*/
   //--------------------------------------------------------------
 
   int tNFitParPerAnalysis;

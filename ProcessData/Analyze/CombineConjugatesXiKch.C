@@ -37,7 +37,7 @@ int main(int argc, char **argv)
 //-----------------------------------------------------------------------------
 
   //-----Data
-  TString FileLocationBase = "~/Analysis/FemtoAnalysis/Results/Results_cXicKch_20160202/Results_cXicKch_20160202";
+  TString FileLocationBase = "~/Analysis/FemtoAnalysis/Results/Results_cXicKch_20170217/Results_cXicKch_20170217";
   Analysis* XiKchP = new Analysis(FileLocationBase,kXiKchP,k0010);
   Analysis* AXiKchP = new Analysis(FileLocationBase,kAXiKchP,k0010);
   Analysis* XiKchM = new Analysis(FileLocationBase,kXiKchM,k0010);
@@ -67,7 +67,7 @@ int main(int argc, char **argv)
   bool bContainsKStar2dCfs = false;
 
   bool bSaveFigures = true;
-  TString tSaveFiguresLocation = "~/Analysis/FemtoAnalysis/Results/Results_cXicKch_20160202/0010/";
+  TString tSaveFiguresLocation = "~/Analysis/FemtoAnalysis/Results/Results_cXicKch_20170217/0010/";
   //-------------------------------------------------------------------
 
   if(bContainsKStarCfs)
@@ -94,7 +94,7 @@ int main(int argc, char **argv)
 
     if(bSaveFigures)
     {
-      TString aName = "XiKchwConjKStarCf.eps";
+      TString aName = "XiKchwConjKStarCf_0010.eps";
       canKStar->SaveAs(tSaveFiguresLocation+aName);
     }
 

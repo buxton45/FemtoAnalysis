@@ -2197,7 +2197,7 @@ void GeneralFitter::CalculateFitFunction(int &npar, double &chi2, double *par)
 
       if(fApplyNonFlatBackgroundCorrection)
       {
-        TF1* tNonFlatBgd = tFitPartialAnalysis->GetNonFlatBackground(/*0.40,0.90*/);
+        TF1* tNonFlatBgd = tFitPartialAnalysis->GetNonFlatBackground(kLinear/*,0.40,0.90*/);
         ApplyNonFlatBackgroundCorrection(tCorrectedFitCfContent, tKStarBinCenters, tNonFlatBgd);
       }
 
