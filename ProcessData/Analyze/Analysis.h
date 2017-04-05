@@ -117,6 +117,8 @@ public:
   void BuildPurityCollection();
   void DrawAllPurityHistos(TPad* aPad);
   double GetPurity(ParticleType aV0Type);
+  TH1* GetCombinedPurityHisto(ParticleType aV0Type);
+  Purity* GetPurityObject(ParticleType aV0Type);
 
   void OutputPassFailInfo();
 

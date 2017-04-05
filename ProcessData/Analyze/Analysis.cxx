@@ -2052,6 +2052,44 @@ double Analysis::GetPurity(ParticleType aV0Type)
   return tReturnValue;
 }
 
+//________________________________________________________________________________________________________________
+TH1* Analysis::GetCombinedPurityHisto(ParticleType aV0Type)
+{
+  TH1* tReturnHisto;
+  assert(fPurityCollection.size() != 0);
+  for(unsigned int i=0; i<fPurityCollection.size(); i++)
+  {
+    if(fPurityCollection[i]->GetParticleType() == aV0Type)
+    {
+      tReturnHisto = fPurityCollection[i]->GetCombinedPurity();
+      return tReturnHisto;
+    }
+  }
+
+  cout << "ERROR: Analysis::GetPurity: for aV0Type = " << aV0Type << " in fAnalysisType = " << fAnalysisType << " no purity was found!" << endl;
+  assert(0);
+  return tReturnHisto;
+}
+
+//________________________________________________________________________________________________________________
+Purity* Analysis::GetPurityObject(ParticleType aV0Type)
+{
+  Purity* tReturnPurity;
+  assert(fPurityCollection.size() != 0);
+  for(unsigned int i=0; i<fPurityCollection.size(); i++)
+  {
+    if(fPurityCollection[i]->GetParticleType() == aV0Type)
+    {
+      tReturnPurity = fPurityCollection[i];
+      return tReturnPurity;
+    }
+  }
+
+  cout << "ERROR: Analysis::GetPurity: for aV0Type = " << aV0Type << " in fAnalysisType = " << fAnalysisType << " no purity was found!" << endl;
+  assert(0);
+  return tReturnPurity;
+}
+
 
 //________________________________________________________________________________________________________________
 void Analysis::OutputPassFailInfo()

@@ -53,7 +53,10 @@ Purity::Purity(TString aCombinedPurityName, ParticleType aParticleType, vector<T
   fPurityFitInfo(0),
 
   fOutputPurityFitInfo(false),
-  fPurityValue(0)
+  fPurityValue(0),
+  fSignal(0),
+  fSignalPlusBgd(0),
+  fBgd(0)
 
 
 
@@ -179,7 +182,11 @@ void Purity::CalculatePurity()
     (*vInfo)(1) = tSigpbgd;
     (*vInfo)(2) = tSig;
     (*vInfo)(3) = tPur;
+
   fPurityValue = tPur;
+  fSignal = tSig;
+  fSignalPlusBgd = tSigpbgd;
+  fBgd = tBgd;
 
   TVectorD *vROI = new TVectorD(2);
     (*vROI)(0) = fROI[0];

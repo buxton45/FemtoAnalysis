@@ -59,7 +59,11 @@ public:
 
   //inline
   double GetPurity();
+  double GetSignal();
+  double GetSignalPlusBgd();
+  double GetBgd();
   ParticleType GetParticleType();
+  TH1* GetCombinedPurity();
 
 private:
 
@@ -76,6 +80,9 @@ private:
 
   bool fOutputPurityFitInfo;
   double fPurityValue;
+  double fSignal;
+  double fSignalPlusBgd;
+  double fBgd;
   TF1* fFitBgd;
 
 
@@ -85,7 +92,12 @@ private:
 };
 
 inline double Purity::GetPurity() {return fPurityValue;}
+inline double Purity::GetSignal() {return fSignal;}
+inline double Purity::GetSignalPlusBgd() {return fSignalPlusBgd;}
+inline double Purity::GetBgd() {return fBgd;}
+
 inline ParticleType Purity::GetParticleType() {return fParticleType;}
+inline TH1* Purity::GetCombinedPurity() {return fCombinedPurity;}
 
 #endif
 
