@@ -16,7 +16,7 @@ int main(int argc, char **argv)
   AnalysisType tAnType = kLamKchP;
   AnalysisRunType tAnRunType = kTrain;
   int tNPartialAnalysis = 2;
-  CentralityType tCentType = kMB;
+  CentralityType tCentType = k0010;  //TODO
   FitGeneratorType tGenType = kPairwConj;
   bool tShareLambdaParams = false;
   bool tAllShareSingleLambdaParam = false;
@@ -25,7 +25,7 @@ int main(int argc, char **argv)
   bool ApplyMomResCorrection = true;
   bool ApplyNonFlatBackgroundCorrection = true;
   NonFlatBgdFitType tNonFlatBgdFitType = kLinear;
-  bool IncludeResiduals = false;
+  bool IncludeResiduals = true;
 
   TString tGeneralAnTypeName;
   if(tAnType==kLamK0 || tAnType==kALamK0) tGeneralAnTypeName = "cLamK0";

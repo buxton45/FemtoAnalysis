@@ -25,6 +25,9 @@ ChargedResidualCf::ChargedResidualCf(ResidualType aResidualType, TString aInterp
   fUseRandomKStarVectors(true),
   fUseExpXiData(false),
   fExpXiData(0),
+  fCoulombCf(0),
+  fCoulombResidualCf(0),
+  fCurrentFitParams(new double[8]),
 
   fCoulombType(kRepulsive),
   fWaveFunction(0),
@@ -58,6 +61,9 @@ ChargedResidualCf::ChargedResidualCf(ResidualType aResidualType, TString aInterp
   SetBohrRadius();
 
   BuildPairSample3dVec();  //TODO if !fUseRandomKStarVectors, then I can only build out to k* = 0.3 GeV/c
+
+  //TODO figure out better way to achieve this
+  for(int i=0; i<8; i++) fCurrentFitParams[i] = 0.;
 }
 
 
@@ -346,6 +352,37 @@ int ChargedResidualCf::GetBinNumber(double aBinWidth, double aMin, double aMax, 
   }
 
   return -1;  //i.e. failure
+}
+
+//________________________________________________________________________________________________________________
+bool ChargedResidualCf::AreParamsSameExcludingLambda(double *aCurrent, double *aNew, int aNEntries)
+{
+//TODO NOTE, want to exclude Lambda parameter here, becuase it's always changing
+  bool tAreSame = true;
+  for(int i=1; i<aNEntries; i++)
+  {
+    if(abs(aCurrent[i]-aNew[i]) > std::numeric_limits< double >::min()) tAreSame = false;
+  }
+
+  if(!tAreSame)
+  {
+    for(int i=0; i<aNEntries; i++) aCurrent[i] = aNew[i];
+  }
+
+  return tAreSame;
+}
+
+//________________________________________________________________________________________________________________
+void ChargedResidualCf::AdjustLambdaParam(td1dVec &aCoulombResidualCf, double aOldLambda, double aNewLambda)
+{
+  double tRawValue, tCurrentValue;
+  for(unsigned int i=0; i<aCoulombResidualCf.size(); i++)
+  {
+    tCurrentValue = aCoulombResidualCf[i];
+    tRawValue = (1.0/aOldLambda)*(tCurrentValue-(1.0-aOldLambda));
+
+    aCoulombResidualCf[i] = aNewLambda*tRawValue + (1.0-aNewLambda);
+  }
 }
 
 //________________________________________________________________________________________________________________
@@ -1181,15 +1218,14 @@ void ChargedResidualCf::SetRandomKStar3Vec(TVector3* aKStar3Vec, double aKStarMa
 
 
 //________________________________________________________________________________________________________________
-td1dVec ChargedResidualCf::GetExpXiData(double aMaxKStar)
+td1dVec ChargedResidualCf::GetExpXiData(double aMaxKStar, CentralityType aCentType)
 {
   if(fExpXiData.size()==0)
   {
-    TString tFileLocationBase = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cXicKch_20160202/Results_cXicKch_20160202";
+    TString tFileLocationBase = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cXicKch_20170406/Results_cXicKch_20170406";
     AnalysisType tAnType;
-    CentralityType tCentType = k0010;
-    AnalysisRunType tRunType=kGrid;
-    int tNFitPartialAnalysis=5;
+    AnalysisRunType tRunType=kTrain;
+    int tNFitPartialAnalysis=2;
 
     switch(fResidualType) {
     case kXiCKchP:
@@ -1217,7 +1253,7 @@ td1dVec ChargedResidualCf::GetExpXiData(double aMaxKStar)
       assert(0);
     }
 
-    FitPairAnalysis* tPairAn = new FitPairAnalysis(tFileLocationBase,tAnType,tCentType,tRunType,tNFitPartialAnalysis);
+    FitPairAnalysis* tPairAn = new FitPairAnalysis(tFileLocationBase,tAnType,aCentType,tRunType,tNFitPartialAnalysis);
     tPairAn->RebinKStarCfHeavy(2,0.32,0.4);
     TH1D* tExpHist = (TH1D*)tPairAn->GetKStarCfHeavy()->GetHeavyCfClone();
     assert(tExpHist->GetXaxis()->GetBinWidth(1)==0.01);  //TODO make general
@@ -1378,54 +1414,63 @@ double ChargedResidualCf::GetFitCfContentCompletewStaticPairs(double aKStarMagMi
 
 
 //________________________________________________________________________________________________________________
-td1dVec ChargedResidualCf::GetCoulombResidualCorrelation(double *aParentCfParams, vector<double> &aKStarBinCenters, bool aUseExpXiData)
+td1dVec ChargedResidualCf::GetCoulombResidualCorrelation(double *aParentCfParams, vector<double> &aKStarBinCenters, bool aUseExpXiData, CentralityType aCentType)
 {
-  fUseExpXiData = aUseExpXiData;
-  double tKStarBinWidth = aKStarBinCenters[1]-aKStarBinCenters[0];
-
-  double tKStarMin, tKStarMax;
-  tKStarMax = aKStarBinCenters[aKStarBinCenters.size()-1]+tKStarBinWidth/2.;
-  vector<double> tParentCf(aKStarBinCenters.size(),0.);
-  if(fUseExpXiData) tParentCf = GetExpXiData(tKStarMax);
+  if(AreParamsSameExcludingLambda(fCurrentFitParams,aParentCfParams,8))
+  {
+    AdjustLambdaParam(fCoulombCf, fCurrentFitParams[0], aParentCfParams[0]);
+  }
   else
   {
+    fUseExpXiData = aUseExpXiData;
+    double tKStarBinWidth = aKStarBinCenters[1]-aKStarBinCenters[0];
 
-    for(unsigned int i=0; i<aKStarBinCenters.size(); i++)
+    double tKStarMin, tKStarMax;
+    tKStarMax = aKStarBinCenters[aKStarBinCenters.size()-1]+tKStarBinWidth/2.;
+    vector<double> tParentCf(aKStarBinCenters.size(),0.);
+    if(fUseExpXiData) tParentCf = GetExpXiData(tKStarMax,aCentType);
+    else
     {
-      tKStarMin = aKStarBinCenters[i]-tKStarBinWidth/2.;
-      tKStarMax = aKStarBinCenters[i]+tKStarBinWidth/2.;
 
-      if(i==0) tKStarMin = 0.; //TODO this is small, but nonzero
+      for(unsigned int i=0; i<aKStarBinCenters.size(); i++)
+      {
+        tKStarMin = aKStarBinCenters[i]-tKStarBinWidth/2.;
+        tKStarMax = aKStarBinCenters[i]+tKStarBinWidth/2.;
 
-      tParentCf[i] = GetFitCfContentCompletewStaticPairs(tKStarMin,tKStarMax,aParentCfParams);
+        if(i==0) tKStarMin = 0.; //TODO this is small, but nonzero
+
+        tParentCf[i] = GetFitCfContentCompletewStaticPairs(tKStarMin,tKStarMax,fCurrentFitParams);
+      }
     }
+    fCoulombCf = tParentCf;
   }
 
   unsigned int tDaughterPairKStarBin, tParentPairKStarBin;
   double tDaughterPairKStar, tParentPairKStar;
-  assert(tParentCf.size() == aKStarBinCenters.size());
-  assert(tParentCf.size() == (unsigned int)fTransformMatrix->GetNbinsX());
-  assert(tParentCf.size() == (unsigned int)fTransformMatrix->GetNbinsY());
+  assert(fCoulombCf.size() == aKStarBinCenters.size());
+  assert(fCoulombCf.size() == (unsigned int)fTransformMatrix->GetNbinsX());
+  assert(fCoulombCf.size() == (unsigned int)fTransformMatrix->GetNbinsY());
 
-  vector<double> tReturnResCf(tParentCf.size(),0.);
-  vector<double> tNormVec(tParentCf.size(),0.);  //TODO once I match bin size, I should be able to call /= by integral, instead of tracking normVec
+  vector<double> tReturnResCf(fCoulombCf.size(),0.);
+  vector<double> tNormVec(fCoulombCf.size(),0.);  //TODO once I match bin size, I should be able to call /= by integral, instead of tracking normVec
 
-  for(unsigned int i=0; i<tParentCf.size(); i++)
+  for(unsigned int i=0; i<fCoulombCf.size(); i++)
   {
     tDaughterPairKStar = aKStarBinCenters[i];
     tDaughterPairKStarBin = fTransformMatrix->GetXaxis()->FindBin(tDaughterPairKStar);
 
-    for(unsigned int j=0; j<tParentCf.size(); j++)
+    for(unsigned int j=0; j<fCoulombCf.size(); j++)
     {
       tParentPairKStar = aKStarBinCenters[j];
       tParentPairKStarBin = fTransformMatrix->GetYaxis()->FindBin(tParentPairKStar);
 
-      tReturnResCf[i] += tParentCf[j]*fTransformMatrix->GetBinContent(tDaughterPairKStarBin,tParentPairKStarBin);
+      tReturnResCf[i] += fCoulombCf[j]*fTransformMatrix->GetBinContent(tDaughterPairKStarBin,tParentPairKStarBin);
       tNormVec[i] += fTransformMatrix->GetBinContent(tDaughterPairKStarBin,tParentPairKStarBin);
     }
     if(tNormVec[i]!=0.) tReturnResCf[i] /= tNormVec[i];
   }
-  return tReturnResCf;
+  fCoulombResidualCf = tReturnResCf;
+  return fCoulombResidualCf;
 }
 
 

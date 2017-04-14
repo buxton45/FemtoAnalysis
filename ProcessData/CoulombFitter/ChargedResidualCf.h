@@ -66,8 +66,11 @@ public:
   int GetBinNumber(int aNbins, double aMin, double aMax, double aValue);
   int GetBinNumber(double aBinWidth, double aMin, double aMax, double aValue);
 
+  bool AreParamsSameExcludingLambda(double *aCurrent, double *aNew, int aNEntries);
+  void AdjustLambdaParam(td1dVec &aCoulombResidualCf, double aOldLambda, double aNewLambda);
+
   td3dVec BuildPairKStar3dVecFromTxt(double aMaxFitKStar=0.3, TString aFileBaseName="/home/jesse/Analysis/FemtoAnalysis/ProcessData/CoulombFitter/PairKStar3dVec_20160610_");
-  void BuildPairSample3dVec(double aMaxFitKStar=1.0, int aNPairsPerKStarBin=1000);
+  void BuildPairSample3dVec(double aMaxFitKStar=1.0, int aNPairsPerKStarBin=16384);  //TODO decide appropriate value for aNPairsPerKStarBin
   void UpdatePairRadiusParameters(double aNewRadius);
 
   //Note:  Linear, Bilinear, and Trilinear will essentially be copies of TH1::, TH2::, and TH3::Interpolate
@@ -90,11 +93,11 @@ public:
   bool CanInterpAll(double aKStar, double aRStar, double aTheta, double aReF0, double aImF0, double aD0);
 
   void SetRandomKStar3Vec(TVector3* aKStar3Vec, double aKStarMagMin, double aKStarMagMax);
-  td1dVec GetExpXiData(double aMaxKStar=1.0);
+  td1dVec GetExpXiData(double aMaxKStar=1.0, CentralityType aCentType=k0010);
   double GetFitCfContentCompletewStaticPairs(double aKStarMagMin, double aKStarMagMax, double *par);  //TODO!!!!!
 
 
-  td1dVec GetCoulombResidualCorrelation(double *aParentCfParams, vector<double> &aKStarBinCenters, bool aUseExpXiData=false);
+  td1dVec GetCoulombResidualCorrelation(double *aParentCfParams, vector<double> &aKStarBinCenters, bool aUseExpXiData=false, CentralityType aCentType=k0010);
   TH1D* Convert1dVecToHist(td1dVec &aCfVec, td1dVec &aKStarBinCenters, TString aTitle = "tCf");
 
 
@@ -115,6 +118,9 @@ protected:
   bool fUseRandomKStarVectors;
   bool fUseExpXiData;
   td1dVec fExpXiData;
+  td1dVec fCoulombCf;
+  td1dVec fCoulombResidualCf;  //The above, but run through the transform matrix
+  double* fCurrentFitParams;
 
   CoulombType fCoulombType;
   WaveFunction* fWaveFunction;
