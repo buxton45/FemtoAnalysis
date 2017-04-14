@@ -36,7 +36,7 @@ int main(int argc, char **argv)
 
 //-----------------------------------------------------------------------------
 
-  TString tFileLocationBase = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cXicKch_20170217/Results_cXicKch_20170217";
+  TString tFileLocationBase = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cXicKch_20170406/Results_cXicKch_20170406";
 
 //  AnalysisType tAnType = kAXiKchP;
 //  AnalysisType tConjType = kXiKchM;

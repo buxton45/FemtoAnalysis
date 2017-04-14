@@ -75,7 +75,7 @@ public:
   void ApplyNonFlatBackgroundCorrection(vector<double> &aCf, vector<double> &aKStarBinCenters, TF1* aNonFlatBgd);
   vector<double> ApplyMomResCorrection(vector<double> &aCf, vector<double> &aKStarBinCenters, TH2* aMomResMatrix);
   vector<double> GetNeutralResidualCorrelation(double *aParentCfParams, vector<double> &aKStarBinCenters, TH2* aTransformMatrix);
-  vector<double> GetChargedResidualCorrelation(ResidualType aResidualType, double *aParentCfParams, vector<double> &aKStarBinCenters, bool aUseExpXiData=false);
+  vector<double> GetChargedResidualCorrelation(ResidualType aResidualType, double *aParentCfParams, vector<double> &aKStarBinCenters, bool aUseExpXiData=false, CentralityType aCentType=k0010);
   vector<double> CombinePrimaryWithResiduals(td1dVec &aLambdaValues, td2dVec &aCfs);
   void ApplyNormalization(double aNorm, td1dVec &aCf);
 
@@ -122,10 +122,10 @@ protected:
   bool fReturnPrimaryWithResidualsToAnalyses;
   NonFlatBgdFitType fNonFlatBgdFitType;
 
-  ChargedResidualCf* fResXiCK;
-  ChargedResidualCf* fResOmegaK;
-  ChargedResidualCf* fResAXiCK;
-  ChargedResidualCf* fResAOmegaK;
+  ChargedResidualCf* fResXiCKchP;
+  ChargedResidualCf* fResOmegaKchP;
+  ChargedResidualCf* fResXiCKchM;
+  ChargedResidualCf* fResOmegaKchM;
 
   double fChi2;
   double fChi2GlobalMin;
