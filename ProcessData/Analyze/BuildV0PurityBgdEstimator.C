@@ -136,10 +136,12 @@ int main(int argc, char **argv)
 
   //-----V0PurityBgdEstimator
   TString V0PurityBgdFileLocationBase = "~/Analysis/FemtoAnalysis/Results/V0PurityBgdEstimator/";
+/*
   if(tV0Type==kLam) V0PurityBgdFileLocationBase += TString("Lambda");
   else if(tV0Type==kALam) V0PurityBgdFileLocationBase += TString("AntiLambda");
   else if(tV0Type==kK0) V0PurityBgdFileLocationBase += TString("K0Short");
   else V0PurityBgdFileLocationBase += TString("");
+*/
   V0PurityBgdFileLocationBase += TString("PurityBgdEstimator");
 
   TString V0PurityBgdMinus = V0PurityBgdFileLocationBase + TString("_FemtoMinus.root");
