@@ -109,7 +109,7 @@ protected:
   FitSharedAnalyses* fFitSharedAnalyses;
   TMinuit* fMinuit;
   int fNAnalyses;
-  vector<TF1*> fFits;
+  td3dVec fCorrectedFitVecs;
 
   double fMaxFitKStar;
   //vector<double> fMaxFitKStarVec;

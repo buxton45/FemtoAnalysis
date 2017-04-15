@@ -722,7 +722,9 @@ TCanvas* FitGenerator::DrawKStarCfswFits(bool aMomResCorrectFit, bool aNonFlatBg
       int tColorCorrectFit = kMagenta+1;
       int tColorNonFlatBgd = kGreen+2;
 
-      TH1* tCorrectedFitHisto = (TH1*)fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetCorrectedFitHisto(aMomResCorrectFit,aNonFlatBgdCorrectFit,false,aNonFlatBgdFitType);
+//TODO currently GetCorrectedFitHistv2 is the method which can also include residuals in the fit
+//      TH1* tCorrectedFitHisto = (TH1*)fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetCorrectedFitHisto(aMomResCorrectFit,aNonFlatBgdCorrectFit,false,aNonFlatBgdFitType);
+      TH1F* tCorrectedFitHisto = fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetCorrectedFitHistv2();
         tCorrectedFitHisto->SetLineWidth(2);
 
       //Include the Cf with statistical errors, and make sure the binning is the same as the fitted Cf ----------

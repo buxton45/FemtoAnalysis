@@ -25,7 +25,7 @@ int main(int argc, char **argv)
   bool ApplyMomResCorrection = true;
   bool ApplyNonFlatBackgroundCorrection = true;
   NonFlatBgdFitType tNonFlatBgdFitType = kLinear;
-  bool IncludeResiduals = true;
+  bool IncludeResiduals = false;
 
   TString tGeneralAnTypeName;
   if(tAnType==kLamK0 || tAnType==kALamK0) tGeneralAnTypeName = "cLamK0";

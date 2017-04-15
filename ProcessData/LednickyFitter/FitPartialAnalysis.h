@@ -111,6 +111,9 @@ public:
 
   TH2* GetModelKStarTrueVsRecMixed();
 
+  void SetCorrectedFitVec(td1dVec &aVec);
+  td1dVec GetCorrectedFitVec();
+
 private:
   AnalysisRunType fAnalysisRunType;
   TString fFileLocation;
@@ -150,6 +153,7 @@ private:
   CfLite* fModelKStarCfFakeIdeal;
 
   TF1* fNonFlatBackground;
+  td1dVec fCorrectedFitVec;
 
 #ifdef __ROOT__
   ClassDef(FitPartialAnalysis, 1)
@@ -184,4 +188,6 @@ inline bool FitPartialAnalysis::RejectOmega() {return fRejectOmega;}
 
 inline TH2* FitPartialAnalysis::GetModelKStarTrueVsRecMixed() {return fModelKStarTrueVsRecMixed;}
 
+inline void FitPartialAnalysis::SetCorrectedFitVec(td1dVec &aVec) {fCorrectedFitVec = aVec;}
+inline td1dVec FitPartialAnalysis::GetCorrectedFitVec() {return fCorrectedFitVec;}
 #endif

@@ -642,7 +642,7 @@ void FitPairAnalysis::BuildModelCfFakeIdealCfFakeRatio(double aMinNorm, double a
 
 
 //________________________________________________________________________________________________________________
-TH1F* FitPairAnalysis::GetCorrectedFitHisto(bool aMomResCorrection, bool aNonFlatBgdCorrection, bool aIncludeResiduals,NonFlatBgdFitType aNonFlatBgdFitType)
+TH1F* FitPairAnalysis::GetCorrectedFitHisto(bool aMomResCorrection, bool aNonFlatBgdCorrection, bool aIncludeResiduals, NonFlatBgdFitType aNonFlatBgdFitType)
 {
   int tNbinsX = fKStarCf->GetNbinsX();
   double tKStarMin = fKStarCf->GetBinLowEdge(1);
@@ -803,4 +803,55 @@ TH1* FitPairAnalysis::GetCfwSysErrors()
   return tReturnHist;
 }
 
+//________________________________________________________________________________________________________________
+td1dVec FitPairAnalysis::GetCorrectedFitVec()
+{
+  double tScale = 0.;
+  double tTempScale = 0.;
+
+  td1dVec tReturnVec = fFitPartialAnalysisCollection[0]->GetCorrectedFitVec();
+  tTempScale = fFitPartialAnalysisCollection[0]->GetKStarNumScale();
+  tScale += tTempScale;
+  for(unsigned int j=0; j<tReturnVec.size(); j++) tReturnVec[j] *= tTempScale;
+
+  for(int i=1; i<fNFitPartialAnalysis; i++)
+  {
+    tTempScale = fFitPartialAnalysisCollection[i]->GetKStarNumScale();
+    tScale += tTempScale;
+    assert(tReturnVec.size() == fFitPartialAnalysisCollection[i]->GetCorrectedFitVec().size());
+    for(unsigned int j=0; j<tReturnVec.size(); j++)
+    {
+      tReturnVec[j] = tReturnVec[j] + tTempScale*fFitPartialAnalysisCollection[i]->GetCorrectedFitVec()[j];
+    }
+  }
+
+  for(unsigned int j=0; j<tReturnVec.size(); j++) tReturnVec[j] /= tScale;
+
+  return tReturnVec;
+}
+
+
+//________________________________________________________________________________________________________________
+TH1F* FitPairAnalysis::GetCorrectedFitHistv2(double aMaxDrawKStar)
+{
+  int tNbinsXToFit = fKStarCfHeavy->GetHeavyCf()->FindBin(aMaxDrawKStar);
+  double tKStarMin = fKStarCfHeavy->GetHeavyCf()->GetBinLowEdge(1);
+  double tKStarMax = fKStarCfHeavy->GetHeavyCf()->GetBinLowEdge(tNbinsXToFit+1);
+
+  td1dVec tCorrectedFitVec = GetCorrectedFitVec();
+
+  TString tTitle = "testCorrectedFitHist";
+  tTitle =+ TString(cAnalysisBaseTags[fAnalysisType]);
+  tTitle =+ TString(cAnalysisBaseTags[fCentralityType]);
+  TH1F* tCorrectedFitHist = new TH1F(tTitle,tTitle,tNbinsXToFit,tKStarMin,tKStarMax);
+
+//TODO make sure bins (and bin widths) match up correctly
+  for(int i=1; i<=tNbinsXToFit; i++)
+  {
+    tCorrectedFitHist->SetBinContent(i, tCorrectedFitVec[i-1]);
+    tCorrectedFitHist->SetBinError(i,0.);
+  }
+
+  return tCorrectedFitHist;
+}
 

@@ -84,6 +84,9 @@ public:
 
   TH1* GetCfwSysErrors();
 
+  td1dVec GetCorrectedFitVec();
+  TH1F* GetCorrectedFitHistv2(double aMaxDrawKStar=0.3); //TODO
+
   //inline (i.e. simple) functions
   TString GetAnalysisName();
   TString GetAnalysisDirectoryName();

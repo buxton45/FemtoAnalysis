@@ -27,7 +27,7 @@ LednickyFitter::LednickyFitter(FitSharedAnalyses* aFitSharedAnalyses, double aMa
   fFitSharedAnalyses(aFitSharedAnalyses),
   fMinuit(fFitSharedAnalyses->GetMinuitObject()),
   fNAnalyses(fFitSharedAnalyses->GetNFitPairAnalysis()),
-  fFits(fNAnalyses),
+  fCorrectedFitVecs(0),
   fMaxFitKStar(aMaxFitKStar),
   fRejectOmega(false),
   fApplyNonFlatBackgroundCorrection(false), //TODO change deault to true here AND in CoulombFitter
@@ -53,6 +53,9 @@ LednickyFitter::LednickyFitter(FitSharedAnalyses* aFitSharedAnalyses, double aMa
   fParErrors(0)
 
 {
+  int tNFitPartialAnalysis = fFitSharedAnalyses->GetFitPairAnalysis(0)->GetNFitPartialAnalysis();
+  fCorrectedFitVecs.resize(fNAnalyses, td2dVec(tNFitPartialAnalysis));
+
 //TODO can comment out everything below if not including residuals
   AnalysisType tAnType = fFitSharedAnalyses->GetFitPairAnalysis(0)->GetAnalysisType();
   TString tFilesLocationBase = "/home/jesse/Analysis/FemtoAnalysis/ProcessData/CoulombFitter/";
@@ -601,6 +604,7 @@ void LednickyFitter::CalculateFitFunction(int &npar, double &chi2, double *par)
         ApplyNonFlatBackgroundCorrection(tCorrectedFitCfContent, tKStarBinCenters, tNonFlatBgd);
       }
 
+      fCorrectedFitVecs[iAnaly][iPartAn] = tCorrectedFitCfContent;
       ApplyNormalization(tPar[5], tCorrectedFitCfContent);
 
       for(int ix=0; ix < tNbinsXToFit; ix++)
@@ -761,6 +765,14 @@ void LednickyFitter::DoFit()
   for(int iAnaly=0; iAnaly<fNAnalyses; iAnaly++)
   {
     fFitSharedAnalyses->GetFitPairAnalysis(iAnaly)->SetFit(CreateFitFunction("fit",iAnaly));
+  }
+
+  for(int iAnaly=0; iAnaly<fNAnalyses; iAnaly++)
+  {
+    for(int iPartAn=0; iPartAn<fFitSharedAnalyses->GetFitPairAnalysis(iAnaly)->GetNFitPartialAnalysis(); iPartAn++)
+    {
+      fFitSharedAnalyses->GetFitPairAnalysis(iAnaly)->GetFitPartialAnalysis(iPartAn)->SetCorrectedFitVec(fCorrectedFitVecs[iAnaly][iPartAn]);
+    }
   }
 
 }
@@ -936,4 +948,3 @@ vector<double> LednickyFitter::FindGoodInitialValues()
 
   return ReturnGoodValues;
 }
-

@@ -59,7 +59,8 @@ FitPartialAnalysis::FitPartialAnalysis(TString aFileLocation, TString aAnalysisN
   fModelKStarCfFake(0),
   fModelKStarCfFakeIdeal(0),
 
-  fNonFlatBackground(0)
+  fNonFlatBackground(0),
+  fCorrectedFitVec(0)
 
 
 {
@@ -196,7 +197,8 @@ FitPartialAnalysis::FitPartialAnalysis(TString aFileLocation, TString aFileLocat
   fModelKStarCfFake(0),
   fModelKStarCfFakeIdeal(0),
 
-  fNonFlatBackground(0)
+  fNonFlatBackground(0),
+  fCorrectedFitVec(0)
 
 
 {
