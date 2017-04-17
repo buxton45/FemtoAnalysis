@@ -29,74 +29,64 @@ int main(int argc, char **argv)
 
   ChronoTimer tFullTimer(kMin);
   tFullTimer.Start();
+//-----------------------------------------------------------------------------
+
+  //!!!!!!!!!!!!!!!! NOTE:  must set myFitter = to whichever LednickyFitter object I want to use
+
+  vector<int> Share01(2);
+    Share01[0] = 0;
+    Share01[1] = 1;
+
+  vector<int> Share23(2);
+    Share23[0] = 2;
+    Share23[1] = 3;
+
+  vector<int> Share45(2);
+    Share45[0] = 4;
+    Share45[1] = 5;
+//-----------------------------------------------------------------------------
+//Be sure to set the following...
+
+  TString tFileLocationBase = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cXicKch_20170406/Results_cXicKch_20170406";
+
+  AnalysisType tAnType, tConjType;
+  tAnType = kXiKchP;
+  //tAnType = kXiKchM;
+
+  if(tAnType==kXiKchP) tConjType = kAXiKchM;
+  else if(tAnType==kXiKchM) tConjType = kAXiKchP;
+  else assert(0);
+
+  AnalysisRunType tAnalysisRunType = kTrain;
+  int tNPartialAnalysis = 5;
+  if(tAnalysisRunType==kTrain || tAnalysisRunType==kTrainSys) tNPartialAnalysis = 2;
 
   bool bDoFit = true;
   bool bDrawFit = false;
   bool bDrawLam = false;
-
-//-----------------------------------------------------------------------------
-
-  TString tFileLocationBase = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cXicKch_20170406/Results_cXicKch_20170406";
-
-//  AnalysisType tAnType = kAXiKchP;
-//  AnalysisType tConjType = kXiKchM;
-
-  AnalysisType tAnType = kXiKchP;
-  AnalysisType tConjType = kAXiKchM;
    
   TString tAnBaseName = TString(cAnalysisBaseTags[tAnType]);
   TString tAnName0010 = tAnBaseName + TString(cCentralityTags[0]);
-/*
-  FitPairAnalysis* tPairAn0010 = new FitPairAnalysis(tFileLocationBase,tAnType,k0010,kGrid,5);
-  FitPairAnalysis* tPairConjAn0010 = new FitPairAnalysis(tFileLocationBase,tConjType,k0010,kGrid,5);
 
-  vector<FitPairAnalysis*> tVecOfPairAn;
-  tVecOfPairAn.push_back(tPairAn0010);
-  tVecOfPairAn.push_back(tPairConjAn0010);
-*/
-  FitPairAnalysis* tPairAn0010 = new FitPairAnalysis(tFileLocationBase,tAnType,k0010);
-  FitPairAnalysis* tPairConjAn0010 = new FitPairAnalysis(tFileLocationBase,tConjType,k0010);
-  FitPairAnalysis* tPairAn1030 = new FitPairAnalysis(tFileLocationBase,tAnType,k1030);
-  FitPairAnalysis* tPairConjAn1030 = new FitPairAnalysis(tFileLocationBase,tConjType,k1030);
-  FitPairAnalysis* tPairAn3050 = new FitPairAnalysis(tFileLocationBase,tAnType,k3050);
-  FitPairAnalysis* tPairConjAn3050 = new FitPairAnalysis(tFileLocationBase,tConjType,k3050);
+
+//-----------------------------------------------------------------------------
+
+  FitPairAnalysis* tPairAn0010 = new FitPairAnalysis(tFileLocationBase,tAnType,k0010,tAnalysisRunType,tNPartialAnalysis);
+  FitPairAnalysis* tPairConjAn0010 = new FitPairAnalysis(tFileLocationBase,tConjType,k0010,tAnalysisRunType,tNPartialAnalysis);
+  FitPairAnalysis* tPairAn1030 = new FitPairAnalysis(tFileLocationBase,tAnType,k1030,tAnalysisRunType,tNPartialAnalysis);
+  FitPairAnalysis* tPairConjAn1030 = new FitPairAnalysis(tFileLocationBase,tConjType,k1030,tAnalysisRunType,tNPartialAnalysis);
+//  FitPairAnalysis* tPairAn3050 = new FitPairAnalysis(tFileLocationBase,tAnType,k3050,tAnalysisRunType,tNPartialAnalysis);
+//  FitPairAnalysis* tPairConjAn3050 = new FitPairAnalysis(tFileLocationBase,tConjType,k3050,tAnalysisRunType,tNPartialAnalysis);
 
   vector<FitPairAnalysis*> tVecOfPairAn;
   tVecOfPairAn.push_back(tPairAn0010);
   tVecOfPairAn.push_back(tPairConjAn0010);
   tVecOfPairAn.push_back(tPairAn1030);
   tVecOfPairAn.push_back(tPairConjAn1030);
-  tVecOfPairAn.push_back(tPairAn3050);
-  tVecOfPairAn.push_back(tPairConjAn3050);
+//  tVecOfPairAn.push_back(tPairAn3050);
+//  tVecOfPairAn.push_back(tPairConjAn3050);
 
   FitSharedAnalyses* tSharedAn = new FitSharedAnalyses(tVecOfPairAn);
-
-  if(tAnType==kAXiKchP || tAnType==kXiKchM)
-  {
-/*
-    //0607100.pdf
-    tSharedAn->SetSharedParameter(kLambda,0.5,0.1,1.);
-    tSharedAn->SetSharedParameter(kRadius,5.,1.,10.);
-    tSharedAn->SetSharedParameter(kRef0,0.57,-5.,5.);
-    tSharedAn->SetSharedParameter(kImf0,0.,-5.,5.);
-    tSharedAn->SetSharedParameter(kd0,0.,-10.,10.);
-    tSharedAn->SetSharedParameter(kRef02,-0.32,-5.,5.);
-    tSharedAn->SetSharedParameter(kImf02,0.,-5.,5.);
-    tSharedAn->SetSharedParameter(kd02,0.,-10.,10.);
-*/
-
-    //PhysRevD.80.094006.pdf
-    tSharedAn->SetSharedParameter(kLambda,0.5,0.1,1.);
-    tSharedAn->SetSharedParameter(kRadius,5.,1.,10.);
-    tSharedAn->SetSharedParameter(kRef0,0.,-5.,5.);
-    tSharedAn->SetSharedParameter(kImf0,0.,-5.,5.);
-    tSharedAn->SetSharedParameter(kd0,0.,-10.,10.);
-    tSharedAn->SetSharedParameter(kRef02,-0.26,-5.,5.);
-    tSharedAn->SetSharedParameter(kImf02,0.,-5.,5.);
-    tSharedAn->SetSharedParameter(kd02,0.,-10.,10.);
-
-
-  }
 
   if(tAnType==kXiKchP || tAnType==kAXiKchM)
   {
@@ -113,8 +103,8 @@ int main(int argc, char **argv)
 */
 
     //PhysRevD.80.094006.pdf
+/*
     tSharedAn->SetSharedParameter(kLambda,0.5,0.1,1.);
-
     //tSharedAn->SetSharedParameter(kRadius,5.,1.,10.);
     tSharedAn->SetSharedParameter(kRadius,{0,1},5.0,2.,12.);
     tSharedAn->SetSharedParameter(kRadius,{2,3},4.5,2.,12.);
@@ -127,8 +117,67 @@ int main(int argc, char **argv)
     tSharedAn->SetSharedParameter(kRef02,0.48,-5.,5.);
     tSharedAn->SetSharedParameter(kImf02,0.17,-5.,5.);
     tSharedAn->SetSharedParameter(kd02,0.,-5.,5.);
+*/
+    tSharedAn->SetSharedParameter(kLambda,{0,1},0.5,0.1,1.);
+    tSharedAn->SetSharedParameter(kLambda,{2,3},0.5,0.1,1.);
+//    tSharedAn->SetSharedParameter(kLambda,{4,5},0.5,0.1,1.);
+
+    tSharedAn->SetSharedParameter(kRadius,{0,1},4.0,1.,6.);
+    tSharedAn->SetSharedParameter(kRadius,{2,3},3.0,1.,6.);
+//    tSharedAn->SetSharedParameter(kRadius,{4,5},2.0,1.,6.);
+
+    tSharedAn->SetSharedParameter(kRef0,1.02,-3.,3.);
+    tSharedAn->SetSharedParameter(kImf0,0.14,-3.,3.);
+    tSharedAn->SetSharedParameter(kd0,0.,-5.,5.);
+    tSharedAn->SetSharedParameter(kRef02,0.48,-3.,3.);
+    tSharedAn->SetSharedParameter(kImf02,0.17,-3.,3.);
+    tSharedAn->SetSharedParameter(kd02,0.,-3.,3.);
 
   }
+
+  if(tAnType==kAXiKchP || tAnType==kXiKchM)
+  {
+/*
+    //0607100.pdf
+    tSharedAn->SetSharedParameter(kLambda,0.5,0.1,1.);
+    tSharedAn->SetSharedParameter(kRadius,5.,1.,10.);
+    tSharedAn->SetSharedParameter(kRef0,0.57,-5.,5.);
+    tSharedAn->SetSharedParameter(kImf0,0.,-5.,5.);
+    tSharedAn->SetSharedParameter(kd0,0.,-10.,10.);
+    tSharedAn->SetSharedParameter(kRef02,-0.32,-5.,5.);
+    tSharedAn->SetSharedParameter(kImf02,0.,-5.,5.);
+    tSharedAn->SetSharedParameter(kd02,0.,-10.,10.);
+*/
+
+    //PhysRevD.80.094006.pdf
+/*
+    tSharedAn->SetSharedParameter(kLambda,0.5,0.1,1.);
+    tSharedAn->SetSharedParameter(kRadius,5.,1.,10.);
+    tSharedAn->SetSharedParameter(kRef0,0.,-5.,5.);
+    tSharedAn->SetSharedParameter(kImf0,0.,-5.,5.);
+    tSharedAn->SetSharedParameter(kd0,0.,-10.,10.);
+    tSharedAn->SetSharedParameter(kRef02,-0.26,-5.,5.);
+    tSharedAn->SetSharedParameter(kImf02,0.,-5.,5.);
+    tSharedAn->SetSharedParameter(kd02,0.,-10.,10.);
+*/
+
+    tSharedAn->SetSharedParameter(kLambda,{0,1},0.5,0.1,1.);
+    tSharedAn->SetSharedParameter(kLambda,{2,3},0.5,0.1,1.);
+//    tSharedAn->SetSharedParameter(kLambda,{4,5},0.5,0.1,1.);
+
+    tSharedAn->SetSharedParameter(kRadius,{0,1},4.0,1.,6.);
+    tSharedAn->SetSharedParameter(kRadius,{2,3},3.0,1.,6.);
+//    tSharedAn->SetSharedParameter(kRadius,{4,5},2.0,1.,6.);
+
+    tSharedAn->SetSharedParameter(kRef0,-0.2,-3.,3.);
+    tSharedAn->SetSharedParameter(kImf0,0.2,-3.,3.);
+    tSharedAn->SetSharedParameter(kd0,0.,-5.,5.);
+    tSharedAn->SetSharedParameter(kRef02,-0.2,-3.,3.);
+    tSharedAn->SetSharedParameter(kImf02,0.2,-3.,3.);
+    tSharedAn->SetSharedParameter(kd02,0.,-5.,5.);
+  }
+
+
 
 
   tSharedAn->RebinAnalyses(2);
@@ -141,7 +190,7 @@ int main(int argc, char **argv)
   CoulombFitter* tFitter = new CoulombFitter(tSharedAn,0.30);
 //  CoulombFitter* tFitter = new CoulombFitter(tSharedAn,0.02);
     tFitter->SetIncludeSingletAndTriplet(true);
-    tFitter->SetApplyMomResCorrection(true);
+    tFitter->SetApplyMomResCorrection(false);
 
 
   TString tFileLocationInterpHistos;
