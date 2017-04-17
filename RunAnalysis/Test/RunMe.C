@@ -28,7 +28,7 @@ TString outputname = "Results_cLamK0_20160928_Bm1_New.root";
 
 TString tConfiguration = "tMacroPath='%%/ConfigFemtoAnalysis.C'; tContainerName = 'cLamK0_femtolist'; ";
 //TString tParams = "@implementVertexCorrections = true; $|Lam|maxInvariantMass=1.165683; ";
-TString tParams = "@implementVertexCorrections = true; @analysisType = AliFemtoAnalysisLambdaKaon::kProtPiM; [0:10:30:50]";
+TString tParams = "@implementVertexCorrections = true; @analysisType = AliFemtoAnalysisLambdaKaon::kXiKchP; [0:10:30:50]";
 
 void RunMe()
 {
@@ -90,13 +90,13 @@ cout << "tParams = " << tParams << endl;
   {
 
     input_files->Add("/aliceData/data/2011/LHC11h_2/000170593/ESDs/pass2/AOD145/0001/AliAOD.root");
-/*
+
     input_files->Add("/aliceData/data/2011/LHC11h_2/000170593/ESDs/pass2/AOD145/0002/AliAOD.root");
     input_files->Add("/aliceData/data/2011/LHC11h_2/000170572/ESDs/pass2/AOD145/0001/AliAOD.root");
     input_files->Add("/aliceData/data/2011/LHC11h_2/000170572/ESDs/pass2/AOD145/0002/AliAOD.root");
     input_files->Add("/aliceData/data/2011/LHC11h_2/000170388/ESDs/pass2/AOD145/0001/AliAOD.root");
     input_files->Add("/aliceData/data/2011/LHC11h_2/000170388/ESDs/pass2/AOD145/0002/AliAOD.root");
-*/
+
 
     //input_files->Add("~/Analysis/K0Lam/Data/LHC11h/000169846_ESDs_pass2_AOD145_1262/AliAOD.root");  //Jai Baseline
   }
