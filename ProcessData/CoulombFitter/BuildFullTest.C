@@ -50,8 +50,8 @@ int main(int argc, char **argv)
   TString tFileLocationBase = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cXicKch_20170406/Results_cXicKch_20170406";
 
   AnalysisType tAnType, tConjType;
-  tAnType = kXiKchP;
-  //tAnType = kXiKchM;
+  //tAnType = kXiKchP;
+  tAnType = kXiKchM;
 
   if(tAnType==kXiKchP) tConjType = kAXiKchM;
   else if(tAnType==kXiKchM) tConjType = kAXiKchP;
@@ -61,8 +61,8 @@ int main(int argc, char **argv)
   int tNPartialAnalysis = 5;
   if(tAnalysisRunType==kTrain || tAnalysisRunType==kTrainSys) tNPartialAnalysis = 2;
 
-  bool bDoFit = true;
-  bool bDrawFit = false;
+  bool bDoFit = false;
+  bool bDrawFit = true;
   bool bDrawLam = false;
    
   TString tAnBaseName = TString(cAnalysisBaseTags[tAnType]);
@@ -384,9 +384,63 @@ cout << "tSampleHist1: " << tSampleHist1->GetNbinsX() << endl;
 
     double tLambda, tRadius, tReF0s, tImF0s, tD0s, tReF0t, tImF0t, tD0t, tNorm;
 
+    if(tAnType==kXiKchP || tAnType==kAXiKchM)
+    {
+      //18 April 2017
+      tLambda = 0.398942;
+      tRadius = 2.33678;
+
+      tReF0s = -1.13176;
+      tImF0s = 0.988682;
+      tD0s = -5.;
+
+      tReF0t = -0.17914;
+      tImF0t = 0.0205195;
+      tD0t = 2.48178;
+      tNorm = 1.;
+/*
+      tLambda = 0.555232;
+      tRadius = 4.60717;
+
+      tReF0s = -0.00976133;
+      tImF0s = 0.0409787;
+      tD0s = -0.33091;
+
+      tReF0t = -0.484049;
+      tImF0t = 0.523492;
+      tD0t = 1.53176;
+      tNorm = 1.;
+*/
+/*
+      tLambda = 0.712651;
+      tRadius = 8.46941;
+
+      tReF0s = -1.09173;
+      tImF0s = 4.42899;
+      tD0s = 0.81589;
+
+      tReF0t = 0.;
+      tImF0t = 0.;
+      tD0t = 0.;
+      tNorm = 1.;
+*/
+    }
+
     if(tAnType==kAXiKchP || tAnType==kXiKchM)
     {
+      //18 April 2017
+      tLambda = 0.691397;
+      tRadius = 4.11372;
 
+      tReF0s = -0.437582;
+      tImF0s = -1.03858;
+      tD0s = -2.19830;
+
+      tReF0t = 0.126213;
+      tImF0t = 0.743508;
+      tD0t = -3.72636;
+      tNorm = 1.;
+/*
       tLambda = 0.973083;
       tRadius = 6.97767;
 
@@ -398,7 +452,7 @@ cout << "tSampleHist1: " << tSampleHist1->GetNbinsX() << endl;
       tImF0t = 2.02133;
       tD0t = 4.07520;
       tNorm = 1.;
-
+*/
 /*
       tLambda = 0.720526;
       tRadius = 6.0;
@@ -414,35 +468,7 @@ cout << "tSampleHist1: " << tSampleHist1->GetNbinsX() << endl;
 */
     }
 
-    if(tAnType==kXiKchP || tAnType==kAXiKchM)
-    {
 
-      tLambda = 0.555232;
-      tRadius = 4.60717;
-
-      tReF0s = -0.00976133;
-      tImF0s = 0.0409787;
-      tD0s = -0.33091;
-
-      tReF0t = -0.484049;
-      tImF0t = 0.523492;
-      tD0t = 1.53176;
-      tNorm = 1.;
-
-/*
-      tLambda = 0.712651;
-      tRadius = 8.46941;
-
-      tReF0s = -1.09173;
-      tImF0s = 4.42899;
-      tD0s = 0.81589;
-
-      tReF0t = 0.;
-      tImF0t = 0.;
-      tD0t = 0.;
-      tNorm = 1.;
-*/
-    }
 
 
     TCanvas* tCan = new TCanvas("tCan","tCan");
