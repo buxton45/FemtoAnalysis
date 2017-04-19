@@ -61,8 +61,8 @@ int main(int argc, char **argv)
   int tNPartialAnalysis = 5;
   if(tAnalysisRunType==kTrain || tAnalysisRunType==kTrainSys) tNPartialAnalysis = 2;
 
-  bool bDoFit = false;
-  bool bDrawFit = true;
+  bool bDoFit = true;
+  bool bDrawFit = false;
   bool bDrawLam = false;
    
   TString tAnBaseName = TString(cAnalysisBaseTags[tAnType]);

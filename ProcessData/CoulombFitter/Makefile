@@ -32,7 +32,7 @@ CFLAGS = $(shell root-config --cflags) -pthread -Wno-deprecated-declarations -st
 
 MY_LIBS = $(addprefix build/, MathematicaSession.o WaveFunction.o ChargedResidualCf.o CoulombFitter.o LednickyFitter.o GeneralFitter.o SimpleFitter.o InterpolationHistograms.o FitChi2Histograms.o FitParameter.o FitPartialAnalysis.o FitPairAnalysis.o FitSharedAnalyses.o CfLite.o CfHeavy.o Types.o Faddeeva.o)
 
-BINARIES = runTest runTest2 runFullTest runBuildInterpolationHistograms runFitLambda runSimpleFitter runProtonCascade runManualFitting
+BINARIES = runTest runTest2 runFullTest runXiKch runBuildInterpolationHistograms runFitLambda runSimpleFitter runProtonCascade runManualFitting
 
 all : $(BINARIES)
 
@@ -44,6 +44,9 @@ runTest2: ${MY_LIBS} test2.C
 
 runFullTest: ${MY_LIBS} BuildFullTest.C	
 	${CXX} BuildFullTest.C ${MY_LIBS} -I${INCDIR} -o runFullTest -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS) -o $@
+
+runXiKch: ${MY_LIBS} BuildXiKch.C	
+	${CXX} BuildXiKch.C ${MY_LIBS} -I${INCDIR} -o runXiKch -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS) -o $@
 
 runBuildInterpolationHistograms: ${MY_LIBS} BuildInterpolationHistograms.C	
 	${CXX} BuildInterpolationHistograms.C ${MY_LIBS} -I${INCDIR} -o runBuildInterpolationHistograms -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS) -o $@
