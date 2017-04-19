@@ -63,7 +63,7 @@ CoulombFitter::CoulombFitter():
 
   fCfsToFit(0),
   fFits(0),
-  fMaxFitKStar(0),
+  fMaxFitKStar(0.3),
   fRejectOmega(false),
   fChi2(0),
   fChi2GlobalMin(1000000000),

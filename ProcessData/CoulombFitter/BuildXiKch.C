@@ -171,7 +171,8 @@ int main(int argc, char **argv)
 //Be sure to set the following...
 
   TString tFileLocationBase = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cXicKch_20170406/Results_cXicKch_20170406";
-  bool bSaveImage = true;
+  bool bSaveImage = false;
+  bool bDrawMultipleCoulombOnly = true;
 
   AnalysisType tAnType;
   CentralityType tCentType;
@@ -186,6 +187,9 @@ int main(int argc, char **argv)
   //tCentType = k1030;
   //tCentType = k3050;
 
+  int tNbinsK = 15;
+  double tKMin = 0.;
+  double tKMax = 0.15;
 
   AnalysisRunType tAnalysisRunType = kTrain;
   int tNPartialAnalysis = 5;
@@ -238,11 +242,6 @@ int main(int argc, char **argv)
 
 
 //_______________________________________________________________________________________________________________________
-
-  int tNbinsK = 15;
-  double tKMin = 0.;
-  double tKMax = 0.15;
-
   double tLambda, tRadius, tReF0s, tImF0s, tD0s, tReF0t, tImF0t, tD0t, tNorm;
 
   if(tAnType==kXiKchP || tAnType==kAXiKchM)
@@ -338,6 +337,19 @@ int main(int argc, char **argv)
   else assert(0);
 
   TCanvas* tCan = DrawKStarCfswFits(tData, tSampleHist1, tCoulombOnlyHist, tAnType, tCentType, bSaveImage);
+
+  if(bDrawMultipleCoulombOnly)
+  {
+    tRadius = 0.;
+    for(int i=0; i<10; i++)
+    {
+      tRadius = tRadius + 1;
+      tCoulombOnlyHist = tFitter->CreateFitHistogramSampleComplete("tCoulombOnlyHist", tAnType, tNbinsK, tKMin, tKMax, tLambda, tRadius, 0., 0., 0., 0., 0., 0., tNorm);
+      tCoulombOnlyHist->DrawCopy("lsame");
+      tCan->Update();
+    }
+
+  }
 
   delete tFitter;
 
