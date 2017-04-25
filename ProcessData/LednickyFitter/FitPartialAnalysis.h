@@ -56,8 +56,8 @@ class FitPartialAnalysis {
 public:
 
   //Constructor, destructor, copy constructor, assignment operator
-  FitPartialAnalysis(TString aFileLocation, TString aAnalysisName, AnalysisType aAnalysisType, CentralityType aCentralityType, BFieldType aBFieldType, AnalysisRunType aRunType=kTrain, TString aDirNameModifier="");
-  FitPartialAnalysis(TString aFileLocation, TString aFileLocationMC, TString aAnalysisName, AnalysisType aAnalysisType, CentralityType aCentralityType, BFieldType aBFieldType, AnalysisRunType aRunType=kTrain, TString aDirNameModifier="");
+  FitPartialAnalysis(TString aFileLocation, TString aAnalysisName, AnalysisType aAnalysisType, CentralityType aCentralityType, BFieldType aBFieldType, AnalysisRunType aRunType=kTrain, TString aDirNameModifier="", bool aIncludeSingletAndTriplet=false);
+  FitPartialAnalysis(TString aFileLocation, TString aFileLocationMC, TString aAnalysisName, AnalysisType aAnalysisType, CentralityType aCentralityType, BFieldType aBFieldType, AnalysisRunType aRunType=kTrain, TString aDirNameModifier="", bool aIncludeSingletAndTriplet=false);
   virtual ~FitPartialAnalysis();
 
   static double NonFlatBackgroundFitFunctionLinear(double *x, double *par);

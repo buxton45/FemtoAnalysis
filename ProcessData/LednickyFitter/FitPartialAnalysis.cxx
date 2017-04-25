@@ -16,7 +16,7 @@ ClassImp(FitPartialAnalysis)
 
 
 //________________________________________________________________________________________________________________
-FitPartialAnalysis::FitPartialAnalysis(TString aFileLocation, TString aAnalysisName, AnalysisType aAnalysisType, CentralityType aCentralityType, BFieldType aBFieldType, AnalysisRunType aRunType, TString aDirNameModifier) : 
+FitPartialAnalysis::FitPartialAnalysis(TString aFileLocation, TString aAnalysisName, AnalysisType aAnalysisType, CentralityType aCentralityType, BFieldType aBFieldType, AnalysisRunType aRunType, TString aDirNameModifier, bool aIncludeSingletAndTriplet) : 
   fAnalysisRunType(aRunType),
   fFileLocation(aFileLocation),
   fFileLocationMC(0),
@@ -75,7 +75,7 @@ FitPartialAnalysis::FitPartialAnalysis(TString aFileLocation, TString aAnalysisN
   //-----Initiate parameters and load into vector
   if(fAnalysisType == kXiKchP || fAnalysisType == kAXiKchP || fAnalysisType == kXiKchM || fAnalysisType == kAXiKchM)
   {
-    fNFitParams = 8;
+    if(aIncludeSingletAndTriplet) fNFitParams = 8;
     fFitParameters.resize(fNFitParams);
 
     fLambda = new FitParameter(kLambda, cStartValues[fAnalysisType][fCentralityType][kLambda],false,0.,0.,0.4);
@@ -92,11 +92,14 @@ FitPartialAnalysis::FitPartialAnalysis(TString aFileLocation, TString aAnalysisN
 //    fNorm->SetFixed(true);
 
 //TODO give these their own unique start values
-    fRef02 = new FitParameter(kRef02, cStartValues[fAnalysisType][fCentralityType][kRef0],false,0.,0.,1.);
-    fImf02 = new FitParameter(kImf02, cStartValues[fAnalysisType][fCentralityType][kImf0],false,0.,0.,1.);
+    if(aIncludeSingletAndTriplet)
+    {
+      fRef02 = new FitParameter(kRef02, cStartValues[fAnalysisType][fCentralityType][kRef0],false,0.,0.,1.);
+      fImf02 = new FitParameter(kImf02, cStartValues[fAnalysisType][fCentralityType][kImf0],false,0.,0.,1.);
 
-    fd02 = new FitParameter(kd02, cStartValues[fAnalysisType][fCentralityType][kd0],false,0.,0.,5.);
-    fd02->SetStartValue(0.);
+      fd02 = new FitParameter(kd02, cStartValues[fAnalysisType][fCentralityType][kd0],false,0.,0.,5.);
+      fd02->SetStartValue(0.);
+    }
 
 /*
     fLambda = new FitParameter(kLambda, cStartValues[fAnalysisType][fCentralityType][kLambda],false,0.,0.,0.4);
@@ -114,9 +117,12 @@ FitPartialAnalysis::FitPartialAnalysis(TString aFileLocation, TString aAnalysisN
     fFitParameters[kRef0] = fRef0;
     fFitParameters[kImf0] = fImf0;
     fFitParameters[kd0] = fd0;
-    fFitParameters[kRef02] = fRef02;
-    fFitParameters[kImf02] = fImf02;
-    fFitParameters[kd02] = fd02;
+    if(aIncludeSingletAndTriplet)
+    {
+      fFitParameters[kRef02] = fRef02;
+      fFitParameters[kImf02] = fImf02;
+      fFitParameters[kd02] = fd02;
+    }
 
   }
   else
@@ -154,7 +160,7 @@ FitPartialAnalysis::FitPartialAnalysis(TString aFileLocation, TString aAnalysisN
 
 
 //________________________________________________________________________________________________________________
-FitPartialAnalysis::FitPartialAnalysis(TString aFileLocation, TString aFileLocationMC, TString aAnalysisName, AnalysisType aAnalysisType, CentralityType aCentralityType, BFieldType aBFieldType, AnalysisRunType aRunType, TString aDirNameModifier) : 
+FitPartialAnalysis::FitPartialAnalysis(TString aFileLocation, TString aFileLocationMC, TString aAnalysisName, AnalysisType aAnalysisType, CentralityType aCentralityType, BFieldType aBFieldType, AnalysisRunType aRunType, TString aDirNameModifier, bool aIncludeSingletAndTriplet) : 
   fAnalysisRunType(aRunType),
   fFileLocation(aFileLocation),
   fFileLocationMC(aFileLocationMC),
@@ -213,7 +219,7 @@ FitPartialAnalysis::FitPartialAnalysis(TString aFileLocation, TString aFileLocat
   //-----Initiate parameters and load into vector
   if(fAnalysisType == kXiKchP || fAnalysisType == kAXiKchP || fAnalysisType == kXiKchM || fAnalysisType == kAXiKchM)
   {
-    fNFitParams = 8;
+    if(aIncludeSingletAndTriplet) fNFitParams = 8;
     fFitParameters.resize(fNFitParams);
 
     fLambda = new FitParameter(kLambda, cStartValues[fAnalysisType][fCentralityType][kLambda],false,0.,0.,0.4);
@@ -230,12 +236,14 @@ FitPartialAnalysis::FitPartialAnalysis(TString aFileLocation, TString aFileLocat
 //    fNorm->SetFixed(true);
 
 //TODO give these their own unique start values
-    fRef02 = new FitParameter(kRef02, cStartValues[fAnalysisType][fCentralityType][kRef0],false,0.,0.,1.);
-    fImf02 = new FitParameter(kImf02, cStartValues[fAnalysisType][fCentralityType][kImf0],false,0.,0.,1.);
+    if(aIncludeSingletAndTriplet)
+    {
+      fRef02 = new FitParameter(kRef02, cStartValues[fAnalysisType][fCentralityType][kRef0],false,0.,0.,1.);
+      fImf02 = new FitParameter(kImf02, cStartValues[fAnalysisType][fCentralityType][kImf0],false,0.,0.,1.);
 
-    fd02 = new FitParameter(kd02, cStartValues[fAnalysisType][fCentralityType][kd0],false,0.,0.,5.);
-    fd02->SetStartValue(0.);
-
+      fd02 = new FitParameter(kd02, cStartValues[fAnalysisType][fCentralityType][kd0],false,0.,0.,5.);
+      fd02->SetStartValue(0.);
+    }
 /*
     fLambda = new FitParameter(kLambda, cStartValues[fAnalysisType][fCentralityType][kLambda],false,0.,0.,0.4);
     fRadius = new FitParameter(kRadius, cStartValues[fAnalysisType][fCentralityType][kRadius],false,0.,0.,5.);
@@ -252,10 +260,12 @@ FitPartialAnalysis::FitPartialAnalysis(TString aFileLocation, TString aFileLocat
     fFitParameters[kRef0] = fRef0;
     fFitParameters[kImf0] = fImf0;
     fFitParameters[kd0] = fd0;
-    fFitParameters[kRef02] = fRef02;
-    fFitParameters[kImf02] = fImf02;
-    fFitParameters[kd02] = fd02;
-
+    if(aIncludeSingletAndTriplet)
+    {
+      fFitParameters[kRef02] = fRef02;
+      fFitParameters[kImf02] = fImf02;
+      fFitParameters[kd02] = fd02;
+    }
   }
   else
   {

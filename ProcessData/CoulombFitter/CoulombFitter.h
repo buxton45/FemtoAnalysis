@@ -158,6 +158,9 @@ public:
   void SetUseRandomKStarVectors(bool aUseRandomKStarVectors);
   void SetApplyMomResCorrection(bool aApplyMomResCorrection);
 
+  double GetChi2();
+  int GetNDF();
+
 protected:
   bool fTurnOffCoulomb;
   bool fInterpHistsLoaded;
@@ -250,4 +253,6 @@ inline void CoulombFitter::SetIncludeSingletAndTriplet(bool aIncludeSingletAndTr
 inline void CoulombFitter::SetUseRandomKStarVectors(bool aUseRandomKStarVectors) {fUseRandomKStarVectors = aUseRandomKStarVectors;}
 inline void CoulombFitter::SetApplyMomResCorrection(bool aApplyMomResCorrection) {fApplyMomResCorrection = aApplyMomResCorrection;}
 
+inline double CoulombFitter::GetChi2() {return fChi2;}
+inline int CoulombFitter::GetNDF() {return fNDF;}
 #endif

@@ -18,7 +18,7 @@ ClassImp(FitPairAnalysis)
 
 
 //________________________________________________________________________________________________________________
-FitPairAnalysis::FitPairAnalysis(TString aAnalysisName, vector<FitPartialAnalysis*> &aFitPartialAnalysisCollection) :
+FitPairAnalysis::FitPairAnalysis(TString aAnalysisName, vector<FitPartialAnalysis*> &aFitPartialAnalysisCollection, bool aIncludeSingletAndTriplet) :
   fAnalysisRunType(kTrain),
   fAnalysisName(aAnalysisName),
   fAnalysisDirectoryName(""),
@@ -68,7 +68,7 @@ FitPairAnalysis::FitPairAnalysis(TString aAnalysisName, vector<FitPartialAnalysi
 
   BuildKStarCfHeavy(fKStarMinNorm,fKStarMaxNorm);
 
-  if(fAnalysisType == kXiKchP || fAnalysisType == kAXiKchP || fAnalysisType == kXiKchM || fAnalysisType == kAXiKchM)
+  if( (fAnalysisType == kXiKchP || fAnalysisType == kAXiKchP || fAnalysisType == kXiKchM || fAnalysisType == kAXiKchM) && aIncludeSingletAndTriplet)
   {
     fNFitParamsToShare = 8; //sharing Lambda, Radius, Ref0, Imf0, d0, Ref02, Imf02, d02
   }
@@ -80,7 +80,7 @@ FitPairAnalysis::FitPairAnalysis(TString aAnalysisName, vector<FitPartialAnalysi
 
 
 //________________________________________________________________________________________________________________
-FitPairAnalysis::FitPairAnalysis(TString aFileLocationBase, AnalysisType aAnalysisType, CentralityType aCentralityType, AnalysisRunType aRunType, int aNFitPartialAnalysis, TString aDirNameModifier) :
+FitPairAnalysis::FitPairAnalysis(TString aFileLocationBase, AnalysisType aAnalysisType, CentralityType aCentralityType, AnalysisRunType aRunType, int aNFitPartialAnalysis, TString aDirNameModifier, bool aIncludeSingletAndTriplet) :
   fAnalysisRunType(aRunType),
   fAnalysisName(0),
   fAnalysisDirectoryName(""),
@@ -134,7 +134,7 @@ FitPairAnalysis::FitPairAnalysis(TString aFileLocationBase, AnalysisType aAnalys
 
     TString tFitPartialAnalysisName = fAnalysisName + cBFieldTags[tBFieldType];
 
-    FitPartialAnalysis* tFitPartialAnalysis = new FitPartialAnalysis(tFileLocation, tFitPartialAnalysisName, fAnalysisType, fCentralityType, tBFieldType, fAnalysisRunType, aDirNameModifier);
+    FitPartialAnalysis* tFitPartialAnalysis = new FitPartialAnalysis(tFileLocation, tFitPartialAnalysisName, fAnalysisType, fCentralityType, tBFieldType, fAnalysisRunType, aDirNameModifier, aIncludeSingletAndTriplet);
 
     fFitPartialAnalysisCollection.push_back(tFitPartialAnalysis);
   } 
@@ -143,7 +143,7 @@ FitPairAnalysis::FitPairAnalysis(TString aFileLocationBase, AnalysisType aAnalys
 
   BuildKStarCfHeavy(fKStarMinNorm,fKStarMaxNorm);
 
-  if(fAnalysisType == kXiKchP || fAnalysisType == kAXiKchP || fAnalysisType == kXiKchM || fAnalysisType == kAXiKchM)
+  if( (fAnalysisType == kXiKchP || fAnalysisType == kAXiKchP || fAnalysisType == kXiKchM || fAnalysisType == kAXiKchM) && aIncludeSingletAndTriplet)
   {
     fNFitParamsToShare = 8; //sharing Lambda, Radius, Ref0, Imf0, d0, Ref02, Imf02, d02
   }
@@ -153,7 +153,7 @@ FitPairAnalysis::FitPairAnalysis(TString aFileLocationBase, AnalysisType aAnalys
 }
 
 //________________________________________________________________________________________________________________
-FitPairAnalysis::FitPairAnalysis(TString aFileLocationBase, TString aFileLocationBaseMC, AnalysisType aAnalysisType, CentralityType aCentralityType, AnalysisRunType aRunType, int aNFitPartialAnalysis, TString aDirNameModifier) :
+FitPairAnalysis::FitPairAnalysis(TString aFileLocationBase, TString aFileLocationBaseMC, AnalysisType aAnalysisType, CentralityType aCentralityType, AnalysisRunType aRunType, int aNFitPartialAnalysis, TString aDirNameModifier, bool aIncludeSingletAndTriplet) :
   fAnalysisRunType(aRunType),
   fAnalysisName(0),
   fAnalysisDirectoryName(""),
@@ -210,7 +210,7 @@ FitPairAnalysis::FitPairAnalysis(TString aFileLocationBase, TString aFileLocatio
 
     TString tFitPartialAnalysisName = fAnalysisName + cBFieldTags[tBFieldType];
 
-    FitPartialAnalysis* tFitPartialAnalysis = new FitPartialAnalysis(tFileLocation, tFileLocationMC, tFitPartialAnalysisName, fAnalysisType, fCentralityType, tBFieldType, fAnalysisRunType, aDirNameModifier);
+    FitPartialAnalysis* tFitPartialAnalysis = new FitPartialAnalysis(tFileLocation, tFileLocationMC, tFitPartialAnalysisName, fAnalysisType, fCentralityType, tBFieldType, fAnalysisRunType, aDirNameModifier, aIncludeSingletAndTriplet);
 
     fFitPartialAnalysisCollection.push_back(tFitPartialAnalysis);
   } 
@@ -222,7 +222,7 @@ FitPairAnalysis::FitPairAnalysis(TString aFileLocationBase, TString aFileLocatio
   BuildModelKStarTrueVsRecMixed(2);
 //  BuildModelCfFakeIdealCfFakeRatio(fKStarMinNorm,fKStarMaxNorm,1);
 
-  if(fAnalysisType == kXiKchP || fAnalysisType == kAXiKchP || fAnalysisType == kXiKchM || fAnalysisType == kAXiKchM)
+  if( (fAnalysisType == kXiKchP || fAnalysisType == kAXiKchP || fAnalysisType == kXiKchM || fAnalysisType == kAXiKchM) && aIncludeSingletAndTriplet)
   {
     fNFitParamsToShare = 8; //sharing Lambda, Radius, Ref0, Imf0, d0, Ref02, Imf02, d02
   }

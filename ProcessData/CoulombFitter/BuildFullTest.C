@@ -47,7 +47,7 @@ int main(int argc, char **argv)
 //-----------------------------------------------------------------------------
 //Be sure to set the following...
 
-  TString tFileLocationBase = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cXicKch_20170406/Results_cXicKch_20170406";
+  TString tFileLocationBase = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cXicKch_20170423/Results_cXicKch_20170423";
 
   AnalysisType tAnType, tConjType;
   //tAnType = kXiKchP;
@@ -61,6 +61,8 @@ int main(int argc, char **argv)
   int tNPartialAnalysis = 5;
   if(tAnalysisRunType==kTrain || tAnalysisRunType==kTrainSys) tNPartialAnalysis = 2;
 
+  bool bIncludeSingletAndTriplet=false;
+
   bool bDoFit = true;
   bool bDrawFit = false;
   bool bDrawLam = false;
@@ -71,12 +73,12 @@ int main(int argc, char **argv)
 
 //-----------------------------------------------------------------------------
 
-  FitPairAnalysis* tPairAn0010 = new FitPairAnalysis(tFileLocationBase,tAnType,k0010,tAnalysisRunType,tNPartialAnalysis);
-  FitPairAnalysis* tPairConjAn0010 = new FitPairAnalysis(tFileLocationBase,tConjType,k0010,tAnalysisRunType,tNPartialAnalysis);
-  FitPairAnalysis* tPairAn1030 = new FitPairAnalysis(tFileLocationBase,tAnType,k1030,tAnalysisRunType,tNPartialAnalysis);
-  FitPairAnalysis* tPairConjAn1030 = new FitPairAnalysis(tFileLocationBase,tConjType,k1030,tAnalysisRunType,tNPartialAnalysis);
-//  FitPairAnalysis* tPairAn3050 = new FitPairAnalysis(tFileLocationBase,tAnType,k3050,tAnalysisRunType,tNPartialAnalysis);
-//  FitPairAnalysis* tPairConjAn3050 = new FitPairAnalysis(tFileLocationBase,tConjType,k3050,tAnalysisRunType,tNPartialAnalysis);
+  FitPairAnalysis* tPairAn0010 = new FitPairAnalysis(tFileLocationBase, tAnType, k0010, tAnalysisRunType, tNPartialAnalysis, TString(""), bIncludeSingletAndTriplet);
+  FitPairAnalysis* tPairConjAn0010 = new FitPairAnalysis(tFileLocationBase, tConjType, k0010, tAnalysisRunType, tNPartialAnalysis, TString(""), bIncludeSingletAndTriplet);
+  FitPairAnalysis* tPairAn1030 = new FitPairAnalysis(tFileLocationBase, tAnType, k1030, tAnalysisRunType, tNPartialAnalysis, TString(""), bIncludeSingletAndTriplet);
+  FitPairAnalysis* tPairConjAn1030 = new FitPairAnalysis(tFileLocationBase, tConjType, k1030, tAnalysisRunType, tNPartialAnalysis, TString(""), bIncludeSingletAndTriplet);
+//  FitPairAnalysis* tPairAn3050 = new FitPairAnalysis(tFileLocationBase, tAnType, k3050, tAnalysisRunType, tNPartialAnalysis, TString(""), bIncludeSingletAndTriplet);
+//  FitPairAnalysis* tPairConjAn3050 = new FitPairAnalysis(tFileLocationBase, tConjType, k3050, tAnalysisRunType, tNPartialAnalysis, TString(""), bIncludeSingletAndTriplet);
 
   vector<FitPairAnalysis*> tVecOfPairAn;
   tVecOfPairAn.push_back(tPairAn0010);
@@ -97,9 +99,12 @@ int main(int argc, char **argv)
     tSharedAn->SetSharedParameter(kRef0,1.46,-5.,5.);
     tSharedAn->SetSharedParameter(kImf0,0.24,-5.,5.);
     tSharedAn->SetSharedParameter(kd0,0.,-5.,5.);
-    tSharedAn->SetSharedParameter(kRef02,0.74,-5.,5.);
-    tSharedAn->SetSharedParameter(kImf02,0.40,-5.,5.);
-    tSharedAn->SetSharedParameter(kd02,0.,-5.,5.);
+    if(bIncludeSingletAndTriplet)
+    {
+      tSharedAn->SetSharedParameter(kRef02,0.74,-5.,5.);
+      tSharedAn->SetSharedParameter(kImf02,0.40,-5.,5.);
+      tSharedAn->SetSharedParameter(kd02,0.,-5.,5.);
+    }
 */
 
     //PhysRevD.80.094006.pdf
@@ -114,9 +119,12 @@ int main(int argc, char **argv)
     tSharedAn->SetSharedParameter(kRef0,1.02,-5.,5.);
     tSharedAn->SetSharedParameter(kImf0,0.14,-5.,5.);
     tSharedAn->SetSharedParameter(kd0,0.,-5.,5.);
-    tSharedAn->SetSharedParameter(kRef02,0.48,-5.,5.);
-    tSharedAn->SetSharedParameter(kImf02,0.17,-5.,5.);
-    tSharedAn->SetSharedParameter(kd02,0.,-5.,5.);
+    if(bIncludeSingletAndTriplet)
+    {
+      tSharedAn->SetSharedParameter(kRef02,0.48,-5.,5.);
+      tSharedAn->SetSharedParameter(kImf02,0.17,-5.,5.);
+      tSharedAn->SetSharedParameter(kd02,0.,-5.,5.);
+    }
 */
     tSharedAn->SetSharedParameter(kLambda,{0,1},0.5,0.1,1.);
     tSharedAn->SetSharedParameter(kLambda,{2,3},0.5,0.1,1.);
@@ -129,10 +137,12 @@ int main(int argc, char **argv)
     tSharedAn->SetSharedParameter(kRef0,1.02,-3.,3.);
     tSharedAn->SetSharedParameter(kImf0,0.14,-3.,3.);
     tSharedAn->SetSharedParameter(kd0,0.,-5.,5.);
-    tSharedAn->SetSharedParameter(kRef02,0.48,-3.,3.);
-    tSharedAn->SetSharedParameter(kImf02,0.17,-3.,3.);
-    tSharedAn->SetSharedParameter(kd02,0.,-3.,3.);
-
+    if(bIncludeSingletAndTriplet)
+    {
+      tSharedAn->SetSharedParameter(kRef02,0.48,-3.,3.);
+      tSharedAn->SetSharedParameter(kImf02,0.17,-3.,3.);
+      tSharedAn->SetSharedParameter(kd02,0.,-3.,3.);
+    }
   }
 
   if(tAnType==kAXiKchP || tAnType==kXiKchM)
@@ -144,9 +154,12 @@ int main(int argc, char **argv)
     tSharedAn->SetSharedParameter(kRef0,0.57,-5.,5.);
     tSharedAn->SetSharedParameter(kImf0,0.,-5.,5.);
     tSharedAn->SetSharedParameter(kd0,0.,-10.,10.);
-    tSharedAn->SetSharedParameter(kRef02,-0.32,-5.,5.);
-    tSharedAn->SetSharedParameter(kImf02,0.,-5.,5.);
-    tSharedAn->SetSharedParameter(kd02,0.,-10.,10.);
+    if(bIncludeSingletAndTriplet)
+    {
+      tSharedAn->SetSharedParameter(kRef02,-0.32,-5.,5.);
+      tSharedAn->SetSharedParameter(kImf02,0.,-5.,5.);
+      tSharedAn->SetSharedParameter(kd02,0.,-10.,10.);
+    }
 */
 
     //PhysRevD.80.094006.pdf
@@ -156,9 +169,12 @@ int main(int argc, char **argv)
     tSharedAn->SetSharedParameter(kRef0,0.,-5.,5.);
     tSharedAn->SetSharedParameter(kImf0,0.,-5.,5.);
     tSharedAn->SetSharedParameter(kd0,0.,-10.,10.);
-    tSharedAn->SetSharedParameter(kRef02,-0.26,-5.,5.);
-    tSharedAn->SetSharedParameter(kImf02,0.,-5.,5.);
-    tSharedAn->SetSharedParameter(kd02,0.,-10.,10.);
+    if(bIncludeSingletAndTriplet)
+    {
+      tSharedAn->SetSharedParameter(kRef02,-0.26,-5.,5.);
+      tSharedAn->SetSharedParameter(kImf02,0.,-5.,5.);
+      tSharedAn->SetSharedParameter(kd02,0.,-10.,10.);
+    }
 */
 
     tSharedAn->SetSharedParameter(kLambda,{0,1},0.5,0.1,1.);
@@ -172,9 +188,12 @@ int main(int argc, char **argv)
     tSharedAn->SetSharedParameter(kRef0,-0.2,-3.,3.);
     tSharedAn->SetSharedParameter(kImf0,0.2,-3.,3.);
     tSharedAn->SetSharedParameter(kd0,0.,-5.,5.);
-    tSharedAn->SetSharedParameter(kRef02,-0.2,-3.,3.);
-    tSharedAn->SetSharedParameter(kImf02,0.2,-3.,3.);
-    tSharedAn->SetSharedParameter(kd02,0.,-5.,5.);
+    if(bIncludeSingletAndTriplet)
+    {
+      tSharedAn->SetSharedParameter(kRef02,-0.2,-3.,3.);
+      tSharedAn->SetSharedParameter(kImf02,0.2,-3.,3.);
+      tSharedAn->SetSharedParameter(kd02,0.,-5.,5.);
+    }
   }
 
 
@@ -189,7 +208,7 @@ int main(int argc, char **argv)
 //  CoulombFitter* tFitter = new CoulombFitter(tSharedAn,0.15);
   CoulombFitter* tFitter = new CoulombFitter(tSharedAn,0.30);
 //  CoulombFitter* tFitter = new CoulombFitter(tSharedAn,0.02);
-    tFitter->SetIncludeSingletAndTriplet(true);
+    tFitter->SetIncludeSingletAndTriplet(bIncludeSingletAndTriplet);
     tFitter->SetApplyMomResCorrection(false);
 
 
