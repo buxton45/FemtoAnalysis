@@ -56,7 +56,7 @@ public:
   TString GetDaughtersHistoTitle(DaughterPairType aDaughterPairType);
   //-----
   void BuildKStarHeavyCf(double aMinNorm=0.32, double aMaxNorm=0.4, int aRebin=1);
-  void DrawKStarHeavyCf(TPad* aPad, int aMarkerColor=1, TString aOption = "", int aMarkerStyle=20);
+  void DrawKStarHeavyCf(TPad* aPad, int aMarkerColor=1, TString aOption = "", int aMarkerStyle=20, double aXMin=-1., double aXMax=-1., double aYMin=-1., double aYMax=-1.);
   void SaveAllKStarHeavyCf(TFile* aFile);
   //-----
   void BuildKStarHeavyCfMCTrue(double aMinNorm=0.32, double aMaxNorm=0.4);

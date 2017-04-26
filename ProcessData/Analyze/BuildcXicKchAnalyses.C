@@ -113,9 +113,11 @@ int main(int argc, char **argv)
   TFile *mySaveFile;
   if(bSaveFile) {mySaveFile = new TFile(SaveFileName, "RECREATE");}
 
-  bool bContainsPurity = true;
-  bool bContainsKStarCfs = true;
+  bool bContainsPurity = false;
+  bool bContainsKStarCfs = false;
   bool bContainsAvgSepCfs = false;
+
+  bool bRunChi2Test = true;
 
   bool bContainsKStar2dCfs = false;
 
@@ -126,7 +128,7 @@ int main(int argc, char **argv)
 
   bool bDrawMC = false;
 
-  bool bSaveFigures = false;
+  bool bSaveFigures = true;
   TString tSaveFiguresLocation = "~/Analysis/FemtoAnalysis/Results/Results_cXicKch_20170423/0010/";
   //-------------------------------------------------------------------
 
@@ -167,14 +169,19 @@ int main(int argc, char **argv)
     TCanvas *canKStar = new TCanvas("canKStar","canKStar");
     canKStar->Divide(2,1);
 
+    double tXMin = 0.0;
+    double tXMax = 0.30;
 
-    XiKchP->DrawKStarHeavyCf((TPad*)canKStar->cd(1),2);
+    double tYMin = 0.38;
+    double tYMax = 1.7;
+
+    XiKchP->DrawKStarHeavyCf((TPad*)canKStar->cd(1),2,"",20,tXMin,tXMax,tYMin,tYMax);
     XiKchM->DrawKStarHeavyCf((TPad*)canKStar->cd(1),4,"same");
     canKStar->cd(1);
     leg1->Draw();
 
 
-    AXiKchP->DrawKStarHeavyCf((TPad*)canKStar->cd(2),4);
+    AXiKchP->DrawKStarHeavyCf((TPad*)canKStar->cd(2),4,"",20,tXMin,tXMax,tYMin,tYMax);
     AXiKchM->DrawKStarHeavyCf((TPad*)canKStar->cd(2),2,"same");
     canKStar->cd(2);
     leg2->Draw();
@@ -332,6 +339,189 @@ int main(int argc, char **argv)
 
   }
 
+
+  if(bRunChi2Test)
+  {
+    XiKchP->BuildKStarHeavyCf();
+    AXiKchP->BuildKStarHeavyCf();
+    XiKchM->BuildKStarHeavyCf();
+    AXiKchM->BuildKStarHeavyCf();
+
+    XiKchP->GetKStarHeavyCf()->Rebin(2);
+    AXiKchP->GetKStarHeavyCf()->Rebin(2);
+    XiKchM->GetKStarHeavyCf()->Rebin(2);
+    AXiKchM->GetKStarHeavyCf()->Rebin(2);
+
+    //--------------------------------------------------------
+    double tXMin = 0.0;
+    double tXMax = 0.15;
+
+    double tYMin = 0.38;
+    double tYMax = 1.7;
+
+    TH1* tCfXiKchP = XiKchP->GetKStarHeavyCf()->GetHeavyCf();
+    TH1* tNumXiKchP = XiKchP->GetKStarHeavyCf()->GetSimplyAddedNumDen("XiKchPNum",true);
+    TH1* tDenXiKchP = XiKchP->GetKStarHeavyCf()->GetSimplyAddedNumDen("XiKchPDen",false);
+
+    TH1* tCfAXiKchM = AXiKchM->GetKStarHeavyCf()->GetHeavyCf();
+    TH1* tNumAXiKchM = AXiKchM->GetKStarHeavyCf()->GetSimplyAddedNumDen("AXiKchMNum",true);
+    TH1* tDenAXiKchM = AXiKchM->GetKStarHeavyCf()->GetSimplyAddedNumDen("AXiKchMDen",false);
+
+
+    TH1* tCfXiKchM = XiKchM->GetKStarHeavyCf()->GetHeavyCf();
+    TH1* tNumXiKchM = XiKchM->GetKStarHeavyCf()->GetSimplyAddedNumDen("XiKchMNum",true);
+    TH1* tDenXiKchM = XiKchM->GetKStarHeavyCf()->GetSimplyAddedNumDen("XiKchMDen",false);
+
+    TH1* tCfAXiKchP = AXiKchP->GetKStarHeavyCf()->GetHeavyCf();
+    TH1* tNumAXiKchP = AXiKchP->GetKStarHeavyCf()->GetSimplyAddedNumDen("AXiKchPNum",true);
+    TH1* tDenAXiKchP = AXiKchP->GetKStarHeavyCf()->GetSimplyAddedNumDen("AXiKchPDen",false);
+
+    //--------------------------------------------------------
+
+    tCfXiKchP->GetXaxis()->SetRangeUser(tXMin,tXMax);
+    tNumXiKchP->GetXaxis()->SetRangeUser(tXMin,tXMax);
+    tDenXiKchP->GetXaxis()->SetRangeUser(tXMin,tXMax);
+
+    tCfAXiKchM->GetXaxis()->SetRangeUser(tXMin,tXMax);
+    tNumAXiKchM->GetXaxis()->SetRangeUser(tXMin,tXMax);
+    tDenAXiKchM->GetXaxis()->SetRangeUser(tXMin,tXMax);
+
+    tCfXiKchM->GetXaxis()->SetRangeUser(tXMin,tXMax);
+    tNumXiKchM->GetXaxis()->SetRangeUser(tXMin,tXMax);
+    tDenXiKchM->GetXaxis()->SetRangeUser(tXMin,tXMax);
+
+    tCfAXiKchP->GetXaxis()->SetRangeUser(tXMin,tXMax);
+    tNumAXiKchP->GetXaxis()->SetRangeUser(tXMin,tXMax);
+    tDenAXiKchP->GetXaxis()->SetRangeUser(tXMin,tXMax);
+    //--------------------------------------------------------
+    int tBinLow = tNumXiKchP->FindBin(tXMin);
+    int tBinHigh = tNumXiKchP->FindBin(tXMax);
+/*
+    tNumAXiKchM->Scale((tNumXiKchP->Integral(tBinLow,tBinHigh))/(tNumAXiKchM->Integral(tBinLow,tBinHigh)));
+    tDenAXiKchM->Scale((tDenXiKchP->Integral(tBinLow,tBinHigh))/(tDenAXiKchM->Integral(tBinLow,tBinHigh)));
+
+    tNumAXiKchP->Scale((tNumXiKchM->Integral(tBinLow,tBinHigh))/(tNumAXiKchP->Integral(tBinLow,tBinHigh)));
+    tDenAXiKchP->Scale((tDenXiKchM->Integral(tBinLow,tBinHigh))/(tDenAXiKchP->Integral(tBinLow,tBinHigh)));
+*/
+    tNumXiKchP->Scale(1.0/tNumXiKchP->Integral(tBinLow,tBinHigh));
+    tDenXiKchP->Scale(1.0/tDenXiKchP->Integral(tBinLow,tBinHigh));
+
+    tNumAXiKchM->Scale(1.0/tNumAXiKchM->Integral(tBinLow,tBinHigh));
+    tDenAXiKchM->Scale(1.0/tDenAXiKchM->Integral(tBinLow,tBinHigh));
+
+    tNumXiKchM->Scale(1.0/tNumXiKchM->Integral(tBinLow,tBinHigh));
+    tDenXiKchM->Scale(1.0/tDenXiKchM->Integral(tBinLow,tBinHigh));
+
+    tNumAXiKchP->Scale(1.0/tNumAXiKchP->Integral(tBinLow,tBinHigh));
+    tDenAXiKchP->Scale(1.0/tDenAXiKchP->Integral(tBinLow,tBinHigh));
+
+
+    //--------------------------------------------------------
+    double tPValCfXiKchP, tPValCfXiKchM;
+    tPValCfXiKchP = tCfXiKchP->Chi2Test(tCfAXiKchM,"WW");
+    tPValCfXiKchM = tCfXiKchM->Chi2Test(tCfAXiKchP,"WW");
+      cout << "tPValCfXiKchP = " << tPValCfXiKchP << endl;
+      cout << "tPValCfXiKchM = " << tPValCfXiKchM << endl;
+
+
+    double tPValNumXiKchP, tPValNumXiKchM;
+    tPValNumXiKchP = tNumXiKchP->Chi2Test(tNumAXiKchM, "WW");
+    tPValNumXiKchM = tNumXiKchM->Chi2Test(tNumAXiKchP, "WW");
+      cout << "tPValNumXiKchP = " << tPValNumXiKchP << endl;
+      cout << "tPValNumXiKchM = " << tPValNumXiKchM << endl;
+
+    TCanvas *canNums = new TCanvas("canNums","canNums");
+    canNums->Divide(2,1);
+    canNums->cd(1);
+      tNumXiKchP->Draw();
+      tNumAXiKchM->Draw("same");
+    canNums->cd(2);
+      tNumXiKchM->Draw();
+      tNumAXiKchP->Draw("same");
+
+    double tPValDenXiKchP, tPValDenXiKchM;
+    tPValDenXiKchP = tDenXiKchP->Chi2Test(tDenAXiKchM, "WW");
+    tPValDenXiKchM = tDenXiKchM->Chi2Test(tDenAXiKchP, "WW");
+      cout << "tPValDenXiKchP = " << tPValDenXiKchP << endl;
+      cout << "tPValDenXiKchM = " << tPValDenXiKchM << endl;
+
+    TCanvas *canDens = new TCanvas("canDens","canDens");
+    canDens->Divide(2,1);
+    canDens->cd(1);
+      tDenXiKchP->Draw();
+      tDenAXiKchM->Draw("same");
+    canDens->cd(2);
+      tDenXiKchM->Draw();
+      tDenAXiKchP->Draw("same");
+
+    //--------------------------------------------------------
+
+    TLegend* legXiKchP = new TLegend(0.60,0.12,0.89,0.32);
+      legXiKchP->SetFillColor(0);
+      legXiKchP->AddEntry(tCfXiKchP,tCfXiKchP->GetTitle(),"lp");
+      legXiKchP->AddEntry(tCfAXiKchM,tCfAXiKchM->GetTitle(),"lp");
+
+    TLegend* legXiKchM = new TLegend(0.60,0.12,0.89,0.32);
+      legXiKchM->SetFillColor(0);
+      legXiKchM->AddEntry(tCfXiKchM,tCfXiKchM->GetTitle(),"lp");
+      legXiKchM->AddEntry(tCfAXiKchP,tCfAXiKchP->GetTitle(),"lp");
+
+    //--------------------------------------------------------
+    TPaveText* textXiKchP = new TPaveText(0.55,0.65,0.85,0.85,"NDC");
+      textXiKchP->SetFillColor(0);
+      textXiKchP->SetBorderSize(0);
+      textXiKchP->SetTextAlign(22);
+      textXiKchP->AddText(TString::Format("#chi^{2} p-val Cfs = %0.3f",tPValCfXiKchP));
+      textXiKchP->AddText(TString::Format("#chi^{2} p-val Nums = %0.3f",tPValNumXiKchP));
+      textXiKchP->AddText(TString::Format("#chi^{2} p-val Dens = %0.3f",tPValDenXiKchP));
+
+    TPaveText* textXiKchM = new TPaveText(0.55,0.65,0.85,0.85,"NDC");
+      textXiKchM->SetFillColor(0);
+      textXiKchM->SetBorderSize(0);
+      textXiKchM->SetTextAlign(22);
+      textXiKchM->AddText(TString::Format("#chi^{2} p-val Cfs = %0.3f",tPValCfXiKchM));
+      textXiKchM->AddText(TString::Format("#chi^{2} p-val Nums = %0.3f",tPValNumXiKchM));
+      textXiKchM->AddText(TString::Format("#chi^{2} p-val Dens = %0.3f",tPValDenXiKchM));
+    //--------------------------------------------------------
+
+
+    TString tNewNameXiKchP = tCfXiKchP->GetTitle();
+      tNewNameXiKchP += " & " ;
+      tNewNameXiKchP += tCfAXiKchM->GetTitle();
+      tNewNameXiKchP += TString(cCentralityTags[XiKchP->GetCentralityType()]);
+    tCfXiKchP->SetTitle(tNewNameXiKchP);
+
+    TString tNewNameAXiKchP = tCfXiKchM->GetTitle();
+      tNewNameAXiKchP += " & " ;
+      tNewNameAXiKchP += tCfAXiKchP->GetTitle();
+      tNewNameAXiKchP += TString(cCentralityTags[AXiKchP->GetCentralityType()]);
+    tCfXiKchM->SetTitle(tNewNameAXiKchP);
+
+    TCanvas *canKStar = new TCanvas("canKStar","canKStar");
+    canKStar->Divide(2,1);
+
+    gStyle->SetOptTitle(0);
+
+    XiKchP->DrawKStarHeavyCf((TPad*)canKStar->cd(1),2,"",20,tXMin,tXMax,tYMin,tYMax);
+    AXiKchM->DrawKStarHeavyCf((TPad*)canKStar->cd(1),2,"same",24);
+    canKStar->cd(1);
+    legXiKchP->Draw();
+    textXiKchP->Draw();
+
+
+    XiKchM->DrawKStarHeavyCf((TPad*)canKStar->cd(2),4,"",20,tXMin,tXMax,tYMin,tYMax);
+    AXiKchP->DrawKStarHeavyCf((TPad*)canKStar->cd(2),4,"same",24);
+    canKStar->cd(2);
+    legXiKchM->Draw();
+    textXiKchM->Draw();
+
+    if(bSaveFigures)
+    {
+      TString aName = "cXicKchChi2Test.eps";
+      canKStar->SaveAs(tSaveFiguresLocation+aName);
+    }
+
+  }
 
 
 

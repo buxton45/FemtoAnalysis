@@ -58,6 +58,7 @@ public:
 
   void SaveAllCollectionsAndCf(TString aPreName, TString aPostName, TFile *aFile);
 
+  TH1* GetSimplyAddedNumDen(TString aReturnName, bool aGetNum);
 
   //inline-----------------------
   TH1* GetHeavyCf();

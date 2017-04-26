@@ -510,7 +510,7 @@ void Analysis::BuildKStarHeavyCf(double aMinNorm, double aMaxNorm, int aRebin)
 }
 
 //________________________________________________________________________________________________________________
-void Analysis::DrawKStarHeavyCf(TPad* aPad, int aMarkerColor, TString aOption, int aMarkerStyle)
+void Analysis::DrawKStarHeavyCf(TPad* aPad, int aMarkerColor, TString aOption, int aMarkerStyle, double aXMin, double aXMax, double aYMin, double aYMax)
 {
   aPad->cd();
   gStyle->SetOptStat(0);
@@ -522,6 +522,15 @@ void Analysis::DrawKStarHeavyCf(TPad* aPad, int aMarkerColor, TString aOption, i
 
   double tYmin = 0.82;
   double tYmax = 1.02;
+
+  if(aXMin>-1. && aXMax>-1. && aYMin>-1. && aYMax>-1.)
+  {
+    tXmin = aXMin;
+    tXmax = aXMax;
+
+    tYmin = aYMin;
+    tYmax = aYMax;
+  }
 
   TAxis *xax1 = tCfToDraw->GetXaxis();
     xax1->SetTitle("k* (GeV/c)");
