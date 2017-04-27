@@ -115,7 +115,9 @@ PartialAnalysis::PartialAnalysis(TString aFileLocation, TString aAnalysisName, A
   else if( (fAnalysisType==kXiKchP) || (fAnalysisType==kAXiKchP) || (fAnalysisType==kXiKchM) || (fAnalysisType==kAXiKchM) )
   {
 
-    fDaughterPairTypes.push_back(kV0Track);
+    fDaughterPairTypes.push_back(kTrackPos);
+    fDaughterPairTypes.push_back(kTrackNeg);
+    fDaughterPairTypes.push_back(kTrackBac);
 
   }
 
@@ -332,17 +334,19 @@ void PartialAnalysis::SetDaughterParticleTypes()
   else if( (fAnalysisType==kXiKchP) || (fAnalysisType==kAXiKchP) || (fAnalysisType==kXiKchM) || (fAnalysisType==kAXiKchM) )
   {
     fDaughterParticleTypes.resize(1);
-    vector<ParticleType> tPart1Daughters(2);
+    vector<ParticleType> tPart1Daughters(3);
 
     if( (fAnalysisType==kXiKchP) || (fAnalysisType==kXiKchM) )
     {
-      tPart1Daughters[0] = kXi;
+      tPart1Daughters[0] = kProton;
       tPart1Daughters[1] = kPiM;
+      tPart1Daughters[2] = kPiM;
     }
     else if( (fAnalysisType==kAXiKchP) || (fAnalysisType==kAXiKchM) )
     {
-      tPart1Daughters[0] = kAXi;
-      tPart1Daughters[1] = kPiP;
+      tPart1Daughters[0] = kPiP;
+      tPart1Daughters[1] = kAntiProton;
+      tPart1Daughters[2] = kPiP;
     }
     fDaughterParticleTypes[0] = tPart1Daughters;
   }

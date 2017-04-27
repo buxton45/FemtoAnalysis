@@ -443,7 +443,7 @@ vector<ParticleType> Analysis::GetCorrectDaughterParticleTypes(DaughterPairType 
     }
   }
 
-  else if( (aDaughterPairType==kTrackPos) || (aDaughterPairType==kTrackNeg) )
+  else if( (aDaughterPairType==kTrackPos) || (aDaughterPairType==kTrackNeg) || (aDaughterPairType==kTrackBac) )
   {
     assert(fDaughterParticleTypes.size() == 1);
     tDaughterParticleTypes.resize(1);
@@ -456,7 +456,10 @@ vector<ParticleType> Analysis::GetCorrectDaughterParticleTypes(DaughterPairType 
     {
       tDaughterParticleTypes[0] = fDaughterParticleTypes[0][1];
     }
-
+    else if(aDaughterPairType==kTrackBac)
+    {
+      tDaughterParticleTypes[0] = fDaughterParticleTypes[0][2];
+    }
   }
 
   return tDaughterParticleTypes;
@@ -464,7 +467,7 @@ vector<ParticleType> Analysis::GetCorrectDaughterParticleTypes(DaughterPairType 
 
 
 //________________________________________________________________________________________________________________
-TString Analysis::GetDaughtersHistoTitle(DaughterPairType aDaughterPairType)
+TString Analysis::GetDaughtersHistoTitle(DaughterPairType aDaughterPairType, bool aIsBacPion)
 {
   vector<ParticleType> tDaughterParticleTypes = GetCorrectDaughterParticleTypes(aDaughterPairType);
   TString tReturnTitle;
@@ -476,13 +479,26 @@ TString Analysis::GetDaughtersHistoTitle(DaughterPairType aDaughterPairType)
 
   else if(tDaughterParticleTypes.size() == 1)
   {
-    tReturnTitle = TString(cRootParticleTags[tDaughterParticleTypes[0]]) + "(" + TString(cRootParticleTags[fParticleTypes[0]]) + ") - " + TString(cRootParticleTags[fParticleTypes[1]]);
+    if(fAnalysisType!=kXiKchP && fAnalysisType!=kAXiKchM && fAnalysisType!=kXiKchM && fAnalysisType!=kAXiKchP)
+    {
+      tReturnTitle = TString(cRootParticleTags[tDaughterParticleTypes[0]]) + "(" + TString(cRootParticleTags[fParticleTypes[0]]) + ") - " + TString(cRootParticleTags[fParticleTypes[1]]);
+    }
+    else
+    {
+      if(aIsBacPion) tReturnTitle = TString(cRootParticleTags[tDaughterParticleTypes[0]]) + "(" + TString(cRootParticleTags[fParticleTypes[0]]) + ") - " + TString(cRootParticleTags[fParticleTypes[1]]);
+      else
+      {
+        tReturnTitle = TString(cRootParticleTags[tDaughterParticleTypes[0]]);
+        if(fParticleTypes[0]==kXi) tReturnTitle += TString("(") + TString(cRootParticleTags[0]);
+        else if(fParticleTypes[0]==kAXi) tReturnTitle += TString("(") + TString(cRootParticleTags[1]);
+        else assert(0);
+        tReturnTitle += TString("(") + TString(cRootParticleTags[fParticleTypes[0]]) + TString(")) - ") + TString(cRootParticleTags[fParticleTypes[1]]);
+      }
+    }
   }
 
   return tReturnTitle;
 }
-
-
 
 
 //________________________________________________________________________________________________________________
@@ -1331,7 +1347,7 @@ TH2* Analysis::GetMomResMatrixFit(KStarTrueVsRecType aType)
 }
 
 //________________________________________________________________________________________________________________
-void Analysis::BuildAvgSepHeavyCf(DaughterPairType aDaughterPairType, double aMinNorm, double aMaxNorm)
+void Analysis::BuildAvgSepHeavyCf(DaughterPairType aDaughterPairType, double aMinNorm, double aMaxNorm, int aRebin)
 {
   vector<CfLite*> tTempCfLiteCollection;
 
@@ -1351,6 +1367,7 @@ void Analysis::BuildAvgSepHeavyCf(DaughterPairType aDaughterPairType, double aMi
   TString tCfName = tCfBaseName + cDaughterPairTags[aDaughterPairType] + cAnalysisBaseTags[fAnalysisType] + cCentralityTags[fCentralityType];
 
   CfHeavy *tCfHeavy = new CfHeavy(tCfName,tCfName,tTempCfLiteCollection,aMinNorm,aMaxNorm);
+  if(aRebin != 1) tCfHeavy->Rebin(aRebin);
 
   fAvgSepHeavyCfs[aDaughterPairType] = tCfHeavy;
 }
@@ -1358,7 +1375,7 @@ void Analysis::BuildAvgSepHeavyCf(DaughterPairType aDaughterPairType, double aMi
 
 
 //________________________________________________________________________________________________________________
-void Analysis::BuildAllAvgSepHeavyCfs(double aMinNorm, double aMaxNorm)
+void Analysis::BuildAllAvgSepHeavyCfs(double aMinNorm, double aMaxNorm, int aRebin)
 {
   int tNCfs = fDaughterPairTypes.size();
 
@@ -1366,7 +1383,7 @@ void Analysis::BuildAllAvgSepHeavyCfs(double aMinNorm, double aMaxNorm)
   {
     //make sure everything is updated
 
-    BuildAvgSepHeavyCf(fDaughterPairTypes[i],aMinNorm,aMaxNorm);
+    BuildAvgSepHeavyCf(fDaughterPairTypes[i],aMinNorm,aMaxNorm,aRebin);
   }
 
 }
@@ -1374,13 +1391,14 @@ void Analysis::BuildAllAvgSepHeavyCfs(double aMinNorm, double aMaxNorm)
 
 
 //________________________________________________________________________________________________________________
-CfHeavy* Analysis::GetAvgSepHeavyCf(DaughterPairType aDaughterPairType)
+CfHeavy* Analysis::GetAvgSepHeavyCf(DaughterPairType aDaughterPairType, int aRebin)
 {
+  if(aRebin != 1) fAvgSepHeavyCfs[aDaughterPairType]->Rebin(aRebin);
   return fAvgSepHeavyCfs[aDaughterPairType];
 }
 
 //________________________________________________________________________________________________________________
-void Analysis::DrawAvgSepHeavyCf(DaughterPairType aDaughterPairType, TPad *aPad)
+void Analysis::DrawAvgSepHeavyCf(DaughterPairType aDaughterPairType, TPad *aPad, bool aIsBacPion)
 {
   aPad->cd();
   gStyle->SetOptStat(0);
@@ -1394,7 +1412,7 @@ void Analysis::DrawAvgSepHeavyCf(DaughterPairType aDaughterPairType, TPad *aPad)
   //------------------------------------------------------------------
 
   tCfToDraw->GetYaxis()->SetRangeUser(-0.5,5.);
-  TString tTitle = GetDaughtersHistoTitle(aDaughterPairType);
+  TString tTitle = GetDaughtersHistoTitle(aDaughterPairType, aIsBacPion);
 
   tCfToDraw->GetXaxis()->SetTitle("Avg. Sep. (cm)");
   tCfToDraw->GetYaxis()->SetTitle("C(Avg. Sep)");
@@ -1404,7 +1422,7 @@ void Analysis::DrawAvgSepHeavyCf(DaughterPairType aDaughterPairType, TPad *aPad)
   tCfToDraw->Draw();
   line->Draw();
 
-  TLegend *tLeg = new TLegend(0.65,0.65,0.85,0.85);
+  TLegend *tLeg = new TLegend(0.55,0.65,0.85,0.85);
     tLeg->AddEntry(tCfToDraw,tTitle,"p");
     tLeg->Draw();
 }

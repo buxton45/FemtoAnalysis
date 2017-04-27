@@ -23,7 +23,7 @@ using std::vector;
   enum CentralityType {k0010=0, k1030=1, k3050=2, kMB=3};
   enum ParticleType {kLam=0, kALam=1, kK0=2, kKchP=3, kKchM=4, kXi=5, kAXi=6, kPiP=7, kPiM=8, kProton=9, kAntiProton=10};
 
-  enum DaughterPairType {kPosPos = 0, kPosNeg = 1, kNegPos = 2, kNegNeg = 3, kTrackPos = 4, kTrackNeg = 5, kTrackTrack = 6, kV0Track=7, kMaxNDaughterPairTypes = 8};
+  enum DaughterPairType {kPosPos = 0, kPosNeg = 1, kNegPos = 2, kNegNeg = 3, kTrackPos = 4, kTrackNeg = 5, kTrackTrack = 6, kTrackBac=7, kMaxNDaughterPairTypes = 8};
 
   enum AxisType {kXaxis=0, kYaxis=1};
 
@@ -179,16 +179,16 @@ using std::vector;
   extern const char* cAXiPurityTag;
 
   
-  extern const char* const cDaughterPairTags[7];
+  extern const char* const cDaughterPairTags[8];
 
-  extern const char* const cAvgSepCfBaseTagsNum[7];
-  extern const char* const cAvgSepCfBaseTagsDen[7];
+  extern const char* const cAvgSepCfBaseTagsNum[8];
+  extern const char* const cAvgSepCfBaseTagsDen[8];
 
-  extern const char* const cSepCfsBaseTagsNum[7];
-  extern const char* const cSepCfsBaseTagsDen[7];
+  extern const char* const cSepCfsBaseTagsNum[8];
+  extern const char* const cSepCfsBaseTagsDen[8];
 
-  extern const char* const cAvgSepCfCowboysAndSailorsBaseTagsNum[7];
-  extern const char* const cAvgSepCfCowboysAndSailorsBaseTagsDen[7];
+  extern const char* const cAvgSepCfCowboysAndSailorsBaseTagsNum[8];
+  extern const char* const cAvgSepCfCowboysAndSailorsBaseTagsDen[8];
   //-------------------------------------------------
 
   //--**--**--**--**--**--**--**--**--**--**--**--**--**--**--**--**--**--**//

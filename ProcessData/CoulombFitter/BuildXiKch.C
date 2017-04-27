@@ -171,7 +171,7 @@ int main(int argc, char **argv)
 //Be sure to set the following...
 
   TString tFileLocationBase = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cXicKch_20170406/Results_cXicKch_20170406";
-  bool bSaveImage = false;
+  bool bSaveImage = true;
   bool bDrawMultipleCoulombOnly = true;
 
   AnalysisType tAnType;
@@ -344,12 +344,17 @@ int main(int argc, char **argv)
     for(int i=0; i<10; i++)
     {
       tRadius = tRadius + 1;
+cout << "tRadius = " << tRadius << endl;
       tCoulombOnlyHist = tFitter->CreateFitHistogramSampleComplete("tCoulombOnlyHist", tAnType, tNbinsK, tKMin, tKMax, tLambda, tRadius, 0., 0., 0., 0., 0., 0., tNorm);
       tCoulombOnlyHist->DrawCopy("lsame");
       tCan->Update();
     }
 
   }
+
+
+  TString tSaveName = TString("DataVsCoulombOnly_") + TString(cAnalysisBaseTags[tAnType]) + TString(cCentralityTags[tCentType]) + TString(".eps"); 
+  tCan->SaveAs(tSaveName);
 
   delete tFitter;
 

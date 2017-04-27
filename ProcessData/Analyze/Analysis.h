@@ -53,7 +53,7 @@ public:
 
   TH1* SimpleAddTH1Collection(TString tHistosName);
   vector<ParticleType> GetCorrectDaughterParticleTypes(DaughterPairType aDaughterPairType);
-  TString GetDaughtersHistoTitle(DaughterPairType aDaughterPairType);
+  TString GetDaughtersHistoTitle(DaughterPairType aDaughterPairType, bool aIsBacPion=false);
   //-----
   void BuildKStarHeavyCf(double aMinNorm=0.32, double aMaxNorm=0.4, int aRebin=1);
   void DrawKStarHeavyCf(TPad* aPad, int aMarkerColor=1, TString aOption = "", int aMarkerStyle=20, double aXMin=-1., double aXMax=-1., double aYMin=-1., double aYMax=-1.);
@@ -90,10 +90,10 @@ public:
   TH2* GetMomResMatrixFit(KStarTrueVsRecType aType);
 
   //-----
-  void BuildAvgSepHeavyCf(DaughterPairType aDaughterPairType, double aMinNorm=14.99, double aMaxNorm=19.99);
-  void BuildAllAvgSepHeavyCfs(double aMinNorm=14.99, double aMaxNorm=19.99);
-  CfHeavy* GetAvgSepHeavyCf(DaughterPairType aDaughterPairType);
-  void DrawAvgSepHeavyCf(DaughterPairType aDaughterPairType, TPad* aPad);
+  void BuildAvgSepHeavyCf(DaughterPairType aDaughterPairType, double aMinNorm=14.99, double aMaxNorm=19.99, int aRebin=1);
+  void BuildAllAvgSepHeavyCfs(double aMinNorm=14.99, double aMaxNorm=19.99, int aRebin=1);
+  CfHeavy* GetAvgSepHeavyCf(DaughterPairType aDaughterPairType, int aRebin=1);
+  void DrawAvgSepHeavyCf(DaughterPairType aDaughterPairType, TPad* aPad, bool aIsBacPion=false);
   void SaveAllAvgSepHeavyCfs(TFile* aFile);
   //-----
   void BuildKStar2dHeavyCfs(double aMinNorm=0.32, double aMaxNorm=0.40);

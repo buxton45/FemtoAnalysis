@@ -38,13 +38,13 @@ int main(int argc, char **argv)
 
   //-----Data
 
-  TString FileLocationBase = "~/Analysis/FemtoAnalysis/Results/Results_cXicKch_20170423/Results_cXicKch_20170423";
+  TString FileLocationBase = "~/Analysis/FemtoAnalysis/Results/Results_cXicKch_20170425_maxDcaXi0.3/Results_cXicKch_20170425_maxDcaXi0.3";
   Analysis* XiKchP = new Analysis(FileLocationBase,kXiKchP,k0010);
   Analysis* AXiKchP = new Analysis(FileLocationBase,kAXiKchP,k0010);
   Analysis* XiKchM = new Analysis(FileLocationBase,kXiKchM,k0010);
   Analysis* AXiKchM = new Analysis(FileLocationBase,kAXiKchM,k0010);
 
-  TString SaveFileName = "~/Analysis/FemtoAnalysis/Results/Results_cXicKch_20170423/0010/Results_cXicKch_20170423_0010.root";
+  TString SaveFileName = "~/Analysis/FemtoAnalysis/Results/Results_cXicKch_20170425_maxDcaXi0.3/0010/Results_cXicKch_20170425_maxDcaXi0.3_0010.root";
 
   //-----MC
 /*
@@ -113,11 +113,11 @@ int main(int argc, char **argv)
   TFile *mySaveFile;
   if(bSaveFile) {mySaveFile = new TFile(SaveFileName, "RECREATE");}
 
-  bool bContainsPurity = false;
-  bool bContainsKStarCfs = false;
-  bool bContainsAvgSepCfs = false;
+  bool bContainsPurity = true;
+  bool bContainsKStarCfs = true;
+  bool bContainsAvgSepCfs = true;
 
-  bool bRunChi2Test = true;
+  bool bRunChi2Test = false;
 
   bool bContainsKStar2dCfs = false;
 
@@ -129,7 +129,7 @@ int main(int argc, char **argv)
   bool bDrawMC = false;
 
   bool bSaveFigures = true;
-  TString tSaveFiguresLocation = "~/Analysis/FemtoAnalysis/Results/Results_cXicKch_20170423/0010/";
+  TString tSaveFiguresLocation = "~/Analysis/FemtoAnalysis/Results/Results_cXicKch_20170425_maxDcaXi0.3/0010/";
   //-------------------------------------------------------------------
 
   if(bContainsKStarCfs)
@@ -300,32 +300,43 @@ int main(int argc, char **argv)
 
   if(bContainsAvgSepCfs)
   {
-    XiKchP->BuildAllAvgSepHeavyCfs();
-    AXiKchP->BuildAllAvgSepHeavyCfs();
-    XiKchM->BuildAllAvgSepHeavyCfs();
-    AXiKchM->BuildAllAvgSepHeavyCfs();
+    double aMinNorm = 14.99;
+    double aMaxNorm = 19.99;
+    int aRebin = 2;
 
-    TCanvas *canAvgSepXiKchP = new TCanvas("canAvgSepXiKchP","canAvgSepXiKchP");
-    TCanvas *canAvgSepAXiKchP = new TCanvas("canAvgSepAXiKchP","canAvgSepAXiKchP");
-    TCanvas *canAvgSepXiKchM = new TCanvas("canAvgSepXiKchM","canAvgSepXiKchM");
-    TCanvas *canAvgSepAXiKchM = new TCanvas("canAvgSepAXiKchM","canAvgSepAXiKchM");
+    XiKchP->BuildAllAvgSepHeavyCfs(aMinNorm, aMaxNorm, aRebin);
+    AXiKchP->BuildAllAvgSepHeavyCfs(aMinNorm, aMaxNorm, aRebin);
+    XiKchM->BuildAllAvgSepHeavyCfs(aMinNorm, aMaxNorm, aRebin);
+    AXiKchM->BuildAllAvgSepHeavyCfs(aMinNorm, aMaxNorm, aRebin);
 
-    canAvgSepXiKchP->Divide(1,2);
-    canAvgSepAXiKchP->Divide(1,2);
-    canAvgSepXiKchM->Divide(1,2);
-    canAvgSepAXiKchM->Divide(1,2);
+    TCanvas *canAvgSepXiKchP = new TCanvas("canAvgSepXiKchP","canAvgSepXiKchP", 700, 1500);
+    TCanvas *canAvgSepAXiKchP = new TCanvas("canAvgSepAXiKchP","canAvgSepAXiKchP", 700, 1500);
+    TCanvas *canAvgSepXiKchM = new TCanvas("canAvgSepXiKchM","canAvgSepXiKchM", 700, 1500);
+    TCanvas *canAvgSepAXiKchM = new TCanvas("canAvgSepAXiKchM","canAvgSepAXiKchM", 700, 1500);
+
+    gStyle->SetOptTitle(0);
+    double tXMargin = 0.01;  //default = 0.01
+    double tYMargin = 0.001;  //default = 0.01
+    canAvgSepXiKchP->Divide(1,3, tXMargin,tYMargin);
+    canAvgSepAXiKchP->Divide(1,3, tXMargin,tYMargin);
+    canAvgSepXiKchM->Divide(1,3, tXMargin,tYMargin);
+    canAvgSepAXiKchM->Divide(1,3, tXMargin,tYMargin);
 
     XiKchP->DrawAvgSepHeavyCf(kTrackPos,(TPad*)canAvgSepXiKchP->cd(1));
     XiKchP->DrawAvgSepHeavyCf(kTrackNeg,(TPad*)canAvgSepXiKchP->cd(2));
+    XiKchP->DrawAvgSepHeavyCf(kTrackBac,(TPad*)canAvgSepXiKchP->cd(3),true);
 
     AXiKchP->DrawAvgSepHeavyCf(kTrackPos,(TPad*)canAvgSepAXiKchP->cd(1));
     AXiKchP->DrawAvgSepHeavyCf(kTrackNeg,(TPad*)canAvgSepAXiKchP->cd(2));
+    AXiKchP->DrawAvgSepHeavyCf(kTrackBac,(TPad*)canAvgSepAXiKchP->cd(3),true);
 
     XiKchM->DrawAvgSepHeavyCf(kTrackPos,(TPad*)canAvgSepXiKchM->cd(1));
     XiKchM->DrawAvgSepHeavyCf(kTrackNeg,(TPad*)canAvgSepXiKchM->cd(2));
+    XiKchM->DrawAvgSepHeavyCf(kTrackBac,(TPad*)canAvgSepXiKchM->cd(3),true);
 
     AXiKchM->DrawAvgSepHeavyCf(kTrackPos,(TPad*)canAvgSepAXiKchM->cd(1));
     AXiKchM->DrawAvgSepHeavyCf(kTrackNeg,(TPad*)canAvgSepAXiKchM->cd(2));
+    AXiKchM->DrawAvgSepHeavyCf(kTrackBac,(TPad*)canAvgSepAXiKchM->cd(3),true);
 
     //----------------------------------
     if(bSaveFile)
@@ -337,6 +348,19 @@ int main(int argc, char **argv)
     }
 
 
+    if(bSaveFigures)
+    {
+      TString aName = "cXicKchAvgSepCfs";
+      TString aNameXiKchP = aName + TString("_XiKchP.eps");
+      TString aNameAXiKchM = aName + TString("_AXiKchM.eps");
+      TString aNameXiKchM = aName + TString("_XiKchM.eps");
+      TString aNameAXiKchP = aName + TString("_AXiKchP.eps");
+
+      canAvgSepXiKchP->SaveAs(tSaveFiguresLocation+aNameXiKchP);
+      canAvgSepAXiKchM->SaveAs(tSaveFiguresLocation+aNameAXiKchM);
+      canAvgSepXiKchM->SaveAs(tSaveFiguresLocation+aNameXiKchM);
+      canAvgSepAXiKchP->SaveAs(tSaveFiguresLocation+aNameAXiKchP);
+    }
   }
 
 
