@@ -73,7 +73,7 @@ FitPairAnalysis::FitPairAnalysis(TString aAnalysisName, vector<FitPartialAnalysi
     fNFitParamsToShare = 8; //sharing Lambda, Radius, Ref0, Imf0, d0, Ref02, Imf02, d02
   }
 
-  ShareFitParameters();
+  ShareFitParameters(aIncludeSingletAndTriplet);
 
 }
 
@@ -148,7 +148,7 @@ FitPairAnalysis::FitPairAnalysis(TString aFileLocationBase, AnalysisType aAnalys
     fNFitParamsToShare = 8; //sharing Lambda, Radius, Ref0, Imf0, d0, Ref02, Imf02, d02
   }
 
-  ShareFitParameters();
+  ShareFitParameters(aIncludeSingletAndTriplet);
 
 }
 
@@ -227,7 +227,7 @@ FitPairAnalysis::FitPairAnalysis(TString aFileLocationBase, TString aFileLocatio
     fNFitParamsToShare = 8; //sharing Lambda, Radius, Ref0, Imf0, d0, Ref02, Imf02, d02
   }
 
-  ShareFitParameters();
+  ShareFitParameters(aIncludeSingletAndTriplet);
 
 }
 
@@ -386,7 +386,7 @@ void FitPairAnalysis::CreateFitNormParameters()
 
 
 //________________________________________________________________________________________________________________
-void FitPairAnalysis::ShareFitParameters()
+void FitPairAnalysis::ShareFitParameters(bool aIncludeSingletAndTriplet)
 {
   fFitParameters.clear();
 
@@ -420,7 +420,7 @@ void FitPairAnalysis::ShareFitParameters()
 
   fNFitParams = fFitParameters.size();
 
-  if(fAnalysisType == kXiKchP || fAnalysisType == kAXiKchP || fAnalysisType == kXiKchM || fAnalysisType == kAXiKchM)
+  if((fAnalysisType == kXiKchP || fAnalysisType == kAXiKchP || fAnalysisType == kXiKchM || fAnalysisType == kAXiKchM) && aIncludeSingletAndTriplet)
   {
     if(fNFitParams != 8)
     {

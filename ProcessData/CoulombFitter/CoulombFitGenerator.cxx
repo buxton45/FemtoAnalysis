@@ -42,6 +42,7 @@ CoulombFitGenerator::CoulombFitGenerator(TString aFileLocationBase, TString aFil
   fLambdaFitParams(),
   fShareLambdaParams(aShareLambdaParams),
   fAllShareSingleLambdaParam(aAllShareSingleLambdaParam),
+  fFixd0(false),
   fFitParamsPerPad(),
 
   fSharedAn(0),
@@ -126,6 +127,7 @@ CoulombFitGenerator::CoulombFitGenerator(TString aFileLocationBase, TString aFil
   fLambdaFitParams(),
   fShareLambdaParams(aShareLambdaParams),
   fAllShareSingleLambdaParam(aAllShareSingleLambdaParam),
+  fFixd0(false),
   fFitParamsPerPad(),
 
   fSharedAn(0),
@@ -1164,7 +1166,9 @@ void CoulombFitGenerator::SetAllParameters()
   //Always shared amongst all
   SetSharedParameter(kRef0,fScattFitParams[0].GetStartValue(),fScattFitParams[0].GetLowerBound(),fScattFitParams[0].GetUpperBound());
   SetSharedParameter(kImf0,fScattFitParams[1].GetStartValue(),fScattFitParams[1].GetLowerBound(),fScattFitParams[1].GetUpperBound());
-  SetSharedParameter(kd0,fScattFitParams[2].GetStartValue(),fScattFitParams[2].GetLowerBound(),fScattFitParams[2].GetUpperBound());
+  if(fFixd0) SetSharedAndFixedParameter(kd0, 0.);
+  else SetSharedParameter(kd0,fScattFitParams[2].GetStartValue(),fScattFitParams[2].GetLowerBound(),fScattFitParams[2].GetUpperBound());
+
   if(fAllShareSingleLambdaParam) SetSharedParameter(kLambda, fLambdaFitParams[0].GetStartValue(), fLambdaFitParams[0].GetLowerBound(), fLambdaFitParams[0].GetUpperBound());
 
   if(fNAnalyses==1)
@@ -1257,7 +1261,7 @@ void CoulombFitGenerator::SetAllParameters()
 
 
 //________________________________________________________________________________________________________________
-void CoulombFitGenerator::DoFit(bool aApplyMomResCorrection, bool aApplyNonFlatBackgroundCorrection, bool aIncludeResiduals, bool aIncludeSingletAndTriplet, NonFlatBgdFitType aNonFlatBgdFitType, double aMaxFitKStar)
+void CoulombFitGenerator::DoFit(bool aApplyMomResCorrection, bool aApplyNonFlatBackgroundCorrection, bool aIncludeResiduals, bool aIncludeSingletAndTriplet, NonFlatBgdFitType aNonFlatBgdFitType, double aMaxFitKStar, int aNPairsPerKStarBin)
 {
   if(aIncludeResiduals)  //since this involves the CoulombFitter, I should place limits on parameters used in interpolations
   {
@@ -1277,7 +1281,7 @@ void CoulombFitGenerator::DoFit(bool aApplyMomResCorrection, bool aApplyNonFlatB
   fCoulombFitter->LoadInterpHistFile(tFileLocationInterpHistos);
 
   fCoulombFitter->SetUseRandomKStarVectors(true);
-  fCoulombFitter->SetUseStaticPairs(true,16384);
+  fCoulombFitter->SetUseStaticPairs(true, aNPairsPerKStarBin);
 
   fCoulombFitter->GetFitSharedAnalyses()->GetMinuitObject()->SetFCN(GlobalFCN);
   fCoulombFitter->SetApplyMomResCorrection(aApplyMomResCorrection);

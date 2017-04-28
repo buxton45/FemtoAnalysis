@@ -67,7 +67,7 @@ public:
   void SetDefaultSharedParameters(bool aSetAllUnbounded=false);
 
   void SetAllParameters();
-  void DoFit(bool aApplyMomResCorrection=false, bool aApplyNonFlatBackgroundCorrection=false, bool aIncludeResiduals=false, bool aIncludeSingletAndTriplet=false, NonFlatBgdFitType aNonFlatBgdFitType=kLinear, double aMaxFitKStar=0.3);
+  void DoFit(bool aApplyMomResCorrection=false, bool aApplyNonFlatBackgroundCorrection=false, bool aIncludeResiduals=false, bool aIncludeSingletAndTriplet=false, NonFlatBgdFitType aNonFlatBgdFitType=kLinear, double aMaxFitKStar=0.3, int aNPairsPerKStarBin=16384);
   void WriteAllFitParameters(ostream &aOut=std::cout);
   vector<TString> GetAllFitParametersTStringVector();
 
@@ -97,7 +97,7 @@ public:
 
   double GetChi2();
 
-
+  void SetFixd0(bool aFix);
 protected:
   TString fSaveLocationBase;
   TString fSaveNameModifier;
@@ -113,6 +113,7 @@ protected:
   vector<FitParameter> fLambdaFitParams; //size depends on centralities being fit and option chosen for Lambda parameter sharing
   bool fShareLambdaParams; //If true, I will still only share across like centralities
   bool fAllShareSingleLambdaParam;  //If true, only one lambda parameter for all analyses
+  bool fFixd0;
   vector<vector<FitParameter> > fFitParamsPerPad; //Each 1d Vector = [Lambda,Radius,ReF0,ImF0,D0]
 
   FitSharedAnalyses* fSharedAn;
@@ -150,5 +151,8 @@ inline void CoulombFitGenerator::SetUseLambdaLimits(bool aUse) {SetUseLimits(fLa
 inline void CoulombFitGenerator::SetFitType(FitType aFitType) {fSharedAn->SetFitType(aFitType);}
 
 inline double CoulombFitGenerator::GetChi2() {return fCoulombFitter->GetChi2();}
+
+inline void CoulombFitGenerator::SetFixd0(bool aFix) {fFixd0 = aFix;}
+
 #endif
 

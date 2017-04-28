@@ -64,7 +64,7 @@ public:
   TF1* GetNonFlatBackground(NonFlatBgdFitType aFitType=kLinear, double aMinFit=0.60, double aMaxFit=0.90);
 
   void CreateFitNormParameters();
-  void ShareFitParameters();
+  void ShareFitParameters(bool aIncludeSingletAndTriplet=false);
   void WriteFitParameters(ostream &aOut=std::cout);
   vector<TString> GetFitParametersTStringVector();
   vector<double> GetFitParametersVector();

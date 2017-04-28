@@ -56,7 +56,7 @@ AliAnalysisTaskFemto* AddTaskLambdaKaon(TString aConfiguration,
 { // Adds a Lambda-Kaon Femtoscopy task to the manager
 
   const TString AUTO_DIRECTORY = /*"$ALICE_PHYSICS/PWGCF/FEMTOSCOPY/macros/Train/LambdaKaonFemto"*/ "/home/jesse/Analysis/FemtoAnalysis/RunAnalysis/Test"
-              , DEFAULT_MACRO = "%%/ConfigFemtoAnalysis.C"
+              , DEFAULT_MACRO = "%%/ConfigFemtoAnalysisSystematics2.C"
               , DEFAULT_CONTAINER_NAME = "LambdaKaon_femtolist"
               , DEFAULT_OUTPUT_CONTAINER = "PWG2FEMTO"
               , DEFAULT_TASK_NAME = "TaskLambdaKaon"

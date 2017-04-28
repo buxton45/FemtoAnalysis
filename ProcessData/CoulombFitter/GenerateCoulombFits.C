@@ -26,7 +26,8 @@ int main(int argc, char **argv)
   bool ApplyNonFlatBackgroundCorrection = false;
   NonFlatBgdFitType tNonFlatBgdFitType = kLinear;
   bool IncludeResiduals = false;
-  bool IncludeSingleAndTriplet = false;
+  bool IncludeSingletAndTriplet = false;
+  bool Fixd0 = true;
 
   TString tGeneralAnTypeName = "cXicKch";
 
@@ -39,8 +40,8 @@ int main(int argc, char **argv)
   if(ApplyMomResCorrection) tSaveNameModifier += TString("_MomResCrctn");
   if(ApplyNonFlatBackgroundCorrection) tSaveNameModifier += TString("_NonFlatBgdCrctn");
   if(tAllShareSingleLambdaParam) tSaveNameModifier += TString("_SingleLamParam");
-  CoulombFitGenerator* tXiKchP = new CoulombFitGenerator(tFileLocationBase,tFileLocationBaseMC,tAnType, tCentType, tAnRunType, tNPartialAnalysis, tGenType, tShareLambdaParams, tAllShareSingleLambdaParam, TString(""), IncludeSingleAndTriplet);
-//  CoulombFitGenerator* tXiKchP = new CoulombFitGenerator(tFileLocationBase, tFileLocationBaseMC, tAnType,{k0010,k1030}, tAnRunType, tNPartialAnalysis, tGenType, tShareLambdaParams, tAllShareSingleLambdaParam, TString(""), IncludeSingleAndTriplet);
+  CoulombFitGenerator* tXiKchP = new CoulombFitGenerator(tFileLocationBase,tFileLocationBaseMC,tAnType, tCentType, tAnRunType, tNPartialAnalysis, tGenType, tShareLambdaParams, tAllShareSingleLambdaParam, TString(""), IncludeSingletAndTriplet);
+//  CoulombFitGenerator* tXiKchP = new CoulombFitGenerator(tFileLocationBase, tFileLocationBaseMC, tAnType,{k0010,k1030}, tAnRunType, tNPartialAnalysis, tGenType, tShareLambdaParams, tAllShareSingleLambdaParam, TString(""), IncludeSingletAndTriplet);
 //  tXiKchP->SetRadiusStartValues({3.0,4.0,5.0});
 //  tXiKchP->SetRadiusLimits({{0.,10.},{0.,10.},{0.,10.}});
   tXiKchP->SetSaveLocationBase(tDirectoryBase,tSaveNameModifier);
@@ -53,8 +54,9 @@ int main(int argc, char **argv)
 
 //TODO!!!!  If I want to apply mom res correction to full fit, I need to give non-central analyses ability to grab
 //           the matrix from the central analyses
-  tXiKchP->DoFit(ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, IncludeResiduals, IncludeSingleAndTriplet, tNonFlatBgdFitType);
-  TCanvas* tKStarwFitsCan = tXiKchP->DrawKStarCfswFits(ApplyMomResCorrection,ApplyNonFlatBackgroundCorrection,tNonFlatBgdFitType,SaveImages);
+  tXiKchP->SetFixd0(Fixd0);
+  tXiKchP->DoFit(ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, IncludeResiduals, IncludeSingletAndTriplet, tNonFlatBgdFitType);
+//  TCanvas* tKStarwFitsCan = tXiKchP->DrawKStarCfswFits(ApplyMomResCorrection,ApplyNonFlatBackgroundCorrection,tNonFlatBgdFitType,SaveImages);
 //  TCanvas* tKStarCfs = tXiKchP->DrawKStarCfs(SaveImages);
 //  TCanvas* tModelKStarCfs = tXiKchP->DrawModelKStarCfs(SaveImages);
 //  tXiKchP->FindGoodInitialValues(ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection);
