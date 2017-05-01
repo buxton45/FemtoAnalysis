@@ -15,7 +15,7 @@ void fcn(Int_t &npar, Double_t *gin, Double_t &f, Double_t *par, Int_t iflag)
 }
 
 //________________________________________________________________________________________________________________
-TCanvas* DrawKStarCfswFits(TH1* aData, TH1* aFit, TH1* aCoulombOnlyFit, AnalysisType aAnType=kXiKchP, CentralityType aCentType=k0010, bool aSaveImage=false)
+TCanvas* DrawKStarCfswFits(TH1* aData, TH1* aFit, TH1* aCoulombOnlyFit, AnalysisType aAnType=kXiKchP, CentralityType aCentType=k0010, bool aDrawMultipleCoulomb=false, bool aSaveImage=false)
 {
   TString tCanvasName = TString("canKStarCfwFits");
   if(aAnType==kXiKchP) tCanvasName += TString("XiKchP");
@@ -97,6 +97,8 @@ TCanvas* DrawKStarCfswFits(TH1* aData, TH1* aFit, TH1* aCoulombOnlyFit, Analysis
   aFit->SetMarkerColor(1);
   aFit->SetLineColor(1);
   aFit->SetLineStyle(1);
+  aFit->SetLineWidth(2);
+  if(aDrawMultipleCoulomb) aFit->SetLineStyle(7);
 
   aCoulombOnlyFit->SetMarkerStyle(21);
   aCoulombOnlyFit->SetMarkerColor(1);
@@ -109,13 +111,13 @@ TCanvas* DrawKStarCfswFits(TH1* aData, TH1* aFit, TH1* aCoulombOnlyFit, Analysis
 
 
   aFit->Draw("l");
-  aCoulombOnlyFit->Draw("lsame");
+  if(!aDrawMultipleCoulomb) aCoulombOnlyFit->Draw("lsame");
   aData->Draw("psame");
 
-  TLegend *tLeg = new TLegend(0.55,0.25,0.85,0.50);
+  TLegend *tLeg = new TLegend(0.25,0.50,0.55,0.75);
     tLeg->AddEntry(aData,tTextAnType,"p");
     tLeg->AddEntry(aFit,"Full Fit","l");
-    tLeg->AddEntry(aCoulombOnlyFit, "Coulomb Only", "l");
+    if(!aDrawMultipleCoulomb) tLeg->AddEntry(aCoulombOnlyFit, "Coulomb Only", "l");
     tLeg->Draw();
 
 
@@ -172,7 +174,7 @@ int main(int argc, char **argv)
 
   TString tFileLocationBase = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cXicKch_20170406/Results_cXicKch_20170406";
   bool bSaveImage = true;
-  bool bDrawMultipleCoulombOnly = true;
+  bool bDrawMultipleCoulomb = true;
 
   AnalysisType tAnType;
   CentralityType tCentType;
@@ -336,21 +338,41 @@ int main(int argc, char **argv)
   else if(tCentType==k3050) tData = tPairAn3050->GetKStarCf();
   else assert(0);
 
-  TCanvas* tCan = DrawKStarCfswFits(tData, tSampleHist1, tCoulombOnlyHist, tAnType, tCentType, bSaveImage);
+  TCanvas* tCan = DrawKStarCfswFits(tData, tSampleHist1, tCoulombOnlyHist, tAnType, tCentType, bDrawMultipleCoulomb, bSaveImage);
 
-  if(bDrawMultipleCoulombOnly)
+  TH1* tCoulombOnlyHistSample;
+  if(bDrawMultipleCoulomb)
   {
+    td1dVec tRadii {1, 2, 3, 4, 5, 6, 8, 10};
+    vector<int> tColors {kMagenta+3, kMagenta+2, kMagenta+1, kMagenta-0, kMagenta-4, kMagenta-7, kMagenta-9, kMagenta-10};
+//    vector<int> tColors {kMagenta-10, kMagenta-9, kMagenta-7, kMagenta-4, kMagenta-0, kMagenta+1, kMagenta+2, kMagenta+3};
+    assert(tRadii.size() == tColors.size());
+    int tCoulombColor;
     tRadius = 0.;
-    for(int i=0; i<10; i++)
+
+    TLegend *tLeg2 = new TLegend(0.60,0.25,0.85,0.75);
+    tLeg2->SetHeader("Coulomb Only");
+
+    for(unsigned int i=0; i<tRadii.size(); i++)
     {
-      tRadius = tRadius + 1;
+      tRadius = tRadii[i];
+      tCoulombColor = tColors[i];
 cout << "tRadius = " << tRadius << endl;
-      tCoulombOnlyHist = tFitter->CreateFitHistogramSampleComplete("tCoulombOnlyHist", tAnType, tNbinsK, tKMin, tKMax, tLambda, tRadius, 0., 0., 0., 0., 0., 0., tNorm);
-      tCoulombOnlyHist->DrawCopy("lsame");
+      tCoulombOnlyHistSample = tFitter->CreateFitHistogramSampleComplete("tCoulombOnlyHistSample", tAnType, tNbinsK, tKMin, tKMax, tLambda, tRadius, 0., 0., 0., 0., 0., 0., tNorm);
+      tCoulombOnlyHistSample->SetLineColor(tCoulombColor);
+      tCoulombOnlyHistSample->SetLineWidth(2);
+      tCoulombOnlyHistSample->DrawCopy("lsame");
+
+      tLeg2->AddEntry(tCoulombOnlyHistSample,TString::Format("R = %0.1f",tRadius),"l");
+
       tCan->Update();
     }
-
+    tLeg2->Draw();
+    tCan->Update();
   }
+
+  tSampleHist1->Draw("lsame"); //make sure data is on top
+  tData->Draw("same");
 
 
   TString tSaveName = TString("DataVsCoulombOnly_") + TString(cAnalysisBaseTags[tAnType]) + TString(cCentralityTags[tCentType]) + TString(".eps"); 

@@ -4,7 +4,7 @@ class SystematicAnalysis;
 SystematicsFileInfo GetFileInfo(int aNumber)
 {
   SystematicsFileInfo gInfoXiKch1;
-    gInfoXiKch1.resultsDate = "2016xxxx";  //TODO
+    gInfoXiKch1.resultsDate = "2017xxxx";  //TODO
     gInfoXiKch1.dirNameModifierBase1 = "_ALLTRACKS_maxImpactXY_";
     gInfoXiKch1.modifierValues1 = vector<double> {1.92,2.4,2.88};
     gInfoXiKch1.dirNameModifierBase2 = "";
@@ -12,7 +12,7 @@ SystematicsFileInfo GetFileInfo(int aNumber)
     gInfoXiKch1.allCentralities = true;
 
   SystematicsFileInfo gInfoXiKch2;
-    gInfoXiKch2.resultsDate = "2016xxxx";  //TODO
+    gInfoXiKch2.resultsDate = "2017xxxx";  //TODO
     gInfoXiKch2.dirNameModifierBase1 = "_ALLTRACKS_maxImpactZ_";
     gInfoXiKch2.modifierValues1 = vector<double> {2.4,3.0,3.6};
     gInfoXiKch2.dirNameModifierBase2 = "";
@@ -21,7 +21,7 @@ SystematicsFileInfo GetFileInfo(int aNumber)
 
 
   SystematicsFileInfo gInfoXiKch3;
-    gInfoXiKch3.resultsDate = "2016xxxx";  //TODO
+    gInfoXiKch3.resultsDate = "2017xxxx";  //TODO
     gInfoXiKch3.dirNameModifierBase1 = "_ALLXIS_maxDcaV0Daughters_";
     gInfoXiKch3.modifierValues1 = vector<double> {0.30,0.40,0.50};
     gInfoXiKch3.dirNameModifierBase2 = "";
@@ -29,23 +29,23 @@ SystematicsFileInfo GetFileInfo(int aNumber)
     gInfoXiKch3.allCentralities = true;
 
   SystematicsFileInfo gInfoXiKch4;
-    gInfoXiKch4.resultsDate = "2016xxxx";  //TODO
+    gInfoXiKch4.resultsDate = "20170429";
     gInfoXiKch4.dirNameModifierBase1 = "_ALLXIS_maxDcaXi_";
-    gInfoXiKch4.modifierValues1 = vector<double> {0.30,0.40,0.50};  //TODO
+    gInfoXiKch4.modifierValues1 = vector<double> {0.20,0.30,0.40};
     gInfoXiKch4.dirNameModifierBase2 = "";
     gInfoXiKch4.modifierValues2 = vector<double> {};
     gInfoXiKch4.allCentralities = true;
 
   SystematicsFileInfo gInfoXiKch5;
-    gInfoXiKch5.resultsDate = "2016xxxx";  //TODO
+    gInfoXiKch5.resultsDate = "20170429";
     gInfoXiKch5.dirNameModifierBase1 = "_ALLXIS_maxDcaXiDaughters_";
-    gInfoXiKch5.modifierValues1 = vector<double> {0.30,0.40,0.50};  //TODO
+    gInfoXiKch5.modifierValues1 = vector<double> {0.20,0.30,0.40};
     gInfoXiKch5.dirNameModifierBase2 = "";
     gInfoXiKch5.modifierValues2 = vector<double> {};
     gInfoXiKch5.allCentralities = true;
 
   SystematicsFileInfo gInfoXiKch6;
-    gInfoXiKch6.resultsDate = "2016xxxx";  //TODO
+    gInfoXiKch6.resultsDate = "2017xxxx";  //TODO
     gInfoXiKch6.dirNameModifierBase1 = "_ALLXIS_minCosPointingAngleV0_";
     gInfoXiKch6.modifierValues1 = vector<double> {0.9992, 0.9993, 0.9994};
     gInfoXiKch6.dirNameModifierBase2 = "";
@@ -53,7 +53,7 @@ SystematicsFileInfo GetFileInfo(int aNumber)
     gInfoXiKch6.allCentralities = true;
 
   SystematicsFileInfo gInfoXiKch7;
-    gInfoXiKch7.resultsDate = "2016xxxx";  //TODO
+    gInfoXiKch7.resultsDate = "20170429";
     gInfoXiKch7.dirNameModifierBase1 = "_ALLXIS_minCosPointingAngleV0toXi_";
     gInfoXiKch7.modifierValues1 = vector<double> {0.9992, 0.9993, 0.9994};
     gInfoXiKch7.dirNameModifierBase2 = "";
@@ -61,7 +61,7 @@ SystematicsFileInfo GetFileInfo(int aNumber)
     gInfoXiKch7.allCentralities = true;
 
   SystematicsFileInfo gInfoXiKch8;
-    gInfoXiKch8.resultsDate = "2016xxxx";  //TODO
+    gInfoXiKch8.resultsDate = "20170429";
     gInfoXiKch8.dirNameModifierBase1 = "_ALLXIS_minCosPointingAngleXi_";
     gInfoXiKch8.modifierValues1 = vector<double> {0.9991, 0.9992, 0.9993};
     gInfoXiKch8.dirNameModifierBase2 = "";
@@ -69,7 +69,7 @@ SystematicsFileInfo GetFileInfo(int aNumber)
     gInfoXiKch8.allCentralities = true;
 
   SystematicsFileInfo gInfoXiKch9;
-    gInfoXiKch9.resultsDate = "2016xxxx";  //TODO
+    gInfoXiKch9.resultsDate = "20170429";
     gInfoXiKch9.dirNameModifierBase1 = "_ALLXIS_minDcaV0_";
     gInfoXiKch9.modifierValues1 = vector<double> {0.05, 0.10, 0.20};
     gInfoXiKch9.dirNameModifierBase2 = "";
@@ -77,7 +77,7 @@ SystematicsFileInfo GetFileInfo(int aNumber)
     gInfoXiKch9.allCentralities = true;
 
   SystematicsFileInfo gInfoXiKch10;
-    gInfoXiKch10.resultsDate = "2016xxxx";  //TODO
+    gInfoXiKch10.resultsDate = "2017xxxx";  //TODO
     gInfoXiKch10.dirNameModifierBase1 = "_ALLXIS_minDcaXiBac_";
     gInfoXiKch10.modifierValues1 = vector<double> {0.02, 0.03, 0.04};
     gInfoXiKch10.dirNameModifierBase2 = "";
@@ -85,7 +85,7 @@ SystematicsFileInfo GetFileInfo(int aNumber)
     gInfoXiKch10.allCentralities = true;
 
   SystematicsFileInfo gInfoXiKch11;
-    gInfoXiKch11.resultsDate = "2016xxxx";  //TODO
+    gInfoXiKch11.resultsDate = "2017xxxx";  //TODO
     gInfoXiKch11.dirNameModifierBase1 = "_AXi_minV0NegDaughterToPrimVertex_";
     gInfoXiKch11.modifierValues1 = vector<double> {0.05,0.10,0.20};
     gInfoXiKch11.dirNameModifierBase2 = "";
@@ -93,7 +93,7 @@ SystematicsFileInfo GetFileInfo(int aNumber)
     gInfoXiKch11.allCentralities = true;
 
   SystematicsFileInfo gInfoXiKch12;
-    gInfoXiKch12.resultsDate = "2016xxxx";  //TODO
+    gInfoXiKch12.resultsDate = "20170429";
     gInfoXiKch12.dirNameModifierBase1 = "_AXi_minV0PosDaughterToPrimVertex_";
     gInfoXiKch12.modifierValues1 = vector<double> {0.20, 0.30, 0.40};
     gInfoXiKch12.dirNameModifierBase2 = "";
@@ -101,15 +101,15 @@ SystematicsFileInfo GetFileInfo(int aNumber)
     gInfoXiKch12.allCentralities = true;
 
   SystematicsFileInfo gInfoXiKch13;
-    gInfoXiKch13.resultsDate = "2016xxxx";  //TODO
+    gInfoXiKch13.resultsDate = "2017xxxx";  //TODO
     gInfoXiKch13.dirNameModifierBase1 = "_minAvgSepTrackBacPion_";
-    gInfoXiKch13.modifierValues1 = vector<double> {7.0, 8.0, 9.0};  //TODO
+    gInfoXiKch13.modifierValues1 = vector<double> {7.0, 8.0, 9.0};
     gInfoXiKch13.dirNameModifierBase2 = "";
     gInfoXiKch13.modifierValues2 = vector<double> {};
     gInfoXiKch13.allCentralities = true;
 
   SystematicsFileInfo gInfoXiKch14;
-    gInfoXiKch14.resultsDate = "2016xxxx";  //TODO
+    gInfoXiKch14.resultsDate = "2017xxxx";  //TODO
     gInfoXiKch14.dirNameModifierBase1 = "_minAvgSepTrackPos_";
     gInfoXiKch14.modifierValues1 = vector<double> {7.0, 8.0, 9.0};
     gInfoXiKch14.dirNameModifierBase2 = "";
@@ -118,7 +118,7 @@ SystematicsFileInfo GetFileInfo(int aNumber)
 
 
   SystematicsFileInfo gInfoXiKch15;
-    gInfoXiKch15.resultsDate = "2016xxxx";  //TODO
+    gInfoXiKch15.resultsDate = "20170429";
     gInfoXiKch15.dirNameModifierBase1 = "_Xi_minV0NegDaughterToPrimVertex_";
     gInfoXiKch15.modifierValues1 = vector<double> {0.2, 0.3, 0.4};
     gInfoXiKch15.dirNameModifierBase2 = "";
@@ -126,7 +126,7 @@ SystematicsFileInfo GetFileInfo(int aNumber)
     gInfoXiKch15.allCentralities = true;
 
   SystematicsFileInfo gInfoXiKch16;
-    gInfoXiKch16.resultsDate = "2016xxxx";  //TODO
+    gInfoXiKch16.resultsDate = "20170429";
     gInfoXiKch16.dirNameModifierBase1 = "_Xi_minV0PosDaughterToPrimVertex_";
     gInfoXiKch16.modifierValues1 = vector<double> {0.05, 0.1, 0.2};
     gInfoXiKch16.dirNameModifierBase2 = "";
@@ -135,7 +135,7 @@ SystematicsFileInfo GetFileInfo(int aNumber)
 
 /*
   SystematicsFileInfo gInfoXiKch6;
-    gInfoXiKch6.resultsDate = "2016xxxx";
+    gInfoXiKch6.resultsDate = "2017xxxx";
     gInfoXiKch6.dirNameModifierBase1 = "_ALLV0S_minInvMassReject_";
     gInfoXiKch6.modifierValues1 = vector<double> {0.494614, 0.492614, 0.488614, 0.482614};
     gInfoXiKch6.dirNameModifierBase2 = "_ALLV0S_maxInvMassReject_";
@@ -217,9 +217,9 @@ int main(int argc, char **argv)
   AnalysisType tAnType = kXiKchP;
   CentralityType tCentType = k0010;
 
-  TString tResultsDate_Save = "2016xxxx";  //TODO
+  TString tResultsDate_Save = "20170427";  //TODO
 
-  bool tSaveFile = true;
+  bool tSaveFile = false;
 
   TString tGeneralAnTypeName;
   if(tAnType==kXiKchP || tAnType==kAXiKchM || tAnType==kXiKchM || tAnType==kAXiKchP) tGeneralAnTypeName = "cXicKch";
@@ -235,6 +235,7 @@ int main(int argc, char **argv)
   for(int iCut=1; iCut<=tMaxCut; iCut++)
   {
     int tCut = iCut;
+    if(iCut==1 || iCut==2 || iCut==3 || iCut==6 || iCut==10 || iCut==11 || iCut==13 || iCut==14) continue;
     cout << "tCut = " << tCut << endl;
 
     SystematicsFileInfo tFileInfo = GetFileInfo(tCut);

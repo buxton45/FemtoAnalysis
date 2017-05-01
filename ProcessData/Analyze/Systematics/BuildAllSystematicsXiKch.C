@@ -29,17 +29,17 @@ SystematicsFileInfo GetFileInfo(int aNumber)
     gInfo3.allCentralities = true;
 
   SystematicsFileInfo gInfo4;
-    gInfo4.resultsDate = "2016xxxx";  //TODO
+    gInfo4.resultsDate = "20160429";
     gInfo4.dirNameModifierBase1 = "_ALLXIS_maxDcaXi_";
-    gInfo4.modifierValues1 = vector<double> {0.30,0.40,0.50};  //TODO
+    gInfo4.modifierValues1 = vector<double> {0.20,0.30,0.40};
     gInfo4.dirNameModifierBase2 = "";
     gInfo4.modifierValues2 = vector<double> {};
     gInfo4.allCentralities = true;
 
   SystematicsFileInfo gInfo5;
-    gInfo5.resultsDate = "2016xxxx";  //TODO
+    gInfo5.resultsDate = "20160429";
     gInfo5.dirNameModifierBase1 = "_ALLXIS_maxDcaXiDaughters_";
-    gInfo5.modifierValues1 = vector<double> {0.30,0.40,0.50};  //TODO
+    gInfo5.modifierValues1 = vector<double> {0.20,0.30,0.40};
     gInfo5.dirNameModifierBase2 = "";
     gInfo5.modifierValues2 = vector<double> {};
     gInfo5.allCentralities = true;
@@ -53,7 +53,7 @@ SystematicsFileInfo GetFileInfo(int aNumber)
     gInfo6.allCentralities = true;
 
   SystematicsFileInfo gInfo7;
-    gInfo7.resultsDate = "2016xxxx";  //TODO
+    gInfo7.resultsDate = "20160429";
     gInfo7.dirNameModifierBase1 = "_ALLXIS_minCosPointingAngleV0toXi_";
     gInfo7.modifierValues1 = vector<double> {0.9992, 0.9993, 0.9994};
     gInfo7.dirNameModifierBase2 = "";
@@ -61,7 +61,7 @@ SystematicsFileInfo GetFileInfo(int aNumber)
     gInfo7.allCentralities = true;
 
   SystematicsFileInfo gInfo8;
-    gInfo8.resultsDate = "2016xxxx";  //TODO
+    gInfo8.resultsDate = "20160429";
     gInfo8.dirNameModifierBase1 = "_ALLXIS_minCosPointingAngleXi_";
     gInfo8.modifierValues1 = vector<double> {0.9991, 0.9992, 0.9993};
     gInfo8.dirNameModifierBase2 = "";
@@ -69,7 +69,7 @@ SystematicsFileInfo GetFileInfo(int aNumber)
     gInfo8.allCentralities = true;
 
   SystematicsFileInfo gInfo9;
-    gInfo9.resultsDate = "2016xxxx";  //TODO
+    gInfo9.resultsDate = "20160429";
     gInfo9.dirNameModifierBase1 = "_ALLXIS_minDcaV0_";
     gInfo9.modifierValues1 = vector<double> {0.05, 0.10, 0.20};
     gInfo9.dirNameModifierBase2 = "";
@@ -93,7 +93,7 @@ SystematicsFileInfo GetFileInfo(int aNumber)
     gInfo11.allCentralities = true;
 
   SystematicsFileInfo gInfo12;
-    gInfo12.resultsDate = "2016xxxx";  //TODO
+    gInfo12.resultsDate = "20160429";
     gInfo12.dirNameModifierBase1 = "_AXi_minV0PosDaughterToPrimVertex_";
     gInfo12.modifierValues1 = vector<double> {0.20, 0.30, 0.40};
     gInfo12.dirNameModifierBase2 = "";
@@ -103,7 +103,7 @@ SystematicsFileInfo GetFileInfo(int aNumber)
   SystematicsFileInfo gInfo13;
     gInfo13.resultsDate = "2016xxxx";  //TODO
     gInfo13.dirNameModifierBase1 = "_minAvgSepTrackBacPion_";
-    gInfo13.modifierValues1 = vector<double> {7.0, 8.0, 9.0};  //TODO
+    gInfo13.modifierValues1 = vector<double> {7.0, 8.0, 9.0};
     gInfo13.dirNameModifierBase2 = "";
     gInfo13.modifierValues2 = vector<double> {};
     gInfo13.allCentralities = true;
@@ -118,7 +118,7 @@ SystematicsFileInfo GetFileInfo(int aNumber)
 
 
   SystematicsFileInfo gInfo15;
-    gInfo15.resultsDate = "2016xxxx";  //TODO
+    gInfo15.resultsDate = "20160429";
     gInfo15.dirNameModifierBase1 = "_Xi_minV0NegDaughterToPrimVertex_";
     gInfo15.modifierValues1 = vector<double> {0.2, 0.3, 0.4};
     gInfo15.dirNameModifierBase2 = "";
@@ -126,7 +126,7 @@ SystematicsFileInfo GetFileInfo(int aNumber)
     gInfo15.allCentralities = true;
 
   SystematicsFileInfo gInfo16;
-    gInfo16.resultsDate = "2016xxxx";  //TODO
+    gInfo16.resultsDate = "20160429";
     gInfo16.dirNameModifierBase1 = "_Xi_minV0PosDaughterToPrimVertex_";
     gInfo16.modifierValues1 = vector<double> {0.05, 0.1, 0.2};
     gInfo16.dirNameModifierBase2 = "";
