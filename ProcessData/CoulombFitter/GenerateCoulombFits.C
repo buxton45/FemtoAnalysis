@@ -27,7 +27,10 @@ int main(int argc, char **argv)
   NonFlatBgdFitType tNonFlatBgdFitType = kLinear;
   bool IncludeResiduals = false;
   bool IncludeSingletAndTriplet = false;
-  bool Fixd0 = true;
+  bool Fixd0 = false;
+
+  double tMaxKStarFit = 0.3;
+  int tNPairsPerKStarBin = 25000;
 
   TString tGeneralAnTypeName = "cXicKch";
 
@@ -55,7 +58,7 @@ int main(int argc, char **argv)
 //TODO!!!!  If I want to apply mom res correction to full fit, I need to give non-central analyses ability to grab
 //           the matrix from the central analyses
   tXiKchP->SetFixd0(Fixd0);
-  tXiKchP->DoFit(ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, IncludeResiduals, IncludeSingletAndTriplet, tNonFlatBgdFitType);
+  tXiKchP->DoFit(ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, IncludeResiduals, IncludeSingletAndTriplet, tNonFlatBgdFitType, tMaxKStarFit, tNPairsPerKStarBin);
 //  TCanvas* tKStarwFitsCan = tXiKchP->DrawKStarCfswFits(ApplyMomResCorrection,ApplyNonFlatBackgroundCorrection,tNonFlatBgdFitType,SaveImages);
 //  TCanvas* tKStarCfs = tXiKchP->DrawKStarCfs(SaveImages);
 //  TCanvas* tModelKStarCfs = tXiKchP->DrawModelKStarCfs(SaveImages);
