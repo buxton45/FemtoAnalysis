@@ -217,7 +217,7 @@ int main(int argc, char **argv)
   AnalysisType tAnType = kXiKchP;
   CentralityType tCentType = k0010;
 
-  TString tResultsDate_Save = "20170427";  //TODO
+  TString tResultsDate_Save = "20170429";  //TODO
 
   bool tSaveFile = false;
 
@@ -270,7 +270,7 @@ int main(int argc, char **argv)
     SystematicAnalysis* tSysAn = new SystematicAnalysis(tFileLocationBase, static_cast<AnalysisType>(tAnType), static_cast<CentralityType>(tCentType), tDirNameModifierBase1, tModifierValues1, tDirNameModifierBase2, tModifierValues2);
 
     td2dVec tCfValues = tSysAn->GetAllCfValues();
-    if(iCut==1) tAllCfValues = tCfValues;
+    if(iCut==4) tAllCfValues = tCfValues;  //TODO
     else AddToCfValuesVector(tCfValues,tAllCfValues);
   }
 

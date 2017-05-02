@@ -38,13 +38,13 @@ int main(int argc, char **argv)
 
   //-----Data
 
-  TString FileLocationBase = "~/Analysis/FemtoAnalysis/Results/Results_cXicKch_20170425_maxDcaXi0.3/Results_cXicKch_20170425_maxDcaXi0.3";
+  TString FileLocationBase = "~/Analysis/FemtoAnalysis/Results/Results_cXicKch_20170501/Results_cXicKch_20170501";
   Analysis* XiKchP = new Analysis(FileLocationBase,kXiKchP,k0010);
   Analysis* AXiKchP = new Analysis(FileLocationBase,kAXiKchP,k0010);
   Analysis* XiKchM = new Analysis(FileLocationBase,kXiKchM,k0010);
   Analysis* AXiKchM = new Analysis(FileLocationBase,kAXiKchM,k0010);
 
-  TString SaveFileName = "~/Analysis/FemtoAnalysis/Results/Results_cXicKch_20170425_maxDcaXi0.3/0010/Results_cXicKch_20170425_maxDcaXi0.3_0010.root";
+  TString SaveFileName = "~/Analysis/FemtoAnalysis/Results/Results_cXicKch_20170501/0010/Results_cXicKch_20170501_0010.root";
 
   //-----MC
 /*
@@ -115,7 +115,7 @@ int main(int argc, char **argv)
 
   bool bContainsPurity = true;
   bool bContainsKStarCfs = true;
-  bool bContainsAvgSepCfs = true;
+  bool bContainsAvgSepCfs = false;
 
   bool bRunChi2Test = false;
 
@@ -129,7 +129,7 @@ int main(int argc, char **argv)
   bool bDrawMC = false;
 
   bool bSaveFigures = true;
-  TString tSaveFiguresLocation = "~/Analysis/FemtoAnalysis/Results/Results_cXicKch_20170425_maxDcaXi0.3/0010/";
+  TString tSaveFiguresLocation = "~/Analysis/FemtoAnalysis/Results/Results_cXicKch_20170501/0010/";
   //-------------------------------------------------------------------
 
   if(bContainsKStarCfs)
@@ -309,18 +309,18 @@ int main(int argc, char **argv)
     XiKchM->BuildAllAvgSepHeavyCfs(aMinNorm, aMaxNorm, aRebin);
     AXiKchM->BuildAllAvgSepHeavyCfs(aMinNorm, aMaxNorm, aRebin);
 
-    TCanvas *canAvgSepXiKchP = new TCanvas("canAvgSepXiKchP","canAvgSepXiKchP", 700, 1500);
-    TCanvas *canAvgSepAXiKchP = new TCanvas("canAvgSepAXiKchP","canAvgSepAXiKchP", 700, 1500);
-    TCanvas *canAvgSepXiKchM = new TCanvas("canAvgSepXiKchM","canAvgSepXiKchM", 700, 1500);
-    TCanvas *canAvgSepAXiKchM = new TCanvas("canAvgSepAXiKchM","canAvgSepAXiKchM", 700, 1500);
+    TCanvas *canAvgSepXiKchP = new TCanvas("canAvgSepXiKchP","canAvgSepXiKchP", 2100, 500);
+    TCanvas *canAvgSepAXiKchP = new TCanvas("canAvgSepAXiKchP","canAvgSepAXiKchP", 2100, 500);
+    TCanvas *canAvgSepXiKchM = new TCanvas("canAvgSepXiKchM","canAvgSepXiKchM", 2100, 500);
+    TCanvas *canAvgSepAXiKchM = new TCanvas("canAvgSepAXiKchM","canAvgSepAXiKchM", 2100, 500);
 
     gStyle->SetOptTitle(0);
     double tXMargin = 0.01;  //default = 0.01
     double tYMargin = 0.001;  //default = 0.01
-    canAvgSepXiKchP->Divide(1,3, tXMargin,tYMargin);
-    canAvgSepAXiKchP->Divide(1,3, tXMargin,tYMargin);
-    canAvgSepXiKchM->Divide(1,3, tXMargin,tYMargin);
-    canAvgSepAXiKchM->Divide(1,3, tXMargin,tYMargin);
+    canAvgSepXiKchP->Divide(3,1, tXMargin,tYMargin);
+    canAvgSepAXiKchP->Divide(3,1, tXMargin,tYMargin);
+    canAvgSepXiKchM->Divide(3,1, tXMargin,tYMargin);
+    canAvgSepAXiKchM->Divide(3,1, tXMargin,tYMargin);
 
     XiKchP->DrawAvgSepHeavyCf(kTrackPos,(TPad*)canAvgSepXiKchP->cd(1));
     XiKchP->DrawAvgSepHeavyCf(kTrackNeg,(TPad*)canAvgSepXiKchP->cd(2));

@@ -549,16 +549,16 @@ void Analysis::DrawKStarHeavyCf(TPad* aPad, int aMarkerColor, TString aOption, i
   }
 
   TAxis *xax1 = tCfToDraw->GetXaxis();
-    xax1->SetTitle("k* (GeV/c)");
+    xax1->SetTitle("#it{k}* (GeV/#it{c})");
     xax1->SetTitleSize(0.05);
     xax1->SetTitleOffset(1.0);
     //xax1->CenterTitle();
     xax1->SetRangeUser(tXmin,tXmax);
   TAxis *yax1 = tCfToDraw->GetYaxis();
     yax1->SetRangeUser(tYmin,tYmax);
-    yax1->SetTitle("C(k*)");
-    yax1->SetTitleSize(0.04);
-    yax1->SetTitleOffset(1.2);
+    yax1->SetTitle("#it{C}(#it{k}*)");
+    yax1->SetTitleSize(0.045);
+    yax1->SetTitleOffset(1.0);
     //yax1->CenterTitle();
 
 

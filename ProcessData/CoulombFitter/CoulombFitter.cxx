@@ -1518,7 +1518,7 @@ cout << "\t aKStarMagMax = " << aKStarMagMax << endl;
   // par[2] = Ref0
   // par[3] = Imf0
   // par[4] = d0
-  // par[5] = Norm
+  // par[5] != Norm !!!!!!!!!!!!!!!!!!!!!
 
   //should probably do x[0] /= hbarc, but let me test first
 
@@ -1647,7 +1647,7 @@ double CoulombFitter::GetFitCfContentwStaticPairs(double aKStarMagMin, double aK
   // par[2] = Ref0
   // par[3] = Imf0
   // par[4] = d0
-  // par[5] = Norm
+  // par[5] != Norm !!!!!!!!!!!!!!!!
 
   UpdatePairRadiusParameters(par[1]);
 
@@ -3337,12 +3337,12 @@ tTimer.Start();
     else if(fUseStaticPairs)
     {
       tCfContentUnNorm = GetFitCfContentwStaticPairs(tKStarMin,tKStarMax,tPar,tAnalysisNumber);
-      tCfContent = tPar[5]*tCfContentUnNorm;
+      tCfContent = tPar[8]*tCfContentUnNorm;
     }
     else
     {
       tCfContentUnNorm = GetFitCfContent(tKStarMin,tKStarMax,tPar,tAnalysisNumber);
-      tCfContent = tPar[5]*tCfContentUnNorm;
+      tCfContent = tPar[8]*tCfContentUnNorm;
     }
 
 //tLoopTimer.Stop();

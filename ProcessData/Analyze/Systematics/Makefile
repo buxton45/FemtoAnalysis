@@ -8,7 +8,7 @@ CFLAGS = $(shell root-config --cflags) -Wall -std=c++11 -I${ANALYZE_DIR} -I${UTI
 
 MY_LIBS = $(addprefix build/, CfLite.o CfHeavy.o Cf2dLite.o Cf2dHeavy.o Types.o Purity.o PartialAnalysis.o Analysis.o DataAndModel.o PlotPartners.o PlotPartnersLamKch.o PlotPartnersLamK0.o SystematicAnalysis.o CanvasPartition.o)
 
-all: runSingleSys runAllSysLamK0 runAllSysLamKch runCompare runBuildErrorBars runBuildErrorBarsXiKch runBuildLeadingErrorContributors
+all: runSingleSys runAllSysLamK0 runAllSysLamKch runCompare runBuildErrorBars runBuildErrorBarsXiKch runBuildErrorBarsXiKch2 runBuildLeadingErrorContributors
 
 runSingleSys: ${MY_LIBS} BuildSingleSystematics.C
 	g++ BuildSingleSystematics.C ${MY_LIBS} -o runSingleSys $(LIBS) $(CFLAGS)
@@ -28,6 +28,9 @@ runBuildErrorBars: ${MY_LIBS} BuildErrorBars.C
 runBuildErrorBarsXiKch: ${MY_LIBS} BuildErrorBarsXiKch.C
 	g++ BuildErrorBarsXiKch.C ${MY_LIBS} -o runBuildErrorBarsXiKch $(LIBS) $(CFLAGS)
 
+runBuildErrorBarsXiKch2: ${MY_LIBS} BuildErrorBarsXiKch2.C
+	g++ BuildErrorBarsXiKch2.C ${MY_LIBS} -o runBuildErrorBarsXiKch2 $(LIBS) $(CFLAGS)
+
 runBuildLeadingErrorContributors: ${MY_LIBS} BuildLeadingErrorContributors.C
 	g++ BuildLeadingErrorContributors.C ${MY_LIBS} -o runBuildLeadingErrorContributors $(LIBS) $(CFLAGS)
 
@@ -41,4 +44,4 @@ build/%.o: %.cxx %.h
 	g++ -c $< $(CFLAGS) -o $@
 
 clean:
-	rm -f runSingleSys runAllSysLamK0 runAllSysLamKch runCompare runBuildErrorBars runBuildErrorBarsXiKch runBuildLeadingErrorContributors ${MY_LIBS}
+	rm -f runSingleSys runAllSysLamK0 runAllSysLamKch runCompare runBuildErrorBars runBuildErrorBarsXiKch runBuildErrorBarsXiKch2 runBuildLeadingErrorContributors ${MY_LIBS}

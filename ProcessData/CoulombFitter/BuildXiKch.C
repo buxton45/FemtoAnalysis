@@ -3,6 +3,11 @@
 #include "TLegend.h"
 #include "CanvasPartition.h"
 
+
+#include "TColor.h"
+#include <TStyle.h>
+#include "TPaveText.h"
+
 CoulombFitter *myFitter = NULL;
 
 //______________________________________________________________________________
@@ -15,7 +20,41 @@ void fcn(Int_t &npar, Double_t *gin, Double_t &f, Double_t *par, Int_t iflag)
 }
 
 //________________________________________________________________________________________________________________
-TCanvas* DrawKStarCfswFits(TH1* aData, TH1* aFit, TH1* aCoulombOnlyFit, AnalysisType aAnType=kXiKchP, CentralityType aCentType=k0010, bool aDrawMultipleCoulomb=false, bool aSaveImage=false)
+TPaveText* CreateParamValuesText(AnalysisType tAnType, td1dVec &tParams, td1dVec &tParamErrors, bool bPrintErrors)
+{
+  TPaveText* tText;
+  if(tAnType==kXiKchP || tAnType==kAXiKchM) tText = new TPaveText(0.60,0.35,0.85,0.75,"NDC");
+  else if(tAnType==kXiKchM || tAnType==kAXiKchP) tText = new TPaveText(0.60,0.30,0.85,0.60,"NDC");
+  else assert(0);
+
+  tText->SetFillColor(0);
+  tText->SetBorderSize(0);
+  tText->SetTextAlign(22);
+  tText->SetTextFont(63);
+  tText->SetTextSize(20);
+
+  if(!bPrintErrors)
+  {
+    tText->AddText(TString::Format("#lambda = %0.2f",tParams[0]));
+    tText->AddText(TString::Format("R = %0.2f",tParams[1]));
+    tText->AddText(TString::Format("Re[f0] = %0.2f",tParams[2]));
+    tText->AddText(TString::Format("Im[f0] = %0.2f",tParams[3]));
+    tText->AddText(TString::Format("d0 = %0.2f",tParams[4]));
+  }
+  else
+  {
+    tText->AddText(TString::Format("#lambda = %0.2f #pm %0.2f",tParams[0], tParamErrors[0]));
+    tText->AddText(TString::Format("R = %0.2f #pm %0.2f",tParams[1], tParamErrors[1]));
+    tText->AddText(TString::Format("Re[f0] = %0.2f #pm %0.2f",tParams[2], tParamErrors[2]));
+    tText->AddText(TString::Format("Im[f0] = %0.2f #pm %0.2f",tParams[3], tParamErrors[3]));
+    tText->AddText(TString::Format("d0 = %0.2f #pm %0.2f",tParams[4], tParamErrors[4]));
+  }
+
+  return tText;
+}
+
+//________________________________________________________________________________________________________________
+TCanvas* DrawKStarCfswFits(TH1* aData, TH1* aDatawSysErrors, TH1* aFit, TH1* aCoulombOnlyFit, AnalysisType aAnType=kXiKchP, CentralityType aCentType=k0010, bool aDrawMultipleCoulomb=false)
 {
   TString tCanvasName = TString("canKStarCfwFits");
   if(aAnType==kXiKchP) tCanvasName += TString("XiKchP");
@@ -31,7 +70,7 @@ TCanvas* DrawKStarCfswFits(TH1* aData, TH1* aFit, TH1* aCoulombOnlyFit, Analysis
   tXHigh = 0.15;
   if(aAnType==kXiKchP || aAnType==kAXiKchM)
   {
-    tYLow = 0.94;
+    tYLow = 0.92;
     tYHigh = 1.7;
   }
   else if(aAnType==kXiKchM || aAnType==kAXiKchP)
@@ -72,33 +111,32 @@ TCanvas* DrawKStarCfswFits(TH1* aData, TH1* aFit, TH1* aCoulombOnlyFit, Analysis
     returnText->SetTextAlign(22);
     returnText->AddText(tTextSysInfo);
 
-  TString tTextAnType = TString(cAnalysisRootTags[aAnType]);
-  TString tTextCentrality = TString(cPrettyCentralityTags[aCentType]);
-  TString tCombinedText = tTextAnType + TString("  ") +  tTextCentrality;
-
   int tColor;
+  Int_t tColorTransparent;
   if(aAnType==kXiKchP || aAnType==kAXiKchM) tColor=kRed+1;
   else if(aAnType==kXiKchM || aAnType==kAXiKchP) tColor=kBlue+1;
   else tColor=1;
 
+//  tColorTransparent = TColor::GetColorTransparent(tColor,0.2);  //TODO why doesn't this work?
+  if(aAnType==kXiKchP || aAnType==kAXiKchM) tColorTransparent=kRed-10;
+  else if(aAnType==kXiKchM || aAnType==kAXiKchP) tColorTransparent=kBlue-10;
+  else tColor=1;
 
+  aData->GetXaxis()->SetTitle("#it{k}* (GeV/#it{c})");
+  aData->GetXaxis()->SetRangeUser(tXLow,tXHigh);
+  aData->GetXaxis()->SetTitleSize(0.055);
+  aData->GetXaxis()->SetTitleOffset(0.8);
 
-  aFit->GetXaxis()->SetTitle("#it{k}* (GeV/#it{c})");
-  aFit->GetXaxis()->SetRangeUser(tXLow,tXHigh);
-  aFit->GetXaxis()->SetTitleSize(0.055);
-  aFit->GetXaxis()->SetTitleOffset(0.8);
-
-  aFit->GetYaxis()->SetTitle("#it{C}(#it{k}*)");
-  aFit->GetYaxis()->SetRangeUser(tYLow,tYHigh);
-  aFit->GetYaxis()->SetTitleSize(0.0575);
-  aFit->GetYaxis()->SetTitleOffset(0.8);
+  aData->GetYaxis()->SetTitle("#it{C}(#it{k}*)");
+  aData->GetYaxis()->SetRangeUser(tYLow,tYHigh);
+  aData->GetYaxis()->SetTitleSize(0.0575);
+  aData->GetYaxis()->SetTitleOffset(0.8);
 
   aFit->SetMarkerStyle(22);
   aFit->SetMarkerColor(1);
   aFit->SetLineColor(1);
   aFit->SetLineStyle(1);
   aFit->SetLineWidth(2);
-  if(aDrawMultipleCoulomb) aFit->SetLineStyle(7);
 
   aCoulombOnlyFit->SetMarkerStyle(21);
   aCoulombOnlyFit->SetMarkerColor(1);
@@ -109,17 +147,17 @@ TCanvas* DrawKStarCfswFits(TH1* aData, TH1* aFit, TH1* aCoulombOnlyFit, Analysis
   aData->SetMarkerColor(tColor);
   aData->SetLineColor(tColor);
 
+  aDatawSysErrors->SetFillColor(tColorTransparent);
+  aDatawSysErrors->SetMarkerColor(tColorTransparent);
+  aDatawSysErrors->SetFillStyle(1000);
+  aDatawSysErrors->SetLineColor(0);
+  aDatawSysErrors->SetLineWidth(0);
 
-  aFit->Draw("l");
+  aData->Draw("ex0");
+  if(!aDrawMultipleCoulomb) aFit->Draw("lsame");
   if(!aDrawMultipleCoulomb) aCoulombOnlyFit->Draw("lsame");
-  aData->Draw("psame");
-
-  TLegend *tLeg = new TLegend(0.25,0.50,0.55,0.75);
-    tLeg->AddEntry(aData,tTextAnType,"p");
-    tLeg->AddEntry(aFit,"Full Fit","l");
-    if(!aDrawMultipleCoulomb) tLeg->AddEntry(aCoulombOnlyFit, "Coulomb Only", "l");
-    tLeg->Draw();
-
+  aDatawSysErrors->Draw("e2psame");
+  aData->Draw("ex0same");
 
   double tXaxisRangeLow;
   if(tXLow<0) tXaxisRangeLow = 0.;
@@ -129,12 +167,6 @@ TCanvas* DrawKStarCfswFits(TH1* aData, TH1* aFit, TH1* aCoulombOnlyFit, Analysis
   tLine->Draw();
 
   returnText->Draw();
-
-  if(aSaveImage)
-  {
-    TString tSaveName = cAnalysisBaseTags[aAnType] + TString(cCentralityTags[aCentType]) + TString(".eps"); 
-    tCan->SaveAs(tSaveName);
-  }
 
   return tCan;
 }
@@ -157,24 +189,14 @@ int main(int argc, char **argv)
 //-----------------------------------------------------------------------------
 
   //!!!!!!!!!!!!!!!! NOTE:  must set myFitter = to whichever LednickyFitter object I want to use
-
-  vector<int> Share01(2);
-    Share01[0] = 0;
-    Share01[1] = 1;
-
-  vector<int> Share23(2);
-    Share23[0] = 2;
-    Share23[1] = 3;
-
-  vector<int> Share45(2);
-    Share45[0] = 4;
-    Share45[1] = 5;
 //-----------------------------------------------------------------------------
 //Be sure to set the following...
 
-  TString tFileLocationBase = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cXicKch_20170406/Results_cXicKch_20170406";
+  TString tFileDirectory = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cXicKch_20170501/";
+  TString tFileLocationBase = tFileDirectory + TString("Results_cXicKch_20170501");
   bool bSaveImage = true;
-  bool bDrawMultipleCoulomb = true;
+  bool bDrawMultipleCoulomb = false;
+  bool bDrawMultipleLambda = false;
 
   AnalysisType tAnType;
   CentralityType tCentType;
@@ -218,10 +240,8 @@ int main(int argc, char **argv)
   tSharedAn->RebinAnalyses(2);
   tSharedAn->CreateMinuitParameters();
 
-//  CoulombFitter* tFitter = new CoulombFitter(tSharedAn,0.15);
-  CoulombFitter* tFitter = new CoulombFitter(tSharedAn,0.30);
-//  CoulombFitter* tFitter = new CoulombFitter(tSharedAn,0.02);
-    tFitter->SetIncludeSingletAndTriplet(true);
+  CoulombFitter* tFitter = new CoulombFitter(tSharedAn,tKMax);
+    tFitter->SetIncludeSingletAndTriplet(false);
     tFitter->SetApplyMomResCorrection(false);
 
 
@@ -233,7 +253,7 @@ int main(int argc, char **argv)
   //-------------------------------------------
 
   tFitter->SetUseRandomKStarVectors(true);
-  tFitter->SetUseStaticPairs(true,16384);
+  tFitter->SetUseStaticPairs(true,50000);
 
   //-------------------------------------------
 
@@ -244,87 +264,70 @@ int main(int argc, char **argv)
 
 
 //_______________________________________________________________________________________________________________________
-  double tLambda, tRadius, tReF0s, tImF0s, tD0s, tReF0t, tImF0t, tD0t, tNorm;
+  double tLambda, tRadius, tReF0, tImF0, tD0, tNorm;
+  double tLambdaErr, tRadiusErr, tReF0Err, tImF0Err, tD0Err;
 
   if(tAnType==kXiKchP || tAnType==kAXiKchM)
   {
-/*
-    //18 April 2017 (0010 with 1030)
-    tLambda = 0.398942;
-    tRadius = 2.33678;
-
-    if(tCentType==k1030)
-    {
-      tLambda = 0.1;
-      tRadius = 1.56581;
-    }
-
-    tReF0s = -1.13176;
-    tImF0s = 0.988682;
-    tD0s = -5.;
-
-    tReF0t = -0.17914;
-    tImF0t = 0.0205195;
-    tD0t = 2.48178;
-    tNorm = 1.;
-*/
-
     //18 April 2017 (0010 only)
-    tLambda = 0.385577;
-    tRadius = 2.13681;
+    if(tAnType==kXiKchP)
+    {
+      tLambda = 0.30;
+      tLambdaErr = 0.12;
+    }
+    else
+    {
+      tLambda = 0.20;
+      tLambdaErr = 0.08;
+    }
+    tRadius = 3.04;
+    tRadiusErr = 0.32;
 
-    tReF0s = -0.782880;
-    tImF0s = 0.448405;
-    tD0s = -5.;
+    tReF0 = -0.01;
+    tReF0Err = 0.1;
 
-    tReF0t = -0.220497;
-    tImF0t = 0.0327614;
-    tD0t = 3.0;
+    tImF0 = 3.2;
+    tImF0Err = 2.3;
+
+    tD0 = 0.;
+    tD0Err = 0.;
+
     tNorm = 1.;
-
   }
 
   if(tAnType==kAXiKchP || tAnType==kXiKchM)
   {
-/*
-    //18 April 2017 (0010 with 1030)
-    tLambda = 0.691397;
-    tRadius = 4.11372;
-
-    if(tCentType==k1030)
-    {
-      tLambda = 0.589762;
-      tRadius = 2.41899;
-    }
-
-    tReF0s = -0.437582;
-    tImF0s = -1.03858;
-    tD0s = -2.19830;
-
-    tReF0t = 0.126213;
-    tImF0t = 0.743508;
-    tD0t = -3.72636;
-    tNorm = 1.;
-*/
-
     //18 April 2017 (0010 only)
-    tLambda = 0.740911;
-    tRadius = 4.14400;
+    if(tAnType==kAXiKchP)
+    {
+      tLambda = 0.31;
+      tLambdaErr = 0.10;
+    }
+    else
+    {
+      tLambda = 0.23;
+      tLambdaErr = 0.09;
+    }
+    tRadius = 4.12;
+    tRadiusErr = 0.23;
 
-    tReF0s = -1.25864;
-    tImF0s = -0.357157;
-    tD0s = 2.94671;
+    tReF0 = 1.33;
+    tReF0Err = 0.89;
 
-    tReF0t = 0.450537;
-    tImF0t = 0.224479;
-    tD0t = -4.51343;
+    tImF0 = 2.45;
+    tImF0Err = 2.04;
+
+    tD0 = 0.;
+    tD0Err = 0.;
+
     tNorm = 1.;
-
   }
+  vector<double> tFitParams {tLambda, tRadius, tReF0, tImF0, tD0};
+  vector<double> tFitParamErrors {tLambdaErr, tRadiusErr, tReF0Err, tImF0Err, tD0Err};
 
   TString tName = cAnalysisRootTags[tAnType];
 
-  TH1* tSampleHist1 = tFitter->CreateFitHistogramSampleComplete("SampleHist1", tAnType, tNbinsK, tKMin, tKMax, tLambda, tRadius, tReF0s, tImF0s, tD0s, tReF0t, tImF0t, tD0t, tNorm);
+  TH1* tSampleHist1 = tFitter->CreateFitHistogramSampleComplete("SampleHist1", tAnType, tNbinsK, tKMin, tKMax, tLambda, tRadius, tReF0, tImF0, tD0, 0., 0., 0., tNorm);
     tSampleHist1->SetDirectory(0);
     tSampleHist1->SetTitle(tName);
     tSampleHist1->SetName(tName);
@@ -338,7 +341,15 @@ int main(int argc, char **argv)
   else if(tCentType==k3050) tData = tPairAn3050->GetKStarCf();
   else assert(0);
 
-  TCanvas* tCan = DrawKStarCfswFits(tData, tSampleHist1, tCoulombOnlyHist, tAnType, tCentType, bDrawMultipleCoulomb, bSaveImage);
+  TH1* tDatawSysErrors = (TH1*)tSharedAn->GetFitPairAnalysis(0)->GetCfwSysErrors();
+
+  TCanvas* tCan = DrawKStarCfswFits(tData, tDatawSysErrors, tSampleHist1, tCoulombOnlyHist, tAnType, tCentType, (bDrawMultipleCoulomb||bDrawMultipleLambda));
+
+  if(!bDrawMultipleCoulomb && !bDrawMultipleLambda)
+  {
+    TPaveText *tText = CreateParamValuesText(tAnType, tFitParams, tFitParamErrors, true);
+    tText->Draw();
+  }
 
   TH1* tCoulombOnlyHistSample;
   if(bDrawMultipleCoulomb)
@@ -350,7 +361,9 @@ int main(int argc, char **argv)
     int tCoulombColor;
     tRadius = 0.;
 
-    TLegend *tLeg2 = new TLegend(0.60,0.25,0.85,0.75);
+    TLegend *tLeg2;
+    if(tAnType==kXiKchP || tAnType==kAXiKchM) tLeg2 = new TLegend(0.60,0.25,0.85,0.75);
+    else if(tAnType==kXiKchM || tAnType==kAXiKchP) tLeg2 = new TLegend(0.60,0.12,0.85,0.60);
     tLeg2->SetHeader("Coulomb Only");
 
     for(unsigned int i=0; i<tRadii.size(); i++)
@@ -371,12 +384,66 @@ cout << "tRadius = " << tRadius << endl;
     tCan->Update();
   }
 
-  tSampleHist1->Draw("lsame"); //make sure data is on top
-  tData->Draw("same");
+  else if(bDrawMultipleLambda)
+  {
+    tRadius = 3.;
+    td1dVec tLambdas {0.1, 0.3, 0.5, 0.7, 0.9};
+    vector<int> tColors {kMagenta+2, kMagenta+1, kMagenta-4, kMagenta-7, kMagenta-9};
+    assert(tLambdas.size() == tColors.size());
+    int tCoulombColor;
+    tLambda = 0.;
 
+    TLegend *tLeg2;
+    if(tAnType==kXiKchP || tAnType==kAXiKchM) tLeg2 = new TLegend(0.60,0.25,0.85,0.75);
+    else if(tAnType==kXiKchM || tAnType==kAXiKchP) tLeg2 = new TLegend(0.60,0.12,0.85,0.60);
+    tLeg2->SetHeader("Coulomb Only");
 
-  TString tSaveName = TString("DataVsCoulombOnly_") + TString(cAnalysisBaseTags[tAnType]) + TString(cCentralityTags[tCentType]) + TString(".eps"); 
-  tCan->SaveAs(tSaveName);
+    for(unsigned int i=0; i<tLambdas.size(); i++)
+    {
+      tLambda = tLambdas[i];
+      tCoulombColor = tColors[i];
+cout << "tLambda = " << tLambda << endl;
+      tCoulombOnlyHistSample = tFitter->CreateFitHistogramSampleComplete("tCoulombOnlyHistSample", tAnType, tNbinsK, tKMin, tKMax, tLambda, tRadius, 0., 0., 0., 0., 0., 0., tNorm);
+      tCoulombOnlyHistSample->SetLineColor(tCoulombColor);
+      tCoulombOnlyHistSample->SetLineWidth(2);
+      tCoulombOnlyHistSample->DrawCopy("lsame");
+
+      tLeg2->AddEntry(tCoulombOnlyHistSample,TString::Format("#lambda = %0.1f",tLambda),"l");
+
+      tCan->Update();
+    }
+    tLeg2->Draw();
+    tCan->Update();
+  }
+
+  if(!bDrawMultipleCoulomb && !bDrawMultipleLambda) tSampleHist1->Draw("lsame"); //make sure data is on top
+  tData->Draw("ex0same");
+
+  //------------------------------------------------------------
+  TString tTextAnType = TString(cAnalysisRootTags[tAnType]);
+  TString tTextCentrality = TString(cPrettyCentralityTags[tCentType]);
+  TString tCombinedText = tTextAnType + TString("  ") +  tTextCentrality;
+
+  TLegend *tLeg;
+  if(tAnType==kXiKchP || tAnType==kAXiKchM) tLeg = new TLegend(0.25,0.50,0.55,0.75);
+  else if(tAnType==kXiKchM || tAnType==kAXiKchP) tLeg = new TLegend(0.25,0.35,0.55,0.60);
+    tLeg->AddEntry(tData,tTextAnType,"p");
+    if(!bDrawMultipleCoulomb && !bDrawMultipleLambda) tLeg->AddEntry(tSampleHist1,"Full Fit","l");
+    if(!bDrawMultipleCoulomb && !bDrawMultipleLambda) tLeg->AddEntry(tCoulombOnlyHist, "Coulomb Only", "l");
+    if(bDrawMultipleCoulomb) tLeg->AddEntry((TObject*)0, TString::Format("#lambda = %0.1f",tLambda), "");
+    if(bDrawMultipleLambda) tLeg->AddEntry((TObject*)0, TString::Format("R = %0.1f",tRadius), "");
+    tLeg->Draw();
+  //-------------------------------------------------------------
+  if(bSaveImage)
+  {
+    TString tSaveName = tFileDirectory;
+    if(!bDrawMultipleCoulomb && !bDrawMultipleLambda) tSaveName += cAnalysisBaseTags[tAnType] + TString(cCentralityTags[tCentType]); 
+    else if(bDrawMultipleCoulomb) tSaveName += TString("DataVsCoulombOnly_VaryR_") + TString(cAnalysisBaseTags[tAnType]) + TString(cCentralityTags[tCentType]);
+    else if(bDrawMultipleLambda) tSaveName += TString("DataVsCoulombOnly_VaryLam_") + TString(cAnalysisBaseTags[tAnType]) + TString(cCentralityTags[tCentType]); 
+    else assert(0);
+    tSaveName += TString(".eps");
+    tCan->SaveAs(tSaveName);
+  }
 
   delete tFitter;
 
