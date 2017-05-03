@@ -32,7 +32,7 @@ CFLAGS = $(shell root-config --cflags) -pthread -Wno-deprecated-declarations -st
 
 MY_LIBS = $(addprefix build/, MathematicaSession.o WaveFunction.o ChargedResidualCf.o CoulombFitter.o LednickyFitter.o GeneralFitter.o SimpleFitter.o CoulombFitGenerator.o InterpolationHistograms.o FitChi2Histograms.o FitParameter.o FitPartialAnalysis.o FitPairAnalysis.o FitSharedAnalyses.o CfLite.o CfHeavy.o Types.o Faddeeva.o CanvasPartition.o)
 
-BINARIES = runTest runTest2 runFullTest runXiKch runCoulombGenerator runVaryCoulomb runBuildInterpolationHistograms runFitLambda runSimpleFitter runProtonCascade runManualFitting
+BINARIES = runTest runTest2 runFullTest runXiKch runVaryCoulomb runCoulombGenerator runBuildInterpolationHistograms runFitLambda runSimpleFitter runProtonCascade runManualFitting
 
 all : $(BINARIES)
 
@@ -48,11 +48,11 @@ runFullTest: ${MY_LIBS} BuildFullTest.C
 runXiKch: ${MY_LIBS} BuildXiKch.C	
 	${CXX} BuildXiKch.C ${MY_LIBS} -I${INCDIR} -o runXiKch -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS) -o $@
 
+runVaryCoulomb: ${MY_LIBS} BuildVaryCoulombOnly.C	
+	${CXX} BuildVaryCoulombOnly.C ${MY_LIBS} -I${INCDIR} -o runVaryCoulomb -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS) -o $@
+
 runCoulombGenerator: ${MY_LIBS} GenerateCoulombFits.C	
 	${CXX} GenerateCoulombFits.C ${MY_LIBS} -I${INCDIR} -o runCoulombGenerator -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS) -o $@
-
-runVaryCoulomb: ${MY_LIBS} BuildVaryCoulombRadius.C	
-	${CXX} BuildVaryCoulombRadius.C ${MY_LIBS} -I${INCDIR} -o runVaryCoulomb -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS) -o $@
 
 runBuildInterpolationHistograms: ${MY_LIBS} BuildInterpolationHistograms.C	
 	${CXX} BuildInterpolationHistograms.C ${MY_LIBS} -I${INCDIR} -o runBuildInterpolationHistograms -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS) -o $@

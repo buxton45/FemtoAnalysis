@@ -89,9 +89,9 @@ public:
   void BuildPairKStar4dVecFromTxt(TString aFileBaseName);
   void BuildPairKStar4dVecOnFly(TString aPairKStarNtupleDirName, TString aFileBaseName, int aNFiles, int aNbinsKStar, double aKStarMin, double aKStarMax);
 
-  void BuildPairSample4dVec(int aNPairsPerKStarBin=16384);
+  void BuildPairSample4dVec(int aNPairsPerKStarBin=16384, double aBinSize=0.01);
   void UpdatePairRadiusParameters(double aNewRadius);
-  void SetUseStaticPairs(bool aUseStaticPairs=true, int aNPairsPerKStarBin=16384);
+  void SetUseStaticPairs(bool aUseStaticPairs=true, int aNPairsPerKStarBin=16384, double aBinSize=0.01);
 
   //Note:  Linear, Bilinear, and Trilinear will essentially be copies of TH1::, TH2::, and TH3::Interpolate
   //       Rewriting these allows me more control, and allows me to find where and why error flags are thrown

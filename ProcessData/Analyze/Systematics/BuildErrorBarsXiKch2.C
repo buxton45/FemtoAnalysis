@@ -46,7 +46,7 @@ SystematicsFileInfo GetFileInfo(int aNumber)
     gInfoXiKch5.modifierValues2 = vector<double> {};
     gInfoXiKch5.allCentralities = true;
 
-  SystematicsFileInfo gInfoXiKch6;
+  SystematicsFileInfo gInfoXiKch6;  //TODO this is set to 0, so no systematics
     gInfoXiKch6.resultsDate = "2017xxxx";  //Handled by LamKch
     gInfoXiKch6.dirNameModifierBase1 = "_ALLXIS_minCosPointingAngleV0_";
     gInfoXiKch6.modifierValues1 = vector<double> {0.9992, 0.9993, 0.9994};
@@ -70,10 +70,11 @@ SystematicsFileInfo GetFileInfo(int aNumber)
     gInfoXiKch8.modifierValues2 = vector<double> {};
     gInfoXiKch8.allCentralities = true;
 
+
   SystematicsFileInfo gInfoXiKch9;
     gInfoXiKch9.resultsDate = "20170429";
     gInfoXiKch9.dirNameModifierBase1 = "_ALLXIS_minDcaV0_";
-    gInfoXiKch9.modifierValues1 = vector<double> {0.05, 0.10, 0.20};
+    gInfoXiKch9.modifierValues1 = vector<double> {0.05, 0.10, 0.20}; //TODO
     gInfoXiKch9.dirNameModifierBase2 = "";
     gInfoXiKch9.modifierValues2 = vector<double> {};
     gInfoXiKch9.allCentralities = true;
@@ -81,11 +82,12 @@ SystematicsFileInfo GetFileInfo(int aNumber)
   SystematicsFileInfo gInfoXiKch9;
     gInfoXiKch9.resultsDate = "20170502";
     gInfoXiKch9.dirNameModifierBase1 = "_ALLXIS_minDcaV0_";
-    gInfoXiKch9.modifierValues1 = vector<double> {0.10, 0.20, 0.30};
+    gInfoXiKch9.modifierValues1 = vector<double> {0.10, 0.20, 0.30}; //TODO
     gInfoXiKch9.dirNameModifierBase2 = "";
     gInfoXiKch9.modifierValues2 = vector<double> {};
     gInfoXiKch9.allCentralities = true;
 */
+
   SystematicsFileInfo gInfoXiKch10;
     gInfoXiKch10.resultsDate = "20170501";
     gInfoXiKch10.dirNameModifierBase1 = "_ALLXIS_minDcaXiBac_";
@@ -102,6 +104,7 @@ SystematicsFileInfo GetFileInfo(int aNumber)
     gInfoXiKch10.modifierValues2 = vector<double> {};
     gInfoXiKch10.allCentralities = true;
 */
+
   SystematicsFileInfo gInfoXiKch11;
     gInfoXiKch11.resultsDate = "2017xxxx";  //Handled by LamKch
     gInfoXiKch11.dirNameModifierBase1 = "_AXi_minV0NegDaughterToPrimVertex_";
@@ -364,7 +367,7 @@ int main(int argc, char **argv)
   AnalysisType tAnTypeXiKch = kXiKchP;
   CentralityType tCentType = k0010;
 
-  TString tResultsDate_Save = "20170501";  //TODO //TODO //TODO CHOOSE CORRECT minDcaXiBac AND minDcaV0!!!!!!!!!!!!!!
+  TString tResultsDate_Save = "20170429";  //TODO //TODO //TODO CHOOSE CORRECT minDcaXiBac AND minDcaV0!!!!!!!!!!!!!!
 
   bool tSaveFile = true;
 
@@ -451,7 +454,7 @@ int main(int argc, char **argv)
 
   td2dVec tAllCfValuesLamKch(0);
 
-  vector<double> tCutsLamKch {5, 8, 1, 9, 11};
+  vector<double> tCutsLamKch {5, 1, 11};
   for(unsigned int iCut=0; iCut<tCutsLamKch.size(); iCut++)
   {
     int tCut = -1*tCutsLamKch[iCut];

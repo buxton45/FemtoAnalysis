@@ -735,7 +735,7 @@ void CoulombFitter::BuildPairKStar4dVecOnFly(TString aPairKStarNtupleDirName, TS
 
 
 //________________________________________________________________________________________________________________
-void CoulombFitter::BuildPairSample4dVec(int aNPairsPerKStarBin)
+void CoulombFitter::BuildPairSample4dVec(int aNPairsPerKStarBin, double aBinSize)
 {
 ChronoTimer tTimer(kSec);
 tTimer.Start();
@@ -743,7 +743,8 @@ tTimer.Start();
   fNPairsPerKStarBin = aNPairsPerKStarBin;
   fPairSample4dVec.resize(fNAnalyses, td3dVec(0, td2dVec(0, td1dVec(0))));
 
-  double tBinSize = 0.01;  //TODO make this automated
+//  double tBinSize = 0.01;  //TODO make this automated
+  double tBinSize = aBinSize;
   int tNBinsKStar = std::round(fMaxFitKStar/tBinSize);  //TODO make this general, ie subtract 1 if fMaxFitKStar is on bin edge (maybe, maybe not bx of iKStarBin<tNBinsKStar)
 
   //Create the source Gaussians
@@ -838,10 +839,10 @@ void CoulombFitter::UpdatePairRadiusParameters(double aNewRadius)
 }
 
 //________________________________________________________________________________________________________________
-void CoulombFitter::SetUseStaticPairs(bool aUseStaticPairs, int aNPairsPerKStarBin)
+void CoulombFitter::SetUseStaticPairs(bool aUseStaticPairs, int aNPairsPerKStarBin, double aBinSize)
 {
   fUseStaticPairs = aUseStaticPairs;
-  BuildPairSample4dVec(aNPairsPerKStarBin);
+  BuildPairSample4dVec(aNPairsPerKStarBin, aBinSize);
 }
 
 
@@ -1654,7 +1655,7 @@ double CoulombFitter::GetFitCfContentwStaticPairs(double aKStarMagMin, double aK
   //TODO make this general
   //This is messing up around aKStarMagMin = 0.29, or bin 57/58
   //Probably fixed with use of std::round, but need to double check
-  double tBinSize = 0.01;
+  double tBinSize = aKStarMagMax-aKStarMagMin;
   int tBin = std::round(aKStarMagMin/tBinSize);
 
   //KStarMag = fPairSample4dVec[aAnalysisNumber][tBin][i][0]
