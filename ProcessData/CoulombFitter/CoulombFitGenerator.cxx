@@ -43,6 +43,7 @@ CoulombFitGenerator::CoulombFitGenerator(TString aFileLocationBase, TString aFil
   fShareLambdaParams(aShareLambdaParams),
   fAllShareSingleLambdaParam(aAllShareSingleLambdaParam),
   fFixd0(false),
+  fFixAllScattParams(false),
   fFitParamsPerPad(),
 
   fSharedAn(0),
@@ -128,6 +129,7 @@ CoulombFitGenerator::CoulombFitGenerator(TString aFileLocationBase, TString aFil
   fShareLambdaParams(aShareLambdaParams),
   fAllShareSingleLambdaParam(aAllShareSingleLambdaParam),
   fFixd0(false),
+  fFixAllScattParams(false),
   fFitParamsPerPad(),
 
   fSharedAn(0),
@@ -1164,10 +1166,20 @@ void CoulombFitGenerator::SetAllParameters()
   vector<vector<int> > tShares2dVec {{0,1},{2,3},{4,5}};
 
   //Always shared amongst all
-  SetSharedParameter(kRef0,fScattFitParams[0].GetStartValue(),fScattFitParams[0].GetLowerBound(),fScattFitParams[0].GetUpperBound());
-  SetSharedParameter(kImf0,fScattFitParams[1].GetStartValue(),fScattFitParams[1].GetLowerBound(),fScattFitParams[1].GetUpperBound());
-  if(fFixd0) SetSharedAndFixedParameter(kd0, 0.);
-  else SetSharedParameter(kd0,fScattFitParams[2].GetStartValue(),fScattFitParams[2].GetLowerBound(),fScattFitParams[2].GetUpperBound());
+  if(fFixAllScattParams)
+  {
+    SetSharedAndFixedParameter(kRef0, 0.);
+    SetSharedAndFixedParameter(kImf0, 0.);
+    SetSharedAndFixedParameter(kd0, 0.);
+  }
+  else
+  {
+    SetSharedParameter(kRef0,fScattFitParams[0].GetStartValue(),fScattFitParams[0].GetLowerBound(),fScattFitParams[0].GetUpperBound());
+    SetSharedParameter(kImf0,fScattFitParams[1].GetStartValue(),fScattFitParams[1].GetLowerBound(),fScattFitParams[1].GetUpperBound());
+
+    if(fFixd0) SetSharedAndFixedParameter(kd0, 0.);
+    else SetSharedParameter(kd0,fScattFitParams[2].GetStartValue(),fScattFitParams[2].GetLowerBound(),fScattFitParams[2].GetUpperBound());
+  }
 
   if(fAllShareSingleLambdaParam) SetSharedParameter(kLambda, fLambdaFitParams[0].GetStartValue(), fLambdaFitParams[0].GetLowerBound(), fLambdaFitParams[0].GetUpperBound());
 

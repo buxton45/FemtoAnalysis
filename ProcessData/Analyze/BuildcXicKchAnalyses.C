@@ -38,21 +38,15 @@ int main(int argc, char **argv)
 
   //-----Data
 
-<<<<<<< HEAD
+
   TString FileLocationBase = "~/Analysis/FemtoAnalysis/Results/Results_cXicKch_20170501/Results_cXicKch_20170501";
-=======
-  TString FileLocationBase = "~/Analysis/FemtoAnalysis/Results/Results_cXicKch_20170427/Results_cXicKch_20170427";
->>>>>>> cb615af59cd1ad0aed0d8c8709bddeea0bc9ee6d
   Analysis* XiKchP = new Analysis(FileLocationBase,kXiKchP,k0010);
   Analysis* AXiKchP = new Analysis(FileLocationBase,kAXiKchP,k0010);
   Analysis* XiKchM = new Analysis(FileLocationBase,kXiKchM,k0010);
   Analysis* AXiKchM = new Analysis(FileLocationBase,kAXiKchM,k0010);
 
-<<<<<<< HEAD
+
   TString SaveFileName = "~/Analysis/FemtoAnalysis/Results/Results_cXicKch_20170501/0010/Results_cXicKch_20170501_0010.root";
-=======
-  TString SaveFileName = "~/Analysis/FemtoAnalysis/Results/Results_cXicKch_20170427/0010/Results_cXicKch_20170427_0010.root";
->>>>>>> cb615af59cd1ad0aed0d8c8709bddeea0bc9ee6d
 
   //-----MC
 /*
@@ -137,11 +131,7 @@ int main(int argc, char **argv)
   bool bDrawMC = false;
 
   bool bSaveFigures = true;
-<<<<<<< HEAD
   TString tSaveFiguresLocation = "~/Analysis/FemtoAnalysis/Results/Results_cXicKch_20170501/0010/";
-=======
-  TString tSaveFiguresLocation = "~/Analysis/FemtoAnalysis/Results/Results_cXicKch_20170427/0010/";
->>>>>>> cb615af59cd1ad0aed0d8c8709bddeea0bc9ee6d
   //-------------------------------------------------------------------
 
   if(bContainsKStarCfs)
@@ -178,11 +168,12 @@ int main(int argc, char **argv)
       tNewNameAXiKchP += TString(cCentralityTags[AXiKchP->GetCentralityType()]);
     AXiKchP->GetKStarHeavyCf()->GetHeavyCf()->SetTitle(tNewNameAXiKchP);
 
-    TCanvas *canKStar = new TCanvas("canKStar","canKStar");
+    TCanvas *canKStar = new TCanvas("canKStar","canKStar", 1400, 500);
     canKStar->Divide(2,1);
+    gStyle->SetOptTitle(0);
 
     double tXMin = 0.0;
-    double tXMax = 0.30;
+    double tXMax = 0.15;
 
     double tYMin = 0.38;
     double tYMax = 1.7;
@@ -533,7 +524,7 @@ int main(int argc, char **argv)
       tNewNameAXiKchP += TString(cCentralityTags[AXiKchP->GetCentralityType()]);
     tCfXiKchM->SetTitle(tNewNameAXiKchP);
 
-    TCanvas *canKStar = new TCanvas("canKStar","canKStar");
+    TCanvas *canKStar = new TCanvas("canKStar","canKStar", 1400, 500);
     canKStar->Divide(2,1);
 
     gStyle->SetOptTitle(0);

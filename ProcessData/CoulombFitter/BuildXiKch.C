@@ -195,7 +195,7 @@ int main(int argc, char **argv)
   TString tFileDirectory = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cXicKch_20170501/";
   TString tFileLocationBase = tFileDirectory + TString("Results_cXicKch_20170501");
   bool bSaveImage = true;
-  bool bDrawMultipleCoulomb = false;
+  bool bDrawMultipleCoulomb = true;
   bool bDrawMultipleLambda = false;
 
   AnalysisType tAnType;
@@ -269,7 +269,7 @@ int main(int argc, char **argv)
 
   if(tAnType==kXiKchP || tAnType==kAXiKchM)
   {
-    //18 April 2017 (0010 only)
+
     if(tAnType==kXiKchP)
     {
       tLambda = 0.30;
@@ -280,6 +280,9 @@ int main(int argc, char **argv)
       tLambda = 0.20;
       tLambdaErr = 0.08;
     }
+
+//    tLambda = 0.3;
+
     tRadius = 3.04;
     tRadiusErr = 0.32;
 
@@ -297,7 +300,7 @@ int main(int argc, char **argv)
 
   if(tAnType==kAXiKchP || tAnType==kXiKchM)
   {
-    //18 April 2017 (0010 only)
+
     if(tAnType==kAXiKchP)
     {
       tLambda = 0.31;
@@ -308,6 +311,9 @@ int main(int argc, char **argv)
       tLambda = 0.23;
       tLambdaErr = 0.09;
     }
+
+//    tLambda = 0.7;
+
     tRadius = 4.12;
     tRadiusErr = 0.23;
 

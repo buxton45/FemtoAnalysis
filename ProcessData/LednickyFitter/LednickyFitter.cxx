@@ -133,7 +133,7 @@ double LednickyFitter::LednickyEq(double *x, double *par)
 }
 
 //________________________________________________________________________________________________________________
-void LednickyFitter::PrintCurrentParamValues(int &aNpar, double* aPar)
+void LednickyFitter::PrintCurrentParamValues(int aNpar, double* aPar)
 {
   for(int i=0; i<aNpar; i++) cout << "par[" << i << "] = " << aPar[i] << endl;
   cout << endl;
@@ -347,7 +347,7 @@ double LednickyFitter::GetPmlValue(double aNumContent, double aDenContent, doubl
 //________________________________________________________________________________________________________________
 void LednickyFitter::CalculateFitFunction(int &npar, double &chi2, double *par)
 {
-  if(fVerbose) PrintCurrentParamValues(npar,par);
+  if(fVerbose) PrintCurrentParamValues(fFitSharedAnalyses->GetNMinuitParams(),par);
 
 
   //---------------------------------------------------------

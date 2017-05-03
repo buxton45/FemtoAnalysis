@@ -2105,7 +2105,7 @@ double CoulombFitter::GetFitCfContentSerialv2(double aKStarMagMin, double aKStar
 }
 
 //________________________________________________________________________________________________________________
-void CoulombFitter::PrintCurrentParamValues(int &aNpar, double* aPar)
+void CoulombFitter::PrintCurrentParamValues(int aNpar, double* aPar)
 {
   for(int i=0; i<aNpar; i++) cout << "par[" << i << "] = " << aPar[i] << endl;
   cout << endl;
@@ -2158,7 +2158,7 @@ tTotalTimer.Start();
   fNCalls++;
 
   cout << "\tfNCalls = " << fNCalls << endl;
-  PrintCurrentParamValues(npar,par);
+  PrintCurrentParamValues(fFitSharedAnalyses->GetNMinuitParams(),par);
 /*
   if(fIncludeSingletAndTriplet)
   {

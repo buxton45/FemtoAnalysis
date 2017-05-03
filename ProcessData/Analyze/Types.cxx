@@ -193,22 +193,22 @@ const double* cALamKchPStartValues[3] = {cALamKchP_0010StartValues,cALamKchP_103
 */
 //________________________________________________________________________________________________________________
 
-const double cXiKchP_0010StartValues[6] = {0.19,4.36,-1.28,0.69,1.79,0.2};
+const double cXiKchP_0010StartValues[6] = {0.5,3.0,-0.5,0.5,0.,0.2};
 const double cXiKchP_1030StartValues[6] = {0.19,4.00,-1.28,0.69,1.79,0.2};
 const double cXiKchP_3050StartValues[6] = {0.19,3.00,-1.28,0.69,1.79,0.2};
 const double* cXiKchPStartValues[3] = {cXiKchP_0010StartValues,cXiKchP_1030StartValues,cXiKchP_3050StartValues};
 
-const double cAXiKchP_0010StartValues[6] = {0.49,3.94,0.09,0.27,7.79,0.2};
+const double cAXiKchP_0010StartValues[6] = {0.5,3.0,0.5,0.5,0.,0.2};
 const double cAXiKchP_1030StartValues[6] = {0.49,4.00,0.09,0.27,7.79,0.2};
 const double cAXiKchP_3050StartValues[6] = {0.49,3.00,0.09,0.27,7.79,0.2};
 const double* cAXiKchPStartValues[3] = {cAXiKchP_0010StartValues,cAXiKchP_1030StartValues,cAXiKchP_3050StartValues};
 
-const double cXiKchM_0010StartValues[6] = {0.49,3.94,0.09,0.27,7.79,0.2};
+const double cXiKchM_0010StartValues[6] = {0.5,3.0,0.5,0.5,0.,0.2};
 const double cXiKchM_1030StartValues[6] = {0.49,4.00,0.09,0.27,7.79,0.2};
 const double cXiKchM_3050StartValues[6] = {0.49,3.00,0.09,0.27,7.79,0.2};
 const double* cXiKchMStartValues[3] = {cXiKchM_0010StartValues,cXiKchM_1030StartValues,cXiKchM_3050StartValues};
 
-const double cAXiKchM_0010StartValues[6] = {0.19,4.36,-1.28,0.69,1.79,0.2};
+const double cAXiKchM_0010StartValues[6] = {0.5,3.0,-0.5,0.5,0.,0.2};
 const double cAXiKchM_1030StartValues[6] = {0.19,4.00,-1.28,0.69,1.79,0.2};
 const double cAXiKchM_3050StartValues[6] = {0.19,3.00,-1.28,0.69,1.79,0.2};
 const double* cAXiKchMStartValues[3] = {cAXiKchM_0010StartValues,cAXiKchM_1030StartValues,cAXiKchM_3050StartValues};

@@ -6,7 +6,7 @@ class SystematicAnalysis;
 SystematicsFileInfo GetFileInfo(int aNumber)
 {
   SystematicsFileInfo gInfoXiKch1;
-    gInfoXiKch1.resultsDate = "2017xxxx";  //Handled by LamKch
+    gInfoXiKch1.resultsDate = "20170501";
     gInfoXiKch1.dirNameModifierBase1 = "_ALLTRACKS_maxImpactXY_";
     gInfoXiKch1.modifierValues1 = vector<double> {1.92,2.4,2.88};
     gInfoXiKch1.dirNameModifierBase2 = "";
@@ -14,7 +14,7 @@ SystematicsFileInfo GetFileInfo(int aNumber)
     gInfoXiKch1.allCentralities = true;
 
   SystematicsFileInfo gInfoXiKch2;
-    gInfoXiKch2.resultsDate = "2017xxxx";  //Handled by LamKch
+    gInfoXiKch2.resultsDate = "20170501";
     gInfoXiKch2.dirNameModifierBase1 = "_ALLTRACKS_maxImpactZ_";
     gInfoXiKch2.modifierValues1 = vector<double> {2.4,3.0,3.6};
     gInfoXiKch2.dirNameModifierBase2 = "";
@@ -77,15 +77,31 @@ SystematicsFileInfo GetFileInfo(int aNumber)
     gInfoXiKch9.dirNameModifierBase2 = "";
     gInfoXiKch9.modifierValues2 = vector<double> {};
     gInfoXiKch9.allCentralities = true;
-
+/*
+  SystematicsFileInfo gInfoXiKch9;
+    gInfoXiKch9.resultsDate = "20170502";
+    gInfoXiKch9.dirNameModifierBase1 = "_ALLXIS_minDcaV0_";
+    gInfoXiKch9.modifierValues1 = vector<double> {0.10, 0.20, 0.30};
+    gInfoXiKch9.dirNameModifierBase2 = "";
+    gInfoXiKch9.modifierValues2 = vector<double> {};
+    gInfoXiKch9.allCentralities = true;
+*/
   SystematicsFileInfo gInfoXiKch10;
-    gInfoXiKch10.resultsDate = "2017xxxx";  //TODO
+    gInfoXiKch10.resultsDate = "20170501";
     gInfoXiKch10.dirNameModifierBase1 = "_ALLXIS_minDcaXiBac_";
-    gInfoXiKch10.modifierValues1 = vector<double> {0.02, 0.03, 0.04};
+    gInfoXiKch10.modifierValues1 = vector<double> {0.02, 0.03, 0.04}; //TODO
     gInfoXiKch10.dirNameModifierBase2 = "";
     gInfoXiKch10.modifierValues2 = vector<double> {};
     gInfoXiKch10.allCentralities = true;
-
+/*
+  SystematicsFileInfo gInfoXiKch10;
+    gInfoXiKch10.resultsDate = "20170502";
+    gInfoXiKch10.dirNameModifierBase1 = "_ALLXIS_minDcaXiBac_";
+    gInfoXiKch10.modifierValues1 = vector<double> {0.05, 0.1, 0.2}; //TODO
+    gInfoXiKch10.dirNameModifierBase2 = "";
+    gInfoXiKch10.modifierValues2 = vector<double> {};
+    gInfoXiKch10.allCentralities = true;
+*/
   SystematicsFileInfo gInfoXiKch11;
     gInfoXiKch11.resultsDate = "2017xxxx";  //Handled by LamKch
     gInfoXiKch11.dirNameModifierBase1 = "_AXi_minV0NegDaughterToPrimVertex_";
@@ -348,9 +364,9 @@ int main(int argc, char **argv)
   AnalysisType tAnTypeXiKch = kXiKchP;
   CentralityType tCentType = k0010;
 
-  TString tResultsDate_Save = "20170501";  //TODO
+  TString tResultsDate_Save = "20170501";  //TODO //TODO //TODO CHOOSE CORRECT minDcaXiBac AND minDcaV0!!!!!!!!!!!!!!
 
-  bool tSaveFile = false;
+  bool tSaveFile = true;
 
   TString tGeneralAnTypeNameXiKch;
   if(tAnTypeXiKch==kXiKchP || tAnTypeXiKch==kAXiKchM || tAnTypeXiKch==kXiKchM || tAnTypeXiKch==kAXiKchP) tGeneralAnTypeNameXiKch = "cXicKch";
@@ -361,7 +377,7 @@ int main(int argc, char **argv)
 
   td2dVec tAllCfValuesXiKch(0);
 
-  vector<double> tCutsXiKch {4,5,7,8,9,12,15,16};
+  vector<double> tCutsXiKch {1,2,4,5,7,8,9,10,12,15,16};
   for(unsigned int iCut=0; iCut<tCutsXiKch.size(); iCut++)
   {
     int tCut = tCutsXiKch[iCut];
@@ -435,7 +451,7 @@ int main(int argc, char **argv)
 
   td2dVec tAllCfValuesLamKch(0);
 
-  vector<double> tCutsLamKch {3, 4, 5, 8, 1, 9, 11};
+  vector<double> tCutsLamKch {5, 8, 1, 9, 11};
   for(unsigned int iCut=0; iCut<tCutsLamKch.size(); iCut++)
   {
     int tCut = -1*tCutsLamKch[iCut];

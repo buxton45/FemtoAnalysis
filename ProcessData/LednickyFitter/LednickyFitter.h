@@ -68,7 +68,7 @@ public:
   static double LednickyEq(double *x, double *par);
 
 
-  void PrintCurrentParamValues(int &aNpar, double* aPar);
+  void PrintCurrentParamValues(int aNpar, double* aPar);
 
   bool AreParamsSame(double *aCurrent, double *aNew, int aNEntries);
   double* AdjustLambdaParam(double *aParamSet, double aNewLambda, int aNEntries);
