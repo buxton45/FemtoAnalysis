@@ -90,7 +90,7 @@ public:
   void BuildPairKStar4dVecOnFly(TString aPairKStarNtupleDirName, TString aFileBaseName, int aNFiles, int aNbinsKStar, double aKStarMin, double aKStarMax);
 
   void BuildPairSample4dVec(int aNPairsPerKStarBin=16384, double aBinSize=0.01);
-  void UpdatePairRadiusParameters(double aNewRadius);
+  void UpdatePairRadiusParameter(double aNewRadius, int aAnalysisNumber);
   void SetUseStaticPairs(bool aUseStaticPairs=true, int aNPairsPerKStarBin=16384, double aBinSize=0.01);
 
   //Note:  Linear, Bilinear, and Trilinear will essentially be copies of TH1::, TH2::, and TH3::Interpolate
@@ -127,14 +127,18 @@ public:
   void PrintCurrentParamValues(int aNpar, double* aPar);
   bool AreParamsSame(double *aCurrent, double *aNew, int aNEntries);
 
-//TODO  double GetChi2Value(int aKStarBin, TH1* aCfToFit, double* aPar);
-//TODO  double GetPmlValue(double aNumContent, double aDenContent, double aCfContent);
+  double GetChi2Value(int aKStarBin, TH1* aCfToFit, double aFitVal);
+  double GetPmlValue(double aNumContent, double aDenContent, double aCfContent);
 
   void CalculateChi2PML(int &npar, double &chi2, double *par);  //TODO change default to true when matrices are ready
   vector<double> ApplyMomResCorrection(vector<double> &aCf, vector<double> &aKStarBinCenters, TH2* aMomResMatrix);
   void CalculateChi2PMLwMomResCorrection(int &npar, double &chi2, double *par);
 
-  void CalculateChi2(int &npar, double &chi2, double *par);
+  void ApplyNonFlatBackgroundCorrection(vector<double> &aCf, vector<double> &aKStarBinCenters, TF1* aNonFlatBgd);
+  void ApplyNormalization(double aNorm, td1dVec &aCf);
+  void CalculateFitFunction(int &npar, double &chi2, double *par);
+
+
   void CalculateFakeChi2(int &npar, double &chi2, double *par);
   double GetChi2(TH1* aFitHistogram);
   void DoFit();
@@ -156,18 +160,31 @@ public:
 
   void SetIncludeSingletAndTriplet(bool aIncludeSingletAndTriplet);
   void SetUseRandomKStarVectors(bool aUseRandomKStarVectors);
+
+  void SetApplyNonFlatBackgroundCorrection(bool aApply);
+  void SetNonFlatBgdFitType(NonFlatBgdFitType aNonFlatBgdFitType);
   void SetApplyMomResCorrection(bool aApplyMomResCorrection);
+  virtual void SetIncludeResidualCorrelations(bool aInclude);
+
+  void SetVerbose(bool aSet);
 
   double GetChi2();
   int GetNDF();
 
 protected:
+  bool fVerbose;
   bool fTurnOffCoulomb;
   bool fInterpHistsLoaded;
   bool fIncludeSingletAndTriplet;
   bool fUseRandomKStarVectors;
   bool fUseStaticPairs;
+
+  bool fApplyNonFlatBackgroundCorrection;
   bool fApplyMomResCorrection;
+  bool fIncludeResidualCorrelations;
+  bool fResidualsInitiated;
+  bool fReturnPrimaryWithResidualsToAnalyses;
+  NonFlatBgdFitType fNonFlatBgdFitType;
 
   int MasterRepeat;
 
@@ -177,6 +194,8 @@ protected:
   FitSharedAnalyses* fFitSharedAnalyses;
   TMinuit* fMinuit;
   int fNAnalyses;
+  td3dVec fCorrectedFitVecs;
+
   bool fAllOfSameCoulombType;
   CoulombType fCoulombType;
   WaveFunction* fWaveFunction;
@@ -185,7 +204,7 @@ protected:
   td4dVec fPairKStar4dVec; //1 3dVec for each of fNAnalyses.  Holds td1dVec = (KStarMag, KStarOut, KStarSide, KStarLong)
 
   int fNPairsPerKStarBin;
-  double fCurrentRadiusParameter;
+  td1dVec fCurrentRadii;
   td4dVec fPairSample4dVec; //1 3dVec for each of fNAnalyses.  Hold td1dVec = (KStarMag, RStarMag, Theta)
                             //  Will be initialized by sampling RStar vectors from Gaussian distributions with mu=0 and sigma=1
                             //  When R parameter is updated, I simply scale all RStar magnitudes
@@ -251,7 +270,13 @@ inline void CoulombFitter::SetTurnOffCoulomb(bool aTurnOffCoulomb) {fTurnOffCoul
 
 inline void CoulombFitter::SetIncludeSingletAndTriplet(bool aIncludeSingletAndTriplet) {fIncludeSingletAndTriplet = aIncludeSingletAndTriplet;}
 inline void CoulombFitter::SetUseRandomKStarVectors(bool aUseRandomKStarVectors) {fUseRandomKStarVectors = aUseRandomKStarVectors;}
+
+inline void CoulombFitter::SetApplyNonFlatBackgroundCorrection(bool aApply) {fApplyNonFlatBackgroundCorrection = aApply;}
+inline void CoulombFitter::SetNonFlatBgdFitType(NonFlatBgdFitType aNonFlatBgdFitType) {fNonFlatBgdFitType = aNonFlatBgdFitType;}
 inline void CoulombFitter::SetApplyMomResCorrection(bool aApplyMomResCorrection) {fApplyMomResCorrection = aApplyMomResCorrection;}
+inline void CoulombFitter::SetIncludeResidualCorrelations(bool aInclude) {fIncludeResidualCorrelations = aInclude;}
+
+inline void CoulombFitter::SetVerbose(bool aSet) {fVerbose=aSet;}
 
 inline double CoulombFitter::GetChi2() {return fChi2;}
 inline int CoulombFitter::GetNDF() {return fNDF;}

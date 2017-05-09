@@ -25,12 +25,19 @@ double gMaxFitKStar;
 
 //________________________________________________________________________________________________________________
 CoulombFitter::CoulombFitter():
+  fVerbose(true),
   fTurnOffCoulomb(false),
   fInterpHistsLoaded(false),
   fIncludeSingletAndTriplet(true),
   fUseRandomKStarVectors(false),
   fUseStaticPairs(false),
+
+  fApplyNonFlatBackgroundCorrection(false), //TODO change deault to true here AND in CoulombFitter
   fApplyMomResCorrection(false), //TODO change default to true here AND LednickyFitter
+  fIncludeResidualCorrelations(false),  //TODO change deault to true here AND in CoulombFitter
+  fResidualsInitiated(false),
+  fReturnPrimaryWithResidualsToAnalyses(false),
+  fNonFlatBgdFitType(kLinear),
 
   fNCalls(0),
   fFakeCf(0),
@@ -38,6 +45,7 @@ CoulombFitter::CoulombFitter():
   fFitSharedAnalyses(0),
   fMinuit(0),
   fNAnalyses(0),
+  fCorrectedFitVecs(0),
   fAllOfSameCoulombType(false),
   fCoulombType(kRepulsive),
   fWaveFunction(0),
@@ -45,7 +53,7 @@ CoulombFitter::CoulombFitter():
 
   fPairKStar4dVec(0),
   fNPairsPerKStarBin(16384),
-  fCurrentRadiusParameter(1.),
+  fCurrentRadii(0),
   fPairSample4dVec(0),
   fInterpHistFile(0), fInterpHistFileLednickyHFunction(0),
 
@@ -76,11 +84,15 @@ CoulombFitter::CoulombFitter():
   fParErrors(0)
 
 {
+  int tNFitPartialAnalysis = fFitSharedAnalyses->GetFitPairAnalysis(0)->GetNFitPartialAnalysis();
+  fCorrectedFitVecs.resize(fNAnalyses, td2dVec(tNFitPartialAnalysis));
+
   gRandom->SetSeed();
   fWaveFunction = new WaveFunction();
   omp_set_num_threads(3);
 
   fNAnalyses=1;
+  fCurrentRadii = td1dVec(fNAnalyses, 1.);
   fUseRandomKStarVectors = true;
   SetUseStaticPairs(true,16384);
 
@@ -90,12 +102,19 @@ CoulombFitter::CoulombFitter():
 
 //________________________________________________________________________________________________________________
 CoulombFitter::CoulombFitter(FitSharedAnalyses* aFitSharedAnalyses, double aMaxFitKStar):
+  fVerbose(true),
   fTurnOffCoulomb(false),
   fInterpHistsLoaded(false),
   fIncludeSingletAndTriplet(true),
   fUseRandomKStarVectors(false),
   fUseStaticPairs(false),
-  fApplyMomResCorrection(false), //TODO change default to true
+
+  fApplyNonFlatBackgroundCorrection(false), //TODO change deault to true here AND in CoulombFitter
+  fApplyMomResCorrection(false), //TODO change default to true here AND LednickyFitter
+  fIncludeResidualCorrelations(false),  //TODO change deault to true here AND in CoulombFitter
+  fResidualsInitiated(false),
+  fReturnPrimaryWithResidualsToAnalyses(false),
+  fNonFlatBgdFitType(kLinear),
 
   fNCalls(0),
   fFakeCf(0),
@@ -110,7 +129,7 @@ CoulombFitter::CoulombFitter(FitSharedAnalyses* aFitSharedAnalyses, double aMaxF
 
   fPairKStar4dVec(0),
   fNPairsPerKStarBin(16384),
-  fCurrentRadiusParameter(1.),
+  fCurrentRadii(fNAnalyses, 1.),
   fPairSample4dVec(0),
   fInterpHistFile(0), fInterpHistFileLednickyHFunction(0),
 
@@ -140,6 +159,9 @@ CoulombFitter::CoulombFitter(FitSharedAnalyses* aFitSharedAnalyses, double aMaxF
   fParErrors(0)
 
 {
+  int tNFitPartialAnalysis = fFitSharedAnalyses->GetFitPairAnalysis(0)->GetNFitPartialAnalysis();
+  fCorrectedFitVecs.resize(fNAnalyses, td2dVec(tNFitPartialAnalysis));
+
   gRandom->SetSeed();
 
   fWaveFunction = new WaveFunction();
@@ -750,7 +772,7 @@ tTimer.Start();
   //Create the source Gaussians
   double tRoot2 = sqrt(2.);  //need this scale to get 4 on denominator of exp in normal dist instead of 2
   double tRadius = 1.0;
-  fCurrentRadiusParameter = tRadius;
+  for(unsigned int i=0; i<fCurrentRadii.size(); i++) fCurrentRadii[i] = tRadius;
   std::default_random_engine generator (std::clock());  //std::clock() is seed
   std::normal_distribution<double> tROutSource(0.,tRoot2*tRadius);
   std::normal_distribution<double> tRSideSource(0.,tRoot2*tRadius);
@@ -818,24 +840,20 @@ tTimer.PrintInterval();
 }
 
 //________________________________________________________________________________________________________________
-void CoulombFitter::UpdatePairRadiusParameters(double aNewRadius)
+void CoulombFitter::UpdatePairRadiusParameter(double aNewRadius, int aAnalysisNumber)
 {
   //TODO allow for change of MU also, not just SIGMA!
-  double tScaleFactor = aNewRadius/fCurrentRadiusParameter;
-  fCurrentRadiusParameter = aNewRadius;
+  double tScaleFactor = aNewRadius/fCurrentRadii[aAnalysisNumber];
+  fCurrentRadii[aAnalysisNumber] = aNewRadius;
 
 //TODO Make sure I am grabbing from correct tBin.  Must work even when I rebin things
-  for(int iAnaly=0; iAnaly<fNAnalyses; iAnaly++)
+  for(int iKStarBin=0; iKStarBin<(int)fPairSample4dVec[aAnalysisNumber].size(); iKStarBin++)
   {
-    for(int iKStarBin=0; iKStarBin<(int)fPairSample4dVec[iAnaly].size(); iKStarBin++)
+    for(int iPair=0; iPair<(int)fPairSample4dVec[aAnalysisNumber][iKStarBin].size(); iPair++)
     {
-      for(int iPair=0; iPair<(int)fPairSample4dVec[iAnaly][iKStarBin].size(); iPair++)
-      {
-        fPairSample4dVec[iAnaly][iKStarBin][iPair][1] *= tScaleFactor;
-      }
+        fPairSample4dVec[aAnalysisNumber][iKStarBin][iPair][1] *= tScaleFactor;
     }
   }
-
 }
 
 //________________________________________________________________________________________________________________
@@ -1650,7 +1668,8 @@ double CoulombFitter::GetFitCfContentwStaticPairs(double aKStarMagMin, double aK
   // par[4] = d0
   // par[5] != Norm !!!!!!!!!!!!!!!!
 
-  UpdatePairRadiusParameters(par[1]);
+  if(abs(par[1]-fCurrentRadii[aAnalysisNumber]) > std::numeric_limits< double >::min()) UpdatePairRadiusParameter(par[1], aAnalysisNumber);
+//  UpdatePairRadiusParametersGlobal(par[1]);  //TODO
 
   //TODO make this general
   //This is messing up around aKStarMagMin = 0.29, or bin 57/58
@@ -1887,7 +1906,8 @@ double CoulombFitter::GetFitCfContentCompletewStaticPairs(double aKStarMagMin, d
   //par[7] = kd02
   //par[8] = kNorm
 
-  UpdatePairRadiusParameters(par[1]);
+  if(abs(par[1]-fCurrentRadii[aAnalysisNumber]) > std::numeric_limits< double >::min()) UpdatePairRadiusParameter(par[1], aAnalysisNumber);
+//  UpdatePairRadiusParametersGlobal(par[1]);  //TODO
 
   //TODO make this general
   //This is messing up around aKStarMagMin = 0.29, or bin 57/58
@@ -2130,13 +2150,11 @@ bool CoulombFitter::AreParamsSame(double *aCurrent, double *aNew, int aNEntries)
   return tAreSame;
 }
 
-/*
+
 //________________________________________________________________________________________________________________
-double CoulombFitter::GetChi2Value(int aKStarBin, TH1* aCfToFit, double* aPar)
+double CoulombFitter::GetChi2Value(int aKStarBin, TH1* aCfToFit, double aFitVal)
 {
-    double tKStar[1];
-    tKStar[0] = aCfToFit->GetXaxis()->GetBinCenter(aKStarBin);
-    double tChi = (aCfToFit->GetBinContent(aKStarBin) - LednickyEq(tKStar,aPar))/aCfToFit->GetBinError(aKStarBin);
+    double tChi = (aCfToFit->GetBinContent(aKStarBin) - aFitVal)/aCfToFit->GetBinError(aKStarBin);
     return tChi*tChi;
 }
 
@@ -2148,7 +2166,7 @@ double CoulombFitter::GetPmlValue(double aNumContent, double aDenContent, double
   double tChi2PML = -2.0*(tTerm1+tTerm2);
   return tChi2PML;
 }
-*/
+
 
 //________________________________________________________________________________________________________________
 void CoulombFitter::CalculateChi2PML(int &npar, double &chi2, double *par)
@@ -2691,61 +2709,37 @@ tTotalTimer.PrintInterval();
 
 
 //________________________________________________________________________________________________________________
-void CoulombFitter::CalculateChi2(int &npar, double &chi2, double *par)
+void CoulombFitter::ApplyNonFlatBackgroundCorrection(vector<double> &aCf, vector<double> &aKStarBinCenters, TF1* aNonFlatBgd)
 {
-ChronoTimer tTotalTimer;
-tTotalTimer.Start();
+  assert(aCf.size() == aKStarBinCenters.size());
+  for(unsigned int i=0; i<aCf.size(); i++)
+  {
+    aCf[i] = aCf[i]*aNonFlatBgd->Eval(aKStarBinCenters[i]);
+  }
+}
+
+
+//________________________________________________________________________________________________________________
+void CoulombFitter::ApplyNormalization(double aNorm, td1dVec &aCf)
+{
+  for(unsigned int i=0; i<aCf.size(); i++) aCf[i] *= aNorm;
+}
+
+
+
+//________________________________________________________________________________________________________________
+void CoulombFitter::CalculateFitFunction(int &npar, double &chi2, double *par)
+{
+  ChronoTimer tTotalTimer;
+  tTotalTimer.Start();
+
+  if(fVerbose)
+  {
+    cout << "\tfNCalls = " << fNCalls << endl;
+    PrintCurrentParamValues(fFitSharedAnalyses->GetNMinuitParams(),par);
+  }
 
   fNCalls++;
-
-  cout << "\tfNCalls = " << fNCalls << endl;
-
-  if(fIncludeSingletAndTriplet)
-  {
-    cout << "\t\tParameter update: " << endl;
-    cout << "\t\t\tpar[0] = Lambda = " << par[0] << endl;
-    cout << "\t\t\tpar[1] = Radius = " << par[1] << endl;
-
-    cout << "\t\t\tpar[2] = ReF0s  = " << par[2] << endl;
-    cout << "\t\t\tpar[3] = ImF0s  = " << par[3] << endl;
-    cout << "\t\t\tpar[4] = D0s    = " << par[4] << endl;
-
-    cout << "\t\t\tpar[5] = ReF0t  = " << par[5] << endl;
-    cout << "\t\t\tpar[6] = ImF0t  = " << par[6] << endl;
-    cout << "\t\t\tpar[7] = D0t    = " << par[7] << endl;
-
-    cout << "\t\t\tpar[8] = Norm1  = " << par[8] << endl;
-    cout << "\t\t\tpar[9] = Norm2  = " << par[9] << endl;
-    cout << "\t\t\tpar[10] = Norm3 = " << par[10] << endl;
-    cout << "\t\t\tpar[11] = Norm4 = " << par[11] << endl;
-    cout << "\t\t\tpar[12] = Norm5 = " << par[12] << endl;
-    cout << "\t\t\tpar[13] = Norm6 = " << par[13] << endl;
-    cout << "\t\t\tpar[14] = Norm7 = " << par[14] << endl;
-    cout << "\t\t\tpar[15] = Norm8 = " << par[15] << endl;
-    cout << "\t\t\tpar[16] = Norm9 = " << par[16] << endl;
-    cout << "\t\t\tpar[17] = Norm10= " << par[17] << endl;
-  }
-  else
-  {
-    cout << "\t\tParameter update: " << endl;
-    cout << "\t\t\tpar[0] = Lambda = " << par[0] << endl;
-    cout << "\t\t\tpar[1] = Radius = " << par[1] << endl;
-
-    cout << "\t\t\tpar[2] = ReF0  = " << par[2] << endl;
-    cout << "\t\t\tpar[3] = ImF0  = " << par[3] << endl;
-    cout << "\t\t\tpar[4] = D0    = " << par[4] << endl;
-
-    cout << "\t\t\tpar[8] = Norm1  = " << par[5] << endl;
-    cout << "\t\t\tpar[9] = Norm2  = " << par[6] << endl;
-    cout << "\t\t\tpar[10] = Norm3 = " << par[7] << endl;
-    cout << "\t\t\tpar[11] = Norm4 = " << par[8] << endl;
-    cout << "\t\t\tpar[12] = Norm5 = " << par[9] << endl;
-    cout << "\t\t\tpar[13] = Norm6 = " << par[10] << endl;
-    cout << "\t\t\tpar[14] = Norm7 = " << par[11] << endl;
-    cout << "\t\t\tpar[15] = Norm8 = " << par[12] << endl;
-    cout << "\t\t\tpar[16] = Norm9 = " << par[13] << endl;
-    cout << "\t\t\tpar[17] = Norm10= " << par[14] << endl;
-  }
 
   //--------------------------------------------------------------
 
@@ -2759,7 +2753,17 @@ tTotalTimer.Start();
   int tNbinsXToFitGlobal = fFitSharedAnalyses->GetFitPairAnalysis(0)->GetFitPartialAnalysis(0)->GetKStarCfLite()->Num()->FindBin(fMaxFitKStar);
   if(fFitSharedAnalyses->GetFitPairAnalysis(0)->GetFitPartialAnalysis(0)->GetKStarCfLite()->Num()->GetBinLowEdge(tNbinsXToFitGlobal) == fMaxFitKStar) tNbinsXToFitGlobal--;
 
-  vector<double> tCfContentUnNorm(tNbinsXToFitGlobal,0.);
+  int tNbinsXToBuildMomResCrctn=0, tNbinsXToBuildResiduals=0;
+  int tNbinsXToBuildGlobal;  // when applying momentum resolution corrections, many times you must go beyond fitting range to apply correction
+  if(fApplyMomResCorrection) tNbinsXToBuildMomResCrctn = fFitSharedAnalyses->GetFitPairAnalysis(0)->GetModelKStarTrueVsRecMixed()->GetNbinsX();
+  if(fIncludeResidualCorrelations) tNbinsXToBuildResiduals = fFitSharedAnalyses->GetFitPairAnalysis(0)->GetTransformMatrices()[0]->GetNbinsX();
+  tNbinsXToBuildGlobal = std::max({tNbinsXToBuildMomResCrctn, tNbinsXToBuildResiduals, tNbinsXToFitGlobal});
+
+
+  vector<double> tPrimaryFitCfContent(tNbinsXToBuildGlobal,0.);
+  vector<double> tNumContent(tNbinsXToBuildGlobal,0.);
+  vector<double> tDenContent(tNbinsXToBuildGlobal,0.);
+  vector<double> tKStarBinCenters(tNbinsXToBuildGlobal,0.);
 
   fChi2 = 0.;
   for(unsigned int i=0; i<fChi2Vec.size(); i++) {fChi2Vec[i] = 0.;}
@@ -2772,6 +2776,15 @@ tTotalTimer.Start();
   {
     FitPairAnalysis* tFitPairAnalysis = fFitSharedAnalyses->GetFitPairAnalysis(iAnaly);
     AnalysisType tAnalysisType = tFitPairAnalysis->GetAnalysisType();
+    int tNbinsXToBuild=0;
+    TH2* tMomResMatrix;
+    if(fApplyMomResCorrection)
+    {
+      tMomResMatrix = tFitPairAnalysis->GetModelKStarTrueVsRecMixed();
+      assert(tMomResMatrix);
+      tNbinsXToBuild = tMomResMatrix->GetNbinsX();
+      assert(tNbinsXToBuild == tNbinsXToBuildGlobal);
+    }
 
     if(!fAllOfSameCoulombType)
     {
@@ -2785,17 +2798,38 @@ tTotalTimer.Start();
     int tNFitPartialAnalysis = tFitPairAnalysis->GetNFitPartialAnalysis();
     for(int iPartAn=0; iPartAn<tNFitPartialAnalysis; iPartAn++)
     {
-//cout << "iPartAn = " << iPartAn << endl;
       FitPartialAnalysis* tFitPartialAnalysis = tFitPairAnalysis->GetFitPartialAnalysis(iPartAn);
       CfLite* tKStarCfLite = tFitPartialAnalysis->GetKStarCfLite();
-      TH1* tCfToFit = tKStarCfLite->Cf();
 
-      TAxis* tXaxis = tCfToFit->GetXaxis();
-      int tNbinsX = tCfToFit->GetNbinsX();
+      TH1* tNum = tKStarCfLite->Num();
+      TH1* tDen = tKStarCfLite->Den();
+      TH1* tCf = tKStarCfLite->Cf();
 
-      int tNbinsXToFit = tCfToFit->FindBin(fMaxFitKStar);
-      if(tCfToFit->GetBinLowEdge(tNbinsXToFit) == fMaxFitKStar) tNbinsXToFit--;
+      assert(tNum->GetXaxis()->GetBinWidth(1) == tDen->GetXaxis()->GetBinWidth(1));
+      assert(tNum->GetXaxis()->GetBinWidth(1) == tCf->GetXaxis()->GetBinWidth(1));
 
+      //make sure tNum and tDen have same bin size as tMomResMatrix
+      if(fApplyMomResCorrection)
+      {
+        assert(tNum->GetXaxis()->GetBinWidth(1) == tMomResMatrix->GetXaxis()->GetBinWidth(1));
+        assert(tNum->GetXaxis()->GetBinWidth(1) == tMomResMatrix->GetYaxis()->GetBinWidth(1));
+      }
+      //make sure tNum and tDen and tCf have same bin size as residuals
+      if(fIncludeResidualCorrelations)
+      {
+        assert(tNum->GetXaxis()->GetBinWidth(1) == tFitPairAnalysis->GetTransformMatrices()[0]->GetXaxis()->GetBinWidth(1));
+        assert(tNum->GetXaxis()->GetBinWidth(1) == tFitPairAnalysis->GetTransformMatrices()[0]->GetYaxis()->GetBinWidth(1));
+      }
+
+      //make sure tNum and tDen have same number of bins
+      assert(tNum->GetNbinsX() == tDen->GetNbinsX());
+
+      TAxis* tXaxisNum = tNum->GetXaxis();
+
+      int tNbinsX = tNum->GetNbinsX();
+
+      int tNbinsXToFit = tNum->FindBin(fMaxFitKStar);
+      if(tNum->GetBinLowEdge(tNbinsXToFit) == fMaxFitKStar) tNbinsXToFit--;
 
       if(tNbinsXToFit > tNbinsX) {tNbinsXToFit = tNbinsX;}  //in case I accidentally include an overflow bin in nbinsXToFit
       assert(tNbinsXToFit == tNbinsXToFitGlobal);
@@ -2848,43 +2882,73 @@ tTotalTimer.Start();
 
       for(int i=0; i<tNFitParams; i++)  //assure all parameters exist
       {
-        if(std::isnan(tPar[i])) {cout <<"CRASH:  In CalculateChi2, a tPar elemement " << i << " DNE!!!!!" << endl;}
+        if(std::isnan(tPar[i])) {cout <<"CRASH:  In CalculateChi2PML, a tPar elemement " << i << " DNE!!!!!" << endl;}
         assert(!std::isnan(tPar[i]));
       }
 
-      double tmp;
+      if(!fApplyMomResCorrection && !fIncludeResidualCorrelations) tNbinsXToBuild = tNbinsXToFit;
+
+      vector<double> tFitCfContent;
+      vector<double> tCorrectedFitCfContent;
 
       bool tAreParamsSame = AreParamsSame(tCurrentFitPar,tPar,tNFitParPerAnalysis);
-      for(int ix=1; ix <= tNbinsXToFit; ix++)
+      double tKStarMin, tKStarMax;
+      for(int ix=1; ix <= tNbinsXToBuild; ix++)
       {
-        double tKStarMin = tXaxis->GetBinLowEdge(ix);
-        double tKStarMax = tXaxis->GetBinLowEdge(ix+1);
+        tKStarMin = tXaxisNum->GetBinLowEdge(ix);
+        tKStarMax = tXaxisNum->GetBinLowEdge(ix+1);
 
-//        if(!tAreParamsSame) tCfContentUnNorm[ix-1] = GetFitCfContentComplete(tKStarMin,tKStarMax,tPar,iAnaly);
-//        tCfContentUnNorm[ix-1] = GetFitCfContentComplete(tKStarMin,tKStarMax,tPar,iAnaly);
+        tKStarBinCenters[ix-1] = tXaxisNum->GetBinCenter(ix);
+
+        tNumContent[ix-1] = tNum->GetBinContent(ix);
+        tDenContent[ix-1] = tDen->GetBinContent(ix);
+
         if(!tAreParamsSame)
         {
-          if(fUseStaticPairs && fIncludeSingletAndTriplet) tCfContentUnNorm[ix-1] = GetFitCfContentCompletewStaticPairs(tKStarMin,tKStarMax,tPar,iAnaly);
-          else if(fIncludeSingletAndTriplet) tCfContentUnNorm[ix-1] = GetFitCfContentComplete(tKStarMin,tKStarMax,tPar,iAnaly);
-          else if(fUseStaticPairs) tCfContentUnNorm[ix-1] = GetFitCfContentwStaticPairs(tKStarMin,tKStarMax,tPar,iAnaly);
-          else tCfContentUnNorm[ix-1] = GetFitCfContent(tKStarMin,tKStarMax,tPar,iAnaly);
+          if(fUseStaticPairs && fIncludeSingletAndTriplet) tPrimaryFitCfContent[ix-1] = GetFitCfContentCompletewStaticPairs(tKStarMin,tKStarMax,tPar,iAnaly);
+          else if(fIncludeSingletAndTriplet) tPrimaryFitCfContent[ix-1] = GetFitCfContentComplete(tKStarMin,tKStarMax,tPar,iAnaly);
+          else if(fUseStaticPairs) tPrimaryFitCfContent[ix-1] = GetFitCfContentwStaticPairs(tKStarMin,tKStarMax,tPar,iAnaly);
+          else tPrimaryFitCfContent[ix-1] = GetFitCfContent(tKStarMin,tKStarMax,tPar,iAnaly);
         }
+      }
 
-        double tCfContent;
-        if(fIncludeSingletAndTriplet) tCfContent = tPar[8]*tCfContentUnNorm[ix-1];
-        else tCfContent = tPar[5]*tCfContentUnNorm[ix-1];
+      if(fIncludeResidualCorrelations)
+      {
+        //TODO do stuff dealing with residual!  This is for later
+      }
+      else tFitCfContent = tPrimaryFitCfContent;
 
-        if(tCfToFit->GetBinContent(ix)!=0 && tCfContent!=0) //even if only in one single bin, t*Content=0 causes fChi2->nan
+      if(fApplyMomResCorrection) tCorrectedFitCfContent = ApplyMomResCorrection(tFitCfContent, tKStarBinCenters, tMomResMatrix);
+      else tCorrectedFitCfContent = tFitCfContent;
+
+      if(fApplyNonFlatBackgroundCorrection)
+      {
+        TF1* tNonFlatBgd = tFitPartialAnalysis->GetNonFlatBackground(fNonFlatBgdFitType/*,0.60,0.90*/);
+        ApplyNonFlatBackgroundCorrection(tCorrectedFitCfContent, tKStarBinCenters, tNonFlatBgd);
+      }
+
+      fCorrectedFitVecs[iAnaly][iPartAn] = tCorrectedFitCfContent;
+      if(fIncludeSingletAndTriplet) ApplyNormalization(tPar[8], tCorrectedFitCfContent);
+      else ApplyNormalization(tPar[5], tCorrectedFitCfContent);
+
+
+      for(int ix=0; ix < tNbinsXToFit; ix++)
+      {
+        if(tNumContent[ix]!=0 && tDenContent[ix]!=0 && tCorrectedFitCfContent[ix]!=0) //even if only in one single bin, t*Content=0 causes fChi2->nan
         {
-          tmp = (tCfToFit->GetBinContent(ix) - tCfContent)/tCfToFit->GetBinError(ix);
+          double tChi2 = 0.;
+          if(fFitSharedAnalyses->GetFitType() == kChi2PML) tChi2 = GetPmlValue(tNumContent[ix],tDenContent[ix],tCorrectedFitCfContent[ix]);
+          else if(fFitSharedAnalyses->GetFitType() == kChi2) tChi2 = GetChi2Value(ix+1,tCf,tCorrectedFitCfContent[ix]);
+          else tChi2 = 0.;
 
-          fChi2Vec[iAnaly] += tmp*tmp;
-          fChi2 += tmp*tmp;
+          fChi2Vec[iAnaly] += tChi2;
+          fChi2 += tChi2;
 
           fNpFitsVec[iAnaly]++;
           fNpFits++;
         }
       }
+
 
       delete[] tPar;
     } 
@@ -2902,142 +2966,24 @@ tTotalTimer.Start();
   chi2 = fChi2;
   if(fChi2 < fChi2GlobalMin) fChi2GlobalMin = fChi2;
 //gObjectTable->Print();
-cout << "fChi2 = " << fChi2 << endl;
-cout << "fChi2GlobalMin = " << fChi2GlobalMin << endl << endl;
 
-tTotalTimer.Stop();
-cout << "tTotalTimer: ";
-tTotalTimer.PrintInterval();
+  tTotalTimer.Stop();
+  if(fVerbose)
+  {
+    cout << "fChi2 = " << fChi2 << endl;
+    cout << "fChi2GlobalMin = " << fChi2GlobalMin << endl;
 
-
+    cout << "tTotalTimer: ";
+    tTotalTimer.PrintInterval();
+    cout << "____________________________________________" << endl;
+  }
+/*
   double *tParamsForHistograms = new double[tNFitParPerAnalysis];
   for(int i=0; i<tNFitParPerAnalysis; i++) tParamsForHistograms[i] = par[i];
   fFitSharedAnalyses->GetFitChi2Histograms()->FillHistograms(fChi2,tParamsForHistograms);
   delete[] tParamsForHistograms;
-}
-
-/*
-//________________________________________________________________________________________________________________
-void CoulombFitter::CalculateChi2(int &npar, double &chi2, double *par)
-{
-  fNCalls++;
-
-  cout << "\tfNCalls = " << fNCalls << endl;
-
-  cout << "\t\tParameter update: " << endl;
-  cout << "\t\t\tpar[0] = " << par[0] << endl;
-  cout << "\t\t\tpar[1] = " << par[1] << endl;
-  cout << "\t\t\tpar[2] = " << par[2] << endl;
-  cout << "\t\t\tpar[3] = " << par[3] << endl;
-  cout << "\t\t\tpar[4] = " << par[4] << endl;
-  cout << "\t\t\tpar[5] = " << par[5] << endl;
-  cout << "\t\t\tpar[6] = " << par[6] << endl;
-  cout << "\t\t\tpar[7] = " << par[7] << endl;
-  cout << "\t\t\tpar[8] = " << par[8] << endl;
-  cout << "\t\t\tpar[9] = " << par[9] << endl;
-  cout << "\t\t\tpar[10] = " << par[10] << endl;
-
-  fChi2 = 0.;
-  for(unsigned int i=0; i<fChi2Vec.size(); i++) {fChi2Vec[i] = 0.;}
-
-  fNpFits = 0.;
-  fNpFitsVec.resize(fNAnalyses);
-  for(unsigned int i=0; i<fNpFitsVec.size(); i++) {fNpFitsVec[i] = 0.;}
-
-  for(int iAnaly=0; iAnaly<fNAnalyses; iAnaly++)
-  {
-    FitPairAnalysis* tFitPairAnalysis = fFitSharedAnalyses->GetFitPairAnalysis(iAnaly);
-    AnalysisType tAnalysisType = tFitPairAnalysis->GetAnalysisType();
-
-    if(!fAllOfSameCoulombType)
-    {
-      //assert(tAnalysisType == kXiKchP || tAnalysisType == kAXiKchM || tAnalysisType == kXiKchM || tAnalysisType == kAXiKchP);
-      if(tAnalysisType == kXiKchP || tAnalysisType == kAXiKchM) fBohrRadius = -gBohrRadiusXiK; //attractive
-      else if(tAnalysisType == kXiKchM || tAnalysisType == kAXiKchP) fBohrRadius = gBohrRadiusXiK; //repulsive
-      else fBohrRadius = 1000000000;
-      fWaveFunction->SetCurrentAnalysisType(tAnalysisType);
-    }
-
-    int tNFitPartialAnalysis = tFitPairAnalysis->GetNFitPartialAnalysis();
-    for(int iPartAn=0; iPartAn<tNFitPartialAnalysis; iPartAn++)
-    {
-//cout << "iPartAn = " << iPartAn << endl;
-      FitPartialAnalysis* tFitPartialAnalysis = tFitPairAnalysis->GetFitPartialAnalysis(iPartAn);
-      CfLite* tKStarCfLite = tFitPartialAnalysis->GetKStarCfLite();
-      TH1* tCfToFit = tKStarCfLite->Cf();
-
-      TAxis* tXaxis = tCfToFit->GetXaxis();
-      int tNbinsX = tCfToFit->GetNbinsX();
-      int tNbinsXToFit = tCfToFit->FindBin(fMaxFitKStar);
-      if(tNbinsXToFit > tNbinsX) {tNbinsXToFit = tNbinsX;}  //in case I accidentally include an overflow bin in nbinsXToFit
-
-      int tLambdaMinuitParamNumber = tFitPartialAnalysis->GetFitParameter(kLambda)->GetMinuitParamNumber();
-      int tRadiusMinuitParamNumber = tFitPartialAnalysis->GetFitParameter(kRadius)->GetMinuitParamNumber();
-      int tRef0MinuitParamNumber = tFitPartialAnalysis->GetFitParameter(kRef0)->GetMinuitParamNumber();
-      int tImf0MinuitParamNumber = tFitPartialAnalysis->GetFitParameter(kImf0)->GetMinuitParamNumber();
-      int td0MinuitParamNumber = tFitPartialAnalysis->GetFitParameter(kd0)->GetMinuitParamNumber();
-
-      int tRef02MinuitParamNumber = tFitPartialAnalysis->GetFitParameter(kRef02)->GetMinuitParamNumber();
-      int tImf02MinuitParamNumber = tFitPartialAnalysis->GetFitParameter(kImf02)->GetMinuitParamNumber();
-      int td02MinuitParamNumber = tFitPartialAnalysis->GetFitParameter(kd02)->GetMinuitParamNumber();
-
-
-      int tNormMinuitParamNumber = tFitPartialAnalysis->GetFitNormParameter()->GetMinuitParamNumber();
-
-      int tNFitParams = tFitPartialAnalysis->GetNFitParams() + 1;  //the +1 accounts for the normalization parameter
-      assert(tNFitParams == 9);
-      double *tPar = new double[tNFitParams];
-
-      tPar[0] = par[tLambdaMinuitParamNumber];
-      tPar[1] = par[tRadiusMinuitParamNumber];
-      tPar[2] = par[tRef0MinuitParamNumber];
-      tPar[3] = par[tImf0MinuitParamNumber];
-      tPar[4] = par[td0MinuitParamNumber];
-      tPar[5] = par[tRef02MinuitParamNumber];
-      tPar[6] = par[tImf02MinuitParamNumber];
-      tPar[7] = par[td02MinuitParamNumber];
-      tPar[8] = par[tNormMinuitParamNumber];
-
-      for(int i=0; i<tNFitParams; i++)  //assure all parameters exist
-      {
-        if(std::isnan(tPar[i])) {cout <<"CRASH:  In CalculateChi2, a tPar elemement " << i << " DNE!!!!!" << endl;}
-        assert(!std::isnan(tPar[i]));
-      }
-
-      double tmp;
-
-      for(int ix=1; ix <= tNbinsXToFit; ix++)
-      {
-        double tKStarMin = tXaxis->GetBinLowEdge(ix);
-        double tKStarMax = tXaxis->GetBinLowEdge(ix+1);
-
-        double tCfContentUnNorm = GetFitCfContentComplete(tKStarMin,tKStarMax,tPar,iAnaly);
-        double tCfContent = tPar[8]*tCfContentUnNorm;
-
-        if(tCfToFit->GetBinContent(ix)!=0 && tCfContent!=0) //even if only in one single bin, t*Content=0 causes fChi2->nan
-        {
-          tmp = (tCfToFit->GetBinContent(ix) - tCfContent)/tCfToFit->GetBinError(ix);
-
-          fChi2Vec[iAnaly] += tmp*tmp;
-          fChi2 += tmp*tmp;
-
-          fNpFitsVec[iAnaly]++;
-          fNpFits++;
-        }
-      }
-
-      delete[] tPar;
-    }
-
-  }
-
-  chi2 = fChi2;
-  if(fChi2 < fChi2GlobalMin) fChi2GlobalMin = fChi2;
-//gObjectTable->Print();
-cout << "fChi2 = " << fChi2 << endl;
-cout << "fChi2GlobalMin = " << fChi2GlobalMin << endl << endl;
-}
 */
+}
 
 
 //________________________________________________________________________________________________________________
@@ -3536,6 +3482,16 @@ void CoulombFitter::DoFit()
     fFitSharedAnalyses->GetFitPairAnalysis(iAnaly)->SetFit(CreateFitFunction("fit",iAnaly));
   }
 */
+
+  for(int iAnaly=0; iAnaly<fNAnalyses; iAnaly++)
+  {
+    for(int iPartAn=0; iPartAn<fFitSharedAnalyses->GetFitPairAnalysis(iAnaly)->GetNFitPartialAnalysis(); iPartAn++)
+    {
+      fFitSharedAnalyses->GetFitPairAnalysis(iAnaly)->GetFitPartialAnalysis(iPartAn)->SetCorrectedFitVec(fCorrectedFitVecs[iAnaly][iPartAn]);
+    }
+  }
+
+
 }
 
 

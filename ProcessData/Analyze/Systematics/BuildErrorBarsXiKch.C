@@ -21,7 +21,7 @@ SystematicsFileInfo GetFileInfo(int aNumber)
 
 
   SystematicsFileInfo gInfoXiKch3;
-    gInfoXiKch3.resultsDate = "2017xxxx";  //TODO
+    gInfoXiKch3.resultsDate = "20170501";
     gInfoXiKch3.dirNameModifierBase1 = "_ALLXIS_maxDcaV0Daughters_";
     gInfoXiKch3.modifierValues1 = vector<double> {0.30,0.40,0.50};
     gInfoXiKch3.dirNameModifierBase2 = "";
@@ -68,22 +68,25 @@ SystematicsFileInfo GetFileInfo(int aNumber)
     gInfoXiKch8.modifierValues2 = vector<double> {};
     gInfoXiKch8.allCentralities = true;
 
+/*
   SystematicsFileInfo gInfoXiKch9;
     gInfoXiKch9.resultsDate = "20170429";
     gInfoXiKch9.dirNameModifierBase1 = "_ALLXIS_minDcaV0_";
-    gInfoXiKch9.modifierValues1 = vector<double> {0.05, 0.10, 0.20};
-    gInfoXiKch9.dirNameModifierBase2 = "";
-    gInfoXiKch9.modifierValues2 = vector<double> {};
-    gInfoXiKch9.allCentralities = true;
-/*
-  SystematicsFileInfo gInfoXiKch9;
-    gInfoXiKch9.resultsDate = "20170502";
-    gInfoXiKch9.dirNameModifierBase1 = "_ALLXIS_minDcaV0_";
-    gInfoXiKch9.modifierValues1 = vector<double> {0.10, 0.20, 0.30};
+    gInfoXiKch9.modifierValues1 = vector<double> {0.05, 0.10, 0.20};  //TODO
     gInfoXiKch9.dirNameModifierBase2 = "";
     gInfoXiKch9.modifierValues2 = vector<double> {};
     gInfoXiKch9.allCentralities = true;
 */
+  SystematicsFileInfo gInfoXiKch9;
+    gInfoXiKch9.resultsDate = "20170502";
+    gInfoXiKch9.dirNameModifierBase1 = "_ALLXIS_minDcaV0_";
+    gInfoXiKch9.modifierValues1 = vector<double> {0.10, 0.20, 0.30};  //TODO
+    gInfoXiKch9.dirNameModifierBase2 = "";
+    gInfoXiKch9.modifierValues2 = vector<double> {};
+    gInfoXiKch9.allCentralities = true;
+
+
+/*
   SystematicsFileInfo gInfoXiKch10;
     gInfoXiKch10.resultsDate = "20170501";
     gInfoXiKch10.dirNameModifierBase1 = "_ALLXIS_minDcaXiBac_";
@@ -91,7 +94,7 @@ SystematicsFileInfo GetFileInfo(int aNumber)
     gInfoXiKch10.dirNameModifierBase2 = "";
     gInfoXiKch10.modifierValues2 = vector<double> {};
     gInfoXiKch10.allCentralities = true;
-/*
+*/
   SystematicsFileInfo gInfoXiKch10;
     gInfoXiKch10.resultsDate = "20170502";
     gInfoXiKch10.dirNameModifierBase1 = "_ALLXIS_minDcaXiBac_";
@@ -99,9 +102,11 @@ SystematicsFileInfo GetFileInfo(int aNumber)
     gInfoXiKch10.dirNameModifierBase2 = "";
     gInfoXiKch10.modifierValues2 = vector<double> {};
     gInfoXiKch10.allCentralities = true;
-*/
+
+
+
   SystematicsFileInfo gInfoXiKch11;
-    gInfoXiKch11.resultsDate = "2017xxxx";  //TODO
+    gInfoXiKch11.resultsDate = "20170501";
     gInfoXiKch11.dirNameModifierBase1 = "_AXi_minV0NegDaughterToPrimVertex_";
     gInfoXiKch11.modifierValues1 = vector<double> {0.05,0.10,0.20};
     gInfoXiKch11.dirNameModifierBase2 = "";
@@ -117,7 +122,7 @@ SystematicsFileInfo GetFileInfo(int aNumber)
     gInfoXiKch12.allCentralities = true;
 
   SystematicsFileInfo gInfoXiKch13;
-    gInfoXiKch13.resultsDate = "2017xxxx";  //TODO
+    gInfoXiKch13.resultsDate = "20170501";
     gInfoXiKch13.dirNameModifierBase1 = "_minAvgSepTrackBacPion_";
     gInfoXiKch13.modifierValues1 = vector<double> {7.0, 8.0, 9.0};
     gInfoXiKch13.dirNameModifierBase2 = "";
@@ -125,7 +130,7 @@ SystematicsFileInfo GetFileInfo(int aNumber)
     gInfoXiKch13.allCentralities = true;
 
   SystematicsFileInfo gInfoXiKch14;
-    gInfoXiKch14.resultsDate = "2017xxxx";  //TODO
+    gInfoXiKch14.resultsDate = "20170501";
     gInfoXiKch14.dirNameModifierBase1 = "_minAvgSepTrackPos_";
     gInfoXiKch14.modifierValues1 = vector<double> {7.0, 8.0, 9.0};
     gInfoXiKch14.dirNameModifierBase2 = "";
@@ -233,9 +238,9 @@ int main(int argc, char **argv)
   AnalysisType tAnType = kXiKchP;
   CentralityType tCentType = k0010;
 
-  TString tResultsDate_Save = "20170429";  //TODO //TODO //TODO CHOOSE CORRECT minDcaXiBac and minDcaV0!!!!!!!!!!!!!!
+  TString tResultsDate_Save = "20170501";  //TODO //TODO //TODO CHOOSE CORRECT minDcaXiBac and minDcaV0!!!!!!!!!!!!!!
 
-  bool tSaveFile = false;
+  bool tSaveFile = true;
 
   TString tGeneralAnTypeName;
   if(tAnType==kXiKchP || tAnType==kAXiKchM || tAnType==kXiKchM || tAnType==kAXiKchP) tGeneralAnTypeName = "cXicKch";
@@ -251,7 +256,7 @@ int main(int argc, char **argv)
   for(int iCut=1; iCut<=tMaxCut; iCut++)
   {
     int tCut = iCut;
-    if(iCut==3 || iCut==6 || iCut==11 || iCut==13 || iCut==14) continue;
+    if(iCut==6) continue;
     cout << "tCut = " << tCut << endl;
 
     SystematicsFileInfo tFileInfo = GetFileInfo(tCut);

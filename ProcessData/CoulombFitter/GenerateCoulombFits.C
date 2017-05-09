@@ -44,7 +44,7 @@ int main(int argc, char **argv)
   if(ApplyMomResCorrection) tSaveNameModifier += TString("_MomResCrctn");
   if(ApplyNonFlatBackgroundCorrection) tSaveNameModifier += TString("_NonFlatBgdCrctn");
   if(tAllShareSingleLambdaParam) tSaveNameModifier += TString("_SingleLamParam");
-  CoulombFitGenerator* tXiKchP = new CoulombFitGenerator(tFileLocationBase,tFileLocationBaseMC,tAnType, tCentType, tAnRunType, tNPartialAnalysis, tGenType, tShareLambdaParams, tAllShareSingleLambdaParam, TString(""), IncludeSingletAndTriplet);
+  CoulombFitGenerator* tXiKchP = new CoulombFitGenerator(tFileLocationBase,tFileLocationBaseMC, tAnType, tCentType, tAnRunType, tNPartialAnalysis, tGenType, tShareLambdaParams, tAllShareSingleLambdaParam, TString(""), IncludeSingletAndTriplet);
 //  CoulombFitGenerator* tXiKchP = new CoulombFitGenerator(tFileLocationBase, tFileLocationBaseMC, tAnType,{k0010,k1030}, tAnRunType, tNPartialAnalysis, tGenType, tShareLambdaParams, tAllShareSingleLambdaParam, TString(""), IncludeSingletAndTriplet);
 //  tXiKchP->SetRadiusStartValues({3.0,4.0,5.0});
 //  tXiKchP->SetRadiusLimits({{0.,10.},{0.,10.},{0.,10.}});

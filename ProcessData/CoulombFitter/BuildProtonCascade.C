@@ -8,8 +8,8 @@ CoulombFitter *myFitter = NULL;
 //______________________________________________________________________________
 void fcn(Int_t &npar, Double_t *gin, Double_t &f, Double_t *par, Int_t iflag)
 {
-//  myFitter->CalculateChi2PML(npar,f,par);
-  myFitter->CalculateChi2(npar,f,par);
+  myFitter->CalculateChi2PML(npar,f,par);
+//  myFitter->CalculateChi2(npar,f,par);
 //  myFitter->CalculateFakeChi2(npar,f,par);
 }
 

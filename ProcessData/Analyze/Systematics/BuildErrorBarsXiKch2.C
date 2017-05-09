@@ -23,7 +23,7 @@ SystematicsFileInfo GetFileInfo(int aNumber)
 
 
   SystematicsFileInfo gInfoXiKch3;
-    gInfoXiKch3.resultsDate = "2017xxxx";  //Handled by LamKch
+    gInfoXiKch3.resultsDate = "20170501";
     gInfoXiKch3.dirNameModifierBase1 = "_ALLXIS_maxDcaV0Daughters_";
     gInfoXiKch3.modifierValues1 = vector<double> {0.30,0.40,0.50};
     gInfoXiKch3.dirNameModifierBase2 = "";
@@ -47,7 +47,7 @@ SystematicsFileInfo GetFileInfo(int aNumber)
     gInfoXiKch5.allCentralities = true;
 
   SystematicsFileInfo gInfoXiKch6;  //TODO this is set to 0, so no systematics
-    gInfoXiKch6.resultsDate = "2017xxxx";  //Handled by LamKch
+    gInfoXiKch6.resultsDate = "2017xxxx";
     gInfoXiKch6.dirNameModifierBase1 = "_ALLXIS_minCosPointingAngleV0_";
     gInfoXiKch6.modifierValues1 = vector<double> {0.9992, 0.9993, 0.9994};
     gInfoXiKch6.dirNameModifierBase2 = "";
@@ -106,7 +106,7 @@ SystematicsFileInfo GetFileInfo(int aNumber)
 */
 
   SystematicsFileInfo gInfoXiKch11;
-    gInfoXiKch11.resultsDate = "2017xxxx";  //Handled by LamKch
+    gInfoXiKch11.resultsDate = "20170501";
     gInfoXiKch11.dirNameModifierBase1 = "_AXi_minV0NegDaughterToPrimVertex_";
     gInfoXiKch11.modifierValues1 = vector<double> {0.05,0.10,0.20};
     gInfoXiKch11.dirNameModifierBase2 = "";
@@ -122,7 +122,7 @@ SystematicsFileInfo GetFileInfo(int aNumber)
     gInfoXiKch12.allCentralities = true;
 
   SystematicsFileInfo gInfoXiKch13;
-    gInfoXiKch13.resultsDate = "2017xxxx";  //TODO
+    gInfoXiKch13.resultsDate = "20170501";
     gInfoXiKch13.dirNameModifierBase1 = "_minAvgSepTrackBacPion_";
     gInfoXiKch13.modifierValues1 = vector<double> {7.0, 8.0, 9.0};
     gInfoXiKch13.dirNameModifierBase2 = "";
@@ -130,7 +130,7 @@ SystematicsFileInfo GetFileInfo(int aNumber)
     gInfoXiKch13.allCentralities = true;
 
   SystematicsFileInfo gInfoXiKch14;
-    gInfoXiKch14.resultsDate = "2017xxxx";  //Handled by LamKch
+    gInfoXiKch14.resultsDate = "20170501";
     gInfoXiKch14.dirNameModifierBase1 = "_minAvgSepTrackPos_";
     gInfoXiKch14.modifierValues1 = vector<double> {7.0, 8.0, 9.0};
     gInfoXiKch14.dirNameModifierBase2 = "";
@@ -380,7 +380,7 @@ int main(int argc, char **argv)
 
   td2dVec tAllCfValuesXiKch(0);
 
-  vector<double> tCutsXiKch {1,2,4,5,7,8,9,10,12,15,16};
+  vector<double> tCutsXiKch {1,2,3,4,5,7,8,9,10,11,12,13,14,15,16};
   for(unsigned int iCut=0; iCut<tCutsXiKch.size(); iCut++)
   {
     int tCut = tCutsXiKch[iCut];
@@ -454,7 +454,7 @@ int main(int argc, char **argv)
 
   td2dVec tAllCfValuesLamKch(0);
 
-  vector<double> tCutsLamKch {5, 1, 11};
+  vector<double> tCutsLamKch {};
   for(unsigned int iCut=0; iCut<tCutsLamKch.size(); iCut++)
   {
     int tCut = -1*tCutsLamKch[iCut];

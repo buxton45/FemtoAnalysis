@@ -182,7 +182,7 @@ int main(int argc, char **argv)
 
   TString tFileDirectory = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cXicKch_20170501/";
   TString tFileLocationBase = tFileDirectory + TString("Results_cXicKch_20170501");
-  bool bSaveImage = false;
+  bool bSaveImage = true;
   bool bDrawErrorBands = true;
 
   AnalysisType tAnType;
