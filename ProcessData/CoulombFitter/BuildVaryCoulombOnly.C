@@ -118,10 +118,7 @@ TCanvas* DrawKStarCfs(TH1* aData, TH1* aDatawSysErrors, AnalysisType aAnType=kXi
   else if(aAnType==kXiKchM || aAnType==kAXiKchP) tColor=kBlue+1;
   else tColor=1;
 
-//  tColorTransparent = TColor::GetColorTransparent(tColor,0.2);  //TODO why doesn't this work?
-  if(aAnType==kXiKchP || aAnType==kAXiKchM) tColorTransparent=kRed-10;
-  else if(aAnType==kXiKchM || aAnType==kAXiKchP) tColorTransparent=kBlue-10;
-  else tColor=1;
+  tColorTransparent = TColor::GetColorTransparent(tColor,0.2);  //TODO transparency doesn't work with .eps!!!!!!!!!!
 
   aData->GetXaxis()->SetTitle("#it{k}* (GeV/#it{c})");
   aData->GetXaxis()->SetRangeUser(tXLow,tXHigh);
@@ -329,21 +326,18 @@ int main(int argc, char **argv)
       tXErrLow[i-1] = 0.;
       tXErrHigh[i-1] = 0.;
 
-cout << "tCoulombOnlyHistSampleLow->GetBinContent(i)= " << tCoulombOnlyHistSampleLow->GetBinContent(i) << endl;
-cout << "tCoulombOnlyHistSampleHigh->GetBinContent(i)= " << tCoulombOnlyHistSampleHigh->GetBinContent(i) << endl << endl;
-
       tYErrLow[i-1] = TMath::Abs(tCoulombOnlyHistSampleHigh->GetBinContent(i) - tCoulombOnlyHistSampleLow->GetBinContent(i));
       tYErrHigh[i-1] = 0.;
     }
 
     tCoulombOnlyGraph = new TGraphAsymmErrors(tNPoints, tX, tY, tXErrLow, tXErrHigh, tYErrLow, tYErrHigh);
     tCoulombOnlyGraph->SetFillStyle(1000);
-    tCoulombOnlyGraph->SetFillColor(kMagenta-9);
+    tCoulombOnlyGraph->SetFillColor(TColor::GetColorTransparent(kMagenta,0.2));
 
     tCoulombOnlyGraph->Draw("3");
     tCan->Update();
 
-//    delete tFitter2;
+    delete tFitter2;
   }
   else
   {
@@ -397,7 +391,7 @@ cout << "tRadius = " << tRadius << endl;
   if(bSaveImage)
   {
     TString tSaveName = tFileDirectory;
-    tSaveName += cAnalysisBaseTags[tAnType] + TString(cCentralityTags[tCentType]) + TString("DataVsCoulombOnly.eps"); 
+    tSaveName += cAnalysisBaseTags[tAnType] + TString(cCentralityTags[tCentType]) + TString("DataVsCoulombOnly.pdf"); 
     tCan->SaveAs(tSaveName);
   }
 
