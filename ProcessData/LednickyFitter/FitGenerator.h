@@ -96,6 +96,7 @@ public:
 
   double GetChi2();
 
+  TH1* GetKStarCf(int aAnalysisNumber);
 
 protected:
   TString fSaveLocationBase;
@@ -149,5 +150,7 @@ inline void FitGenerator::SetUseLambdaLimits(bool aUse) {SetUseLimits(fLambdaFit
 inline void FitGenerator::SetFitType(FitType aFitType) {fSharedAn->SetFitType(aFitType);}
 
 inline double FitGenerator::GetChi2() {return fLednickyFitter->GetChi2();}
+
+inline TH1* FitGenerator::GetKStarCf(int aAnalysisNumber) {return fSharedAn->GetKStarCfHeavy(aAnalysisNumber)->GetHeavyCfClone();}
 #endif
 

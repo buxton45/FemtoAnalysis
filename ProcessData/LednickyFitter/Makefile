@@ -26,7 +26,7 @@ CFLAGS = $(shell root-config --cflags) -Wall -std=c++11 -I${ANALYZE_DIR} -I${LED
 MY_LIBS = $(addprefix build/, FitParameter.o FitChi2Histograms.o FitPartialAnalysis.o FitPairAnalysis.o FitSharedAnalyses.o MathematicaSession.o WaveFunction.o ChargedResidualCf.o LednickyFitter.o FitGenerator.o CfLite.o CfHeavy.o Types.o Faddeeva.o FitSystematicAnalysis.o CanvasPartition.o)
 
 
-all: runLamKchP runLamKchPTest runCompareKchFix2 runFits runTest runGenerator runScattParamValues runLamKchPvsKchM
+all: runLamKchP runLamKchPTest runCompareKchFix2 runFits runTest runGenerator runCompareIgnoreOnFlyStatus runScattParamValues runLamKchPvsKchM
 
 runLamKchP: ${MY_LIBS} BuildLamKchP.C
 	g++ BuildLamKchP.C ${MY_LIBS} -I${INCDIR} -o runLamKchP -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS)
@@ -45,6 +45,9 @@ runTest: ${MY_LIBS} test.C
 
 runGenerator: ${MY_LIBS} GenerateFits.C
 	g++ GenerateFits.C ${MY_LIBS} -I${INCDIR} -o runGenerator -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS)
+
+runCompareIgnoreOnFlyStatus: ${MY_LIBS} CompareIgnoreOnFlyStatus.C
+	g++ CompareIgnoreOnFlyStatus.C ${MY_LIBS} -I${INCDIR} -o runCompareIgnoreOnFlyStatus -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS)
 
 runScattParamValues: ${MY_LIBS} ScattParamValues.C
 	g++ ScattParamValues.C ${MY_LIBS} -I${INCDIR} -o runScattParamValues -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS)
