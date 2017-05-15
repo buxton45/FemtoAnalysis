@@ -7,6 +7,7 @@
 #include "TColor.h"
 #include <TStyle.h>
 #include "TPaveText.h"
+#include <TLatex.h>
 #include "TGraphAsymmErrors.h"
 
 CoulombFitter *myFitter = NULL;
@@ -85,33 +86,6 @@ TCanvas* DrawKStarCfs(TH1* aData, TH1* aDatawSysErrors, AnalysisType aAnType=kXi
   gStyle->SetOptStat(0);
   gStyle->SetOptTitle(0);
 
-  TString tTextSysInfo = TString("Pb-Pb #sqrt{#it{s}_{NN}} = 2.76 TeV");
-//  TString tTextAlicePrelim = TString("ALICE Preliminary");
-  double tSysInfoXMin, tSysInfoXMax, tSysInfoYMin, tSysInfoYMax;
-  if(aAnType==kXiKchP || aAnType==kAXiKchM)
-  {
-    tSysInfoXMin = 0.60;
-    tSysInfoXMax = 0.89;
-
-    tSysInfoYMin = 0.80;
-    tSysInfoYMax = 0.875;
-  }
-
-  if(aAnType==kXiKchM || aAnType==kAXiKchP)
-  {
-    tSysInfoXMin = 0.60;
-    tSysInfoXMax = 0.89;
-
-    tSysInfoYMin = 0.70;
-    tSysInfoYMax = 0.775;
-  }
-
-  TPaveText* returnText = new TPaveText(tSysInfoXMin,tSysInfoYMin,tSysInfoXMax,tSysInfoYMax, "NDC");
-    returnText->SetFillColor(0);
-    returnText->SetBorderSize(0);
-    returnText->SetTextAlign(22);
-    returnText->AddText(tTextSysInfo);
-
   int tColor;
   Int_t tColorTransparent;
   if(aAnType==kXiKchP || aAnType==kAXiKchM) tColor=kRed+1;
@@ -151,7 +125,7 @@ TCanvas* DrawKStarCfs(TH1* aData, TH1* aDatawSysErrors, AnalysisType aAnType=kXi
   tLine->SetLineColor(TColor::GetColorTransparent(kGray,0.75));
   tLine->Draw();
 
-  returnText->Draw();
+//  returnText->Draw();
 
   return tCan;
 }
@@ -282,9 +256,10 @@ int main(int argc, char **argv)
   TH1* tCoulombOnlyHistSampleHigh;
   TH1* tCoulombOnlyHistSampleLow;
   TGraphAsymmErrors* tCoulombOnlyGraph;
+
   if(bDrawErrorBands)
   {
-    tNbinsK = 30;
+    tNbinsK = 15;
     tKMin = 0.;
     tKMax = 0.15;
     double tBinSize = (tKMax-tKMin)/tNbinsK;
@@ -374,6 +349,7 @@ cout << "tRadius = " << tRadius << endl;
     }
     tCan->Update();
   }
+
   tDatawSysErrors->Draw("e2psame");
   tData->Draw("ex0same");
 
@@ -387,11 +363,19 @@ cout << "tRadius = " << tRadius << endl;
   else if(tAnType==kXiKchM || tAnType==kAXiKchP) tLeg = new TLegend(0.25,0.35,0.55,0.60);
     tLeg->AddEntry(tData,tTextAnType,"p");
     tLeg->Draw();
+
+
+  TLatex *tTex = new TLatex(0.09, 2.3, "Pb-Pb #sqrt{#it{s}_{NN}} = 2.76 TeV");
+    tTex->SetTextFont(42);
+    tTex->SetTextSize(0.05);
+    tTex->SetLineWidth(2);
+    tTex->Draw();
+    tTex->DrawLatex(0.02,2.3,"ALICE Preliminary");
   //-------------------------------------------------------------
   if(bSaveImage)
   {
     TString tSaveName = tFileDirectory;
-    tSaveName += cAnalysisBaseTags[tAnType] + TString(cCentralityTags[tCentType]) + TString("DataVsCoulombOnly.pdf"); 
+    tSaveName += cAnalysisBaseTags[tAnType] + TString(cCentralityTags[tCentType]) + TString("_DataVsCoulombOnly.pdf"); 
     tCan->SaveAs(tSaveName);
   }
 
