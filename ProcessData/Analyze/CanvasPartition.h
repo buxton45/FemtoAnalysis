@@ -45,10 +45,10 @@ public:
 
   //Since I am using templates, the following functions need to be defined in this header, i.e. below
   template<typename T>
-  void AddGraph(int aNx, int aNy, T* aGraph, TString tPadLegendName, int aMarkerStyle=20, int aMarkerColor=1, double aMarkerSize=0.75, TString aDrawOption="psames");
+  void AddGraph(int aNx, int aNy, T* aGraph, TString tPadLegendName, int aMarkerStyle=20, int aMarkerColor=1, double aMarkerSize=0.75, TString aDrawOption="psames", float aLabelSize=0.15, float aLabelOffset=0.005);
 
   template<typename T>
-  void SetupAxis(AxisType aAxisType, T* aGraph, float aXscale, float aYscale, float aLabelSize=0.15/*0.25*/, float aLabelOffSet=0.005/*0.007*/);
+  void SetupAxis(AxisType aAxisType, T* aGraph, float aXscale, float aYscale, float aLabelSize=/*0.15*/0.175, float aLabelOffSet=0.005/*0.007*/);
 
   td2dTPadVec BuildPartition(TCanvas *aCanvas,const Int_t Nx = 2,const Int_t Ny = 2,
                          Float_t lMargin = 0.15, Float_t rMargin = 0.05,
@@ -110,7 +110,7 @@ inline double CanvasPartition::GetYScaleFactor(int aNx, int aNy) {return fYScale
 
 //________________________________________________________________________________________________________________
 template<typename T>
-inline void CanvasPartition::AddGraph(int aNx, int aNy, T* aGraph, TString tPadLegendName, int aMarkerStyle, int aMarkerColor, double aMarkerSize, TString aDrawOption)
+inline void CanvasPartition::AddGraph(int aNx, int aNy, T* aGraph, TString tPadLegendName, int aMarkerStyle, int aMarkerColor, double aMarkerSize, TString aDrawOption, float aLabelSize, float aLabelOffSet)
 {
   int tPosition = aNx + aNy*fNx;
 
@@ -118,8 +118,8 @@ inline void CanvasPartition::AddGraph(int aNx, int aNy, T* aGraph, TString tPadL
   //border to be drawn in the TCanvas.  For now, disable for TF1
   if(!(typeid(aGraph) == typeid(TF1*)))
   {
-    SetupAxis(kXaxis,aGraph,fXScaleFactors[aNx][aNy],fYScaleFactors[aNx][aNy]);
-    SetupAxis(kYaxis,aGraph,fXScaleFactors[aNx][aNy],fYScaleFactors[aNx][aNy]);
+    SetupAxis(kXaxis,aGraph,fXScaleFactors[aNx][aNy],fYScaleFactors[aNx][aNy], aLabelSize, aLabelOffSet);
+    SetupAxis(kYaxis,aGraph,fXScaleFactors[aNx][aNy],fYScaleFactors[aNx][aNy], aLabelSize, aLabelOffSet);
   }
 
   aGraph->SetMarkerStyle(aMarkerStyle);

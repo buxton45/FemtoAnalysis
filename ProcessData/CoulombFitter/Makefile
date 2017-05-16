@@ -32,7 +32,7 @@ CFLAGS = $(shell root-config --cflags) -pthread -Wno-deprecated-declarations -st
 
 MY_LIBS = $(addprefix build/, MathematicaSession.o WaveFunction.o ChargedResidualCf.o CoulombFitter.o GlobalCoulombFitter.o LednickyFitter.o GeneralFitter.o SimpleFitter.o CoulombFitGenerator.o InterpolationHistograms.o FitChi2Histograms.o FitParameter.o FitPartialAnalysis.o FitPairAnalysis.o FitSharedAnalyses.o CfLite.o CfHeavy.o Types.o Faddeeva.o CanvasPartition.o)
 
-BINARIES = runTest runTest2 runFullTest runGlobalCoulomb runXiKch runVaryCoulomb runCoulombGenerator runBuildInterpolationHistograms runFitLambda runSimpleFitter runProtonCascade runManualFitting
+BINARIES = runTest runTest2 runFullTest runGlobalCoulomb runXiKch runVaryCoulomb runWPCFVaryCoulomb runWPCFStrongInfluence runCoulombGenerator runBuildInterpolationHistograms runFitLambda runSimpleFitter runProtonCascade runManualFitting
 
 all : $(BINARIES)
 
@@ -53,6 +53,12 @@ runXiKch: ${MY_LIBS} BuildXiKch.C
 
 runVaryCoulomb: ${MY_LIBS} BuildVaryCoulombOnly.C	
 	${CXX} BuildVaryCoulombOnly.C ${MY_LIBS} -I${INCDIR} -o runVaryCoulomb -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS) -o $@
+
+runWPCFVaryCoulomb: ${MY_LIBS} BuildWPCFVaryCoulombOnly.C	
+	${CXX} BuildWPCFVaryCoulombOnly.C ${MY_LIBS} -I${INCDIR} -o runWPCFVaryCoulomb -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS) -o $@
+
+runWPCFStrongInfluence: ${MY_LIBS} BuildWPCFStrongInfluence.C	
+	${CXX} BuildWPCFStrongInfluence.C ${MY_LIBS} -I${INCDIR} -o runWPCFStrongInfluence -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS) -o $@
 
 runCoulombGenerator: ${MY_LIBS} GenerateCoulombFits.C	
 	${CXX} GenerateCoulombFits.C ${MY_LIBS} -I${INCDIR} -o runCoulombGenerator -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS) -o $@

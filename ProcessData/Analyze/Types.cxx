@@ -16,7 +16,7 @@ const int cPDGValues[18] = {2212,-2212,211,-211,311,321,-321,3122,-3122,3212,-32
 //enum AnalysisType
 const char* const cAnalysisBaseTags[17] = {"LamK0", "ALamK0", "LamKchP", "ALamKchP", "LamKchM", "ALamKchM", "XiKchP", "AXiKchP", "XiKchM", "AXiKchM", "LamLam", "ALamALam", "LamALam", "LamPiP", "ALamPiP", "LamPiM", "ALamPiM"};
 
-const char* const cAnalysisRootTags[17] = {"#LambdaK^{0}_{S}", "#bar{#Lambda}K^{0}_{S}", "#LambdaK+", "#bar{#Lambda}K+", "#LambdaK-", "#bar{#Lambda}K-", "#XiK+", "#bar{#Xi}K+", "#XiK-", "#bar{#Xi}K-", "#Lambda#Lambda", "#bar{#Lambda}#bar{#Lambda}", "#Lambda#bar{#Lambda}", "#Lambda#pi+", "#bar{#Lambda}#pi+", "#Lambda#pi-", "#bar{#Lambda}#pi-"};
+const char* const cAnalysisRootTags[17] = {"#LambdaK^{0}_{S}", "#bar{#Lambda}K^{0}_{S}", "#LambdaK+", "#bar{#Lambda}K+", "#LambdaK-", "#bar{#Lambda}K-", "#Xi-K+", "#bar{#Xi}+K+", "#Xi-K-", "#bar{#Xi}+K-", "#Lambda#Lambda", "#bar{#Lambda}#bar{#Lambda}", "#Lambda#bar{#Lambda}", "#Lambda#pi+", "#bar{#Lambda}#pi+", "#Lambda#pi-", "#bar{#Lambda}#pi-"};
 
 //enum BFieldType
 const char* const cBFieldTags[7] = {"_FemtoPlus", "_FemtoMinus", "_Bp1", "_Bp2", "_Bm1", "_Bm2", "_Bm3"};

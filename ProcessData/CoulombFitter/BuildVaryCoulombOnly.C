@@ -22,40 +22,6 @@ void fcn(Int_t &npar, Double_t *gin, Double_t &f, Double_t *par, Int_t iflag)
 }
 
 //________________________________________________________________________________________________________________
-TPaveText* CreateParamValuesText(AnalysisType tAnType, td1dVec &tParams, td1dVec &tParamErrors, bool bPrintErrors)
-{
-  TPaveText* tText;
-  if(tAnType==kXiKchP || tAnType==kAXiKchM) tText = new TPaveText(0.60,0.35,0.85,0.75,"NDC");
-  else if(tAnType==kXiKchM || tAnType==kAXiKchP) tText = new TPaveText(0.60,0.30,0.85,0.60,"NDC");
-  else assert(0);
-
-  tText->SetFillColor(0);
-  tText->SetBorderSize(0);
-  tText->SetTextAlign(22);
-  tText->SetTextFont(63);
-  tText->SetTextSize(20);
-
-  if(!bPrintErrors)
-  {
-    tText->AddText(TString::Format("#lambda = %0.2f",tParams[0]));
-    tText->AddText(TString::Format("R = %0.2f",tParams[1]));
-    tText->AddText(TString::Format("Re[f0] = %0.2f",tParams[2]));
-    tText->AddText(TString::Format("Im[f0] = %0.2f",tParams[3]));
-    tText->AddText(TString::Format("d0 = %0.2f",tParams[4]));
-  }
-  else
-  {
-    tText->AddText(TString::Format("#lambda = %0.2f #pm %0.2f",tParams[0], tParamErrors[0]));
-    tText->AddText(TString::Format("R = %0.2f #pm %0.2f",tParams[1], tParamErrors[1]));
-    tText->AddText(TString::Format("Re[f0] = %0.2f #pm %0.2f",tParams[2], tParamErrors[2]));
-    tText->AddText(TString::Format("Im[f0] = %0.2f #pm %0.2f",tParams[3], tParamErrors[3]));
-    tText->AddText(TString::Format("d0 = %0.2f #pm %0.2f",tParams[4], tParamErrors[4]));
-  }
-
-  return tText;
-}
-
-//________________________________________________________________________________________________________________
 TCanvas* DrawKStarCfs(TH1* aData, TH1* aDatawSysErrors, AnalysisType aAnType=kXiKchP, CentralityType aCentType=k0010)
 {
   TString tCanvasName = TString("canKStarCfwFits");
@@ -159,10 +125,10 @@ int main(int argc, char **argv)
   AnalysisType tAnType;
   CentralityType tCentType;
 
-  tAnType = kXiKchP;
+  //tAnType = kXiKchP;
   //tAnType = kAXiKchM;
 
-  //tAnType = kXiKchM;
+  tAnType = kXiKchM;
   //tAnType = kAXiKchP;
 
   tCentType = k0010;
@@ -282,6 +248,18 @@ int main(int argc, char **argv)
 
     double tLambdaLowCurve = 0.1;
     double tRadiusLowCurve = 10.;
+
+    if(tAnType==kAXiKchP || tAnType==kXiKchM)
+    {
+      double tTmpLambda = tLambdaHighCurve;
+      double tTmpRadius = tRadiusHighCurve;
+
+      tLambdaHighCurve = tLambdaLowCurve;
+      tRadiusHighCurve = tRadiusLowCurve;
+
+      tLambdaLowCurve = tTmpLambda;
+      tRadiusLowCurve = tTmpRadius;
+    }
 
     tCoulombOnlyHistSampleHigh = tFitter2->CreateFitHistogramSampleComplete("tCoulombOnlyHistSampleHigh", tAnType, tNbinsK, tKMin, tKMax, tLambdaHighCurve, tRadiusHighCurve, 0., 0., 0., 0., 0., 0., tNorm);
     tCoulombOnlyHistSampleLow = tFitter2->CreateFitHistogramSampleComplete("tCoulombOnlyHistSampleLow", tAnType, tNbinsK, tKMin, tKMax, tLambdaLowCurve, tRadiusLowCurve, 0., 0., 0., 0., 0., 0., tNorm);
