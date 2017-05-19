@@ -117,6 +117,8 @@ int main(int argc, char **argv)
 
   bool bContainsPurity = true;
   bool bContainsKStarCfs = true;
+  bool bCheckErrorBarConstruction = true;
+
   bool bContainsAvgSepCfs = false;
 
   bool bRunChi2Test = false;
@@ -145,6 +147,16 @@ int main(int argc, char **argv)
     AXiKchP->GetKStarHeavyCf()->Rebin(2);
     XiKchM->GetKStarHeavyCf()->Rebin(2);
     AXiKchM->GetKStarHeavyCf()->Rebin(2);
+
+    if(bCheckErrorBarConstruction)
+    {
+      XiKchP->BuildKStarCfwErrorsByHand();
+      AXiKchP->BuildKStarCfwErrorsByHand();
+      XiKchM->BuildKStarCfwErrorsByHand();
+      AXiKchM->BuildKStarCfwErrorsByHand();
+
+      cout << endl << "Construction of error bars by hand agrees with ROOT using Sumw2!!!!!!!!!!!!!!!!!!!!!!!!" << endl << endl;
+    }
 
     TLegend* leg1 = new TLegend(0.60,0.12,0.89,0.32);
       leg1->SetFillColor(0);

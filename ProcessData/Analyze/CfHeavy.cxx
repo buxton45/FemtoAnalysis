@@ -33,6 +33,7 @@ CfHeavy::CfHeavy(TString aHeavyCfName, TString aHeavyCfTitle, vector<CfLite*> &a
   fCfLiteCollection(aCfLiteCollection),
   fCollectionSize(aCfLiteCollection.size()),
   fHeavyCf(0),
+  fHeavyCfwErrorsByHand(0),
   fMinNorm(aMinNorm),
   fMaxNorm(aMaxNorm)
 
@@ -72,6 +73,9 @@ CfHeavy::CfHeavy(const CfHeavy& aHeavy) :
   if(aHeavy.fHeavyCf) fHeavyCf = (TH1*)aHeavy.fHeavyCf->Clone();
   else fHeavyCf = 0;
 
+  if(aHeavy.fHeavyCfwErrorsByHand) fHeavyCfwErrorsByHand = (TH1*)aHeavy.fHeavyCfwErrorsByHand->Clone();
+  else fHeavyCfwErrorsByHand = 0;
+
 }
 
 //________________________________________________________________________________________________________________
@@ -94,6 +98,9 @@ CfHeavy& CfHeavy::operator=(const CfHeavy& aHeavy)
 
   if(aHeavy.fHeavyCf) fHeavyCf = (TH1*)aHeavy.fHeavyCf->Clone();
   else fHeavyCf = 0;
+
+  if(aHeavy.fHeavyCfwErrorsByHand) fHeavyCfwErrorsByHand = (TH1*)aHeavy.fHeavyCfwErrorsByHand->Clone();
+  else fHeavyCfwErrorsByHand = 0;
 
   return *this;
 }
@@ -298,6 +305,45 @@ TH1* CfHeavy::GetSimplyAddedNumDen(TString aReturnName, bool aGetNum)
 
   if(!tReturnHist->GetSumw2N()) {tReturnHist->Sumw2();}
   return tReturnHist;
+}
+
+//________________________________________________________________________________________________________________
+void CfHeavy::BuildHeavyCfwErrorsByHand()
+{
+  fHeavyCfwErrorsByHand = (TH1*)fHeavyCf->Clone(TString::Format("%swErrorsByHand", fHeavyCfName.Data()));
+  fHeavyCfwErrorsByHand->SetTitle(TString::Format("%swErrorsByHand", fHeavyCfTitle.Data()));
+  fHeavyCfwErrorsByHand->Sumw2(false);  //This doesn't matter, because after SetBinError is called, this is set to true
+
+  for(unsigned int i=0; i<fCfLiteCollection.size(); i++) fCfLiteCollection[i]->BuildCfwErrorsByHand();
+  for(unsigned int i=1; i<fCfLiteCollection.size(); i++) assert(fCfLiteCollection[i-1]->CfwErrorsByHand()->GetNbinsX() == fCfLiteCollection[i]->CfwErrorsByHand()->GetNbinsX());
+
+  int tNbins = fCfLiteCollection[0]->CfwErrorsByHand()->GetNbinsX();
+  assert(tNbins == fHeavyCfwErrorsByHand->GetNbinsX());
+
+  double tSumOfWeights = 0.;
+  for(unsigned int iCf=0; iCf<fCfLiteCollection.size(); iCf++) tSumOfWeights += fCfLiteCollection[iCf]->GetNumScale();
+
+  for(int iBin=1; iBin<=tNbins; iBin++)
+  {
+    double tWeight=0., tVarSq=0., tCfVal=0., tCfErr=0., tTerm1=0.;
+    for(unsigned int iCf=0; iCf<fCfLiteCollection.size(); iCf++)
+    {
+      tWeight = fCfLiteCollection[iCf]->GetNumScale();
+      tCfVal = fCfLiteCollection[iCf]->CfwErrorsByHand()->GetBinContent(iBin);
+      tCfErr = fCfLiteCollection[iCf]->CfwErrorsByHand()->GetBinError(iBin);
+
+      tTerm1 = (1./tSumOfWeights)*tWeight*tCfVal*tCfErr;
+      tVarSq += tTerm1*tTerm1;
+    }
+    assert(abs(sqrt(tVarSq) - fHeavyCf->GetBinError(iBin)) < std::numeric_limits< double >::min());
+    fHeavyCfwErrorsByHand->SetBinError(iBin, sqrt(tVarSq));
+  }
+
+  for(int i=1; i<=tNbins; i++)
+  {
+    assert(abs(fHeavyCfwErrorsByHand->GetBinContent(i) - fHeavyCf->GetBinContent(i)) < std::numeric_limits< double >::min());
+    assert(abs(fHeavyCfwErrorsByHand->GetBinError(i) - fHeavyCf->GetBinError(i)) < std::numeric_limits< double >::min());
+  }
 }
 
 

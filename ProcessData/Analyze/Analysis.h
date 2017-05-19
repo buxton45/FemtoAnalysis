@@ -180,6 +180,9 @@ public:
   void GetMCKchPurity(bool aBeforePairCut);
   bool AreTrainResults();
 
+  void BuildKStarCfwErrorsByHand();
+  TH1* GetKStarCfwErrorsByHand();
+
 private:
   AnalysisRunType fAnalysisRunType;
   bool fCombineConjugates;
@@ -312,6 +315,9 @@ inline double Analysis::GetNKStarNumEntries() {return fNKStarNumEntries;}
 inline TH1* Analysis::GetPart1MassFail() {return fPart1MassFail;}
 
 inline bool Analysis::AreTrainResults() {if(fAnalysisRunType==kTrain || fAnalysisRunType==kTrainSys) return true;}
+
+inline void Analysis::BuildKStarCfwErrorsByHand() {fKStarHeavyCf->BuildHeavyCfwErrorsByHand();}
+inline TH1* Analysis::GetKStarCfwErrorsByHand() {fKStarHeavyCf->BuildHeavyCfwErrorsByHand(); return fKStarHeavyCf->GetHeavyCfwErrorsByHand();}
 
 #endif
 

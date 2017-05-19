@@ -15,6 +15,7 @@
 #include <math.h>
 #include <vector>
 #include <assert.h>
+#include <limits>
 
 #include "TF1.h"
 #include "TH1F.h"
@@ -50,6 +51,8 @@ public:
   void Rebin(int aRebinFactor);
   void Rebin(int aRebinFactor, double aMinNorm, double aMaxNorm);
 
+  void BuildCfwErrorsByHand();
+
 
   //inline-----------------------
   TString CfName();
@@ -58,6 +61,7 @@ public:
   TH1* Num();
   TH1* Den();
   TH1* Cf();
+  TH1* CfwErrorsByHand();
 
   double GetMinNorm();
   double GetMaxNorm();
@@ -72,7 +76,7 @@ private:
   TH1 *fNum, *fDen, *fCf;
   double fMinNorm, fMaxNorm;
   double fNumScale, fDenScale;
-
+  TH1* fCfwErrorsByHand; //ensure Sumw2 is doing its job
 
 
 
@@ -88,6 +92,7 @@ inline TString CfLite::CfTitle() {return fCfTitle;}
 inline TH1* CfLite::Num() {return fNum;}
 inline TH1* CfLite::Den() {return fDen;}
 inline TH1* CfLite::Cf() {return fCf;}
+inline TH1* CfLite::CfwErrorsByHand() {return fCfwErrorsByHand;}
 
 inline double CfLite::GetMinNorm() {return fMinNorm;}
 inline double CfLite::GetMaxNorm() {return fMaxNorm;}

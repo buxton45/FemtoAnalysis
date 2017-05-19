@@ -60,11 +60,13 @@ public:
 
   TH1* GetSimplyAddedNumDen(TString aReturnName, bool aGetNum);
 
+  void BuildHeavyCfwErrorsByHand();
+
   //inline-----------------------
   TH1* GetHeavyCf();
   TH1* GetHeavyCfClone();
 
-
+  TH1* GetHeavyCfwErrorsByHand();
 private:
 
   TString fHeavyCfName;
@@ -74,6 +76,7 @@ private:
   int fCollectionSize;
 
   TH1* fHeavyCf;
+  TH1* fHeavyCfwErrorsByHand;
   double fMinNorm, fMaxNorm;
 
 
@@ -88,7 +91,7 @@ private:
 
 inline TH1* CfHeavy::GetHeavyCf() {return fHeavyCf;}
 inline TH1* CfHeavy::GetHeavyCfClone() {return (TH1*)fHeavyCf->Clone();}
-
+inline TH1* CfHeavy::GetHeavyCfwErrorsByHand() {return fHeavyCfwErrorsByHand;}
 
 
 

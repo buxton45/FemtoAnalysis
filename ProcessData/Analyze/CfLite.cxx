@@ -36,7 +36,8 @@ CfLite::CfLite(TString aName, TString aTitle, TH1* aNum, TH1* aDen, double aMinN
   fMinNorm(aMinNorm),
   fMaxNorm(aMaxNorm),
   fNumScale(0),
-  fDenScale(0)
+  fDenScale(0),
+  fCfwErrorsByHand(0)
 
 {
 
@@ -79,6 +80,9 @@ CfLite::CfLite(const CfLite& aLite) :
 
   if(aLite.fCf) fCf = (TH1*)aLite.fCf->Clone(); 
   else fCf = 0;
+
+  if(aLite.fCfwErrorsByHand) fCfwErrorsByHand = (TH1*)aLite.fCfwErrorsByHand->Clone(); 
+  else fCfwErrorsByHand = 0;
 }
 
 //________________________________________________________________________________________________________________
@@ -102,6 +106,9 @@ CfLite& CfLite::operator=(const CfLite& aLite)
 
   if(aLite.fCf) fCf = (TH1*)aLite.fCf->Clone(); 
   else fCf = 0;
+
+  if(aLite.fCfwErrorsByHand) fCfwErrorsByHand = (TH1*)aLite.fCfwErrorsByHand->Clone(); 
+  else fCfwErrorsByHand = 0;
 
   return *this;
 }
@@ -165,6 +172,35 @@ void CfLite::Rebin(int aRebinFactor, double aMinNorm, double aMaxNorm)
 }
 
 
+//________________________________________________________________________________________________________________
+void CfLite::BuildCfwErrorsByHand()
+{
+  fCfwErrorsByHand = (TH1*)fCf->Clone(TString::Format("%swErrorsByHand", fCfName.Data()));
+  fCfwErrorsByHand->SetDirectory(0);
+  fCfwErrorsByHand->SetTitle(TString::Format("%swErrorsByHand", fCfTitle.Data()));
+  fCfwErrorsByHand->Sumw2(false);  //This doesn't matter, because after SetBinError is called, this is set to true
+
+  double tVarSq = 0.;
+  double tTerm1=0., tTerm2=0., tCfContent=0.;
+  for(int i=1; i<=fCfwErrorsByHand->GetNbinsX(); i++)
+  {
+    assert(abs(fNum->GetBinError(i) - sqrt(fNum->GetBinContent(i))) < std::numeric_limits< double >::min());
+    assert(abs(fDen->GetBinError(i) - sqrt(fDen->GetBinContent(i))) < std::numeric_limits< double >::min());
+
+    tTerm1 = fNum->GetBinError(i)/fNum->GetBinContent(i);
+    tTerm1 *= tTerm1;
+
+    tTerm2 = fDen->GetBinError(i)/fDen->GetBinContent(i);
+    tTerm2 *= tTerm2;
+
+    tCfContent = fCfwErrorsByHand->GetBinContent(i);
+    tCfContent *= tCfContent;
+
+    tVarSq = tCfContent*(tTerm1+tTerm2);
+    assert(abs(sqrt(tVarSq) - fCf->GetBinError(i)) < std::numeric_limits< double >::min());
+    fCfwErrorsByHand->SetBinError(i, sqrt(tVarSq));
+  }
+}
 
 
 

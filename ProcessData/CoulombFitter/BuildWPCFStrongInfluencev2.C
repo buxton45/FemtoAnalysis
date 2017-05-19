@@ -21,26 +21,71 @@ void fcn(Int_t &npar, Double_t *gin, Double_t &f, Double_t *par, Int_t iflag)
 }
 
 //________________________________________________________________________________________________________________
-TPaveText* CreateParamValuesText(AnalysisType tAnType, td1dVec &tParams)
+void CreateParamValuesText(AnalysisType tAnType, td1dVec &tParams1, td1dVec &tParams2)
 {
-  TPaveText* tText;
-  if(tAnType==kXiKchP || tAnType==kAXiKchM) tText = new TPaveText(0.60,0.35,0.85,0.75,"NDC");
-  else if(tAnType==kXiKchM || tAnType==kAXiKchP) tText = new TPaveText(0.60,0.30,0.85,0.60,"NDC");
+  TPaveText *tText1, *tText2, *tText3;
+  if(tAnType==kXiKchP || tAnType==kAXiKchM)
+  {
+//    tText1 = new TPaveText(0.60,0.35,0.85,0.75,"NDC");
+    tText1 = new TPaveText(0.70,0.65,0.85,0.80,"NDC");
+    tText2 = new TPaveText(0.65,0.40,0.70,0.65,"NDC");
+    tText3 = new TPaveText(0.85,0.40,0.90,0.65,"NDC");
+  }
+  else if(tAnType==kXiKchM || tAnType==kAXiKchP)
+  {
+//    tText1 = new TPaveText(0.60,0.30,0.85,0.60,"NDC");
+
+    tText1 = new TPaveText(0.70,0.55,0.85,0.70,"NDC");
+    tText2 = new TPaveText(0.65,0.30,0.70,0.55,"NDC");
+    tText3 = new TPaveText(0.85,0.30,0.90,0.55,"NDC");
+  }
   else assert(0);
 
-  tText->SetFillColor(0);
-  tText->SetBorderSize(0);
-  tText->SetTextAlign(22);
-  tText->SetTextFont(63);
-  tText->SetTextSize(20);
+  double tTextSize = 17.5;
+  tText1->SetFillColor(0);
+  tText1->SetBorderSize(0);
+  tText1->SetTextAlign(22);
+  tText1->SetTextFont(43);
+  tText1->SetTextSize(tTextSize);
 
-  tText->AddText(TString::Format("#lambda = %0.2f",tParams[0]));
-  tText->AddText(TString::Format("R = %0.2f",tParams[1]));
-  tText->AddText(TString::Format("Re[f0] = %0.2f",tParams[2]));
-  tText->AddText(TString::Format("Im[f0] = %0.2f",tParams[3]));
-  tText->AddText(TString::Format("d0 = %0.2f",tParams[4]));
+  tText2->SetFillColor(0);
+  tText2->SetBorderSize(0);
+  tText2->SetTextAlign(22);
+  tText2->SetTextFont(43);
+  tText2->SetTextSize(tTextSize);
 
-  return tText;
+  tText3->SetFillColor(0);
+  tText3->SetBorderSize(0);
+  tText3->SetTextAlign(22);
+  tText3->SetTextFont(43);
+  tText3->SetTextSize(tTextSize);
+
+  tText1->AddText("Simulation Parameters");
+  tText1->AddText(TString::Format("#lambda = %0.1f",tParams1[0]));
+  tText1->AddText(TString::Format("R = %0.1f",tParams1[1]));
+
+
+  tText2->AddText("Set 1");
+  tText2->AddText(TString::Format("Re[f_{0}] = %0.1f",tParams1[2]));
+  tText2->AddText(TString::Format("Im[f_{0}] = %0.1f",tParams1[3]));
+  tText2->AddText(TString::Format("d_{0} = %0.1f",tParams1[4]));
+
+  tText3->AddText("Set 2");
+  tText3->AddText(TString::Format("Re[f_{0}] = %0.1f",tParams2[2]));
+  tText3->AddText(TString::Format("Im[f_{0}] = %0.1f",tParams2[3]));
+  tText3->AddText(TString::Format("d_{0} = %0.1f",tParams2[4]));
+
+  TText* tLine;
+  tLine = tText1->GetLine(0);
+  tLine->SetTextFont(63);
+  tLine = tText2->GetLine(0);
+  tLine->SetTextFont(63);
+  tLine = tText3->GetLine(0);
+  tLine->SetTextFont(63);
+
+  tText1->Draw();
+  tText2->Draw();
+  tText3->Draw();
 }
 
 //________________________________________________________________________________________________________________
@@ -65,18 +110,17 @@ int main(int argc, char **argv)
 
   TString tFileDirectory = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cXicKch_20170501/";
   TString tFileLocationBase = tFileDirectory + TString("Results_cXicKch_20170501");
-  bool bScattMinusPlus = true;  //otherwise, PlusPlus
   bool bSaveImage = true;
 
   AnalysisType tAnType, tConjType;
-
+/*
   tAnType = kXiKchP;
   tConjType = kAXiKchM;
+*/
 
-/*
   tAnType = kXiKchM;
   tConjType = kAXiKchP;
-*/
+
 
   //--Following for simulated curves---------
   int tNbinsK = 16;
@@ -122,15 +166,16 @@ int main(int argc, char **argv)
 
 
 //_______________________________________________________________________________________________________________________
-  double tLambda, tRadius, tReF0, tImF0, tD0, tNorm;
+  double tLambda, tRadius, tReF0, tReF02, tImF0, tD0, tNorm;
   tLambda = 0.5;
   tRadius = 3.0;
   tReF0 = 0.5;
+  tReF02 = -1.*tReF0;
   tImF0 = 0.5;
   tD0 = 0.;
   tNorm = 1.;
-  if(bScattMinusPlus) tReF0 *= -1.;
-  vector<double> tFitParams {tLambda, tRadius, tReF0, tImF0, tD0};
+  vector<double> tFitParams1 {tLambda, tRadius, tReF0, tImF0, tD0};
+  vector<double> tFitParams2 {tLambda, tRadius, tReF02, tImF0, tD0};
 
   int tColor, tColorTransparent;
   if(tAnType==kXiKchP) tColor=kRed+1;
@@ -139,20 +184,29 @@ int main(int argc, char **argv)
 
   tColorTransparent = TColor::GetColorTransparent(tColor,0.2);
 
-  TH1* tFullFit = tFitter->CreateFitHistogramSampleComplete("SampleHist1", tAnType, tNbinsK, tKMin, tKMax, tLambda, tRadius, tReF0, tImF0, tD0, 0., 0., 0., tNorm);
-    tFullFit->SetDirectory(0);
-  tFullFit->SetMarkerStyle(22);
-  tFullFit->SetMarkerColor(tColor);
-  tFullFit->SetLineColor(tColor);
-  tFullFit->SetLineStyle(1);
-  tFullFit->SetLineWidth(2);
+  TH1* tFullFit1 = tFitter->CreateFitHistogramSampleComplete("SampleHist1", tAnType, tNbinsK, tKMin, tKMax, tLambda, tRadius, tReF0, tImF0, tD0, 0., 0., 0., tNorm);
+    tFullFit1->SetDirectory(0);
+  tFullFit1->SetMarkerStyle(22);
+  tFullFit1->SetMarkerColor(tColor);
+  tFullFit1->SetLineColor(tColor);
+  tFullFit1->SetLineStyle(7);
+  tFullFit1->SetLineWidth(2);
+
+  TH1* tFullFit2 = tFitter->CreateFitHistogramSampleComplete("SampleHist2", tAnType, tNbinsK, tKMin, tKMax, tLambda, tRadius, tReF02, tImF0, tD0, 0., 0., 0., tNorm);
+    tFullFit2->SetDirectory(0);
+  tFullFit2->SetMarkerStyle(22);
+  tFullFit2->SetMarkerColor(tColor);
+  tFullFit2->SetLineColor(tColor);
+  tFullFit2->SetLineStyle(3);
+  tFullFit2->SetLineWidth(2);
 
   TH1* tCoulombOnlyFit = tFitter->CreateFitHistogramSampleComplete("tCoulombOnlyFit", tAnType, tNbinsK, tKMin, tKMax, tLambda, tRadius, 0., 0., 0., 0., 0., 0., tNorm);
     tCoulombOnlyFit->SetDirectory(0);
   tCoulombOnlyFit->SetMarkerStyle(21);
   tCoulombOnlyFit->SetMarkerColor(tColor);
   tCoulombOnlyFit->SetLineColor(tColor);
-  tCoulombOnlyFit->SetLineStyle(7);
+  tCoulombOnlyFit->SetLineStyle(1);
+  tCoulombOnlyFit->SetLineWidth(2);
 
   TCanvas* tCan = new TCanvas("tCan","tCan");
   gStyle->SetOptStat(0);
@@ -178,21 +232,22 @@ int main(int argc, char **argv)
   }
   else assert(0);
 
-  tFullFit->GetXaxis()->SetTitle("#it{k}* (GeV/#it{c})");
-  tFullFit->GetXaxis()->SetRangeUser(tXLow,tXHigh);
-  tFullFit->GetXaxis()->SetTitleSize(0.065);
-  tFullFit->GetXaxis()->SetTitleOffset(0.9);
-  tFullFit->GetXaxis()->SetLabelSize(0.04);
-  tFullFit->GetXaxis()->SetLabelOffset(0.005);
+  tFullFit1->GetXaxis()->SetTitle("#it{k}* (GeV/#it{c})");
+  tFullFit1->GetXaxis()->SetRangeUser(tXLow,tXHigh);
+  tFullFit1->GetXaxis()->SetTitleSize(0.065);
+  tFullFit1->GetXaxis()->SetTitleOffset(0.9);
+  tFullFit1->GetXaxis()->SetLabelSize(0.04);
+  tFullFit1->GetXaxis()->SetLabelOffset(0.005);
 
-  tFullFit->GetYaxis()->SetTitle("#it{C}(#it{k}*)");
-  tFullFit->GetYaxis()->SetRangeUser(tYLow,tYHigh);
-  tFullFit->GetYaxis()->SetTitleSize(0.070);
-  tFullFit->GetYaxis()->SetTitleOffset(0.8);
-  tFullFit->GetYaxis()->SetLabelSize(0.04);
-  tFullFit->GetYaxis()->SetLabelOffset(0.005);
+  tFullFit1->GetYaxis()->SetTitle("#it{C}(#it{k}*)");
+  tFullFit1->GetYaxis()->SetRangeUser(tYLow,tYHigh);
+  tFullFit1->GetYaxis()->SetTitleSize(0.070);
+  tFullFit1->GetYaxis()->SetTitleOffset(0.8);
+  tFullFit1->GetYaxis()->SetLabelSize(0.04);
+  tFullFit1->GetYaxis()->SetLabelOffset(0.005);
 
-  tFullFit->Draw("l");
+  tFullFit1->Draw("l");
+  tFullFit2->Draw("lsame");
   tCoulombOnlyFit->Draw("lsame");
 
   double tXaxisRangeLow;
@@ -202,8 +257,7 @@ int main(int argc, char **argv)
   tLine->SetLineColor(TColor::GetColorTransparent(kGray,0.75));
   tLine->Draw();
 
-  TPaveText *tText = CreateParamValuesText(tAnType, tFitParams);
-  tText->Draw();
+  CreateParamValuesText(tAnType, tFitParams1, tFitParams2);
   //------------------------------------------------------------
   TString tTextAnType = TString(cAnalysisRootTags[tAnType]);
   TString tTextCentrality = TString(cPrettyCentralityTags[k0010]);
@@ -213,8 +267,10 @@ int main(int argc, char **argv)
   if(tAnType==kXiKchP || tAnType==kAXiKchM) tLeg = new TLegend(0.25,0.50,0.55,0.75);
   else if(tAnType==kXiKchM || tAnType==kAXiKchP) tLeg = new TLegend(0.25,0.35,0.55,0.60);
   tLeg->SetHeader(TString::Format("%s Simulation",cAnalysisRootTags[tAnType]));
-  tLeg->AddEntry(tFullFit,"Strong+Coulomb","l");
   tLeg->AddEntry(tCoulombOnlyFit, "Coulomb Only", "l");
+  tLeg->AddEntry(tFullFit1,"Strong+Coulomb {Set 1}","l");
+  tLeg->AddEntry(tFullFit2,"Strong+Coulomb {Set 2}","l");
+
 
   TLegendEntry* tHeader = (TLegendEntry*)tLeg->GetListOfPrimitives()->At(0);
   tHeader->SetTextAlign(22);
@@ -245,9 +301,7 @@ int main(int argc, char **argv)
   {
     TString tSaveName = tFileDirectory;
     tSaveName += TString("WPCFStrongInfluence_") + cAnalysisBaseTags[tAnType] + TString(cCentralityTags[k0010]);
-    if(bScattMinusPlus) tSaveName += TString("_ScattParamsMinusPlus");
-    else tSaveName += TString("_ScattParamsPlusPlus");
-    tSaveName += TString(".pdf");
+    tSaveName += TString("_v2.pdf");
     tCan->SaveAs(tSaveName);
   }
 

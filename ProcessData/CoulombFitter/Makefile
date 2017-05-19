@@ -32,7 +32,7 @@ CFLAGS = $(shell root-config --cflags) -pthread -Wno-deprecated-declarations -st
 
 MY_LIBS = $(addprefix build/, MathematicaSession.o WaveFunction.o ChargedResidualCf.o CoulombFitter.o GlobalCoulombFitter.o LednickyFitter.o GeneralFitter.o SimpleFitter.o CoulombFitGenerator.o InterpolationHistograms.o FitChi2Histograms.o FitParameter.o FitPartialAnalysis.o FitPairAnalysis.o FitSharedAnalyses.o CfLite.o CfHeavy.o Types.o Faddeeva.o CanvasPartition.o)
 
-BINARIES = runTest runTest2 runFullTest runGlobalCoulomb runXiKch runVaryCoulomb runWPCFVaryCoulomb runWPCFStrongInfluence runCoulombGenerator runBuildInterpolationHistograms runFitLambda runSimpleFitter runProtonCascade runManualFitting
+BINARIES = runTest runTest2 runFullTest runGlobalCoulomb runXiKch runVaryCoulomb runWPCFVaryCoulomb runWPCFStrongInfluence runWPCFStrongInfluencev2 runCoulombGenerator runBuildInterpolationHistograms runFitLambda runSimpleFitter runProtonCascade runManualFitting
 
 all : $(BINARIES)
 
@@ -59,6 +59,9 @@ runWPCFVaryCoulomb: ${MY_LIBS} BuildWPCFVaryCoulombOnly.C
 
 runWPCFStrongInfluence: ${MY_LIBS} BuildWPCFStrongInfluence.C	
 	${CXX} BuildWPCFStrongInfluence.C ${MY_LIBS} -I${INCDIR} -o runWPCFStrongInfluence -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS) -o $@
+
+runWPCFStrongInfluencev2: ${MY_LIBS} BuildWPCFStrongInfluencev2.C	
+	${CXX} BuildWPCFStrongInfluencev2.C ${MY_LIBS} -I${INCDIR} -o runWPCFStrongInfluencev2 -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS) -o $@
 
 runCoulombGenerator: ${MY_LIBS} GenerateCoulombFits.C	
 	${CXX} GenerateCoulombFits.C ${MY_LIBS} -I${INCDIR} -o runCoulombGenerator -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS) -o $@
