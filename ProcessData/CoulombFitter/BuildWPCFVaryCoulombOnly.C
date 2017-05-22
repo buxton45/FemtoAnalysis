@@ -51,14 +51,14 @@ int main(int argc, char **argv)
   bool bStretchCanvas = true;
 
   AnalysisType tAnType, tConjType;
-
+/*
   tAnType = kXiKchP;
   tConjType = kAXiKchM;
+*/
 
-/*
   tAnType = kXiKchM;
   tConjType = kAXiKchP;
-*/
+
 
   //--Following for simulated curves---------
   int tNbinsK = 16;
@@ -227,6 +227,15 @@ int main(int argc, char **argv)
   TString tCombinedText = tTextAnType + TString("  ") +  tTextCentrality;
   TPaveText* tCombined = tCanPart->SetupTPaveText(tCombinedText,0,0,0.70,0.70,0.15,0.10,63,tSystemInfoSize);
   tCanPart->AddPadPaveText(tCombined,0,0);
+
+  TString tBandInfo = "Coulomb Only Band";
+  TString tBandTopInfo = TString::Format("Max: #lambda = %0.1f \t R = %0.1f", tLambdaHighCurve, tRadiusHighCurve);
+  TString tBandBottomInfo = TString::Format("Min: #lambda = %0.1f \t R = %0.1f", tLambdaLowCurve, tRadiusLowCurve);
+  TPaveText* tBand = tCanPart->SetupTPaveText(tBandInfo,0,0,0.60,0.35,0.15,0.20,63,(tSystemInfoSize/2));
+  tBand->AddText(tBandTopInfo);
+  tBand->AddText(tBandBottomInfo);
+  tBand->SetTextAlign(12);
+  tCanPart->AddPadPaveText(tBand,0,0);
 
   double tAliceXmin = 0.30, tAliceYmin = 0.91, tAliceWidth = 0.40, tAliceHeight = 0.08, tAliceFont = 43, tAliceSize = 17;
   if(bStretchCanvas)
