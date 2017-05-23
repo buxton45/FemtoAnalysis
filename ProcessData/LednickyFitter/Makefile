@@ -26,7 +26,7 @@ CFLAGS = $(shell root-config --cflags) -Wall -std=c++11 -I${ANALYZE_DIR} -I${LED
 MY_LIBS = $(addprefix build/, FitParameter.o FitChi2Histograms.o FitPartialAnalysis.o FitPairAnalysis.o FitSharedAnalyses.o MathematicaSession.o WaveFunction.o ChargedResidualCf.o LednickyFitter.o FitGenerator.o CfLite.o CfHeavy.o Types.o Faddeeva.o FitSystematicAnalysis.o CanvasPartition.o)
 
 
-all: runLamKchP runLamKchPTest runCompareKchFix2 runFits runTest runGenerator runCompareIgnoreOnFlyStatus runScattParamValues runLamKchPvsKchM
+all: runLamKchP runLamKchPTest runCompareKchFix2 runFits runTest runGenerator runCompareIgnoreOnFlyStatus runScattParamValues runLamKchPvsKchM runPlotAll
 
 runLamKchP: ${MY_LIBS} BuildLamKchP.C
 	g++ BuildLamKchP.C ${MY_LIBS} -I${INCDIR} -o runLamKchP -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS)
@@ -54,6 +54,9 @@ runScattParamValues: ${MY_LIBS} ScattParamValues.C
 
 runLamKchPvsKchM: ${MY_LIBS} DrawLamKchPvsLamKchM.C
 	g++ DrawLamKchPvsLamKchM.C ${MY_LIBS} -I${INCDIR} -o runLamKchPvsKchM -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS)
+
+runPlotAll: ${MY_LIBS} PlotAllFitsCentral.C
+	g++ PlotAllFitsCentral.C ${MY_LIBS} -I${INCDIR} -o runPlotAll -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS)
 
 build/%.o: ${ANALYZE_DIR}/%.cxx ${ANALYZE_DIR}/%.h
 	g++ -c $< $(CFLAGS) -o $@

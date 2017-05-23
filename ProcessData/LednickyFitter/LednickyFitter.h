@@ -82,9 +82,12 @@ public:
   double GetChi2Value(int aKStarBin, TH1* aCfToFit, double* aPar);
   double GetPmlValue(double aNumContent, double aDenContent, double aCfContent);
   void CalculateFitFunction(int &npar, double &chi2, double *par);
+  void CalculateFitFunctionOnce(int &npar, double &chi2, double *par, double *parErr, double aChi2, int aNDF);
+
 
   void DoFit();
   TF1* CreateFitFunction(TString aName, int aAnalysisNumber);
+  TF1* CreateFitFunction(int aAnalysisNumber, double *par, double *parErr, double aChi2, int aNDF);  //special case, used with PlotAllFitsCentral.C
 
   vector<double> FindGoodInitialValues();
 

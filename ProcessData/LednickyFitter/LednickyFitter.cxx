@@ -57,6 +57,7 @@ LednickyFitter::LednickyFitter(FitSharedAnalyses* aFitSharedAnalyses, double aMa
   fCorrectedFitVecs.resize(fNAnalyses, td2dVec(tNFitPartialAnalysis));
 
 //TODO can comment out everything below if not including residuals
+/*
   AnalysisType tAnType = fFitSharedAnalyses->GetFitPairAnalysis(0)->GetAnalysisType();
   TString tFilesLocationBase = "/home/jesse/Analysis/FemtoAnalysis/ProcessData/CoulombFitter/";
   TString tInterpLocationBase_XiCKchP, tInterpLocationBase_XiCKchM, tInterpLocationBase_OmegaKchP, tInterpLocationBase_OmegaKchM;
@@ -80,7 +81,7 @@ LednickyFitter::LednickyFitter(FitSharedAnalyses* aFitSharedAnalyses, double aMa
 
   fResOmegaKchP = new ChargedResidualCf(kOmegaKchP,tInterpLocationBase_OmegaKchP,tHFcnLocationBase_OmegaKchP);
   fResOmegaKchM = new ChargedResidualCf(kOmegaKchM,tInterpLocationBase_OmegaKchM,tHFcnLocationBase_OmegaKchM);
-  
+*/  
 }
 
 
@@ -659,6 +660,49 @@ void LednickyFitter::CalculateFitFunction(int &npar, double &chi2, double *par)
 }
 
 //________________________________________________________________________________________________________________
+void LednickyFitter::CalculateFitFunctionOnce(int &npar, double &chi2, double *par, double *parErr, double aChi2, int aNDF)
+{
+  LednickyFitter::CalculateFitFunction(npar, chi2, par);
+
+  double tFitParams[5];
+  double tFitParamErrs[5];
+
+  for(int iAnaly=0; iAnaly<fNAnalyses; iAnaly++)
+  {
+    int tLambdaParamNumber = fFitSharedAnalyses->GetFitPairAnalysis(iAnaly)->GetFitPartialAnalysis(0)->GetFitParameter(kLambda)->GetMinuitParamNumber();
+    int tRadiusParamNumber = fFitSharedAnalyses->GetFitPairAnalysis(iAnaly)->GetFitPartialAnalysis(0)->GetFitParameter(kRadius)->GetMinuitParamNumber();
+    int tRef0ParamNumber = fFitSharedAnalyses->GetFitPairAnalysis(iAnaly)->GetFitPartialAnalysis(0)->GetFitParameter(kRef0)->GetMinuitParamNumber();
+    int tImf0ParamNumber = fFitSharedAnalyses->GetFitPairAnalysis(iAnaly)->GetFitPartialAnalysis(0)->GetFitParameter(kImf0)->GetMinuitParamNumber();
+    int td0ParamNumber = fFitSharedAnalyses->GetFitPairAnalysis(iAnaly)->GetFitPartialAnalysis(0)->GetFitParameter(kd0)->GetMinuitParamNumber();
+
+    tFitParams[0] = par[tLambdaParamNumber];
+    tFitParamErrs[0] = parErr[tLambdaParamNumber];
+
+    tFitParams[1] = par[tRadiusParamNumber];
+    tFitParamErrs[1] = parErr[tRadiusParamNumber];
+
+    tFitParams[2] = par[tRef0ParamNumber];
+    tFitParamErrs[2] = parErr[tRef0ParamNumber];
+
+    tFitParams[3] = par[tImf0ParamNumber];
+    tFitParamErrs[3] = parErr[tImf0ParamNumber];
+
+    tFitParams[4] = par[td0ParamNumber];
+    tFitParamErrs[4] = parErr[td0ParamNumber];
+
+    fFitSharedAnalyses->GetFitPairAnalysis(iAnaly)->SetFit(CreateFitFunction(iAnaly, tFitParams, tFitParamErrs, aChi2, aNDF));
+  }
+
+  for(int iAnaly=0; iAnaly<fNAnalyses; iAnaly++)
+  {
+    for(int iPartAn=0; iPartAn<fFitSharedAnalyses->GetFitPairAnalysis(iAnaly)->GetNFitPartialAnalysis(); iPartAn++)
+    {
+      fFitSharedAnalyses->GetFitPairAnalysis(iAnaly)->GetFitPartialAnalysis(iPartAn)->SetCorrectedFitVec(fCorrectedFitVecs[iAnaly][iPartAn]);
+    }
+  }
+}
+
+//________________________________________________________________________________________________________________
 TF1* LednickyFitter::CreateFitFunction(TString aName, int aAnalysisNumber)
 {
   FitPairAnalysis* tFitPairAnalysis = fFitSharedAnalyses->GetFitPairAnalysis(aAnalysisNumber);
@@ -685,6 +729,30 @@ TF1* LednickyFitter::CreateFitFunction(TString aName, int aAnalysisNumber)
   return ReturnFunction;
 }
 
+//________________________________________________________________________________________________________________
+TF1* LednickyFitter::CreateFitFunction(int aAnalysisNumber, double *par, double *parErr, double aChi2, int aNDF)
+{
+  int tNFitParams = 5;
+  TF1* ReturnFunction = new TF1("fit",LednickyEq,0.,0.5,tNFitParams+1);
+  for(int iPar=0; iPar<tNFitParams; iPar++)
+  {
+    ParameterType tParamType = static_cast<ParameterType>(iPar);
+    ReturnFunction->SetParameter(iPar,par[iPar]);
+    ReturnFunction->SetParError(iPar,parErr[iPar]);
+  }
+
+  ReturnFunction->SetParameter(5,1.);
+  ReturnFunction->SetParError(5,0.);
+
+  ReturnFunction->SetChisquare(aChi2);
+  ReturnFunction->SetNDF(aNDF);
+
+  ReturnFunction->SetParNames("Lambda","Radius","Ref0","Imf0","d0","Norm");
+  fFitSharedAnalyses->GetFitPairAnalysis(aAnalysisNumber)->GetKStarCfHeavy()->GetHeavyCf()->GetListOfFunctions()->Add(ReturnFunction);
+  fFitSharedAnalyses->GetFitPairAnalysis(aAnalysisNumber)->GetKStarCf()->GetListOfFunctions()->Add(ReturnFunction);
+
+  return ReturnFunction;
+}
 
 
 //________________________________________________________________________________________________________________
