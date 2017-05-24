@@ -22,7 +22,7 @@ double gMaxFitKStar;
 //________________________________________________________________________________________________________________
 //****************************************************************************************************************
 //________________________________________________________________________________________________________________
-LednickyFitter::LednickyFitter(FitSharedAnalyses* aFitSharedAnalyses, double aMaxFitKStar):
+LednickyFitter::LednickyFitter(FitSharedAnalyses* aFitSharedAnalyses, double aMaxFitKStar, bool aReadInterpFiles):
   fVerbose(false),
   fFitSharedAnalyses(aFitSharedAnalyses),
   fMinuit(fFitSharedAnalyses->GetMinuitObject()),
@@ -56,32 +56,32 @@ LednickyFitter::LednickyFitter(FitSharedAnalyses* aFitSharedAnalyses, double aMa
   int tNFitPartialAnalysis = fFitSharedAnalyses->GetFitPairAnalysis(0)->GetNFitPartialAnalysis();
   fCorrectedFitVecs.resize(fNAnalyses, td2dVec(tNFitPartialAnalysis));
 
-//TODO can comment out everything below if not including residuals
-/*
-  AnalysisType tAnType = fFitSharedAnalyses->GetFitPairAnalysis(0)->GetAnalysisType();
-  TString tFilesLocationBase = "/home/jesse/Analysis/FemtoAnalysis/ProcessData/CoulombFitter/";
-  TString tInterpLocationBase_XiCKchP, tInterpLocationBase_XiCKchM, tInterpLocationBase_OmegaKchP, tInterpLocationBase_OmegaKchM;
-  TString tHFcnLocationBase_XiCKchP, tHFcnLocationBase_XiCKchM, tHFcnLocationBase_OmegaKchP, tHFcnLocationBase_OmegaKchM;
+  if(aReadInterpFiles)
+  {
+    AnalysisType tAnType = fFitSharedAnalyses->GetFitPairAnalysis(0)->GetAnalysisType();
+    TString tFilesLocationBase = "/home/jesse/Analysis/FemtoAnalysis/ProcessData/CoulombFitter/";
+    TString tInterpLocationBase_XiCKchP, tInterpLocationBase_XiCKchM, tInterpLocationBase_OmegaKchP, tInterpLocationBase_OmegaKchM;
+    TString tHFcnLocationBase_XiCKchP, tHFcnLocationBase_XiCKchM, tHFcnLocationBase_OmegaKchP, tHFcnLocationBase_OmegaKchM;
 
 //TODO for now, no distinction between kXiCKchP and kAXiCKchM, etc.
-  tInterpLocationBase_XiCKchP = tFilesLocationBase + TString("InterpHistsAttractive");
-  tHFcnLocationBase_XiCKchP = tFilesLocationBase + TString("LednickyHFunction");
+    tInterpLocationBase_XiCKchP = tFilesLocationBase + TString("InterpHistsAttractive");
+    tHFcnLocationBase_XiCKchP = tFilesLocationBase + TString("LednickyHFunction");
 
-  tInterpLocationBase_XiCKchM = tFilesLocationBase + TString("InterpHistsRepulsive");
-  tHFcnLocationBase_XiCKchM = tFilesLocationBase + TString("LednickyHFunction");
+    tInterpLocationBase_XiCKchM = tFilesLocationBase + TString("InterpHistsRepulsive");
+    tHFcnLocationBase_XiCKchM = tFilesLocationBase + TString("LednickyHFunction");
 
-  tInterpLocationBase_OmegaKchP = tFilesLocationBase + TString("InterpHists_OmegaKchP");
-  tHFcnLocationBase_OmegaKchP = tFilesLocationBase + TString("LednickyHFunction_OmegaKchP");
+    tInterpLocationBase_OmegaKchP = tFilesLocationBase + TString("InterpHists_OmegaKchP");
+    tHFcnLocationBase_OmegaKchP = tFilesLocationBase + TString("LednickyHFunction_OmegaKchP");
 
-  tInterpLocationBase_OmegaKchM = tFilesLocationBase + TString("InterpHists_OmegaKchM");
-  tHFcnLocationBase_OmegaKchM = tFilesLocationBase + TString("LednickyHFunction_OmegaKchM");
+    tInterpLocationBase_OmegaKchM = tFilesLocationBase + TString("InterpHists_OmegaKchM");
+    tHFcnLocationBase_OmegaKchM = tFilesLocationBase + TString("LednickyHFunction_OmegaKchM");
 
-  fResXiCKchP = new ChargedResidualCf(kXiCKchP,tInterpLocationBase_XiCKchP,tHFcnLocationBase_XiCKchP);
-  fResXiCKchM = new ChargedResidualCf(kXiCKchM,tInterpLocationBase_XiCKchM,tHFcnLocationBase_XiCKchM);
+    fResXiCKchP = new ChargedResidualCf(kXiCKchP,tInterpLocationBase_XiCKchP,tHFcnLocationBase_XiCKchP);
+    fResXiCKchM = new ChargedResidualCf(kXiCKchM,tInterpLocationBase_XiCKchM,tHFcnLocationBase_XiCKchM);
 
-  fResOmegaKchP = new ChargedResidualCf(kOmegaKchP,tInterpLocationBase_OmegaKchP,tHFcnLocationBase_OmegaKchP);
-  fResOmegaKchM = new ChargedResidualCf(kOmegaKchM,tInterpLocationBase_OmegaKchM,tHFcnLocationBase_OmegaKchM);
-*/  
+    fResOmegaKchP = new ChargedResidualCf(kOmegaKchP,tInterpLocationBase_OmegaKchP,tHFcnLocationBase_OmegaKchP);
+    fResOmegaKchM = new ChargedResidualCf(kOmegaKchM,tInterpLocationBase_OmegaKchM,tHFcnLocationBase_OmegaKchM);
+  }
 }
 
 

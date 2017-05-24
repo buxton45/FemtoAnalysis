@@ -243,8 +243,12 @@ int main(int argc, char **argv)
   vector<FitPairAnalysis*> tVecOfPairAn;
 //  vector<FitSharedAnalyses*> tVecOfSharedAn;
   vector<LednickyFitter*> tVecOfLednickyFit;
-  for(int iAnType=0; iAnType<kXiKchP; iAnType+=2)
+  vector<int> tOrder{2, 4, 0}; //default = {0, 2, 4} = LamK0, LamKchP, LamKchM
+//  for(int iAnType=0; iAnType<kXiKchP; iAnType+=2)
+  for(unsigned int i=0; i<tOrder.size(); i++)
   {
+    int iAnType = tOrder[i];
+
     tVecOfPairAn.clear();
 
     tAnType = static_cast<AnalysisType>(iAnType);
@@ -281,7 +285,7 @@ int main(int argc, char **argv)
 
     tFitSharedAn->CreateMinuitParameters();
 
-    LednickyFitter* tLednickyFitter = new LednickyFitter(tFitSharedAn);
+    LednickyFitter* tLednickyFitter = new LednickyFitter(tFitSharedAn, 0.3, false);
     tLednickyFitter->SetApplyNonFlatBackgroundCorrection(ApplyNonFlatBackgroundCorrection);
     tLednickyFitter->SetNonFlatBgdFitType(tNonFlatBgdFitType);
     tLednickyFitter->SetApplyMomResCorrection(ApplyMomResCorrection);
@@ -298,13 +302,10 @@ int main(int argc, char **argv)
   }
 
 
-  for(unsigned int i=0; i<tVecOfLednickyFit.size(); i++) cout << "tVecOfLednickyFit[i]->GetFitSharedAnalyses()->GetFitPairAnalysis(0)->GetAnalysisName() = " << tVecOfLednickyFit[i]->GetFitSharedAnalyses()->GetFitPairAnalysis(0)->GetAnalysisName() << endl;
-
-
   TCanvas* tCan = DrawAll(tVecOfLednickyFit, ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, tNonFlatBgdFitType, false, true, true, tChi2All, tNDFAll);
   if(SaveImages)
   {
-    TString tSaveName = "test";
+    TString tSaveName = "AllFitsCentral";
     tSaveName += tSaveNameModifier;
     tSaveName += TString(".pdf");
 

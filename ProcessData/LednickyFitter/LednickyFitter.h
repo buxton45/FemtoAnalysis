@@ -60,7 +60,7 @@ public:
   //Any enum types
 
   //Constructor, destructor, copy constructor, assignment operator
-  LednickyFitter(FitSharedAnalyses* aFitSharedAnalyses, double aMaxFitKStar = 0.3);
+  LednickyFitter(FitSharedAnalyses* aFitSharedAnalyses, double aMaxFitKStar = 0.3, bool aReadInterpFiles=true);
   virtual ~LednickyFitter();
 
   static double GetLednickyF1(double z);
