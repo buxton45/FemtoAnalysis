@@ -707,6 +707,9 @@ int main(int argc, char **argv)
 
       TString aName2 = "XiPurity_XiKchP.eps";
       canPurity->cd(1)->SaveAs(tSaveFiguresLocation+aName2);
+
+      TString aName3 = "AXiPurity_AXiKchP.eps";
+      canPurity->cd(3)->SaveAs(tSaveFiguresLocation+aName3);
     }
 
   }

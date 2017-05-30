@@ -113,14 +113,14 @@ int main(int argc, char **argv)
   bool bSaveImage = true;
 
   AnalysisType tAnType, tConjType;
-/*
+
   tAnType = kXiKchP;
   tConjType = kAXiKchM;
-*/
 
+/*
   tAnType = kXiKchM;
   tConjType = kAXiKchP;
-
+*/
 
   //--Following for simulated curves---------
   int tNbinsK = 16;
@@ -277,6 +277,7 @@ int main(int argc, char **argv)
 
   tLeg->Draw();
   //-------------------------------------------------------------
+/*
   if(tAnType==kXiKchP || tAnType==kAXiKchM)
   {
     TLatex *tTex = new TLatex(0.0785, 1.64, "Pb-Pb #sqrt{#it{s}_{NN}} = 2.76 TeV");
@@ -295,7 +296,7 @@ int main(int argc, char **argv)
       tTex->Draw();
       tTex->DrawLatex(0.015,1.035,"ALICE Preliminary");
   }
-
+*/
   //-------------------------------------------------------------
   if(bSaveImage)
   {

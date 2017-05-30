@@ -45,8 +45,8 @@ int main(int argc, char **argv)
 //-----------------------------------------------------------------------------
 //Be sure to set the following...
 
-  TString tFileDirectory = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cXicKch_20170501/";
-  TString tFileLocationBase = tFileDirectory + TString("Results_cXicKch_20170501");
+  TString tFileDirectory = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cXicKch_20170505_ignoreOnFlyStatus/";
+  TString tFileLocationBase = tFileDirectory + TString("Results_cXicKch_20170505_ignoreOnFlyStatus");
   bool bSaveImage = true;
   bool bStretchCanvas = true;
 
@@ -225,7 +225,10 @@ int main(int argc, char **argv)
   TString tTextAnType = TString(cAnalysisRootTags[tAnType]);
   TString tTextCentrality = TString(cPrettyCentralityTags[k0010]);
   TString tCombinedText = tTextAnType + TString("  ") +  tTextCentrality;
-  TPaveText* tCombined = tCanPart->SetupTPaveText(tCombinedText,0,0,0.70,0.70,0.15,0.10,63,tSystemInfoSize);
+  TPaveText* tCombined;
+  if(tAnType==kXiKchP) tCombined = tCanPart->SetupTPaveText(tCombinedText,0,0,0.70,0.70,0.15,0.10,63,tSystemInfoSize);
+  else if(tAnType==kXiKchM) tCombined = tCanPart->SetupTPaveText(tCombinedText,0,0,0.70,0.65,0.15,0.10,63,tSystemInfoSize);
+  else assert(0);
   tCanPart->AddPadPaveText(tCombined,0,0);
 
   TString tBandInfo = "Coulomb Only Band";
@@ -243,6 +246,7 @@ int main(int argc, char **argv)
     tAliceSize *= 1.7;
     tAliceYmin = 0.89;
   }
+
   TString tTextAlicePrelim = TString("ALICE Preliminary");
   TPaveText* tAlicePrelim = tCanPart->SetupTPaveText(tTextAlicePrelim,0,0,tAliceXmin, tAliceYmin, tAliceWidth, tAliceHeight, tAliceFont, tAliceSize);
   tCanPart->AddPadPaveText(tAlicePrelim,0,0);
@@ -255,7 +259,10 @@ int main(int argc, char **argv)
 
   TString tTextConjType = TString(cAnalysisRootTags[tConjType]);
   TString tCombinedTextConj = tTextConjType + TString("  ") +  tTextCentrality;
-  TPaveText* tCombinedConj = tCanPart->SetupTPaveText(tCombinedTextConj,1,0,0.70,0.70,0.15,0.10,63,tSystemInfoSize);
+  TPaveText* tCombinedConj;
+  if(tAnType==kXiKchP) tCombinedConj = tCanPart->SetupTPaveText(tCombinedTextConj,1,0,0.70,0.70,0.15,0.10,63,tSystemInfoSize);
+  else if(tAnType==kXiKchM) tCombinedConj = tCanPart->SetupTPaveText(tCombinedTextConj,1,0,0.70,0.65,0.15,0.10,63,tSystemInfoSize);
+  else assert(0);
   tCanPart->AddPadPaveText(tCombinedConj,1,0);
 
   TString tTextSysInfo = TString("Pb-Pb #sqrt{#it{s}_{NN}} = 2.76 TeV");
