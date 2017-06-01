@@ -187,7 +187,7 @@ int main(int argc, char **argv)
   {
     tYLow = 0.92;
 //    tYHigh = 2.52;
-    tYHigh = 1.62;
+    tYHigh = 1.72;
   }
   else if(tAnType==kXiKchM)
   {
@@ -232,8 +232,8 @@ int main(int argc, char **argv)
   tCanPart->AddPadPaveText(tCombined,0,0);
 
   TString tBandInfo = "Coulomb Only Band";
-  TString tBandTopInfo = TString::Format("Max: #lambda = %0.1f \t R = %0.1f", tLambdaHighCurve, tRadiusHighCurve);
-  TString tBandBottomInfo = TString::Format("Min: #lambda = %0.1f \t R = %0.1f", tLambdaLowCurve, tRadiusLowCurve);
+  TString tBandTopInfo = TString::Format("Max: #lambda = %0.1f \t R = %0.1f fm", tLambdaHighCurve, tRadiusHighCurve);
+  TString tBandBottomInfo = TString::Format("Min: #lambda = %0.1f \t R = %0.1f fm", tLambdaLowCurve, tRadiusLowCurve);
   TPaveText* tBand = tCanPart->SetupTPaveText(tBandInfo,0,0,0.60,0.35,0.15,0.20,63,(tSystemInfoSize/2));
   tBand->AddText(tBandTopInfo);
   tBand->AddText(tBandBottomInfo);

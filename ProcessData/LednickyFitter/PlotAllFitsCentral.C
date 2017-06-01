@@ -220,18 +220,18 @@ int main(int argc, char **argv)
 
 
   double tParLamKchM[6] =       {0.453, 4.787, 0.183, 0.453, -5.292, 1.};
-  double tParErrLamKchM[6] =    {0.162, 0.788, 0.134, 0.181, 2.895, 0.};
+  double tParErrLamKchM[6] =    {0.162, 0.788, 0.134, 0.181, 2.940, 0.};
   double tParSysErrLamKchM[6] = {0.190, 1.380, 0.100, 0.180, 7.660, 0.};
 
   double tParALamKchP[6] =       {0.479, 4.787, 0.183, 0.453, -5.292, 1.};
-  double tParErrALamKchP[6] =    {0.170, 0.788, 0.134, 0.181, 2.895, 0.};
+  double tParErrALamKchP[6] =    {0.170, 0.788, 0.134, 0.181, 2.940, 0.};
   double tParSysErrALamKchP[6] = {0.150, 1.380, 0.100, 0.180, 7.660, 0.};
 
   double* tParsAll[6] = {tParLamK0, tParALamK0, tParLamKchP, tParALamKchM, tParLamKchM, tParALamKchP};
   double * tParErrsAll[6] = {tParErrLamK0, tParErrALamK0, tParErrLamKchP, tParErrALamKchM, tParErrLamKchM, tParErrALamKchP};
 
-  double tChi2All[3] = {357.0, 425.8, 284.0};
-  double tNDFAll[3] = {341, 336, 288};
+  double tChi2All[6] = {357.0, 357.0, 425.8, 425.8, 284.0, 284.0};
+  double tNDFAll[6] = {341, 341, 336, 336, 288, 288};
 
   TString tSaveNameModifier = "";
   if(ApplyMomResCorrection) tSaveNameModifier += TString("_MomResCrctn");
@@ -245,6 +245,8 @@ int main(int argc, char **argv)
   vector<LednickyFitter*> tVecOfLednickyFit;
   vector<int> tOrder{2, 4, 0}; //default = {0, 2, 4} = LamK0, LamKchP, LamKchM
 //  for(int iAnType=0; iAnType<kXiKchP; iAnType+=2)
+  double tOrderedChi2All[3];
+  double tOrderedNDFAll[3];
   for(unsigned int i=0; i<tOrder.size(); i++)
   {
     int iAnType = tOrder[i];
@@ -299,10 +301,12 @@ int main(int argc, char **argv)
     tLednickyFitter->CalculateFitFunctionOnce(tNpar, tChi2, tParams, tParamErrs, tChi2All[iAnType], tNDFAll[iAnType]);
 
     tVecOfLednickyFit.push_back(tLednickyFitter);
+    tOrderedChi2All[i] = tChi2All[iAnType];
+    tOrderedNDFAll[i] = tNDFAll[iAnType];
   }
 
 
-  TCanvas* tCan = DrawAll(tVecOfLednickyFit, ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, tNonFlatBgdFitType, false, true, true, tChi2All, tNDFAll);
+  TCanvas* tCan = DrawAll(tVecOfLednickyFit, ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, tNonFlatBgdFitType, false, true, true, tOrderedChi2All, tOrderedNDFAll);
   if(SaveImages)
   {
     TString tSaveName = "AllFitsCentral";
