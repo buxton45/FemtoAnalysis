@@ -67,7 +67,7 @@ public:
   void SetDefaultSharedParameters(bool aSetAllUnbounded=false);
 
   void SetAllParameters();
-  void DoFit(bool aApplyMomResCorrection=false, bool aApplyNonFlatBackgroundCorrection=false, bool aIncludeResiduals=false, bool aIncludeSingletAndTriplet=false, NonFlatBgdFitType aNonFlatBgdFitType=kLinear, double aMaxFitKStar=0.3, int aNPairsPerKStarBin=16384);
+  void DoFit(bool aApplyMomResCorrection=false, bool aApplyNonFlatBackgroundCorrection=false, bool aIncludeResiduals=false, bool aIncludeSingletAndTriplet=false, NonFlatBgdFitType aNonFlatBgdFitType=kLinear, double aMaxFitKStar=0.3, int aNPairsPerKStarBin=16384, bool bSetupWithoutFitting=false);
   void WriteAllFitParameters(ostream &aOut=std::cout);
   vector<TString> GetAllFitParametersTStringVector();
 
@@ -99,6 +99,10 @@ public:
 
   void SetFixd0(bool aFix);
   void SetFixAllScattParams(bool aFix);
+
+  FitSharedAnalyses* GetFitSharedAnalyses();
+  CoulombFitter* GetCoulombFitter();
+
 protected:
   TString fSaveLocationBase;
   TString fSaveNameModifier;
@@ -156,6 +160,9 @@ inline double CoulombFitGenerator::GetChi2() {return fCoulombFitter->GetChi2();}
 
 inline void CoulombFitGenerator::SetFixd0(bool aFix) {fFixd0 = aFix;}
 inline void CoulombFitGenerator::SetFixAllScattParams(bool aFix) {fFixAllScattParams = aFix;}
+
+inline FitSharedAnalyses* CoulombFitGenerator::GetFitSharedAnalyses() {return fSharedAn;}
+inline CoulombFitter* CoulombFitGenerator::GetCoulombFitter() {return fCoulombFitter;}
 
 #endif
 

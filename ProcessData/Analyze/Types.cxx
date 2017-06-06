@@ -89,7 +89,7 @@ const char* const cAvgSepCfBaseTagsNum[7] = {"NumPosPosAvgSepCf_", "NumPosNegAvg
 const char* const cAvgSepCfBaseTagsDen[7] = {"DenPosPosAvgSepCf_", "DenPosNegAvgSepCf_", "DenNegPosAvgSepCf_", "DenNegNegAvgSepCf_", "DenTrackPosAvgSepCf_", "DenTrackNegAvgSepCf_", "DenTrackTrackAvgSepCf_"};
 */
 const char* const cAvgSepCfBaseTagsNum[8] = {"NumV0sPosPosAvgSepCf_", "NumV0sPosNegAvgSepCf_", "NumV0sNegPosAvgSepCf_", "NumV0sNegNegAvgSepCf_", "NumV0TrackPosAvgSepCf_", "NumV0TrackNegAvgSepCf_", "NumTrackTrackAvgSepCf_", "NumXiTrackBacAvgSepCf_"};
-const char* const cAvgSepCfBaseTagsDen[8] = {"DenV0sPosPosAvgSepCf_", "DenV0sPosNegAvgSepCf_", "DenV0sNegPosAvgSepCf_", "DenV0sNegNegAvgSepCf_", "DenV0TrackPosAvgSepCf_", "DenV0TrackNegAvgSepCf_", "DenTrackTrackAvgSepCf_", "DenV0TrackBacAvgSepCf_"};
+const char* const cAvgSepCfBaseTagsDen[8] = {"DenV0sPosPosAvgSepCf_", "DenV0sPosNegAvgSepCf_", "DenV0sNegPosAvgSepCf_", "DenV0sNegNegAvgSepCf_", "DenV0TrackPosAvgSepCf_", "DenV0TrackNegAvgSepCf_", "DenTrackTrackAvgSepCf_", "DenXiTrackBacAvgSepCf_"};
 
 
 const char* const cSepCfsBaseTagsNum[8] = {"NumPosPosSepCfs_", "NumPosNegSepCfs_", "NumNegPosSepCfs_", "NumNegNegSepCfs_", "NumTrackPosSepCfs_", "NumTrackNegSepCfs_", "NumTrackTrackSepCfs_", "NumTrackBacSepCfs_"};

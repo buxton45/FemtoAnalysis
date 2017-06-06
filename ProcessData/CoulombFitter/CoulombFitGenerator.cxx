@@ -1274,7 +1274,7 @@ void CoulombFitGenerator::SetAllParameters()
 
 
 //________________________________________________________________________________________________________________
-void CoulombFitGenerator::DoFit(bool aApplyMomResCorrection, bool aApplyNonFlatBackgroundCorrection, bool aIncludeResiduals, bool aIncludeSingletAndTriplet, NonFlatBgdFitType aNonFlatBgdFitType, double aMaxFitKStar, int aNPairsPerKStarBin)
+void CoulombFitGenerator::DoFit(bool aApplyMomResCorrection, bool aApplyNonFlatBackgroundCorrection, bool aIncludeResiduals, bool aIncludeSingletAndTriplet, NonFlatBgdFitType aNonFlatBgdFitType, double aMaxFitKStar, int aNPairsPerKStarBin, bool aSetupWithoutFitting)
 {
   if(aIncludeResiduals)  //since this involves the CoulombFitter, I should place limits on parameters used in interpolations
   {
@@ -1304,7 +1304,7 @@ void CoulombFitGenerator::DoFit(bool aApplyMomResCorrection, bool aApplyNonFlatB
 //  fCoulombFitter->SetIncludeResidualCorrelations(aIncludeResiduals);  //TODO
   GlobalFitter = fCoulombFitter;
 
-  fCoulombFitter->DoFit();
+  if(!aSetupWithoutFitting) fCoulombFitter->DoFit();
 }
 
 //________________________________________________________________________________________________________________
