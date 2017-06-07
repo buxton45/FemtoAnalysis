@@ -4,45 +4,45 @@ The top-level auxiliary file: AnalysisNoteJBuxton.aux
 The style file: unsrt.bst
 Database file #1: bibfile.bib
 Warning--empty title in Lednicky:82
-You've used 3 entries,
+You've used 6 entries,
             1791 wiz_defined-function locations,
-            468 strings with 3966 characters,
-and the built_in function-call counts, 659 in all, are:
-= -- 55
-> -- 26
+            492 strings with 4428 characters,
+and the built_in function-call counts, 1321 in all, are:
+= -- 115
+> -- 49
 < -- 0
-+ -- 10
-- -- 7
-* -- 49
-:= -- 114
-add.period$ -- 8
-call.type$ -- 3
-change.case$ -- 2
++ -- 19
+- -- 13
+* -- 96
+:= -- 221
+add.period$ -- 17
+call.type$ -- 6
+change.case$ -- 5
 chr.to.int$ -- 0
-cite$ -- 4
-duplicate$ -- 27
-empty$ -- 66
-format.name$ -- 7
-if$ -- 142
+cite$ -- 7
+duplicate$ -- 54
+empty$ -- 135
+format.name$ -- 13
+if$ -- 290
 int.to.chr$ -- 0
-int.to.str$ -- 3
-missing$ -- 3
-newline$ -- 17
-num.names$ -- 3
-pop$ -- 4
+int.to.str$ -- 6
+missing$ -- 6
+newline$ -- 32
+num.names$ -- 6
+pop$ -- 7
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 0
-skip$ -- 10
+skip$ -- 20
 stack$ -- 0
-substring$ -- 51
-swap$ -- 3
+substring$ -- 111
+swap$ -- 6
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
 type$ -- 0
 warning$ -- 1
-while$ -- 6
-width$ -- 4
-write$ -- 33
+while$ -- 12
+width$ -- 7
+write$ -- 66
 (There was 1 warning)

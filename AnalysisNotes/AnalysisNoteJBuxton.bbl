@@ -9,10 +9,27 @@ Michael~Annan Lisa, Scott Pratt, Ron Soltz, and Urs Wiedemann.
 \newblock {Femtoscopy in relativistic heavy ion collisions}.
 \newblock {\em Ann. Rev. Nucl. Part. Sci.}, 55:357--402, 2005.
 
+\bibitem{Koonin:1977fh}
+S.~E. Koonin.
+\newblock {Proton Pictures of High-Energy Nuclear Collisions}.
+\newblock {\em Phys. Lett.}, B70:43--47, 1977.
+
+\bibitem{Pratt:1990zq}
+S.~Pratt, T.~Csorgo, and J.~Zimanyi.
+\newblock {Detailed predictions for two pion correlations in ultrarelativistic
+  heavy ion collisions}.
+\newblock {\em Phys. Rev.}, C42:2646--2652, 1990.
+
 \bibitem{Lednicky:2005tb}
 Richard Lednicky.
 \newblock {Finite-size effects on two-particle production in continuous and
   discrete spectrum}.
 \newblock {\em Phys. Part. Nucl.}, 40:307--352, 2009.
+
+\bibitem{Adam:2015vja}
+Jaroslav Adam et~al.
+\newblock {One-dimensional pion, kaon, and proton femtoscopy in Pb-Pb
+  collisions at $\sqrt{s_{\rm {NN}}}$ =2.76 TeV}.
+\newblock {\em Phys. Rev.}, C92(5):054908, 2015.
 
 \end{thebibliography}
