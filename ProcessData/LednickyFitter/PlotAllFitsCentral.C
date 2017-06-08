@@ -151,6 +151,13 @@ TCanvas* DrawAll(vector<LednickyFitter*> &aFitters, bool aMomResCorrectFit, bool
         tCanPart->AddPadPaveText(tSysInfo,i,j);
       }
 
+      if(i==1 && j==2)
+      {
+        TString tTextkTInfo = TString("All #it{k}_{T}");
+        TPaveText* tkTInfo = tCanPart->SetupTPaveText(tTextkTInfo,i,j,0.79,0.05,0.20,0.15,43,17.5);
+        tCanPart->AddPadPaveText(tkTInfo,i,j);
+      }
+
       const double* tSysErrors = cSysErrors[aFitters[j]->GetFitSharedAnalyses()->GetFitPairAnalysis(i)->GetAnalysisType()][aFitters[j]->GetFitSharedAnalyses()->GetFitPairAnalysis(i)->GetCentralityType()];
 
       bool bDrawAll = false;

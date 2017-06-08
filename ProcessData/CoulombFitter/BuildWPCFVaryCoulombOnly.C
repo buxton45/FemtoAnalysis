@@ -231,13 +231,15 @@ int main(int argc, char **argv)
   else assert(0);
   tCanPart->AddPadPaveText(tCombined,0,0);
 
-  TString tBandInfo = "Coulomb Only Band";
+  TString tBandInfo = "Coulomb-only Band";
   TString tBandTopInfo = TString::Format("Max: #lambda = %0.1f \t R = %0.1f fm", tLambdaHighCurve, tRadiusHighCurve);
   TString tBandBottomInfo = TString::Format("Min: #lambda = %0.1f \t R = %0.1f fm", tLambdaLowCurve, tRadiusLowCurve);
-  TPaveText* tBand = tCanPart->SetupTPaveText(tBandInfo,0,0,0.60,0.35,0.15,0.20,63,(tSystemInfoSize/2));
+  TPaveText* tBand = tCanPart->SetupTPaveText(tBandInfo,0,0,0.50,0.25,0.25,0.25,43,(tSystemInfoSize/1.5));
   tBand->AddText(tBandTopInfo);
   tBand->AddText(tBandBottomInfo);
   tBand->SetTextAlign(12);
+  TText* tTitle = tBand->GetLine(0);
+  tTitle->SetTextFont(63);
   tCanPart->AddPadPaveText(tBand,0,0);
 
   double tAliceXmin = 0.30, tAliceYmin = 0.91, tAliceWidth = 0.40, tAliceHeight = 0.08, tAliceFont = 43, tAliceSize = 17;
@@ -268,6 +270,12 @@ int main(int argc, char **argv)
   TString tTextSysInfo = TString("Pb-Pb #sqrt{#it{s}_{NN}} = 2.76 TeV");
   TPaveText* tSysInfo = tCanPart->SetupTPaveText(tTextSysInfo,1,0,tAliceXmin, tAliceYmin, tAliceWidth, tAliceHeight, tAliceFont, tAliceSize);
   tCanPart->AddPadPaveText(tSysInfo,1,0);
+
+  TString tTextkTInfo = TString("All #it{k}_{T}");
+  TPaveText* tkTInfo;
+  if(tAnType==kXiKchP) tkTInfo = tCanPart->SetupTPaveText(tTextkTInfo,1,0,0.79,0.15,0.20,0.15,43,40);
+  else if(tAnType==kXiKchM) tkTInfo = tCanPart->SetupTPaveText(tTextkTInfo,1,0,0.79,0.05,0.20,0.15,43,40);
+  tCanPart->AddPadPaveText(tkTInfo,1,0);
 
   //------------------------------------------------------------
 
