@@ -26,22 +26,24 @@ void CreateParamValuesText(AnalysisType tAnType, td1dVec &tParams1, td1dVec &tPa
   TPaveText *tText1, *tText2, *tText3;
   if(tAnType==kXiKchP || tAnType==kAXiKchM)
   {
-//    tText1 = new TPaveText(0.60,0.35,0.85,0.75,"NDC");
+/*
     tText1 = new TPaveText(0.70,0.65,0.85,0.80,"NDC");
     tText2 = new TPaveText(0.65,0.40,0.70,0.65,"NDC");
     tText3 = new TPaveText(0.85,0.40,0.90,0.65,"NDC");
+*/
+    tText1 = new TPaveText(0.625,0.50,0.775,0.65,"NDC");
+    tText2 = new TPaveText(0.575,0.25,0.625,0.50,"NDC");
+    tText3 = new TPaveText(0.775,0.25,0.825,0.50,"NDC");
   }
   else if(tAnType==kXiKchM || tAnType==kAXiKchP)
   {
-//    tText1 = new TPaveText(0.60,0.30,0.85,0.60,"NDC");
-
-    tText1 = new TPaveText(0.70,0.55,0.85,0.70,"NDC");
-    tText2 = new TPaveText(0.65,0.30,0.70,0.55,"NDC");
-    tText3 = new TPaveText(0.85,0.30,0.90,0.55,"NDC");
+    tText1 = new TPaveText(0.625,0.40,0.775,0.55,"NDC");
+    tText2 = new TPaveText(0.575,0.15,0.625,0.40,"NDC");
+    tText3 = new TPaveText(0.775,0.15,0.825,0.40,"NDC");
   }
   else assert(0);
 
-  double tTextSize = 17.5;
+  double tTextSize = 20;
   tText1->SetFillColor(0);
   tText1->SetBorderSize(0);
   tText1->SetTextAlign(22);
@@ -113,14 +115,14 @@ int main(int argc, char **argv)
   bool bSaveImage = true;
 
   AnalysisType tAnType, tConjType;
-
+/*
   tAnType = kXiKchP;
   tConjType = kAXiKchM;
+*/
 
-/*
   tAnType = kXiKchM;
   tConjType = kAXiKchP;
-*/
+
 
   //--Following for simulated curves---------
   int tNbinsK = 16;
@@ -227,8 +229,8 @@ int main(int argc, char **argv)
   }
   else if(tAnType==kXiKchM || tAnType==kAXiKchP)
   {
-    tYLow = 0.38;
-    tYHigh = 1.09;
+    tYLow = 0.35;
+    tYHigh = 1.06;
   }
   else assert(0);
 
@@ -259,13 +261,9 @@ int main(int argc, char **argv)
 
   CreateParamValuesText(tAnType, tFitParams1, tFitParams2);
   //------------------------------------------------------------
-  TString tTextAnType = TString(cAnalysisRootTags[tAnType]);
-  TString tTextCentrality = TString(cPrettyCentralityTags[k0010]);
-  TString tCombinedText = tTextAnType + TString("  ") +  tTextCentrality;
-
   TLegend *tLeg;
-  if(tAnType==kXiKchP || tAnType==kAXiKchM) tLeg = new TLegend(0.25,0.50,0.55,0.75);
-  else if(tAnType==kXiKchM || tAnType==kAXiKchP) tLeg = new TLegend(0.25,0.35,0.55,0.60);
+  if(tAnType==kXiKchP || tAnType==kAXiKchM) tLeg = new TLegend(0.475,0.70,0.925,0.95);
+  else if(tAnType==kXiKchM || tAnType==kAXiKchP) tLeg = new TLegend(0.475,0.575,0.925,0.825);
   tLeg->SetHeader(TString::Format("%s Simulation",cAnalysisRootTags[tAnType]));
   tLeg->AddEntry(tCoulombOnlyFit, "Coulomb Only", "l");
   tLeg->AddEntry(tFullFit1,"Strong+Coulomb {Set 1}","l");
@@ -274,6 +272,8 @@ int main(int argc, char **argv)
 
   TLegendEntry* tHeader = (TLegendEntry*)tLeg->GetListOfPrimitives()->At(0);
   tHeader->SetTextAlign(22);
+  tHeader->SetTextFont(63);
+  tHeader->SetTextSize(25);
 
   tLeg->Draw();
   //-------------------------------------------------------------
