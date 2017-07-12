@@ -837,6 +837,381 @@ TCanvas* FitGenerator::DrawKStarCfswFits(bool aMomResCorrectFit, bool aNonFlatBg
   return tCanPart->GetCanvas();
 }
 
+//________________________________________________________________________________________________________________
+TCanvas* FitGenerator::DrawResiduals(int aAnalysisNumber, CentralityType aCentralityType, TString aCanvasName)
+{
+  FitPairAnalysis* tFitPairAnalysis = fSharedAn->GetFitPairAnalysis(aAnalysisNumber);
+  double tOverallLambdaPrimary = tFitPairAnalysis->GetFit()->GetParameter(0);
+  double tRadiusPrimary = tFitPairAnalysis->GetFit()->GetParameter(1);
+  double tReF0Primary = tFitPairAnalysis->GetFit()->GetParameter(2);
+  double tImF0Primary = tFitPairAnalysis->GetFit()->GetParameter(3);
+  double tD0Primary = tFitPairAnalysis->GetFit()->GetParameter(4);
+
+  double tKStarBinWidth = 0.01;
+  vector<double> tKStarBinCenters(100);
+  for(int i=0; i<100; i++) tKStarBinCenters[i] = tKStarBinWidth/2.0 + i*tKStarBinWidth;
+
+  //-------------------------------------------------------------------------------------
+  AnalysisType tAnType = tFitPairAnalysis->GetAnalysisType();
+  ResidualType tResSigKType, tResXi0KType, tResXiCKType, tResOmegaKType;
+  switch(tAnType) {
+  case kLamKchP:
+    tResXiCKType = kXiCKchP;
+    tResOmegaKType = kOmegaKchP;
+    tResSigKType = kSig0KchP;
+    tResXi0KType = kXi0KchP;
+    break;
+
+  case kLamKchM:
+    tResXiCKType = kXiCKchM;
+    tResOmegaKType = kOmegaKchM;
+    tResSigKType = kSig0KchM;
+    tResXi0KType = kXi0KchM;
+    break;
+
+  case kALamKchP:
+    tResXiCKType = kAXiCKchP;
+    tResOmegaKType = kAOmegaKchP;
+    tResSigKType = kASig0KchP;
+    tResXi0KType = kAXi0KchP;
+    break;
+
+  case kALamKchM:
+    tResXiCKType = kAXiCKchM;
+    tResOmegaKType = kAOmegaKchM;
+    tResSigKType = kASig0KchM;
+    tResXi0KType = kAXi0KchM;
+    break;
+
+  default:
+    cout << "ERROR: FitGenerator::DrawResiduals  tAnType = " << tAnType << " is not apropriate" << endl << endl;
+    assert(0);
+  }
+  //---------------------------------------------------------------------------------------
+
+
+  //SigK--------------------------------
+  double tLambda_SigK = 0.26473*tOverallLambdaPrimary;
+  double *tPar_SigK = new double[6];
+    tPar_SigK[0] = tLambda_SigK;
+    tPar_SigK[1] = tRadiusPrimary;
+    tPar_SigK[2] = tReF0Primary;
+    tPar_SigK[3] = tImF0Primary;
+    tPar_SigK[4] = tD0Primary;
+    tPar_SigK[5] = 1.0;
+  TH1D* tHist_SigK = fLednickyFitter->GetNeutralResidualCorrelationHistogram(tPar_SigK, tKStarBinCenters, tFitPairAnalysis->GetTransformMatrices()[0], "Residual_SigK");
+  TH1D* tParentHist_SigK = fLednickyFitter->GetNeutralParentCorrelationHistogram(tPar_SigK, tKStarBinCenters, "Parent_SigK");
+
+  //SigK--------------------------------
+  double tLambda_Xi0K = 0.19041*tOverallLambdaPrimary;
+  double *tPar_Xi0K = new double[6];
+    tPar_Xi0K[0] = tLambda_Xi0K;
+    tPar_Xi0K[1] = tRadiusPrimary;
+    tPar_Xi0K[2] = tReF0Primary;
+    tPar_Xi0K[3] = tImF0Primary;
+    tPar_Xi0K[4] = tD0Primary;
+    tPar_Xi0K[5] = 1.0;
+  TH1D* tHist_Xi0K = fLednickyFitter->GetNeutralResidualCorrelationHistogram(tPar_Xi0K, tKStarBinCenters, tFitPairAnalysis->GetTransformMatrices()[2], "Residual_Xi0K");
+  TH1D* tParentHist_Xi0K = fLednickyFitter->GetNeutralParentCorrelationHistogram(tPar_Xi0K, tKStarBinCenters, "Parent_Xi0K");
+
+  //-----------------------------------------------------------------------------------------
+  bool tUseExpXiData = true;
+
+  double tLambda_XiCK = 0.18386*tOverallLambdaPrimary;  //for now, primary lambda scaled by some factor
+  double *tPar_XiCK = new double[8];
+  if(tResXiCKType==kXiCKchP || tResXiCKType==kAXiCKchM)
+  { 
+    tPar_XiCK[0] = tLambda_XiCK;
+    tPar_XiCK[1] = 4.60717;
+    tPar_XiCK[2] = -0.00976133;
+    tPar_XiCK[3] = 0.0409787;
+    tPar_XiCK[4] = -0.33091;
+    tPar_XiCK[5] = -0.484049;
+    tPar_XiCK[6] = 0.523492;
+    tPar_XiCK[7] = 1.53176;
+  }
+  else if(tResXiCKType==kXiCKchM || tResXiCKType==kAXiCKchP)
+  {
+    tPar_XiCK[0] = tLambda_XiCK;
+    tPar_XiCK[1] = 6.97767;
+    tPar_XiCK[2] = -1.94078;
+    tPar_XiCK[3] = -1.21309;
+    tPar_XiCK[4] = 0.160156;
+    tPar_XiCK[5] = 1.38324;
+    tPar_XiCK[6] = 2.02133;
+    tPar_XiCK[7] = 4.07520;
+  }
+  else {tPar_XiCK[0]=0.; tPar_XiCK[1]=0.; tPar_XiCK[2]=0.; tPar_XiCK[3]=0.; tPar_XiCK[4]=0.; tPar_XiCK[5]=0.; tPar_XiCK[6]=0.; tPar_XiCK[7]=0.;}
+  TH1D* tHist_XiCK = fLednickyFitter->GetChargedResidualCorrelationHistogram(tResXiCKType, tPar_XiCK, tKStarBinCenters, tUseExpXiData, aCentralityType, "Residual_XiCK");
+  TH1D* tParentHist_XiCK = fLednickyFitter->GetChargedParentCorrelationHistogram(tResXiCKType, tPar_XiCK, tKStarBinCenters, tUseExpXiData, aCentralityType, "Parent_XiCK");
+
+  //-----------------------
+
+  double tLambda_OmegaK = 0.01760*tOverallLambdaPrimary;  //for now, primary lambda scaled by some factor
+  double *tPar_OmegaK = new double[8];
+  if(tResOmegaKType==kOmegaKchP || tResOmegaKType==kAOmegaKchM)
+  { 
+    tPar_OmegaK[0] = tLambda_OmegaK;
+    tPar_OmegaK[1] = 2.84;
+    tPar_OmegaK[2] = -1.59;
+    tPar_OmegaK[3] = -0.37;
+    tPar_OmegaK[4] = 5.0;
+    tPar_OmegaK[5] = -0.46;
+    tPar_OmegaK[6] = 1.13;
+    tPar_OmegaK[7] = -2.53;
+  }
+  else if(tResOmegaKType==kOmegaKchM || tResOmegaKType==kAOmegaKchP)
+  {
+    tPar_OmegaK[0] = tLambda_OmegaK;
+    tPar_OmegaK[1] = 2.81;
+    tPar_OmegaK[2] = 0.29;
+    tPar_OmegaK[3] = -0.24;
+    tPar_OmegaK[4] = -10.0;
+    tPar_OmegaK[5] = 0.37;
+    tPar_OmegaK[6] = 0.34;
+    tPar_OmegaK[7] = -3.43;
+  }
+  else {tPar_OmegaK[0]=0.; tPar_OmegaK[1]=0.; tPar_OmegaK[2]=0.; tPar_OmegaK[3]=0.; tPar_OmegaK[4]=0.; tPar_OmegaK[5]=0.; tPar_OmegaK[6]=0.; tPar_OmegaK[7]=0.;}
+  TH1D* tHist_OmegaK = fLednickyFitter->GetChargedResidualCorrelationHistogram(tResOmegaKType, tPar_OmegaK, tKStarBinCenters, tUseExpXiData, aCentralityType, "Residual_OmegaK");
+  TH1D* tParentHist_OmegaK = fLednickyFitter->GetChargedParentCorrelationHistogram(tResOmegaKType, tPar_OmegaK, tKStarBinCenters, tUseExpXiData, aCentralityType, "Parent_OmegaK");
+  //--------------------------------------------------------------------------------
+  TString tCanvasName = "Residuals";
+  int tNx = 2;
+  int tNy = 2;
+  double tXLow = -0.02;
+  double tXHigh = 0.329;
+
+  double tYLowNeutral = std::min(tParentHist_SigK->GetMinimum(), tHist_SigK->GetMinimum());
+  double tYHighNeutral = std::max(tParentHist_SigK->GetMaximum(), tHist_SigK->GetMaximum());
+    tYLowNeutral *= 0.999;
+    tYHighNeutral *= 1.001;
+
+  double tYLowCharged = std::min(tParentHist_XiCK->GetMinimum(), tHist_XiCK->GetMinimum());
+  double tYHighCharged = std::max(tParentHist_XiCK->GetMaximum(), tHist_XiCK->GetMaximum());
+    tYLowCharged *= 0.99;
+    tYHighCharged *= 1.01; 
+
+  CanvasPartition* tCanPart = new CanvasPartition(tCanvasName,tNx,tNy,tXLow,tXHigh,tYLowCharged,tYHighCharged,0.12,0.0025,0.13,0.0025);
+  tCanPart->SetDrawOptStat(false);
+
+  //--------------------------------------------------------------------------------
+  TPaveText *tPaveText;
+
+  tCanPart->AddGraph(0,0,tParentHist_SigK,"",20,kRed,0.75,"ex0");
+  tCanPart->AddGraph(0,0,tHist_SigK,"",24,kRed,0.75,"ex0same");
+    tParentHist_SigK->GetYaxis()->SetRangeUser(tYLowNeutral,tYHighNeutral);
+    tHist_SigK->GetYaxis()->SetRangeUser(tYLowNeutral,tYHighNeutral);
+    tPaveText = tCanPart->SetupTPaveText(cResidualRootTags[tResSigKType],0,0,0.70,0.70,0.15,0.10,63,20);
+    tCanPart->AddPadPaveText(tPaveText,0,0);
+
+  tCanPart->AddGraph(1,0,tParentHist_Xi0K,"",20,kBlue,0.75,"ex0");
+  tCanPart->AddGraph(1,0,tHist_Xi0K,"",24,kBlue,0.75,"ex0same");
+    tParentHist_Xi0K->GetYaxis()->SetRangeUser(tYLowNeutral,tYHighNeutral);
+    tHist_Xi0K->GetYaxis()->SetRangeUser(tYLowNeutral,tYHighNeutral);
+    tPaveText = tCanPart->SetupTPaveText(cResidualRootTags[tResXi0KType],1,0,0.70,0.75,0.15,0.10,63,20);
+    tCanPart->AddPadPaveText(tPaveText,1,0);
+
+  tCanPart->AddGraph(0,1,tParentHist_XiCK,"",20,kMagenta,0.75,"ex0");
+  tCanPart->AddGraph(0,1,tHist_XiCK,"",24,kMagenta,0.75,"ex0same");
+    tPaveText = tCanPart->SetupTPaveText(cResidualRootTags[tResXiCKType],0,1,0.70,0.80,0.15,0.10,63,20);
+    tCanPart->AddPadPaveText(tPaveText,0,1);
+
+  tCanPart->AddGraph(1,1,tParentHist_OmegaK,"",20,kGreen,0.75,"ex0");
+  tCanPart->AddGraph(1,1,tHist_OmegaK,"",24,kGreen,0.75,"ex0same");
+    tPaveText = tCanPart->SetupTPaveText(cResidualRootTags[tResOmegaKType],1,1,0.70,0.825,0.15,0.10,63,20);
+    tCanPart->AddPadPaveText(tPaveText,1,1);
+
+  tCanPart->SetDrawUnityLine(true);
+  tCanPart->DrawAll();
+  tCanPart->DrawXaxisTitle("#it{k}* (GeV/#it{c})");
+  tCanPart->DrawYaxisTitle("#it{C}(#it{k}*)",43,25,0.05,0.85);
+
+
+  delete [] tPar_SigK;
+  delete [] tPar_Xi0K;
+  delete [] tPar_XiCK;
+  delete [] tPar_OmegaK;
+
+  tCanPart->GetCanvas()->SetName(aCanvasName);
+  tCanPart->GetCanvas()->SetTitle(aCanvasName);
+  return tCanPart->GetCanvas();
+}
+
+//________________________________________________________________________________________________________________
+TCanvas* FitGenerator::DrawPrimaryWithResiduals(int aAnalysisNumber, CentralityType aCentralityType, TString aCanvasName)
+{
+  FitPairAnalysis* tFitPairAnalysis = fSharedAn->GetFitPairAnalysis(aAnalysisNumber);
+  double tOverallLambdaPrimary = tFitPairAnalysis->GetFit()->GetParameter(0);
+  double tRadiusPrimary = tFitPairAnalysis->GetFit()->GetParameter(1);
+  double tReF0Primary = tFitPairAnalysis->GetFit()->GetParameter(2);
+  double tImF0Primary = tFitPairAnalysis->GetFit()->GetParameter(3);
+  double tD0Primary = tFitPairAnalysis->GetFit()->GetParameter(4);
+
+  double tKStarBinWidth = 0.01;
+  vector<double> tKStarBinCenters(100);
+  for(int i=0; i<100; i++) tKStarBinCenters[i] = tKStarBinWidth/2.0 + i*tKStarBinWidth;
+
+  //-------------------------------------------------------------------------------------
+  TH1* tCorrectedFit = tFitPairAnalysis->GetCorrectedFitHistv2();
+    tCorrectedFit->SetLineWidth(2);
+  TH1* tPrimaryFitHist = tFitPairAnalysis->GetCorrectedFitHisto(false,false,false);
+
+  AnalysisType tAnType = tFitPairAnalysis->GetAnalysisType();
+  ResidualType tResSigKType, tResXi0KType, tResXiCKType, tResOmegaKType;
+  switch(tAnType) {
+  case kLamKchP:
+    tResXiCKType = kXiCKchP;
+    tResOmegaKType = kOmegaKchP;
+    tResSigKType = kSig0KchP;
+    tResXi0KType = kXi0KchP;
+    break;
+
+  case kLamKchM:
+    tResXiCKType = kXiCKchM;
+    tResOmegaKType = kOmegaKchM;
+    tResSigKType = kSig0KchM;
+    tResXi0KType = kXi0KchM;
+    break;
+
+  case kALamKchP:
+    tResXiCKType = kAXiCKchP;
+    tResOmegaKType = kAOmegaKchP;
+    tResSigKType = kASig0KchP;
+    tResXi0KType = kAXi0KchP;
+    break;
+
+  case kALamKchM:
+    tResXiCKType = kAXiCKchM;
+    tResOmegaKType = kAOmegaKchM;
+    tResSigKType = kASig0KchM;
+    tResXi0KType = kAXi0KchM;
+    break;
+
+  default:
+    cout << "ERROR: FitGenerator::DrawResiduals  tAnType = " << tAnType << " is not apropriate" << endl << endl;
+    assert(0);
+  }
+  //---------------------------------------------------------------------------------------
+
+
+  //SigK--------------------------------
+  double tLambda_SigK = 0.26473*tOverallLambdaPrimary;
+  double *tPar_SigK = new double[6];
+    tPar_SigK[0] = tLambda_SigK;
+    tPar_SigK[1] = tRadiusPrimary;
+    tPar_SigK[2] = tReF0Primary;
+    tPar_SigK[3] = tImF0Primary;
+    tPar_SigK[4] = tD0Primary;
+    tPar_SigK[5] = 1.0;
+  TH1D* tHist_SigK = fLednickyFitter->GetNeutralResidualCorrelationHistogram(tPar_SigK, tKStarBinCenters, tFitPairAnalysis->GetTransformMatrices()[0], "Residual_SigK");
+
+  //SigK--------------------------------
+  double tLambda_Xi0K = 0.19041*tOverallLambdaPrimary;
+  double *tPar_Xi0K = new double[6];
+    tPar_Xi0K[0] = tLambda_Xi0K;
+    tPar_Xi0K[1] = tRadiusPrimary;
+    tPar_Xi0K[2] = tReF0Primary;
+    tPar_Xi0K[3] = tImF0Primary;
+    tPar_Xi0K[4] = tD0Primary;
+    tPar_Xi0K[5] = 1.0;
+  TH1D* tHist_Xi0K = fLednickyFitter->GetNeutralResidualCorrelationHistogram(tPar_Xi0K, tKStarBinCenters, tFitPairAnalysis->GetTransformMatrices()[2], "Residual_Xi0K");
+
+  //-----------------------------------------------------------------------------------------
+  bool tUseExpXiData = true;
+
+  double tLambda_XiCK = 0.18386*tOverallLambdaPrimary;  //for now, primary lambda scaled by some factor
+  double *tPar_XiCK = new double[8];
+  if(tResXiCKType==kXiCKchP || tResXiCKType==kAXiCKchM)
+  { 
+    tPar_XiCK[0] = tLambda_XiCK;
+    tPar_XiCK[1] = 4.60717;
+    tPar_XiCK[2] = -0.00976133;
+    tPar_XiCK[3] = 0.0409787;
+    tPar_XiCK[4] = -0.33091;
+    tPar_XiCK[5] = -0.484049;
+    tPar_XiCK[6] = 0.523492;
+    tPar_XiCK[7] = 1.53176;
+  }
+  else if(tResXiCKType==kXiCKchM || tResXiCKType==kAXiCKchP)
+  {
+    tPar_XiCK[0] = tLambda_XiCK;
+    tPar_XiCK[1] = 6.97767;
+    tPar_XiCK[2] = -1.94078;
+    tPar_XiCK[3] = -1.21309;
+    tPar_XiCK[4] = 0.160156;
+    tPar_XiCK[5] = 1.38324;
+    tPar_XiCK[6] = 2.02133;
+    tPar_XiCK[7] = 4.07520;
+  }
+  else {tPar_XiCK[0]=0.; tPar_XiCK[1]=0.; tPar_XiCK[2]=0.; tPar_XiCK[3]=0.; tPar_XiCK[4]=0.; tPar_XiCK[5]=0.; tPar_XiCK[6]=0.; tPar_XiCK[7]=0.;}
+  TH1D* tHist_XiCK = fLednickyFitter->GetChargedResidualCorrelationHistogram(tResXiCKType, tPar_XiCK, tKStarBinCenters, tUseExpXiData, aCentralityType, "Residual_XiCK");
+
+  //-----------------------
+
+  double tLambda_OmegaK = 0.01760*tOverallLambdaPrimary;  //for now, primary lambda scaled by some factor
+  double *tPar_OmegaK = new double[8];
+  if(tResOmegaKType==kOmegaKchP || tResOmegaKType==kAOmegaKchM)
+  { 
+    tPar_OmegaK[0] = tLambda_OmegaK;
+    tPar_OmegaK[1] = 2.84;
+    tPar_OmegaK[2] = -1.59;
+    tPar_OmegaK[3] = -0.37;
+    tPar_OmegaK[4] = 5.0;
+    tPar_OmegaK[5] = -0.46;
+    tPar_OmegaK[6] = 1.13;
+    tPar_OmegaK[7] = -2.53;
+  }
+  else if(tResOmegaKType==kOmegaKchM || tResOmegaKType==kAOmegaKchP)
+  {
+    tPar_OmegaK[0] = tLambda_OmegaK;
+    tPar_OmegaK[1] = 2.81;
+    tPar_OmegaK[2] = 0.29;
+    tPar_OmegaK[3] = -0.24;
+    tPar_OmegaK[4] = -10.0;
+    tPar_OmegaK[5] = 0.37;
+    tPar_OmegaK[6] = 0.34;
+    tPar_OmegaK[7] = -3.43;
+  }
+  else {tPar_OmegaK[0]=0.; tPar_OmegaK[1]=0.; tPar_OmegaK[2]=0.; tPar_OmegaK[3]=0.; tPar_OmegaK[4]=0.; tPar_OmegaK[5]=0.; tPar_OmegaK[6]=0.; tPar_OmegaK[7]=0.;}
+  TH1D* tHist_OmegaK = fLednickyFitter->GetChargedResidualCorrelationHistogram(tResOmegaKType, tPar_OmegaK, tKStarBinCenters, tUseExpXiData, aCentralityType, "Residual_OmegaK");
+  //--------------------------------------------------------------------------------
+  TString tCanvasName = "PrimaryWithResiduals";
+  int tNx = 1;
+  int tNy = 1;
+
+  double tXLow = 0.0;
+  double tXHigh = 0.3;
+  double tYLow = 0.9;
+  double tYHigh = 1.1;
+
+  CanvasPartition* tCanPart = new CanvasPartition(tCanvasName,tNx,tNy,tXLow,tXHigh,tYLow,tYHigh,0.12,0.0025,0.13,0.0025);
+  tCanPart->SetDrawOptStat(false);
+
+  //--------------------------------------------------------------------------------
+  tCanPart->AddGraph(0,0,tCorrectedFit,"",20,kBlack,0.75,"ex0");
+  tCanPart->AddGraph(0,0,tPrimaryFitHist,"",24,kBlack,0.75,"ex0same");
+  tCanPart->AddGraph(0,0,tHist_SigK,"",25,kBlack,0.75,"ex0same");
+  tCanPart->AddGraph(0,0,tHist_Xi0K,"",26,kBlack,0.75,"ex0same");
+  tCanPart->AddGraph(0,0,tHist_XiCK,"",27,kBlack,0.75,"ex0same");
+  tCanPart->AddGraph(0,0,tHist_OmegaK,"",28,kBlack,0.75,"ex0same");
+
+  tCanPart->SetDrawUnityLine(true);
+  tCanPart->DrawAll();
+  tCanPart->DrawXaxisTitle("#it{k}* (GeV/#it{c})");
+  tCanPart->DrawYaxisTitle("#it{C}(#it{k}*)",43,25,0.05,0.85);
+
+
+  delete [] tPar_SigK;
+  delete [] tPar_Xi0K;
+  delete [] tPar_XiCK;
+  delete [] tPar_OmegaK;
+
+  tCanPart->GetCanvas()->SetName(aCanvasName);
+  tCanPart->GetCanvas()->SetTitle(aCanvasName);
+  return tCanPart->GetCanvas();
+}
+
+
 
 //________________________________________________________________________________________________________________
 TCanvas* FitGenerator::DrawModelKStarCfs(bool aSaveImage)

@@ -165,6 +165,7 @@ TObjArray* PartialAnalysis::ConnectAnalysisDirectory(TString aFileLocation, TStr
     if(aDirectoryName.Contains("LamKch")) tFemtoListName = "cLamcKch";
     else if(aDirectoryName.Contains("LamK0")) tFemtoListName = "cLamK0";
     else if(aDirectoryName.Contains("XiKch")) tFemtoListName = "cXicKch";
+    else if(aDirectoryName.Contains("XiK0")) tFemtoListName = "cXiK0";
     else
     {
       cout << "ERROR in Analysis::ConnectAnalysisDirectory!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
@@ -235,6 +236,9 @@ void PartialAnalysis::SetParticleTypes()
   else if(fAnalysisType == kAXiKchP) {fParticleTypes[0] = kAXi; fParticleTypes[1] = kKchP;}
   else if(fAnalysisType == kXiKchM) {fParticleTypes[0] = kXi; fParticleTypes[1] = kKchM;}
   else if(fAnalysisType == kAXiKchM) {fParticleTypes[0] = kAXi; fParticleTypes[1] = kKchM;}
+
+  else if(fAnalysisType == kXiK0) {fParticleTypes[0] = kXi; fParticleTypes[1] = kK0;}
+  else if(fAnalysisType == kAXiK0) {fParticleTypes[0] = kAXi; fParticleTypes[1] = kK0;}
 
   else if(fAnalysisType == kLamLam) {fParticleTypes[0] = kLam; fParticleTypes[1] = kLam;}
   else if(fAnalysisType == kALamALam) {fParticleTypes[0] = kALam; fParticleTypes[1] = kALam;}
@@ -349,6 +353,32 @@ void PartialAnalysis::SetDaughterParticleTypes()
       tPart1Daughters[2] = kPiP;
     }
     fDaughterParticleTypes[0] = tPart1Daughters;
+  }
+
+  else if( (fAnalysisType==kXiK0) || (fAnalysisType==kAXiK0) )
+  {
+    fDaughterParticleTypes.resize(2);
+    vector<ParticleType> tPart1Daughters(3);
+    vector<ParticleType> tPart2Daughters(2);
+
+    if(fAnalysisType==kXiK0)
+    {
+      tPart1Daughters[0] = kProton;
+      tPart1Daughters[1] = kPiM;
+      tPart1Daughters[2] = kPiM;
+    }
+    else if(fAnalysisType==kAXiK0)
+    {
+      tPart1Daughters[0] = kPiP;
+      tPart1Daughters[1] = kAntiProton;
+      tPart1Daughters[2] = kPiP;
+    }
+
+    tPart2Daughters[0] = kPiP;
+    tPart2Daughters[1] = kPiM;
+
+    fDaughterParticleTypes[0] = tPart1Daughters;
+    fDaughterParticleTypes[1] = tPart2Daughters;
   }
 
   else{ cout << "ERROR IN SetDaughterParticleTypes:  Invalid fAnalysisType!!!!!!!" << endl << endl;}

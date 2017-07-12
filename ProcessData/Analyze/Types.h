@@ -18,12 +18,12 @@ using std::vector;
   enum PartnerAnalysisType {kcLamK0=0, kcLamcKch=1, kcXicKch=2, kcLamcLam=3, kcLamcPi=4};
 
   enum AnalysisRunType {kTrain=0, kTrainSys=1, kGrid=2};
-  enum AnalysisType {kLamK0=0, kALamK0=1, kLamKchP=2, kALamKchP=3, kLamKchM=4, kALamKchM=5, kXiKchP=6, kAXiKchP=7, kXiKchM=8, kAXiKchM=9, kLamLam=10, kALamALam=11, kLamALam=12, kLamPiP=13, kALamPiP=14, kLamPiM=15, kALamPiM=16};
+  enum AnalysisType {kLamK0=0, kALamK0=1, kLamKchP=2, kALamKchP=3, kLamKchM=4, kALamKchM=5, kXiKchP=6, kAXiKchP=7, kXiKchM=8, kAXiKchM=9, kLamLam=10, kALamALam=11, kLamALam=12, kLamPiP=13, kALamPiP=14, kLamPiM=15, kALamPiM=16, kXiK0=17, kAXiK0=18};
   enum BFieldType {kFemtoPlus=0, kFemtoMinus=1, kBp1=2, kBp2=3, kBm1=4, kBm2=5, kBm3=6};
   enum CentralityType {k0010=0, k1030=1, k3050=2, kMB=3};
   enum ParticleType {kLam=0, kALam=1, kK0=2, kKchP=3, kKchM=4, kXi=5, kAXi=6, kPiP=7, kPiM=8, kProton=9, kAntiProton=10};
 
-  enum DaughterPairType {kPosPos = 0, kPosNeg = 1, kNegPos = 2, kNegNeg = 3, kTrackPos = 4, kTrackNeg = 5, kTrackTrack = 6, kTrackBac=7, kMaxNDaughterPairTypes = 8};
+  enum DaughterPairType {kPosPos = 0, kPosNeg = 1, kNegPos = 2, kNegNeg = 3, kTrackPos = 4, kTrackNeg = 5, kTrackTrack = 6, kTrackBac=7, kBacPos = 8, kBacNeg = 9, kMaxNDaughterPairTypes = 10};
 
   enum AxisType {kXaxis=0, kYaxis=1};
 
@@ -133,8 +133,9 @@ using std::vector;
 
 
   //-------------------------------------------------
-  extern const char* const cAnalysisBaseTags[17];
-  extern const char* const cAnalysisRootTags[17];
+  extern const char* const cAnalysisBaseTags[19];
+  extern const char* const cAnalysisRootTags[19];
+  extern const char* const cResidualRootTags[16];
   extern const char* const cBFieldTags[7];
   extern const char* const cCentralityTags[4];
   extern const char* const cPrettyCentralityTags[4];
@@ -179,7 +180,7 @@ using std::vector;
   extern const char* cAXiPurityTag;
 
   
-  extern const char* const cDaughterPairTags[8];
+  extern const char* const cDaughterPairTags[10];
 
   extern const char* const cAvgSepCfBaseTagsNum[8];
   extern const char* const cAvgSepCfBaseTagsDen[8];

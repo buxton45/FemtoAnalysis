@@ -1222,7 +1222,8 @@ td1dVec ChargedResidualCf::GetExpXiData(double aMaxKStar, CentralityType aCentTy
 {
   if(fExpXiData.size()==0)
   {
-    TString tFileLocationBase = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cXicKch_20170406/Results_cXicKch_20170406";
+//    TString tFileLocationBase = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cXicKch_20170406/Results_cXicKch_20170406";
+    TString tFileLocationBase = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cXicKch_20170505_ignoreOnFlyStatus/Results_cXicKch_20170505_ignoreOnFlyStatus";
     AnalysisType tAnType;
     AnalysisRunType tRunType=kTrain;
     int tNFitPartialAnalysis=2;
@@ -1412,6 +1413,41 @@ double ChargedResidualCf::GetFitCfContentCompletewStaticPairs(double aKStarMagMi
 }
 
 
+//________________________________________________________________________________________________________________
+td1dVec ChargedResidualCf::GetCoulombParentCorrelation(double *aParentCfParams, vector<double> &aKStarBinCenters, bool aUseExpXiData, CentralityType aCentType)
+{
+  if(AreParamsSameExcludingLambda(fCurrentFitParams,aParentCfParams,8))
+  {
+    AdjustLambdaParam(fCoulombCf, fCurrentFitParams[0], aParentCfParams[0]);
+  }
+  else
+  {
+    fUseExpXiData = aUseExpXiData;
+    double tKStarBinWidth = aKStarBinCenters[1]-aKStarBinCenters[0];
+
+    double tKStarMin, tKStarMax;
+    tKStarMax = aKStarBinCenters[aKStarBinCenters.size()-1]+tKStarBinWidth/2.;
+    vector<double> tParentCf(aKStarBinCenters.size(),0.);
+    if(fUseExpXiData) tParentCf = GetExpXiData(tKStarMax,aCentType);
+    else
+    {
+
+      for(unsigned int i=0; i<aKStarBinCenters.size(); i++)
+      {
+        tKStarMin = aKStarBinCenters[i]-tKStarBinWidth/2.;
+        tKStarMax = aKStarBinCenters[i]+tKStarBinWidth/2.;
+
+        if(i==0) tKStarMin = 0.; //TODO this is small, but nonzero
+
+        tParentCf[i] = GetFitCfContentCompletewStaticPairs(tKStarMin,tKStarMax,fCurrentFitParams);
+      }
+    }
+    fCoulombCf = tParentCf;
+  }
+  return fCoulombCf;
+}
+
+
 
 //________________________________________________________________________________________________________________
 td1dVec ChargedResidualCf::GetCoulombResidualCorrelation(double *aParentCfParams, vector<double> &aKStarBinCenters, bool aUseExpXiData, CentralityType aCentType)
@@ -1474,21 +1510,8 @@ td1dVec ChargedResidualCf::GetCoulombResidualCorrelation(double *aParentCfParams
 }
 
 
-//________________________________________________________________________________________________________________
-TH1D* ChargedResidualCf::Convert1dVecToHist(td1dVec &aCfVec, td1dVec &aKStarBinCenters, TString aTitle)
-{
-  assert(aCfVec.size() == aKStarBinCenters.size());
 
-  double tBinWidth = aKStarBinCenters[1]-aKStarBinCenters[0];
-  int tNbins = aKStarBinCenters.size();
-  double tKStarMin = aKStarBinCenters[0]-tBinWidth/2.0;
-  tKStarMin=0.;
-  double tKStarMax = aKStarBinCenters[tNbins-1] + tBinWidth/2.0;
 
-  TH1D* tReturnHist = new TH1D(aTitle, aTitle, tNbins, tKStarMin, tKStarMax);
-  for(int i=0; i<tNbins; i++) tReturnHist->SetBinContent(i+1,aCfVec[i]);
 
-  return tReturnHist;
-}
 
 

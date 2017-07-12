@@ -255,6 +255,46 @@ vector<double> LednickyFitter::GetNeutralResidualCorrelation(double *aParentCfPa
 }
 
 //________________________________________________________________________________________________________________
+vector<double> LednickyFitter::GetChargedParentCorrelation(ResidualType aResidualType, double *aParentCfParams, vector<double> &aKStarBinCenters, bool aUseExpXiData, CentralityType aCentType)
+{
+  td1dVec tReturnCfVec;
+
+  switch(aResidualType) {
+  case kXiCKchP:
+  case kAXiCKchM:
+    fResXiCKchP->SetIncludeSingletAndTriplet(true);
+    tReturnCfVec = fResXiCKchP->GetCoulombParentCorrelation(aParentCfParams,aKStarBinCenters,aUseExpXiData,aCentType);
+    break;
+
+  case kXiCKchM:
+  case kAXiCKchP:
+    fResXiCKchM->SetIncludeSingletAndTriplet(true);
+    tReturnCfVec = fResXiCKchM->GetCoulombParentCorrelation(aParentCfParams,aKStarBinCenters,aUseExpXiData,aCentType);
+    break;
+
+  case kOmegaKchP:
+  case kAOmegaKchM:
+    fResOmegaKchP->SetIncludeSingletAndTriplet(true);
+    tReturnCfVec = fResOmegaKchP->GetCoulombParentCorrelation(aParentCfParams,aKStarBinCenters,aUseExpXiData,aCentType);
+    break;
+
+  case kOmegaKchM:
+  case kAOmegaKchP:
+    fResOmegaKchM->SetIncludeSingletAndTriplet(true);
+    tReturnCfVec = fResOmegaKchM->GetCoulombParentCorrelation(aParentCfParams,aKStarBinCenters,aUseExpXiData,aCentType);
+    break;
+
+
+  default:
+    cout << "ERROR: LednickyFitter::GetChargedResidualCorrelation  aResidualType = " << aResidualType << " is not apropriate" << endl << endl;
+    assert(0);
+  }
+
+
+  return tReturnCfVec;
+}
+
+//________________________________________________________________________________________________________________
 vector<double> LednickyFitter::GetChargedResidualCorrelation(ResidualType aResidualType, double *aParentCfParams, vector<double> &aKStarBinCenters, bool aUseExpXiData, CentralityType aCentType)
 {
   td1dVec tReturnCfVec;
@@ -292,6 +332,65 @@ vector<double> LednickyFitter::GetChargedResidualCorrelation(ResidualType aResid
 
 
   return tReturnCfVec;
+}
+
+//________________________________________________________________________________________________________________
+TH1D* LednickyFitter::Convert1dVecToHist(td1dVec &aCfVec, td1dVec &aKStarBinCenters, TString aTitle)
+{
+  assert(aCfVec.size() == aKStarBinCenters.size());
+
+  double tBinWidth = aKStarBinCenters[1]-aKStarBinCenters[0];
+  int tNbins = aKStarBinCenters.size();
+  double tKStarMin = aKStarBinCenters[0]-tBinWidth/2.0;
+  tKStarMin=0.;
+  double tKStarMax = aKStarBinCenters[tNbins-1] + tBinWidth/2.0;
+
+  TH1D* tReturnHist = new TH1D(aTitle, aTitle, tNbins, tKStarMin, tKStarMax);
+  for(int i=0; i<tNbins; i++) {tReturnHist->SetBinContent(i+1,aCfVec[i]); tReturnHist->SetBinError(i+1,0.00000000001);}
+  //NOTE: Set errors to very small, because if set to zero, just drawing histogram points seems to not work with CanvasPartition package
+
+  return tReturnHist;
+}
+
+//________________________________________________________________________________________________________________
+TH1D* LednickyFitter::GetNeutralParentCorrelationHistogram(double *aParentCfParams, vector<double> &aKStarBinCenters, TString aTitle)
+{
+  vector<double> tParentCf(aKStarBinCenters.size(),0.);
+  double tKStar[1];
+  for(unsigned int i=0; i<aKStarBinCenters.size(); i++)
+  {
+    tKStar[0] = aKStarBinCenters[i];
+    tParentCf[i] = LednickyEq(tKStar,aParentCfParams);
+//TODO TODO TODO Not sure whether above is correct
+  }
+  
+  TH1D* tReturnHist = Convert1dVecToHist(tParentCf, aKStarBinCenters, aTitle);
+  return tReturnHist;
+}
+
+
+//________________________________________________________________________________________________________________
+TH1D* LednickyFitter::GetNeutralResidualCorrelationHistogram(double *aParentCfParams, vector<double> &aKStarBinCenters, TH2* aTransformMatrix, TString aTitle)
+{
+  td1dVec tVec = GetNeutralResidualCorrelation(aParentCfParams, aKStarBinCenters, aTransformMatrix);
+  TH1D *tReturnHisto = Convert1dVecToHist(tVec, aKStarBinCenters, aTitle);
+  return tReturnHisto;
+}
+
+//________________________________________________________________________________________________________________
+TH1D* LednickyFitter::GetChargedParentCorrelationHistogram(ResidualType aResidualType, double *aParentCfParams, vector<double> &aKStarBinCenters, bool aUseExpXiData, CentralityType aCentType, TString aTitle)
+{
+  td1dVec tVec = GetChargedParentCorrelation(aResidualType, aParentCfParams, aKStarBinCenters, aUseExpXiData, aCentType);
+  TH1D *tReturnHisto = Convert1dVecToHist(tVec, aKStarBinCenters, aTitle);
+  return tReturnHisto;
+}
+
+//________________________________________________________________________________________________________________
+TH1D* LednickyFitter::GetChargedResidualCorrelationHistogram(ResidualType aResidualType, double *aParentCfParams, vector<double> &aKStarBinCenters, bool aUseExpXiData, CentralityType aCentType, TString aTitle)
+{
+  td1dVec tVec = GetChargedResidualCorrelation(aResidualType, aParentCfParams, aKStarBinCenters, aUseExpXiData, aCentType);
+  TH1D *tReturnHisto = Convert1dVecToHist(tVec, aKStarBinCenters, aTitle);
+  return tReturnHisto;
 }
 
 //________________________________________________________________________________________________________________
@@ -450,7 +549,7 @@ void LednickyFitter::CalculateFitFunction(int &npar, double &chi2, double *par)
       double *tPar = new double[tNFitParams];
       double tOverallLambda = par[tLambdaMinuitParamNumber];
       //tPar[0] = par[tLambdaMinuitParamNumber];
-      if(fIncludeResidualCorrelations) tPar[0] = 0.25*tOverallLambda;
+      if(fIncludeResidualCorrelations) tPar[0] = 0.29579*tOverallLambda;
       else tPar[0] = tOverallLambda;
       tPar[1] = par[tRadiusMinuitParamNumber];
       tPar[2] = par[tRef0MinuitParamNumber];
@@ -487,11 +586,11 @@ void LednickyFitter::CalculateFitFunction(int &npar, double &chi2, double *par)
 
       if(fIncludeResidualCorrelations) 
       {
-        double tLambda_SigK = 0.20*tOverallLambda;  //for now, primary lambda scaled by some factor
+        double tLambda_SigK = 0.26473*tOverallLambda;  //for now, primary lambda scaled by some factor
         double *tPar_SigK = AdjustLambdaParam(tPar,tLambda_SigK,tNFitParams);
         td1dVec tResidual_SigK = GetNeutralResidualCorrelation(tPar_SigK,tKStarBinCenters,tFitPairAnalysis->GetTransformMatrices()[0]);
 
-        double tLambda_Xi0K = 0.13*tOverallLambda;  //for now, primary lambda scaled by some factor
+        double tLambda_Xi0K = 0.19041*tOverallLambda;  //for now, primary lambda scaled by some factor
         double *tPar_Xi0K = AdjustLambdaParam(tPar,tLambda_Xi0K,tNFitParams);
         td1dVec tResidual_Xi0K = GetNeutralResidualCorrelation(tPar_Xi0K,tKStarBinCenters,tFitPairAnalysis->GetTransformMatrices()[2]);
 
@@ -523,10 +622,10 @@ void LednickyFitter::CalculateFitFunction(int &npar, double &chi2, double *par)
           assert(0);
         }
 
-        bool tUseExpXiData = false;
+        bool tUseExpXiData = true;
         //if(tFitPartialAnalysis->GetCentralityType()==k0010) tUseExpXiData=true;
 
-        double tLambda_XiCK = 0.12*tOverallLambda;  //for now, primary lambda scaled by some factor
+        double tLambda_XiCK = 0.18386*tOverallLambda;  //for now, primary lambda scaled by some factor
 //        double *tPar_XiCK = AdjustLambdaParam(tPar,tLambda_XiCK,tNFitParams);
         double *tPar_XiCK = new double[8];
         if(tResXiCKType==kXiCKchP || tResXiCKType==kAXiCKchM)
@@ -554,7 +653,7 @@ void LednickyFitter::CalculateFitFunction(int &npar, double &chi2, double *par)
         else {tPar_XiCK[0]=0.; tPar_XiCK[1]=0.; tPar_XiCK[2]=0.; tPar_XiCK[3]=0.; tPar_XiCK[4]=0.; tPar_XiCK[5]=0.; tPar_XiCK[6]=0.; tPar_XiCK[7]=0.;}
         td1dVec tResidual_XiCK = GetChargedResidualCorrelation(tResXiCKType,tPar_XiCK,tKStarBinCenters,tUseExpXiData,tFitPartialAnalysis->GetCentralityType());
 
-        double tLambda_OmegaK = 0.01*tOverallLambda;  //for now, primary lambda scaled by some factor
+        double tLambda_OmegaK = 0.01760*tOverallLambda;  //for now, primary lambda scaled by some factor
 //        double *tPar_OmegaK = AdjustLambdaParam(tPar,tLambda_OmegaK,tNFitParams);
         double *tPar_OmegaK = new double[8];
 //TODO for now, use same parameters for OmegaK as XiK

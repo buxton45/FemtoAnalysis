@@ -25,9 +25,10 @@ int main(int argc, char **argv)
   bool bWriteEvents = false;
   bool bReadFromRoot = true;
   bool bReadFromTxt = false;
+  bool bPrintUniqueParents = false;
   assert(!(bReadFromRoot && bReadFromTxt));
 
-  TString tEventsDirectory, tEventsSaveFileNameBase, tMatricesSaveFileName;
+  TString tEventsDirectory, tEventsSaveFileNameBase, tMatricesSaveFileName, tPairFractionSaveName;
 
   //-----------------------------------------
   if(bRunFull)
@@ -35,28 +36,33 @@ int main(int argc, char **argv)
     tEventsDirectory = "/home/jesse/Analysis/Therminator2/events/lhyqid3v_LHCPbPb_2760_b2/";
     tEventsSaveFileNameBase = "/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b2/";
     tMatricesSaveFileName = "/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b2/TransformMatrices.root";
+    tPairFractionSaveName = "/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b2/PairFractions.root";
   }
   else
   {
     tEventsDirectory = "/home/jesse/Analysis/Therminator2/events/TestEvents/";
     tEventsSaveFileNameBase = "/home/jesse/Analysis/ReducedTherminator2Events/test/test";
     tMatricesSaveFileName = "/home/jesse/Analysis/ReducedTherminator2Events/test/testTransformMatrices.root";
+    tPairFractionSaveName = "/home/jesse/Analysis/ReducedTherminator2Events/test/testPairFractions.root";
   }
   //-----------------------------------------
   if(bWriteEvents)
   {
-    tEventsCollection->ExtractFromAllRootFiles(tEventsDirectory);
+    tEventsCollection->ExtractFromAllRootFiles(tEventsDirectory, bPrintUniqueParents);
     tEventsCollection->WriteAllEvents(tEventsSaveFileNameBase);
   }
 
   //-----------------------------------------
-  if(bReadFromRoot) tEventsCollection->ExtractFromAllRootFiles(tEventsDirectory);;
+  if(bReadFromRoot) tEventsCollection->ExtractFromAllRootFiles(tEventsDirectory, bPrintUniqueParents);
   if(bReadFromTxt) tEventsCollection->ExtractEventsFromAllTxtFiles(tEventsSaveFileNameBase);
 
   //-----------------------------------------
 
 
   tEventsCollection->SaveAllTransformMatrices(tMatricesSaveFileName);
+  tEventsCollection->SaveAllPairFractionHistograms(tPairFractionSaveName);
+  TCanvas* tCan = tEventsCollection->DrawAllPairFractionHistograms();
+  if(bPrintUniqueParents) tEventsCollection->PrintUniqueParents();
 //-------------------------------------------------------------------------------
   tFullTimer.Stop();
   cout << "Finished program: ";

@@ -32,7 +32,7 @@ TH2F* Get2dHisto(TString FileName, TString ArrayName, TString HistoName)
     }
   else
     {
-      TH1F *ReturnHisto = (TH2F*)femtolist->FindObject(HistoName);
+      TH2F *ReturnHisto = (TH2F*)femtolist->FindObject(HistoName);
     }
 
   TH2F *ReturnHistoClone = (TH2F*)ReturnHisto->Clone();

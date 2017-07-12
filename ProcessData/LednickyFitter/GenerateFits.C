@@ -17,6 +17,7 @@ int main(int argc, char **argv)
   AnalysisRunType tAnRunType = kTrain;
   int tNPartialAnalysis = 2;
   CentralityType tCentType = k0010;  //TODO
+//  CentralityType tCentType = kMB;  //TODO
   FitGeneratorType tGenType = kPairwConj;
   bool tShareLambdaParams = false;
   bool tAllShareSingleLambdaParam = false;
@@ -25,7 +26,9 @@ int main(int argc, char **argv)
   bool ApplyMomResCorrection = true;
   bool ApplyNonFlatBackgroundCorrection = true;
   NonFlatBgdFitType tNonFlatBgdFitType = kLinear;
-  bool IncludeResiduals = false;
+  bool IncludeResiduals = true;
+
+  bool bDrawResiduals = true;
 
   TString tGeneralAnTypeName;
   if(tAnType==kLamK0 || tAnType==kALamK0) tGeneralAnTypeName = "cLamK0";
@@ -62,6 +65,14 @@ int main(int argc, char **argv)
 //  TCanvas* tModelKStarCfs = tLamKchP->DrawModelKStarCfs(SaveImages);
 //  tLamKchP->FindGoodInitialValues(ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection);
 
+//-------------------------------------------------------------------------------
+  if(bDrawResiduals)
+  {
+    TCanvas* tCanLamKchP = tLamKchP->DrawResiduals(0,k0010,cAnalysisBaseTags[tAnType]);
+//    tCanLamKchP->SaveAs(TString("Residuals")+TString(tCanLamKchP->GetName())+TString(".pdf"));
+
+    TCanvas* tCanPrimWithRes = tLamKchP->DrawPrimaryWithResiduals(0,k0010,TString("PrimaryWithResidual_")+TString(cAnalysisBaseTags[tAnType]));
+  }
 //-------------------------------------------------------------------------------
   tFullTimer.Stop();
   cout << "Finished program: ";

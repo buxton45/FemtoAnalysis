@@ -96,9 +96,8 @@ public:
   td1dVec GetExpXiData(double aMaxKStar=1.0, CentralityType aCentType=k0010);
   double GetFitCfContentCompletewStaticPairs(double aKStarMagMin, double aKStarMagMax, double *par);  //TODO!!!!!
 
-
+  td1dVec GetCoulombParentCorrelation(double *aParentCfParams, vector<double> &aKStarBinCenters, bool aUseExpXiData=false, CentralityType aCentType=k0010);
   td1dVec GetCoulombResidualCorrelation(double *aParentCfParams, vector<double> &aKStarBinCenters, bool aUseExpXiData=false, CentralityType aCentType=k0010);
-  TH1D* Convert1dVecToHist(td1dVec &aCfVec, td1dVec &aKStarBinCenters, TString aTitle = "tCf");
 
 
   //inline (i.e. simple) functions

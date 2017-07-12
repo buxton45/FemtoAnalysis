@@ -9,10 +9,13 @@ CFLAGS = $(shell root-config --cflags) -Wall -std=c++11 -I${ANALYZE_DIR} -I${UTI
 MY_LIBS = $(addprefix build/, Types.o ThermParticle.o ThermV0Particle.o ThermEvent.o ThermEventsCollection.o)
 
 
-all: runTest
+all: runTest runPlotResiduals
 
 runTest: ${MY_LIBS} test.C
 	g++ test.C ${MY_LIBS} -o runTest $(LIBS) $(CFLAGS)
+
+runPlotResiduals: ${MY_LIBS} PlotResiduals.C
+	g++ PlotResiduals.C ${MY_LIBS} -o runPlotResiduals $(LIBS) $(CFLAGS)
 
 build/%.o: ${ANALYZE_DIR}/%.cxx ${ANALYZE_DIR}/%.h
 	g++ -c $< $(CFLAGS) -o $@

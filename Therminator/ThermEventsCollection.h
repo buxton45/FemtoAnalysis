@@ -16,6 +16,7 @@
 #include "TH2.h"
 #include "TH2D.h"
 #include "TFile.h"
+#include "TCanvas.h"
 
 #include "ThermEvent.h"
 class ThermEvent;
@@ -45,7 +46,7 @@ public:
   void ExtractEventsFromAllTxtFiles(TString aFileLocationBase);
 
   void ExtractEventsFromRootFile(TString aFileLocation);
-  void ExtractFromAllRootFiles(const char *aDirName);
+  void ExtractFromAllRootFiles(const char *aDirName, bool bBuildUniqueParents=false);
 
   //---------------------------------------------------
 
@@ -68,6 +69,15 @@ public:
   void BuildAllTransformMatrices();  //TODO
   void SaveAllTransformMatrices(TString aSaveFileLocation);
 
+  void MapAndFillParentsMatrix(TH2* aMatrix, int aV0FatherType, int aTrackFatherType);
+  void BuildPairFractionHistogramsParticleV0(ParticlePDGType aParticleType, ParticlePDGType aV0Type, TH1* aHistogram, TH2* aMatrix);
+  void BuildAllPairFractionHistograms();
+  void BuildUniqueParents(int aV0FatherType, int aTrackFatherType);
+  void PrintUniqueParents();
+
+  void SaveAllPairFractionHistograms(TString aSaveFileLocation);
+  TCanvas* DrawAllPairFractionHistograms();
+
 
   //inline
   void SetUseMixedEvents(bool aMixEvents);
@@ -86,11 +96,18 @@ private:
   double fKStarMin, fKStarMax;
   int fNBinsKStar;
 
+  bool fBuildUniqueParents;
+  vector<int> fUniqueV0Parents;
+  vector<int> fUniqueTrackParents;
+
   //LamKchP
   TH2* fSigToLamKchPTransform;
   TH2* fXiCToLamKchPTransform;
   TH2* fXi0ToLamKchPTransform;
   TH2* fOmegaToLamKchPTransform;
+
+  TH1* fPairFractionsLamKchP;
+  TH2* fParentsMatrixLamKchP;
 
   //ALamKchP
   TH2* fASigToALamKchPTransform;
@@ -98,17 +115,26 @@ private:
   TH2* fAXi0ToALamKchPTransform;
   TH2* fAOmegaToALamKchPTransform;
 
+  TH1* fPairFractionsALamKchP;
+  TH2* fParentsMatrixALamKchP;
+
   //LamKchM
   TH2* fSigToLamKchMTransform;
   TH2* fXiCToLamKchMTransform;
   TH2* fXi0ToLamKchMTransform;
   TH2* fOmegaToLamKchMTransform;
 
+  TH1* fPairFractionsLamKchM;
+  TH2* fParentsMatrixLamKchM;
+
   //ALamKchM
   TH2* fASigToALamKchMTransform;
   TH2* fAXiCToALamKchMTransform;
   TH2* fAXi0ToALamKchMTransform;
   TH2* fAOmegaToALamKchMTransform;
+
+  TH1* fPairFractionsALamKchM;
+  TH2* fParentsMatrixALamKchM;
 
   //LamLam to check with Jai
   TH2* fSigToLamLamTransform;

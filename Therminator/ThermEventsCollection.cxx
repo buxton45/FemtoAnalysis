@@ -29,29 +29,41 @@ ThermEventsCollection::ThermEventsCollection() :
   fKStarMax(1.),
   fNBinsKStar(200),
 
+  fBuildUniqueParents(false),
+  fUniqueV0Parents(0),
+  fUniqueTrackParents(0),
+
   //LamKchP
   fSigToLamKchPTransform(0),
   fXiCToLamKchPTransform(0),
   fXi0ToLamKchPTransform(0),
   fOmegaToLamKchPTransform(0),
+  fPairFractionsLamKchP(0),
+  fParentsMatrixLamKchP(0),
 
   //ALamKchP
   fASigToALamKchPTransform(0),
   fAXiCToALamKchPTransform(0),
   fAXi0ToALamKchPTransform(0),
   fAOmegaToALamKchPTransform(0),
+  fPairFractionsALamKchP(0),
+  fParentsMatrixALamKchP(0),
 
   //LamKchM
   fSigToLamKchMTransform(0),
   fXiCToLamKchMTransform(0),
   fXi0ToLamKchMTransform(0),
   fOmegaToLamKchMTransform(0),
+  fPairFractionsLamKchM(0),
+  fParentsMatrixLamKchM(0),
 
   //ALamKchM
   fASigToALamKchMTransform(0),
   fAXiCToALamKchMTransform(0),
   fAXi0ToALamKchMTransform(0),
   fAOmegaToALamKchMTransform(0),
+  fPairFractionsALamKchM(0),
+  fParentsMatrixALamKchM(0),
 
   fSigToLamLamTransform(0)
 
@@ -61,24 +73,32 @@ ThermEventsCollection::ThermEventsCollection() :
   fXiCToLamKchPTransform = new TH2D("fXiCToLamKchPTransform","fXiCToLamKchPTransform",fNBinsKStar,fKStarMin,fKStarMax,fNBinsKStar,fKStarMin,fKStarMax);
   fXi0ToLamKchPTransform = new TH2D("fXi0ToLamKchPTransform","fXi0ToLamKchPTransform",fNBinsKStar,fKStarMin,fKStarMax,fNBinsKStar,fKStarMin,fKStarMax);
   fOmegaToLamKchPTransform = new TH2D("fOmegaToLamKchPTransform","fOmegaToLamKchPTransform",fNBinsKStar,fKStarMin,fKStarMax,fNBinsKStar,fKStarMin,fKStarMax);
+  fPairFractionsLamKchP = new TH1D("fPairFractionsLamKchP", "fPairFractionsLamKchP", 6, 0, 6);
+  fParentsMatrixLamKchP = new TH2D("fParentsMatrixLamKchP", "fParentsMatrixLamKchP", 100, 0, 100, 100, 0, 100);
 
   //ALamKchP
   fASigToALamKchPTransform = new TH2D("fASigToALamKchPTransform","fASigToALamKchPTransform",fNBinsKStar,fKStarMin,fKStarMax,fNBinsKStar,fKStarMin,fKStarMax);
   fAXiCToALamKchPTransform = new TH2D("fAXiCToALamKchPTransform","fAXiCToALamKchPTransform",fNBinsKStar,fKStarMin,fKStarMax,fNBinsKStar,fKStarMin,fKStarMax);
   fAXi0ToALamKchPTransform = new TH2D("fAXi0ToALamKchPTransform","fAXi0ToALamKchPTransform",fNBinsKStar,fKStarMin,fKStarMax,fNBinsKStar,fKStarMin,fKStarMax);
   fAOmegaToALamKchPTransform = new TH2D("fAOmegaToALamKchPTransform","fAOmegaToALamKchPTransform",fNBinsKStar,fKStarMin,fKStarMax,fNBinsKStar,fKStarMin,fKStarMax);
+  fPairFractionsALamKchP = new TH1D("fPairFractionsALamKchP", "fPairFractionsALamKchP", 6, 0, 6);
+  fParentsMatrixALamKchP = new TH2D("fParentsMatrixALamKchP", "fParentsMatrixALamKchP", 100, 0, 100, 100, 0, 100);
 
   //LamKchM
   fSigToLamKchMTransform = new TH2D("fSigToLamKchMTransform","fSigToLamKchMTransform",fNBinsKStar,fKStarMin,fKStarMax,fNBinsKStar,fKStarMin,fKStarMax);
   fXiCToLamKchMTransform = new TH2D("fXiCToLamKchMTransform","fXiCToLamKchMTransform",fNBinsKStar,fKStarMin,fKStarMax,fNBinsKStar,fKStarMin,fKStarMax);
   fXi0ToLamKchMTransform = new TH2D("fXi0ToLamKchMTransform","fXi0ToLamKchMTransform",fNBinsKStar,fKStarMin,fKStarMax,fNBinsKStar,fKStarMin,fKStarMax);
   fOmegaToLamKchMTransform = new TH2D("fOmegaToLamKchMTransform","fOmegaToLamKchMTransform",fNBinsKStar,fKStarMin,fKStarMax,fNBinsKStar,fKStarMin,fKStarMax);
+  fPairFractionsLamKchM = new TH1D("fPairFractionsLamKchM", "fPairFractionsLamKchM", 6, 0, 6);
+  fParentsMatrixLamKchM = new TH2D("fParentsMatrixLamKchM", "fParentsMatrixLamKchM", 100, 0, 100, 100, 0, 100);
 
   //ALamKchM
   fASigToALamKchMTransform = new TH2D("fASigToALamKchMTransform","fASigToALamKchMTransform",fNBinsKStar,fKStarMin,fKStarMax,fNBinsKStar,fKStarMin,fKStarMax);
   fAXiCToALamKchMTransform = new TH2D("fAXiCToALamKchMTransform","fAXiCToALamKchMTransform",fNBinsKStar,fKStarMin,fKStarMax,fNBinsKStar,fKStarMin,fKStarMax);
   fAXi0ToALamKchMTransform = new TH2D("fAXi0ToALamKchMTransform","fAXi0ToALamKchMTransform",fNBinsKStar,fKStarMin,fKStarMax,fNBinsKStar,fKStarMin,fKStarMax);
   fAOmegaToALamKchMTransform = new TH2D("fAOmegaToALamKchMTransform","fAOmegaToALamKchMTransform",fNBinsKStar,fKStarMin,fKStarMax,fNBinsKStar,fKStarMin,fKStarMax);
+  fPairFractionsALamKchM = new TH1D("fPairFractionsALamKchM", "fPairFractionsALamKchM", 6, 0, 6);
+  fParentsMatrixALamKchM = new TH2D("fParentsMatrixALamKchM", "fParentsMatrixALamKchM", 100, 0, 100, 100, 0, 100);
 
   //LamLam
   fSigToLamLamTransform = new TH2D("fSigToLamLamTransform","fSigToLamLamTransform",fNBinsKStar,fKStarMin,fKStarMax,fNBinsKStar,fKStarMin,fKStarMax);
@@ -550,8 +570,10 @@ cout << "fNEvents = " << fNEvents << endl;
 
 
 //________________________________________________________________________________________________________________
-void ThermEventsCollection::ExtractFromAllRootFiles(const char *aDirName)
+void ThermEventsCollection::ExtractFromAllRootFiles(const char *aDirName, bool bBuildUniqueParents)
 {
+  fBuildUniqueParents = bBuildUniqueParents;
+
   fFileNameCollection.clear();
   TString tCompleteFilePath;
 
@@ -580,6 +602,7 @@ void ThermEventsCollection::ExtractFromAllRootFiles(const char *aDirName)
         ExtractEventsFromRootFile(tCompleteFilePath);
 
         BuildAllTransformMatrices();
+        BuildAllPairFractionHistograms();
         fEventsCollection.clear();
         fEventsCollection.shrink_to_fit();
 
@@ -949,16 +972,160 @@ void ThermEventsCollection::SaveAllTransformMatrices(TString aSaveFileLocation)
   tFile->Close();
 }
 
+//________________________________________________________________________________________________________________
+void ThermEventsCollection::MapAndFillParentsMatrix(TH2* aMatrix, int aV0FatherType, int aTrackFatherType)
+{
+  //Note: List of parent PIDs found by turning on bBuildUniqueParents switch in ThermEventsCollection::ExtractFromAllRootFiles
+  vector<int> tV0Fathers {3114, 3116, 3118, 3122, 3124, 3212, 3214, 3216, 3218, 3224, 3226, 3228, 3312, 3322, 3334, 4028, 4128, 4228, 8116, 8117, 8118, 8900, 8901, 13112, 13114, 13116, 13124, 13212, 13214, 13216, 13222, 13224, 13226, 13314, 13324, 23114, 23214, 23224, 31214, 32112, 32124, 32212, 33122, 42112, 42212, 67000, 67001, 67718, 67719};
+
+  vector<int> tTrackFathers {115, 119, 215, 219, 313, 317, 321, 323, 327, 333, 335, 337, 3118, 3124, 3126, 3128, 3216, 3218, 3226, 3228, 3334, 4128, 4228, 8117, 8118, 8900, 8901, 9000, 10111, 10115, 10211, 10215, 10221, 10311, 10313, 10321, 10323, 10331, 13124, 13126, 13212, 13214, 13216, 13222, 13224, 13226, 13314, 13324, 20223, 20313, 20315, 20323, 20325, 20333, 23114, 23122, 23124, 23214, 23224, 30313, 30323, 31214, 32112, 33122, 42112, 43122, 53122, 67001, 67718, 67719, 100313, 100323, 100331, 100333, 9000223};
+
+  int tBinV0Father=-1, tBinTrackFather=-1;
+  for(unsigned int i=0; i<tV0Fathers.size(); i++) if(aV0FatherType==tV0Fathers[i]) tBinV0Father=i;
+  for(unsigned int i=0; i<tTrackFathers.size(); i++) if(aTrackFatherType==tTrackFathers[i]) tBinTrackFather=i;
+
+  if(!fBuildUniqueParents)  //If true, I am likely looking for new parents, so I don't want these asserts to be tripped
+  {
+    if(tBinV0Father==-1) cout << "FAILURE IMMINENT: aV0FatherType = " << aV0FatherType << endl;
+    if(tBinTrackFather==-1) cout << "FAILURE IMMINENT: aTrackFatherType = " << aTrackFatherType << endl;
+    assert(tBinV0Father>-1);
+    assert(tBinTrackFather>-1);
+  }
+  aMatrix->Fill(tBinV0Father,tBinTrackFather);
+}
 
 
+//________________________________________________________________________________________________________________
+void ThermEventsCollection::BuildPairFractionHistogramsParticleV0(ParticlePDGType aParticleType, ParticlePDGType aV0Type, TH1* aHistogram, TH2* aMatrix)
+{
+  vector<ThermParticle> aParticleCollection;
+  vector<ThermV0Particle> aV0Collection;
+
+  for(unsigned int iEv=0; iEv < fEventsCollection.size(); iEv++)
+  {
+    aV0Collection =  fEventsCollection[iEv].GetV0ParticleCollection(aV0Type);
+    aParticleCollection = fEventsCollection[iEv].GetParticleCollection(aParticleType);
+
+    ThermV0Particle tV0;
+
+    for(unsigned int iV0=0; iV0<aV0Collection.size(); iV0++)
+    {
+      tV0 = aV0Collection[iV0];
+      int tV0FatherType = tV0.GetFatherPID();
+
+      double tBin = 0.;
+      if(tV0FatherType == aV0Type) tBin = 0.;
+      else if(tV0FatherType==kPDGSigma || tV0FatherType==kPDGASigma) tBin = 1.;
+      else if(tV0FatherType==kPDGXi0 || tV0FatherType==kPDGAXi0) tBin = 2.;
+      else if(tV0FatherType==kPDGXiC || tV0FatherType==kPDGAXiC) tBin = 3.;
+      else if(tV0FatherType==kPDGOmega || tV0FatherType==kPDGAOmega) tBin = 4.;
+      else tBin = -1.;
+      tBin += 0.1;
+
+      if(tV0.GoodV0())
+      {
+        ThermParticle tParticle;
+        for(unsigned int iPar=0; iPar<aParticleCollection.size(); iPar++)
+        {
+          tParticle = aParticleCollection[iPar];
+          int tParticleFatherType = tParticle.GetFatherPID();
+
+          aHistogram->Fill(tBin);
+          if(fBuildUniqueParents) BuildUniqueParents(TMath::Abs(tV0FatherType), TMath::Abs(tParticleFatherType));
+          MapAndFillParentsMatrix(aMatrix, TMath::Abs(tV0FatherType), TMath::Abs(tParticleFatherType));
+        }
+      }
+    }
+
+  }
+
+}
 
 
+//________________________________________________________________________________________________________________
+void ThermEventsCollection::BuildAllPairFractionHistograms()
+{
+  BuildPairFractionHistogramsParticleV0(kPDGKchP, kPDGLam, fPairFractionsLamKchP, fParentsMatrixLamKchP);
+  BuildPairFractionHistogramsParticleV0(kPDGKchM, kPDGALam, fPairFractionsALamKchM, fParentsMatrixALamKchM);
+
+  BuildPairFractionHistogramsParticleV0(kPDGKchM, kPDGLam, fPairFractionsLamKchM, fParentsMatrixLamKchM);
+  BuildPairFractionHistogramsParticleV0(kPDGKchP, kPDGALam, fPairFractionsALamKchP, fParentsMatrixALamKchP);
+}
 
 
+//________________________________________________________________________________________________________________
+void ThermEventsCollection::BuildUniqueParents(int aV0FatherType, int aTrackFatherType)
+{
+  bool bV0ParentAlreadyIncluded = false;
+  bool bTrackParentAlreadyIncluded = false;
+  for(unsigned int a=0; a<fUniqueV0Parents.size(); a++)
+  {
+    if(fUniqueV0Parents[a] == aV0FatherType) bV0ParentAlreadyIncluded = true;
+  }
+  for(unsigned int b=0; b<fUniqueTrackParents.size(); b++)
+  {
+    if(fUniqueTrackParents[b] == aTrackFatherType) bTrackParentAlreadyIncluded = true;
+  }
+  if(!bV0ParentAlreadyIncluded) fUniqueV0Parents.push_back(aV0FatherType);
+  if(!bTrackParentAlreadyIncluded) fUniqueTrackParents.push_back(aTrackFatherType);
 
+}
 
+//________________________________________________________________________________________________________________
+void ThermEventsCollection::PrintUniqueParents()
+{
+  std::sort(fUniqueV0Parents.begin(), fUniqueV0Parents.end());
+  cout << "fUniqueV0Parents.size() = " << fUniqueV0Parents.size() << endl;
+  for(unsigned int a=0; a<fUniqueV0Parents.size(); a++) cout << fUniqueV0Parents[a] << ", ";
+  cout << endl;
 
+  std::sort(fUniqueTrackParents.begin(), fUniqueTrackParents.end());
+  cout << "fUniqueTrackParents.size() = " << fUniqueTrackParents.size() << endl;
+  for(unsigned int b=0; b<fUniqueTrackParents.size(); b++) cout << fUniqueTrackParents[b] << ", ";
+  cout << endl << endl << endl;
+}
 
+//________________________________________________________________________________________________________________
+void ThermEventsCollection::SaveAllPairFractionHistograms(TString aSaveFileLocation)
+{
+  TFile *tFile = new TFile(aSaveFileLocation, "RECREATE");
+  assert(tFile->IsOpen());
+
+  fPairFractionsLamKchP->Write();
+  fParentsMatrixLamKchP->Write();
+
+  fPairFractionsALamKchM->Write();
+  fParentsMatrixALamKchM->Write();
+
+  fPairFractionsLamKchM->Write();
+  fParentsMatrixLamKchM->Write();
+
+  fPairFractionsALamKchP->Write();
+  fParentsMatrixALamKchP->Write();
+
+  tFile->Close();
+}
+
+//________________________________________________________________________________________________________________
+TCanvas* ThermEventsCollection::DrawAllPairFractionHistograms()
+{
+  TCanvas* tReturnCan = new TCanvas("tReturnCan","tReturnCan");
+  tReturnCan->Divide(2,2);
+  
+  tReturnCan->cd(1);
+  fPairFractionsLamKchP->Draw();
+
+  tReturnCan->cd(2);
+  fPairFractionsALamKchM->Draw();
+
+  tReturnCan->cd(3);
+  fPairFractionsLamKchM->Draw();
+
+  tReturnCan->cd(4);
+  fPairFractionsALamKchP->Draw();
+
+  return tReturnCan;
+}
 
 
 

@@ -14,9 +14,13 @@ const int cPDGValues[18] = {2212,-2212,211,-211,311,321,-321,3122,-3122,3212,-32
 
 
 //enum AnalysisType
-const char* const cAnalysisBaseTags[17] = {"LamK0", "ALamK0", "LamKchP", "ALamKchP", "LamKchM", "ALamKchM", "XiKchP", "AXiKchP", "XiKchM", "AXiKchM", "LamLam", "ALamALam", "LamALam", "LamPiP", "ALamPiP", "LamPiM", "ALamPiM"};
+const char* const cAnalysisBaseTags[19] = {"LamK0", "ALamK0", "LamKchP", "ALamKchP", "LamKchM", "ALamKchM", "XiKchP", "AXiKchP", "XiKchM", "AXiKchM", "LamLam", "ALamALam", "LamALam", "LamPiP", "ALamPiP", "LamPiM", "ALamPiM", "XiK0", "AXiK0"};
 
-const char* const cAnalysisRootTags[17] = {"#LambdaK^{0}_{S}", "#bar{#Lambda}K^{0}_{S}", "#LambdaK+", "#bar{#Lambda}K+", "#LambdaK-", "#bar{#Lambda}K-", "#Xi-K+", "#bar{#Xi}+K+", "#Xi-K-", "#bar{#Xi}+K-", "#Lambda#Lambda", "#bar{#Lambda}#bar{#Lambda}", "#Lambda#bar{#Lambda}", "#Lambda#pi+", "#bar{#Lambda}#pi+", "#Lambda#pi-", "#bar{#Lambda}#pi-"};
+const char* const cAnalysisRootTags[19] = {"#LambdaK^{0}_{S}", "#bar{#Lambda}K^{0}_{S}", "#LambdaK+", "#bar{#Lambda}K+", "#LambdaK-", "#bar{#Lambda}K-", "#Xi-K+", "#bar{#Xi}+K+", "#Xi-K-", "#bar{#Xi}+K-", "#Lambda#Lambda", "#bar{#Lambda}#bar{#Lambda}", "#Lambda#bar{#Lambda}", "#Lambda#pi+", "#bar{#Lambda}#pi+", "#Lambda#pi-", "#bar{#Lambda}#pi-", "#XiK^{0}_{S}", "#bar{#Xi}K^{0}_{S}"};
+
+//enum ResidualType
+const char* const cResidualRootTags[16] = {"#Sigma^{0}K+", "#bar{#Sigma}^{0}K+", "#Sigma^{0}K-", "#bar{#Sigma}^{0}K-", "#Xi^{0}K+", "#bar{#Xi}^{0}K+", "#Xi^{0}K-", "#bar{#Xi}^{0}K-", "#Xi-K+", "#bar{#Xi}+K+", "#Xi-K-", "#bar{#Xi}+K-", "#Omega-K+", "#bar{#Omega}+K+", "#Omega-K-", "#bar{#Omega}+K-"};
+
 
 //enum BFieldType
 const char* const cBFieldTags[7] = {"_FemtoPlus", "_FemtoMinus", "_Bp1", "_Bp2", "_Bm1", "_Bm2", "_Bm3"};
@@ -82,7 +86,7 @@ const char* cXiPurityTag = "XiPurityAid";
 const char* cAXiPurityTag = "AXiPurityAid";
 
 //enum DaughterPairType----*----*----*----*----*----*----*----*----*----*----*----*----*----*----*----*----*----*----*----*----*
-const char* const cDaughterPairTags[8] = {"PosPos", "PosNeg", "NegPos", "NegNeg", "TrackPos", "TrackNeg", "TrackTrack", "TrackBac"};
+const char* const cDaughterPairTags[10] = {"PosPos", "PosNeg", "NegPos", "NegNeg", "TrackPos", "TrackNeg", "TrackTrack", "TrackBac", "BacPos", "BacNeg"};
 
 /*
 const char* const cAvgSepCfBaseTagsNum[7] = {"NumPosPosAvgSepCf_", "NumPosNegAvgSepCf_", "NumNegPosAvgSepCf_", "NumNegNegAvgSepCf_", "NumTrackPosAvgSepCf_", "NumTrackNegAvgSepCf_", "NumTrackTrackAvgSepCf_"};

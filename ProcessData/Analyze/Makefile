@@ -7,7 +7,7 @@ CFLAGS = $(shell root-config --cflags) -Wall -std=c++11 -I${UTILITIES_DIR} -g -O
 
 MY_LIBS = $(addprefix build/, CfLite.o CfHeavy.o Cf2dLite.o Cf2dHeavy.o Types.o Purity.o PartialAnalysis.o Analysis.o DataAndModel.o PlotPartners.o PlotPartnersLamKch.o PlotPartnersLamK0.o SystematicAnalysis.o CanvasPartition.o)
 
-all: runBuildcLamcKch runBuildcLamK0 runBuildcXicKch runBuildcLamcLam runCombineConjugatesLamKch runCombineConjugatesLamK0 runCombineConjugatesXiKch runBuildMomResMatrix runBuildMomResMatrix2 runCompareFixes runCorrectCfs runTest runV0PurityBgdEstimator
+all: runBuildcLamcKch runBuildcLamK0 runBuildcXicKch runBuildcXiK0 runBuildcLamcLam runCombineConjugatesLamKch runCombineConjugatesLamK0 runCombineConjugatesXiKch runBuildMomResMatrix runBuildMomResMatrix2 runCompareFixes runCorrectCfs runTest runV0PurityBgdEstimator
 
 runBuildcLamcKch: ${MY_LIBS} BuildcLamcKchAnalyses.C
 	g++ BuildcLamcKchAnalyses.C ${MY_LIBS} -o runBuildcLamcKch $(LIBS) $(CFLAGS)
@@ -17,6 +17,9 @@ runBuildcLamK0: ${MY_LIBS} BuildcLamK0Analyses.C
 
 runBuildcXicKch: ${MY_LIBS} BuildcXicKchAnalyses.C
 	g++ BuildcXicKchAnalyses.C ${MY_LIBS} -o runBuildcXicKch $(LIBS) $(CFLAGS)
+
+runBuildcXiK0: ${MY_LIBS} BuildcXiK0Analyses.C
+	g++ BuildcXiK0Analyses.C ${MY_LIBS} -o runBuildcXiK0 $(LIBS) $(CFLAGS)
 
 runBuildcLamcLam: ${MY_LIBS} BuildcLamcLamAnalyses.C
 	g++ BuildcLamcLamAnalyses.C ${MY_LIBS} -o runBuildcLamcLam $(LIBS) $(CFLAGS)
@@ -60,4 +63,4 @@ build/%.o: %.cc %.hh
 
 
 clean:
-	rm -f runBuildcLamcKch runBuildcLamK0 runBuildcXicKch runBuildcLamcLam runCombineConjugatesLamKch runCombineConjugatesLamK0 runCombineConjugatesXiKch runBuildMomResMatrix runBuildMomResMatrix2 runCompareFixes runCorrectCfs runTest ${MY_LIBS}
+	rm -f runBuildcLamcKch runBuildcLamK0 runBuildcXicKch runBuildcXiK0 runBuildcLamcLam runCombineConjugatesLamKch runCombineConjugatesLamK0 runCombineConjugatesXiKch runBuildMomResMatrix runBuildMomResMatrix2 runCompareFixes runCorrectCfs runTest ${MY_LIBS}
