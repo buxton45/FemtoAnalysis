@@ -1416,21 +1416,23 @@ double ChargedResidualCf::GetFitCfContentCompletewStaticPairs(double aKStarMagMi
 //________________________________________________________________________________________________________________
 td1dVec ChargedResidualCf::GetCoulombParentCorrelation(double *aParentCfParams, vector<double> &aKStarBinCenters, bool aUseExpXiData, CentralityType aCentType)
 {
-  if(AreParamsSameExcludingLambda(fCurrentFitParams,aParentCfParams,8))
-  {
-    AdjustLambdaParam(fCoulombCf, fCurrentFitParams[0], aParentCfParams[0]);
-  }
+  fUseExpXiData = aUseExpXiData;
+
+  double tKStarBinWidth = aKStarBinCenters[1]-aKStarBinCenters[0];
+
+  double tKStarMin, tKStarMax;
+  tKStarMax = aKStarBinCenters[aKStarBinCenters.size()-1]+tKStarBinWidth/2.;
+
+  if(fUseExpXiData) fCoulombCf = GetExpXiData(tKStarMax,aCentType);
   else
   {
-    fUseExpXiData = aUseExpXiData;
-    double tKStarBinWidth = aKStarBinCenters[1]-aKStarBinCenters[0];
-
-    double tKStarMin, tKStarMax;
-    tKStarMax = aKStarBinCenters[aKStarBinCenters.size()-1]+tKStarBinWidth/2.;
-    vector<double> tParentCf(aKStarBinCenters.size(),0.);
-    if(fUseExpXiData) tParentCf = GetExpXiData(tKStarMax,aCentType);
+    if(AreParamsSameExcludingLambda(fCurrentFitParams,aParentCfParams,8))
+    {
+      AdjustLambdaParam(fCoulombCf, fCurrentFitParams[0], aParentCfParams[0]);
+    }
     else
     {
+      vector<double> tParentCf(aKStarBinCenters.size(),0.);
 
       for(unsigned int i=0; i<aKStarBinCenters.size(); i++)
       {
@@ -1441,8 +1443,8 @@ td1dVec ChargedResidualCf::GetCoulombParentCorrelation(double *aParentCfParams, 
 
         tParentCf[i] = GetFitCfContentCompletewStaticPairs(tKStarMin,tKStarMax,fCurrentFitParams);
       }
+      fCoulombCf = tParentCf;
     }
-    fCoulombCf = tParentCf;
   }
   return fCoulombCf;
 }
@@ -1452,21 +1454,22 @@ td1dVec ChargedResidualCf::GetCoulombParentCorrelation(double *aParentCfParams, 
 //________________________________________________________________________________________________________________
 td1dVec ChargedResidualCf::GetCoulombResidualCorrelation(double *aParentCfParams, vector<double> &aKStarBinCenters, bool aUseExpXiData, CentralityType aCentType)
 {
-  if(AreParamsSameExcludingLambda(fCurrentFitParams,aParentCfParams,8))
-  {
-    AdjustLambdaParam(fCoulombCf, fCurrentFitParams[0], aParentCfParams[0]);
-  }
+  fUseExpXiData = aUseExpXiData;
+
+  double tKStarBinWidth = aKStarBinCenters[1]-aKStarBinCenters[0];
+  double tKStarMin, tKStarMax;
+  tKStarMax = aKStarBinCenters[aKStarBinCenters.size()-1]+tKStarBinWidth/2.;
+
+  if(fUseExpXiData) fCoulombCf = GetExpXiData(tKStarMax,aCentType);
   else
   {
-    fUseExpXiData = aUseExpXiData;
-    double tKStarBinWidth = aKStarBinCenters[1]-aKStarBinCenters[0];
-
-    double tKStarMin, tKStarMax;
-    tKStarMax = aKStarBinCenters[aKStarBinCenters.size()-1]+tKStarBinWidth/2.;
-    vector<double> tParentCf(aKStarBinCenters.size(),0.);
-    if(fUseExpXiData) tParentCf = GetExpXiData(tKStarMax,aCentType);
+    if(AreParamsSameExcludingLambda(fCurrentFitParams,aParentCfParams,8))
+    {
+      AdjustLambdaParam(fCoulombCf, fCurrentFitParams[0], aParentCfParams[0]);
+    }
     else
     {
+      vector<double> tParentCf(aKStarBinCenters.size(),0.);
 
       for(unsigned int i=0; i<aKStarBinCenters.size(); i++)
       {
@@ -1477,8 +1480,8 @@ td1dVec ChargedResidualCf::GetCoulombResidualCorrelation(double *aParentCfParams
 
         tParentCf[i] = GetFitCfContentCompletewStaticPairs(tKStarMin,tKStarMax,fCurrentFitParams);
       }
+      fCoulombCf = tParentCf;
     }
-    fCoulombCf = tParentCf;
   }
 
   unsigned int tDaughterPairKStarBin, tParentPairKStarBin;
@@ -1508,8 +1511,6 @@ td1dVec ChargedResidualCf::GetCoulombResidualCorrelation(double *aParentCfParams
   fCoulombResidualCf = tReturnResCf;
   return fCoulombResidualCf;
 }
-
-
 
 
 

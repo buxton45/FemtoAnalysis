@@ -16,8 +16,8 @@ int main(int argc, char **argv)
   AnalysisType tAnType = kLamKchP;
   AnalysisRunType tAnRunType = kTrain;
   int tNPartialAnalysis = 2;
-  CentralityType tCentType = k0010;  //TODO
-//  CentralityType tCentType = kMB;  //TODO
+//  CentralityType tCentType = k0010;  //TODO
+  CentralityType tCentType = kMB;  //TODO
   FitGeneratorType tGenType = kPairwConj;
   bool tShareLambdaParams = false;
   bool tAllShareSingleLambdaParam = false;
@@ -66,12 +66,12 @@ int main(int argc, char **argv)
 //  tLamKchP->FindGoodInitialValues(ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection);
 
 //-------------------------------------------------------------------------------
-  if(bDrawResiduals)
+  if(IncludeResiduals && bDrawResiduals)
   {
     TCanvas* tCanLamKchP = tLamKchP->DrawResiduals(0,k0010,cAnalysisBaseTags[tAnType]);
 //    tCanLamKchP->SaveAs(TString("Residuals")+TString(tCanLamKchP->GetName())+TString(".pdf"));
 
-    TCanvas* tCanPrimWithRes = tLamKchP->DrawPrimaryWithResiduals(0,k0010,TString("PrimaryWithResidual_")+TString(cAnalysisBaseTags[tAnType]));
+//    TCanvas* tCanPrimWithRes = tLamKchP->DrawPrimaryWithResiduals(0,k0010,TString("PrimaryWithResidual_")+TString(cAnalysisBaseTags[tAnType]));
   }
 //-------------------------------------------------------------------------------
   tFullTimer.Stop();

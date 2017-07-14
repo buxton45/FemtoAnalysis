@@ -406,8 +406,17 @@ vector<double> LednickyFitter::CombinePrimaryWithResiduals(td1dVec &aLambdaValue
     for(unsigned int iCf=0; iCf<aCfs.size(); iCf++)
     {
       //NOTE:  //TODO confusing definitions of Cf and whatnot in Jai's analysis //TODO TODO TODO TODO
-      if(aCfs[iCf][iBin] > 0.) tReturnCf[iBin] += aLambdaValues[iCf]*((aCfs[iCf][iBin]-1.0)/aLambdaValues[iCf]);
-//      if(aCfs[iCf][iBin] > 0.) tReturnCf[iBin] += aCfs[iCf][iBin]-1.0;
+      if(aCfs[iCf][iBin] > 0.)
+      {
+        if(iCf==0) //Special treatment for primary //TODO
+        {
+          tReturnCf[iBin] += aCfs[iCf][iBin]-1.0;
+        }
+        else
+        {
+          tReturnCf[iBin] += aLambdaValues[iCf]*(aCfs[iCf][iBin]-1.0);
+        }
+      }
     }
   }
   return tReturnCf;
@@ -587,11 +596,11 @@ void LednickyFitter::CalculateFitFunction(int &npar, double &chi2, double *par)
       if(fIncludeResidualCorrelations) 
       {
         double tLambda_SigK = 0.26473*tOverallLambda;  //for now, primary lambda scaled by some factor
-        double *tPar_SigK = AdjustLambdaParam(tPar,tLambda_SigK,tNFitParams);
+        double *tPar_SigK = AdjustLambdaParam(tPar,1.0,tNFitParams);  //lambda=1 here, will be applied in CombinePrimaryWithResiduals method
         td1dVec tResidual_SigK = GetNeutralResidualCorrelation(tPar_SigK,tKStarBinCenters,tFitPairAnalysis->GetTransformMatrices()[0]);
 
         double tLambda_Xi0K = 0.19041*tOverallLambda;  //for now, primary lambda scaled by some factor
-        double *tPar_Xi0K = AdjustLambdaParam(tPar,tLambda_Xi0K,tNFitParams);
+        double *tPar_Xi0K = AdjustLambdaParam(tPar,1.0,tNFitParams);  //lambda=1 here, will be applied in CombinePrimaryWithResiduals method
         td1dVec tResidual_Xi0K = GetNeutralResidualCorrelation(tPar_Xi0K,tKStarBinCenters,tFitPairAnalysis->GetTransformMatrices()[2]);
 
         AnalysisType tAnType = tFitPartialAnalysis->GetAnalysisType();
@@ -630,7 +639,7 @@ void LednickyFitter::CalculateFitFunction(int &npar, double &chi2, double *par)
         double *tPar_XiCK = new double[8];
         if(tResXiCKType==kXiCKchP || tResXiCKType==kAXiCKchM)
         { 
-          tPar_XiCK[0] = tLambda_XiCK;
+          tPar_XiCK[0] = 1.0; //TODO lambda=1 here, will be applied in CombinePrimaryWithResiduals method
           tPar_XiCK[1] = 4.60717;
           tPar_XiCK[2] = -0.00976133;
           tPar_XiCK[3] = 0.0409787;
@@ -641,7 +650,7 @@ void LednickyFitter::CalculateFitFunction(int &npar, double &chi2, double *par)
         }
         else if(tResXiCKType==kXiCKchM || tResXiCKType==kAXiCKchP)
         {
-          tPar_XiCK[0] = tLambda_XiCK;
+          tPar_XiCK[0] = 1.0; //TODO lambda=1 here, will be applied in CombinePrimaryWithResiduals method
           tPar_XiCK[1] = 6.97767;
           tPar_XiCK[2] = -1.94078;
           tPar_XiCK[3] = -1.21309;
@@ -659,7 +668,7 @@ void LednickyFitter::CalculateFitFunction(int &npar, double &chi2, double *par)
 //TODO for now, use same parameters for OmegaK as XiK
         if(tResOmegaKType==kOmegaKchP || tResOmegaKType==kAOmegaKchM)
         { 
-          tPar_OmegaK[0] = tLambda_OmegaK;
+          tPar_OmegaK[0] = 1.0; //TODO lambda=1 here, will be applied in CombinePrimaryWithResiduals method
           tPar_OmegaK[1] = 2.84;
           tPar_OmegaK[2] = -1.59;
           tPar_OmegaK[3] = -0.37;
@@ -670,7 +679,7 @@ void LednickyFitter::CalculateFitFunction(int &npar, double &chi2, double *par)
         }
         else if(tResOmegaKType==kOmegaKchM || tResOmegaKType==kAOmegaKchP)
         {
-          tPar_OmegaK[0] = tLambda_OmegaK;
+          tPar_OmegaK[0] = 1.0; //TODO lambda=1 here, will be applied in CombinePrimaryWithResiduals method
           tPar_OmegaK[1] = 2.81;
           tPar_OmegaK[2] = 0.29;
           tPar_OmegaK[3] = -0.24;
