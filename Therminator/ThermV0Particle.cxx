@@ -28,8 +28,7 @@ ThermV0Particle::ThermV0Particle() :
   fDaughter2EID(0),
 
   fDaughter1Mass(0), fDaughter1T(0), fDaughter1X(0), fDaughter1Y(0), fDaughter1Z(0), fDaughter1E(0), fDaughter1Px(0), fDaughter1Py(0), fDaughter1Pz(0),
-  fDaughter2Mass(0), fDaughter2T(0), fDaughter2X(0), fDaughter2Y(0), fDaughter2Z(0), fDaughter2E(0), fDaughter2Px(0), fDaughter2Py(0), fDaughter2Pz(0),
-  fFatherMass(0), fFatherT(0), fFatherX(0), fFatherY(0), fFatherZ(0), fFatherE(0), fFatherPx(0), fFatherPy(0), fFatherPz(0)
+  fDaughter2Mass(0), fDaughter2T(0), fDaughter2X(0), fDaughter2Y(0), fDaughter2Z(0), fDaughter2E(0), fDaughter2Px(0), fDaughter2Py(0), fDaughter2Pz(0)
 {
 
 }
@@ -48,8 +47,7 @@ ThermV0Particle::ThermV0Particle(ParticleCoor* aParticle) :
   fDaughter2EID(0),
 
   fDaughter1Mass(0), fDaughter1T(0), fDaughter1X(0), fDaughter1Y(0), fDaughter1Z(0), fDaughter1E(0), fDaughter1Px(0), fDaughter1Py(0), fDaughter1Pz(0),
-  fDaughter2Mass(0), fDaughter2T(0), fDaughter2X(0), fDaughter2Y(0), fDaughter2Z(0), fDaughter2E(0), fDaughter2Px(0), fDaughter2Py(0), fDaughter2Pz(0),
-  fFatherMass(0), fFatherT(0), fFatherX(0), fFatherY(0), fFatherZ(0), fFatherE(0), fFatherPx(0), fFatherPy(0), fFatherPz(0)
+  fDaughter2Mass(0), fDaughter2T(0), fDaughter2X(0), fDaughter2Y(0), fDaughter2Z(0), fDaughter2E(0), fDaughter2Px(0), fDaughter2Py(0), fDaughter2Pz(0)
 {
 
 }
@@ -68,8 +66,7 @@ ThermV0Particle::ThermV0Particle(vector<double> &aVecFromTxt) :
   fDaughter2EID(0),
 
   fDaughter1Mass(0), fDaughter1T(0), fDaughter1X(0), fDaughter1Y(0), fDaughter1Z(0), fDaughter1E(0), fDaughter1Px(0), fDaughter1Py(0), fDaughter1Pz(0),
-  fDaughter2Mass(0), fDaughter2T(0), fDaughter2X(0), fDaughter2Y(0), fDaughter2Z(0), fDaughter2E(0), fDaughter2Px(0), fDaughter2Py(0), fDaughter2Pz(0),
-  fFatherMass(0), fFatherT(0), fFatherX(0), fFatherY(0), fFatherZ(0), fFatherE(0), fFatherPx(0), fFatherPy(0), fFatherPz(0)
+  fDaughter2Mass(0), fDaughter2T(0), fDaughter2X(0), fDaughter2Y(0), fDaughter2Z(0), fDaughter2E(0), fDaughter2Px(0), fDaughter2Py(0), fDaughter2Pz(0)
 {
   assert(aVecFromTxt.size() == 53);
   //------ThermParticle
@@ -96,55 +93,55 @@ ThermV0Particle::ThermV0Particle(vector<double> &aVecFromTxt) :
   fFatherEID = aVecFromTxt[16];
   fEventID = aVecFromTxt[17];
 
+  fFatherMass = aVecFromTxt[18];
+
+  fFatherT = aVecFromTxt[19];
+  fFatherX = aVecFromTxt[20];
+  fFatherY = aVecFromTxt[21];
+  fFatherZ = aVecFromTxt[22];
+
+  fFatherE = aVecFromTxt[23];
+  fFatherPx = aVecFromTxt[24];
+  fFatherPy = aVecFromTxt[25];
+  fFatherPz = aVecFromTxt[26];
+
+
   //------ThermV0Particle
-  fDaughter1Found = aVecFromTxt[18];
-  fDaughter2Found = aVecFromTxt[19];
-  fBothDaughtersFound = aVecFromTxt[20];
+  fDaughter1Found = aVecFromTxt[27];
+  fDaughter2Found = aVecFromTxt[28];
+  fBothDaughtersFound = aVecFromTxt[29];
 
-  fGoodV0 = aVecFromTxt[21];
+  fGoodV0 = aVecFromTxt[30];
 
-  fDaughter1PID = aVecFromTxt[22];
-  fDaughter2PID = aVecFromTxt[23];
+  fDaughter1PID = aVecFromTxt[31];
+  fDaughter2PID = aVecFromTxt[32];
 
-  fDaughter1EID = aVecFromTxt[24];
-  fDaughter2EID = aVecFromTxt[25];
+  fDaughter1EID = aVecFromTxt[33];
+  fDaughter2EID = aVecFromTxt[34];
 
-  fDaughter1Mass = aVecFromTxt[26];
+  fDaughter1Mass = aVecFromTxt[35];
 
-  fDaughter1T = aVecFromTxt[27];
-  fDaughter1X = aVecFromTxt[28];
-  fDaughter1Y = aVecFromTxt[29];
-  fDaughter1Z = aVecFromTxt[30];
+  fDaughter1T = aVecFromTxt[36];
+  fDaughter1X = aVecFromTxt[37];
+  fDaughter1Y = aVecFromTxt[38];
+  fDaughter1Z = aVecFromTxt[39];
 
-  fDaughter1E = aVecFromTxt[31];
-  fDaughter1Px = aVecFromTxt[32];
-  fDaughter1Py = aVecFromTxt[33];
-  fDaughter1Pz = aVecFromTxt[34];
+  fDaughter1E = aVecFromTxt[40];
+  fDaughter1Px = aVecFromTxt[41];
+  fDaughter1Py = aVecFromTxt[42];
+  fDaughter1Pz = aVecFromTxt[43];
 
-  fDaughter2Mass = aVecFromTxt[35];
+  fDaughter2Mass = aVecFromTxt[44];
 
-  fDaughter2T = aVecFromTxt[36];
-  fDaughter2X = aVecFromTxt[37];
-  fDaughter2Y = aVecFromTxt[38];
-  fDaughter2Z = aVecFromTxt[39];
+  fDaughter2T = aVecFromTxt[45];
+  fDaughter2X = aVecFromTxt[46];
+  fDaughter2Y = aVecFromTxt[47];
+  fDaughter2Z = aVecFromTxt[48];
 
-  fDaughter2E = aVecFromTxt[40];
-  fDaughter2Px = aVecFromTxt[41];
-  fDaughter2Py = aVecFromTxt[42];
-  fDaughter2Pz = aVecFromTxt[43];
-
-  fFatherMass = aVecFromTxt[44];
-
-  fFatherT = aVecFromTxt[45];
-  fFatherX = aVecFromTxt[46];
-  fFatherY = aVecFromTxt[47];
-  fFatherZ = aVecFromTxt[48];
-
-  fFatherE = aVecFromTxt[49];
-  fFatherPx = aVecFromTxt[50];
-  fFatherPy = aVecFromTxt[51];
-  fFatherPz = aVecFromTxt[52];
-
+  fDaughter2E = aVecFromTxt[49];
+  fDaughter2Px = aVecFromTxt[50];
+  fDaughter2Py = aVecFromTxt[51];
+  fDaughter2Pz = aVecFromTxt[52];
 }
 
 
@@ -166,11 +163,7 @@ ThermV0Particle::ThermV0Particle(const ThermV0Particle& aParticle) :
 
   fDaughter2Mass(aParticle.fDaughter2Mass), 
   fDaughter2T(aParticle.fDaughter2T), fDaughter2X(aParticle.fDaughter2X), fDaughter2Y(aParticle.fDaughter2Y), fDaughter2Z(aParticle.fDaughter2Z),
-  fDaughter2E(aParticle.fDaughter2E), fDaughter2Px(aParticle.fDaughter2Px), fDaughter2Py(aParticle.fDaughter2Py), fDaughter2Pz(aParticle.fDaughter2Pz),
-
-  fFatherMass(aParticle.fFatherMass), 
-  fFatherT(aParticle.fFatherT), fFatherX(aParticle.fFatherX), fFatherY(aParticle.fFatherY), fFatherZ(aParticle.fFatherZ),
-  fFatherE(aParticle.fFatherE), fFatherPx(aParticle.fFatherPx), fFatherPy(aParticle.fFatherPy), fFatherPz(aParticle.fFatherPz)
+  fDaughter2E(aParticle.fDaughter2E), fDaughter2Px(aParticle.fDaughter2Px), fDaughter2Py(aParticle.fDaughter2Py), fDaughter2Pz(aParticle.fDaughter2Pz)
 {
 
 }
@@ -211,16 +204,6 @@ ThermV0Particle& ThermV0Particle::operator=(const ThermV0Particle& aParticle)
   fDaughter2Px = aParticle.fDaughter2Px;
   fDaughter2Py = aParticle.fDaughter2Py;
   fDaughter2Pz = aParticle.fDaughter2Pz;
-
-  fFatherMass = aParticle.fFatherMass; 
-  fFatherT = aParticle.fFatherT;
-  fFatherX = aParticle.fFatherX;
-  fFatherY = aParticle.fFatherY;
-  fFatherZ = aParticle.fFatherZ;
-  fFatherE = aParticle.fFatherE;
-  fFatherPx = aParticle.fFatherPx;
-  fFatherPy = aParticle.fFatherPy;
-  fFatherPz = aParticle.fFatherPz;
 
   return *this;
 }
@@ -430,49 +413,6 @@ void ThermV0Particle::LoadDaughter(ThermParticle& aDaughter)
   }
 
 }
-
-
-//________________________________________________________________________________________________________________
-void ThermV0Particle::LoadFather(ThermParticle& aFather)
-{
-  int tPID = aFather.GetPID();
-  int tEID = aFather.GetEID();
-
-  //Just double check here...
-  assert(tPID == fFatherPID);
-  assert(tEID == fFatherEID);
-
-  double tMass = aFather.GetMass();
-
-  TLorentzVector tFourPosition = aFather.GetFourPosition();
-    double tT = tFourPosition.T();
-    double tX = tFourPosition.X();
-    double tY = tFourPosition.Y();
-    double tZ = tFourPosition.Z();
-
-  TLorentzVector tFourMomentum = aFather.GetFourMomentum();
-    double tE = tFourMomentum.E();
-    double tPx = tFourMomentum.Px();
-    double tPy = tFourMomentum.Py();
-    double tPz = tFourMomentum.Pz();
-
-  //-----------------------------------------------------------
-
-  fFatherMass = tMass;
-
-  fFatherT = tT; 
-  fFatherX = tX; 
-  fFatherY = tY; 
-  fFatherZ = tZ;
-
-  fFatherE = tE; 
-  fFatherPx = tPx;
-  fFatherPy = tPy;
-  fFatherPz = tPz;
-
-}
-
-
 
 
 

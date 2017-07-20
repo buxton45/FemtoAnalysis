@@ -71,6 +71,8 @@ public:
   TLorentzVector GetFourPosition();
   TLorentzVector GetFourMomentum();
 
+  void LoadFather(ThermParticle& aFather);
+
   //inline-----------------------------
   bool IsPrimordial();
   bool IsParticleOfInterest();
@@ -99,6 +101,19 @@ public:
 
   void SetDecayed(int aDecayed);
 
+  //---------
+  double GetFatherMass();
+
+  double GetFatherT();
+  double GetFatherX();
+  double GetFatherY();
+  double GetFatherZ();
+
+  double GetFatherE();
+  double GetFatherPx();
+  double GetFatherPy();
+  double GetFatherPz();
+
 
 protected:
   bool fPrimordial;
@@ -115,7 +130,9 @@ protected:
   int fFatherEID;
   int fEventID;
 
-
+  double fFatherMass;
+  double fFatherT, fFatherX, fFatherY, fFatherZ;
+  double fFatherE, fFatherPx, fFatherPy, fFatherPz;
 
 #ifdef __ROOT__
   ClassDef(ThermParticle, 1)
@@ -149,9 +166,19 @@ inline int ThermParticle::GetEventID() {return fEventID;}
 
 //----------
 inline void ThermParticle::SetDecayed(int aDecayed) {fDecayed = aDecayed;}
+//----------
 
+inline double ThermParticle::GetFatherMass() {return fFatherMass;}
 
+inline double ThermParticle::GetFatherT() {return fFatherT;}
+inline double ThermParticle::GetFatherX() {return fFatherX;}
+inline double ThermParticle::GetFatherY() {return fFatherY;}
+inline double ThermParticle::GetFatherZ() {return fFatherZ;}
 
+inline double ThermParticle::GetFatherE() {return fFatherE;}
+inline double ThermParticle::GetFatherPx() {return fFatherPx;}
+inline double ThermParticle::GetFatherPy() {return fFatherPy;}
+inline double ThermParticle::GetFatherPz() {return fFatherPz;}
 
 
 

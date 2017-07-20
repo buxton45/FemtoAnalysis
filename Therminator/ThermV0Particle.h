@@ -26,7 +26,6 @@ public:
   void LoadDaughter1(ThermParticle& aDaughter);
   void LoadDaughter2(ThermParticle& aDaughter);
   void LoadDaughter(ThermParticle& aDaughter);
-  void LoadFather(ThermParticle& aFather);
 
   //inline-----------------------------
   bool Daughter1Found();
@@ -65,18 +64,6 @@ public:
   double GetDaughter2Py();
   double GetDaughter2Pz();
 
-  double GetFatherMass();
-
-  double GetFatherT();
-  double GetFatherX();
-  double GetFatherY();
-  double GetFatherZ();
-
-  double GetFatherE();
-  double GetFatherPx();
-  double GetFatherPy();
-  double GetFatherPz();
-
   //----------
 
   void SetDaughter1PID(int aPID);    // If daughters are charged, Daughter1 = positive
@@ -102,11 +89,6 @@ private:
   double fDaughter2Mass;
   double fDaughter2T, fDaughter2X, fDaughter2Y, fDaughter2Z;
   double fDaughter2E, fDaughter2Px, fDaughter2Py, fDaughter2Pz;
-
-  double fFatherMass;
-  double fFatherT, fFatherX, fFatherY, fFatherZ;
-  double fFatherE, fFatherPx, fFatherPy, fFatherPz;
-
 
 #ifdef __ROOT__
   ClassDef(ThermV0Particle, 1)
@@ -150,18 +132,6 @@ inline double ThermV0Particle::GetDaughter2E() {return fDaughter2E;}
 inline double ThermV0Particle::GetDaughter2Px() {return fDaughter2Px;}
 inline double ThermV0Particle::GetDaughter2Py() {return fDaughter2Py;}
 inline double ThermV0Particle::GetDaughter2Pz() {return fDaughter2Pz;}
-
-inline double ThermV0Particle::GetFatherMass() {return fFatherMass;}
-
-inline double ThermV0Particle::GetFatherT() {return fFatherT;}
-inline double ThermV0Particle::GetFatherX() {return fFatherX;}
-inline double ThermV0Particle::GetFatherY() {return fFatherY;}
-inline double ThermV0Particle::GetFatherZ() {return fFatherZ;}
-
-inline double ThermV0Particle::GetFatherE() {return fFatherE;}
-inline double ThermV0Particle::GetFatherPx() {return fFatherPx;}
-inline double ThermV0Particle::GetFatherPy() {return fFatherPy;}
-inline double ThermV0Particle::GetFatherPz() {return fFatherPz;}
 
 //----------
 

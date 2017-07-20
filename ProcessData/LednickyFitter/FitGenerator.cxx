@@ -1188,8 +1188,8 @@ TCanvas* FitGenerator::DrawPrimaryWithResiduals(int aAnalysisNumber, CentralityT
   tCanPart->SetDrawOptStat(false);
 
   //--------------------------------------------------------------------------------
-  tCanPart->AddGraph(0,0,tCorrectedFit,"",20,kBlack,0.75,"ex0");
-  tCanPart->AddGraph(0,0,tPrimaryFitHist,"",24,kBlack,0.75,"ex0same");
+  tCanPart->AddGraph(0,0,tCorrectedFit,"",20,kMagenta,0.75,"l");
+  tCanPart->AddGraph(0,0,tPrimaryFitHist,"",24,kBlack,0.75,"lsame");
   tCanPart->AddGraph(0,0,tHist_SigK,"",25,kBlack,0.75,"ex0same");
   tCanPart->AddGraph(0,0,tHist_Xi0K,"",26,kBlack,0.75,"ex0same");
   tCanPart->AddGraph(0,0,tHist_XiCK,"",27,kBlack,0.75,"ex0same");
@@ -1210,6 +1210,303 @@ TCanvas* FitGenerator::DrawPrimaryWithResiduals(int aAnalysisNumber, CentralityT
   tCanPart->GetCanvas()->SetTitle(aCanvasName);
   return tCanPart->GetCanvas();
 }
+
+
+//________________________________________________________________________________________________________________
+TCanvas* FitGenerator::DrawKStarCfswFitsAndResiduals(bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, NonFlatBgdFitType aNonFlatBgdFitType, bool aSaveImage, bool aDrawSysErrors, bool aZoomROP)
+{
+  TString tCanvasName = TString("canKStarCfwFitsAndResiduals");
+  if(fGeneratorType==kPairwConj) tCanvasName += TString(cAnalysisBaseTags[fPairType]) + TString("wConj");
+  else if(fGeneratorType==kPair) tCanvasName += TString(cAnalysisBaseTags[fPairType]);
+  else if(fGeneratorType==kConjPair) tCanvasName += TString(cAnalysisBaseTags[fConjPairType]);
+  else assert(0);
+
+  for(unsigned int i=0; i<fCentralityTypes.size(); i++) tCanvasName += TString(cCentralityTags[fCentralityTypes[i]]);
+  if(!aZoomROP) tCanvasName += TString("UnZoomed");
+
+  int tNx=0, tNy=0;
+  if(fNAnalyses == 6) {tNx=2; tNy=3;}
+  else if(fNAnalyses == 4) {tNx=2; tNy=2;}
+  else if(fNAnalyses == 3) {tNx=1; tNy=fNAnalyses;}
+  else if(fNAnalyses == 2 || fNAnalyses==1) {tNx=fNAnalyses; tNy=1;}
+  else assert(0);
+
+  double tXLow = -0.02;
+  double tXHigh = 0.99;
+  double tYLow = 0.71;
+  double tYHigh = 1.09;
+  if(aZoomROP)
+  {
+    tXLow = -0.02;
+    tXHigh = 0.329;
+    tYLow = 0.86;
+    tYHigh = 1.07;
+  }
+
+  CanvasPartition* tCanPart = new CanvasPartition(tCanvasName,tNx,tNy,tXLow,tXHigh,tYLow,tYHigh,0.12,0.0025,0.13,0.0025);
+  tCanPart->SetDrawOptStat(false);
+//  tCanPart->GetCanvas()->SetCanvasSize(1400,1500);
+
+  assert(tNx*tNy == fNAnalyses);
+  int tAnalysisNumber=0;
+  for(int j=0; j<tNy; j++)
+  {
+    for(int i=0; i<tNx; i++)
+    {
+      tAnalysisNumber = j*tNx + i;
+
+      int tColor, tColorTransparent;
+      AnalysisType tAnType = fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetAnalysisType();
+      if(tAnType==kLamK0 || tAnType==kALamK0) tColor=kBlack;
+      else if(tAnType==kLamKchP || tAnType==kALamKchM) tColor=kRed+1;
+      else if(tAnType==kLamKchM || tAnType==kALamKchP) tColor=kBlue+1;
+      else tColor=1;
+
+      tColorTransparent = TColor::GetColorTransparent(tColor,0.2);
+
+      int tColorCorrectFit = kMagenta+1;
+      int tColorNonFlatBgd = kGreen+2;
+
+      //---------------- Residuals ----------------------------------------
+      FitPairAnalysis* tFitPairAnalysis = fSharedAn->GetFitPairAnalysis(tAnalysisNumber);
+      double tOverallLambdaPrimary = tFitPairAnalysis->GetFit()->GetParameter(0);
+      double tRadiusPrimary = tFitPairAnalysis->GetFit()->GetParameter(1);
+      double tReF0Primary = tFitPairAnalysis->GetFit()->GetParameter(2);
+      double tImF0Primary = tFitPairAnalysis->GetFit()->GetParameter(3);
+      double tD0Primary = tFitPairAnalysis->GetFit()->GetParameter(4);
+      CentralityType tCentralityType = tFitPairAnalysis->GetCentralityType();
+
+      double tKStarBinWidth = 0.01;
+      vector<double> tKStarBinCenters(100);
+      for(int i=0; i<100; i++) tKStarBinCenters[i] = tKStarBinWidth/2.0 + i*tKStarBinWidth;
+
+      ResidualType tResSigKType, tResXi0KType, tResXiCKType, tResOmegaKType;
+      switch(tAnType) {
+      case kLamKchP:
+        tResXiCKType = kXiCKchP;
+        tResOmegaKType = kOmegaKchP;
+        tResSigKType = kSig0KchP;
+        tResXi0KType = kXi0KchP;
+        break;
+
+      case kLamKchM:
+        tResXiCKType = kXiCKchM;
+        tResOmegaKType = kOmegaKchM;
+        tResSigKType = kSig0KchM;
+        tResXi0KType = kXi0KchM;
+        break;
+
+      case kALamKchP:
+        tResXiCKType = kAXiCKchP;
+        tResOmegaKType = kAOmegaKchP;
+        tResSigKType = kASig0KchP;
+        tResXi0KType = kAXi0KchP;
+        break;
+
+      case kALamKchM:
+        tResXiCKType = kAXiCKchM;
+        tResOmegaKType = kAOmegaKchM;
+        tResSigKType = kASig0KchM;
+        tResXi0KType = kAXi0KchM;
+        break;
+
+      default:
+        cout << "ERROR: FitGenerator::DrawResiduals  tAnType = " << tAnType << " is not apropriate" << endl << endl;
+        assert(0);
+      }
+      //---------------------------------------------------------------------------------------
+
+
+      //SigK--------------------------------
+      double tLambda_SigK = 0.26473*tOverallLambdaPrimary;
+      double *tPar_SigK = new double[6];
+        tPar_SigK[0] = tLambda_SigK;
+        tPar_SigK[1] = tRadiusPrimary;
+        tPar_SigK[2] = tReF0Primary;
+        tPar_SigK[3] = tImF0Primary;
+        tPar_SigK[4] = tD0Primary;
+        tPar_SigK[5] = 1.0;
+      TH1D* tHist_SigK = fLednickyFitter->GetNeutralResidualCorrelationHistogram(tPar_SigK, tKStarBinCenters, tFitPairAnalysis->GetTransformMatrices()[0], "Residual_SigK");
+      int tColor_SigK = 6;
+      int tMarkerStyle_SigK = 25;
+
+      //SigK--------------------------------
+      double tLambda_Xi0K = 0.19041*tOverallLambdaPrimary;
+      double *tPar_Xi0K = new double[6];
+        tPar_Xi0K[0] = tLambda_Xi0K;
+        tPar_Xi0K[1] = tRadiusPrimary;
+        tPar_Xi0K[2] = tReF0Primary;
+        tPar_Xi0K[3] = tImF0Primary;
+        tPar_Xi0K[4] = tD0Primary;
+        tPar_Xi0K[5] = 1.0;
+      TH1D* tHist_Xi0K = fLednickyFitter->GetNeutralResidualCorrelationHistogram(tPar_Xi0K, tKStarBinCenters, tFitPairAnalysis->GetTransformMatrices()[2], "Residual_Xi0K");
+      int tColor_Xi0K = 7;
+      int tMarkerStyle_Xi0K = 26;
+
+      //-----------------------------------------------------------------------------------------
+      bool tUseExpXiData = true;
+
+      double tLambda_XiCK = 0.18386*tOverallLambdaPrimary;  //for now, primary lambda scaled by some factor
+      double *tPar_XiCK = new double[8];
+      if(tResXiCKType==kXiCKchP || tResXiCKType==kAXiCKchM)
+      { 
+        tPar_XiCK[0] = tLambda_XiCK;
+        tPar_XiCK[1] = 4.60717;
+        tPar_XiCK[2] = -0.00976133;
+        tPar_XiCK[3] = 0.0409787;
+        tPar_XiCK[4] = -0.33091;
+        tPar_XiCK[5] = -0.484049;
+        tPar_XiCK[6] = 0.523492;
+        tPar_XiCK[7] = 1.53176;
+      }
+      else if(tResXiCKType==kXiCKchM || tResXiCKType==kAXiCKchP)
+      {
+        tPar_XiCK[0] = tLambda_XiCK;
+        tPar_XiCK[1] = 6.97767;
+        tPar_XiCK[2] = -1.94078;
+        tPar_XiCK[3] = -1.21309;
+        tPar_XiCK[4] = 0.160156;
+        tPar_XiCK[5] = 1.38324;
+        tPar_XiCK[6] = 2.02133;
+        tPar_XiCK[7] = 4.07520;
+      }
+      else {tPar_XiCK[0]=0.; tPar_XiCK[1]=0.; tPar_XiCK[2]=0.; tPar_XiCK[3]=0.; tPar_XiCK[4]=0.; tPar_XiCK[5]=0.; tPar_XiCK[6]=0.; tPar_XiCK[7]=0.;}
+      TH1D* tHist_XiCK = fLednickyFitter->GetChargedResidualCorrelationHistogram(tResXiCKType, tPar_XiCK, tKStarBinCenters, tUseExpXiData, tCentralityType, "Residual_XiCK");
+      int tColor_XiCK = 8;
+      int tMarkerStyle_XiCK = 27;
+
+      //-----------------------
+
+      double tLambda_OmegaK = 0.01760*tOverallLambdaPrimary;  //for now, primary lambda scaled by some factor
+      double *tPar_OmegaK = new double[8];
+      if(tResOmegaKType==kOmegaKchP || tResOmegaKType==kAOmegaKchM)
+      { 
+        tPar_OmegaK[0] = tLambda_OmegaK;
+        tPar_OmegaK[1] = 2.84;
+        tPar_OmegaK[2] = -1.59;
+        tPar_OmegaK[3] = -0.37;
+        tPar_OmegaK[4] = 5.0;
+        tPar_OmegaK[5] = -0.46;
+        tPar_OmegaK[6] = 1.13;
+        tPar_OmegaK[7] = -2.53;
+      }
+      else if(tResOmegaKType==kOmegaKchM || tResOmegaKType==kAOmegaKchP)
+      {
+        tPar_OmegaK[0] = tLambda_OmegaK;
+        tPar_OmegaK[1] = 2.81;
+        tPar_OmegaK[2] = 0.29;
+        tPar_OmegaK[3] = -0.24;
+        tPar_OmegaK[4] = -10.0;
+        tPar_OmegaK[5] = 0.37;
+        tPar_OmegaK[6] = 0.34;
+        tPar_OmegaK[7] = -3.43;
+      }
+      else {tPar_OmegaK[0]=0.; tPar_OmegaK[1]=0.; tPar_OmegaK[2]=0.; tPar_OmegaK[3]=0.; tPar_OmegaK[4]=0.; tPar_OmegaK[5]=0.; tPar_OmegaK[6]=0.; tPar_OmegaK[7]=0.;}
+      TH1D* tHist_OmegaK = fLednickyFitter->GetChargedResidualCorrelationHistogram(tResOmegaKType, tPar_OmegaK, tKStarBinCenters, tUseExpXiData, tCentralityType, "Residual_OmegaK");
+      int tColor_OmegaK = 9;
+      int tMarkerStyle_OmegaK = 28;
+
+
+//TODO currently GetCorrectedFitHistv2 is the method which can also include residuals in the fit
+//      TH1* tCorrectedFitHisto = (TH1*)fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetCorrectedFitHisto(aMomResCorrectFit,aNonFlatBgdCorrectFit,false,aNonFlatBgdFitType);
+      TH1F* tCorrectedFitHisto = fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetCorrectedFitHistv2();
+        tCorrectedFitHisto->SetLineWidth(2);
+
+      //Include the Cf with statistical errors, and make sure the binning is the same as the fitted Cf ----------
+      TH1* tHistToPlot;
+      if(aDrawSysErrors)
+      {
+        tHistToPlot = (TH1*)fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetCfwSysErrors();
+          //tHistToPlot->SetFillStyle(0);  //for box error bars to draw correctly
+          tHistToPlot->SetFillColor(tColorTransparent);
+          tHistToPlot->SetFillStyle(1000);
+          tHistToPlot->SetLineColor(0);
+          tHistToPlot->SetLineWidth(0);
+      }
+
+//TODO 
+//If the binnings are unequal, I must regenerate the plots with Analyze/Systematics/BuildErrorBars.C
+//This is because a Cf should not simply be rebinned, but rather the Num and Den should be rebinned, and the Cf rebuilt
+//Ths incorrect method would be Cf->Rebin(aRebin); Cf->Scale(1./aRebin);
+/*
+      double tDesiredBinWidth, tBinWidth;
+      tDesiredBinWidth = ((TH1*)fSharedAn->GetKStarCfHeavy(tAnalysisNumber)->GetHeavyCfClone())->GetBinWidth(1);
+      tBinWidth = tHistToPlot->GetBinWidth(1);
+
+      if( (tDesiredBinWidth != tBinWidth) && (fmod(tDesiredBinWidth,tBinWidth) == 0) )
+      {
+        int tScale = tDesiredBinWidth/tBinWidth;
+        tHistToPlot->Rebin(tScale);
+        tHistToPlot->Scale(1./tScale);
+      }
+      else if(tDesiredBinWidth != tBinWidth)
+      {
+        cout << "ERROR: FitGenerator::DrawKStarCfswFits: Histogram containing systematic error bars does not have the correct bin size and" << endl;
+        cout << "DNE an appropriate scale to resolve the issue" << endl;
+        assert(0);
+      }
+*/
+//      assert(tHistToPlot->GetBinWidth(1) == tDesiredBinWidth);
+      if(aDrawSysErrors) assert(tHistToPlot->GetBinWidth(1) == ((TH1*)fSharedAn->GetKStarCfHeavy(tAnalysisNumber)->GetHeavyCfClone())->GetBinWidth(1));
+      //---------------------------------------------------------------------------------------------------------
+
+      tCanPart->AddGraph(i,j,(TH1*)fSharedAn->GetKStarCfHeavy(tAnalysisNumber)->GetHeavyCfClone(),"",20,tColor,0.5,"ex0");  //ex0 suppresses the error along x
+      tCanPart->AddGraph(i,j,(TF1*)fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetNonFlatBackground(aNonFlatBgdFitType),"",20,tColorNonFlatBgd);
+      tCanPart->AddGraph(i,j,(TF1*)fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetFit(),"");
+      tCanPart->AddGraph(i,j,tCorrectedFitHisto,"",20,tColorCorrectFit,0.5,"lsame");
+      if(aDrawSysErrors) tCanPart->AddGraph(i,j,tHistToPlot,"",20,tColorTransparent,0.5,"e2psame");
+      tCanPart->AddGraph(i,j,tHist_SigK,"",tMarkerStyle_SigK,tColor_SigK,0.75,"ex0same");
+      tCanPart->AddGraph(i,j,tHist_Xi0K,"",tMarkerStyle_Xi0K,tColor_Xi0K,0.75,"ex0same");
+      tCanPart->AddGraph(i,j,tHist_XiCK,"",tMarkerStyle_XiCK,tColor_XiCK,0.75,"ex0same");
+      tCanPart->AddGraph(i,j,tHist_OmegaK,"",tMarkerStyle_OmegaK,tColor_OmegaK,0.75,"ex0same");
+      tCanPart->AddGraph(i,j,(TH1*)fSharedAn->GetKStarCfHeavy(tAnalysisNumber)->GetHeavyCfClone(),"",20,tColor,0.5,"ex0same");  //draw again so data on top
+
+      TString tTextAnType = TString(cAnalysisRootTags[fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetAnalysisType()]);
+      TString tTextCentrality = TString(cPrettyCentralityTags[fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetCentralityType()]);
+
+      TString tCombinedText = tTextAnType + TString("  ") +  tTextCentrality;
+      TPaveText* tCombined = tCanPart->SetupTPaveText(tCombinedText,i,j,0.70,0.825,0.15,0.10,63,20);
+      tCanPart->AddPadPaveText(tCombined,i,j);
+
+      if(i==0 && j==0)
+      {
+        TString tTextAlicePrelim = TString("ALICE Preliminary");
+        //TPaveText* tAlicePrelim = tCanPart->SetupTPaveText(tTextAlicePrelim,i,j,0.30,0.85,0.40,0.10,43,15);
+        TPaveText* tAlicePrelim = tCanPart->SetupTPaveText(tTextAlicePrelim,i,j,0.175,0.825,0.40,0.10,43,15);
+        tCanPart->AddPadPaveText(tAlicePrelim,i,j);
+      }
+
+      if(i==1 && j==0)
+      {
+        TString tTextSysInfo = TString("Pb-Pb #sqrt{#it{s}_{NN}} = 2.76 TeV");
+        //TPaveText* tSysInfo = tCanPart->SetupTPaveText(tTextSysInfo,i,j,0.30,0.85,0.40,0.10,43,15);
+        TPaveText* tSysInfo = tCanPart->SetupTPaveText(tTextSysInfo,i,j,0.125,0.825,0.40,0.10,43,15);
+        tCanPart->AddPadPaveText(tSysInfo,i,j);
+      }
+      const double* tSysErrors = cSysErrors[fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetAnalysisType()][fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetCentralityType()];
+
+//      bool bDrawAll = true;
+
+      bool bDrawAll = false;
+      if(i==0 && j==0) bDrawAll = true;
+      CreateParamFinalValuesText(tCanPart,i,j,(TF1*)fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetFit(),tSysErrors,0.73,0.09,0.25,0.53,43,12.0,bDrawAll);
+    }
+  }
+
+  tCanPart->SetDrawUnityLine(true);
+  tCanPart->DrawAll();
+  tCanPart->DrawXaxisTitle("#it{k}* (GeV/#it{c})");
+  tCanPart->DrawYaxisTitle("#it{C}(#it{k}*)",43,25,0.05,0.85);
+
+  if(aSaveImage)
+  {
+    ExistsSaveLocationBase();
+    tCanPart->GetCanvas()->SaveAs(fSaveLocationBase+tCanvasName+fSaveNameModifier+TString(".pdf"));
+  }
+
+  return tCanPart->GetCanvas();
+}
+
 
 
 

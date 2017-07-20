@@ -57,19 +57,20 @@ public:
 
   double GetKStar(ThermParticle &aParticle, ThermV0Particle &aV0);
   double GetKStar(ThermV0Particle &aV01, ThermV0Particle &aV02);
-  double GetFatherKStar(ThermParticle &aParticle, ThermV0Particle &aV0);
+  double GetFatherKStar(ThermParticle &aParticle, ThermV0Particle &aV0, bool aUseParticleFather=false, bool aUseV0Father=true);
   double GetFatherKStar(ThermV0Particle &aV02, ThermV0Particle &aV0);
 
-  void FillTransformMatrixParticleV0(vector<ThermParticle> &aParticleCollection, vector<ThermV0Particle> &aV0Collection, ParticlePDGType aFatherType, TH2* aMatrix);
+  void FillTransformMatrixParticleV0(vector<ThermParticle> &aParticleCollection, vector<ThermV0Particle> &aV0Collection, ParticlePDGType aParticleFatherType, ParticlePDGType aV0FatherType, TH2* aMatrix);
   void FillTransformMatrixV0V0(vector<ThermV0Particle> &aV0wFatherCollection, vector<ThermV0Particle> &aV0Collection, ParticlePDGType aFatherType, TH2* aMatrix);
 
-  void BuildTransformMatrixParticleV0(ParticlePDGType aParticleType, ParticlePDGType aV0Type, ParticlePDGType aFatherType, TH2* aMatrix);
+  void BuildTransformMatrixParticleV0(ParticlePDGType aParticleType, ParticlePDGType aV0Type, ParticlePDGType aParticleFatherType, ParticlePDGType aV0FatherType, TH2* aMatrix);
   void BuildTransformMatrixV0V0(ParticlePDGType aV0wFatherType, ParticlePDGType aV0Type, ParticlePDGType aFatherType, TH2* aMatrix);
 
   void BuildAllTransformMatrices();  //TODO
   void SaveAllTransformMatrices(TString aSaveFileLocation);
 
   void MapAndFillParentsMatrix(TH2* aMatrix, int aV0FatherType, int aTrackFatherType);
+  void MapAndFillPairFractionHistogram(TH1* aHistogram, int aV0FatherType, int aTrackFatherType);
   void BuildPairFractionHistogramsParticleV0(ParticlePDGType aParticleType, ParticlePDGType aV0Type, TH1* aHistogram, TH2* aMatrix);
   void BuildAllPairFractionHistograms();
   void BuildUniqueParents(int aV0FatherType, int aTrackFatherType);
@@ -105,6 +106,14 @@ private:
   TH2* fXiCToLamKchPTransform;
   TH2* fXi0ToLamKchPTransform;
   TH2* fOmegaToLamKchPTransform;
+  //--
+  TH2* fSigStPToLamKchPTransform;
+  TH2* fSigStMToLamKchPTransform;
+  TH2* fSigSt0ToLamKchPTransform;
+  TH2* fLamKSt0ToLamKchPTransform;
+  TH2* fSigKSt0ToLamKchPTransform;
+  TH2* fXiCKSt0ToLamKchPTransform;
+  TH2* fXi0KSt0ToLamKchPTransform;
 
   TH1* fPairFractionsLamKchP;
   TH2* fParentsMatrixLamKchP;
@@ -114,6 +123,14 @@ private:
   TH2* fAXiCToALamKchPTransform;
   TH2* fAXi0ToALamKchPTransform;
   TH2* fAOmegaToALamKchPTransform;
+  //--
+  TH2* fASigStMToALamKchPTransform;
+  TH2* fASigStPToALamKchPTransform;
+  TH2* fASigSt0ToALamKchPTransform;
+  TH2* fALamKSt0ToALamKchPTransform;
+  TH2* fASigKSt0ToALamKchPTransform;
+  TH2* fAXiCKSt0ToALamKchPTransform;
+  TH2* fAXi0KSt0ToALamKchPTransform;
 
   TH1* fPairFractionsALamKchP;
   TH2* fParentsMatrixALamKchP;
@@ -123,6 +140,14 @@ private:
   TH2* fXiCToLamKchMTransform;
   TH2* fXi0ToLamKchMTransform;
   TH2* fOmegaToLamKchMTransform;
+  //--
+  TH2* fSigStPToLamKchMTransform;
+  TH2* fSigStMToLamKchMTransform;
+  TH2* fSigSt0ToLamKchMTransform;
+  TH2* fLamAKSt0ToLamKchMTransform;
+  TH2* fSigAKSt0ToLamKchMTransform;
+  TH2* fXiCAKSt0ToLamKchMTransform;
+  TH2* fXi0AKSt0ToLamKchMTransform;
 
   TH1* fPairFractionsLamKchM;
   TH2* fParentsMatrixLamKchM;
@@ -132,6 +157,14 @@ private:
   TH2* fAXiCToALamKchMTransform;
   TH2* fAXi0ToALamKchMTransform;
   TH2* fAOmegaToALamKchMTransform;
+  //--
+  TH2* fASigStMToALamKchMTransform;
+  TH2* fASigStPToALamKchMTransform;
+  TH2* fASigSt0ToALamKchMTransform;
+  TH2* fALamAKSt0ToALamKchMTransform;
+  TH2* fASigAKSt0ToALamKchMTransform;
+  TH2* fAXiCAKSt0ToALamKchMTransform;
+  TH2* fAXi0AKSt0ToALamKchMTransform;
 
   TH1* fPairFractionsALamKchM;
   TH2* fParentsMatrixALamKchM;

@@ -42,7 +42,15 @@ using std::vector;
 
   enum CoulombType {kAttractive=0, kRepulsive=1, kNeutral=2};
 
-  enum ResidualType {kSig0KchP=0, kASig0KchP=1, kSig0KchM=2, kASig0KchM=3, kXi0KchP=4, kAXi0KchP=5, kXi0KchM=6, kAXi0KchM=7, kXiCKchP=8, kAXiCKchP=9, kXiCKchM=10, kAXiCKchM=11, kOmegaKchP=12, kAOmegaKchP=13, kOmegaKchM=14, kAOmegaKchM=15}; 
+  enum ResidualType {kSig0KchP=0, kASig0KchP=1, kSig0KchM=2, kASig0KchM=3, kXi0KchP=4, kAXi0KchP=5, kXi0KchM=6, kAXi0KchM=7, kXiCKchP=8, kAXiCKchP=9, kXiCKchM=10, kAXiCKchM=11, kOmegaKchP=12, kAOmegaKchP=13, kOmegaKchM=14, kAOmegaKchM=15, 
+kSigStPKchP=16, kASigStMKchP=17, kSigStPKchM=18, kASigStMKchM=19, 
+kSigStMKchP=20, kASigStPKchP=21, kSigStMKchM=22, kASigStPKchM=23,
+kSigSt0KchP=24, kASigSt0KchP=25, kSigSt0KchM=26, kASigSt0KchM=27,
+kLamKSt0=28, kALamKSt0=29, kLamAKSt0=30, kALamAKSt0=31,
+kSig0KSt0=32, kASig0KSt0=33, kSig0AKSt0=34, kASig0AKSt0=35, 
+kXi0KSt0=36, kAXi0KSt0=37, kXi0AKSt0=38, kAXi0AKSt0=39, 
+kXiCKSt0=40, kAXiCKSt0=41, kXiCAKSt0=42, kAXiCAKSt0=43
+}; 
 
 //----------------------------------------------------------
   //TODO Don't forget, when adding new particle, add int value to cPDGValues array
@@ -55,8 +63,15 @@ using std::vector;
 		        kPDGXiC    = 3312,  kPDGAXiC     = -3312,
 		        kPDGXi0    = 3322,  kPDGAXi0     = -3322,
 		        kPDGOmega  = 3334,  kPDGAOmega   = -3334,
+
+			kPDGSigStP = 3224,  kPDGASigStM  = -3224,
+			kPDGSigStM = 3114,  kPDGASigStP  = -3114,
+			kPDGSigSt0 = 3214,  kPDGASigSt0  = -3214,
+			kPDGKSt0   = 313,   kPDGAKSt0    = -313,
                         kPDGNull      = 0                          };
-  extern const int cPDGValues[18];
+  extern const int cPDGValues[26];
+  extern const char* const cPDGRootNames[26];
+  extern const char* const GetPDGRootName(ParticlePDGType aType);
   //----------------------------------------------------------
 
 
@@ -135,7 +150,7 @@ using std::vector;
   //-------------------------------------------------
   extern const char* const cAnalysisBaseTags[19];
   extern const char* const cAnalysisRootTags[19];
-  extern const char* const cResidualRootTags[16];
+  extern const char* const cResidualRootTags[44];
   extern const char* const cBFieldTags[7];
   extern const char* const cCentralityTags[4];
   extern const char* const cPrettyCentralityTags[4];

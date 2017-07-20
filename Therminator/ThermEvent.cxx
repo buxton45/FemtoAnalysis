@@ -273,11 +273,11 @@ void ThermEvent::MatchDaughtersWithFathers()
 }
 
 //________________________________________________________________________________________________________________
-void ThermEvent::FindV0Father(ThermV0Particle &aV0Particle)
+void ThermEvent::FindFather(ThermParticle &aParticle)
 {
-  if(!aV0Particle.IsPrimordial())
+  if(!aParticle.IsPrimordial())
   {
-    int tFatherEID = aV0Particle.GetFatherEID();
+    int tFatherEID = aParticle.GetFatherEID();
 
     int tFatherLocation = -1;
     for(unsigned int i=0; i<fAllParticlesCollection.size(); i++)
@@ -285,7 +285,7 @@ void ThermEvent::FindV0Father(ThermV0Particle &aV0Particle)
       if(fAllParticlesCollection[i].GetEID() == tFatherEID)
       {
         tFatherLocation = i;
-        aV0Particle.LoadFather(fAllParticlesCollection[i]);
+        aParticle.LoadFather(fAllParticlesCollection[i]);
         break;
       }
     }
@@ -295,11 +295,14 @@ void ThermEvent::FindV0Father(ThermV0Particle &aV0Particle)
 
 
 //________________________________________________________________________________________________________________
-void ThermEvent::FindAllV0sFathers()
+void ThermEvent::FindAllFathers()
 {
-  for(unsigned int i=0; i<fLambdaCollection.size(); i++) FindV0Father(fLambdaCollection[i]);
-  for(unsigned int i=0; i<fAntiLambdaCollection.size(); i++) FindV0Father(fAntiLambdaCollection[i]);
-  for(unsigned int i=0; i<fK0ShortCollection.size(); i++) FindV0Father(fK0ShortCollection[i]);
+  for(unsigned int i=0; i<fLambdaCollection.size(); i++) FindFather(fLambdaCollection[i]);
+  for(unsigned int i=0; i<fAntiLambdaCollection.size(); i++) FindFather(fAntiLambdaCollection[i]);
+  for(unsigned int i=0; i<fK0ShortCollection.size(); i++) FindFather(fK0ShortCollection[i]);
+
+  for(unsigned int i=0; i<fKchPCollection.size(); i++) FindFather(fKchPCollection[i]);
+  for(unsigned int i=0; i<fKchMCollection.size(); i++) FindFather(fKchMCollection[i]);
 
   //No longer need fAllParticlesCollection, so I should clear it and free up memory before it is pushed to ThermEventsCollection
   ClearCollection(fAllParticlesCollection);

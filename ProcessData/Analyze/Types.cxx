@@ -4,13 +4,26 @@
 
 
 #include "Types.h"
-
+#include <cassert>
 
 
 
 //________________________________________________________________________________________________________________
 //enum ParticlePDGType
-const int cPDGValues[18] = {2212,-2212,211,-211,311,321,-321,3122,-3122,3212,-3212,3312,-3312,3322,-3322,3334,-3334,0};
+const int cPDGValues[26] = {2212,-2212,211,-211,311,321,-321,3122,-3122,3212,-3212,3312,-3312,3322,-3322,3334,-3334, 3224,-3224,3114,-3114,3214,-3214,313,-313,0};
+const char* const cPDGRootNames[26] {"p", "#bar{p}", "#pi+", "#pi-", "K^{0}_{S}", "K+", "K-", "#Lambda", "#bar{#Lambda}", "#Sigma^{0}", "#bar{#Sigma}^{0}", "#Xi-", "#bar{#Xi}+", "#Xi^{0}", "#bar{#Xi}^{0}", "#Omega-", "#bar{#Omega}+", "#Sigma*+", "#bar{#Sigma*}-", "#Sigma*-", "#bar{#Sigma*}+", "#Sigma*^{0}", "#bar{#Sigma*}^{0}", "K*^{0}", "#bar{K*}^{0}", "", };
+
+const char* const GetPDGRootName(ParticlePDGType aType)
+{
+  int tPosition = -1;
+  for(int i=0; i<26; i++)
+  {
+    if(cPDGValues[i] == aType) tPosition = i;
+  }
+  assert(tPosition > -1);
+  return cPDGRootNames[tPosition];
+}
+
 
 
 //enum AnalysisType
@@ -19,7 +32,15 @@ const char* const cAnalysisBaseTags[19] = {"LamK0", "ALamK0", "LamKchP", "ALamKc
 const char* const cAnalysisRootTags[19] = {"#LambdaK^{0}_{S}", "#bar{#Lambda}K^{0}_{S}", "#LambdaK+", "#bar{#Lambda}K+", "#LambdaK-", "#bar{#Lambda}K-", "#Xi-K+", "#bar{#Xi}+K+", "#Xi-K-", "#bar{#Xi}+K-", "#Lambda#Lambda", "#bar{#Lambda}#bar{#Lambda}", "#Lambda#bar{#Lambda}", "#Lambda#pi+", "#bar{#Lambda}#pi+", "#Lambda#pi-", "#bar{#Lambda}#pi-", "#XiK^{0}_{S}", "#bar{#Xi}K^{0}_{S}"};
 
 //enum ResidualType
-const char* const cResidualRootTags[16] = {"#Sigma^{0}K+", "#bar{#Sigma}^{0}K+", "#Sigma^{0}K-", "#bar{#Sigma}^{0}K-", "#Xi^{0}K+", "#bar{#Xi}^{0}K+", "#Xi^{0}K-", "#bar{#Xi}^{0}K-", "#Xi-K+", "#bar{#Xi}+K+", "#Xi-K-", "#bar{#Xi}+K-", "#Omega-K+", "#bar{#Omega}+K+", "#Omega-K-", "#bar{#Omega}+K-"};
+const char* const cResidualRootTags[44] = {"#Sigma^{0}K+", "#bar{#Sigma}^{0}K+", "#Sigma^{0}K-", "#bar{#Sigma}^{0}K-", "#Xi^{0}K+", "#bar{#Xi}^{0}K+", "#Xi^{0}K-", "#bar{#Xi}^{0}K-", "#Xi-K+", "#bar{#Xi}+K+", "#Xi-K-", "#bar{#Xi}+K-", "#Omega-K+", "#bar{#Omega}+K+", "#Omega-K-", "#bar{#Omega}+K-",
+"#Sigma*^{+}K+", "#bar{#Sigma*}^{-}K+", "#Sigma*^{+}K-", "#bar{#Sigma*}^{-}K-", 
+"#Sigma*^{-}K+", "#bar{#Sigma*}^{+}K+", "#Sigma*^{-}K-", "#bar{#Sigma*}^{+}K-", 
+"#Sigma*^{0}K+", "#bar{#Sigma*}^{0}K+", "#Sigma*^{0}K-", "#bar{#Sigma*}^{0}K-", 
+"#LambdaK*^{0}", "#bar{#Lambda}K*^{0}", "#Lambda#bar{K*}^{0}", "#bar{#Lambda}#bar{K*}^{0}", 
+"#Sigma^{0}K*^{0}", "#bar{#Sigma}^{0}K*^{0}", "#Sigma^{0}{K*}^{0}", "#bar{#Sigma}^{0}{K*}^{0}", 
+"#Xi^{0}K*^{0}", "#bar{#Xi}^{0}K*^{0}", "#Xi^{0}{K*}^{0}", "#bar{#Xi}^{0}{K*}^{0}", 
+"#Xi-K*^{0}", "#bar{#Xi}+K*^{0}", "#Xi-{K*}^{0}", "#bar{#Xi}+{K*}^{0}"
+};
 
 
 //enum BFieldType

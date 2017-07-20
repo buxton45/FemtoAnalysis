@@ -50,8 +50,8 @@ public:
   void FindFatherandLoadDaughter(ThermParticle &aDaughterParticle);
   void MatchDaughtersWithFathers();
 
-  void FindV0Father(ThermV0Particle &aV0Particle);
-  void FindAllV0sFathers();
+  void FindFather(ThermParticle &aParticle);
+  void FindAllFathers();
 
   vector<ThermV0Particle> GetV0ParticleCollection(ParticlePDGType aPDGType);
   vector<ThermParticle> GetParticleCollection(ParticlePDGType aPDGType);

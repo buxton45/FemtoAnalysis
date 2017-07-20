@@ -23,7 +23,8 @@ ThermParticle::ThermParticle() :
   fT(0), fX(0), fY(0), fZ(0),
   fE(0), fPx(0), fPy(0), fPz(0),
   fDecayed(0), fPID(0), fFatherPID(0), fRootPID(0),
-  fEID(0), fFatherEID(0), fEventID(0)
+  fEID(0), fFatherEID(0), fEventID(0),
+  fFatherMass(0), fFatherT(0), fFatherX(0), fFatherY(0), fFatherZ(0), fFatherE(0), fFatherPx(0), fFatherPy(0), fFatherPz(0)
 {
 
 }
@@ -36,7 +37,8 @@ ThermParticle::ThermParticle(ParticleCoor* aParticle) :
   fT(aParticle->t), fX(aParticle->x), fY(aParticle->y), fZ(aParticle->z),
   fE(aParticle->e), fPx(aParticle->px), fPy(aParticle->py), fPz(aParticle->pz),
   fDecayed(aParticle->decayed), fPID(aParticle->pid), fFatherPID(aParticle->fatherpid), fRootPID(aParticle->rootpid),
-  fEID(aParticle->eid), fFatherEID(aParticle->fathereid), fEventID(aParticle->eventid)
+  fEID(aParticle->eid), fFatherEID(aParticle->fathereid), fEventID(aParticle->eventid),
+  fFatherMass(0), fFatherT(0), fFatherX(0), fFatherY(0), fFatherZ(0), fFatherE(0), fFatherPx(0), fFatherPy(0), fFatherPz(0)
 {
   SetIsParticleOfInterest();
   if(fFatherEID == -1) fPrimordial = true;
@@ -50,9 +52,10 @@ ThermParticle::ThermParticle(vector<double> &aVecFromTxt) :
   fT(0), fX(0), fY(0), fZ(0),
   fE(0), fPx(0), fPy(0), fPz(0),
   fDecayed(0), fPID(0), fFatherPID(0), fRootPID(0),
-  fEID(0), fFatherEID(0), fEventID(0)
+  fEID(0), fFatherEID(0), fEventID(0),
+  fFatherMass(0), fFatherT(0), fFatherX(0), fFatherY(0), fFatherZ(0), fFatherE(0), fFatherPx(0), fFatherPy(0), fFatherPz(0)
 {
-  assert(aVecFromTxt.size() == 18);
+  assert(aVecFromTxt.size() == 27);
 
   fPrimordial = aVecFromTxt[0];
   fParticleOfInterest = aVecFromTxt[1];
@@ -77,6 +80,18 @@ ThermParticle::ThermParticle(vector<double> &aVecFromTxt) :
   fFatherEID = aVecFromTxt[16];
   fEventID = aVecFromTxt[17];
 
+  fFatherMass = aVecFromTxt[18];
+
+  fFatherT = aVecFromTxt[19];
+  fFatherX = aVecFromTxt[20];
+  fFatherY = aVecFromTxt[21];
+  fFatherZ = aVecFromTxt[22];
+
+  fFatherE = aVecFromTxt[23];
+  fFatherPx = aVecFromTxt[24];
+  fFatherPy = aVecFromTxt[25];
+  fFatherPz = aVecFromTxt[26];
+
 }
 
 
@@ -87,7 +102,11 @@ ThermParticle::ThermParticle(const ThermParticle& aParticle) :
   fT(aParticle.fT), fX(aParticle.fX), fY(aParticle.fY), fZ(aParticle.fZ),
   fE(aParticle.fE), fPx(aParticle.fPx), fPy(aParticle.fPy), fPz(aParticle.fPz),
   fDecayed(aParticle.fDecayed), fPID(aParticle.fPID), fFatherPID(aParticle.fFatherPID), fRootPID(aParticle.fRootPID),
-  fEID(aParticle.fEID), fFatherEID(aParticle.fFatherEID), fEventID(aParticle.fEventID)
+  fEID(aParticle.fEID), fFatherEID(aParticle.fFatherEID), fEventID(aParticle.fEventID),
+
+  fFatherMass(aParticle.fFatherMass), 
+  fFatherT(aParticle.fFatherT), fFatherX(aParticle.fFatherX), fFatherY(aParticle.fFatherY), fFatherZ(aParticle.fFatherZ),
+  fFatherE(aParticle.fFatherE), fFatherPx(aParticle.fFatherPx), fFatherPy(aParticle.fFatherPy), fFatherPz(aParticle.fFatherPz)
 {
 
 }
@@ -115,6 +134,16 @@ ThermParticle& ThermParticle::operator=(const ThermParticle& aParticle)
   fEID = aParticle.fEID;
   fFatherEID = aParticle.fFatherEID;
   fEventID = aParticle.fEventID;
+
+  fFatherMass = aParticle.fFatherMass; 
+  fFatherT = aParticle.fFatherT;
+  fFatherX = aParticle.fFatherX;
+  fFatherY = aParticle.fFatherY;
+  fFatherZ = aParticle.fFatherZ;
+  fFatherE = aParticle.fFatherE;
+  fFatherPx = aParticle.fFatherPx;
+  fFatherPy = aParticle.fFatherPy;
+  fFatherPz = aParticle.fFatherPz;
 
   return *this;
 }
@@ -276,7 +305,45 @@ TLorentzVector ThermParticle::GetFourMomentum()
 }
 
 
+//________________________________________________________________________________________________________________
+void ThermParticle::LoadFather(ThermParticle& aFather)
+{
+  int tPID = aFather.GetPID();
+  int tEID = aFather.GetEID();
 
+  //Just double check here...
+  assert(tPID == fFatherPID);
+  assert(tEID == fFatherEID);
+
+  double tMass = aFather.GetMass();
+
+  TLorentzVector tFourPosition = aFather.GetFourPosition();
+    double tT = tFourPosition.T();
+    double tX = tFourPosition.X();
+    double tY = tFourPosition.Y();
+    double tZ = tFourPosition.Z();
+
+  TLorentzVector tFourMomentum = aFather.GetFourMomentum();
+    double tE = tFourMomentum.E();
+    double tPx = tFourMomentum.Px();
+    double tPy = tFourMomentum.Py();
+    double tPz = tFourMomentum.Pz();
+
+  //-----------------------------------------------------------
+
+  fFatherMass = tMass;
+
+  fFatherT = tT; 
+  fFatherX = tX; 
+  fFatherY = tY; 
+  fFatherZ = tZ;
+
+  fFatherE = tE; 
+  fFatherPx = tPx;
+  fFatherPy = tPy;
+  fFatherPz = tPz;
+
+}
 
 
 

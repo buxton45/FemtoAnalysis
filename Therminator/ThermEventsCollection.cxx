@@ -38,6 +38,14 @@ ThermEventsCollection::ThermEventsCollection() :
   fXiCToLamKchPTransform(0),
   fXi0ToLamKchPTransform(0),
   fOmegaToLamKchPTransform(0),
+  fSigStPToLamKchPTransform(0),
+  fSigStMToLamKchPTransform(0),
+  fSigSt0ToLamKchPTransform(0),
+  fLamKSt0ToLamKchPTransform(0),
+  fSigKSt0ToLamKchPTransform(0),
+  fXiCKSt0ToLamKchPTransform(0),
+  fXi0KSt0ToLamKchPTransform(0),
+  //-----
   fPairFractionsLamKchP(0),
   fParentsMatrixLamKchP(0),
 
@@ -46,6 +54,14 @@ ThermEventsCollection::ThermEventsCollection() :
   fAXiCToALamKchPTransform(0),
   fAXi0ToALamKchPTransform(0),
   fAOmegaToALamKchPTransform(0),
+  fASigStMToALamKchPTransform(0),
+  fASigStPToALamKchPTransform(0),
+  fASigSt0ToALamKchPTransform(0),
+  fALamKSt0ToALamKchPTransform(0),
+  fASigKSt0ToALamKchPTransform(0),
+  fAXiCKSt0ToALamKchPTransform(0),
+  fAXi0KSt0ToALamKchPTransform(0),
+  //-----
   fPairFractionsALamKchP(0),
   fParentsMatrixALamKchP(0),
 
@@ -54,6 +70,14 @@ ThermEventsCollection::ThermEventsCollection() :
   fXiCToLamKchMTransform(0),
   fXi0ToLamKchMTransform(0),
   fOmegaToLamKchMTransform(0),
+  fSigStPToLamKchMTransform(0),
+  fSigStMToLamKchMTransform(0),
+  fSigSt0ToLamKchMTransform(0),
+  fLamAKSt0ToLamKchMTransform(0),
+  fSigAKSt0ToLamKchMTransform(0),
+  fXiCAKSt0ToLamKchMTransform(0),
+  fXi0AKSt0ToLamKchMTransform(0),
+  //-----
   fPairFractionsLamKchM(0),
   fParentsMatrixLamKchM(0),
 
@@ -62,6 +86,14 @@ ThermEventsCollection::ThermEventsCollection() :
   fAXiCToALamKchMTransform(0),
   fAXi0ToALamKchMTransform(0),
   fAOmegaToALamKchMTransform(0),
+  fASigStMToALamKchMTransform(0),
+  fASigStPToALamKchMTransform(0),
+  fASigSt0ToALamKchMTransform(0),
+  fALamAKSt0ToALamKchMTransform(0),
+  fASigAKSt0ToALamKchMTransform(0),
+  fAXiCAKSt0ToALamKchMTransform(0),
+  fAXi0AKSt0ToALamKchMTransform(0),
+  //-----
   fPairFractionsALamKchM(0),
   fParentsMatrixALamKchM(0),
 
@@ -73,32 +105,64 @@ ThermEventsCollection::ThermEventsCollection() :
   fXiCToLamKchPTransform = new TH2D("fXiCToLamKchPTransform","fXiCToLamKchPTransform",fNBinsKStar,fKStarMin,fKStarMax,fNBinsKStar,fKStarMin,fKStarMax);
   fXi0ToLamKchPTransform = new TH2D("fXi0ToLamKchPTransform","fXi0ToLamKchPTransform",fNBinsKStar,fKStarMin,fKStarMax,fNBinsKStar,fKStarMin,fKStarMax);
   fOmegaToLamKchPTransform = new TH2D("fOmegaToLamKchPTransform","fOmegaToLamKchPTransform",fNBinsKStar,fKStarMin,fKStarMax,fNBinsKStar,fKStarMin,fKStarMax);
-  fPairFractionsLamKchP = new TH1D("fPairFractionsLamKchP", "fPairFractionsLamKchP", 6, 0, 6);
-  fParentsMatrixLamKchP = new TH2D("fParentsMatrixLamKchP", "fParentsMatrixLamKchP", 100, 0, 100, 100, 0, 100);
+  fSigStPToLamKchPTransform = new TH2D("fSigStPToLamKchPTransform","fSigStPToLamKchPTransform",fNBinsKStar,fKStarMin,fKStarMax,fNBinsKStar,fKStarMin,fKStarMax);
+  fSigStMToLamKchPTransform = new TH2D("fSigStMToLamKchPTransform","fSigStMToLamKchPTransform",fNBinsKStar,fKStarMin,fKStarMax,fNBinsKStar,fKStarMin,fKStarMax);
+  fSigSt0ToLamKchPTransform = new TH2D("fSigSt0ToLamKchPTransform","fSigSt0ToLamKchPTransform",fNBinsKStar,fKStarMin,fKStarMax,fNBinsKStar,fKStarMin,fKStarMax);
+  fLamKSt0ToLamKchPTransform = new TH2D("fLamKSt0ToLamKchPTransform","fLamKSt0ToLamKchPTransform",fNBinsKStar,fKStarMin,fKStarMax,fNBinsKStar,fKStarMin,fKStarMax);
+  fSigKSt0ToLamKchPTransform = new TH2D("fSigKSt0ToLamKchPTransform","fSigKSt0ToLamKchPTransform",fNBinsKStar,fKStarMin,fKStarMax,fNBinsKStar,fKStarMin,fKStarMax);
+  fXiCKSt0ToLamKchPTransform = new TH2D("fXiCKSt0ToLamKchPTransform","fXiCKSt0ToLamKchPTransform",fNBinsKStar,fKStarMin,fKStarMax,fNBinsKStar,fKStarMin,fKStarMax);
+  fXi0KSt0ToLamKchPTransform = new TH2D("fXi0KSt0ToLamKchPTransform","fXi0KSt0ToLamKchPTransform",fNBinsKStar,fKStarMin,fKStarMax,fNBinsKStar,fKStarMin,fKStarMax);
+  //-----
+  fPairFractionsLamKchP = new TH1D("fPairFractionsLamKchP", "fPairFractionsLamKchP", 12, 0, 12);
+  fParentsMatrixLamKchP = new TH2D("fParentsMatrixLamKchP", "fParentsMatrixLamKchP", 100, 0, 100, 135, 0, 135);
 
   //ALamKchP
   fASigToALamKchPTransform = new TH2D("fASigToALamKchPTransform","fASigToALamKchPTransform",fNBinsKStar,fKStarMin,fKStarMax,fNBinsKStar,fKStarMin,fKStarMax);
   fAXiCToALamKchPTransform = new TH2D("fAXiCToALamKchPTransform","fAXiCToALamKchPTransform",fNBinsKStar,fKStarMin,fKStarMax,fNBinsKStar,fKStarMin,fKStarMax);
   fAXi0ToALamKchPTransform = new TH2D("fAXi0ToALamKchPTransform","fAXi0ToALamKchPTransform",fNBinsKStar,fKStarMin,fKStarMax,fNBinsKStar,fKStarMin,fKStarMax);
   fAOmegaToALamKchPTransform = new TH2D("fAOmegaToALamKchPTransform","fAOmegaToALamKchPTransform",fNBinsKStar,fKStarMin,fKStarMax,fNBinsKStar,fKStarMin,fKStarMax);
-  fPairFractionsALamKchP = new TH1D("fPairFractionsALamKchP", "fPairFractionsALamKchP", 6, 0, 6);
-  fParentsMatrixALamKchP = new TH2D("fParentsMatrixALamKchP", "fParentsMatrixALamKchP", 100, 0, 100, 100, 0, 100);
+  fASigStMToALamKchPTransform = new TH2D("fASigStMToALamKchPTransform","fASigStMToALamKchPTransform",fNBinsKStar,fKStarMin,fKStarMax,fNBinsKStar,fKStarMin,fKStarMax);
+  fASigStPToALamKchPTransform = new TH2D("fASigStPToALamKchPTransform","fASigStPToALamKchPTransform",fNBinsKStar,fKStarMin,fKStarMax,fNBinsKStar,fKStarMin,fKStarMax);
+  fASigSt0ToALamKchPTransform = new TH2D("fASigSt0ToALamKchPTransform","fASigSt0ToALamKchPTransform",fNBinsKStar,fKStarMin,fKStarMax,fNBinsKStar,fKStarMin,fKStarMax);
+  fALamKSt0ToALamKchPTransform = new TH2D("fALamKSt0ToALamKchPTransform","fALamKSt0ToALamKchPTransform",fNBinsKStar,fKStarMin,fKStarMax,fNBinsKStar,fKStarMin,fKStarMax);
+  fASigKSt0ToALamKchPTransform = new TH2D("fASigKSt0ToALamKchPTransform","fASigKSt0ToALamKchPTransform",fNBinsKStar,fKStarMin,fKStarMax,fNBinsKStar,fKStarMin,fKStarMax);
+  fAXiCKSt0ToALamKchPTransform = new TH2D("fAXiCKSt0ToALamKchPTransform","fAXiCKSt0ToALamKchPTransform",fNBinsKStar,fKStarMin,fKStarMax,fNBinsKStar,fKStarMin,fKStarMax);
+  fAXi0KSt0ToALamKchPTransform = new TH2D("fAXi0KSt0ToALamKchPTransform","fAXi0KSt0ToALamKchPTransform",fNBinsKStar,fKStarMin,fKStarMax,fNBinsKStar,fKStarMin,fKStarMax);
+  //-----
+  fPairFractionsALamKchP = new TH1D("fPairFractionsALamKchP", "fPairFractionsALamKchP", 12, 0, 12);
+  fParentsMatrixALamKchP = new TH2D("fParentsMatrixALamKchP", "fParentsMatrixALamKchP", 100, 0, 100, 135, 0, 135);
 
   //LamKchM
   fSigToLamKchMTransform = new TH2D("fSigToLamKchMTransform","fSigToLamKchMTransform",fNBinsKStar,fKStarMin,fKStarMax,fNBinsKStar,fKStarMin,fKStarMax);
   fXiCToLamKchMTransform = new TH2D("fXiCToLamKchMTransform","fXiCToLamKchMTransform",fNBinsKStar,fKStarMin,fKStarMax,fNBinsKStar,fKStarMin,fKStarMax);
   fXi0ToLamKchMTransform = new TH2D("fXi0ToLamKchMTransform","fXi0ToLamKchMTransform",fNBinsKStar,fKStarMin,fKStarMax,fNBinsKStar,fKStarMin,fKStarMax);
   fOmegaToLamKchMTransform = new TH2D("fOmegaToLamKchMTransform","fOmegaToLamKchMTransform",fNBinsKStar,fKStarMin,fKStarMax,fNBinsKStar,fKStarMin,fKStarMax);
-  fPairFractionsLamKchM = new TH1D("fPairFractionsLamKchM", "fPairFractionsLamKchM", 6, 0, 6);
-  fParentsMatrixLamKchM = new TH2D("fParentsMatrixLamKchM", "fParentsMatrixLamKchM", 100, 0, 100, 100, 0, 100);
+  fSigStPToLamKchMTransform = new TH2D("fSigStPToLamKchMTransform","fSigStPToLamKchMTransform",fNBinsKStar,fKStarMin,fKStarMax,fNBinsKStar,fKStarMin,fKStarMax);
+  fSigStMToLamKchMTransform = new TH2D("fSigStMToLamKchMTransform","fSigStMToLamKchMTransform",fNBinsKStar,fKStarMin,fKStarMax,fNBinsKStar,fKStarMin,fKStarMax);
+  fSigSt0ToLamKchMTransform = new TH2D("fSigSt0ToLamKchMTransform","fSigSt0ToLamKchMTransform",fNBinsKStar,fKStarMin,fKStarMax,fNBinsKStar,fKStarMin,fKStarMax);
+  fLamAKSt0ToLamKchMTransform = new TH2D("fLamAKSt0ToLamKchMTransform","fLamAKSt0ToLamKchMTransform",fNBinsKStar,fKStarMin,fKStarMax,fNBinsKStar,fKStarMin,fKStarMax);
+  fSigAKSt0ToLamKchMTransform = new TH2D("fSigAKSt0ToLamKchMTransform","fSigAKSt0ToLamKchMTransform",fNBinsKStar,fKStarMin,fKStarMax,fNBinsKStar,fKStarMin,fKStarMax);
+  fXiCAKSt0ToLamKchMTransform = new TH2D("fXiCAKSt0ToLamKchMTransform","fXiCAKSt0ToLamKchMTransform",fNBinsKStar,fKStarMin,fKStarMax,fNBinsKStar,fKStarMin,fKStarMax);
+  fXi0AKSt0ToLamKchMTransform = new TH2D("fXi0AKSt0ToLamKchMTransform","fXi0AKSt0ToLamKchMTransform",fNBinsKStar,fKStarMin,fKStarMax,fNBinsKStar,fKStarMin,fKStarMax);
+  //-----
+  fPairFractionsLamKchM = new TH1D("fPairFractionsLamKchM", "fPairFractionsLamKchM", 12, 0, 12);
+  fParentsMatrixLamKchM = new TH2D("fParentsMatrixLamKchM", "fParentsMatrixLamKchM", 100, 0, 100, 135, 0, 135);
 
   //ALamKchM
   fASigToALamKchMTransform = new TH2D("fASigToALamKchMTransform","fASigToALamKchMTransform",fNBinsKStar,fKStarMin,fKStarMax,fNBinsKStar,fKStarMin,fKStarMax);
   fAXiCToALamKchMTransform = new TH2D("fAXiCToALamKchMTransform","fAXiCToALamKchMTransform",fNBinsKStar,fKStarMin,fKStarMax,fNBinsKStar,fKStarMin,fKStarMax);
   fAXi0ToALamKchMTransform = new TH2D("fAXi0ToALamKchMTransform","fAXi0ToALamKchMTransform",fNBinsKStar,fKStarMin,fKStarMax,fNBinsKStar,fKStarMin,fKStarMax);
   fAOmegaToALamKchMTransform = new TH2D("fAOmegaToALamKchMTransform","fAOmegaToALamKchMTransform",fNBinsKStar,fKStarMin,fKStarMax,fNBinsKStar,fKStarMin,fKStarMax);
-  fPairFractionsALamKchM = new TH1D("fPairFractionsALamKchM", "fPairFractionsALamKchM", 6, 0, 6);
-  fParentsMatrixALamKchM = new TH2D("fParentsMatrixALamKchM", "fParentsMatrixALamKchM", 100, 0, 100, 100, 0, 100);
+  fASigStMToALamKchMTransform = new TH2D("fASigStMToALamKchMTransform","fASigStMToALamKchMTransform",fNBinsKStar,fKStarMin,fKStarMax,fNBinsKStar,fKStarMin,fKStarMax);
+  fASigStPToALamKchMTransform = new TH2D("fASigStPToALamKchMTransform","fASigStPToALamKchMTransform",fNBinsKStar,fKStarMin,fKStarMax,fNBinsKStar,fKStarMin,fKStarMax);
+  fASigSt0ToALamKchMTransform = new TH2D("fASigSt0ToALamKchMTransform","fASigSt0ToALamKchMTransform",fNBinsKStar,fKStarMin,fKStarMax,fNBinsKStar,fKStarMin,fKStarMax);
+  fALamAKSt0ToALamKchMTransform = new TH2D("fALamAKSt0ToALamKchMTransform","fALamAKSt0ToALamKchMTransform",fNBinsKStar,fKStarMin,fKStarMax,fNBinsKStar,fKStarMin,fKStarMax);
+  fASigAKSt0ToALamKchMTransform = new TH2D("fASigAKSt0ToALamKchMTransform","fASigAKSt0ToALamKchMTransform",fNBinsKStar,fKStarMin,fKStarMax,fNBinsKStar,fKStarMin,fKStarMax);
+  fAXiCAKSt0ToALamKchMTransform = new TH2D("fAXiCAKSt0ToALamKchMTransform","fAXiCAKSt0ToALamKchMTransform",fNBinsKStar,fKStarMin,fKStarMax,fNBinsKStar,fKStarMin,fKStarMax);
+  fAXi0AKSt0ToALamKchMTransform = new TH2D("fAXi0AKSt0ToALamKchMTransform","fAXi0AKSt0ToALamKchMTransform",fNBinsKStar,fKStarMin,fKStarMax,fNBinsKStar,fKStarMin,fKStarMax);
+  //-----
+  fPairFractionsALamKchM = new TH1D("fPairFractionsALamKchM", "fPairFractionsALamKchM", 12, 0, 12);
+  fParentsMatrixALamKchM = new TH2D("fParentsMatrixALamKchM", "fParentsMatrixALamKchM", 100, 0, 100, 135, 0, 135);
 
   //LamLam
   fSigToLamLamTransform = new TH2D("fSigToLamLamTransform","fSigToLamLamTransform",fNBinsKStar,fKStarMin,fKStarMax,fNBinsKStar,fKStarMin,fKStarMax);
@@ -147,7 +211,7 @@ vector<double> ThermEventsCollection::PackageV0ParticleForWriting(ThermV0Particl
 {
   vector<double> tReturnVector;
     tReturnVector.resize(53);
-    // 18(ThermParticle) + 35(ThermV0Particle) = 53 total
+    // 27(ThermParticle) + 26(ThermV0Particle) = 53 total
 
   //------ThermParticle
   tReturnVector[0] = aV0.IsPrimordial();
@@ -173,54 +237,54 @@ vector<double> ThermEventsCollection::PackageV0ParticleForWriting(ThermV0Particl
   tReturnVector[16] = aV0.GetFatherEID();
   tReturnVector[17] = aV0.GetEventID();
 
+  tReturnVector[18] = aV0.GetFatherMass();
+
+  tReturnVector[19] = aV0.GetFatherT();
+  tReturnVector[20] = aV0.GetFatherX();
+  tReturnVector[21] = aV0.GetFatherY();
+  tReturnVector[22] = aV0.GetFatherZ();
+
+  tReturnVector[23] = aV0.GetFatherE();
+  tReturnVector[24] = aV0.GetFatherPx();
+  tReturnVector[25] = aV0.GetFatherPy();
+  tReturnVector[26] = aV0.GetFatherPz();
+
   //------ThermV0Particle
-  tReturnVector[18] = aV0.Daughter1Found();
-  tReturnVector[19] = aV0.Daughter2Found();
-  tReturnVector[20] = aV0.BothDaughtersFound();
+  tReturnVector[27] = aV0.Daughter1Found();
+  tReturnVector[28] = aV0.Daughter2Found();
+  tReturnVector[29] = aV0.BothDaughtersFound();
 
-  tReturnVector[21] = aV0.GoodV0();
+  tReturnVector[30] = aV0.GoodV0();
 
-  tReturnVector[22] = aV0.GetDaughter1PID();
-  tReturnVector[23] = aV0.GetDaughter2PID();
+  tReturnVector[31] = aV0.GetDaughter1PID();
+  tReturnVector[32] = aV0.GetDaughter2PID();
 
-  tReturnVector[24] = aV0.GetDaughter1EID();
-  tReturnVector[25] = aV0.GetDaughter2EID();
+  tReturnVector[33] = aV0.GetDaughter1EID();
+  tReturnVector[34] = aV0.GetDaughter2EID();
 
-  tReturnVector[26] = aV0.GetDaughter1Mass();
+  tReturnVector[35] = aV0.GetDaughter1Mass();
 
-  tReturnVector[27] = aV0.GetDaughter1T();
-  tReturnVector[28] = aV0.GetDaughter1X();
-  tReturnVector[29] = aV0.GetDaughter1Y();
-  tReturnVector[30] = aV0.GetDaughter1Z();
+  tReturnVector[36] = aV0.GetDaughter1T();
+  tReturnVector[37] = aV0.GetDaughter1X();
+  tReturnVector[38] = aV0.GetDaughter1Y();
+  tReturnVector[39] = aV0.GetDaughter1Z();
 
-  tReturnVector[31] = aV0.GetDaughter1E();
-  tReturnVector[32] = aV0.GetDaughter1Px();
-  tReturnVector[33] = aV0.GetDaughter1Py();
-  tReturnVector[34] = aV0.GetDaughter1Pz();
+  tReturnVector[40] = aV0.GetDaughter1E();
+  tReturnVector[41] = aV0.GetDaughter1Px();
+  tReturnVector[42] = aV0.GetDaughter1Py();
+  tReturnVector[43] = aV0.GetDaughter1Pz();
 
-  tReturnVector[35] = aV0.GetDaughter2Mass();
+  tReturnVector[44] = aV0.GetDaughter2Mass();
 
-  tReturnVector[36] = aV0.GetDaughter2T();
-  tReturnVector[37] = aV0.GetDaughter2X();
-  tReturnVector[38] = aV0.GetDaughter2Y();
-  tReturnVector[39] = aV0.GetDaughter2Z();
+  tReturnVector[45] = aV0.GetDaughter2T();
+  tReturnVector[46] = aV0.GetDaughter2X();
+  tReturnVector[47] = aV0.GetDaughter2Y();
+  tReturnVector[48] = aV0.GetDaughter2Z();
 
-  tReturnVector[40] = aV0.GetDaughter2E();
-  tReturnVector[41] = aV0.GetDaughter2Px();
-  tReturnVector[42] = aV0.GetDaughter2Py();
-  tReturnVector[43] = aV0.GetDaughter2Pz();
-
-  tReturnVector[44] = aV0.GetFatherMass();
-
-  tReturnVector[45] = aV0.GetFatherT();
-  tReturnVector[46] = aV0.GetFatherX();
-  tReturnVector[47] = aV0.GetFatherY();
-  tReturnVector[48] = aV0.GetFatherZ();
-
-  tReturnVector[49] = aV0.GetFatherE();
-  tReturnVector[50] = aV0.GetFatherPx();
-  tReturnVector[51] = aV0.GetFatherPy();
-  tReturnVector[52] = aV0.GetFatherPz();
+  tReturnVector[49] = aV0.GetDaughter2E();
+  tReturnVector[50] = aV0.GetDaughter2Px();
+  tReturnVector[51] = aV0.GetDaughter2Py();
+  tReturnVector[52] = aV0.GetDaughter2Pz();
 
   return tReturnVector;
 }
@@ -229,8 +293,8 @@ vector<double> ThermEventsCollection::PackageV0ParticleForWriting(ThermV0Particl
 vector<double> ThermEventsCollection::PackageParticleForWriting(ThermParticle &aParticle)
 {
   vector<double> tReturnVector;
-    tReturnVector.resize(18);
-    // 18(ThermParticle)
+    tReturnVector.resize(27);
+    // 27(ThermParticle)
 
   //------ThermParticle
   tReturnVector[0] = aParticle.IsPrimordial();
@@ -255,6 +319,18 @@ vector<double> ThermEventsCollection::PackageParticleForWriting(ThermParticle &a
   tReturnVector[15] = aParticle.GetEID();
   tReturnVector[16] = aParticle.GetFatherEID();
   tReturnVector[17] = aParticle.GetEventID();
+
+  tReturnVector[18] = aParticle.GetFatherMass();
+
+  tReturnVector[19] = aParticle.GetFatherT();
+  tReturnVector[20] = aParticle.GetFatherX();
+  tReturnVector[21] = aParticle.GetFatherY();
+  tReturnVector[22] = aParticle.GetFatherZ();
+
+  tReturnVector[23] = aParticle.GetFatherE();
+  tReturnVector[24] = aParticle.GetFatherPx();
+  tReturnVector[25] = aParticle.GetFatherPy();
+  tReturnVector[26] = aParticle.GetFatherPz();
 
   return tReturnVector;
 }
@@ -420,7 +496,7 @@ void ThermEventsCollection::ExtractParticleCollectionsFromTxtFile(TString aFileN
 
   unsigned int tEventID = 0;
   int tEventIndex;
-  unsigned int tEntrySize = 18;  //size of particle vector
+  unsigned int tEntrySize = 27;  //size of particle vector
 
   string tString;
   int tCount = 0;
@@ -537,7 +613,7 @@ void ThermEventsCollection::ExtractEventsFromRootFile(TString aFileLocation)
     if(tParticleEntry->eventid != tEventID)
     {
       tThermEvent.MatchDaughtersWithFathers();
-      tThermEvent.FindAllV0sFathers();
+      tThermEvent.FindAllFathers();
       tThermEvent.SetEventID(tEventID);
       fEventsCollection.push_back(tThermEvent);
       tThermEvent.ClearThermEvent();
@@ -551,7 +627,7 @@ void ThermEventsCollection::ExtractEventsFromRootFile(TString aFileLocation)
     if(tThermEvent.IsParticleOfInterest(tParticleEntry)) tThermEvent.PushBackThermParticleOfInterest(tParticleEntry);
   }
   tThermEvent.MatchDaughtersWithFathers();
-  tThermEvent.FindAllV0sFathers();
+  tThermEvent.FindAllFathers();
   tThermEvent.SetEventID(tEventID);
   fEventsCollection.push_back(tThermEvent);
 
@@ -665,9 +741,11 @@ bool ThermEventsCollection::DoubleCheckV0Attributes(ThermV0Particle &aV0)
   if(aV0.GetDaughter2T()==0 || aV0.GetDaughter2X()==0 || aV0.GetDaughter2Y()==0 ||aV0.GetDaughter2Z()==0) {cout << "DoubleCheckV0Attributes Fail 5" << endl; return false;}
   if(aV0.GetDaughter2E()==0 || aV0.GetDaughter2Px()==0 || aV0.GetDaughter2Py()==0 ||aV0.GetDaughter2Pz()==0) {cout << "DoubleCheckV0Attributes Fail 6" << endl; return false;}
 
-  if(aV0.GetFatherT()==0 || aV0.GetFatherX()==0 || aV0.GetFatherY()==0 ||aV0.GetFatherZ()==0) {cout << "DoubleCheckV0Attributes Fail 7" << endl; return false;}
-  if(aV0.GetFatherE()==0 || aV0.GetFatherPx()==0 || aV0.GetFatherPy()==0 ||aV0.GetFatherPz()==0) {cout << "DoubleCheckV0Attributes Fail 8" << endl; return false;}
-
+  if(!aV0.IsPrimordial())
+  {
+    if(aV0.GetFatherT()==0 || aV0.GetFatherX()==0 || aV0.GetFatherY()==0 ||aV0.GetFatherZ()==0) {cout << "DoubleCheckV0Attributes Fail 7" << endl; return false;}
+    if(aV0.GetFatherE()==0 || aV0.GetFatherPx()==0 || aV0.GetFatherPy()==0 ||aV0.GetFatherPz()==0) {cout << "DoubleCheckV0Attributes Fail 8" << endl; return false;}
+  }
   //------------------------------
   if(aV0.GetPID() == kPDGLam) return DoubleCheckLamAttributes(aV0);
   else if(aV0.GetPID() == kPDGALam) return DoubleCheckALamAttributes(aV0);
@@ -727,22 +805,44 @@ double ThermEventsCollection::GetKStar(ThermV0Particle &aV01, ThermV0Particle &a
 }
 
 //________________________________________________________________________________________________________________
-double ThermEventsCollection::GetFatherKStar(ThermParticle &aParticle, ThermV0Particle &aV0)
+double ThermEventsCollection::GetFatherKStar(ThermParticle &aParticle, ThermV0Particle &aV0, bool aUseParticleFather, bool aUseV0Father)
 {
   double px1, py1, pz1, mass1, E1;
   double px2, py2, pz2, mass2, E2;
 
-  px1 = aParticle.GetPx();
-  py1 = aParticle.GetPy();
-  pz1 = aParticle.GetPz();
-  mass1 = aParticle.GetMass();
-  E1 = aParticle.GetE();
+  if(aUseParticleFather)
+  {
+    px1 = aParticle.GetFatherPx();
+    py1 = aParticle.GetFatherPy();
+    pz1 = aParticle.GetFatherPz();
+    mass1 = aParticle.GetFatherMass();
+    E1 = aParticle.GetFatherE();
+  }
+  else
+  {
+    px1 = aParticle.GetPx();
+    py1 = aParticle.GetPy();
+    pz1 = aParticle.GetPz();
+    mass1 = aParticle.GetMass();
+    E1 = aParticle.GetE();
+  }
 
-  px2 = aV0.GetFatherPx();
-  py2 = aV0.GetFatherPy();
-  pz2 = aV0.GetFatherPz();
-  mass2 = aV0.GetFatherMass();
-  E2 = aV0.GetFatherE();
+  if(aUseV0Father)
+  {
+    px2 = aV0.GetFatherPx();
+    py2 = aV0.GetFatherPy();
+    pz2 = aV0.GetFatherPz();
+    mass2 = aV0.GetFatherMass();
+    E2 = aV0.GetFatherE();
+  }
+  else
+  {
+    px2 = aV0.GetPx();
+    py2 = aV0.GetPy();
+    pz2 = aV0.GetPz();
+    mass2 = aV0.GetMass();
+    E2 = aV0.GetE();
+  }
 
   double tMinvSq = (E1+E2)*(E1+E2) - (px1+px2)*(px1+px2) - (py1+py2)*(py1+py2) - (pz1+pz2)*(pz1+pz2);
   double tQinvSq = ((mass1*mass1 - mass2*mass2)*(mass1*mass1 - mass2*mass2))/tMinvSq + tMinvSq - 2.0*(mass1*mass1 + mass2*mass2);
@@ -777,26 +877,34 @@ double ThermEventsCollection::GetFatherKStar(ThermV0Particle &aV01, ThermV0Parti
 }
 
 //________________________________________________________________________________________________________________
-void ThermEventsCollection::FillTransformMatrixParticleV0(vector<ThermParticle> &aParticleCollection, vector<ThermV0Particle> &aV0Collection, ParticlePDGType aFatherType, TH2* aMatrix)
+void ThermEventsCollection::FillTransformMatrixParticleV0(vector<ThermParticle> &aParticleCollection, vector<ThermV0Particle> &aV0Collection, ParticlePDGType aParticleFatherType, ParticlePDGType aV0FatherType, TH2* aMatrix)
 {
   ThermParticle tParticle;
   ThermV0Particle tV0;
   double tKStar, tFatherKStar;
 
+  bool bUseParticleFather=false;
+  bool bUseV0Father = true;
+
   for(unsigned int iV0=0; iV0<aV0Collection.size(); iV0++)
   {
     tV0 = aV0Collection[iV0];
-    if(tV0.GetFatherPID() == aFatherType && tV0.GoodV0())
+    if((tV0.GetFatherPID() == aV0FatherType || aV0FatherType == kPDGNull) && tV0.GoodV0())
     {
       for(unsigned int iPar=0; iPar<aParticleCollection.size(); iPar++)
       {
         tParticle = aParticleCollection[iPar];
+        if(tParticle.GetFatherPID() == aParticleFatherType || aParticleFatherType == kPDGNull)
+        {
+          if(aParticleFatherType != kPDGNull) bUseParticleFather=true;
 
-        tKStar = GetKStar(tParticle,tV0);
-        tFatherKStar = GetFatherKStar(tParticle,tV0);
+          tKStar = GetKStar(tParticle,tV0);
+          if(tV0.IsPrimordial()) bUseV0Father = false;
+          tFatherKStar = GetFatherKStar(tParticle,tV0,bUseParticleFather,bUseV0Father);
 
-        assert(DoubleCheckV0Attributes(tV0));
-        aMatrix->Fill(tKStar,tFatherKStar);
+          assert(DoubleCheckV0Attributes(tV0));
+          aMatrix->Fill(tKStar,tFatherKStar);
+        }
       }
     }
   }
@@ -832,7 +940,7 @@ void ThermEventsCollection::FillTransformMatrixV0V0(vector<ThermV0Particle> &aV0
 
 
 //________________________________________________________________________________________________________________
-void ThermEventsCollection::BuildTransformMatrixParticleV0(ParticlePDGType aParticleType, ParticlePDGType aV0Type, ParticlePDGType aFatherType, TH2* aMatrix)
+void ThermEventsCollection::BuildTransformMatrixParticleV0(ParticlePDGType aParticleType, ParticlePDGType aV0Type, ParticlePDGType aParticleFatherType, ParticlePDGType aV0FatherType, TH2* aMatrix)
 {
   vector<ThermParticle> aParticleCollection;
   vector<ThermV0Particle> aV0Collection;
@@ -848,7 +956,7 @@ void ThermEventsCollection::BuildTransformMatrixParticleV0(ParticlePDGType aPart
     for(unsigned int iMixEv=0; iMixEv < fMixingEventsCollection.size(); iMixEv++)
     {
       aParticleCollection = fMixingEventsCollection[iMixEv].GetParticleCollection(aParticleType);
-      FillTransformMatrixParticleV0(aParticleCollection,aV0Collection,aFatherType,aMatrix);
+      FillTransformMatrixParticleV0(aParticleCollection,aV0Collection,aParticleFatherType,aV0FatherType,aMatrix);
     }
 
     if(fMixEvents)
@@ -907,28 +1015,60 @@ void ThermEventsCollection::BuildTransformMatrixV0V0(ParticlePDGType aV0wFatherT
 void ThermEventsCollection::BuildAllTransformMatrices()
 {
   //LamKchP
-  BuildTransformMatrixParticleV0(kPDGKchP, kPDGLam, kPDGSigma, fSigToLamKchPTransform);
-  BuildTransformMatrixParticleV0(kPDGKchP, kPDGLam, kPDGXiC, fXiCToLamKchPTransform);
-  BuildTransformMatrixParticleV0(kPDGKchP, kPDGLam, kPDGXi0, fXi0ToLamKchPTransform);
-  BuildTransformMatrixParticleV0(kPDGKchP, kPDGLam, kPDGOmega, fOmegaToLamKchPTransform);
+  BuildTransformMatrixParticleV0(kPDGKchP, kPDGLam, kPDGNull, kPDGSigma, fSigToLamKchPTransform);
+  BuildTransformMatrixParticleV0(kPDGKchP, kPDGLam, kPDGNull, kPDGXiC, fXiCToLamKchPTransform);
+  BuildTransformMatrixParticleV0(kPDGKchP, kPDGLam, kPDGNull, kPDGXi0, fXi0ToLamKchPTransform);
+  BuildTransformMatrixParticleV0(kPDGKchP, kPDGLam, kPDGNull, kPDGOmega, fOmegaToLamKchPTransform);
+
+  BuildTransformMatrixParticleV0(kPDGKchP, kPDGLam, kPDGNull, kPDGSigStP, fSigStPToLamKchPTransform);
+  BuildTransformMatrixParticleV0(kPDGKchP, kPDGLam, kPDGNull, kPDGSigStM, fSigStMToLamKchPTransform);
+  BuildTransformMatrixParticleV0(kPDGKchP, kPDGLam, kPDGNull, kPDGSigSt0, fSigSt0ToLamKchPTransform);
+  BuildTransformMatrixParticleV0(kPDGKchP, kPDGLam, kPDGKSt0, kPDGLam, fLamKSt0ToLamKchPTransform);
+  BuildTransformMatrixParticleV0(kPDGKchP, kPDGLam, kPDGKSt0, kPDGSigma, fSigKSt0ToLamKchPTransform);
+  BuildTransformMatrixParticleV0(kPDGKchP, kPDGLam, kPDGKSt0, kPDGXiC, fXiCKSt0ToLamKchPTransform);
+  BuildTransformMatrixParticleV0(kPDGKchP, kPDGLam, kPDGKSt0, kPDGXi0, fXi0KSt0ToLamKchPTransform);
 
   //ALamKchP
-  BuildTransformMatrixParticleV0(kPDGKchP, kPDGALam, kPDGASigma, fASigToALamKchPTransform);
-  BuildTransformMatrixParticleV0(kPDGKchP, kPDGALam, kPDGAXiC, fAXiCToALamKchPTransform);
-  BuildTransformMatrixParticleV0(kPDGKchP, kPDGALam, kPDGAXi0, fAXi0ToALamKchPTransform);
-  BuildTransformMatrixParticleV0(kPDGKchP, kPDGALam, kPDGAOmega, fAOmegaToALamKchPTransform);
+  BuildTransformMatrixParticleV0(kPDGKchP, kPDGALam, kPDGNull, kPDGASigma, fASigToALamKchPTransform);
+  BuildTransformMatrixParticleV0(kPDGKchP, kPDGALam, kPDGNull, kPDGAXiC, fAXiCToALamKchPTransform);
+  BuildTransformMatrixParticleV0(kPDGKchP, kPDGALam, kPDGNull, kPDGAXi0, fAXi0ToALamKchPTransform);
+  BuildTransformMatrixParticleV0(kPDGKchP, kPDGALam, kPDGNull, kPDGAOmega, fAOmegaToALamKchPTransform);
+
+  BuildTransformMatrixParticleV0(kPDGKchP, kPDGALam, kPDGNull, kPDGASigStM, fASigStMToALamKchPTransform);
+  BuildTransformMatrixParticleV0(kPDGKchP, kPDGALam, kPDGNull, kPDGASigStP, fASigStPToALamKchPTransform);
+  BuildTransformMatrixParticleV0(kPDGKchP, kPDGALam, kPDGNull, kPDGASigSt0, fASigSt0ToALamKchPTransform);
+  BuildTransformMatrixParticleV0(kPDGKchP, kPDGALam, kPDGKSt0, kPDGALam, fALamKSt0ToALamKchPTransform);
+  BuildTransformMatrixParticleV0(kPDGKchP, kPDGALam, kPDGKSt0, kPDGASigma, fASigKSt0ToALamKchPTransform);
+  BuildTransformMatrixParticleV0(kPDGKchP, kPDGALam, kPDGKSt0, kPDGAXiC, fAXiCKSt0ToALamKchPTransform);
+  BuildTransformMatrixParticleV0(kPDGKchP, kPDGALam, kPDGKSt0, kPDGAXi0, fAXi0KSt0ToALamKchPTransform);
 
   //LamKchM
-  BuildTransformMatrixParticleV0(kPDGKchM, kPDGLam, kPDGSigma, fSigToLamKchMTransform);
-  BuildTransformMatrixParticleV0(kPDGKchM, kPDGLam, kPDGXiC, fXiCToLamKchMTransform);
-  BuildTransformMatrixParticleV0(kPDGKchM, kPDGLam, kPDGXi0, fXi0ToLamKchMTransform);
-  BuildTransformMatrixParticleV0(kPDGKchM, kPDGLam, kPDGOmega, fOmegaToLamKchMTransform);
+  BuildTransformMatrixParticleV0(kPDGKchM, kPDGLam, kPDGNull, kPDGSigma, fSigToLamKchMTransform);
+  BuildTransformMatrixParticleV0(kPDGKchM, kPDGLam, kPDGNull, kPDGXiC, fXiCToLamKchMTransform);
+  BuildTransformMatrixParticleV0(kPDGKchM, kPDGLam, kPDGNull, kPDGXi0, fXi0ToLamKchMTransform);
+  BuildTransformMatrixParticleV0(kPDGKchM, kPDGLam, kPDGNull, kPDGOmega, fOmegaToLamKchMTransform);
+
+  BuildTransformMatrixParticleV0(kPDGKchM, kPDGLam, kPDGNull, kPDGSigStP, fSigStPToLamKchMTransform);
+  BuildTransformMatrixParticleV0(kPDGKchM, kPDGLam, kPDGNull, kPDGSigStM, fSigStMToLamKchMTransform);
+  BuildTransformMatrixParticleV0(kPDGKchM, kPDGLam, kPDGNull, kPDGSigSt0, fSigSt0ToLamKchMTransform);
+  BuildTransformMatrixParticleV0(kPDGKchM, kPDGLam, kPDGAKSt0, kPDGLam, fLamAKSt0ToLamKchMTransform);
+  BuildTransformMatrixParticleV0(kPDGKchM, kPDGLam, kPDGAKSt0, kPDGSigma, fSigAKSt0ToLamKchMTransform);
+  BuildTransformMatrixParticleV0(kPDGKchM, kPDGLam, kPDGAKSt0, kPDGXiC, fXiCAKSt0ToLamKchMTransform);
+  BuildTransformMatrixParticleV0(kPDGKchM, kPDGLam, kPDGAKSt0, kPDGXi0, fXi0AKSt0ToLamKchMTransform);
 
   //ALamKchM
-  BuildTransformMatrixParticleV0(kPDGKchM, kPDGALam, kPDGASigma, fASigToALamKchMTransform);
-  BuildTransformMatrixParticleV0(kPDGKchM, kPDGALam, kPDGAXiC, fAXiCToALamKchMTransform);
-  BuildTransformMatrixParticleV0(kPDGKchM, kPDGALam, kPDGAXi0, fAXi0ToALamKchMTransform);
-  BuildTransformMatrixParticleV0(kPDGKchM, kPDGALam, kPDGAOmega, fAOmegaToALamKchMTransform);
+  BuildTransformMatrixParticleV0(kPDGKchM, kPDGALam, kPDGNull, kPDGASigma, fASigToALamKchMTransform);
+  BuildTransformMatrixParticleV0(kPDGKchM, kPDGALam, kPDGNull, kPDGAXiC, fAXiCToALamKchMTransform);
+  BuildTransformMatrixParticleV0(kPDGKchM, kPDGALam, kPDGNull, kPDGAXi0, fAXi0ToALamKchMTransform);
+  BuildTransformMatrixParticleV0(kPDGKchM, kPDGALam, kPDGNull, kPDGAOmega, fAOmegaToALamKchMTransform);
+
+  BuildTransformMatrixParticleV0(kPDGKchM, kPDGALam, kPDGNull, kPDGASigStM, fASigStMToALamKchMTransform);
+  BuildTransformMatrixParticleV0(kPDGKchM, kPDGALam, kPDGNull, kPDGASigStP, fASigStPToALamKchMTransform);
+  BuildTransformMatrixParticleV0(kPDGKchM, kPDGALam, kPDGNull, kPDGASigSt0, fASigSt0ToALamKchMTransform);
+  BuildTransformMatrixParticleV0(kPDGKchM, kPDGALam, kPDGAKSt0, kPDGALam, fALamAKSt0ToALamKchMTransform);
+  BuildTransformMatrixParticleV0(kPDGKchM, kPDGALam, kPDGAKSt0, kPDGASigma, fASigAKSt0ToALamKchMTransform);
+  BuildTransformMatrixParticleV0(kPDGKchM, kPDGALam, kPDGAKSt0, kPDGAXiC, fAXiCAKSt0ToALamKchMTransform);
+  BuildTransformMatrixParticleV0(kPDGKchM, kPDGALam, kPDGAKSt0, kPDGAXi0, fAXi0AKSt0ToALamKchMTransform);
 
   //LamLam
   BuildTransformMatrixV0V0(kPDGLam, kPDGLam, kPDGSigma, fSigToLamLamTransform);
@@ -947,24 +1087,52 @@ void ThermEventsCollection::SaveAllTransformMatrices(TString aSaveFileLocation)
   fXiCToLamKchPTransform->Write();
   fXi0ToLamKchPTransform->Write();
   fOmegaToLamKchPTransform->Write();
+  fSigStPToLamKchPTransform->Write();
+  fSigStMToLamKchPTransform->Write();
+  fSigSt0ToLamKchPTransform->Write();
+  fLamKSt0ToLamKchPTransform->Write();
+  fSigKSt0ToLamKchPTransform->Write();
+  fXiCKSt0ToLamKchPTransform->Write();
+  fXi0KSt0ToLamKchPTransform->Write();
 
   //ALamKchP
   fASigToALamKchPTransform->Write();
   fAXiCToALamKchPTransform->Write();
   fAXi0ToALamKchPTransform->Write();
   fAOmegaToALamKchPTransform->Write();
+  fASigStMToALamKchPTransform->Write();
+  fASigStPToALamKchPTransform->Write();
+  fASigSt0ToALamKchPTransform->Write();
+  fALamKSt0ToALamKchPTransform->Write();
+  fASigKSt0ToALamKchPTransform->Write();
+  fAXiCKSt0ToALamKchPTransform->Write();
+  fAXi0KSt0ToALamKchPTransform->Write();
 
   //LamKchM
   fSigToLamKchMTransform->Write();
   fXiCToLamKchMTransform->Write();
   fXi0ToLamKchMTransform->Write();
   fOmegaToLamKchMTransform->Write();
+  fSigStPToLamKchMTransform->Write();
+  fSigStMToLamKchMTransform->Write();
+  fSigSt0ToLamKchMTransform->Write();
+  fLamAKSt0ToLamKchMTransform->Write();
+  fSigAKSt0ToLamKchMTransform->Write();
+  fXiCAKSt0ToLamKchMTransform->Write();
+  fXi0AKSt0ToLamKchMTransform->Write();
 
   //ALamKchM
   fASigToALamKchMTransform->Write();
   fAXiCToALamKchMTransform->Write();
   fAXi0ToALamKchMTransform->Write();
   fAOmegaToALamKchMTransform->Write();
+  fASigStMToALamKchMTransform->Write();
+  fASigStPToALamKchMTransform->Write();
+  fASigSt0ToALamKchMTransform->Write();
+  fALamAKSt0ToALamKchMTransform->Write();
+  fASigAKSt0ToALamKchMTransform->Write();
+  fAXiCAKSt0ToALamKchMTransform->Write();
+  fAXi0AKSt0ToALamKchMTransform->Write();
 
   //LamLam to check with Jai
   fSigToLamLamTransform->Write();
@@ -976,9 +1144,32 @@ void ThermEventsCollection::SaveAllTransformMatrices(TString aSaveFileLocation)
 void ThermEventsCollection::MapAndFillParentsMatrix(TH2* aMatrix, int aV0FatherType, int aTrackFatherType)
 {
   //Note: List of parent PIDs found by turning on bBuildUniqueParents switch in ThermEventsCollection::ExtractFromAllRootFiles
-  vector<int> tV0Fathers {3114, 3116, 3118, 3122, 3124, 3212, 3214, 3216, 3218, 3224, 3226, 3228, 3312, 3322, 3334, 4028, 4128, 4228, 8116, 8117, 8118, 8900, 8901, 13112, 13114, 13116, 13124, 13212, 13214, 13216, 13222, 13224, 13226, 13314, 13324, 23114, 23214, 23224, 31214, 32112, 32124, 32212, 33122, 42112, 42212, 67000, 67001, 67718, 67719};
+  vector<int> tV0Fathers {
+-67719, -67718, -67001, -67000, -42212, -42112, -33122, -32212, -32124, -32112, 
+-31214, -23224, -23214, -23114, -13324, -13314, -13226, -13224, -13222, -13216, 
+-13214, -13212, -13124, -13116, -13114, -13112, -8901, -8900, -8118, -8117, 
+-8116, -4228, -4128, -4028, -3334, -3322, -3312, -3228, -3226, -3224, 
+-3218, -3216, -3214, -3212, -3124, -3122, -3118, -3116, -3114, 3114, 
+3116, 3118, 3122, 3124, 3212, 3214, 3216, 3218, 3224, 3226, 
+3228, 3312, 3322, 3334, 4028, 4128, 4228, 8116, 8117, 8118, 
+8900, 8901, 13112, 13114, 13116, 13124, 13212, 13214, 13216, 13222, 
+13224, 13226, 13314, 13324, 23114, 23214, 23224, 31214, 32112, 32124, 
+32212, 33122, 42112, 42212, 67000, 67001, 67718, 67719};
 
-  vector<int> tTrackFathers {115, 119, 215, 219, 313, 317, 321, 323, 327, 333, 335, 337, 3118, 3124, 3126, 3128, 3216, 3218, 3226, 3228, 3334, 4128, 4228, 8117, 8118, 8900, 8901, 9000, 10111, 10115, 10211, 10215, 10221, 10311, 10313, 10321, 10323, 10331, 13124, 13126, 13212, 13214, 13216, 13222, 13224, 13226, 13314, 13324, 20223, 20313, 20315, 20323, 20325, 20333, 23114, 23122, 23124, 23214, 23224, 30313, 30323, 31214, 32112, 33122, 42112, 43122, 53122, 67001, 67718, 67719, 100313, 100323, 100331, 100333, 9000223};
+  vector<int> tTrackFathers {
+-100323, -100313, -67719, -67718, -67001, -53122, -43122, -42112, -33122, -32112, 
+-31214, -30323, -30313, -23224, -23214, -23124, -23122, -23114, -20323, -20313, 
+-13226, -13224, -13222, -13216, -13214, -13212, -13126, -13124, -10323, -10321, 
+-10313, -10311, -10215, -10211, -9000, -8901, -8900, -8118, -8117, -4228, 
+-4128, -3334, -3228, -3226, -3218, -3216, -3128, -3126, -3124, -3118, 
+-327, -323, -321, -317, -313, -219, 115, 119, 215, 219, 
+313, 317, 321, 323, 327, 333, 335, 337, 3118, 3124, 
+3126, 3128, 3216, 3218, 3226, 3228, 3334, 4128, 4228, 8117, 8118, 
+8900, 8901, 9000, 10111, 10115, 10211, 10215, 10221, 10311, 10313, 
+10321, 10323, 10331, 13124, 13126, 13212, 13214, 13216, 13222, 13224, 
+13226, 13314, 13324, 20223, 20313, 20315, 20323, 20325, 20333, 23114, 
+23122, 23124, 23214, 23224, 30313, 30323, 31214, 32112, 33122, 42112, 
+43122, 53122, 67001, 67718, 67719, 100313, 100323, 100331, 100333, 9000223};
 
   int tBinV0Father=-1, tBinTrackFather=-1;
   for(unsigned int i=0; i<tV0Fathers.size(); i++) if(aV0FatherType==tV0Fathers[i]) tBinV0Father=i;
@@ -992,6 +1183,32 @@ void ThermEventsCollection::MapAndFillParentsMatrix(TH2* aMatrix, int aV0FatherT
     assert(tBinTrackFather>-1);
   }
   aMatrix->Fill(tBinV0Father,tBinTrackFather);
+}
+
+//________________________________________________________________________________________________________________
+void ThermEventsCollection::MapAndFillPairFractionHistogram(TH1* aHistogram, int aV0FatherType, int aTrackFatherType)
+{
+  double tBin = -1.;
+  if((aV0FatherType == kPDGLam || aV0FatherType == kPDGALam) && (aTrackFatherType == kPDGKchP || aTrackFatherType == kPDGKchM)) tBin = 0.;
+  else if((aV0FatherType==kPDGSigma || aV0FatherType==kPDGASigma) && (aTrackFatherType == kPDGKchP || aTrackFatherType == kPDGKchM)) tBin = 1.;
+  else if((aV0FatherType==kPDGXi0 || aV0FatherType==kPDGAXi0) && (aTrackFatherType == kPDGKchP || aTrackFatherType == kPDGKchM)) tBin = 2.;
+  else if((aV0FatherType==kPDGXiC || aV0FatherType==kPDGAXiC) && (aTrackFatherType == kPDGKchP || aTrackFatherType == kPDGKchM)) tBin = 3.;
+  else if((aV0FatherType==kPDGSigStP || aV0FatherType==kPDGASigStM) && (aTrackFatherType == kPDGKchP || aTrackFatherType == kPDGKchM)) tBin = 4.;
+  else if((aV0FatherType==kPDGSigStM || aV0FatherType==kPDGASigStP) && (aTrackFatherType == kPDGKchP || aTrackFatherType == kPDGKchM)) tBin = 5.;
+  else if((aV0FatherType==kPDGSigSt0 || aV0FatherType==kPDGASigSt0) && (aTrackFatherType == kPDGKchP || aTrackFatherType == kPDGKchM)) tBin = 6.;
+
+  else if((aV0FatherType == kPDGLam || aV0FatherType == kPDGALam) && (aTrackFatherType == kPDGKSt0 || aTrackFatherType == kPDGAKSt0)) tBin = 7.;
+  else if((aV0FatherType==kPDGSigma || aV0FatherType==kPDGASigma) && (aTrackFatherType == kPDGKSt0 || aTrackFatherType == kPDGAKSt0)) tBin = 8.;
+  else if((aV0FatherType==kPDGXi0 || aV0FatherType==kPDGAXi0) && (aTrackFatherType == kPDGKSt0 || aTrackFatherType == kPDGAKSt0)) tBin = 9.;
+  else if((aV0FatherType==kPDGXiC || aV0FatherType==kPDGAXiC) && (aTrackFatherType == kPDGKSt0 || aTrackFatherType == kPDGAKSt0)) tBin = 10.;
+  else tBin = 11.;
+
+  if(tBin > -1)
+  {
+    tBin += 0.1;
+    aHistogram->Fill(tBin);
+  }
+
 }
 
 
@@ -1013,15 +1230,6 @@ void ThermEventsCollection::BuildPairFractionHistogramsParticleV0(ParticlePDGTyp
       tV0 = aV0Collection[iV0];
       int tV0FatherType = tV0.GetFatherPID();
 
-      double tBin = 0.;
-      if(tV0FatherType == aV0Type) tBin = 0.;
-      else if(tV0FatherType==kPDGSigma || tV0FatherType==kPDGASigma) tBin = 1.;
-      else if(tV0FatherType==kPDGXi0 || tV0FatherType==kPDGAXi0) tBin = 2.;
-      else if(tV0FatherType==kPDGXiC || tV0FatherType==kPDGAXiC) tBin = 3.;
-      else if(tV0FatherType==kPDGOmega || tV0FatherType==kPDGAOmega) tBin = 4.;
-      else tBin = -1.;
-      tBin += 0.1;
-
       if(tV0.GoodV0())
       {
         ThermParticle tParticle;
@@ -1030,9 +1238,9 @@ void ThermEventsCollection::BuildPairFractionHistogramsParticleV0(ParticlePDGTyp
           tParticle = aParticleCollection[iPar];
           int tParticleFatherType = tParticle.GetFatherPID();
 
-          aHistogram->Fill(tBin);
-          if(fBuildUniqueParents) BuildUniqueParents(TMath::Abs(tV0FatherType), TMath::Abs(tParticleFatherType));
-          MapAndFillParentsMatrix(aMatrix, TMath::Abs(tV0FatherType), TMath::Abs(tParticleFatherType));
+          MapAndFillPairFractionHistogram(aHistogram, tV0FatherType, tParticleFatherType);
+          if(fBuildUniqueParents) BuildUniqueParents(tV0FatherType, tParticleFatherType);
+          MapAndFillParentsMatrix(aMatrix, tV0FatherType, tParticleFatherType);
         }
       }
     }
