@@ -36,6 +36,7 @@ CanvasPartition::CanvasPartition(TString aCanvasName, int aNx, int aNy, double a
   fGraphs(0),
   fGraphsDrawOptions(aNx*aNy),
   fPadPaveTexts(0),
+  fPadLegends(0),
 
   fPadArray(0),
 
@@ -53,6 +54,8 @@ CanvasPartition::CanvasPartition(TString aCanvasName, int aNx, int aNy, double a
     fGraphs->SetName("GraphsCollection");
   fPadPaveTexts = new TObjArray();
     fPadPaveTexts->SetName("PaveTextsCollection");
+  fPadLegends = new TObjArray();
+    fPadLegends->SetName("LegendsCollection");
 
   for(int i=0; i<aNx*aNy; i++)
   {
@@ -63,6 +66,10 @@ CanvasPartition::CanvasPartition(TString aCanvasName, int aNx, int aNy, double a
     TObjArray* tTemp2 = new TObjArray();
     tTemp2->SetName(TString::Format("PaveTexts_%d",i));
     fPadPaveTexts->Add(tTemp2);
+
+    TObjArray* tTemp3 = new TObjArray();
+    tTemp3->SetName(TString::Format("Legend_%d",i));
+    fPadLegends->Add(tTemp3);
   }
 
 }
@@ -230,7 +237,33 @@ float** CanvasPartition::GetScaleFactors(AxisType aAxisType, td2dTPadVec &fPadAr
   return returnScaleFactors;
 }
 
+//________________________________________________________________________________________________________________
+void CanvasPartition::SetupOptStat(int aNx, int aNy, double aStatX, double aStatY, double aStatW, double aStatH)
+{
+  float tLeftMargin = fPadArray[aNx][aNy]->GetLeftMargin();
+  float tRightMargin = fPadArray[aNx][aNy]->GetRightMargin();
+  float tTopMargin = fPadArray[aNx][aNy]->GetTopMargin();
+  float tBottomMargin = fPadArray[aNx][aNy]->GetBottomMargin();
 
+  float tReNormalizedWidth = 1. - (tLeftMargin+tRightMargin);
+  float tReNormalizedHeight = 1. - (tTopMargin+tBottomMargin);
+
+  //------------------------------------
+
+  double tNormalizedTextXmin = tLeftMargin + aStatX*tReNormalizedWidth;
+  double tNormalizedTextYmin = tBottomMargin + aStatY*tReNormalizedHeight;
+
+  tReNormalizedWidth *= aStatW;
+  tReNormalizedHeight *= aStatH;
+  //------------------------------------
+
+  gStyle->SetOptFit();
+  gStyle->SetStatH(tReNormalizedHeight);
+  gStyle->SetStatW(tReNormalizedWidth);
+
+  gStyle->SetStatX(tNormalizedTextXmin);
+  gStyle->SetStatY(tNormalizedTextYmin);
+}
 
 
 //________________________________________________________________________________________________________________
@@ -266,7 +299,14 @@ TPaveText* CanvasPartition::SetupTPaveText(TString aText, int aNx, int aNy, doub
 }
 
 //________________________________________________________________________________________________________________
-void CanvasPartition::SetupOptStat(int aNx, int aNy, double aStatX, double aStatY, double aStatW, double aStatH)
+void CanvasPartition::AddPadPaveText(TPaveText* aText, int aNx, int aNy)
+{
+  int tPosition = aNx + aNy*fNx;
+  ((TObjArray*)fPadPaveTexts->At(tPosition))->Add(aText);
+}
+
+//________________________________________________________________________________________________________________
+void CanvasPartition::SetupTLegend(TString aHeader, int aNx, int aNy, double aTextXmin, double aTextYmin, double aTextWidth, double aTextHeight)
 {
   float tLeftMargin = fPadArray[aNx][aNy]->GetLeftMargin();
   float tRightMargin = fPadArray[aNx][aNy]->GetRightMargin();
@@ -278,27 +318,33 @@ void CanvasPartition::SetupOptStat(int aNx, int aNy, double aStatX, double aStat
 
   //------------------------------------
 
-  double tNormalizedTextXmin = tLeftMargin + aStatX*tReNormalizedWidth;
-  double tNormalizedTextYmin = tBottomMargin + aStatY*tReNormalizedHeight;
+  double tNormalizedTextXmin = tLeftMargin + aTextXmin*tReNormalizedWidth;
+  double tNormalizedTextYmin = tBottomMargin + aTextYmin*tReNormalizedHeight;
 
-  tReNormalizedWidth *= aStatW;
-  tReNormalizedHeight *= aStatH;
+  double tNormalizedTextXmax = tNormalizedTextXmin + aTextWidth*tReNormalizedWidth;
+  double tNormalizedTextYmax = tNormalizedTextYmin + aTextHeight*tReNormalizedHeight;
+
   //------------------------------------
 
-  gStyle->SetOptFit();
-  gStyle->SetStatH(tReNormalizedHeight);
-  gStyle->SetStatW(tReNormalizedWidth);
+  TLegend* tLeg = new TLegend(tNormalizedTextXmin,tNormalizedTextYmin,tNormalizedTextXmax,tNormalizedTextYmax,"NDC");
+    tLeg->SetFillColor(0);
+    tLeg->SetBorderSize(0);
+    tLeg->SetTextAlign(22);
+    if(!aHeader.IsNull()) tLeg->SetHeader(aHeader);
 
-  gStyle->SetStatX(tNormalizedTextXmin);
-  gStyle->SetStatY(tNormalizedTextYmin);
+  //------------------------------------
+  int tPosition = aNx + aNy*fNx;
+  ((TObjArray*)fPadLegends->At(tPosition))->Add(tLeg);
 }
 
 //________________________________________________________________________________________________________________
-void CanvasPartition::AddPadPaveText(TPaveText* aText, int aNx, int aNy)
+void CanvasPartition::AddLegendEntry(int aNx, int aNy, const TObject *tObj, const char *label, Option_t *option, int tLegNumInPad)
 {
   int tPosition = aNx + aNy*fNx;
-  ((TObjArray*)fPadPaveTexts->At(tPosition))->Add(aText);
+  TObjArray* tLegArray = ((TObjArray*)fPadLegends->At(tPosition));
+  ((TLegend*)tLegArray->At(tLegNumInPad))->AddEntry(tObj, label, option);
 }
+
 
 
 //________________________________________________________________________________________________________________
@@ -342,6 +388,9 @@ void CanvasPartition::DrawInPad(int aNx, int aNy)
 
   TObjArray* tPaveTexts = (TObjArray*)fPadPaveTexts->At(tPosition);
   for(int i=0; i<tPaveTexts->GetEntries(); i++) tPaveTexts->At(i)->Draw();
+
+  TObjArray* tLegends = (TObjArray*)fPadLegends->At(tPosition);
+  for(int i=0; i<tLegends->GetEntries(); i++) tLegends->At(i)->Draw();
 
   if(fDrawUnityLine)
   {

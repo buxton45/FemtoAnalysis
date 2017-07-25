@@ -1483,10 +1483,17 @@ TCanvas* FitGenerator::DrawKStarCfswFitsAndResiduals(bool aMomResCorrectFit, boo
         TPaveText* tSysInfo = tCanPart->SetupTPaveText(tTextSysInfo,i,j,0.125,0.825,0.40,0.10,43,15);
         tCanPart->AddPadPaveText(tSysInfo,i,j);
       }
+
+      if(i==0 && j==1)
+      {
+        tCanPart->SetupTLegend(TString("Residuals"), i, j, 0.35, 0.10, 0.25, 0.50);
+        tCanPart->AddLegendEntry(i, j, tHist_SigK, cResidualRootTags[tResSigKType], "p");
+        tCanPart->AddLegendEntry(i, j, tHist_Xi0K, cResidualRootTags[tResXi0KType], "p");
+        tCanPart->AddLegendEntry(i, j, tHist_XiCK, cResidualRootTags[tResXiCKType], "p");
+        tCanPart->AddLegendEntry(i, j, tHist_OmegaK, cResidualRootTags[tResOmegaKType], "p");
+      }
+
       const double* tSysErrors = cSysErrors[fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetAnalysisType()][fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetCentralityType()];
-
-//      bool bDrawAll = true;
-
       bool bDrawAll = false;
       if(i==0 && j==0) bDrawAll = true;
       CreateParamFinalValuesText(tCanPart,i,j,(TF1*)fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetFit(),tSysErrors,0.73,0.09,0.25,0.53,43,12.0,bDrawAll);

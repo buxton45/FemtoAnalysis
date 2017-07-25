@@ -56,9 +56,11 @@ public:
 
   float** GetScaleFactors(AxisType aAxisType, td2dTPadVec &fPadArray, int Nx, int Ny);
 
-  TPaveText* SetupTPaveText(TString aText, int aNx, int aNy, double aTextXmin=0.75, double aTextYmin=0.75, double aTextWidth=0.15, double aTextHeight=0.10, double aTextFont=63, double aTextSize=15);
   void SetupOptStat(int aNx, int aNy, double aStatX, double aStatY, double aStatW, double aStatH);
+  TPaveText* SetupTPaveText(TString aText, int aNx, int aNy, double aTextXmin=0.75, double aTextYmin=0.75, double aTextWidth=0.15, double aTextHeight=0.10, double aTextFont=63, double aTextSize=15);
   void AddPadPaveText(TPaveText* aText, int aNx, int aNy);
+  void SetupTLegend(TString aText, int aNx, int aNy, double aTextXmin=0.75, double aTextYmin=0.75, double aTextWidth=0.15, double aTextHeight=0.10);
+  void AddLegendEntry(int aNx, int aNy, const TObject *tObj, const char *label="", Option_t *option="lpf", int tLegNumInPad=0);
 
   void DrawInPad(int aNx, int aNy);
   void DrawAll();
@@ -88,6 +90,7 @@ protected:
   TObjArray* fGraphs;
   vector<vector<TString> > fGraphsDrawOptions;
   TObjArray* fPadPaveTexts;
+  TObjArray* fPadLegends;
 
   td2dTPadVec fPadArray;
   float** fXScaleFactors;
