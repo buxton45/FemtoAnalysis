@@ -99,7 +99,7 @@ complex<double> GlobalCoulombFitter::BuildScatteringLength(AnalysisType aAnalysi
   complex<double> tF0 (aReF0,aImF0);
   double tKStar = aKStar/hbarc;
   complex<double> tScattAmp;
-  double tLednickyHFunction = Interpolator::LinearInterpolate(fLednickyHFunctionHist,aKStar);
+  double tLednickyHFunction = LinearInterpolate(fLednickyHFunctionHist,aKStar);
 
   double tImagChi = GetGamowFactor(aKStar)/(2.*GetEta(aKStar));
   complex<double> tLednickyChi (tLednickyHFunction,tImagChi);
@@ -133,19 +133,19 @@ double GlobalCoulombFitter::InterpolateWfSquared(AnalysisType aAnalysisType, dou
   //-------------------------------------
   if(aAnalysisType == kXiKchP || aAnalysisType == kAXiKchM)
   {
-    tHyperGeo1F1Real = Interpolator::TrilinearInterpolate(fHyperGeo1F1RealHist,aKStarMag,aRStarMag,aTheta);
-    tHyperGeo1F1Imag = Interpolator::TrilinearInterpolate(fHyperGeo1F1ImagHist,aKStarMag,aRStarMag,aTheta);
+    tHyperGeo1F1Real = TrilinearInterpolate(fHyperGeo1F1RealHist,aKStarMag,aRStarMag,aTheta);
+    tHyperGeo1F1Imag = TrilinearInterpolate(fHyperGeo1F1ImagHist,aKStarMag,aRStarMag,aTheta);
 
-    tGTildeReal = Interpolator::BilinearInterpolate(fGTildeRealHist,aKStarMag,aRStarMag);
-    tGTildeImag = Interpolator::BilinearInterpolate(fGTildeImagHist,aKStarMag,aRStarMag);
+    tGTildeReal = BilinearInterpolate(fGTildeRealHist,aKStarMag,aRStarMag);
+    tGTildeImag = BilinearInterpolate(fGTildeImagHist,aKStarMag,aRStarMag);
   }
   else if(aAnalysisType == kXiKchM || aAnalysisType == kAXiKchP)
   {
-    tHyperGeo1F1Real = Interpolator::TrilinearInterpolate(fHyperGeo1F1RealHistOppSign,aKStarMag,aRStarMag,aTheta);
-    tHyperGeo1F1Imag = Interpolator::TrilinearInterpolate(fHyperGeo1F1ImagHistOppSign,aKStarMag,aRStarMag,aTheta);
+    tHyperGeo1F1Real = TrilinearInterpolate(fHyperGeo1F1RealHistOppSign,aKStarMag,aRStarMag,aTheta);
+    tHyperGeo1F1Imag = TrilinearInterpolate(fHyperGeo1F1ImagHistOppSign,aKStarMag,aRStarMag,aTheta);
 
-    tGTildeReal = Interpolator::BilinearInterpolate(fGTildeRealHistOppSign,aKStarMag,aRStarMag);
-    tGTildeImag = Interpolator::BilinearInterpolate(fGTildeImagHistOppSign,aKStarMag,aRStarMag);
+    tGTildeReal = BilinearInterpolate(fGTildeRealHistOppSign,aKStarMag,aRStarMag);
+    tGTildeImag = BilinearInterpolate(fGTildeImagHistOppSign,aKStarMag,aRStarMag);
   }
   else assert(0);
 

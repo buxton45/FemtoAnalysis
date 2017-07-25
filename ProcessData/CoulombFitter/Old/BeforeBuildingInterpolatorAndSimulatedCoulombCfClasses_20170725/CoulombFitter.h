@@ -58,12 +58,6 @@ class FitSharedAnalyses;
 #include "WaveFunction.h"
 class WaveFunction;
 
-#include "SimulatedCoulombCf.h"
-class SimulatedCoulombCf;
-
-#include "Interpolator.h"
-class Interpolator;
-
 class CoulombFitter {
 
 public:
@@ -80,6 +74,10 @@ public:
   void LoadLednickyHFunctionFile(TString aFileBaseName="~/Analysis/FemtoAnalysis/ProcessData/CoulombFitter/LednickyHFunction");
   void LoadInterpHistFile(TString aFileBaseName);  //TODO should this be a virtual function?
 
+  int GetBinNumber(double aBinSize, int aNbins, double aValue);
+  int GetBinNumber(int aNbins, double aMin, double aMax, double aValue);
+  int GetBinNumber(double aBinWidth, double aMin, double aMax, double aValue);
+
   void ExtractPairKStar3dVecFromSingleFile(TString aFileLocation, TString aArrayName, TString aNtupleName, double aBinSizeKStar, double aNbinsKStar, td3dVec &aVecToFill);
   td3dVec BuildPairKStar3dVecFull(TString aPairKStarNtupleDirName, TString aFileBaseName, int aNFiles, AnalysisType aAnalysisType, CentralityType aCentralityType, int aNbinsKStar, double aKStarMin, double aKStarMax);
 
@@ -94,6 +92,14 @@ public:
   void BuildPairSample4dVec(int aNPairsPerKStarBin=16384, double aBinSize=0.01);
   void UpdatePairRadiusParameter(double aNewRadius, int aAnalysisNumber);
   void SetUseStaticPairs(bool aUseStaticPairs=true, int aNPairsPerKStarBin=16384, double aBinSize=0.01);
+
+  //Note:  Linear, Bilinear, and Trilinear will essentially be copies of TH1::, TH2::, and TH3::Interpolate
+  //       Rewriting these allows me more control, and allows me to find where and why error flags are thrown
+  double LinearInterpolate(TH1* a1dHisto, double aX);
+  double BilinearInterpolate(TH2* a2dHisto, double aX, double aY);
+  double BilinearInterpolateVector(vector<vector<double> > &a2dVec, double aX, int aNbinsX, double aMinX, double aMaxX, double aY, int aNbinsY, double aMinY, double aMaxY);
+  double TrilinearInterpolate(TH3* a3dHisto, double aX, double aY, double aZ);
+  double QuadrilinearInterpolate(THn* a4dHisto, double aT, double aX, double aY, double aZ);
 
   double GetEta(double aKStar);
   double GetGamowFactor(double aKStar);
