@@ -423,6 +423,120 @@ vector<double> LednickyFitter::CombinePrimaryWithResiduals(td1dVec &aLambdaValue
 }
 
 //________________________________________________________________________________________________________________
+vector<double> LednickyFitter::GetFitCfIncludingResiduals(FitPairAnalysis* aFitPairAnalysis, double aOverallLambda, vector<double> &aKStarBinCenters, vector<double> &aPrimaryFitCfContent, double *aParamSet, int aNFitParams)
+{
+  double tLambda_Primary = aParamSet[0];
+
+  double tLambda_SigK = 0.26473*aOverallLambda;  //for now, primary lambda scaled by some factor
+  double *tPar_SigK = AdjustLambdaParam(aParamSet,1.0,aNFitParams);  //lambda=1 here, will be applied in CombinePrimaryWithResiduals method
+  td1dVec tResidual_SigK = GetNeutralResidualCorrelation(tPar_SigK,aKStarBinCenters,aFitPairAnalysis->GetTransformMatrices()[0]);
+
+  double tLambda_Xi0K = 0.19041*aOverallLambda;  //for now, primary lambda scaled by some factor
+  double *tPar_Xi0K = AdjustLambdaParam(aParamSet,1.0,aNFitParams);  //lambda=1 here, will be applied in CombinePrimaryWithResiduals method
+  td1dVec tResidual_Xi0K = GetNeutralResidualCorrelation(tPar_Xi0K,aKStarBinCenters,aFitPairAnalysis->GetTransformMatrices()[2]);
+
+  AnalysisType tAnType = aFitPairAnalysis->GetAnalysisType();
+  ResidualType tResXiCKType, tResOmegaKType;
+  switch(tAnType) {
+  case kLamKchP:
+    tResXiCKType = kXiCKchP;
+    tResOmegaKType = kOmegaKchP;
+    break;
+
+  case kLamKchM:
+    tResXiCKType = kXiCKchM;
+    tResOmegaKType = kOmegaKchM;
+    break;
+
+  case kALamKchP:
+    tResXiCKType = kAXiCKchP;
+    tResOmegaKType = kAOmegaKchP;
+    break;
+
+  case kALamKchM:
+    tResXiCKType = kAXiCKchM;
+    tResOmegaKType = kAOmegaKchM;
+    break;
+
+  default:
+    cout << "ERROR: LednickyFitter::GetFitCfIncludingResiduals  tAnType = " << tAnType << " is not apropriate" << endl << endl;
+    assert(0);
+  }
+
+  bool tUseExpXiData = true;
+  //if(aFitPairAnalysis->GetCentralityType()==k0010) tUseExpXiData=true;
+
+  double tLambda_XiCK = 0.18386*aOverallLambda;  //for now, primary lambda scaled by some factor
+//  double *tPar_XiCK = AdjustLambdaParam(aParamSet,tLambda_XiCK,aNFitParams);
+  double *tPar_XiCK = new double[8];
+  if(tResXiCKType==kXiCKchP || tResXiCKType==kAXiCKchM)
+  { 
+    tPar_XiCK[0] = 1.0; //TODO lambda=1 here, will be applied in CombinePrimaryWithResiduals method
+    tPar_XiCK[1] = 4.60717;
+    tPar_XiCK[2] = -0.00976133;
+    tPar_XiCK[3] = 0.0409787;
+    tPar_XiCK[4] = -0.33091;
+    tPar_XiCK[5] = -0.484049;
+    tPar_XiCK[6] = 0.523492;
+    tPar_XiCK[7] = 1.53176;
+  }
+  else if(tResXiCKType==kXiCKchM || tResXiCKType==kAXiCKchP)
+  {
+    tPar_XiCK[0] = 1.0; //TODO lambda=1 here, will be applied in CombinePrimaryWithResiduals method
+    tPar_XiCK[1] = 6.97767;
+    tPar_XiCK[2] = -1.94078;
+    tPar_XiCK[3] = -1.21309;
+    tPar_XiCK[4] = 0.160156;
+    tPar_XiCK[5] = 1.38324;
+    tPar_XiCK[6] = 2.02133;
+    tPar_XiCK[7] = 4.07520;
+  }
+  else {tPar_XiCK[0]=0.; tPar_XiCK[1]=0.; tPar_XiCK[2]=0.; tPar_XiCK[3]=0.; tPar_XiCK[4]=0.; tPar_XiCK[5]=0.; tPar_XiCK[6]=0.; tPar_XiCK[7]=0.;}
+  td1dVec tResidual_XiCK = GetChargedResidualCorrelation(tResXiCKType,tPar_XiCK,aKStarBinCenters,tUseExpXiData,aFitPairAnalysis->GetCentralityType());
+
+  double tLambda_OmegaK = 0.01760*aOverallLambda;  //for now, primary lambda scaled by some factor
+//  double *tPar_OmegaK = AdjustLambdaParam(aParamSet,tLambda_OmegaK,aNFitParams);
+  double *tPar_OmegaK = new double[8];
+//TODO for now, use same parameters for OmegaK as XiK
+  if(tResOmegaKType==kOmegaKchP || tResOmegaKType==kAOmegaKchM)
+  { 
+    tPar_OmegaK[0] = 1.0; //TODO lambda=1 here, will be applied in CombinePrimaryWithResiduals method
+    tPar_OmegaK[1] = 2.84;
+    tPar_OmegaK[2] = -1.59;
+    tPar_OmegaK[3] = -0.37;
+    tPar_OmegaK[4] = 5.0;
+    tPar_OmegaK[5] = -0.46;
+    tPar_OmegaK[6] = 1.13;
+    tPar_OmegaK[7] = -2.53;
+  }
+  else if(tResOmegaKType==kOmegaKchM || tResOmegaKType==kAOmegaKchP)
+  {
+    tPar_OmegaK[0] = 1.0; //TODO lambda=1 here, will be applied in CombinePrimaryWithResiduals method
+    tPar_OmegaK[1] = 2.81;
+    tPar_OmegaK[2] = 0.29;
+    tPar_OmegaK[3] = -0.24;
+    tPar_OmegaK[4] = -10.0;
+    tPar_OmegaK[5] = 0.37;
+    tPar_OmegaK[6] = 0.34;
+    tPar_OmegaK[7] = -3.43;
+  }
+  else {tPar_OmegaK[0]=0.; tPar_OmegaK[1]=0.; tPar_OmegaK[2]=0.; tPar_OmegaK[3]=0.; tPar_OmegaK[4]=0.; tPar_OmegaK[5]=0.; tPar_OmegaK[6]=0.; tPar_OmegaK[7]=0.;}
+  td1dVec tResidual_OmegaK = GetChargedResidualCorrelation(tResOmegaKType,tPar_OmegaK,aKStarBinCenters,tUseExpXiData,aFitPairAnalysis->GetCentralityType());
+
+  vector<double> tLambdas{tLambda_Primary,tLambda_SigK,tLambda_Xi0K,tLambda_XiCK,tLambda_OmegaK};
+  td2dVec tAllCfs{aPrimaryFitCfContent,tResidual_SigK,tResidual_Xi0K,tResidual_XiCK,tResidual_OmegaK};
+  vector<double> tFitCfContent = CombinePrimaryWithResiduals(tLambdas, tAllCfs);
+  if(fReturnPrimaryWithResidualsToAnalyses) aFitPairAnalysis->SetPrimaryWithResiduals(tFitCfContent);
+
+  delete[] tPar_SigK;
+  delete[] tPar_Xi0K;
+  delete[] tPar_XiCK;
+  delete[] tPar_OmegaK;
+
+  return tFitCfContent;
+}
+
+//________________________________________________________________________________________________________________
 void LednickyFitter::ApplyNormalization(double aNorm, td1dVec &aCf)
 {
   for(unsigned int i=0; i<aCf.size(); i++) aCf[i] *= aNorm;
@@ -592,7 +706,7 @@ void LednickyFitter::CalculateFitFunction(int &npar, double &chi2, double *par)
         tPrimaryFitCfContent[ix-1] = LednickyEq(x,tPar);
       }
 
-
+/*
       if(fIncludeResidualCorrelations) 
       {
         double tLambda_SigK = 0.26473*tOverallLambda;  //for now, primary lambda scaled by some factor
@@ -701,6 +815,8 @@ void LednickyFitter::CalculateFitFunction(int &npar, double &chi2, double *par)
         delete[] tPar_XiCK;
         delete[] tPar_OmegaK;
       }
+*/
+      if(fIncludeResidualCorrelations) tFitCfContent = GetFitCfIncludingResiduals(tFitPairAnalysis, tOverallLambda, tKStarBinCenters, tPrimaryFitCfContent, tPar, tNFitParams);
       else tFitCfContent = tPrimaryFitCfContent;
 
 

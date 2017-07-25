@@ -84,6 +84,7 @@ public:
   TH1D* GetChargedParentCorrelationHistogram(ResidualType aResidualType, double *aParentCfParams, vector<double> &aKStarBinCenters, bool aUseExpXiData=false, CentralityType aCentType=k0010, TString aTitle = "tParentCf");
   TH1D* GetChargedResidualCorrelationHistogram(ResidualType aResidualType, double *aParentCfParams, vector<double> &aKStarBinCenters, bool aUseExpXiData=false, CentralityType aCentType=k0010, TString aTitle = "tCf");
   vector<double> CombinePrimaryWithResiduals(td1dVec &aLambdaValues, td2dVec &aCfs);
+  vector<double> GetFitCfIncludingResiduals(FitPairAnalysis* aFitPairAnalysis, double aOverallLambda, vector<double> &aKStarBinCenters, vector<double> &aPrimaryFitCfContent, double *aParamSet, int aNFitParams);
   void ApplyNormalization(double aNorm, td1dVec &aCf);
 
   double GetChi2Value(int aKStarBin, TH1* aCfToFit, double* aPar);
