@@ -43,6 +43,9 @@ class WaveFunction;
 #include "FitPairAnalysis.h"
 class FitPairAnalysis;
 
+#include "Interpolator.h"
+class Interpolator;
+
 #include "Types.h"
 
 class SimulatedCoulombCf {
@@ -61,24 +64,12 @@ public:
   void LoadLednickyHFunctionFile(TString aFileBaseName="~/Analysis/FemtoAnalysis/ProcessData/CoulombFitter/LednickyHFunction");
   void LoadInterpHistFile(TString aFileBaseName);  //TODO should this be a virtual function?
 
-  int GetBinNumber(double aBinSize, int aNbins, double aValue);
-  int GetBinNumber(int aNbins, double aMin, double aMax, double aValue);
-  int GetBinNumber(double aBinWidth, double aMin, double aMax, double aValue);
-
   bool AreParamsSameExcludingLambda(double *aCurrent, double *aNew, int aNEntries);
   void AdjustLambdaParam(td1dVec &aCoulombResidualCf, double aOldLambda, double aNewLambda);
 
   td3dVec BuildPairKStar3dVecFromTxt(double aMaxFitKStar=0.3, TString aFileBaseName="/home/jesse/Analysis/FemtoAnalysis/ProcessData/CoulombFitter/PairKStar3dVec_20160610_");
   void BuildPairSample3dVec(double aMaxFitKStar=1.0, int aNPairsPerKStarBin=16384);  //TODO decide appropriate value for aNPairsPerKStarBin
   void UpdatePairRadiusParameters(double aNewRadius);
-
-  //Note:  Linear, Bilinear, and Trilinear will essentially be copies of TH1::, TH2::, and TH3::Interpolate
-  //       Rewriting these allows me more control, and allows me to find where and why error flags are thrown
-  double LinearInterpolate(TH1* a1dHisto, double aX);
-  double BilinearInterpolate(TH2* a2dHisto, double aX, double aY);
-  double BilinearInterpolateVector(vector<vector<double> > &a2dVec, double aX, int aNbinsX, double aMinX, double aMaxX, double aY, int aNbinsY, double aMinY, double aMaxY);
-  double TrilinearInterpolate(TH3* a3dHisto, double aX, double aY, double aZ);
-  double QuadrilinearInterpolate(THn* a4dHisto, double aT, double aX, double aY, double aZ);
 
   double GetEta(double aKStar);
   double GetGamowFactor(double aKStar);
