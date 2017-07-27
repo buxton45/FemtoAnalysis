@@ -85,7 +85,7 @@ public:
 
   double GetFitCfContentSerialv2(double aKStarMagMin, double aKStarMagMax, double *par, int aAnalysisNumber);  //TODO!!!!!
 
-  td1dVec GetCoulombResidualCorrelation(ResidualType aResidualType, double *aParentCfParams, vector<double> &aKStarBinCenters, TH2* aTransformMatrix);
+  td1dVec GetCoulombResidualCorrelation(AnalysisType aResidualType, double *aParentCfParams, vector<double> &aKStarBinCenters, TH2* aTransformMatrix);
 
   void CalculateFitFunction(int &npar, double &chi2, double *par);
 

@@ -46,17 +46,20 @@ class FitPairAnalysis;
 #include "Interpolator.h"
 class Interpolator;
 
+#include "SimulatedPairCollection.h"
+class SimulatedPairCollection;
+
 #include "Types.h"
 
 class SimulatedCoulombCf {
 
 public:
   //Constructor, destructor, copy constructor, assignment operator
-  SimulatedCoulombCf(ResidualType aResidualType, TString aInterpHistFileBaseName, TString aLednickyHFunctionFileBaseName);
+  SimulatedCoulombCf(vector<tmpAnalysisInfo> &aAnalysesInfo, TString aInterpHistFileBaseName, TString aLednickyHFunctionFileBaseName);
   virtual ~SimulatedCoulombCf();
 
-  AnalysisType GetDaughterAnalysisType();
-  void SetBohrRadius();
+//  AnalysisType GetDaughterAnalysisType(int aAnalysisNumber);
+//  void SetBohrRadius();
 
   CoulombType GetCoulombType(AnalysisType aAnalysisType);
   double GetBohrRadius();
@@ -65,11 +68,7 @@ public:
   void LoadInterpHistFile(TString aFileBaseName);  //TODO should this be a virtual function?
 
   bool AreParamsSameExcludingLambda(double *aCurrent, double *aNew, int aNEntries);
-  void AdjustLambdaParam(td1dVec &aCoulombResidualCf, double aOldLambda, double aNewLambda);
-
-  td3dVec BuildPairKStar3dVecFromTxt(double aMaxFitKStar=0.3, TString aFileBaseName="/home/jesse/Analysis/FemtoAnalysis/ProcessData/CoulombFitter/PairKStar3dVec_20160610_");
-  void BuildPairSample3dVec(double aMaxFitKStar=1.0, int aNPairsPerKStarBin=16384);  //TODO decide appropriate value for aNPairsPerKStarBin
-  void UpdatePairRadiusParameters(double aNewRadius);
+  void AdjustLambdaParam(td1dVec &aCoulombCf, double aOldLambda, double aNewLambda);
 
   double GetEta(double aKStar);
   double GetGamowFactor(double aKStar);
@@ -83,9 +82,9 @@ public:
   bool CanInterpAll(double aKStar, double aRStar, double aTheta, double aReF0, double aImF0, double aD0);
 
   void SetRandomKStar3Vec(TVector3* aKStar3Vec, double aKStarMagMin, double aKStarMagMax);
-  double GetFitCfContentCompletewStaticPairs(double aKStarMagMin, double aKStarMagMax, double *par);  //TODO!!!!!
+  double GetFitCfContentCompletewStaticPairs(int aAnalysisNumber, double aKStarMagMin, double aKStarMagMax, double *par);  //TODO!!!!!
 
-  td1dVec GetCoulombParentCorrelation(double *aParentCfParams, vector<double> &aKStarBinCenters, CentralityType aCentType=k0010);
+  td1dVec GetCoulombParentCorrelation(int aAnalysisNumber, double *aParentCfParams, vector<double> &aKStarBinCenters, CentralityType aCentType=k0010);
 
 
   //inline (i.e. simple) functions
@@ -97,7 +96,8 @@ public:
   void SetUseRandomKStarVectors(bool aUseRandomKStarVectors);
 
 protected:
-  ResidualType fResidualType;
+  int fNAnalyses;
+  vector<tmpAnalysisInfo> fAnalysesInfo;
 
   bool fTurnOffCoulomb;
   bool fIncludeSingletAndTriplet;
@@ -109,11 +109,9 @@ protected:
   WaveFunction* fWaveFunction;
   double fBohrRadius;
 
-  int fNPairsPerKStarBin;
-  double fCurrentRadiusParameter;
-  td3dVec fPairSample3dVec; //  1 2dVec for each k* bin, holding collection of td1dVec = (KStarMag, RStarMag, Theta)
-                            //  Will be initialized by sampling RStar vectors from Gaussian distributions with mu=0 and sigma=1
-                            //  When R parameter is updated, I simply scale all RStar magnitudes
+  SimulatedPairCollection *fSimPairCollection;
+
+
   //---------------------------
 
 

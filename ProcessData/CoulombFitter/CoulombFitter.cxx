@@ -2839,38 +2839,38 @@ tTimer.PrintInterval();
 
 
 //________________________________________________________________________________________________________________
-td1dVec CoulombFitter::GetCoulombResidualCorrelation(ResidualType aResidualType, double *aParentCfParams, vector<double> &aKStarBinCenters, TH2* aTransformMatrix)
+td1dVec CoulombFitter::GetCoulombResidualCorrelation(AnalysisType aResidualType, double *aParentCfParams, vector<double> &aKStarBinCenters, TH2* aTransformMatrix)
 {
   TString tFileLocationBase = "/home/jesse/Analysis/FemtoAnalysis/ProcessData/CoulombFitter/";
   TString tFileName, tFullFileName;
   TString tFileNameHFunction, tFullFileNameHFunction;
 
   switch(aResidualType) {
-  case kXiCKchP:
-  case kAXiCKchM:
+  case kResXiCKchP:
+  case kResAXiCKchM:
     tFileName = TString("InterpHistsAttractive.root");
     tFileNameHFunction = TString("LednickyHFunction.root");
     fBohrRadius = -gBohrRadiusXiK;
     break;
 
-  case kXiCKchM:
-  case kAXiCKchP:
+  case kResXiCKchM:
+  case kResAXiCKchP:
     tFileName = TString("InterpHistsRepulsive.root");
     tFileNameHFunction = TString("LednickyHFunction.root");
     fBohrRadius = gBohrRadiusXiK;
     break;
 
 
-  case kOmegaKchP:
-  case kAOmegaKchM:
+  case kResOmegaKchP:
+  case kResAOmegaKchM:
     tFileName = TString("InterpHists_OmegaKchP.root");
     tFileNameHFunction = TString("LednickyHFunction_OmegaKchP.root");
     fBohrRadius = -gBohrRadiusOmegaK;
     break;
 
 
-  case kOmegaKchM:
-  case kAOmegaKchP:
+  case kResOmegaKchM:
+  case kResAOmegaKchP:
     tFileName = TString("InterpHists_OmegaKchM.root");
     tFileNameHFunction = TString("LednickyHFunction_OmegaKchM.root");
     fBohrRadius = gBohrRadiusOmegaK;

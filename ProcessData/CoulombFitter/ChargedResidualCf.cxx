@@ -17,7 +17,7 @@ ClassImp(ChargedResidualCf)
 
 //________________________________________________________________________________________________________________
 
-ChargedResidualCf::ChargedResidualCf(ResidualType aResidualType, TString aInterpHistFileBaseName, TString aLednickyHFunctionFileBaseName, int aTransRebin, TString aTransformMatricesLocation):
+ChargedResidualCf::ChargedResidualCf(AnalysisType aResidualType, TString aInterpHistFileBaseName, TString aLednickyHFunctionFileBaseName, int aTransRebin, TString aTransformMatricesLocation):
   fResidualType(aResidualType),
   fTransformMatrix(),
   fTurnOffCoulomb(false),
@@ -97,23 +97,23 @@ AnalysisType ChargedResidualCf::GetDaughterAnalysisType()
   AnalysisType tReturnType;
 
   switch(fResidualType) {
-  case kXiCKchP:
-  case kOmegaKchP:
+  case kResXiCKchP:
+  case kResOmegaKchP:
     tReturnType = kLamKchP;
     break;
 
-  case kAXiCKchP:
-  case kAOmegaKchP:
+  case kResAXiCKchP:
+  case kResAOmegaKchP:
     tReturnType = kALamKchP;
     break;
 
-  case kXiCKchM:
-  case kOmegaKchM:
+  case kResXiCKchM:
+  case kResOmegaKchM:
     tReturnType = kLamKchM;
     break;
 
-  case kAXiCKchM:
-  case kAOmegaKchM:
+  case kResAXiCKchM:
+  case kResAOmegaKchM:
     tReturnType = kALamKchM;
     break;
 
@@ -138,23 +138,23 @@ void ChargedResidualCf::LoadTransformMatrix(int aRebin, TString aFileLocation)
   TString tName1, tFullName;
 
   switch(fResidualType) {
-  case kXiCKchP:
-  case kXiCKchM:
+  case kResXiCKchP:
+  case kResXiCKchM:
     tName1 = TString("fXiCTo");
     break;
 
-  case kAXiCKchP:
-  case kAXiCKchM:
+  case kResAXiCKchP:
+  case kResAXiCKchM:
     tName1 = TString("fAXiCTo");
     break;
 
-  case kOmegaKchP:
-  case kOmegaKchM:
+  case kResOmegaKchP:
+  case kResOmegaKchM:
     tName1 = TString("fOmegaTo");
     break;
 
-  case kAOmegaKchP:
-  case kAOmegaKchM:
+  case kResAOmegaKchP:
+  case kResAOmegaKchM:
     tName1 = TString("fAOmegaTo");
     break;
 
@@ -176,23 +176,23 @@ void ChargedResidualCf::LoadTransformMatrix(int aRebin, TString aFileLocation)
 void ChargedResidualCf::SetBohrRadius()
 {
   switch(fResidualType) {
-  case kXiCKchP:
-  case kAXiCKchM:
+  case kResXiCKchP:
+  case kResAXiCKchM:
     fBohrRadius = -gBohrRadiusXiK;
     break;
 
-  case kXiCKchM:
-  case kAXiCKchP:
+  case kResXiCKchM:
+  case kResAXiCKchP:
     fBohrRadius = gBohrRadiusXiK;
     break;
 
-  case kOmegaKchP:
-  case kAOmegaKchM:
+  case kResOmegaKchP:
+  case kResAOmegaKchM:
     fBohrRadius = -gBohrRadiusOmegaK;
     break;
 
-  case kOmegaKchM:
-  case kAOmegaKchP:
+  case kResOmegaKchM:
+  case kResAOmegaKchP:
     fBohrRadius = gBohrRadiusOmegaK;
     break;
 
@@ -395,23 +395,23 @@ tTimer.Start();
 
   //----------------------------------------------
   switch(fResidualType) {
-  case kXiCKchP:
-  case kOmegaKchP:
+  case kResXiCKchP:
+  case kResOmegaKchP:
     aFileName += TString("XiKchP_0010.txt");
     break;
 
-  case kXiCKchM:
-  case kOmegaKchM:
+  case kResXiCKchM:
+  case kResOmegaKchM:
     aFileName += TString("XiKchM_0010.txt");
     break;
 
-  case kAXiCKchP:
-  case kAOmegaKchP:
+  case kResAXiCKchP:
+  case kResAOmegaKchP:
     aFileName += TString("AXiKchP_0010.txt");
     break;
 
-  case kAXiCKchM:
-  case kAOmegaKchM:
+  case kResAXiCKchM:
+  case kResAOmegaKchM:
     aFileName += TString("AXiKchM_0010.txt");
     break;
 
@@ -1229,23 +1229,23 @@ td1dVec ChargedResidualCf::GetExpXiData(double aMaxKStar, CentralityType aCentTy
     int tNFitPartialAnalysis=2;
 
     switch(fResidualType) {
-    case kXiCKchP:
-    case kOmegaKchP:
+    case kResXiCKchP:
+    case kResOmegaKchP:
       tAnType = kXiKchP;
       break;
 
-    case kAXiCKchP:
-    case kAOmegaKchP:
+    case kResAXiCKchP:
+    case kResAOmegaKchP:
       tAnType = kAXiKchP;
       break;
 
-    case kXiCKchM:
-    case kOmegaKchM:
+    case kResXiCKchM:
+    case kResOmegaKchM:
       tAnType = kXiKchM;
       break;
 
-    case kAXiCKchM:
-    case kAOmegaKchM:
+    case kResAXiCKchM:
+    case kResAOmegaKchM:
       tAnType = kAXiKchM;
       break;
 

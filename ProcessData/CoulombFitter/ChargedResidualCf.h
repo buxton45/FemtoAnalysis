@@ -49,7 +49,7 @@ class ChargedResidualCf {
 
 public:
   //Constructor, destructor, copy constructor, assignment operator
-  ChargedResidualCf(ResidualType aResidualType, TString aInterpHistFileBaseName, TString aLednickyHFunctionFileBaseName, int aTransRebin=2, TString aTransformMatricesLocation = "/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b2/TransformMatrices_Mix5.root");
+  ChargedResidualCf(AnalysisType aResidualType, TString aInterpHistFileBaseName, TString aLednickyHFunctionFileBaseName, int aTransRebin=2, TString aTransformMatricesLocation = "/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b2/TransformMatrices_Mix5.root");
   virtual ~ChargedResidualCf();
 
   AnalysisType GetDaughterAnalysisType();
@@ -109,7 +109,7 @@ public:
   void SetUseRandomKStarVectors(bool aUseRandomKStarVectors);
 
 protected:
-  ResidualType fResidualType;
+  AnalysisType fResidualType;
   TH2D* fTransformMatrix;
 
   bool fTurnOffCoulomb;

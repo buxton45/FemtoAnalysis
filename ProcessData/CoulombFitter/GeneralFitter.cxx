@@ -1892,38 +1892,38 @@ double GeneralFitter::GetFitCfContentSerialv2(double aKStarMagMin, double aKStar
 
 
 //________________________________________________________________________________________________________________
-td1dVec GeneralFitter::GetCoulombResidualCorrelation(ResidualType aResidualType, double *aParentCfParams, vector<double> &aKStarBinCenters, TH2* aTransformMatrix)
+td1dVec GeneralFitter::GetCoulombResidualCorrelation(AnalysisType aResidualType, double *aParentCfParams, vector<double> &aKStarBinCenters, TH2* aTransformMatrix)
 {
   TString tFileLocationBase = "/home/jesse/Analysis/FemtoAnalysis/ProcessData/CoulombFitter/";
   TString tFileName, tFullFileName;
   TString tFileNameHFunction, tFullFileNameHFunction;
 
   switch(aResidualType) {
-  case kXiCKchP:
-  case kAXiCKchM:
+  case kResXiCKchP:
+  case kResAXiCKchM:
     tFileName = TString("InterpHistsAttractive");
     tFileNameHFunction = TString("LednickyHFunction");
     fBohrRadius = -gBohrRadiusXiK;
     break;
 
-  case kXiCKchM:
-  case kAXiCKchP:
+  case kResXiCKchM:
+  case kResAXiCKchP:
     tFileName = TString("InterpHistsRepulsive");
     tFileNameHFunction = TString("LednickyHFunction");
     fBohrRadius = gBohrRadiusXiK;
     break;
 
 
-  case kOmegaKchP:
-  case kAOmegaKchM:
+  case kResOmegaKchP:
+  case kResAOmegaKchM:
     tFileName = TString("InterpHists_OmegaKchP");
     tFileNameHFunction = TString("LednickyHFunction_OmegaKchP");
     fBohrRadius = -gBohrRadiusOmegaK;
     break;
 
 
-  case kOmegaKchM:
-  case kAOmegaKchP:
+  case kResOmegaKchM:
+  case kResAOmegaKchP:
     tFileName = TString("InterpHists_OmegaKchM");
     tFileNameHFunction = TString("LednickyHFunction_OmegaKchM");
     fBohrRadius = gBohrRadiusOmegaK;
@@ -2176,11 +2176,11 @@ void GeneralFitter::CalculateFitFunction(int &npar, double &chi2, double *par)
 
         double tLambda_XiCK = 0.52*tPar[0];  //for now, primary lambda scaled by some factor
         double *tPar_XiCK = AdjustLambdaParam(tPar,tLambda_XiCK,tNFitParams);
-        td1dVec tResidual_XiCK = GetCoulombResidualCorrelation(kXiCKchP,tPar_XiCK,tKStarBinCenters,tFitPairAnalysis->GetTransformMatrices()[1]);  //TODO
+        td1dVec tResidual_XiCK = GetCoulombResidualCorrelation(kResXiCKchP,tPar_XiCK,tKStarBinCenters,tFitPairAnalysis->GetTransformMatrices()[1]);  //TODO
 
         double tLambda_OmegaK = 0.02*tPar[0];  //for now, primary lambda scaled by some factor
         double *tPar_OmegaK = AdjustLambdaParam(tPar,tLambda_OmegaK,tNFitParams);
-        td1dVec tResidual_OmegaK = GetCoulombResidualCorrelation(kOmegaKchP,tPar_OmegaK,tKStarBinCenters,tFitPairAnalysis->GetTransformMatrices()[3]);  //TODO
+        td1dVec tResidual_OmegaK = GetCoulombResidualCorrelation(kResOmegaKchP,tPar_OmegaK,tKStarBinCenters,tFitPairAnalysis->GetTransformMatrices()[3]);  //TODO
 
         vector<double> tLambdas{tPar[0],tLambda_SigK,tLambda_Xi0K,tLambda_XiCK,tLambda_OmegaK};
         td2dVec tAllCfs{tPrimaryFitCfContent,tResidual_SigK,tResidual_Xi0K,tResidual_XiCK,tResidual_OmegaK};

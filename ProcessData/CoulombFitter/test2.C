@@ -20,7 +20,7 @@ int main(int argc, char **argv)
   TString tInterpHistLocation = "/home/jesse/Analysis/FemtoAnalysis/ProcessData/CoulombFitter/InterpHistsAttractive";
   TString tHFunctionLocation = "/home/jesse/Analysis/FemtoAnalysis/ProcessData/CoulombFitter/LednickyHFunction";
 
-  ResidualType tResidualType = kXiCKchP;
+  AnalysisType tResidualType = kResXiCKchP;
   bool tUseExpXiData = false;
 
   ChargedResidualCf* tResidualCf = new ChargedResidualCf(tResidualType,tInterpHistLocation,tHFunctionLocation);

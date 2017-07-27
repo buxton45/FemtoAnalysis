@@ -76,11 +76,11 @@ LednickyFitter::LednickyFitter(FitSharedAnalyses* aFitSharedAnalyses, double aMa
     tInterpLocationBase_OmegaKchM = tFilesLocationBase + TString("InterpHists_OmegaKchM");
     tHFcnLocationBase_OmegaKchM = tFilesLocationBase + TString("LednickyHFunction_OmegaKchM");
 
-    fResXiCKchP = new ChargedResidualCf(kXiCKchP,tInterpLocationBase_XiCKchP,tHFcnLocationBase_XiCKchP);
-    fResXiCKchM = new ChargedResidualCf(kXiCKchM,tInterpLocationBase_XiCKchM,tHFcnLocationBase_XiCKchM);
+    fResXiCKchP = new ChargedResidualCf(kResXiCKchP,tInterpLocationBase_XiCKchP,tHFcnLocationBase_XiCKchP);
+    fResXiCKchM = new ChargedResidualCf(kResXiCKchM,tInterpLocationBase_XiCKchM,tHFcnLocationBase_XiCKchM);
 
-    fResOmegaKchP = new ChargedResidualCf(kOmegaKchP,tInterpLocationBase_OmegaKchP,tHFcnLocationBase_OmegaKchP);
-    fResOmegaKchM = new ChargedResidualCf(kOmegaKchM,tInterpLocationBase_OmegaKchM,tHFcnLocationBase_OmegaKchM);
+    fResOmegaKchP = new ChargedResidualCf(kResOmegaKchP,tInterpLocationBase_OmegaKchP,tHFcnLocationBase_OmegaKchP);
+    fResOmegaKchM = new ChargedResidualCf(kResOmegaKchM,tInterpLocationBase_OmegaKchM,tHFcnLocationBase_OmegaKchM);
   }
 }
 
@@ -255,31 +255,31 @@ vector<double> LednickyFitter::GetNeutralResidualCorrelation(double *aParentCfPa
 }
 
 //________________________________________________________________________________________________________________
-vector<double> LednickyFitter::GetChargedParentCorrelation(ResidualType aResidualType, double *aParentCfParams, vector<double> &aKStarBinCenters, bool aUseExpXiData, CentralityType aCentType)
+vector<double> LednickyFitter::GetChargedParentCorrelation(AnalysisType aResidualType, double *aParentCfParams, vector<double> &aKStarBinCenters, bool aUseExpXiData, CentralityType aCentType)
 {
   td1dVec tReturnCfVec;
 
   switch(aResidualType) {
-  case kXiCKchP:
-  case kAXiCKchM:
+  case kResXiCKchP:
+  case kResAXiCKchM:
     fResXiCKchP->SetIncludeSingletAndTriplet(true);
     tReturnCfVec = fResXiCKchP->GetCoulombParentCorrelation(aParentCfParams,aKStarBinCenters,aUseExpXiData,aCentType);
     break;
 
-  case kXiCKchM:
-  case kAXiCKchP:
+  case kResXiCKchM:
+  case kResAXiCKchP:
     fResXiCKchM->SetIncludeSingletAndTriplet(true);
     tReturnCfVec = fResXiCKchM->GetCoulombParentCorrelation(aParentCfParams,aKStarBinCenters,aUseExpXiData,aCentType);
     break;
 
-  case kOmegaKchP:
-  case kAOmegaKchM:
+  case kResOmegaKchP:
+  case kResAOmegaKchM:
     fResOmegaKchP->SetIncludeSingletAndTriplet(true);
     tReturnCfVec = fResOmegaKchP->GetCoulombParentCorrelation(aParentCfParams,aKStarBinCenters,aUseExpXiData,aCentType);
     break;
 
-  case kOmegaKchM:
-  case kAOmegaKchP:
+  case kResOmegaKchM:
+  case kResAOmegaKchP:
     fResOmegaKchM->SetIncludeSingletAndTriplet(true);
     tReturnCfVec = fResOmegaKchM->GetCoulombParentCorrelation(aParentCfParams,aKStarBinCenters,aUseExpXiData,aCentType);
     break;
@@ -295,31 +295,31 @@ vector<double> LednickyFitter::GetChargedParentCorrelation(ResidualType aResidua
 }
 
 //________________________________________________________________________________________________________________
-vector<double> LednickyFitter::GetChargedResidualCorrelation(ResidualType aResidualType, double *aParentCfParams, vector<double> &aKStarBinCenters, bool aUseExpXiData, CentralityType aCentType)
+vector<double> LednickyFitter::GetChargedResidualCorrelation(AnalysisType aResidualType, double *aParentCfParams, vector<double> &aKStarBinCenters, bool aUseExpXiData, CentralityType aCentType)
 {
   td1dVec tReturnCfVec;
 
   switch(aResidualType) {
-  case kXiCKchP:
-  case kAXiCKchM:
+  case kResXiCKchP:
+  case kResAXiCKchM:
     fResXiCKchP->SetIncludeSingletAndTriplet(true);
     tReturnCfVec = fResXiCKchP->GetCoulombResidualCorrelation(aParentCfParams,aKStarBinCenters,aUseExpXiData,aCentType);
     break;
 
-  case kXiCKchM:
-  case kAXiCKchP:
+  case kResXiCKchM:
+  case kResAXiCKchP:
     fResXiCKchM->SetIncludeSingletAndTriplet(true);
     tReturnCfVec = fResXiCKchM->GetCoulombResidualCorrelation(aParentCfParams,aKStarBinCenters,aUseExpXiData,aCentType);
     break;
 
-  case kOmegaKchP:
-  case kAOmegaKchM:
+  case kResOmegaKchP:
+  case kResAOmegaKchM:
     fResOmegaKchP->SetIncludeSingletAndTriplet(true);
     tReturnCfVec = fResOmegaKchP->GetCoulombResidualCorrelation(aParentCfParams,aKStarBinCenters,aUseExpXiData,aCentType);
     break;
 
-  case kOmegaKchM:
-  case kAOmegaKchP:
+  case kResOmegaKchM:
+  case kResAOmegaKchP:
     fResOmegaKchM->SetIncludeSingletAndTriplet(true);
     tReturnCfVec = fResOmegaKchM->GetCoulombResidualCorrelation(aParentCfParams,aKStarBinCenters,aUseExpXiData,aCentType);
     break;
@@ -378,7 +378,7 @@ TH1D* LednickyFitter::GetNeutralResidualCorrelationHistogram(double *aParentCfPa
 }
 
 //________________________________________________________________________________________________________________
-TH1D* LednickyFitter::GetChargedParentCorrelationHistogram(ResidualType aResidualType, double *aParentCfParams, vector<double> &aKStarBinCenters, bool aUseExpXiData, CentralityType aCentType, TString aTitle)
+TH1D* LednickyFitter::GetChargedParentCorrelationHistogram(AnalysisType aResidualType, double *aParentCfParams, vector<double> &aKStarBinCenters, bool aUseExpXiData, CentralityType aCentType, TString aTitle)
 {
   td1dVec tVec = GetChargedParentCorrelation(aResidualType, aParentCfParams, aKStarBinCenters, aUseExpXiData, aCentType);
   TH1D *tReturnHisto = Convert1dVecToHist(tVec, aKStarBinCenters, aTitle);
@@ -386,7 +386,7 @@ TH1D* LednickyFitter::GetChargedParentCorrelationHistogram(ResidualType aResidua
 }
 
 //________________________________________________________________________________________________________________
-TH1D* LednickyFitter::GetChargedResidualCorrelationHistogram(ResidualType aResidualType, double *aParentCfParams, vector<double> &aKStarBinCenters, bool aUseExpXiData, CentralityType aCentType, TString aTitle)
+TH1D* LednickyFitter::GetChargedResidualCorrelationHistogram(AnalysisType aResidualType, double *aParentCfParams, vector<double> &aKStarBinCenters, bool aUseExpXiData, CentralityType aCentType, TString aTitle)
 {
   td1dVec tVec = GetChargedResidualCorrelation(aResidualType, aParentCfParams, aKStarBinCenters, aUseExpXiData, aCentType);
   TH1D *tReturnHisto = Convert1dVecToHist(tVec, aKStarBinCenters, aTitle);
@@ -436,26 +436,26 @@ vector<double> LednickyFitter::GetFitCfIncludingResiduals(FitPairAnalysis* aFitP
   td1dVec tResidual_Xi0K = GetNeutralResidualCorrelation(tPar_Xi0K,aKStarBinCenters,aFitPairAnalysis->GetTransformMatrices()[2]);
 
   AnalysisType tAnType = aFitPairAnalysis->GetAnalysisType();
-  ResidualType tResXiCKType, tResOmegaKType;
+  AnalysisType tResXiCKType, tResOmegaKType;
   switch(tAnType) {
   case kLamKchP:
-    tResXiCKType = kXiCKchP;
-    tResOmegaKType = kOmegaKchP;
+    tResXiCKType = kResXiCKchP;
+    tResOmegaKType = kResOmegaKchP;
     break;
 
   case kLamKchM:
-    tResXiCKType = kXiCKchM;
-    tResOmegaKType = kOmegaKchM;
+    tResXiCKType = kResXiCKchM;
+    tResOmegaKType = kResOmegaKchM;
     break;
 
   case kALamKchP:
-    tResXiCKType = kAXiCKchP;
-    tResOmegaKType = kAOmegaKchP;
+    tResXiCKType = kResAXiCKchP;
+    tResOmegaKType = kResAOmegaKchP;
     break;
 
   case kALamKchM:
-    tResXiCKType = kAXiCKchM;
-    tResOmegaKType = kAOmegaKchM;
+    tResXiCKType = kResAXiCKchM;
+    tResOmegaKType = kResAOmegaKchM;
     break;
 
   default:
@@ -469,7 +469,7 @@ vector<double> LednickyFitter::GetFitCfIncludingResiduals(FitPairAnalysis* aFitP
   double tLambda_XiCK = 0.18386*aOverallLambda;  //for now, primary lambda scaled by some factor
 //  double *tPar_XiCK = AdjustLambdaParam(aParamSet,tLambda_XiCK,aNFitParams);
   double *tPar_XiCK = new double[8];
-  if(tResXiCKType==kXiCKchP || tResXiCKType==kAXiCKchM)
+  if(tResXiCKType==kResXiCKchP || tResXiCKType==kResAXiCKchM)
   { 
     tPar_XiCK[0] = 1.0; //TODO lambda=1 here, will be applied in CombinePrimaryWithResiduals method
     tPar_XiCK[1] = 4.60717;
@@ -480,7 +480,7 @@ vector<double> LednickyFitter::GetFitCfIncludingResiduals(FitPairAnalysis* aFitP
     tPar_XiCK[6] = 0.523492;
     tPar_XiCK[7] = 1.53176;
   }
-  else if(tResXiCKType==kXiCKchM || tResXiCKType==kAXiCKchP)
+  else if(tResXiCKType==kResXiCKchM || tResXiCKType==kResAXiCKchP)
   {
     tPar_XiCK[0] = 1.0; //TODO lambda=1 here, will be applied in CombinePrimaryWithResiduals method
     tPar_XiCK[1] = 6.97767;
@@ -498,7 +498,7 @@ vector<double> LednickyFitter::GetFitCfIncludingResiduals(FitPairAnalysis* aFitP
 //  double *tPar_OmegaK = AdjustLambdaParam(aParamSet,tLambda_OmegaK,aNFitParams);
   double *tPar_OmegaK = new double[8];
 //TODO for now, use same parameters for OmegaK as XiK
-  if(tResOmegaKType==kOmegaKchP || tResOmegaKType==kAOmegaKchM)
+  if(tResOmegaKType==kResOmegaKchP || tResOmegaKType==kResAOmegaKchM)
   { 
     tPar_OmegaK[0] = 1.0; //TODO lambda=1 here, will be applied in CombinePrimaryWithResiduals method
     tPar_OmegaK[1] = 2.84;
@@ -509,7 +509,7 @@ vector<double> LednickyFitter::GetFitCfIncludingResiduals(FitPairAnalysis* aFitP
     tPar_OmegaK[6] = 1.13;
     tPar_OmegaK[7] = -2.53;
   }
-  else if(tResOmegaKType==kOmegaKchM || tResOmegaKType==kAOmegaKchP)
+  else if(tResOmegaKType==kResOmegaKchM || tResOmegaKType==kResAOmegaKchP)
   {
     tPar_OmegaK[0] = 1.0; //TODO lambda=1 here, will be applied in CombinePrimaryWithResiduals method
     tPar_OmegaK[1] = 2.81;

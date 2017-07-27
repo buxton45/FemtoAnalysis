@@ -25,23 +25,82 @@ const char* const GetPDGRootName(ParticlePDGType aType)
 }
 
 
-
 //enum AnalysisType
-const char* const cAnalysisBaseTags[19] = {"LamK0", "ALamK0", "LamKchP", "ALamKchP", "LamKchM", "ALamKchM", "XiKchP", "AXiKchP", "XiKchM", "AXiKchM", "LamLam", "ALamALam", "LamALam", "LamPiP", "ALamPiP", "LamPiM", "ALamPiM", "XiK0", "AXiK0"};
+const char* const cAnalysisBaseTags[63] = {
+"LamK0", "ALamK0", 
+"LamKchP", "ALamKchM", "LamKchM", "ALamKchP", 
+"XiKchP", "AXiKchM", "XiKchM", "AXiKchP", 
+"XiK0", "AXiK0", 
+"LamLam", "ALamALam", "LamALam", 
+"LamPiP", "ALamPiM", "LamPiM", "ALamPiP", 
+//----- Residual Types -----
+"Sig0KchP", "ASig0KchM", "Sig0KchM", "ASig0KchP", 
+"Xi0KchP", "AXi0KchM", "Xi0KchM", "AXi0KchP", 
+"XiKchP", "AXiKchM", "XiKchM", "AXiKchP", 
+"OmegaKchP", "AOmegaKchM", "OmegaKchM", "AOmegaKchP",
+"SigStPKchP", "ASigStMKchM", "SigStPKchM", "ASigStMKchP", 
+"SigStMKchP", "ASigStPKchM", "SigStMKchM", "ASigStPKchP", 
+"SigSt0KchP", "ASigSt0KchM", "SigSt0KchM", "ASigSt0KchP", 
+"LamKSt0", "ALamAKSt0", "LamAKSt0", "ALamKSt0", 
+"Sig0KSt0", "ASigma0AKSt0", "Sig0AKSt0", "ASig0KSt0", 
+"Xi0KSt0", "AXi0AKSt0", "Xi0AKSt0", "AXi0KSt0", 
+"XiKSt0", "AXiAKSt0", "XiAKSt0", "AXiKSt0"
 
-const char* const cAnalysisRootTags[19] = {"#LambdaK^{0}_{S}", "#bar{#Lambda}K^{0}_{S}", "#LambdaK+", "#bar{#Lambda}K+", "#LambdaK-", "#bar{#Lambda}K-", "#Xi-K+", "#bar{#Xi}+K+", "#Xi-K-", "#bar{#Xi}+K-", "#Lambda#Lambda", "#bar{#Lambda}#bar{#Lambda}", "#Lambda#bar{#Lambda}", "#Lambda#pi+", "#bar{#Lambda}#pi+", "#Lambda#pi-", "#bar{#Lambda}#pi-", "#XiK^{0}_{S}", "#bar{#Xi}K^{0}_{S}"};
-
-//enum ResidualType
-const char* const cResidualRootTags[44] = {"#Sigma^{0}K+", "#bar{#Sigma}^{0}K+", "#Sigma^{0}K-", "#bar{#Sigma}^{0}K-", "#Xi^{0}K+", "#bar{#Xi}^{0}K+", "#Xi^{0}K-", "#bar{#Xi}^{0}K-", "#Xi-K+", "#bar{#Xi}+K+", "#Xi-K-", "#bar{#Xi}+K-", "#Omega-K+", "#bar{#Omega}+K+", "#Omega-K-", "#bar{#Omega}+K-",
-"#Sigma*^{+}K+", "#bar{#Sigma*}^{-}K+", "#Sigma*^{+}K-", "#bar{#Sigma*}^{-}K-", 
-"#Sigma*^{-}K+", "#bar{#Sigma*}^{+}K+", "#Sigma*^{-}K-", "#bar{#Sigma*}^{+}K-", 
-"#Sigma*^{0}K+", "#bar{#Sigma*}^{0}K+", "#Sigma*^{0}K-", "#bar{#Sigma*}^{0}K-", 
-"#LambdaK*^{0}", "#bar{#Lambda}K*^{0}", "#Lambda#bar{K*}^{0}", "#bar{#Lambda}#bar{K*}^{0}", 
-"#Sigma^{0}K*^{0}", "#bar{#Sigma}^{0}K*^{0}", "#Sigma^{0}{K*}^{0}", "#bar{#Sigma}^{0}{K*}^{0}", 
-"#Xi^{0}K*^{0}", "#bar{#Xi}^{0}K*^{0}", "#Xi^{0}{K*}^{0}", "#bar{#Xi}^{0}{K*}^{0}", 
-"#Xi-K*^{0}", "#bar{#Xi}+K*^{0}", "#Xi-{K*}^{0}", "#bar{#Xi}+{K*}^{0}"
 };
 
+const char* const cAnalysisRootTags[63] = {
+"#LambdaK^{0}_{S}", "#bar{#Lambda}K^{0}_{S}", 
+"#LambdaK+", "#bar{#Lambda}K-", "#LambdaK-", "#bar{#Lambda}K+", 
+"#Xi-K+", "#bar{#Xi}+K-", "#Xi-K-", "#bar{#Xi}+K+",
+"#XiK^{0}_{S}", "#bar{#Xi}K^{0}_{S}", 
+"#Lambda#Lambda", "#bar{#Lambda}#bar{#Lambda}", "#Lambda#bar{#Lambda}", 
+"#Lambda#pi+", "#bar{#Lambda}#pi-", "#Lambda#pi-", "#bar{#Lambda}#pi+", 
+//----- Residual Types -----
+"#Sigma^{0}K+", "#bar{#Sigma}^{0}K-", "#Sigma^{0}K-", "#bar{#Sigma}^{0}K+", 
+"#Xi^{0}K+", "#bar{#Xi}^{0}K-", "#Xi^{0}K-", "#bar{#Xi}^{0}K+", 
+"#Xi-K+", "#bar{#Xi}+K-", "#Xi-K-", "#bar{#Xi}+K+", 
+"#Omega-K+", "#bar{#Omega}+K-", "#Omega-K-", "#bar{#Omega}+K+",
+"#Sigma*^{+}K+", "#bar{#Sigma*}^{-}K-", "#Sigma*^{+}K-", "#bar{#Sigma*}^{-}K+", 
+"#Sigma*^{-}K+", "#bar{#Sigma*}^{+}K-", "#Sigma*^{-}K-", "#bar{#Sigma*}^{+}K+", 
+"#Sigma*^{0}K+", "#bar{#Sigma*}^{0}K-", "#Sigma*^{0}K-", "#bar{#Sigma*}^{0}K+", 
+"#LambdaK*^{0}", "#bar{#Lambda}#bar{K*}^{0}", "#Lambda#bar{K*}^{0}", "#bar{#Lambda}K*^{0}", 
+"#Sigma^{0}K*^{0}", "#bar{#Sigma}^{0}#bar{K*}^{0}", "#Sigma^{0}#bar{K*}^{0}", "#bar{#Sigma}^{0}K*^{0}", 
+"#Xi^{0}K*^{0}", "#bar{#Xi}^{0}#bar{K*}^{0}", "#Xi^{0}#bar{K*}^{0}", "#bar{#Xi}^{0}K*^{0}", 
+"#Xi-K*^{0}", "#bar{#Xi}+#bar{K*}^{0}", "#Xi-#bar{K*}^{0}", "#bar{#Xi}+K*^{0}"
+
+};
+
+/*
+//enum ResidualType
+const char* const cResidualBaseTags[44] = {
+"Sig0KchP", "ASig0KchM", "Sig0KchM", "ASig0KchP", 
+"Xi0KchP", "AXi0KchM", "Xi0KchM", "AXi0KchP", 
+"XiKchP", "AXiKchM", "XiKchM", "AXiKchP", 
+"OmegaKchP", "AOmegaKchM", "OmegaKchM", "AOmegaKchP",
+"SigStPKchP", "ASigStMKchM", "SigStPKchM", "ASigStMKchP", 
+"SigStMKchP", "ASigStPKchM", "SigStMKchM", "ASigStPKchP", 
+"SigSt0KchP", "ASigSt0KchM", "SigSt0KchM", "ASigSt0KchP", 
+"LamKSt0", "ALamAKSt0", "LamAKSt0", "ALamKSt0", 
+"Sig0KSt0", "ASigma0AKSt0", "Sig0AKSt0", "ASig0KSt0", 
+"Xi0KSt0", "AXi0AKSt0", "Xi0AKSt0", "AXi0KSt0", 
+"XiKSt0", "AXiAKSt0", "XiAKSt0", "AXiKSt0"
+};
+
+
+const char* const cResidualRootTags[44] = {
+"#Sigma^{0}K+", "#bar{#Sigma}^{0}K-", "#Sigma^{0}K-", "#bar{#Sigma}^{0}K+", 
+"#Xi^{0}K+", "#bar{#Xi}^{0}K-", "#Xi^{0}K-", "#bar{#Xi}^{0}K+", 
+"#Xi-K+", "#bar{#Xi}+K-", "#Xi-K-", "#bar{#Xi}+K+", 
+"#Omega-K+", "#bar{#Omega}+K-", "#Omega-K-", "#bar{#Omega}+K+",
+"#Sigma*^{+}K+", "#bar{#Sigma*}^{-}K-", "#Sigma*^{+}K-", "#bar{#Sigma*}^{-}K+", 
+"#Sigma*^{-}K+", "#bar{#Sigma*}^{+}K-", "#Sigma*^{-}K-", "#bar{#Sigma*}^{+}K+", 
+"#Sigma*^{0}K+", "#bar{#Sigma*}^{0}K-", "#Sigma*^{0}K-", "#bar{#Sigma*}^{0}K+", 
+"#LambdaK*^{0}", "#bar{#Lambda}#bar{K*}^{0}", "#Lambda#bar{K*}^{0}", "#bar{#Lambda}K*^{0}", 
+"#Sigma^{0}K*^{0}", "#bar{#Sigma}^{0}#bar{K*}^{0}", "#Sigma^{0}#bar{K*}^{0}", "#bar{#Sigma}^{0}K*^{0}", 
+"#Xi^{0}K*^{0}", "#bar{#Xi}^{0}#bar{K*}^{0}", "#Xi^{0}#bar{K*}^{0}", "#bar{#Xi}^{0}K*^{0}", 
+"#Xi-K*^{0}", "#bar{#Xi}+#bar{K*}^{0}", "#Xi-#bar{K*}^{0}", "#bar{#Xi}+K*^{0}"
+};
+*/
 
 //enum BFieldType
 const char* const cBFieldTags[7] = {"_FemtoPlus", "_FemtoMinus", "_Bp1", "_Bp2", "_Bm1", "_Bm2", "_Bm3"};
@@ -240,7 +299,7 @@ const double* cAXiKchMStartValues[3] = {cAXiKchM_0010StartValues,cAXiKchM_1030St
 
 //-----
 
-const double** cStartValues[10] = {cLamK0StartValues, cALamK0StartValues, cLamKchPStartValues, cALamKchPStartValues, cLamKchMStartValues, cALamKchMStartValues, cXiKchPStartValues, cAXiKchPStartValues, cXiKchMStartValues, cAXiKchMStartValues};
+const double** cStartValues[10] = {cLamK0StartValues, cALamK0StartValues, cLamKchPStartValues, cALamKchMStartValues, cLamKchMStartValues, cALamKchPStartValues, cXiKchPStartValues, cAXiKchMStartValues, cXiKchMStartValues, cAXiKchPStartValues};
 
 
 //________________________________________________________________________________________________________________
@@ -301,14 +360,16 @@ const double* cAXiKchMSysErrors[3] = {cAXiKchM_0010SysErrors,cAXiKchM_1030SysErr
 
 //-----
 
-const double** cSysErrors[10] = {cLamK0SysErrors, cALamK0SysErrors, cLamKchPSysErrors, cALamKchPSysErrors, cLamKchMSysErrors, cALamKchMSysErrors, cXiKchPSysErrors, cAXiKchPSysErrors, cXiKchMSysErrors, cAXiKchMSysErrors};
+const double** cSysErrors[10] = {cLamK0SysErrors, cALamK0SysErrors, cLamKchPSysErrors, cALamKchMSysErrors, cLamKchMSysErrors, cALamKchPSysErrors, cXiKchPSysErrors, cAXiKchMSysErrors, cXiKchMSysErrors, cAXiKchPSysErrors};
 
 
 
 //-----
 const double hbarc = 0.197327;
-const double gBohrRadiusXiK = 75.23349845;
-const double gBohrRadiusOmegaK = 70.94291278;
+const double gBohrRadiusXiK = 75.233503766;
+const double gBohrRadiusOmegaK = 70.942912779;
+const double gBohrRadiusSigStPK = 74.328580067;
+const double gBohrRadiusSigStMK = 74.267628885;
 
 //________________________________________________________________________________________________________________
 //****************************************************************************************************************

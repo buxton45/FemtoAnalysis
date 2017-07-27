@@ -76,13 +76,13 @@ public:
   vector<double> ApplyMomResCorrection(vector<double> &aCf, vector<double> &aKStarBinCenters, TH2* aMomResMatrix);
 
   vector<double> GetNeutralResidualCorrelation(double *aParentCfParams, vector<double> &aKStarBinCenters, TH2* aTransformMatrix);
-  vector<double> GetChargedParentCorrelation(ResidualType aResidualType, double *aParentCfParams, vector<double> &aKStarBinCenters, bool aUseExpXiData=false, CentralityType aCentType=k0010);
-  vector<double> GetChargedResidualCorrelation(ResidualType aResidualType, double *aParentCfParams, vector<double> &aKStarBinCenters, bool aUseExpXiData=false, CentralityType aCentType=k0010);
+  vector<double> GetChargedParentCorrelation(AnalysisType aResidualType, double *aParentCfParams, vector<double> &aKStarBinCenters, bool aUseExpXiData=false, CentralityType aCentType=k0010);
+  vector<double> GetChargedResidualCorrelation(AnalysisType aResidualType, double *aParentCfParams, vector<double> &aKStarBinCenters, bool aUseExpXiData=false, CentralityType aCentType=k0010);
   TH1D* Convert1dVecToHist(td1dVec &aCfVec, td1dVec &aKStarBinCenters, TString aTitle = "tCf");
   TH1D* GetNeutralParentCorrelationHistogram(double *aParentCfParams, vector<double> &aKStarBinCenters, TString aTitle = "tParentCf");
   TH1D* GetNeutralResidualCorrelationHistogram(double *aParentCfParams, vector<double> &aKStarBinCenters, TH2* aTransformMatrix, TString aTitle = "tCf");
-  TH1D* GetChargedParentCorrelationHistogram(ResidualType aResidualType, double *aParentCfParams, vector<double> &aKStarBinCenters, bool aUseExpXiData=false, CentralityType aCentType=k0010, TString aTitle = "tParentCf");
-  TH1D* GetChargedResidualCorrelationHistogram(ResidualType aResidualType, double *aParentCfParams, vector<double> &aKStarBinCenters, bool aUseExpXiData=false, CentralityType aCentType=k0010, TString aTitle = "tCf");
+  TH1D* GetChargedParentCorrelationHistogram(AnalysisType aResidualType, double *aParentCfParams, vector<double> &aKStarBinCenters, bool aUseExpXiData=false, CentralityType aCentType=k0010, TString aTitle = "tParentCf");
+  TH1D* GetChargedResidualCorrelationHistogram(AnalysisType aResidualType, double *aParentCfParams, vector<double> &aKStarBinCenters, bool aUseExpXiData=false, CentralityType aCentType=k0010, TString aTitle = "tCf");
   vector<double> CombinePrimaryWithResiduals(td1dVec &aLambdaValues, td2dVec &aCfs);
   vector<double> GetFitCfIncludingResiduals(FitPairAnalysis* aFitPairAnalysis, double aOverallLambda, vector<double> &aKStarBinCenters, vector<double> &aPrimaryFitCfContent, double *aParamSet, int aNFitParams);
   void ApplyNormalization(double aNorm, td1dVec &aCf);

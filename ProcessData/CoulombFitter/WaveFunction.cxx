@@ -43,34 +43,39 @@ void WaveFunction::SetCurrentAnalysisType(AnalysisType aAnalysisType)
 }
 
 //________________________________________________________________________
-void WaveFunction::SetCurrentBohrRadius(ResidualType aResidualType) 
+void WaveFunction::SetCurrentBohrRadius(AnalysisType aAnalysisType) 
 {
-  switch(aResidualType) {
-  case kXiCKchP:
-  case kAXiCKchM:
+  switch(aAnalysisType) {
+  case kXiKchP:
+  case kAXiKchM:
+  case kResXiCKchP:
+  case kResAXiCKchM:
     fCurrentBohrRadius = -gBohrRadiusXiK;
     break;
 
-  case kXiCKchM:
-  case kAXiCKchP:
+  case kXiKchM:
+  case kAXiKchP:
+  case kResXiCKchM:
+  case kResAXiCKchP:
     fCurrentBohrRadius = gBohrRadiusXiK;
     break;
 
 
-  case kOmegaKchP:
-  case kAOmegaKchM:
+  case kResOmegaKchP:
+  case kResAOmegaKchM:
     fCurrentBohrRadius = -gBohrRadiusOmegaK;
     break;
 
 
-  case kOmegaKchM:
-  case kAOmegaKchP:
+  case kResOmegaKchM:
+  case kResAOmegaKchP:
     fCurrentBohrRadius = gBohrRadiusOmegaK;
     break;
 
 
   default:
-    cout << "ERROR: WaveFunction::SetCurrentBohrRadius: Invalid aResidualType = " << aResidualType << endl;
+    cout << "ERROR: WaveFunction::SetCurrentBohrRadius: Invalid aAnalysisType = " << aAnalysisType << endl;
+    assert(0);
   }
 }
 

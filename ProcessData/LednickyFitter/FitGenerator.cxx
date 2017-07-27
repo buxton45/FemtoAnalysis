@@ -853,34 +853,34 @@ TCanvas* FitGenerator::DrawResiduals(int aAnalysisNumber, CentralityType aCentra
 
   //-------------------------------------------------------------------------------------
   AnalysisType tAnType = tFitPairAnalysis->GetAnalysisType();
-  ResidualType tResSigKType, tResXi0KType, tResXiCKType, tResOmegaKType;
+  AnalysisType tResSigKType, tResXi0KType, tResXiCKType, tResOmegaKType;
   switch(tAnType) {
   case kLamKchP:
-    tResXiCKType = kXiCKchP;
-    tResOmegaKType = kOmegaKchP;
-    tResSigKType = kSig0KchP;
-    tResXi0KType = kXi0KchP;
+    tResXiCKType = kResXiCKchP;
+    tResOmegaKType = kResOmegaKchP;
+    tResSigKType = kResSig0KchP;
+    tResXi0KType = kResXi0KchP;
     break;
 
   case kLamKchM:
-    tResXiCKType = kXiCKchM;
-    tResOmegaKType = kOmegaKchM;
-    tResSigKType = kSig0KchM;
-    tResXi0KType = kXi0KchM;
+    tResXiCKType = kResXiCKchM;
+    tResOmegaKType = kResOmegaKchM;
+    tResSigKType = kResSig0KchM;
+    tResXi0KType = kResXi0KchM;
     break;
 
   case kALamKchP:
-    tResXiCKType = kAXiCKchP;
-    tResOmegaKType = kAOmegaKchP;
-    tResSigKType = kASig0KchP;
-    tResXi0KType = kAXi0KchP;
+    tResXiCKType = kResAXiCKchP;
+    tResOmegaKType = kResAOmegaKchP;
+    tResSigKType = kResASig0KchP;
+    tResXi0KType = kResAXi0KchP;
     break;
 
   case kALamKchM:
-    tResXiCKType = kAXiCKchM;
-    tResOmegaKType = kAOmegaKchM;
-    tResSigKType = kASig0KchM;
-    tResXi0KType = kAXi0KchM;
+    tResXiCKType = kResAXiCKchM;
+    tResOmegaKType = kResAOmegaKchM;
+    tResSigKType = kResASig0KchM;
+    tResXi0KType = kResAXi0KchM;
     break;
 
   default:
@@ -919,7 +919,7 @@ TCanvas* FitGenerator::DrawResiduals(int aAnalysisNumber, CentralityType aCentra
 
   double tLambda_XiCK = 0.18386*tOverallLambdaPrimary;  //for now, primary lambda scaled by some factor
   double *tPar_XiCK = new double[8];
-  if(tResXiCKType==kXiCKchP || tResXiCKType==kAXiCKchM)
+  if(tResXiCKType==kResXiCKchP || tResXiCKType==kResAXiCKchM)
   { 
     tPar_XiCK[0] = tLambda_XiCK;
     tPar_XiCK[1] = 4.60717;
@@ -930,7 +930,7 @@ TCanvas* FitGenerator::DrawResiduals(int aAnalysisNumber, CentralityType aCentra
     tPar_XiCK[6] = 0.523492;
     tPar_XiCK[7] = 1.53176;
   }
-  else if(tResXiCKType==kXiCKchM || tResXiCKType==kAXiCKchP)
+  else if(tResXiCKType==kResXiCKchM || tResXiCKType==kResAXiCKchP)
   {
     tPar_XiCK[0] = tLambda_XiCK;
     tPar_XiCK[1] = 6.97767;
@@ -949,7 +949,7 @@ TCanvas* FitGenerator::DrawResiduals(int aAnalysisNumber, CentralityType aCentra
 
   double tLambda_OmegaK = 0.01760*tOverallLambdaPrimary;  //for now, primary lambda scaled by some factor
   double *tPar_OmegaK = new double[8];
-  if(tResOmegaKType==kOmegaKchP || tResOmegaKType==kAOmegaKchM)
+  if(tResOmegaKType==kResOmegaKchP || tResOmegaKType==kResAOmegaKchM)
   { 
     tPar_OmegaK[0] = tLambda_OmegaK;
     tPar_OmegaK[1] = 2.84;
@@ -960,7 +960,7 @@ TCanvas* FitGenerator::DrawResiduals(int aAnalysisNumber, CentralityType aCentra
     tPar_OmegaK[6] = 1.13;
     tPar_OmegaK[7] = -2.53;
   }
-  else if(tResOmegaKType==kOmegaKchM || tResOmegaKType==kAOmegaKchP)
+  else if(tResOmegaKType==kResOmegaKchM || tResOmegaKType==kResAOmegaKchP)
   {
     tPar_OmegaK[0] = tLambda_OmegaK;
     tPar_OmegaK[1] = 2.81;
@@ -1001,24 +1001,24 @@ TCanvas* FitGenerator::DrawResiduals(int aAnalysisNumber, CentralityType aCentra
   tCanPart->AddGraph(0,0,tHist_SigK,"",24,kRed,0.75,"ex0same");
     tParentHist_SigK->GetYaxis()->SetRangeUser(tYLowNeutral,tYHighNeutral);
     tHist_SigK->GetYaxis()->SetRangeUser(tYLowNeutral,tYHighNeutral);
-    tPaveText = tCanPart->SetupTPaveText(cResidualRootTags[tResSigKType],0,0,0.70,0.70,0.15,0.10,63,20);
+    tPaveText = tCanPart->SetupTPaveText(cAnalysisRootTags[tResSigKType],0,0,0.70,0.70,0.15,0.10,63,20);
     tCanPart->AddPadPaveText(tPaveText,0,0);
 
   tCanPart->AddGraph(1,0,tParentHist_Xi0K,"",20,kBlue,0.75,"ex0");
   tCanPart->AddGraph(1,0,tHist_Xi0K,"",24,kBlue,0.75,"ex0same");
     tParentHist_Xi0K->GetYaxis()->SetRangeUser(tYLowNeutral,tYHighNeutral);
     tHist_Xi0K->GetYaxis()->SetRangeUser(tYLowNeutral,tYHighNeutral);
-    tPaveText = tCanPart->SetupTPaveText(cResidualRootTags[tResXi0KType],1,0,0.70,0.75,0.15,0.10,63,20);
+    tPaveText = tCanPart->SetupTPaveText(cAnalysisRootTags[tResXi0KType],1,0,0.70,0.75,0.15,0.10,63,20);
     tCanPart->AddPadPaveText(tPaveText,1,0);
 
   tCanPart->AddGraph(0,1,tParentHist_XiCK,"",20,kMagenta,0.75,"ex0");
   tCanPart->AddGraph(0,1,tHist_XiCK,"",24,kMagenta,0.75,"ex0same");
-    tPaveText = tCanPart->SetupTPaveText(cResidualRootTags[tResXiCKType],0,1,0.70,0.80,0.15,0.10,63,20);
+    tPaveText = tCanPart->SetupTPaveText(cAnalysisRootTags[tResXiCKType],0,1,0.70,0.80,0.15,0.10,63,20);
     tCanPart->AddPadPaveText(tPaveText,0,1);
 
   tCanPart->AddGraph(1,1,tParentHist_OmegaK,"",20,kGreen,0.75,"ex0");
   tCanPart->AddGraph(1,1,tHist_OmegaK,"",24,kGreen,0.75,"ex0same");
-    tPaveText = tCanPart->SetupTPaveText(cResidualRootTags[tResOmegaKType],1,1,0.70,0.825,0.15,0.10,63,20);
+    tPaveText = tCanPart->SetupTPaveText(cAnalysisRootTags[tResOmegaKType],1,1,0.70,0.825,0.15,0.10,63,20);
     tCanPart->AddPadPaveText(tPaveText,1,1);
 
   tCanPart->SetDrawUnityLine(true);
@@ -1057,34 +1057,34 @@ TCanvas* FitGenerator::DrawPrimaryWithResiduals(int aAnalysisNumber, CentralityT
   TH1* tPrimaryFitHist = tFitPairAnalysis->GetCorrectedFitHisto(false,false,false);
 
   AnalysisType tAnType = tFitPairAnalysis->GetAnalysisType();
-  ResidualType tResSigKType, tResXi0KType, tResXiCKType, tResOmegaKType;
+  AnalysisType tResSigKType, tResXi0KType, tResXiCKType, tResOmegaKType;
   switch(tAnType) {
   case kLamKchP:
-    tResXiCKType = kXiCKchP;
-    tResOmegaKType = kOmegaKchP;
-    tResSigKType = kSig0KchP;
-    tResXi0KType = kXi0KchP;
+    tResXiCKType = kResXiCKchP;
+    tResOmegaKType = kResOmegaKchP;
+    tResSigKType = kResSig0KchP;
+    tResXi0KType = kResXi0KchP;
     break;
 
   case kLamKchM:
-    tResXiCKType = kXiCKchM;
-    tResOmegaKType = kOmegaKchM;
-    tResSigKType = kSig0KchM;
-    tResXi0KType = kXi0KchM;
+    tResXiCKType = kResXiCKchM;
+    tResOmegaKType = kResOmegaKchM;
+    tResSigKType = kResSig0KchM;
+    tResXi0KType = kResXi0KchM;
     break;
 
   case kALamKchP:
-    tResXiCKType = kAXiCKchP;
-    tResOmegaKType = kAOmegaKchP;
-    tResSigKType = kASig0KchP;
-    tResXi0KType = kAXi0KchP;
+    tResXiCKType = kResAXiCKchP;
+    tResOmegaKType = kResAOmegaKchP;
+    tResSigKType = kResASig0KchP;
+    tResXi0KType = kResAXi0KchP;
     break;
 
   case kALamKchM:
-    tResXiCKType = kAXiCKchM;
-    tResOmegaKType = kAOmegaKchM;
-    tResSigKType = kASig0KchM;
-    tResXi0KType = kAXi0KchM;
+    tResXiCKType = kResAXiCKchM;
+    tResOmegaKType = kResAOmegaKchM;
+    tResSigKType = kResASig0KchM;
+    tResXi0KType = kResAXi0KchM;
     break;
 
   default:
@@ -1121,7 +1121,7 @@ TCanvas* FitGenerator::DrawPrimaryWithResiduals(int aAnalysisNumber, CentralityT
 
   double tLambda_XiCK = 0.18386*tOverallLambdaPrimary;  //for now, primary lambda scaled by some factor
   double *tPar_XiCK = new double[8];
-  if(tResXiCKType==kXiCKchP || tResXiCKType==kAXiCKchM)
+  if(tResXiCKType==kResXiCKchP || tResXiCKType==kResAXiCKchM)
   { 
     tPar_XiCK[0] = tLambda_XiCK;
     tPar_XiCK[1] = 4.60717;
@@ -1132,7 +1132,7 @@ TCanvas* FitGenerator::DrawPrimaryWithResiduals(int aAnalysisNumber, CentralityT
     tPar_XiCK[6] = 0.523492;
     tPar_XiCK[7] = 1.53176;
   }
-  else if(tResXiCKType==kXiCKchM || tResXiCKType==kAXiCKchP)
+  else if(tResXiCKType==kResXiCKchM || tResXiCKType==kResAXiCKchP)
   {
     tPar_XiCK[0] = tLambda_XiCK;
     tPar_XiCK[1] = 6.97767;
@@ -1150,7 +1150,7 @@ TCanvas* FitGenerator::DrawPrimaryWithResiduals(int aAnalysisNumber, CentralityT
 
   double tLambda_OmegaK = 0.01760*tOverallLambdaPrimary;  //for now, primary lambda scaled by some factor
   double *tPar_OmegaK = new double[8];
-  if(tResOmegaKType==kOmegaKchP || tResOmegaKType==kAOmegaKchM)
+  if(tResOmegaKType==kResOmegaKchP || tResOmegaKType==kResAOmegaKchM)
   { 
     tPar_OmegaK[0] = tLambda_OmegaK;
     tPar_OmegaK[1] = 2.84;
@@ -1161,7 +1161,7 @@ TCanvas* FitGenerator::DrawPrimaryWithResiduals(int aAnalysisNumber, CentralityT
     tPar_OmegaK[6] = 1.13;
     tPar_OmegaK[7] = -2.53;
   }
-  else if(tResOmegaKType==kOmegaKchM || tResOmegaKType==kAOmegaKchP)
+  else if(tResOmegaKType==kResOmegaKchM || tResOmegaKType==kResAOmegaKchP)
   {
     tPar_OmegaK[0] = tLambda_OmegaK;
     tPar_OmegaK[1] = 2.81;
@@ -1280,34 +1280,34 @@ TCanvas* FitGenerator::DrawKStarCfswFitsAndResiduals(bool aMomResCorrectFit, boo
       vector<double> tKStarBinCenters(100);
       for(int i=0; i<100; i++) tKStarBinCenters[i] = tKStarBinWidth/2.0 + i*tKStarBinWidth;
 
-      ResidualType tResSigKType, tResXi0KType, tResXiCKType, tResOmegaKType;
+      AnalysisType tResSigKType, tResXi0KType, tResXiCKType, tResOmegaKType;
       switch(tAnType) {
       case kLamKchP:
-        tResXiCKType = kXiCKchP;
-        tResOmegaKType = kOmegaKchP;
-        tResSigKType = kSig0KchP;
-        tResXi0KType = kXi0KchP;
+        tResXiCKType = kResXiCKchP;
+        tResOmegaKType = kResOmegaKchP;
+        tResSigKType = kResSig0KchP;
+        tResXi0KType = kResXi0KchP;
         break;
 
       case kLamKchM:
-        tResXiCKType = kXiCKchM;
-        tResOmegaKType = kOmegaKchM;
-        tResSigKType = kSig0KchM;
-        tResXi0KType = kXi0KchM;
+        tResXiCKType = kResXiCKchM;
+        tResOmegaKType = kResOmegaKchM;
+        tResSigKType = kResSig0KchM;
+        tResXi0KType = kResXi0KchM;
         break;
 
       case kALamKchP:
-        tResXiCKType = kAXiCKchP;
-        tResOmegaKType = kAOmegaKchP;
-        tResSigKType = kASig0KchP;
-        tResXi0KType = kAXi0KchP;
+        tResXiCKType = kResAXiCKchP;
+        tResOmegaKType = kResAOmegaKchP;
+        tResSigKType = kResASig0KchP;
+        tResXi0KType = kResAXi0KchP;
         break;
 
       case kALamKchM:
-        tResXiCKType = kAXiCKchM;
-        tResOmegaKType = kAOmegaKchM;
-        tResSigKType = kASig0KchM;
-        tResXi0KType = kAXi0KchM;
+        tResXiCKType = kResAXiCKchM;
+        tResOmegaKType = kResAOmegaKchM;
+        tResSigKType = kResASig0KchM;
+        tResXi0KType = kResAXi0KchM;
         break;
 
       default:
@@ -1348,7 +1348,7 @@ TCanvas* FitGenerator::DrawKStarCfswFitsAndResiduals(bool aMomResCorrectFit, boo
 
       double tLambda_XiCK = 0.18386*tOverallLambdaPrimary;  //for now, primary lambda scaled by some factor
       double *tPar_XiCK = new double[8];
-      if(tResXiCKType==kXiCKchP || tResXiCKType==kAXiCKchM)
+      if(tResXiCKType==kResXiCKchP || tResXiCKType==kResAXiCKchM)
       { 
         tPar_XiCK[0] = tLambda_XiCK;
         tPar_XiCK[1] = 4.60717;
@@ -1359,7 +1359,7 @@ TCanvas* FitGenerator::DrawKStarCfswFitsAndResiduals(bool aMomResCorrectFit, boo
         tPar_XiCK[6] = 0.523492;
         tPar_XiCK[7] = 1.53176;
       }
-      else if(tResXiCKType==kXiCKchM || tResXiCKType==kAXiCKchP)
+      else if(tResXiCKType==kResXiCKchM || tResXiCKType==kResAXiCKchP)
       {
         tPar_XiCK[0] = tLambda_XiCK;
         tPar_XiCK[1] = 6.97767;
@@ -1379,7 +1379,7 @@ TCanvas* FitGenerator::DrawKStarCfswFitsAndResiduals(bool aMomResCorrectFit, boo
 
       double tLambda_OmegaK = 0.01760*tOverallLambdaPrimary;  //for now, primary lambda scaled by some factor
       double *tPar_OmegaK = new double[8];
-      if(tResOmegaKType==kOmegaKchP || tResOmegaKType==kAOmegaKchM)
+      if(tResOmegaKType==kResOmegaKchP || tResOmegaKType==kResAOmegaKchM)
       { 
         tPar_OmegaK[0] = tLambda_OmegaK;
         tPar_OmegaK[1] = 2.84;
@@ -1390,7 +1390,7 @@ TCanvas* FitGenerator::DrawKStarCfswFitsAndResiduals(bool aMomResCorrectFit, boo
         tPar_OmegaK[6] = 1.13;
         tPar_OmegaK[7] = -2.53;
       }
-      else if(tResOmegaKType==kOmegaKchM || tResOmegaKType==kAOmegaKchP)
+      else if(tResOmegaKType==kResOmegaKchM || tResOmegaKType==kResAOmegaKchP)
       {
         tPar_OmegaK[0] = tLambda_OmegaK;
         tPar_OmegaK[1] = 2.81;
@@ -1487,10 +1487,10 @@ TCanvas* FitGenerator::DrawKStarCfswFitsAndResiduals(bool aMomResCorrectFit, boo
       if(i==0 && j==1)
       {
         tCanPart->SetupTLegend(TString("Residuals"), i, j, 0.35, 0.10, 0.25, 0.50);
-        tCanPart->AddLegendEntry(i, j, tHist_SigK, cResidualRootTags[tResSigKType], "p");
-        tCanPart->AddLegendEntry(i, j, tHist_Xi0K, cResidualRootTags[tResXi0KType], "p");
-        tCanPart->AddLegendEntry(i, j, tHist_XiCK, cResidualRootTags[tResXiCKType], "p");
-        tCanPart->AddLegendEntry(i, j, tHist_OmegaK, cResidualRootTags[tResOmegaKType], "p");
+        tCanPart->AddLegendEntry(i, j, tHist_SigK, cAnalysisRootTags[tResSigKType], "p");
+        tCanPart->AddLegendEntry(i, j, tHist_Xi0K, cAnalysisRootTags[tResXi0KType], "p");
+        tCanPart->AddLegendEntry(i, j, tHist_XiCK, cAnalysisRootTags[tResXiCKType], "p");
+        tCanPart->AddLegendEntry(i, j, tHist_OmegaK, cAnalysisRootTags[tResOmegaKType], "p");
       }
 
       const double* tSysErrors = cSysErrors[fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetAnalysisType()][fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetCentralityType()];

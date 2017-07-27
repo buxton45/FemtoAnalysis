@@ -18,7 +18,29 @@ using std::vector;
   enum PartnerAnalysisType {kcLamK0=0, kcLamcKch=1, kcXicKch=2, kcLamcLam=3, kcLamcPi=4};
 
   enum AnalysisRunType {kTrain=0, kTrainSys=1, kGrid=2};
-  enum AnalysisType {kLamK0=0, kALamK0=1, kLamKchP=2, kALamKchP=3, kLamKchM=4, kALamKchM=5, kXiKchP=6, kAXiKchP=7, kXiKchM=8, kAXiKchM=9, kLamLam=10, kALamALam=11, kLamALam=12, kLamPiP=13, kALamPiP=14, kLamPiM=15, kALamPiM=16, kXiK0=17, kAXiK0=18};
+
+  enum AnalysisType {
+kLamK0=0, kALamK0=1, 
+kLamKchP=2, kALamKchM=3, kLamKchM=4, kALamKchP=5, 
+kXiKchP=6, kAXiKchM=7, kXiKchM=8, kAXiKchP=9, 
+kXiK0=10, kAXiK0=11, 
+kLamLam=12, kALamALam=13, kLamALam=14, 
+kLamPiP=15, kALamPiM=16, kLamPiM=17, kALamPiP=18, 
+
+//----- Residual Types -----
+kResSig0KchP=19, kResASig0KchM=20, kResSig0KchM=21, kResASig0KchP=22, 
+kResXi0KchP=23, kResAXi0KchM=24, kResXi0KchM=25, kResAXi0KchP=26, 
+kResXiCKchP=27, kResAXiCKchM=28, kResXiCKchM=29, kResAXiCKchP=30, 
+kResOmegaKchP=31, kResAOmegaKchM=32, kResOmegaKchM=33, kResAOmegaKchP=34, 
+kResSigStPKchP=35, kResASigStMKchM=36, kResSigStPKchM=37, kResASigStMKchP=38, 
+kResSigStMKchP=39, kResASigStPKchM=40, kResSigStMKchM=41, kResASigStPKchP=42,
+kResSigSt0KchP=43, kResASigSt0KchM=44, kResSigSt0KchM=45, kResASigSt0KchP=46,
+kResLamKSt0=47, kResALamAKSt0=48, kResLamAKSt0=49, kResALamKSt0=50,
+kResSig0KSt0=51, kResASig0AKSt0=52, kResSig0AKSt0=53, kResASig0KSt0=54, 
+kResXi0KSt0=55, kResAXi0AKSt0=56, kResXi0AKSt0=57, kResAXi0KSt0=58, 
+kResXiCKSt0=59, kResAXiCAKSt0=60, kResXiCAKSt0=61, kResAXiCKSt0=62
+};
+
   enum BFieldType {kFemtoPlus=0, kFemtoMinus=1, kBp1=2, kBp2=3, kBm1=4, kBm2=5, kBm3=6};
   enum CentralityType {k0010=0, k1030=1, k3050=2, kMB=3};
   enum ParticleType {kLam=0, kALam=1, kK0=2, kKchP=3, kKchM=4, kXi=5, kAXi=6, kPiP=7, kPiM=8, kProton=9, kAntiProton=10};
@@ -41,17 +63,21 @@ using std::vector;
   enum GeneralFitterType {kLedEq=0, kLedViaSimPairs=1, kCoulomb=2};
 
   enum CoulombType {kAttractive=0, kRepulsive=1, kNeutral=2};
-
-  enum ResidualType {kSig0KchP=0, kASig0KchP=1, kSig0KchM=2, kASig0KchM=3, kXi0KchP=4, kAXi0KchP=5, kXi0KchM=6, kAXi0KchM=7, kXiCKchP=8, kAXiCKchP=9, kXiCKchM=10, kAXiCKchM=11, kOmegaKchP=12, kAOmegaKchP=13, kOmegaKchM=14, kAOmegaKchM=15, 
-kSigStPKchP=16, kASigStMKchP=17, kSigStPKchM=18, kASigStMKchM=19, 
-kSigStMKchP=20, kASigStPKchP=21, kSigStMKchM=22, kASigStPKchM=23,
-kSigSt0KchP=24, kASigSt0KchP=25, kSigSt0KchM=26, kASigSt0KchM=27,
-kLamKSt0=28, kALamKSt0=29, kLamAKSt0=30, kALamAKSt0=31,
-kSig0KSt0=32, kASig0KSt0=33, kSig0AKSt0=34, kASig0AKSt0=35, 
-kXi0KSt0=36, kAXi0KSt0=37, kXi0AKSt0=38, kAXi0AKSt0=39, 
-kXiCKSt0=40, kAXiCKSt0=41, kXiCAKSt0=42, kAXiCAKSt0=43
+/*
+  enum ResidualType {
+kSig0KchP=0, kASig0KchM=1, kSig0KchM=2, kASig0KchP=3, 
+kXi0KchP=4, kAXi0KchM=5, kXi0KchM=6, kAXi0KchP=7, 
+kXiCKchP=8, kAXiCKchM=9, kXiCKchM=10, kAXiCKchP=11, 
+kOmegaKchP=12, kAOmegaKchM=13, kOmegaKchM=14, kAOmegaKchP=15, 
+kSigStPKchP=16, kASigStMKchM=17, kSigStPKchM=18, kASigStMKchP=19, 
+kSigStMKchP=20, kASigStPKchM=21, kSigStMKchM=22, kASigStPKchP=23,
+kSigSt0KchP=24, kASigSt0KchM=25, kSigSt0KchM=26, kASigSt0KchP=27,
+kLamKSt0=28, kALamAKSt0=29, kLamAKSt0=30, kALamKSt0=31,
+kSig0KSt0=32, kASig0AKSt0=33, kSig0AKSt0=34, kASig0KSt0=35, 
+kXi0KSt0=36, kAXi0AKSt0=37, kXi0AKSt0=38, kAXi0KSt0=39, 
+kXiCKSt0=40, kAXiCAKSt0=41, kXiCAKSt0=42, kAXiCKSt0=43
 }; 
-
+*/
 //----------------------------------------------------------
   //TODO Don't forget, when adding new particle, add int value to cPDGValues array
   enum ParticlePDGType {kPDGProt   = 2212,  kPDGAntiProt = -2212, 
@@ -76,6 +102,12 @@ kXiCKSt0=40, kAXiCKSt0=41, kXiCAKSt0=42, kAXiCAKSt0=43
 
 
   //-------Struct definitions---------------------------------
+  struct tmpAnalysisInfo
+  {
+    AnalysisType analysisType;
+    CentralityType centralityType;
+  };
+
   struct BinInfo
   {
     int nBins;
@@ -148,9 +180,10 @@ kXiCKSt0=40, kAXiCKSt0=41, kXiCAKSt0=42, kAXiCAKSt0=43
 
 
   //-------------------------------------------------
-  extern const char* const cAnalysisBaseTags[19];
-  extern const char* const cAnalysisRootTags[19];
-  extern const char* const cResidualRootTags[44];
+  extern const char* const cAnalysisBaseTags[63];
+  extern const char* const cAnalysisRootTags[63];
+//  extern const char* const cResidualBaseTags[44];
+//  extern const char* const cResidualRootTags[44];
   extern const char* const cBFieldTags[7];
   extern const char* const cCentralityTags[4];
   extern const char* const cPrettyCentralityTags[4];
@@ -341,6 +374,8 @@ kXiCKSt0=40, kAXiCKSt0=41, kXiCAKSt0=42, kAXiCAKSt0=43
   extern const double hbarc;
   extern const double gBohrRadiusXiK;
   extern const double gBohrRadiusOmegaK;
+  extern const double gBohrRadiusSigStPK;
+  extern const double gBohrRadiusSigStMK;
 
   static const std::complex<double> ImI (0.,1.);
 
