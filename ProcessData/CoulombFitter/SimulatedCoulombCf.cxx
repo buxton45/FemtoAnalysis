@@ -85,76 +85,69 @@ SimulatedCoulombCf::~SimulatedCoulombCf()
   delete fInterpHistFile;
 
 }
-/*
-//________________________________________________________________________________________________________________
-AnalysisType SimulatedCoulombCf::GetDaughterAnalysisType(int aAnalysisNumber)
-{
-  AnalysisType tReturnType;
-  AnalysisType aResidualType = fAnalysesInfo[aAnalysisNumber].analysisType;
-
-  switch(fResidualType) {
-  case kResXiCKchP:
-  case kResOmegaKchP:
-    tReturnType = kLamKchP;
-    break;
-
-  case kResAXiCKchP:
-  case kResAOmegaKchP:
-    tReturnType = kALamKchP;
-    break;
-
-  case kResXiCKchM:
-  case kResOmegaKchM:
-    tReturnType = kLamKchM;
-    break;
-
-  case kResAXiCKchM:
-  case kResAOmegaKchM:
-    tReturnType = kALamKchM;
-    break;
-
-  default:
-    cout << "ERROR: SimulatedCoulombCf::GetDaughterAnalysisType:  fResidualType = " << fResidualType << " is not apropriate" << endl << endl;
-    assert(0);
-  }
-
-  return tReturnType;
-}
 
 
 //________________________________________________________________________________________________________________
-void SimulatedCoulombCf::SetBohrRadius()
+double SimulatedCoulombCf::GetBohrRadius(AnalysisType aAnalysisType)
 {
-  switch(fResidualType) {
+  double tReturnRadius;
+
+  switch(aAnalysisType) {
+  case kXiKchP:
+  case kAXiKchM:
   case kResXiCKchP:
   case kResAXiCKchM:
-    fBohrRadius = -gBohrRadiusXiK;
+    tReturnRadius = -gBohrRadiusXiK;
     break;
 
+  case kXiKchM:
+  case kAXiKchP:
   case kResXiCKchM:
   case kResAXiCKchP:
-    fBohrRadius = gBohrRadiusXiK;
+    tReturnRadius = gBohrRadiusXiK;
     break;
+
 
   case kResOmegaKchP:
   case kResAOmegaKchM:
-    fBohrRadius = -gBohrRadiusOmegaK;
+    tReturnRadius = -gBohrRadiusOmegaK;
     break;
+
 
   case kResOmegaKchM:
   case kResAOmegaKchP:
-    fBohrRadius = gBohrRadiusOmegaK;
+    tReturnRadius = gBohrRadiusOmegaK;
+    break;
+
+
+  case kResSigStPKchM:
+  case kResASigStPKchM:
+    tReturnRadius = -gBohrRadiusSigStPK;
+    break;
+
+  case kResASigStMKchP:
+  case kResSigStMKchP:
+    tReturnRadius = -gBohrRadiusSigStMK;
+    break;
+
+
+  case kResSigStPKchP:
+  case kResASigStPKchP:
+    tReturnRadius = gBohrRadiusSigStPK;
+    break;
+
+  case kResASigStMKchM:
+  case kResSigStMKchM:
+    tReturnRadius = gBohrRadiusSigStMK;
     break;
 
   default:
-    cout << "ERROR: SimulatedCoulombCf::SetBohrRadius:  fResidualType = " << fResidualType << " is not apropriate" << endl << endl;
-    assert(0);
+    tReturnRadius = 1000000000;
   }
 
-  fWaveFunction->SetCurrentBohrRadius(fResidualType);
-
+  return tReturnRadius;
 }
-*/
+
 
 
 //________________________________________________________________________________________________________________

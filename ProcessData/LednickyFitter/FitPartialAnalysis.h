@@ -51,6 +51,9 @@ class CfLite;
 
 #include "Types.h"
 
+#include "AnalysisInfo.h"
+class AnalysisInfo;
+
 class FitPartialAnalysis {
 
 public:

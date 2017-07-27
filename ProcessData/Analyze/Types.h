@@ -43,7 +43,6 @@ kResXiCKSt0=59, kResAXiCAKSt0=60, kResXiCAKSt0=61, kResAXiCKSt0=62
 
   enum BFieldType {kFemtoPlus=0, kFemtoMinus=1, kBp1=2, kBp2=3, kBm1=4, kBm2=5, kBm3=6};
   enum CentralityType {k0010=0, k1030=1, k3050=2, kMB=3};
-  enum ParticleType {kLam=0, kALam=1, kK0=2, kKchP=3, kKchM=4, kXi=5, kAXi=6, kPiP=7, kPiM=8, kProton=9, kAntiProton=10};
 
   enum DaughterPairType {kPosPos = 0, kPosNeg = 1, kNegPos = 2, kNegNeg = 3, kTrackPos = 4, kTrackNeg = 5, kTrackTrack = 6, kTrackBac=7, kBacPos = 8, kBacNeg = 9, kMaxNDaughterPairTypes = 10};
 
@@ -98,6 +97,23 @@ kXiCKSt0=40, kAXiCAKSt0=41, kXiCAKSt0=42, kAXiCKSt0=43
   extern const int cPDGValues[26];
   extern const char* const cPDGRootNames[26];
   extern const char* const GetPDGRootName(ParticlePDGType aType);
+
+  enum ParticleType {kProton     = 0,  kAntiProton     = 1,
+                     kPiP        = 2,  kPiM            = 3,
+                     kK0         = 4,
+                     kKchP       = 5,  kKchM           = 6,
+                     kLam        = 7,  kALam           = 8,
+                     kSig0       = 9,  kASig0          = 10,
+                     kXi         = 11, kAXi            = 12,
+                     kXi0        = 13, kAXi0           = 14,
+                     kOmega      = 15, kAOmega         = 16,
+
+                     kSigStP     = 17, kASigStM        = 18,
+                     kSigStM     = 19, kASigStP        = 20,
+                     kSigSt0     = 21, kASigSt0        = 22,
+                     kKSt0       = 23, kAKSt0          = 24};  
+  extern const char* const cParticleTags[25];
+  extern const char* const cRootParticleTags[25]; 
   //----------------------------------------------------------
 
 
@@ -187,8 +203,6 @@ kXiCKSt0=40, kAXiCAKSt0=41, kXiCAKSt0=42, kAXiCKSt0=43
   extern const char* const cBFieldTags[7];
   extern const char* const cCentralityTags[4];
   extern const char* const cPrettyCentralityTags[4];
-  extern const char* const cParticleTags[11];
-  extern const char* const cRootParticleTags[11];
   extern const char* const cKStarTrueVsRecTypeTags[4];
 
   extern const char* cKStarCfBaseTagNum;

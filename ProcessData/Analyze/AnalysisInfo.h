@@ -3,7 +3,13 @@
 #ifndef ANALYSISINFO_H
 #define ANALYSISINFO_H
 
+#include <iostream>
+#include <cassert>
+
 #include "Types.h"
+
+using std::cout;
+using std::endl;
 
 class AnalysisInfo {
 
@@ -11,28 +17,35 @@ public:
   AnalysisInfo(AnalysisType aAnalysisType);
   virtual ~AnalysisInfo();
 
+  ParticlePDGType GetParticlePDGType(ParticleType aParticleType);
+  void SetDaughterPairType();
+  void SetCoulombType();
+  void SetBohrRadius();
+  void SetIsResidual();
 
   //Inline functions
-  AnalysisType AnalysisType();
-  AnalysisType ConjAnalysisType();
+  AnalysisType GetAnalysisType();
+  AnalysisType GetConjAnalysisType();
+  bool IsResidual();
 
-  vector<ParticleType> ParticleTypes();
-  vector<ParticlePDGType> ParticlePDGTypes();
+  vector<ParticleType> GetParticleTypes();
+  vector<ParticlePDGType> GetParticlePDGTypes();
 
-  DaughterPairType DaughterPairType();
+  vector<DaughterPairType> GetDaughterPairTypes();
 
-  CoulombType CoulombType();
-  double BohrRadius();
+  CoulombType GetCoulombType();
+  double GetBohrRadius();
 
 
 private:
   AnalysisType fAnalysisType;
   AnalysisType fConjAnalysisType;
+  bool fIsResidual;
 
   vector<ParticleType> fParticleTypes;
   vector<ParticlePDGType> fParticlePDGTypes;
 
-  DaughterPairType fDaughterPairType;
+  vector<DaughterPairType> fDaughterPairTypes;  //if residual analysis, this will be empty
 
   CoulombType fCoulombType;
   double fBohrRadius;
@@ -43,15 +56,16 @@ private:
 #endif
 };
 
-inline AnalysisType AnalysisInfo::AnalysisType() {return fAnalysisType;}
-inline AnalysisType AnalysisInfo::ConjAnalysisType() {return fConjAnalysisType;}
+inline AnalysisType AnalysisInfo::GetAnalysisType() {return fAnalysisType;}
+inline AnalysisType AnalysisInfo::GetConjAnalysisType() {return fConjAnalysisType;}
+inline bool AnalysisInfo::IsResidual() {return fIsResidual;}
 
-inline vector<ParticleType> AnalysisInfo::ParticleTypes() {return fParticleTypes;}
-inline vector<ParticlePDGType> AnalysisInfo::ParticlePDGTypes() {return fParticlePDGTypes;}
+inline vector<ParticleType> AnalysisInfo::GetParticleTypes() {return fParticleTypes;}
+inline vector<ParticlePDGType> AnalysisInfo::GetParticlePDGTypes() {return fParticlePDGTypes;}
 
-inline DaughterPairType AnalysisInfo::DaughterPairType() {return fDaughterPairType;}
+inline vector<DaughterPairType> AnalysisInfo::GetDaughterPairTypes() {return fDaughterPairTypes;}
 
-inline CoulombType AnalysisInfo::CoulombType() {return fCoulombType;}
-inline double AnalysisInfo::BohrRadius() {return fBohrRadius;}
+inline CoulombType AnalysisInfo::GetCoulombType() {return fCoulombType;}
+inline double AnalysisInfo::GetBohrRadius() {return fBohrRadius;}
 
 #endif

@@ -45,6 +45,9 @@ class Cf2dLite;
 
 #include "Types.h"
 
+#include "AnalysisInfo.h"
+class AnalysisInfo;
+
 
 class PartialAnalysis {
 

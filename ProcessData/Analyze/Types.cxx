@@ -24,6 +24,43 @@ const char* const GetPDGRootName(ParticlePDGType aType)
   return cPDGRootNames[tPosition];
 }
 
+//enum ParticleType
+const char* const cParticleTags[25] = {
+"Proton", "AntiProton", 
+"PiP", "PiM", 
+"K0", 
+"KchP", "KchM", 
+"Lam", "ALam", 
+"Sig0", "ASig0",
+"Xi", "AXi",
+"Xi0", "AXi0",
+"Omega", "AOmega", 
+
+"kSigStP", "kASigStM", 
+"kSigStM", "kASigStP", 
+"kSigSt0", "kASigSt0", 
+"kKSt0", "kAKSt0"
+};
+
+
+const char* const cRootParticleTags[25] = {
+"p", "#bar{p}", 
+"#pi+", "#pi-", 
+"K^{0}_{S}", 
+"K+", "K-", 
+"#Lambda", "#bar{#Lambda}", 
+"#Sigma^{0}", "#bar{#Sigma}^{0}", 
+"#Xi-", "#bar{#Xi}+", 
+"#Xi^{0}", "#bar{#Xi}^{0}", 
+"#Omega-", "#bar{#Omega}+", 
+
+"#Sigma*+", "#bar{#Sigma*}-", 
+"#Sigma*-", "#bar{#Sigma*}+", 
+"#Sigma*^{0}", "#bar{#Sigma*}^{0}", 
+"K*^{0}", "#bar{K*}^{0}"
+};
+
+
 
 //enum AnalysisType
 const char* const cAnalysisBaseTags[63] = {
@@ -109,10 +146,6 @@ const char* const cBFieldTags[7] = {"_FemtoPlus", "_FemtoMinus", "_Bp1", "_Bp2",
 const char* const cCentralityTags[4] = {"_0010", "_1030", "_3050", ""};
 const char* const cPrettyCentralityTags[4] = {"0-10%", "10-30%", "30-50%", ""};
 
-//enum ParticleType
-const char* const cParticleTags[11] = {"Lam", "ALam", "K0", "KchP", "KchM", "Xi", "AXi", "PiP", "PiM", "Proton", "AntiProton"};
-
-const char* const cRootParticleTags[11] = {"#Lambda", "#bar{#Lambda}", "K^{0}", "K+", "K-", "#Xi-", "#bar{#Xi}+", "#pi+", "#pi-", "p", "#bar{p}"};
 
 //enum KStarTrueVsRecType
 const char* const cKStarTrueVsRecTypeTags[4] = {"Same","RotSame","Mixed","RotMixed"};

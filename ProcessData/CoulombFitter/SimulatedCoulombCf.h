@@ -58,8 +58,7 @@ public:
   SimulatedCoulombCf(vector<tmpAnalysisInfo> &aAnalysesInfo, TString aInterpHistFileBaseName, TString aLednickyHFunctionFileBaseName);
   virtual ~SimulatedCoulombCf();
 
-//  AnalysisType GetDaughterAnalysisType(int aAnalysisNumber);
-//  void SetBohrRadius();
+  static double GetBohrRadius(AnalysisType aAnalysisType);
 
   CoulombType GetCoulombType(AnalysisType aAnalysisType);
   double GetBohrRadius();
