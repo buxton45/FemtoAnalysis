@@ -14,6 +14,7 @@ using std::endl;
 class AnalysisInfo {
 
 public:
+  AnalysisInfo();
   AnalysisInfo(AnalysisType aAnalysisType);
   virtual ~AnalysisInfo();
 

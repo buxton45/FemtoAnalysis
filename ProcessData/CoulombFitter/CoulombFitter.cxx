@@ -46,6 +46,8 @@ CoulombFitter::CoulombFitter():
   fMinuit(0),
   fNAnalyses(0),
   fCorrectedFitVecs(0),
+
+  fSimCoulombCf(nullptr),
   fAllOfSameCoulombType(false),
   fCoulombType(kRepulsive),
   fWaveFunction(0),
@@ -122,6 +124,8 @@ CoulombFitter::CoulombFitter(FitSharedAnalyses* aFitSharedAnalyses, double aMaxF
   fFitSharedAnalyses(aFitSharedAnalyses),
   fMinuit(fFitSharedAnalyses->GetMinuitObject()),
   fNAnalyses(fFitSharedAnalyses->GetNFitPairAnalysis()),
+
+  fSimCoulombCf(nullptr),
   fAllOfSameCoulombType(false),
   fCoulombType(kRepulsive),
   fWaveFunction(0),

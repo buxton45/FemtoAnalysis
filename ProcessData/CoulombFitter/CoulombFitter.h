@@ -190,6 +190,7 @@ protected:
   int fNAnalyses;
   td3dVec fCorrectedFitVecs;
 
+  SimulatedCoulombCf *fSimCoulombCf;
   bool fAllOfSameCoulombType;
   CoulombType fCoulombType;
   WaveFunction* fWaveFunction;

@@ -40,19 +40,21 @@ class SimulatedPairCollection {
 
 public:
   //Constructor, destructor, copy constructor, assignment operator
-  SimulatedPairCollection();
+//  SimulatedPairCollection();  //used for stand-alone running for writing text files 
+  SimulatedPairCollection(vector<tmpAnalysisInfo> &aAnalysesInfo, double aKStarBinSize=0.01, double aMaxBuildKStar=1.0, int aNPairsPerKStarBin=16384, 
+                          bool aUseRandomKStarVectors=true, bool aShareSingleSampleAmongstAll=false);
   virtual ~SimulatedPairCollection();
 
   void ExtractDataPairKStar3dVecFromSingleRootFile(TString aFileLocation, TString aArrayName, TString aNtupleName, double aBinSizeKStar, double aNbinsKStar, td3dVec &aVecToFill);
-  td3dVec BuildDataPairKStar3dVecFromAllRootFiles(TString aPairKStarNtupleDirName, TString aFileBaseName, int aNFiles, AnalysisType aAnalysisType, CentralityType aCentralityType, int aNbinsKStar, double aKStarMin, double aKStarMax);
-  void BuildPairKStar4dVecOnFly(TString aPairKStarNtupleDirName, TString aFileBaseName, int aNFiles, int aNbinsKStar, double aKStarMin, double aKStarMax);
+  td3dVec BuildDataPairKStar3dVecFromAllRootFiles(AnalysisType aAnalysisType, CentralityType aCentralityType, int aNbinsKStar, double aKStarMin, double aKStarMax);
+  void BuildPairKStar4dVecOnFly(int aNbinsKStar, double aKStarMin, double aKStarMax);
 
   static void WriteRow(ostream &aOutput, vector<double> &aRow);
-  void WriteDataPairKStar3dVecTxtFile(TString aOutputBaseName, TString aPairKStarNtupleDirName, TString aFileBaseName, int aNFiles, AnalysisType aAnalysisType, CentralityType aCentralityType, int aNbinsKStar, double aKStarMin, double aKStarMax);
-  void WriteAllDataPairKStar3dVecTxtFiles(TString aOutputBaseName, TString aPairKStarNtupleDirName, TString aFileBaseName, int aNFiles, int aNbinsKStar, double aKStarMin, double aKStarMax);
+  void WriteDataPairKStar3dVecTxtFile(TString aOutputBaseName, AnalysisType aAnalysisType, CentralityType aCentralityType, int aNbinsKStar, double aKStarMin, double aKStarMax);
+  void WriteAllDataPairKStar3dVecTxtFiles(TString aOutputBaseName, int aNbinsKStar, double aKStarMin, double aKStarMax);
 
   td3dVec BuildDataPairKStar3dVecFromTxt(TString aFileName);
-  void BuildDataPairKStar4dVecFromTxt(TString aFileBaseName);
+  void BuildDataPairKStar4dVecFromTxt(TString aFileBaseName="PairKStar3dVec_20160610_");
 
   void SetRandomKStar3Vec(TVector3* aKStar3Vec, double aKStarMagMin, double aKStarMagMax);
   void BuildPair4dVec(int aNPairsPerKStarBin=16384, double aBinSize=0.01);
@@ -67,6 +69,9 @@ public:
   double GetPairRStarMag(int aAnalysisNumber, int aBin, int aPairNum);
   double GetPairTheta(int aAnalysisNumber, int aBin, int aPairNum);
 
+  void SetPairKStarNtupleDirLocation(TString aDirLocation);
+  void SetPairKStarNtupleFileBaseName(TString aBaseName);
+
 protected:
   bool fUseStaticPairs;
   bool fUseRandomKStarVectors; //if false, use vectors from data
@@ -79,6 +84,10 @@ protected:
   int fNAnalyses;
   vector<tmpAnalysisInfo> fAnalysesInfo;  //should have size = fNAnalyses
   td1dVec fCurrentRadii; //should have size = fNAnalyses
+
+  TString fPairKStarNtupleDirLocation;
+  TString fPairKStarNtupleFileBaseName;
+  int fNPairKStarNtupleFiles;
   td4dVec fDataPairKStar4dVec;  // This is comprised of k* vectors from the data, and will be empty if fUseRandomKStarVectors = true
                                 // 1 3dVec for each of fNAnalyses.
                                 // 1 2dVec for each k* bin
@@ -98,5 +107,8 @@ inline unsigned int SimulatedPairCollection::GetNumberOfPairsInBin(int aAnalysis
 inline double SimulatedPairCollection::GetPairKStarMag(int aAnalysisNumber, int aBin, int aPairNum) {return fPair4dVec[aAnalysisNumber][aBin][aPairNum][0];}
 inline double SimulatedPairCollection::GetPairRStarMag(int aAnalysisNumber, int aBin, int aPairNum) {return fPair4dVec[aAnalysisNumber][aBin][aPairNum][1];}
 inline double SimulatedPairCollection::GetPairTheta(int aAnalysisNumber, int aBin, int aPairNum) {return fPair4dVec[aAnalysisNumber][aBin][aPairNum][2];}
+
+inline void SimulatedPairCollection::SetPairKStarNtupleDirLocation(TString aDirLocation) {fPairKStarNtupleDirLocation = aDirLocation;}
+inline void SimulatedPairCollection::SetPairKStarNtupleFileBaseName(TString aBaseName) {fPairKStarNtupleFileBaseName = aBaseName;}
 
 #endif

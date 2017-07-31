@@ -19,7 +19,8 @@ ClassImp(SimulatedCoulombCf)
 
 SimulatedCoulombCf::SimulatedCoulombCf(vector<tmpAnalysisInfo> &aAnalysesInfo, TString aInterpHistFileBaseName, TString aLednickyHFunctionFileBaseName):
   fNAnalyses((int)aAnalysesInfo.size()),
-  fAnalysesInfo(aAnalysesInfo),
+  ftmpAnalysesInfo(aAnalysesInfo),
+  fAnalysesInfo(0),
   fTurnOffCoulomb(false),
   fIncludeSingletAndTriplet(false),
   fUseRandomKStarVectors(true),
@@ -30,6 +31,7 @@ SimulatedCoulombCf::SimulatedCoulombCf(vector<tmpAnalysisInfo> &aAnalysesInfo, T
   fWaveFunction(0),
   fBohrRadius(1000000000),
 
+  bSimPairCollectionBuilt(false),
   fSimPairCollection(nullptr),
 
   fInterpHistFile(0), fInterpHistFileLednickyHFunction(0),
@@ -46,16 +48,17 @@ SimulatedCoulombCf::SimulatedCoulombCf(vector<tmpAnalysisInfo> &aAnalysesInfo, T
   fMaxInterpKStar(0), fMaxInterpRStar(0), fMaxInterpTheta(0)
 
 {
-  gRandom->SetSeed();
   fWaveFunction = new WaveFunction();
   omp_set_num_threads(3);
 
   LoadInterpHistFile(aInterpHistFileBaseName);
   LoadLednickyHFunctionFile(aLednickyHFunctionFileBaseName);
 
-//  SetBohrRadius();
+  for(unsigned int i=0; i<fNAnalyses; i++) fAnalysesInfo.emplace_back(ftmpAnalysesInfo[i].analysisType);
+  assert(CheckIfAllOfSameCoulombType());
+  SetBohrRadius(GetBohrRadius(fAnalysesInfo[0].GetAnalysisType()));
 
- // BuildPairSample3dVec();  //TODO if !fUseRandomKStarVectors, then I can only build out to k* = 0.3 GeV/c
+//  fSimPairCollection = new SimulatedPairCollection(ftmpAnalysesInfo);
 
   //TODO figure out better way to achieve this
   for(int i=0; i<8; i++) fCurrentFitParams[i] = 0.;
@@ -86,6 +89,20 @@ SimulatedCoulombCf::~SimulatedCoulombCf()
 
 }
 
+//________________________________________________________________________________________________________________
+bool SimulatedCoulombCf::CheckIfAllOfSameCoulombType()
+{
+  bool tAllSame = true;
+
+  for(unsigned int i=1; i<fAnalysesInfo.size(); i++)
+  {
+    if( (fAnalysesInfo[i-1].GetAnalysisType() != fAnalysesInfo[i].GetAnalysisType()) && (fAnalysesInfo[i-1].GetConjAnalysisType() != fAnalysesInfo[i].GetAnalysisType()) )
+    {
+      tAllSame = false;
+    }
+  }
+  return tAllSame;
+}
 
 //________________________________________________________________________________________________________________
 double SimulatedCoulombCf::GetBohrRadius(AnalysisType aAnalysisType)
@@ -148,6 +165,12 @@ double SimulatedCoulombCf::GetBohrRadius(AnalysisType aAnalysisType)
   return tReturnRadius;
 }
 
+//________________________________________________________________________________________________________________
+void SimulatedCoulombCf::SetBohrRadius(double aBohrRadius)
+{
+  fBohrRadius = aBohrRadius;
+  fWaveFunction->SetCurrentBohrRadius(aBohrRadius);
+}
 
 
 //________________________________________________________________________________________________________________
@@ -428,29 +451,18 @@ bool SimulatedCoulombCf::CanInterpAll(double aKStar, double aRStar, double aThet
 }
 
 //________________________________________________________________________________________________________________
-void SimulatedCoulombCf::SetRandomKStar3Vec(TVector3* aKStar3Vec, double aKStarMagMin, double aKStarMagMax)
+void SimulatedCoulombCf::BuildSimPairCollection(double aKStarBinSize, double aMaxBuildKStar, int aNPairsPerKStarBin, bool aUseRandomKStarVectors, bool aShareSingleSampleAmongstAll)
 {
-  std::default_random_engine tGenerator (std::clock());  //std::clock() is seed
-  std::uniform_real_distribution<double> tKStarMagDistribution(aKStarMagMin,aKStarMagMax);
-  std::uniform_real_distribution<double> tUnityDistribution(0.,1.);
-
-  double tKStarMag = tKStarMagDistribution(tGenerator);
-  double tU = tUnityDistribution(tGenerator);
-  double tV = tUnityDistribution(tGenerator);
-
-  double tTheta = acos(2.*tV-1.); //polar angle
-  double tPhi = 2.*M_PI*tU; //azimuthal angle
-
-  aKStar3Vec->SetMagThetaPhi(tKStarMag,tTheta,tPhi);
+  fUseRandomKStarVectors = aUseRandomKStarVectors;
+  fSimPairCollection = new SimulatedPairCollection(ftmpAnalysesInfo,aKStarBinSize,aMaxBuildKStar,aNPairsPerKStarBin,aUseRandomKStarVectors,aShareSingleSampleAmongstAll);
+  bSimPairCollectionBuilt = true;
 }
-
-
-
 
 
 //________________________________________________________________________________________________________________
 double SimulatedCoulombCf::GetFitCfContentCompletewStaticPairs(int aAnalysisNumber, double aKStarMagMin, double aKStarMagMax, double *par)
 {
+  assert(bSimPairCollectionBuilt);
   omp_set_num_threads(6);
 
   // if fIncludeSingletAndTriplet == false

@@ -58,7 +58,9 @@ public:
   SimulatedCoulombCf(vector<tmpAnalysisInfo> &aAnalysesInfo, TString aInterpHistFileBaseName, TString aLednickyHFunctionFileBaseName);
   virtual ~SimulatedCoulombCf();
 
+  bool CheckIfAllOfSameCoulombType();  //i.e., assure all should use Bohr radius
   static double GetBohrRadius(AnalysisType aAnalysisType);
+  void SetBohrRadius(double aBohrRadius);
 
   CoulombType GetCoulombType(AnalysisType aAnalysisType);
   double GetBohrRadius();
@@ -80,7 +82,8 @@ public:
   bool CanInterpTheta(double aTheta);
   bool CanInterpAll(double aKStar, double aRStar, double aTheta, double aReF0, double aImF0, double aD0);
 
-  void SetRandomKStar3Vec(TVector3* aKStar3Vec, double aKStarMagMin, double aKStarMagMax);
+  void BuildSimPairCollection(double aKStarBinSize, double aMaxBuildKStar, int aNPairsPerKStarBin=16384, bool aUseRandomKStarVectors=true, bool aShareSingleSampleAmongstAll=false);
+
   double GetFitCfContentCompletewStaticPairs(int aAnalysisNumber, double aKStarMagMin, double aKStarMagMax, double *par);  //TODO!!!!!
 
   td1dVec GetCoulombParentCorrelation(int aAnalysisNumber, double *aParentCfParams, vector<double> &aKStarBinCenters, CentralityType aCentType=k0010);
@@ -94,9 +97,13 @@ public:
   void SetIncludeSingletAndTriplet(bool aIncludeSingletAndTriplet);
   void SetUseRandomKStarVectors(bool aUseRandomKStarVectors);
 
+  void SetPairKStarNtupleDirLocation(TString aDirLocation);
+  void SetPairKStarNtupleFileBaseName(TString aBaseName);
+
 protected:
   int fNAnalyses;
-  vector<tmpAnalysisInfo> fAnalysesInfo;
+  vector<tmpAnalysisInfo> ftmpAnalysesInfo;
+  vector<AnalysisInfo> fAnalysesInfo;
 
   bool fTurnOffCoulomb;
   bool fIncludeSingletAndTriplet;
@@ -108,6 +115,7 @@ protected:
   WaveFunction* fWaveFunction;
   double fBohrRadius;
 
+  bool bSimPairCollectionBuilt;
   SimulatedPairCollection *fSimPairCollection;
 
 
@@ -145,5 +153,8 @@ inline void SimulatedCoulombCf::SetTurnOffCoulomb(bool aTurnOffCoulomb) {fTurnOf
 
 inline void SimulatedCoulombCf::SetIncludeSingletAndTriplet(bool aIncludeSingletAndTriplet) {fIncludeSingletAndTriplet = aIncludeSingletAndTriplet;}
 inline void SimulatedCoulombCf::SetUseRandomKStarVectors(bool aUseRandomKStarVectors) {fUseRandomKStarVectors = aUseRandomKStarVectors;}
+
+inline void SimulatedCoulombCf::SetPairKStarNtupleDirLocation(TString aDirLocation) {fSimPairCollection->SetPairKStarNtupleDirLocation(aDirLocation);}
+inline void SimulatedCoulombCf::SetPairKStarNtupleFileBaseName(TString aBaseName) {fSimPairCollection->SetPairKStarNtupleFileBaseName(aBaseName);}
 
 #endif

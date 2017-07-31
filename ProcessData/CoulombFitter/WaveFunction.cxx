@@ -79,6 +79,11 @@ void WaveFunction::SetCurrentBohrRadius(AnalysisType aAnalysisType)
   }
 }
 
+//________________________________________________________________________
+void WaveFunction::SetCurrentBohrRadius(double aBohrRadius) 
+{
+  fCurrentBohrRadius= aBohrRadius;
+}
 
 
 //________________________________________________________________________

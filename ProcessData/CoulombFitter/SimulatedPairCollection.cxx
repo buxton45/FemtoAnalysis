@@ -13,8 +13,25 @@ ClassImp(SimulatedPairCollection)
 
 
 //________________________________________________________________________________________________________________
-SimulatedPairCollection::SimulatedPairCollection()
-{}
+SimulatedPairCollection::SimulatedPairCollection(vector<tmpAnalysisInfo> &aAnalysesInfo, double aKStarBinSize, double aMaxBuildKStar, int aNPairsPerKStarBin, 
+                                                 bool aUseRandomKStarVectors, bool aShareSingleSampleAmongstAll) :
+  fUseStaticPairs(true),
+  fUseRandomKStarVectors(aUseRandomKStarVectors),
+  bShareSingleSampleAmongstAll(aShareSingleSampleAmongstAll),
+  
+  fNPairsPerKStarBin(aNPairsPerKStarBin),
+  fKStarBinSize(aKStarBinSize),
+  fMaxBuildKStar(aMaxBuildKStar),
+
+  fNAnalyses((int)aAnalysesInfo.size()),
+  fCurrentRadii(fNAnalyses, 1.),
+  fPairKStarNtupleDirLocation("/home/jesse/Analysis/FemtoAnalysis/ProcessData/CoulombFitter/NTuples/Roman"),
+  fPairKStarNtupleFileBaseName("Results_cXicKch_20160610"),
+  fDataPairKStar4dVec(0),
+  fPair4dVec(0)
+{
+  gRandom->SetSeed();
+}
 
 
 
@@ -99,7 +116,7 @@ void SimulatedPairCollection::ExtractDataPairKStar3dVecFromSingleRootFile(TStrin
 
 
 //________________________________________________________________________________________________________________
-td3dVec SimulatedPairCollection::BuildDataPairKStar3dVecFromAllRootFiles(TString aPairKStarNtupleDirName, TString aFileBaseName, int aNFiles, AnalysisType aAnalysisType, CentralityType aCentralityType, int aNbinsKStar, double aKStarMin, double aKStarMax)
+td3dVec SimulatedPairCollection::BuildDataPairKStar3dVecFromAllRootFiles(AnalysisType aAnalysisType, CentralityType aCentralityType, int aNbinsKStar, double aKStarMin, double aKStarMax)
 {
   cout << "Beginning FULL conversion of TNtuple to 3dVec" << endl;
   std::clock_t start = std::clock();
@@ -110,8 +127,6 @@ td3dVec SimulatedPairCollection::BuildDataPairKStar3dVecFromAllRootFiles(TString
   //Also, this is basically FitPartialAnalysis::ConnectAnalysisDirectory
 
   //---------------------------------------------------
-  assert(aNFiles==27);
-
   vector<TString> tRomanNumerals(17);
     tRomanNumerals[0] = "I";
     tRomanNumerals[1] = "II";
@@ -150,14 +165,14 @@ cout << "Pre: tPairKStar3dVec.size() = " << tPairKStar3dVec.size() << endl;
   for(int iFile=0; iFile<17; iFile++) //Bm files
   {
     cout << "\t iFile = Bm" << iFile << endl;
-    tFileLocation = aPairKStarNtupleDirName + TString("/") + aFileBaseName + TString("_Bm") + tRomanNumerals[iFile] + TString(".root");
+    tFileLocation = fPairKStarNtupleDirLocation + TString("/") + fPairKStarNtupleFileBaseName + TString("_Bm") + tRomanNumerals[iFile] + TString(".root");
     ExtractDataPairKStar3dVecFromSingleRootFile(tFileLocation,tArrayName,tNtupleName,tBinSize,aNbinsKStar,tPairKStar3dVec);
   }
 
   for(int iFile=0; iFile<10; iFile++) //Bp files
   {
     cout << "\t iFile = Bp" << iFile << endl;
-    tFileLocation = aPairKStarNtupleDirName + TString("/") + aFileBaseName + TString("_Bp") + tRomanNumerals[iFile] + TString(".root");
+    tFileLocation = fPairKStarNtupleDirLocation + TString("/") + fPairKStarNtupleFileBaseName + TString("_Bp") + tRomanNumerals[iFile] + TString(".root");
     ExtractDataPairKStar3dVecFromSingleRootFile(tFileLocation,tArrayName,tNtupleName,tBinSize,aNbinsKStar,tPairKStar3dVec);
   }
 
@@ -172,7 +187,7 @@ cout << "Pre: tPairKStar3dVec.size() = " << tPairKStar3dVec.size() << endl;
 }
 
 //________________________________________________________________________________________________________________
-void SimulatedPairCollection::BuildPairKStar4dVecOnFly(TString aPairKStarNtupleDirName, TString aFileBaseName, int aNFiles, int aNbinsKStar, double aKStarMin, double aKStarMax)
+void SimulatedPairCollection::BuildPairKStar4dVecOnFly(int aNbinsKStar, double aKStarMin, double aKStarMax)
 {
   fDataPairKStar4dVec.resize(fNAnalyses, td3dVec(0, td2dVec(0, td1dVec(0))));
 
@@ -183,7 +198,7 @@ void SimulatedPairCollection::BuildPairKStar4dVecOnFly(TString aPairKStarNtupleD
     tAnalysisType = fAnalysesInfo[iAnaly].analysisType;
     tCentralityType = fAnalysesInfo[iAnaly].centralityType;
 
-    td3dVec tPairKStar3dVec = BuildDataPairKStar3dVecFromAllRootFiles(aPairKStarNtupleDirName,aFileBaseName,aNFiles,tAnalysisType,tCentralityType,aNbinsKStar,aKStarMin,aKStarMax);
+    td3dVec tPairKStar3dVec = BuildDataPairKStar3dVecFromAllRootFiles(tAnalysisType,tCentralityType,aNbinsKStar,aKStarMin,aKStarMax);
     fDataPairKStar4dVec[iAnaly] = tPairKStar3dVec;
   }
 
@@ -213,7 +228,7 @@ void SimulatedPairCollection::WriteRow(ostream &aOutput, vector<double> &aRow)
 }
 
 //________________________________________________________________________________________________________________
-void SimulatedPairCollection::WriteDataPairKStar3dVecTxtFile(TString aOutputBaseName, TString aPairKStarNtupleDirName, TString aFileBaseName, int aNFiles, AnalysisType aAnalysisType, CentralityType aCentralityType, int aNbinsKStar, double aKStarMin, double aKStarMax)
+void SimulatedPairCollection::WriteDataPairKStar3dVecTxtFile(TString aOutputBaseName, AnalysisType aAnalysisType, CentralityType aCentralityType, int aNbinsKStar, double aKStarMin, double aKStarMax)
 {
   TString tOutputName = aOutputBaseName + TString(cAnalysisBaseTags[aAnalysisType])+TString(cCentralityTags[aCentralityType]) + TString(".txt");
   ofstream tFileOut(tOutputName);
@@ -226,7 +241,7 @@ void SimulatedPairCollection::WriteDataPairKStar3dVecTxtFile(TString aOutputBase
   //TODO add centrality selection to this
   //Also, this is basically FitPartialAnalysis::ConnectAnalysisDirectory
 
-  td3dVec tPairKStar3dVec = BuildDataPairKStar3dVecFromAllRootFiles(aPairKStarNtupleDirName,aFileBaseName,aNFiles,aAnalysisType,aCentralityType,aNbinsKStar,aKStarMin,aKStarMax);
+  td3dVec tPairKStar3dVec = BuildDataPairKStar3dVecFromAllRootFiles(aAnalysisType,aCentralityType,aNbinsKStar,aKStarMin,aKStarMax);
 
   //---------------------------------------------------
   tFileOut << aNbinsKStar << " " << aKStarMin << " " << aKStarMax << endl;
@@ -252,7 +267,7 @@ void SimulatedPairCollection::WriteDataPairKStar3dVecTxtFile(TString aOutputBase
 }
 
 //________________________________________________________________________________________________________________
-void SimulatedPairCollection::WriteAllDataPairKStar3dVecTxtFiles(TString aOutputBaseName, TString aPairKStarNtupleDirName, TString aFileBaseName, int aNFiles, int aNbinsKStar, double aKStarMin, double aKStarMax)
+void SimulatedPairCollection::WriteAllDataPairKStar3dVecTxtFiles(TString aOutputBaseName, int aNbinsKStar, double aKStarMin, double aKStarMax)
 {
   AnalysisType tAnalysisType;
   CentralityType tCentralityType;
@@ -260,7 +275,7 @@ void SimulatedPairCollection::WriteAllDataPairKStar3dVecTxtFiles(TString aOutput
   {
     tAnalysisType = fAnalysesInfo[iAnaly].analysisType;
     tCentralityType = fAnalysesInfo[iAnaly].centralityType;
-    WriteDataPairKStar3dVecTxtFile(aOutputBaseName,aPairKStarNtupleDirName,aFileBaseName,aNFiles,tAnalysisType,tCentralityType,aNbinsKStar,aKStarMin,aKStarMax);
+    WriteDataPairKStar3dVecTxtFile(aOutputBaseName,tAnalysisType,tCentralityType,aNbinsKStar,aKStarMin,aKStarMax);
   }
 }
 

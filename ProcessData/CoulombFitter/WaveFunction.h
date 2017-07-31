@@ -44,6 +44,7 @@ public:
 
   void SetCurrentAnalysisType(AnalysisType aAnalysisType);
   void SetCurrentBohrRadius(AnalysisType aAnalysisType);
+  void SetCurrentBohrRadius(double aBohrRadius);
 
   complex<double> GetTest(complex<double> aCmplx);
 
