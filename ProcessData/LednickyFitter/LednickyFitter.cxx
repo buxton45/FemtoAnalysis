@@ -429,35 +429,33 @@ vector<double> LednickyFitter::CombinePrimaryWithResiduals(td1dVec &aLambdaValue
 //________________________________________________________________________________________________________________
 vector<double> LednickyFitter::GetFitCfIncludingResiduals(FitPairAnalysis* aFitPairAnalysis, double aOverallLambda, vector<double> &aKStarBinCenters, vector<double> &aPrimaryFitCfContent, double *aParamSet, int aNFitParams)
 {
-  double tLambda_Primary = aParamSet[0];
-
-  double tLambda_SigK = 0.26473*aOverallLambda;  //for now, primary lambda scaled by some factor
-  double *tPar_SigK = AdjustLambdaParam(aParamSet,1.0,aNFitParams);  //lambda=1 here, will be applied in CombinePrimaryWithResiduals method
-  td1dVec tResidual_SigK = GetNeutralResidualCorrelation(tPar_SigK,aKStarBinCenters,aFitPairAnalysis->GetTransformMatrix(0));
-
-  double tLambda_Xi0K = 0.19041*aOverallLambda;  //for now, primary lambda scaled by some factor
-  double *tPar_Xi0K = AdjustLambdaParam(aParamSet,1.0,aNFitParams);  //lambda=1 here, will be applied in CombinePrimaryWithResiduals method
-  td1dVec tResidual_Xi0K = GetNeutralResidualCorrelation(tPar_Xi0K,aKStarBinCenters,aFitPairAnalysis->GetTransformMatrix(2));
-
   AnalysisType tAnType = aFitPairAnalysis->GetAnalysisType();
-  AnalysisType tResXiCKType, tResOmegaKType;
+  AnalysisType tResSigType, tResXi0Type, tResXiCKType, tResOmegaKType;
   switch(tAnType) {
   case kLamKchP:
+    tResSigType = kResSig0KchP;
+    tResXi0Type = kResXi0KchP;
     tResXiCKType = kResXiCKchP;
     tResOmegaKType = kResOmegaKchP;
     break;
 
   case kLamKchM:
+    tResSigType = kResSig0KchM;
+    tResXi0Type = kResXi0KchM;
     tResXiCKType = kResXiCKchM;
     tResOmegaKType = kResOmegaKchM;
     break;
 
   case kALamKchP:
+    tResSigType = kResASig0KchP;
+    tResXi0Type = kResAXi0KchP;
     tResXiCKType = kResAXiCKchP;
     tResOmegaKType = kResAOmegaKchP;
     break;
 
   case kALamKchM:
+    tResSigType = kResASig0KchM;
+    tResXi0Type = kResAXi0KchM;
     tResXiCKType = kResAXiCKchM;
     tResOmegaKType = kResAOmegaKchM;
     break;
@@ -466,6 +464,18 @@ vector<double> LednickyFitter::GetFitCfIncludingResiduals(FitPairAnalysis* aFitP
     cout << "ERROR: LednickyFitter::GetFitCfIncludingResiduals  tAnType = " << tAnType << " is not apropriate" << endl << endl;
     assert(0);
   }
+
+  double tLambda_Primary = aParamSet[0];
+
+  double tLambda_SigK = 0.26473*aOverallLambda;  //for now, primary lambda scaled by some factor
+  double *tPar_SigK = AdjustLambdaParam(aParamSet,1.0,aNFitParams);  //lambda=1 here, will be applied in CombinePrimaryWithResiduals method
+//  td1dVec tResidual_SigK = GetNeutralResidualCorrelation(tPar_SigK,aKStarBinCenters,aFitPairAnalysis->GetTransformMatrix(0));
+  td1dVec tResidual_SigK = aFitPairAnalysis->GetTransformedNeutralResidualCorrelation(tResSigType, tPar_SigK);
+
+  double tLambda_Xi0K = 0.19041*aOverallLambda;  //for now, primary lambda scaled by some factor
+  double *tPar_Xi0K = AdjustLambdaParam(aParamSet,1.0,aNFitParams);  //lambda=1 here, will be applied in CombinePrimaryWithResiduals method
+//  td1dVec tResidual_Xi0K = GetNeutralResidualCorrelation(tPar_Xi0K,aKStarBinCenters,aFitPairAnalysis->GetTransformMatrix(2));
+  td1dVec tResidual_Xi0K = aFitPairAnalysis->GetTransformedNeutralResidualCorrelation(tResXi0Type, tPar_Xi0K);
 
   bool tUseExpXiData = true;
   //if(aFitPairAnalysis->GetCentralityType()==k0010) tUseExpXiData=true;
@@ -907,11 +917,21 @@ void LednickyFitter::InitializeFitter()
         for(int ix=1; ix <= fNbinsXToBuild; ix++)
         {
           fKStarBinCenters[ix-1] = tNum->GetXaxis()->GetBinCenter(ix);
-
         }
       }
     }
   }
+
+  if(fIncludeResidualCorrelations)
+  {
+    for(int iAnaly=0; iAnaly<fNAnalyses; iAnaly++)
+    {
+      fFitSharedAnalyses->GetFitPairAnalysis(iAnaly)->InitiateResidualCollection(fKStarBinCenters);
+    }
+  }
+
+
+
 }
 
 

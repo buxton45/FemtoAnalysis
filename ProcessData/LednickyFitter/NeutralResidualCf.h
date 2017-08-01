@@ -5,11 +5,12 @@
 
 #include <cassert>
 
-#include "TH2.h"
+#include "Faddeeva.hh"
 
+#include "TH2.h"
+#include "TMath.h"
 
 #include "Types.h"
-#include "LednickyFitter.h"
 
 using namespace std;
 
@@ -19,13 +20,19 @@ public:
   NeutralResidualCf(AnalysisType aResidualType, TH2D* aTransformMatrix, td1dVec &aKStarBinCenters);
   virtual ~NeutralResidualCf();
 
+  static double GetLednickyF1(double z);
+  static double GetLednickyF2(double z);
+  static double LednickyEq(double *x, double *par);
+  static TH1D* Convert1dVecToHist(td1dVec &aCfVec, td1dVec &aKStarBinCenters, TString aTitle = "tCf");
+
   td1dVec GetNeutralResidualCorrelation(double *aParentCfParams);
   td1dVec GetTransformedNeutralResidualCorrelation(double *aParentCfParams);
   TH1D* GetNeutralResidualCorrelationHistogram(double *aParentCfParams, TString aTitle);
   TH1D* GetTransformedNeutralResidualCorrelationHistogram(double *aParentCfParams, TString aTitle);
 
 
-
+  //inline
+  AnalysisType GetResidualType();
 
 
 protected:
@@ -42,6 +49,6 @@ td1dVec fTransformedResCf;
 #endif
 };
 
-
+inline AnalysisType NeutralResidualCf::GetResidualType() {return fResidualType;}
 
 #endif

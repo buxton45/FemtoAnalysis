@@ -47,6 +47,9 @@ class FitPartialAnalysis;
 #include "CfHeavy.h"
 class CfHeavy;
 
+#include "ResidualCollection.h"
+class ResidualCollection;
+
 class FitPairAnalysis {
 
 public:
@@ -87,6 +90,7 @@ public:
 
   td1dVec GetCorrectedFitVec();
   TH1F* GetCorrectedFitHistv2(double aMaxDrawKStar=0.3); //TODO
+  void InitiateResidualCollection(td1dVec &aKStarBinCenters);
 
   //inline (i.e. simple) functions
   TString GetAnalysisName();
@@ -133,6 +137,9 @@ public:
 
   void SetPrimaryWithResiduals(td1dVec &aPrimWithResid);
 
+  vector<AnalysisType> GetTransformStorageMapping();
+  td1dVec GetNeutralResidualCorrelation(AnalysisType aResidualType, double *aParentCfParams);
+  td1dVec GetTransformedNeutralResidualCorrelation(AnalysisType aResidualType, double *aParentCfParams);
 private:
   AnalysisRunType fAnalysisRunType;
   TString fAnalysisName;
@@ -177,6 +184,7 @@ private:
   vector<TH2D*> fTransformMatrices;
   vector<AnalysisType> fTransformStorageMapping;
 
+  ResidualCollection *fResidualCollection;
   td1dVec fPrimaryWithResiduals;
 
 #ifdef __ROOT__
@@ -224,6 +232,10 @@ inline double FitPairAnalysis::GetKStarMaxNorm() {return fKStarMaxNorm;}
 inline bool FitPairAnalysis::AreTrainResults() {if(fAnalysisRunType==kTrain || fAnalysisRunType==kTrainSys) return true;}
 
 inline void FitPairAnalysis::SetPrimaryWithResiduals(td1dVec &aPrimWithResid) {fPrimaryWithResiduals=aPrimWithResid;}
+
+inline vector<AnalysisType> FitPairAnalysis::GetTransformStorageMapping() {return fTransformStorageMapping;}
+inline td1dVec FitPairAnalysis::GetNeutralResidualCorrelation(AnalysisType aResidualType, double *aParentCfParams) {return fResidualCollection->GetNeutralResidualCorrelation(aResidualType, aParentCfParams);}
+inline td1dVec FitPairAnalysis::GetTransformedNeutralResidualCorrelation(AnalysisType aResidualType, double *aParentCfParams) {return fResidualCollection->GetTransformedNeutralResidualCorrelation(aResidualType, aParentCfParams);}
 #endif
 
 

@@ -50,6 +50,7 @@ FitPairAnalysis::FitPairAnalysis(TString aAnalysisName, vector<FitPartialAnalysi
   fTransformMatrices(0),
   fTransformStorageMapping(0),
 
+  fResidualCollection(nullptr),
   fPrimaryWithResiduals(0)
 
 {
@@ -113,6 +114,7 @@ FitPairAnalysis::FitPairAnalysis(TString aFileLocationBase, AnalysisType aAnalys
   fTransformMatrices(0),
   fTransformStorageMapping(0),
 
+  fResidualCollection(nullptr),
   fPrimaryWithResiduals(0)
 
 {
@@ -187,6 +189,7 @@ FitPairAnalysis::FitPairAnalysis(TString aFileLocationBase, TString aFileLocatio
   fTransformMatrices(0),
   fTransformStorageMapping(0),
 
+  fResidualCollection(nullptr),
   fPrimaryWithResiduals(0)
 
 {
@@ -1011,5 +1014,15 @@ TH1F* FitPairAnalysis::GetCorrectedFitHistv2(double aMaxDrawKStar)
   }
 
   return tCorrectedFitHist;
+}
+
+
+
+//________________________________________________________________________________________________________________
+void FitPairAnalysis::InitiateResidualCollection(td1dVec &aKStarBinCenters)
+{
+  vector<TH2D*> aTransformMatrices = GetTransformMatrices();
+  vector<AnalysisType> aTransformStorageMapping = GetTransformStorageMapping();
+  fResidualCollection = new ResidualCollection(fAnalysisType, aKStarBinCenters, aTransformMatrices, aTransformStorageMapping);
 }
 
