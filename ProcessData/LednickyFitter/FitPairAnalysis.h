@@ -81,6 +81,7 @@ public:
   void LoadTransformMatrices(int aRebin=2, TString aFileLocation="");
   vector<TH2D*> GetTransformMatrices(int aRebin=2, TString aFileLocation="");
   TH2D* GetTransformMatrix(int aIndex, int aRebin=2, TString aFileLocation="");
+  TH2D* GetTransformMatrix(AnalysisType aResidualType, int aRebin=2, TString aFileLocation="");
 
   TH1* GetCfwSysErrors();
 
@@ -174,6 +175,7 @@ private:
   TH1* fModelCfFakeIdealCfFakeRatio;
 
   vector<TH2D*> fTransformMatrices;
+  vector<AnalysisType> fTransformStorageMapping;
 
   td1dVec fPrimaryWithResiduals;
 

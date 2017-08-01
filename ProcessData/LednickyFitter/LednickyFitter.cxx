@@ -29,6 +29,10 @@ LednickyFitter::LednickyFitter(FitSharedAnalyses* aFitSharedAnalyses, double aMa
   fNAnalyses(fFitSharedAnalyses->GetNFitPairAnalysis()),
   fCorrectedFitVecs(0),
   fMaxFitKStar(aMaxFitKStar),
+  fNbinsXToBuild(0),
+  fNbinsXToFit(0),
+  fKStarBinWidth(0.),
+  fKStarBinCenters(0),
   fRejectOmega(false),
   fApplyNonFlatBackgroundCorrection(false), //TODO change deault to true here AND in CoulombFitter
   fApplyMomResCorrection(false), //TODO change deault to true here AND in CoulombFitter
@@ -429,11 +433,11 @@ vector<double> LednickyFitter::GetFitCfIncludingResiduals(FitPairAnalysis* aFitP
 
   double tLambda_SigK = 0.26473*aOverallLambda;  //for now, primary lambda scaled by some factor
   double *tPar_SigK = AdjustLambdaParam(aParamSet,1.0,aNFitParams);  //lambda=1 here, will be applied in CombinePrimaryWithResiduals method
-  td1dVec tResidual_SigK = GetNeutralResidualCorrelation(tPar_SigK,aKStarBinCenters,aFitPairAnalysis->GetTransformMatrices()[0]);
+  td1dVec tResidual_SigK = GetNeutralResidualCorrelation(tPar_SigK,aKStarBinCenters,aFitPairAnalysis->GetTransformMatrix(0));
 
   double tLambda_Xi0K = 0.19041*aOverallLambda;  //for now, primary lambda scaled by some factor
   double *tPar_Xi0K = AdjustLambdaParam(aParamSet,1.0,aNFitParams);  //lambda=1 here, will be applied in CombinePrimaryWithResiduals method
-  td1dVec tResidual_Xi0K = GetNeutralResidualCorrelation(tPar_Xi0K,aKStarBinCenters,aFitPairAnalysis->GetTransformMatrices()[2]);
+  td1dVec tResidual_Xi0K = GetNeutralResidualCorrelation(tPar_Xi0K,aKStarBinCenters,aFitPairAnalysis->GetTransformMatrix(2));
 
   AnalysisType tAnType = aFitPairAnalysis->GetAnalysisType();
   AnalysisType tResXiCKType, tResOmegaKType;
@@ -571,11 +575,7 @@ double LednickyFitter::GetPmlValue(double aNumContent, double aDenContent, doubl
 void LednickyFitter::CalculateFitFunction(int &npar, double &chi2, double *par)
 {
   if(fVerbose) PrintCurrentParamValues(fFitSharedAnalyses->GetNMinuitParams(),par);
-
-
   //---------------------------------------------------------
-
-
   double tRejectOmegaLow = 0.19;
   double tRejectOmegaHigh = 0.23;
 
@@ -583,21 +583,10 @@ void LednickyFitter::CalculateFitFunction(int &npar, double &chi2, double *par)
 //  double *tCurrentFitPar = new double[tNFitParPerAnalysis];
 //  for(int i=0; i<tNFitParPerAnalysis; i++) tCurrentFitPar[i] = 0.;
 
-  int tNbinsXToFitGlobal = fFitSharedAnalyses->GetFitPairAnalysis(0)->GetFitPartialAnalysis(0)->GetKStarCfLite()->Num()->FindBin(fMaxFitKStar);
-  if(fFitSharedAnalyses->GetFitPairAnalysis(0)->GetFitPartialAnalysis(0)->GetKStarCfLite()->Num()->GetBinLowEdge(tNbinsXToFitGlobal) == fMaxFitKStar) tNbinsXToFitGlobal--;
-
-
-  int tNbinsXToBuildMomResCrctn=0, tNbinsXToBuildResiduals=0;
-  int tNbinsXToBuildGlobal;  // when applying momentum resolution corrections, many times you must go beyond fitting range to apply correction
-  if(fApplyMomResCorrection) tNbinsXToBuildMomResCrctn = fFitSharedAnalyses->GetFitPairAnalysis(0)->GetModelKStarTrueVsRecMixed()->GetNbinsX();
-  if(fIncludeResidualCorrelations) tNbinsXToBuildResiduals = fFitSharedAnalyses->GetFitPairAnalysis(0)->GetTransformMatrices()[0]->GetNbinsX();
-  tNbinsXToBuildGlobal = std::max({tNbinsXToBuildMomResCrctn, tNbinsXToBuildResiduals, tNbinsXToFitGlobal});
-
-//  vector<double> tPrimaryFitCfContentUnNorm(tNbinsXToBuildGlobal,0.);
-  vector<double> tPrimaryFitCfContent(tNbinsXToBuildGlobal,0.);
-  vector<double> tNumContent(tNbinsXToBuildGlobal,0.);
-  vector<double> tDenContent(tNbinsXToBuildGlobal,0.);
-  vector<double> tKStarBinCenters(tNbinsXToBuildGlobal,0.);
+//  vector<double> tPrimaryFitCfContentUnNorm(fNbinsXToBuild,0.);
+  vector<double> tPrimaryFitCfContent(fNbinsXToBuild,0.);
+  vector<double> tNumContent(fNbinsXToBuild,0.);
+  vector<double> tDenContent(fNbinsXToBuild,0.);
 
   fChi2 = 0.;
   for(unsigned int i=0; i<fChi2Vec.size(); i++) {fChi2Vec[i] = 0.;}
@@ -609,14 +598,11 @@ void LednickyFitter::CalculateFitFunction(int &npar, double &chi2, double *par)
   for(int iAnaly=0; iAnaly<fNAnalyses; iAnaly++)
   {
     FitPairAnalysis* tFitPairAnalysis = fFitSharedAnalyses->GetFitPairAnalysis(iAnaly);
-    int tNbinsXToBuild;
     TH2* tMomResMatrix = NULL;
     if(fApplyMomResCorrection)
     {
       tMomResMatrix = tFitPairAnalysis->GetModelKStarTrueVsRecMixed();
       assert(tMomResMatrix);
-      tNbinsXToBuild = tMomResMatrix->GetNbinsX();
-      assert(tNbinsXToBuild == tNbinsXToBuildGlobal);
     }
 
     int tNFitPartialAnalysis = tFitPairAnalysis->GetNFitPartialAnalysis();
@@ -629,33 +615,6 @@ void LednickyFitter::CalculateFitFunction(int &npar, double &chi2, double *par)
       TH1* tDen = tKStarCfLite->Den();
       TH1* tCf = tKStarCfLite->Cf();
 
-      assert(tNum->GetXaxis()->GetBinWidth(1) == tDen->GetXaxis()->GetBinWidth(1));
-      assert(tNum->GetXaxis()->GetBinWidth(1) == tCf->GetXaxis()->GetBinWidth(1));
-      //make sure tNum and tDen and tCf have same bin size as tMomResMatrix
-      if(fApplyMomResCorrection)
-      {
-        assert(tNum->GetXaxis()->GetBinWidth(1) == tMomResMatrix->GetXaxis()->GetBinWidth(1));
-        assert(tNum->GetXaxis()->GetBinWidth(1) == tMomResMatrix->GetYaxis()->GetBinWidth(1));
-      }
-      //make sure tNum and tDen and tCf have same bin size as residuals
-      if(fIncludeResidualCorrelations)
-      {
-        assert(tNum->GetXaxis()->GetBinWidth(1) == tFitPairAnalysis->GetTransformMatrices()[0]->GetXaxis()->GetBinWidth(1));
-        assert(tNum->GetXaxis()->GetBinWidth(1) == tFitPairAnalysis->GetTransformMatrices()[0]->GetYaxis()->GetBinWidth(1));
-      }
-
-      //make sure tNum and tDen have same number of bins
-      assert(tNum->GetNbinsX() == tDen->GetNbinsX());
-
-      TAxis* tXaxisNum = tNum->GetXaxis();
-
-      int tNbinsX = tNum->GetNbinsX();
-
-      int tNbinsXToFit = tNum->FindBin(fMaxFitKStar);
-      if(tNum->GetBinLowEdge(tNbinsXToFit) == fMaxFitKStar) tNbinsXToFit--;
-
-      if(tNbinsXToFit > tNbinsX) {tNbinsXToFit = tNbinsX;}  //in case I accidentally include an overflow bin in nbinsXToFit
-      assert(tNbinsXToFit == tNbinsXToFitGlobal);
       int tNFitParams = tFitPartialAnalysis->GetNFitParams() +1;  //the +1 accounts for the normalization parameter
       assert(tNFitParams = tNFitParPerAnalysis+1);
 
@@ -690,15 +649,12 @@ void LednickyFitter::CalculateFitFunction(int &npar, double &chi2, double *par)
       bool tRejectOmega = tFitPartialAnalysis->RejectOmega();
 //      bool tAreParamsSame = AreParamsSame(tCurrentFitPar,tPar,tNFitParPerAnalysis);
 
-      if(!fApplyMomResCorrection && !fIncludeResidualCorrelations) tNbinsXToBuild = tNbinsXToFit;
-
       vector<double> tFitCfContent;
       vector<double> tCorrectedFitCfContent;
 
-      for(int ix=1; ix <= tNbinsXToBuild; ix++)
+      for(int ix=1; ix <= fNbinsXToBuild; ix++)
       {
-        tKStarBinCenters[ix-1] = tXaxisNum->GetBinCenter(ix);
-        x[0] = tKStarBinCenters[ix-1];
+        x[0] = fKStarBinCenters[ix-1];
 
         tNumContent[ix-1] = tNum->GetBinContent(ix);
         tDenContent[ix-1] = tDen->GetBinContent(ix);
@@ -706,135 +662,25 @@ void LednickyFitter::CalculateFitFunction(int &npar, double &chi2, double *par)
         tPrimaryFitCfContent[ix-1] = LednickyEq(x,tPar);
       }
 
-/*
-      if(fIncludeResidualCorrelations) 
-      {
-        double tLambda_SigK = 0.26473*tOverallLambda;  //for now, primary lambda scaled by some factor
-        double *tPar_SigK = AdjustLambdaParam(tPar,1.0,tNFitParams);  //lambda=1 here, will be applied in CombinePrimaryWithResiduals method
-        td1dVec tResidual_SigK = GetNeutralResidualCorrelation(tPar_SigK,tKStarBinCenters,tFitPairAnalysis->GetTransformMatrices()[0]);
-
-        double tLambda_Xi0K = 0.19041*tOverallLambda;  //for now, primary lambda scaled by some factor
-        double *tPar_Xi0K = AdjustLambdaParam(tPar,1.0,tNFitParams);  //lambda=1 here, will be applied in CombinePrimaryWithResiduals method
-        td1dVec tResidual_Xi0K = GetNeutralResidualCorrelation(tPar_Xi0K,tKStarBinCenters,tFitPairAnalysis->GetTransformMatrices()[2]);
-
-        AnalysisType tAnType = tFitPartialAnalysis->GetAnalysisType();
-        ResidualType tResXiCKType, tResOmegaKType;
-        switch(tAnType) {
-        case kLamKchP:
-          tResXiCKType = kXiCKchP;
-          tResOmegaKType = kOmegaKchP;
-          break;
-
-        case kLamKchM:
-          tResXiCKType = kXiCKchM;
-          tResOmegaKType = kOmegaKchM;
-          break;
-
-        case kALamKchP:
-          tResXiCKType = kAXiCKchP;
-          tResOmegaKType = kAOmegaKchP;
-          break;
-
-        case kALamKchM:
-          tResXiCKType = kAXiCKchM;
-          tResOmegaKType = kAOmegaKchM;
-          break;
-
-        default:
-          cout << "ERROR: LednickyFitter::LednickyFitter  tAnType = " << tAnType << " is not apropriate" << endl << endl;
-          assert(0);
-        }
-
-        bool tUseExpXiData = true;
-        //if(tFitPartialAnalysis->GetCentralityType()==k0010) tUseExpXiData=true;
-
-        double tLambda_XiCK = 0.18386*tOverallLambda;  //for now, primary lambda scaled by some factor
-//        double *tPar_XiCK = AdjustLambdaParam(tPar,tLambda_XiCK,tNFitParams);
-        double *tPar_XiCK = new double[8];
-        if(tResXiCKType==kXiCKchP || tResXiCKType==kAXiCKchM)
-        { 
-          tPar_XiCK[0] = 1.0; //TODO lambda=1 here, will be applied in CombinePrimaryWithResiduals method
-          tPar_XiCK[1] = 4.60717;
-          tPar_XiCK[2] = -0.00976133;
-          tPar_XiCK[3] = 0.0409787;
-          tPar_XiCK[4] = -0.33091;
-          tPar_XiCK[5] = -0.484049;
-          tPar_XiCK[6] = 0.523492;
-          tPar_XiCK[7] = 1.53176;
-        }
-        else if(tResXiCKType==kXiCKchM || tResXiCKType==kAXiCKchP)
-        {
-          tPar_XiCK[0] = 1.0; //TODO lambda=1 here, will be applied in CombinePrimaryWithResiduals method
-          tPar_XiCK[1] = 6.97767;
-          tPar_XiCK[2] = -1.94078;
-          tPar_XiCK[3] = -1.21309;
-          tPar_XiCK[4] = 0.160156;
-          tPar_XiCK[5] = 1.38324;
-          tPar_XiCK[6] = 2.02133;
-          tPar_XiCK[7] = 4.07520;
-        }
-        else {tPar_XiCK[0]=0.; tPar_XiCK[1]=0.; tPar_XiCK[2]=0.; tPar_XiCK[3]=0.; tPar_XiCK[4]=0.; tPar_XiCK[5]=0.; tPar_XiCK[6]=0.; tPar_XiCK[7]=0.;}
-        td1dVec tResidual_XiCK = GetChargedResidualCorrelation(tResXiCKType,tPar_XiCK,tKStarBinCenters,tUseExpXiData,tFitPartialAnalysis->GetCentralityType());
-
-        double tLambda_OmegaK = 0.01760*tOverallLambda;  //for now, primary lambda scaled by some factor
-//        double *tPar_OmegaK = AdjustLambdaParam(tPar,tLambda_OmegaK,tNFitParams);
-        double *tPar_OmegaK = new double[8];
-//TODO for now, use same parameters for OmegaK as XiK
-        if(tResOmegaKType==kOmegaKchP || tResOmegaKType==kAOmegaKchM)
-        { 
-          tPar_OmegaK[0] = 1.0; //TODO lambda=1 here, will be applied in CombinePrimaryWithResiduals method
-          tPar_OmegaK[1] = 2.84;
-          tPar_OmegaK[2] = -1.59;
-          tPar_OmegaK[3] = -0.37;
-          tPar_OmegaK[4] = 5.0;
-          tPar_OmegaK[5] = -0.46;
-          tPar_OmegaK[6] = 1.13;
-          tPar_OmegaK[7] = -2.53;
-        }
-        else if(tResOmegaKType==kOmegaKchM || tResOmegaKType==kAOmegaKchP)
-        {
-          tPar_OmegaK[0] = 1.0; //TODO lambda=1 here, will be applied in CombinePrimaryWithResiduals method
-          tPar_OmegaK[1] = 2.81;
-          tPar_OmegaK[2] = 0.29;
-          tPar_OmegaK[3] = -0.24;
-          tPar_OmegaK[4] = -10.0;
-          tPar_OmegaK[5] = 0.37;
-          tPar_OmegaK[6] = 0.34;
-          tPar_OmegaK[7] = -3.43;
-        }
-        else {tPar_OmegaK[0]=0.; tPar_OmegaK[1]=0.; tPar_OmegaK[2]=0.; tPar_OmegaK[3]=0.; tPar_OmegaK[4]=0.; tPar_OmegaK[5]=0.; tPar_OmegaK[6]=0.; tPar_OmegaK[7]=0.;}
-        td1dVec tResidual_OmegaK = GetChargedResidualCorrelation(tResOmegaKType,tPar_OmegaK,tKStarBinCenters,tUseExpXiData,tFitPartialAnalysis->GetCentralityType());
-
-        vector<double> tLambdas{tPar[0],tLambda_SigK,tLambda_Xi0K,tLambda_XiCK,tLambda_OmegaK};
-        td2dVec tAllCfs{tPrimaryFitCfContent,tResidual_SigK,tResidual_Xi0K,tResidual_XiCK,tResidual_OmegaK};
-        tFitCfContent = CombinePrimaryWithResiduals(tLambdas, tAllCfs);
-        if(fReturnPrimaryWithResidualsToAnalyses) tFitPairAnalysis->SetPrimaryWithResiduals(tFitCfContent);
-
-        delete[] tPar_SigK;
-        delete[] tPar_Xi0K;
-        delete[] tPar_XiCK;
-        delete[] tPar_OmegaK;
-      }
-*/
-      if(fIncludeResidualCorrelations) tFitCfContent = GetFitCfIncludingResiduals(tFitPairAnalysis, tOverallLambda, tKStarBinCenters, tPrimaryFitCfContent, tPar, tNFitParams);
+      if(fIncludeResidualCorrelations) tFitCfContent = GetFitCfIncludingResiduals(tFitPairAnalysis, tOverallLambda, fKStarBinCenters, tPrimaryFitCfContent, tPar, tNFitParams);
       else tFitCfContent = tPrimaryFitCfContent;
 
 
-      if(fApplyMomResCorrection) tCorrectedFitCfContent = ApplyMomResCorrection(tFitCfContent, tKStarBinCenters, tMomResMatrix);
+      if(fApplyMomResCorrection) tCorrectedFitCfContent = ApplyMomResCorrection(tFitCfContent, fKStarBinCenters, tMomResMatrix);
       else tCorrectedFitCfContent = tFitCfContent;
 
       if(fApplyNonFlatBackgroundCorrection)
       {
         TF1* tNonFlatBgd = tFitPartialAnalysis->GetNonFlatBackground(fNonFlatBgdFitType/*,0.60,0.90*/);
-        ApplyNonFlatBackgroundCorrection(tCorrectedFitCfContent, tKStarBinCenters, tNonFlatBgd);
+        ApplyNonFlatBackgroundCorrection(tCorrectedFitCfContent, fKStarBinCenters, tNonFlatBgd);
       }
 
       fCorrectedFitVecs[iAnaly][iPartAn] = tCorrectedFitCfContent;
       ApplyNormalization(tPar[5], tCorrectedFitCfContent);
 
-      for(int ix=0; ix < tNbinsXToFit; ix++)
+      for(int ix=0; ix < fNbinsXToFit; ix++)
       {
-        if(tRejectOmega && (tKStarBinCenters[ix] > tRejectOmegaLow) && (tKStarBinCenters[ix] < tRejectOmegaHigh)) {fChi2+=0;}
+        if(tRejectOmega && (fKStarBinCenters[ix] > tRejectOmegaLow) && (fKStarBinCenters[ix] < tRejectOmegaHigh)) {fChi2+=0;}
         else
         {
           if(tNumContent[ix]!=0 && tDenContent[ix]!=0 && tCorrectedFitCfContent[ix]!=0) //even if only in one single bin, t*Content=0 causes fChi2->nan
@@ -886,6 +732,7 @@ void LednickyFitter::CalculateFitFunction(int &npar, double &chi2, double *par)
 //________________________________________________________________________________________________________________
 void LednickyFitter::CalculateFitFunctionOnce(int &npar, double &chi2, double *par, double *parErr, double aChi2, int aNDF)
 {
+  InitializeFitter();
   LednickyFitter::CalculateFitFunction(npar, chi2, par);
 
   double tFitParams[5];
@@ -978,12 +825,102 @@ TF1* LednickyFitter::CreateFitFunction(int aAnalysisNumber, double *par, double 
   return ReturnFunction;
 }
 
+//________________________________________________________________________________________________________________
+void LednickyFitter::InitializeFitter()
+{
+  cout << "----- Initializing fitter -----" << endl;
+
+  fNbinsXToBuild = 0;
+  fNbinsXToFit = 0;
+  fKStarBinWidth = 0.;
+  fKStarBinCenters.clear();
+  //-------------------------
+  int tTempNbinsXToFit = 0;  //This should equal fNbinsXToFit, but keep it for consistency/sanity check
+  int tTempNbinsXToBuild = 0;  //This should equal fNbinsXToBuild, but keep it for consistency/sanity check
+  int tNbinsXToBuildMomResCrctn=0;
+  int tNbinsXToBuildResiduals=0;
+
+  //----- Set everything using first partial analysis, check consistency in loops below -----
+  fNbinsXToFit = fFitSharedAnalyses->GetFitPairAnalysis(0)->GetFitPartialAnalysis(0)->GetKStarCfLite()->Num()->FindBin(fMaxFitKStar);
+  if(fFitSharedAnalyses->GetFitPairAnalysis(0)->GetFitPartialAnalysis(0)->GetKStarCfLite()->Num()->GetBinLowEdge(fNbinsXToFit) == fMaxFitKStar) fNbinsXToFit--;
+
+  if(fApplyMomResCorrection) tNbinsXToBuildMomResCrctn = fFitSharedAnalyses->GetFitPairAnalysis(0)->GetModelKStarTrueVsRecMixed()->GetNbinsX();
+  if(fIncludeResidualCorrelations) tNbinsXToBuildResiduals = fFitSharedAnalyses->GetFitPairAnalysis(0)->GetTransformMatrix(0)->GetNbinsX();
+  fNbinsXToBuild = std::max({tNbinsXToBuildMomResCrctn, tNbinsXToBuildResiduals, fNbinsXToFit});
+
+  fKStarBinWidth = fFitSharedAnalyses->GetFitPairAnalysis(0)->GetFitPartialAnalysis(0)->GetKStarCfLite()->Num()->GetXaxis()->GetBinWidth(1);
+  //-------------------------------------------------------------------------------------------
+
+  for(int iAnaly=0; iAnaly<fNAnalyses; iAnaly++)
+  {
+    FitPairAnalysis* tFitPairAnalysis = fFitSharedAnalyses->GetFitPairAnalysis(iAnaly);
+    TH2* tMomResMatrix = NULL;
+    if(fApplyMomResCorrection)
+    {
+      tMomResMatrix = tFitPairAnalysis->GetModelKStarTrueVsRecMixed();
+      assert(tMomResMatrix);
+      tTempNbinsXToBuild = tMomResMatrix->GetNbinsX();
+      assert(tTempNbinsXToBuild == fNbinsXToBuild);
+    }
+
+    int tNFitPartialAnalysis = tFitPairAnalysis->GetNFitPartialAnalysis();
+    for(int iPartAn=0; iPartAn<tNFitPartialAnalysis; iPartAn++)
+    {
+      FitPartialAnalysis* tFitPartialAnalysis = tFitPairAnalysis->GetFitPartialAnalysis(iPartAn);
+      CfLite* tKStarCfLite = tFitPartialAnalysis->GetKStarCfLite();
+
+      TH1* tNum = tKStarCfLite->Num();
+      TH1* tDen = tKStarCfLite->Den();
+      TH1* tCf = tKStarCfLite->Cf();
+
+      assert(tNum->GetXaxis()->GetBinWidth(1) == tDen->GetXaxis()->GetBinWidth(1));
+      assert(tNum->GetXaxis()->GetBinWidth(1) == tCf->GetXaxis()->GetBinWidth(1));
+      assert(tNum->GetXaxis()->GetBinWidth(1) == fKStarBinWidth);
+      //make sure tNum and tDen and tCf have same bin size as tMomResMatrix
+      if(fApplyMomResCorrection)
+      {
+        assert(tNum->GetXaxis()->GetBinWidth(1) == tMomResMatrix->GetXaxis()->GetBinWidth(1));
+        assert(tNum->GetXaxis()->GetBinWidth(1) == tMomResMatrix->GetYaxis()->GetBinWidth(1));
+      }
+      //make sure tNum and tDen and tCf have same bin size as residuals
+      if(fIncludeResidualCorrelations)
+      {
+        assert(tNum->GetXaxis()->GetBinWidth(1) == tFitPairAnalysis->GetTransformMatrix(0)->GetXaxis()->GetBinWidth(1));
+        assert(tNum->GetXaxis()->GetBinWidth(1) == tFitPairAnalysis->GetTransformMatrix(0)->GetYaxis()->GetBinWidth(1));
+      }
+
+      //make sure tNum and tDen have same number of bins
+      assert(tNum->GetNbinsX() == tDen->GetNbinsX());
+      assert(tNum->GetNbinsX() == tCf->GetNbinsX());
+
+      tTempNbinsXToFit = tNum->FindBin(fMaxFitKStar);
+      if(tNum->GetBinLowEdge(tTempNbinsXToFit) == fMaxFitKStar) tTempNbinsXToFit--;
+
+      if(tTempNbinsXToFit > tNum->GetNbinsX()) {tTempNbinsXToFit = tNum->GetNbinsX();}  //in case I accidentally include an overflow bin in nbinsXToFit
+      assert(tTempNbinsXToFit == fNbinsXToFit);
+
+      if(!fApplyMomResCorrection && !fIncludeResidualCorrelations) fNbinsXToBuild = fNbinsXToFit;
+
+      if(iAnaly==0 && iPartAn==0)
+      {
+        fKStarBinCenters.resize(fNbinsXToBuild,0.);
+        for(int ix=1; ix <= fNbinsXToBuild; ix++)
+        {
+          fKStarBinCenters[ix-1] = tNum->GetXaxis()->GetBinCenter(ix);
+
+        }
+      }
+    }
+  }
+}
+
 
 //________________________________________________________________________________________________________________
 void LednickyFitter::DoFit()
 {
+  InitializeFitter();
+
   cout << "*****************************************************************************" << endl;
-  //cout << "Starting to fit " << fCfName << endl;
   cout << "Starting to fit " << endl;
   cout << "*****************************************************************************" << endl;
 

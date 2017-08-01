@@ -89,7 +89,7 @@ public:
   td1dVec GetCoulombParentCorrelation(int aAnalysisNumber, double *aParentCfParams, vector<double> &aKStarBinCenters, CentralityType aCentType=k0010);
 
 
-  //inline (i.e. simple) functions
+  //inline functions
 
   WaveFunction* GetWaveFunctionObject();
   void SetTurnOffCoulomb(bool aTurnOffCoulomb);

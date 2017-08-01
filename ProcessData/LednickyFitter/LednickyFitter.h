@@ -54,6 +54,9 @@ class FitSharedAnalyses;
 #include "ChargedResidualCf.h"
 class ChargedResidualCf;
 
+#include "NeutralResidualCf.h"
+class NeutralResidualCf;
+
 class LednickyFitter {
 
 public:
@@ -78,7 +81,7 @@ public:
   vector<double> GetNeutralResidualCorrelation(double *aParentCfParams, vector<double> &aKStarBinCenters, TH2* aTransformMatrix);
   vector<double> GetChargedParentCorrelation(AnalysisType aResidualType, double *aParentCfParams, vector<double> &aKStarBinCenters, bool aUseExpXiData=false, CentralityType aCentType=k0010);
   vector<double> GetChargedResidualCorrelation(AnalysisType aResidualType, double *aParentCfParams, vector<double> &aKStarBinCenters, bool aUseExpXiData=false, CentralityType aCentType=k0010);
-  TH1D* Convert1dVecToHist(td1dVec &aCfVec, td1dVec &aKStarBinCenters, TString aTitle = "tCf");
+  static TH1D* Convert1dVecToHist(td1dVec &aCfVec, td1dVec &aKStarBinCenters, TString aTitle = "tCf");
   TH1D* GetNeutralParentCorrelationHistogram(double *aParentCfParams, vector<double> &aKStarBinCenters, TString aTitle = "tParentCf");
   TH1D* GetNeutralResidualCorrelationHistogram(double *aParentCfParams, vector<double> &aKStarBinCenters, TH2* aTransformMatrix, TString aTitle = "tCf");
   TH1D* GetChargedParentCorrelationHistogram(AnalysisType aResidualType, double *aParentCfParams, vector<double> &aKStarBinCenters, bool aUseExpXiData=false, CentralityType aCentType=k0010, TString aTitle = "tParentCf");
@@ -92,7 +95,7 @@ public:
   void CalculateFitFunction(int &npar, double &chi2, double *par);
   void CalculateFitFunctionOnce(int &npar, double &chi2, double *par, double *parErr, double aChi2, int aNDF);
 
-
+  void InitializeFitter();  //Called within DoFit
   void DoFit();
   TF1* CreateFitFunction(TString aName, int aAnalysisNumber);
   TF1* CreateFitFunction(int aAnalysisNumber, double *par, double *parErr, double aChi2, int aNDF);  //special case, used with PlotAllFitsCentral.C
@@ -123,6 +126,10 @@ protected:
   td3dVec fCorrectedFitVecs;
 
   double fMaxFitKStar;
+  int fNbinsXToBuild;
+  int fNbinsXToFit;
+  double fKStarBinWidth;
+  td1dVec fKStarBinCenters;
   //vector<double> fMaxFitKStarVec;
 
   bool fRejectOmega;

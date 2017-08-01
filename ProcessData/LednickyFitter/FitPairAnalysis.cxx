@@ -48,6 +48,7 @@ FitPairAnalysis::FitPairAnalysis(TString aAnalysisName, vector<FitPartialAnalysi
   fModelKStarHeavyCfFakeIdeal(0),
   fModelCfFakeIdealCfFakeRatio(0),
   fTransformMatrices(0),
+  fTransformStorageMapping(0),
 
   fPrimaryWithResiduals(0)
 
@@ -110,6 +111,7 @@ FitPairAnalysis::FitPairAnalysis(TString aFileLocationBase, AnalysisType aAnalys
   fModelKStarHeavyCfFakeIdeal(0),
   fModelCfFakeIdealCfFakeRatio(0),
   fTransformMatrices(0),
+  fTransformStorageMapping(0),
 
   fPrimaryWithResiduals(0)
 
@@ -183,6 +185,7 @@ FitPairAnalysis::FitPairAnalysis(TString aFileLocationBase, TString aFileLocatio
   fModelKStarHeavyCfFakeIdeal(0),
   fModelCfFakeIdealCfFakeRatio(0),
   fTransformMatrices(0),
+  fTransformStorageMapping(0),
 
   fPrimaryWithResiduals(0)
 
@@ -727,6 +730,7 @@ void FitPairAnalysis::LoadTransformMatrices(int aRebin, TString aFileLocation)
   TString tName1Omega = TString("OmegaTo");
 
   TString tFullNameSig, tFullNameXiC, tFullNameXi0, tFullNameOmega;
+  TString tFullNameSigStP, tFullNameSigStM, tFullNameSigSt0;
 
   switch(fAnalysisType) {
   case kLamKchP:
@@ -735,6 +739,10 @@ void FitPairAnalysis::LoadTransformMatrices(int aRebin, TString aFileLocation)
     tFullNameXiC = TString("f") + tName1XiC + tName2;
     tFullNameXi0 = TString("f") + tName1Xi0 + tName2;
     tFullNameOmega = TString("f") + tName1Omega + tName2;
+
+    tFullNameSigStP = TString("fSigStPTo") + tName2;
+    tFullNameSigStM = TString("fSigStMTo") + tName2;
+    tFullNameSigSt0 = TString("fSigSt0To") + tName2;
     break;
 
   case kALamKchP:
@@ -743,12 +751,52 @@ void FitPairAnalysis::LoadTransformMatrices(int aRebin, TString aFileLocation)
     tFullNameXiC = TString("fA") + tName1XiC + tName2;
     tFullNameXi0 = TString("fA") + tName1Xi0 + tName2;
     tFullNameOmega = TString("fA") + tName1Omega + tName2;
+
+    tFullNameSigStP = TString("fASigStMTo") + tName2;
+    tFullNameSigStM = TString("fASigStPTo") + tName2;
+    tFullNameSigSt0 = TString("fASigSt0To") + tName2;
     break;
 
   default:
     cout << "ERROR:  fAnalysisType = " << fAnalysisType << " is not apropriate" << endl << endl;
     assert(0);
   }
+
+  TString tFullNameLamKSt0, tFullNameSigKSt0, tFullNameXiCKSt0, tFullNameXi0KSt0;
+  switch(fAnalysisType) {
+  case kLamKchP:
+    tFullNameLamKSt0 = TString("fLamKSt0To") + tName2;
+    tFullNameSigKSt0 = TString("fSigKSt0To") + tName2;
+    tFullNameXiCKSt0 = TString("fXiCKSt0To") + tName2;
+    tFullNameXi0KSt0 = TString("fXi0KSt0To") + tName2;
+    break;
+
+  case kLamKchM:
+    tFullNameLamKSt0 = TString("fLamAKSt0To") + tName2;
+    tFullNameSigKSt0 = TString("fSigAKSt0To") + tName2;
+    tFullNameXiCKSt0 = TString("fXiCAKSt0To") + tName2;
+    tFullNameXi0KSt0 = TString("fXi0AKSt0To") + tName2;
+    break;
+
+  case kALamKchP:
+    tFullNameLamKSt0 = TString("fALamKSt0To") + tName2;
+    tFullNameSigKSt0 = TString("fASigKSt0To") + tName2;
+    tFullNameXiCKSt0 = TString("fAXiCKSt0To") + tName2;
+    tFullNameXi0KSt0 = TString("fAXi0KSt0To") + tName2;
+    break;
+
+  case kALamKchM:
+    tFullNameLamKSt0 = TString("fALamAKSt0To") + tName2;
+    tFullNameSigKSt0 = TString("fASigAKSt0To") + tName2;
+    tFullNameXiCKSt0 = TString("fAXiCAKSt0To") + tName2;
+    tFullNameXi0KSt0 = TString("fAXi0AKSt0To") + tName2;
+    break;
+
+  default:
+    cout << "ERROR:  fAnalysisType = " << fAnalysisType << " is not apropriate" << endl << endl;
+    assert(0);
+  }
+
 
   TH2D* tSig = (TH2D*)tFile->Get(tFullNameSig);
     tSig->SetDirectory(0);
@@ -763,11 +811,108 @@ void FitPairAnalysis::LoadTransformMatrices(int aRebin, TString aFileLocation)
     tOmega->SetDirectory(0);
     tOmega->Rebin2D(aRebin,aRebin);
 
+  TH2D* tSigStP = (TH2D*)tFile->Get(tFullNameSigStP);
+    tSigStP->SetDirectory(0);
+    tSigStP->Rebin2D(aRebin,aRebin);
+  TH2D* tSigStM = (TH2D*)tFile->Get(tFullNameSigStM);
+    tSigStM->SetDirectory(0);
+    tSigStM->Rebin2D(aRebin,aRebin);
+  TH2D* tSigSt0 = (TH2D*)tFile->Get(tFullNameSigSt0);
+    tSigSt0->SetDirectory(0);
+    tSigSt0->Rebin2D(aRebin,aRebin);
+
+  TH2D* tLamKSt0 = (TH2D*)tFile->Get(tFullNameLamKSt0);
+    tLamKSt0->SetDirectory(0);
+    tLamKSt0->Rebin2D(aRebin,aRebin);
+  TH2D* tSigKSt0 = (TH2D*)tFile->Get(tFullNameSigKSt0);
+    tSigKSt0->SetDirectory(0);
+    tSigKSt0->Rebin2D(aRebin,aRebin);
+  TH2D* tXiCKSt0 = (TH2D*)tFile->Get(tFullNameXiCKSt0);
+    tXiCKSt0->SetDirectory(0);
+    tXiCKSt0->Rebin2D(aRebin,aRebin);
+  TH2D* tXi0KSt0 = (TH2D*)tFile->Get(tFullNameXi0KSt0);
+    tXi0KSt0->SetDirectory(0);
+    tXi0KSt0->Rebin2D(aRebin,aRebin);
+
   fTransformMatrices.clear();
   fTransformMatrices.push_back((TH2D*)tSig);
   fTransformMatrices.push_back((TH2D*)tXiC);
   fTransformMatrices.push_back((TH2D*)tXi0);
   fTransformMatrices.push_back((TH2D*)tOmega);
+
+  fTransformMatrices.push_back((TH2D*)tSigStP);
+  fTransformMatrices.push_back((TH2D*)tSigStM);
+  fTransformMatrices.push_back((TH2D*)tSigSt0);
+
+  fTransformMatrices.push_back((TH2D*)tLamKSt0);
+  fTransformMatrices.push_back((TH2D*)tSigKSt0);
+  fTransformMatrices.push_back((TH2D*)tXiCKSt0);
+  fTransformMatrices.push_back((TH2D*)tXi0KSt0);
+
+  //-----------Build mapping vector------------------------
+  fTransformStorageMapping.clear();
+  switch(fAnalysisType) {
+  case kLamKchP:
+    fTransformStorageMapping.push_back(kResSig0KchP);
+    fTransformStorageMapping.push_back(kResXiCKchP);
+    fTransformStorageMapping.push_back(kResXi0KchP);
+    fTransformStorageMapping.push_back(kResOmegaKchP);
+    fTransformStorageMapping.push_back(kResSigStPKchP);
+    fTransformStorageMapping.push_back(kResSigStMKchP);
+    fTransformStorageMapping.push_back(kResSigSt0KchP);
+    fTransformStorageMapping.push_back(kResLamKSt0);
+    fTransformStorageMapping.push_back(kResSig0KSt0);
+    fTransformStorageMapping.push_back(kResXiCKSt0);
+    fTransformStorageMapping.push_back(kResXi0KSt0);
+    break;
+
+  case kLamKchM:
+    fTransformStorageMapping.push_back(kResSig0KchM);
+    fTransformStorageMapping.push_back(kResXiCKchM);
+    fTransformStorageMapping.push_back(kResXi0KchM);
+    fTransformStorageMapping.push_back(kResOmegaKchM);
+    fTransformStorageMapping.push_back(kResSigStPKchM);
+    fTransformStorageMapping.push_back(kResSigStMKchM);
+    fTransformStorageMapping.push_back(kResSigSt0KchM);
+    fTransformStorageMapping.push_back(kResLamAKSt0);
+    fTransformStorageMapping.push_back(kResSig0AKSt0);
+    fTransformStorageMapping.push_back(kResXiCAKSt0);
+    fTransformStorageMapping.push_back(kResXi0AKSt0);
+    break;
+
+  case kALamKchP:
+    fTransformStorageMapping.push_back(kResASig0KchP);
+    fTransformStorageMapping.push_back(kResAXiCKchP);
+    fTransformStorageMapping.push_back(kResAXi0KchP);
+    fTransformStorageMapping.push_back(kResAOmegaKchP);
+    fTransformStorageMapping.push_back(kResASigStMKchP);
+    fTransformStorageMapping.push_back(kResASigStPKchP);
+    fTransformStorageMapping.push_back(kResASigSt0KchP);
+    fTransformStorageMapping.push_back(kResALamKSt0);
+    fTransformStorageMapping.push_back(kResASig0KSt0);
+    fTransformStorageMapping.push_back(kResAXiCKSt0);
+    fTransformStorageMapping.push_back(kResAXi0KSt0);
+    break;
+
+  case kALamKchM:
+    fTransformStorageMapping.push_back(kResASig0KchM);
+    fTransformStorageMapping.push_back(kResAXiCKchM);
+    fTransformStorageMapping.push_back(kResAXi0KchM);
+    fTransformStorageMapping.push_back(kResAOmegaKchM);
+    fTransformStorageMapping.push_back(kResASigStMKchM);
+    fTransformStorageMapping.push_back(kResASigStPKchM);
+    fTransformStorageMapping.push_back(kResASigSt0KchM);
+    fTransformStorageMapping.push_back(kResALamAKSt0);
+    fTransformStorageMapping.push_back(kResASig0AKSt0);
+    fTransformStorageMapping.push_back(kResAXiCAKSt0);
+    fTransformStorageMapping.push_back(kResAXi0AKSt0);
+    break;
+
+  default:
+    cout << "ERROR:  fAnalysisType = " << fAnalysisType << " is not apropriate" << endl << endl;
+    assert(0);
+  }
+
 }
 
 //________________________________________________________________________________________________________________
@@ -782,6 +927,19 @@ TH2D* FitPairAnalysis::GetTransformMatrix(int aIndex, int aRebin, TString aFileL
 {
   if(fTransformMatrices.size()==0) LoadTransformMatrices(aRebin, aFileLocation);
   return fTransformMatrices[aIndex];
+}
+
+//________________________________________________________________________________________________________________
+TH2D* FitPairAnalysis::GetTransformMatrix(AnalysisType aResidualType, int aRebin, TString aFileLocation)
+{
+  if(fTransformMatrices.size()==0) LoadTransformMatrices(aRebin, aFileLocation);
+  int tIndex = -1;
+  for(int i=0; i<(int)fTransformStorageMapping.size(); i++)
+  {
+    if(aResidualType == fTransformStorageMapping[i]) tIndex = i;
+  }
+  assert(tIndex > -1);
+  return fTransformMatrices[tIndex];
 }
 
 
