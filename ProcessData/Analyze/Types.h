@@ -198,6 +198,7 @@ kXiCKSt0=40, kAXiCAKSt0=41, kXiCAKSt0=42, kAXiCKSt0=43
   //-------------------------------------------------
   extern const char* const cAnalysisBaseTags[63];
   extern const char* const cAnalysisRootTags[63];
+  extern const double cAnalysisLambdaFactors[63];
 //  extern const char* const cResidualBaseTags[44];
 //  extern const char* const cResidualRootTags[44];
   extern const char* const cBFieldTags[7];

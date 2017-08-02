@@ -29,6 +29,7 @@ public:
   int GetNeutralIndex(AnalysisType aResidualType);
   td1dVec GetNeutralResidualCorrelation(AnalysisType aResidualType, double *aParentCfParams);
   td1dVec GetTransformedNeutralResidualCorrelation(AnalysisType aResidualType, double *aParentCfParams);
+  td1dVec CombinePrimaryWithResiduals(double *aCfParams, td1dVec &aPrimaryCf);
 
 
 

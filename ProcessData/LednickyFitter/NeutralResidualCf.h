@@ -4,6 +4,7 @@
 #define NEUTRALRESIDUALCF_H
 
 #include <cassert>
+#include <iostream>
 
 #include "Faddeeva.hh"
 
@@ -30,6 +31,8 @@ public:
   TH1D* GetNeutralResidualCorrelationHistogram(double *aParentCfParams, TString aTitle);
   TH1D* GetTransformedNeutralResidualCorrelationHistogram(double *aParentCfParams, TString aTitle);
 
+  double* AdjustLambdaParam(double *aParamSet, double aNewLambda, int aNEntries=6);
+  td1dVec GetContributionToFitCf(double *aParams);  //Note: aParams[0] should be OverallLambda!
 
   //inline
   AnalysisType GetResidualType();
@@ -37,6 +40,7 @@ public:
 
 protected:
 AnalysisType fResidualType;
+double fLambdaFactor;
 TH2D* fTransformMatrix;
 td1dVec fKStarBinCenters;
 td1dVec fResCf;

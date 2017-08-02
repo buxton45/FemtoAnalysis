@@ -427,6 +427,28 @@ vector<double> LednickyFitter::CombinePrimaryWithResiduals(td1dVec &aLambdaValue
 }
 
 //________________________________________________________________________________________________________________
+td1dVec LednickyFitter::TempCombineChargedWithOthers(td1dVec &aLambdaValues, td2dVec &aChargedCfs, td1dVec &aCombinedCf)
+{
+  assert(aLambdaValues.size()==aChargedCfs.size());
+  for(unsigned int i=1; i<aChargedCfs.size(); i++) assert(aChargedCfs[i-1].size()==aChargedCfs[i].size());
+
+  vector<double> tReturnCf(aChargedCfs[0].size(),0.);
+  for(unsigned int iBin=0; iBin<tReturnCf.size(); iBin++)
+  {
+    tReturnCf[iBin] = aCombinedCf[iBin];
+    for(unsigned int iCf=0; iCf<aChargedCfs.size(); iCf++)
+    {
+      //NOTE:  //TODO confusing definitions of Cf and whatnot in Jai's analysis //TODO TODO TODO TODO
+      if(aChargedCfs[iCf][iBin] > 0.)
+      {
+        tReturnCf[iBin] += aLambdaValues[iCf]*(aChargedCfs[iCf][iBin]-1.0);
+      }
+    }
+  }
+  return tReturnCf;
+}
+
+//________________________________________________________________________________________________________________
 vector<double> LednickyFitter::GetFitCfIncludingResiduals(FitPairAnalysis* aFitPairAnalysis, double aOverallLambda, vector<double> &aKStarBinCenters, vector<double> &aPrimaryFitCfContent, double *aParamSet, int aNFitParams)
 {
   AnalysisType tAnType = aFitPairAnalysis->GetAnalysisType();
@@ -542,12 +564,27 @@ vector<double> LednickyFitter::GetFitCfIncludingResiduals(FitPairAnalysis* aFitP
   vector<double> tFitCfContent = CombinePrimaryWithResiduals(tLambdas, tAllCfs);
   if(fReturnPrimaryWithResidualsToAnalyses) aFitPairAnalysis->SetPrimaryWithResiduals(tFitCfContent);
 
+td1dVec tTempLambdas{tLambda_XiCK,tLambda_OmegaK};
+td2dVec tTempChargedCfs{tResidual_XiCK,tResidual_OmegaK};
+double *tTempPar = AdjustLambdaParam(aParamSet,aOverallLambda,aNFitParams);
+td1dVec tTempPartiallyCombinedCfs = aFitPairAnalysis->CombinePrimaryWithResiduals(tTempPar, aPrimaryFitCfContent);
+td1dVec tTempCombinedCfs = TempCombineChargedWithOthers(tTempLambdas, tTempChargedCfs, tTempPartiallyCombinedCfs);
+assert(tFitCfContent.size() == tTempCombinedCfs.size());
+/*
+for(unsigned int i=0; i<tTempCombinedCfs.size(); i++)
+{
+  cout << "tFitCfContent[" << i << "]    = " << tFitCfContent[i] << endl;
+  cout << "tTempCombinedCfs[" << i << "] = " << tTempCombinedCfs[i] << endl << endl;
+}
+*/
+
   delete[] tPar_SigK;
   delete[] tPar_Xi0K;
   delete[] tPar_XiCK;
   delete[] tPar_OmegaK;
 
-  return tFitCfContent;
+  return tTempCombinedCfs;
+//  return tFitCfContent;
 }
 
 //________________________________________________________________________________________________________________
@@ -641,7 +678,7 @@ void LednickyFitter::CalculateFitFunction(int &npar, double &chi2, double *par)
       double *tPar = new double[tNFitParams];
       double tOverallLambda = par[tLambdaMinuitParamNumber];
       //tPar[0] = par[tLambdaMinuitParamNumber];
-      if(fIncludeResidualCorrelations) tPar[0] = 0.29579*tOverallLambda;
+      if(fIncludeResidualCorrelations) tPar[0] = 0.175*tOverallLambda;
       else tPar[0] = tOverallLambda;
       tPar[1] = par[tRadiusMinuitParamNumber];
       tPar[2] = par[tRef0MinuitParamNumber];

@@ -13,6 +13,7 @@ ClassImp(NeutralResidualCf)
 //________________________________________________________________________________________________________________
 NeutralResidualCf::NeutralResidualCf(AnalysisType aResidualType, TH2D* aTransformMatrix, td1dVec &aKStarBinCenters) :
   fResidualType(aResidualType),
+  fLambdaFactor(cAnalysisLambdaFactors[fResidualType]),
   fTransformMatrix(aTransformMatrix),
   fKStarBinCenters(aKStarBinCenters),
   fResCf(0),
@@ -154,4 +155,29 @@ TH1D* NeutralResidualCf::GetTransformedNeutralResidualCorrelationHistogram(doubl
   TH1D* tReturnHist = Convert1dVecToHist(tTransResCf, fKStarBinCenters, aTitle);
   return tReturnHist;
 }
+
+//________________________________________________________________________________________________________________
+double* NeutralResidualCf::AdjustLambdaParam(double *aParamSet, double aNewLambda, int aNEntries)
+{
+  double *tReturnArray = new double[aNEntries];
+  tReturnArray[0] = aNewLambda*aParamSet[0];
+  for(int i=1; i<aNEntries; i++) tReturnArray[i] = aParamSet[i];
+
+  return tReturnArray;
+}
+
+
+
+//________________________________________________________________________________________________________________
+td1dVec NeutralResidualCf::GetContributionToFitCf(double *aParams)
+{
+  double* tNewParams = AdjustLambdaParam(aParams, fLambdaFactor);
+  td1dVec tReturnVec = GetTransformedNeutralResidualCorrelation(tNewParams);
+  for(unsigned int i=0; i<tReturnVec.size(); i++) tReturnVec[i] -= 1.;
+  return tReturnVec;
+}
+
+
+
+
 

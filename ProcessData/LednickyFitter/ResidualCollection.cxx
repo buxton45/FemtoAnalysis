@@ -92,8 +92,27 @@ td1dVec ResidualCollection::GetTransformedNeutralResidualCorrelation(AnalysisTyp
   return fNeutralCfCollection[tIndex].GetTransformedNeutralResidualCorrelation(aParentCfParams);
 }
 
+//________________________________________________________________________________________________________________
+td1dVec ResidualCollection::CombinePrimaryWithResiduals(double *aCfParams, td1dVec &aPrimaryCf)
+{
+  td2dVec tCfs;
+  tCfs.push_back(aPrimaryCf);
+  for(unsigned int iResCf=0; iResCf<fNeutralCfCollection.size(); iResCf++) tCfs.push_back(fNeutralCfCollection[iResCf].GetContributionToFitCf(aCfParams));
+  for(unsigned int i=1; i<tCfs.size(); i++) assert(tCfs[i-1].size()==tCfs[i].size());
 
-
+  td1dVec tReturnCf(tCfs[0].size(), 0.);
+  for(unsigned int iBin=0; iBin<tReturnCf.size(); iBin++)
+  {
+    for(unsigned int iCf=0; iCf<tCfs.size(); iCf++)
+    {
+      if( (iCf==0 && tCfs[iCf][iBin] > 0.) || (iCf>0 && tCfs[iCf][iBin] > -1.))  //TODO maybe change this to assert to find any cases violating this
+      {
+        tReturnCf[iBin] += tCfs[iCf][iBin];
+      }
+    }
+  }
+  return tReturnCf;
+}
 
 
 
