@@ -1515,6 +1515,166 @@ TCanvas* FitGenerator::DrawKStarCfswFitsAndResiduals(bool aMomResCorrectFit, boo
 }
 
 
+//________________________________________________________________________________________________________________
+TCanvas* FitGenerator::DrawKStarCfswFitsAndResidualsv2(bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, NonFlatBgdFitType aNonFlatBgdFitType, bool aSaveImage, bool aDrawSysErrors, bool aZoomROP)
+{
+  TString tCanvasName = TString("canKStarCfwFitsAndResiduals");
+  if(fGeneratorType==kPairwConj) tCanvasName += TString(cAnalysisBaseTags[fPairType]) + TString("wConj");
+  else if(fGeneratorType==kPair) tCanvasName += TString(cAnalysisBaseTags[fPairType]);
+  else if(fGeneratorType==kConjPair) tCanvasName += TString(cAnalysisBaseTags[fConjPairType]);
+  else assert(0);
+
+  for(unsigned int i=0; i<fCentralityTypes.size(); i++) tCanvasName += TString(cCentralityTags[fCentralityTypes[i]]);
+  if(!aZoomROP) tCanvasName += TString("UnZoomed");
+
+  int tNx=0, tNy=0;
+  if(fNAnalyses == 6) {tNx=2; tNy=3;}
+  else if(fNAnalyses == 4) {tNx=2; tNy=2;}
+  else if(fNAnalyses == 3) {tNx=1; tNy=fNAnalyses;}
+  else if(fNAnalyses == 2 || fNAnalyses==1) {tNx=fNAnalyses; tNy=1;}
+  else assert(0);
+
+  double tXLow = -0.02;
+  double tXHigh = 0.99;
+  double tYLow = 0.71;
+  double tYHigh = 1.09;
+  if(aZoomROP)
+  {
+    tXLow = -0.02;
+    tXHigh = 0.329;
+    tYLow = 0.86;
+    tYHigh = 1.07;
+  }
+
+  CanvasPartition* tCanPart = new CanvasPartition(tCanvasName,tNx,tNy,tXLow,tXHigh,tYLow,tYHigh,0.12,0.0025,0.13,0.0025);
+  tCanPart->SetDrawOptStat(false);
+//  tCanPart->GetCanvas()->SetCanvasSize(1400,1500);
+
+  assert(tNx*tNy == fNAnalyses);
+  int tAnalysisNumber=0;
+  for(int j=0; j<tNy; j++)
+  {
+    for(int i=0; i<tNx; i++)
+    {
+      tAnalysisNumber = j*tNx + i;
+
+      int tColor, tColorTransparent;
+      AnalysisType tAnType = fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetAnalysisType();
+      if(tAnType==kLamK0 || tAnType==kALamK0) tColor=kBlack;
+      else if(tAnType==kLamKchP || tAnType==kALamKchM) tColor=kRed+1;
+      else if(tAnType==kLamKchM || tAnType==kALamKchP) tColor=kBlue+1;
+      else tColor=1;
+
+      tColorTransparent = TColor::GetColorTransparent(tColor,0.2);
+
+      int tColorCorrectFit = kMagenta+1;
+      int tColorNonFlatBgd = kGreen+2;
+
+      //---------------- Residuals ----------------------------------------
+      FitPairAnalysis* tFitPairAnalysis = fSharedAn->GetFitPairAnalysis(tAnalysisNumber);
+      double tOverallLambdaPrimary = tFitPairAnalysis->GetFit()->GetParameter(0);
+      double tRadiusPrimary = tFitPairAnalysis->GetFit()->GetParameter(1);
+      double tReF0Primary = tFitPairAnalysis->GetFit()->GetParameter(2);
+      double tImF0Primary = tFitPairAnalysis->GetFit()->GetParameter(3);
+      double tD0Primary = tFitPairAnalysis->GetFit()->GetParameter(4);
+      CentralityType tCentralityType = tFitPairAnalysis->GetCentralityType();
+
+
+//TODO currently GetCorrectedFitHistv2 is the method which can also include residuals in the fit
+//      TH1* tCorrectedFitHisto = (TH1*)fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetCorrectedFitHisto(aMomResCorrectFit,aNonFlatBgdCorrectFit,false,aNonFlatBgdFitType);
+      TH1F* tCorrectedFitHisto = fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetCorrectedFitHistv2();
+        tCorrectedFitHisto->SetLineWidth(2);
+
+      //Include the Cf with statistical errors, and make sure the binning is the same as the fitted Cf ----------
+      TH1* tHistToPlot;
+      if(aDrawSysErrors)
+      {
+        tHistToPlot = (TH1*)fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetCfwSysErrors();
+          //tHistToPlot->SetFillStyle(0);  //for box error bars to draw correctly
+          tHistToPlot->SetFillColor(tColorTransparent);
+          tHistToPlot->SetFillStyle(1000);
+          tHistToPlot->SetLineColor(0);
+          tHistToPlot->SetLineWidth(0);
+      }
+//      assert(tHistToPlot->GetBinWidth(1) == tDesiredBinWidth);
+      if(aDrawSysErrors) assert(tHistToPlot->GetBinWidth(1) == ((TH1*)fSharedAn->GetKStarCfHeavy(tAnalysisNumber)->GetHeavyCfClone())->GetBinWidth(1));
+      //---------------------------------------------------------------------------------------------------------
+
+      tCanPart->AddGraph(i,j,(TH1*)fSharedAn->GetKStarCfHeavy(tAnalysisNumber)->GetHeavyCfClone(),"",20,tColor,0.5,"ex0");  //ex0 suppresses the error along x
+      tCanPart->AddGraph(i,j,(TF1*)fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetNonFlatBackground(aNonFlatBgdFitType),"",20,tColorNonFlatBgd);
+      tCanPart->AddGraph(i,j,(TF1*)fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetFit(),"");
+      tCanPart->AddGraph(i,j,tCorrectedFitHisto,"",20,tColorCorrectFit,0.5,"lsame");
+      if(aDrawSysErrors) tCanPart->AddGraph(i,j,tHistToPlot,"",20,tColorTransparent,0.5,"e2psame");
+      
+      vector<int> tNeutralResBaseColors{7,8,9,30,33,40,41};
+      vector<int> tNeutralResMarkerStyles{24,25,26,27,28,30,35};
+      vector<int> tChargedResBaseColors{44,46,47,49};
+      vector<int> tChargedResMarkerStyles{36,37,38,40};
+      if((i==0 && j==1) || (i==1 && j==1)) tCanPart->SetupTLegend(TString("Residuals"), i, j, 0.35, 0.10, 0.25, 0.50);
+      for(unsigned int iRes=0; iRes<tFitPairAnalysis->GetResidualCollection()->GetNeutralCollection().size(); iRes++)
+      {
+        AnalysisType tTempResidualType = tFitPairAnalysis->GetResidualCollection()->GetNeutralCollection()[iRes].GetResidualType();
+        TString tTempName = TString(cAnalysisRootTags[tTempResidualType]);
+        TH1D* tTempHist = tFitPairAnalysis->GetResidualCollection()->GetNeutralCollection()[iRes].GetTransformedNeutralResidualCorrelationHistogram(tTempName);
+        tCanPart->AddGraph(i,j,tTempHist,"",tNeutralResMarkerStyles[iRes],tNeutralResBaseColors[iRes],0.75,"ex0same");
+        if(i==0 && j==1) tCanPart->AddLegendEntry(i, j, tTempHist, cAnalysisRootTags[tTempResidualType], "p");
+      }
+      for(unsigned int iRes=0; iRes<tFitPairAnalysis->GetResidualCollection()->GetChargedCollection().size(); iRes++)
+      {
+        AnalysisType tTempResidualType = tFitPairAnalysis->GetResidualCollection()->GetChargedCollection()[iRes].GetResidualType();
+        TString tTempName = TString(cAnalysisRootTags[tTempResidualType]);
+        TH1D* tTempHist = tFitPairAnalysis->GetResidualCollection()->GetChargedCollection()[iRes].GetTransformedChargedResidualCorrelationHistogram(tTempName);
+        tCanPart->AddGraph(i,j,tTempHist,"",tChargedResMarkerStyles[iRes],tChargedResBaseColors[iRes],0.75,"ex0same");
+        if(i==1 && j==1) tCanPart->AddLegendEntry(i, j, tTempHist, cAnalysisRootTags[tTempResidualType], "p");
+      }
+
+      tCanPart->AddGraph(i,j,(TH1*)fSharedAn->GetKStarCfHeavy(tAnalysisNumber)->GetHeavyCfClone(),"",20,tColor,0.5,"ex0same");  //draw again so data on top
+
+      TString tTextAnType = TString(cAnalysisRootTags[fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetAnalysisType()]);
+      TString tTextCentrality = TString(cPrettyCentralityTags[fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetCentralityType()]);
+
+      TString tCombinedText = tTextAnType + TString("  ") +  tTextCentrality;
+      TPaveText* tCombined = tCanPart->SetupTPaveText(tCombinedText,i,j,0.70,0.825,0.15,0.10,63,20);
+      tCanPart->AddPadPaveText(tCombined,i,j);
+
+      if(i==0 && j==0)
+      {
+        TString tTextAlicePrelim = TString("ALICE Preliminary");
+        //TPaveText* tAlicePrelim = tCanPart->SetupTPaveText(tTextAlicePrelim,i,j,0.30,0.85,0.40,0.10,43,15);
+        TPaveText* tAlicePrelim = tCanPart->SetupTPaveText(tTextAlicePrelim,i,j,0.175,0.825,0.40,0.10,43,15);
+        tCanPart->AddPadPaveText(tAlicePrelim,i,j);
+      }
+
+      if(i==1 && j==0)
+      {
+        TString tTextSysInfo = TString("Pb-Pb #sqrt{#it{s}_{NN}} = 2.76 TeV");
+        //TPaveText* tSysInfo = tCanPart->SetupTPaveText(tTextSysInfo,i,j,0.30,0.85,0.40,0.10,43,15);
+        TPaveText* tSysInfo = tCanPart->SetupTPaveText(tTextSysInfo,i,j,0.125,0.825,0.40,0.10,43,15);
+        tCanPart->AddPadPaveText(tSysInfo,i,j);
+      }
+
+      const double* tSysErrors = cSysErrors[fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetAnalysisType()][fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetCentralityType()];
+      bool bDrawAll = false;
+      if(i==0 && j==0) bDrawAll = true;
+      CreateParamFinalValuesText(tCanPart,i,j,(TF1*)fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetFit(),tSysErrors,0.73,0.09,0.25,0.53,43,12.0,bDrawAll);
+    }
+  }
+
+  tCanPart->SetDrawUnityLine(true);
+  tCanPart->DrawAll();
+  tCanPart->DrawXaxisTitle("#it{k}* (GeV/#it{c})");
+  tCanPart->DrawYaxisTitle("#it{C}(#it{k}*)",43,25,0.05,0.85);
+
+  if(aSaveImage)
+  {
+    ExistsSaveLocationBase();
+    tCanPart->GetCanvas()->SaveAs(fSaveLocationBase+tCanvasName+fSaveNameModifier+TString(".pdf"));
+  }
+
+  return tCanPart->GetCanvas();
+}
+
+
 
 
 //________________________________________________________________________________________________________________

@@ -36,7 +36,8 @@ public:
 
   //inline
   AnalysisType GetResidualType();
-
+  TH1D* GetNeutralResidualCorrelationHistogram(TString aTitle="fResCf");
+  TH1D* GetTransformedNeutralResidualCorrelationHistogram(TString aTitle="fTransformedResCf");
 
 protected:
 AnalysisType fResidualType;
@@ -54,5 +55,7 @@ td1dVec fTransformedResCf;
 };
 
 inline AnalysisType NeutralResidualCf::GetResidualType() {return fResidualType;}
+inline TH1D* NeutralResidualCf::GetNeutralResidualCorrelationHistogram(TString aTitle) {return Convert1dVecToHist(fResCf, fKStarBinCenters, aTitle);}
+inline TH1D* NeutralResidualCf::GetTransformedNeutralResidualCorrelationHistogram(TString aTitle) {return Convert1dVecToHist(fTransformedResCf, fKStarBinCenters, aTitle);}
 
 #endif

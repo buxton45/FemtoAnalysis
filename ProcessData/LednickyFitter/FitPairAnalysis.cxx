@@ -1023,6 +1023,6 @@ void FitPairAnalysis::InitiateResidualCollection(td1dVec &aKStarBinCenters)
 {
   vector<TH2D*> aTransformMatrices = GetTransformMatrices();
   vector<AnalysisType> aTransformStorageMapping = GetTransformStorageMapping();
-  fResidualCollection = new ResidualCollection(fAnalysisType, aKStarBinCenters, aTransformMatrices, aTransformStorageMapping);
+  fResidualCollection = new ResidualCollection(fAnalysisType, aKStarBinCenters, aTransformMatrices, aTransformStorageMapping, fCentralityType);
 }
 

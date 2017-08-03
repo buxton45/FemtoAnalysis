@@ -30,7 +30,7 @@ LIBS   = $(shell root-config --libs) -lMinuit
 CFLAGS = $(shell root-config --cflags) -pthread -Wno-deprecated-declarations -std=c++11 -m64 -Wall -I${ANALYZE_DIR} -I${LEDNICKYFITTER_DIR} -I${COULOMBFITTER_DIR} -I${UTILITIES_DIR} -g -O0 -fopenmp
 #CFLAGS = -pthread -Wno-deprecated-declarations -m64 -Wall -I${ANALYZE_DIR} -I${LEDNICKYFITTER_DIR} -g -O0 -I/opt/alice/root/alice_v5-34-30/inst/include #because I have to use c++ 99 
 
-MY_LIBS = $(addprefix build/, MathematicaSession.o WaveFunction.o Interpolator.o ChargedResidualCf.o SimulatedPairCollection.o SimulatedCoulombCf.o CoulombFitter.o GlobalCoulombFitter.o LednickyFitter.o GeneralFitter.o SimpleFitter.o CoulombFitGenerator.o InterpolationHistograms.o FitChi2Histograms.o FitParameter.o FitPartialAnalysis.o FitPairAnalysis.o FitSharedAnalyses.o CfLite.o CfHeavy.o Types.o AnalysisInfo.o Faddeeva.o CanvasPartition.o)
+MY_LIBS = $(addprefix build/, MathematicaSession.o WaveFunction.o Interpolator.o ChargedResidualCf.o SimpleChargedResidualCf.o NeutralResidualCf.o ResidualCollection.o SimulatedPairCollection.o SimulatedCoulombCf.o CoulombFitter.o GlobalCoulombFitter.o LednickyFitter.o GeneralFitter.o SimpleFitter.o CoulombFitGenerator.o InterpolationHistograms.o FitChi2Histograms.o FitParameter.o FitPartialAnalysis.o FitPairAnalysis.o FitSharedAnalyses.o CfLite.o CfHeavy.o Types.o AnalysisInfo.o Faddeeva.o CanvasPartition.o)
 
 BINARIES = runTest runTest2 runFullTest runGlobalCoulomb runXiKch runVaryCoulomb runWPCFVaryCoulomb runWPCFStrongInfluence runWPCFStrongInfluencev2 runCoulombGenerator runBuildInterpolationHistograms runFitLambda runSimpleFitter runProtonCascade runManualFitting
 

@@ -1266,6 +1266,7 @@ td1dVec ChargedResidualCf::GetExpXiData(double aMaxKStar, CentralityType aCentTy
     for(int i=0; i<tNbins; i++) tReturnVec[i] = tExpHist->GetBinContent(i+1);
 
     fExpXiData = tReturnVec;
+    delete tPairAn;
   }
 
   return fExpXiData;

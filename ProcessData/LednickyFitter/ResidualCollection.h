@@ -15,28 +15,30 @@
 #include "NeutralResidualCf.h"
 class NeutralResidualCf;
 
-//#include "ChargedResidualCf.h"
-//class ChargedResidualCf;
+#include "SimpleChargedResidualCf.h"
+class SimpleChargedResidualCf;
 
 using namespace std;
 
 class ResidualCollection {
 
 public:
-  ResidualCollection(AnalysisType aAnalysisType, td1dVec &aKStarBinCenters, vector<TH2D*> aTransformMatrices, vector<AnalysisType> aTransformStorageMapping);
+  ResidualCollection(AnalysisType aAnalysisType, td1dVec &aKStarBinCenters, vector<TH2D*> aTransformMatrices, vector<AnalysisType> aTransformStorageMapping, CentralityType aCentType);
   virtual ~ResidualCollection();
-  void BuildStandardCollection(td1dVec &aKStarBinCenters, vector<TH2D*> aTransformMatrices, vector<AnalysisType> aTransformStorageMapping);
+  void BuildStandardCollection(td1dVec &aKStarBinCenters, vector<TH2D*> aTransformMatrices, vector<AnalysisType> aTransformStorageMapping, CentralityType aCentType);
   int GetNeutralIndex(AnalysisType aResidualType);
   td1dVec GetNeutralResidualCorrelation(AnalysisType aResidualType, double *aParentCfParams);
   td1dVec GetTransformedNeutralResidualCorrelation(AnalysisType aResidualType, double *aParentCfParams);
   td1dVec CombinePrimaryWithResiduals(double *aCfParams, td1dVec &aPrimaryCf);
 
-
+//----Inline functins
+  vector<NeutralResidualCf> GetNeutralCollection();
+  vector<SimpleChargedResidualCf> GetChargedCollection();
 
 protected:
 AnalysisType fAnalysisType;
 vector<NeutralResidualCf> fNeutralCfCollection;
-//vector<ChargedResidualCf> fChargedCfCollection;
+vector<SimpleChargedResidualCf> fChargedCfCollection;
 
 
 #ifdef __ROOT__
@@ -44,6 +46,8 @@ vector<NeutralResidualCf> fNeutralCfCollection;
 #endif
 };
 
+inline vector<NeutralResidualCf> ResidualCollection::GetNeutralCollection() {return fNeutralCfCollection;}
+inline vector<SimpleChargedResidualCf> ResidualCollection::GetChargedCollection() {return fChargedCfCollection;}
 
 
 #endif

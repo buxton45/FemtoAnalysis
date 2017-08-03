@@ -141,6 +141,8 @@ public:
   td1dVec GetNeutralResidualCorrelation(AnalysisType aResidualType, double *aParentCfParams);
   td1dVec GetTransformedNeutralResidualCorrelation(AnalysisType aResidualType, double *aParentCfParams);
   td1dVec CombinePrimaryWithResiduals(double *aCfParams, td1dVec &aPrimaryCf);
+  ResidualCollection* GetResidualCollection();
+
 private:
   AnalysisRunType fAnalysisRunType;
   TString fAnalysisName;
@@ -238,13 +240,9 @@ inline vector<AnalysisType> FitPairAnalysis::GetTransformStorageMapping() {retur
 inline td1dVec FitPairAnalysis::GetNeutralResidualCorrelation(AnalysisType aResidualType, double *aParentCfParams) {return fResidualCollection->GetNeutralResidualCorrelation(aResidualType, aParentCfParams);}
 inline td1dVec FitPairAnalysis::GetTransformedNeutralResidualCorrelation(AnalysisType aResidualType, double *aParentCfParams) {return fResidualCollection->GetTransformedNeutralResidualCorrelation(aResidualType, aParentCfParams);}
 inline td1dVec FitPairAnalysis::CombinePrimaryWithResiduals(double *aCfParams, td1dVec &aPrimaryCf) {return fResidualCollection->CombinePrimaryWithResiduals(aCfParams, aPrimaryCf);}
+inline ResidualCollection* FitPairAnalysis::GetResidualCollection() {return fResidualCollection;}
+
 #endif
-
-
-
-
-
-
 
 
 

@@ -11,10 +11,10 @@ ClassImp(ResidualCollection)
 //________________________________________________________________________________________________________________
 //****************************************************************************************************************
 //________________________________________________________________________________________________________________
-ResidualCollection::ResidualCollection(AnalysisType aAnalysisType, td1dVec &aKStarBinCenters, vector<TH2D*> aTransformMatrices, vector<AnalysisType> aTransformStorageMapping) :
+ResidualCollection::ResidualCollection(AnalysisType aAnalysisType, td1dVec &aKStarBinCenters, vector<TH2D*> aTransformMatrices, vector<AnalysisType> aTransformStorageMapping, CentralityType aCentType) :
   fAnalysisType(aAnalysisType)
 {
-  BuildStandardCollection(aKStarBinCenters,aTransformMatrices,aTransformStorageMapping);
+  BuildStandardCollection(aKStarBinCenters,aTransformMatrices,aTransformStorageMapping,aCentType);
 }
 
 
@@ -25,7 +25,7 @@ ResidualCollection::~ResidualCollection()
 
 
 //________________________________________________________________________________________________________________
-void ResidualCollection::BuildStandardCollection(td1dVec &aKStarBinCenters, vector<TH2D*> aTransformMatrices, vector<AnalysisType> aTransformStorageMapping)
+void ResidualCollection::BuildStandardCollection(td1dVec &aKStarBinCenters, vector<TH2D*> aTransformMatrices, vector<AnalysisType> aTransformStorageMapping, CentralityType aCentType)
 {
   if(aTransformStorageMapping.size() != 11)
   {
@@ -54,7 +54,7 @@ void ResidualCollection::BuildStandardCollection(td1dVec &aKStarBinCenters, vect
        aTransformStorageMapping[i] == kResSigStMKchM || aTransformStorageMapping[i] == kResASigStPKchP) tNeutral = false;
 
     if(tNeutral==true) fNeutralCfCollection.emplace_back(aTransformStorageMapping[i], aTransformMatrices[i], aKStarBinCenters);
-
+    else fChargedCfCollection.emplace_back(aTransformStorageMapping[i], aTransformMatrices[i], aKStarBinCenters, aCentType);
   }
 
 }
@@ -98,6 +98,7 @@ td1dVec ResidualCollection::CombinePrimaryWithResiduals(double *aCfParams, td1dV
   td2dVec tCfs;
   tCfs.push_back(aPrimaryCf);
   for(unsigned int iResCf=0; iResCf<fNeutralCfCollection.size(); iResCf++) tCfs.push_back(fNeutralCfCollection[iResCf].GetContributionToFitCf(aCfParams));
+  for(unsigned int iResCf=0; iResCf<fChargedCfCollection.size(); iResCf++) tCfs.push_back(fChargedCfCollection[iResCf].GetContributionToFitCf(aCfParams[0]));
   for(unsigned int i=1; i<tCfs.size(); i++) assert(tCfs[i-1].size()==tCfs[i].size());
 
   td1dVec tReturnCf(tCfs[0].size(), 0.);

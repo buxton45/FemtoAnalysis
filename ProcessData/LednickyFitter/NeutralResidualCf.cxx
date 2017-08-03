@@ -118,7 +118,8 @@ td1dVec NeutralResidualCf::GetTransformedNeutralResidualCorrelation(double *aPar
   assert(tResCf.size() == (unsigned int)fTransformMatrix->GetNbinsX());
   assert(tResCf.size() == (unsigned int)fTransformMatrix->GetNbinsY());
 
-  vector<double> tTransResCf(tResCf.size(),0.);
+  fTransformedResCf.clear();
+  fTransformedResCf.resize(tResCf.size(),0.);
   vector<double> tNormVec(tResCf.size(),0.);  //TODO once I match bin size, I should be able to call /= by integral, instead of tracking normVec
 
   for(unsigned int i=0; i<tResCf.size(); i++)
@@ -131,12 +132,12 @@ td1dVec NeutralResidualCf::GetTransformedNeutralResidualCorrelation(double *aPar
       tParentPairKStar = fKStarBinCenters[j];
       tParentPairKStarBin = fTransformMatrix->GetYaxis()->FindBin(tParentPairKStar);
 
-      tTransResCf[i] += tResCf[j]*fTransformMatrix->GetBinContent(tDaughterPairKStarBin,tParentPairKStarBin);
+      fTransformedResCf[i] += tResCf[j]*fTransformMatrix->GetBinContent(tDaughterPairKStarBin,tParentPairKStarBin);
       tNormVec[i] += fTransformMatrix->GetBinContent(tDaughterPairKStarBin,tParentPairKStarBin);
     }
-    tTransResCf[i] /= tNormVec[i];
+    fTransformedResCf[i] /= tNormVec[i];
   }
-  return tTransResCf;
+  return fTransformedResCf;
 }
 
 //________________________________________________________________________________________________________________
