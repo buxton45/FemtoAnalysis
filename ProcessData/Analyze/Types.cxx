@@ -130,6 +130,33 @@ const double cAnalysisLambdaFactors[63] = {
 
 };
 
+
+//------------ WHEN ONLY INCLUDING 4 RESIDUALS! ------------------------------------//
+const double cAnalysisLambdaFactorsOLD[63] = {
+/*kLamK0=*/1.000, /*kALamK0=*/1.000,
+/*kLamKchP=*/0.296, /*kALamKchM=*/0.296, /*kLamKchM=*/0.296, /*kALamKchP=*/0.296,
+/*kXiKchP=*/1.000, /*kAXiKchM=*/1.000, /*kXiKchM=*/1.000, /*kAXiKchP=*/1.000,
+/*kXiK0=*/1.000, /*kAXiK0=*/1.000,
+/*kLamLam=*/1.000, /*kALamALam=*/1.000, /*kLamALam=*/1.000,
+/*kLamPiP=*/1.000, /*kALamPiM=*/1.000, /*kLamPiM=*/1.000, /*kALamPiP=*/1.000,
+
+//----- Residual Types -----
+/*kResSig0KchP=*/0.26473, /*kResASig0KchM=*/0.26473, /*kResSig0KchM=*/0.26473, /*kResASig0KchP=*/0.26473,
+/*kResXi0KchP=*/0.19041, /*kResAXi0KchM=*/0.19041, /*kResXi0KchM=*/0.19041, /*kResAXi0KchP=*/0.19041,
+/*kResXiCKchP=*/0.18386, /*kResAXiCKchM=*/0.18386, /*kResXiCKchM=*/0.18386, /*kResAXiCKchP=*/0.18386,
+/*kResOmegaKchP=*/0.01760, /*kResAOmegaKchM=*/0.01760, /*kResOmegaKchM=*/0.01760, /*kResAOmegaKchP=*/0.01760,
+/*kResSigStPKchP=*/0.000, /*kResASigStMKchM=*/0.000, /*kResSigStPKchM=*/0.000, /*kResASigStMKchP=*/0.000,
+/*kResSigStMKchP=*/0.000, /*kResASigStPKchM=*/0.000, /*kResSigStMKchM=*/0.000, /*kResASigStPKchP=*/0.000,
+/*kResSigSt0KchP=*/0.000, /*kResASigSt0KchM=*/0.000, /*kResSigSt0KchM=*/0.000, /*kResASigSt0KchP=*/0.000,
+/*kResLamKSt0=*/0.000, /*kResALamAKSt0=*/0.000, /*kResLamAKSt0=*/0.000, /*kResALamKSt0=*/0.000,
+/*kResSig0KSt0=*/0.000, /*kResASig0AKSt0=*/0.000, /*kResSig0AKSt0=*/0.000, /*kResASig0KSt0=*/0.000,
+/*kResXi0KSt0=*/0.000, /*kResAXi0AKSt0=*/0.000, /*kResXi0AKSt0=*/0.000, /*kResAXi0KSt0=*/0.000,
+/*kResXiCKSt0=*/0.000, /*kResAXiCAKSt0=*/0.000, /*kResXiCAKSt0=*/0.000, /*kResAXiCKSt0=*/0.000
+
+};
+
+
+
 /*
 //enum ResidualType
 const char* const cResidualBaseTags[44] = {

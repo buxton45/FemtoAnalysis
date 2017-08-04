@@ -39,6 +39,8 @@ public:
 
   td1dVec GetContributionToFitCf(double aOverallLambda, double aMaxKStar=1.0, 
                                      TString aFileLocationBase = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cXicKch_20170505_ignoreOnFlyStatus/Results_cXicKch_20170505_ignoreOnFlyStatus");  //Note: aParams[0] should be OverallLambda!
+  TH1D* GetTransformedChargedResidualCorrelationHistogramWithLambdaApplied(TString aTitle, double aOverallLambda, double aMaxKStar=1.0, 
+                                     TString aFileLocationBase = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cXicKch_20170505_ignoreOnFlyStatus/Results_cXicKch_20170505_ignoreOnFlyStatus");
 
   //inline
   AnalysisType GetResidualType();

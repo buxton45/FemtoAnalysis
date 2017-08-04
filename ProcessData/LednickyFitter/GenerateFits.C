@@ -74,6 +74,7 @@ int main(int argc, char **argv)
 //    TCanvas* tCanPrimWithRes = tLamKchP->DrawPrimaryWithResiduals(0,k0010,TString("PrimaryWithResidual_")+TString(cAnalysisBaseTags[tAnType]));
     TCanvas* tCanPrimwFitsAndResidual = tLamKchP->DrawKStarCfswFitsAndResiduals(ApplyMomResCorrection,ApplyNonFlatBackgroundCorrection,tNonFlatBgdFitType,SaveImages);
     TCanvas* tCanPrimwFitsAndResidualv2 = tLamKchP->DrawKStarCfswFitsAndResidualsv2(ApplyMomResCorrection,ApplyNonFlatBackgroundCorrection,tNonFlatBgdFitType,SaveImages);
+tCanPrimwFitsAndResidualv2->SaveAs("test.pdf");
   }
 //-------------------------------------------------------------------------------
   tFullTimer.Stop();

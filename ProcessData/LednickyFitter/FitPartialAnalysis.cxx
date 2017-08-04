@@ -454,9 +454,6 @@ TH1* FitPartialAnalysis::Get1dHisto(TString aHistoName, TString aNewName)
   TH1 *ReturnHisto = (TH1*)tHisto->Clone(aNewName);
     ReturnHisto->SetDirectory(0);
 
-  delete tHisto;
-
-  tDir->Delete();
   delete tDir;
 
   //-----Check to see if Sumw2 has already been called, and if not, call it
@@ -482,9 +479,6 @@ TH1* FitPartialAnalysis::Get1dHisto(TString aFileLocation, TString aHistoName, T
   TH1 *ReturnHisto = (TH1*)tHisto->Clone(aNewName);
     ReturnHisto->SetDirectory(0);
 
-  delete tHisto;
-
-  tDir->Delete();
   delete tDir;
 
   //-----Check to see if Sumw2 has already been called, and if not, call it

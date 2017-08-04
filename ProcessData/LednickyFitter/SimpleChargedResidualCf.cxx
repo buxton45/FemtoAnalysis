@@ -63,8 +63,13 @@ SimpleChargedResidualCf::SimpleChargedResidualCf(AnalysisType aResidualType, TH2
     assert(0);
   }
 
-    TString tName = TString("ExpXiHist_") + TString(cAnalysisBaseTags[fResidualType]) + TString(cCentralityTags[aCentType]);
-cout << "tName = " << tName << endl;
+  TString tName = TString("ExpXiHist_") + TString(cAnalysisBaseTags[fResidualType]) + TString(cCentralityTags[aCentType]);
+  cout << "Building SimpleChargedResidualCf object" << endl;
+  cout << "\tResidualType   = " << cAnalysisBaseTags[fResidualType] << endl;
+  cout << "\tUsing experimental data from " << cAnalysisBaseTags[tAnType] << " analysis" << endl;
+  cout << "\tCentralityType = " << cPrettyCentralityTags[aCentType] << endl;
+  cout << "\tLambdaFactor   = " << fLambdaFactor << endl << endl;
+  
   fPairAn = new FitPairAnalysis(aFileLocationBase,tAnType,aCentType,tRunType,tNFitPartialAnalysis);
   fPairAn->RebinKStarCfHeavy(2,0.32,0.4);
   fExpXiHist = (TH1D*)fPairAn->GetKStarCfHeavy()->GetHeavyCf();
@@ -107,7 +112,6 @@ td1dVec SimpleChargedResidualCf::GetChargedResidualCorrelation(double aMaxKStar,
   int tNbins = std::round(aMaxKStar/fExpXiHist->GetXaxis()->GetBinWidth(1));
   if(fResCf.size()!=tNbins)
   {
-cout << "Creating new fResCf in SimpleChargedResidualCf::GetChargedResidualCorrelation" << endl;
     fResCf.clear();
     fResCf.resize(tNbins,0.);
     for(int i=0; i<tNbins; i++) fResCf[i] = fExpXiHist->GetBinContent(i+1);
@@ -179,7 +183,13 @@ td1dVec SimpleChargedResidualCf::GetContributionToFitCf(double aOverallLambda, d
   return tReturnVec;
 }
 
-
-
+//________________________________________________________________________________________________________________
+TH1D* SimpleChargedResidualCf::GetTransformedChargedResidualCorrelationHistogramWithLambdaApplied(TString aTitle, double aOverallLambda, double aMaxKStar, TString aFileLocationBase)
+{
+  td1dVec tReturnVec = GetContributionToFitCf(aOverallLambda, aMaxKStar, aFileLocationBase);
+  for(unsigned int i=0; i<tReturnVec.size(); i++) tReturnVec[i] += 1.;
+  TH1D* tReturnHist = Convert1dVecToHist(tReturnVec, fKStarBinCenters, aTitle);
+  return tReturnHist;
+}
 
 

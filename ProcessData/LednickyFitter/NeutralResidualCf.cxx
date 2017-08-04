@@ -21,6 +21,10 @@ NeutralResidualCf::NeutralResidualCf(AnalysisType aResidualType, TH2D* aTransfor
 {
   assert(fKStarBinCenters.size() == (unsigned int)fTransformMatrix->GetNbinsX());
   assert(fKStarBinCenters.size() == (unsigned int)fTransformMatrix->GetNbinsY());
+
+  cout << "Building NeutralResidualCf object" << endl;
+  cout << "\tResidualType = " << fResidualType << endl;
+  cout << "\tLambdaFactor = " << fLambdaFactor << endl << endl;
 }
 
 

@@ -542,11 +542,12 @@ vector<double> LednickyFitter::GetFitCfIncludingResiduals(FitPairAnalysis* aFitP
   vector<double> tLambdas{tLambda_Primary,tLambda_SigK,tLambda_Xi0K,tLambda_XiCK,tLambda_OmegaK};
   td2dVec tAllCfs{aPrimaryFitCfContent,tResidual_SigK,tResidual_Xi0K,tResidual_XiCK,tResidual_OmegaK};
   vector<double> tFitCfContent = CombinePrimaryWithResiduals(tLambdas, tAllCfs);
-  if(fReturnPrimaryWithResidualsToAnalyses) aFitPairAnalysis->SetPrimaryWithResiduals(tFitCfContent);
+//  if(fReturnPrimaryWithResidualsToAnalyses) aFitPairAnalysis->SetPrimaryWithResiduals(tFitCfContent);
 
 
 double *tTempPar = AdjustLambdaParam(aParamSet,aOverallLambda,aNFitParams);
 td1dVec tTempCombinedCfs = aFitPairAnalysis->CombinePrimaryWithResiduals(tTempPar, aPrimaryFitCfContent);
+  if(fReturnPrimaryWithResidualsToAnalyses) aFitPairAnalysis->SetPrimaryWithResiduals(tTempCombinedCfs);
 assert(tFitCfContent.size() == tTempCombinedCfs.size());
 /*
 for(unsigned int i=0; i<tTempCombinedCfs.size(); i++)
@@ -656,7 +657,7 @@ void LednickyFitter::CalculateFitFunction(int &npar, double &chi2, double *par)
       double *tPar = new double[tNFitParams];
       double tOverallLambda = par[tLambdaMinuitParamNumber];
       //tPar[0] = par[tLambdaMinuitParamNumber];
-      if(fIncludeResidualCorrelations) tPar[0] = 0.175*tOverallLambda;
+      if(fIncludeResidualCorrelations) tPar[0] = cAnalysisLambdaFactors[tFitPairAnalysis->GetAnalysisType()]*tOverallLambda;
       else tPar[0] = tOverallLambda;
       tPar[1] = par[tRadiusMinuitParamNumber];
       tPar[2] = par[tRef0MinuitParamNumber];

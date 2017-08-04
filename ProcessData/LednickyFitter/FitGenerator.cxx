@@ -1623,7 +1623,7 @@ TCanvas* FitGenerator::DrawKStarCfswFitsAndResidualsv2(bool aMomResCorrectFit, b
       {
         AnalysisType tTempResidualType = tFitPairAnalysis->GetResidualCollection()->GetChargedCollection()[iRes].GetResidualType();
         TString tTempName = TString(cAnalysisRootTags[tTempResidualType]);
-        TH1D* tTempHist = tFitPairAnalysis->GetResidualCollection()->GetChargedCollection()[iRes].GetTransformedChargedResidualCorrelationHistogram(tTempName);
+        TH1D* tTempHist = tFitPairAnalysis->GetResidualCollection()->GetChargedCollection()[iRes].GetTransformedChargedResidualCorrelationHistogramWithLambdaApplied(tTempName, tOverallLambdaPrimary);
         tCanPart->AddGraph(i,j,tTempHist,"",tChargedResMarkerStyles[iRes],tChargedResBaseColors[iRes],0.75,"ex0same");
         if(i==1 && j==1) tCanPart->AddLegendEntry(i, j, tTempHist, cAnalysisRootTags[tTempResidualType], "p");
       }
