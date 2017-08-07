@@ -195,7 +195,12 @@ void FitSystematicAnalysis::RunAllFits(bool aSave, ostream &aOut)
 
     FitGenerator* tFitGenerator = new FitGenerator(fFileLocationBase, fFileLocationBaseMC, fAnalysisType, fCentralityType, kTrainSys, 2, fFitGeneratorType, fShareLambdaParams, fAllShareSingleLambdaParam, tDirNameModifier);
 
-    tFitGenerator->DoFit(fApplyMomResCorrection,fApplyNonFlatBackgroundCorrection,fIncludeResiduals,kLinear);
+    tFitGenerator->SetApplyNonFlatBackgroundCorrection(fApplyNonFlatBackgroundCorrection);
+    tFitGenerator->SetNonFlatBgdFitType(kLinear);
+    tFitGenerator->SetApplyMomResCorrection(fApplyMomResCorrection);
+    tFitGenerator->SetIncludeResidualCorrelations(fIncludeResiduals);
+
+    tFitGenerator->DoFit();
 
 //    OutputCutValues(i,aOut);
 //    tFitGenerator->WriteAllFitParameters(aOut);
@@ -237,7 +242,13 @@ void FitSystematicAnalysis::RunVaryFitRange(bool aSave, ostream &aOut, double aM
   for(int i=0; i<tNRangeValues; i++)
   {
     FitGenerator* tFitGenerator = new FitGenerator(fFileLocationBase, fFileLocationBaseMC, fAnalysisType, fCentralityType, kTrain, 2, fFitGeneratorType, fShareLambdaParams, fAllShareSingleLambdaParam);
-    tFitGenerator->DoFit(fApplyMomResCorrection,fApplyNonFlatBackgroundCorrection,fIncludeResiduals,kLinear,tRangeVec[i]);
+
+    tFitGenerator->SetApplyNonFlatBackgroundCorrection(fApplyNonFlatBackgroundCorrection);
+    tFitGenerator->SetNonFlatBgdFitType(kLinear);
+    tFitGenerator->SetApplyMomResCorrection(fApplyMomResCorrection);
+    tFitGenerator->SetIncludeResidualCorrelations(fIncludeResiduals);
+
+    tFitGenerator->DoFit(tRangeVec[i]);
 
     TString tRangeValue = TString::Format("Max KStar for Fit = %0.4f",tRangeVec[i]);
     vector<TString> tFitParamsVec = tFitGenerator->GetAllFitParametersTStringVector();
@@ -273,7 +284,12 @@ void FitSystematicAnalysis::RunVaryNonFlatBackgroundFit(bool aSave, ostream &aOu
   for(int i=0; i<tNFitTypeValues; i++)
   {
     FitGenerator* tFitGenerator = new FitGenerator(fFileLocationBase, fFileLocationBaseMC, fAnalysisType, fCentralityType, kTrain, 2, fFitGeneratorType, fShareLambdaParams, fAllShareSingleLambdaParam);
-    tFitGenerator->DoFit(fApplyMomResCorrection,fApplyNonFlatBackgroundCorrection,fIncludeResiduals,static_cast<NonFlatBgdFitType>(tFitTypeVec[i]));
+    tFitGenerator->SetApplyNonFlatBackgroundCorrection(fApplyNonFlatBackgroundCorrection);
+    tFitGenerator->SetNonFlatBgdFitType(static_cast<NonFlatBgdFitType>(tFitTypeVec[i]));
+    tFitGenerator->SetApplyMomResCorrection(fApplyMomResCorrection);
+    tFitGenerator->SetIncludeResidualCorrelations(fIncludeResiduals);
+
+    tFitGenerator->DoFit();
 
     TString tRangeValue = TString::Format("Fit Type = %d",tFitTypeVec[i]);
     vector<TString> tFitParamsVec = tFitGenerator->GetAllFitParametersTStringVector();

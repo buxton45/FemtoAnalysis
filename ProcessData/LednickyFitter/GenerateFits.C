@@ -59,7 +59,12 @@ int main(int argc, char **argv)
 
 //TODO!!!!  If I want to apply mom res correction to full fit, I need to give non-central analyses ability to grab
 //           the matrix from the central analyses
-  tLamKchP->DoFit(ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, IncludeResiduals, tNonFlatBgdFitType);
+  tLamKchP->SetApplyNonFlatBackgroundCorrection(ApplyNonFlatBackgroundCorrection);
+  tLamKchP->SetNonFlatBgdFitType(tNonFlatBgdFitType);
+  tLamKchP->SetApplyMomResCorrection(ApplyMomResCorrection);
+  tLamKchP->SetIncludeResidualCorrelations(IncludeResiduals);
+
+  tLamKchP->DoFit();
   TCanvas* tKStarwFitsCan = tLamKchP->DrawKStarCfswFits(ApplyMomResCorrection,ApplyNonFlatBackgroundCorrection,tNonFlatBgdFitType,SaveImages);
 //  TCanvas* tKStarCfs = tLamKchP->DrawKStarCfs(SaveImages);
 //  TCanvas* tModelKStarCfs = tLamKchP->DrawModelKStarCfs(SaveImages);

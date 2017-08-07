@@ -85,7 +85,9 @@ int main(int argc, char **argv)
       for(unsigned int id0=0; id0<td0Values.size(); id0++)
       {
         tFitGen->SetScattParamStartValues(tRef0Values[iRe],tImf0Values[iIm],td0Values[id0]);
-        tFitGen->DoFit(ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection);
+        tFitGen->SetApplyMomResCorrection(ApplyMomResCorrection);
+        tFitGen->SetApplyNonFlatBackgroundCorrection(ApplyNonFlatBackgroundCorrection);
+        tFitGen->DoFit();
         tChi2 = tFitGen->GetChi2();
 
         iCall++;

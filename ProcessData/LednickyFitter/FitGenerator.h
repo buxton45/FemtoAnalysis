@@ -37,7 +37,7 @@ public:
 
   void CreateParamInitValuesText(CanvasPartition *aCanPart, int aNx, int aNy, double aTextXmin=0.75, double aTextYmin=0.75, double aTextWidth=0.15, double aTextHeight=0.10, double aTextFont=63, double aTextSize=15);
   void CreateParamFinalValuesText(CanvasPartition *aCanPart, int aNx, int aNy, double aTextXmin=0.75, double aTextYmin=0.75, double aTextWidth=0.15, double aTextHeight=0.10, double aTextFont=63, double aTextSize=15);
-  void CreateParamFinalValuesText(CanvasPartition *aCanPart, int aNx, int aNy, TF1* aFit, const double* aSysErrors, double aTextXmin=0.75, double aTextYmin=0.75, double aTextWidth=0.15, double aTextHeight=0.10, double aTextFont=63, double aTextSize=15, bool aDrawAll=true);
+  void CreateParamFinalValuesText(AnalysisType aAnType, CanvasPartition *aCanPart, int aNx, int aNy, TF1* aFit, const double* aSysErrors, double aTextXmin=0.75, double aTextYmin=0.75, double aTextWidth=0.15, double aTextHeight=0.10, double aTextFont=63, double aTextSize=15, bool aDrawAll=true);
   void CreateParamFinalValuesTextTwoColumns(CanvasPartition *aCanPart, int aNx, int aNy, TF1* aFit, const double* aSysErrors, double aText1Xmin=0.75, double aText1Ymin=0.75, double aText1Width=0.15, double aText1Height=0.10, bool aDrawText1=true, double aText2Xmin=0.50, double aText2Ymin=0.75, double aText2Width=0.15, double aText2Height=0.10, bool aDrawText2=true, double aTextFont=63, double aTextSize=15);
   void AddTextCorrectionInfo(CanvasPartition *aCanPart, int aNx, int aNy, bool aMomResCorrect, bool aNonFlatCorrect, double aTextXmin=0.75, double aTextYmin=0.75, double aTextWidth=0.15, double aTextHeight=0.10, double aTextFont=63, double aTextSize=15);
 
@@ -71,9 +71,11 @@ public:
   void SetLambdaParamLimits(double aMin, double aMax, bool tConjPair=false, CentralityType aCentType=kMB);
 
   void SetDefaultSharedParameters(bool aSetAllUnbounded=false);
+  void SetDefaultLambdaParametersWithResiduals();
 
   void SetAllParameters();
-  void DoFit(bool aApplyMomResCorrection=false, bool aApplyNonFlatBackgroundCorrection=false, bool aIncludeResiduals=false, NonFlatBgdFitType aNonFlatBgdFitType=kLinear, double aMaxFitKStar=0.3);
+  void InitializeGenerator(double aMaxKStarToFit=0.3);  //Called withith DoFit
+  void DoFit(double aMaxFitKStar=0.3);
   void WriteAllFitParameters(ostream &aOut=std::cout);
   vector<TString> GetAllFitParametersTStringVector();
 
@@ -105,6 +107,11 @@ public:
 
   TH1* GetKStarCf(int aAnalysisNumber);
 
+  void SetApplyNonFlatBackgroundCorrection(bool aApply);
+  void SetNonFlatBgdFitType(NonFlatBgdFitType aNonFlatBgdFitType);
+  void SetApplyMomResCorrection(bool aApplyMomResCorrection);
+  virtual void SetIncludeResidualCorrelations(bool aInclude);
+
 protected:
   TString fSaveLocationBase;
   TString fSaveNameModifier;
@@ -121,6 +128,11 @@ protected:
   bool fShareLambdaParams; //If true, I will still only share across like centralities
   bool fAllShareSingleLambdaParam;  //If true, only one lambda parameter for all analyses
   vector<vector<FitParameter> > fFitParamsPerPad; //Each 1d Vector = [Lambda,Radius,ReF0,ImF0,D0]
+
+  bool fApplyNonFlatBackgroundCorrection;
+  NonFlatBgdFitType fNonFlatBgdFitType;
+  bool fApplyMomResCorrection;
+  bool fIncludeResidualCorrelations;
 
   FitSharedAnalyses* fSharedAn;
   LednickyFitter* fLednickyFitter;
@@ -159,5 +171,10 @@ inline void FitGenerator::SetFitType(FitType aFitType) {fSharedAn->SetFitType(aF
 inline double FitGenerator::GetChi2() {return fLednickyFitter->GetChi2();}
 
 inline TH1* FitGenerator::GetKStarCf(int aAnalysisNumber) {return fSharedAn->GetKStarCfHeavy(aAnalysisNumber)->GetHeavyCfClone();}
+
+inline void FitGenerator::SetApplyNonFlatBackgroundCorrection(bool aApply) {fApplyNonFlatBackgroundCorrection = aApply;}
+inline void FitGenerator::SetNonFlatBgdFitType(NonFlatBgdFitType aNonFlatBgdFitType) {fNonFlatBgdFitType = aNonFlatBgdFitType;}
+inline void FitGenerator::SetApplyMomResCorrection(bool aApplyMomResCorrection) {fApplyMomResCorrection = aApplyMomResCorrection;}
+inline void FitGenerator::SetIncludeResidualCorrelations(bool aInclude) {fIncludeResidualCorrelations = aInclude; SetDefaultLambdaParametersWithResiduals();}
 #endif
 

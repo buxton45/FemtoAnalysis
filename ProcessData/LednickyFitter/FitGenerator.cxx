@@ -44,6 +44,11 @@ FitGenerator::FitGenerator(TString aFileLocationBase, TString aFileLocationBaseM
   fAllShareSingleLambdaParam(aAllShareSingleLambdaParam),
   fFitParamsPerPad(),
 
+  fApplyNonFlatBackgroundCorrection(false),
+  fNonFlatBgdFitType(kLinear),
+  fApplyMomResCorrection(false),
+  fIncludeResidualCorrelations(false),
+
   fSharedAn(0),
   fLednickyFitter(0)
 
@@ -133,6 +138,11 @@ FitGenerator::FitGenerator(TString aFileLocationBase, TString aFileLocationBaseM
   fShareLambdaParams(aShareLambdaParams),
   fAllShareSingleLambdaParam(aAllShareSingleLambdaParam),
   fFitParamsPerPad(),
+
+  fApplyNonFlatBackgroundCorrection(false),
+  fNonFlatBgdFitType(kLinear),
+  fApplyMomResCorrection(false),
+  fIncludeResidualCorrelations(false),
 
   fSharedAn(0),
   fLednickyFitter(0)
@@ -318,7 +328,7 @@ void FitGenerator::CreateParamFinalValuesText(CanvasPartition *aCanPart, int aNx
 }
 
 //________________________________________________________________________________________________________________
-void FitGenerator::CreateParamFinalValuesText(CanvasPartition *aCanPart, int aNx, int aNy, TF1* aFit, const double* aSysErrors, double aTextXmin, double aTextYmin, double aTextWidth, double aTextHeight, double aTextFont, double aTextSize, bool aDrawAll)
+void FitGenerator::CreateParamFinalValuesText(AnalysisType aAnType, CanvasPartition *aCanPart, int aNx, int aNy, TF1* aFit, const double* aSysErrors, double aTextXmin, double aTextYmin, double aTextWidth, double aTextHeight, double aTextFont, double aTextSize, bool aDrawAll)
 {
   int tNx=0, tNy=0;
   if(fNAnalyses == 6) {tNx=2; tNy=3;}
@@ -333,12 +343,14 @@ void FitGenerator::CreateParamFinalValuesText(CanvasPartition *aCanPart, int aNx
   double tLambdaErr, tRadiusErr, tReF0Err, tImF0Err, tD0Err;
 
   tLambda = aFit->GetParameter(0);
+  if(fIncludeResidualCorrelations) tLambda /= cAnalysisLambdaFactors[aAnType];
   tRadius = aFit->GetParameter(1);
   tReF0 = aFit->GetParameter(2);
   tImF0 = aFit->GetParameter(3);
   tD0 = aFit->GetParameter(4);
 
   tLambdaErr = aFit->GetParError(0);
+  if(fIncludeResidualCorrelations) tLambdaErr /= cAnalysisLambdaFactors[aAnType];
   tRadiusErr = aFit->GetParError(1);
   tReF0Err = aFit->GetParError(2);
   tImF0Err = aFit->GetParError(3);
@@ -813,7 +825,7 @@ CanvasPartition* FitGenerator::BuildKStarCfswFitsCanvasPartition(TString aCanvas
 
       bool bDrawAll = false;
       if(i==0 && j==0) bDrawAll = true;
-      CreateParamFinalValuesText(tCanPart,i,j,(TF1*)fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetPrimaryFit(),tSysErrors,0.73,0.09,0.25,0.53,43,12.0,bDrawAll);
+      CreateParamFinalValuesText(tAnType, tCanPart,i,j,(TF1*)fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetPrimaryFit(),tSysErrors,0.73,0.09,0.25,0.53,43,12.0,bDrawAll);
 /*
       bool bDrawText1 = true;
       bool bDrawText2 = false;
@@ -1256,16 +1268,11 @@ TCanvas* FitGenerator::DrawKStarCfswFitsAndResiduals(bool aMomResCorrectFit, boo
       //---------------- Residuals ----------------------------------------
       FitPairAnalysis* tFitPairAnalysis = fSharedAn->GetFitPairAnalysis(tAnalysisNumber);
       double tOverallLambdaPrimary = tFitPairAnalysis->GetPrimaryFit()->GetParameter(0);
-      double tRadiusPrimary = tFitPairAnalysis->GetPrimaryFit()->GetParameter(1);
-      double tReF0Primary = tFitPairAnalysis->GetPrimaryFit()->GetParameter(2);
-      double tImF0Primary = tFitPairAnalysis->GetPrimaryFit()->GetParameter(3);
-      double tD0Primary = tFitPairAnalysis->GetPrimaryFit()->GetParameter(4);
-      CentralityType tCentralityType = tFitPairAnalysis->GetCentralityType();
       
       vector<int> tNeutralResBaseColors{7,8,9,30,33,40,41};
-      vector<int> tNeutralResMarkerStyles{24,25,26,27,28,30,35};
+      vector<int> tNeutralResMarkerStyles{24,25,26,27,28,30,32};
       vector<int> tChargedResBaseColors{44,46,47,49};
-      vector<int> tChargedResMarkerStyles{36,37,38,40};
+      vector<int> tChargedResMarkerStyles{24,25,26,27};
       if((i==0 && j==1) || (i==1 && j==1)) tCanPart->SetupTLegend(TString("Residuals"), i, j, 0.35, 0.10, 0.25, 0.50);
       for(unsigned int iRes=0; iRes<tFitPairAnalysis->GetResidualCollection()->GetNeutralCollection().size(); iRes++)
       {
@@ -1634,6 +1641,43 @@ void FitGenerator::SetDefaultSharedParameters(bool aSetAllUnbounded)
 }
 
 //________________________________________________________________________________________________________________
+void FitGenerator::SetDefaultLambdaParametersWithResiduals()
+{
+  double tLambdaMin = 0.;
+  double tLambdaMax = 1.0;
+  double tLambdaStart = 0.9;
+
+  for(unsigned int iCent=0; iCent<fCentralityTypes.size(); iCent++)
+  {
+
+    if(fGeneratorType==kPair)
+    {
+      SetLambdaParamStartValue(tLambdaStart,false,fCentralityTypes[iCent]);
+      SetLambdaParamLimits(tLambdaMin,tLambdaMax,false,fCentralityTypes[iCent]);  //TODO if(fAllShareSingleLambdaParam), do not need to set lambda for each!
+    }
+
+    else if(fGeneratorType==kConjPair)
+    {
+      SetLambdaParamStartValue(tLambdaStart,false,fCentralityTypes[iCent]);
+      SetLambdaParamLimits(tLambdaMin,tLambdaMax,false,fCentralityTypes[iCent]);  //TODO if(fAllShareSingleLambdaParam), do not need to set lambda for each!
+    }
+
+    else if(fGeneratorType==kPairwConj)
+    {
+      SetLambdaParamStartValue(tLambdaStart,false,fCentralityTypes[iCent]);
+      SetLambdaParamLimits(tLambdaMin,tLambdaMax,false,fCentralityTypes[iCent]);  //TODO if(fAllShareSingleLambdaParam), do not need to set lambda for each!
+      if(!fShareLambdaParams)
+      {
+        SetLambdaParamStartValue(tLambdaStart,true,fCentralityTypes[iCent]);
+        SetLambdaParamLimits(tLambdaMin,tLambdaMax,true,fCentralityTypes[iCent]);  //TODO if(fAllShareSingleLambdaParam), do not need to set lambda for each!
+      }
+    }
+
+    else assert(0);
+  }
+}
+
+//________________________________________________________________________________________________________________
 void FitGenerator::SetAllParameters()
 {
   vector<int> Share01 {0,1};
@@ -1736,28 +1780,31 @@ void FitGenerator::SetAllParameters()
 
 }
 
-
 //________________________________________________________________________________________________________________
-void FitGenerator::DoFit(bool aApplyMomResCorrection, bool aApplyNonFlatBackgroundCorrection, bool aIncludeResiduals, NonFlatBgdFitType aNonFlatBgdFitType, double aMaxFitKStar)
+void FitGenerator::InitializeGenerator(double aMaxKStarToFit)
 {
-  if(aIncludeResiduals)  //since this involves the CoulombFitter, I should place limits on parameters used in interpolations
+  if(fIncludeResidualCorrelations)  //since this involves the CoulombFitter, I should place limits on parameters used in interpolations
   {
     for(unsigned int iCent=0; iCent<fCentralityTypes.size(); iCent++) SetRadiusLimits(1.,15.,iCent);
     SetScattParamLimits({{-10.,10.},{-10.,10.},{-10.,10.}});
   }
 
   SetAllParameters();
-
   fSharedAn->CreateMinuitParameters();
 
-  fLednickyFitter = new LednickyFitter(fSharedAn,aMaxFitKStar);
+  fLednickyFitter = new LednickyFitter(fSharedAn,aMaxKStarToFit);
   fLednickyFitter->GetFitSharedAnalyses()->GetMinuitObject()->SetFCN(GlobalFCN);
-  fLednickyFitter->SetApplyMomResCorrection(aApplyMomResCorrection);
-  fLednickyFitter->SetApplyNonFlatBackgroundCorrection(aApplyNonFlatBackgroundCorrection);
-  fLednickyFitter->SetNonFlatBgdFitType(aNonFlatBgdFitType);
-  fLednickyFitter->SetIncludeResidualCorrelations(aIncludeResiduals);
-  GlobalFitter = fLednickyFitter;
+  fLednickyFitter->SetApplyMomResCorrection(fApplyMomResCorrection);
+  fLednickyFitter->SetApplyNonFlatBackgroundCorrection(fApplyNonFlatBackgroundCorrection);
+  fLednickyFitter->SetNonFlatBgdFitType(fNonFlatBgdFitType);
+  fLednickyFitter->SetIncludeResidualCorrelations(fIncludeResidualCorrelations);
+}
 
+//________________________________________________________________________________________________________________
+void FitGenerator::DoFit(double aMaxFitKStar)
+{
+  InitializeGenerator(aMaxFitKStar);
+  GlobalFitter = fLednickyFitter;
   fLednickyFitter->DoFit();
 }
 
