@@ -119,8 +119,8 @@ public:
   CfHeavy* GetKStarCfHeavy();
   TH1* GetKStarCf();
 
-  void SetFit(TF1* aFit);
-  TF1* GetFit();
+  void SetPrimaryFit(TF1* aFit);
+  TF1* GetPrimaryFit();
 
   void SetupAxis(TAxis* aAxis, double aMin, double aMax, TString aTitle, float aTitleSize, float aTitleOffset, bool aCenterTitle, float aLabelSize, float aLabelOffset, int aNdivisions);
   void SetupAxis(TAxis* aAxis, TString aTitle, float aTitleSize, float aTitleOffset, bool aCenterTitle, float aLabelSize, float aLabelOffset, int aNdivisions);
@@ -160,7 +160,7 @@ private:
   CfHeavy *fKStarCfHeavy;
   TH1* fKStarCf;
   double fKStarMinNorm, fKStarMaxNorm;
-  TF1* fFit;
+  TF1* fPrimaryFit;
 
 
   int fNFitParams;
@@ -223,8 +223,8 @@ inline FitParameter* FitPairAnalysis::GetFitNormParameter(int aFitPartialAnalysi
 inline CfHeavy* FitPairAnalysis::GetKStarCfHeavy() {return fKStarCfHeavy;}
 inline TH1* FitPairAnalysis::GetKStarCf() {return fKStarCf;}
 
-inline void FitPairAnalysis::SetFit(TF1* aFit) {fFit = aFit;}
-inline TF1* FitPairAnalysis::GetFit() {return fFit;}
+inline void FitPairAnalysis::SetPrimaryFit(TF1* aFit) {fPrimaryFit = aFit;}
+inline TF1* FitPairAnalysis::GetPrimaryFit() {return fPrimaryFit;}
 
 inline TH2* FitPairAnalysis::GetModelKStarTrueVsRecMixed() {return fModelKStarTrueVsRecMixed;}
 inline TH1* FitPairAnalysis::GetModelCfFakeIdealCfFakeRatio() {return fModelCfFakeIdealCfFakeRatio;}

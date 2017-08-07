@@ -35,7 +35,7 @@ FitPairAnalysis::FitPairAnalysis(TString aAnalysisName, vector<FitPartialAnalysi
   fKStarCf(0),
   fKStarMinNorm(0.32),
   fKStarMaxNorm(0.40),
-  fFit(0),
+  fPrimaryFit(0),
 
   fNFitParams(0),
   fNFitParamsToShare(5),  //sharing Lambda, Radius, Ref0, Imf0, d0
@@ -99,7 +99,7 @@ FitPairAnalysis::FitPairAnalysis(TString aFileLocationBase, AnalysisType aAnalys
   fKStarCf(0),
   fKStarMinNorm(0.32),
   fKStarMaxNorm(0.40),
-  fFit(0),
+  fPrimaryFit(0),
 
   fNFitParams(0),
   fNFitParamsToShare(5),  //sharing Lambda, Radius, Ref0, Imf0, d0
@@ -174,7 +174,7 @@ FitPairAnalysis::FitPairAnalysis(TString aFileLocationBase, TString aFileLocatio
   fKStarCf(0),
   fKStarMinNorm(0.32),
   fKStarMaxNorm(0.40),
-  fFit(0),
+  fPrimaryFit(0),
 
   fNFitParams(0),
   fNFitParamsToShare(5),  //sharing Lambda, Radius, Ref0, Imf0, d0
@@ -560,8 +560,8 @@ void FitPairAnalysis::DrawFit(const char* aTitle)
   fKStarCf->SetMarkerSize(0.5);
 
   fKStarCf->Draw();
-  fFit->SetLineColor(1);
-  fFit->Draw("same");
+  fPrimaryFit->SetLineColor(1);
+  fPrimaryFit->Draw("same");
 
   TLine *line = new TLine(0,1,0.5,1);
   line->SetLineColor(14);
@@ -669,7 +669,7 @@ TH1F* FitPairAnalysis::GetCorrectedFitHisto(bool aMomResCorrection, bool aNonFla
   {
     for(int i=1; i<=tNbinsX; i++)
     {
-      tUncorrected->SetBinContent(i,fFit->Eval(tUncorrected->GetBinCenter(i)));
+      tUncorrected->SetBinContent(i,fPrimaryFit->Eval(tUncorrected->GetBinCenter(i)));
       tUncorrected->SetBinError(i,0.);
     }
   }

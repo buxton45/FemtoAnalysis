@@ -51,9 +51,6 @@ using std::vector;
 #include "FitSharedAnalyses.h"
 class FitSharedAnalyses;
 
-#include "ChargedResidualCf.h"
-class ChargedResidualCf;
-
 class LednickyFitter {
 
 public:
@@ -70,24 +67,23 @@ public:
 
   void PrintCurrentParamValues(int aNpar, double* aPar);
 
-  bool AreParamsSame(double *aCurrent, double *aNew, int aNEntries);
-  double* AdjustLambdaParam(double *aParamSet, double aNewLambda, int aNEntries);
   void ApplyNonFlatBackgroundCorrection(vector<double> &aCf, vector<double> &aKStarBinCenters, TF1* aNonFlatBgd);
   vector<double> ApplyMomResCorrection(vector<double> &aCf, vector<double> &aKStarBinCenters, TH2* aMomResMatrix);
 
-  vector<double> CombinePrimaryWithResiduals(td1dVec &aLambdaValues, td2dVec &aCfs);
-  vector<double> GetFitCfIncludingResiduals(FitPairAnalysis* aFitPairAnalysis, double aOverallLambda, vector<double> &aKStarBinCenters, vector<double> &aPrimaryFitCfContent, double *aParamSet, int aNFitParams);
+  vector<double> GetFitCfIncludingResiduals(FitPairAnalysis* aFitPairAnalysis, vector<double> &aPrimaryFitCfContent, double *aParamSet);
   void ApplyNormalization(double aNorm, td1dVec &aCf);
 
   double GetChi2Value(int aKStarBin, TH1* aCfToFit, double* aPar);
   double GetPmlValue(double aNumContent, double aDenContent, double aCfContent);
   void CalculateFitFunction(int &npar, double &chi2, double *par);
   void CalculateFitFunctionOnce(int &npar, double &chi2, double *par, double *parErr, double aChi2, int aNDF);
+  TF1* CreateFitFunction(TString aName, int aAnalysisNumber);
+  TF1* CreateFitFunction(int aAnalysisNumber, double *par, double *parErr, double aChi2, int aNDF);  //special case, used with PlotAllFitsCentral.C
 
   void InitializeFitter();  //Called within DoFit
   void DoFit();
-  TF1* CreateFitFunction(TString aName, int aAnalysisNumber);
-  TF1* CreateFitFunction(int aAnalysisNumber, double *par, double *parErr, double aChi2, int aNDF);  //special case, used with PlotAllFitsCentral.C
+  void Finalize();  //Send things back to analyses, etc.
+
 
   vector<double> FindGoodInitialValues();
 

@@ -114,35 +114,6 @@ void LednickyFitter::PrintCurrentParamValues(int aNpar, double* aPar)
 
 
 //________________________________________________________________________________________________________________
-bool LednickyFitter::AreParamsSame(double *aCurrent, double *aNew, int aNEntries)
-{
-  bool tAreSame = true;
-  for(int i=0; i<aNEntries; i++)
-  {
-    if(abs(aCurrent[i]-aNew[i]) > std::numeric_limits< double >::min()) tAreSame = false;
-  }
-
-  if(!tAreSame)
-  {
-    for(int i=0; i<aNEntries; i++) aCurrent[i] = aNew[i];
-  }
-
-  return tAreSame;
-}
-
-//________________________________________________________________________________________________________________
-double* LednickyFitter::AdjustLambdaParam(double *aParamSet, double aNewLambda, int aNEntries)
-{
-  double *tReturnArray = new double[aNEntries];
-  tReturnArray[0] = aNewLambda;
-  for(int i=1; i<aNEntries; i++) tReturnArray[i] = aParamSet[i];
-
-  return tReturnArray;
-}
-
-
-
-//________________________________________________________________________________________________________________
 void LednickyFitter::ApplyNonFlatBackgroundCorrection(vector<double> &aCf, vector<double> &aKStarBinCenters, TF1* aNonFlatBgd)
 {
   assert(aCf.size() == aKStarBinCenters.size());
@@ -188,40 +159,9 @@ vector<double> LednickyFitter::ApplyMomResCorrection(vector<double> &aCf, vector
 
 
 //________________________________________________________________________________________________________________
-vector<double> LednickyFitter::CombinePrimaryWithResiduals(td1dVec &aLambdaValues, td2dVec &aCfs)
+vector<double> LednickyFitter::GetFitCfIncludingResiduals(FitPairAnalysis* aFitPairAnalysis, vector<double> &aPrimaryFitCfContent, double *aParamSet)
 {
-  assert(aLambdaValues.size()==aCfs.size());
-  for(unsigned int i=1; i<aCfs.size(); i++) assert(aCfs[i-1].size()==aCfs[i].size());
-
-  vector<double> tReturnCf(aCfs[0].size(),0.);
-  for(unsigned int iBin=0; iBin<tReturnCf.size(); iBin++)
-  {
-    tReturnCf[iBin] = 1.;
-    for(unsigned int iCf=0; iCf<aCfs.size(); iCf++)
-    {
-      //NOTE:  //TODO confusing definitions of Cf and whatnot in Jai's analysis //TODO TODO TODO TODO
-      if(aCfs[iCf][iBin] > 0.)
-      {
-        if(iCf==0) //Special treatment for primary //TODO
-        {
-          tReturnCf[iBin] += aCfs[iCf][iBin]-1.0;
-        }
-        else
-        {
-          tReturnCf[iBin] += aLambdaValues[iCf]*(aCfs[iCf][iBin]-1.0);
-        }
-      }
-    }
-  }
-  return tReturnCf;
-}
-
-
-//________________________________________________________________________________________________________________
-vector<double> LednickyFitter::GetFitCfIncludingResiduals(FitPairAnalysis* aFitPairAnalysis, double aOverallLambda, vector<double> &aKStarBinCenters, vector<double> &aPrimaryFitCfContent, double *aParamSet, int aNFitParams)
-{
-  double *tTempPar = AdjustLambdaParam(aParamSet,aOverallLambda,aNFitParams);
-  td1dVec tFitCfContent = aFitPairAnalysis->CombinePrimaryWithResiduals(tTempPar, aPrimaryFitCfContent);
+  td1dVec tFitCfContent = aFitPairAnalysis->CombinePrimaryWithResiduals(aParamSet, aPrimaryFitCfContent);
   if(fReturnPrimaryWithResidualsToAnalyses) aFitPairAnalysis->SetPrimaryWithResiduals(tFitCfContent);
 
   return tFitCfContent;
@@ -267,10 +207,7 @@ void LednickyFitter::CalculateFitFunction(int &npar, double &chi2, double *par)
   double tRejectOmegaHigh = 0.23;
 
   int tNFitParPerAnalysis = 5;
-//  double *tCurrentFitPar = new double[tNFitParPerAnalysis];
-//  for(int i=0; i<tNFitParPerAnalysis; i++) tCurrentFitPar[i] = 0.;
 
-//  vector<double> tPrimaryFitCfContentUnNorm(fNbinsXToBuild,0.);
   vector<double> tPrimaryFitCfContent(fNbinsXToBuild,0.);
   vector<double> tNumContent(fNbinsXToBuild,0.);
   vector<double> tDenContent(fNbinsXToBuild,0.);
@@ -315,26 +252,25 @@ void LednickyFitter::CalculateFitFunction(int &npar, double &chi2, double *par)
 
       assert(tNFitParams == 6);
       //NOTE: CANNOT use sizeof(tPar)/sizeof(tPar[0]) trick here becasue tPar is pointer
-      double *tPar = new double[tNFitParams];
-      double tOverallLambda = par[tLambdaMinuitParamNumber];
-      //tPar[0] = par[tLambdaMinuitParamNumber];
-      if(fIncludeResidualCorrelations) tPar[0] = cAnalysisLambdaFactors[tFitPairAnalysis->GetAnalysisType()]*tOverallLambda;
-      else tPar[0] = tOverallLambda;
-      tPar[1] = par[tRadiusMinuitParamNumber];
-      tPar[2] = par[tRef0MinuitParamNumber];
-      tPar[3] = par[tImf0MinuitParamNumber];
-      tPar[4] = par[td0MinuitParamNumber];
-      tPar[5] = par[tNormMinuitParamNumber];
+      double *tParPrim = new double[tNFitParams];
+
+
+      if(fIncludeResidualCorrelations) tParPrim[0] = cAnalysisLambdaFactors[tFitPairAnalysis->GetAnalysisType()]*par[tLambdaMinuitParamNumber];
+      else tParPrim[0] = par[tLambdaMinuitParamNumber];
+      tParPrim[1] = par[tRadiusMinuitParamNumber];
+      tParPrim[2] = par[tRef0MinuitParamNumber];
+      tParPrim[3] = par[tImf0MinuitParamNumber];
+      tParPrim[4] = par[td0MinuitParamNumber];
+      tParPrim[5] = par[tNormMinuitParamNumber];
 
       for(int i=0; i<tNFitParams; i++)  //assure all parameters exist
       {
-        if(std::isnan(tPar[i])) {cout <<"CRASH:  In CalculateFitFunction, a tPar elemement " << i << " DNE!!!!!" << endl;}
-        assert(!std::isnan(tPar[i]));
+        if(std::isnan(tParPrim[i])) {cout <<"CRASH:  In CalculateFitFunction, a tParPrim elemement " << i << " DNE!!!!!" << endl;}
+        assert(!std::isnan(tParPrim[i]));
       }
 
       double x[1];
       bool tRejectOmega = tFitPartialAnalysis->RejectOmega();
-//      bool tAreParamsSame = AreParamsSame(tCurrentFitPar,tPar,tNFitParPerAnalysis);
 
       vector<double> tFitCfContent;
       vector<double> tCorrectedFitCfContent;
@@ -346,10 +282,21 @@ void LednickyFitter::CalculateFitFunction(int &npar, double &chi2, double *par)
         tNumContent[ix-1] = tNum->GetBinContent(ix);
         tDenContent[ix-1] = tDen->GetBinContent(ix);
 
-        tPrimaryFitCfContent[ix-1] = LednickyEq(x,tPar);
+        tPrimaryFitCfContent[ix-1] = LednickyEq(x,tParPrim);
       }
 
-      if(fIncludeResidualCorrelations) tFitCfContent = GetFitCfIncludingResiduals(tFitPairAnalysis, tOverallLambda, fKStarBinCenters, tPrimaryFitCfContent, tPar, tNFitParams);
+      if(fIncludeResidualCorrelations) 
+      {
+        double *tParOverall = new double[tNFitParams];
+        tParOverall[0] = par[tLambdaMinuitParamNumber];
+        tParOverall[1] = par[tRadiusMinuitParamNumber];
+        tParOverall[2] = par[tRef0MinuitParamNumber];
+        tParOverall[3] = par[tImf0MinuitParamNumber];
+        tParOverall[4] = par[td0MinuitParamNumber];
+        tParOverall[5] = par[tNormMinuitParamNumber];
+        tFitCfContent = GetFitCfIncludingResiduals(tFitPairAnalysis, tPrimaryFitCfContent, tParOverall);
+        delete[] tParOverall;
+      }
       else tFitCfContent = tPrimaryFitCfContent;
 
 
@@ -363,7 +310,7 @@ void LednickyFitter::CalculateFitFunction(int &npar, double &chi2, double *par)
       }
 
       fCorrectedFitVecs[iAnaly][iPartAn] = tCorrectedFitCfContent;
-      ApplyNormalization(tPar[5], tCorrectedFitCfContent);
+      ApplyNormalization(tParPrim[5], tCorrectedFitCfContent);
 
       for(int ix=0; ix < fNbinsXToFit; ix++)
       {
@@ -374,7 +321,7 @@ void LednickyFitter::CalculateFitFunction(int &npar, double &chi2, double *par)
           {
             double tChi2 = 0.;
             if(fFitSharedAnalyses->GetFitType() == kChi2PML) tChi2 = GetPmlValue(tNumContent[ix],tDenContent[ix],tCorrectedFitCfContent[ix]);
-            else if(fFitSharedAnalyses->GetFitType() == kChi2) tChi2 = GetChi2Value(ix+1,tCf,tPar);
+            else if(fFitSharedAnalyses->GetFitType() == kChi2) tChi2 = GetChi2Value(ix+1,tCf,tParPrim);
             else tChi2 = 0.;
 
             fChi2Vec[iAnaly] += tChi2;
@@ -386,13 +333,9 @@ void LednickyFitter::CalculateFitFunction(int &npar, double &chi2, double *par)
         }
 
       }
-
-      delete[] tPar;
+      delete[] tParPrim;
     }
-
   }
-
-//  delete[] tCurrentFitPar;
 
   if(std::isnan(fChi2) || std::isinf(fChi2))
   {
@@ -448,7 +391,7 @@ void LednickyFitter::CalculateFitFunctionOnce(int &npar, double &chi2, double *p
     tFitParams[4] = par[td0ParamNumber];
     tFitParamErrs[4] = parErr[td0ParamNumber];
 
-    fFitSharedAnalyses->GetFitPairAnalysis(iAnaly)->SetFit(CreateFitFunction(iAnaly, tFitParams, tFitParamErrs, aChi2, aNDF));
+    fFitSharedAnalyses->GetFitPairAnalysis(iAnaly)->SetPrimaryFit(CreateFitFunction(iAnaly, tFitParams, tFitParamErrs, aChi2, aNDF));
   }
 
   for(int iAnaly=0; iAnaly<fNAnalyses; iAnaly++)
@@ -467,11 +410,19 @@ TF1* LednickyFitter::CreateFitFunction(TString aName, int aAnalysisNumber)
 
   int tNFitParams = tFitPairAnalysis->GetNFitParams(); //should be equal to 5
   TF1* ReturnFunction = new TF1(aName,LednickyEq,0.,0.5,tNFitParams+1);
+  double tParamValue, tParamError;
   for(int iPar=0; iPar<tNFitParams; iPar++)
   {
     ParameterType tParamType = static_cast<ParameterType>(iPar);
-    ReturnFunction->SetParameter(iPar,tFitPairAnalysis->GetFitParameter(tParamType)->GetFitValue());
-    ReturnFunction->SetParError(iPar,tFitPairAnalysis->GetFitParameter(tParamType)->GetFitValueError());
+    tParamValue = tFitPairAnalysis->GetFitParameter(tParamType)->GetFitValue();
+    tParamError = tFitPairAnalysis->GetFitParameter(tParamType)->GetFitValueError();
+    if(tParamType==kLambda && fIncludeResidualCorrelations)
+    {
+      tParamValue *= cAnalysisLambdaFactors[tFitPairAnalysis->GetAnalysisType()];
+      tParamError *= cAnalysisLambdaFactors[tFitPairAnalysis->GetAnalysisType()];
+    }
+    ReturnFunction->SetParameter(iPar,tParamValue);
+    ReturnFunction->SetParError(iPar,tParamError);
   }
 
   ReturnFunction->SetParameter(5,1.);
@@ -655,10 +606,16 @@ void LednickyFitter::DoFit()
   fMinuit->mnstat(fChi2,fEdm,fErrDef,fNvpar,fNparx,fIcstat);
   fMinuit->mnprin(3,fChi2);
 
+  //---------------------------------
+  Finalize();
+}
+
+
+//________________________________________________________________________________________________________________
+void LednickyFitter::Finalize()
+{
   int tNParams = fFitSharedAnalyses->GetNMinuitParams();
-
   fNDF = fNpFits-fNvpar;
-
 
   double *tPar = new double[tNParams];
   //get result
@@ -690,7 +647,7 @@ void LednickyFitter::DoFit()
 
   for(int iAnaly=0; iAnaly<fNAnalyses; iAnaly++)
   {
-    fFitSharedAnalyses->GetFitPairAnalysis(iAnaly)->SetFit(CreateFitFunction("fit",iAnaly));
+    fFitSharedAnalyses->GetFitPairAnalysis(iAnaly)->SetPrimaryFit(CreateFitFunction("fit",iAnaly));
   }
 
   for(int iAnaly=0; iAnaly<fNAnalyses; iAnaly++)
@@ -700,7 +657,6 @@ void LednickyFitter::DoFit()
       fFitSharedAnalyses->GetFitPairAnalysis(iAnaly)->GetFitPartialAnalysis(iPartAn)->SetCorrectedFitVec(fCorrectedFitVecs[iAnaly][iPartAn]);
     }
   }
-
 }
 
 
