@@ -54,16 +54,13 @@ class FitSharedAnalyses;
 #include "ChargedResidualCf.h"
 class ChargedResidualCf;
 
-#include "NeutralResidualCf.h"
-class NeutralResidualCf;
-
 class LednickyFitter {
 
 public:
   //Any enum types
 
   //Constructor, destructor, copy constructor, assignment operator
-  LednickyFitter(FitSharedAnalyses* aFitSharedAnalyses, double aMaxFitKStar = 0.3, bool aReadInterpFiles=true);
+  LednickyFitter(FitSharedAnalyses* aFitSharedAnalyses, double aMaxFitKStar = 0.3);
   virtual ~LednickyFitter();
 
   static double GetLednickyF1(double z);
@@ -78,14 +75,6 @@ public:
   void ApplyNonFlatBackgroundCorrection(vector<double> &aCf, vector<double> &aKStarBinCenters, TF1* aNonFlatBgd);
   vector<double> ApplyMomResCorrection(vector<double> &aCf, vector<double> &aKStarBinCenters, TH2* aMomResMatrix);
 
-  vector<double> GetNeutralResidualCorrelation(double *aParentCfParams, vector<double> &aKStarBinCenters, TH2* aTransformMatrix);
-  vector<double> GetChargedParentCorrelation(AnalysisType aResidualType, double *aParentCfParams, vector<double> &aKStarBinCenters, bool aUseExpXiData=false, CentralityType aCentType=k0010);
-  vector<double> GetChargedResidualCorrelation(AnalysisType aResidualType, double *aParentCfParams, vector<double> &aKStarBinCenters, bool aUseExpXiData=false, CentralityType aCentType=k0010);
-  static TH1D* Convert1dVecToHist(td1dVec &aCfVec, td1dVec &aKStarBinCenters, TString aTitle = "tCf");
-  TH1D* GetNeutralParentCorrelationHistogram(double *aParentCfParams, vector<double> &aKStarBinCenters, TString aTitle = "tParentCf");
-  TH1D* GetNeutralResidualCorrelationHistogram(double *aParentCfParams, vector<double> &aKStarBinCenters, TH2* aTransformMatrix, TString aTitle = "tCf");
-  TH1D* GetChargedParentCorrelationHistogram(AnalysisType aResidualType, double *aParentCfParams, vector<double> &aKStarBinCenters, bool aUseExpXiData=false, CentralityType aCentType=k0010, TString aTitle = "tParentCf");
-  TH1D* GetChargedResidualCorrelationHistogram(AnalysisType aResidualType, double *aParentCfParams, vector<double> &aKStarBinCenters, bool aUseExpXiData=false, CentralityType aCentType=k0010, TString aTitle = "tCf");
   vector<double> CombinePrimaryWithResiduals(td1dVec &aLambdaValues, td2dVec &aCfs);
   vector<double> GetFitCfIncludingResiduals(FitPairAnalysis* aFitPairAnalysis, double aOverallLambda, vector<double> &aKStarBinCenters, vector<double> &aPrimaryFitCfContent, double *aParamSet, int aNFitParams);
   void ApplyNormalization(double aNorm, td1dVec &aCf);
@@ -139,11 +128,6 @@ protected:
   bool fResidualsInitiated;
   bool fReturnPrimaryWithResidualsToAnalyses;
   NonFlatBgdFitType fNonFlatBgdFitType;
-
-  ChargedResidualCf* fResXiCKchP;
-  ChargedResidualCf* fResOmegaKchP;
-  ChargedResidualCf* fResXiCKchM;
-  ChargedResidualCf* fResOmegaKchM;
 
   double fChi2;
   double fChi2GlobalMin;

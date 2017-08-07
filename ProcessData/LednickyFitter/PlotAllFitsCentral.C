@@ -294,7 +294,7 @@ int main(int argc, char **argv)
 
     tFitSharedAn->CreateMinuitParameters();
 
-    LednickyFitter* tLednickyFitter = new LednickyFitter(tFitSharedAn, 0.3, false);
+    LednickyFitter* tLednickyFitter = new LednickyFitter(tFitSharedAn, 0.3);
     tLednickyFitter->SetApplyNonFlatBackgroundCorrection(ApplyNonFlatBackgroundCorrection);
     tLednickyFitter->SetNonFlatBgdFitType(tNonFlatBgdFitType);
     tLednickyFitter->SetApplyMomResCorrection(ApplyMomResCorrection);

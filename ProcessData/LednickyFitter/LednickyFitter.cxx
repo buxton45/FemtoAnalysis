@@ -22,8 +22,8 @@ double gMaxFitKStar;
 //________________________________________________________________________________________________________________
 //****************************************************************************************************************
 //________________________________________________________________________________________________________________
-LednickyFitter::LednickyFitter(FitSharedAnalyses* aFitSharedAnalyses, double aMaxFitKStar, bool aReadInterpFiles):
-  fVerbose(false),
+LednickyFitter::LednickyFitter(FitSharedAnalyses* aFitSharedAnalyses, double aMaxFitKStar):
+  fVerbose(true),
   fFitSharedAnalyses(aFitSharedAnalyses),
   fMinuit(fFitSharedAnalyses->GetMinuitObject()),
   fNAnalyses(fFitSharedAnalyses->GetNFitPairAnalysis()),
@@ -41,11 +41,6 @@ LednickyFitter::LednickyFitter(FitSharedAnalyses* aFitSharedAnalyses, double aMa
   fReturnPrimaryWithResidualsToAnalyses(false),
   fNonFlatBgdFitType(kLinear),
 
-  fResXiCKchP(),
-  fResOmegaKchP(),
-  fResXiCKchM(),
-  fResOmegaKchM(),
-
   fChi2(0),
   fChi2GlobalMin(1000000000),
   fChi2Vec(fNAnalyses),
@@ -59,33 +54,6 @@ LednickyFitter::LednickyFitter(FitSharedAnalyses* aFitSharedAnalyses, double aMa
 {
   int tNFitPartialAnalysis = fFitSharedAnalyses->GetFitPairAnalysis(0)->GetNFitPartialAnalysis();
   fCorrectedFitVecs.resize(fNAnalyses, td2dVec(tNFitPartialAnalysis));
-
-  if(aReadInterpFiles)
-  {
-    AnalysisType tAnType = fFitSharedAnalyses->GetFitPairAnalysis(0)->GetAnalysisType();
-    TString tFilesLocationBase = "/home/jesse/Analysis/FemtoAnalysis/ProcessData/CoulombFitter/";
-    TString tInterpLocationBase_XiCKchP, tInterpLocationBase_XiCKchM, tInterpLocationBase_OmegaKchP, tInterpLocationBase_OmegaKchM;
-    TString tHFcnLocationBase_XiCKchP, tHFcnLocationBase_XiCKchM, tHFcnLocationBase_OmegaKchP, tHFcnLocationBase_OmegaKchM;
-
-//TODO for now, no distinction between kXiCKchP and kAXiCKchM, etc.
-    tInterpLocationBase_XiCKchP = tFilesLocationBase + TString("InterpHistsAttractive");
-    tHFcnLocationBase_XiCKchP = tFilesLocationBase + TString("LednickyHFunction");
-
-    tInterpLocationBase_XiCKchM = tFilesLocationBase + TString("InterpHistsRepulsive");
-    tHFcnLocationBase_XiCKchM = tFilesLocationBase + TString("LednickyHFunction");
-
-    tInterpLocationBase_OmegaKchP = tFilesLocationBase + TString("InterpHists_OmegaKchP");
-    tHFcnLocationBase_OmegaKchP = tFilesLocationBase + TString("LednickyHFunction_OmegaKchP");
-
-    tInterpLocationBase_OmegaKchM = tFilesLocationBase + TString("InterpHists_OmegaKchM");
-    tHFcnLocationBase_OmegaKchM = tFilesLocationBase + TString("LednickyHFunction_OmegaKchM");
-
-    fResXiCKchP = new ChargedResidualCf(kResXiCKchP,tInterpLocationBase_XiCKchP,tHFcnLocationBase_XiCKchP);
-    fResXiCKchM = new ChargedResidualCf(kResXiCKchM,tInterpLocationBase_XiCKchM,tHFcnLocationBase_XiCKchM);
-
-    fResOmegaKchP = new ChargedResidualCf(kResOmegaKchP,tInterpLocationBase_OmegaKchP,tHFcnLocationBase_OmegaKchP);
-    fResOmegaKchM = new ChargedResidualCf(kResOmegaKchM,tInterpLocationBase_OmegaKchM,tHFcnLocationBase_OmegaKchM);
-  }
 }
 
 
@@ -220,184 +188,6 @@ vector<double> LednickyFitter::ApplyMomResCorrection(vector<double> &aCf, vector
 
 
 //________________________________________________________________________________________________________________
-vector<double> LednickyFitter::GetNeutralResidualCorrelation(double *aParentCfParams, vector<double> &aKStarBinCenters, TH2* aTransformMatrix)
-{
-  vector<double> tParentCf(aKStarBinCenters.size(),0.);
-  double tKStar[1];
-  for(unsigned int i=0; i<aKStarBinCenters.size(); i++)
-  {
-    tKStar[0] = aKStarBinCenters[i];
-    tParentCf[i] = LednickyEq(tKStar,aParentCfParams);
-//TODO TODO TODO Not sure whether above is correct
-  }
-
-  unsigned int tDaughterPairKStarBin, tParentPairKStarBin;
-  double tDaughterPairKStar, tParentPairKStar;
-  assert(tParentCf.size() == aKStarBinCenters.size());
-  assert(tParentCf.size() == (unsigned int)aTransformMatrix->GetNbinsX());
-  assert(tParentCf.size() == (unsigned int)aTransformMatrix->GetNbinsY());
-
-  vector<double> tReturnResCf(tParentCf.size(),0.);
-  vector<double> tNormVec(tParentCf.size(),0.);  //TODO once I match bin size, I should be able to call /= by integral, instead of tracking normVec
-
-  for(unsigned int i=0; i<tParentCf.size(); i++)
-  {
-    tDaughterPairKStar = aKStarBinCenters[i];
-    tDaughterPairKStarBin = aTransformMatrix->GetXaxis()->FindBin(tDaughterPairKStar);
-
-    for(unsigned int j=0; j<tParentCf.size(); j++)
-    {
-      tParentPairKStar = aKStarBinCenters[j];
-      tParentPairKStarBin = aTransformMatrix->GetYaxis()->FindBin(tParentPairKStar);
-
-      tReturnResCf[i] += tParentCf[j]*aTransformMatrix->GetBinContent(tDaughterPairKStarBin,tParentPairKStarBin);
-      tNormVec[i] += aTransformMatrix->GetBinContent(tDaughterPairKStarBin,tParentPairKStarBin);
-    }
-    tReturnResCf[i] /= tNormVec[i];
-  }
-  return tReturnResCf;
-}
-
-//________________________________________________________________________________________________________________
-vector<double> LednickyFitter::GetChargedParentCorrelation(AnalysisType aResidualType, double *aParentCfParams, vector<double> &aKStarBinCenters, bool aUseExpXiData, CentralityType aCentType)
-{
-  td1dVec tReturnCfVec;
-
-  switch(aResidualType) {
-  case kResXiCKchP:
-  case kResAXiCKchM:
-    fResXiCKchP->SetIncludeSingletAndTriplet(true);
-    tReturnCfVec = fResXiCKchP->GetCoulombParentCorrelation(aParentCfParams,aKStarBinCenters,aUseExpXiData,aCentType);
-    break;
-
-  case kResXiCKchM:
-  case kResAXiCKchP:
-    fResXiCKchM->SetIncludeSingletAndTriplet(true);
-    tReturnCfVec = fResXiCKchM->GetCoulombParentCorrelation(aParentCfParams,aKStarBinCenters,aUseExpXiData,aCentType);
-    break;
-
-  case kResOmegaKchP:
-  case kResAOmegaKchM:
-    fResOmegaKchP->SetIncludeSingletAndTriplet(true);
-    tReturnCfVec = fResOmegaKchP->GetCoulombParentCorrelation(aParentCfParams,aKStarBinCenters,aUseExpXiData,aCentType);
-    break;
-
-  case kResOmegaKchM:
-  case kResAOmegaKchP:
-    fResOmegaKchM->SetIncludeSingletAndTriplet(true);
-    tReturnCfVec = fResOmegaKchM->GetCoulombParentCorrelation(aParentCfParams,aKStarBinCenters,aUseExpXiData,aCentType);
-    break;
-
-
-  default:
-    cout << "ERROR: LednickyFitter::GetChargedResidualCorrelation  aResidualType = " << aResidualType << " is not apropriate" << endl << endl;
-    assert(0);
-  }
-
-
-  return tReturnCfVec;
-}
-
-//________________________________________________________________________________________________________________
-vector<double> LednickyFitter::GetChargedResidualCorrelation(AnalysisType aResidualType, double *aParentCfParams, vector<double> &aKStarBinCenters, bool aUseExpXiData, CentralityType aCentType)
-{
-  td1dVec tReturnCfVec;
-
-  switch(aResidualType) {
-  case kResXiCKchP:
-  case kResAXiCKchM:
-    fResXiCKchP->SetIncludeSingletAndTriplet(true);
-    tReturnCfVec = fResXiCKchP->GetCoulombResidualCorrelation(aParentCfParams,aKStarBinCenters,aUseExpXiData,aCentType);
-    break;
-
-  case kResXiCKchM:
-  case kResAXiCKchP:
-    fResXiCKchM->SetIncludeSingletAndTriplet(true);
-    tReturnCfVec = fResXiCKchM->GetCoulombResidualCorrelation(aParentCfParams,aKStarBinCenters,aUseExpXiData,aCentType);
-    break;
-
-  case kResOmegaKchP:
-  case kResAOmegaKchM:
-    fResOmegaKchP->SetIncludeSingletAndTriplet(true);
-    tReturnCfVec = fResOmegaKchP->GetCoulombResidualCorrelation(aParentCfParams,aKStarBinCenters,aUseExpXiData,aCentType);
-    break;
-
-  case kResOmegaKchM:
-  case kResAOmegaKchP:
-    fResOmegaKchM->SetIncludeSingletAndTriplet(true);
-    tReturnCfVec = fResOmegaKchM->GetCoulombResidualCorrelation(aParentCfParams,aKStarBinCenters,aUseExpXiData,aCentType);
-    break;
-
-
-  default:
-    cout << "ERROR: LednickyFitter::GetChargedResidualCorrelation  aResidualType = " << aResidualType << " is not apropriate" << endl << endl;
-    assert(0);
-  }
-
-
-  return tReturnCfVec;
-}
-
-//________________________________________________________________________________________________________________
-TH1D* LednickyFitter::Convert1dVecToHist(td1dVec &aCfVec, td1dVec &aKStarBinCenters, TString aTitle)
-{
-  assert(aCfVec.size() == aKStarBinCenters.size());
-
-  double tBinWidth = aKStarBinCenters[1]-aKStarBinCenters[0];
-  int tNbins = aKStarBinCenters.size();
-  double tKStarMin = aKStarBinCenters[0]-tBinWidth/2.0;
-  tKStarMin=0.;
-  double tKStarMax = aKStarBinCenters[tNbins-1] + tBinWidth/2.0;
-
-  TH1D* tReturnHist = new TH1D(aTitle, aTitle, tNbins, tKStarMin, tKStarMax);
-  for(int i=0; i<tNbins; i++) {tReturnHist->SetBinContent(i+1,aCfVec[i]); tReturnHist->SetBinError(i+1,0.00000000001);}
-  //NOTE: Set errors to very small, because if set to zero, just drawing histogram points seems to not work with CanvasPartition package
-
-  return tReturnHist;
-}
-
-//________________________________________________________________________________________________________________
-TH1D* LednickyFitter::GetNeutralParentCorrelationHistogram(double *aParentCfParams, vector<double> &aKStarBinCenters, TString aTitle)
-{
-  vector<double> tParentCf(aKStarBinCenters.size(),0.);
-  double tKStar[1];
-  for(unsigned int i=0; i<aKStarBinCenters.size(); i++)
-  {
-    tKStar[0] = aKStarBinCenters[i];
-    tParentCf[i] = LednickyEq(tKStar,aParentCfParams);
-//TODO TODO TODO Not sure whether above is correct
-  }
-  
-  TH1D* tReturnHist = Convert1dVecToHist(tParentCf, aKStarBinCenters, aTitle);
-  return tReturnHist;
-}
-
-
-//________________________________________________________________________________________________________________
-TH1D* LednickyFitter::GetNeutralResidualCorrelationHistogram(double *aParentCfParams, vector<double> &aKStarBinCenters, TH2* aTransformMatrix, TString aTitle)
-{
-  td1dVec tVec = GetNeutralResidualCorrelation(aParentCfParams, aKStarBinCenters, aTransformMatrix);
-  TH1D *tReturnHisto = Convert1dVecToHist(tVec, aKStarBinCenters, aTitle);
-  return tReturnHisto;
-}
-
-//________________________________________________________________________________________________________________
-TH1D* LednickyFitter::GetChargedParentCorrelationHistogram(AnalysisType aResidualType, double *aParentCfParams, vector<double> &aKStarBinCenters, bool aUseExpXiData, CentralityType aCentType, TString aTitle)
-{
-  td1dVec tVec = GetChargedParentCorrelation(aResidualType, aParentCfParams, aKStarBinCenters, aUseExpXiData, aCentType);
-  TH1D *tReturnHisto = Convert1dVecToHist(tVec, aKStarBinCenters, aTitle);
-  return tReturnHisto;
-}
-
-//________________________________________________________________________________________________________________
-TH1D* LednickyFitter::GetChargedResidualCorrelationHistogram(AnalysisType aResidualType, double *aParentCfParams, vector<double> &aKStarBinCenters, bool aUseExpXiData, CentralityType aCentType, TString aTitle)
-{
-  td1dVec tVec = GetChargedResidualCorrelation(aResidualType, aParentCfParams, aKStarBinCenters, aUseExpXiData, aCentType);
-  TH1D *tReturnHisto = Convert1dVecToHist(tVec, aKStarBinCenters, aTitle);
-  return tReturnHisto;
-}
-
-//________________________________________________________________________________________________________________
 vector<double> LednickyFitter::CombinePrimaryWithResiduals(td1dVec &aLambdaValues, td2dVec &aCfs)
 {
   assert(aLambdaValues.size()==aCfs.size());
@@ -430,140 +220,11 @@ vector<double> LednickyFitter::CombinePrimaryWithResiduals(td1dVec &aLambdaValue
 //________________________________________________________________________________________________________________
 vector<double> LednickyFitter::GetFitCfIncludingResiduals(FitPairAnalysis* aFitPairAnalysis, double aOverallLambda, vector<double> &aKStarBinCenters, vector<double> &aPrimaryFitCfContent, double *aParamSet, int aNFitParams)
 {
-  AnalysisType tAnType = aFitPairAnalysis->GetAnalysisType();
-  CentralityType tCentType = aFitPairAnalysis->GetCentralityType();
-  AnalysisType tResSigType, tResXi0Type, tResXiCKType, tResOmegaKType;
-  switch(tAnType) {
-  case kLamKchP:
-    tResSigType = kResSig0KchP;
-    tResXi0Type = kResXi0KchP;
-    tResXiCKType = kResXiCKchP;
-    tResOmegaKType = kResOmegaKchP;
-    break;
+  double *tTempPar = AdjustLambdaParam(aParamSet,aOverallLambda,aNFitParams);
+  td1dVec tFitCfContent = aFitPairAnalysis->CombinePrimaryWithResiduals(tTempPar, aPrimaryFitCfContent);
+  if(fReturnPrimaryWithResidualsToAnalyses) aFitPairAnalysis->SetPrimaryWithResiduals(tFitCfContent);
 
-  case kLamKchM:
-    tResSigType = kResSig0KchM;
-    tResXi0Type = kResXi0KchM;
-    tResXiCKType = kResXiCKchM;
-    tResOmegaKType = kResOmegaKchM;
-    break;
-
-  case kALamKchP:
-    tResSigType = kResASig0KchP;
-    tResXi0Type = kResAXi0KchP;
-    tResXiCKType = kResAXiCKchP;
-    tResOmegaKType = kResAOmegaKchP;
-    break;
-
-  case kALamKchM:
-    tResSigType = kResASig0KchM;
-    tResXi0Type = kResAXi0KchM;
-    tResXiCKType = kResAXiCKchM;
-    tResOmegaKType = kResAOmegaKchM;
-    break;
-
-  default:
-    cout << "ERROR: LednickyFitter::GetFitCfIncludingResiduals  tAnType = " << tAnType << " is not apropriate" << endl << endl;
-    assert(0);
-  }
-
-  double tLambda_Primary = aParamSet[0];
-
-  double tLambda_SigK = 0.26473*aOverallLambda;  //for now, primary lambda scaled by some factor
-  double *tPar_SigK = AdjustLambdaParam(aParamSet,1.0,aNFitParams);  //lambda=1 here, will be applied in CombinePrimaryWithResiduals method
-//  td1dVec tResidual_SigK = GetNeutralResidualCorrelation(tPar_SigK,aKStarBinCenters,aFitPairAnalysis->GetTransformMatrix(0));
-  td1dVec tResidual_SigK = aFitPairAnalysis->GetTransformedNeutralResidualCorrelation(tResSigType, tPar_SigK);
-
-  double tLambda_Xi0K = 0.19041*aOverallLambda;  //for now, primary lambda scaled by some factor
-  double *tPar_Xi0K = AdjustLambdaParam(aParamSet,1.0,aNFitParams);  //lambda=1 here, will be applied in CombinePrimaryWithResiduals method
-//  td1dVec tResidual_Xi0K = GetNeutralResidualCorrelation(tPar_Xi0K,aKStarBinCenters,aFitPairAnalysis->GetTransformMatrix(2));
-  td1dVec tResidual_Xi0K = aFitPairAnalysis->GetTransformedNeutralResidualCorrelation(tResXi0Type, tPar_Xi0K);
-
-  bool tUseExpXiData = true;
-  //if(aFitPairAnalysis->GetCentralityType()==k0010) tUseExpXiData=true;
-
-  double tLambda_XiCK = 0.18386*aOverallLambda;  //for now, primary lambda scaled by some factor
-//  double *tPar_XiCK = AdjustLambdaParam(aParamSet,tLambda_XiCK,aNFitParams);
-  double *tPar_XiCK = new double[8];
-  if(tResXiCKType==kResXiCKchP || tResXiCKType==kResAXiCKchM)
-  { 
-    tPar_XiCK[0] = 1.0; //TODO lambda=1 here, will be applied in CombinePrimaryWithResiduals method
-    tPar_XiCK[1] = 4.60717;
-    tPar_XiCK[2] = -0.00976133;
-    tPar_XiCK[3] = 0.0409787;
-    tPar_XiCK[4] = -0.33091;
-    tPar_XiCK[5] = -0.484049;
-    tPar_XiCK[6] = 0.523492;
-    tPar_XiCK[7] = 1.53176;
-  }
-  else if(tResXiCKType==kResXiCKchM || tResXiCKType==kResAXiCKchP)
-  {
-    tPar_XiCK[0] = 1.0; //TODO lambda=1 here, will be applied in CombinePrimaryWithResiduals method
-    tPar_XiCK[1] = 6.97767;
-    tPar_XiCK[2] = -1.94078;
-    tPar_XiCK[3] = -1.21309;
-    tPar_XiCK[4] = 0.160156;
-    tPar_XiCK[5] = 1.38324;
-    tPar_XiCK[6] = 2.02133;
-    tPar_XiCK[7] = 4.07520;
-  }
-  else {tPar_XiCK[0]=0.; tPar_XiCK[1]=0.; tPar_XiCK[2]=0.; tPar_XiCK[3]=0.; tPar_XiCK[4]=0.; tPar_XiCK[5]=0.; tPar_XiCK[6]=0.; tPar_XiCK[7]=0.;}
-  td1dVec tResidual_XiCK = GetChargedResidualCorrelation(tResXiCKType,tPar_XiCK,aKStarBinCenters,tUseExpXiData,aFitPairAnalysis->GetCentralityType());
-
-  double tLambda_OmegaK = 0.01760*aOverallLambda;  //for now, primary lambda scaled by some factor
-//  double *tPar_OmegaK = AdjustLambdaParam(aParamSet,tLambda_OmegaK,aNFitParams);
-  double *tPar_OmegaK = new double[8];
-//TODO for now, use same parameters for OmegaK as XiK
-  if(tResOmegaKType==kResOmegaKchP || tResOmegaKType==kResAOmegaKchM)
-  { 
-    tPar_OmegaK[0] = 1.0; //TODO lambda=1 here, will be applied in CombinePrimaryWithResiduals method
-    tPar_OmegaK[1] = 2.84;
-    tPar_OmegaK[2] = -1.59;
-    tPar_OmegaK[3] = -0.37;
-    tPar_OmegaK[4] = 5.0;
-    tPar_OmegaK[5] = -0.46;
-    tPar_OmegaK[6] = 1.13;
-    tPar_OmegaK[7] = -2.53;
-  }
-  else if(tResOmegaKType==kResOmegaKchM || tResOmegaKType==kResAOmegaKchP)
-  {
-    tPar_OmegaK[0] = 1.0; //TODO lambda=1 here, will be applied in CombinePrimaryWithResiduals method
-    tPar_OmegaK[1] = 2.81;
-    tPar_OmegaK[2] = 0.29;
-    tPar_OmegaK[3] = -0.24;
-    tPar_OmegaK[4] = -10.0;
-    tPar_OmegaK[5] = 0.37;
-    tPar_OmegaK[6] = 0.34;
-    tPar_OmegaK[7] = -3.43;
-  }
-  else {tPar_OmegaK[0]=0.; tPar_OmegaK[1]=0.; tPar_OmegaK[2]=0.; tPar_OmegaK[3]=0.; tPar_OmegaK[4]=0.; tPar_OmegaK[5]=0.; tPar_OmegaK[6]=0.; tPar_OmegaK[7]=0.;}
-  td1dVec tResidual_OmegaK = GetChargedResidualCorrelation(tResOmegaKType,tPar_OmegaK,aKStarBinCenters,tUseExpXiData,aFitPairAnalysis->GetCentralityType());
-
-  vector<double> tLambdas{tLambda_Primary,tLambda_SigK,tLambda_Xi0K,tLambda_XiCK,tLambda_OmegaK};
-  td2dVec tAllCfs{aPrimaryFitCfContent,tResidual_SigK,tResidual_Xi0K,tResidual_XiCK,tResidual_OmegaK};
-  vector<double> tFitCfContent = CombinePrimaryWithResiduals(tLambdas, tAllCfs);
-//  if(fReturnPrimaryWithResidualsToAnalyses) aFitPairAnalysis->SetPrimaryWithResiduals(tFitCfContent);
-
-
-double *tTempPar = AdjustLambdaParam(aParamSet,aOverallLambda,aNFitParams);
-td1dVec tTempCombinedCfs = aFitPairAnalysis->CombinePrimaryWithResiduals(tTempPar, aPrimaryFitCfContent);
-  if(fReturnPrimaryWithResidualsToAnalyses) aFitPairAnalysis->SetPrimaryWithResiduals(tTempCombinedCfs);
-assert(tFitCfContent.size() == tTempCombinedCfs.size());
-/*
-for(unsigned int i=0; i<tTempCombinedCfs.size(); i++)
-{
-  cout << "tFitCfContent[" << i << "]    = " << tFitCfContent[i] << endl;
-  cout << "tTempCombinedCfs[" << i << "] = " << tTempCombinedCfs[i] << endl << endl;
-}
-*/
-
-  delete[] tPar_SigK;
-  delete[] tPar_Xi0K;
-  delete[] tPar_XiCK;
-  delete[] tPar_OmegaK;
-
-  return tTempCombinedCfs;
-//  return tFitCfContent;
+  return tFitCfContent;
 }
 
 //________________________________________________________________________________________________________________

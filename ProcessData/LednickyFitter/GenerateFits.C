@@ -68,13 +68,12 @@ int main(int argc, char **argv)
 //-------------------------------------------------------------------------------
   if(IncludeResiduals && bDrawResiduals)
   {
-    TCanvas* tCanLamKchP = tLamKchP->DrawResiduals(0,k0010,cAnalysisBaseTags[tAnType]);
+//    TCanvas* tCanLamKchP = tLamKchP->DrawResiduals(0,k0010,cAnalysisBaseTags[tAnType]);
 //    tCanLamKchP->SaveAs(TString("Residuals")+TString(tCanLamKchP->GetName())+TString(".pdf"));
 
 //    TCanvas* tCanPrimWithRes = tLamKchP->DrawPrimaryWithResiduals(0,k0010,TString("PrimaryWithResidual_")+TString(cAnalysisBaseTags[tAnType]));
     TCanvas* tCanPrimwFitsAndResidual = tLamKchP->DrawKStarCfswFitsAndResiduals(ApplyMomResCorrection,ApplyNonFlatBackgroundCorrection,tNonFlatBgdFitType,SaveImages);
-    TCanvas* tCanPrimwFitsAndResidualv2 = tLamKchP->DrawKStarCfswFitsAndResidualsv2(ApplyMomResCorrection,ApplyNonFlatBackgroundCorrection,tNonFlatBgdFitType,SaveImages);
-tCanPrimwFitsAndResidualv2->SaveAs("test.pdf");
+tCanPrimwFitsAndResidual->SaveAs("test.pdf");
   }
 //-------------------------------------------------------------------------------
   tFullTimer.Stop();
