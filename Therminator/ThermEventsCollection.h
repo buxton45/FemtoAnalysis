@@ -58,22 +58,28 @@ public:
   double GetKStar(ThermParticle &aParticle, ThermV0Particle &aV0);
   double GetKStar(ThermV0Particle &aV01, ThermV0Particle &aV02);
   double GetFatherKStar(ThermParticle &aParticle, ThermV0Particle &aV0, bool aUseParticleFather=false, bool aUseV0Father=true);
-  double GetFatherKStar(ThermV0Particle &aV02, ThermV0Particle &aV0);
+  double GetFatherKStar(ThermV0Particle &aV01, ThermV0Particle &aV02, bool aUseV01Father=true, bool aUseV02Father=false);
 
   void FillTransformMatrixParticleV0(vector<ThermParticle> &aParticleCollection, vector<ThermV0Particle> &aV0Collection, ParticlePDGType aParticleFatherType, ParticlePDGType aV0FatherType, TH2* aMatrix);
-  void FillTransformMatrixV0V0(vector<ThermV0Particle> &aV0wFatherCollection, vector<ThermV0Particle> &aV0Collection, ParticlePDGType aFatherType, TH2* aMatrix);
+  void FillTransformMatrixV0V0(vector<ThermV0Particle> &aV01Collection, vector<ThermV0Particle> &aV02Collection, ParticlePDGType aV01FatherType, ParticlePDGType aV02FatherType, TH2* aMatrix);
 
   void BuildTransformMatrixParticleV0(ParticlePDGType aParticleType, ParticlePDGType aV0Type, ParticlePDGType aParticleFatherType, ParticlePDGType aV0FatherType, TH2* aMatrix);
-  void BuildTransformMatrixV0V0(ParticlePDGType aV0wFatherType, ParticlePDGType aV0Type, ParticlePDGType aFatherType, TH2* aMatrix);
+  void BuildTransformMatrixV0V0(ParticlePDGType aV01Type, ParticlePDGType aV02Type, ParticlePDGType aV01FatherType, ParticlePDGType aV02FatherType, TH2* aMatrix);
 
   void BuildAllTransformMatrices();  //TODO
   void SaveAllTransformMatrices(TString aSaveFileLocation);
 
-  void MapAndFillParentsMatrix(TH2* aMatrix, int aV0FatherType, int aTrackFatherType);
-  void MapAndFillPairFractionHistogram(TH1* aHistogram, int aV0FatherType, int aTrackFatherType);
+  void MapAndFillParentsMatrixParticleV0(TH2* aMatrix, int aV0FatherType, int aTrackFatherType);
+  void MapAndFillParentsMatrixV0V0(TH2* aMatrix, int aV01FatherType, int aV02Type);
+
+  void MapAndFillPairFractionHistogramParticleV0(TH1* aHistogram, int aV0FatherType, int aTrackFatherType);
+  void MapAndFillPairFractionHistogramV0V0(TH1* aHistogram, int aV01FatherType, int aV02FatherType);
+
   void BuildPairFractionHistogramsParticleV0(ParticlePDGType aParticleType, ParticlePDGType aV0Type, TH1* aHistogram, TH2* aMatrix);
+  void BuildPairFractionHistogramsV0V0(ParticlePDGType aV01Type, ParticlePDGType aV02Type, TH1* aHistogram, TH2* aMatrix);
+
   void BuildAllPairFractionHistograms();
-  void BuildUniqueParents(int aV0FatherType, int aTrackFatherType);
+  void BuildUniqueParentsParticleV0(int aV0FatherType, int aTrackFatherType);
   void PrintUniqueParents();
 
   void SaveAllPairFractionHistograms(TString aSaveFileLocation);
@@ -168,6 +174,14 @@ private:
 
   TH1* fPairFractionsALamKchM;
   TH2* fParentsMatrixALamKchM;
+
+  //LamK0s
+  TH1* fPairFractionsLamK0;
+  TH2* fParentsMatrixLamK0;
+
+  //ALamK0s
+  TH1* fPairFractionsALamK0;
+  TH2* fParentsMatrixALamK0;
 
   //LamLam to check with Jai
   TH2* fSigToLamLamTransform;

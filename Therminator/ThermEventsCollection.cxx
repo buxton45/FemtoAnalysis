@@ -97,6 +97,15 @@ ThermEventsCollection::ThermEventsCollection() :
   fPairFractionsALamKchM(0),
   fParentsMatrixALamKchM(0),
 
+  //LamK0
+  //-----
+  fPairFractionsLamK0(0),
+  fParentsMatrixLamK0(0),
+
+  //ALamK0
+  fPairFractionsALamK0(0),
+  fParentsMatrixALamK0(0),
+
   fSigToLamLamTransform(0)
 
 {
@@ -163,6 +172,16 @@ ThermEventsCollection::ThermEventsCollection() :
   //-----
   fPairFractionsALamKchM = new TH1D("fPairFractionsALamKchM", "fPairFractionsALamKchM", 12, 0, 12);
   fParentsMatrixALamKchM = new TH2D("fParentsMatrixALamKchM", "fParentsMatrixALamKchM", 100, 0, 100, 135, 0, 135);
+
+  //LamK0
+  //-----
+  fPairFractionsLamK0 = new TH1D("fPairFractionsLamK0", "fPairFractionsLamK0", 12, 0, 12);
+  fParentsMatrixLamK0 = new TH2D("fParentsMatrixLamK0", "fParentsMatrixLamK0", 100, 0, 100, 135, 0, 135);
+
+  //ALamK0
+  //-----
+  fPairFractionsALamK0 = new TH1D("fPairFractionsALamK0", "fPairFractionsALamK0", 12, 0, 12);
+  fParentsMatrixALamK0 = new TH2D("fParentsMatrixALamK0", "fParentsMatrixALamK0", 100, 0, 100, 135, 0, 135);
 
   //LamLam
   fSigToLamLamTransform = new TH2D("fSigToLamLamTransform","fSigToLamLamTransform",fNBinsKStar,fKStarMin,fKStarMax,fNBinsKStar,fKStarMin,fKStarMax);
@@ -852,22 +871,44 @@ double ThermEventsCollection::GetFatherKStar(ThermParticle &aParticle, ThermV0Pa
 }
 
 //________________________________________________________________________________________________________________
-double ThermEventsCollection::GetFatherKStar(ThermV0Particle &aV01, ThermV0Particle &aV02)
+double ThermEventsCollection::GetFatherKStar(ThermV0Particle &aV01, ThermV0Particle &aV02, bool aUseV01Father, bool aUseV02Father)
 {
   double px1, py1, pz1, mass1, E1;
   double px2, py2, pz2, mass2, E2;
 
-  px1 = aV01.GetFatherPx();
-  py1 = aV01.GetFatherPy();
-  pz1 = aV01.GetFatherPz();
-  mass1 = aV01.GetFatherMass();
-  E1 = aV01.GetFatherE();
+  if(aUseV01Father)
+  {
+    px1 = aV01.GetFatherPx();
+    py1 = aV01.GetFatherPy();
+    pz1 = aV01.GetFatherPz();
+    mass1 = aV01.GetFatherMass();
+    E1 = aV01.GetFatherE();
+  }
+  else
+  {
+    px1 = aV01.GetPx();
+    py1 = aV01.GetPy();
+    pz1 = aV01.GetPz();
+    mass1 = aV01.GetMass();
+    E1 = aV01.GetE();
+  }
 
-  px2 = aV02.GetPx();
-  py2 = aV02.GetPy();
-  pz2 = aV02.GetPz();
-  mass2 = aV02.GetMass();
-  E2 = aV02.GetE();
+  if(aUseV02Father)
+  {
+    px2 = aV02.GetFatherPx();
+    py2 = aV02.GetFatherPy();
+    pz2 = aV02.GetFatherPz();
+    mass2 = aV02.GetFatherMass();
+    E2 = aV02.GetFatherE();
+  }
+  else
+  {
+    px2 = aV02.GetPx();
+    py2 = aV02.GetPy();
+    pz2 = aV02.GetPz();
+    mass2 = aV02.GetMass();
+    E2 = aV02.GetE();
+  }
 
   double tMinvSq = (E1+E2)*(E1+E2) - (px1+px2)*(px1+px2) - (py1+py2)*(py1+py2) - (pz1+pz2)*(pz1+pz2);
   double tQinvSq = ((mass1*mass1 - mass2*mass2)*(mass1*mass1 - mass2*mass2))/tMinvSq + tMinvSq - 2.0*(mass1*mass1 + mass2*mass2);
@@ -883,7 +924,7 @@ void ThermEventsCollection::FillTransformMatrixParticleV0(vector<ThermParticle> 
   ThermV0Particle tV0;
   double tKStar, tFatherKStar;
 
-  bool bUseParticleFather=false;
+  bool bUseParticleFather=true;
   bool bUseV0Father = true;
 
   for(unsigned int iV0=0; iV0<aV0Collection.size(); iV0++)
@@ -891,15 +932,26 @@ void ThermEventsCollection::FillTransformMatrixParticleV0(vector<ThermParticle> 
     tV0 = aV0Collection[iV0];
     if((tV0.GetFatherPID() == aV0FatherType || aV0FatherType == kPDGNull) && tV0.GoodV0())
     {
+      if(aV0FatherType == kPDGNull) bUseV0Father = false;  //because, by setting aV0FatherType==kPDGNull, I am saying I don't care where the V0 comes from
+                                                           //In which case, I am also saying to not use the V0Father
+      if(tV0.GetPID() == aV0FatherType)  //here, I want only primary V0s, which, of course, cannot have a father
+      {
+        assert(tV0.IsPrimordial());  //the V0 should only be primordial if that's what we're looking for
+        bUseV0Father = false;
+      }
       for(unsigned int iPar=0; iPar<aParticleCollection.size(); iPar++)
       {
         tParticle = aParticleCollection[iPar];
         if(tParticle.GetFatherPID() == aParticleFatherType || aParticleFatherType == kPDGNull)
         {
-          if(aParticleFatherType != kPDGNull) bUseParticleFather=true;
+          if(aParticleFatherType == kPDGNull) bUseParticleFather=false; //similar explanation as above for if(aV0FatherType == kPDGNull) bUseV0Father = false;
+          if(tParticle.GetPID() == aParticleFatherType)  //similar explanation as above for if(tV0.GetPID() == aV0FatherType)
+          {
+            assert(tParticle.IsPrimordial());
+            bUseParticleFather = false;
+          }
 
           tKStar = GetKStar(tParticle,tV0);
-          if(tV0.IsPrimordial()) bUseV0Father = false;
           tFatherKStar = GetFatherKStar(tParticle,tV0,bUseParticleFather,bUseV0Father);
 
           assert(DoubleCheckV0Attributes(tV0));
@@ -911,26 +963,43 @@ void ThermEventsCollection::FillTransformMatrixParticleV0(vector<ThermParticle> 
 }
 
 //________________________________________________________________________________________________________________
-void ThermEventsCollection::FillTransformMatrixV0V0(vector<ThermV0Particle> &aV0wFatherCollection, vector<ThermV0Particle> &aV0Collection, ParticlePDGType aFatherType, TH2* aMatrix)
+void ThermEventsCollection::FillTransformMatrixV0V0(vector<ThermV0Particle> &aV01Collection, vector<ThermV0Particle> &aV02Collection, ParticlePDGType aV01FatherType, ParticlePDGType aV02FatherType, TH2* aMatrix)
 {
   ThermV0Particle tV01, tV02;
   double tKStar, tFatherKStar;
 
-  for(unsigned int iV01=0; iV01<aV0wFatherCollection.size(); iV01++)
-  {
-    tV01 = aV0wFatherCollection[iV01];
-    if(tV01.GetFatherPID() == aFatherType && tV01.GoodV0())
-    {
-      for(unsigned int iV02=0; iV02<aV0Collection.size(); iV02++)
-      {
-        tV02 = aV0Collection[iV02];
-        if(tV02.GoodV0() && !(tV02.GetEID()==tV01.GetEID() && tV02.GetEventID()==tV02.GetEventID()) ) //For instance, if I am doing LamLam w/o mixing events, I do not want to pair a Lam with itself
-        {
-          tKStar = GetKStar(tV01,tV02);
-          tFatherKStar = GetFatherKStar(tV01,tV02);
+  bool bUseV01Father = true;
+  bool bUseV02Father = true;
 
-          assert(DoubleCheckV0Attributes(tV01) /*&& DoubleCheckV0Attributes(tV02)*/);  //TODO many tV02 will fail because they are primordial and do not have fathers
-											//  However, this DoubleCheckV0Attributes was mainly for debugging, and can probably be removed
+  for(unsigned int iV01=0; iV01<aV01Collection.size(); iV01++)
+  {
+    tV01 = aV01Collection[iV01];
+    if((tV01.GetFatherPID() == aV01FatherType || aV01FatherType == kPDGNull) && tV01.GoodV0())
+    {
+      if(aV01FatherType == kPDGNull) bUseV01Father = false;  //because, by setting aV01FatherType==kPDGNull, I am saying I don't care where V01 comes from
+                                                           //In which case, I am also saying to not use the V0Father
+      if(tV01.GetPID() == aV01FatherType)  //here, I want only primary V0s, which, of course, cannot have a father
+      {
+        assert(tV01.IsPrimordial());  //the V0 should only be primordial if that's what we're looking for
+        bUseV01Father = false;
+      }
+      for(unsigned int iV02=0; iV02<aV02Collection.size(); iV02++)
+      {
+        tV02 = aV02Collection[iV02];
+        if((tV02.GetFatherPID() == aV02FatherType || aV02FatherType == kPDGNull) && tV02.GoodV0() 
+           && !(tV02.GetEID()==tV01.GetEID() && tV02.GetEventID()==tV02.GetEventID()) ) //For instance, if I am doing LamLam w/o mixing events, I do not want to pair a Lam with itself
+        {
+          if(aV02FatherType == kPDGNull) bUseV02Father=false; //similar explanation as above for if(aV01FatherType == kPDGNull) bUseV01Father = false;
+          if(tV02.GetPID() == aV02FatherType)  //similar explanation as above for if(tV01.GetPID() == aV01FatherType)
+          {
+            assert(tV02.IsPrimordial());
+            bUseV02Father = false;
+          }
+
+          tKStar = GetKStar(tV01,tV02);
+          tFatherKStar = GetFatherKStar(tV01,tV02,bUseV01Father,bUseV02Father);
+
+          assert(DoubleCheckV0Attributes(tV01) && DoubleCheckV0Attributes(tV02));  
           aMatrix->Fill(tKStar,tFatherKStar);
         }
       }
@@ -977,14 +1046,14 @@ void ThermEventsCollection::BuildTransformMatrixParticleV0(ParticlePDGType aPart
 
 
 //________________________________________________________________________________________________________________
-void ThermEventsCollection::BuildTransformMatrixV0V0(ParticlePDGType aV0wFatherType, ParticlePDGType aV0Type, ParticlePDGType aFatherType, TH2* aMatrix)
+void ThermEventsCollection::BuildTransformMatrixV0V0(ParticlePDGType aV01Type, ParticlePDGType aV02Type, ParticlePDGType aV01FatherType, ParticlePDGType aV02FatherType, TH2* aMatrix)
 {
-  vector<ThermV0Particle> aV0wFatherCollection;
-  vector<ThermV0Particle> aV0Collection;
+  vector<ThermV0Particle> aV01Collection;
+  vector<ThermV0Particle> aV02Collection;
 
   for(unsigned int iEv=0; iEv < fEventsCollection.size(); iEv++)
   {
-    aV0wFatherCollection =  fEventsCollection[iEv].GetV0ParticleCollection(aV0wFatherType);
+    aV01Collection =  fEventsCollection[iEv].GetV0ParticleCollection(aV01Type);
     if(!fMixEvents)
     {
       fMixingEventsCollection.clear();
@@ -992,8 +1061,8 @@ void ThermEventsCollection::BuildTransformMatrixV0V0(ParticlePDGType aV0wFatherT
     }
     for(unsigned int iMixEv=0; iMixEv < fMixingEventsCollection.size(); iMixEv++)
     {
-      aV0Collection = fMixingEventsCollection[iMixEv].GetV0ParticleCollection(aV0Type);
-      FillTransformMatrixV0V0(aV0wFatherCollection,aV0Collection,aFatherType,aMatrix);
+      aV02Collection = fMixingEventsCollection[iMixEv].GetV0ParticleCollection(aV02Type);
+      FillTransformMatrixV0V0(aV01Collection,aV02Collection,aV01FatherType,aV02FatherType,aMatrix);
     }
 
     if(fMixEvents)
@@ -1071,7 +1140,7 @@ void ThermEventsCollection::BuildAllTransformMatrices()
   BuildTransformMatrixParticleV0(kPDGKchM, kPDGALam, kPDGAKSt0, kPDGAXi0, fAXi0AKSt0ToALamKchMTransform);
 
   //LamLam
-  BuildTransformMatrixV0V0(kPDGLam, kPDGLam, kPDGSigma, fSigToLamLamTransform);
+  BuildTransformMatrixV0V0(kPDGLam, kPDGLam, kPDGSigma, kPDGNull, fSigToLamLamTransform);
 }
 
 
@@ -1141,7 +1210,7 @@ void ThermEventsCollection::SaveAllTransformMatrices(TString aSaveFileLocation)
 }
 
 //________________________________________________________________________________________________________________
-void ThermEventsCollection::MapAndFillParentsMatrix(TH2* aMatrix, int aV0FatherType, int aTrackFatherType)
+void ThermEventsCollection::MapAndFillParentsMatrixParticleV0(TH2* aMatrix, int aV0FatherType, int aTrackFatherType)
 {
   //Note: List of parent PIDs found by turning on bBuildUniqueParents switch in ThermEventsCollection::ExtractFromAllRootFiles
   vector<int> tV0Fathers {
@@ -1186,7 +1255,46 @@ void ThermEventsCollection::MapAndFillParentsMatrix(TH2* aMatrix, int aV0FatherT
 }
 
 //________________________________________________________________________________________________________________
-void ThermEventsCollection::MapAndFillPairFractionHistogram(TH1* aHistogram, int aV0FatherType, int aTrackFatherType)
+void ThermEventsCollection::MapAndFillParentsMatrixV0V0(TH2* aMatrix, int aV01FatherType, int aV02FatherType)
+{
+  //Note: List of parent PIDs found by turning on bBuildUniqueParents switch in ThermEventsCollection::ExtractFromAllRootFiles
+  vector<int> tLambdaFathers {
+-67719, -67718, -67001, -67000, -42212, -42112, -33122, -32212, -32124, -32112, 
+-31214, -23224, -23214, -23114, -13324, -13314, -13226, -13224, -13222, -13216, 
+-13214, -13212, -13124, -13116, -13114, -13112, -8901, -8900, -8118, -8117, 
+-8116, -4228, -4128, -4028, -3334, -3322, -3312, -3228, -3226, -3224, 
+-3218, -3216, -3214, -3212, -3124, -3122, -3118, -3116, -3114, 3114, 
+3116, 3118, 3122, 3124, 3212, 3214, 3216, 3218, 3224, 3226, 
+3228, 3312, 3322, 3334, 4028, 4128, 4228, 8116, 8117, 8118, 
+8900, 8901, 13112, 13114, 13116, 13124, 13212, 13214, 13216, 13222, 
+13224, 13226, 13314, 13324, 23114, 23214, 23224, 31214, 32112, 32124, 
+32212, 33122, 42112, 42212, 67000, 67001, 67718, 67719};
+
+  vector<int> tK0ShortFathers {
+-67718, -67000, -53122, -43122, -33122, -30313, -23124, -23122, -23114, -20325, 
+-13324, -13226, -13224, -13222, -13124, -13114, -13112, -10215, -10211, -8900, 
+-8117, -8116, -3226, -3128, -3126, -3124, -3116, -317, -219, 115, 
+119, 215, 311, 313, 317, 323, 333, 335, 337, 8900, 
+10111, 10221, 10311, 10313, 10321, 10323, 10331, 20223, 20313, 20323, 
+20333, 30313, 32124, 32212, 42212, 100313, 100323, 100331, 100333, 9000223};
+
+  int tBinV01Father=-1, tBinV02Father=-1;
+  for(unsigned int i=0; i<tLambdaFathers.size(); i++) if(aV01FatherType==tLambdaFathers[i]) tBinV01Father=i;
+  for(unsigned int i=0; i<tK0ShortFathers.size(); i++) if(aV02FatherType==tK0ShortFathers[i]) tBinV02Father=i;
+
+  if(!fBuildUniqueParents)  //If true, I am likely looking for new parents, so I don't want these asserts to be tripped
+  {
+    if(tBinV01Father==-1) cout << "FAILURE IMMINENT: aV01FatherType = " << aV01FatherType << endl;
+    if(tBinV02Father==-1) cout << "FAILURE IMMINENT: aV02FatherType = " << aV02FatherType << endl;
+    assert(tBinV01Father>-1);
+    assert(tBinV02Father>-1);
+  }
+  aMatrix->Fill(tBinV01Father,tBinV02Father);
+}
+
+
+//________________________________________________________________________________________________________________
+void ThermEventsCollection::MapAndFillPairFractionHistogramParticleV0(TH1* aHistogram, int aV0FatherType, int aTrackFatherType)
 {
   double tBin = -1.;
   if((aV0FatherType == kPDGLam || aV0FatherType == kPDGALam) && (aTrackFatherType == kPDGKchP || aTrackFatherType == kPDGKchM)) tBin = 0.;
@@ -1211,6 +1319,30 @@ void ThermEventsCollection::MapAndFillPairFractionHistogram(TH1* aHistogram, int
 
 }
 
+//________________________________________________________________________________________________________________
+void ThermEventsCollection::MapAndFillPairFractionHistogramV0V0(TH1* aHistogram, int aV01FatherType, int aV02FatherType)
+{
+  double tBin = -1.;
+  if((aV01FatherType == kPDGLam || aV01FatherType == kPDGALam) && (aV02FatherType == kPDGK0)) tBin = 0.;
+  else if((aV01FatherType==kPDGSigma || aV01FatherType==kPDGASigma) && (aV02FatherType == kPDGK0)) tBin = 1.;
+  else if((aV01FatherType==kPDGXi0 || aV01FatherType==kPDGAXi0) && (aV02FatherType == kPDGK0)) tBin = 2.;
+  else if((aV01FatherType==kPDGXiC || aV01FatherType==kPDGAXiC) && (aV02FatherType == kPDGK0)) tBin = 3.;
+  else if((aV01FatherType==kPDGSigStP || aV01FatherType==kPDGASigStM) && (aV02FatherType == kPDGK0)) tBin = 4.;
+  else if((aV01FatherType==kPDGSigStM || aV01FatherType==kPDGASigStP) && (aV02FatherType == kPDGK0)) tBin = 5.;
+  else if((aV01FatherType==kPDGSigSt0 || aV01FatherType==kPDGASigSt0) && (aV02FatherType == kPDGK0)) tBin = 6.;
+
+  else if((aV01FatherType == kPDGLam || aV01FatherType == kPDGALam) && (aV02FatherType == kPDGKSt0 || aV02FatherType == kPDGAKSt0)) tBin = 7.;
+  else if((aV01FatherType==kPDGSigma || aV01FatherType==kPDGASigma) && (aV02FatherType == kPDGKSt0 || aV02FatherType == kPDGAKSt0)) tBin = 8.;
+  else if((aV01FatherType==kPDGXi0 || aV01FatherType==kPDGAXi0) && (aV02FatherType == kPDGKSt0 || aV02FatherType == kPDGAKSt0)) tBin = 9.;
+  else if((aV01FatherType==kPDGXiC || aV01FatherType==kPDGAXiC) && (aV02FatherType == kPDGKSt0 || aV02FatherType == kPDGAKSt0)) tBin = 10.;
+  else tBin = 11.;
+
+  if(tBin > -1)
+  {
+    tBin += 0.1;
+    aHistogram->Fill(tBin);
+  }
+}
 
 //________________________________________________________________________________________________________________
 void ThermEventsCollection::BuildPairFractionHistogramsParticleV0(ParticlePDGType aParticleType, ParticlePDGType aV0Type, TH1* aHistogram, TH2* aMatrix)
@@ -1238,9 +1370,48 @@ void ThermEventsCollection::BuildPairFractionHistogramsParticleV0(ParticlePDGTyp
           tParticle = aParticleCollection[iPar];
           int tParticleFatherType = tParticle.GetFatherPID();
 
-          MapAndFillPairFractionHistogram(aHistogram, tV0FatherType, tParticleFatherType);
-          if(fBuildUniqueParents) BuildUniqueParents(tV0FatherType, tParticleFatherType);
-          MapAndFillParentsMatrix(aMatrix, tV0FatherType, tParticleFatherType);
+          MapAndFillPairFractionHistogramParticleV0(aHistogram, tV0FatherType, tParticleFatherType);
+          if(fBuildUniqueParents) BuildUniqueParentsParticleV0(tV0FatherType, tParticleFatherType);
+          MapAndFillParentsMatrixParticleV0(aMatrix, tV0FatherType, tParticleFatherType);
+        }
+      }
+    }
+
+  }
+
+}
+
+//________________________________________________________________________________________________________________
+void ThermEventsCollection::BuildPairFractionHistogramsV0V0(ParticlePDGType aV01Type, ParticlePDGType aV02Type, TH1* aHistogram, TH2* aMatrix)
+{
+  vector<ThermV0Particle> aV01Collection, aV02Collection;
+
+  for(unsigned int iEv=0; iEv < fEventsCollection.size(); iEv++)
+  {
+    aV01Collection =  fEventsCollection[iEv].GetV0ParticleCollection(aV01Type);
+    aV02Collection =  fEventsCollection[iEv].GetV0ParticleCollection(aV02Type);
+
+    ThermV0Particle tV01;
+
+    for(unsigned int iV01=0; iV01<aV01Collection.size(); iV01++)
+    {
+      tV01 = aV01Collection[iV01];
+      int tV01FatherType = tV01.GetFatherPID();
+
+      if(tV01.GoodV0())
+      {
+        ThermV0Particle tV02;
+        for(unsigned int iV02=0; iV02<aV02Collection.size(); iV02++)
+        {
+          tV02 = aV02Collection[iV02];
+          int tV02FatherType = tV02.GetFatherPID();
+
+          if(tV02.GoodV0())
+          {
+            MapAndFillPairFractionHistogramV0V0(aHistogram, tV01FatherType, tV02FatherType);
+            if(fBuildUniqueParents) BuildUniqueParentsParticleV0(tV01FatherType, tV02FatherType);
+            MapAndFillParentsMatrixV0V0(aMatrix, tV01FatherType, tV02FatherType);
+          }
         }
       }
     }
@@ -1258,11 +1429,14 @@ void ThermEventsCollection::BuildAllPairFractionHistograms()
 
   BuildPairFractionHistogramsParticleV0(kPDGKchM, kPDGLam, fPairFractionsLamKchM, fParentsMatrixLamKchM);
   BuildPairFractionHistogramsParticleV0(kPDGKchP, kPDGALam, fPairFractionsALamKchP, fParentsMatrixALamKchP);
+
+  BuildPairFractionHistogramsV0V0(kPDGLam, kPDGK0, fPairFractionsLamK0, fParentsMatrixLamK0);
+  BuildPairFractionHistogramsV0V0(kPDGALam, kPDGK0, fPairFractionsALamK0, fParentsMatrixALamK0);
 }
 
 
 //________________________________________________________________________________________________________________
-void ThermEventsCollection::BuildUniqueParents(int aV0FatherType, int aTrackFatherType)
+void ThermEventsCollection::BuildUniqueParentsParticleV0(int aV0FatherType, int aTrackFatherType)
 {
   bool bV0ParentAlreadyIncluded = false;
   bool bTrackParentAlreadyIncluded = false;
@@ -1311,6 +1485,12 @@ void ThermEventsCollection::SaveAllPairFractionHistograms(TString aSaveFileLocat
   fPairFractionsALamKchP->Write();
   fParentsMatrixALamKchP->Write();
 
+  fPairFractionsLamK0->Write();
+  fParentsMatrixLamK0->Write();
+
+  fPairFractionsALamK0->Write();
+  fParentsMatrixALamK0->Write();
+
   tFile->Close();
 }
 
@@ -1318,7 +1498,7 @@ void ThermEventsCollection::SaveAllPairFractionHistograms(TString aSaveFileLocat
 TCanvas* ThermEventsCollection::DrawAllPairFractionHistograms()
 {
   TCanvas* tReturnCan = new TCanvas("tReturnCan","tReturnCan");
-  tReturnCan->Divide(2,2);
+  tReturnCan->Divide(2,3);
   
   tReturnCan->cd(1);
   fPairFractionsLamKchP->Draw();
@@ -1331,6 +1511,12 @@ TCanvas* ThermEventsCollection::DrawAllPairFractionHistograms()
 
   tReturnCan->cd(4);
   fPairFractionsALamKchP->Draw();
+
+  tReturnCan->cd(5);
+  fPairFractionsLamK0->Draw();
+
+  tReturnCan->cd(6);
+  fPairFractionsALamK0->Draw();
 
   return tReturnCan;
 }
