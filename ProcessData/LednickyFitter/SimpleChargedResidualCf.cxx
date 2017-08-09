@@ -107,7 +107,7 @@ TH1D* SimpleChargedResidualCf::Convert1dVecToHist(td1dVec &aCfVec, td1dVec &aKSt
 }
 
 //________________________________________________________________________________________________________________
-td1dVec SimpleChargedResidualCf::GetChargedResidualCorrelation(double aMaxKStar, TString aFileLocationBase)
+td1dVec SimpleChargedResidualCf::GetChargedResidualCorrelation(double aMaxKStar)
 {
   int tNbins = std::round(aMaxKStar/fExpXiHist->GetXaxis()->GetBinWidth(1));
   if(fResCf.size()!=tNbins)
@@ -123,11 +123,11 @@ td1dVec SimpleChargedResidualCf::GetChargedResidualCorrelation(double aMaxKStar,
 
 
 //________________________________________________________________________________________________________________
-td1dVec SimpleChargedResidualCf::GetTransformedChargedResidualCorrelation(double aMaxKStar, TString aFileLocationBase)
+td1dVec SimpleChargedResidualCf::GetTransformedChargedResidualCorrelation(double aMaxKStar)
 {
   if(fTransformedResCf.size()==0)
   {
-    td1dVec tResCf = GetChargedResidualCorrelation(aMaxKStar, aFileLocationBase);
+    td1dVec tResCf = GetChargedResidualCorrelation(aMaxKStar);
 
     unsigned int tDaughterPairKStarBin, tParentPairKStarBin;
     double tDaughterPairKStar, tParentPairKStar;
@@ -159,34 +159,34 @@ td1dVec SimpleChargedResidualCf::GetTransformedChargedResidualCorrelation(double
 }
 
 //________________________________________________________________________________________________________________
-TH1D* SimpleChargedResidualCf::GetChargedResidualCorrelationHistogram(TString aTitle, double aMaxKStar, TString aFileLocationBase)
+TH1D* SimpleChargedResidualCf::GetChargedResidualCorrelationHistogram(TString aTitle, double aMaxKStar)
 {
-  td1dVec tResCf = GetChargedResidualCorrelation(aMaxKStar, aFileLocationBase);
+  td1dVec tResCf = GetChargedResidualCorrelation(aMaxKStar);
   TH1D* tReturnHist = Convert1dVecToHist(tResCf, fKStarBinCenters, aTitle);
   return tReturnHist;
 }
 
 
 //________________________________________________________________________________________________________________
-TH1D* SimpleChargedResidualCf::GetTransformedChargedResidualCorrelationHistogram(TString aTitle, double aMaxKStar, TString aFileLocationBase)
+TH1D* SimpleChargedResidualCf::GetTransformedChargedResidualCorrelationHistogram(TString aTitle, double aMaxKStar)
 {
-  td1dVec tTransResCf = GetTransformedChargedResidualCorrelation(aMaxKStar, aFileLocationBase);
+  td1dVec tTransResCf = GetTransformedChargedResidualCorrelation(aMaxKStar);
   TH1D* tReturnHist = Convert1dVecToHist(tTransResCf, fKStarBinCenters, aTitle);
   return tReturnHist;
 }
 
 //________________________________________________________________________________________________________________
-td1dVec SimpleChargedResidualCf::GetContributionToFitCf(double aOverallLambda, double aMaxKStar, TString aFileLocationBase)
+td1dVec SimpleChargedResidualCf::GetContributionToFitCf(double aOverallLambda, double aMaxKStar)
 {
-  td1dVec tReturnVec = GetTransformedChargedResidualCorrelation(aMaxKStar, aFileLocationBase);
+  td1dVec tReturnVec = GetTransformedChargedResidualCorrelation(aMaxKStar);
   for(unsigned int i=0; i<tReturnVec.size(); i++) tReturnVec[i] = fLambdaFactor*aOverallLambda*(tReturnVec[i]-1.);
   return tReturnVec;
 }
 
 //________________________________________________________________________________________________________________
-TH1D* SimpleChargedResidualCf::GetTransformedChargedResidualCorrelationHistogramWithLambdaApplied(TString aTitle, double aOverallLambda, double aMaxKStar, TString aFileLocationBase)
+TH1D* SimpleChargedResidualCf::GetTransformedChargedResidualCorrelationHistogramWithLambdaApplied(TString aTitle, double aOverallLambda, double aMaxKStar)
 {
-  td1dVec tReturnVec = GetContributionToFitCf(aOverallLambda, aMaxKStar, aFileLocationBase);
+  td1dVec tReturnVec = GetContributionToFitCf(aOverallLambda, aMaxKStar);
   for(unsigned int i=0; i<tReturnVec.size(); i++) tReturnVec[i] += 1.;
   TH1D* tReturnHist = Convert1dVecToHist(tReturnVec, fKStarBinCenters, aTitle);
   return tReturnHist;

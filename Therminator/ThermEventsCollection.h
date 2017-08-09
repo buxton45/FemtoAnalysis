@@ -176,10 +176,36 @@ private:
   TH2* fParentsMatrixALamKchM;
 
   //LamK0s
+  TH2* fSigToLamK0Transform;
+  TH2* fXiCToLamK0Transform;
+  TH2* fXi0ToLamK0Transform;
+  TH2* fOmegaToLamK0Transform;
+  //--
+  TH2* fSigStPToLamK0Transform;
+  TH2* fSigStMToLamK0Transform;
+  TH2* fSigSt0ToLamK0Transform;
+  TH2* fLamKSt0ToLamK0Transform;
+  TH2* fSigKSt0ToLamK0Transform;
+  TH2* fXiCKSt0ToLamK0Transform;
+  TH2* fXi0KSt0ToLamK0Transform;
+
   TH1* fPairFractionsLamK0;
   TH2* fParentsMatrixLamK0;
 
   //ALamK0s
+  TH2* fSigToALamK0Transform;
+  TH2* fXiCToALamK0Transform;
+  TH2* fXi0ToALamK0Transform;
+  TH2* fOmegaToALamK0Transform;
+  //--
+  TH2* fSigStPToALamK0Transform;
+  TH2* fSigStMToALamK0Transform;
+  TH2* fSigSt0ToALamK0Transform;
+  TH2* fALamKSt0ToALamK0Transform;
+  TH2* fSigKSt0ToALamK0Transform;
+  TH2* fXiCKSt0ToALamK0Transform;
+  TH2* fXi0KSt0ToALamK0Transform;
+
   TH1* fPairFractionsALamK0;
   TH2* fParentsMatrixALamK0;
 

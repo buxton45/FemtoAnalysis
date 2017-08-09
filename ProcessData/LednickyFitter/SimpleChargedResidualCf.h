@@ -26,21 +26,15 @@ public:
 
   static TH1D* Convert1dVecToHist(td1dVec &aCfVec, td1dVec &aKStarBinCenters, TString aTitle = "tCf");
 
-  td1dVec GetChargedResidualCorrelation(double aMaxKStar=1.0, 
-                                     TString aFileLocationBase = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cXicKch_20170505_ignoreOnFlyStatus/Results_cXicKch_20170505_ignoreOnFlyStatus");
+  td1dVec GetChargedResidualCorrelation(double aMaxKStar=1.0);
 
-  td1dVec GetTransformedChargedResidualCorrelation(double aMaxKStar=1.0, 
-                                     TString aFileLocationBase = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cXicKch_20170505_ignoreOnFlyStatus/Results_cXicKch_20170505_ignoreOnFlyStatus");
+  td1dVec GetTransformedChargedResidualCorrelation(double aMaxKStar=1.0);
 
-  TH1D* GetChargedResidualCorrelationHistogram(TString aTitle, double aMaxKStar=1.0, 
-                                     TString aFileLocationBase = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cXicKch_20170505_ignoreOnFlyStatus/Results_cXicKch_20170505_ignoreOnFlyStatus");
-  TH1D* GetTransformedChargedResidualCorrelationHistogram(TString aTitle, double aMaxKStar=1.0, 
-                                     TString aFileLocationBase = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cXicKch_20170505_ignoreOnFlyStatus/Results_cXicKch_20170505_ignoreOnFlyStatus");
+  TH1D* GetChargedResidualCorrelationHistogram(TString aTitle, double aMaxKStar=1.0);
+  TH1D* GetTransformedChargedResidualCorrelationHistogram(TString aTitle, double aMaxKStar=1.0);
 
-  td1dVec GetContributionToFitCf(double aOverallLambda, double aMaxKStar=1.0, 
-                                     TString aFileLocationBase = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cXicKch_20170505_ignoreOnFlyStatus/Results_cXicKch_20170505_ignoreOnFlyStatus");  //Note: aParams[0] should be OverallLambda!
-  TH1D* GetTransformedChargedResidualCorrelationHistogramWithLambdaApplied(TString aTitle, double aOverallLambda, double aMaxKStar=1.0, 
-                                     TString aFileLocationBase = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cXicKch_20170505_ignoreOnFlyStatus/Results_cXicKch_20170505_ignoreOnFlyStatus");
+  td1dVec GetContributionToFitCf(double aOverallLambda, double aMaxKStar=1.0);
+  TH1D* GetTransformedChargedResidualCorrelationHistogramWithLambdaApplied(TString aTitle, double aOverallLambda, double aMaxKStar=1.0);
 
   //inline
   AnalysisType GetResidualType();
