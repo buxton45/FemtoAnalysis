@@ -30,8 +30,20 @@ ThermEventsCollection::ThermEventsCollection() :
   fNBinsKStar(200),
 
   fBuildUniqueParents(false),
-  fUniqueV0Parents(0),
-  fUniqueTrackParents(0),
+
+  fUniqueLamParents(0),
+  fUniqueALamParents(0),
+  fUniquecLamParents(0),
+
+  fUniqueK0Parents(0),
+
+  fUniqueKchPParents(0),
+  fUniqueKchMParents(0),
+  fUniquecKchParents(0),
+
+  fUniqueProtParents(0),
+  fUniqueAProtParents(0),
+  fUniquecProtParents(0),
 
   //LamKchP
   fSigToLamKchPTransform(0),
@@ -129,7 +141,10 @@ ThermEventsCollection::ThermEventsCollection() :
   fPairFractionsALamK0(0),
   fParentsMatrixALamK0(0),
 
-  fSigToLamLamTransform(0)
+  fSigToLamLamTransform(0),
+
+  fProtonParents(0),
+  fAProtonParents(0)
 
 {
   //LamKchP
@@ -230,6 +245,10 @@ ThermEventsCollection::ThermEventsCollection() :
 
   //LamLam
   fSigToLamLamTransform = new TH2D("fSigToLamLamTransform","fSigToLamLamTransform",fNBinsKStar,fKStarMin,fKStarMax,fNBinsKStar,fKStarMin,fKStarMax);
+
+  //Protons
+  fProtonParents = new TH1D("fProtonParents", "fProtonParents", 200, 0, 200);
+  fAProtonParents = new TH1D("fAProtonParents", "fAProtonParents", 200, 0, 200);
 }
 
 
@@ -1312,7 +1331,7 @@ void ThermEventsCollection::SaveAllTransformMatrices(TString aSaveFileLocation)
 void ThermEventsCollection::MapAndFillParentsMatrixParticleV0(TH2* aMatrix, int aV0FatherType, int aTrackFatherType)
 {
   //Note: List of parent PIDs found by turning on bBuildUniqueParents switch in ThermEventsCollection::ExtractFromAllRootFiles
-  vector<int> tV0Fathers {
+  vector<int> tLambdaFathers {
 -67719, -67718, -67001, -67000, -42212, -42112, -33122, -32212, -32124, -32112, 
 -31214, -23224, -23214, -23114, -13324, -13314, -13226, -13224, -13222, -13216, 
 -13214, -13212, -13124, -13116, -13114, -13112, -8901, -8900, -8118, -8117, 
@@ -1324,7 +1343,7 @@ void ThermEventsCollection::MapAndFillParentsMatrixParticleV0(TH2* aMatrix, int 
 13224, 13226, 13314, 13324, 23114, 23214, 23224, 31214, 32112, 32124, 
 32212, 33122, 42112, 42212, 67000, 67001, 67718, 67719};
 
-  vector<int> tTrackFathers {
+  vector<int> tKchFathers {
 -100323, -100313, -67719, -67718, -67001, -53122, -43122, -42112, -33122, -32112, 
 -31214, -30323, -30313, -23224, -23214, -23124, -23122, -23114, -20323, -20313, 
 -13226, -13224, -13222, -13216, -13214, -13212, -13126, -13124, -10323, -10321, 
@@ -1340,8 +1359,8 @@ void ThermEventsCollection::MapAndFillParentsMatrixParticleV0(TH2* aMatrix, int 
 43122, 53122, 67001, 67718, 67719, 100313, 100323, 100331, 100333, 9000223};
 
   int tBinV0Father=-1, tBinTrackFather=-1;
-  for(unsigned int i=0; i<tV0Fathers.size(); i++) if(aV0FatherType==tV0Fathers[i]) tBinV0Father=i;
-  for(unsigned int i=0; i<tTrackFathers.size(); i++) if(aTrackFatherType==tTrackFathers[i]) tBinTrackFather=i;
+  for(unsigned int i=0; i<tLambdaFathers.size(); i++) if(aV0FatherType==tLambdaFathers[i]) tBinV0Father=i;
+  for(unsigned int i=0; i<tKchFathers.size(); i++) if(aTrackFatherType==tKchFathers[i]) tBinTrackFather=i;
 
   if(!fBuildUniqueParents)  //If true, I am likely looking for new parents, so I don't want these asserts to be tripped
   {
@@ -1391,6 +1410,42 @@ void ThermEventsCollection::MapAndFillParentsMatrixV0V0(TH2* aMatrix, int aV01Fa
     assert(tBinV02Father>-1);
   }
   aMatrix->Fill(tBinV01Father,tBinV02Father);
+}
+
+//________________________________________________________________________________________________________________
+void ThermEventsCollection::MapAndFillProtonParents(TH1* aHist, int aFatherType)
+{
+  vector<int> tProtonFathers {
+-53122, -43122, -42212, -42112, -33122, -32214, -32212, -32124, -32114, -32112, 
+-31214, -31114, -23224, -23124, -23122, -23114, -22214, -22212, -22124, -22122, 
+-22114, -21214, -21212, -21114, -21112, -13226, -13224, -13222, -13126, -13124, 
+-13116, -13114, -13112, -12216, -12214, -12212, -12126, -12116, -12114, -12112, 
+-11216, -11116, -11114, -9401, -9400, -9299, -9298, -9297, -8117, -8116, 
+-5218, -5128, -4228, -4028, -3228, -3226, -3222, -3218, -3128, -3126, 
+-3124, -3122, -3118, -3116, -2224, -2218, -2216, -2214, -2212, -2128, 
+-2126, -2124, -2122, -2118, -2116, -2114, -1218, -1216, -1214, -1212, 
+-1118, -1116, -1112, 1112, 1116, 1118, 1212, 1214, 1216, 1218, 
+2114, 2116, 2118, 2122, 2124, 2126, 2128, 2212, 2214, 2216,
+2218, 2224, 3116, 3118, 3122, 3124, 3126, 3128, 3218, 3222,
+3226, 3228, 4028, 4228, 5128, 5218, 8116, 8117, 9297, 9298,
+9299, 9400, 9401, 11114, 11116, 11216, 12112, 12114, 12116, 12126,
+12212, 12214, 12216, 13112, 13114, 13116, 13124, 13126, 13222, 13224,
+13226, 21112, 21114, 21212, 21214, 22114, 22122, 22124, 22212, 22214,
+23114, 23122, 23124, 23224, 31114, 31214, 32112, 32114, 32124, 32212,
+32214, 33122, 42112, 42212, 43122, 53122
+};
+
+
+
+  int tBin=-1;
+  for(unsigned int i=0; i<tProtonFathers.size(); i++) if(aFatherType==tProtonFathers[i]) tBin=i;
+
+  if(!fBuildUniqueParents)  //If true, I am likely looking for new parents, so I don't want these asserts to be tripped
+  {
+    if(tBin==-1) cout << "FAILURE IMMINENT: aFatherType = " << aFatherType << endl;
+    assert(tBin>-1);
+  }
+  aHist->Fill(tBin);
 }
 
 
@@ -1472,7 +1527,11 @@ void ThermEventsCollection::BuildPairFractionHistogramsParticleV0(ParticlePDGTyp
           int tParticleFatherType = tParticle.GetFatherPID();
 
           MapAndFillPairFractionHistogramParticleV0(aHistogram, tV0FatherType, tParticleFatherType);
-          if(fBuildUniqueParents) BuildUniqueParentsParticleV0(tV0FatherType, tParticleFatherType);
+          if(fBuildUniqueParents)
+          {
+            BuildUniqueParents(aParticleType, tParticleFatherType);
+            BuildUniqueParents(aV0Type, tV0FatherType);
+          }
           MapAndFillParentsMatrixParticleV0(aMatrix, tV0FatherType, tParticleFatherType);
         }
       }
@@ -1510,7 +1569,11 @@ void ThermEventsCollection::BuildPairFractionHistogramsV0V0(ParticlePDGType aV01
           if(tV02.GoodV0())
           {
             MapAndFillPairFractionHistogramV0V0(aHistogram, tV01FatherType, tV02FatherType);
-            if(fBuildUniqueParents) BuildUniqueParentsParticleV0(tV01FatherType, tV02FatherType);
+            if(fBuildUniqueParents)
+            {
+              BuildUniqueParents(aV01Type, tV01FatherType);
+              BuildUniqueParents(aV02Type, tV02FatherType);
+            }
             MapAndFillParentsMatrixV0V0(aMatrix, tV01FatherType, tV02FatherType);
           }
         }
@@ -1520,6 +1583,36 @@ void ThermEventsCollection::BuildPairFractionHistogramsV0V0(ParticlePDGType aV01
   }
 
 }
+
+
+//________________________________________________________________________________________________________________
+void ThermEventsCollection::BuildProtonParents()
+{
+  vector<ThermParticle> aProtCollection, aAProtCollection;
+  for(unsigned int iEv=0; iEv < fEventsCollection.size(); iEv++)
+  {
+    aProtCollection = fEventsCollection[iEv].GetParticleCollection(kPDGProt);
+    aAProtCollection = fEventsCollection[iEv].GetParticleCollection(kPDGAntiProt);
+
+    ThermParticle tParticle;
+    int tParticleFatherType;
+    for(unsigned int iPar=0; iPar<aProtCollection.size(); iPar++)
+    {
+      tParticle = aProtCollection[iPar];
+      tParticleFatherType = tParticle.GetFatherPID();
+      if(fBuildUniqueParents) BuildUniqueParents(kPDGProt, tParticleFatherType);
+      MapAndFillProtonParents(fProtonParents, tParticleFatherType);
+    }
+    for(unsigned int iPar=0; iPar<aAProtCollection.size(); iPar++)
+    {
+      tParticle = aAProtCollection[iPar];
+      tParticleFatherType = tParticle.GetFatherPID();
+      if(fBuildUniqueParents) BuildUniqueParents(kPDGAntiProt, tParticleFatherType);
+      MapAndFillProtonParents(fAProtonParents, tParticleFatherType);
+    }
+  }
+}
+
 
 
 //________________________________________________________________________________________________________________
@@ -1533,38 +1626,145 @@ void ThermEventsCollection::BuildAllPairFractionHistograms()
 
   BuildPairFractionHistogramsV0V0(kPDGLam, kPDGK0, fPairFractionsLamK0, fParentsMatrixLamK0);
   BuildPairFractionHistogramsV0V0(kPDGALam, kPDGK0, fPairFractionsALamK0, fParentsMatrixALamK0);
+
+  BuildProtonParents();
+
 }
 
 
 //________________________________________________________________________________________________________________
-void ThermEventsCollection::BuildUniqueParentsParticleV0(int aV0FatherType, int aTrackFatherType)
+void ThermEventsCollection::BuildUniqueParents(int aParticleType, int aFatherType)
 {
-  bool bV0ParentAlreadyIncluded = false;
-  bool bTrackParentAlreadyIncluded = false;
-  for(unsigned int a=0; a<fUniqueV0Parents.size(); a++)
-  {
-    if(fUniqueV0Parents[a] == aV0FatherType) bV0ParentAlreadyIncluded = true;
-  }
-  for(unsigned int b=0; b<fUniqueTrackParents.size(); b++)
-  {
-    if(fUniqueTrackParents[b] == aTrackFatherType) bTrackParentAlreadyIncluded = true;
-  }
-  if(!bV0ParentAlreadyIncluded) fUniqueV0Parents.push_back(aV0FatherType);
-  if(!bTrackParentAlreadyIncluded) fUniqueTrackParents.push_back(aTrackFatherType);
+  ParticlePDGType tParticleType = static_cast<ParticlePDGType>(aParticleType);
+  vector<int> *tCollectionToFill;
+  switch(tParticleType) {
+  case kPDGLam:
+    tCollectionToFill = &fUniqueLamParents;
+    break;
 
+  case kPDGALam:
+    tCollectionToFill = &fUniqueALamParents;
+    break;
+
+  case kPDGK0:
+    tCollectionToFill = &fUniqueK0Parents;
+    break;
+
+  case kPDGKchP:
+    tCollectionToFill = &fUniqueKchPParents;
+    break;
+
+  case kPDGKchM:
+    tCollectionToFill = &fUniqueKchMParents;
+    break;
+
+  case kPDGProt:
+    tCollectionToFill = &fUniqueProtParents;
+    break;
+
+  case kPDGAntiProt:
+    tCollectionToFill = &fUniqueAProtParents;
+    break;
+
+  default:
+    cout << "ERROR: ThermEventsCollection::BuildUniqueParents: aParticleType = " << aParticleType << " is not appropriate" << endl << endl;
+    assert(0);
+  }
+
+  bool bParentAlreadyIncluded = false;
+  for(unsigned int i=0; i<tCollectionToFill->size(); i++)
+  {
+    if((*tCollectionToFill)[i] == aFatherType) bParentAlreadyIncluded = true;
+  }
+  if(!bParentAlreadyIncluded) tCollectionToFill->push_back(aFatherType);
+}
+
+//________________________________________________________________________________________________________________
+vector<int> ThermEventsCollection::UniqueCombineVectors(vector<int> &aVec1, vector<int> &aVec2)
+{
+  vector<int> tReturnVector = aVec1;
+  bool bAlreadyIncluded = false;
+  for(unsigned int i=0; i<aVec2.size(); i++)
+  {
+    bAlreadyIncluded = false;
+    for(unsigned int j=0; j<tReturnVector.size(); j++)
+    {
+      if(tReturnVector[j] == aVec2[i]) bAlreadyIncluded = true;
+    }
+    if(!bAlreadyIncluded) tReturnVector.push_back(aVec2[i]);
+  }
+  return tReturnVector;
 }
 
 //________________________________________________________________________________________________________________
 void ThermEventsCollection::PrintUniqueParents()
 {
-  std::sort(fUniqueV0Parents.begin(), fUniqueV0Parents.end());
-  cout << "fUniqueV0Parents.size() = " << fUniqueV0Parents.size() << endl;
-  for(unsigned int a=0; a<fUniqueV0Parents.size(); a++) cout << fUniqueV0Parents[a] << ", ";
-  cout << endl;
+  //-------Lam and ALam-----------
 
-  std::sort(fUniqueTrackParents.begin(), fUniqueTrackParents.end());
-  cout << "fUniqueTrackParents.size() = " << fUniqueTrackParents.size() << endl;
-  for(unsigned int b=0; b<fUniqueTrackParents.size(); b++) cout << fUniqueTrackParents[b] << ", ";
+  std::sort(fUniqueLamParents.begin(), fUniqueLamParents.end());
+  cout << "fUniqueLamParents.size() = " << fUniqueLamParents.size() << endl;
+  for(unsigned int i=0; i<fUniqueLamParents.size()-1; i++) cout << fUniqueLamParents[i] << ", ";
+  cout << fUniqueLamParents[fUniqueLamParents.size()-1] << endl;
+  cout << endl << endl << endl;
+
+  std::sort(fUniqueALamParents.begin(), fUniqueALamParents.end());
+  cout << "fUniqueALamParents.size() = " << fUniqueALamParents.size() << endl;
+  for(unsigned int i=0; i<fUniqueALamParents.size()-1; i++) cout << fUniqueALamParents[i] << ", ";
+  cout << fUniqueALamParents[fUniqueALamParents.size()-1] << endl;
+  cout << endl << endl << endl;
+
+  fUniquecLamParents = UniqueCombineVectors(fUniqueLamParents, fUniqueALamParents);
+  std::sort(fUniquecLamParents.begin(), fUniquecLamParents.end());
+  cout << "fUniquecLamParents.size() = " << fUniquecLamParents.size() << endl;
+  for(unsigned int i=0; i<fUniquecLamParents.size()-1; i++) cout << fUniquecLamParents[i] << ", ";
+  cout << fUniquecLamParents[fUniquecLamParents.size()-1] << endl;
+  cout << endl << endl << endl;
+
+  //-----------K0-------------
+  std::sort(fUniqueK0Parents.begin(), fUniqueK0Parents.end());
+  cout << "fUniqueK0Parents.size() = " << fUniqueK0Parents.size() << endl;
+  for(unsigned int i=0; i<fUniqueK0Parents.size()-1; i++) cout << fUniqueK0Parents[i] << ", ";
+  cout << fUniqueK0Parents[fUniqueK0Parents.size()-1] << endl;
+  cout << endl << endl << endl;
+
+  //----------KchP and KchM-------
+  std::sort(fUniqueKchPParents.begin(), fUniqueKchPParents.end());
+  cout << "fUniqueKchPParents.size() = " << fUniqueKchPParents.size() << endl;
+  for(unsigned int i=0; i<fUniqueKchPParents.size()-1; i++) cout << fUniqueKchPParents[i] << ", ";
+  cout << fUniqueKchPParents[fUniqueKchPParents.size()-1] << endl;
+  cout << endl << endl << endl;
+
+  std::sort(fUniqueKchMParents.begin(), fUniqueKchMParents.end());
+  cout << "fUniqueKchMParents.size() = " << fUniqueKchMParents.size() << endl;
+  for(unsigned int i=0; i<fUniqueKchMParents.size()-1; i++) cout << fUniqueKchMParents[i] << ", ";
+  cout << fUniqueKchMParents[fUniqueKchMParents.size()-1] << endl;
+  cout << endl << endl << endl;
+
+  fUniquecKchParents = UniqueCombineVectors(fUniqueKchPParents, fUniqueKchMParents);
+  std::sort(fUniquecKchParents.begin(), fUniquecKchParents.end());
+  cout << "fUniquecKchParents.size() = " << fUniquecKchParents.size() << endl;
+  for(unsigned int i=0; i<fUniquecKchParents.size()-1; i++) cout << fUniquecKchParents[i] << ", ";
+  cout << fUniquecKchParents[fUniquecKchParents.size()-1] << endl;
+  cout << endl << endl << endl;
+
+  //-----Proton and AntiProton-----
+  std::sort(fUniqueProtParents.begin(), fUniqueProtParents.end());
+  cout << "fUniqueProtParents.size() = " << fUniqueProtParents.size() << endl;
+  for(unsigned int i=0; i<fUniqueProtParents.size()-1; i++) cout << fUniqueProtParents[i] << ", ";
+  cout << fUniqueProtParents[fUniqueProtParents.size()-1] << endl;
+  cout << endl << endl << endl;
+
+  std::sort(fUniqueAProtParents.begin(), fUniqueAProtParents.end());
+  cout << "fUniqueAProtParents.size() = " << fUniqueAProtParents.size() << endl;
+  for(unsigned int i=0; i<fUniqueAProtParents.size()-1; i++) cout << fUniqueAProtParents[i] << ", ";
+  cout << fUniqueAProtParents[fUniqueAProtParents.size()-1] << endl;
+  cout << endl << endl << endl;
+
+  fUniquecProtParents = UniqueCombineVectors(fUniqueProtParents, fUniqueAProtParents);
+  std::sort(fUniquecProtParents.begin(), fUniquecProtParents.end());
+  cout << "fUniquecProtParents.size() = " << fUniquecProtParents.size() << endl;
+  for(unsigned int i=0; i<fUniquecProtParents.size()-1; i++) cout << fUniquecProtParents[i] << ", ";
+  cout << fUniquecProtParents[fUniquecProtParents.size()-1] << endl;
   cout << endl << endl << endl;
 }
 
@@ -1591,6 +1791,9 @@ void ThermEventsCollection::SaveAllPairFractionHistograms(TString aSaveFileLocat
 
   fPairFractionsALamK0->Write();
   fParentsMatrixALamK0->Write();
+
+  fProtonParents->Write();
+  fAProtonParents->Write();
 
   tFile->Close();
 }

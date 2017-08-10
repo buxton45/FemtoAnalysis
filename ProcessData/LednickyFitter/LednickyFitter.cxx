@@ -23,7 +23,7 @@ double gMaxFitKStar;
 //****************************************************************************************************************
 //________________________________________________________________________________________________________________
 LednickyFitter::LednickyFitter(FitSharedAnalyses* aFitSharedAnalyses, double aMaxFitKStar):
-  fVerbose(true),
+  fVerbose(false),
   fFitSharedAnalyses(aFitSharedAnalyses),
   fMinuit(fFitSharedAnalyses->GetMinuitObject()),
   fNAnalyses(fFitSharedAnalyses->GetNFitPairAnalysis()),

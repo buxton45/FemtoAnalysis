@@ -25,7 +25,10 @@ ThermEvent::ThermEvent() :
   fK0ShortCollection(0),
 
   fKchPCollection(0),
-  fKchMCollection(0)
+  fKchMCollection(0),
+
+  fProtCollection(0),
+  fAProtCollection(0)
 
 {
 
@@ -42,7 +45,10 @@ ThermEvent::ThermEvent(TTree* aThermEventsTree, int aEntryNumber) :
   fK0ShortCollection(0),
 
   fKchPCollection(0),
-  fKchMCollection(0)
+  fKchMCollection(0),
+
+  fProtCollection(0),
+  fAProtCollection(0)
 
 {
 
@@ -58,7 +64,9 @@ ThermEvent::ThermEvent(const ThermEvent& aEvent) :
   fAntiLambdaCollection(aEvent.fAntiLambdaCollection),
   fK0ShortCollection(aEvent.fK0ShortCollection),
   fKchPCollection(aEvent.fKchPCollection),
-  fKchMCollection(aEvent.fKchMCollection)
+  fKchMCollection(aEvent.fKchMCollection),
+  fProtCollection(aEvent.fProtCollection),
+  fAProtCollection(aEvent.fAProtCollection)
 {
 
 }
@@ -77,6 +85,8 @@ ThermEvent& ThermEvent::operator=(const ThermEvent& aEvent)
   fK0ShortCollection = aEvent.fK0ShortCollection;
   fKchPCollection = aEvent.fKchPCollection;
   fKchMCollection = aEvent.fKchMCollection;
+  fProtCollection = aEvent.fProtCollection;
+  fAProtCollection = aEvent.fAProtCollection;
 
   return *this;
 }
@@ -108,6 +118,9 @@ bool ThermEvent::IsParticleOfInterest(ParticleCoor* aParticle)
 
   else if(tPID == 321) return true;    //KchP
   else if(tPID == -321) return true;   //KchM 
+
+  else if(tPID == 2212) return true;    //Proton
+  else if(tPID == -2212) return true;   //AntiProton 
 
   else return false;
 }
@@ -164,6 +177,9 @@ void ThermEvent::PushBackThermParticleOfInterest(ParticleCoor* aParticle)
   else if(aParticle->pid == kPDGKchP) fKchPCollection.emplace_back(aParticle);
   else if(aParticle->pid == kPDGKchM) fKchMCollection.emplace_back(aParticle);
 
+  else if(aParticle->pid == kPDGProt) fProtCollection.emplace_back(aParticle);
+  else if(aParticle->pid == kPDGAntiProt) fAProtCollection.emplace_back(aParticle);
+
   else
   {
     cout << "Particle of wrong type trying to be added collection via ThermEvent::PushBackThermParticleOfInterest" << endl;
@@ -200,6 +216,9 @@ void ThermEvent::ClearThermEvent()
 
   ClearCollection(fKchPCollection);
   ClearCollection(fKchMCollection);
+
+  ClearCollection(fProtCollection);
+  ClearCollection(fAProtCollection);
 }
 
 //________________________________________________________________________________________________________________
@@ -304,6 +323,9 @@ void ThermEvent::FindAllFathers()
   for(unsigned int i=0; i<fKchPCollection.size(); i++) FindFather(fKchPCollection[i]);
   for(unsigned int i=0; i<fKchMCollection.size(); i++) FindFather(fKchMCollection[i]);
 
+  for(unsigned int i=0; i<fProtCollection.size(); i++) FindFather(fProtCollection[i]);
+  for(unsigned int i=0; i<fAProtCollection.size(); i++) FindFather(fAProtCollection[i]);
+
   //No longer need fAllParticlesCollection, so I should clear it and free up memory before it is pushed to ThermEventsCollection
   ClearCollection(fAllParticlesCollection);
 }
@@ -325,6 +347,8 @@ vector<ThermParticle> ThermEvent::GetParticleCollection(ParticlePDGType aPDGType
 
   if(aPDGType == kPDGKchP) return fKchPCollection;
   else if(aPDGType == kPDGKchM) return fKchMCollection;
+  else if(aPDGType == kPDGProt) return fProtCollection;
+  else if(aPDGType == kPDGAntiProt) return fAProtCollection;
 
   else assert(0);
 }
@@ -349,6 +373,8 @@ void ThermEvent::SetParticleCollection(unsigned int aEventID, ParticlePDGType aP
 
   if(aPDGType == kPDGKchP) fKchPCollection = aCollection;
   else if(aPDGType == kPDGKchM) fKchMCollection = aCollection;
+  else if(aPDGType == kPDGProt) fProtCollection = aCollection;
+  else if(aPDGType == kPDGAntiProt) fAProtCollection = aCollection;
 
   else assert(0);
 }

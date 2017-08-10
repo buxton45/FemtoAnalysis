@@ -76,8 +76,8 @@ private:
   vector<ThermParticle> fKchPCollection;
   vector<ThermParticle> fKchMCollection;
 
-
-
+  vector<ThermParticle> fProtCollection;
+  vector<ThermParticle> fAProtCollection;
 
 #ifdef __ROOT__
   ClassDef(ThermEvent, 1)

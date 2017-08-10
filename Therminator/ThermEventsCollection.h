@@ -71,15 +71,18 @@ public:
 
   void MapAndFillParentsMatrixParticleV0(TH2* aMatrix, int aV0FatherType, int aTrackFatherType);
   void MapAndFillParentsMatrixV0V0(TH2* aMatrix, int aV01FatherType, int aV02Type);
+  void MapAndFillProtonParents(TH1* aHist, int aFatherType);
 
   void MapAndFillPairFractionHistogramParticleV0(TH1* aHistogram, int aV0FatherType, int aTrackFatherType);
   void MapAndFillPairFractionHistogramV0V0(TH1* aHistogram, int aV01FatherType, int aV02FatherType);
 
   void BuildPairFractionHistogramsParticleV0(ParticlePDGType aParticleType, ParticlePDGType aV0Type, TH1* aHistogram, TH2* aMatrix);
   void BuildPairFractionHistogramsV0V0(ParticlePDGType aV01Type, ParticlePDGType aV02Type, TH1* aHistogram, TH2* aMatrix);
+  void BuildProtonParents();
 
   void BuildAllPairFractionHistograms();
-  void BuildUniqueParentsParticleV0(int aV0FatherType, int aTrackFatherType);
+  void BuildUniqueParents(int aParticleType, int aFatherType);
+  vector<int> UniqueCombineVectors(vector<int> &aVec1, vector<int> &aVec2);
   void PrintUniqueParents();
 
   void SaveAllPairFractionHistograms(TString aSaveFileLocation);
@@ -104,8 +107,20 @@ private:
   int fNBinsKStar;
 
   bool fBuildUniqueParents;
-  vector<int> fUniqueV0Parents;
-  vector<int> fUniqueTrackParents;
+
+  vector<int> fUniqueLamParents;
+  vector<int> fUniqueALamParents;
+  vector<int> fUniquecLamParents; //cLam = Lam and ALam
+
+  vector<int> fUniqueK0Parents;
+
+  vector<int> fUniqueKchPParents;
+  vector<int> fUniqueKchMParents;
+  vector<int> fUniquecKchParents; //cKch = KchP and KchM
+
+  vector<int> fUniqueProtParents;
+  vector<int> fUniqueAProtParents;
+  vector<int> fUniquecProtParents;
 
   //LamKchP
   TH2* fSigToLamKchPTransform;
@@ -212,7 +227,11 @@ private:
   //LamLam to check with Jai
   TH2* fSigToLamLamTransform;
 
-  //TODO K0 analyses will invole feed-down from both Lam and K0
+  //Protons
+  TH1* fProtonParents;
+  TH1* fAProtonParents;
+
+
 
 #ifdef __ROOT__
   ClassDef(ThermEventsCollection, 1)

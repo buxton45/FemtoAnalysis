@@ -59,7 +59,7 @@ SimpleChargedResidualCf::SimpleChargedResidualCf(AnalysisType aResidualType, TH2
     break;
 
   default:
-    cout << "ERROR: SimpleChargedResidualCf::SimpleChargedResidualCf:  fResidualType = " << fResidualType << " is not apropriate" << endl << endl;
+    cout << "ERROR: SimpleChargedResidualCf::SimpleChargedResidualCf:  fResidualType = " << fResidualType << " is not appropriate" << endl << endl;
     assert(0);
   }
 
