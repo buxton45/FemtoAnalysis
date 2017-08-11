@@ -298,8 +298,64 @@ int main(int argc, char **argv)
   }
 
   //------------------------------------
+  bool bZoomProtonParents = true;
 
+  TH1D* tProtonParents = Get1dHisto(tFileLocationPairFractions, "fProtonParents");
+  TH1D* tAProtonParents = Get1dHisto(tFileLocationPairFractions, "fAProtonParents");
 
+  for(unsigned int i=0; i<tProtonFathers.size(); i++)
+  {
+    tProtonParents->GetXaxis()->SetBinLabel(i+1, GetParticleName(tProtonFathers[i]));
+    tAProtonParents->GetXaxis()->SetBinLabel(i+1, GetParticleName(tProtonFathers[i]));
+  }
+
+  tProtonParents->LabelsOption("v", "X");
+  tAProtonParents->LabelsOption("v", "X");
+
+  TCanvas *tProtonParentsCan;
+  TCanvas *tAProtonParentsCan;
+
+  if(bZoomProtonParents)
+  {
+    tProtonParentsCan = new TCanvas("tProtonParentsCan","tProtonParentsCan");
+    tAProtonParentsCan = new TCanvas("tAProtonParentsCan","tAProtonParentsCan");
+
+    tProtonParents->GetXaxis()->SetRange(90,112);
+    tAProtonParents->GetXaxis()->SetRange(56,78);
+
+    
+  }
+  else
+  {
+    tProtonParentsCan = new TCanvas("tProtonParentsCan","tProtonParentsCan", 2100, 1000);
+    tAProtonParentsCan = new TCanvas("tAProtonParentsCan","tAProtonParentsCan", 2100, 1000);
+
+    tProtonParents->GetXaxis()->SetRange(82,168);
+    tAProtonParents->GetXaxis()->SetRange(1,84);
+
+    tProtonParents->GetXaxis()->SetLabelSize(0.025);
+    tAProtonParents->GetXaxis()->SetLabelSize(0.025);
+  }
+
+  tProtonParentsCan->cd();
+  tProtonParents->Draw();
+
+  tAProtonParentsCan->cd();
+  tAProtonParents->Draw();
+
+  if(bSaveImages)
+  {
+    if(bZoomProtonParents)
+    {
+      tProtonParentsCan->SaveAs(tDirectory+"Figures/ProtonParents.pdf");
+      tAProtonParentsCan->SaveAs(tDirectory+"Figures/AntiProtonParents.pdf");
+    }
+    else
+    {
+      tProtonParentsCan->SaveAs(tDirectory+"Figures/ProtonParents_UnZoomed.pdf");
+      tAProtonParentsCan->SaveAs(tDirectory+"Figures/AntiProtonParents_UnZoomed.pdf");
+    }
+  }
 
 //-------------------------------------------------------------------------------
   theApp->Run(kTRUE); //Run the TApp to pause the code.
