@@ -738,6 +738,7 @@ void FitPairAnalysis::LoadTransformMatrices(int aRebin, TString aFileLocation)
   switch(fAnalysisType) {
   case kLamKchP:
   case kLamKchM:
+  case kLamK0:
     tFullNameSig = TString("f") + tName1Sig + tName2;
     tFullNameXiC = TString("f") + tName1XiC + tName2;
     tFullNameXi0 = TString("f") + tName1Xi0 + tName2;
@@ -750,6 +751,7 @@ void FitPairAnalysis::LoadTransformMatrices(int aRebin, TString aFileLocation)
 
   case kALamKchP:
   case kALamKchM:
+  case kALamK0:
     tFullNameSig = TString("fA") + tName1Sig + tName2;
     tFullNameXiC = TString("fA") + tName1XiC + tName2;
     tFullNameXi0 = TString("fA") + tName1Xi0 + tName2;
@@ -768,6 +770,7 @@ void FitPairAnalysis::LoadTransformMatrices(int aRebin, TString aFileLocation)
   TString tFullNameLamKSt0, tFullNameSigKSt0, tFullNameXiCKSt0, tFullNameXi0KSt0;
   switch(fAnalysisType) {
   case kLamKchP:
+  case kLamK0:
     tFullNameLamKSt0 = TString("fLamKSt0To") + tName2;
     tFullNameSigKSt0 = TString("fSigKSt0To") + tName2;
     tFullNameXiCKSt0 = TString("fXiCKSt0To") + tName2;
@@ -782,6 +785,7 @@ void FitPairAnalysis::LoadTransformMatrices(int aRebin, TString aFileLocation)
     break;
 
   case kALamKchP:
+  case kALamK0:
     tFullNameLamKSt0 = TString("fALamKSt0To") + tName2;
     tFullNameSigKSt0 = TString("fASigKSt0To") + tName2;
     tFullNameXiCKSt0 = TString("fAXiCKSt0To") + tName2;
@@ -909,6 +913,34 @@ void FitPairAnalysis::LoadTransformMatrices(int aRebin, TString aFileLocation)
     fTransformStorageMapping.push_back(kResASig0AKSt0);
     fTransformStorageMapping.push_back(kResAXiCAKSt0);
     fTransformStorageMapping.push_back(kResAXi0AKSt0);
+    break;
+
+  case kLamK0:
+    fTransformStorageMapping.push_back(kResSig0K0);
+    fTransformStorageMapping.push_back(kResXiCK0);
+    fTransformStorageMapping.push_back(kResXi0K0);
+    fTransformStorageMapping.push_back(kResOmegaK0);
+    fTransformStorageMapping.push_back(kResSigStPK0);
+    fTransformStorageMapping.push_back(kResSigStMK0);
+    fTransformStorageMapping.push_back(kResSigSt0K0);
+    fTransformStorageMapping.push_back(kResLamKSt0ToLamK0);
+    fTransformStorageMapping.push_back(kResSig0KSt0ToLamK0);
+    fTransformStorageMapping.push_back(kResXiCKSt0ToLamK0);
+    fTransformStorageMapping.push_back(kResXi0KSt0ToLamK0);
+    break;
+
+  case kALamK0:
+    fTransformStorageMapping.push_back(kResASig0K0);
+    fTransformStorageMapping.push_back(kResAXiCK0);
+    fTransformStorageMapping.push_back(kResAXi0K0);
+    fTransformStorageMapping.push_back(kResAOmegaK0);
+    fTransformStorageMapping.push_back(kResASigStMK0);
+    fTransformStorageMapping.push_back(kResASigStPK0);
+    fTransformStorageMapping.push_back(kResASigSt0K0);
+    fTransformStorageMapping.push_back(kResALamKSt0ToALamK0);
+    fTransformStorageMapping.push_back(kResASig0KSt0ToALamK0);
+    fTransformStorageMapping.push_back(kResAXiCKSt0ToALamK0);
+    fTransformStorageMapping.push_back(kResAXi0KSt0ToALamK0);
     break;
 
   default:

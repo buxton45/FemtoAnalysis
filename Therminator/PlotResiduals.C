@@ -60,7 +60,12 @@ void DrawPairFractions(TPad* aPad, TH1D* aHisto)
 {
   aPad->cd();
   gStyle->SetOptStat(0);
-
+/*
+  double tPrimaryFractionInOther = 0.5;
+  double tAdditionalPrimary = tPrimaryFractionInOther*aHisto->GetBinContent(12);
+  double tTotalPrimaryLambda = aHisto->GetBinContent(1) + tAdditionalPrimary;
+  aHisto->SetBinContent(1, tTotalPrimaryLambda);
+*/
   double tNCounts = 0.;
   for(int i=1; i<=11; i++) tNCounts += aHisto->GetBinContent(i);
   double tNFakes = 0.05*tNCounts;
@@ -84,8 +89,8 @@ void DrawParentsMatrix(AnalysisType aAnType, TPad* aPad, TH2D* aMatrix, bool aZo
   aMatrix->GetXaxis()->SetLabelSize(0.01);
   if(aZoomROI)
   {
-    if(aAnType==kLamKchP || aAnType==kLamKchM) aMatrix->GetXaxis()->SetRange(50,65);
-    else if(aAnType==kALamKchP || aAnType==kALamKchM) aMatrix->GetXaxis()->SetRange(35,50);
+    if(aAnType==kLamKchP || aAnType==kLamKchM || aAnType==kLamK0) aMatrix->GetXaxis()->SetRange(50,65);
+    else if(aAnType==kALamKchP || aAnType==kALamKchM || aAnType==kALamK0) aMatrix->GetXaxis()->SetRange(35,50);
     else assert(0);
     aMatrix->GetXaxis()->SetLabelSize(0.03);
   }
@@ -98,6 +103,7 @@ void DrawParentsMatrix(AnalysisType aAnType, TPad* aPad, TH2D* aMatrix, bool aZo
   {
     if(aAnType==kLamKchP || aAnType==kALamKchP) aMatrix->GetYaxis()->SetRange(56,66);
     else if(aAnType==kLamKchM || aAnType==kALamKchM) aMatrix->GetYaxis()->SetRange(50,60);
+    else if(aAnType==kLamK0 || aAnType==kALamK0) aMatrix->GetYaxis()->SetRange(38,48);
     else assert(0);
     aMatrix->GetYaxis()->SetLabelSize(0.04);
   }
@@ -134,6 +140,12 @@ int main(int argc, char **argv)
   TH1D* tPairFractions_ALamKchP = Get1dHisto(tFileLocationPairFractions,"fPairFractionsALamKchP");
   const char* tXAxisLabels_ALamKchP[12] = {cAnalysisRootTags[kALamKchP], cAnalysisRootTags[kResASig0KchP], cAnalysisRootTags[kResAXi0KchP], cAnalysisRootTags[kResAXiCKchP], cAnalysisRootTags[kResASigStMKchP], cAnalysisRootTags[kResASigStPKchP], cAnalysisRootTags[kResASigSt0KchP], cAnalysisRootTags[kResALamKSt0], cAnalysisRootTags[kResASig0KSt0], cAnalysisRootTags[kResAXi0KSt0], cAnalysisRootTags[kResAXiCKSt0], "Fake"}; 
 
+  TH1D* tPairFractions_LamK0 = Get1dHisto(tFileLocationPairFractions,"fPairFractionsLamK0");
+  const char* tXAxisLabels_LamK0[12] = {cAnalysisRootTags[kLamK0], cAnalysisRootTags[kResSig0K0], cAnalysisRootTags[kResXi0K0], cAnalysisRootTags[kResXiCK0], cAnalysisRootTags[kResSigStPK0], cAnalysisRootTags[kResSigStMK0], cAnalysisRootTags[kResSigSt0K0], cAnalysisRootTags[kResLamKSt0], cAnalysisRootTags[kResSig0KSt0], cAnalysisRootTags[kResXi0KSt0], cAnalysisRootTags[kResXiCKSt0], "Fake"};
+
+  TH1D* tPairFractions_ALamK0 = Get1dHisto(tFileLocationPairFractions,"fPairFractionsALamK0");
+  const char* tXAxisLabels_ALamK0[12] = {cAnalysisRootTags[kALamK0], cAnalysisRootTags[kResASig0K0], cAnalysisRootTags[kResAXi0K0], cAnalysisRootTags[kResAXiCK0], cAnalysisRootTags[kResASigStMK0], cAnalysisRootTags[kResASigStPK0], cAnalysisRootTags[kResASigSt0K0], cAnalysisRootTags[kResALamKSt0], cAnalysisRootTags[kResASig0KSt0], cAnalysisRootTags[kResAXi0KSt0], cAnalysisRootTags[kResAXiCKSt0], "Fake"}; 
+
   for(int i=1; i<=12; i++)
   {
     tPairFractions_LamKchP->GetXaxis()->SetBinLabel(i,tXAxisLabels_LamKchP[i-1]);
@@ -141,17 +153,23 @@ int main(int argc, char **argv)
 
     tPairFractions_LamKchM->GetXaxis()->SetBinLabel(i,tXAxisLabels_LamKchM[i-1]);
     tPairFractions_ALamKchP->GetXaxis()->SetBinLabel(i,tXAxisLabels_ALamKchP[i-1]);
+
+    tPairFractions_LamK0->GetXaxis()->SetBinLabel(i,tXAxisLabels_LamK0[i-1]);
+    tPairFractions_ALamK0->GetXaxis()->SetBinLabel(i,tXAxisLabels_ALamK0[i-1]);
   }
 
 
-  TCanvas* tPairFractionsCan = new TCanvas("tPairFractionsCan", "tPairFractionsCan");
-  tPairFractionsCan->Divide(2,2);
+  TCanvas* tPairFractionsCan = new TCanvas("tPairFractionsCan", "tPairFractionsCan", 750, 1500);
+  tPairFractionsCan->Divide(2,3);
 
   DrawPairFractions((TPad*)tPairFractionsCan->cd(1), tPairFractions_LamKchP);
   DrawPairFractions((TPad*)tPairFractionsCan->cd(2), tPairFractions_ALamKchM);
 
   DrawPairFractions((TPad*)tPairFractionsCan->cd(3), tPairFractions_LamKchM);
   DrawPairFractions((TPad*)tPairFractionsCan->cd(4), tPairFractions_ALamKchP);
+
+  DrawPairFractions((TPad*)tPairFractionsCan->cd(5), tPairFractions_LamK0);
+  DrawPairFractions((TPad*)tPairFractionsCan->cd(6), tPairFractions_ALamK0);
 
   if(bSaveImages) tPairFractionsCan->SaveAs(tDirectory+"Figures/ParentsFractions.pdf");
 
@@ -224,6 +242,9 @@ int main(int argc, char **argv)
   TH2D* tParentsMatrix_LamKchM = Get2dHisto(tFileLocationPairFractions, "fParentsMatrixLamKchM");
   TH2D* tParentsMatrix_ALamKchP = Get2dHisto(tFileLocationPairFractions, "fParentsMatrixALamKchP");
 
+  TH2D* tParentsMatrix_LamK0 = Get2dHisto(tFileLocationPairFractions, "fParentsMatrixLamK0");
+  TH2D* tParentsMatrix_ALamK0 = Get2dHisto(tFileLocationPairFractions, "fParentsMatrixALamK0");
+
   for(unsigned int i=0; i<tLambdaFathers.size(); i++)
   {
     tParentsMatrix_LamKchP->GetXaxis()->SetBinLabel(i+1, GetParticleName(tLambdaFathers[i]));
@@ -231,6 +252,9 @@ int main(int argc, char **argv)
 
     tParentsMatrix_LamKchM->GetXaxis()->SetBinLabel(i+1, GetParticleName(tLambdaFathers[i]));
     tParentsMatrix_ALamKchP->GetXaxis()->SetBinLabel(i+1, GetParticleName(tLambdaFathers[i]));
+
+    tParentsMatrix_LamK0->GetXaxis()->SetBinLabel(i+1, GetParticleName(tLambdaFathers[i]));
+    tParentsMatrix_ALamK0->GetXaxis()->SetBinLabel(i+1, GetParticleName(tLambdaFathers[i]));
   }
 
   for(unsigned int i=0; i<tKchFathers.size(); i++)
@@ -240,6 +264,12 @@ int main(int argc, char **argv)
 
     tParentsMatrix_LamKchM->GetYaxis()->SetBinLabel(i+1, GetParticleName(tKchFathers[i]));
     tParentsMatrix_ALamKchP->GetYaxis()->SetBinLabel(i+1, GetParticleName(tKchFathers[i]));
+  }
+
+  for(unsigned int i=0; i<tK0ShortFathers.size(); i++)
+  {
+    tParentsMatrix_LamK0->GetYaxis()->SetBinLabel(i+1, GetParticleName(tK0ShortFathers[i]));
+    tParentsMatrix_ALamK0->GetYaxis()->SetBinLabel(i+1, GetParticleName(tK0ShortFathers[i]));
   }
 
 /*
@@ -256,6 +286,8 @@ int main(int argc, char **argv)
   TCanvas* tParentsCan_ALamKchM;
   TCanvas* tParentsCan_LamKchM;
   TCanvas* tParentsCan_ALamKchP;
+  TCanvas* tParentsCan_LamK0;
+  TCanvas* tParentsCan_ALamK0;
 
   if(bZoomMatrixROI)
   {
@@ -263,6 +295,8 @@ int main(int argc, char **argv)
     tParentsCan_ALamKchM = new TCanvas("tParentsCan_ALamKchM", "tParentsCan_ALamKchM");
     tParentsCan_LamKchM = new TCanvas("tParentsCan_LamKchM", "tParentsCan_LamKchM");
     tParentsCan_ALamKchP = new TCanvas("tParentsCan_ALamKchP", "tParentsCan_ALamKchP");
+    tParentsCan_LamK0 = new TCanvas("tParentsCan_LamK0", "tParentsCan_LamK0");
+    tParentsCan_ALamK0 = new TCanvas("tParentsCan_ALamK0", "tParentsCan_ALamK0");
   }
   else
   {
@@ -270,12 +304,16 @@ int main(int argc, char **argv)
     tParentsCan_ALamKchM = new TCanvas("tParentsCan_ALamKchM", "tParentsCan_ALamKchM", 1000, 1500);
     tParentsCan_LamKchM = new TCanvas("tParentsCan_LamKchM", "tParentsCan_LamKchM", 1000, 1500);
     tParentsCan_ALamKchP = new TCanvas("tParentsCan_ALamKchP", "tParentsCan_ALamKchP", 1000, 1500);
+    tParentsCan_LamK0 = new TCanvas("tParentsCan_LamK0", "tParentsCan_LamK0", 1000, 1500);
+    tParentsCan_ALamK0 = new TCanvas("tParentsCan_ALamK0", "tParentsCan_ALamK0", 1000, 1500);
   }
 
   DrawParentsMatrix(kLamKchP, (TPad*)tParentsCan_LamKchP, tParentsMatrix_LamKchP, bZoomMatrixROI);
   DrawParentsMatrix(kALamKchM, (TPad*)tParentsCan_ALamKchM, tParentsMatrix_ALamKchM, bZoomMatrixROI);
   DrawParentsMatrix(kLamKchM, (TPad*)tParentsCan_LamKchM , tParentsMatrix_LamKchM, bZoomMatrixROI);
   DrawParentsMatrix(kALamKchP, (TPad*)tParentsCan_ALamKchP, tParentsMatrix_ALamKchP, bZoomMatrixROI);
+  DrawParentsMatrix(kLamK0, (TPad*)tParentsCan_LamK0 , tParentsMatrix_LamK0, bZoomMatrixROI);
+  DrawParentsMatrix(kALamK0, (TPad*)tParentsCan_ALamK0, tParentsMatrix_ALamK0, bZoomMatrixROI);
 
   if(bSaveImages) 
   {
@@ -286,6 +324,9 @@ int main(int argc, char **argv)
 
       tParentsCan_LamKchM->SaveAs(tDirectory+"Figures/ParentsLamKchM.pdf");
       tParentsCan_ALamKchP->SaveAs(tDirectory+"Figures/ParentsALamKchP.pdf");
+
+      tParentsCan_LamK0->SaveAs(tDirectory+"Figures/ParentsLamK0.pdf");
+      tParentsCan_ALamK0->SaveAs(tDirectory+"Figures/ParentsALamK0.pdf");
     }
     else
     {
@@ -294,6 +335,9 @@ int main(int argc, char **argv)
 
       tParentsCan_LamKchM->SaveAs(tDirectory+"Figures/ParentsLamKchM_UnZoomed.pdf");
       tParentsCan_ALamKchP->SaveAs(tDirectory+"Figures/ParentsALamKchP_UnZoomed.pdf");
+
+      tParentsCan_LamK0->SaveAs(tDirectory+"Figures/ParentsLamK0_UnZoomed.pdf");
+      tParentsCan_ALamK0->SaveAs(tDirectory+"Figures/ParentsALamK0_UnZoomed.pdf");
     }
   }
 

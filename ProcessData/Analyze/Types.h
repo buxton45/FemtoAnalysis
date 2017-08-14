@@ -35,10 +35,24 @@ kResOmegaKchP=31, kResAOmegaKchM=32, kResOmegaKchM=33, kResAOmegaKchP=34,
 kResSigStPKchP=35, kResASigStMKchM=36, kResSigStPKchM=37, kResASigStMKchP=38, 
 kResSigStMKchP=39, kResASigStPKchM=40, kResSigStMKchM=41, kResASigStPKchP=42,
 kResSigSt0KchP=43, kResASigSt0KchM=44, kResSigSt0KchM=45, kResASigSt0KchP=46,
+
 kResLamKSt0=47, kResALamAKSt0=48, kResLamAKSt0=49, kResALamKSt0=50,
 kResSig0KSt0=51, kResASig0AKSt0=52, kResSig0AKSt0=53, kResASig0KSt0=54, 
 kResXi0KSt0=55, kResAXi0AKSt0=56, kResXi0AKSt0=57, kResAXi0KSt0=58, 
-kResXiCKSt0=59, kResAXiCAKSt0=60, kResXiCAKSt0=61, kResAXiCKSt0=62
+kResXiCKSt0=59, kResAXiCAKSt0=60, kResXiCAKSt0=61, kResAXiCKSt0=62,
+
+kResSig0K0=63, kResASig0K0=64, 
+kResXi0K0=65, kResAXi0K0=66, 
+kResXiCK0=67, kResAXiCK0=68, 
+kResOmegaK0=69, kResAOmegaK0=70, 
+kResSigStPK0=71, kResASigStMK0=72, 
+kResSigStMK0=73, kResASigStPK0=74,
+kResSigSt0K0=75, kResASigSt0K0=76,
+
+kResLamKSt0ToLamK0=77, kResALamKSt0ToALamK0=78,
+kResSig0KSt0ToLamK0=79, kResASig0KSt0ToALamK0=80, 
+kResXi0KSt0ToLamK0=81, kResAXi0KSt0ToALamK0=82, 
+kResXiCKSt0ToLamK0=83, kResAXiCKSt0ToALamK0=84,
 };
 
   enum BFieldType {kFemtoPlus=0, kFemtoMinus=1, kBp1=2, kBp2=3, kBm1=4, kBm2=5, kBm3=6};
@@ -196,10 +210,11 @@ kXiCKSt0=40, kAXiCAKSt0=41, kXiCAKSt0=42, kAXiCKSt0=43
 
 
   //-------------------------------------------------
-  extern const char* const cAnalysisBaseTags[63];
-  extern const char* const cAnalysisRootTags[63];
-  extern const double cAnalysisLambdaFactors[63];
-  extern const double cAnalysisLambdaFactorsOLD[63];  //NOTE if I want to use this, switch name with cAnalysisLambdaFactors
+  extern const char* const cAnalysisBaseTags[85];
+  extern const char* const cAnalysisRootTags[85];
+  extern const double cAnalysisLambdaFactors[85];
+  extern const double cAnalysisLambdaFactors2[85];  //NOTE if I want to use this, switch name with cAnalysisLambdaFactors
+  extern const double cAnalysisLambdaFactorsOLD[85];  //NOTE if I want to use this, switch name with cAnalysisLambdaFactors
 //  extern const char* const cResidualBaseTags[44];
 //  extern const char* const cResidualRootTags[44];
   extern const char* const cBFieldTags[7];
