@@ -184,6 +184,15 @@ td1dVec SimpleChargedResidualCf::GetContributionToFitCf(double aOverallLambda, d
 }
 
 //________________________________________________________________________________________________________________
+TH1D* SimpleChargedResidualCf::GetChargedResidualCorrelationHistogramWithLambdaApplied(TString aTitle, double aOverallLambda, double aMaxKStar)
+{
+  td1dVec tReturnVec = GetChargedResidualCorrelation(aMaxKStar);
+  for(unsigned int i=0; i<tReturnVec.size(); i++) tReturnVec[i] = 1. + fLambdaFactor*aOverallLambda*(tReturnVec[i]-1.);  //TODO is this right?
+  TH1D* tReturnHist = Convert1dVecToHist(tReturnVec, fKStarBinCenters, aTitle);
+  return tReturnHist;
+}
+
+//________________________________________________________________________________________________________________
 TH1D* SimpleChargedResidualCf::GetTransformedChargedResidualCorrelationHistogramWithLambdaApplied(TString aTitle, double aOverallLambda, double aMaxKStar)
 {
   td1dVec tReturnVec = GetContributionToFitCf(aOverallLambda, aMaxKStar);

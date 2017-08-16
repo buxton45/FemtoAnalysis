@@ -34,13 +34,14 @@ public:
   TH1D* GetTransformedChargedResidualCorrelationHistogram(TString aTitle, double aMaxKStar=1.0);
 
   td1dVec GetContributionToFitCf(double aOverallLambda, double aMaxKStar=1.0);
+  TH1D* GetChargedResidualCorrelationHistogramWithLambdaApplied(TString aTitle, double aOverallLambda, double aMaxKStar=1.0);
   TH1D* GetTransformedChargedResidualCorrelationHistogramWithLambdaApplied(TString aTitle, double aOverallLambda, double aMaxKStar=1.0);
 
   //inline
   AnalysisType GetResidualType();
-  TH1D* GetNeutralResidualCorrelationHistogram(TString aTitle="fResCf");
-  TH1D* GetTransformedNeutralResidualCorrelationHistogram(TString aTitle="fTransformedResCf");
-
+  TH1D* GetChargedResidualCorrelationHistogram(TString aTitle="fResCf");
+  TH1D* GetTransformedChargedResidualCorrelationHistogram(TString aTitle="fTransformedResCf");
+  double GetLambdaFactor();
 protected:
 AnalysisType fResidualType;
 FitPairAnalysis* fPairAn;
@@ -59,7 +60,7 @@ td1dVec fTransformedResCf;
 };
 
 inline AnalysisType SimpleChargedResidualCf::GetResidualType() {return fResidualType;}
-inline TH1D* SimpleChargedResidualCf::GetNeutralResidualCorrelationHistogram(TString aTitle) {return Convert1dVecToHist(fResCf, fKStarBinCenters, aTitle);}
-inline TH1D* SimpleChargedResidualCf::GetTransformedNeutralResidualCorrelationHistogram(TString aTitle) {return Convert1dVecToHist(fTransformedResCf, fKStarBinCenters, aTitle);}
-
+inline TH1D* SimpleChargedResidualCf::GetChargedResidualCorrelationHistogram(TString aTitle) {return Convert1dVecToHist(fResCf, fKStarBinCenters, aTitle);}
+inline TH1D* SimpleChargedResidualCf::GetTransformedChargedResidualCorrelationHistogram(TString aTitle) {return Convert1dVecToHist(fTransformedResCf, fKStarBinCenters, aTitle);}
+inline double SimpleChargedResidualCf::GetLambdaFactor() {return fLambdaFactor;}
 #endif
