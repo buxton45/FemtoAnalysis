@@ -9,7 +9,7 @@
 #include "TStyle.h"
 #include "TPaveText.h"
 
-#include "PIDMapping.C"
+#include "PIDMapping.h"
 
 //_________________________________________________________________________________________
 TH1D* Get1dHisto(TString FileName, TString HistoName)
@@ -76,6 +76,68 @@ void DrawPairFractions(TPad* aPad, TH1D* aHisto)
   aHisto->Draw();
 
   PrintLambdaValues(aPad,aHisto);
+}
+
+//________________________________________________________________________________________________________________
+void DrawParentsMatrixBackground(AnalysisType aAnType, TPad* aPad, TH2D* aMatrix)
+{
+  vector<int> tBinsXToSetToZero;
+  vector<int> tBinsYToSetToZero;
+  switch(aAnType) {
+  case kLamKchP:
+    tBinsXToSetToZero = vector<int>{50, 53, 55, 56, 59, 62, 63};
+    tBinsYToSetToZero = vector<int>{61, 63};
+    break;
+
+  case kALamKchM:
+    tBinsXToSetToZero = vector<int>{36, 37, 40, 43, 44, 46, 49};
+    tBinsYToSetToZero = vector<int>{53, 55};
+    break;
+
+  case kLamKchM:
+    tBinsXToSetToZero = vector<int>{50, 53, 55, 56, 59, 62, 63};
+    tBinsYToSetToZero = vector<int>{53, 55};
+    break;
+
+  case kALamKchP:
+    tBinsXToSetToZero = vector<int>{36, 37, 40, 43, 44, 46, 49};
+    tBinsYToSetToZero = vector<int>{61, 63};
+    break;
+
+  case kLamK0:
+    tBinsXToSetToZero = vector<int>{50, 53, 55, 56, 59, 62, 63};
+    tBinsYToSetToZero = vector<int>{42, 45};
+    break;
+
+  case kALamK0:
+    tBinsXToSetToZero = vector<int>{36, 37, 40, 43, 44, 46, 49};
+    tBinsYToSetToZero = vector<int>{42, 45};
+    break;
+
+  default:
+    cout << "ERROR: DrawParentsMatrixBackground: aAnType = " << aAnType << " is not appropriate" << endl << endl;
+    assert(0);
+  }
+
+  //---------------------------------
+  for(unsigned int i=0; i<tBinsXToSetToZero.size(); i++)
+  {
+    for(unsigned int j=0; j<tBinsYToSetToZero.size(); j++)
+    {
+      aMatrix->SetBinContent(tBinsXToSetToZero[i], tBinsYToSetToZero[j], 0.);
+    }
+  }
+
+  aPad->cd();
+  gStyle->SetOptStat(0);
+
+  aMatrix->GetXaxis()->SetRange(1,100);
+  aMatrix->GetXaxis()->SetLabelSize(0.01);
+  aMatrix->LabelsOption("v", "X");
+
+  aMatrix->GetYaxis()->SetRange(1,135);
+  aMatrix->GetYaxis()->SetLabelSize(0.01);
+  aMatrix->Draw("colz");
 }
 
 //________________________________________________________________________________________________________________
@@ -175,6 +237,7 @@ int main(int argc, char **argv)
 
   //------------------------------------
   bool bZoomMatrixROI = true;
+  bool bDrawMatrixBackground = false;
 
   vector<int> tLambdaFathers {
 -67719, -67718, -67001, -67000, -42212, -42112, -33122, -32212, -32124, -32112, 
@@ -341,6 +404,24 @@ int main(int argc, char **argv)
     }
   }
 
+  //-------------------------------------------------------------------------
+
+  if(bDrawMatrixBackground)
+  {
+    TCanvas* tParentsBgdCan_LamKchP = new TCanvas("tParentsBgdCan_LamKchP", "tParentsBgdCan_LamKchP", 1000, 1500);
+    TCanvas* tParentsBgdCan_ALamKchM = new TCanvas("tParentsBgdCan_ALamKchM", "tParentsBgdCan_ALamKchM", 1000, 1500);
+    TCanvas* tParentsBgdCan_LamKchM = new TCanvas("tParentsBgdCan_LamKchM", "tParentsBgdCan_LamKchM", 1000, 1500);
+    TCanvas* tParentsBgdCan_ALamKchP = new TCanvas("tParentsBgdCan_ALamKchP", "tParentsBgdCan_ALamKchP", 1000, 1500);
+    TCanvas* tParentsBgdCan_LamK0 = new TCanvas("tParentsBgdCan_LamK0", "tParentsBgdCan_LamK0", 1000, 1500);
+    TCanvas* tParentsBgdCan_ALamK0 = new TCanvas("tParentsBgdCan_ALamK0", "tParentsBgdCan_ALamK0", 1000, 1500);
+
+    DrawParentsMatrixBackground(kLamKchP, (TPad*)tParentsBgdCan_LamKchP, tParentsMatrix_LamKchP);
+    DrawParentsMatrixBackground(kALamKchM, (TPad*)tParentsBgdCan_ALamKchM, tParentsMatrix_ALamKchM);
+    DrawParentsMatrixBackground(kLamKchM, (TPad*)tParentsBgdCan_LamKchM, tParentsMatrix_LamKchM);
+    DrawParentsMatrixBackground(kALamKchP, (TPad*)tParentsBgdCan_ALamKchP, tParentsMatrix_ALamKchP);
+    DrawParentsMatrixBackground(kLamK0, (TPad*)tParentsBgdCan_LamK0, tParentsMatrix_LamK0);
+    DrawParentsMatrixBackground(kALamK0, (TPad*)tParentsBgdCan_ALamK0, tParentsMatrix_ALamK0);
+  }
   //------------------------------------
   bool bZoomProtonParents = true;
 
