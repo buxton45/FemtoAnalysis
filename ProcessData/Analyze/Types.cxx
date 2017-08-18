@@ -135,7 +135,7 @@ const char* const cAnalysisRootTags[85] = {
 
 };
 
-const double cAnalysisLambdaFactors[85] = {
+const double cAnalysisLambdaFactors2[85] = {
 /*kLamK0=*/0.196, /*kALamK0=*/0.205,
 /*kLamKchP=*/0.175, /*kALamKchM=*/0.181, /*kLamKchM=*/0.175, /*kALamKchP=*/0.181,
 /*kXiKchP=*/1.000, /*kAXiKchM=*/1.000, /*kXiKchM=*/1.000, /*kAXiKchP=*/1.000,
@@ -172,41 +172,41 @@ const double cAnalysisLambdaFactors[85] = {
 };
 
 
-//---------ASSUMING 0.5 OF "OTHER" FEED-DOWN BIN ARE PRIMARY------------------------
-const double cAnalysisLambdaFactors2[85] = {
-/*kLamK0=*/0.382, /*kALamK0=*/0.385,
-/*kLamKchP=*/0.349, /*kALamKchM=*/0.353, /*kLamKchM=*/0.351, /*kALamKchP=*/0.351,
+//---------NEW:ASSUMING SOME OF "OTHER" FEED-DOWN BIN ARE PRIMARY------------------------
+const double cAnalysisLambdaFactors[85] = {
+/*kLamK0=*/0.163, /*kALamK0=*/0.165,
+/*kLamKchP=*/0.154, /*kALamKchM=*/0.155, /*kLamKchM=*/0.153, /*kALamKchP=*/0.157,
 /*kXiKchP=*/1.000, /*kAXiKchM=*/1.000, /*kXiKchM=*/1.000, /*kAXiKchP=*/1.000,
 /*kXiK0=*/1.000, /*kAXiK0=*/1.000,
 /*kLamLam=*/1.000, /*kALamALam=*/1.000, /*kLamALam=*/1.000,
 /*kLamPiP=*/1.000, /*kALamPiM=*/1.000, /*kLamPiM=*/1.000, /*kALamPiP=*/1.000,
 
 //----- Residual Types -----
-/*kResSig0KchP=*/0.122, /*kResASig0KchM=*/0.125, /*kResSig0KchM=*/0.121, /*kResASig0KchP=*/0.126,
-/*kResXi0KchP=*/0.088, /*kResAXi0KchM=*/0.082, /*kResXi0KchM=*/0.087, /*kResAXi0KchP=*/0.083,
-/*kResXiCKchP=*/0.084, /*kResAXiCKchM=*/0.080, /*kResXiCKchM=*/0.084, /*kResAXiCKchP=*/0.080,
+/*kResSig0KchP=*/0.099, /*kResASig0KchM=*/0.102, /*kResSig0KchM=*/0.099, /*kResASig0KchP=*/0.103,
+/*kResXi0KchP=*/0.072, /*kResAXi0KchM=*/0.067, /*kResXi0KchM=*/0.071, /*kResAXi0KchP=*/0.068,
+/*kResXiCKchP=*/0.069, /*kResAXiCKchM=*/0.065, /*kResXiCKchM=*/0.068, /*kResAXiCKchP=*/0.066,
 /*kResOmegaKchP=*/0.000, /*kResAOmegaKchM=*/0.000, /*kResOmegaKchM=*/0.000, /*kResAOmegaKchP=*/0.000,
-/*kResSigStPKchP=*/0.056, /*kResASigStMKchM=*/0.056, /*kResSigStPKchM=*/0.056, /*kResASigStMKchP=*/0.057,
-/*kResSigStMKchP=*/0.051, /*kResASigStPKchM=*/0.055, /*kResSigStMKchM=*/0.051, /*kResASigStPKchP=*/0.055,
-/*kResSigSt0KchP=*/0.051, /*kResASigSt0KchM=*/0.049, /*kResSigSt0KchM=*/0.051, /*kResASigSt0KchP=*/0.049,
+/*kResSigStPKchP=*/0.046, /*kResASigStMKchM=*/0.046, /*kResSigStPKchM=*/0.046, /*kResASigStMKchP=*/0.046,
+/*kResSigStMKchP=*/0.042, /*kResASigStPKchM=*/0.045, /*kResSigStMKchM=*/0.041, /*kResASigStPKchP=*/0.045,
+/*kResSigSt0KchP=*/0.042, /*kResASigSt0KchM=*/0.040, /*kResSigSt0KchM=*/0.041, /*kResASigSt0KchP=*/0.041,
 
-/*kResLamKSt0=*/0.048, /*kResALamAKSt0=*/0.050, /*kResLamAKSt0=*/0.048, /*kResALamKSt0=*/0.050,
-/*kResSig0KSt0=*/0.043, /*kResASig0AKSt0=*/0.044, /*kResSig0AKSt0=*/0.043, /*kResASig0KSt0=*/0.044,
-/*kResXi0KSt0=*/0.031, /*kResAXi0AKSt0=*/0.029, /*kResXi0AKSt0=*/0.031, /*kResAXi0KSt0=*/0.029,
-/*kResXiCKSt0=*/0.030, /*kResAXiCAKSt0=*/0.028, /*kResXiCAKSt0=*/0.030, /*kResAXiCKSt0=*/0.028, 
+/*kResLamKSt0=*/0.039, /*kResALamAKSt0=*/0.041, /*kResLamAKSt0=*/0.039, /*kResALamKSt0=*/0.041,
+/*kResSig0KSt0=*/0.035, /*kResASig0AKSt0=*/0.036, /*kResSig0AKSt0=*/0.035, /*kResASig0KSt0=*/0.036,
+/*kResXi0KSt0=*/0.025, /*kResAXi0AKSt0=*/0.024, /*kResXi0AKSt0=*/0.025, /*kResAXi0KSt0=*/0.024,
+/*kResXiCKSt0=*/0.024, /*kResAXiCAKSt0=*/0.023, /*kResXiCAKSt0=*/0.024, /*kResAXiCKSt0=*/0.023, 
 
-/*kResSig0K0=*/0.134, /*kResASig0K0=*/0.138,
-/*kResXi0K0=*/0.096, /*kResAXi0K0=*/0.091,
-/*kResXiCK0=*/0.093, /*kResAXiCK0=*/0.088,
+/*kResSig0K0=*/0.107, /*kResASig0K0=*/0.111,
+/*kResXi0K0=*/0.077, /*kResAXi0K0=*/0.073,
+/*kResXiCK0=*/0.075, /*kResAXiCK0=*/0.071,
 /*kResOmegaK0=*/0.000, /*kResAOmegaK0=*/0.000,
-/*kResSigStPK0=*/0.062, /*kResASigStMK0=*/0.062,
-/*kResSigStMK0=*/0.056, /*kResASigStPK0=*/0.061,
-/*kResSigSt0K0=*/0.056, /*kResASigSt0K0=*/0.054,
+/*kResSigStPK0=*/0.050, /*kResASigStMK0=*/0.050,
+/*kResSigStMK0=*/0.045, /*kResASigStPK0=*/0.049,
+/*kResSigSt0K0=*/0.045, /*kResASigSt0K0=*/0.044,
 
-/*kResLamKSt0ToLamK0=*/0.023, /*kResALamKSt0ToALamK0=*/0.024,
-/*kResSig0KSt0ToLamK0=*/0.021, /*kResASig0KSt0ToALamK0=*/0.021,
-/*kResXi0KSt0ToLamK0=*/0.015, /*kResAXi0KSt0ToALamK0=*/0.014,
-/*kResXiCKSt0ToLamK0=*/0.014, /*kResAXiCKSt0ToALamK0=*/0.014
+/*kResLamKSt0ToLamK0=*/0.019, /*kResALamKSt0ToALamK0=*/0.020,
+/*kResSig0KSt0ToLamK0=*/0.017, /*kResASig0KSt0ToALamK0=*/0.017,
+/*kResXi0KSt0ToLamK0=*/0.012, /*kResAXi0KSt0ToALamK0=*/0.011,
+/*kResXiCKSt0ToLamK0=*/0.012, /*kResAXiCKSt0ToALamK0=*/0.011
 };
 
 

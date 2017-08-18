@@ -415,12 +415,12 @@ int main(int argc, char **argv)
     TCanvas* tParentsBgdCan_LamK0 = new TCanvas("tParentsBgdCan_LamK0", "tParentsBgdCan_LamK0", 1000, 1500);
     TCanvas* tParentsBgdCan_ALamK0 = new TCanvas("tParentsBgdCan_ALamK0", "tParentsBgdCan_ALamK0", 1000, 1500);
 
-    DrawParentsMatrixBackground(kLamKchP, (TPad*)tParentsBgdCan_LamKchP, tParentsMatrix_LamKchP);
-    DrawParentsMatrixBackground(kALamKchM, (TPad*)tParentsBgdCan_ALamKchM, tParentsMatrix_ALamKchM);
-    DrawParentsMatrixBackground(kLamKchM, (TPad*)tParentsBgdCan_LamKchM, tParentsMatrix_LamKchM);
-    DrawParentsMatrixBackground(kALamKchP, (TPad*)tParentsBgdCan_ALamKchP, tParentsMatrix_ALamKchP);
-    DrawParentsMatrixBackground(kLamK0, (TPad*)tParentsBgdCan_LamK0, tParentsMatrix_LamK0);
-    DrawParentsMatrixBackground(kALamK0, (TPad*)tParentsBgdCan_ALamK0, tParentsMatrix_ALamK0);
+    DrawParentsMatrixBackground(kLamKchP, (TPad*)tParentsBgdCan_LamKchP, (TH2D*)tParentsMatrix_LamKchP->Clone("fParentsMatrixBgdLamKchP"));
+    DrawParentsMatrixBackground(kALamKchM, (TPad*)tParentsBgdCan_ALamKchM, (TH2D*)tParentsMatrix_ALamKchM->Clone("fParentsMatrixBgdALamKchM"));
+    DrawParentsMatrixBackground(kLamKchM, (TPad*)tParentsBgdCan_LamKchM, (TH2D*)tParentsMatrix_LamKchM->Clone("fParentsMatrixBgdLamKchM"));
+    DrawParentsMatrixBackground(kALamKchP, (TPad*)tParentsBgdCan_ALamKchP, (TH2D*)tParentsMatrix_ALamKchP->Clone("fParentsMatrixBgdALamKchP"));
+    DrawParentsMatrixBackground(kLamK0, (TPad*)tParentsBgdCan_LamK0, (TH2D*)tParentsMatrix_LamK0->Clone("fParentsMatrixBgdLamK0"));
+    DrawParentsMatrixBackground(kALamK0, (TPad*)tParentsBgdCan_ALamK0, (TH2D*)tParentsMatrix_ALamK0->Clone("fParentsMatrixBgdALamK0"));
   }
   //------------------------------------
   bool bZoomProtonParents = true;
