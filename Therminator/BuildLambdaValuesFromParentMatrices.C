@@ -11,14 +11,14 @@
 
 #include "PIDMapping.h"
 
-  const char* tXAxisLabels_LamKchP[12] = {cAnalysisRootTags[kLamKchP], cAnalysisRootTags[kResSig0KchP], cAnalysisRootTags[kResXi0KchP], cAnalysisRootTags[kResXiCKchP], cAnalysisRootTags[kResSigStPKchP], cAnalysisRootTags[kResSigStMKchP], cAnalysisRootTags[kResSigSt0KchP], cAnalysisRootTags[kResLamKSt0], cAnalysisRootTags[kResSig0KSt0], cAnalysisRootTags[kResXi0KSt0], cAnalysisRootTags[kResXiCKSt0], "Fake"};
-  const char* tXAxisLabels_ALamKchM[12] = {cAnalysisRootTags[kALamKchM], cAnalysisRootTags[kResASig0KchM], cAnalysisRootTags[kResAXi0KchM], cAnalysisRootTags[kResAXiCKchM], cAnalysisRootTags[kResASigStMKchM], cAnalysisRootTags[kResASigStPKchM], cAnalysisRootTags[kResASigSt0KchM], cAnalysisRootTags[kResALamAKSt0], cAnalysisRootTags[kResASig0AKSt0], cAnalysisRootTags[kResAXi0AKSt0], cAnalysisRootTags[kResAXiCAKSt0], "Fake"};
+  const char* tXAxisLabels_LamKchP[13] = {cAnalysisRootTags[kLamKchP], cAnalysisRootTags[kResSig0KchP], cAnalysisRootTags[kResXi0KchP], cAnalysisRootTags[kResXiCKchP], cAnalysisRootTags[kResSigStPKchP], cAnalysisRootTags[kResSigStMKchP], cAnalysisRootTags[kResSigSt0KchP], cAnalysisRootTags[kResLamKSt0], cAnalysisRootTags[kResSig0KSt0], cAnalysisRootTags[kResXi0KSt0], cAnalysisRootTags[kResXiCKSt0], "Other", "Fake"};
+  const char* tXAxisLabels_ALamKchM[13] = {cAnalysisRootTags[kALamKchM], cAnalysisRootTags[kResASig0KchM], cAnalysisRootTags[kResAXi0KchM], cAnalysisRootTags[kResAXiCKchM], cAnalysisRootTags[kResASigStMKchM], cAnalysisRootTags[kResASigStPKchM], cAnalysisRootTags[kResASigSt0KchM], cAnalysisRootTags[kResALamAKSt0], cAnalysisRootTags[kResASig0AKSt0], cAnalysisRootTags[kResAXi0AKSt0], cAnalysisRootTags[kResAXiCAKSt0], "Other", "Fake"};
 
-  const char* tXAxisLabels_LamKchM[12] = {cAnalysisRootTags[kLamKchM], cAnalysisRootTags[kResSig0KchM], cAnalysisRootTags[kResXi0KchM], cAnalysisRootTags[kResXiCKchM], cAnalysisRootTags[kResSigStPKchM], cAnalysisRootTags[kResSigStMKchM], cAnalysisRootTags[kResSigSt0KchM], cAnalysisRootTags[kResLamAKSt0], cAnalysisRootTags[kResSig0AKSt0], cAnalysisRootTags[kResXi0AKSt0], cAnalysisRootTags[kResXiCAKSt0], "Fake"};
-  const char* tXAxisLabels_ALamKchP[12] = {cAnalysisRootTags[kALamKchP], cAnalysisRootTags[kResASig0KchP], cAnalysisRootTags[kResAXi0KchP], cAnalysisRootTags[kResAXiCKchP], cAnalysisRootTags[kResASigStMKchP], cAnalysisRootTags[kResASigStPKchP], cAnalysisRootTags[kResASigSt0KchP], cAnalysisRootTags[kResALamKSt0], cAnalysisRootTags[kResASig0KSt0], cAnalysisRootTags[kResAXi0KSt0], cAnalysisRootTags[kResAXiCKSt0], "Fake"}; 
+  const char* tXAxisLabels_LamKchM[13] = {cAnalysisRootTags[kLamKchM], cAnalysisRootTags[kResSig0KchM], cAnalysisRootTags[kResXi0KchM], cAnalysisRootTags[kResXiCKchM], cAnalysisRootTags[kResSigStPKchM], cAnalysisRootTags[kResSigStMKchM], cAnalysisRootTags[kResSigSt0KchM], cAnalysisRootTags[kResLamAKSt0], cAnalysisRootTags[kResSig0AKSt0], cAnalysisRootTags[kResXi0AKSt0], cAnalysisRootTags[kResXiCAKSt0], "Other", "Fake"};
+  const char* tXAxisLabels_ALamKchP[13] = {cAnalysisRootTags[kALamKchP], cAnalysisRootTags[kResASig0KchP], cAnalysisRootTags[kResAXi0KchP], cAnalysisRootTags[kResAXiCKchP], cAnalysisRootTags[kResASigStMKchP], cAnalysisRootTags[kResASigStPKchP], cAnalysisRootTags[kResASigSt0KchP], cAnalysisRootTags[kResALamKSt0], cAnalysisRootTags[kResASig0KSt0], cAnalysisRootTags[kResAXi0KSt0], cAnalysisRootTags[kResAXiCKSt0], "Other", "Fake"}; 
 
-  const char* tXAxisLabels_LamK0[12] = {cAnalysisRootTags[kLamK0], cAnalysisRootTags[kResSig0K0], cAnalysisRootTags[kResXi0K0], cAnalysisRootTags[kResXiCK0], cAnalysisRootTags[kResSigStPK0], cAnalysisRootTags[kResSigStMK0], cAnalysisRootTags[kResSigSt0K0], cAnalysisRootTags[kResLamKSt0], cAnalysisRootTags[kResSig0KSt0], cAnalysisRootTags[kResXi0KSt0], cAnalysisRootTags[kResXiCKSt0], "Fake"};
-  const char* tXAxisLabels_ALamK0[12] = {cAnalysisRootTags[kALamK0], cAnalysisRootTags[kResASig0K0], cAnalysisRootTags[kResAXi0K0], cAnalysisRootTags[kResAXiCK0], cAnalysisRootTags[kResASigStMK0], cAnalysisRootTags[kResASigStPK0], cAnalysisRootTags[kResASigSt0K0], cAnalysisRootTags[kResALamKSt0], cAnalysisRootTags[kResASig0KSt0], cAnalysisRootTags[kResAXi0KSt0], cAnalysisRootTags[kResAXiCKSt0], "Fake"}; 
+  const char* tXAxisLabels_LamK0[13] = {cAnalysisRootTags[kLamK0], cAnalysisRootTags[kResSig0K0], cAnalysisRootTags[kResXi0K0], cAnalysisRootTags[kResXiCK0], cAnalysisRootTags[kResSigStPK0], cAnalysisRootTags[kResSigStMK0], cAnalysisRootTags[kResSigSt0K0], cAnalysisRootTags[kResLamKSt0], cAnalysisRootTags[kResSig0KSt0], cAnalysisRootTags[kResXi0KSt0], cAnalysisRootTags[kResXiCKSt0], "Other", "Fake"};
+  const char* tXAxisLabels_ALamK0[13] = {cAnalysisRootTags[kALamK0], cAnalysisRootTags[kResASig0K0], cAnalysisRootTags[kResAXi0K0], cAnalysisRootTags[kResAXiCK0], cAnalysisRootTags[kResASigStMK0], cAnalysisRootTags[kResASigStPK0], cAnalysisRootTags[kResASigSt0K0], cAnalysisRootTags[kResALamKSt0], cAnalysisRootTags[kResASig0KSt0], cAnalysisRootTags[kResAXi0KSt0], cAnalysisRootTags[kResAXiCKSt0], "Other", "Fake"}; 
 
 //_________________________________________________________________________________________
 TH1D* Get1dHisto(TString FileName, TString HistoName)
@@ -79,7 +79,7 @@ void SetXAxisLabels(AnalysisType aAnType, TH1D* aHist)
     assert(0);
   }
 
-  for(int i=1; i<=12; i++) aHist->GetXaxis()->SetBinLabel(i, tLabels[i-1]);
+  for(int i=1; i<=13; i++) aHist->GetXaxis()->SetBinLabel(i, tLabels[i-1]);
 }
 
 
@@ -87,7 +87,7 @@ void SetXAxisLabels(AnalysisType aAnType, TH1D* aHist)
 TH1D* BuildPairFractions(AnalysisType aAnType, TH2D* aMatrix)
 {
   TString tName = TString::Format("PairFractions%s", cAnalysisBaseTags[aAnType]);
-  TH1D* tReturnHist = new TH1D(tName, tName, 12, 0, 12);
+  TH1D* tReturnHist = new TH1D(tName, tName, 13, 0, 13);
 
   vector<int> *tFatherCollection1, *tFatherCollection2;
   bool bParticleV0 = true;
@@ -135,7 +135,7 @@ TH1D* BuildPairFractions(AnalysisType aAnType, TH2D* aMatrix)
 void PrintLambdaValues(TPad* aPad, TH1D* aHisto)
 {
   aPad->cd();
-  TPaveText* returnText = new TPaveText(0.65,0.25,0.85,0.85,"NDC");
+  TPaveText* returnText = new TPaveText(0.50,0.25,0.70,0.85,"NDC");
     returnText->SetFillColor(0);
     returnText->SetBorderSize(0);
     returnText->SetTextAlign(22);
@@ -145,8 +145,8 @@ void PrintLambdaValues(TPad* aPad, TH1D* aHisto)
   returnText->AddText("Estimated #lambda Values");
 
   double tTotal = 0.;
-  for(int i=1; i<=12; i++) tTotal += aHisto->GetBinContent(i);
-  for(int i=1; i<=12; i++) returnText->AddText(TString(aHisto->GetXaxis()->GetBinLabel(i)) + TString::Format(" = %0.3f", aHisto->GetBinContent(i)/tTotal));
+  for(int i=1; i<=13; i++) tTotal += aHisto->GetBinContent(i);
+  for(int i=1; i<=13; i++) returnText->AddText(TString(aHisto->GetXaxis()->GetBinLabel(i)) + TString::Format(" = %0.3f", aHisto->GetBinContent(i)/tTotal));
 
   returnText->Draw();
 }
@@ -160,7 +160,7 @@ void DrawPairFractions(TPad* aPad, TH1D* aHisto)
   double tNCounts = 0.;
   for(int i=1; i<=12; i++) tNCounts += aHisto->GetBinContent(i);
   double tNFakes = 0.05*tNCounts;
-  aHisto->SetBinContent(12, aHisto->GetBinContent(12) + tNFakes);
+  aHisto->SetBinContent(13, tNFakes);
 
   aHisto->GetXaxis()->SetTitle("Parent System");
   aHisto->GetYaxis()->SetTitle("Counts");

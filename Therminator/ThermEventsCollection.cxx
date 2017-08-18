@@ -1395,7 +1395,7 @@ void ThermEventsCollection::MapAndFillPairFractionHistogramParticleV0(TH1* aHist
   else if((aV0FatherType==kPDGXi0 || aV0FatherType==kPDGAXi0) && (aTrackFatherType == kPDGKSt0 || aTrackFatherType == kPDGAKSt0)) tBin = 9.;
   else if((aV0FatherType==kPDGXiC || aV0FatherType==kPDGAXiC) && (aTrackFatherType == kPDGKSt0 || aTrackFatherType == kPDGAKSt0)) tBin = 10.;
   else if(IncludeAsPrimary(aV0FatherType, aTrackFatherType)) tBin=0.;
-  else tBin = 11.;
+  else {assert(IncludeInOthers(aV0FatherType, aTrackFatherType)); tBin = 11.;}
 
   if(tBin > -1)
   {
@@ -1422,7 +1422,7 @@ void ThermEventsCollection::MapAndFillPairFractionHistogramV0V0(TH1* aHistogram,
   else if((aV01FatherType==kPDGXi0 || aV01FatherType==kPDGAXi0) && (aV02FatherType == kPDGKSt0 || aV02FatherType == kPDGAKSt0)) tBin = 9.;
   else if((aV01FatherType==kPDGXiC || aV01FatherType==kPDGAXiC) && (aV02FatherType == kPDGKSt0 || aV02FatherType == kPDGAKSt0)) tBin = 10.;
   else if(IncludeAsPrimary(aV01FatherType, aV02FatherType)) tBin=0.;
-  else tBin = 11.;
+  else {assert(IncludeInOthers(aV01FatherType,aV02FatherType)); tBin = 11.;}
 
   if(tBin > -1)
   {

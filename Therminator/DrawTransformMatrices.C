@@ -92,15 +92,17 @@ int main(int argc, char **argv)
   //the program ends and closes everything
 //-----------------------------------------------------------------------------
   bool bDrawLogZ = false;
-  bool bSaveFigures = true;
+  bool bSaveFigures = false;
 
-  TString tFileName = "/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b2/TransformMatrices.root";
+  TString tFileName = "/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b2/TransformMatrices_Mix5.root";
   TString tSaveLocationBase = "/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b2/Figures/";
 
   TString tSaveLocationBaseLamKchP = tSaveLocationBase + TString("LamKchP/");
   TString tSaveLocationBaseALamKchP = tSaveLocationBase + TString("ALamKchP/");
   TString tSaveLocationBaseLamKchM = tSaveLocationBase + TString("LamKchM/");
   TString tSaveLocationBaseALamKchM = tSaveLocationBase + TString("ALamKchM/");
+  TString tSaveLocationBaseLamK0 = tSaveLocationBase + TString("LamK0/");
+  TString tSaveLocationBaseALamK0 = tSaveLocationBase + TString("ALamK0/");
 
   //LamKchP
   TString tSigToLamKchPName = "fSigToLamKchPTransform";
@@ -154,15 +156,33 @@ int main(int argc, char **argv)
   TString tAXiCAKSt0ToALamKchMName = "fAXiCAKSt0ToALamKchMTransform";
   TString tAXi0AKSt0ToALamKchMName = "fAXi0AKSt0ToALamKchMTransform";
 
-  TString SigToLamName = "fSigToLamKchPTransform";
+  //LamK0
+  TString tSigToLamK0Name = "fSigToLamK0Transform";
+  TString tXiCToLamK0Name = "fXiCToLamK0Transform";
+  TString tXi0ToLamK0Name = "fXi0ToLamK0Transform";
+  TString tOmegaToLamK0Name = "fOmegaToLamK0Transform";
+  TString tSigStPToLamK0Name = "fSigStPToLamK0Transform";
+  TString tSigStMToLamK0Name = "fSigStMToLamK0Transform";
+  TString tSigSt0ToLamK0Name = "fSigSt0ToLamK0Transform";
+  TString tLamKSt0ToLamK0Name = "fLamKSt0ToLamK0Transform";
+  TString tSigKSt0ToLamK0Name = "fSigKSt0ToLamK0Transform";
+  TString tXiCKSt0ToLamK0Name = "fXiCKSt0ToLamK0Transform";
+  TString tXi0KSt0ToLamK0Name = "fXi0KSt0ToLamK0Transform";
 
-  TString XiCToLamName = "fXiCToLamKchPTransform";
-  TString Xi0ToLamName = "fXi0ToLamKchPTransform";
-  TString OmegaToLamName = "fOmegaToLamKchPTransform";
-  TString ASigToALamName = "fASigToALamKchPTransform";
-  TString AXiCToALamName = "fAXiCToALamKchPTransform";
-  TString AXi0ToALamName = "fAXi0ToALamKchPTransform";
-  TString AOmegaToALamName = "fAOmegaToALamKchPTransform";
+  //ALamK0
+  TString tASigToALamK0Name = "fASigToALamK0Transform";
+  TString tAXiCToALamK0Name = "fAXiCToALamK0Transform";
+  TString tAXi0ToALamK0Name = "fAXi0ToALamK0Transform";
+  TString tAOmegaToALamK0Name = "fAOmegaToALamK0Transform";
+  TString tASigStMToALamK0Name = "fASigStMToALamK0Transform";
+  TString tASigStPToALamK0Name = "fASigStPToALamK0Transform";
+  TString tASigSt0ToALamK0Name = "fASigSt0ToALamK0Transform";
+  TString tALamKSt0ToALamK0Name = "fALamKSt0ToALamK0Transform";
+  TString tASigKSt0ToALamK0Name = "fASigKSt0ToALamK0Transform";
+  TString tAXiCKSt0ToALamK0Name = "fAXiCKSt0ToALamK0Transform";
+  TString tAXi0KSt0ToALamK0Name = "fAXi0KSt0ToALamK0Transform";
+
+
 
   //-------------------------------------------------------------------------------------------------
 
@@ -218,6 +238,32 @@ int main(int argc, char **argv)
   TCanvas* tCanASigAKSt0ToALamKchM = DrawTransform(tFileName, tASigAKSt0ToALamKchMName, kPDGASigma, kPDGALam, kPDGAKSt0, kPDGKchM, bDrawLogZ, bSaveFigures, tSaveLocationBaseALamKchM);
   TCanvas* tCanAXiCAKSt0ToALamKchM = DrawTransform(tFileName, tAXiCAKSt0ToALamKchMName, kPDGAXiC, kPDGALam, kPDGAKSt0, kPDGKchM, bDrawLogZ, bSaveFigures, tSaveLocationBaseALamKchM);
   TCanvas* tCanAXi0AKSt0ToALamKchM = DrawTransform(tFileName, tAXi0AKSt0ToALamKchMName, kPDGAXi0, kPDGALam, kPDGAKSt0, kPDGKchM, bDrawLogZ, bSaveFigures, tSaveLocationBaseALamKchM);
+
+  //LamK0
+  TCanvas* tCanSigToLamK0 = DrawTransform(tFileName, tSigToLamK0Name, kPDGSigma, kPDGLam, kPDGK0, kPDGK0, bDrawLogZ, bSaveFigures, tSaveLocationBaseLamK0);
+  TCanvas* tCanXiCToLamK0 = DrawTransform(tFileName, tXiCToLamK0Name, kPDGXiC, kPDGLam, kPDGK0, kPDGK0, bDrawLogZ, bSaveFigures, tSaveLocationBaseLamK0);
+  TCanvas* tCanXi0ToLamK0 = DrawTransform(tFileName, tXi0ToLamK0Name, kPDGXi0, kPDGLam, kPDGK0, kPDGK0, bDrawLogZ, bSaveFigures, tSaveLocationBaseLamK0);
+  TCanvas* tCanOmegaToLamK0 = DrawTransform(tFileName, tOmegaToLamK0Name, kPDGOmega, kPDGLam, kPDGK0, kPDGK0, bDrawLogZ, bSaveFigures, tSaveLocationBaseLamK0);
+  TCanvas* tCanSigStPToLamK0 = DrawTransform(tFileName, tSigStPToLamK0Name, kPDGSigStP, kPDGLam, kPDGK0, kPDGK0, bDrawLogZ, bSaveFigures, tSaveLocationBaseLamK0);
+  TCanvas* tCanSigStMToLamK0 = DrawTransform(tFileName, tSigStMToLamK0Name, kPDGSigStM, kPDGLam, kPDGK0, kPDGK0, bDrawLogZ, bSaveFigures, tSaveLocationBaseLamK0);
+  TCanvas* tCanSigSt0ToLamK0 = DrawTransform(tFileName, tSigSt0ToLamK0Name, kPDGSigSt0, kPDGLam, kPDGK0, kPDGK0, bDrawLogZ, bSaveFigures, tSaveLocationBaseLamK0);
+  TCanvas* tCanLamKSt0ToLamK0 = DrawTransform(tFileName, tLamKSt0ToLamK0Name, kPDGLam, kPDGLam, kPDGKSt0, kPDGK0, bDrawLogZ, bSaveFigures, tSaveLocationBaseLamK0);
+  TCanvas* tCanSigKSt0ToLamK0 = DrawTransform(tFileName, tSigKSt0ToLamK0Name, kPDGSigma, kPDGLam, kPDGKSt0, kPDGK0, bDrawLogZ, bSaveFigures, tSaveLocationBaseLamK0);
+  TCanvas* tCanXiCKSt0ToLamK0 = DrawTransform(tFileName, tXiCKSt0ToLamK0Name, kPDGXiC, kPDGLam, kPDGKSt0, kPDGK0, bDrawLogZ, bSaveFigures, tSaveLocationBaseLamK0);
+  TCanvas* tCanXi0KSt0ToLamK0 = DrawTransform(tFileName, tXi0KSt0ToLamK0Name, kPDGXi0, kPDGLam, kPDGKSt0, kPDGK0, bDrawLogZ, bSaveFigures, tSaveLocationBaseLamK0);
+
+  //ALamK0
+  TCanvas* tCanASigToALamK0 = DrawTransform(tFileName, tASigToALamK0Name, kPDGASigma, kPDGALam, kPDGK0, kPDGK0, bDrawLogZ, bSaveFigures, tSaveLocationBaseALamK0);
+  TCanvas* tCanAXiCToALamK0 = DrawTransform(tFileName, tAXiCToALamK0Name, kPDGAXiC, kPDGALam, kPDGK0, kPDGK0, bDrawLogZ, bSaveFigures, tSaveLocationBaseALamK0);
+  TCanvas* tCanAXi0ToALamK0 = DrawTransform(tFileName, tAXi0ToALamK0Name, kPDGAXi0, kPDGALam, kPDGK0, kPDGK0, bDrawLogZ, bSaveFigures, tSaveLocationBaseALamK0);
+  TCanvas* tCanAOmegaToALamK0 = DrawTransform(tFileName, tAOmegaToALamK0Name, kPDGAOmega, kPDGALam, kPDGK0, kPDGK0, bDrawLogZ, bSaveFigures, tSaveLocationBaseALamK0);
+  TCanvas* tCanASigStMToALamK0 = DrawTransform(tFileName, tASigStMToALamK0Name, kPDGASigStM, kPDGALam, kPDGK0, kPDGK0, bDrawLogZ, bSaveFigures, tSaveLocationBaseALamK0);
+  TCanvas* tCanASigStPToALamK0 = DrawTransform(tFileName, tASigStPToALamK0Name, kPDGASigStP, kPDGALam, kPDGK0, kPDGK0, bDrawLogZ, bSaveFigures, tSaveLocationBaseALamK0);
+  TCanvas* tCanASigSt0ToALamK0 = DrawTransform(tFileName, tASigSt0ToALamK0Name, kPDGASigSt0, kPDGALam, kPDGK0, kPDGK0, bDrawLogZ, bSaveFigures, tSaveLocationBaseALamK0);
+  TCanvas* tCanALamKSt0ToALamK0 = DrawTransform(tFileName, tALamKSt0ToALamK0Name, kPDGALam, kPDGALam, kPDGKSt0, kPDGK0, bDrawLogZ, bSaveFigures, tSaveLocationBaseALamK0);
+  TCanvas* tCanASigKSt0ToALamK0 = DrawTransform(tFileName, tASigKSt0ToALamK0Name, kPDGASigma, kPDGALam, kPDGKSt0, kPDGK0, bDrawLogZ, bSaveFigures, tSaveLocationBaseALamK0);
+  TCanvas* tCanAXiCKSt0ToALamK0 = DrawTransform(tFileName, tAXiCKSt0ToALamK0Name, kPDGAXiC, kPDGALam, kPDGKSt0, kPDGK0, bDrawLogZ, bSaveFigures, tSaveLocationBaseALamK0);
+  TCanvas* tCanAXi0KSt0ToALamK0 = DrawTransform(tFileName, tAXi0KSt0ToALamK0Name, kPDGAXi0, kPDGALam, kPDGKSt0, kPDGK0, bDrawLogZ, bSaveFigures, tSaveLocationBaseALamK0);
 
 
 //-------------------------------------------------------------------------------
@@ -277,6 +323,33 @@ int main(int argc, char **argv)
   tCanASigAKSt0ToALamKchM->Close();
   tCanAXiCAKSt0ToALamKchM->Close();
   tCanAXi0AKSt0ToALamKchM->Close();
+
+  //LamK0
+  tCanSigToLamK0->Close();
+  tCanXiCToLamK0->Close();
+  tCanXi0ToLamK0->Close();
+  tCanOmegaToLamK0->Close();
+  tCanSigStPToLamK0->Close();
+  tCanSigStMToLamK0->Close();
+  tCanSigSt0ToLamK0->Close();
+  tCanLamKSt0ToLamK0->Close();
+  tCanSigKSt0ToLamK0->Close();
+  tCanXiCKSt0ToLamK0->Close();
+  tCanXi0KSt0ToLamK0->Close();
+
+  //ALamK0
+  tCanASigToALamK0->Close();
+  tCanAXiCToALamK0->Close();
+  tCanAXi0ToALamK0->Close();
+  tCanAOmegaToALamK0->Close();
+  tCanASigStMToALamK0->Close();
+  tCanASigStPToALamK0->Close();
+  tCanASigSt0ToALamK0->Close();
+  tCanALamKSt0ToALamK0->Close();
+  tCanASigKSt0ToALamK0->Close();
+  tCanAXiCKSt0ToALamK0->Close();
+  tCanAXi0KSt0ToALamK0->Close();
+
 
   return 0;
 }

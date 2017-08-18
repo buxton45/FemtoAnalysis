@@ -10,9 +10,12 @@
 #include <iostream>
 using namespace std;
 
+#include "Types.h"
+
 extern TString GetParticleName(int aPID);
 extern bool IncludeAsPrimary(int aPID1, int aPID2);
-
+extern bool PairAccountedForInResiduals(int aPID1, int aPID2);
+extern bool IncludeInOthers(int aPID1, int aPID2);
 //------------------------------------------
 
 extern vector<int> cUniqueFathersPIDsFull;

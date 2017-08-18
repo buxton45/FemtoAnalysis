@@ -53,7 +53,45 @@ bool IncludeAsPrimary(int aPID1, int aPID2)
   else return true;
 }
 
+//________________________________________________________________________________________________________________
+bool PairAccountedForInResiduals(int aPID1, int aPID2)
+{
+  bool tAccountedFor = false;
+  if((aPID1 == kPDGLam || aPID1 == kPDGALam) && (aPID2 == kPDGKchP || aPID2 == kPDGKchM)) tAccountedFor = true;
+  else if((aPID1==kPDGSigma || aPID1==kPDGASigma) && (aPID2 == kPDGKchP || aPID2 == kPDGKchM)) tAccountedFor = true;
+  else if((aPID1==kPDGXi0 || aPID1==kPDGAXi0) && (aPID2 == kPDGKchP || aPID2 == kPDGKchM)) tAccountedFor = true;
+  else if((aPID1==kPDGXiC || aPID1==kPDGAXiC) && (aPID2 == kPDGKchP || aPID2 == kPDGKchM)) tAccountedFor = true;
+  else if((aPID1==kPDGSigStP || aPID1==kPDGASigStM) && (aPID2 == kPDGKchP || aPID2 == kPDGKchM)) tAccountedFor = true;
+  else if((aPID1==kPDGSigStM || aPID1==kPDGASigStP) && (aPID2 == kPDGKchP || aPID2 == kPDGKchM)) tAccountedFor = true;
+  else if((aPID1==kPDGSigSt0 || aPID1==kPDGASigSt0) && (aPID2 == kPDGKchP || aPID2 == kPDGKchM)) tAccountedFor = true;
 
+  else if((aPID1 == kPDGLam || aPID1 == kPDGALam) && (aPID2 == kPDGKSt0 || aPID2 == kPDGAKSt0)) tAccountedFor = true;
+  else if((aPID1==kPDGSigma || aPID1==kPDGASigma) && (aPID2 == kPDGKSt0 || aPID2 == kPDGAKSt0)) tAccountedFor = true;
+  else if((aPID1==kPDGXi0 || aPID1==kPDGAXi0) && (aPID2 == kPDGKSt0 || aPID2 == kPDGAKSt0)) tAccountedFor = true;
+  else if((aPID1==kPDGXiC || aPID1==kPDGAXiC) && (aPID2 == kPDGKSt0 || aPID2 == kPDGAKSt0)) tAccountedFor = true;
+
+  else if((aPID1 == kPDGLam || aPID1 == kPDGALam) && (aPID2 == kPDGK0)) tAccountedFor = true;
+  else if((aPID1==kPDGSigma || aPID1==kPDGASigma) && (aPID2 == kPDGK0)) tAccountedFor = true;
+  else if((aPID1==kPDGXi0 || aPID1==kPDGAXi0) && (aPID2 == kPDGK0)) tAccountedFor = true;
+  else if((aPID1==kPDGXiC || aPID1==kPDGAXiC) && (aPID2 == kPDGK0)) tAccountedFor = true;
+  else if((aPID1==kPDGSigStP || aPID1==kPDGASigStM) && (aPID2 == kPDGK0)) tAccountedFor = true;
+  else if((aPID1==kPDGSigStM || aPID1==kPDGASigStP) && (aPID2 == kPDGK0)) tAccountedFor = true;
+  else if((aPID1==kPDGSigSt0 || aPID1==kPDGASigSt0) && (aPID2 == kPDGK0)) tAccountedFor = true;
+
+  else if((aPID1 == kPDGLam || aPID1 == kPDGALam) && (aPID2 == kPDGKSt0 || aPID2 == kPDGAKSt0)) tAccountedFor = true;
+  else if((aPID1==kPDGSigma || aPID1==kPDGASigma) && (aPID2 == kPDGKSt0 || aPID2 == kPDGAKSt0)) tAccountedFor = true;
+  else if((aPID1==kPDGXi0 || aPID1==kPDGAXi0) && (aPID2 == kPDGKSt0 || aPID2 == kPDGAKSt0)) tAccountedFor = true;
+  else if((aPID1==kPDGXiC || aPID1==kPDGAXiC) && (aPID2 == kPDGKSt0 || aPID2 == kPDGAKSt0)) tAccountedFor = true;
+
+  return tAccountedFor;
+}
+
+//________________________________________________________________________________________________________________
+bool IncludeInOthers(int aPID1, int aPID2)
+{
+  if(!IncludeAsPrimary(aPID1,aPID2) && !PairAccountedForInResiduals(aPID1,aPID2)) return true;
+  else return false;
+}
 
 //_____________________________________________________________________________________________________________________________________________________________
 //*************************************************************************************************************************************************************
@@ -424,9 +462,9 @@ vector<int> cUniqueFathersPIDsIncludeAsPrimary {
 /*-67000,*/ /*-67001,*/ /*-67718,*/ /*-67719,*/ 
 
 // omega
-3334, /*9000,*/ 
+/*3334,*/ /*9000,*/ 
 
--3334, /*-9000,*/
+/*-3334,*/ /*-9000,*/
 
 
 // neutron
@@ -522,11 +560,12 @@ vector<int> cUniqueFathersPIDsExcludeAsPrimary {
 -67000, -67001, -67718, -67719, 
 
 // omega
-9000,
+3334, 9000,
 
--9000
+-3334, -9000
 
 };
+
 //_____________________________________________________________________________________________________________________________________________________________
 //*************************************************************************************************************************************************************
 //_____________________________________________________________________________________________________________________________________________________________
