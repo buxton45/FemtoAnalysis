@@ -174,8 +174,8 @@ const double cAnalysisLambdaFactors2[85] = {
 
 //---------NEW:ASSUMING SOME OF "OTHER" FEED-DOWN BIN ARE PRIMARY------------------------
 const double cAnalysisLambdaFactors[85] = {
-/*kLamK0=*/0.163, /*kALamK0=*/0.165,
-/*kLamKchP=*/0.154, /*kALamKchM=*/0.155, /*kLamKchM=*/0.153, /*kALamKchP=*/0.157,
+/*kLamK0=*/0.155, /*kALamK0=*/0.159,
+/*kLamKchP=*/0.145, /*kALamKchM=*/0.148, /*kLamKchM=*/0.144, /*kALamKchP=*/0.149,
 /*kXiKchP=*/1.000, /*kAXiKchM=*/1.000, /*kXiKchM=*/1.000, /*kAXiKchP=*/1.000,
 /*kXiK0=*/1.000, /*kAXiK0=*/1.000,
 /*kLamLam=*/1.000, /*kALamALam=*/1.000, /*kLamALam=*/1.000,

@@ -86,6 +86,52 @@ void DrawParentsMatrixBackground(AnalysisType aAnType, TPad* aPad, TH2D* aMatrix
   aMatrix->Draw("colz");
 }
 
+
+//________________________________________________________________________________________________________________
+void DrawOnlyPairsInOthers(AnalysisType aAnType, TPad* aPad, TH2D* aMatrix)
+{
+  vector<int> tParentCollection1, tParentCollection2;
+  switch(aAnType) {
+  case kLamKchP:
+  case kALamKchM:
+  case kLamKchM:
+  case kALamKchP:
+    tParentCollection1 = cAllLambdaFathers;
+    tParentCollection2 = cAllKchFathers;
+    break;
+
+  case kLamK0:
+  case kALamK0:
+    tParentCollection1 = cAllLambdaFathers;
+    tParentCollection2 = cAllK0ShortFathers;
+    break;
+
+
+  default:
+    cout << "ERROR: DrawOnlyPairsInOthers: aAnType = " << aAnType << " is not appropriate" << endl << endl;
+    assert(0);
+  }
+
+  for(unsigned int i=0; i<tParentCollection1.size(); i++)
+  {
+    for(unsigned int j=0; j<tParentCollection2.size(); j++)
+    {
+      if(!IncludeInOthers(tParentCollection1[i], tParentCollection2[j])) aMatrix->SetBinContent(i+1, j+1, 0.);
+    }
+  }
+
+  aPad->cd();
+  gStyle->SetOptStat(0);
+
+  aMatrix->GetXaxis()->SetRange(1,100);
+  aMatrix->GetXaxis()->SetLabelSize(0.01);
+  aMatrix->LabelsOption("v", "X");
+
+  aMatrix->GetYaxis()->SetRange(1,135);
+  aMatrix->GetYaxis()->SetLabelSize(0.01);
+  aMatrix->Draw("colz");
+}
+
 //________________________________________________________________________________________________________________
 void DrawParentsMatrix(AnalysisType aAnType, TPad* aPad, TH2D* aMatrix, bool aZoomROI=false)
 {
@@ -131,8 +177,9 @@ int main(int argc, char **argv)
   //the program ends and closes everything
 //-----------------------------------------------------------------------------
   bool bSaveImages = false;
-  bool bZoomMatrixROI = true;
+  bool bZoomMatrixROI = false;
   bool bDrawMatrixBackground = false;
+  bool bDrawOnlyPairsInOthers = true;
 
 
   TString tDirectory = "~/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b2/";
@@ -253,6 +300,24 @@ int main(int argc, char **argv)
     DrawParentsMatrixBackground(kALamKchP, (TPad*)tParentsBgdCan_ALamKchP, (TH2D*)tParentsMatrix_ALamKchP->Clone("fParentsMatrixBgdALamKchP"));
     DrawParentsMatrixBackground(kLamK0, (TPad*)tParentsBgdCan_LamK0, (TH2D*)tParentsMatrix_LamK0->Clone("fParentsMatrixBgdLamK0"));
     DrawParentsMatrixBackground(kALamK0, (TPad*)tParentsBgdCan_ALamK0, (TH2D*)tParentsMatrix_ALamK0->Clone("fParentsMatrixBgdALamK0"));
+  }
+
+  //-------------------------------------------------------------------------
+  if(bDrawOnlyPairsInOthers)
+  {
+    TCanvas* tParentsOthersCan_LamKchP = new TCanvas("tParentsOthersCan_LamKchP", "tParentsOthersCan_LamKchP", 1000, 1500);
+    TCanvas* tParentsOthersCan_ALamKchM = new TCanvas("tParentsOthersCan_ALamKchM", "tParentsOthersCan_ALamKchM", 1000, 1500);
+    TCanvas* tParentsOthersCan_LamKchM = new TCanvas("tParentsOthersCan_LamKchM", "tParentsOthersCan_LamKchM", 1000, 1500);
+    TCanvas* tParentsOthersCan_ALamKchP = new TCanvas("tParentsOthersCan_ALamKchP", "tParentsOthersCan_ALamKchP", 1000, 1500);
+    TCanvas* tParentsOthersCan_LamK0 = new TCanvas("tParentsOthersCan_LamK0", "tParentsOthersCan_LamK0", 1000, 1500);
+    TCanvas* tParentsOthersCan_ALamK0 = new TCanvas("tParentsOthersCan_ALamK0", "tParentsOthersCan_ALamK0", 1000, 1500);
+
+    DrawOnlyPairsInOthers(kLamKchP, (TPad*)tParentsOthersCan_LamKchP, (TH2D*)tParentsMatrix_LamKchP->Clone("fParentsMatrixOthersLamKchP"));
+    DrawOnlyPairsInOthers(kALamKchM, (TPad*)tParentsOthersCan_ALamKchM, (TH2D*)tParentsMatrix_ALamKchM->Clone("fParentsMatrixOthersALamKchM"));
+    DrawOnlyPairsInOthers(kLamKchM, (TPad*)tParentsOthersCan_LamKchM, (TH2D*)tParentsMatrix_LamKchM->Clone("fParentsMatrixOthersLamKchM"));
+    DrawOnlyPairsInOthers(kALamKchP, (TPad*)tParentsOthersCan_ALamKchP, (TH2D*)tParentsMatrix_ALamKchP->Clone("fParentsMatrixOthersALamKchP"));
+    DrawOnlyPairsInOthers(kLamK0, (TPad*)tParentsOthersCan_LamK0, (TH2D*)tParentsMatrix_LamK0->Clone("fParentsMatrixOthersLamK0"));
+    DrawOnlyPairsInOthers(kALamK0, (TPad*)tParentsOthersCan_ALamK0, (TH2D*)tParentsMatrix_ALamK0->Clone("fParentsMatrixOthersALamK0"));
   }
 
 //-------------------------------------------------------------------------------
