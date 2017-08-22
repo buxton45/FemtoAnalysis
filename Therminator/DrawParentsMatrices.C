@@ -75,6 +75,7 @@ void DrawParentsMatrixBackground(AnalysisType aAnType, TPad* aPad, TH2D* aMatrix
   }
 
   aPad->cd();
+  aPad->SetRightMargin(0.15);
   gStyle->SetOptStat(0);
 
   aMatrix->GetXaxis()->SetRange(1,100);
@@ -121,6 +122,7 @@ void DrawOnlyPairsInOthers(AnalysisType aAnType, TPad* aPad, TH2D* aMatrix)
   }
 
   aPad->cd();
+  aPad->SetRightMargin(0.15);
   gStyle->SetOptStat(0);
 
   aMatrix->GetXaxis()->SetRange(1,100);
@@ -136,8 +138,15 @@ void DrawOnlyPairsInOthers(AnalysisType aAnType, TPad* aPad, TH2D* aMatrix)
 void DrawParentsMatrix(AnalysisType aAnType, TPad* aPad, TH2D* aMatrix, bool aZoomROI=false, bool aSetLogZ=false, bool aSave=false, TString aSaveName="")
 {
   aPad->cd();
+  aPad->SetRightMargin(0.15);
   aPad->SetLogz(aSetLogZ);
   gStyle->SetOptStat(0);
+
+  TString tReturnName;
+  if(aZoomROI) tReturnName = TString("Parents Matrix: ");
+  else tReturnName = TString("Parents Matrix (Full): ");
+  tReturnName += TString(cAnalysisRootTags[aAnType]);
+  aMatrix->SetTitle(tReturnName);
 
 //  aMatrix->GetXaxis()->SetTitle("Lambda Parent ID");
   aMatrix->GetXaxis()->SetRange(1,100);
@@ -179,10 +188,12 @@ void DrawParentsMatrix(AnalysisType aAnType, TPad* aPad, TH2D* aMatrix, bool aZo
 void DrawCondensedParentsMatrix(AnalysisType aAnType, TPad* aPad, TH2D* aMatrix, bool aSetLogZ=false, bool aSave=false, TString aSaveName="")
 {
   aPad->cd();
+  aPad->SetRightMargin(0.15);
+  aPad->SetTopMargin(0.075);
   aPad->SetLogz(aSetLogZ);
   gStyle->SetOptStat(0);
 
-  TString tReturnName = TString("fCondensedParentsMatrix") + TString(cAnalysisBaseTags[aAnType]);
+  TString tReturnName = TString("Parents Matrix: ") + TString(cAnalysisRootTags[aAnType]);
   TH2D* tCondensedMatrix = new TH2D(tReturnName, tReturnName, 100, 0, 100, 135, 0, 135);
 
   //-------------------------------------------------
@@ -280,8 +291,8 @@ int main(int argc, char **argv)
   //the program ends and closes everything
 //-----------------------------------------------------------------------------
   bool bSaveImages = false;
-  bool bZoomMatrixROI = true;
 
+  bool bZoomMatrixROI = true;
   bool bDrawCondensed = true;
   bool bSetLogZ = false;
 
@@ -357,12 +368,12 @@ int main(int argc, char **argv)
     tParentsCan_ALamK0 = new TCanvas("tParentsCan_ALamK0", "tParentsCan_ALamK0", 1000, 1500);
   }
 
-  DrawParentsMatrix(kLamKchP, (TPad*)tParentsCan_LamKchP, tParentsMatrix_LamKchP, bZoomMatrixROI, bSetLogZ, bSaveImages, tDirectory+"Figures/ParentsLamKchP");
-  DrawParentsMatrix(kALamKchM, (TPad*)tParentsCan_ALamKchM, tParentsMatrix_ALamKchM, bZoomMatrixROI, bSetLogZ, bSaveImages, tDirectory+"Figures/ParentsALamKchM");
-  DrawParentsMatrix(kLamKchM, (TPad*)tParentsCan_LamKchM , tParentsMatrix_LamKchM, bZoomMatrixROI, bSetLogZ, bSaveImages, tDirectory+"Figures/ParentsLamKchM");
-  DrawParentsMatrix(kALamKchP, (TPad*)tParentsCan_ALamKchP, tParentsMatrix_ALamKchP, bZoomMatrixROI, bSetLogZ, bSaveImages, tDirectory+"Figures/ParentsALamKchP");
-  DrawParentsMatrix(kLamK0, (TPad*)tParentsCan_LamK0 , tParentsMatrix_LamK0, bZoomMatrixROI, bSetLogZ, bSaveImages, tDirectory+"Figures/ParentsLamK0");
-  DrawParentsMatrix(kALamK0, (TPad*)tParentsCan_ALamK0, tParentsMatrix_ALamK0, bZoomMatrixROI, bSetLogZ, bSaveImages, tDirectory+"Figures/ParentsALamK0");
+  DrawParentsMatrix(kLamKchP, (TPad*)tParentsCan_LamKchP, tParentsMatrix_LamKchP, bZoomMatrixROI, bSetLogZ, bSaveImages, tDirectory+"Figures/LamKchP/ParentsLamKchP");
+  DrawParentsMatrix(kALamKchM, (TPad*)tParentsCan_ALamKchM, tParentsMatrix_ALamKchM, bZoomMatrixROI, bSetLogZ, bSaveImages, tDirectory+"Figures/ALamKchM/ParentsALamKchM");
+  DrawParentsMatrix(kLamKchM, (TPad*)tParentsCan_LamKchM , tParentsMatrix_LamKchM, bZoomMatrixROI, bSetLogZ, bSaveImages, tDirectory+"Figures/LamKchM/ParentsLamKchM");
+  DrawParentsMatrix(kALamKchP, (TPad*)tParentsCan_ALamKchP, tParentsMatrix_ALamKchP, bZoomMatrixROI, bSetLogZ, bSaveImages, tDirectory+"Figures/ALamKchP/ParentsALamKchP");
+  DrawParentsMatrix(kLamK0, (TPad*)tParentsCan_LamK0 , tParentsMatrix_LamK0, bZoomMatrixROI, bSetLogZ, bSaveImages, tDirectory+"Figures/LamK0/ParentsLamK0");
+  DrawParentsMatrix(kALamK0, (TPad*)tParentsCan_ALamK0, tParentsMatrix_ALamK0, bZoomMatrixROI, bSetLogZ, bSaveImages, tDirectory+"Figures/ALamK0/ParentsALamK0");
 
 
 
@@ -376,12 +387,12 @@ int main(int argc, char **argv)
     TCanvas* tCondensedParentsCan_LamK0 = new TCanvas("tCondensedParentsCan_LamK0", "tCondensedParentsCan_LamK0", 1000, 1500);
     TCanvas* tCondensedParentsCan_ALamK0 = new TCanvas("tCondensedParentsCan_ALamK0", "tCondensedParentsCan_ALamK0", 1000, 1500);
 
-    DrawCondensedParentsMatrix(kLamKchP, (TPad*)tCondensedParentsCan_LamKchP, tParentsMatrix_LamKchP, bSetLogZ, bSaveImages, tDirectory+"Figures/CondensedParentsLamKchP");
-    DrawCondensedParentsMatrix(kALamKchM, (TPad*)tCondensedParentsCan_ALamKchM, tParentsMatrix_ALamKchM, bSetLogZ, bSaveImages, tDirectory+"Figures/CondensedParentsALamKchM");
-    DrawCondensedParentsMatrix(kLamKchM, (TPad*)tCondensedParentsCan_LamKchM, tParentsMatrix_LamKchM, bSetLogZ, bSaveImages, tDirectory+"Figures/CondensedParentsLamKchM");
-    DrawCondensedParentsMatrix(kALamKchP, (TPad*)tCondensedParentsCan_ALamKchP, tParentsMatrix_ALamKchP, bSetLogZ, bSaveImages, tDirectory+"Figures/CondensedParentsALamKchP");
-    DrawCondensedParentsMatrix(kLamK0, (TPad*)tCondensedParentsCan_LamK0, tParentsMatrix_LamK0, bSetLogZ, bSaveImages, tDirectory+"Figures/CondensedParentsLamK0");
-    DrawCondensedParentsMatrix(kALamK0, (TPad*)tCondensedParentsCan_ALamK0, tParentsMatrix_ALamK0, bSetLogZ, bSaveImages, tDirectory+"Figures/CondensedParentsALamK0");
+    DrawCondensedParentsMatrix(kLamKchP, (TPad*)tCondensedParentsCan_LamKchP, tParentsMatrix_LamKchP, bSetLogZ, bSaveImages, tDirectory+"Figures/LamKchP/CondensedParentsLamKchP");
+    DrawCondensedParentsMatrix(kALamKchM, (TPad*)tCondensedParentsCan_ALamKchM, tParentsMatrix_ALamKchM, bSetLogZ, bSaveImages, tDirectory+"Figures/ALamKchM/CondensedParentsALamKchM");
+    DrawCondensedParentsMatrix(kLamKchM, (TPad*)tCondensedParentsCan_LamKchM, tParentsMatrix_LamKchM, bSetLogZ, bSaveImages, tDirectory+"Figures/LamKchM/CondensedParentsLamKchM");
+    DrawCondensedParentsMatrix(kALamKchP, (TPad*)tCondensedParentsCan_ALamKchP, tParentsMatrix_ALamKchP, bSetLogZ, bSaveImages, tDirectory+"Figures/ALamKchP/CondensedParentsALamKchP");
+    DrawCondensedParentsMatrix(kLamK0, (TPad*)tCondensedParentsCan_LamK0, tParentsMatrix_LamK0, bSetLogZ, bSaveImages, tDirectory+"Figures/LamK0/CondensedParentsLamK0");
+    DrawCondensedParentsMatrix(kALamK0, (TPad*)tCondensedParentsCan_ALamK0, tParentsMatrix_ALamK0, bSetLogZ, bSaveImages, tDirectory+"Figures/ALamK0/CondensedParentsALamK0");
   }
 
   //-------------------------------------------------------------------------

@@ -86,7 +86,7 @@ void SetXAxisLabels(AnalysisType aAnType, TH1D* aHist)
 //________________________________________________________________________________________________________________
 TH1D* BuildPairFractions(AnalysisType aAnType, TH2D* aMatrix)
 {
-  TString tName = TString::Format("PairFractions%s", cAnalysisBaseTags[aAnType]);
+  TString tName = TString::Format("#lambda Estimates: %s", cAnalysisRootTags[aAnType]);
   TH1D* tReturnHist = new TH1D(tName, tName, 13, 0, 13);
 
   vector<int> *tFatherCollection1, *tFatherCollection2;

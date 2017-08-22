@@ -23,6 +23,7 @@ int main(int argc, char **argv)
   bool tAllShareSingleLambdaParam = false;
 
   bool SaveImages = false;
+  bool SaveImagesInRootFile = false;
   bool ApplyMomResCorrection = true;
   bool ApplyNonFlatBackgroundCorrection = true;
   NonFlatBgdFitType tNonFlatBgdFitType = kLinear;
@@ -72,15 +73,32 @@ int main(int argc, char **argv)
 //  tLamKchP->FindGoodInitialValues(ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection);
 
 //-------------------------------------------------------------------------------
+  TObjArray* tAllCanLamKchP;
+  TCanvas* tCanPrimwFitsAndResidual;
+
   if(IncludeResiduals && bDrawResiduals)
   {
     TCanvas* tCanLamKchP = tLamKchP->DrawResiduals(0,k0010,cAnalysisBaseTags[tAnType]);
 
-    TObjArray* tAllCanLamKchP = tLamKchP->DrawAllResiduals(SaveImages);
+    tAllCanLamKchP = tLamKchP->DrawAllResiduals(SaveImages);
 
 //    TCanvas* tCanPrimWithRes = tLamKchP->DrawPrimaryWithResiduals(0,k0010,TString("PrimaryWithResidual_")+TString(cAnalysisBaseTags[tAnType]));
-    TCanvas* tCanPrimwFitsAndResidual = tLamKchP->DrawKStarCfswFitsAndResiduals(ApplyMomResCorrection,ApplyNonFlatBackgroundCorrection,tNonFlatBgdFitType,SaveImages);
+    tCanPrimwFitsAndResidual = tLamKchP->DrawKStarCfswFitsAndResiduals(ApplyMomResCorrection,ApplyNonFlatBackgroundCorrection,tNonFlatBgdFitType,SaveImages);
   }
+
+//-------------------------------------------------------------------------------
+  if(SaveImagesInRootFile)
+  {
+    TFile *tFile = new TFile(tLamKchP->GetSaveLocationBase() + TString(cAnalysisBaseTags[tAnType]) + TString("Plots") + tLamKchP->GetSaveNameModifier() + TString(".root"), "RECREATE");
+    tKStarwFitsCan->Write();
+    if(IncludeResiduals && bDrawResiduals)
+    {
+      for(int i=0; i<tAllCanLamKchP->GetEntries(); i++) (TCanvas*)tAllCanLamKchP->At(i)->Write();
+      tCanPrimwFitsAndResidual->Write();
+    }
+    tFile->Close();
+  }
+
 //-------------------------------------------------------------------------------
   tFullTimer.Stop();
   cout << "Finished program: ";

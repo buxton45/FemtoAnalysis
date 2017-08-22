@@ -87,6 +87,7 @@ public:
 
   //inline 
   TString GetSaveLocationBase();
+  TString GetSaveNameModifier();
 
   void SetSharedParameter(ParameterType aParamType);  //share amongst all
   void SetSharedParameter(ParameterType aParamType, double aStartValue, double aLowerBound=0., double aUpperBound=0.);  //share amongst all
@@ -112,6 +113,7 @@ public:
   void SetNonFlatBgdFitType(NonFlatBgdFitType aNonFlatBgdFitType);
   void SetApplyMomResCorrection(bool aApplyMomResCorrection);
   virtual void SetIncludeResidualCorrelations(bool aInclude);
+
 
 protected:
   TString fSaveLocationBase;
@@ -146,6 +148,7 @@ protected:
 };
 
 inline TString FitGenerator::GetSaveLocationBase() {return fSaveLocationBase;}
+inline TString FitGenerator::GetSaveNameModifier() {return fSaveNameModifier;}
 
 inline void FitGenerator::SetSharedParameter(ParameterType aParamType) 
   {fSharedAn->SetSharedParameter(aParamType);}
@@ -177,5 +180,7 @@ inline void FitGenerator::SetApplyNonFlatBackgroundCorrection(bool aApply) {fApp
 inline void FitGenerator::SetNonFlatBgdFitType(NonFlatBgdFitType aNonFlatBgdFitType) {fNonFlatBgdFitType = aNonFlatBgdFitType;}
 inline void FitGenerator::SetApplyMomResCorrection(bool aApplyMomResCorrection) {fApplyMomResCorrection = aApplyMomResCorrection;}
 inline void FitGenerator::SetIncludeResidualCorrelations(bool aInclude) {fIncludeResidualCorrelations = aInclude; SetDefaultLambdaParametersWithResiduals();}
+
+
 #endif
 
