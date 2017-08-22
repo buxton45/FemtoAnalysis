@@ -133,9 +133,10 @@ void DrawOnlyPairsInOthers(AnalysisType aAnType, TPad* aPad, TH2D* aMatrix)
 }
 
 //________________________________________________________________________________________________________________
-void DrawParentsMatrix(AnalysisType aAnType, TPad* aPad, TH2D* aMatrix, bool aZoomROI=false)
+void DrawParentsMatrix(AnalysisType aAnType, TPad* aPad, TH2D* aMatrix, bool aZoomROI=false, bool aSetLogZ=false, bool aSave=false, TString aSaveName="")
 {
   aPad->cd();
+  aPad->SetLogz(aSetLogZ);
   gStyle->SetOptStat(0);
 
 //  aMatrix->GetXaxis()->SetTitle("Lambda Parent ID");
@@ -162,6 +163,108 @@ void DrawParentsMatrix(AnalysisType aAnType, TPad* aPad, TH2D* aMatrix, bool aZo
     aMatrix->GetYaxis()->SetLabelSize(0.04);
   }
   aMatrix->Draw("colz");
+
+  if(aSave)
+  {
+    TString tSaveName = aSaveName;
+    if(aSetLogZ) tSaveName += TString("_LogZ");
+    if(!aZoomROI) tSaveName += TString("_UnZoomed");
+    tSaveName += TString(".pdf");
+
+    aPad->SaveAs(tSaveName);
+  }
+}
+
+//________________________________________________________________________________________________________________
+void DrawCondensedParentsMatrix(AnalysisType aAnType, TPad* aPad, TH2D* aMatrix, bool aSetLogZ=false, bool aSave=false, TString aSaveName="")
+{
+  aPad->cd();
+  aPad->SetLogz(aSetLogZ);
+  gStyle->SetOptStat(0);
+
+  TString tReturnName = TString("fCondensedParentsMatrix") + TString(cAnalysisBaseTags[aAnType]);
+  TH2D* tCondensedMatrix = new TH2D(tReturnName, tReturnName, 100, 0, 100, 135, 0, 135);
+
+  //-------------------------------------------------
+  vector<int> tColumnsToSkip(0);
+  vector<int> tRowsToSkip(0);
+
+  double tCounts = 0.;
+  for(int i=1; i<=aMatrix->GetNbinsX(); i++)
+  {
+    tCounts = 0.;
+    for(int j=1; j<=aMatrix->GetNbinsY(); j++)
+    {
+      tCounts += aMatrix->GetBinContent(i,j);
+    }
+    if(tCounts==0.) tColumnsToSkip.push_back(i);
+  }
+
+  for(int j=1; j<=aMatrix->GetNbinsY(); j++)
+  {
+    tCounts = 0.;
+    for(int i=1; i<=aMatrix->GetNbinsX(); i++)
+    {
+      tCounts += aMatrix->GetBinContent(i,j);
+    }
+    if(tCounts==0.) tRowsToSkip.push_back(j);
+  }
+
+  //-------------------------------------------------
+
+  bool bSkipX=false;
+  bool bSkipY=false;
+
+  int tXbinTracker = 0;
+  int tYbinTracker = 0;
+
+  for(int i=1; i<=aMatrix->GetNbinsX(); i++)
+  {
+    bSkipX=false;
+    for(int a=0; a<(int)tColumnsToSkip.size(); a++)
+    {
+      if(i==tColumnsToSkip[a]) bSkipX=true;
+    }
+    if(!bSkipX)
+    {
+      tXbinTracker++;
+      tYbinTracker=0;
+      for(int j=1; j<=aMatrix->GetNbinsY(); j++)
+      {
+        bSkipY=false;
+        for(int b=0; b<(int)tRowsToSkip.size(); b++)
+        {
+          if(j==tRowsToSkip[b]) bSkipY = true;
+        }
+        if(!bSkipY)
+        {
+          tYbinTracker++;
+          tCondensedMatrix->SetBinContent(tXbinTracker, tYbinTracker, aMatrix->GetBinContent(i,j));
+          tCondensedMatrix->GetXaxis()->SetBinLabel(tXbinTracker, aMatrix->GetXaxis()->GetBinLabel(i));
+          tCondensedMatrix->GetYaxis()->SetBinLabel(tYbinTracker, aMatrix->GetYaxis()->GetBinLabel(j));
+        }
+      }
+    }
+
+  }
+
+  tCondensedMatrix->GetXaxis()->SetRange(1,tXbinTracker);
+  tCondensedMatrix->GetXaxis()->SetLabelSize(0.02);
+
+  tCondensedMatrix->GetYaxis()->SetRange(1,tYbinTracker);
+  tCondensedMatrix->GetYaxis()->SetLabelSize(0.02);
+
+  tCondensedMatrix->LabelsOption("v", "X");
+  tCondensedMatrix->Draw("colz");
+
+  if(aSave)
+  {
+    TString tSaveName = aSaveName;
+    if(aSetLogZ) tSaveName += TString("_LogZ");
+    tSaveName += TString(".pdf");
+
+    aPad->SaveAs(tSaveName);
+  }
 }
 
 
@@ -177,9 +280,13 @@ int main(int argc, char **argv)
   //the program ends and closes everything
 //-----------------------------------------------------------------------------
   bool bSaveImages = false;
-  bool bZoomMatrixROI = false;
+  bool bZoomMatrixROI = true;
+
+  bool bDrawCondensed = true;
+  bool bSetLogZ = false;
+
   bool bDrawMatrixBackground = false;
-  bool bDrawOnlyPairsInOthers = true;
+  bool bDrawOnlyPairsInOthers = false;
 
 
   TString tDirectory = "~/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b2/";
@@ -250,37 +357,31 @@ int main(int argc, char **argv)
     tParentsCan_ALamK0 = new TCanvas("tParentsCan_ALamK0", "tParentsCan_ALamK0", 1000, 1500);
   }
 
-  DrawParentsMatrix(kLamKchP, (TPad*)tParentsCan_LamKchP, tParentsMatrix_LamKchP, bZoomMatrixROI);
-  DrawParentsMatrix(kALamKchM, (TPad*)tParentsCan_ALamKchM, tParentsMatrix_ALamKchM, bZoomMatrixROI);
-  DrawParentsMatrix(kLamKchM, (TPad*)tParentsCan_LamKchM , tParentsMatrix_LamKchM, bZoomMatrixROI);
-  DrawParentsMatrix(kALamKchP, (TPad*)tParentsCan_ALamKchP, tParentsMatrix_ALamKchP, bZoomMatrixROI);
-  DrawParentsMatrix(kLamK0, (TPad*)tParentsCan_LamK0 , tParentsMatrix_LamK0, bZoomMatrixROI);
-  DrawParentsMatrix(kALamK0, (TPad*)tParentsCan_ALamK0, tParentsMatrix_ALamK0, bZoomMatrixROI);
+  DrawParentsMatrix(kLamKchP, (TPad*)tParentsCan_LamKchP, tParentsMatrix_LamKchP, bZoomMatrixROI, bSetLogZ, bSaveImages, tDirectory+"Figures/ParentsLamKchP");
+  DrawParentsMatrix(kALamKchM, (TPad*)tParentsCan_ALamKchM, tParentsMatrix_ALamKchM, bZoomMatrixROI, bSetLogZ, bSaveImages, tDirectory+"Figures/ParentsALamKchM");
+  DrawParentsMatrix(kLamKchM, (TPad*)tParentsCan_LamKchM , tParentsMatrix_LamKchM, bZoomMatrixROI, bSetLogZ, bSaveImages, tDirectory+"Figures/ParentsLamKchM");
+  DrawParentsMatrix(kALamKchP, (TPad*)tParentsCan_ALamKchP, tParentsMatrix_ALamKchP, bZoomMatrixROI, bSetLogZ, bSaveImages, tDirectory+"Figures/ParentsALamKchP");
+  DrawParentsMatrix(kLamK0, (TPad*)tParentsCan_LamK0 , tParentsMatrix_LamK0, bZoomMatrixROI, bSetLogZ, bSaveImages, tDirectory+"Figures/ParentsLamK0");
+  DrawParentsMatrix(kALamK0, (TPad*)tParentsCan_ALamK0, tParentsMatrix_ALamK0, bZoomMatrixROI, bSetLogZ, bSaveImages, tDirectory+"Figures/ParentsALamK0");
 
-  if(bSaveImages) 
+
+
+  //-------------------------------------------------------------------------
+  if(bDrawCondensed)
   {
-    if(bZoomMatrixROI)
-    {
-      tParentsCan_LamKchP->SaveAs(tDirectory+"Figures/ParentsLamKchP.pdf");
-      tParentsCan_ALamKchM->SaveAs(tDirectory+"Figures/ParentsALamKchM.pdf");
+    TCanvas* tCondensedParentsCan_LamKchP = new TCanvas("tCondensedParentsCan_LamKchP", "tCondensedParentsCan_LamKchP", 1000, 1500);
+    TCanvas* tCondensedParentsCan_ALamKchM = new TCanvas("tCondensedParentsCan_ALamKchM", "tCondensedParentsCan_ALamKchM", 1000, 1500);
+    TCanvas* tCondensedParentsCan_LamKchM = new TCanvas("tCondensedParentsCan_LamKchM", "tCondensedParentsCan_LamKchM", 1000, 1500);
+    TCanvas* tCondensedParentsCan_ALamKchP = new TCanvas("tCondensedParentsCan_ALamKchP", "tCondensedParentsCan_ALamKchP", 1000, 1500);
+    TCanvas* tCondensedParentsCan_LamK0 = new TCanvas("tCondensedParentsCan_LamK0", "tCondensedParentsCan_LamK0", 1000, 1500);
+    TCanvas* tCondensedParentsCan_ALamK0 = new TCanvas("tCondensedParentsCan_ALamK0", "tCondensedParentsCan_ALamK0", 1000, 1500);
 
-      tParentsCan_LamKchM->SaveAs(tDirectory+"Figures/ParentsLamKchM.pdf");
-      tParentsCan_ALamKchP->SaveAs(tDirectory+"Figures/ParentsALamKchP.pdf");
-
-      tParentsCan_LamK0->SaveAs(tDirectory+"Figures/ParentsLamK0.pdf");
-      tParentsCan_ALamK0->SaveAs(tDirectory+"Figures/ParentsALamK0.pdf");
-    }
-    else
-    {
-      tParentsCan_LamKchP->SaveAs(tDirectory+"Figures/ParentsLamKchP_UnZoomed.pdf");
-      tParentsCan_ALamKchM->SaveAs(tDirectory+"Figures/ParentsALamKchM_UnZoomed.pdf");
-
-      tParentsCan_LamKchM->SaveAs(tDirectory+"Figures/ParentsLamKchM_UnZoomed.pdf");
-      tParentsCan_ALamKchP->SaveAs(tDirectory+"Figures/ParentsALamKchP_UnZoomed.pdf");
-
-      tParentsCan_LamK0->SaveAs(tDirectory+"Figures/ParentsLamK0_UnZoomed.pdf");
-      tParentsCan_ALamK0->SaveAs(tDirectory+"Figures/ParentsALamK0_UnZoomed.pdf");
-    }
+    DrawCondensedParentsMatrix(kLamKchP, (TPad*)tCondensedParentsCan_LamKchP, tParentsMatrix_LamKchP, bSetLogZ, bSaveImages, tDirectory+"Figures/CondensedParentsLamKchP");
+    DrawCondensedParentsMatrix(kALamKchM, (TPad*)tCondensedParentsCan_ALamKchM, tParentsMatrix_ALamKchM, bSetLogZ, bSaveImages, tDirectory+"Figures/CondensedParentsALamKchM");
+    DrawCondensedParentsMatrix(kLamKchM, (TPad*)tCondensedParentsCan_LamKchM, tParentsMatrix_LamKchM, bSetLogZ, bSaveImages, tDirectory+"Figures/CondensedParentsLamKchM");
+    DrawCondensedParentsMatrix(kALamKchP, (TPad*)tCondensedParentsCan_ALamKchP, tParentsMatrix_ALamKchP, bSetLogZ, bSaveImages, tDirectory+"Figures/CondensedParentsALamKchP");
+    DrawCondensedParentsMatrix(kLamK0, (TPad*)tCondensedParentsCan_LamK0, tParentsMatrix_LamK0, bSetLogZ, bSaveImages, tDirectory+"Figures/CondensedParentsLamK0");
+    DrawCondensedParentsMatrix(kALamK0, (TPad*)tCondensedParentsCan_ALamK0, tParentsMatrix_ALamK0, bSetLogZ, bSaveImages, tDirectory+"Figures/CondensedParentsALamK0");
   }
 
   //-------------------------------------------------------------------------
