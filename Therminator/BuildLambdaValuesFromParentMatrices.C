@@ -152,7 +152,7 @@ void PrintLambdaValues(TPad* aPad, TH1D* aHisto)
 }
 
 //________________________________________________________________________________________________________________
-void DrawPairFractions(TPad* aPad, TH1D* aHisto)
+void DrawPairFractions(TPad* aPad, TH1D* aHisto, bool aSave=false, TString aSaveName = "")
 {
   aPad->cd();
   gStyle->SetOptStat(0);
@@ -164,9 +164,15 @@ void DrawPairFractions(TPad* aPad, TH1D* aHisto)
 
   aHisto->GetXaxis()->SetTitle("Parent System");
   aHisto->GetYaxis()->SetTitle("Counts");
+
+  aHisto->GetXaxis()->SetTitleOffset(1.25);
+  aHisto->GetYaxis()->SetTitleOffset(1.5);
+
   aHisto->Draw();
 
   PrintLambdaValues(aPad,aHisto);
+
+  if(aSave) aPad->SaveAs(aSaveName+TString(".pdf"));
 }
 
 //________________________________________________________________________________________________________________
@@ -241,19 +247,24 @@ int main(int argc, char **argv)
   TH1D* tPairFractions_ALamK0 = BuildPairFractions(kALamK0, tParentsMatrix_ALamK0);
 
   //------------------------------------------------------------------------------
-  TCanvas* tPairFractionsCan = new TCanvas("tPairFractionsCan", "tPairFractionsCan", 750, 1500);
-  tPairFractionsCan->Divide(2,3);
+  TCanvas* tCan_LamKchP = new TCanvas("tCan_LamKchP", "tCan_LamKchP");
+  TCanvas* tCan_ALamKchM = new TCanvas("tCan_ALamKchM", "tCan_ALamKchM");
 
-  DrawPairFractions((TPad*)tPairFractionsCan->cd(1), tPairFractions_LamKchP);
-  DrawPairFractions((TPad*)tPairFractionsCan->cd(2), tPairFractions_ALamKchM);
+  TCanvas* tCan_LamKchM = new TCanvas("tCan_LamKchM", "tCan_LamKchM");
+  TCanvas* tCan_ALamKchP = new TCanvas("tCan_ALamKchP", "tCan_ALamKchP");
 
-  DrawPairFractions((TPad*)tPairFractionsCan->cd(3), tPairFractions_LamKchM);
-  DrawPairFractions((TPad*)tPairFractionsCan->cd(4), tPairFractions_ALamKchP);
+  TCanvas* tCan_LamK0 = new TCanvas("tCan_LamK0", "tCan_LamK0");
+  TCanvas* tCan_ALamK = new TCanvas("tCan_ALamK0", "tCan_ALamK0");
+  //------------------------------------------------------------------------------
 
-  DrawPairFractions((TPad*)tPairFractionsCan->cd(5), tPairFractions_LamK0);
-  DrawPairFractions((TPad*)tPairFractionsCan->cd(6), tPairFractions_ALamK0);
+  DrawPairFractions((TPad*)tCan_LamKchP, tPairFractions_LamKchP, bSaveImages, tDirectory+TString("/Figures/LamKchP/LamValuesFromParentsMatrix_LamKchP"));
+  DrawPairFractions((TPad*)tCan_ALamKchM, tPairFractions_ALamKchM, bSaveImages, tDirectory+TString("/Figures/ALamKchM/LamValuesFromParentsMatrix_ALamKchM"));
 
-  if(bSaveImages) tPairFractionsCan->SaveAs(tDirectory+"Figures/LambdaValuesFromParentsMatrices.pdf");
+  DrawPairFractions((TPad*)tCan_LamKchM, tPairFractions_LamKchM, bSaveImages, tDirectory+TString("/Figures/LamKchM/LamValuesFromParentsMatrix_LamKchM"));
+  DrawPairFractions((TPad*)tCan_ALamKchP, tPairFractions_ALamKchP, bSaveImages, tDirectory+TString("/Figures/ALamKchP/LamValuesFromParentsMatrix_ALamKchP"));
+
+  DrawPairFractions((TPad*)tCan_LamK0, tPairFractions_LamK0, bSaveImages, tDirectory+TString("/Figures/LamK0/LamValuesFromParentsMatrix_LamK0"));
+  DrawPairFractions((TPad*)tCan_ALamK, tPairFractions_ALamK0, bSaveImages, tDirectory+TString("/Figures/ALamK0/LamValuesFromParentsMatrix_ALamK0"));
 
 //-------------------------------------------------------------------------------
   theApp->Run(kTRUE); //Run the TApp to pause the code.

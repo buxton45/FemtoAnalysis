@@ -76,7 +76,10 @@ TCanvas* DrawTransform(TString tFileName, TString tHistoName, ParticlePDGType aM
     tText->AddText(tBoxText);
   tText->Draw();
 
-  if(bSaveFigures) tReturnCan->SaveAs(aSaveLocationBase+TString(tMatrix->GetName())+TString(".pdf"));
+  TString tSaveName = aSaveLocationBase+TString(tMatrix->GetName());
+  if(aDrawLogZ) tSaveName += TString("_LogZ");
+  tSaveName += TString(".pdf");
+  if(bSaveFigures) tReturnCan->SaveAs(tSaveName);
 
   return tReturnCan;
 }
