@@ -1613,4 +1613,24 @@ TCanvas* ThermEventsCollection::DrawAllPairFractionHistograms()
 }
 
 
+//________________________________________________________________________________________________________________
+double ThermEventsCollection::GetProperDecayLength(double aMeanDecayLength)
+{
+  double tLambda = 1.0/aMeanDecayLength;
+  std::default_random_engine tGenerator (std::clock());  //std::clock() is seed
+  std::exponential_distribution<double> tExpDistribution(tLambda);
+  double tDecayLength = tExpDistribution(tGenerator);
+//TODO
+cout << "aMeanDecayLength = " << aMeanDecayLength << endl;
+cout << "tDecayLength = " << tDecayLength << endl << endl;
+  return tDecayLength;
+}
+
+
+//________________________________________________________________________________________________________________
+double ThermEventsCollection::GetLabDecayLength(double aProperDecayLength, double aMass, double aE)
+{
+  double tGamma = aE/aMass;
+  return tGamma*aProperDecayLength;
+}
 

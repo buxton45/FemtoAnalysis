@@ -171,6 +171,7 @@ void ThermPairAnalysis::InitiateTransformMatrices()
   }
 
   fTransformMatrices = new TObjArray();
+  fTransformMatrices->SetName(TString::Format("TransformMatrices_%s", cAnalysisBaseTags[fAnalysisType]));
   TString tTempTitle;
   for(unsigned int i=0; i<fTransformStorageMapping.size(); i++)
   {
@@ -399,7 +400,7 @@ void ThermPairAnalysis::BuildAllTransformMatrices(ThermEvent aEvent, vector<Ther
   for(unsigned int i=0; i<fTransformInfo.size(); i++)
   {
     if(bIsV0V0) BuildTransformMatrixV0V0(aEvent, aMixingEventsCollection, fTransformInfo[i].parentType1, fTransformInfo[i].parentType2, (TH2D*)fTransformMatrices->At(i));
-    else BuildTransformMatrixParticleV0(aEvent, aMixingEventsCollection, fTransformInfo[i].parentType1, fTransformInfo[i].parentType2, (TH2D*)fTransformMatrices->At(i));
+    else BuildTransformMatrixParticleV0(aEvent, aMixingEventsCollection, fTransformInfo[i].parentType2, fTransformInfo[i].parentType1, (TH2D*)fTransformMatrices->At(i));
   }
 }
 

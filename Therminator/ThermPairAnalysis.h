@@ -91,7 +91,7 @@ private:
 inline void ThermPairAnalysis::SetUseMixedEvents(bool aUse) {fMixEvents = aUse;}
 inline void ThermPairAnalysis::SetBuildUniqueParents(bool aBuild) {fBuildUniqueParents = aBuild;}
 
-inline TH2D* ThermPairAnalysis::GetTransformMatrix(int aIndex) {return (TH2D*)fTransformMatrices->At(aIndex);}
+inline TH2D* ThermPairAnalysis::GetTransformMatrix(int aIndex) {return ((TH2D*)fTransformMatrices->At(aIndex));}
 
 #endif
 

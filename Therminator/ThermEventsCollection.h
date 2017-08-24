@@ -10,6 +10,7 @@
 #include <fstream>
 #include <string>
 #include <iomanip>
+#include <random>
 
 #include "TSystemDirectory.h"
 #include "TSystemFile.h"
@@ -83,6 +84,8 @@ public:
   void SaveAllPairFractionHistograms(TString aSaveFileLocation);
   TCanvas* DrawAllPairFractionHistograms();
 
+  double GetProperDecayLength(double aMeanDecayLength);
+  double GetLabDecayLength(double aProperDecayLength, double aMass, double aE);
 
   //inline
   void SetUseMixedEvents(bool aMixEvents);
