@@ -6,13 +6,19 @@ CFLAGS = $(shell root-config --cflags) -Wall -std=c++11 -I${ANALYZE_DIR} -I${UTI
 #IFLAGS = -I$(ROOTSYS)/include
 #.PHONY: clean
 
-MY_LIBS = $(addprefix build/, Types.o PIDMapping.o ThermParticle.o ThermV0Particle.o ThermEvent.o ThermEventsCollection.o)
+RM = rm
 
+MY_LIBS = $(addprefix build/, Types.o PIDMapping.o ThermParticle.o ThermV0Particle.o ThermEvent.o ThermPairAnalysis.o ThermEventsCollection.o SimpleThermAnalysis.o)
 
-all: runTest runDrawTransforms runDrawPairFractions runDrawParentsMatrices runBuildLambdaValuesFromParentMatrices
+BINARIES = runTest runTest2 runDrawTransforms runDrawPairFractions runDrawParentsMatrices runBuildLambdaValuesFromParentMatrices
+
+all: $(BINARIES)
 
 runTest: ${MY_LIBS} test.C
 	g++ test.C ${MY_LIBS} -o runTest $(LIBS) $(CFLAGS)
+
+runTest2: ${MY_LIBS} test2.C
+	g++ test2.C ${MY_LIBS} -o runTest2 $(LIBS) $(CFLAGS)
 
 runDrawTransforms: ${MY_LIBS} DrawTransformMatrices.C
 	g++ DrawTransformMatrices.C ${MY_LIBS} -o runDrawTransforms $(LIBS) $(CFLAGS)
@@ -35,4 +41,4 @@ build/%.o: %.cxx %.h
 
 
 clean:
-	rm -f runTest ${MY_LIBS}
+	@ ${RM} -rf *.o $(BINARIES) ${MY_LIBS}

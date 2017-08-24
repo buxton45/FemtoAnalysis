@@ -15,10 +15,9 @@ ClassImp(ThermEventsCollection)
 
 
 //________________________________________________________________________________________________________________
-ThermEventsCollection::ThermEventsCollection(TString aEventsDirectory) :
+ThermEventsCollection::ThermEventsCollection() :
   fNFiles(0),
   fNEvents(0),
-  fEventsDirectory(aEventsDirectory),
   fFileNameCollection(0),
   fEventsCollection(0),
 
@@ -917,7 +916,6 @@ void ThermEventsCollection::FillTransformMatrixV0V0(vector<ThermV0Particle> &aV0
     }
   }
 }
-
 
 
 //________________________________________________________________________________________________________________

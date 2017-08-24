@@ -21,6 +21,9 @@
 #include "ThermEvent.h"
 class ThermEvent;
 
+#include "ThermPairAnalysis.h"
+class ThermPairAnalysis;
+
 #include "PIDMapping.h"
 
 using std::string;
@@ -30,7 +33,7 @@ using std::istringstream;
 class ThermEventsCollection {
 
 public:
-  ThermEventsCollection(TString aEventsDirectory = "/home/jesse/Analysis/Therminator2/events/lhyqid3v_LHCPbPb_2760_b2/");
+  ThermEventsCollection();
   virtual ~ThermEventsCollection();
 
   int ReturnEventIndex(unsigned int aEventID);
@@ -88,13 +91,9 @@ public:
   void SetUseMixedEvents(bool aMixEvents);
   void SetNEventsToMix(int aNEventsToMix);
 
-  vector<ThermEvent> GetEventsCollection();
-  vector<ThermEvent> GetMixingEventsCollection();
-
 private:
   int fNFiles;
   int fNEvents;
-  TString fEventsDirectory;
   vector<TString> fFileNameCollection;
   vector<ThermEvent> fEventsCollection;
 
@@ -241,10 +240,6 @@ private:
 //inline stuff
 inline void ThermEventsCollection::SetUseMixedEvents(bool aMixEvents) {fMixEvents = aMixEvents;}
 inline void ThermEventsCollection::SetNEventsToMix(int aNEventsToMix) {fNEventsToMix = aNEventsToMix; fMixEvents=true;}
-
-
-inline vector<ThermEvent> ThermEventsCollection::GetEventsCollection() {return fEventsCollection;}
-inline vector<ThermEvent> ThermEventsCollection::GetMixingEventsCollection() {return fMixingEventsCollection;}
 
 #endif
 

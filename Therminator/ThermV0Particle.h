@@ -69,6 +69,13 @@ public:
   void SetDaughter1PID(int aPID);    // If daughters are charged, Daughter1 = positive
   void SetDaughter2PID(int aPID);  // If daughters are charged, Daughter2 = negative
 
+  //----------
+
+  bool DoubleCheckLamAttributes();
+  bool DoubleCheckALamAttributes();
+  bool DoubleCheckK0Attributes();
+  bool DoubleCheckV0Attributes();
+
 private:
   bool fDaughter1Found;
   bool fDaughter2Found;

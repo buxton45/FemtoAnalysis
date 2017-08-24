@@ -21,7 +21,7 @@ int main(int argc, char **argv)
   ThermEventsCollection *tEventsCollection = new ThermEventsCollection();
   tEventsCollection->SetUseMixedEvents(true);
 
-  bool bRunFull = true;
+  bool bRunFull = false;
   bool bWriteEvents = false;
   bool bReadFromRoot = true;
   bool bReadFromTxt = false;

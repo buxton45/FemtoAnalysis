@@ -132,6 +132,27 @@ kXiCKSt0=40, kAXiCAKSt0=41, kXiCAKSt0=42, kAXiCKSt0=43
 
 
   //-------Struct definitions---------------------------------
+  struct TransformInfo
+  {
+    ParticlePDGType particleType1;
+    ParticlePDGType parentType1;
+
+    ParticlePDGType particleType2;
+    ParticlePDGType parentType2;
+
+    TransformInfo(ParticlePDGType aParticleType1, ParticlePDGType aParticleType2, 
+                  ParticlePDGType aParentType1  , ParticlePDGType aParentType2  )
+    {
+      particleType1 = aParticleType1;
+      parentType1   = aParentType1;
+
+      particleType2 = aParticleType2;
+      parentType2   = aParentType2;
+
+    }
+  };
+
+
   struct tmpAnalysisInfo
   {
     AnalysisType analysisType;

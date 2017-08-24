@@ -416,3 +416,68 @@ void ThermV0Particle::LoadDaughter(ThermParticle& aDaughter)
 
 
 
+
+//________________________________________________________________________________________________________________
+bool ThermV0Particle::DoubleCheckLamAttributes()
+{
+  if(!fGoodV0) {cout << "DoubleCheckLamAttributes Fail 1" << endl; return false;}
+  if(fPID != kPDGLam) {cout << "DoubleCheckLamAttributes Fail 2" << endl; return false;}
+  if(!fBothDaughtersFound) {cout << "DoubleCheckLamAttributes Fail 3" << endl; return false;}
+  if(fDaughter1PID != kPDGProt) {cout << "DoubleCheckLamAttributes Fail 4" << endl; return false;}
+  if(fDaughter2PID != kPDGPiM) {cout << "DoubleCheckLamAttributes Fail 5" << endl; return false;}
+
+  return true;
+}
+
+//________________________________________________________________________________________________________________
+bool ThermV0Particle::DoubleCheckALamAttributes()
+{
+  if(!fGoodV0) {cout << "DoubleCheckALamAttributes Fail 1" << endl; return false;}
+  if(fPID != kPDGALam) {cout << "DoubleCheckALamAttributes Fail 2" << endl; return false;}
+  if(!BothDaughtersFound()) {cout << "DoubleCheckALamAttributes Fail 3" << endl; return false;}
+  if(fDaughter1PID != kPDGPiP) {cout << "DoubleCheckALamAttributes Fail 4" << endl; return false;}
+  if(fDaughter2PID != kPDGAntiProt) {cout << "DoubleCheckALamAttributes Fail 5" << endl; return false;}
+
+  return true;
+}
+
+//________________________________________________________________________________________________________________
+bool ThermV0Particle::DoubleCheckK0Attributes()
+{
+  if(!fGoodV0) {cout << "DoubleCheckK0Attributes Fail 1" << endl; return false;}
+  if(fPID != kPDGK0) {cout << "DoubleCheckK0Attributes Fail 2" << endl; return false;}
+  if(!fBothDaughtersFound) {cout << "DoubleCheckK0Attributes Fail 3" << endl; return false;}
+  if(fDaughter1PID != kPDGPiP) {cout << "DoubleCheckK0Attributes Fail 4" << endl; return false;}
+  if(fDaughter2PID != kPDGPiM) {cout << "DoubleCheckK0Attributes Fail 5" << endl; return false;}
+
+  return true;
+}
+
+
+
+//________________________________________________________________________________________________________________
+bool ThermV0Particle::DoubleCheckV0Attributes()
+{
+  //------------------------------
+  if(fDaughter1Mass==0) {cout << "DoubleCheckV0Attributes Fail 1" << endl; return false;}
+  if(fDaughter1T==0 || fDaughter1X==0 || fDaughter1Y==0 ||fDaughter1Z==0) {cout << "DoubleCheckV0Attributes Fail 2" << endl; return false;}
+  if(fDaughter1E==0 || fDaughter1Px==0 || fDaughter1Py==0 ||fDaughter1Pz==0) {cout << "DoubleCheckV0Attributes Fail 3" << endl; return false;}
+
+  if(fDaughter2Mass==0) {cout << "DoubleCheckV0Attributes Fail 4" << endl; return false;}
+  if(fDaughter2T==0 || fDaughter2X==0 || fDaughter2Y==0 ||fDaughter2Z==0) {cout << "DoubleCheckV0Attributes Fail 5" << endl; return false;}
+  if(fDaughter2E==0 || fDaughter2Px==0 || fDaughter2Py==0 ||fDaughter2Pz==0) {cout << "DoubleCheckV0Attributes Fail 6" << endl; return false;}
+
+  if(!fPrimordial)
+  {
+    if(fFatherT==0 || fFatherX==0 || fFatherY==0 ||fFatherZ==0) {cout << "DoubleCheckV0Attributes Fail 7" << endl; return false;}
+    if(fFatherE==0 || fFatherPx==0 || fFatherPy==0 ||fFatherPz==0) {cout << "DoubleCheckV0Attributes Fail 8" << endl; return false;}
+  }
+  //------------------------------
+  if(fPID == kPDGLam) return DoubleCheckLamAttributes();
+  else if(fPID == kPDGALam) return DoubleCheckALamAttributes();
+  else if(fPID == kPDGK0) return DoubleCheckK0Attributes();
+  else assert(0);
+
+}
+
+

@@ -25,8 +25,9 @@ CFLAGS = $(shell root-config --cflags) -Wall -std=c++11 -I${ANALYZE_DIR} -I${LED
 
 MY_LIBS = $(addprefix build/, FitParameter.o FitChi2Histograms.o FitPartialAnalysis.o FitPairAnalysis.o FitSharedAnalyses.o MathematicaSession.o WaveFunction.o ChargedResidualCf.o SimpleChargedResidualCf.o NeutralResidualCf.o ResidualCollection.o LednickyFitter.o FitGenerator.o CfLite.o CfHeavy.o Types.o AnalysisInfo.o Faddeeva.o FitSystematicAnalysis.o CanvasPartition.o)
 
+BINARIES = runLamKchP runLamKchPTest runCompareKchFix2 runFits runTest runGenerator runCompareIgnoreOnFlyStatus runScattParamValues runLamKchPvsKchM runPlotAll
 
-all: runLamKchP runLamKchPTest runCompareKchFix2 runFits runTest runGenerator runCompareIgnoreOnFlyStatus runScattParamValues runLamKchPvsKchM runPlotAll
+all: $(BINARIES)
 
 runLamKchP: ${MY_LIBS} BuildLamKchP.C
 	g++ BuildLamKchP.C ${MY_LIBS} -I${INCDIR} -o runLamKchP -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS)
