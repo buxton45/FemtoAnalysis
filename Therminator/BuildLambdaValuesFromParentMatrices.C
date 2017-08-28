@@ -84,7 +84,7 @@ void SetXAxisLabels(AnalysisType aAnType, TH1D* aHist)
 
 
 //________________________________________________________________________________________________________________
-TH1D* BuildPairFractions(AnalysisType aAnType, TH2D* aMatrix)
+TH1D* BuildPairFractions(AnalysisType aAnType, TH2D* aMatrix, double aMaxDecayLength=-1.)
 {
   TString tName = TString::Format("#lambda Estimates: %s", cAnalysisRootTags[aAnType]);
   TH1D* tReturnHist = new TH1D(tName, tName, 13, 0, 13);
@@ -122,11 +122,11 @@ TH1D* BuildPairFractions(AnalysisType aAnType, TH2D* aMatrix)
     {
       tPDG2 = (*tFatherCollection2)[iPar2];
       tWeight = aMatrix->GetBinContent(iPar1+1, iPar2+1);
-      if(bParticleV0) ThermEventsCollection::MapAndFillPairFractionHistogramParticleV0(tReturnHist, tPDG1, tPDG2, tWeight);
-      else ThermEventsCollection::MapAndFillPairFractionHistogramV0V0(tReturnHist, tPDG1, tPDG2, tWeight);
+      if(bParticleV0) ThermEventsCollection::MapAndFillPairFractionHistogramParticleV0(tReturnHist, tPDG1, tPDG2, tWeight, aMaxDecayLength);
+      else ThermEventsCollection::MapAndFillPairFractionHistogramV0V0(tReturnHist, tPDG1, tPDG2, tWeight, aMaxDecayLength);
     }
   }
-
+  PrintIncludeAsPrimary(aMaxDecayLength);
   SetXAxisLabels(aAnType, tReturnHist);
   return tReturnHist;
 }
@@ -220,6 +220,8 @@ int main(int argc, char **argv)
   //the program ends and closes everything
 //-----------------------------------------------------------------------------
   bool bSaveImages = false;
+//  double tMaxDecayLength = -1.;
+  double tMaxDecayLength = 3.01;
 
   TString tDirectory = "~/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b2/";
   TString tFileLocationPairFractions = tDirectory + "PairFractions.root";
@@ -237,14 +239,14 @@ int main(int argc, char **argv)
   TH2D* tParentsMatrix_ALamK0 = Get2dHisto(tFileLocationPairFractions, "fParentsMatrixALamK0");
 
   //------------------------------------------------------------------------------
-  TH1D* tPairFractions_LamKchP = BuildPairFractions(kLamKchP, tParentsMatrix_LamKchP);
-  TH1D* tPairFractions_ALamKchM = BuildPairFractions(kALamKchM, tParentsMatrix_ALamKchM);
+  TH1D* tPairFractions_LamKchP = BuildPairFractions(kLamKchP, tParentsMatrix_LamKchP, tMaxDecayLength);
+  TH1D* tPairFractions_ALamKchM = BuildPairFractions(kALamKchM, tParentsMatrix_ALamKchM, tMaxDecayLength);
 
-  TH1D* tPairFractions_LamKchM = BuildPairFractions(kLamKchM, tParentsMatrix_LamKchM);
-  TH1D* tPairFractions_ALamKchP = BuildPairFractions(kALamKchP, tParentsMatrix_ALamKchP);
+  TH1D* tPairFractions_LamKchM = BuildPairFractions(kLamKchM, tParentsMatrix_LamKchM, tMaxDecayLength);
+  TH1D* tPairFractions_ALamKchP = BuildPairFractions(kALamKchP, tParentsMatrix_ALamKchP, tMaxDecayLength);
 
-  TH1D* tPairFractions_LamK0 = BuildPairFractions(kLamK0, tParentsMatrix_LamK0);
-  TH1D* tPairFractions_ALamK0 = BuildPairFractions(kALamK0, tParentsMatrix_ALamK0);
+  TH1D* tPairFractions_LamK0 = BuildPairFractions(kLamK0, tParentsMatrix_LamK0, tMaxDecayLength);
+  TH1D* tPairFractions_ALamK0 = BuildPairFractions(kALamK0, tParentsMatrix_ALamK0, tMaxDecayLength);
 
   //------------------------------------------------------------------------------
   TCanvas* tCan_LamKchP = new TCanvas("tCan_LamKchP", "tCan_LamKchP");

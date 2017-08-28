@@ -89,7 +89,7 @@ void DrawParentsMatrixBackground(AnalysisType aAnType, TPad* aPad, TH2D* aMatrix
 
 
 //________________________________________________________________________________________________________________
-void DrawOnlyPairsInOthers(AnalysisType aAnType, TPad* aPad, TH2D* aMatrix)
+void DrawOnlyPairsInOthers(AnalysisType aAnType, TPad* aPad, TH2D* aMatrix, double aMaxDecayLength=-1.)
 {
   vector<int> tParentCollection1, tParentCollection2;
   switch(aAnType) {
@@ -117,7 +117,7 @@ void DrawOnlyPairsInOthers(AnalysisType aAnType, TPad* aPad, TH2D* aMatrix)
   {
     for(unsigned int j=0; j<tParentCollection2.size(); j++)
     {
-      if(!IncludeInOthers(tParentCollection1[i], tParentCollection2[j])) aMatrix->SetBinContent(i+1, j+1, 0.);
+      if(!IncludeInOthers(tParentCollection1[i], tParentCollection2[j], aMaxDecayLength)) aMatrix->SetBinContent(i+1, j+1, 0.);
     }
   }
 
@@ -297,7 +297,7 @@ int main(int argc, char **argv)
   bool bSetLogZ = false;
 
   bool bDrawMatrixBackground = false;
-  bool bDrawOnlyPairsInOthers = false;
+  bool bDrawOnlyPairsInOthers = true;
 
 
   TString tDirectory = "~/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b2/";
@@ -417,6 +417,9 @@ int main(int argc, char **argv)
   //-------------------------------------------------------------------------
   if(bDrawOnlyPairsInOthers)
   {
+//    double tMaxDecayLength = -1.;
+    double tMaxDecayLength = 3.01;
+
     TCanvas* tParentsOthersCan_LamKchP = new TCanvas("tParentsOthersCan_LamKchP", "tParentsOthersCan_LamKchP", 1000, 1500);
     TCanvas* tParentsOthersCan_ALamKchM = new TCanvas("tParentsOthersCan_ALamKchM", "tParentsOthersCan_ALamKchM", 1000, 1500);
     TCanvas* tParentsOthersCan_LamKchM = new TCanvas("tParentsOthersCan_LamKchM", "tParentsOthersCan_LamKchM", 1000, 1500);
@@ -424,12 +427,12 @@ int main(int argc, char **argv)
     TCanvas* tParentsOthersCan_LamK0 = new TCanvas("tParentsOthersCan_LamK0", "tParentsOthersCan_LamK0", 1000, 1500);
     TCanvas* tParentsOthersCan_ALamK0 = new TCanvas("tParentsOthersCan_ALamK0", "tParentsOthersCan_ALamK0", 1000, 1500);
 
-    DrawOnlyPairsInOthers(kLamKchP, (TPad*)tParentsOthersCan_LamKchP, (TH2D*)tParentsMatrix_LamKchP->Clone("fParentsMatrixOthersLamKchP"));
-    DrawOnlyPairsInOthers(kALamKchM, (TPad*)tParentsOthersCan_ALamKchM, (TH2D*)tParentsMatrix_ALamKchM->Clone("fParentsMatrixOthersALamKchM"));
-    DrawOnlyPairsInOthers(kLamKchM, (TPad*)tParentsOthersCan_LamKchM, (TH2D*)tParentsMatrix_LamKchM->Clone("fParentsMatrixOthersLamKchM"));
-    DrawOnlyPairsInOthers(kALamKchP, (TPad*)tParentsOthersCan_ALamKchP, (TH2D*)tParentsMatrix_ALamKchP->Clone("fParentsMatrixOthersALamKchP"));
-    DrawOnlyPairsInOthers(kLamK0, (TPad*)tParentsOthersCan_LamK0, (TH2D*)tParentsMatrix_LamK0->Clone("fParentsMatrixOthersLamK0"));
-    DrawOnlyPairsInOthers(kALamK0, (TPad*)tParentsOthersCan_ALamK0, (TH2D*)tParentsMatrix_ALamK0->Clone("fParentsMatrixOthersALamK0"));
+    DrawOnlyPairsInOthers(kLamKchP, (TPad*)tParentsOthersCan_LamKchP, (TH2D*)tParentsMatrix_LamKchP->Clone("fParentsMatrixOthersLamKchP"), tMaxDecayLength);
+    DrawOnlyPairsInOthers(kALamKchM, (TPad*)tParentsOthersCan_ALamKchM, (TH2D*)tParentsMatrix_ALamKchM->Clone("fParentsMatrixOthersALamKchM"), tMaxDecayLength);
+    DrawOnlyPairsInOthers(kLamKchM, (TPad*)tParentsOthersCan_LamKchM, (TH2D*)tParentsMatrix_LamKchM->Clone("fParentsMatrixOthersLamKchM"), tMaxDecayLength);
+    DrawOnlyPairsInOthers(kALamKchP, (TPad*)tParentsOthersCan_ALamKchP, (TH2D*)tParentsMatrix_ALamKchP->Clone("fParentsMatrixOthersALamKchP"), tMaxDecayLength);
+    DrawOnlyPairsInOthers(kLamK0, (TPad*)tParentsOthersCan_LamK0, (TH2D*)tParentsMatrix_LamK0->Clone("fParentsMatrixOthersLamK0"), tMaxDecayLength);
+    DrawOnlyPairsInOthers(kALamK0, (TPad*)tParentsOthersCan_ALamK0, (TH2D*)tParentsMatrix_ALamK0->Clone("fParentsMatrixOthersALamK0"), tMaxDecayLength);
   }
 
 //-------------------------------------------------------------------------------

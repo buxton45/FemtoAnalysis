@@ -21,6 +21,9 @@ int main(int argc, char **argv)
   bool bUseMixedEvents = true;
   bool bPrintUniqueParents = false;
 
+//  double tMaxPrimaryDecayLength = -1.; 
+  double tMaxPrimaryDecayLength = 3.01; 
+
   //-----------------------------------------
   TString tEventsDirectory, tMatricesSaveFileName, tPairFractionSaveName;
 
@@ -45,6 +48,7 @@ int main(int argc, char **argv)
   tSimpleThermAnalysis->SetEventsDirectory(tEventsDirectory);
   tSimpleThermAnalysis->SetPairFractionsSaveName(tPairFractionSaveName);
   tSimpleThermAnalysis->SetTransformMatricesSaveName(tMatricesSaveFileName);
+  if(tMaxPrimaryDecayLength > 0.) tSimpleThermAnalysis->SetMaxPrimaryDecayLength(tMaxPrimaryDecayLength);
 
   tSimpleThermAnalysis->ProcessAll();
 

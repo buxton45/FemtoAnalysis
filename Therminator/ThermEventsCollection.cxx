@@ -1235,7 +1235,7 @@ void ThermEventsCollection::MapAndFillProtonParents(TH1* aHist, int aFatherType)
 
 
 //________________________________________________________________________________________________________________
-void ThermEventsCollection::MapAndFillPairFractionHistogramParticleV0(TH1* aHistogram, int aV0FatherType, int aTrackFatherType, double tWeight)
+void ThermEventsCollection::MapAndFillPairFractionHistogramParticleV0(TH1* aHistogram, int aV0FatherType, int aTrackFatherType, double tWeight, double aMaxPrimaryDecayLength)
 {
   double tBin = -1.;
   if((aV0FatherType == kPDGLam || aV0FatherType == kPDGALam) && (aTrackFatherType == kPDGKchP || aTrackFatherType == kPDGKchM)) tBin = 0.;
@@ -1250,8 +1250,8 @@ void ThermEventsCollection::MapAndFillPairFractionHistogramParticleV0(TH1* aHist
   else if((aV0FatherType==kPDGSigma || aV0FatherType==kPDGASigma) && (aTrackFatherType == kPDGKSt0 || aTrackFatherType == kPDGAKSt0)) tBin = 8.;
   else if((aV0FatherType==kPDGXi0 || aV0FatherType==kPDGAXi0) && (aTrackFatherType == kPDGKSt0 || aTrackFatherType == kPDGAKSt0)) tBin = 9.;
   else if((aV0FatherType==kPDGXiC || aV0FatherType==kPDGAXiC) && (aTrackFatherType == kPDGKSt0 || aTrackFatherType == kPDGAKSt0)) tBin = 10.;
-  else if(IncludeAsPrimary(aV0FatherType, aTrackFatherType)) tBin=0.;
-  else {assert(IncludeInOthers(aV0FatherType, aTrackFatherType)); tBin = 11.;}
+  else if(IncludeAsPrimary(aV0FatherType, aTrackFatherType, aMaxPrimaryDecayLength)) tBin=0.;
+  else {assert(IncludeInOthers(aV0FatherType, aTrackFatherType, aMaxPrimaryDecayLength)); tBin = 11.;}
 
   if(tBin > -1)
   {
@@ -1262,7 +1262,7 @@ void ThermEventsCollection::MapAndFillPairFractionHistogramParticleV0(TH1* aHist
 }
 
 //________________________________________________________________________________________________________________
-void ThermEventsCollection::MapAndFillPairFractionHistogramV0V0(TH1* aHistogram, int aV01FatherType, int aV02FatherType, double tWeight)
+void ThermEventsCollection::MapAndFillPairFractionHistogramV0V0(TH1* aHistogram, int aV01FatherType, int aV02FatherType, double tWeight, double aMaxPrimaryDecayLength)
 {
   double tBin = -1.;
   if((aV01FatherType == kPDGLam || aV01FatherType == kPDGALam) && (aV02FatherType == kPDGK0)) tBin = 0.;
@@ -1277,8 +1277,8 @@ void ThermEventsCollection::MapAndFillPairFractionHistogramV0V0(TH1* aHistogram,
   else if((aV01FatherType==kPDGSigma || aV01FatherType==kPDGASigma) && (aV02FatherType == kPDGKSt0 || aV02FatherType == kPDGAKSt0)) tBin = 8.;
   else if((aV01FatherType==kPDGXi0 || aV01FatherType==kPDGAXi0) && (aV02FatherType == kPDGKSt0 || aV02FatherType == kPDGAKSt0)) tBin = 9.;
   else if((aV01FatherType==kPDGXiC || aV01FatherType==kPDGAXiC) && (aV02FatherType == kPDGKSt0 || aV02FatherType == kPDGAKSt0)) tBin = 10.;
-  else if(IncludeAsPrimary(aV01FatherType, aV02FatherType)) tBin=0.;
-  else {assert(IncludeInOthers(aV01FatherType,aV02FatherType)); tBin = 11.;}
+  else if(IncludeAsPrimary(aV01FatherType, aV02FatherType, aMaxPrimaryDecayLength)) tBin=0.;
+  else {assert(IncludeInOthers(aV01FatherType,aV02FatherType, aMaxPrimaryDecayLength)); tBin = 11.;}
 
   if(tBin > -1)
   {
@@ -1288,7 +1288,7 @@ void ThermEventsCollection::MapAndFillPairFractionHistogramV0V0(TH1* aHistogram,
 }
 
 //________________________________________________________________________________________________________________
-void ThermEventsCollection::BuildPairFractionHistogramsParticleV0(ParticlePDGType aParticleType, ParticlePDGType aV0Type, TH1* aHistogram, TH2* aMatrix)
+void ThermEventsCollection::BuildPairFractionHistogramsParticleV0(ParticlePDGType aParticleType, ParticlePDGType aV0Type, TH1* aHistogram, TH2* aMatrix, double aMaxPrimaryDecayLength)
 {
   vector<ThermParticle> aParticleCollection;
   vector<ThermV0Particle> aV0Collection;
@@ -1313,7 +1313,7 @@ void ThermEventsCollection::BuildPairFractionHistogramsParticleV0(ParticlePDGTyp
           tParticle = aParticleCollection[iPar];
           int tParticleFatherType = tParticle.GetFatherPID();
 
-          MapAndFillPairFractionHistogramParticleV0(aHistogram, tV0FatherType, tParticleFatherType);
+          MapAndFillPairFractionHistogramParticleV0(aHistogram, tV0FatherType, tParticleFatherType, aMaxPrimaryDecayLength);
           if(fBuildUniqueParents)
           {
             BuildUniqueParents(aParticleType, tParticleFatherType);
@@ -1329,7 +1329,7 @@ void ThermEventsCollection::BuildPairFractionHistogramsParticleV0(ParticlePDGTyp
 }
 
 //________________________________________________________________________________________________________________
-void ThermEventsCollection::BuildPairFractionHistogramsV0V0(ParticlePDGType aV01Type, ParticlePDGType aV02Type, TH1* aHistogram, TH2* aMatrix)
+void ThermEventsCollection::BuildPairFractionHistogramsV0V0(ParticlePDGType aV01Type, ParticlePDGType aV02Type, TH1* aHistogram, TH2* aMatrix, double aMaxPrimaryDecayLength)
 {
   vector<ThermV0Particle> aV01Collection, aV02Collection;
 
@@ -1355,7 +1355,7 @@ void ThermEventsCollection::BuildPairFractionHistogramsV0V0(ParticlePDGType aV01
 
           if(tV02.GoodV0())
           {
-            MapAndFillPairFractionHistogramV0V0(aHistogram, tV01FatherType, tV02FatherType);
+            MapAndFillPairFractionHistogramV0V0(aHistogram, tV01FatherType, tV02FatherType, aMaxPrimaryDecayLength);
             if(fBuildUniqueParents)
             {
               BuildUniqueParents(aV01Type, tV01FatherType);
@@ -1403,16 +1403,16 @@ void ThermEventsCollection::BuildProtonParents()
 
 
 //________________________________________________________________________________________________________________
-void ThermEventsCollection::BuildAllPairFractionHistograms()
+void ThermEventsCollection::BuildAllPairFractionHistograms(double aMaxPrimaryDecayLength)
 {
-  BuildPairFractionHistogramsParticleV0(kPDGKchP, kPDGLam, fPairFractionsLamKchP, fParentsMatrixLamKchP);
-  BuildPairFractionHistogramsParticleV0(kPDGKchM, kPDGALam, fPairFractionsALamKchM, fParentsMatrixALamKchM);
+  BuildPairFractionHistogramsParticleV0(kPDGKchP, kPDGLam, fPairFractionsLamKchP, fParentsMatrixLamKchP, aMaxPrimaryDecayLength);
+  BuildPairFractionHistogramsParticleV0(kPDGKchM, kPDGALam, fPairFractionsALamKchM, fParentsMatrixALamKchM, aMaxPrimaryDecayLength);
 
-  BuildPairFractionHistogramsParticleV0(kPDGKchM, kPDGLam, fPairFractionsLamKchM, fParentsMatrixLamKchM);
-  BuildPairFractionHistogramsParticleV0(kPDGKchP, kPDGALam, fPairFractionsALamKchP, fParentsMatrixALamKchP);
+  BuildPairFractionHistogramsParticleV0(kPDGKchM, kPDGLam, fPairFractionsLamKchM, fParentsMatrixLamKchM, aMaxPrimaryDecayLength);
+  BuildPairFractionHistogramsParticleV0(kPDGKchP, kPDGALam, fPairFractionsALamKchP, fParentsMatrixALamKchP, aMaxPrimaryDecayLength);
 
-  BuildPairFractionHistogramsV0V0(kPDGLam, kPDGK0, fPairFractionsLamK0, fParentsMatrixLamK0);
-  BuildPairFractionHistogramsV0V0(kPDGALam, kPDGK0, fPairFractionsALamK0, fParentsMatrixALamK0);
+  BuildPairFractionHistogramsV0V0(kPDGLam, kPDGK0, fPairFractionsLamK0, fParentsMatrixLamK0, aMaxPrimaryDecayLength);
+  BuildPairFractionHistogramsV0V0(kPDGALam, kPDGK0, fPairFractionsALamK0, fParentsMatrixALamK0, aMaxPrimaryDecayLength);
 
   BuildProtonParents();
 

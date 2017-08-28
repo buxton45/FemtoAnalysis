@@ -51,6 +51,8 @@ public:
   void SetPairFractionsSaveName(TString aSaveName);
   void SetTransformMatricesSaveName(TString aSaveName);
 
+  void SetMaxPrimaryDecayLength(double aMax);
+
 private:
   int fNFiles;
   int fNEvents;
@@ -67,6 +69,8 @@ private:
 
   double fKStarMin, fKStarMax;
   int fNBinsKStar;
+
+  double fMaxPrimaryDecayLength;
 
   bool fBuildUniqueParents;
 
@@ -86,5 +90,6 @@ inline void SimpleThermAnalysis::SetEventsDirectory(TString aDirectory) {fEvents
 inline void SimpleThermAnalysis::SetPairFractionsSaveName(TString aSaveName) {fPairFractionsSaveName = aSaveName;}
 inline void SimpleThermAnalysis::SetTransformMatricesSaveName(TString aSaveName) {fTransformMatricesSaveName = aSaveName;}
 
+inline void SimpleThermAnalysis::SetMaxPrimaryDecayLength(double aMax) {fMaxPrimaryDecayLength = aMax;}
 
 #endif

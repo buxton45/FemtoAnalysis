@@ -47,15 +47,15 @@ public:
   void MapAndFillParentsMatrixParticleV0(TH2* aMatrix, int aV0FatherType, int aTrackFatherType);
   void MapAndFillParentsMatrixV0V0(TH2* aMatrix, int aV01FatherType, int aV02Type);
 
-  static void MapAndFillPairFractionHistogramParticleV0(TH1* aHistogram, int aV0FatherType, int aTrackFatherType, double tWeight=1.);
-  static void MapAndFillPairFractionHistogramV0V0(TH1* aHistogram, int aV01FatherType, int aV02FatherType, double tWeight=1.);
+  static void MapAndFillPairFractionHistogramParticleV0(TH1* aHistogram, int aV0FatherType, int aTrackFatherType, double tWeight=1., double aMaxPrimaryDecayLength=-1.);
+  static void MapAndFillPairFractionHistogramV0V0(TH1* aHistogram, int aV01FatherType, int aV02FatherType, double tWeight=1., double aMaxPrimaryDecayLength=-1.);
 
   void FillUniqueParents(vector<int> &aUniqueParents, int aFatherType);
   static vector<int> UniqueCombineVectors(vector<int> &aVec1, vector<int> &aVec2);
   void PrintUniqueParents();
 
-  void BuildPairFractionHistogramsParticleV0(ThermEvent aEvent);
-  void BuildPairFractionHistogramsV0V0(ThermEvent aEvent);
+  void BuildPairFractionHistogramsParticleV0(ThermEvent aEvent, double aMaxPrimaryDecayLength=-1.);
+  void BuildPairFractionHistogramsV0V0(ThermEvent aEvent, double aMaxPrimaryDecayLength=-1.);
 
   void SavePairFractionsAndParentsMatrix(TFile *aFile);
 

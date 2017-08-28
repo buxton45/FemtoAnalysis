@@ -31,6 +31,8 @@ SimpleThermAnalysis::SimpleThermAnalysis() :
   fKStarMax(1.),
   fNBinsKStar(200),
 
+  fMaxPrimaryDecayLength(-1.),
+
   fBuildUniqueParents(false),
 
   fAnalysisLamKchP(nullptr),
@@ -237,14 +239,14 @@ void SimpleThermAnalysis::ProcessEventByEvent(vector<ThermEvent> &aEventsCollect
     fAnalysisALamK0->BuildAllTransformMatrices(fEventsCollection[iEv], fMixingEventsCollection);
 
     //-- Pair fractions and parents matrices
-    fAnalysisLamKchP->BuildPairFractionHistogramsParticleV0(fEventsCollection[iEv]);
-    fAnalysisALamKchM->BuildPairFractionHistogramsParticleV0(fEventsCollection[iEv]);
+    fAnalysisLamKchP->BuildPairFractionHistogramsParticleV0(fEventsCollection[iEv], fMaxPrimaryDecayLength);
+    fAnalysisALamKchM->BuildPairFractionHistogramsParticleV0(fEventsCollection[iEv], fMaxPrimaryDecayLength);
 
-    fAnalysisLamKchM->BuildPairFractionHistogramsParticleV0(fEventsCollection[iEv]);
-    fAnalysisALamKchP->BuildPairFractionHistogramsParticleV0(fEventsCollection[iEv]);
+    fAnalysisLamKchM->BuildPairFractionHistogramsParticleV0(fEventsCollection[iEv], fMaxPrimaryDecayLength);
+    fAnalysisALamKchP->BuildPairFractionHistogramsParticleV0(fEventsCollection[iEv], fMaxPrimaryDecayLength);
 
-    fAnalysisLamK0->BuildPairFractionHistogramsV0V0(fEventsCollection[iEv]);
-    fAnalysisALamK0->BuildPairFractionHistogramsV0V0(fEventsCollection[iEv]);
+    fAnalysisLamK0->BuildPairFractionHistogramsV0V0(fEventsCollection[iEv], fMaxPrimaryDecayLength);
+    fAnalysisALamK0->BuildPairFractionHistogramsV0V0(fEventsCollection[iEv], fMaxPrimaryDecayLength);
 
     if(fMixEvents)
     {

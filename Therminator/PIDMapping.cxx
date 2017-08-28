@@ -7,8 +7,6 @@
 //*************************************************************************************************************************************************************
 //_____________________________________________________________________________________________________________________________________________________________
 
-
-
 //________________________________________________________________________________________________________________
 TString GetParticleName(int aPID)
 {
@@ -40,6 +38,31 @@ bool IncludeAsPrimary(int aPID1, int aPID2)
 */
 
 //________________________________________________________________________________________________________________
+TString GetParticleNamev2(int aPID)
+{
+  for(unsigned int i=0; i<cPidInfo.size(); i++)
+  {
+    if(aPID == cPidInfo[i].pdgType) return cPidInfo[i].name;
+  }
+
+  assert(0);
+  return TString("");
+}
+
+//________________________________________________________________________________________________________________
+double GetParticleDecayLength(int aPID)
+{
+  for(unsigned int i=0; i<cPidInfo.size(); i++)
+  {
+    if(aPID == cPidInfo[i].pdgType) return cPidInfo[i].decayLength;
+  }
+
+  assert(0);
+  return 0;
+}
+
+
+//________________________________________________________________________________________________________________
 bool IncludeAsPrimary(int aPID1, int aPID2)
 {
   bool bInclude1=true, bInclude2=true;
@@ -52,6 +75,34 @@ bool IncludeAsPrimary(int aPID1, int aPID2)
   if(!bInclude1 || !bInclude2) return false;
   else return true;
 }
+
+//________________________________________________________________________________________________________________
+bool IncludeAsPrimary(int aPID1, int aPID2, double aMaxDecayLength)
+{
+  if(aMaxDecayLength < 0.) return IncludeAsPrimary(aPID1,aPID2);
+  else if((aPID1 == kPDGLam || aPID1 == kPDGALam) && (aPID2 == kPDGKchP || aPID2 == kPDGKchM || aPID2 == kPDGK0)) return true;
+  else
+  {
+    bool bInclude1=true, bInclude2=true;
+
+    if(GetParticleDecayLength(aPID1) > aMaxDecayLength) bInclude1 = false;
+    if(GetParticleDecayLength(aPID2) > aMaxDecayLength) bInclude2 = false;  
+
+    if(!bInclude1 || !bInclude2) return false;
+    else return true;
+  }
+}
+
+//________________________________________________________________________________________________________________
+void PrintIncludeAsPrimary(double aMaxDecayLength)
+{
+  for(unsigned int i=0; i<cPidInfo.size(); i++)
+  {
+    if(GetParticleDecayLength(cPidInfo[i].pdgType) <= aMaxDecayLength) cout << cPidInfo[i].name << " : " << cPidInfo[i].pdgType << endl;
+  }
+
+}
+
 
 //________________________________________________________________________________________________________________
 bool PairAccountedForInResiduals(int aPID1, int aPID2)
@@ -92,6 +143,19 @@ bool IncludeInOthers(int aPID1, int aPID2)
   if(!IncludeAsPrimary(aPID1,aPID2) && !PairAccountedForInResiduals(aPID1,aPID2)) return true;
   else return false;
 }
+
+//________________________________________________________________________________________________________________
+bool IncludeInOthers(int aPID1, int aPID2, double aMaxDecayLength)
+{
+  if(aMaxDecayLength < 0.) return IncludeInOthers(aPID1,aPID2);
+  else
+  {
+    if(!IncludeAsPrimary(aPID1,aPID2,aMaxDecayLength) && !PairAccountedForInResiduals(aPID1,aPID2)) return true;
+    else return false;
+  }
+}
+
+
 
 //_____________________________________________________________________________________________________________________________________________________________
 //*************************************************************************************************************************************************************
@@ -901,5 +965,423 @@ vector<int> cAllProtonFathers {
 23114, 23122, 23124, 23224, 31114, 31214, 32112, 32114, 32124, 32212,
 32214, 33122, 42112, 42212, 43122, 53122
 };
+
+
+
+
+//________________________________________________________________________________________________________
+vector<PidInfo> cPidInfo {
+
+//-------------------- a --------------------
+//----- a_{0}
+PidInfo(10111,  "a_{0}(1450)^{0}", 0.74),
+PidInfo(10211,  "a_{0}(1450)^{+}", 0.74),
+PidInfo(-10211, "a_{0}(1450)^{-}", 0.74),
+
+//----- a_{2}
+//TODO in particles.data, two 215 entries, should be 215 and -215
+PidInfo(115,  "a_{2}(1320)^{0}", 1.84),
+PidInfo(215,  "a_{2}(1320)^{+}", 1.84),
+PidInfo(-215, "a_{2}(1320)^{-}", 1.84),
+
+//----- a_{4}
+PidInfo(119,  "a_{4}(2040)^{0}", 0.77),
+PidInfo(219,  "a_{4}(2040)^{+}", 0.77),
+PidInfo(-219, "a_{4}(2040)^{-}", 0.77),
+
+
+//-------------------- phi --------------------
+PidInfo(333,    "#phi(1020)"    , 46.26),
+PidInfo(337,    "#phi_{3}(1850)", 2.27),
+PidInfo(100333, "#phi(1680)"    , 1.32),
+
+
+//-------------------- f --------------------
+// f
+//335,                    /* f'_{2} */
+//10221, 10331, 9000223,  /* f_{0} */
+//20223, 20333,           /* f_{1} */
+
+//----- f'_{2}
+PidInfo(335, "f'_{2}(1525)", 2.7),
+
+//----- f_{0}
+PidInfo(10221  , "f_{0}(1370)", 0.69),
+PidInfo(10331  , "f_{0}(1710)", 1.42),
+PidInfo(9000223, "f_{0}(1500)", 1.81),
+
+//----- f_{1}
+PidInfo(20223, "f_{1}(1285)", 8.19),
+PidInfo(20333, "f_{1}(1420)", 3.59),
+
+//-------------------- pi --------------------
+PidInfo(10115,  "#pi_{2}(1670)^{0}", 0.76),
+PidInfo(10215,  "#pi_{2}(1670)^{+}", 0.76),
+PidInfo(-10215, "#pi_{2}(1670)^{-}", 0.76),
+
+//-------------------- eta --------------------
+PidInfo(100331, "#eta(1475)", 2.32),
+
+
+
+//-------------------- kaons --------------------
+PidInfo(311, "K^{0}", 2.6844e13), //Note: K0s=K0 in THERMINATOR2
+
+PidInfo(321, "K+", 3.712e15),
+
+PidInfo(313, "K*(892)^{0}", 4.11),
+PidInfo(323, "K*(892)^{+}", 4.11),
+PidInfo(30313, "K*(1680)^{0}", 0.61),
+PidInfo(30323, "#bar{K*}(1680)^{0}", 0.61),
+PidInfo(100313, "K*(1410)^{0}", 0.85),
+PidInfo(100323, "K*(1410)^{+}", 0.85),
+
+PidInfo(10311, "K*_{0}(1430)^{0}", 0.73),
+PidInfo(10321, "K*_{0}(1430)^{+}", 0.73),
+
+PidInfo(10313, "K_{1}(1270)^{0}", 2.19),
+PidInfo(10323, "K_{1}(1270)^{+}", 2.19),
+PidInfo(20313, "K_{1}(1400)^{0}", 1.13),
+PidInfo(20323, "K_{1}(1400)^{+}", 1.13),
+
+PidInfo(20315, "K_{2}(1820)^{+}", 0.71),
+PidInfo(20325, "K_{2}(1820)^{-}", 0.71),
+
+PidInfo(317, "K*_{3}(1780)^{0}", 1.24),
+PidInfo(327, "#bar{K*}_{3}(1780)^{0}", 1.24),
+
+//-----
+
+PidInfo(-311, "#bar{K^{0}}", 2.6844e13), //Note: K0s=K0 in THERMINATOR2
+
+PidInfo(-321, "K-", 3.712e15),
+
+PidInfo(-313, "#bar{K*}(892)^{0}", 4.11),
+PidInfo(-323, "K*(892)^{-}", 4.11),
+PidInfo(-30313, "K*(1680)^{+}", 0.61),
+PidInfo(-30323, "K*(1680)^{-}", 0.61),
+PidInfo(-100313, "#bar{K*}(1410)^{0}", 0.85),
+PidInfo(-100323, "K*(1410)^{-}", 0.85),
+
+PidInfo(-10311, "#bar{K*}_{0}(1430)^{0}", 0.73),
+PidInfo(-10321, "K*_{0}(1430)^{-}", 0.73),
+
+PidInfo(-10313, "#bar{K}_{1}(1270)^{0}", 2.19),
+PidInfo(-10323, "K_{1}(1270)^{-}", 2.19),
+PidInfo(-20313, "#bar{K}_{1}(1400)^{0}", 1.13),
+PidInfo(-20323, "K_{1}(1400)^{-}", 1.13),
+
+PidInfo(-20315, "#bar{K}_{2}(1820)^{+}", 0.71),
+PidInfo(-20325, "K_{2}(1820)^{0}", 0.71),
+
+PidInfo(-317, "K*_{3}(1780)^{+}", 1.24),
+PidInfo(-327, "#bar{K*}_{3}(1780)^{-}", 1.24),
+
+
+
+//-------------------- sigma --------------------
+PidInfo(3114, "#Sigma*(1385)^{-}", 5.33),
+PidInfo(3116, "#Sigma(1775)^{+}", 1.64),
+PidInfo(3118, "#Sigma(2030)^{+}", 1.1),
+
+PidInfo(3212, "#Sigma^{0}", 2.22e4),
+PidInfo(3214, "#Sigma*(1385)^{0}", 5.33),
+PidInfo(3216, "#Sigma(1775)^{-}", 1.64),
+PidInfo(3218, "#Sigma(2030)^{-}", 1.1),
+PidInfo(3224, "#Sigma*(1385)^{+}", 5.33),
+PidInfo(3226, "#Sigma(1775)^{0}", 1.64),
+PidInfo(3228, "#Sigma(2030)^{0}", 1.1),
+
+PidInfo(4028, "#Sigma(2250)^{+}", 1.97),
+PidInfo(4128, "#Sigma(2250)^{-}", 1.97),
+PidInfo(4228, "#Sigma(2250)^{0}", 1.97),
+PidInfo(8116, "#Sigma(1750)^{+}", 2.19),
+PidInfo(8117, "#Sigma(1750)^{0}", 2.19),
+PidInfo(8118, "#Sigma(1750)^{-}", 2.19),
+
+PidInfo(13112, "#Sigma(1660)^{+}", 1.97),
+PidInfo(13114, "#Sigma(1670)^{+}", 3.29),
+PidInfo(13116, "#Sigma(1915)^{+}", 1.64),
+
+PidInfo(13212, "#Sigma(1660)^{-}", 1.97),
+PidInfo(13214, "#Sigma(1670)^{-}", 3.29),
+PidInfo(13216, "#Sigma(1915)^{-}", 1.64),
+PidInfo(13222, "#Sigma(1660)^{0}", 1.97),
+PidInfo(13224, "#Sigma(1670)^{0}", 3.29),
+PidInfo(13226, "#Sigma(1915)^{0}", 1.64),
+
+PidInfo(23114, "#Sigma(1940)^{+}", 0.9),
+
+PidInfo(23214, "#Sigma(1940)^{-}", 0.9),
+PidInfo(23224, "#Sigma(1940)^{0}", 0.9),
+
+PidInfo(3222, "#Sigma(1189)^{+}", 2.404e13),
+
+//-----
+
+PidInfo(-3114, "#bar{#Sigma*}(1385)^{+}", 5.33),
+PidInfo(-3116, "#bar{#Sigma}(1775)^{-}", 1.64),
+PidInfo(-3118, "#bar{#Sigma}(2030)^{-}", 1.1),
+
+PidInfo(-3212, "#bar{#Sigma}^{0}", 2.22e4),
+PidInfo(-3214, "#bar{#Sigma*}(1385)^{0}", 5.33),
+PidInfo(-3216, "#bar{#Sigma}(1775)^{+}", 1.64),
+PidInfo(-3218, "#bar{#Sigma}(2030)^{+}", 1.1),
+PidInfo(-3224, "#bar{#Sigma*}(1385)^{-}", 5.33),
+PidInfo(-3226, "#bar{#Sigma}(1775)^{0}", 1.64),
+PidInfo(-3228, "#bar{#Sigma}(2030)^{0}", 1.1),
+
+PidInfo(-4028, "#bar{#Sigma}(2250)^{-}", 1.97),
+PidInfo(-4128, "#bar{#Sigma}(2250)^{+}", 1.97),
+PidInfo(-4228, "#bar{#Sigma}(2250)^{0}", 1.97),
+PidInfo(-8116, "#bar{#Sigma}(1750)^{-}", 2.19),
+PidInfo(-8117, "#bar{#Sigma}(1750)^{0}", 2.19),
+PidInfo(-8118, "#bar{#Sigma}(1750)^{+}", 2.19),
+
+PidInfo(-13112, "#bar{#Sigma}(1660)^{-}", 1.97),
+PidInfo(-13114, "#bar{#Sigma}(1670)^{-}", 3.29),
+PidInfo(-13116, "#bar{#Sigma}(1915)^{-}", 1.64),
+
+PidInfo(-13212, "#bar{#Sigma}(1660)^{+}", 1.97),
+PidInfo(-13214, "#bar{#Sigma}(1670)^{+}", 3.29),
+PidInfo(-13216, "#bar{#Sigma}(1915)^{+}", 1.64),
+PidInfo(-13222, "#bar{#Sigma}(1660)^{0}", 1.97),
+PidInfo(-13224, "#bar{#Sigma}(1670)^{0}", 3.29),
+PidInfo(-13226, "#bar{#Sigma}(1915)^{0}", 1.64),
+
+PidInfo(-23114, "#bar{#Sigma}(1940)^{-}", 0.9),
+
+PidInfo(-23214, "#bar{#Sigma}(1940)^{+}", 0.9),
+PidInfo(-23224, "#bar{#Sigma}(1940)^{0}", 0.9),
+
+PidInfo(-3222, "#bar{#Sigma}(1189)^{-}", 2.404e13),
+
+
+
+//-------------------- lambda --------------------
+PidInfo(3122, "#Lambda", 7.89e13),
+PidInfo(3124, "#Lambda(1520)", 12.65),
+PidInfo(3126, "#Lambda(1820)", 2.47),
+PidInfo(3128, "#Lambda(2100)", 0.99),
+
+PidInfo(13124, "#Lambda(1690)", 3.29),
+PidInfo(13126, "#Lambda(1830)", 2.08),
+
+PidInfo(23122, "#Lambda(1600)", 1.32),
+PidInfo(23124, "#Lambda(1890)", 1.97),
+
+PidInfo(33122, "#Lambda(1670)", 5.64),
+
+PidInfo(43122, "#Lambda(1800)", 0.66),
+PidInfo(53122, "#Lambda(1810)", 1.32),
+
+//-----
+
+PidInfo(-3122, "#bar{#Lambda}", 7.89e13),
+PidInfo(-3124, "#bar{#Lambda}(1520)", 12.65),
+PidInfo(-3126, "#bar{#Lambda}(1820)", 2.47),
+PidInfo(-3128, "#bar{#Lambda}(2100)", 0.99),
+
+PidInfo(-13124, "#bar{#Lambda}(1690)", 3.29),
+PidInfo(-13126, "#bar{#Lambda}(1830)", 2.08),
+
+PidInfo(-23122, "#bar{#Lambda}(1600)", 1.32),
+PidInfo(-23124, "#bar{#Lambda}(1890)", 1.97),
+
+PidInfo(-33122, "#bar{#Lambda}(1670)", 5.64),
+
+PidInfo(-43122, "#bar{#Lambda}(1800)", 0.66),
+PidInfo(-53122, "#bar{#Lambda}(1810)", 1.32),
+
+
+//-------------------- xi --------------------
+PidInfo(3312, "#Xi^{-}", 4.91e13),
+PidInfo(3322, "#Xi^{0}", 8.71e13),
+
+PidInfo(8900, "#bar{#Xi}(2030)^{+}", 9.87),
+PidInfo(8901, "#Xi(2030)^{-}", 9.87),
+
+PidInfo(13314, "#Xi(1820)^{-}", 8.22),
+PidInfo(13324, "#bar{#Xi}(1820)^{+}", 8.22),
+
+PidInfo(67000, "#Xi(1950)^{0}", 3.29),
+PidInfo(67001, "#Xi(1950)^{-}", 3.29),
+PidInfo(67718, "#Xi(1690)^{0}", 6.58),
+PidInfo(67719, "#bar{#Xi}(1690)^{+}", 6.58),
+
+//-----
+
+PidInfo(-3312, "#bar{#Xi}^{+}", 4.91e13),
+PidInfo(-3322, "#bar{#Xi}^{0}", 8.71e13),
+
+PidInfo(-8900, "#bar{#Xi}(2030)^{0}", 9.87),
+PidInfo(-8901, "#Xi(2030)^{0}", 9.87),
+
+PidInfo(-13314, "#Xi(1820)^{0}", 8.22),
+PidInfo(-13324, "#bar{#Xi}(1820)^{0}", 8.22),
+
+PidInfo(-67000, "#bar{#Xi}(1950)^{0}", 3.29),
+PidInfo(-67001, "#bar{#Xi}(1950)^{+}", 3.29),
+PidInfo(-67718, "#bar{#Xi}(1690)^{0}", 6.58),
+PidInfo(-67719, "#Xi(1690)^{-}", 6.58),
+
+//-------------------- omega --------------------
+PidInfo(3334, "#Omega^{-}", 2.461e13),
+PidInfo(9000, "#Omega(2250)^{-}", 3.59),
+
+//-----
+
+PidInfo(-3334, "#bar{#Omega}^{+}", 2.461e13),
+PidInfo(-9000, "#bar{#Omega}(2250)^{+}", 3.59),
+
+
+//-------------------- nucleons --------------------
+PidInfo(32112, "N(1650)^{+}", 1.41),
+PidInfo(32212, "N(1650)^{0}", 1.41),
+
+PidInfo(42112, "N(1710)^{+}", 1.97),
+PidInfo(42212, "N(1710)^{0}", 1.97),
+
+PidInfo(31214, "N(1720)^{+}", 0.79),
+PidInfo(32124, "N(1720)^{0}", 0.79),
+
+PidInfo(1214, "N(1520)^{0}", 1.72),
+PidInfo(1218, "N(2190)^{+}", 0.39),
+PidInfo(2116, "N(1675)^{+}", 1.32),
+PidInfo(2124, "N(1520)^{+}", 1.72),
+PidInfo(2128, "N(2190)^{0}", 0.39),
+PidInfo(2216, "N(1675)^{0}", 1.32),
+PidInfo(5128, "N(2250)^{+}", 0.39),
+
+PidInfo(5218, "N(2250)^{0}", 0.39),
+PidInfo(9400, "N(2600)^{0}", 0.30),
+PidInfo(9401, "N(2600)^{+}", 0.30),
+PidInfo(12112, "N(1440)^{0}", 0.56),
+PidInfo(12116, "N(1680)^{+}", 1.52),
+PidInfo(12212, "N(1440)^{+}", 0.56),
+PidInfo(12216, "N(1680)^{0}", 1.52),
+
+PidInfo(21214, "N(1700)^{+}", 1.32),
+PidInfo(22124, "N(1700)^{0}", 1.32),
+PidInfo(22212, "N(1535)^{+}", 1.32),
+
+//-----
+
+PidInfo(-32112, "#bar{N}(1650)^{-}", 1.41),
+PidInfo(-32212, "#bar{N}(1650)^{0}", 1.41),
+
+PidInfo(-42112, "#bar{N}(1710)^{-}", 1.97),
+PidInfo(-42212, "#bar{N}(1710)^{0}", 1.97),
+
+PidInfo(-31214, "#bar{N}(1720)^{-}", 0.79),
+PidInfo(-32124, "#bar{N}(1720)^{0}", 0.79),
+
+PidInfo(-1214, "#bar{N}(1520)^{0}", 1.72),
+PidInfo(-1218, "#bar{N}(2190)^{-}", 0.39),
+PidInfo(-2116, "#bar{N}(1675)^{-}", 1.32),
+PidInfo(-2124, "#bar{N}(1520)^{-}", 1.72),
+PidInfo(-2128, "#bar{N}(2190)^{0}", 0.39),
+PidInfo(-2216, "#bar{N}(1675)^{0}", 1.32),
+PidInfo(-5128, "#bar{N}(2250)^{-}", 0.39),
+
+PidInfo(-5218, "#bar{N}(2250)^{0}", 0.39),
+PidInfo(-9400, "#bar{N}(2600)^{0}", 0.30),
+PidInfo(-9401, "#bar{N}(2600)^{-}", 0.30),
+PidInfo(-12112, "#bar{N}(1440)^{0}", 0.56),
+PidInfo(-12116, "#bar{N}(1680)^{-}", 1.52),
+PidInfo(-12212, "#bar{N}(1440)^{-}", 0.56),
+PidInfo(-12216, "#bar{N}(1680)^{0}", 1.52),
+
+PidInfo(-21214, "#bar{N}(1700)^{-}", 1.32),
+PidInfo(-22124, "#bar{N}(1700)^{0}", 1.32),
+PidInfo(-22212, "#bar{N}(1535)^{-}", 1.32),
+
+//-------------------- delta --------------------
+PidInfo(1112, "#Delta(1620)^{++}", 1.41),
+PidInfo(1116, "#Delta(1905)^{++}", 0.60),
+PidInfo(1118, "#Delta(1950)^{++}", 0.69),
+PidInfo(1212, "#Delta(1620)^{+}", 1.41),
+
+PidInfo(1216, "#Delta(1905)^{+}", 0.60),
+PidInfo(2114, "#Delta(1232)^{0}", 1.72),
+PidInfo(2118, "#Delta(1950)^{+}", 0.69),
+PidInfo(2122, "#Delta(1620)^{0}", 1.41),
+PidInfo(2126, "#Delta(1905)^{0}", 0.60),
+PidInfo(2214, "#Delta(1232)^{+}", 1.72),
+
+PidInfo(2218, "#Delta(1950)^{0}", 0.69),
+PidInfo(2224, "#Delta(1232)^{++}", 1.72),
+PidInfo(9297, "#Delta(2420)^{++}", 0.49),
+PidInfo(9298, "#Delta(2420)^{+}", 0.49),
+PidInfo(9299, "#Delta(2420)^{0}", 0.49),
+PidInfo(11114, "#Delta(1700)^{++}", 0.66),
+
+PidInfo(11116, "#Delta(1930)^{++}", 0.55),
+PidInfo(11216, "#Delta(1930)^{+}", 0.55),
+PidInfo(12114, "#Delta(1700)^{+}", 0.66),
+PidInfo(12126, "#Delta(1930)^{0}", 0.55),
+PidInfo(12214, "#Delta(1700)^{0}", 0.66),
+
+PidInfo(21112, "#Delta(1910)^{++}", 0.70),
+PidInfo(21114, "#Delta(1920)^{++}", 0.76),
+PidInfo(21212, "#Delta(1910)^{+}", 0.70),
+PidInfo(22114, "#Delta(1920)^{+}", 0.76),
+
+PidInfo(22122, "#Delta(1910)^{0}", 0.70),
+PidInfo(22214, "#Delta(1920)^{0}", 0.76),
+PidInfo(31114, "#Delta(1600)^{++}", 0.62),
+PidInfo(32114, "#Delta(1600)^{+}", 0.62),
+PidInfo(32214, "#Delta(1600)^{0}", 0.62),
+
+
+//-----
+
+PidInfo(-1112, "#bar{#Delta}(1620)^{--}", 1.41),
+PidInfo(-1116, "#bar{#Delta}(1905)^{--}", 0.60),
+PidInfo(-1118, "#bar{#Delta}(1950)^{--}", 0.69),
+PidInfo(-1212, "#bar{#Delta}(1620)^{-}", 1.41),
+
+PidInfo(-1216, "#bar{#Delta}(1905)^{-}", 0.60),
+PidInfo(-2114, "#bar{#Delta}(1232)^{0}", 1.72),
+PidInfo(-2118, "#bar{#Delta}(1950)^{-}", 0.69),
+PidInfo(-2122, "#bar{#Delta}(1620)^{0}", 1.41),
+PidInfo(-2126, "#bar{#Delta}(1905)^{0}", 0.60),
+PidInfo(-2214, "#bar{#Delta}(1232)^{-}", 1.72),
+
+PidInfo(-2218, "#bar{#Delta}(1950)^{0}", 0.69),
+PidInfo(-2224, "#bar{#Delta}(1232)^{--}", 1.72),
+PidInfo(-9297, "#bar{#Delta}(2420)^{--}", 0.49),
+PidInfo(-9298, "#bar{#Delta}(2420)^{-}", 0.49),
+PidInfo(-9299, "#bar{#Delta}(2420)^{0}", 0.49),
+PidInfo(-11114, "#bar{#Delta}(1700)^{--}", 0.66),
+
+PidInfo(-11116, "#bar{#Delta}(1930)^{--}", 0.55),
+PidInfo(-11216, "#bar{#Delta}(1930)^{-}", 0.55),
+PidInfo(-12114, "#bar{#Delta}(1700)^{-}", 0.66),
+PidInfo(-12126, "#bar{#Delta}(1930)^{0}", 0.55),
+PidInfo(-12214, "#bar{#Delta}(1700)^{0}", 0.66),
+
+PidInfo(-21112, "#bar{#Delta}(1910)^{--}", 0.70),
+PidInfo(-21114, "#bar{#Delta}(1920)^{--}", 0.76),
+PidInfo(-21212, "#bar{#Delta}(1910)^{-}", 0.70),
+PidInfo(-22114, "#bar{#Delta}(1920)^{-}", 0.76),
+
+PidInfo(-22122, "#bar{#Delta}(1910)^{0}", 0.70),
+PidInfo(-22214, "#bar{#Delta}(1920)^{0}", 0.76),
+PidInfo(-31114, "#bar{#Delta}(1600)^{--}", 0.62),
+PidInfo(-32114, "#bar{#Delta}(1600)^{-}", 0.62),
+PidInfo(-32214, "#bar{#Delta}(1600)^{0}", 0.62),
+
+
+//-------------------- proton --------------------
+PidInfo(2212, "p", 2.0e60),
+
+//-----
+
+PidInfo(-2212, "#bar{p}", 2.0e60)
+};
+
+
+
 
 
