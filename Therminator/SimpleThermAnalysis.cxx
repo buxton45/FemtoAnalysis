@@ -218,6 +218,16 @@ void SimpleThermAnalysis::ProcessAll()
     fAnalysisALamK0->PrintUniqueParents();
   }
 
+
+  fAnalysisLamKchP->PrintPrimaryAndOtherPairInfo();
+  fAnalysisALamKchM->PrintPrimaryAndOtherPairInfo();
+  fAnalysisLamKchM->PrintPrimaryAndOtherPairInfo();
+  fAnalysisALamKchP->PrintPrimaryAndOtherPairInfo();
+  fAnalysisLamK0->PrintPrimaryAndOtherPairInfo();
+  fAnalysisALamK0->PrintPrimaryAndOtherPairInfo();
+
+
+
   SaveAll();
 }
 

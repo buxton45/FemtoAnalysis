@@ -8,6 +8,18 @@
 //_____________________________________________________________________________________________________________________________________________________________
 
 //________________________________________________________________________________________________________________
+PidInfo GetParticlePidInfo(int aPID)
+{
+  for(unsigned int i=0; i<cPidInfo.size(); i++)
+  {
+    if(aPID == cPidInfo[i].pdgType) return cPidInfo[i];
+  }
+
+  assert(0);
+  return cPidInfo[0];
+}
+
+//________________________________________________________________________________________________________________
 TString GetParticleName(int aPID)
 {
   assert(cUniqueFathersPIDsFull.size() == cUniqueFathersNamesFull.size());
@@ -80,13 +92,11 @@ bool IncludeAsPrimary(int aPID1, int aPID2)
 bool IncludeAsPrimary(int aPID1, int aPID2, double aMaxDecayLength)
 {
   if(aMaxDecayLength < 0.) return IncludeAsPrimary(aPID1,aPID2);
-  else if((aPID1 == kPDGLam || aPID1 == kPDGALam) && (aPID2 == kPDGKchP || aPID2 == kPDGKchM || aPID2 == kPDGK0)) return true;
   else
   {
     bool bInclude1=true, bInclude2=true;
-
-    if(GetParticleDecayLength(aPID1) > aMaxDecayLength) bInclude1 = false;
-    if(GetParticleDecayLength(aPID2) > aMaxDecayLength) bInclude2 = false;  
+    if(aPID1 != kPDGLam && aPID1 != kPDGALam && GetParticleDecayLength(aPID1) > aMaxDecayLength) bInclude1 = false;
+    if(aPID2 != kPDGKchP && aPID2 != kPDGKchM && aPID2 != kPDGK0 && GetParticleDecayLength(aPID2) > aMaxDecayLength) bInclude2 = false;
 
     if(!bInclude1 || !bInclude2) return false;
     else return true;
@@ -108,8 +118,7 @@ void PrintIncludeAsPrimary(double aMaxDecayLength)
 bool PairAccountedForInResiduals(int aPID1, int aPID2)
 {
   bool tAccountedFor = false;
-  if((aPID1 == kPDGLam || aPID1 == kPDGALam) && (aPID2 == kPDGKchP || aPID2 == kPDGKchM)) tAccountedFor = true;
-  else if((aPID1==kPDGSigma || aPID1==kPDGASigma) && (aPID2 == kPDGKchP || aPID2 == kPDGKchM)) tAccountedFor = true;
+  if((aPID1==kPDGSigma || aPID1==kPDGASigma) && (aPID2 == kPDGKchP || aPID2 == kPDGKchM)) tAccountedFor = true;
   else if((aPID1==kPDGXi0 || aPID1==kPDGAXi0) && (aPID2 == kPDGKchP || aPID2 == kPDGKchM)) tAccountedFor = true;
   else if((aPID1==kPDGXiC || aPID1==kPDGAXiC) && (aPID2 == kPDGKchP || aPID2 == kPDGKchM)) tAccountedFor = true;
   else if((aPID1==kPDGSigStP || aPID1==kPDGASigStM) && (aPID2 == kPDGKchP || aPID2 == kPDGKchM)) tAccountedFor = true;

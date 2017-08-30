@@ -63,6 +63,7 @@ int main(int argc, char **argv)
   tEventsCollection->SaveAllPairFractionHistograms(tPairFractionSaveName);
   TCanvas* tCan = tEventsCollection->DrawAllPairFractionHistograms();
   if(bPrintUniqueParents) tEventsCollection->PrintUniqueParents();
+  tEventsCollection->PrintAllPrimaryAndOtherPairInfo();
 //-------------------------------------------------------------------------------
   tFullTimer.Stop();
   cout << "Finished program: ";

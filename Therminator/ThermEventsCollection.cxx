@@ -62,6 +62,9 @@ ThermEventsCollection::ThermEventsCollection(TString aEventsDirectory) :
   fPairFractionsLamKchP(0),
   fParentsMatrixLamKchP(0),
 
+  fPrimaryPairInfoLamKchP(0),
+  fOtherPairInfoLamKchP(0),
+
   //ALamKchP
   fASigToALamKchPTransform(0),
   fAXiCToALamKchPTransform(0),
@@ -77,6 +80,9 @@ ThermEventsCollection::ThermEventsCollection(TString aEventsDirectory) :
   //-----
   fPairFractionsALamKchP(0),
   fParentsMatrixALamKchP(0),
+
+  fPrimaryPairInfoALamKchP(0),
+  fOtherPairInfoALamKchP(0),
 
   //LamKchM
   fSigToLamKchMTransform(0),
@@ -94,6 +100,9 @@ ThermEventsCollection::ThermEventsCollection(TString aEventsDirectory) :
   fPairFractionsLamKchM(0),
   fParentsMatrixLamKchM(0),
 
+  fPrimaryPairInfoLamKchM(0),
+  fOtherPairInfoLamKchM(0),
+
   //ALamKchM
   fASigToALamKchMTransform(0),
   fAXiCToALamKchMTransform(0),
@@ -109,6 +118,9 @@ ThermEventsCollection::ThermEventsCollection(TString aEventsDirectory) :
   //-----
   fPairFractionsALamKchM(0),
   fParentsMatrixALamKchM(0),
+
+  fPrimaryPairInfoALamKchM(0),
+  fOtherPairInfoALamKchM(0),
 
   //LamK0
   fSigToLamK0Transform(0),
@@ -126,6 +138,9 @@ ThermEventsCollection::ThermEventsCollection(TString aEventsDirectory) :
   fPairFractionsLamK0(0),
   fParentsMatrixLamK0(0),
 
+  fPrimaryPairInfoLamK0(0),
+  fOtherPairInfoLamK0(0),
+
   //ALamK0
   fASigToALamK0Transform(0),
   fAXiCToALamK0Transform(0),
@@ -142,10 +157,25 @@ ThermEventsCollection::ThermEventsCollection(TString aEventsDirectory) :
   fPairFractionsALamK0(0),
   fParentsMatrixALamK0(0),
 
+  fPrimaryPairInfoALamK0(0),
+  fOtherPairInfoALamK0(0),
+
   fSigToLamLamTransform(0),
 
   fProtonParents(0),
-  fAProtonParents(0)
+  fAProtonParents(0),
+
+  fProtonRadii(0),
+  fAProtonRadii(0),
+
+  f2dProtonRadii(0),
+  f2dAProtonRadii(0),
+
+  fLamRadii(0),
+  fALamRadii(0),
+
+  f2dLamRadii(0),
+  f2dALamRadii(0)
 
 {
   //LamKchP
@@ -250,6 +280,18 @@ ThermEventsCollection::ThermEventsCollection(TString aEventsDirectory) :
   //Protons
   fProtonParents = new TH1D("fProtonParents", "fProtonParents", 200, 0, 200);
   fAProtonParents = new TH1D("fAProtonParents", "fAProtonParents", 200, 0, 200);
+
+  fProtonRadii = new TH1D("fProtonRadii", "fProtonRadii", 200, 0, 200);
+  fAProtonRadii = new TH1D("fAProtonRadii", "fAProtonRadii", 200, 0, 200);
+
+  f2dProtonRadii = new TH2D("f2dProtonRadii", "f2dProtonRadii", 200, 0, 200, 200, 0, 200);
+  f2dAProtonRadii = new TH2D("f2dAProtonRadii", "f2dAProtonRadii", 200, 0, 200, 200, 0, 200);
+
+  fLamRadii = new TH1D("fLamRadii", "fLamRadii", 200, 0, 200);
+  fALamRadii = new TH1D("fALamRadii", "fALamRadii", 200, 0, 200);
+
+  f2dLamRadii = new TH2D("f2dLamRadii", "f2dLamRadii", 200, 0, 200, 200, 0, 200);
+  f2dALamRadii = new TH2D("f2dALamRadii", "f2dALamRadii", 200, 0, 200, 200, 0, 200);
 }
 
 
@@ -1233,9 +1275,144 @@ void ThermEventsCollection::MapAndFillProtonParents(TH1* aHist, int aFatherType)
   aHist->Fill(tBin);
 }
 
+//________________________________________________________________________________________________________________
+void ThermEventsCollection::MapAndFillProtonRadii(TH2* a2dHist, ThermParticle &aParticle)
+{
+  int tBin=-1;
+  int tFatherType = aParticle.GetFatherPID();
+  for(unsigned int i=0; i<cAllProtonFathers.size(); i++) if(tFatherType==cAllProtonFathers[i]) tBin=i;
+
+  if(!fBuildUniqueParents)  //If true, I am likely looking for new parents, so I don't want these asserts to be tripped
+  {
+    if(tBin==-1) cout << "FAILURE IMMINENT: tFatherType = " << tFatherType << endl;
+    assert(tBin>-1);
+  }
+
+  if(aParticle.IsPrimordial()) a2dHist->Fill(tBin, 0.);
+  else a2dHist->Fill(tBin, GetLabDecayLength(GetParticleDecayLength(tFatherType), aParticle.GetFatherMass(), aParticle.GetFatherE()));
+}
 
 //________________________________________________________________________________________________________________
-void ThermEventsCollection::MapAndFillPairFractionHistogramParticleV0(TH1* aHistogram, int aV0FatherType, int aTrackFatherType, double tWeight, double aMaxPrimaryDecayLength)
+void ThermEventsCollection::MapAndFillLambdaRadii(TH2* a2dHist, ThermV0Particle &aParticle)
+{
+  int tBin=-1;
+  int tFatherType = aParticle.GetFatherPID();
+  for(unsigned int i=0; i<cAllLambdaFathers.size(); i++) if(tFatherType==cAllLambdaFathers[i]) tBin=i;
+
+  if(!fBuildUniqueParents)  //If true, I am likely looking for new parents, so I don't want these asserts to be tripped
+  {
+    if(tBin==-1) cout << "FAILURE IMMINENT: tFatherType = " << tFatherType << endl;
+    assert(tBin>-1);
+  }
+
+  if(aParticle.IsPrimordial()) a2dHist->Fill(tBin, 0.);
+  else a2dHist->Fill(tBin, GetLabDecayLength(GetParticleDecayLength(tFatherType), aParticle.GetFatherMass(), aParticle.GetFatherE()));
+}
+
+
+//________________________________________________________________________________________________________________
+void ThermEventsCollection::FillPrimaryAndOtherPairInfo(int aType1, int aType2, int aParentType1, int aParentType2, double aMaxPrimaryDecayLength)
+{
+  ParticlePDGType tParticleType1 = static_cast<ParticlePDGType>(aType1);
+  ParticlePDGType tParticleType2 = static_cast<ParticlePDGType>(aType2);
+
+  vector<vector<PidInfo> > *aPrimaryPairInfo;
+  vector<vector<PidInfo> > *aOtherPairInfo;
+
+  if(tParticleType1==kPDGLam && tParticleType2==kPDGKchP) {aPrimaryPairInfo=&fPrimaryPairInfoLamKchP; aOtherPairInfo=&fOtherPairInfoLamKchP;}
+  else if(tParticleType1==kPDGALam && tParticleType2==kPDGKchM) {aPrimaryPairInfo=&fPrimaryPairInfoALamKchM; aOtherPairInfo=&fOtherPairInfoALamKchM;}
+
+  else if(tParticleType1==kPDGLam && tParticleType2==kPDGKchM) {aPrimaryPairInfo=&fPrimaryPairInfoLamKchM; aOtherPairInfo=&fOtherPairInfoLamKchM;}
+  else if(tParticleType1==kPDGALam && tParticleType2==kPDGKchP) {aPrimaryPairInfo=&fPrimaryPairInfoALamKchP; aOtherPairInfo=&fOtherPairInfoALamKchP;}
+
+  else if(tParticleType1==kPDGLam && tParticleType2==kPDGK0) {aPrimaryPairInfo=&fPrimaryPairInfoLamK0; aOtherPairInfo=&fOtherPairInfoLamK0;}
+  else if(tParticleType1==kPDGALam && tParticleType2==kPDGK0) {aPrimaryPairInfo=&fPrimaryPairInfoALamK0; aOtherPairInfo=&fOtherPairInfoALamK0;}
+
+  else assert(0);
+
+  //--------------------------------------------------------------------
+
+  bool bPairAlreadyIncluded = false;
+
+  if(IncludeAsPrimary(aParentType1, aParentType2, aMaxPrimaryDecayLength))
+  {
+    for(unsigned int i=0; i<aPrimaryPairInfo->size(); i++)
+    {
+      if((*aPrimaryPairInfo)[i][0].pdgType == static_cast<ParticlePDGType>(aParentType1) &&
+         (*aPrimaryPairInfo)[i][1].pdgType == static_cast<ParticlePDGType>(aParentType2)) bPairAlreadyIncluded = true;
+    }
+    if(!bPairAlreadyIncluded) aPrimaryPairInfo->push_back(vector<PidInfo>{GetParticlePidInfo(aParentType1),GetParticlePidInfo(aParentType2)});
+  }
+
+  //--------------------
+  if(IncludeInOthers(aParentType1, aParentType2, aMaxPrimaryDecayLength))
+  {
+    bPairAlreadyIncluded = false;
+    for(unsigned int i=0; i<aOtherPairInfo->size(); i++)
+    {
+      if((*aOtherPairInfo)[i][0].pdgType == static_cast<ParticlePDGType>(aParentType1) &&
+         (*aOtherPairInfo)[i][1].pdgType == static_cast<ParticlePDGType>(aParentType2)) bPairAlreadyIncluded = true;
+    }
+    if(!bPairAlreadyIncluded) aOtherPairInfo->push_back(vector<PidInfo>{GetParticlePidInfo(aParentType1),GetParticlePidInfo(aParentType2)});
+  }
+}
+
+//________________________________________________________________________________________________________________
+void ThermEventsCollection::PrintPrimaryAndOtherPairInfo(int aType1, int aType2)
+{
+  ParticlePDGType tParticleType1 = static_cast<ParticlePDGType>(aType1);
+  ParticlePDGType tParticleType2 = static_cast<ParticlePDGType>(aType2);
+
+  vector<vector<PidInfo> > *aPrimaryPairInfo;
+  vector<vector<PidInfo> > *aOtherPairInfo;
+
+  if(tParticleType1==kPDGLam && tParticleType2==kPDGKchP) {aPrimaryPairInfo=&fPrimaryPairInfoLamKchP; aOtherPairInfo=&fOtherPairInfoLamKchP;}
+  else if(tParticleType1==kPDGALam && tParticleType2==kPDGKchM) {aPrimaryPairInfo=&fPrimaryPairInfoALamKchM; aOtherPairInfo=&fOtherPairInfoALamKchM;}
+
+  else if(tParticleType1==kPDGLam && tParticleType2==kPDGKchM) {aPrimaryPairInfo=&fPrimaryPairInfoLamKchM; aOtherPairInfo=&fOtherPairInfoLamKchM;}
+  else if(tParticleType1==kPDGALam && tParticleType2==kPDGKchP) {aPrimaryPairInfo=&fPrimaryPairInfoALamKchP; aOtherPairInfo=&fOtherPairInfoALamKchP;}
+
+  else if(tParticleType1==kPDGLam && tParticleType2==kPDGK0) {aPrimaryPairInfo=&fPrimaryPairInfoLamK0; aOtherPairInfo=&fOtherPairInfoLamK0;}
+  else if(tParticleType1==kPDGALam && tParticleType2==kPDGK0) {aPrimaryPairInfo=&fPrimaryPairInfoALamK0; aOtherPairInfo=&fOtherPairInfoALamK0;}
+
+  else assert(0);
+
+  //--------------------------------------------------------------------
+
+  cout << "----------------------------------------- " << GetPDGRootName(tParticleType1) << " and " << GetPDGRootName(tParticleType2) << " -----------------------------------------" << endl;
+
+  cout << "---------- aPrimaryPairInfo ----------" << endl;
+  cout << "\aPrimaryPairInfo.size() = " << aPrimaryPairInfo->size() << endl;
+  for(unsigned int i=0; i<aPrimaryPairInfo->size(); i++)
+  {
+    cout << "PID1, PID2   = " << (*aPrimaryPairInfo)[i][0].pdgType << ", " << (*aPrimaryPairInfo)[i][1].pdgType << endl;
+    cout << "Name1, Name2 = " << (*aPrimaryPairInfo)[i][0].name << ", " << (*aPrimaryPairInfo)[i][1].name << endl << endl;
+  }
+
+  cout << "---------- aOtherPairInfo ----------" << endl;
+  cout << "\aOtherPairInfo.size() = " << aOtherPairInfo->size() << endl;
+  for(unsigned int i=0; i<aOtherPairInfo->size(); i++)
+  {
+    cout << "PID1, PID2   = " << (*aOtherPairInfo)[i][0].pdgType << ", " << (*aOtherPairInfo)[i][1].pdgType << endl;
+    cout << "Name1, Name2 = " << (*aOtherPairInfo)[i][0].name << ", " << (*aOtherPairInfo)[i][1].name << endl << endl;
+  }
+}
+
+//________________________________________________________________________________________________________________
+void ThermEventsCollection::PrintAllPrimaryAndOtherPairInfo()
+{
+  PrintPrimaryAndOtherPairInfo(kPDGLam, kPDGKchP);
+  PrintPrimaryAndOtherPairInfo(kPDGALam, kPDGKchM);
+
+  PrintPrimaryAndOtherPairInfo(kPDGLam, kPDGKchM);
+  PrintPrimaryAndOtherPairInfo(kPDGALam, kPDGKchP);
+
+  PrintPrimaryAndOtherPairInfo(kPDGLam, kPDGK0);
+  PrintPrimaryAndOtherPairInfo(kPDGALam, kPDGK0);
+}
+
+//________________________________________________________________________________________________________________
+void ThermEventsCollection::MapAndFillPairFractionHistogramParticleV0(TH1* aHistogram, int aV0FatherType, int aTrackFatherType, double aMaxPrimaryDecayLength, double tWeight)
 {
   double tBin = -1.;
   if((aV0FatherType == kPDGLam || aV0FatherType == kPDGALam) && (aTrackFatherType == kPDGKchP || aTrackFatherType == kPDGKchM)) tBin = 0.;
@@ -1262,7 +1439,7 @@ void ThermEventsCollection::MapAndFillPairFractionHistogramParticleV0(TH1* aHist
 }
 
 //________________________________________________________________________________________________________________
-void ThermEventsCollection::MapAndFillPairFractionHistogramV0V0(TH1* aHistogram, int aV01FatherType, int aV02FatherType, double tWeight, double aMaxPrimaryDecayLength)
+void ThermEventsCollection::MapAndFillPairFractionHistogramV0V0(TH1* aHistogram, int aV01FatherType, int aV02FatherType, double aMaxPrimaryDecayLength, double tWeight)
 {
   double tBin = -1.;
   if((aV01FatherType == kPDGLam || aV01FatherType == kPDGALam) && (aV02FatherType == kPDGK0)) tBin = 0.;
@@ -1314,6 +1491,7 @@ void ThermEventsCollection::BuildPairFractionHistogramsParticleV0(ParticlePDGTyp
           int tParticleFatherType = tParticle.GetFatherPID();
 
           MapAndFillPairFractionHistogramParticleV0(aHistogram, tV0FatherType, tParticleFatherType, aMaxPrimaryDecayLength);
+          FillPrimaryAndOtherPairInfo(aV0Type, aParticleType, tV0FatherType, tParticleFatherType, aMaxPrimaryDecayLength);
           if(fBuildUniqueParents)
           {
             BuildUniqueParents(aParticleType, tParticleFatherType);
@@ -1356,6 +1534,7 @@ void ThermEventsCollection::BuildPairFractionHistogramsV0V0(ParticlePDGType aV01
           if(tV02.GoodV0())
           {
             MapAndFillPairFractionHistogramV0V0(aHistogram, tV01FatherType, tV02FatherType, aMaxPrimaryDecayLength);
+            FillPrimaryAndOtherPairInfo(aV01Type, aV02Type, tV01FatherType, tV02FatherType, aMaxPrimaryDecayLength);
             if(fBuildUniqueParents)
             {
               BuildUniqueParents(aV01Type, tV01FatherType);
@@ -1389,6 +1568,9 @@ void ThermEventsCollection::BuildProtonParents()
       tParticleFatherType = tParticle.GetFatherPID();
       if(fBuildUniqueParents) BuildUniqueParents(kPDGProt, tParticleFatherType);
       MapAndFillProtonParents(fProtonParents, tParticleFatherType);
+      MapAndFillProtonRadii(f2dProtonRadii, tParticle);
+      if(tParticle.IsPrimordial()) fProtonRadii->Fill(0.);
+      else fProtonRadii->Fill(GetLabDecayLength(GetParticleDecayLength(tParticleFatherType), tParticle.GetFatherMass(), tParticle.GetFatherE()));
     }
     for(unsigned int iPar=0; iPar<aAProtCollection.size(); iPar++)
     {
@@ -1396,6 +1578,39 @@ void ThermEventsCollection::BuildProtonParents()
       tParticleFatherType = tParticle.GetFatherPID();
       if(fBuildUniqueParents) BuildUniqueParents(kPDGAntiProt, tParticleFatherType);
       MapAndFillProtonParents(fAProtonParents, tParticleFatherType);
+      MapAndFillProtonRadii(f2dAProtonRadii, tParticle);
+      if(tParticle.IsPrimordial()) fAProtonRadii->Fill(0.);
+      else fAProtonRadii->Fill(GetLabDecayLength(GetParticleDecayLength(tParticleFatherType), tParticle.GetFatherMass(), tParticle.GetFatherE()));
+    }
+  }
+}
+
+//________________________________________________________________________________________________________________
+void ThermEventsCollection::BuildLambdaParents()
+{
+  vector<ThermV0Particle> aLamCollection, aALamCollection;
+  for(unsigned int iEv=0; iEv < fEventsCollection.size(); iEv++)
+  {
+    aLamCollection = fEventsCollection[iEv].GetV0ParticleCollection(kPDGLam);
+    aALamCollection = fEventsCollection[iEv].GetV0ParticleCollection(kPDGALam);
+
+    ThermV0Particle tParticle;
+    int tParticleFatherType;
+    for(unsigned int iPar=0; iPar<aLamCollection.size(); iPar++)
+    {
+      tParticle = aLamCollection[iPar];
+      tParticleFatherType = tParticle.GetFatherPID();
+      MapAndFillLambdaRadii(f2dLamRadii, tParticle);
+      if(tParticle.IsPrimordial()) fLamRadii->Fill(0.);
+      else fLamRadii->Fill(GetLabDecayLength(GetParticleDecayLength(tParticleFatherType), tParticle.GetFatherMass(), tParticle.GetFatherE()));
+    }
+    for(unsigned int iPar=0; iPar<aALamCollection.size(); iPar++)
+    {
+      tParticle = aALamCollection[iPar];
+      tParticleFatherType = tParticle.GetFatherPID();
+      MapAndFillLambdaRadii(f2dALamRadii, tParticle);
+      if(tParticle.IsPrimordial()) fALamRadii->Fill(0.);
+      else fALamRadii->Fill(GetLabDecayLength(GetParticleDecayLength(tParticleFatherType), tParticle.GetFatherMass(), tParticle.GetFatherE()));
     }
   }
 }
@@ -1415,6 +1630,7 @@ void ThermEventsCollection::BuildAllPairFractionHistograms(double aMaxPrimaryDec
   BuildPairFractionHistogramsV0V0(kPDGALam, kPDGK0, fPairFractionsALamK0, fParentsMatrixALamK0, aMaxPrimaryDecayLength);
 
   BuildProtonParents();
+  BuildLambdaParents();
 
 }
 
@@ -1582,6 +1798,18 @@ void ThermEventsCollection::SaveAllPairFractionHistograms(TString aSaveFileLocat
   fProtonParents->Write();
   fAProtonParents->Write();
 
+  fProtonRadii->Write();
+  fAProtonRadii->Write();
+
+  f2dProtonRadii->Write();
+  f2dAProtonRadii->Write();
+
+  fLamRadii->Write();
+  fALamRadii->Write();
+
+  f2dLamRadii->Write();
+  f2dALamRadii->Write();
+
   tFile->Close();
 }
 
@@ -1621,16 +1849,16 @@ double ThermEventsCollection::GetProperDecayLength(double aMeanDecayLength)
   std::exponential_distribution<double> tExpDistribution(tLambda);
   double tDecayLength = tExpDistribution(tGenerator);
 //TODO
-cout << "aMeanDecayLength = " << aMeanDecayLength << endl;
-cout << "tDecayLength = " << tDecayLength << endl << endl;
+//cout << "aMeanDecayLength = " << aMeanDecayLength << endl;
+//cout << "tDecayLength = " << tDecayLength << endl << endl;
   return tDecayLength;
 }
 
 
 //________________________________________________________________________________________________________________
-double ThermEventsCollection::GetLabDecayLength(double aProperDecayLength, double aMass, double aE)
+double ThermEventsCollection::GetLabDecayLength(double aMeanDecayLength, double aMass, double aE)
 {
   double tGamma = aE/aMass;
-  return tGamma*aProperDecayLength;
+  return tGamma*GetProperDecayLength(aMeanDecayLength);
 }
 

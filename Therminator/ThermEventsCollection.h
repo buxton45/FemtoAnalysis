@@ -68,13 +68,20 @@ public:
   void MapAndFillParentsMatrixParticleV0(TH2* aMatrix, int aV0FatherType, int aTrackFatherType);
   void MapAndFillParentsMatrixV0V0(TH2* aMatrix, int aV01FatherType, int aV02Type);
   void MapAndFillProtonParents(TH1* aHist, int aFatherType);
+  void MapAndFillProtonRadii(TH2* a2dHist, ThermParticle &aParticle);
+  void MapAndFillLambdaRadii(TH2* a2dHist, ThermV0Particle &aParticle);
 
-  static void MapAndFillPairFractionHistogramParticleV0(TH1* aHistogram, int aV0FatherType, int aTrackFatherType, double tWeight=1., double aMaxPrimaryDecayLength=-1.);
-  static void MapAndFillPairFractionHistogramV0V0(TH1* aHistogram, int aV01FatherType, int aV02FatherType, double tWeight=1., double aMaxPrimaryDecayLength=-1.);
+  void FillPrimaryAndOtherPairInfo(int aType1, int aType2, int aParentType1, int aParentType2, double aMaxPrimaryDecayLength=-1.);
+  void PrintPrimaryAndOtherPairInfo(int aType1, int aType2);
+  void PrintAllPrimaryAndOtherPairInfo();
+
+  static void MapAndFillPairFractionHistogramParticleV0(TH1* aHistogram, int aV0FatherType, int aTrackFatherType, double aMaxPrimaryDecayLength=-1., double tWeight=1.);
+  static void MapAndFillPairFractionHistogramV0V0(TH1* aHistogram, int aV01FatherType, int aV02FatherType, double aMaxPrimaryDecayLength=-1., double tWeight=1.);
 
   void BuildPairFractionHistogramsParticleV0(ParticlePDGType aParticleType, ParticlePDGType aV0Type, TH1* aHistogram, TH2* aMatrix, double aMaxPrimaryDecayLength=-1.);
   void BuildPairFractionHistogramsV0V0(ParticlePDGType aV01Type, ParticlePDGType aV02Type, TH1* aHistogram, TH2* aMatrix, double aMaxPrimaryDecayLength=-1.);
   void BuildProtonParents();
+  void BuildLambdaParents();
 
   void BuildAllPairFractionHistograms(double aMaxPrimaryDecayLength=-1.);
   void BuildUniqueParents(int aParticleType, int aFatherType);
@@ -85,7 +92,7 @@ public:
   TCanvas* DrawAllPairFractionHistograms();
 
   double GetProperDecayLength(double aMeanDecayLength);
-  double GetLabDecayLength(double aProperDecayLength, double aMass, double aE);
+  double GetLabDecayLength(double aMeanDecayLength, double aMass, double aE);
 
   //inline
   void SetUseMixedEvents(bool aMixEvents);
@@ -141,6 +148,9 @@ private:
   TH1* fPairFractionsLamKchP;
   TH2* fParentsMatrixLamKchP;
 
+  vector<vector<PidInfo> > fPrimaryPairInfoLamKchP;
+  vector<vector<PidInfo> > fOtherPairInfoLamKchP;
+
   //ALamKchP
   TH2* fASigToALamKchPTransform;
   TH2* fAXiCToALamKchPTransform;
@@ -157,6 +167,9 @@ private:
 
   TH1* fPairFractionsALamKchP;
   TH2* fParentsMatrixALamKchP;
+
+  vector<vector<PidInfo> > fPrimaryPairInfoALamKchP;
+  vector<vector<PidInfo> > fOtherPairInfoALamKchP;
 
   //LamKchM
   TH2* fSigToLamKchMTransform;
@@ -175,6 +188,9 @@ private:
   TH1* fPairFractionsLamKchM;
   TH2* fParentsMatrixLamKchM;
 
+  vector<vector<PidInfo> > fPrimaryPairInfoLamKchM;
+  vector<vector<PidInfo> > fOtherPairInfoLamKchM;
+
   //ALamKchM
   TH2* fASigToALamKchMTransform;
   TH2* fAXiCToALamKchMTransform;
@@ -191,6 +207,9 @@ private:
 
   TH1* fPairFractionsALamKchM;
   TH2* fParentsMatrixALamKchM;
+
+  vector<vector<PidInfo> > fPrimaryPairInfoALamKchM;
+  vector<vector<PidInfo> > fOtherPairInfoALamKchM;
 
   //LamK0s
   TH2* fSigToLamK0Transform;
@@ -209,6 +228,9 @@ private:
   TH1* fPairFractionsLamK0;
   TH2* fParentsMatrixLamK0;
 
+  vector<vector<PidInfo> > fPrimaryPairInfoLamK0;
+  vector<vector<PidInfo> > fOtherPairInfoLamK0;
+
   //ALamK0s
   TH2* fASigToALamK0Transform;
   TH2* fAXiCToALamK0Transform;
@@ -226,6 +248,9 @@ private:
   TH1* fPairFractionsALamK0;
   TH2* fParentsMatrixALamK0;
 
+  vector<vector<PidInfo> > fPrimaryPairInfoALamK0;
+  vector<vector<PidInfo> > fOtherPairInfoALamK0;
+
   //LamLam to check with Jai
   TH2* fSigToLamLamTransform;
 
@@ -233,7 +258,17 @@ private:
   TH1* fProtonParents;
   TH1* fAProtonParents;
 
+  TH1* fProtonRadii;
+  TH1* fAProtonRadii;
 
+  TH2* f2dProtonRadii;
+  TH2* f2dAProtonRadii;
+
+  TH1* fLamRadii;
+  TH1* fALamRadii;
+
+  TH2* f2dLamRadii;
+  TH2* f2dALamRadii;
 
 #ifdef __ROOT__
   ClassDef(ThermEventsCollection, 1)

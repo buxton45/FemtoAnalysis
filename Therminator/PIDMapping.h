@@ -12,6 +12,35 @@ using namespace std;
 
 #include "Types.h"
 
+struct PidInfo
+{
+  ParticlePDGType pdgType;
+  TString name;
+  double decayLength;
+
+  PidInfo(ParticlePDGType aPdgType, TString aName, double aDecayLength) :
+    pdgType(aPdgType),
+    name(aName),
+    decayLength(aDecayLength)
+  {
+
+  }
+
+  PidInfo(int aPdgType, TString aName, double aDecayLength) :
+    pdgType(static_cast<ParticlePDGType>(aPdgType)),
+    name(aName),
+    decayLength(aDecayLength)
+  {
+
+  }
+
+};
+
+
+extern vector<PidInfo> cPidInfo;
+
+
+extern PidInfo GetParticlePidInfo(int aPID);
 
 extern TString GetParticleName(int aPID);
 extern TString GetParticleNamev2(int aPID);
@@ -20,6 +49,8 @@ extern double GetParticleDecayLength(int aPID);
 
 extern bool IncludeAsPrimary(int aPID1, int aPID2);
 extern bool IncludeAsPrimary(int aPID1, int aPID2, double aMaxDecayLength);
+
+extern void PrintIncludeAsPrimary(int aPID1, int aPID2);
 extern void PrintIncludeAsPrimary(double aMaxDecayLength);
 
 extern bool PairAccountedForInResiduals(int aPID1, int aPID2);
@@ -51,32 +82,6 @@ extern vector<int> cAllProtonFathers;
 
 
 //------------------------------------------
-  struct PidInfo
-  {
-    ParticlePDGType pdgType;
-    TString name;
-    double decayLength;
-
-    PidInfo(ParticlePDGType aPdgType, TString aName, double aDecayLength) :
-      pdgType(aPdgType),
-      name(aName),
-      decayLength(aDecayLength)
-    {
-
-    }
-
-    PidInfo(int aPdgType, TString aName, double aDecayLength) :
-      pdgType(static_cast<ParticlePDGType>(aPdgType)),
-      name(aName),
-      decayLength(aDecayLength)
-    {
-
-    }
-
-  };
-
-
-extern vector<PidInfo> cPidInfo;
 
 
 

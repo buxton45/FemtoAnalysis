@@ -122,8 +122,8 @@ TH1D* BuildPairFractions(AnalysisType aAnType, TH2D* aMatrix, double aMaxDecayLe
     {
       tPDG2 = (*tFatherCollection2)[iPar2];
       tWeight = aMatrix->GetBinContent(iPar1+1, iPar2+1);
-      if(bParticleV0) ThermEventsCollection::MapAndFillPairFractionHistogramParticleV0(tReturnHist, tPDG1, tPDG2, tWeight, aMaxDecayLength);
-      else ThermEventsCollection::MapAndFillPairFractionHistogramV0V0(tReturnHist, tPDG1, tPDG2, tWeight, aMaxDecayLength);
+      if(bParticleV0) ThermEventsCollection::MapAndFillPairFractionHistogramParticleV0(tReturnHist, tPDG1, tPDG2, aMaxDecayLength, tWeight);
+      else ThermEventsCollection::MapAndFillPairFractionHistogramV0V0(tReturnHist, tPDG1, tPDG2, aMaxDecayLength, tWeight);
     }
   }
   PrintIncludeAsPrimary(aMaxDecayLength);
