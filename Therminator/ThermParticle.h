@@ -88,6 +88,7 @@ public:
   double GetPx();
   double GetPy();
   double GetPz();
+  double GetMagP();
 
   int GetDecayed();
   int GetPID();
@@ -113,7 +114,7 @@ public:
   double GetFatherPx();
   double GetFatherPy();
   double GetFatherPz();
-
+  double GetFatherMagP();
 
 protected:
   bool fPrimordial;
@@ -155,6 +156,7 @@ inline double ThermParticle::GetE() {return fE;}
 inline double ThermParticle::GetPx() {return fPx;}
 inline double ThermParticle::GetPy() {return fPy;}
 inline double ThermParticle::GetPz() {return fPz;}
+inline double ThermParticle::GetMagP() {return sqrt(fPx*fPx + fPy*fPy + fPz*fPz);}
 
 inline int ThermParticle::GetDecayed() {return fDecayed;}
 inline int ThermParticle::GetPID() {return fPID;}
@@ -179,7 +181,7 @@ inline double ThermParticle::GetFatherE() {return fFatherE;}
 inline double ThermParticle::GetFatherPx() {return fFatherPx;}
 inline double ThermParticle::GetFatherPy() {return fFatherPy;}
 inline double ThermParticle::GetFatherPz() {return fFatherPz;}
-
+inline double ThermParticle::GetFatherMagP() {return sqrt(fFatherPx*fFatherPx + fFatherPy*fFatherPy + fFatherPz*fFatherPz);}
 
 
 

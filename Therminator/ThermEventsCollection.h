@@ -16,6 +16,7 @@
 #include "TSystemFile.h"
 #include "TH2.h"
 #include "TH2D.h"
+#include "TH3.h"
 #include "TFile.h"
 #include "TCanvas.h"
 
@@ -69,10 +70,8 @@ public:
   void MapAndFillParentsMatrixV0V0(TH2* aMatrix, int aV01FatherType, int aV02Type);
   void MapAndFillProtonParents(TH1* aHist, int aFatherType);
 
-  void MapAndFillProtonRadii(TH2* a2dHist, ThermParticle &aParticle);
-  void MapAndFillLambdaRadii(TH2* a2dHist, ThermV0Particle &aParticle);
-  void MapAndFillKchRadii(TH2* a2dHist, ThermParticle &aParticle);
-  void MapAndFillK0Radii(TH2* a2dHist, ThermV0Particle &aParticle);
+  void MapAndFillRadiiHistograms(ParticlePDGType aPDGType, TH1* aRadii, TH2* a2dHist, TH2* aRadiiVsBeta, ThermParticle &aParticle);
+  void MapAndFillRadiiHistograms(ParticlePDGType aPDGType, TH1* aRadii, TH2* a2dHist, TH2* aRadiiVsBeta, TH3* a3dHist, ThermParticle &aParticle);
 
   void FillPrimaryAndOtherPairInfo(int aType1, int aType2, int aParentType1, int aParentType2, double aMaxPrimaryDecayLength=-1.);
   void PrintPrimaryAndOtherPairInfo(int aType1, int aType2);
@@ -96,8 +95,8 @@ public:
   void SaveAllPairFractionHistograms(TString aSaveFileLocation);
   TCanvas* DrawAllPairFractionHistograms();
 
-  double GetProperDecayLength(double aMeanDecayLength);
-  double GetLabDecayLength(double aMeanDecayLength, double aMass, double aE);
+  double GetSampledCTau(double aMeanCTau);
+  double GetLabDecayLength(double aMeanCTau, double aMass, double aE, double aMagP);
 
   //inline
   void SetUseMixedEvents(bool aMixEvents);
@@ -267,19 +266,27 @@ private:
   TH1* fAProtonRadii;
   TH2* f2dProtonRadii;
   TH2* f2dAProtonRadii;
+  TH2* fProtonRadiiVsBeta;
+  TH2* fAProtonRadiiVsBeta;
+  TH3* f3dProtonRadii;
 
   TH1* fLamRadii;
   TH1* fALamRadii;
   TH2* f2dLamRadii;
   TH2* f2dALamRadii;
+  TH2* fLamRadiiVsBeta;
+  TH2* fALamRadiiVsBeta;
 
   TH1* fKchPRadii;
   TH1* fKchMRadii;
   TH2* f2dKchPRadii;
   TH2* f2dKchMRadii;
+  TH2* fKchPRadiiVsBeta;
+  TH2* fKchMRadiiVsBeta;
 
   TH1* fK0Radii;
   TH2* f2dK0Radii;
+  TH2* fK0RadiiVsBeta;
 
 #ifdef __ROOT__
   ClassDef(ThermEventsCollection, 1)
