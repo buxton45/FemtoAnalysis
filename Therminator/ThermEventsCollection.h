@@ -68,8 +68,11 @@ public:
   void MapAndFillParentsMatrixParticleV0(TH2* aMatrix, int aV0FatherType, int aTrackFatherType);
   void MapAndFillParentsMatrixV0V0(TH2* aMatrix, int aV01FatherType, int aV02Type);
   void MapAndFillProtonParents(TH1* aHist, int aFatherType);
+
   void MapAndFillProtonRadii(TH2* a2dHist, ThermParticle &aParticle);
   void MapAndFillLambdaRadii(TH2* a2dHist, ThermV0Particle &aParticle);
+  void MapAndFillKchRadii(TH2* a2dHist, ThermParticle &aParticle);
+  void MapAndFillK0Radii(TH2* a2dHist, ThermV0Particle &aParticle);
 
   void FillPrimaryAndOtherPairInfo(int aType1, int aType2, int aParentType1, int aParentType2, double aMaxPrimaryDecayLength=-1.);
   void PrintPrimaryAndOtherPairInfo(int aType1, int aType2);
@@ -82,6 +85,8 @@ public:
   void BuildPairFractionHistogramsV0V0(ParticlePDGType aV01Type, ParticlePDGType aV02Type, TH1* aHistogram, TH2* aMatrix, double aMaxPrimaryDecayLength=-1.);
   void BuildProtonParents();
   void BuildLambdaParents();
+  void BuildKchParents();
+  void BuildK0Parents();
 
   void BuildAllPairFractionHistograms(double aMaxPrimaryDecayLength=-1.);
   void BuildUniqueParents(int aParticleType, int aFatherType);
@@ -260,15 +265,21 @@ private:
 
   TH1* fProtonRadii;
   TH1* fAProtonRadii;
-
   TH2* f2dProtonRadii;
   TH2* f2dAProtonRadii;
 
   TH1* fLamRadii;
   TH1* fALamRadii;
-
   TH2* f2dLamRadii;
   TH2* f2dALamRadii;
+
+  TH1* fKchPRadii;
+  TH1* fKchMRadii;
+  TH2* f2dKchPRadii;
+  TH2* f2dKchMRadii;
+
+  TH1* fK0Radii;
+  TH2* f2dK0Radii;
 
 #ifdef __ROOT__
   ClassDef(ThermEventsCollection, 1)

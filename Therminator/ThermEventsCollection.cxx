@@ -167,15 +167,21 @@ ThermEventsCollection::ThermEventsCollection(TString aEventsDirectory) :
 
   fProtonRadii(0),
   fAProtonRadii(0),
-
   f2dProtonRadii(0),
   f2dAProtonRadii(0),
 
   fLamRadii(0),
   fALamRadii(0),
-
   f2dLamRadii(0),
-  f2dALamRadii(0)
+  f2dALamRadii(0),
+
+  fKchPRadii(0),
+  fKchMRadii(0),
+  f2dKchPRadii(0),
+  f2dKchMRadii(0),
+
+  fK0Radii(0),
+  f2dK0Radii(0)
 
 {
   //LamKchP
@@ -292,6 +298,16 @@ ThermEventsCollection::ThermEventsCollection(TString aEventsDirectory) :
 
   f2dLamRadii = new TH2D("f2dLamRadii", "f2dLamRadii", 200, 0, 200, 200, 0, 200);
   f2dALamRadii = new TH2D("f2dALamRadii", "f2dALamRadii", 200, 0, 200, 200, 0, 200);
+
+  fKchPRadii = new TH1D("fKchPRadii", "fKchPRadii", 200, 0, 200);
+  fKchMRadii = new TH1D("fKchMRadii", "fKchMRadii", 200, 0, 200);
+
+  f2dKchPRadii = new TH2D("f2dKchPRadii", "f2dKchPRadii", 200, 0, 200, 200, 0, 200);
+  f2dKchMRadii = new TH2D("f2dKchMRadii", "f2dKchMRadii", 200, 0, 200, 200, 0, 200);
+
+  fK0Radii = new TH1D("fK0Radii", "fK0Radii", 200, 0, 200);
+
+  f2dK0Radii = new TH2D("f2dK0Radii", "f2dK0Radii", 200, 0, 200, 200, 0, 200);
 }
 
 
@@ -1309,6 +1325,40 @@ void ThermEventsCollection::MapAndFillLambdaRadii(TH2* a2dHist, ThermV0Particle 
   else a2dHist->Fill(tBin, GetLabDecayLength(GetParticleDecayLength(tFatherType), aParticle.GetFatherMass(), aParticle.GetFatherE()));
 }
 
+//________________________________________________________________________________________________________________
+void ThermEventsCollection::MapAndFillKchRadii(TH2* a2dHist, ThermParticle &aParticle)
+{
+  int tBin=-1;
+  int tFatherType = aParticle.GetFatherPID();
+  for(unsigned int i=0; i<cAllKchFathers.size(); i++) if(tFatherType==cAllKchFathers[i]) tBin=i;
+
+  if(!fBuildUniqueParents)  //If true, I am likely looking for new parents, so I don't want these asserts to be tripped
+  {
+    if(tBin==-1) cout << "FAILURE IMMINENT: tFatherType = " << tFatherType << endl;
+    assert(tBin>-1);
+  }
+
+  if(aParticle.IsPrimordial()) a2dHist->Fill(tBin, 0.);
+  else a2dHist->Fill(tBin, GetLabDecayLength(GetParticleDecayLength(tFatherType), aParticle.GetFatherMass(), aParticle.GetFatherE()));
+}
+
+//________________________________________________________________________________________________________________
+void ThermEventsCollection::MapAndFillK0Radii(TH2* a2dHist, ThermV0Particle &aParticle)
+{
+  int tBin=-1;
+  int tFatherType = aParticle.GetFatherPID();
+  for(unsigned int i=0; i<cAllK0ShortFathers.size(); i++) if(tFatherType==cAllK0ShortFathers[i]) tBin=i;
+
+  if(!fBuildUniqueParents)  //If true, I am likely looking for new parents, so I don't want these asserts to be tripped
+  {
+    if(tBin==-1) cout << "FAILURE IMMINENT: tFatherType = " << tFatherType << endl;
+    assert(tBin>-1);
+  }
+
+  if(aParticle.IsPrimordial()) a2dHist->Fill(tBin, 0.);
+  else a2dHist->Fill(tBin, GetLabDecayLength(GetParticleDecayLength(tFatherType), aParticle.GetFatherMass(), aParticle.GetFatherE()));
+}
+
 
 //________________________________________________________________________________________________________________
 void ThermEventsCollection::FillPrimaryAndOtherPairInfo(int aType1, int aType2, int aParentType1, int aParentType2, double aMaxPrimaryDecayLength)
@@ -1615,7 +1665,58 @@ void ThermEventsCollection::BuildLambdaParents()
   }
 }
 
+//________________________________________________________________________________________________________________
+void ThermEventsCollection::BuildKchParents()
+{
+  vector<ThermParticle> aKchPCollection, aKchMCollection;
+  for(unsigned int iEv=0; iEv < fEventsCollection.size(); iEv++)
+  {
+    aKchPCollection = fEventsCollection[iEv].GetParticleCollection(kPDGKchP);
+    aKchMCollection = fEventsCollection[iEv].GetParticleCollection(kPDGKchM);
 
+    ThermParticle tParticle;
+    int tParticleFatherType;
+    for(unsigned int iPar=0; iPar<aKchPCollection.size(); iPar++)
+    {
+      tParticle = aKchPCollection[iPar];
+      tParticleFatherType = tParticle.GetFatherPID();
+      MapAndFillKchRadii(f2dKchPRadii, tParticle);
+      if(tParticle.IsPrimordial()) fKchPRadii->Fill(0.);
+      else fKchPRadii->Fill(GetLabDecayLength(GetParticleDecayLength(tParticleFatherType), tParticle.GetFatherMass(), tParticle.GetFatherE()));
+    }
+    for(unsigned int iPar=0; iPar<aKchMCollection.size(); iPar++)
+    {
+      tParticle = aKchMCollection[iPar];
+      tParticleFatherType = tParticle.GetFatherPID();
+      MapAndFillKchRadii(f2dKchMRadii, tParticle);
+      if(tParticle.IsPrimordial()) fKchMRadii->Fill(0.);
+      else fKchMRadii->Fill(GetLabDecayLength(GetParticleDecayLength(tParticleFatherType), tParticle.GetFatherMass(), tParticle.GetFatherE()));
+    }
+  }
+}
+
+
+//________________________________________________________________________________________________________________
+void ThermEventsCollection::BuildK0Parents()
+{
+  vector<ThermV0Particle> aK0Collection;
+  for(unsigned int iEv=0; iEv < fEventsCollection.size(); iEv++)
+  {
+    aK0Collection = fEventsCollection[iEv].GetV0ParticleCollection(kPDGK0);
+
+    ThermV0Particle tParticle;
+    int tParticleFatherType;
+    for(unsigned int iPar=0; iPar<aK0Collection.size(); iPar++)
+    {
+      tParticle = aK0Collection[iPar];
+      tParticleFatherType = tParticle.GetFatherPID();
+      MapAndFillK0Radii(f2dK0Radii, tParticle);
+      if(tParticle.IsPrimordial()) fK0Radii->Fill(0.);
+      else fK0Radii->Fill(GetLabDecayLength(GetParticleDecayLength(tParticleFatherType), tParticle.GetFatherMass(), tParticle.GetFatherE()));
+    }
+
+  }
+}
 
 //________________________________________________________________________________________________________________
 void ThermEventsCollection::BuildAllPairFractionHistograms(double aMaxPrimaryDecayLength)
@@ -1631,6 +1732,8 @@ void ThermEventsCollection::BuildAllPairFractionHistograms(double aMaxPrimaryDec
 
   BuildProtonParents();
   BuildLambdaParents();
+  BuildKchParents();
+  BuildK0Parents();
 
 }
 
@@ -1809,6 +1912,16 @@ void ThermEventsCollection::SaveAllPairFractionHistograms(TString aSaveFileLocat
 
   f2dLamRadii->Write();
   f2dALamRadii->Write();
+
+  fKchPRadii->Write();
+  fKchMRadii->Write();
+
+  f2dKchPRadii->Write();
+  f2dKchMRadii->Write();
+
+  fK0Radii->Write();
+
+  f2dK0Radii->Write();
 
   tFile->Close();
 }
