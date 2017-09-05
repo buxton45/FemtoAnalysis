@@ -9,17 +9,8 @@
 #include "TStyle.h"
 #include "TPaveText.h"
 
+#include "ThermCommon.h"
 
-//________________________________________________________________________________________________________________
-TH2D* Get2dHisto(TString FileName, TString HistoName)
-{
-  TFile f1(FileName);
-  TH2D* ReturnHisto = (TH2D*)f1.Get(HistoName);
-  TH2D *ReturnHistoClone = (TH2D*)ReturnHisto->Clone();
-  ReturnHistoClone->SetDirectory(0);
-
-  return ReturnHistoClone;
-}
 
 
 //________________________________________________________________________________________________________________

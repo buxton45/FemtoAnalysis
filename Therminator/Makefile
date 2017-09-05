@@ -8,9 +8,9 @@ CFLAGS = $(shell root-config --cflags) -Wall -std=c++11 -I${ANALYZE_DIR} -I${UTI
 
 RM = rm
 
-MY_LIBS = $(addprefix build/, Types.o PIDMapping.o ThermParticle.o ThermV0Particle.o ThermEvent.o ThermPairAnalysis.o ThermEventsCollection.o SimpleThermAnalysis.o)
+MY_LIBS = $(addprefix build/, Types.o PIDMapping.o ThermCommon.o ThermParticle.o ThermV0Particle.o ThermEvent.o ThermPairAnalysis.o ThermEventsCollection.o SimpleThermAnalysis.o)
 
-BINARIES = runTest runTest2 runDrawTransforms runDrawPairFractions runDrawParentsMatrices runBuildLambdaValuesFromParentMatrices
+BINARIES = runTest runTest2 runDrawTransforms runDrawPairFractions runDrawParentsMatrices runBuildLambdaValuesFromParentMatrices runProject3dRadii
 
 all: $(BINARIES)
 
@@ -32,6 +32,9 @@ runDrawParentsMatrices: ${MY_LIBS} DrawParentsMatrices.C
 
 runBuildLambdaValuesFromParentMatrices: ${MY_LIBS} BuildLambdaValuesFromParentMatrices.C
 	g++ BuildLambdaValuesFromParentMatrices.C ${MY_LIBS} -o runBuildLambdaValuesFromParentMatrices $(LIBS) $(CFLAGS)
+
+runProject3dRadii: ${MY_LIBS} Project3dRadiiMatrices.C
+	g++ Project3dRadiiMatrices.C ${MY_LIBS} -o runProject3dRadii $(LIBS) $(CFLAGS)
 
 build/%.o: ${ANALYZE_DIR}/%.cxx ${ANALYZE_DIR}/%.h
 	g++ -c $< $(CFLAGS) -o $@

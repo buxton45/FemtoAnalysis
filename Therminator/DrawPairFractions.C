@@ -10,61 +10,7 @@
 #include "TPaveText.h"
 
 #include "PIDMapping.h"
-
-//_________________________________________________________________________________________
-TH1D* Get1dHisto(TString FileName, TString HistoName)
-{
-  TFile f1(FileName);
-  TH1D *ReturnHisto = (TH1D*)f1.Get(HistoName);
-
-  TH1D *ReturnHistoClone = (TH1D*)ReturnHisto->Clone();
-  ReturnHistoClone->SetDirectory(0);
-
-  return ReturnHistoClone;
-}
-
-//________________________________________________________________________________________________________________
-void PrintLambdaValues(TPad* aPad, TH1D* aHisto)
-{
-  aPad->cd();
-  TPaveText* returnText = new TPaveText(0.65,0.25,0.85,0.85,"NDC");
-    returnText->SetFillColor(0);
-    returnText->SetBorderSize(0);
-    returnText->SetTextAlign(22);
-    returnText->SetTextFont(63);
-    returnText->SetTextSize(10);
-
-  returnText->AddText("Estimated #lambda Values");
-
-  double tTotal = 0.;
-  for(int i=1; i<=12; i++) tTotal += aHisto->GetBinContent(i);
-  for(int i=1; i<=12; i++) returnText->AddText(TString(aHisto->GetXaxis()->GetBinLabel(i)) + TString::Format(" = %0.3f", aHisto->GetBinContent(i)/tTotal));
-
-  returnText->Draw();
-}
-
-//________________________________________________________________________________________________________________
-void DrawPairFractions(TPad* aPad, TH1D* aHisto)
-{
-  aPad->cd();
-  gStyle->SetOptStat(0);
-/*
-  double tPrimaryFractionInOther = 0.5;
-  double tAdditionalPrimary = tPrimaryFractionInOther*aHisto->GetBinContent(12);
-  double tTotalPrimaryLambda = aHisto->GetBinContent(1) + tAdditionalPrimary;
-  aHisto->SetBinContent(1, tTotalPrimaryLambda);
-*/
-  double tNCounts = 0.;
-  for(int i=1; i<=11; i++) tNCounts += aHisto->GetBinContent(i);
-  double tNFakes = 0.05*tNCounts;
-  aHisto->SetBinContent(12,tNFakes);
-
-  aHisto->GetXaxis()->SetTitle("Parent System");
-  aHisto->GetYaxis()->SetTitle("Counts");
-  aHisto->Draw();
-
-  PrintLambdaValues(aPad,aHisto);
-}
+#include "ThermCommon.h"
 
 //________________________________________________________________________________________________________________
 //****************************************************************************************************************
