@@ -147,6 +147,46 @@ void DrawPairFractions(TPad* aPad, TH1D* aHisto, bool aSave, TString aSaveName)
 
 
 //________________________________________________________________________________________________________________
+vector<int> GetParentsPidVector(ParticlePDGType aType)
+{
+  vector<int> tFathers;
+
+  switch(aType) {
+  case kPDGLam:
+  case kPDGALam:
+    tFathers = cAllLambdaFathers;
+    break;
+
+  case kPDGKchP:
+  case kPDGKchM:
+    tFathers = cAllKchFathers;
+    break;
+
+  case kPDGK0:
+    tFathers = cAllK0ShortFathers;
+    break;
+
+  case kPDGProt:
+  case kPDGAntiProt:
+    tFathers = cAllProtonFathers;
+    break;
+
+  default:
+    cout << "ERROR: GetParentsPidVector: aType = " << aType << " is not appropriate" << endl << endl;
+    assert(0);
+  }
+
+  return tFathers;
+}
+
+//________________________________________________________________________________________________________________
+void SetParentPidBinLabels(TAxis* aAxis, ParticlePDGType aType)
+{
+  vector<int> tFathers = GetParentsPidVector(aType);
+  for(unsigned int i=0; i<tFathers.size(); i++) aAxis->SetBinLabel(i+1, GetParticleName(tFathers[i]));
+}
+
+//________________________________________________________________________________________________________________
 void DrawParentsMatrixBackground(AnalysisType aAnType, TPad* aPad, TH2D* aMatrix)
 {
   vector<int> tBinsXToSetToZero;
@@ -307,17 +347,11 @@ void DrawParentsMatrix(AnalysisType aAnType, TPad* aPad, TH2D* aMatrix, bool aZo
 }
 
 //________________________________________________________________________________________________________________
-void DrawCondensedParentsMatrix(AnalysisType aAnType, TPad* aPad, TH2D* aMatrix, bool aSetLogZ, bool aSave, TString aSaveName)
+TH2D* BuildCondensedParentsMatrix(TH2D* aMatrix, TString aReturnName)
 {
-  aPad->cd();
-  aPad->SetRightMargin(0.15);
-  aPad->SetTopMargin(0.075);
-  aPad->SetLogz(aSetLogZ);
-  gStyle->SetOptStat(0);
-
-  TString tReturnName = TString("Parents Matrix: ") + TString(cAnalysisRootTags[aAnType]);
-  TH2D* tCondensedMatrix = new TH2D(tReturnName, tReturnName, 100, 0, 100, 135, 0, 135);
-
+  TH2D* tCondensedMatrix = new TH2D(aReturnName, aReturnName, 
+                                    aMatrix->GetNbinsX(), aMatrix->GetXaxis()->GetBinLowEdge(1), aMatrix->GetXaxis()->GetBinUpEdge(aMatrix->GetNbinsX()), 
+                                    aMatrix->GetNbinsY(), aMatrix->GetYaxis()->GetBinLowEdge(1), aMatrix->GetYaxis()->GetBinUpEdge(aMatrix->GetNbinsY()));
   //-------------------------------------------------
   vector<int> tColumnsToSkip(0);
   vector<int> tRowsToSkip(0);
@@ -388,6 +422,22 @@ void DrawCondensedParentsMatrix(AnalysisType aAnType, TPad* aPad, TH2D* aMatrix,
   tCondensedMatrix->GetYaxis()->SetLabelSize(0.02);
 
   tCondensedMatrix->LabelsOption("v", "X");
+
+  return tCondensedMatrix;
+}
+
+//________________________________________________________________________________________________________________
+void DrawCondensedParentsMatrix(AnalysisType aAnType, TPad* aPad, TH2D* aMatrix, bool aSetLogZ, bool aSave, TString aSaveName)
+{
+  aPad->cd();
+  aPad->SetRightMargin(0.15);
+  aPad->SetTopMargin(0.075);
+  aPad->SetLogz(aSetLogZ);
+  gStyle->SetOptStat(0);
+
+  TString tReturnName = TString("Parents Matrix: ") + TString(cAnalysisRootTags[aAnType]);
+  TH2D* tCondensedMatrix = BuildCondensedParentsMatrix(aMatrix, tReturnName);
+
   tCondensedMatrix->Draw("colz");
 
   if(aSave)
@@ -399,3 +449,93 @@ void DrawCondensedParentsMatrix(AnalysisType aAnType, TPad* aPad, TH2D* aMatrix,
     aPad->SaveAs(tSaveName);
   }
 }
+
+//________________________________________________________________________________________________________________
+//****************************************************************************************************************
+//________________________________________________________________________________________________________________
+
+//________________________________________________________________________________________________________________
+TH2D* BuildCondensed2dRadiiVsBeta(TH2D* a2dHist, TString aReturnName)
+{
+  TH2D* tCondensed = new TH2D(aReturnName, aReturnName, 
+                              a2dHist->GetNbinsX(), a2dHist->GetXaxis()->GetBinLowEdge(1), a2dHist->GetXaxis()->GetBinUpEdge(a2dHist->GetNbinsX()), 
+                              a2dHist->GetNbinsY(), a2dHist->GetYaxis()->GetBinLowEdge(1), a2dHist->GetYaxis()->GetBinUpEdge(a2dHist->GetNbinsY()));
+  //-------------------------------------------------
+  vector<int> tColumnsToSkip(0);
+
+  double tCounts = 0.;
+  for(int i=1; i<=a2dHist->GetNbinsX(); i++)
+  {
+    tCounts = 0.;
+    for(int j=1; j<=a2dHist->GetNbinsY(); j++)
+    {
+      tCounts += a2dHist->GetBinContent(i,j);
+    }
+    if(tCounts==0.) tColumnsToSkip.push_back(i);
+  }
+
+  //-------------------------------------------------
+
+  bool bSkipX=false;
+
+  int tXbinTracker = 0;
+  int tYbinTracker = 0;
+
+  for(int i=1; i<=a2dHist->GetNbinsX(); i++)
+  {
+    bSkipX=false;
+    for(int a=0; a<(int)tColumnsToSkip.size(); a++)
+    {
+      if(i==tColumnsToSkip[a]) bSkipX=true;
+    }
+    if(!bSkipX)
+    {
+      tXbinTracker++;
+      for(int j=1; j<=a2dHist->GetNbinsY(); j++)
+      {
+        tCondensed->SetBinContent(tXbinTracker, j, a2dHist->GetBinContent(i,j));
+        tCondensed->GetXaxis()->SetBinLabel(tXbinTracker, a2dHist->GetXaxis()->GetBinLabel(i));
+      }
+    }
+  }
+
+  tCondensed->GetXaxis()->SetRange(1,tXbinTracker);
+  tCondensed->GetXaxis()->SetLabelSize(0.02);
+
+  tCondensed->GetYaxis()->SetRange(1,tYbinTracker);
+  tCondensed->GetYaxis()->SetLabelSize(0.02);
+
+  tCondensed->LabelsOption("v", "X");
+
+  return tCondensed;
+}
+
+
+
+//________________________________________________________________________________________________________________
+void DrawCondensed2dRadiiVsPid(ParticlePDGType aType, TPad* aPad, TH2D* a2dHist, bool aSetLogZ, bool aSave, TString aSaveName)
+{
+  aPad->cd();
+  aPad->SetRightMargin(0.15);
+  aPad->SetTopMargin(0.075);
+  aPad->SetLogz(aSetLogZ);
+  gStyle->SetOptStat(0);
+
+  TString tReturnName = TString("Radii Vs PID: ") + TString(GetPDGRootName(aType));
+  SetParentPidBinLabels(a2dHist->GetXaxis(), aType);
+  TH2D* tCondensed = BuildCondensed2dRadiiVsBeta(a2dHist, tReturnName);
+
+  tCondensed->Draw("colz");
+
+  if(aSave)
+  {
+    TString tSaveName = aSaveName;
+    if(aSetLogZ) tSaveName += TString("_LogZ");
+    tSaveName += TString(".pdf");
+
+    aPad->SaveAs(tSaveName);
+  }
+
+}
+
+

@@ -19,6 +19,7 @@
 #include "TH3.h"
 #include "TFile.h"
 #include "TPad.h"
+#include "TAxis.h"
 
 #include "Types.h"
 #include "PIDMapping.h"
@@ -49,10 +50,17 @@ extern void DrawPairFractions(TPad* aPad, TH1D* aHisto, bool aSave=false, TStrin
 
 //-----------------------------------------------------------
 
+extern vector<int> GetParentsPidVector(ParticlePDGType aType);
+extern void SetParentPidBinLabels(TAxis* aAxis, ParticlePDGType aType);
 extern void DrawParentsMatrixBackground(AnalysisType aAnType, TPad* aPad, TH2D* aMatrix);
 extern void DrawOnlyPairsInOthers(AnalysisType aAnType, TPad* aPad, TH2D* aMatrix, double aMaxDecayLength=-1.);
 extern void DrawParentsMatrix(AnalysisType aAnType, TPad* aPad, TH2D* aMatrix, bool aZoomROI=false, bool aSetLogZ=false, bool aSave=false, TString aSaveName="");
+extern TH2D* BuildCondensedParentsMatrix(TH2D* aMatrix, TString aReturnName);
 extern void DrawCondensedParentsMatrix(AnalysisType aAnType, TPad* aPad, TH2D* aMatrix, bool aSetLogZ=false, bool aSave=false, TString aSaveName="");
+
+//-----------------------------------------------------------
+extern TH2D* BuildCondensed2dRadiiVsBeta(TH2D* a2dHist, TString aReturnName);
+extern void DrawCondensed2dRadiiVsPid(ParticlePDGType aType, TPad* aPad, TH2D* a2dHist, bool aSetLogZ=false, bool aSave=false, TString aSaveName="");
 
 //-----------------------------------------------------------
 
