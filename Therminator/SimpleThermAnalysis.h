@@ -24,6 +24,9 @@
 #include "ThermPairAnalysis.h"
 class ThermPairAnalysis;
 
+#include "ThermSingleParticleAnalysis.h"
+class ThermSingleParticleAnalysis;
+
 #include "ThermEvent.h"
 class ThermEvent;
 
@@ -50,6 +53,7 @@ public:
   void SetEventsDirectory(TString aDirectory);
   void SetPairFractionsSaveName(TString aSaveName);
   void SetTransformMatricesSaveName(TString aSaveName);
+  void SetSingleParticlesSaveName(TString aSaveName);
 
   void SetMaxPrimaryDecayLength(double aMax);
 
@@ -59,6 +63,7 @@ private:
   TString fEventsDirectory;
   TString fPairFractionsSaveName;
   TString fTransformMatricesSaveName;
+  TString fSingleParticlesSaveName;
 
   vector<TString> fFileNameCollection;
   vector<ThermEvent> fEventsCollection;
@@ -78,6 +83,11 @@ private:
   ThermPairAnalysis *fAnalysisLamKchM, *fAnalysisALamKchP;
   ThermPairAnalysis *fAnalysisLamK0, *fAnalysisALamK0;
 
+  ThermSingleParticleAnalysis *fSPAnalysisLam, *fSPAnalysisALam;
+  ThermSingleParticleAnalysis *fSPAnalysisKchP, *fSPAnalysisKchM;
+  ThermSingleParticleAnalysis *fSPAnalysisProt, *fSPAnalysisAProt;
+  ThermSingleParticleAnalysis *fSPAnalysisK0;
+
 
 #ifdef __ROOT__
   ClassDef(SimpleThermAnalysis, 1)
@@ -89,6 +99,7 @@ private:
 inline void SimpleThermAnalysis::SetEventsDirectory(TString aDirectory) {fEventsDirectory = aDirectory;}
 inline void SimpleThermAnalysis::SetPairFractionsSaveName(TString aSaveName) {fPairFractionsSaveName = aSaveName;}
 inline void SimpleThermAnalysis::SetTransformMatricesSaveName(TString aSaveName) {fTransformMatricesSaveName = aSaveName;}
+inline void SimpleThermAnalysis::SetSingleParticlesSaveName(TString aSaveName) {fSingleParticlesSaveName = aSaveName;}
 
 inline void SimpleThermAnalysis::SetMaxPrimaryDecayLength(double aMax) {fMaxPrimaryDecayLength = aMax;}
 

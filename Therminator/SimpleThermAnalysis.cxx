@@ -17,8 +17,9 @@ SimpleThermAnalysis::SimpleThermAnalysis() :
   fNEvents(0),
 
   fEventsDirectory("/home/jesse/Analysis/Therminator2/events/TestEvents/"),
-  fPairFractionsSaveName("/home/jesse/Analysis/ReducedTherminator2Events/test/testPairFractions.root"),
-  fTransformMatricesSaveName("/home/jesse/Analysis/ReducedTherminator2Events/test/testTransformMatrices.root"),
+  fPairFractionsSaveName("/home/jesse/Analysis/ReducedTherminator2Events/test/testPairFractionsv2.root"),
+  fTransformMatricesSaveName("/home/jesse/Analysis/ReducedTherminator2Events/test/testTransformMatricesv2.root"),
+  fSingleParticlesSaveName("/home/jesse/Analysis/ReducedTherminator2Events/test/testSingleParticleAnalysesv2.root"),
 
   fFileNameCollection(0),
   fEventsCollection(0),
@@ -40,7 +41,15 @@ SimpleThermAnalysis::SimpleThermAnalysis() :
   fAnalysisLamKchM(nullptr),
   fAnalysisALamKchP(nullptr),
   fAnalysisLamK0(nullptr),
-  fAnalysisALamK0(nullptr)
+  fAnalysisALamK0(nullptr),
+
+  fSPAnalysisLam(nullptr),
+  fSPAnalysisALam(nullptr),
+  fSPAnalysisKchP(nullptr), 
+  fSPAnalysisKchM(nullptr),
+  fSPAnalysisProt(nullptr), 
+  fSPAnalysisAProt(nullptr),
+  fSPAnalysisK0(nullptr)
 
 {
   fAnalysisLamKchP = new ThermPairAnalysis(kLamKchP);
@@ -49,6 +58,15 @@ SimpleThermAnalysis::SimpleThermAnalysis() :
   fAnalysisALamKchP = new ThermPairAnalysis(kALamKchP);
   fAnalysisLamK0 = new ThermPairAnalysis(kLamK0);
   fAnalysisALamK0 = new ThermPairAnalysis(kALamK0);
+
+
+  fSPAnalysisLam = new ThermSingleParticleAnalysis(kPDGLam);
+  fSPAnalysisALam = new ThermSingleParticleAnalysis(kPDGALam);
+  fSPAnalysisKchP = new ThermSingleParticleAnalysis(kPDGKchP);
+  fSPAnalysisKchM = new ThermSingleParticleAnalysis(kPDGKchM);
+  fSPAnalysisProt = new ThermSingleParticleAnalysis(kPDGProt);
+  fSPAnalysisAProt = new ThermSingleParticleAnalysis(kPDGAntiProt);
+  fSPAnalysisK0 = new ThermSingleParticleAnalysis(kPDGK0);
 
 }
 
@@ -85,6 +103,14 @@ void SimpleThermAnalysis::SetBuildUniqueParents(bool aBuild)
   fAnalysisALamKchP->SetBuildUniqueParents(aBuild);
   fAnalysisLamK0->SetBuildUniqueParents(aBuild);
   fAnalysisALamK0->SetBuildUniqueParents(aBuild);
+
+  fSPAnalysisLam->SetBuildUniqueParents(aBuild);
+  fSPAnalysisALam->SetBuildUniqueParents(aBuild);
+  fSPAnalysisKchP->SetBuildUniqueParents(aBuild);
+  fSPAnalysisKchM->SetBuildUniqueParents(aBuild);
+  fSPAnalysisProt->SetBuildUniqueParents(aBuild);
+  fSPAnalysisAProt->SetBuildUniqueParents(aBuild);
+  fSPAnalysisK0->SetBuildUniqueParents(aBuild);
 }
 
 //________________________________________________________________________________________________________________
@@ -113,6 +139,19 @@ void SimpleThermAnalysis::SaveAll()
   fAnalysisALamK0->SaveAllTransformMatrices(tFileTransformMatrices);
 
   tFileTransformMatrices->Close();
+
+  //---------------------------------------------
+  TFile* tFileSingleParticleAnalyses = new TFile(fSingleParticlesSaveName, "RECREATE");
+
+  fSPAnalysisLam->SaveAll(tFileSingleParticleAnalyses);
+  fSPAnalysisALam->SaveAll(tFileSingleParticleAnalyses);
+  fSPAnalysisKchP->SaveAll(tFileSingleParticleAnalyses);
+  fSPAnalysisKchM->SaveAll(tFileSingleParticleAnalyses);
+  fSPAnalysisProt->SaveAll(tFileSingleParticleAnalyses);
+  fSPAnalysisAProt->SaveAll(tFileSingleParticleAnalyses);
+  fSPAnalysisK0->SaveAll(tFileSingleParticleAnalyses);
+
+  tFileSingleParticleAnalyses->Close();
 }
 
 //________________________________________________________________________________________________________________
@@ -257,6 +296,15 @@ void SimpleThermAnalysis::ProcessEventByEvent(vector<ThermEvent> &aEventsCollect
 
     fAnalysisLamK0->BuildPairFractionHistogramsV0V0(fEventsCollection[iEv], fMaxPrimaryDecayLength);
     fAnalysisALamK0->BuildPairFractionHistogramsV0V0(fEventsCollection[iEv], fMaxPrimaryDecayLength);
+
+    //--------------------------------------------
+    fSPAnalysisLam->ProcessEvent(fEventsCollection[iEv]);
+    fSPAnalysisALam->ProcessEvent(fEventsCollection[iEv]);
+    fSPAnalysisKchP->ProcessEvent(fEventsCollection[iEv]);
+    fSPAnalysisKchM->ProcessEvent(fEventsCollection[iEv]);
+    fSPAnalysisProt->ProcessEvent(fEventsCollection[iEv]); 
+    fSPAnalysisAProt->ProcessEvent(fEventsCollection[iEv]);
+    fSPAnalysisK0->ProcessEvent(fEventsCollection[iEv]);
 
     if(fMixEvents)
     {

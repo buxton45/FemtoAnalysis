@@ -172,6 +172,7 @@ ThermEventsCollection::ThermEventsCollection(TString aEventsDirectory) :
   fProtonRadiiVsBeta(0),
   fAProtonRadiiVsBeta(0),
   f3dProtonRadii(0),
+  f3dAProtonRadii(0),
 
   fLamRadii(0),
   fALamRadii(0),
@@ -179,6 +180,8 @@ ThermEventsCollection::ThermEventsCollection(TString aEventsDirectory) :
   f2dALamRadii(0),
   fLamRadiiVsBeta(0),
   fALamRadiiVsBeta(0),
+  f3dLamRadii(0),
+  f3dALamRadii(0),
 
   fKchPRadii(0),
   fKchMRadii(0),
@@ -186,10 +189,13 @@ ThermEventsCollection::ThermEventsCollection(TString aEventsDirectory) :
   f2dKchMRadii(0),
   fKchPRadiiVsBeta(0),
   fKchMRadiiVsBeta(0),
+  f3dKchPRadii(0),
+  f3dKchMRadii(0),
 
   fK0Radii(0),
   f2dK0Radii(0),
-  fK0RadiiVsBeta(0)
+  fK0RadiiVsBeta(0),
+  f3dK0Radii(0)
 
 {
   //LamKchP
@@ -302,6 +308,7 @@ ThermEventsCollection::ThermEventsCollection(TString aEventsDirectory) :
   fProtonRadiiVsBeta = new TH2D("fProtonRadiiVsBeta", "fProtonRadiiVsBeta", 100, 0, 1., 200, 0, 200);
   fAProtonRadiiVsBeta = new TH2D("fAProtonRadiiVsBeta", "fAProtonRadiiVsBeta", 100, 0, 1., 200, 0, 200);
   f3dProtonRadii = new TH3D("f3dProtonRadii", "f3dProtonRadii", 200, 0, 200, 100, 0, 1., 200, 0, 200);
+  f3dAProtonRadii = new TH3D("f3dAProtonRadii", "f3dAProtonRadii", 200, 0, 200, 100, 0, 1., 200, 0, 200);
 
   fLamRadii = new TH1D("fLamRadii", "fLamRadii", 200, 0, 200);
   fALamRadii = new TH1D("fALamRadii", "fALamRadii", 200, 0, 200);
@@ -309,6 +316,8 @@ ThermEventsCollection::ThermEventsCollection(TString aEventsDirectory) :
   f2dALamRadii = new TH2D("f2dALamRadii", "f2dALamRadii", 200, 0, 200, 200, 0, 200);
   fLamRadiiVsBeta = new TH2D("fLamRadiiVsBeta", "fLamRadiiVsBeta", 100, 0, 1., 200, 0, 200);
   fALamRadiiVsBeta = new TH2D("fALamRadiiVsBeta", "fALamRadiiVsBeta", 100, 0, 1., 200, 0, 200);
+  f3dLamRadii = new TH3D("f3dLamRadii", "f3dLamRadii", 200, 0, 200, 100, 0, 1., 200, 0, 200);
+  f3dALamRadii = new TH3D("f3dALamRadii", "f3dALamRadii", 200, 0, 200, 100, 0, 1., 200, 0, 200);
 
   fKchPRadii = new TH1D("fKchPRadii", "fKchPRadii", 200, 0, 200);
   fKchMRadii = new TH1D("fKchMRadii", "fKchMRadii", 200, 0, 200);
@@ -316,10 +325,13 @@ ThermEventsCollection::ThermEventsCollection(TString aEventsDirectory) :
   f2dKchMRadii = new TH2D("f2dKchMRadii", "f2dKchMRadii", 200, 0, 200, 200, 0, 200);
   fKchPRadiiVsBeta = new TH2D("fKchPRadiiVsBeta", "fKchPRadiiVsBeta", 100, 0, 1., 200, 0, 200);
   fKchMRadiiVsBeta = new TH2D("fKchMRadiiVsBeta", "fKchMRadiiVsBeta", 100, 0, 1., 200, 0, 200);
+  f3dKchPRadii = new TH3D("f3dKchPRadii", "f3dKchPRadii", 200, 0, 200, 100, 0, 1., 200, 0, 200);
+  f3dKchMRadii = new TH3D("f3dKchMRadii", "f3dKchMRadii", 200, 0, 200, 100, 0, 1., 200, 0, 200);
 
   fK0Radii = new TH1D("fK0Radii", "fK0Radii", 200, 0, 200);
   f2dK0Radii = new TH2D("f2dK0Radii", "f2dK0Radii", 200, 0, 200, 200, 0, 200);
   fK0RadiiVsBeta = new TH2D("fK0RadiiVsBeta", "fK0RadiiVsBeta", 100, 0, 1., 200, 0, 200);
+  f3dK0Radii = new TH3D("f3dK0Radii", "f3dK0Radii", 200, 0, 200, 100, 0, 1., 200, 0, 200);
 }
 
 
@@ -1678,7 +1690,7 @@ void ThermEventsCollection::BuildProtonParents()
       tParticleFatherType = tParticle.GetFatherPID();
       if(fBuildUniqueParents) BuildUniqueParents(kPDGAntiProt, tParticleFatherType);
       MapAndFillProtonParents(fAProtonParents, tParticleFatherType);
-      MapAndFillRadiiHistograms(kPDGAntiProt, fAProtonRadii, f2dAProtonRadii, fAProtonRadiiVsBeta, tParticle);
+      MapAndFillRadiiHistograms(kPDGAntiProt, fAProtonRadii, f2dAProtonRadii, fAProtonRadiiVsBeta, f3dAProtonRadii, tParticle);
     }
   }
 }
@@ -1696,12 +1708,12 @@ void ThermEventsCollection::BuildLambdaParents()
     for(unsigned int iPar=0; iPar<aLamCollection.size(); iPar++)
     {
       tParticle = aLamCollection[iPar];
-      MapAndFillRadiiHistograms(kPDGLam, fLamRadii, f2dLamRadii, fLamRadiiVsBeta, tParticle);
+      MapAndFillRadiiHistograms(kPDGLam, fLamRadii, f2dLamRadii, fLamRadiiVsBeta, f3dLamRadii, tParticle);
     }
     for(unsigned int iPar=0; iPar<aALamCollection.size(); iPar++)
     {
       tParticle = aALamCollection[iPar];
-      MapAndFillRadiiHistograms(kPDGALam, fALamRadii, f2dALamRadii, fALamRadiiVsBeta, tParticle);
+      MapAndFillRadiiHistograms(kPDGALam, fALamRadii, f2dALamRadii, fALamRadiiVsBeta, f3dALamRadii, tParticle);
     }
   }
 }
@@ -1719,12 +1731,12 @@ void ThermEventsCollection::BuildKchParents()
     for(unsigned int iPar=0; iPar<aKchPCollection.size(); iPar++)
     {
       tParticle = aKchPCollection[iPar];
-      MapAndFillRadiiHistograms(kPDGKchP, fKchPRadii, f2dKchPRadii, fKchPRadiiVsBeta, tParticle);
+      MapAndFillRadiiHistograms(kPDGKchP, fKchPRadii, f2dKchPRadii, fKchPRadiiVsBeta, f3dKchPRadii, tParticle);
     }
     for(unsigned int iPar=0; iPar<aKchMCollection.size(); iPar++)
     {
       tParticle = aKchMCollection[iPar];
-      MapAndFillRadiiHistograms(kPDGKchM, fKchMRadii, f2dKchMRadii, fKchMRadiiVsBeta, tParticle);
+      MapAndFillRadiiHistograms(kPDGKchM, fKchMRadii, f2dKchMRadii, fKchMRadiiVsBeta, f3dKchMRadii, tParticle);
     }
   }
 }
@@ -1742,7 +1754,7 @@ void ThermEventsCollection::BuildK0Parents()
     for(unsigned int iPar=0; iPar<aK0Collection.size(); iPar++)
     {
       tParticle = aK0Collection[iPar];
-      MapAndFillRadiiHistograms(kPDGK0, fK0Radii, f2dK0Radii, fK0RadiiVsBeta, tParticle);
+      MapAndFillRadiiHistograms(kPDGK0, fK0Radii, f2dK0Radii, fK0RadiiVsBeta, f3dK0Radii, tParticle);
     }
 
   }
@@ -1938,6 +1950,7 @@ void ThermEventsCollection::SaveAllPairFractionHistograms(TString aSaveFileLocat
   fProtonRadiiVsBeta->Write();
   fAProtonRadiiVsBeta->Write();
   f3dProtonRadii->Write();
+  f3dAProtonRadii->Write();
 
   fLamRadii->Write();
   fALamRadii->Write();
@@ -1945,6 +1958,8 @@ void ThermEventsCollection::SaveAllPairFractionHistograms(TString aSaveFileLocat
   f2dALamRadii->Write();
   fLamRadiiVsBeta->Write();
   fALamRadiiVsBeta->Write();
+  f3dLamRadii->Write();
+  f3dALamRadii->Write();
 
   fKchPRadii->Write();
   fKchMRadii->Write();
@@ -1952,10 +1967,13 @@ void ThermEventsCollection::SaveAllPairFractionHistograms(TString aSaveFileLocat
   f2dKchMRadii->Write();
   fKchPRadiiVsBeta->Write();
   fKchMRadiiVsBeta->Write();
+  f3dKchPRadii->Write();
+  f3dKchMRadii->Write();
 
   fK0Radii->Write();
   f2dK0Radii->Write();
   fK0RadiiVsBeta->Write();
+  f3dK0Radii->Write();
 
   tFile->Close();
 }

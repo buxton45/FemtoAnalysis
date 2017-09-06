@@ -269,6 +269,7 @@ private:
   TH2* fProtonRadiiVsBeta;
   TH2* fAProtonRadiiVsBeta;
   TH3* f3dProtonRadii;
+  TH3* f3dAProtonRadii;
 
   TH1* fLamRadii;
   TH1* fALamRadii;
@@ -276,6 +277,8 @@ private:
   TH2* f2dALamRadii;
   TH2* fLamRadiiVsBeta;
   TH2* fALamRadiiVsBeta;
+  TH3* f3dLamRadii;
+  TH3* f3dALamRadii;
 
   TH1* fKchPRadii;
   TH1* fKchMRadii;
@@ -283,10 +286,13 @@ private:
   TH2* f2dKchMRadii;
   TH2* fKchPRadiiVsBeta;
   TH2* fKchMRadiiVsBeta;
+  TH3* f3dKchPRadii;
+  TH3* f3dKchMRadii;
 
   TH1* fK0Radii;
   TH2* f2dK0Radii;
   TH2* fK0RadiiVsBeta;
+  TH3* f3dK0Radii;
 
 #ifdef __ROOT__
   ClassDef(ThermEventsCollection, 1)

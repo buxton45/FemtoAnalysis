@@ -342,7 +342,7 @@ void ThermPairAnalysis::FillTransformMatrixV0V0(vector<ThermV0Particle> &aV01Col
 
 
 //________________________________________________________________________________________________________________
-void ThermPairAnalysis::BuildTransformMatrixParticleV0(ThermEvent aEvent, vector<ThermEvent> &aMixingEventsCollection, ParticlePDGType aParticleFatherType, ParticlePDGType aV0FatherType, TH2* aMatrix)
+void ThermPairAnalysis::BuildTransformMatrixParticleV0(ThermEvent &aEvent, vector<ThermEvent> &aMixingEventsCollection, ParticlePDGType aParticleFatherType, ParticlePDGType aV0FatherType, TH2* aMatrix)
 {
   ParticlePDGType tParticleType = fTransformInfo[0].particleType2;
   ParticlePDGType tV0Type       = fTransformInfo[0].particleType1;
@@ -370,7 +370,7 @@ void ThermPairAnalysis::BuildTransformMatrixParticleV0(ThermEvent aEvent, vector
 
 
 //________________________________________________________________________________________________________________
-void ThermPairAnalysis::BuildTransformMatrixV0V0(ThermEvent aEvent, vector<ThermEvent> &aMixingEventsCollection, ParticlePDGType aV01FatherType, ParticlePDGType aV02FatherType, TH2* aMatrix)
+void ThermPairAnalysis::BuildTransformMatrixV0V0(ThermEvent &aEvent, vector<ThermEvent> &aMixingEventsCollection, ParticlePDGType aV01FatherType, ParticlePDGType aV02FatherType, TH2* aMatrix)
 {
   ParticlePDGType tV01Type = fTransformInfo[0].particleType1;
   ParticlePDGType tV02Type = fTransformInfo[0].particleType2;
@@ -396,7 +396,7 @@ void ThermPairAnalysis::BuildTransformMatrixV0V0(ThermEvent aEvent, vector<Therm
 }
 
 //________________________________________________________________________________________________________________
-void ThermPairAnalysis::BuildAllTransformMatrices(ThermEvent aEvent, vector<ThermEvent> &aMixingEventsCollection)
+void ThermPairAnalysis::BuildAllTransformMatrices(ThermEvent &aEvent, vector<ThermEvent> &aMixingEventsCollection)
 {
   bool bIsV0V0 = false;
   if(fTransformInfo[0].particleType2==kPDGK0 || fTransformInfo[0].particleType2==kPDGLam || fTransformInfo[0].particleType2==kPDGALam) bIsV0V0=true;
@@ -607,7 +607,7 @@ void ThermPairAnalysis::MapAndFillPairFractionHistogramV0V0(TH1* aHistogram, int
 
 
 //________________________________________________________________________________________________________________
-void ThermPairAnalysis::BuildPairFractionHistogramsParticleV0(ThermEvent aEvent, double aMaxPrimaryDecayLength)
+void ThermPairAnalysis::BuildPairFractionHistogramsParticleV0(ThermEvent &aEvent, double aMaxPrimaryDecayLength)
 {
   ParticlePDGType tParticleType = fTransformInfo[0].particleType2;
   ParticlePDGType tV0Type       = fTransformInfo[0].particleType1;
@@ -647,7 +647,7 @@ void ThermPairAnalysis::BuildPairFractionHistogramsParticleV0(ThermEvent aEvent,
 }
 
 //________________________________________________________________________________________________________________
-void ThermPairAnalysis::BuildPairFractionHistogramsV0V0(ThermEvent aEvent, double aMaxPrimaryDecayLength)
+void ThermPairAnalysis::BuildPairFractionHistogramsV0V0(ThermEvent &aEvent, double aMaxPrimaryDecayLength)
 {
   ParticlePDGType tV01Type = fTransformInfo[0].particleType1;
   ParticlePDGType tV02Type = fTransformInfo[0].particleType2;

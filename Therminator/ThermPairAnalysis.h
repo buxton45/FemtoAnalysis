@@ -38,9 +38,9 @@ public:
   void FillTransformMatrixParticleV0(vector<ThermParticle> &aParticleCollection, vector<ThermV0Particle> &aV0Collection, ParticlePDGType aParticleFatherType, ParticlePDGType aV0FatherType, TH2* aMatrix);
   void FillTransformMatrixV0V0(vector<ThermV0Particle> &aV01Collection, vector<ThermV0Particle> &aV02Collection, ParticlePDGType aV01FatherType, ParticlePDGType aV02FatherType, TH2* aMatrix);
 
-  void BuildTransformMatrixParticleV0(ThermEvent aEvent, vector<ThermEvent> &aMixingEventsCollection, ParticlePDGType aParticleFatherType, ParticlePDGType aV0FatherType, TH2* aMatrix);
-  void BuildTransformMatrixV0V0(ThermEvent aEvent, vector<ThermEvent> &aMixingEventsCollection, ParticlePDGType aV01FatherType, ParticlePDGType aV02FatherType, TH2* aMatrix);
-  void BuildAllTransformMatrices(ThermEvent aEvent, vector<ThermEvent> &aMixingEventsCollection);
+  void BuildTransformMatrixParticleV0(ThermEvent &aEvent, vector<ThermEvent> &aMixingEventsCollection, ParticlePDGType aParticleFatherType, ParticlePDGType aV0FatherType, TH2* aMatrix);
+  void BuildTransformMatrixV0V0(ThermEvent &aEvent, vector<ThermEvent> &aMixingEventsCollection, ParticlePDGType aV01FatherType, ParticlePDGType aV02FatherType, TH2* aMatrix);
+  void BuildAllTransformMatrices(ThermEvent &aEvent, vector<ThermEvent> &aMixingEventsCollection);
   void SaveAllTransformMatrices(TFile *aFile);
 
 
@@ -58,8 +58,8 @@ public:
   static void MapAndFillPairFractionHistogramV0V0(TH1* aHistogram, int aV01FatherType, int aV02FatherType, double aMaxPrimaryDecayLength=-1., double tWeight=1.);
 
 
-  void BuildPairFractionHistogramsParticleV0(ThermEvent aEvent, double aMaxPrimaryDecayLength=-1.);
-  void BuildPairFractionHistogramsV0V0(ThermEvent aEvent, double aMaxPrimaryDecayLength=-1.);
+  void BuildPairFractionHistogramsParticleV0(ThermEvent &aEvent, double aMaxPrimaryDecayLength=-1.);
+  void BuildPairFractionHistogramsV0V0(ThermEvent &aEvent, double aMaxPrimaryDecayLength=-1.);
 
   void SavePairFractionsAndParentsMatrix(TFile *aFile);
 

@@ -25,19 +25,21 @@ int main(int argc, char **argv)
   double tMaxPrimaryDecayLength = 3.01; 
 
   //-----------------------------------------
-  TString tEventsDirectory, tMatricesSaveFileName, tPairFractionSaveName;
+  TString tEventsDirectory, tMatricesSaveFileName, tPairFractionSaveName, tSingleParticlesSaveName;
 
   if(bRunFull)
   {
     tEventsDirectory = "/home/jesse/Analysis/Therminator2/events/lhyqid3v_LHCPbPb_2760_b2/";
     tMatricesSaveFileName = "/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b2/TransformMatricesv2.root";
     tPairFractionSaveName = "/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b2/PairFractionsv2.root";
+    tSingleParticlesSaveName = "/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b2/SingleParticleAnalysesv2.root";
   }
   else
   {
     tEventsDirectory = "/home/jesse/Analysis/Therminator2/events/TestEvents/";
     tMatricesSaveFileName = "/home/jesse/Analysis/ReducedTherminator2Events/test/testTransformMatricesv2.root";
     tPairFractionSaveName = "/home/jesse/Analysis/ReducedTherminator2Events/test/testPairFractionsv2.root";
+    tSingleParticlesSaveName = "/home/jesse/Analysis/ReducedTherminator2Events/test/testSingleParticleAnalysesv2.root";
   }
   //-----------------------------------------
 

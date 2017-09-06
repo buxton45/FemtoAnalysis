@@ -8,7 +8,7 @@ CFLAGS = $(shell root-config --cflags) -Wall -std=c++11 -I${ANALYZE_DIR} -I${UTI
 
 RM = rm
 
-MY_LIBS = $(addprefix build/, Types.o PIDMapping.o ThermCommon.o ThermParticle.o ThermV0Particle.o ThermEvent.o ThermPairAnalysis.o ThermEventsCollection.o SimpleThermAnalysis.o)
+MY_LIBS = $(addprefix build/, Types.o PIDMapping.o ThermCommon.o ThermParticle.o ThermV0Particle.o ThermEvent.o ThermPairAnalysis.o ThermSingleParticleAnalysis.o ThermEventsCollection.o SimpleThermAnalysis.o)
 
 BINARIES = runTest runTest2 runDrawTransforms runDrawPairFractions runDrawParentsMatrices runBuildLambdaValuesFromParentMatrices runProject3dRadii
 
