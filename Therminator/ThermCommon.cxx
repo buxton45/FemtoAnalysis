@@ -433,7 +433,7 @@ void DrawCondensedParentsMatrix(AnalysisType aAnType, TPad* aPad, TH2D* aMatrix,
   aPad->SetRightMargin(0.15);
   aPad->SetTopMargin(0.075);
   aPad->SetLogz(aSetLogZ);
-  gStyle->SetOptStat(0);
+//  gStyle->SetOptStat(0);
 
   TString tReturnName = TString("Parents Matrix: ") + TString(cAnalysisRootTags[aAnType]);
   TH2D* tCondensedMatrix = BuildCondensedParentsMatrix(aMatrix, tReturnName);
@@ -479,7 +479,6 @@ TH2D* BuildCondensed2dRadiiVsBeta(TH2D* a2dHist, TString aReturnName)
   bool bSkipX=false;
 
   int tXbinTracker = 0;
-  int tYbinTracker = 0;
 
   for(int i=1; i<=a2dHist->GetNbinsX(); i++)
   {
@@ -502,7 +501,6 @@ TH2D* BuildCondensed2dRadiiVsBeta(TH2D* a2dHist, TString aReturnName)
   tCondensed->GetXaxis()->SetRange(1,tXbinTracker);
   tCondensed->GetXaxis()->SetLabelSize(0.02);
 
-  tCondensed->GetYaxis()->SetRange(1,tYbinTracker);
   tCondensed->GetYaxis()->SetLabelSize(0.02);
 
   tCondensed->LabelsOption("v", "X");
@@ -519,7 +517,7 @@ void DrawCondensed2dRadiiVsPid(ParticlePDGType aType, TPad* aPad, TH2D* a2dHist,
   aPad->SetRightMargin(0.15);
   aPad->SetTopMargin(0.075);
   aPad->SetLogz(aSetLogZ);
-  gStyle->SetOptStat(0);
+//  gStyle->SetOptStat(0);
 
   TString tReturnName = TString("Radii Vs PID: ") + TString(GetPDGRootName(aType));
   SetParentPidBinLabels(a2dHist->GetXaxis(), aType);
@@ -531,6 +529,78 @@ void DrawCondensed2dRadiiVsPid(ParticlePDGType aType, TPad* aPad, TH2D* a2dHist,
   {
     TString tSaveName = aSaveName;
     if(aSetLogZ) tSaveName += TString("_LogZ");
+    tSaveName += TString(".pdf");
+
+    aPad->SaveAs(tSaveName);
+  }
+
+}
+
+
+//________________________________________________________________________________________________________________
+//****************************************************************************************************************
+//________________________________________________________________________________________________________________
+
+//________________________________________________________________________________________________________________
+TH1D* BuildCondensed1dParentsHistogram(TH1D* a1dHist, TString aReturnName)
+{
+  TH1D* tCondensed = new TH1D(aReturnName, aReturnName, 
+                              a1dHist->GetNbinsX(), a1dHist->GetXaxis()->GetBinLowEdge(1), a1dHist->GetXaxis()->GetBinUpEdge(a1dHist->GetNbinsX()));
+  //-------------------------------------------------
+  vector<int> tColumnsToSkip(0);
+
+  for(int i=1; i<=a1dHist->GetNbinsX(); i++)
+  {
+    if(a1dHist->GetBinContent(i)==0.) tColumnsToSkip.push_back(i);
+  }
+
+  //-------------------------------------------------
+
+  bool bSkipX=false;
+
+  int tXbinTracker = 0;
+
+  for(int i=1; i<=a1dHist->GetNbinsX(); i++)
+  {
+    bSkipX=false;
+    for(int a=0; a<(int)tColumnsToSkip.size(); a++)
+    {
+      if(i==tColumnsToSkip[a]) bSkipX=true;
+    }
+    if(!bSkipX)
+    {
+      tXbinTracker++;
+      tCondensed->SetBinContent(tXbinTracker, a1dHist->GetBinContent(i));
+      tCondensed->GetXaxis()->SetBinLabel(tXbinTracker, a1dHist->GetXaxis()->GetBinLabel(i));
+    }
+  }
+
+  tCondensed->GetXaxis()->SetRange(1,tXbinTracker);
+  tCondensed->GetXaxis()->SetLabelSize(0.02);
+
+  tCondensed->GetYaxis()->SetLabelSize(0.02);
+
+  tCondensed->LabelsOption("v", "X");
+
+  return tCondensed;
+}
+
+
+//________________________________________________________________________________________________________________
+void DrawCondensed1dParentsHistogram(ParticlePDGType aType, TPad* aPad, TH1D* a1dHist, bool aSave, TString aSaveName)
+{
+  aPad->cd();
+//  gStyle->SetOptStat(0);
+
+  TString tReturnName = TString::Format("%s Parents", GetPDGRootName(aType));
+  SetParentPidBinLabels(a1dHist->GetXaxis(), aType);
+  TH1D* tCondensed = BuildCondensed1dParentsHistogram(a1dHist, tReturnName);
+
+  tCondensed->Draw();
+
+  if(aSave)
+  {
+    TString tSaveName = aSaveName;
     tSaveName += TString(".pdf");
 
     aPad->SaveAs(tSaveName);

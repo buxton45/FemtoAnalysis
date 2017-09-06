@@ -59,8 +59,14 @@ extern TH2D* BuildCondensedParentsMatrix(TH2D* aMatrix, TString aReturnName);
 extern void DrawCondensedParentsMatrix(AnalysisType aAnType, TPad* aPad, TH2D* aMatrix, bool aSetLogZ=false, bool aSave=false, TString aSaveName="");
 
 //-----------------------------------------------------------
+
 extern TH2D* BuildCondensed2dRadiiVsBeta(TH2D* a2dHist, TString aReturnName);
-extern void DrawCondensed2dRadiiVsPid(ParticlePDGType aType, TPad* aPad, TH2D* a2dHist, bool aSetLogZ=false, bool aSave=false, TString aSaveName="");
+extern void DrawCondensed2dRadiiVsPid(ParticlePDGType aType, TPad* aPad, TH2D* a2dHist, bool aSetLogZ=true, bool aSave=false, TString aSaveName="");
+
+//-----------------------------------------------------------
+
+extern TH1D* BuildCondensed1dParentsHistogram(TH1D* a1dHist, TString aReturnName);
+extern void DrawCondensed1dParentsHistogram(ParticlePDGType aType, TPad* aPad, TH1D* a1dHist, bool aSave=false, TString aSaveName="");
 
 //-----------------------------------------------------------
 
