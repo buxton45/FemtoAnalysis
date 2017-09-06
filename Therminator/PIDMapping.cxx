@@ -62,6 +62,19 @@ TString GetParticleNamev2(int aPID)
 }
 
 //________________________________________________________________________________________________________________
+int GetParticlePid(TString aName)
+{
+  for(unsigned int i=0; i<cPidInfo.size(); i++)
+  {
+    if(aName.EqualTo(cPidInfo[i].name)) return cPidInfo[i].pdgType;
+  }
+
+  assert(0);
+  return 0;
+}
+
+
+//________________________________________________________________________________________________________________
 double GetParticleDecayLength(int aPID)
 {
   for(unsigned int i=0; i<cPidInfo.size(); i++)
@@ -72,6 +85,21 @@ double GetParticleDecayLength(int aPID)
   assert(0);
   return 0;
 }
+
+//________________________________________________________________________________________________________________
+double GetParticleDecayLength(TString aName)
+{
+  for(unsigned int i=0; i<cPidInfo.size(); i++)
+  {
+//cout << "aName = " << aName << endl;
+//cout << "cPidInfo[i].name = " << cPidInfo[i].name << endl << endl;
+    if(aName.EqualTo(cPidInfo[i].name)) return cPidInfo[i].decayLength;
+  }
+
+  assert(0);
+  return 0;
+}
+
 
 
 //________________________________________________________________________________________________________________

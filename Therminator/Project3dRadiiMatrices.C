@@ -30,6 +30,7 @@ void DrawProject3dMatrixTo1d(TPad* aPad, TH3D* a3dMatrix)
 cout << "t1dHisto->GetMean() = " << t1dHisto->GetMean() << endl;
 }
 
+
 //________________________________________________________________________________________________________________
 void Draw2dRadiiVsBeta(TPad* aPad, TH3D* a3dMatrix, bool aSetLogZ=true)
 {
@@ -77,6 +78,76 @@ void Draw2dRadiiVsPid(TPad* aPad, TH3D* a3dMatrix, bool aSetLogZ=true)
 
   t2dHisto->DrawCopy("colz");
 }
+
+//________________________________________________________________________________________________________________
+TH2D* GetProject3dMatrixTo2dRadiiVsPidPrimaryOnly(TH3D* a3dMatrix, ParticlePDGType aType, double aMaxDecayLength=-1., bool aGetCondensed=true)
+{
+  TH3D* t3dMatrix = (TH3D*)a3dMatrix->Clone();
+  TH2D* t2dRadiiVsPid = Get2dRadiiVsPid(t3dMatrix);
+  SetParentPidBinLabels(t2dRadiiVsPid->GetXaxis(), aType);
+
+  TString tNamePart = TString::Format("%s2dRadiiVsPidPrimOnly_%0.3f", GetPDGRootName(aType), aMaxDecayLength);
+  TH2D* tPartiallyCondensed = BuildCondensed2dRadiiVsBeta(t2dRadiiVsPid, tNamePart);
+  for(int i=1; i<=tPartiallyCondensed->GetNbinsX(); i++)
+  {
+    TString tParentName = tPartiallyCondensed->GetXaxis()->GetBinLabel(i);
+    if(tParentName.IsNull() || aMaxDecayLength<0.) continue;
+    if(GetParticleDecayLength(tParentName) > aMaxDecayLength &&
+       GetParticlePid(tParentName) != aType)
+    {
+      for(int j=1; j<=tPartiallyCondensed->GetNbinsY(); j++)
+      {
+        tPartiallyCondensed->SetBinContent(i,j,0.);
+      }
+    }
+    
+  }
+
+  if(aGetCondensed)
+  {
+    TString tName = TString::Format("%sCondensed2dRadiiVsPidPrimOnly_%0.3f", GetPDGRootName(aType), aMaxDecayLength);
+    TH2D* tCondensed = BuildCondensed2dRadiiVsBeta(tPartiallyCondensed, tName);
+
+    return tCondensed;
+  }
+  else return tPartiallyCondensed;
+}
+
+//________________________________________________________________________________________________________________
+void DrawProject3dMatrixTo2dRadiiVsPidPrimaryOnly(TPad* aPad, TH3D* a3dMatrix, ParticlePDGType aType, double aMaxDecayLength=-1., bool aDrawCondensed=false, bool aSetLogZ=true)
+{
+  aPad->cd();
+  aPad->SetLogz(aSetLogZ);
+  gStyle->SetOptStat(1111);
+
+  TH2D* t2dRadiiVsPid = GetProject3dMatrixTo2dRadiiVsPidPrimaryOnly(a3dMatrix, aType, aMaxDecayLength, aDrawCondensed);
+
+  t2dRadiiVsPid->GetXaxis()->SetTitle("Parent");
+  t2dRadiiVsPid->GetYaxis()->SetTitle("Radius (fm)");
+
+  t2dRadiiVsPid->DrawCopy("colz");
+}
+
+//________________________________________________________________________________________________________________
+void DrawProject3dMatrixTo1dPrimaryOnly(TPad* aPad, TH3D* a3dMatrix, ParticlePDGType aType, double aMaxDecayLength=-1.)
+{
+  aPad->cd();
+  gStyle->SetOptStat(1111);
+
+  TH2D* tCondensed = GetProject3dMatrixTo2dRadiiVsPidPrimaryOnly(a3dMatrix, aType, aMaxDecayLength);
+
+  TString tName2 = TString::Format("%sRadiiPrimOnly_%0.3f", GetPDGRootName(aType), aMaxDecayLength);
+  TH1D* tRadii = tCondensed->ProjectionY(tName2.Data(), 1, tCondensed->GetNbinsX());
+    tRadii->SetName(tName2);
+    tRadii->SetTitle(tName2);
+
+  tRadii->GetXaxis()->SetTitle("Radius (fm)");
+  tRadii->GetYaxis()->SetTitle("Counts");
+
+  tRadii->DrawCopy();
+
+}
+
 
 
 //________________________________________________________________________________________________________________
@@ -126,7 +197,7 @@ vector<int> tMostAbundantParents_K0 {311, 323, 313, 333};
 vector<int> tMostAbundantParents_Prot {3122, 2212, 2224, 2214, 3222, 2114};
 vector<int> tMostAbundantParents_AProt {-3122, -2212, -2224, -2214, -3222, -2114};
 //________________________________________________________________________________________________________________
-void DrawAll(TString aFileLocationSingleParticleAnalyses, ParticlePDGType aType)
+void DrawAll(TString aFileLocationSingleParticleAnalyses, ParticlePDGType aType, double aMaxDecayLength=-1)
 {
   gStyle->SetOptStat(1111);
 
@@ -136,6 +207,15 @@ void DrawAll(TString aFileLocationSingleParticleAnalyses, ParticlePDGType aType)
   TCanvas* tCan_1dRadii = new TCanvas(TString::Format("tCan_%sRadii", GetPDGRootName(aType)),
                                       TString::Format("tCan_%sRadii", GetPDGRootName(aType)));
   DrawProject3dMatrixTo1d((TPad*)tCan_1dRadii, t3dRadii);
+
+
+  TCanvas* tCan_1dRadiiPrimOnly = new TCanvas(TString::Format("tCan_%sRadiiPrimOnly", GetPDGRootName(aType)),
+                                              TString::Format("tCan_%sRadiiPrimOnly", GetPDGRootName(aType)));
+  DrawProject3dMatrixTo1dPrimaryOnly((TPad*)tCan_1dRadiiPrimOnly, t3dRadii, aType, aMaxDecayLength);
+
+  TCanvas* tCan_2dRadiiVsPidPrimOnly = new TCanvas(TString::Format("tCan_%s2dRadiiVsPidPrimOnly", GetPDGRootName(aType)),
+                                                   TString::Format("tCan_%s2dRadiiVsPidPrimOnly", GetPDGRootName(aType)));
+  DrawProject3dMatrixTo2dRadiiVsPidPrimaryOnly((TPad*)tCan_2dRadiiVsPidPrimOnly, t3dRadii, aType, aMaxDecayLength);
 
 
   TCanvas* tCan_2dRadiiVsBeta = new TCanvas(TString::Format("tCan_%s2dRadiiVsBeta", GetPDGRootName(aType)),
@@ -150,7 +230,7 @@ void DrawAll(TString aFileLocationSingleParticleAnalyses, ParticlePDGType aType)
   TCanvas* tCan_Condensed2dRadiiVsPid = new TCanvas(TString::Format("tCan_%sCondensed2dRadiiVsPid", GetPDGRootName(aType)),
                                                     TString::Format("tCan_%sCondensed2dRadiiVsPid", GetPDGRootName(aType)));
   TH2D* tCondensedRadiiVsPid = Get2dRadiiVsPid(t3dRadii);
-  DrawCondensed2dRadiiVsPid(kPDGProt, (TPad*)tCan_Condensed2dRadiiVsPid, tCondensedRadiiVsPid);
+  DrawCondensed2dRadiiVsPid(aType, (TPad*)tCan_Condensed2dRadiiVsPid, tCondensedRadiiVsPid);
 
   vector<int> tMostAbundantParents;
   int tNx = 2;
@@ -225,7 +305,12 @@ int main(int argc, char **argv)
   TString tDirectory = "~/Analysis/ReducedTherminator2Events/test/";
   TString tFileLocationSingleParticleAnalyses = tDirectory + "testSingleParticleAnalysesv2.root";
 
-  DrawAll(tFileLocationSingleParticleAnalyses, kPDGProt);
+//  double tMaxDecayLength = -1.;
+//  double tMaxDecayLength = 3.0;
+  double tMaxDecayLength = 5.0;
+//  double tMaxDecayLength = 5.5;
+
+  DrawAll(tFileLocationSingleParticleAnalyses, kPDGLam, tMaxDecayLength);
 
 //-------------------------------------------------------------------------------
   theApp->Run(kTRUE); //Run the TApp to pause the code.

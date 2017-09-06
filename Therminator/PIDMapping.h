@@ -45,7 +45,10 @@ extern PidInfo GetParticlePidInfo(int aPID);
 extern TString GetParticleName(int aPID);
 extern TString GetParticleNamev2(int aPID);
 
+extern int GetParticlePid(TString aName);
+
 extern double GetParticleDecayLength(int aPID);
+extern double GetParticleDecayLength(TString aName);
 
 extern bool IncludeAsPrimary(int aPID1, int aPID2);
 extern bool IncludeAsPrimary(int aPID1, int aPID2, double aMaxDecayLength);
