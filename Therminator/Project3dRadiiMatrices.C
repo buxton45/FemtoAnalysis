@@ -197,7 +197,7 @@ vector<int> tMostAbundantParents_K0 {311, 323, 313, 333};
 vector<int> tMostAbundantParents_Prot {3122, 2212, 2224, 2214, 3222, 2114};
 vector<int> tMostAbundantParents_AProt {-3122, -2212, -2224, -2214, -3222, -2114};
 //________________________________________________________________________________________________________________
-void DrawAll(TString aFileLocationSingleParticleAnalyses, ParticlePDGType aType, double aMaxDecayLength=-1)
+void DrawAll(TString aFileLocationSingleParticleAnalyses, ParticlePDGType aType, double aMaxDecayLength=-1, bool aSave=false)
 {
   gStyle->SetOptStat(1111);
 
@@ -209,12 +209,12 @@ void DrawAll(TString aFileLocationSingleParticleAnalyses, ParticlePDGType aType,
   DrawProject3dMatrixTo1d((TPad*)tCan_1dRadii, t3dRadii);
 
 
-  TCanvas* tCan_1dRadiiPrimOnly = new TCanvas(TString::Format("tCan_%sRadiiPrimOnly", GetPDGRootName(aType)),
-                                              TString::Format("tCan_%sRadiiPrimOnly", GetPDGRootName(aType)));
+  TCanvas* tCan_1dRadiiPrimOnly = new TCanvas(TString::Format("tCan_%sRadiiPrimOnly_MaxDecay%0.2f", GetPDGRootName(aType), aMaxDecayLength),
+                                              TString::Format("tCan_%sRadiiPrimOnly_MaxDecay%0.2f", GetPDGRootName(aType), aMaxDecayLength));
   DrawProject3dMatrixTo1dPrimaryOnly((TPad*)tCan_1dRadiiPrimOnly, t3dRadii, aType, aMaxDecayLength);
 
-  TCanvas* tCan_2dRadiiVsPidPrimOnly = new TCanvas(TString::Format("tCan_%s2dRadiiVsPidPrimOnly", GetPDGRootName(aType)),
-                                                   TString::Format("tCan_%s2dRadiiVsPidPrimOnly", GetPDGRootName(aType)));
+  TCanvas* tCan_2dRadiiVsPidPrimOnly = new TCanvas(TString::Format("tCan_%s2dRadiiVsPidPrimOnly_MaxDecay%0.2f", GetPDGRootName(aType), aMaxDecayLength),
+                                                   TString::Format("tCan_%s2dRadiiVsPidPrimOnly_MaxDecay%0.2f", GetPDGRootName(aType), aMaxDecayLength));
   DrawProject3dMatrixTo2dRadiiVsPidPrimaryOnly((TPad*)tCan_2dRadiiVsPidPrimOnly, t3dRadii, aType, aMaxDecayLength);
 
 
@@ -222,10 +222,11 @@ void DrawAll(TString aFileLocationSingleParticleAnalyses, ParticlePDGType aType,
                                             TString::Format("tCan_%s2dRadiiVsBeta", GetPDGRootName(aType)));
   Draw2dRadiiVsBeta((TPad*)tCan_2dRadiiVsBeta, t3dRadii);
 
-
+/*
   TCanvas* tCan_2dRadiiVsPid = new TCanvas(TString::Format("tCan_%s2dRadiiVsPid", GetPDGRootName(aType)),
                                            TString::Format("tCan_%s2dRadiiVsPid", GetPDGRootName(aType)));
   Draw2dRadiiVsPid((TPad*)tCan_2dRadiiVsPid, t3dRadii);
+*/
 
   TCanvas* tCan_Condensed2dRadiiVsPid = new TCanvas(TString::Format("tCan_%sCondensed2dRadiiVsPid", GetPDGRootName(aType)),
                                                     TString::Format("tCan_%sCondensed2dRadiiVsPid", GetPDGRootName(aType)));
@@ -235,40 +236,48 @@ void DrawAll(TString aFileLocationSingleParticleAnalyses, ParticlePDGType aType,
   vector<int> tMostAbundantParents;
   int tNx = 2;
   int tNy = -1;
+  TString tSubDirectory;
   switch(aType) {
   case kPDGLam:
     tMostAbundantParents = tMostAbundantParents_Lam;
     tNy = 4;
+    tSubDirectory = "Lam/";
     break;
 
   case kPDGALam:
     tMostAbundantParents = tMostAbundantParents_ALam;
     tNy = 4;
+    tSubDirectory = "ALam/";
     break;
 
   case kPDGKchP:
     tMostAbundantParents = tMostAbundantParents_KchP;
     tNy = 2;
+    tSubDirectory = "KchP/";
     break;
 
   case kPDGKchM:
     tMostAbundantParents = tMostAbundantParents_KchM;
     tNy = 2;
+    tSubDirectory = "KchM/";
     break;
 
   case kPDGK0:
     tMostAbundantParents = tMostAbundantParents_K0;
     tNy = 2;
+    tSubDirectory = "K0/";
     break;
 
   case kPDGProt:
     tMostAbundantParents = tMostAbundantParents_Prot;
     tNy = 3;
+    tSubDirectory = "Prot/";
     break;
 
   case kPDGAntiProt:
     tMostAbundantParents = tMostAbundantParents_AProt;
     tNy = 3;
+    tSubDirectory = "AProt/";
     break;
 
   default:
@@ -276,7 +285,8 @@ void DrawAll(TString aFileLocationSingleParticleAnalyses, ParticlePDGType aType,
     assert(0);
   }
 
-  TCanvas *tCan_RadiiForMultipleParents = new TCanvas("tCan_RadiiForMultipleParents", "tCan_RadiiForMultipleParents");
+  TCanvas* tCan_RadiiForMultipleParents = new TCanvas(TString::Format("tCan_%sRadiiForMultipleParents", GetPDGRootName(aType)), 
+                                                      TString::Format("tCan_%sRadiiForMultipleParents", GetPDGRootName(aType)));
   DrawRadiiForMultipleParents(tCan_RadiiForMultipleParents, t3dRadii, aType, tMostAbundantParents, tNx, tNy);
 
   TString tNameParents = TString::Format("%sParents", GetPDGRootName(aType));
@@ -284,6 +294,22 @@ void DrawAll(TString aFileLocationSingleParticleAnalyses, ParticlePDGType aType,
   TCanvas* tCan_Parents = new TCanvas(TString::Format("tCan_%sParents", GetPDGRootName(aType)), 
                                       TString::Format("tCan_%sParents", GetPDGRootName(aType)));
   DrawCondensed1dParentsHistogram(aType, (TPad*)tCan_Parents, tParents);
+
+  //---------------------------------------
+  if(aSave)
+  {
+    TString tSaveDirectory = "~/Analysis/Presentations/GroupMeetings/20170907/Figures/";
+    TString tFileType = ".eps";
+//    TString tFileType = ".pdf";
+
+    tCan_1dRadii->SaveAs(tSaveDirectory + tSubDirectory + TString(tCan_1dRadii->GetName()) + tFileType);
+    tCan_1dRadiiPrimOnly->SaveAs(tSaveDirectory + tSubDirectory + TString(tCan_1dRadiiPrimOnly->GetName()) + tFileType);
+    tCan_2dRadiiVsPidPrimOnly->SaveAs(tSaveDirectory + tSubDirectory + TString(tCan_2dRadiiVsPidPrimOnly->GetName()) + tFileType);
+    tCan_2dRadiiVsBeta->SaveAs(tSaveDirectory + tSubDirectory + TString(tCan_2dRadiiVsBeta->GetName()) + tFileType);
+    tCan_Condensed2dRadiiVsPid->SaveAs(tSaveDirectory + tSubDirectory + TString(tCan_Condensed2dRadiiVsPid->GetName()) + tFileType);
+    tCan_RadiiForMultipleParents->SaveAs(tSaveDirectory + tSubDirectory + TString(tCan_RadiiForMultipleParents->GetName()) + tFileType);
+    tCan_Parents->SaveAs(tSaveDirectory + tSubDirectory + TString(tCan_Parents->GetName()) + tFileType);
+  }
 }
 //________________________________________________________________________________________________________________
 //****************************************************************************************************************
@@ -297,20 +323,28 @@ int main(int argc, char **argv)
   //the program ends and closes everything
 //-----------------------------------------------------------------------------
 
-/*
-  TString tDirectory = "~/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b2/";
-  TString tFileLocationPairFractions = tDirectory + "PairFractions.root";
-*/
 
+  TString tDirectory = "~/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b2/";
+  TString tFileLocationSingleParticleAnalyses = tDirectory + "SingleParticleAnalysesv2.root";
+
+/*
   TString tDirectory = "~/Analysis/ReducedTherminator2Events/test/";
   TString tFileLocationSingleParticleAnalyses = tDirectory + "testSingleParticleAnalysesv2.root";
+*/
+  ParticlePDGType tType = kPDGLam;
+  bool bSave = false;
 
 //  double tMaxDecayLength = -1.;
 //  double tMaxDecayLength = 3.0;
   double tMaxDecayLength = 5.0;
 //  double tMaxDecayLength = 5.5;
 
-  DrawAll(tFileLocationSingleParticleAnalyses, kPDGLam, tMaxDecayLength);
+  DrawAll(tFileLocationSingleParticleAnalyses, kPDGLam, tMaxDecayLength, bSave);
+
+/*
+  vector<double> tMaxDecayLengthVec {-1., 3.0, 5.0, 5.5};
+  for(unsigned int i=0; i<tMaxDecayLengthVec.size(); i++) DrawAll(tFileLocationSingleParticleAnalyses, tType, tMaxDecayLengthVec[i], bSave);
+*/
 
 //-------------------------------------------------------------------------------
   theApp->Run(kTRUE); //Run the TApp to pause the code.

@@ -1981,6 +1981,32 @@ td1dVec GeneralFitter::GetCoulombResidualCorrelation(AnalysisType aResidualType,
   return tReturnResCf;
 }
 
+//________________________________________________________________________________________________________________
+bool GeneralFitter::AreParamsSame(double *aCurrent, double *aNew, int aNEntries)
+{
+  bool tAreSame = true;
+  for(int i=0; i<aNEntries; i++)
+  {
+    if(abs(aCurrent[i]-aNew[i]) > std::numeric_limits< double >::min()) tAreSame = false;
+  }
+
+  if(!tAreSame)
+  {
+    for(int i=0; i<aNEntries; i++) aCurrent[i] = aNew[i];
+  }
+
+  return tAreSame;
+}
+
+//________________________________________________________________________________________________________________
+double* GeneralFitter::AdjustLambdaParam(double *aParamSet, double aNewLambda, int aNEntries)
+{
+  double *tReturnArray = new double[aNEntries];
+  tReturnArray[0] = aNewLambda;
+  for(int i=1; i<aNEntries; i++) tReturnArray[i] = aParamSet[i];
+
+  return tReturnArray;
+}
 
 
 //________________________________________________________________________________________________________________

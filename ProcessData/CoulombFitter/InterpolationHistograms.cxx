@@ -48,7 +48,7 @@ InterpolationHistograms::InterpolationHistograms(TString aSaveFileName, Analysis
   fSession = fWaveFunction->GetSession();
 
   fWaveFunction->SetCurrentAnalysisType(fAnalysisType);
-  fSaveFileName += TString(cAnalysisBaseTags[fAnalysisType]);
+  fSaveFileName += TString::Format("_%s", cAnalysisBaseTags[fAnalysisType]);
 }
 
 

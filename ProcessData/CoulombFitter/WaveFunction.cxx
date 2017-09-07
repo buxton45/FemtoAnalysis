@@ -33,6 +33,7 @@ WaveFunction::~WaveFunction()
 //________________________________________________________________________
 void WaveFunction::SetCurrentAnalysisType(AnalysisType aAnalysisType) 
 {
+/*
   fCurrentAnalysisType = aAnalysisType;
 
 //  assert(fCurrentAnalysisType == kXiKchP || fCurrentAnalysisType == kAXiKchM || fCurrentAnalysisType == kXiKchM || fCurrentAnalysisType == kAXiKchP);
@@ -40,42 +41,66 @@ void WaveFunction::SetCurrentAnalysisType(AnalysisType aAnalysisType)
   if(fCurrentAnalysisType == kXiKchP || fCurrentAnalysisType == kAXiKchM) fCurrentBohrRadius = -gBohrRadiusXiK; //attractive
   else if(fCurrentAnalysisType == kXiKchM || fCurrentAnalysisType == kAXiKchP) fCurrentBohrRadius = gBohrRadiusXiK; //repulsive
   else fCurrentBohrRadius = 1000000000;
+*/
+  SetCurrentBohrRadius(aAnalysisType);
 }
 
 //________________________________________________________________________
 void WaveFunction::SetCurrentBohrRadius(AnalysisType aAnalysisType) 
 {
-  switch(aAnalysisType) {
+  fCurrentAnalysisType = aAnalysisType;
+
+  switch(fCurrentAnalysisType) {
   case kXiKchP:
   case kAXiKchM:
   case kResXiCKchP:
   case kResAXiCKchM:
-    fCurrentBohrRadius = -gBohrRadiusXiK;
+    fCurrentBohrRadius = -gBohrRadiusXiK;  //attractive
     break;
 
   case kXiKchM:
   case kAXiKchP:
   case kResXiCKchM:
   case kResAXiCKchP:
-    fCurrentBohrRadius = gBohrRadiusXiK;
+    fCurrentBohrRadius = gBohrRadiusXiK;  //repulsive
     break;
 
 
   case kResOmegaKchP:
   case kResAOmegaKchM:
-    fCurrentBohrRadius = -gBohrRadiusOmegaK;
+    fCurrentBohrRadius = -gBohrRadiusOmegaK;  //attractive
     break;
 
 
   case kResOmegaKchM:
   case kResAOmegaKchP:
-    fCurrentBohrRadius = gBohrRadiusOmegaK;
+    fCurrentBohrRadius = gBohrRadiusOmegaK;  //repulsive
     break;
 
+  case kResSigStPKchM:
+  case kResASigStMKchP:
+    fCurrentBohrRadius = -gBohrRadiusSigStPK; //attractive
+    break;
+
+  case kResSigStPKchP:
+  case kResASigStMKchM:
+    fCurrentBohrRadius = gBohrRadiusSigStPK; //repulsive
+    break;
+
+  case kResSigStMKchP:
+  case kResASigStPKchM:
+    fCurrentBohrRadius = -gBohrRadiusSigStMK;  //attractive
+    break;
+
+  case kResSigStMKchM:
+  case kResASigStPKchP:
+    fCurrentBohrRadius = gBohrRadiusSigStMK;  //repulsive
+    break;
 
   default:
-    cout << "ERROR: WaveFunction::SetCurrentBohrRadius: Invalid aAnalysisType = " << aAnalysisType << endl;
-    assert(0);
+    fCurrentBohrRadius = 1000000000;
+//    cout << "ERROR: WaveFunction::SetCurrentBohrRadius: Invalid aAnalysisType = " << aAnalysisType << endl;
+//    assert(0);
   }
 }
 

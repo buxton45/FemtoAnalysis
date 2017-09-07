@@ -8,7 +8,7 @@
 int main(int argc, char **argv)
 {
 
-  TString tSaveBaseName = "InterpHistsNEW";
+  TString tSaveBaseName = "InterpHists";
 
   int tNbinsKStar = 160;
   double tKStarMin = 0.;
@@ -40,7 +40,7 @@ int main(int argc, char **argv)
   double tD0Max = 10.;
 
   //---------------------------------------
-  AnalysisType tAnalysisType = kXiKchP;
+  AnalysisType tAnalysisType = kResSigStPKchM;
 
   InterpolationHistograms* myCreator = new InterpolationHistograms(tSaveBaseName,tAnalysisType);
 

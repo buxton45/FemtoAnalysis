@@ -87,6 +87,8 @@ public:
 
   td1dVec GetCoulombResidualCorrelation(AnalysisType aResidualType, double *aParentCfParams, vector<double> &aKStarBinCenters, TH2* aTransformMatrix);
 
+  bool AreParamsSame(double *aCurrent, double *aNew, int aNEntries);
+  double* AdjustLambdaParam(double *aParamSet, double aNewLambda, int aNEntries);
   void CalculateFitFunction(int &npar, double &chi2, double *par);
 
   void CalculateFakeChi2(int &npar, double &chi2, double *par);

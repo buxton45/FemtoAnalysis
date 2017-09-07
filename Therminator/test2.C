@@ -50,6 +50,7 @@ int main(int argc, char **argv)
   tSimpleThermAnalysis->SetEventsDirectory(tEventsDirectory);
   tSimpleThermAnalysis->SetPairFractionsSaveName(tPairFractionSaveName);
   tSimpleThermAnalysis->SetTransformMatricesSaveName(tMatricesSaveFileName);
+  tSimpleThermAnalysis->SetSingleParticlesSaveName(tSingleParticlesSaveName);
   if(tMaxPrimaryDecayLength > 0.) tSimpleThermAnalysis->SetMaxPrimaryDecayLength(tMaxPrimaryDecayLength);
 
   tSimpleThermAnalysis->ProcessAll();

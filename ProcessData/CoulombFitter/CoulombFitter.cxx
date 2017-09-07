@@ -24,7 +24,7 @@ double gMaxFitKStar;
 
 
 //________________________________________________________________________________________________________________
-CoulombFitter::CoulombFitter():
+CoulombFitter::CoulombFitter(double aMaxFitKStar):
   fVerbose(true),
   fTurnOffCoulomb(false),
   fInterpHistsLoaded(false),
@@ -48,7 +48,7 @@ CoulombFitter::CoulombFitter():
   fCorrectedFitVecs(0),
 
   fSimCoulombCf(nullptr),
-  fAllOfSameCoulombType(false),
+  fAllOfSameCoulombType(true),
   fCoulombType(kRepulsive),
   fWaveFunction(0),
   fBohrRadius(gBohrRadiusXiK),
@@ -73,7 +73,7 @@ CoulombFitter::CoulombFitter():
 
   fCfsToFit(0),
   fFits(0),
-  fMaxFitKStar(0.3),
+  fMaxFitKStar(aMaxFitKStar),
   fRejectOmega(false),
   fChi2(0),
   fChi2GlobalMin(1000000000),
@@ -86,8 +86,8 @@ CoulombFitter::CoulombFitter():
   fParErrors(0)
 
 {
-  int tNFitPartialAnalysis = fFitSharedAnalyses->GetFitPairAnalysis(0)->GetNFitPartialAnalysis();
-  fCorrectedFitVecs.resize(fNAnalyses, td2dVec(tNFitPartialAnalysis));
+//  int tNFitPartialAnalysis = fFitSharedAnalyses->GetFitPairAnalysis(0)->GetNFitPartialAnalysis();
+//  fCorrectedFitVecs.resize(fNAnalyses, td2dVec(tNFitPartialAnalysis));
 
   gRandom->SetSeed();
   fWaveFunction = new WaveFunction();
