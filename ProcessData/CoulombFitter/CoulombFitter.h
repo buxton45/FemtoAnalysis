@@ -73,12 +73,11 @@ public:
   virtual ~CoulombFitter();
 
   CoulombType GetCoulombType(AnalysisType aAnalysisType);
-  double GetBohrRadius(CoulombType aCoulombType);
   double GetBohrRadius(AnalysisType aAnalysisType);
-  void CheckIfAllOfSameCoulombType();
+  void SetCoulombAttributes(AnalysisType aAnalysisType);
 
   void LoadLednickyHFunctionFile(TString aFileBaseName="~/Analysis/FemtoAnalysis/ProcessData/CoulombFitter/LednickyHFunction");
-  void LoadInterpHistFile(TString aFileBaseName);  //TODO should this be a virtual function?
+  void LoadInterpHistFile(TString aFileBaseName, TString aLednickyHFunctionFileBaseName="~/Analysis/FemtoAnalysis/ProcessData/CoulombFitter/LednickyHFunction");  //TODO should this be a virtual function?
 
   void ExtractPairKStar3dVecFromSingleFile(TString aFileLocation, TString aArrayName, TString aNtupleName, double aBinSizeKStar, double aNbinsKStar, td3dVec &aVecToFill);
   td3dVec BuildPairKStar3dVecFull(TString aPairKStarNtupleDirName, TString aFileBaseName, int aNFiles, AnalysisType aAnalysisType, CentralityType aCentralityType, int aNbinsKStar, double aKStarMin, double aKStarMax);
@@ -191,8 +190,6 @@ protected:
   td3dVec fCorrectedFitVecs;
 
   SimulatedCoulombCf *fSimCoulombCf;
-  bool fAllOfSameCoulombType;
-  CoulombType fCoulombType;
   WaveFunction* fWaveFunction;
   double fBohrRadius;
 

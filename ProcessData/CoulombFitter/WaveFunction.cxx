@@ -46,62 +46,75 @@ void WaveFunction::SetCurrentAnalysisType(AnalysisType aAnalysisType)
 }
 
 //________________________________________________________________________
-void WaveFunction::SetCurrentBohrRadius(AnalysisType aAnalysisType) 
+double WaveFunction::GetBohrRadius(AnalysisType aAnalysisType)
 {
-  fCurrentAnalysisType = aAnalysisType;
+  double tReturnBohrRadius = -1.;
 
-  switch(fCurrentAnalysisType) {
+  switch(aAnalysisType) {
   case kXiKchP:
   case kAXiKchM:
   case kResXiCKchP:
   case kResAXiCKchM:
-    fCurrentBohrRadius = -gBohrRadiusXiK;  //attractive
+    tReturnBohrRadius = -gBohrRadiusXiK;  //attractive
     break;
 
   case kXiKchM:
   case kAXiKchP:
   case kResXiCKchM:
   case kResAXiCKchP:
-    fCurrentBohrRadius = gBohrRadiusXiK;  //repulsive
+    tReturnBohrRadius = gBohrRadiusXiK;  //repulsive
     break;
 
+  //-----------------------------------------------------
 
   case kResOmegaKchP:
   case kResAOmegaKchM:
-    fCurrentBohrRadius = -gBohrRadiusOmegaK;  //attractive
+    tReturnBohrRadius = -gBohrRadiusOmegaK;  //attractive
     break;
-
 
   case kResOmegaKchM:
   case kResAOmegaKchP:
-    fCurrentBohrRadius = gBohrRadiusOmegaK;  //repulsive
+    tReturnBohrRadius = gBohrRadiusOmegaK;  //repulsive
     break;
+
+  //-----------------------------------------------------
 
   case kResSigStPKchM:
   case kResASigStMKchP:
-    fCurrentBohrRadius = -gBohrRadiusSigStPK; //attractive
+    tReturnBohrRadius = -gBohrRadiusSigStPK; //attractive
     break;
 
   case kResSigStPKchP:
   case kResASigStMKchM:
-    fCurrentBohrRadius = gBohrRadiusSigStPK; //repulsive
+    tReturnBohrRadius = gBohrRadiusSigStPK; //repulsive
     break;
 
   case kResSigStMKchP:
   case kResASigStPKchM:
-    fCurrentBohrRadius = -gBohrRadiusSigStMK;  //attractive
+    tReturnBohrRadius = -gBohrRadiusSigStMK;  //attractive
     break;
 
   case kResSigStMKchM:
   case kResASigStPKchP:
-    fCurrentBohrRadius = gBohrRadiusSigStMK;  //repulsive
+    tReturnBohrRadius = gBohrRadiusSigStMK;  //repulsive
     break;
 
+  //-----------------------------------------------------
+
   default:
-    fCurrentBohrRadius = 1000000000;
+    tReturnBohrRadius = 1000000000;
 //    cout << "ERROR: WaveFunction::SetCurrentBohrRadius: Invalid aAnalysisType = " << aAnalysisType << endl;
 //    assert(0);
   }
+  return tReturnBohrRadius;
+}
+
+//________________________________________________________________________
+void WaveFunction::SetCurrentBohrRadius(AnalysisType aAnalysisType) 
+{
+  fCurrentAnalysisType = aAnalysisType;
+  fCurrentBohrRadius = GetBohrRadius(fCurrentAnalysisType);
+
 }
 
 //________________________________________________________________________

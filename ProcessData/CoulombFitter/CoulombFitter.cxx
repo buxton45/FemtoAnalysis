@@ -48,10 +48,8 @@ CoulombFitter::CoulombFitter(double aMaxFitKStar):
   fCorrectedFitVecs(0),
 
   fSimCoulombCf(nullptr),
-  fAllOfSameCoulombType(true),
-  fCoulombType(kRepulsive),
   fWaveFunction(0),
-  fBohrRadius(gBohrRadiusXiK),
+  fBohrRadius(-gBohrRadiusXiK),
 
   fPairKStar4dVec(0),
   fNPairsPerKStarBin(16384),
@@ -91,6 +89,7 @@ CoulombFitter::CoulombFitter(double aMaxFitKStar):
 
   gRandom->SetSeed();
   fWaveFunction = new WaveFunction();
+  SetCoulombAttributes(kXiKchP);
   omp_set_num_threads(3);
 
   fNAnalyses=1;
@@ -126,8 +125,6 @@ CoulombFitter::CoulombFitter(FitSharedAnalyses* aFitSharedAnalyses, double aMaxF
   fNAnalyses(fFitSharedAnalyses->GetNFitPairAnalysis()),
 
   fSimCoulombCf(nullptr),
-  fAllOfSameCoulombType(false),
-  fCoulombType(kRepulsive),
   fWaveFunction(0),
   fBohrRadius(gBohrRadiusXiK),
 
@@ -169,7 +166,7 @@ CoulombFitter::CoulombFitter(FitSharedAnalyses* aFitSharedAnalyses, double aMaxF
   gRandom->SetSeed();
 
   fWaveFunction = new WaveFunction();
-  CheckIfAllOfSameCoulombType();
+  SetCoulombAttributes(fFitSharedAnalyses->GetFitPairAnalysis(0)->GetAnalysisType());
 
   for(int i=0; i<fNAnalyses; i++)
   {
@@ -219,52 +216,16 @@ CoulombType CoulombFitter::GetCoulombType(AnalysisType aAnalysisType)
 
 
 //________________________________________________________________________________________________________________
-double CoulombFitter::GetBohrRadius(CoulombType aCoulombType)
-{
-  double tBohrRadius;
-  if(aCoulombType == kAttractive) tBohrRadius = -gBohrRadiusXiK;
-  else if(aCoulombType == kRepulsive) tBohrRadius = gBohrRadiusXiK;
-  else if(aCoulombType == kNeutral) tBohrRadius = 1000000000;
-  else
-  {
-    cout << "ERROR in GetBohrRadius:  Invalid fCoulombType selected" << endl;
-    assert(0);
-  }
-
-  return tBohrRadius;
-}
-
-
-//________________________________________________________________________________________________________________
 double CoulombFitter::GetBohrRadius(AnalysisType aAnalysisType)
 {
-  CoulombType tCoulombType = GetCoulombType(aAnalysisType);
-  double tBohrRadius = GetBohrRadius(tCoulombType);
-  return tBohrRadius;
+  return fWaveFunction->GetBohrRadius(aAnalysisType);
 }
 
 //________________________________________________________________________________________________________________
-void CoulombFitter::CheckIfAllOfSameCoulombType()
+void CoulombFitter::SetCoulombAttributes(AnalysisType aAnalysisType)
 {
-  CoulombType tCoulombType0, tCoulombType1;
-
-  bool tAllSame = true;
-  for(int iAnaly1=1; iAnaly1<fNAnalyses; iAnaly1++)
-  {
-    tCoulombType0 = GetCoulombType(fFitSharedAnalyses->GetFitPairAnalysis(iAnaly1-1)->GetAnalysisType());
-    tCoulombType1 = GetCoulombType(fFitSharedAnalyses->GetFitPairAnalysis(iAnaly1)->GetAnalysisType());
-
-    if(tCoulombType0 != tCoulombType1) tAllSame = false;
-  }
-
-  fAllOfSameCoulombType = tAllSame;
-  if(fAllOfSameCoulombType)
-  {
-    fCoulombType = tCoulombType1;
-    fBohrRadius = GetBohrRadius(fCoulombType);
-    fWaveFunction->SetCurrentAnalysisType(fFitSharedAnalyses->GetFitPairAnalysis(0)->GetAnalysisType());
-  }
-
+  fWaveFunction->SetCurrentAnalysisType(aAnalysisType);
+  fBohrRadius = fWaveFunction->GetCurrentBohrRadius();
 }
 
 
@@ -292,7 +253,7 @@ void CoulombFitter::LoadLednickyHFunctionFile(TString aFileBaseName)
 }
 
 //________________________________________________________________________________________________________________
-void CoulombFitter::LoadInterpHistFile(TString aFileBaseName)
+void CoulombFitter::LoadInterpHistFile(TString aFileBaseName, TString aLednickyHFunctionFileBaseName)
 {
 ChronoTimer tTimer(kSec);
 tTimer.Start();
@@ -300,7 +261,7 @@ cout << "Starting LoadInterpHistFile" << endl;
 
 //--------------------------------------------------------------
 
-  LoadLednickyHFunctionFile();
+  LoadLednickyHFunctionFile(aLednickyHFunctionFileBaseName);
 
   TString aFileName = aFileBaseName+".root";
   fInterpHistFile = TFile::Open(aFileName);
@@ -848,7 +809,8 @@ complex<double> CoulombFitter::BuildScatteringLength(double aKStar, double aReF0
   double tKStar = aKStar/hbarc;
   complex<double> tScattAmp;
 
-  if(fTurnOffCoulomb)
+  if(aReF0==0. && aImF0==0. && aD0==0.) tScattAmp = complex<double>(0.,0.);
+  else if(fTurnOffCoulomb)
   {
     complex<double> tLastTerm (0.,tKStar);
     tScattAmp = pow((1./tF0) + 0.5*aD0*tKStar*tKStar - tLastTerm,-1);
@@ -1181,7 +1143,15 @@ cout << "\t aKStarMagMin = " << aKStarMagMin << "\t aKStarMagMax = " << aKStarMa
 
   if(tNMathematica > 0.2*tMaxKStarCalls)
   {
+    cout << "\t\tIn GetFitCfContent" << endl;
     cout << "\t\t\tWARNING:: tNMathematica > 1/5 of pairs!!!!!!!!!!!!!!!!!!" << endl;
+    cout << "\t\t\t\taKStarMagMin = " << aKStarMagMin << endl;
+    cout << "\t\t\t\taKStarMagMax = " << aKStarMagMax << endl;
+    cout << "\t\t\t\tpar[0] = " << par[0] << endl;
+    cout << "\t\t\t\tpar[1] = " << par[1] << endl;
+    cout << "\t\t\t\tpar[2] = " << par[2] << endl;
+    cout << "\t\t\t\tpar[3] = " << par[3] << endl;
+    cout << "\t\t\t\tpar[4] = " << par[4] << endl << endl;
   }
 
   return tReturnCfContent;
@@ -1254,7 +1224,15 @@ double CoulombFitter::GetFitCfContentwStaticPairs(double aKStarMagMin, double aK
 
   if(tNMathematica > 0.2*tMaxKStarCalls)
   {
+    cout << "\t\tIn GetFitCfContentwStaticPairs" << endl;
     cout << "\t\t\tWARNING:: tNMathematica > 1/5 of pairs!!!!!!!!!!!!!!!!!!" << endl;
+    cout << "\t\t\t\taKStarMagMin = " << aKStarMagMin << endl;
+    cout << "\t\t\t\taKStarMagMax = " << aKStarMagMax << endl;
+    cout << "\t\t\t\tpar[0] = " << par[0] << endl;
+    cout << "\t\t\t\tpar[1] = " << par[1] << endl;
+    cout << "\t\t\t\tpar[2] = " << par[2] << endl;
+    cout << "\t\t\t\tpar[3] = " << par[3] << endl;
+    cout << "\t\t\t\tpar[4] = " << par[4] << endl << endl;
   }
 
   return tReturnCfContent;
@@ -1413,7 +1391,18 @@ double CoulombFitter::GetFitCfContentComplete(double aKStarMagMin, double aKStar
 
   if(tNMathematica > 0.2*tMaxKStarCalls)
   {
+    cout << "\t\tIn GetFitCfContentComplete" << endl;
     cout << "\t\t\tWARNING:: tNMathematica > 1/5 of pairs!!!!!!!!!!!!!!!!!!" << endl;
+    cout << "\t\t\t\taKStarMagMin = " << aKStarMagMin << endl;
+    cout << "\t\t\t\taKStarMagMax = " << aKStarMagMax << endl;
+    cout << "\t\t\t\tpar[0] = " << par[0] << endl;
+    cout << "\t\t\t\tpar[1] = " << par[1] << endl;
+    cout << "\t\t\t\tpar[2] = " << par[2] << endl;
+    cout << "\t\t\t\tpar[3] = " << par[3] << endl;
+    cout << "\t\t\t\tpar[4] = " << par[4] << endl;
+    cout << "\t\t\t\tpar[5] = " << par[5] << endl;
+    cout << "\t\t\t\tpar[6] = " << par[6] << endl;
+    cout << "\t\t\t\tpar[7] = " << par[7] << endl << endl;
   }
 
   return tReturnCfContent;
@@ -1534,7 +1523,18 @@ double CoulombFitter::GetFitCfContentCompletewStaticPairs(double aKStarMagMin, d
 
   if(tNMathematica > 0.2*tMaxKStarCalls)
   {
+    cout << "\t\tIn GetFitCfContentCompletewStaticPairs" << endl;
     cout << "\t\t\tWARNING:: tNMathematica > 1/5 of pairs!!!!!!!!!!!!!!!!!!" << endl;
+    cout << "\t\t\t\taKStarMagMin = " << aKStarMagMin << endl;
+    cout << "\t\t\t\taKStarMagMax = " << aKStarMagMax << endl;
+    cout << "\t\t\t\tpar[0] = " << par[0] << endl;
+    cout << "\t\t\t\tpar[1] = " << par[1] << endl;
+    cout << "\t\t\t\tpar[2] = " << par[2] << endl;
+    cout << "\t\t\t\tpar[3] = " << par[3] << endl;
+    cout << "\t\t\t\tpar[4] = " << par[4] << endl;
+    cout << "\t\t\t\tpar[5] = " << par[5] << endl;
+    cout << "\t\t\t\tpar[6] = " << par[6] << endl;
+    cout << "\t\t\t\tpar[7] = " << par[7] << endl << endl;
   }
 
   return tReturnCfContent;
@@ -1780,15 +1780,7 @@ tTotalTimer.Start();
   {
     FitPairAnalysis* tFitPairAnalysis = fFitSharedAnalyses->GetFitPairAnalysis(iAnaly);
     AnalysisType tAnalysisType = tFitPairAnalysis->GetAnalysisType();
-
-    if(!fAllOfSameCoulombType)
-    {
-      //assert(tAnalysisType == kXiKchP || tAnalysisType == kAXiKchM || tAnalysisType == kXiKchM || tAnalysisType == kAXiKchP);
-      if(tAnalysisType == kXiKchP || tAnalysisType == kAXiKchM) fBohrRadius = -gBohrRadiusXiK; //attractive
-      else if(tAnalysisType == kXiKchM || tAnalysisType == kAXiKchP) fBohrRadius = gBohrRadiusXiK; //repulsive
-      else fBohrRadius = 1000000000;
-      fWaveFunction->SetCurrentAnalysisType(tAnalysisType);
-    }
+    SetCoulombAttributes(tAnalysisType);
 
     int tNFitPartialAnalysis = tFitPairAnalysis->GetNFitPartialAnalysis();
     for(int iPartAn=0; iPartAn<tNFitPartialAnalysis; iPartAn++)
@@ -2071,14 +2063,7 @@ tTotalTimer.Start();
     int tNbinsXToBuild = tMomResMatrix->GetNbinsX();
     assert(tNbinsXToBuild == tNbinsXToBuildGlobal);
 
-    if(!fAllOfSameCoulombType)
-    {
-      //assert(tAnalysisType == kXiKchP || tAnalysisType == kAXiKchM || tAnalysisType == kXiKchM || tAnalysisType == kAXiKchP);
-      if(tAnalysisType == kXiKchP || tAnalysisType == kAXiKchM) fBohrRadius = -gBohrRadiusXiK; //attractive
-      else if(tAnalysisType == kXiKchM || tAnalysisType == kAXiKchP) fBohrRadius = gBohrRadiusXiK; //repulsive
-      else fBohrRadius = 1000000000;
-      fWaveFunction->SetCurrentAnalysisType(tAnalysisType);
-    }
+    SetCoulombAttributes(tAnalysisType);
 
     int tNFitPartialAnalysis = tFitPairAnalysis->GetNFitPartialAnalysis();
     for(int iPartAn=0; iPartAn<tNFitPartialAnalysis; iPartAn++)
@@ -2315,14 +2300,7 @@ void CoulombFitter::CalculateFitFunction(int &npar, double &chi2, double *par)
       assert(tNbinsXToBuild == tNbinsXToBuildGlobal);
     }
 
-    if(!fAllOfSameCoulombType)
-    {
-      //assert(tAnalysisType == kXiKchP || tAnalysisType == kAXiKchM || tAnalysisType == kXiKchM || tAnalysisType == kAXiKchP);
-      if(tAnalysisType == kXiKchP || tAnalysisType == kAXiKchM) fBohrRadius = -gBohrRadiusXiK; //attractive
-      else if(tAnalysisType == kXiKchM || tAnalysisType == kAXiKchP) fBohrRadius = gBohrRadiusXiK; //repulsive
-      else fBohrRadius = 1000000000;
-      fWaveFunction->SetCurrentAnalysisType(tAnalysisType);
-    }
+    SetCoulombAttributes(tAnalysisType);
 
     int tNFitPartialAnalysis = tFitPairAnalysis->GetNFitPartialAnalysis();
     for(int iPartAn=0; iPartAn<tNFitPartialAnalysis; iPartAn++)
@@ -2613,14 +2591,7 @@ TH1* CoulombFitter::CreateFitHistogram(TString aName, int aAnalysisNumber)
   FitPairAnalysis* tFitPairAnalysis = fFitSharedAnalyses->GetFitPairAnalysis(aAnalysisNumber);
   AnalysisType tAnalysisType = tFitPairAnalysis->GetAnalysisType();
 
-  if(!fAllOfSameCoulombType)
-  {
-    //assert(tAnalysisType == kXiKchP || tAnalysisType == kAXiKchM || tAnalysisType == kXiKchM || tAnalysisType == kAXiKchP);
-    if(tAnalysisType == kXiKchP || tAnalysisType == kAXiKchM) fBohrRadius = -gBohrRadiusXiK; //attractive
-    else if(tAnalysisType == kXiKchM || tAnalysisType == kAXiKchP) fBohrRadius = gBohrRadiusXiK; //repulsive
-    else fBohrRadius = 1000000000;
-    fWaveFunction->SetCurrentAnalysisType(tAnalysisType);
-  }
+  SetCoulombAttributes(tAnalysisType);
 
   int tNFitParams = tFitPairAnalysis->GetNFitParams(); //should be equal to 8
 
@@ -2687,14 +2658,7 @@ TH1* CoulombFitter::CreateFitHistogramSample(TString aName, AnalysisType aAnalys
 ChronoTimer tTimer;
 tTimer.Start();
 
-  if(!fAllOfSameCoulombType)
-  {
-    //assert(aAnalysisType == kXiKchP || aAnalysisType == kAXiKchM || aAnalysisType == kXiKchM || aAnalysisType == kAXiKchP);
-    if(aAnalysisType == kXiKchP || aAnalysisType == kAXiKchM) fBohrRadius = -gBohrRadiusXiK; //attractive
-    else if(aAnalysisType == kXiKchM || aAnalysisType == kAXiKchP) fBohrRadius = gBohrRadiusXiK; //repulsive
-    else fBohrRadius = 1000000000;
-    fWaveFunction->SetCurrentAnalysisType(aAnalysisType);
-  }
+  SetCoulombAttributes(aAnalysisType);
 
   TH1D* tReturnHist = new TH1D(aName,aName,aNbinsK,aKMin,aKMax);
 
@@ -2765,14 +2729,7 @@ TH1* CoulombFitter::CreateFitHistogramSampleComplete(TString aName, AnalysisType
 ChronoTimer tTimer;
 tTimer.Start();
 
-  if(!fAllOfSameCoulombType)
-  {
-    //assert(aAnalysisType == kXiKchP || aAnalysisType == kAXiKchM || aAnalysisType == kXiKchM || aAnalysisType == kAXiKchP);
-    if(aAnalysisType == kXiKchP || aAnalysisType == kAXiKchM) fBohrRadius = -gBohrRadiusXiK; //attractive
-    else if(aAnalysisType == kXiKchM || aAnalysisType == kAXiKchP) fBohrRadius = gBohrRadiusXiK; //repulsive
-    else fBohrRadius = 1000000000;
-    fWaveFunction->SetCurrentAnalysisType(aAnalysisType);
-  }
+  SetCoulombAttributes(aAnalysisType);
 
   TH1D* tReturnHist = new TH1D(aName,aName,aNbinsK,aKMin,aKMax);
 

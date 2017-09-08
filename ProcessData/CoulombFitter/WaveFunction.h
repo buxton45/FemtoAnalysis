@@ -43,6 +43,7 @@ public:
   virtual ~WaveFunction();
 
   void SetCurrentAnalysisType(AnalysisType aAnalysisType);
+  double GetBohrRadius(AnalysisType aAnalysisType);
   void SetCurrentBohrRadius(AnalysisType aAnalysisType);
   void SetCurrentBohrRadius(double aBohrRadius);
 
@@ -68,7 +69,7 @@ public:
   //inline (i.e. simple) functions
   MathematicaSession* GetSession();
   void SetTurnOffCoulomb(bool aTurnOffCoulomb);
-
+  double GetCurrentBohrRadius();
 
 private:
   MathematicaSession* fSession;
@@ -89,6 +90,6 @@ private:
 //inline stuff
 inline MathematicaSession* WaveFunction::GetSession() {return fSession;}
 inline void WaveFunction::SetTurnOffCoulomb(bool aTurnOffCoulomb) {fTurnOffCoulomb = aTurnOffCoulomb;}
-
+inline double WaveFunction::GetCurrentBohrRadius() {return fCurrentBohrRadius;}
 
 #endif

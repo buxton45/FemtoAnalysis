@@ -60,7 +60,7 @@ int main(int argc, char **argv)
                                            tNbinsKStar, tKStarMin, tKStarMax,
                                            tNbinsRStar, tRStarMin, tRStarMax);
 
-  CoulombFitter* tFitter = new CoulombFitter(0.4);
+  CoulombFitter* tFitter = new CoulombFitter(1.0);
 
   TString tFileLocationInterpHistos = "InterpHists";
     tFileLocationInterpHistos += TString::Format("_%s", cAnalysisBaseTags[tAnType]);
@@ -68,8 +68,7 @@ int main(int argc, char **argv)
     tFileLocationLednickyHFile += TString::Format("_%s", cAnalysisBaseTags[tAnType]);
   TString tSaveName = TString::Format("2dCoulombOnlyInterpCfs_%s.root", cAnalysisBaseTags[tAnType]);
 
-  tFitter->LoadInterpHistFile(tFileLocationInterpHistos);
-  tFitter->LoadLednickyHFunctionFile(tFileLocationLednickyHFile);
+  tFitter->LoadInterpHistFile(tFileLocationInterpHistos, tFileLocationLednickyHFile);
 
   tFitter->SetUseRandomKStarVectors(true);
   tFitter->SetUseStaticPairs(true,50000);
@@ -84,7 +83,7 @@ int main(int argc, char **argv)
 cout << "tRadiusBinWidth = " << tRadiusBinWidth << endl;
   for(int iR=0; iR<tNbinsRStar; iR++)
   {
-    tRadius = (iR+0.5)*tRadiusBinWidth;
+    tRadius = tRStarMin + (iR+0.5)*tRadiusBinWidth;
 cout << "iR = " << iR << " and tRadius = " << tRadius << endl;
     tCoulombOnlyHistSample = tFitter->CreateFitHistogramSampleComplete(TString::Format("tCoulombOnlyHistSample_%d", iR), tAnType, 
                                                                        tNbinsKStar, tKStarMin, tKStarMax, tLambda, tRadius, 
