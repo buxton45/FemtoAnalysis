@@ -41,17 +41,17 @@ int main(int argc, char **argv)
   tFullTimer.Start();
 //-----------------------------------------------------------------------------
 
-  AnalysisType tAnType = kXiKchP;
+  AnalysisType tAnType = kResSigStPKchM;
 
-  int tNbinsKStar = 39;
+  int tNbinsKStar = 100;
   double tKStarMin = 0.;
-  double tKStarMax = 0.39;
+  double tKStarMax = 1.;
 
   double tLambda = 1.0;
 
-  int tNbinsRStar = 500;
+  int tNbinsRStar = 200;
   double tRStarMin = 0.;
-  double tRStarMax = 50.;
+  double tRStarMax = 20.;
 
   double tNorm = 1.;
 

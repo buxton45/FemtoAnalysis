@@ -12,7 +12,7 @@ ClassImp(SimpleChargedResidualCf)
 //________________________________________________________________________________________________________________
 //****************************************************************************************************************
 //________________________________________________________________________________________________________________
-SimpleChargedResidualCf::SimpleChargedResidualCf(AnalysisType aResidualType, TH2D* aTransformMatrix, td1dVec &aKStarBinCenters, CentralityType aCentType, double aMaxKStar, TString aFileLocationBase) :
+SimpleChargedResidualCf::SimpleChargedResidualCf(AnalysisType aResidualType, TH2D* aTransformMatrix, td1dVec &aKStarBinCenters, CentralityType aCentType, TString aFileLocationBase) :
   fResidualType(aResidualType),
   fPairAn(nullptr),
   fExpXiHist(nullptr),
@@ -20,7 +20,9 @@ SimpleChargedResidualCf::SimpleChargedResidualCf(AnalysisType aResidualType, TH2
   fTransformMatrix(aTransformMatrix),
   fKStarBinCenters(aKStarBinCenters),
   fResCf(0),
-  fTransformedResCf(0)
+  fTransformedResCf(0),
+  fUseCoulombOnlyInterpCfs(false),
+  f2dCoulombOnlyInterpCfs(nullptr)
 {
   assert(fKStarBinCenters.size() == (unsigned int)fTransformMatrix->GetNbinsX());
   assert(fKStarBinCenters.size() == (unsigned int)fTransformMatrix->GetNbinsY());
@@ -107,27 +109,77 @@ TH1D* SimpleChargedResidualCf::Convert1dVecToHist(td1dVec &aCfVec, td1dVec &aKSt
 }
 
 //________________________________________________________________________________________________________________
-td1dVec SimpleChargedResidualCf::GetChargedResidualCorrelation(double aMaxKStar)
+td1dVec SimpleChargedResidualCf::ConvertHistTo1dVec(TH1* aHist)
 {
-  int tNbins = std::round(aMaxKStar/fExpXiHist->GetXaxis()->GetBinWidth(1));
-  if(fResCf.size()!=tNbins)
+  td1dVec tReturnVec(0);
+  for(int i=1; i<=aHist->GetNbinsX(); i++) tReturnVec.push_back(aHist->GetBinContent(i));
+  return tReturnVec;
+}
+
+//________________________________________________________________________________________________________________
+void SimpleChargedResidualCf::LoadCoulombOnlyInterpCfs(TString aFileDirectory, AnalysisType aResType, bool aUseCoulombOnlyInterpCfs)
+{
+  SetUseCoulombOnlyInterpCfs(aUseCoulombOnlyInterpCfs);
+
+  TString aFileName = aFileDirectory + TString::Format("2dCoulombOnlyInterpCfs_%s.root", cAnalysisBaseTags[aResType]);
+  TFile aFile(aFileName);
+  TH2D* t2dCoulombOnlyInterpCfs = (TH2D*)aFile.Get(TString::Format("2dCoulombOnlyInterpCfs_%s", cAnalysisBaseTags[aResType]));
+  f2dCoulombOnlyInterpCfs = (TH2D*)t2dCoulombOnlyInterpCfs->Clone();
+  f2dCoulombOnlyInterpCfs->SetDirectory(0);
+}
+
+//________________________________________________________________________________________________________________
+td1dVec SimpleChargedResidualCf::ExtractCfFrom2dInterpCfs(double aRadius)
+{
+  assert(aRadius>0.);
+  assert(f2dCoulombOnlyInterpCfs);  //TODO does this really check that 2dhist is loaded?
+/*
+  int tBinR = f2dCoulombOnlyInterpCfs->GetYaxis()->FindBin(aRadius);
+  TH1D* tTempCf = f2dCoulombOnlyInterpCfs->ProjectionX("tTempCf", tBinR, tBinR);
+  td1dVec tReturnVec = ConvertHistTo1dVec(tTempCf);
+  return tReturnVec;
+*/
+
+  assert(f2dCoulombOnlyInterpCfs->GetNbinsX() >= fKStarBinCenters.size());
+  assert(f2dCoulombOnlyInterpCfs->GetXaxis()->GetBinWidth(1) == (fKStarBinCenters[1]-fKStarBinCenters[0]));
+
+  td1dVec tReturnVec(0);
+  double tCfValue = -1.;
+  for(unsigned int i=0; i<fKStarBinCenters.size(); i++)
   {
-    fResCf.clear();
-    fResCf.resize(tNbins,0.);
-    for(int i=0; i<tNbins; i++) fResCf[i] = fExpXiHist->GetBinContent(i+1);
+    tCfValue = f2dCoulombOnlyInterpCfs->Interpolate(fKStarBinCenters[i], aRadius);
+    tReturnVec.push_back(tCfValue);
+  }
+  return tReturnVec;
+}
+
+//________________________________________________________________________________________________________________
+td1dVec SimpleChargedResidualCf::GetChargedResidualCorrelation(double aRadiusParam)
+{
+  if(fUseCoulombOnlyInterpCfs) fResCf = ExtractCfFrom2dInterpCfs(aRadiusParam);
+  else
+  {
+    double aMaxKStar = fKStarBinCenters[fKStarBinCenters.size()-1] + (fKStarBinCenters[1]-fKStarBinCenters[0])/2;
+    int tNbins = std::round(aMaxKStar/fExpXiHist->GetXaxis()->GetBinWidth(1));
+    if(fResCf.size()!=tNbins)
+    {
+      fResCf.clear();
+      fResCf.resize(tNbins,0.);
+      for(int i=0; i<tNbins; i++) fResCf[i] = fExpXiHist->GetBinContent(i+1);
 
 //    delete tPairAn;
+    }
   }
   return fResCf;
 }
 
 
 //________________________________________________________________________________________________________________
-td1dVec SimpleChargedResidualCf::GetTransformedChargedResidualCorrelation(double aMaxKStar)
+td1dVec SimpleChargedResidualCf::GetTransformedChargedResidualCorrelation(double aRadiusParam)
 {
   if(fTransformedResCf.size()==0)
   {
-    td1dVec tResCf = GetChargedResidualCorrelation(aMaxKStar);
+    td1dVec tResCf = GetChargedResidualCorrelation(aRadiusParam);
 
     unsigned int tDaughterPairKStarBin, tParentPairKStarBin;
     double tDaughterPairKStar, tParentPairKStar;
@@ -159,43 +211,43 @@ td1dVec SimpleChargedResidualCf::GetTransformedChargedResidualCorrelation(double
 }
 
 //________________________________________________________________________________________________________________
-TH1D* SimpleChargedResidualCf::GetChargedResidualCorrelationHistogram(TString aTitle, double aMaxKStar)
+TH1D* SimpleChargedResidualCf::GetChargedResidualCorrelationHistogram(TString aTitle, double aRadiusParam)
 {
-  td1dVec tResCf = GetChargedResidualCorrelation(aMaxKStar);
+  td1dVec tResCf = GetChargedResidualCorrelation(aRadiusParam);
   TH1D* tReturnHist = Convert1dVecToHist(tResCf, fKStarBinCenters, aTitle);
   return tReturnHist;
 }
 
 
 //________________________________________________________________________________________________________________
-TH1D* SimpleChargedResidualCf::GetTransformedChargedResidualCorrelationHistogram(TString aTitle, double aMaxKStar)
+TH1D* SimpleChargedResidualCf::GetTransformedChargedResidualCorrelationHistogram(TString aTitle, double aRadiusParam)
 {
-  td1dVec tTransResCf = GetTransformedChargedResidualCorrelation(aMaxKStar);
+  td1dVec tTransResCf = GetTransformedChargedResidualCorrelation(aRadiusParam);
   TH1D* tReturnHist = Convert1dVecToHist(tTransResCf, fKStarBinCenters, aTitle);
   return tReturnHist;
 }
 
 //________________________________________________________________________________________________________________
-td1dVec SimpleChargedResidualCf::GetContributionToFitCf(double aOverallLambda, double aMaxKStar)
+td1dVec SimpleChargedResidualCf::GetContributionToFitCf(double aOverallLambda, double aRadiusParam)
 {
-  td1dVec tReturnVec = GetTransformedChargedResidualCorrelation(aMaxKStar);
+  td1dVec tReturnVec = GetTransformedChargedResidualCorrelation(aRadiusParam);
   for(unsigned int i=0; i<tReturnVec.size(); i++) tReturnVec[i] = fLambdaFactor*aOverallLambda*(tReturnVec[i]-1.);
   return tReturnVec;
 }
 
 //________________________________________________________________________________________________________________
-TH1D* SimpleChargedResidualCf::GetChargedResidualCorrelationHistogramWithLambdaApplied(TString aTitle, double aOverallLambda, double aMaxKStar)
+TH1D* SimpleChargedResidualCf::GetChargedResidualCorrelationHistogramWithLambdaApplied(TString aTitle, double aOverallLambda, double aRadiusParam)
 {
-  td1dVec tReturnVec = GetChargedResidualCorrelation(aMaxKStar);
+  td1dVec tReturnVec = GetChargedResidualCorrelation(aRadiusParam);
   for(unsigned int i=0; i<tReturnVec.size(); i++) tReturnVec[i] = 1. + fLambdaFactor*aOverallLambda*(tReturnVec[i]-1.);  //TODO is this right?
   TH1D* tReturnHist = Convert1dVecToHist(tReturnVec, fKStarBinCenters, aTitle);
   return tReturnHist;
 }
 
 //________________________________________________________________________________________________________________
-TH1D* SimpleChargedResidualCf::GetTransformedChargedResidualCorrelationHistogramWithLambdaApplied(TString aTitle, double aOverallLambda, double aMaxKStar)
+TH1D* SimpleChargedResidualCf::GetTransformedChargedResidualCorrelationHistogramWithLambdaApplied(TString aTitle, double aOverallLambda, double aRadiusParam)
 {
-  td1dVec tReturnVec = GetContributionToFitCf(aOverallLambda, aMaxKStar);
+  td1dVec tReturnVec = GetContributionToFitCf(aOverallLambda, aRadiusParam);
   for(unsigned int i=0; i<tReturnVec.size(); i++) tReturnVec[i] += 1.;
   TH1D* tReturnHist = Convert1dVecToHist(tReturnVec, fKStarBinCenters, aTitle);
   return tReturnHist;
