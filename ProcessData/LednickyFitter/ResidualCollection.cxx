@@ -63,13 +63,14 @@ void ResidualCollection::BuildStandardCollection(td1dVec &aKStarBinCenters, vect
 void ResidualCollection::SetUseCoulombOnlyInterpCfs(TString aFileDirectory, bool aUseCoulombOnlyInterpCfs)
 {
   AnalysisType tResType;
+  double tRadiusFactor = 1.;
   for(unsigned int i=0; i<fChargedCfCollection.size(); i++) 
   {
     tResType = fChargedCfCollection[i].GetResidualType();
     if(tResType==kResSigStPKchP || tResType==kResASigStMKchM ||
        tResType==kResSigStPKchM || tResType==kResASigStMKchP ||
        tResType==kResSigStMKchP || tResType==kResASigStPKchM ||
-       tResType==kResSigStMKchM || tResType==kResASigStPKchP) fChargedCfCollection[i].LoadCoulombOnlyInterpCfs(aFileDirectory, aUseCoulombOnlyInterpCfs);
+       tResType==kResSigStMKchM || tResType==kResASigStPKchP) fChargedCfCollection[i].LoadCoulombOnlyInterpCfs(aFileDirectory, aUseCoulombOnlyInterpCfs, tRadiusFactor);
 
   }
 }

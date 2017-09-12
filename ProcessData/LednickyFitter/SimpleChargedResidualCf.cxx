@@ -22,7 +22,8 @@ SimpleChargedResidualCf::SimpleChargedResidualCf(AnalysisType aResidualType, TH2
   fResCf(0),
   fTransformedResCf(0),
   fUseCoulombOnlyInterpCfs(false),
-  f2dCoulombOnlyInterpCfs(nullptr)
+  f2dCoulombOnlyInterpCfs(nullptr),
+  fRadiusFactor(1.)
 {
   assert(fKStarBinCenters.size() == (unsigned int)fTransformMatrix->GetNbinsX());
   assert(fKStarBinCenters.size() == (unsigned int)fTransformMatrix->GetNbinsY());
@@ -117,8 +118,9 @@ td1dVec SimpleChargedResidualCf::ConvertHistTo1dVec(TH1* aHist)
 }
 
 //________________________________________________________________________________________________________________
-void SimpleChargedResidualCf::LoadCoulombOnlyInterpCfs(TString aFileDirectory, bool aUseCoulombOnlyInterpCfs)
+void SimpleChargedResidualCf::LoadCoulombOnlyInterpCfs(TString aFileDirectory, bool aUseCoulombOnlyInterpCfs, double aRadiusFactor)
 {
+  fRadiusFactor = aRadiusFactor;
   SetUseCoulombOnlyInterpCfs(aUseCoulombOnlyInterpCfs);
 
   TString aFileName = aFileDirectory + TString::Format("2dCoulombOnlyInterpCfs_%s.root", cAnalysisBaseTags[fResidualType]);
@@ -133,9 +135,10 @@ void SimpleChargedResidualCf::LoadCoulombOnlyInterpCfs(TString aFileDirectory, b
 td1dVec SimpleChargedResidualCf::ExtractCfFrom2dInterpCfs(double aRadius)
 {
   assert(aRadius>0.);
+  double tRadius = fRadiusFactor*aRadius;
   assert(f2dCoulombOnlyInterpCfs);  //TODO does this really check that 2dhist is loaded?
 /*
-  int tBinR = f2dCoulombOnlyInterpCfs->GetYaxis()->FindBin(aRadius);
+  int tBinR = f2dCoulombOnlyInterpCfs->GetYaxis()->FindBin(tRadius);
   TH1D* tTempCf = f2dCoulombOnlyInterpCfs->ProjectionX("tTempCf", tBinR, tBinR);
   td1dVec tReturnVec = ConvertHistTo1dVec(tTempCf);
   return tReturnVec;
@@ -148,7 +151,7 @@ td1dVec SimpleChargedResidualCf::ExtractCfFrom2dInterpCfs(double aRadius)
   double tCfValue = -1.;
   for(unsigned int i=0; i<fKStarBinCenters.size(); i++)
   {
-    tCfValue = f2dCoulombOnlyInterpCfs->Interpolate(fKStarBinCenters[i], aRadius);
+    tCfValue = f2dCoulombOnlyInterpCfs->Interpolate(fKStarBinCenters[i], tRadius);
     tReturnVec.push_back(tCfValue);
   }
   return tReturnVec;

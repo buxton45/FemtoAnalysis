@@ -135,95 +135,96 @@ const char* const cAnalysisRootTags[85] = {
 
 };
 
+//------------ WHEN INCLUDING ALL 10 RESIDUALS and no MaxDecayLengthPrimary! ------------------------------------//
 const double cAnalysisLambdaFactors2[85] = {
-/*kLamK0=*/0.196, /*kALamK0=*/0.205,
-/*kLamKchP=*/0.175, /*kALamKchM=*/0.181, /*kLamKchM=*/0.175, /*kALamKchP=*/0.181,
+/*kLamK0=*/0.162, /*kALamK0=*/0.167,
+/*kLamKchP=*/0.152, /*kALamKchM=*/0.156, /*kLamKchM=*/0.151, /*kALamKchP=*/0.156,
 /*kXiKchP=*/1.000, /*kAXiKchM=*/1.000, /*kXiKchM=*/1.000, /*kAXiKchP=*/1.000,
 /*kXiK0=*/1.000, /*kAXiK0=*/1.000,
 /*kLamLam=*/1.000, /*kALamALam=*/1.000, /*kLamALam=*/1.000,
 /*kLamPiP=*/1.000, /*kALamPiM=*/1.000, /*kLamPiM=*/1.000, /*kALamPiP=*/1.000,
 
 //----- Residual Types -----
-/*kResSig0KchP=*/0.157, /*kResASig0KchM=*/0.161, /*kResSig0KchM=*/0.156, /*kResASig0KchP=*/0.161,
-/*kResXi0KchP=*/0.113, /*kResAXi0KchM=*/0.106, /*kResXi0KchM=*/0.112, /*kResAXi0KchP=*/0.106,
-/*kResXiCKchP=*/0.109, /*kResAXiCKchM=*/0.103, /*kResXiCKchM=*/0.109, /*kResAXiCKchP=*/0.103,
+/*kResSig0KchP=*/0.104, /*kResASig0KchM=*/0.107, /*kResSig0KchM=*/0.103, /*kResASig0KchP=*/0.108,
+/*kResXi0KchP=*/0.075, /*kResAXi0KchM=*/0.071, /*kResXi0KchM=*/0.074, /*kResAXi0KchP=*/0.071,
+/*kResXiCKchP=*/0.073, /*kResAXiCKchM=*/0.069, /*kResXiCKchM=*/0.072, /*kResAXiCKchP=*/0.069,
 /*kResOmegaKchP=*/0.000, /*kResAOmegaKchM=*/0.000, /*kResOmegaKchM=*/0.000, /*kResAOmegaKchP=*/0.000,
-/*kResSigStPKchP=*/0.073, /*kResASigStMKchM=*/0.072, /*kResSigStPKchM=*/0.073, /*kResASigStMKchP=*/0.073,
-/*kResSigStMKchP=*/0.066, /*kResASigStPKchM=*/0.071, /*kResSigStMKchM=*/0.066, /*kResASigStPKchP=*/0.071,
-/*kResSigSt0KchP=*/0.066, /*kResASigSt0KchM=*/0.063, /*kResSigSt0KchM=*/0.066, /*kResASigSt0KchP=*/0.063,
+/*kResSigStPKchP=*/0.048, /*kResASigStMKchM=*/0.048, /*kResSigStPKchM=*/0.048, /*kResASigStMKchP=*/0.049,
+/*kResSigStMKchP=*/0.044, /*kResASigStPKchM=*/0.047, /*kResSigStMKchM=*/0.043, /*kResASigStPKchP=*/0.047,
+/*kResSigSt0KchP=*/0.044, /*kResASigSt0KchM=*/0.042, /*kResSigSt0KchM=*/0.043, /*kResASigSt0KchP=*/0.043,
 
-/*kResLamKSt0=*/0.062, /*kResALamAKSt0=*/0.064, /*kResLamAKSt0=*/0.062, /*kResALamKSt0=*/0.064,
-/*kResSig0KSt0=*/0.055, /*kResASig0AKSt0=*/0.057, /*kResSig0AKSt0=*/0.056, /*kResASig0KSt0=*/0.057,
-/*kResXi0KSt0=*/0.040, /*kResAXi0AKSt0=*/0.038, /*kResXi0AKSt0=*/0.040, /*kResAXi0KSt0=*/0.037,
-/*kResXiCKSt0=*/0.038, /*kResAXiCAKSt0=*/0.037, /*kResXiCAKSt0=*/0.039, /*kResAXiCKSt0=*/0.036, 
+/*kResLamKSt0=*/0.041, /*kResALamAKSt0=*/0.043, /*kResLamAKSt0=*/0.041, /*kResALamKSt0=*/0.043,
+/*kResSig0KSt0=*/0.037, /*kResASig0AKSt0=*/0.038, /*kResSig0AKSt0=*/0.037, /*kResASig0KSt0=*/0.038,
+/*kResXi0KSt0=*/0.026, /*kResAXi0AKSt0=*/0.025, /*kResXi0AKSt0=*/0.026, /*kResAXi0KSt0=*/0.025,
+/*kResXiCKSt0=*/0.026, /*kResAXiCAKSt0=*/0.024, /*kResXiCAKSt0=*/0.026, /*kResAXiCKSt0=*/0.024, 
 
-/*kResSig0K0=*/0.177, /*kResASig0K0=*/0.182,
-/*kResXi0K0=*/0.127, /*kResAXi0K0=*/0.120,
-/*kResXiCK0=*/0.123, /*kResAXiCK0=*/0.116,
+/*kResSig0K0=*/0.113, /*kResASig0K0=*/0.117,
+/*kResXi0K0=*/0.081, /*kResAXi0K0=*/0.077,
+/*kResXiCK0=*/0.078, /*kResAXiCK0=*/0.075,
 /*kResOmegaK0=*/0.000, /*kResAOmegaK0=*/0.000,
-/*kResSigStPK0=*/0.082, /*kResASigStMK0=*/0.082,
-/*kResSigStMK0=*/0.074, /*kResASigStPK0=*/0.080,
-/*kResSigSt0K0=*/0.074, /*kResASigSt0K0=*/0.071,
+/*kResSigStPK0=*/0.052, /*kResASigStMK0=*/0.053,
+/*kResSigStMK0=*/0.047, /*kResASigStPK0=*/0.051,
+/*kResSigSt0K0=*/0.047, /*kResASigSt0K0=*/0.046,
 
-/*kResLamKSt0ToLamK0=*/0.031, /*kResALamKSt0ToALamK0=*/0.032,
-/*kResSig0KSt0ToLamK0=*/0.027, /*kResASig0KSt0ToALamK0=*/0.028,
-/*kResXi0KSt0ToLamK0=*/0.020, /*kResAXi0KSt0ToALamK0=*/0.019,
-/*kResXiCKSt0ToLamK0=*/0.019, /*kResAXiCKSt0ToALamK0=*/0.018
+/*kResLamKSt0ToLamK0=*/0.020, /*kResALamKSt0ToALamK0=*/0.021,
+/*kResSig0KSt0ToLamK0=*/0.018, /*kResASig0KSt0ToALamK0=*/0.018,
+/*kResXi0KSt0ToLamK0=*/0.013, /*kResAXi0KSt0ToALamK0=*/0.012,
+/*kResXiCKSt0ToLamK0=*/0.012, /*kResAXiCKSt0ToALamK0=*/0.012
 };
 
-
+//------------ WHEN INCLUDING ALL 10 RESIDUALS and MaxDecayLengthPrimary=5! ------------------------------------//
 //---------NEW:ASSUMING SOME OF "OTHER" FEED-DOWN BIN ARE PRIMARY------------------------
 const double cAnalysisLambdaFactors[85] = {
-/*kLamK0=*/0.155, /*kALamK0=*/0.159,
-/*kLamKchP=*/0.145, /*kALamKchM=*/0.148, /*kLamKchM=*/0.144, /*kALamKchP=*/0.149,
+/*kLamK0=*/0.228, /*kALamK0=*/0.233,
+/*kLamKchP=*/0.198, /*kALamKchM=*/0.202, /*kLamKchM=*/0.197, /*kALamKchP=*/0.202,
 /*kXiKchP=*/1.000, /*kAXiKchM=*/1.000, /*kXiKchM=*/1.000, /*kAXiKchP=*/1.000,
 /*kXiK0=*/1.000, /*kAXiK0=*/1.000,
 /*kLamLam=*/1.000, /*kALamALam=*/1.000, /*kLamALam=*/1.000,
 /*kLamPiP=*/1.000, /*kALamPiM=*/1.000, /*kLamPiM=*/1.000, /*kALamPiP=*/1.000,
 
 //----- Residual Types -----
-/*kResSig0KchP=*/0.099, /*kResASig0KchM=*/0.102, /*kResSig0KchM=*/0.099, /*kResASig0KchP=*/0.103,
-/*kResXi0KchP=*/0.072, /*kResAXi0KchM=*/0.067, /*kResXi0KchM=*/0.071, /*kResAXi0KchP=*/0.068,
-/*kResXiCKchP=*/0.069, /*kResAXiCKchM=*/0.065, /*kResXiCKchM=*/0.068, /*kResAXiCKchP=*/0.066,
+/*kResSig0KchP=*/0.104, /*kResASig0KchM=*/0.107, /*kResSig0KchM=*/0.103, /*kResASig0KchP=*/0.108,
+/*kResXi0KchP=*/0.075, /*kResAXi0KchM=*/0.071, /*kResXi0KchM=*/0.074, /*kResAXi0KchP=*/0.071,
+/*kResXiCKchP=*/0.073, /*kResAXiCKchM=*/0.069, /*kResXiCKchM=*/0.072, /*kResAXiCKchP=*/0.069,
 /*kResOmegaKchP=*/0.000, /*kResAOmegaKchM=*/0.000, /*kResOmegaKchM=*/0.000, /*kResAOmegaKchP=*/0.000,
-/*kResSigStPKchP=*/0.046, /*kResASigStMKchM=*/0.046, /*kResSigStPKchM=*/0.046, /*kResASigStMKchP=*/0.046,
-/*kResSigStMKchP=*/0.042, /*kResASigStPKchM=*/0.045, /*kResSigStMKchM=*/0.041, /*kResASigStPKchP=*/0.045,
-/*kResSigSt0KchP=*/0.042, /*kResASigSt0KchM=*/0.040, /*kResSigSt0KchM=*/0.041, /*kResASigSt0KchP=*/0.041,
+/*kResSigStPKchP=*/0.048, /*kResASigStMKchM=*/0.048, /*kResSigStPKchM=*/0.048, /*kResASigStMKchP=*/0.049,
+/*kResSigStMKchP=*/0.044, /*kResASigStPKchM=*/0.047, /*kResSigStMKchM=*/0.043, /*kResASigStPKchP=*/0.047,
+/*kResSigSt0KchP=*/0.044, /*kResASigSt0KchM=*/0.042, /*kResSigSt0KchM=*/0.043, /*kResASigSt0KchP=*/0.043,
 
-/*kResLamKSt0=*/0.039, /*kResALamAKSt0=*/0.041, /*kResLamAKSt0=*/0.039, /*kResALamKSt0=*/0.041,
-/*kResSig0KSt0=*/0.035, /*kResASig0AKSt0=*/0.036, /*kResSig0AKSt0=*/0.035, /*kResASig0KSt0=*/0.036,
-/*kResXi0KSt0=*/0.025, /*kResAXi0AKSt0=*/0.024, /*kResXi0AKSt0=*/0.025, /*kResAXi0KSt0=*/0.024,
-/*kResXiCKSt0=*/0.024, /*kResAXiCAKSt0=*/0.023, /*kResXiCAKSt0=*/0.024, /*kResAXiCKSt0=*/0.023, 
+/*kResLamKSt0=*/0.041, /*kResALamAKSt0=*/0.043, /*kResLamAKSt0=*/0.041, /*kResALamKSt0=*/0.043,
+/*kResSig0KSt0=*/0.037, /*kResASig0AKSt0=*/0.038, /*kResSig0AKSt0=*/0.037, /*kResASig0KSt0=*/0.038,
+/*kResXi0KSt0=*/0.026, /*kResAXi0AKSt0=*/0.025, /*kResXi0AKSt0=*/0.026, /*kResAXi0KSt0=*/0.025,
+/*kResXiCKSt0=*/0.026, /*kResAXiCAKSt0=*/0.024, /*kResXiCAKSt0=*/0.026, /*kResAXiCKSt0=*/0.024, 
 
-/*kResSig0K0=*/0.107, /*kResASig0K0=*/0.111,
-/*kResXi0K0=*/0.077, /*kResAXi0K0=*/0.073,
-/*kResXiCK0=*/0.075, /*kResAXiCK0=*/0.071,
+/*kResSig0K0=*/0.113, /*kResASig0K0=*/0.117,
+/*kResXi0K0=*/0.081, /*kResAXi0K0=*/0.077,
+/*kResXiCK0=*/0.078, /*kResAXiCK0=*/0.075,
 /*kResOmegaK0=*/0.000, /*kResAOmegaK0=*/0.000,
-/*kResSigStPK0=*/0.050, /*kResASigStMK0=*/0.050,
-/*kResSigStMK0=*/0.045, /*kResASigStPK0=*/0.049,
-/*kResSigSt0K0=*/0.045, /*kResASigSt0K0=*/0.044,
+/*kResSigStPK0=*/0.052, /*kResASigStMK0=*/0.053,
+/*kResSigStMK0=*/0.047, /*kResASigStPK0=*/0.051,
+/*kResSigSt0K0=*/0.047, /*kResASigSt0K0=*/0.046,
 
-/*kResLamKSt0ToLamK0=*/0.019, /*kResALamKSt0ToALamK0=*/0.020,
-/*kResSig0KSt0ToLamK0=*/0.017, /*kResASig0KSt0ToALamK0=*/0.017,
-/*kResXi0KSt0ToLamK0=*/0.012, /*kResAXi0KSt0ToALamK0=*/0.011,
-/*kResXiCKSt0ToLamK0=*/0.012, /*kResAXiCKSt0ToALamK0=*/0.011
+/*kResLamKSt0ToLamK0=*/0.020, /*kResALamKSt0ToALamK0=*/0.021,
+/*kResSig0KSt0ToLamK0=*/0.018, /*kResASig0KSt0ToALamK0=*/0.018,
+/*kResXi0KSt0ToLamK0=*/0.013, /*kResAXi0KSt0ToALamK0=*/0.012,
+/*kResXiCKSt0ToLamK0=*/0.012, /*kResAXiCKSt0ToALamK0=*/0.012
 };
 
 
-//------------ WHEN ONLY INCLUDING 4 RESIDUALS! ------------------------------------//
+//------------ WHEN ONLY INCLUDING 3 RESIDUALS and MaxDecayLengthPrimary=5! ------------------------------------//
 const double cAnalysisLambdaFactorsOLD[85] = {
-/*kLamK0=*/1.000, /*kALamK0=*/1.000,
-/*kLamKchP=*/0.296, /*kALamKchM=*/0.296, /*kLamKchM=*/0.296, /*kALamKchP=*/0.296,
+/*kLamK0=*/0.247, /*kALamK0=*/0.254,
+/*kLamKchP=*/0.239, /*kALamKchM=*/0.245, /*kLamKchM=*/0.239, /*kALamKchP=*/0.245,
 /*kXiKchP=*/1.000, /*kAXiKchM=*/1.000, /*kXiKchM=*/1.000, /*kAXiKchP=*/1.000,
 /*kXiK0=*/1.000, /*kAXiK0=*/1.000,
 /*kLamLam=*/1.000, /*kALamALam=*/1.000, /*kLamALam=*/1.000,
 /*kLamPiP=*/1.000, /*kALamPiM=*/1.000, /*kLamPiM=*/1.000, /*kALamPiP=*/1.000,
 
 //----- Residual Types -----
-/*kResSig0KchP=*/0.26473, /*kResASig0KchM=*/0.26473, /*kResSig0KchM=*/0.26473, /*kResASig0KchP=*/0.26473,
-/*kResXi0KchP=*/0.19041, /*kResAXi0KchM=*/0.19041, /*kResXi0KchM=*/0.19041, /*kResAXi0KchP=*/0.19041,
-/*kResXiCKchP=*/0.18386, /*kResAXiCKchM=*/0.18386, /*kResXiCKchM=*/0.18386, /*kResAXiCKchP=*/0.18386,
-/*kResOmegaKchP=*/0.01760, /*kResAOmegaKchM=*/0.01760, /*kResOmegaKchM=*/0.01760, /*kResAOmegaKchP=*/0.01760,
+/*kResSig0KchP=*/0.104, /*kResASig0KchM=*/0.107, /*kResSig0KchM=*/0.103, /*kResASig0KchP=*/0.108,
+/*kResXi0KchP=*/0.075, /*kResAXi0KchM=*/0.071, /*kResXi0KchM=*/0.074, /*kResAXi0KchP=*/0.071,
+/*kResXiCKchP=*/0.073, /*kResAXiCKchM=*/0.069, /*kResXiCKchM=*/0.072, /*kResAXiCKchP=*/0.069,
+/*kResOmegaKchP=*/0.000, /*kResAOmegaKchM=*/0.000, /*kResOmegaKchM=*/0.000, /*kResAOmegaKchP=*/0.000,
 /*kResSigStPKchP=*/0.000, /*kResASigStMKchM=*/0.000, /*kResSigStPKchM=*/0.000, /*kResASigStMKchP=*/0.000,
 /*kResSigStMKchP=*/0.000, /*kResASigStPKchM=*/0.000, /*kResSigStMKchM=*/0.000, /*kResASigStPKchP=*/0.000,
 /*kResSigSt0KchP=*/0.000, /*kResASigSt0KchM=*/0.000, /*kResSigSt0KchM=*/0.000, /*kResASigSt0KchP=*/0.000,
@@ -233,9 +234,9 @@ const double cAnalysisLambdaFactorsOLD[85] = {
 /*kResXi0KSt0=*/0.000, /*kResAXi0AKSt0=*/0.000, /*kResXi0AKSt0=*/0.000, /*kResAXi0KSt0=*/0.000,
 /*kResXiCKSt0=*/0.000, /*kResAXiCAKSt0=*/0.000, /*kResXiCAKSt0=*/0.000, /*kResAXiCKSt0=*/0.000,
 
-/*kResSig0K0=*/0.000, /*kResASig0K0=*/0.000,
-/*kResXi0K0=*/0.000, /*kResAXi0K0=*/0.000,
-/*kResXiCK0=*/0.000, /*kResAXiCK0=*/0.000,
+/*kResSig0K0=*/0.113, /*kResASig0K0=*/0.117,
+/*kResXi0K0=*/0.081, /*kResAXi0K0=*/0.077,
+/*kResXiCK0=*/0.078, /*kResAXiCK0=*/0.075,
 /*kResOmegaK0=*/0.000, /*kResAOmegaK0=*/0.000,
 /*kResSigStPK0=*/0.000, /*kResASigStMK0=*/0.000,
 /*kResSigStMK0=*/0.000, /*kResASigStPK0=*/0.000,

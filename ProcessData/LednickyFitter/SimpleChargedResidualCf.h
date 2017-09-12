@@ -27,7 +27,7 @@ public:
   static TH1D* Convert1dVecToHist(td1dVec &aCfVec, td1dVec &aKStarBinCenters, TString aTitle = "tCf");
   static td1dVec ConvertHistTo1dVec(TH1* aHist);
 
-  void LoadCoulombOnlyInterpCfs(TString aFileDirectory="/home/jesse/Analysis/FemtoAnalysis/ProcessData/CoulombFitter/", bool aUseCoulombOnlyInterpCfs=true);
+  void LoadCoulombOnlyInterpCfs(TString aFileDirectory="/home/jesse/Analysis/FemtoAnalysis/ProcessData/CoulombFitter/", bool aUseCoulombOnlyInterpCfs=true, double aRadiusFactor=1.);
   td1dVec ExtractCfFrom2dInterpCfs(double aRadius);
 
   td1dVec GetChargedResidualCorrelation(double aRadiusParam=-1.);
@@ -57,6 +57,7 @@ protected:
 
   bool fUseCoulombOnlyInterpCfs;
   TH2D* f2dCoulombOnlyInterpCfs;
+  double fRadiusFactor;  //Allow me to give SigSt different radii
 
 
 #ifdef __ROOT__
