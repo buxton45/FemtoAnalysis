@@ -28,6 +28,7 @@ int main(int argc, char **argv)
   bool ApplyNonFlatBackgroundCorrection = true;
   NonFlatBgdFitType tNonFlatBgdFitType = kLinear;
   bool IncludeResiduals = true;
+  bool UseCoulombOnlyInterpCfs = true;
 
   bool bDrawResiduals = true;
 
@@ -47,6 +48,7 @@ int main(int argc, char **argv)
   if(ApplyNonFlatBackgroundCorrection) tSaveNameModifier += TString("_NonFlatBgdCrctn");
   if(tAllShareSingleLambdaParam) tSaveNameModifier += TString("_SingleLamParam");
   if(IncludeResiduals) tSaveNameModifier += TString("_ResidualsIncluded");
+  if(UseCoulombOnlyInterpCfs) tSaveNameModifier += TString("_UsingCoulombOnlyInterpCfs");
   FitGenerator* tLamKchP = new FitGenerator(tFileLocationBase,tFileLocationBaseMC,tAnType, tCentType,tAnRunType,tNPartialAnalysis,tGenType,tShareLambdaParams,tAllShareSingleLambdaParam);
 //  FitGenerator* tLamKchP = new FitGenerator(tFileLocationBase,tFileLocationBaseMC,tAnType,{k0010,k1030},tAnRunType,tNPartialAnalysis,tGenType,tShareLambdaParams,tAllShareSingleLambdaParam);
 //  tLamKchP->SetRadiusStartValues({3.0,4.0,5.0});
@@ -65,6 +67,7 @@ int main(int argc, char **argv)
   tLamKchP->SetNonFlatBgdFitType(tNonFlatBgdFitType);
   tLamKchP->SetApplyMomResCorrection(ApplyMomResCorrection);
   tLamKchP->SetIncludeResidualCorrelations(IncludeResiduals);
+  tLamKchP->SetUseCoulombOnlyInterpCfsForChargedResiduals(UseCoulombOnlyInterpCfs);
 
   tLamKchP->DoFit();
   TCanvas* tKStarwFitsCan = tLamKchP->DrawKStarCfswFits(ApplyMomResCorrection,ApplyNonFlatBackgroundCorrection,tNonFlatBgdFitType,SaveImages);

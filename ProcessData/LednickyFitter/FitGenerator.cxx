@@ -48,6 +48,7 @@ FitGenerator::FitGenerator(TString aFileLocationBase, TString aFileLocationBaseM
   fNonFlatBgdFitType(kLinear),
   fApplyMomResCorrection(false),
   fIncludeResidualCorrelations(false),
+  fUseCoulombOnlyInterpCfsForChargedResiduals(false),
 
   fSharedAn(0),
   fLednickyFitter(0)
@@ -143,6 +144,7 @@ FitGenerator::FitGenerator(TString aFileLocationBase, TString aFileLocationBaseM
   fNonFlatBgdFitType(kLinear),
   fApplyMomResCorrection(false),
   fIncludeResidualCorrelations(false),
+  fUseCoulombOnlyInterpCfsForChargedResiduals(false),
 
   fSharedAn(0),
   fLednickyFitter(0)
@@ -938,8 +940,8 @@ TCanvas* FitGenerator::DrawResiduals(int aAnalysisNumber, CentralityType aCentra
       TString tTempName = TString(cAnalysisRootTags[tTempResidualType]);
       TString tTempName1 = TString("Residual_") + tTempName;
       TString tTempName2 = TString("TransformedResidual_") + tTempName;
-      TH1D* tTempHist1 = tFitPairAnalysis->GetResidualCollection()->GetChargedCollection()[iRes].GetChargedResidualCorrelationHistogramWithLambdaApplied(tTempName1, tOverallLambdaPrimary);
-      TH1D* tTempHist2 = tFitPairAnalysis->GetResidualCollection()->GetChargedCollection()[iRes].GetTransformedChargedResidualCorrelationHistogramWithLambdaApplied(tTempName2, tOverallLambdaPrimary);
+      TH1D* tTempHist1 = tFitPairAnalysis->GetResidualCollection()->GetChargedCollection()[iRes].GetChargedResidualCorrelationHistogramWithLambdaApplied(tTempName1, tOverallLambdaPrimary, tRadiusPrimary);
+      TH1D* tTempHist2 = tFitPairAnalysis->GetResidualCollection()->GetChargedCollection()[iRes].GetTransformedChargedResidualCorrelationHistogramWithLambdaApplied(tTempName2, tOverallLambdaPrimary, tRadiusPrimary);
 
       tNCharged++;
       tCan->cd(tNNeutral+tNCharged);
@@ -1200,6 +1202,7 @@ TCanvas* FitGenerator::DrawKStarCfswFitsAndResiduals(bool aMomResCorrectFit, boo
       //---------------- Residuals ----------------------------------------
       FitPairAnalysis* tFitPairAnalysis = fSharedAn->GetFitPairAnalysis(tAnalysisNumber);
       double tOverallLambdaPrimary = tFitPairAnalysis->GetFitParameter(kLambda)->GetFitValue();
+      double tRadiusPrimary = tFitPairAnalysis->GetFitParameter(kRadius)->GetFitValue();
       
       vector<int> tNeutralResBaseColors{7,8,9,30,33,40,41};
       vector<int> tNeutralResMarkerStyles{24,25,26,27,28,30,32};
@@ -1218,7 +1221,7 @@ TCanvas* FitGenerator::DrawKStarCfswFitsAndResiduals(bool aMomResCorrectFit, boo
       {
         AnalysisType tTempResidualType = tFitPairAnalysis->GetResidualCollection()->GetChargedCollection()[iRes].GetResidualType();
         TString tTempName = TString(cAnalysisRootTags[tTempResidualType]);
-        TH1D* tTempHist = tFitPairAnalysis->GetResidualCollection()->GetChargedCollection()[iRes].GetTransformedChargedResidualCorrelationHistogramWithLambdaApplied(tTempName, tOverallLambdaPrimary);
+        TH1D* tTempHist = tFitPairAnalysis->GetResidualCollection()->GetChargedCollection()[iRes].GetTransformedChargedResidualCorrelationHistogramWithLambdaApplied(tTempName, tOverallLambdaPrimary, tRadiusPrimary);
         tCanPart->AddGraph(i,j,tTempHist,"",tChargedResMarkerStyles[iRes],tChargedResBaseColors[iRes],0.75,"ex0same");
         if(i==1 && j==1) tCanPart->AddLegendEntry(i, j, tTempHist, cAnalysisRootTags[tTempResidualType], "p");
       }
@@ -1730,6 +1733,7 @@ void FitGenerator::InitializeGenerator(double aMaxKStarToFit)
   fLednickyFitter->SetApplyNonFlatBackgroundCorrection(fApplyNonFlatBackgroundCorrection);
   fLednickyFitter->SetNonFlatBgdFitType(fNonFlatBgdFitType);
   fLednickyFitter->SetIncludeResidualCorrelations(fIncludeResidualCorrelations);
+  fLednickyFitter->SetUseCoulombOnlyInterpCfsForChargedResiduals(fUseCoulombOnlyInterpCfsForChargedResiduals);
 }
 
 //________________________________________________________________________________________________________________

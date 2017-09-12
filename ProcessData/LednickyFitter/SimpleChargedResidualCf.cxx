@@ -117,13 +117,14 @@ td1dVec SimpleChargedResidualCf::ConvertHistTo1dVec(TH1* aHist)
 }
 
 //________________________________________________________________________________________________________________
-void SimpleChargedResidualCf::LoadCoulombOnlyInterpCfs(TString aFileDirectory, AnalysisType aResType, bool aUseCoulombOnlyInterpCfs)
+void SimpleChargedResidualCf::LoadCoulombOnlyInterpCfs(TString aFileDirectory, bool aUseCoulombOnlyInterpCfs)
 {
   SetUseCoulombOnlyInterpCfs(aUseCoulombOnlyInterpCfs);
 
-  TString aFileName = aFileDirectory + TString::Format("2dCoulombOnlyInterpCfs_%s.root", cAnalysisBaseTags[aResType]);
+  TString aFileName = aFileDirectory + TString::Format("2dCoulombOnlyInterpCfs_%s.root", cAnalysisBaseTags[fResidualType]);
   TFile aFile(aFileName);
-  TH2D* t2dCoulombOnlyInterpCfs = (TH2D*)aFile.Get(TString::Format("2dCoulombOnlyInterpCfs_%s", cAnalysisBaseTags[aResType]));
+  TH2D* t2dCoulombOnlyInterpCfs = (TH2D*)aFile.Get(TString::Format("t2dCoulombOnlyInterpCfs_%s", cAnalysisBaseTags[fResidualType]));
+  assert(t2dCoulombOnlyInterpCfs);
   f2dCoulombOnlyInterpCfs = (TH2D*)t2dCoulombOnlyInterpCfs->Clone();
   f2dCoulombOnlyInterpCfs->SetDirectory(0);
 }
@@ -141,7 +142,7 @@ td1dVec SimpleChargedResidualCf::ExtractCfFrom2dInterpCfs(double aRadius)
 */
 
   assert(f2dCoulombOnlyInterpCfs->GetNbinsX() >= fKStarBinCenters.size());
-  assert(f2dCoulombOnlyInterpCfs->GetXaxis()->GetBinWidth(1) == (fKStarBinCenters[1]-fKStarBinCenters[0]));
+  assert( abs(f2dCoulombOnlyInterpCfs->GetXaxis()->GetBinWidth(1) - (fKStarBinCenters[1]-fKStarBinCenters[0])) < 0.0000000001 );
 
   td1dVec tReturnVec(0);
   double tCfValue = -1.;

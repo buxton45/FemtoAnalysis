@@ -60,6 +60,22 @@ void ResidualCollection::BuildStandardCollection(td1dVec &aKStarBinCenters, vect
 }
 
 //________________________________________________________________________________________________________________
+void ResidualCollection::SetUseCoulombOnlyInterpCfs(TString aFileDirectory, bool aUseCoulombOnlyInterpCfs)
+{
+  AnalysisType tResType;
+  for(unsigned int i=0; i<fChargedCfCollection.size(); i++) 
+  {
+    tResType = fChargedCfCollection[i].GetResidualType();
+    if(tResType==kResSigStPKchP || tResType==kResASigStMKchM ||
+       tResType==kResSigStPKchM || tResType==kResASigStMKchP ||
+       tResType==kResSigStMKchP || tResType==kResASigStPKchM ||
+       tResType==kResSigStMKchM || tResType==kResASigStPKchP) fChargedCfCollection[i].LoadCoulombOnlyInterpCfs(aFileDirectory, aUseCoulombOnlyInterpCfs);
+
+  }
+}
+
+
+//________________________________________________________________________________________________________________
 int ResidualCollection::GetNeutralIndex(AnalysisType aResidualType)
 {
   int tIndex = -1;
@@ -98,7 +114,7 @@ td1dVec ResidualCollection::CombinePrimaryWithResiduals(double *aCfParams, td1dV
   td2dVec tCfs;
   tCfs.push_back(aPrimaryCf);
   for(unsigned int iResCf=0; iResCf<fNeutralCfCollection.size(); iResCf++) tCfs.push_back(fNeutralCfCollection[iResCf].GetContributionToFitCf(aCfParams));
-  for(unsigned int iResCf=0; iResCf<fChargedCfCollection.size(); iResCf++) tCfs.push_back(fChargedCfCollection[iResCf].GetContributionToFitCf(aCfParams[0]));
+  for(unsigned int iResCf=0; iResCf<fChargedCfCollection.size(); iResCf++) tCfs.push_back(fChargedCfCollection[iResCf].GetContributionToFitCf(aCfParams[0], aCfParams[1]));
   for(unsigned int i=1; i<tCfs.size(); i++) assert(tCfs[i-1].size()==tCfs[i].size());
 
   td1dVec tReturnCf(tCfs[0].size(), 0.);

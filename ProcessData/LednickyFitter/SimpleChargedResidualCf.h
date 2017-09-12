@@ -27,7 +27,7 @@ public:
   static TH1D* Convert1dVecToHist(td1dVec &aCfVec, td1dVec &aKStarBinCenters, TString aTitle = "tCf");
   static td1dVec ConvertHistTo1dVec(TH1* aHist);
 
-  void LoadCoulombOnlyInterpCfs(TString aFileDirectory, AnalysisType aResType, bool aUseCoulombOnlyInterpCfs=true);
+  void LoadCoulombOnlyInterpCfs(TString aFileDirectory="/home/jesse/Analysis/FemtoAnalysis/ProcessData/CoulombFitter/", bool aUseCoulombOnlyInterpCfs=true);
   td1dVec ExtractCfFrom2dInterpCfs(double aRadius);
 
   td1dVec GetChargedResidualCorrelation(double aRadiusParam=-1.);

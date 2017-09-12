@@ -94,6 +94,7 @@ public:
   void SetNonFlatBgdFitType(NonFlatBgdFitType aNonFlatBgdFitType);
   void SetApplyMomResCorrection(bool aApplyMomResCorrection);
   virtual void SetIncludeResidualCorrelations(bool aInclude);
+  void SetUseCoulombOnlyInterpCfsForChargedResiduals(bool aUse);
 
   vector<double> GetMinParams();
   vector<double> GetParErrors();
@@ -121,6 +122,7 @@ protected:
   bool fApplyNonFlatBackgroundCorrection;
   bool fApplyMomResCorrection;
   bool fIncludeResidualCorrelations;
+  bool fUseCoulombOnlyInterpCfsForChargedResiduals;
   bool fResidualsInitiated;
   bool fReturnPrimaryWithResidualsToAnalyses;
   NonFlatBgdFitType fNonFlatBgdFitType;
@@ -155,6 +157,7 @@ inline void LednickyFitter::SetApplyNonFlatBackgroundCorrection(bool aApply) {fA
 inline void LednickyFitter::SetNonFlatBgdFitType(NonFlatBgdFitType aNonFlatBgdFitType) {fNonFlatBgdFitType = aNonFlatBgdFitType;}
 inline void LednickyFitter::SetApplyMomResCorrection(bool aApplyMomResCorrection) {fApplyMomResCorrection = aApplyMomResCorrection;}
 inline void LednickyFitter::SetIncludeResidualCorrelations(bool aInclude) {fIncludeResidualCorrelations = aInclude;}
+inline void LednickyFitter::SetUseCoulombOnlyInterpCfsForChargedResiduals(bool aUse) {fUseCoulombOnlyInterpCfsForChargedResiduals = aUse;}
 
 inline vector<double> LednickyFitter::GetMinParams() {return fMinParams;}
 inline vector<double> LednickyFitter::GetParErrors() {return fParErrors;}
