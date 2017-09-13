@@ -42,6 +42,8 @@ int main(int argc, char **argv)
   TString tFileLocationBase = TString::Format("%sResults_%s_%s",tDirectoryBase.Data(),tGeneralAnTypeName.Data(),tResultsDate.Data());
   TString tFileLocationBaseMC = TString::Format("%sResults_%sMC_%s",tDirectoryBase.Data(),tGeneralAnTypeName.Data(),tResultsDate.Data());
 
+  TString tSaveDirectoryBase = TString::Format("/home/jesse/Analysis/Presentations/AliFemto/20170913/Figures/%s/", cAnalysisBaseTags[tAnType]);
+//  tSaveDirectoryBase = tDirectoryBase;
 
   TString tSaveNameModifier = "";
   if(ApplyMomResCorrection) tSaveNameModifier += TString("_MomResCrctn");
@@ -53,7 +55,7 @@ int main(int argc, char **argv)
 //  FitGenerator* tLamKchP = new FitGenerator(tFileLocationBase,tFileLocationBaseMC,tAnType,{k0010,k1030},tAnRunType,tNPartialAnalysis,tGenType,tShareLambdaParams,tAllShareSingleLambdaParam);
 //  tLamKchP->SetRadiusStartValues({3.0,4.0,5.0});
 //  tLamKchP->SetRadiusLimits({{0.,10.},{0.,10.},{0.,10.}});
-  tLamKchP->SetSaveLocationBase(tDirectoryBase,tSaveNameModifier);
+  tLamKchP->SetSaveLocationBase(tSaveDirectoryBase,tSaveNameModifier);
   //tLamKchP->SetFitType(kChi2);
 
 

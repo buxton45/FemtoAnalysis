@@ -8,6 +8,7 @@
 #include "TApplication.h"
 #include "TStyle.h"
 #include "TPaveText.h"
+#include "TLegend.h"
 
 #include "PIDMapping.h"
 #include "ThermCommon.h"
@@ -16,6 +17,7 @@
 void DrawProject3dMatrixTo1d(TPad* aPad, TH3D* a3dMatrix)
 {
   aPad->cd();
+  aPad->SetLogy(true);
   gStyle->SetOptStat(1111);
   TH3D* t3dMatrix = (TH3D*)a3dMatrix->Clone();
 
@@ -118,20 +120,28 @@ void DrawProject3dMatrixTo2dRadiiVsPidPrimaryOnly(TPad* aPad, TH3D* a3dMatrix, P
 {
   aPad->cd();
   aPad->SetLogz(aSetLogZ);
-  gStyle->SetOptStat(1111);
+  gStyle->SetOptStat(101);
+  gStyle->SetOptTitle(0);
+
+  aPad->SetTopMargin(0.05);
+  aPad->SetBottomMargin(0.12);
 
   TH2D* t2dRadiiVsPid = GetProject3dMatrixTo2dRadiiVsPidPrimaryOnly(a3dMatrix, aType, aMaxDecayLength, aDrawCondensed);
 
   t2dRadiiVsPid->GetXaxis()->SetTitle("Parent");
   t2dRadiiVsPid->GetYaxis()->SetTitle("Radius (fm)");
 
+  t2dRadiiVsPid->GetXaxis()->SetTitleOffset(1.7);
+
   t2dRadiiVsPid->DrawCopy("colz");
 }
+
 
 //________________________________________________________________________________________________________________
 void DrawProject3dMatrixTo1dPrimaryOnly(TPad* aPad, TH3D* a3dMatrix, ParticlePDGType aType, double aMaxDecayLength=-1.)
 {
   aPad->cd();
+  aPad->SetLogy(true);
   gStyle->SetOptStat(1111);
 
   TH2D* tCondensed = GetProject3dMatrixTo2dRadiiVsPidPrimaryOnly(a3dMatrix, aType, aMaxDecayLength);
@@ -145,6 +155,48 @@ void DrawProject3dMatrixTo1dPrimaryOnly(TPad* aPad, TH3D* a3dMatrix, ParticlePDG
   tRadii->GetYaxis()->SetTitle("Counts");
 
   tRadii->DrawCopy();
+
+}
+
+//________________________________________________________________________________________________________________
+void DrawMultipleProject3dMatrixTo1dPrimaryOnly(TPad* aPad, TH3D* a3dMatrix, ParticlePDGType aType, td1dVec &aMaxDecayLengthVec)
+{
+  aPad->cd();
+  aPad->SetLogy(true);
+  gStyle->SetOptStat(0);
+  gStyle->SetOptTitle(0);
+
+  TLegend* tLeg = new TLegend(0.50, 0.50, 0.85, 0.85);
+    tLeg->SetFillColor(0);
+    tLeg->SetBorderSize(0);
+    tLeg->SetTextAlign(22);
+
+  TH2D* tCondensed;
+  TH1D* tRadii;
+  for(unsigned int i=0; i<aMaxDecayLengthVec.size(); i++)
+  {
+    tCondensed = GetProject3dMatrixTo2dRadiiVsPidPrimaryOnly(a3dMatrix, aType, aMaxDecayLengthVec[i]);
+
+    TString tName2 = TString::Format("%sRadiiPrimOnly_%0.3f", GetPDGRootName(aType), aMaxDecayLengthVec[i]);
+    tRadii = tCondensed->ProjectionY(tName2.Data(), 1, tCondensed->GetNbinsX());
+      tRadii->SetName(tName2);
+      tRadii->SetTitle(tName2);
+      tRadii->SetMarkerStyle(20);
+      tRadii->SetMarkerColor(i+1);
+      tRadii->SetLineColor(i+1);
+      tRadii->SetLineStyle(1);
+      tRadii->SetLineWidth(2);
+
+    tRadii->GetXaxis()->SetTitle("Radius (fm)");
+    tRadii->GetYaxis()->SetTitle("Counts");
+
+    if(i==0) tRadii->Draw();
+    else tRadii->Draw("same");
+
+    if(aMaxDecayLengthVec[i] < 0.) tLeg->AddEntry(tRadii, TString::Format("No #bar{#tau_{PDG}} cut (#bar{R} = %0.2f)", tRadii->GetMean()), "l");
+    else tLeg->AddEntry(tRadii, TString::Format("#bar{#tau_{PDG}} < %0.1f (#bar{R} = %0.2f)", aMaxDecayLengthVec[i], tRadii->GetMean()), "l");
+  }
+  tLeg->Draw();
 
 }
 
@@ -212,6 +264,12 @@ void DrawAll(TString aFileLocationSingleParticleAnalyses, ParticlePDGType aType,
   TCanvas* tCan_1dRadiiPrimOnly = new TCanvas(TString::Format("tCan_%sRadiiPrimOnly_MaxDecay%0.2f", GetPDGRootName(aType), aMaxDecayLength),
                                               TString::Format("tCan_%sRadiiPrimOnly_MaxDecay%0.2f", GetPDGRootName(aType), aMaxDecayLength));
   DrawProject3dMatrixTo1dPrimaryOnly((TPad*)tCan_1dRadiiPrimOnly, t3dRadii, aType, aMaxDecayLength);
+
+  td1dVec tMaxDecayLengthVec{-1., 5.5, 5., 3.};
+  TCanvas* tCan_Multiple1dRadiiPrimOnly = new TCanvas(TString::Format("tCan_%sRadiiPrimOnly", GetPDGRootName(aType)),
+                                              TString::Format("tCan_%sRadiiPrimOnly", GetPDGRootName(aType)));
+  DrawMultipleProject3dMatrixTo1dPrimaryOnly((TPad*)tCan_Multiple1dRadiiPrimOnly, t3dRadii, aType, tMaxDecayLengthVec);
+
 
   TCanvas* tCan_2dRadiiVsPidPrimOnly = new TCanvas(TString::Format("tCan_%s2dRadiiVsPidPrimOnly_MaxDecay%0.2f", GetPDGRootName(aType), aMaxDecayLength),
                                                    TString::Format("tCan_%s2dRadiiVsPidPrimOnly_MaxDecay%0.2f", GetPDGRootName(aType), aMaxDecayLength));
@@ -298,12 +356,13 @@ void DrawAll(TString aFileLocationSingleParticleAnalyses, ParticlePDGType aType,
   //---------------------------------------
   if(aSave)
   {
-    TString tSaveDirectory = "~/Analysis/Presentations/GroupMeetings/20170907/Figures/";
+    TString tSaveDirectory = "/home/jesse/Analysis/Presentations/AliFemto/20170913/Figures/";
     TString tFileType = ".eps";
 //    TString tFileType = ".pdf";
 
     tCan_1dRadii->SaveAs(tSaveDirectory + tSubDirectory + TString(tCan_1dRadii->GetName()) + tFileType);
     tCan_1dRadiiPrimOnly->SaveAs(tSaveDirectory + tSubDirectory + TString(tCan_1dRadiiPrimOnly->GetName()) + tFileType);
+    tCan_Multiple1dRadiiPrimOnly->SaveAs(tSaveDirectory + tSubDirectory + TString(tCan_Multiple1dRadiiPrimOnly->GetName()) + tFileType);
     tCan_2dRadiiVsPidPrimOnly->SaveAs(tSaveDirectory + tSubDirectory + TString(tCan_2dRadiiVsPidPrimOnly->GetName()) + tFileType);
     tCan_2dRadiiVsBeta->SaveAs(tSaveDirectory + tSubDirectory + TString(tCan_2dRadiiVsBeta->GetName()) + tFileType);
     tCan_Condensed2dRadiiVsPid->SaveAs(tSaveDirectory + tSubDirectory + TString(tCan_Condensed2dRadiiVsPid->GetName()) + tFileType);
@@ -339,7 +398,7 @@ int main(int argc, char **argv)
   double tMaxDecayLength = 5.0;
 //  double tMaxDecayLength = 5.5;
 
-  DrawAll(tFileLocationSingleParticleAnalyses, kPDGLam, tMaxDecayLength, bSave);
+  DrawAll(tFileLocationSingleParticleAnalyses, tType, tMaxDecayLength, bSave);
 
 /*
   vector<double> tMaxDecayLengthVec {-1., 3.0, 5.0, 5.5};

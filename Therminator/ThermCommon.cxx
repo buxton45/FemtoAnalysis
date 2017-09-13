@@ -110,8 +110,8 @@ void PrintLambdaValues(TPad* aPad, TH1D* aHisto)
   returnText->AddText("Estimated #lambda Values");
 
   double tTotal = 0.;
-  for(int i=1; i<=12; i++) tTotal += aHisto->GetBinContent(i);
-  for(int i=1; i<=12; i++) returnText->AddText(TString(aHisto->GetXaxis()->GetBinLabel(i)) + TString::Format(" = %0.3f", aHisto->GetBinContent(i)/tTotal));
+  for(int i=1; i<=13; i++) tTotal += aHisto->GetBinContent(i);
+  for(int i=1; i<=13; i++) returnText->AddText(TString(aHisto->GetXaxis()->GetBinLabel(i)) + TString::Format(" = %0.3f", aHisto->GetBinContent(i)/tTotal));
 
   returnText->Draw();
 }
