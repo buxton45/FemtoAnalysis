@@ -28,17 +28,23 @@ int main(int argc, char **argv)
   //the program ends and closes everything
 //-----------------------------------------------------------------------------
   bool bSaveImages = false;
+//  TString tSaveFileType = ".png";
+  TString tSaveFileType = ".eps";
+//  TString tSaveFileType = ".pdf";
 
   bool bZoomMatrixROI = true;
   bool bDrawCondensed = true;
   bool bSetLogZ = false;
 
   bool bDrawMatrixBackground = false;
-  bool bDrawOnlyPairsInOthers = true;
+  bool bDrawOnlyPairsInOthers = false;
 
 
   TString tDirectory = "~/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b2/";
   TString tFileLocationPairFractions = tDirectory + "PairFractions.root";
+
+  TString tSaveDirectory = "/home/jesse/Analysis/Presentations/AliFemto/20170913/";
+//  tSaveDirectory = tDirectory;
 
 //-----------------------------------------------------------------------------
 
@@ -105,12 +111,12 @@ int main(int argc, char **argv)
     tParentsCan_ALamK0 = new TCanvas("tParentsCan_ALamK0", "tParentsCan_ALamK0", 1000, 1500);
   }
 
-  DrawParentsMatrix(kLamKchP, (TPad*)tParentsCan_LamKchP, tParentsMatrix_LamKchP, bZoomMatrixROI, bSetLogZ, bSaveImages, tDirectory+"Figures/LamKchP/ParentsLamKchP");
-  DrawParentsMatrix(kALamKchM, (TPad*)tParentsCan_ALamKchM, tParentsMatrix_ALamKchM, bZoomMatrixROI, bSetLogZ, bSaveImages, tDirectory+"Figures/ALamKchM/ParentsALamKchM");
-  DrawParentsMatrix(kLamKchM, (TPad*)tParentsCan_LamKchM , tParentsMatrix_LamKchM, bZoomMatrixROI, bSetLogZ, bSaveImages, tDirectory+"Figures/LamKchM/ParentsLamKchM");
-  DrawParentsMatrix(kALamKchP, (TPad*)tParentsCan_ALamKchP, tParentsMatrix_ALamKchP, bZoomMatrixROI, bSetLogZ, bSaveImages, tDirectory+"Figures/ALamKchP/ParentsALamKchP");
-  DrawParentsMatrix(kLamK0, (TPad*)tParentsCan_LamK0 , tParentsMatrix_LamK0, bZoomMatrixROI, bSetLogZ, bSaveImages, tDirectory+"Figures/LamK0/ParentsLamK0");
-  DrawParentsMatrix(kALamK0, (TPad*)tParentsCan_ALamK0, tParentsMatrix_ALamK0, bZoomMatrixROI, bSetLogZ, bSaveImages, tDirectory+"Figures/ALamK0/ParentsALamK0");
+  DrawParentsMatrix(kLamKchP, (TPad*)tParentsCan_LamKchP, tParentsMatrix_LamKchP, bZoomMatrixROI, bSetLogZ, bSaveImages, tSaveDirectory+"Figures/LamKchP/ParentsLamKchP", tSaveFileType);
+  DrawParentsMatrix(kALamKchM, (TPad*)tParentsCan_ALamKchM, tParentsMatrix_ALamKchM, bZoomMatrixROI, bSetLogZ, bSaveImages, tSaveDirectory+"Figures/ALamKchM/ParentsALamKchM", tSaveFileType);
+  DrawParentsMatrix(kLamKchM, (TPad*)tParentsCan_LamKchM , tParentsMatrix_LamKchM, bZoomMatrixROI, bSetLogZ, bSaveImages, tSaveDirectory+"Figures/LamKchM/ParentsLamKchM", tSaveFileType);
+  DrawParentsMatrix(kALamKchP, (TPad*)tParentsCan_ALamKchP, tParentsMatrix_ALamKchP, bZoomMatrixROI, bSetLogZ, bSaveImages, tSaveDirectory+"Figures/ALamKchP/ParentsALamKchP", tSaveFileType);
+  DrawParentsMatrix(kLamK0, (TPad*)tParentsCan_LamK0 , tParentsMatrix_LamK0, bZoomMatrixROI, bSetLogZ, bSaveImages, tSaveDirectory+"Figures/LamK0/ParentsLamK0", tSaveFileType);
+  DrawParentsMatrix(kALamK0, (TPad*)tParentsCan_ALamK0, tParentsMatrix_ALamK0, bZoomMatrixROI, bSetLogZ, bSaveImages, tSaveDirectory+"Figures/ALamK0/ParentsALamK0", tSaveFileType);
 
 
 
@@ -124,12 +130,12 @@ int main(int argc, char **argv)
     TCanvas* tCondensedParentsCan_LamK0 = new TCanvas("tCondensedParentsCan_LamK0", "tCondensedParentsCan_LamK0", 1000, 1500);
     TCanvas* tCondensedParentsCan_ALamK0 = new TCanvas("tCondensedParentsCan_ALamK0", "tCondensedParentsCan_ALamK0", 1000, 1500);
 
-    DrawCondensedParentsMatrix(kLamKchP, (TPad*)tCondensedParentsCan_LamKchP, tParentsMatrix_LamKchP, bSetLogZ, bSaveImages, tDirectory+"Figures/LamKchP/CondensedParentsLamKchP");
-    DrawCondensedParentsMatrix(kALamKchM, (TPad*)tCondensedParentsCan_ALamKchM, tParentsMatrix_ALamKchM, bSetLogZ, bSaveImages, tDirectory+"Figures/ALamKchM/CondensedParentsALamKchM");
-    DrawCondensedParentsMatrix(kLamKchM, (TPad*)tCondensedParentsCan_LamKchM, tParentsMatrix_LamKchM, bSetLogZ, bSaveImages, tDirectory+"Figures/LamKchM/CondensedParentsLamKchM");
-    DrawCondensedParentsMatrix(kALamKchP, (TPad*)tCondensedParentsCan_ALamKchP, tParentsMatrix_ALamKchP, bSetLogZ, bSaveImages, tDirectory+"Figures/ALamKchP/CondensedParentsALamKchP");
-    DrawCondensedParentsMatrix(kLamK0, (TPad*)tCondensedParentsCan_LamK0, tParentsMatrix_LamK0, bSetLogZ, bSaveImages, tDirectory+"Figures/LamK0/CondensedParentsLamK0");
-    DrawCondensedParentsMatrix(kALamK0, (TPad*)tCondensedParentsCan_ALamK0, tParentsMatrix_ALamK0, bSetLogZ, bSaveImages, tDirectory+"Figures/ALamK0/CondensedParentsALamK0");
+    DrawCondensedParentsMatrix(kLamKchP, (TPad*)tCondensedParentsCan_LamKchP, tParentsMatrix_LamKchP, bSetLogZ, bSaveImages, tSaveDirectory+"Figures/LamKchP/CondensedParentsLamKchP", tSaveFileType);
+    DrawCondensedParentsMatrix(kALamKchM, (TPad*)tCondensedParentsCan_ALamKchM, tParentsMatrix_ALamKchM, bSetLogZ, bSaveImages, tSaveDirectory+"Figures/ALamKchM/CondensedParentsALamKchM", tSaveFileType);
+    DrawCondensedParentsMatrix(kLamKchM, (TPad*)tCondensedParentsCan_LamKchM, tParentsMatrix_LamKchM, bSetLogZ, bSaveImages, tSaveDirectory+"Figures/LamKchM/CondensedParentsLamKchM", tSaveFileType);
+    DrawCondensedParentsMatrix(kALamKchP, (TPad*)tCondensedParentsCan_ALamKchP, tParentsMatrix_ALamKchP, bSetLogZ, bSaveImages, tSaveDirectory+"Figures/ALamKchP/CondensedParentsALamKchP", tSaveFileType);
+    DrawCondensedParentsMatrix(kLamK0, (TPad*)tCondensedParentsCan_LamK0, tParentsMatrix_LamK0, bSetLogZ, bSaveImages, tSaveDirectory+"Figures/LamK0/CondensedParentsLamK0", tSaveFileType);
+    DrawCondensedParentsMatrix(kALamK0, (TPad*)tCondensedParentsCan_ALamK0, tParentsMatrix_ALamK0, bSetLogZ, bSaveImages, tSaveDirectory+"Figures/ALamK0/CondensedParentsALamK0", tSaveFileType);
   }
 
   //-------------------------------------------------------------------------

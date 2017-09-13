@@ -138,7 +138,7 @@ void DrawPairFractions(TPad* aPad, TH1D* aHisto, bool aSave, TString aSaveName)
 
   PrintLambdaValues(aPad,aHisto);
 
-  if(aSave) aPad->SaveAs(aSaveName+TString(".pdf"));
+  if(aSave) aPad->SaveAs(aSaveName+TString(".eps"));
 }
 
 //________________________________________________________________________________________________________________
@@ -297,12 +297,18 @@ void DrawOnlyPairsInOthers(AnalysisType aAnType, TPad* aPad, TH2D* aMatrix, doub
 }
 
 //________________________________________________________________________________________________________________
-void DrawParentsMatrix(AnalysisType aAnType, TPad* aPad, TH2D* aMatrix, bool aZoomROI, bool aSetLogZ, bool aSave, TString aSaveName)
+void DrawParentsMatrix(AnalysisType aAnType, TPad* aPad, TH2D* aMatrix, bool aZoomROI, bool aSetLogZ, bool aSave, TString aSaveName, TString aFileType)
 {
   aPad->cd();
   aPad->SetRightMargin(0.15);
   aPad->SetLogz(aSetLogZ);
   gStyle->SetOptStat(0);
+
+  if(aZoomROI)
+  {
+    aPad->SetLeftMargin(0.15);
+    aPad->SetBottomMargin(0.15);
+  }
 
   TString tReturnName;
   if(aZoomROI) tReturnName = TString("Parents Matrix: ");
@@ -310,7 +316,8 @@ void DrawParentsMatrix(AnalysisType aAnType, TPad* aPad, TH2D* aMatrix, bool aZo
   tReturnName += TString(cAnalysisRootTags[aAnType]);
   aMatrix->SetTitle(tReturnName);
 
-//  aMatrix->GetXaxis()->SetTitle("Lambda Parent ID");
+  aMatrix->GetXaxis()->SetTitle("(A)Lambda Parent ID");
+  if(aZoomROI) aMatrix->GetXaxis()->SetTitleOffset(2.1);
   aMatrix->GetXaxis()->SetRange(1,100);
   aMatrix->GetXaxis()->SetLabelSize(0.01);
   if(aZoomROI)
@@ -322,7 +329,8 @@ void DrawParentsMatrix(AnalysisType aAnType, TPad* aPad, TH2D* aMatrix, bool aZo
   }
   aMatrix->LabelsOption("v", "X");
 
-//  aMatrix->GetYaxis()->SetTitle("Kch Parent ID");
+  aMatrix->GetYaxis()->SetTitle("Kaon Parent ID");
+  if(aZoomROI) aMatrix->GetYaxis()->SetTitleOffset(2.1);
   aMatrix->GetYaxis()->SetRange(1,135);
   aMatrix->GetYaxis()->SetLabelSize(0.01);
   if(aZoomROI)
@@ -340,7 +348,7 @@ void DrawParentsMatrix(AnalysisType aAnType, TPad* aPad, TH2D* aMatrix, bool aZo
     TString tSaveName = aSaveName;
     if(aSetLogZ) tSaveName += TString("_LogZ");
     if(!aZoomROI) tSaveName += TString("_UnZoomed");
-    tSaveName += TString(".pdf");
+    tSaveName += aFileType;
 
     aPad->SaveAs(tSaveName);
   }
@@ -427,16 +435,28 @@ TH2D* BuildCondensedParentsMatrix(TH2D* aMatrix, TString aReturnName)
 }
 
 //________________________________________________________________________________________________________________
-void DrawCondensedParentsMatrix(AnalysisType aAnType, TPad* aPad, TH2D* aMatrix, bool aSetLogZ, bool aSave, TString aSaveName)
+void DrawCondensedParentsMatrix(AnalysisType aAnType, TPad* aPad, TH2D* aMatrix, bool aSetLogZ, bool aSave, TString aSaveName, TString aFileType)
 {
   aPad->cd();
   aPad->SetRightMargin(0.15);
   aPad->SetTopMargin(0.075);
+  aPad->SetLeftMargin(0.125);
+  aPad->SetBottomMargin(0.125);
   aPad->SetLogz(aSetLogZ);
 //  gStyle->SetOptStat(0);
 
   TString tReturnName = TString("Parents Matrix: ") + TString(cAnalysisRootTags[aAnType]);
   TH2D* tCondensedMatrix = BuildCondensedParentsMatrix(aMatrix, tReturnName);
+
+  tCondensedMatrix->GetXaxis()->SetTitle("(A)Lambda Parent ID");
+  tCondensedMatrix->GetXaxis()->SetTitleSize(0.025);
+  tCondensedMatrix->GetXaxis()->SetTitleOffset(2.1);
+  tCondensedMatrix->GetXaxis()->SetLabelSize(0.0225);
+
+  tCondensedMatrix->GetYaxis()->SetTitle("Kaon Parent ID");
+  tCondensedMatrix->GetYaxis()->SetTitleSize(0.025);
+  tCondensedMatrix->GetYaxis()->SetTitleOffset(2.0);
+  tCondensedMatrix->GetYaxis()->SetLabelSize(0.0175);
 
   tCondensedMatrix->Draw("colz");
 
@@ -444,7 +464,7 @@ void DrawCondensedParentsMatrix(AnalysisType aAnType, TPad* aPad, TH2D* aMatrix,
   {
     TString tSaveName = aSaveName;
     if(aSetLogZ) tSaveName += TString("_LogZ");
-    tSaveName += TString(".pdf");
+    tSaveName += aFileType;
 
     aPad->SaveAs(tSaveName);
   }
@@ -529,7 +549,7 @@ void DrawCondensed2dRadiiVsPid(ParticlePDGType aType, TPad* aPad, TH2D* a2dHist,
   {
     TString tSaveName = aSaveName;
     if(aSetLogZ) tSaveName += TString("_LogZ");
-    tSaveName += TString(".pdf");
+    tSaveName += TString(".eps");
 
     aPad->SaveAs(tSaveName);
   }
@@ -601,7 +621,7 @@ void DrawCondensed1dParentsHistogram(ParticlePDGType aType, TPad* aPad, TH1D* a1
   if(aSave)
   {
     TString tSaveName = aSaveName;
-    tSaveName += TString(".pdf");
+    tSaveName += TString(".eps");
 
     aPad->SaveAs(tSaveName);
   }

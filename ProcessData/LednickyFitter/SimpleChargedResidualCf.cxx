@@ -152,6 +152,7 @@ td1dVec SimpleChargedResidualCf::ExtractCfFrom2dInterpCfs(double aRadius)
   for(unsigned int i=0; i<fKStarBinCenters.size(); i++)
   {
     tCfValue = f2dCoulombOnlyInterpCfs->Interpolate(fKStarBinCenters[i], tRadius);
+    assert(tCfValue>0); //This should hopefully kill the program if I go outside of interpolation region
     tReturnVec.push_back(tCfValue);
   }
   return tReturnVec;
@@ -181,7 +182,7 @@ td1dVec SimpleChargedResidualCf::GetChargedResidualCorrelation(double aRadiusPar
 //________________________________________________________________________________________________________________
 td1dVec SimpleChargedResidualCf::GetTransformedChargedResidualCorrelation(double aRadiusParam)
 {
-  if(fTransformedResCf.size()==0)
+  if(fUseCoulombOnlyInterpCfs || fTransformedResCf.size()==0)
   {
     td1dVec tResCf = GetChargedResidualCorrelation(aRadiusParam);
 

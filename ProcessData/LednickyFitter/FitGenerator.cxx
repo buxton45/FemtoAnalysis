@@ -652,7 +652,7 @@ TCanvas* FitGenerator::DrawKStarCfs(bool aSaveImage, bool aDrawSysErrors)
   if(aSaveImage)
   {
     ExistsSaveLocationBase();
-    tCanPart->GetCanvas()->SaveAs(fSaveLocationBase+tCanvasName+fSaveNameModifier+TString(".pdf"));
+    tCanPart->GetCanvas()->SaveAs(fSaveLocationBase+tCanvasName+fSaveNameModifier+TString(".eps"));
   }
 
   return tCanPart->GetCanvas();
@@ -855,7 +855,7 @@ TCanvas* FitGenerator::DrawKStarCfswFits(bool aMomResCorrectFit, bool aNonFlatBg
   if(aSaveImage)
   {
     ExistsSaveLocationBase();
-    tCanPart->GetCanvas()->SaveAs(fSaveLocationBase+tCanPart->GetCanvas()->GetName()+fSaveNameModifier+TString(".pdf"));
+    tCanPart->GetCanvas()->SaveAs(fSaveLocationBase+tCanPart->GetCanvas()->GetName()+fSaveNameModifier+TString(".eps"));
   }
 
   return tCanPart->GetCanvas();
@@ -974,7 +974,7 @@ TCanvas* FitGenerator::DrawResiduals(int aAnalysisNumber, CentralityType aCentra
   if(aSaveImage)
   {
     ExistsSaveLocationBase();
-    tCan->SaveAs(fSaveLocationBase+tCan->GetName()+fSaveNameModifier+TString(".pdf"));
+    tCan->SaveAs(fSaveLocationBase+tCan->GetName()+fSaveNameModifier+TString(".eps"));
   }
 
 
@@ -1237,7 +1237,7 @@ TCanvas* FitGenerator::DrawKStarCfswFitsAndResiduals(bool aMomResCorrectFit, boo
   if(aSaveImage)
   {
     ExistsSaveLocationBase();
-    tCanPart->GetCanvas()->SaveAs(fSaveLocationBase+tCanPart->GetCanvas()->GetName()+fSaveNameModifier+TString(".pdf"));
+    tCanPart->GetCanvas()->SaveAs(fSaveLocationBase+tCanPart->GetCanvas()->GetName()+fSaveNameModifier+TString(".eps"));
   }
 
   return tCanPart->GetCanvas();
@@ -1306,7 +1306,7 @@ TCanvas* FitGenerator::DrawModelKStarCfs(bool aSaveImage)
   if(aSaveImage)
   {
     ExistsSaveLocationBase();
-    tCanPart->GetCanvas()->SaveAs(fSaveLocationBase+tCanvasName+fSaveNameModifier+TString(".pdf"));
+    tCanPart->GetCanvas()->SaveAs(fSaveLocationBase+tCanvasName+fSaveNameModifier+TString(".eps"));
   }
 
   return tCanPart->GetCanvas();
@@ -1576,10 +1576,10 @@ void FitGenerator::SetDefaultSharedParameters(bool aSetAllUnbounded)
 }
 
 //________________________________________________________________________________________________________________
-void FitGenerator::SetDefaultLambdaParametersWithResiduals()
+void FitGenerator::SetDefaultLambdaParametersWithResiduals(double aMinLambda, double aMaxLambda)
 {
-  double tLambdaMin = 0.;
-  double tLambdaMax = 1.0;
+  double tLambdaMin = aMinLambda;
+  double tLambdaMax = aMaxLambda;
   double tLambdaStart = 0.9;
 
   for(unsigned int iCent=0; iCent<fCentralityTypes.size(); iCent++)
@@ -1718,10 +1718,17 @@ void FitGenerator::SetAllParameters()
 //________________________________________________________________________________________________________________
 void FitGenerator::InitializeGenerator(double aMaxKStarToFit)
 {
+/*
   if(fIncludeResidualCorrelations)  //since this involves the CoulombFitter, I should place limits on parameters used in interpolations
   {
     for(unsigned int iCent=0; iCent<fCentralityTypes.size(); iCent++) SetRadiusLimits(1.,15.,iCent);
     SetScattParamLimits({{-10.,10.},{-10.,10.},{-10.,10.}});
+  }
+*/
+
+  if(fIncludeResidualCorrelations && fUseCoulombOnlyInterpCfsForChargedResiduals)
+  {
+    for(unsigned int iCent=0; iCent<fCentralityTypes.size(); iCent++) SetRadiusLimits(3.,13.,iCent);
   }
 
   SetAllParameters();

@@ -54,9 +54,9 @@ extern vector<int> GetParentsPidVector(ParticlePDGType aType);
 extern void SetParentPidBinLabels(TAxis* aAxis, ParticlePDGType aType);
 extern void DrawParentsMatrixBackground(AnalysisType aAnType, TPad* aPad, TH2D* aMatrix);
 extern void DrawOnlyPairsInOthers(AnalysisType aAnType, TPad* aPad, TH2D* aMatrix, double aMaxDecayLength=-1.);
-extern void DrawParentsMatrix(AnalysisType aAnType, TPad* aPad, TH2D* aMatrix, bool aZoomROI=false, bool aSetLogZ=false, bool aSave=false, TString aSaveName="");
+extern void DrawParentsMatrix(AnalysisType aAnType, TPad* aPad, TH2D* aMatrix, bool aZoomROI=false, bool aSetLogZ=false, bool aSave=false, TString aSaveName="", TString aFileType = ".pdf");
 extern TH2D* BuildCondensedParentsMatrix(TH2D* aMatrix, TString aReturnName);
-extern void DrawCondensedParentsMatrix(AnalysisType aAnType, TPad* aPad, TH2D* aMatrix, bool aSetLogZ=false, bool aSave=false, TString aSaveName="");
+extern void DrawCondensedParentsMatrix(AnalysisType aAnType, TPad* aPad, TH2D* aMatrix, bool aSetLogZ=false, bool aSave=false, TString aSaveName="", TString aFileType = ".pdf");
 
 //-----------------------------------------------------------
 

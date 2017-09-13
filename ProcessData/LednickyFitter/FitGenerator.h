@@ -72,7 +72,7 @@ public:
   void SetLambdaParamLimits(double aMin, double aMax, bool tConjPair=false, CentralityType aCentType=kMB);
 
   void SetDefaultSharedParameters(bool aSetAllUnbounded=false);
-  void SetDefaultLambdaParametersWithResiduals();
+  void SetDefaultLambdaParametersWithResiduals(double aMinLambda=0., double aMaxLambda=1.0);
 
   void SetAllParameters();
   void InitializeGenerator(double aMaxKStarToFit=0.3);  //Called withith DoFit
@@ -112,7 +112,7 @@ public:
   void SetApplyNonFlatBackgroundCorrection(bool aApply);
   void SetNonFlatBgdFitType(NonFlatBgdFitType aNonFlatBgdFitType);
   void SetApplyMomResCorrection(bool aApplyMomResCorrection);
-  virtual void SetIncludeResidualCorrelations(bool aInclude);
+  virtual void SetIncludeResidualCorrelations(bool aInclude, double aMinLambda=0., double aMaxLambda=1.0);
   void SetUseCoulombOnlyInterpCfsForChargedResiduals(bool aUse);
 
 protected:
@@ -180,7 +180,7 @@ inline TH1* FitGenerator::GetKStarCf(int aAnalysisNumber) {return fSharedAn->Get
 inline void FitGenerator::SetApplyNonFlatBackgroundCorrection(bool aApply) {fApplyNonFlatBackgroundCorrection = aApply;}
 inline void FitGenerator::SetNonFlatBgdFitType(NonFlatBgdFitType aNonFlatBgdFitType) {fNonFlatBgdFitType = aNonFlatBgdFitType;}
 inline void FitGenerator::SetApplyMomResCorrection(bool aApplyMomResCorrection) {fApplyMomResCorrection = aApplyMomResCorrection;}
-inline void FitGenerator::SetIncludeResidualCorrelations(bool aInclude) {fIncludeResidualCorrelations = aInclude; SetDefaultLambdaParametersWithResiduals();}
+inline void FitGenerator::SetIncludeResidualCorrelations(bool aInclude, double aMinLambda, double aMaxLambda) {fIncludeResidualCorrelations = aInclude; SetDefaultLambdaParametersWithResiduals(aMinLambda, aMaxLambda);}
 inline void FitGenerator::SetUseCoulombOnlyInterpCfsForChargedResiduals(bool aUse) {fUseCoulombOnlyInterpCfsForChargedResiduals = aUse;}
 
 #endif

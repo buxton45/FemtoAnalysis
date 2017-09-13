@@ -21,21 +21,39 @@ To achieve this, we will simultaneously fit the data for both the primary correl
 \vspace{4mm}
  C_{measured}(k^{*}_{\Lambda K^{+}}) = 1 + \lambda_{\Lambda K^{+}}[C_{\Lambda K^{+}}(k^{*}_{\Lambda K^{+}})-1] + \lambda_{\Sigma^{0}K^{+}}[C_{\Sigma^{0}K^{+}}(k^{*}_{\Lambda K^{+}})-1] \\
 \vspace{2mm}
-  ~~~~~C_{\Sigma^{0}K^{+}}(k^{*}_{\Lambda K^{+}}) \equiv \sum\limits_{k^{*}_{\Sigma^{0}K^{+}}} \frac{C_{\Sigma^{0}K^{+}}\left(k^{*}_{\Sigma^{0}K^{+}}\right) T\left(k^{*}_{\Sigma^{0}K^{+}},k^{*}_{\Lambda K^{+}}\right)}{T\left(k^{*}_{\Sigma^{0}K^{+}},k^{*}_{\Lambda K^{+}}\right)}
+  ~~~~~C_{\Sigma^{0}K^{+}}(k^{*}_{\Lambda K^{+}}) \equiv \frac{\sum\limits_{k^{*}_{\Sigma^{0}K^{+}}} C_{\Sigma^{0}K^{+}}\left(k^{*}_{\Sigma^{0}K^{+}}\right) T\left(k^{*}_{\Sigma^{0}K^{+}},k^{*}_{\Lambda K^{+}}\right)}{\sum\limits_{k^{*}_{\Sigma^{0}K^{+}}} T\left(k^{*}_{\Sigma^{0}K^{+}},k^{*}_{\Lambda K^{+}}\right)}
 \end{array} 
 \label{eqn:SimpleResiduals}
 \end{equation}
 
-$C_{\Sigma^{0}K^{+}}(k^{*}_{\Sigma^{0}K^{+}})$ is the $\Sigma^{0}$K$^{+}$ correlation function from, for instance, Equation \ref{eqn:LednickyEqn}, and $T$ is the transform matrix generated with THERMINATOR.  This equation can be easily extended to include feed-down from more sourced:
+$C_{\Sigma^{0}K^{+}}(k^{*}_{\Sigma^{0}K^{+}})$ is the $\Sigma^{0}$K$^{+}$ correlation function from, for instance, Equation \ref{eqn:LednickyEqn}, and $T$ is the transform matrix generated with THERMINATOR.
+
+  This equation can be easily extended to include feed-down from more sources:
 
 \begin{equation}
- C_{measured}(k^{*}_{\Lambda K}) = \sum\limits_{i}  \lambda_{i}C_{i}(k^{*}_{\Lambda K})
+\begin{array}{l}
+\vspace{4mm}
+\begin{split}
+ C_{measured}(k^{*}_{\Lambda K}) & = 1 + \lambda_{\Lambda K}[C_{\Lambda K}(k^{*}_{\Lambda K})-1] + \lambda_{\Sigma^{0}K}[C_{\Sigma^{0}K}(k^{*}_{\Lambda K})-1] + ... \\ &
+ + \lambda_{P_{1}P_{2}}[C_{P_{1}P_{2}}(k^{*}_{\Lambda K})-1] + \lambda_{other}[C_{other}(k^{*}_{\Lambda K})-1] 
+\end{split}
+\\
+\vspace{2mm}
+  ~~~~~C_{P_{1}P_{2}}(k^{*}_{\Lambda K}) \equiv \frac{\sum\limits_{k^{*}_{P_{1}P_{2}}} C_{P_{1}P_{2}}\left(k^{*}_{P_{1}P_{2}}\right) T\left(k^{*}_{P_{1}P_{2}},k^{*}_{\Lambda K}\right)}{\sum\limits_{k^{*}_{P_{1}P_{2}}} T\left(k^{*}_{P_{1}P_{2}},k^{*}_{\Lambda K}\right)}
+\end{array} 
+\label{eqn:ResidualsFull}
+\end{equation}
+
+  Or, more compactly:
+
+\begin{equation}
+ C_{measured}(k^{*}_{\Lambda K}) = 1 + \sum\limits_{i}  \lambda_{i}[C_{i}(k^{*}_{\Lambda K})-1]
 \label{eqn:Residuals}
 \end{equation}
 
 The framework for extracting the necessary transform matrices from the THERMINATOR data is already in place, and has been used to generate the examples from $\Lambda$K$^{+}$ and $\bar{\Lambda}$K$^{+}$ analyses shown in Figures \ref{fig:TransformMatricesLamKchP} and \ref{fig:TransformMatricesALamKchP}.  However, these residual correlations have not yet been implemented in the fitter.
 
-There is an obvious added complication here, as, for instance, the $\Xi^{-}$K$^{\pm}$ residuals necessitate the inclusion of the CoulombFitter into the process.  The complication of combining the two fitters is not as troubling as the increase in fitting time that this is sure to bring.  Additionally, in the future, we may combine our $\Lambda$K and $\Xi$K analyses to be fit simultaneously.
+There is an obvious added complication here, as, for instance, the $\Xi^{-}$K$^{\pm}$ residuals necessitate the inclusion of the CoulombFitter into the process.  The complication of combining the two fitters is not as troubling as the increase in fitting time that this is sure to bring.  We have two solutions to bypass such a large increase in run time.  First, we can use our experimental $\Xi^{\mathrm{ch}}$K$^{\mathrm{ch}}$ data to represent all charged parent pair system.  Alternatively, we can assume the strong interaction is negligible in the charged residual, and generate the parent correlation function given radius and $\lambda$ parameters.  We find in our $\Xi^{\mathrm{ch}}$K$^{\mathrm{ch}}$ that a Coulomb-only description of the system describes, reasonable well, the broad features of the correlation.  The strong interaction is necessary for the fine details.  However, as these correlations are run through a transform matrix, which largely flattens out and fine details, a Coulomb-only description should be sufficient.
 
 \begin{figure}[h!]
   \centering

@@ -49,9 +49,15 @@ int main(int argc, char **argv)
 
   double tLambda = 1.0;
 
+/*
   int tNbinsRStar = 200;
   double tRStarMin = 0.;
   double tRStarMax = 20.;
+*/
+
+  int tNbinsRStar = 60;
+  double tRStarMin = 1.;
+  double tRStarMax = 16.;
 
   double tNorm = 1.;
 

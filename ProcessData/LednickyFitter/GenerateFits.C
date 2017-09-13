@@ -27,8 +27,15 @@ int main(int argc, char **argv)
   bool ApplyMomResCorrection = true;
   bool ApplyNonFlatBackgroundCorrection = true;
   NonFlatBgdFitType tNonFlatBgdFitType = kLinear;
+
   bool IncludeResiduals = true;
+
+  bool UseAll10Residuals = true;
+  bool UnboundLambda = true;
   bool UseCoulombOnlyInterpCfs = true;
+
+  double aLambdaMin=0., aLambdaMax=1.;
+  if(UnboundLambda) aLambdaMax=0.;
 
   bool bDrawResiduals = true;
 
@@ -43,6 +50,14 @@ int main(int argc, char **argv)
   TString tFileLocationBaseMC = TString::Format("%sResults_%sMC_%s",tDirectoryBase.Data(),tGeneralAnTypeName.Data(),tResultsDate.Data());
 
   TString tSaveDirectoryBase = TString::Format("/home/jesse/Analysis/Presentations/AliFemto/20170913/Figures/%s/", cAnalysisBaseTags[tAnType]);
+    if(UseAll10Residuals) tSaveDirectoryBase += TString("10Residuals/");
+    else tSaveDirectoryBase += TString("3Residuals/");
+
+    if(UnboundLambda) tSaveDirectoryBase += TString("NoLimits/");
+    else tSaveDirectoryBase += TString("LimitedLambda/");
+
+    if(UseCoulombOnlyInterpCfs) tSaveDirectoryBase += TString("UsingCoulombOnlyInterpCfs/");
+    else tSaveDirectoryBase += TString("UsingXiKData/");
 //  tSaveDirectoryBase = tDirectoryBase;
 
   TString tSaveNameModifier = "";
@@ -68,7 +83,7 @@ int main(int argc, char **argv)
   tLamKchP->SetApplyNonFlatBackgroundCorrection(ApplyNonFlatBackgroundCorrection);
   tLamKchP->SetNonFlatBgdFitType(tNonFlatBgdFitType);
   tLamKchP->SetApplyMomResCorrection(ApplyMomResCorrection);
-  tLamKchP->SetIncludeResidualCorrelations(IncludeResiduals);
+  tLamKchP->SetIncludeResidualCorrelations(IncludeResiduals, aLambdaMin, aLambdaMax);
   tLamKchP->SetUseCoulombOnlyInterpCfsForChargedResiduals(UseCoulombOnlyInterpCfs);
 
   tLamKchP->DoFit();
