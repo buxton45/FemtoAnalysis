@@ -1728,7 +1728,7 @@ void FitGenerator::InitializeGenerator(double aMaxKStarToFit)
 
   if(fIncludeResidualCorrelations && fUseCoulombOnlyInterpCfsForChargedResiduals)
   {
-    for(unsigned int iCent=0; iCent<fCentralityTypes.size(); iCent++) SetRadiusLimits(3.,13.,iCent);
+    for(unsigned int iCent=0; iCent<fCentralityTypes.size(); iCent++) SetRadiusLimits(1.,13.,iCent);
   }
 
   SetAllParameters();

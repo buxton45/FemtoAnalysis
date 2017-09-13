@@ -55,9 +55,9 @@ int main(int argc, char **argv)
   double tRStarMax = 20.;
 */
 
-  int tNbinsRStar = 60;
+  int tNbinsRStar = 48;
   double tRStarMin = 1.;
-  double tRStarMax = 16.;
+  double tRStarMax = 13.;
 
   double tNorm = 1.;
 
