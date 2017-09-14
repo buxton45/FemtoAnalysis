@@ -45,6 +45,7 @@ public:
   AnalysisType GetResidualType();
   double GetLambdaFactor();
   void SetUseCoulombOnlyInterpCfs(bool aUse);
+  TH2D* GetTransformMatrix();
 protected:
   AnalysisType fResidualType;
   FitPairAnalysis* fPairAn;
@@ -68,4 +69,5 @@ protected:
 inline AnalysisType SimpleChargedResidualCf::GetResidualType() {return fResidualType;}
 inline double SimpleChargedResidualCf::GetLambdaFactor() {return fLambdaFactor;}
 inline void SimpleChargedResidualCf::SetUseCoulombOnlyInterpCfs(bool aUse) {fUseCoulombOnlyInterpCfs = aUse;}
+inline TH2D* SimpleChargedResidualCf::GetTransformMatrix() {return fTransformMatrix;}
 #endif

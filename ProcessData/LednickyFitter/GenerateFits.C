@@ -95,6 +95,7 @@ int main(int argc, char **argv)
 //-------------------------------------------------------------------------------
   TObjArray* tAllCanLamKchP;
   TCanvas* tCanPrimwFitsAndResidual;
+  TObjArray* tAllResWithTransMatrices;
 
   if(IncludeResiduals && bDrawResiduals)
   {
@@ -104,6 +105,8 @@ int main(int argc, char **argv)
 
 //    TCanvas* tCanPrimWithRes = tLamKchP->DrawPrimaryWithResiduals(0,k0010,TString("PrimaryWithResidual_")+TString(cAnalysisBaseTags[tAnType]));
     tCanPrimwFitsAndResidual = tLamKchP->DrawKStarCfswFitsAndResiduals(ApplyMomResCorrection,ApplyNonFlatBackgroundCorrection,tNonFlatBgdFitType,SaveImages);
+
+    tAllResWithTransMatrices = tLamKchP->DrawAllResidualsWithTransformMatrices(SaveImages);
   }
 
 //-------------------------------------------------------------------------------

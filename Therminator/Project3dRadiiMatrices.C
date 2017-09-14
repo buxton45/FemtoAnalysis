@@ -14,6 +14,26 @@
 #include "ThermCommon.h"
 
 //________________________________________________________________________________________________________________
+double GetMeanRadius(TH1* aRadii)
+{
+  double tNum=0., tDen=0.;
+  double tRadius, tNCounts, tWeight;
+  for(int i=1; i<=aRadii->GetNbinsX(); i++)
+  {
+    tNCounts = aRadii->GetBinContent(i);
+    tRadius = aRadii->GetBinCenter(i);
+    tWeight = tRadius*tRadius;
+//    tWeight = 1.;
+
+    tNum += tNCounts*tRadius*tWeight;
+    tDen += tNCounts*tWeight;
+  }
+
+  double tMean = tNum/tDen;
+  return tMean;
+}
+
+//________________________________________________________________________________________________________________
 void DrawProject3dMatrixTo1d(TPad* aPad, TH3D* a3dMatrix)
 {
   aPad->cd();
@@ -195,6 +215,9 @@ void DrawMultipleProject3dMatrixTo1dPrimaryOnly(TPad* aPad, TH3D* a3dMatrix, Par
 
     if(aMaxDecayLengthVec[i] < 0.) tLeg->AddEntry(tRadii, TString::Format("No #bar{#tau_{PDG}} cut (#bar{R} = %0.2f)", tRadii->GetMean()), "l");
     else tLeg->AddEntry(tRadii, TString::Format("#bar{#tau_{PDG}} < %0.1f (#bar{R} = %0.2f)", aMaxDecayLengthVec[i], tRadii->GetMean()), "l");
+
+    cout << "tRadii->GetMean() = " << tRadii->GetMean() << endl;
+    cout << "GetMeanRadius(tRadii) = " << GetMeanRadius(tRadii) << endl << endl;
   }
   tLeg->Draw();
 

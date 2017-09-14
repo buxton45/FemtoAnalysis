@@ -896,6 +896,7 @@ TCanvas* FitGenerator::DrawResiduals(int aAnalysisNumber, CentralityType aCentra
   //-----------------------------------------------------------------------------------
   int tNResiduals = 10;  //really are 11, but will skip Omega
   int tNNeutral=0, tNCharged=0;
+  TPad *tPadA, *tPadB;
   for(unsigned int iRes=0; iRes<tFitPairAnalysis->GetResidualCollection()->GetNeutralCollection().size(); iRes++)
   {
     AnalysisType tTempResidualType = tFitPairAnalysis->GetResidualCollection()->GetNeutralCollection()[iRes].GetResidualType();
@@ -910,6 +911,11 @@ TCanvas* FitGenerator::DrawResiduals(int aAnalysisNumber, CentralityType aCentra
       tNNeutral++;
       tCan->cd(tNNeutral);
 
+      tPadA = new TPad(TString::Format("tPad_%iA",tNNeutral), TString::Format("tPad_%iA",tNNeutral), 0.0, 0.0, 0.5, 1.0);
+      tPadA->Draw();
+      tPadB = new TPad(TString::Format("tPad_%iB",tNNeutral), TString::Format("tPad_%iB",tNNeutral), 0.5, 0.0, 1.0, 1.0);
+      tPadB->Draw();
+
       tTempHist1->SetMarkerStyle(tResMarkerStyles[iRes]);
       tTempHist1->SetMarkerColor(tResBaseColors[iRes]);
       tTempHist1->SetLineColor(tResBaseColors[iRes]);
@@ -921,6 +927,9 @@ TCanvas* FitGenerator::DrawResiduals(int aAnalysisNumber, CentralityType aCentra
       tTempHist2->SetMarkerSize(0.5);
 
       tTempHist1->GetXaxis()->SetRangeUser(tXLow,tXHigh);
+      tTempHist2->GetXaxis()->SetRangeUser(tXLow,tXHigh);
+
+      tPadA->cd();
       tTempHist1->Draw("ex0");
       tTempHist2->Draw("ex0same");
 
@@ -930,6 +939,9 @@ TCanvas* FitGenerator::DrawResiduals(int aAnalysisNumber, CentralityType aCentra
       tLeg->AddEntry(tTempHist1, "Residual", "p");
       tLeg->AddEntry(tTempHist2, "Transformed", "p");
       tLeg->Draw();
+
+      tPadB->cd();
+      tTempHist2->Draw("ex0");
     }
   }
   for(unsigned int iRes=0; iRes<tFitPairAnalysis->GetResidualCollection()->GetChargedCollection().size(); iRes++)
@@ -946,6 +958,11 @@ TCanvas* FitGenerator::DrawResiduals(int aAnalysisNumber, CentralityType aCentra
       tNCharged++;
       tCan->cd(tNNeutral+tNCharged);
 
+      tPadA = new TPad(TString::Format("tPad_%iA",tNNeutral+tNCharged), TString::Format("tPad_%iA",tNNeutral+tNCharged), 0.0, 0.0, 0.5, 1.0);
+      tPadA->Draw();
+      tPadB = new TPad(TString::Format("tPad_%iB",tNNeutral+tNCharged), TString::Format("tPad_%iB",tNNeutral+tNCharged), 0.5, 0.0, 1.0, 1.0);
+      tPadB->Draw();
+
       tTempHist1->SetMarkerStyle(tResMarkerStyles[iRes+tNNeutral]);
       tTempHist1->SetMarkerColor(tResBaseColors[iRes+tNNeutral]);
       tTempHist1->SetLineColor(tResBaseColors[iRes+tNNeutral]);
@@ -957,6 +974,9 @@ TCanvas* FitGenerator::DrawResiduals(int aAnalysisNumber, CentralityType aCentra
       tTempHist2->SetMarkerSize(1.0);
 
       tTempHist1->GetXaxis()->SetRangeUser(tXLow,tXHigh);
+      tTempHist2->GetXaxis()->SetRangeUser(tXLow,tXHigh);
+
+      tPadA->cd();
       tTempHist1->Draw("ex0");
       tTempHist2->Draw("ex0same");
 
@@ -966,6 +986,9 @@ TCanvas* FitGenerator::DrawResiduals(int aAnalysisNumber, CentralityType aCentra
       tLeg->AddEntry(tTempHist1, "Residual", "p");
       tLeg->AddEntry(tTempHist2, "Transformed", "p");
       tLeg->Draw();
+
+      tPadB->cd();
+      tTempHist2->Draw("ex0");
     }
   }
 
@@ -990,6 +1013,188 @@ TObjArray* FitGenerator::DrawAllResiduals(bool aSaveImage)
     CentralityType tCentType = fSharedAn->GetFitPairAnalysis(i)->GetCentralityType();
     TCanvas* tCan = DrawResiduals(i,tCentType, "Residuals", aSaveImage);
     tReturnArray->Add(tCan);
+  }
+  return tReturnArray;
+}
+
+//________________________________________________________________________________________________________________
+TObjArray* FitGenerator::DrawResidualsWithTransformMatrices(int aAnalysisNumber, CentralityType aCentralityType, bool aSaveImage)
+{
+  TObjArray* tReturnArray = new TObjArray();
+
+  FitPairAnalysis* tFitPairAnalysis = fSharedAn->GetFitPairAnalysis(aAnalysisNumber);
+  AnalysisType tAnType = tFitPairAnalysis->GetAnalysisType();
+
+  double tOverallLambdaPrimary = tFitPairAnalysis->GetFitParameter(kLambda)->GetFitValue();
+  double tRadiusPrimary = tFitPairAnalysis->GetPrimaryFit()->GetParameter(1);
+  double tReF0Primary = tFitPairAnalysis->GetPrimaryFit()->GetParameter(2);
+  double tImF0Primary = tFitPairAnalysis->GetPrimaryFit()->GetParameter(3);
+  double tD0Primary = tFitPairAnalysis->GetPrimaryFit()->GetParameter(4);
+
+  //-----------------------------------------------------------------------------------
+
+  double tXLow = 0.0;
+  double tXHigh = 0.3;
+
+  vector<int> tResBaseColors{7,8,9,30,33,40,41,  44,46,47,49};
+  vector<int> tResMarkerStyles{20,21,22,33,34,29,23,  20,21,22,33};
+  vector<int> tTransformedResMarkerStyles{24,25,26,27,28,30,32,  24,25,26,27};
+
+  //-----------------------------------------------------------------------------------
+  int tNResiduals = 10;  //really are 11, but will skip Omega
+  int tNNeutral=0, tNCharged=0;
+
+  TCanvas* tCan;
+  TPad *tPadA, *tPadB, *tPadC;
+  TString tCanvasBaseName = TString::Format("Residuals_%s%s", cAnalysisBaseTags[tAnType], cCentralityTags[aCentralityType]);
+  for(unsigned int iRes=0; iRes<tFitPairAnalysis->GetResidualCollection()->GetNeutralCollection().size(); iRes++)
+  {
+    AnalysisType tTempResidualType = tFitPairAnalysis->GetResidualCollection()->GetNeutralCollection()[iRes].GetResidualType();
+    if( (tTempResidualType != kResOmegaK0) && (tTempResidualType != kResAOmegaK0) )
+    {
+      TString tTempName = TString(cAnalysisRootTags[tTempResidualType]);
+      TString tTempName1 = TString("Residual_") + tTempName;
+      TString tTempName2 = TString("TransformedResidual_") + tTempName;
+      TH1D* tTempHist1 = tFitPairAnalysis->GetResidualCollection()->GetNeutralCollection()[iRes].GetNeutralResidualCorrelationHistogram(tTempName1);
+      TH1D* tTempHist2 = tFitPairAnalysis->GetResidualCollection()->GetNeutralCollection()[iRes].GetTransformedNeutralResidualCorrelationHistogram(tTempName2);
+      TH2D* tTempTransformMatrix = tFitPairAnalysis->GetResidualCollection()->GetNeutralCollection()[iRes].GetTransformMatrix();
+
+      tNNeutral++;
+      tCan = new TCanvas(TString::Format("%s_%s", tCanvasBaseName.Data(), cAnalysisRootTags[tTempResidualType]),
+                         TString::Format("%s_%s", tCanvasBaseName.Data(), cAnalysisRootTags[tTempResidualType]));
+      tCan->cd();
+
+      tPadA = new TPad(TString::Format("tPadA_%s_%s",tCanvasBaseName.Data(), cAnalysisRootTags[tTempResidualType]), 
+                       TString::Format("tPadA_%s_%s",tCanvasBaseName.Data(), cAnalysisRootTags[tTempResidualType]), 
+                       0.0, 0.5, 0.5, 1.0);
+      tPadA->Draw();
+      tPadB = new TPad(TString::Format("tPadB_%s_%s",tCanvasBaseName.Data(), cAnalysisRootTags[tTempResidualType]), 
+                       TString::Format("tPadB_%s_%s",tCanvasBaseName.Data(), cAnalysisRootTags[tTempResidualType]), 
+                       0.0, 0.0, 0.5, 0.5);
+      tPadB->Draw();
+      tPadC = new TPad(TString::Format("tPadC_%s_%s",tCanvasBaseName.Data(), cAnalysisRootTags[tTempResidualType]), 
+                       TString::Format("tPadC_%s_%s",tCanvasBaseName.Data(), cAnalysisRootTags[tTempResidualType]), 
+                       0.5, 0.0, 1.0, 1.0);
+      tPadC->Draw();
+
+      tTempHist1->SetMarkerStyle(tResMarkerStyles[iRes]);
+      tTempHist1->SetMarkerColor(tResBaseColors[iRes]);
+      tTempHist1->SetLineColor(tResBaseColors[iRes]);
+      tTempHist1->SetMarkerSize(0.5);
+
+      tTempHist2->SetMarkerStyle(tTransformedResMarkerStyles[iRes]);
+      tTempHist2->SetMarkerColor(tResBaseColors[iRes]);
+      tTempHist2->SetLineColor(tResBaseColors[iRes]);
+      tTempHist2->SetMarkerSize(0.5);
+
+      tTempHist1->GetXaxis()->SetRangeUser(tXLow,tXHigh);
+      tTempHist2->GetXaxis()->SetRangeUser(tXLow,tXHigh);
+
+      tPadA->cd();
+      tTempHist1->Draw("ex0");
+      tTempHist2->Draw("ex0same");
+
+      TLegend* tLeg = new TLegend(0.60, 0.20, 0.85, 0.70);
+      tLeg->SetHeader(TString::Format("%s Residuals", cAnalysisRootTags[tTempResidualType]));
+      tLeg->AddEntry((TObject*)0, TString::Format("#lambda = %0.3f \t #lambda_{Tot} = %0.3f", tFitPairAnalysis->GetResidualCollection()->GetNeutralCollection()[iRes].GetLambdaFactor(), tOverallLambdaPrimary), "");
+      tLeg->AddEntry(tTempHist1, "Residual", "p");
+      tLeg->AddEntry(tTempHist2, "Transformed", "p");
+      tLeg->Draw();
+
+      tPadB->cd();
+      tTempHist2->Draw("ex0");
+
+      tPadC->cd();
+      tTempTransformMatrix->Draw("colz");
+
+      tReturnArray->Add(tCan);
+    }
+  }
+  for(unsigned int iRes=0; iRes<tFitPairAnalysis->GetResidualCollection()->GetChargedCollection().size(); iRes++)
+  {
+    AnalysisType tTempResidualType = tFitPairAnalysis->GetResidualCollection()->GetChargedCollection()[iRes].GetResidualType();
+    if( (tTempResidualType != kResOmegaKchP) && (tTempResidualType != kResAOmegaKchM) && (tTempResidualType != kResOmegaKchM) && (tTempResidualType != kResAOmegaKchP) )
+    {
+      TString tTempName = TString(cAnalysisRootTags[tTempResidualType]);
+      TString tTempName1 = TString("Residual_") + tTempName;
+      TString tTempName2 = TString("TransformedResidual_") + tTempName;
+      TH1D* tTempHist1 = tFitPairAnalysis->GetResidualCollection()->GetChargedCollection()[iRes].GetChargedResidualCorrelationHistogramWithLambdaApplied(tTempName1, tOverallLambdaPrimary, tRadiusPrimary);
+      TH1D* tTempHist2 = tFitPairAnalysis->GetResidualCollection()->GetChargedCollection()[iRes].GetTransformedChargedResidualCorrelationHistogramWithLambdaApplied(tTempName2, tOverallLambdaPrimary, tRadiusPrimary);
+      TH2D* tTempTransformMatrix = tFitPairAnalysis->GetResidualCollection()->GetChargedCollection()[iRes].GetTransformMatrix();
+
+      tNCharged++;
+      tCan = new TCanvas(TString::Format("%s_%s", tCanvasBaseName.Data(), cAnalysisRootTags[tTempResidualType]),
+                         TString::Format("%s_%s", tCanvasBaseName.Data(), cAnalysisRootTags[tTempResidualType]));
+      tCan->cd();
+
+      tPadA = new TPad(TString::Format("tPadA_%s_%s",tCanvasBaseName.Data(), cAnalysisRootTags[tTempResidualType]), 
+                       TString::Format("tPadA_%s_%s",tCanvasBaseName.Data(), cAnalysisRootTags[tTempResidualType]), 
+                       0.0, 0.5, 0.5, 1.0);
+      tPadA->Draw();
+      tPadB = new TPad(TString::Format("tPadB_%s_%s",tCanvasBaseName.Data(), cAnalysisRootTags[tTempResidualType]), 
+                       TString::Format("tPadB_%s_%s",tCanvasBaseName.Data(), cAnalysisRootTags[tTempResidualType]), 
+                       0.0, 0.0, 0.5, 0.5);
+      tPadB->Draw();
+      tPadC = new TPad(TString::Format("tPadC_%s_%s",tCanvasBaseName.Data(), cAnalysisRootTags[tTempResidualType]), 
+                       TString::Format("tPadC_%s_%s",tCanvasBaseName.Data(), cAnalysisRootTags[tTempResidualType]), 
+                       0.5, 0.0, 1.0, 1.0);
+      tPadC->Draw();
+
+      tTempHist1->SetMarkerStyle(tResMarkerStyles[iRes+tNNeutral]);
+      tTempHist1->SetMarkerColor(tResBaseColors[iRes+tNNeutral]);
+      tTempHist1->SetLineColor(tResBaseColors[iRes+tNNeutral]);
+      tTempHist1->SetMarkerSize(1.0);
+
+      tTempHist2->SetMarkerStyle(tTransformedResMarkerStyles[iRes+tNNeutral]);
+      tTempHist2->SetMarkerColor(tResBaseColors[iRes+tNNeutral]);
+      tTempHist2->SetLineColor(tResBaseColors[iRes+tNNeutral]);
+      tTempHist2->SetMarkerSize(1.0);
+
+      tTempHist1->GetXaxis()->SetRangeUser(tXLow,tXHigh);
+      tTempHist2->GetXaxis()->SetRangeUser(tXLow,tXHigh);
+
+      tPadA->cd();
+      tTempHist1->Draw("ex0");
+      tTempHist2->Draw("ex0same");
+
+      TLegend* tLeg = new TLegend(0.60, 0.20, 0.85, 0.70);
+      tLeg->SetHeader(TString::Format("%s Residuals", cAnalysisRootTags[tTempResidualType]));
+      tLeg->AddEntry((TObject*)0, TString::Format("#lambda = %0.3f \t #lambda_{Tot} = %0.3f", tFitPairAnalysis->GetResidualCollection()->GetChargedCollection()[iRes].GetLambdaFactor(), tOverallLambdaPrimary), "");
+      tLeg->AddEntry(tTempHist1, "Residual", "p");
+      tLeg->AddEntry(tTempHist2, "Transformed", "p");
+      tLeg->Draw();
+
+      tPadB->cd();
+      tTempHist2->Draw("ex0");
+
+      tPadC->cd();
+      tTempTransformMatrix->Draw("colz");
+
+      tReturnArray->Add(tCan);
+    }
+  }
+
+  assert((tNNeutral+tNCharged) == tNResiduals);
+/*
+  if(aSaveImage)
+  {
+    ExistsSaveLocationBase();
+    tCan->SaveAs(fSaveLocationBase+tCan->GetName()+fSaveNameModifier+TString(".eps"));
+  }
+*/
+
+  return tReturnArray;
+}
+
+//________________________________________________________________________________________________________________
+TObjArray* FitGenerator::DrawAllResidualsWithTransformMatrices(bool aSaveImage)
+{
+  TObjArray* tReturnArray = new TObjArray();
+  for(int i=0; i<fNAnalyses; i++)
+  {
+    CentralityType tCentType = fSharedAn->GetFitPairAnalysis(i)->GetCentralityType();
+    TObjArray* tArr = DrawResidualsWithTransformMatrices(i,tCentType, aSaveImage);
+    tReturnArray->Add(tArr);
   }
   return tReturnArray;
 }

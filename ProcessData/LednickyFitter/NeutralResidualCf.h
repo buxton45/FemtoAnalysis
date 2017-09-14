@@ -39,13 +39,14 @@ public:
   TH1D* GetNeutralResidualCorrelationHistogram(TString aTitle="fResCf");
   TH1D* GetTransformedNeutralResidualCorrelationHistogram(TString aTitle="fTransformedResCf");
   double GetLambdaFactor();
+  TH2D* GetTransformMatrix();
 protected:
-AnalysisType fResidualType;
-double fLambdaFactor;
-TH2D* fTransformMatrix;
-td1dVec fKStarBinCenters;
-td1dVec fResCf;
-td1dVec fTransformedResCf;
+  AnalysisType fResidualType;
+  double fLambdaFactor;
+  TH2D* fTransformMatrix;
+  td1dVec fKStarBinCenters;
+  td1dVec fResCf;
+  td1dVec fTransformedResCf;
 
 
 
@@ -58,4 +59,5 @@ inline AnalysisType NeutralResidualCf::GetResidualType() {return fResidualType;}
 inline TH1D* NeutralResidualCf::GetNeutralResidualCorrelationHistogram(TString aTitle) {return Convert1dVecToHist(fResCf, fKStarBinCenters, aTitle);}
 inline TH1D* NeutralResidualCf::GetTransformedNeutralResidualCorrelationHistogram(TString aTitle) {return Convert1dVecToHist(fTransformedResCf, fKStarBinCenters, aTitle);}
 inline double NeutralResidualCf::GetLambdaFactor() {return fLambdaFactor;}
+inline TH2D* NeutralResidualCf::GetTransformMatrix() {return fTransformMatrix;}
 #endif
