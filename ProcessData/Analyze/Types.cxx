@@ -550,5 +550,486 @@ const double gBohrRadiusSigStMK = 74.267628885;
 //________________________________________________________________________________________________________________
 //****************************************************************************************************************
 //________________________________________________________________________________________________________________
+vector<ParticlePDGType> GetResidualDaughtersAndMothers(AnalysisType aResidualType)
+{
+  AnalysisType tAnType;
+  vector<ParticlePDGType> tReturnVec(4);
+  ParticlePDGType tDaughterType1, tMotherType1;
+  ParticlePDGType tDaughterType2, tMotherType2;
+  switch(aResidualType) {
+  //LamKchP-------------------------------
+  case kResSig0KchP:
+  case kResXi0KchP:
+  case kResXiCKchP:
+  case kResOmegaKchP:
+  case kResSigStPKchP:
+  case kResSigStMKchP:
+  case kResSigSt0KchP:
+  case kResLamKSt0:
+  case kResSig0KSt0:
+  case kResXi0KSt0:
+  case kResXiCKSt0:
+
+    tDaughterType1 = kPDGLam;
+    tDaughterType2 = kPDGKchP;
+    break;
+
+  //ALamKchM-------------------------------
+  case kResASig0KchM:
+  case kResAXi0KchM:
+  case kResAXiCKchM:
+  case kResAOmegaKchM:
+  case kResASigStMKchM:
+  case kResASigStPKchM:
+  case kResASigSt0KchM:
+  case kResALamAKSt0:
+  case kResASig0AKSt0:
+  case kResAXi0AKSt0:
+  case kResAXiCAKSt0:
+
+    tDaughterType1 = kPDGALam;
+    tDaughterType2 = kPDGKchM;
+    break;
+  //-------------
+
+  //LamKchM-------------------------------
+  case kResSig0KchM:
+  case kResXi0KchM:
+  case kResXiCKchM:
+  case kResOmegaKchM:
+  case kResSigStPKchM:
+  case kResSigStMKchM:
+  case kResSigSt0KchM:
+  case kResLamAKSt0:
+  case kResSig0AKSt0:
+  case kResXi0AKSt0:
+  case kResXiCAKSt0:
+
+    tDaughterType1 = kPDGLam;
+    tDaughterType2 = kPDGKchM;
+    break;
+  //-------------
+
+  //ALamKchP-------------------------------
+  case kResASig0KchP:
+  case kResAXi0KchP:
+  case kResAXiCKchP:
+  case kResAOmegaKchP:
+  case kResASigStMKchP:
+  case kResASigStPKchP:
+  case kResASigSt0KchP:
+  case kResALamKSt0:
+  case kResASig0KSt0:
+  case kResAXi0KSt0:
+  case kResAXiCKSt0:
+
+    tDaughterType1 = kPDGALam;
+    tDaughterType2 = kPDGKchP;
+    break;
+  //-------------
+
+  //LamK0-------------------------------
+  case kResSig0K0:
+  case kResXi0K0:
+  case kResXiCK0:
+  case kResOmegaK0:
+  case kResSigStPK0:
+  case kResSigStMK0:
+  case kResSigSt0K0:
+  case kResLamKSt0ToLamK0:
+  case kResSig0KSt0ToLamK0:
+  case kResXi0KSt0ToLamK0:
+  case kResXiCKSt0ToLamK0:
+
+    tDaughterType1 = kPDGLam;
+    tDaughterType2 = kPDGK0;
+    break;
+  //-------------
+
+  //ALamK0-------------------------------
+  case kResASig0K0:
+  case kResAXi0K0:
+  case kResAXiCK0:
+  case kResAOmegaK0:
+  case kResASigStMK0:
+  case kResASigStPK0:
+  case kResASigSt0K0:
+  case kResALamKSt0ToALamK0:
+  case kResASig0KSt0ToALamK0:
+  case kResAXi0KSt0ToALamK0:
+  case kResAXiCKSt0ToALamK0:
+
+    tDaughterType1 = kPDGALam;
+    tDaughterType2 = kPDGK0;
+    break;
+  //-------------
+
+  default:
+    cout << "ERROR: Types::GetResidualDaughtersAndMothers:  aResidualType = " << aResidualType << " is not appropriate" << endl << endl;
+    assert(0);
+  }
+
+
+  switch(aResidualType) {
+  //LamKchP-------------------------------------------------------------------------------
+  case kResSig0KchP:
+    tMotherType1 = kPDGSigma;
+    tMotherType2 = kPDGKchP;
+    break;
+  //-------------
+  case kResXi0KchP:
+    tMotherType1 = kPDGXi0;
+    tMotherType2 = kPDGKchP;
+    break;
+  //-------------
+  case kResXiCKchP:
+    tMotherType1 = kPDGXiC;
+    tMotherType2 = kPDGKchP;
+    break;
+  //-------------
+  case kResOmegaKchP:
+    tMotherType1 = kPDGOmega;
+    tMotherType2 = kPDGKchP;
+    break;
+  //-------------
+  case kResSigStPKchP:
+    tMotherType1 = kPDGSigStP;
+    tMotherType2 = kPDGKchP;
+    break;
+  //-------------
+  case kResSigStMKchP:
+    tMotherType1 = kPDGSigStM;
+    tMotherType2 = kPDGKchP;
+    break;
+  //-------------
+  case kResSigSt0KchP:
+    tMotherType1 = kPDGSigSt0;
+    tMotherType2 = kPDGKchP;
+    break;
+  //-------------
+  case kResLamKSt0:
+    tMotherType1 = kPDGLam;
+    tMotherType2 = kPDGKSt0;
+    break;
+  //-------------
+  case kResSig0KSt0:
+    tMotherType1 = kPDGSigma;
+    tMotherType2 = kPDGKSt0;
+    break;
+  //-------------
+  case kResXi0KSt0:
+    tMotherType1 = kPDGXi0;
+    tMotherType2 = kPDGKSt0;
+    break;
+  //-------------
+  case kResXiCKSt0:
+    tMotherType1 = kPDGXiC;
+    tMotherType2 = kPDGKSt0;
+    break;
+  //-------------
+
+
+
+
+  //ALamKchM-------------------------------------------------------------------------------
+  case kResASig0KchM:
+    tMotherType1 = kPDGASigma;
+    tMotherType2 = kPDGKchM;
+    break;
+  //-------------
+  case kResAXi0KchM:
+    tMotherType1 = kPDGAXi0;
+    tMotherType2 = kPDGKchM;
+    break;
+  //-------------
+  case kResAXiCKchM:
+    tMotherType1 = kPDGAXiC;
+    tMotherType2 = kPDGKchM;
+    break;
+  //-------------
+  case kResAOmegaKchM:
+    tMotherType1 = kPDGAOmega;
+    tMotherType2 = kPDGKchM;
+    break;
+  //-------------
+  case kResASigStMKchM:
+    tMotherType1 = kPDGASigStM;
+    tMotherType2 = kPDGKchM;
+    break;
+  //-------------
+  case kResASigStPKchM:
+    tMotherType1 = kPDGASigStP;
+    tMotherType2 = kPDGKchM;
+    break;
+  //-------------
+  case kResASigSt0KchM:
+    tMotherType1 = kPDGASigSt0;
+    tMotherType2 = kPDGKchM;
+    break;
+  //-------------
+  case kResALamAKSt0:
+    tMotherType1 = kPDGALam;
+    tMotherType2 = kPDGAKSt0;
+    break;
+  //-------------
+  case kResASig0AKSt0:
+    tMotherType1 = kPDGASigma;
+    tMotherType2 = kPDGAKSt0;
+    break;
+  //-------------
+  case kResAXi0AKSt0:
+    tMotherType1 = kPDGAXi0;
+    tMotherType2 = kPDGAKSt0;
+    break;
+  //-------------
+  case kResAXiCAKSt0:
+    tMotherType1 = kPDGAXiC;
+    tMotherType2 = kPDGAKSt0;
+    break;
+  //-------------
+
+  //LamKchM-------------------------------------------------------------------------------
+  case kResSig0KchM:
+    tMotherType1 = kPDGSigma;
+    tMotherType2 = kPDGKchM;
+    break;
+  //-------------
+  case kResXi0KchM:
+    tMotherType1 = kPDGXi0;
+    tMotherType2 = kPDGKchM;
+    break;
+  //-------------
+  case kResXiCKchM:
+    tMotherType1 = kPDGXiC;
+    tMotherType2 = kPDGKchM;
+    break;
+  //-------------
+  case kResOmegaKchM:
+    tMotherType1 = kPDGOmega;
+    tMotherType2 = kPDGKchM;
+    break;
+  //-------------
+  case kResSigStPKchM:
+    tMotherType1 = kPDGSigStP;
+    tMotherType2 = kPDGKchM;
+    break;
+  //-------------
+  case kResSigStMKchM:
+    tMotherType1 = kPDGSigStM;
+    tMotherType2 = kPDGKchM;
+    break;
+  //-------------
+  case kResSigSt0KchM:
+    tMotherType1 = kPDGSigSt0;
+    tMotherType2 = kPDGKchM;
+    break;
+  //-------------
+  case kResLamAKSt0:
+    tMotherType1 = kPDGLam;
+    tMotherType2 = kPDGAKSt0;
+    break;
+  //-------------
+  case kResSig0AKSt0:
+    tMotherType1 = kPDGSigma;
+    tMotherType2 = kPDGAKSt0;
+    break;
+  //-------------
+  case kResXi0AKSt0:
+    tMotherType1 = kPDGXi0;
+    tMotherType2 = kPDGAKSt0;
+    break;
+  //-------------
+  case kResXiCAKSt0:
+    tMotherType1 = kPDGXiC;
+    tMotherType2 = kPDGAKSt0;
+    break;
+  //-------------
+
+
+  //ALamKchP-------------------------------------------------------------------------------
+  case kResASig0KchP:
+    tMotherType1 = kPDGASigma;
+    tMotherType2 = kPDGKchP;
+    break;
+  //-------------
+  case kResAXi0KchP:
+    tMotherType1 = kPDGAXi0;
+    tMotherType2 = kPDGKchP;
+    break;
+  //-------------
+  case kResAXiCKchP:
+    tMotherType1 = kPDGAXiC;
+    tMotherType2 = kPDGKchP;
+    break;
+  //-------------
+  case kResAOmegaKchP:
+    tMotherType1 = kPDGAOmega;
+    tMotherType2 = kPDGKchP;
+    break;
+  //-------------
+  case kResASigStMKchP:
+    tMotherType1 = kPDGASigStM;
+    tMotherType2 = kPDGKchP;
+    break;
+  //-------------
+  case kResASigStPKchP:
+    tMotherType1 = kPDGASigStP;
+    tMotherType2 = kPDGKchP;
+    break;
+  //-------------
+  case kResASigSt0KchP:
+    tMotherType1 = kPDGASigSt0;
+    tMotherType2 = kPDGKchP;
+    break;
+  //-------------
+  case kResALamKSt0:
+    tMotherType1 = kPDGALam;
+    tMotherType2 = kPDGKSt0;
+    break;
+  //-------------
+  case kResASig0KSt0:
+    tMotherType1 = kPDGASigma;
+    tMotherType2 = kPDGKSt0;
+    break;
+  //-------------
+  case kResAXi0KSt0:
+    tMotherType1 = kPDGAXi0;
+    tMotherType2 = kPDGKSt0;
+    break;
+  //-------------
+  case kResAXiCKSt0:
+    tMotherType1 = kPDGAXiC;
+    tMotherType2 = kPDGKSt0;
+    break;
+  //-------------
+
+
+  //LamK0-------------------------------------------------------------------------------
+  case kResSig0K0:
+    tMotherType1 = kPDGSigma;
+    tMotherType2 = kPDGK0;
+    break;
+  //-------------
+  case kResXi0K0:
+    tMotherType1 = kPDGXi0;
+    tMotherType2 = kPDGK0;
+    break;
+  //-------------
+  case kResXiCK0:
+    tMotherType1 = kPDGXiC;
+    tMotherType2 = kPDGK0;
+    break;
+  //-------------
+  case kResOmegaK0:
+    tMotherType1 = kPDGOmega;
+    tMotherType2 = kPDGK0;
+    break;
+  //-------------
+  case kResSigStPK0:
+    tMotherType1 = kPDGSigStP;
+    tMotherType2 = kPDGK0;
+    break;
+  //-------------
+  case kResSigStMK0:
+    tMotherType1 = kPDGSigStM;
+    tMotherType2 = kPDGK0;
+    break;
+  //-------------
+  case kResSigSt0K0:
+    tMotherType1 = kPDGSigSt0;
+    tMotherType2 = kPDGK0;
+    break;
+  //-------------
+  case kResLamKSt0ToLamK0:
+    tMotherType1 = kPDGLam;
+    tMotherType2 = kPDGKSt0;
+    break;
+  //-------------
+  case kResSig0KSt0ToLamK0:
+    tMotherType1 = kPDGSigma;
+    tMotherType2 = kPDGKSt0;
+    break;
+  //-------------
+  case kResXi0KSt0ToLamK0:
+    tMotherType1 = kPDGXi0;
+    tMotherType2 = kPDGKSt0;
+    break;
+  //-------------
+  case kResXiCKSt0ToLamK0:
+    tMotherType1 = kPDGXiC;
+    tMotherType2 = kPDGKSt0;
+    break;
+  //-------------
+
+
+  //ALamK0-------------------------------------------------------------------------------
+  case kResASig0K0:
+    tMotherType1 = kPDGASigma;
+    tMotherType2 = kPDGK0;
+    break;
+  //-------------
+  case kResAXi0K0:
+    tMotherType1 = kPDGAXi0;
+    tMotherType2 = kPDGK0;
+    break;
+  //-------------
+  case kResAXiCK0:
+    tMotherType1 = kPDGAXiC;
+    tMotherType2 = kPDGK0;
+    break;
+  //-------------
+  case kResAOmegaK0:
+    tMotherType1 = kPDGAOmega;
+    tMotherType2 = kPDGK0;
+    break;
+  //-------------
+  case kResASigStMK0:
+    tMotherType1 = kPDGASigStM;
+    tMotherType2 = kPDGK0;
+    break;
+  //-------------
+  case kResASigStPK0:
+    tMotherType1 = kPDGASigStP;
+    tMotherType2 = kPDGK0;
+    break;
+  //-------------
+  case kResASigSt0K0:
+    tMotherType1 = kPDGASigSt0;
+    tMotherType2 = kPDGK0;
+    break;
+  //-------------
+  case kResALamKSt0ToALamK0:
+    tMotherType1 = kPDGALam;
+    tMotherType2 = kPDGKSt0;
+    break;
+  //-------------
+  case kResASig0KSt0ToALamK0:
+    tMotherType1 = kPDGASigma;
+    tMotherType2 = kPDGKSt0;
+    break;
+  //-------------
+  case kResAXi0KSt0ToALamK0:
+    tMotherType1 = kPDGAXi0;
+    tMotherType2 = kPDGKSt0;
+    break;
+  //-------------
+  case kResAXiCKSt0ToALamK0:
+    tMotherType1 = kPDGAXiC;
+    tMotherType2 = kPDGKSt0;
+    break;
+  //-------------
+
+  default:
+    cout << "ERROR: Types::GetResidualDaughtersAndMothers:  aResidualType = " << aResidualType << " is not appropriate" << endl << endl;
+    assert(0);
+  }
+
+  tReturnVec[0] = tMotherType1;
+  tReturnVec[1] = tDaughterType1;
+  tReturnVec[2] = tMotherType2;
+  tReturnVec[3] = tDaughterType2;
+
+  return tReturnVec;
+}
 
 

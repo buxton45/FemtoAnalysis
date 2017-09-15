@@ -11,8 +11,10 @@
 
 #include <vector>
 #include <complex>
+#include <cassert>
+#include <iostream>
 using std::vector;
-
+using namespace std;
 
   //-------enum types-----------------------------------------
   enum PartnerAnalysisType {kcLamK0=0, kcLamcKch=1, kcXicKch=2, kcLamcLam=3, kcLamcPi=4};
@@ -111,6 +113,7 @@ kXiCKSt0=40, kAXiCAKSt0=41, kXiCAKSt0=42, kAXiCKSt0=43
   extern const int cPDGValues[26];
   extern const char* const cPDGRootNames[26];
   extern const char* const GetPDGRootName(ParticlePDGType aType);
+  extern vector<ParticlePDGType> GetResidualDaughtersAndMothers(AnalysisType aResidualType);
 
   enum ParticleType {kProton     = 0,  kAntiProton     = 1,
                      kPiP        = 2,  kPiM            = 3,

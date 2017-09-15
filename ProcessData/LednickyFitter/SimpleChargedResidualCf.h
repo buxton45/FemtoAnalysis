@@ -26,6 +26,7 @@ public:
 
   static TH1D* Convert1dVecToHist(td1dVec &aCfVec, td1dVec &aKStarBinCenters, TString aTitle = "tCf");
   static td1dVec ConvertHistTo1dVec(TH1* aHist);
+  void SetDaughtersAndMothers();
 
   void LoadCoulombOnlyInterpCfs(TString aFileDirectory="/home/jesse/Analysis/FemtoAnalysis/ProcessData/CoulombFitter/", bool aUseCoulombOnlyInterpCfs=true, double aRadiusFactor=1.);
   td1dVec ExtractCfFrom2dInterpCfs(double aRadius);
@@ -46,8 +47,16 @@ public:
   double GetLambdaFactor();
   void SetUseCoulombOnlyInterpCfs(bool aUse);
   TH2D* GetTransformMatrix();
+
+  ParticlePDGType GetMotherType1();
+  ParticlePDGType GetDaughterType1();
+  ParticlePDGType GetMotherType2();
+  ParticlePDGType GetDaughterType2();
+
 protected:
   AnalysisType fResidualType;
+  ParticlePDGType fDaughterType1, fMotherType1;
+  ParticlePDGType fDaughterType2, fMotherType2;
   FitPairAnalysis* fPairAn;
   TH1D* fExpXiHist;
   double fLambdaFactor;
@@ -70,4 +79,9 @@ inline AnalysisType SimpleChargedResidualCf::GetResidualType() {return fResidual
 inline double SimpleChargedResidualCf::GetLambdaFactor() {return fLambdaFactor;}
 inline void SimpleChargedResidualCf::SetUseCoulombOnlyInterpCfs(bool aUse) {fUseCoulombOnlyInterpCfs = aUse;}
 inline TH2D* SimpleChargedResidualCf::GetTransformMatrix() {return fTransformMatrix;}
+
+inline ParticlePDGType SimpleChargedResidualCf::GetMotherType1() {return fMotherType1;}
+inline ParticlePDGType SimpleChargedResidualCf::GetDaughterType1() {return fDaughterType1;}
+inline ParticlePDGType SimpleChargedResidualCf::GetMotherType2() {return fMotherType2;}
+inline ParticlePDGType SimpleChargedResidualCf::GetDaughterType2() {return fDaughterType2;}
 #endif

@@ -14,6 +14,10 @@ ClassImp(SimpleChargedResidualCf)
 //________________________________________________________________________________________________________________
 SimpleChargedResidualCf::SimpleChargedResidualCf(AnalysisType aResidualType, TH2D* aTransformMatrix, td1dVec &aKStarBinCenters, CentralityType aCentType, TString aFileLocationBase) :
   fResidualType(aResidualType),
+  fDaughterType1(kPDGNull),
+  fMotherType1(kPDGNull),
+  fDaughterType2(kPDGNull),
+  fMotherType2(kPDGNull),
   fPairAn(nullptr),
   fExpXiHist(nullptr),
   fLambdaFactor(cAnalysisLambdaFactors[fResidualType]),
@@ -81,6 +85,8 @@ SimpleChargedResidualCf::SimpleChargedResidualCf(AnalysisType aResidualType, TH2
     fExpXiHist->SetDirectory(0);
   assert(fExpXiHist->GetXaxis()->GetBinWidth(1)==0.01);  //TODO make general
   assert(fExpXiHist->GetNbinsX()==100);
+
+  SetDaughtersAndMothers();
 }
 
 
@@ -116,6 +122,17 @@ td1dVec SimpleChargedResidualCf::ConvertHistTo1dVec(TH1* aHist)
   for(int i=1; i<=aHist->GetNbinsX(); i++) tReturnVec.push_back(aHist->GetBinContent(i));
   return tReturnVec;
 }
+
+//________________________________________________________________________________________________________________
+void SimpleChargedResidualCf::SetDaughtersAndMothers()
+{
+  vector<ParticlePDGType> tDaughtersAndMothers = GetResidualDaughtersAndMothers(fResidualType);
+  fMotherType1 = tDaughtersAndMothers[0];
+  fDaughterType1 = tDaughtersAndMothers[1];
+  fMotherType2 = tDaughtersAndMothers[2];
+  fDaughterType2 = tDaughtersAndMothers[3];
+}
+
 
 //________________________________________________________________________________________________________________
 void SimpleChargedResidualCf::LoadCoulombOnlyInterpCfs(TString aFileDirectory, bool aUseCoulombOnlyInterpCfs, double aRadiusFactor)

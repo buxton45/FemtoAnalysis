@@ -13,6 +13,10 @@ ClassImp(NeutralResidualCf)
 //________________________________________________________________________________________________________________
 NeutralResidualCf::NeutralResidualCf(AnalysisType aResidualType, TH2D* aTransformMatrix, td1dVec &aKStarBinCenters) :
   fResidualType(aResidualType),
+  fDaughterType1(kPDGNull),
+  fMotherType1(kPDGNull),
+  fDaughterType2(kPDGNull),
+  fMotherType2(kPDGNull),
   fLambdaFactor(cAnalysisLambdaFactors[fResidualType]),
   fTransformMatrix(aTransformMatrix),
   fKStarBinCenters(aKStarBinCenters),
@@ -25,6 +29,8 @@ NeutralResidualCf::NeutralResidualCf(AnalysisType aResidualType, TH2D* aTransfor
   cout << "Building NeutralResidualCf object" << endl;
   cout << "\tResidualType = " << cAnalysisBaseTags[fResidualType] << endl;
   cout << "\tLambdaFactor = " << fLambdaFactor << endl << endl;
+
+  SetDaughtersAndMothers();
 }
 
 
@@ -91,6 +97,16 @@ TH1D* NeutralResidualCf::Convert1dVecToHist(td1dVec &aCfVec, td1dVec &aKStarBinC
   //NOTE: Set errors to very small, because if set to zero, just drawing histogram points seems to not work with CanvasPartition package
 
   return tReturnHist;
+}
+
+//________________________________________________________________________________________________________________
+void NeutralResidualCf::SetDaughtersAndMothers()
+{
+  vector<ParticlePDGType> tDaughtersAndMothers = GetResidualDaughtersAndMothers(fResidualType);
+  fMotherType1 = tDaughtersAndMothers[0];
+  fDaughterType1 = tDaughtersAndMothers[1];
+  fMotherType2 = tDaughtersAndMothers[2];
+  fDaughterType2 = tDaughtersAndMothers[3];
 }
 
 

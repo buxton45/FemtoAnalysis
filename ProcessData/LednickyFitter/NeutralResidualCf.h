@@ -25,6 +25,7 @@ public:
   static double GetLednickyF2(double z);
   static double LednickyEq(double *x, double *par);
   static TH1D* Convert1dVecToHist(td1dVec &aCfVec, td1dVec &aKStarBinCenters, TString aTitle = "tCf");
+  void SetDaughtersAndMothers();
 
   td1dVec GetNeutralResidualCorrelation(double *aParentCfParams);
   td1dVec GetTransformedNeutralResidualCorrelation(double *aParentCfParams);
@@ -40,8 +41,16 @@ public:
   TH1D* GetTransformedNeutralResidualCorrelationHistogram(TString aTitle="fTransformedResCf");
   double GetLambdaFactor();
   TH2D* GetTransformMatrix();
+
+  ParticlePDGType GetMotherType1();
+  ParticlePDGType GetDaughterType1();
+  ParticlePDGType GetMotherType2();
+  ParticlePDGType GetDaughterType2();
+
 protected:
   AnalysisType fResidualType;
+  ParticlePDGType fDaughterType1, fMotherType1;
+  ParticlePDGType fDaughterType2, fMotherType2;
   double fLambdaFactor;
   TH2D* fTransformMatrix;
   td1dVec fKStarBinCenters;
@@ -60,4 +69,9 @@ inline TH1D* NeutralResidualCf::GetNeutralResidualCorrelationHistogram(TString a
 inline TH1D* NeutralResidualCf::GetTransformedNeutralResidualCorrelationHistogram(TString aTitle) {return Convert1dVecToHist(fTransformedResCf, fKStarBinCenters, aTitle);}
 inline double NeutralResidualCf::GetLambdaFactor() {return fLambdaFactor;}
 inline TH2D* NeutralResidualCf::GetTransformMatrix() {return fTransformMatrix;}
+
+inline ParticlePDGType NeutralResidualCf::GetMotherType1() {return fMotherType1;}
+inline ParticlePDGType NeutralResidualCf::GetDaughterType1() {return fDaughterType1;}
+inline ParticlePDGType NeutralResidualCf::GetMotherType2() {return fMotherType2;}
+inline ParticlePDGType NeutralResidualCf::GetDaughterType2() {return fDaughterType2;}
 #endif

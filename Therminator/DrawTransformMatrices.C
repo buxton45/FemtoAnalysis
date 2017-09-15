@@ -17,6 +17,7 @@
 TCanvas* DrawTransform(TString tFileName, TString tHistoName, ParticlePDGType aMotherType1, ParticlePDGType aDaughterType1, ParticlePDGType aMotherType2, ParticlePDGType aDaughterType2, bool aDrawLogZ=false, bool bSaveFigures=false, TString aSaveLocationBase="")
 {
   TH2D* tMatrix = Get2dHisto(tFileName,tHistoName);
+  tMatrix->Rebin2D(2,2);
 
   TString tMotherName1 = TString(GetPDGRootName(aMotherType1));
   TString tDaughterName1 = TString(GetPDGRootName(aDaughterType1));
@@ -69,7 +70,7 @@ TCanvas* DrawTransform(TString tFileName, TString tHistoName, ParticlePDGType aM
 
   TString tSaveName = aSaveLocationBase+TString(tMatrix->GetName());
   if(aDrawLogZ) tSaveName += TString("_LogZ");
-  tSaveName += TString(".pdf");
+  tSaveName += TString(".eps");
   if(bSaveFigures) tReturnCan->SaveAs(tSaveName);
 
   return tReturnCan;
