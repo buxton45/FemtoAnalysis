@@ -26,7 +26,7 @@ public:
   ResidualCollection(AnalysisType aAnalysisType, td1dVec &aKStarBinCenters, vector<TH2D*> aTransformMatrices, vector<AnalysisType> aTransformStorageMapping, CentralityType aCentType);
   virtual ~ResidualCollection();
   void BuildStandardCollection(td1dVec &aKStarBinCenters, vector<TH2D*> aTransformMatrices, vector<AnalysisType> aTransformStorageMapping, CentralityType aCentType);
-  void SetUseCoulombOnlyInterpCfs(TString aFileDirectory="/home/jesse/Analysis/FemtoAnalysis/ProcessData/CoulombFitter/", bool aUseCoulombOnlyInterpCfs=true);
+  void SetUseCoulombOnlyInterpCfs(TString aFileDirectory="/home/jesse/Analysis/FemtoAnalysis/ProcessData/CoulombFitter/", bool aUseCoulombOnlyInterpCfsForChargedResiduals=true, bool aUseCoulombOnlyInterpCfsForXiKResiduals=false);
   int GetNeutralIndex(AnalysisType aResidualType);
   td1dVec GetNeutralResidualCorrelation(AnalysisType aResidualType, double *aParentCfParams);
   td1dVec GetTransformedNeutralResidualCorrelation(AnalysisType aResidualType, double *aParentCfParams);

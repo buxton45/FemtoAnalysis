@@ -60,18 +60,27 @@ void ResidualCollection::BuildStandardCollection(td1dVec &aKStarBinCenters, vect
 }
 
 //________________________________________________________________________________________________________________
-void ResidualCollection::SetUseCoulombOnlyInterpCfs(TString aFileDirectory, bool aUseCoulombOnlyInterpCfs)
+void ResidualCollection::SetUseCoulombOnlyInterpCfs(TString aFileDirectory, bool aUseCoulombOnlyInterpCfsForChargedResiduals, bool aUseCoulombOnlyInterpCfsForXiKResiduals)
 {
   AnalysisType tResType;
   double tRadiusFactor = 1.;
   for(unsigned int i=0; i<fChargedCfCollection.size(); i++) 
   {
     tResType = fChargedCfCollection[i].GetResidualType();
-    if(tResType==kResSigStPKchP || tResType==kResASigStMKchM ||
-       tResType==kResSigStPKchM || tResType==kResASigStMKchP ||
-       tResType==kResSigStMKchP || tResType==kResASigStPKchM ||
-       tResType==kResSigStMKchM || tResType==kResASigStPKchP) fChargedCfCollection[i].LoadCoulombOnlyInterpCfs(aFileDirectory, aUseCoulombOnlyInterpCfs, tRadiusFactor);
-
+    if(aUseCoulombOnlyInterpCfsForChargedResiduals)
+    {
+      if(tResType==kResSigStPKchP || tResType==kResASigStMKchM ||
+         tResType==kResSigStPKchM || tResType==kResASigStMKchP ||
+         tResType==kResSigStMKchP || tResType==kResASigStPKchM ||
+         tResType==kResSigStMKchM || tResType==kResASigStPKchP) fChargedCfCollection[i].LoadCoulombOnlyInterpCfs(aFileDirectory, aUseCoulombOnlyInterpCfsForChargedResiduals, tRadiusFactor);
+    }
+    if(aUseCoulombOnlyInterpCfsForXiKResiduals)
+    {
+      if(tResType==kXiKchP || tResType==kAXiKchM ||
+         tResType==kXiKchM || tResType==kAXiKchP ||
+         tResType==kResXiCKchP || tResType==kResAXiCKchM ||
+         tResType==kResXiCKchM || tResType==kResAXiCKchP) fChargedCfCollection[i].LoadCoulombOnlyInterpCfs(aFileDirectory, aUseCoulombOnlyInterpCfsForXiKResiduals, tRadiusFactor);
+    }
   }
 }
 

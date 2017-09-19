@@ -10,9 +10,9 @@ int main(int argc, char **argv)
 
   TString tSaveBaseName = "InterpHists";
 
-  int tNbinsKStar = 160;
+  int tNbinsKStar = 400;
   double tKStarMin = 0.;
-  double tKStarMax = 0.40;
+  double tKStarMax = 1.0;
 
   int tNbinsRStar = 500;
   double tRStarMin = 0.;

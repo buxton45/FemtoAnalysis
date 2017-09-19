@@ -49,6 +49,7 @@ FitGenerator::FitGenerator(TString aFileLocationBase, TString aFileLocationBaseM
   fApplyMomResCorrection(false),
   fIncludeResidualCorrelations(false),
   fUseCoulombOnlyInterpCfsForChargedResiduals(false),
+  fUseCoulombOnlyInterpCfsForXiKResiduals(false),
 
   fSharedAn(0),
   fLednickyFitter(0)
@@ -145,6 +146,7 @@ FitGenerator::FitGenerator(TString aFileLocationBase, TString aFileLocationBaseM
   fApplyMomResCorrection(false),
   fIncludeResidualCorrelations(false),
   fUseCoulombOnlyInterpCfsForChargedResiduals(false),
+  fUseCoulombOnlyInterpCfsForXiKResiduals(false),
 
   fSharedAn(0),
   fLednickyFitter(0)
@@ -1227,6 +1229,12 @@ TObjArray* FitGenerator::DrawResidualsWithTransformMatrices(int aAnalysisNumber,
       tTempHist1->GetXaxis()->SetRangeUser(tXLow,tXHigh);
       tTempHist2->GetXaxis()->SetRangeUser(tXLow,tXHigh);
 
+      tTempHist1->GetXaxis()->SetTitle("#it{k}* (GeV/#it{c})");
+      tTempHist2->GetXaxis()->SetTitle("#it{k}* (GeV/#it{c})");
+
+      tTempHist1->GetYaxis()->SetTitle("#it{C}(#it{k}*)");
+      tTempHist2->GetYaxis()->SetTitle("#it{C}(#it{k}*)");
+
       tPadA->cd();
       tTempHist1->Draw("ex0");
       tTempHist2->Draw("ex0same");
@@ -2038,6 +2046,7 @@ void FitGenerator::InitializeGenerator(double aMaxKStarToFit)
   fLednickyFitter->SetNonFlatBgdFitType(fNonFlatBgdFitType);
   fLednickyFitter->SetIncludeResidualCorrelations(fIncludeResidualCorrelations);
   fLednickyFitter->SetUseCoulombOnlyInterpCfsForChargedResiduals(fUseCoulombOnlyInterpCfsForChargedResiduals);
+  fLednickyFitter->SetUseCoulombOnlyInterpCfsForXiKResiduals(fUseCoulombOnlyInterpCfsForXiKResiduals);
 }
 
 //________________________________________________________________________________________________________________

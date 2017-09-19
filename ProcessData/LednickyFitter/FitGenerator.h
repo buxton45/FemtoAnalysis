@@ -117,6 +117,7 @@ public:
   void SetApplyMomResCorrection(bool aApplyMomResCorrection);
   virtual void SetIncludeResidualCorrelations(bool aInclude, double aMinLambda=0., double aMaxLambda=1.0);
   void SetUseCoulombOnlyInterpCfsForChargedResiduals(bool aUse);
+  void SetUseCoulombOnlyInterpCfsForXiKResiduals(bool aUse);
 
 protected:
   TString fSaveLocationBase;
@@ -139,7 +140,8 @@ protected:
   NonFlatBgdFitType fNonFlatBgdFitType;
   bool fApplyMomResCorrection;
   bool fIncludeResidualCorrelations;
-  bool fUseCoulombOnlyInterpCfsForChargedResiduals;
+  bool fUseCoulombOnlyInterpCfsForChargedResiduals;  //ex SigStPK, etc
+  bool fUseCoulombOnlyInterpCfsForXiKResiduals;
 
   FitSharedAnalyses* fSharedAn;
   LednickyFitter* fLednickyFitter;
@@ -185,6 +187,7 @@ inline void FitGenerator::SetNonFlatBgdFitType(NonFlatBgdFitType aNonFlatBgdFitT
 inline void FitGenerator::SetApplyMomResCorrection(bool aApplyMomResCorrection) {fApplyMomResCorrection = aApplyMomResCorrection;}
 inline void FitGenerator::SetIncludeResidualCorrelations(bool aInclude, double aMinLambda, double aMaxLambda) {fIncludeResidualCorrelations = aInclude; SetDefaultLambdaParametersWithResiduals(aMinLambda, aMaxLambda);}
 inline void FitGenerator::SetUseCoulombOnlyInterpCfsForChargedResiduals(bool aUse) {fUseCoulombOnlyInterpCfsForChargedResiduals = aUse;}
+inline void FitGenerator::SetUseCoulombOnlyInterpCfsForXiKResiduals(bool aUse) {fUseCoulombOnlyInterpCfsForXiKResiduals = aUse;}
 
 #endif
 

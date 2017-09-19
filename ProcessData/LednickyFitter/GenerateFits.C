@@ -32,7 +32,8 @@ int main(int argc, char **argv)
 
   bool UseAll10Residuals = true;
   bool UnboundLambda = true;
-  bool UseCoulombOnlyInterpCfs = true;
+  bool UseCoulombOnlyInterpCfsForChargedResiduals = true;
+  bool UseCoulombOnlyInterpCfsForXiKResiduals = false;
 
   double aLambdaMin=0., aLambdaMax=1.;
   if(UnboundLambda) aLambdaMax=0.;
@@ -56,7 +57,7 @@ int main(int argc, char **argv)
     if(UnboundLambda) tSaveDirectoryBase += TString("NoLimits/");
     else tSaveDirectoryBase += TString("LimitedLambda/");
 
-    if(UseCoulombOnlyInterpCfs) tSaveDirectoryBase += TString("UsingCoulombOnlyInterpCfs/");
+    if(UseCoulombOnlyInterpCfsForChargedResiduals) tSaveDirectoryBase += TString("UsingCoulombOnlyInterpCfs/");
     else tSaveDirectoryBase += TString("UsingXiKData/");
 //  tSaveDirectoryBase = tDirectoryBase;
 
@@ -65,7 +66,10 @@ int main(int argc, char **argv)
   if(ApplyNonFlatBackgroundCorrection) tSaveNameModifier += TString("_NonFlatBgdCrctn");
   if(tAllShareSingleLambdaParam) tSaveNameModifier += TString("_SingleLamParam");
   if(IncludeResiduals) tSaveNameModifier += TString("_ResidualsIncluded");
-  if(UseCoulombOnlyInterpCfs) tSaveNameModifier += TString("_UsingCoulombOnlyInterpCfs");
+
+  if(UseCoulombOnlyInterpCfsForXiKResiduals && UseCoulombOnlyInterpCfsForChargedResiduals) tSaveNameModifier += TString("_UsingCoulombOnlyInterpCfsForAll");
+  else if(UseCoulombOnlyInterpCfsForChargedResiduals) tSaveNameModifier += TString("_UsingCoulombOnlyInterpCfs");
+
   FitGenerator* tLamKchP = new FitGenerator(tFileLocationBase,tFileLocationBaseMC,tAnType, tCentType,tAnRunType,tNPartialAnalysis,tGenType,tShareLambdaParams,tAllShareSingleLambdaParam);
 //  FitGenerator* tLamKchP = new FitGenerator(tFileLocationBase,tFileLocationBaseMC,tAnType,{k0010,k1030},tAnRunType,tNPartialAnalysis,tGenType,tShareLambdaParams,tAllShareSingleLambdaParam);
 //  tLamKchP->SetRadiusStartValues({3.0,4.0,5.0});
@@ -84,7 +88,8 @@ int main(int argc, char **argv)
   tLamKchP->SetNonFlatBgdFitType(tNonFlatBgdFitType);
   tLamKchP->SetApplyMomResCorrection(ApplyMomResCorrection);
   tLamKchP->SetIncludeResidualCorrelations(IncludeResiduals, aLambdaMin, aLambdaMax);
-  tLamKchP->SetUseCoulombOnlyInterpCfsForChargedResiduals(UseCoulombOnlyInterpCfs);
+  tLamKchP->SetUseCoulombOnlyInterpCfsForChargedResiduals(UseCoulombOnlyInterpCfsForChargedResiduals);
+  tLamKchP->SetUseCoulombOnlyInterpCfsForXiKResiduals(UseCoulombOnlyInterpCfsForXiKResiduals);
 
   tLamKchP->DoFit();
   TCanvas* tKStarwFitsCan = tLamKchP->DrawKStarCfswFits(ApplyMomResCorrection,ApplyNonFlatBackgroundCorrection,tNonFlatBgdFitType,SaveImages);

@@ -1051,11 +1051,11 @@ TH1F* FitPairAnalysis::GetCorrectedFitHistv2(double aMaxDrawKStar)
 
 
 //________________________________________________________________________________________________________________
-void FitPairAnalysis::InitiateResidualCollection(td1dVec &aKStarBinCenters, bool aUseCoulombOnlyInterpCfs, TString aInterpCfsDirectory)
+void FitPairAnalysis::InitiateResidualCollection(td1dVec &aKStarBinCenters, bool aUseCoulombOnlyInterpCfsForChargedResiduals, bool aUseCoulombOnlyInterpCfsForXiKResiduals, TString aInterpCfsDirectory)
 {
   vector<TH2D*> aTransformMatrices = GetTransformMatrices();
   vector<AnalysisType> aTransformStorageMapping = GetTransformStorageMapping();
   fResidualCollection = new ResidualCollection(fAnalysisType, aKStarBinCenters, aTransformMatrices, aTransformStorageMapping, fCentralityType);
-  if(aUseCoulombOnlyInterpCfs) fResidualCollection->SetUseCoulombOnlyInterpCfs(aInterpCfsDirectory, aUseCoulombOnlyInterpCfs);
+  fResidualCollection->SetUseCoulombOnlyInterpCfs(aInterpCfsDirectory, aUseCoulombOnlyInterpCfsForChargedResiduals, aUseCoulombOnlyInterpCfsForXiKResiduals);
 }
 

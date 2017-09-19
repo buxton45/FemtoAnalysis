@@ -38,6 +38,7 @@ LednickyFitter::LednickyFitter(FitSharedAnalyses* aFitSharedAnalyses, double aMa
   fApplyMomResCorrection(false), //TODO change deault to true here AND in CoulombFitter
   fIncludeResidualCorrelations(false),  //TODO change deault to true here AND in CoulombFitter
   fUseCoulombOnlyInterpCfsForChargedResiduals(false),
+  fUseCoulombOnlyInterpCfsForXiKResiduals(false),
   fResidualsInitiated(false),
   fReturnPrimaryWithResidualsToAnalyses(false),
   fNonFlatBgdFitType(kLinear),
@@ -555,7 +556,7 @@ void LednickyFitter::InitializeFitter()
   {
     for(int iAnaly=0; iAnaly<fNAnalyses; iAnaly++)
     {
-      fFitSharedAnalyses->GetFitPairAnalysis(iAnaly)->InitiateResidualCollection(fKStarBinCenters,fUseCoulombOnlyInterpCfsForChargedResiduals);
+      fFitSharedAnalyses->GetFitPairAnalysis(iAnaly)->InitiateResidualCollection(fKStarBinCenters, fUseCoulombOnlyInterpCfsForChargedResiduals, fUseCoulombOnlyInterpCfsForXiKResiduals);
     }
   }
 
