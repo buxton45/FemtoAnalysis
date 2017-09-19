@@ -902,7 +902,7 @@ TCanvas* FitGenerator::DrawResiduals(int aAnalysisNumber, CentralityType aCentra
     AnalysisType tTempResidualType = tFitPairAnalysis->GetResidualCollection()->GetNeutralCollection()[iRes].GetResidualType();
     if( (tTempResidualType != kResOmegaK0) && (tTempResidualType != kResAOmegaK0) )
     {
-      TString tTempName = TString(cAnalysisRootTags[tTempResidualType]);
+      TString tTempName = TString(cAnalysisBaseTags[tTempResidualType]);
       TString tTempName1 = TString("Residual_") + tTempName;
       TString tTempName2 = TString("TransformedResidual_") + tTempName;
       TH1D* tTempHist1 = tFitPairAnalysis->GetResidualCollection()->GetNeutralCollection()[iRes].GetNeutralResidualCorrelationHistogram(tTempName1);
@@ -949,7 +949,7 @@ TCanvas* FitGenerator::DrawResiduals(int aAnalysisNumber, CentralityType aCentra
     AnalysisType tTempResidualType = tFitPairAnalysis->GetResidualCollection()->GetChargedCollection()[iRes].GetResidualType();
     if( (tTempResidualType != kResOmegaKchP) && (tTempResidualType != kResAOmegaKchM) && (tTempResidualType != kResOmegaKchM) && (tTempResidualType != kResAOmegaKchP) )
     {
-      TString tTempName = TString(cAnalysisRootTags[tTempResidualType]);
+      TString tTempName = TString(cAnalysisBaseTags[tTempResidualType]);
       TString tTempName1 = TString("Residual_") + tTempName;
       TString tTempName2 = TString("TransformedResidual_") + tTempName;
       TH1D* tTempHist1 = tFitPairAnalysis->GetResidualCollection()->GetChargedCollection()[iRes].GetChargedResidualCorrelationHistogramWithLambdaApplied(tTempName1, tOverallLambdaPrimary, tRadiusPrimary);
@@ -1061,7 +1061,7 @@ TObjArray* FitGenerator::DrawResidualsWithTransformMatrices(int aAnalysisNumber,
     AnalysisType tTempResidualType = tFitPairAnalysis->GetResidualCollection()->GetNeutralCollection()[iRes].GetResidualType();
     if( (tTempResidualType != kResOmegaK0) && (tTempResidualType != kResAOmegaK0) )
     {
-      tTempName = TString(cAnalysisRootTags[tTempResidualType]);
+      tTempName = TString(cAnalysisBaseTags[tTempResidualType]);
       tTempName1 = TString("Residual_") + tTempName;
       tTempName2 = TString("TransformedResidual_") + tTempName;
 
@@ -1088,28 +1088,28 @@ TObjArray* FitGenerator::DrawResidualsWithTransformMatrices(int aAnalysisNumber,
       tTempTransformMatrix->GetZaxis()->SetLabelOffset(0.004);
 
       tNNeutral++;
-      tCan = new TCanvas(TString::Format("%s_%s", tCanvasBaseName.Data(), cAnalysisRootTags[tTempResidualType]),
-                         TString::Format("%s_%s", tCanvasBaseName.Data(), cAnalysisRootTags[tTempResidualType]));
+      tCan = new TCanvas(TString::Format("%s_%s", tCanvasBaseName.Data(), cAnalysisBaseTags[tTempResidualType]),
+                         TString::Format("%s_%s", tCanvasBaseName.Data(), cAnalysisBaseTags[tTempResidualType]));
       tCan->cd();
 
-      tPadA = new TPad(TString::Format("tPadA_%s_%s",tCanvasBaseName.Data(), cAnalysisRootTags[tTempResidualType]), 
-                       TString::Format("tPadA_%s_%s",tCanvasBaseName.Data(), cAnalysisRootTags[tTempResidualType]), 
+      tPadA = new TPad(TString::Format("tPadA_%s_%s",tCanvasBaseName.Data(), cAnalysisBaseTags[tTempResidualType]), 
+                       TString::Format("tPadA_%s_%s",tCanvasBaseName.Data(), cAnalysisBaseTags[tTempResidualType]), 
                        0.0, 0.5, 0.5, 1.0);
       tPadA->Draw();
 
-      tPadB = new TPad(TString::Format("tPadB_%s_%s",tCanvasBaseName.Data(), cAnalysisRootTags[tTempResidualType]), 
-                       TString::Format("tPadB_%s_%s",tCanvasBaseName.Data(), cAnalysisRootTags[tTempResidualType]), 
+      tPadB = new TPad(TString::Format("tPadB_%s_%s",tCanvasBaseName.Data(), cAnalysisBaseTags[tTempResidualType]), 
+                       TString::Format("tPadB_%s_%s",tCanvasBaseName.Data(), cAnalysisBaseTags[tTempResidualType]), 
                        0.0, 0.0, 0.5, 0.5);
       tPadB->Draw();
 
-      tPadC = new TPad(TString::Format("tPadC_%s_%s",tCanvasBaseName.Data(), cAnalysisRootTags[tTempResidualType]), 
-                       TString::Format("tPadC_%s_%s",tCanvasBaseName.Data(), cAnalysisRootTags[tTempResidualType]), 
+      tPadC = new TPad(TString::Format("tPadC_%s_%s",tCanvasBaseName.Data(), cAnalysisBaseTags[tTempResidualType]), 
+                       TString::Format("tPadC_%s_%s",tCanvasBaseName.Data(), cAnalysisBaseTags[tTempResidualType]), 
                        0.5, 0.5, 1.0, 1.0);
       tPadC->SetRightMargin(0.15);
       tPadC->Draw();
 
-      tPadD = new TPad(TString::Format("tPadD_%s_%s",tCanvasBaseName.Data(), cAnalysisRootTags[tTempResidualType]), 
-                       TString::Format("tPadD_%s_%s",tCanvasBaseName.Data(), cAnalysisRootTags[tTempResidualType]), 
+      tPadD = new TPad(TString::Format("tPadD_%s_%s",tCanvasBaseName.Data(), cAnalysisBaseTags[tTempResidualType]), 
+                       TString::Format("tPadD_%s_%s",tCanvasBaseName.Data(), cAnalysisBaseTags[tTempResidualType]), 
                        0.5, 0.0, 1.0, 0.5);
       tPadD->SetRightMargin(0.15);
       tPadD->Draw();
@@ -1172,7 +1172,7 @@ TObjArray* FitGenerator::DrawResidualsWithTransformMatrices(int aAnalysisNumber,
     AnalysisType tTempResidualType = tFitPairAnalysis->GetResidualCollection()->GetChargedCollection()[iRes].GetResidualType();
     if( (tTempResidualType != kResOmegaKchP) && (tTempResidualType != kResAOmegaKchM) && (tTempResidualType != kResOmegaKchM) && (tTempResidualType != kResAOmegaKchP) )
     {
-      tTempName = TString(cAnalysisRootTags[tTempResidualType]);
+      tTempName = TString(cAnalysisBaseTags[tTempResidualType]);
       tTempName1 = TString("Residual_") + tTempName;
       tTempName2 = TString("TransformedResidual_") + tTempName;
 
@@ -1188,28 +1188,28 @@ TObjArray* FitGenerator::DrawResidualsWithTransformMatrices(int aAnalysisNumber,
       TH2D* tTempTransformMatrix = tFitPairAnalysis->GetResidualCollection()->GetChargedCollection()[iRes].GetTransformMatrix();
 
       tNCharged++;
-      tCan = new TCanvas(TString::Format("%s_%s", tCanvasBaseName.Data(), cAnalysisRootTags[tTempResidualType]),
-                         TString::Format("%s_%s", tCanvasBaseName.Data(), cAnalysisRootTags[tTempResidualType]));
+      tCan = new TCanvas(TString::Format("%s_%s", tCanvasBaseName.Data(), cAnalysisBaseTags[tTempResidualType]),
+                         TString::Format("%s_%s", tCanvasBaseName.Data(), cAnalysisBaseTags[tTempResidualType]));
       tCan->cd();
 
-      tPadA = new TPad(TString::Format("tPadA_%s_%s",tCanvasBaseName.Data(), cAnalysisRootTags[tTempResidualType]), 
-                       TString::Format("tPadA_%s_%s",tCanvasBaseName.Data(), cAnalysisRootTags[tTempResidualType]), 
+      tPadA = new TPad(TString::Format("tPadA_%s_%s",tCanvasBaseName.Data(), cAnalysisBaseTags[tTempResidualType]), 
+                       TString::Format("tPadA_%s_%s",tCanvasBaseName.Data(), cAnalysisBaseTags[tTempResidualType]), 
                        0.0, 0.5, 0.5, 1.0);
       tPadA->Draw();
 
-      tPadB = new TPad(TString::Format("tPadB_%s_%s",tCanvasBaseName.Data(), cAnalysisRootTags[tTempResidualType]), 
-                       TString::Format("tPadB_%s_%s",tCanvasBaseName.Data(), cAnalysisRootTags[tTempResidualType]), 
+      tPadB = new TPad(TString::Format("tPadB_%s_%s",tCanvasBaseName.Data(), cAnalysisBaseTags[tTempResidualType]), 
+                       TString::Format("tPadB_%s_%s",tCanvasBaseName.Data(), cAnalysisBaseTags[tTempResidualType]), 
                        0.0, 0.0, 0.5, 0.5);
       tPadB->Draw();
 
-      tPadC = new TPad(TString::Format("tPadC_%s_%s",tCanvasBaseName.Data(), cAnalysisRootTags[tTempResidualType]), 
-                       TString::Format("tPadC_%s_%s",tCanvasBaseName.Data(), cAnalysisRootTags[tTempResidualType]), 
+      tPadC = new TPad(TString::Format("tPadC_%s_%s",tCanvasBaseName.Data(), cAnalysisBaseTags[tTempResidualType]), 
+                       TString::Format("tPadC_%s_%s",tCanvasBaseName.Data(), cAnalysisBaseTags[tTempResidualType]), 
                        0.5, 0.5, 1.0, 1.0);
       tPadC->SetRightMargin(0.15);
       tPadC->Draw();
 
-      tPadD = new TPad(TString::Format("tPadD_%s_%s",tCanvasBaseName.Data(), cAnalysisRootTags[tTempResidualType]), 
-                       TString::Format("tPadD_%s_%s",tCanvasBaseName.Data(), cAnalysisRootTags[tTempResidualType]), 
+      tPadD = new TPad(TString::Format("tPadD_%s_%s",tCanvasBaseName.Data(), cAnalysisBaseTags[tTempResidualType]), 
+                       TString::Format("tPadD_%s_%s",tCanvasBaseName.Data(), cAnalysisBaseTags[tTempResidualType]), 
                        0.5, 0.0, 1.0, 0.5);
       tPadD->SetRightMargin(0.15);
       tPadD->Draw();

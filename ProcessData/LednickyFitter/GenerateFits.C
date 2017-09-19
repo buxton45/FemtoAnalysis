@@ -22,7 +22,7 @@ int main(int argc, char **argv)
   bool tShareLambdaParams = false;
   bool tAllShareSingleLambdaParam = false;
 
-  bool SaveImages = true;
+  bool SaveImages = false;
   bool SaveImagesInRootFile = false;
   bool ApplyMomResCorrection = true;
   bool ApplyNonFlatBackgroundCorrection = true;
