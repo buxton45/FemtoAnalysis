@@ -86,6 +86,29 @@ void ResidualCollection::SetUseCoulombOnlyInterpCfs(TString aFileDirectory, bool
 
 
 //________________________________________________________________________________________________________________
+void ResidualCollection::SetRadiusFactorForSigStResiduals(double aFactor)
+{
+  AnalysisType tResType;
+
+  for(unsigned int i=0; i<fChargedCfCollection.size(); i++) 
+  {
+    tResType = fChargedCfCollection[i].GetResidualType();
+    if(tResType==kResSigStPKchP || tResType==kResASigStMKchM || tResType==kResSigStPKchM || tResType==kResASigStMKchP || 
+       tResType==kResSigStMKchP || tResType==kResASigStPKchM || tResType==kResSigStMKchM || tResType==kResASigStPKchP) fChargedCfCollection[i].SetRadiusFactor(aFactor);
+  }
+
+  for(unsigned int i=0; i<fNeutralCfCollection.size(); i++) 
+  {
+    tResType = fNeutralCfCollection[i].GetResidualType();
+    if(tResType==kResSigSt0KchP || tResType==kResASigSt0KchM || tResType==kResSigSt0KchM || tResType==kResASigSt0KchP || 
+       tResType==kResSigStPK0 || tResType==kResASigStMK0 || 
+       tResType==kResSigStMK0 || tResType==kResASigStPK0 || 
+       tResType==kResSigSt0K0 || tResType==kResASigSt0K0) fNeutralCfCollection[i].SetRadiusFactor(aFactor);
+  }
+}
+
+
+//________________________________________________________________________________________________________________
 int ResidualCollection::GetNeutralIndex(AnalysisType aResidualType)
 {
   int tIndex = -1;

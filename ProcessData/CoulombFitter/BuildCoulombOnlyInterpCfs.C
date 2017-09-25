@@ -54,10 +54,14 @@ int main(int argc, char **argv)
   double tRStarMin = 0.;
   double tRStarMax = 20.;
 */
-
+/*
   int tNbinsRStar = 48;
   double tRStarMin = 1.;
   double tRStarMax = 13.;
+*/
+  int tNbinsRStar = 100;
+  double tRStarMin = 0.;
+  double tRStarMax = 25.;
 
   double tNorm = 1.;
 

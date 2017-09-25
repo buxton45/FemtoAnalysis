@@ -53,6 +53,8 @@ public:
   ParticlePDGType GetMotherType2();
   ParticlePDGType GetDaughterType2();
 
+  void SetRadiusFactor(double aFactor);
+
 protected:
   AnalysisType fResidualType;
   ParticlePDGType fDaughterType1, fMotherType1;
@@ -84,4 +86,6 @@ inline ParticlePDGType SimpleChargedResidualCf::GetMotherType1() {return fMother
 inline ParticlePDGType SimpleChargedResidualCf::GetDaughterType1() {return fDaughterType1;}
 inline ParticlePDGType SimpleChargedResidualCf::GetMotherType2() {return fMotherType2;}
 inline ParticlePDGType SimpleChargedResidualCf::GetDaughterType2() {return fDaughterType2;}
+
+inline void SimpleChargedResidualCf::SetRadiusFactor(double aFactor) {fRadiusFactor = aFactor;}
 #endif

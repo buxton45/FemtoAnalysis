@@ -21,7 +21,8 @@ NeutralResidualCf::NeutralResidualCf(AnalysisType aResidualType, TH2D* aTransfor
   fTransformMatrix(aTransformMatrix),
   fKStarBinCenters(aKStarBinCenters),
   fResCf(0),
-  fTransformedResCf(0)
+  fTransformedResCf(0),
+  fRadiusFactor(1.)
 {
   assert(fKStarBinCenters.size() == (unsigned int)fTransformMatrix->GetNbinsX());
   assert(fKStarBinCenters.size() == (unsigned int)fTransformMatrix->GetNbinsY());
@@ -116,6 +117,7 @@ td1dVec NeutralResidualCf::GetNeutralResidualCorrelation(double *aParentCfParams
   fResCf.clear();
   fResCf.resize(fKStarBinCenters.size(),0.);
   double tKStar[1];
+  aParentCfParams[1] *= fRadiusFactor;
   for(unsigned int i=0; i<fKStarBinCenters.size(); i++)
   {
     tKStar[0] = fKStarBinCenters[i];

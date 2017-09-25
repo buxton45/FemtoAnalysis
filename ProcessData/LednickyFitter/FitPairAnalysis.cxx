@@ -1057,5 +1057,8 @@ void FitPairAnalysis::InitiateResidualCollection(td1dVec &aKStarBinCenters, bool
   vector<AnalysisType> aTransformStorageMapping = GetTransformStorageMapping();
   fResidualCollection = new ResidualCollection(fAnalysisType, aKStarBinCenters, aTransformMatrices, aTransformStorageMapping, fCentralityType);
   fResidualCollection->SetUseCoulombOnlyInterpCfs(aInterpCfsDirectory, aUseCoulombOnlyInterpCfsForChargedResiduals, aUseCoulombOnlyInterpCfsForXiKResiduals);
+
+  double tSigStRadiusFactor = 1.;
+  fResidualCollection->SetRadiusFactorForSigStResiduals(tSigStRadiusFactor);
 }
 

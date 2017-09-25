@@ -47,6 +47,8 @@ public:
   ParticlePDGType GetMotherType2();
   ParticlePDGType GetDaughterType2();
 
+  void SetRadiusFactor(double aFactor);
+
 protected:
   AnalysisType fResidualType;
   ParticlePDGType fDaughterType1, fMotherType1;
@@ -56,6 +58,8 @@ protected:
   td1dVec fKStarBinCenters;
   td1dVec fResCf;
   td1dVec fTransformedResCf;
+
+  double fRadiusFactor;  //Allow me to give SigSt different radii
 
 
 
@@ -74,4 +78,6 @@ inline ParticlePDGType NeutralResidualCf::GetMotherType1() {return fMotherType1;
 inline ParticlePDGType NeutralResidualCf::GetDaughterType1() {return fDaughterType1;}
 inline ParticlePDGType NeutralResidualCf::GetMotherType2() {return fMotherType2;}
 inline ParticlePDGType NeutralResidualCf::GetDaughterType2() {return fDaughterType2;}
+
+inline void NeutralResidualCf::SetRadiusFactor(double aFactor) {fRadiusFactor = aFactor;}
 #endif

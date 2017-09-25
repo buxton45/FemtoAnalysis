@@ -14,9 +14,9 @@ int main(int argc, char **argv)
   double tKStarMin = 0.;
   double tKStarMax = 1.0;
 
-  int tNbinsRStar = 500;
+  int tNbinsRStar = 1000;
   double tRStarMin = 0.;
-  double tRStarMax = 50.;
+  double tRStarMax = 100.;
 
 //  int tNbinsTheta = 180;
 //  double tThetaMin = 0.;
@@ -40,7 +40,7 @@ int main(int argc, char **argv)
   double tD0Max = 10.;
 
   //---------------------------------------
-  AnalysisType tAnalysisType = kXiKchP;
+  AnalysisType tAnalysisType = kResASigStPKchM;
 
   InterpolationHistograms* myCreator = new InterpolationHistograms(tSaveBaseName,tAnalysisType);
 
