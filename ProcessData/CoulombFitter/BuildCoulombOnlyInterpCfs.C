@@ -41,7 +41,7 @@ int main(int argc, char **argv)
   tFullTimer.Start();
 //-----------------------------------------------------------------------------
 
-  AnalysisType tAnType = kResSigStPKchM;
+  AnalysisType tAnType = kResASigStMKchM;
 
   int tNbinsKStar = 100;
   double tKStarMin = 0.;

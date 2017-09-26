@@ -40,7 +40,7 @@ int main(int argc, char **argv)
   double tD0Max = 10.;
 
   //---------------------------------------
-  AnalysisType tAnalysisType = kResASigStPKchM;
+  AnalysisType tAnalysisType = kResASigStPKchP;
 
   InterpolationHistograms* myCreator = new InterpolationHistograms(tSaveBaseName,tAnalysisType);
 
