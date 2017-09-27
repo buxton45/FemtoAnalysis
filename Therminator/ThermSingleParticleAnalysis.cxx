@@ -31,23 +31,23 @@ ThermSingleParticleAnalysis::ThermSingleParticleAnalysis(ParticlePDGType aPartic
 
   fRadii = new TH1D(TString::Format("%sRadii",GetPDGRootName(fParticlePDGType)), 
                       TString::Format("%sRadii",GetPDGRootName(fParticlePDGType)), 
-                      200, 0, 200);
+                      1000, 0, 1000);
 
   f2dRadiiVsPid = new TH2D(TString::Format("%s2dRadiiVsPid",GetPDGRootName(fParticlePDGType)),
                            TString::Format("%s2dRadiiVsPid",GetPDGRootName(fParticlePDGType)),
                            200, 0, 200,
-                           200, 0, 200);
+                           1000, 0, 1000);
 
   f2dRadiiVsBeta = new TH2D(TString::Format("%s2dRadiiVsBeta",GetPDGRootName(fParticlePDGType)),
                            TString::Format("%s2dRadiiVsBeta",GetPDGRootName(fParticlePDGType)),
                            100, 0, 1.,
-                           200, 0, 200);
+                           1000, 0, 1000);
 
   f3dRadii = new TH3D(TString::Format("%s3dRadii",GetPDGRootName(fParticlePDGType)),
                       TString::Format("%s3dRadii",GetPDGRootName(fParticlePDGType)),
                       200, 0, 200, 
                       100, 0, 1., 
-                      200, 0, 200);
+                      1000, 0, 1000);
 
   //-------------------------------
   switch(fParticlePDGType) {
@@ -151,9 +151,27 @@ void ThermSingleParticleAnalysis::MapAndFillRadiiHistograms(ThermParticle &aPart
   }
 
   double tDecayLength;
+/*
   if(aParticle.IsPrimordial()) tDecayLength = 0.;
   else tDecayLength = GetLabDecayLength(GetParticleDecayLength(tFatherType), aParticle.GetFatherMass(), aParticle.GetFatherE(), aParticle.GetFatherMagP());
-
+*/
+  tDecayLength = sqrt(aParticle.GetX()*aParticle.GetX() + aParticle.GetY()*aParticle.GetY() + aParticle.GetZ()*aParticle.GetZ());
+/*
+  if(!aParticle.IsPrimordial())
+  {
+    double tParticleOrigin, tParentOrigin, tDiff, tLabDecayLength;
+    tParticleOrigin = sqrt(aParticle.GetX()*aParticle.GetX() + aParticle.GetY()*aParticle.GetY() + aParticle.GetZ()*aParticle.GetZ());
+    tParentOrigin = sqrt(aParticle.GetFatherX()*aParticle.GetFatherX() + aParticle.GetFatherY()*aParticle.GetFatherY() + aParticle.GetFatherZ()*aParticle.GetFatherZ());
+    tDiff = sqrt((aParticle.GetFatherX()-aParticle.GetX())*(aParticle.GetFatherX()-aParticle.GetX()) + 
+                 (aParticle.GetFatherY()-aParticle.GetY())*(aParticle.GetFatherY()-aParticle.GetY()) +
+                 (aParticle.GetFatherZ()-aParticle.GetZ())*(aParticle.GetFatherZ()-aParticle.GetZ()));
+    tLabDecayLength = GetLabDecayLength(GetParticleDecayLength(tFatherType), aParticle.GetFatherMass(), aParticle.GetFatherE(), aParticle.GetFatherMagP());
+    cout << "tParticleOrigin = " << tParticleOrigin << endl;
+    cout << "tParentOrigin = " << tParentOrigin << endl;
+    cout << "tDiff = " << tDiff << endl;
+    cout << "tLabDecayLength = " << tLabDecayLength << endl << endl;
+  }
+*/
 //  double tBeta = aParticle.GetFatherMagP()/aParticle.GetFatherE();
   double tBeta = aParticle.GetMagP()/aParticle.GetE();
 

@@ -33,7 +33,9 @@ ThermPairAnalysis::ThermPairAnalysis(AnalysisType aAnType) :
   fParentsMatrix(nullptr),
 
   fPrimaryPairInfo(0),
-  fOtherPairInfo(0)
+  fOtherPairInfo(0),
+
+  fPairSource(nullptr)
 {
   InitiateTransformMatrices();
 
@@ -42,6 +44,9 @@ ThermPairAnalysis::ThermPairAnalysis(AnalysisType aAnType) :
 
   TString tParentsMatrixName = TString::Format("ParentsMatrix%s", cAnalysisBaseTags[aAnType]);
   fParentsMatrix = new TH2D(tParentsMatrixName, tParentsMatrixName, 100, 0, 100, 135, 0, 135);
+
+  TString tPairSourceName = TString::Format("PairSource%s", cAnalysisBaseTags[aAnType]);
+  fPairSource = new TH1D(tPairSourceName, tPairSourceName, 200, 0, 200);
 }
 
 
@@ -701,7 +706,16 @@ void ThermPairAnalysis::SavePairFractionsAndParentsMatrix(TFile *aFile)
 
 
 
+//________________________________________________________________________________________________________________
+double ThermPairAnalysis::CalcKStar(const TLorentzVector &p1, const TLorentzVector &p2)
+{
+  const double p_inv = (p1 + p2).Mag2(),
+               q_inv = (p1 - p2).Mag2(),
+           mass_diff = p1.Mag2() - p2.Mag2();
 
+  const double tQ = ::pow(mass_diff, 2) / p_inv - q_inv;
+  return ::sqrt(tQ) / 2.0;
+}
 
 
 

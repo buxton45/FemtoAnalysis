@@ -14,6 +14,7 @@
 #include "TH1.h"
 #include "TH2.h"
 #include "TFile.h"
+#include "TLorentzVector.h"
 
 #include "Types.h"
 #include "PIDMapping.h"
@@ -63,6 +64,9 @@ public:
 
   void SavePairFractionsAndParentsMatrix(TFile *aFile);
 
+
+  double CalcKStar(const TLorentzVector &p1, const TLorentzVector &p2);
+
   //-- inline
   void SetUseMixedEvents(bool aUse);
   void SetBuildUniqueParents(bool aBuild);
@@ -87,6 +91,8 @@ private:
 
   vector<vector<PidInfo> > fPrimaryPairInfo;  //each vector<PidInfo> has 2 elements for each particle in pair
   vector<vector<PidInfo> > fOtherPairInfo;
+
+  TH1* fPairSource;
 
 #ifdef __ROOT__
   ClassDef(ThermPairAnalysis, 1)

@@ -379,7 +379,7 @@ void DrawAll(TString aFileLocationSingleParticleAnalyses, ParticlePDGType aType,
   //---------------------------------------
   if(aSave)
   {
-    TString tSaveDirectory = "/home/jesse/Analysis/Presentations/AliFemto/20170913/Figures/";
+    TString tSaveDirectory = "/home/jesse/Analysis/Presentations/GroupMeetings/20170928/Figures/";
     TString tFileType = ".eps";
 //    TString tFileType = ".pdf";
 
