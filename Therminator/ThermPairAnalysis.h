@@ -9,12 +9,14 @@
 #include <string>
 #include <iomanip>
 #include <cassert>
+#include <complex>
 
 #include "TObjArray.h"
 #include "TH1.h"
 #include "TH2.h"
 #include "TFile.h"
 #include "TLorentzVector.h"
+#include "TVector3.h"
 
 #include "Types.h"
 #include "PIDMapping.h"
@@ -31,6 +33,7 @@ public:
   ThermPairAnalysis(AnalysisType aAnType);
   virtual ~ThermPairAnalysis();
 
+  void SetPartTypes();
   void InitiateTransformMatrices();
 
   double GetFatherKStar(ThermParticle &aParticle1, ThermParticle &aParticle2, bool aUseParticleFather1, bool aUseParticleFather2);
@@ -65,8 +68,25 @@ public:
   void SavePairFractionsAndParentsMatrix(TFile *aFile);
 
 
-  double CalcKStar(const TLorentzVector &p1, const TLorentzVector &p2);
+  double CalcKStar(ThermParticle &tPart1, ThermParticle &tPart2);
+
+//TODO combine GetKStar3Vec and GetRStar3Vec
+  TVector3 GetKStar3Vec(ThermParticle &tPart1, ThermParticle &tPart2);
+  TVector3 GetRStar3Vec(ThermParticle &tPart1, ThermParticle &tPart2);
   double CalcRStar(ThermParticle &tPart1, ThermParticle &tPart2);
+  complex<double> GetStrongOnlyWaveFunction(TVector3 &aKStar3Vec, TVector3 &aRStar3Vec);
+  double GetStrongOnlyWaveFunctionSq(TVector3 aKStar3Vec, TVector3 aRStar3Vec);
+
+  void FillCorrelationFunctionsParticleV0(vector<ThermParticle> &aParticleCollection, vector<ThermV0Particle> &aV0Collection, bool aMixedEvents);
+  void FillCorrelationFunctionsV0V0(vector<ThermV0Particle> &aV01Collection, vector<ThermV0Particle> &aV02Collection, bool aMixedEvents);
+
+  void BuildCorrelationFunctionsParticleV0(ThermEvent &aEvent, vector<ThermEvent> &aMixingEventsCollection);
+  void BuildCorrelationFunctionsV0V0(ThermEvent &aEvent, vector<ThermEvent> &aMixingEventsCollection);
+
+  TH1* BuildFinalCf(TH1* aNum, TH1* aDen, TString aName);
+  void SaveAllCorrelationFunctions(TFile *aFile);
+
+  void ProcessEvent(ThermEvent &aEvent, vector<ThermEvent> &aMixingEventsCollection, double aMaxPrimaryDecayLength=-1.);
 
   //-- inline
   void SetUseMixedEvents(bool aUse);
@@ -74,6 +94,7 @@ public:
   TH2D* GetTransformMatrix(int aIndex);
 private:
   AnalysisType fAnalysisType;
+  ParticlePDGType fPartType1, fPartType2;
 
   double fKStarMin, fKStarMax;
   int fNBinsKStar;
@@ -94,8 +115,19 @@ private:
   vector<vector<PidInfo> > fOtherPairInfo;
 
   TH1* fPairSourceFull;
+  TH1* fNumFull;
+  TH1* fDenFull;
+  TH1* fCfFull;
+
   TH1* fPairSourcePrimaryOnly;
+  TH1* fNumPrimaryOnly;
+  TH1* fDenPrimaryOnly;
+  TH1* fCfPrimaryOnly;
+
   TH1* fPairSourceWithoutSigmaSt;
+  TH1* fNumWithoutSigmaSt;
+  TH1* fDenWithoutSigmaSt;
+  TH1* fCfWithoutSigmaSt;
 
 #ifdef __ROOT__
   ClassDef(ThermPairAnalysis, 1)

@@ -19,6 +19,7 @@ SimpleThermAnalysis::SimpleThermAnalysis() :
   fEventsDirectory("/home/jesse/Analysis/Therminator2/events/TestEvents/"),
   fPairFractionsSaveName("/home/jesse/Analysis/ReducedTherminator2Events/test/testPairFractionsv2.root"),
   fTransformMatricesSaveName("/home/jesse/Analysis/ReducedTherminator2Events/test/testTransformMatricesv2.root"),
+  fCorrelationFunctionsSaveName("/home/jesse/Analysis/ReducedTherminator2Events/test/testCorrelationFunctions.root"),
   fSingleParticlesSaveName("/home/jesse/Analysis/ReducedTherminator2Events/test/testSingleParticleAnalysesv2.root"),
 
   fFileNameCollection(0),
@@ -139,6 +140,18 @@ void SimpleThermAnalysis::SaveAll()
   fAnalysisALamK0->SaveAllTransformMatrices(tFileTransformMatrices);
 
   tFileTransformMatrices->Close();
+
+  //---------------------------------------------
+  TFile* tFileCorrelationFunctions = new TFile(fCorrelationFunctionsSaveName, "RECREATE");
+
+  fAnalysisLamKchP->SaveAllCorrelationFunctions(tFileCorrelationFunctions);
+  fAnalysisALamKchM->SaveAllCorrelationFunctions(tFileCorrelationFunctions);
+  fAnalysisLamKchM->SaveAllCorrelationFunctions(tFileCorrelationFunctions);
+  fAnalysisALamKchP->SaveAllCorrelationFunctions(tFileCorrelationFunctions);
+  fAnalysisLamK0->SaveAllCorrelationFunctions(tFileCorrelationFunctions);
+  fAnalysisALamK0->SaveAllCorrelationFunctions(tFileCorrelationFunctions);
+
+  tFileCorrelationFunctions->Close();
 
   //---------------------------------------------
   TFile* tFileSingleParticleAnalyses = new TFile(fSingleParticlesSaveName, "RECREATE");
@@ -277,25 +290,14 @@ void SimpleThermAnalysis::ProcessEventByEvent(vector<ThermEvent> &aEventsCollect
 
   for(unsigned int iEv=0; iEv < fEventsCollection.size(); iEv++)
   {
-    //-- Transform Matrices --
-    fAnalysisLamKchP->BuildAllTransformMatrices(fEventsCollection[iEv], fMixingEventsCollection);
-    fAnalysisALamKchM->BuildAllTransformMatrices(fEventsCollection[iEv], fMixingEventsCollection);
+    fAnalysisLamKchP->ProcessEvent(fEventsCollection[iEv], fMixingEventsCollection, fMaxPrimaryDecayLength);
+    fAnalysisALamKchM->ProcessEvent(fEventsCollection[iEv], fMixingEventsCollection, fMaxPrimaryDecayLength);
 
-    fAnalysisLamKchM->BuildAllTransformMatrices(fEventsCollection[iEv], fMixingEventsCollection);
-    fAnalysisALamKchP->BuildAllTransformMatrices(fEventsCollection[iEv], fMixingEventsCollection);
+    fAnalysisLamKchM->ProcessEvent(fEventsCollection[iEv], fMixingEventsCollection, fMaxPrimaryDecayLength);
+    fAnalysisALamKchP->ProcessEvent(fEventsCollection[iEv], fMixingEventsCollection, fMaxPrimaryDecayLength);
 
-    fAnalysisLamK0->BuildAllTransformMatrices(fEventsCollection[iEv], fMixingEventsCollection);
-    fAnalysisALamK0->BuildAllTransformMatrices(fEventsCollection[iEv], fMixingEventsCollection);
-
-    //-- Pair fractions and parents matrices
-    fAnalysisLamKchP->BuildPairFractionHistogramsParticleV0(fEventsCollection[iEv], fMaxPrimaryDecayLength);
-    fAnalysisALamKchM->BuildPairFractionHistogramsParticleV0(fEventsCollection[iEv], fMaxPrimaryDecayLength);
-
-    fAnalysisLamKchM->BuildPairFractionHistogramsParticleV0(fEventsCollection[iEv], fMaxPrimaryDecayLength);
-    fAnalysisALamKchP->BuildPairFractionHistogramsParticleV0(fEventsCollection[iEv], fMaxPrimaryDecayLength);
-
-    fAnalysisLamK0->BuildPairFractionHistogramsV0V0(fEventsCollection[iEv], fMaxPrimaryDecayLength);
-    fAnalysisALamK0->BuildPairFractionHistogramsV0V0(fEventsCollection[iEv], fMaxPrimaryDecayLength);
+    fAnalysisLamK0->ProcessEvent(fEventsCollection[iEv], fMixingEventsCollection, fMaxPrimaryDecayLength);
+    fAnalysisALamK0->ProcessEvent(fEventsCollection[iEv], fMixingEventsCollection, fMaxPrimaryDecayLength);
 
     //--------------------------------------------
     fSPAnalysisLam->ProcessEvent(fEventsCollection[iEv]);

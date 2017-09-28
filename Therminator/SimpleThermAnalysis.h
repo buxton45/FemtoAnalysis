@@ -63,6 +63,7 @@ private:
   TString fEventsDirectory;
   TString fPairFractionsSaveName;
   TString fTransformMatricesSaveName;
+  TString fCorrelationFunctionsSaveName;
   TString fSingleParticlesSaveName;
 
   vector<TString> fFileNameCollection;

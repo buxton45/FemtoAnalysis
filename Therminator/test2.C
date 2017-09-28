@@ -17,8 +17,8 @@ int main(int argc, char **argv)
   tFullTimer.Start();
 
 //-----------------------------------------------------------------------------
-  bool bRunFull = true;
-  bool bUseMixedEvents = false;
+  bool bRunFull = false;
+  bool bUseMixedEvents = true;
   bool bPrintUniqueParents = false;
 
 //  double tMaxPrimaryDecayLength = -1.; 
