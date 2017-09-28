@@ -35,7 +35,9 @@ ThermPairAnalysis::ThermPairAnalysis(AnalysisType aAnType) :
   fPrimaryPairInfo(0),
   fOtherPairInfo(0),
 
-  fPairSource(nullptr)
+  fPairSourceFull(nullptr),
+  fPairSourcePrimaryOnly(nullptr),
+  fPairSourceWithoutSigmaSt(nullptr)
 {
   InitiateTransformMatrices();
 
@@ -45,8 +47,14 @@ ThermPairAnalysis::ThermPairAnalysis(AnalysisType aAnType) :
   TString tParentsMatrixName = TString::Format("ParentsMatrix%s", cAnalysisBaseTags[aAnType]);
   fParentsMatrix = new TH2D(tParentsMatrixName, tParentsMatrixName, 100, 0, 100, 135, 0, 135);
 
-  TString tPairSourceName = TString::Format("PairSource%s", cAnalysisBaseTags[aAnType]);
-  fPairSource = new TH1D(tPairSourceName, tPairSourceName, 200, 0, 200);
+  TString tPairSourceFullName = TString::Format("PairSourceFull%s", cAnalysisBaseTags[aAnType]);
+  fPairSourceFull = new TH1D(tPairSourceFullName, tPairSourceFullName, 1000, 0, 1000);
+
+  TString tPairSourcePrimaryOnlyName = TString::Format("PairSourcePrimaryOnly%s", cAnalysisBaseTags[aAnType]);
+  fPairSourcePrimaryOnly = new TH1D(tPairSourcePrimaryOnlyName, tPairSourcePrimaryOnlyName, 1000, 0, 1000);
+
+  TString tPairSourceWithoutSigmaStName = TString::Format("PairSourceWithoutSigmaSt%s", cAnalysisBaseTags[aAnType]);
+  fPairSourceWithoutSigmaSt = new TH1D(tPairSourceWithoutSigmaStName, tPairSourceWithoutSigmaStName, 1000, 0, 1000);
 }
 
 
@@ -297,6 +305,27 @@ void ThermPairAnalysis::FillTransformMatrixParticleV0(vector<ThermParticle> &aPa
       }
     }
   }
+
+//TODO
+  for(unsigned int iV0=0; iV0<aV0Collection.size(); iV0++)
+  {
+    tV0 = aV0Collection[iV0];
+    if(tV0.GoodV0())
+    {
+      for(unsigned int iPar=0; iPar<aParticleCollection.size(); iPar++)
+      {
+        tParticle = aParticleCollection[iPar];
+
+        double tRStar = CalcRStar(tV0, tParticle);
+        fPairSourceFull->Fill(tRStar);
+        if(tV0.IsPrimordial() && tParticle.IsPrimordial()) fPairSourcePrimaryOnly->Fill(tRStar);
+        if(tV0.GetFatherPID() != kPDGSigStP && tV0.GetFatherPID() != kPDGASigStM && 
+           tV0.GetFatherPID() != kPDGSigStM && tV0.GetFatherPID() != kPDGASigStP && 
+           tV0.GetFatherPID() != kPDGSigSt0 && tV0.GetFatherPID() != kPDGASigSt0) fPairSourceWithoutSigmaSt->Fill(tRStar);
+      }
+    }
+  }
+
 }
 
 //________________________________________________________________________________________________________________
@@ -342,6 +371,29 @@ void ThermPairAnalysis::FillTransformMatrixV0V0(vector<ThermV0Particle> &aV01Col
       }
     }
   }
+
+//TODO
+  for(unsigned int iV01=0; iV01<aV01Collection.size(); iV01++)
+  {
+    tV01 = aV01Collection[iV01];
+    if(tV01.GoodV0())
+    {
+      for(unsigned int iV02=0; iV02<aV02Collection.size(); iV02++)
+      {
+        tV02 = aV02Collection[iV02];
+        if(tV02.GoodV0())
+        {
+          double tRStar = CalcRStar(tV01, tV02);
+          fPairSourceFull->Fill(tRStar);
+          if(tV01.IsPrimordial() && tV02.IsPrimordial()) fPairSourcePrimaryOnly->Fill(tRStar);
+          if(tV01.GetFatherPID() != kPDGSigStP && tV01.GetFatherPID() != kPDGASigStM && 
+             tV01.GetFatherPID() != kPDGSigStM && tV01.GetFatherPID() != kPDGASigStP && 
+             tV01.GetFatherPID() != kPDGSigSt0 && tV01.GetFatherPID() != kPDGASigSt0) fPairSourceWithoutSigmaSt->Fill(tRStar);
+        }
+      }
+    }
+  }
+
 }
 
 
@@ -417,6 +469,9 @@ void ThermPairAnalysis::SaveAllTransformMatrices(TFile *aFile)
 {
   assert(aFile->IsOpen());
   for(int i=0; i<fTransformMatrices->GetEntries(); i++) ((TH2D*)fTransformMatrices->At(i))->Write();
+  fPairSourceFull->Write();
+  fPairSourcePrimaryOnly->Write();
+  fPairSourceWithoutSigmaSt->Write();
 }
 
 
@@ -716,6 +771,96 @@ double ThermPairAnalysis::CalcKStar(const TLorentzVector &p1, const TLorentzVect
   const double tQ = ::pow(mass_diff, 2) / p_inv - q_inv;
   return ::sqrt(tQ) / 2.0;
 }
+
+
+//________________________________________________________________________________________________________________
+double ThermPairAnalysis::CalcRStar(ThermParticle &tPart1, ThermParticle &tPart2)
+{
+  double tRStar = 0.;
+
+  TLorentzVector p1 = tPart1.GetFourMomentum();
+  TLorentzVector p2 = tPart2.GetFourMomentum();
+
+  TLorentzVector x1 = tPart1.GetFourPosition();
+  TLorentzVector x2 = tPart2.GetFourPosition();
+
+  //---------------------------------
+
+  TLorentzVector P = p1 + p2;
+
+  // Calculate pair variables
+
+  const double tPx = P.X(),
+               tPy = P.Y(),
+               tPz = P.Z();
+
+  double tE1 = p1.E();
+  double tE2 = p2.E();
+
+  double tE  = tE1 + tE2;
+  double tPt = tPx*tPx + tPy*tPy;
+  double tMt = tE*tE - tPz*tPz;//mCVK;
+  double tM  = (tMt - tPt > 0.0) ? sqrt(tMt - tPt) : 0.0;
+
+  if (tMt == 0 || tE == 0 || tM == 0 || tPt == 0 ) {
+    assert(0);
+    return 0.0;
+  }
+
+  tMt = sqrt(tMt);
+  tPt = sqrt(tPt);
+
+  double pX = p1.X();
+  double pY = p1.Y();
+  double pZ = p1.Z();
+
+  // Boost to LCMS
+  double tBeta = tPz/tE;
+  double tGamma = tE/tMt;
+  double tKStarLong = tGamma * (pZ - tBeta * tE1);
+  double tE1L = tGamma * (tE1  - tBeta * pZ);
+
+  // Rotate in transverse plane
+  double tKStarOut  = ( pX*tPx + pY*tPy)/tPt;
+  double tKStarSide = (-pX*tPy + pY*tPx)/tPt;
+
+  // Boost to pair cms
+  tKStarOut = tMt/tM * (tKStarOut - tPt/tMt * tE1L);
+
+  // separation distance
+  TLorentzVector D = x1 - x2;
+
+  double tDX = D.X();
+  double tDY = D.Y();
+  double tRLong = D.Z();
+  double tDTime = D.T();
+
+  double tROut = (tDX*tPx + tDY*tPy)/tPt;
+  double tRSide = (-tDX*tPy + tDY*tPx)/tPt;
+
+  double tRStarSide = tRSide;
+
+  double tRStarLong = tGamma*(tRLong - tBeta* tDTime);
+  double tDTimePairLCMS = tGamma*(tDTime - tBeta* tRLong);
+
+  tBeta = tPt/tMt;
+  tGamma = tMt/tM;
+
+  double tRStarOut = tGamma*(tROut - tBeta* tDTimePairLCMS);
+
+  tRStar = ::sqrt(tRStarOut*tRStarOut + tRStarSide*tRStarSide + tRStarLong*tRStarLong);
+/*
+  double tKStar = ::sqrt(tKStarOut*tKStarOut + tKStarSide*tKStarSide + tKStarLong*tKStarLong);
+  cout << "tRStar = " << tRStar << endl;
+  cout << "tKStar1 = " << tKStar << endl;
+  cout << "CalcKStar(p1,p2) = " << CalcKStar(p1,p2) << endl << endl; 
+*/
+  return tRStar;
+}
+
+
+
+
 
 
 

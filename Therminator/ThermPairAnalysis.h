@@ -66,6 +66,7 @@ public:
 
 
   double CalcKStar(const TLorentzVector &p1, const TLorentzVector &p2);
+  double CalcRStar(ThermParticle &tPart1, ThermParticle &tPart2);
 
   //-- inline
   void SetUseMixedEvents(bool aUse);
@@ -92,7 +93,9 @@ private:
   vector<vector<PidInfo> > fPrimaryPairInfo;  //each vector<PidInfo> has 2 elements for each particle in pair
   vector<vector<PidInfo> > fOtherPairInfo;
 
-  TH1* fPairSource;
+  TH1* fPairSourceFull;
+  TH1* fPairSourcePrimaryOnly;
+  TH1* fPairSourceWithoutSigmaSt;
 
 #ifdef __ROOT__
   ClassDef(ThermPairAnalysis, 1)
