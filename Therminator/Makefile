@@ -10,7 +10,7 @@ RM = rm
 
 MY_LIBS = $(addprefix build/, Types.o PIDMapping.o ThermCommon.o ThermParticle.o ThermV0Particle.o ThermEvent.o ThermPairAnalysis.o ThermSingleParticleAnalysis.o ThermEventsCollection.o SimpleThermAnalysis.o)
 
-BINARIES = runTest runTest2 runDrawTransforms runDrawPairFractions runDrawParentsMatrices runBuildLambdaValuesFromParentMatrices runProject3dRadii runDrawPairSources
+BINARIES = runTest runTest2 runDrawTransforms runDrawPairFractions runDrawParentsMatrices runBuildLambdaValuesFromParentMatrices runProject3dRadii runDrawPairSources runDrawCfs
 
 all: $(BINARIES)
 
@@ -38,6 +38,9 @@ runProject3dRadii: ${MY_LIBS} Project3dRadiiMatrices.C
 
 runDrawPairSources: ${MY_LIBS} DrawPairSources.C
 	g++ DrawPairSources.C ${MY_LIBS} -o runDrawPairSources $(LIBS) $(CFLAGS)
+
+runDrawCfs: ${MY_LIBS} DrawCorrelationFunctions.C
+	g++ DrawCorrelationFunctions.C ${MY_LIBS} -o runDrawCfs $(LIBS) $(CFLAGS)
 
 build/%.o: ${ANALYZE_DIR}/%.cxx ${ANALYZE_DIR}/%.h
 	g++ -c $< $(CFLAGS) -o $@

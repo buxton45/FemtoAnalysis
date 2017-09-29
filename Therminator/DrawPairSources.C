@@ -24,6 +24,7 @@ void DrawPairSources(TPad* aPad, TString aFileName, AnalysisType aAnType, bool a
   TString tBaseNameFull = TString::Format("PairSourceFull%s", cAnalysisBaseTags[aAnType]);
   TString tBaseNamePrimaryOnly = TString::Format("PairSourcePrimaryOnly%s", cAnalysisBaseTags[aAnType]);
   TString tBaseNameWithoutSigmaSt = TString::Format("PairSourceWithoutSigmaSt%s", cAnalysisBaseTags[aAnType]);
+  TString tBaseNameSigmaStOnly = TString::Format("PairSourceSigmaStOnly%s", cAnalysisBaseTags[aAnType]);
 
   TH1D* tSourceFull = Get1dHisto(aFileName, tBaseNameFull);
     tSourceFull->SetLineColor(1);
@@ -31,6 +32,8 @@ void DrawPairSources(TPad* aPad, TString aFileName, AnalysisType aAnType, bool a
     tSourcePrimaryOnly->SetLineColor(2);
   TH1D* tSourceWithoutSigmaSt = Get1dHisto(aFileName, tBaseNameWithoutSigmaSt);
     tSourceWithoutSigmaSt->SetLineColor(3);
+  TH1D* tSourceSigmaStOnly = Get1dHisto(aFileName, tBaseNameSigmaStOnly);
+    tSourceSigmaStOnly->SetLineColor(4);
 
   tSourceFull->GetXaxis()->SetTitle("r*");
   tSourceFull->GetYaxis()->SetTitle("dN/dr*");
@@ -40,6 +43,7 @@ void DrawPairSources(TPad* aPad, TString aFileName, AnalysisType aAnType, bool a
   tSourceFull->Draw();
   tSourcePrimaryOnly->Draw("same");
   tSourceWithoutSigmaSt->Draw("same");
+  tSourceSigmaStOnly->Draw("same");
 
   TLegend* tLeg = new TLegend(0.60, 0.60, 0.85, 0.85);
     tLeg->SetFillColor(0);
@@ -50,6 +54,7 @@ void DrawPairSources(TPad* aPad, TString aFileName, AnalysisType aAnType, bool a
   tLeg->AddEntry(tSourceFull, "Full");
   tLeg->AddEntry(tSourceWithoutSigmaSt, "w/o #Sigma*");
   tLeg->AddEntry(tSourcePrimaryOnly, "Primary Only");
+  tLeg->AddEntry(tSourceSigmaStOnly, "#Sigma* Only");
 
   tLeg->Draw();
 }
@@ -67,7 +72,7 @@ int main(int argc, char **argv)
   bool bDrawLogY = true;
   bool bSaveFigures = false;
 
-  TString tFileName = "/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b2/TransformMatricesv2.root";
+  TString tFileName = "/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b2/CorrelationFunctions.root";
   TString tSaveLocationBase = "/home/jesse/Analysis/Presentations/GroupMeetings/20170928/Figures/";
 
   TString tSaveLocationBaseLamKchP = tSaveLocationBase + TString("LamKchP/");
