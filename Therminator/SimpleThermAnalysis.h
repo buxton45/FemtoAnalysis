@@ -53,6 +53,7 @@ public:
   void SetEventsDirectory(TString aDirectory);
   void SetPairFractionsSaveName(TString aSaveName);
   void SetTransformMatricesSaveName(TString aSaveName);
+  void SetCorrelationFunctionsSaveName(TString aSaveName);
   void SetSingleParticlesSaveName(TString aSaveName);
 
   void SetMaxPrimaryDecayLength(double aMax);
@@ -100,6 +101,7 @@ private:
 inline void SimpleThermAnalysis::SetEventsDirectory(TString aDirectory) {fEventsDirectory = aDirectory;}
 inline void SimpleThermAnalysis::SetPairFractionsSaveName(TString aSaveName) {fPairFractionsSaveName = aSaveName;}
 inline void SimpleThermAnalysis::SetTransformMatricesSaveName(TString aSaveName) {fTransformMatricesSaveName = aSaveName;}
+inline void SimpleThermAnalysis::SetCorrelationFunctionsSaveName(TString aSaveName) {fCorrelationFunctionsSaveName = aSaveName;}
 inline void SimpleThermAnalysis::SetSingleParticlesSaveName(TString aSaveName) {fSingleParticlesSaveName = aSaveName;}
 
 inline void SimpleThermAnalysis::SetMaxPrimaryDecayLength(double aMax) {fMaxPrimaryDecayLength = aMax;}

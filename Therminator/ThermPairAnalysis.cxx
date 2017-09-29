@@ -50,7 +50,12 @@ ThermPairAnalysis::ThermPairAnalysis(AnalysisType aAnType) :
   fPairSourceWithoutSigmaSt(nullptr),
   fNumWithoutSigmaSt(nullptr),
   fDenWithoutSigmaSt(nullptr),
-  fCfWithoutSigmaSt(nullptr)
+  fCfWithoutSigmaSt(nullptr),
+
+  fPairSourceSigmaStOnly(nullptr),
+  fNumSigmaStOnly(nullptr),
+  fDenSigmaStOnly(nullptr),
+  fCfSigmaStOnly(nullptr)
 
 {
   SetPartTypes();
@@ -104,6 +109,19 @@ ThermPairAnalysis::ThermPairAnalysis(AnalysisType aAnType) :
   fPairSourceWithoutSigmaSt->Sumw2();
   fNumWithoutSigmaSt->Sumw2();
   fDenWithoutSigmaSt->Sumw2();
+
+  fPairSourceSigmaStOnly = new TH1D(TString::Format("PairSourceSigmaStOnly%s", cAnalysisBaseTags[aAnType]), 
+                                       TString::Format("PairSourceSigmaStOnly%s", cAnalysisBaseTags[aAnType]), 
+                                       1000, 0, 1000);
+  fNumSigmaStOnly = new TH1D(TString::Format("NumSigmaStOnly%s", cAnalysisBaseTags[aAnType]),
+                                TString::Format("NumSigmaStOnly%s", cAnalysisBaseTags[aAnType]), 
+                                100, 0., 1.);
+  fDenSigmaStOnly = new TH1D(TString::Format("DenSigmaStOnly%s", cAnalysisBaseTags[aAnType]),
+                                TString::Format("DenSigmaStOnly%s", cAnalysisBaseTags[aAnType]), 
+                                100, 0., 1.);
+  fPairSourceSigmaStOnly->Sumw2();
+  fNumSigmaStOnly->Sumw2();
+  fDenSigmaStOnly->Sumw2();
 
 }
 
@@ -1097,18 +1115,20 @@ double ThermPairAnalysis::GetStrongOnlyWaveFunctionSq(TVector3 aKStar3Vec, TVect
 //________________________________________________________________________________________________________________
 void ThermPairAnalysis::FillCorrelationFunctionsParticleV0(vector<ThermParticle> &aParticleCollection, vector<ThermV0Particle> &aV0Collection, bool aMixedEvents)
 {
-  TH1 *tCfFull, *tCfPrimaryOnly, *tCfWithoutSigmaSt;
+  TH1 *tCfFull, *tCfPrimaryOnly, *tCfWithoutSigmaSt, *tCfSigmaStOnly;
   if(!aMixedEvents)
   {
     tCfFull = fNumFull;
     tCfPrimaryOnly = fNumPrimaryOnly;
     tCfWithoutSigmaSt = fNumWithoutSigmaSt;
+    tCfSigmaStOnly = fNumSigmaStOnly;
   }
   else
   {
     tCfFull = fDenFull;
     tCfPrimaryOnly = fDenPrimaryOnly;
     tCfWithoutSigmaSt = fDenWithoutSigmaSt;
+    tCfSigmaStOnly = fDenSigmaStOnly;
   }
 
 
@@ -1147,6 +1167,11 @@ void ThermPairAnalysis::FillCorrelationFunctionsParticleV0(vector<ThermParticle>
           tCfWithoutSigmaSt->Fill(tKStar, tWeight);
           if(!aMixedEvents) fPairSourceWithoutSigmaSt->Fill(tRStar);
         }
+        else
+        {
+          tCfSigmaStOnly->Fill(tKStar, tWeight);
+          if(!aMixedEvents) fPairSourceSigmaStOnly->Fill(tRStar);
+        }
 
       }
     }
@@ -1158,18 +1183,20 @@ void ThermPairAnalysis::FillCorrelationFunctionsParticleV0(vector<ThermParticle>
 //________________________________________________________________________________________________________________
 void ThermPairAnalysis::FillCorrelationFunctionsV0V0(vector<ThermV0Particle> &aV01Collection, vector<ThermV0Particle> &aV02Collection, bool aMixedEvents)
 {
-  TH1 *tCfFull, *tCfPrimaryOnly, *tCfWithoutSigmaSt;
+  TH1 *tCfFull, *tCfPrimaryOnly, *tCfWithoutSigmaSt, *tCfSigmaStOnly;
   if(!aMixedEvents)
   {
     tCfFull = fNumFull;
     tCfPrimaryOnly = fNumPrimaryOnly;
     tCfWithoutSigmaSt = fNumWithoutSigmaSt;
+    tCfSigmaStOnly = fNumSigmaStOnly;
   }
   else
   {
     tCfFull = fDenFull;
     tCfPrimaryOnly = fDenPrimaryOnly;
     tCfWithoutSigmaSt = fDenWithoutSigmaSt;
+    tCfSigmaStOnly = fDenSigmaStOnly;
   }
 
 
@@ -1207,6 +1234,11 @@ void ThermPairAnalysis::FillCorrelationFunctionsV0V0(vector<ThermV0Particle> &aV
           {
             tCfWithoutSigmaSt->Fill(tKStar, tWeight);
             if(!aMixedEvents) fPairSourceWithoutSigmaSt->Fill(tRStar);
+          }
+          else
+          {
+            tCfSigmaStOnly->Fill(tKStar, tWeight);
+            if(!aMixedEvents) fPairSourceSigmaStOnly->Fill(tRStar);
           }
 
         }
@@ -1309,6 +1341,12 @@ void ThermPairAnalysis::SaveAllCorrelationFunctions(TFile *aFile)
   fDenWithoutSigmaSt->Write();
   fCfWithoutSigmaSt = BuildFinalCf(fNumWithoutSigmaSt, fDenWithoutSigmaSt, TString::Format("CfWithoutSigmaSt%s", cAnalysisBaseTags[fAnalysisType]));
   fCfWithoutSigmaSt->Write();
+
+  fPairSourceSigmaStOnly->Write();
+  fNumSigmaStOnly->Write();
+  fDenSigmaStOnly->Write();
+  fCfSigmaStOnly = BuildFinalCf(fNumSigmaStOnly, fDenSigmaStOnly, TString::Format("CfSigmaStOnly%s", cAnalysisBaseTags[fAnalysisType]));
+  fCfSigmaStOnly->Write();
 }
 
 

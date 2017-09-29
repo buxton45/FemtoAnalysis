@@ -129,6 +129,11 @@ private:
   TH1* fDenWithoutSigmaSt;
   TH1* fCfWithoutSigmaSt;
 
+  TH1* fPairSourceSigmaStOnly;
+  TH1* fNumSigmaStOnly;
+  TH1* fDenSigmaStOnly;
+  TH1* fCfSigmaStOnly;
+
 #ifdef __ROOT__
   ClassDef(ThermPairAnalysis, 1)
 #endif

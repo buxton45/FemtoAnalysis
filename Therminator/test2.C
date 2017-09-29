@@ -25,7 +25,7 @@ int main(int argc, char **argv)
   double tMaxPrimaryDecayLength = 3.01; 
 
   //-----------------------------------------
-  TString tEventsDirectory, tMatricesSaveFileName, tPairFractionSaveName, tSingleParticlesSaveName;
+  TString tEventsDirectory, tMatricesSaveFileName, tPairFractionSaveName, tSingleParticlesSaveName, tCorrelationFunctionsSaveName;
 
   if(bRunFull)
   {
@@ -33,6 +33,7 @@ int main(int argc, char **argv)
     tMatricesSaveFileName = "/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b2/TransformMatricesv2.root";
     tPairFractionSaveName = "/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b2/PairFractionsv2.root";
     tSingleParticlesSaveName = "/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b2/SingleParticleAnalysesv2.root";
+    tCorrelationFunctionsSaveName  = "/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b2/CorrelationFunctions.root";
   }
   else
   {
@@ -40,6 +41,7 @@ int main(int argc, char **argv)
     tMatricesSaveFileName = "/home/jesse/Analysis/ReducedTherminator2Events/test/testTransformMatricesv2.root";
     tPairFractionSaveName = "/home/jesse/Analysis/ReducedTherminator2Events/test/testPairFractionsv2.root";
     tSingleParticlesSaveName = "/home/jesse/Analysis/ReducedTherminator2Events/test/testSingleParticleAnalysesv2.root";
+    tCorrelationFunctionsSaveName  = "/home/jesse/Analysis/ReducedTherminator2Events/test/testCorrelationFunctions.root";
   }
   //-----------------------------------------
 
@@ -51,6 +53,7 @@ int main(int argc, char **argv)
   tSimpleThermAnalysis->SetPairFractionsSaveName(tPairFractionSaveName);
   tSimpleThermAnalysis->SetTransformMatricesSaveName(tMatricesSaveFileName);
   tSimpleThermAnalysis->SetSingleParticlesSaveName(tSingleParticlesSaveName);
+  tSimpleThermAnalysis->SetCorrelationFunctionsSaveName(tCorrelationFunctionsSaveName);
   if(tMaxPrimaryDecayLength > 0.) tSimpleThermAnalysis->SetMaxPrimaryDecayLength(tMaxPrimaryDecayLength);
 
   tSimpleThermAnalysis->ProcessAll();
