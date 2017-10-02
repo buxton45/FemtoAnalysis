@@ -185,7 +185,7 @@ inline TH1* FitGenerator::GetKStarCf(int aAnalysisNumber) {return fSharedAn->Get
 inline void FitGenerator::SetApplyNonFlatBackgroundCorrection(bool aApply) {fApplyNonFlatBackgroundCorrection = aApply;}
 inline void FitGenerator::SetNonFlatBgdFitType(NonFlatBgdFitType aNonFlatBgdFitType) {fNonFlatBgdFitType = aNonFlatBgdFitType;}
 inline void FitGenerator::SetApplyMomResCorrection(bool aApplyMomResCorrection) {fApplyMomResCorrection = aApplyMomResCorrection;}
-inline void FitGenerator::SetIncludeResidualCorrelations(bool aInclude, double aMinLambda, double aMaxLambda) {fIncludeResidualCorrelations = aInclude; SetDefaultLambdaParametersWithResiduals(aMinLambda, aMaxLambda);}
+inline void FitGenerator::SetIncludeResidualCorrelations(bool aInclude, double aMinLambda, double aMaxLambda) {fIncludeResidualCorrelations = aInclude; if(aInclude) SetDefaultLambdaParametersWithResiduals(aMinLambda, aMaxLambda);}
 inline void FitGenerator::SetUseCoulombOnlyInterpCfsForChargedResiduals(bool aUse) {fUseCoulombOnlyInterpCfsForChargedResiduals = aUse;}
 inline void FitGenerator::SetUseCoulombOnlyInterpCfsForXiKResiduals(bool aUse) {fUseCoulombOnlyInterpCfsForXiKResiduals = aUse;}
 

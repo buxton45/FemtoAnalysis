@@ -124,6 +124,11 @@ private:
   TH1* fDenPrimaryOnly;
   TH1* fCfPrimaryOnly;
 
+  TH1* fPairSourcePrimaryAndShortDecays;
+  TH1* fNumPrimaryAndShortDecays;
+  TH1* fDenPrimaryAndShortDecays;
+  TH1* fCfPrimaryAndShortDecays;
+
   TH1* fPairSourceWithoutSigmaSt;
   TH1* fNumWithoutSigmaSt;
   TH1* fDenWithoutSigmaSt;

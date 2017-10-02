@@ -126,7 +126,7 @@ void DrawCfs(TPad* aPad, TString aFileName, AnalysisType aAnType)
   tCfFull->GetXaxis()->SetTitle("k* (GeV/c)");
   tCfFull->GetYaxis()->SetTitle("C(k*)");
 
-  tCfFull->GetXaxis()->SetRangeUser(0.,0.329);
+//  tCfFull->GetXaxis()->SetRangeUser(0.,0.329);
   tCfFull->GetYaxis()->SetRangeUser(0.86, 1.07);
 
   tCfFull->Draw();
@@ -251,7 +251,7 @@ void DrawCfsWithConj(TPad* aPad, TString aFileName, AnalysisType aAnType, Analys
   tCfFullTot->GetXaxis()->SetTitle("k* (GeV/c)");
   tCfFullTot->GetYaxis()->SetTitle("C(k*)");
 
-  tCfFullTot->GetXaxis()->SetRangeUser(0.,0.329);
+//  tCfFullTot->GetXaxis()->SetRangeUser(0.,0.329);
   tCfFullTot->GetYaxis()->SetRangeUser(0.86, 1.07);
 
   tCfFullTot->Draw();

@@ -47,6 +47,11 @@ ThermPairAnalysis::ThermPairAnalysis(AnalysisType aAnType) :
   fDenPrimaryOnly(nullptr),
   fCfPrimaryOnly(nullptr),
 
+  fPairSourcePrimaryAndShortDecays(nullptr),
+  fNumPrimaryAndShortDecays(nullptr),
+  fDenPrimaryAndShortDecays(nullptr),
+  fCfPrimaryAndShortDecays(nullptr),
+
   fPairSourceWithoutSigmaSt(nullptr),
   fNumWithoutSigmaSt(nullptr),
   fDenWithoutSigmaSt(nullptr),
@@ -95,6 +100,19 @@ ThermPairAnalysis::ThermPairAnalysis(AnalysisType aAnType) :
   fPairSourcePrimaryOnly->Sumw2();
   fNumPrimaryOnly->Sumw2();
   fDenPrimaryOnly->Sumw2();
+
+  fPairSourcePrimaryAndShortDecays = new TH1D(TString::Format("PairSourcePrimaryAndShortDecays%s", cAnalysisBaseTags[aAnType]), 
+                                              TString::Format("PairSourcePrimaryAndShortDecays%s", cAnalysisBaseTags[aAnType]), 
+                                              1000, 0, 1000);
+  fNumPrimaryAndShortDecays = new TH1D(TString::Format("NumPrimaryAndShortDecays%s", cAnalysisBaseTags[aAnType]),
+                                       TString::Format("NumPrimaryAndShortDecays%s", cAnalysisBaseTags[aAnType]), 
+                                       100, 0., 1.);
+  fDenPrimaryAndShortDecays = new TH1D(TString::Format("DenPrimaryAndShortDecays%s", cAnalysisBaseTags[aAnType]),
+                                       TString::Format("DenPrimaryAndShortDecays%s", cAnalysisBaseTags[aAnType]), 
+                                       100, 0., 1.);
+  fPairSourcePrimaryAndShortDecays->Sumw2();
+  fNumPrimaryAndShortDecays->Sumw2();
+  fDenPrimaryAndShortDecays->Sumw2();
 
 
   fPairSourceWithoutSigmaSt = new TH1D(TString::Format("PairSourceWithoutSigmaSt%s", cAnalysisBaseTags[aAnType]), 
@@ -1115,11 +1133,12 @@ double ThermPairAnalysis::GetStrongOnlyWaveFunctionSq(TVector3 aKStar3Vec, TVect
 //________________________________________________________________________________________________________________
 void ThermPairAnalysis::FillCorrelationFunctionsParticleV0(vector<ThermParticle> &aParticleCollection, vector<ThermV0Particle> &aV0Collection, bool aMixedEvents)
 {
-  TH1 *tCfFull, *tCfPrimaryOnly, *tCfWithoutSigmaSt, *tCfSigmaStOnly;
+  TH1 *tCfFull, *tCfPrimaryOnly, *tCfPrimaryAndShortDecays, *tCfWithoutSigmaSt, *tCfSigmaStOnly;
   if(!aMixedEvents)
   {
     tCfFull = fNumFull;
     tCfPrimaryOnly = fNumPrimaryOnly;
+    tCfPrimaryAndShortDecays= fNumPrimaryAndShortDecays;
     tCfWithoutSigmaSt = fNumWithoutSigmaSt;
     tCfSigmaStOnly = fNumSigmaStOnly;
   }
@@ -1127,6 +1146,7 @@ void ThermPairAnalysis::FillCorrelationFunctionsParticleV0(vector<ThermParticle>
   {
     tCfFull = fDenFull;
     tCfPrimaryOnly = fDenPrimaryOnly;
+    tCfPrimaryAndShortDecays = fDenPrimaryAndShortDecays;
     tCfWithoutSigmaSt = fDenWithoutSigmaSt;
     tCfSigmaStOnly = fDenSigmaStOnly;
   }
@@ -1160,6 +1180,12 @@ void ThermPairAnalysis::FillCorrelationFunctionsParticleV0(vector<ThermParticle>
           if(!aMixedEvents) fPairSourcePrimaryOnly->Fill(tRStar);
         }
 
+        if((tV0.IsPrimordial() && tParticle.IsPrimordial()) || IncludeAsPrimary(tV0.GetFatherPID(), tParticle.GetFatherPID(), 5.0))
+        {
+          tCfPrimaryAndShortDecays->Fill(tKStar, tWeight);
+          if(!aMixedEvents) fPairSourcePrimaryAndShortDecays->Fill(tRStar);
+        }
+
         if(tV0.GetFatherPID() != kPDGSigStP && tV0.GetFatherPID() != kPDGASigStM && 
            tV0.GetFatherPID() != kPDGSigStM && tV0.GetFatherPID() != kPDGASigStP && 
            tV0.GetFatherPID() != kPDGSigSt0 && tV0.GetFatherPID() != kPDGASigSt0)
@@ -1183,11 +1209,12 @@ void ThermPairAnalysis::FillCorrelationFunctionsParticleV0(vector<ThermParticle>
 //________________________________________________________________________________________________________________
 void ThermPairAnalysis::FillCorrelationFunctionsV0V0(vector<ThermV0Particle> &aV01Collection, vector<ThermV0Particle> &aV02Collection, bool aMixedEvents)
 {
-  TH1 *tCfFull, *tCfPrimaryOnly, *tCfWithoutSigmaSt, *tCfSigmaStOnly;
+  TH1 *tCfFull, *tCfPrimaryOnly, *tCfPrimaryAndShortDecays, *tCfWithoutSigmaSt, *tCfSigmaStOnly;
   if(!aMixedEvents)
   {
     tCfFull = fNumFull;
     tCfPrimaryOnly = fNumPrimaryOnly;
+    tCfPrimaryAndShortDecays= fNumPrimaryAndShortDecays;
     tCfWithoutSigmaSt = fNumWithoutSigmaSt;
     tCfSigmaStOnly = fNumSigmaStOnly;
   }
@@ -1195,6 +1222,7 @@ void ThermPairAnalysis::FillCorrelationFunctionsV0V0(vector<ThermV0Particle> &aV
   {
     tCfFull = fDenFull;
     tCfPrimaryOnly = fDenPrimaryOnly;
+    tCfPrimaryAndShortDecays = fDenPrimaryAndShortDecays;
     tCfWithoutSigmaSt = fDenWithoutSigmaSt;
     tCfSigmaStOnly = fDenSigmaStOnly;
   }
@@ -1226,6 +1254,12 @@ void ThermPairAnalysis::FillCorrelationFunctionsV0V0(vector<ThermV0Particle> &aV
           {
             tCfPrimaryOnly->Fill(tKStar, tWeight);
             if(!aMixedEvents) fPairSourcePrimaryOnly->Fill(tRStar);
+          }
+
+          if((tV01.IsPrimordial() && tV02.IsPrimordial()) || IncludeAsPrimary(tV01.GetFatherPID(), tV02.GetFatherPID(), 5.0))
+          {
+            tCfPrimaryAndShortDecays->Fill(tKStar, tWeight);
+            if(!aMixedEvents) fPairSourcePrimaryAndShortDecays->Fill(tRStar);
           }
 
           if(tV01.GetFatherPID() != kPDGSigStP && tV01.GetFatherPID() != kPDGASigStM && 
@@ -1335,6 +1369,12 @@ void ThermPairAnalysis::SaveAllCorrelationFunctions(TFile *aFile)
   fDenPrimaryOnly->Write();
   fCfPrimaryOnly = BuildFinalCf(fNumPrimaryOnly, fDenPrimaryOnly, TString::Format("CfPrimaryOnly%s", cAnalysisBaseTags[fAnalysisType]));
   fCfPrimaryOnly->Write();
+
+  fPairSourcePrimaryAndShortDecays->Write();
+  fNumPrimaryAndShortDecays->Write();
+  fDenPrimaryAndShortDecays->Write();
+  fCfPrimaryAndShortDecays = BuildFinalCf(fNumPrimaryAndShortDecays, fDenPrimaryAndShortDecays, TString::Format("CfPrimaryAndShortDecays%s", cAnalysisBaseTags[fAnalysisType]));
+  fCfPrimaryAndShortDecays->Write();
 
   fPairSourceWithoutSigmaSt->Write();
   fNumWithoutSigmaSt->Write();

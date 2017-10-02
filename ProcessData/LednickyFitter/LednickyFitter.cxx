@@ -114,6 +114,28 @@ void LednickyFitter::PrintCurrentParamValues(int aNpar, double* aPar)
   cout << endl;
 }
 
+//________________________________________________________________________________________________________________
+double LednickyFitter::GetChi2Value(int aKStarBin, TH1* aCfToFit, double* aPar)
+{
+    double tKStar[1];
+    tKStar[0] = aCfToFit->GetXaxis()->GetBinCenter(aKStarBin);
+    double tChi = (aCfToFit->GetBinContent(aKStarBin) - LednickyEq(tKStar,aPar))/aCfToFit->GetBinError(aKStarBin);
+    return tChi*tChi;
+}
+
+
+
+
+//________________________________________________________________________________________________________________
+double LednickyFitter::GetPmlValue(double aNumContent, double aDenContent, double aCfContent)
+{
+  double tTerm1 = aNumContent*log(  (aCfContent*(aNumContent+aDenContent)) / (aNumContent*(aCfContent+1))  );
+  double tTerm2 = aDenContent*log(  (aNumContent+aDenContent) / (aDenContent*(aCfContent+1))  );
+  double tChi2PML = -2.0*(tTerm1+tTerm2);
+  return tChi2PML;
+}
+
+
 
 //________________________________________________________________________________________________________________
 void LednickyFitter::ApplyNonFlatBackgroundCorrection(vector<double> &aCf, vector<double> &aKStarBinCenters, TF1* aNonFlatBgd)
@@ -159,6 +181,13 @@ vector<double> LednickyFitter::ApplyMomResCorrection(vector<double> &aCf, vector
   return tReturnCf;
 }
 
+//________________________________________________________________________________________________________________
+void LednickyFitter::ApplyNormalization(double aNorm, td1dVec &aCf)
+{
+  for(unsigned int i=0; i<aCf.size(); i++) aCf[i] *= aNorm;
+}
+
+
 
 //________________________________________________________________________________________________________________
 vector<double> LednickyFitter::GetFitCfIncludingResiduals(FitPairAnalysis* aFitPairAnalysis, vector<double> &aPrimaryFitCfContent, double *aParamSet)
@@ -168,37 +197,6 @@ vector<double> LednickyFitter::GetFitCfIncludingResiduals(FitPairAnalysis* aFitP
 
   return tFitCfContent;
 }
-
-//________________________________________________________________________________________________________________
-void LednickyFitter::ApplyNormalization(double aNorm, td1dVec &aCf)
-{
-  for(unsigned int i=0; i<aCf.size(); i++) aCf[i] *= aNorm;
-}
-
-
-
-
-//________________________________________________________________________________________________________________
-double LednickyFitter::GetChi2Value(int aKStarBin, TH1* aCfToFit, double* aPar)
-{
-    double tKStar[1];
-    tKStar[0] = aCfToFit->GetXaxis()->GetBinCenter(aKStarBin);
-    double tChi = (aCfToFit->GetBinContent(aKStarBin) - LednickyEq(tKStar,aPar))/aCfToFit->GetBinError(aKStarBin);
-    return tChi*tChi;
-}
-
-
-
-
-//________________________________________________________________________________________________________________
-double LednickyFitter::GetPmlValue(double aNumContent, double aDenContent, double aCfContent)
-{
-  double tTerm1 = aNumContent*log(  (aCfContent*(aNumContent+aDenContent)) / (aNumContent*(aCfContent+1))  );
-  double tTerm2 = aDenContent*log(  (aNumContent+aDenContent) / (aDenContent*(aCfContent+1))  );
-  double tChi2PML = -2.0*(tTerm1+tTerm2);
-  return tChi2PML;
-}
-
 
 //________________________________________________________________________________________________________________
 void LednickyFitter::CalculateFitFunction(int &npar, double &chi2, double *par)

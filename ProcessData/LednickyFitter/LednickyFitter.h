@@ -65,16 +65,16 @@ public:
   static double LednickyEq(double *x, double *par);
 
 
-  void PrintCurrentParamValues(int aNpar, double* aPar);
+  static void PrintCurrentParamValues(int aNpar, double* aPar);
+  static double GetChi2Value(int aKStarBin, TH1* aCfToFit, double* aPar);
+  static double GetPmlValue(double aNumContent, double aDenContent, double aCfContent);
 
-  void ApplyNonFlatBackgroundCorrection(vector<double> &aCf, vector<double> &aKStarBinCenters, TF1* aNonFlatBgd);
-  vector<double> ApplyMomResCorrection(vector<double> &aCf, vector<double> &aKStarBinCenters, TH2* aMomResMatrix);
+  static void ApplyNonFlatBackgroundCorrection(vector<double> &aCf, vector<double> &aKStarBinCenters, TF1* aNonFlatBgd);
+  static vector<double> ApplyMomResCorrection(vector<double> &aCf, vector<double> &aKStarBinCenters, TH2* aMomResMatrix);
+  static void ApplyNormalization(double aNorm, td1dVec &aCf);
 
   vector<double> GetFitCfIncludingResiduals(FitPairAnalysis* aFitPairAnalysis, vector<double> &aPrimaryFitCfContent, double *aParamSet);
-  void ApplyNormalization(double aNorm, td1dVec &aCf);
 
-  double GetChi2Value(int aKStarBin, TH1* aCfToFit, double* aPar);
-  double GetPmlValue(double aNumContent, double aDenContent, double aCfContent);
   void CalculateFitFunction(int &npar, double &chi2, double *par);
   void CalculateFitFunctionOnce(int &npar, double &chi2, double *par, double *parErr, double aChi2, int aNDF);
   TF1* CreateFitFunction(TString aName, int aAnalysisNumber);
