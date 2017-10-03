@@ -32,6 +32,7 @@
 #include "TAxis.h"
 #include "TGraph.h"
 #include "TMath.h"
+#include "TVector3.h"
 
 #include "TSystem.h"
 #include "TMinuit.h"
@@ -61,7 +62,13 @@ public:
   //Constructor, destructor, copy constructor, assignment operator
   SimpleLednickyFitter(AnalysisType aAnalysisType, CfLite *aCfLite, double aMaxFitKStar = 0.3);
   SimpleLednickyFitter(AnalysisType aAnalysisType, TString aFileLocation, TString aBaseName, double aMaxFitKStar = 0.3);
+  SimpleLednickyFitter(AnalysisType aAnalysisType, vector<double> &aSimParams, double aMaxBuildKStar=1.0, double aMaxFitKStar = 0.3);
   virtual ~SimpleLednickyFitter();
+
+  void SetRandomKStar3Vec(TVector3* aKStar3Vec, double aKStarMagMin, double aKStarMagMax);
+  complex<double> GetStrongOnlyWaveFunction(TVector3* aKStar3Vec, TVector3* aRStar3Vec, vector<double> &aSimParams);
+  double GetStrongOnlyWaveFunctionSq(TVector3* aKStar3Vec, TVector3 *aRStar3Vec, vector<double> &aSimParams);
+  TH1D* GetSimluatedNumDen(bool aBuildNum, vector<double> &aSimParams, double aMaxBuildKStar=0.5, int aNPairsPerKStarBin = 20000, double aKStarBinSize=0.01);
 
   TH1D* Get1dHisto(TString FileName, TString HistoName);
   void CreateMinuitParameters();

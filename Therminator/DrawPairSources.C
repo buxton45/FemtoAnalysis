@@ -23,6 +23,7 @@ void DrawPairSources(TPad* aPad, TString aFileName, AnalysisType aAnType, bool a
 
   TString tBaseNameFull = TString::Format("PairSourceFull%s", cAnalysisBaseTags[aAnType]);
   TString tBaseNamePrimaryOnly = TString::Format("PairSourcePrimaryOnly%s", cAnalysisBaseTags[aAnType]);
+  TString tBaseNamePrimaryAndShortDecays = TString::Format("PairSourcePrimaryAndShortDecays%s", cAnalysisBaseTags[aAnType]);
   TString tBaseNameWithoutSigmaSt = TString::Format("PairSourceWithoutSigmaSt%s", cAnalysisBaseTags[aAnType]);
   TString tBaseNameSigmaStOnly = TString::Format("PairSourceSigmaStOnly%s", cAnalysisBaseTags[aAnType]);
 
@@ -30,10 +31,12 @@ void DrawPairSources(TPad* aPad, TString aFileName, AnalysisType aAnType, bool a
     tSourceFull->SetLineColor(1);
   TH1D* tSourcePrimaryOnly = Get1dHisto(aFileName, tBaseNamePrimaryOnly);
     tSourcePrimaryOnly->SetLineColor(2);
+  TH1D* tSourcePrimaryAndShortDecays = Get1dHisto(aFileName, tBaseNamePrimaryAndShortDecays);
+    tSourcePrimaryAndShortDecays->SetLineColor(3);
   TH1D* tSourceWithoutSigmaSt = Get1dHisto(aFileName, tBaseNameWithoutSigmaSt);
-    tSourceWithoutSigmaSt->SetLineColor(3);
+    tSourceWithoutSigmaSt->SetLineColor(4);
   TH1D* tSourceSigmaStOnly = Get1dHisto(aFileName, tBaseNameSigmaStOnly);
-    tSourceSigmaStOnly->SetLineColor(4);
+    tSourceSigmaStOnly->SetLineColor(6);
 
   tSourceFull->GetXaxis()->SetTitle("r*");
   tSourceFull->GetYaxis()->SetTitle("dN/dr*");
@@ -42,6 +45,7 @@ void DrawPairSources(TPad* aPad, TString aFileName, AnalysisType aAnType, bool a
 
   tSourceFull->Draw();
   tSourcePrimaryOnly->Draw("same");
+  tSourcePrimaryAndShortDecays->Draw("same");
   tSourceWithoutSigmaSt->Draw("same");
   tSourceSigmaStOnly->Draw("same");
 
@@ -54,6 +58,7 @@ void DrawPairSources(TPad* aPad, TString aFileName, AnalysisType aAnType, bool a
   tLeg->AddEntry(tSourceFull, "Full");
   tLeg->AddEntry(tSourceWithoutSigmaSt, "w/o #Sigma*");
   tLeg->AddEntry(tSourcePrimaryOnly, "Primary Only");
+  tLeg->AddEntry(tSourcePrimaryAndShortDecays, "Primary and short decays");
   tLeg->AddEntry(tSourceSigmaStOnly, "#Sigma* Only");
 
   tLeg->Draw();

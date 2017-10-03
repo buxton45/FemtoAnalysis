@@ -86,11 +86,174 @@ SimpleLednickyFitter::SimpleLednickyFitter(AnalysisType aAnalysisType, TString a
   CreateMinuitParameters();
 }
 
+//________________________________________________________________________________________________________________
+SimpleLednickyFitter::SimpleLednickyFitter(AnalysisType aAnalysisType, vector<double> &aSimParams, double aMaxBuildKStar, double aMaxFitKStar):
+  fAnalysisType(aAnalysisType),
+  fCfLite(nullptr),
+  fFitType(kChi2PML),
+  fVerbose(false),
+  fMinuit(nullptr),
+  fCorrectedFitVec(0),
+  fMaxFitKStar(aMaxFitKStar),
+  fNbinsXToBuild(0),
+  fNbinsXToFit(0),
+  fKStarBinWidth(0.),
+  fKStarBinCenters(0),
+  fRejectOmega(false),
+
+  fChi2(0),
+  fChi2GlobalMin(1000000000),
+  fNpFits(0),
+  fNDF(0),
+  fErrFlg(0),
+  fMinParams(0),
+  fParErrors(0)
+
+{
+  double aMinNorm = 0.32, aMaxNorm = 0.40;
+  TH1D* tNum = GetSimluatedNumDen(true, aSimParams, aMaxBuildKStar);
+  TH1D* tDen = GetSimluatedNumDen(false, aSimParams, aMaxBuildKStar);
+
+  fCfLite = new CfLite(TString("CfLiteSim")+cAnalysisBaseTags[fAnalysisType], 
+                       TString("CfLiteSim")+cAnalysisBaseTags[fAnalysisType],
+                       tNum, tDen, aMinNorm, aMaxNorm);
+/*
+TCanvas* tCan = new TCanvas("tCan", "tCan");
+tCan->Divide(3,1);
+
+tCan->cd(1);
+fCfLite->Cf()->Draw();
+
+tCan->cd(2);
+fCfLite->Num()->Draw();
+
+tCan->cd(3);
+fCfLite->Den()->Draw();
+*/
+
+  fMinuit = new TMinuit(50);
+  CreateMinuitParameters();
+
+}
+
 
 //________________________________________________________________________________________________________________
 SimpleLednickyFitter::~SimpleLednickyFitter()
 {
   cout << "LednickyFitter object is being deleted!!!" << endl;
+}
+
+//________________________________________________________________________________________________________________
+void SimpleLednickyFitter::SetRandomKStar3Vec(TVector3* aKStar3Vec, double aKStarMagMin, double aKStarMagMax)
+{
+  std::default_random_engine tGenerator (std::clock());  //std::clock() is seed
+  std::uniform_real_distribution<double> tKStarMagDistribution(aKStarMagMin,aKStarMagMax);
+  std::uniform_real_distribution<double> tUnityDistribution(0.,1.);
+
+  double tKStarMag = tKStarMagDistribution(tGenerator);
+  double tU = tUnityDistribution(tGenerator);
+  double tV = tUnityDistribution(tGenerator);
+
+  double tTheta = acos(2.*tV-1.); //polar angle
+  double tPhi = 2.*M_PI*tU; //azimuthal angle
+
+  aKStar3Vec->SetMagThetaPhi(tKStarMag,tTheta,tPhi);
+}
+
+//________________________________________________________________________________________________________________
+complex<double> SimpleLednickyFitter::GetStrongOnlyWaveFunction(TVector3* aKStar3Vec, TVector3* aRStar3Vec, vector<double> &aSimParams)
+{
+  if(aRStar3Vec->X()==0 && aRStar3Vec->Y()==0 && aRStar3Vec->Z()==0)  //TODO i.e. if pair originate from single resonance
+  {
+    double tRoot2 = sqrt(2.);
+    double tRadius = 1.0;
+    std::default_random_engine generator (std::clock());  //std::clock() is seed
+    std::normal_distribution<double> tROutSource(0.,tRoot2*tRadius);
+    std::normal_distribution<double> tRSideSource(0.,tRoot2*tRadius);
+    std::normal_distribution<double> tRLongSource(0.,tRoot2*tRadius);
+
+    aRStar3Vec->SetXYZ(tROutSource(generator),tRSideSource(generator),tRLongSource(generator));
+  }
+
+
+  complex<double> ImI (0., 1.);
+  complex<double> tF0 (aSimParams[2], aSimParams[3]);
+  double tD0 = aSimParams[4];
+
+  double tKdotR = aKStar3Vec->Dot(*aRStar3Vec);
+    tKdotR /= hbarc;
+  double tKStarMag = aKStar3Vec->Mag();
+    tKStarMag /= hbarc;
+  double tRStarMag = aRStar3Vec->Mag();
+
+  complex<double> tScattLenLastTerm (0., tKStarMag);
+  complex<double> tScattAmp = pow((1./tF0) + 0.5*tD0*tKStarMag*tKStarMag - tScattLenLastTerm,-1);
+
+  complex<double> tReturnWf = exp(ImI*tKdotR) + tScattAmp*exp(ImI*tKStarMag*tRStarMag)/tRStarMag;
+  return tReturnWf;
+}
+
+//________________________________________________________________________________________________________________
+double SimpleLednickyFitter::GetStrongOnlyWaveFunctionSq(TVector3 *aKStar3Vec, TVector3 *aRStar3Vec, vector<double> &aSimParams)
+{
+  complex<double> tWf = GetStrongOnlyWaveFunction(aKStar3Vec, aRStar3Vec, aSimParams);
+  double tWfSq = norm(tWf);
+  return tWfSq;
+}
+
+
+
+//________________________________________________________________________________________________________________
+TH1D* SimpleLednickyFitter::GetSimluatedNumDen(bool aBuildNum, vector<double> &aSimParams, double aMaxBuildKStar, int aNPairsPerKStarBin, double aKStarBinSize)
+{
+  int tNBins = aMaxBuildKStar/aKStarBinSize;
+cout << "tNBins = " << tNBins << endl;
+  TH1D* tReturnHist;
+  if(aBuildNum) tReturnHist = new TH1D(TString::Format("SimNum_%s", cAnalysisBaseTags[fAnalysisType]),
+                                       TString::Format("SimNum_%s", cAnalysisBaseTags[fAnalysisType]),
+                                       tNBins, 0., aMaxBuildKStar);
+  else tReturnHist = new TH1D(TString::Format("SimDen_%s", cAnalysisBaseTags[fAnalysisType]),
+                              TString::Format("SimDen_%s", cAnalysisBaseTags[fAnalysisType]),
+                              tNBins, 0., aMaxBuildKStar);
+  tReturnHist->Sumw2();
+
+  int tNPairsPerKStarBin = aNPairsPerKStarBin;
+  if(!aBuildNum) tNPairsPerKStarBin *= 5;
+
+  assert(aSimParams.size()==6);
+  //double tLambda = aSimParams[0];
+  //double tRadius = aSimParams[1];
+  //double tReF0   = aSimParams[2];
+  //double tImF0   = aSimParams[3];
+  //double tD0     = aSimParams[4];
+  //double tNorm   = aSimParams[5];
+
+  double tRoot2 = sqrt(2.);  //need this scale to get 4 on denominator of exp in normal dist instead of 2
+  std::default_random_engine generator (std::clock());  //std::clock() is seed
+  std::normal_distribution<double> tROutSource(0.,tRoot2*aSimParams[1]);
+  std::normal_distribution<double> tRSideSource(0.,tRoot2*aSimParams[1]);
+  std::normal_distribution<double> tRLongSource(0.,tRoot2*aSimParams[1]);
+
+  TVector3* tKStar3Vec = new TVector3(0.,0.,0.);
+  TVector3* tSource3Vec = new TVector3(0.,0.,0.);
+  double tKStarMagMin, tKStarMagMax;
+  double tWeight = 1.;
+  for(int iKStarBin=0; iKStarBin<tNBins; iKStarBin++)
+  {
+    tKStarMagMin = iKStarBin*aKStarBinSize;
+    if(iKStarBin==0) tKStarMagMin=0.004;
+    tKStarMagMax = (iKStarBin+1)*aKStarBinSize;
+    for(int iPair=0; iPair<tNPairsPerKStarBin; iPair++)
+    {
+      SetRandomKStar3Vec(tKStar3Vec,tKStarMagMin,tKStarMagMax);
+      tSource3Vec->SetXYZ(tROutSource(generator),tRSideSource(generator),tRLongSource(generator)); //TODO: for now, spherically symmetric
+      if(aBuildNum) tWeight = GetStrongOnlyWaveFunctionSq(tKStar3Vec, tSource3Vec, aSimParams);
+      else tWeight = 1.;
+      tReturnHist->Fill(tKStar3Vec->Mag(), tWeight);
+    }
+  }
+
+  return tReturnHist;
 }
 
 //________________________________________________________________________________________________________________

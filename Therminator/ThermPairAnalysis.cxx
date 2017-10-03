@@ -1118,7 +1118,7 @@ complex<double> ThermPairAnalysis::GetStrongOnlyWaveFunction(TVector3 &aKStar3Ve
   complex<double> tScattLenLastTerm (0., tKStarMag);
   complex<double> tScattAmp = pow((1./tF0) + 0.5*tD0*tKStarMag*tKStarMag - tScattLenLastTerm,-1);
 
-  complex<double> tReturnWf = exp(ImI*tKdotR) + tScattAmp*exp(ImI*tKdotR)/tRStarMag;
+  complex<double> tReturnWf = exp(ImI*tKdotR) + tScattAmp*exp(ImI*tKStarMag*tRStarMag)/tRStarMag;
   return tReturnWf;
 }
 

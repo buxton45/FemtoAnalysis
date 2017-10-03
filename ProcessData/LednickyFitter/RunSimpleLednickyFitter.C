@@ -78,9 +78,19 @@ int main(int argc, char **argv)
 
 //  SimpleLednickyFitter *tSLFitter = new SimpleLednickyFitter(tAnType, tFileLocationCfs, tBaseName);
 
+/*
   CfLite* tDataCfLite = GetDataCfLite(tAnType);
   SimpleLednickyFitter *tSLFitter = new SimpleLednickyFitter(tAnType, tDataCfLite);
+*/
 
+  vector<double> tSimParams(6);
+    tSimParams[0] = 0.5;
+    tSimParams[1] = 5.0;
+    tSimParams[2] = -0.5;
+    tSimParams[3] = 0.5;
+    tSimParams[4] = 0.;
+    tSimParams[5] = 1.;
+  SimpleLednickyFitter *tSLFitter = new SimpleLednickyFitter(tAnType, tSimParams);
 
   tSLFitter->GetMinuitObject()->SetFCN(fcn);
   myFitter = tSLFitter;
