@@ -39,6 +39,8 @@ struct PidInfo
 
 extern vector<PidInfo> cPidInfo;
 
+extern int GetParticleIndexInPidInfo(int aPID);
+extern int GetParticlePidFromIndex(int aIndex);
 
 extern PidInfo GetParticlePidInfo(int aPID);
 

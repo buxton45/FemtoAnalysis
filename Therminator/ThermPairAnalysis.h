@@ -14,6 +14,7 @@
 #include "TObjArray.h"
 #include "TH1.h"
 #include "TH2.h"
+#include "TH3.h"
 #include "TFile.h"
 #include "TLorentzVector.h"
 #include "TVector3.h"
@@ -77,8 +78,11 @@ public:
   complex<double> GetStrongOnlyWaveFunction(TVector3 &aKStar3Vec, TVector3 &aRStar3Vec);
   double GetStrongOnlyWaveFunctionSq(TVector3 aKStar3Vec, TVector3 aRStar3Vec);
 
-  void FillCorrelationFunctionsParticleV0(vector<ThermParticle> &aParticleCollection, vector<ThermV0Particle> &aV0Collection, bool aMixedEvents);
-  void FillCorrelationFunctionsV0V0(vector<ThermV0Particle> &aV01Collection, vector<ThermV0Particle> &aV02Collection, bool aMixedEvents);
+  void FillCorrelationFunctionsNumOrDenParticleV0(vector<ThermParticle> &aParticleCollection, vector<ThermV0Particle> &aV0Collection, bool aFillNumerator);
+  void FillCorrelationFunctionsNumOrDenV0V0(vector<ThermV0Particle> &aV01Collection, vector<ThermV0Particle> &aV02Collection, bool aFillNumerator);
+
+  void FillCorrelationFunctionsNumAndDenParticleV0(vector<ThermParticle> &aParticleCollection, vector<ThermV0Particle> &aV0Collection);
+  void FillCorrelationFunctionsNumAndDenV0V0(vector<ThermV0Particle> &aV01Collection, vector<ThermV0Particle> &aV02Collection);
 
   void BuildCorrelationFunctionsParticleV0(ThermEvent &aEvent, vector<ThermEvent> &aMixingEventsCollection);
   void BuildCorrelationFunctionsV0V0(ThermEvent &aEvent, vector<ThermEvent> &aMixingEventsCollection);
@@ -98,6 +102,8 @@ public:
   void SetBuildCorrelationFunctions(bool aBuild);
   void SetBuildSingleParticleAnalyses(bool aBuild);
 
+  void SetBuildMixedEventNumerators(bool aBuild);
+
 private:
   AnalysisType fAnalysisType;
   ParticlePDGType fPartType1, fPartType2;
@@ -113,6 +119,7 @@ private:
   bool fBuildPairFractions;
   bool fBuildTransformMatrices;
   bool fBuildCorrelationFunctions;
+  bool fBuildMixedEventNumerators;
 
   vector<AnalysisType> fTransformStorageMapping;
   vector<TransformInfo> fTransformInfo;
@@ -123,6 +130,10 @@ private:
 
   vector<vector<PidInfo> > fPrimaryPairInfo;  //each vector<PidInfo> has 2 elements for each particle in pair
   vector<vector<PidInfo> > fOtherPairInfo;
+
+  TH3* fPairSource3d;
+  TH3* fNum3d;
+  TH3* fDen3d;
 
   TH1* fPairSourceFull;
   TH1* fNumFull;
@@ -149,6 +160,11 @@ private:
   TH1* fDenSigmaStOnly;
   TH1* fCfSigmaStOnly;
 
+  TH1* fPairSourceSecondaryOnly;
+  TH1* fNumSecondaryOnly;
+  TH1* fDenSecondaryOnly;
+  TH1* fCfSecondaryOnly;
+
 #ifdef __ROOT__
   ClassDef(ThermPairAnalysis, 1)
 #endif
@@ -162,6 +178,8 @@ inline TH2D* ThermPairAnalysis::GetTransformMatrix(int aIndex) {return ((TH2D*)f
 inline void ThermPairAnalysis::SetBuildPairFractions(bool aBuild) {fBuildPairFractions = aBuild;}
 inline void ThermPairAnalysis::SetBuildTransformMatrices(bool aBuild) {fBuildTransformMatrices = aBuild;}
 inline void ThermPairAnalysis::SetBuildCorrelationFunctions(bool aBuild) {fBuildCorrelationFunctions = aBuild;}
+
+inline void ThermPairAnalysis::SetBuildMixedEventNumerators(bool aBuild) {fBuildMixedEventNumerators = aBuild;}
 
 #endif
 

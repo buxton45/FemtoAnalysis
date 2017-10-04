@@ -21,10 +21,13 @@ int main(int argc, char **argv)
   bool bUseMixedEvents = true;
   bool bPrintUniqueParents = false;
 
-  bool bBuildPairFractions = true;
-  bool bBuildTransformMatrices = true;
+  bool bBuildPairFractions = false;
+  bool bBuildTransformMatrices = false;
+  bool bBuildSingleParticleAnalyses = false;
+
   bool bBuildCorrelationFunctions = true;
-  bool bBuildSingleParticleAnalyses = true;
+  bool bBuildMixedEventNumerators = true;
+  int tNEventsToMix = 5;
 
 //  double tMaxPrimaryDecayLength = -1.; 
   double tMaxPrimaryDecayLength = 3.01; 
@@ -35,18 +38,18 @@ int main(int argc, char **argv)
   if(bRunFull)
   {
     tEventsDirectory = "/home/jesse/Analysis/Therminator2/events/lhyqid3v_LHCPbPb_2760_b2/";
-    tMatricesSaveFileName = "/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b2/TransformMatricesv2.root";
-    tPairFractionSaveName = "/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b2/PairFractionsv2.root";
-    tSingleParticlesSaveName = "/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b2/SingleParticleAnalysesv2.root";
-    tCorrelationFunctionsSaveName  = "/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b2/CorrelationFunctions.root";
+    tMatricesSaveFileName = "/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b2/TransformMatricesv2";
+    tPairFractionSaveName = "/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b2/PairFractionsv2";
+    tSingleParticlesSaveName = "/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b2/SingleParticleAnalysesv2";
+    tCorrelationFunctionsSaveName  = "/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b2/CorrelationFunctions";
   }
   else
   {
     tEventsDirectory = "/home/jesse/Analysis/Therminator2/events/TestEvents/";
-    tMatricesSaveFileName = "/home/jesse/Analysis/ReducedTherminator2Events/test/testTransformMatricesv2.root";
-    tPairFractionSaveName = "/home/jesse/Analysis/ReducedTherminator2Events/test/testPairFractionsv2.root";
-    tSingleParticlesSaveName = "/home/jesse/Analysis/ReducedTherminator2Events/test/testSingleParticleAnalysesv2.root";
-    tCorrelationFunctionsSaveName  = "/home/jesse/Analysis/ReducedTherminator2Events/test/testCorrelationFunctions.root";
+    tMatricesSaveFileName = "/home/jesse/Analysis/ReducedTherminator2Events/test/testTransformMatricesv2";
+    tPairFractionSaveName = "/home/jesse/Analysis/ReducedTherminator2Events/test/testPairFractionsv2";
+    tSingleParticlesSaveName = "/home/jesse/Analysis/ReducedTherminator2Events/test/testSingleParticleAnalysesv2";
+    tCorrelationFunctionsSaveName  = "/home/jesse/Analysis/ReducedTherminator2Events/test/testCorrelationFunctions";
   }
   //-----------------------------------------
 
@@ -56,7 +59,11 @@ int main(int argc, char **argv)
 
   tSimpleThermAnalysis->SetBuildPairFractions(bBuildPairFractions);
   tSimpleThermAnalysis->SetBuildTransformMatrices(bBuildTransformMatrices);
+
   tSimpleThermAnalysis->SetBuildCorrelationFunctions(bBuildCorrelationFunctions);
+  tSimpleThermAnalysis->SetBuildMixedEventNumerators(bBuildMixedEventNumerators);
+  tSimpleThermAnalysis->SetNEventsToMix(tNEventsToMix);
+
   tSimpleThermAnalysis->SetBuildSingleParticleAnalyses(bBuildSingleParticleAnalyses);
 
   tSimpleThermAnalysis->SetEventsDirectory(tEventsDirectory);

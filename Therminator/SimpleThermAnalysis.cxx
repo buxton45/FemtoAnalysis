@@ -40,6 +40,7 @@ SimpleThermAnalysis::SimpleThermAnalysis() :
   fBuildPairFractions(true),
   fBuildTransformMatrices(true),
   fBuildCorrelationFunctions(true),
+  fBuildMixedEventNumerators(false),
   fBuildSingleParticleAnalyses(true),
 
   fAnalysisLamKchP(nullptr),
@@ -124,6 +125,7 @@ void SimpleThermAnalysis::SaveAll()
 {
   if(fBuildPairFractions)
   {
+    fPairFractionsSaveName += TString(".root");
     TFile *tFilePairFractions = new TFile(fPairFractionsSaveName, "RECREATE");
 
     fAnalysisLamKchP->SavePairFractionsAndParentsMatrix(tFilePairFractions);
@@ -138,6 +140,7 @@ void SimpleThermAnalysis::SaveAll()
   //---------------------------------------------
   if(fBuildTransformMatrices)
   {
+    fTransformMatricesSaveName += TString(".root");
     TFile* tFileTransformMatrices = new TFile(fTransformMatricesSaveName, "RECREATE");
 
     fAnalysisLamKchP->SaveAllTransformMatrices(tFileTransformMatrices);
@@ -152,6 +155,8 @@ void SimpleThermAnalysis::SaveAll()
   //---------------------------------------------
   if(fBuildCorrelationFunctions)
   {
+    if(fBuildMixedEventNumerators) fCorrelationFunctionsSaveName += TString::Format("_%iMixedEvNum", fNEventsToMix);
+    fCorrelationFunctionsSaveName += TString(".root");
     TFile* tFileCorrelationFunctions = new TFile(fCorrelationFunctionsSaveName, "RECREATE");
 
     fAnalysisLamKchP->SaveAllCorrelationFunctions(tFileCorrelationFunctions);
@@ -166,6 +171,7 @@ void SimpleThermAnalysis::SaveAll()
   //---------------------------------------------
   if(fBuildSingleParticleAnalyses)
   {
+    fSingleParticlesSaveName += TString(".root");
     TFile* tFileSingleParticleAnalyses = new TFile(fSingleParticlesSaveName, "RECREATE");
 
     fSPAnalysisLam->SaveAll(tFileSingleParticleAnalyses);
@@ -385,6 +391,21 @@ void SimpleThermAnalysis::SetBuildCorrelationFunctions(bool aBuild)
 
   fAnalysisLamK0->SetBuildCorrelationFunctions(aBuild);
   fAnalysisALamK0->SetBuildCorrelationFunctions(aBuild);
+}
+
+//________________________________________________________________________________________________________________
+void SimpleThermAnalysis::SetBuildMixedEventNumerators(bool aBuild)
+{
+  fBuildMixedEventNumerators = aBuild;
+
+  fAnalysisLamKchP->SetBuildMixedEventNumerators(aBuild);
+  fAnalysisALamKchM->SetBuildMixedEventNumerators(aBuild);
+
+  fAnalysisLamKchM->SetBuildMixedEventNumerators(aBuild);
+  fAnalysisALamKchP->SetBuildMixedEventNumerators(aBuild);
+
+  fAnalysisLamK0->SetBuildMixedEventNumerators(aBuild);
+  fAnalysisALamK0->SetBuildMixedEventNumerators(aBuild);
 }
 
 

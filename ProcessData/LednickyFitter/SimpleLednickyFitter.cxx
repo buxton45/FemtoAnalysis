@@ -266,36 +266,42 @@ void SimpleLednickyFitter::CreateMinuitParameters()
   double tLowerBound_Lambda = 0.;
   double tUpperBound_Lambda = 0.;
   fMinuit->mnparm(0, TString("Lambda"), tStartVal_Lambda, tStepSize_Lambda, tLowerBound_Lambda, tUpperBound_Lambda, tErrFlg);
+//  fMinuit->FixParameter(0);
 
   double tStartVal_Radius = 5.0;
   double tStepSize_Radius = 0.001;
   double tLowerBound_Radius = 0.;
   double tUpperBound_Radius = 0.;
   fMinuit->mnparm(1, TString("Radius"), tStartVal_Radius, tStepSize_Radius, tLowerBound_Radius, tUpperBound_Radius, tErrFlg);
+//  fMinuit->FixParameter(1);
 
   double tStartVal_ReF0 = -0.5;
   double tStepSize_ReF0 = 0.001;
   double tLowerBound_ReF0 = 0.;
   double tUpperBound_ReF0 = 0.;
   fMinuit->mnparm(2, TString("ReF0"), tStartVal_ReF0, tStepSize_ReF0, tLowerBound_ReF0, tUpperBound_ReF0, tErrFlg);
+//  fMinuit->FixParameter(2);
 
   double tStartVal_ImF0 = 0.5;
   double tStepSize_ImF0 = 0.001;
   double tLowerBound_ImF0 = 0.;
   double tUpperBound_ImF0 = 0.;
   fMinuit->mnparm(3, TString("ImF0"), tStartVal_ImF0, tStepSize_ImF0, tLowerBound_ImF0, tUpperBound_ImF0, tErrFlg);
+//  fMinuit->FixParameter(3);
 
   double tStartVal_D0 = 0.0;
   double tStepSize_D0 = 0.001;
   double tLowerBound_D0 = 0.;
   double tUpperBound_D0 = 0.;
   fMinuit->mnparm(4, TString("D0"), tStartVal_D0, tStepSize_D0, tLowerBound_D0, tUpperBound_D0, tErrFlg);
+//  fMinuit->FixParameter(4);
 
   double tStartVal_Norm = (double)fCfLite->GetNumScale()/(double)fCfLite->GetDenScale();
   double tStepSize_Norm = 0.001;
   double tLowerBound_Norm = 0.;
   double tUpperBound_Norm = 0.;
   fMinuit->mnparm(5, TString("Norm"), tStartVal_Norm, tStepSize_Norm, tLowerBound_Norm, tUpperBound_Norm, tErrFlg);
+//  fMinuit->FixParameter(5);
 }
 
 

@@ -50,10 +50,11 @@ public:
   void SetBuildPairFractions(bool aBuild);
   void SetBuildTransformMatrices(bool aBuild);
   void SetBuildCorrelationFunctions(bool aBuild);
+  void SetBuildMixedEventNumerators(bool aBuild);
   void SetBuildSingleParticleAnalyses(bool aBuild);
 
   //-- inline
-
+  void SetNEventsToMix(int aNEventsToMix);
 
   void SetEventsDirectory(TString aDirectory);
   void SetPairFractionsSaveName(TString aSaveName);
@@ -89,6 +90,7 @@ private:
   bool fBuildPairFractions;
   bool fBuildTransformMatrices;
   bool fBuildCorrelationFunctions;
+  bool fBuildMixedEventNumerators;
   bool fBuildSingleParticleAnalyses;
 
   ThermPairAnalysis *fAnalysisLamKchP, *fAnalysisALamKchM;
@@ -106,7 +108,7 @@ private:
 #endif
 };
 
-
+inline void SimpleThermAnalysis::SetNEventsToMix(int aNEventsToMix) {fNEventsToMix = aNEventsToMix;}
 
 inline void SimpleThermAnalysis::SetEventsDirectory(TString aDirectory) {fEventsDirectory = aDirectory;}
 inline void SimpleThermAnalysis::SetPairFractionsSaveName(TString aSaveName) {fPairFractionsSaveName = aSaveName;}
