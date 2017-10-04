@@ -51,6 +51,7 @@ public:
   void SetBuildTransformMatrices(bool aBuild);
   void SetBuildCorrelationFunctions(bool aBuild);
   void SetBuildMixedEventNumerators(bool aBuild);
+  void SetWeightCfsWithParentInteraction(bool aSet);
   void SetBuildSingleParticleAnalyses(bool aBuild);
 
   //-- inline
@@ -91,6 +92,7 @@ private:
   bool fBuildTransformMatrices;
   bool fBuildCorrelationFunctions;
   bool fBuildMixedEventNumerators;
+  bool fWeightCfsWithParentInteraction;
   bool fBuildSingleParticleAnalyses;
 
   ThermPairAnalysis *fAnalysisLamKchP, *fAnalysisALamKchM;

@@ -25,6 +25,8 @@
 #include "ThermEvent.h"
 class ThermEvent;
 
+#include "ThermChargedResidual.h"
+class ThermChargedResidual;
 
 using namespace std;
 
@@ -36,6 +38,12 @@ public:
 
   void SetPartTypes();
   void InitiateTransformMatrices();
+
+  void LoadChargedResiduals();
+  void SetWeightCfsWithParentInteraction(bool aSet);
+  bool IsChargedResidual(ParticlePDGType aType1, ParticlePDGType aType2);
+  AnalysisType GetChargedResidualType(ParticlePDGType aType1, ParticlePDGType aType2);
+  int GetChargedResidualIndex(ParticlePDGType aType1, ParticlePDGType aType2);
 
   double GetFatherKStar(ThermParticle &aParticle1, ThermParticle &aParticle2, bool aUseParticleFather1, bool aUseParticleFather2);
   double GetKStar(ThermParticle &aParticle1, ThermParticle &aParticle2);
@@ -68,15 +76,21 @@ public:
 
   void SavePairFractionsAndParentsMatrix(TFile *aFile);
 
-
+  double CalcKStar(TLorentzVector &p1, TLorentzVector &p2);
   double CalcKStar(ThermParticle &tPart1, ThermParticle &tPart2);
 
 //TODO combine GetKStar3Vec and GetRStar3Vec
+  TVector3 GetKStar3Vec(TLorentzVector &p1, TLorentzVector &p2);
   TVector3 GetKStar3Vec(ThermParticle &tPart1, ThermParticle &tPart2);
+
+  TVector3 GetRStar3Vec(TLorentzVector &p1, TLorentzVector &x1, TLorentzVector &p2, TLorentzVector &x2);
   TVector3 GetRStar3Vec(ThermParticle &tPart1, ThermParticle &tPart2);
+
+  double CalcRStar(TLorentzVector &p1, TLorentzVector &x1, TLorentzVector &p2, TLorentzVector &x2);
   double CalcRStar(ThermParticle &tPart1, ThermParticle &tPart2);
   complex<double> GetStrongOnlyWaveFunction(TVector3 &aKStar3Vec, TVector3 &aRStar3Vec);
   double GetStrongOnlyWaveFunctionSq(TVector3 aKStar3Vec, TVector3 aRStar3Vec);
+  double GetParentPairWaveFunctionSq(ThermParticle &tPart1, ThermParticle &tPart2);
 
   void FillCorrelationFunctionsNumOrDenParticleV0(vector<ThermParticle> &aParticleCollection, vector<ThermV0Particle> &aV0Collection, bool aFillNumerator);
   void FillCorrelationFunctionsNumOrDenV0V0(vector<ThermV0Particle> &aV01Collection, vector<ThermV0Particle> &aV02Collection, bool aFillNumerator);
@@ -104,6 +118,7 @@ public:
 
   void SetBuildMixedEventNumerators(bool aBuild);
 
+
 private:
   AnalysisType fAnalysisType;
   ParticlePDGType fPartType1, fPartType2;
@@ -130,6 +145,10 @@ private:
 
   vector<vector<PidInfo> > fPrimaryPairInfo;  //each vector<PidInfo> has 2 elements for each particle in pair
   vector<vector<PidInfo> > fOtherPairInfo;
+
+  vector<AnalysisType> fChargedResidualsTypeMap;
+  vector<ThermChargedResidual> fChargedResiduals;
+  bool fWeightCfsWithParentInteraction;
 
   TH3* fPairSource3d;
   TH3* fNum3d;
@@ -180,6 +199,7 @@ inline void ThermPairAnalysis::SetBuildTransformMatrices(bool aBuild) {fBuildTra
 inline void ThermPairAnalysis::SetBuildCorrelationFunctions(bool aBuild) {fBuildCorrelationFunctions = aBuild;}
 
 inline void ThermPairAnalysis::SetBuildMixedEventNumerators(bool aBuild) {fBuildMixedEventNumerators = aBuild;}
+
 
 #endif
 

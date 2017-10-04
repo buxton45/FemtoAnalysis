@@ -71,6 +71,10 @@ public:
   TLorentzVector GetFourPosition();
   TLorentzVector GetFourMomentum();
 
+  TLorentzVector GetFatherFourPosition();
+  TLorentzVector GetFatherFourMomentum();
+
+
   void LoadFather(ThermParticle& aFather);
 
   //inline-----------------------------

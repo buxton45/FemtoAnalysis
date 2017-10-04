@@ -304,6 +304,20 @@ TLorentzVector ThermParticle::GetFourMomentum()
   return TLorentzVector(fPx,fPy,fPz,fE);
 }
 
+//________________________________________________________________________________________________________________
+TLorentzVector ThermParticle::GetFatherFourPosition()
+{
+  return TLorentzVector(fFatherX,fFatherY,fFatherZ,fFatherT);
+}
+
+
+//________________________________________________________________________________________________________________
+TLorentzVector ThermParticle::GetFatherFourMomentum()
+{
+  return TLorentzVector(fFatherPx,fFatherPy,fFatherPz,fFatherE);
+}
+
+
 
 //________________________________________________________________________________________________________________
 void ThermParticle::LoadFather(ThermParticle& aFather)

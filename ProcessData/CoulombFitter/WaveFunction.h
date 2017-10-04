@@ -43,7 +43,7 @@ public:
   virtual ~WaveFunction();
 
   void SetCurrentAnalysisType(AnalysisType aAnalysisType);
-  double GetBohrRadius(AnalysisType aAnalysisType);
+  static double GetBohrRadius(AnalysisType aAnalysisType);
   void SetCurrentBohrRadius(AnalysisType aAnalysisType);
   void SetCurrentBohrRadius(double aBohrRadius);
 

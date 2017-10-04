@@ -28,6 +28,7 @@ int main(int argc, char **argv)
   bool bBuildCorrelationFunctions = true;
   bool bBuildMixedEventNumerators = true;
   int tNEventsToMix = 5;
+  bool bWeightCfsWithParentInteraction = false;
 
 //  double tMaxPrimaryDecayLength = -1.; 
   double tMaxPrimaryDecayLength = 3.01; 
@@ -62,6 +63,7 @@ int main(int argc, char **argv)
 
   tSimpleThermAnalysis->SetBuildCorrelationFunctions(bBuildCorrelationFunctions);
   tSimpleThermAnalysis->SetBuildMixedEventNumerators(bBuildMixedEventNumerators);
+  tSimpleThermAnalysis->SetWeightCfsWithParentInteraction(bWeightCfsWithParentInteraction);
   tSimpleThermAnalysis->SetNEventsToMix(tNEventsToMix);
 
   tSimpleThermAnalysis->SetBuildSingleParticleAnalyses(bBuildSingleParticleAnalyses);

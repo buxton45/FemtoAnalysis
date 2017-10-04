@@ -42,6 +42,8 @@ ThermPairAnalysis::ThermPairAnalysis(AnalysisType aAnType) :
   fPrimaryPairInfo(0),
   fOtherPairInfo(0),
 
+  fWeightCfsWithParentInteraction(false),
+
   fPairSource3d(nullptr),
   fNum3d(nullptr),
   fDen3d(nullptr),
@@ -392,6 +394,90 @@ void ThermPairAnalysis::InitiateTransformMatrices()
   cout << "_______________________________________________________________________________________" << endl;
 }
 
+
+//________________________________________________________________________________________________________________
+void ThermPairAnalysis::LoadChargedResiduals()
+{
+  fChargedResiduals.clear();
+  fChargedResidualsTypeMap.clear();
+  fChargedResidualsTypeMap.resize(3);
+
+  if(fAnalysisType==kLamKchP)
+  {
+    fChargedResidualsTypeMap[0] = kResXiCKchP;
+    fChargedResidualsTypeMap[1] = kResSigStPKchP;
+    fChargedResidualsTypeMap[2] = kResSigStMKchP;
+  }
+  else if(fAnalysisType==kALamKchM)
+  {
+    fChargedResidualsTypeMap[0] = kResAXiCKchM;
+    fChargedResidualsTypeMap[1] = kResASigStMKchM;
+    fChargedResidualsTypeMap[2] = kResASigStPKchM;
+  }
+  else if(fAnalysisType==kLamKchM)
+  {
+    fChargedResidualsTypeMap[0] = kResXiCKchM;
+    fChargedResidualsTypeMap[1] = kResSigStPKchM;
+    fChargedResidualsTypeMap[2] = kResSigStMKchM;
+  }
+  else if(fAnalysisType==kALamKchP)
+  {
+    fChargedResidualsTypeMap[0] = kResAXiCKchP;
+    fChargedResidualsTypeMap[1] = kResASigStMKchP;
+    fChargedResidualsTypeMap[2] = kResASigStPKchP;
+  }
+  else assert(0);
+
+  for(unsigned int i=0; i<fChargedResidualsTypeMap.size(); i++)
+  {
+    fChargedResiduals.emplace_back(fChargedResidualsTypeMap[i]);
+  }
+}
+
+//________________________________________________________________________________________________________________
+void ThermPairAnalysis::SetWeightCfsWithParentInteraction(bool aSet) 
+{
+  fWeightCfsWithParentInteraction = aSet;
+
+  if((fAnalysisType==kLamKchP || fAnalysisType==kALamKchM || 
+     fAnalysisType==kLamKchM || fAnalysisType==kALamKchP) &&
+     fWeightCfsWithParentInteraction) LoadChargedResiduals();
+}
+
+//________________________________________________________________________________________________________________
+bool ThermPairAnalysis::IsChargedResidual(ParticlePDGType aType1, ParticlePDGType aType2)
+{
+  for(unsigned int i=0; i<fChargedResiduals.size(); i++)
+  {
+    vector<ParticlePDGType> tTypes = fChargedResiduals[i].GetPartTypes();
+    if(tTypes[0]==aType1 && tTypes[1]==aType2) return true;
+  }
+  return false;
+}
+
+//________________________________________________________________________________________________________________
+AnalysisType ThermPairAnalysis::GetChargedResidualType(ParticlePDGType aType1, ParticlePDGType aType2)
+{
+  for(unsigned int i=0; i<fChargedResiduals.size(); i++)
+  {
+    vector<ParticlePDGType> tTypes = fChargedResiduals[i].GetPartTypes();
+    if(tTypes[0]==aType1 && tTypes[1]==aType2) return fChargedResiduals[i].GetResidualType();
+  }
+  assert(0);
+  return kLamK0;
+}
+
+//________________________________________________________________________________________________________________
+int ThermPairAnalysis::GetChargedResidualIndex(ParticlePDGType aType1, ParticlePDGType aType2)
+{
+  for(unsigned int i=0; i<fChargedResiduals.size(); i++)
+  {
+    vector<ParticlePDGType> tTypes = fChargedResiduals[i].GetPartTypes();
+    if(tTypes[0]==aType1 && tTypes[1]==aType2) return i;
+  }
+  assert(0);
+  return 0;
+}
 
 
 //________________________________________________________________________________________________________________
@@ -898,14 +984,9 @@ void ThermPairAnalysis::SavePairFractionsAndParentsMatrix(TFile *aFile)
   fParentsMatrix->Write();
 }
 
-
-
 //________________________________________________________________________________________________________________
-double ThermPairAnalysis::CalcKStar(ThermParticle &tPart1, ThermParticle &tPart2)
+double ThermPairAnalysis::CalcKStar(TLorentzVector &p1, TLorentzVector &p2)
 {
-  TLorentzVector p1 = tPart1.GetFourMomentum();
-  TLorentzVector p2 = tPart2.GetFourMomentum();
-
   const double p_inv = (p1 + p2).Mag2(),
                q_inv = (p1 - p2).Mag2(),
            mass_diff = p1.Mag2() - p2.Mag2();
@@ -914,21 +995,23 @@ double ThermPairAnalysis::CalcKStar(ThermParticle &tPart1, ThermParticle &tPart2
   return ::sqrt(tQ) / 2.0;
 }
 
+
 //________________________________________________________________________________________________________________
-TVector3 ThermPairAnalysis::GetKStar3Vec(ThermParticle &tPart1, ThermParticle &tPart2)
+double ThermPairAnalysis::CalcKStar(ThermParticle &tPart1, ThermParticle &tPart2)
 {
   TLorentzVector p1 = tPart1.GetFourMomentum();
   TLorentzVector p2 = tPart2.GetFourMomentum();
 
-  TLorentzVector x1 = tPart1.GetFourPosition();
-  TLorentzVector x2 = tPart2.GetFourPosition();
+  return CalcKStar(p1, p2);
+}
 
-  //---------------------------------
 
+//________________________________________________________________________________________________________________
+TVector3 ThermPairAnalysis::GetKStar3Vec(TLorentzVector &p1, TLorentzVector &p2)
+{
   TLorentzVector P = p1 + p2;
 
   // Calculate pair variables
-
   const double tPx = P.X(),
                tPy = P.Y(),
                tPz = P.Z();
@@ -968,22 +1051,23 @@ TVector3 ThermPairAnalysis::GetKStar3Vec(ThermParticle &tPart1, ThermParticle &t
   return TVector3(tKStarOut, tKStarSide, tKStarLong);
 }
 
-
 //________________________________________________________________________________________________________________
-TVector3 ThermPairAnalysis::GetRStar3Vec(ThermParticle &tPart1, ThermParticle &tPart2)
+TVector3 ThermPairAnalysis::GetKStar3Vec(ThermParticle &tPart1, ThermParticle &tPart2)
 {
   TLorentzVector p1 = tPart1.GetFourMomentum();
   TLorentzVector p2 = tPart2.GetFourMomentum();
 
-  TLorentzVector x1 = tPart1.GetFourPosition();
-  TLorentzVector x2 = tPart2.GetFourPosition();
-
   //---------------------------------
 
+  return GetKStar3Vec(p1, p2);
+}
+
+//________________________________________________________________________________________________________________
+TVector3 ThermPairAnalysis::GetRStar3Vec(TLorentzVector &p1, TLorentzVector &x1, TLorentzVector &p2, TLorentzVector &x2)
+{
   TLorentzVector P = p1 + p2;
 
   // Calculate pair variables
-
   const double tPx = P.X(),
                tPy = P.Y(),
                tPz = P.Z();
@@ -1042,6 +1126,28 @@ TVector3 ThermPairAnalysis::GetRStar3Vec(ThermParticle &tPart1, ThermParticle &t
   double tRStarOut = tGamma*(tROut - tBeta* tDTimePairLCMS);
 
   return TVector3(tRStarOut, tRStarSide, tRStarLong);
+}
+
+
+//________________________________________________________________________________________________________________
+TVector3 ThermPairAnalysis::GetRStar3Vec(ThermParticle &tPart1, ThermParticle &tPart2)
+{
+  TLorentzVector p1 = tPart1.GetFourMomentum();
+  TLorentzVector p2 = tPart2.GetFourMomentum();
+
+  TLorentzVector x1 = tPart1.GetFourPosition();
+  TLorentzVector x2 = tPart2.GetFourPosition();
+
+  //---------------------------------
+
+  return GetRStar3Vec(p1, x1, p2, x2);
+}
+
+//________________________________________________________________________________________________________________
+double ThermPairAnalysis::CalcRStar(TLorentzVector &p1, TLorentzVector &x1, TLorentzVector &p2, TLorentzVector &x2)
+{
+  TVector3 tRStar3Vec = GetRStar3Vec(p1, x1, p2, x2);
+  return tRStar3Vec.Mag();
 }
 
 //________________________________________________________________________________________________________________
@@ -1179,6 +1285,55 @@ double ThermPairAnalysis::GetStrongOnlyWaveFunctionSq(TVector3 aKStar3Vec, TVect
 }
 
 //________________________________________________________________________________________________________________
+double ThermPairAnalysis::GetParentPairWaveFunctionSq(ThermParticle &tPart1, ThermParticle &tPart2)
+{
+//  assert(!(tPart1.IsPrimordial() && tPart2.IsPrimordial()));
+  //--------------------------------------------------------------
+  TLorentzVector p1, x1, p2, x2;
+  ParticlePDGType tResType1, tResType2;
+  //----------
+  if(tPart1.IsPrimordial())
+  {
+    p1 = tPart1.GetFourMomentum();
+    x1 = tPart1.GetFourPosition();
+    tResType1 = static_cast<ParticlePDGType>(tPart1.GetPID());
+  }
+  else
+  {
+    p1 = tPart1.GetFatherFourMomentum();
+    x1 = tPart1.GetFatherFourPosition();
+    tResType1 = static_cast<ParticlePDGType>(tPart1.GetFatherPID());
+  }
+  //----------
+  if(tPart2.IsPrimordial())
+  {
+    p2 = tPart2.GetFourMomentum();
+    x2 = tPart2.GetFourPosition();
+    tResType2 = static_cast<ParticlePDGType>(tPart2.GetPID());
+  }
+  else
+  {
+    p2 = tPart2.GetFatherFourMomentum();
+    x2 = tPart2.GetFatherFourPosition();
+    tResType2 = static_cast<ParticlePDGType>(tPart2.GetFatherPID());
+  }
+  //--------------------------------------------------------------
+
+  TVector3 tRStar3Vec = GetRStar3Vec(p1, x1, p2, x2);
+  TVector3 tKStar3Vec = GetKStar3Vec(p1, p2);
+
+  //--------------------------------------------------------------
+
+  if(!IsChargedResidual(tResType1, tResType2)) return GetStrongOnlyWaveFunctionSq(tKStar3Vec, tRStar3Vec);
+  else
+  {
+    int tResIndex = GetChargedResidualIndex(tResType1, tResType2);
+    return fChargedResiduals[tResIndex].InterpolateWfSquared(&tKStar3Vec, &tRStar3Vec, 0., 0., 0.);
+  }
+
+}
+
+//________________________________________________________________________________________________________________
 void ThermPairAnalysis::FillCorrelationFunctionsNumOrDenParticleV0(vector<ThermParticle> &aParticleCollection, vector<ThermV0Particle> &aV0Collection, bool aFillNumerator)
 {
   TH3 *tCf3d;
@@ -1227,7 +1382,11 @@ void ThermPairAnalysis::FillCorrelationFunctionsNumOrDenParticleV0(vector<ThermP
 
         tRStar = CalcRStar(tV0, tParticle);
         tKStar = CalcKStar(tV0, tParticle);
-        if(aFillNumerator) tWeight = GetStrongOnlyWaveFunctionSq(GetKStar3Vec(tV0, tParticle), GetRStar3Vec(tV0, tParticle));
+        if(aFillNumerator)
+        {
+          if(fWeightCfsWithParentInteraction) tWeight = GetParentPairWaveFunctionSq(tV0, tParticle);
+          else tWeight = GetStrongOnlyWaveFunctionSq(GetKStar3Vec(tV0, tParticle), GetRStar3Vec(tV0, tParticle));
+        }
 
         tCf3d->Fill(tParentIndex1, tParentIndex2, tKStar, tWeight);
         tCfFull->Fill(tKStar, tWeight);
@@ -1325,7 +1484,11 @@ void ThermPairAnalysis::FillCorrelationFunctionsNumOrDenV0V0(vector<ThermV0Parti
 
           tRStar = CalcRStar(tV01, tV02);
           tKStar = CalcKStar(tV01, tV02);
-          if(aFillNumerator) tWeight = GetStrongOnlyWaveFunctionSq(GetKStar3Vec(tV01, tV02), GetRStar3Vec(tV01, tV02));
+          if(aFillNumerator)
+          {
+            if(fWeightCfsWithParentInteraction) tWeight = GetParentPairWaveFunctionSq(tV01, tV02);
+            else tWeight = GetStrongOnlyWaveFunctionSq(GetKStar3Vec(tV01, tV02), GetRStar3Vec(tV01, tV02));
+          }
 
           tCf3d->Fill(tParentIndex1, tParentIndex2, tKStar, tWeight);
           tCfFull->Fill(tKStar, tWeight);
@@ -1397,7 +1560,8 @@ void ThermPairAnalysis::FillCorrelationFunctionsNumAndDenParticleV0(vector<Therm
 
         tRStar = CalcRStar(tV0, tParticle);
         tKStar = CalcKStar(tV0, tParticle);
-        tWeight = GetStrongOnlyWaveFunctionSq(GetKStar3Vec(tV0, tParticle), GetRStar3Vec(tV0, tParticle));
+        if(fWeightCfsWithParentInteraction) tWeight = GetParentPairWaveFunctionSq(tV0, tParticle);
+        else tWeight = GetStrongOnlyWaveFunctionSq(GetKStar3Vec(tV0, tParticle), GetRStar3Vec(tV0, tParticle));
 
         fNum3d->Fill(tParentIndex1, tParentIndex2, tKStar, tWeight);
         fDen3d->Fill(tParentIndex1, tParentIndex2, tKStar);
@@ -1476,7 +1640,8 @@ void ThermPairAnalysis::FillCorrelationFunctionsNumAndDenV0V0(vector<ThermV0Part
 
           tRStar = CalcRStar(tV01, tV02);
           tKStar = CalcKStar(tV01, tV02);
-          tWeight = GetStrongOnlyWaveFunctionSq(GetKStar3Vec(tV01, tV02), GetRStar3Vec(tV01, tV02));
+          if(fWeightCfsWithParentInteraction) tWeight = GetParentPairWaveFunctionSq(tV01, tV02);
+          else tWeight = GetStrongOnlyWaveFunctionSq(GetKStar3Vec(tV01, tV02), GetRStar3Vec(tV01, tV02));
 
           fNum3d->Fill(tParentIndex1, tParentIndex2, tKStar, tWeight);
           fDen3d->Fill(tParentIndex1, tParentIndex2, tKStar);

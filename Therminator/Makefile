@@ -1,14 +1,15 @@
 ANALYZE_DIR = /home/jesse/Analysis/FemtoAnalysis/ProcessData/Analyze
 UTILITIES_DIR = /home/jesse/Analysis/FemtoAnalysis/ProcessData/Utilities
+COULOMBFITTER_DIR = /home/jesse/Analysis/FemtoAnalysis/ProcessData/CoulombFitter
 
 LIBS   = $(shell root-config --libs) -lMinuit
-CFLAGS = $(shell root-config --cflags) -Wall -std=c++11 -I${ANALYZE_DIR} -I${UTILITIES_DIR} -g -O0
+CFLAGS = $(shell root-config --cflags) -Wall -std=c++11 -I${ANALYZE_DIR} -I${UTILITIES_DIR} -I${COULOMBFITTER_DIR} -g -O0
 #IFLAGS = -I$(ROOTSYS)/include
 #.PHONY: clean
 
 RM = rm
 
-MY_LIBS = $(addprefix build/, Types.o PIDMapping.o ThermCommon.o ThermParticle.o ThermV0Particle.o ThermEvent.o ThermPairAnalysis.o ThermSingleParticleAnalysis.o ThermEventsCollection.o SimpleThermAnalysis.o)
+MY_LIBS = $(addprefix build/, Interpolator.o Types.o PIDMapping.o ThermCommon.o ThermParticle.o ThermV0Particle.o ThermEvent.o ThermChargedResidual.o ThermPairAnalysis.o ThermSingleParticleAnalysis.o ThermEventsCollection.o SimpleThermAnalysis.o)
 
 BINARIES = runTest runTest2 runDrawTransforms runDrawPairFractions runDrawParentsMatrices runBuildLambdaValuesFromParentMatrices runProject3dRadii runDrawPairSources runDrawCfs runProject3dCfs
 
@@ -47,6 +48,9 @@ runProject3dCfs: ${MY_LIBS} Project3dCfs.C
 
 build/%.o: ${ANALYZE_DIR}/%.cxx ${ANALYZE_DIR}/%.h
 	g++ -c $< $(CFLAGS) -o $@
+
+build/%.o: ${COULOMBFITTER_DIR}/%.cxx ${COULOMBFITTER_DIR}/%.h
+	g++ -c $< -I${INCDIR} $(CFLAGS) -o $@
 
 build/%.o: %.cxx %.h
 	g++ -c $< $(CFLAGS) -o $@
