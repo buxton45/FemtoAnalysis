@@ -100,6 +100,9 @@ int main(int argc, char **argv)
 
   TCanvas* tCan = new TCanvas("tCan", "tCan");
   tSLFitter->DrawCfWithFit((TPad*)tCan);
+
+  TCanvas* tCan2 = new TCanvas("tCan2", "tCan2");
+  tSLFitter->DrawCfNumDen((TPad*)tCan2);
 //-------------------------------------------------------------------------------
   tFullTimer.Stop();
   cout << "Finished program: ";

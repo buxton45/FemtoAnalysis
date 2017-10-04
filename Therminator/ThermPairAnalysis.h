@@ -92,6 +92,12 @@ public:
   void SetUseMixedEvents(bool aUse);
   void SetBuildUniqueParents(bool aBuild);
   TH2D* GetTransformMatrix(int aIndex);
+
+  void SetBuildPairFractions(bool aBuild);
+  void SetBuildTransformMatrices(bool aBuild);
+  void SetBuildCorrelationFunctions(bool aBuild);
+  void SetBuildSingleParticleAnalyses(bool aBuild);
+
 private:
   AnalysisType fAnalysisType;
   ParticlePDGType fPartType1, fPartType2;
@@ -103,6 +109,10 @@ private:
   bool fBuildUniqueParents;
   vector<int> fUniqueParents1;
   vector<int> fUniqueParents2;
+
+  bool fBuildPairFractions;
+  bool fBuildTransformMatrices;
+  bool fBuildCorrelationFunctions;
 
   vector<AnalysisType> fTransformStorageMapping;
   vector<TransformInfo> fTransformInfo;
@@ -148,6 +158,10 @@ inline void ThermPairAnalysis::SetUseMixedEvents(bool aUse) {fMixEvents = aUse;}
 inline void ThermPairAnalysis::SetBuildUniqueParents(bool aBuild) {fBuildUniqueParents = aBuild;}
 
 inline TH2D* ThermPairAnalysis::GetTransformMatrix(int aIndex) {return ((TH2D*)fTransformMatrices->At(aIndex));}
+ 
+inline void ThermPairAnalysis::SetBuildPairFractions(bool aBuild) {fBuildPairFractions = aBuild;}
+inline void ThermPairAnalysis::SetBuildTransformMatrices(bool aBuild) {fBuildTransformMatrices = aBuild;}
+inline void ThermPairAnalysis::SetBuildCorrelationFunctions(bool aBuild) {fBuildCorrelationFunctions = aBuild;}
 
 #endif
 

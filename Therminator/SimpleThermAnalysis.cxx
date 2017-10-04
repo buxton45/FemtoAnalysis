@@ -37,6 +37,11 @@ SimpleThermAnalysis::SimpleThermAnalysis() :
 
   fBuildUniqueParents(false),
 
+  fBuildPairFractions(true),
+  fBuildTransformMatrices(true),
+  fBuildCorrelationFunctions(true),
+  fBuildSingleParticleAnalyses(true),
+
   fAnalysisLamKchP(nullptr),
   fAnalysisALamKchM(nullptr),
   fAnalysisLamKchM(nullptr),
@@ -117,54 +122,62 @@ void SimpleThermAnalysis::SetBuildUniqueParents(bool aBuild)
 //________________________________________________________________________________________________________________
 void SimpleThermAnalysis::SaveAll()
 {
-  TFile *tFilePairFractions = new TFile(fPairFractionsSaveName, "RECREATE");
+  if(fBuildPairFractions)
+  {
+    TFile *tFilePairFractions = new TFile(fPairFractionsSaveName, "RECREATE");
 
-  fAnalysisLamKchP->SavePairFractionsAndParentsMatrix(tFilePairFractions);
-  fAnalysisALamKchM->SavePairFractionsAndParentsMatrix(tFilePairFractions);
-  fAnalysisLamKchM->SavePairFractionsAndParentsMatrix(tFilePairFractions);
-  fAnalysisALamKchP->SavePairFractionsAndParentsMatrix(tFilePairFractions);
-  fAnalysisLamK0->SavePairFractionsAndParentsMatrix(tFilePairFractions);
-  fAnalysisALamK0->SavePairFractionsAndParentsMatrix(tFilePairFractions);
+    fAnalysisLamKchP->SavePairFractionsAndParentsMatrix(tFilePairFractions);
+    fAnalysisALamKchM->SavePairFractionsAndParentsMatrix(tFilePairFractions);
+    fAnalysisLamKchM->SavePairFractionsAndParentsMatrix(tFilePairFractions);
+    fAnalysisALamKchP->SavePairFractionsAndParentsMatrix(tFilePairFractions);
+    fAnalysisLamK0->SavePairFractionsAndParentsMatrix(tFilePairFractions);
+    fAnalysisALamK0->SavePairFractionsAndParentsMatrix(tFilePairFractions);
 
-  tFilePairFractions->Close();
-
+    tFilePairFractions->Close();
+  }
   //---------------------------------------------
+  if(fBuildTransformMatrices)
+  {
+    TFile* tFileTransformMatrices = new TFile(fTransformMatricesSaveName, "RECREATE");
 
-  TFile* tFileTransformMatrices = new TFile(fTransformMatricesSaveName, "RECREATE");
+    fAnalysisLamKchP->SaveAllTransformMatrices(tFileTransformMatrices);
+    fAnalysisALamKchM->SaveAllTransformMatrices(tFileTransformMatrices);
+    fAnalysisLamKchM->SaveAllTransformMatrices(tFileTransformMatrices);
+    fAnalysisALamKchP->SaveAllTransformMatrices(tFileTransformMatrices);
+    fAnalysisLamK0->SaveAllTransformMatrices(tFileTransformMatrices);
+    fAnalysisALamK0->SaveAllTransformMatrices(tFileTransformMatrices);
 
-  fAnalysisLamKchP->SaveAllTransformMatrices(tFileTransformMatrices);
-  fAnalysisALamKchM->SaveAllTransformMatrices(tFileTransformMatrices);
-  fAnalysisLamKchM->SaveAllTransformMatrices(tFileTransformMatrices);
-  fAnalysisALamKchP->SaveAllTransformMatrices(tFileTransformMatrices);
-  fAnalysisLamK0->SaveAllTransformMatrices(tFileTransformMatrices);
-  fAnalysisALamK0->SaveAllTransformMatrices(tFileTransformMatrices);
-
-  tFileTransformMatrices->Close();
-
+    tFileTransformMatrices->Close();
+  }
   //---------------------------------------------
-  TFile* tFileCorrelationFunctions = new TFile(fCorrelationFunctionsSaveName, "RECREATE");
+  if(fBuildCorrelationFunctions)
+  {
+    TFile* tFileCorrelationFunctions = new TFile(fCorrelationFunctionsSaveName, "RECREATE");
 
-  fAnalysisLamKchP->SaveAllCorrelationFunctions(tFileCorrelationFunctions);
-  fAnalysisALamKchM->SaveAllCorrelationFunctions(tFileCorrelationFunctions);
-  fAnalysisLamKchM->SaveAllCorrelationFunctions(tFileCorrelationFunctions);
-  fAnalysisALamKchP->SaveAllCorrelationFunctions(tFileCorrelationFunctions);
-  fAnalysisLamK0->SaveAllCorrelationFunctions(tFileCorrelationFunctions);
-  fAnalysisALamK0->SaveAllCorrelationFunctions(tFileCorrelationFunctions);
+    fAnalysisLamKchP->SaveAllCorrelationFunctions(tFileCorrelationFunctions);
+    fAnalysisALamKchM->SaveAllCorrelationFunctions(tFileCorrelationFunctions);
+    fAnalysisLamKchM->SaveAllCorrelationFunctions(tFileCorrelationFunctions);
+    fAnalysisALamKchP->SaveAllCorrelationFunctions(tFileCorrelationFunctions);
+    fAnalysisLamK0->SaveAllCorrelationFunctions(tFileCorrelationFunctions);
+    fAnalysisALamK0->SaveAllCorrelationFunctions(tFileCorrelationFunctions);
 
-  tFileCorrelationFunctions->Close();
-
+    tFileCorrelationFunctions->Close();
+  }
   //---------------------------------------------
-  TFile* tFileSingleParticleAnalyses = new TFile(fSingleParticlesSaveName, "RECREATE");
+  if(fBuildSingleParticleAnalyses)
+  {
+    TFile* tFileSingleParticleAnalyses = new TFile(fSingleParticlesSaveName, "RECREATE");
 
-  fSPAnalysisLam->SaveAll(tFileSingleParticleAnalyses);
-  fSPAnalysisALam->SaveAll(tFileSingleParticleAnalyses);
-  fSPAnalysisKchP->SaveAll(tFileSingleParticleAnalyses);
-  fSPAnalysisKchM->SaveAll(tFileSingleParticleAnalyses);
-  fSPAnalysisProt->SaveAll(tFileSingleParticleAnalyses);
-  fSPAnalysisAProt->SaveAll(tFileSingleParticleAnalyses);
-  fSPAnalysisK0->SaveAll(tFileSingleParticleAnalyses);
+    fSPAnalysisLam->SaveAll(tFileSingleParticleAnalyses);
+    fSPAnalysisALam->SaveAll(tFileSingleParticleAnalyses);
+    fSPAnalysisKchP->SaveAll(tFileSingleParticleAnalyses);
+    fSPAnalysisKchM->SaveAll(tFileSingleParticleAnalyses);
+    fSPAnalysisProt->SaveAll(tFileSingleParticleAnalyses);
+    fSPAnalysisAProt->SaveAll(tFileSingleParticleAnalyses);
+    fSPAnalysisK0->SaveAll(tFileSingleParticleAnalyses);
 
-  tFileSingleParticleAnalyses->Close();
+    tFileSingleParticleAnalyses->Close();
+  }
 }
 
 //________________________________________________________________________________________________________________
@@ -300,13 +313,16 @@ void SimpleThermAnalysis::ProcessEventByEvent(vector<ThermEvent> &aEventsCollect
     fAnalysisALamK0->ProcessEvent(fEventsCollection[iEv], fMixingEventsCollection, fMaxPrimaryDecayLength);
 
     //--------------------------------------------
-    fSPAnalysisLam->ProcessEvent(fEventsCollection[iEv]);
-    fSPAnalysisALam->ProcessEvent(fEventsCollection[iEv]);
-    fSPAnalysisKchP->ProcessEvent(fEventsCollection[iEv]);
-    fSPAnalysisKchM->ProcessEvent(fEventsCollection[iEv]);
-    fSPAnalysisProt->ProcessEvent(fEventsCollection[iEv]); 
-    fSPAnalysisAProt->ProcessEvent(fEventsCollection[iEv]);
-    fSPAnalysisK0->ProcessEvent(fEventsCollection[iEv]);
+    if(fBuildSingleParticleAnalyses)
+    {
+      fSPAnalysisLam->ProcessEvent(fEventsCollection[iEv]);
+      fSPAnalysisALam->ProcessEvent(fEventsCollection[iEv]);
+      fSPAnalysisKchP->ProcessEvent(fEventsCollection[iEv]);
+      fSPAnalysisKchM->ProcessEvent(fEventsCollection[iEv]);
+      fSPAnalysisProt->ProcessEvent(fEventsCollection[iEv]); 
+      fSPAnalysisAProt->ProcessEvent(fEventsCollection[iEv]);
+      fSPAnalysisK0->ProcessEvent(fEventsCollection[iEv]);
+    }
 
     if(fMixEvents)
     {
@@ -322,6 +338,65 @@ void SimpleThermAnalysis::ProcessEventByEvent(vector<ThermEvent> &aEventsCollect
   }
 
 }
+
+
+//________________________________________________________________________________________________________________
+void SimpleThermAnalysis::SetBuildPairFractions(bool aBuild) 
+{
+  fBuildPairFractions = aBuild;
+
+  fAnalysisLamKchP->SetBuildPairFractions(aBuild);
+  fAnalysisALamKchM->SetBuildPairFractions(aBuild);
+
+  fAnalysisLamKchM->SetBuildPairFractions(aBuild);
+  fAnalysisALamKchP->SetBuildPairFractions(aBuild);
+
+  fAnalysisLamK0->SetBuildPairFractions(aBuild);
+  fAnalysisALamK0->SetBuildPairFractions(aBuild);
+}
+
+
+//________________________________________________________________________________________________________________
+void SimpleThermAnalysis::SetBuildTransformMatrices(bool aBuild)
+{
+  fBuildTransformMatrices = aBuild;
+
+  fAnalysisLamKchP->SetBuildTransformMatrices(aBuild);
+  fAnalysisALamKchM->SetBuildTransformMatrices(aBuild);
+
+  fAnalysisLamKchM->SetBuildTransformMatrices(aBuild);
+  fAnalysisALamKchP->SetBuildTransformMatrices(aBuild);
+
+  fAnalysisLamK0->SetBuildTransformMatrices(aBuild);
+  fAnalysisALamK0->SetBuildTransformMatrices(aBuild);
+}
+
+
+//________________________________________________________________________________________________________________
+void SimpleThermAnalysis::SetBuildCorrelationFunctions(bool aBuild)
+{
+  fBuildCorrelationFunctions = aBuild;
+
+  fAnalysisLamKchP->SetBuildCorrelationFunctions(aBuild);
+  fAnalysisALamKchM->SetBuildCorrelationFunctions(aBuild);
+
+  fAnalysisLamKchM->SetBuildCorrelationFunctions(aBuild);
+  fAnalysisALamKchP->SetBuildCorrelationFunctions(aBuild);
+
+  fAnalysisLamK0->SetBuildCorrelationFunctions(aBuild);
+  fAnalysisALamK0->SetBuildCorrelationFunctions(aBuild);
+}
+
+
+//________________________________________________________________________________________________________________
+void SimpleThermAnalysis::SetBuildSingleParticleAnalyses(bool aBuild)
+{
+  fBuildSingleParticleAnalyses = aBuild;
+}
+
+
+
+
 
 
 

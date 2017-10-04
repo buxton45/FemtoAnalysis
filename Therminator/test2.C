@@ -21,6 +21,11 @@ int main(int argc, char **argv)
   bool bUseMixedEvents = true;
   bool bPrintUniqueParents = false;
 
+  bool bBuildPairFractions = true;
+  bool bBuildTransformMatrices = true;
+  bool bBuildCorrelationFunctions = true;
+  bool bBuildSingleParticleAnalyses = true;
+
 //  double tMaxPrimaryDecayLength = -1.; 
   double tMaxPrimaryDecayLength = 3.01; 
 
@@ -48,6 +53,11 @@ int main(int argc, char **argv)
   SimpleThermAnalysis *tSimpleThermAnalysis = new SimpleThermAnalysis();
   tSimpleThermAnalysis->SetUseMixedEvents(bUseMixedEvents);
   tSimpleThermAnalysis->SetBuildUniqueParents(bPrintUniqueParents);
+
+  tSimpleThermAnalysis->SetBuildPairFractions(bBuildPairFractions);
+  tSimpleThermAnalysis->SetBuildTransformMatrices(bBuildTransformMatrices);
+  tSimpleThermAnalysis->SetBuildCorrelationFunctions(bBuildCorrelationFunctions);
+  tSimpleThermAnalysis->SetBuildSingleParticleAnalyses(bBuildSingleParticleAnalyses);
 
   tSimpleThermAnalysis->SetEventsDirectory(tEventsDirectory);
   tSimpleThermAnalysis->SetPairFractionsSaveName(tPairFractionSaveName);

@@ -27,6 +27,11 @@ ThermPairAnalysis::ThermPairAnalysis(AnalysisType aAnType) :
   fUniqueParents1(0),
   fUniqueParents2(0),
 
+  fBuildPairFractions(true),
+  fBuildTransformMatrices(true),
+  fBuildCorrelationFunctions(true),
+
+
   fTransformStorageMapping(0),
   fTransformInfo(),
   fTransformMatrices(nullptr),
@@ -1393,17 +1398,17 @@ void ThermPairAnalysis::SaveAllCorrelationFunctions(TFile *aFile)
 //________________________________________________________________________________________________________________
 void ThermPairAnalysis::ProcessEvent(ThermEvent &aEvent, vector<ThermEvent> &aMixingEventsCollection, double aMaxPrimaryDecayLength)
 {
-  BuildAllTransformMatrices(aEvent, aMixingEventsCollection);
+  if(fBuildTransformMatrices) BuildAllTransformMatrices(aEvent, aMixingEventsCollection);
 
   if(fAnalysisType==kLamK0 || fAnalysisType==kALamK0)
   {
-    BuildPairFractionHistogramsV0V0(aEvent, aMaxPrimaryDecayLength);
-    BuildCorrelationFunctionsV0V0(aEvent, aMixingEventsCollection);
+    if(fBuildPairFractions) BuildPairFractionHistogramsV0V0(aEvent, aMaxPrimaryDecayLength);
+    if(fBuildCorrelationFunctions)BuildCorrelationFunctionsV0V0(aEvent, aMixingEventsCollection);
   }
   else
   {
-    BuildPairFractionHistogramsParticleV0(aEvent, aMaxPrimaryDecayLength);
-    BuildCorrelationFunctionsParticleV0(aEvent, aMixingEventsCollection);
+    if(fBuildPairFractions) BuildPairFractionHistogramsParticleV0(aEvent, aMaxPrimaryDecayLength);
+    if(fBuildCorrelationFunctions)BuildCorrelationFunctionsParticleV0(aEvent, aMixingEventsCollection);
   }
 }
 

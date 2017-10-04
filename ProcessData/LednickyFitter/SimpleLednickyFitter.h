@@ -68,7 +68,7 @@ public:
   void SetRandomKStar3Vec(TVector3* aKStar3Vec, double aKStarMagMin, double aKStarMagMax);
   complex<double> GetStrongOnlyWaveFunction(TVector3* aKStar3Vec, TVector3* aRStar3Vec, vector<double> &aSimParams);
   double GetStrongOnlyWaveFunctionSq(TVector3* aKStar3Vec, TVector3 *aRStar3Vec, vector<double> &aSimParams);
-  TH1D* GetSimluatedNumDen(bool aBuildNum, vector<double> &aSimParams, double aMaxBuildKStar=0.5, int aNPairsPerKStarBin = 20000, double aKStarBinSize=0.01);
+  TH1D* GetSimluatedNumDen(bool aBuildNum, vector<double> &aSimParams, double aMaxBuildKStar=0.5, int aNPairsPerKStarBin = 100000, double aKStarBinSize=0.01);
 
   TH1D* Get1dHisto(TString FileName, TString HistoName);
   void CreateMinuitParameters();
@@ -80,6 +80,7 @@ public:
   void Finalize();
 
   void DrawCfWithFit(TPad *aPad);
+  void DrawCfNumDen(TPad *aPad);
 
   //inline (i.e. simple) functions
 

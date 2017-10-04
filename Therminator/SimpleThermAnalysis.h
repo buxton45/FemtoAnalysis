@@ -47,6 +47,11 @@ public:
   void ProcessAll();
   void ProcessEventByEvent(vector<ThermEvent> &aEventsCollection);
 
+  void SetBuildPairFractions(bool aBuild);
+  void SetBuildTransformMatrices(bool aBuild);
+  void SetBuildCorrelationFunctions(bool aBuild);
+  void SetBuildSingleParticleAnalyses(bool aBuild);
+
   //-- inline
 
 
@@ -80,6 +85,11 @@ private:
   double fMaxPrimaryDecayLength;
 
   bool fBuildUniqueParents;
+
+  bool fBuildPairFractions;
+  bool fBuildTransformMatrices;
+  bool fBuildCorrelationFunctions;
+  bool fBuildSingleParticleAnalyses;
 
   ThermPairAnalysis *fAnalysisLamKchP, *fAnalysisALamKchM;
   ThermPairAnalysis *fAnalysisLamKchM, *fAnalysisALamKchP;

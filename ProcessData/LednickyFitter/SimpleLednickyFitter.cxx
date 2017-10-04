@@ -117,19 +117,6 @@ SimpleLednickyFitter::SimpleLednickyFitter(AnalysisType aAnalysisType, vector<do
   fCfLite = new CfLite(TString("CfLiteSim")+cAnalysisBaseTags[fAnalysisType], 
                        TString("CfLiteSim")+cAnalysisBaseTags[fAnalysisType],
                        tNum, tDen, aMinNorm, aMaxNorm);
-/*
-TCanvas* tCan = new TCanvas("tCan", "tCan");
-tCan->Divide(3,1);
-
-tCan->cd(1);
-fCfLite->Cf()->Draw();
-
-tCan->cd(2);
-fCfLite->Num()->Draw();
-
-tCan->cd(3);
-fCfLite->Den()->Draw();
-*/
 
   fMinuit = new TMinuit(50);
   CreateMinuitParameters();
@@ -218,7 +205,7 @@ cout << "tNBins = " << tNBins << endl;
   tReturnHist->Sumw2();
 
   int tNPairsPerKStarBin = aNPairsPerKStarBin;
-  if(!aBuildNum) tNPairsPerKStarBin *= 5;
+  if(!aBuildNum) tNPairsPerKStarBin *= 5. * ((double)rand()/(RAND_MAX));
 
   assert(aSimParams.size()==6);
   //double tLambda = aSimParams[0];
@@ -236,14 +223,15 @@ cout << "tNBins = " << tNBins << endl;
 
   TVector3* tKStar3Vec = new TVector3(0.,0.,0.);
   TVector3* tSource3Vec = new TVector3(0.,0.,0.);
-  double tKStarMagMin, tKStarMagMax;
+  double tKStarMagMin, tKStarMagMax, tKStarMagAvg;
   double tWeight = 1.;
   for(int iKStarBin=0; iKStarBin<tNBins; iKStarBin++)
   {
     tKStarMagMin = iKStarBin*aKStarBinSize;
     if(iKStarBin==0) tKStarMagMin=0.004;
     tKStarMagMax = (iKStarBin+1)*aKStarBinSize;
-    for(int iPair=0; iPair<tNPairsPerKStarBin; iPair++)
+    tKStarMagAvg = 0.5*(tKStarMagMin + tKStarMagMax);
+    for(int iPair=0; iPair<std::round(tKStarMagAvg*tKStarMagAvg*tNPairsPerKStarBin); iPair++)
     {
       SetRandomKStar3Vec(tKStar3Vec,tKStarMagMin,tKStarMagMax);
       tSource3Vec->SetXYZ(tROutSource(generator),tRSideSource(generator),tRLongSource(generator)); //TODO: for now, spherically symmetric
@@ -273,7 +261,7 @@ void SimpleLednickyFitter::CreateMinuitParameters()
 {
   int tErrFlg = 0;
 
-  double tStartVal_Lambda = 0.5;
+  double tStartVal_Lambda = 1.0;
   double tStepSize_Lambda = 0.001;
   double tLowerBound_Lambda = 0.;
   double tUpperBound_Lambda = 0.;
@@ -571,6 +559,26 @@ void SimpleLednickyFitter::DrawCfWithFit(TPad *aPad)
 }
 
 
+//________________________________________________________________________________________________________________
+void SimpleLednickyFitter::DrawCfNumDen(TPad *aPad)
+{
+  aPad->cd();
+  aPad->Divide(3,1);
+
+  TH1D* tCf = (TH1D*)fCfLite->Cf();
+  TH1D* tNum = (TH1D*)fCfLite->Num();
+  TH1D* tDen = (TH1D*)fCfLite->Den();
+
+  aPad->cd(1);
+  tCf->Draw();
+
+  aPad->cd(2);
+  tNum->Draw();
+
+  aPad->cd(3);
+  tDen->Draw();
+
+}
 
 
 
