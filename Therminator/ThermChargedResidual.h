@@ -31,23 +31,19 @@ using namespace std;
 class ThermChargedResidual {
 
 public:
-  ThermChargedResidual(AnalysisType aAnType);
+  ThermChargedResidual(AnalysisType aResType);
   ThermChargedResidual(const ThermChargedResidual& aRes);
   ThermChargedResidual& operator=(const ThermChargedResidual& aRes);
   virtual ~ThermChargedResidual();
 
   void SetPartTypes();
-  static double GetBohrRadius(AnalysisType aAnalysisType);
-  void LoadLednickyHFunctionFile(TString aFileBaseName="/home/jesse/Analysis/FemtoAnalysis/ProcessData/CoulombFitter/LednickyHFunction");
-  void LoadInterpHistFile(TString aFileBaseName="/home/jesse/Analysis/FemtoAnalysis/ProcessData/CoulombFitter/InterpHists", 
-                          TString aLednickyHFunctionFileBaseName="/home/jesse/Analysis/FemtoAnalysis/ProcessData/CoulombFitter/LednickyHFunction");
 
-  double GetEta(double aKStar);
-  double GetGamowFactor(double aKStar);
-  complex<double> GetExpTerm(double aKStar, double aRStar, double aTheta);
-  complex<double> BuildScatteringLength(double aKStar, double aReF0, double aImF0, double aD0);
-  double InterpolateWfSquared(double aKStarMag, double aRStarMag, double aTheta, double aReF0, double aImF0, double aD0);
-  double InterpolateWfSquared(TVector3* aKStar3Vec, TVector3* aRStar3Vec, double aReF0, double aImF0, double aD0);
+  void LoadCoulombOnlyInterpWfs(TString aFileDirectory="/home/jesse/Analysis/FemtoAnalysis/ProcessData/CoulombFitter/");
+  bool CanInterp(double aKStarMag, double aRStarMag, double aTheta);
+  bool CanInterp(TVector3* aKStar3Vec, TVector3* aRStar3Vec);
+
+  double InterpolateWfSquared(double aKStarMag, double aRStarMag, double aTheta);
+  double InterpolateWfSquared(TVector3* aKStar3Vec, TVector3* aRStar3Vec);
 
   //inline
   AnalysisType GetResidualType();
@@ -56,21 +52,11 @@ public:
 private:
   AnalysisType fResidualType;
   ParticlePDGType fPartType1, fPartType2;
-  double fBohrRadius;
-  bool fTurnOffCoulomb;
 
-  TFile *fInterpHistFile, *fInterpHistFileLednickyHFunction;
-
-  TH1D* fLednickyHFunctionHist;
-
-  TH2D* fGTildeRealHist;
-  TH2D* fGTildeImagHist;
-
-  TH3D* fHyperGeo1F1RealHist;
-  TH3D* fHyperGeo1F1ImagHist;
-
-  double fMinInterpKStar, fMinInterpRStar, fMinInterpTheta;
-  double fMaxInterpKStar, fMaxInterpRStar, fMaxInterpTheta;
+  TH3D* f3dCoulombOnlyInterpWfs;
+  double fInterpKStarMagMin, fInterpKStarMagMax;
+  double fInterpRStarMagMin, fInterpRStarMagMax;
+  double fInterpThetaMin, fInterpThetaMax;
 
 #ifdef __ROOT__
   ClassDef(ThermChargedResidual, 1)

@@ -74,23 +74,42 @@ void DrawCfs(TPad* aPad, TString aFileName, AnalysisType aAnType)
 
   //---------------------------------------------------------------
 
+  int tColorFull = 1;
+  int tColorPrimaryOnly = 2;
+  int tColorPrimaryAndShortDecays = 3;
+  int tColorWithoutSigmaSt = 4;
+  int tColorSigmaStOnly = 20;
+  int tColorSecondaryOnly = 6;
+
+  int tMarkerStyleFull = 20;
+  int tMarkerStylePrimaryOnly = 20;
+  int tMarkerStylePrimaryAndShortDecays = 20;
+  int tMarkerStyleWithoutSigmaSt = 20;
+  int tMarkerStyleSigmaStOnly = 20;
+  int tMarkerStyleSecondaryOnly = 20;
+
+  //---------------------------------------------------------------
+
   TString tNumBaseNameFull = TString::Format("NumFull%s", cAnalysisBaseTags[aAnType]);
   TString tNumBaseNamePrimaryOnly = TString::Format("NumPrimaryOnly%s", cAnalysisBaseTags[aAnType]);
   TString tNumBaseNamePrimaryAndShortDecays = TString::Format("NumPrimaryAndShortDecays%s", cAnalysisBaseTags[aAnType]);
   TString tNumBaseNameWithoutSigmaSt = TString::Format("NumWithoutSigmaSt%s", cAnalysisBaseTags[aAnType]);
   TString tNumBaseNameSigmaStOnly = TString::Format("NumSigmaStOnly%s", cAnalysisBaseTags[aAnType]);
+  TString tNumBaseNameSecondaryOnly = TString::Format("NumSecondaryOnly%s", cAnalysisBaseTags[aAnType]);
 
   TString tDenBaseNameFull = TString::Format("DenFull%s", cAnalysisBaseTags[aAnType]);
   TString tDenBaseNamePrimaryOnly = TString::Format("DenPrimaryOnly%s", cAnalysisBaseTags[aAnType]);
   TString tDenBaseNamePrimaryAndShortDecays = TString::Format("DenPrimaryAndShortDecays%s", cAnalysisBaseTags[aAnType]);
   TString tDenBaseNameWithoutSigmaSt = TString::Format("DenWithoutSigmaSt%s", cAnalysisBaseTags[aAnType]);
   TString tDenBaseNameSigmaStOnly = TString::Format("DenSigmaStOnly%s", cAnalysisBaseTags[aAnType]);
+  TString tDenBaseNameSecondaryOnly = TString::Format("DenSecondaryOnly%s", cAnalysisBaseTags[aAnType]);
 
   TString tCfBaseNameFull = TString::Format("CfFull%s", cAnalysisBaseTags[aAnType]);
   TString tCfBaseNamePrimaryOnly = TString::Format("CfPrimaryOnly%s", cAnalysisBaseTags[aAnType]);
   TString tCfBaseNamePrimaryAndShortDecays = TString::Format("CfPrimaryAndShortDecays%s", cAnalysisBaseTags[aAnType]);
   TString tCfBaseNameWithoutSigmaSt = TString::Format("CfWithoutSigmaSt%s", cAnalysisBaseTags[aAnType]);
   TString tCfBaseNameSigmaStOnly = TString::Format("CfSigmaStOnly%s", cAnalysisBaseTags[aAnType]);
+  TString tCfBaseNameSecondaryOnly = TString::Format("CfSecondaryOnly%s", cAnalysisBaseTags[aAnType]);
 
   //---------------------------------------------------------------
 
@@ -109,29 +128,35 @@ void DrawCfs(TPad* aPad, TString aFileName, AnalysisType aAnType)
   TH1D* tNumSigmaStOnly = Get1dHisto(aFileName, tNumBaseNameSigmaStOnly);
   TH1D* tDenSigmaStOnly = Get1dHisto(aFileName, tDenBaseNameSigmaStOnly);
 
+  TH1D* tNumSecondaryOnly = Get1dHisto(aFileName, tNumBaseNameSecondaryOnly);
+  TH1D* tDenSecondaryOnly = Get1dHisto(aFileName, tDenBaseNameSecondaryOnly);
 
   //---------------------------------------------------------------
 
   TH1D* tCfFull = BuildCf(tNumFull, tDenFull, tCfBaseNameFull, aRebin);
-    tCfFull->SetLineColor(1);
-    tCfFull->SetMarkerColor(1);
-    tCfFull->SetMarkerStyle(20);
+    tCfFull->SetLineColor(tColorFull);
+    tCfFull->SetMarkerColor(tColorFull);
+    tCfFull->SetMarkerStyle(tMarkerStyleFull);
   TH1D* tCfPrimaryOnly = BuildCf(tNumPrimaryOnly, tDenPrimaryOnly, tCfBaseNamePrimaryOnly, aRebin);
-    tCfPrimaryOnly->SetLineColor(2);
-    tCfPrimaryOnly->SetMarkerColor(2);
-    tCfPrimaryOnly->SetMarkerStyle(20);
+    tCfPrimaryOnly->SetLineColor(tColorPrimaryOnly);
+    tCfPrimaryOnly->SetMarkerColor(tColorPrimaryOnly);
+    tCfPrimaryOnly->SetMarkerStyle(tMarkerStylePrimaryOnly);
   TH1D* tCfPrimaryAndShortDecays = BuildCf(tNumPrimaryAndShortDecays, tDenPrimaryAndShortDecays, tCfBaseNamePrimaryAndShortDecays, aRebin);
-    tCfPrimaryAndShortDecays->SetLineColor(3);
-    tCfPrimaryAndShortDecays->SetMarkerColor(3);
-    tCfPrimaryAndShortDecays->SetMarkerStyle(20);
+    tCfPrimaryAndShortDecays->SetLineColor(tColorPrimaryAndShortDecays);
+    tCfPrimaryAndShortDecays->SetMarkerColor(tColorPrimaryAndShortDecays);
+    tCfPrimaryAndShortDecays->SetMarkerStyle(tMarkerStylePrimaryAndShortDecays);
   TH1D* tCfWithoutSigmaSt = BuildCf(tNumWithoutSigmaSt, tDenWithoutSigmaSt, tCfBaseNameWithoutSigmaSt, aRebin);
-    tCfWithoutSigmaSt->SetLineColor(4);
-    tCfWithoutSigmaSt->SetMarkerColor(4);
-    tCfWithoutSigmaSt->SetMarkerStyle(20);
+    tCfWithoutSigmaSt->SetLineColor(tColorWithoutSigmaSt);
+    tCfWithoutSigmaSt->SetMarkerColor(tColorWithoutSigmaSt);
+    tCfWithoutSigmaSt->SetMarkerStyle(tMarkerStyleWithoutSigmaSt);
   TH1D* tCfSigmaStOnly = BuildCf(tNumSigmaStOnly, tDenSigmaStOnly, tCfBaseNameSigmaStOnly, aRebin);
-    tCfSigmaStOnly->SetLineColor(6);
-    tCfSigmaStOnly->SetMarkerColor(6);
-    tCfSigmaStOnly->SetMarkerStyle(20);
+    tCfSigmaStOnly->SetLineColor(tColorSigmaStOnly);
+    tCfSigmaStOnly->SetMarkerColor(tColorSigmaStOnly);
+    tCfSigmaStOnly->SetMarkerStyle(tMarkerStyleSigmaStOnly);
+  TH1D* tCfSecondaryOnly = BuildCf(tNumSecondaryOnly, tDenSecondaryOnly, tCfBaseNameSecondaryOnly, aRebin);
+    tCfSecondaryOnly->SetLineColor(tColorSecondaryOnly);
+    tCfSecondaryOnly->SetMarkerColor(tColorSecondaryOnly);
+    tCfSecondaryOnly->SetMarkerStyle(tMarkerStyleSecondaryOnly);
 
   tCfFull->GetXaxis()->SetTitle("k* (GeV/c)");
   tCfFull->GetYaxis()->SetTitle("C(k*)");
@@ -144,8 +169,10 @@ void DrawCfs(TPad* aPad, TString aFileName, AnalysisType aAnType)
   tCfPrimaryAndShortDecays->Draw("same");
   tCfWithoutSigmaSt->Draw("same");
   tCfSigmaStOnly->Draw("same");
+  tCfSecondaryOnly->Draw("same");
+  tCfFull->Draw("same");
 
-  TLegend* tLeg = new TLegend(0.60, 0.60, 0.85, 0.85);
+  TLegend* tLeg = new TLegend(0.60, 0.15, 0.85, 0.40);
     tLeg->SetFillColor(0);
     tLeg->SetBorderSize(0);
     tLeg->SetTextAlign(22);
@@ -153,6 +180,7 @@ void DrawCfs(TPad* aPad, TString aFileName, AnalysisType aAnType)
 
   tLeg->AddEntry(tCfFull, "Full");
   tLeg->AddEntry(tCfWithoutSigmaSt, "w/o #Sigma*");
+  tLeg->AddEntry(tCfSecondaryOnly, "#Sigma* Only");
   tLeg->AddEntry(tCfPrimaryOnly, "Primary Only");
   tLeg->AddEntry(tCfPrimaryAndShortDecays, "Primary and short decays");
   tLeg->AddEntry(tCfSigmaStOnly, "#Sigma* Only");
@@ -171,23 +199,42 @@ void DrawCfsWithConj(TPad* aPad, TString aFileName, AnalysisType aAnType, Analys
 
   //---------------------------------------------------------------
 
+  int tColorFull = 1;
+  int tColorPrimaryOnly = 2;
+  int tColorPrimaryAndShortDecays = 3;
+  int tColorWithoutSigmaSt = 4;
+  int tColorSigmaStOnly = 20;
+  int tColorSecondaryOnly = 6;
+
+  int tMarkerStyleFull = 20;
+  int tMarkerStylePrimaryOnly = 20;
+  int tMarkerStylePrimaryAndShortDecays = 20;
+  int tMarkerStyleWithoutSigmaSt = 20;
+  int tMarkerStyleSigmaStOnly = 20;
+  int tMarkerStyleSecondaryOnly = 20;
+
+  //---------------------------------------------------------------
+
   TString tNumBaseNameFull = TString::Format("NumFull%s", cAnalysisBaseTags[aAnType]);
   TString tNumBaseNamePrimaryOnly = TString::Format("NumPrimaryOnly%s", cAnalysisBaseTags[aAnType]);
   TString tNumBaseNamePrimaryAndShortDecays = TString::Format("NumPrimaryAndShortDecays%s", cAnalysisBaseTags[aAnType]);
   TString tNumBaseNameWithoutSigmaSt = TString::Format("NumWithoutSigmaSt%s", cAnalysisBaseTags[aAnType]);
   TString tNumBaseNameSigmaStOnly = TString::Format("NumSigmaStOnly%s", cAnalysisBaseTags[aAnType]);
+  TString tNumBaseNameSecondaryOnly = TString::Format("NumSecondaryOnly%s", cAnalysisBaseTags[aAnType]);
 
   TString tDenBaseNameFull = TString::Format("DenFull%s", cAnalysisBaseTags[aAnType]);
   TString tDenBaseNamePrimaryOnly = TString::Format("DenPrimaryOnly%s", cAnalysisBaseTags[aAnType]);
   TString tDenBaseNamePrimaryAndShortDecays = TString::Format("DenPrimaryAndShortDecays%s", cAnalysisBaseTags[aAnType]);
   TString tDenBaseNameWithoutSigmaSt = TString::Format("DenWithoutSigmaSt%s", cAnalysisBaseTags[aAnType]);
   TString tDenBaseNameSigmaStOnly = TString::Format("DenSigmaStOnly%s", cAnalysisBaseTags[aAnType]);
+  TString tDenBaseNameSecondaryOnly = TString::Format("DenSecondaryOnly%s", cAnalysisBaseTags[aAnType]);
 
   TString tCfBaseNameFull = TString::Format("CfFull%s", cAnalysisBaseTags[aAnType]);
   TString tCfBaseNamePrimaryOnly = TString::Format("CfPrimaryOnly%s", cAnalysisBaseTags[aAnType]);
   TString tCfBaseNamePrimaryAndShortDecays = TString::Format("CfPrimaryAndShortDecays%s", cAnalysisBaseTags[aAnType]);
   TString tCfBaseNameWithoutSigmaSt = TString::Format("CfWithoutSigmaSt%s", cAnalysisBaseTags[aAnType]);
   TString tCfBaseNameSigmaStOnly = TString::Format("CfSigmaStOnly%s", cAnalysisBaseTags[aAnType]);
+  TString tCfBaseNameSecondaryOnly = TString::Format("CfSecondaryOnly%s", cAnalysisBaseTags[aAnType]);
 
   //---------
 
@@ -211,6 +258,10 @@ void DrawCfsWithConj(TPad* aPad, TString aFileName, AnalysisType aAnType, Analys
   TH1D* tDenSigmaStOnly = Get1dHisto(aFileName, tDenBaseNameSigmaStOnly);
   TH1D* tCfSigmaStOnly = BuildCf(tNumSigmaStOnly, tDenSigmaStOnly, tCfBaseNameSigmaStOnly, aRebin);
 
+  TH1D* tNumSecondaryOnly = Get1dHisto(aFileName, tNumBaseNameSecondaryOnly);
+  TH1D* tDenSecondaryOnly = Get1dHisto(aFileName, tDenBaseNameSecondaryOnly);
+  TH1D* tCfSecondaryOnly = BuildCf(tNumSecondaryOnly, tDenSecondaryOnly, tCfBaseNameSecondaryOnly, aRebin);
+
 
   //---------------------------------------------------------------
 
@@ -219,18 +270,21 @@ void DrawCfsWithConj(TPad* aPad, TString aFileName, AnalysisType aAnType, Analys
   TString tConjNumBaseNamePrimaryAndShortDecays = TString::Format("NumPrimaryAndShortDecays%s", cAnalysisBaseTags[aAnType]);
   TString tConjNumBaseNameWithoutSigmaSt = TString::Format("NumWithoutSigmaSt%s", cAnalysisBaseTags[aAnType]);
   TString tConjNumBaseNameSigmaStOnly = TString::Format("NumSigmaStOnly%s", cAnalysisBaseTags[aAnType]);
+  TString tConjNumBaseNameSecondaryOnly = TString::Format("NumSecondaryOnly%s", cAnalysisBaseTags[aAnType]);
 
   TString tConjDenBaseNameFull = TString::Format("DenFull%s", cAnalysisBaseTags[aAnType]);
   TString tConjDenBaseNamePrimaryOnly = TString::Format("DenPrimaryOnly%s", cAnalysisBaseTags[aAnType]);
   TString tConjDenBaseNamePrimaryAndShortDecays = TString::Format("DenPrimaryAndShortDecays%s", cAnalysisBaseTags[aAnType]);
   TString tConjDenBaseNameWithoutSigmaSt = TString::Format("DenWithoutSigmaSt%s", cAnalysisBaseTags[aAnType]);
   TString tConjDenBaseNameSigmaStOnly = TString::Format("DenSigmaStOnly%s", cAnalysisBaseTags[aAnType]);
+  TString tConjDenBaseNameSecondaryOnly = TString::Format("DenSecondaryOnly%s", cAnalysisBaseTags[aAnType]);
 
   TString tConjCfBaseNameFull = TString::Format("CfFull%s", cAnalysisBaseTags[aAnType]);
   TString tConjCfBaseNamePrimaryOnly = TString::Format("CfPrimaryOnly%s", cAnalysisBaseTags[aAnType]);
   TString tConjCfBaseNamePrimaryAndShortDecays = TString::Format("CfPrimaryAndShortDecays%s", cAnalysisBaseTags[aAnType]);
   TString tConjCfBaseNameWithoutSigmaSt = TString::Format("CfWithoutSigmaSt%s", cAnalysisBaseTags[aAnType]);
   TString tConjCfBaseNameSigmaStOnly = TString::Format("CfSigmaStOnly%s", cAnalysisBaseTags[aAnType]);
+  TString tConjCfBaseNameSecondaryOnly = TString::Format("CfSecondaryOnly%s", cAnalysisBaseTags[aAnType]);
 
   //---------
 
@@ -254,29 +308,37 @@ void DrawCfsWithConj(TPad* aPad, TString aFileName, AnalysisType aAnType, Analys
   TH1D* tConjDenSigmaStOnly = Get1dHisto(aFileName, tConjDenBaseNameSigmaStOnly);
   TH1D* tConjCfSigmaStOnly = BuildCf(tConjNumSigmaStOnly, tConjDenSigmaStOnly, tConjCfBaseNameSigmaStOnly, aRebin);
 
+  TH1D* tConjNumSecondaryOnly = Get1dHisto(aFileName, tConjNumBaseNameSecondaryOnly);
+  TH1D* tConjDenSecondaryOnly = Get1dHisto(aFileName, tConjDenBaseNameSecondaryOnly);
+  TH1D* tConjCfSecondaryOnly = BuildCf(tConjNumSecondaryOnly, tConjDenSecondaryOnly, tConjCfBaseNameSecondaryOnly, aRebin);
+
 
   //---------------------------------------------------------------
 
   TH1D* tCfFullTot = CombineConjugates(tNumFull, tCfFull, tConjNumFull, tConjCfFull, tNumBaseNameFull+tConjNumBaseNameFull);
-    tCfFullTot->SetLineColor(1);
-    tCfFullTot->SetMarkerColor(1);
-    tCfFullTot->SetMarkerStyle(20);
+    tCfFullTot->SetLineColor(tColorFull);
+    tCfFullTot->SetMarkerColor(tColorFull);
+    tCfFullTot->SetMarkerStyle(tMarkerStyleFull);
   TH1D* tCfPrimaryOnlyTot = CombineConjugates(tNumPrimaryOnly, tCfPrimaryOnly, tConjNumPrimaryOnly, tConjCfPrimaryOnly, tNumBaseNamePrimaryOnly+tConjNumBaseNamePrimaryOnly);
-    tCfPrimaryOnlyTot->SetLineColor(2);
-    tCfPrimaryOnlyTot->SetMarkerColor(2);
-    tCfPrimaryOnlyTot->SetMarkerStyle(20);
+    tCfPrimaryOnlyTot->SetLineColor(tColorPrimaryOnly);
+    tCfPrimaryOnlyTot->SetMarkerColor(tColorPrimaryOnly);
+    tCfPrimaryOnlyTot->SetMarkerStyle(tMarkerStylePrimaryOnly);
   TH1D* tCfPrimaryAndShortDecaysTot = CombineConjugates(tNumPrimaryAndShortDecays, tCfPrimaryAndShortDecays, tConjNumPrimaryAndShortDecays, tConjCfPrimaryAndShortDecays, tNumBaseNamePrimaryAndShortDecays+tConjNumBaseNamePrimaryAndShortDecays);
-    tCfPrimaryAndShortDecaysTot->SetLineColor(3);
-    tCfPrimaryAndShortDecaysTot->SetMarkerColor(3);
-    tCfPrimaryAndShortDecaysTot->SetMarkerStyle(20);
+    tCfPrimaryAndShortDecaysTot->SetLineColor(tColorPrimaryAndShortDecays);
+    tCfPrimaryAndShortDecaysTot->SetMarkerColor(tColorPrimaryAndShortDecays);
+    tCfPrimaryAndShortDecaysTot->SetMarkerStyle(tMarkerStylePrimaryAndShortDecays);
   TH1D* tCfWithoutSigmaStTot = CombineConjugates(tNumWithoutSigmaSt, tCfWithoutSigmaSt, tConjNumWithoutSigmaSt, tConjCfWithoutSigmaSt, tNumBaseNameWithoutSigmaSt+tConjNumBaseNameWithoutSigmaSt);
-    tCfWithoutSigmaStTot->SetLineColor(4);
-    tCfWithoutSigmaStTot->SetMarkerColor(4);
-    tCfWithoutSigmaStTot->SetMarkerStyle(20);
+    tCfWithoutSigmaStTot->SetLineColor(tColorWithoutSigmaSt);
+    tCfWithoutSigmaStTot->SetMarkerColor(tColorWithoutSigmaSt);
+    tCfWithoutSigmaStTot->SetMarkerStyle(tMarkerStyleWithoutSigmaSt);
   TH1D* tCfSigmaStOnlyTot = CombineConjugates(tNumSigmaStOnly, tCfSigmaStOnly, tConjNumSigmaStOnly, tConjCfSigmaStOnly, tNumBaseNameSigmaStOnly+tConjNumBaseNameSigmaStOnly);
-    tCfSigmaStOnlyTot->SetLineColor(6);
-    tCfSigmaStOnlyTot->SetMarkerColor(6);
-    tCfSigmaStOnlyTot->SetMarkerStyle(20);
+    tCfSigmaStOnlyTot->SetLineColor(tColorSigmaStOnly);
+    tCfSigmaStOnlyTot->SetMarkerColor(tColorSigmaStOnly);
+    tCfSigmaStOnlyTot->SetMarkerStyle(tMarkerStyleSigmaStOnly);
+  TH1D* tCfSecondaryOnlyTot = CombineConjugates(tNumSecondaryOnly, tCfSecondaryOnly, tConjNumSecondaryOnly, tConjCfSecondaryOnly, tNumBaseNameSecondaryOnly+tConjNumBaseNameSecondaryOnly);
+    tCfSecondaryOnlyTot->SetLineColor(tColorSecondaryOnly);
+    tCfSecondaryOnlyTot->SetMarkerColor(tColorSecondaryOnly);
+    tCfSecondaryOnlyTot->SetMarkerStyle(tMarkerStyleSecondaryOnly);
 
   tCfFullTot->GetXaxis()->SetTitle("k* (GeV/c)");
   tCfFullTot->GetYaxis()->SetTitle("C(k*)");
@@ -289,8 +351,10 @@ void DrawCfsWithConj(TPad* aPad, TString aFileName, AnalysisType aAnType, Analys
   tCfPrimaryAndShortDecaysTot->Draw("same");
   tCfWithoutSigmaStTot->Draw("same");
   tCfSigmaStOnlyTot->Draw("same");
+  tCfSecondaryOnlyTot->Draw("same");
+  tCfFullTot->Draw("same");
 
-  TLegend* tLeg = new TLegend(0.60, 0.60, 0.85, 0.85);
+  TLegend* tLeg = new TLegend(0.60, 0.15, 0.85, 0.40);
     tLeg->SetFillColor(0);
     tLeg->SetBorderSize(0);
     tLeg->SetTextAlign(22);
@@ -298,6 +362,7 @@ void DrawCfsWithConj(TPad* aPad, TString aFileName, AnalysisType aAnType, Analys
 
   tLeg->AddEntry(tCfFullTot, "Full");
   tLeg->AddEntry(tCfWithoutSigmaStTot, "w/o #Sigma*");
+  tLeg->AddEntry(tCfSecondaryOnlyTot, "Secondary Only");
   tLeg->AddEntry(tCfPrimaryOnlyTot, "Primary Only");
   tLeg->AddEntry(tCfPrimaryAndShortDecaysTot, "Primary and short decays");
   tLeg->AddEntry(tCfSigmaStOnlyTot, "#Sigma* Only");
@@ -319,7 +384,7 @@ int main(int argc, char **argv)
   bool bCombineConjugates = true;
   bool bSaveFigures = false;
 
-  TString tFileName = "/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b2/CorrelationFunctions.root";
+  TString tFileName = "/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b2/CorrelationFunctions_10MixedEvNum.root";
   TString tSaveLocationBase = "/home/jesse/Analysis/Presentations/GroupMeetings/20170928/Figures/";
 
   TString tSaveLocationBaseLamKchP = tSaveLocationBase + TString("LamKchP/");

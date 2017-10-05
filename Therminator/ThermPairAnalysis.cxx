@@ -439,12 +439,10 @@ void ThermPairAnalysis::SetWeightCfsWithParentInteraction(bool aSet)
 {
   fWeightCfsWithParentInteraction = aSet;
 
-//TODO
-/*
   if((fAnalysisType==kLamKchP || fAnalysisType==kALamKchM || 
      fAnalysisType==kLamKchM || fAnalysisType==kALamKchP) &&
      fWeightCfsWithParentInteraction) LoadChargedResiduals();
-*/
+
 }
 
 //________________________________________________________________________________________________________________
@@ -1327,17 +1325,13 @@ double ThermPairAnalysis::GetParentPairWaveFunctionSq(ThermParticle &tPart1, The
 
   //--------------------------------------------------------------
 
-
-  //TODO!!!!!
-  return GetStrongOnlyWaveFunctionSq(tKStar3Vec, tRStar3Vec);
-/*
   if(!IsChargedResidual(tResType1, tResType2)) return GetStrongOnlyWaveFunctionSq(tKStar3Vec, tRStar3Vec);
   else
   {
     int tResIndex = GetChargedResidualIndex(tResType1, tResType2);
-    return fChargedResiduals[tResIndex].InterpolateWfSquared(&tKStar3Vec, &tRStar3Vec, 0., 0., 0.);
+    return fChargedResiduals[tResIndex].InterpolateWfSquared(&tKStar3Vec, &tRStar3Vec);
   }
-*/
+
 }
 
 //________________________________________________________________________________________________________________

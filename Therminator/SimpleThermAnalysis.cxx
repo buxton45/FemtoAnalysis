@@ -157,6 +157,7 @@ void SimpleThermAnalysis::SaveAll()
   if(fBuildCorrelationFunctions)
   {
     if(fBuildMixedEventNumerators) fCorrelationFunctionsSaveName += TString::Format("_%iMixedEvNum", fNEventsToMix);
+    if(fWeightCfsWithParentInteraction) fCorrelationFunctionsSaveName += TString("_WeightParentsInteraction");
     fCorrelationFunctionsSaveName += TString(".root");
     TFile* tFileCorrelationFunctions = new TFile(fCorrelationFunctionsSaveName, "RECREATE");
 

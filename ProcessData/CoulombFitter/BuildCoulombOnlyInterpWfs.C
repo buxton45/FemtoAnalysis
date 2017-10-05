@@ -1,5 +1,5 @@
-/* BuildCoulombOnlyInterCfs.C
-Interpolation Correlation Functions (Cfs) */
+/* BuildCoulombOnlyInterWfs.C
+Interpolation Wave Functions (Wfs) */
 
 #include "FitSharedAnalyses.h"
 #include "CoulombFitter.h"
@@ -43,35 +43,35 @@ int main(int argc, char **argv)
   ChronoTimer tFullTimer(kMin);
   tFullTimer.Start();
 //-----------------------------------------------------------------------------
+  bool bVerboseL1 = true;
+  bool bVerboseL2 = false;
+  bool bVerboseL3 = false; 
 
-  AnalysisType tAnType = kResASigStPKchP;
+  AnalysisType tAnType = kXiKchP;
 
-  int tNbinsKStar = 100;
+  double tLambda = 1.0;
+  double tNorm = 1.;
+  double tReF0=0., tImF0=0., tD0=0.;
+
+  int tNbinsKStar = 200;
   double tKStarMin = 0.;
   double tKStarMax = 1.;
 
-  double tLambda = 1.0;
-
-/*
-  int tNbinsRStar = 200;
+  int tNbinsRStar = 400;
   double tRStarMin = 0.;
-  double tRStarMax = 20.;
-*/
-/*
-  int tNbinsRStar = 48;
-  double tRStarMin = 1.;
-  double tRStarMax = 13.;
-*/
-  int tNbinsRStar = 100;
-  double tRStarMin = 0.;
-  double tRStarMax = 25.;
+  double tRStarMax = 100.;
 
-  double tNorm = 1.;
+  double tBinWidthTheta = M_PI/180;
+  int tNbinsTheta = 182;  //one bin under 0 and one bin over pi, to be safe
+  double tThetaMin = 0. - 1.*tBinWidthTheta;
+  double tThetaMax = 1.*M_PI + 1.*tBinWidthTheta;
 
-  TH2D* t2dCoulombOnlyInterpCfs = new TH2D(TString::Format("t2dCoulombOnlyInterpCfs_%s", cAnalysisBaseTags[tAnType]),
-                                           TString::Format("t2dCoulombOnlyInterpCfs_%s", cAnalysisBaseTags[tAnType]), 
+
+  TH3D* t3dCoulombOnlyInterpWfs = new TH3D(TString::Format("t3dCoulombOnlyInterpWfs_%s", cAnalysisBaseTags[tAnType]),
+                                           TString::Format("t3dCoulombOnlyInterpWfs_%s", cAnalysisBaseTags[tAnType]), 
                                            tNbinsKStar, tKStarMin, tKStarMax,
-                                           tNbinsRStar, tRStarMin, tRStarMax);
+                                           tNbinsRStar, tRStarMin, tRStarMax,
+                                           tNbinsTheta, tThetaMin, tThetaMax);
 
   CoulombFitter* tFitter = new CoulombFitter(1.0);
 
@@ -79,7 +79,7 @@ int main(int argc, char **argv)
     tFileLocationInterpHistos += TString::Format("_%s", cAnalysisBaseTags[tAnType]);
   TString tFileLocationLednickyHFile = "LednickyHFunction";
     tFileLocationLednickyHFile += TString::Format("_%s", cAnalysisBaseTags[tAnType]);
-  TString tSaveName = TString::Format("2dCoulombOnlyInterpCfs_%s.root", cAnalysisBaseTags[tAnType]);
+  TString tSaveName = TString::Format("3dCoulombOnlyInterpWfs_%s.root", cAnalysisBaseTags[tAnType]);
 
   tFitter->LoadInterpHistFile(tFileLocationInterpHistos, tFileLocationLednickyHFile);
 
@@ -90,38 +90,41 @@ int main(int argc, char **argv)
   tFitter->GetFitSharedAnalyses()->GetMinuitObject()->SetFCN(fcn);
   myFitter = tFitter;
 */
-  double tRadius = -1.;
-  double tRadiusBinWidth = (tRStarMax-tRStarMin)/tNbinsRStar;
-  TH1* tCoulombOnlyHistSample;
-cout << "tRadiusBinWidth = " << tRadiusBinWidth << endl;
-  for(int iR=0; iR<tNbinsRStar; iR++)
+
+  TAxis* tKaxis = t3dCoulombOnlyInterpWfs->GetXaxis();
+  TAxis* tRaxis = t3dCoulombOnlyInterpWfs->GetYaxis();
+  TAxis* tThetaaxis = t3dCoulombOnlyInterpWfs->GetZaxis();
+
+  double tWfSq = -1.;
+  double tKStar=-1., tRStar=-1., tTheta=-1.;
+  for(int iK=0; iK<tNbinsKStar; iK++)
   {
-    tRadius = tRStarMin + (iR+0.5)*tRadiusBinWidth;
-cout << "iR = " << iR << " and tRadius = " << tRadius << endl;
-    tCoulombOnlyHistSample = tFitter->CreateFitHistogramSampleComplete(TString::Format("tCoulombOnlyHistSample_%d", iR), tAnType, 
-                                                                       tNbinsKStar, tKStarMin, tKStarMax, tLambda, tRadius, 
-                                                                       0., 0., 0., 0., 0., 0., tNorm);
-    assert(tCoulombOnlyHistSample->GetNbinsX() == t2dCoulombOnlyInterpCfs->GetNbinsX());
-    assert(tCoulombOnlyHistSample->GetXaxis()->GetBinWidth(1) == t2dCoulombOnlyInterpCfs->GetXaxis()->GetBinWidth(1));
-
-    int tBinR = t2dCoulombOnlyInterpCfs->GetYaxis()->FindBin(tRadius);
-    assert(tBinR == (iR+1));
-
-    for(int iK=1; iK<=t2dCoulombOnlyInterpCfs->GetNbinsX(); iK++)
+    tKStar = tKaxis->GetBinCenter(iK+1); //histograms start at 1, not 0
+    if(bVerboseL1) cout << "\tiK+1 = " << iK+1 << "  |  tKStar = " << tKStar << endl;
+    for(int iR=0; iR<tNbinsRStar; iR++)
     {
-      t2dCoulombOnlyInterpCfs->SetBinContent(iK, tBinR, tCoulombOnlyHistSample->GetBinContent(iK));
-      t2dCoulombOnlyInterpCfs->SetBinError(iK, tBinR, tCoulombOnlyHistSample->GetBinError(iK));
+      tRStar = tRaxis->GetBinCenter(iR+1);
+      if(bVerboseL2) cout << "\t\tiR+1 = " << iR+1 << "  |  tRStar = " << tRStar << endl;
+      for(int iTheta=0; iTheta<tNbinsTheta; iTheta++)
+      {
+        tTheta = tThetaaxis->GetBinCenter(iTheta+1);
+        if(bVerboseL3) cout << "\t\t\tiTheta+1 = " << iTheta+1 << "  |  tTheta = " << tTheta << endl;
+
+        tWfSq = tFitter->InterpolateWfSquared(tKStar, tRStar, tTheta, tReF0, tImF0, tD0);
+        t3dCoulombOnlyInterpWfs->SetBinContent(iK+1, iR+1, iTheta+1, tWfSq);
+      }
     }
   }
 
+
   TCanvas* tTestCan = new TCanvas("tTestCan", "tTestCan");
   tTestCan->cd();
-  t2dCoulombOnlyInterpCfs->Draw("colz"); 
+  t3dCoulombOnlyInterpWfs->Draw(); 
 
 
 
   TFile* tSaveFile = new TFile(tSaveName, "RECREATE");
-  t2dCoulombOnlyInterpCfs->Write();
+  t3dCoulombOnlyInterpWfs->Write();
   tSaveFile->Close();
 
   delete tFitter;

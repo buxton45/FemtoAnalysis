@@ -69,5 +69,8 @@ extern TH1D* BuildCondensed1dParentsHistogram(TH1D* a1dHist, TString aReturnName
 extern void DrawCondensed1dParentsHistogram(ParticlePDGType aType, TPad* aPad, TH1D* a1dHist, bool aSave=false, TString aSaveName="");
 
 //-----------------------------------------------------------
+extern TH1D* BuildCf(TH1* aNum, TH1* aDen, TString aName, double aMinNorm=0.32, double aMaxNorm=0.40);
+
+//-----------------------------------------------------------
 
 #endif

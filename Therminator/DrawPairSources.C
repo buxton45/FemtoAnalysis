@@ -21,22 +21,55 @@ void DrawPairSources(TPad* aPad, TString aFileName, AnalysisType aAnType, bool a
   gStyle->SetOptStat(0);
   gStyle->SetOptTitle(0);
 
+  //---------------------------------------------------------------
+
+  int tColorFull = 1;
+  int tColorPrimaryOnly = 2;
+  int tColorPrimaryAndShortDecays = 3;
+  int tColorWithoutSigmaSt = 4;
+  int tColorSigmaStOnly = 20;
+  int tColorSecondaryOnly = 6;
+
+  int tMarkerStyleFull = 20;
+  int tMarkerStylePrimaryOnly = 20;
+  int tMarkerStylePrimaryAndShortDecays = 20;
+  int tMarkerStyleWithoutSigmaSt = 20;
+  int tMarkerStyleSigmaStOnly = 20;
+  int tMarkerStyleSecondaryOnly = 20;
+
+  //---------------------------------------------------------------
+
   TString tBaseNameFull = TString::Format("PairSourceFull%s", cAnalysisBaseTags[aAnType]);
   TString tBaseNamePrimaryOnly = TString::Format("PairSourcePrimaryOnly%s", cAnalysisBaseTags[aAnType]);
   TString tBaseNamePrimaryAndShortDecays = TString::Format("PairSourcePrimaryAndShortDecays%s", cAnalysisBaseTags[aAnType]);
   TString tBaseNameWithoutSigmaSt = TString::Format("PairSourceWithoutSigmaSt%s", cAnalysisBaseTags[aAnType]);
   TString tBaseNameSigmaStOnly = TString::Format("PairSourceSigmaStOnly%s", cAnalysisBaseTags[aAnType]);
+  TString tBaseNameSecondaryOnly = TString::Format("PairSourceSecondaryOnly%s", cAnalysisBaseTags[aAnType]);
 
   TH1D* tSourceFull = Get1dHisto(aFileName, tBaseNameFull);
-    tSourceFull->SetLineColor(1);
+    tSourceFull->SetLineColor(tColorFull);
+    tSourceFull->SetMarkerColor(tColorFull);
+    tSourceFull->SetMarkerStyle(tMarkerStyleFull);
   TH1D* tSourcePrimaryOnly = Get1dHisto(aFileName, tBaseNamePrimaryOnly);
-    tSourcePrimaryOnly->SetLineColor(2);
+    tSourcePrimaryOnly->SetLineColor(tColorPrimaryOnly);
+    tSourcePrimaryOnly->SetMarkerColor(tColorPrimaryOnly);
+    tSourcePrimaryOnly->SetMarkerStyle(tMarkerStylePrimaryOnly);
   TH1D* tSourcePrimaryAndShortDecays = Get1dHisto(aFileName, tBaseNamePrimaryAndShortDecays);
-    tSourcePrimaryAndShortDecays->SetLineColor(3);
+    tSourcePrimaryAndShortDecays->SetLineColor(tColorPrimaryAndShortDecays);
+    tSourcePrimaryAndShortDecays->SetMarkerColor(tColorPrimaryAndShortDecays);
+    tSourcePrimaryAndShortDecays->SetMarkerStyle(tMarkerStylePrimaryAndShortDecays);
   TH1D* tSourceWithoutSigmaSt = Get1dHisto(aFileName, tBaseNameWithoutSigmaSt);
-    tSourceWithoutSigmaSt->SetLineColor(4);
+    tSourceWithoutSigmaSt->SetLineColor(tColorWithoutSigmaSt);
+    tSourceWithoutSigmaSt->SetMarkerColor(tColorWithoutSigmaSt);
+    tSourceWithoutSigmaSt->SetMarkerStyle(tMarkerStyleWithoutSigmaSt);
   TH1D* tSourceSigmaStOnly = Get1dHisto(aFileName, tBaseNameSigmaStOnly);
-    tSourceSigmaStOnly->SetLineColor(6);
+    tSourceSigmaStOnly->SetLineColor(tColorSigmaStOnly);
+    tSourceSigmaStOnly->SetMarkerColor(tColorSigmaStOnly);
+    tSourceSigmaStOnly->SetMarkerStyle(tMarkerStyleSigmaStOnly);
+  TH1D* tSourceSecondaryOnly = Get1dHisto(aFileName, tBaseNameSecondaryOnly);
+    tSourceSecondaryOnly->SetLineColor(tColorSecondaryOnly);
+    tSourceSecondaryOnly->SetMarkerColor(tColorSecondaryOnly);
+    tSourceSecondaryOnly->SetMarkerStyle(tMarkerStyleSecondaryOnly);
 
   tSourceFull->GetXaxis()->SetTitle("r*");
   tSourceFull->GetYaxis()->SetTitle("dN/dr*");
@@ -48,6 +81,7 @@ void DrawPairSources(TPad* aPad, TString aFileName, AnalysisType aAnType, bool a
   tSourcePrimaryAndShortDecays->Draw("same");
   tSourceWithoutSigmaSt->Draw("same");
   tSourceSigmaStOnly->Draw("same");
+  tSourceSecondaryOnly->Draw("same");
 
   TLegend* tLeg = new TLegend(0.60, 0.60, 0.85, 0.85);
     tLeg->SetFillColor(0);
@@ -57,6 +91,7 @@ void DrawPairSources(TPad* aPad, TString aFileName, AnalysisType aAnType, bool a
 
   tLeg->AddEntry(tSourceFull, "Full");
   tLeg->AddEntry(tSourceWithoutSigmaSt, "w/o #Sigma*");
+  tLeg->AddEntry(tSourceSecondaryOnly, "Secondary Only");
   tLeg->AddEntry(tSourcePrimaryOnly, "Primary Only");
   tLeg->AddEntry(tSourcePrimaryAndShortDecays, "Primary and short decays");
   tLeg->AddEntry(tSourceSigmaStOnly, "#Sigma* Only");
@@ -77,7 +112,7 @@ int main(int argc, char **argv)
   bool bDrawLogY = true;
   bool bSaveFigures = false;
 
-  TString tFileName = "/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b2/CorrelationFunctions.root";
+  TString tFileName = "/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b2/CorrelationFunctions_10MixedEvNum.root";
   TString tSaveLocationBase = "/home/jesse/Analysis/Presentations/GroupMeetings/20170928/Figures/";
 
   TString tSaveLocationBaseLamKchP = tSaveLocationBase + TString("LamKchP/");

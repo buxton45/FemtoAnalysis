@@ -629,3 +629,32 @@ void DrawCondensed1dParentsHistogram(ParticlePDGType aType, TPad* aPad, TH1D* a1
 }
 
 
+//________________________________________________________________________________________________________________
+//****************************************************************************************************************
+//________________________________________________________________________________________________________________
+
+//________________________________________________________________________________________________________________
+TH1D* BuildCf(TH1* aNum, TH1* aDen, TString aName, double aMinNorm, double aMaxNorm)
+{
+  int tMinNormBin = aNum->FindBin(aMinNorm);
+  int tMaxNormBin = aNum->FindBin(aMaxNorm);
+  double tNumScale = aNum->Integral(tMinNormBin,tMaxNormBin);
+
+  tMinNormBin = aDen->FindBin(aMinNorm);
+  tMaxNormBin = aDen->FindBin(aMaxNorm);
+  double tDenScale = aDen->Integral(tMinNormBin,tMaxNormBin);
+
+  TH1D* tReturnCf = (TH1D*)aNum->Clone(aName);
+
+  //-----Check to see if Sumw2 has already been called, and if not, call it
+  if(!tReturnCf->GetSumw2N()) tReturnCf->Sumw2();
+
+  tReturnCf->Divide(aDen);
+  tReturnCf->Scale(tDenScale/tNumScale);
+  tReturnCf->SetTitle(aName);
+
+  if(!tReturnCf->GetSumw2N()) {tReturnCf->Sumw2();}
+
+  return tReturnCf;
+}
+
