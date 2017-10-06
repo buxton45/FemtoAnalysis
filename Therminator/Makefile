@@ -9,9 +9,9 @@ CFLAGS = $(shell root-config --cflags) -Wall -std=c++11 -I${ANALYZE_DIR} -I${UTI
 
 RM = rm
 
-MY_LIBS = $(addprefix build/, Interpolator.o Types.o PIDMapping.o ThermCommon.o ThermParticle.o ThermV0Particle.o ThermEvent.o ThermChargedResidual.o ThermPairAnalysis.o ThermSingleParticleAnalysis.o ThermEventsCollection.o SimpleThermAnalysis.o)
+MY_LIBS = $(addprefix build/, Interpolator.o Types.o PIDMapping.o ThermCommon.o ThermParticle.o ThermV0Particle.o ThermEvent.o ThermChargedResidual.o ThermPairAnalysis.o ThermSingleParticleAnalysis.o ThermEventsCollection.o SimpleThermAnalysis.o Therm3dCf.o)
 
-BINARIES = runTest runTest2 runDrawTransforms runDrawPairFractions runDrawParentsMatrices runBuildLambdaValuesFromParentMatrices runProject3dRadii runDrawPairSources runDrawCfs runProject3dCfs
+BINARIES = runTest runTest2 runDrawTransforms runDrawPairFractions runDrawParentsMatrices runBuildLambdaValuesFromParentMatrices runProject3dRadii runDrawPairSources runDrawCfs runDrawCfsv2 runProject3dCfs runProject3dCfsv2
 
 all: $(BINARIES)
 
@@ -43,8 +43,14 @@ runDrawPairSources: ${MY_LIBS} DrawPairSources.C
 runDrawCfs: ${MY_LIBS} DrawCorrelationFunctions.C
 	g++ DrawCorrelationFunctions.C ${MY_LIBS} -o runDrawCfs $(LIBS) $(CFLAGS)
 
+runDrawCfsv2: ${MY_LIBS} DrawCorrelationFunctionsv2.C
+	g++ DrawCorrelationFunctionsv2.C ${MY_LIBS} -o runDrawCfsv2 $(LIBS) $(CFLAGS)
+
 runProject3dCfs: ${MY_LIBS} Project3dCfs.C
 	g++ Project3dCfs.C ${MY_LIBS} -o runProject3dCfs $(LIBS) $(CFLAGS)
+
+runProject3dCfsv2: ${MY_LIBS} Project3dCfsv2.C
+	g++ Project3dCfsv2.C ${MY_LIBS} -o runProject3dCfsv2 $(LIBS) $(CFLAGS)
 
 build/%.o: ${ANALYZE_DIR}/%.cxx ${ANALYZE_DIR}/%.h
 	g++ -c $< $(CFLAGS) -o $@

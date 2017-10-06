@@ -634,8 +634,11 @@ void DrawCondensed1dParentsHistogram(ParticlePDGType aType, TPad* aPad, TH1D* a1
 //________________________________________________________________________________________________________________
 
 //________________________________________________________________________________________________________________
-TH1D* BuildCf(TH1* aNum, TH1* aDen, TString aName, double aMinNorm, double aMaxNorm)
+TH1D* BuildCf(TH1* aNum, TH1* aDen, TString aName, double aMinNorm, double aMaxNorm, int aRebin)
 {
+  aNum->Rebin(aRebin);
+  aDen->Rebin(aRebin);
+
   int tMinNormBin = aNum->FindBin(aMinNorm);
   int tMaxNormBin = aNum->FindBin(aMaxNorm);
   double tNumScale = aNum->Integral(tMinNormBin,tMaxNormBin);

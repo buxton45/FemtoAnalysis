@@ -36,6 +36,7 @@ public:
   ThermPairAnalysis(AnalysisType aAnType);
   virtual ~ThermPairAnalysis();
 
+  static vector<ParticlePDGType> GetPartTypes(AnalysisType aAnType);
   void SetPartTypes();
   void InitiateTransformMatrices();
 

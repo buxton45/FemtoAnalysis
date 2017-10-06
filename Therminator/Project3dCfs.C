@@ -88,6 +88,43 @@ TH1D* GetSecondaryOnly(TString aFileLocationCfs, AnalysisType aAnType, ParticleP
 }
 
 //________________________________________________________________________________________________________________
+TH1D* GetAtLeastOneSecondaryInPair(TString aFileLocationCfs, AnalysisType aAnType, ParticlePDGType aType1, ParticlePDGType aType2)
+{
+  TH3D* tNum3d = Get3dHisto(aFileLocationCfs, TString::Format("Num3d%s", cAnalysisBaseTags[aAnType]));
+  TH3D* tDen3d = Get3dHisto(aFileLocationCfs, TString::Format("Den3d%s", cAnalysisBaseTags[aAnType]));
+
+  int tIndex1 = GetParticleIndexInPidInfo(aType1) + 1;
+  int tIndex2 = GetParticleIndexInPidInfo(aType2) + 1;
+
+  for(int i=1; i<=tNum3d->GetNbinsX(); i++)
+  {
+    for(int j=1; j<=tNum3d->GetNbinsY(); j++)
+    {
+      if(i!=tIndex1 || j!=tIndex2)
+      {
+        for(int k=1; k<tNum3d->GetNbinsZ(); k++)
+        {
+          tNum3d->SetBinContent(i, j, k, 0.);
+          tDen3d->SetBinContent(i, j, k, 0.);
+        }
+      }
+    }
+  }
+
+  TH1D* tNum = tNum3d->ProjectionZ(TString::Format("NumAtLeastOneSecondaryInPair%s", cAnalysisBaseTags[aAnType]), 
+                                   1, tNum3d->GetNbinsX(), 
+                                   1, tNum3d->GetNbinsY());
+  TH1D* tDen = tDen3d->ProjectionZ(TString::Format("DenAtLeastOneSecondaryInPair%s", cAnalysisBaseTags[aAnType]), 
+                                   1, tDen3d->GetNbinsX(), 
+                                   1, tDen3d->GetNbinsY());
+
+  TString tReturnName = TString::Format("CfAtLeastOneSecondaryInPair%s", cAnalysisBaseTags[aAnType]);
+  TH1D* tCf = BuildCf(tNum, tDen, tReturnName);
+
+  return tCf;
+}
+
+//________________________________________________________________________________________________________________
 TH1D* GetWithoutSigmaSt(TString aFileLocationCfs, AnalysisType aAnType, ParticlePDGType aType1, ParticlePDGType aType2)
 {
   TH3D* tNum3d = Get3dHisto(aFileLocationCfs, TString::Format("Num3d%s", cAnalysisBaseTags[aAnType]));
@@ -357,6 +394,15 @@ int main(int argc, char **argv)
   tCfPrimaryAndShortDecaysProject->Draw();
   tCanPrimaryAndShortDecaysB->cd(2);
   tCfPrimaryAndShortDecays->Draw();
+//-------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------
+  TH1D* tCfAtLeastOneSecondaryInPairProject = GetAtLeastOneSecondaryInPair(tFileLocationCfs, tAnType, tType1, tType2);
+    tCfAtLeastOneSecondaryInPairProject->SetMarkerStyle(20);
+    tCfAtLeastOneSecondaryInPairProject->SetMarkerColor(1);
+
+  TCanvas *tCanAtLeastOneSecondaryInPairA = new TCanvas("tCanAtLeastOneSecondaryInPairA", "tCanAtLeastOneSecondaryInPairA");
+  tCanAtLeastOneSecondaryInPairA->cd();
+  tCfAtLeastOneSecondaryInPairProject->Draw();
 //-------------------------------------------------------------------------------
 
 

@@ -203,54 +203,69 @@ ThermPairAnalysis::~ThermPairAnalysis()
 
 
 //________________________________________________________________________________________________________________
-void ThermPairAnalysis::SetPartTypes()
+vector<ParticlePDGType> ThermPairAnalysis::GetPartTypes(AnalysisType aAnalysisType)
 {
-  switch(fAnalysisType) {
+  vector<ParticlePDGType> tReturnVec(2);
+  ParticlePDGType tPartType1, tPartType2;
+
+  switch(aAnalysisType) {
   //LamKchP-------------------------------
   case kLamKchP:
-    fPartType1 = kPDGLam;
-    fPartType2 = kPDGKchP;
+    tPartType1 = kPDGLam;
+    tPartType2 = kPDGKchP;
     break;
 
   //ALamKchM-------------------------------
   case kALamKchM:
-    fPartType1 = kPDGALam;
-    fPartType2 = kPDGKchM;
+    tPartType1 = kPDGALam;
+    tPartType2 = kPDGKchM;
     break;
   //-------------
 
   //LamKchM-------------------------------
   case kLamKchM:
-    fPartType1 = kPDGLam;
-    fPartType2 = kPDGKchM;
+    tPartType1 = kPDGLam;
+    tPartType2 = kPDGKchM;
     break;
   //-------------
 
   //ALamKchP-------------------------------
   case kALamKchP:
-    fPartType1 = kPDGALam;
-    fPartType2 = kPDGKchP;
+    tPartType1 = kPDGALam;
+    tPartType2 = kPDGKchP;
     break;
   //-------------
 
   //LamK0-------------------------------
   case kLamK0:
-    fPartType1 = kPDGLam;
-    fPartType2 = kPDGK0;
+    tPartType1 = kPDGLam;
+    tPartType2 = kPDGK0;
     break;
   //-------------
 
   //ALamK0-------------------------------
   case kALamK0:
-    fPartType1 = kPDGALam;
-    fPartType2 = kPDGK0;
+    tPartType1 = kPDGALam;
+    tPartType2 = kPDGK0;
     break;
   //-------------
 
   default:
-    cout << "ERROR: ThermPairAnalysis::SetPartTypes:  fAnalysisType = " << fAnalysisType << " is not appropriate" << endl << endl;
+    cout << "ERROR: ThermPairAnalysis::GetPartTypes:  aAnalysisType = " << aAnalysisType << " is not appropriate" << endl << endl;
     assert(0);
   }
+
+  tReturnVec[0] = tPartType1;
+  tReturnVec[1] = tPartType2;
+  return tReturnVec;
+}
+
+//________________________________________________________________________________________________________________
+void ThermPairAnalysis::SetPartTypes()
+{
+  vector<ParticlePDGType> tTempVec = GetPartTypes(fAnalysisType);
+  fPartType1 = tTempVec[0];
+  fPartType2 = tTempVec[1];
 }
 
 
