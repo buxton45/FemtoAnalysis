@@ -73,7 +73,7 @@ int main(int argc, char **argv)
                                            tNbinsKStar, tKStarMin, tKStarMax,
                                            tNbinsRStar, tRStarMin, tRStarMax);
 
-  CoulombFitter* tFitter = new CoulombFitter(1.0);
+  CoulombFitter* tFitter = new CoulombFitter(tAnType, 1.0);
 
   TString tFileLocationInterpHistos = "InterpHists";
     tFileLocationInterpHistos += TString::Format("_%s", cAnalysisBaseTags[tAnType]);

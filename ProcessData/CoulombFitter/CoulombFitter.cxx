@@ -24,7 +24,7 @@ double gMaxFitKStar;
 
 
 //________________________________________________________________________________________________________________
-CoulombFitter::CoulombFitter(double aMaxFitKStar):
+CoulombFitter::CoulombFitter(AnalysisType aAnalysisType, double aMaxFitKStar):
   fVerbose(true),
   fTurnOffCoulomb(false),
   fInterpHistsLoaded(false),
@@ -89,7 +89,7 @@ CoulombFitter::CoulombFitter(double aMaxFitKStar):
 
   gRandom->SetSeed();
   fWaveFunction = new WaveFunction();
-  SetCoulombAttributes(kXiKchP);
+  SetCoulombAttributes(aAnalysisType);
   omp_set_num_threads(3);
 
   fNAnalyses=1;

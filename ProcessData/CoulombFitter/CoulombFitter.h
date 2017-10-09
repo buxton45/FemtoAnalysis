@@ -68,7 +68,7 @@ class CoulombFitter {
 
 public:
   //Constructor, destructor, copy constructor, assignment operator
-  CoulombFitter(double aMaxFitKStar = 0.3); //TODO delete this constructor.  Only here for testing
+  CoulombFitter(AnalysisType aAnalysisType, double aMaxFitKStar = 0.3); //TODO delete this constructor.  Only here for testing
   CoulombFitter(FitSharedAnalyses* aFitSharedAnalyses, double aMaxFitKStar = 0.3);
   virtual ~CoulombFitter();
 

@@ -79,8 +79,8 @@ public:
   void DoFit();
   void Finalize();
 
-  void DrawCfWithFit(TPad *aPad);
-  void DrawCfNumDen(TPad *aPad);
+  void DrawCfWithFit(TPad *aPad, TString aDrawOption="");
+  void DrawCfNumDen(TPad *aPad, TString aDrawOption="");
 
   //inline (i.e. simple) functions
 

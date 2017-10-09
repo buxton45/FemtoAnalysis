@@ -59,7 +59,7 @@ TH1D* Therm3dCf::GetFull(TH3D* aHist3d, TString aPreName)
 {
   TH1D* tReturnHist = aHist3d->ProjectionZ(TString::Format("%sFull%s", aPreName.Data(), cAnalysisBaseTags[fAnalysisType]), 
                                            1, aHist3d->GetNbinsX(), 
-                                           1, aHist3d->GetNbinsY());
+                                           1, aHist3d->GetNbinsY(), "e");
   return tReturnHist;
 }
 
@@ -68,7 +68,7 @@ TH1D* Therm3dCf::GetPrimaryOnly(TH3D* aHist3d, TString aPreName)
 {
   TH1D* tReturnHist = aHist3d->ProjectionZ(TString::Format("%sPrimaryOnly%s", aPreName.Data(), cAnalysisBaseTags[fAnalysisType]), 
                                            fPartIndex1, fPartIndex1, 
-                                           fPartIndex2, fPartIndex2);
+                                           fPartIndex2, fPartIndex2, "e");
   return tReturnHist;
 }
 
@@ -86,6 +86,7 @@ TH1D* Therm3dCf::GetSecondaryOnly(TH3D* aHist3d, TString aPreName)
         for(int k=1; k<tTempHist3d->GetNbinsZ(); k++)
         {
           tTempHist3d->SetBinContent(i, j, k, 0.);
+          tTempHist3d->SetBinError(i, j, k, 0.);
         }
       }
     }
@@ -93,7 +94,7 @@ TH1D* Therm3dCf::GetSecondaryOnly(TH3D* aHist3d, TString aPreName)
 
   TH1D* tReturnHist = tTempHist3d->ProjectionZ(TString::Format("%sSecondaryOnly%s", aPreName.Data(), cAnalysisBaseTags[fAnalysisType]), 
                                                1, tTempHist3d->GetNbinsX(), 
-                                               1, tTempHist3d->GetNbinsY());
+                                               1, tTempHist3d->GetNbinsY(), "e");
   return tReturnHist;
 }
 
@@ -111,6 +112,7 @@ TH1D* Therm3dCf::GetAtLeastOneSecondaryInPair(TH3D* aHist3d, TString aPreName)
         for(int k=1; k<tTempHist3d->GetNbinsZ(); k++)
         {
           tTempHist3d->SetBinContent(i, j, k, 0.);
+          tTempHist3d->SetBinError(i, j, k, 0.);
         }
       }
     }
@@ -118,7 +120,7 @@ TH1D* Therm3dCf::GetAtLeastOneSecondaryInPair(TH3D* aHist3d, TString aPreName)
 
   TH1D* tReturnHist = tTempHist3d->ProjectionZ(TString::Format("%sAtLeastOneSecondaryInPair%s", aPreName.Data(), cAnalysisBaseTags[fAnalysisType]), 
                                                1, tTempHist3d->GetNbinsX(), 
-                                               1, tTempHist3d->GetNbinsY());
+                                               1, tTempHist3d->GetNbinsY(), "e");
   return tReturnHist;
 }
 
@@ -134,7 +136,7 @@ TH1D* Therm3dCf::GetWithoutSigmaSt(TH3D* aHist3d, TString aPreName)
     tType1 = static_cast<ParticlePDGType>(GetParticlePidFromIndex(i-1));
     if(tType1==kPDGSigStP || tType1==kPDGASigStM ||
        tType1==kPDGSigStM || tType1==kPDGASigStP ||
-       tType1==kPDGSigSt0 || tType1==kPDGSigSt0)
+       tType1==kPDGSigSt0 || tType1==kPDGASigSt0)
     {
       for(int j=1; j<=tTempHist3d->GetNbinsY(); j++)
       {
@@ -142,6 +144,7 @@ TH1D* Therm3dCf::GetWithoutSigmaSt(TH3D* aHist3d, TString aPreName)
         for(int k=1; k<tTempHist3d->GetNbinsZ(); k++)
         {
           tTempHist3d->SetBinContent(i, j, k, 0.);
+          tTempHist3d->SetBinError(i, j, k, 0.);
         }
       }
     }
@@ -149,7 +152,7 @@ TH1D* Therm3dCf::GetWithoutSigmaSt(TH3D* aHist3d, TString aPreName)
 
   TH1D* tReturnHist = tTempHist3d->ProjectionZ(TString::Format("%sWithoutSigmaSt%s", aPreName.Data(), cAnalysisBaseTags[fAnalysisType]), 
                                                1, tTempHist3d->GetNbinsX(), 
-                                               1, tTempHist3d->GetNbinsY());
+                                               1, tTempHist3d->GetNbinsY(), "e");
   return tReturnHist;
 }
 
@@ -165,7 +168,7 @@ TH1D* Therm3dCf::GetSigmaStOnly(TH3D* aHist3d, TString aPreName)
     tType1 = static_cast<ParticlePDGType>(GetParticlePidFromIndex(i-1));
     if(tType1 != kPDGSigStP && tType1 != kPDGASigStM &&
        tType1 != kPDGSigStM && tType1 != kPDGASigStP &&
-       tType1 != kPDGSigSt0 && tType1 != kPDGSigSt0)
+       tType1 != kPDGSigSt0 && tType1 != kPDGASigSt0)
     {
       for(int j=1; j<=tTempHist3d->GetNbinsY(); j++)
       {
@@ -173,6 +176,7 @@ TH1D* Therm3dCf::GetSigmaStOnly(TH3D* aHist3d, TString aPreName)
         for(int k=1; k<tTempHist3d->GetNbinsZ(); k++)
         {
           tTempHist3d->SetBinContent(i, j, k, 0.);
+          tTempHist3d->SetBinError(i, j, k, 0.);
         }
       }
     }
@@ -180,7 +184,97 @@ TH1D* Therm3dCf::GetSigmaStOnly(TH3D* aHist3d, TString aPreName)
 
   TH1D* tReturnHist = tTempHist3d->ProjectionZ(TString::Format("%sSigmaStOnly%s", aPreName.Data(), cAnalysisBaseTags[fAnalysisType]), 
                                                1, tTempHist3d->GetNbinsX(), 
-                                               1, tTempHist3d->GetNbinsY());
+                                               1, tTempHist3d->GetNbinsY(), "e");
+  return tReturnHist;
+}
+
+//________________________________________________________________________________________________________________
+TH1D* Therm3dCf::GetSigmaStPOnly(TH3D* aHist3d, TString aPreName)
+{
+  TH3D* tTempHist3d = (TH3D*)aHist3d->Clone(TString::Format("%sGetSigmaStPOnlyTempHist3d%s", aPreName.Data(), cAnalysisBaseTags[fAnalysisType]));
+
+  ParticlePDGType tType1;
+//  ParticlePDGType tType2;
+  for(int i=1; i<=tTempHist3d->GetNbinsX(); i++)
+  {
+    tType1 = static_cast<ParticlePDGType>(GetParticlePidFromIndex(i-1));
+    if(tType1 != kPDGSigStP && tType1 != kPDGASigStM)
+    {
+      for(int j=1; j<=tTempHist3d->GetNbinsY(); j++)
+      {
+//        tType2 = static_cast<ParticlePDGType>(GetParticlePidFromIndex(j-1));
+        for(int k=1; k<tTempHist3d->GetNbinsZ(); k++)
+        {
+          tTempHist3d->SetBinContent(i, j, k, 0.);
+          tTempHist3d->SetBinError(i, j, k, 0.);
+        }
+      }
+    }
+  }
+
+  TH1D* tReturnHist = tTempHist3d->ProjectionZ(TString::Format("%sSigmaStPOnly%s", aPreName.Data(), cAnalysisBaseTags[fAnalysisType]), 
+                                               1, tTempHist3d->GetNbinsX(), 
+                                               1, tTempHist3d->GetNbinsY(), "e");
+  return tReturnHist;
+}
+
+//________________________________________________________________________________________________________________
+TH1D* Therm3dCf::GetSigmaStMOnly(TH3D* aHist3d, TString aPreName)
+{
+  TH3D* tTempHist3d = (TH3D*)aHist3d->Clone(TString::Format("%sGetSigmaStMOnlyTempHist3d%s", aPreName.Data(), cAnalysisBaseTags[fAnalysisType]));
+
+  ParticlePDGType tType1;
+//  ParticlePDGType tType2;
+  for(int i=1; i<=tTempHist3d->GetNbinsX(); i++)
+  {
+    tType1 = static_cast<ParticlePDGType>(GetParticlePidFromIndex(i-1));
+    if(tType1 != kPDGSigStM && tType1 != kPDGASigStP)
+    {
+      for(int j=1; j<=tTempHist3d->GetNbinsY(); j++)
+      {
+//        tType2 = static_cast<ParticlePDGType>(GetParticlePidFromIndex(j-1));
+        for(int k=1; k<tTempHist3d->GetNbinsZ(); k++)
+        {
+          tTempHist3d->SetBinContent(i, j, k, 0.);
+          tTempHist3d->SetBinError(i, j, k, 0.);
+        }
+      }
+    }
+  }
+
+  TH1D* tReturnHist = tTempHist3d->ProjectionZ(TString::Format("%sSigmaStMOnly%s", aPreName.Data(), cAnalysisBaseTags[fAnalysisType]), 
+                                               1, tTempHist3d->GetNbinsX(), 
+                                               1, tTempHist3d->GetNbinsY(), "e");
+  return tReturnHist;
+}
+
+//________________________________________________________________________________________________________________
+TH1D* Therm3dCf::GetSigmaSt0Only(TH3D* aHist3d, TString aPreName)
+{
+  TH3D* tTempHist3d = (TH3D*)aHist3d->Clone(TString::Format("%sGetSigmaSt0OnlyTempHist3d%s", aPreName.Data(), cAnalysisBaseTags[fAnalysisType]));
+
+  ParticlePDGType tType1;
+//  ParticlePDGType tType2;
+  for(int i=1; i<=tTempHist3d->GetNbinsX(); i++)
+  {
+    tType1 = static_cast<ParticlePDGType>(GetParticlePidFromIndex(i-1));
+    if(tType1 != kPDGSigSt0 && tType1 != kPDGASigSt0)
+    {
+      for(int j=1; j<=tTempHist3d->GetNbinsY(); j++)
+      {
+//        tType2 = static_cast<ParticlePDGType>(GetParticlePidFromIndex(j-1));
+        for(int k=1; k<tTempHist3d->GetNbinsZ(); k++)
+        {
+          tTempHist3d->SetBinContent(i, j, k, 0.);
+          tTempHist3d->SetBinError(i, j, k, 0.);
+        }
+      }
+    }
+  }
+
+  TH1D* tReturnHist = tTempHist3d->ProjectionZ(TString::Format("%sSigmaSt0Only%s", aPreName.Data(), cAnalysisBaseTags[fAnalysisType]), 
+                                               1, tTempHist3d->GetNbinsX(), 
+                                               1, tTempHist3d->GetNbinsY(), "e");
   return tReturnHist;
 }
 
@@ -201,6 +295,7 @@ TH1D* Therm3dCf::GetPrimaryAndShortDecays(TH3D* aHist3d, TString aPreName)
         for(int k=1; k<tTempHist3d->GetNbinsZ(); k++)
         {
           tTempHist3d->SetBinContent(i, j, k, 0.);
+          tTempHist3d->SetBinError(i, j, k, 0.);
         }
       }
     }
@@ -208,7 +303,7 @@ TH1D* Therm3dCf::GetPrimaryAndShortDecays(TH3D* aHist3d, TString aPreName)
 
   TH1D* tReturnHist = tTempHist3d->ProjectionZ(TString::Format("%sPrimaryAndShortDecays%s", aPreName.Data(), cAnalysisBaseTags[fAnalysisType]), 
                                                1, tTempHist3d->GetNbinsX(), 
-                                               1, tTempHist3d->GetNbinsY());
+                                               1, tTempHist3d->GetNbinsY(), "e");
   return tReturnHist;
 
 }
@@ -292,6 +387,45 @@ TH1D* Therm3dCf::GetSigmaStOnlyCf()
 
   return tCf;
 }
+
+//________________________________________________________________________________________________________________
+TH1D* Therm3dCf::GetSigmaStPOnlyCf()
+{
+  TH1D* tNum = GetSigmaStPOnly(fNum3d, "Num");
+  TH1D* tDen = GetSigmaStPOnly(fDen3d, "Den");
+
+  TString tReturnName = TString::Format("CfSigmaStPOnly%s", cAnalysisBaseTags[fAnalysisType]);
+  TH1D* tCf = BuildCf(tNum, tDen, tReturnName, fMinNorm, fMaxNorm, fRebin);
+
+  return tCf;
+}
+
+
+//________________________________________________________________________________________________________________
+TH1D* Therm3dCf::GetSigmaStMOnlyCf()
+{
+  TH1D* tNum = GetSigmaStMOnly(fNum3d, "Num");
+  TH1D* tDen = GetSigmaStMOnly(fDen3d, "Den");
+
+  TString tReturnName = TString::Format("CfSigmaStMOnly%s", cAnalysisBaseTags[fAnalysisType]);
+  TH1D* tCf = BuildCf(tNum, tDen, tReturnName, fMinNorm, fMaxNorm, fRebin);
+
+  return tCf;
+}
+
+
+//________________________________________________________________________________________________________________
+TH1D* Therm3dCf::GetSigmaSt0OnlyCf()
+{
+  TH1D* tNum = GetSigmaSt0Only(fNum3d, "Num");
+  TH1D* tDen = GetSigmaSt0Only(fDen3d, "Den");
+
+  TString tReturnName = TString::Format("CfSigmaSt0Only%s", cAnalysisBaseTags[fAnalysisType]);
+  TH1D* tCf = BuildCf(tNum, tDen, tReturnName, fMinNorm, fMaxNorm, fRebin);
+
+  return tCf;
+}
+
 
 //________________________________________________________________________________________________________________
 TH1D* Therm3dCf::GetPrimaryAndShortDecaysCf()

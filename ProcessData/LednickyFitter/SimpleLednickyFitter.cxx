@@ -552,7 +552,7 @@ void SimpleLednickyFitter::Finalize()
 
 
 //________________________________________________________________________________________________________________
-void SimpleLednickyFitter::DrawCfWithFit(TPad *aPad)
+void SimpleLednickyFitter::DrawCfWithFit(TPad *aPad, TString aDrawOption)
 {
   aPad->cd();
 
@@ -560,13 +560,14 @@ void SimpleLednickyFitter::DrawCfWithFit(TPad *aPad)
   TF1* tFit = CreateFitFunction(TString("Fit"));
 
 
-  tCf->Draw();
-  tFit->Draw("same");
+  tCf->Draw(aDrawOption);
+  if(aDrawOption.EqualTo("same")) tFit->Draw(aDrawOption);
+  else tFit->Draw(aDrawOption+TString("same"));
 }
 
 
 //________________________________________________________________________________________________________________
-void SimpleLednickyFitter::DrawCfNumDen(TPad *aPad)
+void SimpleLednickyFitter::DrawCfNumDen(TPad *aPad, TString aDrawOption)
 {
   aPad->cd();
   aPad->Divide(3,1);
@@ -576,13 +577,13 @@ void SimpleLednickyFitter::DrawCfNumDen(TPad *aPad)
   TH1D* tDen = (TH1D*)fCfLite->Den();
 
   aPad->cd(1);
-  tCf->Draw();
+  tCf->Draw(aDrawOption);
 
   aPad->cd(2);
-  tNum->Draw();
+  tNum->Draw(aDrawOption);
 
   aPad->cd(3);
-  tDen->Draw();
+  tDen->Draw(aDrawOption);
 
 }
 

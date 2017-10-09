@@ -69,20 +69,22 @@ int main(int argc, char **argv)
   bool SaveImages = true;
 
   TString tDirectory = "~/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b2/";
-  TString tFileLocationCfs = tDirectory + "CorrelationFunctions.root";
+//  TString tFileLocationCfs = tDirectory + "CorrelationFunctions.root";
+  TString tFileLocationCfs = tDirectory + "CorrelationFunctions_10MixedEvNum.root";
+//  TString tFileLocationCfs = tDirectory + "CorrelationFunctions_10MixedEvNum_WeightParentsInteraction.root";
 
 //  TString tSaveDirectory = "/home/jesse/Analysis/Presentations/AliFemto/20170913/";
 //-------------------------------------------------------------------------------
   TString tBaseName = "Full";
   //TString tBaseName = "PrimaryOnly";
 
-//  SimpleLednickyFitter *tSLFitter = new SimpleLednickyFitter(tAnType, tFileLocationCfs, tBaseName);
+  SimpleLednickyFitter *tSLFitter = new SimpleLednickyFitter(tAnType, tFileLocationCfs, tBaseName);
 
 /*
   CfLite* tDataCfLite = GetDataCfLite(tAnType);
   SimpleLednickyFitter *tSLFitter = new SimpleLednickyFitter(tAnType, tDataCfLite);
 */
-
+/*
   vector<double> tSimParams(6);
     tSimParams[0] = 0.5;
     tSimParams[1] = 5.0;
@@ -91,7 +93,7 @@ int main(int argc, char **argv)
     tSimParams[4] = 0.;
     tSimParams[5] = 1.;
   SimpleLednickyFitter *tSLFitter = new SimpleLednickyFitter(tAnType, tSimParams);
-
+*/
   tSLFitter->GetMinuitObject()->SetFCN(fcn);
   myFitter = tSLFitter;
 

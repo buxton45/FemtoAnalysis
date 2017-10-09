@@ -36,7 +36,12 @@ public:
   TH1D* GetSecondaryOnly(TH3D* aHist3d, TString aPreName);
   TH1D* GetAtLeastOneSecondaryInPair(TH3D* aHist3d, TString aPreName);
   TH1D* GetWithoutSigmaSt(TH3D* aHist3d, TString aPreName);
+
   TH1D* GetSigmaStOnly(TH3D* aHist3d, TString aPreName);
+  TH1D* GetSigmaStPOnly(TH3D* aHist3d, TString aPreName);
+  TH1D* GetSigmaStMOnly(TH3D* aHist3d, TString aPreName);
+  TH1D* GetSigmaSt0Only(TH3D* aHist3d, TString aPreName);
+
   TH1D* GetPrimaryAndShortDecays(TH3D* aHist3d, TString aPreName);
 
   //-----------------------------------
@@ -46,7 +51,12 @@ public:
   TH1D* GetSecondaryOnlyCf();
   TH1D* GetAtLeastOneSecondaryInPairCf();
   TH1D* GetWithoutSigmaStCf();
+
   TH1D* GetSigmaStOnlyCf();
+  TH1D* GetSigmaStPOnlyCf();
+  TH1D* GetSigmaStMOnlyCf();
+  TH1D* GetSigmaSt0OnlyCf();
+
   TH1D* GetPrimaryAndShortDecaysCf();
 
   //inline----------------------------------------
@@ -69,6 +79,15 @@ public:
 
   TH1D* GetSigmaStOnlyNum();
   TH1D* GetSigmaStOnlyDen();
+
+  TH1D* GetSigmaStPOnlyNum();
+  TH1D* GetSigmaStPOnlyDen();
+
+  TH1D* GetSigmaStMOnlyNum();
+  TH1D* GetSigmaStMOnlyDen();
+
+  TH1D* GetSigmaSt0OnlyNum();
+  TH1D* GetSigmaSt0OnlyDen();
 
   TH1D* GetPrimaryAndShortDecaysNum();
   TH1D* GetPrimaryAndShortDecaysDen();
@@ -109,6 +128,15 @@ inline TH1D* Therm3dCf::GetWithoutSigmaStDen() {return GetWithoutSigmaSt(fDen3d,
 
 inline TH1D* Therm3dCf::GetSigmaStOnlyNum() {return GetSigmaStOnly(fNum3d, "Num");}
 inline TH1D* Therm3dCf::GetSigmaStOnlyDen() {return GetSigmaStOnly(fDen3d, "Den");}
+
+inline TH1D* Therm3dCf::GetSigmaStPOnlyNum() {return GetSigmaStPOnly(fNum3d, "Num");}
+inline TH1D* Therm3dCf::GetSigmaStPOnlyDen() {return GetSigmaStPOnly(fDen3d, "Den");}
+
+inline TH1D* Therm3dCf::GetSigmaStMOnlyNum() {return GetSigmaStMOnly(fNum3d, "Num");}
+inline TH1D* Therm3dCf::GetSigmaStMOnlyDen() {return GetSigmaStMOnly(fDen3d, "Den");}
+
+inline TH1D* Therm3dCf::GetSigmaSt0OnlyNum() {return GetSigmaSt0Only(fNum3d, "Num");}
+inline TH1D* Therm3dCf::GetSigmaSt0OnlyDen() {return GetSigmaSt0Only(fDen3d, "Den");}
 
 inline TH1D* Therm3dCf::GetPrimaryAndShortDecaysNum() {return GetPrimaryAndShortDecays(fNum3d, "Num");}
 inline TH1D* Therm3dCf::GetPrimaryAndShortDecaysDen() {return GetPrimaryAndShortDecays(fDen3d, "Den");}

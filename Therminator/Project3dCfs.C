@@ -4,245 +4,10 @@
 #include <vector>
 #include <assert.h>
 
-#include "ThermEventsCollection.h"
-#include "TApplication.h"
-#include "TStyle.h"
-#include "TPaveText.h"
-#include "TLegend.h"
+#include "Therm3dCf.h"
+class Therm3dCf;
 
-#include "PIDMapping.h"
-#include "ThermCommon.h"
 
-//________________________________________________________________________________________________________________
-TH1D* GetFull(TString aFileLocationCfs, AnalysisType aAnType)
-{
-  TH3D* tNum3d = Get3dHisto(aFileLocationCfs, TString::Format("Num3d%s", cAnalysisBaseTags[aAnType]));
-  TH3D* tDen3d = Get3dHisto(aFileLocationCfs, TString::Format("Den3d%s", cAnalysisBaseTags[aAnType]));
-
-  TH1D* tNum = tNum3d->ProjectionZ(TString::Format("NumFull%s", cAnalysisBaseTags[aAnType]), 
-                                   1, tNum3d->GetNbinsX(), 
-                                   1, tNum3d->GetNbinsY());
-  TH1D* tDen = tDen3d->ProjectionZ(TString::Format("DenFull%s", cAnalysisBaseTags[aAnType]), 
-                                   1, tDen3d->GetNbinsX(), 
-                                   1, tDen3d->GetNbinsY());
-
-  TString tReturnName = TString::Format("CfFull%s", cAnalysisBaseTags[aAnType]);
-  TH1D* tCf = BuildCf(tNum, tDen, tReturnName);
-
-  return tCf;
-}
-
-//________________________________________________________________________________________________________________
-TH1D* GetPrimaryOnly(TString aFileLocationCfs, AnalysisType aAnType, ParticlePDGType aType1, ParticlePDGType aType2)
-{
-  TH3D* tNum3d = Get3dHisto(aFileLocationCfs, TString::Format("Num3d%s", cAnalysisBaseTags[aAnType]));
-  TH3D* tDen3d = Get3dHisto(aFileLocationCfs, TString::Format("Den3d%s", cAnalysisBaseTags[aAnType]));
-
-  int tIndex1 = GetParticleIndexInPidInfo(aType1) + 1;
-  int tIndex2 = GetParticleIndexInPidInfo(aType2) + 1;
-
-  TH1D* tNum = tNum3d->ProjectionZ(TString::Format("NumPrimaryOnly%s", cAnalysisBaseTags[aAnType]), tIndex1, tIndex1, tIndex2, tIndex2);
-  TH1D* tDen = tDen3d->ProjectionZ(TString::Format("DenPrimaryOnly%s", cAnalysisBaseTags[aAnType]), tIndex1, tIndex1, tIndex2, tIndex2);
-
-  TString tReturnName = TString::Format("CfPrimaryOnly%s", cAnalysisBaseTags[aAnType]);
-  TH1D* tCf = BuildCf(tNum, tDen, tReturnName);
-
-  return tCf;
-}
-
-//________________________________________________________________________________________________________________
-TH1D* GetSecondaryOnly(TString aFileLocationCfs, AnalysisType aAnType, ParticlePDGType aType1, ParticlePDGType aType2)
-{
-  TH3D* tNum3d = Get3dHisto(aFileLocationCfs, TString::Format("Num3d%s", cAnalysisBaseTags[aAnType]));
-  TH3D* tDen3d = Get3dHisto(aFileLocationCfs, TString::Format("Den3d%s", cAnalysisBaseTags[aAnType]));
-
-  int tIndex1 = GetParticleIndexInPidInfo(aType1) + 1;
-  int tIndex2 = GetParticleIndexInPidInfo(aType2) + 1;
-
-  for(int i=1; i<=tNum3d->GetNbinsX(); i++)
-  {
-    for(int j=1; j<=tNum3d->GetNbinsY(); j++)
-    {
-      if(i==tIndex1 || j==tIndex2)
-      {
-        for(int k=1; k<tNum3d->GetNbinsZ(); k++)
-        {
-          tNum3d->SetBinContent(i, j, k, 0.);
-          tDen3d->SetBinContent(i, j, k, 0.);
-        }
-      }
-    }
-  }
-
-  TH1D* tNum = tNum3d->ProjectionZ(TString::Format("NumSecondaryOnly%s", cAnalysisBaseTags[aAnType]), 
-                                   1, tNum3d->GetNbinsX(), 
-                                   1, tNum3d->GetNbinsY());
-  TH1D* tDen = tDen3d->ProjectionZ(TString::Format("DenSecondaryOnly%s", cAnalysisBaseTags[aAnType]), 
-                                   1, tDen3d->GetNbinsX(), 
-                                   1, tDen3d->GetNbinsY());
-
-  TString tReturnName = TString::Format("CfSecondaryOnly%s", cAnalysisBaseTags[aAnType]);
-  TH1D* tCf = BuildCf(tNum, tDen, tReturnName);
-
-  return tCf;
-}
-
-//________________________________________________________________________________________________________________
-TH1D* GetAtLeastOneSecondaryInPair(TString aFileLocationCfs, AnalysisType aAnType, ParticlePDGType aType1, ParticlePDGType aType2)
-{
-  TH3D* tNum3d = Get3dHisto(aFileLocationCfs, TString::Format("Num3d%s", cAnalysisBaseTags[aAnType]));
-  TH3D* tDen3d = Get3dHisto(aFileLocationCfs, TString::Format("Den3d%s", cAnalysisBaseTags[aAnType]));
-
-  int tIndex1 = GetParticleIndexInPidInfo(aType1) + 1;
-  int tIndex2 = GetParticleIndexInPidInfo(aType2) + 1;
-
-  for(int i=1; i<=tNum3d->GetNbinsX(); i++)
-  {
-    for(int j=1; j<=tNum3d->GetNbinsY(); j++)
-    {
-      if(i!=tIndex1 || j!=tIndex2)
-      {
-        for(int k=1; k<tNum3d->GetNbinsZ(); k++)
-        {
-          tNum3d->SetBinContent(i, j, k, 0.);
-          tDen3d->SetBinContent(i, j, k, 0.);
-        }
-      }
-    }
-  }
-
-  TH1D* tNum = tNum3d->ProjectionZ(TString::Format("NumAtLeastOneSecondaryInPair%s", cAnalysisBaseTags[aAnType]), 
-                                   1, tNum3d->GetNbinsX(), 
-                                   1, tNum3d->GetNbinsY());
-  TH1D* tDen = tDen3d->ProjectionZ(TString::Format("DenAtLeastOneSecondaryInPair%s", cAnalysisBaseTags[aAnType]), 
-                                   1, tDen3d->GetNbinsX(), 
-                                   1, tDen3d->GetNbinsY());
-
-  TString tReturnName = TString::Format("CfAtLeastOneSecondaryInPair%s", cAnalysisBaseTags[aAnType]);
-  TH1D* tCf = BuildCf(tNum, tDen, tReturnName);
-
-  return tCf;
-}
-
-//________________________________________________________________________________________________________________
-TH1D* GetWithoutSigmaSt(TString aFileLocationCfs, AnalysisType aAnType, ParticlePDGType aType1, ParticlePDGType aType2)
-{
-  TH3D* tNum3d = Get3dHisto(aFileLocationCfs, TString::Format("Num3d%s", cAnalysisBaseTags[aAnType]));
-  TH3D* tDen3d = Get3dHisto(aFileLocationCfs, TString::Format("Den3d%s", cAnalysisBaseTags[aAnType]));
-
-  ParticlePDGType tType1;
-//  ParticlePDGType tType2;
-  for(int i=1; i<=tNum3d->GetNbinsX(); i++)
-  {
-    tType1 = static_cast<ParticlePDGType>(GetParticlePidFromIndex(i-1));
-    if(tType1==kPDGSigStP || tType1==kPDGASigStM ||
-       tType1==kPDGSigStM || tType1==kPDGASigStP ||
-       tType1==kPDGSigSt0 || tType1==kPDGSigSt0)
-    {
-      for(int j=1; j<=tNum3d->GetNbinsY(); j++)
-      {
-//        tType2 = static_cast<ParticlePDGType>(GetParticlePidFromIndex(j-1));
-        for(int k=1; k<tNum3d->GetNbinsZ(); k++)
-        {
-          tNum3d->SetBinContent(i, j, k, 0.);
-          tDen3d->SetBinContent(i, j, k, 0.);
-        }
-      }
-    }
-  }
-
-  TH1D* tNum = tNum3d->ProjectionZ(TString::Format("NumWithoutSigmaSt%s", cAnalysisBaseTags[aAnType]), 
-                                   1, tNum3d->GetNbinsX(), 
-                                   1, tNum3d->GetNbinsY());
-  TH1D* tDen = tDen3d->ProjectionZ(TString::Format("DenWithoutSigmaSt%s", cAnalysisBaseTags[aAnType]), 
-                                   1, tDen3d->GetNbinsX(), 
-                                   1, tDen3d->GetNbinsY());
-
-  TString tReturnName = TString::Format("CfWithoutSigmaSt%s", cAnalysisBaseTags[aAnType]);
-  TH1D* tCf = BuildCf(tNum, tDen, tReturnName);
-
-  return tCf;
-}
-
-//________________________________________________________________________________________________________________
-TH1D* GetSigmaStOnly(TString aFileLocationCfs, AnalysisType aAnType, ParticlePDGType aType1, ParticlePDGType aType2)
-{
-  TH3D* tNum3d = Get3dHisto(aFileLocationCfs, TString::Format("Num3d%s", cAnalysisBaseTags[aAnType]));
-  TH3D* tDen3d = Get3dHisto(aFileLocationCfs, TString::Format("Den3d%s", cAnalysisBaseTags[aAnType]));
-
-  ParticlePDGType tType1;
-//  ParticlePDGType tType2;
-  for(int i=1; i<=tNum3d->GetNbinsX(); i++)
-  {
-    tType1 = static_cast<ParticlePDGType>(GetParticlePidFromIndex(i-1));
-    if(tType1 != kPDGSigStP && tType1 != kPDGASigStM &&
-       tType1 != kPDGSigStM && tType1 != kPDGASigStP &&
-       tType1 != kPDGSigSt0 && tType1 != kPDGSigSt0)
-    {
-      for(int j=1; j<=tNum3d->GetNbinsY(); j++)
-      {
-//        tType2 = static_cast<ParticlePDGType>(GetParticlePidFromIndex(j-1));
-        for(int k=1; k<tNum3d->GetNbinsZ(); k++)
-        {
-          tNum3d->SetBinContent(i, j, k, 0.);
-          tDen3d->SetBinContent(i, j, k, 0.);
-        }
-      }
-    }
-  }
-
-  TH1D* tNum = tNum3d->ProjectionZ(TString::Format("NumSigmaStOnly%s", cAnalysisBaseTags[aAnType]), 
-                                   1, tNum3d->GetNbinsX(), 
-                                   1, tNum3d->GetNbinsY());
-  TH1D* tDen = tDen3d->ProjectionZ(TString::Format("DenSigmaStOnly%s", cAnalysisBaseTags[aAnType]), 
-                                   1, tDen3d->GetNbinsX(), 
-                                   1, tDen3d->GetNbinsY());
-
-  TString tReturnName = TString::Format("CfSigmaStOnly%s", cAnalysisBaseTags[aAnType]);
-  TH1D* tCf = BuildCf(tNum, tDen, tReturnName);
-
-  return tCf;
-}
-
-//________________________________________________________________________________________________________________
-TH1D* GetPrimaryAndShortDecays(TString aFileLocationCfs, AnalysisType aAnType, ParticlePDGType aType1, ParticlePDGType aType2)
-{
-  TH3D* tNum3d = Get3dHisto(aFileLocationCfs, TString::Format("Num3d%s", cAnalysisBaseTags[aAnType]));
-  TH3D* tDen3d = Get3dHisto(aFileLocationCfs, TString::Format("Den3d%s", cAnalysisBaseTags[aAnType]));
-
-  int tIndex1 = GetParticleIndexInPidInfo(aType1) + 1;
-  int tIndex2 = GetParticleIndexInPidInfo(aType2) + 1;
-
-  ParticlePDGType tType1, tType2;
-  for(int i=1; i<=tNum3d->GetNbinsX(); i++)
-  {
-    tType1 = static_cast<ParticlePDGType>(GetParticlePidFromIndex(i-1));
-    for(int j=1; j<=tNum3d->GetNbinsY(); j++)
-    {
-      tType2 = static_cast<ParticlePDGType>(GetParticlePidFromIndex(j-1));
-      if((i != tIndex1 || j != tIndex2) && !IncludeAsPrimary(tType1, tType2, 5.0))
-      {
-        for(int k=1; k<tNum3d->GetNbinsZ(); k++)
-        {
-          tNum3d->SetBinContent(i, j, k, 0.);
-          tDen3d->SetBinContent(i, j, k, 0.);
-        }
-      }
-    }
-  }
-
-  TH1D* tNum = tNum3d->ProjectionZ(TString::Format("NumPrimaryAndShortDecays%s", cAnalysisBaseTags[aAnType]), 
-                                   1, tNum3d->GetNbinsX(), 
-                                   1, tNum3d->GetNbinsY());
-  TH1D* tDen = tDen3d->ProjectionZ(TString::Format("DenPrimaryAndShortDecays%s", cAnalysisBaseTags[aAnType]), 
-                                   1, tDen3d->GetNbinsX(), 
-                                   1, tDen3d->GetNbinsY());
-
-  TString tReturnName = TString::Format("CfPrimaryAndShortDecays%s", cAnalysisBaseTags[aAnType]);
-  TH1D* tCf = BuildCf(tNum, tDen, tReturnName);
-
-  return tCf;
-}
 
 //________________________________________________________________________________________________________________
 //****************************************************************************************************************
@@ -257,19 +22,16 @@ int main(int argc, char **argv)
 //-----------------------------------------------------------------------------
 
 
-  TString tDirectory = "~/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b2/";
+  TString tDirectory = "/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b2/";
   TString tFileLocationCfs = tDirectory + "CorrelationFunctions_10MixedEvNum.root";
 
-/*
-  TString tDirectory = "/home/jesse/Analysis/ReducedTherminator2Events/test/";
-  TString tFileLocationCfs = tDirectory + "testCorrelationFunctions_5MixedEvNum.root";
-*/
   AnalysisType tAnType = kLamKchP;
-  ParticlePDGType tType1 = kPDGLam;
-  ParticlePDGType tType2 = kPDGKchP;
+
+  int tRebin=1;
+  Therm3dCf *t3dCf = new Therm3dCf(tAnType, tFileLocationCfs, tRebin);
 
 //-------------------------------------------------------------------------------
-  TH1D* tCfFullProject = GetFull(tFileLocationCfs, tAnType);
+  TH1D* tCfFullProject = t3dCf->GetFullCf();
     tCfFullProject->SetMarkerStyle(20);
     tCfFullProject->SetMarkerColor(1);
 
@@ -291,7 +53,7 @@ int main(int argc, char **argv)
 //-------------------------------------------------------------------------------
 
 //-------------------------------------------------------------------------------
-  TH1D* tCfPrimaryOnlyProject = GetPrimaryOnly(tFileLocationCfs, tAnType, tType1, tType2);
+  TH1D* tCfPrimaryOnlyProject = t3dCf->GetPrimaryOnlyCf();
     tCfPrimaryOnlyProject->SetMarkerStyle(20);
     tCfPrimaryOnlyProject->SetMarkerColor(1);
 
@@ -312,7 +74,7 @@ int main(int argc, char **argv)
   tCfPrimOnly->Draw();
 //-------------------------------------------------------------------------------
 //-------------------------------------------------------------------------------
-  TH1D* tCfSecondaryOnlyProject = GetSecondaryOnly(tFileLocationCfs, tAnType, tType1, tType2);
+  TH1D* tCfSecondaryOnlyProject = t3dCf->GetSecondaryOnlyCf();
     tCfSecondaryOnlyProject->SetMarkerStyle(20);
     tCfSecondaryOnlyProject->SetMarkerColor(1);
 
@@ -333,7 +95,7 @@ int main(int argc, char **argv)
   tCfSecondaryOnly->Draw();
 //-------------------------------------------------------------------------------
 //-------------------------------------------------------------------------------
-  TH1D* tCfWithoutSigmaStProject = GetWithoutSigmaSt(tFileLocationCfs, tAnType, tType1, tType2);
+  TH1D* tCfWithoutSigmaStProject = t3dCf->GetWithoutSigmaStCf();
     tCfWithoutSigmaStProject->SetMarkerStyle(20);
     tCfWithoutSigmaStProject->SetMarkerColor(1);
 
@@ -354,7 +116,7 @@ int main(int argc, char **argv)
   tCfWithoutSigmaSt->Draw();
 //-------------------------------------------------------------------------------
 //-------------------------------------------------------------------------------
-  TH1D* tCfSigmaStOnlyProject = GetSigmaStOnly(tFileLocationCfs, tAnType, tType1, tType2);
+  TH1D* tCfSigmaStOnlyProject = t3dCf->GetSigmaStOnlyCf();
     tCfSigmaStOnlyProject->SetMarkerStyle(20);
     tCfSigmaStOnlyProject->SetMarkerColor(1);
 
@@ -375,7 +137,7 @@ int main(int argc, char **argv)
   tCfSigmaStOnly->Draw();
 //-------------------------------------------------------------------------------
 //-------------------------------------------------------------------------------
-  TH1D* tCfPrimaryAndShortDecaysProject = GetPrimaryAndShortDecays(tFileLocationCfs, tAnType, tType1, tType2);
+  TH1D* tCfPrimaryAndShortDecaysProject = t3dCf->GetPrimaryAndShortDecaysCf();
     tCfPrimaryAndShortDecaysProject->SetMarkerStyle(20);
     tCfPrimaryAndShortDecaysProject->SetMarkerColor(1);
 
@@ -396,7 +158,7 @@ int main(int argc, char **argv)
   tCfPrimaryAndShortDecays->Draw();
 //-------------------------------------------------------------------------------
 //-------------------------------------------------------------------------------
-  TH1D* tCfAtLeastOneSecondaryInPairProject = GetAtLeastOneSecondaryInPair(tFileLocationCfs, tAnType, tType1, tType2);
+  TH1D* tCfAtLeastOneSecondaryInPairProject = t3dCf->GetAtLeastOneSecondaryInPairCf();
     tCfAtLeastOneSecondaryInPairProject->SetMarkerStyle(20);
     tCfAtLeastOneSecondaryInPairProject->SetMarkerColor(1);
 
@@ -412,5 +174,12 @@ int main(int argc, char **argv)
 
   return 0;
 }
+
+
+
+
+
+
+
 
 
