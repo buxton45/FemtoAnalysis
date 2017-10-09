@@ -79,6 +79,7 @@ public:
   void DoFit();
   void Finalize();
 
+  TPaveText* CreateParamFinalValuesText(TF1* aFit, double aTextXmin, double aTextYmin, double aTextWidth, double aTextHeight);
   void DrawCfWithFit(TPad *aPad, TString aDrawOption="");
   void DrawCfNumDen(TPad *aPad, TString aDrawOption="");
 

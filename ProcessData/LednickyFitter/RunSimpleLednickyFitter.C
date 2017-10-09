@@ -66,17 +66,26 @@ int main(int argc, char **argv)
   tFullTimer.Start();
 //-----------------------------------------------------------------------------
   AnalysisType tAnType = kLamKchP;
-  bool SaveImages = true;
+  bool bSaveFigures = false;
 
   TString tDirectory = "~/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b2/";
-//  TString tFileLocationCfs = tDirectory + "CorrelationFunctions.root";
-  TString tFileLocationCfs = tDirectory + "CorrelationFunctions_10MixedEvNum.root";
-//  TString tFileLocationCfs = tDirectory + "CorrelationFunctions_10MixedEvNum_WeightParentsInteraction.root";
+  TString tFileLocationCfs = tDirectory + "CorrelationFunctions_10MixedEvNum";
 
-//  TString tSaveDirectory = "/home/jesse/Analysis/Presentations/AliFemto/20170913/";
+  TString tFileNameModifier = "";
+//  TString tFileNameModifier = "_WeightParentsInteraction";
+//  TString tFileNameModifier = "_WeightParentsInteraction_NoCharged";
+
+  tFileLocationCfs += tFileNameModifier;
+  tFileLocationCfs += TString(".root");
+
+  TString tSaveLocationBase = "/home/jesse/Analysis/Presentations/GroupMeetings/20171012/Figures/";
+
 //-------------------------------------------------------------------------------
   TString tBaseName = "Full";
   //TString tBaseName = "PrimaryOnly";
+  //TString tBaseName = "PrimaryAndShortDecays";
+  //TString tBaseName = "WithoutSigmaSt";
+  //TString tBaseName = "SigmaStOnly";
 
   SimpleLednickyFitter *tSLFitter = new SimpleLednickyFitter(tAnType, tFileLocationCfs, tBaseName);
 
@@ -100,11 +109,14 @@ int main(int argc, char **argv)
   tSLFitter->DoFit();
 
 
-  TCanvas* tCan = new TCanvas("tCan", "tCan");
-  tSLFitter->DrawCfWithFit((TPad*)tCan);
+  TCanvas* tCanCfWithFit = new TCanvas("tCanCfWithFit", "tCanCfWithFit");
+  tSLFitter->DrawCfWithFit((TPad*)tCanCfWithFit);
 
-  TCanvas* tCan2 = new TCanvas("tCan2", "tCan2");
-  tSLFitter->DrawCfNumDen((TPad*)tCan2);
+//  TCanvas* tCan2 = new TCanvas("tCan2", "tCan2");
+//  tSLFitter->DrawCfNumDen((TPad*)tCan2);
+
+  if(bSaveFigures) tCanCfWithFit->SaveAs(tSaveLocationBase + TString::Format("%s/", cAnalysisBaseTags[tAnType]) + TString(tCanCfWithFit->GetName()) + tBaseName + tFileNameModifier + TString(".eps"));
+
 //-------------------------------------------------------------------------------
   tFullTimer.Stop();
   cout << "Finished program: ";

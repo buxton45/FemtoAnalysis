@@ -552,6 +552,35 @@ void SimpleLednickyFitter::Finalize()
 
 
 //________________________________________________________________________________________________________________
+TPaveText* SimpleLednickyFitter::CreateParamFinalValuesText(TF1* aFit, double aTextXmin, double aTextYmin, double aTextWidth, double aTextHeight)
+{
+  double tLambda, tRadius, tReF0, tImF0, tD0;
+  double tLambdaErr, tRadiusErr, tReF0Err, tImF0Err, tD0Err;
+
+  tLambda = aFit->GetParameter(0);
+  tRadius = aFit->GetParameter(1);
+  tReF0 = aFit->GetParameter(2);
+  tImF0 = aFit->GetParameter(3);
+  tD0 = aFit->GetParameter(4);
+
+  tLambdaErr = aFit->GetParError(0);
+  tRadiusErr = aFit->GetParError(1);
+  tReF0Err = aFit->GetParError(2);
+  tImF0Err = aFit->GetParError(3);
+  tD0Err = aFit->GetParError(4);
+
+  TPaveText *tText = new TPaveText(aTextXmin, aTextYmin, aTextXmin+aTextWidth, aTextYmin+aTextHeight, "NDC");
+  tText->AddText(TString::Format("#lambda = %0.2f #pm %0.2f",tLambda,tLambdaErr));
+  tText->AddText(TString::Format("R = %0.2f #pm %0.2f",tRadius,tRadiusErr));
+  tText->AddText(TString::Format("Re[f0] = %0.2f #pm %0.2f",tReF0,tReF0Err));
+  tText->AddText(TString::Format("Im[f0] = %0.2f #pm %0.2f",tImF0,tImF0Err));
+  tText->AddText(TString::Format("d0 = %0.2f #pm %0.2f",tD0,tD0Err));
+
+  return tText;
+}
+
+
+//________________________________________________________________________________________________________________
 void SimpleLednickyFitter::DrawCfWithFit(TPad *aPad, TString aDrawOption)
 {
   aPad->cd();
@@ -563,6 +592,9 @@ void SimpleLednickyFitter::DrawCfWithFit(TPad *aPad, TString aDrawOption)
   tCf->Draw(aDrawOption);
   if(aDrawOption.EqualTo("same")) tFit->Draw(aDrawOption);
   else tFit->Draw(aDrawOption+TString("same"));
+
+  TPaveText* tText = CreateParamFinalValuesText(tFit, 0.5, 0.5, 0.25, 0.25);
+  tText->Draw();
 }
 
 
