@@ -83,6 +83,13 @@ public:
   void DrawCfWithFit(TPad *aPad, TString aDrawOption="");
   void DrawCfNumDen(TPad *aPad, TString aDrawOption="");
 
+  void LoadTransformMatrices(int aRebin=2, TString aFileLocation="");
+  vector<TH2D*> GetTransformMatrices(int aRebin=2, TString aFileLocation="");
+  TH2D* GetTransformMatrix(int aIndex, int aRebin=2, TString aFileLocation="");
+  void InitiateResidualCollection(td1dVec &aKStarBinCenters, bool aUseCoulombOnlyInterpCfsForChargedResiduals=true, bool aUseCoulombOnlyInterpCfsForXiKResiduals=false, TString aInterpCfsDirectory="/home/jesse/Analysis/FemtoAnalysis/ProcessData/CoulombFitter/");
+  vector<double> GetFitCfIncludingResiduals(vector<double> &aPrimaryFitCfContent, double *aParamSet);
+
+
   //inline (i.e. simple) functions
 
   vector<double> GetMinParams();
@@ -93,6 +100,10 @@ public:
   double GetChi2();
   int GetNDF();
   TMinuit* GetMinuitObject();
+
+  vector<AnalysisType> GetTransformStorageMapping();
+  void SetIncludeResidualCorrelations(bool aInclude=true);
+  td1dVec CombinePrimaryWithResiduals(double *aCfParams, td1dVec &aPrimaryCf);
 
 protected:
   AnalysisType fAnalysisType;
@@ -126,6 +137,10 @@ protected:
   vector<double> fMinParams;
   vector<double> fParErrors;
 
+  bool fIncludeResidualCorrelations;
+  vector<TH2D*> fTransformMatrices;
+  vector<AnalysisType> fTransformStorageMapping;
+  ResidualCollection *fResidualCollection;
 
 #ifdef __ROOT__
   ClassDef(SimpleLednickyFitter, 1)
@@ -143,4 +158,9 @@ inline double SimpleLednickyFitter::GetChi2() {return fChi2;}
 inline int SimpleLednickyFitter::GetNDF() {return fNDF;}
 
 inline TMinuit* SimpleLednickyFitter::GetMinuitObject() {return fMinuit;}
+
+inline vector<AnalysisType> SimpleLednickyFitter::GetTransformStorageMapping() {return fTransformStorageMapping;}
+inline void SimpleLednickyFitter::SetIncludeResidualCorrelations(bool aInclude) {fIncludeResidualCorrelations = aInclude;}
+inline td1dVec SimpleLednickyFitter::CombinePrimaryWithResiduals(double *aCfParams, td1dVec &aPrimaryCf) {return fResidualCollection->CombinePrimaryWithResiduals(aCfParams, aPrimaryCf);}
+
 #endif

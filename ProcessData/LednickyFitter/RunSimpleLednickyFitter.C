@@ -67,6 +67,7 @@ int main(int argc, char **argv)
 //-----------------------------------------------------------------------------
   AnalysisType tAnType = kLamKchP;
   bool bSaveFigures = false;
+  bool bIncludeResiduals = false;
 
   TString tDirectory = "~/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b2/";
   TString tFileLocationCfs = tDirectory + "CorrelationFunctions_10MixedEvNum";
@@ -106,6 +107,7 @@ int main(int argc, char **argv)
   tSLFitter->GetMinuitObject()->SetFCN(fcn);
   myFitter = tSLFitter;
 
+  tSLFitter->SetIncludeResidualCorrelations(bIncludeResiduals);
   tSLFitter->DoFit();
 
 

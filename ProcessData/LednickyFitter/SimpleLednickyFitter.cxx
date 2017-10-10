@@ -42,11 +42,15 @@ SimpleLednickyFitter::SimpleLednickyFitter(AnalysisType aAnalysisType, CfLite *a
   fNDF(0),
   fErrFlg(0),
   fMinParams(0),
-  fParErrors(0)
+  fParErrors(0),
+
+  fIncludeResidualCorrelations(false),
+  fTransformMatrices(0),
+  fTransformStorageMapping(0),
+  fResidualCollection(nullptr)
 
 {
   fMinuit = new TMinuit(50);
-  CreateMinuitParameters();
 }
 
 
@@ -83,7 +87,6 @@ SimpleLednickyFitter::SimpleLednickyFitter(AnalysisType aAnalysisType, TString a
                        tNum, tDen, aMinNorm, aMaxNorm);
 
   fMinuit = new TMinuit(50);
-  CreateMinuitParameters();
 }
 
 //________________________________________________________________________________________________________________
@@ -119,7 +122,6 @@ SimpleLednickyFitter::SimpleLednickyFitter(AnalysisType aAnalysisType, vector<do
                        tNum, tDen, aMinNorm, aMaxNorm);
 
   fMinuit = new TMinuit(50);
-  CreateMinuitParameters();
 
 }
 
@@ -272,6 +274,7 @@ void SimpleLednickyFitter::CreateMinuitParameters()
   double tStepSize_Radius = 0.001;
   double tLowerBound_Radius = 0.;
   double tUpperBound_Radius = 0.;
+  if(fIncludeResidualCorrelations) {tLowerBound_Radius=1.; tUpperBound_Radius=12.;}
   fMinuit->mnparm(1, TString("Radius"), tStartVal_Radius, tStepSize_Radius, tLowerBound_Radius, tUpperBound_Radius, tErrFlg);
 //  fMinuit->FixParameter(1);
 
@@ -336,7 +339,8 @@ void SimpleLednickyFitter::CalculateFitFunction(int &npar, double &chi2, double 
 
   double *tParPrim = new double[tNFitParams];
 
-  tParPrim[0] = par[tLambdaMinuitParamNumber];
+  if(fIncludeResidualCorrelations) tParPrim[0] = cAnalysisLambdaFactors[fAnalysisType]*par[tLambdaMinuitParamNumber];
+  else tParPrim[0] = par[tLambdaMinuitParamNumber];
   tParPrim[1] = par[tRadiusMinuitParamNumber];
   tParPrim[2] = par[tRef0MinuitParamNumber];
   tParPrim[3] = par[tImf0MinuitParamNumber];
@@ -353,6 +357,9 @@ void SimpleLednickyFitter::CalculateFitFunction(int &npar, double &chi2, double 
   bool tRejectOmega = false;
   if(fAnalysisType==kLamKchM || fAnalysisType==kALamKchP) tRejectOmega = true; 
 
+  vector<double> tFitCfContent;
+  vector<double> tCorrectedFitCfContent;
+
   for(int ix=1; ix <= fNbinsXToBuild; ix++)
   {
     x[0] = fKStarBinCenters[ix-1];
@@ -363,17 +370,33 @@ void SimpleLednickyFitter::CalculateFitFunction(int &npar, double &chi2, double 
     tPrimaryFitCfContent[ix-1] = LednickyFitter::LednickyEq(x,tParPrim);
   }
 
-  LednickyFitter::ApplyNormalization(tParPrim[5], tPrimaryFitCfContent);
+  if(fIncludeResidualCorrelations) 
+  {
+    double *tParOverall = new double[tNFitParams];
+    tParOverall[0] = par[tLambdaMinuitParamNumber];
+    tParOverall[1] = par[tRadiusMinuitParamNumber];
+    tParOverall[2] = par[tRef0MinuitParamNumber];
+    tParOverall[3] = par[tImf0MinuitParamNumber];
+    tParOverall[4] = par[td0MinuitParamNumber];
+    tParOverall[5] = par[tNormMinuitParamNumber];
+    tFitCfContent = GetFitCfIncludingResiduals(tPrimaryFitCfContent, tParOverall);
+    delete[] tParOverall;
+  }
+  else tFitCfContent = tPrimaryFitCfContent;
+
+  tCorrectedFitCfContent = tFitCfContent;
+
+  LednickyFitter::ApplyNormalization(tParPrim[5], tCorrectedFitCfContent);
 
   for(int ix=0; ix < fNbinsXToFit; ix++)
   {
     if(tRejectOmega && (fKStarBinCenters[ix] > tRejectOmegaLow) && (fKStarBinCenters[ix] < tRejectOmegaHigh)) {fChi2+=0;}
     else
     {
-      if(tNumContent[ix]!=0 && tDenContent[ix]!=0 && tPrimaryFitCfContent[ix]!=0) //even if only in one single bin, t*Content=0 causes fChi2->nan
+      if(tNumContent[ix]!=0 && tDenContent[ix]!=0 && tCorrectedFitCfContent[ix]!=0) //even if only in one single bin, t*Content=0 causes fChi2->nan
       {
         double tChi2 = 0.;
-        if(fFitType == kChi2PML) tChi2 = LednickyFitter::GetPmlValue(tNumContent[ix],tDenContent[ix],tPrimaryFitCfContent[ix]);
+        if(fFitType == kChi2PML) tChi2 = LednickyFitter::GetPmlValue(tNumContent[ix],tDenContent[ix],tCorrectedFitCfContent[ix]);
         else if(fFitType == kChi2) tChi2 = LednickyFitter::GetChi2Value(ix+1,tCf,tParPrim);
         else tChi2 = 0.;
 
@@ -412,6 +435,11 @@ TF1* SimpleLednickyFitter::CreateFitFunction(TString aName)
   {
     tParamValue = fMinParams[iPar];
     tParamError = fParErrors[iPar];
+    if(iPar==0 && fIncludeResidualCorrelations)
+    {
+      tParamValue *= cAnalysisLambdaFactors[fAnalysisType];
+      tParamError *= cAnalysisLambdaFactors[fAnalysisType];
+    }
 
     ReturnFunction->SetParameter(iPar,tParamValue);
     ReturnFunction->SetParError(iPar,tParamError);
@@ -434,6 +462,7 @@ TF1* SimpleLednickyFitter::CreateFitFunction(TString aName)
 void SimpleLednickyFitter::InitializeFitter()
 {
   cout << "----- Initializing fitter -----" << endl;
+  CreateMinuitParameters();
 
   fNbinsXToBuild = 0;
   fNbinsXToFit = 0;
@@ -449,6 +478,7 @@ void SimpleLednickyFitter::InitializeFitter()
   fNbinsXToFit = fCfLite->Num()->FindBin(fMaxFitKStar);
   if(fCfLite->Num()->GetBinLowEdge(fNbinsXToFit) == fMaxFitKStar) fNbinsXToFit--;
 
+  if(fIncludeResidualCorrelations) tNbinsXToBuildResiduals = GetTransformMatrix(0)->GetNbinsX();
   fNbinsXToBuild = std::max({tNbinsXToBuildMomResCrctn, tNbinsXToBuildResiduals, fNbinsXToFit});
 
   fKStarBinWidth = fCfLite->Num()->GetXaxis()->GetBinWidth(1);
@@ -463,6 +493,13 @@ void SimpleLednickyFitter::InitializeFitter()
   assert(tNum->GetXaxis()->GetBinWidth(1) == tCf->GetXaxis()->GetBinWidth(1));
   assert(tNum->GetXaxis()->GetBinWidth(1) == fKStarBinWidth);
 
+  //make sure tNum and tDen and tCf have same bin size as residuals
+  if(fIncludeResidualCorrelations)
+  {
+    assert(tNum->GetXaxis()->GetBinWidth(1) == fTransformMatrices[0]->GetXaxis()->GetBinWidth(1));
+    assert(tNum->GetXaxis()->GetBinWidth(1) == fTransformMatrices[0]->GetYaxis()->GetBinWidth(1));
+  }
+
   //make sure tNum and tDen have same number of bins
   assert(tNum->GetNbinsX() == tDen->GetNbinsX());
   assert(tNum->GetNbinsX() == tCf->GetNbinsX());
@@ -473,12 +510,15 @@ void SimpleLednickyFitter::InitializeFitter()
   if(tTempNbinsXToFit > tNum->GetNbinsX()) {tTempNbinsXToFit = tNum->GetNbinsX();}  //in case I accidentally include an overflow bin in nbinsXToFit
   assert(tTempNbinsXToFit == fNbinsXToFit);
 
+  if(!fIncludeResidualCorrelations) fNbinsXToBuild = fNbinsXToFit;
+
   fKStarBinCenters.resize(fNbinsXToBuild,0.);
   for(int ix=1; ix <= fNbinsXToBuild; ix++)
   {
     fKStarBinCenters[ix-1] = tNum->GetXaxis()->GetBinCenter(ix);
   }
 
+  if(fIncludeResidualCorrelations) InitiateResidualCollection(fKStarBinCenters);
 
 }
 
@@ -620,4 +660,272 @@ void SimpleLednickyFitter::DrawCfNumDen(TPad *aPad, TString aDrawOption)
 }
 
 
+
+
+//________________________________________________________________________________________________________________
+void SimpleLednickyFitter::LoadTransformMatrices(int aRebin, TString aFileLocation)
+{
+  if(aFileLocation.IsNull()) aFileLocation = "/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b2/TransformMatrices_Mix5.root";
+
+  TFile *tFile = TFile::Open(aFileLocation);
+  TString tName2 = cAnalysisBaseTags[fAnalysisType] + TString("Transform");
+
+  TString tName1Sig   = TString("SigTo");
+  TString tName1XiC   = TString("XiCTo");
+  TString tName1Xi0   = TString("Xi0To");
+  TString tName1Omega = TString("OmegaTo");
+
+  TString tFullNameSig, tFullNameXiC, tFullNameXi0, tFullNameOmega;
+  TString tFullNameSigStP, tFullNameSigStM, tFullNameSigSt0;
+
+  switch(fAnalysisType) {
+  case kLamKchP:
+  case kLamKchM:
+  case kLamK0:
+    tFullNameSig = TString("f") + tName1Sig + tName2;
+    tFullNameXiC = TString("f") + tName1XiC + tName2;
+    tFullNameXi0 = TString("f") + tName1Xi0 + tName2;
+    tFullNameOmega = TString("f") + tName1Omega + tName2;
+
+    tFullNameSigStP = TString("fSigStPTo") + tName2;
+    tFullNameSigStM = TString("fSigStMTo") + tName2;
+    tFullNameSigSt0 = TString("fSigSt0To") + tName2;
+    break;
+
+  case kALamKchP:
+  case kALamKchM:
+  case kALamK0:
+    tFullNameSig = TString("fA") + tName1Sig + tName2;
+    tFullNameXiC = TString("fA") + tName1XiC + tName2;
+    tFullNameXi0 = TString("fA") + tName1Xi0 + tName2;
+    tFullNameOmega = TString("fA") + tName1Omega + tName2;
+
+    tFullNameSigStP = TString("fASigStMTo") + tName2;
+    tFullNameSigStM = TString("fASigStPTo") + tName2;
+    tFullNameSigSt0 = TString("fASigSt0To") + tName2;
+    break;
+
+  default:
+    cout << "ERROR:  fAnalysisType = " << fAnalysisType << " is not apropriate" << endl << endl;
+    assert(0);
+  }
+
+  TString tFullNameLamKSt0, tFullNameSigKSt0, tFullNameXiCKSt0, tFullNameXi0KSt0;
+  switch(fAnalysisType) {
+  case kLamKchP:
+  case kLamK0:
+    tFullNameLamKSt0 = TString("fLamKSt0To") + tName2;
+    tFullNameSigKSt0 = TString("fSigKSt0To") + tName2;
+    tFullNameXiCKSt0 = TString("fXiCKSt0To") + tName2;
+    tFullNameXi0KSt0 = TString("fXi0KSt0To") + tName2;
+    break;
+
+  case kLamKchM:
+    tFullNameLamKSt0 = TString("fLamAKSt0To") + tName2;
+    tFullNameSigKSt0 = TString("fSigAKSt0To") + tName2;
+    tFullNameXiCKSt0 = TString("fXiCAKSt0To") + tName2;
+    tFullNameXi0KSt0 = TString("fXi0AKSt0To") + tName2;
+    break;
+
+  case kALamKchP:
+  case kALamK0:
+    tFullNameLamKSt0 = TString("fALamKSt0To") + tName2;
+    tFullNameSigKSt0 = TString("fASigKSt0To") + tName2;
+    tFullNameXiCKSt0 = TString("fAXiCKSt0To") + tName2;
+    tFullNameXi0KSt0 = TString("fAXi0KSt0To") + tName2;
+    break;
+
+  case kALamKchM:
+    tFullNameLamKSt0 = TString("fALamAKSt0To") + tName2;
+    tFullNameSigKSt0 = TString("fASigAKSt0To") + tName2;
+    tFullNameXiCKSt0 = TString("fAXiCAKSt0To") + tName2;
+    tFullNameXi0KSt0 = TString("fAXi0AKSt0To") + tName2;
+    break;
+
+  default:
+    cout << "ERROR:  fAnalysisType = " << fAnalysisType << " is not apropriate" << endl << endl;
+    assert(0);
+  }
+
+
+  TH2D* tSig = (TH2D*)tFile->Get(tFullNameSig);
+    tSig->SetDirectory(0);
+    tSig->Rebin2D(aRebin,aRebin);
+  TH2D* tXiC = (TH2D*)tFile->Get(tFullNameXiC);
+    tXiC->SetDirectory(0);
+    tXiC->Rebin2D(aRebin,aRebin);
+  TH2D* tXi0 = (TH2D*)tFile->Get(tFullNameXi0);
+    tXi0->SetDirectory(0);
+    tXi0->Rebin2D(aRebin,aRebin);
+  TH2D* tOmega = (TH2D*)tFile->Get(tFullNameOmega);
+    tOmega->SetDirectory(0);
+    tOmega->Rebin2D(aRebin,aRebin);
+
+  TH2D* tSigStP = (TH2D*)tFile->Get(tFullNameSigStP);
+    tSigStP->SetDirectory(0);
+    tSigStP->Rebin2D(aRebin,aRebin);
+  TH2D* tSigStM = (TH2D*)tFile->Get(tFullNameSigStM);
+    tSigStM->SetDirectory(0);
+    tSigStM->Rebin2D(aRebin,aRebin);
+  TH2D* tSigSt0 = (TH2D*)tFile->Get(tFullNameSigSt0);
+    tSigSt0->SetDirectory(0);
+    tSigSt0->Rebin2D(aRebin,aRebin);
+
+  TH2D* tLamKSt0 = (TH2D*)tFile->Get(tFullNameLamKSt0);
+    tLamKSt0->SetDirectory(0);
+    tLamKSt0->Rebin2D(aRebin,aRebin);
+  TH2D* tSigKSt0 = (TH2D*)tFile->Get(tFullNameSigKSt0);
+    tSigKSt0->SetDirectory(0);
+    tSigKSt0->Rebin2D(aRebin,aRebin);
+  TH2D* tXiCKSt0 = (TH2D*)tFile->Get(tFullNameXiCKSt0);
+    tXiCKSt0->SetDirectory(0);
+    tXiCKSt0->Rebin2D(aRebin,aRebin);
+  TH2D* tXi0KSt0 = (TH2D*)tFile->Get(tFullNameXi0KSt0);
+    tXi0KSt0->SetDirectory(0);
+    tXi0KSt0->Rebin2D(aRebin,aRebin);
+
+  fTransformMatrices.clear();
+  fTransformMatrices.push_back((TH2D*)tSig);
+  fTransformMatrices.push_back((TH2D*)tXiC);
+  fTransformMatrices.push_back((TH2D*)tXi0);
+  fTransformMatrices.push_back((TH2D*)tOmega);
+
+  fTransformMatrices.push_back((TH2D*)tSigStP);
+  fTransformMatrices.push_back((TH2D*)tSigStM);
+  fTransformMatrices.push_back((TH2D*)tSigSt0);
+
+  fTransformMatrices.push_back((TH2D*)tLamKSt0);
+  fTransformMatrices.push_back((TH2D*)tSigKSt0);
+  fTransformMatrices.push_back((TH2D*)tXiCKSt0);
+  fTransformMatrices.push_back((TH2D*)tXi0KSt0);
+
+  //-----------Build mapping vector------------------------
+  fTransformStorageMapping.clear();
+  switch(fAnalysisType) {
+  case kLamKchP:
+    fTransformStorageMapping.push_back(kResSig0KchP);
+    fTransformStorageMapping.push_back(kResXiCKchP);
+    fTransformStorageMapping.push_back(kResXi0KchP);
+    fTransformStorageMapping.push_back(kResOmegaKchP);
+    fTransformStorageMapping.push_back(kResSigStPKchP);
+    fTransformStorageMapping.push_back(kResSigStMKchP);
+    fTransformStorageMapping.push_back(kResSigSt0KchP);
+    fTransformStorageMapping.push_back(kResLamKSt0);
+    fTransformStorageMapping.push_back(kResSig0KSt0);
+    fTransformStorageMapping.push_back(kResXiCKSt0);
+    fTransformStorageMapping.push_back(kResXi0KSt0);
+    break;
+
+  case kLamKchM:
+    fTransformStorageMapping.push_back(kResSig0KchM);
+    fTransformStorageMapping.push_back(kResXiCKchM);
+    fTransformStorageMapping.push_back(kResXi0KchM);
+    fTransformStorageMapping.push_back(kResOmegaKchM);
+    fTransformStorageMapping.push_back(kResSigStPKchM);
+    fTransformStorageMapping.push_back(kResSigStMKchM);
+    fTransformStorageMapping.push_back(kResSigSt0KchM);
+    fTransformStorageMapping.push_back(kResLamAKSt0);
+    fTransformStorageMapping.push_back(kResSig0AKSt0);
+    fTransformStorageMapping.push_back(kResXiCAKSt0);
+    fTransformStorageMapping.push_back(kResXi0AKSt0);
+    break;
+
+  case kALamKchP:
+    fTransformStorageMapping.push_back(kResASig0KchP);
+    fTransformStorageMapping.push_back(kResAXiCKchP);
+    fTransformStorageMapping.push_back(kResAXi0KchP);
+    fTransformStorageMapping.push_back(kResAOmegaKchP);
+    fTransformStorageMapping.push_back(kResASigStMKchP);
+    fTransformStorageMapping.push_back(kResASigStPKchP);
+    fTransformStorageMapping.push_back(kResASigSt0KchP);
+    fTransformStorageMapping.push_back(kResALamKSt0);
+    fTransformStorageMapping.push_back(kResASig0KSt0);
+    fTransformStorageMapping.push_back(kResAXiCKSt0);
+    fTransformStorageMapping.push_back(kResAXi0KSt0);
+    break;
+
+  case kALamKchM:
+    fTransformStorageMapping.push_back(kResASig0KchM);
+    fTransformStorageMapping.push_back(kResAXiCKchM);
+    fTransformStorageMapping.push_back(kResAXi0KchM);
+    fTransformStorageMapping.push_back(kResAOmegaKchM);
+    fTransformStorageMapping.push_back(kResASigStMKchM);
+    fTransformStorageMapping.push_back(kResASigStPKchM);
+    fTransformStorageMapping.push_back(kResASigSt0KchM);
+    fTransformStorageMapping.push_back(kResALamAKSt0);
+    fTransformStorageMapping.push_back(kResASig0AKSt0);
+    fTransformStorageMapping.push_back(kResAXiCAKSt0);
+    fTransformStorageMapping.push_back(kResAXi0AKSt0);
+    break;
+
+  case kLamK0:
+    fTransformStorageMapping.push_back(kResSig0K0);
+    fTransformStorageMapping.push_back(kResXiCK0);
+    fTransformStorageMapping.push_back(kResXi0K0);
+    fTransformStorageMapping.push_back(kResOmegaK0);
+    fTransformStorageMapping.push_back(kResSigStPK0);
+    fTransformStorageMapping.push_back(kResSigStMK0);
+    fTransformStorageMapping.push_back(kResSigSt0K0);
+    fTransformStorageMapping.push_back(kResLamKSt0ToLamK0);
+    fTransformStorageMapping.push_back(kResSig0KSt0ToLamK0);
+    fTransformStorageMapping.push_back(kResXiCKSt0ToLamK0);
+    fTransformStorageMapping.push_back(kResXi0KSt0ToLamK0);
+    break;
+
+  case kALamK0:
+    fTransformStorageMapping.push_back(kResASig0K0);
+    fTransformStorageMapping.push_back(kResAXiCK0);
+    fTransformStorageMapping.push_back(kResAXi0K0);
+    fTransformStorageMapping.push_back(kResAOmegaK0);
+    fTransformStorageMapping.push_back(kResASigStMK0);
+    fTransformStorageMapping.push_back(kResASigStPK0);
+    fTransformStorageMapping.push_back(kResASigSt0K0);
+    fTransformStorageMapping.push_back(kResALamKSt0ToALamK0);
+    fTransformStorageMapping.push_back(kResASig0KSt0ToALamK0);
+    fTransformStorageMapping.push_back(kResAXiCKSt0ToALamK0);
+    fTransformStorageMapping.push_back(kResAXi0KSt0ToALamK0);
+    break;
+
+  default:
+    cout << "ERROR:  fAnalysisType = " << fAnalysisType << " is not apropriate" << endl << endl;
+    assert(0);
+  }
+
+}
+
+//________________________________________________________________________________________________________________
+TH2D* SimpleLednickyFitter::GetTransformMatrix(int aIndex, int aRebin, TString aFileLocation)
+{
+  if(fTransformMatrices.size()==0) LoadTransformMatrices(aRebin, aFileLocation);
+  return fTransformMatrices[aIndex];
+}
+
+//________________________________________________________________________________________________________________
+vector<TH2D*> SimpleLednickyFitter::GetTransformMatrices(int aRebin, TString aFileLocation)
+{
+  if(fTransformMatrices.size()==0) LoadTransformMatrices(aRebin, aFileLocation);
+  return fTransformMatrices;
+}
+
+
+//________________________________________________________________________________________________________________
+void SimpleLednickyFitter::InitiateResidualCollection(td1dVec &aKStarBinCenters, bool aUseCoulombOnlyInterpCfsForChargedResiduals, bool aUseCoulombOnlyInterpCfsForXiKResiduals, TString aInterpCfsDirectory)
+{
+  vector<TH2D*> aTransformMatrices = GetTransformMatrices();
+  vector<AnalysisType> aTransformStorageMapping = GetTransformStorageMapping();
+  fResidualCollection = new ResidualCollection(fAnalysisType, aKStarBinCenters, aTransformMatrices, aTransformStorageMapping, k0010);
+  fResidualCollection->SetUseCoulombOnlyInterpCfs(aInterpCfsDirectory, aUseCoulombOnlyInterpCfsForChargedResiduals, aUseCoulombOnlyInterpCfsForXiKResiduals);
+
+  double tSigStRadiusFactor = 1.;
+  fResidualCollection->SetRadiusFactorForSigStResiduals(tSigStRadiusFactor);
+}
+
+
+//________________________________________________________________________________________________________________
+vector<double> SimpleLednickyFitter::GetFitCfIncludingResiduals(vector<double> &aPrimaryFitCfContent, double *aParamSet)
+{
+  td1dVec tFitCfContent = CombinePrimaryWithResiduals(aParamSet, aPrimaryFitCfContent);
+
+  return tFitCfContent;
+}
 
