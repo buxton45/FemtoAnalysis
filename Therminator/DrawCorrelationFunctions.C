@@ -180,7 +180,7 @@ void DrawCfs(TPad* aPad, TString aFileName, AnalysisType aAnType)
 
   tLeg->AddEntry(tCfFull, "Full");
   tLeg->AddEntry(tCfWithoutSigmaSt, "w/o #Sigma*");
-  tLeg->AddEntry(tCfSecondaryOnly, "#Sigma* Only");
+  tLeg->AddEntry(tCfSecondaryOnly, "Secondary Only");
   tLeg->AddEntry(tCfPrimaryOnly, "Primary Only");
   tLeg->AddEntry(tCfPrimaryAndShortDecays, "Primary and short decays");
   tLeg->AddEntry(tCfSigmaStOnly, "#Sigma* Only");

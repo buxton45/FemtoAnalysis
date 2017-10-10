@@ -43,21 +43,26 @@ public:
   TH1D* GetSigmaSt0Only(TH3D* aHist3d, TString aPreName);
 
   TH1D* GetPrimaryAndShortDecays(TH3D* aHist3d, TString aPreName);
+  TH1D* GetLongDecays(TH3D* aHist3d, TString aPreName, double aMinDecayLength=1000);
 
   //-----------------------------------
 
-  TH1D* GetFullCf();
-  TH1D* GetPrimaryOnlyCf();
-  TH1D* GetSecondaryOnlyCf();
-  TH1D* GetAtLeastOneSecondaryInPairCf();
-  TH1D* GetWithoutSigmaStCf();
+  TH1D* GetFullCf(int aMarkerStyle=20, int aColor=1);
+  TH1D* GetPrimaryOnlyCf(int aMarkerStyle=20, int aColor=2);
+  TH1D* GetSecondaryOnlyCf(int aMarkerStyle=20, int aColor=6);
+  TH1D* GetAtLeastOneSecondaryInPairCf(int aMarkerStyle=20, int aColor=28);
+  TH1D* GetWithoutSigmaStCf(int aMarkerStyle=20, int aColor=4);
 
-  TH1D* GetSigmaStOnlyCf();
-  TH1D* GetSigmaStPOnlyCf();
-  TH1D* GetSigmaStMOnlyCf();
-  TH1D* GetSigmaSt0OnlyCf();
+  TH1D* GetSigmaStOnlyCf(int aMarkerStyle=20, int aColor=20);
+  TH1D* GetSigmaStPOnlyCf(int aMarkerStyle=24, int aColor=20);
+  TH1D* GetSigmaStMOnlyCf(int aMarkerStyle=25, int aColor=20);
+  TH1D* GetSigmaSt0OnlyCf(int aMarkerStyle=26, int aColor=20);
 
-  TH1D* GetPrimaryAndShortDecaysCf();
+  TH1D* GetPrimaryAndShortDecaysCf(int aMarkerStyle=20, int aColor=3);
+  TH1D* GetLongDecaysCf(double aMinDecayLength=1000, int aMarkerStyle=20, int aColor=3);
+
+  void DrawAllCfs(TPad* aPad, int aCommonMarkerStyle=20);
+  void DrawAllSigmaStFlavors(TPad* aPad);
 
   //inline----------------------------------------
   AnalysisType GetAnalysisType();
@@ -92,6 +97,8 @@ public:
   TH1D* GetPrimaryAndShortDecaysNum();
   TH1D* GetPrimaryAndShortDecaysDen();
 
+  TH1D* GetLongDecaysNum(double aMinDecayLength=1000);
+  TH1D* GetLongDecaysDen(double aMinDecayLength=1000);
 
 private:
   AnalysisType fAnalysisType;
@@ -101,6 +108,7 @@ private:
   int fRebin;
 
   TH3D *fNum3d, *fDen3d;
+
 
 
 
@@ -141,5 +149,7 @@ inline TH1D* Therm3dCf::GetSigmaSt0OnlyDen() {return GetSigmaSt0Only(fDen3d, "De
 inline TH1D* Therm3dCf::GetPrimaryAndShortDecaysNum() {return GetPrimaryAndShortDecays(fNum3d, "Num");}
 inline TH1D* Therm3dCf::GetPrimaryAndShortDecaysDen() {return GetPrimaryAndShortDecays(fDen3d, "Den");}
 
+inline TH1D* Therm3dCf::GetLongDecaysNum(double aMinDecayLength) {return GetLongDecays(fNum3d, "Num", aMinDecayLength);}
+inline TH1D* Therm3dCf::GetLongDecaysDen(double aMinDecayLength) {return GetLongDecays(fDen3d, "Den", aMinDecayLength);}
 
 #endif

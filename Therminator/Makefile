@@ -11,7 +11,7 @@ RM = rm
 
 MY_LIBS = $(addprefix build/, Interpolator.o Types.o PIDMapping.o ThermCommon.o ThermParticle.o ThermV0Particle.o ThermEvent.o ThermChargedResidual.o ThermPairAnalysis.o ThermSingleParticleAnalysis.o ThermEventsCollection.o SimpleThermAnalysis.o Therm3dCf.o)
 
-BINARIES = runTest runTest2 runDrawTransforms runDrawPairFractions runDrawParentsMatrices runBuildLambdaValuesFromParentMatrices runProject3dRadii runDrawPairSources runDrawCfs runDrawCfsv2 runProject3dCfs
+BINARIES = runTest runTest2 runDrawTransforms runDrawPairFractions runDrawParentsMatrices runBuildLambdaValuesFromParentMatrices runProject3dRadii runDrawPairSources runDrawCfs runDrawCfsv2 runCompareCfs runProject3dCfs
 
 all: $(BINARIES)
 
@@ -45,6 +45,9 @@ runDrawCfs: ${MY_LIBS} DrawCorrelationFunctions.C
 
 runDrawCfsv2: ${MY_LIBS} DrawCorrelationFunctionsv2.C
 	g++ DrawCorrelationFunctionsv2.C ${MY_LIBS} -o runDrawCfsv2 $(LIBS) $(CFLAGS)
+
+runCompareCfs: ${MY_LIBS} CompareCorrelationFunctions.C
+	g++ CompareCorrelationFunctions.C ${MY_LIBS} -o runCompareCfs $(LIBS) $(CFLAGS)
 
 runProject3dCfs: ${MY_LIBS} Project3dCfs.C
 	g++ Project3dCfs.C ${MY_LIBS} -o runProject3dCfs $(LIBS) $(CFLAGS)

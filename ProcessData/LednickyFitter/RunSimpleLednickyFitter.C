@@ -71,8 +71,8 @@ int main(int argc, char **argv)
   TString tDirectory = "~/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b2/";
   TString tFileLocationCfs = tDirectory + "CorrelationFunctions_10MixedEvNum";
 
-  TString tFileNameModifier = "";
-//  TString tFileNameModifier = "_WeightParentsInteraction";
+//  TString tFileNameModifier = "";
+  TString tFileNameModifier = "_WeightParentsInteraction";
 //  TString tFileNameModifier = "_WeightParentsInteraction_NoCharged";
 
   tFileLocationCfs += tFileNameModifier;
