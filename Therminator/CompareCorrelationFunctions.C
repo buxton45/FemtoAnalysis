@@ -41,6 +41,9 @@ void Draw1vs2(TPad* aPad, AnalysisType aAnType, TH1D* aCf1, TH1D* aCf2, TString 
 
   tLeg->Draw();
 
+  TLine* tLine = new TLine(aCf1->GetXaxis()->GetBinLowEdge(1), 1, aCf1->GetXaxis()->GetBinUpEdge(aCf1->GetNbinsX()), 1);
+  tLine->SetLineColor(14);
+  tLine->Draw();
 }
 
 
@@ -87,6 +90,7 @@ int main(int argc, char **argv)
     TH1D* tCfSigmaStOnly1 = t3dCf1->GetSigmaStOnlyCf(tMarkerStyle1);
     TH1D* tCfSecondaryOnly1 = t3dCf1->GetSecondaryOnlyCf(tMarkerStyle1);
     TH1D* tCfAtLeastOneSecondaryInPair1 = t3dCf1->GetAtLeastOneSecondaryInPairCf(tMarkerStyle1);
+    TH1D* tCfLongDecays1 = t3dCf1->GetLongDecaysCf(1000, tMarkerStyle1);
 
 
   Therm3dCf *t3dCf2 = new Therm3dCf(tAnType, tFileLocationCfs2, tRebin);
@@ -97,6 +101,7 @@ int main(int argc, char **argv)
     TH1D* tCfSigmaStOnly2 = t3dCf2->GetSigmaStOnlyCf(tMarkerStyle2);
     TH1D* tCfSecondaryOnly2 = t3dCf2->GetSecondaryOnlyCf(tMarkerStyle2);
     TH1D* tCfAtLeastOneSecondaryInPair2 = t3dCf2->GetAtLeastOneSecondaryInPairCf(tMarkerStyle2);
+    TH1D* tCfLongDecays2 = t3dCf2->GetLongDecaysCf(1000, tMarkerStyle2);
 
 //-------------------------------------------------------------------------------
 
@@ -140,12 +145,18 @@ int main(int argc, char **argv)
   tOverallDescriptor = TString("AtLeastOneSecondaryInPair");
   Draw1vs2((TPad*)tCanAtLeastOneSecondaryInPair, tAnType, tCfAtLeastOneSecondaryInPair1, tCfAtLeastOneSecondaryInPair2, tDescriptor1, tDescriptor2, tOverallDescriptor);
 
+  //--------------------------------------------
+
+  TCanvas* tCanLongDecays = new TCanvas("CompareCfs_LongDecays", "CompareCfs_LongDecays");
+  tOverallDescriptor = TString("LongDecays");
+  Draw1vs2((TPad*)tCanLongDecays, tAnType, tCfLongDecays1, tCfLongDecays2, tDescriptor1, tDescriptor2, tOverallDescriptor);
+
 //-------------------------------------------------------------------------------
 
   if(bSaveFigures)
   {
     TString tSaveFileBase = tSaveLocationBase + TString::Format("%s/", cAnalysisBaseTags[tAnType]);
-    TString tSaveNameFull, tSaveNamePrimaryOnly, tSaveNamePrimaryAndShortDecays, tSaveNameWithoutSigmaSt, tSaveNameSigmaStOnly, tSaveNameSecondaryOnly, tSaveNameAtLeastOneSecondaryInPair;
+    TString tSaveNameFull, tSaveNamePrimaryOnly, tSaveNamePrimaryAndShortDecays, tSaveNameWithoutSigmaSt, tSaveNameSigmaStOnly, tSaveNameSecondaryOnly, tSaveNameAtLeastOneSecondaryInPair, tSaveNameLongDecays;
 
     tSaveNameFull = tSaveFileBase + TString(tCanFull->GetName());
     tSaveNamePrimaryOnly = tSaveFileBase + TString(tCanPrimaryOnly->GetName());
@@ -154,6 +165,7 @@ int main(int argc, char **argv)
     tSaveNameSigmaStOnly = tSaveFileBase + TString(tCanSigmaStOnly->GetName());
     tSaveNameSecondaryOnly = tSaveFileBase + TString(tCanSecondaryOnly->GetName());
     tSaveNameAtLeastOneSecondaryInPair = tSaveFileBase + TString(tCanAtLeastOneSecondaryInPair->GetName());
+    tSaveNameLongDecays = tSaveFileBase + TString(tCanLongDecays->GetName());
 
     tSaveNameFull += TString::Format("_%s", cAnalysisBaseTags[tAnType]) + TString(".eps");
     tSaveNamePrimaryOnly += TString::Format("_%s", cAnalysisBaseTags[tAnType]) + TString(".eps");
@@ -162,6 +174,7 @@ int main(int argc, char **argv)
     tSaveNameSigmaStOnly += TString::Format("_%s", cAnalysisBaseTags[tAnType]) + TString(".eps");
     tSaveNameSecondaryOnly += TString::Format("_%s", cAnalysisBaseTags[tAnType]) + TString(".eps");
     tSaveNameAtLeastOneSecondaryInPair += TString::Format("_%s", cAnalysisBaseTags[tAnType]) + TString(".eps");
+    tSaveNameLongDecays += TString::Format("_%s", cAnalysisBaseTags[tAnType]) + TString(".eps");
 
     tCanFull->SaveAs(tSaveNameFull);
     tCanPrimaryOnly->SaveAs(tSaveNamePrimaryOnly);
@@ -170,6 +183,7 @@ int main(int argc, char **argv)
     tCanSigmaStOnly->SaveAs(tSaveNameSigmaStOnly);
     tCanSecondaryOnly->SaveAs(tSaveNameSecondaryOnly);
     tCanAtLeastOneSecondaryInPair->SaveAs(tSaveNameAtLeastOneSecondaryInPair);
+    tCanLongDecays->SaveAs(tSaveNameLongDecays);
   }
 
 

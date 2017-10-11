@@ -386,6 +386,7 @@ void SimpleLednickyFitter::CalculateFitFunction(int &npar, double &chi2, double 
 
   tCorrectedFitCfContent = tFitCfContent;
 
+  fCorrectedFitVec = tCorrectedFitCfContent;
   LednickyFitter::ApplyNormalization(tParPrim[5], tCorrectedFitCfContent);
 
   for(int ix=0; ix < fNbinsXToFit; ix++)
@@ -592,6 +593,30 @@ void SimpleLednickyFitter::Finalize()
 
 
 //________________________________________________________________________________________________________________
+TH1D* SimpleLednickyFitter::GetCorrectedFitHist()
+{
+  assert(fCorrectedFitVec.size());
+  assert(fCorrectedFitVec.size() == fKStarBinCenters.size());
+
+  int tNbins = fKStarBinCenters.size();
+  double tKStarBinWidth = fKStarBinCenters[1] - fKStarBinCenters[0];
+  double tKStarMin = fKStarBinCenters[0] - tKStarBinWidth/2.;
+    if(tKStarMin < 0.0001) tKStarMin = 0.;  //not that it's terribly important, but getting tKStarMin ~ 1e-19
+  double tKStarMax = fKStarBinCenters[fKStarBinCenters.size()-1] + tKStarBinWidth/2;
+
+  TString tTitle = TString::Format("CorrectedFitHist_%s", cAnalysisBaseTags[fAnalysisType]);
+  TH1D* tReturnCf = new TH1D(tTitle, tTitle, tNbins, tKStarMin, tKStarMax);
+
+  for(int i=1; i<=tNbins; i++)
+  {
+    tReturnCf->SetBinContent(i, fCorrectedFitVec[i-1]);
+    tReturnCf->SetBinError(i, 0.);
+  }
+
+  return tReturnCf;
+}
+
+//________________________________________________________________________________________________________________
 TPaveText* SimpleLednickyFitter::CreateParamFinalValuesText(TF1* aFit, double aTextXmin, double aTextYmin, double aTextWidth, double aTextHeight)
 {
   double tLambda, tRadius, tReF0, tImF0, tD0;
@@ -609,6 +634,12 @@ TPaveText* SimpleLednickyFitter::CreateParamFinalValuesText(TF1* aFit, double aT
   tImF0Err = aFit->GetParError(3);
   tD0Err = aFit->GetParError(4);
 
+  if(fIncludeResidualCorrelations)
+  {
+    tLambda /= cAnalysisLambdaFactors[fAnalysisType];
+    tLambdaErr /= cAnalysisLambdaFactors[fAnalysisType];
+  }
+
   TPaveText *tText = new TPaveText(aTextXmin, aTextYmin, aTextXmin+aTextWidth, aTextYmin+aTextHeight, "NDC");
   tText->AddText(TString::Format("#lambda = %0.2f #pm %0.2f",tLambda,tLambdaErr));
   tText->AddText(TString::Format("R = %0.2f #pm %0.2f",tRadius,tRadiusErr));
@@ -624,6 +655,8 @@ TPaveText* SimpleLednickyFitter::CreateParamFinalValuesText(TF1* aFit, double aT
 void SimpleLednickyFitter::DrawCfWithFit(TPad *aPad, TString aDrawOption)
 {
   aPad->cd();
+  gStyle->SetOptStat(0);
+  gStyle->SetOptTitle(0);
 
   TH1D* tCf = (TH1D*)fCfLite->Cf();
   TF1* tFit = CreateFitFunction(TString("Fit"));
@@ -635,6 +668,78 @@ void SimpleLednickyFitter::DrawCfWithFit(TPad *aPad, TString aDrawOption)
 
   TPaveText* tText = CreateParamFinalValuesText(tFit, 0.5, 0.5, 0.25, 0.25);
   tText->Draw();
+}
+
+//________________________________________________________________________________________________________________
+void SimpleLednickyFitter::DrawCfWithFitAndResiduals(TPad *aPad)
+{
+  aPad->cd();
+  gStyle->SetOptStat(0);
+  gStyle->SetOptTitle(0);
+
+  TH1D* tCf = (TH1D*)fCfLite->Cf();
+    tCf->SetMarkerStyle(20);
+  TF1* tFit = CreateFitFunction(TString("Fit"));
+  TH1D* tCorrectedCf = GetCorrectedFitHist();
+    tCorrectedCf->SetMarkerColor(kMagenta+1);
+    tCorrectedCf->SetLineColor(kMagenta+1);
+    tCorrectedCf->SetLineWidth(2);
+
+  tCf->Draw();
+  tFit->Draw("same");
+  tCorrectedCf->Draw("lsame");
+
+  TPaveText* tText = CreateParamFinalValuesText(tFit, 0.6, 0.6, 0.25, 0.20);
+  tText->Draw();
+
+  //------------------------------------ Residuals ---------------------------------------
+  double tOverallLambdaPrimary = fMinParams[0];
+  double tRadiusPrimary = fMinParams[1];
+
+  vector<int> tNeutralResBaseColors{7,8,9,30,33,40,41};
+  vector<int> tNeutralResMarkerStyles{24,25,26,27,28,30,32};
+  vector<int> tChargedResBaseColors{44,46,47,49};
+  vector<int> tChargedResMarkerStyles{24,25,26,27};
+
+  //------ Neutral Residuals ------------------
+  TLegend *tLegNeutral = new TLegend(0.35, 0.15, 0.55, 0.45);
+    tLegNeutral->SetFillColor(0);
+    tLegNeutral->SetBorderSize(0);
+    tLegNeutral->SetTextAlign(22);
+  for(unsigned int iRes=0; iRes<fResidualCollection->GetNeutralCollection().size(); iRes++)
+  {
+    AnalysisType tTempResidualType = fResidualCollection->GetNeutralCollection()[iRes].GetResidualType();
+    TString tTempName = TString(cAnalysisRootTags[tTempResidualType]);
+    TH1D* tTempHist = fResidualCollection->GetNeutralCollection()[iRes].GetTransformedNeutralResidualCorrelationHistogram(tTempName);
+      tTempHist->SetMarkerColor(tNeutralResBaseColors[iRes]);
+      tTempHist->SetLineColor(tNeutralResBaseColors[iRes]);
+      tTempHist->SetMarkerStyle(tNeutralResMarkerStyles[iRes]);
+
+    tLegNeutral->AddEntry(tTempHist, cAnalysisRootTags[tTempResidualType]);
+
+    tTempHist->Draw("ex0same");
+  }
+  //------ Charged Residuals ------------------
+  TLegend *tLegCharged = new TLegend(0.60, 0.25, 0.80, 0.45);
+    tLegCharged->SetFillColor(0);
+    tLegCharged->SetBorderSize(0);
+    tLegCharged->SetTextAlign(22);
+  for(unsigned int iRes=0; iRes<fResidualCollection->GetChargedCollection().size(); iRes++)
+  {
+    AnalysisType tTempResidualType = fResidualCollection->GetChargedCollection()[iRes].GetResidualType();
+    TString tTempName = TString(cAnalysisRootTags[tTempResidualType]);
+    TH1D* tTempHist = fResidualCollection->GetChargedCollection()[iRes].GetTransformedChargedResidualCorrelationHistogramWithLambdaApplied(tTempName, tOverallLambdaPrimary, tRadiusPrimary);
+      tTempHist->SetMarkerColor(tChargedResBaseColors[iRes]);
+      tTempHist->SetLineColor(tChargedResBaseColors[iRes]);
+      tTempHist->SetMarkerStyle(tChargedResMarkerStyles[iRes]);
+
+    tLegCharged->AddEntry(tTempHist, cAnalysisRootTags[tTempResidualType]);
+
+    tTempHist->Draw("ex0same");
+  }
+
+  tLegNeutral->Draw();
+  tLegCharged->Draw();
 }
 
 

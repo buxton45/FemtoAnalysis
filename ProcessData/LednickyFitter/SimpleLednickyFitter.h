@@ -33,6 +33,7 @@
 #include "TGraph.h"
 #include "TMath.h"
 #include "TVector3.h"
+#include "TLegend.h"
 
 #include "TSystem.h"
 #include "TMinuit.h"
@@ -79,8 +80,10 @@ public:
   void DoFit();
   void Finalize();
 
+  TH1D* GetCorrectedFitHist();
   TPaveText* CreateParamFinalValuesText(TF1* aFit, double aTextXmin, double aTextYmin, double aTextWidth, double aTextHeight);
   void DrawCfWithFit(TPad *aPad, TString aDrawOption="");
+  void DrawCfWithFitAndResiduals(TPad *aPad);
   void DrawCfNumDen(TPad *aPad, TString aDrawOption="");
 
   void LoadTransformMatrices(int aRebin=2, TString aFileLocation="");

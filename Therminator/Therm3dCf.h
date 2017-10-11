@@ -59,7 +59,7 @@ public:
   TH1D* GetSigmaSt0OnlyCf(int aMarkerStyle=26, int aColor=20);
 
   TH1D* GetPrimaryAndShortDecaysCf(int aMarkerStyle=20, int aColor=3);
-  TH1D* GetLongDecaysCf(double aMinDecayLength=1000, int aMarkerStyle=20, int aColor=3);
+  TH1D* GetLongDecaysCf(double aMinDecayLength=1000, int aMarkerStyle=20, int aColor=16);
 
   void DrawAllCfs(TPad* aPad, int aCommonMarkerStyle=20);
   void DrawAllSigmaStFlavors(TPad* aPad);

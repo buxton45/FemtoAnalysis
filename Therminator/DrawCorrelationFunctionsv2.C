@@ -161,6 +161,10 @@ void DrawCfsWithConj(TPad* aPad, Therm3dCf* a3dCf, Therm3dCf* aConj3dCf)
   tLeg->AddEntry(tCfSigmaStOnlyTot, "#Sigma* Only");
 
   tLeg->Draw();
+
+  TLine* tLine = new TLine(tCfFullTot->GetXaxis()->GetBinLowEdge(1), 1, tCfFullTot->GetXaxis()->GetBinUpEdge(tCfFullTot->GetNbinsX()), 1);
+  tLine->SetLineColor(14);
+  tLine->Draw();
 }
 
 //________________________________________________________________________________________________________________
@@ -254,6 +258,10 @@ void DrawAllSigmaStFlavorsWithConj(TPad* aPad, Therm3dCf* a3dCf, Therm3dCf* aCon
   tLeg->AddEntry(tCfSigmaSt0OnlyTot, "#Sigma*^{0} (#bar{#Sigma*}^{0}) Only");
 
   tLeg->Draw();
+
+  TLine* tLine = new TLine(tCfSigmaStOnlyTot->GetXaxis()->GetBinLowEdge(1), 1, tCfSigmaStOnlyTot->GetXaxis()->GetBinUpEdge(tCfSigmaStOnlyTot->GetNbinsX()), 1);
+  tLine->SetLineColor(14);
+  tLine->Draw();
 }
 
 

@@ -67,13 +67,13 @@ int main(int argc, char **argv)
 //-----------------------------------------------------------------------------
   AnalysisType tAnType = kLamKchP;
   bool bSaveFigures = false;
-  bool bIncludeResiduals = false;
+  bool bIncludeResiduals = true;
 
   TString tDirectory = "~/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b2/";
   TString tFileLocationCfs = tDirectory + "CorrelationFunctions_10MixedEvNum";
 
-  TString tFileNameModifier = "";
-//  TString tFileNameModifier = "_WeightParentsInteraction";
+//  TString tFileNameModifier = "";
+  TString tFileNameModifier = "_WeightParentsInteraction";
 //  TString tFileNameModifier = "_WeightParentsInteraction_NoCharged";
 
   tFileLocationCfs += tFileNameModifier;
@@ -111,8 +111,19 @@ int main(int argc, char **argv)
   tSLFitter->DoFit();
 
 
-  TCanvas* tCanCfWithFit = new TCanvas("tCanCfWithFit", "tCanCfWithFit");
-  tSLFitter->DrawCfWithFit((TPad*)tCanCfWithFit);
+  TString tCanName = TString("tCanCfWithFit");
+  TCanvas* tCanCfWithFit;
+  if(!bIncludeResiduals)
+  {
+    tCanCfWithFit = new TCanvas(tCanName, tCanName);
+    tSLFitter->DrawCfWithFit((TPad*)tCanCfWithFit);
+  }
+  else
+  {
+    tCanName = TString("tCanCfWithFitAndResiduals");
+    tCanCfWithFit = new TCanvas(tCanName, tCanName);
+    tSLFitter->DrawCfWithFitAndResiduals((TPad*)tCanCfWithFit);
+  }
 
 //  TCanvas* tCan2 = new TCanvas("tCan2", "tCan2");
 //  tSLFitter->DrawCfNumDen((TPad*)tCan2);

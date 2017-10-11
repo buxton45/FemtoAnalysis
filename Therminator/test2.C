@@ -27,7 +27,7 @@ int main(int argc, char **argv)
 
   bool bBuildCorrelationFunctions = true;
   bool bBuildMixedEventNumerators = true;
-  int tNEventsToMix = 5;
+  int tNEventsToMix = 10;
   bool bWeightCfsWithParentInteraction = false;
 
 //  double tMaxPrimaryDecayLength = -1.; 

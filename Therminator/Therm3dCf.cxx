@@ -359,6 +359,7 @@ TH1D* Therm3dCf::GetFullCf(int aMarkerStyle, int aColor)
   tCf->SetLineColor(aColor);
   tCf->SetMarkerColor(aColor);
   tCf->SetMarkerStyle(aMarkerStyle);
+  tCf->SetMarkerSize(0.5);
 
   return tCf;
 }
@@ -375,6 +376,7 @@ TH1D* Therm3dCf::GetPrimaryOnlyCf(int aMarkerStyle, int aColor)
   tCf->SetLineColor(aColor);
   tCf->SetMarkerColor(aColor);
   tCf->SetMarkerStyle(aMarkerStyle);
+  tCf->SetMarkerSize(0.5);
 
   return tCf;
 }
@@ -391,6 +393,7 @@ TH1D* Therm3dCf::GetSecondaryOnlyCf(int aMarkerStyle, int aColor)
   tCf->SetLineColor(aColor);
   tCf->SetMarkerColor(aColor);
   tCf->SetMarkerStyle(aMarkerStyle);
+  tCf->SetMarkerSize(0.5);
 
   return tCf;
 }
@@ -407,6 +410,7 @@ TH1D* Therm3dCf::GetAtLeastOneSecondaryInPairCf(int aMarkerStyle, int aColor)
   tCf->SetLineColor(aColor);
   tCf->SetMarkerColor(aColor);
   tCf->SetMarkerStyle(aMarkerStyle);
+  tCf->SetMarkerSize(0.5);
 
   return tCf;
 }
@@ -423,6 +427,7 @@ TH1D* Therm3dCf::GetWithoutSigmaStCf(int aMarkerStyle, int aColor)
   tCf->SetLineColor(aColor);
   tCf->SetMarkerColor(aColor);
   tCf->SetMarkerStyle(aMarkerStyle);
+  tCf->SetMarkerSize(0.5);
 
   return tCf;
 }
@@ -439,6 +444,7 @@ TH1D* Therm3dCf::GetSigmaStOnlyCf(int aMarkerStyle, int aColor)
   tCf->SetLineColor(aColor);
   tCf->SetMarkerColor(aColor);
   tCf->SetMarkerStyle(aMarkerStyle);
+  tCf->SetMarkerSize(0.5);
 
   return tCf;
 }
@@ -455,6 +461,7 @@ TH1D* Therm3dCf::GetSigmaStPOnlyCf(int aMarkerStyle, int aColor)
   tCf->SetLineColor(aColor);
   tCf->SetMarkerColor(aColor);
   tCf->SetMarkerStyle(aMarkerStyle);
+  tCf->SetMarkerSize(0.5);
 
   return tCf;
 }
@@ -472,6 +479,7 @@ TH1D* Therm3dCf::GetSigmaStMOnlyCf(int aMarkerStyle, int aColor)
   tCf->SetLineColor(aColor);
   tCf->SetMarkerColor(aColor);
   tCf->SetMarkerStyle(aMarkerStyle);
+  tCf->SetMarkerSize(0.5);
 
   return tCf;
 }
@@ -489,6 +497,7 @@ TH1D* Therm3dCf::GetSigmaSt0OnlyCf(int aMarkerStyle, int aColor)
   tCf->SetLineColor(aColor);
   tCf->SetMarkerColor(aColor);
   tCf->SetMarkerStyle(aMarkerStyle);
+  tCf->SetMarkerSize(0.5);
 
   return tCf;
 }
@@ -506,6 +515,7 @@ TH1D* Therm3dCf::GetPrimaryAndShortDecaysCf(int aMarkerStyle, int aColor)
   tCf->SetLineColor(aColor);
   tCf->SetMarkerColor(aColor);
   tCf->SetMarkerStyle(aMarkerStyle);
+  tCf->SetMarkerSize(0.5);
 
   return tCf;
 }
@@ -523,6 +533,7 @@ TH1D* Therm3dCf::GetLongDecaysCf(double aMinDecayLength, int aMarkerStyle, int a
   tCf->SetLineColor(aColor);
   tCf->SetMarkerColor(aColor);
   tCf->SetMarkerStyle(aMarkerStyle);
+  tCf->SetMarkerSize(0.5);
 
   return tCf;
 }
@@ -588,6 +599,10 @@ void Therm3dCf::DrawAllCfs(TPad* aPad, int aCommonMarkerStyle)
 //  tLeg->AddEntry(tCfLongDecays, "Long Decays");
 
   tLeg->Draw();
+
+  TLine* tLine = new TLine(tCfFull->GetXaxis()->GetBinLowEdge(1), 1, tCfFull->GetXaxis()->GetBinUpEdge(tCfFull->GetNbinsX()), 1);
+  tLine->SetLineColor(14);
+  tLine->Draw();
 }
 
 
@@ -641,6 +656,10 @@ void Therm3dCf::DrawAllSigmaStFlavors(TPad* aPad)
   tLeg->AddEntry(tCfSigmaSt0Only, "#Sigma*^{0} (#bar{#Sigma*}^{0}) Only");
 
   tLeg->Draw();
+
+  TLine* tLine = new TLine(tCfSigmaStOnly->GetXaxis()->GetBinLowEdge(1), 1, tCfSigmaStOnly->GetXaxis()->GetBinUpEdge(tCfSigmaStOnly->GetNbinsX()), 1);
+  tLine->SetLineColor(14);
+  tLine->Draw();
 }
 
 
