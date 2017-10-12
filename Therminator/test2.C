@@ -30,6 +30,8 @@ int main(int argc, char **argv)
   int tNEventsToMix = 10;
   bool bWeightCfsWithParentInteraction = false;
 
+  bool bCheckCoECoM = false;
+
 //  double tMaxPrimaryDecayLength = -1.; 
   double tMaxPrimaryDecayLength = 3.01; 
 
@@ -74,6 +76,8 @@ int main(int argc, char **argv)
   tSimpleThermAnalysis->SetSingleParticlesSaveName(tSingleParticlesSaveName);
   tSimpleThermAnalysis->SetCorrelationFunctionsSaveName(tCorrelationFunctionsSaveName);
   if(tMaxPrimaryDecayLength > 0.) tSimpleThermAnalysis->SetMaxPrimaryDecayLength(tMaxPrimaryDecayLength);
+
+  tSimpleThermAnalysis->SetCheckCoECoM(bCheckCoECoM);
 
   tSimpleThermAnalysis->ProcessAll();
 

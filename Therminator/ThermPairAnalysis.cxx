@@ -1141,7 +1141,9 @@ TVector3 ThermPairAnalysis::GetRStar3Vec(TLorentzVector &p1, TLorentzVector &x1,
 
   double tRStarOut = tGamma*(tROut - tBeta* tDTimePairLCMS);
 
-  return TVector3(tRStarOut, tRStarSide, tRStarLong);
+  TVector3 tReturnVec = TVector3(tRStarOut, tRStarSide, tRStarLong);
+
+  return tReturnVec;
 }
 
 

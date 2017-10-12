@@ -65,6 +65,7 @@ public:
 
   void SetMaxPrimaryDecayLength(double aMax);
 
+  void SetCheckCoECoM(bool aCheck=true);
 private:
   int fNFiles;
   int fNEvents;
@@ -104,6 +105,7 @@ private:
   ThermSingleParticleAnalysis *fSPAnalysisProt, *fSPAnalysisAProt;
   ThermSingleParticleAnalysis *fSPAnalysisK0;
 
+  bool fCheckCoECoM;
 
 #ifdef __ROOT__
   ClassDef(SimpleThermAnalysis, 1)
@@ -120,4 +122,5 @@ inline void SimpleThermAnalysis::SetSingleParticlesSaveName(TString aSaveName) {
 
 inline void SimpleThermAnalysis::SetMaxPrimaryDecayLength(double aMax) {fMaxPrimaryDecayLength = aMax;}
 
+inline void SimpleThermAnalysis::SetCheckCoECoM(bool aCheck) {fCheckCoECoM = aCheck;}
 #endif

@@ -59,6 +59,8 @@ public:
   void SetV0ParticleCollection(unsigned int aEventID, ParticlePDGType aPDGType, vector<ThermV0Particle> &aCollection);
   void SetParticleCollection(unsigned int aEventID, ParticlePDGType aPDGType, vector<ThermParticle> &aCollection);
 
+  void CheckCoECoM();
+
   //inline stuff
   void SetEventID(unsigned int aEventID);
   unsigned int GetEventID();

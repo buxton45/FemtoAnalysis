@@ -379,5 +379,25 @@ void ThermEvent::SetParticleCollection(unsigned int aEventID, ParticlePDGType aP
   else assert(0);
 }
 
+//________________________________________________________________________________________________________________
+void ThermEvent::CheckCoECoM()
+{
+  if(fAllParticlesCollection.size()==0) cout << "Must call CheckCoECoM BEFORE FindAllFathers, fAllParticlesCollection.size()==0, crash imminent!" << endl;
+  assert(fAllParticlesCollection.size());
+
+  TLorentzVector tTotMom4Vec = TLorentzVector(0., 0., 0., 0.);
+  for(unsigned int i=0; i<fAllParticlesCollection.size(); i++) tTotMom4Vec += fAllParticlesCollection[i].GetFourMomentum();
+
+  cout << "_____________________________________" << endl;
+  cout << "Total 4-momentum calculated:" << endl;
+  cout << "PTotX = " << tTotMom4Vec.X() << endl;
+  cout << "PTotY = " << tTotMom4Vec.Y() << endl;
+  cout << "PTotZ = " << tTotMom4Vec.Z() << endl;
+  cout << "----------" << endl;
+  cout << "PTotMag = " << tTotMom4Vec.P() << endl;
+  cout << "ETot = " << tTotMom4Vec.T() << endl;
+  cout << "_____________________________________" << endl << endl;
+}
+
 
 
