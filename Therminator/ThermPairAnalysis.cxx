@@ -90,22 +90,32 @@ ThermPairAnalysis::ThermPairAnalysis(AnalysisType aAnType) :
   fParentsMatrix = new TH2D(tParentsMatrixName, tParentsMatrixName, 100, 0, 100, 135, 0, 135);
   fParentsMatrix->Sumw2();
 
+/*
+  int tNbinsKStar = 100;
+  double tKStarMin = 0.;
+  double tKStarMax = 1.;
+*/
+
+  int tNbinsKStar = 300;
+  double tKStarMin = 0.;
+  double tKStarMax = 3.;
+
   unsigned int tPidInfoSize = cPidInfo.size();
   fPairSource3d = new TH3D(TString::Format("PairSource3d%s", cAnalysisBaseTags[aAnType]), 
                            TString::Format("PairSource3d%s", cAnalysisBaseTags[aAnType]),
                            tPidInfoSize, 0, tPidInfoSize, 
                            tPidInfoSize, 0, tPidInfoSize,
-                           100, 0., 1.);
+                           1000, 0, 1000);
   fNum3d = new TH3D(TString::Format("Num3d%s", cAnalysisBaseTags[aAnType]), 
                            TString::Format("Num3d%s", cAnalysisBaseTags[aAnType]),
                            tPidInfoSize, 0, tPidInfoSize, 
                            tPidInfoSize, 0, tPidInfoSize,
-                           100, 0., 1.);
+                           tNbinsKStar, tKStarMin, tKStarMax);
   fDen3d = new TH3D(TString::Format("Den3d%s", cAnalysisBaseTags[aAnType]), 
                            TString::Format("Den3d%s", cAnalysisBaseTags[aAnType]),
                            tPidInfoSize, 0, tPidInfoSize, 
                            tPidInfoSize, 0, tPidInfoSize,
-                           100, 0., 1.);
+                           tNbinsKStar, tKStarMin, tKStarMax);
   fPairSource3d->Sumw2();
   fNum3d->Sumw2();
   fDen3d->Sumw2();
@@ -116,10 +126,10 @@ ThermPairAnalysis::ThermPairAnalysis(AnalysisType aAnType) :
                              1000, 0, 1000);
   fNumFull = new TH1D(TString::Format("NumFull%s", cAnalysisBaseTags[aAnType]),
                       TString::Format("NumFull%s", cAnalysisBaseTags[aAnType]), 
-                      100, 0., 1.);
+                      tNbinsKStar, tKStarMin, tKStarMax);
   fDenFull = new TH1D(TString::Format("DenFull%s", cAnalysisBaseTags[aAnType]),
                       TString::Format("DenFull%s", cAnalysisBaseTags[aAnType]), 
-                      100, 0., 1.);
+                      tNbinsKStar, tKStarMin, tKStarMax);
   fPairSourceFull->Sumw2();
   fNumFull->Sumw2();
   fDenFull->Sumw2();
@@ -130,10 +140,10 @@ ThermPairAnalysis::ThermPairAnalysis(AnalysisType aAnType) :
                                     1000, 0, 1000);
   fNumPrimaryOnly = new TH1D(TString::Format("NumPrimaryOnly%s", cAnalysisBaseTags[aAnType]),
                              TString::Format("NumPrimaryOnly%s", cAnalysisBaseTags[aAnType]), 
-                             100, 0., 1.);
+                             tNbinsKStar, tKStarMin, tKStarMax);
   fDenPrimaryOnly = new TH1D(TString::Format("DenPrimaryOnly%s", cAnalysisBaseTags[aAnType]),
                              TString::Format("DenPrimaryOnly%s", cAnalysisBaseTags[aAnType]), 
-                             100, 0., 1.);
+                             tNbinsKStar, tKStarMin, tKStarMax);
   fPairSourcePrimaryOnly->Sumw2();
   fNumPrimaryOnly->Sumw2();
   fDenPrimaryOnly->Sumw2();
@@ -143,10 +153,10 @@ ThermPairAnalysis::ThermPairAnalysis(AnalysisType aAnType) :
                                               1000, 0, 1000);
   fNumPrimaryAndShortDecays = new TH1D(TString::Format("NumPrimaryAndShortDecays%s", cAnalysisBaseTags[aAnType]),
                                        TString::Format("NumPrimaryAndShortDecays%s", cAnalysisBaseTags[aAnType]), 
-                                       100, 0., 1.);
+                                       tNbinsKStar, tKStarMin, tKStarMax);
   fDenPrimaryAndShortDecays = new TH1D(TString::Format("DenPrimaryAndShortDecays%s", cAnalysisBaseTags[aAnType]),
                                        TString::Format("DenPrimaryAndShortDecays%s", cAnalysisBaseTags[aAnType]), 
-                                       100, 0., 1.);
+                                       tNbinsKStar, tKStarMin, tKStarMax);
   fPairSourcePrimaryAndShortDecays->Sumw2();
   fNumPrimaryAndShortDecays->Sumw2();
   fDenPrimaryAndShortDecays->Sumw2();
@@ -157,10 +167,10 @@ ThermPairAnalysis::ThermPairAnalysis(AnalysisType aAnType) :
                                        1000, 0, 1000);
   fNumWithoutSigmaSt = new TH1D(TString::Format("NumWithoutSigmaSt%s", cAnalysisBaseTags[aAnType]),
                                 TString::Format("NumWithoutSigmaSt%s", cAnalysisBaseTags[aAnType]), 
-                                100, 0., 1.);
+                                tNbinsKStar, tKStarMin, tKStarMax);
   fDenWithoutSigmaSt = new TH1D(TString::Format("DenWithoutSigmaSt%s", cAnalysisBaseTags[aAnType]),
                                 TString::Format("DenWithoutSigmaSt%s", cAnalysisBaseTags[aAnType]), 
-                                100, 0., 1.);
+                                tNbinsKStar, tKStarMin, tKStarMax);
   fPairSourceWithoutSigmaSt->Sumw2();
   fNumWithoutSigmaSt->Sumw2();
   fDenWithoutSigmaSt->Sumw2();
@@ -170,10 +180,10 @@ ThermPairAnalysis::ThermPairAnalysis(AnalysisType aAnType) :
                                        1000, 0, 1000);
   fNumSigmaStOnly = new TH1D(TString::Format("NumSigmaStOnly%s", cAnalysisBaseTags[aAnType]),
                                 TString::Format("NumSigmaStOnly%s", cAnalysisBaseTags[aAnType]), 
-                                100, 0., 1.);
+                                tNbinsKStar, tKStarMin, tKStarMax);
   fDenSigmaStOnly = new TH1D(TString::Format("DenSigmaStOnly%s", cAnalysisBaseTags[aAnType]),
                                 TString::Format("DenSigmaStOnly%s", cAnalysisBaseTags[aAnType]), 
-                                100, 0., 1.);
+                                tNbinsKStar, tKStarMin, tKStarMax);
   fPairSourceSigmaStOnly->Sumw2();
   fNumSigmaStOnly->Sumw2();
   fDenSigmaStOnly->Sumw2();
@@ -183,10 +193,10 @@ ThermPairAnalysis::ThermPairAnalysis(AnalysisType aAnType) :
                                       1000, 0, 1000);
   fNumSecondaryOnly = new TH1D(TString::Format("NumSecondaryOnly%s", cAnalysisBaseTags[aAnType]),
                                TString::Format("NumSecondaryOnly%s", cAnalysisBaseTags[aAnType]), 
-                               100, 0., 1.);
+                               tNbinsKStar, tKStarMin, tKStarMax);
   fDenSecondaryOnly = new TH1D(TString::Format("DenSecondaryOnly%s", cAnalysisBaseTags[aAnType]),
                                TString::Format("DenSecondaryOnly%s", cAnalysisBaseTags[aAnType]), 
-                               100, 0., 1.);
+                               tNbinsKStar, tKStarMin, tKStarMax);
   fPairSourceSecondaryOnly->Sumw2();
   fNumSecondaryOnly->Sumw2();
   fDenSecondaryOnly->Sumw2();
