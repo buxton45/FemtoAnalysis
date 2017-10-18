@@ -90,22 +90,24 @@ ThermPairAnalysis::ThermPairAnalysis(AnalysisType aAnType) :
   fParentsMatrix = new TH2D(tParentsMatrixName, tParentsMatrixName, 100, 0, 100, 135, 0, 135);
   fParentsMatrix->Sumw2();
 
-/*
-  int tNbinsKStar = 100;
-  double tKStarMin = 0.;
-  double tKStarMax = 1.;
-*/
-
   int tNbinsKStar = 300;
   double tKStarMin = 0.;
   double tKStarMax = 3.;
+
+  int tNbinsRStar3d = 200;
+  double tRStarMin3d = 0.;
+  double tRStarMax3d = 200.;
+
+  int tNbinsRStar1d = 1000;
+  double tRStarMin1d = 0.;
+  double tRStarMax1d = 1000.;
 
   unsigned int tPidInfoSize = cPidInfo.size();
   fPairSource3d = new TH3D(TString::Format("PairSource3d%s", cAnalysisBaseTags[aAnType]), 
                            TString::Format("PairSource3d%s", cAnalysisBaseTags[aAnType]),
                            tPidInfoSize, 0, tPidInfoSize, 
                            tPidInfoSize, 0, tPidInfoSize,
-                           1000, 0, 1000);
+                           tNbinsRStar3d, tRStarMin3d, tRStarMax3d);
   fNum3d = new TH3D(TString::Format("Num3d%s", cAnalysisBaseTags[aAnType]), 
                            TString::Format("Num3d%s", cAnalysisBaseTags[aAnType]),
                            tPidInfoSize, 0, tPidInfoSize, 
@@ -123,7 +125,7 @@ ThermPairAnalysis::ThermPairAnalysis(AnalysisType aAnType) :
 
   fPairSourceFull = new TH1D(TString::Format("PairSourceFull%s", cAnalysisBaseTags[aAnType]), 
                              TString::Format("PairSourceFull%s", cAnalysisBaseTags[aAnType]), 
-                             1000, 0, 1000);
+                             tNbinsRStar1d, tRStarMin1d, tRStarMax1d);
   fNumFull = new TH1D(TString::Format("NumFull%s", cAnalysisBaseTags[aAnType]),
                       TString::Format("NumFull%s", cAnalysisBaseTags[aAnType]), 
                       tNbinsKStar, tKStarMin, tKStarMax);
@@ -137,7 +139,7 @@ ThermPairAnalysis::ThermPairAnalysis(AnalysisType aAnType) :
 
   fPairSourcePrimaryOnly = new TH1D(TString::Format("PairSourcePrimaryOnly%s", cAnalysisBaseTags[aAnType]), 
                                     TString::Format("PairSourcePrimaryOnly%s", cAnalysisBaseTags[aAnType]), 
-                                    1000, 0, 1000);
+                                    tNbinsRStar1d, tRStarMin1d, tRStarMax1d);
   fNumPrimaryOnly = new TH1D(TString::Format("NumPrimaryOnly%s", cAnalysisBaseTags[aAnType]),
                              TString::Format("NumPrimaryOnly%s", cAnalysisBaseTags[aAnType]), 
                              tNbinsKStar, tKStarMin, tKStarMax);
@@ -150,7 +152,7 @@ ThermPairAnalysis::ThermPairAnalysis(AnalysisType aAnType) :
 
   fPairSourcePrimaryAndShortDecays = new TH1D(TString::Format("PairSourcePrimaryAndShortDecays%s", cAnalysisBaseTags[aAnType]), 
                                               TString::Format("PairSourcePrimaryAndShortDecays%s", cAnalysisBaseTags[aAnType]), 
-                                              1000, 0, 1000);
+                                              tNbinsRStar1d, tRStarMin1d, tRStarMax1d);
   fNumPrimaryAndShortDecays = new TH1D(TString::Format("NumPrimaryAndShortDecays%s", cAnalysisBaseTags[aAnType]),
                                        TString::Format("NumPrimaryAndShortDecays%s", cAnalysisBaseTags[aAnType]), 
                                        tNbinsKStar, tKStarMin, tKStarMax);
@@ -164,7 +166,7 @@ ThermPairAnalysis::ThermPairAnalysis(AnalysisType aAnType) :
 
   fPairSourceWithoutSigmaSt = new TH1D(TString::Format("PairSourceWithoutSigmaSt%s", cAnalysisBaseTags[aAnType]), 
                                        TString::Format("PairSourceWithoutSigmaSt%s", cAnalysisBaseTags[aAnType]), 
-                                       1000, 0, 1000);
+                                       tNbinsRStar1d, tRStarMin1d, tRStarMax1d);
   fNumWithoutSigmaSt = new TH1D(TString::Format("NumWithoutSigmaSt%s", cAnalysisBaseTags[aAnType]),
                                 TString::Format("NumWithoutSigmaSt%s", cAnalysisBaseTags[aAnType]), 
                                 tNbinsKStar, tKStarMin, tKStarMax);
@@ -177,7 +179,7 @@ ThermPairAnalysis::ThermPairAnalysis(AnalysisType aAnType) :
 
   fPairSourceSigmaStOnly = new TH1D(TString::Format("PairSourceSigmaStOnly%s", cAnalysisBaseTags[aAnType]), 
                                        TString::Format("PairSourceSigmaStOnly%s", cAnalysisBaseTags[aAnType]), 
-                                       1000, 0, 1000);
+                                       tNbinsRStar1d, tRStarMin1d, tRStarMax1d);
   fNumSigmaStOnly = new TH1D(TString::Format("NumSigmaStOnly%s", cAnalysisBaseTags[aAnType]),
                                 TString::Format("NumSigmaStOnly%s", cAnalysisBaseTags[aAnType]), 
                                 tNbinsKStar, tKStarMin, tKStarMax);
@@ -190,7 +192,7 @@ ThermPairAnalysis::ThermPairAnalysis(AnalysisType aAnType) :
 
   fPairSourceSecondaryOnly = new TH1D(TString::Format("PairSourceSecondaryOnly%s", cAnalysisBaseTags[aAnType]), 
                                       TString::Format("PairSourceSecondaryOnly%s", cAnalysisBaseTags[aAnType]), 
-                                      1000, 0, 1000);
+                                      tNbinsRStar1d, tRStarMin1d, tRStarMax1d);
   fNumSecondaryOnly = new TH1D(TString::Format("NumSecondaryOnly%s", cAnalysisBaseTags[aAnType]),
                                TString::Format("NumSecondaryOnly%s", cAnalysisBaseTags[aAnType]), 
                                tNbinsKStar, tKStarMin, tKStarMax);

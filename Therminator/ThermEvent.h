@@ -20,6 +20,7 @@ class ThermParticle;
 class ThermV0Particle;
 
 #include "ParticleCoor.h"
+class ParticleCoor;
 //TODO emplace_back
 class ThermEvent {
 

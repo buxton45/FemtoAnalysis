@@ -44,6 +44,7 @@ public:
   void SaveAll();
 
   vector<ThermEvent> ExtractEventsFromRootFile(TString aFileLocation);
+  void ProcessAllInDirectory(TSystemDirectory* aEventsDirectory);
   void ProcessAll();
   void ProcessEventByEvent(vector<ThermEvent> &aEventsCollection);
 

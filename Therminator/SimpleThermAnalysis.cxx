@@ -251,17 +251,20 @@ cout << "fNEvents = " << fNEvents << endl;
 }
 
 //________________________________________________________________________________________________________________
-void SimpleThermAnalysis::ProcessAll()
+void SimpleThermAnalysis::ProcessAllInDirectory(TSystemDirectory* aEventsDirectory)
 {
+  TString tCompleteDirectoryPath = aEventsDirectory->GetTitle();
+  if(!tCompleteDirectoryPath.EndsWith("/")) tCompleteDirectoryPath += TString("/");
+
+  cout << "Analyzing events in directory: " << tCompleteDirectoryPath << endl;
+
   TString tCompleteFilePath;
 
-  TSystemDirectory tDir(fEventsDirectory.Data(), fEventsDirectory.Data());
-  TList* tFiles = tDir.GetListOfFiles();
+  TList* tFiles = aEventsDirectory->GetListOfFiles();
+  int tNFilesInDir = 0;
 
   const char* tBeginningText = "event";
   const char* tEndingText = ".root";
-
-  fNFiles = 0;
 
   if(tFiles)
   {
@@ -275,15 +278,53 @@ void SimpleThermAnalysis::ProcessAll()
       if(!tFile->IsDirectory() && tName.BeginsWith(tBeginningText) && tName.EndsWith(tEndingText))
       {
         fNFiles++;
-        tCompleteFilePath = TString(fEventsDirectory.Data()) + tName;
+        tNFilesInDir++;
+        tCompleteFilePath = TString(tCompleteDirectoryPath.Data()) + tName;
         fEventsCollection = ExtractEventsFromRootFile(tCompleteFilePath);
         ProcessEventByEvent(fEventsCollection);
 
+        cout << "tNFilesInDir = " << tNFilesInDir << endl;
         cout << "fNFiles = " << fNFiles << endl << endl;
       }
     }
   }
+  cout << "Total number of files in subdirectory = " << tNFilesInDir << endl;
+}
+
+//________________________________________________________________________________________________________________
+void SimpleThermAnalysis::ProcessAll()
+{
+  TSystemDirectory *tDir = new TSystemDirectory(fEventsDirectory.Data(), fEventsDirectory.Data());
+  TList* tSubDirectories = tDir->GetListOfFiles(); 
+
+  const char* tBeginningText = "events";
+
+  fNFiles = 0;
+  int tNSubDirectories = 0;
+
+  if(tSubDirectories)
+  {
+    TSystemDirectory* tSubDirectory;
+    TString tName;
+    TIter tIterNext(tSubDirectories);
+
+    while((tSubDirectory=(TSystemDirectory*)tIterNext()))
+    {
+      tName = tSubDirectory->GetName();
+      if(tSubDirectory->IsDirectory() && tName.BeginsWith(tBeginningText))
+      {
+        tNSubDirectories++;
+        cout << "tNSubDirectories = " << tNSubDirectories << endl << endl;
+        ProcessAllInDirectory(tSubDirectory);
+      }
+    }
+  }
+
+  if(tNSubDirectories==0) ProcessAllInDirectory(tDir);  //i.e. no events subdirectories; all events in 
+                                                        //single directory located at fEventsDirectory
+
   cout << "Total number of files = " << fNFiles << endl;
+  //----------------------------------------------------
 
   if(fBuildUniqueParents)
   {
@@ -303,9 +344,8 @@ void SimpleThermAnalysis::ProcessAll()
   fAnalysisLamK0->PrintPrimaryAndOtherPairInfo();
   fAnalysisALamK0->PrintPrimaryAndOtherPairInfo();
 
-
-
   SaveAll();
+  tDir->Delete();
 }
 
 //________________________________________________________________________________________________________________

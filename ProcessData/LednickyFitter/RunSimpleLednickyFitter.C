@@ -67,6 +67,7 @@ int main(int argc, char **argv)
 //-----------------------------------------------------------------------------
   AnalysisType tAnType = kLamKchP;
   bool bSaveFigures = false;
+  bool bApplyNonFlatBackgroundCorrection = true;
   bool bIncludeResiduals = true;
 
   TString tDirectory = "~/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b2/";
@@ -107,6 +108,7 @@ int main(int argc, char **argv)
   tSLFitter->GetMinuitObject()->SetFCN(fcn);
   myFitter = tSLFitter;
 
+  tSLFitter->SetApplyNonFlatBackgroundCorrection(bApplyNonFlatBackgroundCorrection);
   tSLFitter->SetIncludeResidualCorrelations(bIncludeResiduals);
   tSLFitter->DoFit();
 

@@ -26,11 +26,12 @@ int main(int argc, char **argv)
   bool bBuildSingleParticleAnalyses = false;
 
   bool bBuildCorrelationFunctions = true;
-  bool bBuildMixedEventNumerators = true;
+  bool bBuildMixedEventNumerators = false;
   int tNEventsToMix = 10;
   bool bWeightCfsWithParentInteraction = false;
 
   bool bCheckCoECoM = false;
+  bool bOnlyRunOverJaiEvents = false;
 
 //  double tMaxPrimaryDecayLength = -1.; 
   double tMaxPrimaryDecayLength = 3.01; 
@@ -53,6 +54,16 @@ int main(int argc, char **argv)
     tPairFractionSaveName = "/home/jesse/Analysis/ReducedTherminator2Events/test/testPairFractionsv2";
     tSingleParticlesSaveName = "/home/jesse/Analysis/ReducedTherminator2Events/test/testSingleParticleAnalysesv2";
     tCorrelationFunctionsSaveName  = "/home/jesse/Analysis/ReducedTherminator2Events/test/testCorrelationFunctions";
+  }
+
+  if(bOnlyRunOverJaiEvents) 
+  {
+    tEventsDirectory += TString("events0/");
+
+    tMatricesSaveFileName += TString("_JaiEventsOnly");
+    tPairFractionSaveName += TString("_JaiEventsOnly");
+    tSingleParticlesSaveName += TString("_JaiEventsOnly");
+    tCorrelationFunctionsSaveName += TString("_JaiEventsOnly");
   }
   //-----------------------------------------
 

@@ -71,6 +71,8 @@ public:
   double GetStrongOnlyWaveFunctionSq(TVector3* aKStar3Vec, TVector3 *aRStar3Vec, vector<double> &aSimParams);
   TH1D* GetSimluatedNumDen(bool aBuildNum, vector<double> &aSimParams, double aMaxBuildKStar=0.5, int aNPairsPerKStarBin = 100000, double aKStarBinSize=0.01);
 
+  TF1* FitNonFlatBackground(TH1* aCf, double aMinFit, double aMaxFit);
+
   TH1D* Get1dHisto(TString FileName, TString HistoName);
   void CreateMinuitParameters();
   void CalculateFitFunction(int &npar, double &chi2, double *par);
@@ -104,6 +106,7 @@ public:
   int GetNDF();
   TMinuit* GetMinuitObject();
 
+  void SetApplyNonFlatBackgroundCorrection(bool aApply=true);
   vector<AnalysisType> GetTransformStorageMapping();
   void SetIncludeResidualCorrelations(bool aInclude=true);
   td1dVec CombinePrimaryWithResiduals(double *aCfParams, td1dVec &aPrimaryCf);
@@ -140,6 +143,8 @@ protected:
   vector<double> fMinParams;
   vector<double> fParErrors;
 
+  bool fApplyNonFlatBackgroundCorrection;
+  TF1* fNonFlatBgdFit;
   bool fIncludeResidualCorrelations;
   vector<TH2D*> fTransformMatrices;
   vector<AnalysisType> fTransformStorageMapping;
@@ -162,6 +167,7 @@ inline int SimpleLednickyFitter::GetNDF() {return fNDF;}
 
 inline TMinuit* SimpleLednickyFitter::GetMinuitObject() {return fMinuit;}
 
+inline void SimpleLednickyFitter::SetApplyNonFlatBackgroundCorrection(bool aApply) {fApplyNonFlatBackgroundCorrection = aApply;}
 inline vector<AnalysisType> SimpleLednickyFitter::GetTransformStorageMapping() {return fTransformStorageMapping;}
 inline void SimpleLednickyFitter::SetIncludeResidualCorrelations(bool aInclude) {fIncludeResidualCorrelations = aInclude;}
 inline td1dVec SimpleLednickyFitter::CombinePrimaryWithResiduals(double *aCfParams, td1dVec &aPrimaryCf) {return fResidualCollection->CombinePrimaryWithResiduals(aCfParams, aPrimaryCf);}

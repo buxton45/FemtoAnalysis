@@ -44,6 +44,8 @@ SimpleLednickyFitter::SimpleLednickyFitter(AnalysisType aAnalysisType, CfLite *a
   fMinParams(0),
   fParErrors(0),
 
+  fApplyNonFlatBackgroundCorrection(false),
+  fNonFlatBgdFit(nullptr),
   fIncludeResidualCorrelations(false),
   fTransformMatrices(0),
   fTransformStorageMapping(0),
@@ -246,6 +248,22 @@ cout << "tNBins = " << tNBins << endl;
   return tReturnHist;
 }
 
+
+//________________________________________________________________________________________________________________
+TF1* SimpleLednickyFitter::FitNonFlatBackground(TH1* aCf, double aMinFit, double aMaxFit)
+{
+  TF1* tNonFlatBackground;
+
+  TString tFitName = TString("NonFlatBackgroundFitLinear_") + TString(aCf->GetTitle());
+  tNonFlatBackground = new TF1(tFitName,FitPartialAnalysis::NonFlatBackgroundFitFunctionLinear,0.,1.,2);
+    tNonFlatBackground->SetParameter(0,0.);
+    tNonFlatBackground->SetParameter(1,1.);
+  aCf->Fit(tFitName,"0q","",aMinFit,aMaxFit);
+
+  return tNonFlatBackground;
+}
+
+
 //________________________________________________________________________________________________________________
 TH1D* SimpleLednickyFitter::Get1dHisto(TString FileName, TString HistoName)
 {
@@ -386,6 +404,8 @@ void SimpleLednickyFitter::CalculateFitFunction(int &npar, double &chi2, double 
 
   tCorrectedFitCfContent = tFitCfContent;
 
+  if(fApplyNonFlatBackgroundCorrection) LednickyFitter::ApplyNonFlatBackgroundCorrection(tCorrectedFitCfContent, fKStarBinCenters, fNonFlatBgdFit);
+
   fCorrectedFitVec = tCorrectedFitCfContent;
   LednickyFitter::ApplyNormalization(tParPrim[5], tCorrectedFitCfContent);
 
@@ -519,10 +539,11 @@ void SimpleLednickyFitter::InitializeFitter()
     fKStarBinCenters[ix-1] = tNum->GetXaxis()->GetBinCenter(ix);
   }
 
+  if(fApplyNonFlatBackgroundCorrection) fNonFlatBgdFit = FitNonFlatBackground(tCf, 0.5, 1.0);
+
   if(fIncludeResidualCorrelations) InitiateResidualCollection(fKStarBinCenters);
 
 }
-
 
 //________________________________________________________________________________________________________________
 void SimpleLednickyFitter::DoFit()
@@ -668,6 +689,24 @@ void SimpleLednickyFitter::DrawCfWithFit(TPad *aPad, TString aDrawOption)
 
   TPaveText* tText = CreateParamFinalValuesText(tFit, 0.5, 0.5, 0.25, 0.25);
   tText->Draw();
+
+  if(fApplyNonFlatBackgroundCorrection)
+  {
+    fNonFlatBgdFit->SetLineColor(kGreen+2);
+    fNonFlatBgdFit->Draw("lsame");
+
+    TPaveText* tTextBgd = new TPaveText(0.25, 0.50, 0.45, 0.60, "NDC");
+    tTextBgd->AddText(TString::Format("BgdFit(x) = %0.1e*x + %0.2f", fNonFlatBgdFit->GetParameter(0), fNonFlatBgdFit->GetParameter(1)));
+    tTextBgd->Draw();
+
+    TF1* tFit = CreateFitFunction(TString("Fit"));
+    TH1D* tCorrectedCf = GetCorrectedFitHist();
+      tCorrectedCf->SetMarkerColor(kMagenta+1);
+      tCorrectedCf->SetLineColor(kMagenta+1);
+      tCorrectedCf->SetLineWidth(2);
+    tCorrectedCf->Draw("lsame");
+  }
+
 }
 
 //________________________________________________________________________________________________________________
@@ -740,6 +779,16 @@ void SimpleLednickyFitter::DrawCfWithFitAndResiduals(TPad *aPad)
 
   tLegNeutral->Draw();
   tLegCharged->Draw();
+
+  if(fApplyNonFlatBackgroundCorrection)
+  {
+    fNonFlatBgdFit->SetLineColor(kGreen+2);
+    fNonFlatBgdFit->Draw("lsame");
+
+    TPaveText* tTextBgd = new TPaveText(0.30, 0.60, 0.50, 0.70, "NDC");
+    tTextBgd->AddText(TString::Format("BgdFit(x) = %0.1e*x + %0.2f", fNonFlatBgdFit->GetParameter(0), fNonFlatBgdFit->GetParameter(1)));
+    tTextBgd->Draw();
+  }
 }
 
 
