@@ -27,7 +27,7 @@ int main(int argc, char **argv)
 
   bool bBuildCorrelationFunctions = true;
   bool bBuildMixedEventNumerators = false;
-  int tNEventsToMix = 10;
+  int tNEventsToMix = 5;
   bool bWeightCfsWithParentInteraction = false;
 
   bool bCheckCoECoM = false;
