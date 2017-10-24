@@ -52,6 +52,8 @@ int main(int argc, char **argv)
   TString tFileLocationBase = TString::Format("%sResults_%s_%s",tDirectoryBase.Data(),tGeneralAnTypeName.Data(),tResultsDate.Data());
   TString tFileLocationBaseMC = TString::Format("%sResults_%sMC_%s",tDirectoryBase.Data(),tGeneralAnTypeName.Data(),tResultsDate.Data());
 
+  TString tSaveDirectoryBase = TString::Format("/home/jesse/Analysis/Presentations/GroupMeetings/20171026/Figures/%s/", cAnalysisBaseTags[tAnType]);
+/*
   TString tSaveDirectoryBase = TString::Format("/home/jesse/Analysis/Presentations/AliFemto/20170913/Figures/%s/", cAnalysisBaseTags[tAnType]);
     if(UseAll10Residuals) tSaveDirectoryBase += TString("10Residuals/");
     else tSaveDirectoryBase += TString("3Residuals/");
@@ -61,6 +63,7 @@ int main(int argc, char **argv)
 
     if(UseCoulombOnlyInterpCfsForChargedResiduals) tSaveDirectoryBase += TString("UsingCoulombOnlyInterpCfs/");
     else tSaveDirectoryBase += TString("UsingXiKData/");
+*/
 //  tSaveDirectoryBase = tDirectoryBase;
 
   TString tSaveNameModifier = "";
@@ -68,6 +71,7 @@ int main(int argc, char **argv)
   if(ApplyNonFlatBackgroundCorrection) tSaveNameModifier += TString("_NonFlatBgdCrctn");
   if(tAllShareSingleLambdaParam) tSaveNameModifier += TString("_SingleLamParam");
   if(IncludeResiduals) tSaveNameModifier += TString("_ResidualsIncluded");
+  if(FixRadii) tSaveNameModifier += TString("_FixedRadii");
 
   if(UseCoulombOnlyInterpCfsForXiKResiduals && UseCoulombOnlyInterpCfsForChargedResiduals) tSaveNameModifier += TString("_UsingCoulombOnlyInterpCfsForAll");
   else if(UseCoulombOnlyInterpCfsForChargedResiduals) tSaveNameModifier += TString("_UsingCoulombOnlyInterpCfs");
@@ -92,7 +96,11 @@ int main(int argc, char **argv)
   tLamKchP->SetIncludeResidualCorrelations(IncludeResiduals, aLambdaMin, aLambdaMax);
   tLamKchP->SetUseCoulombOnlyInterpCfsForChargedResiduals(UseCoulombOnlyInterpCfsForChargedResiduals);
   tLamKchP->SetUseCoulombOnlyInterpCfsForXiKResiduals(UseCoulombOnlyInterpCfsForXiKResiduals);
-  if(FixRadii) tLamKchP->SetRadiusLimits({{4., 4.}, {3.5, 3.5}, {2.75, 2.75}});
+  if(FixRadii) 
+  {
+    if(tAnType==kLamK0 || tAnType==kALamK0) tLamKchP->SetRadiusLimits({{3.25, 3.25}, {2.75, 2.75}, {2.25, 2.25}});
+    else tLamKchP->SetRadiusLimits({{3.5, 3.5}, {3.25, 3.25}, {2.5, 2.5}});
+  }
 
   tLamKchP->DoFit();
   TCanvas* tKStarwFitsCan = tLamKchP->DrawKStarCfswFits(ApplyMomResCorrection,ApplyNonFlatBackgroundCorrection,tNonFlatBgdFitType,SaveImages);

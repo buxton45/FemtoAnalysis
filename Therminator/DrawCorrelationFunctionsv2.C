@@ -134,7 +134,7 @@ void DrawCfsWithConj(TPad* aPad, Therm3dCf* a3dCf, Therm3dCf* aConj3dCf)
   tCfFullTot->GetXaxis()->SetTitle("k* (GeV/c)");
   tCfFullTot->GetYaxis()->SetTitle("C(k*)");
 
-//  tCfFullTot->GetXaxis()->SetRangeUser(0.,0.329);
+  tCfFullTot->GetXaxis()->SetRangeUser(0.,1.0);
   tCfFullTot->GetYaxis()->SetRangeUser(0.86, 1.07);
 
   tCfFullTot->Draw();
@@ -238,7 +238,7 @@ void DrawAllSigmaStFlavorsWithConj(TPad* aPad, Therm3dCf* a3dCf, Therm3dCf* aCon
   tCfSigmaStOnlyTot->GetXaxis()->SetTitle("k* (GeV/c)");
   tCfSigmaStOnlyTot->GetYaxis()->SetTitle("C(k*)");
 
-//  tCfSigmaStOnlyTot->GetXaxis()->SetRangeUser(0.,0.329);
+  tCfSigmaStOnlyTot->GetXaxis()->SetRangeUser(0.,1.0);
   tCfSigmaStOnlyTot->GetYaxis()->SetRangeUser(0.86, 1.07);
 
   tCfSigmaStOnlyTot->Draw();
@@ -276,21 +276,24 @@ int main(int argc, char **argv)
   //This allows the user a chance to look at and manipulate a TBrowser before
   //the program ends and closes everything
 //-----------------------------------------------------------------------------
-  bool bCombineConjugates = false;
+  bool bCombineConjugates = true;
   bool bSaveFigures = false;
 
   int tRebin=2;
+  double tMinNorm = 1.0/*0.32*/;
+  double tMaxNorm = 2.0/*0.40*/;
 
-  TString tFileLocationCfs = "/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b2/CorrelationFunctions_10MixedEvNum";
+  TString tFileLocationCfs = "/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b2/CorrelationFunctions";
 
   TString tFileNameModifier = "";
 //  TString tFileNameModifier = "_WeightParentsInteraction";
+//  TString tFileNameModifier = "_WeightParentsInteraction_OnlyWeightLongDecayParents";
 //  TString tFileNameModifier = "_WeightParentsInteraction_NoCharged";
 
   tFileLocationCfs += tFileNameModifier;
   tFileLocationCfs += TString(".root");
 
-  TString tSaveLocationBase = "/home/jesse/Analysis/Presentations/GroupMeetings/20171012/Figures/";
+  TString tSaveLocationBase = "/home/jesse/Analysis/Presentations/GroupMeetings/20171026/Figures/";
 
   TString tSaveLocationBaseLamKchP = tSaveLocationBase + TString("LamKchP/");
   TString tSaveLocationBaseALamKchP = tSaveLocationBase + TString("ALamKchP/");
@@ -302,13 +305,19 @@ int main(int argc, char **argv)
   //--------------------------------------------
 
   Therm3dCf *t3dCf_LamKchP = new Therm3dCf(kLamKchP, tFileLocationCfs, tRebin);
+    t3dCf_LamKchP->SetNormalizationRegion(tMinNorm, tMaxNorm);
   Therm3dCf *t3dCf_ALamKchM = new Therm3dCf(kALamKchM, tFileLocationCfs, tRebin);
+    t3dCf_ALamKchM->SetNormalizationRegion(tMinNorm, tMaxNorm);
 
   Therm3dCf *t3dCf_LamKchM = new Therm3dCf(kLamKchM, tFileLocationCfs, tRebin);
+    t3dCf_LamKchM->SetNormalizationRegion(tMinNorm, tMaxNorm);
   Therm3dCf *t3dCf_ALamKchP = new Therm3dCf(kALamKchP, tFileLocationCfs, tRebin);
+    t3dCf_ALamKchP->SetNormalizationRegion(tMinNorm, tMaxNorm);
 
   Therm3dCf *t3dCf_LamK0 = new Therm3dCf(kLamK0, tFileLocationCfs, tRebin);
+    t3dCf_LamK0->SetNormalizationRegion(tMinNorm, tMaxNorm);
   Therm3dCf *t3dCf_ALamK0 = new Therm3dCf(kALamK0, tFileLocationCfs, tRebin);
+    t3dCf_ALamK0->SetNormalizationRegion(tMinNorm, tMaxNorm);
 
   //--------------------------------------------
 
