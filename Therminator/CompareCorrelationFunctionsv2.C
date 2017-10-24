@@ -23,7 +23,7 @@ void Draw1vs2vs3(TPad* aPad, AnalysisType aAnType, TH1D* aCf1, TH1D* aCf2, TH1D*
   aCf1->GetXaxis()->SetTitle("k* (GeV/c)");
   aCf1->GetYaxis()->SetTitle("C(k*)");
 
-//  aCf1->GetXaxis()->SetRangeUser(0.,0.329);
+  aCf1->GetXaxis()->SetRangeUser(0.,1.0);
   aCf1->GetYaxis()->SetRangeUser(0.86, 1.07);
 
   aCf1->Draw();
