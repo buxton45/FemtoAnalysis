@@ -115,11 +115,12 @@ FitSharedAnalyses::~FitSharedAnalyses()
 }
 
 //________________________________________________________________________________________________________________
-void FitSharedAnalyses::SetParameter(ParameterType aParamType, int aAnalysisNumber, double aStartValue, double aLowerBound, double aUpperBound)
+void FitSharedAnalyses::SetParameter(ParameterType aParamType, int aAnalysisNumber, double aStartValue, double aLowerBound, double aUpperBound, bool aIsFixed)
 {
   fFitPairAnalysisCollection[aAnalysisNumber]->GetFitParameter(aParamType)->SetStartValue(aStartValue);
   fFitPairAnalysisCollection[aAnalysisNumber]->GetFitParameter(aParamType)->SetLowerBound(aLowerBound);
   fFitPairAnalysisCollection[aAnalysisNumber]->GetFitParameter(aParamType)->SetUpperBound(aUpperBound);
+  fFitPairAnalysisCollection[aAnalysisNumber]->GetFitParameter(aParamType)->SetFixed(aIsFixed);
 }
 
 
@@ -236,7 +237,7 @@ void FitSharedAnalyses::CompareParameters(TString aAnalysisName1, FitParameter* 
 
 
 //________________________________________________________________________________________________________________
-void FitSharedAnalyses::SetSharedParameter(ParameterType aParamType)
+void FitSharedAnalyses::SetSharedParameter(ParameterType aParamType, bool aIsFixed)
 {
   //Sets parameter for all analyses
   //If I only want to set for certain analyses, used the overloaded SetSharedParameter function with &aSharedAnalyses argument
@@ -248,6 +249,7 @@ void FitSharedAnalyses::SetSharedParameter(ParameterType aParamType)
   for(int i=0; i<fNFitPairAnalysis; i++)
   {
     fFitPairAnalysisCollection[i]->GetFitParameter(aParamType)->SetSharedGlobal(true,tAllShared);
+    fFitPairAnalysisCollection[i]->GetFitParameter(aParamType)->SetFixed(aIsFixed);
     if(i != 0)
     {
       CompareParameters(fFitPairAnalysisCollection[0]->GetAnalysisName(), fFitPairAnalysisCollection[0]->GetFitParameter(aParamType), fFitPairAnalysisCollection[i]->GetAnalysisName(), fFitPairAnalysisCollection[i]->GetFitParameter(aParamType));
@@ -262,7 +264,7 @@ void FitSharedAnalyses::SetSharedParameter(ParameterType aParamType)
 
 
 //________________________________________________________________________________________________________________
-void FitSharedAnalyses::SetSharedParameter(ParameterType aParamType, double aStartValue, double aLowerBound, double aUpperBound)
+void FitSharedAnalyses::SetSharedParameter(ParameterType aParamType, double aStartValue, double aLowerBound, double aUpperBound, bool aIsFixed)
 {
   //Sets parameter for all analyses
   //If I only want to set for certain analyses, used the overloaded SetSharedParameter function with &aSharedAnalyses argument
@@ -277,6 +279,7 @@ void FitSharedAnalyses::SetSharedParameter(ParameterType aParamType, double aSta
   fFitPairAnalysisCollection[0]->GetFitParameter(aParamType)->SetStartValue(aStartValue);
   fFitPairAnalysisCollection[0]->GetFitParameter(aParamType)->SetLowerBound(aLowerBound);
   fFitPairAnalysisCollection[0]->GetFitParameter(aParamType)->SetUpperBound(aUpperBound);
+  fFitPairAnalysisCollection[0]->GetFitParameter(aParamType)->SetFixed(aIsFixed);
 
   for(int i=1; i<fNFitPairAnalysis; i++)
   {
@@ -300,7 +303,7 @@ void FitSharedAnalyses::SetSharedParameter(ParameterType aParamType, double aSta
 
 
 //________________________________________________________________________________________________________________
-void FitSharedAnalyses::SetSharedParameter(ParameterType aParamType, const vector<int> &aSharedAnalyses)
+void FitSharedAnalyses::SetSharedParameter(ParameterType aParamType, const vector<int> &aSharedAnalyses, bool aIsFixed)
 {
   vector<FitParameter*> tempSharedParameters (aSharedAnalyses.size());
 
@@ -308,6 +311,7 @@ void FitSharedAnalyses::SetSharedParameter(ParameterType aParamType, const vecto
   {
 
     fFitPairAnalysisCollection[aSharedAnalyses[i]]->GetFitParameter(aParamType)->SetSharedGlobal(true,aSharedAnalyses);
+    fFitPairAnalysisCollection[aSharedAnalyses[i]]->GetFitParameter(aParamType)->SetFixed(aIsFixed);
     if(i != 0)
     {
       CompareParameters(fFitPairAnalysisCollection[aSharedAnalyses[0]]->GetAnalysisName(), fFitPairAnalysisCollection[aSharedAnalyses[0]]->GetFitParameter(aParamType), fFitPairAnalysisCollection[aSharedAnalyses[i]]->GetAnalysisName(), fFitPairAnalysisCollection[aSharedAnalyses[i]]->GetFitParameter(aParamType));
@@ -324,7 +328,7 @@ void FitSharedAnalyses::SetSharedParameter(ParameterType aParamType, const vecto
 
 
 //________________________________________________________________________________________________________________
-void FitSharedAnalyses::SetSharedParameter(ParameterType aParamType, const vector<int> &aSharedAnalyses, double aStartValue, double aLowerBound, double aUpperBound)
+void FitSharedAnalyses::SetSharedParameter(ParameterType aParamType, const vector<int> &aSharedAnalyses, double aStartValue, double aLowerBound, double aUpperBound, bool aIsFixed)
 {
   vector<FitParameter*> tempSharedParameters (aSharedAnalyses.size());
 
@@ -333,6 +337,7 @@ void FitSharedAnalyses::SetSharedParameter(ParameterType aParamType, const vecto
   fFitPairAnalysisCollection[aSharedAnalyses[0]]->GetFitParameter(aParamType)->SetStartValue(aStartValue);
   fFitPairAnalysisCollection[aSharedAnalyses[0]]->GetFitParameter(aParamType)->SetLowerBound(aLowerBound);
   fFitPairAnalysisCollection[aSharedAnalyses[0]]->GetFitParameter(aParamType)->SetUpperBound(aUpperBound);
+  fFitPairAnalysisCollection[aSharedAnalyses[0]]->GetFitParameter(aParamType)->SetFixed(aIsFixed);
 
   for(unsigned int i=1; i<aSharedAnalyses.size(); i++)
   {

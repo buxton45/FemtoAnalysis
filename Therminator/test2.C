@@ -29,6 +29,7 @@ int main(int argc, char **argv)
   bool bBuildMixedEventNumerators = false;
   int tNEventsToMix = 5;
   bool bWeightCfsWithParentInteraction = false;
+  bool bOnlyWeightLongDecayParents = false;
 
   bool bCheckCoECoM = false;
   bool bOnlyRunOverJaiEvents = false;
@@ -77,6 +78,7 @@ int main(int argc, char **argv)
   tSimpleThermAnalysis->SetBuildCorrelationFunctions(bBuildCorrelationFunctions);
   tSimpleThermAnalysis->SetBuildMixedEventNumerators(bBuildMixedEventNumerators);
   tSimpleThermAnalysis->SetWeightCfsWithParentInteraction(bWeightCfsWithParentInteraction);
+  tSimpleThermAnalysis->SetOnlyWeightLongDecayParents(bOnlyWeightLongDecayParents);
   tSimpleThermAnalysis->SetNEventsToMix(tNEventsToMix);
 
   tSimpleThermAnalysis->SetBuildSingleParticleAnalyses(bBuildSingleParticleAnalyses);

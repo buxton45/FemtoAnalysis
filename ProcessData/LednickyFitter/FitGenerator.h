@@ -92,15 +92,15 @@ public:
   TString GetSaveLocationBase();
   TString GetSaveNameModifier();
 
-  void SetSharedParameter(ParameterType aParamType);  //share amongst all
-  void SetSharedParameter(ParameterType aParamType, double aStartValue, double aLowerBound=0., double aUpperBound=0.);  //share amongst all
+  void SetSharedParameter(ParameterType aParamType, bool aIsFixed=false);  //share amongst all
+  void SetSharedParameter(ParameterType aParamType, double aStartValue, double aLowerBound=0., double aUpperBound=0., bool aIsFixed=false);  //share amongst all
 
-  void SetSharedParameter(ParameterType aParamType, const vector<int> &aSharedAnalyses); //share amongst analyses selected in aSharedAnalyses
-  void SetSharedParameter(ParameterType aParamType, const vector<int> &aSharedAnalyses, double aStartValue, double aLowerBound=0., double aUpperBound=0.);
+  void SetSharedParameter(ParameterType aParamType, const vector<int> &aSharedAnalyses, bool aIsFixed=false); //share amongst analyses selected in aSharedAnalyses
+  void SetSharedParameter(ParameterType aParamType, const vector<int> &aSharedAnalyses, double aStartValue, double aLowerBound=0., double aUpperBound=0., bool aIsFixed=false);
 
   void SetSharedAndFixedParameter(ParameterType aParamType, double aFixedValue);
 
-  void SetParameter(ParameterType aParamType, int aAnalysisNumber, double aStartValue, double aLowerBound=0., double aUpperBound=0.);
+  void SetParameter(ParameterType aParamType, int aAnalysisNumber, double aStartValue, double aLowerBound=0., double aUpperBound=0., bool aIsFixed=false);
 
   void SetUseRadiusLimits(bool aUse);
   void SetUseScattParamLimits(bool aUse);
@@ -156,21 +156,21 @@ protected:
 inline TString FitGenerator::GetSaveLocationBase() {return fSaveLocationBase;}
 inline TString FitGenerator::GetSaveNameModifier() {return fSaveNameModifier;}
 
-inline void FitGenerator::SetSharedParameter(ParameterType aParamType) 
-  {fSharedAn->SetSharedParameter(aParamType);}
-inline void FitGenerator::SetSharedParameter(ParameterType aParamType, double aStartValue, double aLowerBound, double aUpperBound) 
-  {fSharedAn->SetSharedParameter(aParamType,aStartValue,aLowerBound,aUpperBound);}
+inline void FitGenerator::SetSharedParameter(ParameterType aParamType, bool aIsFixed) 
+  {fSharedAn->SetSharedParameter(aParamType,aIsFixed);}
+inline void FitGenerator::SetSharedParameter(ParameterType aParamType, double aStartValue, double aLowerBound, double aUpperBound, bool aIsFixed) 
+  {fSharedAn->SetSharedParameter(aParamType,aStartValue,aLowerBound,aUpperBound,aIsFixed);}
 
-inline void FitGenerator::SetSharedParameter(ParameterType aParamType, const vector<int> &aSharedAnalyses) 
-  {fSharedAn->SetSharedParameter(aParamType,aSharedAnalyses);}
-inline void FitGenerator::SetSharedParameter(ParameterType aParamType, const vector<int> &aSharedAnalyses, double aStartValue, double aLowerBound, double aUpperBound) 
-  {fSharedAn->SetSharedParameter(aParamType,aSharedAnalyses,aStartValue,aLowerBound,aUpperBound);}
+inline void FitGenerator::SetSharedParameter(ParameterType aParamType, const vector<int> &aSharedAnalyses, bool aIsFixed) 
+  {fSharedAn->SetSharedParameter(aParamType,aSharedAnalyses,aIsFixed);}
+inline void FitGenerator::SetSharedParameter(ParameterType aParamType, const vector<int> &aSharedAnalyses, double aStartValue, double aLowerBound, double aUpperBound, bool aIsFixed) 
+  {fSharedAn->SetSharedParameter(aParamType,aSharedAnalyses,aStartValue,aLowerBound,aUpperBound,aIsFixed);}
 
 inline void FitGenerator::SetSharedAndFixedParameter(ParameterType aParamType, double aFixedValue)
   {fSharedAn->SetSharedAndFixedParameter(aParamType,aFixedValue);}
 
-inline void FitGenerator::SetParameter(ParameterType aParamType, int aAnalysisNumber, double aStartValue, double aLowerBound, double aUpperBound)
-  {fSharedAn->SetParameter(aParamType,aAnalysisNumber,aStartValue,aLowerBound,aUpperBound);}
+inline void FitGenerator::SetParameter(ParameterType aParamType, int aAnalysisNumber, double aStartValue, double aLowerBound, double aUpperBound, bool aIsFixed)
+  {fSharedAn->SetParameter(aParamType,aAnalysisNumber,aStartValue,aLowerBound,aUpperBound,aIsFixed);}
 
 inline void FitGenerator::SetUseRadiusLimits(bool aUse) {SetUseLimits(fRadiusFitParams,aUse);}
 inline void FitGenerator::SetUseScattParamLimits(bool aUse) {SetUseLimits(fScattFitParams,aUse);}

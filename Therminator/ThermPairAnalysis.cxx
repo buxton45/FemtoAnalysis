@@ -43,6 +43,7 @@ ThermPairAnalysis::ThermPairAnalysis(AnalysisType aAnType) :
   fOtherPairInfo(0),
 
   fWeightCfsWithParentInteraction(false),
+  fOnlyWeightLongDecayParents(false),
 
   fPairSource3d(nullptr),
   fNum3d(nullptr),
@@ -470,6 +471,13 @@ void ThermPairAnalysis::SetWeightCfsWithParentInteraction(bool aSet)
      fAnalysisType==kLamKchM || fAnalysisType==kALamKchP) &&
      fWeightCfsWithParentInteraction) LoadChargedResiduals();
 
+}
+
+//________________________________________________________________________________________________________________
+void ThermPairAnalysis::SetOnlyWeightLongDecayParents(bool aSet)
+{
+  fOnlyWeightLongDecayParents = aSet;
+  if(fOnlyWeightLongDecayParents) fWeightCfsWithParentInteraction = fOnlyWeightLongDecayParents;
 }
 
 //________________________________________________________________________________________________________________
@@ -1333,6 +1341,13 @@ double ThermPairAnalysis::GetParentPairWaveFunctionSq(ThermParticle &tPart1, The
     p1 = tPart1.GetFatherFourMomentum();
     x1 = tPart1.GetFatherFourPosition();
     tResType1 = static_cast<ParticlePDGType>(tPart1.GetFatherPID());
+
+    if(fOnlyWeightLongDecayParents && GetParticleDecayLength(tResType1) < 1000.)
+    {
+      p1 = tPart1.GetFourMomentum();
+      x1 = tPart1.GetFourPosition();
+      tResType1 = static_cast<ParticlePDGType>(tPart1.GetPID());
+    }
   }
   //----------
   if(tPart2.IsPrimordial())
@@ -1346,6 +1361,13 @@ double ThermPairAnalysis::GetParentPairWaveFunctionSq(ThermParticle &tPart1, The
     p2 = tPart2.GetFatherFourMomentum();
     x2 = tPart2.GetFatherFourPosition();
     tResType2 = static_cast<ParticlePDGType>(tPart2.GetFatherPID());
+
+    if(fOnlyWeightLongDecayParents && GetParticleDecayLength(tResType2) < 1000.)
+    {
+      p2 = tPart2.GetFourMomentum();
+      x2 = tPart2.GetFourPosition();
+      tResType2 = static_cast<ParticlePDGType>(tPart2.GetPID());
+    }
   }
   //--------------------------------------------------------------
 

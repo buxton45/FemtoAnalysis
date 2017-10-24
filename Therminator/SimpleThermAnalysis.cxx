@@ -42,6 +42,7 @@ SimpleThermAnalysis::SimpleThermAnalysis() :
   fBuildCorrelationFunctions(true),
   fBuildMixedEventNumerators(false),
   fWeightCfsWithParentInteraction(false),
+  fOnlyWeightLongDecayParents(false),
   fBuildSingleParticleAnalyses(true),
 
   fAnalysisLamKchP(nullptr),
@@ -160,6 +161,7 @@ void SimpleThermAnalysis::SaveAll()
   {
     if(fBuildMixedEventNumerators) fCorrelationFunctionsSaveName += TString::Format("_%iMixedEvNum", fNEventsToMix);
     if(fWeightCfsWithParentInteraction) fCorrelationFunctionsSaveName += TString("_WeightParentsInteraction");
+    if(fOnlyWeightLongDecayParents) fCorrelationFunctionsSaveName += TString("_OnlyWeightLongDecayParents");
     fCorrelationFunctionsSaveName += TString(".root");
     TFile* tFileCorrelationFunctions = new TFile(fCorrelationFunctionsSaveName, "RECREATE");
 
@@ -469,6 +471,20 @@ void SimpleThermAnalysis::SetWeightCfsWithParentInteraction(bool aSet)
   fAnalysisALamK0->SetWeightCfsWithParentInteraction(aSet);
 }
 
+//________________________________________________________________________________________________________________
+void SimpleThermAnalysis::SetOnlyWeightLongDecayParents(bool aSet)
+{
+  fOnlyWeightLongDecayParents = aSet;
+
+  fAnalysisLamKchP->SetOnlyWeightLongDecayParents(aSet);
+  fAnalysisALamKchM->SetOnlyWeightLongDecayParents(aSet);
+
+  fAnalysisLamKchM->SetOnlyWeightLongDecayParents(aSet);
+  fAnalysisALamKchP->SetOnlyWeightLongDecayParents(aSet);
+
+  fAnalysisLamK0->SetOnlyWeightLongDecayParents(aSet);
+  fAnalysisALamK0->SetOnlyWeightLongDecayParents(aSet);
+}
 
 //________________________________________________________________________________________________________________
 void SimpleThermAnalysis::SetBuildSingleParticleAnalyses(bool aBuild)

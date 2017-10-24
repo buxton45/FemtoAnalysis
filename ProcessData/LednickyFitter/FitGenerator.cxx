@@ -1681,8 +1681,12 @@ void FitGenerator::SetRadiusLimits(double aMin, double aMax, int aIndex)
   }
   assert(aIndex < (int)fRadiusFitParams.size());
 
-  fRadiusFitParams[aIndex].SetLowerBound(aMin);
-  fRadiusFitParams[aIndex].SetUpperBound(aMax);
+  if(aMin==aMax && aMin>0.) fRadiusFitParams[aIndex].SetFixedToValue(aMin);  //aMin>0 bc aMin=aMax=0 mean unbounded
+  else
+  {
+    fRadiusFitParams[aIndex].SetLowerBound(aMin);
+    fRadiusFitParams[aIndex].SetUpperBound(aMax);
+  }
 }
 //________________________________________________________________________________________________________________
 void FitGenerator::SetRadiusLimits(const td2dVec &aMinMax2dVec)
@@ -1927,18 +1931,18 @@ void FitGenerator::SetAllParameters()
   vector<vector<int> > tShares2dVec {{0,1},{2,3},{4,5}};
 
   //Always shared amongst all
-  SetSharedParameter(kRef0,fScattFitParams[0].GetStartValue(),fScattFitParams[0].GetLowerBound(),fScattFitParams[0].GetUpperBound());
-  SetSharedParameter(kImf0,fScattFitParams[1].GetStartValue(),fScattFitParams[1].GetLowerBound(),fScattFitParams[1].GetUpperBound());
-  SetSharedParameter(kd0,fScattFitParams[2].GetStartValue(),fScattFitParams[2].GetLowerBound(),fScattFitParams[2].GetUpperBound());
-  if(fAllShareSingleLambdaParam) SetSharedParameter(kLambda, fLambdaFitParams[0].GetStartValue(), fLambdaFitParams[0].GetLowerBound(), fLambdaFitParams[0].GetUpperBound());
+  SetSharedParameter(kRef0,fScattFitParams[0].GetStartValue(),fScattFitParams[0].GetLowerBound(),fScattFitParams[0].GetUpperBound(), fScattFitParams[0].IsFixed());
+  SetSharedParameter(kImf0,fScattFitParams[1].GetStartValue(),fScattFitParams[1].GetLowerBound(),fScattFitParams[1].GetUpperBound(), fScattFitParams[1].IsFixed());
+  SetSharedParameter(kd0,fScattFitParams[2].GetStartValue(),fScattFitParams[2].GetLowerBound(),fScattFitParams[2].GetUpperBound(), fScattFitParams[2].IsFixed());
+  if(fAllShareSingleLambdaParam) SetSharedParameter(kLambda, fLambdaFitParams[0].GetStartValue(), fLambdaFitParams[0].GetLowerBound(), fLambdaFitParams[0].GetUpperBound(), fLambdaFitParams[0].IsFixed());
 
   if(fNAnalyses==1)
   {
     SetSharedParameter(kLambda, fLambdaFitParams[0].GetStartValue(), 
-                       fLambdaFitParams[0].GetLowerBound(), fLambdaFitParams[0].GetUpperBound());
+                       fLambdaFitParams[0].GetLowerBound(), fLambdaFitParams[0].GetUpperBound(), fLambdaFitParams[0].IsFixed());
 
     SetSharedParameter(kRadius, fRadiusFitParams[0].GetStartValue(),
-                       fRadiusFitParams[0].GetLowerBound(), fRadiusFitParams[0].GetUpperBound());
+                       fRadiusFitParams[0].GetLowerBound(), fRadiusFitParams[0].GetUpperBound(), fRadiusFitParams[0].IsFixed());
 
     fFitParamsPerPad[0][0] = fLambdaFitParams[0];
     fFitParamsPerPad[0][1] = fRadiusFitParams[0];
@@ -1949,19 +1953,19 @@ void FitGenerator::SetAllParameters()
     if(!fAllShareSingleLambdaParam)
     {
       SetParameter(kLambda, 0, fLambdaFitParams[0].GetStartValue(),
-                   fLambdaFitParams[0].GetLowerBound(), fLambdaFitParams[0].GetUpperBound());
+                   fLambdaFitParams[0].GetLowerBound(), fLambdaFitParams[0].GetUpperBound(), fLambdaFitParams[0].IsFixed());
       SetParameter(kLambda, 1, fLambdaFitParams[1].GetStartValue(),
-                   fLambdaFitParams[1].GetLowerBound(), fLambdaFitParams[1].GetUpperBound());
+                   fLambdaFitParams[1].GetLowerBound(), fLambdaFitParams[1].GetUpperBound(), fLambdaFitParams[1].IsFixed());
       SetParameter(kLambda, 2, fLambdaFitParams[2].GetStartValue(),
-                   fLambdaFitParams[2].GetLowerBound(), fLambdaFitParams[2].GetUpperBound());
+                   fLambdaFitParams[2].GetLowerBound(), fLambdaFitParams[2].GetUpperBound(), fLambdaFitParams[2].IsFixed());
     }
 
     SetParameter(kRadius, 0, fRadiusFitParams[0].GetStartValue(),
-                 fRadiusFitParams[0].GetLowerBound(), fRadiusFitParams[0].GetUpperBound());
+                 fRadiusFitParams[0].GetLowerBound(), fRadiusFitParams[0].GetUpperBound(), fRadiusFitParams[0].IsFixed());
     SetParameter(kRadius, 1, fRadiusFitParams[1].GetStartValue(),
-                 fRadiusFitParams[1].GetLowerBound(), fRadiusFitParams[1].GetUpperBound());
+                 fRadiusFitParams[1].GetLowerBound(), fRadiusFitParams[1].GetUpperBound(), fRadiusFitParams[1].IsFixed());
     SetParameter(kRadius, 2, fRadiusFitParams[2].GetStartValue(),
-                 fRadiusFitParams[2].GetLowerBound(), fRadiusFitParams[2].GetUpperBound());
+                 fRadiusFitParams[2].GetLowerBound(), fRadiusFitParams[2].GetUpperBound(), fRadiusFitParams[2].IsFixed());
 
     for(int i=0; i<fNAnalyses; i++)
     {
@@ -1976,7 +1980,7 @@ void FitGenerator::SetAllParameters()
     for(int i=0; i<(fNAnalyses/2); i++)
     {
       SetSharedParameter(kRadius, tShares2dVec[i], fRadiusFitParams[i].GetStartValue(),
-                         fRadiusFitParams[i].GetLowerBound(), fRadiusFitParams[i].GetUpperBound());
+                         fRadiusFitParams[i].GetLowerBound(), fRadiusFitParams[i].GetUpperBound(), fRadiusFitParams[i].IsFixed());
 
       fFitParamsPerPad[2*i][1] = fRadiusFitParams[i];
       fFitParamsPerPad[2*i+1][1] = fRadiusFitParams[i];
@@ -1989,7 +1993,7 @@ void FitGenerator::SetAllParameters()
         for(int i=0; i<(fNAnalyses/2); i++)
         {
           SetSharedParameter(kLambda, tShares2dVec[i], fLambdaFitParams[i].GetStartValue(),
-                             fLambdaFitParams[i].GetLowerBound(), fLambdaFitParams[i].GetUpperBound());
+                             fLambdaFitParams[i].GetLowerBound(), fLambdaFitParams[i].GetUpperBound(), fLambdaFitParams[i].IsFixed());
 
           fFitParamsPerPad[2*i][0] = fLambdaFitParams[i];
           fFitParamsPerPad[2*i+1][0] = fLambdaFitParams[i];
@@ -2001,7 +2005,7 @@ void FitGenerator::SetAllParameters()
         for(int i=0; i<fNAnalyses; i++)
         {
           SetParameter(kLambda, i, fLambdaFitParams[i].GetStartValue(),
-                       fLambdaFitParams[i].GetLowerBound(), fLambdaFitParams[i].GetUpperBound());
+                       fLambdaFitParams[i].GetLowerBound(), fLambdaFitParams[i].GetUpperBound(), fLambdaFitParams[i].IsFixed());
           fFitParamsPerPad[i][0] = fLambdaFitParams[i];
         }
       }

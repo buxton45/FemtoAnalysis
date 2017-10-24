@@ -42,6 +42,7 @@ public:
 
   void LoadChargedResiduals();
   void SetWeightCfsWithParentInteraction(bool aSet);
+  void SetOnlyWeightLongDecayParents(bool aSet);
   bool IsChargedResidual(ParticlePDGType aType1, ParticlePDGType aType2);
   AnalysisType GetChargedResidualType(ParticlePDGType aType1, ParticlePDGType aType2);
   int GetChargedResidualIndex(ParticlePDGType aType1, ParticlePDGType aType2);
@@ -150,6 +151,7 @@ private:
   vector<AnalysisType> fChargedResidualsTypeMap;
   vector<ThermChargedResidual> fChargedResiduals;
   bool fWeightCfsWithParentInteraction;
+  bool fOnlyWeightLongDecayParents;
 
   TH3* fPairSource3d;
   TH3* fNum3d;

@@ -35,10 +35,12 @@ int main(int argc, char **argv)
   bool UseCoulombOnlyInterpCfsForChargedResiduals = true;
   bool UseCoulombOnlyInterpCfsForXiKResiduals = false;
 
+  bool FixRadii = false;
+
   double aLambdaMin=0., aLambdaMax=1.;
   if(UnboundLambda) aLambdaMax=0.;
 
-  bool bDrawResiduals = true;
+  bool bDrawResiduals = false;
 
   TString tGeneralAnTypeName;
   if(tAnType==kLamK0 || tAnType==kALamK0) tGeneralAnTypeName = "cLamK0";
@@ -90,6 +92,7 @@ int main(int argc, char **argv)
   tLamKchP->SetIncludeResidualCorrelations(IncludeResiduals, aLambdaMin, aLambdaMax);
   tLamKchP->SetUseCoulombOnlyInterpCfsForChargedResiduals(UseCoulombOnlyInterpCfsForChargedResiduals);
   tLamKchP->SetUseCoulombOnlyInterpCfsForXiKResiduals(UseCoulombOnlyInterpCfsForXiKResiduals);
+  if(FixRadii) tLamKchP->SetRadiusLimits({{4., 4.}, {3.5, 3.5}, {2.75, 2.75}});
 
   tLamKchP->DoFit();
   TCanvas* tKStarwFitsCan = tLamKchP->DrawKStarCfswFits(ApplyMomResCorrection,ApplyNonFlatBackgroundCorrection,tNonFlatBgdFitType,SaveImages);

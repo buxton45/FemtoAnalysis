@@ -53,6 +53,7 @@ public:
   void SetBuildCorrelationFunctions(bool aBuild);
   void SetBuildMixedEventNumerators(bool aBuild);
   void SetWeightCfsWithParentInteraction(bool aSet);
+  void SetOnlyWeightLongDecayParents(bool aSet);
   void SetBuildSingleParticleAnalyses(bool aBuild);
 
   //-- inline
@@ -95,6 +96,7 @@ private:
   bool fBuildCorrelationFunctions;
   bool fBuildMixedEventNumerators;
   bool fWeightCfsWithParentInteraction;
+  bool fOnlyWeightLongDecayParents;
   bool fBuildSingleParticleAnalyses;
 
   ThermPairAnalysis *fAnalysisLamKchP, *fAnalysisALamKchM;
