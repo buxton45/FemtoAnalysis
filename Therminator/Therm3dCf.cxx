@@ -53,6 +53,16 @@ void Therm3dCf::SetPartTypes()
   fPartType2 = tTempVec[1];
 }
 
+//________________________________________________________________________________________________________________
+void Therm3dCf::SetNormalizationRegion(double aMinNorm, double aMaxNorm) 
+{
+  //double check the normalization is within range of histogram
+  assert(aMinNorm >= fNum3d->GetZaxis()->GetBinLowEdge(1));
+  assert(aMaxNorm <= fNum3d->GetZaxis()->GetBinUpEdge(fNum3d->GetNbinsZ()));
+
+  fMinNorm = aMinNorm;
+  fMaxNorm = aMaxNorm;
+}
 
 //________________________________________________________________________________________________________________
 TH1D* Therm3dCf::GetFull(TH3D* aHist3d, TString aPreName)

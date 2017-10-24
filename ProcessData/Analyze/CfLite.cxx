@@ -128,6 +128,9 @@ void CfLite::BuildCf(double aMinNorm, double aMaxNorm)
 //________________________________________________________________________________________________________________
 void CfLite::BuildCf(TString aName, TString aTitle, double aMinNorm, double aMaxNorm)
 {
+  assert(aMinNorm >= fNum->GetXaxis()->GetBinLowEdge(1));
+  assert(aMaxNorm <= fNum->GetXaxis()->GetBinUpEdge(fNum->GetNbinsX()));
+
   int tMinNormBin = fNum->FindBin(aMinNorm);
   int tMaxNormBin = fNum->FindBin(aMaxNorm);
   fNumScale = fNum->Integral(tMinNormBin,tMaxNormBin);

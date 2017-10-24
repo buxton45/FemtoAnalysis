@@ -66,8 +66,8 @@ public:
   double GetMinNorm();
   double GetMaxNorm();
 
-  int GetNumScale();
-  int GetDenScale();
+  double GetNumScale();
+  double GetDenScale();
 
 private:
 
@@ -97,8 +97,8 @@ inline TH1* CfLite::CfwErrorsByHand() {return fCfwErrorsByHand;}
 inline double CfLite::GetMinNorm() {return fMinNorm;}
 inline double CfLite::GetMaxNorm() {return fMaxNorm;}
 
-inline int CfLite::GetNumScale() {return fNumScale;}
-inline int CfLite::GetDenScale() {return fDenScale;};
+inline double CfLite::GetNumScale() {return fNumScale;}
+inline double CfLite::GetDenScale() {return fDenScale;};
 
 
 

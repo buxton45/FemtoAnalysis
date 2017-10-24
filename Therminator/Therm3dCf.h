@@ -31,6 +31,8 @@ public:
 
   void SetPartTypes();
 
+  void SetNormalizationRegion(double aMinNorm, double aMaxNorm);
+
   TH1D* GetFull(TH3D* aHist3d, TString aPreName);
   TH1D* GetPrimaryOnly(TH3D* aHist3d, TString aPreName);
   TH1D* GetSecondaryOnly(TH3D* aHist3d, TString aPreName);

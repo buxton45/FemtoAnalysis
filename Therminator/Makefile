@@ -11,7 +11,7 @@ RM = rm
 
 MY_LIBS = $(addprefix build/, ParticleCoor.o Interpolator.o Types.o PIDMapping.o ThermCommon.o ThermParticle.o ThermV0Particle.o ThermEvent.o ThermChargedResidual.o ThermPairAnalysis.o ThermSingleParticleAnalysis.o ThermEventsCollection.o SimpleThermAnalysis.o Therm3dCf.o)
 
-BINARIES = runTest runTest2 runDrawTransforms runDrawPairFractions runDrawParentsMatrices runBuildLambdaValuesFromParentMatrices runProject3dRadii runDrawPairSources runDrawCfs runDrawCfsv2 runCompareCfs runProject3dCfs
+BINARIES = runTest runTest2 runDrawTransforms runDrawPairFractions runDrawParentsMatrices runBuildLambdaValuesFromParentMatrices runProject3dRadii runDrawPairSources runDrawCfs runDrawCfsv2 runCompareCfs runCompareCfsv2 runProject3dCfs
 
 all: $(BINARIES)
 
@@ -48,6 +48,9 @@ runDrawCfsv2: ${MY_LIBS} DrawCorrelationFunctionsv2.C
 
 runCompareCfs: ${MY_LIBS} CompareCorrelationFunctions.C
 	g++ CompareCorrelationFunctions.C ${MY_LIBS} -o runCompareCfs $(LIBS) $(CFLAGS)
+
+runCompareCfsv2: ${MY_LIBS} CompareCorrelationFunctionsv2.C
+	g++ CompareCorrelationFunctionsv2.C ${MY_LIBS} -o runCompareCfsv2 $(LIBS) $(CFLAGS)
 
 runProject3dCfs: ${MY_LIBS} Project3dCfs.C
 	g++ Project3dCfs.C ${MY_LIBS} -o runProject3dCfs $(LIBS) $(CFLAGS)
