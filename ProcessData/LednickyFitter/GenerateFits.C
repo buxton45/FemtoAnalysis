@@ -19,6 +19,7 @@ int main(int argc, char **argv)
 //  CentralityType tCentType = k0010;  //TODO
   CentralityType tCentType = kMB;  //TODO
   FitGeneratorType tGenType = kPairwConj;
+  FitType tFitType = kChi2PML;
   bool tShareLambdaParams = false;
   bool tAllShareSingleLambdaParam = false;
 
@@ -90,6 +91,7 @@ int main(int argc, char **argv)
 
 //TODO!!!!  If I want to apply mom res correction to full fit, I need to give non-central analyses ability to grab
 //           the matrix from the central analyses
+  tLamKchP->SetFitType(tFitType);
   tLamKchP->SetApplyNonFlatBackgroundCorrection(ApplyNonFlatBackgroundCorrection);
   tLamKchP->SetNonFlatBgdFitType(tNonFlatBgdFitType);
   tLamKchP->SetApplyMomResCorrection(ApplyMomResCorrection);

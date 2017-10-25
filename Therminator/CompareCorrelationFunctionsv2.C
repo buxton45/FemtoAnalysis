@@ -64,14 +64,18 @@ int main(int argc, char **argv)
 
   AnalysisType tAnType = kLamKchP;
 
-  bool bSaveFigures = true;
+  bool bSaveFigures = false;
   int tRebin=2;
-  double tMinNorm = 1.0/*0.32*/;
-  double tMaxNorm = 2.0/*0.40*/;
-
+  double tMinNorm = 0.80/*0.32*/;
+  double tMaxNorm = 0.99/*0.40*/;
+/*
   TString tFileLocationCfs1 = "/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b2/CorrelationFunctions.root";
   TString tFileLocationCfs2 = "/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b2/CorrelationFunctions_WeightParentsInteraction.root";
   TString tFileLocationCfs3 = "/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b2/CorrelationFunctions_WeightParentsInteraction_OnlyWeightLongDecayParents.root";
+*/
+  TString tFileLocationCfs1 = "/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b2/CorrelationFunctions_JaiEventsOnly_10MixedEvNum.root";
+  TString tFileLocationCfs2 = "/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b2/CorrelationFunctions_JaiEventsOnly_10MixedEvNum_WeightParentsInteraction.root";
+  TString tFileLocationCfs3 = "/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b2/CorrelationFunctions_JaiEventsOnly_10MixedEvNum_WeightParentsInteraction_OnlyWeightLongDecayParents.root";
 
   TString tSaveLocationBase = "/home/jesse/Analysis/Presentations/GroupMeetings/20171026/Figures/";
 

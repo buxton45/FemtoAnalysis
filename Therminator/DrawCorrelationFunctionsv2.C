@@ -280,8 +280,8 @@ int main(int argc, char **argv)
   bool bSaveFigures = false;
 
   int tRebin=2;
-  double tMinNorm = 1.0/*0.32*/;
-  double tMaxNorm = 2.0/*0.40*/;
+  double tMinNorm = 1.0/*0.80*//*0.32*/;
+  double tMaxNorm = 2.0/*0.99*//*0.40*/;
 
   TString tFileLocationCfs = "/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b2/CorrelationFunctions";
 

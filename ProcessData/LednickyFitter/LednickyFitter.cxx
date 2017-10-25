@@ -117,13 +117,21 @@ void LednickyFitter::PrintCurrentParamValues(int aNpar, double* aPar)
 //________________________________________________________________________________________________________________
 double LednickyFitter::GetChi2Value(int aKStarBin, TH1* aCfToFit, double* aPar)
 {
-    double tKStar[1];
-    tKStar[0] = aCfToFit->GetXaxis()->GetBinCenter(aKStarBin);
-    double tChi = (aCfToFit->GetBinContent(aKStarBin) - LednickyEq(tKStar,aPar))/aCfToFit->GetBinError(aKStarBin);
-    return tChi*tChi;
+//TODO this is dated, and only works if no corrections (i.e. no momentum resolution, non-flat bgd, residuals, etc.)
+  double tKStar[1];
+  tKStar[0] = aCfToFit->GetXaxis()->GetBinCenter(aKStarBin);
+  double tChi = (aCfToFit->GetBinContent(aKStarBin) - LednickyEq(tKStar,aPar))/aCfToFit->GetBinError(aKStarBin);
+  return tChi*tChi;
 }
 
-
+//________________________________________________________________________________________________________________
+double LednickyFitter::GetChi2Value(int aKStarBin, TH1* aCfToFit, double aFitCfContent)
+{
+  double tKStar[1];
+  tKStar[0] = aCfToFit->GetXaxis()->GetBinCenter(aKStarBin);
+  double tChi = (aCfToFit->GetBinContent(aKStarBin) - aFitCfContent)/aCfToFit->GetBinError(aKStarBin);
+  return tChi*tChi;
+}
 
 
 //________________________________________________________________________________________________________________
@@ -321,7 +329,7 @@ void LednickyFitter::CalculateFitFunction(int &npar, double &chi2, double *par)
           {
             double tChi2 = 0.;
             if(fFitSharedAnalyses->GetFitType() == kChi2PML) tChi2 = GetPmlValue(tNumContent[ix],tDenContent[ix],tCorrectedFitCfContent[ix]);
-            else if(fFitSharedAnalyses->GetFitType() == kChi2) tChi2 = GetChi2Value(ix+1,tCf,tParPrim);
+            else if(fFitSharedAnalyses->GetFitType() == kChi2) tChi2 = GetChi2Value(ix+1,tCf,tCorrectedFitCfContent[ix]);
             else tChi2 = 0.;
 
             fChi2Vec[iAnaly] += tChi2;

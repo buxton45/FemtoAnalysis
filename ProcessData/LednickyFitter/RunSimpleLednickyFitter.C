@@ -69,12 +69,13 @@ int main(int argc, char **argv)
   bool bSaveFigures = false;
   bool bApplyNonFlatBackgroundCorrection = true;
   bool bIncludeResiduals = true;
+  FitType tFitType = kChi2PML;
 
   TString tDirectory = "~/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b2/";
-  TString tFileLocationCfs = tDirectory + "CorrelationFunctions_10MixedEvNum";
+  TString tFileLocationCfs = tDirectory + "CorrelationFunctions_JaiEventsOnly_10MixedEvNum";
 
-//  TString tFileNameModifier = "";
-  TString tFileNameModifier = "_WeightParentsInteraction";
+  TString tFileNameModifier = "";
+//  TString tFileNameModifier = "_WeightParentsInteraction";
 //  TString tFileNameModifier = "_WeightParentsInteraction_NoCharged";
 
   tFileLocationCfs += tFileNameModifier;
@@ -110,6 +111,7 @@ int main(int argc, char **argv)
 
   tSLFitter->SetApplyNonFlatBackgroundCorrection(bApplyNonFlatBackgroundCorrection);
   tSLFitter->SetIncludeResidualCorrelations(bIncludeResiduals);
+  tSLFitter->SetFitType(tFitType);
   tSLFitter->DoFit();
 
 

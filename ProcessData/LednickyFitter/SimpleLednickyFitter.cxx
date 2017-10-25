@@ -80,7 +80,8 @@ SimpleLednickyFitter::SimpleLednickyFitter(AnalysisType aAnalysisType, TString a
   fParErrors(0)
 
 {
-  double aMinNorm = 0.32, aMaxNorm = 0.40;
+//  double aMinNorm = 0.32, aMaxNorm = 0.40;
+  double aMinNorm = 0.80, aMaxNorm = 0.99;
   TH1D* tNum = Get1dHisto(aFileLocation, TString("Num")+aBaseName+cAnalysisBaseTags[fAnalysisType]);
   TH1D* tDen = Get1dHisto(aFileLocation, TString("Den")+aBaseName+cAnalysisBaseTags[fAnalysisType]);
 
@@ -418,7 +419,7 @@ void SimpleLednickyFitter::CalculateFitFunction(int &npar, double &chi2, double 
       {
         double tChi2 = 0.;
         if(fFitType == kChi2PML) tChi2 = LednickyFitter::GetPmlValue(tNumContent[ix],tDenContent[ix],tCorrectedFitCfContent[ix]);
-        else if(fFitType == kChi2) tChi2 = LednickyFitter::GetChi2Value(ix+1,tCf,tParPrim);
+        else if(fFitType == kChi2) tChi2 = LednickyFitter::GetChi2Value(ix+1,tCf,tCorrectedFitCfContent[ix]);
         else tChi2 = 0.;
 
         fChi2 += tChi2;

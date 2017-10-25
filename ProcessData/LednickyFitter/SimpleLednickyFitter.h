@@ -111,6 +111,8 @@ public:
   void SetIncludeResidualCorrelations(bool aInclude=true);
   td1dVec CombinePrimaryWithResiduals(double *aCfParams, td1dVec &aPrimaryCf);
 
+  void SetFitType(FitType aFitType);
+
 protected:
   AnalysisType fAnalysisType;
   CfLite* fCfLite;
@@ -171,5 +173,7 @@ inline void SimpleLednickyFitter::SetApplyNonFlatBackgroundCorrection(bool aAppl
 inline vector<AnalysisType> SimpleLednickyFitter::GetTransformStorageMapping() {return fTransformStorageMapping;}
 inline void SimpleLednickyFitter::SetIncludeResidualCorrelations(bool aInclude) {fIncludeResidualCorrelations = aInclude;}
 inline td1dVec SimpleLednickyFitter::CombinePrimaryWithResiduals(double *aCfParams, td1dVec &aPrimaryCf) {return fResidualCollection->CombinePrimaryWithResiduals(aCfParams, aPrimaryCf);}
+
+inline void SimpleLednickyFitter::SetFitType(FitType aFitType) {fFitType = aFitType;}
 
 #endif

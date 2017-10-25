@@ -67,6 +67,7 @@ public:
 
   static void PrintCurrentParamValues(int aNpar, double* aPar);
   static double GetChi2Value(int aKStarBin, TH1* aCfToFit, double* aPar);
+  static double GetChi2Value(int aKStarBin, TH1* aCfToFit, double aFitCfContent);
   static double GetPmlValue(double aNumContent, double aDenContent, double aCfContent);
 
   static void ApplyNonFlatBackgroundCorrection(vector<double> &aCf, vector<double> &aKStarBinCenters, TF1* aNonFlatBgd);
