@@ -1698,10 +1698,11 @@ void FitGenerator::SetRadiusLimits(const td2dVec &aMinMax2dVec)
 
 
 //________________________________________________________________________________________________________________
-void FitGenerator::SetScattParamStartValue(double aVal, ParameterType aParamType)
+void FitGenerator::SetScattParamStartValue(double aVal, ParameterType aParamType, bool aIsFixed)
 {
   int tIndex = aParamType - kRef0;
   fScattFitParams[tIndex].SetStartValue(aVal);
+  fScattFitParams[tIndex].SetFixed(aIsFixed);
 
   cout << "SetScattParamStartValue: " << TString(cParameterNames[aParamType]) << " = " << aVal << endl;
   cout << "\tDouble Check: tIndex in fScattFitParams = " << tIndex << endl << endl;

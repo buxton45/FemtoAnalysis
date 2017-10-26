@@ -45,6 +45,7 @@ public:
   TH1D* GetSigmaSt0Only(TH3D* aHist3d, TString aPreName);
 
   TH1D* GetPrimaryAndShortDecays(TH3D* aHist3d, TString aPreName);
+  TH1D* GetPrimaryAndShortDecaysAndSigmaSt(TH3D* aHist3d, TString aPreName);
   TH1D* GetLongDecays(TH3D* aHist3d, TString aPreName, double aMinDecayLength=1000);
 
   //-----------------------------------
@@ -61,6 +62,7 @@ public:
   TH1D* GetSigmaSt0OnlyCf(int aMarkerStyle=26, int aColor=20);
 
   TH1D* GetPrimaryAndShortDecaysCf(int aMarkerStyle=20, int aColor=3);
+  TH1D* GetPrimaryAndShortDecaysAndSigmaStCf(int aMarkerStyle=20, int aColor=kGreen+2);
   TH1D* GetLongDecaysCf(double aMinDecayLength=1000, int aMarkerStyle=20, int aColor=16);
 
   void DrawAllCfs(TPad* aPad, int aCommonMarkerStyle=20);
@@ -98,6 +100,9 @@ public:
 
   TH1D* GetPrimaryAndShortDecaysNum();
   TH1D* GetPrimaryAndShortDecaysDen();
+
+  TH1D* GetPrimaryAndShortDecaysAndSigmaStNum();
+  TH1D* GetPrimaryAndShortDecaysAndSigmaStDen();
 
   TH1D* GetLongDecaysNum(double aMinDecayLength=1000);
   TH1D* GetLongDecaysDen(double aMinDecayLength=1000);
@@ -150,6 +155,9 @@ inline TH1D* Therm3dCf::GetSigmaSt0OnlyDen() {return GetSigmaSt0Only(fDen3d, "De
 
 inline TH1D* Therm3dCf::GetPrimaryAndShortDecaysNum() {return GetPrimaryAndShortDecays(fNum3d, "Num");}
 inline TH1D* Therm3dCf::GetPrimaryAndShortDecaysDen() {return GetPrimaryAndShortDecays(fDen3d, "Den");}
+
+inline TH1D* Therm3dCf::GetPrimaryAndShortDecaysAndSigmaStNum() {return GetPrimaryAndShortDecaysAndSigmaSt(fNum3d, "Num");}
+inline TH1D* Therm3dCf::GetPrimaryAndShortDecaysAndSigmaStDen() {return GetPrimaryAndShortDecaysAndSigmaSt(fDen3d, "Den");}
 
 inline TH1D* Therm3dCf::GetLongDecaysNum(double aMinDecayLength) {return GetLongDecays(fNum3d, "Num", aMinDecayLength);}
 inline TH1D* Therm3dCf::GetLongDecaysDen(double aMinDecayLength) {return GetLongDecays(fDen3d, "Den", aMinDecayLength);}

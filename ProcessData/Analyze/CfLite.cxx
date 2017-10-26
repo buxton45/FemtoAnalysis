@@ -206,8 +206,16 @@ void CfLite::BuildCfwErrorsByHand()
 }
 
 
+//________________________________________________________________________________________________________________
+TH1* CfLite::GetUnNormalizedCf()
+{
+  TH1* tReturnCf = (TH1*)fNum->Clone(TString::Format("%sUnNormalized",fCf->GetTitle()));
+  if(!tReturnCf->GetSumw2N()) tReturnCf->Sumw2();
+  tReturnCf->Divide(fDen);
+  tReturnCf->SetTitle(TString::Format("%sUnNormalized",fCf->GetTitle()));
 
-
+  return tReturnCf;
+}
 
 
 

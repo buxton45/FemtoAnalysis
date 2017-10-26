@@ -77,7 +77,7 @@ int main(int argc, char **argv)
   TString tFileLocationCfs2 = "/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b2/CorrelationFunctions_JaiEventsOnly_10MixedEvNum_WeightParentsInteraction.root";
   TString tFileLocationCfs3 = "/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b2/CorrelationFunctions_JaiEventsOnly_10MixedEvNum_WeightParentsInteraction_OnlyWeightLongDecayParents.root";
 
-  TString tSaveLocationBase = "/home/jesse/Analysis/Presentations/GroupMeetings/20171026/Figures/";
+  TString tSaveLocationBase = "/home/jesse/Analysis/Presentations/GroupMeetings/20171102/Figures/";
 
   vector<ParticlePDGType> tParticlesInPair = ThermPairAnalysis::GetPartTypes(tAnType);
 
@@ -101,6 +101,7 @@ int main(int argc, char **argv)
     TH1D* tCfFull1 = t3dCf1->GetFullCf(tMarkerStyle1, tColor1);
     TH1D* tCfPrimaryOnly1 = t3dCf1->GetPrimaryOnlyCf(tMarkerStyle1, tColor1);
     TH1D* tCfPrimaryAndShortDecays1 = t3dCf1->GetPrimaryAndShortDecaysCf(tMarkerStyle1, tColor1);
+    TH1D* tCfPrimaryAndShortDecaysAndSigmaSt1 = t3dCf1->GetPrimaryAndShortDecaysAndSigmaStCf(tMarkerStyle1, tColor1);
     TH1D* tCfWithoutSigmaSt1 = t3dCf1->GetWithoutSigmaStCf(tMarkerStyle1, tColor1);
     TH1D* tCfSigmaStOnly1 = t3dCf1->GetSigmaStOnlyCf(tMarkerStyle1, tColor1);
     TH1D* tCfSecondaryOnly1 = t3dCf1->GetSecondaryOnlyCf(tMarkerStyle1, tColor1);
@@ -113,6 +114,7 @@ int main(int argc, char **argv)
     TH1D* tCfFull2 = t3dCf2->GetFullCf(tMarkerStyle2, tColor2);
     TH1D* tCfPrimaryOnly2 = t3dCf2->GetPrimaryOnlyCf(tMarkerStyle2, tColor2);
     TH1D* tCfPrimaryAndShortDecays2 = t3dCf2->GetPrimaryAndShortDecaysCf(tMarkerStyle2, tColor2);
+    TH1D* tCfPrimaryAndShortDecaysAndSigmaSt2 = t3dCf2->GetPrimaryAndShortDecaysAndSigmaStCf(tMarkerStyle2, tColor2);
     TH1D* tCfWithoutSigmaSt2 = t3dCf2->GetWithoutSigmaStCf(tMarkerStyle2, tColor2);
     TH1D* tCfSigmaStOnly2 = t3dCf2->GetSigmaStOnlyCf(tMarkerStyle2, tColor2);
     TH1D* tCfSecondaryOnly2 = t3dCf2->GetSecondaryOnlyCf(tMarkerStyle2, tColor2);
@@ -124,6 +126,7 @@ int main(int argc, char **argv)
     TH1D* tCfFull3 = t3dCf3->GetFullCf(tMarkerStyle3, tColor3);
     TH1D* tCfPrimaryOnly3 = t3dCf3->GetPrimaryOnlyCf(tMarkerStyle3, tColor3);
     TH1D* tCfPrimaryAndShortDecays3 = t3dCf3->GetPrimaryAndShortDecaysCf(tMarkerStyle3, tColor3);
+    TH1D* tCfPrimaryAndShortDecaysAndSigmaSt3 = t3dCf3->GetPrimaryAndShortDecaysAndSigmaStCf(tMarkerStyle3, tColor3);
     TH1D* tCfWithoutSigmaSt3 = t3dCf3->GetWithoutSigmaStCf(tMarkerStyle3, tColor3);
     TH1D* tCfSigmaStOnly3 = t3dCf3->GetSigmaStOnlyCf(tMarkerStyle3, tColor3);
     TH1D* tCfSecondaryOnly3 = t3dCf3->GetSecondaryOnlyCf(tMarkerStyle3, tColor3);
@@ -147,6 +150,12 @@ int main(int argc, char **argv)
   TCanvas* tCanPrimaryAndShortDecays = new TCanvas("CompareCfs3Methods_PrimaryAndShortDecays", "CompareCfs3Methods_PrimaryAndShortDecays");
   tOverallDescriptor = TString("PrimaryAndShortDecays");
   Draw1vs2vs3((TPad*)tCanPrimaryAndShortDecays, tAnType, tCfPrimaryAndShortDecays1, tCfPrimaryAndShortDecays2, tCfPrimaryAndShortDecays3, tDescriptor1, tDescriptor2, tDescriptor3, tOverallDescriptor);
+
+  //--------------------------------------------
+
+  TCanvas* tCanPrimaryAndShortDecaysAndSigmaSt = new TCanvas("CompareCfs3Methods_PrimaryAndShortDecaysAndSigmaSt", "CompareCfs3Methods_PrimaryAndShortDecaysAndSigmaSt");
+  tOverallDescriptor = TString("PrimaryAndShortDecaysAndSigmaSt");
+  Draw1vs2vs3((TPad*)tCanPrimaryAndShortDecaysAndSigmaSt, tAnType, tCfPrimaryAndShortDecaysAndSigmaSt1, tCfPrimaryAndShortDecaysAndSigmaSt2, tCfPrimaryAndShortDecaysAndSigmaSt3, tDescriptor1, tDescriptor2, tDescriptor3, tOverallDescriptor);
 
   //--------------------------------------------
 
@@ -183,11 +192,12 @@ int main(int argc, char **argv)
   if(bSaveFigures)
   {
     TString tSaveFileBase = tSaveLocationBase + TString::Format("%s/", cAnalysisBaseTags[tAnType]);
-    TString tSaveNameFull, tSaveNamePrimaryOnly, tSaveNamePrimaryAndShortDecays, tSaveNameWithoutSigmaSt, tSaveNameSigmaStOnly, tSaveNameSecondaryOnly, tSaveNameAtLeastOneSecondaryInPair, tSaveNameLongDecays;
+    TString tSaveNameFull, tSaveNamePrimaryOnly, tSaveNamePrimaryAndShortDecays, tSaveNamePrimaryAndShortDecaysAndSigmaSt, tSaveNameWithoutSigmaSt, tSaveNameSigmaStOnly, tSaveNameSecondaryOnly, tSaveNameAtLeastOneSecondaryInPair, tSaveNameLongDecays;
 
     tSaveNameFull = tSaveFileBase + TString(tCanFull->GetName());
     tSaveNamePrimaryOnly = tSaveFileBase + TString(tCanPrimaryOnly->GetName());
     tSaveNamePrimaryAndShortDecays = tSaveFileBase + TString(tCanPrimaryAndShortDecays->GetName());
+    tSaveNamePrimaryAndShortDecaysAndSigmaSt = tSaveFileBase + TString(tCanPrimaryAndShortDecaysAndSigmaSt->GetName());
     tSaveNameWithoutSigmaSt = tSaveFileBase + TString(tCanWithoutSigmaSt->GetName());
     tSaveNameSigmaStOnly = tSaveFileBase + TString(tCanSigmaStOnly->GetName());
     tSaveNameSecondaryOnly = tSaveFileBase + TString(tCanSecondaryOnly->GetName());
@@ -197,6 +207,7 @@ int main(int argc, char **argv)
     tSaveNameFull += TString::Format("_%s", cAnalysisBaseTags[tAnType]) + TString(".eps");
     tSaveNamePrimaryOnly += TString::Format("_%s", cAnalysisBaseTags[tAnType]) + TString(".eps");
     tSaveNamePrimaryAndShortDecays += TString::Format("_%s", cAnalysisBaseTags[tAnType]) + TString(".eps");
+    tSaveNamePrimaryAndShortDecaysAndSigmaSt += TString::Format("_%s", cAnalysisBaseTags[tAnType]) + TString(".eps");
     tSaveNameWithoutSigmaSt += TString::Format("_%s", cAnalysisBaseTags[tAnType]) + TString(".eps");
     tSaveNameSigmaStOnly += TString::Format("_%s", cAnalysisBaseTags[tAnType]) + TString(".eps");
     tSaveNameSecondaryOnly += TString::Format("_%s", cAnalysisBaseTags[tAnType]) + TString(".eps");
@@ -206,6 +217,7 @@ int main(int argc, char **argv)
     tCanFull->SaveAs(tSaveNameFull);
     tCanPrimaryOnly->SaveAs(tSaveNamePrimaryOnly);
     tCanPrimaryAndShortDecays->SaveAs(tSaveNamePrimaryAndShortDecays);
+    tCanPrimaryAndShortDecaysAndSigmaSt->SaveAs(tSaveNamePrimaryAndShortDecaysAndSigmaSt);
     tCanWithoutSigmaSt->SaveAs(tSaveNameWithoutSigmaSt);
     tCanSigmaStOnly->SaveAs(tSaveNameSigmaStOnly);
     tCanSecondaryOnly->SaveAs(tSaveNameSecondaryOnly);

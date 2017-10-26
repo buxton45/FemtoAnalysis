@@ -326,6 +326,37 @@ TH1D* Therm3dCf::GetPrimaryAndShortDecays(TH3D* aHist3d, TString aPreName)
 
 }
 
+//________________________________________________________________________________________________________________
+TH1D* Therm3dCf::GetPrimaryAndShortDecaysAndSigmaSt(TH3D* aHist3d, TString aPreName)
+{
+  TH3D* tTempHist3d = (TH3D*)aHist3d->Clone(TString::Format("%sGetPrimaryAndShortDecaysAndSigmaStTempHist3d%s", aPreName.Data(), cAnalysisBaseTags[fAnalysisType]));
+
+  ParticlePDGType tType1, tType2;
+  for(int i=1; i<=tTempHist3d->GetNbinsX(); i++)
+  {
+    tType1 = static_cast<ParticlePDGType>(GetParticlePidFromIndex(i-1));
+    for(int j=1; j<=tTempHist3d->GetNbinsY(); j++)
+    {
+      tType2 = static_cast<ParticlePDGType>(GetParticlePidFromIndex(j-1));
+      if((i != fPartIndex1 || j != fPartIndex2) && !IncludeAsPrimary(tType1, tType2, 5.5))
+      {
+        for(int k=1; k<tTempHist3d->GetNbinsZ(); k++)
+        {
+          tTempHist3d->SetBinContent(i, j, k, 0.);
+          tTempHist3d->SetBinError(i, j, k, 0.);
+        }
+      }
+    }
+  }
+
+  TH1D* tReturnHist = tTempHist3d->ProjectionZ(TString::Format("%sPrimaryAndShortDecaysAndSigmaSt%s", aPreName.Data(), cAnalysisBaseTags[fAnalysisType]), 
+                                               1, tTempHist3d->GetNbinsX(), 
+                                               1, tTempHist3d->GetNbinsY(), "e");
+  tTempHist3d->Delete();
+  return tReturnHist;
+
+}
+
 
 //________________________________________________________________________________________________________________
 TH1D* Therm3dCf::GetLongDecays(TH3D* aHist3d, TString aPreName, double aMinDecayLength)
@@ -539,6 +570,23 @@ TH1D* Therm3dCf::GetPrimaryAndShortDecaysCf(int aMarkerStyle, int aColor)
   return tCf;
 }
 
+//________________________________________________________________________________________________________________
+TH1D* Therm3dCf::GetPrimaryAndShortDecaysAndSigmaStCf(int aMarkerStyle, int aColor)
+{
+  TH1D* tNum = GetPrimaryAndShortDecaysAndSigmaSt(fNum3d, "Num");
+  TH1D* tDen = GetPrimaryAndShortDecaysAndSigmaSt(fDen3d, "Den");
+
+  TString tReturnName = TString::Format("CfPrimaryAndShortAndSigmaStDecays%s", cAnalysisBaseTags[fAnalysisType]);
+  TH1D* tCf = BuildCf(tNum, tDen, tReturnName, fMinNorm, fMaxNorm, fRebin);
+
+  tCf->SetLineColor(aColor);
+  tCf->SetMarkerColor(aColor);
+  tCf->SetMarkerStyle(aMarkerStyle);
+  tCf->SetMarkerSize(0.5);
+
+  return tCf;
+}
+
 
 //________________________________________________________________________________________________________________
 TH1D* Therm3dCf::GetLongDecaysCf(double aMinDecayLength, int aMarkerStyle, int aColor)
@@ -569,6 +617,7 @@ void Therm3dCf::DrawAllCfs(TPad* aPad, int aCommonMarkerStyle)
   int tColorFull = 1;
   int tColorPrimaryOnly = 2;
   int tColorPrimaryAndShortDecays = 3;
+  int tColorPrimaryAndShortDecaysAndSigmaSt = kGreen+2;
   int tColorWithoutSigmaSt = 4;
   int tColorSigmaStOnly = 20;
   int tColorSecondaryOnly = 6;
@@ -580,6 +629,7 @@ void Therm3dCf::DrawAllCfs(TPad* aPad, int aCommonMarkerStyle)
   TH1D* tCfFull = GetFullCf(aCommonMarkerStyle, tColorFull);
   TH1D* tCfPrimaryOnly = GetPrimaryOnlyCf(aCommonMarkerStyle, tColorPrimaryOnly);
   TH1D* tCfPrimaryAndShortDecays = GetPrimaryAndShortDecaysCf(aCommonMarkerStyle, tColorPrimaryAndShortDecays);
+  TH1D* tCfPrimaryAndShortDecaysAndSigmaSt = GetPrimaryAndShortDecaysAndSigmaStCf(aCommonMarkerStyle, tColorPrimaryAndShortDecaysAndSigmaSt);
   TH1D* tCfWithoutSigmaSt = GetWithoutSigmaStCf(aCommonMarkerStyle, tColorWithoutSigmaSt);
   TH1D* tCfSigmaStOnly = GetSigmaStOnlyCf(aCommonMarkerStyle, tColorSigmaStOnly);
   TH1D* tCfSecondaryOnly = GetSecondaryOnlyCf(aCommonMarkerStyle, tColorSecondaryOnly);
@@ -595,6 +645,7 @@ void Therm3dCf::DrawAllCfs(TPad* aPad, int aCommonMarkerStyle)
   tCfFull->Draw();
   tCfPrimaryOnly->Draw("same");
   tCfPrimaryAndShortDecays->Draw("same");
+  tCfPrimaryAndShortDecaysAndSigmaSt->Draw("same");
   tCfWithoutSigmaSt->Draw("same");
   tCfSigmaStOnly->Draw("same");
   tCfSecondaryOnly->Draw("same");
@@ -610,7 +661,8 @@ void Therm3dCf::DrawAllCfs(TPad* aPad, int aCommonMarkerStyle)
 
   tLeg->AddEntry(tCfFull, "Full");
   tLeg->AddEntry(tCfPrimaryOnly, "Primary Only");
-  tLeg->AddEntry(tCfPrimaryAndShortDecays, "Primary and short decays");
+  tLeg->AddEntry(tCfPrimaryAndShortDecays, "Primary & short decays");
+  tLeg->AddEntry(tCfPrimaryAndShortDecaysAndSigmaSt, "Primary, short decays & #Sigma*");
   tLeg->AddEntry(tCfWithoutSigmaSt, "w/o #Sigma*");
   tLeg->AddEntry(tCfAtLeastOneSecondaryInPair, "At Least One Secondary");
   tLeg->AddEntry(tCfSecondaryOnly, "Secondary Only");

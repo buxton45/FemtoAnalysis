@@ -611,6 +611,28 @@ void SimpleLednickyFitter::Finalize()
     fParErrors.push_back(tempParError);
   }
 
+
+/*
+  TF1* tFit = CreateFitFunction(TString("Fit"));
+  vector<double> tCorrectedFitVecWithNorm = fCorrectedFitVec;
+  LednickyFitter::ApplyNormalization(fMinParams[5], tCorrectedFitVecWithNorm);
+  TH1* tCf = fCfLite->Cf();
+  TH1* tNum = fCfLite->Num();
+  TH1* tDen = fCfLite->Den();
+
+  for(int i=0; i<30; i++)
+  {
+    cout << "i = " << i << endl;
+    cout << "tCf->GetBinCenter = " << tCf->GetBinCenter(i+1) << endl;
+    cout << "tCf->GetBinContent = " << tCf->GetBinContent(i+1) << endl;
+    cout << "tNum/tDen = " << tNum->GetBinContent(i+1)/tDen->GetBinContent(i+1) << endl;
+    cout << "fCorrectedFitVec = " << fCorrectedFitVec[i] << endl;
+    cout << "tCorrectedFitVecWithNorm = " << tCorrectedFitVecWithNorm[i] << endl;
+    cout << "tFit = " << tFit->Eval(tCf->GetBinCenter(i+1)) << endl;
+    cout << "-------------------------------------------------------" << endl << endl;
+  }
+*/
+
 }
 
 
@@ -700,7 +722,6 @@ void SimpleLednickyFitter::DrawCfWithFit(TPad *aPad, TString aDrawOption)
     tTextBgd->AddText(TString::Format("BgdFit(x) = %0.1e*x + %0.2f", fNonFlatBgdFit->GetParameter(0), fNonFlatBgdFit->GetParameter(1)));
     tTextBgd->Draw();
 
-    TF1* tFit = CreateFitFunction(TString("Fit"));
     TH1D* tCorrectedCf = GetCorrectedFitHist();
       tCorrectedCf->SetMarkerColor(kMagenta+1);
       tCorrectedCf->SetLineColor(kMagenta+1);

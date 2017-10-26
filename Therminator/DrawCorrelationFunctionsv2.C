@@ -44,6 +44,7 @@ void DrawCfsWithConj(TPad* aPad, Therm3dCf* a3dCf, Therm3dCf* aConj3dCf)
   int tColorFull = 1;
   int tColorPrimaryOnly = 2;
   int tColorPrimaryAndShortDecays = 3;
+  int tColorPrimaryAndShortDecaysAndSigmaSt = kGreen+2;
   int tColorWithoutSigmaSt = 4;
   int tColorSigmaStOnly = 20;
   int tColorSecondaryOnly = 6;
@@ -52,6 +53,7 @@ void DrawCfsWithConj(TPad* aPad, Therm3dCf* a3dCf, Therm3dCf* aConj3dCf)
   int tMarkerStyleFull = 20;
   int tMarkerStylePrimaryOnly = 20;
   int tMarkerStylePrimaryAndShortDecays = 20;
+  int tMarkerStylePrimaryAndShortDecaysAndSigmaSt = 20;
   int tMarkerStyleWithoutSigmaSt = 20;
   int tMarkerStyleSigmaStOnly = 20;
   int tMarkerStyleSecondaryOnly = 20;
@@ -67,6 +69,9 @@ void DrawCfsWithConj(TPad* aPad, Therm3dCf* a3dCf, Therm3dCf* aConj3dCf)
 
   TH1D* tNumPrimaryAndShortDecays = a3dCf->GetPrimaryAndShortDecaysNum();
   TH1D* tCfPrimaryAndShortDecays = a3dCf->GetPrimaryAndShortDecaysCf(tMarkerStylePrimaryAndShortDecays, tColorPrimaryAndShortDecays);
+
+  TH1D* tNumPrimaryAndShortDecaysAndSigmaSt = a3dCf->GetPrimaryAndShortDecaysAndSigmaStNum();
+  TH1D* tCfPrimaryAndShortDecaysAndSigmaSt = a3dCf->GetPrimaryAndShortDecaysAndSigmaStCf(tMarkerStylePrimaryAndShortDecaysAndSigmaSt, tColorPrimaryAndShortDecaysAndSigmaSt);
 
   TH1D* tNumWithoutSigmaSt = a3dCf->GetWithoutSigmaStNum();
   TH1D* tCfWithoutSigmaSt = a3dCf->GetWithoutSigmaStCf(tMarkerStyleWithoutSigmaSt, tColorWithoutSigmaSt);
@@ -91,6 +96,9 @@ void DrawCfsWithConj(TPad* aPad, Therm3dCf* a3dCf, Therm3dCf* aConj3dCf)
   TH1D* tConjNumPrimaryAndShortDecays = aConj3dCf->GetPrimaryAndShortDecaysNum();
   TH1D* tConjCfPrimaryAndShortDecays = aConj3dCf->GetPrimaryAndShortDecaysCf(tMarkerStylePrimaryAndShortDecays, tColorPrimaryAndShortDecays);
 
+  TH1D* tConjNumPrimaryAndShortDecaysAndSigmaSt = aConj3dCf->GetPrimaryAndShortDecaysAndSigmaStNum();
+  TH1D* tConjCfPrimaryAndShortDecaysAndSigmaSt = aConj3dCf->GetPrimaryAndShortDecaysAndSigmaStCf(tMarkerStylePrimaryAndShortDecaysAndSigmaSt, tColorPrimaryAndShortDecaysAndSigmaSt);
+
   TH1D* tConjNumWithoutSigmaSt = aConj3dCf->GetWithoutSigmaStNum();
   TH1D* tConjCfWithoutSigmaSt = aConj3dCf->GetWithoutSigmaStCf(tMarkerStyleWithoutSigmaSt, tColorWithoutSigmaSt);
 
@@ -108,6 +116,7 @@ void DrawCfsWithConj(TPad* aPad, Therm3dCf* a3dCf, Therm3dCf* aConj3dCf)
   TString tCfBaseNameFull = TString::Format("CfFull%s", cAnalysisBaseTags[a3dCf->GetAnalysisType()]);
   TString tCfBaseNamePrimaryOnly = TString::Format("CfPrimaryOnly%s", cAnalysisBaseTags[a3dCf->GetAnalysisType()]);
   TString tCfBaseNamePrimaryAndShortDecays = TString::Format("CfPrimaryAndShortDecays%s", cAnalysisBaseTags[a3dCf->GetAnalysisType()]);
+  TString tCfBaseNamePrimaryAndShortDecaysAndSigmaSt = TString::Format("CfPrimaryAndShortDecaysAndSigmaSt%s", cAnalysisBaseTags[a3dCf->GetAnalysisType()]);
   TString tCfBaseNameWithoutSigmaSt = TString::Format("CfWithoutSigmaSt%s", cAnalysisBaseTags[a3dCf->GetAnalysisType()]);
   TString tCfBaseNameSigmaStOnly = TString::Format("CfSigmaStOnly%s", cAnalysisBaseTags[a3dCf->GetAnalysisType()]);
   TString tCfBaseNameSecondaryOnly = TString::Format("CfSecondaryOnly%s", cAnalysisBaseTags[a3dCf->GetAnalysisType()]);
@@ -116,6 +125,7 @@ void DrawCfsWithConj(TPad* aPad, Therm3dCf* a3dCf, Therm3dCf* aConj3dCf)
   TString tConjCfBaseNameFull = TString::Format("CfFull%s", cAnalysisBaseTags[aConj3dCf->GetAnalysisType()]);
   TString tConjCfBaseNamePrimaryOnly = TString::Format("CfPrimaryOnly%s", cAnalysisBaseTags[aConj3dCf->GetAnalysisType()]);
   TString tConjCfBaseNamePrimaryAndShortDecays = TString::Format("CfPrimaryAndShortDecays%s", cAnalysisBaseTags[aConj3dCf->GetAnalysisType()]);
+  TString tConjCfBaseNamePrimaryAndShortDecaysAndSigmaSt = TString::Format("CfPrimaryAndShortDecaysAndSigmaSt%s", cAnalysisBaseTags[aConj3dCf->GetAnalysisType()]);
   TString tConjCfBaseNameWithoutSigmaSt = TString::Format("CfWithoutSigmaSt%s", cAnalysisBaseTags[aConj3dCf->GetAnalysisType()]);
   TString tConjCfBaseNameSigmaStOnly = TString::Format("CfSigmaStOnly%s", cAnalysisBaseTags[aConj3dCf->GetAnalysisType()]);
   TString tConjCfBaseNameSecondaryOnly = TString::Format("CfSecondaryOnly%s", cAnalysisBaseTags[aConj3dCf->GetAnalysisType()]);
@@ -126,6 +136,7 @@ void DrawCfsWithConj(TPad* aPad, Therm3dCf* a3dCf, Therm3dCf* aConj3dCf)
   TH1D* tCfFullTot = CombineConjugates(tNumFull, tCfFull, tConjNumFull, tConjCfFull, tCfBaseNameFull+tConjCfBaseNameFull);
   TH1D* tCfPrimaryOnlyTot = CombineConjugates(tNumPrimaryOnly, tCfPrimaryOnly, tConjNumPrimaryOnly, tConjCfPrimaryOnly, tCfBaseNamePrimaryOnly+tConjCfBaseNamePrimaryOnly);
   TH1D* tCfPrimaryAndShortDecaysTot = CombineConjugates(tNumPrimaryAndShortDecays, tCfPrimaryAndShortDecays, tConjNumPrimaryAndShortDecays, tConjCfPrimaryAndShortDecays, tCfBaseNamePrimaryAndShortDecays+tConjCfBaseNamePrimaryAndShortDecays);
+  TH1D* tCfPrimaryAndShortDecaysAndSigmaStTot = CombineConjugates(tNumPrimaryAndShortDecaysAndSigmaSt, tCfPrimaryAndShortDecaysAndSigmaSt, tConjNumPrimaryAndShortDecaysAndSigmaSt, tConjCfPrimaryAndShortDecaysAndSigmaSt, tCfBaseNamePrimaryAndShortDecaysAndSigmaSt+tConjCfBaseNamePrimaryAndShortDecaysAndSigmaSt);
   TH1D* tCfWithoutSigmaStTot = CombineConjugates(tNumWithoutSigmaSt, tCfWithoutSigmaSt, tConjNumWithoutSigmaSt, tConjCfWithoutSigmaSt, tCfBaseNameWithoutSigmaSt+tConjCfBaseNameWithoutSigmaSt);
   TH1D* tCfSigmaStOnlyTot = CombineConjugates(tNumSigmaStOnly, tCfSigmaStOnly, tConjNumSigmaStOnly, tConjCfSigmaStOnly, tCfBaseNameSigmaStOnly+tConjCfBaseNameSigmaStOnly);
   TH1D* tCfSecondaryOnlyTot = CombineConjugates(tNumSecondaryOnly, tCfSecondaryOnly, tConjNumSecondaryOnly, tConjCfSecondaryOnly, tCfBaseNameSecondaryOnly+tConjCfBaseNameSecondaryOnly);
@@ -140,6 +151,7 @@ void DrawCfsWithConj(TPad* aPad, Therm3dCf* a3dCf, Therm3dCf* aConj3dCf)
   tCfFullTot->Draw();
   tCfPrimaryOnlyTot->Draw("same");
   tCfPrimaryAndShortDecaysTot->Draw("same");
+  tCfPrimaryAndShortDecaysAndSigmaStTot->Draw("same");
   tCfWithoutSigmaStTot->Draw("same");
   tCfSigmaStOnlyTot->Draw("same");
   tCfSecondaryOnlyTot->Draw("same");
@@ -154,7 +166,8 @@ void DrawCfsWithConj(TPad* aPad, Therm3dCf* a3dCf, Therm3dCf* aConj3dCf)
 
   tLeg->AddEntry(tCfFullTot, "Full");
   tLeg->AddEntry(tCfPrimaryOnlyTot, "Primary Only");
-  tLeg->AddEntry(tCfPrimaryAndShortDecaysTot, "Primary and short decays");
+  tLeg->AddEntry(tCfPrimaryAndShortDecaysTot, "Primary & short decays");
+  tLeg->AddEntry(tCfPrimaryAndShortDecaysAndSigmaStTot, "Primary, short decays & #Sigma*");
   tLeg->AddEntry(tCfWithoutSigmaStTot, "w/o #Sigma*");
   tLeg->AddEntry(tCfAtLeastOneSecondaryInPairTot, "At Least One Secondary");
   tLeg->AddEntry(tCfSecondaryOnlyTot, "Secondary Only");
@@ -280,20 +293,20 @@ int main(int argc, char **argv)
   bool bSaveFigures = false;
 
   int tRebin=2;
-  double tMinNorm = 1.0/*0.80*//*0.32*/;
-  double tMaxNorm = 2.0/*0.99*//*0.40*/;
+  double tMinNorm = 0.80/*0.80*//*0.32*/;
+  double tMaxNorm = 0.99/*0.99*//*0.40*/;
 
-  TString tFileLocationCfs = "/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b2/CorrelationFunctions";
+  TString tFileLocationCfs = "/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b2/CorrelationFunctions_JaiEventsOnly_10MixedEvNum";
 
-  TString tFileNameModifier = "";
-//  TString tFileNameModifier = "_WeightParentsInteraction";
+//  TString tFileNameModifier = "";
+  TString tFileNameModifier = "_WeightParentsInteraction";
 //  TString tFileNameModifier = "_WeightParentsInteraction_OnlyWeightLongDecayParents";
 //  TString tFileNameModifier = "_WeightParentsInteraction_NoCharged";
 
   tFileLocationCfs += tFileNameModifier;
   tFileLocationCfs += TString(".root");
 
-  TString tSaveLocationBase = "/home/jesse/Analysis/Presentations/GroupMeetings/20171026/Figures/";
+  TString tSaveLocationBase = "/home/jesse/Analysis/Presentations/GroupMeetings/20171102/Figures/";
 
   TString tSaveLocationBaseLamKchP = tSaveLocationBase + TString("LamKchP/");
   TString tSaveLocationBaseALamKchP = tSaveLocationBase + TString("ALamKchP/");

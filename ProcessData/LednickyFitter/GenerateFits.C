@@ -37,6 +37,7 @@ int main(int argc, char **argv)
   bool UseCoulombOnlyInterpCfsForXiKResiduals = false;
 
   bool FixRadii = false;
+  bool FixD0 = false;
 
   double aLambdaMin=0., aLambdaMax=1.;
   if(UnboundLambda) aLambdaMax=0.;
@@ -53,7 +54,7 @@ int main(int argc, char **argv)
   TString tFileLocationBase = TString::Format("%sResults_%s_%s",tDirectoryBase.Data(),tGeneralAnTypeName.Data(),tResultsDate.Data());
   TString tFileLocationBaseMC = TString::Format("%sResults_%sMC_%s",tDirectoryBase.Data(),tGeneralAnTypeName.Data(),tResultsDate.Data());
 
-  TString tSaveDirectoryBase = TString::Format("/home/jesse/Analysis/Presentations/GroupMeetings/20171026/Figures/%s/", cAnalysisBaseTags[tAnType]);
+  TString tSaveDirectoryBase = TString::Format("/home/jesse/Analysis/Presentations/GroupMeetings/20171102/Figures/%s/", cAnalysisBaseTags[tAnType]);
 /*
   TString tSaveDirectoryBase = TString::Format("/home/jesse/Analysis/Presentations/AliFemto/20170913/Figures/%s/", cAnalysisBaseTags[tAnType]);
     if(UseAll10Residuals) tSaveDirectoryBase += TString("10Residuals/");
@@ -73,6 +74,7 @@ int main(int argc, char **argv)
   if(tAllShareSingleLambdaParam) tSaveNameModifier += TString("_SingleLamParam");
   if(IncludeResiduals) tSaveNameModifier += TString("_ResidualsIncluded");
   if(FixRadii) tSaveNameModifier += TString("_FixedRadii");
+  if(FixD0) tSaveNameModifier += TString("_FixedD0");
 
   if(UseCoulombOnlyInterpCfsForXiKResiduals && UseCoulombOnlyInterpCfsForChargedResiduals) tSaveNameModifier += TString("_UsingCoulombOnlyInterpCfsForAll");
   else if(UseCoulombOnlyInterpCfsForChargedResiduals) tSaveNameModifier += TString("_UsingCoulombOnlyInterpCfs");
@@ -103,6 +105,7 @@ int main(int argc, char **argv)
     if(tAnType==kLamK0 || tAnType==kALamK0) tLamKchP->SetRadiusLimits({{3.25, 3.25}, {2.75, 2.75}, {2.25, 2.25}});
     else tLamKchP->SetRadiusLimits({{3.5, 3.5}, {3.25, 3.25}, {2.5, 2.5}});
   }
+  if(FixD0) tLamKchP->SetScattParamStartValue(0., kd0, true);
 
   tLamKchP->DoFit();
   TCanvas* tKStarwFitsCan = tLamKchP->DrawKStarCfswFits(ApplyMomResCorrection,ApplyNonFlatBackgroundCorrection,tNonFlatBgdFitType,SaveImages);

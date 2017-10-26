@@ -52,7 +52,7 @@ public:
   void Rebin(int aRebinFactor, double aMinNorm, double aMaxNorm);
 
   void BuildCfwErrorsByHand();
-
+  TH1* GetUnNormalizedCf();
 
   //inline-----------------------
   TString CfName();

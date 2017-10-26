@@ -65,7 +65,7 @@ public:
   void SetRadiusLimits(double aMin, double aMax, int aIndex=0);  //set for particular R parameter
   void SetRadiusLimits(const td2dVec &aMinMax2dVec);  //set unique values for each R parameter
 
-  void SetScattParamStartValue(double aVal, ParameterType aParamType);
+  void SetScattParamStartValue(double aVal, ParameterType aParamType, bool aIsFixed=false);
   void SetScattParamStartValues(double aReF0, double aImF0, double aD0);
   void SetScattParamLimits(double aMin, double aMax, ParameterType aParamType);
   void SetScattParamLimits(const td2dVec &aMinMax2dVec);
