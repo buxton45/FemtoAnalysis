@@ -25,7 +25,7 @@ CFLAGS = $(shell root-config --cflags) -Wall -std=c++11 -I${ANALYZE_DIR} -I${LED
 
 MY_LIBS = $(addprefix build/, FitParameter.o FitChi2Histograms.o FitPartialAnalysis.o FitPairAnalysis.o FitSharedAnalyses.o MathematicaSession.o WaveFunction.o ChargedResidualCf.o SimpleChargedResidualCf.o NeutralResidualCf.o ResidualCollection.o SimpleLednickyFitter.o LednickyFitter.o FitGenerator.o CfLite.o CfHeavy.o Types.o AnalysisInfo.o Faddeeva.o FitSystematicAnalysis.o CanvasPartition.o)
 
-BINARIES = runLamKchP runLamKchPTest runCompareKchFix2 runFits runTest runGenerator runCompareIgnoreOnFlyStatus runScattParamValues runLamKchPvsKchM runPlotAll runSimpleLednicky
+BINARIES = runLamKchP runLamKchPTest runCompareKchFix2 runFits runTest runGenerator runCompareIgnoreOnFlyStatus runScattParamValues runLamKchPvsKchM runPlotAll runSimpleLednicky runCompareFittingMethods
 
 all: $(BINARIES)
 
@@ -61,6 +61,9 @@ runPlotAll: ${MY_LIBS} PlotAllFitsCentral.C
 
 runSimpleLednicky: ${MY_LIBS} RunSimpleLednickyFitter.C
 	g++ RunSimpleLednickyFitter.C ${MY_LIBS} -I${INCDIR} -o runSimpleLednicky -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS)
+
+runCompareFittingMethods: ${MY_LIBS} CompareFittingMethods.C
+	g++ CompareFittingMethods.C ${MY_LIBS} -I${INCDIR} -o runCompareFittingMethods -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS)
 
 build/%.o: ${ANALYZE_DIR}/%.cxx ${ANALYZE_DIR}/%.h
 	g++ -c $< $(CFLAGS) -o $@

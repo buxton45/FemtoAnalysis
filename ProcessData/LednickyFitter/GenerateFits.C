@@ -72,7 +72,8 @@ int main(int argc, char **argv)
   if(ApplyMomResCorrection) tSaveNameModifier += TString("_MomResCrctn");
   if(ApplyNonFlatBackgroundCorrection) tSaveNameModifier += TString("_NonFlatBgdCrctn");
   if(tAllShareSingleLambdaParam) tSaveNameModifier += TString("_SingleLamParam");
-  if(IncludeResiduals) tSaveNameModifier += TString("_ResidualsIncluded");
+  if(IncludeResiduals && UseAll10Residuals) tSaveNameModifier += TString("_10ResidualsIncluded");
+  if(IncludeResiduals && !UseAll10Residuals) tSaveNameModifier += TString("_3ResidualsIncluded");
   if(FixRadii) tSaveNameModifier += TString("_FixedRadii");
   if(FixD0) tSaveNameModifier += TString("_FixedD0");
 
