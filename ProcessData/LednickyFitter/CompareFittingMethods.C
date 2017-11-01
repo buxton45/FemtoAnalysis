@@ -107,6 +107,100 @@ void DrawReF0vsImF0(TPad* aPad, FitInfo &aFitInfo, TString aDrawOption="epsame")
 }
 
 //---------------------------------------------------------------------------------------------------------------------------------
+void DrawWeightedMeanF0vsImF0(TPad* aPad, vector<FitInfo> &aFitInfoVec, bool bInclude10Res=true, bool bInclude3Res=true, TString aDrawOption="epsame")
+{
+  double tNumX = 0., tDenX = 0.;
+  double tNumY = 0., tDenY = 0.;
+
+  for(unsigned int i=0; i<aFitInfoVec.size(); i++)
+  {
+    if(!bInclude10Res && i < aFitInfoVec.size()/2) continue; 
+    if(!bInclude3Res && i >= aFitInfoVec.size()/2) continue;
+
+    tNumX += aFitInfoVec[i].ref0/(aFitInfoVec[i].ref0StatErr*aFitInfoVec[i].ref0StatErr);
+    tDenX += 1./(aFitInfoVec[i].ref0StatErr*aFitInfoVec[i].ref0StatErr);
+
+    tNumY += aFitInfoVec[i].imf0/(aFitInfoVec[i].imf0StatErr*aFitInfoVec[i].imf0StatErr);
+    tDenY += 1./(aFitInfoVec[i].imf0StatErr*aFitInfoVec[i].imf0StatErr);
+  }
+
+  double tAvgX = tNumX/tDenX;
+  double tErrX = sqrt(1./tDenX);
+
+  double tAvgY = tNumY/tDenY;
+  double tErrY = sqrt(1./tDenY);
+
+  //--------------------------------------
+  aPad->cd();
+  gStyle->SetOptStat(0);
+  gStyle->SetOptTitle(0);
+
+  TGraphAsymmErrors* tGr = new TGraphAsymmErrors(1);
+
+  tGr->SetName("Average Re[f0] vs Im[f0]");
+  tGr->SetMarkerStyle(29);
+  tGr->SetMarkerSize(2.0);
+  tGr->SetMarkerColor(6);
+  tGr->SetFillColor(6);
+  tGr->SetFillStyle(1000);
+  tGr->SetLineColor(6);
+  tGr->SetLineWidth(1);
+
+  tGr->SetPoint(0, tAvgX, tAvgY);
+  tGr->SetPointError(0, tErrX, tErrX, tErrY, tErrY);
+
+  tGr->Draw(aDrawOption);
+
+}
+
+//---------------------------------------------------------------------------------------------------------------------------------
+void DrawAverageF0vsImF0(TPad* aPad, vector<FitInfo> &aFitInfoVec, bool bInclude10Res=true, bool bInclude3Res=true, TString aDrawOption="epsame")
+{
+  double tNumX = 0., tDenX = 0.;
+  double tNumY = 0., tDenY = 0.;
+
+  for(unsigned int i=0; i<aFitInfoVec.size(); i++)
+  {
+    if(!bInclude10Res && i < aFitInfoVec.size()/2) continue; 
+    if(!bInclude3Res && i >= aFitInfoVec.size()/2) continue;
+
+    tNumX += aFitInfoVec[i].ref0;
+    tDenX += 1.;
+
+    tNumY += aFitInfoVec[i].imf0;
+    tDenY += 1.;
+  }
+
+  double tAvgX = tNumX/tDenX;
+  double tErrX = 0.;
+
+  double tAvgY = tNumY/tDenY;
+  double tErrY = 0.;
+
+  //--------------------------------------
+  aPad->cd();
+  gStyle->SetOptStat(0);
+  gStyle->SetOptTitle(0);
+
+  TGraphAsymmErrors* tGr = new TGraphAsymmErrors(1);
+
+  tGr->SetName("Average Re[f0] vs Im[f0]");
+  tGr->SetMarkerStyle(30);
+  tGr->SetMarkerSize(2.0);
+  tGr->SetMarkerColor(6);
+  tGr->SetFillColor(6);
+  tGr->SetFillStyle(1000);
+  tGr->SetLineColor(6);
+  tGr->SetLineWidth(1);
+
+  tGr->SetPoint(0, tAvgX, tAvgY);
+  tGr->SetPointError(0, tErrX, tErrX, tErrY, tErrY);
+
+  tGr->Draw(aDrawOption);
+
+}
+
+//---------------------------------------------------------------------------------------------------------------------------------
 void DrawAllReF0vsImF0(AnalysisType aAnType, TPad* aPad, vector<FitInfo> &aFitInfoVec, bool bInclude10Res=true, bool bInclude3Res=true, bool bSaveImage=false, double aMinX=-2., double aMaxX=2., double aMinY=0., double aMaxY=2.)
 {
   aPad->cd();
@@ -125,9 +219,15 @@ void DrawAllReF0vsImF0(AnalysisType aAnType, TPad* aPad, vector<FitInfo> &aFitIn
 
   TLatex* tTex = new TLatex();
   tTex->SetTextAlign(12);
+  tTex->SetLineWidth(2);
+  tTex->SetTextFont(62);
+  tTex->SetTextSize(0.08);
+
+  if(aAnType == kLamKchM) tTex->DrawLatex(0.25, 1.35, cAnalysisRootTags[aAnType]);
+  else tTex->DrawLatex(-1.75, 1.35, cAnalysisRootTags[aAnType]);
+
   tTex->SetTextFont(42);
   tTex->SetTextSize(0.04);
-  tTex->SetLineWidth(2);
 
   double tStartX = -0.25;
   double tStartY = 1.4;
@@ -153,6 +253,22 @@ void DrawAllReF0vsImF0(AnalysisType aAnType, TPad* aPad, vector<FitInfo> &aFitIn
     tMarker->DrawMarker(tStartX-0.05, tStartY-i*tIncrementY);
   }
 
+  //------------------------------------------------
+  DrawWeightedMeanF0vsImF0(aPad, aFitInfoVec, bInclude10Res, bInclude3Res);
+  if(bInclude10Res && !bInclude3Res) tTex->DrawLatex(tStartX, tStartY-(aFitInfoVec.size()/2)*tIncrementY, "Weighted Mean");
+  else tTex->DrawLatex(tStartX, tStartY-aFitInfoVec.size()*tIncrementY, "Weighted Mean");
+  tMarker->SetMarkerStyle(29);
+  tMarker->SetMarkerColor(6);
+  if(bInclude10Res && !bInclude3Res) tMarker->DrawMarker(tStartX-0.05, tStartY-(aFitInfoVec.size()/2)*tIncrementY);
+  else tMarker->DrawMarker(tStartX-0.05, tStartY-aFitInfoVec.size()*tIncrementY);
+  //------------------------------------------------
+  DrawAverageF0vsImF0(aPad, aFitInfoVec, bInclude10Res, bInclude3Res);
+  if(bInclude10Res && !bInclude3Res) tTex->DrawLatex(tStartX, tStartY-(aFitInfoVec.size()/2+1)*tIncrementY, "Average");
+  else tTex->DrawLatex(tStartX, tStartY-(aFitInfoVec.size()+1)*tIncrementY, "Average");
+  tMarker->SetMarkerStyle(30);
+  tMarker->SetMarkerColor(6);
+  if(bInclude10Res && !bInclude3Res) tMarker->DrawMarker(tStartX-0.05, tStartY-(aFitInfoVec.size()/2+1)*tIncrementY);
+  else tMarker->DrawMarker(tStartX-0.05, tStartY-(aFitInfoVec.size()+1)*tIncrementY);
   //------------------------------------------------
   if(bSaveImage)
   {
@@ -216,6 +332,162 @@ void DrawRadiusvsLambda(TPad* aPad, FitInfo &aFitInfo, CentralityType aCentType=
 }
 
 //---------------------------------------------------------------------------------------------------------------------------------
+void DrawWeightedMeanRadiusvsLambda(TPad* aPad, vector<FitInfo> &aFitInfoVec, CentralityType aCentType, bool bInclude10Res=true, bool bInclude3Res=true, TString aDrawOption="epsame")
+{
+  double tNumX = 0., tDenX = 0.;
+  double tNumY = 0., tDenY = 0.;
+
+  double tRadius=0., tRadiusErr=0.;
+  double tLambda=0., tLambdaErr=0.;
+
+  for(unsigned int i=0; i<aFitInfoVec.size(); i++)
+  {
+    if(!bInclude10Res && i < aFitInfoVec.size()/2) continue; 
+    if(!bInclude3Res && i >= aFitInfoVec.size()/2) continue;
+
+    if(aCentType==k0010)
+    {
+      tRadius = aFitInfoVec[i].radius1;
+      tRadiusErr = aFitInfoVec[i].radiusStatErr1;
+
+      tLambda = aFitInfoVec[i].lambda1;
+      tLambdaErr = aFitInfoVec[i].lambdaStatErr1;
+    }
+    else if(aCentType==k1030)
+    {
+      tRadius = aFitInfoVec[i].radius2;
+      tRadiusErr = aFitInfoVec[i].radiusStatErr2;
+
+      tLambda = aFitInfoVec[i].lambda2;
+      tLambdaErr = aFitInfoVec[i].lambdaStatErr2;
+    }
+    else if(aCentType==k3050)
+    {
+      tRadius = aFitInfoVec[i].radius3;
+      tRadiusErr = aFitInfoVec[i].radiusStatErr3;
+
+      tLambda = aFitInfoVec[i].lambda3;
+      tLambdaErr = aFitInfoVec[i].lambdaStatErr3;
+    }
+    else assert(0);
+
+    //Problematic for two points with tRadiusErr = 0.
+    //tNumX += tRadius/(tRadiusErr*tRadiusErr);
+    //tDenX += 1./(tRadiusErr*tRadiusErr);
+    tNumX += tRadius;
+    tDenX += 1;
+
+    tNumY += tLambda/(tLambdaErr*tLambdaErr);
+    tDenY += 1./(tLambdaErr*tLambdaErr);
+  }
+
+  double tAvgX = tNumX/tDenX;
+  //double tErrX = sqrt(1./tDenX);
+  double tErrX = 0.;
+
+  double tAvgY = tNumY/tDenY;
+  double tErrY = sqrt(1./tDenY);
+
+  //--------------------------------------
+  aPad->cd();
+  gStyle->SetOptStat(0);
+  gStyle->SetOptTitle(0);
+
+  TGraphAsymmErrors* tGr = new TGraphAsymmErrors(1);
+
+  tGr->SetName("Average R vs #lambda");
+  tGr->SetMarkerStyle(29);
+  tGr->SetMarkerSize(2.0);
+  tGr->SetMarkerColor(6);
+  tGr->SetFillColor(6);
+  tGr->SetFillStyle(1000);
+  tGr->SetLineColor(6);
+  tGr->SetLineWidth(1);
+
+  tGr->SetPoint(0, tAvgX, tAvgY);
+  tGr->SetPointError(0, tErrX, tErrX, tErrY, tErrY);
+
+  tGr->Draw(aDrawOption);
+
+}
+
+//---------------------------------------------------------------------------------------------------------------------------------
+void DrawAverageRadiusvsLambda(TPad* aPad, vector<FitInfo> &aFitInfoVec, CentralityType aCentType, bool bInclude10Res=true, bool bInclude3Res=true, TString aDrawOption="epsame")
+{
+  double tNumX = 0., tDenX = 0.;
+  double tNumY = 0., tDenY = 0.;
+
+  double tRadius=0., tRadiusErr=0.;
+  double tLambda=0., tLambdaErr=0.;
+
+  for(unsigned int i=0; i<aFitInfoVec.size(); i++)
+  {
+    if(!bInclude10Res && i < aFitInfoVec.size()/2) continue; 
+    if(!bInclude3Res && i >= aFitInfoVec.size()/2) continue;
+
+    if(aCentType==k0010)
+    {
+      tRadius = aFitInfoVec[i].radius1;
+      tRadiusErr = aFitInfoVec[i].radiusStatErr1;
+
+      tLambda = aFitInfoVec[i].lambda1;
+      tLambdaErr = aFitInfoVec[i].lambdaStatErr1;
+    }
+    else if(aCentType==k1030)
+    {
+      tRadius = aFitInfoVec[i].radius2;
+      tRadiusErr = aFitInfoVec[i].radiusStatErr2;
+
+      tLambda = aFitInfoVec[i].lambda2;
+      tLambdaErr = aFitInfoVec[i].lambdaStatErr2;
+    }
+    else if(aCentType==k3050)
+    {
+      tRadius = aFitInfoVec[i].radius3;
+      tRadiusErr = aFitInfoVec[i].radiusStatErr3;
+
+      tLambda = aFitInfoVec[i].lambda3;
+      tLambdaErr = aFitInfoVec[i].lambdaStatErr3;
+    }
+    else assert(0);
+
+    tNumX += tRadius;
+    tDenX += 1;
+
+    tNumY += tLambda;
+    tDenY += 1.;
+  }
+
+  double tAvgX = tNumX/tDenX;
+  double tErrX = 0.;
+
+  double tAvgY = tNumY/tDenY;
+  double tErrY = 0.;
+
+  //--------------------------------------
+  aPad->cd();
+  gStyle->SetOptStat(0);
+  gStyle->SetOptTitle(0);
+
+  TGraphAsymmErrors* tGr = new TGraphAsymmErrors(1);
+
+  tGr->SetName("Average R vs #lambda");
+  tGr->SetMarkerStyle(30);
+  tGr->SetMarkerSize(2.0);
+  tGr->SetMarkerColor(6);
+  tGr->SetFillColor(6);
+  tGr->SetFillStyle(1000);
+  tGr->SetLineColor(6);
+  tGr->SetLineWidth(1);
+
+  tGr->SetPoint(0, tAvgX, tAvgY);
+  tGr->SetPointError(0, tErrX, tErrX, tErrY, tErrY);
+
+  tGr->Draw(aDrawOption);
+
+}
+
+//---------------------------------------------------------------------------------------------------------------------------------
 void DrawAllRadiusvsLambda(AnalysisType aAnType, TPad* aPad, vector<FitInfo> &aFitInfoVec, CentralityType aCentType=k0010, bool bInclude10Res=true, bool bInclude3Res=true, bool bSaveImage=false, double aMinX=0., double aMaxX=8., double aMinY=0., double aMaxY=2.)
 {
   aPad->cd();
@@ -234,12 +506,21 @@ void DrawAllRadiusvsLambda(AnalysisType aAnType, TPad* aPad, vector<FitInfo> &aF
 
   TLatex* tTex = new TLatex();
   tTex->SetTextAlign(12);
-  tTex->SetTextFont(42);
-  tTex->SetTextSize(0.03);
   tTex->SetLineWidth(2);
 
+  tTex->SetTextFont(62);
+  tTex->SetTextSize(0.08);
+  tTex->DrawLatex(0.5, 1.8, cAnalysisRootTags[aAnType]);
+
+  tTex->SetTextFont(42);
+  tTex->SetTextSize(0.06);
+  tTex->DrawLatex(0.5, 1.6, cPrettyCentralityTags[aCentType]);
+
+  tTex->SetTextSize(0.03);
+
+
   double tStartX = 5.5;
-  double tStartY = 0.7;
+  double tStartY = 0.8;
 
   double tIncrementY = 0.08;
 
@@ -267,6 +548,23 @@ void DrawAllRadiusvsLambda(AnalysisType aAnType, TPad* aPad, vector<FitInfo> &aF
     tMarker->DrawMarker(tStartX-0.10, tStartY-i*tIncrementY);
 
   }
+
+  //------------------------------------------------
+  DrawWeightedMeanRadiusvsLambda(aPad, aFitInfoVec, aCentType, bInclude10Res, bInclude3Res);
+  if(bInclude10Res && !bInclude3Res) tTex->DrawLatex(tStartX, tStartY-(aFitInfoVec.size()/2)*tIncrementY, "Weighted Mean");
+  else tTex->DrawLatex(tStartX, tStartY-aFitInfoVec.size()*tIncrementY, "Weighted Mean");
+  tMarker->SetMarkerStyle(29);
+  tMarker->SetMarkerColor(6);
+  if(bInclude10Res && !bInclude3Res) tMarker->DrawMarker(tStartX-0.05, tStartY-(aFitInfoVec.size()/2)*tIncrementY);
+  else tMarker->DrawMarker(tStartX-0.05, tStartY-aFitInfoVec.size()*tIncrementY);
+  //------------------------------------------------
+  DrawAverageRadiusvsLambda(aPad, aFitInfoVec, aCentType, bInclude10Res, bInclude3Res);
+  if(bInclude10Res && !bInclude3Res) tTex->DrawLatex(tStartX, tStartY-(aFitInfoVec.size()/2+1)*tIncrementY, "Average");
+  else tTex->DrawLatex(tStartX, tStartY-(aFitInfoVec.size()+1)*tIncrementY, "Average");
+  tMarker->SetMarkerStyle(30);
+  tMarker->SetMarkerColor(6);
+  if(bInclude10Res && !bInclude3Res) tMarker->DrawMarker(tStartX-0.05, tStartY-(aFitInfoVec.size()/2+1)*tIncrementY);
+  else tMarker->DrawMarker(tStartX-0.05, tStartY-(aFitInfoVec.size()+1)*tIncrementY);
 
   //------------------------------------------------
   if(bSaveImage)
