@@ -165,6 +165,12 @@ td1dVec ResidualCollection::CombinePrimaryWithResiduals(double *aCfParams, td1dV
 }
 
 
+//________________________________________________________________________________________________________________
+void ResidualCollection::SetUsemTScalingOfRadii(double aPower)
+{
+  for(unsigned int i=0; i<fChargedCfCollection.size(); i++) fChargedCfCollection[i].SetUsemTScalingOfRadii(fAnalysisType, aPower);
+  for(unsigned int i=0; i<fNeutralCfCollection.size(); i++) fNeutralCfCollection[i].SetUsemTScalingOfRadii(fAnalysisType, aPower);
+}
 
 
 

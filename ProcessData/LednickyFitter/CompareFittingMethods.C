@@ -299,7 +299,7 @@ void DrawAllReF0vsImF0(AnalysisType aAnType, TPad* aPad, vector<FitInfo> &aFitIn
       tDescriptorFull = aFitInfoVec[i].descriptor;
       tDescriptorEnd = tDescriptorFull.Index("_");
       if(tDescriptorEnd == -1) tDescriptorEnd = tDescriptorFull.Length();
-      tDescriptor = tDescriptorFull(0, tDescriptorEnd-1);
+      tDescriptor = tDescriptorFull(0, tDescriptorEnd);
 
       tTex->DrawLatex(tStartX, tStartY-iTex*tIncrementY, tDescriptor);
       tMarker->SetMarkerStyle(aFitInfoVec[i].markerStyle+1);
@@ -655,7 +655,7 @@ void DrawAllRadiusvsLambda(AnalysisType aAnType, TPad* aPad, vector<FitInfo> &aF
       tDescriptorFull = aFitInfoVec[i].descriptor;
       tDescriptorEnd = tDescriptorFull.Index("_");
       if(tDescriptorEnd == -1) tDescriptorEnd = tDescriptorFull.Length();
-      tDescriptor = tDescriptorFull(0, tDescriptorEnd-1);
+      tDescriptor = tDescriptorFull(0, tDescriptorEnd);
 
       tTex->DrawLatex(tStartX, tStartY-iTex*tIncrementY, tDescriptor);
       tMarker->SetMarkerStyle(aFitInfoVec[i].markerStyle+1);
@@ -1305,9 +1305,9 @@ int main(int argc, char **argv)
                                        0.5*(1.50+1.50), 0.5*(0.83+0.83),
                                        0.5*(1.50+1.50), 0.5*(0.83+0.83),
 
-                                       3.50, 0.00,
                                        3.25, 0.00,
-                                       2.50, 0.00,
+                                       2.75, 0.00,
+                                       2.25, 0.00,
 
                                       -0.11, 0.03,
                                        0.10, 0.01,
@@ -1323,9 +1323,9 @@ int main(int argc, char **argv)
                                        0.5*(1.11+1.14), 0.5*(0.20+0.20),
                                        0.5*(1.50+1.40), 0.5*(0.89+0.65),
 
-                                       3.50, 0.00,
                                        3.25, 0.00,
-                                       2.50, 0.00,
+                                       2.75, 0.00,
+                                       2.25, 0.00,
 
                                       -0.12, 0.04,
                                        0.16, 0.04,
@@ -1415,9 +1415,9 @@ int main(int argc, char **argv)
                                        0.5*(0.60+0.60), 0.5*(0.63+0.63),
                                        0.5*(0.60+0.60), 0.5*(0.63+0.63),
 
-                                       3.50, 0.00,
                                        3.25, 0.00,
-                                       2.50, 0.00,
+                                       2.75, 0.00,
+                                       2.25, 0.00,
 
                                       -0.35, 0.08,
                                        0.27, 0.05,
@@ -1433,9 +1433,9 @@ int main(int argc, char **argv)
                                        0.5*(1.50+1.50), 0.5*(0.79+0.79),
                                        0.5*(1.50+1.50), 0.5*(0.79+0.79),
 
-                                       3.50, 0.00,
                                        3.25, 0.00,
-                                       2.50, 0.00,
+                                       2.75, 0.00,
+                                       2.25, 0.00,
 
                                       -0.10, 0.03,
                                        0.14, 0.02,

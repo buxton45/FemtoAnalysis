@@ -106,6 +106,8 @@ public:
   double GetChi2();
   int GetNDF();
 
+  void SetUsemTScalingOfResidualRadii(bool aUse=true, double aPower=-0.5);
+
 protected:
   bool fVerbose;
   FitSharedAnalyses* fFitSharedAnalyses;
@@ -129,6 +131,9 @@ protected:
   bool fResidualsInitiated;
   bool fReturnPrimaryWithResidualsToAnalyses;
   NonFlatBgdFitType fNonFlatBgdFitType;
+
+  bool fUsemTScalingOfResidualRadii;
+  double fmTScalingPowerOfResidualRadii;
 
   double fChi2;
   double fChi2GlobalMin;
@@ -170,5 +175,7 @@ inline void LednickyFitter::SetVerbose(bool aSet) {fVerbose=aSet;}
 
 inline double LednickyFitter::GetChi2() {return fChi2;}
 inline int LednickyFitter::GetNDF() {return fNDF;}
+
+inline void LednickyFitter::SetUsemTScalingOfResidualRadii(bool aUse, double aPower) {fUsemTScalingOfResidualRadii = aUse; fmTScalingPowerOfResidualRadii = aPower;}
 
 #endif

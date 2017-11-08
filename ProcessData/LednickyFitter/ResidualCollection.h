@@ -33,6 +33,8 @@ public:
   td1dVec GetTransformedNeutralResidualCorrelation(AnalysisType aResidualType, double *aParentCfParams);
   td1dVec CombinePrimaryWithResiduals(double *aCfParams, td1dVec &aPrimaryCf);
 
+  void SetUsemTScalingOfRadii(double aPower=-0.5);
+
 //----Inline functins
   vector<NeutralResidualCf> GetNeutralCollection();
   vector<SimpleChargedResidualCf> GetChargedCollection();

@@ -43,6 +43,9 @@ LednickyFitter::LednickyFitter(FitSharedAnalyses* aFitSharedAnalyses, double aMa
   fReturnPrimaryWithResidualsToAnalyses(false),
   fNonFlatBgdFitType(kLinear),
 
+  fUsemTScalingOfResidualRadii(false),
+  fmTScalingPowerOfResidualRadii(-0.5),
+
   fChi2(0),
   fChi2GlobalMin(1000000000),
   fChi2Vec(fNAnalyses),
@@ -563,6 +566,7 @@ void LednickyFitter::InitializeFitter()
     for(int iAnaly=0; iAnaly<fNAnalyses; iAnaly++)
     {
       fFitSharedAnalyses->GetFitPairAnalysis(iAnaly)->InitiateResidualCollection(fKStarBinCenters, fUseCoulombOnlyInterpCfsForChargedResiduals, fUseCoulombOnlyInterpCfsForXiKResiduals);
+      if(fUsemTScalingOfResidualRadii) fFitSharedAnalyses->GetFitPairAnalysis(iAnaly)->GetResidualCollection()->SetUsemTScalingOfRadii(fmTScalingPowerOfResidualRadii);
     }
   }
 

@@ -42,6 +42,8 @@ public:
   TH1D* GetChargedResidualCorrelationHistogramWithLambdaApplied(TString aTitle, double aOverallLambda, double aRadiusParam=-1.);
   TH1D* GetTransformedChargedResidualCorrelationHistogramWithLambdaApplied(TString aTitle, double aOverallLambda, double aRadiusParam=-1.);
 
+  void SetUsemTScalingOfRadii(AnalysisType aParentAnType, double aPower=-0.5);
+
   //inline
   AnalysisType GetResidualType();
   double GetLambdaFactor();

@@ -275,4 +275,22 @@ TH1D* SimpleChargedResidualCf::GetTransformedChargedResidualCorrelationHistogram
   return tReturnHist;
 }
 
+//________________________________________________________________________________________________________________
+void SimpleChargedResidualCf::SetUsemTScalingOfRadii(AnalysisType aParentAnType, double aPower)
+{
+  double tmTFactorParentPair = cmTFactorsFromTherminator[aParentAnType];
+  double tmTFactorResPair = cmTFactorsFromTherminator[fResidualType];
+  double tRatio = tmTFactorResPair/tmTFactorParentPair;
+
+  double tScaleFactor = pow(tRatio, aPower);
+  SetRadiusFactor(tScaleFactor);
+
+  cout << "Implementing SetUsemTScalingOfRadii for ResidualType = " << cAnalysisBaseTags[fResidualType];
+  cout << " of parent AnalysisType = " << cAnalysisBaseTags[aParentAnType] << endl;
+  cout << "\taPower       = " << aPower << endl;
+  cout << "\tRadiusFactor = " << fRadiusFactor << endl << endl;
+}
+
+
+
 

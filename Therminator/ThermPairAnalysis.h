@@ -90,6 +90,11 @@ public:
 
   double CalcRStar(TLorentzVector &p1, TLorentzVector &x1, TLorentzVector &p2, TLorentzVector &x2);
   double CalcRStar(ThermParticle &tPart1, ThermParticle &tPart2);
+
+  double CalcmT(TLorentzVector &p1, TLorentzVector &p2);
+  double CalcmT(ThermParticle &tPart1, ThermParticle &tPart2);
+  void FillParentmT3d(TH3* aPairmT3d, ThermParticle &tPart1, ThermParticle &tPart2);
+
   complex<double> GetStrongOnlyWaveFunction(TVector3 &aKStar3Vec, TVector3 &aRStar3Vec);
   double GetStrongOnlyWaveFunctionSq(TVector3 aKStar3Vec, TVector3 aRStar3Vec);
   double GetParentPairWaveFunctionSq(ThermParticle &tPart1, ThermParticle &tPart2);
@@ -186,6 +191,9 @@ private:
   TH1* fNumSecondaryOnly;
   TH1* fDenSecondaryOnly;
   TH1* fCfSecondaryOnly;
+
+  TH2* fPairKStarVsmT;
+  TH3* fPairmT3d;
 
 #ifdef __ROOT__
   ClassDef(ThermPairAnalysis, 1)

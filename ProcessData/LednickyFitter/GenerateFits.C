@@ -42,6 +42,9 @@ int main(int argc, char **argv)
   bool FixAllLambdaTo1 = false;
   if(FixAllLambdaTo1) tAllShareSingleLambdaParam = true;
 
+  bool UsemTScalingOfResidualRadii = false;
+  double mTScalingPowerOfResidualRadii = -0.5;
+
   double aLambdaMin=0., aLambdaMax=1.;
   if(UnboundLambda) aLambdaMax=0.;
 
@@ -87,6 +90,9 @@ int main(int argc, char **argv)
   if(UseCoulombOnlyInterpCfsForXiKResiduals && UseCoulombOnlyInterpCfsForChargedResiduals) tSaveNameModifier += TString("_UsingCoulombOnlyInterpCfsForAll");
   else if(UseCoulombOnlyInterpCfsForChargedResiduals) tSaveNameModifier += TString("_UsingCoulombOnlyInterpCfs");
 
+  if(UsemTScalingOfResidualRadii) tSaveNameModifier += TString::Format("_UsingmTScalingOfResidualRadii");
+
+
   FitGenerator* tLamKchP = new FitGenerator(tFileLocationBase,tFileLocationBaseMC,tAnType, tCentType,tAnRunType,tNPartialAnalysis,tGenType,tShareLambdaParams,tAllShareSingleLambdaParam);
 //  FitGenerator* tLamKchP = new FitGenerator(tFileLocationBase,tFileLocationBaseMC,tAnType,{k0010,k1030},tAnRunType,tNPartialAnalysis,tGenType,tShareLambdaParams,tAllShareSingleLambdaParam);
 //  tLamKchP->SetRadiusStartValues({3.0,4.0,5.0});
@@ -123,6 +129,7 @@ int main(int argc, char **argv)
 
   }
   if(FixAllLambdaTo1) tLamKchP->SetLambdaParamStartValue(1.0, false, kMB, true);
+  if(UsemTScalingOfResidualRadii) tLamKchP->SetUsemTScalingOfResidualRadii(UsemTScalingOfResidualRadii, mTScalingPowerOfResidualRadii);
 
   tLamKchP->DoFit();
   TCanvas* tKStarwFitsCan = tLamKchP->DrawKStarCfswFits(ApplyMomResCorrection,ApplyNonFlatBackgroundCorrection,tNonFlatBgdFitType,SaveImages);

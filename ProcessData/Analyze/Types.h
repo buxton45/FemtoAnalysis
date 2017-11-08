@@ -239,8 +239,10 @@ kXiCKSt0=40, kAXiCAKSt0=41, kXiCAKSt0=42, kAXiCKSt0=43
   extern const double cAnalysisLambdaFactors[85];
   extern const double cAnalysisLambdaFactors2[85];  //NOTE if I want to use this, switch name with cAnalysisLambdaFactors
   extern const double cAnalysisLambdaFactorsOLD[85];  //NOTE if I want to use this, switch name with cAnalysisLambdaFactors
+  extern const double cmTFactorsFromTherminator[85];
 //  extern const char* const cResidualBaseTags[44];
 //  extern const char* const cResidualRootTags[44];
+
   extern const char* const cBFieldTags[7];
   extern const char* const cCentralityTags[4];
   extern const char* const cPrettyCentralityTags[4];

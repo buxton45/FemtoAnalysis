@@ -51,6 +51,9 @@ FitGenerator::FitGenerator(TString aFileLocationBase, TString aFileLocationBaseM
   fUseCoulombOnlyInterpCfsForChargedResiduals(false),
   fUseCoulombOnlyInterpCfsForXiKResiduals(false),
 
+  fUsemTScalingOfResidualRadii(false),
+  fmTScalingPowerOfResidualRadii(-0.5),
+
   fSharedAn(0),
   fLednickyFitter(0)
 
@@ -147,6 +150,9 @@ FitGenerator::FitGenerator(TString aFileLocationBase, TString aFileLocationBaseM
   fIncludeResidualCorrelations(false),
   fUseCoulombOnlyInterpCfsForChargedResiduals(false),
   fUseCoulombOnlyInterpCfsForXiKResiduals(false),
+
+  fUsemTScalingOfResidualRadii(false),
+  fmTScalingPowerOfResidualRadii(-0.5),
 
   fSharedAn(0),
   fLednickyFitter(0)
@@ -2053,6 +2059,7 @@ void FitGenerator::InitializeGenerator(double aMaxKStarToFit)
   fLednickyFitter->SetIncludeResidualCorrelations(fIncludeResidualCorrelations);
   fLednickyFitter->SetUseCoulombOnlyInterpCfsForChargedResiduals(fUseCoulombOnlyInterpCfsForChargedResiduals);
   fLednickyFitter->SetUseCoulombOnlyInterpCfsForXiKResiduals(fUseCoulombOnlyInterpCfsForXiKResiduals);
+  fLednickyFitter->SetUsemTScalingOfResidualRadii(fUsemTScalingOfResidualRadii, fmTScalingPowerOfResidualRadii);
 }
 
 //________________________________________________________________________________________________________________

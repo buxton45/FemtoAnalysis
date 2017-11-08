@@ -119,6 +119,8 @@ public:
   void SetUseCoulombOnlyInterpCfsForChargedResiduals(bool aUse);
   void SetUseCoulombOnlyInterpCfsForXiKResiduals(bool aUse);
 
+  void SetUsemTScalingOfResidualRadii(bool aUse=true, double aPower=-0.5);
+
 protected:
   TString fSaveLocationBase;
   TString fSaveNameModifier;
@@ -142,6 +144,9 @@ protected:
   bool fIncludeResidualCorrelations;
   bool fUseCoulombOnlyInterpCfsForChargedResiduals;  //ex SigStPK, etc
   bool fUseCoulombOnlyInterpCfsForXiKResiduals;
+
+  bool fUsemTScalingOfResidualRadii;
+  double fmTScalingPowerOfResidualRadii;
 
   FitSharedAnalyses* fSharedAn;
   LednickyFitter* fLednickyFitter;
@@ -188,6 +193,8 @@ inline void FitGenerator::SetApplyMomResCorrection(bool aApplyMomResCorrection) 
 inline void FitGenerator::SetIncludeResidualCorrelations(bool aInclude, double aMinLambda, double aMaxLambda) {fIncludeResidualCorrelations = aInclude; if(aInclude) SetDefaultLambdaParametersWithResiduals(aMinLambda, aMaxLambda);}
 inline void FitGenerator::SetUseCoulombOnlyInterpCfsForChargedResiduals(bool aUse) {fUseCoulombOnlyInterpCfsForChargedResiduals = aUse;}
 inline void FitGenerator::SetUseCoulombOnlyInterpCfsForXiKResiduals(bool aUse) {fUseCoulombOnlyInterpCfsForXiKResiduals = aUse;}
+
+inline void FitGenerator::SetUsemTScalingOfResidualRadii(bool aUse, double aPower) {fUsemTScalingOfResidualRadii = aUse; fmTScalingPowerOfResidualRadii = aPower;}
 
 #endif
 

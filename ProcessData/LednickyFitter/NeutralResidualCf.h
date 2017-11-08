@@ -35,6 +35,8 @@ public:
   double* AdjustLambdaParam(double *aParamSet, double aNewLambda, int aNEntries=6);
   td1dVec GetContributionToFitCf(double *aParams);  //Note: aParams[0] should be OverallLambda!
 
+  void SetUsemTScalingOfRadii(AnalysisType aParentAnType, double aPower=-0.5);
+
   //inline
   AnalysisType GetResidualType();
   TH1D* GetNeutralResidualCorrelationHistogram(TString aTitle="fResCf");

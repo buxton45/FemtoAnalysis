@@ -77,7 +77,10 @@ ThermPairAnalysis::ThermPairAnalysis(AnalysisType aAnType) :
   fPairSourceSecondaryOnly(nullptr),
   fNumSecondaryOnly(nullptr),
   fDenSecondaryOnly(nullptr),
-  fCfSecondaryOnly(nullptr)
+  fCfSecondaryOnly(nullptr),
+
+  fPairKStarVsmT(nullptr),
+  fPairmT3d(nullptr)
 
 {
   SetPartTypes();
@@ -203,6 +206,20 @@ ThermPairAnalysis::ThermPairAnalysis(AnalysisType aAnType) :
   fPairSourceSecondaryOnly->Sumw2();
   fNumSecondaryOnly->Sumw2();
   fDenSecondaryOnly->Sumw2();
+
+
+  fPairKStarVsmT = new TH2D(TString::Format("PairKStarVsmT%s", cAnalysisBaseTags[aAnType]),
+                            TString::Format("PairKStarVsmT%s", cAnalysisBaseTags[aAnType]),
+                            100, 0., 1.,
+                            250, 0., 2.5);
+  fPairKStarVsmT->Sumw2();
+
+  fPairmT3d = new TH3D(TString::Format("PairmT3d%s", cAnalysisBaseTags[aAnType]),
+                       TString::Format("PairmT3d%s", cAnalysisBaseTags[aAnType]),
+                       tPidInfoSize, 0, tPidInfoSize, 
+                       tPidInfoSize, 0, tPidInfoSize,
+                       250, 0., 2.5);
+  fPairmT3d->Sumw2();
 
 }
 
@@ -1278,6 +1295,58 @@ double ThermPairAnalysis::CalcRStar(ThermParticle &tPart1, ThermParticle &tPart2
 }
 
 //________________________________________________________________________________________________________________
+double ThermPairAnalysis::CalcmT(TLorentzVector &p1, TLorentzVector &p2)
+{
+  TLorentzVector tPTot = p1+p2;
+  return 0.5*tPTot.Mt();
+}
+
+//________________________________________________________________________________________________________________
+double ThermPairAnalysis::CalcmT(ThermParticle &tPart1, ThermParticle &tPart2)
+{
+  TLorentzVector tP1 = tPart1.GetFourMomentum();
+  TLorentzVector tP2 = tPart2.GetFourMomentum();
+  return CalcmT(tP1, tP2);
+}
+
+
+//________________________________________________________________________________________________________________
+void ThermPairAnalysis::FillParentmT3d(TH3* aPairmT3d, ThermParticle &tPart1, ThermParticle &tPart2)
+{
+  //--------------------------------------------------------------
+  TLorentzVector p1, p2;
+  int tIndex1, tIndex2;
+  double tmT = 0.;
+  //----------
+  if(tPart1.IsPrimordial())
+  {
+    p1 = tPart1.GetFourMomentum();
+    tIndex1 = GetParticleIndexInPidInfo(tPart1.GetPID());
+  }
+  else
+  {
+    p1 = tPart1.GetFatherFourMomentum();
+    tIndex1 = GetParticleIndexInPidInfo(tPart1.GetFatherPID());
+  }
+  //----------
+  if(tPart2.IsPrimordial())
+  {
+    p2 = tPart2.GetFourMomentum();
+    tIndex2 = GetParticleIndexInPidInfo(tPart2.GetPID());
+  }
+  else
+  {
+    p2 = tPart2.GetFatherFourMomentum();
+    tIndex2 = GetParticleIndexInPidInfo(tPart2.GetFatherPID());
+  }
+  //--------------------------------------------------------------
+  tmT = CalcmT(p1,p2);
+  aPairmT3d->Fill(tIndex1, tIndex2, tmT);
+}
+
+
+
+//________________________________________________________________________________________________________________
 complex<double> ThermPairAnalysis::GetStrongOnlyWaveFunction(TVector3 &aKStar3Vec, TVector3 &aRStar3Vec)
 {
   if(aRStar3Vec.X()==0 && aRStar3Vec.Y()==0 && aRStar3Vec.Z()==0)  //TODO i.e. if pair originate from single resonance
@@ -1446,6 +1515,9 @@ void ThermPairAnalysis::FillCorrelationFunctionsNumOrDenParticleV0(vector<ThermP
         {
           fPairSource3d->Fill(tParentIndex1, tParentIndex2, tRStar);
           fPairSourceFull->Fill(tRStar);
+
+          fPairKStarVsmT->Fill(tKStar, CalcmT(tV0, tParticle));
+          if(tKStar <= 0.3) FillParentmT3d(fPairmT3d, tV0, tParticle);
         }
 
         if(tV0.IsPrimordial() && tParticle.IsPrimordial())
@@ -1548,6 +1620,9 @@ void ThermPairAnalysis::FillCorrelationFunctionsNumOrDenV0V0(vector<ThermV0Parti
           {
             fPairSource3d->Fill(tParentIndex1, tParentIndex2, tRStar);
             fPairSourceFull->Fill(tRStar);
+
+            fPairKStarVsmT->Fill(tKStar, CalcmT(tV01, tV02));
+            if(tKStar <= 0.3) FillParentmT3d(fPairmT3d, tV01, tV02);
           }
 
           if(tV01.IsPrimordial() && tV02.IsPrimordial())
@@ -1618,6 +1693,9 @@ void ThermPairAnalysis::FillCorrelationFunctionsNumAndDenParticleV0(vector<Therm
         fNum3d->Fill(tParentIndex1, tParentIndex2, tKStar, tWeight);
         fDen3d->Fill(tParentIndex1, tParentIndex2, tKStar);
         fPairSource3d->Fill(tParentIndex1, tParentIndex2, tRStar);
+
+        fPairKStarVsmT->Fill(tKStar, CalcmT(tV0, tParticle));
+        if(tKStar <= 0.3) FillParentmT3d(fPairmT3d, tV0, tParticle);
 
         fNumFull->Fill(tKStar, tWeight);
         fDenFull->Fill(tKStar);
@@ -1698,6 +1776,9 @@ void ThermPairAnalysis::FillCorrelationFunctionsNumAndDenV0V0(vector<ThermV0Part
           fNum3d->Fill(tParentIndex1, tParentIndex2, tKStar, tWeight);
           fDen3d->Fill(tParentIndex1, tParentIndex2, tKStar);
           fPairSource3d->Fill(tParentIndex1, tParentIndex2, tRStar);
+
+          fPairKStarVsmT->Fill(tKStar, CalcmT(tV01, tV02));
+          if(tKStar <= 0.3) FillParentmT3d(fPairmT3d, tV01, tV02);
 
           fNumFull->Fill(tKStar, tWeight);
           fDenFull->Fill(tKStar);
@@ -1866,6 +1947,9 @@ void ThermPairAnalysis::SaveAllCorrelationFunctions(TFile *aFile)
   fDenSecondaryOnly->Write();
   fCfSecondaryOnly = BuildFinalCf(fNumSecondaryOnly, fDenSecondaryOnly, TString::Format("CfSecondaryOnly%s", cAnalysisBaseTags[fAnalysisType]));
   fCfSecondaryOnly->Write();
+
+  fPairKStarVsmT->Write();
+  fPairmT3d->Write();
 }
 
 
