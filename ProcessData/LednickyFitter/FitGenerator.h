@@ -66,12 +66,12 @@ public:
   void SetRadiusLimits(const td2dVec &aMinMax2dVec);  //set unique values for each R parameter
 
   void SetScattParamStartValue(double aVal, ParameterType aParamType, bool aIsFixed=false);
-  void SetScattParamStartValues(double aReF0, double aImF0, double aD0);
+  void SetScattParamStartValues(double aReF0, double aImF0, double aD0, bool aAreFixed=false);
   void SetScattParamLimits(double aMin, double aMax, ParameterType aParamType);
   void SetScattParamLimits(const td2dVec &aMinMax2dVec);
 
   int GetLambdaBinNumber(bool tConjPair=false, CentralityType aCentType=k0010);  //ex. tConjPair=false for kLamK0 and tConjPair=true for kALamK0
-  void SetLambdaParamStartValue(double aLam, bool tConjPair=false, CentralityType aCentType=kMB);
+  void SetLambdaParamStartValue(double aLam, bool tConjPair=false, CentralityType aCentType=kMB, bool aIsFixed=false);
   void SetLambdaParamLimits(double aMin, double aMax, bool tConjPair=false, CentralityType aCentType=kMB);
 
   void SetDefaultSharedParameters(bool aSetAllUnbounded=false);

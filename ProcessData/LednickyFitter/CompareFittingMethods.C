@@ -36,6 +36,9 @@ struct FitInfo
   double radiusStatErr1, radiusStatErr2, radiusStatErr3; 
   double ref0StatErr, imf0StatErr, d0StatErr;
 
+  double chi2;
+  int ndf;
+
   Color_t markerColor;
   int markerStyle;
 
@@ -49,6 +52,7 @@ struct FitInfo
           double aReF0,   double aReF0StatErr, 
           double aImF0,   double aImF0StatErr, 
           double aD0,     double aD0StatErr, 
+          double aChi2, int aNDF,
           Color_t aMarkerColor, int aMarkerStyle)
   {
     descriptor = aDescriptor;
@@ -77,11 +81,49 @@ struct FitInfo
     imf0StatErr   = aImF0StatErr;
     d0StatErr     = aD0StatErr;
 
+    chi2 = aChi2;
+    ndf = aNDF;
+
     markerColor = aMarkerColor;
     markerStyle = aMarkerStyle;
   }
 
 };
+
+//---------------------------------------------------------------------------------------------------------------------------------
+void DrawChi2PerNDF(double aStartX, double aStartY, TPad* aPad, vector<FitInfo> &aFitInfoVec, bool bInclude10Res=true, bool bInclude3Res=true)
+{
+  aPad->cd();
+  gStyle->SetOptStat(0);
+  gStyle->SetOptTitle(0);
+
+  TLatex* tTex = new TLatex();
+  tTex->SetTextAlign(12);
+  tTex->SetLineWidth(2);
+  tTex->SetTextFont(42);
+  tTex->SetTextSize(0.02);
+
+  const Size_t tMarkerSize=1.6;
+  TMarker *tMarker = new TMarker();
+  tMarker->SetMarkerSize(tMarkerSize);
+
+  double tIncrementY = 0.08;
+  TString tText;
+  int iTex = 0;
+  for(unsigned int i=0; i<aFitInfoVec.size(); i++)
+  {
+    if(!bInclude10Res && i < aFitInfoVec.size()/2) continue; 
+    if(!bInclude3Res && i >= aFitInfoVec.size()/2) continue; 
+
+    tText = TString::Format("#chi^{2}/NDF = %0.1f/%i = %0.3f", aFitInfoVec[i].chi2, aFitInfoVec[i].ndf, (aFitInfoVec[i].chi2/aFitInfoVec[i].ndf));
+    tTex->DrawLatex(aStartX, aStartY-iTex*tIncrementY, tText);
+    tMarker->SetMarkerStyle(aFitInfoVec[i].markerStyle);
+    tMarker->SetMarkerColor(aFitInfoVec[i].markerColor);
+    tMarker->DrawMarker(aStartX-0.10, aStartY-iTex*tIncrementY);
+    iTex++;
+  }
+
+}
 
 //---------------------------------------------------------------------------------------------------------------------------------
 void DrawReF0vsImF0(TPad* aPad, FitInfo &aFitInfo, TString aDrawOption="epsame")
@@ -107,7 +149,7 @@ void DrawReF0vsImF0(TPad* aPad, FitInfo &aFitInfo, TString aDrawOption="epsame")
 }
 
 //---------------------------------------------------------------------------------------------------------------------------------
-void DrawWeightedMeanF0vsImF0(TPad* aPad, vector<FitInfo> &aFitInfoVec, bool bInclude10Res=true, bool bInclude3Res=true, TString aDrawOption="epsame")
+void DrawWeightedMeanReF0vsImF0(TPad* aPad, vector<FitInfo> &aFitInfoVec, bool bInclude10Res=true, bool bInclude3Res=true, TString aDrawOption="epsame")
 {
   double tNumX = 0., tDenX = 0.;
   double tNumY = 0., tDenY = 0.;
@@ -138,7 +180,7 @@ void DrawWeightedMeanF0vsImF0(TPad* aPad, vector<FitInfo> &aFitInfoVec, bool bIn
   TGraphAsymmErrors* tGr = new TGraphAsymmErrors(1);
 
   tGr->SetName("Average Re[f0] vs Im[f0]");
-  tGr->SetMarkerStyle(29);
+  tGr->SetMarkerStyle(30);
   tGr->SetMarkerSize(2.0);
   tGr->SetMarkerColor(6);
   tGr->SetFillColor(6);
@@ -154,7 +196,7 @@ void DrawWeightedMeanF0vsImF0(TPad* aPad, vector<FitInfo> &aFitInfoVec, bool bIn
 }
 
 //---------------------------------------------------------------------------------------------------------------------------------
-void DrawAverageF0vsImF0(TPad* aPad, vector<FitInfo> &aFitInfoVec, bool bInclude10Res=true, bool bInclude3Res=true, TString aDrawOption="epsame")
+void DrawAverageReF0vsImF0(TPad* aPad, vector<FitInfo> &aFitInfoVec, bool bInclude10Res=true, bool bInclude3Res=true, TString aDrawOption="epsame")
 {
   double tNumX = 0., tDenX = 0.;
   double tNumY = 0., tDenY = 0.;
@@ -185,7 +227,7 @@ void DrawAverageF0vsImF0(TPad* aPad, vector<FitInfo> &aFitInfoVec, bool bInclude
   TGraphAsymmErrors* tGr = new TGraphAsymmErrors(1);
 
   tGr->SetName("Average Re[f0] vs Im[f0]");
-  tGr->SetMarkerStyle(30);
+  tGr->SetMarkerStyle(29);
   tGr->SetMarkerSize(2.0);
   tGr->SetMarkerColor(6);
   tGr->SetFillColor(6);
@@ -229,7 +271,7 @@ void DrawAllReF0vsImF0(AnalysisType aAnType, TPad* aPad, vector<FitInfo> &aFitIn
   tTex->SetTextFont(42);
   tTex->SetTextSize(0.04);
 
-  double tStartX = -0.25;
+  double tStartX = 0.30;
   double tStartY = 1.4;
 
   if(aAnType == kLamKchM) tStartX = -1.75;
@@ -240,6 +282,9 @@ void DrawAllReF0vsImF0(AnalysisType aAnType, TPad* aPad, vector<FitInfo> &aFitIn
   TMarker *tMarker = new TMarker();
   tMarker->SetMarkerSize(tMarkerSize);
 
+  int iTex=0;
+  TString tDescriptorFull, tDescriptor;
+  unsigned int tDescriptorEnd = 0;
   for(unsigned int i=0; i<aFitInfoVec.size(); i++)
   {
     if(!bInclude10Res && i < aFitInfoVec.size()/2) continue; 
@@ -247,32 +292,86 @@ void DrawAllReF0vsImF0(AnalysisType aAnType, TPad* aPad, vector<FitInfo> &aFitIn
 
     DrawReF0vsImF0(aPad, aFitInfoVec[i]);
 
-    tTex->DrawLatex(tStartX, tStartY-i*tIncrementY, aFitInfoVec[i].descriptor);
-    tMarker->SetMarkerStyle(aFitInfoVec[i].markerStyle);
-    tMarker->SetMarkerColor(aFitInfoVec[i].markerColor);
-    tMarker->DrawMarker(tStartX-0.05, tStartY-i*tIncrementY);
+    if(i%2==0)
+    {
+      if(iTex>2) continue;
+
+      tDescriptorFull = aFitInfoVec[i].descriptor;
+      tDescriptorEnd = tDescriptorFull.Index("_");
+      if(tDescriptorEnd == -1) tDescriptorEnd = tDescriptorFull.Length();
+      tDescriptor = tDescriptorFull(0, tDescriptorEnd-1);
+
+      tTex->DrawLatex(tStartX, tStartY-iTex*tIncrementY, tDescriptor);
+      tMarker->SetMarkerStyle(aFitInfoVec[i].markerStyle+1);
+      tMarker->SetMarkerColor(aFitInfoVec[i].markerColor);
+      tMarker->DrawMarker(tStartX-0.05, tStartY-iTex*tIncrementY);
+      iTex++;
+    }
   }
 
   //------------------------------------------------
-  DrawWeightedMeanF0vsImF0(aPad, aFitInfoVec, bInclude10Res, bInclude3Res);
-  if(bInclude10Res && !bInclude3Res) tTex->DrawLatex(tStartX, tStartY-(aFitInfoVec.size()/2)*tIncrementY, "Weighted Mean");
-  else tTex->DrawLatex(tStartX, tStartY-aFitInfoVec.size()*tIncrementY, "Weighted Mean");
+  DrawAverageReF0vsImF0(aPad, aFitInfoVec, bInclude10Res, bInclude3Res);
+  tTex->DrawLatex(tStartX, tStartY-(iTex)*tIncrementY, "Average");
   tMarker->SetMarkerStyle(29);
   tMarker->SetMarkerColor(6);
-  if(bInclude10Res && !bInclude3Res) tMarker->DrawMarker(tStartX-0.05, tStartY-(aFitInfoVec.size()/2)*tIncrementY);
-  else tMarker->DrawMarker(tStartX-0.05, tStartY-aFitInfoVec.size()*tIncrementY);
+  tMarker->DrawMarker(tStartX-0.05, tStartY-(iTex)*tIncrementY);
   //------------------------------------------------
-  DrawAverageF0vsImF0(aPad, aFitInfoVec, bInclude10Res, bInclude3Res);
-  if(bInclude10Res && !bInclude3Res) tTex->DrawLatex(tStartX, tStartY-(aFitInfoVec.size()/2+1)*tIncrementY, "Average");
-  else tTex->DrawLatex(tStartX, tStartY-(aFitInfoVec.size()+1)*tIncrementY, "Average");
+/*
+  DrawWeightedMeanReF0vsImF0(aPad, aFitInfoVec, bInclude10Res, bInclude3Res);
+  tTex->DrawLatex(tStartX, tStartY-(iTex+1)*tIncrementY, "Weighted Mean");
   tMarker->SetMarkerStyle(30);
   tMarker->SetMarkerColor(6);
-  if(bInclude10Res && !bInclude3Res) tMarker->DrawMarker(tStartX-0.05, tStartY-(aFitInfoVec.size()/2+1)*tIncrementY);
-  else tMarker->DrawMarker(tStartX-0.05, tStartY-(aFitInfoVec.size()+1)*tIncrementY);
+  tMarker->DrawMarker(tStartX-0.05, tStartY-(iTex+1)*tIncrementY);
+*/
   //------------------------------------------------
+  tTex->DrawLatex(tStartX, tStartY-(iTex+2)*tIncrementY, "Free D0");
+  tMarker->SetMarkerStyle(20);
+  tMarker->SetMarkerColor(1);
+  tMarker->DrawMarker(tStartX-0.05, tStartY-(iTex+2)*tIncrementY);
+
+  tTex->DrawLatex(tStartX, tStartY-(iTex+3)*tIncrementY, "Fixed D0");
+  tMarker->SetMarkerStyle(22);
+  tMarker->SetMarkerColor(1);
+  tMarker->DrawMarker(tStartX-0.05, tStartY-(iTex+3)*tIncrementY);
+  //------------------------------------------------
+  if(bInclude10Res && bInclude3Res)
+  {
+    tTex->DrawLatex(tStartX, tStartY-(iTex+5)*tIncrementY, "10 Res.");
+    tMarker->SetMarkerStyle(21);
+    tMarker->SetMarkerColor(1);
+    tMarker->DrawMarker(tStartX-0.05, tStartY-(iTex+5)*tIncrementY);
+
+    tTex->DrawLatex(tStartX, tStartY-(iTex+6)*tIncrementY, "3 Res.");
+    tMarker->SetMarkerStyle(25);
+    tMarker->SetMarkerColor(1);
+    tMarker->DrawMarker(tStartX-0.05, tStartY-(iTex+6)*tIncrementY);
+  }
+  else if(bInclude10Res)
+  {
+    tTex->DrawLatex(tStartX, tStartY-(iTex+5)*tIncrementY, "10 Res.");
+    tMarker->SetMarkerStyle(21);
+    tMarker->SetMarkerColor(1);
+    tMarker->DrawMarker(tStartX-0.05, tStartY-(iTex+5)*tIncrementY);
+  }
+  else if(bInclude3Res)
+  {
+    tTex->DrawLatex(tStartX, tStartY-(iTex+5)*tIncrementY, "3 Res.");
+    tMarker->SetMarkerStyle(25);
+    tMarker->SetMarkerColor(1);
+    tMarker->DrawMarker(tStartX-0.05, tStartY-(iTex+5)*tIncrementY);
+  }
+  else assert(0);
+
+  //--------------------------------------------------------
+  double tStartXChi2 = -0.50;
+  double tStartYChi2 = 1.4;
+  if(aAnType == kLamKchM) tStartXChi2 = -0.75;
+  DrawChi2PerNDF(tStartXChi2, tStartYChi2, aPad, aFitInfoVec, bInclude10Res, bInclude3Res);
+  //--------------------------------------------------------
+
   if(bSaveImage)
   {
-    TString tSaveLocationBase = "/home/jesse/Analysis/Presentations/GroupMeetings/20171102/Figures/";
+    TString tSaveLocationBase = "/home/jesse/Analysis/Presentations/AliFemto/20171108/Figures/";
     TString tSaveLocationFull_ReF0vsImF0;
 
     tSaveLocationFull_ReF0vsImF0 = tSaveLocationBase + TString::Format("%s/ReF0vsImF0", cAnalysisBaseTags[aAnType]);
@@ -290,7 +389,7 @@ void DrawAllReF0vsImF0(AnalysisType aAnType, TPad* aPad, vector<FitInfo> &aFitIn
 
 
 //---------------------------------------------------------------------------------------------------------------------------------
-void DrawRadiusvsLambda(TPad* aPad, FitInfo &aFitInfo, CentralityType aCentType=k0010, TString aDrawOption="epsame")
+void DrawRadiusvsLambda(TPad* aPad, FitInfo &aFitInfo, CentralityType aCentType=k0010, TString aDrawOption="epsame", bool aDrawingAllCentralities=false)
 {
   aPad->cd();
   gStyle->SetOptStat(0);
@@ -300,10 +399,14 @@ void DrawRadiusvsLambda(TPad* aPad, FitInfo &aFitInfo, CentralityType aCentType=
 
   tGr->SetName(aFitInfo.descriptor);
 
-  if(aCentType==k0010) tGr->SetMarkerStyle(aFitInfo.markerStyle);
-  else if(aCentType==k1030) tGr->SetMarkerStyle(aFitInfo.markerStyle+1);
-  else if(aCentType==k3050) tGr->SetMarkerStyle(aFitInfo.markerStyle+2);
-  else assert(0);
+  if(aDrawingAllCentralities)
+  {
+    if(aCentType==k0010) tGr->SetMarkerStyle(aFitInfo.markerStyle);
+    else if(aCentType==k1030) tGr->SetMarkerStyle(aFitInfo.markerStyle+1);
+    else if(aCentType==k3050) tGr->SetMarkerStyle(aFitInfo.markerStyle+2);
+    else assert(0);
+  }
+  else tGr->SetMarkerStyle(aFitInfo.markerStyle);
 
   tGr->SetMarkerColor(aFitInfo.markerColor);
   tGr->SetFillColor(aFitInfo.markerColor);
@@ -396,7 +499,7 @@ void DrawWeightedMeanRadiusvsLambda(TPad* aPad, vector<FitInfo> &aFitInfoVec, Ce
   TGraphAsymmErrors* tGr = new TGraphAsymmErrors(1);
 
   tGr->SetName("Average R vs #lambda");
-  tGr->SetMarkerStyle(29);
+  tGr->SetMarkerStyle(30);
   tGr->SetMarkerSize(2.0);
   tGr->SetMarkerColor(6);
   tGr->SetFillColor(6);
@@ -472,7 +575,7 @@ void DrawAverageRadiusvsLambda(TPad* aPad, vector<FitInfo> &aFitInfoVec, Central
   TGraphAsymmErrors* tGr = new TGraphAsymmErrors(1);
 
   tGr->SetName("Average R vs #lambda");
-  tGr->SetMarkerStyle(30);
+  tGr->SetMarkerStyle(29);
   tGr->SetMarkerSize(2.0);
   tGr->SetMarkerColor(6);
   tGr->SetFillColor(6);
@@ -519,8 +622,8 @@ void DrawAllRadiusvsLambda(AnalysisType aAnType, TPad* aPad, vector<FitInfo> &aF
   tTex->SetTextSize(0.03);
 
 
-  double tStartX = 5.5;
-  double tStartY = 0.8;
+  double tStartX = 6.5;
+  double tStartY = 1.0;
 
   double tIncrementY = 0.08;
 
@@ -528,6 +631,9 @@ void DrawAllRadiusvsLambda(AnalysisType aAnType, TPad* aPad, vector<FitInfo> &aF
   TMarker *tMarker = new TMarker();
   tMarker->SetMarkerSize(tMarkerSize);
 
+  int iTex=0;
+  TString tDescriptorFull, tDescriptor;
+  unsigned int tDescriptorEnd = 0;
   for(unsigned int i=0; i<aFitInfoVec.size(); i++)
   {
 
@@ -536,40 +642,92 @@ void DrawAllRadiusvsLambda(AnalysisType aAnType, TPad* aPad, vector<FitInfo> &aF
 
     if(aCentType==kMB)
     {
-      DrawRadiusvsLambda(aPad, aFitInfoVec[i], k0010);
-      DrawRadiusvsLambda(aPad, aFitInfoVec[i], k1030);
-      DrawRadiusvsLambda(aPad, aFitInfoVec[i], k3050);
+      DrawRadiusvsLambda(aPad, aFitInfoVec[i], k0010, true);
+      DrawRadiusvsLambda(aPad, aFitInfoVec[i], k1030, true);
+      DrawRadiusvsLambda(aPad, aFitInfoVec[i], k3050, true);
     }
     else DrawRadiusvsLambda(aPad, aFitInfoVec[i], aCentType);
 
-    tTex->DrawLatex(tStartX, tStartY-i*tIncrementY, aFitInfoVec[i].descriptor);
-    tMarker->SetMarkerStyle(aFitInfoVec[i].markerStyle);
-    tMarker->SetMarkerColor(aFitInfoVec[i].markerColor);
-    tMarker->DrawMarker(tStartX-0.10, tStartY-i*tIncrementY);
+    if(i%2 == 0)
+    {
+      if(iTex>2) continue;
 
+      tDescriptorFull = aFitInfoVec[i].descriptor;
+      tDescriptorEnd = tDescriptorFull.Index("_");
+      if(tDescriptorEnd == -1) tDescriptorEnd = tDescriptorFull.Length();
+      tDescriptor = tDescriptorFull(0, tDescriptorEnd-1);
+
+      tTex->DrawLatex(tStartX, tStartY-iTex*tIncrementY, tDescriptor);
+      tMarker->SetMarkerStyle(aFitInfoVec[i].markerStyle+1);
+      tMarker->SetMarkerColor(aFitInfoVec[i].markerColor);
+      tMarker->DrawMarker(tStartX-0.10, tStartY-iTex*tIncrementY);
+      iTex++;
+    }
   }
 
   //------------------------------------------------
-  DrawWeightedMeanRadiusvsLambda(aPad, aFitInfoVec, aCentType, bInclude10Res, bInclude3Res);
-  if(bInclude10Res && !bInclude3Res) tTex->DrawLatex(tStartX, tStartY-(aFitInfoVec.size()/2)*tIncrementY, "Weighted Mean");
-  else tTex->DrawLatex(tStartX, tStartY-aFitInfoVec.size()*tIncrementY, "Weighted Mean");
+  DrawAverageRadiusvsLambda(aPad, aFitInfoVec, aCentType, bInclude10Res, bInclude3Res);
+  tTex->DrawLatex(tStartX, tStartY-(iTex)*tIncrementY, "Average");
   tMarker->SetMarkerStyle(29);
   tMarker->SetMarkerColor(6);
-  if(bInclude10Res && !bInclude3Res) tMarker->DrawMarker(tStartX-0.05, tStartY-(aFitInfoVec.size()/2)*tIncrementY);
-  else tMarker->DrawMarker(tStartX-0.05, tStartY-aFitInfoVec.size()*tIncrementY);
+  tMarker->DrawMarker(tStartX-0.05, tStartY-(iTex)*tIncrementY);
   //------------------------------------------------
-  DrawAverageRadiusvsLambda(aPad, aFitInfoVec, aCentType, bInclude10Res, bInclude3Res);
-  if(bInclude10Res && !bInclude3Res) tTex->DrawLatex(tStartX, tStartY-(aFitInfoVec.size()/2+1)*tIncrementY, "Average");
-  else tTex->DrawLatex(tStartX, tStartY-(aFitInfoVec.size()+1)*tIncrementY, "Average");
+/*
+  DrawWeightedMeanRadiusvsLambda(aPad, aFitInfoVec, aCentType, bInclude10Res, bInclude3Res);
+  tTex->DrawLatex(tStartX, tStartY-(iTex+1)*tIncrementY, "Weighted Mean");
   tMarker->SetMarkerStyle(30);
   tMarker->SetMarkerColor(6);
-  if(bInclude10Res && !bInclude3Res) tMarker->DrawMarker(tStartX-0.05, tStartY-(aFitInfoVec.size()/2+1)*tIncrementY);
-  else tMarker->DrawMarker(tStartX-0.05, tStartY-(aFitInfoVec.size()+1)*tIncrementY);
-
+  tMarker->DrawMarker(tStartX-0.05, tStartY-(iTex+1)*tIncrementY);
+*/
   //------------------------------------------------
+  tTex->DrawLatex(tStartX, tStartY-(iTex+2)*tIncrementY, "Free D0");
+  tMarker->SetMarkerStyle(20);
+  tMarker->SetMarkerColor(1);
+  tMarker->DrawMarker(tStartX-0.05, tStartY-(iTex+2)*tIncrementY);
+
+  tTex->DrawLatex(tStartX, tStartY-(iTex+3)*tIncrementY, "Fixed D0");
+  tMarker->SetMarkerStyle(22);
+  tMarker->SetMarkerColor(1);
+  tMarker->DrawMarker(tStartX-0.05, tStartY-(iTex+3)*tIncrementY);
+  //------------------------------------------------
+  if(bInclude10Res && bInclude3Res)
+  {
+    tTex->DrawLatex(tStartX, tStartY-(iTex+5)*tIncrementY, "10 Res.");
+    tMarker->SetMarkerStyle(21);
+    tMarker->SetMarkerColor(1);
+    tMarker->DrawMarker(tStartX-0.05, tStartY-(iTex+5)*tIncrementY);
+
+    tTex->DrawLatex(tStartX, tStartY-(iTex+6)*tIncrementY, "3 Res.");
+    tMarker->SetMarkerStyle(25);
+    tMarker->SetMarkerColor(1);
+    tMarker->DrawMarker(tStartX-0.05, tStartY-(iTex+6)*tIncrementY);
+  }
+  else if(bInclude10Res)
+  {
+    tTex->DrawLatex(tStartX, tStartY-(iTex+5)*tIncrementY, "10 Res.");
+    tMarker->SetMarkerStyle(21);
+    tMarker->SetMarkerColor(1);
+    tMarker->DrawMarker(tStartX-0.05, tStartY-(iTex+5)*tIncrementY);
+  }
+  else if(bInclude3Res)
+  {
+    tTex->DrawLatex(tStartX, tStartY-(iTex+5)*tIncrementY, "3 Res.");
+    tMarker->SetMarkerStyle(25);
+    tMarker->SetMarkerColor(1);
+    tMarker->DrawMarker(tStartX-0.05, tStartY-(iTex+5)*tIncrementY);
+  }
+  else assert(0);
+
+  //--------------------------------------------------------
+  double tStartXChi2 = 0.50;
+  double tStartYChi2 = 1.2;
+  if((aAnType==kLamK0 && aCentType==k1030) || aCentType==k3050) tStartXChi2 = 4.5;
+  DrawChi2PerNDF(tStartXChi2, tStartYChi2, aPad, aFitInfoVec, bInclude10Res, bInclude3Res);
+  //--------------------------------------------------------
+
   if(bSaveImage)
   {
-    TString tSaveLocationBase = "/home/jesse/Analysis/Presentations/GroupMeetings/20171102/Figures/";
+    TString tSaveLocationBase = "/home/jesse/Analysis/Presentations/AliFemto/20171108/Figures/";
     TString tSaveLocationFull_RadiusvsLambda;
 
     tSaveLocationFull_RadiusvsLambda = tSaveLocationBase + TString::Format("%s/RadiusvsLambda%s", cAnalysisBaseTags[aAnType], cCentralityTags[aCentType]);
@@ -601,9 +759,14 @@ int main(int argc, char **argv)
   Color_t tColor2 = kBlue;
   Color_t tColor3 = kRed;
   Color_t tColor4 = kGreen+2;
+  Color_t tColor5 = kCyan;
+  Color_t tColor6 = kYellow+2;
 
-  int tMarkerStyleA = 20;
-  int tMarkerStyleB = 24;
+  int tMarkerStyleA1 = 20;
+  int tMarkerStyleA2 = 22;
+
+  int tMarkerStyleB1 = 24;
+  int tMarkerStyleB2 = 26;
 
   //---------------------------------------------------------------------------
   //---------------------------- LamKchP --------------------------------------
@@ -622,7 +785,11 @@ int main(int argc, char **argv)
                                       -1.51, 0.37,
                                        0.65, 0.40,
                                        1.13, 0.74,
-                                       tColor1, tMarkerStyleA);
+
+                                       424.2,
+                                       336,
+
+                                       tColor1, tMarkerStyleA1);
 
   FitInfo tFitInfo2a_LamKchP = FitInfo(TString("FreeRadii_FixedD0_10Res"), 
                                        0.5*(1.33+1.32), 0.5*(0.40+0.40),
@@ -636,9 +803,50 @@ int main(int argc, char **argv)
                                       -1.08, 0.14,
                                        0.59, 0.30,
                                        0.00, 0.00,
-                                       tColor2, tMarkerStyleA);
 
-  FitInfo tFitInfo3a_LamKchP = FitInfo(TString("FixedRadii_FreeD0_10Res"), 
+                                       425.9,
+                                       337,
+
+                                       tColor1, tMarkerStyleA2);
+
+
+  FitInfo tFitInfo3a_LamKchP = FitInfo(TString("FixedLambda_FreeD0_10Res"), 
+                                       0.5*(1.00+1.00), 0.5*(0.00+0.00),
+                                       0.5*(1.00+1.00), 0.5*(0.00+0.00),
+                                       0.5*(1.00+1.00), 0.5*(0.00+0.00),
+
+                                       5.09, 0.54,
+                                       4.57, 0.48,
+                                       3.55, 0.35,
+
+                                      -1.49, 0.24,
+                                       0.66, 0.38,
+                                       1.10, 0.59,
+
+                                       428.3,
+                                       342,
+
+                                       tColor2, tMarkerStyleA1);
+
+  FitInfo tFitInfo4a_LamKchP = FitInfo(TString("FixedLambda_FixedD0_10Res"), 
+                                       0.5*(1.00+1.00), 0.5*(0.00+0.00),
+                                       0.5*(1.00+1.00), 0.5*(0.00+0.00),
+                                       0.5*(1.00+1.00), 0.5*(0.00+0.00),
+
+                                       4.67, 0.43,
+                                       4.17, 0.37,
+                                       3.22, 0.26,
+
+                                      -1.18, 0.13,
+                                       0.60, 0.30,
+                                       0.00, 0.00,
+
+                                       431.3,
+                                       343,
+
+                                       tColor2, tMarkerStyleA2);
+
+  FitInfo tFitInfo5a_LamKchP = FitInfo(TString("FixedRadii_FreeD0_10Res"), 
                                        0.5*(0.84+0.83), 0.5*(0.27+0.27),
                                        0.5*(0.96+0.81), 0.5*(0.31+0.26),
                                        0.5*(0.81+0.79), 0.5*(0.27+0.27),
@@ -650,9 +858,13 @@ int main(int argc, char **argv)
                                       -1.02, 0.36,
                                        0.08, 0.06,
                                        0.92, 0.38,
-                                       tColor3, tMarkerStyleA);
 
-  FitInfo tFitInfo4a_LamKchP = FitInfo(TString("FixedRadii_FixedD0_10Res"), 
+                                       432.6,
+                                       339,
+
+                                       tColor3, tMarkerStyleA1);
+
+  FitInfo tFitInfo6a_LamKchP = FitInfo(TString("FixedRadii_FixedD0_10Res"), 
                                        0.5*(1.03+1.03), 0.5*(0.32+0.32),
                                        0.5*(1.18+1.00), 0.5*(0.36+0.30),
                                        0.5*(1.05+1.02), 0.5*(0.32+0.32),
@@ -664,7 +876,11 @@ int main(int argc, char **argv)
                                       -0.76, 0.23,
                                        0.12, 0.07,
                                        0.00, 0.00,
-                                       tColor4, tMarkerStyleA);
+
+                                       435.1,
+                                       340,
+
+                                       tColor3, tMarkerStyleA2);
 
 
   //--------------- 3 Residuals ----------
@@ -680,7 +896,11 @@ int main(int argc, char **argv)
                                       -1.24, 0.32,
                                        0.50, 0.35,
                                        1.11, 0.51,
-                                       tColor1, tMarkerStyleB);
+
+                                       427.2,
+                                       336,
+
+                                       tColor1, tMarkerStyleB1);
 
   FitInfo tFitInfo2b_LamKchP = FitInfo(TString("FreeRadii_FixedD0_3Res"), 
                                        0.5*(1.23+1.21), 0.5*(0.37+0.37),
@@ -694,9 +914,50 @@ int main(int argc, char **argv)
                                       -0.85, 0.13,
                                        0.49, 0.24,
                                        0.00, 0.00,
-                                       tColor2, tMarkerStyleB);
 
-  FitInfo tFitInfo3b_LamKchP = FitInfo(TString("FixedRadii_FreeD0_3Res"), 
+                                       430.0,
+                                       337,
+
+                                       tColor1, tMarkerStyleB2);
+
+
+  FitInfo tFitInfo3b_LamKchP = FitInfo(TString("FixedLambda_FreeD0_3Res"), 
+                                       0.5*(1.00+1.00), 0.5*(0.00+0.00),
+                                       0.5*(1.00+1.00), 0.5*(0.00+0.00),
+                                       0.5*(1.00+1.00), 0.5*(0.00+0.00),
+
+                                       4.84, 0.60,
+                                       4.34, 0.53,
+                                       3.37, 0.38,
+
+                                      -1.16, 0.19,
+                                       0.55, 0.33,
+                                       1.02, 0.43,
+
+                                       432.1,
+                                       342,
+
+                                       tColor2, tMarkerStyleB1);
+
+  FitInfo tFitInfo4b_LamKchP = FitInfo(TString("FixedLambda_FixedD0_3Res"), 
+                                       0.5*(1.00+1.00), 0.5*(0.00+0.00),
+                                       0.5*(1.00+1.00), 0.5*(0.00+0.00),
+                                       0.5*(1.00+1.00), 0.5*(0.00+0.00),
+
+                                       4.48, 0.42,
+                                       4.01, 0.36,
+                                       3.09, 0.26,
+
+                                      -0.94, 0.10,
+                                       0.51, 0.23,
+                                       0.00, 0.00,
+
+                                       435.8,
+                                       343,
+
+                                       tColor2, tMarkerStyleB2);
+
+  FitInfo tFitInfo5b_LamKchP = FitInfo(TString("FixedRadii_FreeD0_3Res"), 
                                        0.5*(0.83+0.82), 0.5*(0.27+0.27),
                                        0.5*(0.96+0.80), 0.5*(0.31+0.26),
                                        0.5*(0.82+0.80), 0.5*(0.28+0.28),
@@ -708,9 +969,13 @@ int main(int argc, char **argv)
                                       -0.90, 0.32,
                                        0.12, 0.06,
                                        1.06, 0.27,
-                                       tColor3, tMarkerStyleB);
 
-  FitInfo tFitInfo4b_LamKchP = FitInfo(TString("FixedRadii_FixedD0_3Res"), 
+                                       432.6,
+                                       339,
+
+                                       tColor3, tMarkerStyleB1);
+
+  FitInfo tFitInfo6b_LamKchP = FitInfo(TString("FixedRadii_FixedD0_3Res"), 
                                        0.5*(1.04+1.03), 0.5*(0.29+0.29),
                                        0.5*(1.20+1.00), 0.5*(0.33+0.28),
                                        0.5*(1.08+1.04), 0.5*(0.31+0.30),
@@ -722,7 +987,11 @@ int main(int argc, char **argv)
                                       -0.66, 0.18,
                                        0.15, 0.07,
                                        0.00, 0.00,
-                                       tColor4, tMarkerStyleB);
+
+                                       437.0,
+                                       340,
+
+                                       tColor1, tMarkerStyleB2);
 
 
 
@@ -743,7 +1012,11 @@ int main(int argc, char **argv)
                                        0.45, 0.23,
                                        0.52, 0.21,
                                       -4.81, 2.62,
-                                       tColor1, tMarkerStyleA);
+
+                                       286.2,
+                                       288,
+
+                                       tColor1, tMarkerStyleA1);
 
   FitInfo tFitInfo2a_LamKchM = FitInfo(TString("FreeRadii_FixedD0_10Res"), 
                                        0.5*(1.16+1.17), 0.5*(0.63+0.61),
@@ -757,9 +1030,50 @@ int main(int argc, char **argv)
                                        0.34, 0.17,
                                        0.52, 0.27,
                                        0.00, 0.00,
-                                       tColor2, tMarkerStyleA);
 
-  FitInfo tFitInfo3a_LamKchM = FitInfo(TString("FixedRadii_FreeD0_10Res"), 
+                                       290.1,
+                                       289,
+
+                                       tColor1, tMarkerStyleA2);
+
+
+  FitInfo tFitInfo3a_LamKchM = FitInfo(TString("FixedLambda_FreeD0_10Res"), 
+                                       0.5*(1.00+1.00), 0.5*(0.00+0.00),
+                                       0.5*(1.00+1.00), 0.5*(0.00+0.00),
+                                       0.5*(1.00+1.00), 0.5*(0.00+0.00),
+
+                                       5.15, 0.26,
+                                       4.44, 0.28,
+                                       3.22, 0.31,
+
+                                       0.54, 0.18,
+                                       0.69, 0.15,
+                                      -3.31, 1.41,
+
+                                       293.4,
+                                       294,
+
+                                       tColor2, tMarkerStyleA1);
+
+  FitInfo tFitInfo4a_LamKchM = FitInfo(TString("FixedLambda_FixedD0_10Res"), 
+                                       0.5*(1.00+1.00), 0.5*(0.00+0.00),
+                                       0.5*(1.00+1.00), 0.5*(0.00+0.00),
+                                       0.5*(1.00+1.00), 0.5*(0.00+0.00),
+
+                                       4.52, 0.36,
+                                       3.89, 0.34,
+                                       2.77, 0.32,
+
+                                       0.40, 0.17,
+                                       0.60, 0.15,
+                                       0.00, 0.00,
+
+                                       296.2,
+                                       295,
+
+                                       tColor2, tMarkerStyleA2);
+
+  FitInfo tFitInfo5a_LamKchM = FitInfo(TString("FixedRadii_FreeD0_10Res"), 
                                        0.5*(0.58+0.60), 0.5*(0.27+0.27),
                                        0.5*(0.58+0.72), 0.5*(0.26+0.32),
                                        0.5*(0.63+0.56), 0.5*(0.34+0.24),
@@ -771,9 +1085,13 @@ int main(int argc, char **argv)
                                        0.23, 0.20,
                                        0.64, 0.51,
                                        1.81, 4.68,
-                                       tColor3, tMarkerStyleA);
 
-  FitInfo tFitInfo4a_LamKchM = FitInfo(TString("FixedRadii_FixedD0_10Res"), 
+                                       297.3,
+                                       291,
+
+                                       tColor3, tMarkerStyleA1);
+
+  FitInfo tFitInfo6a_LamKchM = FitInfo(TString("FixedRadii_FixedD0_10Res"), 
                                        0.5*(0.55+0.57), 0.5*(0.15+0.15),
                                        0.5*(0.56+0.69), 0.5*(0.15+0.18),
                                        0.5*(0.60+0.54), 0.5*(0.22+0.16),
@@ -785,7 +1103,12 @@ int main(int argc, char **argv)
                                        0.25, 0.15,
                                        0.71, 0.33,
                                        0.00, 0.00,
-                                       tColor4, tMarkerStyleA);
+
+                                       297.2,
+                                       292,
+
+                                       tColor3, tMarkerStyleA2);
+
 
 
   //--------------- 3 Residuals ----------
@@ -801,7 +1124,11 @@ int main(int argc, char **argv)
                                        0.34, 0.21,
                                        0.42, 0.19,
                                       -5.72, 3.39,
-                                       tColor1, tMarkerStyleB);
+
+                                       285.0,
+                                       288,
+
+                                       tColor1, tMarkerStyleB1);
 
   FitInfo tFitInfo2b_LamKchM = FitInfo(TString("FreeRadii_FixedD0_3Res"), 
                                        0.5*(1.20+1.20), 0.5*(0.60+0.58),
@@ -815,9 +1142,50 @@ int main(int argc, char **argv)
                                        0.21, 0.14,
                                        0.39, 0.22,
                                        0.00, 0.00,
-                                       tColor2, tMarkerStyleB);
 
-  FitInfo tFitInfo3b_LamKchM = FitInfo(TString("FixedRadii_FreeD0_3Res"), 
+                                       290.6,
+                                       289,
+
+                                       tColor1, tMarkerStyleB2);
+
+
+  FitInfo tFitInfo3b_LamKchM = FitInfo(TString("FixedLambda_FreeD0_3Res"), 
+                                       0.5*(1.00+1.00), 0.5*(0.00+0.00),
+                                       0.5*(1.00+1.00), 0.5*(0.00+0.00),
+                                       0.5*(1.00+1.00), 0.5*(0.00+0.00),
+
+                                       4.95, 0.33,
+                                       4.27, 0.32,
+                                       3.13, 0.32,
+
+                                       0.40, 0.16,
+                                       0.57, 0.13,
+                                      -3.83, 1.52,
+
+                                       292.8,
+                                       294,
+
+                                       tColor2, tMarkerStyleB1);
+
+  FitInfo tFitInfo4b_LamKchM = FitInfo(TString("FixedLambda_FixedD0_3Res"), 
+                                       0.5*(1.00+1.00), 0.5*(0.00+0.00),
+                                       0.5*(1.00+1.00), 0.5*(0.00+0.00),
+                                       0.5*(1.00+1.00), 0.5*(0.00+0.00),
+
+                                       4.12, 0.44,
+                                       3.56, 0.39,
+                                       2.50, 0.35,
+
+                                       0.25, 0.14,
+                                       0.45, 0.13,
+                                       0.00, 0.00,
+
+                                       297.0,
+                                       295,
+
+                                       tColor2, tMarkerStyleB2);
+
+  FitInfo tFitInfo5b_LamKchM = FitInfo(TString("FixedRadii_FreeD0_3Res"), 
                                        0.5*(0.65+0.67), 0.5*(0.32+0.32),
                                        0.5*(0.65+0.81), 0.5*(0.31+0.38),
                                        0.5*(0.72+0.62), 0.5*(0.44+0.29),
@@ -829,9 +1197,13 @@ int main(int argc, char **argv)
                                        0.12, 0.13,
                                        0.45, 0.36,
                                       -4.68, 4.91,
-                                       tColor3, tMarkerStyleB);
 
-  FitInfo tFitInfo4b_LamKchM = FitInfo(TString("FixedRadii_FixedD0_3Res"), 
+                                       295.3,
+                                       291,
+
+                                       tColor3, tMarkerStyleB1);
+
+  FitInfo tFitInfo6b_LamKchM = FitInfo(TString("FixedRadii_FixedD0_3Res"), 
                                        0.5*(0.78+0.80), 0.5*(0.38+0.38),
                                        0.5*(0.78+0.96), 0.5*(0.37+0.45),
                                        0.5*(0.93+0.74), 0.5*(0.62+0.36),
@@ -843,8 +1215,11 @@ int main(int argc, char **argv)
                                        0.15, 0.10,
                                        0.42, 0.28,
                                        0.00, 0.00,
-                                       tColor4, tMarkerStyleB);
 
+                                       297.2,
+                                       292,
+
+                                       tColor3, tMarkerStyleB2);
 
 
   //---------------------------------------------------------------------------
@@ -864,7 +1239,11 @@ int main(int argc, char **argv)
                                       -0.26, 0.07,
                                        0.17, 0.07,
                                        2.53, 0.68,
-                                       tColor1, tMarkerStyleA);
+
+                                       357.7,
+                                       341,
+
+                                       tColor1, tMarkerStyleA1);
 
   FitInfo tFitInfo2a_LamK0 = FitInfo(TString("FreeRadii_FixedD0_10Res"), 
                                        0.5*(1.50+1.44), 0.5*(0.65+0.16),
@@ -878,9 +1257,50 @@ int main(int argc, char **argv)
                                       -0.12, 0.03,
                                        0.11, 0.10,
                                        0.00, 0.00,
-                                       tColor2, tMarkerStyleA);
 
-  FitInfo tFitInfo3a_LamK0 = FitInfo(TString("FixedRadii_FreeD0_10Res"), 
+                                       354.1,
+                                       337,
+
+                                       tColor1, tMarkerStyleA2);
+
+
+  FitInfo tFitInfo3a_LamK0 = FitInfo(TString("FixedLambda_FreeD0_10Res"), 
+                                       0.5*(1.00+1.00), 0.5*(0.00+0.00),
+                                       0.5*(1.00+1.00), 0.5*(0.00+0.00),
+                                       0.5*(1.00+1.00), 0.5*(0.00+0.00),
+
+                                       3.16, 0.52,
+                                       2.44, 0.42,
+                                       1.79, 0.31,
+
+                                      -0.15, 0.04,
+                                       0.13, 0.05,
+                                       3.50, 1.14,
+
+                                       358.0,
+                                       342,
+
+                                       tColor2, tMarkerStyleA1);
+
+  FitInfo tFitInfo4a_LamK0 = FitInfo(TString("FixedLambda_FixedD0_10Res"), 
+                                       0.5*(1.00+1.00), 0.5*(0.00+0.00),
+                                       0.5*(1.00+1.00), 0.5*(0.00+0.00),
+                                       0.5*(1.00+1.00), 0.5*(0.00+0.00),
+
+                                       3.32, 0.88,
+                                       2.54, 0.65,
+                                       1.84, 0.45,
+
+                                      -0.13, 0.04,
+                                       0.16, 0.12,
+                                       0.00, 0.00,
+
+                                       360.1,
+                                       343,
+
+                                       tColor2, tMarkerStyleA2);
+
+  FitInfo tFitInfo5a_LamK0 = FitInfo(TString("FixedRadii_FreeD0_10Res"), 
                                        0.5*(1.50+1.50), 0.5*(0.83+0.83),
                                        0.5*(1.50+1.50), 0.5*(0.83+0.83),
                                        0.5*(1.50+1.50), 0.5*(0.83+0.83),
@@ -892,9 +1312,13 @@ int main(int argc, char **argv)
                                       -0.11, 0.03,
                                        0.10, 0.01,
                                       -0.73, 2.57,
-                                       tColor3, tMarkerStyleA);
 
-  FitInfo tFitInfo4a_LamK0 = FitInfo(TString("FixedRadii_FixedD0_10Res"), 
+                                       370.1,
+                                       344,
+
+                                       tColor3, tMarkerStyleA1);
+
+  FitInfo tFitInfo6a_LamK0 = FitInfo(TString("FixedRadii_FixedD0_10Res"), 
                                        0.5*(0.99+0.93), 0.5*(0.16+0.16),
                                        0.5*(1.11+1.14), 0.5*(0.20+0.20),
                                        0.5*(1.50+1.40), 0.5*(0.89+0.65),
@@ -906,8 +1330,11 @@ int main(int argc, char **argv)
                                       -0.12, 0.04,
                                        0.16, 0.04,
                                        0.00, 0.00,
-                                       tColor4, tMarkerStyleA);
 
+                                       360.6,
+                                       340,
+
+                                       tColor3, tMarkerStyleA2);
 
   //--------------- 3 Residuals ----------
   FitInfo tFitInfo1b_LamK0 = FitInfo(TString("FreeRadii_FreeD0_3Res"), 
@@ -922,7 +1349,11 @@ int main(int argc, char **argv)
                                       -0.27, 0.06,
                                        0.21, 0.10,
                                        2.66, 0.58,
-                                       tColor1, tMarkerStyleB);
+
+                                       357.1,
+                                       341,
+
+                                       tColor1, tMarkerStyleB1);
 
   FitInfo tFitInfo2b_LamK0 = FitInfo(TString("FreeRadii_FixedD0_3Res"), 
                                        0.5*(1.50+1.50), 0.5*(0.90+0.90),
@@ -936,9 +1367,50 @@ int main(int argc, char **argv)
                                       -0.08, 0.03,
                                        0.15, 0.11,
                                        0.00, 0.00,
-                                       tColor2, tMarkerStyleB);
 
-  FitInfo tFitInfo3b_LamK0 = FitInfo(TString("FixedRadii_FreeD0_3Res"), 
+                                       359.9,
+                                       342,
+
+                                       tColor1, tMarkerStyleB2);
+
+
+  FitInfo tFitInfo3b_LamK0 = FitInfo(TString("FixedLambda_FreeD0_3Res"), 
+                                       0.5*(1.00+1.00), 0.5*(0.00+0.00),
+                                       0.5*(1.00+1.00), 0.5*(0.00+0.00),
+                                       0.5*(1.00+1.00), 0.5*(0.00+0.00),
+
+                                       3.10, 0.55,
+                                       2.36, 0.43,
+                                       1.73, 0.32,
+
+                                      -0.15, 0.03,
+                                       0.15, 0.07,
+                                       3.58, 1.03,
+
+                                       357.4,
+                                       342,
+
+                                       tColor2, tMarkerStyleB1);
+
+  FitInfo tFitInfo4b_LamK0 = FitInfo(TString("FixedLambda_FixedD0_3Res"), 
+                                       0.5*(1.00+1.00), 0.5*(0.00+0.00),
+                                       0.5*(1.00+1.00), 0.5*(0.00+0.00),
+                                       0.5*(1.00+1.00), 0.5*(0.00+0.00),
+
+                                       3.25, 0.83,
+                                       2.45, 0.60,
+                                       1.76, 0.42,
+
+                                      -0.12, 0.04,
+                                       0.19, 0.15,
+                                       0.00, 0.00,
+
+                                       360.3,
+                                       343,
+
+                                       tColor2, tMarkerStyleB2);
+
+  FitInfo tFitInfo5b_LamK0 = FitInfo(TString("FixedRadii_FreeD0_3Res"), 
                                        0.5*(0.60+0.60), 0.5*(0.63+0.63),
                                        0.5*(0.60+0.60), 0.5*(0.63+0.63),
                                        0.5*(0.60+0.60), 0.5*(0.63+0.63),
@@ -950,9 +1422,13 @@ int main(int argc, char **argv)
                                       -0.35, 0.08,
                                        0.27, 0.05,
                                        2.72, 0.54,
-                                       tColor3, tMarkerStyleB);
 
-  FitInfo tFitInfo4b_LamK0 = FitInfo(TString("FixedRadii_FixedD0_3Res"), 
+                                       367.9,
+                                       344,
+
+                                       tColor3, tMarkerStyleB1);
+
+  FitInfo tFitInfo6b_LamK0 = FitInfo(TString("FixedRadii_FixedD0_3Res"), 
                                        0.5*(1.50+1.50), 0.5*(0.79+0.79),
                                        0.5*(1.50+1.50), 0.5*(0.79+0.79),
                                        0.5*(1.50+1.50), 0.5*(0.79+0.79),
@@ -964,8 +1440,11 @@ int main(int argc, char **argv)
                                       -0.10, 0.03,
                                        0.14, 0.02,
                                        0.00, 0.00,
-                                       tColor4, tMarkerStyleB);
 
+                                       372.0,
+                                       345,
+
+                                       tColor3, tMarkerStyleB2);
 
 //---------------------------------------------------------------------------------------------------------------------------------
 //*********************************************************************************************************************************
@@ -978,8 +1457,8 @@ int main(int argc, char **argv)
   bool bSaveFigures = false;
 
 //-------------------------------------------------------------------------------
-  vector<FitInfo> tFitInfoVec_LamKchP{tFitInfo1a_LamKchP, tFitInfo2a_LamKchP, tFitInfo3a_LamKchP, tFitInfo4a_LamKchP,
-                                      tFitInfo1b_LamKchP, tFitInfo2b_LamKchP, tFitInfo3b_LamKchP, tFitInfo4b_LamKchP};
+  vector<FitInfo> tFitInfoVec_LamKchP{tFitInfo1a_LamKchP, tFitInfo2a_LamKchP, tFitInfo3a_LamKchP, tFitInfo4a_LamKchP, tFitInfo5a_LamKchP, tFitInfo6a_LamKchP,
+                                      tFitInfo1b_LamKchP, tFitInfo2b_LamKchP, tFitInfo3b_LamKchP, tFitInfo4b_LamKchP, tFitInfo5b_LamKchP, tFitInfo6b_LamKchP};
 
   TCanvas* tCanReF0vsImF0_LamKchP = new TCanvas("tCanReF0vsImF0_LamKchP", "tCanReF0vsImF0_LamKchP");
   double aMinX_LamKchP = -2.;
@@ -998,8 +1477,8 @@ int main(int argc, char **argv)
 
 //-------------------------------------------------------------------------------
 
-  vector<FitInfo> tFitInfoVec_LamKchM{tFitInfo1a_LamKchM, tFitInfo2a_LamKchM, tFitInfo3a_LamKchM, tFitInfo4a_LamKchM,
-                                      tFitInfo1b_LamKchM, tFitInfo2b_LamKchM, tFitInfo3b_LamKchM, tFitInfo4b_LamKchM};
+  vector<FitInfo> tFitInfoVec_LamKchM{tFitInfo1a_LamKchM, tFitInfo2a_LamKchM, tFitInfo3a_LamKchM, tFitInfo4a_LamKchM, tFitInfo5a_LamKchM, tFitInfo6a_LamKchM,
+                                      tFitInfo1b_LamKchM, tFitInfo2b_LamKchM, tFitInfo3b_LamKchM, tFitInfo4b_LamKchM, tFitInfo5b_LamKchM, tFitInfo6b_LamKchM};
 
   TCanvas* tCanReF0vsImF0_LamKchM = new TCanvas("tCanReF0vsImF0_LamKchM", "tCanReF0vsImF0_LamKchM");
   double aMinX_LamKchM = -2.;
@@ -1016,8 +1495,8 @@ int main(int argc, char **argv)
 
 //-------------------------------------------------------------------------------
 
-  vector<FitInfo> tFitInfoVec_LamK0{tFitInfo1a_LamK0, tFitInfo2a_LamK0, tFitInfo3a_LamK0, tFitInfo4a_LamK0,
-                                      tFitInfo1b_LamK0, tFitInfo2b_LamK0, tFitInfo3b_LamK0, tFitInfo4b_LamK0};
+  vector<FitInfo> tFitInfoVec_LamK0{tFitInfo1a_LamK0, tFitInfo2a_LamK0, tFitInfo3a_LamK0, tFitInfo4a_LamK0, tFitInfo5a_LamK0, tFitInfo6a_LamK0,
+                                    tFitInfo1b_LamK0, tFitInfo2b_LamK0, tFitInfo3b_LamK0, tFitInfo4b_LamK0, tFitInfo5b_LamK0, tFitInfo6b_LamK0};
 
   TCanvas* tCanReF0vsImF0_LamK0 = new TCanvas("tCanReF0vsImF0_LamK0", "tCanReF0vsImF0_LamK0");
   double aMinX_LamK0 = -2.;

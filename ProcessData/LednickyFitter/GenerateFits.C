@@ -38,6 +38,9 @@ int main(int argc, char **argv)
 
   bool FixRadii = false;
   bool FixD0 = false;
+  bool FixAllScattParams = false;
+  bool FixAllLambdaTo1 = false;
+  if(FixAllLambdaTo1) tAllShareSingleLambdaParam = true;
 
   double aLambdaMin=0., aLambdaMax=1.;
   if(UnboundLambda) aLambdaMax=0.;
@@ -54,7 +57,7 @@ int main(int argc, char **argv)
   TString tFileLocationBase = TString::Format("%sResults_%s_%s",tDirectoryBase.Data(),tGeneralAnTypeName.Data(),tResultsDate.Data());
   TString tFileLocationBaseMC = TString::Format("%sResults_%sMC_%s",tDirectoryBase.Data(),tGeneralAnTypeName.Data(),tResultsDate.Data());
 
-  TString tSaveDirectoryBase = TString::Format("/home/jesse/Analysis/Presentations/GroupMeetings/20171102/Figures/%s/", cAnalysisBaseTags[tAnType]);
+  TString tSaveDirectoryBase = TString::Format("/home/jesse/Analysis/Presentations/AliFemto/20171108/Figures/%s/", cAnalysisBaseTags[tAnType]);
 /*
   TString tSaveDirectoryBase = TString::Format("/home/jesse/Analysis/Presentations/AliFemto/20170913/Figures/%s/", cAnalysisBaseTags[tAnType]);
     if(UseAll10Residuals) tSaveDirectoryBase += TString("10Residuals/");
@@ -71,11 +74,15 @@ int main(int argc, char **argv)
   TString tSaveNameModifier = "";
   if(ApplyMomResCorrection) tSaveNameModifier += TString("_MomResCrctn");
   if(ApplyNonFlatBackgroundCorrection) tSaveNameModifier += TString("_NonFlatBgdCrctn");
-  if(tAllShareSingleLambdaParam) tSaveNameModifier += TString("_SingleLamParam");
+
+  if(tAllShareSingleLambdaParam && !FixAllLambdaTo1) tSaveNameModifier += TString("_SingleLamParam");
+  if(FixAllLambdaTo1) tSaveNameModifier += TString("_FixAllLambdaTo1");
+
   if(IncludeResiduals && UseAll10Residuals) tSaveNameModifier += TString("_10ResidualsIncluded");
   if(IncludeResiduals && !UseAll10Residuals) tSaveNameModifier += TString("_3ResidualsIncluded");
   if(FixRadii) tSaveNameModifier += TString("_FixedRadii");
   if(FixD0) tSaveNameModifier += TString("_FixedD0");
+  if(FixAllScattParams) tSaveNameModifier += TString("_FixedScattParams");
 
   if(UseCoulombOnlyInterpCfsForXiKResiduals && UseCoulombOnlyInterpCfsForChargedResiduals) tSaveNameModifier += TString("_UsingCoulombOnlyInterpCfsForAll");
   else if(UseCoulombOnlyInterpCfsForChargedResiduals) tSaveNameModifier += TString("_UsingCoulombOnlyInterpCfs");
@@ -107,6 +114,15 @@ int main(int argc, char **argv)
     else tLamKchP->SetRadiusLimits({{3.5, 3.5}, {3.25, 3.25}, {2.5, 2.5}});
   }
   if(FixD0) tLamKchP->SetScattParamStartValue(0., kd0, true);
+  if(FixAllScattParams)
+  {
+    if     (tAnType==kLamKchP || tAnType==kALamKchM) tLamKchP->SetScattParamStartValues(-1.02, 0.08, 0.92, true)/*tLamKchP->SetScattParamStartValues(-0.76, 0.12, 0., true)*/;
+    else if(tAnType==kLamKchM || tAnType==kALamKchP) tLamKchP->SetScattParamStartValues(0.23, 0.64, 1.81, true)/*tLamKchP->SetScattParamStartValues(0.25, 0.71, 0., true)*/;
+    else if(tAnType==kLamK0 || tAnType==kALamK0)     tLamKchP->SetScattParamStartValues(-0.11, 0.10, -0.73, true)/*tLamKchP->SetScattParamStartValues(-0.12, 0.16, 0., true)*/;
+    else assert(0);
+
+  }
+  if(FixAllLambdaTo1) tLamKchP->SetLambdaParamStartValue(1.0, false, kMB, true);
 
   tLamKchP->DoFit();
   TCanvas* tKStarwFitsCan = tLamKchP->DrawKStarCfswFits(ApplyMomResCorrection,ApplyNonFlatBackgroundCorrection,tNonFlatBgdFitType,SaveImages);

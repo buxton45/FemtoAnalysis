@@ -1708,11 +1708,11 @@ void FitGenerator::SetScattParamStartValue(double aVal, ParameterType aParamType
   cout << "\tDouble Check: tIndex in fScattFitParams = " << tIndex << endl << endl;
 }
 //________________________________________________________________________________________________________________
-void FitGenerator::SetScattParamStartValues(double aReF0, double aImF0, double aD0)
+void FitGenerator::SetScattParamStartValues(double aReF0, double aImF0, double aD0, bool aAreFixed)
 {
-  SetScattParamStartValue(aReF0,kRef0);
-  SetScattParamStartValue(aImF0,kImf0);
-  SetScattParamStartValue(aD0,kd0);
+  SetScattParamStartValue(aReF0,kRef0,aAreFixed);
+  SetScattParamStartValue(aImF0,kImf0,aAreFixed);
+  SetScattParamStartValue(aD0,kd0,aAreFixed);
 }
 
 //________________________________________________________________________________________________________________
@@ -1763,10 +1763,11 @@ int FitGenerator::GetLambdaBinNumber(bool tConjPair, CentralityType aCentType)
 }
 
 //________________________________________________________________________________________________________________
-void FitGenerator::SetLambdaParamStartValue(double aLam, bool tConjPair, CentralityType aCentType)
+void FitGenerator::SetLambdaParamStartValue(double aLam, bool tConjPair, CentralityType aCentType, bool aIsFixed)
 {
   int tBinNumber = GetLambdaBinNumber(tConjPair, aCentType);
   fLambdaFitParams[tBinNumber].SetStartValue(aLam);
+  fLambdaFitParams[tBinNumber].SetFixed(aIsFixed);
 }
 
 
