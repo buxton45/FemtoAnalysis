@@ -120,7 +120,8 @@ int main(int argc, char **argv)
   //the program ends and closes everything
 //-----------------------------------------------------------------------------
 
-  TString tFileName = "/home/jesse/Analysis/ReducedTherminator2Events/test/testCorrelationFunctions.root";
+  TString tFileName = "/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b2/CorrelationFunctions.root";
+//  TString tFileName = "/home/jesse/Analysis/ReducedTherminator2Events/test/testCorrelationFunctions.root";
 
 //  AnalysisType tAnType = kLamKchP;
 //  PrintAllmT(tAnType, tFileName);

@@ -249,39 +249,39 @@ const double cAnalysisLambdaFactorsOLD[85] = {
 };
 
 const double cmTFactorsFromTherminator[85] = {
-/*kLamK0=*/1.510, /*kALamK0=*/1.503,
-/*kLamKchP=*/1.412, /*kALamKchM=*/1.389, /*kLamKchM=*/1.411, /*kALamKchP=*/1.388,
+/*kLamK0=*/1.512, /*kALamK0=*/1.502,
+/*kLamKchP=*/1.404, /*kALamKchM=*/1.388, /*kLamKchM=*/1.404, /*kALamKchP=*/1.388,
 /*kXiKchP=*/1.000, /*kAXiKchM=*/1.000, /*kXiKchM=*/1.000, /*kAXiKchP=*/1.000,
 /*kXiK0=*/1.000, /*kAXiK0=*/1.000,
 /*kLamLam=*/1.000, /*kALamALam=*/1.000, /*kLamALam=*/1.000,
 /*kLamPiP=*/1.000, /*kALamPiM=*/1.000, /*kLamPiM=*/1.000, /*kALamPiP=*/1.000,
 
 //----- Residual Types -----
-/*kResSig0KchP=*/1.448, /*kResASig0KchM=*/1.443, /*kResSig0KchM=*/1.448, /*kResASig0KchP=*/1.449,
-/*kResXi0KchP=*/1.531, /*kResAXi0KchM=*/1.511, /*kResXi0KchM=*/1.537, /*kResAXi0KchP=*/1.512,
-/*kResXiCKchP=*/1.528, /*kResAXiCKchM=*/1.530, /*kResXiCKchM=*/1.541, /*kResAXiCKchP=*/1.538,
-/*kResOmegaKchP=*/1.782, /*kResAOmegaKchM=*/1.744, /*kResOmegaKchM=*/1.800, /*kResAOmegaKchP=*/1.741,
-/*kResSigStPKchP=*/1.586, /*kResASigStMKchM=*/1.581, /*kResSigStPKchM=*/1.587, /*kResASigStMKchP=*/1.576,
-/*kResSigStMKchP=*/1.596, /*kResASigStPKchM=*/1.580, /*kResSigStMKchM=*/1.586, /*kResASigStPKchP=*/1.576,
-/*kResSigSt0KchP=*/1.559, /*kResASigSt0KchM=*/1.557, /*kResSigSt0KchM=*/1.567, /*kResASigSt0KchP=*/1.561,
+/*kResSig0KchP=*/1.453, /*kResASig0KchM=*/1.438, /*kResSig0KchM=*/1.453, /*kResASig0KchP=*/1.438,
+/*kResXi0KchP=*/1.536, /*kResAXi0KchM=*/1.520, /*kResXi0KchM=*/1.536, /*kResAXi0KchP=*/1.521,
+/*kResXiCKchP=*/1.540, /*kResAXiCKchM=*/1.525, /*kResXiCKchM=*/1.540, /*kResAXiCKchP=*/1.525,
+/*kResOmegaKchP=*/1.768, /*kResAOmegaKchM=*/1.755, /*kResOmegaKchM=*/1.768, /*kResAOmegaKchP=*/1.759,
+/*kResSigStPKchP=*/1.585, /*kResASigStMKchM=*/1.570, /*kResSigStPKchM=*/1.585, /*kResASigStMKchP=*/1.570,
+/*kResSigStMKchP=*/1.589, /*kResASigStPKchM=*/1.573, /*kResSigStMKchM=*/1.589, /*kResASigStPKchP=*/1.575,
+/*kResSigSt0KchP=*/1.586, /*kResASigSt0KchM=*/1.570, /*kResSigSt0KchM=*/1.585, /*kResASigSt0KchP=*/1.571,
 
-/*kResLamKSt0=*/1.676, /*kResALamAKSt0=*/1.649, /*kResLamAKSt0=*/1.667, /*kResALamKSt0=*/1.654,
-/*kResSig0KSt0=*/1.711, /*kResASig0AKSt0=*/1.699, /*kResSig0AKSt0=*/1.726, /*kResASig0KSt0=*/1.709,
-/*kResXi0KSt0=*/1.773, /*kResAXi0AKSt0=*/1.774, /*kResXi0AKSt0=*/1.792, /*kResAXi0KSt0=*/1.773,
-/*kResXiCKSt0=*/1.788, /*kResAXiCAKSt0=*/1.785, /*kResXiCAKSt0=*/1.784, /*kResAXiCKSt0=*/1.798,
+/*kResLamKSt0=*/1.668, /*kResALamAKSt0=*/1.653, /*kResLamAKSt0=*/1.669, /*kResALamKSt0=*/1.653,
+/*kResSig0KSt0=*/1.714, /*kResASig0AKSt0=*/1.698, /*kResSig0AKSt0=*/1.715, /*kResASig0KSt0=*/1.698,
+/*kResXi0KSt0=*/1.788, /*kResAXi0AKSt0=*/1.773, /*kResXi0AKSt0=*/1.788, /*kResAXi0KSt0=*/1.772,
+/*kResXiCKSt0=*/1.792, /*kResAXiCAKSt0=*/1.776, /*kResXiCAKSt0=*/1.792, /*kResAXiCKSt0=*/1.777,
 
-/*kResSig0K0=*/1.568, /*kResASig0K0=*/1.563,
-/*kResXi0K0=*/1.642, /*kResAXi0K0=*/1.626,
-/*kResXiCK0=*/1.649, /*kResAXiCK0=*/1.666,
-/*kResOmegaK0=*/1.888, /*kResAOmegaK0=*/1.884,
-/*kResSigStPK0=*/1.679, /*kResASigStMK0=*/1.677,
-/*kResSigStMK0=*/1.694, /*kResASigStPK0=*/1.685,
-/*kResSigSt0K0=*/1.657, /*kResASigSt0K0=*/1.657,
+/*kResSig0K0=*/1.560, /*kResASig0K0=*/1.551,
+/*kResXi0K0=*/1.641, /*kResAXi0K0=*/1.629,
+/*kResXiCK0=*/1.643, /*kResAXiCK0=*/1.636,
+/*kResOmegaK0=*/1.856, /*kResAOmegaK0=*/1.852,
+/*kResSigStPK0=*/1.689, /*kResASigStMK0=*/1.678,
+/*kResSigStMK0=*/1.691, /*kResASigStPK0=*/1.683,
+/*kResSigSt0K0=*/1.688, /*kResASigSt0K0=*/1.678,
 
-/*kResLamKSt0ToLamK0=*/1.766, /*kResALamAKSt0ToALamK0=*/1.758,
-/*kResSig0KSt0ToLamK0=*/1.769, /*kResASig0AKSt0ToALamK0=*/1.786,
-/*kResXi0KSt0ToLamK0=*/1.872, /*kResAXi0AKSt0ToALamK0=*/1.869,
-/*kResXiCKSt0ToLamK0=*/1.886, /*kResAXiCAKSt0ToALamK0=*/1.876
+/*kResLamKSt0ToLamK0=*/1.765, /*kResALamAKSt0ToALamK0=*/1.755,
+/*kResSig0KSt0ToLamK0=*/1.805, /*kResASig0AKSt0ToALamK0=*/1.798,
+/*kResXi0KSt0ToLamK0=*/1.873, /*kResAXi0AKSt0ToALamK0=*/1.867,
+/*kResXiCKSt0ToLamK0=*/1.882, /*kResAXiCAKSt0ToALamK0=*/1.869
 };
 
 
