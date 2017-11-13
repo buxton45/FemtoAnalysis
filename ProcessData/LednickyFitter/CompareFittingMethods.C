@@ -779,8 +779,8 @@ TCanvas* DrawAllRadiusvsLambda(AnalysisType aAnType, CentralityType aCentType=k0
 //---------------------------------------------------------------------------------------------------------------------------------
 TCanvas* CompareRadiusvsLambdaAcrossAnalyses(CentralityType aCentType=k0010, bool aUseWeightedMean=false)
 {
-  TCanvas* tReturnCan = new TCanvas(TString::Format("tCanCompareRadiusvsLambdaAcrossCentralities_%s", cCentralityTags[aCentType]), 
-                                    TString::Format("tCanCompareRadiusvsLambdaAcrossCentralities_%s", cCentralityTags[aCentType]));
+  TCanvas* tReturnCan = new TCanvas(TString::Format("tCanCompareRadiusvsLambdaAcrossAnalyses_%s", cCentralityTags[aCentType]), 
+                                    TString::Format("tCanCompareRadiusvsLambdaAcrossAnalyses_%s", cCentralityTags[aCentType]));
 
 
   tReturnCan->cd();
@@ -862,10 +862,10 @@ TCanvas* CompareRadiusvsLambdaAcrossAnalyses(CentralityType aCentType=k0010, boo
 TCanvas* CompareReF0vsImF0AcrossAnalyses(bool aUseWeightedMean=false)
 {
 /*
-  TCanvas* tReturnCan = new TCanvas(TString::Format("tCanCompareReF0vsImF0AcrossCentralities_%s", cAnalysisBaseTags[aAnType]), 
-                                    TString::Format("tCanCompareReF0vsImF0AcrossCentralities_%s", cAnalysisBaseTags[aAnType]));
+  TCanvas* tReturnCan = new TCanvas(TString::Format("tCanCompareReF0vsImF0AcrossAnalyses_%s", cAnalysisBaseTags[aAnType]), 
+                                    TString::Format("tCanCompareReF0vsImF0AcrossAnalyses_%s", cAnalysisBaseTags[aAnType]));
 */
-  TCanvas* tReturnCan = new TCanvas("tCanCompareReF0vsImF0AcrossCentralities_", "tCanCompareReF0vsImF0AcrossCentralities_");
+  TCanvas* tReturnCan = new TCanvas("tCanCompareReF0vsImF0AcrossAnalyses_", "tCanCompareReF0vsImF0AcrossAnalyses_");
 
   tReturnCan->cd();
   gStyle->SetOptStat(0);
@@ -970,6 +970,7 @@ int main(int argc, char **argv)
   bool bSaveFigures = false;
 
 //-------------------------------------------------------------------------------
+/*
   TCanvas* tCanReF0vsImF0_LamKchP;
   tCanReF0vsImF0_LamKchP = DrawAllReF0vsImF0(kLamKchP, bInclude10Res, bInclude3Res, bSaveFigures, bDrawAverage, bDrawWeightedMean);
 
@@ -1019,19 +1020,18 @@ int main(int argc, char **argv)
     tCanRadiusvsLambda_LamK02 = DrawAllRadiusvsLambda(kLamK0, k1030, bInclude10Res, bInclude3Res, bSaveFigures, bDrawAverage, bDrawWeightedMean);
     tCanRadiusvsLambda_LamK03 = DrawAllRadiusvsLambda(kLamK0, k3050, bInclude10Res, bInclude3Res, bSaveFigures, bDrawAverage, bDrawWeightedMean);
   }
-
+*/
 //-------------------------------------------------------------------------------
 //*******************************************************************************
 //-------------------------------------------------------------------------------
   TCanvas* tCanCompareRadiusvsLambdaAcrossAnalyses = CompareRadiusvsLambdaAcrossAnalyses(k0010, true);
-
   TCanvas* tCanCompareReF0vsImF0AcrossAnalyses = CompareReF0vsImF0AcrossAnalyses(true);
 
 //-------------------------------------------------------------------------------
   theApp->Run(kTRUE); //Run the TApp to pause the code.
   // Select "Exit ROOT" from Canvas "File" menu to exit
   // and execute the next statements.
-
+/*
   delete tCanReF0vsImF0_LamKchP;
   delete tCanRadiusvsLambda_LamKchP1;
   delete tCanRadiusvsLambda_LamKchP2;
@@ -1046,7 +1046,7 @@ int main(int argc, char **argv)
   delete tCanRadiusvsLambda_LamK01;
   delete tCanRadiusvsLambda_LamK02;
   delete tCanRadiusvsLambda_LamK03;
-
+*/
   delete tCanCompareRadiusvsLambdaAcrossAnalyses;
   delete tCanCompareReF0vsImF0AcrossAnalyses;
 
