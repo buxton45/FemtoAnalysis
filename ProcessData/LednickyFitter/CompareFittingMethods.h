@@ -873,17 +873,85 @@ struct FitInfo
 
                                        tColor3, tMarkerStyleB2);
 
+//------------------------------------------------------------------------------------------------
+//              QM 2017 Results, i.e. without residuals
+//------------------------------------------------------------------------------------------------
+  Color_t tColorQM_LamKchP = kRed+1;
+  Color_t tColorQM_LamKchM = kBlue+1;
+  Color_t tColorQM_LamK0 = kBlack;
+
+
+  const FitInfo tFitInfoQM_LamKchP = FitInfo(TString("QM2017"), 
+                                       kLamKchP,
+                                       true, true, true, false, 
+                                       0.5*(0.38+0.37), 0.5*(0.09+0.08),
+                                       0.5*(0.48+0.41), 0.5*(0.13+0.11),
+                                       0.5*(0.64+0.62), 0.5*(0.20+0.19),
+
+                                       4.04, 0.38,
+                                       3.92, 0.45,
+                                       3.72, 0.55,
+
+                                      -0.69, 0.16,
+                                       0.39, 0.14,
+                                       0.64, 0.53,
+
+                                       425.8,
+                                       336,
+
+                                       tColorQM_LamKchP, tMarkerStyleA1);
+
+  const FitInfo tFitInfoQM_LamKchM = FitInfo(TString("QM2017"), 
+                                       kLamKchM,
+                                       true, true, true, false, 
+                                       0.5*(0.45+0.48), 0.5*(0.16+0.17),
+                                       0.5*(0.40+0.49), 0.5*(0.15+0.18),
+                                       0.5*(0.20+0.22), 0.5*(0.08+0.08),
+
+                                       4.79, 0.79,
+                                       4.00, 0.72,
+                                       2.11, 0.52,
+
+                                       0.18, 0.13,
+                                       0.45, 0.18,
+                                      -5.29, 2.94,
+
+                                       284.0,
+                                       288,
+
+                                       tColorQM_LamKchM, tMarkerStyleA1);
+
+  const FitInfo tFitInfoQM_LamK0 = FitInfo(TString("QM2017"), 
+                                       kLamK0,
+                                       true, true, true, false, 
+                                       0.5*(0.40+0.40), 0.5*(0.19+0.19),
+                                       0.5*(0.40+0.40), 0.5*(0.19+0.19),
+                                       0.5*(0.40+0.40), 0.5*(0.19+0.19),
+
+                                       3.02, 0.54,
+                                       2.27, 0.41,
+                                       1.67, 0.30,
+
+                                      -0.16, 0.03,
+                                       0.18, 0.08,
+                                       3.57, 0.95,
+
+                                       357.0,
+                                       341,
+
+                                       tColorQM_LamK0, tMarkerStyleA1);
+
 
 //------------------------------------------------------------------------------------------------
 
   const vector<FitInfo> tFitInfoVec_LamKchP{tFitInfo1a_LamKchP, tFitInfo2a_LamKchP, tFitInfo3a_LamKchP, tFitInfo4a_LamKchP, tFitInfo5a_LamKchP, tFitInfo6a_LamKchP,
-                                      tFitInfo1b_LamKchP, tFitInfo2b_LamKchP, tFitInfo3b_LamKchP, tFitInfo4b_LamKchP, tFitInfo5b_LamKchP, tFitInfo6b_LamKchP};
+                                            tFitInfo1b_LamKchP, tFitInfo2b_LamKchP, tFitInfo3b_LamKchP, tFitInfo4b_LamKchP, tFitInfo5b_LamKchP, tFitInfo6b_LamKchP};
 
   const vector<FitInfo> tFitInfoVec_LamKchM{tFitInfo1a_LamKchM, tFitInfo2a_LamKchM, tFitInfo3a_LamKchM, tFitInfo4a_LamKchM, tFitInfo5a_LamKchM, tFitInfo6a_LamKchM,
-                                      tFitInfo1b_LamKchM, tFitInfo2b_LamKchM, tFitInfo3b_LamKchM, tFitInfo4b_LamKchM, tFitInfo5b_LamKchM, tFitInfo6b_LamKchM};
+                                            tFitInfo1b_LamKchM, tFitInfo2b_LamKchM, tFitInfo3b_LamKchM, tFitInfo4b_LamKchM, tFitInfo5b_LamKchM, tFitInfo6b_LamKchM};
 
   const vector<FitInfo> tFitInfoVec_LamK0{tFitInfo1a_LamK0, tFitInfo2a_LamK0, tFitInfo3a_LamK0, tFitInfo4a_LamK0, tFitInfo5a_LamK0, tFitInfo6a_LamK0,
-                                    tFitInfo1b_LamK0, tFitInfo2b_LamK0, tFitInfo3b_LamK0, tFitInfo4b_LamK0, tFitInfo5b_LamK0, tFitInfo6b_LamK0};
+                                          tFitInfo1b_LamK0, tFitInfo2b_LamK0, tFitInfo3b_LamK0, tFitInfo4b_LamK0, tFitInfo5b_LamK0, tFitInfo6b_LamK0};
 
 
 
