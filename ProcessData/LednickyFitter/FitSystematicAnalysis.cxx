@@ -29,7 +29,10 @@ FitSystematicAnalysis::FitSystematicAnalysis(TString aFileLocationBase, TString 
   fAllShareSingleLambdaParam(aAllShareSingleLambdaParam),
   fApplyNonFlatBackgroundCorrection(false),
   fApplyMomResCorrection(false),
-  fIncludeResiduals(false),
+  fIncludeResidualCorrelations(false),
+  fUseCoulombOnlyInterpCfsForChargedResiduals(false),
+  fUseCoulombOnlyInterpCfsForXiKResiduals(false),
+
   fSaveDirectory(""),
 
   fDirNameModifierBase1(aDirNameModifierBase1),
@@ -55,7 +58,10 @@ FitSystematicAnalysis::FitSystematicAnalysis(TString aFileLocationBase, TString 
   fAllShareSingleLambdaParam(aAllShareSingleLambdaParam),
   fApplyNonFlatBackgroundCorrection(false),
   fApplyMomResCorrection(false),
-  fIncludeResiduals(false),
+  fIncludeResidualCorrelations(false),
+  fUseCoulombOnlyInterpCfsForChargedResiduals(false),
+  fUseCoulombOnlyInterpCfsForXiKResiduals(false),
+
   fSaveDirectory(""),
 
   fDirNameModifierBase1(aDirNameModifierBase1),
@@ -82,7 +88,10 @@ FitSystematicAnalysis::FitSystematicAnalysis(TString aFileLocationBase, TString 
   fAllShareSingleLambdaParam(aAllShareSingleLambdaParam),
   fApplyNonFlatBackgroundCorrection(false),
   fApplyMomResCorrection(false),
-  fIncludeResiduals(false),
+  fIncludeResidualCorrelations(false),
+  fUseCoulombOnlyInterpCfsForChargedResiduals(false),
+  fUseCoulombOnlyInterpCfsForXiKResiduals(false),
+
   fSaveDirectory(""),
 
   fDirNameModifierBase1(0),
@@ -198,7 +207,14 @@ void FitSystematicAnalysis::RunAllFits(bool aSave, ostream &aOut)
     tFitGenerator->SetApplyNonFlatBackgroundCorrection(fApplyNonFlatBackgroundCorrection);
     tFitGenerator->SetNonFlatBgdFitType(kLinear);
     tFitGenerator->SetApplyMomResCorrection(fApplyMomResCorrection);
-    tFitGenerator->SetIncludeResidualCorrelations(fIncludeResiduals);
+    if(fIncludeResidualCorrelations)
+    {
+      if(fAnalysisType==kLamK0 || fAnalysisType==kALamK0) tFitGenerator->SetIncludeResidualCorrelations(fIncludeResidualCorrelations, 0.60, 1.50);
+      else tFitGenerator->SetIncludeResidualCorrelations(fIncludeResidualCorrelations, 0., 0.);
+    }
+    tFitGenerator->SetUseCoulombOnlyInterpCfsForChargedResiduals(fUseCoulombOnlyInterpCfsForChargedResiduals);
+    tFitGenerator->SetUseCoulombOnlyInterpCfsForXiKResiduals(fUseCoulombOnlyInterpCfsForXiKResiduals);
+    
 
     tFitGenerator->DoFit();
 
@@ -220,6 +236,11 @@ void FitSystematicAnalysis::RunAllFits(bool aSave, ostream &aOut)
       tSaveName += tDirNameModifier;
       if(fApplyMomResCorrection) tSaveName += TString("_MomResCrctn");
       if(fApplyNonFlatBackgroundCorrection) tSaveName += TString("_NonFlatBgdCrctn");
+
+      if(fIncludeResidualCorrelations) tSaveName += TString("_ResidualsIncluded");
+      if(fUseCoulombOnlyInterpCfsForXiKResiduals && fUseCoulombOnlyInterpCfsForChargedResiduals) tSaveName += TString("_UsingCoulombOnlyInterpCfsForAll");
+      else if(fUseCoulombOnlyInterpCfsForChargedResiduals) tSaveName += TString("_UsingCoulombOnlyInterpCfs");
+
       tSaveName += TString(".pdf");
       tKStarwFitsCan->SaveAs(tSaveName);
     }
@@ -246,7 +267,13 @@ void FitSystematicAnalysis::RunVaryFitRange(bool aSave, ostream &aOut, double aM
     tFitGenerator->SetApplyNonFlatBackgroundCorrection(fApplyNonFlatBackgroundCorrection);
     tFitGenerator->SetNonFlatBgdFitType(kLinear);
     tFitGenerator->SetApplyMomResCorrection(fApplyMomResCorrection);
-    tFitGenerator->SetIncludeResidualCorrelations(fIncludeResiduals);
+    if(fIncludeResidualCorrelations)
+    {
+      if(fAnalysisType==kLamK0 || fAnalysisType==kALamK0) tFitGenerator->SetIncludeResidualCorrelations(fIncludeResidualCorrelations, 0.60, 1.50);
+      else tFitGenerator->SetIncludeResidualCorrelations(fIncludeResidualCorrelations, 0., 0.);
+    }
+    tFitGenerator->SetUseCoulombOnlyInterpCfsForChargedResiduals(fUseCoulombOnlyInterpCfsForChargedResiduals);
+    tFitGenerator->SetUseCoulombOnlyInterpCfsForXiKResiduals(fUseCoulombOnlyInterpCfsForXiKResiduals);
 
     tFitGenerator->DoFit(tRangeVec[i]);
 
@@ -263,6 +290,11 @@ void FitSystematicAnalysis::RunVaryFitRange(bool aSave, ostream &aOut, double aM
       tSaveName += TString::Format("_MaxFitKStar_%0.4f",tRangeVec[i]);
       if(fApplyMomResCorrection) tSaveName += TString("_MomResCrctn");
       if(fApplyNonFlatBackgroundCorrection) tSaveName += TString("_NonFlatBgdCrctn");
+
+      if(fIncludeResidualCorrelations) tSaveName += TString("_ResidualsIncluded");
+      if(fUseCoulombOnlyInterpCfsForXiKResiduals && fUseCoulombOnlyInterpCfsForChargedResiduals) tSaveName += TString("_UsingCoulombOnlyInterpCfsForAll");
+      else if(fUseCoulombOnlyInterpCfsForChargedResiduals) tSaveName += TString("_UsingCoulombOnlyInterpCfs");
+
       tSaveName += TString(".pdf");
       tKStarwFitsCan->SaveAs(tSaveName);
     }
@@ -287,7 +319,13 @@ void FitSystematicAnalysis::RunVaryNonFlatBackgroundFit(bool aSave, ostream &aOu
     tFitGenerator->SetApplyNonFlatBackgroundCorrection(fApplyNonFlatBackgroundCorrection);
     tFitGenerator->SetNonFlatBgdFitType(static_cast<NonFlatBgdFitType>(tFitTypeVec[i]));
     tFitGenerator->SetApplyMomResCorrection(fApplyMomResCorrection);
-    tFitGenerator->SetIncludeResidualCorrelations(fIncludeResiduals);
+    if(fIncludeResidualCorrelations)
+    {
+      if(fAnalysisType==kLamK0 || fAnalysisType==kALamK0) tFitGenerator->SetIncludeResidualCorrelations(fIncludeResidualCorrelations, 0.60, 1.50);
+      else tFitGenerator->SetIncludeResidualCorrelations(fIncludeResidualCorrelations, 0., 0.);
+    }
+    tFitGenerator->SetUseCoulombOnlyInterpCfsForChargedResiduals(fUseCoulombOnlyInterpCfsForChargedResiduals);
+    tFitGenerator->SetUseCoulombOnlyInterpCfsForXiKResiduals(fUseCoulombOnlyInterpCfsForXiKResiduals);
 
     tFitGenerator->DoFit();
 
@@ -304,6 +342,11 @@ void FitSystematicAnalysis::RunVaryNonFlatBackgroundFit(bool aSave, ostream &aOu
       tSaveName += TString::Format("_FitType_%d",tFitTypeVec[i]);
       if(fApplyMomResCorrection) tSaveName += TString("_MomResCrctn");
       if(fApplyNonFlatBackgroundCorrection) tSaveName += TString("_NonFlatBgdCrctn");
+
+      if(fIncludeResidualCorrelations) tSaveName += TString("_ResidualsIncluded");
+      if(fUseCoulombOnlyInterpCfsForXiKResiduals && fUseCoulombOnlyInterpCfsForChargedResiduals) tSaveName += TString("_UsingCoulombOnlyInterpCfsForAll");
+      else if(fUseCoulombOnlyInterpCfsForChargedResiduals) tSaveName += TString("_UsingCoulombOnlyInterpCfs");
+
       tSaveName += TString(".pdf");
       tKStarwFitsCan->SaveAs(tSaveName);
     }

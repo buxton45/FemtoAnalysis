@@ -19,6 +19,10 @@ int main(int argc, char **argv)
   bool ApplyMomResCorrection = true;
   bool ApplyNonFlatBackgroundCorrection = true;
 
+  bool IncludeResiduals = false;
+  bool UseCoulombOnlyInterpCfsForChargedResiduals = true;
+  bool UseCoulombOnlyInterpCfsForXiKResiduals = false;
+
   bool bWriteToFile = true;
   bool bSaveImages = true;
 
@@ -36,6 +40,14 @@ int main(int argc, char **argv)
   TString tOutputFileName = tDirectoryBase + TString("CfFitValues_VaryMaxFitKStar_") + TString(cAnalysisBaseTags[tAnType]) + TString(cCentralityTags[tCentralityType]);
   if(ApplyMomResCorrection) tOutputFileName += TString("_MomResCrctn");
   if(ApplyNonFlatBackgroundCorrection) tOutputFileName += TString("_NonFlatBgdCrctn");
+
+  if(IncludeResiduals) 
+  {
+    tOutputFileName += TString("_ResidualsIncluded");
+    if(UseCoulombOnlyInterpCfsForXiKResiduals && UseCoulombOnlyInterpCfsForChargedResiduals) tOutputFileName += TString("_UsingCoulombOnlyInterpCfsForAll");
+    else if(UseCoulombOnlyInterpCfsForChargedResiduals) tOutputFileName += TString("_UsingCoulombOnlyInterpCfs");
+  }
+
   tOutputFileName += TString(".txt");
   std::ofstream tOutputFile;
   if(bWriteToFile) tOutputFile.open(tOutputFileName);
@@ -45,6 +57,11 @@ int main(int argc, char **argv)
   tFitSysAn->SetSaveDirectory(tDirectoryBase);
   tFitSysAn->SetApplyNonFlatBackgroundCorrection(ApplyNonFlatBackgroundCorrection);
   tFitSysAn->SetApplyMomResCorrection(ApplyMomResCorrection);
+
+  tFitSysAn->SetIncludeResidualCorrelations(IncludeResiduals);
+  tFitSysAn->SetUseCoulombOnlyInterpCfsForChargedResiduals(UseCoulombOnlyInterpCfsForChargedResiduals);
+  tFitSysAn->SetUseCoulombOnlyInterpCfsForXiKResiduals(UseCoulombOnlyInterpCfsForXiKResiduals);
+
   if(bWriteToFile) tFitSysAn->RunVaryFitRange(bSaveImages,tOutputFile);
   else tFitSysAn->RunVaryFitRange(bSaveImages);
 

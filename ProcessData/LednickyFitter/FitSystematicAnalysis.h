@@ -43,6 +43,11 @@ public:
   //inline
   void SetApplyNonFlatBackgroundCorrection(bool aApply);
   void SetApplyMomResCorrection(bool aApply);
+
+  void SetIncludeResidualCorrelations(bool aInclude);
+  void SetUseCoulombOnlyInterpCfsForChargedResiduals(bool aUse);
+  void SetUseCoulombOnlyInterpCfsForXiKResiduals(bool aUse);
+
   void SetSaveDirectory(TString aDirectory);
 
 protected:
@@ -55,7 +60,10 @@ protected:
   bool fAllShareSingleLambdaParam;
   bool fApplyNonFlatBackgroundCorrection;
   bool fApplyMomResCorrection;
-  bool fIncludeResiduals;
+  bool fIncludeResidualCorrelations;
+  bool fUseCoulombOnlyInterpCfsForChargedResiduals;  //ex SigStPK, etc
+  bool fUseCoulombOnlyInterpCfsForXiKResiduals;
+
   TString fSaveDirectory;
 
   TString fDirNameModifierBase1;
@@ -71,6 +79,11 @@ protected:
 
 inline void FitSystematicAnalysis::SetApplyNonFlatBackgroundCorrection(bool aApply) {fApplyNonFlatBackgroundCorrection=aApply;}
 inline void FitSystematicAnalysis::SetApplyMomResCorrection(bool aApply) {fApplyMomResCorrection=aApply;}
+
+inline void FitSystematicAnalysis::SetIncludeResidualCorrelations(bool aInclude) {fIncludeResidualCorrelations = aInclude;}
+inline void FitSystematicAnalysis::SetUseCoulombOnlyInterpCfsForChargedResiduals(bool aUse) {fUseCoulombOnlyInterpCfsForChargedResiduals = aUse;}
+inline void FitSystematicAnalysis::SetUseCoulombOnlyInterpCfsForXiKResiduals(bool aUse) {fUseCoulombOnlyInterpCfsForXiKResiduals = aUse;}
+
 inline void FitSystematicAnalysis::SetSaveDirectory(TString aDirectory) {fSaveDirectory = aDirectory;}
 
 #endif

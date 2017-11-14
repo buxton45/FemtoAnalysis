@@ -87,8 +87,11 @@ int main(int argc, char **argv)
   if(FixD0) tSaveNameModifier += TString("_FixedD0");
   if(FixAllScattParams) tSaveNameModifier += TString("_FixedScattParams");
 
-  if(UseCoulombOnlyInterpCfsForXiKResiduals && UseCoulombOnlyInterpCfsForChargedResiduals) tSaveNameModifier += TString("_UsingCoulombOnlyInterpCfsForAll");
-  else if(UseCoulombOnlyInterpCfsForChargedResiduals) tSaveNameModifier += TString("_UsingCoulombOnlyInterpCfs");
+  if(IncludeResiduals)
+  {
+    if(UseCoulombOnlyInterpCfsForXiKResiduals && UseCoulombOnlyInterpCfsForChargedResiduals) tSaveNameModifier += TString("_UsingCoulombOnlyInterpCfsForAll");
+    else if(UseCoulombOnlyInterpCfsForChargedResiduals) tSaveNameModifier += TString("_UsingCoulombOnlyInterpCfs");
+  }
 
   if(UsemTScalingOfResidualRadii) tSaveNameModifier += TString::Format("_UsingmTScalingOfResidualRadii");
 
