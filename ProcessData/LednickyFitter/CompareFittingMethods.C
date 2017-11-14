@@ -357,7 +357,7 @@ TCanvas* DrawAllReF0vsImF0(AnalysisType aAnType, bool bInclude10Res=true, bool b
 }
 
 //---------------------------------------------------------------------------------------------------------------------------------
-TGraphAsymmErrors* GetRadiusvsLambda(FitInfo &aFitInfo, CentralityType aCentType=k0010)
+TGraphAsymmErrors* GetRadiusvsLambda(const FitInfo &aFitInfo, CentralityType aCentType=k0010)
 {
   TGraphAsymmErrors* tReturnGr = new TGraphAsymmErrors(1);
   tReturnGr->SetName(aFitInfo.descriptor);
@@ -812,35 +812,17 @@ void DrawAnalysisStamps(TPad* aPad, double aStartX, double aStartY, double aIncr
 
 
 //---------------------------------------------------------------------------------------------------------------------------------
-TCanvas* CompareRadiusvsLambdaAcrossAnalyses(CentralityType aCentType=k0010, bool aUseWeightedMean=false, bool bInclude10Res=true, bool bInclude3Res=true, bool bSaveImage=false)
+void DrawRadiusvsLambdaAcrossAnalyses(TPad* aPad, int aMarkerStyle=20, CentralityType aCentType=k0010, bool aUseWeightedMean=false, bool bInclude10Res=true, bool bInclude3Res=true)
 {
-  TCanvas* tReturnCan = new TCanvas(TString::Format("tCanCompareRadiusvsLambdaAcrossAnalyses_%s", cCentralityTags[aCentType]), 
-                                    TString::Format("tCanCompareRadiusvsLambdaAcrossAnalyses_%s", cCentralityTags[aCentType]));
-
-
-  tReturnCan->cd();
-  gStyle->SetOptStat(0);
-  gStyle->SetOptTitle(0);
-  //------------------------
-  double aMinX = 0.;
-  double aMaxX = 8.;
-
-  double aMinY = 0.;
-  double aMaxY = 2.;
-  //------------------------
-
-  TH1D* tTrash = new TH1D("tTrash", "tTrash", 10, aMinX, aMaxX);
-  tTrash->GetXaxis()->SetRangeUser(aMinX, aMaxX);
-  tTrash->GetYaxis()->SetRangeUser(aMinY, aMaxY);
-
-  tTrash->GetXaxis()->SetTitle("Radius");
-  tTrash->GetYaxis()->SetTitle("#lambda");
-
-  tTrash->DrawCopy("axis");
+  aPad->cd();
   //------------------------
   vector<FitInfo> aFitInfoVec_LamKchP = tFitInfoVec_LamKchP;
   vector<FitInfo> aFitInfoVec_LamKchM = tFitInfoVec_LamKchM;
   vector<FitInfo> aFitInfoVec_LamK0 = tFitInfoVec_LamK0;
+
+  Color_t tColor_LamKchP = kRed+1;
+  Color_t tColor_LamKchM = kBlue+1;
+  Color_t tColor_LamK0 = kBlack;
 
   //------------------------
 
@@ -871,32 +853,114 @@ TCanvas* CompareRadiusvsLambdaAcrossAnalyses(CentralityType aCentType=k0010, boo
   }
 
 
-  tGr_LamKchP->SetMarkerColor(kRed);
-  tGr_LamKchP->SetMarkerStyle(20);
-  tGr_LamKchP->SetFillColor(kRed);
+  tGr_LamKchP->SetMarkerColor(tColor_LamKchP);
+  tGr_LamKchP->SetMarkerStyle(aMarkerStyle);
+  tGr_LamKchP->SetFillColor(tColor_LamKchP);
   tGr_LamKchP->SetFillStyle(1000);
-  tGr_LamKchP->SetLineColor(kRed);
+  tGr_LamKchP->SetLineColor(tColor_LamKchP);
   tGr_LamKchP->SetLineWidth(1);
 
 
-  tGr_LamKchM->SetMarkerColor(kBlue);
-  tGr_LamKchM->SetMarkerStyle(20);
-  tGr_LamKchM->SetFillColor(kBlue);
+  tGr_LamKchM->SetMarkerColor(tColor_LamKchM);
+  tGr_LamKchM->SetMarkerStyle(aMarkerStyle);
+  tGr_LamKchM->SetFillColor(tColor_LamKchM);
   tGr_LamKchM->SetFillStyle(1000);
-  tGr_LamKchM->SetLineColor(kBlue);
+  tGr_LamKchM->SetLineColor(tColor_LamKchM);
   tGr_LamKchM->SetLineWidth(1);
 
 
-  tGr_LamK0->SetMarkerColor(kBlack);
-  tGr_LamK0->SetMarkerStyle(20);
-  tGr_LamK0->SetFillColor(kBlack);
+  tGr_LamK0->SetMarkerColor(tColor_LamK0);
+  tGr_LamK0->SetMarkerStyle(aMarkerStyle);
+  tGr_LamK0->SetFillColor(tColor_LamK0);
   tGr_LamK0->SetFillStyle(1000);
-  tGr_LamK0->SetLineColor(kBlack);
+  tGr_LamK0->SetLineColor(tColor_LamK0);
   tGr_LamK0->SetLineWidth(1);
   //------------------------
   tGr_LamKchP->Draw("epsame");
   tGr_LamKchM->Draw("epsame");
   tGr_LamK0->Draw("epsame");
+
+}
+
+
+
+//---------------------------------------------------------------------------------------------------------------------------------
+void DrawRadiusvsLambdaAcrossAnalysesQMResults(TPad* aPad, int aMarkerStyle=20, CentralityType aCentType=k0010)
+{
+  aPad->cd();
+  //------------------------
+
+  Color_t tColor_LamKchP = kRed+1;
+  Color_t tColor_LamKchM = kBlue+1;
+  Color_t tColor_LamK0 = kBlack;
+  //------------------------
+
+  TGraphAsymmErrors *tGr_LamKchP, *tGr_LamKchM, *tGr_LamK0;
+  tGr_LamKchP = GetRadiusvsLambda(tFitInfoQM_LamKchP, aCentType);
+  tGr_LamKchM = GetRadiusvsLambda(tFitInfoQM_LamKchM, aCentType);
+  tGr_LamK0   = GetRadiusvsLambda(tFitInfoQM_LamK0, aCentType);
+  //------------------------
+
+  tGr_LamKchP->SetMarkerColor(tColor_LamKchP);
+  tGr_LamKchP->SetMarkerStyle(aMarkerStyle);
+  tGr_LamKchP->SetFillColor(tColor_LamKchP);
+  tGr_LamKchP->SetFillStyle(1000);
+  tGr_LamKchP->SetLineColor(tColor_LamKchP);
+  tGr_LamKchP->SetLineWidth(1);
+
+
+  tGr_LamKchM->SetMarkerColor(tColor_LamKchM);
+  tGr_LamKchM->SetMarkerStyle(aMarkerStyle);
+  tGr_LamKchM->SetFillColor(tColor_LamKchM);
+  tGr_LamKchM->SetFillStyle(1000);
+  tGr_LamKchM->SetLineColor(tColor_LamKchM);
+  tGr_LamKchM->SetLineWidth(1);
+
+
+  tGr_LamK0->SetMarkerColor(tColor_LamK0);
+  tGr_LamK0->SetMarkerStyle(aMarkerStyle);
+  tGr_LamK0->SetFillColor(tColor_LamK0);
+  tGr_LamK0->SetFillStyle(1000);
+  tGr_LamK0->SetLineColor(tColor_LamK0);
+  tGr_LamK0->SetLineWidth(1);
+  //------------------------
+  tGr_LamKchP->Draw("epsame");
+  tGr_LamKchM->Draw("epsame");
+  tGr_LamK0->Draw("epsame");
+}
+
+
+//---------------------------------------------------------------------------------------------------------------------------------
+TCanvas* CompareRadiusvsLambdaAcrossAnalyses(CentralityType aCentType=k0010, bool aUseWeightedMean=false, bool bInclude10Res=true, bool bInclude3Res=true, bool bSaveImage=false)
+{
+  TCanvas* tReturnCan = new TCanvas(TString::Format("tCanCompareRadiusvsLambdaAcrossAnalyses%s", cCentralityTags[aCentType]), 
+                                    TString::Format("tCanCompareRadiusvsLambdaAcrossAnalyses%s", cCentralityTags[aCentType]));
+
+
+  tReturnCan->cd();
+  gStyle->SetOptStat(0);
+  gStyle->SetOptTitle(0);
+  //------------------------
+  double aMinX = 0.;
+  double aMaxX = 8.;
+
+  double aMinY = 0.;
+  double aMaxY = 2.;
+  //------------------------
+
+  TH1D* tTrash = new TH1D("tTrash", "tTrash", 10, aMinX, aMaxX);
+  tTrash->GetXaxis()->SetRangeUser(aMinX, aMaxX);
+  tTrash->GetYaxis()->SetRangeUser(aMinY, aMaxY);
+
+  tTrash->GetXaxis()->SetTitle("Radius");
+  tTrash->GetYaxis()->SetTitle("#lambda");
+
+  tTrash->DrawCopy("axis");
+
+
+  //------------------------
+  int tMarkerStyle = 20;
+  DrawRadiusvsLambdaAcrossAnalyses((TPad*)tReturnCan, tMarkerStyle, aCentType, aUseWeightedMean, bInclude10Res, bInclude3Res);
 
   //------------------------------------------------------
   double tStartX = 6.0;
@@ -929,6 +993,203 @@ TCanvas* CompareRadiusvsLambdaAcrossAnalyses(CentralityType aCentType=k0010, boo
   return tReturnCan;
 }
 
+
+//---------------------------------------------------------------------------------------------------------------------------------
+TCanvas* CompareAllRadiusvsLambdaAcrossAnalyses(CentralityType aCentType=k0010, bool bInclude10Res=true, bool bInclude3Res=true, bool bSaveImage=false)
+{
+  TCanvas* tReturnCan = new TCanvas(TString::Format("tCanCompareAllRadiusvsLambdaAcrossAnalyses%s", cCentralityTags[aCentType]), 
+                                    TString::Format("tCanCompareAllRadiusvsLambdaAcrossAnalyses%s", cCentralityTags[aCentType]));
+
+
+  tReturnCan->cd();
+  gStyle->SetOptStat(0);
+  gStyle->SetOptTitle(0);
+  //------------------------
+  double aMinX = 0.;
+  double aMaxX = 8.;
+
+  double aMinY = 0.;
+  double aMaxY = 2.;
+  //------------------------
+
+  TH1D* tTrash = new TH1D("tTrash", "tTrash", 10, aMinX, aMaxX);
+  tTrash->GetXaxis()->SetRangeUser(aMinX, aMaxX);
+  tTrash->GetYaxis()->SetRangeUser(aMinY, aMaxY);
+
+  tTrash->GetXaxis()->SetTitle("Radius");
+  tTrash->GetYaxis()->SetTitle("#lambda");
+
+  tTrash->DrawCopy("axis");
+
+  //------------------------
+  bool bInclude_QM = true;
+  int tMarkerStyle_QM = 20;
+  vector<bool> tInfoVec_QM{false, false, false};
+  TString tDescriptor_QM = "QM 2017";
+
+  //------------------------
+  bool bInclude_10and3_WeightedMean = true;
+  int tMarkerStyle_10and3_WeightedMean = 24;
+  vector<bool> tInfoVec_10and3_WeightedMean{true, true, true};
+  TString tDescriptor_10and3_WeightedMean = "10 & 3 Res., Avg.";
+
+  //------------------------
+  bool bInclude_10_WeightedMean = true;
+  int tMarkerStyle_10_WeightedMean = 29;
+  vector<bool> tInfoVec_10_WeightedMean{true, true, false};
+  TString tDescriptor_10_WeightedMean = "10 Res., Avg.";
+
+  bool bInclude_3_WeightedMean = true;
+  int tMarkerStyle_3_WeightedMean = 30;
+  vector<bool> tInfoVec_3_WeightedMean{true, false, true};
+  TString tDescriptor_3_WeightedMean = "3 Res., Avg.";
+
+  //------------------------
+  bool bInclude_10_AllFree = true;
+  int tMarkerStyle_10_AllFree = 33;
+  vector<bool> tInfoVec_10_AllFree{false, true, false};
+  TString tDescriptor_10_AllFree = "10 Res., All Free";
+
+  bool bInclude_3_AllFree = true;
+  int tMarkerStyle_3_AllFree = 27;
+  vector<bool> tInfoVec_3_AllFree{false, false, true};
+  TString tDescriptor_3_AllFree = "3 Res., All Free";
+
+  //----------------------------------------
+  if(bInclude10Res && bInclude3Res)
+  {
+    bInclude_QM = true;
+
+    bInclude_10and3_WeightedMean = true;
+
+    bInclude_10_WeightedMean = true;
+    bInclude_3_WeightedMean = true;
+
+    bInclude_10_AllFree = true;
+    bInclude_3_AllFree = true;
+  }
+  else if(bInclude10Res)
+  {
+    bInclude_QM = true;
+
+    bInclude_10and3_WeightedMean = false;
+
+    bInclude_10_WeightedMean = true;
+    bInclude_3_WeightedMean = false;
+
+    bInclude_10_AllFree = true;
+    bInclude_3_AllFree = false;
+  }
+  else if(bInclude3Res)
+  {
+    bInclude_QM = true;
+
+    bInclude_10and3_WeightedMean = false;
+
+    bInclude_10_WeightedMean = false;
+    bInclude_3_WeightedMean = true;
+
+    bInclude_10_AllFree = false;
+    bInclude_3_AllFree = true;
+  }
+  else assert(0);
+
+  //----------------------------------------
+  vector<vector<bool> > tInfoVec2d{tInfoVec_QM, 
+                                   tInfoVec_10and3_WeightedMean,
+                                   tInfoVec_10_WeightedMean,     tInfoVec_3_WeightedMean, 
+                                   tInfoVec_10_AllFree,          tInfoVec_3_AllFree};
+
+  vector<int> tMarkerStyles{tMarkerStyle_QM, 
+                            tMarkerStyle_10and3_WeightedMean,
+                            tMarkerStyle_10_WeightedMean,     tMarkerStyle_3_WeightedMean, 
+                            tMarkerStyle_10_AllFree,          tMarkerStyle_3_AllFree};
+
+  vector<int> tIncludePlots{bInclude_QM, 
+                            bInclude_10and3_WeightedMean, 
+                            bInclude_10_WeightedMean,    bInclude_3_WeightedMean,
+                            bInclude_10_AllFree,         bInclude_3_AllFree};
+
+  vector<TString> tDescriptors{tDescriptor_QM,
+                               tDescriptor_10and3_WeightedMean,
+                               tDescriptor_10_WeightedMean,     tDescriptor_3_WeightedMean, 
+                               tDescriptor_10_AllFree,          tDescriptor_3_AllFree};
+
+  assert(tInfoVec2d.size() == tMarkerStyles.size());
+  assert(tInfoVec2d.size() == tIncludePlots.size());
+  assert(tInfoVec2d.size() == tDescriptors.size());
+
+  //------------------------------------------------------
+  double tStartX = 5.8;
+  double tStartY = 0.7;
+  double tIncrementX = 0.10;
+  double tIncrementY = 0.10;
+  double tTextSize = 0.04;
+
+  TLatex* tTex = new TLatex();
+  tTex->SetTextAlign(12);
+  tTex->SetLineWidth(2);
+  tTex->SetTextFont(42);
+  tTex->SetTextSize(0.04);
+
+  const Size_t tMarkerSize=1.6;
+  TMarker *tMarker = new TMarker();
+  tMarker->SetMarkerSize(tMarkerSize);
+  tMarker->SetMarkerStyle(20);
+  tMarker->SetMarkerColor(kBlack);
+
+  int iTex = 0;
+
+  for(unsigned int i=0; i<tInfoVec2d.size(); i++)
+  {
+    if(tIncludePlots[i])
+    {
+      if(!tInfoVec2d[i][0] && !tInfoVec2d[i][1] && !tInfoVec2d[i][2]) DrawRadiusvsLambdaAcrossAnalysesQMResults((TPad*)tReturnCan, tMarkerStyles[i], aCentType);
+      else DrawRadiusvsLambdaAcrossAnalyses((TPad*)tReturnCan, tMarkerStyles[i], aCentType, tInfoVec2d[i][0], tInfoVec2d[i][1], tInfoVec2d[i][2]);
+
+      tTex->DrawLatex(tStartX, tStartY-iTex*tIncrementY, tDescriptors[i]);
+      tMarker->SetMarkerStyle(tMarkerStyles[i]);
+      tMarker->DrawMarker(tStartX-tIncrementX, tStartY-iTex*tIncrementY);
+      iTex++;
+    }
+  }
+
+  //------------------------------------------------------
+
+  tTex->SetTextFont(42);
+  tTex->SetTextSize(0.06);
+  tTex->DrawLatex(0.5, 1.8, cPrettyCentralityTags[aCentType]);
+
+  //------------------------------------------------------
+
+  double tStartXStamp = 0.5;
+  double tStartYStamp = 1.6;
+  double tIncrementXStamp = 0.10;
+  double tIncrementYStamp = 0.10;
+  double tTextSizeStamp = 0.04;
+  int tMarkerStyleStamp = 21;
+  DrawAnalysisStamps((TPad*)tReturnCan, tStartXStamp, tStartYStamp, tIncrementXStamp, tIncrementYStamp, tTextSizeStamp, tMarkerStyleStamp);
+
+  //------------------------------------------------------
+
+
+  if(bSaveImage)
+  {
+    TString tSaveLocationFull;
+    tSaveLocationFull = gSaveLocationBase + TString::Format("AllRadiusvsLambdaAcrossAnalyses%s", cCentralityTags[aCentType]);
+
+    if(bInclude10Res && bInclude3Res) tSaveLocationFull += TString("_10ResAnd3Res");
+    else if(bInclude10Res) tSaveLocationFull += TString("_10Res");
+    else if(bInclude3Res) tSaveLocationFull += TString("_3Res");
+    else assert(0);
+
+    tSaveLocationFull += TString(".eps");
+    tReturnCan->SaveAs(tSaveLocationFull);
+  }
+
+  return tReturnCan;
+
+}
 
 
 //---------------------------------------------------------------------------------------------------------------------------------
@@ -1114,7 +1375,7 @@ TCanvas* CompareReF0vsImF0AcrossAnalyses(bool aUseWeightedMean=false, bool bIncl
 }
 
 //---------------------------------------------------------------------------------------------------------------------------------
-TCanvas* CompareAllReF0vsImF0AcrossAnalyses(bool bSaveImage=false)
+TCanvas* CompareAllReF0vsImF0AcrossAnalyses(bool bInclude10Res=true, bool bInclude3Res=true, bool bSaveImage=false)
 {
 /*
   TCanvas* tReturnCan = new TCanvas(TString::Format("tCanCompareAllReF0vsImF0AcrossAnalyses_%s", cAnalysisBaseTags[aAnType]), 
@@ -1144,13 +1405,13 @@ TCanvas* CompareAllReF0vsImF0AcrossAnalyses(bool bSaveImage=false)
 
   //------------------------
   bool bInclude_QM = true;
-  int tMarkerStyle_QM = 24;
+  int tMarkerStyle_QM = 20;
   vector<bool> tInfoVec_QM{false, false, false};
   TString tDescriptor_QM = "QM 2017";
 
   //------------------------
   bool bInclude_10and3_WeightedMean = true;
-  int tMarkerStyle_10and3_WeightedMean = 20;
+  int tMarkerStyle_10and3_WeightedMean = 24;
   vector<bool> tInfoVec_10and3_WeightedMean{true, true, true};
   TString tDescriptor_10and3_WeightedMean = "10 & 3 Res., Avg.";
 
@@ -1175,6 +1436,45 @@ TCanvas* CompareAllReF0vsImF0AcrossAnalyses(bool bSaveImage=false)
   int tMarkerStyle_3_AllFree = 27;
   vector<bool> tInfoVec_3_AllFree{false, false, true};
   TString tDescriptor_3_AllFree = "3 Res., All Free";
+
+  //----------------------------------------
+  if(bInclude10Res && bInclude3Res)
+  {
+    bInclude_QM = true;
+
+    bInclude_10and3_WeightedMean = true;
+
+    bInclude_10_WeightedMean = true;
+    bInclude_3_WeightedMean = true;
+
+    bInclude_10_AllFree = true;
+    bInclude_3_AllFree = true;
+  }
+  else if(bInclude10Res)
+  {
+    bInclude_QM = true;
+
+    bInclude_10and3_WeightedMean = false;
+
+    bInclude_10_WeightedMean = true;
+    bInclude_3_WeightedMean = false;
+
+    bInclude_10_AllFree = true;
+    bInclude_3_AllFree = false;
+  }
+  else if(bInclude3Res)
+  {
+    bInclude_QM = true;
+
+    bInclude_10and3_WeightedMean = false;
+
+    bInclude_10_WeightedMean = false;
+    bInclude_3_WeightedMean = true;
+
+    bInclude_10_AllFree = false;
+    bInclude_3_AllFree = true;
+  }
+  else assert(0);
 
   //----------------------------------------
   vector<vector<bool> > tInfoVec2d{tInfoVec_QM, 
@@ -1255,15 +1555,12 @@ TCanvas* CompareAllReF0vsImF0AcrossAnalyses(bool bSaveImage=false)
 
 //    tSaveLocationFull = gSaveLocationBase + TString::Format("%s/ReF0vsImF0", cAnalysisBaseTags[aAnType]);
     tSaveLocationFull = gSaveLocationBase + TString("AllReF0vsImF0AcrossAnalyses");
-/*
+
     if(bInclude10Res && bInclude3Res) tSaveLocationFull += TString("_10ResAnd3Res");
     else if(bInclude10Res) tSaveLocationFull += TString("_10Res");
     else if(bInclude3Res) tSaveLocationFull += TString("_3Res");
     else assert(0);
 
-    if(aUseWeightedMean) tSaveLocationFull += TString("_WeightedMean");
-    else tSaveLocationFull += TString("_AllFree");
-*/
     tSaveLocationFull += TString(".eps");
     tReturnCan->SaveAs(tSaveLocationFull);
   }
@@ -1375,21 +1672,21 @@ int main(int argc, char **argv)
   TCanvas* tCanCompareReF0vsImF0AcrossAnalyses = CompareReF0vsImF0AcrossAnalyses(bUseWeightedMeanInAnalysesComparison, bInclude10Res, bInclude3Res, bSaveFigures);
 */
 //-------------------------------------------------------------------------------
-/*
+
   TCanvas *tCanCompareAllRadiusvsLambdaAcrossAnalyses1, *tCanCompareAllRadiusvsLambdaAcrossAnalyses2, *tCanCompareAllRadiusvsLambdaAcrossAnalyses3;
   if(tCentType != kMB)
   {
-    tCanCompareAllRadiusvsLambdaAcrossAnalyses1 = CompareAllRadiusvsLambdaAcrossAnalyses(tCentType, bUseWeightedMeanInAnalysesComparison, bInclude10Res, bInclude3Res, bSaveFigures);
+    tCanCompareAllRadiusvsLambdaAcrossAnalyses1 = CompareAllRadiusvsLambdaAcrossAnalyses(tCentType, bInclude10Res, bInclude3Res, bSaveFigures);
   }
   else
   {
-    tCanCompareAllRadiusvsLambdaAcrossAnalyses1 = CompareAllRadiusvsLambdaAcrossAnalyses(k0010, bUseWeightedMeanInAnalysesComparison, bInclude10Res, bInclude3Res, bSaveFigures);
-    tCanCompareAllRadiusvsLambdaAcrossAnalyses2 = CompareAllRadiusvsLambdaAcrossAnalyses(k1030, bUseWeightedMeanInAnalysesComparison, bInclude10Res, bInclude3Res, bSaveFigures);
-    tCanCompareAllRadiusvsLambdaAcrossAnalyses3 = CompareAllRadiusvsLambdaAcrossAnalyses(k3050, bUseWeightedMeanInAnalysesComparison, bInclude10Res, bInclude3Res, bSaveFigures);
+    tCanCompareAllRadiusvsLambdaAcrossAnalyses1 = CompareAllRadiusvsLambdaAcrossAnalyses(k0010, bInclude10Res, bInclude3Res, bSaveFigures);
+    tCanCompareAllRadiusvsLambdaAcrossAnalyses2 = CompareAllRadiusvsLambdaAcrossAnalyses(k1030, bInclude10Res, bInclude3Res, bSaveFigures);
+    tCanCompareAllRadiusvsLambdaAcrossAnalyses3 = CompareAllRadiusvsLambdaAcrossAnalyses(k3050, bInclude10Res, bInclude3Res, bSaveFigures);
   }
-*/
 
-  TCanvas* tCanCompareAllReF0vsImF0AcrossAnalyses = CompareAllReF0vsImF0AcrossAnalyses(bSaveFigures);
+
+  TCanvas* tCanCompareAllReF0vsImF0AcrossAnalyses = CompareAllReF0vsImF0AcrossAnalyses(bInclude10Res, bInclude3Res, bSaveFigures);
 
 //-------------------------------------------------------------------------------
   theApp->Run(kTRUE); //Run the TApp to pause the code.
@@ -1417,11 +1714,10 @@ int main(int argc, char **argv)
   delete tCanCompareRadiusvsLambdaAcrossAnalyses3;
   delete tCanCompareReF0vsImF0AcrossAnalyses;
 */
-/*
+
   delete tCanCompareAllRadiusvsLambdaAcrossAnalyses1;
   delete tCanCompareAllRadiusvsLambdaAcrossAnalyses2;
   delete tCanCompareAllRadiusvsLambdaAcrossAnalyses3;
-*/
   delete tCanCompareAllReF0vsImF0AcrossAnalyses;
 
   cout << "DONE" << endl;
