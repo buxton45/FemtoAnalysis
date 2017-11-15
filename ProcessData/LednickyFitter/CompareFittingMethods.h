@@ -546,7 +546,7 @@ struct FitInfo
 
   const FitInfo tFitInfo3b_LamKchM = FitInfo(TString("FixedLambda_FreeD0_3Res"), 
                                        kLamKchM,
-                                       false, true, false, false, 
+                                       false, true, true, false, 
                                        0.5*(1.00+1.00), 0.5*(0.00+0.00),
                                        0.5*(1.00+1.00), 0.5*(0.00+0.00),
                                        0.5*(1.00+1.00), 0.5*(0.00+0.00),
