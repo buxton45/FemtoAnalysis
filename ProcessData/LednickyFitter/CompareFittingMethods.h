@@ -21,6 +21,11 @@ typedef std::vector<double> td1dVec;
 typedef std::vector<std::vector<double> > td2dVec;
 
 using namespace std;
+//---------------------------------------------------------------------------------------------------------------------------------
+enum AverageType {kAverage=0, kWeightedMean=1};
+
+enum IncludeResType {kInclude10ResOnly=0, kInclude3ResOnly=1, kInclude10ResAnd3Res=2, kIncludeNoRes=3};
+const char* const cIncludeResTypeTags[4] = {"_10Res", "_3Res", "_10ResAnd3Res", ""};
 
 //---------------------------------------------------------------------------------------------------------------------------------
 struct FitInfo
@@ -29,16 +34,28 @@ struct FitInfo
   AnalysisType analysisType;
 
   double lambda1, lambda2, lambda3;
+  vector<double> lambdaVec;
+
   double radius1, radius2, radius3;
+  vector<double> radiusVec;
+
   double ref0, imf0, d0;
 
 
   double lambdaStatErr1, lambdaStatErr2, lambdaStatErr3;
+  vector<double> lambdaStatErrVec;
+
   double radiusStatErr1, radiusStatErr2, radiusStatErr3; 
+  vector<double> radiusStatErrVec;
+
   double ref0StatErr, imf0StatErr, d0StatErr;
 
   double lambdaSysErr1, lambdaSysErr2, lambdaSysErr3;
+  vector<double> lambdaSysErrVec;
+
   double radiusSysErr1, radiusSysErr2, radiusSysErr3; 
+  vector<double> radiusSysErrVec;
+
   double ref0SysErr, imf0SysErr, d0SysErr;
 
   double chi2;
@@ -116,6 +133,14 @@ struct FitInfo
 
     markerColor = aMarkerColor;
     markerStyle = aMarkerStyle;
+
+    //-------------------------
+    lambdaVec = vector<double>{lambda1, lambda2, lambda3};
+    radiusVec = vector<double>{radius1, radius2, radius3};
+    lambdaStatErrVec = vector<double>{lambdaStatErr1, lambdaStatErr2, lambdaStatErr3};
+    radiusStatErrVec = vector<double>{radiusStatErr1, radiusStatErr2, radiusStatErr3};
+    lambdaSysErrVec = vector<double>{lambdaSysErr1, lambdaSysErr2, lambdaSysErr3};
+    radiusSysErrVec = vector<double>{radiusSysErr1, radiusSysErr2, radiusSysErr3};
   }
 
 };

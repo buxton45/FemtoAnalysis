@@ -82,16 +82,13 @@ void DrawPoints(TString aName,
 
 
 //---------------------------------------------------------------------------------------------------------------------------------
-TGraphAsymmErrors* GetWeightedMeanRadiusvsLambda(vector<FitInfo> &aFitInfoVec, CentralityType aCentType, bool bInclude10Res=true, bool bInclude3Res=true)
+vector<double> GetWeightedMeanRadiusInfo(vector<FitInfo> &aFitInfoVec, CentralityType aCentType, bool bInclude10Res=true, bool bInclude3Res=true)
 {
-  TGraphAsymmErrors* tReturnGr = new TGraphAsymmErrors(1);
-  if(aCentType==kMB) return tReturnGr;
+  vector<double> tReturnVec{0.,0.,0.};
+  if(aCentType==kMB) return tReturnVec;
 
-  double tNumRadius = 0., tDenRadius = 0.;
-  double tNumLambda = 0., tDenLambda = 0.;
-
-  double tRadius=0., tRadiusErr=0.;
-  double tLambda=0., tLambdaErr=0.;
+  double tNumRadius = 0., tDenRadiusStat = 0., tDenRadiusSys = 0.;
+  double tRadius=0., tRadiusStatErr=0., tRadiusSysErr=0.;
 
   for(unsigned int i=0; i<aFitInfoVec.size(); i++)
   {
@@ -100,80 +97,51 @@ TGraphAsymmErrors* GetWeightedMeanRadiusvsLambda(vector<FitInfo> &aFitInfoVec, C
 
     //Exclude fixed radius results from all average/mean calculations
     if(!aFitInfoVec[i].freeRadii) continue;
+    //Exclude fixed lambda results from all average/mean calculations
+    if(!aFitInfoVec[i].freeLambda) continue;
 
-    if(aCentType==k0010)
+    tRadius = aFitInfoVec[i].radiusVec[aCentType];
+    tRadiusStatErr = aFitInfoVec[i].radiusStatErrVec[aCentType];
+    tRadiusSysErr = aFitInfoVec[i].radiusSysErrVec[aCentType];
+
+    if(tRadiusStatErr > 0.)
     {
-      tRadius = aFitInfoVec[i].radius1;
-      tRadiusErr = aFitInfoVec[i].radiusStatErr1;
-
-      tLambda = aFitInfoVec[i].lambda1;
-      tLambdaErr = aFitInfoVec[i].lambdaStatErr1;
+      tNumRadius += tRadius/(tRadiusStatErr*tRadiusStatErr);
+      tDenRadiusStat += 1./(tRadiusStatErr*tRadiusStatErr);
     }
-    else if(aCentType==k1030)
-    {
-      tRadius = aFitInfoVec[i].radius2;
-      tRadiusErr = aFitInfoVec[i].radiusStatErr2;
-
-      tLambda = aFitInfoVec[i].lambda2;
-      tLambdaErr = aFitInfoVec[i].lambdaStatErr2;
-    }
-    else if(aCentType==k3050)
-    {
-      tRadius = aFitInfoVec[i].radius3;
-      tRadiusErr = aFitInfoVec[i].radiusStatErr3;
-
-      tLambda = aFitInfoVec[i].lambda3;
-      tLambdaErr = aFitInfoVec[i].lambdaStatErr3;
-    }
-    else assert(0);
-
-    tNumRadius += tRadius/(tRadiusErr*tRadiusErr);
-    tDenRadius += 1./(tRadiusErr*tRadiusErr);
-
-    if(aFitInfoVec[i].freeLambda)
-    {
-      tNumLambda += tLambda/(tLambdaErr*tLambdaErr);
-      tDenLambda += 1./(tLambdaErr*tLambdaErr);
-    }
+    if(tRadiusSysErr > 0.) tDenRadiusSys += 1./(tRadiusSysErr*tRadiusSysErr);
   }
 
-  double tAvgRadius = tNumRadius/tDenRadius;
-  double tErrRadius = sqrt(1./tDenRadius);
-
-  double tAvgLambda = tNumLambda/tDenLambda;
-  double tErrLambda = sqrt(1./tDenLambda);
+  assert(tDenRadiusStat > 0.);
+  double tAvgRadius = tNumRadius/tDenRadiusStat;
+  double tStatErrRadius = sqrt(1./tDenRadiusStat);
+  double tSysErrRadius;
+  if(tDenRadiusSys > 0.) tSysErrRadius = sqrt(1./tDenRadiusSys);
+  else tSysErrRadius = 0.;
   //--------------------------------------
 
-  tReturnGr->SetPoint(0, tAvgRadius, tAvgLambda);
-  tReturnGr->SetPointError(0, tErrRadius, tErrRadius, tErrLambda, tErrLambda);
+  tReturnVec[0] = tAvgRadius;
+  tReturnVec[1] = tStatErrRadius;
+  tReturnVec[2] = tSysErrRadius;
 
-  return tReturnGr;
+  return tReturnVec;
 }
 
 //---------------------------------------------------------------------------------------------------------------------------------
-TGraphAsymmErrors* GetRadiusvsLambda(const FitInfo &aFitInfo, CentralityType aCentType=k0010)
+vector<double> GetRadiusInfo(const FitInfo &aFitInfo, CentralityType aCentType=k0010)
 {
-  TGraphAsymmErrors* tReturnGr = new TGraphAsymmErrors(1);
-  tReturnGr->SetName(aFitInfo.descriptor);
+  vector<double> tReturnVec(3);
+  double tRadius, tRadiusStatErr, tRadiusSysErr;
 
-  if(aCentType==k0010)
-  {
-    tReturnGr->SetPoint(0, aFitInfo.radius1, aFitInfo.lambda1);
-    tReturnGr->SetPointError(0, aFitInfo.radiusStatErr1, aFitInfo.radiusStatErr1, aFitInfo.lambdaStatErr1, aFitInfo.lambdaStatErr1);
-  }
-  else if(aCentType==k1030)
-  {
-    tReturnGr->SetPoint(0, aFitInfo.radius2, aFitInfo.lambda2);
-    tReturnGr->SetPointError(0, aFitInfo.radiusStatErr2, aFitInfo.radiusStatErr2, aFitInfo.lambdaStatErr2, aFitInfo.lambdaStatErr2);
-  }
-  else if(aCentType==k3050)
-  {
-    tReturnGr->SetPoint(0, aFitInfo.radius3, aFitInfo.lambda3);
-    tReturnGr->SetPointError(0, aFitInfo.radiusStatErr3, aFitInfo.radiusStatErr3, aFitInfo.lambdaStatErr3, aFitInfo.lambdaStatErr3);
-  }
-  else assert(0);
+  tRadius = aFitInfo.radiusVec[aCentType];
+  tRadiusStatErr = aFitInfo.radiusStatErrVec[aCentType];
+  tRadiusSysErr = aFitInfo.radiusSysErrVec[aCentType];
 
-  return tReturnGr;
+  tReturnVec[0] = tRadius;
+  tReturnVec[1] = tRadiusStatErr;
+  tReturnVec[2] = tRadiusSysErr;
+
+  return tReturnVec;
 }
 
 
@@ -187,48 +155,38 @@ vector<double> GetRInfo(AnalysisType aAnType, CentralityType aCentType, bool aUs
   else assert(0);
   //--------------------------------
 
-  TGraphAsymmErrors *tGr;
+  vector<double> tRadiusInfo;
   if(aUseWeightedMean)
   {
-    tGr = GetWeightedMeanRadiusvsLambda(aFitInfoVec, aCentType, bInclude10Res, bInclude3Res);
+    tRadiusInfo = GetWeightedMeanRadiusInfo(aFitInfoVec, aCentType, bInclude10Res, bInclude3Res);
   }
   else
   {
     assert(!(bInclude10Res && bInclude3Res));
     if(bInclude10Res)
     {
-      tGr = GetRadiusvsLambda(aFitInfoVec[0], aCentType);
+      tRadiusInfo = GetRadiusInfo(aFitInfoVec[0], aCentType);
     }
     else
     {
-      tGr = GetRadiusvsLambda(aFitInfoVec[6], aCentType);
+      tRadiusInfo = GetRadiusInfo(aFitInfoVec[6], aCentType);
     }
   }
 
-  double tRadius, tLambda;
-  tGr->GetPoint(0, tRadius, tLambda);
-  double tRadiusErr = tGr->GetErrorX(0);
-
-  vector<double> tReturnVec{tRadius, tRadiusErr};
-  return tReturnVec;
+  return tRadiusInfo;
 }
 
 //___________________________________________________________________________________
 vector<double> GetRInfoQM(AnalysisType aAnType, CentralityType aCentType)
 {
-  TGraphAsymmErrors *tGr;
-  if     (aAnType==kLamKchP) tGr = GetRadiusvsLambda(tFitInfoQM_LamKchP, aCentType);
-  else if(aAnType==kLamKchM) tGr = GetRadiusvsLambda(tFitInfoQM_LamKchM, aCentType);
-  else if(aAnType==kLamK0) tGr = GetRadiusvsLambda(tFitInfoQM_LamK0, aCentType);
+  vector<double> tRadiusInfo;
+  if     (aAnType==kLamKchP) tRadiusInfo = GetRadiusInfo(tFitInfoQM_LamKchP, aCentType);
+  else if(aAnType==kLamKchM) tRadiusInfo = GetRadiusInfo(tFitInfoQM_LamKchM, aCentType);
+  else if(aAnType==kLamK0) tRadiusInfo = GetRadiusInfo(tFitInfoQM_LamK0, aCentType);
   else assert(0);
   //--------------------------------
 
-  double tRadius, tLambda;
-  tGr->GetPoint(0, tRadius, tLambda);
-  double tRadiusErr = tGr->GetErrorX(0);
-
-  vector<double> tReturnVec{tRadius, tRadiusErr};
-  return tReturnVec;
+  return tRadiusInfo;
 }
 
 
@@ -255,26 +213,89 @@ int main(int argc, char **argv)
   bool bMakeOthersTransparent = true;
   bool bOutlinePoints = true;
 
-  bool bResultsWithResiduals = true;
+//  bool bResultsWithResiduals = true;
   bool bSaveImage = false;
 
-
+  //------------------------
+  //int tFitToPlot=0
+  int tMarkerStyle_QM = 20;
+  vector<bool> tInfoVec_QM{false, false, false};
+  TString tDescriptor_QM = "QM 2017";
+  TString tSaveDescriptor_QM = "_QM2017";
 
   //------------------------
+  //int tFitToPlot=1
+  int tMarkerStyle_10and3_WeightedMean = 24;
   vector<bool> tInfoVec_10and3_WeightedMean{true, true, true};
+  TString tDescriptor_10and3_WeightedMean = "10 & 3 Res., Avg.";
+  TString tSaveDescriptor_10and3_WeightedMean = "_10ResAnd3Res_Avg";
+
+  //------------------------
+  //int tFitToPlot=2
+  int tMarkerStyle_10_WeightedMean = 29;
   vector<bool> tInfoVec_10_WeightedMean{true, true, false};
+  TString tDescriptor_10_WeightedMean = "10 Res., Avg.";
+  TString tSaveDescriptor_10_WeightedMean = "_10Res_Avg";
+
+  //int tFitToPlot=3
+  int tMarkerStyle_3_WeightedMean = 30;
   vector<bool> tInfoVec_3_WeightedMean{true, false, true};
+  TString tDescriptor_3_WeightedMean = "3 Res., Avg.";
+  TString tSaveDescriptor_3_WeightedMean = "_3Res_Avg";
+
+  //------------------------
+  //int tFitToPlot=4
+  int tMarkerStyle_10_AllFree = 33;
   vector<bool> tInfoVec_10_AllFree{false, true, false};
+  TString tDescriptor_10_AllFree = "10 Res., All Free";
+  TString tSaveDescriptor_10_AllFree = "_10Res_AllFree";
+
+  //int tFitToPlot=5
+  int tMarkerStyle_3_AllFree = 27;
   vector<bool> tInfoVec_3_AllFree{false, false, true};
+  TString tDescriptor_3_AllFree = "3 Res., All Free";
+  TString tSaveDescriptor_3_AllFree = "_3Res_AllFree";
+
+  //----------------------------------------
+  vector<vector<bool> > tInfoVec2d{tInfoVec_QM, 
+                                   tInfoVec_10and3_WeightedMean,
+                                   tInfoVec_10_WeightedMean,     tInfoVec_3_WeightedMean, 
+                                   tInfoVec_10_AllFree,          tInfoVec_3_AllFree};
+
+  vector<int> tMarkerStyles{tMarkerStyle_QM, 
+                            tMarkerStyle_10and3_WeightedMean,
+                            tMarkerStyle_10_WeightedMean,     tMarkerStyle_3_WeightedMean, 
+                            tMarkerStyle_10_AllFree,          tMarkerStyle_3_AllFree};
+
+  vector<TString> tDescriptors{tDescriptor_QM,
+                               tDescriptor_10and3_WeightedMean,
+                               tDescriptor_10_WeightedMean,     tDescriptor_3_WeightedMean, 
+                               tDescriptor_10_AllFree,          tDescriptor_3_AllFree};
+
+  vector<TString> tSaveDescriptors{tSaveDescriptor_QM,
+                               tSaveDescriptor_10and3_WeightedMean,
+                               tSaveDescriptor_10_WeightedMean,     tSaveDescriptor_3_WeightedMean, 
+                               tSaveDescriptor_10_AllFree,          tSaveDescriptor_3_AllFree};
+
+  assert(tInfoVec2d.size() == tMarkerStyles.size());
+  assert(tInfoVec2d.size() == tDescriptors.size());
+  assert(tInfoVec2d.size() == tSaveDescriptors.size());
+
+  //------------------------------------------------------
+
+
+
   //------------------------
   bool bDrawQM = true;
-  vector<bool> tInfoVec = tInfoVec_10and3_WeightedMean;
-
+  int tFitToPlot = 1;
+  assert(tFitToPlot < (int)tInfoVec2d.size());
+  if(bDrawQM) tFitToPlot = 0;
 
 
   assert(!(bUseMinvCalculation && bUseReducedMassCalculation));
 
-  TString tSaveName = "./mTscaling";
+//  TString tSaveName = "./mTscaling";
+  TString tSaveName = "/home/jesse/Analysis/Presentations/GroupMeetings/20171123/Figures/mTscaling";
 
   if(bRunAveragedKchPKchM) tSaveName += TString("Averaged");
 
@@ -283,7 +304,8 @@ int main(int argc, char **argv)
 
   if(bOutlinePoints) tSaveName += TString("_OutlinedPoints");
   if(bMakeOthersTransparent) tSaveName += TString("_OthersTransparent");
-  if(bResultsWithResiduals) tSaveName += TString("_WithResiduals");
+//  if(bResultsWithResiduals) tSaveName += TString("_WithResiduals");
+  tSaveName += tSaveDescriptors[tFitToPlot];
   tSaveName += TString(".pdf");
   
   Int_t red = kRed;
@@ -376,10 +398,10 @@ int main(int argc, char **argv)
   if(bUseReducedMassCalculation) tLamK00010mT = 0.25*(1.395+1.396+1.396+1.395);  //m_red
   vector<double> RInfo_LamK0_0010;
   if(bDrawQM) RInfo_LamK0_0010 = GetRInfoQM(kLamK0, k0010);
-  else RInfo_LamK0_0010 = GetRInfo(kLamK0, k0010, tInfoVec[0], tInfoVec[1], tInfoVec[2]);
+  else RInfo_LamK0_0010 = GetRInfo(kLamK0, k0010, tInfoVec2d[tFitToPlot][0], tInfoVec2d[tFitToPlot][1], tInfoVec2d[tFitToPlot][2]);
   double tLamK00010R = RInfo_LamK0_0010[0];
   double tLamK00010Rerr = RInfo_LamK0_0010[1];
-  double tLamK00010RerrSys = 0.329;
+  double tLamK00010RerrSys = RInfo_LamK0_0010[2];
 /*
   double tLamK00010R = 3.024;
   double tLamK00010Rerr = 0.541;
@@ -391,10 +413,10 @@ int main(int argc, char **argv)
   if(bUseReducedMassCalculation) tLamK01030mT = 0.25*(1.377+1.377+1.378+1.375);  //m_red
   vector<double> RInfo_LamK0_1030;
   if(bDrawQM) RInfo_LamK0_1030 = GetRInfoQM(kLamK0, k1030);
-  else RInfo_LamK0_1030 = GetRInfo(kLamK0, k1030, tInfoVec[0], tInfoVec[1], tInfoVec[2]);
+  else RInfo_LamK0_1030 = GetRInfo(kLamK0, k1030, tInfoVec2d[tFitToPlot][0], tInfoVec2d[tFitToPlot][1], tInfoVec2d[tFitToPlot][2]);
   double tLamK01030R = RInfo_LamK0_1030[0];
   double tLamK01030Rerr = RInfo_LamK0_1030[1];
-  double tLamK01030RerrSys = 0.324;
+  double tLamK01030RerrSys = RInfo_LamK0_1030[2];
 /*
   double tLamK01030R = 2.270;
   double tLamK01030Rerr = 0.413;
@@ -406,10 +428,10 @@ int main(int argc, char **argv)
   if(bUseReducedMassCalculation) tLamK03050mT = 0.25*(1.331+1.328+1.331+1.327);  //m_red
   vector<double> RInfo_LamK0_3050;
   if(bDrawQM) RInfo_LamK0_3050 = GetRInfoQM(kLamK0, k3050);
-  else RInfo_LamK0_3050 = GetRInfo(kLamK0, k3050, tInfoVec[0], tInfoVec[1], tInfoVec[2]);
+  else RInfo_LamK0_3050 = GetRInfo(kLamK0, k3050, tInfoVec2d[tFitToPlot][0], tInfoVec2d[tFitToPlot][1], tInfoVec2d[tFitToPlot][2]);
   double tLamK03050R = RInfo_LamK0_3050[0];
   double tLamK03050Rerr = RInfo_LamK0_3050[1];
-  double tLamK03050RerrSys = 0.280;
+  double tLamK03050RerrSys = RInfo_LamK0_3050[2];
 /*
   double tLamK03050R = 1.669;
   double tLamK03050Rerr = 0.307;
@@ -438,10 +460,10 @@ int main(int argc, char **argv)
   if(bUseReducedMassCalculation) tLamKchP0010mT = 0.25*(1.203+1.200+1.206+1.201); //m_red
   vector<double> RInfo_LamKchP_0010;
   if(bDrawQM) RInfo_LamKchP_0010 = GetRInfoQM(kLamKchP, k0010);
-  else RInfo_LamKchP_0010 = GetRInfo(kLamKchP, k0010, tInfoVec[0], tInfoVec[1], tInfoVec[2]);
+  else RInfo_LamKchP_0010 = GetRInfo(kLamKchP, k0010, tInfoVec2d[tFitToPlot][0], tInfoVec2d[tFitToPlot][1], tInfoVec2d[tFitToPlot][2]);
   double tLamKchP0010R = RInfo_LamKchP_0010[0];
   double tLamKchP0010Rerr = RInfo_LamKchP_0010[1];
-  double tLamKchP0010RerrSys = 0.830;
+  double tLamKchP0010RerrSys = RInfo_LamKchP_0010[2];
 /*
   double tLamKchP0010R = 4.045;
   double tLamKchP0010Rerr = 0.381;
@@ -453,10 +475,10 @@ int main(int argc, char **argv)
   if(bUseReducedMassCalculation) tLamKchP1030mT = 0.25*(1.188+1.182+1.192+1.184); //m_red
   vector<double> RInfo_LamKchP_1030;
   if(bDrawQM) RInfo_LamKchP_1030 = GetRInfoQM(kLamKchP, k1030);
-  else RInfo_LamKchP_1030 = GetRInfo(kLamKchP, k1030, tInfoVec[0], tInfoVec[1], tInfoVec[2]);
+  else RInfo_LamKchP_1030 = GetRInfo(kLamKchP, k1030, tInfoVec2d[tFitToPlot][0], tInfoVec2d[tFitToPlot][1], tInfoVec2d[tFitToPlot][2]);
   double tLamKchP1030R = RInfo_LamKchP_1030[0];
   double tLamKchP1030Rerr = RInfo_LamKchP_1030[1];
-  double tLamKchP1030RerrSys = 0.663;
+  double tLamKchP1030RerrSys = RInfo_LamKchP_1030[2];
 /*
   double tLamKchP1030R = 3.923;
   double tLamKchP1030Rerr = 0.454;
@@ -468,10 +490,10 @@ int main(int argc, char **argv)
   if(bUseReducedMassCalculation) tLamKchP3050mT = 0.25*(1.144+1.134+1.149+1.136); //m_red
   vector<double> RInfo_LamKchP_3050;
   if(bDrawQM) RInfo_LamKchP_3050 = GetRInfoQM(kLamKchP, k3050);
-  else RInfo_LamKchP_3050 = GetRInfo(kLamKchP, k3050, tInfoVec[0], tInfoVec[1], tInfoVec[2]);
+  else RInfo_LamKchP_3050 = GetRInfo(kLamKchP, k3050, tInfoVec2d[tFitToPlot][0], tInfoVec2d[tFitToPlot][1], tInfoVec2d[tFitToPlot][2]);
   double tLamKchP3050R = RInfo_LamKchP_3050[0];
   double tLamKchP3050Rerr = RInfo_LamKchP_3050[1];
-  double tLamKchP3050RerrSys = 0.420;
+  double tLamKchP3050RerrSys = RInfo_LamKchP_3050[2];
 /*
   double tLamKchP3050R = 3.717;
   double tLamKchP3050Rerr = 0.554;
@@ -500,10 +522,10 @@ int main(int argc, char **argv)
   if(bUseReducedMassCalculation) tLamKchM0010mT = 0.25*(1.204+1.202+1.205+1.204); //m_red
   vector<double> RInfo_LamKchM_0010;
   if(bDrawQM) RInfo_LamKchM_0010 = GetRInfoQM(kLamKchM, k0010);
-  else RInfo_LamKchM_0010 = GetRInfo(kLamKchM, k0010, tInfoVec[0], tInfoVec[1], tInfoVec[2]);
+  else RInfo_LamKchM_0010 = GetRInfo(kLamKchM, k0010, tInfoVec2d[tFitToPlot][0], tInfoVec2d[tFitToPlot][1], tInfoVec2d[tFitToPlot][2]);
   double tLamKchM0010R = RInfo_LamKchM_0010[0];
   double tLamKchM0010Rerr = RInfo_LamKchM_0010[1];
-  double tLamKchM0010RerrSys = 1.375;
+  double tLamKchM0010RerrSys = RInfo_LamKchM_0010[2];
 /*
   double tLamKchM0010R = 4.787;
   double tLamKchM0010Rerr = 0.788;
@@ -515,10 +537,10 @@ int main(int argc, char **argv)
   if(bUseReducedMassCalculation) tLamKchM1030mT = 0.25*(1.187+1.187+1.189+1.190); //m_red
   vector<double> RInfo_LamKchM_1030;
   if(bDrawQM) RInfo_LamKchM_1030 = GetRInfoQM(kLamKchM, k1030);
-  else RInfo_LamKchM_1030 = GetRInfo(kLamKchM, k1030, tInfoVec[0], tInfoVec[1], tInfoVec[2]);
+  else RInfo_LamKchM_1030 = GetRInfo(kLamKchM, k1030, tInfoVec2d[tFitToPlot][0], tInfoVec2d[tFitToPlot][1], tInfoVec2d[tFitToPlot][2]);
   double tLamKchM1030R = RInfo_LamKchM_1030[0];
   double tLamKchM1030Rerr = RInfo_LamKchM_1030[1];
-  double tLamKchM1030RerrSys = 0.978;
+  double tLamKchM1030RerrSys = RInfo_LamKchM_1030[2];
 /*
   double tLamKchM1030R = 4.001;
   double tLamKchM1030Rerr = 0.719;
@@ -530,10 +552,10 @@ int main(int argc, char **argv)
   if(bUseReducedMassCalculation) tLamKchM3050mT = 0.25*(1.139+1.143+1.141+1.146); //m_red
   vector<double> RInfo_LamKchM_3050;
   if(bDrawQM) RInfo_LamKchM_3050 = GetRInfoQM(kLamKchM, k3050);
-  else RInfo_LamKchM_3050 = GetRInfo(kLamKchM, k3050, tInfoVec[0], tInfoVec[1], tInfoVec[2]);
+  else RInfo_LamKchM_3050 = GetRInfo(kLamKchM, k3050, tInfoVec2d[tFitToPlot][0], tInfoVec2d[tFitToPlot][1], tInfoVec2d[tFitToPlot][2]);
   double tLamKchM3050R = RInfo_LamKchM_3050[0];
   double tLamKchM3050Rerr = RInfo_LamKchM_3050[1];
-  double tLamKchM3050RerrSys = 0.457;
+  double tLamKchM3050RerrSys = RInfo_LamKchM_3050[2];
 /*
   double tLamKchM3050R = 2.112;
   double tLamKchM3050Rerr = 0.517;
@@ -861,8 +883,21 @@ int main(int argc, char **argv)
     DrawPoints("GraphLamKchAvg3050",tLamKchAvg3050Sys,tLamKchAvg3050Stat,myBlueT,myBlue,tMarkerStyleLamKchAvg,tMarkerSize,tMarkerStyleLamKchAvgo);
   }
 
+//-------------------------------------------------------------------------------
+  TLatex* tTex = new TLatex();
+  tTex->SetTextAlign(12);
+  tTex->SetLineWidth(2);
+  tTex->SetTextFont(62);
+  tTex->SetTextSize(0.06);
 
+  TMarker *tMarker = new TMarker();
+  tMarker->SetMarkerSize(2.0);
+  tMarker->SetMarkerStyle(20);
+  tMarker->SetMarkerColor(kBlack);
 
+  tTex->DrawLatex(0.35, 2., tDescriptors[tFitToPlot]);
+  tMarker->SetMarkerStyle(tMarkerStyles[tFitToPlot]);
+  tMarker->DrawMarker(0.3, 2.);
 
 //---------------------------- Save file ----------------------------------------------------
   if(bSaveImage) canmtcomb->SaveAs(tSaveName);
