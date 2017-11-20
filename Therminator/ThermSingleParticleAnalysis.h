@@ -63,6 +63,12 @@ private:
   TH2* f2dRadiiVsBeta;
   TH3* f3dRadii;
 
+  TH3* fTransverseEmission;
+  TH3* fTransverseEmissionPrimaryOnly;
+
+  TH3* fTransverseEmissionVsTau;
+  TH3* fTransverseEmissionVsTauPrimaryOnly;
+
 #ifdef __ROOT__
   ClassDef(ThermSingleParticleAnalysis, 1)
 #endif

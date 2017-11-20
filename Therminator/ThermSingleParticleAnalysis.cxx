@@ -19,11 +19,17 @@ ThermSingleParticleAnalysis::ThermSingleParticleAnalysis(ParticlePDGType aPartic
   fUniqueParents(0),
   fAllFathers(0),
 
-  fParents(0),
-  fRadii(0),
-  f2dRadiiVsPid(0),
-  f2dRadiiVsBeta(0),
-  f3dRadii(0)
+  fParents(nullptr),
+  fRadii(nullptr),
+  f2dRadiiVsPid(nullptr),
+  f2dRadiiVsBeta(nullptr),
+  f3dRadii(nullptr),
+
+  fTransverseEmission(nullptr),
+  fTransverseEmissionPrimaryOnly(nullptr),
+
+  fTransverseEmissionVsTau(nullptr),
+  fTransverseEmissionVsTauPrimaryOnly(nullptr)
 {
   fParents = new TH1D(TString::Format("%sParents",GetPDGRootName(fParticlePDGType)), 
                       TString::Format("%sParents",GetPDGRootName(fParticlePDGType)), 
@@ -48,6 +54,30 @@ ThermSingleParticleAnalysis::ThermSingleParticleAnalysis(ParticlePDGType aPartic
                       200, 0, 200, 
                       100, 0, 1., 
                       1000, 0, 1000);
+
+  fTransverseEmission = new TH3D(TString::Format("%sTransverseEmission",GetPDGRootName(fParticlePDGType)),
+                                 TString::Format("%sTransverseEmission",GetPDGRootName(fParticlePDGType)),
+                                 400, -20., 20.,
+                                 400, -20., 20.,
+                                 200, -1., 1.);
+
+  fTransverseEmissionPrimaryOnly = new TH3D(TString::Format("%sTransverseEmissionPrimaryOnly",GetPDGRootName(fParticlePDGType)),
+                                           TString::Format("%sTransverseEmissionPrimaryOnly",GetPDGRootName(fParticlePDGType)),
+                                           400, -20., 20.,
+                                           400, -20., 20.,
+                                           200, -1., 1.);
+
+  fTransverseEmissionVsTau = new TH3D(TString::Format("%sTransverseEmissionVsTau",GetPDGRootName(fParticlePDGType)),
+                                           TString::Format("%sTransverseEmissionVsTau",GetPDGRootName(fParticlePDGType)),
+                                           200, 0, 20.,
+                                           200, 0, 20.,
+                                           100, 0., 1.);
+
+  fTransverseEmissionVsTauPrimaryOnly = new TH3D(TString::Format("%sTransverseEmissionVsTauPrimaryOnly",GetPDGRootName(fParticlePDGType)),
+                                                 TString::Format("%sTransverseEmissionVsTauPrimaryOnly",GetPDGRootName(fParticlePDGType)),
+                                                 200, 0, 20.,
+                                                 200, 0, 20.,
+                                                 100, 0., 1.);
 
   //-------------------------------
   switch(fParticlePDGType) {
@@ -179,6 +209,18 @@ void ThermSingleParticleAnalysis::MapAndFillRadiiHistograms(ThermParticle &aPart
   f2dRadiiVsPid->Fill(tBin, tDecayLength);
   f2dRadiiVsBeta->Fill(tBeta, tDecayLength);
   f3dRadii->Fill(tBin, tBeta, tDecayLength);
+
+  double tBetaX = aParticle.GetPx()/aParticle.GetE();
+  double tBetaY = aParticle.GetPy()/aParticle.GetE();
+
+  if(tBetaY > -0.1 && tBetaY < 0.1) 
+  {
+    fTransverseEmission->Fill(aParticle.GetX(), aParticle.GetY(), tBetaX);
+    if(aParticle.IsPrimordial()) fTransverseEmissionPrimaryOnly->Fill(aParticle.GetX(), aParticle.GetY(), tBetaX);
+  }
+  fTransverseEmissionVsTau->Fill(sqrt(aParticle.GetX()*aParticle.GetX() + aParticle.GetY()*aParticle.GetY()), aParticle.GetTau(), tBeta);  //TODO is GetTau() correct?
+  if(aParticle.IsPrimordial()) fTransverseEmissionVsTauPrimaryOnly->Fill(sqrt(aParticle.GetX()*aParticle.GetX() + aParticle.GetY()*aParticle.GetY()), aParticle.GetTau(), tBeta);
+
 }
 
 //________________________________________________________________________________________________________________
@@ -265,5 +307,10 @@ void ThermSingleParticleAnalysis::SaveAll(TFile *aFile)
   f2dRadiiVsBeta->Write();
   f3dRadii->Write();
 
+  fTransverseEmission->Write();
+  fTransverseEmissionPrimaryOnly->Write();
+
+  fTransverseEmissionVsTau->Write();
+  fTransverseEmissionVsTauPrimaryOnly->Write();
 }
 
