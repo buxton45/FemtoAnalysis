@@ -27,6 +27,9 @@ enum AverageType {kAverage=0, kWeightedMean=1};
 enum IncludeResType {kInclude10ResOnly=0, kInclude3ResOnly=1, kInclude10ResAnd3Res=2, kIncludeNoRes=3};
 const char* const cIncludeResTypeTags[4] = {"_10Res", "_3Res", "_10ResAnd3Res", ""};
 
+enum IncludeD0Type {kFreeD0Only=0, kFixedD0Only=1, kFreeAndFixedD0=2};
+const char* const cIncludeD0TypeTags[4] = {"_FreeD0Only", "_FixedD0Only", "_FreeAndFixedD0"};
+
 //---------------------------------------------------------------------------------------------------------------------------------
 struct FitInfo
 {
