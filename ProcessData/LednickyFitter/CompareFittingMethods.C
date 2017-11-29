@@ -117,6 +117,104 @@ vector<FitInfo> GetFitInfoVec(AnalysisType aAnType, IncludeResType aIncludeResTy
 
 
 //---------------------------------------------------------------------------------------------------------------------------------
+vector<bool> GetIncludePlotsVec(IncludeResType aIncludeResType, IncludeD0Type aIncludeD0Type)
+{
+  bool bInclude_QM = true;
+  //------------------------
+  bool bInclude_10and3_Avg_FreeD0 = true;
+  bool bInclude_10and3_Avg_FixedD0 = true;
+  bool bInclude_10and3_Avg = true;
+  //------------------------
+  bool bInclude_10_FreeD0 = true;
+  bool bInclude_10_FixedD0 = true;
+  bool bInclude_10_Avg = true;
+  //------------------------
+  bool bInclude_3_FreeD0 = true;
+  bool bInclude_3_FixedD0 = true;
+  bool bInclude_3_Avg = true;
+  //----------------------------------------
+
+  if(aIncludeResType==kInclude10ResOnly)
+  {
+    bInclude_10and3_Avg_FreeD0 = false;
+    bInclude_10and3_Avg_FixedD0 = false;
+    bInclude_10and3_Avg = false;
+
+    bInclude_10_FreeD0 = true;
+    bInclude_10_FixedD0 = true;
+    bInclude_10_Avg = true;
+
+
+    bInclude_3_FreeD0 = false;
+    bInclude_3_FixedD0 = false;
+    bInclude_3_Avg = false;
+  }
+  else if(aIncludeResType==kInclude3ResOnly)
+  {
+    bInclude_10and3_Avg_FreeD0 = false;
+    bInclude_10and3_Avg_FixedD0 = false;
+    bInclude_10and3_Avg = false;
+
+    bInclude_10_FreeD0 = false;
+    bInclude_10_FixedD0 = false;
+    bInclude_10_Avg = false;
+
+
+    bInclude_3_FreeD0 = true;
+    bInclude_3_FixedD0 = true;
+    bInclude_3_Avg = true;
+  }
+
+  //----------------------------------------
+
+  if(aIncludeD0Type==kFreeD0Only)
+  {
+    if(aIncludeResType==kInclude10ResAnd3Res) bInclude_10and3_Avg_FreeD0 = true;
+    else bInclude_10and3_Avg_FreeD0 = false;
+    bInclude_10and3_Avg_FixedD0 = false;
+    bInclude_10and3_Avg = false;
+
+    if(aIncludeResType != kInclude3ResOnly) bInclude_10_FreeD0 = true;
+    else bInclude_10_FreeD0 = false;
+    bInclude_10_FixedD0 = false;
+    bInclude_10_Avg = false;
+
+
+    if(aIncludeResType != kInclude10ResOnly) bInclude_3_FreeD0 = true;
+    else bInclude_3_FreeD0 = false;
+    bInclude_3_FixedD0 = false;
+    bInclude_3_Avg = false;
+  }
+  else if(aIncludeD0Type==kFixedD0Only)
+  {
+    bInclude_10and3_Avg_FreeD0 = false;
+    if(aIncludeResType==kInclude10ResAnd3Res) bInclude_10and3_Avg_FixedD0 = true;
+    else bInclude_10and3_Avg_FixedD0 = false;
+    bInclude_10and3_Avg = false;
+
+    bInclude_10_FreeD0 = false;
+    if(aIncludeResType != kInclude3ResOnly) bInclude_10_FixedD0 = true;
+    else bInclude_10_FixedD0 = false;
+    bInclude_10_Avg = false;
+
+
+    bInclude_3_FreeD0 = false;
+    if(aIncludeResType != kInclude10ResOnly) bInclude_3_FixedD0 = true;
+    else bInclude_3_FixedD0 = false;
+    bInclude_3_Avg = false;
+  }
+
+  //----------------------------------------
+  vector<bool> tIncludePlots{bInclude_QM, 
+                             bInclude_10and3_Avg_FreeD0, bInclude_10and3_Avg_FixedD0, bInclude_10and3_Avg,
+                             bInclude_10_FreeD0,         bInclude_10_FixedD0,         bInclude_10_Avg,
+                             bInclude_3_FreeD0,          bInclude_3_FixedD0,          bInclude_3_Avg};
+  return tIncludePlots;
+}
+
+
+
+//---------------------------------------------------------------------------------------------------------------------------------
 void DrawChi2PerNDF(double aStartX, double aStartY, TPad* aPad, vector<FitInfo> &aFitInfoVec)
 {
   aPad->cd();
@@ -862,19 +960,13 @@ void DrawRadiusvsLambdaAcrossAnalysesQMResults(TPad* aPad, int aMarkerStyle=20, 
 }
 
 
-
-
-
 //---------------------------------------------------------------------------------------------------------------------------------
-TCanvas* CompareAllRadiusvsLambdaAcrossAnalyses(TString aCanBaseName, CentralityType aCentType, vector<IncludeResType> &aIncResTypes, vector<IncludeD0Type> &aIncD0Types, vector<int> &aMarkerStyles, vector<double> &aMarkerSizes, vector<bool> &aIncludePlots, vector<TString> &aDescriptors, vector<double> &aDescriptorsPositionInfo)
+TCanvas* CompareAllRadiusvsLambdaAcrossAnalyses(TString aCanBaseName, CentralityType aCentType, vector<bool> &aIncludePlots, vector<double> &aDescriptorsPositionInfo)
 {
   //Note aDescriptorsPositionInfo = [tStartX, tStartY, tIncrementX, tIncrementY, tTextSize]
   assert(aDescriptorsPositionInfo.size()==5);
+  assert(aIncludePlots.size() == tDrawAcrossAnalysesInfoVec.size());
 
-  assert(aIncResTypes.size() == aIncD0Types.size());
-  assert(aIncResTypes.size() == aMarkerStyles.size());
-  assert(aIncResTypes.size() == aIncludePlots.size());
-  assert(aIncResTypes.size() == aDescriptors.size());
   //----------------------------------------
 
   TCanvas* tReturnCan = new TCanvas(TString::Format("tCan%s%s", aCanBaseName.Data(), cCentralityTags[aCentType]), 
@@ -898,23 +990,34 @@ TCanvas* CompareAllRadiusvsLambdaAcrossAnalyses(TString aCanBaseName, Centrality
   tTex->SetTextFont(42);
   tTex->SetTextSize(tTextSize);
 
-  const Size_t tMarkerSize=1.6;
+  const Size_t tDescriptorMarkerSize=1.6;
   TMarker *tMarker = new TMarker();
-  tMarker->SetMarkerSize(tMarkerSize);
+  tMarker->SetMarkerSize(tDescriptorMarkerSize);
   tMarker->SetMarkerStyle(20);
   tMarker->SetMarkerColor(kBlack);
 
-  int iTex = 0;
+  IncludeResType tIncResType;
+  IncludeD0Type tIncD0Type;
+  int tMarkerStyle;
+  double tMarkerSize;
+  TString tDescriptor;
 
-  for(unsigned int i=0; i<aIncResTypes.size(); i++)
+  int iTex = 0;
+  for(unsigned int i=0; i<aIncludePlots.size(); i++)
   {
+    tIncResType = tDrawAcrossAnalysesInfoVec[i].incResType;
+    tIncD0Type = tDrawAcrossAnalysesInfoVec[i].incD0Type;
+    tMarkerStyle = tDrawAcrossAnalysesInfoVec[i].markerStyle;
+    tMarkerSize = tDrawAcrossAnalysesInfoVec[i].markerSize;
+    tDescriptor = tDrawAcrossAnalysesInfoVec[i].descriptor;
+
     if(aIncludePlots[i])
     {
-      if(aIncResTypes[i]==kIncludeNoRes) DrawRadiusvsLambdaAcrossAnalysesQMResults((TPad*)tReturnCan, aMarkerStyles[i], aMarkerSizes[i], aCentType);
-      else DrawRadiusvsLambdaAcrossAnalyses((TPad*)tReturnCan, aMarkerStyles[i], aMarkerSizes[i], aCentType, aIncResTypes[i], aIncD0Types[i]);
+      if(tIncResType==kIncludeNoRes) DrawRadiusvsLambdaAcrossAnalysesQMResults((TPad*)tReturnCan, tMarkerStyle, tMarkerSize, aCentType);
+      else DrawRadiusvsLambdaAcrossAnalyses((TPad*)tReturnCan, tMarkerStyle, tMarkerSize, aCentType, tIncResType, tIncD0Type);
 
-      tTex->DrawLatex(tStartX, tStartY-iTex*tIncrementY, aDescriptors[i]);
-      tMarker->SetMarkerStyle(aMarkerStyles[i]);
+      tTex->DrawLatex(tStartX, tStartY-iTex*tIncrementY, tDescriptor);
+      tMarker->SetMarkerStyle(tMarkerStyle);
       tMarker->DrawMarker(tStartX-tIncrementX, tStartY-iTex*tIncrementY);
       iTex++;
     }
@@ -944,268 +1047,64 @@ TCanvas* CompareAllRadiusvsLambdaAcrossAnalyses(TString aCanBaseName, Centrality
 
 
 //---------------------------------------------------------------------------------------------------------------------------------
-TCanvas* CompareAllRadiusvsLambdaAcrossAnalysesv1(CentralityType aCentType=k0010, IncludeResType aIncludeResType=kInclude10ResAnd3Res, IncludeD0Type aIncludeD0Type=kFreeAndFixedD0, bool bSaveImage=false)
+TCanvas* CompareAllRadiusvsLambdaAcrossAnalysesv3(CentralityType aCentType=k0010, IncludeResType aIncludeResType=kInclude10ResAnd3Res, IncludeD0Type aIncludeD0Type=kFreeAndFixedD0, bool bSaveImage=false)
 {
-  //------------------------
-  bool bInclude_QM = true;
-  int tMarkerStyle_QM = 20;
-  double tMarkerSize_QM = 1.0;
-  IncludeResType tIncResType_QM = kIncludeNoRes;
-  IncludeD0Type tIncD0Type_QM = kFreeD0Only;
-  TString tDescriptor_QM = "QM 2017";
+  //TODO
+  bool bDrawv1 = false;
+  bool bDrawv2 = false;
+
+  assert(!(bDrawv1&&bDrawv2));
 
   //------------------------
-  bool bInclude_10and3_Avg = true;
-  int tMarkerStyle_10and3_Avg = 24;
-  double tMarkerSize_10and3_Avg = 2.0;
-  IncludeResType tIncResType_10and3_Avg = kInclude10ResAnd3Res;
-  IncludeD0Type tIncD0Type_10and3_Avg = kFreeAndFixedD0;
-  TString tDescriptor_10and3_Avg = "10 & 3 Res., Avg.";
-
-  //------------------------
-  bool bInclude_10_Avg = true;
-  int tMarkerStyle_10_Avg = 29;
-  double tMarkerSize_10_Avg = 2.0;
-  IncludeResType tIncResType_10_Avg = kInclude10ResOnly;
-  IncludeD0Type tIncD0Type_10_Avg = kFreeAndFixedD0;
-  TString tDescriptor_10_Avg = "10 Res., Avg.";
-
-  bool bInclude_3_Avg = true;
-  int tMarkerStyle_3_Avg = 30;
-  double tMarkerSize_3_Avg = 2.0;
-  IncludeResType tIncResType_3_Avg = kInclude3ResOnly;
-  IncludeD0Type tIncD0Type_3_Avg = kFreeAndFixedD0;
-  TString tDescriptor_3_Avg = "3 Res., Avg.";
-
-  //------------------------
-  bool bInclude_10_FreeD0 = true;
-  int tMarkerStyle_10_FreeD0 = 33;
-  double tMarkerSize_10_FreeD0 = 1.0;
-  IncludeResType tIncResType_10_FreeD0 = kInclude10ResOnly;
-  IncludeD0Type tIncD0Type_10_FreeD0 = kFreeD0Only;
-  TString tDescriptor_10_FreeD0 = "10 Res., All Free";
-
-  bool bInclude_3_FreeD0 = true;
-  int tMarkerStyle_3_FreeD0 = 27;
-  double tMarkerSize_3_FreeD0 = 1.0;
-  IncludeResType tIncResType_3_FreeD0 = kInclude3ResOnly;
-  IncludeD0Type tIncD0Type_3_FreeD0 = kFreeD0Only;
-  TString tDescriptor_3_FreeD0 = "3 Res., All Free";
+  vector<bool> tIncludePlots = GetIncludePlotsVec(aIncludeResType, aIncludeD0Type);
 
   //----------------------------------------
-  if(aIncludeResType==kInclude10ResAnd3Res)
-  {
-    bInclude_QM = true;
-
-    bInclude_10and3_Avg = true;
-
-    bInclude_10_Avg = true;
-    bInclude_3_Avg = true;
-
-    bInclude_10_FreeD0 = true;
-    bInclude_3_FreeD0 = true;
-  }
-  else if(aIncludeResType==kInclude10ResOnly)
-  {
-    bInclude_QM = true;
-
-    bInclude_10and3_Avg = false;
-
-    bInclude_10_Avg = true;
-    bInclude_3_Avg = false;
-
-    bInclude_10_FreeD0 = true;
-    bInclude_3_FreeD0 = false;
-  }
-  else if(aIncludeResType==kInclude3ResOnly)
-  {
-    bInclude_QM = true;
-
-    bInclude_10and3_Avg = false;
-
-    bInclude_10_Avg = false;
-    bInclude_3_Avg = true;
-
-    bInclude_10_FreeD0 = false;
-    bInclude_3_FreeD0 = true;
-  }
-  else assert(0);
-
-  //----------------------------------------
-  vector<IncludeResType> tIncResTypes{tIncResType_QM,
-                                      tIncResType_10and3_Avg,
-                                      tIncResType_10_Avg,     tIncResType_3_Avg,
-                                      tIncResType_10_FreeD0,  tIncResType_3_FreeD0};
-
-  vector<IncludeD0Type> tIncD0Types{tIncD0Type_QM,
-                                    tIncD0Type_10and3_Avg,
-                                    tIncD0Type_10_Avg,     tIncD0Type_3_Avg,
-                                    tIncD0Type_10_FreeD0,  tIncD0Type_3_FreeD0};
-
-
-
-  vector<int> tMarkerStyles{tMarkerStyle_QM, 
-                            tMarkerStyle_10and3_Avg,
-                            tMarkerStyle_10_Avg,     tMarkerStyle_3_Avg, 
-                            tMarkerStyle_10_FreeD0,  tMarkerStyle_3_FreeD0};
-
-  vector<double> tMarkerSizes{tMarkerSize_QM, 
-                              tMarkerSize_10and3_Avg,
-                              tMarkerSize_10_Avg,     tMarkerSize_3_Avg, 
-                              tMarkerSize_10_FreeD0,  tMarkerSize_3_FreeD0};
-
-  vector<bool> tIncludePlots{bInclude_QM, 
-                             bInclude_10and3_Avg, 
-                             bInclude_10_Avg,    bInclude_3_Avg,
-                             bInclude_10_FreeD0, bInclude_3_FreeD0};
-
-  vector<TString> tDescriptors{tDescriptor_QM,
-                               tDescriptor_10and3_Avg,
-                               tDescriptor_10_Avg,     tDescriptor_3_Avg, 
-                               tDescriptor_10_FreeD0,  tDescriptor_3_FreeD0};
-
+  if(bDrawv1) tIncludePlots = tIncludePlotsv1;
+  if(bDrawv2) tIncludePlots = tIncludePlotsv2;
 
   //------------------------------------------------------
 
-  TString tCanBaseName = "CompareAllRadiusvsLambdaAcrossAnalysesv1";
-
-  double tStartX = 5.8;
-  double tStartY = 0.7;
-  double tIncrementX = 0.10;
-  double tIncrementY = 0.10;
-  double tTextSize = 0.04;
-  vector<double> tDescriptorsPositionInfo{tStartX, tStartY, tIncrementX, tIncrementY, tTextSize};
-
-  TCanvas* tReturnCan = CompareAllRadiusvsLambdaAcrossAnalyses(tCanBaseName, aCentType, tIncResTypes, tIncD0Types, tMarkerStyles, tMarkerSizes, tIncludePlots, tDescriptors, tDescriptorsPositionInfo);
-
-  //------------------------------------------------------
-
-  if(bSaveImage)
-  {
-    TString tSaveLocationFull;
-    tSaveLocationFull = gSaveLocationBase + TString::Format("AllRadiusvsLambdaAcrossAnalysesv1%s%s.eps", cCentralityTags[aCentType], cIncludeResTypeTags[aIncludeResType]);
-    tReturnCan->SaveAs(tSaveLocationFull);
-  }
-
-  return tReturnCan;
-}
-
-//---------------------------------------------------------------------------------------------------------------------------------
-TCanvas* CompareAllRadiusvsLambdaAcrossAnalysesv2(CentralityType aCentType=k0010, IncludeResType aIncludeResType=kInclude10ResAnd3Res, IncludeD0Type aIncludeD0Type=kFreeAndFixedD0, bool bSaveImage=false)
-{
-  //------------------------
-
-  bool bInclude_QM = true;
-  int tMarkerStyle_QM = 20;
-  double tMarkerSize_QM = 1.0;
-  IncludeResType tIncResType_QM = kIncludeNoRes;
-  IncludeD0Type tIncD0Type_QM = kFreeD0Only;
-  TString tDescriptor_QM = "QM 2017";
-
-  //------------------------
-  bool bInclude_10and3_Avg_FreeD0 = true;
-  int tMarkerStyle_10and3_Avg_FreeD0 = 21;
-  double tMarkerSize_10and3_Avg_FreeD0 = 2.0;
-  IncludeResType tIncResType_10and3_Avg_FreeD0 = kInclude10ResAnd3Res;
-  IncludeD0Type tIncD0Type_10and3_Avg_FreeD0 = kFreeD0Only;
-  TString tDescriptor_10and3_Avg_FreeD0 = "10&3 Res., Avg., Free d_{0}";
-
-  bool bInclude_10and3_Avg_FixedD0 = true;
-  int tMarkerStyle_10and3_Avg_FixedD0 = 25;
-  double tMarkerSize_10and3_Avg_FixedD0 = 2.0;
-  IncludeResType tIncResType_10and3_Avg_FixedD0 = kInclude10ResAnd3Res;
-  IncludeD0Type tIncD0Type_10and3_Avg_FixedD0 = kFixedD0Only;
-  TString tDescriptor_10and3_Avg_FixedD0 = "10&3 Res., Avg., Fix d_{0}";
-
-  //------------------------
-  bool bInclude_10_FreeD0 = true;
-  int tMarkerStyle_10_FreeD0 = 33;
-  double tMarkerSize_10_FreeD0 = 1.0;
-  IncludeResType tIncResType_10_FreeD0 = kInclude10ResOnly;
-  IncludeD0Type tIncD0Type_10_FreeD0 = kFreeD0Only;
-  TString tDescriptor_10_FreeD0 = "10 Res., Free d_{0}";
-
-  bool bInclude_10_FixedD0 = true;
-  int tMarkerStyle_10_FixedD0 = 27;
-  double tMarkerSize_10_FixedD0 = 1.0;
-  IncludeResType tIncResType_10_FixedD0 = kInclude10ResOnly;
-  IncludeD0Type tIncD0Type_10_FixedD0 = kFixedD0Only;
-  TString tDescriptor_10_FixedD0 = "10 Res., Fix d_{0}";
-
-  //------------------------
-  bool bInclude_3_FreeD0 = true;
-  int tMarkerStyle_3_FreeD0 = 29;
-  double tMarkerSize_3_FreeD0 = 1.0;
-  IncludeResType tIncResType_3_FreeD0 = kInclude3ResOnly;
-  IncludeD0Type tIncD0Type_3_FreeD0 = kFreeD0Only;
-  TString tDescriptor_3_FreeD0 = "3 Res., Free d_{0}";
-
-  bool bInclude_3_FixedD0 = true;
-  int tMarkerStyle_3_FixedD0 = 30;
-  double tMarkerSize_3_FixedD0 = 1.0;
-  IncludeResType tIncResType_3_FixedD0 = kInclude3ResOnly;
-  IncludeD0Type tIncD0Type_3_FixedD0 = kFixedD0Only;
-  TString tDescriptor_3_FixedD0 = "3 Res., Fix d_{0}";
-
-  //----------------------------------------
-  vector<IncludeResType> tIncResTypes{tIncResType_QM,
-                                      tIncResType_10and3_Avg_FreeD0, tIncResType_10and3_Avg_FixedD0,
-                                      tIncResType_10_FreeD0,     tIncResType_10_FixedD0,
-                                      tIncResType_3_FreeD0,          tIncResType_3_FixedD0};
-
-  vector<IncludeD0Type> tIncD0Types{tIncD0Type_QM,
-                                    tIncD0Type_10and3_Avg_FreeD0, tIncD0Type_10and3_Avg_FixedD0,
-                                    tIncD0Type_10_FreeD0,     tIncD0Type_10_FixedD0,
-                                    tIncD0Type_3_FreeD0,          tIncD0Type_3_FixedD0};
-
-
-  vector<int> tMarkerStyles{tMarkerStyle_QM, 
-                            tMarkerStyle_10and3_Avg_FreeD0, tMarkerStyle_10and3_Avg_FixedD0,
-                            tMarkerStyle_10_FreeD0,         tMarkerStyle_10_FixedD0, 
-                            tMarkerStyle_3_FreeD0,          tMarkerStyle_3_FixedD0};
-
-  vector<double> tMarkerSizes{tMarkerSize_QM, 
-                              tMarkerSize_10and3_Avg_FreeD0, tMarkerSize_10and3_Avg_FixedD0,
-                              tMarkerSize_10_FreeD0,         tMarkerSize_10_FixedD0, 
-                              tMarkerSize_3_FreeD0,          tMarkerSize_3_FixedD0};
-
-  vector<bool> tIncludePlots{bInclude_QM, 
-                             bInclude_10and3_Avg_FreeD0, bInclude_10and3_Avg_FixedD0,
-                             bInclude_10_FreeD0,    bInclude_10_FixedD0,
-                             bInclude_3_FreeD0,         bInclude_3_FixedD0};
-
-  vector<TString> tDescriptors{tDescriptor_QM,
-                               tDescriptor_10and3_Avg_FreeD0, tDescriptor_10and3_Avg_FixedD0,
-                               tDescriptor_10_FreeD0,     tDescriptor_10_FixedD0, 
-                               tDescriptor_3_FreeD0,          tDescriptor_3_FixedD0};
-
-  //------------------------------------------------------
-
-  TString tCanBaseName = "CompareAllRadiusvsLambdaAcrossAnalysesv2";
+  TString tCanBaseName = "CompareAllRadiusvsLambdaAcrossAnalysesv3";
 
   double tStartX = 5.8;
   double tStartY = 0.75;
   double tIncrementX = 0.11;
   double tIncrementY = 0.11;
   double tTextSize = 0.03;
+
+  if(bDrawv1)
+  {
+    tStartX = 5.8;
+    tStartY = 0.7;
+    tIncrementX = 0.10;
+    tIncrementY = 0.10;
+    tTextSize = 0.04;
+  }
+
+  if(bDrawv2)
+  {
+    tStartX = 5.8;
+    tStartY = 0.75;
+    tIncrementX = 0.11;
+    tIncrementY = 0.11;
+    tTextSize = 0.03;
+  }
+
   vector<double> tDescriptorsPositionInfo{tStartX, tStartY, tIncrementX, tIncrementY, tTextSize};
 
-  TCanvas* tReturnCan = CompareAllRadiusvsLambdaAcrossAnalyses(tCanBaseName, aCentType, tIncResTypes, tIncD0Types, tMarkerStyles, tMarkerSizes, tIncludePlots, tDescriptors, tDescriptorsPositionInfo);
+  TCanvas* tReturnCan = CompareAllRadiusvsLambdaAcrossAnalyses(tCanBaseName, aCentType, tIncludePlots, tDescriptorsPositionInfo);
 
   //------------------------------------------------------
 
   if(bSaveImage)
   {
     TString tSaveLocationFull;
-    tSaveLocationFull = gSaveLocationBase + TString::Format("AllRadiusvsLambdaAcrossAnalysesv2%s%s.eps", cCentralityTags[aCentType], cIncludeResTypeTags[aIncludeResType]);
+    tSaveLocationFull = gSaveLocationBase + TString::Format("AllRadiusvsLambdaAcrossAnalysesv3%s%s.eps", cCentralityTags[aCentType], cIncludeResTypeTags[aIncludeResType]);
     tReturnCan->SaveAs(tSaveLocationFull);
   }
 
   return tReturnCan;
 }
-
-
-
 
 
 
@@ -1463,17 +1362,15 @@ void DrawD0AcrossAnalysesQMResults(TPad* aPad, int aMarkerStyle=20, double aMark
 
 
 
+
+
 //---------------------------------------------------------------------------------------------------------------------------------
-TCanvas* CompareAllReF0vsImF0AcrossAnalyses(TString aCanBaseName, vector<IncludeResType> &aIncResTypes, vector<IncludeD0Type> &aIncD0Types, vector<int> &aMarkerStyles, vector<double> &aMarkerSizes, vector<bool> &aIncludePlots, vector<TString> &aDescriptors, vector<double> &aDescriptorsPositionInfo)
+TCanvas* CompareAllReF0vsImF0AcrossAnalyses(TString aCanBaseName, vector<bool> &aIncludePlots, vector<double> &aDescriptorsPositionInfo)
 {
   //Note aDescriptorsPositionInfo = [tStartX, tStartY, tIncrementX, tIncrementY, tTextSize]
   assert(aDescriptorsPositionInfo.size()==5);
+  assert(aIncludePlots.size() == tDrawAcrossAnalysesInfoVec.size());
 
-  assert(aIncResTypes.size() == aIncD0Types.size());
-  assert(aIncResTypes.size() == aMarkerStyles.size());
-  assert(aIncResTypes.size() == aMarkerSizes.size());
-  assert(aIncResTypes.size() == aIncludePlots.size());
-  assert(aIncResTypes.size() == aDescriptors.size());
   //----------------------------------------
 
   TCanvas* tReturnCan = new TCanvas(TString::Format("tCan%s", aCanBaseName.Data()), TString::Format("tCan%s", aCanBaseName.Data()));
@@ -1508,32 +1405,47 @@ TCanvas* CompareAllReF0vsImF0AcrossAnalyses(TString aCanBaseName, vector<Include
   tTex->SetTextFont(42);
   tTex->SetTextSize(tTextSize);
 
-  const Size_t tMarkerSize=1.6;
+  const Size_t tDescriptorMarkerSize=1.6;
   TMarker *tMarker = new TMarker();
-  tMarker->SetMarkerSize(tMarkerSize);
+  tMarker->SetMarkerSize(tDescriptorMarkerSize);
   tMarker->SetMarkerStyle(20);
   tMarker->SetMarkerColor(kBlack);
 
-  int iTex = 0;
+  //------------------------------------------------------
 
-  for(unsigned int i=0; i<aIncResTypes.size(); i++)
+  IncludeResType tIncResType;
+  IncludeD0Type tIncD0Type;
+  int tMarkerStyle;
+  double tMarkerSize;
+  TString tDescriptor;
+
+  int iTex = 0;
+  for(unsigned int i=0; i<aIncludePlots.size(); i++)
   {
+
+    tIncResType = tDrawAcrossAnalysesInfoVec[i].incResType;
+    tIncD0Type = tDrawAcrossAnalysesInfoVec[i].incD0Type;
+    tMarkerStyle = tDrawAcrossAnalysesInfoVec[i].markerStyle;
+    tMarkerSize = tDrawAcrossAnalysesInfoVec[i].markerSize;
+    tDescriptor = tDrawAcrossAnalysesInfoVec[i].descriptor;
+
+
     if(aIncludePlots[i])
     {
-      if(aIncResTypes[i]==kIncludeNoRes)  //Signifies QM results
+      if(tIncResType==kIncludeNoRes)  //Signifies QM results
       {
-        DrawReF0vsImF0AcrossAnalysesQMResults((TPad*)tPadReF0vsImF0, aMarkerStyles[i], aMarkerSizes[i]);
-        DrawD0AcrossAnalysesQMResults((TPad*)tPadD0, aMarkerStyles[i], aMarkerSizes[i]);
+        DrawReF0vsImF0AcrossAnalysesQMResults((TPad*)tPadReF0vsImF0, tMarkerStyle, tMarkerSize);
+        DrawD0AcrossAnalysesQMResults((TPad*)tPadD0, tMarkerStyle, tMarkerSize);
       }
       else 
       {
-        DrawReF0vsImF0AcrossAnalyses((TPad*)tPadReF0vsImF0, aMarkerStyles[i], aMarkerSizes[i], aIncResTypes[i], aIncD0Types[i]);
-        DrawD0AcrossAnalyses((TPad*)tPadD0, aMarkerStyles[i], aMarkerSizes[i], aIncResTypes[i], aIncD0Types[i]);
+        DrawReF0vsImF0AcrossAnalyses((TPad*)tPadReF0vsImF0, tMarkerStyle, tMarkerSize, tIncResType, tIncD0Type);
+        DrawD0AcrossAnalyses((TPad*)tPadD0, tMarkerStyle, tMarkerSize, tIncResType, tIncD0Type);
       }
 
       tPadReF0vsImF0->cd();
-      tTex->DrawLatex(tStartX, tStartY-iTex*tIncrementY, aDescriptors[i]);
-      tMarker->SetMarkerStyle(aMarkerStyles[i]);
+      tTex->DrawLatex(tStartX, tStartY-iTex*tIncrementY, tDescriptor);
+      tMarker->SetMarkerStyle(tMarkerStyle);
       tMarker->DrawMarker(tStartX-tIncrementX, tStartY-iTex*tIncrementY);
       iTex++;
     }
@@ -1556,264 +1468,6 @@ TCanvas* CompareAllReF0vsImF0AcrossAnalyses(TString aCanBaseName, vector<Include
 
 
 
-
-
-
-
-
-
-
-
-
-
-//---------------------------------------------------------------------------------------------------------------------------------
-TCanvas* CompareAllReF0vsImF0AcrossAnalysesv1(IncludeResType aIncludeResType=kInclude10ResAnd3Res, IncludeD0Type aIncludeD0Type=kFreeAndFixedD0, bool bSaveImage=false)
-{
-  //------------------------
-  bool bInclude_QM = true;
-  int tMarkerStyle_QM = 20;
-  double tMarkerSize_QM = 1.0;
-  IncludeResType tIncResType_QM = kIncludeNoRes;
-  IncludeD0Type tIncD0Type_QM = kFreeD0Only;
-  TString tDescriptor_QM = "QM 2017";
-
-  //------------------------
-  bool bInclude_10and3_Avg = true;
-  int tMarkerStyle_10and3_Avg = 24;
-  double tMarkerSize_10and3_Avg = 2.0;
-  IncludeResType tIncResType_10and3_Avg = kInclude10ResAnd3Res;
-  IncludeD0Type tIncD0Type_10and3_Avg = kFreeAndFixedD0;
-  TString tDescriptor_10and3_Avg = "10 & 3 Res., Avg.";
-
-  //------------------------
-  bool bInclude_10_Avg = true;
-  int tMarkerStyle_10_Avg = 29;
-  double tMarkerSize_10_Avg = 2.0;
-  IncludeResType tIncResType_10_Avg = kInclude10ResOnly;
-  IncludeD0Type tIncD0Type_10_Avg = kFreeAndFixedD0;
-  TString tDescriptor_10_Avg = "10 Res., Avg.";
-
-  bool bInclude_3_Avg = true;
-  int tMarkerStyle_3_Avg = 30;
-  double tMarkerSize_3_Avg = 2.0;
-  IncludeResType tIncResType_3_Avg = kInclude3ResOnly;
-  IncludeD0Type tIncD0Type_3_Avg = kFreeAndFixedD0;
-  TString tDescriptor_3_Avg = "3 Res., Avg.";
-
-  //------------------------
-  bool bInclude_10_FreeD0 = true;
-  int tMarkerStyle_10_FreeD0 = 33;
-  double tMarkerSize_10_FreeD0 = 1.0;
-  IncludeResType tIncResType_10_FreeD0 = kInclude10ResOnly;
-  IncludeD0Type tIncD0Type_10_FreeD0 = kFreeD0Only;
-  TString tDescriptor_10_FreeD0 = "10 Res., All Free";
-
-  bool bInclude_3_FreeD0 = true;
-  int tMarkerStyle_3_FreeD0 = 27;
-  double tMarkerSize_3_FreeD0 = 1.0;
-  IncludeResType tIncResType_3_FreeD0 = kInclude3ResOnly;
-  IncludeD0Type tIncD0Type_3_FreeD0 = kFreeD0Only;
-  TString tDescriptor_3_FreeD0 = "3 Res., All Free";
-
-  //----------------------------------------
-  if(aIncludeResType==kInclude10ResOnly)
-  {
-    bInclude_10and3_Avg = false;
-
-    bInclude_10_Avg = true;
-    bInclude_3_Avg = false;
-
-    bInclude_10_FreeD0 = true;
-    bInclude_3_FreeD0 = false;
-  }
-  else if(aIncludeResType==kInclude3ResOnly)
-  {
-    bInclude_10and3_Avg = false;
-
-    bInclude_10_Avg = false;
-    bInclude_3_Avg = true;
-
-    bInclude_10_FreeD0 = false;
-    bInclude_3_FreeD0 = true;
-  }
-
-
-  //----------------------------------------
-  vector<IncludeResType> tIncResTypes{tIncResType_QM,
-                                      tIncResType_10and3_Avg,
-                                      tIncResType_10_Avg,     tIncResType_3_Avg,
-                                      tIncResType_10_FreeD0,          tIncResType_3_FreeD0};
-
-  vector<IncludeD0Type> tIncD0Types{tIncD0Type_QM,
-                                    tIncD0Type_10and3_Avg,
-                                    tIncD0Type_10_Avg,     tIncD0Type_3_Avg,
-                                    tIncD0Type_10_FreeD0,          tIncD0Type_3_FreeD0};
-
-
-  vector<int> tMarkerStyles{tMarkerStyle_QM, 
-                            tMarkerStyle_10and3_Avg,
-                            tMarkerStyle_10_Avg,     tMarkerStyle_3_Avg, 
-                            tMarkerStyle_10_FreeD0,  tMarkerStyle_3_FreeD0};
-
-  vector<double> tMarkerSizes{tMarkerSize_QM, 
-                              tMarkerSize_10and3_Avg,
-                              tMarkerSize_10_Avg,     tMarkerSize_3_Avg, 
-                              tMarkerSize_10_FreeD0,  tMarkerSize_3_FreeD0};
-
-  vector<bool> tIncludePlots{bInclude_QM, 
-                             bInclude_10and3_Avg, 
-                             bInclude_10_Avg,    bInclude_3_Avg,
-                             bInclude_10_FreeD0,         bInclude_3_FreeD0};
-
-  vector<TString> tDescriptors{tDescriptor_QM,
-                               tDescriptor_10and3_Avg,
-                               tDescriptor_10_Avg,     tDescriptor_3_Avg, 
-                               tDescriptor_10_FreeD0,          tDescriptor_3_FreeD0};
-
-  //----------------------------------------
-
-  TString tCanBaseName = "CompareAllReF0vsImF0AcrossAnalysesv1";
-
-  double tStartX = 0.0;
-  double tStartY = 1.4;
-  double tIncrementX = 0.05;
-  double tIncrementY = 0.08;
-  double tTextSize = 0.04;
-  vector<double> tDescriptorsPositionInfo{tStartX, tStartY, tIncrementX, tIncrementY, tTextSize};
-
-  TCanvas* tReturnCan = CompareAllReF0vsImF0AcrossAnalyses(tCanBaseName, tIncResTypes, tIncD0Types, tMarkerStyles, tMarkerSizes, tIncludePlots, tDescriptors, tDescriptorsPositionInfo);
-
-  //----------------------------------------
-  if(bSaveImage)
-  {
-    TString tSaveLocationFull;
-
-//    tSaveLocationFull = gSaveLocationBase + TString::Format("%s/ReF0vsImF0", cAnalysisBaseTags[aAnType]);
-    tSaveLocationFull = gSaveLocationBase + TString::Format("AllReF0vsImF0AcrossAnalysesv1%s.eps", cIncludeResTypeTags[aIncludeResType]);
-    tReturnCan->SaveAs(tSaveLocationFull);
-  }
-
-  return tReturnCan;
-}
-
-
-//---------------------------------------------------------------------------------------------------------------------------------
-TCanvas* CompareAllReF0vsImF0AcrossAnalysesv2(IncludeResType aIncludeResType=kInclude10ResAnd3Res, IncludeD0Type aIncludeD0Type=kFreeAndFixedD0, bool bSaveImage=false)
-{
-  //------------------------
-
-  bool bInclude_QM = true;
-  int tMarkerStyle_QM = 20;
-  double tMarkerSize_QM = 1.0;
-  IncludeResType tIncResType_QM = kIncludeNoRes;
-  IncludeD0Type tIncD0Type_QM = kFreeD0Only;
-  TString tDescriptor_QM = "QM 2017";
-
-  //------------------------
-  bool bInclude_10and3_Avg_FreeD0 = true;
-  int tMarkerStyle_10and3_Avg_FreeD0 = 21;
-  double tMarkerSize_10and3_Avg_FreeD0 = 2.0;
-  IncludeResType tIncResType_10and3_Avg_FreeD0 = kInclude10ResAnd3Res;
-  IncludeD0Type tIncD0Type_10and3_Avg_FreeD0 = kFreeD0Only;
-  TString tDescriptor_10and3_Avg_FreeD0 = "10&3 Res., Avg., Free d_{0}";
-
-  bool bInclude_10and3_Avg_FixedD0 = true;
-  int tMarkerStyle_10and3_Avg_FixedD0 = 25;
-  double tMarkerSize_10and3_Avg_FixedD0 = 2.0;
-  IncludeResType tIncResType_10and3_Avg_FixedD0 = kInclude10ResAnd3Res;
-  IncludeD0Type tIncD0Type_10and3_Avg_FixedD0 = kFixedD0Only;
-  TString tDescriptor_10and3_Avg_FixedD0 = "10&3 Res., Avg., Fix d_{0}";
-
-  //------------------------
-  bool bInclude_10_FreeD0 = true;
-  int tMarkerStyle_10_FreeD0 = 33;
-  double tMarkerSize_10_FreeD0 = 1.0;
-  IncludeResType tIncResType_10_FreeD0 = kInclude10ResOnly;
-  IncludeD0Type tIncD0Type_10_FreeD0 = kFreeD0Only;
-  TString tDescriptor_10_FreeD0 = "10 Res., Free d_{0}";
-
-  bool bInclude_10_FixedD0 = true;
-  int tMarkerStyle_10_FixedD0 = 27;
-  double tMarkerSize_10_FixedD0 = 1.0;
-  IncludeResType tIncResType_10_FixedD0 = kInclude10ResOnly;
-  IncludeD0Type tIncD0Type_10_FixedD0 = kFixedD0Only;
-  TString tDescriptor_10_FixedD0 = "10 Res., Fix d_{0}";
-
-  //------------------------
-  bool bInclude_3_FreeD0 = true;
-  int tMarkerStyle_3_FreeD0 = 29;
-  double tMarkerSize_3_FreeD0 = 1.0;
-  IncludeResType tIncResType_3_FreeD0 = kInclude3ResOnly;
-  IncludeD0Type tIncD0Type_3_FreeD0 = kFreeD0Only;
-  TString tDescriptor_3_FreeD0 = "3 Res., Free d_{0}";
-
-  bool bInclude_3_FixedD0 = true;
-  int tMarkerStyle_3_FixedD0 = 30;
-  double tMarkerSize_3_FixedD0 = 1.0;
-  IncludeResType tIncResType_3_FixedD0 = kInclude3ResOnly;
-  IncludeD0Type tIncD0Type_3_FixedD0 = kFixedD0Only;
-  TString tDescriptor_3_FixedD0 = "3 Res., Fix d_{0}";
-
-  //----------------------------------------
-  vector<IncludeResType> tIncResTypes{tIncResType_QM,
-                                      tIncResType_10and3_Avg_FreeD0, tIncResType_10and3_Avg_FixedD0,
-                                      tIncResType_10_FreeD0,     tIncResType_10_FixedD0,
-                                      tIncResType_3_FreeD0,          tIncResType_3_FixedD0};
-
-  vector<IncludeD0Type> tIncD0Types{tIncD0Type_QM,
-                                    tIncD0Type_10and3_Avg_FreeD0, tIncD0Type_10and3_Avg_FixedD0,
-                                    tIncD0Type_10_FreeD0,     tIncD0Type_10_FixedD0,
-                                    tIncD0Type_3_FreeD0,          tIncD0Type_3_FixedD0};
-
-
-  vector<int> tMarkerStyles{tMarkerStyle_QM, 
-                            tMarkerStyle_10and3_Avg_FreeD0, tMarkerStyle_10and3_Avg_FixedD0,
-                            tMarkerStyle_10_FreeD0,     tMarkerStyle_10_FixedD0, 
-                            tMarkerStyle_3_FreeD0,          tMarkerStyle_3_FixedD0};
-
-  vector<double> tMarkerSizes{tMarkerSize_QM, 
-                              tMarkerSize_10and3_Avg_FreeD0, tMarkerSize_10and3_Avg_FixedD0,
-                              tMarkerSize_10_FreeD0,     tMarkerSize_10_FixedD0, 
-                              tMarkerSize_3_FreeD0,          tMarkerSize_3_FixedD0};
-
-  vector<bool> tIncludePlots{bInclude_QM, 
-                             bInclude_10and3_Avg_FreeD0, bInclude_10and3_Avg_FixedD0,
-                             bInclude_10_FreeD0,    bInclude_10_FixedD0,
-                             bInclude_3_FreeD0,         bInclude_3_FixedD0};
-
-  vector<TString> tDescriptors{tDescriptor_QM,
-                               tDescriptor_10and3_Avg_FreeD0, tDescriptor_10and3_Avg_FixedD0,
-                               tDescriptor_10_FreeD0,     tDescriptor_10_FixedD0, 
-                               tDescriptor_3_FreeD0,          tDescriptor_3_FixedD0};
-
-  //----------------------------------------
-
-  TString tCanBaseName = "CompareAllReF0vsImF0AcrossAnalysesv2";
-
-  double tStartX = -0.5;
-  double tStartY = 1.4;
-  double tIncrementX = 0.05;
-  double tIncrementY = 0.10;
-  double tTextSize = 0.04;
-  vector<double> tDescriptorsPositionInfo{tStartX, tStartY, tIncrementX, tIncrementY, tTextSize};
-
-  TCanvas* tReturnCan = CompareAllReF0vsImF0AcrossAnalyses(tCanBaseName, tIncResTypes, tIncD0Types, tMarkerStyles, tMarkerSizes, tIncludePlots, tDescriptors, tDescriptorsPositionInfo);
-
-  //----------------------------------------
-  if(bSaveImage)
-  {
-    TString tSaveLocationFull;
-
-//    tSaveLocationFull = gSaveLocationBase + TString::Format("%s/ReF0vsImF0", cAnalysisBaseTags[aAnType]);
-    tSaveLocationFull = gSaveLocationBase + TString::Format("AllReF0vsImF0AcrossAnalysesv2%s.eps", cIncludeResTypeTags[aIncludeResType]);
-    tReturnCan->SaveAs(tSaveLocationFull);
-  }
-
-
-  return tReturnCan;
-}
-
-
 //---------------------------------------------------------------------------------------------------------------------------------
 TCanvas* CompareAllReF0vsImF0AcrossAnalysesv3(IncludeResType aIncludeResType=kInclude10ResAnd3Res, IncludeD0Type aIncludeD0Type=kFreeAndFixedD0, bool bSaveImage=false)
 {
@@ -1822,198 +1476,11 @@ TCanvas* CompareAllReF0vsImF0AcrossAnalysesv3(IncludeResType aIncludeResType=kIn
   bool bDrawv2 = false;
 
   assert(!(bDrawv1&&bDrawv2));
-
   //------------------------
-
-  bool bInclude_QM = true;
-  int tMarkerStyle_QM = 20;
-  double tMarkerSize_QM = 1.0;
-  IncludeResType tIncResType_QM = kIncludeNoRes;
-  IncludeD0Type tIncD0Type_QM = kFreeD0Only;
-  TString tDescriptor_QM = "QM 2017";
-
-  //------------------------
-  bool bInclude_10and3_Avg_FreeD0 = true;
-  int tMarkerStyle_10and3_Avg_FreeD0 = 21;
-  double tMarkerSize_10and3_Avg_FreeD0 = 1.0;
-  IncludeResType tIncResType_10and3_Avg_FreeD0 = kInclude10ResAnd3Res;
-  IncludeD0Type tIncD0Type_10and3_Avg_FreeD0 = kFreeD0Only;
-  TString tDescriptor_10and3_Avg_FreeD0 = "10&3 Res., Avg., Free d_{0}";
-
-  bool bInclude_10and3_Avg_FixedD0 = true;
-  int tMarkerStyle_10and3_Avg_FixedD0 = 25;
-  double tMarkerSize_10and3_Avg_FixedD0 = 1.0;
-  IncludeResType tIncResType_10and3_Avg_FixedD0 = kInclude10ResAnd3Res;
-  IncludeD0Type tIncD0Type_10and3_Avg_FixedD0 = kFixedD0Only;
-  TString tDescriptor_10and3_Avg_FixedD0 = "10&3 Res., Avg., Fix d_{0}";
-
-  bool bInclude_10and3_Avg = true;
-  int tMarkerStyle_10and3_Avg = 35;
-  double tMarkerSize_10and3_Avg = 2.0;
-  IncludeResType tIncResType_10and3_Avg = kInclude10ResAnd3Res;
-  IncludeD0Type tIncD0Type_10and3_Avg = kFreeAndFixedD0;
-  TString tDescriptor_10and3_Avg = "10 & 3 Res., Avg.";
-
-  //------------------------
-  bool bInclude_10_FreeD0 = true;
-  int tMarkerStyle_10_FreeD0 = 47;
-  double tMarkerSize_10_FreeD0 = 1.0;
-  IncludeResType tIncResType_10_FreeD0 = kInclude10ResOnly;
-  IncludeD0Type tIncD0Type_10_FreeD0 = kFreeD0Only;
-  TString tDescriptor_10_FreeD0 = "10 Res., Free d_{0}";
-
-  bool bInclude_10_FixedD0 = true;
-  int tMarkerStyle_10_FixedD0 = 46;
-  double tMarkerSize_10_FixedD0 = 1.0;
-  IncludeResType tIncResType_10_FixedD0 = kInclude10ResOnly;
-  IncludeD0Type tIncD0Type_10_FixedD0 = kFixedD0Only;
-  TString tDescriptor_10_FixedD0 = "10 Res., Fix d_{0}";
-
-  bool bInclude_10_Avg = true;
-  int tMarkerStyle_10_Avg = 48;
-  double tMarkerSize_10_Avg = 2.0;
-  IncludeResType tIncResType_10_Avg = kInclude10ResOnly;
-  IncludeD0Type tIncD0Type_10_Avg = kFreeAndFixedD0;
-  TString tDescriptor_10_Avg = "10 Res., Avg.";
-
-  //------------------------
-  bool bInclude_3_FreeD0 = true;
-  int tMarkerStyle_3_FreeD0 = 34;
-  double tMarkerSize_3_FreeD0 = 1.0;
-  IncludeResType tIncResType_3_FreeD0 = kInclude3ResOnly;
-  IncludeD0Type tIncD0Type_3_FreeD0 = kFreeD0Only;
-  TString tDescriptor_3_FreeD0 = "3 Res., Free d_{0}";
-
-  bool bInclude_3_FixedD0 = true;
-  int tMarkerStyle_3_FixedD0 = 28;
-  double tMarkerSize_3_FixedD0 = 1.0;
-  IncludeResType tIncResType_3_FixedD0 = kInclude3ResOnly;
-  IncludeD0Type tIncD0Type_3_FixedD0 = kFixedD0Only;
-  TString tDescriptor_3_FixedD0 = "3 Res., Fix d_{0}";
-
-  bool bInclude_3_Avg = true;
-  int tMarkerStyle_3_Avg = 49;
-  double tMarkerSize_3_Avg = 2.0;
-  IncludeResType tIncResType_3_Avg = kInclude3ResOnly;
-  IncludeD0Type tIncD0Type_3_Avg = kFreeAndFixedD0;
-  TString tDescriptor_3_Avg = "3 Res., Avg.";
-
+  vector<bool> tIncludePlots = GetIncludePlotsVec(aIncludeResType, aIncludeD0Type);
   //----------------------------------------
-
-  if(aIncludeResType==kInclude10ResOnly)
-  {
-    bInclude_10and3_Avg_FreeD0 = false;
-    bInclude_10and3_Avg_FixedD0 = false;
-    bInclude_10and3_Avg = false;
-
-    bInclude_10_FreeD0 = true;
-    bInclude_10_FixedD0 = true;
-    bInclude_10_Avg = true;
-
-
-    bInclude_3_FreeD0 = false;
-    bInclude_3_FixedD0 = false;
-    bInclude_3_Avg = false;
-  }
-  else if(aIncludeResType==kInclude3ResOnly)
-  {
-    bInclude_10and3_Avg_FreeD0 = false;
-    bInclude_10and3_Avg_FixedD0 = false;
-    bInclude_10and3_Avg = false;
-
-    bInclude_10_FreeD0 = false;
-    bInclude_10_FixedD0 = false;
-    bInclude_10_Avg = false;
-
-
-    bInclude_3_FreeD0 = true;
-    bInclude_3_FixedD0 = true;
-    bInclude_3_Avg = true;
-  }
-
-  //----------------------------------------
-
-  if(aIncludeD0Type==kFreeD0Only)
-  {
-    if(aIncludeResType==kInclude10ResAnd3Res) bInclude_10and3_Avg_FreeD0 = true;
-    else bInclude_10and3_Avg_FreeD0 = false;
-    bInclude_10and3_Avg_FixedD0 = false;
-    bInclude_10and3_Avg = false;
-
-    if(aIncludeResType != kInclude3ResOnly) bInclude_10_FreeD0 = true;
-    else bInclude_10_FreeD0 = false;
-    bInclude_10_FixedD0 = false;
-    bInclude_10_Avg = false;
-
-
-    if(aIncludeResType != kInclude10ResOnly) bInclude_3_FreeD0 = true;
-    else bInclude_3_FreeD0 = false;
-    bInclude_3_FixedD0 = false;
-    bInclude_3_Avg = false;
-  }
-  else if(aIncludeD0Type==kFixedD0Only)
-  {
-    bInclude_10and3_Avg_FreeD0 = false;
-    if(aIncludeResType==kInclude10ResAnd3Res) bInclude_10and3_Avg_FixedD0 = true;
-    else bInclude_10and3_Avg_FixedD0 = false;
-    bInclude_10and3_Avg = false;
-
-    bInclude_10_FreeD0 = false;
-    if(aIncludeResType != kInclude3ResOnly) bInclude_10_FixedD0 = true;
-    else bInclude_10_FixedD0 = false;
-    bInclude_10_Avg = false;
-
-
-    bInclude_3_FreeD0 = false;
-    if(aIncludeResType != kInclude10ResOnly) bInclude_3_FixedD0 = true;
-    else bInclude_3_FixedD0 = false;
-    bInclude_3_Avg = false;
-  }
- 
-
-  //----------------------------------------
-  vector<IncludeResType> tIncResTypes{tIncResType_QM,
-                                      tIncResType_10and3_Avg_FreeD0, tIncResType_10and3_Avg_FixedD0, tIncResType_10and3_Avg,
-                                      tIncResType_10_FreeD0,         tIncResType_10_FixedD0,         tIncResType_10_Avg,
-                                      tIncResType_3_FreeD0,          tIncResType_3_FixedD0,          tIncResType_3_Avg};
-
-  vector<IncludeD0Type> tIncD0Types{tIncD0Type_QM,
-                                    tIncD0Type_10and3_Avg_FreeD0, tIncD0Type_10and3_Avg_FixedD0, tIncD0Type_10and3_Avg,
-                                    tIncD0Type_10_FreeD0,         tIncD0Type_10_FixedD0,         tIncD0Type_10_Avg,
-                                    tIncD0Type_3_FreeD0,          tIncD0Type_3_FixedD0,          tIncD0Type_3_Avg};
-
-
-  vector<int> tMarkerStyles{tMarkerStyle_QM, 
-                            tMarkerStyle_10and3_Avg_FreeD0, tMarkerStyle_10and3_Avg_FixedD0, tMarkerStyle_10and3_Avg,
-                            tMarkerStyle_10_FreeD0,         tMarkerStyle_10_FixedD0,         tMarkerStyle_10_Avg, 
-                            tMarkerStyle_3_FreeD0,          tMarkerStyle_3_FixedD0,          tMarkerStyle_3_Avg};
-
-  vector<double> tMarkerSizes{tMarkerSize_QM, 
-                              tMarkerSize_10and3_Avg_FreeD0, tMarkerSize_10and3_Avg_FixedD0, tMarkerSize_10and3_Avg,
-                              tMarkerSize_10_FreeD0,         tMarkerSize_10_FixedD0,         tMarkerSize_10_Avg, 
-                              tMarkerSize_3_FreeD0,          tMarkerSize_3_FixedD0,          tMarkerSize_3_Avg};
-
-  vector<bool> tIncludePlots{bInclude_QM, 
-                             bInclude_10and3_Avg_FreeD0, bInclude_10and3_Avg_FixedD0, bInclude_10and3_Avg,
-                             bInclude_10_FreeD0,         bInclude_10_FixedD0,         bInclude_10_Avg,
-                             bInclude_3_FreeD0,          bInclude_3_FixedD0,          bInclude_3_Avg};
-
-  vector<TString> tDescriptors{tDescriptor_QM,
-                               tDescriptor_10and3_Avg_FreeD0, tDescriptor_10and3_Avg_FixedD0, tDescriptor_10and3_Avg,
-                               tDescriptor_10_FreeD0,         tDescriptor_10_FixedD0,         tDescriptor_10_Avg,
-                               tDescriptor_3_FreeD0,          tDescriptor_3_FixedD0,          tDescriptor_3_Avg};
-
-  //----------------------------------------
-  if(bDrawv1) tIncludePlots = {true,
-                               false, false, true, 
-                               true,  false, true, 
-                               true,  false, true};
-
-  if(bDrawv2) tIncludePlots = {true,
-                               true, true, false, 
-                               true, true, false, 
-                               true, true, false};
-
+  if(bDrawv1) tIncludePlots = tIncludePlotsv1;
+  if(bDrawv2) tIncludePlots = tIncludePlotsv2;
   //----------------------------------------
 
   TString tCanBaseName = "CompareAllReF0vsImF0AcrossAnalysesv3";
@@ -2043,7 +1510,7 @@ TCanvas* CompareAllReF0vsImF0AcrossAnalysesv3(IncludeResType aIncludeResType=kIn
 
   vector<double> tDescriptorsPositionInfo{tStartX, tStartY, tIncrementX, tIncrementY, tTextSize};
 
-  TCanvas* tReturnCan = CompareAllReF0vsImF0AcrossAnalyses(tCanBaseName, tIncResTypes, tIncD0Types, tMarkerStyles, tMarkerSizes, tIncludePlots, tDescriptors, tDescriptorsPositionInfo);
+  TCanvas* tReturnCan = CompareAllReF0vsImF0AcrossAnalyses(tCanBaseName, tIncludePlots, tDescriptorsPositionInfo);
 
   //----------------------------------------
   if(bSaveImage)
@@ -2058,6 +1525,136 @@ TCanvas* CompareAllReF0vsImF0AcrossAnalysesv3(IncludeResType aIncludeResType=kIn
 
   return tReturnCan;
 }
+
+
+//---------------------------------------------------------------------------------------------------------------------------------
+TCanvas* CompareAllReF0vsImF0AcrossAnalysesFinal(TString aCanBaseName, IncludeResType aIncludeResType=kInclude10ResAnd3Res, IncludeD0Type aIncludeD0Type=kFreeAndFixedD0, bool bSaveImage=false)
+{
+  //TODO
+  bool bDrawv1 = false;
+  bool bDrawv2 = false;
+
+  assert(!(bDrawv1&&bDrawv2));
+  //------------------------
+  vector<bool> tIncludePlots = GetIncludePlotsVec(aIncludeResType, aIncludeD0Type);
+  //----------------------------------------
+  if(bDrawv1) tIncludePlots = tIncludePlotsv1;
+  if(bDrawv2) tIncludePlots = tIncludePlotsv2;
+
+  assert(tIncludePlots.size() == tDrawAcrossAnalysesInfoVec.size());
+
+  //----------------------------------------
+
+  TCanvas* tReturnCan = new TCanvas(TString::Format("tCan%s", aCanBaseName.Data()), TString::Format("tCan%s", aCanBaseName.Data()));
+  tReturnCan->cd();
+
+  TPad* tPadReF0vsImF0 = new TPad(TString::Format("tPadReF0vsImF0%s", aCanBaseName.Data()), TString::Format("tPadReF0vsImF0%s", aCanBaseName.Data()), 
+                                  0.0, 0.0, 0.8, 1.0);
+  tPadReF0vsImF0->SetRightMargin(0.01);
+  tPadReF0vsImF0->Draw();
+
+  TPad* tPadD0 = new TPad(TString::Format("tPadD0%s", aCanBaseName.Data()), TString::Format("tPadD0%s", aCanBaseName.Data()), 
+                          0.8, 0.0, 1.0, 1.0);
+  tPadD0->SetRightMargin(0.4);
+  tPadD0->SetLeftMargin(0.);
+  tPadD0->Draw();
+
+  gStyle->SetOptStat(0);
+  gStyle->SetOptTitle(0);
+
+  SetupReF0vsImF0AndD0Axes(tPadReF0vsImF0, tPadD0);
+
+  //------------------------------------------------------
+  double tStartX = -0.5;
+  double tStartY = 1.4;
+  double tIncrementX = 0.05;
+  double tIncrementY = 0.10;
+  double tTextSize = 0.04;
+
+  if(bDrawv1)
+  {
+    tStartX = 0.0;
+    tIncrementY = 0.08;
+  }
+
+  TLatex* tTex = new TLatex();
+  tTex->SetTextAlign(12);
+  tTex->SetLineWidth(2);
+  tTex->SetTextFont(42);
+  tTex->SetTextSize(tTextSize);
+
+  const Size_t tDescriptorMarkerSize=1.6;
+  TMarker *tMarker = new TMarker();
+  tMarker->SetMarkerSize(tDescriptorMarkerSize);
+  tMarker->SetMarkerStyle(20);
+  tMarker->SetMarkerColor(kBlack);
+
+  //------------------------------------------------------
+
+  IncludeResType tIncResType;
+  IncludeD0Type tIncD0Type;
+  int tMarkerStyle;
+  double tMarkerSize;
+  TString tDescriptor;
+
+  int iTex = 0;
+  for(unsigned int i=0; i<tIncludePlots.size(); i++)
+  {
+
+    tIncResType = tDrawAcrossAnalysesInfoVec[i].incResType;
+    tIncD0Type = tDrawAcrossAnalysesInfoVec[i].incD0Type;
+    tMarkerStyle = tDrawAcrossAnalysesInfoVec[i].markerStyle;
+    tMarkerSize = tDrawAcrossAnalysesInfoVec[i].markerSize;
+    tDescriptor = tDrawAcrossAnalysesInfoVec[i].descriptor;
+
+
+    if(tIncludePlots[i])
+    {
+      if(tIncResType==kIncludeNoRes)  //Signifies QM results
+      {
+        DrawReF0vsImF0AcrossAnalysesQMResults((TPad*)tPadReF0vsImF0, tMarkerStyle, tMarkerSize);
+        DrawD0AcrossAnalysesQMResults((TPad*)tPadD0, tMarkerStyle, tMarkerSize);
+      }
+      else 
+      {
+        DrawReF0vsImF0AcrossAnalyses((TPad*)tPadReF0vsImF0, tMarkerStyle, tMarkerSize, tIncResType, tIncD0Type);
+        DrawD0AcrossAnalyses((TPad*)tPadD0, tMarkerStyle, tMarkerSize, tIncResType, tIncD0Type);
+      }
+
+      tPadReF0vsImF0->cd();
+      tTex->DrawLatex(tStartX, tStartY-iTex*tIncrementY, tDescriptor);
+      tMarker->SetMarkerStyle(tMarkerStyle);
+      tMarker->DrawMarker(tStartX-tIncrementX, tStartY-iTex*tIncrementY);
+      iTex++;
+    }
+  }
+
+  //------------------------------------------------------
+
+  double tStartXStamp = -1.75;
+  double tStartYStamp = 1.4;
+  double tIncrementXStamp = 0.05;
+  double tIncrementYStamp = 0.08;
+  double tTextSizeStamp = 0.04;
+  int tMarkerStyleStamp = 21;
+  DrawAnalysisStamps((TPad*)tPadReF0vsImF0, tStartXStamp, tStartYStamp, tIncrementXStamp, tIncrementYStamp, tTextSizeStamp, tMarkerStyleStamp);
+
+  //------------------------------------------------------
+
+  if(bSaveImage)
+  {
+    TString tSaveLocationFull;
+
+    tSaveLocationFull = gSaveLocationBase + TString::Format("AllReF0vsImF0AcrossAnalysesFinal%s.eps", cIncludeResTypeTags[aIncludeResType]);
+    tReturnCan->SaveAs(tSaveLocationFull);
+  }
+
+  return tReturnCan;
+}
+
+
+
+
 
 
 
@@ -2150,19 +1747,19 @@ int main(int argc, char **argv)
   TCanvas *tCanCompareAllRadiusvsLambdaAcrossAnalyses1, *tCanCompareAllRadiusvsLambdaAcrossAnalyses2, *tCanCompareAllRadiusvsLambdaAcrossAnalyses3;
   if(tCentType != kMB)
   {
-    tCanCompareAllRadiusvsLambdaAcrossAnalyses1 = CompareAllRadiusvsLambdaAcrossAnalysesv1(tCentType, tIncludeResType, kFreeAndFixedD0, bSaveFigures);
+    tCanCompareAllRadiusvsLambdaAcrossAnalyses1 = CompareAllRadiusvsLambdaAcrossAnalysesv3(tCentType, tIncludeResType, kFreeAndFixedD0, bSaveFigures);
   }
   else
   {
-    tCanCompareAllRadiusvsLambdaAcrossAnalyses1 = CompareAllRadiusvsLambdaAcrossAnalysesv2(k0010, tIncludeResType, kFreeAndFixedD0, bSaveFigures);
-    tCanCompareAllRadiusvsLambdaAcrossAnalyses2 = CompareAllRadiusvsLambdaAcrossAnalysesv2(k1030, tIncludeResType, kFreeAndFixedD0, bSaveFigures);
-    tCanCompareAllRadiusvsLambdaAcrossAnalyses3 = CompareAllRadiusvsLambdaAcrossAnalysesv2(k3050, tIncludeResType, kFreeAndFixedD0, bSaveFigures);
+    tCanCompareAllRadiusvsLambdaAcrossAnalyses1 = CompareAllRadiusvsLambdaAcrossAnalysesv3(k0010, tIncludeResType, kFreeAndFixedD0, bSaveFigures);
+    tCanCompareAllRadiusvsLambdaAcrossAnalyses2 = CompareAllRadiusvsLambdaAcrossAnalysesv3(k1030, tIncludeResType, kFreeAndFixedD0, bSaveFigures);
+    tCanCompareAllRadiusvsLambdaAcrossAnalyses3 = CompareAllRadiusvsLambdaAcrossAnalysesv3(k3050, tIncludeResType, kFreeAndFixedD0, bSaveFigures);
   }
 */
 
-  TCanvas* tCanCompareAllReF0vsImF0AcrossAnalysesv1 = CompareAllReF0vsImF0AcrossAnalysesv1(tIncludeResType, kFreeAndFixedD0, bSaveFigures);
-  TCanvas* tCanCompareAllReF0vsImF0AcrossAnalysesv2 = CompareAllReF0vsImF0AcrossAnalysesv2(tIncludeResType, kFreeAndFixedD0, bSaveFigures);
   TCanvas* tCanCompareAllReF0vsImF0AcrossAnalysesv3 = CompareAllReF0vsImF0AcrossAnalysesv3(tIncludeResType, kFreeAndFixedD0, bSaveFigures);
+  TCanvas* tCanCompareAllReF0vsImF0AcrossAnalysesFinal = CompareAllReF0vsImF0AcrossAnalysesFinal("CompareAllReF0vsImF0AcrossAnalysesFinal", tIncludeResType, kFreeAndFixedD0, bSaveFigures);
+
 
 //-------------------------------------------------------------------------------
   theApp->Run(kTRUE); //Run the TApp to pause the code.
@@ -2189,9 +1786,9 @@ int main(int argc, char **argv)
   delete tCanCompareAllRadiusvsLambdaAcrossAnalyses2;
   delete tCanCompareAllRadiusvsLambdaAcrossAnalyses3;
 */
-  delete tCanCompareAllReF0vsImF0AcrossAnalysesv1;
-  delete tCanCompareAllReF0vsImF0AcrossAnalysesv2;
+
   delete tCanCompareAllReF0vsImF0AcrossAnalysesv3;
+  delete tCanCompareAllReF0vsImF0AcrossAnalysesFinal;
 
   cout << "DONE" << endl;
   return 0;

@@ -1000,3 +1000,114 @@ struct FitInfo
 
 
 
+
+//---------------------------------------------------------------------------------------------------------------------------------
+//*********************************************************************************************************************************
+//---------------------------------------------------------------------------------------------------------------------------------
+struct DrawAcrossAnalysesInfo
+{
+  TString descriptor;
+  IncludeResType incResType;
+  IncludeD0Type incD0Type;
+  int markerStyle;
+  double markerSize;
+
+  DrawAcrossAnalysesInfo(TString aDescriptor, IncludeResType aIncludeResType, IncludeD0Type aIncD0Type, int aMarkerStyle, double aMarkerSize)
+  {
+    descriptor = aDescriptor;
+    incResType = aIncludeResType;
+    incD0Type = aIncD0Type;
+    markerStyle = aMarkerStyle;
+    markerSize = aMarkerSize;
+  }
+
+};
+
+
+//-------------------------------------------
+
+  double tMarkerSizeSingle = 1.0;
+  double tMarkerSizeAvg = 2.0;
+
+  //-----
+
+  int tMarkerStyle_QM = 20;
+
+  int tMarkerStyle_10and3_Avg_FreeD0 = 21;
+  int tMarkerStyle_10and3_Avg_FixedD0 = 25;
+  int tMarkerStyle_10and3_Avg = 35;
+
+  int tMarkerStyle_10_FreeD0 = 47;
+  int tMarkerStyle_10_FixedD0 = 46;
+  int tMarkerStyle_10_Avg = 48;
+
+  int tMarkerStyle_3_FreeD0 = 34;
+  int tMarkerStyle_3_FixedD0 = 28;
+  int tMarkerStyle_3_Avg = 49;
+
+//-------------------------------------------
+
+  const DrawAcrossAnalysesInfo tDrawInfo_QM = DrawAcrossAnalysesInfo(TString("QM 2017"),
+                                                                     kIncludeNoRes, kFreeD0Only,
+                                                                     tMarkerStyle_QM, tMarkerSizeSingle);
+
+  //-----
+
+  const DrawAcrossAnalysesInfo tDrawInfo_10and3_Avg_FreeD0 = DrawAcrossAnalysesInfo(TString("10&3 Res., Avg., Free d_{0}"),
+                                                                     kInclude10ResAnd3Res, kFreeD0Only,
+                                                                     tMarkerStyle_10and3_Avg_FreeD0, tMarkerSizeSingle);
+
+  const DrawAcrossAnalysesInfo tDrawInfo_10and3_Avg_FixedD0 = DrawAcrossAnalysesInfo(TString("10&3 Res., Avg., Fix d_{0}"),
+                                                                     kInclude10ResAnd3Res, kFixedD0Only,
+                                                                     tMarkerStyle_10and3_Avg_FixedD0, tMarkerSizeSingle);
+
+  const DrawAcrossAnalysesInfo tDrawInfo_10and3_Avg = DrawAcrossAnalysesInfo(TString("10 & 3 Res., Avg."),
+                                                                     kInclude10ResAnd3Res, kFreeAndFixedD0,
+                                                                     tMarkerStyle_10and3_Avg, tMarkerSizeAvg);
+
+  //-----
+
+  const DrawAcrossAnalysesInfo tDrawInfo_10_FreeD0 = DrawAcrossAnalysesInfo(TString("10 Res., Free d_{0}"),
+                                                                     kInclude10ResOnly, kFreeD0Only,
+                                                                     tMarkerStyle_10_FreeD0, tMarkerSizeSingle);
+
+  const DrawAcrossAnalysesInfo tDrawInfo_10_FixedD0 = DrawAcrossAnalysesInfo(TString("10 Res., Fix d_{0}"),
+                                                                     kInclude10ResOnly, kFixedD0Only,
+                                                                     tMarkerStyle_10_FixedD0, tMarkerSizeSingle);
+
+  const DrawAcrossAnalysesInfo tDrawInfo_10_Avg = DrawAcrossAnalysesInfo(TString("10 Res., Avg."),
+                                                                     kInclude10ResOnly, kFreeAndFixedD0,
+                                                                     tMarkerStyle_10_Avg, tMarkerSizeAvg);
+
+  //-----
+
+  const DrawAcrossAnalysesInfo tDrawInfo_3_FreeD0 = DrawAcrossAnalysesInfo(TString("3 Res., Free d_{0}"),
+                                                                     kInclude3ResOnly, kFreeD0Only,
+                                                                     tMarkerStyle_3_FreeD0, tMarkerSizeSingle);
+
+  const DrawAcrossAnalysesInfo tDrawInfo_3_FixedD0 = DrawAcrossAnalysesInfo(TString("3 Res., Fix d_{0}"),
+                                                                     kInclude3ResOnly, kFixedD0Only,
+                                                                     tMarkerStyle_3_FixedD0, tMarkerSizeSingle);
+
+  const DrawAcrossAnalysesInfo tDrawInfo_3_Avg = DrawAcrossAnalysesInfo(TString("3 Res., Avg."),
+                                                                     kInclude3ResOnly, kFreeAndFixedD0,
+                                                                     tMarkerStyle_3_Avg, tMarkerSizeAvg);
+
+
+//------------------------------------------------------------------------------------------------
+
+  const vector<DrawAcrossAnalysesInfo> tDrawAcrossAnalysesInfoVec{tDrawInfo_QM,
+                                                                  tDrawInfo_10and3_Avg_FreeD0, tDrawInfo_10and3_Avg_FixedD0, tDrawInfo_10and3_Avg, 
+                                                                  tDrawInfo_10_FreeD0,         tDrawInfo_10_FixedD0,         tDrawInfo_10_Avg,
+                                                                  tDrawInfo_3_FreeD0,          tDrawInfo_3_FixedD0,          tDrawInfo_3_Avg};
+
+  const vector<bool> tIncludePlotsv1{true,
+                                     false, false, true, 
+                                     true,  false, true, 
+                                     true,  false, true};
+
+  const vector<bool> tIncludePlotsv2{true,
+                                     true, true, false, 
+                                     true, true, false, 
+                                     true, true, false};
+
