@@ -28,7 +28,10 @@ enum IncludeResType {kInclude10ResOnly=0, kInclude3ResOnly=1, kInclude10ResAnd3R
 const char* const cIncludeResTypeTags[4] = {"_10Res", "_3Res", "_10ResAnd3Res", ""};
 
 enum IncludeD0Type {kFreeD0Only=0, kFixedD0Only=1, kFreeAndFixedD0=2};
-const char* const cIncludeD0TypeTags[4] = {"_FreeD0Only", "_FixedD0Only", "_FreeAndFixedD0"};
+const char* const cIncludeD0TypeTags[3] = {"_FreeD0Only", "_FixedD0Only", "_FreeAndFixedD0"};
+
+enum Plot10and3Type {kPlot10and3SeparateOnly=0, kPlot10and3AvgOnly=1, kPlot10and3SeparateAndAvg=2};
+const char* const cPlot10and3TypeTage[3] = {"_10and3SeparateOnly", "_10and3AvgOnly", "_10and3SeparateandAvg"};
 
 //---------------------------------------------------------------------------------------------------------------------------------
 struct FitInfo

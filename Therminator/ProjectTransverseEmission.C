@@ -15,8 +15,10 @@
 #include "PIDMapping.h"
 #include "ThermCommon.h"
 
+TString gSaveLocationBase = "/home/jesse/Analysis/Presentations/GroupMeetings/20171130/Figures/TransverseEmission/";
+
 //________________________________________________________________________________________________________________
-TCanvas* DrawTransverseEmission(TString aFileLocation, ParticlePDGType aType, double aMinBetaX, double aMaxBetaX, bool aPrimaryOnly)
+TCanvas* DrawTransverseEmission(TString aFileLocation, ParticlePDGType aType, double aMinBetaX, double aMaxBetaX, bool aPrimaryOnly, bool bSaveImage=false)
 {
   TCanvas* tReturnCan = new TCanvas(TString::Format("tCanTransEmission_%s",GetPDGRootName(aType)),
                                     TString::Format("tCanTransEmission_%s",GetPDGRootName(aType)));
@@ -60,11 +62,22 @@ TCanvas* DrawTransverseEmission(TString aFileLocation, ParticlePDGType aType, do
   tTex->DrawLatex(-15., 10., TString::Format("%0.2f < #beta_{X} < %0.2f", aMinBetaX, aMaxBetaX));
   tTex->DrawLatex(-15., 7.5, "-0.10 < #beta_{Y} < 0.10");
 
+  //------------------------------
+  if(bSaveImage)
+  {
+    TString tSaveLocationFull;
+    TString tModifier = "";
+    if(aPrimaryOnly) tModifier = TString("PrimaryOnly");
+
+    tSaveLocationFull = gSaveLocationBase + TString::Format("%s%s%0.2fto%0.2f.eps", tReturnCan->GetName(), tModifier.Data(), aMinBetaX, aMaxBetaX);
+    tReturnCan->SaveAs(tSaveLocationFull);
+  }
+  //------------------------------
   return tReturnCan;
 }
 
 //________________________________________________________________________________________________________________
-TCanvas* DrawTransverseEmissionVsTau(TString aFileLocation, ParticlePDGType aType, double aMinMagBeta, double aMaxMagBeta, bool aPrimaryOnly)
+TCanvas* DrawTransverseEmissionVsTau(TString aFileLocation, ParticlePDGType aType, double aMinMagBeta, double aMaxMagBeta, bool aPrimaryOnly, bool bSaveImage=false)
 {
   TCanvas* tReturnCan = new TCanvas(TString::Format("tCanTransEmissionVsTau_%s",GetPDGRootName(aType)),
                                     TString::Format("tCanTransEmissionVsTau_%s",GetPDGRootName(aType)));
@@ -84,13 +97,24 @@ TCanvas* DrawTransverseEmissionVsTau(TString aFileLocation, ParticlePDGType aTyp
   TH2D* t2dHist = (TH2D*)t3dHist->Project3D("yx");
 //  t2dHist->Rebin2D(2,2);
   t2dHist->GetXaxis()->SetRangeUser(0., 12.);
-  t2dHist->GetYaxis()->SetRangeUser(0., 3.5);
+  t2dHist->GetYaxis()->SetRangeUser(0., 10.0);
 
   t2dHist->GetXaxis()->SetTitle("R_{T} (fm)");
   t2dHist->GetYaxis()->SetTitle("#tau (fm/c)");
 
   t2dHist->Draw("colz");
 
+  //------------------------------
+  if(bSaveImage)
+  {
+    TString tSaveLocationFull;
+    TString tModifier = "";
+    if(aPrimaryOnly) tModifier = TString("PrimaryOnly");
+
+    tSaveLocationFull = gSaveLocationBase + TString::Format("%s%s%0.2fto%0.2f.eps", tReturnCan->GetName(), tModifier.Data(), aMinMagBeta, aMaxMagBeta);
+    tReturnCan->SaveAs(tSaveLocationFull);
+  }
+  //------------------------------
   return tReturnCan;
 }
 
@@ -116,25 +140,26 @@ int main(int argc, char **argv)
 */  
 
   bool bDrawPrimaryOnly = true;
+  bool bSaveFigures = false;
 //-------------------------------------------------------------------------------
 
-  double tBetaXMin = 0.90;
-  double tBetaXMax = 0.99;
+  double tBetaXMin = 0.60;
+  double tBetaXMax = 0.69;
 
-  TCanvas* tCanK0 = DrawTransverseEmission(tFileLocation, kPDGK0, tBetaXMin, tBetaXMax, bDrawPrimaryOnly);
-  TCanvas* tCanKchP = DrawTransverseEmission(tFileLocation, kPDGKchP, tBetaXMin, tBetaXMax, bDrawPrimaryOnly);
-  TCanvas* tCanProt = DrawTransverseEmission(tFileLocation, kPDGProt, tBetaXMin, tBetaXMax, bDrawPrimaryOnly);
-  TCanvas* tCanLam = DrawTransverseEmission(tFileLocation, kPDGLam, tBetaXMin, tBetaXMax, bDrawPrimaryOnly);
+  TCanvas* tCanK0 = DrawTransverseEmission(tFileLocation, kPDGK0, tBetaXMin, tBetaXMax, bDrawPrimaryOnly, bSaveFigures);
+  TCanvas* tCanKchP = DrawTransverseEmission(tFileLocation, kPDGKchP, tBetaXMin, tBetaXMax, bDrawPrimaryOnly, bSaveFigures);
+  TCanvas* tCanProt = DrawTransverseEmission(tFileLocation, kPDGProt, tBetaXMin, tBetaXMax, bDrawPrimaryOnly, bSaveFigures);
+  TCanvas* tCanLam = DrawTransverseEmission(tFileLocation, kPDGLam, tBetaXMin, tBetaXMax, bDrawPrimaryOnly, bSaveFigures);
 
 //-------------------------------------------------------------------------------
 
-  double tBetaMagMin = 0.0;
+  double tBetaMagMin = 0.00;
   double tBetaMagMax = 0.99;
 
-  TCanvas* tCanVsTauK0 = DrawTransverseEmissionVsTau(tFileLocation, kPDGK0, tBetaMagMin, tBetaMagMax, bDrawPrimaryOnly);
-  TCanvas* tCanVsTauKchP = DrawTransverseEmissionVsTau(tFileLocation, kPDGKchP, tBetaMagMin, tBetaMagMax, bDrawPrimaryOnly);
-  TCanvas* tCanVsTauProt = DrawTransverseEmissionVsTau(tFileLocation, kPDGProt, tBetaMagMin, tBetaMagMax, bDrawPrimaryOnly);
-  TCanvas* tCanVsTauLam = DrawTransverseEmissionVsTau(tFileLocation, kPDGLam, tBetaMagMin, tBetaMagMax, bDrawPrimaryOnly);
+  TCanvas* tCanVsTauK0 = DrawTransverseEmissionVsTau(tFileLocation, kPDGK0, tBetaMagMin, tBetaMagMax, bDrawPrimaryOnly, bSaveFigures);
+  TCanvas* tCanVsTauKchP = DrawTransverseEmissionVsTau(tFileLocation, kPDGKchP, tBetaMagMin, tBetaMagMax, bDrawPrimaryOnly, bSaveFigures);
+  TCanvas* tCanVsTauProt = DrawTransverseEmissionVsTau(tFileLocation, kPDGProt, tBetaMagMin, tBetaMagMax, bDrawPrimaryOnly, bSaveFigures);
+  TCanvas* tCanVsTauLam = DrawTransverseEmissionVsTau(tFileLocation, kPDGLam, tBetaMagMin, tBetaMagMax, bDrawPrimaryOnly, bSaveFigures);
 
 
 //-------------------------------------------------------------------------------
