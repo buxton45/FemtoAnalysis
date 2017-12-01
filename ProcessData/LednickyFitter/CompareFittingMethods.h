@@ -1000,6 +1000,103 @@ struct FitInfo
   const vector<FitInfo> tFitInfoVec_LamK0{tFitInfo1a_LamK0, tFitInfo2a_LamK0, tFitInfo3a_LamK0, tFitInfo4a_LamK0, tFitInfo5a_LamK0, tFitInfo6a_LamK0,
                                           tFitInfo1b_LamK0, tFitInfo2b_LamK0, tFitInfo3b_LamK0, tFitInfo4b_LamK0, tFitInfo5b_LamK0, tFitInfo6b_LamK0};
 
+//---------------------------------------------------------------------------------------------------------------------------------
+//*********************************************************************************************************************************
+//---------------------------------------------------------------------------------------------------------------------------------
+td1dVec GetMean(td2dVec &aVecOfPointsWithErrors/*, AverageType tAvgType=kWeightedMean*/)
+{
+  //Each td1dVec in aVecOfPointsWithErrors = [Point, PointStatError, PointSysError]
+  //Return td1dVec of same structure
+
+  vector<double> tReturnVec{0.,0.,0.};
+
+  double tNum=0., tDenStat=0., tDenSys=0.;
+  double tMean=0., tMeanStatErr=0., tMeanSysErr=0.;
+
+  double tPoint=0., tPointStatErr=0., tPointSysErr=0.;
+  for(unsigned int i=0; i<aVecOfPointsWithErrors.size(); i++)
+  {
+    tPoint =        aVecOfPointsWithErrors[i][0];
+    tPointStatErr = aVecOfPointsWithErrors[i][1];
+    tPointSysErr =  aVecOfPointsWithErrors[i][2];
+
+    if(tPointStatErr > 0.)
+    {
+      tNum += tPoint/(tPointStatErr*tPointStatErr);
+      tDenStat += 1./(tPointStatErr*tPointStatErr);
+    }
+    else
+    {
+      tNum += tPoint;
+      tDenStat += 1.;
+    }
+    if(tPointSysErr > 0.) tDenSys += 1./(tPointSysErr*tPointSysErr);
+  }
+
+  assert(tDenStat > 0.);
+  tMean = tNum/tDenStat;
+  if(tDenStat==(double)aVecOfPointsWithErrors.size()) tMeanStatErr=0.;  //in this case, not weighted avg
+  else tMeanStatErr = sqrt(1./tDenStat);
+  if(tDenSys > 0.) tMeanSysErr = sqrt(1./tDenSys);
+
+  //--------------------------------------------
+  tReturnVec[0] = tMean;
+  tReturnVec[1] = tMeanStatErr;
+  tReturnVec[2] = tMeanSysErr;
+
+  return tReturnVec;
+}
+
+
+
+//---------------------------------------------------------------------------------------------------------------------------------
+vector<FitInfo> GetFitInfoVec(AnalysisType aAnType, IncludeResType aIncludeResType=kInclude10ResAnd3Res, IncludeD0Type aIncludeD0Type=kFreeAndFixedD0)
+{
+  vector<FitInfo> aFitInfoVec;
+  if     (aAnType==kLamKchP) aFitInfoVec = tFitInfoVec_LamKchP;
+  else if(aAnType==kLamKchM) aFitInfoVec = tFitInfoVec_LamKchM;
+  else if(aAnType==kLamK0) aFitInfoVec = tFitInfoVec_LamK0;
+  else assert(0);
+  //------------------------------
+  vector<FitInfo> tReturnVec;
+  //------------------------------
+
+  bool bPassRes=false, bPassD0=false;
+  for(unsigned int i=0; i<aFitInfoVec.size(); i++)
+  {
+    if(aIncludeResType==kInclude10ResAnd3Res) bPassRes = true;
+    else if(aIncludeResType==kInclude10ResOnly && aFitInfoVec[i].all10ResidualsUsed) bPassRes = true;
+    else if(aIncludeResType==kInclude3ResOnly && !aFitInfoVec[i].all10ResidualsUsed) bPassRes = true;
+    else bPassRes = false;
+
+    if(aIncludeD0Type==kFreeAndFixedD0) bPassD0 = true;
+    else if(aIncludeD0Type==kFreeD0Only && aFitInfoVec[i].freeD0) bPassD0 = true;
+    else if(aIncludeD0Type==kFixedD0Only && !aFitInfoVec[i].freeD0) bPassD0 = true;
+    else bPassD0 = false;
+
+    if(bPassRes && bPassD0) tReturnVec.push_back(aFitInfoVec[i]);
+  }
+
+  return tReturnVec;
+}
+
+//---------------------------------------------------------------------------------------------------------------------------------
+bool IncludeFitInfoInMeanCalculation(FitInfo &aFitInfo, IncludeResType aIncludeResType, IncludeD0Type aIncludeD0Type)
+{
+  if(aIncludeResType==kInclude10ResOnly && !aFitInfo.all10ResidualsUsed) return false;
+  if(aIncludeResType==kInclude3ResOnly  && aFitInfo.all10ResidualsUsed) return false;
+
+  if(aIncludeD0Type==kFreeD0Only && !aFitInfo.freeD0) return false;
+  if(aIncludeD0Type==kFixedD0Only && aFitInfo.freeD0) return false;
+
+  //Exclude fixed radius results from all average/mean calculations
+  if(!aFitInfo.freeRadii) return false;
+  //Exclude fixed lambda results from all average/mean calculations
+  if(!aFitInfo.freeLambda) return false;
+
+  return true;
+}
+
 
 
 
@@ -1010,14 +1107,16 @@ struct FitInfo
 struct DrawAcrossAnalysesInfo
 {
   TString descriptor;
+  TString saveDescriptor;
   IncludeResType incResType;
   IncludeD0Type incD0Type;
   int markerStyle;
   double markerSize;
 
-  DrawAcrossAnalysesInfo(TString aDescriptor, IncludeResType aIncludeResType, IncludeD0Type aIncD0Type, int aMarkerStyle, double aMarkerSize)
+  DrawAcrossAnalysesInfo(TString aDescriptor, TString aSaveDescriptor, IncludeResType aIncludeResType, IncludeD0Type aIncD0Type, int aMarkerStyle, double aMarkerSize)
   {
     descriptor = aDescriptor;
+    saveDescriptor = aSaveDescriptor;
     incResType = aIncludeResType;
     incD0Type = aIncD0Type;
     markerStyle = aMarkerStyle;
@@ -1051,48 +1150,58 @@ struct DrawAcrossAnalysesInfo
 //-------------------------------------------
 
   const DrawAcrossAnalysesInfo tDrawInfo_QM = DrawAcrossAnalysesInfo(TString("QM 2017"),
+                                                                     TString("_QM2017"),
                                                                      kIncludeNoRes, kFreeD0Only,
                                                                      tMarkerStyle_QM, tMarkerSizeSingle);
 
   //-----
 
   const DrawAcrossAnalysesInfo tDrawInfo_10and3_Avg_FreeD0 = DrawAcrossAnalysesInfo(TString("10&3 Res., Avg., Free d_{0}"),
+                                                                     TString("_10And3Res_Avg_FreeD0"),
                                                                      kInclude10ResAnd3Res, kFreeD0Only,
                                                                      tMarkerStyle_10and3_Avg_FreeD0, tMarkerSizeSingle);
 
   const DrawAcrossAnalysesInfo tDrawInfo_10and3_Avg_FixedD0 = DrawAcrossAnalysesInfo(TString("10&3 Res., Avg., Fix d_{0}"),
+                                                                     TString("_10And3Res_Avg_FixedD0"),
                                                                      kInclude10ResAnd3Res, kFixedD0Only,
                                                                      tMarkerStyle_10and3_Avg_FixedD0, tMarkerSizeSingle);
 
   const DrawAcrossAnalysesInfo tDrawInfo_10and3_Avg = DrawAcrossAnalysesInfo(TString("10 & 3 Res., Avg."),
+                                                                     TString("_10And3Res_Avg"),
                                                                      kInclude10ResAnd3Res, kFreeAndFixedD0,
                                                                      tMarkerStyle_10and3_Avg, tMarkerSizeAvg);
 
   //-----
 
   const DrawAcrossAnalysesInfo tDrawInfo_10_FreeD0 = DrawAcrossAnalysesInfo(TString("10 Res., Free d_{0}"),
+                                                                     TString("_10Res_FreeD0"),
                                                                      kInclude10ResOnly, kFreeD0Only,
                                                                      tMarkerStyle_10_FreeD0, tMarkerSizeSingle);
 
   const DrawAcrossAnalysesInfo tDrawInfo_10_FixedD0 = DrawAcrossAnalysesInfo(TString("10 Res., Fix d_{0}"),
+                                                                     TString("_10Res_FixedD0"),
                                                                      kInclude10ResOnly, kFixedD0Only,
                                                                      tMarkerStyle_10_FixedD0, tMarkerSizeSingle);
 
   const DrawAcrossAnalysesInfo tDrawInfo_10_Avg = DrawAcrossAnalysesInfo(TString("10 Res., Avg."),
+                                                                     TString("_10Res_Avg"),
                                                                      kInclude10ResOnly, kFreeAndFixedD0,
                                                                      tMarkerStyle_10_Avg, tMarkerSizeAvg);
 
   //-----
 
   const DrawAcrossAnalysesInfo tDrawInfo_3_FreeD0 = DrawAcrossAnalysesInfo(TString("3 Res., Free d_{0}"),
+                                                                     TString("_3Res_FreeD0"),
                                                                      kInclude3ResOnly, kFreeD0Only,
                                                                      tMarkerStyle_3_FreeD0, tMarkerSizeSingle);
 
   const DrawAcrossAnalysesInfo tDrawInfo_3_FixedD0 = DrawAcrossAnalysesInfo(TString("3 Res., Fix d_{0}"),
+                                                                     TString("_3Res_FixedD0"),
                                                                      kInclude3ResOnly, kFixedD0Only,
                                                                      tMarkerStyle_3_FixedD0, tMarkerSizeSingle);
 
   const DrawAcrossAnalysesInfo tDrawInfo_3_Avg = DrawAcrossAnalysesInfo(TString("3 Res., Avg."),
+                                                                     TString("_3Res_Avg"),
                                                                      kInclude3ResOnly, kFreeAndFixedD0,
                                                                      tMarkerStyle_3_Avg, tMarkerSizeAvg);
 

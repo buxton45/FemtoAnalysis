@@ -2,118 +2,8 @@
 TString gSaveLocationBase = "/home/jesse/Analysis/Presentations/GroupMeetings/20171123/Figures/";
 
 
-//---------------------------------------------------------------------------------------------------------------------------------
-td1dVec GetMean(td2dVec &aVecOfPointsWithErrors/*, AverageType tAvgType=kWeightedMean*/)
-{
-  //Each td1dVec in aVecOfPointsWithErrors = [Point, PointStatError, PointSysError]
-  //Return td1dVec of same structure
-
-  vector<double> tReturnVec{0.,0.,0.};
-
-  double tNum=0., tDenStat=0., tDenSys=0.;
-  double tMean=0., tMeanStatErr=0., tMeanSysErr=0.;
-
-  double tPoint=0., tPointStatErr=0., tPointSysErr=0.;
-  for(unsigned int i=0; i<aVecOfPointsWithErrors.size(); i++)
-  {
-    tPoint =        aVecOfPointsWithErrors[i][0];
-    tPointStatErr = aVecOfPointsWithErrors[i][1];
-    tPointSysErr =  aVecOfPointsWithErrors[i][2];
-
-    if(tPointStatErr > 0.)
-    {
-      tNum += tPoint/(tPointStatErr*tPointStatErr);
-      tDenStat += 1./(tPointStatErr*tPointStatErr);
-    }
-    else
-    {
-      tNum += tPoint;
-      tDenStat += 1.;
-    }
-    if(tPointSysErr > 0.) tDenSys += 1./(tPointSysErr*tPointSysErr);
-  }
-
-  assert(tDenStat > 0.);
-  tMean = tNum/tDenStat;
-  if(tDenStat==(double)aVecOfPointsWithErrors.size()) tMeanStatErr=0.;  //in this case, not weighted avg
-  else tMeanStatErr = sqrt(1./tDenStat);
-  if(tDenSys > 0.) tMeanSysErr = sqrt(1./tDenSys);
-
-  //--------------------------------------------
-  tReturnVec[0] = tMean;
-  tReturnVec[1] = tMeanStatErr;
-  tReturnVec[2] = tMeanSysErr;
-
-  return tReturnVec;
-}
-/*
-//---------------------------------------------------------------------------------------------------------------------------------
-vector<FitInfo> GetFitInfoVec(AnalysisType aAnType, IncludeResType aIncludeResType=kInclude10ResAnd3Res)
-{
-  vector<FitInfo> aFitInfoVec;
-  if     (aAnType==kLamKchP) aFitInfoVec = tFitInfoVec_LamKchP;
-  else if(aAnType==kLamKchM) aFitInfoVec = tFitInfoVec_LamKchM;
-  else if(aAnType==kLamK0) aFitInfoVec = tFitInfoVec_LamK0;
-  else assert(0);
-  //------------------------------
-  vector<FitInfo> tReturnVec;
-
-  if(aIncludeResType==kInclude10ResAnd3Res) tReturnVec = aFitInfoVec;
-  else if(aIncludeResType==kInclude10ResOnly)
-  {
-    tReturnVec.push_back(aFitInfoVec[0]);
-    tReturnVec.push_back(aFitInfoVec[1]);
-    tReturnVec.push_back(aFitInfoVec[2]);
-    tReturnVec.push_back(aFitInfoVec[3]);
-    tReturnVec.push_back(aFitInfoVec[4]);
-    tReturnVec.push_back(aFitInfoVec[5]);
-  }
-  else if(aIncludeResType==kInclude3ResOnly)
-  {
-    tReturnVec.push_back(aFitInfoVec[6]);
-    tReturnVec.push_back(aFitInfoVec[7]);
-    tReturnVec.push_back(aFitInfoVec[8]);
-    tReturnVec.push_back(aFitInfoVec[9]);
-    tReturnVec.push_back(aFitInfoVec[10]);
-    tReturnVec.push_back(aFitInfoVec[11]);
-  }
-  else assert(0);
-
-  return tReturnVec;
-}
-*/
 
 
-//---------------------------------------------------------------------------------------------------------------------------------
-vector<FitInfo> GetFitInfoVec(AnalysisType aAnType, IncludeResType aIncludeResType=kInclude10ResAnd3Res, IncludeD0Type aIncludeD0Type=kFreeAndFixedD0)
-{
-  vector<FitInfo> aFitInfoVec;
-  if     (aAnType==kLamKchP) aFitInfoVec = tFitInfoVec_LamKchP;
-  else if(aAnType==kLamKchM) aFitInfoVec = tFitInfoVec_LamKchM;
-  else if(aAnType==kLamK0) aFitInfoVec = tFitInfoVec_LamK0;
-  else assert(0);
-  //------------------------------
-  vector<FitInfo> tReturnVec;
-  //------------------------------
-
-  bool bPassRes=false, bPassD0=false;
-  for(unsigned int i=0; i<aFitInfoVec.size(); i++)
-  {
-    if(aIncludeResType==kInclude10ResAnd3Res) bPassRes = true;
-    else if(aIncludeResType==kInclude10ResOnly && aFitInfoVec[i].all10ResidualsUsed) bPassRes = true;
-    else if(aIncludeResType==kInclude3ResOnly && !aFitInfoVec[i].all10ResidualsUsed) bPassRes = true;
-    else bPassRes = false;
-
-    if(aIncludeD0Type==kFreeAndFixedD0) bPassD0 = true;
-    else if(aIncludeD0Type==kFreeD0Only && aFitInfoVec[i].freeD0) bPassD0 = true;
-    else if(aIncludeD0Type==kFixedD0Only && !aFitInfoVec[i].freeD0) bPassD0 = true;
-    else bPassD0 = false;
-
-    if(bPassRes && bPassD0) tReturnVec.push_back(aFitInfoVec[i]);
-  }
-
-  return tReturnVec;
-}
 
 /*
 //---------------------------------------------------------------------------------------------------------------------------------
@@ -511,16 +401,7 @@ TGraphAsymmErrors* GetWeightedMeanReF0vsImF0(vector<FitInfo> &aFitInfoVec, Inclu
 
   for(unsigned int i=0; i<aFitInfoVec.size(); i++)
   {
-    if(aIncludeResType==kInclude10ResOnly && !aFitInfoVec[i].all10ResidualsUsed) continue;
-    if(aIncludeResType==kInclude3ResOnly  && aFitInfoVec[i].all10ResidualsUsed) continue;
-
-    if(aIncludeD0Type==kFreeD0Only && !aFitInfoVec[i].freeD0) continue;
-    if(aIncludeD0Type==kFixedD0Only && aFitInfoVec[i].freeD0) continue;
-
-    //Exclude fixed radius results from all average/mean calculations
-    if(!aFitInfoVec[i].freeRadii) continue;
-    //Exclude fixed lambda results from all average/mean calculations
-    if(!aFitInfoVec[i].freeLambda) continue;
+    if(!IncludeFitInfoInMeanCalculation(aFitInfoVec[i], aIncludeResType, aIncludeD0Type)) continue;
 
     tReF0Vec.push_back(vector<double>{aFitInfoVec[i].ref0, aFitInfoVec[i].ref0StatErr, aFitInfoVec[i].ref0SysErr});
     tImF0Vec.push_back(vector<double>{aFitInfoVec[i].imf0, aFitInfoVec[i].imf0StatErr, aFitInfoVec[i].imf0SysErr});
@@ -554,16 +435,7 @@ TGraphAsymmErrors* GetWeightedMeanD0(vector<FitInfo> &aFitInfoVec, IncludeResTyp
   td2dVec tD0Vec;
   for(unsigned int i=0; i<aFitInfoVec.size(); i++) 
   {
-    if(aIncludeResType==kInclude10ResOnly && !aFitInfoVec[i].all10ResidualsUsed) continue;
-    if(aIncludeResType==kInclude3ResOnly  && aFitInfoVec[i].all10ResidualsUsed) continue;
-
-    if(aIncludeD0Type==kFreeD0Only && !aFitInfoVec[i].freeD0) continue;
-    if(aIncludeD0Type==kFixedD0Only && aFitInfoVec[i].freeD0) continue;
-
-    //Exclude fixed radius results from all average/mean calculations
-    if(!aFitInfoVec[i].freeRadii) continue;
-    //Exclude fixed lambda results from all average/mean calculations
-    if(!aFitInfoVec[i].freeLambda) continue;
+    if(!IncludeFitInfoInMeanCalculation(aFitInfoVec[i], aIncludeResType, aIncludeD0Type)) continue;
 
     tD0Vec.push_back(vector<double>{aFitInfoVec[i].d0, aFitInfoVec[i].d0StatErr, aFitInfoVec[i].d0SysErr});
   }
@@ -596,16 +468,7 @@ TGraphAsymmErrors* GetWeightedMeanRadiusvsLambda(vector<FitInfo> &aFitInfoVec, C
 
   for(unsigned int i=0; i<aFitInfoVec.size(); i++)
   {
-    if(aIncludeResType==kInclude10ResOnly && !aFitInfoVec[i].all10ResidualsUsed) continue;
-    if(aIncludeResType==kInclude3ResOnly  && aFitInfoVec[i].all10ResidualsUsed) continue;
-
-    if(aIncludeD0Type==kFreeD0Only && !aFitInfoVec[i].freeD0) continue;
-    if(aIncludeD0Type==kFixedD0Only && aFitInfoVec[i].freeD0) continue;
-
-    //Exclude fixed radius results from all average/mean calculations
-    if(!aFitInfoVec[i].freeRadii) continue;
-    //Exclude fixed lambda results from all average/mean calculations
-    if(!aFitInfoVec[i].freeLambda) continue;
+    if(!IncludeFitInfoInMeanCalculation(aFitInfoVec[i], aIncludeResType, aIncludeD0Type)) continue;
 
     tRadiusVec.push_back(vector<double>{aFitInfoVec[i].radiusVec[aCentType], aFitInfoVec[i].radiusStatErrVec[aCentType], aFitInfoVec[i].radiusSysErrVec[aCentType]});
     tLambdaVec.push_back(vector<double>{aFitInfoVec[i].lambdaVec[aCentType], aFitInfoVec[i].lambdaStatErrVec[aCentType], aFitInfoVec[i].lambdaSysErrVec[aCentType]});
@@ -1081,7 +944,7 @@ TCanvas* CompareAllRadiusvsLambdaAcrossAnalyses(CentralityType aCentType, Includ
 
     if(tIncludePlots[i])
     {
-      if(tIncResType==kIncludeNoRes) DrawRadiusvsLambdaAcrossAnalysesQMResults((TPad*)tReturnCan, tMarkerStyle, tMarkerSize, aCentType);
+      if(tIncResType==kIncludeNoRes) DrawRadiusvsLambdaAcrossAnalysesQMResults((TPad*)tReturnCan, tMarkerStyle, tMarkerSize, aCentType);  //Signifies QM results
       else DrawRadiusvsLambdaAcrossAnalyses((TPad*)tReturnCan, tMarkerStyle, tMarkerSize, aCentType, tIncResType, tIncD0Type);
 
       tTex->DrawLatex(tStartX, tStartY-iTex*tIncrementY, tDescriptor);
