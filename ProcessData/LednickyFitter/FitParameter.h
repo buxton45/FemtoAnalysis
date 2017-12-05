@@ -24,6 +24,7 @@ using std::endl;
 using std::vector;
 
 #include "Types.h"
+#include "Types_LambdaValues.h"
 
 class FitParameter {
 

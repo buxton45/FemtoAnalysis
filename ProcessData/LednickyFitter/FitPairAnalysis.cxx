@@ -1051,12 +1051,12 @@ TH1F* FitPairAnalysis::GetCorrectedFitHistv2(double aMaxDrawKStar)
 
 
 //________________________________________________________________________________________________________________
-void FitPairAnalysis::InitiateResidualCollection(td1dVec &aKStarBinCenters, bool aUseCoulombOnlyInterpCfsForChargedResiduals, bool aUseCoulombOnlyInterpCfsForXiKResiduals, TString aInterpCfsDirectory)
+void FitPairAnalysis::InitiateResidualCollection(td1dVec &aKStarBinCenters, IncludeResidualsType aIncludeResidualsType, ChargedResidualsType aChargedResidualsType, ResPrimMaxDecayType aResPrimMaxDecayType, TString aInterpCfsDirectory)
 {
   vector<TH2D*> aTransformMatrices = GetTransformMatrices();
   vector<AnalysisType> aTransformStorageMapping = GetTransformStorageMapping();
-  fResidualCollection = new ResidualCollection(fAnalysisType, aKStarBinCenters, aTransformMatrices, aTransformStorageMapping, fCentralityType);
-  fResidualCollection->SetUseCoulombOnlyInterpCfs(aInterpCfsDirectory, aUseCoulombOnlyInterpCfsForChargedResiduals, aUseCoulombOnlyInterpCfsForXiKResiduals);
+  fResidualCollection = new ResidualCollection(fAnalysisType, aIncludeResidualsType, aResPrimMaxDecayType, aKStarBinCenters, aTransformMatrices, aTransformStorageMapping, fCentralityType);
+  fResidualCollection->SetChargedResidualsType(aInterpCfsDirectory, aChargedResidualsType);
 
   double tSigStRadiusFactor = 1.;
   fResidualCollection->SetRadiusFactorForSigStResiduals(tSigStRadiusFactor);

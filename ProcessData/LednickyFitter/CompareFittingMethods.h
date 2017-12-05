@@ -13,6 +13,7 @@
 #include "TApplication.h"
 
 #include "Types.h"
+#include "Types_LambdaValues.h"
 
 #include <iostream>
 #include <vector>

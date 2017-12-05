@@ -44,9 +44,8 @@ public:
   void SetApplyNonFlatBackgroundCorrection(bool aApply);
   void SetApplyMomResCorrection(bool aApply);
 
-  void SetIncludeResidualCorrelations(bool aInclude);
-  void SetUseCoulombOnlyInterpCfsForChargedResiduals(bool aUse);
-  void SetUseCoulombOnlyInterpCfsForXiKResiduals(bool aUse);
+  void SetIncludeResidualCorrelationsType(IncludeResidualsType aIncludeResidualsType);
+  void SetChargedResidualsType(ChargedResidualsType aChargedResidualsType);
 
   void SetSaveDirectory(TString aDirectory);
 
@@ -60,9 +59,8 @@ protected:
   bool fAllShareSingleLambdaParam;
   bool fApplyNonFlatBackgroundCorrection;
   bool fApplyMomResCorrection;
-  bool fIncludeResidualCorrelations;
-  bool fUseCoulombOnlyInterpCfsForChargedResiduals;  //ex SigStPK, etc
-  bool fUseCoulombOnlyInterpCfsForXiKResiduals;
+  IncludeResidualsType fIncludeResidualsType;
+  ChargedResidualsType fChargedResidualsType;
 
   TString fSaveDirectory;
 
@@ -80,9 +78,8 @@ protected:
 inline void FitSystematicAnalysis::SetApplyNonFlatBackgroundCorrection(bool aApply) {fApplyNonFlatBackgroundCorrection=aApply;}
 inline void FitSystematicAnalysis::SetApplyMomResCorrection(bool aApply) {fApplyMomResCorrection=aApply;}
 
-inline void FitSystematicAnalysis::SetIncludeResidualCorrelations(bool aInclude) {fIncludeResidualCorrelations = aInclude;}
-inline void FitSystematicAnalysis::SetUseCoulombOnlyInterpCfsForChargedResiduals(bool aUse) {fUseCoulombOnlyInterpCfsForChargedResiduals = aUse;}
-inline void FitSystematicAnalysis::SetUseCoulombOnlyInterpCfsForXiKResiduals(bool aUse) {fUseCoulombOnlyInterpCfsForXiKResiduals = aUse;}
+inline void FitSystematicAnalysis::SetIncludeResidualCorrelationsType(IncludeResidualsType aIncludeResidualsType) {fIncludeResidualsType = aIncludeResidualsType;}
+inline void FitSystematicAnalysis::SetChargedResidualsType(ChargedResidualsType aChargedResidualsType) {fChargedResidualsType = aChargedResidualsType;}
 
 inline void FitSystematicAnalysis::SetSaveDirectory(TString aDirectory) {fSaveDirectory = aDirectory;}
 

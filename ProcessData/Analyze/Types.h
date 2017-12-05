@@ -72,6 +72,10 @@ kResXiCKSt0ToLamK0=83, kResAXiCKSt0ToALamK0=84,
   enum FitGeneratorType {kPair=0, kConjPair=1, kPairwConj=2};
   enum NonFlatBgdFitType {kLinear=0, kQuadratic=1, kGaussian=2};
 
+  enum IncludeResidualsType {kIncludeNoResiduals=0, kInclude10Residuals=1, kInclude3Residuals=2};
+  enum ChargedResidualsType {kUseXiDataForAll=0, kUseXiDataAndCoulombOnlyInterp=1, kUseCoulombOnlyInterpForAll=2};
+  enum ResPrimMaxDecayType {k0fm=0, k4fm=1, k5fm=2, k6fm=3, k10fm=4, k100fm=5};
+
   enum InterpType {kGTilde=0, kHyperGeo1F1=1, kScattLen=2};
   enum InterpAxisType {kKaxis=0, kRaxis=1, kThetaaxis=2, kReF0axis=3, kImF0axis=4, kD0axis=5};
 

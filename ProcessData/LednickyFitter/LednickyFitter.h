@@ -94,9 +94,9 @@ public:
   void SetApplyNonFlatBackgroundCorrection(bool aApply);
   void SetNonFlatBgdFitType(NonFlatBgdFitType aNonFlatBgdFitType);
   void SetApplyMomResCorrection(bool aApplyMomResCorrection);
-  virtual void SetIncludeResidualCorrelations(bool aInclude);
-  void SetUseCoulombOnlyInterpCfsForChargedResiduals(bool aUse);
-  void SetUseCoulombOnlyInterpCfsForXiKResiduals(bool aUse);
+  virtual void SetIncludeResidualCorrelationsType(IncludeResidualsType aIncludeResidualsType);
+  void SetChargedResidualsType(ChargedResidualsType aChargedResidualsType);
+  void SetResPrimMaxDecayType(ResPrimMaxDecayType aResPrimMaxDecayType);
 
   vector<double> GetMinParams();
   vector<double> GetParErrors();
@@ -125,9 +125,11 @@ protected:
   bool fRejectOmega;
   bool fApplyNonFlatBackgroundCorrection;
   bool fApplyMomResCorrection;
-  bool fIncludeResidualCorrelations;
-  bool fUseCoulombOnlyInterpCfsForChargedResiduals;
-  bool fUseCoulombOnlyInterpCfsForXiKResiduals;
+
+  IncludeResidualsType fIncludeResidualsType;
+  ChargedResidualsType fChargedResidualsType;
+  ResPrimMaxDecayType fResPrimMaxDecayType;
+
   bool fResidualsInitiated;
   bool fReturnPrimaryWithResidualsToAnalyses;
   NonFlatBgdFitType fNonFlatBgdFitType;
@@ -164,9 +166,9 @@ inline FitSharedAnalyses* LednickyFitter::GetFitSharedAnalyses() {return fFitSha
 inline void LednickyFitter::SetApplyNonFlatBackgroundCorrection(bool aApply) {fApplyNonFlatBackgroundCorrection = aApply;}
 inline void LednickyFitter::SetNonFlatBgdFitType(NonFlatBgdFitType aNonFlatBgdFitType) {fNonFlatBgdFitType = aNonFlatBgdFitType;}
 inline void LednickyFitter::SetApplyMomResCorrection(bool aApplyMomResCorrection) {fApplyMomResCorrection = aApplyMomResCorrection;}
-inline void LednickyFitter::SetIncludeResidualCorrelations(bool aInclude) {fIncludeResidualCorrelations = aInclude;}
-inline void LednickyFitter::SetUseCoulombOnlyInterpCfsForChargedResiduals(bool aUse) {fUseCoulombOnlyInterpCfsForChargedResiduals = aUse;}
-inline void LednickyFitter::SetUseCoulombOnlyInterpCfsForXiKResiduals(bool aUse) {fUseCoulombOnlyInterpCfsForXiKResiduals = aUse;}
+inline void LednickyFitter::SetIncludeResidualCorrelationsType(IncludeResidualsType aIncludeResidualsType) {fIncludeResidualsType = aIncludeResidualsType;}
+inline void LednickyFitter::SetChargedResidualsType(ChargedResidualsType aChargedResidualsType) {fChargedResidualsType = aChargedResidualsType;}
+inline void LednickyFitter::SetResPrimMaxDecayType(ResPrimMaxDecayType aResPrimMaxDecayType) {fResPrimMaxDecayType = aResPrimMaxDecayType;}
 
 inline vector<double> LednickyFitter::GetMinParams() {return fMinParams;}
 inline vector<double> LednickyFitter::GetParErrors() {return fParErrors;}

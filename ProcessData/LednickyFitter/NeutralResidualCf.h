@@ -12,13 +12,14 @@
 #include "TMath.h"
 
 #include "Types.h"
+#include "Types_LambdaValues.h"
 
 using namespace std;
 
 class NeutralResidualCf {
 
 public:
-  NeutralResidualCf(AnalysisType aResidualType, TH2D* aTransformMatrix, td1dVec &aKStarBinCenters);
+  NeutralResidualCf(AnalysisType aResidualType, IncludeResidualsType aIncludeResidualsType, ResPrimMaxDecayType aResPrimMaxDecayType, TH2D* aTransformMatrix, td1dVec &aKStarBinCenters);
   virtual ~NeutralResidualCf();
 
   static double GetLednickyF1(double z);
@@ -53,6 +54,8 @@ public:
 
 protected:
   AnalysisType fResidualType;
+  IncludeResidualsType fIncludeResidualsType;
+  ResPrimMaxDecayType fResPrimMaxDecayType;
   ParticlePDGType fDaughterType1, fMotherType1;
   ParticlePDGType fDaughterType2, fMotherType2;
   double fLambdaFactor;

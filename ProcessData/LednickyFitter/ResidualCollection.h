@@ -11,6 +11,7 @@
 
 
 #include "Types.h"
+#include "Types_LambdaValues.h"
 
 #include "NeutralResidualCf.h"
 class NeutralResidualCf;
@@ -23,10 +24,10 @@ using namespace std;
 class ResidualCollection {
 
 public:
-  ResidualCollection(AnalysisType aAnalysisType, td1dVec &aKStarBinCenters, vector<TH2D*> aTransformMatrices, vector<AnalysisType> aTransformStorageMapping, CentralityType aCentType);
+  ResidualCollection(AnalysisType aAnalysisType, IncludeResidualsType aIncludeResidualsType, ResPrimMaxDecayType aResPrimMaxDecayType, td1dVec &aKStarBinCenters, vector<TH2D*> aTransformMatrices, vector<AnalysisType> aTransformStorageMapping, CentralityType aCentType);
   virtual ~ResidualCollection();
   void BuildStandardCollection(td1dVec &aKStarBinCenters, vector<TH2D*> aTransformMatrices, vector<AnalysisType> aTransformStorageMapping, CentralityType aCentType);
-  void SetUseCoulombOnlyInterpCfs(TString aFileDirectory="/home/jesse/Analysis/FemtoAnalysis/ProcessData/CoulombFitter/", bool aUseCoulombOnlyInterpCfsForChargedResiduals=true, bool aUseCoulombOnlyInterpCfsForXiKResiduals=false);
+  void SetChargedResidualsType(TString aFileDirectory="/home/jesse/Analysis/FemtoAnalysis/ProcessData/CoulombFitter/", ChargedResidualsType aChargedResidualsType=kUseXiDataAndCoulombOnlyInterp);
   void SetRadiusFactorForSigStResiduals(double aFactor=1.);
   int GetNeutralIndex(AnalysisType aResidualType);
   td1dVec GetNeutralResidualCorrelation(AnalysisType aResidualType, double *aParentCfParams);
@@ -41,6 +42,8 @@ public:
 
 protected:
 AnalysisType fAnalysisType;
+IncludeResidualsType fIncludeResidualsType;
+ResPrimMaxDecayType fResPrimMaxDecayType;
 vector<NeutralResidualCf> fNeutralCfCollection;
 vector<SimpleChargedResidualCf> fChargedCfCollection;
 

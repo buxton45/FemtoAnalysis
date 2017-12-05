@@ -47,9 +47,9 @@ FitGenerator::FitGenerator(TString aFileLocationBase, TString aFileLocationBaseM
   fApplyNonFlatBackgroundCorrection(false),
   fNonFlatBgdFitType(kLinear),
   fApplyMomResCorrection(false),
-  fIncludeResidualCorrelations(false),
-  fUseCoulombOnlyInterpCfsForChargedResiduals(false),
-  fUseCoulombOnlyInterpCfsForXiKResiduals(false),
+  fIncludeResidualsType(kIncludeNoResiduals),
+  fChargedResidualsType(kUseXiDataAndCoulombOnlyInterp),
+  fResPrimMaxDecayType(k5fm),
 
   fUsemTScalingOfResidualRadii(false),
   fmTScalingPowerOfResidualRadii(-0.5),
@@ -147,9 +147,9 @@ FitGenerator::FitGenerator(TString aFileLocationBase, TString aFileLocationBaseM
   fApplyNonFlatBackgroundCorrection(false),
   fNonFlatBgdFitType(kLinear),
   fApplyMomResCorrection(false),
-  fIncludeResidualCorrelations(false),
-  fUseCoulombOnlyInterpCfsForChargedResiduals(false),
-  fUseCoulombOnlyInterpCfsForXiKResiduals(false),
+  fIncludeResidualsType(kIncludeNoResiduals),
+  fChargedResidualsType(kUseXiDataAndCoulombOnlyInterp),
+  fResPrimMaxDecayType(k5fm),
 
   fUsemTScalingOfResidualRadii(false),
   fmTScalingPowerOfResidualRadii(-0.5),
@@ -353,14 +353,16 @@ void FitGenerator::CreateParamFinalValuesText(AnalysisType aAnType, CanvasPartit
   double tLambdaErr, tRadiusErr, tReF0Err, tImF0Err, tD0Err;
 
   tLambda = aFit->GetParameter(0);
-  if(fIncludeResidualCorrelations) tLambda /= cAnalysisLambdaFactors[aAnType];
+//  if(fIncludeResidualsType != kIncludeNoResiduals) tLambda /= cAnalysisLambdaFactors[aAnType];
+  if(fIncludeResidualsType != kIncludeNoResiduals) tLambda /= cAnalysisLambdaFactorsArr[fIncludeResidualsType][fResPrimMaxDecayType][aAnType];
   tRadius = aFit->GetParameter(1);
   tReF0 = aFit->GetParameter(2);
   tImF0 = aFit->GetParameter(3);
   tD0 = aFit->GetParameter(4);
 
   tLambdaErr = aFit->GetParError(0);
-  if(fIncludeResidualCorrelations) tLambdaErr /= cAnalysisLambdaFactors[aAnType];
+//  if(fIncludeResidualsType != kIncludeNoResiduals) tLambdaErr /= cAnalysisLambdaFactors[aAnType];
+  if(fIncludeResidualsType != kIncludeNoResiduals) tLambdaErr /= cAnalysisLambdaFactorsArr[fIncludeResidualsType][fResPrimMaxDecayType][aAnType];
   tRadiusErr = aFit->GetParError(1);
   tReF0Err = aFit->GetParError(2);
   tImF0Err = aFit->GetParError(3);
@@ -2036,14 +2038,14 @@ void FitGenerator::SetAllParameters()
 void FitGenerator::InitializeGenerator(double aMaxKStarToFit)
 {
 /*
-  if(fIncludeResidualCorrelations)  //since this involves the CoulombFitter, I should place limits on parameters used in interpolations
+  if(fIncludeResidualsType != kIncludeNoResiduals)  //since this involves the CoulombFitter, I should place limits on parameters used in interpolations
   {
     for(unsigned int iCent=0; iCent<fCentralityTypes.size(); iCent++) SetRadiusLimits(1.,15.,iCent);
     SetScattParamLimits({{-10.,10.},{-10.,10.},{-10.,10.}});
   }
 */
 
-  if(fIncludeResidualCorrelations && fUseCoulombOnlyInterpCfsForChargedResiduals)
+  if(fIncludeResidualsType != kIncludeNoResiduals && fChargedResidualsType != kUseXiDataForAll)
   {
     for(unsigned int iCent=0; iCent<fCentralityTypes.size(); iCent++) SetRadiusLimits(1.,12.,iCent);
   }
@@ -2056,9 +2058,9 @@ void FitGenerator::InitializeGenerator(double aMaxKStarToFit)
   fLednickyFitter->SetApplyMomResCorrection(fApplyMomResCorrection);
   fLednickyFitter->SetApplyNonFlatBackgroundCorrection(fApplyNonFlatBackgroundCorrection);
   fLednickyFitter->SetNonFlatBgdFitType(fNonFlatBgdFitType);
-  fLednickyFitter->SetIncludeResidualCorrelations(fIncludeResidualCorrelations);
-  fLednickyFitter->SetUseCoulombOnlyInterpCfsForChargedResiduals(fUseCoulombOnlyInterpCfsForChargedResiduals);
-  fLednickyFitter->SetUseCoulombOnlyInterpCfsForXiKResiduals(fUseCoulombOnlyInterpCfsForXiKResiduals);
+  fLednickyFitter->SetIncludeResidualCorrelationsType(fIncludeResidualsType);
+  fLednickyFitter->SetChargedResidualsType(fChargedResidualsType);
+  fLednickyFitter->SetResPrimMaxDecayType(fResPrimMaxDecayType);
   fLednickyFitter->SetUsemTScalingOfResidualRadii(fUsemTScalingOfResidualRadii, fmTScalingPowerOfResidualRadii);
 }
 

@@ -11,13 +11,16 @@ ClassImp(NeutralResidualCf)
 //________________________________________________________________________________________________________________
 //****************************************************************************************************************
 //________________________________________________________________________________________________________________
-NeutralResidualCf::NeutralResidualCf(AnalysisType aResidualType, TH2D* aTransformMatrix, td1dVec &aKStarBinCenters) :
+NeutralResidualCf::NeutralResidualCf(AnalysisType aResidualType, IncludeResidualsType aIncludeResidualsType, ResPrimMaxDecayType aResPrimMaxDecayType, TH2D* aTransformMatrix, td1dVec &aKStarBinCenters) :
   fResidualType(aResidualType),
+  fIncludeResidualsType(aIncludeResidualsType),
+  fResPrimMaxDecayType(aResPrimMaxDecayType),
   fDaughterType1(kPDGNull),
   fMotherType1(kPDGNull),
   fDaughterType2(kPDGNull),
   fMotherType2(kPDGNull),
-  fLambdaFactor(cAnalysisLambdaFactors[fResidualType]),
+//  fLambdaFactor(cAnalysisLambdaFactors[fResidualType]),
+  fLambdaFactor(cAnalysisLambdaFactorsArr[fIncludeResidualsType][fResPrimMaxDecayType][fResidualType]),
   fTransformMatrix(aTransformMatrix),
   fKStarBinCenters(aKStarBinCenters),
   fResCf(0),

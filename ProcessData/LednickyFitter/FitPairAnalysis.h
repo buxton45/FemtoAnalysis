@@ -90,7 +90,7 @@ public:
 
   td1dVec GetCorrectedFitVec();
   TH1F* GetCorrectedFitHistv2(double aMaxDrawKStar=0.3); //TODO
-  void InitiateResidualCollection(td1dVec &aKStarBinCenters, bool aUseCoulombOnlyInterpCfsForChargedResiduals=false, bool aUseCoulombOnlyInterpCfsForXiKResiduals=false, TString aInterpCfsDirectory="/home/jesse/Analysis/FemtoAnalysis/ProcessData/CoulombFitter/");
+  void InitiateResidualCollection(td1dVec &aKStarBinCenters, IncludeResidualsType aIncludeResidualsType, ChargedResidualsType aChargedResidualsType, ResPrimMaxDecayType aResPrimMaxDecayType, TString aInterpCfsDirectory="/home/jesse/Analysis/FemtoAnalysis/ProcessData/CoulombFitter/");
 
   //inline (i.e. simple) functions
   TString GetAnalysisName();

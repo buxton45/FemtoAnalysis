@@ -46,7 +46,7 @@ SimpleLednickyFitter::SimpleLednickyFitter(AnalysisType aAnalysisType, CfLite *a
 
   fApplyNonFlatBackgroundCorrection(false),
   fNonFlatBgdFit(nullptr),
-  fIncludeResidualCorrelations(false),
+  fIncludeResidualsType(kIncludeNoResiduals),
   fTransformMatrices(0),
   fTransformStorageMapping(0),
   fResidualCollection(nullptr)
@@ -293,7 +293,7 @@ void SimpleLednickyFitter::CreateMinuitParameters()
   double tStepSize_Radius = 0.001;
   double tLowerBound_Radius = 0.;
   double tUpperBound_Radius = 0.;
-  if(fIncludeResidualCorrelations) {tLowerBound_Radius=1.; tUpperBound_Radius=12.;}
+  if(fIncludeResidualsType != kIncludeNoResiduals) {tLowerBound_Radius=1.; tUpperBound_Radius=12.;}
   fMinuit->mnparm(1, TString("Radius"), tStartVal_Radius, tStepSize_Radius, tLowerBound_Radius, tUpperBound_Radius, tErrFlg);
 //  fMinuit->FixParameter(1);
 
@@ -358,7 +358,8 @@ void SimpleLednickyFitter::CalculateFitFunction(int &npar, double &chi2, double 
 
   double *tParPrim = new double[tNFitParams];
 
-  if(fIncludeResidualCorrelations) tParPrim[0] = cAnalysisLambdaFactors[fAnalysisType]*par[tLambdaMinuitParamNumber];
+//  if(fIncludeResidualsType != kIncludeNoResiduals) tParPrim[0] = cAnalysisLambdaFactors[fAnalysisType]*par[tLambdaMinuitParamNumber];
+  if(fIncludeResidualsType != kIncludeNoResiduals) tParPrim[0] = cAnalysisLambdaFactorsArr[fIncludeResidualsType][fResPrimMaxDecayType][fAnalysisType]*par[tLambdaMinuitParamNumber];
   else tParPrim[0] = par[tLambdaMinuitParamNumber];
   tParPrim[1] = par[tRadiusMinuitParamNumber];
   tParPrim[2] = par[tRef0MinuitParamNumber];
@@ -389,7 +390,7 @@ void SimpleLednickyFitter::CalculateFitFunction(int &npar, double &chi2, double 
     tPrimaryFitCfContent[ix-1] = LednickyFitter::LednickyEq(x,tParPrim);
   }
 
-  if(fIncludeResidualCorrelations) 
+  if(fIncludeResidualsType != kIncludeNoResiduals) 
   {
     double *tParOverall = new double[tNFitParams];
     tParOverall[0] = par[tLambdaMinuitParamNumber];
@@ -457,10 +458,12 @@ TF1* SimpleLednickyFitter::CreateFitFunction(TString aName)
   {
     tParamValue = fMinParams[iPar];
     tParamError = fParErrors[iPar];
-    if(iPar==0 && fIncludeResidualCorrelations)
+    if(iPar==0 && fIncludeResidualsType != kIncludeNoResiduals)
     {
-      tParamValue *= cAnalysisLambdaFactors[fAnalysisType];
-      tParamError *= cAnalysisLambdaFactors[fAnalysisType];
+//      tParamValue *= cAnalysisLambdaFactors[fAnalysisType];
+//      tParamError *= cAnalysisLambdaFactors[fAnalysisType];
+      tParamValue *= cAnalysisLambdaFactorsArr[fIncludeResidualsType][fResPrimMaxDecayType][fAnalysisType];
+      tParamError *= cAnalysisLambdaFactorsArr[fIncludeResidualsType][fResPrimMaxDecayType][fAnalysisType];
     }
 
     ReturnFunction->SetParameter(iPar,tParamValue);
@@ -500,7 +503,7 @@ void SimpleLednickyFitter::InitializeFitter()
   fNbinsXToFit = fCfLite->Num()->FindBin(fMaxFitKStar);
   if(fCfLite->Num()->GetBinLowEdge(fNbinsXToFit) == fMaxFitKStar) fNbinsXToFit--;
 
-  if(fIncludeResidualCorrelations) tNbinsXToBuildResiduals = GetTransformMatrix(0)->GetNbinsX();
+  if(fIncludeResidualsType != kIncludeNoResiduals) tNbinsXToBuildResiduals = GetTransformMatrix(0)->GetNbinsX();
   fNbinsXToBuild = std::max({tNbinsXToBuildMomResCrctn, tNbinsXToBuildResiduals, fNbinsXToFit});
 
   fKStarBinWidth = fCfLite->Num()->GetXaxis()->GetBinWidth(1);
@@ -516,7 +519,7 @@ void SimpleLednickyFitter::InitializeFitter()
   assert(tNum->GetXaxis()->GetBinWidth(1) == fKStarBinWidth);
 
   //make sure tNum and tDen and tCf have same bin size as residuals
-  if(fIncludeResidualCorrelations)
+  if(fIncludeResidualsType != kIncludeNoResiduals)
   {
     assert(tNum->GetXaxis()->GetBinWidth(1) == fTransformMatrices[0]->GetXaxis()->GetBinWidth(1));
     assert(tNum->GetXaxis()->GetBinWidth(1) == fTransformMatrices[0]->GetYaxis()->GetBinWidth(1));
@@ -532,7 +535,7 @@ void SimpleLednickyFitter::InitializeFitter()
   if(tTempNbinsXToFit > tNum->GetNbinsX()) {tTempNbinsXToFit = tNum->GetNbinsX();}  //in case I accidentally include an overflow bin in nbinsXToFit
   assert(tTempNbinsXToFit == fNbinsXToFit);
 
-  if(!fIncludeResidualCorrelations) fNbinsXToBuild = fNbinsXToFit;
+  if(fIncludeResidualsType == kIncludeNoResiduals) fNbinsXToBuild = fNbinsXToFit;
 
   fKStarBinCenters.resize(fNbinsXToBuild,0.);
   for(int ix=1; ix <= fNbinsXToBuild; ix++)
@@ -542,7 +545,7 @@ void SimpleLednickyFitter::InitializeFitter()
 
   if(fApplyNonFlatBackgroundCorrection) fNonFlatBgdFit = FitNonFlatBackground(tCf, 0.5, 1.0);
 
-  if(fIncludeResidualCorrelations) InitiateResidualCollection(fKStarBinCenters);
+  if(fIncludeResidualsType != kIncludeNoResiduals) InitiateResidualCollection(fKStarBinCenters);
 
 }
 
@@ -678,10 +681,12 @@ TPaveText* SimpleLednickyFitter::CreateParamFinalValuesText(TF1* aFit, double aT
   tImF0Err = aFit->GetParError(3);
   tD0Err = aFit->GetParError(4);
 
-  if(fIncludeResidualCorrelations)
+  if(fIncludeResidualsType != kIncludeNoResiduals)
   {
-    tLambda /= cAnalysisLambdaFactors[fAnalysisType];
-    tLambdaErr /= cAnalysisLambdaFactors[fAnalysisType];
+//    tLambda /= cAnalysisLambdaFactors[fAnalysisType];
+//    tLambdaErr /= cAnalysisLambdaFactors[fAnalysisType];
+    tLambda /= cAnalysisLambdaFactorsArr[fIncludeResidualsType][fResPrimMaxDecayType][fAnalysisType];
+    tLambdaErr /= cAnalysisLambdaFactorsArr[fIncludeResidualsType][fResPrimMaxDecayType][fAnalysisType];
   }
 
   TPaveText *tText = new TPaveText(aTextXmin, aTextYmin, aTextXmin+aTextWidth, aTextYmin+aTextHeight, "NDC");
@@ -1085,12 +1090,12 @@ vector<TH2D*> SimpleLednickyFitter::GetTransformMatrices(int aRebin, TString aFi
 
 
 //________________________________________________________________________________________________________________
-void SimpleLednickyFitter::InitiateResidualCollection(td1dVec &aKStarBinCenters, bool aUseCoulombOnlyInterpCfsForChargedResiduals, bool aUseCoulombOnlyInterpCfsForXiKResiduals, TString aInterpCfsDirectory)
+void SimpleLednickyFitter::InitiateResidualCollection(td1dVec &aKStarBinCenters, ChargedResidualsType aChargedResidualsType, ResPrimMaxDecayType aResPrimMaxDecayType, TString aInterpCfsDirectory)
 {
   vector<TH2D*> aTransformMatrices = GetTransformMatrices();
   vector<AnalysisType> aTransformStorageMapping = GetTransformStorageMapping();
-  fResidualCollection = new ResidualCollection(fAnalysisType, aKStarBinCenters, aTransformMatrices, aTransformStorageMapping, k0010);
-  fResidualCollection->SetUseCoulombOnlyInterpCfs(aInterpCfsDirectory, aUseCoulombOnlyInterpCfsForChargedResiduals, aUseCoulombOnlyInterpCfsForXiKResiduals);
+  fResidualCollection = new ResidualCollection(fAnalysisType, fIncludeResidualsType, aResPrimMaxDecayType, aKStarBinCenters, aTransformMatrices, aTransformStorageMapping, k0010);
+  fResidualCollection->SetChargedResidualsType(aInterpCfsDirectory, aChargedResidualsType);
 
   double tSigStRadiusFactor = 1.;
   fResidualCollection->SetRadiusFactorForSigStResiduals(tSigStRadiusFactor);

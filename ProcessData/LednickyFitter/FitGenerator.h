@@ -115,9 +115,9 @@ public:
   void SetApplyNonFlatBackgroundCorrection(bool aApply);
   void SetNonFlatBgdFitType(NonFlatBgdFitType aNonFlatBgdFitType);
   void SetApplyMomResCorrection(bool aApplyMomResCorrection);
-  virtual void SetIncludeResidualCorrelations(bool aInclude, double aMinLambda=0., double aMaxLambda=1.0);
-  void SetUseCoulombOnlyInterpCfsForChargedResiduals(bool aUse);
-  void SetUseCoulombOnlyInterpCfsForXiKResiduals(bool aUse);
+  virtual void SetIncludeResidualCorrelationsType(IncludeResidualsType aIncludeResidualsType, double aMinLambda=0., double aMaxLambda=1.0);
+  void SetChargedResidualsType(ChargedResidualsType aChargedResidualsType);
+  void SetResPrimMaxDecayType(ResPrimMaxDecayType aResPrimMaxDecayType);
 
   void SetUsemTScalingOfResidualRadii(bool aUse=true, double aPower=-0.5);
 
@@ -141,9 +141,10 @@ protected:
   bool fApplyNonFlatBackgroundCorrection;
   NonFlatBgdFitType fNonFlatBgdFitType;
   bool fApplyMomResCorrection;
-  bool fIncludeResidualCorrelations;
-  bool fUseCoulombOnlyInterpCfsForChargedResiduals;  //ex SigStPK, etc
-  bool fUseCoulombOnlyInterpCfsForXiKResiduals;
+
+  IncludeResidualsType fIncludeResidualsType;
+  ChargedResidualsType fChargedResidualsType;
+  ResPrimMaxDecayType fResPrimMaxDecayType;
 
   bool fUsemTScalingOfResidualRadii;
   double fmTScalingPowerOfResidualRadii;
@@ -190,9 +191,9 @@ inline TH1* FitGenerator::GetKStarCf(int aAnalysisNumber) {return fSharedAn->Get
 inline void FitGenerator::SetApplyNonFlatBackgroundCorrection(bool aApply) {fApplyNonFlatBackgroundCorrection = aApply;}
 inline void FitGenerator::SetNonFlatBgdFitType(NonFlatBgdFitType aNonFlatBgdFitType) {fNonFlatBgdFitType = aNonFlatBgdFitType;}
 inline void FitGenerator::SetApplyMomResCorrection(bool aApplyMomResCorrection) {fApplyMomResCorrection = aApplyMomResCorrection;}
-inline void FitGenerator::SetIncludeResidualCorrelations(bool aInclude, double aMinLambda, double aMaxLambda) {fIncludeResidualCorrelations = aInclude; if(aInclude) SetDefaultLambdaParametersWithResiduals(aMinLambda, aMaxLambda);}
-inline void FitGenerator::SetUseCoulombOnlyInterpCfsForChargedResiduals(bool aUse) {fUseCoulombOnlyInterpCfsForChargedResiduals = aUse;}
-inline void FitGenerator::SetUseCoulombOnlyInterpCfsForXiKResiduals(bool aUse) {fUseCoulombOnlyInterpCfsForXiKResiduals = aUse;}
+inline void FitGenerator::SetIncludeResidualCorrelationsType(IncludeResidualsType aIncludeResidualsType, double aMinLambda, double aMaxLambda) {fIncludeResidualsType = aIncludeResidualsType; if(aIncludeResidualsType != kIncludeNoResiduals) SetDefaultLambdaParametersWithResiduals(aMinLambda, aMaxLambda);}
+inline void FitGenerator::SetChargedResidualsType(ChargedResidualsType aChargedResidualsType) {fChargedResidualsType = aChargedResidualsType;}
+inline void FitGenerator::SetResPrimMaxDecayType(ResPrimMaxDecayType aResPrimMaxDecayType) {fResPrimMaxDecayType = aResPrimMaxDecayType;}
 
 inline void FitGenerator::SetUsemTScalingOfResidualRadii(bool aUse, double aPower) {fUsemTScalingOfResidualRadii = aUse; fmTScalingPowerOfResidualRadii = aPower;}
 

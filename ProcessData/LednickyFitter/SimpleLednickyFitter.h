@@ -91,7 +91,7 @@ public:
   void LoadTransformMatrices(int aRebin=2, TString aFileLocation="");
   vector<TH2D*> GetTransformMatrices(int aRebin=2, TString aFileLocation="");
   TH2D* GetTransformMatrix(int aIndex, int aRebin=2, TString aFileLocation="");
-  void InitiateResidualCollection(td1dVec &aKStarBinCenters, bool aUseCoulombOnlyInterpCfsForChargedResiduals=true, bool aUseCoulombOnlyInterpCfsForXiKResiduals=false, TString aInterpCfsDirectory="/home/jesse/Analysis/FemtoAnalysis/ProcessData/CoulombFitter/");
+  void InitiateResidualCollection(td1dVec &aKStarBinCenters, ChargedResidualsType aChargedResidualsType=kUseXiDataAndCoulombOnlyInterp, ResPrimMaxDecayType aResPrimMaxDecayType=k5fm, TString aInterpCfsDirectory="/home/jesse/Analysis/FemtoAnalysis/ProcessData/CoulombFitter/");
   vector<double> GetFitCfIncludingResiduals(vector<double> &aPrimaryFitCfContent, double *aParamSet);
 
 
@@ -108,7 +108,8 @@ public:
 
   void SetApplyNonFlatBackgroundCorrection(bool aApply=true);
   vector<AnalysisType> GetTransformStorageMapping();
-  void SetIncludeResidualCorrelations(bool aInclude=true);
+  void SetIncludeResidualCorrelationsType(IncludeResidualsType aIncludeResidualsType);
+  void SetResPrimMaxDecayType(ResPrimMaxDecayType aResPrimMaxDecayType);
   td1dVec CombinePrimaryWithResiduals(double *aCfParams, td1dVec &aPrimaryCf);
 
   void SetFitType(FitType aFitType);
@@ -147,7 +148,9 @@ protected:
 
   bool fApplyNonFlatBackgroundCorrection;
   TF1* fNonFlatBgdFit;
-  bool fIncludeResidualCorrelations;
+
+  IncludeResidualsType fIncludeResidualsType; 
+  ResPrimMaxDecayType fResPrimMaxDecayType;
   vector<TH2D*> fTransformMatrices;
   vector<AnalysisType> fTransformStorageMapping;
   ResidualCollection *fResidualCollection;
@@ -171,7 +174,8 @@ inline TMinuit* SimpleLednickyFitter::GetMinuitObject() {return fMinuit;}
 
 inline void SimpleLednickyFitter::SetApplyNonFlatBackgroundCorrection(bool aApply) {fApplyNonFlatBackgroundCorrection = aApply;}
 inline vector<AnalysisType> SimpleLednickyFitter::GetTransformStorageMapping() {return fTransformStorageMapping;}
-inline void SimpleLednickyFitter::SetIncludeResidualCorrelations(bool aInclude) {fIncludeResidualCorrelations = aInclude;}
+inline void SimpleLednickyFitter::SetIncludeResidualCorrelationsType(IncludeResidualsType aIncludeResidualsType) {fIncludeResidualsType = aIncludeResidualsType;}
+inline void SimpleLednickyFitter::SetResPrimMaxDecayType(ResPrimMaxDecayType aResPrimMaxDecayType) {fResPrimMaxDecayType = aResPrimMaxDecayType;}
 inline td1dVec SimpleLednickyFitter::CombinePrimaryWithResiduals(double *aCfParams, td1dVec &aPrimaryCf) {return fResidualCollection->CombinePrimaryWithResiduals(aCfParams, aPrimaryCf);}
 
 inline void SimpleLednickyFitter::SetFitType(FitType aFitType) {fFitType = aFitType;}

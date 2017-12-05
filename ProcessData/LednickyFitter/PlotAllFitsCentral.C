@@ -206,7 +206,7 @@ int main(int argc, char **argv)
   bool ApplyMomResCorrection = true;
   bool ApplyNonFlatBackgroundCorrection = true;
   NonFlatBgdFitType tNonFlatBgdFitType = kLinear;
-  bool IncludeResiduals = false;
+  IncludeResidualsType tIncludeResidualsType = kIncludeNoResiduals; 
 
   double tParLamK0[6] =       {0.400, 3.024, -0.157, 0.176, 3.566, 1.};
   double tParErrLamK0[6] =    {0.187, 0.541, 0.031, 0.077, 0.947, 0.};
@@ -298,7 +298,7 @@ int main(int argc, char **argv)
     tLednickyFitter->SetApplyNonFlatBackgroundCorrection(ApplyNonFlatBackgroundCorrection);
     tLednickyFitter->SetNonFlatBgdFitType(tNonFlatBgdFitType);
     tLednickyFitter->SetApplyMomResCorrection(ApplyMomResCorrection);
-    tLednickyFitter->SetIncludeResidualCorrelations(IncludeResiduals);
+    tLednickyFitter->SetIncludeResidualCorrelationsType(tIncludeResidualsType);
 
     int tNpar = 10;
     double tChi2 = 0.;

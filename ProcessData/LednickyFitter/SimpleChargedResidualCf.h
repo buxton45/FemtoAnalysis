@@ -11,6 +11,7 @@
 #include "TMath.h"
 
 #include "Types.h"
+#include "Types_LambdaValues.h"
 
 class FitPairAnalysis;
 
@@ -19,7 +20,7 @@ using namespace std;
 class SimpleChargedResidualCf {
 
 public:
-  SimpleChargedResidualCf(AnalysisType aResidualType, TH2D* aTransformMatrix, td1dVec &aKStarBinCenters,
+  SimpleChargedResidualCf(AnalysisType aResidualType, IncludeResidualsType aIncludeResidualsType, ResPrimMaxDecayType aResPrimMaxDecayType, TH2D* aTransformMatrix, td1dVec &aKStarBinCenters,
                           CentralityType aCentType=k0010, 
                           TString aFileLocationBase = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cXicKch_20170505_ignoreOnFlyStatus/Results_cXicKch_20170505_ignoreOnFlyStatus");
   virtual ~SimpleChargedResidualCf();
@@ -59,6 +60,8 @@ public:
 
 protected:
   AnalysisType fResidualType;
+  IncludeResidualsType fIncludeResidualsType;
+  ResPrimMaxDecayType fResPrimMaxDecayType;
   ParticlePDGType fDaughterType1, fMotherType1;
   ParticlePDGType fDaughterType2, fMotherType2;
   FitPairAnalysis* fPairAn;

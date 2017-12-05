@@ -68,7 +68,8 @@ int main(int argc, char **argv)
   AnalysisType tAnType = kLamKchP;
   bool bSaveFigures = false;
   bool bApplyNonFlatBackgroundCorrection = true;
-  bool bIncludeResiduals = true;
+  IncludeResidualsType tIncludeResidualsType = kInclude10Residuals; 
+  ResPrimMaxDecayType tResPrimMaxDecayType = k5fm;
   FitType tFitType = kChi2PML;
 
   TString tDirectory = "~/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b2/";
@@ -110,14 +111,15 @@ int main(int argc, char **argv)
   myFitter = tSLFitter;
 
   tSLFitter->SetApplyNonFlatBackgroundCorrection(bApplyNonFlatBackgroundCorrection);
-  tSLFitter->SetIncludeResidualCorrelations(bIncludeResiduals);
+  tSLFitter->SetIncludeResidualCorrelationsType(tIncludeResidualsType);
+  tSLFitter->SetResPrimMaxDecayType(tResPrimMaxDecayType);
   tSLFitter->SetFitType(tFitType);
   tSLFitter->DoFit();
 
 
   TString tCanName = TString("tCanCfWithFit");
   TCanvas* tCanCfWithFit;
-  if(!bIncludeResiduals)
+  if(tIncludeResidualsType==kIncludeNoResiduals)
   {
     tCanCfWithFit = new TCanvas(tCanName, tCanName);
     tSLFitter->DrawCfWithFit((TPad*)tCanCfWithFit);

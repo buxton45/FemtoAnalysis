@@ -29,12 +29,11 @@ int main(int argc, char **argv)
   bool ApplyNonFlatBackgroundCorrection = true;
   NonFlatBgdFitType tNonFlatBgdFitType = kLinear;
 
-  bool IncludeResiduals = true;
+  IncludeResidualsType tIncludeResidualsType = kInclude10Residuals; 
+  ChargedResidualsType tChargedResidualsType = kUseXiDataAndCoulombOnlyInterp;
+  ResPrimMaxDecayType tResPrimMaxDecayType = k5fm;
 
-  bool UseAll10Residuals = true;
   bool UnboundLambda = true;
-  bool UseCoulombOnlyInterpCfsForChargedResiduals = true;
-  bool UseCoulombOnlyInterpCfsForXiKResiduals = false;
 
   bool FixRadii = false;
   bool FixD0 = false;
@@ -61,18 +60,7 @@ int main(int argc, char **argv)
   TString tFileLocationBaseMC = TString::Format("%sResults_%sMC_%s",tDirectoryBase.Data(),tGeneralAnTypeName.Data(),tResultsDate.Data());
 
   TString tSaveDirectoryBase = TString::Format("/home/jesse/Analysis/Presentations/AliFemto/20171108/Figures/%s/", cAnalysisBaseTags[tAnType]);
-/*
-  TString tSaveDirectoryBase = TString::Format("/home/jesse/Analysis/Presentations/AliFemto/20170913/Figures/%s/", cAnalysisBaseTags[tAnType]);
-    if(UseAll10Residuals) tSaveDirectoryBase += TString("10Residuals/");
-    else tSaveDirectoryBase += TString("3Residuals/");
 
-    if(UnboundLambda) tSaveDirectoryBase += TString("NoLimits/");
-    else tSaveDirectoryBase += TString("LimitedLambda/");
-
-    if(UseCoulombOnlyInterpCfsForChargedResiduals) tSaveDirectoryBase += TString("UsingCoulombOnlyInterpCfs/");
-    else tSaveDirectoryBase += TString("UsingXiKData/");
-*/
-//  tSaveDirectoryBase = tDirectoryBase;
 
   TString tSaveNameModifier = "";
   if(ApplyMomResCorrection) tSaveNameModifier += TString("_MomResCrctn");
@@ -81,16 +69,18 @@ int main(int argc, char **argv)
   if(tAllShareSingleLambdaParam && !FixAllLambdaTo1) tSaveNameModifier += TString("_SingleLamParam");
   if(FixAllLambdaTo1) tSaveNameModifier += TString("_FixAllLambdaTo1");
 
-  if(IncludeResiduals && UseAll10Residuals) tSaveNameModifier += TString("_10ResidualsIncluded");
-  if(IncludeResiduals && !UseAll10Residuals) tSaveNameModifier += TString("_3ResidualsIncluded");
+  if(tIncludeResidualsType == kInclude10Residuals) tSaveNameModifier += TString("_10ResidualsIncluded");
+  if(tIncludeResidualsType == kInclude3Residuals) tSaveNameModifier += TString("_3ResidualsIncluded");
   if(FixRadii) tSaveNameModifier += TString("_FixedRadii");
   if(FixD0) tSaveNameModifier += TString("_FixedD0");
   if(FixAllScattParams) tSaveNameModifier += TString("_FixedScattParams");
 
-  if(IncludeResiduals)
+  if(tIncludeResidualsType != kIncludeNoResiduals)
   {
-    if(UseCoulombOnlyInterpCfsForXiKResiduals && UseCoulombOnlyInterpCfsForChargedResiduals) tSaveNameModifier += TString("_UsingCoulombOnlyInterpCfsForAll");
-    else if(UseCoulombOnlyInterpCfsForChargedResiduals) tSaveNameModifier += TString("_UsingCoulombOnlyInterpCfs");
+    if(tChargedResidualsType == kUseXiDataForAll) tSaveNameModifier += TString("_UsingXiDataForAll");
+    else if(tChargedResidualsType == kUseXiDataAndCoulombOnlyInterp) tSaveNameModifier += TString("_UsingXiDataAndCoulombOnly");
+    else if(tChargedResidualsType == kUseCoulombOnlyInterpForAll) tSaveNameModifier += TString("_UsingCoulombOnlyForAll");
+    else assert(0);
   }
 
   if(UsemTScalingOfResidualRadii) tSaveNameModifier += TString::Format("_UsingmTScalingOfResidualRadii");
@@ -114,9 +104,9 @@ int main(int argc, char **argv)
   tLamKchP->SetApplyNonFlatBackgroundCorrection(ApplyNonFlatBackgroundCorrection);
   tLamKchP->SetNonFlatBgdFitType(tNonFlatBgdFitType);
   tLamKchP->SetApplyMomResCorrection(ApplyMomResCorrection);
-  tLamKchP->SetIncludeResidualCorrelations(IncludeResiduals, aLambdaMin, aLambdaMax);
-  tLamKchP->SetUseCoulombOnlyInterpCfsForChargedResiduals(UseCoulombOnlyInterpCfsForChargedResiduals);
-  tLamKchP->SetUseCoulombOnlyInterpCfsForXiKResiduals(UseCoulombOnlyInterpCfsForXiKResiduals);
+  tLamKchP->SetIncludeResidualCorrelationsType(tIncludeResidualsType, aLambdaMin, aLambdaMax);
+  tLamKchP->SetChargedResidualsType(tChargedResidualsType);
+  tLamKchP->SetResPrimMaxDecayType(tResPrimMaxDecayType);
   if(FixRadii) 
   {
     if(tAnType==kLamK0 || tAnType==kALamK0) tLamKchP->SetRadiusLimits({{3.25, 3.25}, {2.75, 2.75}, {2.25, 2.25}});
@@ -145,7 +135,7 @@ int main(int argc, char **argv)
   TCanvas* tCanPrimwFitsAndResidual;
   TObjArray* tAllResWithTransMatrices;
 
-  if(IncludeResiduals && bDrawResiduals)
+  if(tIncludeResidualsType != kIncludeNoResiduals && bDrawResiduals)
   {
     TCanvas* tCanLamKchP = tLamKchP->DrawResiduals(0,k0010,cAnalysisBaseTags[tAnType]);
 
@@ -162,7 +152,7 @@ int main(int argc, char **argv)
   {
     TFile *tFile = new TFile(tLamKchP->GetSaveLocationBase() + TString(cAnalysisBaseTags[tAnType]) + TString("Plots") + tLamKchP->GetSaveNameModifier() + TString(".root"), "RECREATE");
     tKStarwFitsCan->Write();
-    if(IncludeResiduals && bDrawResiduals)
+    if(tIncludeResidualsType != kIncludeNoResiduals && bDrawResiduals)
     {
       for(int i=0; i<tAllCanLamKchP->GetEntries(); i++) (TCanvas*)tAllCanLamKchP->At(i)->Write();
       tCanPrimwFitsAndResidual->Write();

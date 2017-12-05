@@ -298,7 +298,7 @@ int main(int argc, char **argv)
   bool ApplyMomResCorrection = true;
   bool ApplyNonFlatBackgroundCorrection = true;
 
-  bool IncludeResiduals = false;
+  IncludeResidualsType tIncludeResidualsType; 
   bool UseCoulombOnlyInterpCfsForChargedResiduals = true;
   bool UseCoulombOnlyInterpCfsForXiKResiduals = false;
 
@@ -357,7 +357,7 @@ int main(int argc, char **argv)
     if(ApplyMomResCorrection) tOutputFileName += TString("_MomResCrctn");
     if(ApplyNonFlatBackgroundCorrection) tOutputFileName += TString("_NonFlatBgdCrctn");
 
-    if(IncludeResiduals)
+    if(tIncludeResidualsType != kIncludeNoResiduals)
     {
       tOutputFileName += TString("_ResidualsIncluded");
       if(UseCoulombOnlyInterpCfsForXiKResiduals && UseCoulombOnlyInterpCfsForChargedResiduals) tOutputFileName += TString("_UsingCoulombOnlyInterpCfsForAll");
@@ -374,7 +374,7 @@ int main(int argc, char **argv)
     tFitSysAn->SetApplyNonFlatBackgroundCorrection(ApplyNonFlatBackgroundCorrection);
     tFitSysAn->SetApplyMomResCorrection(ApplyMomResCorrection);
 
-    tFitSysAn->SetIncludeResidualCorrelations(IncludeResiduals);
+    tFitSysAn->SetIncludeResidualCorrelationsType(tIncludeResidualsType);
     tFitSysAn->SetUseCoulombOnlyInterpCfsForChargedResiduals(UseCoulombOnlyInterpCfsForChargedResiduals);
     tFitSysAn->SetUseCoulombOnlyInterpCfsForXiKResiduals(UseCoulombOnlyInterpCfsForXiKResiduals);
 

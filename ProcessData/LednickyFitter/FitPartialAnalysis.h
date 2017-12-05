@@ -50,6 +50,7 @@ class FitParameter;
 class CfLite;
 
 #include "Types.h"
+#include "Types_LambdaValues.h"
 
 #include "AnalysisInfo.h"
 class AnalysisInfo;
