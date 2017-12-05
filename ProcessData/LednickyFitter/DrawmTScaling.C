@@ -196,8 +196,15 @@ int main(int argc, char **argv)
 //  bool bResultsWithResiduals = true;
   bool bSaveImage = false;
 
-  IncludeResType tIncludeResType = kInclude10ResAnd3Res;
-  IncludeD0Type tIncludeD0Type = kFreeAndFixedD0;
+  IncludeResType tIncludeResType;
+    tIncludeResType = kInclude10ResAnd3Res;
+//    tIncludeResType = kInclude10ResOnly;
+//    tIncludeResType = kInclude3ResOnly;
+
+  IncludeD0Type tIncludeD0Type;
+    tIncludeD0Type = kFreeAndFixedD0;
+//    tIncludeD0Type = kFreeD0Only;
+//    tIncludeD0Type = kFixedD0Only;
 
   bool bDrawQM = false;
   if(bDrawQM)

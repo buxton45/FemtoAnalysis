@@ -30,6 +30,13 @@ const char* const cIncludeResTypeTags[4] = {"_10Res", "_3Res", "_10ResAnd3Res", 
 enum IncludeD0Type {kFreeD0Only=0, kFixedD0Only=1, kFreeAndFixedD0=2};
 const char* const cIncludeD0TypeTags[3] = {"_FreeD0Only", "_FixedD0Only", "_FreeAndFixedD0"};
 
+enum IncludeRadiiType {kFreeRadiiOnly=0, kFixedRadiiOnly=1, kFreeAndFixedRadii=2};
+const char* const cIncludeRadiiTypeTags[3] = {"_FreeRadiiOnly", "_FixedRadiiOnly", "_FreeAndFixedRadii"};
+
+enum IncludeLambdaType {kFreeLambdaOnly=0, kFixedLambdaOnly=1, kFreeAndFixedLambda=2};
+const char* const cIncludeLambdaTypeTags[3] = {"_FreeLambdaOnly", "_FixedLambdaOnly", "_FreeAndFixedLambda"};
+
+
 enum Plot10and3Type {kPlot10and3SeparateOnly=0, kPlot10and3AvgOnly=1, kPlot10and3SeparateAndAvg=2};
 const char* const cPlot10and3TypeTage[3] = {"_10and3SeparateOnly", "_10and3AvgOnly", "_10and3SeparateandAvg"};
 
@@ -1050,7 +1057,8 @@ td1dVec GetMean(td2dVec &aVecOfPointsWithErrors/*, AverageType tAvgType=kWeighte
 
 
 //---------------------------------------------------------------------------------------------------------------------------------
-vector<FitInfo> GetFitInfoVec(AnalysisType aAnType, IncludeResType aIncludeResType=kInclude10ResAnd3Res, IncludeD0Type aIncludeD0Type=kFreeAndFixedD0)
+vector<FitInfo> GetFitInfoVec(AnalysisType aAnType, IncludeResType aIncludeResType=kInclude10ResAnd3Res, IncludeD0Type aIncludeD0Type=kFreeAndFixedD0,
+                                                    IncludeRadiiType aIncludeRadiiType=kFreeAndFixedRadii, IncludeLambdaType aIncludeLambdaType=kFreeAndFixedLambda)
 {
   vector<FitInfo> aFitInfoVec;
   if     (aAnType==kLamKchP) aFitInfoVec = tFitInfoVec_LamKchP;
@@ -1061,7 +1069,7 @@ vector<FitInfo> GetFitInfoVec(AnalysisType aAnType, IncludeResType aIncludeResTy
   vector<FitInfo> tReturnVec;
   //------------------------------
 
-  bool bPassRes=false, bPassD0=false;
+  bool bPassRes=false, bPassD0=false, bPassRadii=false, bPassLambda=false;
   for(unsigned int i=0; i<aFitInfoVec.size(); i++)
   {
     if(aIncludeResType==kInclude10ResAnd3Res) bPassRes = true;
@@ -1074,7 +1082,17 @@ vector<FitInfo> GetFitInfoVec(AnalysisType aAnType, IncludeResType aIncludeResTy
     else if(aIncludeD0Type==kFixedD0Only && !aFitInfoVec[i].freeD0) bPassD0 = true;
     else bPassD0 = false;
 
-    if(bPassRes && bPassD0) tReturnVec.push_back(aFitInfoVec[i]);
+    if(aIncludeRadiiType==kFreeAndFixedRadii) bPassRadii = true;
+    else if(aIncludeRadiiType==kFreeRadiiOnly && aFitInfoVec[i].freeRadii) bPassRadii = true;
+    else if(aIncludeRadiiType==kFixedRadiiOnly && !aFitInfoVec[i].freeRadii) bPassRadii = true;
+    else bPassRadii = false;
+
+    if(aIncludeLambdaType==kFreeAndFixedLambda) bPassLambda = true;
+    else if(aIncludeLambdaType==kFreeLambdaOnly && aFitInfoVec[i].freeLambda) bPassLambda = true;
+    else if(aIncludeLambdaType==kFixedLambdaOnly && !aFitInfoVec[i].freeLambda) bPassLambda = true;
+    else bPassLambda = false;
+
+    if(bPassRes && bPassD0 && bPassRadii && bPassLambda) tReturnVec.push_back(aFitInfoVec[i]);
   }
 
   return tReturnVec;
@@ -1137,7 +1155,7 @@ struct DrawAcrossAnalysesInfo
 
   int tMarkerStyle_10and3_Avg_FreeD0 = 21;
   int tMarkerStyle_10and3_Avg_FixedD0 = 25;
-  int tMarkerStyle_10and3_Avg = 35;
+  int tMarkerStyle_10and3_Avg = 36;
 
   int tMarkerStyle_10_FreeD0 = 47;
   int tMarkerStyle_10_FixedD0 = 46;
