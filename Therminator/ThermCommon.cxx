@@ -134,7 +134,7 @@ void DrawPairFractions(TPad* aPad, TH1D* aHisto, bool aSave, TString aSaveName)
   aHisto->GetXaxis()->SetTitleOffset(1.25);
   aHisto->GetYaxis()->SetTitleOffset(1.5);
 
-  aHisto->Draw();
+  aHisto->Draw("HIST");
 
   PrintLambdaValues(aPad,aHisto);
 

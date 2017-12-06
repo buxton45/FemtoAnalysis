@@ -40,22 +40,23 @@ int main(int argc, char **argv)
 //-----------------------------------------------------------------------------
 
   //-----Data
-  TString FileLocationBase = "~/Analysis/FemtoAnalysis/Results/Results_cLamcKch_AsRc_KchAndLamFix2_20160229/Results_cLamcKch_AsRc_KchAndLamFix2_20160229";
+  TString FileLocationBase = "~/Analysis/FemtoAnalysis/Results/PreTrain/Results_cLamcKch_AsRc_KchAndLamFix2_20160229/Results_cLamcKch_AsRc_KchAndLamFix2_20160229";
+  AnalysisRunType tAnRunType = kGrid;
   //TString FileLocationBase = "~/Analysis/FemtoAnalysis/Results/Results_cLamcKch_As";
-  Analysis* LamKchP = new Analysis(FileLocationBase,kLamKchP,k0010);
-  Analysis* ALamKchP = new Analysis(FileLocationBase,kALamKchP,k0010);
-  Analysis* LamKchM = new Analysis(FileLocationBase,kLamKchM,k0010);
-  Analysis* ALamKchM = new Analysis(FileLocationBase,kALamKchM,k0010);
+  Analysis* LamKchP = new Analysis(FileLocationBase,kLamKchP,k0010,tAnRunType);
+  Analysis* ALamKchP = new Analysis(FileLocationBase,kALamKchP,k0010,tAnRunType);
+  Analysis* LamKchM = new Analysis(FileLocationBase,kLamKchM,k0010,tAnRunType);
+  Analysis* ALamKchM = new Analysis(FileLocationBase,kALamKchM,k0010,tAnRunType);
 
   TString SaveFileName = "~/Analysis/FemtoAnalysis/Results/Results_cLamcKch_AsRc_20151007/0010/Results_cLamcKch_AsRc_20151007_0010TEST.root";
 
   //-----MC
 
-  TString FileLocationBaseMC = "~/Analysis/FemtoAnalysis/Results/Results_cLamcKch_AsRcMC_KchAndLamFix2_20160229/Results_cLamcKch_AsRcMC_KchAndLamFix2_20160229";
-  Analysis* LamKchPMC = new Analysis(FileLocationBaseMC,kLamKchP,k0010);
-  Analysis* ALamKchPMC = new Analysis(FileLocationBaseMC,kALamKchP,k0010);
-  Analysis* LamKchMMC = new Analysis(FileLocationBaseMC,kLamKchM,k0010);
-  Analysis* ALamKchMMC = new Analysis(FileLocationBaseMC,kALamKchM,k0010);
+  TString FileLocationBaseMC = "~/Analysis/FemtoAnalysis/Results/PreTrain/Results_cLamcKch_AsRcMC_KchAndLamFix2_20160229/Results_cLamcKch_AsRcMC_KchAndLamFix2_20160229";
+  Analysis* LamKchPMC = new Analysis(FileLocationBaseMC,kLamKchP,k0010,tAnRunType);
+  Analysis* ALamKchPMC = new Analysis(FileLocationBaseMC,kALamKchP,k0010,tAnRunType);
+  Analysis* LamKchMMC = new Analysis(FileLocationBaseMC,kLamKchM,k0010,tAnRunType);
+  Analysis* ALamKchMMC = new Analysis(FileLocationBaseMC,kALamKchM,k0010,tAnRunType);
 /*
   TString FileLocationBaseMCd = "~/Analysis/FemtoAnalysis/Results/Results_cLamcKch_AsRcMCd_KchAndLamFix2_20160229/Results_cLamcKch_AsRcMCd_KchAndLamFix2_20160229";
   Analysis* LamKchPMCd = new Analysis(FileLocationBaseMCd,kLamKchP,k0010);

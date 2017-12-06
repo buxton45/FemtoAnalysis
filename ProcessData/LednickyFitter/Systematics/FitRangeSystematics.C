@@ -18,10 +18,11 @@ int main(int argc, char **argv)
 
   bool ApplyMomResCorrection = true;
   bool ApplyNonFlatBackgroundCorrection = true;
+  NonFlatBgdFitType tNonFlatBgdFitType = kLinear;
 
-  IncludeResidualsType tIncludeResidualsType; 
-  bool UseCoulombOnlyInterpCfsForChargedResiduals = true;
-  bool UseCoulombOnlyInterpCfsForXiKResiduals = false;
+  IncludeResidualsType tIncludeResidualsType = kInclude10Residuals; 
+  ChargedResidualsType tChargedResidualsType = kUseXiDataAndCoulombOnlyInterp;
+  ResPrimMaxDecayType tResPrimMaxDecayType = k5fm;
 
   bool bWriteToFile = true;
   bool bSaveImages = true;
@@ -41,11 +42,11 @@ int main(int argc, char **argv)
   if(ApplyMomResCorrection) tOutputFileName += TString("_MomResCrctn");
   if(ApplyNonFlatBackgroundCorrection) tOutputFileName += TString("_NonFlatBgdCrctn");
 
-  if(tIncludeResidualsType != kIncludeNoResiduals) 
+  tOutputFileName += cIncludeResidualsTypeTags[tIncludeResidualsType];
+  if(tIncludeResidualsType != kIncludeNoResiduals)
   {
-    tOutputFileName += TString("_ResidualsIncluded");
-    if(UseCoulombOnlyInterpCfsForXiKResiduals && UseCoulombOnlyInterpCfsForChargedResiduals) tOutputFileName += TString("_UsingCoulombOnlyInterpCfsForAll");
-    else if(UseCoulombOnlyInterpCfsForChargedResiduals) tOutputFileName += TString("_UsingCoulombOnlyInterpCfs");
+    tOutputFileName += cResPrimMaxDecayTypeTags[tResPrimMaxDecayType];
+    tOutputFileName += cChargedResidualsTypeTags[tChargedResidualsType];
   }
 
   tOutputFileName += TString(".txt");
@@ -56,11 +57,12 @@ int main(int argc, char **argv)
   FitSystematicAnalysis* tFitSysAn = new FitSystematicAnalysis(tFileLocationBase, tFileLocationBaseMC, tAnType, tCentralityType, tFitGeneratorType, tShareLambdaParameters, tAllShareSingleLambdaParam);
   tFitSysAn->SetSaveDirectory(tDirectoryBase);
   tFitSysAn->SetApplyNonFlatBackgroundCorrection(ApplyNonFlatBackgroundCorrection);
+  tFitSysAn->SetNonFlatBgdFitType(tNonFlatBgdFitType);
   tFitSysAn->SetApplyMomResCorrection(ApplyMomResCorrection);
 
   tFitSysAn->SetIncludeResidualCorrelationsType(tIncludeResidualsType);
-  tFitSysAn->SetUseCoulombOnlyInterpCfsForChargedResiduals(UseCoulombOnlyInterpCfsForChargedResiduals);
-  tFitSysAn->SetUseCoulombOnlyInterpCfsForXiKResiduals(UseCoulombOnlyInterpCfsForXiKResiduals);
+  tFitSysAn->SetChargedResidualsType(tChargedResidualsType);
+  tFitSysAn->SetResPrimMaxDecayType(tResPrimMaxDecayType);
 
   if(bWriteToFile) tFitSysAn->RunVaryFitRange(bSaveImages,tOutputFile);
   else tFitSysAn->RunVaryFitRange(bSaveImages);

@@ -329,6 +329,13 @@ const char* const cPrettyCentralityTags[4] = {"0-10%", "10-30%", "30-50%", ""};
 //enum KStarTrueVsRecType
 const char* const cKStarTrueVsRecTypeTags[4] = {"Same","RotSame","Mixed","RotMixed"};
 
+//enum IncludeResidualsType
+const char* const cIncludeResidualsTypeTags[3] = {"_NoRes", "_10Res", "_3Res"};
+//enum ChargedResidualsType
+const char* const cChargedResidualsTypeTags[3] = {"_UsingXiDataForAll", "_UsingXiDataAndCoulombOnly", "_UsingCoulombOnlyForAll"};
+//enum ResPrimMaxDecayType
+const char* const cResPrimMaxDecayTypeTags[6] = {"_PrimMaxDecay0fm", "_PrimMaxDecay4fm", "_PrimMaxDecay5fm", "_PrimMaxDecay6fm", "_PrimMaxDecay10fm", "_PrimMaxDecay100fm"};
+
 const char* cKStarCfBaseTagNum = "NumKStarCf_";
 const char* cKStarCfBaseTagDen = "DenKStarCf_";
 

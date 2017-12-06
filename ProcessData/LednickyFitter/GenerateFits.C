@@ -49,6 +49,25 @@ int main(int argc, char **argv)
 
   bool bDrawResiduals = false;
 
+
+//-----------------------------------------------------------------------------
+
+  if(tAnType==kLamK0)
+  {
+    tAllShareSingleLambdaParam = true;
+    UnboundLambda = false;
+    aLambdaMin = 0.1;  //TODO currently, if tIncludeResidualsType = kIncludeNoResiduals, this does nothing
+    aLambdaMax = 1.0;  //TODO "                                                                          "
+
+    if(tIncludeResidualsType != kIncludeNoResiduals)
+    {
+      aLambdaMin = 0.6;
+      aLambdaMax = 1.5;
+    }
+  }
+
+//-----------------------------------------------------------------------------
+
   TString tGeneralAnTypeName;
   if(tAnType==kLamK0 || tAnType==kALamK0) tGeneralAnTypeName = "cLamK0";
   else if(tAnType==kLamKchP || tAnType==kALamKchM || tAnType==kLamKchM || tAnType==kALamKchP) tGeneralAnTypeName = "cLamcKch";
@@ -69,18 +88,15 @@ int main(int argc, char **argv)
   if(tAllShareSingleLambdaParam && !FixAllLambdaTo1) tSaveNameModifier += TString("_SingleLamParam");
   if(FixAllLambdaTo1) tSaveNameModifier += TString("_FixAllLambdaTo1");
 
-  if(tIncludeResidualsType == kInclude10Residuals) tSaveNameModifier += TString("_10ResidualsIncluded");
-  if(tIncludeResidualsType == kInclude3Residuals) tSaveNameModifier += TString("_3ResidualsIncluded");
   if(FixRadii) tSaveNameModifier += TString("_FixedRadii");
   if(FixD0) tSaveNameModifier += TString("_FixedD0");
   if(FixAllScattParams) tSaveNameModifier += TString("_FixedScattParams");
 
+  tSaveNameModifier += cIncludeResidualsTypeTags[tIncludeResidualsType];
   if(tIncludeResidualsType != kIncludeNoResiduals)
   {
-    if(tChargedResidualsType == kUseXiDataForAll) tSaveNameModifier += TString("_UsingXiDataForAll");
-    else if(tChargedResidualsType == kUseXiDataAndCoulombOnlyInterp) tSaveNameModifier += TString("_UsingXiDataAndCoulombOnly");
-    else if(tChargedResidualsType == kUseCoulombOnlyInterpForAll) tSaveNameModifier += TString("_UsingCoulombOnlyForAll");
-    else assert(0);
+    tSaveNameModifier += cResPrimMaxDecayTypeTags[tResPrimMaxDecayType];
+    tSaveNameModifier += cChargedResidualsTypeTags[tChargedResidualsType];
   }
 
   if(UsemTScalingOfResidualRadii) tSaveNameModifier += TString::Format("_UsingmTScalingOfResidualRadii");

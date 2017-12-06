@@ -6,6 +6,11 @@
 #include "Types_LambdaValues.h"
 #include <cassert>
 
+//NOTE:  Changing MaxDecayLengthPrimary only changes the primary lambda values
+//       (and the "other" lambda values).
+//       i.e. for a given number of residuals included, only the first 6 elements
+//       of the arrays will differ
+
 
 //------------ WHEN INCLUDING NO RESIDUALS ------------------------------------//
 const double cAnalysisLambdaFactors_NoRes_MaxPrimDecay0[85] = {
@@ -124,11 +129,11 @@ const double cAnalysisLambdaFactors_10Res_MaxPrimDecay0[85] = {
 /*kResXiCKSt0ToLamK0=*/  0.012, /*kResAXiCAKSt0ToALamK0=*/  0.011
 };
 
-//TODO
+
 //------------ WHEN INCLUDING ALL 10 RESIDUALS and MaxDecayLengthPrimary=4 ------------------------------------//
 const double cAnalysisLambdaFactors_10Res_MaxPrimDecay4[85] = {
-/*kLamK0=*/   0.217,   /*kALamK0=*/   0.222,
-/*kLamKchP=*/ 0.188,   /*kALamKchM=*/ 0.192,  /*kLamKchM=*/ 0.188, /*kALamKchP=*/ 0.193,
+/*kLamK0=*/   0.165,   /*kALamK0=*/   0.169,
+/*kLamKchP=*/ 0.154,   /*kALamKchM=*/ 0.158,  /*kLamKchM=*/ 0.154, /*kALamKchP=*/ 0.158,
 /*kXiKchP=*/  1.000,   /*kAXiKchM=*/  1.000,  /*kXiKchM=*/  1.000, /*kAXiKchP=*/  1.000,
 /*kXiK0=*/    1.000,   /*kAXiK0=*/    1.000,
 /*kLamLam=*/  1.000,   /*kALamALam=*/ 1.000,  /*kLamALam=*/ 1.000,
@@ -199,11 +204,11 @@ const double cAnalysisLambdaFactors_10Res_MaxPrimDecay5[85] = {
 /*kResXiCKSt0ToLamK0=*/  0.012, /*kResAXiCAKSt0ToALamK0=*/  0.011
 };
 
-//TODO
+
 //------------ WHEN INCLUDING ALL 10 RESIDUALS and MaxDecayLengthPrimary=6 ------------------------------------//
 const double cAnalysisLambdaFactors_10Res_MaxPrimDecay6[85] = {
-/*kLamK0=*/   0.217,   /*kALamK0=*/   0.222,
-/*kLamKchP=*/ 0.188,   /*kALamKchM=*/ 0.192,  /*kLamKchM=*/ 0.188, /*kALamKchP=*/ 0.193,
+/*kLamK0=*/   0.302,   /*kALamK0=*/   0.306,
+/*kLamKchP=*/ 0.277,   /*kALamKchM=*/ 0.283,  /*kLamKchM=*/ 0.277, /*kALamKchP=*/ 0.282,
 /*kXiKchP=*/  1.000,   /*kAXiKchM=*/  1.000,  /*kXiKchM=*/  1.000, /*kAXiKchP=*/  1.000,
 /*kXiK0=*/    1.000,   /*kAXiK0=*/    1.000,
 /*kLamLam=*/  1.000,   /*kALamALam=*/ 1.000,  /*kLamALam=*/ 1.000,
@@ -363,11 +368,11 @@ const double cAnalysisLambdaFactors_3Res_MaxPrimDecay0[85] = {
 /*kResXiCKSt0ToLamK0=*/  0.000, /*kResAXiCAKSt0ToALamK0=*/  0.000
 };
 
-//TODO
+
 //------------ WHEN INCLUDING 3 RESIDUALS and MaxDecayLengthPrimary=4 ------------------------------------//
 const double cAnalysisLambdaFactors_3Res_MaxPrimDecay4[85] = {
-/*kLamK0=*/   0.235,   /*kALamK0=*/   0.242,
-/*kLamKchP=*/ 0.228,   /*kALamKchM=*/ 0.233,  /*kLamKchM=*/ 0.227, /*kALamKchP=*/ 0.234,
+/*kLamK0=*/   0.165,   /*kALamK0=*/   0.169,
+/*kLamKchP=*/ 0.154,   /*kALamKchM=*/ 0.158,  /*kLamKchM=*/ 0.154, /*kALamKchP=*/ 0.158,
 /*kXiKchP=*/  1.000,   /*kAXiKchM=*/  1.000,  /*kXiKchM=*/  1.000, /*kAXiKchP=*/  1.000,
 /*kXiK0=*/    1.000,   /*kAXiK0=*/    1.000,
 /*kLamLam=*/  1.000,   /*kALamALam=*/ 1.000,  /*kLamALam=*/ 1.000,
@@ -438,11 +443,11 @@ const double cAnalysisLambdaFactors_3Res_MaxPrimDecay5[85] = {
 /*kResXiCKSt0ToLamK0=*/  0.000, /*kResAXiCAKSt0ToALamK0=*/  0.000
 };
 
-//TODO
+
 //------------ WHEN INCLUDING 3 RESIDUALS and MaxDecayLengthPrimary=6 ------------------------------------//
 const double cAnalysisLambdaFactors_3Res_MaxPrimDecay6[85] = {
-/*kLamK0=*/   0.235,   /*kALamK0=*/   0.242,
-/*kLamKchP=*/ 0.228,   /*kALamKchM=*/ 0.233,  /*kLamKchM=*/ 0.227, /*kALamKchP=*/ 0.234,
+/*kLamK0=*/   0.461,   /*kALamK0=*/   0.471,
+/*kLamKchP=*/ 0.445,   /*kALamKchM=*/ 0.455,  /*kLamKchM=*/ 0.445, /*kALamKchP=*/ 0.455,
 /*kXiKchP=*/  1.000,   /*kAXiKchM=*/  1.000,  /*kXiKchM=*/  1.000, /*kAXiKchP=*/  1.000,
 /*kXiK0=*/    1.000,   /*kAXiK0=*/    1.000,
 /*kLamLam=*/  1.000,   /*kALamALam=*/ 1.000,  /*kLamALam=*/ 1.000,

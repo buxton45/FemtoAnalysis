@@ -31,6 +31,7 @@ FitSystematicAnalysis::FitSystematicAnalysis(TString aFileLocationBase, TString 
   fApplyMomResCorrection(false),
   fIncludeResidualsType(kIncludeNoResiduals),
   fChargedResidualsType(kUseXiDataAndCoulombOnlyInterp),
+  fResPrimMaxDecayType(k5fm),
 
   fSaveDirectory(""),
 
@@ -59,6 +60,7 @@ FitSystematicAnalysis::FitSystematicAnalysis(TString aFileLocationBase, TString 
   fApplyMomResCorrection(false),
   fIncludeResidualsType(kIncludeNoResiduals),
   fChargedResidualsType(kUseXiDataAndCoulombOnlyInterp),
+  fResPrimMaxDecayType(k5fm),
 
   fSaveDirectory(""),
 
@@ -88,6 +90,7 @@ FitSystematicAnalysis::FitSystematicAnalysis(TString aFileLocationBase, TString 
   fApplyMomResCorrection(false),
   fIncludeResidualsType(kIncludeNoResiduals),
   fChargedResidualsType(kUseXiDataAndCoulombOnlyInterp),
+  fResPrimMaxDecayType(k5fm),
 
   fSaveDirectory(""),
 
@@ -210,6 +213,7 @@ void FitSystematicAnalysis::RunAllFits(bool aSave, ostream &aOut)
       else tFitGenerator->SetIncludeResidualCorrelationsType(fIncludeResidualsType, 0., 0.);
     }
     tFitGenerator->SetChargedResidualsType(fChargedResidualsType);
+    tFitGenerator->SetResPrimMaxDecayType(fResPrimMaxDecayType);
 
     tFitGenerator->DoFit();
 
@@ -232,15 +236,11 @@ void FitSystematicAnalysis::RunAllFits(bool aSave, ostream &aOut)
       if(fApplyMomResCorrection) tSaveName += TString("_MomResCrctn");
       if(fApplyNonFlatBackgroundCorrection) tSaveName += TString("_NonFlatBgdCrctn");
 
-      if(fIncludeResidualsType == kInclude10Residuals) tSaveName += TString("_10ResidualsIncluded");
-      if(fIncludeResidualsType == kInclude3Residuals) tSaveName += TString("_3ResidualsIncluded");
-
+      tSaveName += cIncludeResidualsTypeTags[fIncludeResidualsType];
       if(fIncludeResidualsType != kIncludeNoResiduals)
       {
-        if(fChargedResidualsType == kUseXiDataForAll) tSaveName += TString("_UsingXiDataForAll");
-        else if(fChargedResidualsType == kUseXiDataAndCoulombOnlyInterp) tSaveName += TString("_UsingXiDataAndCoulombOnly");
-        else if(fChargedResidualsType == kUseCoulombOnlyInterpForAll) tSaveName += TString("_UsingCoulombOnlyForAll");
-        else assert(0);
+        tSaveName += cResPrimMaxDecayTypeTags[fResPrimMaxDecayType];
+        tSaveName += cChargedResidualsTypeTags[fChargedResidualsType];
       }
 
       tSaveName += TString(".pdf");
@@ -275,6 +275,7 @@ void FitSystematicAnalysis::RunVaryFitRange(bool aSave, ostream &aOut, double aM
       else tFitGenerator->SetIncludeResidualCorrelationsType(fIncludeResidualsType, 0., 0.);
     }
     tFitGenerator->SetChargedResidualsType(fChargedResidualsType);
+    tFitGenerator->SetResPrimMaxDecayType(fResPrimMaxDecayType);
 
     tFitGenerator->DoFit(tRangeVec[i]);
 
@@ -292,15 +293,11 @@ void FitSystematicAnalysis::RunVaryFitRange(bool aSave, ostream &aOut, double aM
       if(fApplyMomResCorrection) tSaveName += TString("_MomResCrctn");
       if(fApplyNonFlatBackgroundCorrection) tSaveName += TString("_NonFlatBgdCrctn");
 
-      if(fIncludeResidualsType == kInclude10Residuals) tSaveName += TString("_10ResidualsIncluded");
-      if(fIncludeResidualsType == kInclude3Residuals) tSaveName += TString("_3ResidualsIncluded");
-
+      tSaveName += cIncludeResidualsTypeTags[fIncludeResidualsType];
       if(fIncludeResidualsType != kIncludeNoResiduals)
       {
-        if(fChargedResidualsType == kUseXiDataForAll) tSaveName += TString("_UsingXiDataForAll");
-        else if(fChargedResidualsType == kUseXiDataAndCoulombOnlyInterp) tSaveName += TString("_UsingXiDataAndCoulombOnly");
-        else if(fChargedResidualsType == kUseCoulombOnlyInterpForAll) tSaveName += TString("_UsingCoulombOnlyForAll");
-        else assert(0);
+        tSaveName += cResPrimMaxDecayTypeTags[fResPrimMaxDecayType];
+        tSaveName += cChargedResidualsTypeTags[fChargedResidualsType];
       }
 
       tSaveName += TString(".pdf");
@@ -333,6 +330,7 @@ void FitSystematicAnalysis::RunVaryNonFlatBackgroundFit(bool aSave, ostream &aOu
       else tFitGenerator->SetIncludeResidualCorrelationsType(fIncludeResidualsType, 0., 0.);
     }
     tFitGenerator->SetChargedResidualsType(fChargedResidualsType);
+    tFitGenerator->SetResPrimMaxDecayType(fResPrimMaxDecayType);
 
     tFitGenerator->DoFit();
 
@@ -350,15 +348,11 @@ void FitSystematicAnalysis::RunVaryNonFlatBackgroundFit(bool aSave, ostream &aOu
       if(fApplyMomResCorrection) tSaveName += TString("_MomResCrctn");
       if(fApplyNonFlatBackgroundCorrection) tSaveName += TString("_NonFlatBgdCrctn");
 
-      if(fIncludeResidualsType == kInclude10Residuals) tSaveName += TString("_10ResidualsIncluded");
-      if(fIncludeResidualsType == kInclude3Residuals) tSaveName += TString("_3ResidualsIncluded");
-
+      tSaveName += cIncludeResidualsTypeTags[fIncludeResidualsType];
       if(fIncludeResidualsType != kIncludeNoResiduals)
       {
-        if(fChargedResidualsType == kUseXiDataForAll) tSaveName += TString("_UsingXiDataForAll");
-        else if(fChargedResidualsType == kUseXiDataAndCoulombOnlyInterp) tSaveName += TString("_UsingXiDataAndCoulombOnly");
-        else if(fChargedResidualsType == kUseCoulombOnlyInterpForAll) tSaveName += TString("_UsingCoulombOnlyForAll");
-        else assert(0);
+        tSaveName += cResPrimMaxDecayTypeTags[fResPrimMaxDecayType];
+        tSaveName += cChargedResidualsTypeTags[fChargedResidualsType];
       }
 
       tSaveName += TString(".pdf");

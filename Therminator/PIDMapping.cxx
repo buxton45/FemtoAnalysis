@@ -176,7 +176,7 @@ bool PairAccountedForInResiduals(int aPID1, int aPID2)
   else if((aPID1==kPDGXi0 || aPID1==kPDGAXi0) && (aPID2 == kPDGKSt0 || aPID2 == kPDGAKSt0)) tAccountedFor = true;
   else if((aPID1==kPDGXiC || aPID1==kPDGAXiC) && (aPID2 == kPDGKSt0 || aPID2 == kPDGAKSt0)) tAccountedFor = true;
 
-  else if((aPID1 == kPDGLam || aPID1 == kPDGALam) && (aPID2 == kPDGK0)) tAccountedFor = true;
+
   else if((aPID1==kPDGSigma || aPID1==kPDGASigma) && (aPID2 == kPDGK0)) tAccountedFor = true;
   else if((aPID1==kPDGXi0 || aPID1==kPDGAXi0) && (aPID2 == kPDGK0)) tAccountedFor = true;
   else if((aPID1==kPDGXiC || aPID1==kPDGAXiC) && (aPID2 == kPDGK0)) tAccountedFor = true;

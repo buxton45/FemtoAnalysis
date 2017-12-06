@@ -46,6 +46,7 @@ public:
 
   void SetIncludeResidualCorrelationsType(IncludeResidualsType aIncludeResidualsType);
   void SetChargedResidualsType(ChargedResidualsType aChargedResidualsType);
+  void SetResPrimMaxDecayType(ResPrimMaxDecayType aResPrimMaxDecayType);
 
   void SetSaveDirectory(TString aDirectory);
 
@@ -59,8 +60,10 @@ protected:
   bool fAllShareSingleLambdaParam;
   bool fApplyNonFlatBackgroundCorrection;
   bool fApplyMomResCorrection;
+
   IncludeResidualsType fIncludeResidualsType;
   ChargedResidualsType fChargedResidualsType;
+  ResPrimMaxDecayType fResPrimMaxDecayType;
 
   TString fSaveDirectory;
 
@@ -80,6 +83,7 @@ inline void FitSystematicAnalysis::SetApplyMomResCorrection(bool aApply) {fApply
 
 inline void FitSystematicAnalysis::SetIncludeResidualCorrelationsType(IncludeResidualsType aIncludeResidualsType) {fIncludeResidualsType = aIncludeResidualsType;}
 inline void FitSystematicAnalysis::SetChargedResidualsType(ChargedResidualsType aChargedResidualsType) {fChargedResidualsType = aChargedResidualsType;}
+inline void FitSystematicAnalysis::SetResPrimMaxDecayType(ResPrimMaxDecayType aResPrimMaxDecayType) {fResPrimMaxDecayType = aResPrimMaxDecayType;}
 
 inline void FitSystematicAnalysis::SetSaveDirectory(TString aDirectory) {fSaveDirectory = aDirectory;}
 
