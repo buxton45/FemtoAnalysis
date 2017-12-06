@@ -1789,6 +1789,16 @@ void FitGenerator::SetLambdaParamLimits(double aMin, double aMax, bool tConjPair
 }
 
 //________________________________________________________________________________________________________________
+void FitGenerator::SetAllLambdaParamLimits(double aMin, double aMax)
+{
+  for(unsigned int i=0; i<fLambdaFitParams.size(); i++)
+  {
+    fLambdaFitParams[i].SetLowerBound(aMin);
+    fLambdaFitParams[i].SetUpperBound(aMax);
+  }
+}
+
+//________________________________________________________________________________________________________________
 void FitGenerator::SetDefaultSharedParameters(bool aSetAllUnbounded)
 {
 //TODO this seems like overkill because this is already handled at the FitPartialAnalysis level

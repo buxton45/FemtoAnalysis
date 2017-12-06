@@ -28,6 +28,7 @@ FitSystematicAnalysis::FitSystematicAnalysis(TString aFileLocationBase, TString 
   fShareLambdaParams(aShareLambdaParams),
   fAllShareSingleLambdaParam(aAllShareSingleLambdaParam),
   fApplyNonFlatBackgroundCorrection(false),
+  fNonFlatBgdFitType(kLinear),
   fApplyMomResCorrection(false),
   fIncludeResidualsType(kIncludeNoResiduals),
   fChargedResidualsType(kUseXiDataAndCoulombOnlyInterp),
@@ -57,6 +58,7 @@ FitSystematicAnalysis::FitSystematicAnalysis(TString aFileLocationBase, TString 
   fShareLambdaParams(aShareLambdaParams),
   fAllShareSingleLambdaParam(aAllShareSingleLambdaParam),
   fApplyNonFlatBackgroundCorrection(false),
+  fNonFlatBgdFitType(kLinear),
   fApplyMomResCorrection(false),
   fIncludeResidualsType(kIncludeNoResiduals),
   fChargedResidualsType(kUseXiDataAndCoulombOnlyInterp),
@@ -87,6 +89,7 @@ FitSystematicAnalysis::FitSystematicAnalysis(TString aFileLocationBase, TString 
   fShareLambdaParams(aShareLambdaParams),
   fAllShareSingleLambdaParam(aAllShareSingleLambdaParam),
   fApplyNonFlatBackgroundCorrection(false),
+  fNonFlatBgdFitType(kLinear),
   fApplyMomResCorrection(false),
   fIncludeResidualsType(kIncludeNoResiduals),
   fChargedResidualsType(kUseXiDataAndCoulombOnlyInterp),
@@ -205,7 +208,7 @@ void FitSystematicAnalysis::RunAllFits(bool aSave, ostream &aOut)
     FitGenerator* tFitGenerator = new FitGenerator(fFileLocationBase, fFileLocationBaseMC, fAnalysisType, fCentralityType, kTrainSys, 2, fFitGeneratorType, fShareLambdaParams, fAllShareSingleLambdaParam, tDirNameModifier);
 
     tFitGenerator->SetApplyNonFlatBackgroundCorrection(fApplyNonFlatBackgroundCorrection);
-    tFitGenerator->SetNonFlatBgdFitType(kLinear);
+    tFitGenerator->SetNonFlatBgdFitType(fNonFlatBgdFitType);
     tFitGenerator->SetApplyMomResCorrection(fApplyMomResCorrection);
     if(fIncludeResidualsType != kIncludeNoResiduals)
     {
@@ -224,7 +227,7 @@ void FitSystematicAnalysis::RunAllFits(bool aSave, ostream &aOut)
     tFitParamsVec.insert(tFitParamsVec.begin(),tCutValue);
     tText2dVector.push_back(tFitParamsVec);
 
-    TCanvas* tKStarwFitsCan = tFitGenerator->DrawKStarCfswFits(fApplyMomResCorrection,fApplyNonFlatBackgroundCorrection,kLinear,false,false);
+    TCanvas* tKStarwFitsCan = tFitGenerator->DrawKStarCfswFits(fApplyMomResCorrection,fApplyNonFlatBackgroundCorrection,fNonFlatBgdFitType,false,false);
     if(aSave)
     {
       TString tSaveName = fSaveDirectory;
@@ -267,7 +270,7 @@ void FitSystematicAnalysis::RunVaryFitRange(bool aSave, ostream &aOut, double aM
     FitGenerator* tFitGenerator = new FitGenerator(fFileLocationBase, fFileLocationBaseMC, fAnalysisType, fCentralityType, kTrain, 2, fFitGeneratorType, fShareLambdaParams, fAllShareSingleLambdaParam);
 
     tFitGenerator->SetApplyNonFlatBackgroundCorrection(fApplyNonFlatBackgroundCorrection);
-    tFitGenerator->SetNonFlatBgdFitType(kLinear);
+    tFitGenerator->SetNonFlatBgdFitType(fNonFlatBgdFitType);
     tFitGenerator->SetApplyMomResCorrection(fApplyMomResCorrection);
     if(fIncludeResidualsType != kIncludeNoResiduals)
     {
@@ -284,7 +287,7 @@ void FitSystematicAnalysis::RunVaryFitRange(bool aSave, ostream &aOut, double aM
     tFitParamsVec.insert(tFitParamsVec.begin(),tRangeValue);
     tText2dVector.push_back(tFitParamsVec);
 
-    TCanvas* tKStarwFitsCan = tFitGenerator->DrawKStarCfswFits(fApplyMomResCorrection,fApplyNonFlatBackgroundCorrection,kLinear,false,false);
+    TCanvas* tKStarwFitsCan = tFitGenerator->DrawKStarCfswFits(fApplyMomResCorrection,fApplyNonFlatBackgroundCorrection,fNonFlatBgdFitType,false,false);
     if(aSave)
     {
       TString tSaveName = fSaveDirectory;

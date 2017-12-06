@@ -42,6 +42,7 @@ public:
 
   //inline
   void SetApplyNonFlatBackgroundCorrection(bool aApply);
+  void SetNonFlatBgdFitType(NonFlatBgdFitType aNonFlatBgdFitType);
   void SetApplyMomResCorrection(bool aApply);
 
   void SetIncludeResidualCorrelationsType(IncludeResidualsType aIncludeResidualsType);
@@ -59,6 +60,7 @@ protected:
   bool fShareLambdaParams;
   bool fAllShareSingleLambdaParam;
   bool fApplyNonFlatBackgroundCorrection;
+  NonFlatBgdFitType fNonFlatBgdFitType;
   bool fApplyMomResCorrection;
 
   IncludeResidualsType fIncludeResidualsType;
@@ -79,6 +81,7 @@ protected:
 };
 
 inline void FitSystematicAnalysis::SetApplyNonFlatBackgroundCorrection(bool aApply) {fApplyNonFlatBackgroundCorrection=aApply;}
+inline void FitSystematicAnalysis::SetNonFlatBgdFitType(NonFlatBgdFitType aNonFlatBgdFitType) {fNonFlatBgdFitType = aNonFlatBgdFitType;}
 inline void FitSystematicAnalysis::SetApplyMomResCorrection(bool aApply) {fApplyMomResCorrection=aApply;}
 
 inline void FitSystematicAnalysis::SetIncludeResidualCorrelationsType(IncludeResidualsType aIncludeResidualsType) {fIncludeResidualsType = aIncludeResidualsType;}

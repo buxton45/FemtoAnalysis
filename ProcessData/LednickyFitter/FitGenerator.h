@@ -73,6 +73,7 @@ public:
   int GetLambdaBinNumber(bool tConjPair=false, CentralityType aCentType=k0010);  //ex. tConjPair=false for kLamK0 and tConjPair=true for kALamK0
   void SetLambdaParamStartValue(double aLam, bool tConjPair=false, CentralityType aCentType=kMB, bool aIsFixed=false);
   void SetLambdaParamLimits(double aMin, double aMax, bool tConjPair=false, CentralityType aCentType=kMB);
+  void SetAllLambdaParamLimits(double aMin, double aMax);
 
   void SetDefaultSharedParameters(bool aSetAllUnbounded=false);
   void SetDefaultLambdaParametersWithResiduals(double aMinLambda=0., double aMaxLambda=1.0);
