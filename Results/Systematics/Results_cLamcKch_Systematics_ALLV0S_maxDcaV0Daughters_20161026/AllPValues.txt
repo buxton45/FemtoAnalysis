@@ -1,0 +1,216 @@
+______________________________________________________________________________
+AnalysisType = LamKchP
+CentralityType = 0-10%
+
+ALLV0S_maxDcaV0Daughters = 0.300000
+ALLV0S_maxDcaV0Daughters = 0.400000
+p value = 0.785773
+
+ALLV0S_maxDcaV0Daughters = 0.300000
+ALLV0S_maxDcaV0Daughters = 0.500000
+p value = 0.60451
+
+ALLV0S_maxDcaV0Daughters = 0.400000
+ALLV0S_maxDcaV0Daughters = 0.500000
+p value = 0.0566006
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = LamKchP
+CentralityType = 10-30%
+
+ALLV0S_maxDcaV0Daughters = 0.300000
+ALLV0S_maxDcaV0Daughters = 0.400000
+p value = 0.103489
+
+ALLV0S_maxDcaV0Daughters = 0.300000
+ALLV0S_maxDcaV0Daughters = 0.500000
+p value = 0.11973
+
+ALLV0S_maxDcaV0Daughters = 0.400000
+ALLV0S_maxDcaV0Daughters = 0.500000
+p value = 0.603088
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = LamKchP
+CentralityType = 30-50%
+
+ALLV0S_maxDcaV0Daughters = 0.300000
+ALLV0S_maxDcaV0Daughters = 0.400000
+p value = 0.00842305
+
+ALLV0S_maxDcaV0Daughters = 0.300000
+ALLV0S_maxDcaV0Daughters = 0.500000
+p value = 0.00692357
+
+ALLV0S_maxDcaV0Daughters = 0.400000
+ALLV0S_maxDcaV0Daughters = 0.500000
+p value = 0.245989
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = ALamKchP
+CentralityType = 0-10%
+
+ALLV0S_maxDcaV0Daughters = 0.300000
+ALLV0S_maxDcaV0Daughters = 0.400000
+p value = 0.0857122
+
+ALLV0S_maxDcaV0Daughters = 0.300000
+ALLV0S_maxDcaV0Daughters = 0.500000
+p value = 0.101876
+
+ALLV0S_maxDcaV0Daughters = 0.400000
+ALLV0S_maxDcaV0Daughters = 0.500000
+p value = 0.0422079
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = ALamKchP
+CentralityType = 10-30%
+
+ALLV0S_maxDcaV0Daughters = 0.300000
+ALLV0S_maxDcaV0Daughters = 0.400000
+p value = 0.0980607
+
+ALLV0S_maxDcaV0Daughters = 0.300000
+ALLV0S_maxDcaV0Daughters = 0.500000
+p value = 0.284557
+
+ALLV0S_maxDcaV0Daughters = 0.400000
+ALLV0S_maxDcaV0Daughters = 0.500000
+p value = 0.168553
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = ALamKchP
+CentralityType = 30-50%
+
+ALLV0S_maxDcaV0Daughters = 0.300000
+ALLV0S_maxDcaV0Daughters = 0.400000
+p value = 0.0963611
+
+ALLV0S_maxDcaV0Daughters = 0.300000
+ALLV0S_maxDcaV0Daughters = 0.500000
+p value = 0.373262
+
+ALLV0S_maxDcaV0Daughters = 0.400000
+ALLV0S_maxDcaV0Daughters = 0.500000
+p value = 0.427523
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = LamKchM
+CentralityType = 0-10%
+
+ALLV0S_maxDcaV0Daughters = 0.300000
+ALLV0S_maxDcaV0Daughters = 0.400000
+p value = 0.679704
+
+ALLV0S_maxDcaV0Daughters = 0.300000
+ALLV0S_maxDcaV0Daughters = 0.500000
+p value = 0.0941436
+
+ALLV0S_maxDcaV0Daughters = 0.400000
+ALLV0S_maxDcaV0Daughters = 0.500000
+p value = 0.401466
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = LamKchM
+CentralityType = 10-30%
+
+ALLV0S_maxDcaV0Daughters = 0.300000
+ALLV0S_maxDcaV0Daughters = 0.400000
+p value = 0.940827
+
+ALLV0S_maxDcaV0Daughters = 0.300000
+ALLV0S_maxDcaV0Daughters = 0.500000
+p value = 0.564648
+
+ALLV0S_maxDcaV0Daughters = 0.400000
+ALLV0S_maxDcaV0Daughters = 0.500000
+p value = 0.0370254
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = LamKchM
+CentralityType = 30-50%
+
+ALLV0S_maxDcaV0Daughters = 0.300000
+ALLV0S_maxDcaV0Daughters = 0.400000
+p value = 0.0510259
+
+ALLV0S_maxDcaV0Daughters = 0.300000
+ALLV0S_maxDcaV0Daughters = 0.500000
+p value = 0.00309859
+
+ALLV0S_maxDcaV0Daughters = 0.400000
+ALLV0S_maxDcaV0Daughters = 0.500000
+p value = 9.5202e-05
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = ALamKchM
+CentralityType = 0-10%
+
+ALLV0S_maxDcaV0Daughters = 0.300000
+ALLV0S_maxDcaV0Daughters = 0.400000
+p value = 0.000235073
+
+ALLV0S_maxDcaV0Daughters = 0.300000
+ALLV0S_maxDcaV0Daughters = 0.500000
+p value = 0.00025869
+
+ALLV0S_maxDcaV0Daughters = 0.400000
+ALLV0S_maxDcaV0Daughters = 0.500000
+p value = 0.63347
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = ALamKchM
+CentralityType = 10-30%
+
+ALLV0S_maxDcaV0Daughters = 0.300000
+ALLV0S_maxDcaV0Daughters = 0.400000
+p value = 0.0615929
+
+ALLV0S_maxDcaV0Daughters = 0.300000
+ALLV0S_maxDcaV0Daughters = 0.500000
+p value = 0.00300649
+
+ALLV0S_maxDcaV0Daughters = 0.400000
+ALLV0S_maxDcaV0Daughters = 0.500000
+p value = 0.000331125
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = ALamKchM
+CentralityType = 30-50%
+
+ALLV0S_maxDcaV0Daughters = 0.300000
+ALLV0S_maxDcaV0Daughters = 0.400000
+p value = 0.0260187
+
+ALLV0S_maxDcaV0Daughters = 0.300000
+ALLV0S_maxDcaV0Daughters = 0.500000
+p value = 0.147813
+
+ALLV0S_maxDcaV0Daughters = 0.400000
+ALLV0S_maxDcaV0Daughters = 0.500000
+p value = 0.0357761
+
+______________________________________________________________________________
+

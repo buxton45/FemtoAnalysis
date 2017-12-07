@@ -1,0 +1,144 @@
+______________________________________________________________________________
+AnalysisType = LamK0
+CentralityType = 0-10%
+
+K0s_minCosPointingAngle = 0.999200
+K0s_minCosPointingAngle = 0.999300
+	par[0]: -3.209e-04 & 4.053e-04 & No
+	-3.209e-04 $\pm$ 4.053e-04 & 1.221e+01 $\pm$ 8.176e+00 & 0.000e+00 $\pm$ 0.000e+00 & No
+Is Signficant? 0
+
+K0s_minCosPointingAngle = 0.999200
+K0s_minCosPointingAngle = 0.999400
+	par[0]: 1.321e-04 & 1.453e-04 & No
+	1.321e-04 $\pm$ 1.453e-04 & 2.134e+00 $\pm$ 2.440e+00 & 0.000e+00 $\pm$ 0.000e+00 & No
+Is Signficant? 0
+
+K0s_minCosPointingAngle = 0.999300
+K0s_minCosPointingAngle = 0.999400
+	par[0]: 2.184e-04 & 2.188e-04 & No
+	2.184e-04 $\pm$ 2.188e-04 & 3.237e+00 $\pm$ 2.872e+00 & 0.000e+00 $\pm$ 0.000e+00 & No
+Is Signficant? 0
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = LamK0
+CentralityType = 10-30%
+
+K0s_minCosPointingAngle = 0.999200
+K0s_minCosPointingAngle = 0.999300
+	par[0]: 1.491e-03 & 2.069e-03 & No
+	1.491e-03 $\pm$ 2.069e-03 & 1.912e+01 $\pm$ 1.580e+01 & 0.000e+00 $\pm$ 0.000e+00 & No
+Is Signficant? 0
+
+K0s_minCosPointingAngle = 0.999200
+K0s_minCosPointingAngle = 0.999400
+	par[0]: 7.822e-05 & 3.005e-05 & Yes
+	7.822e-05 $\pm$ 3.005e-05 & 1.719e-09 $\pm$ 3.741e-03 & 0.000e+00 $\pm$ 0.000e+00 & Yes
+Is Signficant? 1
+
+K0s_minCosPointingAngle = 0.999300
+K0s_minCosPointingAngle = 0.999400
+	par[0]: 5.593e-05 & 2.241e-05 & Yes
+	5.593e-05 $\pm$ 2.241e-05 & -5.069e-09 $\pm$ 4.151e-03 & 0.000e+00 $\pm$ 0.000e+00 & Yes
+Is Signficant? 1
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = LamK0
+CentralityType = 30-50%
+
+K0s_minCosPointingAngle = 0.999200
+K0s_minCosPointingAngle = 0.999300
+	par[0]: -3.328e-04 & 6.564e-04 & No
+	-3.328e-04 $\pm$ 6.564e-04 & 6.094e+00 $\pm$ 6.349e+00 & 0.000e+00 $\pm$ 0.000e+00 & No
+Is Signficant? 0
+
+K0s_minCosPointingAngle = 0.999200
+K0s_minCosPointingAngle = 0.999400
+	par[0]: 3.714e-04 & 6.779e-05 & Yes
+	3.714e-04 $\pm$ 6.779e-05 & -2.095e-07 $\pm$ 1.092e-03 & 0.000e+00 $\pm$ 0.000e+00 & Yes
+Is Signficant? 1
+
+K0s_minCosPointingAngle = 0.999300
+K0s_minCosPointingAngle = 0.999400
+	par[0]: 3.971e-04 & 5.016e-05 & Yes
+	3.971e-04 $\pm$ 5.016e-05 & -2.514e-07 $\pm$ 9.074e-04 & 0.000e+00 $\pm$ 0.000e+00 & Yes
+Is Signficant? 1
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = ALamK0
+CentralityType = 0-10%
+
+K0s_minCosPointingAngle = 0.999200
+K0s_minCosPointingAngle = 0.999300
+	par[0]: 6.409e-04 & 4.583e-04 & No
+	6.409e-04 $\pm$ 4.583e-04 & 1.169e+01 $\pm$ 4.897e+00 & 0.000e+00 $\pm$ 0.000e+00 & No
+Is Signficant? 0
+
+K0s_minCosPointingAngle = 0.999200
+K0s_minCosPointingAngle = 0.999400
+	par[0]: 1.310e-03 & 8.540e-04 & No
+	1.310e-03 $\pm$ 8.540e-04 & 1.448e+01 $\pm$ 5.176e+00 & 0.000e+00 $\pm$ 0.000e+00 & No
+Is Signficant? 0
+
+K0s_minCosPointingAngle = 0.999300
+K0s_minCosPointingAngle = 0.999400
+	par[0]: -2.956e-05 & 1.153e-05 & Yes
+	-2.956e-05 $\pm$ 1.153e-05 & -3.466e-07 $\pm$ 1.245e-02 & 0.000e+00 $\pm$ 0.000e+00 & Yes
+Is Signficant? 1
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = ALamK0
+CentralityType = 10-30%
+
+K0s_minCosPointingAngle = 0.999200
+K0s_minCosPointingAngle = 0.999300
+	par[0]: 1.662e-04 & 2.012e-05 & Yes
+	1.662e-04 $\pm$ 2.012e-05 & 3.923e-11 $\pm$ 1.555e-03 & 0.000e+00 $\pm$ 0.000e+00 & Yes
+Is Signficant? 1
+
+K0s_minCosPointingAngle = 0.999200
+K0s_minCosPointingAngle = 0.999400
+	par[0]: 2.235e-04 & 3.127e-05 & Yes
+	2.235e-04 $\pm$ 3.127e-05 & -1.911e-08 $\pm$ 2.595e-03 & 0.000e+00 $\pm$ 0.000e+00 & Yes
+Is Signficant? 1
+
+K0s_minCosPointingAngle = 0.999300
+K0s_minCosPointingAngle = 0.999400
+	par[0]: 6.241e-05 & 2.570e-05 & Yes
+	6.241e-05 $\pm$ 2.570e-05 & 7.896e-05 $\pm$ 2.926e-01 & 0.000e+00 $\pm$ 0.000e+00 & Yes
+Is Signficant? 1
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = ALamK0
+CentralityType = 30-50%
+
+K0s_minCosPointingAngle = 0.999200
+K0s_minCosPointingAngle = 0.999300
+	par[0]: -1.302e-04 & 3.166e-04 & No
+	-1.302e-04 $\pm$ 3.166e-04 & 3.948e+00 $\pm$ 3.580e+00 & 0.000e+00 $\pm$ 0.000e+00 & No
+Is Signficant? 0
+
+K0s_minCosPointingAngle = 0.999200
+K0s_minCosPointingAngle = 0.999400
+	par[0]: -6.377e-04 & 1.043e-03 & No
+	-6.377e-04 $\pm$ 1.043e-03 & 7.110e+00 $\pm$ 4.212e+00 & 0.000e+00 $\pm$ 0.000e+00 & No
+Is Signficant? 0
+
+K0s_minCosPointingAngle = 0.999300
+K0s_minCosPointingAngle = 0.999400
+	par[0]: 2.182e-04 & 5.153e-05 & Yes
+	2.182e-04 $\pm$ 5.153e-05 & 1.851e-10 $\pm$ 1.442e-03 & 0.000e+00 $\pm$ 0.000e+00 & Yes
+Is Signficant? 1
+
+______________________________________________________________________________
+

@@ -1,0 +1,108 @@
+______________________________________________________________________________
+AnalysisType = LamK0
+CentralityType = 0-10%
+
+CLAM_minCosPointingAngle = 0.999200
+CLAM_minCosPointingAngle = 0.999300
+p value = 0.169364
+
+CLAM_minCosPointingAngle = 0.999200
+CLAM_minCosPointingAngle = 0.999400
+p value = 0.565068
+
+CLAM_minCosPointingAngle = 0.999300
+CLAM_minCosPointingAngle = 0.999400
+p value = 0.499179
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = LamK0
+CentralityType = 10-30%
+
+CLAM_minCosPointingAngle = 0.999200
+CLAM_minCosPointingAngle = 0.999300
+p value = 0.00115832
+
+CLAM_minCosPointingAngle = 0.999200
+CLAM_minCosPointingAngle = 0.999400
+p value = 1.94218e-96
+
+CLAM_minCosPointingAngle = 0.999300
+CLAM_minCosPointingAngle = 0.999400
+p value = 0.10303
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = LamK0
+CentralityType = 30-50%
+
+CLAM_minCosPointingAngle = 0.999200
+CLAM_minCosPointingAngle = 0.999300
+p value = 0.0053523
+
+CLAM_minCosPointingAngle = 0.999200
+CLAM_minCosPointingAngle = 0.999400
+p value = 2.46994e-08
+
+CLAM_minCosPointingAngle = 0.999300
+CLAM_minCosPointingAngle = 0.999400
+p value = 5.57873e-09
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = ALamK0
+CentralityType = 0-10%
+
+CLAM_minCosPointingAngle = 0.999200
+CLAM_minCosPointingAngle = 0.999300
+p value = 0.869619
+
+CLAM_minCosPointingAngle = 0.999200
+CLAM_minCosPointingAngle = 0.999400
+p value = 0.790437
+
+CLAM_minCosPointingAngle = 0.999300
+CLAM_minCosPointingAngle = 0.999400
+p value = 0.768579
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = ALamK0
+CentralityType = 10-30%
+
+CLAM_minCosPointingAngle = 0.999200
+CLAM_minCosPointingAngle = 0.999300
+p value = 0.0916631
+
+CLAM_minCosPointingAngle = 0.999200
+CLAM_minCosPointingAngle = 0.999400
+p value = 0.0285142
+
+CLAM_minCosPointingAngle = 0.999300
+CLAM_minCosPointingAngle = 0.999400
+p value = 0.1327
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = ALamK0
+CentralityType = 30-50%
+
+CLAM_minCosPointingAngle = 0.999200
+CLAM_minCosPointingAngle = 0.999300
+p value = 9.79222e-09
+
+CLAM_minCosPointingAngle = 0.999200
+CLAM_minCosPointingAngle = 0.999400
+p value = 0.0126865
+
+CLAM_minCosPointingAngle = 0.999300
+CLAM_minCosPointingAngle = 0.999400
+p value = 0.094812
+
+______________________________________________________________________________
+

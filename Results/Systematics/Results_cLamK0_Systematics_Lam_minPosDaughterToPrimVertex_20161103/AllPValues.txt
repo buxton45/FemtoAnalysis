@@ -1,0 +1,108 @@
+______________________________________________________________________________
+AnalysisType = LamK0
+CentralityType = 0-10%
+
+Lam_minPosDaughterToPrimVertex = 0.050000
+Lam_minPosDaughterToPrimVertex = 0.100000
+p value = 0
+
+Lam_minPosDaughterToPrimVertex = 0.050000
+Lam_minPosDaughterToPrimVertex = 0.200000
+p value = 0.323026
+
+Lam_minPosDaughterToPrimVertex = 0.100000
+Lam_minPosDaughterToPrimVertex = 0.200000
+p value = 0.323026
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = LamK0
+CentralityType = 10-30%
+
+Lam_minPosDaughterToPrimVertex = 0.050000
+Lam_minPosDaughterToPrimVertex = 0.100000
+p value = 1
+
+Lam_minPosDaughterToPrimVertex = 0.050000
+Lam_minPosDaughterToPrimVertex = 0.200000
+p value = 0.680027
+
+Lam_minPosDaughterToPrimVertex = 0.100000
+Lam_minPosDaughterToPrimVertex = 0.200000
+p value = 0.68008
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = LamK0
+CentralityType = 30-50%
+
+Lam_minPosDaughterToPrimVertex = 0.050000
+Lam_minPosDaughterToPrimVertex = 0.100000
+p value = 0
+
+Lam_minPosDaughterToPrimVertex = 0.050000
+Lam_minPosDaughterToPrimVertex = 0.200000
+p value = 0.0462229
+
+Lam_minPosDaughterToPrimVertex = 0.100000
+Lam_minPosDaughterToPrimVertex = 0.200000
+p value = 0.0462229
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = ALamK0
+CentralityType = 0-10%
+
+Lam_minPosDaughterToPrimVertex = 0.050000
+Lam_minPosDaughterToPrimVertex = 0.100000
+p value = 0
+
+Lam_minPosDaughterToPrimVertex = 0.050000
+Lam_minPosDaughterToPrimVertex = 0.200000
+p value = 0
+
+Lam_minPosDaughterToPrimVertex = 0.100000
+Lam_minPosDaughterToPrimVertex = 0.200000
+p value = 0
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = ALamK0
+CentralityType = 10-30%
+
+Lam_minPosDaughterToPrimVertex = 0.050000
+Lam_minPosDaughterToPrimVertex = 0.100000
+p value = 0
+
+Lam_minPosDaughterToPrimVertex = 0.050000
+Lam_minPosDaughterToPrimVertex = 0.200000
+p value = 0
+
+Lam_minPosDaughterToPrimVertex = 0.100000
+Lam_minPosDaughterToPrimVertex = 0.200000
+p value = 0
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = ALamK0
+CentralityType = 30-50%
+
+Lam_minPosDaughterToPrimVertex = 0.050000
+Lam_minPosDaughterToPrimVertex = 0.100000
+p value = 0
+
+Lam_minPosDaughterToPrimVertex = 0.050000
+Lam_minPosDaughterToPrimVertex = 0.200000
+p value = 0
+
+Lam_minPosDaughterToPrimVertex = 0.100000
+Lam_minPosDaughterToPrimVertex = 0.200000
+p value = 0
+
+______________________________________________________________________________
+

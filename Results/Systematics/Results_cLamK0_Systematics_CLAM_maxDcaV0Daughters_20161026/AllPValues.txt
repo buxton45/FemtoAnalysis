@@ -1,0 +1,108 @@
+______________________________________________________________________________
+AnalysisType = LamK0
+CentralityType = 0-10%
+
+CLAM_maxDcaV0Daughters = 0.300000
+CLAM_maxDcaV0Daughters = 0.400000
+p value = 0.393679
+
+CLAM_maxDcaV0Daughters = 0.300000
+CLAM_maxDcaV0Daughters = 0.500000
+p value = 0.284315
+
+CLAM_maxDcaV0Daughters = 0.400000
+CLAM_maxDcaV0Daughters = 0.500000
+p value = 0.51334
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = LamK0
+CentralityType = 10-30%
+
+CLAM_maxDcaV0Daughters = 0.300000
+CLAM_maxDcaV0Daughters = 0.400000
+p value = 0.301575
+
+CLAM_maxDcaV0Daughters = 0.300000
+CLAM_maxDcaV0Daughters = 0.500000
+p value = 0.558827
+
+CLAM_maxDcaV0Daughters = 0.400000
+CLAM_maxDcaV0Daughters = 0.500000
+p value = 0.840641
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = LamK0
+CentralityType = 30-50%
+
+CLAM_maxDcaV0Daughters = 0.300000
+CLAM_maxDcaV0Daughters = 0.400000
+p value = 1.29147e-38
+
+CLAM_maxDcaV0Daughters = 0.300000
+CLAM_maxDcaV0Daughters = 0.500000
+p value = 4.09626e-08
+
+CLAM_maxDcaV0Daughters = 0.400000
+CLAM_maxDcaV0Daughters = 0.500000
+p value = 0.00867437
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = ALamK0
+CentralityType = 0-10%
+
+CLAM_maxDcaV0Daughters = 0.300000
+CLAM_maxDcaV0Daughters = 0.400000
+p value = 0.353423
+
+CLAM_maxDcaV0Daughters = 0.300000
+CLAM_maxDcaV0Daughters = 0.500000
+p value = 0.618417
+
+CLAM_maxDcaV0Daughters = 0.400000
+CLAM_maxDcaV0Daughters = 0.500000
+p value = 0.0717318
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = ALamK0
+CentralityType = 10-30%
+
+CLAM_maxDcaV0Daughters = 0.300000
+CLAM_maxDcaV0Daughters = 0.400000
+p value = 0.0717208
+
+CLAM_maxDcaV0Daughters = 0.300000
+CLAM_maxDcaV0Daughters = 0.500000
+p value = 0.940642
+
+CLAM_maxDcaV0Daughters = 0.400000
+CLAM_maxDcaV0Daughters = 0.500000
+p value = 0.132972
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = ALamK0
+CentralityType = 30-50%
+
+CLAM_maxDcaV0Daughters = 0.300000
+CLAM_maxDcaV0Daughters = 0.400000
+p value = 0.443277
+
+CLAM_maxDcaV0Daughters = 0.300000
+CLAM_maxDcaV0Daughters = 0.500000
+p value = 0.357276
+
+CLAM_maxDcaV0Daughters = 0.400000
+CLAM_maxDcaV0Daughters = 0.500000
+p value = 0.012793
+
+______________________________________________________________________________
+

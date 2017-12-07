@@ -1,0 +1,216 @@
+______________________________________________________________________________
+AnalysisType = LamKchP
+CentralityType = 0-10%
+
+minAvgSepTrackPos = 7.000000
+minAvgSepTrackPos = 8.000000
+p value = 2.10162e-41
+
+minAvgSepTrackPos = 7.000000
+minAvgSepTrackPos = 9.000000
+p value = 1.03884e-294
+
+minAvgSepTrackPos = 8.000000
+minAvgSepTrackPos = 9.000000
+p value = 1.88824e-186
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = LamKchP
+CentralityType = 10-30%
+
+minAvgSepTrackPos = 7.000000
+minAvgSepTrackPos = 8.000000
+p value = 0.85654
+
+minAvgSepTrackPos = 7.000000
+minAvgSepTrackPos = 9.000000
+p value = 1.11691e-09
+
+minAvgSepTrackPos = 8.000000
+minAvgSepTrackPos = 9.000000
+p value = 0.614285
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = LamKchP
+CentralityType = 30-50%
+
+minAvgSepTrackPos = 7.000000
+minAvgSepTrackPos = 8.000000
+p value = 0.99933
+
+minAvgSepTrackPos = 7.000000
+minAvgSepTrackPos = 9.000000
+p value = 1
+
+minAvgSepTrackPos = 8.000000
+minAvgSepTrackPos = 9.000000
+p value = 0.1034
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = ALamKchP
+CentralityType = 0-10%
+
+minAvgSepTrackPos = 7.000000
+minAvgSepTrackPos = 8.000000
+p value = 1.39719e-76
+
+minAvgSepTrackPos = 7.000000
+minAvgSepTrackPos = 9.000000
+p value = 6.78151e-136
+
+minAvgSepTrackPos = 8.000000
+minAvgSepTrackPos = 9.000000
+p value = 6.94022e-46
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = ALamKchP
+CentralityType = 10-30%
+
+minAvgSepTrackPos = 7.000000
+minAvgSepTrackPos = 8.000000
+p value = 4.70767e-14
+
+minAvgSepTrackPos = 7.000000
+minAvgSepTrackPos = 9.000000
+p value = 3.18509e-92
+
+minAvgSepTrackPos = 8.000000
+minAvgSepTrackPos = 9.000000
+p value = 0.609211
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = ALamKchP
+CentralityType = 30-50%
+
+minAvgSepTrackPos = 7.000000
+minAvgSepTrackPos = 8.000000
+p value = 3.01991e-14
+
+minAvgSepTrackPos = 7.000000
+minAvgSepTrackPos = 9.000000
+p value = 1.45909e-17
+
+minAvgSepTrackPos = 8.000000
+minAvgSepTrackPos = 9.000000
+p value = 0.000332596
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = LamKchM
+CentralityType = 0-10%
+
+minAvgSepTrackPos = 7.000000
+minAvgSepTrackPos = 8.000000
+p value = 1.00479e-236
+
+minAvgSepTrackPos = 7.000000
+minAvgSepTrackPos = 9.000000
+p value = 0
+
+minAvgSepTrackPos = 8.000000
+minAvgSepTrackPos = 9.000000
+p value = 5.05989e-243
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = LamKchM
+CentralityType = 10-30%
+
+minAvgSepTrackPos = 7.000000
+minAvgSepTrackPos = 8.000000
+p value = 6.19636e-17
+
+minAvgSepTrackPos = 7.000000
+minAvgSepTrackPos = 9.000000
+p value = 7.449e-76
+
+minAvgSepTrackPos = 8.000000
+minAvgSepTrackPos = 9.000000
+p value = 4.59997e-43
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = LamKchM
+CentralityType = 30-50%
+
+minAvgSepTrackPos = 7.000000
+minAvgSepTrackPos = 8.000000
+p value = 0.0871192
+
+minAvgSepTrackPos = 7.000000
+minAvgSepTrackPos = 9.000000
+p value = 0.229639
+
+minAvgSepTrackPos = 8.000000
+minAvgSepTrackPos = 9.000000
+p value = 0.994262
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = ALamKchM
+CentralityType = 0-10%
+
+minAvgSepTrackPos = 7.000000
+minAvgSepTrackPos = 8.000000
+p value = 3.74024e-78
+
+minAvgSepTrackPos = 7.000000
+minAvgSepTrackPos = 9.000000
+p value = 5.83104e-188
+
+minAvgSepTrackPos = 8.000000
+minAvgSepTrackPos = 9.000000
+p value = 0
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = ALamKchM
+CentralityType = 10-30%
+
+minAvgSepTrackPos = 7.000000
+minAvgSepTrackPos = 8.000000
+p value = 1.42105e-27
+
+minAvgSepTrackPos = 7.000000
+minAvgSepTrackPos = 9.000000
+p value = 4.34372e-138
+
+minAvgSepTrackPos = 8.000000
+minAvgSepTrackPos = 9.000000
+p value = 9.57656e-62
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = ALamKchM
+CentralityType = 30-50%
+
+minAvgSepTrackPos = 7.000000
+minAvgSepTrackPos = 8.000000
+p value = 0
+
+minAvgSepTrackPos = 7.000000
+minAvgSepTrackPos = 9.000000
+p value = 4.45838e-09
+
+minAvgSepTrackPos = 8.000000
+minAvgSepTrackPos = 9.000000
+p value = 0.00436373
+
+______________________________________________________________________________
+

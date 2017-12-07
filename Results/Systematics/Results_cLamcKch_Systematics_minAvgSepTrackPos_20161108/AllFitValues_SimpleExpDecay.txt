@@ -1,0 +1,288 @@
+______________________________________________________________________________
+AnalysisType = LamKchP
+CentralityType = 0-10%
+
+minAvgSepTrackPos = 7.500000
+minAvgSepTrackPos = 8.000000
+	par[0]: 9.859e-07 & 6.391e-08 & Yes
+	9.859e-07 $\pm$ 6.391e-08 & 7.667e-10 $\pm$ 1.015e-03 & 0.000e+00 $\pm$ 0.000e+00 & Yes
+Is Signficant? 1
+
+minAvgSepTrackPos = 7.500000
+minAvgSepTrackPos = 8.500000
+	par[0]: 3.822e-06 & 1.263e-07 & Yes
+	3.822e-06 $\pm$ 1.263e-07 & 4.959e-08 $\pm$ 2.891e-04 & 0.000e+00 $\pm$ 0.000e+00 & Yes
+Is Signficant? 1
+
+minAvgSepTrackPos = 8.000000
+minAvgSepTrackPos = 8.500000
+	par[0]: 2.884e-06 & 1.007e-07 & Yes
+	2.884e-06 $\pm$ 1.007e-07 & 2.267e-08 $\pm$ 5.425e-04 & 0.000e+00 $\pm$ 0.000e+00 & Yes
+Is Signficant? 1
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = LamKchP
+CentralityType = 10-30%
+
+minAvgSepTrackPos = 7.500000
+minAvgSepTrackPos = 8.000000
+	par[0]: 2.142e-06 & 1.132e-06 & No
+	2.142e-06 $\pm$ 1.132e-06 & 7.376e-01 $\pm$ 7.717e-01 & 0.000e+00 $\pm$ 0.000e+00 & No
+Is Signficant? 0
+
+minAvgSepTrackPos = 7.500000
+minAvgSepTrackPos = 8.500000
+	par[0]: 2.521e-06 & 1.553e-07 & Yes
+	2.521e-06 $\pm$ 1.553e-07 & -1.179e-09 $\pm$ 5.956e-04 & 0.000e+00 $\pm$ 0.000e+00 & Yes
+Is Signficant? 1
+
+minAvgSepTrackPos = 8.000000
+minAvgSepTrackPos = 8.500000
+	par[0]: 3.671e-06 & 1.220e-06 & Yes
+	3.671e-06 $\pm$ 1.220e-06 & 7.049e-01 $\pm$ 5.101e-01 & 0.000e+00 $\pm$ 0.000e+00 & Yes
+Is Signficant? 1
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = LamKchP
+CentralityType = 30-50%
+
+minAvgSepTrackPos = 7.500000
+minAvgSepTrackPos = 8.000000
+	par[0]: -5.515e-07 & 3.287e-07 & No
+	-5.515e-07 $\pm$ 3.287e-07 & 2.306e-08 $\pm$ 1.096e-02 & 0.000e+00 $\pm$ 0.000e+00 & No
+Is Signficant? 0
+
+minAvgSepTrackPos = 7.500000
+minAvgSepTrackPos = 8.500000
+	par[0]: 2.092e-06 & 5.170e-07 & Yes
+	2.092e-06 $\pm$ 5.170e-07 & -1.399e-07 $\pm$ 4.968e-02 & 0.000e+00 $\pm$ 0.000e+00 & Yes
+Is Signficant? 1
+
+minAvgSepTrackPos = 8.000000
+minAvgSepTrackPos = 8.500000
+	par[0]: 6.544e-02 & 2.254e-02 & Yes
+	6.544e-02 $\pm$ 2.254e-02 & 1.135e+02 $\pm$ 2.542e+01 & 0.000e+00 $\pm$ 0.000e+00 & Yes
+Is Signficant? 1
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = ALamKchP
+CentralityType = 0-10%
+
+minAvgSepTrackPos = 7.500000
+minAvgSepTrackPos = 8.000000
+	par[0]: 3.282e-06 & 3.680e-07 & Yes
+	3.282e-06 $\pm$ 3.680e-07 & 2.151e-01 $\pm$ 1.830e-01 & 0.000e+00 $\pm$ 0.000e+00 & Yes
+Is Signficant? 1
+
+minAvgSepTrackPos = 7.500000
+minAvgSepTrackPos = 8.500000
+	par[0]: 8.030e-07 & 2.268e-08 & Yes
+	8.030e-07 $\pm$ 2.268e-08 & 2.113e-08 $\pm$ 6.862e-04 & 0.000e+00 $\pm$ 0.000e+00 & Yes
+Is Signficant? 1
+
+minAvgSepTrackPos = 8.000000
+minAvgSepTrackPos = 8.500000
+	par[0]: -1.259e-06 & 1.251e-07 & Yes
+	-1.259e-06 $\pm$ 1.251e-07 & 2.805e-05 $\pm$ 9.254e-02 & 0.000e+00 $\pm$ 0.000e+00 & Yes
+Is Signficant? 1
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = ALamKchP
+CentralityType = 10-30%
+
+minAvgSepTrackPos = 7.500000
+minAvgSepTrackPos = 8.000000
+	par[0]: -1.316e-06 & 2.293e-07 & Yes
+	-1.316e-06 $\pm$ 2.293e-07 & 1.107e-08 $\pm$ 8.296e-04 & 0.000e+00 $\pm$ 0.000e+00 & Yes
+Is Signficant? 1
+
+minAvgSepTrackPos = 7.500000
+minAvgSepTrackPos = 8.500000
+	par[0]: 2.014e-05 & 9.399e-06 & Yes
+	2.014e-05 $\pm$ 9.399e-06 & 3.151e+00 $\pm$ 8.019e-01 & 0.000e+00 $\pm$ 0.000e+00 & Yes
+Is Signficant? 1
+
+minAvgSepTrackPos = 8.000000
+minAvgSepTrackPos = 8.500000
+	par[0]: 4.193e-06 & 2.519e-07 & Yes
+	4.193e-06 $\pm$ 2.519e-07 & -7.957e-07 $\pm$ 8.040e-03 & 0.000e+00 $\pm$ 0.000e+00 & Yes
+Is Signficant? 1
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = ALamKchP
+CentralityType = 30-50%
+
+minAvgSepTrackPos = 7.500000
+minAvgSepTrackPos = 8.000000
+	par[0]: 3.726e-06 & 6.757e-07 & Yes
+	3.726e-06 $\pm$ 6.757e-07 & 8.805e-08 $\pm$ 2.068e-02 & 0.000e+00 $\pm$ 0.000e+00 & Yes
+Is Signficant? 1
+
+minAvgSepTrackPos = 7.500000
+minAvgSepTrackPos = 8.500000
+	par[0]: 3.962e-04 & 1.115e-04 & Yes
+	3.962e-04 $\pm$ 1.115e-04 & 8.110e+00 $\pm$ 5.629e-01 & 0.000e+00 $\pm$ 0.000e+00 & Yes
+Is Signficant? 1
+
+minAvgSepTrackPos = 8.000000
+minAvgSepTrackPos = 8.500000
+	par[0]: 1.769e-04 & 1.638e-04 & No
+	1.769e-04 $\pm$ 1.638e-04 & 9.748e+00 $\pm$ 2.739e+00 & 0.000e+00 $\pm$ 0.000e+00 & No
+Is Signficant? 0
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = LamKchM
+CentralityType = 0-10%
+
+minAvgSepTrackPos = 7.500000
+minAvgSepTrackPos = 8.000000
+	par[0]: 2.280e-06 & 9.859e-08 & Yes
+	2.280e-06 $\pm$ 9.859e-08 & -7.871e-10 $\pm$ 2.993e-04 & 0.000e+00 $\pm$ 0.000e+00 & Yes
+Is Signficant? 1
+
+minAvgSepTrackPos = 7.500000
+minAvgSepTrackPos = 8.500000
+	par[0]: 4.092e-06 & 3.434e-07 & Yes
+	4.092e-06 $\pm$ 3.434e-07 & 1.469e-01 $\pm$ 1.534e-01 & 0.000e+00 $\pm$ 0.000e+00 & Yes
+Is Signficant? 1
+
+minAvgSepTrackPos = 8.000000
+minAvgSepTrackPos = 8.500000
+	par[0]: 8.562e-07 & 5.373e-08 & Yes
+	8.562e-07 $\pm$ 5.373e-08 & 1.530e-08 $\pm$ 9.893e-04 & 0.000e+00 $\pm$ 0.000e+00 & Yes
+Is Signficant? 1
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = LamKchM
+CentralityType = 10-30%
+
+minAvgSepTrackPos = 7.500000
+minAvgSepTrackPos = 8.000000
+	par[0]: 2.187e-06 & 1.981e-07 & Yes
+	2.187e-06 $\pm$ 1.981e-07 & 3.809e-10 $\pm$ 1.265e-03 & 0.000e+00 $\pm$ 0.000e+00 & Yes
+Is Signficant? 1
+
+minAvgSepTrackPos = 7.500000
+minAvgSepTrackPos = 8.500000
+	par[0]: 4.783e-06 & 2.979e-07 & Yes
+	4.783e-06 $\pm$ 2.979e-07 & 2.683e-09 $\pm$ 1.770e-03 & 0.000e+00 $\pm$ 0.000e+00 & Yes
+Is Signficant? 1
+
+minAvgSepTrackPos = 8.000000
+minAvgSepTrackPos = 8.500000
+	par[0]: 2.417e-06 & 2.250e-07 & Yes
+	2.417e-06 $\pm$ 2.250e-07 & 3.858e-08 $\pm$ 9.131e-03 & 0.000e+00 $\pm$ 0.000e+00 & Yes
+Is Signficant? 1
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = LamKchM
+CentralityType = 30-50%
+
+minAvgSepTrackPos = 7.500000
+minAvgSepTrackPos = 8.000000
+	par[0]: -8.611e-06 & 1.224e-06 & Yes
+	-8.611e-06 $\pm$ 1.224e-06 & -2.866e-09 $\pm$ 8.960e-04 & 0.000e+00 $\pm$ 0.000e+00 & Yes
+Is Signficant? 1
+
+minAvgSepTrackPos = 7.500000
+minAvgSepTrackPos = 8.500000
+	par[0]: -3.663e-06 & 8.963e-07 & Yes
+	-3.663e-06 $\pm$ 8.963e-07 & 0.000e+00 $\pm$ 2.944e-03 & 0.000e+00 $\pm$ 0.000e+00 & Yes
+Is Signficant? 1
+
+minAvgSepTrackPos = 8.000000
+minAvgSepTrackPos = 8.500000
+	par[0]: 8.694e-06 & 7.776e-06 & No
+	8.694e-06 $\pm$ 7.776e-06 & 8.901e-01 $\pm$ 1.475e+00 & 0.000e+00 $\pm$ 0.000e+00 & No
+Is Signficant? 0
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = ALamKchM
+CentralityType = 0-10%
+
+minAvgSepTrackPos = 7.500000
+minAvgSepTrackPos = 8.000000
+	par[0]: 5.252e-07 & 4.318e-08 & Yes
+	5.252e-07 $\pm$ 4.318e-08 & 1.673e-08 $\pm$ 3.517e-03 & 0.000e+00 $\pm$ 0.000e+00 & Yes
+Is Signficant? 1
+
+minAvgSepTrackPos = 7.500000
+minAvgSepTrackPos = 8.500000
+	par[0]: 3.687e-06 & 4.589e-07 & Yes
+	3.687e-06 $\pm$ 4.589e-07 & 9.178e-02 $\pm$ 1.850e-01 & 0.000e+00 $\pm$ 0.000e+00 & Yes
+Is Signficant? 1
+
+minAvgSepTrackPos = 8.000000
+minAvgSepTrackPos = 8.500000
+	par[0]: 2.566e-06 & 1.024e-07 & Yes
+	2.566e-06 $\pm$ 1.024e-07 & 1.772e-09 $\pm$ 3.638e-04 & 0.000e+00 $\pm$ 0.000e+00 & Yes
+Is Signficant? 1
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = ALamKchM
+CentralityType = 10-30%
+
+minAvgSepTrackPos = 7.500000
+minAvgSepTrackPos = 8.000000
+	par[0]: 4.017e-06 & 2.837e-07 & Yes
+	4.017e-06 $\pm$ 2.837e-07 & -1.617e-08 $\pm$ 1.153e-03 & 0.000e+00 $\pm$ 0.000e+00 & Yes
+Is Signficant? 1
+
+minAvgSepTrackPos = 7.500000
+minAvgSepTrackPos = 8.500000
+	par[0]: 7.304e-06 & 3.434e-07 & Yes
+	7.304e-06 $\pm$ 3.434e-07 & 1.531e-07 $\pm$ 1.177e-03 & 0.000e+00 $\pm$ 0.000e+00 & Yes
+Is Signficant? 1
+
+minAvgSepTrackPos = 8.000000
+minAvgSepTrackPos = 8.500000
+	par[0]: 4.188e-06 & 1.011e-06 & Yes
+	4.188e-06 $\pm$ 1.011e-06 & 2.854e-01 $\pm$ 3.806e-01 & 0.000e+00 $\pm$ 0.000e+00 & Yes
+Is Signficant? 1
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = ALamKchM
+CentralityType = 30-50%
+
+minAvgSepTrackPos = 7.500000
+minAvgSepTrackPos = 8.000000
+	par[0]: -4.715e-07 & 3.785e-07 & No
+	-4.715e-07 $\pm$ 3.785e-07 & -5.150e-08 $\pm$ 7.627e-03 & 0.000e+00 $\pm$ 0.000e+00 & No
+Is Signficant? 0
+
+minAvgSepTrackPos = 7.500000
+minAvgSepTrackPos = 8.500000
+	par[0]: 6.501e-05 & 3.625e-05 & No
+	6.501e-05 $\pm$ 3.625e-05 & 3.694e+00 $\pm$ 1.173e+00 & 0.000e+00 $\pm$ 0.000e+00 & No
+Is Signficant? 0
+
+minAvgSepTrackPos = 8.000000
+minAvgSepTrackPos = 8.500000
+	par[0]: 7.471e-06 & 3.593e-06 & Yes
+	7.471e-06 $\pm$ 3.593e-06 & 1.392e-01 $\pm$ 7.226e-01 & 0.000e+00 $\pm$ 0.000e+00 & Yes
+Is Signficant? 1
+
+______________________________________________________________________________
+

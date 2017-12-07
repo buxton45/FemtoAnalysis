@@ -1,0 +1,120 @@
+______________________________________________________________________________
+AnalysisType = LamKchP
+CentralityType = 0-10%
+
+ALLV0S_minInvMassReject = 0.494614 and ALLV0S_maxInvMassReject = 0.500614
+ALLV0S_minInvMassReject = 0.492614 and ALLV0S_maxInvMassReject = 0.502614
+p value = 0.0964007
+
+ALLV0S_minInvMassReject = 0.494614 and ALLV0S_maxInvMassReject = 0.500614
+ALLV0S_minInvMassReject = 0.488614 and ALLV0S_maxInvMassReject = 0.506614
+p value = 0.831689
+
+ALLV0S_minInvMassReject = 0.494614 and ALLV0S_maxInvMassReject = 0.500614
+ALLV0S_minInvMassReject = 0.482614 and ALLV0S_maxInvMassReject = 0.512614
+p value = 0.0158394
+
+ALLV0S_minInvMassReject = 0.492614 and ALLV0S_maxInvMassReject = 0.502614
+ALLV0S_minInvMassReject = 0.488614 and ALLV0S_maxInvMassReject = 0.506614
+p value = 0.790725
+
+ALLV0S_minInvMassReject = 0.492614 and ALLV0S_maxInvMassReject = 0.502614
+ALLV0S_minInvMassReject = 0.482614 and ALLV0S_maxInvMassReject = 0.512614
+p value = 0.0319865
+
+ALLV0S_minInvMassReject = 0.488614 and ALLV0S_maxInvMassReject = 0.506614
+ALLV0S_minInvMassReject = 0.482614 and ALLV0S_maxInvMassReject = 0.512614
+p value = 8.62087e-05
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = ALamKchP
+CentralityType = 0-10%
+
+ALLV0S_minInvMassReject = 0.494614 and ALLV0S_maxInvMassReject = 0.500614
+ALLV0S_minInvMassReject = 0.492614 and ALLV0S_maxInvMassReject = 0.502614
+p value = 0.0518948
+
+ALLV0S_minInvMassReject = 0.494614 and ALLV0S_maxInvMassReject = 0.500614
+ALLV0S_minInvMassReject = 0.488614 and ALLV0S_maxInvMassReject = 0.506614
+p value = 0.073584
+
+ALLV0S_minInvMassReject = 0.494614 and ALLV0S_maxInvMassReject = 0.500614
+ALLV0S_minInvMassReject = 0.482614 and ALLV0S_maxInvMassReject = 0.512614
+p value = 0.00767658
+
+ALLV0S_minInvMassReject = 0.492614 and ALLV0S_maxInvMassReject = 0.502614
+ALLV0S_minInvMassReject = 0.488614 and ALLV0S_maxInvMassReject = 0.506614
+p value = 0.304302
+
+ALLV0S_minInvMassReject = 0.492614 and ALLV0S_maxInvMassReject = 0.502614
+ALLV0S_minInvMassReject = 0.482614 and ALLV0S_maxInvMassReject = 0.512614
+p value = 0.000653563
+
+ALLV0S_minInvMassReject = 0.488614 and ALLV0S_maxInvMassReject = 0.506614
+ALLV0S_minInvMassReject = 0.482614 and ALLV0S_maxInvMassReject = 0.512614
+p value = 1.06067e-06
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = LamKchM
+CentralityType = 0-10%
+
+ALLV0S_minInvMassReject = 0.494614 and ALLV0S_maxInvMassReject = 0.500614
+ALLV0S_minInvMassReject = 0.492614 and ALLV0S_maxInvMassReject = 0.502614
+p value = 0.0517617
+
+ALLV0S_minInvMassReject = 0.494614 and ALLV0S_maxInvMassReject = 0.500614
+ALLV0S_minInvMassReject = 0.488614 and ALLV0S_maxInvMassReject = 0.506614
+p value = 0.497164
+
+ALLV0S_minInvMassReject = 0.494614 and ALLV0S_maxInvMassReject = 0.500614
+ALLV0S_minInvMassReject = 0.482614 and ALLV0S_maxInvMassReject = 0.512614
+p value = 0.0190161
+
+ALLV0S_minInvMassReject = 0.492614 and ALLV0S_maxInvMassReject = 0.502614
+ALLV0S_minInvMassReject = 0.488614 and ALLV0S_maxInvMassReject = 0.506614
+p value = 0.684984
+
+ALLV0S_minInvMassReject = 0.492614 and ALLV0S_maxInvMassReject = 0.502614
+ALLV0S_minInvMassReject = 0.482614 and ALLV0S_maxInvMassReject = 0.512614
+p value = 0.0171422
+
+ALLV0S_minInvMassReject = 0.488614 and ALLV0S_maxInvMassReject = 0.506614
+ALLV0S_minInvMassReject = 0.482614 and ALLV0S_maxInvMassReject = 0.512614
+p value = 8.61213e-05
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = ALamKchM
+CentralityType = 0-10%
+
+ALLV0S_minInvMassReject = 0.494614 and ALLV0S_maxInvMassReject = 0.500614
+ALLV0S_minInvMassReject = 0.492614 and ALLV0S_maxInvMassReject = 0.502614
+p value = 0.729204
+
+ALLV0S_minInvMassReject = 0.494614 and ALLV0S_maxInvMassReject = 0.500614
+ALLV0S_minInvMassReject = 0.488614 and ALLV0S_maxInvMassReject = 0.506614
+p value = 0.440321
+
+ALLV0S_minInvMassReject = 0.494614 and ALLV0S_maxInvMassReject = 0.500614
+ALLV0S_minInvMassReject = 0.482614 and ALLV0S_maxInvMassReject = 0.512614
+p value = 0.482054
+
+ALLV0S_minInvMassReject = 0.492614 and ALLV0S_maxInvMassReject = 0.502614
+ALLV0S_minInvMassReject = 0.488614 and ALLV0S_maxInvMassReject = 0.506614
+p value = 0.521264
+
+ALLV0S_minInvMassReject = 0.492614 and ALLV0S_maxInvMassReject = 0.502614
+ALLV0S_minInvMassReject = 0.482614 and ALLV0S_maxInvMassReject = 0.512614
+p value = 0.602687
+
+ALLV0S_minInvMassReject = 0.488614 and ALLV0S_maxInvMassReject = 0.506614
+ALLV0S_minInvMassReject = 0.482614 and ALLV0S_maxInvMassReject = 0.512614
+p value = 0.649277
+
+______________________________________________________________________________
+

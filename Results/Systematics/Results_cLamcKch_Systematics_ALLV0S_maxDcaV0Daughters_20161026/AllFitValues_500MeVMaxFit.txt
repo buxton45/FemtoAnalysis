@@ -1,0 +1,288 @@
+______________________________________________________________________________
+AnalysisType = LamKchP
+CentralityType = 0-10%
+
+ALLV0S_maxDcaV0Daughters = 0.300000
+ALLV0S_maxDcaV0Daughters = 0.400000
+	par[0]: -1.136e-02 & 9.416e-03 & No
+	-1.136e-02 $\pm$ 9.416e-03 & 7.507e+01 $\pm$ 4.020e+01 & 1.084e-05 $\pm$ 2.128e-05 & No
+Is Signficant? 0
+
+ALLV0S_maxDcaV0Daughters = 0.300000
+ALLV0S_maxDcaV0Daughters = 0.500000
+	par[0]: -5.020e-03 & 2.468e-03 & Yes
+	-5.020e-03 $\pm$ 2.468e-03 & 2.777e+01 $\pm$ 8.280e+00 & 1.167e-05 $\pm$ 2.895e-05 & Yes
+Is Signficant? 1
+
+ALLV0S_maxDcaV0Daughters = 0.400000
+ALLV0S_maxDcaV0Daughters = 0.500000
+	par[0]: -2.395e-03 & 1.173e-03 & Yes
+	-2.395e-03 $\pm$ 1.173e-03 & 2.604e+01 $\pm$ 7.236e+00 & -6.258e-06 $\pm$ 1.792e-05 & Yes
+Is Signficant? 1
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = LamKchP
+CentralityType = 10-30%
+
+ALLV0S_maxDcaV0Daughters = 0.300000
+ALLV0S_maxDcaV0Daughters = 0.400000
+	par[0]: -2.773e-02 & 1.091e-01 & No
+	-2.773e-02 $\pm$ 1.091e-01 & 2.317e-02 $\pm$ 9.113e-02 & 2.746e-02 $\pm$ 1.091e-01 & No
+Is Signficant? 0
+
+ALLV0S_maxDcaV0Daughters = 0.300000
+ALLV0S_maxDcaV0Daughters = 0.500000
+	par[0]: -2.227e-02 & 8.119e-02 & No
+	-2.227e-02 $\pm$ 8.119e-02 & 3.060e-02 $\pm$ 1.261e-01 & 2.200e-02 $\pm$ 8.127e-02 & No
+Is Signficant? 0
+
+ALLV0S_maxDcaV0Daughters = 0.400000
+ALLV0S_maxDcaV0Daughters = 0.500000
+	par[0]: -2.962e-04 & 1.524e-03 & No
+	-2.962e-04 $\pm$ 1.524e-03 & 1.806e+01 $\pm$ 6.026e+01 & 1.763e-05 $\pm$ 4.166e-05 & No
+Is Signficant? 0
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = LamKchP
+CentralityType = 30-50%
+
+ALLV0S_maxDcaV0Daughters = 0.300000
+ALLV0S_maxDcaV0Daughters = 0.400000
+	par[0]: 1.057e-03 & 1.241e-03 & No
+	1.057e-03 $\pm$ 1.241e-03 & 7.048e+00 $\pm$ 9.706e+00 & -3.048e-05 $\pm$ 2.564e-04 & No
+Is Signficant? 0
+
+ALLV0S_maxDcaV0Daughters = 0.300000
+ALLV0S_maxDcaV0Daughters = 0.500000
+	par[0]: 6.953e-04 & 1.044e-03 & No
+	6.953e-04 $\pm$ 1.044e-03 & 4.312e+00 $\pm$ 1.036e+01 & -2.095e-05 $\pm$ 5.527e-04 & No
+Is Signficant? 0
+
+ALLV0S_maxDcaV0Daughters = 0.400000
+ALLV0S_maxDcaV0Daughters = 0.500000
+	par[0]: -7.586e-02 & 3.692e-02 & Yes
+	-7.586e-02 $\pm$ 3.692e-02 & 1.231e+02 $\pm$ 4.388e+01 & 4.408e-05 $\pm$ 8.244e-05 & Yes
+Is Signficant? 1
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = ALamKchP
+CentralityType = 0-10%
+
+ALLV0S_maxDcaV0Daughters = 0.300000
+ALLV0S_maxDcaV0Daughters = 0.400000
+	par[0]: -3.676e-04 & 2.325e-04 & No
+	-3.676e-04 $\pm$ 2.325e-04 & 5.722e+00 $\pm$ 6.041e+00 & 4.210e-05 $\pm$ 8.611e-05 & No
+Is Signficant? 0
+
+ALLV0S_maxDcaV0Daughters = 0.300000
+ALLV0S_maxDcaV0Daughters = 0.500000
+	par[0]: -4.616e-04 & 5.153e-04 & No
+	-4.616e-04 $\pm$ 5.153e-04 & 9.316e+00 $\pm$ 9.687e+00 & 4.188e-05 $\pm$ 5.489e-05 & No
+Is Signficant? 0
+
+ALLV0S_maxDcaV0Daughters = 0.400000
+ALLV0S_maxDcaV0Daughters = 0.500000
+	par[0]: 6.753e-03 & 8.862e-02 & No
+	6.753e-03 $\pm$ 8.862e-02 & 1.074e-02 $\pm$ 1.577e-01 & -6.699e-03 $\pm$ 8.864e-02 & No
+Is Signficant? 0
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = ALamKchP
+CentralityType = 10-30%
+
+ALLV0S_maxDcaV0Daughters = 0.300000
+ALLV0S_maxDcaV0Daughters = 0.400000
+	par[0]: 2.291e-04 & 3.914e-04 & No
+	2.291e-04 $\pm$ 3.914e-04 & 4.973e+00 $\pm$ 1.391e+01 & 2.007e-05 $\pm$ 1.762e-04 & No
+Is Signficant? 0
+
+ALLV0S_maxDcaV0Daughters = 0.300000
+ALLV0S_maxDcaV0Daughters = 0.500000
+	par[0]: -6.281e-02 & 3.731e-02 & No
+	-6.281e-02 $\pm$ 3.731e-02 & 1.346e+02 $\pm$ 4.552e+01 & 4.977e-05 $\pm$ 5.832e-05 & No
+Is Signficant? 0
+
+ALLV0S_maxDcaV0Daughters = 0.400000
+ALLV0S_maxDcaV0Daughters = 0.500000
+	par[0]: -9.527e-04 & 1.492e-03 & No
+	-9.527e-04 $\pm$ 1.492e-03 & 1.547e+01 $\pm$ 1.761e+01 & -5.407e-06 $\pm$ 4.974e-05 & No
+Is Signficant? 0
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = ALamKchP
+CentralityType = 30-50%
+
+ALLV0S_maxDcaV0Daughters = 0.300000
+ALLV0S_maxDcaV0Daughters = 0.400000
+	par[0]: 1.108e-01 & 6.299e-01 & No
+	1.108e-01 $\pm$ 6.299e-01 & 9.283e-03 $\pm$ 5.277e-02 & -1.105e-01 $\pm$ 6.299e-01 & No
+Is Signficant? 0
+
+ALLV0S_maxDcaV0Daughters = 0.300000
+ALLV0S_maxDcaV0Daughters = 0.500000
+	par[0]: 1.142e-03 & 3.365e-03 & No
+	1.142e-03 $\pm$ 3.365e-03 & 7.291e+00 $\pm$ 3.196e+01 & 1.247e-05 $\pm$ 7.174e-04 & No
+Is Signficant? 0
+
+ALLV0S_maxDcaV0Daughters = 0.400000
+ALLV0S_maxDcaV0Daughters = 0.500000
+	par[0]: 4.620e-03 & 5.502e-03 & No
+	4.620e-03 $\pm$ 5.502e-03 & 2.634e+01 $\pm$ 1.754e+01 & 1.507e-04 $\pm$ 8.903e-05 & No
+Is Signficant? 0
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = LamKchM
+CentralityType = 0-10%
+
+ALLV0S_maxDcaV0Daughters = 0.300000
+ALLV0S_maxDcaV0Daughters = 0.400000
+	par[0]: -1.527e-04 & 1.883e-04 & No
+	-1.527e-04 $\pm$ 1.883e-04 & 3.225e+00 $\pm$ 1.395e+01 & 9.386e-06 $\pm$ 2.663e-04 & No
+Is Signficant? 0
+
+ALLV0S_maxDcaV0Daughters = 0.300000
+ALLV0S_maxDcaV0Daughters = 0.500000
+	par[0]: -4.160e-04 & 4.435e-04 & No
+	-4.160e-04 $\pm$ 4.435e-04 & 8.907e+00 $\pm$ 8.537e+00 & -2.024e-05 $\pm$ 5.241e-05 & No
+Is Signficant? 0
+
+ALLV0S_maxDcaV0Daughters = 0.400000
+ALLV0S_maxDcaV0Daughters = 0.500000
+	par[0]: -5.835e-04 & 6.913e-04 & No
+	-5.835e-04 $\pm$ 6.913e-04 & 1.758e+01 $\pm$ 1.331e+01 & 2.192e-07 $\pm$ 2.090e-05 & No
+Is Signficant? 0
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = LamKchM
+CentralityType = 10-30%
+
+ALLV0S_maxDcaV0Daughters = 0.300000
+ALLV0S_maxDcaV0Daughters = 0.400000
+	par[0]: -5.726e-02 & 1.965e-01 & No
+	-5.726e-02 $\pm$ 1.965e-01 & 1.248e-02 $\pm$ 4.470e-02 & 5.705e-02 $\pm$ 1.965e-01 & No
+Is Signficant? 0
+
+ALLV0S_maxDcaV0Daughters = 0.300000
+ALLV0S_maxDcaV0Daughters = 0.500000
+	par[0]: -1.133e-01 & 3.506e-01 & No
+	-1.133e-01 $\pm$ 3.506e-01 & 7.772e-03 $\pm$ 2.200e-02 & 1.129e-01 $\pm$ 3.505e-01 & No
+Is Signficant? 0
+
+ALLV0S_maxDcaV0Daughters = 0.400000
+ALLV0S_maxDcaV0Daughters = 0.500000
+	par[0]: -4.351e-02 & 2.713e-01 & No
+	-4.351e-02 $\pm$ 2.713e-01 & 4.472e-03 $\pm$ 3.141e-02 & 4.339e-02 $\pm$ 2.714e-01 & No
+Is Signficant? 0
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = LamKchM
+CentralityType = 30-50%
+
+ALLV0S_maxDcaV0Daughters = 0.300000
+ALLV0S_maxDcaV0Daughters = 0.400000
+	par[0]: -1.140e-02 & 7.375e-03 & Yes
+	-1.140e-02 $\pm$ 7.375e-03 & 2.899e+01 $\pm$ 1.076e+01 & -2.442e-04 $\pm$ 1.090e-04 & Yes
+Is Signficant? 1
+
+ALLV0S_maxDcaV0Daughters = 0.300000
+ALLV0S_maxDcaV0Daughters = 0.500000
+	par[0]: 1.655e-01 & 1.113e+00 & No
+	1.655e-01 $\pm$ 1.113e+00 & 4.696e-03 $\pm$ 2.764e-02 & -1.656e-01 $\pm$ 1.113e+00 & No
+Is Signficant? 0
+
+ALLV0S_maxDcaV0Daughters = 0.400000
+ALLV0S_maxDcaV0Daughters = 0.500000
+	par[0]: 2.958e-02 & 2.476e-01 & No
+	2.958e-02 $\pm$ 2.476e-01 & -2.143e-02 $\pm$ 1.857e-01 & -2.948e-02 $\pm$ 2.476e-01 & No
+Is Signficant? 0
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = ALamKchM
+CentralityType = 0-10%
+
+ALLV0S_maxDcaV0Daughters = 0.300000
+ALLV0S_maxDcaV0Daughters = 0.400000
+	par[0]: -7.829e-03 & 6.509e-03 & Yes
+	-7.829e-03 $\pm$ 6.509e-03 & 6.776e+01 $\pm$ 3.217e+01 & -5.200e-05 $\pm$ 2.262e-05 & Yes
+Is Signficant? 1
+
+ALLV0S_maxDcaV0Daughters = 0.300000
+ALLV0S_maxDcaV0Daughters = 0.500000
+	par[0]: -2.827e-03 & 3.026e-03 & Yes
+	-2.827e-03 $\pm$ 3.026e-03 & 3.036e+01 $\pm$ 1.967e+01 & -6.852e-05 $\pm$ 3.045e-05 & Yes
+Is Signficant? 1
+
+ALLV0S_maxDcaV0Daughters = 0.400000
+ALLV0S_maxDcaV0Daughters = 0.500000
+	par[0]: -5.710e-04 & 5.934e-04 & No
+	-5.710e-04 $\pm$ 5.934e-04 & 1.530e+01 $\pm$ 1.025e+01 & -1.175e-05 $\pm$ 2.237e-05 & No
+Is Signficant? 0
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = ALamKchM
+CentralityType = 10-30%
+
+ALLV0S_maxDcaV0Daughters = 0.300000
+ALLV0S_maxDcaV0Daughters = 0.400000
+	par[0]: 7.443e-04 & 8.673e-04 & No
+	7.443e-04 $\pm$ 8.673e-04 & 1.097e+01 $\pm$ 8.724e+00 & -5.521e-06 $\pm$ 6.619e-05 & No
+Is Signficant? 0
+
+ALLV0S_maxDcaV0Daughters = 0.300000
+ALLV0S_maxDcaV0Daughters = 0.500000
+	par[0]: 2.167e-03 & 1.670e-03 & No
+	2.167e-03 $\pm$ 1.670e-03 & 1.543e+01 $\pm$ 6.684e+00 & 7.073e-05 $\pm$ 7.011e-05 & No
+Is Signficant? 0
+
+ALLV0S_maxDcaV0Daughters = 0.400000
+ALLV0S_maxDcaV0Daughters = 0.500000
+	par[0]: 1.088e-03 & 1.168e-03 & No
+	1.088e-03 $\pm$ 1.168e-03 & 1.788e+01 $\pm$ 9.331e+00 & 6.645e-05 $\pm$ 4.125e-05 & No
+Is Signficant? 0
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = ALamKchM
+CentralityType = 30-50%
+
+ALLV0S_maxDcaV0Daughters = 0.300000
+ALLV0S_maxDcaV0Daughters = 0.400000
+	par[0]: -1.225e-01 & 4.522e-01 & No
+	-1.225e-01 $\pm$ 4.522e-01 & 1.675e-02 $\pm$ 6.371e-02 & 1.217e-01 $\pm$ 4.522e-01 & No
+Is Signficant? 0
+
+ALLV0S_maxDcaV0Daughters = 0.300000
+ALLV0S_maxDcaV0Daughters = 0.500000
+	par[0]: -1.095e-01 & 6.446e-01 & No
+	-1.095e-01 $\pm$ 6.446e-01 & 8.926e-03 $\pm$ 5.330e-02 & 1.090e-01 $\pm$ 6.446e-01 & No
+Is Signficant? 0
+
+ALLV0S_maxDcaV0Daughters = 0.400000
+ALLV0S_maxDcaV0Daughters = 0.500000
+	par[0]: 2.278e-03 & 2.851e-03 & Yes
+	2.278e-03 $\pm$ 2.851e-03 & 1.608e+01 $\pm$ 1.247e+01 & -2.993e-04 $\pm$ 1.027e-04 & Yes
+Is Signficant? 1
+
+______________________________________________________________________________
+

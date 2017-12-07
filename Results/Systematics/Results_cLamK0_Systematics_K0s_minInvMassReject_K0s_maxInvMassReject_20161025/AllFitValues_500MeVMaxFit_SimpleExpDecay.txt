@@ -1,0 +1,84 @@
+______________________________________________________________________________
+AnalysisType = LamK0
+CentralityType = 0-10%
+
+K0s_minInvMassReject = 1.112683 and K0s_maxInvMassReject = 1.118683
+K0s_minInvMassReject = 1.110683 and K0s_maxInvMassReject = 1.120683
+	par[0]: -1.179e-05 & 7.214e-06 & No
+	-1.179e-05 $\pm$ 7.214e-06 & -1.788e-07 $\pm$ 5.686e-02 & 0.000e+00 $\pm$ 0.000e+00 & No
+Is Signficant? 0
+
+K0s_minInvMassReject = 1.112683 and K0s_maxInvMassReject = 1.118683
+K0s_minInvMassReject = 1.106683 and K0s_maxInvMassReject = 1.124683
+	par[0]: 1.912e-03 & 2.233e-04 & Yes
+	1.912e-03 $\pm$ 2.233e-04 & 3.600e+01 $\pm$ 3.678e+00 & 0.000e+00 $\pm$ 0.000e+00 & Yes
+Is Signficant? 1
+
+K0s_minInvMassReject = 1.112683 and K0s_maxInvMassReject = 1.118683
+K0s_minInvMassReject = 1.100683 and K0s_maxInvMassReject = 1.130683
+	par[0]: 9.421e-04 & 4.981e-04 & No
+	9.421e-04 $\pm$ 4.981e-04 & 3.579e+01 $\pm$ 1.233e+01 & 0.000e+00 $\pm$ 0.000e+00 & No
+Is Signficant? 0
+
+K0s_minInvMassReject = 1.110683 and K0s_maxInvMassReject = 1.120683
+K0s_minInvMassReject = 1.106683 and K0s_maxInvMassReject = 1.124683
+	par[0]: 1.120e-03 & 1.929e-04 & Yes
+	1.120e-03 $\pm$ 1.929e-04 & 3.501e+01 $\pm$ 4.495e+00 & 0.000e+00 $\pm$ 0.000e+00 & Yes
+Is Signficant? 1
+
+K0s_minInvMassReject = 1.110683 and K0s_maxInvMassReject = 1.120683
+K0s_minInvMassReject = 1.100683 and K0s_maxInvMassReject = 1.130683
+	par[0]: 1.113e-04 & 9.312e-05 & No
+	1.113e-04 $\pm$ 9.312e-05 & 6.133e+00 $\pm$ 5.457e+00 & 0.000e+00 $\pm$ 0.000e+00 & No
+Is Signficant? 0
+
+K0s_minInvMassReject = 1.106683 and K0s_maxInvMassReject = 1.124683
+K0s_minInvMassReject = 1.100683 and K0s_maxInvMassReject = 1.130683
+	par[0]: 4.102e-05 & 2.765e-05 & No
+	4.102e-05 $\pm$ 2.765e-05 & 2.972e+00 $\pm$ 2.786e+00 & 0.000e+00 $\pm$ 0.000e+00 & No
+Is Signficant? 0
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = ALamK0
+CentralityType = 0-10%
+
+K0s_minInvMassReject = 1.112683 and K0s_maxInvMassReject = 1.118683
+K0s_minInvMassReject = 1.110683 and K0s_maxInvMassReject = 1.120683
+	par[0]: 1.549e-04 & 7.651e-05 & Yes
+	1.549e-04 $\pm$ 7.651e-05 & 1.226e+01 $\pm$ 4.270e+00 & 0.000e+00 $\pm$ 0.000e+00 & Yes
+Is Signficant? 1
+
+K0s_minInvMassReject = 1.112683 and K0s_maxInvMassReject = 1.118683
+K0s_minInvMassReject = 1.106683 and K0s_maxInvMassReject = 1.124683
+	par[0]: 3.445e-04 & 2.809e-04 & No
+	3.445e-04 $\pm$ 2.809e-04 & 2.318e+01 $\pm$ 1.216e+01 & 0.000e+00 $\pm$ 0.000e+00 & No
+Is Signficant? 0
+
+K0s_minInvMassReject = 1.112683 and K0s_maxInvMassReject = 1.118683
+K0s_minInvMassReject = 1.100683 and K0s_maxInvMassReject = 1.130683
+	par[0]: -3.028e-05 & 1.267e-05 & Yes
+	-3.028e-05 $\pm$ 1.267e-05 & 4.408e-08 $\pm$ 7.922e-03 & 0.000e+00 $\pm$ 0.000e+00 & Yes
+Is Signficant? 1
+
+K0s_minInvMassReject = 1.110683 and K0s_maxInvMassReject = 1.120683
+K0s_minInvMassReject = 1.106683 and K0s_maxInvMassReject = 1.124683
+	par[0]: -4.436e-06 & 7.088e-06 & No
+	-4.436e-06 $\pm$ 7.088e-06 & -1.530e-05 $\pm$ 2.254e-01 & 0.000e+00 $\pm$ 0.000e+00 & No
+Is Signficant? 0
+
+K0s_minInvMassReject = 1.110683 and K0s_maxInvMassReject = 1.120683
+K0s_minInvMassReject = 1.100683 and K0s_maxInvMassReject = 1.130683
+	par[0]: -4.398e-05 & 3.245e-05 & No
+	-4.398e-05 $\pm$ 3.245e-05 & 2.447e+00 $\pm$ 2.742e+00 & 0.000e+00 $\pm$ 0.000e+00 & No
+Is Signficant? 0
+
+K0s_minInvMassReject = 1.106683 and K0s_maxInvMassReject = 1.124683
+K0s_minInvMassReject = 1.100683 and K0s_maxInvMassReject = 1.130683
+	par[0]: 4.055e-04 & 9.183e-05 & Yes
+	4.055e-04 $\pm$ 9.183e-05 & 3.226e+01 $\pm$ 9.384e+00 & 0.000e+00 $\pm$ 0.000e+00 & Yes
+Is Signficant? 1
+
+______________________________________________________________________________
+

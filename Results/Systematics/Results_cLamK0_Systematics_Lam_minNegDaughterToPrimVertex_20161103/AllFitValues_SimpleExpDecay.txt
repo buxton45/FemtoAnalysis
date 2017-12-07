@@ -1,0 +1,144 @@
+______________________________________________________________________________
+AnalysisType = LamK0
+CentralityType = 0-10%
+
+Lam_minNegDaughterToPrimVertex = 0.200000
+Lam_minNegDaughterToPrimVertex = 0.300000
+	par[0]: 4.071e-05 & 1.292e-05 & Yes
+	4.071e-05 $\pm$ 1.292e-05 & 4.338e-05 $\pm$ 3.324e-01 & 0.000e+00 $\pm$ 0.000e+00 & Yes
+Is Signficant? 1
+
+Lam_minNegDaughterToPrimVertex = 0.200000
+Lam_minNegDaughterToPrimVertex = 0.400000
+	par[0]: 2.437e-05 & 1.545e-05 & No
+	2.437e-05 $\pm$ 1.545e-05 & -2.812e-07 $\pm$ 2.132e-02 & 0.000e+00 $\pm$ 0.000e+00 & No
+Is Signficant? 0
+
+Lam_minNegDaughterToPrimVertex = 0.300000
+Lam_minNegDaughterToPrimVertex = 0.400000
+	par[0]: -7.267e-05 & 9.759e-05 & No
+	-7.267e-05 $\pm$ 9.759e-05 & 2.929e+00 $\pm$ 3.437e+00 & 0.000e+00 $\pm$ 0.000e+00 & No
+Is Signficant? 0
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = LamK0
+CentralityType = 10-30%
+
+Lam_minNegDaughterToPrimVertex = 0.200000
+Lam_minNegDaughterToPrimVertex = 0.300000
+	par[0]: 3.802e-05 & 1.986e-05 & No
+	3.802e-05 $\pm$ 1.986e-05 & 6.611e-08 $\pm$ 1.230e-02 & 0.000e+00 $\pm$ 0.000e+00 & No
+Is Signficant? 0
+
+Lam_minNegDaughterToPrimVertex = 0.200000
+Lam_minNegDaughterToPrimVertex = 0.400000
+	par[0]: 1.043e-04 & 3.256e-05 & Yes
+	1.043e-04 $\pm$ 3.256e-05 & 1.779e-09 $\pm$ 2.570e-03 & 0.000e+00 $\pm$ 0.000e+00 & Yes
+Is Signficant? 1
+
+Lam_minNegDaughterToPrimVertex = 0.300000
+Lam_minNegDaughterToPrimVertex = 0.400000
+	par[0]: 7.270e-05 & 2.580e-05 & Yes
+	7.270e-05 $\pm$ 2.580e-05 & -7.824e-08 $\pm$ 3.287e-03 & 0.000e+00 $\pm$ 0.000e+00 & Yes
+Is Signficant? 1
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = LamK0
+CentralityType = 30-50%
+
+Lam_minNegDaughterToPrimVertex = 0.200000
+Lam_minNegDaughterToPrimVertex = 0.300000
+	par[0]: 7.601e-04 & 4.585e-04 & No
+	7.601e-04 $\pm$ 4.585e-04 & 2.355e+00 $\pm$ 1.480e+00 & 0.000e+00 $\pm$ 0.000e+00 & No
+Is Signficant? 0
+
+Lam_minNegDaughterToPrimVertex = 0.200000
+Lam_minNegDaughterToPrimVertex = 0.400000
+	par[0]: 6.452e-04 & 8.540e-04 & No
+	6.452e-04 $\pm$ 8.540e-04 & 2.304e+00 $\pm$ 3.227e+00 & 0.000e+00 $\pm$ 0.000e+00 & No
+Is Signficant? 0
+
+Lam_minNegDaughterToPrimVertex = 0.300000
+Lam_minNegDaughterToPrimVertex = 0.400000
+	par[0]: 6.004e-03 & 4.800e-03 & No
+	6.004e-03 $\pm$ 4.800e-03 & 2.194e+01 $\pm$ 8.810e+00 & 0.000e+00 $\pm$ 0.000e+00 & No
+Is Signficant? 0
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = ALamK0
+CentralityType = 0-10%
+
+Lam_minNegDaughterToPrimVertex = 0.200000
+Lam_minNegDaughterToPrimVertex = 0.300000
+	par[0]: 0.000e+00 & 0.000e+00 & No
+	0.000e+00 $\pm$ 0.000e+00 & 0.000e+00 $\pm$ 0.000e+00 & 0.000e+00 $\pm$ 0.000e+00 & No
+Is Signficant? 0
+
+Lam_minNegDaughterToPrimVertex = 0.200000
+Lam_minNegDaughterToPrimVertex = 0.400000
+	par[0]: 0.000e+00 & 0.000e+00 & No
+	0.000e+00 $\pm$ 0.000e+00 & 0.000e+00 $\pm$ 0.000e+00 & 0.000e+00 $\pm$ 0.000e+00 & No
+Is Signficant? 0
+
+Lam_minNegDaughterToPrimVertex = 0.300000
+Lam_minNegDaughterToPrimVertex = 0.400000
+	par[0]: 0.000e+00 & 0.000e+00 & No
+	0.000e+00 $\pm$ 0.000e+00 & 0.000e+00 $\pm$ 0.000e+00 & 0.000e+00 $\pm$ 0.000e+00 & No
+Is Signficant? 0
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = ALamK0
+CentralityType = 10-30%
+
+Lam_minNegDaughterToPrimVertex = 0.200000
+Lam_minNegDaughterToPrimVertex = 0.300000
+	par[0]: 0.000e+00 & 0.000e+00 & No
+	0.000e+00 $\pm$ 0.000e+00 & 0.000e+00 $\pm$ 0.000e+00 & 0.000e+00 $\pm$ 0.000e+00 & No
+Is Signficant? 0
+
+Lam_minNegDaughterToPrimVertex = 0.200000
+Lam_minNegDaughterToPrimVertex = 0.400000
+	par[0]: 0.000e+00 & 0.000e+00 & No
+	0.000e+00 $\pm$ 0.000e+00 & 0.000e+00 $\pm$ 0.000e+00 & 0.000e+00 $\pm$ 0.000e+00 & No
+Is Signficant? 0
+
+Lam_minNegDaughterToPrimVertex = 0.300000
+Lam_minNegDaughterToPrimVertex = 0.400000
+	par[0]: 0.000e+00 & 0.000e+00 & No
+	0.000e+00 $\pm$ 0.000e+00 & 0.000e+00 $\pm$ 0.000e+00 & 0.000e+00 $\pm$ 0.000e+00 & No
+Is Signficant? 0
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = ALamK0
+CentralityType = 30-50%
+
+Lam_minNegDaughterToPrimVertex = 0.200000
+Lam_minNegDaughterToPrimVertex = 0.300000
+	par[0]: 0.000e+00 & 0.000e+00 & No
+	0.000e+00 $\pm$ 0.000e+00 & 0.000e+00 $\pm$ 0.000e+00 & 0.000e+00 $\pm$ 0.000e+00 & No
+Is Signficant? 0
+
+Lam_minNegDaughterToPrimVertex = 0.200000
+Lam_minNegDaughterToPrimVertex = 0.400000
+	par[0]: 0.000e+00 & 0.000e+00 & No
+	0.000e+00 $\pm$ 0.000e+00 & 0.000e+00 $\pm$ 0.000e+00 & 0.000e+00 $\pm$ 0.000e+00 & No
+Is Signficant? 0
+
+Lam_minNegDaughterToPrimVertex = 0.300000
+Lam_minNegDaughterToPrimVertex = 0.400000
+	par[0]: 0.000e+00 & 0.000e+00 & No
+	0.000e+00 $\pm$ 0.000e+00 & 0.000e+00 $\pm$ 0.000e+00 & 0.000e+00 $\pm$ 0.000e+00 & No
+Is Signficant? 0
+
+______________________________________________________________________________
+

@@ -1,0 +1,144 @@
+______________________________________________________________________________
+AnalysisType = LamK0
+CentralityType = 0-10%
+
+minAvgSepPosPos = 5.000000
+minAvgSepPosPos = 6.000000
+	par[0]: 1.411e-05 & 4.698e-07 & Yes
+	1.411e-05 $\pm$ 4.698e-07 & 0.000e+00 $\pm$ 3.677e+00 & 5.815e-07 $\pm$ 4.681e-07 & Yes
+Is Signficant? 1
+
+minAvgSepPosPos = 5.000000
+minAvgSepPosPos = 7.000000
+	par[0]: -3.490e-06 & 1.463e+01 & No
+	-3.490e-06 $\pm$ 1.463e+01 & 3.687e+00 $\pm$ 1.000e+00 & 2.611e-05 $\pm$ 1.463e+01 & No
+Is Signficant? 0
+
+minAvgSepPosPos = 6.000000
+minAvgSepPosPos = 7.000000
+	par[0]: 2.585e-06 & 8.713e-06 & Yes
+	2.585e-06 $\pm$ 8.713e-06 & 3.646e+00 $\pm$ 3.635e-03 & 1.086e-05 $\pm$ 7.497e-07 & Yes
+Is Signficant? 1
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = LamK0
+CentralityType = 10-30%
+
+minAvgSepPosPos = 5.000000
+minAvgSepPosPos = 6.000000
+	par[0]: 7.573e-04 & 1.805e-04 & Yes
+	7.573e-04 $\pm$ 1.805e-04 & 1.684e+01 $\pm$ 3.123e+00 & 1.515e-05 $\pm$ 7.121e-07 & Yes
+Is Signficant? 1
+
+minAvgSepPosPos = 5.000000
+minAvgSepPosPos = 7.000000
+	par[0]: -2.534e-06 & 1.032e-05 & No
+	-2.534e-06 $\pm$ 1.032e-05 & -2.213e-09 $\pm$ 1.102e-01 & 3.214e-07 $\pm$ 1.042e-05 & No
+Is Signficant? 0
+
+minAvgSepPosPos = 6.000000
+minAvgSepPosPos = 7.000000
+	par[0]: -1.845e-05 & 1.834e-05 & No
+	-1.845e-05 $\pm$ 1.834e-05 & 2.494e-08 $\pm$ 2.809e-02 & 1.071e-06 $\pm$ 1.838e-05 & No
+Is Signficant? 0
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = LamK0
+CentralityType = 30-50%
+
+minAvgSepPosPos = 5.000000
+minAvgSepPosPos = 6.000000
+	par[0]: 4.158e-04 & 5.709e-05 & Yes
+	4.158e-04 $\pm$ 5.709e-05 & 2.761e+00 $\pm$ 4.787e-01 & -5.522e-05 $\pm$ 1.335e-05 & Yes
+Is Signficant? 1
+
+minAvgSepPosPos = 5.000000
+minAvgSepPosPos = 7.000000
+	par[0]: 7.360e-04 & 1.363e-04 & Yes
+	7.360e-04 $\pm$ 1.363e-04 & 4.819e+00 $\pm$ 4.909e-01 & -4.120e-06 $\pm$ 5.635e-06 & Yes
+Is Signficant? 1
+
+minAvgSepPosPos = 6.000000
+minAvgSepPosPos = 7.000000
+	par[0]: 7.731e-04 & 1.416e-04 & Yes
+	7.731e-04 $\pm$ 1.416e-04 & 7.566e+00 $\pm$ 9.413e-01 & 3.543e-05 $\pm$ 4.566e-06 & Yes
+Is Signficant? 1
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = ALamK0
+CentralityType = 0-10%
+
+minAvgSepPosPos = 5.000000
+minAvgSepPosPos = 6.000000
+	par[0]: 7.047e-05 & 6.696e-06 & Yes
+	7.047e-05 $\pm$ 6.696e-06 & 2.262e+00 $\pm$ 2.576e-01 & -8.403e-06 $\pm$ 1.315e-06 & Yes
+Is Signficant? 1
+
+minAvgSepPosPos = 5.000000
+minAvgSepPosPos = 7.000000
+	par[0]: 1.150e-04 & 1.685e-05 & Yes
+	1.150e-04 $\pm$ 1.685e-05 & 1.333e-01 $\pm$ 2.512e-02 & -1.006e-04 $\pm$ 1.696e-05 & Yes
+Is Signficant? 1
+
+minAvgSepPosPos = 6.000000
+minAvgSepPosPos = 7.000000
+	par[0]: 1.671e-05 & 4.885e-06 & Yes
+	1.671e-05 $\pm$ 4.885e-06 & 3.134e+00 $\pm$ 6.889e-05 & -2.993e-07 $\pm$ 2.788e-07 & Yes
+Is Signficant? 1
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = ALamK0
+CentralityType = 10-30%
+
+minAvgSepPosPos = 5.000000
+minAvgSepPosPos = 6.000000
+	par[0]: 2.769e-05 & 5.334e-07 & Yes
+	2.769e-05 $\pm$ 5.334e-07 & 0.000e+00 $\pm$ 3.130e+00 & 1.407e-05 $\pm$ 4.898e-07 & Yes
+Is Signficant? 1
+
+minAvgSepPosPos = 5.000000
+minAvgSepPosPos = 7.000000
+	par[0]: 1.296e-04 & 6.097e-05 & Yes
+	1.296e-04 $\pm$ 6.097e-05 & 4.111e+00 $\pm$ 1.108e+00 & 2.378e-06 $\pm$ 2.606e-06 & Yes
+Is Signficant? 1
+
+minAvgSepPosPos = 6.000000
+minAvgSepPosPos = 7.000000
+	par[0]: 1.010e-03 & 3.667e-04 & Yes
+	1.010e-03 $\pm$ 3.667e-04 & 4.990e-02 $\pm$ 1.876e-02 & -9.657e-04 $\pm$ 3.659e-04 & Yes
+Is Signficant? 1
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = ALamK0
+CentralityType = 30-50%
+
+minAvgSepPosPos = 5.000000
+minAvgSepPosPos = 6.000000
+	par[0]: 1.414e-03 & 1.135e-04 & Yes
+	1.414e-03 $\pm$ 1.135e-04 & 7.212e+00 $\pm$ 4.005e-01 & 2.052e-05 $\pm$ 4.143e-06 & Yes
+Is Signficant? 1
+
+minAvgSepPosPos = 5.000000
+minAvgSepPosPos = 7.000000
+	par[0]: 4.356e-04 & 7.951e-05 & Yes
+	4.356e-04 $\pm$ 7.951e-05 & 2.832e+00 $\pm$ 4.881e-01 & -3.824e-05 $\pm$ 1.086e-05 & Yes
+Is Signficant? 1
+
+minAvgSepPosPos = 6.000000
+minAvgSepPosPos = 7.000000
+	par[0]: -2.984e-05 & 5.983e-05 & No
+	-2.984e-05 $\pm$ 5.983e-05 & -2.143e-09 $\pm$ 1.427e-02 & 4.896e-06 $\pm$ 5.988e-05 & No
+Is Signficant? 0
+
+______________________________________________________________________________
+

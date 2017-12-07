@@ -1,0 +1,108 @@
+______________________________________________________________________________
+AnalysisType = LamK0
+CentralityType = 0-10%
+
+minAvgSepNegNeg = 5.000000
+minAvgSepNegNeg = 6.000000
+p value = 3.30297e-84
+
+minAvgSepNegNeg = 5.000000
+minAvgSepNegNeg = 7.000000
+p value = 0.777048
+
+minAvgSepNegNeg = 6.000000
+minAvgSepNegNeg = 7.000000
+p value = 1.56551e-10
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = LamK0
+CentralityType = 10-30%
+
+minAvgSepNegNeg = 5.000000
+minAvgSepNegNeg = 6.000000
+p value = 0.524212
+
+minAvgSepNegNeg = 5.000000
+minAvgSepNegNeg = 7.000000
+p value = 2.96958e-16
+
+minAvgSepNegNeg = 6.000000
+minAvgSepNegNeg = 7.000000
+p value = 4.99951e-14
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = LamK0
+CentralityType = 30-50%
+
+minAvgSepNegNeg = 5.000000
+minAvgSepNegNeg = 6.000000
+p value = 1.12123e-08
+
+minAvgSepNegNeg = 5.000000
+minAvgSepNegNeg = 7.000000
+p value = 1.11655e-244
+
+minAvgSepNegNeg = 6.000000
+minAvgSepNegNeg = 7.000000
+p value = 0
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = ALamK0
+CentralityType = 0-10%
+
+minAvgSepNegNeg = 5.000000
+minAvgSepNegNeg = 6.000000
+p value = 1.70431e-81
+
+minAvgSepNegNeg = 5.000000
+minAvgSepNegNeg = 7.000000
+p value = 2.51199e-11
+
+minAvgSepNegNeg = 6.000000
+minAvgSepNegNeg = 7.000000
+p value = 0.883702
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = ALamK0
+CentralityType = 10-30%
+
+minAvgSepNegNeg = 5.000000
+minAvgSepNegNeg = 6.000000
+p value = 2.51584e-07
+
+minAvgSepNegNeg = 5.000000
+minAvgSepNegNeg = 7.000000
+p value = 1.37484e-69
+
+minAvgSepNegNeg = 6.000000
+minAvgSepNegNeg = 7.000000
+p value = 4.12775e-39
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = ALamK0
+CentralityType = 30-50%
+
+minAvgSepNegNeg = 5.000000
+minAvgSepNegNeg = 6.000000
+p value = 2.21298e-16
+
+minAvgSepNegNeg = 5.000000
+minAvgSepNegNeg = 7.000000
+p value = 4.49506e-06
+
+minAvgSepNegNeg = 6.000000
+minAvgSepNegNeg = 7.000000
+p value = 1.85892e-26
+
+______________________________________________________________________________
+

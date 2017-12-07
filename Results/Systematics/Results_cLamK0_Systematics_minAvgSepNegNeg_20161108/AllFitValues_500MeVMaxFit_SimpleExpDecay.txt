@@ -1,0 +1,144 @@
+______________________________________________________________________________
+AnalysisType = LamK0
+CentralityType = 0-10%
+
+minAvgSepNegNeg = 5.500000
+minAvgSepNegNeg = 6.000000
+	par[0]: 6.589e-06 & 1.477e-06 & Yes
+	6.589e-06 $\pm$ 1.477e-06 & 4.887e-08 $\pm$ 1.103e-02 & 0.000e+00 $\pm$ 0.000e+00 & Yes
+Is Signficant? 1
+
+minAvgSepNegNeg = 5.500000
+minAvgSepNegNeg = 6.500000
+	par[0]: 7.312e-06 & 2.231e-06 & Yes
+	7.312e-06 $\pm$ 2.231e-06 & 4.282e-07 $\pm$ 5.728e-03 & 0.000e+00 $\pm$ 0.000e+00 & Yes
+Is Signficant? 1
+
+minAvgSepNegNeg = 6.000000
+minAvgSepNegNeg = 6.500000
+	par[0]: 2.819e-06 & 1.663e-06 & No
+	2.819e-06 $\pm$ 1.663e-06 & 0.000e+00 $\pm$ 1.003e-01 & 0.000e+00 $\pm$ 0.000e+00 & No
+Is Signficant? 0
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = LamK0
+CentralityType = 10-30%
+
+minAvgSepNegNeg = 5.500000
+minAvgSepNegNeg = 6.000000
+	par[0]: 4.436e-05 & 3.075e-05 & No
+	4.436e-05 $\pm$ 3.075e-05 & 5.134e+00 $\pm$ 2.324e+00 & 0.000e+00 $\pm$ 0.000e+00 & No
+Is Signficant? 0
+
+minAvgSepNegNeg = 5.500000
+minAvgSepNegNeg = 6.500000
+	par[0]: 2.515e-05 & 4.750e-05 & No
+	2.515e-05 $\pm$ 4.750e-05 & 6.350e+00 $\pm$ 6.350e+00 & 0.000e+00 $\pm$ 0.000e+00 & No
+Is Signficant? 0
+
+minAvgSepNegNeg = 6.000000
+minAvgSepNegNeg = 6.500000
+	par[0]: 1.334e-04 & 7.990e-05 & No
+	1.334e-04 $\pm$ 7.990e-05 & 1.139e+01 $\pm$ 5.027e+00 & 0.000e+00 $\pm$ 0.000e+00 & No
+Is Signficant? 0
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = LamK0
+CentralityType = 30-50%
+
+minAvgSepNegNeg = 5.500000
+minAvgSepNegNeg = 6.000000
+	par[0]: 5.259e-05 & 2.874e-05 & No
+	5.259e-05 $\pm$ 2.874e-05 & 0.000e+00 $\pm$ 1.017e+01 & 0.000e+00 $\pm$ 0.000e+00 & No
+Is Signficant? 0
+
+minAvgSepNegNeg = 5.500000
+minAvgSepNegNeg = 6.500000
+	par[0]: 8.719e-05 & 5.358e-05 & No
+	8.719e-05 $\pm$ 5.358e-05 & 0.000e+00 $\pm$ 1.069e+01 & 0.000e+00 $\pm$ 0.000e+00 & No
+Is Signficant? 0
+
+minAvgSepNegNeg = 6.000000
+minAvgSepNegNeg = 6.500000
+	par[0]: 1.796e-04 & 7.182e-06 & Yes
+	1.796e-04 $\pm$ 7.182e-06 & 0.000e+00 $\pm$ 4.955e+00 & 0.000e+00 $\pm$ 0.000e+00 & Yes
+Is Signficant? 1
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = ALamK0
+CentralityType = 0-10%
+
+minAvgSepNegNeg = 5.500000
+minAvgSepNegNeg = 6.000000
+	par[0]: 1.028e-03 & 4.906e-04 & Yes
+	1.028e-03 $\pm$ 4.906e-04 & 5.866e+01 $\pm$ 1.437e+01 & 0.000e+00 $\pm$ 0.000e+00 & Yes
+Is Signficant? 1
+
+minAvgSepNegNeg = 5.500000
+minAvgSepNegNeg = 6.500000
+	par[0]: -1.331e-05 & 2.514e-05 & No
+	-1.331e-05 $\pm$ 2.514e-05 & 7.229e+00 $\pm$ 6.039e+00 & 0.000e+00 $\pm$ 0.000e+00 & No
+Is Signficant? 0
+
+minAvgSepNegNeg = 6.000000
+minAvgSepNegNeg = 6.500000
+	par[0]: -6.250e-06 & 8.943e-06 & No
+	-6.250e-06 $\pm$ 8.943e-06 & 2.854e+00 $\pm$ 3.994e+00 & 0.000e+00 $\pm$ 0.000e+00 & No
+Is Signficant? 0
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = ALamK0
+CentralityType = 10-30%
+
+minAvgSepNegNeg = 5.500000
+minAvgSepNegNeg = 6.000000
+	par[0]: 4.487e-04 & 1.349e-04 & Yes
+	4.487e-04 $\pm$ 1.349e-04 & 1.907e+01 $\pm$ 4.013e+00 & 0.000e+00 $\pm$ 0.000e+00 & Yes
+Is Signficant? 1
+
+minAvgSepNegNeg = 5.500000
+minAvgSepNegNeg = 6.500000
+	par[0]: 7.538e-06 & 7.266e-05 & No
+	7.538e-06 $\pm$ 7.266e-05 & 0.000e+00 $\pm$ 2.163e+01 & 0.000e+00 $\pm$ 0.000e+00 & No
+Is Signficant? 0
+
+minAvgSepNegNeg = 6.000000
+minAvgSepNegNeg = 6.500000
+	par[0]: 1.367e-05 & 3.918e-05 & No
+	1.367e-05 $\pm$ 3.918e-05 & 0.000e+00 $\pm$ 1.683e+01 & 0.000e+00 $\pm$ 0.000e+00 & No
+Is Signficant? 0
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = ALamK0
+CentralityType = 30-50%
+
+minAvgSepNegNeg = 5.500000
+minAvgSepNegNeg = 6.000000
+	par[0]: 2.475e-04 & 3.920e-05 & Yes
+	2.475e-04 $\pm$ 3.920e-05 & 2.456e+00 $\pm$ 4.522e-01 & 0.000e+00 $\pm$ 0.000e+00 & Yes
+Is Signficant? 1
+
+minAvgSepNegNeg = 5.500000
+minAvgSepNegNeg = 6.500000
+	par[0]: 1.557e-04 & 8.335e-05 & No
+	1.557e-04 $\pm$ 8.335e-05 & 3.442e+00 $\pm$ 1.623e+00 & 0.000e+00 $\pm$ 0.000e+00 & No
+Is Signficant? 0
+
+minAvgSepNegNeg = 6.000000
+minAvgSepNegNeg = 6.500000
+	par[0]: 1.105e-04 & 3.327e-05 & Yes
+	1.105e-04 $\pm$ 3.327e-05 & 0.000e+00 $\pm$ 8.764e+00 & 0.000e+00 $\pm$ 0.000e+00 & Yes
+Is Signficant? 1
+
+______________________________________________________________________________
+

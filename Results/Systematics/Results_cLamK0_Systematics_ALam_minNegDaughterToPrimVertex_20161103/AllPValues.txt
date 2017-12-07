@@ -1,0 +1,108 @@
+______________________________________________________________________________
+AnalysisType = LamK0
+CentralityType = 0-10%
+
+ALam_minNegDaughterToPrimVertex = 0.050000
+ALam_minNegDaughterToPrimVertex = 0.100000
+p value = 0
+
+ALam_minNegDaughterToPrimVertex = 0.050000
+ALam_minNegDaughterToPrimVertex = 0.200000
+p value = 0
+
+ALam_minNegDaughterToPrimVertex = 0.100000
+ALam_minNegDaughterToPrimVertex = 0.200000
+p value = 0
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = LamK0
+CentralityType = 10-30%
+
+ALam_minNegDaughterToPrimVertex = 0.050000
+ALam_minNegDaughterToPrimVertex = 0.100000
+p value = 0
+
+ALam_minNegDaughterToPrimVertex = 0.050000
+ALam_minNegDaughterToPrimVertex = 0.200000
+p value = 0
+
+ALam_minNegDaughterToPrimVertex = 0.100000
+ALam_minNegDaughterToPrimVertex = 0.200000
+p value = 0
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = LamK0
+CentralityType = 30-50%
+
+ALam_minNegDaughterToPrimVertex = 0.050000
+ALam_minNegDaughterToPrimVertex = 0.100000
+p value = 0
+
+ALam_minNegDaughterToPrimVertex = 0.050000
+ALam_minNegDaughterToPrimVertex = 0.200000
+p value = 0
+
+ALam_minNegDaughterToPrimVertex = 0.100000
+ALam_minNegDaughterToPrimVertex = 0.200000
+p value = 0
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = ALamK0
+CentralityType = 0-10%
+
+ALam_minNegDaughterToPrimVertex = 0.050000
+ALam_minNegDaughterToPrimVertex = 0.100000
+p value = 0
+
+ALam_minNegDaughterToPrimVertex = 0.050000
+ALam_minNegDaughterToPrimVertex = 0.200000
+p value = 0.341746
+
+ALam_minNegDaughterToPrimVertex = 0.100000
+ALam_minNegDaughterToPrimVertex = 0.200000
+p value = 0.341746
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = ALamK0
+CentralityType = 10-30%
+
+ALam_minNegDaughterToPrimVertex = 0.050000
+ALam_minNegDaughterToPrimVertex = 0.100000
+p value = 0
+
+ALam_minNegDaughterToPrimVertex = 0.050000
+ALam_minNegDaughterToPrimVertex = 0.200000
+p value = 0.0857036
+
+ALam_minNegDaughterToPrimVertex = 0.100000
+ALam_minNegDaughterToPrimVertex = 0.200000
+p value = 0.0857036
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = ALamK0
+CentralityType = 30-50%
+
+ALam_minNegDaughterToPrimVertex = 0.050000
+ALam_minNegDaughterToPrimVertex = 0.100000
+p value = 0
+
+ALam_minNegDaughterToPrimVertex = 0.050000
+ALam_minNegDaughterToPrimVertex = 0.200000
+p value = 0.322067
+
+ALam_minNegDaughterToPrimVertex = 0.100000
+ALam_minNegDaughterToPrimVertex = 0.200000
+p value = 0.322067
+
+______________________________________________________________________________
+

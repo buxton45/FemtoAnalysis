@@ -1,0 +1,60 @@
+______________________________________________________________________________
+AnalysisType = LamK0
+CentralityType = 0-10%
+
+K0s_minInvMassReject = 1.112683 and K0s_maxInvMassReject = 1.118683
+K0s_minInvMassReject = 1.110683 and K0s_maxInvMassReject = 1.120683
+p value = 0.526425
+
+K0s_minInvMassReject = 1.112683 and K0s_maxInvMassReject = 1.118683
+K0s_minInvMassReject = 1.106683 and K0s_maxInvMassReject = 1.124683
+p value = 3.18011e-33
+
+K0s_minInvMassReject = 1.112683 and K0s_maxInvMassReject = 1.118683
+K0s_minInvMassReject = 1.100683 and K0s_maxInvMassReject = 1.130683
+p value = 0.434998
+
+K0s_minInvMassReject = 1.110683 and K0s_maxInvMassReject = 1.120683
+K0s_minInvMassReject = 1.106683 and K0s_maxInvMassReject = 1.124683
+p value = 1.63176e-11
+
+K0s_minInvMassReject = 1.110683 and K0s_maxInvMassReject = 1.120683
+K0s_minInvMassReject = 1.100683 and K0s_maxInvMassReject = 1.130683
+p value = 0.0850312
+
+K0s_minInvMassReject = 1.106683 and K0s_maxInvMassReject = 1.124683
+K0s_minInvMassReject = 1.100683 and K0s_maxInvMassReject = 1.130683
+p value = 0.687372
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = ALamK0
+CentralityType = 0-10%
+
+K0s_minInvMassReject = 1.112683 and K0s_maxInvMassReject = 1.118683
+K0s_minInvMassReject = 1.110683 and K0s_maxInvMassReject = 1.120683
+p value = 8.5032e-05
+
+K0s_minInvMassReject = 1.112683 and K0s_maxInvMassReject = 1.118683
+K0s_minInvMassReject = 1.106683 and K0s_maxInvMassReject = 1.124683
+p value = 1.13662e-05
+
+K0s_minInvMassReject = 1.112683 and K0s_maxInvMassReject = 1.118683
+K0s_minInvMassReject = 1.100683 and K0s_maxInvMassReject = 1.130683
+p value = 3.42107e-05
+
+K0s_minInvMassReject = 1.110683 and K0s_maxInvMassReject = 1.120683
+K0s_minInvMassReject = 1.106683 and K0s_maxInvMassReject = 1.124683
+p value = 0.21305
+
+K0s_minInvMassReject = 1.110683 and K0s_maxInvMassReject = 1.120683
+K0s_minInvMassReject = 1.100683 and K0s_maxInvMassReject = 1.130683
+p value = 0.0552837
+
+K0s_minInvMassReject = 1.106683 and K0s_maxInvMassReject = 1.124683
+K0s_minInvMassReject = 1.100683 and K0s_maxInvMassReject = 1.130683
+p value = 2.95259e-09
+
+______________________________________________________________________________
+

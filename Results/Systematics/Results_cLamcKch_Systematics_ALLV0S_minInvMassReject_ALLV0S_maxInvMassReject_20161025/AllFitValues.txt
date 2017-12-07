@@ -1,0 +1,168 @@
+______________________________________________________________________________
+AnalysisType = LamKchP
+CentralityType = 0-10%
+
+ALLV0S_minInvMassReject = 0.494614 and ALLV0S_maxInvMassReject = 0.500614
+ALLV0S_minInvMassReject = 0.492614 and ALLV0S_maxInvMassReject = 0.502614
+	par[0]: 1.058e-04 & 7.208e-05 & No
+	1.058e-04 $\pm$ 7.208e-05 & 6.750e+00 $\pm$ 3.857e+00 & -6.422e-06 $\pm$ 5.201e-06 & No
+Is Signficant? 0
+
+ALLV0S_minInvMassReject = 0.494614 and ALLV0S_maxInvMassReject = 0.500614
+ALLV0S_minInvMassReject = 0.488614 and ALLV0S_maxInvMassReject = 0.506614
+	par[0]: 6.366e-04 & 3.484e-04 & Yes
+	6.366e-04 $\pm$ 3.484e-04 & 1.375e+01 $\pm$ 4.795e+00 & -1.328e-05 $\pm$ 6.605e-06 & Yes
+Is Signficant? 1
+
+ALLV0S_minInvMassReject = 0.494614 and ALLV0S_maxInvMassReject = 0.500614
+ALLV0S_minInvMassReject = 0.482614 and ALLV0S_maxInvMassReject = 0.512614
+	par[0]: 3.006e-04 & 1.429e-04 & Yes
+	3.006e-04 $\pm$ 1.429e-04 & 5.982e+00 $\pm$ 2.791e+00 & -5.729e-05 $\pm$ 1.376e-05 & Yes
+Is Signficant? 1
+
+ALLV0S_minInvMassReject = 0.492614 and ALLV0S_maxInvMassReject = 0.502614
+ALLV0S_minInvMassReject = 0.488614 and ALLV0S_maxInvMassReject = 0.506614
+	par[0]: 7.676e-04 & 3.943e-04 & No
+	7.676e-04 $\pm$ 3.943e-04 & 1.916e+01 $\pm$ 5.624e+00 & -8.692e-06 $\pm$ 4.934e-06 & No
+Is Signficant? 0
+
+ALLV0S_minInvMassReject = 0.492614 and ALLV0S_maxInvMassReject = 0.502614
+ALLV0S_minInvMassReject = 0.482614 and ALLV0S_maxInvMassReject = 0.512614
+	par[0]: 2.197e-04 & 1.445e-04 & Yes
+	2.197e-04 $\pm$ 1.445e-04 & 6.149e+00 $\pm$ 4.028e+00 & -4.980e-05 $\pm$ 1.297e-05 & Yes
+Is Signficant? 1
+
+ALLV0S_minInvMassReject = 0.488614 and ALLV0S_maxInvMassReject = 0.506614
+ALLV0S_minInvMassReject = 0.482614 and ALLV0S_maxInvMassReject = 0.512614
+	par[0]: 9.196e-05 & 7.654e-05 & No
+	9.196e-05 $\pm$ 7.654e-05 & 1.218e+00 $\pm$ 2.406e+00 & -7.581e-05 $\pm$ 9.450e-05 & No
+Is Signficant? 0
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = ALamKchP
+CentralityType = 0-10%
+
+ALLV0S_minInvMassReject = 0.494614 and ALLV0S_maxInvMassReject = 0.500614
+ALLV0S_minInvMassReject = 0.492614 and ALLV0S_maxInvMassReject = 0.502614
+	par[0]: 6.762e-04 & 5.238e-04 & Yes
+	6.762e-04 $\pm$ 5.238e-04 & 2.146e+01 $\pm$ 9.729e+00 & 2.097e-05 $\pm$ 5.408e-06 & Yes
+Is Signficant? 1
+
+ALLV0S_minInvMassReject = 0.494614 and ALLV0S_maxInvMassReject = 0.500614
+ALLV0S_minInvMassReject = 0.488614 and ALLV0S_maxInvMassReject = 0.506614
+	par[0]: 2.434e-04 & 1.478e-04 & No
+	2.434e-04 $\pm$ 1.478e-04 & 4.183e+00 $\pm$ 3.713e+00 & -8.255e-06 $\pm$ 3.063e-05 & No
+Is Signficant? 0
+
+ALLV0S_minInvMassReject = 0.494614 and ALLV0S_maxInvMassReject = 0.500614
+ALLV0S_minInvMassReject = 0.482614 and ALLV0S_maxInvMassReject = 0.512614
+	par[0]: 3.857e-04 & 9.629e-05 & Yes
+	3.857e-04 $\pm$ 9.629e-05 & 2.760e+00 $\pm$ 1.686e+00 & -1.378e-04 $\pm$ 6.011e-05 & Yes
+Is Signficant? 1
+
+ALLV0S_minInvMassReject = 0.492614 and ALLV0S_maxInvMassReject = 0.502614
+ALLV0S_minInvMassReject = 0.488614 and ALLV0S_maxInvMassReject = 0.506614
+	par[0]: 1.619e-04 & 7.137e-05 & Yes
+	1.619e-04 $\pm$ 7.137e-05 & 3.356e+00 $\pm$ 2.634e+00 & -2.889e-05 $\pm$ 2.573e-05 & Yes
+Is Signficant? 1
+
+ALLV0S_minInvMassReject = 0.492614 and ALLV0S_maxInvMassReject = 0.502614
+ALLV0S_minInvMassReject = 0.482614 and ALLV0S_maxInvMassReject = 0.512614
+	par[0]: 3.319e-04 & 8.027e-05 & Yes
+	3.319e-04 $\pm$ 8.027e-05 & 2.634e+00 $\pm$ 1.569e+00 & -1.526e-04 $\pm$ 5.383e-05 & Yes
+Is Signficant? 1
+
+ALLV0S_minInvMassReject = 0.488614 and ALLV0S_maxInvMassReject = 0.506614
+ALLV0S_minInvMassReject = 0.482614 and ALLV0S_maxInvMassReject = 0.512614
+	par[0]: 1.808e-04 & 5.498e-05 & Yes
+	1.808e-04 $\pm$ 5.498e-05 & 2.348e+00 $\pm$ 1.932e+00 & -1.213e-04 $\pm$ 4.611e-05 & Yes
+Is Signficant? 1
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = LamKchM
+CentralityType = 0-10%
+
+ALLV0S_minInvMassReject = 0.494614 and ALLV0S_maxInvMassReject = 0.500614
+ALLV0S_minInvMassReject = 0.492614 and ALLV0S_maxInvMassReject = 0.502614
+	par[0]: 1.106e-03 & 8.937e-04 & No
+	1.106e-03 $\pm$ 8.937e-04 & 3.497e+01 $\pm$ 1.742e+01 & -4.808e-07 $\pm$ 3.663e-06 & No
+Is Signficant? 0
+
+ALLV0S_minInvMassReject = 0.494614 and ALLV0S_maxInvMassReject = 0.500614
+ALLV0S_minInvMassReject = 0.488614 and ALLV0S_maxInvMassReject = 0.506614
+	par[0]: 7.635e-04 & 4.505e-04 & No
+	7.635e-04 $\pm$ 4.505e-04 & 1.715e+01 $\pm$ 6.115e+00 & -1.137e-05 $\pm$ 6.481e-06 & No
+Is Signficant? 0
+
+ALLV0S_minInvMassReject = 0.494614 and ALLV0S_maxInvMassReject = 0.500614
+ALLV0S_minInvMassReject = 0.482614 and ALLV0S_maxInvMassReject = 0.512614
+	par[0]: 8.630e-04 & 5.043e-04 & Yes
+	8.630e-04 $\pm$ 5.043e-04 & 1.336e+01 $\pm$ 5.154e+00 & -7.250e-05 $\pm$ 9.720e-06 & Yes
+Is Signficant? 1
+
+ALLV0S_minInvMassReject = 0.492614 and ALLV0S_maxInvMassReject = 0.502614
+ALLV0S_minInvMassReject = 0.488614 and ALLV0S_maxInvMassReject = 0.506614
+	par[0]: 3.737e-04 & 2.628e-04 & No
+	3.737e-04 $\pm$ 2.628e-04 & 1.486e+01 $\pm$ 6.197e+00 & -1.001e-05 $\pm$ 5.254e-06 & No
+Is Signficant? 0
+
+ALLV0S_minInvMassReject = 0.492614 and ALLV0S_maxInvMassReject = 0.502614
+ALLV0S_minInvMassReject = 0.482614 and ALLV0S_maxInvMassReject = 0.512614
+	par[0]: 5.804e-04 & 3.167e-04 & Yes
+	5.804e-04 $\pm$ 3.167e-04 & 1.203e+01 $\pm$ 4.580e+00 & -7.120e-05 $\pm$ 8.802e-06 & Yes
+Is Signficant? 1
+
+ALLV0S_minInvMassReject = 0.488614 and ALLV0S_maxInvMassReject = 0.506614
+ALLV0S_minInvMassReject = 0.482614 and ALLV0S_maxInvMassReject = 0.512614
+	par[0]: 1.929e-04 & 1.876e-04 & Yes
+	1.929e-04 $\pm$ 1.876e-04 & 7.859e+00 $\pm$ 6.353e+00 & -6.294e-05 $\pm$ 9.003e-06 & Yes
+Is Signficant? 1
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = ALamKchM
+CentralityType = 0-10%
+
+ALLV0S_minInvMassReject = 0.494614 and ALLV0S_maxInvMassReject = 0.500614
+ALLV0S_minInvMassReject = 0.492614 and ALLV0S_maxInvMassReject = 0.502614
+	par[0]: 1.180e-04 & 1.512e-04 & No
+	1.180e-04 $\pm$ 1.512e-04 & 7.190e+00 $\pm$ 7.903e+00 & -1.333e-05 $\pm$ 8.693e-06 & No
+Is Signficant? 0
+
+ALLV0S_minInvMassReject = 0.494614 and ALLV0S_maxInvMassReject = 0.500614
+ALLV0S_minInvMassReject = 0.488614 and ALLV0S_maxInvMassReject = 0.506614
+	par[0]: 4.115e-04 & 2.620e-04 & Yes
+	4.115e-04 $\pm$ 2.620e-04 & 8.262e+00 $\pm$ 4.000e+00 & -3.115e-05 $\pm$ 1.227e-05 & Yes
+Is Signficant? 1
+
+ALLV0S_minInvMassReject = 0.494614 and ALLV0S_maxInvMassReject = 0.500614
+ALLV0S_minInvMassReject = 0.482614 and ALLV0S_maxInvMassReject = 0.512614
+	par[0]: 4.316e-04 & 1.631e-04 & Yes
+	4.316e-04 $\pm$ 1.631e-04 & 4.620e+00 $\pm$ 1.990e+00 & -6.489e-05 $\pm$ 2.676e-05 & Yes
+Is Signficant? 1
+
+ALLV0S_minInvMassReject = 0.492614 and ALLV0S_maxInvMassReject = 0.502614
+ALLV0S_minInvMassReject = 0.488614 and ALLV0S_maxInvMassReject = 0.506614
+	par[0]: 2.996e-04 & 2.246e-04 & No
+	2.996e-04 $\pm$ 2.246e-04 & 8.759e+00 $\pm$ 4.836e+00 & -1.776e-05 $\pm$ 9.529e-06 & No
+Is Signficant? 0
+
+ALLV0S_minInvMassReject = 0.492614 and ALLV0S_maxInvMassReject = 0.502614
+ALLV0S_minInvMassReject = 0.482614 and ALLV0S_maxInvMassReject = 0.512614
+	par[0]: 3.479e-04 & 1.383e-04 & Yes
+	3.479e-04 $\pm$ 1.383e-04 & 4.461e+00 $\pm$ 2.012e+00 & -4.994e-05 $\pm$ 2.403e-05 & Yes
+Is Signficant? 1
+
+ALLV0S_minInvMassReject = 0.488614 and ALLV0S_maxInvMassReject = 0.506614
+ALLV0S_minInvMassReject = 0.482614 and ALLV0S_maxInvMassReject = 0.512614
+	par[0]: 1.722e-04 & 5.885e-05 & Yes
+	1.722e-04 $\pm$ 5.885e-05 & 1.843e+00 $\pm$ 2.469e+00 & -6.302e-05 $\pm$ 8.760e-05 & Yes
+Is Signficant? 1
+
+______________________________________________________________________________
+

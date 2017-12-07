@@ -1,0 +1,288 @@
+______________________________________________________________________________
+AnalysisType = LamKchP
+CentralityType = 0-10%
+
+ALLTRACKS_maxImpactZ = 2.400000
+ALLTRACKS_maxImpactZ = 3.000000
+	par[0]: -4.304e-05 & 4.037e-06 & Yes
+	-4.304e-05 $\pm$ 4.037e-06 & -3.215e-09 $\pm$ 1.316e-03 & 0.000e+00 $\pm$ 0.000e+00 & Yes
+Is Signficant? 1
+
+ALLTRACKS_maxImpactZ = 2.400000
+ALLTRACKS_maxImpactZ = 3.600000
+	par[0]: -3.951e-05 & 4.756e-06 & Yes
+	-3.951e-05 $\pm$ 4.756e-06 & 2.125e-06 $\pm$ 1.988e-03 & 0.000e+00 $\pm$ 0.000e+00 & Yes
+Is Signficant? 1
+
+ALLTRACKS_maxImpactZ = 3.000000
+ALLTRACKS_maxImpactZ = 3.600000
+	par[0]: 3.025e-06 & 2.558e-06 & No
+	3.025e-06 $\pm$ 2.558e-06 & -9.701e-07 $\pm$ 1.054e-01 & 0.000e+00 $\pm$ 0.000e+00 & No
+Is Signficant? 0
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = LamKchP
+CentralityType = 10-30%
+
+ALLTRACKS_maxImpactZ = 2.400000
+ALLTRACKS_maxImpactZ = 3.000000
+	par[0]: -9.769e-05 & 8.744e-06 & Yes
+	-9.769e-05 $\pm$ 8.744e-06 & -6.683e-09 $\pm$ 4.894e-04 & 0.000e+00 $\pm$ 0.000e+00 & Yes
+Is Signficant? 1
+
+ALLTRACKS_maxImpactZ = 2.400000
+ALLTRACKS_maxImpactZ = 3.600000
+	par[0]: -1.014e-04 & 1.039e-05 & Yes
+	-1.014e-04 $\pm$ 1.039e-05 & 3.377e-08 $\pm$ 5.492e-04 & 0.000e+00 $\pm$ 0.000e+00 & Yes
+Is Signficant? 1
+
+ALLTRACKS_maxImpactZ = 3.000000
+ALLTRACKS_maxImpactZ = 3.600000
+	par[0]: -2.104e-03 & 2.387e-03 & No
+	-2.104e-03 $\pm$ 2.387e-03 & 6.787e+01 $\pm$ 5.059e+01 & 0.000e+00 $\pm$ 0.000e+00 & No
+Is Signficant? 0
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = LamKchP
+CentralityType = 30-50%
+
+ALLTRACKS_maxImpactZ = 2.400000
+ALLTRACKS_maxImpactZ = 3.000000
+	par[0]: -1.896e-04 & 2.128e-05 & Yes
+	-1.896e-04 $\pm$ 2.128e-05 & 7.309e-10 $\pm$ 4.700e-04 & 0.000e+00 $\pm$ 0.000e+00 & Yes
+Is Signficant? 1
+
+ALLTRACKS_maxImpactZ = 2.400000
+ALLTRACKS_maxImpactZ = 3.600000
+	par[0]: -1.936e-04 & 2.540e-05 & Yes
+	-1.936e-04 $\pm$ 2.540e-05 & 4.078e-09 $\pm$ 4.339e-04 & 0.000e+00 $\pm$ 0.000e+00 & Yes
+Is Signficant? 1
+
+ALLTRACKS_maxImpactZ = 3.000000
+ALLTRACKS_maxImpactZ = 3.600000
+	par[0]: -1.565e-05 & 1.383e-05 & No
+	-1.565e-05 $\pm$ 1.383e-05 & -2.169e-08 $\pm$ 6.055e-03 & 0.000e+00 $\pm$ 0.000e+00 & No
+Is Signficant? 0
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = ALamKchP
+CentralityType = 0-10%
+
+ALLTRACKS_maxImpactZ = 2.400000
+ALLTRACKS_maxImpactZ = 3.000000
+	par[0]: -4.066e-05 & 4.100e-06 & Yes
+	-4.066e-05 $\pm$ 4.100e-06 & -2.588e-08 $\pm$ 7.645e-04 & 0.000e+00 $\pm$ 0.000e+00 & Yes
+Is Signficant? 1
+
+ALLTRACKS_maxImpactZ = 2.400000
+ALLTRACKS_maxImpactZ = 3.600000
+	par[0]: -3.554e-05 & 4.850e-06 & Yes
+	-3.554e-05 $\pm$ 4.850e-06 & -9.647e-09 $\pm$ 9.202e-04 & 0.000e+00 $\pm$ 0.000e+00 & Yes
+Is Signficant? 1
+
+ALLTRACKS_maxImpactZ = 3.000000
+ALLTRACKS_maxImpactZ = 3.600000
+	par[0]: 6.792e-06 & 8.385e-06 & No
+	6.792e-06 $\pm$ 8.385e-06 & 5.458e-01 $\pm$ 1.781e+00 & 0.000e+00 $\pm$ 0.000e+00 & No
+Is Signficant? 0
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = ALamKchP
+CentralityType = 10-30%
+
+ALLTRACKS_maxImpactZ = 2.400000
+ALLTRACKS_maxImpactZ = 3.000000
+	par[0]: -5.040e-05 & 8.944e-06 & Yes
+	-5.040e-05 $\pm$ 8.944e-06 & 6.382e-09 $\pm$ 7.829e-04 & 0.000e+00 $\pm$ 0.000e+00 & Yes
+Is Signficant? 1
+
+ALLTRACKS_maxImpactZ = 2.400000
+ALLTRACKS_maxImpactZ = 3.600000
+	par[0]: -8.368e-05 & 1.059e-05 & Yes
+	-8.368e-05 $\pm$ 1.059e-05 & -3.848e-08 $\pm$ 4.240e-04 & 0.000e+00 $\pm$ 0.000e+00 & Yes
+Is Signficant? 1
+
+ALLTRACKS_maxImpactZ = 3.000000
+ALLTRACKS_maxImpactZ = 3.600000
+	par[0]: -3.834e-05 & 5.648e-06 & Yes
+	-3.834e-05 $\pm$ 5.648e-06 & 6.138e-09 $\pm$ 1.496e-03 & 0.000e+00 $\pm$ 0.000e+00 & Yes
+Is Signficant? 1
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = ALamKchP
+CentralityType = 30-50%
+
+ALLTRACKS_maxImpactZ = 2.400000
+ALLTRACKS_maxImpactZ = 3.000000
+	par[0]: -4.227e-04 & 2.098e-05 & Yes
+	-4.227e-04 $\pm$ 2.098e-05 & -1.212e-09 $\pm$ 1.756e-04 & 0.000e+00 $\pm$ 0.000e+00 & Yes
+Is Signficant? 1
+
+ALLTRACKS_maxImpactZ = 2.400000
+ALLTRACKS_maxImpactZ = 3.600000
+	par[0]: -4.571e-04 & 2.523e-05 & Yes
+	-4.571e-04 $\pm$ 2.523e-05 & -4.884e-10 $\pm$ 1.493e-04 & 0.000e+00 $\pm$ 0.000e+00 & Yes
+Is Signficant? 1
+
+ALLTRACKS_maxImpactZ = 3.000000
+ALLTRACKS_maxImpactZ = 3.600000
+	par[0]: -4.718e-05 & 1.396e-05 & Yes
+	-4.718e-05 $\pm$ 1.396e-05 & 1.146e-08 $\pm$ 1.391e-03 & 0.000e+00 $\pm$ 0.000e+00 & Yes
+Is Signficant? 1
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = LamKchM
+CentralityType = 0-10%
+
+ALLTRACKS_maxImpactZ = 2.400000
+ALLTRACKS_maxImpactZ = 3.000000
+	par[0]: -3.656e-05 & 4.200e-06 & Yes
+	-3.656e-05 $\pm$ 4.200e-06 & 1.378e-07 $\pm$ 8.857e-04 & 0.000e+00 $\pm$ 0.000e+00 & Yes
+Is Signficant? 1
+
+ALLTRACKS_maxImpactZ = 2.400000
+ALLTRACKS_maxImpactZ = 3.600000
+	par[0]: -4.653e-05 & 4.955e-06 & Yes
+	-4.653e-05 $\pm$ 4.955e-06 & -2.801e-08 $\pm$ 6.846e-04 & 0.000e+00 $\pm$ 0.000e+00 & Yes
+Is Signficant? 1
+
+ALLTRACKS_maxImpactZ = 3.000000
+ALLTRACKS_maxImpactZ = 3.600000
+	par[0]: -1.062e-05 & 2.626e-06 & Yes
+	-1.062e-05 $\pm$ 2.626e-06 & -2.872e-08 $\pm$ 2.229e-03 & 0.000e+00 $\pm$ 0.000e+00 & Yes
+Is Signficant? 1
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = LamKchM
+CentralityType = 10-30%
+
+ALLTRACKS_maxImpactZ = 2.400000
+ALLTRACKS_maxImpactZ = 3.000000
+	par[0]: -1.242e-04 & 9.069e-06 & Yes
+	-1.242e-04 $\pm$ 9.069e-06 & -1.988e-10 $\pm$ 2.327e-04 & 0.000e+00 $\pm$ 0.000e+00 & Yes
+Is Signficant? 1
+
+ALLTRACKS_maxImpactZ = 2.400000
+ALLTRACKS_maxImpactZ = 3.600000
+	par[0]: -1.418e-04 & 1.077e-05 & Yes
+	-1.418e-04 $\pm$ 1.077e-05 & -1.467e-08 $\pm$ 2.533e-04 & 0.000e+00 $\pm$ 0.000e+00 & Yes
+Is Signficant? 1
+
+ALLTRACKS_maxImpactZ = 3.000000
+ALLTRACKS_maxImpactZ = 3.600000
+	par[0]: 4.013e-05 & 6.940e-05 & No
+	4.013e-05 $\pm$ 6.940e-05 & 7.317e+00 $\pm$ 5.228e+00 & 0.000e+00 $\pm$ 0.000e+00 & No
+Is Signficant? 0
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = LamKchM
+CentralityType = 30-50%
+
+ALLTRACKS_maxImpactZ = 2.400000
+ALLTRACKS_maxImpactZ = 3.000000
+	par[0]: 4.400e-04 & 2.859e-04 & No
+	4.400e-04 $\pm$ 2.859e-04 & 6.145e+00 $\pm$ 2.305e+00 & 0.000e+00 $\pm$ 0.000e+00 & No
+Is Signficant? 0
+
+ALLTRACKS_maxImpactZ = 2.400000
+ALLTRACKS_maxImpactZ = 3.600000
+	par[0]: 2.243e-04 & 2.731e-04 & No
+	2.243e-04 $\pm$ 2.731e-04 & 5.956e+00 $\pm$ 2.770e+00 & 0.000e+00 $\pm$ 0.000e+00 & No
+Is Signficant? 0
+
+ALLTRACKS_maxImpactZ = 3.000000
+ALLTRACKS_maxImpactZ = 3.600000
+	par[0]: -6.559e-05 & 1.420e-05 & Yes
+	-6.559e-05 $\pm$ 1.420e-05 & 3.056e-09 $\pm$ 3.002e-03 & 0.000e+00 $\pm$ 0.000e+00 & Yes
+Is Signficant? 1
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = ALamKchM
+CentralityType = 0-10%
+
+ALLTRACKS_maxImpactZ = 2.400000
+ALLTRACKS_maxImpactZ = 3.000000
+	par[0]: -4.376e-05 & 4.259e-06 & Yes
+	-4.376e-05 $\pm$ 4.259e-06 & 2.380e-09 $\pm$ 1.115e-03 & 0.000e+00 $\pm$ 0.000e+00 & Yes
+Is Signficant? 1
+
+ALLTRACKS_maxImpactZ = 2.400000
+ALLTRACKS_maxImpactZ = 3.600000
+	par[0]: -3.958e-05 & 5.032e-06 & Yes
+	-3.958e-05 $\pm$ 5.032e-06 & 8.175e-09 $\pm$ 1.161e-03 & 0.000e+00 $\pm$ 0.000e+00 & Yes
+Is Signficant? 1
+
+ALLTRACKS_maxImpactZ = 3.000000
+ALLTRACKS_maxImpactZ = 3.600000
+	par[0]: 1.207e-05 & 1.310e-05 & No
+	1.207e-05 $\pm$ 1.310e-05 & 1.826e+00 $\pm$ 2.026e+00 & 0.000e+00 $\pm$ 0.000e+00 & No
+Is Signficant? 0
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = ALamKchM
+CentralityType = 10-30%
+
+ALLTRACKS_maxImpactZ = 2.400000
+ALLTRACKS_maxImpactZ = 3.000000
+	par[0]: -3.545e-05 & 9.334e-06 & Yes
+	-3.545e-05 $\pm$ 9.334e-06 & -1.539e-08 $\pm$ 2.398e-03 & 0.000e+00 $\pm$ 0.000e+00 & Yes
+Is Signficant? 1
+
+ALLTRACKS_maxImpactZ = 2.400000
+ALLTRACKS_maxImpactZ = 3.600000
+	par[0]: -4.385e-05 & 1.106e-05 & Yes
+	-4.385e-05 $\pm$ 1.106e-05 & -1.730e-08 $\pm$ 1.324e-03 & 0.000e+00 $\pm$ 0.000e+00 & Yes
+Is Signficant? 1
+
+ALLTRACKS_maxImpactZ = 3.000000
+ALLTRACKS_maxImpactZ = 3.600000
+	par[0]: 6.102e-05 & 6.656e-05 & No
+	6.102e-05 $\pm$ 6.656e-05 & 6.143e+00 $\pm$ 3.410e+00 & 0.000e+00 $\pm$ 0.000e+00 & No
+Is Signficant? 0
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = ALamKchM
+CentralityType = 30-50%
+
+ALLTRACKS_maxImpactZ = 2.400000
+ALLTRACKS_maxImpactZ = 3.000000
+	par[0]: -2.987e-04 & 2.231e-05 & Yes
+	-2.987e-04 $\pm$ 2.231e-05 & -7.454e-09 $\pm$ 3.066e-04 & 0.000e+00 $\pm$ 0.000e+00 & Yes
+Is Signficant? 1
+
+ALLTRACKS_maxImpactZ = 2.400000
+ALLTRACKS_maxImpactZ = 3.600000
+	par[0]: -3.227e-04 & 2.664e-05 & Yes
+	-3.227e-04 $\pm$ 2.664e-05 & 2.084e-09 $\pm$ 3.487e-04 & 0.000e+00 $\pm$ 0.000e+00 & Yes
+Is Signficant? 1
+
+ALLTRACKS_maxImpactZ = 3.000000
+ALLTRACKS_maxImpactZ = 3.600000
+	par[0]: -3.512e-05 & 1.451e-05 & Yes
+	-3.512e-05 $\pm$ 1.451e-05 & -1.859e-07 $\pm$ 4.041e-03 & 0.000e+00 $\pm$ 0.000e+00 & Yes
+Is Signficant? 1
+
+______________________________________________________________________________
+

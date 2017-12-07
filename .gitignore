@@ -1,5 +1,9 @@
 ##Files to be ignored by Git
 
+##Subdirectories can have their own .gitignore files!
+##Currently, other .gitignore files in:
+##  Results
+
 *~
 *.o
 *.so

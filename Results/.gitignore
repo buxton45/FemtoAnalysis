@@ -1,0 +1,7 @@
+##Files to be ignored by Git
+
+!*.txt
+
+PreTrain/*
+OldResults/*
+NEW3AS/*

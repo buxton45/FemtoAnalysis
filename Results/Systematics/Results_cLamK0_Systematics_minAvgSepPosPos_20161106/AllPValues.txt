@@ -1,0 +1,108 @@
+______________________________________________________________________________
+AnalysisType = LamK0
+CentralityType = 0-10%
+
+minAvgSepPosPos = 5.000000
+minAvgSepPosPos = 6.000000
+p value = 0
+
+minAvgSepPosPos = 5.000000
+minAvgSepPosPos = 7.000000
+p value = 0
+
+minAvgSepPosPos = 6.000000
+minAvgSepPosPos = 7.000000
+p value = 6.67751e-276
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = LamK0
+CentralityType = 10-30%
+
+minAvgSepPosPos = 5.000000
+minAvgSepPosPos = 6.000000
+p value = 1.53482e-64
+
+minAvgSepPosPos = 5.000000
+minAvgSepPosPos = 7.000000
+p value = 0.000100801
+
+minAvgSepPosPos = 6.000000
+minAvgSepPosPos = 7.000000
+p value = 2.04655e-10
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = LamK0
+CentralityType = 30-50%
+
+minAvgSepPosPos = 5.000000
+minAvgSepPosPos = 6.000000
+p value = 5.93768e-22
+
+minAvgSepPosPos = 5.000000
+minAvgSepPosPos = 7.000000
+p value = 1.53884e-33
+
+minAvgSepPosPos = 6.000000
+minAvgSepPosPos = 7.000000
+p value = 9.5642e-29
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = ALamK0
+CentralityType = 0-10%
+
+minAvgSepPosPos = 5.000000
+minAvgSepPosPos = 6.000000
+p value = 0
+
+minAvgSepPosPos = 5.000000
+minAvgSepPosPos = 7.000000
+p value = 9.73044e-58
+
+minAvgSepPosPos = 6.000000
+minAvgSepPosPos = 7.000000
+p value = 4.30823e-17
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = ALamK0
+CentralityType = 10-30%
+
+minAvgSepPosPos = 5.000000
+minAvgSepPosPos = 6.000000
+p value = 0
+
+minAvgSepPosPos = 5.000000
+minAvgSepPosPos = 7.000000
+p value = 1.89584e-30
+
+minAvgSepPosPos = 6.000000
+minAvgSepPosPos = 7.000000
+p value = 8.04825e-62
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = ALamK0
+CentralityType = 30-50%
+
+minAvgSepPosPos = 5.000000
+minAvgSepPosPos = 6.000000
+p value = 9.26021e-112
+
+minAvgSepPosPos = 5.000000
+minAvgSepPosPos = 7.000000
+p value = 3.78806e-33
+
+minAvgSepPosPos = 6.000000
+minAvgSepPosPos = 7.000000
+p value = 0.114466
+
+______________________________________________________________________________
+

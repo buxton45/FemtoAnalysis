@@ -1,0 +1,144 @@
+______________________________________________________________________________
+AnalysisType = LamK0
+CentralityType = 0-10%
+
+ALam_minPosDaughterToPrimVertex = 0.200000
+ALam_minPosDaughterToPrimVertex = 0.300000
+	par[0]: 0.000e+00 & 0.000e+00 & No
+	0.000e+00 $\pm$ 0.000e+00 & 0.000e+00 $\pm$ 0.000e+00 & 0.000e+00 $\pm$ 0.000e+00 & No
+Is Signficant? 0
+
+ALam_minPosDaughterToPrimVertex = 0.200000
+ALam_minPosDaughterToPrimVertex = 0.400000
+	par[0]: 0.000e+00 & 0.000e+00 & No
+	0.000e+00 $\pm$ 0.000e+00 & 0.000e+00 $\pm$ 0.000e+00 & 0.000e+00 $\pm$ 0.000e+00 & No
+Is Signficant? 0
+
+ALam_minPosDaughterToPrimVertex = 0.300000
+ALam_minPosDaughterToPrimVertex = 0.400000
+	par[0]: 0.000e+00 & 0.000e+00 & No
+	0.000e+00 $\pm$ 0.000e+00 & 0.000e+00 $\pm$ 0.000e+00 & 0.000e+00 $\pm$ 0.000e+00 & No
+Is Signficant? 0
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = LamK0
+CentralityType = 10-30%
+
+ALam_minPosDaughterToPrimVertex = 0.200000
+ALam_minPosDaughterToPrimVertex = 0.300000
+	par[0]: 0.000e+00 & 0.000e+00 & No
+	0.000e+00 $\pm$ 0.000e+00 & 0.000e+00 $\pm$ 0.000e+00 & 0.000e+00 $\pm$ 0.000e+00 & No
+Is Signficant? 0
+
+ALam_minPosDaughterToPrimVertex = 0.200000
+ALam_minPosDaughterToPrimVertex = 0.400000
+	par[0]: 0.000e+00 & 0.000e+00 & No
+	0.000e+00 $\pm$ 0.000e+00 & 0.000e+00 $\pm$ 0.000e+00 & 0.000e+00 $\pm$ 0.000e+00 & No
+Is Signficant? 0
+
+ALam_minPosDaughterToPrimVertex = 0.300000
+ALam_minPosDaughterToPrimVertex = 0.400000
+	par[0]: 0.000e+00 & 0.000e+00 & No
+	0.000e+00 $\pm$ 0.000e+00 & 0.000e+00 $\pm$ 0.000e+00 & 0.000e+00 $\pm$ 0.000e+00 & No
+Is Signficant? 0
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = LamK0
+CentralityType = 30-50%
+
+ALam_minPosDaughterToPrimVertex = 0.200000
+ALam_minPosDaughterToPrimVertex = 0.300000
+	par[0]: 0.000e+00 & 0.000e+00 & No
+	0.000e+00 $\pm$ 0.000e+00 & 0.000e+00 $\pm$ 0.000e+00 & 0.000e+00 $\pm$ 0.000e+00 & No
+Is Signficant? 0
+
+ALam_minPosDaughterToPrimVertex = 0.200000
+ALam_minPosDaughterToPrimVertex = 0.400000
+	par[0]: 0.000e+00 & 0.000e+00 & No
+	0.000e+00 $\pm$ 0.000e+00 & 0.000e+00 $\pm$ 0.000e+00 & 0.000e+00 $\pm$ 0.000e+00 & No
+Is Signficant? 0
+
+ALam_minPosDaughterToPrimVertex = 0.300000
+ALam_minPosDaughterToPrimVertex = 0.400000
+	par[0]: 0.000e+00 & 0.000e+00 & No
+	0.000e+00 $\pm$ 0.000e+00 & 0.000e+00 $\pm$ 0.000e+00 & 0.000e+00 $\pm$ 0.000e+00 & No
+Is Signficant? 0
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = ALamK0
+CentralityType = 0-10%
+
+ALam_minPosDaughterToPrimVertex = 0.200000
+ALam_minPosDaughterToPrimVertex = 0.300000
+	par[0]: 7.057e-05 & 9.930e-06 & Yes
+	7.057e-05 $\pm$ 9.930e-06 & -1.486e-08 $\pm$ 1.922e-03 & 0.000e+00 $\pm$ 0.000e+00 & Yes
+Is Signficant? 1
+
+ALam_minPosDaughterToPrimVertex = 0.200000
+ALam_minPosDaughterToPrimVertex = 0.400000
+	par[0]: 5.676e-05 & 1.584e-05 & Yes
+	5.676e-05 $\pm$ 1.584e-05 & -8.240e-07 $\pm$ 3.075e-03 & 0.000e+00 $\pm$ 0.000e+00 & Yes
+Is Signficant? 1
+
+ALam_minPosDaughterToPrimVertex = 0.300000
+ALam_minPosDaughterToPrimVertex = 0.400000
+	par[0]: -6.916e-05 & 8.861e-05 & No
+	-6.916e-05 $\pm$ 8.861e-05 & 2.937e+00 $\pm$ 3.139e+00 & 0.000e+00 $\pm$ 0.000e+00 & No
+Is Signficant? 0
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = ALamK0
+CentralityType = 10-30%
+
+ALam_minPosDaughterToPrimVertex = 0.200000
+ALam_minPosDaughterToPrimVertex = 0.300000
+	par[0]: 7.893e-05 & 2.044e-05 & Yes
+	7.893e-05 $\pm$ 2.044e-05 & -3.715e-08 $\pm$ 5.966e-03 & 0.000e+00 $\pm$ 0.000e+00 & Yes
+Is Signficant? 1
+
+ALam_minPosDaughterToPrimVertex = 0.200000
+ALam_minPosDaughterToPrimVertex = 0.400000
+	par[0]: -1.364e-04 & 2.058e-04 & No
+	-1.364e-04 $\pm$ 2.058e-04 & 2.890e+00 $\pm$ 3.401e+00 & 0.000e+00 $\pm$ 0.000e+00 & No
+Is Signficant? 0
+
+ALam_minPosDaughterToPrimVertex = 0.300000
+ALam_minPosDaughterToPrimVertex = 0.400000
+	par[0]: -1.626e-04 & 1.068e-04 & No
+	-1.626e-04 $\pm$ 1.068e-04 & 9.230e-01 $\pm$ 1.117e+00 & 0.000e+00 $\pm$ 0.000e+00 & No
+Is Signficant? 0
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = ALamK0
+CentralityType = 30-50%
+
+ALam_minPosDaughterToPrimVertex = 0.200000
+ALam_minPosDaughterToPrimVertex = 0.300000
+	par[0]: 2.229e-04 & 4.893e-05 & Yes
+	2.229e-04 $\pm$ 4.893e-05 & 1.538e-08 $\pm$ 5.320e-03 & 0.000e+00 $\pm$ 0.000e+00 & Yes
+Is Signficant? 1
+
+ALam_minPosDaughterToPrimVertex = 0.200000
+ALam_minPosDaughterToPrimVertex = 0.400000
+	par[0]: -8.797e-06 & 4.806e-04 & No
+	-8.797e-06 $\pm$ 4.806e-04 & 4.082e+00 $\pm$ 1.910e+01 & 0.000e+00 $\pm$ 0.000e+00 & No
+Is Signficant? 0
+
+ALam_minPosDaughterToPrimVertex = 0.300000
+ALam_minPosDaughterToPrimVertex = 0.400000
+	par[0]: -2.199e-04 & 2.354e-04 & No
+	-2.199e-04 $\pm$ 2.354e-04 & 1.686e+00 $\pm$ 1.717e+00 & 0.000e+00 $\pm$ 0.000e+00 & No
+Is Signficant? 0
+
+______________________________________________________________________________
+

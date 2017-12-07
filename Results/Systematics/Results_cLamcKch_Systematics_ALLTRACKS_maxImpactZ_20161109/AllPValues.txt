@@ -1,0 +1,216 @@
+______________________________________________________________________________
+AnalysisType = LamKchP
+CentralityType = 0-10%
+
+ALLTRACKS_maxImpactZ = 2.400000
+ALLTRACKS_maxImpactZ = 3.000000
+p value = 1.16553e-08
+
+ALLTRACKS_maxImpactZ = 2.400000
+ALLTRACKS_maxImpactZ = 3.600000
+p value = 6.13274e-05
+
+ALLTRACKS_maxImpactZ = 3.000000
+ALLTRACKS_maxImpactZ = 3.600000
+p value = 0.0784913
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = LamKchP
+CentralityType = 10-30%
+
+ALLTRACKS_maxImpactZ = 2.400000
+ALLTRACKS_maxImpactZ = 3.000000
+p value = 6.40892e-13
+
+ALLTRACKS_maxImpactZ = 2.400000
+ALLTRACKS_maxImpactZ = 3.600000
+p value = 4.12612e-09
+
+ALLTRACKS_maxImpactZ = 3.000000
+ALLTRACKS_maxImpactZ = 3.600000
+p value = 0.262373
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = LamKchP
+CentralityType = 30-50%
+
+ALLTRACKS_maxImpactZ = 2.400000
+ALLTRACKS_maxImpactZ = 3.000000
+p value = 0.000155645
+
+ALLTRACKS_maxImpactZ = 2.400000
+ALLTRACKS_maxImpactZ = 3.600000
+p value = 0.000722597
+
+ALLTRACKS_maxImpactZ = 3.000000
+ALLTRACKS_maxImpactZ = 3.600000
+p value = 0.192753
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = ALamKchP
+CentralityType = 0-10%
+
+ALLTRACKS_maxImpactZ = 2.400000
+ALLTRACKS_maxImpactZ = 3.000000
+p value = 2.24456e-08
+
+ALLTRACKS_maxImpactZ = 2.400000
+ALLTRACKS_maxImpactZ = 3.600000
+p value = 0.00283165
+
+ALLTRACKS_maxImpactZ = 3.000000
+ALLTRACKS_maxImpactZ = 3.600000
+p value = 0.893344
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = ALamKchP
+CentralityType = 10-30%
+
+ALLTRACKS_maxImpactZ = 2.400000
+ALLTRACKS_maxImpactZ = 3.000000
+p value = 3.40435e-05
+
+ALLTRACKS_maxImpactZ = 2.400000
+ALLTRACKS_maxImpactZ = 3.600000
+p value = 3.33843e-06
+
+ALLTRACKS_maxImpactZ = 3.000000
+ALLTRACKS_maxImpactZ = 3.600000
+p value = 3.70956e-14
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = ALamKchP
+CentralityType = 30-50%
+
+ALLTRACKS_maxImpactZ = 2.400000
+ALLTRACKS_maxImpactZ = 3.000000
+p value = 4.72197e-49
+
+ALLTRACKS_maxImpactZ = 2.400000
+ALLTRACKS_maxImpactZ = 3.600000
+p value = 2.7601e-38
+
+ALLTRACKS_maxImpactZ = 3.000000
+ALLTRACKS_maxImpactZ = 3.600000
+p value = 0.0492288
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = LamKchM
+CentralityType = 0-10%
+
+ALLTRACKS_maxImpactZ = 2.400000
+ALLTRACKS_maxImpactZ = 3.000000
+p value = 0.000104098
+
+ALLTRACKS_maxImpactZ = 2.400000
+ALLTRACKS_maxImpactZ = 3.600000
+p value = 3.13109e-06
+
+ALLTRACKS_maxImpactZ = 3.000000
+ALLTRACKS_maxImpactZ = 3.600000
+p value = 0.0331625
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = LamKchM
+CentralityType = 10-30%
+
+ALLTRACKS_maxImpactZ = 2.400000
+ALLTRACKS_maxImpactZ = 3.000000
+p value = 1.14038e-20
+
+ALLTRACKS_maxImpactZ = 2.400000
+ALLTRACKS_maxImpactZ = 3.600000
+p value = 1.13739e-18
+
+ALLTRACKS_maxImpactZ = 3.000000
+ALLTRACKS_maxImpactZ = 3.600000
+p value = 0.160591
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = LamKchM
+CentralityType = 30-50%
+
+ALLTRACKS_maxImpactZ = 2.400000
+ALLTRACKS_maxImpactZ = 3.000000
+p value = 0.265794
+
+ALLTRACKS_maxImpactZ = 2.400000
+ALLTRACKS_maxImpactZ = 3.600000
+p value = 0.0102906
+
+ALLTRACKS_maxImpactZ = 3.000000
+ALLTRACKS_maxImpactZ = 3.600000
+p value = 0.0330291
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = ALamKchM
+CentralityType = 0-10%
+
+ALLTRACKS_maxImpactZ = 2.400000
+ALLTRACKS_maxImpactZ = 3.000000
+p value = 3.16924e-12
+
+ALLTRACKS_maxImpactZ = 2.400000
+ALLTRACKS_maxImpactZ = 3.600000
+p value = 0.00010735
+
+ALLTRACKS_maxImpactZ = 3.000000
+ALLTRACKS_maxImpactZ = 3.600000
+p value = 0.562877
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = ALamKchM
+CentralityType = 10-30%
+
+ALLTRACKS_maxImpactZ = 2.400000
+ALLTRACKS_maxImpactZ = 3.000000
+p value = 0.895842
+
+ALLTRACKS_maxImpactZ = 2.400000
+ALLTRACKS_maxImpactZ = 3.600000
+p value = 0.593031
+
+ALLTRACKS_maxImpactZ = 3.000000
+ALLTRACKS_maxImpactZ = 3.600000
+p value = 0.310014
+
+______________________________________________________________________________
+
+______________________________________________________________________________
+AnalysisType = ALamKchM
+CentralityType = 30-50%
+
+ALLTRACKS_maxImpactZ = 2.400000
+ALLTRACKS_maxImpactZ = 3.000000
+p value = 7.63388e-16
+
+ALLTRACKS_maxImpactZ = 2.400000
+ALLTRACKS_maxImpactZ = 3.600000
+p value = 1.58873e-13
+
+ALLTRACKS_maxImpactZ = 3.000000
+ALLTRACKS_maxImpactZ = 3.600000
+p value = 0.380975
+
+______________________________________________________________________________
+
