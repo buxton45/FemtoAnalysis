@@ -367,7 +367,7 @@ kXiCKSt0=40, kAXiCAKSt0=41, kXiCAKSt0=42, kAXiCKSt0=43
 
   //-----
 
-  extern const double **cStartValues[10];  // = fStartValues[6][3][6]
+  extern const double **cStartValues[10];  // = fStartValues[10][3][6]
                                           //first index = AnalysisType
                                           //second index = CentralityType
                                           //third index = Parameter value
@@ -429,7 +429,7 @@ kXiCKSt0=40, kAXiCAKSt0=41, kXiCAKSt0=42, kAXiCKSt0=43
 
   //-----
 
-  extern const double **cSysErrors[10];  // = fSysErrors[6][3][6]
+  extern const double **cSysErrors[10];  // = fSysErrors[10][3][6]
                                           //first index = AnalysisType
                                           //second index = CentralityType
                                           //third index = Parameter value

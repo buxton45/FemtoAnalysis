@@ -10,7 +10,7 @@ int main(int argc, char **argv)
 
   bool bPlayCompletionBeep = true;
 //-----------------------------------------------------------------------------
-  AnalysisType tAnType = kLamKchM;
+  AnalysisType tAnType = kLamKchP;
   CentralityType tCentralityType = kMB;
   FitGeneratorType tFitGeneratorType = kPairwConj;
   bool tShareLambdaParameters = false;
@@ -38,22 +38,6 @@ int main(int argc, char **argv)
   TString tFileLocationBase = tDirectoryBase + TString::Format("Results_%s_%s",tGeneralAnTypeName.Data(),tResultsDate.Data());
   TString tFileLocationBaseMC = tDirectoryBase + TString::Format("Results_%sMC_%s",tGeneralAnTypeName.Data(),tResultsDate.Data());
 
-  TString tOutputFileName = tDirectoryBase + TString("CfFitValues_VaryNonFlatBgdFitType_") + TString(cAnalysisBaseTags[tAnType]) + TString(cCentralityTags[tCentralityType]);
-  if(ApplyMomResCorrection) tOutputFileName += TString("_MomResCrctn");
-  if(ApplyNonFlatBackgroundCorrection) tOutputFileName += TString("_NonFlatBgdCrctn");
-
-  tOutputFileName += cIncludeResidualsTypeTags[tIncludeResidualsType];
-  if(tIncludeResidualsType != kIncludeNoResiduals)
-  {
-    tOutputFileName += cResPrimMaxDecayTypeTags[tResPrimMaxDecayType];
-    tOutputFileName += cChargedResidualsTypeTags[tChargedResidualsType];
-  }
-
-  tOutputFileName += TString(".txt");
-  std::ofstream tOutputFile;
-  if(bWriteToFile) tOutputFile.open(tOutputFileName);
-
-
   FitSystematicAnalysis* tFitSysAn = new FitSystematicAnalysis(tFileLocationBase, tFileLocationBaseMC, tAnType, tCentralityType, tFitGeneratorType, tShareLambdaParameters, tAllShareSingleLambdaParam);
   tFitSysAn->SetSaveDirectory(tDirectoryBase);
   tFitSysAn->SetApplyNonFlatBackgroundCorrection(ApplyNonFlatBackgroundCorrection);
@@ -64,9 +48,7 @@ int main(int argc, char **argv)
   tFitSysAn->SetChargedResidualsType(tChargedResidualsType);
   tFitSysAn->SetResPrimMaxDecayType(tResPrimMaxDecayType);
 
-  if(bWriteToFile) tFitSysAn->RunVaryNonFlatBackgroundFit(bSaveImages,tOutputFile);
-  else tFitSysAn->RunVaryNonFlatBackgroundFit(bSaveImages);
-
+  tFitSysAn->RunVaryNonFlatBackgroundFit(bSaveImages, bWriteToFile);
 
 cout << "DONE" << endl;
 if(bPlayCompletionBeep) system("( speaker-test -t sine -f 1000 )& pid=$! ; sleep 0.5s ; kill -9 $pid");

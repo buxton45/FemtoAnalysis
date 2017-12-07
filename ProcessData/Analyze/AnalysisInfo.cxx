@@ -21,7 +21,7 @@ AnalysisInfo::AnalysisInfo() :
   fCoulombType(kNeutral),
   fBohrRadius(1000000000)
 {
-  AnalysisInfo(fAnalysisType);
+  *this = AnalysisInfo(fAnalysisType);
 }
 
 

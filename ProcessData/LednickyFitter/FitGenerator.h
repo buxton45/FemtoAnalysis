@@ -64,6 +64,7 @@ public:
   void SetRadiusStartValues(const vector<double> &aStartValues);
   void SetRadiusLimits(double aMin, double aMax, int aIndex=0);  //set for particular R parameter
   void SetRadiusLimits(const td2dVec &aMinMax2dVec);  //set unique values for each R parameter
+  void SetAllRadiiLimits(double aMin, double aMax);
 
   void SetScattParamStartValue(double aVal, ParameterType aParamType, bool aIsFixed=false);
   void SetScattParamStartValues(double aReF0, double aImF0, double aD0, bool aAreFixed=false);
@@ -72,6 +73,7 @@ public:
 
   int GetLambdaBinNumber(bool tConjPair=false, CentralityType aCentType=k0010);  //ex. tConjPair=false for kLamK0 and tConjPair=true for kALamK0
   void SetLambdaParamStartValue(double aLam, bool tConjPair=false, CentralityType aCentType=kMB, bool aIsFixed=false);
+  void SetAllLambdaParamStartValues(const vector<double> &aLams, bool aAreFixed=false);
   void SetLambdaParamLimits(double aMin, double aMax, bool tConjPair=false, CentralityType aCentType=kMB);
   void SetAllLambdaParamLimits(double aMin, double aMax);
 

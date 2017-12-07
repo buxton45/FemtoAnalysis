@@ -354,22 +354,6 @@ int main(int argc, char **argv)
     tFileLocationBase += tResultsDate;
     tFileLocationBaseMC += tResultsDate;
 
-    TString tOutputFileName = tDirectoryBase + TString("CfFitValues_") + TString(cAnalysisBaseTags[tAnType]) + TString(cCentralityTags[tCentralityType]);
-    if(ApplyMomResCorrection) tOutputFileName += TString("_MomResCrctn");
-    if(ApplyNonFlatBackgroundCorrection) tOutputFileName += TString("_NonFlatBgdCrctn");
-
-    tOutputFileName += cIncludeResidualsTypeTags[tIncludeResidualsType];
-    if(tIncludeResidualsType != kIncludeNoResiduals)
-    {
-      tOutputFileName += cResPrimMaxDecayTypeTags[tResPrimMaxDecayType];
-      tOutputFileName += cChargedResidualsTypeTags[tChargedResidualsType];
-    }
-
-    tOutputFileName += TString(".txt");
-    std::ofstream tOutputFile;
-    if(bWriteToFile) tOutputFile.open(tOutputFileName);
-
-
     FitSystematicAnalysis* tFitSysAn = new FitSystematicAnalysis(tFileLocationBase, tFileLocationBaseMC, tAnType, tDirNameModifierBase1, tModifierValues1, tDirNameModifierBase2, tModifierValues2, tCentralityType, tFitGeneratorType, tShareLambdaParameters, tAllShareSingleLambdaParam);
     tFitSysAn->SetSaveDirectory(tDirectoryBase);
     tFitSysAn->SetApplyNonFlatBackgroundCorrection(ApplyNonFlatBackgroundCorrection);
@@ -380,8 +364,7 @@ int main(int argc, char **argv)
     tFitSysAn->SetChargedResidualsType(tChargedResidualsType);
     tFitSysAn->SetResPrimMaxDecayType(tResPrimMaxDecayType);
 
-    if(bWriteToFile) tFitSysAn->RunAllFits(bSaveImages,tOutputFile);
-    else tFitSysAn->RunAllFits(bSaveImages);
+    tFitSysAn->RunAllFits(bSaveImages, bWriteToFile);
 
     delete tFitSysAn;
   }

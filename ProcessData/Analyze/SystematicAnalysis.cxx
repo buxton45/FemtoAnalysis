@@ -80,7 +80,7 @@ SystematicAnalysis::SystematicAnalysis(TString aFileLocationBase, AnalysisType a
   fDirNameModifierBase2 = "";
   fModifierValues2 = vector<double> (0);
 
-  SystematicAnalysis(aFileLocationBase,aAnalysisType,aCentralityType,aDirNameModifierBase1,aModifierValues1,fDirNameModifierBase2,fModifierValues2);
+  *this = SystematicAnalysis(aFileLocationBase,aAnalysisType,aCentralityType,aDirNameModifierBase1,aModifierValues1,fDirNameModifierBase2,fModifierValues2);
 }
 
 

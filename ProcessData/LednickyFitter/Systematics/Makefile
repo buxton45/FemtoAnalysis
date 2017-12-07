@@ -23,7 +23,7 @@ CFLAGS = $(shell root-config --cflags) -Wall -std=c++11 -I${ANALYZE_DIR} -I${LED
 #IFLAGS = -I$(ROOTSYS)/include
 #.PHONY: clean
 
-MY_LIBS = $(addprefix build/, FitParameter.o FitChi2Histograms.o FitPartialAnalysis.o FitPairAnalysis.o FitSharedAnalyses.o MathematicaSession.o WaveFunction.o ChargedResidualCf.o SimpleChargedResidualCf.o NeutralResidualCf.o ResidualCollection.o LednickyFitter.o FitGenerator.o CfLite.o CfHeavy.o Types.o Types_LambdaValues.o Faddeeva.o FitSystematicAnalysis.o CanvasPartition.o)
+MY_LIBS = $(addprefix build/, FitParameter.o FitChi2Histograms.o FitPartialAnalysis.o FitPairAnalysis.o FitSharedAnalyses.o MathematicaSession.o WaveFunction.o ChargedResidualCf.o SimpleChargedResidualCf.o NeutralResidualCf.o ResidualCollection.o LednickyFitter.o FitGenerator.o CfLite.o CfHeavy.o Types.o Types_LambdaValues.o Types_FitParamValues.o Faddeeva.o FitSystematicAnalysis.o CanvasPartition.o)
 
 all: runSingleSystematics runAllSystematics runRead runFitRange runNonFlatBgdSys
 

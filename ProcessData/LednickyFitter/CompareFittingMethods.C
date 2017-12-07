@@ -1,3 +1,5 @@
+#include "TSystem.h"
+
 #include "CompareFittingMethods.h"
 TString gSaveLocationBase = "/home/jesse/Analysis/Presentations/GroupMeetings/20171207/Figures/";
 
@@ -625,6 +627,7 @@ TCanvas* DrawAllReF0vsImF0(AnalysisType aAnType,
   {
     TString tSaveLocationFull_ReF0vsImF0;
 
+    gSystem->mkdir(gSaveLocationBase.Data());
     tSaveLocationFull_ReF0vsImF0 = gSaveLocationBase + TString::Format("%s/ReF0vsImF0%s.eps", cAnalysisBaseTags[aAnType], cIncludeResTypeTags[aIncludeResType]);
     tReturnCan->SaveAs(tSaveLocationFull_ReF0vsImF0);
   }
@@ -755,6 +758,7 @@ TCanvas* DrawAllRadiusvsLambda(AnalysisType aAnType, CentralityType aCentType=k0
   {
     TString tSaveLocationFull_RadiusvsLambda;
 
+    gSystem->mkdir(gSaveLocationBase.Data());
     tSaveLocationFull_RadiusvsLambda = gSaveLocationBase + TString::Format("%s/RadiusvsLambda%s%s.eps", cAnalysisBaseTags[aAnType], cCentralityTags[aCentType], cIncludeResTypeTags[aIncludeResType]);
     tReturnCan->SaveAs(tSaveLocationFull_RadiusvsLambda);
   }
@@ -991,6 +995,7 @@ TCanvas* CompareAllRadiusvsLambdaAcrossAnalyses(CentralityType aCentType, Includ
 
   if(bSaveImage)
   {
+    gSystem->mkdir(gSaveLocationBase.Data());
     TString tSaveLocationFull = TString::Format("%s%s.eps", gSaveLocationBase.Data(), tCanName.Data());
     tReturnCan->SaveAs(tSaveLocationFull);
   }
@@ -1352,6 +1357,7 @@ TCanvas* CompareAllReF0vsImF0AcrossAnalyses(IncludeResType aIncludeResType=kIncl
 
   if(bSaveImage)
   {
+    gSystem->mkdir(gSaveLocationBase.Data());
     TString tSaveLocationFull = TString::Format("%s%s.eps", gSaveLocationBase.Data(), tCanName.Data());
     tReturnCan->SaveAs(tSaveLocationFull);
   }

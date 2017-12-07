@@ -23,6 +23,7 @@ FitSystematicAnalysis::FitSystematicAnalysis(TString aFileLocationBase, TString 
   fFileLocationBase(aFileLocationBase),
   fFileLocationBaseMC(aFileLocationBaseMC),
   fAnalysisType(aAnalysisType),
+  fConjAnalysisType(kALamK0),
   fCentralityType(aCentralityType),
   fFitGeneratorType(aGeneratorType),
   fShareLambdaParams(aShareLambdaParams),
@@ -43,6 +44,7 @@ FitSystematicAnalysis::FitSystematicAnalysis(TString aFileLocationBase, TString 
 
 {
   if(!fDirNameModifierBase2.IsNull()) assert(fModifierValues1.size() == fModifierValues2.size());
+  SetConjAnalysisType();
 }
 
 
@@ -53,6 +55,7 @@ FitSystematicAnalysis::FitSystematicAnalysis(TString aFileLocationBase, TString 
   fFileLocationBase(aFileLocationBase),
   fFileLocationBaseMC(aFileLocationBaseMC),
   fAnalysisType(aAnalysisType),
+  fConjAnalysisType(kALamK0),
   fCentralityType(aCentralityType),
   fFitGeneratorType(aGeneratorType),
   fShareLambdaParams(aShareLambdaParams),
@@ -75,7 +78,7 @@ FitSystematicAnalysis::FitSystematicAnalysis(TString aFileLocationBase, TString 
   fDirNameModifierBase2 = "";
   fModifierValues2 = vector<double> (0);
 
-  FitSystematicAnalysis(aFileLocationBase, aFileLocationBaseMC, aAnalysisType, aDirNameModifierBase1, aModifierValues1, fDirNameModifierBase2, fModifierValues2, aCentralityType, aGeneratorType, aShareLambdaParams, aAllShareSingleLambdaParam);
+  *this = FitSystematicAnalysis(aFileLocationBase, aFileLocationBaseMC, aAnalysisType, aDirNameModifierBase1, aModifierValues1, fDirNameModifierBase2, fModifierValues2, aCentralityType, aGeneratorType, aShareLambdaParams, aAllShareSingleLambdaParam);
 }
 
 //________________________________________________________________________________________________________________
@@ -84,6 +87,7 @@ FitSystematicAnalysis::FitSystematicAnalysis(TString aFileLocationBase, TString 
   fFileLocationBase(aFileLocationBase),
   fFileLocationBaseMC(aFileLocationBaseMC),
   fAnalysisType(aAnalysisType),
+  fConjAnalysisType(kALamK0),
   fCentralityType(aCentralityType),
   fFitGeneratorType(aGeneratorType),
   fShareLambdaParams(aShareLambdaParams),
@@ -103,10 +107,13 @@ FitSystematicAnalysis::FitSystematicAnalysis(TString aFileLocationBase, TString 
   fModifierValues2(0)
 
 {
+  fDirNameModifierBase1 = "";
+  fModifierValues1 = vector<double> (0);
+
   fDirNameModifierBase2 = "";
   fModifierValues2 = vector<double> (0);
 
-  FitSystematicAnalysis(aFileLocationBase, aFileLocationBaseMC, aAnalysisType, fDirNameModifierBase1, fModifierValues1, fDirNameModifierBase2, fModifierValues2, aCentralityType, aGeneratorType, aShareLambdaParams, aAllShareSingleLambdaParam);
+  *this = FitSystematicAnalysis(aFileLocationBase, aFileLocationBaseMC, aAnalysisType, fDirNameModifierBase1, fModifierValues1, fDirNameModifierBase2, fModifierValues2, aCentralityType, aGeneratorType, aShareLambdaParams, aAllShareSingleLambdaParam);
 }
 
 
@@ -114,6 +121,17 @@ FitSystematicAnalysis::FitSystematicAnalysis(TString aFileLocationBase, TString 
 FitSystematicAnalysis::~FitSystematicAnalysis()
 {
 /*no-op*/
+}
+
+//________________________________________________________________________________________________________________
+void FitSystematicAnalysis::SetConjAnalysisType()
+{
+  assert(fAnalysisType==kLamK0 || fAnalysisType==kLamKchP || fAnalysisType==kLamKchM);
+
+  if(fAnalysisType==kLamK0) fConjAnalysisType=kALamK0;
+  else if(fAnalysisType==kLamKchP) fConjAnalysisType=kALamKchM;
+  else if(fAnalysisType==kLamKchM) fConjAnalysisType=kALamKchP;
+  else assert(0);
 }
 
 //________________________________________________________________________________________________________________
@@ -196,28 +214,88 @@ void FitSystematicAnalysis::PrintText2dVec(vector<vector<TString> > &a2dVec, ost
 }
 
 //________________________________________________________________________________________________________________
-void FitSystematicAnalysis::RunAllFits(bool aSave, ostream &aOut)
+void FitSystematicAnalysis::AppendFitInfo(TString &aSaveName)
+{
+  if(fApplyMomResCorrection) aSaveName += TString("_MomResCrctn");
+  if(fApplyNonFlatBackgroundCorrection) aSaveName += TString("_NonFlatBgdCrctn");
+
+  aSaveName += cIncludeResidualsTypeTags[fIncludeResidualsType];
+  if(fIncludeResidualsType != kIncludeNoResiduals)
+  {
+    aSaveName += cResPrimMaxDecayTypeTags[fResPrimMaxDecayType];
+    aSaveName += cChargedResidualsTypeTags[fChargedResidualsType];
+  }
+}
+
+
+//________________________________________________________________________________________________________________
+FitGenerator* FitSystematicAnalysis::BuildFitGenerator(AnalysisRunType aRunType, TString aDirNameModifier, NonFlatBgdFitType aNonFlatBgdFitType)
+{
+  //For now, it appears only needed parameters here are AnalysisRunType aRunType and TString aDirNameModifier (for FitGenerator constructor)
+  // and NonFlatBgdFitType aNonFlatBgdFitType for assigning attributes
+  // Otherwise, default members used
+
+  FitGenerator* tFitGenerator = new FitGenerator(fFileLocationBase, fFileLocationBaseMC, fAnalysisType, fCentralityType, aRunType, 2, fFitGeneratorType, fShareLambdaParams, fAllShareSingleLambdaParam, aDirNameModifier);
+
+  tFitGenerator->SetApplyNonFlatBackgroundCorrection(fApplyNonFlatBackgroundCorrection);
+  tFitGenerator->SetNonFlatBgdFitType(aNonFlatBgdFitType);
+  tFitGenerator->SetApplyMomResCorrection(fApplyMomResCorrection);
+  if(fIncludeResidualsType != kIncludeNoResiduals)
+  {
+    if(fAnalysisType==kLamK0 || fAnalysisType==kALamK0) tFitGenerator->SetIncludeResidualCorrelationsType(fIncludeResidualsType, 0.60, 1.50);
+    else tFitGenerator->SetIncludeResidualCorrelationsType(fIncludeResidualsType, 0., 0.);
+  }
+  tFitGenerator->SetChargedResidualsType(fChargedResidualsType);
+  tFitGenerator->SetResPrimMaxDecayType(fResPrimMaxDecayType);
+
+  //----- Set appropriate parameter start values, and limits, to keep fitter from accidentally doing something crazy
+  assert(fCentralityType==kMB);  //This will fail otherwise
+
+  tFitGenerator->SetRadiusStartValues({cFitParamValues[fIncludeResidualsType][fAnalysisType][k0010][kRadius], 
+                                       cFitParamValues[fIncludeResidualsType][fAnalysisType][k1030][kRadius], 
+                                       cFitParamValues[fIncludeResidualsType][fAnalysisType][k3050][kRadius]});
+  tFitGenerator->SetAllRadiiLimits(2., 10.);
+
+  tFitGenerator->SetAllLambdaParamStartValues({cFitParamValues[fIncludeResidualsType][fAnalysisType][k0010][kLambda], 
+                                               cFitParamValues[fIncludeResidualsType][fConjAnalysisType][k0010][kLambda], 
+                                               cFitParamValues[fIncludeResidualsType][fAnalysisType][k1030][kLambda], 
+                                               cFitParamValues[fIncludeResidualsType][fConjAnalysisType][k1030][kLambda], 
+                                               cFitParamValues[fIncludeResidualsType][fAnalysisType][k3050][kLambda], 
+                                               cFitParamValues[fIncludeResidualsType][fConjAnalysisType][k3050][kLambda]});
+  if(fIncludeResidualsType == kIncludeNoResiduals) tFitGenerator->SetAllLambdaParamLimits(0.1, 1.0);
+  else tFitGenerator->SetAllLambdaParamLimits(0.1, 2.0);
+
+  tFitGenerator->SetScattParamStartValues(cFitParamValues[fIncludeResidualsType][fAnalysisType][k0010][kRef0], 
+                                          cFitParamValues[fIncludeResidualsType][fAnalysisType][k0010][kImf0],
+                                          cFitParamValues[fIncludeResidualsType][fAnalysisType][k0010][kd0]);
+
+  //----------------------------------------------------------------------------------------------------------------
+
+  return tFitGenerator;
+}
+
+
+
+//________________________________________________________________________________________________________________
+void FitSystematicAnalysis::RunAllFits(bool aSaveImages, bool aWriteToTxtFile)
 {
   vector<vector<TString> > tText2dVector(0);
+
+  TString tSpecificSaveDirectory;
+  if(aSaveImages || aWriteToTxtFile)
+  {
+    tSpecificSaveDirectory = fSaveDirectory;
+    AppendFitInfo(tSpecificSaveDirectory);
+    tSpecificSaveDirectory += TString("/");
+    gSystem->mkdir(tSpecificSaveDirectory);
+  }
 
   for(unsigned int i=0; i<fModifierValues1.size(); i++)
   {
     TString tDirNameModifier = fDirNameModifierBase1 + TString::Format("%0.6f",fModifierValues1[i]);
     if(!fDirNameModifierBase2.IsNull()) tDirNameModifier += fDirNameModifierBase2 + TString::Format("%0.6f",fModifierValues2[i]);
 
-    FitGenerator* tFitGenerator = new FitGenerator(fFileLocationBase, fFileLocationBaseMC, fAnalysisType, fCentralityType, kTrainSys, 2, fFitGeneratorType, fShareLambdaParams, fAllShareSingleLambdaParam, tDirNameModifier);
-
-    tFitGenerator->SetApplyNonFlatBackgroundCorrection(fApplyNonFlatBackgroundCorrection);
-    tFitGenerator->SetNonFlatBgdFitType(fNonFlatBgdFitType);
-    tFitGenerator->SetApplyMomResCorrection(fApplyMomResCorrection);
-    if(fIncludeResidualsType != kIncludeNoResiduals)
-    {
-      if(fAnalysisType==kLamK0 || fAnalysisType==kALamK0) tFitGenerator->SetIncludeResidualCorrelationsType(fIncludeResidualsType, 0.60, 1.50);
-      else tFitGenerator->SetIncludeResidualCorrelationsType(fIncludeResidualsType, 0., 0.);
-    }
-    tFitGenerator->SetChargedResidualsType(fChargedResidualsType);
-    tFitGenerator->SetResPrimMaxDecayType(fResPrimMaxDecayType);
-
+    FitGenerator* tFitGenerator = BuildFitGenerator(kTrainSys, tDirNameModifier, fNonFlatBgdFitType);
     tFitGenerator->DoFit();
 
 //    OutputCutValues(i,aOut);
@@ -228,36 +306,40 @@ void FitSystematicAnalysis::RunAllFits(bool aSave, ostream &aOut)
     tText2dVector.push_back(tFitParamsVec);
 
     TCanvas* tKStarwFitsCan = tFitGenerator->DrawKStarCfswFits(fApplyMomResCorrection,fApplyNonFlatBackgroundCorrection,fNonFlatBgdFitType,false,false);
-    if(aSave)
+    if(aSaveImages)
     {
-      TString tSaveName = fSaveDirectory;
-      tSaveName += tKStarwFitsCan->GetTitle();
+      TString tImageSaveName = tSpecificSaveDirectory;
+      tImageSaveName += tKStarwFitsCan->GetTitle();
       TString tDirNameModifier = fDirNameModifierBase1 + TString::Format("%0.6f",fModifierValues1[i]);
       if(!fDirNameModifierBase2.IsNull()) tDirNameModifier += fDirNameModifierBase2 + TString::Format("%0.6f",fModifierValues2[i]);
 
-      tSaveName += tDirNameModifier;
-      if(fApplyMomResCorrection) tSaveName += TString("_MomResCrctn");
-      if(fApplyNonFlatBackgroundCorrection) tSaveName += TString("_NonFlatBgdCrctn");
+      tImageSaveName += tDirNameModifier;
+      AppendFitInfo(tImageSaveName);
 
-      tSaveName += cIncludeResidualsTypeTags[fIncludeResidualsType];
-      if(fIncludeResidualsType != kIncludeNoResiduals)
-      {
-        tSaveName += cResPrimMaxDecayTypeTags[fResPrimMaxDecayType];
-        tSaveName += cChargedResidualsTypeTags[fChargedResidualsType];
-      }
-
-      tSaveName += TString(".pdf");
-      tKStarwFitsCan->SaveAs(tSaveName);
+      tImageSaveName += TString(".pdf");
+      tKStarwFitsCan->SaveAs(tImageSaveName);
     }
     delete tFitGenerator;
   }
 
-  PrintText2dVec(tText2dVector,aOut);
+  if(!aWriteToTxtFile) PrintText2dVec(tText2dVector);
+  else
+  {
+    TString tOutputFileName = TString::Format("%sCfFitValues_%s%s", tSpecificSaveDirectory.Data(), cAnalysisBaseTags[fAnalysisType], cCentralityTags[fCentralityType]);
+    AppendFitInfo(tOutputFileName);
+    tOutputFileName += TString(".txt");
+    std::ofstream tOutputFile;
+    tOutputFile.open(tOutputFileName);
+
+    PrintText2dVec(tText2dVector,tOutputFile);
+
+    tOutputFile.close();
+  }
 }
 
 
 //________________________________________________________________________________________________________________
-void FitSystematicAnalysis::RunVaryFitRange(bool aSave, ostream &aOut, double aMaxKStar1, double aMaxKStar2, double aMaxKStar3)
+void FitSystematicAnalysis::RunVaryFitRange(bool aSaveImages, bool aWriteToTxtFile, double aMaxKStar1, double aMaxKStar2, double aMaxKStar3)
 {
   assert(fModifierValues1.size()==0);  //this is not intended for use with various modifier values, but for the final analysis
   int tNRangeValues = 3;
@@ -265,21 +347,18 @@ void FitSystematicAnalysis::RunVaryFitRange(bool aSave, ostream &aOut, double aM
 
   vector<vector<TString> > tText2dVector(0);
 
+  TString tSpecificSaveDirectory;
+  if(aSaveImages || aWriteToTxtFile)
+  {
+    tSpecificSaveDirectory = TString::Format("%sSystematics/", fSaveDirectory.Data());
+    AppendFitInfo(tSpecificSaveDirectory);
+    tSpecificSaveDirectory += TString("/");
+    gSystem->mkdir(tSpecificSaveDirectory, true);
+  }
+
   for(int i=0; i<tNRangeValues; i++)
   {
-    FitGenerator* tFitGenerator = new FitGenerator(fFileLocationBase, fFileLocationBaseMC, fAnalysisType, fCentralityType, kTrain, 2, fFitGeneratorType, fShareLambdaParams, fAllShareSingleLambdaParam);
-
-    tFitGenerator->SetApplyNonFlatBackgroundCorrection(fApplyNonFlatBackgroundCorrection);
-    tFitGenerator->SetNonFlatBgdFitType(fNonFlatBgdFitType);
-    tFitGenerator->SetApplyMomResCorrection(fApplyMomResCorrection);
-    if(fIncludeResidualsType != kIncludeNoResiduals)
-    {
-      if(fAnalysisType==kLamK0 || fAnalysisType==kALamK0) tFitGenerator->SetIncludeResidualCorrelationsType(fIncludeResidualsType, 0.60, 1.50);
-      else tFitGenerator->SetIncludeResidualCorrelationsType(fIncludeResidualsType, 0., 0.);
-    }
-    tFitGenerator->SetChargedResidualsType(fChargedResidualsType);
-    tFitGenerator->SetResPrimMaxDecayType(fResPrimMaxDecayType);
-
+    FitGenerator* tFitGenerator = BuildFitGenerator(kTrain, "", fNonFlatBgdFitType);
     tFitGenerator->DoFit(tRangeVec[i]);
 
     TString tRangeValue = TString::Format("Max KStar for Fit = %0.4f",tRangeVec[i]);
@@ -288,53 +367,57 @@ void FitSystematicAnalysis::RunVaryFitRange(bool aSave, ostream &aOut, double aM
     tText2dVector.push_back(tFitParamsVec);
 
     TCanvas* tKStarwFitsCan = tFitGenerator->DrawKStarCfswFits(fApplyMomResCorrection,fApplyNonFlatBackgroundCorrection,fNonFlatBgdFitType,false,false);
-    if(aSave)
+    if(aSaveImages)
     {
-      TString tSaveName = fSaveDirectory;
-      tSaveName += tKStarwFitsCan->GetTitle();
-      tSaveName += TString::Format("_MaxFitKStar_%0.4f",tRangeVec[i]);
-      if(fApplyMomResCorrection) tSaveName += TString("_MomResCrctn");
-      if(fApplyNonFlatBackgroundCorrection) tSaveName += TString("_NonFlatBgdCrctn");
+      TString tImageSaveName = tSpecificSaveDirectory;
+      tImageSaveName += tKStarwFitsCan->GetTitle();
+      tImageSaveName += TString::Format("_MaxFitKStar_%0.4f",tRangeVec[i]);
+      AppendFitInfo(tImageSaveName);
 
-      tSaveName += cIncludeResidualsTypeTags[fIncludeResidualsType];
-      if(fIncludeResidualsType != kIncludeNoResiduals)
-      {
-        tSaveName += cResPrimMaxDecayTypeTags[fResPrimMaxDecayType];
-        tSaveName += cChargedResidualsTypeTags[fChargedResidualsType];
-      }
-
-      tSaveName += TString(".pdf");
-      tKStarwFitsCan->SaveAs(tSaveName);
+      tImageSaveName += TString(".pdf");
+      tKStarwFitsCan->SaveAs(tImageSaveName);
     }
     delete tFitGenerator;
   }
-  PrintText2dVec(tText2dVector,aOut);
+
+  if(!aWriteToTxtFile) PrintText2dVec(tText2dVector);
+  else
+  {
+    TString tOutputFileName = TString::Format("%sCfFitValues_VaryMaxFitKStar_%s%s", tSpecificSaveDirectory.Data(), cAnalysisBaseTags[fAnalysisType], cCentralityTags[fCentralityType]);
+    AppendFitInfo(tOutputFileName);
+    tOutputFileName += TString(".txt");
+    std::ofstream tOutputFile;
+    tOutputFile.open(tOutputFileName);
+
+    PrintText2dVec(tText2dVector,tOutputFile);
+
+    tOutputFile.close();
+  }
 }
 
 
 //________________________________________________________________________________________________________________
-void FitSystematicAnalysis::RunVaryNonFlatBackgroundFit(bool aSave, ostream &aOut)
+void FitSystematicAnalysis::RunVaryNonFlatBackgroundFit(bool aSaveImages, bool aWriteToTxtFile)
 {
   assert(fModifierValues1.size()==0);  //this is not intended for use with various modifier values, but for the final analysis
+  assert(fApplyNonFlatBackgroundCorrection);  //This better be true, since I'm varying to NonFlatBgd method here!
   int tNFitTypeValues = 3;
   vector<int> tFitTypeVec = {0,1,2};
 
   vector<vector<TString> > tText2dVector(0);
 
+  TString tSpecificSaveDirectory;
+  if(aSaveImages || aWriteToTxtFile)
+  {
+    tSpecificSaveDirectory = TString::Format("%sSystematics/", fSaveDirectory.Data());
+    AppendFitInfo(tSpecificSaveDirectory);
+    tSpecificSaveDirectory += TString("/");
+    gSystem->mkdir(tSpecificSaveDirectory, true);
+  }
+
   for(int i=0; i<tNFitTypeValues; i++)
   {
-    FitGenerator* tFitGenerator = new FitGenerator(fFileLocationBase, fFileLocationBaseMC, fAnalysisType, fCentralityType, kTrain, 2, fFitGeneratorType, fShareLambdaParams, fAllShareSingleLambdaParam);
-    tFitGenerator->SetApplyNonFlatBackgroundCorrection(fApplyNonFlatBackgroundCorrection);
-    tFitGenerator->SetNonFlatBgdFitType(static_cast<NonFlatBgdFitType>(tFitTypeVec[i]));
-    tFitGenerator->SetApplyMomResCorrection(fApplyMomResCorrection);
-    if(fIncludeResidualsType != kIncludeNoResiduals)
-    {
-      if(fAnalysisType==kLamK0 || fAnalysisType==kALamK0) tFitGenerator->SetIncludeResidualCorrelationsType(fIncludeResidualsType, 0.60, 1.50);
-      else tFitGenerator->SetIncludeResidualCorrelationsType(fIncludeResidualsType, 0., 0.);
-    }
-    tFitGenerator->SetChargedResidualsType(fChargedResidualsType);
-    tFitGenerator->SetResPrimMaxDecayType(fResPrimMaxDecayType);
-
+    FitGenerator* tFitGenerator = BuildFitGenerator(kTrain, "", static_cast<NonFlatBgdFitType>(tFitTypeVec[i]));
     tFitGenerator->DoFit();
 
     TString tRangeValue = TString::Format("Fit Type = %d",tFitTypeVec[i]);
@@ -343,26 +426,31 @@ void FitSystematicAnalysis::RunVaryNonFlatBackgroundFit(bool aSave, ostream &aOu
     tText2dVector.push_back(tFitParamsVec);
 
     TCanvas* tKStarwFitsCan = tFitGenerator->DrawKStarCfswFits(fApplyMomResCorrection,fApplyNonFlatBackgroundCorrection,static_cast<NonFlatBgdFitType>(tFitTypeVec[i]),false,false);
-    if(aSave)
+    if(aSaveImages)
     {
-      TString tSaveName = fSaveDirectory;
-      tSaveName += tKStarwFitsCan->GetTitle();
-      tSaveName += TString::Format("_FitType_%d",tFitTypeVec[i]);
-      if(fApplyMomResCorrection) tSaveName += TString("_MomResCrctn");
-      if(fApplyNonFlatBackgroundCorrection) tSaveName += TString("_NonFlatBgdCrctn");
+      TString tImageSaveName = tSpecificSaveDirectory;
+      tImageSaveName += tKStarwFitsCan->GetTitle();
+      tImageSaveName += TString::Format("_FitType_%d",tFitTypeVec[i]);
+      AppendFitInfo(tImageSaveName);
 
-      tSaveName += cIncludeResidualsTypeTags[fIncludeResidualsType];
-      if(fIncludeResidualsType != kIncludeNoResiduals)
-      {
-        tSaveName += cResPrimMaxDecayTypeTags[fResPrimMaxDecayType];
-        tSaveName += cChargedResidualsTypeTags[fChargedResidualsType];
-      }
-
-      tSaveName += TString(".pdf");
-      tKStarwFitsCan->SaveAs(tSaveName);
+      tImageSaveName += TString(".pdf");
+      tKStarwFitsCan->SaveAs(tImageSaveName);
     }
     delete tFitGenerator;
   }
-  PrintText2dVec(tText2dVector,aOut);
+
+  if(!aWriteToTxtFile) PrintText2dVec(tText2dVector);
+  else
+  {
+    TString tOutputFileName = TString::Format("%sCfFitValues_VaryNonFlatBgdFitType_%s%s", tSpecificSaveDirectory.Data(), cAnalysisBaseTags[fAnalysisType], cCentralityTags[fCentralityType]);
+    AppendFitInfo(tOutputFileName);
+    tOutputFileName += TString(".txt");
+    std::ofstream tOutputFile;
+    tOutputFile.open(tOutputFileName);
+
+    PrintText2dVec(tText2dVector,tOutputFile);
+
+    tOutputFile.close();
+  }
 }
 

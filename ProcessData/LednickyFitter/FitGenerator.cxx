@@ -1704,6 +1704,16 @@ void FitGenerator::SetRadiusLimits(const td2dVec &aMinMax2dVec)
   for(unsigned int i=0; i<fRadiusFitParams.size(); i++) SetRadiusLimits(aMinMax2dVec[i][0],aMinMax2dVec[i][1],i);
 }
 
+//________________________________________________________________________________________________________________
+void FitGenerator::SetAllRadiiLimits(double aMin, double aMax)
+{
+  for(unsigned int i=0; i<fRadiusFitParams.size(); i++)
+  {
+    fRadiusFitParams[i].SetLowerBound(aMin);
+    fRadiusFitParams[i].SetUpperBound(aMax);
+  }
+}
+
 
 //________________________________________________________________________________________________________________
 void FitGenerator::SetScattParamStartValue(double aVal, ParameterType aParamType, bool aIsFixed)
@@ -1776,6 +1786,23 @@ void FitGenerator::SetLambdaParamStartValue(double aLam, bool tConjPair, Central
   int tBinNumber = GetLambdaBinNumber(tConjPair, aCentType);
   fLambdaFitParams[tBinNumber].SetStartValue(aLam);
   fLambdaFitParams[tBinNumber].SetFixed(aIsFixed);
+}
+
+//________________________________________________________________________________________________________________
+void FitGenerator::SetAllLambdaParamStartValues(const vector<double> &aLams, bool aAreFixed)
+{
+  //For now, should only be used for case of all 3 centralities, pair with conj
+  //Ordering should be [Pair0010, Conj0010, Pair1030, Conj1030, Pair3050, Conj3050]
+  assert(aLams.size()==fLambdaFitParams.size());
+
+  SetLambdaParamStartValue(aLams[0], false, k0010, aAreFixed);
+  SetLambdaParamStartValue(aLams[1], true,  k0010, aAreFixed);
+
+  SetLambdaParamStartValue(aLams[2], false, k1030, aAreFixed);
+  SetLambdaParamStartValue(aLams[3], true,  k1030, aAreFixed);
+
+  SetLambdaParamStartValue(aLams[4], false, k3050, aAreFixed);
+  SetLambdaParamStartValue(aLams[5], true,  k3050, aAreFixed);
 }
 
 
