@@ -29,6 +29,8 @@ int main(int argc, char **argv)
 
   TString tResultsDate = "20161027";
 
+  if(tAnType==kLamK0) tAllShareSingleLambdaParam = true;
+
   TString tGeneralAnTypeName;
   if(tAnType==kLamK0 || tAnType==kALamK0) tGeneralAnTypeName = "cLamK0";
   else if(tAnType==kLamKchP || tAnType==kALamKchM || tAnType==kLamKchM || tAnType==kALamKchP) tGeneralAnTypeName = "cLamcKch";

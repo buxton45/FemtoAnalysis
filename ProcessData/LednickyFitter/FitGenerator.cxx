@@ -1793,6 +1793,7 @@ void FitGenerator::SetAllLambdaParamStartValues(const vector<double> &aLams, boo
 {
   //For now, should only be used for case of all 3 centralities, pair with conj
   //Ordering should be [Pair0010, Conj0010, Pair1030, Conj1030, Pair3050, Conj3050]
+  assert(aLams.size()==6);
   assert(aLams.size()==fLambdaFitParams.size());
 
   SetLambdaParamStartValue(aLams[0], false, k0010, aAreFixed);

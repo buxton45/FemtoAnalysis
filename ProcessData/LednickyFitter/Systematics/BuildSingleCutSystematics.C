@@ -306,6 +306,8 @@ int main(int argc, char **argv)
   bool bWriteToFile = true;
   bool bSaveImages = true;
 
+  if(tAnType==kLamK0) tAllShareSingleLambdaParam = true;
+
   SystematicsFileInfo tFileInfo = GetFileInfo(1);
     TString tResultsDate = tFileInfo.resultsDate;
     TString tDirNameModifierBase1 = tFileInfo.dirNameModifierBase1;

@@ -289,7 +289,7 @@ int main(int argc, char **argv)
 
   bool bPlayCompletionBeep = true;
 //-----------------------------------------------------------------------------
-  AnalysisType tAnType = kLamKchP;
+  AnalysisType tAnType = kLamKchM;
   CentralityType tCentralityType = kMB;
   FitGeneratorType tFitGeneratorType = kPairwConj;
   bool tShareLambdaParameters = false;
@@ -305,6 +305,8 @@ int main(int argc, char **argv)
 
   bool bWriteToFile = true;
   bool bSaveImages = true;
+
+  if(tAnType==kLamK0) tAllShareSingleLambdaParam = true;
 
   int tMaxCut;
   if(tAnType==kLamK0 || tAnType==kALamK0) tMaxCut = 17;
