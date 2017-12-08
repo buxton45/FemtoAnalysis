@@ -262,129 +262,6 @@ void PrintFinalVec(td4dVec &aFinal, ostream &aOut=std::cout)
   }
 }
 
-
-
-
-
-//----------------------------------------------------------------------
-void ReadAllCutSys(TString aSystematicsDirectory, td4dVec &aAllCutSysToFill, AnalysisType aAnType, CentralityType aCentType, 
-                   bool aApplyMomResCrctn, bool aApplyNonFlatBgdCrctn, 
-                   IncludeResidualsType aIncResType, ResPrimMaxDecayType aMaxDecayType, ChargedResidualsType aChargedResType, 
-                   bool aRunOldQMNaming)
-{
-  TString tGeneralAnTypeName;
-
-  assert(aAnType==kLamK0 || aAnType==kLamKchP || aAnType==kLamKchM);
-  if(aAnType==kLamK0) tGeneralAnTypeName = "cLamK0";
-  else if(aAnType==kLamKchP || aAnType==kLamKchM) tGeneralAnTypeName = "cLamcKch";
-  else assert(0);
-
-  //----------------------------------------------
-  cout << endl;
-  cout << "________________________________";
-  cout << " Reading systematics for " << cAnalysisBaseTags[aAnType] << " and " << cAnalysisBaseTags[aAnType+1];
-  cout << "________________________________" << endl;
-  //----------------------------------------------
-
-  int tNCuts;
-  if(aAnType==kLamK0) tNCuts = 17;
-  else if(aAnType==kLamKchP || aAnType==kLamKchM) tNCuts = 12;
-  else assert(0);
-
-  int tCut=-999;
-  for(int iCut=1; iCut<=tNCuts; iCut++)
-  {
-    if(aAnType==kLamK0 && (iCut==9 || iCut==15 || iCut==17)) continue;
-    if((aAnType==kLamKchP || aAnType==kLamKchM) && (iCut==6 || iCut==12)) continue;
-
-    if(aAnType==kLamK0) tCut = -1*iCut;
-    else tCut = iCut;
-    cout << "tCut = " << tCut << endl;
-
-    SystematicsFileInfo tFileInfo = GetFileInfo_LamK(tCut);
-      TString tResultsDate = tFileInfo.resultsDate;
-      TString tDirNameModifierBase1 = tFileInfo.dirNameModifierBase1;
-      vector<double> tModifierValues1 = tFileInfo.modifierValues1;
-      TString tDirNameModifierBase2 = tFileInfo.dirNameModifierBase2;
-      vector<double> tModifierValues2 = tFileInfo.modifierValues2;
-
-    TString tDirectoryBase = TString::Format("%sResults_%s_Systematics%s", aSystematicsDirectory.Data(), tGeneralAnTypeName.Data(), tDirNameModifierBase1.Data());
-    if(!tDirNameModifierBase2.IsNull())
-    {
-      tDirectoryBase.Remove(TString::kTrailing,'_');
-      tDirectoryBase += tDirNameModifierBase2;
-    }
-    tDirectoryBase += TString::Format("%s/",tResultsDate.Data());
-
-    TString tFileLocationBase;
-    if(aRunOldQMNaming)
-    {
-      tFileLocationBase = tDirectoryBase + TString::Format("CfFitValues_%s_MomResCrctn_NonFlatBgdCrctn.txt", cAnalysisBaseTags[aAnType]);
-    }
-    else
-    {
-      tFileLocationBase = tDirectoryBase;
-      FitSystematicAnalysis::AppendFitInfo(tFileLocationBase, aApplyMomResCrctn, aApplyNonFlatBgdCrctn, 
-                                           aIncResType, aMaxDecayType, aChargedResType);
-      tFileLocationBase += TString::Format("/CfFitValues_%s%s", cAnalysisBaseTags[aAnType], cCentralityTags[aCentType]);
-      FitSystematicAnalysis::AppendFitInfo(tFileLocationBase, aApplyMomResCrctn, aApplyNonFlatBgdCrctn, 
-                                           aIncResType, aMaxDecayType, aChargedResType);
-      tFileLocationBase += TString(".txt");
-    }
-
-    ReadFile(tFileLocationBase,aAllCutSysToFill);
-    cout << "Read file " << tFileLocationBase << endl << endl;
-  }
-
-}
-
-
-//----------------------------------------------------------------------
-void ReadFitRangeAndNonFlatBgdSys(TString aResultsDirectory, td4dVec &aAllFitSysToFill, AnalysisType aAnType, CentralityType aCentType, 
-                                  bool aApplyMomResCrctn, bool aApplyNonFlatBgdCrctn, 
-                                  IncludeResidualsType aIncResType, ResPrimMaxDecayType aMaxDecayType, ChargedResidualsType aChargedResType, 
-                                  bool aRunOldQMNaming)
-{
-  //----------------------------------------------
-  cout << endl;
-  cout << "________________________________";
-  cout << " Reading FitRangeSys and NonFlatBgd for " << cAnalysisBaseTags[aAnType] << " and " << cAnalysisBaseTags[aAnType+1];
-  cout << "________________________________" << endl;
-  //----------------------------------------------
-
-  TString tFileLocationFitRangeSys;
-  TString tFileLocationNonFlatBgdSys;
-  if(aRunOldQMNaming)
-  {
-    tFileLocationFitRangeSys = TString::Format("%sCfFitValues_VaryMaxFitKStar_%s_MomResCrctn_NonFlatBgdCrctn.txt", aResultsDirectory.Data(), cAnalysisBaseTags[aAnType]);
-    tFileLocationNonFlatBgdSys = TString::Format("%sCfFitValues_VaryNonFlatBgdFitType_%s_MomResCrctn_NonFlatBgdCrctn.txt", aResultsDirectory.Data(), cAnalysisBaseTags[aAnType]);
-  }
-  else
-  {
-    TString tFileLocationBase_FitRangeAndNonFlat = TString::Format("%sSystematics/", aResultsDirectory.Data());
-    FitSystematicAnalysis::AppendFitInfo(tFileLocationBase_FitRangeAndNonFlat, aApplyMomResCrctn, aApplyNonFlatBgdCrctn, aIncResType, aMaxDecayType, aChargedResType);
-    tFileLocationBase_FitRangeAndNonFlat += TString("/");
-
-    tFileLocationFitRangeSys = TString::Format("%sCfFitValues_VaryMaxFitKStar_%s%s", tFileLocationBase_FitRangeAndNonFlat.Data(), 
-                                               cAnalysisBaseTags[aAnType], cCentralityTags[aCentType]);
-    FitSystematicAnalysis::AppendFitInfo(tFileLocationFitRangeSys, aApplyMomResCrctn, aApplyNonFlatBgdCrctn, aIncResType, aMaxDecayType, aChargedResType);
-    tFileLocationFitRangeSys += TString(".txt");
-
-
-    tFileLocationNonFlatBgdSys = TString::Format("%sCfFitValues_VaryNonFlatBgdFitType_%s%s", tFileLocationBase_FitRangeAndNonFlat.Data(), 
-                                                 cAnalysisBaseTags[aAnType], cCentralityTags[aCentType]);
-    FitSystematicAnalysis::AppendFitInfo(tFileLocationNonFlatBgdSys, aApplyMomResCrctn, aApplyNonFlatBgdCrctn, aIncResType, aMaxDecayType, aChargedResType);
-    tFileLocationNonFlatBgdSys += TString(".txt");
-  }
-
-  ReadFile(tFileLocationFitRangeSys, aAllFitSysToFill);
-  ReadFile(tFileLocationNonFlatBgdSys, aAllFitSysToFill);
-
-  cout << "Read file " << tFileLocationFitRangeSys << endl;
-  cout << "Read file " << tFileLocationNonFlatBgdSys << endl;
-}
-
-
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //********************************************************************************************************************************************************************************
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -406,8 +283,8 @@ int main(int argc, char **argv)
   NonFlatBgdFitType tNonFlatBgdFitType = kLinear;
 
   IncludeResidualsType tIncludeResidualsType = kInclude10Residuals; 
-  ResPrimMaxDecayType tResPrimMaxDecayType = k5fm;
   ChargedResidualsType tChargedResidualsType = kUseXiDataAndCoulombOnlyInterp;
+  ResPrimMaxDecayType tResPrimMaxDecayType = k5fm;
 
   if(bRunOldQMNaming) tIncludeResidualsType = kIncludeNoResiduals; 
 
@@ -429,54 +306,205 @@ int main(int argc, char **argv)
   bool bIncludeFitRangeSys = true;
   bool bWriteToFile = false;
 
-  //---------------------------------------------------------------------------------------
 
-  ReadAllCutSys(tSystematicsDirectory, tAllCutSys, kLamKchP, tCentralityType, 
-                ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, 
-                tIncludeResidualsType, tResPrimMaxDecayType, tChargedResidualsType, 
-                bRunOldQMNaming);
+  cout << endl << "_________________________ Reading systematics from LamKchP and LamKchM _________________________" << endl;
+  for(int iCut=1; iCut<=12; iCut++)
+  {
+    if(iCut==6 || iCut==12) continue;
+    cout << "iCut = " << iCut << endl;
 
-  ReadAllCutSys(tSystematicsDirectory, tAllCutSys, kLamKchM, tCentralityType, 
-                ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, 
-                tIncludeResidualsType, tResPrimMaxDecayType, tChargedResidualsType, 
-                bRunOldQMNaming);
+    SystematicsFileInfo tFileInfo = GetFileInfo_LamK(iCut);
+      TString tResultsDate = tFileInfo.resultsDate;
+      TString tDirNameModifierBase1 = tFileInfo.dirNameModifierBase1;
+      vector<double> tModifierValues1 = tFileInfo.modifierValues1;
+      TString tDirNameModifierBase2 = tFileInfo.dirNameModifierBase2;
+      vector<double> tModifierValues2 = tFileInfo.modifierValues2;
 
-  ReadAllCutSys(tSystematicsDirectory, tAllCutSys, kLamK0, tCentralityType, 
-                ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, 
-                tIncludeResidualsType, tResPrimMaxDecayType, tChargedResidualsType, 
-                bRunOldQMNaming);
+    TString tDirectoryBase = TString::Format("%sResults_%s_Systematics%s", tSystematicsDirectory.Data(), "cLamcKch", tDirNameModifierBase1.Data());
+    if(!tDirNameModifierBase2.IsNull())
+    {
+      tDirectoryBase.Remove(TString::kTrailing,'_');
+      tDirectoryBase += tDirNameModifierBase2;
+    }
+    tDirectoryBase += TString::Format("%s/",tResultsDate.Data());
 
-  //---------------------------------------------------------------------------------------
+    TString tFileLocationBase1, tFileLocationBase2;
+    if(bRunOldQMNaming)
+    {
+      tFileLocationBase1 = tDirectoryBase + TString::Format("CfFitValues_%s_MomResCrctn_NonFlatBgdCrctn.txt","LamKchP");
+      tFileLocationBase2 = tDirectoryBase + TString::Format("CfFitValues_%s_MomResCrctn_NonFlatBgdCrctn.txt","LamKchM");
+    }
+    else
+    {
+      tFileLocationBase1 = tDirectoryBase;
+      FitSystematicAnalysis::AppendFitInfo(tFileLocationBase1, ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, 
+                                           tIncludeResidualsType, tResPrimMaxDecayType, tChargedResidualsType);
+      tFileLocationBase1 += TString::Format("/CfFitValues_%s%s", cAnalysisBaseTags[kLamKchP], cCentralityTags[tCentralityType]);
+      FitSystematicAnalysis::AppendFitInfo(tFileLocationBase1, ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, 
+                                           tIncludeResidualsType, tResPrimMaxDecayType, tChargedResidualsType);
+      tFileLocationBase1 += TString(".txt");
+      //---------------------------------------
+      tFileLocationBase2 = tDirectoryBase;
+      FitSystematicAnalysis::AppendFitInfo(tFileLocationBase2, ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, 
+                                           tIncludeResidualsType, tResPrimMaxDecayType, tChargedResidualsType);
+      tFileLocationBase2 += TString::Format("/CfFitValues_%s%s", cAnalysisBaseTags[kLamKchM], cCentralityTags[tCentralityType]);
+      FitSystematicAnalysis::AppendFitInfo(tFileLocationBase2, ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, 
+                                           tIncludeResidualsType, tResPrimMaxDecayType, tChargedResidualsType);
+      tFileLocationBase2 += TString(".txt");
+
+    }
+
+    ReadFile(tFileLocationBase1,tAllCutSys);
+      cout << "Read file " << tFileLocationBase1 << endl;
+    ReadFile(tFileLocationBase2,tAllCutSys);
+      cout << "Read file " << tFileLocationBase2 << endl << endl;
+  }
+
+  //-----------------------------------------------------------------------------------------
+
+  cout << endl << "________________________________ Reading systematics from LamK0 ________________________________" << endl;
+  for(int iCut=1; iCut<=17; iCut++)
+  {
+    if(iCut==9 || iCut==15 || iCut==17) continue;
+    int tCut = -1*iCut;
+    cout << "tCut = " << tCut << endl;
+
+    SystematicsFileInfo tFileInfo = GetFileInfo_LamK(tCut);
+      TString tResultsDate = tFileInfo.resultsDate;
+      TString tDirNameModifierBase1 = tFileInfo.dirNameModifierBase1;
+      vector<double> tModifierValues1 = tFileInfo.modifierValues1;
+      TString tDirNameModifierBase2 = tFileInfo.dirNameModifierBase2;
+      vector<double> tModifierValues2 = tFileInfo.modifierValues2;
+
+    TString tDirectoryBase = TString::Format("%sResults_%s_Systematics%s", tSystematicsDirectory.Data(),"cLamK0",tDirNameModifierBase1.Data());
+    if(!tDirNameModifierBase2.IsNull())
+    {
+      tDirectoryBase.Remove(TString::kTrailing,'_');
+      tDirectoryBase += tDirNameModifierBase2;
+    }
+    tDirectoryBase += TString::Format("%s/",tResultsDate.Data());
+
+    TString tFileLocationBase;
+    if(bRunOldQMNaming)
+    {
+      tFileLocationBase = tDirectoryBase + TString::Format("CfFitValues_%s_MomResCrctn_NonFlatBgdCrctn.txt","LamK0");
+    }
+    else
+    {
+      tFileLocationBase = tDirectoryBase;
+      FitSystematicAnalysis::AppendFitInfo(tFileLocationBase, ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, 
+                                           tIncludeResidualsType, tResPrimMaxDecayType, tChargedResidualsType);
+      tFileLocationBase += TString::Format("/CfFitValues_%s%s", cAnalysisBaseTags[kLamK0], cCentralityTags[tCentralityType]);
+      FitSystematicAnalysis::AppendFitInfo(tFileLocationBase, ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, 
+                                           tIncludeResidualsType, tResPrimMaxDecayType, tChargedResidualsType);
+      tFileLocationBase += TString(".txt");
+    }
+
+    ReadFile(tFileLocationBase,tAllCutSys);
+      cout << "Read file " << tFileLocationBase << endl << endl;
+  }
+
   td4dVec tFinalCutSysVec = ReduceCutsVector(tAllCutSys);
+
   //-----------------------------------------------------------------------------------------
   td4dVec tFinalVec;
-
-
-
   if(bIncludeFitRangeSys)
   {
+    TString tFileLocationFitRangeSysLamK0, tFileLocationFitRangeSysLamKchP, tFileLocationFitRangeSysLamKchM;
+    TString tFileLocationNonFlatBgdSysLamK0, tFileLocationNonFlatBgdSysLamKchP, tFileLocationNonFlatBgdSysLamKchM;
+    if(bRunOldQMNaming)
+    {
+      tFileLocationFitRangeSysLamK0 = TString::Format("%sCfFitValues_VaryMaxFitKStar_LamK0_MomResCrctn_NonFlatBgdCrctn.txt", tResultsDirectory_cLamK0.Data());
+      tFileLocationFitRangeSysLamKchP = TString::Format("%sCfFitValues_VaryMaxFitKStar_LamKchP_MomResCrctn_NonFlatBgdCrctn.txt", tResultsDirectory_cLamcKch.Data());
+      tFileLocationFitRangeSysLamKchM = TString::Format("%sCfFitValues_VaryMaxFitKStar_LamKchM_MomResCrctn_NonFlatBgdCrctn.txt", tResultsDirectory_cLamcKch.Data());
+
+      tFileLocationNonFlatBgdSysLamK0 = TString::Format("%sCfFitValues_VaryNonFlatBgdFitType_LamK0_MomResCrctn_NonFlatBgdCrctn.txt", tResultsDirectory_cLamK0.Data());
+      tFileLocationNonFlatBgdSysLamKchP = TString::Format("%sCfFitValues_VaryNonFlatBgdFitType_LamKchP_MomResCrctn_NonFlatBgdCrctn.txt", tResultsDirectory_cLamcKch.Data());
+      tFileLocationNonFlatBgdSysLamKchM = TString::Format("%sCfFitValues_VaryNonFlatBgdFitType_LamKchM_MomResCrctn_NonFlatBgdCrctn.txt", tResultsDirectory_cLamcKch.Data());
+    }
+    else
+    {
+      TString tFileLocationBase_FitRangeAndNonFlat_cLamK0 = TString::Format("%sSystematics/", tResultsDirectory_cLamK0.Data());
+      FitSystematicAnalysis::AppendFitInfo(tFileLocationBase_FitRangeAndNonFlat_cLamK0, ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, 
+                                           tIncludeResidualsType, tResPrimMaxDecayType, tChargedResidualsType);
+      tFileLocationBase_FitRangeAndNonFlat_cLamK0 += TString("/");
+
+      tFileLocationFitRangeSysLamK0 = TString::Format("%sCfFitValues_VaryMaxFitKStar_%s%s", tFileLocationBase_FitRangeAndNonFlat_cLamK0.Data(), 
+                                                      cAnalysisBaseTags[kLamK0], cCentralityTags[tCentralityType]);
+      FitSystematicAnalysis::AppendFitInfo(tFileLocationFitRangeSysLamK0, ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, 
+                                           tIncludeResidualsType, tResPrimMaxDecayType, tChargedResidualsType);
+      tFileLocationFitRangeSysLamK0 += TString(".txt");
+
+
+      tFileLocationNonFlatBgdSysLamK0 = TString::Format("%sCfFitValues_VaryNonFlatBgdFitType_%s%s", tFileLocationBase_FitRangeAndNonFlat_cLamK0.Data(), 
+                                                        cAnalysisBaseTags[kLamK0], cCentralityTags[tCentralityType]);
+      FitSystematicAnalysis::AppendFitInfo(tFileLocationNonFlatBgdSysLamK0, ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, 
+                                           tIncludeResidualsType, tResPrimMaxDecayType, tChargedResidualsType);
+      tFileLocationNonFlatBgdSysLamK0 += TString(".txt");
+
+      //------------------------------------------------------------
+
+      TString tFileLocationBase_FitRangeAndNonFlat_cLamcKch = TString::Format("%sSystematics/", tResultsDirectory_cLamcKch.Data());
+      FitSystematicAnalysis::AppendFitInfo(tFileLocationBase_FitRangeAndNonFlat_cLamcKch, ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, 
+                                           tIncludeResidualsType, tResPrimMaxDecayType, tChargedResidualsType);
+      tFileLocationBase_FitRangeAndNonFlat_cLamcKch += TString("/");
+
+      tFileLocationFitRangeSysLamKchP = TString::Format("%sCfFitValues_VaryMaxFitKStar_%s%s", tFileLocationBase_FitRangeAndNonFlat_cLamcKch.Data(), 
+                                                        cAnalysisBaseTags[kLamKchP], cCentralityTags[tCentralityType]);
+      FitSystematicAnalysis::AppendFitInfo(tFileLocationFitRangeSysLamKchP, ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, 
+                                           tIncludeResidualsType, tResPrimMaxDecayType, tChargedResidualsType);
+      tFileLocationFitRangeSysLamKchP += TString(".txt");
+
+      tFileLocationNonFlatBgdSysLamKchP = TString::Format("%sCfFitValues_VaryNonFlatBgdFitType_%s%s", tFileLocationBase_FitRangeAndNonFlat_cLamcKch.Data(), 
+                                                          cAnalysisBaseTags[kLamKchP], cCentralityTags[tCentralityType]);
+      FitSystematicAnalysis::AppendFitInfo(tFileLocationNonFlatBgdSysLamKchP, ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, 
+                                           tIncludeResidualsType, tResPrimMaxDecayType, tChargedResidualsType);
+      tFileLocationNonFlatBgdSysLamKchP += TString(".txt");
+
+
+      tFileLocationFitRangeSysLamKchM = TString::Format("%sCfFitValues_VaryMaxFitKStar_%s%s", tFileLocationBase_FitRangeAndNonFlat_cLamcKch.Data(), 
+                                                        cAnalysisBaseTags[kLamKchM], cCentralityTags[tCentralityType]);
+      FitSystematicAnalysis::AppendFitInfo(tFileLocationFitRangeSysLamKchM, ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, 
+                                           tIncludeResidualsType, tResPrimMaxDecayType, tChargedResidualsType);
+      tFileLocationFitRangeSysLamKchM += TString(".txt");
+
+      tFileLocationNonFlatBgdSysLamKchM = TString::Format("%sCfFitValues_VaryNonFlatBgdFitType_%s%s", tFileLocationBase_FitRangeAndNonFlat_cLamcKch.Data(), 
+                                                          cAnalysisBaseTags[kLamKchM], cCentralityTags[tCentralityType]);
+      FitSystematicAnalysis::AppendFitInfo(tFileLocationNonFlatBgdSysLamKchM, ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, 
+                                           tIncludeResidualsType, tResPrimMaxDecayType, tChargedResidualsType);
+      tFileLocationNonFlatBgdSysLamKchM += TString(".txt");
+      
+
+    }
+
     td4dVec tAllFitSys(0);
       tAllFitSys.resize(tNAnalysisTypes, td3dVec(tNCentralityTypes, td2dVec(tNParameterTypes, td1dVec(0))));
 
-    ReadFitRangeAndNonFlatBgdSys(tResultsDirectory_cLamcKch, tAllFitSys, kLamKchP, tCentralityType,
-                                 ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, 
-                                 tIncludeResidualsType, tResPrimMaxDecayType, tChargedResidualsType, 
-                                 bRunOldQMNaming);
+    cout << endl << "__________________________________ Reading FitRangeSys Files ___________________________________" << endl;
+    ReadFile(tFileLocationFitRangeSysLamK0,tAllFitSys);
+      cout << "Read file " << tFileLocationFitRangeSysLamK0 << endl;
+    ReadFile(tFileLocationFitRangeSysLamKchP,tAllFitSys);
+      cout << "Read file " << tFileLocationFitRangeSysLamKchP << endl;
+    ReadFile(tFileLocationFitRangeSysLamKchM,tAllFitSys);
+      cout << "Read file " << tFileLocationFitRangeSysLamKchM << endl;
 
-    ReadFitRangeAndNonFlatBgdSys(tResultsDirectory_cLamcKch, tAllFitSys, kLamKchM, tCentralityType,
-                                 ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, 
-                                 tIncludeResidualsType, tResPrimMaxDecayType, tChargedResidualsType, 
-                                 bRunOldQMNaming);
 
-    ReadFitRangeAndNonFlatBgdSys(tResultsDirectory_cLamK0, tAllFitSys, kLamK0, tCentralityType,
-                                 ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, 
-                                 tIncludeResidualsType, tResPrimMaxDecayType, tChargedResidualsType, 
-                                 bRunOldQMNaming);
+  cout << endl << "___________________________________ Reading NonFlatBgd Files ___________________________________" << endl;
+    ReadFile(tFileLocationNonFlatBgdSysLamK0,tAllFitSys);
+      cout << "Read file " << tFileLocationNonFlatBgdSysLamK0 << endl;
+    ReadFile(tFileLocationNonFlatBgdSysLamKchP,tAllFitSys);
+      cout << "Read file " << tFileLocationNonFlatBgdSysLamKchP << endl;
+    ReadFile(tFileLocationNonFlatBgdSysLamKchM,tAllFitSys);
+      cout << "Read file " << tFileLocationNonFlatBgdSysLamKchM << endl;
 
     td4dVec tFinalFitSysVec = ReduceCutsVector(tAllFitSys);
+
     tFinalVec = CombineCutSyswFitSys(tFinalCutSysVec,tFinalFitSysVec);
   }
   else tFinalVec = tFinalCutSysVec;
+
+
+
 
   //-----------------------------------------------------------------------------------------
 
@@ -484,7 +512,7 @@ int main(int argc, char **argv)
 
   if(bWriteToFile)
   {
-    TString tOutputLamKchName = TString::Format("%sFinalFitSystematicsNEWTest_", tResultsDirectory_cLamcKch.Data());
+    TString tOutputLamKchName = TString::Format("%sFinalFitSystematicsNEW_", tResultsDirectory_cLamcKch.Data());
     if(bIncludeFitRangeSys) tOutputLamKchName += TString("wFitRangeSys_");
     if(!bRunOldQMNaming)
     {
@@ -494,7 +522,7 @@ int main(int argc, char **argv)
     }
     tOutputLamKchName += TString("cLamcKch.txt");
 
-    TString tOutputLamK0Name = TString::Format("%sFinalFitSystematicsNEWTest_", tResultsDirectory_cLamK0.Data());
+    TString tOutputLamK0Name = TString::Format("%sFinalFitSystematicsNEW_", tResultsDirectory_cLamK0.Data());
     if(bIncludeFitRangeSys) tOutputLamK0Name += TString("wFitRangeSys_");
     if(!bRunOldQMNaming)
     {
@@ -519,6 +547,10 @@ int main(int argc, char **argv)
     tOutputLamK0.close();
   }
   else PrintFinalVec(tFinalVec);
+
+
+
+
 
 
 cout << "DONE" << endl;

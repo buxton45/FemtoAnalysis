@@ -40,6 +40,8 @@ public:
   void AppendDifference(vector<vector<TString> > &a2dVec, int aCut, int aLineNumber);
   void PrintText2dVec(vector<vector<TString> > &a2dVec, ostream &aOut=std::cout);
 
+  static void AppendFitInfo(TString &aSaveName, bool aApplyMomResCorrection, bool aApplyNonFlatBackgroundCorrection, IncludeResidualsType aIncludeResidualsType, 
+                            ResPrimMaxDecayType aResPrimMaxDecayType=k5fm, ChargedResidualsType aChargedResidualsType=kUseXiDataAndCoulombOnlyInterp);
   void AppendFitInfo(TString &aSaveName);
   FitGenerator* BuildFitGenerator(AnalysisRunType aRunType, TString aDirNameModifier, NonFlatBgdFitType aNonFlatBgdFitType);
 

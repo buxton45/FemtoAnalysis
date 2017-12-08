@@ -1,7 +1,7 @@
 #include "SystematicAnalysis.h"
 class SystematicAnalysis;
 
-SystematicsFileInfo GetFileInfo(int aNumber)
+SystematicsFileInfo GetFileInfo_XiK(int aNumber)
 {
   SystematicsFileInfo gInfoXiKch1;
     gInfoXiKch1.resultsDate = "20170501";
@@ -184,7 +184,7 @@ SystematicsFileInfo GetFileInfo(int aNumber)
   else if(aNumber==16) return gInfoXiKch16;
   else
   {
-    cout << "ERROR: SystematicsFileInfo GetFileInfo" << endl;
+    cout << "ERROR: SystematicsFileInfo GetFileInfo_XiK" << endl;
     assert(0);
     return gInfoXiKch1;
   }
@@ -259,7 +259,7 @@ int main(int argc, char **argv)
     if(iCut==6) continue;
     cout << "tCut = " << tCut << endl;
 
-    SystematicsFileInfo tFileInfo = GetFileInfo(tCut);
+    SystematicsFileInfo tFileInfo = GetFileInfo_XiK(tCut);
       TString tResultsDate = tFileInfo.resultsDate;
       TString tDirNameModifierBase1 = tFileInfo.dirNameModifierBase1;
       vector<double> tModifierValues1 = tFileInfo.modifierValues1;

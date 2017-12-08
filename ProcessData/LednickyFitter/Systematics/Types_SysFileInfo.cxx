@@ -156,7 +156,7 @@ const SystematicsFileInfo gInfoLamK017 = SystematicsFileInfo("20161108",
 //***************************************************************************************************************************************
 //---------------------------------------------------------------------------------------------------------------------------------------
 
-const SystematicsFileInfo GetFileInfo(int aNumber)
+const SystematicsFileInfo GetFileInfo_LamK(int aNumber)
 {
   if(aNumber==1) return gInfoLamKch1;
   else if(aNumber==2) return gInfoLamKch2;

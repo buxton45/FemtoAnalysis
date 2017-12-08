@@ -214,17 +214,25 @@ void FitSystematicAnalysis::PrintText2dVec(vector<vector<TString> > &a2dVec, ost
 }
 
 //________________________________________________________________________________________________________________
+void FitSystematicAnalysis::AppendFitInfo(TString &aSaveName, bool aApplyMomResCorrection, bool aApplyNonFlatBackgroundCorrection, 
+                                          IncludeResidualsType aIncludeResidualsType, ResPrimMaxDecayType aResPrimMaxDecayType, ChargedResidualsType aChargedResidualsType)
+{
+  if(aApplyMomResCorrection) aSaveName += TString("_MomResCrctn");
+  if(aApplyNonFlatBackgroundCorrection) aSaveName += TString("_NonFlatBgdCrctn");
+
+  aSaveName += cIncludeResidualsTypeTags[aIncludeResidualsType];
+  if(aIncludeResidualsType != kIncludeNoResiduals)
+  {
+    aSaveName += cResPrimMaxDecayTypeTags[aResPrimMaxDecayType];
+    aSaveName += cChargedResidualsTypeTags[aChargedResidualsType];
+  }
+}
+
+
+//________________________________________________________________________________________________________________
 void FitSystematicAnalysis::AppendFitInfo(TString &aSaveName)
 {
-  if(fApplyMomResCorrection) aSaveName += TString("_MomResCrctn");
-  if(fApplyNonFlatBackgroundCorrection) aSaveName += TString("_NonFlatBgdCrctn");
-
-  aSaveName += cIncludeResidualsTypeTags[fIncludeResidualsType];
-  if(fIncludeResidualsType != kIncludeNoResiduals)
-  {
-    aSaveName += cResPrimMaxDecayTypeTags[fResPrimMaxDecayType];
-    aSaveName += cChargedResidualsTypeTags[fChargedResidualsType];
-  }
+  AppendFitInfo(aSaveName, fApplyMomResCorrection, fApplyNonFlatBackgroundCorrection, fIncludeResidualsType, fResPrimMaxDecayType, fChargedResidualsType);
 }
 
 

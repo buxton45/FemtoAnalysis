@@ -51,7 +51,7 @@ int main(int argc, char **argv)
     if(tAnType==kLamK0 || tAnType==kALamK0) tCut *= -1;
     cout << "tCut = " << tCut << endl;
 
-    SystematicsFileInfo tFileInfo = GetFileInfo(tCut);
+    SystematicsFileInfo tFileInfo = GetFileInfo_LamK(tCut);
       TString tResultsDate = tFileInfo.resultsDate;
       TString tDirNameModifierBase1 = tFileInfo.dirNameModifierBase1;
       vector<double> tModifierValues1 = tFileInfo.modifierValues1;

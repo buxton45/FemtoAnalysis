@@ -1,7 +1,7 @@
 #include "SystematicAnalysis.h"
 class SystematicAnalysis;
 
-SystematicsFileInfo GetFileInfo(int aNumber)
+SystematicsFileInfo GetFileInfo_XiK(int aNumber)
 {
   SystematicsFileInfo gInfo1;
     gInfo1.resultsDate = "2016xxxx";  //TODO
@@ -163,7 +163,7 @@ SystematicsFileInfo GetFileInfo(int aNumber)
   else if(aNumber==16) return gInfo16;
   else
   {
-    cout << "ERROR: SystematicsFileInfo GetFileInfo" << endl;
+    cout << "ERROR: SystematicsFileInfo GetFileInfo_XiK" << endl;
     assert(0);
     return gInfo1;
   }
@@ -182,7 +182,7 @@ int main(int argc, char **argv)
   SystematicAnalysis::DiffHistFitType tFitType = SystematicAnalysis::kExpDecay;
   bool tFixOffsetParam = false;
 
-  SystematicsFileInfo tFileInfo = GetFileInfo(12);
+  SystematicsFileInfo tFileInfo = GetFileInfo_XiK(12);
     TString tResultsDate = tFileInfo.resultsDate;
     TString tDirNameModifierBase1 = tFileInfo.dirNameModifierBase1;
     vector<double> tModifierValues1 = tFileInfo.modifierValues1;

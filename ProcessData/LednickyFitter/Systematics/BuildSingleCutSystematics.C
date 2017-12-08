@@ -32,7 +32,7 @@ int main(int argc, char **argv)
 
   if(tAnType==kLamK0) tAllShareSingleLambdaParam = true;
 
-  SystematicsFileInfo tFileInfo = GetFileInfo(1);
+  SystematicsFileInfo tFileInfo = GetFileInfo_LamK(1);
     TString tResultsDate = tFileInfo.resultsDate;
     TString tDirNameModifierBase1 = tFileInfo.dirNameModifierBase1;
     vector<double> tModifierValues1 = tFileInfo.modifierValues1;

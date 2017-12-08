@@ -48,7 +48,7 @@ extern const SystematicsFileInfo gInfoLamK017;
 
 //----------------------------------------------------
 
-extern const SystematicsFileInfo GetFileInfo(int aNumber);
+extern const SystematicsFileInfo GetFileInfo_LamK(int aNumber);
 
 #endif
 
