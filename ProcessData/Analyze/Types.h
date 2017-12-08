@@ -220,11 +220,30 @@ kXiCKSt0=40, kAXiCAKSt0=41, kXiCAKSt0=42, kAXiCKSt0=43
   struct SystematicsFileInfo
   {
     const char* resultsDate;
+
     const char* dirNameModifierBase1;
-    const char* dirNameModifierBase2;
     vector<double> modifierValues1;
+
+    const char* dirNameModifierBase2;
     vector<double> modifierValues2;
+
     bool allCentralities;
+
+    SystematicsFileInfo(const char* aResultDate, 
+                        const char* aDirNameModifierBase1, const vector<double> &aModifierValues1, 
+                        const char* aDirNameModifierBase2, const vector<double> &aModifierValues2, 
+                        bool aAllCentralities)
+    {
+      resultsDate = aResultDate;
+
+      dirNameModifierBase1 = aDirNameModifierBase1;
+      modifierValues1 = aModifierValues1;
+
+      dirNameModifierBase2 = aDirNameModifierBase2;
+      modifierValues2 = aModifierValues2;
+
+      allCentralities = aAllCentralities;
+    }
   };
 
   //----------------------------------------------------------
