@@ -36,6 +36,7 @@ FitPairAnalysis::FitPairAnalysis(TString aAnalysisName, vector<FitPartialAnalysi
   fKStarMinNorm(0.32),
   fKStarMaxNorm(0.40),
   fPrimaryFit(0),
+  fNonFlatBackground(0),
 
   fNFitParams(0),
   fNFitParamsToShare(5),  //sharing Lambda, Radius, Ref0, Imf0, d0
@@ -100,6 +101,7 @@ FitPairAnalysis::FitPairAnalysis(TString aFileLocationBase, AnalysisType aAnalys
   fKStarMinNorm(0.32),
   fKStarMaxNorm(0.40),
   fPrimaryFit(0),
+  fNonFlatBackground(0),
 
   fNFitParams(0),
   fNFitParamsToShare(5),  //sharing Lambda, Radius, Ref0, Imf0, d0
@@ -175,6 +177,7 @@ FitPairAnalysis::FitPairAnalysis(TString aFileLocationBase, TString aFileLocatio
   fKStarMinNorm(0.32),
   fKStarMaxNorm(0.40),
   fPrimaryFit(0),
+  fNonFlatBackground(0),
 
   fNFitParams(0),
   fNFitParamsToShare(5),  //sharing Lambda, Radius, Ref0, Imf0, d0
@@ -350,8 +353,10 @@ void FitPairAnalysis::DrawKStarCfHeavy(TPad* aPad, int aMarkerColor, TString aOp
 //________________________________________________________________________________________________________________
 TF1* FitPairAnalysis::GetNonFlatBackground(NonFlatBgdFitType aFitType, double aMinFit, double aMaxFit)
 {
-  TF1* tNonFlatBackground = FitPartialAnalysis::FitNonFlatBackground(fKStarCfHeavy->GetHeavyCfClone(),aFitType,aMinFit,aMaxFit);
-  return tNonFlatBackground;
+  if(fNonFlatBackground) return fNonFlatBackground;
+
+  fNonFlatBackground = FitPartialAnalysis::FitNonFlatBackground(fKStarCfHeavy->GetHeavyCfClone(),aFitType,aMinFit,aMaxFit);
+  return fNonFlatBackground;
 }
 
 

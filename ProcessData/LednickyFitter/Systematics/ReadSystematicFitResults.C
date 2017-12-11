@@ -484,7 +484,7 @@ int main(int argc, char **argv)
 
   if(bWriteToFile)
   {
-    TString tOutputLamKchName = TString::Format("%sFinalFitSystematicsNEWTest_", tResultsDirectory_cLamcKch.Data());
+    TString tOutputLamKchName = TString::Format("%sFinalFitSystematics_", tResultsDirectory_cLamcKch.Data());
     if(bIncludeFitRangeSys) tOutputLamKchName += TString("wFitRangeSys_");
     if(!bRunOldQMNaming)
     {
@@ -494,7 +494,7 @@ int main(int argc, char **argv)
     }
     tOutputLamKchName += TString("cLamcKch.txt");
 
-    TString tOutputLamK0Name = TString::Format("%sFinalFitSystematicsNEWTest_", tResultsDirectory_cLamK0.Data());
+    TString tOutputLamK0Name = TString::Format("%sFinalFitSystematics_", tResultsDirectory_cLamK0.Data());
     if(bIncludeFitRangeSys) tOutputLamK0Name += TString("wFitRangeSys_");
     if(!bRunOldQMNaming)
     {

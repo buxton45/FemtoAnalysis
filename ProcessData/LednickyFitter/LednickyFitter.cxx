@@ -319,7 +319,13 @@ void LednickyFitter::CalculateFitFunction(int &npar, double &chi2, double *par)
 
       if(fApplyNonFlatBackgroundCorrection)
       {
-        TF1* tNonFlatBgd = tFitPartialAnalysis->GetNonFlatBackground(fNonFlatBgdFitType/*,0.60,0.90*/);
+        TF1* tNonFlatBgd;
+        //Note: If Bgd not modeled by linear function, grab tNonFlatBgd from pair analysis instead of partial analysis
+        //      This greatly helps the fitter by stabilizing tNonFlatBgd
+        //      Both methods give the same result when Bgd is linear
+        if(fNonFlatBgdFitType==kLinear) tNonFlatBgd = tFitPartialAnalysis->GetNonFlatBackground(fNonFlatBgdFitType/*,0.60,0.90*/);
+        else tNonFlatBgd = tFitPairAnalysis->GetNonFlatBackground(fNonFlatBgdFitType/*,0.60,0.90*/);
+
         ApplyNonFlatBackgroundCorrection(tCorrectedFitCfContent, fKStarBinCenters, tNonFlatBgd);
       }
 

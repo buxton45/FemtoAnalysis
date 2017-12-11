@@ -25,7 +25,7 @@ CFLAGS = $(shell root-config --cflags) -Wall -std=c++11 -I${ANALYZE_DIR} -I${LED
 
 MY_LIBS = $(addprefix build/, FitParameter.o FitChi2Histograms.o FitPartialAnalysis.o FitPairAnalysis.o FitSharedAnalyses.o MathematicaSession.o WaveFunction.o ChargedResidualCf.o SimpleChargedResidualCf.o NeutralResidualCf.o ResidualCollection.o LednickyFitter.o FitGenerator.o CfLite.o CfHeavy.o Types.o Types_LambdaValues.o Types_FitParamValues.o Types_SysFileInfo.o Faddeeva.o FitSystematicAnalysis.o CanvasPartition.o)
 
-all: runSingleSystematics runAllSystematics runRead runFitRange runNonFlatBgdSys
+all: runSingleSystematics runAllSystematics runRead runFindOutliers runFitRange runNonFlatBgdSys
 
 runSingleSystematics: ${MY_LIBS} BuildSingleCutSystematics.C
 	g++ BuildSingleCutSystematics.C ${MY_LIBS} -I${INCDIR} -o runSingleSystematics -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS)
@@ -35,6 +35,9 @@ runAllSystematics: ${MY_LIBS} BuildAllCutsSystematics.C
 
 runRead: ${MY_LIBS} ReadSystematicFitResults.C
 	g++ ReadSystematicFitResults.C ${MY_LIBS} -I${INCDIR} -o runRead -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS)
+
+runFindOutliers: ${MY_LIBS} FindOutliers.C
+	g++ FindOutliers.C ${MY_LIBS} -I${INCDIR} -o runFindOutliers -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS)
 
 runFitRange: ${MY_LIBS} FitRangeSystematics.C
 	g++ FitRangeSystematics.C ${MY_LIBS} -I${INCDIR} -o runFitRange -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS)
@@ -58,4 +61,4 @@ build/%.o: %.cxx %.h
 	g++ -c $< -I${INCDIR} $(CFLAGS) -o $@
 
 clean:
-	rm -f runSingleSystematics runAllSystematics runRead runFitRange runNonFlatBgdSys ${MY_LIBS}
+	rm -f runSingleSystematics runAllSystematics runRead runFindOutliers runFitRange runNonFlatBgdSys ${MY_LIBS}

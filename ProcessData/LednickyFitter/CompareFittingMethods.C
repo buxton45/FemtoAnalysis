@@ -2,7 +2,8 @@
 
 #include "CompareFittingMethods.h"
 TString gSaveLocationBase = "/home/jesse/Analysis/Presentations/GroupMeetings/20171207/Figures/";
-
+//TString gSaveType = "eps";
+TString gSaveType = "pdf";
 
 /*
 //---------------------------------------------------------------------------------------------------------------------------------
@@ -300,96 +301,154 @@ void SetupRadiusvsLambdaAxes(TPad* aPad, double aMinR=0., double aMaxR=8., doubl
 
 
 //---------------------------------------------------------------------------------------------------------------------------------
-TGraphAsymmErrors* GetReF0vsImF0(const FitInfo &aFitInfo)
+TGraphAsymmErrors* GetReF0vsImF0(const FitInfo &aFitInfo, ErrorType aErrType=kStat)
 {
   TGraphAsymmErrors* tReturnGr = new TGraphAsymmErrors(1);
   tReturnGr->SetPoint(0, aFitInfo.ref0, aFitInfo.imf0);
-  tReturnGr->SetPointError(0, aFitInfo.ref0StatErr, aFitInfo.ref0StatErr, aFitInfo.imf0StatErr, aFitInfo.imf0StatErr);
+  if(aErrType==kStat) tReturnGr->SetPointError(0, aFitInfo.ref0StatErr, aFitInfo.ref0StatErr, aFitInfo.imf0StatErr, aFitInfo.imf0StatErr);
+  else if(aErrType==kSys) tReturnGr->SetPointError(0, aFitInfo.ref0SysErr, aFitInfo.ref0SysErr, aFitInfo.imf0SysErr, aFitInfo.imf0SysErr);
+  else assert(0);
 
   return tReturnGr;
 }
 
 //---------------------------------------------------------------------------------------------------------------------------------
-TGraphAsymmErrors* GetD0(const FitInfo &aFitInfo)
+TGraphAsymmErrors* GetD0(const FitInfo &aFitInfo, ErrorType aErrType=kStat)
 {
   TGraphAsymmErrors* tReturnGr = new TGraphAsymmErrors(1);
   tReturnGr->SetPoint(0, 0.5, aFitInfo.d0);
-  tReturnGr->SetPointError(0, 0., 0., aFitInfo.d0StatErr, aFitInfo.d0StatErr);
+  if(aErrType==kStat) tReturnGr->SetPointError(0, 0., 0., aFitInfo.d0StatErr, aFitInfo.d0StatErr);
+  else if(aErrType==kSys) tReturnGr->SetPointError(0, 0., 0., aFitInfo.d0SysErr, aFitInfo.d0SysErr);
+  else assert(0);
 
   return tReturnGr;
 }
 
 //---------------------------------------------------------------------------------------------------------------------------------
-TGraphAsymmErrors* GetRadiusvsLambda(const FitInfo &aFitInfo, CentralityType aCentType=k0010)
+TGraphAsymmErrors* GetRadiusvsLambda(const FitInfo &aFitInfo, CentralityType aCentType=k0010, ErrorType aErrType=kStat)
 {
   TGraphAsymmErrors* tReturnGr = new TGraphAsymmErrors(1);
   tReturnGr->SetName(aFitInfo.descriptor);
 
   assert(aCentType != kMB);
   tReturnGr->SetPoint(0, aFitInfo.radiusVec[aCentType], aFitInfo.lambdaVec[aCentType]);
-  tReturnGr->SetPointError(0, aFitInfo.radiusStatErrVec[aCentType], aFitInfo.radiusStatErrVec[aCentType], 
-                              aFitInfo.lambdaStatErrVec[aCentType], aFitInfo.lambdaStatErrVec[aCentType]);
+  if(aErrType==kStat)
+  {
+    tReturnGr->SetPointError(0, aFitInfo.radiusStatErrVec[aCentType], aFitInfo.radiusStatErrVec[aCentType], 
+                                aFitInfo.lambdaStatErrVec[aCentType], aFitInfo.lambdaStatErrVec[aCentType]);
+  }
+  else if(aErrType==kSys)
+  {
+    tReturnGr->SetPointError(0, aFitInfo.radiusSysErrVec[aCentType], aFitInfo.radiusSysErrVec[aCentType], 
+                                aFitInfo.lambdaSysErrVec[aCentType], aFitInfo.lambdaSysErrVec[aCentType]);
+  }
+  else assert(0);
 
   return tReturnGr;
 }
 
 //---------------------------------------------------------------------------------------------------------------------------------
-void DrawReF0vsImF0(TPad* aPad, FitInfo &aFitInfo, TString aDrawOption="epsame")
+void DrawReF0vsImF0(TPad* aPad, FitInfo &aFitInfo, ErrorType aErrType=kStat)
 {
   aPad->cd();
   gStyle->SetOptStat(0);
   gStyle->SetOptTitle(0);
 
-  TGraphAsymmErrors* tGr = GetReF0vsImF0(aFitInfo);
+  TString tDrawOption;
+  int tColor;
+  TGraphAsymmErrors* tGr = GetReF0vsImF0(aFitInfo, aErrType);
+  tGr->SetName(aFitInfo.descriptor + cErrorTypeTags[aErrType]);
+  if(aErrType==kStat)
+  {
+    tColor = aFitInfo.markerColor;
+    tGr->SetLineWidth(1);
+    tDrawOption = TString("pzsame");
+  }
+  else if(aErrType==kSys)
+  {
+    tColor = TColor::GetColorTransparent(aFitInfo.markerColor, 0.3);
+    tGr->SetLineWidth(0);
+    tDrawOption = TString("e2same");
+  }
+  else assert(0);
 
-  tGr->SetName(aFitInfo.descriptor);
   tGr->SetMarkerStyle(aFitInfo.markerStyle);
-  tGr->SetMarkerColor(aFitInfo.markerColor);
-  tGr->SetFillColor(aFitInfo.markerColor);
+  tGr->SetMarkerColor(tColor);
+  tGr->SetFillColor(tColor);
   tGr->SetFillStyle(1000);
-  tGr->SetLineColor(aFitInfo.markerColor);
-  tGr->SetLineWidth(1);
+  tGr->SetLineColor(tColor);
 
-  tGr->Draw(aDrawOption);
+  tGr->Draw(tDrawOption);
 }
 
 //---------------------------------------------------------------------------------------------------------------------------------
-void DrawD0(TPad* aPad, FitInfo &aFitInfo, TString aDrawOption="epsame")
+void DrawD0(TPad* aPad, FitInfo &aFitInfo, ErrorType aErrType=kStat)
 {
   aPad->cd();
   gStyle->SetOptStat(0);
   gStyle->SetOptTitle(0);
 
-  TGraphAsymmErrors* tGr = GetD0(aFitInfo);
+  TString tDrawOption;
+  int tColor;
 
-  tGr->SetName(aFitInfo.descriptor);
+  TGraphAsymmErrors* tGr = GetD0(aFitInfo, aErrType);
+  tGr->SetName(aFitInfo.descriptor + cErrorTypeTags[aErrType]);
+  if(aErrType==kStat)
+  {
+    tColor = aFitInfo.markerColor;
+    tGr->SetLineWidth(1);
+    tDrawOption = TString("pzsame");
+  }
+  else if(aErrType==kSys)
+  {
+    tColor = TColor::GetColorTransparent(aFitInfo.markerColor, 0.3);
+    tGr->SetLineWidth(0);
+    tDrawOption = TString("e2same");
+  }
+  else assert(0);
+
   tGr->SetMarkerStyle(aFitInfo.markerStyle);
-  tGr->SetMarkerColor(aFitInfo.markerColor);
-  tGr->SetFillColor(aFitInfo.markerColor);
+  tGr->SetMarkerColor(tColor);
+  tGr->SetFillColor(tColor);
   tGr->SetFillStyle(1000);
-  tGr->SetLineColor(aFitInfo.markerColor);
-  tGr->SetLineWidth(1);
+  tGr->SetLineColor(tColor);
 
-  tGr->Draw(aDrawOption);
+  tGr->Draw(tDrawOption);
 }
 
 //---------------------------------------------------------------------------------------------------------------------------------
-void DrawRadiusvsLambda(TPad* aPad, FitInfo &aFitInfo, CentralityType aCentType=k0010, TString aDrawOption="epsame")
+void DrawRadiusvsLambda(TPad* aPad, FitInfo &aFitInfo, CentralityType aCentType=k0010, ErrorType aErrType=kStat)
 {
   aPad->cd();
   gStyle->SetOptStat(0);
   gStyle->SetOptTitle(0);
 
-  TGraphAsymmErrors* tGr = GetRadiusvsLambda(aFitInfo, aCentType);
+  TString tDrawOption;
+  int tColor;
+
+  TGraphAsymmErrors* tGr = GetRadiusvsLambda(aFitInfo, aCentType, aErrType);
+  tGr->SetName(aFitInfo.descriptor + cErrorTypeTags[aErrType]);
+  if(aErrType==kStat)
+  {
+    tColor = aFitInfo.markerColor;
+    tGr->SetLineWidth(1);
+    tDrawOption = TString("pzsame");
+  }
+  else if(aErrType==kSys)
+  {
+    tColor = TColor::GetColorTransparent(aFitInfo.markerColor, 0.3);
+    tGr->SetLineWidth(0);
+    tDrawOption = TString("e2same");
+  }
+  else assert(0);
 
   tGr->SetMarkerStyle(aFitInfo.markerStyle);
-  tGr->SetMarkerColor(aFitInfo.markerColor);
-  tGr->SetFillColor(aFitInfo.markerColor);
+  tGr->SetMarkerColor(tColor);
+  tGr->SetFillColor(tColor);
   tGr->SetFillStyle(1000);
-  tGr->SetLineColor(aFitInfo.markerColor);
-  tGr->SetLineWidth(1);
+  tGr->SetLineColor(tColor);
 
-  tGr->Draw(aDrawOption);
+  tGr->Draw(tDrawOption);
 }
 
 //---------------------------------------------------------------------------------------------------------------------------------
@@ -499,7 +558,7 @@ TGraphAsymmErrors* GetWeightedMeanRadiusvsLambda(vector<FitInfo> &aFitInfoVec, C
 TCanvas* DrawAllReF0vsImF0(AnalysisType aAnType, 
                            IncludeResType aIncludeResType=kInclude10ResAnd3Res, IncludeD0Type aIncludeD0Type=kFreeAndFixedD0,
                            IncludeRadiiType aIncludeRadiiType=kFreeAndFixedRadii, IncludeLambdaType aIncludeLambdaType=kFreeAndFixedLambda, 
-                           bool bSaveImage=false)
+                           ErrorType aErrType=kStatAndSys, bool bSaveImage=false)
 {
   TCanvas* tReturnCan = new TCanvas(TString::Format("tCanReF0vsImF0_%s", cAnalysisBaseTags[aAnType]), 
                                     TString::Format("tCanReF0vsImF0_%s", cAnalysisBaseTags[aAnType]));
@@ -549,8 +608,19 @@ TCanvas* DrawAllReF0vsImF0(AnalysisType aAnType,
   int tDescriptorEnd = 0;
   for(unsigned int i=0; i<aFitInfoVec.size(); i++)
   {
-    DrawReF0vsImF0((TPad*)tPadReF0vsImF0, aFitInfoVec[i]);
-    DrawD0((TPad*)tPadD0, aFitInfoVec[i]);
+    if(aErrType==kStatAndSys)
+    {
+      DrawReF0vsImF0((TPad*)tPadReF0vsImF0, aFitInfoVec[i], kSys);
+      DrawReF0vsImF0((TPad*)tPadReF0vsImF0, aFitInfoVec[i], kStat);
+
+      DrawD0((TPad*)tPadD0, aFitInfoVec[i], kSys);
+      DrawD0((TPad*)tPadD0, aFitInfoVec[i], kStat);
+    }
+    else 
+    {
+      DrawReF0vsImF0((TPad*)tPadReF0vsImF0, aFitInfoVec[i], aErrType);
+      DrawD0((TPad*)tPadD0, aFitInfoVec[i], aErrType);
+    }
 
     if(i%2==0)
     {
@@ -628,7 +698,7 @@ TCanvas* DrawAllReF0vsImF0(AnalysisType aAnType,
     TString tSaveLocationFull_ReF0vsImF0;
 
     gSystem->mkdir(gSaveLocationBase.Data());
-    tSaveLocationFull_ReF0vsImF0 = gSaveLocationBase + TString::Format("%s/ReF0vsImF0%s.eps", cAnalysisBaseTags[aAnType], cIncludeResTypeTags[aIncludeResType]);
+    tSaveLocationFull_ReF0vsImF0 = gSaveLocationBase + TString::Format("%s/ReF0vsImF0%s.%s", cAnalysisBaseTags[aAnType], cIncludeResTypeTags[aIncludeResType], gSaveType.Data());
     tReturnCan->SaveAs(tSaveLocationFull_ReF0vsImF0);
   }
 
@@ -640,7 +710,7 @@ TCanvas* DrawAllReF0vsImF0(AnalysisType aAnType,
 TCanvas* DrawAllRadiusvsLambda(AnalysisType aAnType, CentralityType aCentType=k0010, 
                                IncludeResType aIncludeResType=kInclude10ResAnd3Res, IncludeD0Type aIncludeD0Type=kFreeAndFixedD0, 
                                IncludeRadiiType aIncludeRadiiType=kFreeAndFixedRadii, IncludeLambdaType aIncludeLambdaType=kFreeAndFixedLambda, 
-                               bool bSaveImage=false)
+                               ErrorType aErrType=kStatAndSys, bool bSaveImage=false)
 {
   TCanvas* tReturnCan = new TCanvas(TString::Format("tCanRadiusvsLambda_%s%s", cAnalysisBaseTags[aAnType], cCentralityTags[aCentType]), 
                                     TString::Format("tCanRadiusvsLambda_%s%s", cAnalysisBaseTags[aAnType], cCentralityTags[aCentType]));
@@ -681,7 +751,12 @@ TCanvas* DrawAllRadiusvsLambda(AnalysisType aAnType, CentralityType aCentType=k0
   int tDescriptorEnd = 0;
   for(unsigned int i=0; i<aFitInfoVec.size(); i++)
   {
-    DrawRadiusvsLambda((TPad*)tReturnCan, aFitInfoVec[i], aCentType);
+    if(aErrType==kStatAndSys)
+    {
+      DrawRadiusvsLambda((TPad*)tReturnCan, aFitInfoVec[i], aCentType, kSys);
+      DrawRadiusvsLambda((TPad*)tReturnCan, aFitInfoVec[i], aCentType, kStat);
+    }
+    else DrawRadiusvsLambda((TPad*)tReturnCan, aFitInfoVec[i], aCentType, aErrType);
 
     if(i%2 == 0)
     {
@@ -759,7 +834,7 @@ TCanvas* DrawAllRadiusvsLambda(AnalysisType aAnType, CentralityType aCentType=k0
     TString tSaveLocationFull_RadiusvsLambda;
 
     gSystem->mkdir(gSaveLocationBase.Data());
-    tSaveLocationFull_RadiusvsLambda = gSaveLocationBase + TString::Format("%s/RadiusvsLambda%s%s.eps", cAnalysisBaseTags[aAnType], cCentralityTags[aCentType], cIncludeResTypeTags[aIncludeResType]);
+    tSaveLocationFull_RadiusvsLambda = gSaveLocationBase + TString::Format("%s/RadiusvsLambda%s%s.%s", cAnalysisBaseTags[aAnType], cCentralityTags[aCentType], cIncludeResTypeTags[aIncludeResType], gSaveType.Data());
     tReturnCan->SaveAs(tSaveLocationFull_RadiusvsLambda);
   }
 
@@ -767,7 +842,7 @@ TCanvas* DrawAllRadiusvsLambda(AnalysisType aAnType, CentralityType aCentType=k0
 }
 
 //---------------------------------------------------------------------------------------------------------------------------------
-void DrawRadiusvsLambdaAcrossAnalyses(TPad* aPad, int aMarkerStyle=20, double aMarkerSize=1., CentralityType aCentType=k0010, IncludeResType aIncludeResType=kInclude10ResAnd3Res, IncludeD0Type aIncludeD0Type=kFreeAndFixedD0)
+void DrawRadiusvsLambdaAcrossAnalyses(TPad* aPad, int aMarkerStyle=20, double aMarkerSize=1., CentralityType aCentType=k0010, IncludeResType aIncludeResType=kInclude10ResAnd3Res, IncludeD0Type aIncludeD0Type=kFreeAndFixedD0, ErrorType aErrType=kStat)
 {
   aPad->cd();
   //------------------------
@@ -778,6 +853,13 @@ void DrawRadiusvsLambdaAcrossAnalyses(TPad* aPad, int aMarkerStyle=20, double aM
   Color_t tColor_LamKchP = kRed+1;
   Color_t tColor_LamKchM = kBlue+1;
   Color_t tColor_LamK0 = kBlack;
+
+  if(aErrType==kSys)
+  {
+    tColor_LamKchP = TColor::GetColorTransparent(tColor_LamKchP, 0.3);
+    tColor_LamKchM = TColor::GetColorTransparent(tColor_LamKchM, 0.3);
+    tColor_LamK0 = TColor::GetColorTransparent(tColor_LamK0, 0.3);
+  }
 
   //------------------------
 
@@ -798,11 +880,12 @@ void DrawRadiusvsLambdaAcrossAnalyses(TPad* aPad, int aMarkerStyle=20, double aM
     if(aIncludeD0Type==kFreeD0Only) assert(aFitInfoVec_LamKchP[0].freeD0);
     if(aIncludeD0Type==kFixedD0Only) assert(!aFitInfoVec_LamKchP[0].freeD0);
 
-    tGr_LamKchP = GetRadiusvsLambda(aFitInfoVec_LamKchP[0], aCentType);
-    tGr_LamKchM = GetRadiusvsLambda(aFitInfoVec_LamKchM[0], aCentType);
-    tGr_LamK0   = GetRadiusvsLambda(aFitInfoVec_LamK0[0], aCentType);
+    tGr_LamKchP = GetRadiusvsLambda(aFitInfoVec_LamKchP[0], aCentType, aErrType);
+    tGr_LamKchM = GetRadiusvsLambda(aFitInfoVec_LamKchM[0], aCentType, aErrType);
+    tGr_LamK0   = GetRadiusvsLambda(aFitInfoVec_LamK0[0], aCentType, aErrType);
   }
 
+  TString tDrawOption = "epsame";
 
   tGr_LamKchP->SetMarkerColor(tColor_LamKchP);
   tGr_LamKchP->SetMarkerStyle(aMarkerStyle);
@@ -810,7 +893,6 @@ void DrawRadiusvsLambdaAcrossAnalyses(TPad* aPad, int aMarkerStyle=20, double aM
   tGr_LamKchP->SetFillColor(tColor_LamKchP);
   tGr_LamKchP->SetFillStyle(1000);
   tGr_LamKchP->SetLineColor(tColor_LamKchP);
-  tGr_LamKchP->SetLineWidth(1);
 
 
   tGr_LamKchM->SetMarkerColor(tColor_LamKchM);
@@ -819,7 +901,6 @@ void DrawRadiusvsLambdaAcrossAnalyses(TPad* aPad, int aMarkerStyle=20, double aM
   tGr_LamKchM->SetFillColor(tColor_LamKchM);
   tGr_LamKchM->SetFillStyle(1000);
   tGr_LamKchM->SetLineColor(tColor_LamKchM);
-  tGr_LamKchM->SetLineWidth(1);
 
 
   tGr_LamK0->SetMarkerColor(tColor_LamK0);
@@ -828,11 +909,28 @@ void DrawRadiusvsLambdaAcrossAnalyses(TPad* aPad, int aMarkerStyle=20, double aM
   tGr_LamK0->SetFillColor(tColor_LamK0);
   tGr_LamK0->SetFillStyle(1000);
   tGr_LamK0->SetLineColor(tColor_LamK0);
-  tGr_LamK0->SetLineWidth(1);
+
+  if(aErrType==kStat)
+  {
+    tDrawOption = ("pzsame");
+
+    tGr_LamKchP->SetLineWidth(1);
+    tGr_LamKchM->SetLineWidth(1);
+    tGr_LamK0->SetLineWidth(1);
+  }
+  else if(aErrType==kSys)
+  {
+    tDrawOption = ("e2same");
+
+    tGr_LamKchP->SetLineWidth(0);
+    tGr_LamKchM->SetLineWidth(0);
+    tGr_LamK0->SetLineWidth(0);
+  }
+  else assert(0);
   //------------------------
-  tGr_LamKchP->Draw("epsame");
-  tGr_LamKchM->Draw("epsame");
-  tGr_LamK0->Draw("epsame");
+  tGr_LamKchP->Draw(tDrawOption);
+  tGr_LamKchM->Draw(tDrawOption);
+  tGr_LamK0->Draw(tDrawOption);
 
 }
 
@@ -840,7 +938,7 @@ void DrawRadiusvsLambdaAcrossAnalyses(TPad* aPad, int aMarkerStyle=20, double aM
 
 
 //---------------------------------------------------------------------------------------------------------------------------------
-void DrawRadiusvsLambdaAcrossAnalysesQMResults(TPad* aPad, int aMarkerStyle=20, double aMarkerSize=1., CentralityType aCentType=k0010)
+void DrawRadiusvsLambdaAcrossAnalysesQMResults(TPad* aPad, int aMarkerStyle=20, double aMarkerSize=1., CentralityType aCentType=k0010, ErrorType aErrType=kStat)
 {
   aPad->cd();
   //------------------------
@@ -848,13 +946,23 @@ void DrawRadiusvsLambdaAcrossAnalysesQMResults(TPad* aPad, int aMarkerStyle=20, 
   Color_t tColor_LamKchP = kRed+1;
   Color_t tColor_LamKchM = kBlue+1;
   Color_t tColor_LamK0 = kBlack;
+
+  if(aErrType==kSys)
+  {
+    tColor_LamKchP = TColor::GetColorTransparent(tColor_LamKchP, 0.3);
+    tColor_LamKchM = TColor::GetColorTransparent(tColor_LamKchM, 0.3);
+    tColor_LamK0 = TColor::GetColorTransparent(tColor_LamK0, 0.3);
+  }
+
   //------------------------
 
   TGraphAsymmErrors *tGr_LamKchP, *tGr_LamKchM, *tGr_LamK0;
-  tGr_LamKchP = GetRadiusvsLambda(tFitInfoQM_LamKchP, aCentType);
-  tGr_LamKchM = GetRadiusvsLambda(tFitInfoQM_LamKchM, aCentType);
-  tGr_LamK0   = GetRadiusvsLambda(tFitInfoQM_LamK0, aCentType);
+  tGr_LamKchP = GetRadiusvsLambda(tFitInfoQM_LamKchP, aCentType, aErrType);
+  tGr_LamKchM = GetRadiusvsLambda(tFitInfoQM_LamKchM, aCentType, aErrType);
+  tGr_LamK0   = GetRadiusvsLambda(tFitInfoQM_LamK0, aCentType, aErrType);
   //------------------------
+
+  TString tDrawOption = "epsame";
 
   tGr_LamKchP->SetMarkerColor(tColor_LamKchP);
   tGr_LamKchP->SetMarkerStyle(aMarkerStyle);
@@ -862,7 +970,6 @@ void DrawRadiusvsLambdaAcrossAnalysesQMResults(TPad* aPad, int aMarkerStyle=20, 
   tGr_LamKchP->SetFillColor(tColor_LamKchP);
   tGr_LamKchP->SetFillStyle(1000);
   tGr_LamKchP->SetLineColor(tColor_LamKchP);
-  tGr_LamKchP->SetLineWidth(1);
 
 
   tGr_LamKchM->SetMarkerColor(tColor_LamKchM);
@@ -871,7 +978,6 @@ void DrawRadiusvsLambdaAcrossAnalysesQMResults(TPad* aPad, int aMarkerStyle=20, 
   tGr_LamKchM->SetFillColor(tColor_LamKchM);
   tGr_LamKchM->SetFillStyle(1000);
   tGr_LamKchM->SetLineColor(tColor_LamKchM);
-  tGr_LamKchM->SetLineWidth(1);
 
 
   tGr_LamK0->SetMarkerColor(tColor_LamK0);
@@ -880,16 +986,33 @@ void DrawRadiusvsLambdaAcrossAnalysesQMResults(TPad* aPad, int aMarkerStyle=20, 
   tGr_LamK0->SetFillColor(tColor_LamK0);
   tGr_LamK0->SetFillStyle(1000);
   tGr_LamK0->SetLineColor(tColor_LamK0);
-  tGr_LamK0->SetLineWidth(1);
+
+  if(aErrType==kStat)
+  {
+    tDrawOption = ("pzsame");
+
+    tGr_LamKchP->SetLineWidth(1);
+    tGr_LamKchM->SetLineWidth(1);
+    tGr_LamK0->SetLineWidth(1);
+  }
+  else if(aErrType==kSys)
+  {
+    tDrawOption = ("e2same");
+
+    tGr_LamKchP->SetLineWidth(0);
+    tGr_LamKchM->SetLineWidth(0);
+    tGr_LamK0->SetLineWidth(0);
+  }
+  else assert(0);
   //------------------------
-  tGr_LamKchP->Draw("epsame");
-  tGr_LamKchM->Draw("epsame");
-  tGr_LamK0->Draw("epsame");
+  tGr_LamKchP->Draw(tDrawOption);
+  tGr_LamKchM->Draw(tDrawOption);
+  tGr_LamK0->Draw(tDrawOption);
 }
 
 
 //---------------------------------------------------------------------------------------------------------------------------------
-TCanvas* CompareAllRadiusvsLambdaAcrossAnalyses(CentralityType aCentType, IncludeResType aIncludeResType=kInclude10ResAnd3Res, IncludeD0Type aIncludeD0Type=kFreeAndFixedD0, Plot10and3Type aPlot10and3Type=kPlot10and3SeparateAndAvg, bool aIncludeFreeFixedD0Avgs=true, bool bSaveImage=false)
+TCanvas* CompareAllRadiusvsLambdaAcrossAnalyses(CentralityType aCentType, IncludeResType aIncludeResType=kInclude10ResAnd3Res, IncludeD0Type aIncludeD0Type=kFreeAndFixedD0, Plot10and3Type aPlot10and3Type=kPlot10and3SeparateAndAvg, bool aIncludeFreeFixedD0Avgs=true, ErrorType aErrType=kStatAndSys, bool bSaveImage=false)
 {
   vector<bool> tIncludePlots = GetIncludePlotsVec(aIncludeResType, aIncludeD0Type, aPlot10and3Type, aIncludeFreeFixedD0Avgs);
   assert(tIncludePlots.size() == tDrawAcrossAnalysesInfoVec.size());
@@ -963,8 +1086,24 @@ TCanvas* CompareAllRadiusvsLambdaAcrossAnalyses(CentralityType aCentType, Includ
 
     if(tIncludePlots[i])
     {
-      if(tIncResType==kIncludeNoRes) DrawRadiusvsLambdaAcrossAnalysesQMResults((TPad*)tReturnCan, tMarkerStyle, tMarkerSize, aCentType);  //Signifies QM results
-      else DrawRadiusvsLambdaAcrossAnalyses((TPad*)tReturnCan, tMarkerStyle, tMarkerSize, aCentType, tIncResType, tIncD0Type);
+      if(tIncResType==kIncludeNoRes) 
+      {
+        if(aErrType==kStatAndSys)
+        {
+          DrawRadiusvsLambdaAcrossAnalysesQMResults((TPad*)tReturnCan, tMarkerStyle, tMarkerSize, aCentType, kSys);
+          DrawRadiusvsLambdaAcrossAnalysesQMResults((TPad*)tReturnCan, tMarkerStyle, tMarkerSize, aCentType, kStat);
+        }
+        else DrawRadiusvsLambdaAcrossAnalysesQMResults((TPad*)tReturnCan, tMarkerStyle, tMarkerSize, aCentType, aErrType);  //Signifies QM results
+      }
+      else 
+      {
+        if(aErrType==kStatAndSys)
+        {
+          DrawRadiusvsLambdaAcrossAnalyses((TPad*)tReturnCan, tMarkerStyle, tMarkerSize, aCentType, tIncResType, tIncD0Type, kSys);
+          DrawRadiusvsLambdaAcrossAnalyses((TPad*)tReturnCan, tMarkerStyle, tMarkerSize, aCentType, tIncResType, tIncD0Type, kStat);
+        }
+        else DrawRadiusvsLambdaAcrossAnalyses((TPad*)tReturnCan, tMarkerStyle, tMarkerSize, aCentType, tIncResType, tIncD0Type, aErrType);
+      }
 
       if(tDescriptor.Contains("d_{0}")) tTex->DrawLatex(tStartX, tStartY-iTex*tIncrementY-0.1*tIncrementY, tDescriptor);
       else tTex->DrawLatex(tStartX, tStartY-iTex*tIncrementY, tDescriptor);
@@ -996,7 +1135,7 @@ TCanvas* CompareAllRadiusvsLambdaAcrossAnalyses(CentralityType aCentType, Includ
   if(bSaveImage)
   {
     gSystem->mkdir(gSaveLocationBase.Data());
-    TString tSaveLocationFull = TString::Format("%s%s.eps", gSaveLocationBase.Data(), tCanName.Data());
+    TString tSaveLocationFull = TString::Format("%s%s.%s", gSaveLocationBase.Data(), tCanName.Data(), gSaveType.Data());
     tReturnCan->SaveAs(tSaveLocationFull);
   }
 
@@ -1006,7 +1145,7 @@ TCanvas* CompareAllRadiusvsLambdaAcrossAnalyses(CentralityType aCentType, Includ
 
 
 //---------------------------------------------------------------------------------------------------------------------------------
-void DrawReF0vsImF0AcrossAnalyses(TPad* aPad, int aMarkerStyle=20, double aMarkerSize=1., IncludeResType aIncludeResType=kInclude10ResAnd3Res, IncludeD0Type aIncludeD0Type=kFreeAndFixedD0)
+void DrawReF0vsImF0AcrossAnalyses(TPad* aPad, int aMarkerStyle=20, double aMarkerSize=1., IncludeResType aIncludeResType=kInclude10ResAnd3Res, IncludeD0Type aIncludeD0Type=kFreeAndFixedD0, ErrorType aErrType=kStat)
 {
   aPad->cd();
   //------------------------
@@ -1017,6 +1156,13 @@ void DrawReF0vsImF0AcrossAnalyses(TPad* aPad, int aMarkerStyle=20, double aMarke
   Color_t tColor_LamKchP = kRed+1;
   Color_t tColor_LamKchM = kBlue+1;
   Color_t tColor_LamK0 = kBlack;
+
+  if(aErrType==kSys)
+  {
+    tColor_LamKchP = TColor::GetColorTransparent(tColor_LamKchP, 0.3);
+    tColor_LamKchM = TColor::GetColorTransparent(tColor_LamKchM, 0.3);
+    tColor_LamK0 = TColor::GetColorTransparent(tColor_LamK0, 0.3);
+  }
 
   //------------------------
   TGraphAsymmErrors *tGr_LamKchP, *tGr_LamKchM, *tGr_LamK0;
@@ -1036,47 +1182,63 @@ void DrawReF0vsImF0AcrossAnalyses(TPad* aPad, int aMarkerStyle=20, double aMarke
     if(aIncludeD0Type==kFreeD0Only) assert(aFitInfoVec_LamKchP[0].freeD0);
     if(aIncludeD0Type==kFixedD0Only) assert(!aFitInfoVec_LamKchP[0].freeD0);
 
-    tGr_LamKchP = GetReF0vsImF0(aFitInfoVec_LamKchP[0]);
-    tGr_LamKchM = GetReF0vsImF0(aFitInfoVec_LamKchM[0]);
-    tGr_LamK0   = GetReF0vsImF0(aFitInfoVec_LamK0[0]);
+    tGr_LamKchP = GetReF0vsImF0(aFitInfoVec_LamKchP[0], aErrType);
+    tGr_LamKchM = GetReF0vsImF0(aFitInfoVec_LamKchM[0], aErrType);
+    tGr_LamK0   = GetReF0vsImF0(aFitInfoVec_LamK0[0], aErrType);
   }
 
-  tGr_LamKchP->SetMarkerColor(tColor_LamKchP);
+  TString tDrawOption = "epsame";
+
   tGr_LamKchP->SetMarkerStyle(aMarkerStyle);
   tGr_LamKchP->SetMarkerSize(aMarkerSize);
+  tGr_LamKchP->SetMarkerColor(tColor_LamKchP);
   tGr_LamKchP->SetFillColor(tColor_LamKchP);
-  tGr_LamKchP->SetFillStyle(1000);
   tGr_LamKchP->SetLineColor(tColor_LamKchP);
-  tGr_LamKchP->SetLineWidth(1);
+  tGr_LamKchP->SetFillStyle(1000);
 
-
-  tGr_LamKchM->SetMarkerColor(tColor_LamKchM);
   tGr_LamKchM->SetMarkerStyle(aMarkerStyle);
   tGr_LamKchM->SetMarkerSize(aMarkerSize);
+  tGr_LamKchM->SetMarkerColor(tColor_LamKchM);
   tGr_LamKchM->SetFillColor(tColor_LamKchM);
-  tGr_LamKchM->SetFillStyle(1000);
   tGr_LamKchM->SetLineColor(tColor_LamKchM);
-  tGr_LamKchM->SetLineWidth(1);
+  tGr_LamKchM->SetFillStyle(1000);
 
-
-  tGr_LamK0->SetMarkerColor(tColor_LamK0);
   tGr_LamK0->SetMarkerStyle(aMarkerStyle);
   tGr_LamK0->SetMarkerSize(aMarkerSize);
+  tGr_LamK0->SetMarkerColor(tColor_LamK0);
   tGr_LamK0->SetFillColor(tColor_LamK0);
-  tGr_LamK0->SetFillStyle(1000);
   tGr_LamK0->SetLineColor(tColor_LamK0);
-  tGr_LamK0->SetLineWidth(1);
+  tGr_LamK0->SetFillStyle(1000);
+
+  if(aErrType==kStat)
+  {
+    tDrawOption = ("pzsame");
+
+    tGr_LamKchP->SetLineWidth(1);
+    tGr_LamKchM->SetLineWidth(1);
+    tGr_LamK0->SetLineWidth(1);
+  }
+  else if(aErrType==kSys)
+  {
+    tDrawOption = ("e2same");
+
+    tGr_LamKchP->SetLineWidth(0);
+    tGr_LamKchM->SetLineWidth(0);
+    tGr_LamK0->SetLineWidth(0);
+  }
+  else assert(0);
+  
   //------------------------
-  tGr_LamKchP->Draw("epsame");
-  tGr_LamKchM->Draw("epsame");
-  tGr_LamK0->Draw("epsame");
+  tGr_LamKchP->Draw(tDrawOption);
+  tGr_LamKchM->Draw(tDrawOption);
+  tGr_LamK0->Draw(tDrawOption);
 
   //------------------------------------------------------
 
 }
 
 //---------------------------------------------------------------------------------------------------------------------------------
-void DrawReF0vsImF0AcrossAnalysesQMResults(TPad* aPad, int aMarkerStyle=20, double aMarkerSize=1.)
+void DrawReF0vsImF0AcrossAnalysesQMResults(TPad* aPad, int aMarkerStyle=20, double aMarkerSize=1., ErrorType aErrType=kStat)
 {
   aPad->cd();
   //------------------------
@@ -1084,12 +1246,20 @@ void DrawReF0vsImF0AcrossAnalysesQMResults(TPad* aPad, int aMarkerStyle=20, doub
   Color_t tColor_LamKchM = kBlue+1;
   Color_t tColor_LamK0 = kBlack;
 
+  if(aErrType==kSys)
+  {
+    tColor_LamKchP = TColor::GetColorTransparent(tColor_LamKchP, 0.3);
+    tColor_LamKchM = TColor::GetColorTransparent(tColor_LamKchM, 0.3);
+    tColor_LamK0 = TColor::GetColorTransparent(tColor_LamK0, 0.3);
+  }
+
   //------------------------
   TGraphAsymmErrors *tGr_LamKchP, *tGr_LamKchM, *tGr_LamK0;
-  tGr_LamKchP = GetReF0vsImF0(tFitInfoQM_LamKchP);
-  tGr_LamKchM = GetReF0vsImF0(tFitInfoQM_LamKchM);
-  tGr_LamK0   = GetReF0vsImF0(tFitInfoQM_LamK0);
+  tGr_LamKchP = GetReF0vsImF0(tFitInfoQM_LamKchP, aErrType);
+  tGr_LamKchM = GetReF0vsImF0(tFitInfoQM_LamKchM, aErrType);
+  tGr_LamK0   = GetReF0vsImF0(tFitInfoQM_LamK0, aErrType);
 
+  TString tDrawOption = "epsame";
   //------------------------
   tGr_LamKchP->SetMarkerColor(tColor_LamKchP);
   tGr_LamKchP->SetMarkerStyle(aMarkerStyle);
@@ -1097,7 +1267,6 @@ void DrawReF0vsImF0AcrossAnalysesQMResults(TPad* aPad, int aMarkerStyle=20, doub
   tGr_LamKchP->SetFillColor(tColor_LamKchP);
   tGr_LamKchP->SetFillStyle(1000);
   tGr_LamKchP->SetLineColor(tColor_LamKchP);
-  tGr_LamKchP->SetLineWidth(1);
 
 
   tGr_LamKchM->SetMarkerColor(tColor_LamKchM);
@@ -1106,7 +1275,6 @@ void DrawReF0vsImF0AcrossAnalysesQMResults(TPad* aPad, int aMarkerStyle=20, doub
   tGr_LamKchM->SetFillColor(tColor_LamKchM);
   tGr_LamKchM->SetFillStyle(1000);
   tGr_LamKchM->SetLineColor(tColor_LamKchM);
-  tGr_LamKchM->SetLineWidth(1);
 
 
   tGr_LamK0->SetMarkerColor(tColor_LamK0);
@@ -1115,11 +1283,29 @@ void DrawReF0vsImF0AcrossAnalysesQMResults(TPad* aPad, int aMarkerStyle=20, doub
   tGr_LamK0->SetFillColor(tColor_LamK0);
   tGr_LamK0->SetFillStyle(1000);
   tGr_LamK0->SetLineColor(tColor_LamK0);
-  tGr_LamK0->SetLineWidth(1);
+
+  if(aErrType==kStat)
+  {
+    tDrawOption = ("pzsame");
+
+    tGr_LamKchP->SetLineWidth(1);
+    tGr_LamKchM->SetLineWidth(1);
+    tGr_LamK0->SetLineWidth(1);
+  }
+  else if(aErrType==kSys)
+  {
+    tDrawOption = ("e2same");
+
+    tGr_LamKchP->SetLineWidth(0);
+    tGr_LamKchM->SetLineWidth(0);
+    tGr_LamK0->SetLineWidth(0);
+  }
+  else assert(0);
+
   //------------------------
-  tGr_LamKchP->Draw("epsame");
-  tGr_LamKchM->Draw("epsame");
-  tGr_LamK0->Draw("epsame");
+  tGr_LamKchP->Draw(tDrawOption);
+  tGr_LamKchM->Draw(tDrawOption);
+  tGr_LamK0->Draw(tDrawOption);
 
   //------------------------------------------------------
 
@@ -1127,7 +1313,7 @@ void DrawReF0vsImF0AcrossAnalysesQMResults(TPad* aPad, int aMarkerStyle=20, doub
 
 
 //---------------------------------------------------------------------------------------------------------------------------------
-void DrawD0AcrossAnalyses(TPad* aPad, int aMarkerStyle=20, double aMarkerSize=1., IncludeResType aIncludeResType=kInclude10ResAnd3Res, IncludeD0Type aIncludeD0Type=kFreeAndFixedD0)
+void DrawD0AcrossAnalyses(TPad* aPad, int aMarkerStyle=20, double aMarkerSize=1., IncludeResType aIncludeResType=kInclude10ResAnd3Res, IncludeD0Type aIncludeD0Type=kFreeAndFixedD0, ErrorType aErrType=kStat)
 {
   aPad->cd();
   //------------------------
@@ -1138,6 +1324,13 @@ void DrawD0AcrossAnalyses(TPad* aPad, int aMarkerStyle=20, double aMarkerSize=1.
   Color_t tColor_LamKchP = kRed+1;
   Color_t tColor_LamKchM = kBlue+1;
   Color_t tColor_LamK0 = kBlack;
+
+  if(aErrType==kSys)
+  {
+    tColor_LamKchP = TColor::GetColorTransparent(tColor_LamKchP, 0.3);
+    tColor_LamKchM = TColor::GetColorTransparent(tColor_LamKchM, 0.3);
+    tColor_LamK0 = TColor::GetColorTransparent(tColor_LamK0, 0.3);
+  }
 
   //------------------------
   TGraphAsymmErrors *tGr_LamKchP, *tGr_LamKchM, *tGr_LamK0;
@@ -1157,10 +1350,12 @@ void DrawD0AcrossAnalyses(TPad* aPad, int aMarkerStyle=20, double aMarkerSize=1.
     if(aIncludeD0Type==kFreeD0Only) assert(aFitInfoVec_LamKchP[0].freeD0);
     if(aIncludeD0Type==kFixedD0Only) assert(!aFitInfoVec_LamKchP[0].freeD0);
 
-    tGr_LamKchP = GetD0(aFitInfoVec_LamKchP[0]);
-    tGr_LamKchM = GetD0(aFitInfoVec_LamKchM[0]);
-    tGr_LamK0   = GetD0(aFitInfoVec_LamK0[0]);
+    tGr_LamKchP = GetD0(aFitInfoVec_LamKchP[0], aErrType);
+    tGr_LamKchM = GetD0(aFitInfoVec_LamKchM[0], aErrType);
+    tGr_LamK0   = GetD0(aFitInfoVec_LamK0[0], aErrType);
   }
+
+  TString tDrawOption = "epsame";
 
   tGr_LamKchP->SetMarkerColor(tColor_LamKchP);
   tGr_LamKchP->SetMarkerStyle(aMarkerStyle);
@@ -1168,7 +1363,6 @@ void DrawD0AcrossAnalyses(TPad* aPad, int aMarkerStyle=20, double aMarkerSize=1.
   tGr_LamKchP->SetFillColor(tColor_LamKchP);
   tGr_LamKchP->SetFillStyle(1000);
   tGr_LamKchP->SetLineColor(tColor_LamKchP);
-  tGr_LamKchP->SetLineWidth(1);
 
 
   tGr_LamKchM->SetMarkerColor(tColor_LamKchM);
@@ -1177,7 +1371,6 @@ void DrawD0AcrossAnalyses(TPad* aPad, int aMarkerStyle=20, double aMarkerSize=1.
   tGr_LamKchM->SetFillColor(tColor_LamKchM);
   tGr_LamKchM->SetFillStyle(1000);
   tGr_LamKchM->SetLineColor(tColor_LamKchM);
-  tGr_LamKchM->SetLineWidth(1);
 
 
   tGr_LamK0->SetMarkerColor(tColor_LamK0);
@@ -1186,18 +1379,35 @@ void DrawD0AcrossAnalyses(TPad* aPad, int aMarkerStyle=20, double aMarkerSize=1.
   tGr_LamK0->SetFillColor(tColor_LamK0);
   tGr_LamK0->SetFillStyle(1000);
   tGr_LamK0->SetLineColor(tColor_LamK0);
-  tGr_LamK0->SetLineWidth(1);
+
+  if(aErrType==kStat)
+  {
+    tDrawOption = ("pzsame");
+
+    tGr_LamKchP->SetLineWidth(1);
+    tGr_LamKchM->SetLineWidth(1);
+    tGr_LamK0->SetLineWidth(1);
+  }
+  else if(aErrType==kSys)
+  {
+    tDrawOption = ("e2same");
+
+    tGr_LamKchP->SetLineWidth(0);
+    tGr_LamKchM->SetLineWidth(0);
+    tGr_LamK0->SetLineWidth(0);
+  }
+  else assert(0);
   //------------------------
-  tGr_LamKchP->Draw("epsame");
-  tGr_LamKchM->Draw("epsame");
-  tGr_LamK0->Draw("epsame");
+  tGr_LamKchP->Draw(tDrawOption);
+  tGr_LamKchM->Draw(tDrawOption);
+  tGr_LamK0->Draw(tDrawOption);
 
   //------------------------------------------------------
 
 }
 
 //---------------------------------------------------------------------------------------------------------------------------------
-void DrawD0AcrossAnalysesQMResults(TPad* aPad, int aMarkerStyle=20, double aMarkerSize=1.)
+void DrawD0AcrossAnalysesQMResults(TPad* aPad, int aMarkerStyle=20, double aMarkerSize=1., ErrorType aErrType=kStat)
 {
   aPad->cd();
   //------------------------
@@ -1205,12 +1415,21 @@ void DrawD0AcrossAnalysesQMResults(TPad* aPad, int aMarkerStyle=20, double aMark
   Color_t tColor_LamKchM = kBlue+1;
   Color_t tColor_LamK0 = kBlack;
 
+  if(aErrType==kSys)
+  {
+    tColor_LamKchP = TColor::GetColorTransparent(tColor_LamKchP, 0.3);
+    tColor_LamKchM = TColor::GetColorTransparent(tColor_LamKchM, 0.3);
+    tColor_LamK0 = TColor::GetColorTransparent(tColor_LamK0, 0.3);
+  }
+
   //------------------------
   TGraphAsymmErrors *tGr_LamKchP, *tGr_LamKchM, *tGr_LamK0;
-  tGr_LamKchP = GetD0(tFitInfoQM_LamKchP);
-  tGr_LamKchM = GetD0(tFitInfoQM_LamKchM);
-  tGr_LamK0   = GetD0(tFitInfoQM_LamK0);
+  tGr_LamKchP = GetD0(tFitInfoQM_LamKchP, aErrType);
+  tGr_LamKchM = GetD0(tFitInfoQM_LamKchM, aErrType);
+  tGr_LamK0   = GetD0(tFitInfoQM_LamK0, aErrType);
 
+
+  TString tDrawOption = "epsame";
   //------------------------
   tGr_LamKchP->SetMarkerColor(tColor_LamKchP);
   tGr_LamKchP->SetMarkerStyle(aMarkerStyle);
@@ -1218,7 +1437,6 @@ void DrawD0AcrossAnalysesQMResults(TPad* aPad, int aMarkerStyle=20, double aMark
   tGr_LamKchP->SetFillColor(tColor_LamKchP);
   tGr_LamKchP->SetFillStyle(1000);
   tGr_LamKchP->SetLineColor(tColor_LamKchP);
-  tGr_LamKchP->SetLineWidth(1);
 
 
   tGr_LamKchM->SetMarkerColor(tColor_LamKchM);
@@ -1227,7 +1445,6 @@ void DrawD0AcrossAnalysesQMResults(TPad* aPad, int aMarkerStyle=20, double aMark
   tGr_LamKchM->SetFillColor(tColor_LamKchM);
   tGr_LamKchM->SetFillStyle(1000);
   tGr_LamKchM->SetLineColor(tColor_LamKchM);
-  tGr_LamKchM->SetLineWidth(1);
 
 
   tGr_LamK0->SetMarkerColor(tColor_LamK0);
@@ -1236,16 +1453,33 @@ void DrawD0AcrossAnalysesQMResults(TPad* aPad, int aMarkerStyle=20, double aMark
   tGr_LamK0->SetFillColor(tColor_LamK0);
   tGr_LamK0->SetFillStyle(1000);
   tGr_LamK0->SetLineColor(tColor_LamK0);
-  tGr_LamK0->SetLineWidth(1);
+
+  if(aErrType==kStat)
+  {
+    tDrawOption = ("pzsame");
+
+    tGr_LamKchP->SetLineWidth(1);
+    tGr_LamKchM->SetLineWidth(1);
+    tGr_LamK0->SetLineWidth(1);
+  }
+  else if(aErrType==kSys)
+  {
+    tDrawOption = ("e2same");
+
+    tGr_LamKchP->SetLineWidth(0);
+    tGr_LamKchM->SetLineWidth(0);
+    tGr_LamK0->SetLineWidth(0);
+  }
+  else assert(0);
   //------------------------
-  tGr_LamKchP->Draw("epsame");
-  tGr_LamKchM->Draw("epsame");
-  tGr_LamK0->Draw("epsame");
+  tGr_LamKchP->Draw(tDrawOption);
+  tGr_LamKchM->Draw(tDrawOption);
+  tGr_LamK0->Draw(tDrawOption);
 }
 
 
 //---------------------------------------------------------------------------------------------------------------------------------
-TCanvas* CompareAllReF0vsImF0AcrossAnalyses(IncludeResType aIncludeResType=kInclude10ResAnd3Res, IncludeD0Type aIncludeD0Type=kFreeAndFixedD0, Plot10and3Type aPlot10and3Type=kPlot10and3SeparateAndAvg, bool aIncludeFreeFixedD0Avgs=true, bool bSaveImage=false)
+TCanvas* CompareAllReF0vsImF0AcrossAnalyses(IncludeResType aIncludeResType=kInclude10ResAnd3Res, IncludeD0Type aIncludeD0Type=kFreeAndFixedD0, Plot10and3Type aPlot10and3Type=kPlot10and3SeparateAndAvg, bool aIncludeFreeFixedD0Avgs=true, ErrorType aErrType=kStatAndSys, bool bSaveImage=false)
 {
   vector<bool> tIncludePlots = GetIncludePlotsVec(aIncludeResType, aIncludeD0Type, aPlot10and3Type, aIncludeFreeFixedD0Avgs);
   assert(tIncludePlots.size() == tDrawAcrossAnalysesInfoVec.size());
@@ -1325,13 +1559,35 @@ TCanvas* CompareAllReF0vsImF0AcrossAnalyses(IncludeResType aIncludeResType=kIncl
     {
       if(tIncResType==kIncludeNoRes)  //Signifies QM results
       {
-        DrawReF0vsImF0AcrossAnalysesQMResults((TPad*)tPadReF0vsImF0, tMarkerStyle, tMarkerSize);
-        DrawD0AcrossAnalysesQMResults((TPad*)tPadD0, tMarkerStyle, tMarkerSize);
+        if(aErrType==kStatAndSys)
+        {
+          DrawReF0vsImF0AcrossAnalysesQMResults((TPad*)tPadReF0vsImF0, tMarkerStyle, tMarkerSize, kSys);
+          DrawReF0vsImF0AcrossAnalysesQMResults((TPad*)tPadReF0vsImF0, tMarkerStyle, tMarkerSize, kStat);
+
+          DrawD0AcrossAnalysesQMResults((TPad*)tPadD0, tMarkerStyle, tMarkerSize, kSys);
+          DrawD0AcrossAnalysesQMResults((TPad*)tPadD0, tMarkerStyle, tMarkerSize, kStat);
+        }
+        else
+        {
+          DrawReF0vsImF0AcrossAnalysesQMResults((TPad*)tPadReF0vsImF0, tMarkerStyle, tMarkerSize, aErrType);
+          DrawD0AcrossAnalysesQMResults((TPad*)tPadD0, tMarkerStyle, tMarkerSize, aErrType);
+        }
       }
       else 
       {
-        DrawReF0vsImF0AcrossAnalyses((TPad*)tPadReF0vsImF0, tMarkerStyle, tMarkerSize, tIncResType, tIncD0Type);
-        DrawD0AcrossAnalyses((TPad*)tPadD0, tMarkerStyle, tMarkerSize, tIncResType, tIncD0Type);
+        if(aErrType==kStatAndSys)
+        {
+          DrawReF0vsImF0AcrossAnalyses((TPad*)tPadReF0vsImF0, tMarkerStyle, tMarkerSize, tIncResType, tIncD0Type, kSys);
+          DrawReF0vsImF0AcrossAnalyses((TPad*)tPadReF0vsImF0, tMarkerStyle, tMarkerSize, tIncResType, tIncD0Type, kStat);
+
+          DrawD0AcrossAnalyses((TPad*)tPadD0, tMarkerStyle, tMarkerSize, tIncResType, tIncD0Type, kSys);
+          DrawD0AcrossAnalyses((TPad*)tPadD0, tMarkerStyle, tMarkerSize, tIncResType, tIncD0Type, kStat);
+        }
+        else
+        {
+          DrawReF0vsImF0AcrossAnalyses((TPad*)tPadReF0vsImF0, tMarkerStyle, tMarkerSize, tIncResType, tIncD0Type, aErrType);
+          DrawD0AcrossAnalyses((TPad*)tPadD0, tMarkerStyle, tMarkerSize, tIncResType, tIncD0Type, aErrType);
+        }
       }
 
       tPadReF0vsImF0->cd();
@@ -1358,7 +1614,7 @@ TCanvas* CompareAllReF0vsImF0AcrossAnalyses(IncludeResType aIncludeResType=kIncl
   if(bSaveImage)
   {
     gSystem->mkdir(gSaveLocationBase.Data());
-    TString tSaveLocationFull = TString::Format("%s%s.eps", gSaveLocationBase.Data(), tCanName.Data());
+    TString tSaveLocationFull = TString::Format("%s%s.%s", gSaveLocationBase.Data(), tCanName.Data(), gSaveType.Data());
     tReturnCan->SaveAs(tSaveLocationFull);
   }
 
@@ -1391,13 +1647,13 @@ int main(int argc, char **argv)
   CentralityType tCentType = kMB;
 
   IncludeResType tIncludeResType;
-    tIncludeResType = kInclude10ResAnd3Res;
-//    tIncludeResType = kInclude10ResOnly;
+//    tIncludeResType = kInclude10ResAnd3Res;
+    tIncludeResType = kInclude10ResOnly;
 //    tIncludeResType = kInclude3ResOnly;
 
   IncludeD0Type tIncludeD0Type;
-    tIncludeD0Type = kFreeAndFixedD0;
-//    tIncludeD0Type = kFreeD0Only;
+//    tIncludeD0Type = kFreeAndFixedD0;
+    tIncludeD0Type = kFreeD0Only;
 //    tIncludeD0Type = kFixedD0Only;
 
   Plot10and3Type tPlot10and3Type;
@@ -1419,6 +1675,11 @@ int main(int argc, char **argv)
     tIncludeLambdaType = kFreeAndFixedLambda;
 //    tIncludeLambdaType = kFreeLambdaOnly;
 //    tIncludeLambdaType = kFixedLambdaOnly;
+
+  ErrorType tErrorType;
+    tErrorType = kStatAndSys;
+//   tErrorType = kStat;
+//    tErrorType = kSys;
 
 //-------------------------------------------------------------------------------
 //------- Some common combinations ----------
@@ -1443,53 +1704,53 @@ int main(int argc, char **argv)
 //-------------------------------------------------------------------------------
 /*
   TCanvas* tCanReF0vsImF0_LamKchP;
-  tCanReF0vsImF0_LamKchP = DrawAllReF0vsImF0(kLamKchP, tIncludeResType, tIncludeD0Type, tIncludeRadiiType, tIncludeLambdaType, bSaveFigures);
+  tCanReF0vsImF0_LamKchP = DrawAllReF0vsImF0(kLamKchP, tIncludeResType, tIncludeD0Type, tIncludeRadiiType, tIncludeLambdaType, tErrorType, bSaveFigures);
 
   //-------------
   TCanvas *tCanRadiusvsLambda_LamKchP1, *tCanRadiusvsLambda_LamKchP2, *tCanRadiusvsLambda_LamKchP3;
   if(tCentType != kMB)
   {
-    tCanRadiusvsLambda_LamKchP1 = DrawAllRadiusvsLambda(kLamKchP, tCentType, tIncludeResType, tIncludeD0Type, tIncludeRadiiType, tIncludeLambdaType, bSaveFigures);
+    tCanRadiusvsLambda_LamKchP1 = DrawAllRadiusvsLambda(kLamKchP, tCentType, tIncludeResType, tIncludeD0Type, tIncludeRadiiType, tIncludeLambdaType, tErrorType, bSaveFigures);
   }
   else
   {
-    tCanRadiusvsLambda_LamKchP1 = DrawAllRadiusvsLambda(kLamKchP, k0010, tIncludeResType, tIncludeD0Type, tIncludeRadiiType, tIncludeLambdaType, bSaveFigures);
-    tCanRadiusvsLambda_LamKchP2 = DrawAllRadiusvsLambda(kLamKchP, k1030, tIncludeResType, tIncludeD0Type, tIncludeRadiiType, tIncludeLambdaType, bSaveFigures);
-    tCanRadiusvsLambda_LamKchP3 = DrawAllRadiusvsLambda(kLamKchP, k3050, tIncludeResType, tIncludeD0Type, tIncludeRadiiType, tIncludeLambdaType, bSaveFigures);
+    tCanRadiusvsLambda_LamKchP1 = DrawAllRadiusvsLambda(kLamKchP, k0010, tIncludeResType, tIncludeD0Type, tIncludeRadiiType, tIncludeLambdaType, tErrorType, bSaveFigures);
+    tCanRadiusvsLambda_LamKchP2 = DrawAllRadiusvsLambda(kLamKchP, k1030, tIncludeResType, tIncludeD0Type, tIncludeRadiiType, tIncludeLambdaType, tErrorType, bSaveFigures);
+    tCanRadiusvsLambda_LamKchP3 = DrawAllRadiusvsLambda(kLamKchP, k3050, tIncludeResType, tIncludeD0Type, tIncludeRadiiType, tIncludeLambdaType, tErrorType, bSaveFigures);
   }
 
 //-------------------------------------------------------------------------------
   TCanvas* tCanReF0vsImF0_LamKchM;
-  tCanReF0vsImF0_LamKchM = DrawAllReF0vsImF0(kLamKchM, tIncludeResType, tIncludeD0Type, tIncludeRadiiType, tIncludeLambdaType, bSaveFigures);
+  tCanReF0vsImF0_LamKchM = DrawAllReF0vsImF0(kLamKchM, tIncludeResType, tIncludeD0Type, tIncludeRadiiType, tIncludeLambdaType, tErrorType, bSaveFigures);
 
   //-------------
   TCanvas *tCanRadiusvsLambda_LamKchM1, *tCanRadiusvsLambda_LamKchM2, *tCanRadiusvsLambda_LamKchM3;
   if(tCentType != kMB)
   {
-    tCanRadiusvsLambda_LamKchM1 = DrawAllRadiusvsLambda(kLamKchM, tCentType, tIncludeResType, tIncludeD0Type, tIncludeRadiiType, tIncludeLambdaType, bSaveFigures);
+    tCanRadiusvsLambda_LamKchM1 = DrawAllRadiusvsLambda(kLamKchM, tCentType, tIncludeResType, tIncludeD0Type, tIncludeRadiiType, tIncludeLambdaType, tErrorType, bSaveFigures);
   }
   else
   {
-    tCanRadiusvsLambda_LamKchM1 = DrawAllRadiusvsLambda(kLamKchM, k0010, tIncludeResType, tIncludeD0Type, tIncludeRadiiType, tIncludeLambdaType, bSaveFigures);
-    tCanRadiusvsLambda_LamKchM2 = DrawAllRadiusvsLambda(kLamKchM, k1030, tIncludeResType, tIncludeD0Type, tIncludeRadiiType, tIncludeLambdaType, bSaveFigures);
-    tCanRadiusvsLambda_LamKchM3 = DrawAllRadiusvsLambda(kLamKchM, k3050, tIncludeResType, tIncludeD0Type, tIncludeRadiiType, tIncludeLambdaType, bSaveFigures);
+    tCanRadiusvsLambda_LamKchM1 = DrawAllRadiusvsLambda(kLamKchM, k0010, tIncludeResType, tIncludeD0Type, tIncludeRadiiType, tIncludeLambdaType, tErrorType, bSaveFigures);
+    tCanRadiusvsLambda_LamKchM2 = DrawAllRadiusvsLambda(kLamKchM, k1030, tIncludeResType, tIncludeD0Type, tIncludeRadiiType, tIncludeLambdaType, tErrorType, bSaveFigures);
+    tCanRadiusvsLambda_LamKchM3 = DrawAllRadiusvsLambda(kLamKchM, k3050, tIncludeResType, tIncludeD0Type, tIncludeRadiiType, tIncludeLambdaType, tErrorType, bSaveFigures);
   }
 
 //-------------------------------------------------------------------------------
   TCanvas* tCanReF0vsImF0_LamK0;
-  tCanReF0vsImF0_LamK0 = DrawAllReF0vsImF0(kLamK0, tIncludeResType, tIncludeD0Type, tIncludeRadiiType, tIncludeLambdaType, bSaveFigures);
+  tCanReF0vsImF0_LamK0 = DrawAllReF0vsImF0(kLamK0, tIncludeResType, tIncludeD0Type, tIncludeRadiiType, tIncludeLambdaType, tErrorType, bSaveFigures);
 
   //-------------
   TCanvas *tCanRadiusvsLambda_LamK01, *tCanRadiusvsLambda_LamK02, *tCanRadiusvsLambda_LamK03;
   if(tCentType != kMB)
   {
-    tCanRadiusvsLambda_LamK01 = DrawAllRadiusvsLambda(kLamK0, tCentType, tIncludeResType, tIncludeD0Type, tIncludeRadiiType, tIncludeLambdaType, bSaveFigures);
+    tCanRadiusvsLambda_LamK01 = DrawAllRadiusvsLambda(kLamK0, tCentType, tIncludeResType, tIncludeD0Type, tIncludeRadiiType, tIncludeLambdaType, tErrorType, bSaveFigures);
   }
   else
   {
-    tCanRadiusvsLambda_LamK01 = DrawAllRadiusvsLambda(kLamK0, k0010, tIncludeResType, tIncludeD0Type, tIncludeRadiiType, tIncludeLambdaType, bSaveFigures);
-    tCanRadiusvsLambda_LamK02 = DrawAllRadiusvsLambda(kLamK0, k1030, tIncludeResType, tIncludeD0Type, tIncludeRadiiType, tIncludeLambdaType, bSaveFigures);
-    tCanRadiusvsLambda_LamK03 = DrawAllRadiusvsLambda(kLamK0, k3050, tIncludeResType, tIncludeD0Type, tIncludeRadiiType, tIncludeLambdaType, bSaveFigures);
+    tCanRadiusvsLambda_LamK01 = DrawAllRadiusvsLambda(kLamK0, k0010, tIncludeResType, tIncludeD0Type, tIncludeRadiiType, tIncludeLambdaType, tErrorType, bSaveFigures);
+    tCanRadiusvsLambda_LamK02 = DrawAllRadiusvsLambda(kLamK0, k1030, tIncludeResType, tIncludeD0Type, tIncludeRadiiType, tIncludeLambdaType, tErrorType, bSaveFigures);
+    tCanRadiusvsLambda_LamK03 = DrawAllRadiusvsLambda(kLamK0, k3050, tIncludeResType, tIncludeD0Type, tIncludeRadiiType, tIncludeLambdaType, tErrorType, bSaveFigures);
   }
 */
 //-------------------------------------------------------------------------------
@@ -1499,16 +1760,16 @@ int main(int argc, char **argv)
   TCanvas *tCanCompareAllRadiusvsLambdaAcrossAnalyses1, *tCanCompareAllRadiusvsLambdaAcrossAnalyses2, *tCanCompareAllRadiusvsLambdaAcrossAnalyses3;
   if(tCentType != kMB)
   {
-    tCanCompareAllRadiusvsLambdaAcrossAnalyses1 = CompareAllRadiusvsLambdaAcrossAnalyses(tCentType, tIncludeResType, tIncludeD0Type, tPlot10and3Type, tIncludeFreeFixedD0Avgs, bSaveFigures);
+    tCanCompareAllRadiusvsLambdaAcrossAnalyses1 = CompareAllRadiusvsLambdaAcrossAnalyses(tCentType, tIncludeResType, tIncludeD0Type, tPlot10and3Type, tIncludeFreeFixedD0Avgs, tErrorType, bSaveFigures);
   }
   else
   {
-    tCanCompareAllRadiusvsLambdaAcrossAnalyses1 = CompareAllRadiusvsLambdaAcrossAnalyses(k0010, tIncludeResType, tIncludeD0Type, tPlot10and3Type, tIncludeFreeFixedD0Avgs, bSaveFigures);
-    tCanCompareAllRadiusvsLambdaAcrossAnalyses2 = CompareAllRadiusvsLambdaAcrossAnalyses(k1030, tIncludeResType, tIncludeD0Type, tPlot10and3Type, tIncludeFreeFixedD0Avgs, bSaveFigures);
-    tCanCompareAllRadiusvsLambdaAcrossAnalyses3 = CompareAllRadiusvsLambdaAcrossAnalyses(k3050, tIncludeResType, tIncludeD0Type, tPlot10and3Type, tIncludeFreeFixedD0Avgs, bSaveFigures);
+    tCanCompareAllRadiusvsLambdaAcrossAnalyses1 = CompareAllRadiusvsLambdaAcrossAnalyses(k0010, tIncludeResType, tIncludeD0Type, tPlot10and3Type, tIncludeFreeFixedD0Avgs, tErrorType, bSaveFigures);
+    tCanCompareAllRadiusvsLambdaAcrossAnalyses2 = CompareAllRadiusvsLambdaAcrossAnalyses(k1030, tIncludeResType, tIncludeD0Type, tPlot10and3Type, tIncludeFreeFixedD0Avgs, tErrorType, bSaveFigures);
+    tCanCompareAllRadiusvsLambdaAcrossAnalyses3 = CompareAllRadiusvsLambdaAcrossAnalyses(k3050, tIncludeResType, tIncludeD0Type, tPlot10and3Type, tIncludeFreeFixedD0Avgs, tErrorType, bSaveFigures);
   }
 
-  TCanvas* tCanCompareAllReF0vsImF0AcrossAnalyses = CompareAllReF0vsImF0AcrossAnalyses(tIncludeResType, tIncludeD0Type, tPlot10and3Type, tIncludeFreeFixedD0Avgs, bSaveFigures);
+  TCanvas* tCanCompareAllReF0vsImF0AcrossAnalyses = CompareAllReF0vsImF0AcrossAnalyses(tIncludeResType, tIncludeD0Type, tPlot10and3Type, tIncludeFreeFixedD0Avgs, tErrorType, bSaveFigures);
 
 
 //-------------------------------------------------------------------------------

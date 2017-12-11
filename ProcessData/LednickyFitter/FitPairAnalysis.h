@@ -161,6 +161,7 @@ private:
   TH1* fKStarCf;
   double fKStarMinNorm, fKStarMaxNorm;
   TF1* fPrimaryFit;
+  TF1* fNonFlatBackground;
 
 
   int fNFitParams;

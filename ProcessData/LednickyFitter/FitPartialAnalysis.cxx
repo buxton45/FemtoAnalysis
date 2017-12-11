@@ -336,7 +336,8 @@ double FitPartialAnalysis::NonFlatBackgroundFitFunctionQuadratic(double *x, doub
 //________________________________________________________________________________________________________________
 double FitPartialAnalysis::NonFlatBackgroundFitFunctionGaussian(double *x, double *par)
 {
-  return par[0]*exp(-0.5*(pow((x[0]-par[1])/par[2],2.0))) + par[3];
+//  return par[0]*exp(-0.5*(pow((x[0]-par[1])/par[2],2.0))) + par[3];
+  return (1./(par[2]*sqrt(TMath::TwoPi())))*par[0]*exp(-0.5*(pow((x[0]-par[1])/par[2],2.0))) + par[3];
 }
 
 
