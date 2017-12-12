@@ -46,6 +46,9 @@ using std::vector;
 #include "FitParameter.h"
 class FitParameter;
 
+#include "BackgroundFitter.h"
+class BackgroundFitter;
+
 #include "CfLite.h"
 class CfLite;
 
@@ -64,10 +67,6 @@ public:
   FitPartialAnalysis(TString aFileLocation, TString aFileLocationMC, TString aAnalysisName, AnalysisType aAnalysisType, CentralityType aCentralityType, BFieldType aBFieldType, AnalysisRunType aRunType=kTrain, TString aDirNameModifier="", bool aIncludeSingletAndTriplet=false);
   virtual ~FitPartialAnalysis();
 
-  static double NonFlatBackgroundFitFunctionLinear(double *x, double *par);
-  static double NonFlatBackgroundFitFunctionQuadratic(double *x, double *par);
-  static double NonFlatBackgroundFitFunctionGaussian(double *x, double *par);
-
   TObjArray* ConnectAnalysisDirectory(TString aFileLocation, TString aDirectoryName);
 
   void SetParticleTypes();
@@ -79,8 +78,12 @@ public:
 
   void BuildKStarCf(double aMinNorm=0.32, double aMaxNorm=0.4);
   void RebinKStarCf(int aRebinFactor, double aMinNorm=0.32, double aMaxNorm=0.4);
-  static TF1* FitNonFlatBackground(TH1* aCf, NonFlatBgdFitType aFitType=kLinear, double aMinFit=0.6, double aMaxFit=0.9);
-  TF1* GetNonFlatBackground(NonFlatBgdFitType aFitType=kLinear, double aMinFit=0.60, double aMaxFit=0.90);
+
+  static TF1* FitNonFlatBackground(TH1* aNum, TH1* aDen, TH1* aCf, NonFlatBgdFitType aBgdFitType, FitType aFitType=kChi2PML, 
+                                   double aMinBgdFit=0.60, double aMaxBhdFit=0.90, double aKStarMinNorm=0.32, double aKStarMaxNorm=0.40);
+  static TF1* FitNonFlatBackground(TH1* aCf, NonFlatBgdFitType aBgdFitType=kLinear, 
+                                   double aMinBgdFit=0.6, double aMaxBgdFit=0.9, double aKStarMinNorm=0.32, double aKStarMaxNorm=0.40);
+  TF1* GetNonFlatBackground(NonFlatBgdFitType aBgdFitType=kLinear, FitType aFitType=kChi2PML, double aMinFit=0.60, double aMaxFit=0.90);
 
   void SetFitParameter(FitParameter* aParam);
 

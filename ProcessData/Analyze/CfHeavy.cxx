@@ -301,7 +301,11 @@ TH1* CfHeavy::GetSimplyAddedNumDen(TString aReturnName, bool aGetNum)
   //-----Check to see if Sumw2 has already been classed, and if not, call it
   if(!tReturnHist->GetSumw2N()) {tReturnHist->Sumw2();}
 
-  for(unsigned int i=1; i<fCfLiteCollection.size(); i++) tReturnHist->Add(fCfLiteCollection[i]->Cf());
+  for(unsigned int i=1; i<fCfLiteCollection.size(); i++)
+  {
+    if(aGetNum) tReturnHist->Add(fCfLiteCollection[i]->Num());
+    else tReturnHist->Add(fCfLiteCollection[i]->Den());
+  }
 
   if(!tReturnHist->GetSumw2N()) {tReturnHist->Sumw2();}
   return tReturnHist;

@@ -349,13 +349,20 @@ void FitPairAnalysis::DrawKStarCfHeavy(TPad* aPad, int aMarkerColor, TString aOp
 
 }
 
-
 //________________________________________________________________________________________________________________
-TF1* FitPairAnalysis::GetNonFlatBackground(NonFlatBgdFitType aFitType, double aMinFit, double aMaxFit)
+TF1* FitPairAnalysis::GetNonFlatBackground(NonFlatBgdFitType aBgdFitType, FitType aFitType, double aMinFit, double aMaxFit)
 {
   if(fNonFlatBackground) return fNonFlatBackground;
 
-  fNonFlatBackground = FitPartialAnalysis::FitNonFlatBackground(fKStarCfHeavy->GetHeavyCfClone(),aFitType,aMinFit,aMaxFit);
+  if(aFitType==kChi2PML)
+  {
+    TH1* tNum = fKStarCfHeavy->GetSimplyAddedNumDen("SimplyAddedNum", true);
+    TH1* tDen = fKStarCfHeavy->GetSimplyAddedNumDen("SimplyAddedDen", false);
+
+    fNonFlatBackground = FitPartialAnalysis::FitNonFlatBackground(tNum, tDen, fKStarCfHeavy->GetHeavyCfClone(), aBgdFitType, aFitType, aMinFit, aMaxFit, fKStarMinNorm, fKStarMaxNorm);
+  }
+  else fNonFlatBackground = FitPartialAnalysis::FitNonFlatBackground(fKStarCfHeavy->GetHeavyCfClone(), aBgdFitType, aMinFit, aMaxFit, fKStarMinNorm, fKStarMaxNorm);
+
   return fNonFlatBackground;
 }
 
@@ -653,7 +660,7 @@ void FitPairAnalysis::BuildModelCfFakeIdealCfFakeRatio(double aMinNorm, double a
 
 
 //________________________________________________________________________________________________________________
-TH1F* FitPairAnalysis::GetCorrectedFitHisto(bool aMomResCorrection, bool aNonFlatBgdCorrection, bool aIncludeResiduals, NonFlatBgdFitType aNonFlatBgdFitType)
+TH1F* FitPairAnalysis::GetCorrectedFitHisto(bool aMomResCorrection, bool aNonFlatBgdCorrection, bool aIncludeResiduals, NonFlatBgdFitType aNonFlatBgdFitType, FitType aFitType)
 {
   int tNbinsX = fKStarCf->GetNbinsX();
   double tKStarMin = fKStarCf->GetBinLowEdge(1);
@@ -681,7 +688,7 @@ TH1F* FitPairAnalysis::GetCorrectedFitHisto(bool aMomResCorrection, bool aNonFla
 
   if(aNonFlatBgdCorrection)
   {
-    TF1* tNonFlatBgd = FitPairAnalysis::GetNonFlatBackground(aNonFlatBgdFitType);
+    TF1* tNonFlatBgd = FitPairAnalysis::GetNonFlatBackground(aNonFlatBgdFitType, aFitType);
     for(int i=1; i<=tUncorrected->GetNbinsX(); i++)
     {
       double tVal = tUncorrected->GetBinContent(i)*tNonFlatBgd->Eval(tUncorrected->GetBinCenter(i));

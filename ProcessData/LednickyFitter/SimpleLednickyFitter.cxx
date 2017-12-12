@@ -256,7 +256,7 @@ TF1* SimpleLednickyFitter::FitNonFlatBackground(TH1* aCf, double aMinFit, double
   TF1* tNonFlatBackground;
 
   TString tFitName = TString("NonFlatBackgroundFitLinear_") + TString(aCf->GetTitle());
-  tNonFlatBackground = new TF1(tFitName,FitPartialAnalysis::NonFlatBackgroundFitFunctionLinear,0.,1.,2);
+  tNonFlatBackground = new TF1(tFitName,BackgroundFitter::FitFunctionLinear,0.,1.,2);
     tNonFlatBackground->SetParameter(0,0.);
     tNonFlatBackground->SetParameter(1,1.);
   aCf->Fit(tFitName,"0q","",aMinFit,aMaxFit);

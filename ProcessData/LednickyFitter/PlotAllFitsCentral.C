@@ -57,7 +57,7 @@ void CreateParamText(CanvasPartition *aCanPart, int aNx, int aNy, TF1* aFit, con
 
 
 //________________________________________________________________________________________________________________
-TCanvas* DrawAll(vector<LednickyFitter*> &aFitters, bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, NonFlatBgdFitType aNonFlatBgdFitType, bool aSaveImage, bool aDrawSysErrors, bool aZoomROP, double* aChi2All, double* aNDFAll)
+TCanvas* DrawAll(vector<LednickyFitter*> &aFitters, bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, NonFlatBgdFitType aNonFlatBgdFitType, FitType aFitType, bool aSaveImage, bool aDrawSysErrors, bool aZoomROP, double* aChi2All, double* aNDFAll)
 {
   TString tCanvasName = TString("canKStarCfwFits");
   if(!aZoomROP) tCanvasName += TString("UnZoomed");
@@ -122,7 +122,7 @@ TCanvas* DrawAll(vector<LednickyFitter*> &aFitters, bool aMomResCorrectFit, bool
       //---------------------------------------------------------------------------------------------------------
 
       tCanPart->AddGraph(i,j,(TH1*)aFitters[j]->GetFitSharedAnalyses()->GetKStarCfHeavy(i)->GetHeavyCfClone(),"",20,tColor,0.5,"ex0");  //ex0 suppresses the error along x
-      tCanPart->AddGraph(i,j,(TF1*)aFitters[j]->GetFitSharedAnalyses()->GetFitPairAnalysis(i)->GetNonFlatBackground(aNonFlatBgdFitType),"",20,tColorNonFlatBgd);
+      tCanPart->AddGraph(i,j,(TF1*)aFitters[j]->GetFitSharedAnalyses()->GetFitPairAnalysis(i)->GetNonFlatBackground(aNonFlatBgdFitType, aFitType),"",20,tColorNonFlatBgd);
       tCanPart->AddGraph(i,j,(TF1*)aFitters[j]->GetFitSharedAnalyses()->GetFitPairAnalysis(i)->GetPrimaryFit(),"");
       tCanPart->AddGraph(i,j,tCorrectedFitHisto,"",20,tColorCorrectFit,0.5,"lsame");
       if(aDrawSysErrors) tCanPart->AddGraph(i,j,tHistToPlot,"",20,tColorTransparent,0.5,"e2psame");
@@ -201,6 +201,7 @@ int main(int argc, char **argv)
   int tNPartialAnalysis = 2;
   CentralityType tCentType = k0010;  //TODO
   FitGeneratorType tGenType = kPairwConj;
+  FitType tFitType = kChi2PML;
 
   bool SaveImages = true;
   bool ApplyMomResCorrection = true;
@@ -293,6 +294,7 @@ int main(int argc, char **argv)
     tFitSharedAn->SetSharedParameter(kd0, {0,1}, tParsAll[iAnType][4]);
 
     tFitSharedAn->CreateMinuitParameters();
+    tFitSharedAn->SetFitType(tFitType);
 
     LednickyFitter* tLednickyFitter = new LednickyFitter(tFitSharedAn, 0.3);
     tLednickyFitter->SetApplyNonFlatBackgroundCorrection(ApplyNonFlatBackgroundCorrection);
@@ -313,7 +315,7 @@ int main(int argc, char **argv)
   }
 
 
-  TCanvas* tCan = DrawAll(tVecOfLednickyFit, ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, tNonFlatBgdFitType, false, true, true, tOrderedChi2All, tOrderedNDFAll);
+  TCanvas* tCan = DrawAll(tVecOfLednickyFit, ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, tNonFlatBgdFitType, tFitType, false, true, true, tOrderedChi2All, tOrderedNDFAll);
   if(SaveImages)
   {
     TString tSaveName = "AllFitsCentral";
