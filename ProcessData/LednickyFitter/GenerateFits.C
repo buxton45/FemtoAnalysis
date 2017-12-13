@@ -27,7 +27,7 @@ int main(int argc, char **argv)
   bool SaveImagesInRootFile = false;
   bool ApplyMomResCorrection = true;
   bool ApplyNonFlatBackgroundCorrection = true;
-  NonFlatBgdFitType tNonFlatBgdFitType = kLinear;
+  NonFlatBgdFitType tNonFlatBgdFitType = kQuadratic;
 
   IncludeResidualsType tIncludeResidualsType = kIncludeNoResiduals; 
   ChargedResidualsType tChargedResidualsType = kUseXiDataAndCoulombOnlyInterp;
@@ -140,8 +140,11 @@ int main(int argc, char **argv)
   if(FixAllLambdaTo1) tLamKchP->SetLambdaParamStartValue(1.0, false, kMB, true);
   if(UsemTScalingOfResidualRadii) tLamKchP->SetUsemTScalingOfResidualRadii(UsemTScalingOfResidualRadii, mTScalingPowerOfResidualRadii);
 
+tLamKchP->SetAllLambdaParamLimits(0.1,1.0);
+tLamKchP->SetRadiusLimits({{1., 10.}, {1., 10.}, {1., 10.}});
+
   tLamKchP->DoFit();
-  TCanvas* tKStarwFitsCan = tLamKchP->DrawKStarCfswFits(ApplyMomResCorrection,ApplyNonFlatBackgroundCorrection,tNonFlatBgdFitType,SaveImages);
+  TCanvas* tKStarwFitsCan = tLamKchP->DrawKStarCfswFits(ApplyMomResCorrection,ApplyNonFlatBackgroundCorrection,tNonFlatBgdFitType,SaveImages,false,false);
 //  TCanvas* tKStarCfs = tLamKchP->DrawKStarCfs(SaveImages);
 //  TCanvas* tModelKStarCfs = tLamKchP->DrawModelKStarCfs(SaveImages);
 //  tLamKchP->FindGoodInitialValues(ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection);

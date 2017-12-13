@@ -64,7 +64,7 @@ public:
   void BuildKStarCfHeavy(double aMinNorm=0.32, double aMaxNorm=0.4);
   void RebinKStarCfHeavy(int aRebinFactor, double aMinNorm=0.32, double aMaxNorm=0.4);
   void DrawKStarCfHeavy(TPad* aPad, int aMarkerColor=1, TString aOption = "", int aMarkerStyle=20);
-  TF1* GetNonFlatBackground(NonFlatBgdFitType aBgdFitType=kLinear, FitType aFitType=kChi2PML, double aMinFit=0.60, double aMaxFit=0.90);
+  TF1* GetNonFlatBackground(NonFlatBgdFitType aBgdFitType=kLinear, FitType aFitType=kChi2PML, double aMinBgdFit=0.60, double aMaxBgdFit=0.90);
 
   void CreateFitNormParameters();
   void ShareFitParameters(bool aIncludeSingletAndTriplet=false);

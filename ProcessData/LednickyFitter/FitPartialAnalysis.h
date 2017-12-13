@@ -83,7 +83,7 @@ public:
                                    double aMinBgdFit=0.60, double aMaxBhdFit=0.90, double aKStarMinNorm=0.32, double aKStarMaxNorm=0.40);
   static TF1* FitNonFlatBackground(TH1* aCf, NonFlatBgdFitType aBgdFitType=kLinear, 
                                    double aMinBgdFit=0.6, double aMaxBgdFit=0.9, double aKStarMinNorm=0.32, double aKStarMaxNorm=0.40);
-  TF1* GetNonFlatBackground(NonFlatBgdFitType aBgdFitType=kLinear, FitType aFitType=kChi2PML, double aMinFit=0.60, double aMaxFit=0.90);
+  TF1* GetNonFlatBackground(NonFlatBgdFitType aBgdFitType=kLinear, FitType aFitType=kChi2PML, double aMinBgdFit=0.60, double aMaxBgdFit=0.90);
 
   void SetFitParameter(FitParameter* aParam);
 

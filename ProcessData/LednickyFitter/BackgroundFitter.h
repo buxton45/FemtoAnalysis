@@ -32,9 +32,16 @@ public:
                    double aMinBgdFit=0.60, double aMaxBgdFit=0.90, double aKStarMinNorm=0.32, double aKStarMaxNorm=0.40);
   virtual ~BackgroundFitter();
 
+  void PrintFitFunctionInfo();
+
   static double FitFunctionLinear(double *x, double *par);
   static double FitFunctionQuadratic(double *x, double *par);
   static double FitFunctionGaussian(double *x, double *par);
+
+  //These are used in FitPairAnalysis
+  static double AddTwoFitFunctionsLinear(double *x, double *par);
+  static double AddTwoFitFunctionsQuadratic(double *x, double *par);
+  static double AddTwoFitFunctionsGaussian(double *x, double *par);
 
   static double GetPmlValue(double aNumContent, double aDenContent, double aCfContent);
   void CalculateBgdFitFunction(int &npar, double &chi2, double *par);

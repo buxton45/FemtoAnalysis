@@ -572,7 +572,7 @@ void FitPartialAnalysis::RebinKStarCf(int aRebinFactor, double aMinNorm, double 
 TF1* FitPartialAnalysis::FitNonFlatBackground(TH1* aNum, TH1* aDen, TH1* aCf, NonFlatBgdFitType aBgdFitType, FitType aFitType, 
                                               double aMinBgdFit, double aMaxBgdFit, double aKStarMinNorm, double aKStarMaxNorm)
 {
-  BackgroundFitter* tBgdFitter = new BackgroundFitter(aNum, aDen, aCf, aBgdFitType, aFitType, aMinBgdFit, aMaxBgdFit);
+  BackgroundFitter* tBgdFitter = new BackgroundFitter(aNum, aDen, aCf, aBgdFitType, aFitType, aMinBgdFit, aMaxBgdFit, aKStarMinNorm, aKStarMaxNorm);
   tBgdFitter->GetMinuitObject()->SetFCN(GlobalBgdFCN);
   GlobalBgdFitter = tBgdFitter;
 
@@ -589,7 +589,7 @@ TF1* FitPartialAnalysis::FitNonFlatBackground(TH1* aCf, NonFlatBgdFitType aBgdFi
   TH1* tDummyNum=nullptr;
   TH1* tDummyDen=nullptr;
 
-  return FitNonFlatBackground(tDummyNum, tDummyDen, aCf, aBgdFitType, kChi2, aMinBgdFit, aMaxBgdFit);
+  return FitNonFlatBackground(tDummyNum, tDummyDen, aCf, aBgdFitType, kChi2, aMinBgdFit, aMaxBgdFit, aKStarMinNorm, aKStarMaxNorm);
 }
 
 

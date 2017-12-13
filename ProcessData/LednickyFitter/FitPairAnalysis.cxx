@@ -350,7 +350,7 @@ void FitPairAnalysis::DrawKStarCfHeavy(TPad* aPad, int aMarkerColor, TString aOp
 }
 
 //________________________________________________________________________________________________________________
-TF1* FitPairAnalysis::GetNonFlatBackground(NonFlatBgdFitType aBgdFitType, FitType aFitType, double aMinFit, double aMaxFit)
+TF1* FitPairAnalysis::GetNonFlatBackground(NonFlatBgdFitType aBgdFitType, FitType aFitType, double aMinBgdFit, double aMaxBgdFit)
 {
   if(fNonFlatBackground) return fNonFlatBackground;
 
@@ -359,13 +359,44 @@ TF1* FitPairAnalysis::GetNonFlatBackground(NonFlatBgdFitType aBgdFitType, FitTyp
     TH1* tNum = fKStarCfHeavy->GetSimplyAddedNumDen("SimplyAddedNum", true);
     TH1* tDen = fKStarCfHeavy->GetSimplyAddedNumDen("SimplyAddedDen", false);
 
-    fNonFlatBackground = FitPartialAnalysis::FitNonFlatBackground(tNum, tDen, fKStarCfHeavy->GetHeavyCfClone(), aBgdFitType, aFitType, aMinFit, aMaxFit, fKStarMinNorm, fKStarMaxNorm);
+    fNonFlatBackground = FitPartialAnalysis::FitNonFlatBackground(tNum, tDen, fKStarCfHeavy->GetHeavyCfClone(), aBgdFitType, aFitType, aMinBgdFit, aMaxBgdFit, fKStarMinNorm, fKStarMaxNorm);
   }
-  else fNonFlatBackground = FitPartialAnalysis::FitNonFlatBackground(fKStarCfHeavy->GetHeavyCfClone(), aBgdFitType, aMinFit, aMaxFit, fKStarMinNorm, fKStarMaxNorm);
+  else fNonFlatBackground = FitPartialAnalysis::FitNonFlatBackground(fKStarCfHeavy->GetHeavyCfClone(), aBgdFitType, aMinBgdFit, aMaxBgdFit, fKStarMinNorm, fKStarMaxNorm);
 
   return fNonFlatBackground;
 }
 
+/*
+//________________________________________________________________________________________________________________
+TF1* FitPairAnalysis::GetNonFlatBackground(NonFlatBgdFitType aBgdFitType, FitType aFitType, double aMinBgdFit, double aMaxBgdFit)
+{
+  if(fNonFlatBackground) return fNonFlatBackground;
+
+  assert(fNFitPartialAnalysis==2);
+  TF1* tFit1 = (TF1*)fFitPartialAnalysisCollection[0]->GetNonFlatBackground(aBgdFitType, aFitType, aMinBgdFit, aMaxBgdFit);
+  double tNumScale1 = fFitPartialAnalysisCollection[0]->GetKStarCfLite()->GetNumScale();
+
+  TF1* tFit2 = (TF1*)fFitPartialAnalysisCollection[1]->GetNonFlatBackground(aBgdFitType, aFitType, aMinBgdFit, aMaxBgdFit);
+  double tNumScale2 = fFitPartialAnalysisCollection[1]->GetKStarCfLite()->GetNumScale();
+
+
+  fNonFlatBackground = new TF1("IHOPETHISWORKS", BackgroundFitter::AddTwoFitFunctionsQuadratic, 0., 1., 8);
+  fNonFlatBackground->SetParameter(0, tFit1->GetParameter(0));
+  fNonFlatBackground->SetParameter(1, tFit1->GetParameter(1));
+  fNonFlatBackground->SetParameter(2, tFit1->GetParameter(2));
+  fNonFlatBackground->SetParameter(3, tNumScale1);
+
+  fNonFlatBackground->SetParameter(4, tFit2->GetParameter(0));
+  fNonFlatBackground->SetParameter(5, tFit2->GetParameter(1));
+  fNonFlatBackground->SetParameter(6, tFit2->GetParameter(2));
+  fNonFlatBackground->SetParameter(7, tNumScale2);
+
+  delete tFit1;
+  delete tFit2;
+
+  return fNonFlatBackground;
+}
+*/
 
 //________________________________________________________________________________________________________________
 void FitPairAnalysis::CreateFitNormParameters()
