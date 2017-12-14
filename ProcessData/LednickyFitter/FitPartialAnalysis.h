@@ -146,10 +146,8 @@ private:
   vector<ParticleType> fParticleTypes;
 
   CfLite *fKStarCfLite;
-  TH1 *fKStarCf, *fKStarCfNum, *fKStarCfDen;
   double fKStarMinNorm, fKStarMaxNorm;
   double fMinBgdFit, fMaxBgdFit;
-  double fKStarNumScale, fKStarDenScale;
 
   int fNFitParams;
   FitParameter* fLambda;
@@ -187,9 +185,9 @@ inline void FitPartialAnalysis::SetFitPartialAnalysisNumber(int aAnalysisNumber)
 inline int FitPartialAnalysis::GetFitPartialAnalysisNumber() {return fFitPartialAnalysisNumber;}
 
 inline CfLite* FitPartialAnalysis::GetKStarCfLite() {return fKStarCfLite;}
-inline TH1* FitPartialAnalysis::GetKStarCf() {return fKStarCf;}
-inline TH1* FitPartialAnalysis::GetNumKStarCf() {return fKStarCfNum;}
-inline TH1* FitPartialAnalysis::GetDenKStarCf() {return fKStarCfDen;}
+inline TH1* FitPartialAnalysis::GetKStarCf() {return fKStarCfLite->Cf();}
+inline TH1* FitPartialAnalysis::GetNumKStarCf() {return fKStarCfLite->Num();}
+inline TH1* FitPartialAnalysis::GetDenKStarCf() {return fKStarCfLite->Den();}
 
 inline double FitPartialAnalysis::GetKStarMinNorm() {return fKStarMinNorm;}
 inline double FitPartialAnalysis::GetKStarMaxNorm() {return fKStarMaxNorm;}
@@ -199,8 +197,8 @@ inline double FitPartialAnalysis::GetMinBgdFit() {return fMinBgdFit;}
 inline double FitPartialAnalysis::GetMaxBgdFit() {return fMaxBgdFit;}
 inline void FitPartialAnalysis::SetMinMaxBgdFit(double aMin, double aMax) {fMinBgdFit=aMin; fMaxBgdFit=aMax;}
 
-inline double FitPartialAnalysis::GetKStarNumScale() {return fKStarNumScale;}
-inline double FitPartialAnalysis::GetKStarDenScale() {return fKStarDenScale;}
+inline double FitPartialAnalysis::GetKStarNumScale() {return fKStarCfLite->GetNumScale();}
+inline double FitPartialAnalysis::GetKStarDenScale() {return fKStarCfLite->GetDenScale();}
 
 inline vector<ParticleType> FitPartialAnalysis::GetParticleTypes() {return fParticleTypes;}
 

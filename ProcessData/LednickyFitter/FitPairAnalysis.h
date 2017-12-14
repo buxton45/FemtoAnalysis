@@ -166,7 +166,6 @@ private:
   vector<ParticleType> fParticleTypes;
 
   CfHeavy *fKStarCfHeavy;
-  TH1* fKStarCf;
   double fKStarMinNorm, fKStarMaxNorm;
   double fMinBgdFit, fMaxBgdFit;
   TF1* fPrimaryFit;
@@ -231,11 +230,12 @@ inline vector<FitParameter*> FitPairAnalysis::GetFitNormParameters() {return fFi
 inline FitParameter* FitPairAnalysis::GetFitNormParameter(int aFitPartialAnalysisNumber) {return fFitNormParameters[aFitPartialAnalysisNumber];}
 
 inline CfHeavy* FitPairAnalysis::GetKStarCfHeavy() {return fKStarCfHeavy;}
-inline TH1* FitPairAnalysis::GetKStarCf() {return fKStarCf;}
+inline TH1* FitPairAnalysis::GetKStarCf() {return fKStarCfHeavy->GetHeavyCf();}
 
 inline double FitPairAnalysis::GetKStarMinNorm() {return fKStarMinNorm;}
 inline double FitPairAnalysis::GetKStarMaxNorm() {return fKStarMaxNorm;}
-inline void FitPairAnalysis::SetKStarMinMaxNorm(double aMin, double aMax) {RebinKStarCfHeavy(1, aMin, aMax); for(int i=0; i<fNFitPartialAnalysis; i++) fFitPartialAnalysisCollection[i]->SetKStarMinMaxNorm(aMin, aMax);}
+inline void FitPairAnalysis::SetKStarMinMaxNorm(double aMin, double aMax) {RebinKStarCfHeavy(1, aMin, aMax);}  //Propagated through to CfLite objects, no need to for loop through
+                                                                                                               //fFitPartialAnalysisCollection and call SetKStarMinMaxNorm on each
 
 inline double FitPairAnalysis::GetMinBgdFit() {return fMinBgdFit;}
 inline double FitPairAnalysis::GetMaxBgdFit() {return fMaxBgdFit;}

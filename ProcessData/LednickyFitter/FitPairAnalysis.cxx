@@ -32,7 +32,6 @@ FitPairAnalysis::FitPairAnalysis(TString aAnalysisName, vector<FitPartialAnalysi
   fParticleTypes(2),
 
   fKStarCfHeavy(0),
-  fKStarCf(0),
 
   fKStarMinNorm(0.32),
   fKStarMaxNorm(0.40),
@@ -102,7 +101,6 @@ FitPairAnalysis::FitPairAnalysis(TString aFileLocationBase, AnalysisType aAnalys
   fParticleTypes(2),
 
   fKStarCfHeavy(0),
-  fKStarCf(0),
 
   fKStarMinNorm(0.32),
   fKStarMaxNorm(0.40),
@@ -183,7 +181,6 @@ FitPairAnalysis::FitPairAnalysis(TString aFileLocationBase, TString aFileLocatio
   fParticleTypes(2),
 
   fKStarCfHeavy(0),
-  fKStarCf(0),
 
   fKStarMinNorm(0.32),
   fKStarMaxNorm(0.40),
@@ -308,7 +305,6 @@ void FitPairAnalysis::BuildKStarCfHeavy(double aMinNorm, double aMaxNorm)
   TString tTitle = TString(cRootParticleTags[fParticleTypes[0]]) + TString(cRootParticleTags[fParticleTypes[1]]);
 
   fKStarCfHeavy = new CfHeavy(tCfName,tTitle,tTempCfLiteCollection,fKStarMinNorm,fKStarMaxNorm);
-  fKStarCf = fKStarCfHeavy->GetHeavyCf();
 }
 
 
@@ -319,7 +315,6 @@ void FitPairAnalysis::RebinKStarCfHeavy(int aRebinFactor, double aMinNorm, doubl
   fKStarMaxNorm = aMaxNorm;
 
   fKStarCfHeavy->Rebin(aRebinFactor,fKStarMinNorm,fKStarMaxNorm);
-  fKStarCf = fKStarCfHeavy->GetHeavyCf();
 }
 
 
@@ -408,7 +403,7 @@ TF1* FitPairAnalysis::GetNonFlatBackground_CombinePartialFits(NonFlatBgdFitType 
   TF1* tFit2 = (TF1*)fFitPartialAnalysisCollection[1]->GetNonFlatBackground(aBgdFitType, aFitType);
   double tNumScale2 = fFitPartialAnalysisCollection[1]->GetKStarCfLite()->GetNumScale();
 
-  TString tReturnName = TString::Format("NonFlatBgdFit%s_%s", cNonFlatBgdFitTypeTags[aBgdFitType], fKStarCf->GetName());
+  TString tReturnName = TString::Format("NonFlatBgdFit%s_%s", cNonFlatBgdFitTypeTags[aBgdFitType], fKStarCfHeavy->GetHeavyCf()->GetName());
 
   assert(tFit1->GetNpar() == tFit2->GetNpar());
   int tNParsSingle = tFit1->GetNpar();
@@ -657,16 +652,16 @@ void FitPairAnalysis::DrawFit(const char* aTitle)
   gStyle->SetStatX(0.85);
   gStyle->SetStatY(0.60);
 
-  TAxis *xax = fKStarCf->GetXaxis();
+  TAxis *xax = fKStarCfHeavy->GetHeavyCf()->GetXaxis();
   SetupAxis(xax,0.,0.5,"k* (GeV/c)",0.05,0.9,false,0.03,0.005,510);
-  TAxis *yax = fKStarCf->GetYaxis();
+  TAxis *yax = fKStarCfHeavy->GetHeavyCf()->GetYaxis();
   SetupAxis(yax,0.9,1.04,"C(k*)",0.05,0.9,false,0.03,0.005,510);
 
-  fKStarCf->SetTitle(aTitle);
-  fKStarCf->SetMarkerStyle(20);
-  fKStarCf->SetMarkerSize(0.5);
+  fKStarCfHeavy->GetHeavyCf()->SetTitle(aTitle);
+  fKStarCfHeavy->GetHeavyCf()->SetMarkerStyle(20);
+  fKStarCfHeavy->GetHeavyCf()->SetMarkerSize(0.5);
 
-  fKStarCf->Draw();
+  fKStarCfHeavy->GetHeavyCf()->Draw();
   fPrimaryFit->SetLineColor(1);
   fPrimaryFit->Draw("same");
 
@@ -757,9 +752,9 @@ void FitPairAnalysis::BuildModelCfFakeIdealCfFakeRatio(double aMinNorm, double a
 //________________________________________________________________________________________________________________
 TH1F* FitPairAnalysis::GetCorrectedFitHisto(bool aMomResCorrection, bool aNonFlatBgdCorrection, bool aIncludeResiduals, NonFlatBgdFitType aNonFlatBgdFitType, FitType aFitType)
 {
-  int tNbinsX = fKStarCf->GetNbinsX();
-  double tKStarMin = fKStarCf->GetBinLowEdge(1);
-  double tKStarMax = fKStarCf->GetBinLowEdge(tNbinsX+1);
+  int tNbinsX = fKStarCfHeavy->GetHeavyCf()->GetNbinsX();
+  double tKStarMin = fKStarCfHeavy->GetHeavyCf()->GetBinLowEdge(1);
+  double tKStarMax = fKStarCfHeavy->GetHeavyCf()->GetBinLowEdge(tNbinsX+1);
 
   TH1F* tUncorrected = new TH1F("tUncorrected","tUncorrected",tNbinsX,tKStarMin,tKStarMax);
 

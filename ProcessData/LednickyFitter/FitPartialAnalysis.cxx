@@ -40,18 +40,12 @@ FitPartialAnalysis::FitPartialAnalysis(TString aFileLocation, TString aAnalysisN
   fParticleTypes(2),
 
   fKStarCfLite(0),
-  fKStarCf(0),
-  fKStarCfNum(0),
-  fKStarCfDen(0),
 
   fKStarMinNorm(0.32),
   fKStarMaxNorm(0.40),
 
   fMinBgdFit(0.60),
   fMaxBgdFit(0.90),
-
-  fKStarNumScale(0),
-  fKStarDenScale(0),
 
   fNFitParams(5),  //should be initialized here to the correct number of parameters, excluding fNorm
   fLambda(0),
@@ -100,7 +94,7 @@ FitPartialAnalysis::FitPartialAnalysis(TString aFileLocation, TString aAnalysisN
 //    fd0->SetFixed(true);
 
     fNorm = new FitParameter(kNorm, cStartValues[fAnalysisType][fCentralityType][kNorm],false,0.,0.,0.1);
-    fNorm->SetStartValue(fKStarNumScale/fKStarDenScale);
+    fNorm->SetStartValue(fKStarCfLite->GetNumScale()/fKStarCfLite->GetDenScale());
 //    fNorm->SetFixed(true);
 
 //TODO give these their own unique start values
@@ -120,7 +114,7 @@ FitPartialAnalysis::FitPartialAnalysis(TString aFileLocation, TString aAnalysisN
     fImf0 = new FitParameter(kImf0, 0.24, true);
     fd0 = new FitParameter(kd0, 0., true);
     fNorm = new FitParameter(kNorm, cStartValues[fAnalysisType][fCentralityType][kNorm],false,0.,0.,0.1);
-    fNorm->SetStartValue(fKStarNumScale/fKStarDenScale);
+    fNorm->SetStartValue(fKStarCfLite->GetNumScale()/fKStarCfLite->GetDenScale());
     fNorm->SetFixed(true);
 */
 
@@ -146,7 +140,7 @@ FitPartialAnalysis::FitPartialAnalysis(TString aFileLocation, TString aAnalysisN
     fImf0 = new FitParameter(kImf0, cStartValues[fAnalysisType][fCentralityType][kImf0]);
     fd0 = new FitParameter(kd0, cStartValues[fAnalysisType][fCentralityType][kd0]);
     fNorm = new FitParameter(kNorm, cStartValues[fAnalysisType][fCentralityType][kNorm]);
-    fNorm->SetStartValue(fKStarNumScale/fKStarDenScale);
+    fNorm->SetStartValue(fKStarCfLite->GetNumScale()/fKStarCfLite->GetDenScale());
     //fNorm->SetFixed(true);
 */
 
@@ -156,7 +150,7 @@ FitPartialAnalysis::FitPartialAnalysis(TString aFileLocation, TString aAnalysisN
     fImf0 = new FitParameter(kImf0, cStartValues[fAnalysisType][fCentralityType][kImf0],false,0.,0.,10.);
     fd0 = new FitParameter(kd0, cStartValues[fAnalysisType][fCentralityType][kd0],false,0.,0.,50.);
     fNorm = new FitParameter(kNorm, cStartValues[fAnalysisType][fCentralityType][kNorm]);
-    fNorm->SetStartValue(fKStarNumScale/fKStarDenScale);
+    fNorm->SetStartValue(fKStarCfLite->GetNumScale()/fKStarCfLite->GetDenScale());
 
 
     fFitParameters[kLambda] = fLambda;
@@ -187,18 +181,12 @@ FitPartialAnalysis::FitPartialAnalysis(TString aFileLocation, TString aFileLocat
   fParticleTypes(2),
 
   fKStarCfLite(0),
-  fKStarCf(0),
-  fKStarCfNum(0),
-  fKStarCfDen(0),
 
   fKStarMinNorm(0.32),
   fKStarMaxNorm(0.40),
 
   fMinBgdFit(0.60),
   fMaxBgdFit(0.90),
-
-  fKStarNumScale(0),
-  fKStarDenScale(0),
 
   fNFitParams(5),  //should be initialized here to the correct number of parameters, excluding fNorm
   fLambda(0),
@@ -247,7 +235,7 @@ FitPartialAnalysis::FitPartialAnalysis(TString aFileLocation, TString aFileLocat
 //    fd0->SetFixed(true);
 
     fNorm = new FitParameter(kNorm, cStartValues[fAnalysisType][fCentralityType][kNorm],false,0.,0.,0.1);
-    fNorm->SetStartValue(fKStarNumScale/fKStarDenScale);
+    fNorm->SetStartValue(fKStarCfLite->GetNumScale()/fKStarCfLite->GetDenScale());
 //    fNorm->SetFixed(true);
 
 //TODO give these their own unique start values
@@ -266,7 +254,7 @@ FitPartialAnalysis::FitPartialAnalysis(TString aFileLocation, TString aFileLocat
     fImf0 = new FitParameter(kImf0, 0.24, true);
     fd0 = new FitParameter(kd0, 0., true);
     fNorm = new FitParameter(kNorm, cStartValues[fAnalysisType][fCentralityType][kNorm],false,0.,0.,0.1);
-    fNorm->SetStartValue(fKStarNumScale/fKStarDenScale);
+    fNorm->SetStartValue(fKStarCfLite->GetNumScale()/fKStarCfLite->GetDenScale());
     fNorm->SetFixed(true);
 */
 
@@ -290,7 +278,7 @@ FitPartialAnalysis::FitPartialAnalysis(TString aFileLocation, TString aFileLocat
     fImf0 = new FitParameter(kImf0, cStartValues[fAnalysisType][fCentralityType][kImf0]/*,false,0.,0.,1.*/);
     fd0 = new FitParameter(kd0, cStartValues[fAnalysisType][fCentralityType][kd0]/*,false,0.,0.,5.*/);
     fNorm = new FitParameter(kNorm, cStartValues[fAnalysisType][fCentralityType][kNorm]);
-    fNorm->SetStartValue(fKStarNumScale/fKStarDenScale);
+    fNorm->SetStartValue(fKStarCfLite->GetNumScale()/fKStarCfLite->GetDenScale());
     //fNorm->SetFixed(true);
 
 
@@ -546,14 +534,6 @@ void FitPartialAnalysis::BuildKStarCf(double aMinNorm, double aMaxNorm)
   TString tCfBaseName = "KStarCf_";
   TString tCfName = tCfBaseName + TString(cAnalysisBaseTags[fAnalysisType]) + TString(cCentralityTags[fCentralityType]) + TString(cBFieldTags[fBFieldType]);
   fKStarCfLite = new CfLite(tCfName,tCfName,tNum,tDen,fKStarMinNorm,fKStarMaxNorm);
-
-  fKStarCf = fKStarCfLite->Cf();
-  fKStarCfNum = fKStarCfLite->Num();
-  fKStarCfDen = fKStarCfLite->Den();
-
-  fKStarNumScale = fKStarCfLite->GetNumScale();
-  fKStarDenScale = fKStarCfLite->GetDenScale();
-
 }
 
 //________________________________________________________________________________________________________________
@@ -563,14 +543,6 @@ void FitPartialAnalysis::RebinKStarCf(int aRebinFactor, double aMinNorm, double 
   fKStarMaxNorm = aMaxNorm;
 
   fKStarCfLite->Rebin(aRebinFactor,fKStarMinNorm,fKStarMaxNorm);
-
-  fKStarCf = fKStarCfLite->Cf();
-  fKStarCfNum = fKStarCfLite->Num();
-  fKStarCfDen = fKStarCfLite->Den();
-
-  fKStarNumScale = fKStarCfLite->GetNumScale();
-  fKStarDenScale = fKStarCfLite->GetDenScale();
-
 }
 
 
@@ -606,11 +578,11 @@ TF1* FitPartialAnalysis::GetNonFlatBackground(NonFlatBgdFitType aBgdFitType, Fit
 
   if(aFitType==kChi2PML)
   {
-    fNonFlatBackground = FitNonFlatBackground(fKStarCfNum, fKStarCfDen, fKStarCf, aBgdFitType, aFitType, fMinBgdFit, fMaxBgdFit, fKStarMinNorm, fKStarMaxNorm);
+    fNonFlatBackground = FitNonFlatBackground(fKStarCfLite->Num(), fKStarCfLite->Den(), fKStarCfLite->Cf(), aBgdFitType, aFitType, fMinBgdFit, fMaxBgdFit, fKStarMinNorm, fKStarMaxNorm);
   }
   else if(aFitType==kChi2)
   {
-    fNonFlatBackground = FitNonFlatBackground(fKStarCf, aBgdFitType, fMinBgdFit, fMaxBgdFit, fKStarMinNorm, fKStarMaxNorm);
+    fNonFlatBackground = FitNonFlatBackground(fKStarCfLite->Cf(), aBgdFitType, fMinBgdFit, fMaxBgdFit, fKStarMinNorm, fKStarMaxNorm);
   }
   else assert(0);
 
