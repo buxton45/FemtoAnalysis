@@ -241,23 +241,21 @@ TF1* BackgroundFitter::FitNonFlatBackgroundPML()
   TF1* tNonFlatBackground;
   double tPar=0., tParErr=0.;
   int tNPars=0;
+  TString tFitName = TString::Format("NonFlatBackgroundFit%s_%s", cNonFlatBgdFitTypeTags[fNonFlatBgdFitType], fCf->GetTitle());
 
   if(fNonFlatBgdFitType==kLinear)
   {
     tNPars=2;
-    TString tFitName = TString("NonFlatBackgroundFitLinear_") + TString(fCf->GetTitle());
     tNonFlatBackground = new TF1(tFitName,FitFunctionLinear,0.,1.,2);
   }
   else if(fNonFlatBgdFitType == kQuadratic)
   {
     tNPars=3;
-    TString tFitName = TString("NonFlatBackgroundFitQuadratic_") + TString(fCf->GetTitle());
     tNonFlatBackground = new TF1(tFitName,FitFunctionQuadratic,0.,1.,3);
   }
   else if(fNonFlatBgdFitType == kGaussian)
   {
     tNPars=4;
-    TString tFitName = TString("NonFlatBackgroundFitGaussian_") + TString(fCf->GetTitle());
     tNonFlatBackground = new TF1(tFitName,FitFunctionGaussian,0.,1.,4);
   }
   else assert(0);
@@ -286,34 +284,25 @@ TF1* BackgroundFitter::FitNonFlatBackgroundSimple()
   PrintFitFunctionInfo();
 
   TF1* tNonFlatBackground;
+  TString tFitName = TString::Format("NonFlatBackgroundFit%s_%s", cNonFlatBgdFitTypeTags[fNonFlatBgdFitType], fCf->GetTitle());
 
   if(fNonFlatBgdFitType==kLinear)
   {
-    TString tFitName = TString("NonFlatBackgroundFitLinear_") + TString(fCf->GetTitle());
     tNonFlatBackground = new TF1(tFitName,FitFunctionLinear,0.,1.,2);
       tNonFlatBackground->SetParameter(0,0.);
       tNonFlatBackground->SetParameter(1,1.);
     fCf->Fit(tFitName,"0q","",fMinBgdFit,fMaxBgdFit);
-
-    cout << "Par[0] = " << tNonFlatBackground->GetParameter(0) << endl;
-    cout << "Par[1] = " << tNonFlatBackground->GetParameter(1) << endl;
   }
   else if(fNonFlatBgdFitType == kQuadratic)
   {
-    TString tFitName = TString("NonFlatBackgroundFitQuadratic_") + TString(fCf->GetTitle());
     tNonFlatBackground = new TF1(tFitName,FitFunctionQuadratic,0.,1.,3);
       tNonFlatBackground->SetParameter(0,0.);
       tNonFlatBackground->SetParameter(1,0.);
       tNonFlatBackground->SetParameter(2,1.);
     fCf->Fit(tFitName,"0q","",fMinBgdFit,fMaxBgdFit);
-
-    cout << "Par[0] = " << tNonFlatBackground->GetParameter(0) << endl;
-    cout << "Par[1] = " << tNonFlatBackground->GetParameter(1) << endl;
-    cout << "Par[2] = " << tNonFlatBackground->GetParameter(2) << endl;
   }
   else if(fNonFlatBgdFitType == kGaussian)
   {
-    TString tFitName = TString("NonFlatBackgroundFitGaussian_") + TString(fCf->GetTitle());
     tNonFlatBackground = new TF1(tFitName,FitFunctionGaussian,0.,1.,4);
       tNonFlatBackground->SetParameter(0,0.1);
       tNonFlatBackground->SetParameter(1,0.);
@@ -323,13 +312,10 @@ TF1* BackgroundFitter::FitNonFlatBackgroundSimple()
       tNonFlatBackground->SetParLimits(1,-0.05,0.05);
 
     fCf->Fit(tFitName,"0q","",fMinBgdFit,fMaxBgdFit);
-
-    cout << "Par[0] = " << tNonFlatBackground->GetParameter(0) << endl;
-    cout << "Par[1] = " << tNonFlatBackground->GetParameter(1) << endl;
-    cout << "Par[2] = " << tNonFlatBackground->GetParameter(2) << endl;
-    cout << "Par[3] = " << tNonFlatBackground->GetParameter(3) << endl;
   }
   else assert(0);
+
+  for(int i=0; i<tNonFlatBackground->GetNpar(); i++) cout << "Par[" << i << "] = " << tNonFlatBackground->GetParameter(i) << endl;
 
   cout << "-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*" << endl;
   return tNonFlatBackground;

@@ -329,6 +329,9 @@ const char* const cPrettyCentralityTags[4] = {"0-10%", "10-30%", "30-50%", ""};
 //enum KStarTrueVsRecType
 const char* const cKStarTrueVsRecTypeTags[4] = {"Same","RotSame","Mixed","RotMixed"};
 
+//enum NonFlatBgdFitType
+const char* const cNonFlatBgdFitTypeTags[3] = {"Linear", "Quadratic", "Gaussian"};
+
 //enum IncludeResidualsType
 const char* const cIncludeResidualsTypeTags[3] = {"_NoRes", "_10Res", "_3Res"};
 //enum ChargedResidualsType

@@ -350,8 +350,11 @@ void FitPairAnalysis::DrawKStarCfHeavy(TPad* aPad, int aMarkerColor, TString aOp
 }
 
 //________________________________________________________________________________________________________________
-TF1* FitPairAnalysis::GetNonFlatBackground(NonFlatBgdFitType aBgdFitType, FitType aFitType, double aMinBgdFit, double aMaxBgdFit)
+TF1* FitPairAnalysis::GetNonFlatBackground_FitCombinedPartials(NonFlatBgdFitType aBgdFitType, FitType aFitType, double aMinBgdFit, double aMaxBgdFit)
 {
+  //Fit combined histograms
+  //  In case aFitType==kChi2PML, use simply added numerators and denominators
+  //  In case aFitType==kChi2, use fKStarCfHeavy, i.e. weighted combination of Cfs
   if(fNonFlatBackground) return fNonFlatBackground;
 
   if(aFitType==kChi2PML)
@@ -366,37 +369,72 @@ TF1* FitPairAnalysis::GetNonFlatBackground(NonFlatBgdFitType aBgdFitType, FitTyp
   return fNonFlatBackground;
 }
 
-/*
+
 //________________________________________________________________________________________________________________
-TF1* FitPairAnalysis::GetNonFlatBackground(NonFlatBgdFitType aBgdFitType, FitType aFitType, double aMinBgdFit, double aMaxBgdFit)
+TF1* FitPairAnalysis::GetNonFlatBackground_CombinePartialFits(NonFlatBgdFitType aBgdFitType, FitType aFitType, double aMinBgdFit, double aMaxBgdFit)
 {
+  //Combine fits (technically, probably the most correct method, as the fits to the partial analyses are used during fitting)
+  //  i.e. fit NonFlatBgd for partial analyses first individually, and then combine with weighted mean
+
   if(fNonFlatBackground) return fNonFlatBackground;
 
-  assert(fNFitPartialAnalysis==2);
+  assert(fNFitPartialAnalysis==2);  // i.e. this only works for train runs with _FemtoPlus and _FemtoMinus
+                                    //      NOT with old grid runs with _Bp1, _Bp2, _Bm1, _Bm2, _Bm3
   TF1* tFit1 = (TF1*)fFitPartialAnalysisCollection[0]->GetNonFlatBackground(aBgdFitType, aFitType, aMinBgdFit, aMaxBgdFit);
   double tNumScale1 = fFitPartialAnalysisCollection[0]->GetKStarCfLite()->GetNumScale();
 
   TF1* tFit2 = (TF1*)fFitPartialAnalysisCollection[1]->GetNonFlatBackground(aBgdFitType, aFitType, aMinBgdFit, aMaxBgdFit);
   double tNumScale2 = fFitPartialAnalysisCollection[1]->GetKStarCfLite()->GetNumScale();
 
+  TString tReturnName = TString::Format("NonFlatBgdFit%s_%s", cNonFlatBgdFitTypeTags[aBgdFitType], fKStarCf->GetName());
 
-  fNonFlatBackground = new TF1("IHOPETHISWORKS", BackgroundFitter::AddTwoFitFunctionsQuadratic, 0., 1., 8);
-  fNonFlatBackground->SetParameter(0, tFit1->GetParameter(0));
-  fNonFlatBackground->SetParameter(1, tFit1->GetParameter(1));
-  fNonFlatBackground->SetParameter(2, tFit1->GetParameter(2));
-  fNonFlatBackground->SetParameter(3, tNumScale1);
+  assert(tFit1->GetNpar() == tFit2->GetNpar());
+  int tNParsSingle = tFit1->GetNpar();
+  int tNParsTotal = 2*(tNParsSingle+1); //tNParsTotal equals 2*(tNParsSingle+1) (+1 from inclusion of num scales)
 
-  fNonFlatBackground->SetParameter(4, tFit2->GetParameter(0));
-  fNonFlatBackground->SetParameter(5, tFit2->GetParameter(1));
-  fNonFlatBackground->SetParameter(6, tFit2->GetParameter(2));
-  fNonFlatBackground->SetParameter(7, tNumScale2);
+  if(aBgdFitType==kLinear)
+  {
+    assert(tNParsTotal==6);
+    fNonFlatBackground = new TF1(tReturnName, BackgroundFitter::AddTwoFitFunctionsLinear, 0., 1., tNParsTotal);
+  }
+  else if(aBgdFitType == kQuadratic)
+  {
+    assert(tNParsTotal==8);
+    fNonFlatBackground = new TF1(tReturnName, BackgroundFitter::AddTwoFitFunctionsQuadratic, 0., 1., tNParsTotal);
+  }
+  else if(aBgdFitType == kGaussian)
+  {
+    assert(tNParsTotal==10);
+    fNonFlatBackground = new TF1(tReturnName, BackgroundFitter::AddTwoFitFunctionsGaussian, 0., 1., tNParsTotal);
+  }
+  else assert(0);
+
+  for(int i=0; i<tNParsSingle; i++) fNonFlatBackground->SetParameter(i, tFit1->GetParameter(i));
+  fNonFlatBackground->SetParameter(tNParsSingle, tNumScale1);
+
+  for(int i=0; i<tNParsSingle; i++) fNonFlatBackground->SetParameter(i+tNParsSingle+1, tFit2->GetParameter(i));
+  fNonFlatBackground->SetParameter(tNParsTotal-1, tNumScale2);
+
+  for(int i=0; i<tNParsTotal; i++) cout << "PairPar[" << i << "] = " << fNonFlatBackground->GetParameter(i) << endl;
 
   delete tFit1;
   delete tFit2;
 
   return fNonFlatBackground;
 }
-*/
+
+
+//________________________________________________________________________________________________________________
+TF1* FitPairAnalysis::GetNonFlatBackground(NonFlatBgdFitType aBgdFitType, FitType aFitType, bool aCombinePartialFits, double aMinBgdFit, double aMaxBgdFit)
+{
+  if(fNonFlatBackground) return fNonFlatBackground;
+
+  if(aCombinePartialFits) fNonFlatBackground = GetNonFlatBackground_CombinePartialFits(aBgdFitType, aFitType, aMinBgdFit, aMaxBgdFit);
+  else fNonFlatBackground = GetNonFlatBackground_FitCombinedPartials(aBgdFitType, aFitType, aMinBgdFit, aMaxBgdFit);
+  
+  return fNonFlatBackground;
+}
+
 
 //________________________________________________________________________________________________________________
 void FitPairAnalysis::CreateFitNormParameters()

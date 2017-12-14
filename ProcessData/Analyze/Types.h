@@ -271,6 +271,8 @@ kXiCKSt0=40, kAXiCAKSt0=41, kXiCAKSt0=42, kAXiCKSt0=43
   extern const char* const cPrettyCentralityTags[4];
   extern const char* const cKStarTrueVsRecTypeTags[4];
 
+  extern const char* const cNonFlatBgdFitTypeTags[3];
+
   extern const char* const cIncludeResidualsTypeTags[3];
   extern const char* const cChargedResidualsTypeTags[3];
   extern const char* const cResPrimMaxDecayTypeTags[6];
