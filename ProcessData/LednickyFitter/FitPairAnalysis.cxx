@@ -355,6 +355,9 @@ TF1* FitPairAnalysis::GetNonFlatBackground_FitCombinedPartials(NonFlatBgdFitType
   //Fit combined histograms
   //  In case aFitType==kChi2PML, use simply added numerators and denominators
   //  In case aFitType==kChi2, use fKStarCfHeavy, i.e. weighted combination of Cfs
+
+  cout << "\t Using method FitPairAnalysis::GetNonFlatBackground_FitCombinedPartials" << endl;
+
   if(fNonFlatBackground) return fNonFlatBackground;
 
   if(aFitType==kChi2PML)
@@ -377,6 +380,8 @@ TF1* FitPairAnalysis::GetNonFlatBackground_CombinePartialFits(NonFlatBgdFitType 
   //  i.e. fit NonFlatBgd for partial analyses first individually, and then combine with weighted mean
 
   if(fNonFlatBackground) return fNonFlatBackground;
+
+  cout << "\t Using method FitPairAnalysis::GetNonFlatBackground_CombinePartialFits" << endl;
 
   assert(fNFitPartialAnalysis==2);  // i.e. this only works for train runs with _FemtoPlus and _FemtoMinus
                                     //      NOT with old grid runs with _Bp1, _Bp2, _Bm1, _Bm2, _Bm3
@@ -428,6 +433,11 @@ TF1* FitPairAnalysis::GetNonFlatBackground_CombinePartialFits(NonFlatBgdFitType 
 TF1* FitPairAnalysis::GetNonFlatBackground(NonFlatBgdFitType aBgdFitType, FitType aFitType, bool aCombinePartialFits, double aMinBgdFit, double aMaxBgdFit)
 {
   if(fNonFlatBackground) return fNonFlatBackground;
+
+  cout << endl << endl;
+  cout << "-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**" << endl;
+  cout << "Getting NonFlatBackground for pair analysis " << fAnalysisName << endl;
+
 
   if(aCombinePartialFits) fNonFlatBackground = GetNonFlatBackground_CombinePartialFits(aBgdFitType, aFitType, aMinBgdFit, aMaxBgdFit);
   else fNonFlatBackground = GetNonFlatBackground_FitCombinedPartials(aBgdFitType, aFitType, aMinBgdFit, aMaxBgdFit);

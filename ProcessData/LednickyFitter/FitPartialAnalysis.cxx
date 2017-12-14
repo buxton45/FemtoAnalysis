@@ -538,7 +538,7 @@ void FitPartialAnalysis::BuildKStarCf(double aMinNorm, double aMaxNorm)
   TH1* tDen = Get1dHisto(tDenName,tNewDenName);
 
   TString tCfBaseName = "KStarCf_";
-  TString tCfName = tCfBaseName + TString(cAnalysisBaseTags[fAnalysisType]) + TString(cBFieldTags[fBFieldType]);
+  TString tCfName = tCfBaseName + TString(cAnalysisBaseTags[fAnalysisType]) + TString(cCentralityTags[fCentralityType]) + TString(cBFieldTags[fBFieldType]);
   fKStarCfLite = new CfLite(tCfName,tCfName,tNum,tDen,fKStarMinNorm,fKStarMaxNorm);
 
   fKStarCf = fKStarCfLite->Cf();
