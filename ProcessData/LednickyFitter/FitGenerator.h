@@ -81,7 +81,7 @@ public:
   void SetDefaultLambdaParametersWithResiduals(double aMinLambda=0., double aMaxLambda=1.0);
 
   void SetAllParameters();
-  void InitializeGenerator(double aMaxKStarToFit=0.3);  //Called withith DoFit
+  void InitializeGenerator(double aMaxFitKStar=0.3);  //Called withith DoFit
   void DoFit(double aMaxFitKStar=0.3);
   void WriteAllFitParameters(ostream &aOut=std::cout);
   vector<TString> GetAllFitParametersTStringVector();
@@ -114,6 +114,8 @@ public:
   double GetChi2();
 
   TH1* GetKStarCf(int aAnalysisNumber);
+  void SetKStarMinMaxNorm(double aMin, double aMax);
+  void SetMinMaxBgdFit(double aMin, double aMax);
 
   void SetApplyNonFlatBackgroundCorrection(bool aApply);
   void SetNonFlatBgdFitType(NonFlatBgdFitType aNonFlatBgdFitType);
@@ -190,6 +192,8 @@ inline void FitGenerator::SetFitType(FitType aFitType) {fSharedAn->SetFitType(aF
 inline double FitGenerator::GetChi2() {return fLednickyFitter->GetChi2();}
 
 inline TH1* FitGenerator::GetKStarCf(int aAnalysisNumber) {return fSharedAn->GetKStarCfHeavy(aAnalysisNumber)->GetHeavyCfClone();}
+inline void FitGenerator::SetKStarMinMaxNorm(double aMin, double aMax) {fSharedAn->SetKStarMinMaxNorm(aMin, aMax);}
+inline void FitGenerator::SetMinMaxBgdFit(double aMin, double aMax) {fSharedAn->SetMinMaxBgdFit(aMin, aMax);}
 
 inline void FitGenerator::SetApplyNonFlatBackgroundCorrection(bool aApply) {fApplyNonFlatBackgroundCorrection = aApply;}
 inline void FitGenerator::SetNonFlatBgdFitType(NonFlatBgdFitType aNonFlatBgdFitType) {fNonFlatBgdFitType = aNonFlatBgdFitType;}

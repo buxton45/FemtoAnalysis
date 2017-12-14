@@ -139,6 +139,9 @@ int main(int argc, char **argv)
   }
   if(FixAllLambdaTo1) tLamKchP->SetLambdaParamStartValue(1.0, false, kMB, true);
   if(UsemTScalingOfResidualRadii) tLamKchP->SetUsemTScalingOfResidualRadii(UsemTScalingOfResidualRadii, mTScalingPowerOfResidualRadii);
+
+//  tLamKchP->SetKStarMinMaxNorm(0.5,0.6);
+//  tLamKchP->SetMinMaxBgdFit(0.65, 0.95);
 /*
 tLamKchP->SetAllLambdaParamLimits(0.1,1.0);
 tLamKchP->SetRadiusLimits({{1., 10.}, {1., 10.}, {1., 10.}});

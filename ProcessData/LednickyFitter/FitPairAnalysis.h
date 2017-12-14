@@ -65,9 +65,9 @@ public:
   void RebinKStarCfHeavy(int aRebinFactor, double aMinNorm=0.32, double aMaxNorm=0.4);
   void DrawKStarCfHeavy(TPad* aPad, int aMarkerColor=1, TString aOption = "", int aMarkerStyle=20);
 
-  TF1* GetNonFlatBackground_FitCombinedPartials(NonFlatBgdFitType aBgdFitType=kLinear, FitType aFitType=kChi2PML, double aMinBgdFit=0.60, double aMaxBgdFit=0.90);
-  TF1* GetNonFlatBackground_CombinePartialFits(NonFlatBgdFitType aBgdFitType=kLinear, FitType aFitType=kChi2PML, double aMinBgdFit=0.60, double aMaxBgdFit=0.90);
-  TF1* GetNonFlatBackground(NonFlatBgdFitType aBgdFitType=kLinear, FitType aFitType=kChi2PML, bool aCombinePartialFits=true, double aMinBgdFit=0.60, double aMaxBgdFit=0.90);
+  TF1* GetNonFlatBackground_FitCombinedPartials(NonFlatBgdFitType aBgdFitType=kLinear, FitType aFitType=kChi2PML);
+  TF1* GetNonFlatBackground_CombinePartialFits(NonFlatBgdFitType aBgdFitType=kLinear, FitType aFitType=kChi2PML);
+  TF1* GetNonFlatBackground(NonFlatBgdFitType aBgdFitType=kLinear, FitType aFitType=kChi2PML, bool aCombinePartialFits=true);
 
   void CreateFitNormParameters();
   void ShareFitParameters(bool aIncludeSingletAndTriplet=false);
@@ -122,6 +122,14 @@ public:
   CfHeavy* GetKStarCfHeavy();
   TH1* GetKStarCf();
 
+  double GetKStarMinNorm();
+  double GetKStarMaxNorm();
+  void SetKStarMinMaxNorm(double aMin, double aMax);
+
+  double GetMinBgdFit();
+  double GetMaxBgdFit();
+  void SetMinMaxBgdFit(double aMin, double aMax);
+
   void SetPrimaryFit(TF1* aFit);
   TF1* GetPrimaryFit();
 
@@ -132,9 +140,6 @@ public:
 
   TH2* GetModelKStarTrueVsRecMixed();
   TH1* GetModelCfFakeIdealCfFakeRatio();
-
-  double GetKStarMinNorm();
-  double GetKStarMaxNorm();
 
   bool AreTrainResults();
 
@@ -163,6 +168,7 @@ private:
   CfHeavy *fKStarCfHeavy;
   TH1* fKStarCf;
   double fKStarMinNorm, fKStarMaxNorm;
+  double fMinBgdFit, fMaxBgdFit;
   TF1* fPrimaryFit;
   TF1* fNonFlatBackground;
 
@@ -227,14 +233,19 @@ inline FitParameter* FitPairAnalysis::GetFitNormParameter(int aFitPartialAnalysi
 inline CfHeavy* FitPairAnalysis::GetKStarCfHeavy() {return fKStarCfHeavy;}
 inline TH1* FitPairAnalysis::GetKStarCf() {return fKStarCf;}
 
+inline double FitPairAnalysis::GetKStarMinNorm() {return fKStarMinNorm;}
+inline double FitPairAnalysis::GetKStarMaxNorm() {return fKStarMaxNorm;}
+inline void FitPairAnalysis::SetKStarMinMaxNorm(double aMin, double aMax) {RebinKStarCfHeavy(1, aMin, aMax); for(int i=0; i<fNFitPartialAnalysis; i++) fFitPartialAnalysisCollection[i]->SetKStarMinMaxNorm(aMin, aMax);}
+
+inline double FitPairAnalysis::GetMinBgdFit() {return fMinBgdFit;}
+inline double FitPairAnalysis::GetMaxBgdFit() {return fMaxBgdFit;}
+inline void FitPairAnalysis::SetMinMaxBgdFit(double aMin, double aMax) {fMinBgdFit=aMin; fMaxBgdFit=aMax; for(int i=0; i<fNFitPartialAnalysis; i++) fFitPartialAnalysisCollection[i]->SetMinMaxBgdFit(aMin, aMax);}
+
 inline void FitPairAnalysis::SetPrimaryFit(TF1* aFit) {fPrimaryFit = aFit;}
 inline TF1* FitPairAnalysis::GetPrimaryFit() {return fPrimaryFit;}
 
 inline TH2* FitPairAnalysis::GetModelKStarTrueVsRecMixed() {return fModelKStarTrueVsRecMixed;}
 inline TH1* FitPairAnalysis::GetModelCfFakeIdealCfFakeRatio() {return fModelCfFakeIdealCfFakeRatio;}
-
-inline double FitPairAnalysis::GetKStarMinNorm() {return fKStarMinNorm;}
-inline double FitPairAnalysis::GetKStarMaxNorm() {return fKStarMaxNorm;}
 
 inline bool FitPairAnalysis::AreTrainResults() {if(fAnalysisRunType==kTrain || fAnalysisRunType==kTrainSys) return true;}
 

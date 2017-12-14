@@ -69,6 +69,12 @@ public:
 
   void ReturnFitParametersToAnalyses();
 
+  double GetKStarMinNorm();
+  double GetKStarMaxNorm();
+
+  double GetMinBgdFit();
+  double GetMaxBgdFit();
+
   //inline (i.e. simple) functions
 
   int GetNMinuitParams();
@@ -96,6 +102,9 @@ public:
 
   void RebinAnalyses(int aRebin);
 
+  void SetKStarMinMaxNorm(double aMin, double aMax);
+  void SetMinMaxBgdFit(double aMin, double aMax);
+
   FitChi2Histograms* GetFitChi2Histograms();
 
   void SetFixNormParams(bool aFixNormParams);
@@ -110,8 +119,6 @@ private:
   bool fFixNormParams;
 
   vector<FitPairAnalysis*> fFitPairAnalysisCollection;
-
-  vector<CfHeavy*> fKStarCfHeavyCollection;
 
   int fNMinuitParams;
   vector<double> fMinuitMinParams;
@@ -149,12 +156,14 @@ inline vector<double> FitSharedAnalyses::GetMinuitParErrors() {return fMinuitPar
 
 
 inline FitPairAnalysis* FitSharedAnalyses::GetFitPairAnalysis(int aPairAnalysisNumber) {return fFitPairAnalysisCollection[aPairAnalysisNumber];}
-inline CfHeavy* FitSharedAnalyses::GetKStarCfHeavy(int aPairAnalysisNumber) {return fKStarCfHeavyCollection[aPairAnalysisNumber];}
+inline CfHeavy* FitSharedAnalyses::GetKStarCfHeavy(int aPairAnalysisNumber) {return fFitPairAnalysisCollection[aPairAnalysisNumber]->GetKStarCfHeavy();}
 inline CfHeavy* FitSharedAnalyses::GetModelKStarCfHeavy(int aPairAnalysisNumber) {return fFitPairAnalysisCollection[aPairAnalysisNumber]->GetModelKStarHeavyCf();}
 
 inline void FitSharedAnalyses::DrawFit(int aAnalysisNumber, const char* aTitle) {fFitPairAnalysisCollection[aAnalysisNumber]->DrawFit(aTitle);}
 
 inline void FitSharedAnalyses::RebinAnalyses(int aRebin) {for(int i=0; i<fNFitPairAnalysis; i++) fFitPairAnalysisCollection[i]->RebinKStarCfHeavy(aRebin);}
+inline void FitSharedAnalyses::SetKStarMinMaxNorm(double aMin, double aMax) {for(int i=0; i<fNFitPairAnalysis; i++) fFitPairAnalysisCollection[i]->SetKStarMinMaxNorm(aMin, aMax);}
+inline void FitSharedAnalyses::SetMinMaxBgdFit(double aMin, double aMax) {for(int i=0; i<fNFitPairAnalysis; i++) fFitPairAnalysisCollection[i]->SetMinMaxBgdFit(aMin, aMax);}
 
 inline FitChi2Histograms* FitSharedAnalyses::GetFitChi2Histograms() {return fFitChi2Histograms;}
 

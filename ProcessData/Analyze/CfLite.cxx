@@ -118,7 +118,7 @@ CfLite& CfLite::operator=(const CfLite& aLite)
 //________________________________________________________________________________________________________________
 void CfLite::BuildCf(double aMinNorm, double aMaxNorm)
 {
-  BuildCf(fCfName,fCfTitle,fMinNorm,fMaxNorm);
+  BuildCf(fCfName,fCfTitle,aMinNorm,aMaxNorm);
 }
 
 

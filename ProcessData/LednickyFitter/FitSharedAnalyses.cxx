@@ -25,7 +25,6 @@ FitSharedAnalyses::FitSharedAnalyses(vector<FitPairAnalysis*> &aVecOfFitPairAnal
   fFixNormParams(false),
 
   fFitPairAnalysisCollection(aVecOfFitPairAnalyses),
-  fKStarCfHeavyCollection(fNFitPairAnalysis),
 
   fNMinuitParams(0),
   fMinuitMinParams(0),
@@ -48,15 +47,6 @@ FitSharedAnalyses::FitSharedAnalyses(vector<FitPairAnalysis*> &aVecOfFitPairAnal
   fNFitNormParamsPerAnalysis = fFitPairAnalysisCollection[0]->GetNFitNormParams();
 
   fMinuit = new TMinuit(50);
-
-  //load all the CfHeavys into collection
-  for(int i=0; i<fNFitPairAnalysis; i++)
-  {
-    //double check to make sure we are loading the CfHeavy in the proper position
-    assert(fFitPairAnalysisCollection[i]->GetFitPairAnalysisNumber() == i);
-    fKStarCfHeavyCollection[i] = fFitPairAnalysisCollection[i]->GetKStarCfHeavy();
-  }
-
   fFitChi2Histograms = new FitChi2Histograms();
 }
 
@@ -72,7 +62,6 @@ FitSharedAnalyses::FitSharedAnalyses(vector<FitPairAnalysis*> &aVecOfFitPairAnal
   fFixNormParams(false),
 
   fFitPairAnalysisCollection(aVecOfFitPairAnalyses),
-  fKStarCfHeavyCollection(fNFitPairAnalysis),
 
   fNMinuitParams(0),
   fMinuitMinParams(0),
@@ -95,15 +84,6 @@ FitSharedAnalyses::FitSharedAnalyses(vector<FitPairAnalysis*> &aVecOfFitPairAnal
   fNFitNormParamsPerAnalysis = fFitPairAnalysisCollection[0]->GetNFitNormParams();
 
   fMinuit = new TMinuit(50);
-
-  //load all the CfHeavys into collection
-  for(int i=0; i<fNFitPairAnalysis; i++)
-  {
-    //double check to make sure we are loading the CfHeavy in the proper position
-    assert(fFitPairAnalysisCollection[i]->GetFitPairAnalysisNumber() == i);
-    fKStarCfHeavyCollection[i] = fFitPairAnalysisCollection[i]->GetKStarCfHeavy();
-  }
-
   fFitChi2Histograms = new FitChi2Histograms();
 }
 
@@ -529,9 +509,36 @@ void FitSharedAnalyses::ReturnFitParametersToAnalyses()
 
 }
 
+//________________________________________________________________________________________________________________
+double FitSharedAnalyses::GetKStarMinNorm()
+{
+  for(int i=1; i<fNFitPairAnalysis; i++) assert(fFitPairAnalysisCollection[i-1]->GetKStarMinNorm() == fFitPairAnalysisCollection[i]->GetKStarMinNorm());
+  return fFitPairAnalysisCollection[0]->GetKStarMinNorm();
+}
 
 
+//________________________________________________________________________________________________________________
+double FitSharedAnalyses::GetKStarMaxNorm()
+{
+  for(int i=1; i<fNFitPairAnalysis; i++) assert(fFitPairAnalysisCollection[i-1]->GetKStarMaxNorm() == fFitPairAnalysisCollection[i]->GetKStarMaxNorm());
+  return fFitPairAnalysisCollection[0]->GetKStarMaxNorm();
+}
 
+
+//________________________________________________________________________________________________________________
+double FitSharedAnalyses::GetMinBgdFit()
+{
+  for(int i=1; i<fNFitPairAnalysis; i++) assert(fFitPairAnalysisCollection[i-1]->GetMinBgdFit() == fFitPairAnalysisCollection[i]->GetMinBgdFit());
+  return fFitPairAnalysisCollection[0]->GetMinBgdFit();
+}
+
+
+//________________________________________________________________________________________________________________
+double FitSharedAnalyses::GetMaxBgdFit()
+{
+  for(int i=1; i<fNFitPairAnalysis; i++) assert(fFitPairAnalysisCollection[i-1]->GetMaxBgdFit() == fFitPairAnalysisCollection[i]->GetMaxBgdFit());
+  return fFitPairAnalysisCollection[0]->GetMaxBgdFit();
+}
 
 
 

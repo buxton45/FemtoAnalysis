@@ -262,7 +262,6 @@ FitGenerator* FitSystematicAnalysis::BuildFitGenerator(AnalysisRunType aRunType,
   tFitGenerator->SetRadiusStartValues({cFitParamValues[fIncludeResidualsType][fAnalysisType][k0010][kRadius], 
                                        cFitParamValues[fIncludeResidualsType][fAnalysisType][k1030][kRadius], 
                                        cFitParamValues[fIncludeResidualsType][fAnalysisType][k3050][kRadius]});
-//  tFitGenerator->SetAllRadiiLimits(1., 10.);
 
   if(fAllShareSingleLambdaParam) tFitGenerator->SetLambdaParamStartValue(cFitParamValues[fIncludeResidualsType][fAnalysisType][k0010][kLambda]);
   else
@@ -274,10 +273,7 @@ FitGenerator* FitSystematicAnalysis::BuildFitGenerator(AnalysisRunType aRunType,
                                                  cFitParamValues[fIncludeResidualsType][fAnalysisType][k3050][kLambda], 
                                                  cFitParamValues[fIncludeResidualsType][fConjAnalysisType][k3050][kLambda]});
   }
-/*
-  if(fIncludeResidualsType == kIncludeNoResiduals) tFitGenerator->SetAllLambdaParamLimits(0.1, 1.0);
-  else tFitGenerator->SetAllLambdaParamLimits(0.1, 2.0);
-*/
+
   if((fAnalysisType==kLamK0 || fAnalysisType==kALamK0) && fIncludeResidualsType == kIncludeNoResiduals) tFitGenerator->SetAllLambdaParamLimits(0.4, 0.6);
   if((fAnalysisType==kLamK0 || fAnalysisType==kALamK0) && fIncludeResidualsType != kIncludeNoResiduals) tFitGenerator->SetAllLambdaParamLimits(0.6, 1.5);
 
@@ -341,7 +337,7 @@ void FitSystematicAnalysis::RunAllFits(bool aSaveImages, bool aWriteToTxtFile)
   if(!aWriteToTxtFile) PrintText2dVec(tText2dVector);
   else
   {
-    TString tOutputFileName = TString::Format("%sCfFitValuesNOLIMITS_%s%s", tSpecificSaveDirectory.Data(), cAnalysisBaseTags[fAnalysisType], cCentralityTags[fCentralityType]);
+    TString tOutputFileName = TString::Format("%sCfFitValues_%s%s", tSpecificSaveDirectory.Data(), cAnalysisBaseTags[fAnalysisType], cCentralityTags[fCentralityType]);
     AppendFitInfo(tOutputFileName);
     tOutputFileName += TString(".txt");
     std::ofstream tOutputFile;
@@ -399,7 +395,7 @@ void FitSystematicAnalysis::RunVaryFitRange(bool aSaveImages, bool aWriteToTxtFi
   if(!aWriteToTxtFile) PrintText2dVec(tText2dVector);
   else
   {
-    TString tOutputFileName = TString::Format("%sCfFitValuesNOLIMITS_VaryMaxFitKStar_%s%s", tSpecificSaveDirectory.Data(), cAnalysisBaseTags[fAnalysisType], cCentralityTags[fCentralityType]);
+    TString tOutputFileName = TString::Format("%sCfFitValues_VaryMaxFitKStar_%s%s", tSpecificSaveDirectory.Data(), cAnalysisBaseTags[fAnalysisType], cCentralityTags[fCentralityType]);
     AppendFitInfo(tOutputFileName);
     tOutputFileName += TString(".txt");
     std::ofstream tOutputFile;
@@ -458,7 +454,7 @@ void FitSystematicAnalysis::RunVaryNonFlatBackgroundFit(bool aSaveImages, bool a
   if(!aWriteToTxtFile) PrintText2dVec(tText2dVector);
   else
   {
-    TString tOutputFileName = TString::Format("%sCfFitValuesNOLIMITS_VaryNonFlatBgdFitType_%s%s", tSpecificSaveDirectory.Data(), cAnalysisBaseTags[fAnalysisType], cCentralityTags[fCentralityType]);
+    TString tOutputFileName = TString::Format("%sCfFitValues_VaryNonFlatBgdFitType_%s%s", tSpecificSaveDirectory.Data(), cAnalysisBaseTags[fAnalysisType], cCentralityTags[fCentralityType]);
     AppendFitInfo(tOutputFileName);
     tOutputFileName += TString(".txt");
     std::ofstream tOutputFile;

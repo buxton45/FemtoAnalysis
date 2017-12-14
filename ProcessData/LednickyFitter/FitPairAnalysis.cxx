@@ -33,8 +33,13 @@ FitPairAnalysis::FitPairAnalysis(TString aAnalysisName, vector<FitPartialAnalysi
 
   fKStarCfHeavy(0),
   fKStarCf(0),
+
   fKStarMinNorm(0.32),
   fKStarMaxNorm(0.40),
+
+  fMinBgdFit(0.60),
+  fMaxBgdFit(0.90),
+
   fPrimaryFit(0),
   fNonFlatBackground(0),
 
@@ -98,8 +103,13 @@ FitPairAnalysis::FitPairAnalysis(TString aFileLocationBase, AnalysisType aAnalys
 
   fKStarCfHeavy(0),
   fKStarCf(0),
+
   fKStarMinNorm(0.32),
   fKStarMaxNorm(0.40),
+
+  fMinBgdFit(0.60),
+  fMaxBgdFit(0.90),
+
   fPrimaryFit(0),
   fNonFlatBackground(0),
 
@@ -174,8 +184,13 @@ FitPairAnalysis::FitPairAnalysis(TString aFileLocationBase, TString aFileLocatio
 
   fKStarCfHeavy(0),
   fKStarCf(0),
+
   fKStarMinNorm(0.32),
   fKStarMaxNorm(0.40),
+
+  fMinBgdFit(0.60),
+  fMaxBgdFit(0.90),
+
   fPrimaryFit(0),
   fNonFlatBackground(0),
 
@@ -350,31 +365,31 @@ void FitPairAnalysis::DrawKStarCfHeavy(TPad* aPad, int aMarkerColor, TString aOp
 }
 
 //________________________________________________________________________________________________________________
-TF1* FitPairAnalysis::GetNonFlatBackground_FitCombinedPartials(NonFlatBgdFitType aBgdFitType, FitType aFitType, double aMinBgdFit, double aMaxBgdFit)
+TF1* FitPairAnalysis::GetNonFlatBackground_FitCombinedPartials(NonFlatBgdFitType aBgdFitType, FitType aFitType)
 {
   //Fit combined histograms
   //  In case aFitType==kChi2PML, use simply added numerators and denominators
   //  In case aFitType==kChi2, use fKStarCfHeavy, i.e. weighted combination of Cfs
 
-  cout << "\t Using method FitPairAnalysis::GetNonFlatBackground_FitCombinedPartials" << endl;
-
   if(fNonFlatBackground) return fNonFlatBackground;
+
+  cout << "\t Using method FitPairAnalysis::GetNonFlatBackground_FitCombinedPartials" << endl;
 
   if(aFitType==kChi2PML)
   {
     TH1* tNum = fKStarCfHeavy->GetSimplyAddedNumDen("SimplyAddedNum", true);
     TH1* tDen = fKStarCfHeavy->GetSimplyAddedNumDen("SimplyAddedDen", false);
 
-    fNonFlatBackground = FitPartialAnalysis::FitNonFlatBackground(tNum, tDen, fKStarCfHeavy->GetHeavyCfClone(), aBgdFitType, aFitType, aMinBgdFit, aMaxBgdFit, fKStarMinNorm, fKStarMaxNorm);
+    fNonFlatBackground = FitPartialAnalysis::FitNonFlatBackground(tNum, tDen, fKStarCfHeavy->GetHeavyCfClone(), aBgdFitType, aFitType, fMinBgdFit, fMaxBgdFit, fKStarMinNorm, fKStarMaxNorm);
   }
-  else fNonFlatBackground = FitPartialAnalysis::FitNonFlatBackground(fKStarCfHeavy->GetHeavyCfClone(), aBgdFitType, aMinBgdFit, aMaxBgdFit, fKStarMinNorm, fKStarMaxNorm);
+  else fNonFlatBackground = FitPartialAnalysis::FitNonFlatBackground(fKStarCfHeavy->GetHeavyCfClone(), aBgdFitType, fMinBgdFit, fMaxBgdFit, fKStarMinNorm, fKStarMaxNorm);
 
   return fNonFlatBackground;
 }
 
 
 //________________________________________________________________________________________________________________
-TF1* FitPairAnalysis::GetNonFlatBackground_CombinePartialFits(NonFlatBgdFitType aBgdFitType, FitType aFitType, double aMinBgdFit, double aMaxBgdFit)
+TF1* FitPairAnalysis::GetNonFlatBackground_CombinePartialFits(NonFlatBgdFitType aBgdFitType, FitType aFitType)
 {
   //Combine fits (technically, probably the most correct method, as the fits to the partial analyses are used during fitting)
   //  i.e. fit NonFlatBgd for partial analyses first individually, and then combine with weighted mean
@@ -385,10 +400,12 @@ TF1* FitPairAnalysis::GetNonFlatBackground_CombinePartialFits(NonFlatBgdFitType 
 
   assert(fNFitPartialAnalysis==2);  // i.e. this only works for train runs with _FemtoPlus and _FemtoMinus
                                     //      NOT with old grid runs with _Bp1, _Bp2, _Bm1, _Bm2, _Bm3
-  TF1* tFit1 = (TF1*)fFitPartialAnalysisCollection[0]->GetNonFlatBackground(aBgdFitType, aFitType, aMinBgdFit, aMaxBgdFit);
+  fFitPartialAnalysisCollection[0]->SetMinMaxBgdFit(fMinBgdFit, fMaxBgdFit);
+  TF1* tFit1 = (TF1*)fFitPartialAnalysisCollection[0]->GetNonFlatBackground(aBgdFitType, aFitType);
   double tNumScale1 = fFitPartialAnalysisCollection[0]->GetKStarCfLite()->GetNumScale();
 
-  TF1* tFit2 = (TF1*)fFitPartialAnalysisCollection[1]->GetNonFlatBackground(aBgdFitType, aFitType, aMinBgdFit, aMaxBgdFit);
+  fFitPartialAnalysisCollection[1]->SetMinMaxBgdFit(fMinBgdFit, fMaxBgdFit);
+  TF1* tFit2 = (TF1*)fFitPartialAnalysisCollection[1]->GetNonFlatBackground(aBgdFitType, aFitType);
   double tNumScale2 = fFitPartialAnalysisCollection[1]->GetKStarCfLite()->GetNumScale();
 
   TString tReturnName = TString::Format("NonFlatBgdFit%s_%s", cNonFlatBgdFitTypeTags[aBgdFitType], fKStarCf->GetName());
@@ -430,7 +447,7 @@ TF1* FitPairAnalysis::GetNonFlatBackground_CombinePartialFits(NonFlatBgdFitType 
 
 
 //________________________________________________________________________________________________________________
-TF1* FitPairAnalysis::GetNonFlatBackground(NonFlatBgdFitType aBgdFitType, FitType aFitType, bool aCombinePartialFits, double aMinBgdFit, double aMaxBgdFit)
+TF1* FitPairAnalysis::GetNonFlatBackground(NonFlatBgdFitType aBgdFitType, FitType aFitType, bool aCombinePartialFits)
 {
   if(fNonFlatBackground) return fNonFlatBackground;
 
@@ -438,9 +455,8 @@ TF1* FitPairAnalysis::GetNonFlatBackground(NonFlatBgdFitType aBgdFitType, FitTyp
   cout << "-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**" << endl;
   cout << "Getting NonFlatBackground for pair analysis " << fAnalysisName << endl;
 
-
-  if(aCombinePartialFits) fNonFlatBackground = GetNonFlatBackground_CombinePartialFits(aBgdFitType, aFitType, aMinBgdFit, aMaxBgdFit);
-  else fNonFlatBackground = GetNonFlatBackground_FitCombinedPartials(aBgdFitType, aFitType, aMinBgdFit, aMaxBgdFit);
+  if(aCombinePartialFits) fNonFlatBackground = GetNonFlatBackground_CombinePartialFits(aBgdFitType, aFitType);
+  else fNonFlatBackground = GetNonFlatBackground_FitCombinedPartials(aBgdFitType, aFitType);
   
   return fNonFlatBackground;
 }

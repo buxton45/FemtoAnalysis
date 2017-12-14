@@ -47,6 +47,9 @@ FitPartialAnalysis::FitPartialAnalysis(TString aFileLocation, TString aAnalysisN
   fKStarMinNorm(0.32),
   fKStarMaxNorm(0.40),
 
+  fMinBgdFit(0.60),
+  fMaxBgdFit(0.90),
+
   fKStarNumScale(0),
   fKStarDenScale(0),
 
@@ -190,6 +193,9 @@ FitPartialAnalysis::FitPartialAnalysis(TString aFileLocation, TString aFileLocat
 
   fKStarMinNorm(0.32),
   fKStarMaxNorm(0.40),
+
+  fMinBgdFit(0.60),
+  fMaxBgdFit(0.90),
 
   fKStarNumScale(0),
   fKStarDenScale(0),
@@ -594,17 +600,17 @@ TF1* FitPartialAnalysis::FitNonFlatBackground(TH1* aCf, NonFlatBgdFitType aBgdFi
 
 
 //________________________________________________________________________________________________________________
-TF1* FitPartialAnalysis::GetNonFlatBackground(NonFlatBgdFitType aBgdFitType, FitType aFitType, double aMinBgdFit, double aMaxBgdFit)
+TF1* FitPartialAnalysis::GetNonFlatBackground(NonFlatBgdFitType aBgdFitType, FitType aFitType)
 {
   if(fNonFlatBackground) return fNonFlatBackground;
 
   if(aFitType==kChi2PML)
   {
-    fNonFlatBackground = FitNonFlatBackground(fKStarCfNum, fKStarCfDen, fKStarCf, aBgdFitType, aFitType, aMinBgdFit, aMaxBgdFit, fKStarMinNorm, fKStarMaxNorm);
+    fNonFlatBackground = FitNonFlatBackground(fKStarCfNum, fKStarCfDen, fKStarCf, aBgdFitType, aFitType, fMinBgdFit, fMaxBgdFit, fKStarMinNorm, fKStarMaxNorm);
   }
   else if(aFitType==kChi2)
   {
-    fNonFlatBackground = FitNonFlatBackground(fKStarCf, aBgdFitType, aMinBgdFit, aMaxBgdFit, fKStarMinNorm, fKStarMaxNorm);
+    fNonFlatBackground = FitNonFlatBackground(fKStarCf, aBgdFitType, fMinBgdFit, fMaxBgdFit, fKStarMinNorm, fKStarMaxNorm);
   }
   else assert(0);
 

@@ -83,7 +83,7 @@ public:
                                    double aMinBgdFit=0.60, double aMaxBhdFit=0.90, double aKStarMinNorm=0.32, double aKStarMaxNorm=0.40);
   static TF1* FitNonFlatBackground(TH1* aCf, NonFlatBgdFitType aBgdFitType=kLinear, 
                                    double aMinBgdFit=0.6, double aMaxBgdFit=0.9, double aKStarMinNorm=0.32, double aKStarMaxNorm=0.40);
-  TF1* GetNonFlatBackground(NonFlatBgdFitType aBgdFitType=kLinear, FitType aFitType=kChi2PML, double aMinBgdFit=0.60, double aMaxBgdFit=0.90);
+  TF1* GetNonFlatBackground(NonFlatBgdFitType aBgdFitType=kLinear, FitType aFitType=kChi2PML);
 
   void SetFitParameter(FitParameter* aParam);
 
@@ -103,6 +103,15 @@ public:
   TH1* GetKStarCf();
   TH1* GetNumKStarCf();
   TH1* GetDenKStarCf();
+
+  double GetKStarMinNorm();
+  double GetKStarMaxNorm();
+  void SetKStarMinMaxNorm(double aMin, double aMax);
+
+  double GetMinBgdFit();
+  double GetMaxBgdFit();
+  void SetMinMaxBgdFit(double aMin, double aMax);
+
   double GetKStarNumScale();
   double GetKStarDenScale();
 
@@ -139,6 +148,7 @@ private:
   CfLite *fKStarCfLite;
   TH1 *fKStarCf, *fKStarCfNum, *fKStarCfDen;
   double fKStarMinNorm, fKStarMaxNorm;
+  double fMinBgdFit, fMaxBgdFit;
   double fKStarNumScale, fKStarDenScale;
 
   int fNFitParams;
@@ -180,6 +190,15 @@ inline CfLite* FitPartialAnalysis::GetKStarCfLite() {return fKStarCfLite;}
 inline TH1* FitPartialAnalysis::GetKStarCf() {return fKStarCf;}
 inline TH1* FitPartialAnalysis::GetNumKStarCf() {return fKStarCfNum;}
 inline TH1* FitPartialAnalysis::GetDenKStarCf() {return fKStarCfDen;}
+
+inline double FitPartialAnalysis::GetKStarMinNorm() {return fKStarMinNorm;}
+inline double FitPartialAnalysis::GetKStarMaxNorm() {return fKStarMaxNorm;}
+inline void FitPartialAnalysis::SetKStarMinMaxNorm(double aMin, double aMax) {RebinKStarCf(1, aMin, aMax);}
+
+inline double FitPartialAnalysis::GetMinBgdFit() {return fMinBgdFit;}
+inline double FitPartialAnalysis::GetMaxBgdFit() {return fMaxBgdFit;}
+inline void FitPartialAnalysis::SetMinMaxBgdFit(double aMin, double aMax) {fMinBgdFit=aMin; fMaxBgdFit=aMax;}
+
 inline double FitPartialAnalysis::GetKStarNumScale() {return fKStarNumScale;}
 inline double FitPartialAnalysis::GetKStarDenScale() {return fKStarDenScale;}
 

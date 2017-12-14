@@ -109,6 +109,8 @@ void FillCutsVector(td4dVec &aAll, td1dVec &aValues, ParameterType aParamType, A
 void ReadFile(TString aFileLocation, td4dVec &aAll)
 {
   ifstream tFileIn(aFileLocation);
+  if(!tFileIn.is_open()) cout << "FAILURE - FILE NOT OPEN: " << aFileLocation << endl;
+  assert(tFileIn.is_open());
 
   AnalysisType tCurrentAnType;
   CentralityType tCurrentCentralityType;
@@ -484,8 +486,8 @@ int main(int argc, char **argv)
 
   if(bWriteToFile)
   {
-    TString tOutputLamKchName = TString::Format("%sFinalFitSystematics_", tResultsDirectory_cLamcKch.Data());
-    if(bIncludeFitRangeSys) tOutputLamKchName += TString("wFitRangeSys_");
+    TString tOutputLamKchName = TString::Format("%sFinalFitSystematics", tResultsDirectory_cLamcKch.Data());
+    if(bIncludeFitRangeSys) tOutputLamKchName += TString("_wFitRangeSys");
     if(!bRunOldQMNaming)
     {
       FitSystematicAnalysis::AppendFitInfo(tOutputLamKchName, ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, 
@@ -494,8 +496,8 @@ int main(int argc, char **argv)
     }
     tOutputLamKchName += TString("cLamcKch.txt");
 
-    TString tOutputLamK0Name = TString::Format("%sFinalFitSystematics_", tResultsDirectory_cLamK0.Data());
-    if(bIncludeFitRangeSys) tOutputLamK0Name += TString("wFitRangeSys_");
+    TString tOutputLamK0Name = TString::Format("%sFinalFitSystematics", tResultsDirectory_cLamK0.Data());
+    if(bIncludeFitRangeSys) tOutputLamK0Name += TString("_wFitRangeSys");
     if(!bRunOldQMNaming)
     {
       FitSystematicAnalysis::AppendFitInfo(tOutputLamK0Name, ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, 

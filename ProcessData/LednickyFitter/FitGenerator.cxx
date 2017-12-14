@@ -2073,7 +2073,7 @@ void FitGenerator::SetAllParameters()
 }
 
 //________________________________________________________________________________________________________________
-void FitGenerator::InitializeGenerator(double aMaxKStarToFit)
+void FitGenerator::InitializeGenerator(double aMaxFitKStar)
 {
 /*
   if(fIncludeResidualsType != kIncludeNoResiduals)  //since this involves the CoulombFitter, I should place limits on parameters used in interpolations
@@ -2091,7 +2091,7 @@ void FitGenerator::InitializeGenerator(double aMaxKStarToFit)
   SetAllParameters();
   fSharedAn->CreateMinuitParameters();
 
-  fLednickyFitter = new LednickyFitter(fSharedAn,aMaxKStarToFit);
+  fLednickyFitter = new LednickyFitter(fSharedAn,aMaxFitKStar);
   fLednickyFitter->GetFitSharedAnalyses()->GetMinuitObject()->SetFCN(GlobalFCN);
   fLednickyFitter->SetApplyMomResCorrection(fApplyMomResCorrection);
   fLednickyFitter->SetApplyNonFlatBackgroundCorrection(fApplyNonFlatBackgroundCorrection);
