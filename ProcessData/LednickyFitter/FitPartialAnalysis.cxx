@@ -41,9 +41,6 @@ FitPartialAnalysis::FitPartialAnalysis(TString aFileLocation, TString aAnalysisN
 
   fKStarCfLite(0),
 
-  fKStarMinNorm(0.32),
-  fKStarMaxNorm(0.40),
-
   fMinBgdFit(0.60),
   fMaxBgdFit(0.90),
 
@@ -74,7 +71,8 @@ FitPartialAnalysis::FitPartialAnalysis(TString aFileLocation, TString aAnalysisN
   fDirectoryName = TString(cAnalysisBaseTags[fAnalysisType]) + TString(cCentralityTags[fCentralityType]);
   if(!aDirNameModifier.IsNull()) fDirectoryName += aDirNameModifier;
 
-  BuildKStarCf(fKStarMinNorm,fKStarMaxNorm);
+  double tKStarMinNorm = 0.32, tKStarMaxNorm = 0.40;
+  BuildKStarCf(tKStarMinNorm, tKStarMaxNorm);
 
   SetParticleTypes();
 
@@ -182,9 +180,6 @@ FitPartialAnalysis::FitPartialAnalysis(TString aFileLocation, TString aFileLocat
 
   fKStarCfLite(0),
 
-  fKStarMinNorm(0.32),
-  fKStarMaxNorm(0.40),
-
   fMinBgdFit(0.60),
   fMaxBgdFit(0.90),
 
@@ -215,7 +210,8 @@ FitPartialAnalysis::FitPartialAnalysis(TString aFileLocation, TString aFileLocat
   fDirectoryName = TString(cAnalysisBaseTags[fAnalysisType]) + TString(cCentralityTags[fCentralityType]);
   if(!aDirNameModifier.IsNull()) fDirectoryName += aDirNameModifier;
 
-  BuildKStarCf(fKStarMinNorm,fKStarMaxNorm);
+  double tKStarMinNorm = 0.32, tKStarMaxNorm = 0.40;
+  BuildKStarCf(tKStarMinNorm, tKStarMaxNorm);
 
   SetParticleTypes();
 
@@ -518,11 +514,8 @@ TH2* FitPartialAnalysis::Get2dHisto(TString aFileLocation, TString aDirectoryNam
 
 
 //________________________________________________________________________________________________________________
-void FitPartialAnalysis::BuildKStarCf(double aMinNorm, double aMaxNorm)
+void FitPartialAnalysis::BuildKStarCf(double aKStarMinNorm, double aKStarMaxNorm)
 {
-  fKStarMinNorm = aMinNorm;
-  fKStarMaxNorm = aMaxNorm;
-
   TString tNumName = cKStarCfBaseTagNum + TString(cAnalysisBaseTags[fAnalysisType]);
   TString tNewNumName = tNumName + TString(cBFieldTags[fBFieldType]);
   TH1* tNum = Get1dHisto(tNumName,tNewNumName);
@@ -533,16 +526,13 @@ void FitPartialAnalysis::BuildKStarCf(double aMinNorm, double aMaxNorm)
 
   TString tCfBaseName = "KStarCf_";
   TString tCfName = tCfBaseName + TString(cAnalysisBaseTags[fAnalysisType]) + TString(cCentralityTags[fCentralityType]) + TString(cBFieldTags[fBFieldType]);
-  fKStarCfLite = new CfLite(tCfName,tCfName,tNum,tDen,fKStarMinNorm,fKStarMaxNorm);
+  fKStarCfLite = new CfLite(tCfName, tCfName, tNum, tDen, aKStarMinNorm, aKStarMaxNorm);
 }
 
 //________________________________________________________________________________________________________________
-void FitPartialAnalysis::RebinKStarCf(int aRebinFactor, double aMinNorm, double aMaxNorm)
+void FitPartialAnalysis::RebinKStarCf(int aRebinFactor, double aKStarMinNorm, double aKStarMaxNorm)
 {
-  fKStarMinNorm = aMinNorm;
-  fKStarMaxNorm = aMaxNorm;
-
-  fKStarCfLite->Rebin(aRebinFactor,fKStarMinNorm,fKStarMaxNorm);
+  fKStarCfLite->Rebin(aRebinFactor, aKStarMinNorm, aKStarMaxNorm);
 }
 
 
@@ -578,11 +568,12 @@ TF1* FitPartialAnalysis::GetNonFlatBackground(NonFlatBgdFitType aBgdFitType, Fit
 
   if(aFitType==kChi2PML)
   {
-    fNonFlatBackground = FitNonFlatBackground(fKStarCfLite->Num(), fKStarCfLite->Den(), fKStarCfLite->Cf(), aBgdFitType, aFitType, fMinBgdFit, fMaxBgdFit, fKStarMinNorm, fKStarMaxNorm);
+    fNonFlatBackground = FitNonFlatBackground(fKStarCfLite->Num(), fKStarCfLite->Den(), fKStarCfLite->Cf(), aBgdFitType, aFitType, 
+                                              fMinBgdFit, fMaxBgdFit, fKStarCfLite->GetMinNorm(), fKStarCfLite->GetMaxNorm());
   }
   else if(aFitType==kChi2)
   {
-    fNonFlatBackground = FitNonFlatBackground(fKStarCfLite->Cf(), aBgdFitType, fMinBgdFit, fMaxBgdFit, fKStarMinNorm, fKStarMaxNorm);
+    fNonFlatBackground = FitNonFlatBackground(fKStarCfLite->Cf(), aBgdFitType, fMinBgdFit, fMaxBgdFit, fKStarCfLite->GetMinNorm(), fKStarCfLite->GetMaxNorm());
   }
   else assert(0);
 
@@ -598,7 +589,7 @@ void FitPartialAnalysis::SetFitParameter(FitParameter* aParam)
 }
 
 //________________________________________________________________________________________________________________
-CfLite* FitPartialAnalysis::GetModelKStarCf(double aMinNorm, double aMaxNorm, int aRebin)
+CfLite* FitPartialAnalysis::GetModelKStarCf(double aKStarMinNorm, double aKStarMaxNorm, int aRebin)
 {
   TString tNumName = cKStarCfBaseTagNum + TString(cAnalysisBaseTags[fAnalysisType]);
   TString tNewNumName = tNumName + TString(cBFieldTags[fBFieldType]);
@@ -610,14 +601,14 @@ CfLite* FitPartialAnalysis::GetModelKStarCf(double aMinNorm, double aMaxNorm, in
 
   TString tCfBaseName = "ModelKStarCf_";
   TString tCfName = tCfBaseName + TString(cAnalysisBaseTags[fAnalysisType]) + TString(cBFieldTags[fBFieldType]);
-  CfLite* tReturnCfLite = new CfLite(tCfName,tCfName,tNum,tDen,aMinNorm,aMaxNorm);
+  CfLite* tReturnCfLite = new CfLite(tCfName,tCfName,tNum,tDen,aKStarMinNorm,aKStarMaxNorm);
   if(aRebin != 1) tReturnCfLite->Rebin(aRebin);
 
   return tReturnCfLite;
 }
 
 //________________________________________________________________________________________________________________
-CfLite* FitPartialAnalysis::GetModelKStarCfFake(double aMinNorm, double aMaxNorm, int aRebin)
+CfLite* FitPartialAnalysis::GetModelKStarCfFake(double aKStarMinNorm, double aKStarMaxNorm, int aRebin)
 {
   TString tNumName = cModelKStarCfNumFakeBaseTag + TString(cAnalysisBaseTags[fAnalysisType]);
   TString tNewNumName = tNumName + TString(cBFieldTags[fBFieldType]);
@@ -629,7 +620,7 @@ CfLite* FitPartialAnalysis::GetModelKStarCfFake(double aMinNorm, double aMaxNorm
 
   TString tCfBaseName = "ModelKStarCfFake_";
   TString tCfName = tCfBaseName + TString(cAnalysisBaseTags[fAnalysisType]) + TString(cBFieldTags[fBFieldType]);
-  fModelKStarCfFake = new CfLite(tCfName,tCfName,tNum,tDen,aMinNorm,aMaxNorm);
+  fModelKStarCfFake = new CfLite(tCfName,tCfName,tNum,tDen,aKStarMinNorm,aKStarMaxNorm);
   if(aRebin != 1) fModelKStarCfFake->Rebin(aRebin);
 
   return fModelKStarCfFake;
@@ -637,7 +628,7 @@ CfLite* FitPartialAnalysis::GetModelKStarCfFake(double aMinNorm, double aMaxNorm
 
 
 //________________________________________________________________________________________________________________
-CfLite* FitPartialAnalysis::GetModelKStarCfFakeIdeal(double aMinNorm, double aMaxNorm, int aRebin)
+CfLite* FitPartialAnalysis::GetModelKStarCfFakeIdeal(double aKStarMinNorm, double aKStarMaxNorm, int aRebin)
 {
   TString tNumName = cModelKStarCfNumFakeIdealBaseTag + TString(cAnalysisBaseTags[fAnalysisType]);
   TString tNewNumName = tNumName + TString(cBFieldTags[fBFieldType]);
@@ -649,7 +640,7 @@ CfLite* FitPartialAnalysis::GetModelKStarCfFakeIdeal(double aMinNorm, double aMa
 
   TString tCfBaseName = "ModelKStarCfFakeIdeal_";
   TString tCfName = tCfBaseName + TString(cAnalysisBaseTags[fAnalysisType]) + TString(cBFieldTags[fBFieldType]);
-  fModelKStarCfFakeIdeal = new CfLite(tCfName,tCfName,tNum,tDen,aMinNorm,aMaxNorm);
+  fModelKStarCfFakeIdeal = new CfLite(tCfName,tCfName,tNum,tDen,aKStarMinNorm,aKStarMaxNorm);
   if(aRebin != 1) fModelKStarCfFakeIdeal->Rebin(aRebin);
 
   return fModelKStarCfFakeIdeal;

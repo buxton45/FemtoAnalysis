@@ -33,9 +33,6 @@ FitPairAnalysis::FitPairAnalysis(TString aAnalysisName, vector<FitPartialAnalysi
 
   fKStarCfHeavy(0),
 
-  fKStarMinNorm(0.32),
-  fKStarMaxNorm(0.40),
-
   fMinBgdFit(0.60),
   fMaxBgdFit(0.90),
 
@@ -73,7 +70,8 @@ FitPairAnalysis::FitPairAnalysis(TString aAnalysisName, vector<FitPartialAnalysi
   //Don't need to make sure they have same particle types, because analysis types are same
   fParticleTypes = fFitPartialAnalysisCollection[0]->GetParticleTypes();
 
-  BuildKStarCfHeavy(fKStarMinNorm,fKStarMaxNorm);
+  double tKStarMinNorm = 0.32, tKStarMaxNorm=0.40;
+  BuildKStarCfHeavy(tKStarMinNorm, tKStarMaxNorm);
 
   if( (fAnalysisType == kXiKchP || fAnalysisType == kAXiKchP || fAnalysisType == kXiKchM || fAnalysisType == kAXiKchM) && aIncludeSingletAndTriplet)
   {
@@ -101,9 +99,6 @@ FitPairAnalysis::FitPairAnalysis(TString aFileLocationBase, AnalysisType aAnalys
   fParticleTypes(2),
 
   fKStarCfHeavy(0),
-
-  fKStarMinNorm(0.32),
-  fKStarMaxNorm(0.40),
 
   fMinBgdFit(0.60),
   fMaxBgdFit(0.90),
@@ -155,7 +150,8 @@ FitPairAnalysis::FitPairAnalysis(TString aFileLocationBase, AnalysisType aAnalys
 
   fParticleTypes = fFitPartialAnalysisCollection[0]->GetParticleTypes();
 
-  BuildKStarCfHeavy(fKStarMinNorm,fKStarMaxNorm);
+  double tKStarMinNorm = 0.32, tKStarMaxNorm=0.40;
+  BuildKStarCfHeavy(tKStarMinNorm, tKStarMaxNorm);
 
   if( (fAnalysisType == kXiKchP || fAnalysisType == kAXiKchP || fAnalysisType == kXiKchM || fAnalysisType == kAXiKchM) && aIncludeSingletAndTriplet)
   {
@@ -181,9 +177,6 @@ FitPairAnalysis::FitPairAnalysis(TString aFileLocationBase, TString aFileLocatio
   fParticleTypes(2),
 
   fKStarCfHeavy(0),
-
-  fKStarMinNorm(0.32),
-  fKStarMaxNorm(0.40),
 
   fMinBgdFit(0.60),
   fMaxBgdFit(0.90),
@@ -238,10 +231,11 @@ FitPairAnalysis::FitPairAnalysis(TString aFileLocationBase, TString aFileLocatio
 
   fParticleTypes = fFitPartialAnalysisCollection[0]->GetParticleTypes();
 
-  BuildKStarCfHeavy(fKStarMinNorm,fKStarMaxNorm);
-  RebinKStarCfHeavy(2,fKStarMinNorm,fKStarMaxNorm);
+  double tKStarMinNorm = 0.32, tKStarMaxNorm=0.40;
+  BuildKStarCfHeavy(tKStarMinNorm, tKStarMaxNorm);
+  RebinKStarCfHeavy(2, tKStarMinNorm, tKStarMaxNorm);
   BuildModelKStarTrueVsRecMixed(2);
-//  BuildModelCfFakeIdealCfFakeRatio(fKStarMinNorm,fKStarMaxNorm,1);
+//  BuildModelCfFakeIdealCfFakeRatio(tKStarMinNorm, tKStarMaxNorm, 1);
 
   if( (fAnalysisType == kXiKchP || fAnalysisType == kAXiKchP || fAnalysisType == kXiKchM || fAnalysisType == kAXiKchM) && aIncludeSingletAndTriplet)
   {
@@ -284,17 +278,14 @@ void FitPairAnalysis::BuildModelKStarTrueVsRecMixed(int aRebinFactor)
 
 
 //________________________________________________________________________________________________________________
-void FitPairAnalysis::BuildKStarCfHeavy(double aMinNorm, double aMaxNorm)
+void FitPairAnalysis::BuildKStarCfHeavy(double aKStarMinNorm, double aKStarMaxNorm)
 {
-  fKStarMinNorm = aMinNorm;
-  fKStarMaxNorm = aMaxNorm;
-
   vector<CfLite*> tTempCfLiteCollection;
 
   for(int iAnaly=0; iAnaly<fNFitPartialAnalysis; iAnaly++)
   {
     //first, make sure everything is updated
-    fFitPartialAnalysisCollection[iAnaly]->BuildKStarCf(fKStarMinNorm,fKStarMaxNorm);
+    fFitPartialAnalysisCollection[iAnaly]->BuildKStarCf(aKStarMinNorm, aKStarMaxNorm);
 
     tTempCfLiteCollection.push_back(fFitPartialAnalysisCollection[iAnaly]->GetKStarCfLite());
   }
@@ -304,17 +295,14 @@ void FitPairAnalysis::BuildKStarCfHeavy(double aMinNorm, double aMaxNorm)
 
   TString tTitle = TString(cRootParticleTags[fParticleTypes[0]]) + TString(cRootParticleTags[fParticleTypes[1]]);
 
-  fKStarCfHeavy = new CfHeavy(tCfName,tTitle,tTempCfLiteCollection,fKStarMinNorm,fKStarMaxNorm);
+  fKStarCfHeavy = new CfHeavy(tCfName, tTitle, tTempCfLiteCollection, aKStarMinNorm, aKStarMaxNorm);
 }
 
 
 //________________________________________________________________________________________________________________
-void FitPairAnalysis::RebinKStarCfHeavy(int aRebinFactor, double aMinNorm, double aMaxNorm)
+void FitPairAnalysis::RebinKStarCfHeavy(int aRebinFactor, double aKStarMinNorm, double aKStarMaxNorm)
 {
-  fKStarMinNorm = aMinNorm;
-  fKStarMaxNorm = aMaxNorm;
-
-  fKStarCfHeavy->Rebin(aRebinFactor,fKStarMinNorm,fKStarMaxNorm);
+  fKStarCfHeavy->Rebin(aRebinFactor, aKStarMinNorm, aKStarMaxNorm);
 }
 
 
@@ -375,9 +363,11 @@ TF1* FitPairAnalysis::GetNonFlatBackground_FitCombinedPartials(NonFlatBgdFitType
     TH1* tNum = fKStarCfHeavy->GetSimplyAddedNumDen("SimplyAddedNum", true);
     TH1* tDen = fKStarCfHeavy->GetSimplyAddedNumDen("SimplyAddedDen", false);
 
-    fNonFlatBackground = FitPartialAnalysis::FitNonFlatBackground(tNum, tDen, fKStarCfHeavy->GetHeavyCfClone(), aBgdFitType, aFitType, fMinBgdFit, fMaxBgdFit, fKStarMinNorm, fKStarMaxNorm);
+    fNonFlatBackground = FitPartialAnalysis::FitNonFlatBackground(tNum, tDen, fKStarCfHeavy->GetHeavyCfClone(), aBgdFitType, aFitType, 
+                                                                  fMinBgdFit, fMaxBgdFit, fKStarCfHeavy->GetMinNorm(), fKStarCfHeavy->GetMaxNorm());
   }
-  else fNonFlatBackground = FitPartialAnalysis::FitNonFlatBackground(fKStarCfHeavy->GetHeavyCfClone(), aBgdFitType, fMinBgdFit, fMaxBgdFit, fKStarMinNorm, fKStarMaxNorm);
+  else fNonFlatBackground = FitPartialAnalysis::FitNonFlatBackground(fKStarCfHeavy->GetHeavyCfClone(), aBgdFitType,
+                                                                     fMinBgdFit, fMaxBgdFit, fKStarCfHeavy->GetMinNorm(), fKStarCfHeavy->GetMaxNorm());
 
   return fNonFlatBackground;
 }
@@ -676,13 +666,13 @@ void FitPairAnalysis::DrawFit(const char* aTitle)
 }
 
 //________________________________________________________________________________________________________________
-CfHeavy* FitPairAnalysis::GetModelKStarHeavyCf(double aMinNorm, double aMaxNorm, int aRebin)
+CfHeavy* FitPairAnalysis::GetModelKStarHeavyCf(double aKStarMinNorm, double aKStarMaxNorm, int aRebin)
 {
   vector<CfLite*> tTempCfLiteCollection;
 
   for(int iAnaly=0; iAnaly<fNFitPartialAnalysis; iAnaly++)
   {
-    tTempCfLiteCollection.push_back(fFitPartialAnalysisCollection[iAnaly]->GetModelKStarCf(aMinNorm,aMaxNorm,aRebin));
+    tTempCfLiteCollection.push_back(fFitPartialAnalysisCollection[iAnaly]->GetModelKStarCf(aKStarMinNorm,aKStarMaxNorm,aRebin));
   }
 
   TString tCfBaseName = "ModelKStarHeavyCf_";
@@ -690,19 +680,19 @@ CfHeavy* FitPairAnalysis::GetModelKStarHeavyCf(double aMinNorm, double aMaxNorm,
 
   TString tTitle = TString(cRootParticleTags[fParticleTypes[0]]) + TString(cRootParticleTags[fParticleTypes[1]]);
 
-  CfHeavy* tReturnCfHeavy = new CfHeavy(tCfName,tTitle,tTempCfLiteCollection,aMinNorm,aMaxNorm);
+  CfHeavy* tReturnCfHeavy = new CfHeavy(tCfName,tTitle,tTempCfLiteCollection,aKStarMinNorm,aKStarMaxNorm);
 
   return tReturnCfHeavy;
 }
 
 //________________________________________________________________________________________________________________
-void FitPairAnalysis::BuildModelKStarHeavyCfFake(double aMinNorm, double aMaxNorm, int aRebin)
+void FitPairAnalysis::BuildModelKStarHeavyCfFake(double aKStarMinNorm, double aKStarMaxNorm, int aRebin)
 {
   vector<CfLite*> tTempCfLiteCollection;
 
   for(int iAnaly=0; iAnaly<fNFitPartialAnalysis; iAnaly++)
   {
-    tTempCfLiteCollection.push_back(fFitPartialAnalysisCollection[iAnaly]->GetModelKStarCfFake(aMinNorm,aMaxNorm,aRebin));
+    tTempCfLiteCollection.push_back(fFitPartialAnalysisCollection[iAnaly]->GetModelKStarCfFake(aKStarMinNorm,aKStarMaxNorm,aRebin));
   }
 
   TString tCfBaseName = "ModelKStarHeavyCfFake_";
@@ -710,18 +700,18 @@ void FitPairAnalysis::BuildModelKStarHeavyCfFake(double aMinNorm, double aMaxNor
 
   TString tTitle = TString(cRootParticleTags[fParticleTypes[0]]) + TString(cRootParticleTags[fParticleTypes[1]]);
 
-  fModelKStarHeavyCfFake = new CfHeavy(tCfName,tTitle,tTempCfLiteCollection,aMinNorm,aMaxNorm);
+  fModelKStarHeavyCfFake = new CfHeavy(tCfName,tTitle,tTempCfLiteCollection,aKStarMinNorm,aKStarMaxNorm);
 }
 
 
 //________________________________________________________________________________________________________________
-void FitPairAnalysis::BuildModelKStarHeavyCfFakeIdeal(double aMinNorm, double aMaxNorm, int aRebin)
+void FitPairAnalysis::BuildModelKStarHeavyCfFakeIdeal(double aKStarMinNorm, double aKStarMaxNorm, int aRebin)
 {
   vector<CfLite*> tTempCfLiteCollection;
 
   for(int iAnaly=0; iAnaly<fNFitPartialAnalysis; iAnaly++)
   {
-    tTempCfLiteCollection.push_back(fFitPartialAnalysisCollection[iAnaly]->GetModelKStarCfFakeIdeal(aMinNorm,aMaxNorm,aRebin));
+    tTempCfLiteCollection.push_back(fFitPartialAnalysisCollection[iAnaly]->GetModelKStarCfFakeIdeal(aKStarMinNorm,aKStarMaxNorm,aRebin));
   }
 
   TString tCfBaseName = "ModelKStarHeavyCfFakeIdeal_";
@@ -729,17 +719,17 @@ void FitPairAnalysis::BuildModelKStarHeavyCfFakeIdeal(double aMinNorm, double aM
 
   TString tTitle = TString(cRootParticleTags[fParticleTypes[0]]) + TString(cRootParticleTags[fParticleTypes[1]]);
 
-  fModelKStarHeavyCfFakeIdeal = new CfHeavy(tCfName,tTitle,tTempCfLiteCollection,aMinNorm,aMaxNorm);
+  fModelKStarHeavyCfFakeIdeal = new CfHeavy(tCfName,tTitle,tTempCfLiteCollection,aKStarMinNorm,aKStarMaxNorm);
 }
 
 
 //________________________________________________________________________________________________________________
-void FitPairAnalysis::BuildModelCfFakeIdealCfFakeRatio(double aMinNorm, double aMaxNorm, int aRebinFactor)
+void FitPairAnalysis::BuildModelCfFakeIdealCfFakeRatio(double aKStarMinNorm, double aKStarMaxNorm, int aRebinFactor)
 {
   TString tName = "ModelCfFakeIdealCfFakeRatio_" + TString(cAnalysisBaseTags[fAnalysisType]) + TString(cCentralityTags[fCentralityType]);
 
-  BuildModelKStarHeavyCfFake(aMinNorm,aMaxNorm,aRebinFactor);
-  BuildModelKStarHeavyCfFakeIdeal(aMinNorm,aMaxNorm,aRebinFactor);
+  BuildModelKStarHeavyCfFake(aKStarMinNorm,aKStarMaxNorm,aRebinFactor);
+  BuildModelKStarHeavyCfFakeIdeal(aKStarMinNorm,aKStarMaxNorm,aRebinFactor);
 
   fModelCfFakeIdealCfFakeRatio = (TH1*)fModelKStarHeavyCfFakeIdeal->GetHeavyCf()->Clone(tName);
   fModelCfFakeIdealCfFakeRatio->SetTitle(tName);

@@ -61,8 +61,8 @@ public:
   virtual ~FitPairAnalysis();
 
   void BuildModelKStarTrueVsRecMixed(int aRebinFactor=1);
-  void BuildKStarCfHeavy(double aMinNorm=0.32, double aMaxNorm=0.4);
-  void RebinKStarCfHeavy(int aRebinFactor, double aMinNorm=0.32, double aMaxNorm=0.4);
+  void BuildKStarCfHeavy(double aKStarMinNorm=0.32, double aKStarMaxNorm=0.4);
+  void RebinKStarCfHeavy(int aRebinFactor, double aKStarMinNorm=0.32, double aKStarMaxNorm=0.4);
   void DrawKStarCfHeavy(TPad* aPad, int aMarkerColor=1, TString aOption = "", int aMarkerStyle=20);
 
   TF1* GetNonFlatBackground_FitCombinedPartials(NonFlatBgdFitType aBgdFitType=kLinear, FitType aFitType=kChi2PML);
@@ -77,10 +77,10 @@ public:
 
   void SetFitParameter(FitParameter* aParam);
 
-  CfHeavy* GetModelKStarHeavyCf(double aMinNorm=0.32, double aMaxNorm=0.40, int aRebin=4);
-  void BuildModelKStarHeavyCfFake(double aMinNorm, double aMaxNorm, int aRebin=1);
-  void BuildModelKStarHeavyCfFakeIdeal(double aMinNorm, double aMaxNorm, int aRebin=1);
-  void BuildModelCfFakeIdealCfFakeRatio(double aMinNorm=0.32, double aMaxNorm=0.4, int aRebinFactor=1);
+  CfHeavy* GetModelKStarHeavyCf(double aKStarMinNorm=0.32, double aKStarMaxNorm=0.40, int aRebin=4);
+  void BuildModelKStarHeavyCfFake(double aKStarMinNorm, double aKStarMaxNorm, int aRebin=1);
+  void BuildModelKStarHeavyCfFakeIdeal(double aKStarMinNorm, double aKStarMaxNorm, int aRebin=1);
+  void BuildModelCfFakeIdealCfFakeRatio(double aKStarMinNorm=0.32, double aKStarMaxNorm=0.4, int aRebinFactor=1);
 
   TH1F* GetCorrectedFitHisto(bool aMomResCorrection=true, bool aNonFlatBgdCorrection=true, bool aIncludeResiduals=false, NonFlatBgdFitType aNonFlatBgdFitType=kLinear, FitType aFitType=kChi2PML);
 
@@ -166,7 +166,6 @@ private:
   vector<ParticleType> fParticleTypes;
 
   CfHeavy *fKStarCfHeavy;
-  double fKStarMinNorm, fKStarMaxNorm;
   double fMinBgdFit, fMaxBgdFit;
   TF1* fPrimaryFit;
   TF1* fNonFlatBackground;
@@ -232,8 +231,8 @@ inline FitParameter* FitPairAnalysis::GetFitNormParameter(int aFitPartialAnalysi
 inline CfHeavy* FitPairAnalysis::GetKStarCfHeavy() {return fKStarCfHeavy;}
 inline TH1* FitPairAnalysis::GetKStarCf() {return fKStarCfHeavy->GetHeavyCf();}
 
-inline double FitPairAnalysis::GetKStarMinNorm() {return fKStarMinNorm;}
-inline double FitPairAnalysis::GetKStarMaxNorm() {return fKStarMaxNorm;}
+inline double FitPairAnalysis::GetKStarMinNorm() {return fKStarCfHeavy->GetMinNorm();}
+inline double FitPairAnalysis::GetKStarMaxNorm() {return fKStarCfHeavy->GetMaxNorm();}
 inline void FitPairAnalysis::SetKStarMinMaxNorm(double aMin, double aMax) {RebinKStarCfHeavy(1, aMin, aMax);}  //Propagated through to CfLite objects, no need to for loop through
                                                                                                                //fFitPartialAnalysisCollection and call SetKStarMinMaxNorm on each
 

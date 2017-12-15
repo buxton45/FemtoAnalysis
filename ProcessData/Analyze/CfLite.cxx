@@ -118,7 +118,7 @@ CfLite& CfLite::operator=(const CfLite& aLite)
 //________________________________________________________________________________________________________________
 void CfLite::BuildCf(double aMinNorm, double aMaxNorm)
 {
-  BuildCf(fCfName,fCfTitle,aMinNorm,aMaxNorm);
+  BuildCf(fCfName, fCfTitle, aMinNorm, aMaxNorm);
 }
 
 
@@ -131,12 +131,15 @@ void CfLite::BuildCf(TString aName, TString aTitle, double aMinNorm, double aMax
   assert(aMinNorm >= fNum->GetXaxis()->GetBinLowEdge(1));
   assert(aMaxNorm <= fNum->GetXaxis()->GetBinUpEdge(fNum->GetNbinsX()));
 
-  int tMinNormBin = fNum->FindBin(aMinNorm);
-  int tMaxNormBin = fNum->FindBin(aMaxNorm);
+  fMinNorm = aMinNorm;
+  fMaxNorm = aMaxNorm;
+
+  int tMinNormBin = fNum->FindBin(fMinNorm);
+  int tMaxNormBin = fNum->FindBin(fMaxNorm);
   fNumScale = fNum->Integral(tMinNormBin,tMaxNormBin);
 
-  tMinNormBin = fDen->FindBin(aMinNorm);
-  tMaxNormBin = fDen->FindBin(aMaxNorm);
+  tMinNormBin = fDen->FindBin(fMinNorm);
+  tMaxNormBin = fDen->FindBin(fMaxNorm);
   fDenScale = fDen->Integral(tMinNormBin,tMaxNormBin);
 
   fCf = (TH1*)fNum->Clone(aName);
@@ -163,7 +166,7 @@ void CfLite::BuildCf(TString aName, TString aTitle, double aMinNorm, double aMax
 //________________________________________________________________________________________________________________
 void CfLite::Rebin(int aRebinFactor)
 {
-  Rebin(aRebinFactor,fMinNorm,fMaxNorm);
+  Rebin(aRebinFactor, fMinNorm, fMaxNorm);
 }
 //________________________________________________________________________________________________________________
 void CfLite::Rebin(int aRebinFactor, double aMinNorm, double aMaxNorm)

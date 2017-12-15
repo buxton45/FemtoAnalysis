@@ -76,8 +76,8 @@ public:
   TH2* Get2dHisto(TString aHistoName, TString aNewName);
   TH2* Get2dHisto(TString aFileLocation, TString aDirectoryName, TString aHistoName, TString aNewName);
 
-  void BuildKStarCf(double aMinNorm=0.32, double aMaxNorm=0.4);
-  void RebinKStarCf(int aRebinFactor, double aMinNorm=0.32, double aMaxNorm=0.4);
+  void BuildKStarCf(double aKStarMinNorm=0.32, double aKStarMaxNorm=0.4);
+  void RebinKStarCf(int aRebinFactor, double aKStarMinNorm=0.32, double aKStarMaxNorm=0.4);
 
   static TF1* FitNonFlatBackground(TH1* aNum, TH1* aDen, TH1* aCf, NonFlatBgdFitType aBgdFitType, FitType aFitType=kChi2PML, 
                                    double aMinBgdFit=0.60, double aMaxBhdFit=0.90, double aKStarMinNorm=0.32, double aKStarMaxNorm=0.40);
@@ -87,9 +87,9 @@ public:
 
   void SetFitParameter(FitParameter* aParam);
 
-  CfLite* GetModelKStarCf(double aMinNorm=0.32, double aMaxNorm=0.40, int aRebin=1);
-  CfLite* GetModelKStarCfFake(double aMinNorm, double aMaxNorm, int aRebin=1);
-  CfLite* GetModelKStarCfFakeIdeal(double aMinNorm, double aMaxNorm, int aRebin=1);
+  CfLite* GetModelKStarCf(double aKStarMinNorm=0.32, double aKStarMaxNorm=0.40, int aRebin=1);
+  CfLite* GetModelKStarCfFake(double aKStarMinNorm, double aKStarMaxNorm, int aRebin=1);
+  CfLite* GetModelKStarCfFakeIdeal(double aKStarMinNorm, double aKStarMaxNorm, int aRebin=1);
 
   //inline (i.e. simple) functions
   AnalysisType GetAnalysisType();
@@ -146,7 +146,6 @@ private:
   vector<ParticleType> fParticleTypes;
 
   CfLite *fKStarCfLite;
-  double fKStarMinNorm, fKStarMaxNorm;
   double fMinBgdFit, fMaxBgdFit;
 
   int fNFitParams;
@@ -189,8 +188,8 @@ inline TH1* FitPartialAnalysis::GetKStarCf() {return fKStarCfLite->Cf();}
 inline TH1* FitPartialAnalysis::GetNumKStarCf() {return fKStarCfLite->Num();}
 inline TH1* FitPartialAnalysis::GetDenKStarCf() {return fKStarCfLite->Den();}
 
-inline double FitPartialAnalysis::GetKStarMinNorm() {return fKStarMinNorm;}
-inline double FitPartialAnalysis::GetKStarMaxNorm() {return fKStarMaxNorm;}
+inline double FitPartialAnalysis::GetKStarMinNorm() {return fKStarCfLite->GetMinNorm();}
+inline double FitPartialAnalysis::GetKStarMaxNorm() {return fKStarCfLite->GetMaxNorm();}
 inline void FitPartialAnalysis::SetKStarMinMaxNorm(double aMin, double aMax) {RebinKStarCf(1, aMin, aMax);}
 
 inline double FitPartialAnalysis::GetMinBgdFit() {return fMinBgdFit;}

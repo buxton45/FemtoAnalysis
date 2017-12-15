@@ -67,6 +67,10 @@ public:
   TH1* GetHeavyCfClone();
 
   TH1* GetHeavyCfwErrorsByHand();
+
+  double GetMinNorm();
+  double GetMaxNorm();
+
 private:
 
   TString fHeavyCfName;
@@ -93,7 +97,8 @@ inline TH1* CfHeavy::GetHeavyCf() {return fHeavyCf;}
 inline TH1* CfHeavy::GetHeavyCfClone() {return (TH1*)fHeavyCf->Clone();}
 inline TH1* CfHeavy::GetHeavyCfwErrorsByHand() {return fHeavyCfwErrorsByHand;}
 
-
+inline double CfHeavy::GetMinNorm() {return fMinNorm;}
+inline double CfHeavy::GetMaxNorm() {return fMaxNorm;}
 
 
 
