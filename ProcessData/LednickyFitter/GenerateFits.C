@@ -140,12 +140,23 @@ int main(int argc, char **argv)
   if(FixAllLambdaTo1) tLamKchP->SetLambdaParamStartValue(1.0, false, kMB, true);
   if(UsemTScalingOfResidualRadii) tLamKchP->SetUsemTScalingOfResidualRadii(UsemTScalingOfResidualRadii, mTScalingPowerOfResidualRadii);
 
-//  tLamKchP->SetKStarMinMaxNorm(0.5,0.6);
-//  tLamKchP->SetMinMaxBgdFit(0.65, 0.95);
-/*
-tLamKchP->SetAllLambdaParamLimits(0.1,1.0);
-tLamKchP->SetRadiusLimits({{1., 10.}, {1., 10.}, {1., 10.}});
-*/
+  if(ApplyNonFlatBackgroundCorrection && tNonFlatBgdFitType != kLinear)
+  {
+//    tLamKchP->SetKStarMinMaxNorm(0.5,0.6);
+    tLamKchP->SetMinMaxBgdFit(0.45, 0.95);
+    tLamKchP->SetAllRadiiLimits(1., 10.);
+
+    if(tIncludeResidualsType == kIncludeNoResiduals) tLamKchP->SetAllLambdaParamLimits(0.1,1.0);
+//    else tLamKchP->SetAllLambdaParamLimits(0.1,2.0);
+      //Don't seem to need lambda limits with residuals.  In fact, when limits in place, the fit doesn't converge
+      // Without limits, the fit converges (with lambda values within limits!)
+  }
+
+
+
+
+
+
   tLamKchP->DoFit();
   TCanvas* tKStarwFitsCan = tLamKchP->DrawKStarCfswFits(ApplyMomResCorrection,ApplyNonFlatBackgroundCorrection,tNonFlatBgdFitType,SaveImages,false,false);
 //  TCanvas* tKStarCfs = tLamKchP->DrawKStarCfs(SaveImages);

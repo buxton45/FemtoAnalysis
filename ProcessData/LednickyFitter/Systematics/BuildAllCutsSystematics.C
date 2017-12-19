@@ -27,6 +27,8 @@ int main(int argc, char **argv)
   ChargedResidualsType tChargedResidualsType = kUseXiDataAndCoulombOnlyInterp;
   ResPrimMaxDecayType tResPrimMaxDecayType = k5fm;
 
+  bool FixD0 = false;
+
   bool bWriteToFile = true;
   bool bSaveImages = true;
 
@@ -91,6 +93,8 @@ int main(int argc, char **argv)
     tFitSysAn->SetIncludeResidualCorrelationsType(tIncludeResidualsType);
     tFitSysAn->SetChargedResidualsType(tChargedResidualsType);
     tFitSysAn->SetResPrimMaxDecayType(tResPrimMaxDecayType);
+
+    tFitSysAn->SetFixD0(FixD0);
 
     tFitSysAn->RunAllFits(bSaveImages, bWriteToFile);
 

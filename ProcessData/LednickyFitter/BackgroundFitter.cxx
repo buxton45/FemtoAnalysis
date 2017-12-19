@@ -55,8 +55,8 @@ BackgroundFitter::BackgroundFitter(TH1* aNum, TH1* aDen, TH1* aCf, NonFlatBgdFit
     {
       //(1./(par[2]*sqrt(TMath::TwoPi())))*par[0]*exp(-0.5*(pow((x[0]-par[1])/par[2],2.0))) + par[3]
       fMinuit->mnparm(0, "Par0", 0.1, 0.01, 0., 0., tErrFlg);
-      fMinuit->mnparm(1, "Par1", 0., 0.01, 0., 0., tErrFlg);
-//      fMinuit->mnparm(1, "Par1", 0., 0.01, -0.05, 0.05, tErrFlg);
+//      fMinuit->mnparm(1, "Par1", 0., 0.01, 0., 0., tErrFlg);
+      fMinuit->mnparm(1, "Par1", 0., 0.01, -0.05, 0.05, tErrFlg);
       fMinuit->mnparm(2, "Par2", 0.5, 0.01, 0., 0., tErrFlg);
       fMinuit->mnparm(3, "Par3", 0.96, 0.01, 0., 0., tErrFlg);
     }

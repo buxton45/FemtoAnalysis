@@ -31,9 +31,12 @@ FitSystematicAnalysis::FitSystematicAnalysis(TString aFileLocationBase, TString 
   fApplyNonFlatBackgroundCorrection(false),
   fNonFlatBgdFitType(kLinear),
   fApplyMomResCorrection(false),
+
   fIncludeResidualsType(kIncludeNoResiduals),
   fChargedResidualsType(kUseXiDataAndCoulombOnlyInterp),
   fResPrimMaxDecayType(k5fm),
+
+  fFixD0(false),
 
   fSaveDirectory(""),
 
@@ -63,9 +66,12 @@ FitSystematicAnalysis::FitSystematicAnalysis(TString aFileLocationBase, TString 
   fApplyNonFlatBackgroundCorrection(false),
   fNonFlatBgdFitType(kLinear),
   fApplyMomResCorrection(false),
+
   fIncludeResidualsType(kIncludeNoResiduals),
   fChargedResidualsType(kUseXiDataAndCoulombOnlyInterp),
   fResPrimMaxDecayType(k5fm),
+
+  fFixD0(false),
 
   fSaveDirectory(""),
 
@@ -95,9 +101,12 @@ FitSystematicAnalysis::FitSystematicAnalysis(TString aFileLocationBase, TString 
   fApplyNonFlatBackgroundCorrection(false),
   fNonFlatBgdFitType(kLinear),
   fApplyMomResCorrection(false),
+
   fIncludeResidualsType(kIncludeNoResiduals),
   fChargedResidualsType(kUseXiDataAndCoulombOnlyInterp),
   fResPrimMaxDecayType(k5fm),
+
+  fFixD0(false),
 
   fSaveDirectory(""),
 
@@ -215,7 +224,7 @@ void FitSystematicAnalysis::PrintText2dVec(vector<vector<TString> > &a2dVec, ost
 
 //________________________________________________________________________________________________________________
 void FitSystematicAnalysis::AppendFitInfo(TString &aSaveName, bool aApplyMomResCorrection, bool aApplyNonFlatBackgroundCorrection, 
-                                          IncludeResidualsType aIncludeResidualsType, ResPrimMaxDecayType aResPrimMaxDecayType, ChargedResidualsType aChargedResidualsType)
+                                          IncludeResidualsType aIncludeResidualsType, ResPrimMaxDecayType aResPrimMaxDecayType, ChargedResidualsType aChargedResidualsType, bool aFixD0)
 {
   if(aApplyMomResCorrection) aSaveName += TString("_MomResCrctn");
   if(aApplyNonFlatBackgroundCorrection) aSaveName += TString("_NonFlatBgdCrctn");
@@ -226,13 +235,14 @@ void FitSystematicAnalysis::AppendFitInfo(TString &aSaveName, bool aApplyMomResC
     aSaveName += cResPrimMaxDecayTypeTags[aResPrimMaxDecayType];
     aSaveName += cChargedResidualsTypeTags[aChargedResidualsType];
   }
+  if(aFixD0) aSaveName += TString("_FixedD0");
 }
 
 
 //________________________________________________________________________________________________________________
 void FitSystematicAnalysis::AppendFitInfo(TString &aSaveName)
 {
-  AppendFitInfo(aSaveName, fApplyMomResCorrection, fApplyNonFlatBackgroundCorrection, fIncludeResidualsType, fResPrimMaxDecayType, fChargedResidualsType);
+  AppendFitInfo(aSaveName, fApplyMomResCorrection, fApplyNonFlatBackgroundCorrection, fIncludeResidualsType, fResPrimMaxDecayType, fChargedResidualsType, fFixD0);
 }
 
 
@@ -281,6 +291,7 @@ FitGenerator* FitSystematicAnalysis::BuildFitGenerator(AnalysisRunType aRunType,
                                           cFitParamValues[fIncludeResidualsType][fAnalysisType][k0010][kImf0],
                                           cFitParamValues[fIncludeResidualsType][fAnalysisType][k0010][kd0]);
 
+  if(fFixD0) tFitGenerator->SetScattParamStartValue(0., kd0, true);
   //----------------------------------------------------------------------------------------------------------------
 
   return tFitGenerator;
@@ -371,6 +382,11 @@ void FitSystematicAnalysis::RunVaryFitRange(bool aSaveImages, bool aWriteToTxtFi
   for(int i=0; i<tNRangeValues; i++)
   {
     FitGenerator* tFitGenerator = BuildFitGenerator(kTrain, "", fNonFlatBgdFitType);
+    //TODO are these limits necessary?
+    tFitGenerator->SetAllRadiiLimits(1., 10.);
+    if(fIncludeResidualsType == kIncludeNoResiduals) tFitGenerator->SetAllLambdaParamLimits(0.1, 1.);
+    else tFitGenerator->SetAllLambdaParamLimits(0.1, 2.);
+
     tFitGenerator->DoFit(tRangeVec[i]);
 
     TString tRangeValue = TString::Format("Max KStar for Fit = %0.4f",tRangeVec[i]);
@@ -430,6 +446,25 @@ void FitSystematicAnalysis::RunVaryNonFlatBackgroundFit(bool aSaveImages, bool a
   for(int i=0; i<tNFitTypeValues; i++)
   {
     FitGenerator* tFitGenerator = BuildFitGenerator(kTrain, "", static_cast<NonFlatBgdFitType>(tFitTypeVec[i]));
+
+    //--------------------------------
+    //For a few cases, fitting with kQuadratic and kGaussian can be difficult, so these restrictions are put in place to combat that
+    // NOTE: Changing the MinMaxBgdFit range from [0.6, 0.9] (in typical analysis) to [0.45, 0.95] (here) does not significantly change
+    //       the results for kLinear, and helps the other cases to build a more stable background fit
+    tFitGenerator->SetMinMaxBgdFit(0.45, 0.95);
+
+    // NOTE: Limits for lambda in (A)LamK0 already in place in FitSystematicAnalysis::BuildFitGenerator, which is why here
+    //       I have && !(fAnalysisType==kLamK0 || fAnalysisType==kALamK0)
+    if(fIncludeResidualsType == kIncludeNoResiduals && !(fAnalysisType==kLamK0 || fAnalysisType==kALamK0)) tFitGenerator->SetAllLambdaParamLimits(0.1, 1.0);
+
+    //Don't seem to need lambda limits with residuals.  In fact, when limits in place, the fit doesn't converge
+    // Without limits, the fit converges (with lambda values within limits!)
+    //if(fIncludeResidualsType != kIncludeNoResiduals && !(fAnalysisType==kLamK0 || fAnalysisType==kALamK0)) tFitGenerator->SetAllLambdaParamLimits(0.1, 2.0);
+
+    tFitGenerator->SetAllRadiiLimits(1., 10.);  //NOTE: This does nothing when fIncludeResidualsType != kIncludeNoResiduals && fChargedResidualsType != kUseXiDataForAll,
+                                                //      as, in that case, FitGenerator hardwires limits [1., 12] to stay within interpolation regime
+    //--------------------------------
+
     tFitGenerator->DoFit();
 
     TString tRangeValue = TString::Format("Fit Type = %d",tFitTypeVec[i]);

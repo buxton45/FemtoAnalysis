@@ -41,7 +41,7 @@ public:
   void PrintText2dVec(vector<vector<TString> > &a2dVec, ostream &aOut=std::cout);
 
   static void AppendFitInfo(TString &aSaveName, bool aApplyMomResCorrection, bool aApplyNonFlatBackgroundCorrection, IncludeResidualsType aIncludeResidualsType, 
-                            ResPrimMaxDecayType aResPrimMaxDecayType=k5fm, ChargedResidualsType aChargedResidualsType=kUseXiDataAndCoulombOnlyInterp);
+                            ResPrimMaxDecayType aResPrimMaxDecayType=k5fm, ChargedResidualsType aChargedResidualsType=kUseXiDataAndCoulombOnlyInterp, bool aFixD0=false);
   void AppendFitInfo(TString &aSaveName);
   FitGenerator* BuildFitGenerator(AnalysisRunType aRunType, TString aDirNameModifier, NonFlatBgdFitType aNonFlatBgdFitType);
 
@@ -57,6 +57,8 @@ public:
   void SetIncludeResidualCorrelationsType(IncludeResidualsType aIncludeResidualsType);
   void SetChargedResidualsType(ChargedResidualsType aChargedResidualsType);
   void SetResPrimMaxDecayType(ResPrimMaxDecayType aResPrimMaxDecayType);
+
+  void SetFixD0(bool aFix);
 
   void SetSaveDirectory(TString aDirectory);
 
@@ -76,6 +78,8 @@ protected:
   IncludeResidualsType fIncludeResidualsType;
   ChargedResidualsType fChargedResidualsType;
   ResPrimMaxDecayType fResPrimMaxDecayType;
+
+  bool fFixD0;
 
   TString fSaveDirectory;
 
@@ -97,6 +101,8 @@ inline void FitSystematicAnalysis::SetApplyMomResCorrection(bool aApply) {fApply
 inline void FitSystematicAnalysis::SetIncludeResidualCorrelationsType(IncludeResidualsType aIncludeResidualsType) {fIncludeResidualsType = aIncludeResidualsType;}
 inline void FitSystematicAnalysis::SetChargedResidualsType(ChargedResidualsType aChargedResidualsType) {fChargedResidualsType = aChargedResidualsType;}
 inline void FitSystematicAnalysis::SetResPrimMaxDecayType(ResPrimMaxDecayType aResPrimMaxDecayType) {fResPrimMaxDecayType = aResPrimMaxDecayType;}
+
+inline void FitSystematicAnalysis::SetFixD0(bool aFix) {fFixD0=aFix;}
 
 inline void FitSystematicAnalysis::SetSaveDirectory(TString aDirectory) {fSaveDirectory = aDirectory;}
 

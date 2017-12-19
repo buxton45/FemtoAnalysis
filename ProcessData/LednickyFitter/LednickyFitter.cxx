@@ -323,7 +323,7 @@ void LednickyFitter::CalculateFitFunction(int &npar, double &chi2, double *par)
         //Note: If Bgd not modeled by linear function, grab tNonFlatBgd from pair analysis instead of partial analysis
         //      This greatly helps the fitter by stabilizing tNonFlatBgd
         //      Both methods give the same result when Bgd is linear
-        tNonFlatBgd = tFitPartialAnalysis->GetNonFlatBackground(fNonFlatBgdFitType, fFitSharedAnalyses->GetFitType()/*,0.41,0.99*/);
+        tNonFlatBgd = tFitPartialAnalysis->GetNonFlatBackground(fNonFlatBgdFitType, fFitSharedAnalyses->GetFitType());
 
         ApplyNonFlatBackgroundCorrection(tCorrectedFitCfContent, fKStarBinCenters, tNonFlatBgd);
       }
@@ -490,8 +490,13 @@ void LednickyFitter::InitializeFitter()
   cout << "----- Initializing fitter -----" << endl;
 
   //First, make sure KStar fit region, KStar normalization region, and NonFlatBgd fit region do not overlap
+  //TODO Is this absolutely necessary?
+/*
   assert(fMaxFitKStar < fFitSharedAnalyses->GetKStarMinNorm());
   if(fApplyNonFlatBackgroundCorrection) assert(fFitSharedAnalyses->GetKStarMaxNorm() < fFitSharedAnalyses->GetMinBgdFit());
+*/
+  //Bare minimum, the KStar fit region and the NonFlatBgd fit region definitely should not overlap
+  if(fApplyNonFlatBackgroundCorrection) assert(fMaxFitKStar < fFitSharedAnalyses->GetMinBgdFit());
 
   fNbinsXToBuild = 0;
   fNbinsXToFit = 0;
