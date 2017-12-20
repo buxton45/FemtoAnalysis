@@ -53,12 +53,14 @@ BackgroundFitter::BackgroundFitter(TH1* aNum, TH1* aDen, TH1* aCf, NonFlatBgdFit
     }
     else if(fNonFlatBgdFitType == kGaussian)
     {
-      //(1./(par[2]*sqrt(TMath::TwoPi())))*par[0]*exp(-0.5*(pow((x[0]-par[1])/par[2],2.0))) + par[3]
-      fMinuit->mnparm(0, "Par0", 0.1, 0.01, 0., 0., tErrFlg);
-//      fMinuit->mnparm(1, "Par1", 0., 0.01, 0., 0., tErrFlg);
-      fMinuit->mnparm(1, "Par1", 0., 0.01, -0.05, 0.05, tErrFlg);
+      //par[0]*exp(-0.5*(pow((x[0]-par[1])/par[2],2.0))) + par[3]
+      fMinuit->mnparm(0, "Par0", 0.1, 0.1, 0., 0., tErrFlg);
+      fMinuit->mnparm(1, "Par1", 0., 0.1, 0., 0., tErrFlg);
+//      fMinuit->mnparm(1, "Par1", 0., 0.01, -0.05, 0.05, tErrFlg);
       fMinuit->mnparm(2, "Par2", 0.5, 0.01, 0., 0., tErrFlg);
-      fMinuit->mnparm(3, "Par3", 0.96, 0.01, 0., 0., tErrFlg);
+      fMinuit->mnparm(3, "Par3", 0.9, 0.1, 0., 0., tErrFlg);
+
+      fMinuit->FixParameter(1);
     }
     else assert(0);
   }
@@ -91,7 +93,7 @@ void BackgroundFitter::PrintFitFunctionInfo()
   else if(fNonFlatBgdFitType == kGaussian)
   {
     cout << "Using fNonFlatBgdFitType=kGaussian" << endl;
-    cout << "==> \t Form: (1./(par[2]*sqrt(TMath::TwoPi())))*par[0]*exp(-0.5*(pow((x[0]-par[1])/par[2],2.0))) + par[3]" << endl;
+    cout << "==> \t Form: par[0]*exp(-0.5*(pow((x[0]-par[1])/par[2],2.0))) + par[3]" << endl;
   }
   else assert(0);
 
@@ -113,8 +115,7 @@ double BackgroundFitter::FitFunctionQuadratic(double *x, double *par)
 //________________________________________________________________________________________________________________
 double BackgroundFitter::FitFunctionGaussian(double *x, double *par)
 {
-//  return par[0]*exp(-0.5*(pow((x[0]-par[1])/par[2],2.0))) + par[3];
-  return (1./(par[2]*sqrt(TMath::TwoPi())))*par[0]*exp(-0.5*(pow((x[0]-par[1])/par[2],2.0))) + par[3];
+  return par[0]*exp(-0.5*(pow((x[0]-par[1])/par[2],2.0))) + par[3];
 }
 
 
@@ -149,10 +150,10 @@ double BackgroundFitter::AddTwoFitFunctionsQuadratic(double *x, double *par)
 double BackgroundFitter::AddTwoFitFunctionsGaussian(double *x, double *par)
 {
   //Num counts are par[4] and par[9]
-  double tGauss1 = (1./(par[2]*sqrt(TMath::TwoPi())))*par[0]*exp(-0.5*(pow((x[0]-par[1])/par[2],2.0))) + par[3];
+  double tGauss1 = par[0]*exp(-0.5*(pow((x[0]-par[1])/par[2],2.0))) + par[3];
   double tNumCounts1 = par[4];
 
-  double tGauss2 = (1./(par[7]*sqrt(TMath::TwoPi())))*par[5]*exp(-0.5*(pow((x[0]-par[6])/par[7],2.0))) + par[8];
+  double tGauss2 = par[5]*exp(-0.5*(pow((x[0]-par[6])/par[7],2.0))) + par[8];
   double tNumCounts2 = par[9];
 
 
@@ -229,7 +230,7 @@ TF1* BackgroundFitter::FitNonFlatBackgroundPML()
   fMinuit->SetPrintLevel(0);
   // Now ready for minimization step
   arglist[0] = 50000;
-  arglist[1] = 0.1;
+  arglist[1] = 0.001;
   fMinuit->mnexcm("MIGRAD", arglist ,2,tErrFlg);
 
   if(tErrFlg != 0)

@@ -47,6 +47,7 @@ int main(int argc, char **argv)
   double aLambdaMin=0., aLambdaMax=1.;
   if(UnboundLambda) aLambdaMax=0.;
 
+  bool bZoomROP = false;
   bool bDrawResiduals = false;
 
 
@@ -158,7 +159,7 @@ int main(int argc, char **argv)
 
 
   tLamKchP->DoFit();
-  TCanvas* tKStarwFitsCan = tLamKchP->DrawKStarCfswFits(ApplyMomResCorrection,ApplyNonFlatBackgroundCorrection,tNonFlatBgdFitType,SaveImages,false,false);
+  TCanvas* tKStarwFitsCan = tLamKchP->DrawKStarCfswFits(ApplyMomResCorrection,ApplyNonFlatBackgroundCorrection,tNonFlatBgdFitType,SaveImages,false,bZoomROP);
 //  TCanvas* tKStarCfs = tLamKchP->DrawKStarCfs(SaveImages);
 //  TCanvas* tModelKStarCfs = tLamKchP->DrawModelKStarCfs(SaveImages);
 //  tLamKchP->FindGoodInitialValues(ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection);

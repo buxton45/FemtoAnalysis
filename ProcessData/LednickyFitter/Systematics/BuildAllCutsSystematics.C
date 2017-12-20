@@ -13,7 +13,7 @@ int main(int argc, char **argv)
 
   bool bPlayCompletionBeep = true;
 //-----------------------------------------------------------------------------
-  AnalysisType tAnType = kLamKchP;
+  AnalysisType tAnType = kLamK0;
   CentralityType tCentralityType = kMB;
   FitGeneratorType tFitGeneratorType = kPairwConj;
   bool tShareLambdaParameters = false;
@@ -23,11 +23,11 @@ int main(int argc, char **argv)
   bool ApplyNonFlatBackgroundCorrection = true;
   NonFlatBgdFitType tNonFlatBgdFitType = kLinear;
 
-  IncludeResidualsType tIncludeResidualsType = kIncludeNoResiduals; 
+  IncludeResidualsType tIncludeResidualsType = kInclude3Residuals; 
   ChargedResidualsType tChargedResidualsType = kUseXiDataAndCoulombOnlyInterp;
   ResPrimMaxDecayType tResPrimMaxDecayType = k5fm;
 
-  bool FixD0 = false;
+  bool FixD0 = true;
 
   bool bWriteToFile = true;
   bool bSaveImages = true;
@@ -44,7 +44,7 @@ int main(int argc, char **argv)
   else if(tAnType==kLamKchP || tAnType==kALamKchM || tAnType==kLamKchM || tAnType==kALamKchP) tGeneralAnTypeName = "cLamcKch";
   else assert(0);
 
-  for(int iCut=1; iCut<=tMaxCut; iCut++)
+  for(int iCut=11; iCut<=tMaxCut; iCut++)
   {
     if(tGeneralAnTypeName=="cLamcKch" && iCut==6) continue;
     if(tGeneralAnTypeName=="cLamK0" && iCut==9) continue;
@@ -53,7 +53,7 @@ int main(int argc, char **argv)
     if(tAnType==kLamK0 || tAnType==kALamK0) tCut *= -1;
     cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++ ";
     cout << "tCut = " << tCut;
-    cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++ " << endl << endl;
+    cout << " +++++++++++++++++++++++++++++++++++++++++++++++++++++++ " << endl << endl;
 
     SystematicsFileInfo tFileInfo = GetFileInfo_LamK(tCut);
       TString tResultsDate = tFileInfo.resultsDate;

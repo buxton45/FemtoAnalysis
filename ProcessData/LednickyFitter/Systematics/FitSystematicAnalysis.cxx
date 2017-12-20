@@ -443,6 +443,7 @@ void FitSystematicAnalysis::RunVaryNonFlatBackgroundFit(bool aSaveImages, bool a
     gSystem->mkdir(tSpecificSaveDirectory, true);
   }
 
+  bool tZoomROP=false;
   for(int i=0; i<tNFitTypeValues; i++)
   {
     FitGenerator* tFitGenerator = BuildFitGenerator(kTrain, "", static_cast<NonFlatBgdFitType>(tFitTypeVec[i]));
@@ -472,7 +473,7 @@ void FitSystematicAnalysis::RunVaryNonFlatBackgroundFit(bool aSaveImages, bool a
     tFitParamsVec.insert(tFitParamsVec.begin(),tRangeValue);
     tText2dVector.push_back(tFitParamsVec);
 
-    TCanvas* tKStarwFitsCan = tFitGenerator->DrawKStarCfswFits(fApplyMomResCorrection,fApplyNonFlatBackgroundCorrection,static_cast<NonFlatBgdFitType>(tFitTypeVec[i]),false,false);
+    TCanvas* tKStarwFitsCan = tFitGenerator->DrawKStarCfswFits(fApplyMomResCorrection, fApplyNonFlatBackgroundCorrection, static_cast<NonFlatBgdFitType>(tFitTypeVec[i]), false, false, tZoomROP);
     if(aSaveImages)
     {
       TString tImageSaveName = tSpecificSaveDirectory;
