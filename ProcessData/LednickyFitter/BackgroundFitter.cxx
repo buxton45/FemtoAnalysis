@@ -315,7 +315,8 @@ TF1* BackgroundFitter::FitNonFlatBackgroundSimple()
       tNonFlatBackground->SetParameter(2,0.5);
       tNonFlatBackground->SetParameter(3,0.96);
 
-      tNonFlatBackground->SetParLimits(1,-0.05,0.05);
+//      tNonFlatBackground->SetParLimits(1,-0.05,0.05);
+      tNonFlatBackground->FixParameter(1,0.);
 
     fCf->Fit(tFitName,"0q","",fMinBgdFit,fMaxBgdFit);
   }
