@@ -131,16 +131,18 @@ int main(int argc, char **argv)
 */
 
 
-  TString tFileLocationBase = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cXicKch_20160202/Results_cXicKch_20160202";
+  TString tFileLocationBase = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cXicKch_20170423/Results_cXicKch_20170423";
 
   AnalysisType tAnType = kAXiKchP;
   AnalysisType tConjType = kXiKchM;
+
+  bool bIncludeSingletAndTriplet = true;
    
   TString tAnBaseName = TString(cAnalysisBaseTags[tAnType]);
   TString tAnName0010 = tAnBaseName + TString(cCentralityTags[0]);
 
-  FitPairAnalysis* tPairAn0010 = new FitPairAnalysis(tFileLocationBase,tAnType,k0010);
-  FitPairAnalysis* tPairConjAn0010 = new FitPairAnalysis(tFileLocationBase,tConjType,k0010);
+  FitPairAnalysis* tPairAn0010 = new FitPairAnalysis(tFileLocationBase,tAnType,k0010,kTrain,2,"",bIncludeSingletAndTriplet);
+  FitPairAnalysis* tPairConjAn0010 = new FitPairAnalysis(tFileLocationBase,tConjType,k0010,kTrain,2,"",bIncludeSingletAndTriplet);
 
   vector<FitPairAnalysis*> tVecOfPairAn;
   tVecOfPairAn.push_back(tPairAn0010);
@@ -153,10 +155,12 @@ int main(int argc, char **argv)
   tSharedAn->SetSharedParameter(kRef0,1.02);
   tSharedAn->SetSharedParameter(kImf0,0.14);
   tSharedAn->SetSharedParameter(kd0,0.);
-  tSharedAn->SetSharedParameter(kRef02,0.11);
-  tSharedAn->SetSharedParameter(kImf02,0.17);
-  tSharedAn->SetSharedParameter(kd02,0.);
-
+  if(bIncludeSingletAndTriplet)
+  {
+    tSharedAn->SetSharedParameter(kRef02,0.11);
+    tSharedAn->SetSharedParameter(kImf02,0.17);
+    tSharedAn->SetSharedParameter(kd02,0.);
+  }
 
 /*
   tSharedAn->SetSharedParameter(kLambda,0.72,0.3,1.);
@@ -185,6 +189,8 @@ int main(int argc, char **argv)
 
   CoulombFitterParallel* tFitter = new CoulombFitterParallel(tSharedAn,0.15);
 //  CoulombFitterParallel* tFitter = new CoulombFitterParallel(tSharedAn,0.02);
+  tFitter->SetIncludeSingletAndTriplet(bIncludeSingletAndTriplet);
+  tFitter->SetApplyMomResCorrection(false);
 
   TString tFileLocationInterpHistos = "/home/jesse/Analysis/FemtoAnalysis/ProcessData/CoulombFitter/InterpHistsRepulsive";
   tFitter->LoadInterpHistFile(tFileLocationInterpHistos);
@@ -205,9 +211,11 @@ int main(int argc, char **argv)
 //  tFitter->WriteAllPairKStar3dVecFiles(tOutputName,tPairKStarNtupleDirName,tFileBaseName,tNFiles,16,0.,0.16);
 
 //  tFitter->BuildPairKStar3dVecFromTxt(tOutputName);
-  tFitter->BuildPairKStar4dVecFromTxt(tOutputName);
+
+//  tFitter->BuildPairKStar4dVecFromTxt(tOutputName);
+  tFitter->SetUseRandomKStarVectors(true);
   tFitter->SetUseStaticPairs(true,16384);
-  tFitter->SetIncludeSingletAndTriplet(true);
+
   //-------------------------------------------
 
   tFitter->GetFitSharedAnalyses()->GetMinuitObject()->SetFCN(fcn);

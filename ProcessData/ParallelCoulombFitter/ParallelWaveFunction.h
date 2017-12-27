@@ -28,11 +28,9 @@ using std::endl;
 using std::vector;
 
 extern __managed__ double* d_fLednickyHFunction;
-extern __managed__ double *d_fGTildeReal, *d_fGTildeImag, *d_fHyperGeo1F1Real, *d_fHyperGeo1F1Imag ,*d_fCoulombScatteringLengthReal, *d_fCoulombScatteringLengthImag;
-extern __managed__ double *d_fScattLenRealSubVec, *d_fScattLenImagSubVec;
+extern __managed__ double *d_fGTildeReal, *d_fGTildeImag, *d_fHyperGeo1F1Real, *d_fHyperGeo1F1Imag;
 extern __managed__ BinInfoGTilde *d_fGTildeInfo;
 extern __managed__ BinInfoHyperGeo1F1 *d_fHyperGeo1F1Info;
-extern __managed__ BinInfoScattLen *d_fScattLenInfo;
 
 extern __managed__ double *d_fPairKStar3dVec;
 extern __managed__ BinInfoKStar *d_fPairKStar3dVecInfo;
@@ -51,7 +49,7 @@ class ParallelWaveFunction {
 public:
 
   //Constructor, destructor, copy constructor, assignment operator
-  ParallelWaveFunction(bool aInterpScattLen=false, int aNThreadsPerBlock=512, int aNBlocks=32); //TODO delete this constructor.  Only here for testing
+  ParallelWaveFunction(int aNThreadsPerBlock=512, int aNBlocks=32); //TODO delete this constructor.  Only here for testing
   virtual ~ParallelWaveFunction();
 
   //--------------Load the arrays from c++ program dealing with the histograms
@@ -68,15 +66,6 @@ public:
   void LoadHyperGeo1F1Real(td3dVec &aHyperGeo1F1Real);
   void LoadHyperGeo1F1Imag(td3dVec &aHyperGeo1F1Imag);
 
-  void LoadScattLenReal(td4dVec &aScattLenReal);
-  void LoadScattLenImag(td4dVec &aScattLenImag);
-
-  void LoadScattLenRealSub(td4dVec &aScattLenReal);
-  void LoadScattLenImagSub(td4dVec &aScattLenImag);
-
-  void UnLoadScattLenRealSub();
-  void UnLoadScattLenImagSub();
-
 
   //--------------------------------------------------------------------------
 
@@ -87,12 +76,13 @@ public:
   //------------------------------------------------------
 
 //  double* RunInterpolateWfSquared(td2dVec &aPairs, double aReF0, double aImF0, double aD0);
+//TODO EVERYBODY NEEDS aRadiusScale, as in RunInterpolateEntireCfCompletewStaticPairs!!!!!!!!!!!!!!!!!!!!!!!!
   vector<double> RunInterpolateWfSquared(td2dVec &aPairs, double aReF0, double aImF0, double aD0);
 
   vector<double> RunInterpolateEntireCf(td3dVec &aPairs, double aReF0, double aImF0, double aD0);
 
   vector<double> RunInterpolateEntireCfComplete(td3dVec &aPairs, double aReF0s, double aImF0s, double aD0s, double aReF0t, double aImF0t, double aD0t);
-  td2dVec RunInterpolateEntireCfCompletewStaticPairs(int aAnalysisNumber, double aReF0s, double aImF0s, double aD0s, double aReF0t, double aImF0t, double aD0t);
+  td2dVec RunInterpolateEntireCfCompletewStaticPairs(int aAnalysisNumber, double aRadiusScale, double aReF0s, double aImF0s, double aD0s, double aReF0t, double aImF0t, double aD0t);
 
   vector<double> RunInterpolateEntireCfComplete2(int aNSimPairsPerBin, double aKStarMin, double aKStarMax, double aNbinsK, double aR, double aReF0s, double aImF0s, double aD0s, double aReF0t, double aImF0t, double aD0t);
 
@@ -105,12 +95,10 @@ private:
 
   double *fGTildeReal, *fGTildeImag;
   double *fHyperGeo1F1Real, *fHyperGeo1F1Imag;
-  double *fCoulombScatteringLengthReal, *fCoulombScatteringLengthImag;
 
 /*
   BinInfoGTilde *fGTildeInfo;
   BinInfoHyperGeo1F1 *fHyperGeo1F1Info;
-  BinInfoScattLen *fScattLenInfo;
 */
   BinInfoSamplePairs fSamplePairsBinInfo;
 

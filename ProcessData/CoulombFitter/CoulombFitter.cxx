@@ -416,7 +416,7 @@ td3dVec CoulombFitter::BuildPairKStar3dVecFull(TString aPairKStarNtupleDirName, 
   //---------------------------------------------------
 
   fNbinsKStar = aNbinsKStar;
-  double fBinSizeKStar = (aKStarMax-aKStarMin)/fNbinsKStar;
+  fBinSizeKStar = (aKStarMax-aKStarMin)/fNbinsKStar;
 cout << "fBinSizeKStar = " << fBinSizeKStar << endl;
 
   td3dVec tPairKStar3dVec;
@@ -684,8 +684,8 @@ tTimer.Start();
   fPairSample4dVec.resize(fNAnalyses, td3dVec(0, td2dVec(0, td1dVec(0))));
 
 //  double tBinSize = 0.01;  //TODO make this automated
-  double fBinSizeKStar = aBinSize;
-  int fNBinsKStar = std::round(fMaxFitKStar/fBinSizeKStar);  //TODO make this general, ie subtract 1 if fMaxFitKStar is on bin edge (maybe, maybe not bx of iKStarBin<tNBinsKStar)
+  fBinSizeKStar = aBinSize;
+  fNbinsKStar = std::round(fMaxFitKStar/fBinSizeKStar);  //TODO make this general, ie subtract 1 if fMaxFitKStar is on bin edge (maybe, maybe not bx of iKStarBin<tNBinsKStar)
 
   //Create the source Gaussians
   double tRoot2 = sqrt(2.);  //need this scale to get 4 on denominator of exp in normal dist instead of 2
@@ -714,7 +714,7 @@ tTimer.Start();
   for(int iAnaly=0; iAnaly<fNAnalyses; iAnaly++)
   {
     tTemp3dVec.clear();
-    for(int iKStarBin=0; iKStarBin<fNBinsKStar; iKStarBin++)
+    for(int iKStarBin=0; iKStarBin<fNbinsKStar; iKStarBin++)
     {
       if(!fUseRandomKStarVectors) tRandomKStarElement = std::uniform_int_distribution<int>(0.0, fPairKStar4dVec[iAnaly][iKStarBin].size()-1);
       tKStarMagMin = iKStarBin*fBinSizeKStar;

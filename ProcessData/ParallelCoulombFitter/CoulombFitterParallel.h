@@ -27,10 +27,11 @@ class CoulombFitterParallel : public CoulombFitter {
 
 public:
   //Constructor, destructor, copy constructor, assignment operator
-  CoulombFitterParallel(); //TODO delete this constructor.  Only here for testing
-  CoulombFitterParallel(FitSharedAnalyses* aFitSharedAnalyses, double aMaxFitKStar = 0.3, bool aCreateInterpVectors=true, bool aUseScattLenHists=false);
+//  CoulombFitterParallel(); //TODO delete this constructor.  Only here for testing
+  CoulombFitterParallel(FitSharedAnalyses* aFitSharedAnalyses, double aMaxFitKStar = 0.3);
   virtual ~CoulombFitterParallel();
 
+  void PassHyperGeo1F1AndGTildeToParallelWaveFunction();
   void LoadInterpHistFile(TString aFileBaseName);  //TODO should this be a vritual function?
 
   td3dVec BuildPairKStar3dVecFull(TString aPairKStarNtupleDirName, TString aFileBaseName, int aNFiles, AnalysisType aAnalysisType, CentralityType aCentralityType, int aNbinsKStar, double aKStarMin, double aKStarMax);  //TODO fix the fPairKStar3dVecInfo and should this be a virtual function?
@@ -38,8 +39,8 @@ public:
   td3dVec BuildPairKStar3dVecFromTxt(TString aFileName);  //TODO fix the fPairKStar3dVecInfo and should this be a virtual function?
   void BuildPairKStar4dVecFromTxt(TString aFileBaseName);  //TODO fix the fPairKStar3dVecInfo and should this be a virtual function?
 
-  void UpdatePairRadiusParameters(double aNewRadius);
-  void SetUseStaticPairs(bool aUseStaticPairs=true, int aNPairsPerKStarBin=16384);
+  void BuildPairSample4dVec(int aNPairsPerKStarBin=16384, double aBinSize=0.01);
+  void SetUseStaticPairs(bool aUseStaticPairs=true, int aNPairsPerKStarBin=16384, double aBinSize=0.01);
   bool CanInterpAllSamplePairs();
   td3dVec GetCPUSamplePairs(int aAnalysisNumber);
 
@@ -69,6 +70,16 @@ public:
   ParallelWaveFunction* GetParallelWaveFunctionObject();
 
 private:
+  BinInfoHyperGeo1F1 fHyperGeo1F1Info;
+  BinInfoGTilde fGTildeInfo;
+
+  td2dVec fGTildeReal;
+  td2dVec fGTildeImag;
+
+  td3dVec fHyperGeo1F1Real;
+  td3dVec fHyperGeo1F1Imag;
+
+  BinInfoSamplePairs fSamplePairsBinInfo;  //TODO naming of fSamplePairsBinInfo and fPairKStar3dVecInfo confusing
   BinInfoKStar fPairKStar3dVecInfo;
   ParallelWaveFunction* fParallelWaveFunction;
 

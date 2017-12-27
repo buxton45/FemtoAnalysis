@@ -15,7 +15,7 @@ int main(int argc, char **argv)
 
 //-----------------------------------------------------------------------------
 
-  TString tFileLocationNtupleBase = "~/Analysis/K0Lam/Results_cXicKch_20160414/Results_cXicKch_20160414";
+  TString tFileLocationNtupleBase = "~/Analysis/K0Lam/Results_cXicKch_20170423/Results_cXicKch_20170423";
 
   Interpolate *tInt = new Interpolate();
 

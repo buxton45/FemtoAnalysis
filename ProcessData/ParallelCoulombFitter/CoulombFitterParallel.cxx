@@ -22,25 +22,39 @@ double gMaxFitKStar;
 //****************************************************************************************************************
 //________________________________________________________________________________________________________________
 
-
+/*
 //________________________________________________________________________________________________________________
 CoulombFitterParallel::CoulombFitterParallel():
   CoulombFitter(),
+
+  fGTildeReal(0),
+  fGTildeImag(0),
+
+  fHyperGeo1F1Real(0),
+  fHyperGeo1F1Imag(0),
+
   fParallelWaveFunction(0)
 
 {
-  fParallelWaveFunction = new ParallelWaveFunction(fUseScattLenHists);
+  fParallelWaveFunction = new ParallelWaveFunction();
 }
-
+*/
 
 
 //________________________________________________________________________________________________________________
-CoulombFitterParallel::CoulombFitterParallel(FitSharedAnalyses* aFitSharedAnalyses, double aMaxFitKStar, bool aCreateInterpVectors, bool aUseScattLenHists):
-  CoulombFitter(aFitSharedAnalyses,aMaxFitKStar,aCreateInterpVectors,aUseScattLenHists),
+CoulombFitterParallel::CoulombFitterParallel(FitSharedAnalyses* aFitSharedAnalyses, double aMaxFitKStar):
+  CoulombFitter(aFitSharedAnalyses,aMaxFitKStar),
+
+  fGTildeReal(0),
+  fGTildeImag(0),
+
+  fHyperGeo1F1Real(0),
+  fHyperGeo1F1Imag(0),
+
   fParallelWaveFunction(0)
 
 {
-  fParallelWaveFunction = new ParallelWaveFunction(fUseScattLenHists);
+  fParallelWaveFunction = new ParallelWaveFunction();
 }
 
 
@@ -63,32 +77,104 @@ CoulombFitterParallel::~CoulombFitterParallel()
 
   delete fGTildeReal;
   delete fGTildeImag;
-
-  delete fCoulombScatteringLengthReal;
-  delete fCoulombScatteringLengthImag;
 */
+}
 
+//________________________________________________________________________________________________________________
+void CoulombFitterParallel::PassHyperGeo1F1AndGTildeToParallelWaveFunction()
+{
+ChronoTimer tTimer(kSec);
+tTimer.Start();
+cout << "Starting PassHyperGeo1F1AndGTildeToParallelWaveFunction" << endl;
 
-  delete fCoulombScatteringLengthRealHist1;
-  delete fCoulombScatteringLengthImagHist1;
+//--------------------------------------------------------------
+  fHyperGeo1F1Info.nBinsK = fHyperGeo1F1RealHist->GetXaxis()->GetNbins();
+  fHyperGeo1F1Info.binWidthK = fHyperGeo1F1RealHist->GetXaxis()->GetBinWidth(1);
+  fHyperGeo1F1Info.minK = fHyperGeo1F1RealHist->GetXaxis()->GetBinLowEdge(1);
+  fHyperGeo1F1Info.minInterpK = fHyperGeo1F1RealHist->GetXaxis()->GetBinCenter(1);
+  fHyperGeo1F1Info.maxK = fHyperGeo1F1RealHist->GetXaxis()->GetBinUpEdge(fHyperGeo1F1RealHist->GetNbinsX());
+  fHyperGeo1F1Info.maxInterpK = fHyperGeo1F1RealHist->GetXaxis()->GetBinCenter(fHyperGeo1F1RealHist->GetNbinsX());
 
-  delete fCoulombScatteringLengthRealHist2;
-  delete fCoulombScatteringLengthImagHist2;
+  fHyperGeo1F1Info.nBinsR = fHyperGeo1F1RealHist->GetYaxis()->GetNbins();
+  fHyperGeo1F1Info.binWidthR = fHyperGeo1F1RealHist->GetYaxis()->GetBinWidth(1);
+  fHyperGeo1F1Info.minR = fHyperGeo1F1RealHist->GetYaxis()->GetBinLowEdge(1);
+  fHyperGeo1F1Info.minInterpR = fHyperGeo1F1RealHist->GetYaxis()->GetBinCenter(1);
+  fHyperGeo1F1Info.maxR = fHyperGeo1F1RealHist->GetYaxis()->GetBinUpEdge(fHyperGeo1F1RealHist->GetNbinsY());
+  fHyperGeo1F1Info.maxInterpR = fHyperGeo1F1RealHist->GetYaxis()->GetBinCenter(fHyperGeo1F1RealHist->GetNbinsY());
 
-  if(fUseScattLenHists)
+  fHyperGeo1F1Info.nBinsTheta = fHyperGeo1F1RealHist->GetZaxis()->GetNbins();
+  fHyperGeo1F1Info.binWidthTheta = fHyperGeo1F1RealHist->GetZaxis()->GetBinWidth(1);
+  fHyperGeo1F1Info.minTheta = fHyperGeo1F1RealHist->GetZaxis()->GetBinLowEdge(1);
+  fHyperGeo1F1Info.minInterpTheta = fHyperGeo1F1RealHist->GetZaxis()->GetBinCenter(1);
+  fHyperGeo1F1Info.maxTheta = fHyperGeo1F1RealHist->GetZaxis()->GetBinUpEdge(fHyperGeo1F1RealHist->GetNbinsZ());
+  fHyperGeo1F1Info.maxInterpTheta = fHyperGeo1F1RealHist->GetZaxis()->GetBinCenter(fHyperGeo1F1RealHist->GetNbinsZ());
+
+  //-----
+
+  fGTildeInfo.nBinsK = fGTildeRealHist->GetXaxis()->GetNbins();
+  fGTildeInfo.binWidthK = fGTildeRealHist->GetXaxis()->GetBinWidth(1);
+  fGTildeInfo.minK = fGTildeRealHist->GetXaxis()->GetBinLowEdge(1);
+  fGTildeInfo.minInterpK = fGTildeRealHist->GetXaxis()->GetBinCenter(1);
+  fGTildeInfo.maxK = fGTildeRealHist->GetXaxis()->GetBinUpEdge(fGTildeRealHist->GetNbinsX());
+  fGTildeInfo.maxInterpK = fGTildeRealHist->GetXaxis()->GetBinCenter(fGTildeRealHist->GetNbinsX());
+
+  fGTildeInfo.nBinsR = fGTildeRealHist->GetYaxis()->GetNbins();
+  fGTildeInfo.binWidthR = fGTildeRealHist->GetYaxis()->GetBinWidth(1);
+  fGTildeInfo.minR = fGTildeRealHist->GetYaxis()->GetBinLowEdge(1);
+  fGTildeInfo.minInterpR = fGTildeRealHist->GetYaxis()->GetBinCenter(1);
+  fGTildeInfo.maxR = fGTildeRealHist->GetYaxis()->GetBinUpEdge(fGTildeRealHist->GetNbinsY());
+  fGTildeInfo.maxInterpR = fGTildeRealHist->GetYaxis()->GetBinCenter(fGTildeRealHist->GetNbinsY());
+
+//--------------------------------------------------------------
+
+  int tNbinsK = fHyperGeo1F1RealHist->GetXaxis()->GetNbins();
+  int tNbinsR = fHyperGeo1F1RealHist->GetYaxis()->GetNbins();
+  int tNbinsTheta = fHyperGeo1F1RealHist->GetZaxis()->GetNbins();
+
+  fHyperGeo1F1Real.resize(tNbinsK, td2dVec(tNbinsR, td1dVec(tNbinsTheta,0)));
+  fHyperGeo1F1Imag.resize(tNbinsK, td2dVec(tNbinsR, td1dVec(tNbinsTheta,0)));
+
+  int iK, iR, iTheta;
+  #pragma omp parallel for private(iK,iR,iTheta)
+  for(iK=1; iK<=tNbinsK; iK++)
   {
-    fInterpHistFileScatLenReal1->Close();
-    delete fInterpHistFileScatLenReal1;
-
-    fInterpHistFileScatLenImag1->Close();
-    delete fInterpHistFileScatLenImag1;
-
-    fInterpHistFileScatLenReal2->Close();
-    delete fInterpHistFileScatLenReal2;
-
-    fInterpHistFileScatLenImag2->Close();
-    delete fInterpHistFileScatLenImag2;
+    for(iR=1; iR<=tNbinsR; iR++)
+    {
+      for(iTheta=1; iTheta<=tNbinsTheta; iTheta++)
+      {
+        fHyperGeo1F1Real[iK-1][iR-1][iTheta-1] = fHyperGeo1F1RealHist->GetBinContent(iK,iR,iTheta);
+        fHyperGeo1F1Imag[iK-1][iR-1][iTheta-1] = fHyperGeo1F1ImagHist->GetBinContent(iK,iR,iTheta);
+      }
+    }
   }
+
+  fGTildeReal.resize(tNbinsK, td1dVec(tNbinsR,0));
+  fGTildeImag.resize(tNbinsK, td1dVec(tNbinsR,0));
+
+  #pragma omp parallel for private(iK,iR)
+  for(iK=1; iK<=tNbinsK; iK++)
+  {
+    for(iR=1; iR<=tNbinsR; iR++)
+    {
+      fGTildeReal[iK-1][iR-1] = fGTildeRealHist->GetBinContent(iK,iR);
+      fGTildeImag[iK-1][iR-1] = fGTildeImagHist->GetBinContent(iK,iR);
+    }
+  }
+
+  //--------------------------------------------------------------
+
+  fParallelWaveFunction->LoadGTildeReal(fGTildeReal);
+  fParallelWaveFunction->LoadGTildeImag(fGTildeImag);
+  fParallelWaveFunction->LoadGTildeInfo(fGTildeInfo);
+
+  fParallelWaveFunction->LoadHyperGeo1F1Real(fHyperGeo1F1Real);
+  fParallelWaveFunction->LoadHyperGeo1F1Imag(fHyperGeo1F1Imag);
+  fParallelWaveFunction->LoadHyperGeo1F1Info(fHyperGeo1F1Info);
+
+//--------------------------------------------------------------
+tTimer.Stop();
+cout << "PassHyperGeo1F1AndGTildeToParallelWaveFunction: ";
+tTimer.PrintInterval();
 }
 
 
@@ -102,20 +188,10 @@ void CoulombFitterParallel::LoadInterpHistFile(TString aFileBaseName)
 //TODO after sending these vectors over, they can probably be deleted
 //maybe I should not even make them class members, but only members of this function
 
-  assert(fCreateInterpVectors);
-
-  fParallelWaveFunction->LoadLednickyHFunction(fLednickyHFunction);
-
-  fParallelWaveFunction->LoadGTildeReal(fGTildeReal);
-  fParallelWaveFunction->LoadGTildeImag(fGTildeImag);
-  fParallelWaveFunction->LoadGTildeInfo(fGTildeInfo);
-
-  fParallelWaveFunction->LoadHyperGeo1F1Real(fHyperGeo1F1Real);
-  fParallelWaveFunction->LoadHyperGeo1F1Imag(fHyperGeo1F1Imag);
-  fParallelWaveFunction->LoadHyperGeo1F1Info(fHyperGeo1F1Info);
-
-  fParallelWaveFunction->LoadScattLenInfo(fScattLenInfo);  //TODO maybe this should be within the following if statement
-
+  td1dVec tLednickyHFunction(0);
+  for(int i=1; i<=fLednickyHFunctionHist->GetNbinsX(); i++) tLednickyHFunction.push_back(fLednickyHFunctionHist->GetBinContent(i));
+  fParallelWaveFunction->LoadLednickyHFunction(tLednickyHFunction);
+  PassHyperGeo1F1AndGTildeToParallelWaveFunction();
 }
 
 //________________________________________________________________________________________________________________
@@ -228,18 +304,26 @@ void CoulombFitterParallel::BuildPairKStar4dVecFromTxt(TString aFileBaseName)
 }
 
 //________________________________________________________________________________________________________________
-void CoulombFitterParallel::UpdatePairRadiusParameters(double aNewRadius)
+void CoulombFitterParallel::BuildPairSample4dVec(int aNPairsPerKStarBin, double aBinSize)
 {
-  double tScaleFactor = aNewRadius/fCurrentRadiusParameter;
-  CoulombFitter::UpdatePairRadiusParameters(aNewRadius);
-  fParallelWaveFunction->UpdatePairSampleRadii(tScaleFactor);
+  CoulombFitter::BuildPairSample4dVec(aNPairsPerKStarBin, aBinSize);
+
+  fSamplePairsBinInfo.nAnalyses = fNAnalyses;
+  fSamplePairsBinInfo.nBinsK = fNbinsKStar;
+  fSamplePairsBinInfo.nPairsPerBin = fNPairsPerKStarBin;
+
+  fSamplePairsBinInfo.minK = 0.; //TODO
+  fSamplePairsBinInfo.maxK = fMaxFitKStar;
+  fSamplePairsBinInfo.binWidthK = fBinSizeKStar;
+  fSamplePairsBinInfo.nElementsPerPair = fPairSample4dVec[0][0][0].size();
 }
 
 
 //________________________________________________________________________________________________________________
-void CoulombFitterParallel::SetUseStaticPairs(bool aUseStaticPairs, int aNPairsPerKStarBin)
+void CoulombFitterParallel::SetUseStaticPairs(bool aUseStaticPairs, int aNPairsPerKStarBin, double aBinSize)
 {
-  CoulombFitter::SetUseStaticPairs(aUseStaticPairs,aNPairsPerKStarBin);
+  fUseStaticPairs = aUseStaticPairs;
+  BuildPairSample4dVec(aNPairsPerKStarBin, aBinSize);
   fParallelWaveFunction->LoadPairSample4dVec(fPairSample4dVec,fSamplePairsBinInfo);
 }
 
@@ -289,56 +373,6 @@ td3dVec CoulombFitterParallel::GetCPUSamplePairs(int aAnalysisNumber)
   }
 
   return tReturnVec;
-}
-
-
-//________________________________________________________________________________________________________________
-void CoulombFitterParallel::CreateScattLenSubs(double aReF0, double aImF0, double aD0)
-{
-  int tLowBinReF0 = GetInterpLowBin(kScattLen,kReF0axis,aReF0);
-  int tLowBinImF0 = GetInterpLowBin(kScattLen,kImF0axis,aImF0);
-  int tLowBinD0 = GetInterpLowBin(kScattLen,kD0axis,aD0);
-
-  vector<int> tRelevantReF0Bins(2);
-    tRelevantReF0Bins[0] = tLowBinReF0;
-    tRelevantReF0Bins[1] = tLowBinReF0+1;
-
-  vector<int> tRelevantImF0Bins(2);
-    tRelevantImF0Bins[0] = tLowBinImF0;
-    tRelevantImF0Bins[1] = tLowBinImF0+1;
-
-  vector<int> tRelevantD0Bins(2);
-    tRelevantD0Bins[0] = tLowBinD0;
-    tRelevantD0Bins[1] = tLowBinD0+1;
-
-  int tNbinsReF0 = 2;
-  int tNbinsImF0 = 2;
-  int tNbinsD0 = 2;
-  int tNbinsK = fScattLenInfo.nBinsK;
-
-  fCoulombScatteringLengthRealSub.clear();
-  fCoulombScatteringLengthImagSub.clear();
-
-  fCoulombScatteringLengthRealSub.resize(tNbinsReF0, td3dVec(tNbinsImF0, td2dVec(tNbinsD0, td1dVec(tNbinsK,0))));
-  fCoulombScatteringLengthImagSub.resize(tNbinsReF0, td3dVec(tNbinsImF0, td2dVec(tNbinsD0, td1dVec(tNbinsK,0))));
-
-  int iReF0, iImF0, iD0, iK;
-  #pragma omp parallel for private(iReF0,iImF0,iD0,iK)
-  for(iReF0=0; iReF0<tNbinsReF0; iReF0++)
-  {
-    for(iImF0=0; iImF0<tNbinsImF0; iImF0++)
-    {
-      for(iD0=0; iD0<tNbinsD0; iD0++)
-      {
-        for(iK=0; iK<tNbinsK; iK++)
-        {
-          fCoulombScatteringLengthRealSub[iReF0][iImF0][iD0][iK] = fCoulombScatteringLengthReal[tRelevantReF0Bins[iReF0]][tRelevantImF0Bins[iImF0]][tRelevantD0Bins[iD0]][iK];
-          fCoulombScatteringLengthImagSub[iReF0][iImF0][iD0][iK] = fCoulombScatteringLengthImag[tRelevantReF0Bins[iReF0]][tRelevantImF0Bins[iImF0]][tRelevantD0Bins[iD0]][iK];
-        }
-      }
-    }
-  }
-
 }
 
 //________________________________________________________________________________________________________________
@@ -729,7 +763,7 @@ td1dVec CoulombFitterParallel::GetEntireFitCfContentCompletewStaticPairs(double 
 //ChronoTimer tUpdateTimer;
 //tUpdateTimer.Start();
 
-  UpdatePairRadiusParameters(par[1]);
+  if(abs(par[1]-fCurrentRadii[aAnalysisNumber]) > std::numeric_limits< double >::min()) UpdatePairRadiusParameter(par[1], aAnalysisNumber);
 
 //tUpdateTimer.Stop();
 //cout << "tUpdateTimer: ";
@@ -740,7 +774,7 @@ td1dVec CoulombFitterParallel::GetEntireFitCfContentCompletewStaticPairs(double 
 //CfParallelTimer.Start();
 
   //--------Do parallel calculations!----------
-  td2dVec tResultsGPU = fParallelWaveFunction->RunInterpolateEntireCfCompletewStaticPairs(aAnalysisNumber,par[2],par[3],par[4],par[5],par[6],par[7]);
+  td2dVec tResultsGPU = fParallelWaveFunction->RunInterpolateEntireCfCompletewStaticPairs(aAnalysisNumber,par[1],par[2],par[3],par[4],par[5],par[6],par[7]);
 
 //CfParallelTimer.Stop();
 //cout << "CfParallelTimer in GetEntireFitCfContent: ";
@@ -863,32 +897,7 @@ tTotalTimer.Start();
   {
     FitPairAnalysis* tFitPairAnalysis = fFitSharedAnalyses->GetFitPairAnalysis(iAnaly);
     AnalysisType tAnalysisType = tFitPairAnalysis->GetAnalysisType();
-
-    //-----
-    if(fUseScattLenHists)
-    {
-//TODO if I am using GetEntireFitCfContentComplete, or any other "Complete", I will need to create separate
-// ScattLenSubs for singlet and triplet
-      double aReF0, aImF0, aD0;
-//ChronoTimer tTimerSubs;
-//tTimerSubs.Start();
-
-      aReF0 = par[tFitPairAnalysis->GetFitPartialAnalysis(0)->GetFitParameter(kRef0)->GetMinuitParamNumber()];
-      aImF0 = par[tFitPairAnalysis->GetFitPartialAnalysis(0)->GetFitParameter(kImf0)->GetMinuitParamNumber()];
-      aD0 = par[tFitPairAnalysis->GetFitPartialAnalysis(0)->GetFitParameter(kd0)->GetMinuitParamNumber()];
-      CreateScattLenSubs(aReF0,aImF0,aD0);  //TODO evaluate whether this can be placed here
-                                                                    //Should be able to, because ReF0, ImF0, and D0 should not change
-                                                                    //within this loop
-      //TODO if any of the parameters cannot be interpolate, CreateScattLenSubs will fail!  Fix this!Z
-      fParallelWaveFunction->LoadScattLenRealSub(fCoulombScatteringLengthRealSub);
-      fParallelWaveFunction->LoadScattLenImagSub(fCoulombScatteringLengthImagSub);
-
-//tTimerSubs.Stop();
-//cout << "tTimerSubs: ";
-//tTimerSubs.PrintInterval();
-    }
-    //-----
-
+/*
     if(!fAllOfSameCoulombType)
     {
       assert(tAnalysisType == kXiKchP || tAnalysisType == kAXiKchM || tAnalysisType == kXiKchM || tAnalysisType == kAXiKchP);
@@ -896,7 +905,7 @@ tTotalTimer.Start();
       else fBohrRadius = gBohrRadiusXiK; //repulsive
       fWaveFunction->SetCurrentAnalysisType(tAnalysisType);
     }
-
+*/
     int tNFitPartialAnalysis = tFitPairAnalysis->GetNFitPartialAnalysis();
     for(int iPartAn=0; iPartAn<tNFitPartialAnalysis; iPartAn++)
     {
@@ -992,11 +1001,6 @@ tTotalTimer.Start();
 
       delete[] tPar;
     }
-    if(fUseScattLenHists)
-    {
-      fParallelWaveFunction->UnLoadScattLenRealSub();
-      fParallelWaveFunction->UnLoadScattLenImagSub();
-    }
   }
     delete[] tCurrentFitPar;
 
@@ -1042,29 +1046,7 @@ void CoulombFitterParallel::CalculateChi2Parallel(int &npar, double &chi2, doubl
   {
     FitPairAnalysis* tFitPairAnalysis = fFitSharedAnalyses->GetFitPairAnalysis(iAnaly);
     AnalysisType tAnalysisType = tFitPairAnalysis->GetAnalysisType();
-
-    //-----
-    if(fUseScattLenHists)
-    {
-      double aReF0, aImF0, aD0;
-//ChronoTimer tTimerSubs;
-//tTimerSubs.Start();
-
-      aReF0 = par[tFitPairAnalysis->GetFitPartialAnalysis(0)->GetFitParameter(kRef0)->GetMinuitParamNumber()];
-      aImF0 = par[tFitPairAnalysis->GetFitPartialAnalysis(0)->GetFitParameter(kImf0)->GetMinuitParamNumber()];
-      aD0 = par[tFitPairAnalysis->GetFitPartialAnalysis(0)->GetFitParameter(kd0)->GetMinuitParamNumber()];
-      CreateScattLenSubs(aReF0,aImF0,aD0);  //TODO evaluate whether this can be placed here
-                                                                    //Should be able to, because ReF0, ImF0, and D0 should not change
-                                                                    //within this loop
-      //TODO if any of the parameters cannot be interpolate, CreateScattLenSubs will fail!  Fix this!Z
-      fParallelWaveFunction->LoadScattLenRealSub(fCoulombScatteringLengthRealSub);
-      fParallelWaveFunction->LoadScattLenImagSub(fCoulombScatteringLengthImagSub);
-
-//tTimerSubs.Stop();
-//cout << "tTimerSubs: ";
-//tTimerSubs.PrintInterval();
-    }
-    //-----
+/*
     if(!fAllOfSameCoulombType)
     {
       assert(tAnalysisType == kXiKchP || tAnalysisType == kAXiKchM || tAnalysisType == kXiKchM || tAnalysisType == kAXiKchP);
@@ -1072,7 +1054,7 @@ void CoulombFitterParallel::CalculateChi2Parallel(int &npar, double &chi2, doubl
       else fBohrRadius = gBohrRadiusXiK; //repulsive
       fWaveFunction->SetCurrentAnalysisType(tAnalysisType);
     }
-
+*/
     int tNFitPartialAnalysis = tFitPairAnalysis->GetNFitPartialAnalysis();
     for(int iPartAn=0; iPartAn<tNFitPartialAnalysis; iPartAn++)
     {
@@ -1135,11 +1117,6 @@ void CoulombFitterParallel::CalculateChi2Parallel(int &npar, double &chi2, doubl
 
       delete[] tPar;
     }
-    if(fUseScattLenHists)
-    {
-      fParallelWaveFunction->UnLoadScattLenRealSub();
-      fParallelWaveFunction->UnLoadScattLenImagSub();
-    }
   }
 
   chi2 = fChi2;
@@ -1165,18 +1142,6 @@ void CoulombFitterParallel::CalculateFakeChi2Parallel(int &npar, double &chi2, d
   int tNbinsK = fFakeCf->GetNbinsX();
   int tAnalysisNumber = 0;  //TODO
 
-    //-----
-  if(fUseScattLenHists)
-  {
-    double aReF0 = par[2];
-    double aImF0 = par[3];
-    double aD0 = par[4];
-    CreateScattLenSubs(aReF0,aImF0,aD0);  //TODO 
-    fParallelWaveFunction->LoadScattLenRealSub(fCoulombScatteringLengthRealSub);
-    fParallelWaveFunction->LoadScattLenImagSub(fCoulombScatteringLengthImagSub);
-  }
-    //-----
-
   for(int ix=1; ix<=tNbinsK; ix++)
   {
     tKStarMin = tXaxis->GetBinLowEdge(ix);
@@ -1189,12 +1154,6 @@ void CoulombFitterParallel::CalculateFakeChi2Parallel(int &npar, double &chi2, d
 
   chi2 = tChi2;
 cout << "tChi2 = " << tChi2 << endl << endl;
-
-  if(fUseScattLenHists)
-  {
-    fParallelWaveFunction->UnLoadScattLenRealSub();
-    fParallelWaveFunction->UnLoadScattLenImagSub();
-  }
 }
 
 
@@ -1203,7 +1162,7 @@ TH1* CoulombFitterParallel::CreateFitHistogramParallel(TString aName, int aAnaly
 {
   FitPairAnalysis* tFitPairAnalysis = fFitSharedAnalyses->GetFitPairAnalysis(aAnalysisNumber);
   AnalysisType tAnalysisType = tFitPairAnalysis->GetAnalysisType();
-
+/*
   if(!fAllOfSameCoulombType)
   {
     assert(tAnalysisType == kXiKchP || tAnalysisType == kAXiKchM || tAnalysisType == kXiKchM || tAnalysisType == kAXiKchP);
@@ -1211,7 +1170,7 @@ TH1* CoulombFitterParallel::CreateFitHistogramParallel(TString aName, int aAnaly
     else fBohrRadius = gBohrRadiusXiK; //repulsive
     fWaveFunction->SetCurrentAnalysisType(tAnalysisType);
   }
-
+*/
   int tNFitParams = tFitPairAnalysis->GetNFitParams(); //should be equal to 5
 
   TH1* tKStarCf = tFitPairAnalysis->GetKStarCf();
@@ -1232,19 +1191,6 @@ TH1* CoulombFitterParallel::CreateFitHistogramParallel(TString aName, int aAnaly
     tParError[iPar] = tFitPairAnalysis->GetFitParameter(tParamType)->GetFitValueError();
   }
 
-  //-----
-  if(fUseScattLenHists)
-  {
-    double aReF0 = tFitPairAnalysis->GetFitParameter(kRef0)->GetFitValue();
-    double aImF0 = tFitPairAnalysis->GetFitParameter(kImf0)->GetFitValue();
-    double aD0 = tFitPairAnalysis->GetFitParameter(kd0)->GetFitValue();
-    CreateScattLenSubs(aReF0,aImF0,aD0);  //TODO 
-    fParallelWaveFunction->LoadScattLenRealSub(fCoulombScatteringLengthRealSub);
-    fParallelWaveFunction->LoadScattLenImagSub(fCoulombScatteringLengthImagSub);
-  }
-  //-----
-
-
   double tKStarMin, tKStarMax, tCfContent;
   for(int ix=1; ix <= tNbins; ix++)
   {
@@ -1258,12 +1204,6 @@ TH1* CoulombFitterParallel::CreateFitHistogramParallel(TString aName, int aAnaly
   delete[] tPar;
   delete[] tParError;
 
-  if(fUseScattLenHists)
-  {
-    fParallelWaveFunction->UnLoadScattLenRealSub();
-    fParallelWaveFunction->UnLoadScattLenImagSub();
-  }
-
   return tReturnHist;
 }
 
@@ -1273,7 +1213,7 @@ TH1* CoulombFitterParallel::CreateFitHistogramSampleParallel(TString aName, Anal
   cout << "Beginning CreateFitHistogramSampleParallel" << endl;
 ChronoTimer tTimer;
 tTimer.Start();
-
+/*
   if(!fAllOfSameCoulombType)
   {
     assert(aAnalysisType == kXiKchP || aAnalysisType == kAXiKchM || aAnalysisType == kXiKchM || aAnalysisType == kAXiKchP);
@@ -1281,7 +1221,7 @@ tTimer.Start();
     else fBohrRadius = gBohrRadiusXiK; //repulsive
     fWaveFunction->SetCurrentAnalysisType(aAnalysisType);
   }
-
+*/
   TH1D* tReturnHist = new TH1D(aName,aName,aNbinsK,aKMin,aKMax);
 
   double *tPar = new double[6];
@@ -1293,15 +1233,6 @@ tTimer.Start();
   tPar[5] = aNorm;
 
   int tAnalysisNumber = 0;  //TODO
-
-  //-----
-  if(fUseScattLenHists)
-  {
-    CreateScattLenSubs(aReF0,aImF0,aD0);  //TODO 
-    fParallelWaveFunction->LoadScattLenRealSub(fCoulombScatteringLengthRealSub);
-    fParallelWaveFunction->LoadScattLenImagSub(fCoulombScatteringLengthImagSub);
-  }
-  //-----
 
   double tBinSize = (aKMax-aKMin)/aNbinsK;
 ChronoTimer CfParallelTimer;
@@ -1348,13 +1279,6 @@ tTimer.PrintInterval();
   delete[] tPar;
 
   fFakeCf = tReturnHist;  //TODO delete this
-
-  if(fUseScattLenHists)
-  {
-    fParallelWaveFunction->UnLoadScattLenRealSub();
-    fParallelWaveFunction->UnLoadScattLenImagSub();
-  }
-
   return tReturnHist;
 }
 
@@ -1366,7 +1290,7 @@ TH1* CoulombFitterParallel::CreateFitHistogramSampleCompleteParallel(TString aNa
   cout << "Beginning CreateFitHistogramSampleCompleteParallel" << endl;
 ChronoTimer tTimer;
 tTimer.Start();
-
+/*
   if(!fAllOfSameCoulombType)
   {
     assert(aAnalysisType == kXiKchP || aAnalysisType == kAXiKchM || aAnalysisType == kXiKchM || aAnalysisType == kAXiKchP);
@@ -1374,7 +1298,7 @@ tTimer.Start();
     else fBohrRadius = gBohrRadiusXiK; //repulsive
     fWaveFunction->SetCurrentAnalysisType(aAnalysisType);
   }
-
+*/
   TH1D* tReturnHist = new TH1D(aName,aName,aNbinsK,aKMin,aKMax);
 
   double *tPar = new double[9];
@@ -1389,8 +1313,6 @@ tTimer.Start();
   tPar[8] = aNorm;
 
   int tAnalysisNumber = 0; //TODO
-
-  assert(!fUseScattLenHists);
 
   double tBinSize = (aKMax-aKMin)/aNbinsK;
 ChronoTimer CfParallelTimer;

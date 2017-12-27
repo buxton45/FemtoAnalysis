@@ -139,49 +139,6 @@ __device__ int GetInterpLowBin(InterpType aInterpType, InterpAxisType aAxisType,
           break;
       }
       break;
-
-    case kScattLen:
-      switch(aAxisType)
-      {
-        case kReF0axis:
-          tNbins = d_fScattLenInfo->nBinsReF0;
-          tBinWidth = d_fScattLenInfo->binWidthReF0;
-          tMin = d_fScattLenInfo->minReF0;
-          tMax = d_fScattLenInfo->maxReF0;
-          break;
-
-        case kImF0axis:
-          tNbins = d_fScattLenInfo->nBinsImF0;
-          tBinWidth = d_fScattLenInfo->binWidthImF0;
-          tMin = d_fScattLenInfo->minImF0;
-          tMax = d_fScattLenInfo->maxImF0;
-          break;
-
-        case kD0axis:
-          tNbins = d_fScattLenInfo->nBinsD0;
-          tBinWidth = d_fScattLenInfo->binWidthD0;
-          tMin = d_fScattLenInfo->minD0;
-          tMax = d_fScattLenInfo->maxD0;
-          break;
-
-        case kKaxis:
-          tNbins = d_fScattLenInfo->nBinsK;
-          tBinWidth = d_fScattLenInfo->binWidthK;
-          tMin = d_fScattLenInfo->minK;
-          tMax = d_fScattLenInfo->maxK;
-          break;
-
-
-        //Invalid axis selection
-        case kRaxis:
-          tErrorFlag = true;
-          break;
-        case kThetaaxis:
-          tErrorFlag = true;
-          break;
-
-      }
-      break;
   }
 
   //Check error
@@ -278,49 +235,6 @@ __device__ double GetInterpLowBinCenter(InterpType aInterpType, InterpAxisType a
         case kD0axis:
           tErrorFlag = true;
           break;
-      }
-      break;
-
-    case kScattLen:
-      switch(aAxisType)
-      {
-        case kReF0axis:
-          tNbins = d_fScattLenInfo->nBinsReF0;
-          tBinWidth = d_fScattLenInfo->binWidthReF0;
-          tMin = d_fScattLenInfo->minReF0;
-          tMax = d_fScattLenInfo->maxReF0;
-          break;
-
-        case kImF0axis:
-          tNbins = d_fScattLenInfo->nBinsImF0;
-          tBinWidth = d_fScattLenInfo->binWidthImF0;
-          tMin = d_fScattLenInfo->minImF0;
-          tMax = d_fScattLenInfo->maxImF0;
-          break;
-
-        case kD0axis:
-          tNbins = d_fScattLenInfo->nBinsD0;
-          tBinWidth = d_fScattLenInfo->binWidthD0;
-          tMin = d_fScattLenInfo->minD0;
-          tMax = d_fScattLenInfo->maxD0;
-          break;
-
-        case kKaxis:
-          tNbins = d_fScattLenInfo->nBinsK;
-          tBinWidth = d_fScattLenInfo->binWidthK;
-          tMin = d_fScattLenInfo->minK;
-          tMax = d_fScattLenInfo->maxK;
-          break;
-
-
-        //Invalid axis selection
-        case kRaxis:
-          tErrorFlag = true;
-          break;
-        case kThetaaxis:
-          tErrorFlag = true;
-          break;
-
       }
       break;
   }
@@ -510,338 +424,6 @@ __device__ cuDoubleComplex HyperGeo1F1Interpolate(double aKStar, double aRStar, 
   return tReturnValue;
 }
 
-/*
-//________________________________________________________________________________________________________________
-__device__ cuDoubleComplex ScattLenInterpolateFull(double aReF0, double aImF0, double aD0, double aKStar)
-{
-//This doesn't work because d_fCoulombScatteringLengthReal and d_fCoulombScatteringLengthImag are
-// too big to fit onto the GPU memory. I am keeping it in case I figure out how to resolve the memory issue
-// i.e. figure out how to let the device directly access host memory
-
-  double tResultReal = 0.;
-  double tResultImag = 0.;
-  //----------------------------
-
-  int tNbinsK = d_fScattLenInfo->nBinsK;
-  int tNbinsD0 = d_fScattLenInfo->nBinsD0;
-  int tNbinsImF0 = d_fScattLenInfo->nBinsImF0;
-  //----------------------------
-
-  //TODO put in check to make sure GetInterpLowBinCenter does not return the error -2
-  double tBinWidthReF0 = d_fScattLenInfo->binWidthReF0;
-  int tBin0ReF0 = GetInterpLowBin(kScattLen,kReF0axis,aReF0);
-  int tBin1ReF0 = tBin0ReF0+1;
-  double tBin0CenterReF0 = GetInterpLowBinCenter(kScattLen,kReF0axis,aReF0);
-//  double tBin1CenterReF0 = tBin0CenterReF0+tBinWidthReF0;
-
-  double tBinWidthImF0 = d_fScattLenInfo->binWidthImF0;
-  int tBin0ImF0 = GetInterpLowBin(kScattLen,kImF0axis,aImF0);
-  int tBin1ImF0 = tBin0ImF0+1;
-  double tBin0CenterImF0 = GetInterpLowBinCenter(kScattLen,kImF0axis,aImF0);
-//  double tBin1CenterImF0 = tBin0CenterImF0+tBinWidthImF0;
-
-  double tBinWidthD0 = d_fScattLenInfo->binWidthD0;
-  int tBin0D0 = GetInterpLowBin(kScattLen,kD0axis,aD0);
-  int tBin1D0 = tBin0D0+1;
-  double tBin0CenterD0 = GetInterpLowBinCenter(kScattLen,kD0axis,aD0);
-//  double tBin1CenterD0 = tBin0CenterD0+tBinWidthD0;
-
-  double tBinWidthK = d_fScattLenInfo->binWidthK;
-  int tBin0K = GetInterpLowBin(kScattLen,kKaxis,aKStar);
-  int tBin1K = tBin0K+1;
-  double tBin0CenterK = GetInterpLowBinCenter(kScattLen,kKaxis,aKStar);
-//  double tBin1CenterK = tBin0CenterK+tBinWidthK;
-
-  //--------------------------
-
-  double tDiffReF0 = (aReF0 - tBin0CenterReF0)/tBinWidthReF0;
-  double tDiffImF0 = (aImF0 - tBin0CenterImF0)/tBinWidthImF0;
-  double tDiffD0 = (aD0 - tBin0CenterD0)/tBinWidthD0;
-  double tDiffK = (aKStar - tBin0CenterK)/tBinWidthK;
-
-  //--------------------------
-  //Assuming f(t,x,y,z) = f(ReF0,ImF0,D0,KStar).  Ordering for memory access reasons
-
-  //---------------REAL----------------------------------
-  //interpolate along z (i.e. KStar)
-  double tC0000Real = d_fCoulombScatteringLengthReal[tBin0ReF0*tNbinsImF0*tNbinsD0*tNbinsK + tBin0ImF0*tNbinsD0*tNbinsK + tBin0D0*tNbinsK + tBin0K];
-  double tC0001Real = d_fCoulombScatteringLengthReal[tBin0ReF0*tNbinsImF0*tNbinsD0*tNbinsK + tBin0ImF0*tNbinsD0*tNbinsK + tBin0D0*tNbinsK + tBin1K];
-
-  double tC0010Real = d_fCoulombScatteringLengthReal[tBin0ReF0*tNbinsImF0*tNbinsD0*tNbinsK + tBin0ImF0*tNbinsD0*tNbinsK + tBin1D0*tNbinsK + tBin0K];
-  double tC0011Real = d_fCoulombScatteringLengthReal[tBin0ReF0*tNbinsImF0*tNbinsD0*tNbinsK + tBin0ImF0*tNbinsD0*tNbinsK + tBin1D0*tNbinsK + tBin1K];
-
-  double tC0100Real = d_fCoulombScatteringLengthReal[tBin0ReF0*tNbinsImF0*tNbinsD0*tNbinsK + tBin1ImF0*tNbinsD0*tNbinsK + tBin0D0*tNbinsK + tBin0K];
-  double tC0101Real = d_fCoulombScatteringLengthReal[tBin0ReF0*tNbinsImF0*tNbinsD0*tNbinsK + tBin1ImF0*tNbinsD0*tNbinsK + tBin0D0*tNbinsK + tBin1K];
-
-  double tC0110Real = d_fCoulombScatteringLengthReal[tBin0ReF0*tNbinsImF0*tNbinsD0*tNbinsK + tBin1ImF0*tNbinsD0*tNbinsK + tBin1D0*tNbinsK + tBin0K];
-  double tC0111Real = d_fCoulombScatteringLengthReal[tBin0ReF0*tNbinsImF0*tNbinsD0*tNbinsK + tBin1ImF0*tNbinsD0*tNbinsK + tBin1D0*tNbinsK + tBin1K];
-
-  double tC1000Real = d_fCoulombScatteringLengthReal[tBin1ReF0*tNbinsImF0*tNbinsD0*tNbinsK + tBin0ImF0*tNbinsD0*tNbinsK + tBin0D0*tNbinsK + tBin0K];
-  double tC1001Real = d_fCoulombScatteringLengthReal[tBin1ReF0*tNbinsImF0*tNbinsD0*tNbinsK + tBin0ImF0*tNbinsD0*tNbinsK + tBin0D0*tNbinsK + tBin1K];
-
-  double tC1010Real = d_fCoulombScatteringLengthReal[tBin1ReF0*tNbinsImF0*tNbinsD0*tNbinsK + tBin0ImF0*tNbinsD0*tNbinsK + tBin1D0*tNbinsK + tBin0K];
-  double tC1011Real = d_fCoulombScatteringLengthReal[tBin1ReF0*tNbinsImF0*tNbinsD0*tNbinsK + tBin0ImF0*tNbinsD0*tNbinsK + tBin1D0*tNbinsK + tBin1K];
-
-  double tC1100Real = d_fCoulombScatteringLengthReal[tBin1ReF0*tNbinsImF0*tNbinsD0*tNbinsK + tBin1ImF0*tNbinsD0*tNbinsK + tBin0D0*tNbinsK + tBin0K];
-  double tC1101Real = d_fCoulombScatteringLengthReal[tBin1ReF0*tNbinsImF0*tNbinsD0*tNbinsK + tBin1ImF0*tNbinsD0*tNbinsK + tBin0D0*tNbinsK + tBin1K];
-
-  double tC1110Real = d_fCoulombScatteringLengthReal[tBin1ReF0*tNbinsImF0*tNbinsD0*tNbinsK + tBin1ImF0*tNbinsD0*tNbinsK + tBin1D0*tNbinsK + tBin0K];
-  double tC1111Real = d_fCoulombScatteringLengthReal[tBin1ReF0*tNbinsImF0*tNbinsD0*tNbinsK + tBin1ImF0*tNbinsD0*tNbinsK + tBin1D0*tNbinsK + tBin1K];
-
-  //---
-  double tC000Real = tC0000Real*(1.0-tDiffK) + tC0001Real*tDiffK;
-  double tC001Real = tC0010Real*(1.0-tDiffK) + tC0011Real*tDiffK;
-
-  double tC010Real = tC0100Real*(1.0-tDiffK) + tC0101Real*tDiffK;
-  double tC011Real = tC0110Real*(1.0-tDiffK) + tC0111Real*tDiffK;
-
-  double tC100Real = tC1000Real*(1.0-tDiffK) + tC1001Real*tDiffK;
-  double tC101Real = tC1010Real*(1.0-tDiffK) + tC1011Real*tDiffK;
-
-  double tC110Real = tC1100Real*(1.0-tDiffK) + tC1101Real*tDiffK;
-  double tC111Real = tC1110Real*(1.0-tDiffK) + tC1111Real*tDiffK;
-
-  //interpolate along y (i.e. D0)
-  double tC00Real = tC000Real*(1.0-tDiffD0) + tC001Real*tDiffD0;
-  double tC01Real = tC010Real*(1.0-tDiffD0) + tC011Real*tDiffD0;
-
-  double tC10Real = tC100Real*(1.0-tDiffD0) + tC101Real*tDiffD0;
-  double tC11Real = tC110Real*(1.0-tDiffD0) + tC111Real*tDiffD0;
-
-  //interpolate along x (i.e. ImF0)
-  double tC0Real = tC00Real*(1.0-tDiffImF0) + tC01Real*tDiffImF0;
-  double tC1Real = tC10Real*(1.0-tDiffImF0) + tC11Real*tDiffImF0;
-
-  //interpolate along t (i.e. ReF0)
-  tResultReal = tC0Real*(1.0-tDiffReF0) + tC1Real*tDiffReF0;
-
-
-  //---------------Imag----------------------------------
-  //interpolate along z (i.e. KStar)
-  double tC0000Imag = d_fCoulombScatteringLengthImag[tBin0ReF0*tNbinsImF0*tNbinsD0*tNbinsK + tBin0ImF0*tNbinsD0*tNbinsK + tBin0D0*tNbinsK + tBin0K];
-  double tC0001Imag = d_fCoulombScatteringLengthImag[tBin0ReF0*tNbinsImF0*tNbinsD0*tNbinsK + tBin0ImF0*tNbinsD0*tNbinsK + tBin0D0*tNbinsK + tBin1K];
-
-  double tC0010Imag = d_fCoulombScatteringLengthImag[tBin0ReF0*tNbinsImF0*tNbinsD0*tNbinsK + tBin0ImF0*tNbinsD0*tNbinsK + tBin1D0*tNbinsK + tBin0K];
-  double tC0011Imag = d_fCoulombScatteringLengthImag[tBin0ReF0*tNbinsImF0*tNbinsD0*tNbinsK + tBin0ImF0*tNbinsD0*tNbinsK + tBin1D0*tNbinsK + tBin1K];
-
-  double tC0100Imag = d_fCoulombScatteringLengthImag[tBin0ReF0*tNbinsImF0*tNbinsD0*tNbinsK + tBin1ImF0*tNbinsD0*tNbinsK + tBin0D0*tNbinsK + tBin0K];
-  double tC0101Imag = d_fCoulombScatteringLengthImag[tBin0ReF0*tNbinsImF0*tNbinsD0*tNbinsK + tBin1ImF0*tNbinsD0*tNbinsK + tBin0D0*tNbinsK + tBin1K];
-
-  double tC0110Imag = d_fCoulombScatteringLengthImag[tBin0ReF0*tNbinsImF0*tNbinsD0*tNbinsK + tBin1ImF0*tNbinsD0*tNbinsK + tBin1D0*tNbinsK + tBin0K];
-  double tC0111Imag = d_fCoulombScatteringLengthImag[tBin0ReF0*tNbinsImF0*tNbinsD0*tNbinsK + tBin1ImF0*tNbinsD0*tNbinsK + tBin1D0*tNbinsK + tBin1K];
-
-  double tC1000Imag = d_fCoulombScatteringLengthImag[tBin1ReF0*tNbinsImF0*tNbinsD0*tNbinsK + tBin0ImF0*tNbinsD0*tNbinsK + tBin0D0*tNbinsK + tBin0K];
-  double tC1001Imag = d_fCoulombScatteringLengthImag[tBin1ReF0*tNbinsImF0*tNbinsD0*tNbinsK + tBin0ImF0*tNbinsD0*tNbinsK + tBin0D0*tNbinsK + tBin1K];
-
-  double tC1010Imag = d_fCoulombScatteringLengthImag[tBin1ReF0*tNbinsImF0*tNbinsD0*tNbinsK + tBin0ImF0*tNbinsD0*tNbinsK + tBin1D0*tNbinsK + tBin0K];
-  double tC1011Imag = d_fCoulombScatteringLengthImag[tBin1ReF0*tNbinsImF0*tNbinsD0*tNbinsK + tBin0ImF0*tNbinsD0*tNbinsK + tBin1D0*tNbinsK + tBin1K];
-
-  double tC1100Imag = d_fCoulombScatteringLengthImag[tBin1ReF0*tNbinsImF0*tNbinsD0*tNbinsK + tBin1ImF0*tNbinsD0*tNbinsK + tBin0D0*tNbinsK + tBin0K];
-  double tC1101Imag = d_fCoulombScatteringLengthImag[tBin1ReF0*tNbinsImF0*tNbinsD0*tNbinsK + tBin1ImF0*tNbinsD0*tNbinsK + tBin0D0*tNbinsK + tBin1K];
-
-  double tC1110Imag = d_fCoulombScatteringLengthImag[tBin1ReF0*tNbinsImF0*tNbinsD0*tNbinsK + tBin1ImF0*tNbinsD0*tNbinsK + tBin1D0*tNbinsK + tBin0K];
-  double tC1111Imag = d_fCoulombScatteringLengthImag[tBin1ReF0*tNbinsImF0*tNbinsD0*tNbinsK + tBin1ImF0*tNbinsD0*tNbinsK + tBin1D0*tNbinsK + tBin1K];
-
-  //---
-  double tC000Imag = tC0000Imag*(1.0-tDiffK) + tC0001Imag*tDiffK;
-  double tC001Imag = tC0010Imag*(1.0-tDiffK) + tC0011Imag*tDiffK;
-
-  double tC010Imag = tC0100Imag*(1.0-tDiffK) + tC0101Imag*tDiffK;
-  double tC011Imag = tC0110Imag*(1.0-tDiffK) + tC0111Imag*tDiffK;
-
-  double tC100Imag = tC1000Imag*(1.0-tDiffK) + tC1001Imag*tDiffK;
-  double tC101Imag = tC1010Imag*(1.0-tDiffK) + tC1011Imag*tDiffK;
-
-  double tC110Imag = tC1100Imag*(1.0-tDiffK) + tC1101Imag*tDiffK;
-  double tC111Imag = tC1110Imag*(1.0-tDiffK) + tC1111Imag*tDiffK;
-
-  //interpolate along y (i.e. D0)
-  double tC00Imag = tC000Imag*(1.0-tDiffD0) + tC001Imag*tDiffD0;
-  double tC01Imag = tC010Imag*(1.0-tDiffD0) + tC011Imag*tDiffD0;
-
-  double tC10Imag = tC100Imag*(1.0-tDiffD0) + tC101Imag*tDiffD0;
-  double tC11Imag = tC110Imag*(1.0-tDiffD0) + tC111Imag*tDiffD0;
-
-  //interpolate along x (i.e. ImF0)
-  double tC0Imag = tC00Imag*(1.0-tDiffImF0) + tC01Imag*tDiffImF0;
-  double tC1Imag = tC10Imag*(1.0-tDiffImF0) + tC11Imag*tDiffImF0;
-
-  //interpolate along t (i.e. ReF0)
-  tResultImag = tC0Imag*(1.0-tDiffReF0) + tC1Imag*tDiffReF0;
-
-
-  //--------------------------------
-  cuDoubleComplex tReturnValue = make_cuDoubleComplex(tResultReal,tResultImag);
-  return tReturnValue;
-
-}
-*/
-
-//________________________________________________________________________________________________________________
-__device__ cuDoubleComplex ScattLenInterpolate(double aReF0, double aImF0, double aD0, double aKStar)
-{
-  double tResultReal = 0.;
-  double tResultImag = 0.;
-  //----------------------------
-
-  int tNbinsK = d_fScattLenInfo->nBinsK;
-//  int tNbinsD0 = d_fScattLenInfo->nBinsD0;
-//  int tNbinsImF0 = d_fScattLenInfo->nBinsImF0;
-  int tNbinsD0 = 2;
-  int tNbinsImF0 = 2;
-  //----------------------------
-
-  //TODO put in check to make sure GetInterpLowBinCenter does not return the error -2
-  double tBinWidthReF0 = d_fScattLenInfo->binWidthReF0;
-  int tBin0ReF0 = 0;
-  int tBin1ReF0 = tBin0ReF0+1;
-  double tBin0CenterReF0 = GetInterpLowBinCenter(kScattLen,kReF0axis,aReF0);
-//  double tBin1CenterReF0 = tBin0CenterReF0+tBinWidthReF0;
-
-  double tBinWidthImF0 = d_fScattLenInfo->binWidthImF0;
-  int tBin0ImF0 = 0;
-  int tBin1ImF0 = tBin0ImF0+1;
-  double tBin0CenterImF0 = GetInterpLowBinCenter(kScattLen,kImF0axis,aImF0);
-//  double tBin1CenterImF0 = tBin0CenterImF0+tBinWidthImF0;
-
-  double tBinWidthD0 = d_fScattLenInfo->binWidthD0;
-  int tBin0D0 = 0;
-  int tBin1D0 = tBin0D0+1;
-  double tBin0CenterD0 = GetInterpLowBinCenter(kScattLen,kD0axis,aD0);
-//  double tBin1CenterD0 = tBin0CenterD0+tBinWidthD0;
-
-  double tBinWidthK = d_fScattLenInfo->binWidthK;
-  int tBin0K = GetInterpLowBin(kScattLen,kKaxis,aKStar);
-  int tBin1K = tBin0K+1;
-  double tBin0CenterK = GetInterpLowBinCenter(kScattLen,kKaxis,aKStar);
-//  double tBin1CenterK = tBin0CenterK+tBinWidthK;
-
-  //--------------------------
-  assert(tBin0K>=0);
-  assert(tBin0CenterK>0);
-
-  double tDiffReF0 = (aReF0 - tBin0CenterReF0)/tBinWidthReF0;
-  double tDiffImF0 = (aImF0 - tBin0CenterImF0)/tBinWidthImF0;
-  double tDiffD0 = (aD0 - tBin0CenterD0)/tBinWidthD0;
-  double tDiffK = (aKStar - tBin0CenterK)/tBinWidthK;
-
-  //--------------------------
-  //Assuming f(t,x,y,z) = f(ReF0,ImF0,D0,KStar).  Ordering for memory access reasons
-
-  //---------------REAL----------------------------------
-  //interpolate along z (i.e. KStar)
-  double tC0000Real = d_fScattLenRealSubVec[tBin0ReF0*tNbinsImF0*tNbinsD0*tNbinsK + tBin0ImF0*tNbinsD0*tNbinsK + tBin0D0*tNbinsK + tBin0K];
-  double tC0001Real = d_fScattLenRealSubVec[tBin0ReF0*tNbinsImF0*tNbinsD0*tNbinsK + tBin0ImF0*tNbinsD0*tNbinsK + tBin0D0*tNbinsK + tBin1K];
-
-  double tC0010Real = d_fScattLenRealSubVec[tBin0ReF0*tNbinsImF0*tNbinsD0*tNbinsK + tBin0ImF0*tNbinsD0*tNbinsK + tBin1D0*tNbinsK + tBin0K];
-  double tC0011Real = d_fScattLenRealSubVec[tBin0ReF0*tNbinsImF0*tNbinsD0*tNbinsK + tBin0ImF0*tNbinsD0*tNbinsK + tBin1D0*tNbinsK + tBin1K];
-
-  double tC0100Real = d_fScattLenRealSubVec[tBin0ReF0*tNbinsImF0*tNbinsD0*tNbinsK + tBin1ImF0*tNbinsD0*tNbinsK + tBin0D0*tNbinsK + tBin0K];
-  double tC0101Real = d_fScattLenRealSubVec[tBin0ReF0*tNbinsImF0*tNbinsD0*tNbinsK + tBin1ImF0*tNbinsD0*tNbinsK + tBin0D0*tNbinsK + tBin1K];
-
-  double tC0110Real = d_fScattLenRealSubVec[tBin0ReF0*tNbinsImF0*tNbinsD0*tNbinsK + tBin1ImF0*tNbinsD0*tNbinsK + tBin1D0*tNbinsK + tBin0K];
-  double tC0111Real = d_fScattLenRealSubVec[tBin0ReF0*tNbinsImF0*tNbinsD0*tNbinsK + tBin1ImF0*tNbinsD0*tNbinsK + tBin1D0*tNbinsK + tBin1K];
-
-  double tC1000Real = d_fScattLenRealSubVec[tBin1ReF0*tNbinsImF0*tNbinsD0*tNbinsK + tBin0ImF0*tNbinsD0*tNbinsK + tBin0D0*tNbinsK + tBin0K];
-  double tC1001Real = d_fScattLenRealSubVec[tBin1ReF0*tNbinsImF0*tNbinsD0*tNbinsK + tBin0ImF0*tNbinsD0*tNbinsK + tBin0D0*tNbinsK + tBin1K];
-
-  double tC1010Real = d_fScattLenRealSubVec[tBin1ReF0*tNbinsImF0*tNbinsD0*tNbinsK + tBin0ImF0*tNbinsD0*tNbinsK + tBin1D0*tNbinsK + tBin0K];
-  double tC1011Real = d_fScattLenRealSubVec[tBin1ReF0*tNbinsImF0*tNbinsD0*tNbinsK + tBin0ImF0*tNbinsD0*tNbinsK + tBin1D0*tNbinsK + tBin1K];
-
-  double tC1100Real = d_fScattLenRealSubVec[tBin1ReF0*tNbinsImF0*tNbinsD0*tNbinsK + tBin1ImF0*tNbinsD0*tNbinsK + tBin0D0*tNbinsK + tBin0K];
-  double tC1101Real = d_fScattLenRealSubVec[tBin1ReF0*tNbinsImF0*tNbinsD0*tNbinsK + tBin1ImF0*tNbinsD0*tNbinsK + tBin0D0*tNbinsK + tBin1K];
-
-  double tC1110Real = d_fScattLenRealSubVec[tBin1ReF0*tNbinsImF0*tNbinsD0*tNbinsK + tBin1ImF0*tNbinsD0*tNbinsK + tBin1D0*tNbinsK + tBin0K];
-  double tC1111Real = d_fScattLenRealSubVec[tBin1ReF0*tNbinsImF0*tNbinsD0*tNbinsK + tBin1ImF0*tNbinsD0*tNbinsK + tBin1D0*tNbinsK + tBin1K];
-
-  //---
-  double tC000Real = tC0000Real*(1.0-tDiffK) + tC0001Real*tDiffK;
-  double tC001Real = tC0010Real*(1.0-tDiffK) + tC0011Real*tDiffK;
-
-  double tC010Real = tC0100Real*(1.0-tDiffK) + tC0101Real*tDiffK;
-  double tC011Real = tC0110Real*(1.0-tDiffK) + tC0111Real*tDiffK;
-
-  double tC100Real = tC1000Real*(1.0-tDiffK) + tC1001Real*tDiffK;
-  double tC101Real = tC1010Real*(1.0-tDiffK) + tC1011Real*tDiffK;
-
-  double tC110Real = tC1100Real*(1.0-tDiffK) + tC1101Real*tDiffK;
-  double tC111Real = tC1110Real*(1.0-tDiffK) + tC1111Real*tDiffK;
-
-  //interpolate along y (i.e. D0)
-  double tC00Real = tC000Real*(1.0-tDiffD0) + tC001Real*tDiffD0;
-  double tC01Real = tC010Real*(1.0-tDiffD0) + tC011Real*tDiffD0;
-
-  double tC10Real = tC100Real*(1.0-tDiffD0) + tC101Real*tDiffD0;
-  double tC11Real = tC110Real*(1.0-tDiffD0) + tC111Real*tDiffD0;
-
-  //interpolate along x (i.e. ImF0)
-  double tC0Real = tC00Real*(1.0-tDiffImF0) + tC01Real*tDiffImF0;
-  double tC1Real = tC10Real*(1.0-tDiffImF0) + tC11Real*tDiffImF0;
-
-  //interpolate along t (i.e. ReF0)
-  tResultReal = tC0Real*(1.0-tDiffReF0) + tC1Real*tDiffReF0;
-
-
-  //---------------Imag----------------------------------
-  //interpolate along z (i.e. KStar)
-  double tC0000Imag = d_fScattLenImagSubVec[tBin0ReF0*tNbinsImF0*tNbinsD0*tNbinsK + tBin0ImF0*tNbinsD0*tNbinsK + tBin0D0*tNbinsK + tBin0K];
-  double tC0001Imag = d_fScattLenImagSubVec[tBin0ReF0*tNbinsImF0*tNbinsD0*tNbinsK + tBin0ImF0*tNbinsD0*tNbinsK + tBin0D0*tNbinsK + tBin1K];
-
-  double tC0010Imag = d_fScattLenImagSubVec[tBin0ReF0*tNbinsImF0*tNbinsD0*tNbinsK + tBin0ImF0*tNbinsD0*tNbinsK + tBin1D0*tNbinsK + tBin0K];
-  double tC0011Imag = d_fScattLenImagSubVec[tBin0ReF0*tNbinsImF0*tNbinsD0*tNbinsK + tBin0ImF0*tNbinsD0*tNbinsK + tBin1D0*tNbinsK + tBin1K];
-
-  double tC0100Imag = d_fScattLenImagSubVec[tBin0ReF0*tNbinsImF0*tNbinsD0*tNbinsK + tBin1ImF0*tNbinsD0*tNbinsK + tBin0D0*tNbinsK + tBin0K];
-  double tC0101Imag = d_fScattLenImagSubVec[tBin0ReF0*tNbinsImF0*tNbinsD0*tNbinsK + tBin1ImF0*tNbinsD0*tNbinsK + tBin0D0*tNbinsK + tBin1K];
-
-  double tC0110Imag = d_fScattLenImagSubVec[tBin0ReF0*tNbinsImF0*tNbinsD0*tNbinsK + tBin1ImF0*tNbinsD0*tNbinsK + tBin1D0*tNbinsK + tBin0K];
-  double tC0111Imag = d_fScattLenImagSubVec[tBin0ReF0*tNbinsImF0*tNbinsD0*tNbinsK + tBin1ImF0*tNbinsD0*tNbinsK + tBin1D0*tNbinsK + tBin1K];
-
-  double tC1000Imag = d_fScattLenImagSubVec[tBin1ReF0*tNbinsImF0*tNbinsD0*tNbinsK + tBin0ImF0*tNbinsD0*tNbinsK + tBin0D0*tNbinsK + tBin0K];
-  double tC1001Imag = d_fScattLenImagSubVec[tBin1ReF0*tNbinsImF0*tNbinsD0*tNbinsK + tBin0ImF0*tNbinsD0*tNbinsK + tBin0D0*tNbinsK + tBin1K];
-
-  double tC1010Imag = d_fScattLenImagSubVec[tBin1ReF0*tNbinsImF0*tNbinsD0*tNbinsK + tBin0ImF0*tNbinsD0*tNbinsK + tBin1D0*tNbinsK + tBin0K];
-  double tC1011Imag = d_fScattLenImagSubVec[tBin1ReF0*tNbinsImF0*tNbinsD0*tNbinsK + tBin0ImF0*tNbinsD0*tNbinsK + tBin1D0*tNbinsK + tBin1K];
-
-  double tC1100Imag = d_fScattLenImagSubVec[tBin1ReF0*tNbinsImF0*tNbinsD0*tNbinsK + tBin1ImF0*tNbinsD0*tNbinsK + tBin0D0*tNbinsK + tBin0K];
-  double tC1101Imag = d_fScattLenImagSubVec[tBin1ReF0*tNbinsImF0*tNbinsD0*tNbinsK + tBin1ImF0*tNbinsD0*tNbinsK + tBin0D0*tNbinsK + tBin1K];
-
-  double tC1110Imag = d_fScattLenImagSubVec[tBin1ReF0*tNbinsImF0*tNbinsD0*tNbinsK + tBin1ImF0*tNbinsD0*tNbinsK + tBin1D0*tNbinsK + tBin0K];
-  double tC1111Imag = d_fScattLenImagSubVec[tBin1ReF0*tNbinsImF0*tNbinsD0*tNbinsK + tBin1ImF0*tNbinsD0*tNbinsK + tBin1D0*tNbinsK + tBin1K];
-
-  //---
-  double tC000Imag = tC0000Imag*(1.0-tDiffK) + tC0001Imag*tDiffK;
-  double tC001Imag = tC0010Imag*(1.0-tDiffK) + tC0011Imag*tDiffK;
-
-  double tC010Imag = tC0100Imag*(1.0-tDiffK) + tC0101Imag*tDiffK;
-  double tC011Imag = tC0110Imag*(1.0-tDiffK) + tC0111Imag*tDiffK;
-
-  double tC100Imag = tC1000Imag*(1.0-tDiffK) + tC1001Imag*tDiffK;
-  double tC101Imag = tC1010Imag*(1.0-tDiffK) + tC1011Imag*tDiffK;
-
-  double tC110Imag = tC1100Imag*(1.0-tDiffK) + tC1101Imag*tDiffK;
-  double tC111Imag = tC1110Imag*(1.0-tDiffK) + tC1111Imag*tDiffK;
-
-  //interpolate along y (i.e. D0)
-  double tC00Imag = tC000Imag*(1.0-tDiffD0) + tC001Imag*tDiffD0;
-  double tC01Imag = tC010Imag*(1.0-tDiffD0) + tC011Imag*tDiffD0;
-
-  double tC10Imag = tC100Imag*(1.0-tDiffD0) + tC101Imag*tDiffD0;
-  double tC11Imag = tC110Imag*(1.0-tDiffD0) + tC111Imag*tDiffD0;
-
-  //interpolate along x (i.e. ImF0)
-  double tC0Imag = tC00Imag*(1.0-tDiffImF0) + tC01Imag*tDiffImF0;
-  double tC1Imag = tC10Imag*(1.0-tDiffImF0) + tC11Imag*tDiffImF0;
-
-  //interpolate along t (i.e. ReF0)
-  tResultImag = tC0Imag*(1.0-tDiffReF0) + tC1Imag*tDiffReF0;
-
-
-  //--------------------------------
-  cuDoubleComplex tReturnValue = make_cuDoubleComplex(tResultReal,tResultImag);
-  return tReturnValue;
-
-}
-
 //________________________________________________________________________________________________________________
 __device__ double GetEta(double aKStar)
 {
@@ -928,30 +510,61 @@ __device__ double AssembleWfSquared(double aRStarMag, double aGamowFactor, cuDou
 }
 
 //________________________________________________________________________________________________________________
-__device__ double InterpolateWfSquaredInterpScattLen(double aKStarMag, double aRStarMag, double aTheta, double aReF0, double aImF0, double aD0)
+__device__ cuDoubleComplex BuildScatteringLength(double aKStarMag, double aReF0, double aImF0, double aD0)
 {
-  double tGamow = GetGamowFactor(aKStarMag);
-  cuDoubleComplex tExpTermCmplx = GetExpTerm(aKStarMag,aRStarMag,aTheta);
+  //TODO figure out how to load hbarc and gBohrRadius into GPU
+  double d_hbarc = 0.197327;
+  double d_gBohrRadius = 75.23349845;
 
-  cuDoubleComplex tGTildeCmplx, tHyperGeo1F1Cmplx, tScattLenCmplx;
+  cuDoubleComplex tRealUnity = make_cuDoubleComplex(1.0,0);
+  cuDoubleComplex tF0 = make_cuDoubleComplex(aReF0, aImF0);
+  cuDoubleComplex tInvF0 = cuCdiv(tRealUnity,tF0);
 
-  tGTildeCmplx = GTildeInterpolate(aKStarMag,aRStarMag);
-  tHyperGeo1F1Cmplx = HyperGeo1F1Interpolate(aKStarMag,aRStarMag,aTheta);
-  tScattLenCmplx = ScattLenInterpolate(aReF0,aImF0,aD0,aKStarMag);
+  cuDoubleComplex tScattLenCmplx;
+  if(aReF0==0.0 && aImF0==0.0 && aD0==0.0) tScattLenCmplx = make_cuDoubleComplex(0.0,0.0);
+//TODO
+/*
+  else if(fTurnOffCoulomb)
+  {
+    double tKStar = aKStarMag/d_hbarc;
+    double tTerm2 = 0.5*aD0*tKStar*tKStar;
+    cuDoubleComplex tTerm2Complex = make_cuDoubleComplex(tTerm2,0);
+    cuDoubleComplex tTerm3Complex = make_cuDoubleComplex(0.0, tKStar);
 
-  double tResult = AssembleWfSquared(aRStarMag,tGamow,tExpTermCmplx,tGTildeCmplx,tHyperGeo1F1Cmplx,tScattLenCmplx);
+    cuDoubleComplex tTerm12 = cuCadd(tInvF0,tTerm2Complex);
+    cuDoubleComplex tInvScattLen = cuCsub(tTerm12,tTerm3Complex);
 
-  return tResult;
+    tScattLenCmplx = cuCdiv(tRealUnity,tInvScattLen);
+  }
+*/
+  else
+  {
 
+
+    double tGamow = GetGamowFactor(aKStarMag);  
+    double tLednickyHFunction = LednickyHFunctionInterpolate(aKStarMag);
+    double tImag = tGamow/(2.0*GetEta(aKStarMag));
+    cuDoubleComplex tLednickyChi = make_cuDoubleComplex(tLednickyHFunction,tImag);
+
+    double tKStar = aKStarMag/d_hbarc;
+    double tTerm2 = 0.5*aD0*tKStar*tKStar;
+    cuDoubleComplex tTerm2Complex = make_cuDoubleComplex(tTerm2,0);
+
+    double tStupid = 2.0/d_gBohrRadius;
+    cuDoubleComplex tMultFact = make_cuDoubleComplex(tStupid, 0);
+    cuDoubleComplex tTerm3Complex = cuCmul(tMultFact,tLednickyChi);
+
+    cuDoubleComplex tTerm12 = cuCadd(tInvF0,tTerm2Complex);
+    cuDoubleComplex tInvScattLen = cuCsub(tTerm12,tTerm3Complex);
+
+    tScattLenCmplx = cuCdiv(tRealUnity,tInvScattLen);
+  }
+  return tScattLenCmplx;
 }
 
 //________________________________________________________________________________________________________________
 __device__ double InterpolateWfSquared(double aKStarMag, double aRStarMag, double aTheta, double aReF0, double aImF0, double aD0)
 {
-  double d_hbarc = 0.197327; //TODO
-  double d_gBohrRadius = 75.23349845;
-  cuDoubleComplex tRealUnity = make_cuDoubleComplex(1.0,0);
-
   double tGamow = GetGamowFactor(aKStarMag);
   cuDoubleComplex tExpTermCmplx = GetExpTerm(aKStarMag,aRStarMag,aTheta);
 
@@ -961,26 +574,7 @@ __device__ double InterpolateWfSquared(double aKStarMag, double aRStarMag, doubl
   tHyperGeo1F1Cmplx = HyperGeo1F1Interpolate(aKStarMag,aRStarMag,aTheta);
 
   //---Build scatt len
-
-  double tLednickyHFunction = LednickyHFunctionInterpolate(aKStarMag);
-  double tImag = tGamow/(2.0*GetEta(aKStarMag));
-  cuDoubleComplex tLednickyChi = make_cuDoubleComplex(tLednickyHFunction,tImag);
-
-  cuDoubleComplex tF0 = make_cuDoubleComplex(aReF0,aImF0);
-  cuDoubleComplex tInvF0 = cuCdiv(tRealUnity,tF0);
-
-  double tKStar = aKStarMag/d_hbarc;
-  double tTerm2 = 0.5*aD0*tKStar*tKStar;
-  cuDoubleComplex tTerm2Complex = make_cuDoubleComplex(tTerm2,0);
-
-  double tStupid = 2.0/d_gBohrRadius;
-  cuDoubleComplex tMultFact = make_cuDoubleComplex(tStupid, 0);
-  cuDoubleComplex tTerm3Complex = cuCmul(tMultFact,tLednickyChi);
-
-  cuDoubleComplex tTerm12 = cuCadd(tInvF0,tTerm2Complex);
-  cuDoubleComplex tInvScattLen = cuCsub(tTerm12,tTerm3Complex);
-
-  tScattLenCmplx = cuCdiv(tRealUnity,tInvScattLen);
+  tScattLenCmplx = BuildScatteringLength(aKStarMag, aReF0, aImF0, aD0);
 
   //--------------------------
 
@@ -988,20 +582,6 @@ __device__ double InterpolateWfSquared(double aKStarMag, double aRStarMag, doubl
 
   return tResult;
 
-}
-
-
-
-//________________________________________________________________________________________________________________
-__device__ bool CanInterpolate(double aKStar, double aRStar, double aTheta, double aReF0, double aImF0, double aD0)
-{
-  if(aKStar < d_fScattLenInfo->minInterpK || aKStar > d_fScattLenInfo->maxInterpK) return false;
-  if(aRStar < d_fGTildeInfo->minInterpR || aRStar > d_fGTildeInfo->maxInterpR) return false;
-  if(aTheta < d_fHyperGeo1F1Info->minInterpTheta || aTheta > d_fHyperGeo1F1Info->maxInterpTheta) return false;
-  if(aReF0 < d_fScattLenInfo->minInterpReF0 || aReF0 > d_fScattLenInfo->maxInterpReF0) return false;
-  if(aImF0 < d_fScattLenInfo->minInterpImF0 || aImF0 > d_fScattLenInfo->maxInterpImF0) return false;
-  if(aD0 < d_fScattLenInfo->minInterpD0 || aD0 > d_fScattLenInfo->maxInterpD0) return false;
-  return true;
 }
 
 //________________________________________________________________________________________________________________
@@ -1015,7 +595,7 @@ __device__ bool CanInterpolate(double aKStar, double aRStar, double aTheta)
  
 
 //________________________________________________________________________________________________________________
-__global__ void GetWfAverage(double *aKStarMag, double *aRStarMag, double *aTheta, double aReF0, double aImF0, double aD0, double *g_odata, bool aInterpScattLen)
+__global__ void GetWfAverage(double *aKStarMag, double *aRStarMag, double *aTheta, double aReF0, double aImF0, double aD0, double *g_odata)
 {
 //  int idx = threadIdx.x + blockIdx.x*blockDim.x;
 
@@ -1024,8 +604,7 @@ __global__ void GetWfAverage(double *aKStarMag, double *aRStarMag, double *aThet
   unsigned int tid = threadIdx.x;
   unsigned int i = blockIdx.x*blockDim.x + threadIdx.x;
 
-  if(aInterpScattLen) sdata[tid] = InterpolateWfSquaredInterpScattLen(aKStarMag[i],aRStarMag[i],aTheta[i],aReF0,aImF0,aD0);
-  else sdata[tid] = InterpolateWfSquared(aKStarMag[i],aRStarMag[i],aTheta[i],aReF0,aImF0,aD0);
+  sdata[tid] = InterpolateWfSquared(aKStarMag[i],aRStarMag[i],aTheta[i],aReF0,aImF0,aD0);
   __syncthreads();
 
   //do reduction in shared mem
@@ -1057,7 +636,7 @@ __global__ void GetWfAverage(double *aKStarMag, double *aRStarMag, double *aThet
 
 
 //________________________________________________________________________________________________________________
-__global__ void GetEntireCf(double *aKStarMag, double *aRStarMag, double *aTheta, double aReF0, double aImF0, double aD0, double *g_odata, int aOffsetInput, int aOffsetOutput, bool aInterpScattLen)
+__global__ void GetEntireCf(double *aKStarMag, double *aRStarMag, double *aTheta, double aReF0, double aImF0, double aD0, double *g_odata, int aOffsetInput, int aOffsetOutput)
 {
 //  int idx = threadIdx.x + blockIdx.x*blockDim.x;
 
@@ -1066,8 +645,7 @@ __global__ void GetEntireCf(double *aKStarMag, double *aRStarMag, double *aTheta
   unsigned int tid = threadIdx.x;
   unsigned int i = blockIdx.x*blockDim.x + threadIdx.x + aOffsetInput;
 
-  if(aInterpScattLen) sdata[tid] = InterpolateWfSquaredInterpScattLen(aKStarMag[i],aRStarMag[i],aTheta[i],aReF0,aImF0,aD0);
-  else sdata[tid] = InterpolateWfSquared(aKStarMag[i],aRStarMag[i],aTheta[i],aReF0,aImF0,aD0);
+  sdata[tid] = InterpolateWfSquared(aKStarMag[i],aRStarMag[i],aTheta[i],aReF0,aImF0,aD0);
   __syncthreads();
 
   //do reduction in shared mem
@@ -1098,7 +676,7 @@ __global__ void GetEntireCf(double *aKStarMag, double *aRStarMag, double *aTheta
 }
 
 //________________________________________________________________________________________________________________
-__global__ void GetEntireCfComplete(double *aKStarMag, double *aRStarMag, double *aTheta, double aReF0s, double aImF0s, double aD0s, double aReF0t, double aImF0t, double aD0t, double *g_odata, int aOffsetInput, int aOffsetOutput, bool aInterpScattLen)
+__global__ void GetEntireCfComplete(double *aKStarMag, double *aRStarMag, double *aTheta, double aReF0s, double aImF0s, double aD0s, double aReF0t, double aImF0t, double aD0t, double *g_odata, int aOffsetInput, int aOffsetOutput)
 {
 //  int idx = threadIdx.x + blockIdx.x*blockDim.x;
 
@@ -1109,16 +687,8 @@ __global__ void GetEntireCfComplete(double *aKStarMag, double *aRStarMag, double
 
   double tWfSqSinglet, tWfSqTriplet, tWfSq;
 
-  if(aInterpScattLen)
-  {
-    tWfSqSinglet = InterpolateWfSquaredInterpScattLen(aKStarMag[i],aRStarMag[i],aTheta[i],aReF0s,aImF0s,aD0s);
-    tWfSqTriplet = InterpolateWfSquaredInterpScattLen(aKStarMag[i],aRStarMag[i],aTheta[i],aReF0t,aImF0t,aD0t);
-  }
-  else
-  {
-    tWfSqSinglet = InterpolateWfSquared(aKStarMag[i],aRStarMag[i],aTheta[i],aReF0s,aImF0s,aD0s);
-    tWfSqTriplet = InterpolateWfSquared(aKStarMag[i],aRStarMag[i],aTheta[i],aReF0t,aImF0t,aD0t);
-  }
+  tWfSqSinglet = InterpolateWfSquared(aKStarMag[i],aRStarMag[i],aTheta[i],aReF0s,aImF0s,aD0s);
+  tWfSqTriplet = InterpolateWfSquared(aKStarMag[i],aRStarMag[i],aTheta[i],aReF0t,aImF0t,aD0t);
 
   tWfSq = 0.25*tWfSqSinglet + 0.75*tWfSqTriplet;
   sdata[tid] = tWfSq;
@@ -1180,7 +750,7 @@ __device__ bool CanInterpPair(double aKStar, double aRStar, double aTheta)
 
 
 //________________________________________________________________________________________________________________
-__global__ void GetEntireCfCompletewStaticPairs(double aReF0s, double aImF0s, double aD0s, double aReF0t, double aImF0t, double aD0t, double *g_odata, double *g_odata2, int aAnalysisNumber, int aBinKNumber, int aOffsetOutput, bool aInterpScattLen)
+__global__ void GetEntireCfCompletewStaticPairs(double aRadiusScale, double aReF0s, double aImF0s, double aD0s, double aReF0t, double aImF0t, double aD0t, double *g_odata, double *g_odata2, int aAnalysisNumber, int aBinKNumber, int aOffsetOutput)
 {
 //  int idx = threadIdx.x + blockIdx.x*blockDim.x;
 
@@ -1191,19 +761,11 @@ __global__ void GetEntireCfCompletewStaticPairs(double aReF0s, double aImF0s, do
   unsigned int i = GetSamplePairOffset(aAnalysisNumber,aBinKNumber,tPairNumber);
 
   double tWfSqSinglet, tWfSqTriplet, tWfSq;
-
-  if(CanInterpPair(d_fPairSample4dVec[i],d_fPairSample4dVec[i+1],d_fPairSample4dVec[i+2]))
+  double tRadius = aRadiusScale*d_fPairSample4dVec[i+1];
+  if(CanInterpPair(d_fPairSample4dVec[i],tRadius,d_fPairSample4dVec[i+2]))
   {
-    if(aInterpScattLen)
-    {
-      tWfSqSinglet = InterpolateWfSquaredInterpScattLen(d_fPairSample4dVec[i],d_fPairSample4dVec[i+1],d_fPairSample4dVec[i+2],aReF0s,aImF0s,aD0s);
-      tWfSqTriplet = InterpolateWfSquaredInterpScattLen(d_fPairSample4dVec[i],d_fPairSample4dVec[i+1],d_fPairSample4dVec[i+2],aReF0t,aImF0t,aD0t);
-    }
-    else
-    {
-      tWfSqSinglet = InterpolateWfSquared(d_fPairSample4dVec[i],d_fPairSample4dVec[i+1],d_fPairSample4dVec[i+2],aReF0s,aImF0s,aD0s);
-      tWfSqTriplet = InterpolateWfSquared(d_fPairSample4dVec[i],d_fPairSample4dVec[i+1],d_fPairSample4dVec[i+2],aReF0t,aImF0t,aD0t);
-    }
+    tWfSqSinglet = InterpolateWfSquared(d_fPairSample4dVec[i],tRadius,d_fPairSample4dVec[i+2],aReF0s,aImF0s,aD0s);
+    tWfSqTriplet = InterpolateWfSquared(d_fPairSample4dVec[i],tRadius,d_fPairSample4dVec[i+2],aReF0t,aImF0t,aD0t);
 
     tWfSq = 0.25*tWfSqSinglet + 0.75*tWfSqTriplet;
     sdata2[tid][0] = tWfSq;
@@ -1262,7 +824,7 @@ __global__ void RandInit(curandState *state, unsigned long seed, int aOffset)
 
 
 //________________________________________________________________________________________________________________
-__global__ void GetEntireCfComplete2(curandState *state1, curandState *state2, curandState *state3, double aR, double aReF0s, double aImF0s, double aD0s, double aReF0t, double aImF0t, double aD0t, double *g_odata, int aKbin, int aOffsetInput, int aOffsetOutput, double* aCPUPairs, bool aInterpScattLen)
+__global__ void GetEntireCfComplete2(curandState *state1, curandState *state2, curandState *state3, double aR, double aReF0s, double aImF0s, double aD0s, double aReF0t, double aImF0t, double aD0t, double *g_odata, int aKbin, int aOffsetInput, int aOffsetOutput, double* aCPUPairs)
 {
 //  int idx = threadIdx.x + blockIdx.x*blockDim.x;
 
@@ -1299,29 +861,13 @@ __global__ void GetEntireCfComplete2(curandState *state1, curandState *state2, c
     tCosTheta = (tKStarOut*tRStarOut + tKStarSide*tRStarSide + tKStarLong*tRStarLong)/(tKStarMag*tRStarMag);
     tTheta = acos(tCosTheta);
 
-    if(aInterpScattLen)
-    {
-      bool tPass1 = CanInterpolate(tKStarMag,tRStarMag,tTheta,aReF0s,aImF0s,aD0s);
-      bool tPass2 = CanInterpolate(tKStarMag,tRStarMag,tTheta,aReF0t,aImF0t,aD0t);
-
-      if(tPass1 && tPass2) tPass = true;
-      else tPass = false;
-    }
-    else tPass = CanInterpolate(tKStarMag,tRStarMag,tTheta);
+    tPass = CanInterpolate(tKStarMag,tRStarMag,tTheta);
   }
 
   double tWfSqSinglet, tWfSqTriplet, tWfSq;
 
-  if(aInterpScattLen)
-  {
-    tWfSqSinglet = InterpolateWfSquaredInterpScattLen(tKStarMag,tRStarMag,tTheta,aReF0s,aImF0s,aD0s);
-    tWfSqTriplet = InterpolateWfSquaredInterpScattLen(tKStarMag,tRStarMag,tTheta,aReF0t,aImF0t,aD0t);
-  }
-  else
-  {
-    tWfSqSinglet = InterpolateWfSquared(tKStarMag,tRStarMag,tTheta,aReF0s,aImF0s,aD0s);
-    tWfSqTriplet = InterpolateWfSquared(tKStarMag,tRStarMag,tTheta,aReF0t,aImF0t,aD0t);
-  }
+  tWfSqSinglet = InterpolateWfSquared(tKStarMag,tRStarMag,tTheta,aReF0s,aImF0s,aD0s);
+  tWfSqTriplet = InterpolateWfSquared(tKStarMag,tRStarMag,tTheta,aReF0t,aImF0t,aD0t);
 
   tWfSq = 0.25*tWfSqSinglet + 0.75*tWfSqTriplet;
   sdata[tid] = tWfSq;
@@ -1359,13 +905,11 @@ __global__ void GetEntireCfComplete2(curandState *state1, curandState *state2, c
 //________________________________________________________________________________________________________________
 
 
-ParallelWaveFunction::ParallelWaveFunction(bool aInterpScattLen, int aNThreadsPerBlock, int aNBlocks):
-  fInterpScattLen(aInterpScattLen),
+ParallelWaveFunction::ParallelWaveFunction(int aNThreadsPerBlock, int aNBlocks):
   fNThreadsPerBlock(aNThreadsPerBlock),
   fNBlocks(aNBlocks)
 {
   cudaSetDeviceFlags(cudaDeviceMapHost);
-
 }
 
 //________________________________________________________________________________________________________________
@@ -1383,10 +927,6 @@ ParallelWaveFunction::~ParallelWaveFunction()
   checkCudaErrors(cudaFree(d_fHyperGeo1F1Real));
   checkCudaErrors(cudaFree(d_fHyperGeo1F1Imag));
   checkCudaErrors(cudaFree(d_fHyperGeo1F1Info));
-
-//  checkCudaErrors(cudaFree(d_fCoulombScatteringLengthReal));
-//  checkCudaErrors(cudaFree(d_fCoulombScatteringLengthImag));
-  checkCudaErrors(cudaFree(d_fScattLenInfo));
 }
 
 
@@ -1414,6 +954,8 @@ void ParallelWaveFunction::LoadPairSample4dVec(td4dVec &aPairSample4dVec, BinInf
   //------------------------------------------------------
   assert((int)aPairSample4dVec.size() == d_fPairSample4dVecInfo->nAnalyses);
   assert((int)aPairSample4dVec[0].size() == d_fPairSample4dVecInfo->nBinsK);
+  assert((int)aPairSample4dVec[0][0].size() == d_fPairSample4dVecInfo->nPairsPerBin);
+  assert((int)aPairSample4dVec[0][0][0].size() == d_fPairSample4dVecInfo->nElementsPerPair);
   assert(d_fPairSample4dVecInfo->nElementsPerPair == 3);
   //------------------------------------------------------
 
@@ -1621,147 +1163,6 @@ void ParallelWaveFunction::LoadHyperGeo1F1Imag(td3dVec &aHyperGeo1F1Imag)
 }
 
 
-
-//________________________________________________________________________________________________________________
-void ParallelWaveFunction::LoadScattLenReal(td4dVec &aScattLenReal)
-{
-  int tNbinsReF0 = aScattLenReal.size();
-  int tNbinsImF0 = aScattLenReal[0].size();
-  int tNbinsD0 = aScattLenReal[0][0].size();
-  int tNbinsK = aScattLenReal[0][0][0].size();
-
-
-  int tSize = tNbinsReF0*tNbinsImF0*tNbinsD0*tNbinsK*sizeof(double);
-
-  checkCudaErrors(cudaMallocManaged(&d_fCoulombScatteringLengthReal, tSize));
-
-  int tIndex;
-  for(int iReF0=0; iReF0<tNbinsReF0; iReF0++)
-  {
-    for(int iImF0=0; iImF0<tNbinsImF0; iImF0++)
-    {
-      for(int iD0=0; iD0<tNbinsD0; iD0++)
-      {
-        for(int iK=0; iK<tNbinsK; iK++)
-        {
-          tIndex = iK + iD0*tNbinsK + iImF0*tNbinsK*tNbinsD0 + iReF0*tNbinsK*tNbinsD0*tNbinsImF0;
-          d_fCoulombScatteringLengthReal[tIndex] = aScattLenReal[iReF0][iImF0][iD0][iK];
-        }
-      }
-    }
-  }
-
-}
-
-
-//________________________________________________________________________________________________________________
-void ParallelWaveFunction::LoadScattLenImag(td4dVec &aScattLenImag)
-{
-  int tNbinsReF0 = aScattLenImag.size();
-  int tNbinsImF0 = aScattLenImag[0].size();
-  int tNbinsD0 = aScattLenImag[0][0].size();
-  int tNbinsK = aScattLenImag[0][0][0].size();
-
-
-  int tSize = tNbinsReF0*tNbinsImF0*tNbinsD0*tNbinsK*sizeof(double);
-
-  checkCudaErrors(cudaMallocManaged(&d_fCoulombScatteringLengthImag, tSize));
-
-  int tIndex;
-  for(int iReF0=0; iReF0<tNbinsReF0; iReF0++)
-  {
-    for(int iImF0=0; iImF0<tNbinsImF0; iImF0++)
-    {
-      for(int iD0=0; iD0<tNbinsD0; iD0++)
-      {
-        for(int iK=0; iK<tNbinsK; iK++)
-        {
-          tIndex = iK + iD0*tNbinsK + iImF0*tNbinsK*tNbinsD0 + iReF0*tNbinsK*tNbinsD0*tNbinsImF0;
-          d_fCoulombScatteringLengthImag[tIndex] = aScattLenImag[iReF0][iImF0][iD0][iK];
-        }
-      }
-    }
-  }
-
-}
-
-//________________________________________________________________________________________________________________
-void ParallelWaveFunction::LoadScattLenRealSub(td4dVec &aScattLenReal)
-{
-  int tNbinsReF0 = aScattLenReal.size();
-  int tNbinsImF0 = aScattLenReal[0].size();
-  int tNbinsD0 = aScattLenReal[0][0].size();
-  int tNbinsK = aScattLenReal[0][0][0].size();
-
-
-  int tSize = tNbinsReF0*tNbinsImF0*tNbinsD0*tNbinsK*sizeof(double);
-
-  checkCudaErrors(cudaMallocManaged(&d_fScattLenRealSubVec, tSize));
-
-  int tIndex;
-  for(int iReF0=0; iReF0<tNbinsReF0; iReF0++)
-  {
-    for(int iImF0=0; iImF0<tNbinsImF0; iImF0++)
-    {
-      for(int iD0=0; iD0<tNbinsD0; iD0++)
-      {
-        for(int iK=0; iK<tNbinsK; iK++)
-        {
-          tIndex = iK + iD0*tNbinsK + iImF0*tNbinsK*tNbinsD0 + iReF0*tNbinsK*tNbinsD0*tNbinsImF0;
-          d_fScattLenRealSubVec[tIndex] = aScattLenReal[iReF0][iImF0][iD0][iK];
-        }
-      }
-    }
-  }
-
-}
-
-
-//________________________________________________________________________________________________________________
-void ParallelWaveFunction::LoadScattLenImagSub(td4dVec &aScattLenImag)
-{
-  int tNbinsReF0 = aScattLenImag.size();
-  int tNbinsImF0 = aScattLenImag[0].size();
-  int tNbinsD0 = aScattLenImag[0][0].size();
-  int tNbinsK = aScattLenImag[0][0][0].size();
-
-
-  int tSize = tNbinsReF0*tNbinsImF0*tNbinsD0*tNbinsK*sizeof(double);
-
-  checkCudaErrors(cudaMallocManaged(&d_fScattLenImagSubVec, tSize));
-
-  int tIndex;
-  for(int iReF0=0; iReF0<tNbinsReF0; iReF0++)
-  {
-    for(int iImF0=0; iImF0<tNbinsImF0; iImF0++)
-    {
-      for(int iD0=0; iD0<tNbinsD0; iD0++)
-      {
-        for(int iK=0; iK<tNbinsK; iK++)
-        {
-          tIndex = iK + iD0*tNbinsK + iImF0*tNbinsK*tNbinsD0 + iReF0*tNbinsK*tNbinsD0*tNbinsImF0;
-          d_fScattLenImagSubVec[tIndex] = aScattLenImag[iReF0][iImF0][iD0][iK];
-        }
-      }
-    }
-  }
-
-}
-
-
-//________________________________________________________________________________________________________________
-void ParallelWaveFunction::UnLoadScattLenRealSub()
-{
-  checkCudaErrors(cudaFree(d_fScattLenRealSubVec));
-}
-
-//________________________________________________________________________________________________________________
-void ParallelWaveFunction::UnLoadScattLenImagSub()
-{
-  checkCudaErrors(cudaFree(d_fScattLenImagSubVec));
-}
-
-
 //________________________________________________________________________________________________________________
 void ParallelWaveFunction::LoadGTildeInfo(BinInfoGTilde &aBinInfo)
 {
@@ -1815,43 +1216,6 @@ void ParallelWaveFunction::LoadHyperGeo1F1Info(BinInfoHyperGeo1F1 &aBinInfo)
 }
 
 //________________________________________________________________________________________________________________
-void ParallelWaveFunction::LoadScattLenInfo(BinInfoScattLen &aBinInfo)
-{
-  checkCudaErrors(cudaMallocManaged(&d_fScattLenInfo, sizeof(BinInfoScattLen)));
-
-  d_fScattLenInfo->nBinsReF0 = aBinInfo.nBinsReF0;
-  d_fScattLenInfo->nBinsImF0 = aBinInfo.nBinsImF0;
-  d_fScattLenInfo->nBinsD0 = aBinInfo.nBinsD0;
-  d_fScattLenInfo->nBinsK = aBinInfo.nBinsK;
-
-  d_fScattLenInfo->binWidthReF0 = aBinInfo.binWidthReF0;
-  d_fScattLenInfo->binWidthImF0 = aBinInfo.binWidthImF0;
-  d_fScattLenInfo->binWidthD0 = aBinInfo.binWidthD0;
-  d_fScattLenInfo->binWidthK = aBinInfo.binWidthK;
-
-  d_fScattLenInfo->minReF0 = aBinInfo.minReF0;
-  d_fScattLenInfo->maxReF0 = aBinInfo.maxReF0;
-  d_fScattLenInfo->minImF0 = aBinInfo.minImF0;
-  d_fScattLenInfo->maxImF0 = aBinInfo.maxImF0;
-  d_fScattLenInfo->minD0 = aBinInfo.minD0;
-  d_fScattLenInfo->maxD0 = aBinInfo.maxD0;
-  d_fScattLenInfo->minK = aBinInfo.minK;
-  d_fScattLenInfo->maxK = aBinInfo.maxK;
-
-
-
-  d_fScattLenInfo->minInterpReF0 = aBinInfo.minInterpReF0;
-  d_fScattLenInfo->maxInterpReF0 = aBinInfo.maxInterpReF0;
-  d_fScattLenInfo->minInterpImF0 = aBinInfo.minInterpImF0;
-  d_fScattLenInfo->maxInterpImF0 = aBinInfo.maxInterpImF0;
-  d_fScattLenInfo->minInterpD0 = aBinInfo.minInterpD0;
-  d_fScattLenInfo->maxInterpD0 = aBinInfo.maxInterpD0;
-  d_fScattLenInfo->minInterpK = aBinInfo.minInterpK;
-  d_fScattLenInfo->maxInterpK = aBinInfo.maxInterpK;
-
-}
-
-//________________________________________________________________________________________________________________
 //double* ParallelWaveFunction::RunInterpolateWfSquared(td2dVec &aPairs, double aReF0, double aImF0, double aD0)
 vector<double> ParallelWaveFunction::RunInterpolateWfSquared(td2dVec &aPairs, double aReF0, double aImF0, double aD0)
 {
@@ -1882,7 +1246,7 @@ vector<double> ParallelWaveFunction::RunInterpolateWfSquared(td2dVec &aPairs, do
   //----------Run the kernel-----------------------------------------------
   GpuTimer timer;
   timer.Start();
-  GetWfAverage<<<fNBlocks,fNThreadsPerBlock,tSizeShared>>>(h_KStarMag,h_RStarMag,h_Theta,aReF0,aImF0,aD0,h_WfSquared,fInterpScattLen);
+  GetWfAverage<<<fNBlocks,fNThreadsPerBlock,tSizeShared>>>(h_KStarMag,h_RStarMag,h_Theta,aReF0,aImF0,aD0,h_WfSquared);
   timer.Stop();
   std::cout << "InterpolateWfSquared kernel finished in " << timer.Elapsed() << " ms" << std::endl;
 
@@ -1961,7 +1325,7 @@ vector<double> ParallelWaveFunction::RunInterpolateEntireCf(td3dVec &aPairs, dou
   {
     int tOffsetInput = i*tNPairsPerBin;
     int tOffsetOutput = i*fNBlocks;
-    GetEntireCf<<<fNBlocks,fNThreadsPerBlock,tSizeShared,tStreams[i]>>>(h_KStarMag,h_RStarMag,h_Theta,aReF0,aImF0,aD0,h_Cf,tOffsetInput,tOffsetOutput,fInterpScattLen);
+    GetEntireCf<<<fNBlocks,fNThreadsPerBlock,tSizeShared,tStreams[i]>>>(h_KStarMag,h_RStarMag,h_Theta,aReF0,aImF0,aD0,h_Cf,tOffsetInput,tOffsetOutput);
   }
 //  timer.Stop();
 //  std::cout << "GetEntireCf kernel finished in " << timer.Elapsed() << " ms" << std::endl;
@@ -2049,14 +1413,11 @@ vector<double> ParallelWaveFunction::RunInterpolateEntireCfComplete(td3dVec &aPa
 //  GpuTimer timer;
 //  timer.Start();
 
-  //TODO this doesn't work with fInterpScattLen = true.  If I want this to work, I need to add singlet and triplet interpolation vectors
-  assert(!fInterpScattLen);
-
   for(int i=0; i<tNBins; i++)
   {
     int tOffsetInput = i*tNPairsPerBin;
     int tOffsetOutput = i*fNBlocks;
-    GetEntireCfComplete<<<fNBlocks,fNThreadsPerBlock,tSizeShared,tStreams[i]>>>(h_KStarMag,h_RStarMag,h_Theta,aReF0s,aImF0s,aD0s,aReF0t,aImF0t,aD0t,h_Cf,tOffsetInput,tOffsetOutput,fInterpScattLen);
+    GetEntireCfComplete<<<fNBlocks,fNThreadsPerBlock,tSizeShared,tStreams[i]>>>(h_KStarMag,h_RStarMag,h_Theta,aReF0s,aImF0s,aD0s,aReF0t,aImF0t,aD0t,h_Cf,tOffsetInput,tOffsetOutput);
   }
 //  timer.Stop();
 //  std::cout << "GetEntireCf kernel finished in " << timer.Elapsed() << " ms" << std::endl;
@@ -2099,12 +1460,12 @@ vector<double> ParallelWaveFunction::RunInterpolateEntireCfComplete(td3dVec &aPa
 
 
 //________________________________________________________________________________________________________________
-td2dVec ParallelWaveFunction::RunInterpolateEntireCfCompletewStaticPairs(int aAnalysisNumber, double aReF0s, double aImF0s, double aD0s, double aReF0t, double aImF0t, double aD0t)
+td2dVec ParallelWaveFunction::RunInterpolateEntireCfCompletewStaticPairs(int aAnalysisNumber, double aRadiusScale, double aReF0s, double aImF0s, double aD0s, double aReF0t, double aImF0t, double aD0t)
 {
 //  GpuTimer timerPre;
 //  timerPre.Start();
   int tNBins = fSamplePairsBinInfo.nBinsK;
-  int tNPairsPerBin = fSamplePairsBinInfo.nPairsPerBin;
+//  int tNPairsPerBin = fSamplePairsBinInfo.nPairsPerBin;
   int tSizeOutput = tNBins*fNBlocks*sizeof(double); //the kernel reduces the values for tNPairs bins down to fNBlocks bins
   int tSizeShared = fNThreadsPerBlock*sizeof(double);
   tSizeShared *= 2; //to account for Cf values and counts
@@ -2133,13 +1494,10 @@ td2dVec ParallelWaveFunction::RunInterpolateEntireCfCompletewStaticPairs(int aAn
 //  GpuTimer timer;
 //  timer.Start();
 
-  //TODO this doesn't work with fInterpScattLen = true.  If I want this to work, I need to add singlet and triplet interpolation vectors
-  assert(!fInterpScattLen);
-
   for(int i=0; i<tNBins; i++)
   {
     int tOffsetOutput = i*fNBlocks;
-    GetEntireCfCompletewStaticPairs<<<fNBlocks,fNThreadsPerBlock,tSizeShared,tStreams[i]>>>(aReF0s, aImF0s, aD0s, aReF0t, aImF0t, aD0t, h_CfSums, h_CfCounts, aAnalysisNumber, i, tOffsetOutput, fInterpScattLen);
+    GetEntireCfCompletewStaticPairs<<<fNBlocks,fNThreadsPerBlock,tSizeShared,tStreams[i]>>>(aRadiusScale, aReF0s, aImF0s, aD0s, aReF0t, aImF0t, aD0t, h_CfSums, h_CfCounts, aAnalysisNumber, i, tOffsetOutput);
   }
 //  timer.Stop();
 //  std::cout << "GetEntireCf kernel finished in " << timer.Elapsed() << " ms" << std::endl;
@@ -2191,7 +1549,7 @@ vector<double> ParallelWaveFunction::RunInterpolateEntireCfComplete2(int aNSimPa
 
   int tNBins = aNbinsK;
   int tNPairsPerBin = aNSimPairsPerBin;
-  int tSizeInput = tNBins*tNPairsPerBin*sizeof(double);
+//  int tSizeInput = tNBins*tNPairsPerBin*sizeof(double);
   int tSizeOutput = tNBins*fNBlocks*sizeof(double); //the kernel reduces the values for tNPairs bins down to fNBlocks bins
   int tSizeShared = fNThreadsPerBlock*sizeof(double);
   int tSizedState = tNBins*tNPairsPerBin*sizeof(curandState);
@@ -2235,7 +1593,7 @@ vector<double> ParallelWaveFunction::RunInterpolateEntireCfComplete2(int aNSimPa
     RandInit<<<fNBlocks,fNThreadsPerBlock,0,tStreams[i]>>>(d_state1,std::clock(),tOffsetInput);
     RandInit<<<fNBlocks,fNThreadsPerBlock,0,tStreams[i]>>>(d_state2,std::clock(),tOffsetInput);
     RandInit<<<fNBlocks,fNThreadsPerBlock,0,tStreams[i]>>>(d_state3,std::clock(),tOffsetInput);
-    GetEntireCfComplete2<<<fNBlocks,fNThreadsPerBlock,tSizeShared,tStreams[i]>>>(d_state1,d_state2,d_state3, aR, aReF0s,aImF0s,aD0s, aReF0t,aImF0t,aD0t, h_Cf,i,tOffsetInput,tOffsetOutput,h_CPUPairs,fInterpScattLen);
+    GetEntireCfComplete2<<<fNBlocks,fNThreadsPerBlock,tSizeShared,tStreams[i]>>>(d_state1,d_state2,d_state3, aR, aReF0s,aImF0s,aD0s, aReF0t,aImF0t,aD0t, h_Cf,i,tOffsetInput,tOffsetOutput,h_CPUPairs);
   }
 //  timer.Stop();
 //  std::cout << "GetEntireCfComplete2 kernel finished in " << timer.Elapsed() << " ms" << std::endl;
