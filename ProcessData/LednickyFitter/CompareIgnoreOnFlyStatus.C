@@ -23,15 +23,19 @@ TCanvas* DrawKStarCfs(vector<vector<TH1*> > &aHistos, AnalysisType aAnType, Anal
 
   int tAnalysisNumber=0;
 
-  int tMarkerStyle = 20;
+  int tMarkerStyle1 = 20;
   int tMarkerStyle2 = 25;
-  int tMarkerColor = 1;
+
+  int tMarkerColor1 = 1;
+  int tMarkerColor2 = 1;
+
+
   double tMarkerSize = 0.5;
 
-  if(aAnType==kLamK0 || aAnType==kALamK0) tMarkerColor = 1;
-  else if(aAnType==kLamKchP || aAnType==kALamKchM) tMarkerColor = 2;
-  else if(aAnType==kLamKchM || aAnType==kALamKchP) tMarkerColor = 4;
-  else tMarkerColor=1;
+  if(aAnType==kLamK0 || aAnType==kALamK0) {tMarkerColor1 = kBlack; tMarkerColor2 = kGray+2;}
+  else if(aAnType==kLamKchP || aAnType==kALamKchM) {tMarkerColor1 = kRed; tMarkerColor2 = kRed+2;}
+  else if(aAnType==kLamKchM || aAnType==kALamKchP) {tMarkerColor1 = kBlue; tMarkerColor2 = kBlue+2;}
+  else {tMarkerColor1=1; tMarkerColor2=1;}
 
   for(int j=0; j<tNy; j++)
   {
@@ -40,8 +44,8 @@ TCanvas* DrawKStarCfs(vector<vector<TH1*> > &aHistos, AnalysisType aAnType, Anal
       tAnalysisNumber = j*tNx + i;
       //---------------------------------------------------------------------------------------------------------
 
-      tCanPart->AddGraph(i,j,aHistos[tAnalysisNumber][0],"",tMarkerStyle,tMarkerColor,tMarkerSize);
-      tCanPart->AddGraph(i,j,aHistos[tAnalysisNumber][1],"",tMarkerStyle2,tMarkerColor,tMarkerSize);
+      tCanPart->AddGraph(i,j,aHistos[tAnalysisNumber][0],"",tMarkerStyle1,tMarkerColor1,tMarkerSize);
+      tCanPart->AddGraph(i,j,aHistos[tAnalysisNumber][1],"",tMarkerStyle2,tMarkerColor2,tMarkerSize);
 
       TString tTextAnType;
       if(tAnalysisNumber==0 || tAnalysisNumber==2 || tAnalysisNumber==4) tTextAnType = TString(cAnalysisRootTags[aAnType]);
@@ -70,6 +74,77 @@ TCanvas* DrawKStarCfs(vector<vector<TH1*> > &aHistos, AnalysisType aAnType, Anal
   return tCanPart->GetCanvas();
 }
 
+//________________________________________________________________________________________________________________
+TCanvas* DrawRatios(vector<vector<TH1*> > &aHistos, AnalysisType aAnType, AnalysisType aConjType)
+{
+  TString tCanvasName = TString("canKStarCfsRatios");
+  tCanvasName += TString(cAnalysisBaseTags[aAnType]) + TString("wConj");
+
+  assert(aHistos.size()==6);
+  int tNx=2, tNy=3;
+
+
+  double tXLow = -0.02;
+  double tXHigh = 0.32;
+  double tYLow = 0.88;
+  double tYHigh = 1.05;
+  CanvasPartition* tCanPart = new CanvasPartition(tCanvasName,tNx,tNy,tXLow,tXHigh,tYLow,tYHigh,0.12,0.05,0.13,0.05);
+
+  int tAnalysisNumber=0;
+
+  int tMarkerStyle1 = 20;
+  int tMarkerColor1 = 1;
+  double tMarkerSize = 0.5;
+
+  if(aAnType==kLamK0 || aAnType==kALamK0) tMarkerColor1 = kBlack;
+  else if(aAnType==kLamKchP || aAnType==kALamKchM) tMarkerColor1 = kRed;
+  else if(aAnType==kLamKchM || aAnType==kALamKchP) tMarkerColor1 = kBlue;
+  else tMarkerColor1=1;
+
+  TH1* tRatio;
+  TString tRatioName;
+  for(int j=0; j<tNy; j++)
+  {
+    for(int i=0; i<tNx; i++)
+    {
+      tAnalysisNumber = j*tNx + i;
+      //---------------------------------------------------------------------------------------------------------
+      tRatioName = TString::Format("KStarCfRatios%s%d", cAnalysisBaseTags[aAnType], tAnalysisNumber);
+      tRatio = (TH1*)aHistos[tAnalysisNumber][0]->Clone(tRatioName);
+      tRatio->Divide((TH1*)aHistos[tAnalysisNumber][1]);
+      tCanPart->AddGraph(i,j,(TH1*)tRatio->Clone(tRatioName),"",tMarkerStyle1,tMarkerColor1,tMarkerSize);
+
+
+      TString tTextAnType;
+      if(tAnalysisNumber==0 || tAnalysisNumber==2 || tAnalysisNumber==4) tTextAnType = TString(cAnalysisRootTags[aAnType]);
+      else if(tAnalysisNumber==1 || tAnalysisNumber==3 || tAnalysisNumber==5) tTextAnType = TString(cAnalysisRootTags[aConjType]);
+      else assert(0);
+
+      TPaveText* tAnTypeName = tCanPart->SetupTPaveText(tTextAnType,i,j,0.8,0.85);
+      tCanPart->AddPadPaveText(tAnTypeName,i,j);
+
+      CentralityType tCentType;
+      if(tAnalysisNumber==0 || tAnalysisNumber==1) tCentType = k0010;
+      else if(tAnalysisNumber==2 || tAnalysisNumber==3) tCentType = k0010;
+      else if(tAnalysisNumber==4 || tAnalysisNumber==5) tCentType = k0010;
+      else assert(0);
+      TString tTextCentrality = TString(cPrettyCentralityTags[tCentType]);
+      TPaveText* tCentralityName = tCanPart->SetupTPaveText(tTextCentrality,i,j,0.05,0.85);
+      tCanPart->AddPadPaveText(tCentralityName,i,j);
+    }
+  }
+
+  tCanPart->SetDrawUnityLine(true);
+  tCanPart->DrawAll();
+  tCanPart->DrawXaxisTitle("k* (GeV/c)");
+  tCanPart->DrawYaxisTitle("C(k*)",43,25,0.05,0.75);
+
+  return tCanPart->GetCanvas();
+}
+
+//________________________________________________________________________________________________________________
+//****************************************************************************************************************
+//________________________________________________________________________________________________________________
 int main(int argc, char **argv) 
 {
   TApplication* theApp = new TApplication("App", &argc, argv);
@@ -81,7 +156,8 @@ int main(int argc, char **argv)
   tFullTimer.Start();
 //-----------------------------------------------------------------------------
   TString tResultsDate1 = "20161027";
-  TString tResultsDate2 = "20170505_ignoreOnFlyStatus";
+//  TString tResultsDate2 = "20170505_ignoreOnFlyStatus";
+  TString tResultsDate2 = "20171220_onFlyStatusFalse";
 
   AnalysisType tAnType = kLamKchP;
   AnalysisRunType tAnRunType = kTrain;
@@ -172,7 +248,7 @@ int main(int argc, char **argv)
   vector<vector<TH1*> > tHistos {{tCfPair0010_1,tCfPair0010_2}, {tCfConj0010_1,tCfConj0010_2}, {tCfPair1030_1,tCfPair1030_2}, {tCfConj1030_1,tCfConj1030_2}, {tCfPair3050_1,tCfPair3050_2}, {tCfConj3050_1,tCfConj3050_2} };
 
   TCanvas* tCan = DrawKStarCfs(tHistos, tAnType, tConjType);
-
+  TCanvas* tRatioCan = DrawRatios(tHistos, tAnType, tConjType);
 
 
 //-------------------------------------------------------------------------------

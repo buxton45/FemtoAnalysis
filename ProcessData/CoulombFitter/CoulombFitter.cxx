@@ -52,6 +52,9 @@ CoulombFitter::CoulombFitter(AnalysisType aAnalysisType, double aMaxFitKStar):
   fBohrRadius(-gBohrRadiusXiK),
 
   fPairKStar4dVec(0),
+
+  fBinSizeKStar(0.01),
+  fNbinsKStar(30),
   fNPairsPerKStarBin(16384),
   fCurrentRadii(0),
   fPairSample4dVec(0),
@@ -129,6 +132,9 @@ CoulombFitter::CoulombFitter(FitSharedAnalyses* aFitSharedAnalyses, double aMaxF
   fBohrRadius(gBohrRadiusXiK),
 
   fPairKStar4dVec(0),
+
+  fBinSizeKStar(0.01),
+  fNbinsKStar(30),
   fNPairsPerKStarBin(16384),
   fCurrentRadii(fNAnalyses, 1.),
   fPairSample4dVec(0),
@@ -409,12 +415,13 @@ td3dVec CoulombFitter::BuildPairKStar3dVecFull(TString aPairKStarNtupleDirName, 
     tRomanNumerals[16] = "XVII";
   //---------------------------------------------------
 
-  double tBinSize = (aKStarMax-aKStarMin)/aNbinsKStar;
-cout << "tBinSize = " << tBinSize << endl;
+  fNbinsKStar = aNbinsKStar;
+  double fBinSizeKStar = (aKStarMax-aKStarMin)/fNbinsKStar;
+cout << "fBinSizeKStar = " << fBinSizeKStar << endl;
 
   td3dVec tPairKStar3dVec;
     tPairKStar3dVec.clear();
-  tPairKStar3dVec.resize(aNbinsKStar, td2dVec(0,td1dVec(0)));
+  tPairKStar3dVec.resize(fNbinsKStar, td2dVec(0,td1dVec(0)));
 
 cout << "Pre: tPairKStar3dVec.size() = " << tPairKStar3dVec.size() << endl;
 
@@ -428,14 +435,14 @@ cout << "Pre: tPairKStar3dVec.size() = " << tPairKStar3dVec.size() << endl;
   {
     cout << "\t iFile = Bm" << iFile << endl;
     tFileLocation = aPairKStarNtupleDirName + TString("/") + aFileBaseName + TString("_Bm") + tRomanNumerals[iFile] + TString(".root");
-    ExtractPairKStar3dVecFromSingleFile(tFileLocation,tArrayName,tNtupleName,tBinSize,aNbinsKStar,tPairKStar3dVec);
+    ExtractPairKStar3dVecFromSingleFile(tFileLocation,tArrayName,tNtupleName,fBinSizeKStar,fNbinsKStar,tPairKStar3dVec);
   }
 
   for(int iFile=0; iFile<10; iFile++) //Bp files
   {
     cout << "\t iFile = Bp" << iFile << endl;
     tFileLocation = aPairKStarNtupleDirName + TString("/") + aFileBaseName + TString("_Bp") + tRomanNumerals[iFile] + TString(".root");
-    ExtractPairKStar3dVecFromSingleFile(tFileLocation,tArrayName,tNtupleName,tBinSize,aNbinsKStar,tPairKStar3dVec);
+    ExtractPairKStar3dVecFromSingleFile(tFileLocation,tArrayName,tNtupleName,fBinSizeKStar,fNbinsKStar,tPairKStar3dVec);
   }
 
   double duration = (std::clock() - start)/(double) CLOCKS_PER_SEC;
@@ -443,7 +450,7 @@ cout << "Pre: tPairKStar3dVec.size() = " << tPairKStar3dVec.size() << endl;
 
 
   cout << "Final: tPairKStar3dVec.size() = " << tPairKStar3dVec.size() << endl;
-  for(int i=0; i<aNbinsKStar; i++) cout << "i = " << i << "and tPairKStar3dVec[i].size() = " << tPairKStar3dVec[i].size() << endl;
+  for(int i=0; i<fNbinsKStar; i++) cout << "i = " << i << "and tPairKStar3dVec[i].size() = " << tPairKStar3dVec[i].size() << endl;
 
   return tPairKStar3dVec;
 }
@@ -677,8 +684,8 @@ tTimer.Start();
   fPairSample4dVec.resize(fNAnalyses, td3dVec(0, td2dVec(0, td1dVec(0))));
 
 //  double tBinSize = 0.01;  //TODO make this automated
-  double tBinSize = aBinSize;
-  int tNBinsKStar = std::round(fMaxFitKStar/tBinSize);  //TODO make this general, ie subtract 1 if fMaxFitKStar is on bin edge (maybe, maybe not bx of iKStarBin<tNBinsKStar)
+  double fBinSizeKStar = aBinSize;
+  int fNBinsKStar = std::round(fMaxFitKStar/fBinSizeKStar);  //TODO make this general, ie subtract 1 if fMaxFitKStar is on bin edge (maybe, maybe not bx of iKStarBin<tNBinsKStar)
 
   //Create the source Gaussians
   double tRoot2 = sqrt(2.);  //need this scale to get 4 on denominator of exp in normal dist instead of 2
@@ -707,12 +714,12 @@ tTimer.Start();
   for(int iAnaly=0; iAnaly<fNAnalyses; iAnaly++)
   {
     tTemp3dVec.clear();
-    for(int iKStarBin=0; iKStarBin<tNBinsKStar; iKStarBin++)
+    for(int iKStarBin=0; iKStarBin<fNBinsKStar; iKStarBin++)
     {
       if(!fUseRandomKStarVectors) tRandomKStarElement = std::uniform_int_distribution<int>(0.0, fPairKStar4dVec[iAnaly][iKStarBin].size()-1);
-      tKStarMagMin = iKStarBin*tBinSize;
+      tKStarMagMin = iKStarBin*fBinSizeKStar;
       if(iKStarBin==0) tKStarMagMin=0.004;  //TODO here and in ChargedResidualCf
-      tKStarMagMax = (iKStarBin+1)*tBinSize;
+      tKStarMagMax = (iKStarBin+1)*fBinSizeKStar;
       tTemp2dVec.clear();
       for(int iPair=0; iPair<fNPairsPerKStarBin; iPair++)
       {
@@ -1036,8 +1043,8 @@ cout << "\t aKStarMagMax = " << aKStarMagMax << endl;
   //TODO make this general
   //This is messing up around aKStarMagMin = 0.29, or bin 57/58
   //Probably fixed with use of std::round, but need to double check
-  double tBinSize = 0.01;
-  int tBin = std::round(aKStarMagMin/tBinSize);
+//  double tBinSize = 0.01;
+  int tBin = std::round(aKStarMagMin/fBinSizeKStar);
 /*
 cout << "In GetFitCfContent....." << endl;
 cout << "\t tBin = " << tBin << endl;
@@ -1173,8 +1180,8 @@ double CoulombFitter::GetFitCfContentwStaticPairs(double aKStarMagMin, double aK
   //TODO make this general
   //This is messing up around aKStarMagMin = 0.29, or bin 57/58
   //Probably fixed with use of std::round, but need to double check
-  double tBinSize = aKStarMagMax-aKStarMagMin;
-  int tBin = std::round(aKStarMagMin/tBinSize);
+//  double tBinSize = aKStarMagMax-aKStarMagMin;
+  int tBin = std::round(aKStarMagMin/fBinSizeKStar);
 
   //KStarMag = fPairSample4dVec[aAnalysisNumber][tBin][i][0]
   //RStarMag = fPairSample4dVec[aAnalysisNumber][tBin][i][1]
@@ -1258,8 +1265,8 @@ double CoulombFitter::GetFitCfContentComplete(double aKStarMagMin, double aKStar
   //TODO make this general
   //This is messing up around aKStarMagMin = 0.29, or bin 57/58
   //Probably fixed with use of std::round, but need to double check
-  double tBinSize = 0.01;
-  int tBin = std::round(aKStarMagMin/tBinSize);
+//  double tBinSize = 0.01;
+  int tBin = std::round(aKStarMagMin/fBinSizeKStar);
 
   //KStarMag = fPairKStar4dVec[aAnalysisNumber][tBin][i][0]
   //KStarOut = fPairKStar4dVec[aAnalysisNumber][tBin][i][1]
@@ -1430,8 +1437,8 @@ double CoulombFitter::GetFitCfContentCompletewStaticPairs(double aKStarMagMin, d
   //TODO make this general
   //This is messing up around aKStarMagMin = 0.29, or bin 57/58
   //Probably fixed with use of std::round, but need to double check
-  double tBinSize = 0.01;
-  int tBin = std::round(aKStarMagMin/tBinSize);
+//  double tBinSize = 0.01;
+  int tBin = std::round(aKStarMagMin/fBinSizeKStar);
 
   //KStarMag = fPairSample4dVec[aAnalysisNumber][tBin][i][0]
   //RStarMag = fPairSample4dVec[aAnalysisNumber][tBin][i][1]
@@ -1557,8 +1564,8 @@ double CoulombFitter::GetFitCfContentSerialv2(double aKStarMagMin, double aKStar
   //TODO make this general
   //This is messing up around aKStarMagMin = 0.29, or bin 57/58
   //Probably fixed with use of std::round, but need to double check
-  double tBinSize = 0.01;
-  int tBin = std::round(aKStarMagMin/tBinSize);
+//  double tBinSize = 0.01;
+  int tBin = std::round(aKStarMagMin/fBinSizeKStar);
 
   //KStarMag = fPairKStar4dVec[aAnalysisNumber][tBin][i][0]
   //KStarOut = fPairKStar4dVec[aAnalysisNumber][tBin][i][1]

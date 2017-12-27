@@ -11,7 +11,8 @@ int main(int argc, char **argv)
   ChronoTimer tFullTimer(kSec);
   tFullTimer.Start();
 //-----------------------------------------------------------------------------
-  TString tResultsDate = "20161027";
+//  TString tResultsDate = "20161027";
+  TString tResultsDate = "20171220_onFlyStatusFalse";
 
   AnalysisType tAnType = kLamKchP;
   AnalysisRunType tAnRunType = kTrain;
@@ -47,7 +48,7 @@ int main(int argc, char **argv)
   double aLambdaMin=0., aLambdaMax=1.;
   if(UnboundLambda) aLambdaMax=0.;
 
-  bool bZoomROP = false;
+  bool bZoomROP = true;
   bool bDrawResiduals = false;
 
 
@@ -57,8 +58,8 @@ int main(int argc, char **argv)
   {
     tAllShareSingleLambdaParam = true;
     UnboundLambda = false;
-    aLambdaMin = 0.1;  //TODO currently, if tIncludeResidualsType = kIncludeNoResiduals, this does nothing
-    aLambdaMax = 1.0;  //TODO "                                                                          "
+    aLambdaMin = 0.4;  //TODO currently, if tIncludeResidualsType = kIncludeNoResiduals, this does nothing
+    aLambdaMax = 0.6;  //TODO "                                                                          "
 
     if(tIncludeResidualsType != kIncludeNoResiduals)
     {
@@ -79,8 +80,8 @@ int main(int argc, char **argv)
   TString tFileLocationBase = TString::Format("%sResults_%s_%s",tDirectoryBase.Data(),tGeneralAnTypeName.Data(),tResultsDate.Data());
   TString tFileLocationBaseMC = TString::Format("%sResults_%sMC_%s",tDirectoryBase.Data(),tGeneralAnTypeName.Data(),tResultsDate.Data());
 
-  TString tSaveDirectoryBase = TString::Format("/home/jesse/Analysis/Presentations/AliFemto/20171108/Figures/%s/", cAnalysisBaseTags[tAnType]);
-
+//  TString tSaveDirectoryBase = TString::Format("/home/jesse/Analysis/Presentations/AliFemto/20171108/Figures/%s/", cAnalysisBaseTags[tAnType]);
+  TString tSaveDirectoryBase = tDirectoryBase;
 
   TString tSaveNameModifier = "";
   if(ApplyMomResCorrection) tSaveNameModifier += TString("_MomResCrctn");
@@ -121,7 +122,8 @@ int main(int argc, char **argv)
   tLamKchP->SetApplyNonFlatBackgroundCorrection(ApplyNonFlatBackgroundCorrection);
   tLamKchP->SetNonFlatBgdFitType(tNonFlatBgdFitType);
   tLamKchP->SetApplyMomResCorrection(ApplyMomResCorrection);
-  tLamKchP->SetIncludeResidualCorrelationsType(tIncludeResidualsType, aLambdaMin, aLambdaMax);
+  tLamKchP->SetIncludeResidualCorrelationsType(tIncludeResidualsType, aLambdaMin, aLambdaMax);  //TODO fix this in FitGenerator
+  if(!UnboundLambda) tLamKchP->SetAllLambdaParamLimits(aLambdaMin, aLambdaMax);
   tLamKchP->SetChargedResidualsType(tChargedResidualsType);
   tLamKchP->SetResPrimMaxDecayType(tResPrimMaxDecayType);
   if(FixRadii) 
