@@ -82,6 +82,12 @@ public:
   void SetFitType(FitType aFitType);
   FitType GetFitType();
 
+  void SetApplyNonFlatBackgroundCorrection(bool aApply);
+  bool GetApplyNonFlatBackgroundCorrection();
+
+  void SetNonFlatBgdFitType(NonFlatBgdFitType aFitType);
+  NonFlatBgdFitType GetNonFlatBgdFitType();
+
   TMinuit* GetMinuitObject();
   int GetNFitPairAnalysis();
 
@@ -112,6 +118,8 @@ public:
 private:
   TMinuit* fMinuit;
   FitType fFitType; //kChi2PML = default, or kChi2;
+  bool fApplyNonFlatBackgroundCorrection;
+  NonFlatBgdFitType fNonFlatBgdFitType; //kLinear = default
   int fNFitPairAnalysis;
 
   int fNFitParamsPerAnalysis;
@@ -139,8 +147,15 @@ private:
 //inline stuff
 
 inline int FitSharedAnalyses::GetNMinuitParams() {return fNMinuitParams;}
+
 inline void FitSharedAnalyses::SetFitType(FitType aFitType) {fFitType = aFitType;}
 inline FitType FitSharedAnalyses::GetFitType() {return fFitType;}
+
+inline void FitSharedAnalyses::SetApplyNonFlatBackgroundCorrection(bool aApply) {fApplyNonFlatBackgroundCorrection = aApply;}
+inline bool FitSharedAnalyses::GetApplyNonFlatBackgroundCorrection() {return fApplyNonFlatBackgroundCorrection;}
+
+inline void FitSharedAnalyses::SetNonFlatBgdFitType(NonFlatBgdFitType aFitType) {fNonFlatBgdFitType = aFitType;}
+inline NonFlatBgdFitType FitSharedAnalyses::GetNonFlatBgdFitType() {return fNonFlatBgdFitType;}
 
 inline TMinuit* FitSharedAnalyses::GetMinuitObject() {return fMinuit;}
 inline int FitSharedAnalyses::GetNFitPairAnalysis() {return fNFitPairAnalysis;}

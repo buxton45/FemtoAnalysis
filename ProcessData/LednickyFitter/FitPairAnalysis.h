@@ -65,9 +65,9 @@ public:
   void RebinKStarCfHeavy(int aRebinFactor, double aKStarMinNorm=0.32, double aKStarMaxNorm=0.4);
   void DrawKStarCfHeavy(TPad* aPad, int aMarkerColor=1, TString aOption = "", int aMarkerStyle=20);
 
-  TF1* GetNonFlatBackground_FitCombinedPartials(NonFlatBgdFitType aBgdFitType=kLinear, FitType aFitType=kChi2PML);
-  TF1* GetNonFlatBackground_CombinePartialFits(NonFlatBgdFitType aBgdFitType=kLinear, FitType aFitType=kChi2PML);
-  TF1* GetNonFlatBackground(NonFlatBgdFitType aBgdFitType=kLinear, FitType aFitType=kChi2PML, bool aCombinePartialFits=true);
+  TF1* GetNonFlatBackground_FitCombinedPartials(NonFlatBgdFitType aBgdFitType, FitType aFitType, bool aNormalizeFitToCf);
+  TF1* GetNonFlatBackground_CombinePartialFits(NonFlatBgdFitType aBgdFitType, FitType aFitType, bool aNormalizeFitToCf);
+  TF1* GetNonFlatBackground(NonFlatBgdFitType aBgdFitType, FitType aFitType, bool aNormalizeFitToCf, bool aCombinePartialFits);
 
   void CreateFitNormParameters();
   void ShareFitParameters(bool aIncludeSingletAndTriplet=false);
@@ -167,6 +167,8 @@ private:
 
   CfHeavy *fKStarCfHeavy;
   double fMinBgdFit, fMaxBgdFit;
+  bool fNormalizeBgdFitToCf;
+
   TF1* fPrimaryFit;
   TF1* fNonFlatBackground;
 

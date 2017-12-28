@@ -122,7 +122,7 @@ TCanvas* DrawAll(vector<LednickyFitter*> &aFitters, bool aMomResCorrectFit, bool
       //---------------------------------------------------------------------------------------------------------
 
       tCanPart->AddGraph(i,j,(TH1*)aFitters[j]->GetFitSharedAnalyses()->GetKStarCfHeavy(i)->GetHeavyCfClone(),"",20,tColor,0.5,"ex0");  //ex0 suppresses the error along x
-      tCanPart->AddGraph(i,j,(TF1*)aFitters[j]->GetFitSharedAnalyses()->GetFitPairAnalysis(i)->GetNonFlatBackground(aNonFlatBgdFitType, aFitType, true),"",20,tColorNonFlatBgd);
+      tCanPart->AddGraph(i,j,(TF1*)aFitters[j]->GetFitSharedAnalyses()->GetFitPairAnalysis(i)->GetNonFlatBackground(aNonFlatBgdFitType, aFitType, true, true),"",20,tColorNonFlatBgd);
       tCanPart->AddGraph(i,j,(TF1*)aFitters[j]->GetFitSharedAnalyses()->GetFitPairAnalysis(i)->GetPrimaryFit(),"");
       tCanPart->AddGraph(i,j,tCorrectedFitHisto,"",20,tColorCorrectFit,0.5,"lsame");
       if(aDrawSysErrors) tCanPart->AddGraph(i,j,tHistToPlot,"",20,tColorTransparent,0.5,"e2psame");

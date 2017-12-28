@@ -143,8 +143,9 @@ protected:
   bool fAllShareSingleLambdaParam;  //If true, only one lambda parameter for all analyses
   vector<vector<FitParameter> > fFitParamsPerPad; //Each 1d Vector = [Lambda,Radius,ReF0,ImF0,D0]
 
-  bool fApplyNonFlatBackgroundCorrection;
-  NonFlatBgdFitType fNonFlatBgdFitType;
+  bool fApplyNonFlatBackgroundCorrection; //TODO eliminate this in favor of fSharedAn->GetApplyNonFlatBackgroundCorrection
+  NonFlatBgdFitType fNonFlatBgdFitType;  //TODO eliminate this in favor of fSharedAn->GetNonFlatBgdType()
+                                         //TODO can probably eliminate other similar types of redundancies
   bool fApplyMomResCorrection;
 
   IncludeResidualsType fIncludeResidualsType;
@@ -195,8 +196,8 @@ inline TH1* FitGenerator::GetKStarCf(int aAnalysisNumber) {return fSharedAn->Get
 inline void FitGenerator::SetKStarMinMaxNorm(double aMin, double aMax) {fSharedAn->SetKStarMinMaxNorm(aMin, aMax);}
 inline void FitGenerator::SetMinMaxBgdFit(double aMin, double aMax) {fSharedAn->SetMinMaxBgdFit(aMin, aMax);}
 
-inline void FitGenerator::SetApplyNonFlatBackgroundCorrection(bool aApply) {fApplyNonFlatBackgroundCorrection = aApply;}
-inline void FitGenerator::SetNonFlatBgdFitType(NonFlatBgdFitType aNonFlatBgdFitType) {fNonFlatBgdFitType = aNonFlatBgdFitType;}
+inline void FitGenerator::SetApplyNonFlatBackgroundCorrection(bool aApply) {fApplyNonFlatBackgroundCorrection = aApply; fSharedAn->SetApplyNonFlatBackgroundCorrection(aApply);}
+inline void FitGenerator::SetNonFlatBgdFitType(NonFlatBgdFitType aNonFlatBgdFitType) {fNonFlatBgdFitType = aNonFlatBgdFitType; fSharedAn->SetNonFlatBgdFitType(aNonFlatBgdFitType);}
 inline void FitGenerator::SetApplyMomResCorrection(bool aApplyMomResCorrection) {fApplyMomResCorrection = aApplyMomResCorrection;}
 inline void FitGenerator::SetIncludeResidualCorrelationsType(IncludeResidualsType aIncludeResidualsType, double aMinLambda, double aMaxLambda) {fIncludeResidualsType = aIncludeResidualsType; if(aIncludeResidualsType != kIncludeNoResiduals) SetDefaultLambdaParametersWithResiduals(aMinLambda, aMaxLambda);}
 inline void FitGenerator::SetChargedResidualsType(ChargedResidualsType aChargedResidualsType) {fChargedResidualsType = aChargedResidualsType;}

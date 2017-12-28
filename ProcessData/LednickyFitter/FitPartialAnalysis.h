@@ -79,11 +79,11 @@ public:
   void BuildKStarCf(double aKStarMinNorm=0.32, double aKStarMaxNorm=0.4);
   void RebinKStarCf(int aRebinFactor, double aKStarMinNorm=0.32, double aKStarMaxNorm=0.4);
 
-  static TF1* FitNonFlatBackground(TH1* aNum, TH1* aDen, TH1* aCf, NonFlatBgdFitType aBgdFitType, FitType aFitType=kChi2PML, 
+  static TF1* FitNonFlatBackground(TH1* aNum, TH1* aDen, TH1* aCf, NonFlatBgdFitType aBgdFitType, FitType aFitType, bool aNormalizeFitToCf, 
                                    double aMinBgdFit=0.60, double aMaxBhdFit=0.90, double aKStarMinNorm=0.32, double aKStarMaxNorm=0.40);
-  static TF1* FitNonFlatBackground(TH1* aCf, NonFlatBgdFitType aBgdFitType=kLinear, 
+  static TF1* FitNonFlatBackground(TH1* aCf, NonFlatBgdFitType aBgdFitType, 
                                    double aMinBgdFit=0.6, double aMaxBgdFit=0.9, double aKStarMinNorm=0.32, double aKStarMaxNorm=0.40);
-  TF1* GetNonFlatBackground(NonFlatBgdFitType aBgdFitType=kLinear, FitType aFitType=kChi2PML);
+  TF1* GetNonFlatBackground(NonFlatBgdFitType aBgdFitType, FitType aFitType, bool aNormalizeFitToCf);
 
   void SetFitParameter(FitParameter* aParam);
 
@@ -147,6 +147,7 @@ private:
 
   CfLite *fKStarCfLite;
   double fMinBgdFit, fMaxBgdFit;
+  bool fNormalizeBgdFitToCf;
 
   int fNFitParams;
   FitParameter* fLambda;

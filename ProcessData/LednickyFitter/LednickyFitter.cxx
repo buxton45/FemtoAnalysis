@@ -317,19 +317,27 @@ void LednickyFitter::CalculateFitFunction(int &npar, double &chi2, double *par)
       if(fApplyMomResCorrection) tCorrectedFitCfContent = ApplyMomResCorrection(tFitCfContent, fKStarBinCenters, tMomResMatrix);
       else tCorrectedFitCfContent = tFitCfContent;
 
+      bool tNormalizeBgdFitToCf=false;
       if(fApplyNonFlatBackgroundCorrection)
       {
         TF1* tNonFlatBgd;
         //Note: If Bgd not modeled by linear function, grab tNonFlatBgd from pair analysis instead of partial analysis
         //      This greatly helps the fitter by stabilizing tNonFlatBgd
         //      Both methods give the same result when Bgd is linear
-        tNonFlatBgd = tFitPartialAnalysis->GetNonFlatBackground(fNonFlatBgdFitType, fFitSharedAnalyses->GetFitType());
+        tNonFlatBgd = tFitPartialAnalysis->GetNonFlatBackground(fNonFlatBgdFitType, fFitSharedAnalyses->GetFitType(), tNormalizeBgdFitToCf);
 
         ApplyNonFlatBackgroundCorrection(tCorrectedFitCfContent, fKStarBinCenters, tNonFlatBgd);
       }
 
       fCorrectedFitVecs[iAnaly][iPartAn] = tCorrectedFitCfContent;
       ApplyNormalization(tParPrim[5], tCorrectedFitCfContent);
+      if(fApplyNonFlatBackgroundCorrection && fFitSharedAnalyses->GetFitType()==kChi2PML && !tNormalizeBgdFitToCf)
+      {
+        //In this case, ApplyNonFlatBackgroundCorrection essentially takes care of the normalization, since it fits raw Num and Den
+        // ApplyNormalization applies a normalization that is very close to 1.  Therefore, for the plots in fCorrectedFitVecs to look pretty,
+        // I must scale them back up to around unity
+        ApplyNormalization(tKStarCfLite->GetDenScale()/tKStarCfLite->GetNumScale(), fCorrectedFitVecs[iAnaly][iPartAn]);
+      }
 
       for(int ix=0; ix < fNbinsXToFit; ix++)
       {

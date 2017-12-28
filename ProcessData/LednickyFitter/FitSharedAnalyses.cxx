@@ -19,6 +19,8 @@ ClassImp(FitSharedAnalyses)
 FitSharedAnalyses::FitSharedAnalyses(vector<FitPairAnalysis*> &aVecOfFitPairAnalyses) :
   fMinuit(0),
   fFitType(kChi2PML),
+  fApplyNonFlatBackgroundCorrection(false),
+  fNonFlatBgdFitType(kLinear),
   fNFitPairAnalysis(aVecOfFitPairAnalyses.size()),
   fNFitParamsPerAnalysis(0),
   fNFitNormParamsPerAnalysis(0),
@@ -56,6 +58,8 @@ FitSharedAnalyses::FitSharedAnalyses(vector<FitPairAnalysis*> &aVecOfFitPairAnal
 FitSharedAnalyses::FitSharedAnalyses(vector<FitPairAnalysis*> &aVecOfFitPairAnalyses, vector<ParameterType> &aVecOfSharedParameterTypes) :
   fMinuit(0),
   fFitType(kChi2PML),
+  fApplyNonFlatBackgroundCorrection(false),
+  fNonFlatBgdFitType(kLinear),
   fNFitPairAnalysis(aVecOfFitPairAnalyses.size()),
   fNFitParamsPerAnalysis(0),
   fNFitNormParamsPerAnalysis(0),
@@ -415,26 +419,28 @@ void FitSharedAnalyses::CreateMinuitParametersMatrix()
   }
 
   vector<FitParameter*> tempNormVec;
+  double tNormStartValue = 1.;
   for(int iAnaly=0; iAnaly<fNFitPairAnalysis; iAnaly++)
   {
     //tempNormVec.clear();
     tempNormVec = fFitPairAnalysisCollection[iAnaly]->GetFitNormParameters();
     assert((int)tempNormVec.size() == fNFitNormParamsPerAnalysis);
+    assert((int)tempNormVec.size() == fFitPairAnalysisCollection[iAnaly]->GetNFitPartialAnalysis());  //always let each have own normalization, so I can't forsee
+                                                                                                      //when this would ever fail
 
-    if(fFitType==kChi2)
+    for(int iPartAn=0; iPartAn<fFitPairAnalysisCollection[iAnaly]->GetNFitPartialAnalysis(); iPartAn++)
     {
-      for(int i=0; i<(int)tempNormVec.size(); i++)
+      if(!fApplyNonFlatBackgroundCorrection && fFitType==kChi2PML)  //any other cases where norm != 1?
       {
-        tempNormVec[i]->SetStartValue(1.);
+        double tNumScale=0., tDenScale=0.;
+        tNumScale = fFitPairAnalysisCollection[iAnaly]->GetFitPartialAnalysis(iPartAn)->GetKStarNumScale();
+        tDenScale = fFitPairAnalysisCollection[iAnaly]->GetFitPartialAnalysis(iPartAn)->GetKStarDenScale();
+        tNormStartValue = tNumScale/tDenScale;
       }
-    }
+      else tNormStartValue = 1.;
+      tempNormVec[iPartAn]->SetStartValue(tNormStartValue);
 
-    if(fFixNormParams)
-    {
-      for(int i=0; i<(int)tempNormVec.size(); i++)
-      {
-        tempNormVec[i]->SetFixed(true);
-      }
+      if(fFixNormParams) tempNormVec[iPartAn]->SetFixed(true);
     }
 
     fMinuitFitParametersMatrix.push_back(tempNormVec);

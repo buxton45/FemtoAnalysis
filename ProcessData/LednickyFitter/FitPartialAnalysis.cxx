@@ -43,6 +43,7 @@ FitPartialAnalysis::FitPartialAnalysis(TString aFileLocation, TString aAnalysisN
 
   fMinBgdFit(0.60),
   fMaxBgdFit(0.90),
+  fNormalizeBgdFitToCf(false),
 
   fNFitParams(5),  //should be initialized here to the correct number of parameters, excluding fNorm
   fLambda(0),
@@ -182,6 +183,7 @@ FitPartialAnalysis::FitPartialAnalysis(TString aFileLocation, TString aFileLocat
 
   fMinBgdFit(0.60),
   fMaxBgdFit(0.90),
+  fNormalizeBgdFitToCf(false),
 
   fNFitParams(5),  //should be initialized here to the correct number of parameters, excluding fNorm
   fLambda(0),
@@ -537,10 +539,10 @@ void FitPartialAnalysis::RebinKStarCf(int aRebinFactor, double aKStarMinNorm, do
 
 
 //________________________________________________________________________________________________________________
-TF1* FitPartialAnalysis::FitNonFlatBackground(TH1* aNum, TH1* aDen, TH1* aCf, NonFlatBgdFitType aBgdFitType, FitType aFitType, 
+TF1* FitPartialAnalysis::FitNonFlatBackground(TH1* aNum, TH1* aDen, TH1* aCf, NonFlatBgdFitType aBgdFitType, FitType aFitType, bool aNormalizeFitToCf, 
                                               double aMinBgdFit, double aMaxBgdFit, double aKStarMinNorm, double aKStarMaxNorm)
 {
-  BackgroundFitter* tBgdFitter = new BackgroundFitter(aNum, aDen, aCf, aBgdFitType, aFitType, aMinBgdFit, aMaxBgdFit, aKStarMinNorm, aKStarMaxNorm);
+  BackgroundFitter* tBgdFitter = new BackgroundFitter(aNum, aDen, aCf, aBgdFitType, aFitType, aNormalizeFitToCf, aMinBgdFit, aMaxBgdFit, aKStarMinNorm, aKStarMaxNorm);
   tBgdFitter->GetMinuitObject()->SetFCN(GlobalBgdFCN);
   GlobalBgdFitter = tBgdFitter;
 
@@ -557,22 +559,24 @@ TF1* FitPartialAnalysis::FitNonFlatBackground(TH1* aCf, NonFlatBgdFitType aBgdFi
   TH1* tDummyNum=nullptr;
   TH1* tDummyDen=nullptr;
 
-  return FitNonFlatBackground(tDummyNum, tDummyDen, aCf, aBgdFitType, kChi2, aMinBgdFit, aMaxBgdFit, aKStarMinNorm, aKStarMaxNorm);
+  return FitNonFlatBackground(tDummyNum, tDummyDen, aCf, aBgdFitType, kChi2, false, aMinBgdFit, aMaxBgdFit, aKStarMinNorm, aKStarMaxNorm);
 }
 
 
 //________________________________________________________________________________________________________________
-TF1* FitPartialAnalysis::GetNonFlatBackground(NonFlatBgdFitType aBgdFitType, FitType aFitType)
+TF1* FitPartialAnalysis::GetNonFlatBackground(NonFlatBgdFitType aBgdFitType, FitType aFitType, bool aNormalizeFitToCf)
 {
-  if(fNonFlatBackground) return fNonFlatBackground;
+  if(fNonFlatBackground && aNormalizeFitToCf==fNormalizeBgdFitToCf) return fNonFlatBackground;
 
+  fNormalizeBgdFitToCf = aNormalizeFitToCf;
   if(aFitType==kChi2PML)
   {
-    fNonFlatBackground = FitNonFlatBackground(fKStarCfLite->Num(), fKStarCfLite->Den(), fKStarCfLite->Cf(), aBgdFitType, aFitType, 
+    fNonFlatBackground = FitNonFlatBackground(fKStarCfLite->Num(), fKStarCfLite->Den(), fKStarCfLite->Cf(), aBgdFitType, aFitType, aNormalizeFitToCf, 
                                               fMinBgdFit, fMaxBgdFit, fKStarCfLite->GetMinNorm(), fKStarCfLite->GetMaxNorm());
   }
   else if(aFitType==kChi2)
   {
+    assert(!aNormalizeFitToCf);  //It is already normalized by fitting to Cf
     fNonFlatBackground = FitNonFlatBackground(fKStarCfLite->Cf(), aBgdFitType, fMinBgdFit, fMaxBgdFit, fKStarCfLite->GetMinNorm(), fKStarCfLite->GetMaxNorm());
   }
   else assert(0);
