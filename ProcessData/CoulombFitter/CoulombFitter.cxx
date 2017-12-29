@@ -1114,11 +1114,8 @@ cout << "\t aKStarMagMin = " << aKStarMagMin << "\t aKStarMagMax = " << aKStarMa
     cout << "\t\t\tWARNING:: tNMathematica > 1/5 of pairs!!!!!!!!!!!!!!!!!!" << endl;
     cout << "\t\t\t\taKStarMagMin = " << aKStarMagMin << endl;
     cout << "\t\t\t\taKStarMagMax = " << aKStarMagMax << endl;
-    cout << "\t\t\t\tpar[0] = " << par[0] << endl;
-    cout << "\t\t\t\tpar[1] = " << par[1] << endl;
-    cout << "\t\t\t\tpar[2] = " << par[2] << endl;
-    cout << "\t\t\t\tpar[3] = " << par[3] << endl;
-    cout << "\t\t\t\tpar[4] = " << par[4] << endl << endl;
+    PrintCurrentParamValues(fFitSharedAnalyses->GetNMinuitParams(),par);
+    cout << endl << endl;
   }
 
   return tReturnCfContent;
@@ -1216,11 +1213,8 @@ double CoulombFitter::GetFitCfContentwStaticPairs(double aKStarMagMin, double aK
     cout << "\t\t\tWARNING:: tNMathematica > 1/5 of pairs!!!!!!!!!!!!!!!!!!" << endl;
     cout << "\t\t\t\taKStarMagMin = " << aKStarMagMin << endl;
     cout << "\t\t\t\taKStarMagMax = " << aKStarMagMax << endl;
-    cout << "\t\t\t\tpar[0] = " << par[0] << endl;
-    cout << "\t\t\t\tpar[1] = " << par[1] << endl;
-    cout << "\t\t\t\tpar[2] = " << par[2] << endl;
-    cout << "\t\t\t\tpar[3] = " << par[3] << endl;
-    cout << "\t\t\t\tpar[4] = " << par[4] << endl << endl;
+    PrintCurrentParamValues(fFitSharedAnalyses->GetNMinuitParams(),par);
+    cout << endl << endl;
   }
 
   return tReturnCfContent;
@@ -1383,14 +1377,8 @@ double CoulombFitter::GetFitCfContentComplete(double aKStarMagMin, double aKStar
     cout << "\t\t\tWARNING:: tNMathematica > 1/5 of pairs!!!!!!!!!!!!!!!!!!" << endl;
     cout << "\t\t\t\taKStarMagMin = " << aKStarMagMin << endl;
     cout << "\t\t\t\taKStarMagMax = " << aKStarMagMax << endl;
-    cout << "\t\t\t\tpar[0] = " << par[0] << endl;
-    cout << "\t\t\t\tpar[1] = " << par[1] << endl;
-    cout << "\t\t\t\tpar[2] = " << par[2] << endl;
-    cout << "\t\t\t\tpar[3] = " << par[3] << endl;
-    cout << "\t\t\t\tpar[4] = " << par[4] << endl;
-    cout << "\t\t\t\tpar[5] = " << par[5] << endl;
-    cout << "\t\t\t\tpar[6] = " << par[6] << endl;
-    cout << "\t\t\t\tpar[7] = " << par[7] << endl << endl;
+    PrintCurrentParamValues(fFitSharedAnalyses->GetNMinuitParams(),par);
+    cout << endl << endl;
   }
 
   return tReturnCfContent;
@@ -1515,14 +1503,8 @@ double CoulombFitter::GetFitCfContentCompletewStaticPairs(double aKStarMagMin, d
     cout << "\t\t\tWARNING:: tNMathematica > 1/5 of pairs!!!!!!!!!!!!!!!!!!" << endl;
     cout << "\t\t\t\taKStarMagMin = " << aKStarMagMin << endl;
     cout << "\t\t\t\taKStarMagMax = " << aKStarMagMax << endl;
-    cout << "\t\t\t\tpar[0] = " << par[0] << endl;
-    cout << "\t\t\t\tpar[1] = " << par[1] << endl;
-    cout << "\t\t\t\tpar[2] = " << par[2] << endl;
-    cout << "\t\t\t\tpar[3] = " << par[3] << endl;
-    cout << "\t\t\t\tpar[4] = " << par[4] << endl;
-    cout << "\t\t\t\tpar[5] = " << par[5] << endl;
-    cout << "\t\t\t\tpar[6] = " << par[6] << endl;
-    cout << "\t\t\t\tpar[7] = " << par[7] << endl << endl;
+    PrintCurrentParamValues(fFitSharedAnalyses->GetNMinuitParams(),par);
+    cout << endl << endl;
   }
 
   return tReturnCfContent;
@@ -1670,55 +1652,7 @@ tTotalTimer.Start();
   fNCalls++;
 
   cout << "\tfNCalls = " << fNCalls << endl;
-  PrintCurrentParamValues(fFitSharedAnalyses->GetNMinuitParams(),par);
-/*
-  if(fIncludeSingletAndTriplet)
-  {
-    cout << "\t\tParameter update: " << endl;
-    cout << "\t\t\tpar[0] = Lambda = " << par[0] << endl;
-    cout << "\t\t\tpar[1] = Radius = " << par[1] << endl;
-
-    cout << "\t\t\tpar[2] = ReF0s  = " << par[2] << endl;
-    cout << "\t\t\tpar[3] = ImF0s  = " << par[3] << endl;
-    cout << "\t\t\tpar[4] = D0s    = " << par[4] << endl;
-
-    cout << "\t\t\tpar[5] = ReF0t  = " << par[5] << endl;
-    cout << "\t\t\tpar[6] = ImF0t  = " << par[6] << endl;
-    cout << "\t\t\tpar[7] = D0t    = " << par[7] << endl;
-
-    cout << "\t\t\tpar[8] = Norm1  = " << par[8] << endl;
-    cout << "\t\t\tpar[9] = Norm2  = " << par[9] << endl;
-    cout << "\t\t\tpar[10] = Norm3 = " << par[10] << endl;
-    cout << "\t\t\tpar[11] = Norm4 = " << par[11] << endl;
-    cout << "\t\t\tpar[12] = Norm5 = " << par[12] << endl;
-    cout << "\t\t\tpar[13] = Norm6 = " << par[13] << endl;
-    cout << "\t\t\tpar[14] = Norm7 = " << par[14] << endl;
-    cout << "\t\t\tpar[15] = Norm8 = " << par[15] << endl;
-    cout << "\t\t\tpar[16] = Norm9 = " << par[16] << endl;
-    cout << "\t\t\tpar[17] = Norm10= " << par[17] << endl;
-  }
-  else
-  {
-    cout << "\t\tParameter update: " << endl;
-    cout << "\t\t\tpar[0] = Lambda = " << par[0] << endl;
-    cout << "\t\t\tpar[1] = Radius = " << par[1] << endl;
-
-    cout << "\t\t\tpar[2] = ReF0  = " << par[2] << endl;
-    cout << "\t\t\tpar[3] = ImF0  = " << par[3] << endl;
-    cout << "\t\t\tpar[4] = D0    = " << par[4] << endl;
-
-    cout << "\t\t\tpar[8] = Norm1  = " << par[5] << endl;
-    cout << "\t\t\tpar[9] = Norm2  = " << par[6] << endl;
-    cout << "\t\t\tpar[10] = Norm3 = " << par[7] << endl;
-    cout << "\t\t\tpar[11] = Norm4 = " << par[8] << endl;
-    cout << "\t\t\tpar[12] = Norm5 = " << par[9] << endl;
-    cout << "\t\t\tpar[13] = Norm6 = " << par[10] << endl;
-    cout << "\t\t\tpar[14] = Norm7 = " << par[11] << endl;
-    cout << "\t\t\tpar[15] = Norm8 = " << par[12] << endl;
-    cout << "\t\t\tpar[16] = Norm9 = " << par[13] << endl;
-    cout << "\t\t\tpar[17] = Norm10= " << par[14] << endl;
-  }
-*/
+  if(fVerbose) PrintCurrentParamValues(fFitSharedAnalyses->GetNMinuitParams(),par);
   //--------------------------------------------------------------
 
   int tNFitParPerAnalysis;
@@ -1906,54 +1840,7 @@ tTotalTimer.Start();
   fNCalls++;
 
   cout << "\tfNCalls = " << fNCalls << endl;
-
-  if(fIncludeSingletAndTriplet)
-  {
-    cout << "\t\tParameter update: " << endl;
-    cout << "\t\t\tpar[0] = Lambda = " << par[0] << endl;
-    cout << "\t\t\tpar[1] = Radius = " << par[1] << endl;
-
-    cout << "\t\t\tpar[2] = ReF0s  = " << par[2] << endl;
-    cout << "\t\t\tpar[3] = ImF0s  = " << par[3] << endl;
-    cout << "\t\t\tpar[4] = D0s    = " << par[4] << endl;
-
-    cout << "\t\t\tpar[5] = ReF0t  = " << par[5] << endl;
-    cout << "\t\t\tpar[6] = ImF0t  = " << par[6] << endl;
-    cout << "\t\t\tpar[7] = D0t    = " << par[7] << endl;
-
-    cout << "\t\t\tpar[8] = Norm1  = " << par[8] << endl;
-    cout << "\t\t\tpar[9] = Norm2  = " << par[9] << endl;
-    cout << "\t\t\tpar[10] = Norm3 = " << par[10] << endl;
-    cout << "\t\t\tpar[11] = Norm4 = " << par[11] << endl;
-    cout << "\t\t\tpar[12] = Norm5 = " << par[12] << endl;
-    cout << "\t\t\tpar[13] = Norm6 = " << par[13] << endl;
-    cout << "\t\t\tpar[14] = Norm7 = " << par[14] << endl;
-    cout << "\t\t\tpar[15] = Norm8 = " << par[15] << endl;
-    cout << "\t\t\tpar[16] = Norm9 = " << par[16] << endl;
-    cout << "\t\t\tpar[17] = Norm10= " << par[17] << endl;
-  }
-  else
-  {
-    cout << "\t\tParameter update: " << endl;
-    cout << "\t\t\tpar[0] = Lambda = " << par[0] << endl;
-    cout << "\t\t\tpar[1] = Radius = " << par[1] << endl;
-
-    cout << "\t\t\tpar[2] = ReF0  = " << par[2] << endl;
-    cout << "\t\t\tpar[3] = ImF0  = " << par[3] << endl;
-    cout << "\t\t\tpar[4] = D0    = " << par[4] << endl;
-
-    cout << "\t\t\tpar[8] = Norm1  = " << par[5] << endl;
-    cout << "\t\t\tpar[9] = Norm2  = " << par[6] << endl;
-    cout << "\t\t\tpar[10] = Norm3 = " << par[7] << endl;
-    cout << "\t\t\tpar[11] = Norm4 = " << par[8] << endl;
-    cout << "\t\t\tpar[12] = Norm5 = " << par[9] << endl;
-    cout << "\t\t\tpar[13] = Norm6 = " << par[10] << endl;
-    cout << "\t\t\tpar[14] = Norm7 = " << par[11] << endl;
-    cout << "\t\t\tpar[15] = Norm8 = " << par[12] << endl;
-    cout << "\t\t\tpar[16] = Norm9 = " << par[13] << endl;
-    cout << "\t\t\tpar[17] = Norm10= " << par[14] << endl;
-  }
-
+  if(fVerbose) PrintCurrentParamValues(fFitSharedAnalyses->GetNMinuitParams(),par);
   //--------------------------------------------------------------
 
   int tNFitParPerAnalysis;
