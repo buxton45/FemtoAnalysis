@@ -157,7 +157,9 @@ int main(int argc, char **argv)
 //-----------------------------------------------------------------------------
   TString tResultsDate1 = "20161027";
 //  TString tResultsDate2 = "20170505_ignoreOnFlyStatus";
-  TString tResultsDate2 = "20171220_onFlyStatusFalse";
+//  TString tResultsDate2 = "20171220_onFlyStatusFalse";
+  TString tResultsDate2 = "20171227";
+//  TString tResultsDate2 = "20171227_LHC10h";
 
   AnalysisType tAnType = kLamKchP;
   AnalysisRunType tAnRunType = kTrain;
