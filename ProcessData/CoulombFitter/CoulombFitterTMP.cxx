@@ -25,17 +25,26 @@ double gMaxFitKStar;
 
 //________________________________________________________________________________________________________________
 CoulombFitter::CoulombFitter(FitSharedAnalyses* aFitSharedAnalyses, double aMaxFitKStar):
-  LednickyFitter(aFitSharedAnalyses, aMaxFitKStar),
-
+  fVerbose(true),
   fTurnOffCoulomb(false),
   fInterpHistsLoaded(false),
   fIncludeSingletAndTriplet(true),
   fUseRandomKStarVectors(false),
   fUseStaticPairs(false),
 
+  fApplyNonFlatBackgroundCorrection(false), //TODO change deault to true here AND in CoulombFitter
+  fApplyMomResCorrection(false), //TODO change default to true here AND LednickyFitter
+  fIncludeResidualCorrelations(false),  //TODO change deault to true here AND in CoulombFitter
+  fResidualsInitiated(false),
+  fReturnPrimaryWithResidualsToAnalyses(false),
+  fNonFlatBgdFitType(kLinear),
 
   fNCalls(0),
   fFakeCf(0),
+
+  fFitSharedAnalyses(aFitSharedAnalyses),
+  fMinuit(fFitSharedAnalyses->GetMinuitObject()),
+  fNAnalyses(fFitSharedAnalyses->GetNFitPairAnalysis()),
 
   fSimCoulombCf(nullptr),
   fWaveFunction(0),
@@ -59,13 +68,35 @@ CoulombFitter::CoulombFitter(FitSharedAnalyses* aFitSharedAnalyses, double aMaxF
   fHyperGeo1F1ImagHist(0),
 
   fMinInterpKStar(0), fMinInterpRStar(0), fMinInterpTheta(0),
-  fMaxInterpKStar(0), fMaxInterpRStar(0), fMaxInterpTheta(0)
+  fMaxInterpKStar(0), fMaxInterpRStar(0), fMaxInterpTheta(0),
+
+  fCfsToFit(fNAnalyses),
+  fFits(fNAnalyses),
+  fMaxFitKStar(aMaxFitKStar),
+  fRejectOmega(false),
+  fChi2(0),
+  fChi2GlobalMin(1000000000),
+  fChi2Vec(fNAnalyses),
+  fNpFits(0),
+  fNpFitsVec(fNAnalyses),
+  fNDF(0),
+  fErrFlg(0),
+  fMinParams(0),
+  fParErrors(0)
 
 {
+  int tNFitPartialAnalysis = fFitSharedAnalyses->GetFitPairAnalysis(0)->GetNFitPartialAnalysis();
+  fCorrectedFitVecs.resize(fNAnalyses, td2dVec(tNFitPartialAnalysis));
+
   gRandom->SetSeed();
 
   fWaveFunction = new WaveFunction();
   SetCoulombAttributes(fFitSharedAnalyses->GetFitPairAnalysis(0)->GetAnalysisType());
+
+  for(int i=0; i<fNAnalyses; i++)
+  {
+    //fCfsToFit[i] = fFitSharedAnalyses->GetPairAnalysis(i)->GetCf();
+  }
 
   omp_set_num_threads(3);
 
@@ -75,19 +106,27 @@ CoulombFitter::CoulombFitter(FitSharedAnalyses* aFitSharedAnalyses, double aMaxF
 
 //________________________________________________________________________________________________________________
 CoulombFitter::CoulombFitter(AnalysisType aAnalysisType, double aMaxFitKStar):
-  LednickyFitter(aAnalysisType, aMaxFitKStar),
-
+  fVerbose(true),
   fTurnOffCoulomb(false),
   fInterpHistsLoaded(false),
   fIncludeSingletAndTriplet(true),
   fUseRandomKStarVectors(false),
   fUseStaticPairs(false),
 
+  fApplyNonFlatBackgroundCorrection(false), //TODO change deault to true here AND in CoulombFitter
+  fApplyMomResCorrection(false), //TODO change default to true here AND LednickyFitter
+  fIncludeResidualCorrelations(false),  //TODO change deault to true here AND in CoulombFitter
+  fResidualsInitiated(false),
+  fReturnPrimaryWithResidualsToAnalyses(false),
+  fNonFlatBgdFitType(kLinear),
 
   fNCalls(0),
   fFakeCf(0),
 
-
+  fFitSharedAnalyses(nullptr),
+  fMinuit(nullptr),
+  fNAnalyses(0),
+  fCorrectedFitVecs(0),
 
   fSimCoulombCf(nullptr),
   fWaveFunction(0),
@@ -111,15 +150,33 @@ CoulombFitter::CoulombFitter(AnalysisType aAnalysisType, double aMaxFitKStar):
   fHyperGeo1F1ImagHist(0),
 
   fMinInterpKStar(0), fMinInterpRStar(0), fMinInterpTheta(0),
-  fMaxInterpKStar(0), fMaxInterpRStar(0), fMaxInterpTheta(0)
+  fMaxInterpKStar(0), fMaxInterpRStar(0), fMaxInterpTheta(0),
+
+
+  fCfsToFit(0),
+  fFits(0),
+  fMaxFitKStar(aMaxFitKStar),
+  fRejectOmega(false),
+  fChi2(0),
+  fChi2GlobalMin(1000000000),
+  fChi2Vec(0),
+  fNpFits(0),
+  fNpFitsVec(0),
+  fNDF(0),
+  fErrFlg(0),
+  fMinParams(0),
+  fParErrors(0)
 
 {
+//  int tNFitPartialAnalysis = fFitSharedAnalyses->GetFitPairAnalysis(0)->GetNFitPartialAnalysis();
+//  fCorrectedFitVecs.resize(fNAnalyses, td2dVec(tNFitPartialAnalysis));
+
   gRandom->SetSeed();
   fWaveFunction = new WaveFunction();
   SetCoulombAttributes(aAnalysisType);
   omp_set_num_threads(3);
 
-  fNAnalyses=1;  //TODO I don't think I need this anymore, since it's in LednickyFitter constructor
+  fNAnalyses=1;
   fCurrentRadii = td1dVec(fNAnalyses, 1.);
   fUseRandomKStarVectors = true;
   SetUseStaticPairs(true,16384);
@@ -1642,6 +1699,13 @@ double CoulombFitter::GetFitCfContentSerialv2(double aKStarMagMin, double aKStar
   return tReturnCfContent;
 }
 
+//________________________________________________________________________________________________________________
+void CoulombFitter::PrintCurrentParamValues(int aNpar, double* aPar)
+{
+  for(int i=0; i<aNpar; i++) cout << "par[" << i << "] = " << aPar[i] << endl;
+  cout << endl;
+}
+
 
 //________________________________________________________________________________________________________________
 bool CoulombFitter::AreParamsSame(double *aCurrent, double *aNew, int aNEntries)
@@ -1658,6 +1722,23 @@ bool CoulombFitter::AreParamsSame(double *aCurrent, double *aNew, int aNEntries)
   }
 
   return tAreSame;
+}
+
+
+//________________________________________________________________________________________________________________
+double CoulombFitter::GetChi2Value(int aKStarBin, TH1* aCfToFit, double aFitVal)
+{
+    double tChi = (aCfToFit->GetBinContent(aKStarBin) - aFitVal)/aCfToFit->GetBinError(aKStarBin);
+    return tChi*tChi;
+}
+
+//________________________________________________________________________________________________________________
+double CoulombFitter::GetPmlValue(double aNumContent, double aDenContent, double aCfContent)
+{
+  double tTerm1 = aNumContent*log(  (aCfContent*(aNumContent+aDenContent)) / (aNumContent*(aCfContent+1))  );
+  double tTerm2 = aDenContent*log(  (aNumContent+aDenContent) / (aDenContent*(aCfContent+1))  );
+  double tChi2PML = -2.0*(tTerm1+tTerm2);
+  return tChi2PML;
 }
 
 
@@ -1893,6 +1974,41 @@ tTotalTimer.PrintInterval();
   fFitSharedAnalyses->GetFitChi2Histograms()->FillHistograms(fChi2,tParamsForHistograms);
   delete[] tParamsForHistograms;
 }
+
+
+//________________________________________________________________________________________________________________
+vector<double> CoulombFitter::ApplyMomResCorrection(vector<double> &aCf, vector<double> &aKStarBinCenters, TH2* aMomResMatrix)
+{
+  //TODO probably rebin aMomResMatrix to match bin size of aCf
+  //TODO do in both this AND LednickyFitter
+
+  unsigned int tKStarRecBin, tKStarTrueBin;
+  double tKStarRec, tKStarTrue;
+  assert(aCf.size() == aKStarBinCenters.size());
+  assert(aCf.size() == (unsigned int)aMomResMatrix->GetNbinsX());
+  assert(aCf.size() == (unsigned int)aMomResMatrix->GetNbinsY());
+
+  vector<double> tReturnCf(aCf.size(),0.);
+  vector<double> tNormVec(aCf.size(),0.);  //TODO once I match bin size, I should be able to call /= by integral, instead of tracking normVec
+
+  for(unsigned int i=0; i<aCf.size(); i++)
+  {
+    tKStarRec = aKStarBinCenters[i];
+    tKStarRecBin = aMomResMatrix->GetYaxis()->FindBin(tKStarRec);
+
+    for(unsigned int j=0; j<aCf.size(); j++)
+    {
+      tKStarTrue = aKStarBinCenters[j];
+      tKStarTrueBin = aMomResMatrix->GetXaxis()->FindBin(tKStarTrue);
+
+      tReturnCf[i] += aCf[j]*aMomResMatrix->GetBinContent(tKStarTrueBin,tKStarRecBin);
+      tNormVec[i] += aMomResMatrix->GetBinContent(tKStarTrueBin,tKStarRecBin);
+    }
+    tReturnCf[i] /= tNormVec[i];
+  }
+  return tReturnCf;
+}
+
 
 
 //________________________________________________________________________________________________________________
@@ -2150,6 +2266,26 @@ tTotalTimer.PrintInterval();
 }
 
 
+
+//________________________________________________________________________________________________________________
+void CoulombFitter::ApplyNonFlatBackgroundCorrection(vector<double> &aCf, vector<double> &aKStarBinCenters, TF1* aNonFlatBgd)
+{
+  assert(aCf.size() == aKStarBinCenters.size());
+  for(unsigned int i=0; i<aCf.size(); i++)
+  {
+    aCf[i] = aCf[i]*aNonFlatBgd->Eval(aKStarBinCenters[i]);
+  }
+}
+
+
+//________________________________________________________________________________________________________________
+void CoulombFitter::ApplyNormalization(double aNorm, td1dVec &aCf)
+{
+  for(unsigned int i=0; i<aCf.size(); i++) aCf[i] *= aNorm;
+}
+
+
+
 //________________________________________________________________________________________________________________
 void CoulombFitter::CalculateFitFunction(int &npar, double &chi2, double *par)
 {
@@ -2179,7 +2315,7 @@ void CoulombFitter::CalculateFitFunction(int &npar, double &chi2, double *par)
   int tNbinsXToBuildMomResCrctn=0, tNbinsXToBuildResiduals=0;
   int tNbinsXToBuildGlobal;  // when applying momentum resolution corrections, many times you must go beyond fitting range to apply correction
   if(fApplyMomResCorrection) tNbinsXToBuildMomResCrctn = fFitSharedAnalyses->GetFitPairAnalysis(0)->GetModelKStarTrueVsRecMixed()->GetNbinsX();
-  if(fIncludeResidualsType != kIncludeNoResiduals) tNbinsXToBuildResiduals = fFitSharedAnalyses->GetFitPairAnalysis(0)->GetTransformMatrices()[0]->GetNbinsX();
+  if(fIncludeResidualCorrelations) tNbinsXToBuildResiduals = fFitSharedAnalyses->GetFitPairAnalysis(0)->GetTransformMatrices()[0]->GetNbinsX();
   tNbinsXToBuildGlobal = std::max({tNbinsXToBuildMomResCrctn, tNbinsXToBuildResiduals, tNbinsXToFitGlobal});
 
 
@@ -2231,7 +2367,7 @@ void CoulombFitter::CalculateFitFunction(int &npar, double &chi2, double *par)
         assert(tNum->GetXaxis()->GetBinWidth(1) == tMomResMatrix->GetYaxis()->GetBinWidth(1));
       }
       //make sure tNum and tDen and tCf have same bin size as residuals
-      if(fIncludeResidualsType != kIncludeNoResiduals)
+      if(fIncludeResidualCorrelations)
       {
         assert(tNum->GetXaxis()->GetBinWidth(1) == tFitPairAnalysis->GetTransformMatrices()[0]->GetXaxis()->GetBinWidth(1));
         assert(tNum->GetXaxis()->GetBinWidth(1) == tFitPairAnalysis->GetTransformMatrices()[0]->GetYaxis()->GetBinWidth(1));
@@ -2302,7 +2438,7 @@ void CoulombFitter::CalculateFitFunction(int &npar, double &chi2, double *par)
         assert(!std::isnan(tPar[i]));
       }
 
-      if(!fApplyMomResCorrection && fIncludeResidualsType==kIncludeNoResiduals) tNbinsXToBuild = tNbinsXToFit;
+      if(!fApplyMomResCorrection && !fIncludeResidualCorrelations) tNbinsXToBuild = tNbinsXToFit;
 
       vector<double> tFitCfContent;
       vector<double> tCorrectedFitCfContent;
@@ -2328,7 +2464,7 @@ void CoulombFitter::CalculateFitFunction(int &npar, double &chi2, double *par)
         }
       }
 
-      if(fIncludeResidualsType != kIncludeNoResiduals)
+      if(fIncludeResidualCorrelations)
       {
         //TODO do stuff dealing with residual!  This is for later
       }

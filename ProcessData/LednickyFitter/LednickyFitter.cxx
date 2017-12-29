@@ -63,6 +63,47 @@ LednickyFitter::LednickyFitter(FitSharedAnalyses* aFitSharedAnalyses, double aMa
   fCorrectedFitVecs.resize(fNAnalyses, td2dVec(tNFitPartialAnalysis));
 }
 
+//________________________________________________________________________________________________________________
+LednickyFitter::LednickyFitter(AnalysisType aAnalysisType, double aMaxFitKStar):
+  fVerbose(false),
+  fFitSharedAnalyses(nullptr),
+  fMinuit(nullptr),
+  fNAnalyses(0),
+  fCorrectedFitVecs(0),
+  fMaxFitKStar(aMaxFitKStar),
+  fNbinsXToBuild(0),
+  fNbinsXToFit(0),
+  fKStarBinWidth(0.),
+  fKStarBinCenters(0),
+  fRejectOmega(false),
+  fApplyNonFlatBackgroundCorrection(false), //TODO change deault to true here AND in CoulombFitter
+  fApplyMomResCorrection(false), //TODO change deault to true here AND in CoulombFitter
+
+  fIncludeResidualsType(kIncludeNoResiduals), //TODO change deault to true here AND in CoulombFitter
+  fChargedResidualsType(kUseXiDataAndCoulombOnlyInterp),
+  fResPrimMaxDecayType(k5fm),
+
+  fResidualsInitiated(false),
+  fReturnPrimaryWithResidualsToAnalyses(false),
+  fNonFlatBgdFitType(kLinear),
+
+  fUsemTScalingOfResidualRadii(false),
+  fmTScalingPowerOfResidualRadii(-0.5),
+
+  fChi2(0),
+  fChi2GlobalMin(1000000000),
+  fChi2Vec(fNAnalyses),
+  fNpFits(0),
+  fNpFitsVec(fNAnalyses),
+  fNDF(0),
+  fErrFlg(0),
+  fMinParams(0),
+  fParErrors(0)
+
+{
+  fNAnalyses=1;
+}
+
 
 //________________________________________________________________________________________________________________
 LednickyFitter::~LednickyFitter()
@@ -132,8 +173,6 @@ double LednickyFitter::GetChi2Value(int aKStarBin, TH1* aCfToFit, double* aPar)
 //________________________________________________________________________________________________________________
 double LednickyFitter::GetChi2Value(int aKStarBin, TH1* aCfToFit, double aFitCfContent)
 {
-  double tKStar[1];
-  tKStar[0] = aCfToFit->GetXaxis()->GetBinCenter(aKStarBin);
   double tChi = (aCfToFit->GetBinContent(aKStarBin) - aFitCfContent)/aCfToFit->GetBinError(aKStarBin);
   return tChi*tChi;
 }
@@ -321,11 +360,9 @@ void LednickyFitter::CalculateFitFunction(int &npar, double &chi2, double *par)
       if(fApplyNonFlatBackgroundCorrection)
       {
         TF1* tNonFlatBgd;
-        //Note: If Bgd not modeled by linear function, grab tNonFlatBgd from pair analysis instead of partial analysis
-        //      This greatly helps the fitter by stabilizing tNonFlatBgd
-        //      Both methods give the same result when Bgd is linear
+        //I thought using PairAnalysis, when BgdFitType != kLinear, would help stabilize things, but it doesn't seem to help all that much.
+        //  Things have been stabilized with other tweaks.
         tNonFlatBgd = tFitPartialAnalysis->GetNonFlatBackground(fNonFlatBgdFitType, fFitSharedAnalyses->GetFitType(), tNormalizeBgdFitToCf);
-
         ApplyNonFlatBackgroundCorrection(tCorrectedFitCfContent, fKStarBinCenters, tNonFlatBgd);
       }
 

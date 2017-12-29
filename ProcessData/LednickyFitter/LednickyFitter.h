@@ -58,6 +58,7 @@ public:
 
   //Constructor, destructor, copy constructor, assignment operator
   LednickyFitter(FitSharedAnalyses* aFitSharedAnalyses, double aMaxFitKStar = 0.3);
+  LednickyFitter(AnalysisType aAnalysisType, double aMaxFitKStar = 0.3);  //Currently, just used for CoulombFitter::CoulombFitter(AnalysisType aAnalysisType, double aMaxFitKStar)
   virtual ~LednickyFitter();
 
   static double GetLednickyF1(double z);

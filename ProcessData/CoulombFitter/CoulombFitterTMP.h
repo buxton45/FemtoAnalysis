@@ -51,6 +51,10 @@ using std::cout;
 using std::endl;
 using std::vector;
 
+#include "FitSharedAnalyses.h"
+class FitSharedAnalyses;
+
+
 #include "WaveFunction.h"
 class WaveFunction;
 
@@ -60,9 +64,7 @@ class SimulatedCoulombCf;
 #include "Interpolator.h"
 class Interpolator;
 
-#include "LednickyFitter.h"
-
-class CoulombFitter : public LednickyFitter {
+class CoulombFitter {
 
 public:
   //Constructor, destructor, copy constructor, assignment operator
@@ -115,11 +117,18 @@ public:
   double GetFitCfContentSerialv2(double aKStarMagMin, double aKStarMagMax, double *par, int aAnalysisNumber);  //TODO!!!!!
 
   //void CalculateChi2(int &npar, double &chi2, double *par);
+  void PrintCurrentParamValues(int aNpar, double* aPar);
   bool AreParamsSame(double *aCurrent, double *aNew, int aNEntries);
 
+  double GetChi2Value(int aKStarBin, TH1* aCfToFit, double aFitVal);
+  double GetPmlValue(double aNumContent, double aDenContent, double aCfContent);
+
   void CalculateChi2PML(int &npar, double &chi2, double *par);  //TODO change default to true when matrices are ready
+  vector<double> ApplyMomResCorrection(vector<double> &aCf, vector<double> &aKStarBinCenters, TH2* aMomResMatrix);
   void CalculateChi2PMLwMomResCorrection(int &npar, double &chi2, double *par);
 
+  void ApplyNonFlatBackgroundCorrection(vector<double> &aCf, vector<double> &aKStarBinCenters, TF1* aNonFlatBgd);
+  void ApplyNormalization(double aNorm, td1dVec &aCf);
   void CalculateFitFunction(int &npar, double &chi2, double *par);
 
 
@@ -134,27 +143,51 @@ public:
 
 
   //inline (i.e. simple) functions
+  FitSharedAnalyses* GetFitSharedAnalyses();
+
+  vector<double> GetMinParams();
+  vector<double> GetParErrors();
+
   WaveFunction* GetWaveFunctionObject();
   void SetTurnOffCoulomb(bool aTurnOffCoulomb);
 
   void SetIncludeSingletAndTriplet(bool aIncludeSingletAndTriplet);
   void SetUseRandomKStarVectors(bool aUseRandomKStarVectors);
 
-//TODO
-  double GetChi2();  //Why do I need this, it's defined in LednickyFitter.  Stupid compiler
+  void SetApplyNonFlatBackgroundCorrection(bool aApply);
+  void SetNonFlatBgdFitType(NonFlatBgdFitType aNonFlatBgdFitType);
+  void SetApplyMomResCorrection(bool aApplyMomResCorrection);
+  virtual void SetIncludeResidualCorrelations(bool aInclude);
 
+  void SetVerbose(bool aSet);
+
+  double GetChi2();
+  int GetNDF();
 
 protected:
+  bool fVerbose;
   bool fTurnOffCoulomb;
   bool fInterpHistsLoaded;
   bool fIncludeSingletAndTriplet;
   bool fUseRandomKStarVectors;
   bool fUseStaticPairs;
 
+  bool fApplyNonFlatBackgroundCorrection;
+  bool fApplyMomResCorrection;
+  bool fIncludeResidualCorrelations;
+  bool fResidualsInitiated;
+  bool fReturnPrimaryWithResidualsToAnalyses;
+  NonFlatBgdFitType fNonFlatBgdFitType;
+
+  int MasterRepeat;
 
   int fNCalls;  //TODO delete this
   TH1* fFakeCf; //TODO delete this
 
+  FitSharedAnalyses* fFitSharedAnalyses;
+  TMinuit* fMinuit;
+  int fNAnalyses;
+  td3dVec fCorrectedFitVecs;
 
   SimulatedCoulombCf *fSimCoulombCf;
   WaveFunction* fWaveFunction;
@@ -162,8 +195,8 @@ protected:
 
   td4dVec fPairKStar4dVec; //1 3dVec for each of fNAnalyses.  Holds td1dVec = (KStarMag, KStarOut, KStarSide, KStarLong)
 
-  double fBinSizeKStar;  //TODO make sure set and used everywhere it should be  //TODO same as double fKStarBinWidth?
-  int fNbinsKStar;       //TODO make sure set and used everywhere it should be  //TODO same as fNbinsXToBuild or fNbinsXToFit?
+  double fBinSizeKStar;  //TODO make sure set and used everywhere it should be
+  int fNbinsKStar;       //TODO make sure set and used everywhere it should be
   int fNPairsPerKStarBin;
   td1dVec fCurrentRadii;
   td4dVec fPairSample4dVec; //1 3dVec for each of fNAnalyses.  Hold td1dVec = (KStarMag, RStarMag, Theta)
@@ -188,6 +221,31 @@ protected:
   double fMaxInterpKStar, fMaxInterpRStar, fMaxInterpTheta;
   //---------------------------
 
+  vector<TH1F*> fCfsToFit;
+  vector<TF1*> fFits;
+
+  double fMaxFitKStar;
+  //vector<double> fMaxFitKStarVec;
+
+  bool fRejectOmega;
+
+  double fChi2;
+  double fChi2GlobalMin;
+
+  double fEdm, fErrDef;
+  int fNvpar, fNparx, fIcstat;
+
+  vector<double> fChi2Vec;
+
+  int fNpFits;
+  vector<int> fNpFitsVec;
+
+  int fNDF;
+  int fErrFlg;
+
+  vector<double> fMinParams;
+  vector<double> fParErrors;
+
 
 #ifdef __ROOT__
   ClassDef(CoulombFitter, 1)
@@ -196,12 +254,24 @@ protected:
 
 
 //inline stuff
+inline FitSharedAnalyses* CoulombFitter::GetFitSharedAnalyses() {return fFitSharedAnalyses;}
+
+inline vector<double> CoulombFitter::GetMinParams() {return fMinParams;}
+inline vector<double> CoulombFitter::GetParErrors() {return fParErrors;}
+
 inline WaveFunction* CoulombFitter::GetWaveFunctionObject() {return fWaveFunction;}
 inline void CoulombFitter::SetTurnOffCoulomb(bool aTurnOffCoulomb) {fTurnOffCoulomb = aTurnOffCoulomb; fWaveFunction->SetTurnOffCoulomb(fTurnOffCoulomb);}
 
 inline void CoulombFitter::SetIncludeSingletAndTriplet(bool aIncludeSingletAndTriplet) {fIncludeSingletAndTriplet = aIncludeSingletAndTriplet;}
 inline void CoulombFitter::SetUseRandomKStarVectors(bool aUseRandomKStarVectors) {fUseRandomKStarVectors = aUseRandomKStarVectors;}
 
-inline double CoulombFitter::GetChi2() {return LednickyFitter::GetChi2();}
+inline void CoulombFitter::SetApplyNonFlatBackgroundCorrection(bool aApply) {fApplyNonFlatBackgroundCorrection = aApply;}
+inline void CoulombFitter::SetNonFlatBgdFitType(NonFlatBgdFitType aNonFlatBgdFitType) {fNonFlatBgdFitType = aNonFlatBgdFitType;}
+inline void CoulombFitter::SetApplyMomResCorrection(bool aApplyMomResCorrection) {fApplyMomResCorrection = aApplyMomResCorrection;}
+inline void CoulombFitter::SetIncludeResidualCorrelations(bool aInclude) {fIncludeResidualCorrelations = aInclude;}
 
+inline void CoulombFitter::SetVerbose(bool aSet) {fVerbose=aSet;}
+
+inline double CoulombFitter::GetChi2() {return fChi2;}
+inline int CoulombFitter::GetNDF() {return fNDF;}
 #endif
