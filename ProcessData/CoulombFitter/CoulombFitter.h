@@ -150,12 +150,15 @@ protected:
   WaveFunction* fWaveFunction;
   double fBohrRadius;
 
-  td4dVec fPairKStar4dVec; //1 3dVec for each of fNAnalyses.  Holds td1dVec = (KStarMag, KStarOut, KStarSide, KStarLong)
+
 
   double fBinSizeKStar;  //TODO make sure set and used everywhere it should be  //TODO same as double fKStarBinWidth?
   int fNbinsKStar;       //TODO make sure set and used everywhere it should be  //TODO same as fNbinsXToBuild or fNbinsXToFit?
   int fNPairsPerKStarBin;
   td1dVec fCurrentRadii;
+
+  td4dVec fPairKStar4dVec; //1 3dVec for each of fNAnalyses.  Holds td1dVec = (KStarMag, KStarOut, KStarSide, KStarLong)
+
   td4dVec fPairSample4dVec; //1 3dVec for each of fNAnalyses.  Hold td1dVec = (KStarMag, RStarMag, Theta)
                             //  Will be initialized by sampling RStar vectors from Gaussian distributions with mu=0 and sigma=1
                             //  When R parameter is updated, I simply scale all RStar magnitudes

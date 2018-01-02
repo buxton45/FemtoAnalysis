@@ -50,13 +50,16 @@ CoulombFitter::CoulombFitter(FitSharedAnalyses* aFitSharedAnalyses, double aMaxF
   fWaveFunction(0),
   fBohrRadius(gBohrRadiusXiK),
 
-  fPairKStar4dVec(0),
+
 
   fBinSizeKStar(0.01),
   fNbinsKStar(30),
   fNPairsPerKStarBin(16384),
   fCurrentRadii(fNAnalyses, 1.),
+
+  fPairKStar4dVec(0),
   fPairSample4dVec(0),
+
   fInterpHistFile(0), fInterpHistFileLednickyHFunction(0),
 
   fLednickyHFunctionHist(0),
@@ -111,13 +114,16 @@ CoulombFitter::CoulombFitter(AnalysisType aAnalysisType, double aMaxFitKStar):
   fWaveFunction(0),
   fBohrRadius(-gBohrRadiusXiK),
 
-  fPairKStar4dVec(0),
+
 
   fBinSizeKStar(0.01),
   fNbinsKStar(30),
   fNPairsPerKStarBin(16384),
   fCurrentRadii(0),
+
+  fPairKStar4dVec(0),
   fPairSample4dVec(0),
+
   fInterpHistFile(0), fInterpHistFileLednickyHFunction(0),
 
   fLednickyHFunctionHist(0),
