@@ -59,7 +59,7 @@ public:
   void BuildPairKStar4dVecFromTxt(TString aFileBaseName);
   void BuildPairKStar4dVecOnFly(TString aPairKStarNtupleBaseName, int aNFiles, int aNbinsKStar, double aKStarMin, double aKStarMax);
 
-  void BuildPairSample4dVec(int aNPairsPerKStarBin=16384, double aBinSize=0.01);
+  void BuildPairSample4dVec(int aNPairsPerKStarBin=16384, double aBinSize=0.01);  //TODO make this parallel!!!!!
   void UpdatePairRadiusParameter(double aNewRadius, int aAnalysisNumber);
   void SetUseStaticPairs(bool aUseStaticPairs=true, int aNPairsPerKStarBin=16384, double aBinSize=0.01);
 

@@ -232,7 +232,7 @@ int main(int argc, char **argv)
 
 //  tFitter->BuildPairKStar4dVecFromTxt(tOutputName);
   tFitter->SetUseRandomKStarVectors(true);
-  tFitter->SetUseStaticPairs(true,16384);
+  tFitter->SetUseStaticPairs(false,16384);
 
   //-------------------------------------------
 

@@ -997,162 +997,6 @@ void CoulombFitter::SetRandomKStar3Vec(TVector3* aKStar3Vec, double aKStarMagMin
 
 
 //________________________________________________________________________________________________________________
-double CoulombFitter::GetFitCfContent(double aKStarMagMin, double aKStarMagMax, double *par, int aAnalysisNumber)
-{
-  omp_set_num_threads(6);
-
-/*
-cout << "In CoulombFitter::GetFitCfContent" << endl;
-cout << "\t aKStarMagMin = " << aKStarMagMin << endl;
-cout << "\t aKStarMagMax = " << aKStarMagMax << endl;
-*/
-  // par[0] = Lambda 
-  // par[1] = Radius
-  // par[2] = Ref0
-  // par[3] = Imf0
-  // par[4] = d0
-  // par[5] != Norm !!!!!!!!!!!!!!!!!!!!!
-
-  //should probably do x[0] /= hbarc, but let me test first
-
-
-  //TODO make this general
-  //This is messing up around aKStarMagMin = 0.29, or bin 57/58
-  //Probably fixed with use of std::round, but need to double check
-//  double tBinSize = 0.01;
-  int tBin = std::round(aKStarMagMin/fBinSizeKStar);
-/*
-cout << "In GetFitCfContent....." << endl;
-cout << "\t tBin = " << tBin << endl;
-cout << "\t aKStarMagMin = " << aKStarMagMin << "\t aKStarMagMax = " << aKStarMagMax << endl;
-*/
-
-
-  //KStarMag = fPairKStar4dVec[aAnalysisNumber][tBin][i][0]
-  //KStarOut = fPairKStar4dVec[aAnalysisNumber][tBin][i][1]
-  //KStarSide = fPairKStar4dVec[aAnalysisNumber][tBin][i][2]
-  //KStarLong = fPairKStar4dVec[aAnalysisNumber][tBin][i][3]
-
-  int tCounter = 0;
-  double tReturnCfContent = 0.;
-//cout << "fPairKStar4dVec[aAnalysisNumber][tBin].size() = " << fPairKStar4dVec[aAnalysisNumber][tBin].size() << endl << endl;
-
-  int tMaxKStarCalls;
-/*
-  if(fPairKStar4dVec[aAnalysisNumber][tBin].size() < 100) tMaxKStarCalls = fPairKStar4dVec[aAnalysisNumber][tBin].size();
-  else tMaxKStarCalls = 100;
-*/
-  //definitely oversampling by commenting out the above
-  //Currently, lowest bin only have 6 entries!
-  tMaxKStarCalls = 100000;
-
-  //Create the source Gaussians
-  double tRoot2 = sqrt(2.);
-  std::default_random_engine generator (std::clock());  //std::clock() is seed
-  std::normal_distribution<double> tROutSource(0.,tRoot2*par[1]);
-  std::normal_distribution<double> tRSideSource(0.,tRoot2*par[1]);
-  std::normal_distribution<double> tRLongSource(0.,tRoot2*par[1]);
-
-  std::uniform_int_distribution<int> tRandomKStarElement;
-  if(!fUseRandomKStarVectors) tRandomKStarElement = std::uniform_int_distribution<int>(0.0, fPairKStar4dVec[aAnalysisNumber][tBin].size()-1);
-
-  TVector3* tKStar3Vec = new TVector3(0.,0.,0.);
-  TVector3* tSource3Vec = new TVector3(0.,0.,0.);
-
-  int tI;
-  bool tCanInterp;
-  double tTheta, tKStarMag, tRStarMag, tWaveFunctionSq;
-  complex<double> tWaveFunction;
-
-  td2dVec tMathematicaPairs;
-  td1dVec tTempPair(3);
-
-  int tNInterpolate = 0;
-  int tNMathematica = 0;
-
-  #pragma omp parallel for reduction(+: tCounter) reduction(+: tReturnCfContent) private(tI, tCanInterp, tTheta, tKStarMag, tRStarMag, tWaveFunctionSq) firstprivate(tKStar3Vec, tSource3Vec, tTempPair)
-  for(int i=0; i<tMaxKStarCalls; i++)
-
-//  for(int i=0; i<fPairKStar4dVec[aAnalysisNumber][tBin].size(); i++)
-  {
-//TODO Check randomization
-//TODO Make sure I am grabbing from correct tBin.  Must work even when I rebin things
-
-    if(!fUseRandomKStarVectors)
-    {
-      tI = tRandomKStarElement(generator);
-      tKStar3Vec->SetXYZ(fPairKStar4dVec[aAnalysisNumber][tBin][tI][1],fPairKStar4dVec[aAnalysisNumber][tBin][tI][2],fPairKStar4dVec[aAnalysisNumber][tBin][tI][3]);
-    }
-    else SetRandomKStar3Vec(tKStar3Vec,aKStarMagMin,aKStarMagMax);
-
-    tSource3Vec->SetXYZ(tROutSource(generator),tRSideSource(generator),tRLongSource(generator)); //TODO: for now, spherically symmetric
-
-    tTheta = tKStar3Vec->Angle(*tSource3Vec);
-    tKStarMag = tKStar3Vec->Mag();
-
-    //TODO: take out this restriction
-//    while (tSource3Vec->Mag() > 20.) tSource3Vec->SetXYZ(tROutSource(generator),tRSideSource(generator),tRLongSource(generator));
-
-    tRStarMag = tSource3Vec->Mag();
-
-
-//TODO make 1 and 2 histograms overlap by a bin or two!
-//TODO
-//TODO
-//TODO!!!!!!!!!!!!! Must have separate InterpolateWfSquaredXiKchP and InterpolateWfSquaredXiKchM!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    //Note:  Running CanInterpAll is faster than checking CanInterpScatParams outside of for loop and comparing to CanInterpKRTh.....strange but true
-    tCanInterp = CanInterpAll(tKStarMag,tRStarMag,tTheta,par[2],par[3],par[4]);
-    if(fTurnOffCoulomb || tCanInterp) 
-    {
-      tWaveFunctionSq = InterpolateWfSquared(tKStarMag,tRStarMag,tTheta,par[2],par[3],par[4]);
-      tReturnCfContent += tWaveFunctionSq;
-      tCounter++;
-    }
-
-    #pragma omp critical
-    if(!tCanInterp)
-    {
-      tTempPair[0] = tKStarMag;
-      tTempPair[1] = tRStarMag;
-      tTempPair[2] = tTheta;
-      tMathematicaPairs.push_back(tTempPair);
-    }
-  }
-
-  tNInterpolate = tCounter;
-  tNMathematica = tMathematicaPairs.size();
-
-  for(int i=0; i<(int)tMathematicaPairs.size(); i++)
-  {
-    tWaveFunction = fWaveFunction->GetWaveFunction(tMathematicaPairs[i][0], tMathematicaPairs[i][1], tMathematicaPairs[i][2], par[2], par[3], par[4]);
-    tWaveFunctionSq = norm(tWaveFunction);
-    tReturnCfContent += tWaveFunctionSq;
-    tCounter++;
-  }
-
-  delete tKStar3Vec;
-  delete tSource3Vec;
-
-  tReturnCfContent /= tCounter;
-
-//  tReturnCfContent = par[5]*(par[0]*tReturnCfContent + (1.-par[0]));  //C = Norm*(Lam*C_gen + (1-Lam));
-  tReturnCfContent = (par[0]*tReturnCfContent + (1.-par[0]));  //C = (Lam*C_gen + (1-Lam));
-
-
-  if(tNMathematica > 0.2*tMaxKStarCalls)
-  {
-    cout << "\t\tIn GetFitCfContent" << endl;
-    cout << "\t\t\tWARNING:: tNMathematica > 1/5 of pairs!!!!!!!!!!!!!!!!!!" << endl;
-    cout << "\t\t\t\taKStarMagMin = " << aKStarMagMin << endl;
-    cout << "\t\t\t\taKStarMagMax = " << aKStarMagMax << endl;
-    PrintCurrentParamValues(fFitSharedAnalyses->GetNMinuitParams(),par);
-    cout << endl << endl;
-  }
-
-  return tReturnCfContent;
-}
-
-//________________________________________________________________________________________________________________
 double CoulombFitter::GetFitCfContentwStaticPairs(double aKStarMagMin, double aKStarMagMax, double *par, int aAnalysisNumber)
 {
   omp_set_num_threads(6);
@@ -1241,170 +1085,6 @@ double CoulombFitter::GetFitCfContentwStaticPairs(double aKStarMagMin, double aK
   if(tNMathematica > 0.2*tMaxKStarCalls)
   {
     cout << "\t\tIn GetFitCfContentwStaticPairs" << endl;
-    cout << "\t\t\tWARNING:: tNMathematica > 1/5 of pairs!!!!!!!!!!!!!!!!!!" << endl;
-    cout << "\t\t\t\taKStarMagMin = " << aKStarMagMin << endl;
-    cout << "\t\t\t\taKStarMagMax = " << aKStarMagMax << endl;
-    PrintCurrentParamValues(fFitSharedAnalyses->GetNMinuitParams(),par);
-    cout << endl << endl;
-  }
-
-  return tReturnCfContent;
-}
-
-//________________________________________________________________________________________________________________
-double CoulombFitter::GetFitCfContentComplete(double aKStarMagMin, double aKStarMagMax, double *par, int aAnalysisNumber)
-{
-  assert(fIncludeSingletAndTriplet == true);
-
-  omp_set_num_threads(6);
-  //par[0] = kLambda
-  //par[1] = kRadius
-  //par[2] = kRef0
-  //par[3] = kImf0
-  //par[4] = kd0
-  //par[5] = kRef02
-  //par[6] = kImf02
-  //par[7] = kd02
-  //par[8] = kNorm
-
-
-  //TODO make this general
-  //This is messing up around aKStarMagMin = 0.29, or bin 57/58
-  //Probably fixed with use of std::round, but need to double check
-//  double tBinSize = 0.01;
-  int tBin = std::round(aKStarMagMin/fBinSizeKStar);
-
-  //KStarMag = fPairKStar4dVec[aAnalysisNumber][tBin][i][0]
-  //KStarOut = fPairKStar4dVec[aAnalysisNumber][tBin][i][1]
-  //KStarSide = fPairKStar4dVec[aAnalysisNumber][tBin][i][2]
-  //KStarLong = fPairKStar4dVec[aAnalysisNumber][tBin][i][3]
-
-  int tCounter = 0;
-  double tReturnCfContent = 0.;
-//cout << "fPairKStar4dVec[aAnalysisNumber][tBin].size() = " << fPairKStar4dVec[aAnalysisNumber][tBin].size() << endl << endl;
-
-  int tMaxKStarCalls;
-
-//  if(fPairKStar4dVec[aAnalysisNumber][tBin].size() < 100) tMaxKStarCalls = fPairKStar4dVec[aAnalysisNumber][tBin].size();
-//  else tMaxKStarCalls = 100;
-
-  //definitely oversampling by commenting out the above
-  //Currently, lowest bin only have 6 entries!
-  tMaxKStarCalls = 16384;
-//  if(fPairKStar4dVec[aAnalysisNumber][tBin].size() < tMaxKStarCalls) tMaxKStarCalls = fPairKStar4dVec[aAnalysisNumber][tBin].size();
-
-  //Create the source Gaussians
-  double tRoot2 = sqrt(2.);
-  std::default_random_engine generator (std::clock());  //std::clock() is seed
-  std::normal_distribution<double> tROutSource(0.,tRoot2*par[1]);
-  std::normal_distribution<double> tRSideSource(0.,tRoot2*par[1]);
-  std::normal_distribution<double> tRLongSource(0.,tRoot2*par[1]);
-
-  std::uniform_int_distribution<int> tRandomKStarElement;
-  if(!fUseRandomKStarVectors) tRandomKStarElement = std::uniform_int_distribution<int>(0.0, fPairKStar4dVec[aAnalysisNumber][tBin].size()-1);
-
-  TVector3* tKStar3Vec = new TVector3(0.,0.,0.);
-  TVector3* tSource3Vec = new TVector3(0.,0.,0.);
-
-  int tI;
-  bool tCanInterp;
-  double tTheta, tKStarMag, tRStarMag, tWaveFunctionSqSinglet, tWaveFunctionSqTriplet, tWaveFunctionSq;
-  complex<double> tWaveFunctionSinglet, tWaveFunctionTriplet;
-
-  vector<vector<double> > tMathematicaPairs;
-  vector<double> tTempPair(3);
-
-  int tNInterpolate = 0;
-  int tNMathematica = 0;
-
-//ChronoTimer tIntTimer;
-//tIntTimer.Start();
-
-  #pragma omp parallel for reduction(+: tCounter) reduction(+: tReturnCfContent) private(tI, tCanInterp, tTheta, tKStarMag, tRStarMag, tWaveFunctionSqSinglet, tWaveFunctionSqTriplet, tWaveFunctionSq) firstprivate(tKStar3Vec, tSource3Vec, tTempPair)
-  for(int i=0; i<tMaxKStarCalls; i++)
-
-//  for(int i=0; i<fPairKStar4dVec[aAnalysisNumber][tBin].size(); i++)
-  {
-//TODO Check randomization
-//TODO Make sure I am grabbing from correct tBin.  Must work even when I rebin things
-    if(!fUseRandomKStarVectors)
-    {
-      tI = tRandomKStarElement(generator);
-      tKStar3Vec->SetXYZ(fPairKStar4dVec[aAnalysisNumber][tBin][tI][1],fPairKStar4dVec[aAnalysisNumber][tBin][tI][2],fPairKStar4dVec[aAnalysisNumber][tBin][tI][3]);
-    }
-    else SetRandomKStar3Vec(tKStar3Vec,aKStarMagMin,aKStarMagMax);
-
-    tSource3Vec->SetXYZ(tROutSource(generator),tRSideSource(generator),tRLongSource(generator)); //TODO: for now, spherically symmetric
-
-    tTheta = tKStar3Vec->Angle(*tSource3Vec);
-    tKStarMag = tKStar3Vec->Mag();
-    tRStarMag = tSource3Vec->Mag();
-
-
-//TODO make 1 and 2 histograms overlap by a bin or two!
-//TODO
-//TODO
-//TODO!!!!!!!!!!!!! Must have separate InterpolateWfSquaredXiKchP and InterpolateWfSquaredXiKchM!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    //Note:  Running CanInterpAll is faster than checking CanInterpScatParams outside of for loop and comparing to CanInterpKRTh.....strange but true
-    tCanInterp = CanInterpAll(tKStarMag,tRStarMag,tTheta,par[2],par[3],par[4]);
-    if(fTurnOffCoulomb || tCanInterp)
-    {
-      tWaveFunctionSqSinglet = InterpolateWfSquared(tKStarMag,tRStarMag,tTheta,par[2],par[3],par[4]);
-      tWaveFunctionSqTriplet = InterpolateWfSquared(tKStarMag,tRStarMag,tTheta,par[5],par[6],par[7]);
-
-      tWaveFunctionSq = 0.25*tWaveFunctionSqSinglet + 0.75*tWaveFunctionSqTriplet;
-      tReturnCfContent += tWaveFunctionSq;
-      tCounter ++;
-    }
-
-    #pragma omp critical
-    if(!tCanInterp)
-    {
-      tTempPair[0] = tKStarMag;
-      tTempPair[1] = tRStarMag;
-      tTempPair[2] = tTheta;
-      tMathematicaPairs.push_back(tTempPair);
-    }
-  }
-
-//tIntTimer.Stop();
-//cout << "Interpolation in GetFitCfContentComplete ";
-//tIntTimer.PrintInterval();
-
-  tNInterpolate = tCounter;
-  tNMathematica = tMathematicaPairs.size();
-
-//ChronoTimer tMathTimer;
-//tMathTimer.Start();
-
-  for(int i=0; i<(int)tMathematicaPairs.size(); i++)
-  {
-    tWaveFunctionSinglet = fWaveFunction->GetWaveFunction(tMathematicaPairs[i][0],tMathematicaPairs[i][1],tMathematicaPairs[i][2],par[2],par[3],par[4]);
-    tWaveFunctionSqSinglet = norm(tWaveFunctionSinglet);
-
-    tWaveFunctionTriplet = fWaveFunction->GetWaveFunction(tMathematicaPairs[i][0],tMathematicaPairs[i][1],tMathematicaPairs[i][2],par[5],par[6],par[7]);
-    tWaveFunctionSqTriplet = norm(tWaveFunctionTriplet);
-
-    tWaveFunctionSq = 0.25*tWaveFunctionSqSinglet + 0.75*tWaveFunctionSqTriplet;
-    tReturnCfContent += tWaveFunctionSq;
-    tCounter ++;
-  }
-//tMathTimer.Stop();
-//cout << "Mathematica calls in GetFitCfContentComplete ";
-//tMathTimer.PrintInterval();
-
-  delete tKStar3Vec;
-  delete tSource3Vec;
-
-  tReturnCfContent /= tCounter;
-
-//  tReturnCfContent = par[8]*(par[0]*tReturnCfContent + (1.-par[0]));  //C = Norm*(Lam*C_gen + (1-Lam));
-  tReturnCfContent = (par[0]*tReturnCfContent + (1.-par[0]));  //C = (Lam*C_gen + (1-Lam));
-
-
-  if(tNMathematica > 0.2*tMaxKStarCalls)
-  {
-    cout << "\t\tIn GetFitCfContentComplete" << endl;
     cout << "\t\t\tWARNING:: tNMathematica > 1/5 of pairs!!!!!!!!!!!!!!!!!!" << endl;
     cout << "\t\t\t\taKStarMagMin = " << aKStarMagMin << endl;
     cout << "\t\t\t\taKStarMagMax = " << aKStarMagMax << endl;
@@ -1685,6 +1365,8 @@ tTotalTimer.Start();
   cout << "\tfNCalls = " << fNCalls << endl;
   if(fVerbose) PrintCurrentParamValues(fFitSharedAnalyses->GetNMinuitParams(),par);
   //--------------------------------------------------------------
+  if(!fUseStaticPairs) BuildPairSample4dVec(fNPairsPerKStarBin, fPairsKStarBinSize);
+  //--------------------------------------------------------------
 
   int tNFitParPerAnalysis;
   if(fIncludeSingletAndTriplet) tNFitParPerAnalysis = 8;
@@ -1805,10 +1487,8 @@ tTotalTimer.Start();
 //        tCfContentUnNorm[ix-1] = GetFitCfContentComplete(tKStarMin,tKStarMax,tPar,iAnaly);
         if(!tAreParamsSame)
         {
-          if(fUseStaticPairs && fIncludeSingletAndTriplet) tCfContentUnNorm[ix-1] = GetFitCfContentCompletewStaticPairs(tKStarMin,tKStarMax,tPar,iAnaly);
-          else if(fIncludeSingletAndTriplet) tCfContentUnNorm[ix-1] = GetFitCfContentComplete(tKStarMin,tKStarMax,tPar,iAnaly);
-          else if(fUseStaticPairs) tCfContentUnNorm[ix-1] = GetFitCfContentwStaticPairs(tKStarMin,tKStarMax,tPar,iAnaly);
-          else tCfContentUnNorm[ix-1] = GetFitCfContent(tKStarMin,tKStarMax,tPar,iAnaly);
+          if(fIncludeSingletAndTriplet) tCfContentUnNorm[ix-1] = GetFitCfContentCompletewStaticPairs(tKStarMin,tKStarMax,tPar,iAnaly);
+          else tCfContentUnNorm[ix-1] = GetFitCfContentwStaticPairs(tKStarMin,tKStarMax,tPar,iAnaly);
         }
 
         double tCfContent;
@@ -1872,6 +1552,8 @@ tTotalTimer.Start();
 
   cout << "\tfNCalls = " << fNCalls << endl;
   if(fVerbose) PrintCurrentParamValues(fFitSharedAnalyses->GetNMinuitParams(),par);
+  //--------------------------------------------------------------
+  if(!fUseStaticPairs) BuildPairSample4dVec(fNPairsPerKStarBin, fPairsKStarBinSize);
   //--------------------------------------------------------------
 
   int tNFitParPerAnalysis;
@@ -2009,10 +1691,8 @@ tTotalTimer.Start();
 //        tCfContentUnNorm[ix-1] = GetFitCfContentComplete(tKStarMin,tKStarMax,tPar,iAnaly);
         if(!tAreParamsSame)
         {
-          if(fUseStaticPairs && fIncludeSingletAndTriplet) tCfContentUnNorm[ix-1] = GetFitCfContentCompletewStaticPairs(tKStarMin,tKStarMax,tPar,iAnaly);
-          else if(fIncludeSingletAndTriplet) tCfContentUnNorm[ix-1] = GetFitCfContentComplete(tKStarMin,tKStarMax,tPar,iAnaly);
-          else if(fUseStaticPairs) tCfContentUnNorm[ix-1] = GetFitCfContentwStaticPairs(tKStarMin,tKStarMax,tPar,iAnaly);
-          else tCfContentUnNorm[ix-1] = GetFitCfContent(tKStarMin,tKStarMax,tPar,iAnaly);
+          if(fIncludeSingletAndTriplet) tCfContentUnNorm[ix-1] = GetFitCfContentCompletewStaticPairs(tKStarMin,tKStarMax,tPar,iAnaly);
+          else tCfContentUnNorm[ix-1] = GetFitCfContentwStaticPairs(tKStarMin,tKStarMax,tPar,iAnaly);
         }
 
         if(fIncludeSingletAndTriplet) tCfContent[ix-1] = tPar[8]*tCfContentUnNorm[ix-1];
@@ -2082,6 +1762,8 @@ void CoulombFitter::CalculateFitFunction(int &npar, double &chi2, double *par)
 
   fNCalls++;
 
+  //--------------------------------------------------------------
+  if(!fUseStaticPairs) BuildPairSample4dVec(fNPairsPerKStarBin, fPairsKStarBinSize);
   //--------------------------------------------------------------
 
   int tNFitParPerAnalysis;
@@ -2239,10 +1921,8 @@ void CoulombFitter::CalculateFitFunction(int &npar, double &chi2, double *par)
 
         if(!tAreParamsSame)
         {
-          if(fUseStaticPairs && fIncludeSingletAndTriplet) tPrimaryFitCfContent[ix-1] = GetFitCfContentCompletewStaticPairs(tKStarMin,tKStarMax,tPar,iAnaly);
-          else if(fIncludeSingletAndTriplet) tPrimaryFitCfContent[ix-1] = GetFitCfContentComplete(tKStarMin,tKStarMax,tPar,iAnaly);
-          else if(fUseStaticPairs) tPrimaryFitCfContent[ix-1] = GetFitCfContentwStaticPairs(tKStarMin,tKStarMax,tPar,iAnaly);
-          else tPrimaryFitCfContent[ix-1] = GetFitCfContent(tKStarMin,tKStarMax,tPar,iAnaly);
+          if(fIncludeSingletAndTriplet) tPrimaryFitCfContent[ix-1] = GetFitCfContentCompletewStaticPairs(tKStarMin,tKStarMax,tPar,iAnaly);
+          else tPrimaryFitCfContent[ix-1] = GetFitCfContentwStaticPairs(tKStarMin,tKStarMax,tPar,iAnaly);
         }
       }
 
@@ -2335,6 +2015,10 @@ void CoulombFitter::CalculateFakeChi2(int &npar, double &chi2, double *par)
   cout << "\t\t\tpar[3] = ImF0  = " << par[3] << endl;
   cout << "\t\t\tpar[4] = D0    = " << par[4] << endl;
 
+  //--------------------------------------------------------------
+  if(!fUseStaticPairs) BuildPairSample4dVec(fNPairsPerKStarBin, fPairsKStarBinSize);
+  //--------------------------------------------------------------
+
 
   TAxis *tXaxis = fFakeCf->GetXaxis();
   double tChi2 = 0.;
@@ -2352,10 +2036,8 @@ void CoulombFitter::CalculateFakeChi2(int &npar, double &chi2, double *par)
     tKStarMin = tXaxis->GetBinLowEdge(ix);
     tKStarMax = tXaxis->GetBinLowEdge(ix+1);
 
-    if(fUseStaticPairs && fIncludeSingletAndTriplet) tmp = (fFakeCf->GetBinContent(ix) - par[8]*GetFitCfContentCompletewStaticPairs(tKStarMin,tKStarMax,par,tAnalysisNumber))/fFakeCf->GetBinError(ix);
-    else if(fIncludeSingletAndTriplet) tmp = (fFakeCf->GetBinContent(ix) - par[8]*GetFitCfContentComplete(tKStarMin,tKStarMax,par,tAnalysisNumber))/fFakeCf->GetBinError(ix);
-    else if(fUseStaticPairs) tmp = (fFakeCf->GetBinContent(ix) - par[5]*GetFitCfContentwStaticPairs(tKStarMin,tKStarMax,par,tAnalysisNumber))/fFakeCf->GetBinError(ix);
-    else tmp = (fFakeCf->GetBinContent(ix) - par[5]*GetFitCfContent(tKStarMin,tKStarMax,par,tAnalysisNumber))/fFakeCf->GetBinError(ix);
+    if(fIncludeSingletAndTriplet) tmp = (fFakeCf->GetBinContent(ix) - par[8]*GetFitCfContentCompletewStaticPairs(tKStarMin,tKStarMax,par,tAnalysisNumber))/fFakeCf->GetBinError(ix);
+    else tmp = (fFakeCf->GetBinContent(ix) - par[5]*GetFitCfContentwStaticPairs(tKStarMin,tKStarMax,par,tAnalysisNumber))/fFakeCf->GetBinError(ix);
     tChi2 += tmp*tmp;
     tNpfits++;
   }
@@ -2416,6 +2098,8 @@ double CoulombFitter::GetChi2(TH1* aFitHistogram)
 //________________________________________________________________________________________________________________
 TH1* CoulombFitter::CreateFitHistogram(TString aName, int aAnalysisNumber)
 {
+  if(!fUseStaticPairs) BuildPairSample4dVec(fNPairsPerKStarBin, fPairsKStarBinSize);
+  //--------------------------------------------------------------
   FitPairAnalysis* tFitPairAnalysis = fFitSharedAnalyses->GetFitPairAnalysis(aAnalysisNumber);
   AnalysisType tAnalysisType = tFitPairAnalysis->GetAnalysisType();
 
@@ -2449,26 +2133,17 @@ TH1* CoulombFitter::CreateFitHistogram(TString aName, int aAnalysisNumber)
     tKStarMin = tReturnHist->GetBinLowEdge(ix);
     tKStarMax = tReturnHist->GetBinLowEdge(ix+1);
 
-    if(fUseStaticPairs && fIncludeSingletAndTriplet)
+    if(fIncludeSingletAndTriplet)
     {
       tCfContentUnNorm = GetFitCfContentCompletewStaticPairs(tKStarMin,tKStarMax,tPar,aAnalysisNumber);
       tCfContent = tPar[8]*tCfContentUnNorm;
     }
-    else if(fIncludeSingletAndTriplet)
-    {
-      tCfContentUnNorm = GetFitCfContentComplete(tKStarMin,tKStarMax,tPar,aAnalysisNumber);
-      tCfContent = tPar[8]*tCfContentUnNorm;
-    }
-    else if(fUseStaticPairs)
+    else
     {
       tCfContentUnNorm = GetFitCfContentwStaticPairs(tKStarMin,tKStarMax,tPar,aAnalysisNumber);
       tCfContent = tPar[5]*tCfContentUnNorm;
     }
-    else
-    {
-      tCfContentUnNorm = GetFitCfContent(tKStarMin,tKStarMax,tPar,aAnalysisNumber);
-      tCfContent = tPar[5]*tCfContentUnNorm;
-    }
+
     tReturnHist->SetBinContent(ix,tCfContent);
   }
 
@@ -2511,11 +2186,11 @@ tTimer.Start();
 ChronoTimer tLoopTimer;
 tLoopTimer.Start();
 
-        tCfContentUnNorm = GetFitCfContent(tKStarMin,tKStarMax,tPar,tAnalysisNumber);
+        tCfContentUnNorm = GetFitCfContentwStaticPairs(tKStarMin,tKStarMax,tPar,tAnalysisNumber);
         tCfContent = aNorm*tCfContentUnNorm;
 
 tLoopTimer.Stop();
-cout << "Finished GetFitCfContent ";
+cout << "Finished GetFitCfContentwStaticPairs ";
 tLoopTimer.PrintInterval();
 cout << endl;
 
@@ -2557,6 +2232,9 @@ TH1* CoulombFitter::CreateFitHistogramSampleComplete(TString aName, AnalysisType
 ChronoTimer tTimer;
 tTimer.Start();
 
+  if(!fUseStaticPairs) BuildPairSample4dVec(fNPairsPerKStarBin, fPairsKStarBinSize);
+  //--------------------------------------------------------------
+
   SetCoulombAttributes(aAnalysisType);
 
   TH1D* tReturnHist = new TH1D(aName,aName,aNbinsK,aKMin,aKMax);
@@ -2585,26 +2263,18 @@ tTimer.Start();
 //ChronoTimer tLoopTimer;
 //tLoopTimer.Start();
     
-    if(fUseStaticPairs && fIncludeSingletAndTriplet)
+    if(fIncludeSingletAndTriplet)
     {
       tCfContentUnNorm = GetFitCfContentCompletewStaticPairs(tKStarMin,tKStarMax,tPar,tAnalysisNumber);
       tCfContent = tPar[8]*tCfContentUnNorm;
     }
-    else if(fIncludeSingletAndTriplet)
-    {
-      tCfContentUnNorm = GetFitCfContentComplete(tKStarMin,tKStarMax,tPar,tAnalysisNumber);
-      tCfContent = tPar[8]*tCfContentUnNorm;
-    }
-    else if(fUseStaticPairs)
+
+    else
     {
       tCfContentUnNorm = GetFitCfContentwStaticPairs(tKStarMin,tKStarMax,tPar,tAnalysisNumber);
       tCfContent = tPar[8]*tCfContentUnNorm;
     }
-    else
-    {
-      tCfContentUnNorm = GetFitCfContent(tKStarMin,tKStarMax,tPar,tAnalysisNumber);
-      tCfContent = tPar[8]*tCfContentUnNorm;
-    }
+
 
 //tLoopTimer.Stop();
 //cout << "Finished GetFitCfContentComplete ";
