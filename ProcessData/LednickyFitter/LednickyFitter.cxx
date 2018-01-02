@@ -561,7 +561,9 @@ void LednickyFitter::InitializeFitter()
   if(fIncludeResidualsType != kIncludeNoResiduals) tNbinsXToBuildResiduals = fFitSharedAnalyses->GetFitPairAnalysis(0)->GetTransformMatrix(0)->GetNbinsX();
   fNbinsXToBuild = std::max({tNbinsXToBuildMomResCrctn, tNbinsXToBuildResiduals, fNbinsXToFit});
 
-  fKStarBinWidth = fFitSharedAnalyses->GetFitPairAnalysis(0)->GetFitPartialAnalysis(0)->GetKStarCfLite()->Num()->GetXaxis()->GetBinWidth(1);
+  if(fKStarBinWidth==0.) fKStarBinWidth = fFitSharedAnalyses->GetFitPairAnalysis(0)->GetFitPartialAnalysis(0)->GetKStarCfLite()->Num()->GetXaxis()->GetBinWidth(1);
+  else assert(fKStarBinWidth == fFitSharedAnalyses->GetFitPairAnalysis(0)->GetFitPartialAnalysis(0)->GetKStarCfLite()->Num()->GetXaxis()->GetBinWidth(1));
+  
   //-------------------------------------------------------------------------------------------
 
   for(int iAnaly=0; iAnaly<fNAnalyses; iAnaly++)

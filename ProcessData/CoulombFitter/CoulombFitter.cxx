@@ -31,8 +31,17 @@ CoulombFitter::CoulombFitter(FitSharedAnalyses* aFitSharedAnalyses, double aMaxF
   fInterpHistsLoaded(false),
   fIncludeSingletAndTriplet(true),
   fUseRandomKStarVectors(false),
+  fReadPairsFromTxtFiles(false),
   fUseStaticPairs(false),
 
+  fPairKStarNtupleBaseName("/home/jesse/Analysis/FemtoAnalysis/ProcessData/CoulombFitter/NTuples/Roman/Results_cXicKch_20160610"), 
+  fNFilesNtuple(27), 
+  fPairKStar3dVecBaseName("/home/jesse/Analysis/FemtoAnalysis/ProcessData/CoulombFitter/PairKStar3dVec_20160610_"), 
+
+  fPairsNbinsKStar(0),
+  fPairsKStarMin(0.),
+  fPairsKStarMax(0.),
+  fPairsKStarBinSize(0.),
 
   fNCalls(0),
   fFakeCf(0),
@@ -81,8 +90,17 @@ CoulombFitter::CoulombFitter(AnalysisType aAnalysisType, double aMaxFitKStar):
   fInterpHistsLoaded(false),
   fIncludeSingletAndTriplet(true),
   fUseRandomKStarVectors(false),
+  fReadPairsFromTxtFiles(false),
   fUseStaticPairs(false),
 
+  fPairKStarNtupleBaseName("/home/jesse/Analysis/FemtoAnalysis/ProcessData/CoulombFitter/NTuples/Roman/Results_cXicKch_20160610"), 
+  fNFilesNtuple(27), 
+  fPairKStar3dVecBaseName("/home/jesse/Analysis/FemtoAnalysis/ProcessData/CoulombFitter/PairKStar3dVec_20160610_"), 
+
+  fPairsNbinsKStar(0),
+  fPairsKStarMin(0.),
+  fPairsKStarMax(0.),
+  fPairsKStarBinSize(0.),
 
   fNCalls(0),
   fFakeCf(0),
@@ -325,7 +343,7 @@ void CoulombFitter::ExtractPairKStar3dVecFromSingleFile(TString aFileLocation, T
 }
 
 //________________________________________________________________________________________________________________
-td3dVec CoulombFitter::BuildPairKStar3dVecFull(TString aPairKStarNtupleDirName, TString aFileBaseName, int aNFiles, AnalysisType aAnalysisType, CentralityType aCentralityType, int aNbinsKStar, double aKStarMin, double aKStarMax)
+td3dVec CoulombFitter::BuildPairKStar3dVecFull(TString aPairKStarNtupleBaseName, int aNFiles, AnalysisType aAnalysisType, CentralityType aCentralityType, int aNbinsKStar, double aKStarMin, double aKStarMax)
 {
   cout << "Beginning FULL conversion of TNtuple to 3dVec" << endl;
   std::clock_t start = std::clock();
@@ -377,14 +395,14 @@ cout << "Pre: tPairKStar3dVec.size() = " << tPairKStar3dVec.size() << endl;
   for(int iFile=0; iFile<17; iFile++) //Bm files
   {
     cout << "\t iFile = Bm" << iFile << endl;
-    tFileLocation = aPairKStarNtupleDirName + TString("/") + aFileBaseName + TString("_Bm") + tRomanNumerals[iFile] + TString(".root");
+    tFileLocation = aPairKStarNtupleBaseName + TString("_Bm") + tRomanNumerals[iFile] + TString(".root");
     ExtractPairKStar3dVecFromSingleFile(tFileLocation,tArrayName,tNtupleName,fBinSizeKStar,fNbinsKStar,tPairKStar3dVec);
   }
 
   for(int iFile=0; iFile<10; iFile++) //Bp files
   {
     cout << "\t iFile = Bp" << iFile << endl;
-    tFileLocation = aPairKStarNtupleDirName + TString("/") + aFileBaseName + TString("_Bp") + tRomanNumerals[iFile] + TString(".root");
+    tFileLocation = aPairKStarNtupleBaseName + TString("_Bp") + tRomanNumerals[iFile] + TString(".root");
     ExtractPairKStar3dVecFromSingleFile(tFileLocation,tArrayName,tNtupleName,fBinSizeKStar,fNbinsKStar,tPairKStar3dVec);
   }
 
@@ -412,7 +430,7 @@ void CoulombFitter::WriteRow(ostream &aOutput, vector<double> &aRow)
 
 
 //________________________________________________________________________________________________________________
-void CoulombFitter::WritePairKStar3dVecFile(TString aOutputBaseName, TString aPairKStarNtupleDirName, TString aFileBaseName, int aNFiles, AnalysisType aAnalysisType, CentralityType aCentralityType, int aNbinsKStar, double aKStarMin, double aKStarMax)
+void CoulombFitter::WritePairKStar3dVecFile(TString aOutputBaseName, TString aPairKStarNtupleBaseName, int aNFiles, AnalysisType aAnalysisType, CentralityType aCentralityType, int aNbinsKStar, double aKStarMin, double aKStarMax)
 {
   TString tOutputName = aOutputBaseName + TString(cAnalysisBaseTags[aAnalysisType])+TString(cCentralityTags[aCentralityType]) + TString(".txt");
   ofstream tFileOut(tOutputName);
@@ -425,7 +443,7 @@ void CoulombFitter::WritePairKStar3dVecFile(TString aOutputBaseName, TString aPa
   //TODO add centrality selection to this
   //Also, this is basically FitPartialAnalysis::ConnectAnalysisDirectory
 
-  td3dVec tPairKStar3dVec = BuildPairKStar3dVecFull(aPairKStarNtupleDirName,aFileBaseName,aNFiles,aAnalysisType,aCentralityType,aNbinsKStar,aKStarMin,aKStarMax);
+  td3dVec tPairKStar3dVec = BuildPairKStar3dVecFull(aPairKStarNtupleBaseName,aNFiles,aAnalysisType,aCentralityType,aNbinsKStar,aKStarMin,aKStarMax);
 
   //---------------------------------------------------
   tFileOut << aNbinsKStar << " " << aKStarMin << " " << aKStarMax << endl;
@@ -451,7 +469,7 @@ void CoulombFitter::WritePairKStar3dVecFile(TString aOutputBaseName, TString aPa
 }
 
 //________________________________________________________________________________________________________________
-void CoulombFitter::WriteAllPairKStar3dVecFiles(TString aOutputBaseName, TString aPairKStarNtupleDirName, TString aFileBaseName, int aNFiles, int aNbinsKStar, double aKStarMin, double aKStarMax)
+void CoulombFitter::WriteAllPairKStar3dVecFiles(TString aOutputBaseName, TString aPairKStarNtupleBaseName, int aNFiles, int aNbinsKStar, double aKStarMin, double aKStarMax)
 {
   AnalysisType tAnalysisType;
   CentralityType tCentralityType;
@@ -459,7 +477,7 @@ void CoulombFitter::WriteAllPairKStar3dVecFiles(TString aOutputBaseName, TString
   {
     tAnalysisType = fFitSharedAnalyses->GetFitPairAnalysis(iAnaly)->GetAnalysisType();
     tCentralityType = fFitSharedAnalyses->GetFitPairAnalysis(iAnaly)->GetCentralityType();
-    WritePairKStar3dVecFile(aOutputBaseName,aPairKStarNtupleDirName,aFileBaseName,aNFiles,tAnalysisType,tCentralityType,aNbinsKStar,aKStarMin,aKStarMax);
+    WritePairKStar3dVecFile(aOutputBaseName,aPairKStarNtupleBaseName,aNFiles,tAnalysisType,tCentralityType,aNbinsKStar,aKStarMin,aKStarMax);
   }
 }
 
@@ -470,6 +488,13 @@ ChronoTimer tTimer;
 tTimer.Start();
 
   ifstream tFileIn(aFileName);
+  if(!tFileIn.is_open())
+  {
+    cout << "!!!!!!!!!! Not able to find file: " << aFileName << " !!!!!!!!!!" << endl;
+    cout << "\t Create file by running either WritePairKStar3dVecFile (1 File)";
+    cout << "\t or WriteAllPairKStar3dVecFiles (all files needed for analysis)" << endl; 
+    assert(0);
+  }
 
   td3dVec tPairKStar3dVec;
     tPairKStar3dVec.clear();
@@ -588,7 +613,7 @@ void CoulombFitter::BuildPairKStar4dVecFromTxt(TString aFileBaseName)
 
 
 //________________________________________________________________________________________________________________
-void CoulombFitter::BuildPairKStar4dVecOnFly(TString aPairKStarNtupleDirName, TString aFileBaseName, int aNFiles, int aNbinsKStar, double aKStarMin, double aKStarMax)
+void CoulombFitter::BuildPairKStar4dVecOnFly(TString aPairKStarNtupleBaseName, int aNFiles, int aNbinsKStar, double aKStarMin, double aKStarMax)
 {
   fPairKStar4dVec.resize(fNAnalyses, td3dVec(0, td2dVec(0, td1dVec(0))));
 
@@ -599,7 +624,7 @@ void CoulombFitter::BuildPairKStar4dVecOnFly(TString aPairKStarNtupleDirName, TS
     tAnalysisType = fFitSharedAnalyses->GetFitPairAnalysis(iAnaly)->GetAnalysisType();
     tCentralityType = fFitSharedAnalyses->GetFitPairAnalysis(iAnaly)->GetCentralityType();
 
-    td3dVec tPairKStar3dVec = BuildPairKStar3dVecFull(aPairKStarNtupleDirName,aFileBaseName,aNFiles,tAnalysisType,tCentralityType,aNbinsKStar,aKStarMin,aKStarMax);
+    td3dVec tPairKStar3dVec = BuildPairKStar3dVecFull(aPairKStarNtupleBaseName,aNFiles,tAnalysisType,tCentralityType,aNbinsKStar,aKStarMin,aKStarMax);
     fPairKStar4dVec[iAnaly] = tPairKStar3dVec;
   }
 
@@ -2686,6 +2711,25 @@ td1dVec CoulombFitter::GetCoulombResidualCorrelation(AnalysisType aResidualType,
   return tReturnResCf;
 }
 
+
+//________________________________________________________________________________________________________________
+void CoulombFitter::InitializeFitter()
+{
+  LednickyFitter::InitializeFitter();
+  //------------------------------
+
+  if(!fUseRandomKStarVectors)  //Using KStarVectors from data, so must build fPairKStar4dVec
+  {
+    if(fReadPairsFromTxtFiles) BuildPairKStar4dVecFromTxt(fPairKStar3dVecBaseName);
+    else BuildPairKStar4dVecOnFly(fPairKStarNtupleBaseName, fNFilesNtuple, fPairsNbinsKStar, fPairsKStarMin, fPairsKStarMax);
+  }
+  else BuildPairSample4dVec(fNPairsPerKStarBin, fPairsKStarBinSize);
+
+
+
+}
+
+
 //________________________________________________________________________________________________________________
 void CoulombFitter::DoFit()
 {
@@ -2779,5 +2823,9 @@ void CoulombFitter::DoFit()
 
 
 //________________________________________________________________________________________________________________
+void CoulombFitter::Finalize()
+{
+  LednickyFitter::Finalize();
+}
 
 

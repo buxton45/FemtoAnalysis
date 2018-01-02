@@ -6,42 +6,13 @@
 #define COULOMBFITTER_H
 
 //includes and any constant variable declarations
-#include <iostream>
-#include <sstream>
-#include <fstream>
-#include <string>
-#include <iomanip>
-#include <complex>
-#include <math.h>
-#include <vector>
-#include <ctime>
-#include <random>
-#include <chrono>
-#include <algorithm>
-#include <limits>
 
-#include "Faddeeva.hh"
-
-#include "TF1.h"
-#include "TH1F.h"
 #include "TH3.h"
 #include "THn.h"
-#include "TFile.h"
-#include "TCanvas.h"
-#include "TApplication.h"
-#include "TPaveText.h"
-#include "TStyle.h"
-#include "TAxis.h"
-#include "TGraph.h"
-#include "TMath.h"
 #include "TVector3.h"
 #include "TNtuple.h"
 #include "TRandom.h"
 #include "TObjectTable.h"
-
-#include "TSystem.h"
-#include "TMinuit.h"
-#include "TVirtualFitter.h"
 
 #include <omp.h>
 
@@ -78,15 +49,15 @@ public:
   void LoadInterpHistFile(TString aFileBaseName, TString aLednickyHFunctionFileBaseName="~/Analysis/FemtoAnalysis/ProcessData/CoulombFitter/LednickyHFunction");  //TODO should this be a virtual function?
 
   void ExtractPairKStar3dVecFromSingleFile(TString aFileLocation, TString aArrayName, TString aNtupleName, double aBinSizeKStar, double aNbinsKStar, td3dVec &aVecToFill);
-  td3dVec BuildPairKStar3dVecFull(TString aPairKStarNtupleDirName, TString aFileBaseName, int aNFiles, AnalysisType aAnalysisType, CentralityType aCentralityType, int aNbinsKStar, double aKStarMin, double aKStarMax);
+  td3dVec BuildPairKStar3dVecFull(TString aPairKStarNtupleBaseName, int aNFiles, AnalysisType aAnalysisType, CentralityType aCentralityType, int aNbinsKStar, double aKStarMin, double aKStarMax);
 
   void WriteRow(ostream &aOutput, vector<double> &aRow);
-  void WritePairKStar3dVecFile(TString aOutputBaseName, TString aPairKStarNtupleDirName, TString aFileBaseName, int aNFiles, AnalysisType aAnalysisType, CentralityType aCentralityType, int aNbinsKStar, double aKStarMin, double aKStarMax);
-  void WriteAllPairKStar3dVecFiles(TString aOutputBaseName, TString aPairKStarNtupleDirName, TString aFileBaseName, int aNFiles, int aNbinsKStar, double aKStarMin, double aKStarMax);
+  void WritePairKStar3dVecFile(TString aOutputBaseName, TString aPairKStarNtupleBaseName, int aNFiles, AnalysisType aAnalysisType, CentralityType aCentralityType, int aNbinsKStar, double aKStarMin, double aKStarMax);
+  void WriteAllPairKStar3dVecFiles(TString aOutputBaseName, TString aPairKStarNtupleBaseName, int aNFiles, int aNbinsKStar, double aKStarMin, double aKStarMax);
   td3dVec BuildPairKStar3dVecFromTxt(TString aFileName);
 
   void BuildPairKStar4dVecFromTxt(TString aFileBaseName);
-  void BuildPairKStar4dVecOnFly(TString aPairKStarNtupleDirName, TString aFileBaseName, int aNFiles, int aNbinsKStar, double aKStarMin, double aKStarMax);
+  void BuildPairKStar4dVecOnFly(TString aPairKStarNtupleBaseName, int aNFiles, int aNbinsKStar, double aKStarMin, double aKStarMax);
 
   void BuildPairSample4dVec(int aNPairsPerKStarBin=16384, double aBinSize=0.01);
   void UpdatePairRadiusParameter(double aNewRadius, int aAnalysisNumber);
@@ -125,13 +96,16 @@ public:
 
   void CalculateFakeChi2(int &npar, double &chi2, double *par);
   double GetChi2(TH1* aFitHistogram);
-  void DoFit();
+
   TH1* CreateFitHistogram(TString aName, int aAnalysisNumber);
   TH1* CreateFitHistogramSample(TString aName, AnalysisType aAnalysisType, int aNbinsK, double aKMin, double aKMax, double aLambda, double aR, double aReF0, double aImF0, double aD0, double aNorm);
   TH1* CreateFitHistogramSampleComplete(TString aName, AnalysisType aAnalysisType, int aNbinsK, double aKMin, double aKMax, double aLambda, double aR, double aReF0s, double aImF0s, double aD0s, double aReF0t, double aImF0t, double aD0t, double aNorm);
 
   td1dVec GetCoulombResidualCorrelation(AnalysisType aResidualType, double *aParentCfParams, vector<double> &aKStarBinCenters, TH2* aTransformMatrix);
 
+  void InitializeFitter();  //Called within DoFit
+  void DoFit();
+  void Finalize();  //Send things back to analyses, etc.
 
   //inline (i.e. simple) functions
   WaveFunction* GetWaveFunctionObject();
@@ -139,6 +113,10 @@ public:
 
   void SetIncludeSingletAndTriplet(bool aIncludeSingletAndTriplet);
   void SetUseRandomKStarVectors(bool aUseRandomKStarVectors);
+  void SetReadPairsFromTxtFiles(bool aRead);
+
+  void SetPairKStarNtupleBaseName(TString aName, int aNFiles=27);
+  void SetPairKStar3dVecBaseName(TString aName);
 
 //TODO
   double GetChi2();  //Why do I need this, it's defined in LednickyFitter.  Stupid compiler
@@ -148,8 +126,20 @@ protected:
   bool fTurnOffCoulomb;
   bool fInterpHistsLoaded;
   bool fIncludeSingletAndTriplet;
+
   bool fUseRandomKStarVectors;
+  bool fReadPairsFromTxtFiles; //if fUseRandomKStarVectors is true, this does nothing
   bool fUseStaticPairs;
+
+  TString fPairKStarNtupleBaseName;
+  int fNFilesNtuple;
+  TString fPairKStar3dVecBaseName;
+
+  //TODO!!!!!!!!!!!
+  int fPairsNbinsKStar;
+  double fPairsKStarMin;
+  double fPairsKStarMax;
+  double fPairsKStarBinSize;
 
 
   int fNCalls;  //TODO delete this
@@ -201,6 +191,10 @@ inline void CoulombFitter::SetTurnOffCoulomb(bool aTurnOffCoulomb) {fTurnOffCoul
 
 inline void CoulombFitter::SetIncludeSingletAndTriplet(bool aIncludeSingletAndTriplet) {fIncludeSingletAndTriplet = aIncludeSingletAndTriplet;}
 inline void CoulombFitter::SetUseRandomKStarVectors(bool aUseRandomKStarVectors) {fUseRandomKStarVectors = aUseRandomKStarVectors;}
+inline void CoulombFitter::SetReadPairsFromTxtFiles(bool aRead) {fReadPairsFromTxtFiles = aRead;}
+
+inline void CoulombFitter::SetPairKStarNtupleBaseName(TString aName, int aNFiles) {fPairKStarNtupleBaseName = aName; fNFilesNtuple = aNFiles;}
+inline void CoulombFitter::SetPairKStar3dVecBaseName(TString aName) {fPairKStar3dVecBaseName = aName;}
 
 inline double CoulombFitter::GetChi2() {return LednickyFitter::GetChi2();}
 

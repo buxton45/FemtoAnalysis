@@ -218,16 +218,15 @@ int main(int argc, char **argv)
   tFitter->LoadInterpHistFile(tFileLocationInterpHistos);
 
   //-------------------------------------------
-  TString tPairKStarNtupleDirName = "/home/jesse/Analysis/FemtoAnalysis/ProcessData/CoulombFitter/NTuples/Roman";
-  TString tFileBaseName = "Results_cXicKch_20160610";
+  TString tPairKStarNtupleBaseName = "/home/jesse/Analysis/FemtoAnalysis/ProcessData/CoulombFitter/NTuples/Roman/Results_cXicKch_20160610";
   TString tOutputName = "PairKStar3dVec_20160610_";
   int tNFiles = 27;
 
 
-//  tFitter->BuildPairKStar3dVecFull(tPairKStarNtupleDirName,tFileBaseName,tNFiles,kAXiKchP,k0010,16,0.,0.16);
-//  tFitter->WritePairKStar3dVecFile(tOutputName,tPairKStarNtupleDirName,tFileBaseName,tNFiles,kAXiKchP,k0010,16,0.,0.16);
-//  tFitter->WriteAllPairKStar3dVecFiles(tOutputName,tPairKStarNtupleDirName,tFileBaseName,tNFiles,16,0.,0.16);
-//  tFitter->WriteAllPairKStar3dVecFiles(tOutputName,tPairKStarNtupleDirName,tFileBaseName,tNFiles,32,0.,0.32);
+//  tFitter->BuildPairKStar3dVecFull(tPairKStarNtupleBaseName,tNFiles,kAXiKchP,k0010,16,0.,0.16);
+//  tFitter->WritePairKStar3dVecFile(tOutputName,tPairKStarNtupleBaseName,tNFiles,kAXiKchP,k0010,16,0.,0.16);
+//  tFitter->WriteAllPairKStar3dVecFiles(tOutputName,tPairKStarNtupleBaseName,tNFiles,16,0.,0.16);
+//  tFitter->WriteAllPairKStar3dVecFiles(tOutputName,tPairKStarNtupleBaseName,tNFiles,32,0.,0.32);
 
 //  tFitter->BuildPairKStar3dVecFromTxt(tOutputName);
 
