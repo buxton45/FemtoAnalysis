@@ -32,7 +32,7 @@ CFLAGS = $(shell root-config --cflags) -pthread -Wno-deprecated-declarations -st
 
 MY_LIBS = $(addprefix build/, MathematicaSession.o WaveFunction.o Interpolator.o ChargedResidualCf.o SimpleChargedResidualCf.o NeutralResidualCf.o ResidualCollection.o SimulatedPairCollection.o SimulatedCoulombCf.o CoulombFitter.o GlobalCoulombFitter.o LednickyFitter.o SimpleFitter.o CoulombFitGenerator.o InterpolationHistograms.o FitChi2Histograms.o FitParameter.o BackgroundFitter.o FitPartialAnalysis.o FitPairAnalysis.o FitSharedAnalyses.o CfLite.o CfHeavy.o Types.o Types_LambdaValues.o Types_FitParamValues.o AnalysisInfo.o Faddeeva.o CanvasPartition.o)
 
-BINARIES = runTest runTest2 runFullTest runGlobalCoulomb runXiKch runVaryCoulomb runWPCFVaryCoulomb runWPCFStrongInfluence runWPCFStrongInfluencev2 runCoulombGenerator runBuildInterpolationHistograms runBuildCoulombOnlyInterpCfs runTestCoulombOnlyInterpCfs runBuildCoulombOnlyInterpWfs runSimpleFitter runProtonCascade runManualFitting
+BINARIES = runTest runTest2 runFullTest runGlobalCoulomb runXiKch runVaryCoulomb runWPCFVaryCoulomb runWPCFStrongInfluence runWPCFStrongInfluencev2 runCoulombGenerator runBuildInterpolationHistograms runBuildCoulombOnlyInterpCfs runTestCoulombOnlyInterpCfs runBuildCoulombOnlyInterpWfs runFitLambda runSimpleFitter runProtonCascade runManualFitting
 
 all : $(BINARIES)
 
@@ -77,6 +77,9 @@ runTestCoulombOnlyInterpCfs: ${MY_LIBS} testCoulombOnlyInterpCfs.C
 
 runBuildCoulombOnlyInterpWfs: ${MY_LIBS} BuildCoulombOnlyInterpWfs.C	
 	${CXX} BuildCoulombOnlyInterpWfs.C ${MY_LIBS} -I${INCDIR} -o runBuildCoulombOnlyInterpWfs -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS) -o $@
+
+runFitLambda: ${MY_LIBS} BuildFitLambda.C	
+	${CXX} BuildFitLambda.C ${MY_LIBS} -I${INCDIR} -o runFitLambda -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS) -o $@
 
 runSimpleFitter: ${MY_LIBS} SimpleTest.C	
 	${CXX} SimpleTest.C ${MY_LIBS} -I${INCDIR} -o runSimpleFitter -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS) -o $@

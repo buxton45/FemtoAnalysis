@@ -116,6 +116,7 @@ public:
   TH1* GetKStarCf(int aAnalysisNumber);
   void SetKStarMinMaxNorm(double aMin, double aMax);
   void SetMinMaxBgdFit(double aMin, double aMax);
+  FitSharedAnalyses* GetFitSharedAnalyses();
 
   void SetApplyNonFlatBackgroundCorrection(bool aApply);
   void SetNonFlatBgdFitType(NonFlatBgdFitType aNonFlatBgdFitType);
@@ -195,6 +196,8 @@ inline double FitGenerator::GetChi2() {return fLednickyFitter->GetChi2();}
 inline TH1* FitGenerator::GetKStarCf(int aAnalysisNumber) {return fSharedAn->GetKStarCfHeavy(aAnalysisNumber)->GetHeavyCfClone();}
 inline void FitGenerator::SetKStarMinMaxNorm(double aMin, double aMax) {fSharedAn->SetKStarMinMaxNorm(aMin, aMax);}
 inline void FitGenerator::SetMinMaxBgdFit(double aMin, double aMax) {fSharedAn->SetMinMaxBgdFit(aMin, aMax);}
+
+inline FitSharedAnalyses* FitGenerator::GetFitSharedAnalyses() {return fSharedAn;}
 
 inline void FitGenerator::SetApplyNonFlatBackgroundCorrection(bool aApply) {fApplyNonFlatBackgroundCorrection = aApply; fSharedAn->SetApplyNonFlatBackgroundCorrection(aApply);}
 inline void FitGenerator::SetNonFlatBgdFitType(NonFlatBgdFitType aNonFlatBgdFitType) {fNonFlatBgdFitType = aNonFlatBgdFitType; fSharedAn->SetNonFlatBgdFitType(aNonFlatBgdFitType);}

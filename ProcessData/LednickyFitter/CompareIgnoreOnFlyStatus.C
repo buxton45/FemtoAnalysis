@@ -6,12 +6,14 @@ class CanvasPartition;
 
 
 //________________________________________________________________________________________________________________
-TCanvas* DrawKStarCfs(vector<vector<TH1*> > &aHistos, AnalysisType aAnType, AnalysisType aConjType)
+TCanvas* DrawKStarCfs(FitGenerator* aFG1, FitGenerator* aFG2)
 {
+  AnalysisType aAnType = aFG1->GetFitSharedAnalyses()->GetFitPairAnalysis(0)->GetAnalysisType();
+  AnalysisType aConjType = aFG1->GetFitSharedAnalyses()->GetFitPairAnalysis(1)->GetAnalysisType();
+
   TString tCanvasName = TString("canKStarCfs");
   tCanvasName += TString(cAnalysisBaseTags[aAnType]) + TString("wConj");
 
-  assert(aHistos.size()==6);
   int tNx=2, tNy=3;
 
 
@@ -44,8 +46,8 @@ TCanvas* DrawKStarCfs(vector<vector<TH1*> > &aHistos, AnalysisType aAnType, Anal
       tAnalysisNumber = j*tNx + i;
       //---------------------------------------------------------------------------------------------------------
 
-      tCanPart->AddGraph(i,j,aHistos[tAnalysisNumber][0],"",tMarkerStyle1,tMarkerColor1,tMarkerSize);
-      tCanPart->AddGraph(i,j,aHistos[tAnalysisNumber][1],"",tMarkerStyle2,tMarkerColor2,tMarkerSize);
+      tCanPart->AddGraph(i,j,(TH1*)aFG1->GetKStarCf(tAnalysisNumber),"",tMarkerStyle1,tMarkerColor1,tMarkerSize);
+      tCanPart->AddGraph(i,j,(TH1*)aFG2->GetKStarCf(tAnalysisNumber),"",tMarkerStyle2,tMarkerColor2,tMarkerSize);
 
       TString tTextAnType;
       if(tAnalysisNumber==0 || tAnalysisNumber==2 || tAnalysisNumber==4) tTextAnType = TString(cAnalysisRootTags[aAnType]);
@@ -74,15 +76,18 @@ TCanvas* DrawKStarCfs(vector<vector<TH1*> > &aHistos, AnalysisType aAnType, Anal
   return tCanPart->GetCanvas();
 }
 
+
+
 //________________________________________________________________________________________________________________
-TCanvas* DrawRatios(vector<vector<TH1*> > &aHistos, AnalysisType aAnType, AnalysisType aConjType)
+TCanvas* DrawKStarCfRatios(FitGenerator* aFG1, FitGenerator* aFG2)
 {
+  AnalysisType aAnType = aFG1->GetFitSharedAnalyses()->GetFitPairAnalysis(0)->GetAnalysisType();
+  AnalysisType aConjType = aFG1->GetFitSharedAnalyses()->GetFitPairAnalysis(1)->GetAnalysisType();
+
   TString tCanvasName = TString("canKStarCfsRatios");
   tCanvasName += TString(cAnalysisBaseTags[aAnType]) + TString("wConj");
 
-  assert(aHistos.size()==6);
   int tNx=2, tNy=3;
-
 
   double tXLow = -0.02;
   double tXHigh = 0.32;
@@ -110,8 +115,8 @@ TCanvas* DrawRatios(vector<vector<TH1*> > &aHistos, AnalysisType aAnType, Analys
       tAnalysisNumber = j*tNx + i;
       //---------------------------------------------------------------------------------------------------------
       tRatioName = TString::Format("KStarCfRatios%s%d", cAnalysisBaseTags[aAnType], tAnalysisNumber);
-      tRatio = (TH1*)aHistos[tAnalysisNumber][0]->Clone(tRatioName);
-      tRatio->Divide((TH1*)aHistos[tAnalysisNumber][1]);
+      tRatio = (TH1*)aFG1->GetKStarCf(tAnalysisNumber)->Clone(tRatioName);
+      tRatio->Divide((TH1*)aFG2->GetKStarCf(tAnalysisNumber));
       tCanPart->AddGraph(i,j,(TH1*)tRatio->Clone(tRatioName),"",tMarkerStyle1,tMarkerColor1,tMarkerSize);
 
 
@@ -137,10 +142,168 @@ TCanvas* DrawRatios(vector<vector<TH1*> > &aHistos, AnalysisType aAnType, Analys
   tCanPart->SetDrawUnityLine(true);
   tCanPart->DrawAll();
   tCanPart->DrawXaxisTitle("k* (GeV/c)");
-  tCanPart->DrawYaxisTitle("C(k*)",43,25,0.05,0.75);
+  tCanPart->DrawYaxisTitle("C_{1}(k*)/C_{2}(k*)",43,25,0.05,0.75);
 
   return tCanPart->GetCanvas();
 }
+
+//________________________________________________________________________________________________________________
+TCanvas* DrawNumDenRatiosPartAn(bool aDrawNum, FitGenerator* aFG1, FitGenerator* aFG2)
+{
+  AnalysisType aAnType = aFG1->GetFitSharedAnalyses()->GetFitPairAnalysis(0)->GetAnalysisType();
+  AnalysisType aConjType = aFG1->GetFitSharedAnalyses()->GetFitPairAnalysis(1)->GetAnalysisType();
+
+  TString tCanvasName;
+  if(aDrawNum) tCanvasName = TString("canNumRatiosPartAn");
+  else tCanvasName = TString("canDenRatiosPartAn");
+  tCanvasName += TString(cAnalysisBaseTags[aAnType]) + TString("wConj");
+
+  int tNx=2, tNy=6;
+
+  double tXLow = -0.02;
+  double tXHigh = 0.98;
+  double tYLow = 0.52;
+  double tYHigh = 1.02;
+  CanvasPartition* tCanPart = new CanvasPartition(tCanvasName,tNx,tNy,tXLow,tXHigh,tYLow,tYHigh,0.12,0.05,0.13,0.05);
+  tCanPart->GetCanvas()->SetCanvasSize(700,1500);
+
+  int tMarkerStyle1 = 20;
+  int tMarkerColor1 = 1;
+  double tMarkerSize = 0.5;
+
+  if(aAnType==kLamK0 || aAnType==kALamK0) tMarkerColor1 = kBlack;
+  else if(aAnType==kLamKchP || aAnType==kALamKchM) tMarkerColor1 = kRed;
+  else if(aAnType==kLamKchM || aAnType==kALamKchP) tMarkerColor1 = kBlue;
+  else tMarkerColor1=1;
+
+  TH1* tRatio;
+  TString tRatioName;
+  int tAnalysisNumber=0;
+  int tPartialAnNumber = 0;
+  FitPartialAnalysis *tPartAn1, *tPartAn2;
+  for(int j=0; j<tNy; j++)
+  {
+    for(int i=0; i<tNx; i++)
+    {
+      tPartialAnNumber = i;
+      //---------------------------------------------------------------------------------------------------------
+      tPartAn1 = aFG1->GetFitSharedAnalyses()->GetFitPairAnalysis(tAnalysisNumber)->GetFitPartialAnalysis(tPartialAnNumber);
+      tPartAn2 = aFG2->GetFitSharedAnalyses()->GetFitPairAnalysis(tAnalysisNumber)->GetFitPartialAnalysis(tPartialAnNumber);
+      //---------------------------------------------------------------------------------------------------------
+      if(aDrawNum) 
+      {
+        tRatioName = TString::Format("NumRatios%s_%d_%d", cAnalysisBaseTags[aAnType], tAnalysisNumber, tPartialAnNumber);
+        tRatio = (TH1*)tPartAn1->GetKStarCfLite()->Num()->Clone(tRatioName);
+        tRatio->Divide((TH1*)tPartAn2->GetKStarCfLite()->Num());
+      }
+      else 
+      {
+        tRatioName = TString::Format("DenRatios%s_%d_%d", cAnalysisBaseTags[aAnType], tAnalysisNumber, tPartialAnNumber);
+        tRatio = (TH1*)tPartAn1->GetKStarCfLite()->Den()->Clone(tRatioName);
+        tRatio->Divide((TH1*)tPartAn2->GetKStarCfLite()->Den());
+      }
+      tCanPart->AddGraph(i,j,(TH1*)tRatio->Clone(tRatioName),"",tMarkerStyle1,tMarkerColor1,tMarkerSize);
+
+      assert(tPartAn1->GetAnalysisType() == tPartAn2->GetAnalysisType());
+      assert(tPartAn1->GetBFieldType() == tPartAn2->GetBFieldType());
+      assert(tPartAn1->GetCentralityType() == tPartAn2->GetCentralityType());
+
+      TString tTextAnType = TString::Format("%s (%s)", cAnalysisRootTags[tPartAn1->GetAnalysisType()], cBFieldTags[tPartAn1->GetBFieldType()]);
+
+      TPaveText* tAnTypeName = tCanPart->SetupTPaveText(tTextAnType,i,j,0.6,0.85);
+      tCanPart->AddPadPaveText(tAnTypeName,i,j);
+
+      TString tTextCentrality = TString(cPrettyCentralityTags[tPartAn1->GetCentralityType()]);
+      TPaveText* tCentralityName = tCanPart->SetupTPaveText(tTextCentrality,i,j,0.05,0.85);
+      tCanPart->AddPadPaveText(tCentralityName,i,j);
+
+      tAnalysisNumber += i;
+    }
+  }
+
+  tCanPart->SetDrawUnityLine(true);
+  tCanPart->DrawAll();
+  tCanPart->DrawXaxisTitle("k* (GeV/c)");
+  if(aDrawNum) tCanPart->DrawYaxisTitle("Num1/Num2",43,25,0.05,0.75);
+  else tCanPart->DrawYaxisTitle("Den1/Den2",43,25,0.05,0.75);
+
+  return tCanPart->GetCanvas();
+}
+
+//________________________________________________________________________________________________________________
+TCanvas* DrawNumDenRatiosAn(bool aDrawNum, FitGenerator* aFG1, FitGenerator* aFG2, bool aNormalize=false)
+{
+  AnalysisType aAnType = aFG1->GetFitSharedAnalyses()->GetFitPairAnalysis(0)->GetAnalysisType();
+  AnalysisType aConjType = aFG1->GetFitSharedAnalyses()->GetFitPairAnalysis(1)->GetAnalysisType();
+
+  TString tCanvasName;
+  if(aDrawNum) tCanvasName = TString("canNumRatios");
+  else tCanvasName = TString("canDenRatios");
+  tCanvasName += TString(cAnalysisBaseTags[aAnType]) + TString("wConj");
+
+  int tNx=2, tNy=3;
+
+  double tXLow = -0.02;
+  double tXHigh = 0.98;
+  double tYLow = 0.52;
+  double tYHigh = 1.02;
+  CanvasPartition* tCanPart = new CanvasPartition(tCanvasName,tNx,tNy,tXLow,tXHigh,tYLow,tYHigh,0.12,0.05,0.13,0.05);
+//  tCanPart->GetCanvas()->SetCanvasSize(700,1500);
+
+  int tMarkerStyle1 = 20;
+  int tMarkerColor1 = 1;
+  double tMarkerSize = 0.5;
+
+  if(aAnType==kLamK0 || aAnType==kALamK0) tMarkerColor1 = kBlack;
+  else if(aAnType==kLamKchP || aAnType==kALamKchM) tMarkerColor1 = kRed;
+  else if(aAnType==kLamKchM || aAnType==kALamKchP) tMarkerColor1 = kBlue;
+  else tMarkerColor1=1;
+
+  TH1* tRatio;
+  TString tRatioName;
+  int tAnalysisNumber=0;
+  FitPairAnalysis *tAn1, *tAn2;
+  for(int j=0; j<tNy; j++)
+  {
+    for(int i=0; i<tNx; i++)
+    {
+      tAnalysisNumber = j*tNx + i;
+      //---------------------------------------------------------------------------------------------------------
+      tAn1 = aFG1->GetFitSharedAnalyses()->GetFitPairAnalysis(tAnalysisNumber);
+      tAn2 = aFG2->GetFitSharedAnalyses()->GetFitPairAnalysis(tAnalysisNumber);
+      //---------------------------------------------------------------------------------------------------------
+      if(aDrawNum) tRatioName = TString::Format("NumRatios%s_%d", cAnalysisBaseTags[aAnType], tAnalysisNumber);
+      else tRatioName = TString::Format("DenRatios%s_%d", cAnalysisBaseTags[aAnType], tAnalysisNumber);
+
+      tRatio = (TH1*)tAn1->GetKStarCfHeavy()->GetSimplyAddedNumDen(tRatioName, aDrawNum);
+      tRatio->Divide((TH1*)tAn2->GetKStarCfHeavy()->GetSimplyAddedNumDen(tRatioName, aDrawNum));
+      if(aNormalize) tRatio->Scale(((TH1*)tAn2->GetKStarCfHeavy()->GetSimplyAddedNumDen(tRatioName, aDrawNum))->Integral()/((TH1*)tAn1->GetKStarCfHeavy()->GetSimplyAddedNumDen(tRatioName, aDrawNum))->Integral());
+      tCanPart->AddGraph(i,j,(TH1*)tRatio->Clone(tRatioName),"",tMarkerStyle1,tMarkerColor1,tMarkerSize);
+
+      assert(tAn1->GetAnalysisType() == tAn2->GetAnalysisType());
+      assert(tAn1->GetCentralityType() == tAn2->GetCentralityType());
+
+      TString tTextAnType = TString::Format("%s", cAnalysisRootTags[tAn1->GetAnalysisType()]);
+
+      TPaveText* tAnTypeName = tCanPart->SetupTPaveText(tTextAnType,i,j,0.6,0.85);
+      tCanPart->AddPadPaveText(tAnTypeName,i,j);
+
+      TString tTextCentrality = TString(cPrettyCentralityTags[tAn1->GetCentralityType()]);
+      TPaveText* tCentralityName = tCanPart->SetupTPaveText(tTextCentrality,i,j,0.05,0.85);
+      tCanPart->AddPadPaveText(tCentralityName,i,j);
+
+    }
+  }
+
+  tCanPart->SetDrawUnityLine(true);
+  tCanPart->DrawAll();
+  tCanPart->DrawXaxisTitle("k* (GeV/c)");
+  if(aDrawNum) tCanPart->DrawYaxisTitle("Num1/Num2",43,25,0.05,0.75);
+  else tCanPart->DrawYaxisTitle("Den1/Den2",43,25,0.05,0.75);
+
+  return tCanPart->GetCanvas();
+}
+
 
 //________________________________________________________________________________________________________________
 //****************************************************************************************************************
@@ -192,66 +355,16 @@ int main(int argc, char **argv)
   FitGenerator* tLamKchP1 = new FitGenerator(tFileLocationBase1,tFileLocationBaseMC1,tAnType, tCentType,tAnRunType,tNPartialAnalysis,tGenType);
   FitGenerator* tLamKchP2 = new FitGenerator(tFileLocationBase2,tFileLocationBaseMC2,tAnType, tCentType,tAnRunType,tNPartialAnalysis,tGenType);
 
+  //-----------------------------------------------------------------------------
 
-/*
-  TH1* tKStarCf1a = tLamKchP1->GetKStarCf(0);
-    tKStarCf1a->SetMarkerStyle(20);
-    tKStarCf1a->SetMarkerColor(2);
-    tKStarCf1a->SetMarkerSize(1.);
+  TCanvas* tCan = DrawKStarCfs(tLamKchP1, tLamKchP2);
+  TCanvas* tRatioCan = DrawKStarCfRatios(tLamKchP1, tLamKchP2);
 
-  TH1* tKStarCf1b = tLamKchP1->GetKStarCf(1);
-    tKStarCf1b->SetMarkerStyle(20);
-    tKStarCf1b->SetMarkerColor(2);
-    tKStarCf1b->SetMarkerSize(1.);
+  TCanvas* tRatioNumPartAn = DrawNumDenRatiosPartAn(true, tLamKchP1, tLamKchP2);
+  TCanvas* tRatioDenPartAn = DrawNumDenRatiosPartAn(false, tLamKchP1, tLamKchP2);
 
-  TH1* tKStarCf2a = tLamKchP2->GetKStarCf(0);
-    tKStarCf2a->SetMarkerStyle(25);
-    tKStarCf2a->SetMarkerColor(2);
-    tKStarCf2a->SetMarkerSize(1.);
-
-  TH1* tKStarCf2b = tLamKchP2->GetKStarCf(1);
-    tKStarCf2b->SetMarkerStyle(25);
-    tKStarCf2b->SetMarkerColor(2);
-    tKStarCf2b->SetMarkerSize(1.);
-
-
-  TCanvas *tCan = new TCanvas("tCan", "tCan");
-  tCan->Divide(2,1);
-  gStyle->SetOptStat(0);
-
-  tCan->cd(1);
-  tKStarCf1a->Draw();
-  tKStarCf2a->Draw("same");
-
-  tCan->cd(2);
-  tKStarCf1b->Draw();
-  tKStarCf2b->Draw("same");
-*/
-  //---------------------------------------------------
-  TH1* tCfPair0010_1 = tLamKchP1->GetKStarCf(0);
-  TH1* tCfConj0010_1 = tLamKchP1->GetKStarCf(1);
-
-  TH1* tCfPair1030_1 = tLamKchP1->GetKStarCf(2);
-  TH1* tCfConj1030_1 = tLamKchP1->GetKStarCf(3);
-
-  TH1* tCfPair3050_1 = tLamKchP1->GetKStarCf(4);
-  TH1* tCfConj3050_1 = tLamKchP1->GetKStarCf(5);
-  //---------------------------------------------------
-  TH1* tCfPair0010_2 = tLamKchP2->GetKStarCf(0);
-  TH1* tCfConj0010_2 = tLamKchP2->GetKStarCf(1);
-
-  TH1* tCfPair1030_2 = tLamKchP2->GetKStarCf(2);
-  TH1* tCfConj1030_2 = tLamKchP2->GetKStarCf(3);
-
-  TH1* tCfPair3050_2 = tLamKchP2->GetKStarCf(4);
-  TH1* tCfConj3050_2 = tLamKchP2->GetKStarCf(5);
-
-
-  vector<vector<TH1*> > tHistos {{tCfPair0010_1,tCfPair0010_2}, {tCfConj0010_1,tCfConj0010_2}, {tCfPair1030_1,tCfPair1030_2}, {tCfConj1030_1,tCfConj1030_2}, {tCfPair3050_1,tCfPair3050_2}, {tCfConj3050_1,tCfConj3050_2} };
-
-  TCanvas* tCan = DrawKStarCfs(tHistos, tAnType, tConjType);
-  TCanvas* tRatioCan = DrawRatios(tHistos, tAnType, tConjType);
-
+  TCanvas* tRatioNumAn = DrawNumDenRatiosAn(true, tLamKchP1, tLamKchP2);
+  TCanvas* tRatioDenAn = DrawNumDenRatiosAn(false, tLamKchP1, tLamKchP2);
 
 //-------------------------------------------------------------------------------
   tFullTimer.Stop();

@@ -1,7 +1,7 @@
-#include "GeneralFitter.h"
+#include "CoulombFitter.h"
 #include "TLegend.h"
 
-GeneralFitter *myFitter = NULL;
+CoulombFitter *myFitter = NULL;
 
 //______________________________________________________________________________
 void fcn(Int_t &npar, Double_t *gin, Double_t &f, Double_t *par, Int_t iflag)
@@ -32,7 +32,7 @@ int main(int argc, char **argv)
   bool bFakeFit = false;
 
   double tKStarMin = 0.0;
-  double tKStarMax = 0.50;
+  double tKStarMax = 0.30;
   double tBinSize = 0.01;
   int tNBinsK = (tKStarMax-tKStarMin)/tBinSize;
 
@@ -72,13 +72,13 @@ int main(int argc, char **argv)
   if(tAnType==kLamKchP || tAnType==kALamKchM)
   {
 
-    tSharedAn->SetSharedParameter(kRadius,{0,1},5.0,2.,12.);
-    tSharedAn->SetSharedParameter(kRadius,{2,3},4.5,2.,12.);
-    tSharedAn->SetSharedParameter(kRadius,{4,5},4.0,2.,12.);
+    tSharedAn->SetSharedParameter(kRadius,{0,1},4.0,0.,0.);
+    tSharedAn->SetSharedParameter(kRadius,{2,3},3.5,0.,0.);
+    tSharedAn->SetSharedParameter(kRadius,{4,5},3.0,0.,0.);
 
-    tSharedAn->SetSharedParameter(kRef0,-1.694,-10.,10.);
-    tSharedAn->SetSharedParameter(kImf0,1.123,-10.,10.);
-    tSharedAn->SetSharedParameter(kd0,3.195,-10.,10.);
+    tSharedAn->SetSharedParameter(kRef0,-0.69,0.,0.);
+    tSharedAn->SetSharedParameter(kImf0,0.39,0.,0.);
+    tSharedAn->SetSharedParameter(kd0,0.,0.,0.);
   }
 
   if(tAnType==kLamKchM || tAnType==kALamKchP)
@@ -96,19 +96,22 @@ int main(int argc, char **argv)
   tSharedAn->SetFitType(kChi2PML);
 
   tSharedAn->SetFixNormParams(false);
+  tSharedAn->SetApplyNonFlatBackgroundCorrection(true);
   tSharedAn->CreateMinuitParameters();
 
-  GeneralFitter* tFitter = new GeneralFitter(tSharedAn,tKStarMax);
+  CoulombFitter* tFitter = new CoulombFitter(tSharedAn,tKStarMax);
     tFitter->SetTurnOffCoulomb(true);
     tFitter->SetIncludeSingletAndTriplet(false);
     tFitter->SetUseRandomKStarVectors(true);
     tFitter->SetUseStaticPairs(true);
-    tFitter->SetNPairsPerKStarBin(100000);
+    tFitter->SetNPairsPerKStarBin(50000);
     tFitter->SetBinSizeKStar(0.01);
 
-    tFitter->SetApplyMomResCorrection(true);
-    tFitter->SetApplyNonFlatBackgroundCorrection(true);
-    tFitter->SetIncludeResidualCorrelations(true);
+    tFitter->SetApplyMomResCorrection(true);                             //TODO
+    tFitter->SetApplyNonFlatBackgroundCorrection(true);                  //TODO
+    tFitter->SetIncludeResidualCorrelationsType(kIncludeNoResiduals);    //TODO
+
+    tFitter->SetVerbose(true);
 
   tFitter->GetFitSharedAnalyses()->GetMinuitObject()->SetFCN(fcn);
   myFitter = tFitter;
@@ -116,8 +119,8 @@ int main(int argc, char **argv)
   if(bDoFit)
   {
     tFitter->DoFit();
-    TString tSaveHistName = "Chi2HistogramsMinuit_" + TString(cAnalysisBaseTags[tAnType]) + TString(".root");
-    tSharedAn->GetFitChi2Histograms()->SaveHistograms(tSaveHistName);
+//    TString tSaveHistName = "Chi2HistogramsMinuit_" + TString(cAnalysisBaseTags[tAnType]) + TString(".root");
+//    tSharedAn->GetFitChi2Histograms()->SaveHistograms(tSaveHistName);
   }
 
 //_______________________________________________________________________________________________________________________

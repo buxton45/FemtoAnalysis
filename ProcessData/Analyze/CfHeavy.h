@@ -71,6 +71,8 @@ public:
   double GetMinNorm();
   double GetMaxNorm();
 
+  CfLite* GetCfLite(int aPartAnNumber);
+
 private:
 
   TString fHeavyCfName;
@@ -100,6 +102,7 @@ inline TH1* CfHeavy::GetHeavyCfwErrorsByHand() {return fHeavyCfwErrorsByHand;}
 inline double CfHeavy::GetMinNorm() {return fMinNorm;}
 inline double CfHeavy::GetMaxNorm() {return fMaxNorm;}
 
+inline CfLite* CfHeavy::GetCfLite(int aPartAnNumber) {return fCfLiteCollection[aPartAnNumber];}
 
 
 #endif

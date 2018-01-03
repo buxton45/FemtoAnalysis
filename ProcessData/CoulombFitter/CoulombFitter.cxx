@@ -808,7 +808,7 @@ double CoulombFitter::InterpolateWfSquared(double aKStarMag, double aRStarMag, d
   bool tDebug = true; //debug means use personal interpolation methods, instead of standard root ones
 
   //TODO put check to make sure file is open, not sure if assert(fInterpHistFile->IsOpen works);
-  assert(fInterpHistsLoaded);
+  if(!fTurnOffCoulomb) assert(fInterpHistsLoaded);
   //assert(fInterpHistFile->IsOpen());
 
   double tGamow = GetGamowFactor(aKStarMag);
@@ -965,6 +965,7 @@ bool CoulombFitter::CanInterpTheta(double aTheta)
 //________________________________________________________________________________________________________________
 bool CoulombFitter::CanInterpAll(double aKStar, double aRStar, double aTheta)
 {
+  if(fTurnOffCoulomb) return true;
   if(CanInterpKStar(aKStar) && CanInterpRStar(aRStar) && CanInterpTheta(aTheta)) return true;
   return false;
 }
