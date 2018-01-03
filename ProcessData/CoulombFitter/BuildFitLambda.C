@@ -105,7 +105,6 @@ int main(int argc, char **argv)
     tFitter->SetUseStaticPairs(true);
     tFitter->SetNPairsPerKStarBin(100000);
     tFitter->SetBinSizeKStar(0.01);
-    tFitter->BuildPairSample4dVec();
 
     tFitter->SetApplyMomResCorrection(true);
     tFitter->SetApplyNonFlatBackgroundCorrection(true);

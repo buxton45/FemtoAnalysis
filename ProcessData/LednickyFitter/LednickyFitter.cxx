@@ -68,20 +68,20 @@ LednickyFitter::LednickyFitter(FitSharedAnalyses* aFitSharedAnalyses, double aMa
 }
 
 //________________________________________________________________________________________________________________
-LednickyFitter::LednickyFitter(AnalysisType aAnalysisType, double aMaxFitKStar):
+LednickyFitter::LednickyFitter(AnalysisType aAnalysisType, double aMaxBuildKStar, double aKStarBinWidth):
   fVerbose(false),
   fFitSharedAnalyses(nullptr),
   fMinuit(nullptr),
   fNAnalyses(0),
   fCorrectedFitVecs(0),
 
-  fMaxFitKStar(aMaxFitKStar),
+  fMaxFitKStar(aMaxBuildKStar),
   fNbinsXToFit(0),
 
-  fMaxBuildKStar(0.0),
+  fMaxBuildKStar(aMaxBuildKStar),
   fNbinsXToBuild(0),
 
-  fKStarBinWidth(0.),
+  fKStarBinWidth(aKStarBinWidth),
   fKStarBinCenters(0),
   fRejectOmega(false),
   fApplyNonFlatBackgroundCorrection(false), //TODO change deault to true here AND in CoulombFitter
@@ -110,6 +110,9 @@ LednickyFitter::LednickyFitter(AnalysisType aAnalysisType, double aMaxFitKStar):
 
 {
   fNAnalyses=1;
+
+  fNbinsXToFit = std::round(fMaxFitKStar/fKStarBinWidth);
+  fNbinsXToBuild = fNbinsXToFit;
 }
 
 

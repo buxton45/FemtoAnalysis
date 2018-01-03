@@ -14,10 +14,7 @@ CoulombFitter *myFitter = NULL;
 //______________________________________________________________________________
 void fcn(Int_t &npar, Double_t *gin, Double_t &f, Double_t *par, Int_t iflag)
 {
-  myFitter->CalculateChi2PML(npar,f,par);
-//  myFitter->CalculateChi2PMLwMomResCorrection(npar,f,par);
-//  myFitter->CalculateChi2(npar,f,par);
-//  myFitter->CalculateFakeChi2(npar,f,par);
+  myFitter->CalculateFitFunction(npar,f,par);
 }
 
 //________________________________________________________________________________________________________________
@@ -66,7 +63,7 @@ int main(int argc, char **argv)
   TString tFileDirectory = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cXicKch_20170501/";
   TString tFileLocationBase = tFileDirectory + TString("Results_cXicKch_20170501");
   bool bScattMinusPlus = true;  //otherwise, PlusPlus
-  bool bSaveImage = true;
+  bool bSaveImage = false;
 
   AnalysisType tAnType, tConjType;
 
@@ -117,7 +114,6 @@ int main(int argc, char **argv)
   tFitter->SetUseStaticPairs(true);
   tFitter->SetNPairsPerKStarBin(tNPairsPerKStarBin);
   tFitter->SetBinSizeKStar(tBinSize);
-  tFitter->BuildPairSample4dVec();
 
   tFitter->GetFitSharedAnalyses()->GetMinuitObject()->SetFCN(fcn);
   myFitter = tFitter;

@@ -38,7 +38,7 @@ class CoulombFitter : public LednickyFitter {
 public:
   //Constructor, destructor, copy constructor, assignment operator
   CoulombFitter(FitSharedAnalyses* aFitSharedAnalyses, double aMaxFitKStar = 0.3);
-  CoulombFitter(AnalysisType aAnalysisType, double aMaxFitKStar = 0.3);
+  CoulombFitter(AnalysisType aAnalysisType, double aMaxBuildKStar = 0.3, double aKStarBinWidth=0.01);
   virtual ~CoulombFitter();
 
   CoulombType GetCoulombType(AnalysisType aAnalysisType);
@@ -87,9 +87,7 @@ public:
   //void CalculateChi2(int &npar, double &chi2, double *par);
   bool AreParamsSame(double *aCurrent, double *aNew, int aNEntries);
 
-  void CalculateChi2PML(int &npar, double &chi2, double *par);
   void CalculateFitFunction(int &npar, double &chi2, double *par);
-
 
   void CalculateFakeChi2(int &npar, double &chi2, double *par);
   double GetChi2(TH1* aFitHistogram);
