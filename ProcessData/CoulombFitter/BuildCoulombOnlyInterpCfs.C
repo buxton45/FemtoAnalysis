@@ -87,6 +87,7 @@ int main(int argc, char **argv)
   tFitter->SetUseStaticPairs(true);
   tFitter->SetNPairsPerKStarBin(50000);
   tFitter->SetIncludeSingletAndTriplet(false);
+  tFitter->BuildPairSample4dVec();
 /*
   tFitter->GetFitSharedAnalyses()->GetMinuitObject()->SetFCN(fcn);
   myFitter = tFitter;

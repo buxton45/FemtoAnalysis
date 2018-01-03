@@ -100,6 +100,8 @@ int main(int argc, char **argv)
   td1dVec tBinInfo = tFitter->BuildPairKStar4dVecFromTxt(tOutputName);
   tFitter->SetUseStaticPairs(true);
   tFitter->SetNPairsPerKStarBin(16384);
+  tFitter->SetBinSizeKStar(0.01);
+  tFitter->BuildPairSample4dVec();
   //-------------------------------------------
 
   tFitter->GetFitSharedAnalyses()->GetMinuitObject()->SetFCN(fcn);

@@ -90,7 +90,7 @@ public:
   bool CanInterpKStar(double aKStar);
   bool CanInterpRStar(double aRStar);
   bool CanInterpTheta(double aTheta);
-  bool CanInterpAll(double aKStar, double aRStar, double aTheta, double aReF0, double aImF0, double aD0);
+  bool CanInterpAll(double aKStar, double aRStar, double aTheta);
 
   void SetRandomKStar3Vec(TVector3* aKStar3Vec, double aKStarMagMin, double aKStarMagMax);
   td1dVec GetExpXiData(double aMaxKStar=1.0, CentralityType aCentType=k0010);

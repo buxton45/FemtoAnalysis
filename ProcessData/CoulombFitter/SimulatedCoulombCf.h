@@ -80,7 +80,7 @@ public:
   bool CanInterpKStar(double aKStar);
   bool CanInterpRStar(double aRStar);
   bool CanInterpTheta(double aTheta);
-  bool CanInterpAll(double aKStar, double aRStar, double aTheta, double aReF0, double aImF0, double aD0);
+  bool CanInterpAll(double aKStar, double aRStar, double aTheta);
 
   void BuildSimPairCollection(double aKStarBinSize, double aMaxBuildKStar, int aNPairsPerKStarBin=16384, bool aUseRandomKStarVectors=true, bool aShareSingleSampleAmongstAll=false);
 

@@ -220,7 +220,7 @@ double GlobalCoulombFitter::GetFitCfContent(AnalysisType aAnalysisType, double a
 
     tRStarMag = tSource3Vec->Mag();
 
-    if(fTurnOffCoulomb || CanInterpAll(tKStarMag,tRStarMag,tTheta,par[2],par[3],par[4])) 
+    if(fTurnOffCoulomb || CanInterpAll(tKStarMag,tRStarMag,tTheta)) 
     {
       tWaveFunctionSq = InterpolateWfSquared(aAnalysisType,tKStarMag,tRStarMag,tTheta,par[2],par[3],par[4]);
       tNInterpolate++;
@@ -277,7 +277,7 @@ double GlobalCoulombFitter::GetFitCfContentwStaticPairs(AnalysisType aAnalysisTy
     tRStarMag = fPairSample4dVec[aAnalysisNumber][tBin][i][1];
     tTheta = fPairSample4dVec[aAnalysisNumber][tBin][i][2];
 
-    if(fTurnOffCoulomb || CanInterpAll(tKStarMag,tRStarMag,tTheta,par[2],par[3],par[4])) 
+    if(fTurnOffCoulomb || CanInterpAll(tKStarMag,tRStarMag,tTheta)) 
     {
       tWaveFunctionSq = InterpolateWfSquared(aAnalysisType, tKStarMag,tRStarMag,tTheta,par[2],par[3],par[4]);
       tNInterpolate++;

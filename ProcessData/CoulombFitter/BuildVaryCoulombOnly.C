@@ -138,6 +138,8 @@ int main(int argc, char **argv)
   int tNbinsK = 15;
   double tKMin = 0.;
   double tKMax = 0.15;
+  double tBinSize = (tKMax-tKMin)/tNbinsK;
+  int tNPairsPerKStarBin = 50000;
 
   AnalysisRunType tAnalysisRunType = kTrain;
   int tNPartialAnalysis = 5;
@@ -178,7 +180,9 @@ int main(int argc, char **argv)
 
   tFitter->SetUseRandomKStarVectors(true);
   tFitter->SetUseStaticPairs(true);
-  tFitter->SetNPairsPerKStarBin(50000);
+  tFitter->SetNPairsPerKStarBin(tNPairsPerKStarBin);
+  tFitter->SetBinSizeKStar(tBinSize);
+  tFitter->BuildPairSample4dVec();
 
   //-------------------------------------------
 
@@ -229,7 +233,7 @@ int main(int argc, char **argv)
     tNbinsK = 15;
     tKMin = 0.;
     tKMax = 0.15;
-    double tBinSize = (tKMax-tKMin)/tNbinsK;
+    tBinSize = (tKMax-tKMin)/tNbinsK;
 
     CoulombFitter* tFitter2 = new CoulombFitter(tSharedAn,tKMax);
       tFitter2->SetIncludeSingletAndTriplet(false);
@@ -239,8 +243,9 @@ int main(int argc, char **argv)
 
     tFitter2->SetUseRandomKStarVectors(true);
     tFitter2->SetUseStaticPairs(true);
-    tFitter2->SetNPairsPerKStarBin(50000);
+    tFitter2->SetNPairsPerKStarBin(tNPairsPerKStarBin);
     tFitter2->SetBinSizeKStar(tBinSize);
+    tFitter2->BuildPairSample4dVec();
 
     tFitter2->GetFitSharedAnalyses()->GetMinuitObject()->SetFCN(fcn);
     myFitter = tFitter2;

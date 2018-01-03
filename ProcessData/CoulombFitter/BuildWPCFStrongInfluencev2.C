@@ -129,6 +129,7 @@ int main(int argc, char **argv)
   double tKMin = 0.;
   double tKMax = 0.16;
   double tBinSize = (tKMax-tKMin)/tNbinsK;
+  int tNPairsPerKStarBin = 50000;
   //-----------------------------------------
 
 
@@ -160,8 +161,9 @@ int main(int argc, char **argv)
 
   tFitter->SetUseRandomKStarVectors(true);
   tFitter->SetUseStaticPairs(true);
-  tFitter->SetNPairsPerKStarBin(50000);
+  tFitter->SetNPairsPerKStarBin(tNPairsPerKStarBin);
   tFitter->SetBinSizeKStar(tBinSize);
+  tFitter->BuildPairSample4dVec();
 
   tFitter->GetFitSharedAnalyses()->GetMinuitObject()->SetFCN(fcn);
   myFitter = tFitter;

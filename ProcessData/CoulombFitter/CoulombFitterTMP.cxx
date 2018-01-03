@@ -998,7 +998,7 @@ bool CoulombFitter::CanInterpTheta(double aTheta)
 
 
 //________________________________________________________________________________________________________________
-bool CoulombFitter::CanInterpAll(double aKStar, double aRStar, double aTheta, double aReF0, double aImF0, double aD0)
+bool CoulombFitter::CanInterpAll(double aKStar, double aRStar, double aTheta)
 {
   if(CanInterpKStar(aKStar) && CanInterpRStar(aRStar) && CanInterpTheta(aTheta)) return true;
   return false;
@@ -1127,7 +1127,7 @@ cout << "\t aKStarMagMin = " << aKStarMagMin << "\t aKStarMagMax = " << aKStarMa
 //TODO
 //TODO!!!!!!!!!!!!! Must have separate InterpolateWfSquaredXiKchP and InterpolateWfSquaredXiKchM!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     //Note:  Running CanInterpAll is faster than checking CanInterpScatParams outside of for loop and comparing to CanInterpKRTh.....strange but true
-    tCanInterp = CanInterpAll(tKStarMag,tRStarMag,tTheta,par[2],par[3],par[4]);
+    tCanInterp = CanInterpAll(tKStarMag,tRStarMag,tTheta);
     if(fTurnOffCoulomb || tCanInterp) 
     {
       tWaveFunctionSq = InterpolateWfSquared(tKStarMag,tRStarMag,tTheta,par[2],par[3],par[4]);
@@ -1232,7 +1232,7 @@ double CoulombFitter::GetFitCfContentwStaticPairs(double aKStarMagMin, double aK
     tRStarMag = fPairSample4dVec[aAnalysisNumber][tBin][i][1];
     tTheta = fPairSample4dVec[aAnalysisNumber][tBin][i][2];
 
-    tCanInterp = CanInterpAll(tKStarMag,tRStarMag,tTheta,par[2],par[3],par[4]);
+    tCanInterp = CanInterpAll(tKStarMag,tRStarMag,tTheta);
     if(fTurnOffCoulomb || tCanInterp) 
     {
       tWaveFunctionSq = InterpolateWfSquared(tKStarMag,tRStarMag,tTheta,par[2],par[3],par[4]);
@@ -1378,7 +1378,7 @@ double CoulombFitter::GetFitCfContentComplete(double aKStarMagMin, double aKStar
 //TODO
 //TODO!!!!!!!!!!!!! Must have separate InterpolateWfSquaredXiKchP and InterpolateWfSquaredXiKchM!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     //Note:  Running CanInterpAll is faster than checking CanInterpScatParams outside of for loop and comparing to CanInterpKRTh.....strange but true
-    tCanInterp = CanInterpAll(tKStarMag,tRStarMag,tTheta,par[2],par[3],par[4]);
+    tCanInterp = CanInterpAll(tKStarMag,tRStarMag,tTheta);
     if(fTurnOffCoulomb || tCanInterp)
     {
       tWaveFunctionSqSinglet = InterpolateWfSquared(tKStarMag,tRStarMag,tTheta,par[2],par[3],par[4]);
@@ -1513,7 +1513,7 @@ double CoulombFitter::GetFitCfContentCompletewStaticPairs(double aKStarMagMin, d
     tRStarMag = fPairSample4dVec[aAnalysisNumber][tBin][i][1];
     tTheta = fPairSample4dVec[aAnalysisNumber][tBin][i][2];
 
-    tCanInterp = CanInterpAll(tKStarMag,tRStarMag,tTheta,par[2],par[3],par[4]);
+    tCanInterp = CanInterpAll(tKStarMag,tRStarMag,tTheta);
     if(fTurnOffCoulomb || tCanInterp)
     {
       tWaveFunctionSqSinglet = InterpolateWfSquared(tKStarMag,tRStarMag,tTheta,par[2],par[3],par[4]);
@@ -1664,7 +1664,7 @@ double CoulombFitter::GetFitCfContentSerialv2(double aKStarMagMin, double aKStar
       tTempPair[2] = tTheta;
 
 
-    if(CanInterpAll(tKStarMag,tRStarMag,tTheta,par[2],par[3],par[4]))
+    if(CanInterpAll(tKStarMag,tRStarMag,tTheta))
     {
       tPairsGPU.push_back(tTempPair);
       tNGood++;

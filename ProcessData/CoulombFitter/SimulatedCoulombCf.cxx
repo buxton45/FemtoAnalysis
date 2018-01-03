@@ -444,7 +444,7 @@ bool SimulatedCoulombCf::CanInterpTheta(double aTheta)
 
 
 //________________________________________________________________________________________________________________
-bool SimulatedCoulombCf::CanInterpAll(double aKStar, double aRStar, double aTheta, double aReF0, double aImF0, double aD0)
+bool SimulatedCoulombCf::CanInterpAll(double aKStar, double aRStar, double aTheta)
 {
   if(CanInterpKStar(aKStar) && CanInterpRStar(aRStar) && CanInterpTheta(aTheta)) return true;
   return false;
@@ -517,7 +517,7 @@ double SimulatedCoulombCf::GetFitCfContentCompletewStaticPairs(int aAnalysisNumb
     tRStarMag = fSimPairCollection->GetPairRStarMag(aAnalysisNumber, tBin, i);
     tTheta = fSimPairCollection->GetPairTheta(aAnalysisNumber, tBin, i);
 
-    tCanInterp = CanInterpAll(tKStarMag,tRStarMag,tTheta,par[2],par[3],par[4]);
+    tCanInterp = CanInterpAll(tKStarMag,tRStarMag,tTheta);
     if(fTurnOffCoulomb || tCanInterp)
     {
       if(fIncludeSingletAndTriplet)

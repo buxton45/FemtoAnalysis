@@ -102,7 +102,10 @@ int main(int argc, char **argv)
     tFitter->SetTurnOffCoulomb(true);
     tFitter->SetIncludeSingletAndTriplet(false);
     tFitter->SetUseRandomKStarVectors(true);
-    tFitter->SetUseStaticPairs(true,100000);
+    tFitter->SetUseStaticPairs(true);
+    tFitter->SetNPairsPerKStarBin(100000);
+    tFitter->SetBinSizeKStar(0.01);
+    tFitter->BuildPairSample4dVec();
 
     tFitter->SetApplyMomResCorrection(true);
     tFitter->SetApplyNonFlatBackgroundCorrection(true);

@@ -1193,7 +1193,7 @@ bool ChargedResidualCf::CanInterpTheta(double aTheta)
 
 
 //________________________________________________________________________________________________________________
-bool ChargedResidualCf::CanInterpAll(double aKStar, double aRStar, double aTheta, double aReF0, double aImF0, double aD0)
+bool ChargedResidualCf::CanInterpAll(double aKStar, double aRStar, double aTheta)
 {
   if(CanInterpKStar(aKStar) && CanInterpRStar(aRStar) && CanInterpTheta(aTheta)) return true;
   return false;
@@ -1336,7 +1336,7 @@ double ChargedResidualCf::GetFitCfContentCompletewStaticPairs(double aKStarMagMi
     tRStarMag = fPairSample3dVec[tBin][i][1];
     tTheta = fPairSample3dVec[tBin][i][2];
 
-    tCanInterp = CanInterpAll(tKStarMag,tRStarMag,tTheta,par[2],par[3],par[4]);
+    tCanInterp = CanInterpAll(tKStarMag,tRStarMag,tTheta);
     if(fTurnOffCoulomb || tCanInterp)
     {
       if(fIncludeSingletAndTriplet)

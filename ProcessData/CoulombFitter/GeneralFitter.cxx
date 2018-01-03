@@ -1429,7 +1429,7 @@ bool GeneralFitter::CanInterpTheta(double aTheta)
 
 
 //________________________________________________________________________________________________________________
-bool GeneralFitter::CanInterpAll(double aKStar, double aRStar, double aTheta, double aReF0, double aImF0, double aD0)
+bool GeneralFitter::CanInterpAll(double aKStar, double aRStar, double aTheta)
 {
   if(CanInterpKStar(aKStar) && CanInterpRStar(aRStar) && CanInterpTheta(aTheta)) return true;
   return false;
@@ -1555,7 +1555,7 @@ double GeneralFitter::GetFitCfContentComplete(double aKStarMagMin, double aKStar
 //TODO
 //TODO!!!!!!!!!!!!! Must have separate InterpolateWfSquaredXiKchP and InterpolateWfSquaredXiKchM!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     //Note:  Running CanInterpAll is faster than checking CanInterpScatParams outside of for loop and comparing to CanInterpKRTh.....strange but true
-    tCanInterp = CanInterpAll(tKStarMag,tRStarMag,tTheta,par[2],par[3],par[4]);
+    tCanInterp = CanInterpAll(tKStarMag,tRStarMag,tTheta);
     if(fTurnOffCoulomb || tCanInterp)
     {
       if(fIncludeSingletAndTriplet)
@@ -1700,7 +1700,7 @@ double GeneralFitter::GetFitCfContentCompletewStaticPairs(double aKStarMagMin, d
     tRStarMag = fPairSample4dVec[aAnalysisNumber][tBin][i][1];
     tTheta = fPairSample4dVec[aAnalysisNumber][tBin][i][2];
 
-    tCanInterp = CanInterpAll(tKStarMag,tRStarMag,tTheta,par[2],par[3],par[4]);
+    tCanInterp = CanInterpAll(tKStarMag,tRStarMag,tTheta);
     if(fTurnOffCoulomb || tCanInterp)
     {
       if(fIncludeSingletAndTriplet)
@@ -1855,7 +1855,7 @@ double GeneralFitter::GetFitCfContentSerialv2(double aKStarMagMin, double aKStar
       tTempPair[2] = tTheta;
 
 
-    if(CanInterpAll(tKStarMag,tRStarMag,tTheta,par[2],par[3],par[4]))
+    if(CanInterpAll(tKStarMag,tRStarMag,tTheta))
     {
       tPairsGPU.push_back(tTempPair);
       tNGood++;

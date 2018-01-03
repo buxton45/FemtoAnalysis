@@ -457,7 +457,7 @@ PairGenTimer.Start();
       tTempPair[2] = tTheta;
 
 
-    if(CanInterpAll(tKStarMag,tRStarMag,tTheta,par[2],par[3],par[4]))
+    if(CanInterpAll(tKStarMag,tRStarMag,tTheta))
     {
       tPairsGPU.push_back(tTempPair);
       tNGood++;
@@ -561,7 +561,7 @@ td4dVec CoulombFitterParallel::Get3dPairs(double aKStarMagMin, double aKStarMagM
       tTempPair[1] = tRStarMag;
       tTempPair[2] = tTheta;
 
-      if(CanInterpAll(tKStarMag,tRStarMag,tTheta,par[2],par[3],par[4]))
+      if(CanInterpAll(tKStarMag,tRStarMag,tTheta))
       {
         tNGood++;
         tPairsGPU[iBin].push_back(tTempPair);

@@ -60,6 +60,7 @@ public:
   void BuildPairKStar4dVecOnFly(TString aPairKStarNtupleBaseName, int aNFiles, int aNbinsKStar, double aKStarMin, double aKStarMax);
 
   void BuildPairSample4dVec(int aNPairsPerKStarBin, double aBinSize);  //TODO make this parallel!!!!!
+  void BuildPairSample4dVec();
   void UpdatePairRadiusParameter(double aNewRadius, int aAnalysisNumber);
 
 
@@ -73,7 +74,7 @@ public:
   bool CanInterpKStar(double aKStar);
   bool CanInterpRStar(double aRStar);
   bool CanInterpTheta(double aTheta);
-  bool CanInterpAll(double aKStar, double aRStar, double aTheta, double aReF0, double aImF0, double aD0);
+  bool CanInterpAll(double aKStar, double aRStar, double aTheta);
 
   void SetRandomKStar3Vec(TVector3* aKStar3Vec, double aKStarMagMin, double aKStarMagMax);
 
@@ -86,9 +87,7 @@ public:
   //void CalculateChi2(int &npar, double &chi2, double *par);
   bool AreParamsSame(double *aCurrent, double *aNew, int aNEntries);
 
-  void CalculateChi2PML(int &npar, double &chi2, double *par);  //TODO change default to true when matrices are ready
-  void CalculateChi2PMLwMomResCorrection(int &npar, double &chi2, double *par);
-
+  void CalculateChi2PML(int &npar, double &chi2, double *par);
   void CalculateFitFunction(int &npar, double &chi2, double *par);
 
 

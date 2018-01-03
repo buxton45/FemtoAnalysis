@@ -47,7 +47,7 @@ int main(int argc, char **argv)
 
   TString tFileDirectory = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cXicKch_20170505_ignoreOnFlyStatus/";
   TString tFileLocationBase = tFileDirectory + TString("Results_cXicKch_20170505_ignoreOnFlyStatus");
-  bool bSaveImage = true;
+  bool bSaveImage = false;
   bool bStretchCanvas = true;
 
   AnalysisType tAnType, tConjType;
@@ -65,6 +65,7 @@ int main(int argc, char **argv)
   double tKMin = 0.;
   double tKMax = 0.16;
   double tBinSize = (tKMax-tKMin)/tNbinsK;
+  int tNPairsPerKStarBin = 50000;
   //-----------------------------------------
 
 
@@ -117,8 +118,9 @@ int main(int argc, char **argv)
 
   tFitter->SetUseRandomKStarVectors(true);
   tFitter->SetUseStaticPairs(true);
-  tFitter->SetNPairsPerKStarBin(50000);
+  tFitter->SetNPairsPerKStarBin(tNPairsPerKStarBin);
   tFitter->SetBinSizeKStar(tBinSize);
+  tFitter->BuildPairSample4dVec();
 
   tFitter->GetFitSharedAnalyses()->GetMinuitObject()->SetFCN(fcn);
   myFitter = tFitter;
