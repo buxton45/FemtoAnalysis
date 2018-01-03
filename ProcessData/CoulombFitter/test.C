@@ -97,7 +97,7 @@ int main(int argc, char **argv)
   int tNFiles = 27;
 
 //  tFitter->WriteAllPairKStar3dVecFiles(tOutputName,tPairKStarNtupleDirName,tFileBaseName,tNFiles,32,0.,0.32);
-  tFitter->BuildPairKStar4dVecFromTxt(tOutputName);
+  td1dVec tBinInfo = tFitter->BuildPairKStar4dVecFromTxt(tOutputName);
   //-------------------------------------------
 
   tFitter->GetFitSharedAnalyses()->GetMinuitObject()->SetFCN(fcn);

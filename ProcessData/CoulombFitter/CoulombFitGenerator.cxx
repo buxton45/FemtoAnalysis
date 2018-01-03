@@ -1294,7 +1294,8 @@ void CoulombFitGenerator::DoFit(bool aApplyMomResCorrection, bool aApplyNonFlatB
   fCoulombFitter->LoadInterpHistFile(tFileLocationInterpHistos);
 
   fCoulombFitter->SetUseRandomKStarVectors(true);
-  fCoulombFitter->SetUseStaticPairs(true, aNPairsPerKStarBin);
+  fCoulombFitter->SetUseStaticPairs(true);
+  fCoulombFitter->SetNPairsPerKStarBin(aNPairsPerKStarBin);
 
   fCoulombFitter->GetFitSharedAnalyses()->GetMinuitObject()->SetFCN(GlobalFCN);
   fCoulombFitter->SetApplyMomResCorrection(aApplyMomResCorrection);

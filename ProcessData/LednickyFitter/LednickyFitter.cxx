@@ -28,9 +28,13 @@ LednickyFitter::LednickyFitter(FitSharedAnalyses* aFitSharedAnalyses, double aMa
   fMinuit(fFitSharedAnalyses->GetMinuitObject()),
   fNAnalyses(fFitSharedAnalyses->GetNFitPairAnalysis()),
   fCorrectedFitVecs(0),
+
   fMaxFitKStar(aMaxFitKStar),
-  fNbinsXToBuild(0),
   fNbinsXToFit(0),
+
+  fMaxBuildKStar(0.0),
+  fNbinsXToBuild(0),
+
   fKStarBinWidth(0.),
   fKStarBinCenters(0),
   fRejectOmega(false),
@@ -70,9 +74,13 @@ LednickyFitter::LednickyFitter(AnalysisType aAnalysisType, double aMaxFitKStar):
   fMinuit(nullptr),
   fNAnalyses(0),
   fCorrectedFitVecs(0),
+
   fMaxFitKStar(aMaxFitKStar),
-  fNbinsXToBuild(0),
   fNbinsXToFit(0),
+
+  fMaxBuildKStar(0.0),
+  fNbinsXToBuild(0),
+
   fKStarBinWidth(0.),
   fKStarBinCenters(0),
   fRejectOmega(false),
@@ -626,6 +634,7 @@ void LednickyFitter::InitializeFitter()
       }
     }
   }
+  fMaxBuildKStar = fFitSharedAnalyses->GetFitPairAnalysis(0)->GetFitPartialAnalysis(0)->GetKStarCfLite()->Num()->GetXaxis()->GetBinUpEdge(fNbinsXToBuild);
 
   if(fIncludeResidualsType != kIncludeNoResiduals)
   {

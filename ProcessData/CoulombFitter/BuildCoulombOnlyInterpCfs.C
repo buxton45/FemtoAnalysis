@@ -84,7 +84,8 @@ int main(int argc, char **argv)
   tFitter->LoadInterpHistFile(tFileLocationInterpHistos, tFileLocationLednickyHFile);
 
   tFitter->SetUseRandomKStarVectors(true);
-  tFitter->SetUseStaticPairs(true,50000);
+  tFitter->SetUseStaticPairs(true);
+  tFitter->SetNPairsPerKStarBin(50000);
   tFitter->SetIncludeSingletAndTriplet(false);
 /*
   tFitter->GetFitSharedAnalyses()->GetMinuitObject()->SetFCN(fcn);

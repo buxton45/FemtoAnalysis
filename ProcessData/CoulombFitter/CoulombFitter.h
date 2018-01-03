@@ -56,12 +56,12 @@ public:
   void WriteAllPairKStar3dVecFiles(TString aOutputBaseName, TString aPairKStarNtupleBaseName, int aNFiles, int aNbinsKStar, double aKStarMin, double aKStarMax);
   td3dVec BuildPairKStar3dVecFromTxt(TString aFileName);
 
-  void BuildPairKStar4dVecFromTxt(TString aFileBaseName);
+  td1dVec BuildPairKStar4dVecFromTxt(TString aFileBaseName);
   void BuildPairKStar4dVecOnFly(TString aPairKStarNtupleBaseName, int aNFiles, int aNbinsKStar, double aKStarMin, double aKStarMax);
 
-  void BuildPairSample4dVec(int aNPairsPerKStarBin=16384, double aBinSize=0.01);  //TODO make this parallel!!!!!
+  void BuildPairSample4dVec(int aNPairsPerKStarBin, double aBinSize);  //TODO make this parallel!!!!!
   void UpdatePairRadiusParameter(double aNewRadius, int aAnalysisNumber);
-  void SetUseStaticPairs(bool aUseStaticPairs=true, int aNPairsPerKStarBin=16384, double aBinSize=0.01);
+
 
   double GetEta(double aKStar);
   double GetGamowFactor(double aKStar);
@@ -77,11 +77,9 @@ public:
 
   void SetRandomKStar3Vec(TVector3* aKStar3Vec, double aKStarMagMin, double aKStarMagMax);
 
-  double GetFitCfContent(double aKStarMagMin, double aKStarMagMax, double *par, int aAnalysisNumber);  //TODO!!!!!
-  double GetFitCfContentwStaticPairs(double aKStarMagMin, double aKStarMagMax, double *par, int aAnalysisNumber);  //TODO!!!!!
 
+  double GetFitCfContent(double aKStarMagMin, double aKStarMagMax, double *par, int aAnalysisNumber);  //TODO!!!!!
   double GetFitCfContentComplete(double aKStarMagMin, double aKStarMagMax, double *par, int aAnalysisNumber);  //TODO!!!!!
-  double GetFitCfContentCompletewStaticPairs(double aKStarMagMin, double aKStarMagMax, double *par, int aAnalysisNumber);  //TODO!!!!!
 
   double GetFitCfContentSerialv2(double aKStarMagMin, double aKStarMagMax, double *par, int aAnalysisNumber);  //TODO!!!!!
 
@@ -114,9 +112,13 @@ public:
   void SetIncludeSingletAndTriplet(bool aIncludeSingletAndTriplet);
   void SetUseRandomKStarVectors(bool aUseRandomKStarVectors);
   void SetReadPairsFromTxtFiles(bool aRead);
+  void SetUseStaticPairs(bool aUseStaticPairs=true);
 
   void SetPairKStarNtupleBaseName(TString aName, int aNFiles=27);
   void SetPairKStar3dVecBaseName(TString aName);
+
+  void SetNPairsPerKStarBin(int aNPairsPerBin);
+  void SetBinSizeKStar(double aBinSize);
 
 //TODO
   double GetChi2();  //Why do I need this, it's defined in LednickyFitter.  Stupid compiler
@@ -135,13 +137,6 @@ protected:
   int fNFilesNtuple;
   TString fPairKStar3dVecBaseName;
 
-  //TODO!!!!!!!!!!!
-  int fPairsNbinsKStar;
-  double fPairsKStarMin;
-  double fPairsKStarMax;
-  double fPairsKStarBinSize;
-
-
   int fNCalls;  //TODO delete this
   TH1* fFakeCf; //TODO delete this
 
@@ -150,15 +145,13 @@ protected:
   WaveFunction* fWaveFunction;
   double fBohrRadius;
 
-
-
-  double fBinSizeKStar;  //TODO make sure set and used everywhere it should be  //TODO same as double fKStarBinWidth?
-  int fNbinsKStar;       //TODO make sure set and used everywhere it should be  //TODO same as fNbinsXToBuild or fNbinsXToFit?
   int fNPairsPerKStarBin;
   td1dVec fCurrentRadii;
 
   td4dVec fPairKStar4dVec; //1 3dVec for each of fNAnalyses.  Holds td1dVec = (KStarMag, KStarOut, KStarSide, KStarLong)
+                           //Only needed if fUseRandomKStarVectors=false
 
+  BinInfoSamplePairs fSamplePairsBinInfo;  
   td4dVec fPairSample4dVec; //1 3dVec for each of fNAnalyses.  Hold td1dVec = (KStarMag, RStarMag, Theta)
                             //  Will be initialized by sampling RStar vectors from Gaussian distributions with mu=0 and sigma=1
                             //  When R parameter is updated, I simply scale all RStar magnitudes
@@ -195,9 +188,13 @@ inline void CoulombFitter::SetTurnOffCoulomb(bool aTurnOffCoulomb) {fTurnOffCoul
 inline void CoulombFitter::SetIncludeSingletAndTriplet(bool aIncludeSingletAndTriplet) {fIncludeSingletAndTriplet = aIncludeSingletAndTriplet;}
 inline void CoulombFitter::SetUseRandomKStarVectors(bool aUseRandomKStarVectors) {fUseRandomKStarVectors = aUseRandomKStarVectors;}
 inline void CoulombFitter::SetReadPairsFromTxtFiles(bool aRead) {fReadPairsFromTxtFiles = aRead;}
+inline void CoulombFitter::SetUseStaticPairs(bool aUse) {fUseStaticPairs = aUse;}
 
 inline void CoulombFitter::SetPairKStarNtupleBaseName(TString aName, int aNFiles) {fPairKStarNtupleBaseName = aName; fNFilesNtuple = aNFiles;}
 inline void CoulombFitter::SetPairKStar3dVecBaseName(TString aName) {fPairKStar3dVecBaseName = aName;}
+
+inline void CoulombFitter::SetNPairsPerKStarBin(int aNPairsPerBin) {fNPairsPerKStarBin = aNPairsPerBin;}
+inline void CoulombFitter::SetBinSizeKStar(double aBinSize) {if(fKStarBinWidth==0.) fKStarBinWidth = aBinSize;}
 
 inline double CoulombFitter::GetChi2() {return LednickyFitter::GetChi2();}
 

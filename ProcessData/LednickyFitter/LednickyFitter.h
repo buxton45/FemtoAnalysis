@@ -117,8 +117,11 @@ protected:
   td3dVec fCorrectedFitVecs;
 
   double fMaxFitKStar;
-  int fNbinsXToBuild;
   int fNbinsXToFit;
+
+  double fMaxBuildKStar;
+  int fNbinsXToBuild;
+
   double fKStarBinWidth;
   td1dVec fKStarBinCenters;
   //vector<double> fMaxFitKStarVec;

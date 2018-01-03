@@ -253,7 +253,8 @@ int main(int argc, char **argv)
   //-------------------------------------------
 
   tFitter->SetUseRandomKStarVectors(true);
-  tFitter->SetUseStaticPairs(true,50000);
+  tFitter->SetUseStaticPairs(true);
+  tFitter->SetNPairsPerKStarBin(50000);
 
   //-------------------------------------------
 

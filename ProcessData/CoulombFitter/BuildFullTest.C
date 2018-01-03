@@ -75,16 +75,16 @@ int main(int argc, char **argv)
 
   FitPairAnalysis* tPairAn0010 = new FitPairAnalysis(tFileLocationBase, tAnType, k0010, tAnalysisRunType, tNPartialAnalysis, TString(""), bIncludeSingletAndTriplet);
   FitPairAnalysis* tPairConjAn0010 = new FitPairAnalysis(tFileLocationBase, tConjType, k0010, tAnalysisRunType, tNPartialAnalysis, TString(""), bIncludeSingletAndTriplet);
-  FitPairAnalysis* tPairAn1030 = new FitPairAnalysis(tFileLocationBase, tAnType, k1030, tAnalysisRunType, tNPartialAnalysis, TString(""), bIncludeSingletAndTriplet);
-  FitPairAnalysis* tPairConjAn1030 = new FitPairAnalysis(tFileLocationBase, tConjType, k1030, tAnalysisRunType, tNPartialAnalysis, TString(""), bIncludeSingletAndTriplet);
+//  FitPairAnalysis* tPairAn1030 = new FitPairAnalysis(tFileLocationBase, tAnType, k1030, tAnalysisRunType, tNPartialAnalysis, TString(""), bIncludeSingletAndTriplet);
+//  FitPairAnalysis* tPairConjAn1030 = new FitPairAnalysis(tFileLocationBase, tConjType, k1030, tAnalysisRunType, tNPartialAnalysis, TString(""), bIncludeSingletAndTriplet);
 //  FitPairAnalysis* tPairAn3050 = new FitPairAnalysis(tFileLocationBase, tAnType, k3050, tAnalysisRunType, tNPartialAnalysis, TString(""), bIncludeSingletAndTriplet);
 //  FitPairAnalysis* tPairConjAn3050 = new FitPairAnalysis(tFileLocationBase, tConjType, k3050, tAnalysisRunType, tNPartialAnalysis, TString(""), bIncludeSingletAndTriplet);
 
   vector<FitPairAnalysis*> tVecOfPairAn;
   tVecOfPairAn.push_back(tPairAn0010);
   tVecOfPairAn.push_back(tPairConjAn0010);
-  tVecOfPairAn.push_back(tPairAn1030);
-  tVecOfPairAn.push_back(tPairConjAn1030);
+//  tVecOfPairAn.push_back(tPairAn1030);
+//  tVecOfPairAn.push_back(tPairConjAn1030);
 //  tVecOfPairAn.push_back(tPairAn3050);
 //  tVecOfPairAn.push_back(tPairConjAn3050);
 
@@ -127,11 +127,11 @@ int main(int argc, char **argv)
     }
 */
     tSharedAn->SetSharedParameter(kLambda,{0,1},0.5,0.1,1.);
-    tSharedAn->SetSharedParameter(kLambda,{2,3},0.5,0.1,1.);
+//    tSharedAn->SetSharedParameter(kLambda,{2,3},0.5,0.1,1.);
 //    tSharedAn->SetSharedParameter(kLambda,{4,5},0.5,0.1,1.);
 
     tSharedAn->SetSharedParameter(kRadius,{0,1},4.0,1.,6.);
-    tSharedAn->SetSharedParameter(kRadius,{2,3},3.0,1.,6.);
+//    tSharedAn->SetSharedParameter(kRadius,{2,3},3.0,1.,6.);
 //    tSharedAn->SetSharedParameter(kRadius,{4,5},2.0,1.,6.);
 
     tSharedAn->SetSharedParameter(kRef0,1.02,-3.,3.);
@@ -178,11 +178,11 @@ int main(int argc, char **argv)
 */
 
     tSharedAn->SetSharedParameter(kLambda,{0,1},0.5,0.1,1.);
-    tSharedAn->SetSharedParameter(kLambda,{2,3},0.5,0.1,1.);
+//    tSharedAn->SetSharedParameter(kLambda,{2,3},0.5,0.1,1.);
 //    tSharedAn->SetSharedParameter(kLambda,{4,5},0.5,0.1,1.);
 
     tSharedAn->SetSharedParameter(kRadius,{0,1},4.0,1.,6.);
-    tSharedAn->SetSharedParameter(kRadius,{2,3},3.0,1.,6.);
+//    tSharedAn->SetSharedParameter(kRadius,{2,3},3.0,1.,6.);
 //    tSharedAn->SetSharedParameter(kRadius,{4,5},2.0,1.,6.);
 
     tSharedAn->SetSharedParameter(kRef0,-0.2,-3.,3.);
@@ -205,8 +205,8 @@ int main(int argc, char **argv)
 
   tSharedAn->CreateMinuitParameters();
 
-//  CoulombFitter* tFitter = new CoulombFitter(tSharedAn,0.15);
-  CoulombFitter* tFitter = new CoulombFitter(tSharedAn,0.30);
+  CoulombFitter* tFitter = new CoulombFitter(tSharedAn,0.15);
+//  CoulombFitter* tFitter = new CoulombFitter(tSharedAn,0.30);
 //  CoulombFitter* tFitter = new CoulombFitter(tSharedAn,0.02);
     tFitter->SetIncludeSingletAndTriplet(bIncludeSingletAndTriplet);
     tFitter->SetApplyMomResCorrection(false);
@@ -230,10 +230,10 @@ int main(int argc, char **argv)
 
 //  tFitter->BuildPairKStar3dVecFromTxt(tOutputName);
 
-//  tFitter->BuildPairKStar4dVecFromTxt(tOutputName);
+//  td1dVec tBinInfo = tFitter->BuildPairKStar4dVecFromTxt(tOutputName);
   tFitter->SetUseRandomKStarVectors(true);
-  tFitter->SetUseStaticPairs(false,16384);
-
+  tFitter->SetUseStaticPairs(true);
+  tFitter->SetNPairsPerKStarBin(16384);
   //-------------------------------------------
 
   tFitter->GetFitSharedAnalyses()->GetMinuitObject()->SetFCN(fcn);
