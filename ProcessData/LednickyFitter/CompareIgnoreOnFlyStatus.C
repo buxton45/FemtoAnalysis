@@ -6,12 +6,13 @@ class CanvasPartition;
 
 
 //________________________________________________________________________________________________________________
-TCanvas* DrawKStarCfs(FitGenerator* aFG1, FitGenerator* aFG2)
+TCanvas* DrawKStarCfs(FitGenerator* aFG1, FitGenerator* aFG2, bool aZoom=false)
 {
   AnalysisType aAnType = aFG1->GetFitSharedAnalyses()->GetFitPairAnalysis(0)->GetAnalysisType();
   AnalysisType aConjType = aFG1->GetFitSharedAnalyses()->GetFitPairAnalysis(1)->GetAnalysisType();
 
   TString tCanvasName = TString("canKStarCfs");
+  if(aZoom) tCanvasName += TString("Zoom");
   tCanvasName += TString(cAnalysisBaseTags[aAnType]) + TString("wConj");
 
   int tNx=2, tNy=3;
@@ -19,6 +20,8 @@ TCanvas* DrawKStarCfs(FitGenerator* aFG1, FitGenerator* aFG2)
 
   double tXLow = -0.02;
   double tXHigh = 0.99;
+  if(aZoom) tXHigh = 0.32;
+
   double tYLow = 0.71;
   double tYHigh = 1.09;
   CanvasPartition* tCanPart = new CanvasPartition(tCanvasName,tNx,tNy,tXLow,tXHigh,tYLow,tYHigh,0.12,0.05,0.13,0.05);
@@ -336,6 +339,7 @@ int main(int argc, char **argv)
   else if(tAnType==kLamKchM) {tConjType=kALamKchP;}
 
   bool SaveImages = false;
+  TString tSaveDir = "/home/jesse/Analysis/Presentations/GroupMeetings/20180104/";
 
   TString tGeneralAnTypeName;
   if(tAnType==kLamK0 || tAnType==kALamK0) tGeneralAnTypeName = "cLamK0";
@@ -356,8 +360,8 @@ int main(int argc, char **argv)
   FitGenerator* tLamKchP2 = new FitGenerator(tFileLocationBase2,tFileLocationBaseMC2,tAnType, tCentType,tAnRunType,tNPartialAnalysis,tGenType);
 
   //-----------------------------------------------------------------------------
-
-  TCanvas* tCan = DrawKStarCfs(tLamKchP1, tLamKchP2);
+  bool bZoom = false;
+  TCanvas* tCan = DrawKStarCfs(tLamKchP1, tLamKchP2, bZoom);
   TCanvas* tRatioCan = DrawKStarCfRatios(tLamKchP1, tLamKchP2);
 
   TCanvas* tRatioNumPartAn = DrawNumDenRatiosPartAn(true, tLamKchP1, tLamKchP2);
@@ -365,6 +369,18 @@ int main(int argc, char **argv)
 
   TCanvas* tRatioNumAn = DrawNumDenRatiosAn(true, tLamKchP1, tLamKchP2);
   TCanvas* tRatioDenAn = DrawNumDenRatiosAn(false, tLamKchP1, tLamKchP2);
+
+  if(SaveImages)
+  {
+    tCan->SaveAs(TString::Format("%s%s.eps", tSaveDir.Data(), tCan->GetName()));
+    tRatioCan->SaveAs(TString::Format("%s%s.eps", tSaveDir.Data(), tRatioCan->GetName()));
+
+    tRatioNumPartAn->SaveAs(TString::Format("%s%s.eps", tSaveDir.Data(), tRatioNumPartAn->GetName()));
+    tRatioDenPartAn->SaveAs(TString::Format("%s%s.eps", tSaveDir.Data(), tRatioDenPartAn->GetName()));
+
+    tRatioNumAn->SaveAs(TString::Format("%s%s.eps", tSaveDir.Data(), tRatioNumAn->GetName()));
+    tRatioDenAn->SaveAs(TString::Format("%s%s.eps", tSaveDir.Data(), tRatioDenAn->GetName()));
+  }
 
 //-------------------------------------------------------------------------------
   tFullTimer.Stop();

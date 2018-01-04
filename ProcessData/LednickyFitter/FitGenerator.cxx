@@ -2141,6 +2141,12 @@ vector<TString> FitGenerator::GetAllFitParametersTStringVector()
     for(unsigned int iPar=0; iPar<tParamVec.size(); iPar++) tReturnVec.push_back(tParamVec[iPar]);
     tReturnVec.push_back(TString(""));
   }
+
+  tReturnVec.push_back("******************************");
+  tReturnVec.push_back(TString::Format("Chi2 = %0.3f  NDF = %d  Chi2/NDF = %0.3f",
+                                        GetChi2(), GetNDF(), GetChi2()/GetNDF()));
+  tReturnVec.push_back(TString(""));
+
   return tReturnVec;
 }
 

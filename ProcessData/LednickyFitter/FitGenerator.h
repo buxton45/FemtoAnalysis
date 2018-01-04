@@ -112,6 +112,7 @@ public:
   void SetFitType(FitType aFitType);
 
   double GetChi2();
+  int GetNDF();
 
   TH1* GetKStarCf(int aAnalysisNumber);
   void SetKStarMinMaxNorm(double aMin, double aMax);
@@ -192,6 +193,7 @@ inline void FitGenerator::SetUseLambdaLimits(bool aUse) {SetUseLimits(fLambdaFit
 inline void FitGenerator::SetFitType(FitType aFitType) {fSharedAn->SetFitType(aFitType);}
 
 inline double FitGenerator::GetChi2() {return fLednickyFitter->GetChi2();}
+inline int FitGenerator::GetNDF() {return fLednickyFitter->GetNDF();}
 
 inline TH1* FitGenerator::GetKStarCf(int aAnalysisNumber) {return fSharedAn->GetKStarCfHeavy(aAnalysisNumber)->GetHeavyCfClone();}
 inline void FitGenerator::SetKStarMinMaxNorm(double aMin, double aMax) {fSharedAn->SetKStarMinMaxNorm(aMin, aMax);}
