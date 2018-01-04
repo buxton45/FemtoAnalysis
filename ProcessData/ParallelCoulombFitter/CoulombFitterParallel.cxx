@@ -195,9 +195,9 @@ void CoulombFitterParallel::LoadInterpHistFile(TString aFileBaseName)
 }
 
 //________________________________________________________________________________________________________________
-td3dVec CoulombFitterParallel::BuildPairKStar3dVecFull(TString aPairKStarNtupleDirName, TString aFileBaseName, int aNFiles, AnalysisType aAnalysisType, CentralityType aCentralityType, int aNbinsKStar, double aKStarMin, double aKStarMax)
+td3dVec CoulombFitterParallel::BuildPairKStar3dVecFull(TString aPairKStarNtupleBaseName, int aNFiles, AnalysisType aAnalysisType, CentralityType aCentralityType, int aNbinsKStar, double aKStarMin, double aKStarMax)
 {
-  td3dVec tPairKStar3dVec = CoulombFitter::BuildPairKStar3dVecFull(aPairKStarNtupleDirName,aFileBaseName,aNFiles,aAnalysisType,aCentralityType,aNbinsKStar,aKStarMin,aKStarMax);
+  td3dVec tPairKStar3dVec = CoulombFitter::BuildPairKStar3dVecFull(aPairKStarNtupleBaseName,aNFiles,aAnalysisType,aCentralityType,aNbinsKStar,aKStarMin,aKStarMax);
 
   //----****----****----****----****----****----****
   //TODO make this automated
@@ -272,35 +272,16 @@ cout << "tKStarMax = " << tKStarMax << endl;
 }
 
 //________________________________________________________________________________________________________________
-void CoulombFitterParallel::BuildPairKStar4dVecFromTxt(TString aFileBaseName)
+td1dVec CoulombFitterParallel::BuildPairKStar4dVecFromTxt(TString aFileBaseName)
 {
-  fPairKStar4dVec.resize(fNAnalyses, td3dVec(0, td2dVec(0, td1dVec(0))));
+  td1dVec tReturnBinInfo = CoulombFitter::BuildPairKStar4dVecFromTxt(aFileBaseName);
+}
 
-  AnalysisType tAnalysisType;
-  CentralityType tCentralityType;
-  TString tFileName;
-  for(int iAnaly=0; iAnaly<fNAnalyses; iAnaly++)
-  {
-    tAnalysisType = fFitSharedAnalyses->GetFitPairAnalysis(iAnaly)->GetAnalysisType();
-    tCentralityType = fFitSharedAnalyses->GetFitPairAnalysis(iAnaly)->GetCentralityType();
-    tFileName = aFileBaseName + TString(cAnalysisBaseTags[tAnalysisType])+TString(cCentralityTags[tCentralityType]) + TString(".txt");
 
-    td3dVec tPairKStar3dVec = BuildPairKStar3dVecFromTxt(tFileName);
-      tPairKStar3dVec.pop_back();  //strip off the binning information
-
-    fPairKStar4dVec[iAnaly] = tPairKStar3dVec;
-  }
-
-  for(int iAnaly=0; iAnaly<fNAnalyses; iAnaly++)
-  {
-    cout << "iAnaly = " << iAnaly << endl;
-    cout << "fPairKStar4dVec[iAnaly].size() = " << fPairKStar4dVec[iAnaly].size() << endl;
-    for(int i=0; i<(int)fPairKStar4dVec[iAnaly].size(); i++)
-    {
-      cout << "\t i = " << i << endl;
-      cout << "\t\tfPairKStar4dVec[iAnaly][i].size() = " << fPairKStar4dVec[iAnaly][i].size() << endl;
-    }
-  }
+//________________________________________________________________________________________________________________
+void CoulombFitterParallel::BuildPairKStar4dVecOnFly(TString aPairKStarNtupleBaseName, int aNFiles, int aNbinsKStar, double aKStarMin, double aKStarMax)
+{
+  CoulombFitter::BuildPairKStar4dVecOnFly(aPairKStarNtupleBaseName, aNFiles, aNbinsKStar, aKStarMin, aKStarMax);
 }
 
 //________________________________________________________________________________________________________________
@@ -309,24 +290,16 @@ void CoulombFitterParallel::BuildPairSample4dVec(int aNPairsPerKStarBin, double 
   CoulombFitter::BuildPairSample4dVec(aNPairsPerKStarBin, aBinSize);
 
   fSamplePairsBinInfo.nAnalyses = fNAnalyses;
-  fSamplePairsBinInfo.nBinsK = fNbinsKStar;
+  fSamplePairsBinInfo.nBinsK = fNbinsXToBuild;
   fSamplePairsBinInfo.nPairsPerBin = fNPairsPerKStarBin;
 
   fSamplePairsBinInfo.minK = 0.; //TODO
   fSamplePairsBinInfo.maxK = fMaxFitKStar;
-  fSamplePairsBinInfo.binWidthK = fBinSizeKStar;
+  fSamplePairsBinInfo.binWidthK = fKStarBinWidth;
   fSamplePairsBinInfo.nElementsPerPair = fPairSample4dVec[0][0][0].size();
+
+  fParallelWaveFunction->LoadPairSample4dVec(fPairSample4dVec, fSamplePairsBinInfo);
 }
-
-
-//________________________________________________________________________________________________________________
-void CoulombFitterParallel::SetUseStaticPairs(bool aUseStaticPairs, int aNPairsPerKStarBin, double aBinSize)
-{
-  fUseStaticPairs = aUseStaticPairs;
-  BuildPairSample4dVec(aNPairsPerKStarBin, aBinSize);
-  fParallelWaveFunction->LoadPairSample4dVec(fPairSample4dVec,fSamplePairsBinInfo);
-}
-
 
 //________________________________________________________________________________________________________________
 bool CoulombFitterParallel::CanInterpAllSamplePairs()
@@ -1347,5 +1320,128 @@ tTimer.PrintInterval();
 
 
 //________________________________________________________________________________________________________________
+void CoulombFitterParallel::InitializeFitter()
+{
+  CoulombFitter::InitializeFitter();
+  //------------------------------
+
+  if(!fUseRandomKStarVectors)  //Using KStarVectors from data, so must build fPairKStar4dVec
+  {
+    if(fReadPairsFromTxtFiles) 
+    {
+      td1dVec tBinInfo = BuildPairKStar4dVecFromTxt(fPairKStar3dVecBaseName);
+      assert(fNbinsXToBuild <= tBinInfo[0]);
+      assert(0.0 == tBinInfo[1]);
+      assert(fMaxBuildKStar <= tBinInfo[2]);
+    }
+    else BuildPairKStar4dVecOnFly(fPairKStarNtupleBaseName, fNFilesNtuple, fNbinsXToBuild, 0.0, fMaxBuildKStar);
+  }
+  
+  BuildPairSample4dVec(fNPairsPerKStarBin, fKStarBinWidth);
+
+
+
+}
+
+
+//________________________________________________________________________________________________________________
+void CoulombFitterParallel::DoFit()
+{
+  InitializeFitter();
+
+  cout << "*****************************************************************************" << endl;
+  //cout << "Starting to fit " << fCfName << endl;
+  cout << "Starting to fit " << endl;
+  cout << "*****************************************************************************" << endl;
+
+  fMinuit->SetPrintLevel(0);  // -1=quiet, 0=normal, 1=verbose (more options using mnexcm("SET PRI", ...)
+
+  double arglist[10];
+  fErrFlg = 0;
+
+  // for max likelihood = 0.5, for chisq = 1.0
+  arglist[0] = 1.;
+  fMinuit->mnexcm("SET ERR", arglist ,1,fErrFlg);
+
+//  arglist[0] = 0.0000000001;
+//  fMinuit->mnexcm("SET EPS", arglist, 1, fErrFlg);
+
+  // Set strategy to be used
+  // 0 = economize (many params and/or fcn takes a long time to calculate and/or not interested in precise param erros)
+  // 1 = default
+  // 2 = Minuit allowed to waste calls in order to ensure precision (fcn evaluated in short time and/or param erros must be reliable)
+  arglist[0] = 1;
+  fMinuit->mnexcm("SET STR", arglist ,1,fErrFlg);
+
+  // Now ready for minimization step
+  arglist[0] = 5000;
+  arglist[1] = 0.1;
+  fMinuit->mnexcm("MIGRAD", arglist ,2,fErrFlg);  //I do not think MIGRAD will work here because depends on derivates, etc
+//  fMinuit->mnexcm("MINI", arglist ,2,fErrFlg);  //MINI also uses MIGRAD, so probably won't work
+//  fMinuit->mnexcm("SIM", arglist ,2,fErrFlg);  //MINI also uses MIGRAD, so probably won't work
+//  fMinuit->mnscan();
+
+  if(fErrFlg != 0)
+  {
+    cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
+    //cout << "WARNING!!!!!" << endl << "fErrFlg != 0 for the Cf: " << fCfName << endl;
+    cout << "WARNING!!!!!" << endl << "fErrFlg != 0 for the Cf: " << endl;
+    cout << "fErrFlg = " << fErrFlg << endl;
+    cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
+  }
+
+  // Print results
+  fMinuit->mnstat(fChi2,fEdm,fErrDef,fNvpar,fNparx,fIcstat);
+  fMinuit->mnprin(3,fChi2);
+
+  int tNParams = fFitSharedAnalyses->GetNMinuitParams();
+
+  fNDF = fNpFits-fNvpar;
+
+  //get result
+  for(int i=0; i<tNParams; i++)
+  {
+    double tempMinParam;
+    double tempParError;
+    fMinuit->GetParameter(i,tempMinParam,tempParError);
+    
+    fMinParams.push_back(tempMinParam);
+    fParErrors.push_back(tempParError);
+  }
+
+  fFitSharedAnalyses->SetMinuitMinParams(fMinParams);
+  fFitSharedAnalyses->SetMinuitParErrors(fParErrors);
+  fFitSharedAnalyses->ReturnFitParametersToAnalyses();
+
+
+//TODO return the fit histogram to the analyses
+  for(int iAnaly=0; iAnaly<fNAnalyses; iAnaly++)
+  {
+    TH1* tHistTest = CreateFitHistogram("FitHis",iAnaly);
+  }
+/*
+  for(int iAnaly=0; iAnaly<fNAnalyses; iAnaly++)
+  {
+    fFitSharedAnalyses->GetFitPairAnalysis(iAnaly)->SetFit(CreateFitFunction("fit",iAnaly));
+  }
+*/
+
+  for(int iAnaly=0; iAnaly<fNAnalyses; iAnaly++)
+  {
+    for(int iPartAn=0; iPartAn<fFitSharedAnalyses->GetFitPairAnalysis(iAnaly)->GetNFitPartialAnalysis(); iPartAn++)
+    {
+      fFitSharedAnalyses->GetFitPairAnalysis(iAnaly)->GetFitPartialAnalysis(iPartAn)->SetCorrectedFitVec(fCorrectedFitVecs[iAnaly][iPartAn]);
+    }
+  }
+
+
+}
+
+
+//________________________________________________________________________________________________________________
+void CoulombFitterParallel::Finalize()
+{
+  LednickyFitter::Finalize();
+}
 
 
