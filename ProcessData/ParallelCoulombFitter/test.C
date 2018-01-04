@@ -133,53 +133,96 @@ int main(int argc, char **argv)
 
   TString tFileLocationBase = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cXicKch_20170423/Results_cXicKch_20170423";
 
-  AnalysisType tAnType = kAXiKchP;
-  AnalysisType tConjType = kXiKchM;
+  AnalysisType tAnType, tConjType;
+  //tAnType = kXiKchP;
+  tAnType = kXiKchM;
 
-  bool bIncludeSingletAndTriplet = true;
+  if(tAnType==kXiKchP) tConjType = kAXiKchM;
+  else if(tAnType==kXiKchM) tConjType = kAXiKchP;
+  else assert(0);
+
+  AnalysisRunType tAnalysisRunType = kTrain;
+  int tNPartialAnalysis = 5;
+  if(tAnalysisRunType==kTrain || tAnalysisRunType==kTrainSys) tNPartialAnalysis = 2;
+
+  bool bIncludeSingletAndTriplet=true;
+  bool bRunMB=false;
    
   TString tAnBaseName = TString(cAnalysisBaseTags[tAnType]);
   TString tAnName0010 = tAnBaseName + TString(cCentralityTags[0]);
 
-  FitPairAnalysis* tPairAn0010 = new FitPairAnalysis(tFileLocationBase,tAnType,k0010,kTrain,2,"",bIncludeSingletAndTriplet);
-  FitPairAnalysis* tPairConjAn0010 = new FitPairAnalysis(tFileLocationBase,tConjType,k0010,kTrain,2,"",bIncludeSingletAndTriplet);
-
+//-----------------------------------------------------------------------------
   vector<FitPairAnalysis*> tVecOfPairAn;
-  tVecOfPairAn.push_back(tPairAn0010);
-  tVecOfPairAn.push_back(tPairConjAn0010);
+
+  FitPairAnalysis* tPairAn0010 = new FitPairAnalysis(tFileLocationBase, tAnType, k0010, tAnalysisRunType, tNPartialAnalysis, "",bIncludeSingletAndTriplet);
+    tVecOfPairAn.push_back(tPairAn0010);
+  FitPairAnalysis* tPairConjAn0010 = new FitPairAnalysis(tFileLocationBase, tConjType, k0010, tAnalysisRunType, tNPartialAnalysis, "", bIncludeSingletAndTriplet);
+    tVecOfPairAn.push_back(tPairConjAn0010);
+
+  if(bRunMB)
+  {
+    FitPairAnalysis* tPairAn1030 = new FitPairAnalysis(tFileLocationBase, tAnType, k1030, tAnalysisRunType, tNPartialAnalysis, TString(""), bIncludeSingletAndTriplet);
+      tVecOfPairAn.push_back(tPairAn1030);
+    FitPairAnalysis* tPairConjAn1030 = new FitPairAnalysis(tFileLocationBase, tConjType, k1030, tAnalysisRunType, tNPartialAnalysis, TString(""), bIncludeSingletAndTriplet);
+      tVecOfPairAn.push_back(tPairConjAn1030);
+    FitPairAnalysis* tPairAn3050 = new FitPairAnalysis(tFileLocationBase, tAnType, k3050, tAnalysisRunType, tNPartialAnalysis, TString(""), bIncludeSingletAndTriplet);
+      tVecOfPairAn.push_back(tPairAn3050);
+    FitPairAnalysis* tPairConjAn3050 = new FitPairAnalysis(tFileLocationBase, tConjType, k3050, tAnalysisRunType, tNPartialAnalysis, TString(""), bIncludeSingletAndTriplet);
+      tVecOfPairAn.push_back(tPairConjAn3050);
+  }
 
   FitSharedAnalyses* tSharedAn = new FitSharedAnalyses(tVecOfPairAn);
 
-  tSharedAn->SetSharedParameter(kLambda,0.72,0.3,1.);
-  tSharedAn->SetSharedParameter(kRadius,5.2,3.,8.);
-  tSharedAn->SetSharedParameter(kRef0,1.02);
-  tSharedAn->SetSharedParameter(kImf0,0.14);
-  tSharedAn->SetSharedParameter(kd0,0.);
-  if(bIncludeSingletAndTriplet)
+
+
+  if(tAnType==kXiKchP || tAnType==kAXiKchM)
   {
-    tSharedAn->SetSharedParameter(kRef02,0.11);
-    tSharedAn->SetSharedParameter(kImf02,0.17);
-    tSharedAn->SetSharedParameter(kd02,0.);
+    tSharedAn->SetSharedParameter(kLambda,{0,1},0.5,0.1,1.);
+    tSharedAn->SetSharedParameter(kRadius,{0,1},4.0,1.,6.);
+    tSharedAn->SetSharedParameter(kRef0,1.02,-3.,3.);
+    tSharedAn->SetSharedParameter(kImf0,0.14,-3.,3.);
+    tSharedAn->SetSharedParameter(kd0,0.,-5.,5.);
+    if(bIncludeSingletAndTriplet)
+    {
+      tSharedAn->SetSharedParameter(kRef02,0.48,-3.,3.);
+      tSharedAn->SetSharedParameter(kImf02,0.17,-3.,3.);
+      tSharedAn->SetSharedParameter(kd02,0.,-3.,3.);
+    }
+    if(bRunMB)
+    {
+      tSharedAn->SetSharedParameter(kLambda,{2,3},0.5,0.1,1.);
+      tSharedAn->SetSharedParameter(kLambda,{4,5},0.5,0.1,1.);
+
+      tSharedAn->SetSharedParameter(kRadius,{2,3},3.0,1.,6.);
+      tSharedAn->SetSharedParameter(kRadius,{4,5},2.0,1.,6.);
+    }
   }
 
-/*
-  tSharedAn->SetSharedParameter(kLambda,0.72,0.3,1.);
-  tSharedAn->SetSharedParameter(kRadius,5.2,3.,8.);
-  tSharedAn->SetSharedParameter(kRef0,1.02,-5.,5.);
-  tSharedAn->SetSharedParameter(kImf0,0.14,-5.,5.);
-  tSharedAn->SetSharedParameter(kd0,0.,-9.,9.);
-  tSharedAn->SetSharedParameter(kRef02,0.11,-5.,5.);
-  tSharedAn->SetSharedParameter(kImf02,0.17,-5.,5.);
-  tSharedAn->SetSharedParameter(kd02,0.,-9.,9.);
-*/
+  if(tAnType==kAXiKchP || tAnType==kXiKchM)
+  {
+    tSharedAn->SetSharedParameter(kLambda,{0,1},0.5,0.1,1.);
+    tSharedAn->SetSharedParameter(kRadius,{0,1},4.0,1.,6.);
+    tSharedAn->SetSharedParameter(kRef0,-0.2,-3.,3.);
+    tSharedAn->SetSharedParameter(kImf0,0.2,-3.,3.);
+    tSharedAn->SetSharedParameter(kd0,0.,-5.,5.);
+    if(bIncludeSingletAndTriplet)
+    {
+      tSharedAn->SetSharedParameter(kRef02,-0.2,-3.,3.);
+      tSharedAn->SetSharedParameter(kImf02,0.2,-3.,3.);
+      tSharedAn->SetSharedParameter(kd02,0.,-5.,5.);
+    }
+    if(bRunMB)
+    {
+      tSharedAn->SetSharedParameter(kLambda,{2,3},0.5,0.1,1.);
+      tSharedAn->SetSharedParameter(kLambda,{4,5},0.5,0.1,1.);
+      tSharedAn->SetSharedParameter(kRadius,{2,3},3.0,1.,6.);
+      tSharedAn->SetSharedParameter(kRadius,{4,5},2.0,1.,6.);
+    }
+  }
 
-/*
-  tSharedAn->SetSharedParameter(kLambda,0.72,0.3,1.);
-  tSharedAn->SetSharedParameter(kRadius,5.25,3.,8.);
-  tSharedAn->SetSharedParameter(kRef0,1.46,-2.,2.);
-  tSharedAn->SetSharedParameter(kImf0,0.24,-2.,2.);
-  tSharedAn->SetSharedParameter(kd0,0.,-9.,9.);
-*/
+
+
+
 
   tSharedAn->RebinAnalyses(2);
 
@@ -192,29 +235,28 @@ int main(int argc, char **argv)
   tFitter->SetIncludeSingletAndTriplet(bIncludeSingletAndTriplet);
   tFitter->SetApplyMomResCorrection(false);
 
-  TString tFileLocationInterpHistos = "/home/jesse/Analysis/FemtoAnalysis/ProcessData/CoulombFitter/InterpHistsRepulsive";
+
+  TString tFileLocationInterpHistos;
+  if(tAnType==kAXiKchP || tAnType==kXiKchM) tFileLocationInterpHistos = "/home/jesse/Analysis/FemtoAnalysis/ProcessData/CoulombFitter/InterpHistsRepulsive";
+  else if(tAnType==kXiKchP || tAnType==kAXiKchM) tFileLocationInterpHistos = "/home/jesse/Analysis/FemtoAnalysis/ProcessData/CoulombFitter/InterpHistsAttractive";
   tFitter->LoadInterpHistFile(tFileLocationInterpHistos);
-/*
-  TString tFileLocationNtupleBase = "~/Analysis/K0Lam/Results_cXicKch_20160414/Results_cXicKch_20160414";
-//  tFitter->BuildPairKStar3dVec(tFileLocationNtupleBase,kAXiKchP,k0010,kBp2,62,0.,0.31);
-//  tFitter->BuildPairKStar3dVec(tFileLocationNtupleBase,kAXiKchP,k0010,kBp2,31,0.,0.155);
-  tFitter->BuildPairKStar3dVec(tFileLocationNtupleBase,kAXiKchP,k0010,kBp2,16,0.,0.16);
-*/
+
   //-------------------------------------------
-  TString tPairKStarNtupleDirName = "/home/jesse/Analysis/FemtoAnalysis/ProcessData/CoulombFitter/NTuples/Roman";
-  TString tFileBaseName = "Results_cXicKch_20160610";
+  TString tPairKStarNtupleBaseName = "/home/jesse/Analysis/FemtoAnalysis/ProcessData/CoulombFitter/NTuples/Roman/Results_cXicKch_20160610";
   TString tOutputName = "PairKStar3dVec_20160610_";
   int tNFiles = 27;
 
-//  tFitter->BuildPairKStar3dVecFull(tPairKStarNtupleDirName,tFileBaseName,tNFiles,kAXiKchP,k0010,16,0.,0.16);
-//  tFitter->WritePairKStar3dVecFile(tOutputName,tPairKStarNtupleDirName,tFileBaseName,tNFiles,kAXiKchP,k0010,16,0.,0.16);
-//  tFitter->WriteAllPairKStar3dVecFiles(tOutputName,tPairKStarNtupleDirName,tFileBaseName,tNFiles,16,0.,0.16);
+
+//  tFitter->BuildPairKStar3dVecFull(tPairKStarNtupleBaseName,tNFiles,kAXiKchP,k0010,16,0.,0.16);
+//  tFitter->WritePairKStar3dVecFile(tOutputName,tPairKStarNtupleBaseName,tNFiles,kAXiKchP,k0010,16,0.,0.16);
+//  tFitter->WriteAllPairKStar3dVecFiles(tOutputName,tPairKStarNtupleBaseName,tNFiles,16,0.,0.16);
 
 //  tFitter->BuildPairKStar3dVecFromTxt(tOutputName);
 
 //  tFitter->BuildPairKStar4dVecFromTxt(tOutputName);
   tFitter->SetUseRandomKStarVectors(true);
-  tFitter->SetUseStaticPairs(true,16384);
+  tFitter->SetUseStaticPairs(true);
+  tFitter->SetNPairsPerKStarBin(16384);
 
   //-------------------------------------------
 

@@ -34,13 +34,14 @@ public:
   void PassHyperGeo1F1AndGTildeToParallelWaveFunction();
   void LoadInterpHistFile(TString aFileBaseName);  //TODO should this be a vritual function?
 
-  td3dVec BuildPairKStar3dVecFull(TString aPairKStarNtupleDirName, TString aFileBaseName, int aNFiles, AnalysisType aAnalysisType, CentralityType aCentralityType, int aNbinsKStar, double aKStarMin, double aKStarMax);  //TODO fix the fPairKStar3dVecInfo and should this be a virtual function?
+  td3dVec BuildPairKStar3dVecFull(TString aPairKStarNtupleBaseName, int aNFiles, AnalysisType aAnalysisType, CentralityType aCentralityType, int aNbinsKStar, double aKStarMin, double aKStarMax);  //TODO fix the fPairKStar3dVecInfo and should this be a virtual function?
 
   td3dVec BuildPairKStar3dVecFromTxt(TString aFileName);  //TODO fix the fPairKStar3dVecInfo and should this be a virtual function?
-  void BuildPairKStar4dVecFromTxt(TString aFileBaseName);  //TODO fix the fPairKStar3dVecInfo and should this be a virtual function?
+
+  td1dVec BuildPairKStar4dVecFromTxt(TString aFileBaseName);  //TODO fix the fPairKStar3dVecInfo and should this be a virtual function?
+  void BuildPairKStar4dVecOnFly(TString aPairKStarNtupleBaseName, int aNFiles, int aNbinsKStar, double aKStarMin, double aKStarMax);
 
   void BuildPairSample4dVec(int aNPairsPerKStarBin=16384, double aBinSize=0.01);
-  void SetUseStaticPairs(bool aUseStaticPairs=true, int aNPairsPerKStarBin=16384, double aBinSize=0.01);
   bool CanInterpAllSamplePairs();
   td3dVec GetCPUSamplePairs(int aAnalysisNumber);
 
@@ -65,6 +66,10 @@ public:
   TH1* CreateFitHistogramParallel(TString aName, int aAnalysisNumber);
   TH1* CreateFitHistogramSampleParallel(TString aName, AnalysisType aAnalysisType, int aNbinsK, double aKMin, double aKMax, double aLambda, double aR, double aReF0, double aImF0, double aD0, double aNorm);
   TH1* CreateFitHistogramSampleCompleteParallel(TString aName, AnalysisType aAnalysisType, int aNbinsK, double aKMin, double aKMax, double aLambda, double aR, double aReF0s, double aImF0s, double aD0s,  double aReF0t, double aImF0t, double aD0t, double aNorm);
+
+  void InitializeFitter();  //Called within DoFit
+  void DoFit();
+  void Finalize();  //Send things back to analyses, etc.
 
   //inline (i.e. simple) functions
   ParallelWaveFunction* GetParallelWaveFunctionObject();
