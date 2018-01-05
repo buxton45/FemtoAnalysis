@@ -15,6 +15,8 @@ int main(int argc, char **argv)
 //  TString tResultsDate = "20171220_onFlyStatusFalse";
 //  TString tResultsDate = "20171227";
 //  TString tResultsDate = "20171227_LHC10h";
+//  TString tResultsDate = "20180104_useIsProbableElectronMethodTrue";
+//  TString tResultsDate = "20180104_useIsProbableElectronMethodFalse";
 
   AnalysisType tAnType = kLamKchP;
   AnalysisRunType tAnRunType = kTrain;
