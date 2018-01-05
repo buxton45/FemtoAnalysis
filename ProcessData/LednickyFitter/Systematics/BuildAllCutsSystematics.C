@@ -27,7 +27,7 @@ int main(int argc, char **argv)
   ChargedResidualsType tChargedResidualsType = kUseXiDataAndCoulombOnlyInterp;
   ResPrimMaxDecayType tResPrimMaxDecayType = k5fm;
 
-  bool FixD0 = false;
+  bool FixD0 = true;
 
   bool bWriteToFile = true;
   bool bSaveImages = true;
