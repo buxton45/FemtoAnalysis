@@ -20,7 +20,8 @@ COULOMBFITTER_DIR = /home/jesse/Analysis/FemtoAnalysis/ProcessData/CoulombFitter
 UTILITIES_DIR = /home/jesse/Analysis/FemtoAnalysis/ProcessData/Utilities
 
 LIBS	= -lcudart
-CUDAINCLUDES = -I../../NVIDIA_CUDA-7.5_Samples/common/inc
+CUDAINCDIR = /usr/local/cuda/include
+CUDALIBDIR = /usr/local/cuda/lib64
 
 LIBSC   = $(shell root-config --libs) -lMinuit
 CFLAGS = $(shell root-config --cflags) -pthread -Wno-deprecated-declarations -m64 -Wall -std=c++11 -I${ANALYZE_DIR} -I${LEDNICKYFITTER_DIR} -I${COULOMBFITTER_DIR} -I${UTILITIES_DIR} -g -O0 -fopenmp
@@ -32,10 +33,10 @@ BINARIES = runTest runInterp
 all : $(BINARIES)
 
 runTest: ${MY_LIBS} test.C
-	g++ test.C ${MY_LIBS} -I${INCDIR} -o runTest -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(LIBSC) $(CFLAGS)
+	g++ test.C ${MY_LIBS} -I${INCDIR} -o runTest -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(LIBSC) $(CFLAGS) -I${CUDAINCDIR} -L${CUDALIBDIR}
 
 runInterp: ${MY_LIBS} testInterp.C
-	g++ testInterp.C ${MY_LIBS} -I${INCDIR} -o runInterp -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(LIBSC) $(CFLAGS)
+	g++ testInterp.C ${MY_LIBS} -I${INCDIR} -o runInterp -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(LIBSC) $(CFLAGS) -I${CUDAINCDIR} -L${CUDALIBDIR}
 
 build/%.o: ${ANALYZE_DIR}/%.cxx ${ANALYZE_DIR}/%.h
 	g++ -c $< $(CFLAGS) -o $@
@@ -50,10 +51,10 @@ build/%.o: ${COULOMBFITTER_DIR}/%.cxx ${COULOMBFITTER_DIR}/%.h
 	g++ -c $< -I${INCDIR} $(CFLAGS) -o $@
 
 build/%.o: %.cxx %.h
-	g++ -c $< -I${INCDIR} $(CFLAGS) -o $@
+	g++ -c $< -I${INCDIR} $(CFLAGS) -I${CUDAINCDIR} -L${CUDALIBDIR} -o $@
 
 build/%.o: %.cu %.h
-	nvcc -c -std=c++11 -arch=sm_50 -lineinfo -Xptxas -v --default-stream per-thread $< -o $@ -I${ANALYZE_DIR}
+	nvcc -c -std=c++11 -arch=sm_50 -lineinfo -Xptxas -v --default-stream per-thread $< -o $@ -I${ANALYZE_DIR} -I${CUDAINCDIR} -L${CUDALIBDIR}
 
 clean: 
 	@ ${RM} -rf *.o $(BINARIES) ${MY_LIBS}
