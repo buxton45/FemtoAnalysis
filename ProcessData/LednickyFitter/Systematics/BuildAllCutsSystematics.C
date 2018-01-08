@@ -23,7 +23,7 @@ int main(int argc, char **argv)
   bool ApplyNonFlatBackgroundCorrection = true;
   NonFlatBgdFitType tNonFlatBgdFitType = kLinear;
 
-  IncludeResidualsType tIncludeResidualsType = kInclude10Residuals; 
+  IncludeResidualsType tIncludeResidualsType = kInclude3Residuals; 
   ChargedResidualsType tChargedResidualsType = kUseXiDataAndCoulombOnlyInterp;
   ResPrimMaxDecayType tResPrimMaxDecayType = k5fm;
 
@@ -44,7 +44,7 @@ int main(int argc, char **argv)
   else if(tAnType==kLamKchP || tAnType==kALamKchM || tAnType==kLamKchM || tAnType==kALamKchP) tGeneralAnTypeName = "cLamcKch";
   else assert(0);
 
-  for(int iCut=1; iCut<=tMaxCut; iCut++)
+  for(int iCut=16; iCut<=tMaxCut; iCut++)
   {
     if(tGeneralAnTypeName=="cLamcKch" && iCut==6) continue;
     if(tGeneralAnTypeName=="cLamK0" && iCut==9) continue;
