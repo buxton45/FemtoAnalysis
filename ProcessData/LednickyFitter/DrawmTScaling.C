@@ -198,13 +198,13 @@ int main(int argc, char **argv)
 
   IncludeResType tIncludeResType;
     tIncludeResType = kInclude10ResAnd3Res;
-//    tIncludeResType = kInclude10ResOnly;
-//    tIncludeResType = kInclude3ResOnly;
+    //tIncludeResType = kInclude10ResOnly;
+    //tIncludeResType = kInclude3ResOnly;
 
   IncludeD0Type tIncludeD0Type;
     tIncludeD0Type = kFreeAndFixedD0;
-//    tIncludeD0Type = kFreeD0Only;
-//    tIncludeD0Type = kFixedD0Only;
+    //tIncludeD0Type = kFreeD0Only;
+    //tIncludeD0Type = kFixedD0Only;
 
   bool bDrawQM = false;
   if(bDrawQM)
@@ -220,7 +220,7 @@ int main(int argc, char **argv)
   assert(!(bUseMinvCalculation && bUseReducedMassCalculation));
 
 //  TString tSaveName = "./mTscaling";
-  TString tSaveName = "/home/jesse/Analysis/Presentations/GroupMeetings/20171207/Figures/mTscaling";
+  TString tSaveName = "/home/jesse/Analysis/Presentations/AliFemto/20180110/Figures/mTscaling";
 
   if(bRunAveragedKchPKchM) tSaveName += TString("Averaged");
 

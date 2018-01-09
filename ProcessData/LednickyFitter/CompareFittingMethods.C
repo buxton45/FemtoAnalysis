@@ -1,9 +1,9 @@
 #include "TSystem.h"
 
 #include "CompareFittingMethods.h"
-TString gSaveLocationBase = "/home/jesse/Analysis/Presentations/GroupMeetings/20171207/Figures/";
+TString gSaveLocationBase = "/home/jesse/Analysis/Presentations/AliFemto/20180110/Figures/";
 //TString gSaveType = "eps";
-TString gSaveType = "pdf";
+TString gSaveType = "pdf";  // must save as pdf for transparency to work
 
 /*
 //---------------------------------------------------------------------------------------------------------------------------------
@@ -225,6 +225,39 @@ void DrawAnalysisStamps(TPad* aPad, double aStartX, double aStartY, double aIncr
   tTex->DrawLatex(aStartX, aStartY-iTex*aIncrementY, cAnalysisRootTags[kLamK0]);
   tMarker->SetMarkerColor(kBlack);
   tMarker->DrawMarker(aStartX-aIncrementX, aStartY-iTex*aIncrementY);
+  iTex++;
+}
+
+//---------------------------------------------------------------------------------------------------------------------------------
+void DrawFixedRadiiStamps(TPad* aPad, double aStartX, double aStartY, double aIncrementX, double aIncrementY, double aTextSize=0.04, int aMarkerStyle=20)
+{
+  aPad->cd();
+
+  TLatex* tTex = new TLatex();
+  tTex->SetTextAlign(12);
+  tTex->SetLineWidth(2);
+  tTex->SetTextFont(42);
+  tTex->SetTextSize(aTextSize);
+
+  const Size_t tMarkerSize=1.6;
+  TMarker *tMarker = new TMarker();
+  tMarker->SetMarkerSize(tMarkerSize);
+  tMarker->SetMarkerStyle(aMarkerStyle);
+
+  int iTex = 0;
+
+  tTex->DrawLatex(aStartX, aStartY-(iTex-0.75)*aIncrementY, "Fixed Radii");
+
+  tMarker->SetMarkerColor(tFitInfo5a_LamKchP.markerColor);
+  tMarker->DrawMarker(aStartX+(2.*aIncrementX), aStartY-iTex*aIncrementY);
+  iTex++;
+
+  tMarker->SetMarkerColor(tFitInfo5a_LamKchM.markerColor);
+  tMarker->DrawMarker(aStartX+(2.*aIncrementX), aStartY-iTex*aIncrementY);
+  iTex++;
+
+  tMarker->SetMarkerColor(tFitInfo5a_LamK0.markerColor);
+  tMarker->DrawMarker(aStartX+(2.*aIncrementX), aStartY-iTex*aIncrementY);
   iTex++;
 }
 
@@ -703,6 +736,57 @@ TCanvas* DrawAllReF0vsImF0(AnalysisType aAnType,
   }
 
   return tReturnCan;
+}
+
+
+//TODO For use in CompareAllReF0vsImF0AcrossAnalyses!!!
+//---------------------------------------------------------------------------------------------------------------------------------
+void DrawAllReF0vsImF0(TPad* aPadReF0vsImF0, TPad* aPadD0, 
+                       AnalysisType aAnType, 
+                       IncludeResType aIncludeResType=kInclude10ResAnd3Res, IncludeD0Type aIncludeD0Type=kFreeAndFixedD0,
+                       IncludeRadiiType aIncludeRadiiType=kFreeAndFixedRadii, IncludeLambdaType aIncludeLambdaType=kFreeAndFixedLambda, 
+                       ErrorType aErrType=kStatAndSys)
+{
+  //------------------------
+  vector<FitInfo> aFitInfoVec = GetFitInfoVec(aAnType, aIncludeResType, aIncludeD0Type, aIncludeRadiiType, aIncludeLambdaType);
+  //------------------------
+
+  TLatex* tTex = new TLatex();
+  tTex->SetTextAlign(12);
+  tTex->SetLineWidth(2);
+  tTex->SetTextFont(42);
+  tTex->SetTextSize(0.04);
+
+  double tStartX = 0.30;
+  double tStartY = 1.4;
+
+  if(aAnType == kLamKchM) tStartX = -1.75;
+
+  double tIncrementY = 0.08;
+
+  const Size_t tMarkerSize=1.6;
+  TMarker *tMarker = new TMarker();
+  tMarker->SetMarkerSize(tMarkerSize);
+
+  int iTex=0;
+  TString tDescriptorFull, tDescriptor;
+  int tDescriptorEnd = 0;
+  for(unsigned int i=0; i<aFitInfoVec.size(); i++)
+  {
+    if(aErrType==kStatAndSys)
+    {
+      DrawReF0vsImF0((TPad*)aPadReF0vsImF0, aFitInfoVec[i], kSys);
+      DrawReF0vsImF0((TPad*)aPadReF0vsImF0, aFitInfoVec[i], kStat);
+
+      DrawD0((TPad*)aPadD0, aFitInfoVec[i], kSys);
+      DrawD0((TPad*)aPadD0, aFitInfoVec[i], kStat);
+    }
+    else 
+    {
+      DrawReF0vsImF0((TPad*)aPadReF0vsImF0, aFitInfoVec[i], aErrType);
+      DrawD0((TPad*)aPadD0, aFitInfoVec[i], aErrType);
+    }
+  }
 }
 
 
@@ -1479,7 +1563,7 @@ void DrawD0AcrossAnalysesQMResults(TPad* aPad, int aMarkerStyle=20, double aMark
 
 
 //---------------------------------------------------------------------------------------------------------------------------------
-TCanvas* CompareAllReF0vsImF0AcrossAnalyses(IncludeResType aIncludeResType=kInclude10ResAnd3Res, IncludeD0Type aIncludeD0Type=kFreeAndFixedD0, Plot10and3Type aPlot10and3Type=kPlot10and3SeparateAndAvg, bool aIncludeFreeFixedD0Avgs=true, ErrorType aErrType=kStatAndSys, bool bSaveImage=false)
+TCanvas* CompareAllReF0vsImF0AcrossAnalyses(IncludeResType aIncludeResType=kInclude10ResAnd3Res, IncludeD0Type aIncludeD0Type=kFreeAndFixedD0, Plot10and3Type aPlot10and3Type=kPlot10and3SeparateAndAvg, bool aIncludeFreeFixedD0Avgs=true, ErrorType aErrType=kStatAndSys, bool aDrawFixedRadii=false, bool bSaveImage=false)
 {
   vector<bool> tIncludePlots = GetIncludePlotsVec(aIncludeResType, aIncludeD0Type, aPlot10and3Type, aIncludeFreeFixedD0Avgs);
   assert(tIncludePlots.size() == tDrawAcrossAnalysesInfoVec.size());
@@ -1601,8 +1685,35 @@ TCanvas* CompareAllReF0vsImF0AcrossAnalyses(IncludeResType aIncludeResType=kIncl
 
   //------------------------------------------------------
 
+  if(aDrawFixedRadii)
+  {
+    //TODO For now, since I need to finish this quickly, no option to average
+    assert(aPlot10and3Type != kPlot10and3SeparateAndAvg);
+    assert(!aIncludeFreeFixedD0Avgs);
+
+    DrawAllReF0vsImF0(tPadReF0vsImF0, tPadD0,
+                      kLamKchP, 
+                      aIncludeResType, aIncludeD0Type,
+                      kFixedRadiiOnly, kFreeLambdaOnly, 
+                      kStat);
+
+    DrawAllReF0vsImF0(tPadReF0vsImF0, tPadD0,
+                      kLamKchM, 
+                      aIncludeResType, aIncludeD0Type,
+                      kFixedRadiiOnly, kFreeLambdaOnly, 
+                      kStat);
+
+    DrawAllReF0vsImF0(tPadReF0vsImF0, tPadD0,
+                      kLamK0, 
+                      aIncludeResType, aIncludeD0Type,
+                      kFixedRadiiOnly, kFreeLambdaOnly, 
+                      kStat);
+  }
+
+  //------------------------------------------------------
+
   double tStartXStamp = -1.75;
-  double tStartYStamp = 1.4;
+  double tStartYStamp = 1.35;
   double tIncrementXStamp = 0.05;
   double tIncrementYStamp = 0.10;
   double tTextSizeStamp = 0.04;
@@ -1610,11 +1721,17 @@ TCanvas* CompareAllReF0vsImF0AcrossAnalyses(IncludeResType aIncludeResType=kIncl
   DrawAnalysisStamps((TPad*)tPadReF0vsImF0, tStartXStamp, tStartYStamp, tIncrementXStamp, tIncrementYStamp, tTextSizeStamp, tMarkerStyleStamp);
 
   //------------------------------------------------------
+  if(aDrawFixedRadii) DrawFixedRadiiStamps((TPad*)tPadReF0vsImF0, tStartXStamp+0.35, tStartYStamp, tIncrementXStamp, tIncrementYStamp, 0.75*tTextSizeStamp, tMarkerStyleStamp);
+  //------------------------------------------------------
 
   if(bSaveImage)
   {
     gSystem->mkdir(gSaveLocationBase.Data());
-    TString tSaveLocationFull = TString::Format("%s%s.%s", gSaveLocationBase.Data(), tCanName.Data(), gSaveType.Data());
+
+    TString tModifier = "";
+    if(aDrawFixedRadii) tModifier = TString("_wFixedRadiiResults");
+
+    TString tSaveLocationFull = TString::Format("%s%s%s.%s", gSaveLocationBase.Data(), tCanName.Data(), tModifier.Data(), gSaveType.Data());
     tReturnCan->SaveAs(tSaveLocationFull);
   }
 
@@ -1647,39 +1764,76 @@ int main(int argc, char **argv)
   CentralityType tCentType = kMB;
 
   IncludeResType tIncludeResType;
-//    tIncludeResType = kInclude10ResAnd3Res;
-    tIncludeResType = kInclude10ResOnly;
-//    tIncludeResType = kInclude3ResOnly;
+    tIncludeResType = kInclude10ResAnd3Res;
+    //tIncludeResType = kInclude10ResOnly;
+    //tIncludeResType = kInclude3ResOnly;
 
   IncludeD0Type tIncludeD0Type;
-//    tIncludeD0Type = kFreeAndFixedD0;
-    tIncludeD0Type = kFreeD0Only;
-//    tIncludeD0Type = kFixedD0Only;
+    tIncludeD0Type = kFreeAndFixedD0;
+    //tIncludeD0Type = kFreeD0Only;
+    //tIncludeD0Type = kFixedD0Only;
 
   Plot10and3Type tPlot10and3Type;
-    tPlot10and3Type=kPlot10and3SeparateAndAvg;
-//    tPlot10and3Type=kPlot10and3SeparateOnly;
-//    tPlot10and3Type=kPlot10and3AvgOnly;
+    //tPlot10and3Type=kPlot10and3SeparateAndAvg;
+    tPlot10and3Type=kPlot10and3SeparateOnly;
+    //tPlot10and3Type=kPlot10and3AvgOnly;
 
-  bool tIncludeFreeFixedD0Avgs=true;
+  bool tIncludeFreeFixedD0Avgs=false;
+  bool tDrawFixedRadiiInCompareAllReF0vsImF0AcrossAnalyses = false;
+
+  //--------------------------------------------------------------------------
 
   // tIncludeRadiiType and tIncludeLambdaType only for single analysis methods
   //  i.e. only for DrawAll... methods
   //  For Compare...AcrossAnalyses methods, tIncludeRadiiType = kFreeRadiiOnly and tIncludeLambdaType = kFreeLambdaOnly
   IncludeRadiiType tIncludeRadiiType;
     tIncludeRadiiType = kFreeAndFixedRadii;
-//    tIncludeRadiiType = kFreeRadiiOnly;
-//    tIncludeRadiiType = kFixedRadiiOnly;
+    //tIncludeRadiiType = kFreeRadiiOnly;
+    //tIncludeRadiiType = kFixedRadiiOnly;
 
   IncludeLambdaType tIncludeLambdaType;
     tIncludeLambdaType = kFreeAndFixedLambda;
-//    tIncludeLambdaType = kFreeLambdaOnly;
-//    tIncludeLambdaType = kFixedLambdaOnly;
+    //tIncludeLambdaType = kFreeLambdaOnly;
+    //tIncludeLambdaType = kFixedLambdaOnly;
 
   ErrorType tErrorType;
     tErrorType = kStatAndSys;
-//   tErrorType = kStat;
-//    tErrorType = kSys;
+    //tErrorType = kStat;
+    //tErrorType = kSys;
+
+
+
+//-------------- Combinations for AliFemto_20180110 -----------------------------
+
+  tIncludeResType = kInclude10ResAnd3Res;
+  tIncludeD0Type = kFreeAndFixedD0;
+  tPlot10and3Type=kPlot10and3SeparateOnly;
+  tIncludeFreeFixedD0Avgs=false;
+
+/*
+  tIncludeResType = kInclude10ResAnd3Res;
+  tIncludeD0Type = kFreeD0Only;
+  tPlot10and3Type=kPlot10and3SeparateOnly;
+  tIncludeFreeFixedD0Avgs=false;
+*/
+/*
+  tIncludeResType = kInclude10ResAnd3Res;
+  tIncludeD0Type = kFixedD0Only;
+  tPlot10and3Type=kPlot10and3SeparateOnly;
+  tIncludeFreeFixedD0Avgs=false;
+*/
+/*
+  tIncludeResType = kInclude10ResOnly;
+  tIncludeD0Type = kFreeAndFixedD0;
+  tPlot10and3Type=kPlot10and3SeparateOnly;
+  tIncludeFreeFixedD0Avgs=false;
+*/
+/*
+  tIncludeResType = kInclude3ResOnly;
+  tIncludeD0Type = kFreeAndFixedD0;
+  tPlot10and3Type=kPlot10and3SeparateOnly;
+  tIncludeFreeFixedD0Avgs=false;
+*/
 
 //-------------------------------------------------------------------------------
 //------- Some common combinations ----------
@@ -1769,7 +1923,8 @@ int main(int argc, char **argv)
     tCanCompareAllRadiusvsLambdaAcrossAnalyses3 = CompareAllRadiusvsLambdaAcrossAnalyses(k3050, tIncludeResType, tIncludeD0Type, tPlot10and3Type, tIncludeFreeFixedD0Avgs, tErrorType, bSaveFigures);
   }
 
-  TCanvas* tCanCompareAllReF0vsImF0AcrossAnalyses = CompareAllReF0vsImF0AcrossAnalyses(tIncludeResType, tIncludeD0Type, tPlot10and3Type, tIncludeFreeFixedD0Avgs, tErrorType, bSaveFigures);
+  TCanvas* tCanCompareAllReF0vsImF0AcrossAnalyses = CompareAllReF0vsImF0AcrossAnalyses(tIncludeResType, tIncludeD0Type, tPlot10and3Type, tIncludeFreeFixedD0Avgs, tErrorType, 
+                                                                                       tDrawFixedRadiiInCompareAllReF0vsImF0AcrossAnalyses, bSaveFigures);
 
 
 //-------------------------------------------------------------------------------

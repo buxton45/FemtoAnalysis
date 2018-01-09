@@ -285,7 +285,7 @@ struct FitInfo
                                        432.0,
                                        339,
 
-                                       tColor3, tMarkerStyleA1);
+                                       kPink+10, 47);
 
   const FitInfo tFitInfo6a_LamKchP = FitInfo(TString("FixedRadii_FixedD0_10Res"), 
                                        kLamKchP,
@@ -305,7 +305,7 @@ struct FitInfo
                                        434.3,
                                        340,
 
-                                       tColor3, tMarkerStyleA2);
+                                       kPink+10, 46);
 
 
   //--------------- 3 Residuals ----------
@@ -408,7 +408,7 @@ struct FitInfo
                                        432.0,
                                        339,
 
-                                       tColor3, tMarkerStyleB1);
+                                       kPink+10, 34);
 
   const FitInfo tFitInfo6b_LamKchP = FitInfo(TString("FixedRadii_FixedD0_3Res"), 
                                        kLamKchP,
@@ -428,7 +428,7 @@ struct FitInfo
                                        436.0,
                                        340,
 
-                                       tColor3, tMarkerStyleB2);
+                                       kPink+10, 28);
 
 
 
@@ -536,7 +536,7 @@ struct FitInfo
                                        296.9,
                                        291,
 
-                                       tColor3, tMarkerStyleA1);
+                                       kAzure+10, 47);
 
   const FitInfo tFitInfo6a_LamKchM = FitInfo(TString("FixedRadii_FixedD0_10Res"), 
                                        kLamKchM,
@@ -556,7 +556,7 @@ struct FitInfo
                                        296.8,
                                        292,
 
-                                       tColor3, tMarkerStyleA2);
+                                       kAzure+10, 46);
 
 
 
@@ -660,7 +660,7 @@ struct FitInfo
                                        294.9,
                                        291,
 
-                                       tColor3, tMarkerStyleB1);
+                                       kAzure+10, 34);
 
   const FitInfo tFitInfo6b_LamKchM = FitInfo(TString("FixedRadii_FixedD0_3Res"), 
                                        kLamKchM,
@@ -680,7 +680,7 @@ struct FitInfo
                                        296.8,
                                        292,
 
-                                       tColor3, tMarkerStyleB2);
+                                       kAzure+10, 28);
 
 
   //---------------------------------------------------------------------------
@@ -787,7 +787,7 @@ struct FitInfo
                                        367.3,
                                        344,
 
-                                       tColor3, tMarkerStyleA1);
+                                       kGray+1, 47);
 
   const FitInfo tFitInfo6a_LamK0 = FitInfo(TString("FixedRadii_FixedD0_10Res"), 
                                        kLamK0,
@@ -807,7 +807,7 @@ struct FitInfo
                                        370.3,
                                        345,
 
-                                       tColor3, tMarkerStyleA2);
+                                       kGray+1, 46);
 
   //--------------- 3 Residuals ----------
   const FitInfo tFitInfo1b_LamK0 = FitInfo(TString("FreeRadii_FreeD0_3Res"), 
@@ -909,7 +909,7 @@ struct FitInfo
                                        372.0,
                                        344,
 
-                                       tColor3, tMarkerStyleB1);
+                                       kGray+1, 34);
 
   const FitInfo tFitInfo6b_LamK0 = FitInfo(TString("FixedRadii_FixedD0_3Res"), 
                                        kLamK0,
@@ -929,7 +929,7 @@ struct FitInfo
                                        372.1,
                                        345,
 
-                                       tColor3, tMarkerStyleB2);
+                                       kGray+1, 28);
 
 //------------------------------------------------------------------------------------------------
 //              QM 2017 Results, i.e. without residuals
