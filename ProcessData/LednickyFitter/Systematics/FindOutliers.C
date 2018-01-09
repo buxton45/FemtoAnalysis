@@ -164,7 +164,15 @@ void ReadFile(TString aFileLocation, td4dVec &aAll, double aTolerance=100)
 
       for(unsigned int i=0; i<tDiffVec.size(); i++)
       {
-        assert(tDiffVec[1]==0.);
+        if(tValuesVec[i] != 0. && tDiffVec[1]!=0.)
+        {
+          cout << "tDiffVec[1]!=0. !!!!!!!!!!!!!!!!!!!!" << endl;
+          cout << "Analysis   = " << cAnalysisBaseTags[tCurrentAnType] << endl;
+          cout << "Centrality = " << cCentralityTags[tCurrentCentralityType] << endl;
+          cout << "Parameter  = " << cParameterNames[tCurrentParameterType] << endl;
+        }
+        if(tValuesVec[i] != 0.) assert(tDiffVec[1]==0.);  //If tValuesVec[i]==0., then tDiffVec[i] = nan
+
         if(abs(tDiffVec[i]) > aTolerance)
         {
           cout << std::setw(10) << cAnalysisBaseTags[tCurrentAnType] << " | ";
