@@ -399,7 +399,7 @@ int main(int argc, char **argv)
   //the program ends and closes everything
 //-----------------------------------------------------------------------------
 
-  bool bRunOldQMNaming = true;
+  bool bRunOldQMNaming = false;
 
   CentralityType tCentralityType = kMB;  //Probably should always be kMB
 
@@ -407,11 +407,14 @@ int main(int argc, char **argv)
   bool ApplyNonFlatBackgroundCorrection = true;
   NonFlatBgdFitType tNonFlatBgdFitType = kLinear;
 
-  IncludeResidualsType tIncludeResidualsType = kInclude10Residuals; 
+  IncludeResidualsType tIncludeResidualsType = kIncludeNoResiduals; 
   ResPrimMaxDecayType tResPrimMaxDecayType = k5fm;
   ChargedResidualsType tChargedResidualsType = kUseXiDataAndCoulombOnlyInterp;
 
   bool tFixD0 = false;
+
+  bool bIncludeFitRangeSys = true;
+  bool bWriteToFile = false;
 
   if(bRunOldQMNaming) tIncludeResidualsType = kIncludeNoResiduals; 
 
@@ -422,6 +425,22 @@ int main(int argc, char **argv)
   TString tResultsDirectory_cLamK0 = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamK0_20161027/";
   TString tResultsDirectory_cLamcKch = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_20161027/";
 
+  TString tSaveDirectory_cLamK0 = tResultsDirectory_cLamK0;
+  TString tSaveDirectory_cLamcKch = tResultsDirectory_cLamcKch;
+
+  if(!bRunOldQMNaming)
+  {
+    tSaveDirectory_cLamK0 += TString("Systematics/");
+    FitSystematicAnalysis::AppendFitInfo(tSaveDirectory_cLamK0, ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, 
+                                         tIncludeResidualsType, tResPrimMaxDecayType, tChargedResidualsType, tFixD0);
+    tSaveDirectory_cLamK0 += TString("/");
+    //-----
+    tSaveDirectory_cLamcKch += TString("Systematics/");
+    FitSystematicAnalysis::AppendFitInfo(tSaveDirectory_cLamcKch, ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, 
+                                         tIncludeResidualsType, tResPrimMaxDecayType, tChargedResidualsType, tFixD0);
+    tSaveDirectory_cLamcKch += TString("/");
+  }
+
   //-------------------------------
   int tNAnalysisTypes = 6; //kLamK0, kALamK0, kLamKchP, kALamKchP, kLamKchM, kALamKchM
   int tNCentralityTypes = 3; //k0010, k1030, k3050
@@ -429,9 +448,6 @@ int main(int argc, char **argv)
 
   td4dVec tAllCutSys(0);
     tAllCutSys.resize(tNAnalysisTypes, td3dVec(tNCentralityTypes, td2dVec(tNParameterTypes, td1dVec(0))));
-
-  bool bIncludeFitRangeSys = true;
-  bool bWriteToFile = false;
 
   //---------------------------------------------------------------------------------------
 
@@ -488,7 +504,7 @@ int main(int argc, char **argv)
 
   if(bWriteToFile)
   {
-    TString tOutputLamKchName = TString::Format("%sFinalFitSystematics", tResultsDirectory_cLamcKch.Data());
+    TString tOutputLamKchName = TString::Format("%sFinalFitSystematics", tSaveDirectory_cLamcKch.Data());
     if(bIncludeFitRangeSys) tOutputLamKchName += TString("_wFitRangeSys");
     if(!bRunOldQMNaming)
     {
@@ -498,7 +514,7 @@ int main(int argc, char **argv)
     }
     tOutputLamKchName += TString("cLamcKch.txt");
 
-    TString tOutputLamK0Name = TString::Format("%sFinalFitSystematics", tResultsDirectory_cLamK0.Data());
+    TString tOutputLamK0Name = TString::Format("%sFinalFitSystematics", tSaveDirectory_cLamK0.Data());
     if(bIncludeFitRangeSys) tOutputLamK0Name += TString("_wFitRangeSys");
     if(!bRunOldQMNaming)
     {
