@@ -346,10 +346,10 @@ TGraphAsymmErrors* GetReF0vsImF0(const FitInfo &aFitInfo, ErrorType aErrType=kSt
 }
 
 //---------------------------------------------------------------------------------------------------------------------------------
-TGraphAsymmErrors* GetD0(const FitInfo &aFitInfo, ErrorType aErrType=kStat)
+TGraphAsymmErrors* GetD0(const FitInfo &aFitInfo, ErrorType aErrType=kStat, double aXOffset=0.5)
 {
   TGraphAsymmErrors* tReturnGr = new TGraphAsymmErrors(1);
-  tReturnGr->SetPoint(0, 0.5, aFitInfo.d0);
+  tReturnGr->SetPoint(0, aXOffset, aFitInfo.d0);
   if(aErrType==kStat) tReturnGr->SetPointError(0, 0., 0., aFitInfo.d0StatErr, aFitInfo.d0StatErr);
   else if(aErrType==kSys) tReturnGr->SetPointError(0, 0., 0., aFitInfo.d0SysErr, aFitInfo.d0SysErr);
   else assert(0);
@@ -415,7 +415,7 @@ void DrawReF0vsImF0(TPad* aPad, FitInfo &aFitInfo, ErrorType aErrType=kStat)
 }
 
 //---------------------------------------------------------------------------------------------------------------------------------
-void DrawD0(TPad* aPad, FitInfo &aFitInfo, ErrorType aErrType=kStat)
+void DrawD0(TPad* aPad, FitInfo &aFitInfo, ErrorType aErrType=kStat, double aXOffset=0.5)
 {
   aPad->cd();
   gStyle->SetOptStat(0);
@@ -424,29 +424,35 @@ void DrawD0(TPad* aPad, FitInfo &aFitInfo, ErrorType aErrType=kStat)
   TString tDrawOption;
   int tColor;
 
-  TGraphAsymmErrors* tGr = GetD0(aFitInfo, aErrType);
+  TGraphAsymmErrors* tGr = GetD0(aFitInfo, aErrType, aXOffset);
   tGr->SetName(aFitInfo.descriptor + cErrorTypeTags[aErrType]);
-  if(aErrType==kStat)
-  {
-    tColor = aFitInfo.markerColor;
-    tGr->SetLineWidth(1);
-    tDrawOption = TString("pzsame");
-  }
-  else if(aErrType==kSys)
-  {
-    tColor = TColor::GetColorTransparent(aFitInfo.markerColor, 0.3);
-    tGr->SetLineWidth(0);
-    tDrawOption = TString("e2same");
-  }
-  else assert(0);
 
-  tGr->SetMarkerStyle(aFitInfo.markerStyle);
-  tGr->SetMarkerColor(tColor);
-  tGr->SetFillColor(tColor);
-  tGr->SetFillStyle(1000);
-  tGr->SetLineColor(tColor);
+  double tX=0., tY=0;
+  tGr->GetPoint(0, tX, tY);
+  if(tY != 0.)
+  {
+    if(aErrType==kStat)
+    {
+      tColor = aFitInfo.markerColor;
+      tGr->SetLineWidth(1);
+      tDrawOption = TString("pzsame");
+    }
+    else if(aErrType==kSys)
+    {
+      tColor = TColor::GetColorTransparent(aFitInfo.markerColor, 0.3);
+      tGr->SetLineWidth(0);
+      tDrawOption = TString("e2same");
+    }
+    else assert(0);
 
-  tGr->Draw(tDrawOption);
+    tGr->SetMarkerStyle(aFitInfo.markerStyle);
+    tGr->SetMarkerColor(tColor);
+    tGr->SetFillColor(tColor);
+    tGr->SetFillStyle(1000);
+    tGr->SetLineColor(tColor);
+
+    tGr->Draw(tDrawOption);
+  }
 }
 
 //---------------------------------------------------------------------------------------------------------------------------------
@@ -745,7 +751,7 @@ void DrawAllReF0vsImF0(TPad* aPadReF0vsImF0, TPad* aPadD0,
                        AnalysisType aAnType, 
                        IncludeResType aIncludeResType=kInclude10ResAnd3Res, IncludeD0Type aIncludeD0Type=kFreeAndFixedD0,
                        IncludeRadiiType aIncludeRadiiType=kFreeAndFixedRadii, IncludeLambdaType aIncludeLambdaType=kFreeAndFixedLambda, 
-                       ErrorType aErrType=kStatAndSys)
+                       ErrorType aErrType=kStatAndSys, double aD0XOffset=0.5, double aD0XOffsetIncrement=0.)
 {
   //------------------------
   vector<FitInfo> aFitInfoVec = GetFitInfoVec(aAnType, aIncludeResType, aIncludeD0Type, aIncludeRadiiType, aIncludeLambdaType);
@@ -778,13 +784,13 @@ void DrawAllReF0vsImF0(TPad* aPadReF0vsImF0, TPad* aPadD0,
       DrawReF0vsImF0((TPad*)aPadReF0vsImF0, aFitInfoVec[i], kSys);
       DrawReF0vsImF0((TPad*)aPadReF0vsImF0, aFitInfoVec[i], kStat);
 
-      DrawD0((TPad*)aPadD0, aFitInfoVec[i], kSys);
-      DrawD0((TPad*)aPadD0, aFitInfoVec[i], kStat);
+      DrawD0((TPad*)aPadD0, aFitInfoVec[i], kSys, aD0XOffset+i*aD0XOffsetIncrement);
+      DrawD0((TPad*)aPadD0, aFitInfoVec[i], kStat, aD0XOffset+i*aD0XOffsetIncrement);
     }
     else 
     {
       DrawReF0vsImF0((TPad*)aPadReF0vsImF0, aFitInfoVec[i], aErrType);
-      DrawD0((TPad*)aPadD0, aFitInfoVec[i], aErrType);
+      DrawD0((TPad*)aPadD0, aFitInfoVec[i], aErrType, aD0XOffset+i*aD0XOffsetIncrement);
     }
   }
 }
@@ -1397,7 +1403,7 @@ void DrawReF0vsImF0AcrossAnalysesQMResults(TPad* aPad, int aMarkerStyle=20, doub
 
 
 //---------------------------------------------------------------------------------------------------------------------------------
-void DrawD0AcrossAnalyses(TPad* aPad, int aMarkerStyle=20, double aMarkerSize=1., IncludeResType aIncludeResType=kInclude10ResAnd3Res, IncludeD0Type aIncludeD0Type=kFreeAndFixedD0, ErrorType aErrType=kStat)
+void DrawD0AcrossAnalyses(TPad* aPad, int aMarkerStyle=20, double aMarkerSize=1., IncludeResType aIncludeResType=kInclude10ResAnd3Res, IncludeD0Type aIncludeD0Type=kFreeAndFixedD0, ErrorType aErrType=kStat, double aXOffset=0.5)
 {
   aPad->cd();
   //------------------------
@@ -1434,10 +1440,18 @@ void DrawD0AcrossAnalyses(TPad* aPad, int aMarkerStyle=20, double aMarkerSize=1.
     if(aIncludeD0Type==kFreeD0Only) assert(aFitInfoVec_LamKchP[0].freeD0);
     if(aIncludeD0Type==kFixedD0Only) assert(!aFitInfoVec_LamKchP[0].freeD0);
 
-    tGr_LamKchP = GetD0(aFitInfoVec_LamKchP[0], aErrType);
-    tGr_LamKchM = GetD0(aFitInfoVec_LamKchM[0], aErrType);
-    tGr_LamK0   = GetD0(aFitInfoVec_LamK0[0], aErrType);
+    tGr_LamKchP = GetD0(aFitInfoVec_LamKchP[0], aErrType, aXOffset);
+    tGr_LamKchM = GetD0(aFitInfoVec_LamKchM[0], aErrType, aXOffset);
+    tGr_LamK0   = GetD0(aFitInfoVec_LamK0[0], aErrType, aXOffset);
   }
+
+  double tX_LamKchP=0., tY_LamKchP=0.;
+  double tX_LamKchM=0., tY_LamKchM=0.;
+  double tX_LamK0=0., tY_LamK0=0.;
+
+  tGr_LamKchP->GetPoint(0, tX_LamKchP, tY_LamKchP);
+  tGr_LamKchM->GetPoint(0, tX_LamKchM, tY_LamKchM);
+  tGr_LamK0->GetPoint(0, tX_LamK0, tY_LamK0);
 
   TString tDrawOption = "epsame";
 
@@ -1482,16 +1496,16 @@ void DrawD0AcrossAnalyses(TPad* aPad, int aMarkerStyle=20, double aMarkerSize=1.
   }
   else assert(0);
   //------------------------
-  tGr_LamKchP->Draw(tDrawOption);
-  tGr_LamKchM->Draw(tDrawOption);
-  tGr_LamK0->Draw(tDrawOption);
+  if(tY_LamKchP != 0.) tGr_LamKchP->Draw(tDrawOption);
+  if(tY_LamKchM != 0.) tGr_LamKchM->Draw(tDrawOption);
+  if(tY_LamK0 != 0.) tGr_LamK0->Draw(tDrawOption);
 
   //------------------------------------------------------
 
 }
 
 //---------------------------------------------------------------------------------------------------------------------------------
-void DrawD0AcrossAnalysesQMResults(TPad* aPad, int aMarkerStyle=20, double aMarkerSize=1., ErrorType aErrType=kStat)
+void DrawD0AcrossAnalysesQMResults(TPad* aPad, int aMarkerStyle=20, double aMarkerSize=1., ErrorType aErrType=kStat, double aXOffset=0.5)
 {
   aPad->cd();
   //------------------------
@@ -1508,9 +1522,17 @@ void DrawD0AcrossAnalysesQMResults(TPad* aPad, int aMarkerStyle=20, double aMark
 
   //------------------------
   TGraphAsymmErrors *tGr_LamKchP, *tGr_LamKchM, *tGr_LamK0;
-  tGr_LamKchP = GetD0(tFitInfoQM_LamKchP, aErrType);
-  tGr_LamKchM = GetD0(tFitInfoQM_LamKchM, aErrType);
-  tGr_LamK0   = GetD0(tFitInfoQM_LamK0, aErrType);
+  tGr_LamKchP = GetD0(tFitInfoQM_LamKchP, aErrType, aXOffset);
+  tGr_LamKchM = GetD0(tFitInfoQM_LamKchM, aErrType, aXOffset);
+  tGr_LamK0   = GetD0(tFitInfoQM_LamK0, aErrType, aXOffset);
+
+  double tX_LamKchP=0., tY_LamKchP=0.;
+  double tX_LamKchM=0., tY_LamKchM=0.;
+  double tX_LamK0=0., tY_LamK0=0.;
+
+  tGr_LamKchP->GetPoint(0, tX_LamKchP, tY_LamKchP);
+  tGr_LamKchM->GetPoint(0, tX_LamKchM, tY_LamKchM);
+  tGr_LamK0->GetPoint(0, tX_LamK0, tY_LamK0);
 
 
   TString tDrawOption = "epsame";
@@ -1556,9 +1578,9 @@ void DrawD0AcrossAnalysesQMResults(TPad* aPad, int aMarkerStyle=20, double aMark
   }
   else assert(0);
   //------------------------
-  tGr_LamKchP->Draw(tDrawOption);
-  tGr_LamKchM->Draw(tDrawOption);
-  tGr_LamK0->Draw(tDrawOption);
+  if(tY_LamKchP != 0.) tGr_LamKchP->Draw(tDrawOption);
+  if(tY_LamKchM != 0.) tGr_LamKchM->Draw(tDrawOption);
+  if(tY_LamK0 != 0.) tGr_LamK0->Draw(tDrawOption);
 }
 
 
@@ -1622,6 +1644,19 @@ TCanvas* CompareAllReF0vsImF0AcrossAnalyses(IncludeResType aIncludeResType=kIncl
 
   //------------------------------------------------------
 
+  int tND0Increments = 0;
+  for(unsigned int i=0; i<tIncludePlots.size(); i++) if(tIncludePlots[i] && tDrawAcrossAnalysesInfoVec[i].incD0Type != kFixedD0Only) tND0Increments++;
+
+  if(aDrawFixedRadii)
+  {
+    vector<FitInfo> aTempFitInfoVec = GetFitInfoVec(kLamKchP, aIncludeResType, aIncludeD0Type, kFixedRadiiOnly, kFreeLambdaOnly);
+    for(unsigned int i=0; i<aTempFitInfoVec.size(); i++) if(aTempFitInfoVec[i].d0 != 0.) tND0Increments++;
+  }
+  tND0Increments +=2;  //To give some room at left and right of plot
+  double tIncrementSize = 1./tND0Increments;
+
+  //------------------------------------------------------
+
   IncludeResType tIncResType;
   IncludeD0Type tIncD0Type;
   int tMarkerStyle;
@@ -1629,6 +1664,7 @@ TCanvas* CompareAllReF0vsImF0AcrossAnalyses(IncludeResType aIncludeResType=kIncl
   TString tDescriptor;
 
   int iTex = 0;
+  int iD0Inc = 0;
   for(unsigned int i=0; i<tIncludePlots.size(); i++)
   {
 
@@ -1648,13 +1684,13 @@ TCanvas* CompareAllReF0vsImF0AcrossAnalyses(IncludeResType aIncludeResType=kIncl
           DrawReF0vsImF0AcrossAnalysesQMResults((TPad*)tPadReF0vsImF0, tMarkerStyle, tMarkerSize, kSys);
           DrawReF0vsImF0AcrossAnalysesQMResults((TPad*)tPadReF0vsImF0, tMarkerStyle, tMarkerSize, kStat);
 
-          DrawD0AcrossAnalysesQMResults((TPad*)tPadD0, tMarkerStyle, tMarkerSize, kSys);
-          DrawD0AcrossAnalysesQMResults((TPad*)tPadD0, tMarkerStyle, tMarkerSize, kStat);
+          DrawD0AcrossAnalysesQMResults((TPad*)tPadD0, tMarkerStyle, tMarkerSize, kSys, (iD0Inc+1)*tIncrementSize);
+          DrawD0AcrossAnalysesQMResults((TPad*)tPadD0, tMarkerStyle, tMarkerSize, kStat, (iD0Inc+1)*tIncrementSize);
         }
         else
         {
           DrawReF0vsImF0AcrossAnalysesQMResults((TPad*)tPadReF0vsImF0, tMarkerStyle, tMarkerSize, aErrType);
-          DrawD0AcrossAnalysesQMResults((TPad*)tPadD0, tMarkerStyle, tMarkerSize, aErrType);
+          DrawD0AcrossAnalysesQMResults((TPad*)tPadD0, tMarkerStyle, tMarkerSize, aErrType, (iD0Inc+1)*tIncrementSize);
         }
       }
       else 
@@ -1664,13 +1700,13 @@ TCanvas* CompareAllReF0vsImF0AcrossAnalyses(IncludeResType aIncludeResType=kIncl
           DrawReF0vsImF0AcrossAnalyses((TPad*)tPadReF0vsImF0, tMarkerStyle, tMarkerSize, tIncResType, tIncD0Type, kSys);
           DrawReF0vsImF0AcrossAnalyses((TPad*)tPadReF0vsImF0, tMarkerStyle, tMarkerSize, tIncResType, tIncD0Type, kStat);
 
-          DrawD0AcrossAnalyses((TPad*)tPadD0, tMarkerStyle, tMarkerSize, tIncResType, tIncD0Type, kSys);
-          DrawD0AcrossAnalyses((TPad*)tPadD0, tMarkerStyle, tMarkerSize, tIncResType, tIncD0Type, kStat);
+          DrawD0AcrossAnalyses((TPad*)tPadD0, tMarkerStyle, tMarkerSize, tIncResType, tIncD0Type, kSys, (iD0Inc+1)*tIncrementSize);
+          DrawD0AcrossAnalyses((TPad*)tPadD0, tMarkerStyle, tMarkerSize, tIncResType, tIncD0Type, kStat, (iD0Inc+1)*tIncrementSize);
         }
         else
         {
           DrawReF0vsImF0AcrossAnalyses((TPad*)tPadReF0vsImF0, tMarkerStyle, tMarkerSize, tIncResType, tIncD0Type, aErrType);
-          DrawD0AcrossAnalyses((TPad*)tPadD0, tMarkerStyle, tMarkerSize, tIncResType, tIncD0Type, aErrType);
+          DrawD0AcrossAnalyses((TPad*)tPadD0, tMarkerStyle, tMarkerSize, tIncResType, tIncD0Type, aErrType, (iD0Inc+1)*tIncrementSize);
         }
       }
 
@@ -1680,6 +1716,7 @@ TCanvas* CompareAllReF0vsImF0AcrossAnalyses(IncludeResType aIncludeResType=kIncl
       tMarker->SetMarkerStyle(tMarkerStyle);
       tMarker->DrawMarker(tStartX-tIncrementX, tStartY-iTex*tIncrementY);
       iTex++;
+      if(tIncludePlots[i] && tDrawAcrossAnalysesInfoVec[i].incD0Type != kFixedD0Only) iD0Inc++;
     }
   }
 
@@ -1695,19 +1732,19 @@ TCanvas* CompareAllReF0vsImF0AcrossAnalyses(IncludeResType aIncludeResType=kIncl
                       kLamKchP, 
                       aIncludeResType, aIncludeD0Type,
                       kFixedRadiiOnly, kFreeLambdaOnly, 
-                      kStat);
+                      kStat, (iD0Inc+1)*tIncrementSize, tIncrementSize);
 
     DrawAllReF0vsImF0(tPadReF0vsImF0, tPadD0,
                       kLamKchM, 
                       aIncludeResType, aIncludeD0Type,
                       kFixedRadiiOnly, kFreeLambdaOnly, 
-                      kStat);
+                      kStat, (iD0Inc+1)*tIncrementSize, tIncrementSize);
 
     DrawAllReF0vsImF0(tPadReF0vsImF0, tPadD0,
                       kLamK0, 
                       aIncludeResType, aIncludeD0Type,
                       kFixedRadiiOnly, kFreeLambdaOnly, 
-                      kStat);
+                      kStat, (iD0Inc+1)*tIncrementSize, tIncrementSize);
   }
 
   //------------------------------------------------------
