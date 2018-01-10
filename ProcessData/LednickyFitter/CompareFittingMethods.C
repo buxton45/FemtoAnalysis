@@ -1838,12 +1838,12 @@ int main(int argc, char **argv)
 
 
 //-------------- Combinations for AliFemto_20180110 -----------------------------
-
+/*
   tIncludeResType = kInclude10ResAnd3Res;
   tIncludeD0Type = kFreeAndFixedD0;
   tPlot10and3Type=kPlot10and3SeparateOnly;
   tIncludeFreeFixedD0Avgs=false;
-
+*/
 /*
   tIncludeResType = kInclude10ResAnd3Res;
   tIncludeD0Type = kFreeD0Only;

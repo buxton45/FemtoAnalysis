@@ -89,6 +89,10 @@ public:
 
   vector<double> FindGoodInitialValues();
 
+  vector<int> GetParamInfoFromMinuitParamNumber(int aMinuitParamNumber);
+  TGraph* GenerateContourPlot(int aNPoints, int aParam1, int aParam2);
+  TCanvas* GenerateContourPlots(const vector<double> &aErrVals={4,1});  //1=1sigma, 4=2sigma
+
   //inline (i.e. simple) functions
   FitSharedAnalyses* GetFitSharedAnalyses();
 

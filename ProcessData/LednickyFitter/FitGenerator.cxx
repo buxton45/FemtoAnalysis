@@ -2111,6 +2111,15 @@ void FitGenerator::DoFit(double aMaxFitKStar)
 }
 
 //________________________________________________________________________________________________________________
+TCanvas* FitGenerator::GenerateContourPlots(const vector<double> &aErrVals, double aMaxFitKStar)
+{
+  InitializeGenerator(aMaxFitKStar);
+  GlobalFitter = fLednickyFitter;
+  TCanvas* tReturnCan = fLednickyFitter->GenerateContourPlots(aErrVals);
+  return tReturnCan;
+}
+
+//________________________________________________________________________________________________________________
 void FitGenerator::WriteAllFitParameters(ostream &aOut)
 {
   for(int iAn=0; iAn<fSharedAn->GetNFitPairAnalysis(); iAn++)

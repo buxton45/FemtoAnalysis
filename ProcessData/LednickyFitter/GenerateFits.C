@@ -18,6 +18,9 @@ int main(int argc, char **argv)
 //  TString tResultsDate = "20180104_useIsProbableElectronMethodTrue";
 //  TString tResultsDate = "20180104_useIsProbableElectronMethodFalse";
 
+  bool bDoFit = false;
+  bool bGenerateContours = true;
+
   AnalysisType tAnType = kLamKchP;
   AnalysisRunType tAnRunType = kTrain;
   int tNPartialAnalysis = 2;
@@ -163,44 +166,54 @@ int main(int argc, char **argv)
 
 
 
-
-  tLamKchP->DoFit();
-  TCanvas* tKStarwFitsCan = tLamKchP->DrawKStarCfswFits(ApplyMomResCorrection,ApplyNonFlatBackgroundCorrection,tNonFlatBgdFitType,SaveImages,false,bZoomROP);
-//  TCanvas* tKStarCfs = tLamKchP->DrawKStarCfs(SaveImages);
-//  TCanvas* tModelKStarCfs = tLamKchP->DrawModelKStarCfs(SaveImages);
-//  tLamKchP->FindGoodInitialValues(ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection);
+  if(bDoFit)
+  {
+    tLamKchP->DoFit();
+    TCanvas* tKStarwFitsCan = tLamKchP->DrawKStarCfswFits(ApplyMomResCorrection,ApplyNonFlatBackgroundCorrection,tNonFlatBgdFitType,SaveImages,false,bZoomROP);
+//    TCanvas* tKStarCfs = tLamKchP->DrawKStarCfs(SaveImages);
+//    TCanvas* tModelKStarCfs = tLamKchP->DrawModelKStarCfs(SaveImages);
+//    tLamKchP->FindGoodInitialValues(ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection);
 
 //-------------------------------------------------------------------------------
-  TObjArray* tAllCanLamKchP;
-  TCanvas* tCanPrimwFitsAndResidual;
-  TObjArray* tAllResWithTransMatrices;
+    TObjArray* tAllCanLamKchP;
+    TCanvas* tCanPrimwFitsAndResidual;
+    TObjArray* tAllResWithTransMatrices;
 
-  if(tIncludeResidualsType != kIncludeNoResiduals && bDrawResiduals)
-  {
-    TCanvas* tCanLamKchP = tLamKchP->DrawResiduals(0,k0010,cAnalysisBaseTags[tAnType]);
-
-    tAllCanLamKchP = tLamKchP->DrawAllResiduals(SaveImages);
-
-//    TCanvas* tCanPrimWithRes = tLamKchP->DrawPrimaryWithResiduals(0,k0010,TString("PrimaryWithResidual_")+TString(cAnalysisBaseTags[tAnType]));
-    tCanPrimwFitsAndResidual = tLamKchP->DrawKStarCfswFitsAndResiduals(ApplyMomResCorrection,ApplyNonFlatBackgroundCorrection,tNonFlatBgdFitType,SaveImages);
-
-    tAllResWithTransMatrices = tLamKchP->DrawAllResidualsWithTransformMatrices(SaveImages);
-  }
-
-//-------------------------------------------------------------------------------
-  if(SaveImagesInRootFile)
-  {
-    TFile *tFile = new TFile(tLamKchP->GetSaveLocationBase() + TString(cAnalysisBaseTags[tAnType]) + TString("Plots") + tLamKchP->GetSaveNameModifier() + TString(".root"), "RECREATE");
-    tKStarwFitsCan->Write();
     if(tIncludeResidualsType != kIncludeNoResiduals && bDrawResiduals)
     {
-      for(int i=0; i<tAllCanLamKchP->GetEntries(); i++) (TCanvas*)tAllCanLamKchP->At(i)->Write();
-      tCanPrimwFitsAndResidual->Write();
+      TCanvas* tCanLamKchP = tLamKchP->DrawResiduals(0,k0010,cAnalysisBaseTags[tAnType]);
+
+      tAllCanLamKchP = tLamKchP->DrawAllResiduals(SaveImages);
+
+//      TCanvas* tCanPrimWithRes = tLamKchP->DrawPrimaryWithResiduals(0,k0010,TString("PrimaryWithResidual_")+TString(cAnalysisBaseTags[tAnType]));
+      tCanPrimwFitsAndResidual = tLamKchP->DrawKStarCfswFitsAndResiduals(ApplyMomResCorrection,ApplyNonFlatBackgroundCorrection,tNonFlatBgdFitType,SaveImages);
+
+      tAllResWithTransMatrices = tLamKchP->DrawAllResidualsWithTransformMatrices(SaveImages);
     }
-    tFile->Close();
+
+//-------------------------------------------------------------------------------
+    if(SaveImagesInRootFile)
+    {
+      TFile *tFile = new TFile(tLamKchP->GetSaveLocationBase() + TString(cAnalysisBaseTags[tAnType]) + TString("Plots") + tLamKchP->GetSaveNameModifier() + TString(".root"), "RECREATE");
+      tKStarwFitsCan->Write();
+      if(tIncludeResidualsType != kIncludeNoResiduals && bDrawResiduals)
+      {
+        for(int i=0; i<tAllCanLamKchP->GetEntries(); i++) (TCanvas*)tAllCanLamKchP->At(i)->Write();
+        tCanPrimwFitsAndResidual->Write();
+      }
+      tFile->Close();
+    }
+
+  }
+//-------------------------------------------------------------------------------
+
+  if(bGenerateContours)
+  {
+    tLamKchP->GenerateContourPlots({4, 1});
   }
 
 //-------------------------------------------------------------------------------
+
   tFullTimer.Stop();
   cout << "Finished program: ";
   tFullTimer.PrintInterval();

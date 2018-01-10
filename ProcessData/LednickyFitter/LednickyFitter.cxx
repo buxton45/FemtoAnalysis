@@ -698,6 +698,9 @@ void LednickyFitter::DoFit()
   fMinuit->mnprin(3,fChi2);
 
   //---------------------------------
+  fMinuit->mnexcm("SHO COR", arglist ,2,fErrFlg);
+  //---------------------------------
+
   Finalize();
 }
 
@@ -921,3 +924,197 @@ vector<double> LednickyFitter::FindGoodInitialValues()
 
   return ReturnGoodValues;
 }
+
+
+//________________________________________________________________________________________________________________
+vector<int> LednickyFitter::GetParamInfoFromMinuitParamNumber(int aMinuitParamNumber)
+{
+  vector<int> tReturnVec = {-1, -1, -1};  //[AnType, CentType, ParamType]
+
+  AnalysisType tAnType, tPartAnType;
+  CentralityType tCentType, tPartCentType;
+  ParameterType tParamType;
+  for(int iAnaly=0; iAnaly<fNAnalyses; iAnaly++)
+  {
+    FitPairAnalysis* tFitPairAnalysis = fFitSharedAnalyses->GetFitPairAnalysis(iAnaly);
+    tAnType = tFitPairAnalysis->GetAnalysisType();
+    tCentType = tFitPairAnalysis->GetCentralityType();
+    int tNFitPartialAnalysis = tFitPairAnalysis->GetNFitPartialAnalysis();
+    for(int iPartAn=0; iPartAn<tNFitPartialAnalysis; iPartAn++)
+    {
+      FitPartialAnalysis* tFitPartialAnalysis = tFitPairAnalysis->GetFitPartialAnalysis(iPartAn);
+      tPartAnType = tFitPartialAnalysis->GetAnalysisType();
+      tPartCentType = tFitPartialAnalysis->GetCentralityType();
+
+      assert(tAnType==tPartAnType);
+      assert(tCentType==tPartCentType);
+
+      int tNFitParams = tFitPartialAnalysis->GetNFitParams();  //the +1 accounts for the normalization parameter
+      assert(tNFitParams = 5);
+
+      for(int iParam=0; iParam<tNFitParams; iParam++)
+      {
+        if(tFitPartialAnalysis->GetFitParameter(static_cast<ParameterType>(iParam))->GetMinuitParamNumber() == aMinuitParamNumber)
+        {
+          tParamType = static_cast<ParameterType>(iParam);
+          tReturnVec = vector<int>{tAnType, tCentType, tParamType};
+          return tReturnVec;
+        }
+      }
+      if(tFitPartialAnalysis->GetFitNormParameter()->GetMinuitParamNumber() == aMinuitParamNumber)
+      {
+        tParamType = kNorm;
+        tReturnVec = vector<int>{tAnType, tCentType, tParamType};
+        return tReturnVec;
+      }
+    }
+  }
+  assert(0);
+  return tReturnVec;
+}
+
+
+//________________________________________________________________________________________________________________
+TGraph* LednickyFitter::GenerateContourPlot(int aNPoints, int aParam1, int aParam2)
+{
+  TGraph* tReturnGr = (TGraph*)fMinuit->Contour(aNPoints, aParam1, aParam2);
+
+  //-------------------
+  //X-AXIS
+  vector<int> tParamInfo1 = GetParamInfoFromMinuitParamNumber(aParam1);
+  AnalysisType tAnType1 = static_cast<AnalysisType>(tParamInfo1[0]);
+  CentralityType tCentType1 = static_cast<CentralityType>(tParamInfo1[1]);
+  ParameterType tParamType1 = static_cast<ParameterType>(tParamInfo1[2]);
+  TString tTextXax = TString::Format("%s %s %s", cAnalysisRootTags[tAnType1], cPrettyCentralityTags[tCentType1], cParameterNames[tParamType1]);
+
+  //Y-AXIS
+  vector<int> tParamInfo2 = GetParamInfoFromMinuitParamNumber(aParam2);
+  AnalysisType tAnType2 = static_cast<AnalysisType>(tParamInfo2[0]);
+  CentralityType tCentType2 = static_cast<CentralityType>(tParamInfo2[1]);
+  ParameterType tParamType2 = static_cast<ParameterType>(tParamInfo2[2]);
+  TString tTextYax = TString::Format("%s %s %s", cAnalysisRootTags[tAnType2], cPrettyCentralityTags[tCentType2], cParameterNames[tParamType2]);
+  //-------------------
+  TString tName = TString::Format("%s%s_%svs%s%s_%s", cAnalysisBaseTags[tAnType1], cCentralityTags[tCentType1], cParameterNames[tParamType1], 
+                                                    cAnalysisBaseTags[tAnType2], cCentralityTags[tCentType2], cParameterNames[tParamType2]);
+
+  TString tTitle = TString::Format("%s %s %s vs. %s %s %s", cAnalysisRootTags[tAnType1], cPrettyCentralityTags[tCentType1], cParameterNames[tParamType1], 
+                                                            cAnalysisRootTags[tAnType2], cPrettyCentralityTags[tCentType2], cParameterNames[tParamType2]);
+
+  tReturnGr->SetName(tName);
+  tReturnGr->SetTitle(tTitle);
+
+  tReturnGr->GetXaxis()->SetTitle(tTextXax);
+  tReturnGr->GetYaxis()->SetTitle(tTextYax);
+
+  return tReturnGr;
+}
+
+
+//________________________________________________________________________________________________________________
+TCanvas* LednickyFitter::GenerateContourPlots(const vector<double> &aErrVals)
+{
+  assert(aErrVals.size() <= 2);  //TODO for now, impose this restriction
+
+  InitializeFitter();
+
+  cout << "*****************************************************************************" << endl;
+  cout << "Starting to fit " << endl;
+  cout << "*****************************************************************************" << endl;
+
+  fMinuit->SetPrintLevel(0);  // -1=quiet, 0=normal, 1=verbose (more options using mnexcm("SET PRI", ...)
+
+  double arglist[10];
+  fErrFlg = 0;
+
+  // for max likelihood = 0.5, for chisq = 1.0
+  arglist[0] = 1.;
+  fMinuit->mnexcm("SET ERR", arglist ,1,fErrFlg);
+
+  // Set strategy to be used
+  // 0 = economize (many params and/or fcn takes a long time to calculate and/or not interested in precise param erros)
+  // 1 = default
+  // 2 = Minuit allowed to waste calls in order to ensure precision (fcn evaluated in short time and/or param erros must be reliable)
+  arglist[0] = 2;
+  fMinuit->mnexcm("SET STR", arglist ,1,fErrFlg);
+
+  // Now ready for minimization step
+  arglist[0] = 50000;
+  arglist[1] = 0.1;
+  fMinuit->mnexcm("MIGRAD", arglist ,2,fErrFlg);
+
+  if(fErrFlg != 0)
+  {
+    cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
+    //cout << "WARNING!!!!!" << endl << "fErrFlg != 0 for the Cf: " << fCfName << endl;
+    cout << "WARNING!!!!!" << endl << "fErrFlg != 0 for the Cf: " << endl;
+    cout << "fErrFlg = " << fErrFlg << endl;
+    cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
+  }
+  assert(fErrFlg==0);
+
+  // Print results
+  fMinuit->mnstat(fChi2,fEdm,fErrDef,fNvpar,fNparx,fIcstat);
+  fMinuit->mnprin(3,fChi2);
+
+  //---------------------------------
+  fMinuit->mnexcm("SHO COR", arglist ,2,fErrFlg);
+  //---------------------------------
+
+  int tNParamsOfInterest = 11;
+  int tNContourPoints = 4;
+  int tOffset = 6;
+  int tGridWidth = 1 + (tNParamsOfInterest-tOffset);
+
+  TCanvas* tReturnCan = new TCanvas("tReturnCan", "tReturnCan");
+  tReturnCan->Divide(tGridWidth,tGridWidth);
+  tReturnCan->cd();
+
+  int tPadNum = 0;
+  TGraph* tGr;
+
+  TString tFileName = "TestTFile.root";
+  TFile *tSaveFile = new TFile(tFileName, "RECREATE");
+
+  double tErrVal = 0.;
+  for(unsigned int iErrVal=0; iErrVal<aErrVals.size(); iErrVal++)
+  {
+    tErrVal = aErrVals[iErrVal];
+    arglist[0] = tErrVal;
+    fMinuit->mnexcm("SET ERR", arglist ,1,fErrFlg);
+
+    for(int i=tOffset; i<=tNParamsOfInterest; i++)
+    {
+      for(int j=i+1; j<=tNParamsOfInterest; j++)
+      {
+        tPadNum = (i-tOffset)*tGridWidth + ((j+1)-tOffset);
+        tReturnCan->cd(tPadNum);
+        tGr = GenerateContourPlot(tNContourPoints, i, j);
+        if(iErrVal==0)
+        {
+          tGr->SetFillColor(42);
+          tGr->Draw("alf");
+        }
+        else
+        {
+          tGr->SetFillColor(38);
+          tGr->Draw("lf");
+        }
+        tReturnCan->Update();
+        tGr->Write(TString::Format("%s_tErrVal=%0.1f", tGr->GetName(), tErrVal));
+      }
+    }
+  }
+
+  tSaveFile->Close();
+  return tReturnCan;
+  //---------------------------------
+//  Finalize();
+
+}
+
+
+
+
+
+
+
