@@ -351,7 +351,7 @@ TGraphAsymmErrors* GetD0(const FitInfo &aFitInfo, ErrorType aErrType=kStat, doub
   TGraphAsymmErrors* tReturnGr = new TGraphAsymmErrors(1);
   tReturnGr->SetPoint(0, aXOffset, aFitInfo.d0);
   if(aErrType==kStat) tReturnGr->SetPointError(0, 0., 0., aFitInfo.d0StatErr, aFitInfo.d0StatErr);
-  else if(aErrType==kSys) tReturnGr->SetPointError(0, 0., 0., aFitInfo.d0SysErr, aFitInfo.d0SysErr);
+  else if(aErrType==kSys) tReturnGr->SetPointError(0, 0.05, 0.05, aFitInfo.d0SysErr, aFitInfo.d0SysErr);
   else assert(0);
 
   return tReturnGr;
@@ -770,11 +770,7 @@ void DrawAllReF0vsImF0(TPad* aPadReF0vsImF0, TPad* aPadD0,
 
   double tIncrementY = 0.08;
 
-  const Size_t tMarkerSize=1.6;
-  TMarker *tMarker = new TMarker();
-  tMarker->SetMarkerSize(tMarkerSize);
-
-  int iTex=0;
+  int iD0Inc=0;
   TString tDescriptorFull, tDescriptor;
   int tDescriptorEnd = 0;
   for(unsigned int i=0; i<aFitInfoVec.size(); i++)
@@ -784,14 +780,15 @@ void DrawAllReF0vsImF0(TPad* aPadReF0vsImF0, TPad* aPadD0,
       DrawReF0vsImF0((TPad*)aPadReF0vsImF0, aFitInfoVec[i], kSys);
       DrawReF0vsImF0((TPad*)aPadReF0vsImF0, aFitInfoVec[i], kStat);
 
-      DrawD0((TPad*)aPadD0, aFitInfoVec[i], kSys, aD0XOffset+i*aD0XOffsetIncrement);
-      DrawD0((TPad*)aPadD0, aFitInfoVec[i], kStat, aD0XOffset+i*aD0XOffsetIncrement);
+      DrawD0((TPad*)aPadD0, aFitInfoVec[i], kSys, aD0XOffset+iD0Inc*aD0XOffsetIncrement);
+      DrawD0((TPad*)aPadD0, aFitInfoVec[i], kStat, aD0XOffset+iD0Inc*aD0XOffsetIncrement);
     }
     else 
     {
       DrawReF0vsImF0((TPad*)aPadReF0vsImF0, aFitInfoVec[i], aErrType);
-      DrawD0((TPad*)aPadD0, aFitInfoVec[i], aErrType, aD0XOffset+i*aD0XOffsetIncrement);
+      DrawD0((TPad*)aPadD0, aFitInfoVec[i], aErrType, aD0XOffset+iD0Inc*aD0XOffsetIncrement);
     }
+    if(aFitInfoVec[i].d0 != 0.) iD0Inc++;
   }
 }
 
@@ -1652,7 +1649,7 @@ TCanvas* CompareAllReF0vsImF0AcrossAnalyses(IncludeResType aIncludeResType=kIncl
     vector<FitInfo> aTempFitInfoVec = GetFitInfoVec(kLamKchP, aIncludeResType, aIncludeD0Type, kFixedRadiiOnly, kFreeLambdaOnly);
     for(unsigned int i=0; i<aTempFitInfoVec.size(); i++) if(aTempFitInfoVec[i].d0 != 0.) tND0Increments++;
   }
-  tND0Increments +=2;  //To give some room at left and right of plot
+  tND0Increments +=1;  //To give some room at left and right of plot
   double tIncrementSize = 1./tND0Increments;
 
   //------------------------------------------------------

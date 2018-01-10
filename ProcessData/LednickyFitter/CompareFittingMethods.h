@@ -1150,7 +1150,7 @@ struct DrawAcrossAnalysesInfo
 
 //-------------------------------------------
 
-  double tMarkerSizeSingle = 1.0;
+  double tMarkerSizeSingle = 1.5;
   double tMarkerSizeAvg = 2.0;
 
   //-----
