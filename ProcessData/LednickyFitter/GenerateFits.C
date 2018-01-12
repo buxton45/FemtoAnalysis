@@ -18,8 +18,8 @@ int main(int argc, char **argv)
 //  TString tResultsDate = "20180104_useIsProbableElectronMethodTrue";
 //  TString tResultsDate = "20180104_useIsProbableElectronMethodFalse";
 
-  bool bDoFit = false;
-  bool bGenerateContours = true;
+  bool bDoFit = true;
+  bool bGenerateContours = false;
 
   AnalysisType tAnType = kLamKchP;
   AnalysisRunType tAnRunType = kTrain;
@@ -37,9 +37,9 @@ int main(int argc, char **argv)
   bool ApplyNonFlatBackgroundCorrection = true;
   NonFlatBgdFitType tNonFlatBgdFitType = kLinear;
 
-  IncludeResidualsType tIncludeResidualsType = kIncludeNoResiduals; 
+  IncludeResidualsType tIncludeResidualsType = kInclude10Residuals; 
   ChargedResidualsType tChargedResidualsType = kUseXiDataAndCoulombOnlyInterp;
-  ResPrimMaxDecayType tResPrimMaxDecayType = k5fm;
+  ResPrimMaxDecayType tResPrimMaxDecayType = k4fm;
 
   bool UnboundLambda = true;
 

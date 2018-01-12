@@ -1181,8 +1181,7 @@ void FitPairAnalysis::InitiateResidualCollection(td1dVec &aKStarBinCenters, Incl
 {
   vector<TH2D*> aTransformMatrices = GetTransformMatrices();
   vector<AnalysisType> aTransformStorageMapping = GetTransformStorageMapping();
-  fResidualCollection = new ResidualCollection(fAnalysisType, aIncludeResidualsType, aResPrimMaxDecayType, aKStarBinCenters, aTransformMatrices, aTransformStorageMapping, fCentralityType);
-  fResidualCollection->SetChargedResidualsType(aInterpCfsDirectory, aChargedResidualsType);
+  fResidualCollection = new ResidualCollection(fAnalysisType, aIncludeResidualsType, aChargedResidualsType, aResPrimMaxDecayType, aKStarBinCenters, aTransformMatrices, aTransformStorageMapping, fCentralityType);
 
   double tSigStRadiusFactor = 1.;
   fResidualCollection->SetRadiusFactorForSigStResiduals(tSigStRadiusFactor);

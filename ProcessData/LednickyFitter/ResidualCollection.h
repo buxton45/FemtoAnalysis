@@ -24,10 +24,16 @@ using namespace std;
 class ResidualCollection {
 
 public:
-  ResidualCollection(AnalysisType aAnalysisType, IncludeResidualsType aIncludeResidualsType, ResPrimMaxDecayType aResPrimMaxDecayType, td1dVec &aKStarBinCenters, vector<TH2D*> aTransformMatrices, vector<AnalysisType> aTransformStorageMapping, CentralityType aCentType);
+  ResidualCollection(AnalysisType aAnalysisType, IncludeResidualsType aIncludeResidualsType, ChargedResidualsType aChargedResidualsType, ResPrimMaxDecayType aResPrimMaxDecayType, 
+                     td1dVec &aKStarBinCenters, vector<TH2D*> aTransformMatrices, vector<AnalysisType> aTransformStorageMapping, CentralityType aCentType, 
+                     TString aInterpCfsDirectory = "/home/jesse/Analysis/FemtoAnalysis/ProcessData/CoulombFitter/", 
+                     TString aExpXiFileLocationBase = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cXicKch_20170505_ignoreOnFlyStatus/Results_cXicKch_20170505_ignoreOnFlyStatus");
   virtual ~ResidualCollection();
   void BuildStandardCollection(td1dVec &aKStarBinCenters, vector<TH2D*> aTransformMatrices, vector<AnalysisType> aTransformStorageMapping, CentralityType aCentType);
-  void SetChargedResidualsType(TString aFileDirectory="/home/jesse/Analysis/FemtoAnalysis/ProcessData/CoulombFitter/", ChargedResidualsType aChargedResidualsType=kUseXiDataAndCoulombOnlyInterp);
+  void SetChargedResidualsType(ChargedResidualsType aChargedResidualsType=kUseXiDataAndCoulombOnlyInterp,
+                               TString aInterpCfsDirectory = "/home/jesse/Analysis/FemtoAnalysis/ProcessData/CoulombFitter/",
+                               TString aExpXiFileLocationBase = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cXicKch_20170505_ignoreOnFlyStatus/Results_cXicKch_20170505_ignoreOnFlyStatus");
+
   void SetRadiusFactorForSigStResiduals(double aFactor=1.);
   int GetNeutralIndex(AnalysisType aResidualType);
   td1dVec GetNeutralResidualCorrelation(AnalysisType aResidualType, double *aParentCfParams);
@@ -42,8 +48,9 @@ public:
 
 protected:
 AnalysisType fAnalysisType;
-IncludeResidualsType fIncludeResidualsType;
-ResPrimMaxDecayType fResPrimMaxDecayType;
+IncludeResidualsType fIncludeResidualsType;  //TODO is this really needed?
+ChargedResidualsType fChargedResidualsType;  //TODO is this really needed?
+ResPrimMaxDecayType fResPrimMaxDecayType;  //TODO is this really needed?
 vector<NeutralResidualCf> fNeutralCfCollection;
 vector<SimpleChargedResidualCf> fChargedCfCollection;
 

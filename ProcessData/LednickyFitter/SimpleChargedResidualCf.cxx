@@ -14,13 +14,14 @@ ClassImp(SimpleChargedResidualCf)
 //________________________________________________________________________________________________________________
 SimpleChargedResidualCf::SimpleChargedResidualCf(AnalysisType aResidualType, IncludeResidualsType aIncludeResidualsType, ResPrimMaxDecayType aResPrimMaxDecayType, TH2D* aTransformMatrix, td1dVec &aKStarBinCenters, CentralityType aCentType, TString aFileLocationBase) :
   fResidualType(aResidualType),
+  fCentralityType(aCentType),
   fIncludeResidualsType(aIncludeResidualsType),
   fResPrimMaxDecayType(aResPrimMaxDecayType),
   fDaughterType1(kPDGNull),
   fMotherType1(kPDGNull),
   fDaughterType2(kPDGNull),
   fMotherType2(kPDGNull),
-  fPairAn(nullptr),
+  fPairAn(nullptr),  //TODO can I delete this after fExpXiHist is built?
   fExpXiHist(nullptr),
 //  fLambdaFactor(cAnalysisLambdaFactors[fResidualType]),
   fLambdaFactor(cAnalysisLambdaFactorsArr[fIncludeResidualsType][fResPrimMaxDecayType][fResidualType]),
@@ -34,61 +35,7 @@ SimpleChargedResidualCf::SimpleChargedResidualCf(AnalysisType aResidualType, Inc
 {
   assert(fKStarBinCenters.size() == (unsigned int)fTransformMatrix->GetNbinsX());
   assert(fKStarBinCenters.size() == (unsigned int)fTransformMatrix->GetNbinsY());
-
-  AnalysisType tAnType;
-  AnalysisRunType tRunType=kTrain;
-  int tNFitPartialAnalysis=2;
-
-  switch(fResidualType) {
-  case kResXiCKchP:
-  case kResOmegaKchP:
-  case kResSigStPKchM:
-  case kResSigStMKchP:
-    tAnType = kXiKchP;  //attractive
-    break;
-
-  case kResAXiCKchM:
-  case kResAOmegaKchM:
-  case kResASigStMKchP:
-  case kResASigStPKchM:
-    tAnType = kAXiKchM;  //attractive
-    break;
-
-  case kResXiCKchM:
-  case kResOmegaKchM:
-  case kResSigStPKchP:
-  case kResSigStMKchM:
-    tAnType = kXiKchM;  //repulsive
-    break;
-
-  case kResAXiCKchP:
-  case kResAOmegaKchP:
-  case kResASigStMKchM:
-  case kResASigStPKchP:
-    tAnType = kAXiKchP; //repulsive
-    break;
-
-  default:
-    cout << "ERROR: SimpleChargedResidualCf::SimpleChargedResidualCf:  fResidualType = " << fResidualType << " is not appropriate" << endl << endl;
-    assert(0);
-  }
-
-  TString tName = TString("ExpXiHist_") + TString(cAnalysisBaseTags[fResidualType]) + TString(cCentralityTags[aCentType]);
-  cout << "Building SimpleChargedResidualCf object" << endl;
-  cout << "\tResidualType   = " << cAnalysisBaseTags[fResidualType] << endl;
-  cout << "\tUsing experimental data from " << cAnalysisBaseTags[tAnType] << " analysis" << endl;
-  cout << "\tCentralityType = " << cPrettyCentralityTags[aCentType] << endl;
-  cout << "\tLambdaFactor   = " << fLambdaFactor << endl << endl;
   
-  fPairAn = new FitPairAnalysis(aFileLocationBase,tAnType,aCentType,tRunType,tNFitPartialAnalysis);
-  fPairAn->RebinKStarCfHeavy(2,0.32,0.4);
-  fExpXiHist = (TH1D*)fPairAn->GetKStarCfHeavy()->GetHeavyCf();
-    fExpXiHist->SetName(tName);
-    fExpXiHist->SetTitle(tName);
-    fExpXiHist->SetDirectory(0);
-  assert(fExpXiHist->GetXaxis()->GetBinWidth(1)==0.01);  //TODO make general
-  assert(fExpXiHist->GetNbinsX()==100);
-
   SetDaughtersAndMothers();
 }
 
@@ -136,12 +83,75 @@ void SimpleChargedResidualCf::SetDaughtersAndMothers()
   fDaughterType2 = tDaughtersAndMothers[3];
 }
 
+//________________________________________________________________________________________________________________
+void SimpleChargedResidualCf::BuildExpXiHist(TString aFileLocationBase)
+{
+  fUseCoulombOnlyInterpCfs = false;
+
+  AnalysisType tAnType;
+  AnalysisRunType tRunType=kTrain;
+  int tNFitPartialAnalysis=2;
+
+  switch(fResidualType) {
+  case kResXiCKchP:
+  case kResOmegaKchP:
+  case kResSigStPKchM:
+  case kResSigStMKchP:
+    tAnType = kXiKchP;  //attractive
+    break;
+
+  case kResAXiCKchM:
+  case kResAOmegaKchM:
+  case kResASigStMKchP:
+  case kResASigStPKchM:
+    tAnType = kAXiKchM;  //attractive
+    break;
+
+  case kResXiCKchM:
+  case kResOmegaKchM:
+  case kResSigStPKchP:
+  case kResSigStMKchM:
+    tAnType = kXiKchM;  //repulsive
+    break;
+
+  case kResAXiCKchP:
+  case kResAOmegaKchP:
+  case kResASigStMKchM:
+  case kResASigStPKchP:
+    tAnType = kAXiKchP; //repulsive
+    break;
+
+  default:
+    cout << "ERROR: SimpleChargedResidualCf::SimpleChargedResidualCf:  fResidualType = " << fResidualType << " is not appropriate" << endl << endl;
+    assert(0);
+  }
+  //----------------------------------------------------------------------------
+  cout << "Building SimpleChargedResidualCf object" << endl;
+  cout << "\tResidualType   = " << cAnalysisBaseTags[fResidualType] << endl;
+  cout << "\tCentralityType = " << cPrettyCentralityTags[fCentralityType] << endl;
+  cout << "\tLambdaFactor   = " << fLambdaFactor << endl;
+  cout << "\tUsing experimental data from " << cAnalysisBaseTags[tAnType] << " analysis" << endl << endl;
+
+  //-----------------------
+
+  TString tName = TString("ExpXiHist_") + TString(cAnalysisBaseTags[fResidualType]) + TString(cCentralityTags[fCentralityType]);
+
+  //TODO make more general
+  fPairAn = new FitPairAnalysis(aFileLocationBase,tAnType,fCentralityType,tRunType,tNFitPartialAnalysis);
+  fPairAn->RebinKStarCfHeavy(2,0.32,0.4);
+  fExpXiHist = (TH1D*)fPairAn->GetKStarCfHeavy()->GetHeavyCf();
+    fExpXiHist->SetName(tName);
+    fExpXiHist->SetTitle(tName);
+    fExpXiHist->SetDirectory(0);
+  assert(fExpXiHist->GetXaxis()->GetBinWidth(1)==0.01);  //TODO make general
+  assert(fExpXiHist->GetNbinsX()==100);
+}
 
 //________________________________________________________________________________________________________________
-void SimpleChargedResidualCf::LoadCoulombOnlyInterpCfs(TString aFileDirectory, bool aUseCoulombOnlyInterpCfs, double aRadiusFactor)
+void SimpleChargedResidualCf::LoadCoulombOnlyInterpCfs(TString aFileDirectory, double aRadiusFactor)
 {
   fRadiusFactor = aRadiusFactor;
-  SetUseCoulombOnlyInterpCfs(aUseCoulombOnlyInterpCfs);
+  fUseCoulombOnlyInterpCfs = true;
 
   TString aFileName = aFileDirectory + TString::Format("2dCoulombOnlyInterpCfs_%s.root", cAnalysisBaseTags[fResidualType]);
   TFile aFile(aFileName);
@@ -149,6 +159,13 @@ void SimpleChargedResidualCf::LoadCoulombOnlyInterpCfs(TString aFileDirectory, b
   assert(t2dCoulombOnlyInterpCfs);
   f2dCoulombOnlyInterpCfs = (TH2D*)t2dCoulombOnlyInterpCfs->Clone();
   f2dCoulombOnlyInterpCfs->SetDirectory(0);
+
+  //----------------------------------------------------------------------------
+  cout << "Building SimpleChargedResidualCf object" << endl;
+  cout << "\tResidualType   = " << cAnalysisBaseTags[fResidualType] << endl;
+  cout << "\tCentralityType = " << cPrettyCentralityTags[fCentralityType] << endl;
+  cout << "\tLambdaFactor   = " << fLambdaFactor << endl;
+  cout << "\tUsing CoulombOnlyInterpCfs from " << aFileName << endl << endl;
 }
 
 //________________________________________________________________________________________________________________
@@ -181,6 +198,13 @@ td1dVec SimpleChargedResidualCf::ExtractCfFrom2dInterpCfs(double aRadius)
 //________________________________________________________________________________________________________________
 td1dVec SimpleChargedResidualCf::GetChargedResidualCorrelation(double aRadiusParam)
 {
+  if(fResidualType==kResOmegaKchP  || fResidualType==kResAOmegaKchM  ||  //TODO really need to eliminate Omega stuff everywhere
+     fResidualType==kResOmegaKchM  || fResidualType==kResAOmegaKchP)
+  {
+    fResCf = vector<double>(fKStarBinCenters.size(), 0.);
+    return fResCf;
+  }
+
   if(fUseCoulombOnlyInterpCfs) fResCf = ExtractCfFrom2dInterpCfs(aRadiusParam);
   else
   {

@@ -11,12 +11,14 @@ ClassImp(ResidualCollection)
 //________________________________________________________________________________________________________________
 //****************************************************************************************************************
 //________________________________________________________________________________________________________________
-ResidualCollection::ResidualCollection(AnalysisType aAnalysisType, IncludeResidualsType aIncludeResidualsType, ResPrimMaxDecayType aResPrimMaxDecayType, td1dVec &aKStarBinCenters, vector<TH2D*> aTransformMatrices, vector<AnalysisType> aTransformStorageMapping, CentralityType aCentType) :
+ResidualCollection::ResidualCollection(AnalysisType aAnalysisType, IncludeResidualsType aIncludeResidualsType, ChargedResidualsType aChargedResidualsType, ResPrimMaxDecayType aResPrimMaxDecayType, td1dVec &aKStarBinCenters, vector<TH2D*> aTransformMatrices, vector<AnalysisType> aTransformStorageMapping, CentralityType aCentType, TString aInterpCfsDirectory, TString aExpXiFileLocationBase) :
   fAnalysisType(aAnalysisType),
   fIncludeResidualsType(aIncludeResidualsType),
+  fChargedResidualsType(aChargedResidualsType),
   fResPrimMaxDecayType(aResPrimMaxDecayType)
 {
   BuildStandardCollection(aKStarBinCenters,aTransformMatrices,aTransformStorageMapping,aCentType);
+  SetChargedResidualsType(fChargedResidualsType, aInterpCfsDirectory, aExpXiFileLocationBase);
 }
 
 
@@ -62,10 +64,11 @@ void ResidualCollection::BuildStandardCollection(td1dVec &aKStarBinCenters, vect
 }
 
 //________________________________________________________________________________________________________________
-void ResidualCollection::SetChargedResidualsType(TString aFileDirectory, ChargedResidualsType aChargedResidualsType)
+void ResidualCollection::SetChargedResidualsType(ChargedResidualsType aChargedResidualsType, TString aInterpCfsDirectory, TString aExpXiFileLocationBase)
 {
   AnalysisType tResType;
   double tRadiusFactor = 1.;
+/*
   bool tUseCoulombOnlyInterpCfsForChargedResiduals = true;
   bool tUseCoulombOnlyInterpCfsForXiKResiduals = false;
 
@@ -94,15 +97,42 @@ void ResidualCollection::SetChargedResidualsType(TString aFileDirectory, Charged
       if(tResType==kResSigStPKchP || tResType==kResASigStMKchM ||
          tResType==kResSigStPKchM || tResType==kResASigStMKchP ||
          tResType==kResSigStMKchP || tResType==kResASigStPKchM ||
-         tResType==kResSigStMKchM || tResType==kResASigStPKchP) fChargedCfCollection[i].LoadCoulombOnlyInterpCfs(aFileDirectory, tUseCoulombOnlyInterpCfsForChargedResiduals, tRadiusFactor);
+         tResType==kResSigStMKchM || tResType==kResASigStPKchP) fChargedCfCollection[i].LoadCoulombOnlyInterpCfs(aInterpCfsDirectory, tUseCoulombOnlyInterpCfsForChargedResiduals, tRadiusFactor);
     }
     if(tUseCoulombOnlyInterpCfsForXiKResiduals)
     {
       if(tResType==kXiKchP || tResType==kAXiKchM ||
          tResType==kXiKchM || tResType==kAXiKchP ||
          tResType==kResXiCKchP || tResType==kResAXiCKchM ||
-         tResType==kResXiCKchM || tResType==kResAXiCKchP) fChargedCfCollection[i].LoadCoulombOnlyInterpCfs(aFileDirectory, tUseCoulombOnlyInterpCfsForXiKResiduals, tRadiusFactor);
+         tResType==kResXiCKchM || tResType==kResAXiCKchP) fChargedCfCollection[i].LoadCoulombOnlyInterpCfs(aInterpCfsDirectory, tUseCoulombOnlyInterpCfsForXiKResiduals, tRadiusFactor);
     }
+  }
+*/
+
+  for(unsigned int i=0; i<fChargedCfCollection.size(); i++) 
+  {
+    tResType = fChargedCfCollection[i].GetResidualType();
+    if(tResType==kResOmegaKchP  || tResType==kResAOmegaKchM  || 
+       tResType==kResOmegaKchM  || tResType==kResAOmegaKchP) continue;  //Omega is never included, so shouldn't waste time building anything for it.
+                                                                        // It is still built by PairAnalysis by default, which is why this is necessary.
+                                                                        // Otherwise assert(0) in else if(aChargedResidualsType==kUseXiDataAndCoulombOnlyInterp)
+                                                                        // below is thrown
+
+    if(aChargedResidualsType==kUseXiDataForAll)                 fChargedCfCollection[i].BuildExpXiHist(aExpXiFileLocationBase);
+    else if(aChargedResidualsType==kUseCoulombOnlyInterpForAll) fChargedCfCollection[i].LoadCoulombOnlyInterpCfs(aInterpCfsDirectory, tRadiusFactor);
+    else if(aChargedResidualsType==kUseXiDataAndCoulombOnlyInterp)
+    {
+      if(tResType==kResSigStPKchP || tResType==kResASigStMKchM ||
+         tResType==kResSigStPKchM || tResType==kResASigStMKchP ||
+         tResType==kResSigStMKchP || tResType==kResASigStPKchM ||
+         tResType==kResSigStMKchM || tResType==kResASigStPKchP) fChargedCfCollection[i].LoadCoulombOnlyInterpCfs(aInterpCfsDirectory, tRadiusFactor);
+      else if(tResType==kXiKchP || tResType==kAXiKchM ||
+              tResType==kXiKchM || tResType==kAXiKchP ||
+              tResType==kResXiCKchP || tResType==kResAXiCKchM ||
+              tResType==kResXiCKchM || tResType==kResAXiCKchP) fChargedCfCollection[i].BuildExpXiHist(aExpXiFileLocationBase);
+      else assert(0);
+    }
+    else assert(0);
   }
 }
 

@@ -1094,8 +1094,7 @@ void SimpleLednickyFitter::InitiateResidualCollection(td1dVec &aKStarBinCenters,
 {
   vector<TH2D*> aTransformMatrices = GetTransformMatrices();
   vector<AnalysisType> aTransformStorageMapping = GetTransformStorageMapping();
-  fResidualCollection = new ResidualCollection(fAnalysisType, fIncludeResidualsType, aResPrimMaxDecayType, aKStarBinCenters, aTransformMatrices, aTransformStorageMapping, k0010);
-  fResidualCollection->SetChargedResidualsType(aInterpCfsDirectory, aChargedResidualsType);
+  fResidualCollection = new ResidualCollection(fAnalysisType, fIncludeResidualsType, aChargedResidualsType, aResPrimMaxDecayType, aKStarBinCenters, aTransformMatrices, aTransformStorageMapping, k0010);
 
   double tSigStRadiusFactor = 1.;
   fResidualCollection->SetRadiusFactorForSigStResiduals(tSigStRadiusFactor);

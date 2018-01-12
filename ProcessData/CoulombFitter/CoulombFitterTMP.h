@@ -2,6 +2,11 @@
 // CoulombFitter:                                                        //
 ///////////////////////////////////////////////////////////////////////////
 
+//TODO
+//!!!!!!!!!!!!!!!!!!! This is old class !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+//!!!!!!!! New version inherits from LednickyFitter, as it should !!!!!
+//!!!!!!!! Once I am positive the new version works correctly, this should be deleted!!!!!!!!!!
+
 #ifndef COULOMBFITTER_H
 #define COULOMBFITTER_H
 
