@@ -31,12 +31,15 @@ SimpleChargedResidualCf::SimpleChargedResidualCf(AnalysisType aResidualType, Inc
   fTransformedResCf(0),
   fUseCoulombOnlyInterpCfs(false),
   f2dCoulombOnlyInterpCfs(nullptr),
+  fCurrentRadiusParam(-1.),
   fRadiusFactor(1.)
 {
   assert(fKStarBinCenters.size() == (unsigned int)fTransformMatrix->GetNbinsX());
   assert(fKStarBinCenters.size() == (unsigned int)fTransformMatrix->GetNbinsY());
   
   SetDaughtersAndMothers();
+
+  omp_set_num_threads(3);
 }
 
 
@@ -196,8 +199,26 @@ td1dVec SimpleChargedResidualCf::ExtractCfFrom2dInterpCfs(double aRadius)
 }
 
 //________________________________________________________________________________________________________________
+bool SimpleChargedResidualCf::IsRadiusParamSame(double aRadiusParam)
+{
+  if(aRadiusParam==fCurrentRadiusParam) return true;
+  else if(abs(aRadiusParam-fCurrentRadiusParam) < std::numeric_limits< double >::min()) return true;  //To be safe, not always precisely equal
+  else
+  {
+    fCurrentRadiusParam = aRadiusParam;
+    return false;
+  }
+}
+
+//________________________________________________________________________________________________________________
 td1dVec SimpleChargedResidualCf::GetChargedResidualCorrelation(double aRadiusParam)
 {
+  //If radius parameter is unchanged from previous call, simply return fResCf
+  //If radius is different, IsRadiusParamSame will change fCurrentRadiusParam to
+  // new value, and complete the calculation
+//  bool tIsRadiusSame = IsRadiusParamSame(aRadiusParam);
+//  if(tIsRadiusSame) return fResCf;
+
   if(fResidualType==kResOmegaKchP  || fResidualType==kResAOmegaKchM  ||  //TODO really need to eliminate Omega stuff everywhere
      fResidualType==kResOmegaKchM  || fResidualType==kResAOmegaKchP)
   {
@@ -226,6 +247,8 @@ td1dVec SimpleChargedResidualCf::GetChargedResidualCorrelation(double aRadiusPar
 //________________________________________________________________________________________________________________
 td1dVec SimpleChargedResidualCf::GetTransformedChargedResidualCorrelation(double aRadiusParam)
 {
+  omp_set_num_threads(6);
+
   if(fUseCoulombOnlyInterpCfs || fTransformedResCf.size()==0)
   {
     td1dVec tResCf = GetChargedResidualCorrelation(aRadiusParam);
@@ -254,6 +277,23 @@ td1dVec SimpleChargedResidualCf::GetTransformedChargedResidualCorrelation(double
         tNormVec[i] += fTransformMatrix->GetBinContent(tDaughterPairKStarBin,tParentPairKStarBin);
       }
       fTransformedResCf[i] /= tNormVec[i];
+
+
+/*
+    double tTransformedResCf_i=0., tNormVec_i=0.;
+    #pragma omp parallel for reduction(+: tTransformedResCf_i, tNormVec_i) private(tParentPairKStar, tParentPairKStarBin)
+    for(unsigned int j=0; j<tResCf.size(); j++)
+    {
+      tParentPairKStar = fKStarBinCenters[j];
+      tParentPairKStarBin = fTransformMatrix->GetYaxis()->FindBin(tParentPairKStar);
+
+      tTransformedResCf_i += tResCf[j]*fTransformMatrix->GetBinContent(tDaughterPairKStarBin,tParentPairKStarBin);
+      tNormVec_i += fTransformMatrix->GetBinContent(tDaughterPairKStarBin,tParentPairKStarBin);
+    }
+    tNormVec[i] = tNormVec_i;
+    fTransformedResCf[i] = tTransformedResCf_i/tNormVec_i;
+*/
+
     }
   }
   return fTransformedResCf;

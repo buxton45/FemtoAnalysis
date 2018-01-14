@@ -7,6 +7,8 @@
 #include <iostream>
 #include <math.h>
 
+#include <omp.h>
+
 #include "TH2.h"
 #include "TMath.h"
 
@@ -35,6 +37,7 @@ public:
 
   td1dVec ExtractCfFrom2dInterpCfs(double aRadius);
 
+  bool IsRadiusParamSame(double aRadiusParam);
   td1dVec GetChargedResidualCorrelation(double aRadiusParam=-1.);
 
   td1dVec GetTransformedChargedResidualCorrelation(double aRadiusParam=-1.);
@@ -77,6 +80,7 @@ protected:
 
   bool fUseCoulombOnlyInterpCfs;
   TH2D* f2dCoulombOnlyInterpCfs;
+  double fCurrentRadiusParam;
   double fRadiusFactor;  //Allow me to give SigSt different radii
 
 

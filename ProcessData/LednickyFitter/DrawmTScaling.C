@@ -220,7 +220,7 @@ int main(int argc, char **argv)
   assert(!(bUseMinvCalculation && bUseReducedMassCalculation));
 
 //  TString tSaveName = "./mTscaling";
-  TString tSaveName = "/home/jesse/Analysis/Presentations/AliFemto/20180110/Figures/mTscaling";
+  TString tSaveName = "/home/jesse/Analysis/Presentations/PWGCF/LamKPaperProposal/ALICEMiniWeek_20180115/Figures/mTscaling";
 
   if(bRunAveragedKchPKchM) tSaveName += TString("Averaged");
 

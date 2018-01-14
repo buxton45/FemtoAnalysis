@@ -18,8 +18,8 @@ int main(int argc, char **argv)
 //  TString tResultsDate = "20180104_useIsProbableElectronMethodTrue";
 //  TString tResultsDate = "20180104_useIsProbableElectronMethodFalse";
 
-  bool bDoFit = true;
-  bool bGenerateContours = false;
+  bool bDoFit = false;
+  bool bGenerateContours = true;
 
   AnalysisType tAnType = kLamKchP;
   AnalysisRunType tAnRunType = kTrain;

@@ -1,7 +1,7 @@
 #include "TSystem.h"
 
 #include "CompareFittingMethods.h"
-TString gSaveLocationBase = "/home/jesse/Analysis/Presentations/AliFemto/20180110/Figures/";
+TString gSaveLocationBase = "/home/jesse/Analysis/Presentations/PWGCF/LamKPaperProposal/ALICEMiniWeek_20180115/Figures/";
 //TString gSaveType = "eps";
 TString gSaveType = "pdf";  // must save as pdf for transparency to work
 
@@ -1837,25 +1837,46 @@ int main(int argc, char **argv)
 
 
 
-//-------------- Combinations for AliFemto_20180110 -----------------------------
+//-------------- Combinations for PWGCF 20180115 -----------------------------
+
 /*
-  tIncludeResType = kInclude10ResAnd3Res;
-  tIncludeD0Type = kFreeAndFixedD0;
+  tIncludeResType = kInclude10ResOnly;
+  tIncludeD0Type = kFreeD0Only;
   tPlot10and3Type=kPlot10and3SeparateOnly;
   tIncludeFreeFixedD0Avgs=false;
 */
+
+/*
+  tIncludeResType = kInclude3ResOnly;
+  tIncludeD0Type = kFreeD0Only;
+  tPlot10and3Type=kPlot10and3SeparateOnly;
+  tIncludeFreeFixedD0Avgs=false;
+*/
+
 /*
   tIncludeResType = kInclude10ResAnd3Res;
   tIncludeD0Type = kFreeD0Only;
   tPlot10and3Type=kPlot10and3SeparateOnly;
   tIncludeFreeFixedD0Avgs=false;
 */
+
 /*
-  tIncludeResType = kInclude10ResAnd3Res;
+  tIncludeResType = kInclude10ResOnly;
   tIncludeD0Type = kFixedD0Only;
   tPlot10and3Type=kPlot10and3SeparateOnly;
   tIncludeFreeFixedD0Avgs=false;
 */
+
+/*
+  tIncludeResType = kInclude3ResOnly;
+  tIncludeD0Type = kFixedD0Only;
+  tPlot10and3Type=kPlot10and3SeparateOnly;
+  tIncludeFreeFixedD0Avgs=false;
+*/
+
+
+//  NOT vital, possible only in Backup
+
 /*
   tIncludeResType = kInclude10ResOnly;
   tIncludeD0Type = kFreeAndFixedD0;
@@ -1864,6 +1885,20 @@ int main(int argc, char **argv)
 */
 /*
   tIncludeResType = kInclude3ResOnly;
+  tIncludeD0Type = kFreeAndFixedD0;
+  tPlot10and3Type=kPlot10and3SeparateOnly;
+  tIncludeFreeFixedD0Avgs=false;
+*/
+
+/*
+  tIncludeResType = kInclude10ResAnd3Res;
+  tIncludeD0Type = kFreeD0Only;
+  tPlot10and3Type=kPlot10and3SeparateOnly;
+  tIncludeFreeFixedD0Avgs=false;
+*/
+
+/*
+  tIncludeResType = kInclude10ResAnd3Res;
   tIncludeD0Type = kFreeAndFixedD0;
   tPlot10and3Type=kPlot10and3SeparateOnly;
   tIncludeFreeFixedD0Avgs=false;

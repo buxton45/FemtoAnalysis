@@ -6,6 +6,8 @@
 #include <cassert>
 #include <iostream>
 
+#include <omp.h>
+
 #include "Faddeeva.hh"
 
 #include "TH2.h"

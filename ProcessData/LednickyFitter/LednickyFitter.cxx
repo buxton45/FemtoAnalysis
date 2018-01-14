@@ -1059,10 +1059,15 @@ TCanvas* LednickyFitter::GenerateContourPlots(const vector<double> &aErrVals)
   //---------------------------------
   fMinuit->mnexcm("SHO COR", arglist ,2,fErrFlg);
   //---------------------------------
+  int tNContourPoints = 4;
 
   int tNParamsOfInterest = 11;
-  int tNContourPoints = 4;
   int tOffset = 6;
+/*
+  int tNParamsOfInterest = 11;
+  int tOffset = 0;
+*/
+
   int tGridWidth = 1 + (tNParamsOfInterest-tOffset);
 
   TCanvas* tReturnCan = new TCanvas("tReturnCan", "tReturnCan");
@@ -1072,7 +1077,7 @@ TCanvas* LednickyFitter::GenerateContourPlots(const vector<double> &aErrVals)
   int tPadNum = 0;
   TGraph* tGr;
 
-  TString tFileName = "TestTFile.root";
+  TString tFileName = TString::Format("TestTFile_%s.root", cAnalysisBaseTags[fFitSharedAnalyses->GetFitPairAnalysis(0)->GetAnalysisType()]);
   TFile *tSaveFile = new TFile(tFileName, "RECREATE");
 
   double tErrVal = 0.;

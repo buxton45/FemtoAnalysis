@@ -35,6 +35,8 @@ NeutralResidualCf::NeutralResidualCf(AnalysisType aResidualType, IncludeResidual
   cout << "\tLambdaFactor = " << fLambdaFactor << endl << endl;
 
   SetDaughtersAndMothers();
+
+  omp_set_num_threads(3);
 }
 
 
@@ -135,6 +137,8 @@ td1dVec NeutralResidualCf::GetNeutralResidualCorrelation(double *aParentCfParams
 //________________________________________________________________________________________________________________
 td1dVec NeutralResidualCf::GetTransformedNeutralResidualCorrelation(double *aParentCfParams)
 {
+  omp_set_num_threads(6);
+
   td1dVec tResCf = GetNeutralResidualCorrelation(aParentCfParams);
 
   unsigned int tDaughterPairKStarBin, tParentPairKStarBin;
@@ -161,6 +165,23 @@ td1dVec NeutralResidualCf::GetTransformedNeutralResidualCorrelation(double *aPar
       tNormVec[i] += fTransformMatrix->GetBinContent(tDaughterPairKStarBin,tParentPairKStarBin);
     }
     fTransformedResCf[i] /= tNormVec[i];
+
+
+/*
+    double tTransformedResCf_i=0., tNormVec_i=0.;
+    #pragma omp parallel for reduction(+: tTransformedResCf_i, tNormVec_i) private(tParentPairKStar, tParentPairKStarBin)
+    for(unsigned int j=0; j<tResCf.size(); j++)
+    {
+      tParentPairKStar = fKStarBinCenters[j];
+      tParentPairKStarBin = fTransformMatrix->GetYaxis()->FindBin(tParentPairKStar);
+
+      tTransformedResCf_i += tResCf[j]*fTransformMatrix->GetBinContent(tDaughterPairKStarBin,tParentPairKStarBin);
+      tNormVec_i += fTransformMatrix->GetBinContent(tDaughterPairKStarBin,tParentPairKStarBin);
+    }
+    tNormVec[i] = tNormVec_i;
+    fTransformedResCf[i] = tTransformedResCf_i/tNormVec_i;
+*/
+
   }
   return fTransformedResCf;
 }
