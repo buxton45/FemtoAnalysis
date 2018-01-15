@@ -18,8 +18,8 @@ int main(int argc, char **argv)
 //  TString tResultsDate = "20180104_useIsProbableElectronMethodTrue";
 //  TString tResultsDate = "20180104_useIsProbableElectronMethodFalse";
 
-  bool bDoFit = false;
-  bool bGenerateContours = true;
+  bool bDoFit = true;
+  bool bGenerateContours = false;
 
   AnalysisType tAnType = kLamKchP;
   AnalysisRunType tAnRunType = kTrain;
@@ -209,7 +209,9 @@ int main(int argc, char **argv)
 
   if(bGenerateContours)
   {
-    tLamKchP->GenerateContourPlots({4, 1});
+    tLamKchP->GenerateContourPlots(4, {0, 6, 9, 10, 11}, {4, 1});
+//    tLamKchP->GenerateContourPlots(4, {2, 7, 9, 10, 11}, {4, 1});
+//    tLamKchP->GenerateContourPlots(4, {4, 8, 9, 10, 11}, {4, 1});
   }
 
 //-------------------------------------------------------------------------------

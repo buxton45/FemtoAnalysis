@@ -1,4 +1,5 @@
 #include "TSystem.h"
+#include "TLegend.h"
 
 #include "CompareFittingMethods.h"
 TString gSaveLocationBase = "/home/jesse/Analysis/Presentations/PWGCF/LamKPaperProposal/ALICEMiniWeek_20180115/Figures/";
@@ -1582,7 +1583,7 @@ void DrawD0AcrossAnalysesQMResults(TPad* aPad, int aMarkerStyle=20, double aMark
 
 
 //---------------------------------------------------------------------------------------------------------------------------------
-TCanvas* CompareAllReF0vsImF0AcrossAnalyses(IncludeResType aIncludeResType=kInclude10ResAnd3Res, IncludeD0Type aIncludeD0Type=kFreeAndFixedD0, Plot10and3Type aPlot10and3Type=kPlot10and3SeparateAndAvg, bool aIncludeFreeFixedD0Avgs=true, ErrorType aErrType=kStatAndSys, bool aDrawFixedRadii=false, bool bSaveImage=false)
+TCanvas* CompareAllReF0vsImF0AcrossAnalyses(IncludeResType aIncludeResType=kInclude10ResAnd3Res, IncludeD0Type aIncludeD0Type=kFreeAndFixedD0, Plot10and3Type aPlot10and3Type=kPlot10and3SeparateAndAvg, bool aIncludeFreeFixedD0Avgs=true, ErrorType aErrType=kStatAndSys, bool aDrawFixedRadii=false, bool aDrawPredictions=false, bool bSaveImage=false)
 {
   vector<bool> tIncludePlots = GetIncludePlotsVec(aIncludeResType, aIncludeD0Type, aPlot10and3Type, aIncludeFreeFixedD0Avgs);
   assert(tIncludePlots.size() == tDrawAcrossAnalysesInfoVec.size());
@@ -1745,6 +1746,59 @@ TCanvas* CompareAllReF0vsImF0AcrossAnalyses(IncludeResType aIncludeResType=kIncl
   }
 
   //------------------------------------------------------
+  if(aDrawPredictions)
+  {
+    tPadReF0vsImF0->cd();
+
+    TGraphAsymmErrors *tGr_0607100_Set1 = new TGraphAsymmErrors(1);
+      tGr_0607100_Set1->SetPoint(0, 0.17, 0.34);
+      tGr_0607100_Set1->SetPointError(0, 0.06, 0.06, 0.00, 0.00);
+      tGr_0607100_Set1->SetMarkerStyle(39);
+      tGr_0607100_Set1->SetMarkerSize(1.5);
+      tGr_0607100_Set1->SetMarkerColor(kGreen+2);
+      tGr_0607100_Set1->SetLineColor(kGreen+2);
+      tGr_0607100_Set1->Draw("pzsame");
+
+    TGraphAsymmErrors *tGr_0607100_Set2 = new TGraphAsymmErrors(1);
+      tGr_0607100_Set2->SetPoint(0, 0.09, 0.34);
+      tGr_0607100_Set2->SetPointError(0, 0.06, 0.06, 0.00, 0.00);
+      tGr_0607100_Set2->SetMarkerStyle(37);
+      tGr_0607100_Set2->SetMarkerSize(1.5);
+      tGr_0607100_Set2->SetMarkerColor(kGreen+2);
+      tGr_0607100_Set2->SetLineColor(kGreen+2);
+      tGr_0607100_Set2->Draw("pzsame");
+
+  //-----------
+
+    TGraphAsymmErrors *tGr_PhysRevD_KLam = new TGraphAsymmErrors(1);
+      tGr_PhysRevD_KLam->SetPoint(0, 0.19, 0.14);
+      tGr_PhysRevD_KLam->SetPointError(0, 0.56, 0.55, 0.00, 0.00);
+      tGr_PhysRevD_KLam->SetMarkerStyle(29);
+      tGr_PhysRevD_KLam->SetMarkerSize(1.5);
+      tGr_PhysRevD_KLam->SetMarkerColor(kOrange);
+      tGr_PhysRevD_KLam->SetLineColor(kOrange);
+      tGr_PhysRevD_KLam->Draw("pzsame");
+
+    TGraphAsymmErrors *tGr_PhysRevD_AKLam = new TGraphAsymmErrors(1);
+      tGr_PhysRevD_AKLam->SetPoint(0, 0.04, 0.18);
+      tGr_PhysRevD_AKLam->SetPointError(0, 0.56, 0.55, 0.00, 0.00);
+      tGr_PhysRevD_AKLam->SetMarkerStyle(30);
+      tGr_PhysRevD_AKLam->SetMarkerSize(1.5);
+      tGr_PhysRevD_AKLam->SetMarkerColor(kOrange);
+      tGr_PhysRevD_AKLam->SetLineColor(kOrange);
+      tGr_PhysRevD_AKLam->Draw("pzsame");
+
+    TLegend* tLegPredictions = new TLegend(0.825, 0.725, 0.975, 0.875);
+      tLegPredictions->SetLineWidth(0);
+      tLegPredictions->AddEntry(tGr_0607100_Set1, "[1] Set 1", "p");
+      tLegPredictions->AddEntry(tGr_0607100_Set2, "[1] Set 2", "p");
+      tLegPredictions->AddEntry(tGr_PhysRevD_KLam, "[2] K#Lambda", "p");
+      tLegPredictions->AddEntry(tGr_PhysRevD_AKLam, "[2] #bar{K}#Lambda", "p");
+    tLegPredictions->Draw();
+  }
+
+
+  //------------------------------------------------------
 
   double tStartXStamp = -1.75;
   double tStartYStamp = 1.35;
@@ -1764,6 +1818,7 @@ TCanvas* CompareAllReF0vsImF0AcrossAnalyses(IncludeResType aIncludeResType=kIncl
 
     TString tModifier = "";
     if(aDrawFixedRadii) tModifier = TString("_wFixedRadiiResults");
+    if(aDrawPredictions) tModifier += TString("_wScattLenPredictions");
 
     TString tSaveLocationFull = TString::Format("%s%s%s.%s", gSaveLocationBase.Data(), tCanName.Data(), tModifier.Data(), gSaveType.Data());
     tReturnCan->SaveAs(tSaveLocationFull);
@@ -1814,6 +1869,7 @@ int main(int argc, char **argv)
 
   bool tIncludeFreeFixedD0Avgs=false;
   bool tDrawFixedRadiiInCompareAllReF0vsImF0AcrossAnalyses = false;
+  bool tDrawScattLenPredictions = false;
 
   //--------------------------------------------------------------------------
 
@@ -1993,7 +2049,7 @@ int main(int argc, char **argv)
   }
 
   TCanvas* tCanCompareAllReF0vsImF0AcrossAnalyses = CompareAllReF0vsImF0AcrossAnalyses(tIncludeResType, tIncludeD0Type, tPlot10and3Type, tIncludeFreeFixedD0Avgs, tErrorType, 
-                                                                                       tDrawFixedRadiiInCompareAllReF0vsImF0AcrossAnalyses, bSaveFigures);
+                                                                                       tDrawFixedRadiiInCompareAllReF0vsImF0AcrossAnalyses, tDrawScattLenPredictions, bSaveFigures);
 
 
 //-------------------------------------------------------------------------------

@@ -975,7 +975,7 @@ vector<int> LednickyFitter::GetParamInfoFromMinuitParamNumber(int aMinuitParamNu
 
 
 //________________________________________________________________________________________________________________
-TGraph* LednickyFitter::GenerateContourPlot(int aNPoints, int aParam1, int aParam2)
+TGraph* LednickyFitter::GetContourPlot(int aNPoints, int aParam1, int aParam2)
 {
   TGraph* tReturnGr = (TGraph*)fMinuit->Contour(aNPoints, aParam1, aParam2);
 
@@ -1093,7 +1093,7 @@ TCanvas* LednickyFitter::GenerateContourPlots(const vector<double> &aErrVals)
       {
         tPadNum = (i-tOffset)*tGridWidth + ((j+1)-tOffset);
         tReturnCan->cd(tPadNum);
-        tGr = GenerateContourPlot(tNContourPoints, i, j);
+        tGr = GetContourPlot(tNContourPoints, i, j);
         if(iErrVal==0)
         {
           tGr->SetFillColor(42);
@@ -1117,8 +1117,101 @@ TCanvas* LednickyFitter::GenerateContourPlots(const vector<double> &aErrVals)
 
 }
 
+//________________________________________________________________________________________________________________
+TCanvas* LednickyFitter::GenerateContourPlots(int aNPoints, const vector<double> &aParams, const vector<double> &aErrVals)
+{
+  assert(aErrVals.size() <= 2);  //TODO for now, impose this restriction
 
+  InitializeFitter();
 
+  cout << "*****************************************************************************" << endl;
+  cout << "Starting to fit " << endl;
+  cout << "*****************************************************************************" << endl;
+
+  fMinuit->SetPrintLevel(0);  // -1=quiet, 0=normal, 1=verbose (more options using mnexcm("SET PRI", ...)
+
+  double arglist[10];
+  fErrFlg = 0;
+
+  // for max likelihood = 0.5, for chisq = 1.0
+  arglist[0] = 1.;
+  fMinuit->mnexcm("SET ERR", arglist ,1,fErrFlg);
+
+  // Set strategy to be used
+  // 0 = economize (many params and/or fcn takes a long time to calculate and/or not interested in precise param erros)
+  // 1 = default
+  // 2 = Minuit allowed to waste calls in order to ensure precision (fcn evaluated in short time and/or param erros must be reliable)
+  arglist[0] = 2;
+  fMinuit->mnexcm("SET STR", arglist ,1,fErrFlg);
+
+  // Now ready for minimization step
+  arglist[0] = 50000;
+  arglist[1] = 0.1;
+  fMinuit->mnexcm("MIGRAD", arglist ,2,fErrFlg);
+
+  if(fErrFlg != 0)
+  {
+    cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
+    //cout << "WARNING!!!!!" << endl << "fErrFlg != 0 for the Cf: " << fCfName << endl;
+    cout << "WARNING!!!!!" << endl << "fErrFlg != 0 for the Cf: " << endl;
+    cout << "fErrFlg = " << fErrFlg << endl;
+    cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
+  }
+  assert(fErrFlg==0);
+
+  // Print results
+  fMinuit->mnstat(fChi2,fEdm,fErrDef,fNvpar,fNparx,fIcstat);
+  fMinuit->mnprin(3,fChi2);
+
+  //---------------------------------
+  fMinuit->mnexcm("SHO COR", arglist ,2,fErrFlg);
+  //---------------------------------
+  TCanvas* tReturnCan = new TCanvas("tReturnCan", "tReturnCan");
+  tReturnCan->Divide(aParams.size(),aParams.size());
+  tReturnCan->cd();
+
+  int tPadNum = 0;
+  TGraph* tGr;
+
+  TString tFileName = TString::Format("TestTFile_%s.root", cAnalysisBaseTags[fFitSharedAnalyses->GetFitPairAnalysis(0)->GetAnalysisType()]);
+  TFile *tSaveFile = new TFile(tFileName, "RECREATE");
+
+  double tErrVal = 0.;
+  for(unsigned int iErrVal=0; iErrVal<aErrVals.size(); iErrVal++)
+  {
+    tErrVal = aErrVals[iErrVal];
+    arglist[0] = tErrVal;
+    fMinuit->mnexcm("SET ERR", arglist ,1,fErrFlg);
+
+    for(int i=0; i< aParams.size(); i++)
+    {
+      for(int j=i+1; j< aParams.size(); j++)
+      {
+        tPadNum = i*aParams.size() + j + 1;  //+1 because pad numbering starts at 1, not 0
+        tReturnCan->cd(tPadNum);
+        tGr = GetContourPlot(aNPoints, aParams[i], aParams[j]);
+        if(iErrVal==0)
+        {
+          tGr->SetFillColor(42);
+          tGr->Draw("alf");
+        }
+        else
+        {
+          tGr->SetFillColor(38);
+          tGr->Draw("lf");
+        }
+        tReturnCan->Update();
+        tGr->Write(TString::Format("%s_tErrVal=%0.1f", tGr->GetName(), tErrVal));
+      }
+    }
+  }
+
+  tSaveFile->Close();
+  return tReturnCan;
+  //---------------------------------
+//  Finalize();
+
+}
 
 
 

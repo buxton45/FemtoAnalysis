@@ -2120,6 +2120,15 @@ TCanvas* FitGenerator::GenerateContourPlots(const vector<double> &aErrVals, doub
 }
 
 //________________________________________________________________________________________________________________
+TCanvas* FitGenerator::GenerateContourPlots(int aNPoints, const vector<double> &aParams, const vector<double> &aErrVals, double aMaxFitKStar)
+{
+  InitializeGenerator(aMaxFitKStar);
+  GlobalFitter = fLednickyFitter;
+  TCanvas* tReturnCan = fLednickyFitter->GenerateContourPlots(aNPoints, aParams, aErrVals);
+  return tReturnCan;
+}
+
+//________________________________________________________________________________________________________________
 void FitGenerator::WriteAllFitParameters(ostream &aOut)
 {
   for(int iAn=0; iAn<fSharedAn->GetNFitPairAnalysis(); iAn++)
