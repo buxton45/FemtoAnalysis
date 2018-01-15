@@ -761,6 +761,11 @@ void SimpleLednickyFitter::DrawCfWithFitAndResiduals(TPad *aPad)
   //------------------------------------ Residuals ---------------------------------------
   double tOverallLambdaPrimary = fMinParams[0];
   double tRadiusPrimary = fMinParams[1];
+  double tReF0Primary = fMinParams[2];
+  double tImF0Primary = fMinParams[3];
+  double tD0Primary = fMinParams[4];
+
+  td1dVec tParamsOverall{tOverallLambdaPrimary, tRadiusPrimary, tReF0Primary, tImF0Primary, tD0Primary};
 
   vector<int> tNeutralResBaseColors{7,8,9,30,33,40,41};
   vector<int> tNeutralResMarkerStyles{24,25,26,27,28,30,32};
@@ -776,7 +781,7 @@ void SimpleLednickyFitter::DrawCfWithFitAndResiduals(TPad *aPad)
   {
     AnalysisType tTempResidualType = fResidualCollection->GetNeutralCollection()[iRes].GetResidualType();
     TString tTempName = TString(cAnalysisRootTags[tTempResidualType]);
-    TH1D* tTempHist = fResidualCollection->GetNeutralCollection()[iRes].GetTransformedNeutralResidualCorrelationHistogram(tTempName);
+    TH1D* tTempHist = fResidualCollection->GetNeutralCollection()[iRes].GetTransformedResidualCorrelationHistogramWithLambdaApplied(tTempName, tParamsOverall.data());
       tTempHist->SetMarkerColor(tNeutralResBaseColors[iRes]);
       tTempHist->SetLineColor(tNeutralResBaseColors[iRes]);
       tTempHist->SetMarkerStyle(tNeutralResMarkerStyles[iRes]);
@@ -794,7 +799,7 @@ void SimpleLednickyFitter::DrawCfWithFitAndResiduals(TPad *aPad)
   {
     AnalysisType tTempResidualType = fResidualCollection->GetChargedCollection()[iRes].GetResidualType();
     TString tTempName = TString(cAnalysisRootTags[tTempResidualType]);
-    TH1D* tTempHist = fResidualCollection->GetChargedCollection()[iRes].GetTransformedChargedResidualCorrelationHistogramWithLambdaApplied(tTempName, tOverallLambdaPrimary, tRadiusPrimary);
+    TH1D* tTempHist = fResidualCollection->GetChargedCollection()[iRes].GetTransformedResidualCorrelationHistogramWithLambdaApplied(tTempName, tParamsOverall.data());
       tTempHist->SetMarkerColor(tChargedResBaseColors[iRes]);
       tTempHist->SetLineColor(tChargedResBaseColors[iRes]);
       tTempHist->SetMarkerStyle(tChargedResMarkerStyles[iRes]);

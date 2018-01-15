@@ -117,16 +117,16 @@ void NeutralResidualCf::SetDaughtersAndMothers()
 
 
 //________________________________________________________________________________________________________________
-td1dVec NeutralResidualCf::GetNeutralResidualCorrelation(double *aParentCfParams)
+td1dVec NeutralResidualCf::GetNeutralResidualCorrelation(double *aCfParams)
 {
   fResCf.clear();
   fResCf.resize(fKStarBinCenters.size(),0.);
   double tKStar[1];
-  aParentCfParams[1] *= fRadiusFactor;
+  aCfParams[1] *= fRadiusFactor;
   for(unsigned int i=0; i<fKStarBinCenters.size(); i++)
   {
     tKStar[0] = fKStarBinCenters[i];
-    fResCf[i] = LednickyEq(tKStar,aParentCfParams);
+    fResCf[i] = LednickyEq(tKStar,aCfParams);
 //TODO TODO TODO Not sure whether above is correct
   }
   return fResCf;
@@ -135,11 +135,11 @@ td1dVec NeutralResidualCf::GetNeutralResidualCorrelation(double *aParentCfParams
 
 
 //________________________________________________________________________________________________________________
-td1dVec NeutralResidualCf::GetTransformedNeutralResidualCorrelation(double *aParentCfParams)
+td1dVec NeutralResidualCf::GetTransformedNeutralResidualCorrelation(double *aCfParams)
 {
   omp_set_num_threads(6);
 
-  td1dVec tResCf = GetNeutralResidualCorrelation(aParentCfParams);
+  td1dVec tResCf = GetNeutralResidualCorrelation(aCfParams);
 
   unsigned int tDaughterPairKStarBin, tParentPairKStarBin;
   double tDaughterPairKStar, tParentPairKStar;
@@ -187,18 +187,18 @@ td1dVec NeutralResidualCf::GetTransformedNeutralResidualCorrelation(double *aPar
 }
 
 //________________________________________________________________________________________________________________
-TH1D* NeutralResidualCf::GetNeutralResidualCorrelationHistogram(double *aParentCfParams, TString aTitle)
+TH1D* NeutralResidualCf::GetNeutralResidualCorrelationHistogram(double *aCfParams, TString aTitle)
 {
-  td1dVec tResCf = GetNeutralResidualCorrelation(aParentCfParams);
+  td1dVec tResCf = GetNeutralResidualCorrelation(aCfParams);
   TH1D* tReturnHist = Convert1dVecToHist(tResCf, fKStarBinCenters, aTitle);
   return tReturnHist;
 }
 
 
 //________________________________________________________________________________________________________________
-TH1D* NeutralResidualCf::GetTransformedNeutralResidualCorrelationHistogram(double *aParentCfParams, TString aTitle)
+TH1D* NeutralResidualCf::GetTransformedNeutralResidualCorrelationHistogram(double *aCfParams, TString aTitle)
 {
-  td1dVec tTransResCf = GetTransformedNeutralResidualCorrelation(aParentCfParams);
+  td1dVec tTransResCf = GetTransformedNeutralResidualCorrelation(aCfParams);
   TH1D* tReturnHist = Convert1dVecToHist(tTransResCf, fKStarBinCenters, aTitle);
   return tReturnHist;
 }
@@ -216,12 +216,30 @@ double* NeutralResidualCf::AdjustLambdaParam(double *aParamSet, double aNewLambd
 
 
 //________________________________________________________________________________________________________________
-td1dVec NeutralResidualCf::GetContributionToFitCf(double *aParams)
+td1dVec NeutralResidualCf::GetContributionToFitCf(double *aParamsOverall)
 {
-  double* tNewParams = AdjustLambdaParam(aParams, fLambdaFactor);
+  double* tNewParams = AdjustLambdaParam(aParamsOverall, fLambdaFactor);
   td1dVec tReturnVec = GetTransformedNeutralResidualCorrelation(tNewParams);
   for(unsigned int i=0; i<tReturnVec.size(); i++) tReturnVec[i] -= 1.;
   return tReturnVec;
+}
+
+//________________________________________________________________________________________________________________
+TH1D* NeutralResidualCf::GetResidualCorrelationHistogramWithLambdaApplied(TString aTitle, double *aParamsOverall)
+{
+  double* tNewParams = AdjustLambdaParam(aParamsOverall, fLambdaFactor);
+  td1dVec tReturnVec = GetNeutralResidualCorrelation(tNewParams);
+  TH1D* tReturnHist = Convert1dVecToHist(tReturnVec, fKStarBinCenters, aTitle);
+  return tReturnHist;
+}
+
+//________________________________________________________________________________________________________________
+TH1D* NeutralResidualCf::GetTransformedResidualCorrelationHistogramWithLambdaApplied(TString aTitle, double *aParamsOverall)
+{
+  td1dVec tReturnVec = GetContributionToFitCf(aParamsOverall);
+  for(unsigned int i=0; i<tReturnVec.size(); i++) tReturnVec[i] += 1.;
+  TH1D* tReturnHist = Convert1dVecToHist(tReturnVec, fKStarBinCenters, aTitle);
+  return tReturnHist;
 }
 
 

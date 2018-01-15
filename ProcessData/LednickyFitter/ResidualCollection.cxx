@@ -31,10 +31,18 @@ ResidualCollection::~ResidualCollection()
 //________________________________________________________________________________________________________________
 void ResidualCollection::BuildStandardCollection(td1dVec &aKStarBinCenters, vector<TH2D*> aTransformMatrices, vector<AnalysisType> aTransformStorageMapping, CentralityType aCentType)
 {
-  if(aTransformStorageMapping.size() != 11)
+  if(fIncludeResidualsType==kInclude10Residuals && aTransformStorageMapping.size() != 11)
   {
     int tResponse;
-    cout << "aTransformStorageMapping.size() != 11, is this alright?" << endl;
+    cout << "fIncludeResidualsType=kInclude10Residuals and aTransformStorageMapping.size() != 11, is this alright?" << endl;
+    cout << "(0) = No \t (1) = Yes" << endl;
+    cin >> tResponse;
+    assert(tResponse);
+  }
+  else if(fIncludeResidualsType==kInclude3Residuals && aTransformStorageMapping.size() != 3)
+  {
+    int tResponse;
+    cout << "fIncludeResidualsType=kInclude3Residuals and aTransformStorageMapping.size() != 3, is this alright?" << endl;
     cout << "(0) = No \t (1) = Yes" << endl;
     cin >> tResponse;
     assert(tResponse);
@@ -199,7 +207,7 @@ td1dVec ResidualCollection::CombinePrimaryWithResiduals(double *aCfParams, td1dV
   td2dVec tCfs;
   tCfs.push_back(aPrimaryCf);
   for(unsigned int iResCf=0; iResCf<fNeutralCfCollection.size(); iResCf++) tCfs.push_back(fNeutralCfCollection[iResCf].GetContributionToFitCf(aCfParams));
-  for(unsigned int iResCf=0; iResCf<fChargedCfCollection.size(); iResCf++) tCfs.push_back(fChargedCfCollection[iResCf].GetContributionToFitCf(aCfParams[0], aCfParams[1]));
+  for(unsigned int iResCf=0; iResCf<fChargedCfCollection.size(); iResCf++) tCfs.push_back(fChargedCfCollection[iResCf].GetContributionToFitCf(aCfParams));
   for(unsigned int i=1; i<tCfs.size(); i++) assert(tCfs[i-1].size()==tCfs[i].size());
 
   td1dVec tReturnCf(tCfs[0].size(), 0.);

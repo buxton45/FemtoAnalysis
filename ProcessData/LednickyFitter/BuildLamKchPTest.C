@@ -65,12 +65,13 @@ int main(int argc, char **argv)
   if(bRunLamKchP)
   {
     //-----Find good normalization values LamKchP
+    IncludeResidualsType tIncludeResType = kInclude10Residuals;
     FitPairAnalysis* tLamKchP0010 = new FitPairAnalysis(FileLocationBase,FileLocationBaseMC,kLamKchP,k0010);
-    tLamKchP0010->LoadTransformMatrices(2,FileLocationTransform);
+    tLamKchP0010->LoadTransformMatrices(tIncludeResType, 2,FileLocationTransform);
 
 
     //TODO delete
-    vector<TH2D*> tTransformMatrices = tLamKchP0010->GetTransformMatrices();
+    vector<TH2D*> tTransformMatrices = tLamKchP0010->GetTransformMatrices(tIncludeResType);
     cout << "tTransformMatrices.size() = " << tTransformMatrices.size() << endl;
     TCanvas* tTrashCan = new TCanvas("tTrashCan","tTrashCan");
     tTrashCan->Divide(2,2);

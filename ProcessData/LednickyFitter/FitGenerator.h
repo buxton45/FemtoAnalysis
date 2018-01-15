@@ -50,6 +50,8 @@ public:
   virtual TCanvas* DrawResiduals(int aAnalysisNumber, CentralityType aCentralityType=k0010, TString aCanvasName="Residuals", bool aSaveImage=false);
   virtual TObjArray* DrawAllResiduals(bool aSaveImage=false);
 
+  template <typename T>
+  TCanvas* GetResidualsWithTransformMatrices(AnalysisType aAnType, CentralityType aCentType, T& aResidual, td1dVec &aParamsOverall, int aOffset=0);
   virtual TObjArray* DrawResidualsWithTransformMatrices(int aAnalysisNumber, CentralityType aCentralityType=k0010, bool aSaveImage=false);
   virtual TObjArray* DrawAllResidualsWithTransformMatrices(bool aSaveImage=false);
 //  virtual TCanvas* DrawPrimaryWithResiduals(int aAnalysisNumber, CentralityType aCentralityType=k0010, TString aCanvasName="tCan");

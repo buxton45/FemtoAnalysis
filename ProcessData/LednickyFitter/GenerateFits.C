@@ -11,9 +11,9 @@ int main(int argc, char **argv)
   ChronoTimer tFullTimer(kSec);
   tFullTimer.Start();
 //-----------------------------------------------------------------------------
-  TString tResultsDate = "20161027";
+//  TString tResultsDate = "20161027";
 //  TString tResultsDate = "20171220_onFlyStatusFalse";
-//  TString tResultsDate = "20171227";
+  TString tResultsDate = "20171227";
 //  TString tResultsDate = "20171227_LHC10h";
 //  TString tResultsDate = "20180104_useIsProbableElectronMethodTrue";
 //  TString tResultsDate = "20180104_useIsProbableElectronMethodFalse";
@@ -37,7 +37,7 @@ int main(int argc, char **argv)
   bool ApplyNonFlatBackgroundCorrection = true;
   NonFlatBgdFitType tNonFlatBgdFitType = kLinear;
 
-  IncludeResidualsType tIncludeResidualsType = kInclude10Residuals; 
+  IncludeResidualsType tIncludeResidualsType = kInclude3Residuals; 
   ChargedResidualsType tChargedResidualsType = kUseXiDataAndCoulombOnlyInterp;
   ResPrimMaxDecayType tResPrimMaxDecayType = k4fm;
 
@@ -181,12 +181,10 @@ int main(int argc, char **argv)
 
     if(tIncludeResidualsType != kIncludeNoResiduals && bDrawResiduals)
     {
-      TCanvas* tCanLamKchP = tLamKchP->DrawResiduals(0,k0010,cAnalysisBaseTags[tAnType]);
-
       tAllCanLamKchP = tLamKchP->DrawAllResiduals(SaveImages);
 
 //      TCanvas* tCanPrimWithRes = tLamKchP->DrawPrimaryWithResiduals(0,k0010,TString("PrimaryWithResidual_")+TString(cAnalysisBaseTags[tAnType]));
-      tCanPrimwFitsAndResidual = tLamKchP->DrawKStarCfswFitsAndResiduals(ApplyMomResCorrection,ApplyNonFlatBackgroundCorrection,tNonFlatBgdFitType,SaveImages);
+      tCanPrimwFitsAndResidual = tLamKchP->DrawKStarCfswFitsAndResiduals(ApplyMomResCorrection,ApplyNonFlatBackgroundCorrection,tNonFlatBgdFitType,SaveImages,false,bZoomROP);
 
       tAllResWithTransMatrices = tLamKchP->DrawAllResidualsWithTransformMatrices(SaveImages);
     }

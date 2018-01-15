@@ -846,8 +846,9 @@ TH1F* FitPairAnalysis::GetCorrectedFitHisto(bool aMomResCorrection, bool aNonFla
 
 
 //________________________________________________________________________________________________________________
-void FitPairAnalysis::LoadTransformMatrices(int aRebin, TString aFileLocation)
+void FitPairAnalysis::LoadTransformMatrices(IncludeResidualsType aIncludeResidualsType, int aRebin, TString aFileLocation)
 {
+  assert(aIncludeResidualsType != kIncludeNoResiduals);
   if(aFileLocation.IsNull()) aFileLocation = "/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b2/TransformMatrices_Mix5.root";
 
   TFile *tFile = TFile::Open(aFileLocation);
@@ -1074,26 +1075,32 @@ void FitPairAnalysis::LoadTransformMatrices(int aRebin, TString aFileLocation)
     assert(0);
   }
 
+  if(aIncludeResidualsType==kInclude3Residuals)
+  {
+    fTransformMatrices.resize(3);
+    fTransformStorageMapping.resize(3);
+  }
+
 }
 
 //________________________________________________________________________________________________________________
-vector<TH2D*> FitPairAnalysis::GetTransformMatrices(int aRebin, TString aFileLocation)
+vector<TH2D*> FitPairAnalysis::GetTransformMatrices(IncludeResidualsType aIncludeResidualsType, int aRebin, TString aFileLocation)
 {
-  if(fTransformMatrices.size()==0) LoadTransformMatrices(aRebin, aFileLocation);
+  if(fTransformMatrices.size()==0) LoadTransformMatrices(aIncludeResidualsType, aRebin, aFileLocation);
   return fTransformMatrices;
 }
 
 //________________________________________________________________________________________________________________
-TH2D* FitPairAnalysis::GetTransformMatrix(int aIndex, int aRebin, TString aFileLocation)
+TH2D* FitPairAnalysis::GetTransformMatrix(IncludeResidualsType aIncludeResidualsType, int aIndex, int aRebin, TString aFileLocation)
 {
-  if(fTransformMatrices.size()==0) LoadTransformMatrices(aRebin, aFileLocation);
+  if(fTransformMatrices.size()==0) LoadTransformMatrices(aIncludeResidualsType, aRebin, aFileLocation);
   return fTransformMatrices[aIndex];
 }
 
 //________________________________________________________________________________________________________________
-TH2D* FitPairAnalysis::GetTransformMatrix(AnalysisType aResidualType, int aRebin, TString aFileLocation)
+TH2D* FitPairAnalysis::GetTransformMatrix(IncludeResidualsType aIncludeResidualsType, AnalysisType aResidualType, int aRebin, TString aFileLocation)
 {
-  if(fTransformMatrices.size()==0) LoadTransformMatrices(aRebin, aFileLocation);
+  if(fTransformMatrices.size()==0) LoadTransformMatrices(aIncludeResidualsType, aRebin, aFileLocation);
   int tIndex = -1;
   for(int i=0; i<(int)fTransformStorageMapping.size(); i++)
   {
@@ -1179,7 +1186,7 @@ TH1F* FitPairAnalysis::GetCorrectedFitHistv2(double aMaxDrawKStar)
 //________________________________________________________________________________________________________________
 void FitPairAnalysis::InitiateResidualCollection(td1dVec &aKStarBinCenters, IncludeResidualsType aIncludeResidualsType, ChargedResidualsType aChargedResidualsType, ResPrimMaxDecayType aResPrimMaxDecayType, TString aInterpCfsDirectory)
 {
-  vector<TH2D*> aTransformMatrices = GetTransformMatrices();
+  vector<TH2D*> aTransformMatrices = GetTransformMatrices(aIncludeResidualsType);
   vector<AnalysisType> aTransformStorageMapping = GetTransformStorageMapping();
   fResidualCollection = new ResidualCollection(fAnalysisType, aIncludeResidualsType, aChargedResidualsType, aResPrimMaxDecayType, aKStarBinCenters, aTransformMatrices, aTransformStorageMapping, fCentralityType);
 

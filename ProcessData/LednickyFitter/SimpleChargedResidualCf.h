@@ -38,16 +38,16 @@ public:
   td1dVec ExtractCfFrom2dInterpCfs(double aRadius);
 
   bool IsRadiusParamSame(double aRadiusParam);
-  td1dVec GetChargedResidualCorrelation(double aRadiusParam=-1.);
+  td1dVec GetChargedResidualCorrelation(double aRadiusParam);
 
-  td1dVec GetTransformedChargedResidualCorrelation(double aRadiusParam=-1.);
+  td1dVec GetTransformedChargedResidualCorrelation(double aRadiusParam);
 
-  TH1D* GetChargedResidualCorrelationHistogram(TString aTitle, double aRadiusParam=-1.);
-  TH1D* GetTransformedChargedResidualCorrelationHistogram(TString aTitle, double aRadiusParam=-1.);
+  TH1D* GetChargedResidualCorrelationHistogram(TString aTitle, double aRadiusParam);
+  TH1D* GetTransformedChargedResidualCorrelationHistogram(TString aTitle, double aRadiusParam);
 
-  td1dVec GetContributionToFitCf(double aOverallLambda, double aRadiusParam=-1.);
-  TH1D* GetChargedResidualCorrelationHistogramWithLambdaApplied(TString aTitle, double aOverallLambda, double aRadiusParam=-1.);
-  TH1D* GetTransformedChargedResidualCorrelationHistogramWithLambdaApplied(TString aTitle, double aOverallLambda, double aRadiusParam=-1.);
+  td1dVec GetContributionToFitCf(double *aParamsOverall);
+  TH1D* GetResidualCorrelationHistogramWithLambdaApplied(TString aTitle, double *aParamsOverall);
+  TH1D* GetTransformedResidualCorrelationHistogramWithLambdaApplied(TString aTitle, double *aParamsOverall);
 
   void SetUsemTScalingOfRadii(AnalysisType aParentAnType, double aPower=-0.5);
 

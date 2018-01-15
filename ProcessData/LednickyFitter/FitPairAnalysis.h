@@ -84,10 +84,10 @@ public:
 
   TH1F* GetCorrectedFitHisto(bool aMomResCorrection=true, bool aNonFlatBgdCorrection=true, bool aIncludeResiduals=false, NonFlatBgdFitType aNonFlatBgdFitType=kLinear, FitType aFitType=kChi2PML);
 
-  void LoadTransformMatrices(int aRebin=2, TString aFileLocation="");
-  vector<TH2D*> GetTransformMatrices(int aRebin=2, TString aFileLocation="");
-  TH2D* GetTransformMatrix(int aIndex, int aRebin=2, TString aFileLocation="");
-  TH2D* GetTransformMatrix(AnalysisType aResidualType, int aRebin=2, TString aFileLocation="");
+  void LoadTransformMatrices(IncludeResidualsType aIncludeResidualsType, int aRebin=2, TString aFileLocation="");
+  vector<TH2D*> GetTransformMatrices(IncludeResidualsType aIncludeResidualsType, int aRebin=2, TString aFileLocation="");
+  TH2D* GetTransformMatrix(IncludeResidualsType aIncludeResidualsType, int aIndex, int aRebin=2, TString aFileLocation="");
+  TH2D* GetTransformMatrix(IncludeResidualsType aIncludeResidualsType, AnalysisType aResidualType, int aRebin=2, TString aFileLocation="");
 
   TH1* GetCfwSysErrors();
 

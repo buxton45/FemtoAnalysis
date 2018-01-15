@@ -569,7 +569,7 @@ void LednickyFitter::InitializeFitter()
   if(fFitSharedAnalyses->GetFitPairAnalysis(0)->GetFitPartialAnalysis(0)->GetKStarCfLite()->Num()->GetBinLowEdge(fNbinsXToFit) == fMaxFitKStar) fNbinsXToFit--;
 
   if(fApplyMomResCorrection) tNbinsXToBuildMomResCrctn = fFitSharedAnalyses->GetFitPairAnalysis(0)->GetModelKStarTrueVsRecMixed()->GetNbinsX();
-  if(fIncludeResidualsType != kIncludeNoResiduals) tNbinsXToBuildResiduals = fFitSharedAnalyses->GetFitPairAnalysis(0)->GetTransformMatrix(0)->GetNbinsX();
+  if(fIncludeResidualsType != kIncludeNoResiduals) tNbinsXToBuildResiduals = fFitSharedAnalyses->GetFitPairAnalysis(0)->GetTransformMatrix(fIncludeResidualsType, 0)->GetNbinsX();
   fNbinsXToBuild = std::max({tNbinsXToBuildMomResCrctn, tNbinsXToBuildResiduals, fNbinsXToFit});
 
   if(fKStarBinWidth==0.) fKStarBinWidth = fFitSharedAnalyses->GetFitPairAnalysis(0)->GetFitPartialAnalysis(0)->GetKStarCfLite()->Num()->GetXaxis()->GetBinWidth(1);
@@ -611,8 +611,8 @@ void LednickyFitter::InitializeFitter()
       //make sure tNum and tDen and tCf have same bin size as residuals
       if(fIncludeResidualsType != kIncludeNoResiduals)
       {
-        assert(tNum->GetXaxis()->GetBinWidth(1) == tFitPairAnalysis->GetTransformMatrix(0)->GetXaxis()->GetBinWidth(1));
-        assert(tNum->GetXaxis()->GetBinWidth(1) == tFitPairAnalysis->GetTransformMatrix(0)->GetYaxis()->GetBinWidth(1));
+        assert(tNum->GetXaxis()->GetBinWidth(1) == tFitPairAnalysis->GetTransformMatrix(fIncludeResidualsType, 0)->GetXaxis()->GetBinWidth(1));
+        assert(tNum->GetXaxis()->GetBinWidth(1) == tFitPairAnalysis->GetTransformMatrix(fIncludeResidualsType, 0)->GetYaxis()->GetBinWidth(1));
       }
 
       //make sure tNum and tDen have same number of bins

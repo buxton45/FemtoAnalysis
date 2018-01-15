@@ -317,26 +317,32 @@ TH1D* SimpleChargedResidualCf::GetTransformedChargedResidualCorrelationHistogram
 }
 
 //________________________________________________________________________________________________________________
-td1dVec SimpleChargedResidualCf::GetContributionToFitCf(double aOverallLambda, double aRadiusParam)
+td1dVec SimpleChargedResidualCf::GetContributionToFitCf(double *aParamsOverall)
 {
-  td1dVec tReturnVec = GetTransformedChargedResidualCorrelation(aRadiusParam);
-  for(unsigned int i=0; i<tReturnVec.size(); i++) tReturnVec[i] = fLambdaFactor*aOverallLambda*(tReturnVec[i]-1.);
+  double tOverallLambda = aParamsOverall[0];
+  double tRadiusParam = aParamsOverall[1];
+
+  td1dVec tReturnVec = GetTransformedChargedResidualCorrelation(tRadiusParam);
+  for(unsigned int i=0; i<tReturnVec.size(); i++) tReturnVec[i] = fLambdaFactor*tOverallLambda*(tReturnVec[i]-1.);
   return tReturnVec;
 }
 
 //________________________________________________________________________________________________________________
-TH1D* SimpleChargedResidualCf::GetChargedResidualCorrelationHistogramWithLambdaApplied(TString aTitle, double aOverallLambda, double aRadiusParam)
+TH1D* SimpleChargedResidualCf::GetResidualCorrelationHistogramWithLambdaApplied(TString aTitle, double *aParamsOverall)
 {
-  td1dVec tReturnVec = GetChargedResidualCorrelation(aRadiusParam);
-  for(unsigned int i=0; i<tReturnVec.size(); i++) tReturnVec[i] = 1. + fLambdaFactor*aOverallLambda*(tReturnVec[i]-1.);  //TODO is this right?
+  double tOverallLambda = aParamsOverall[0];
+  double tRadiusParam = aParamsOverall[1];
+
+  td1dVec tReturnVec = GetChargedResidualCorrelation(tRadiusParam);
+  for(unsigned int i=0; i<tReturnVec.size(); i++) tReturnVec[i] = 1. + fLambdaFactor*tOverallLambda*(tReturnVec[i]-1.);  //TODO is this right?
   TH1D* tReturnHist = Convert1dVecToHist(tReturnVec, fKStarBinCenters, aTitle);
   return tReturnHist;
 }
 
 //________________________________________________________________________________________________________________
-TH1D* SimpleChargedResidualCf::GetTransformedChargedResidualCorrelationHistogramWithLambdaApplied(TString aTitle, double aOverallLambda, double aRadiusParam)
+TH1D* SimpleChargedResidualCf::GetTransformedResidualCorrelationHistogramWithLambdaApplied(TString aTitle, double *aParamsOverall)
 {
-  td1dVec tReturnVec = GetContributionToFitCf(aOverallLambda, aRadiusParam);
+  td1dVec tReturnVec = GetContributionToFitCf(aParamsOverall);
   for(unsigned int i=0; i<tReturnVec.size(); i++) tReturnVec[i] += 1.;
   TH1D* tReturnHist = Convert1dVecToHist(tReturnVec, fKStarBinCenters, aTitle);
   return tReturnHist;

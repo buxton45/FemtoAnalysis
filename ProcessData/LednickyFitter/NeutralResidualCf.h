@@ -30,20 +30,20 @@ public:
   static TH1D* Convert1dVecToHist(td1dVec &aCfVec, td1dVec &aKStarBinCenters, TString aTitle = "tCf");
   void SetDaughtersAndMothers();
 
-  td1dVec GetNeutralResidualCorrelation(double *aParentCfParams);
-  td1dVec GetTransformedNeutralResidualCorrelation(double *aParentCfParams);
-  TH1D* GetNeutralResidualCorrelationHistogram(double *aParentCfParams, TString aTitle);
-  TH1D* GetTransformedNeutralResidualCorrelationHistogram(double *aParentCfParams, TString aTitle);
+  td1dVec GetNeutralResidualCorrelation(double *aCfParams);
+  td1dVec GetTransformedNeutralResidualCorrelation(double *aCfParams);
+  TH1D* GetNeutralResidualCorrelationHistogram(double *aCfParams, TString aTitle);
+  TH1D* GetTransformedNeutralResidualCorrelationHistogram(double *aCfParams, TString aTitle);
 
   double* AdjustLambdaParam(double *aParamSet, double aNewLambda, int aNEntries=6);
-  td1dVec GetContributionToFitCf(double *aParams);  //Note: aParams[0] should be OverallLambda!
+  td1dVec GetContributionToFitCf(double *aParamsOverall);  //Note: aParams[0] should be OverallLambda!
+  TH1D* GetResidualCorrelationHistogramWithLambdaApplied(TString aTitle, double *aParamsOverall);
+  TH1D* GetTransformedResidualCorrelationHistogramWithLambdaApplied(TString aTitle, double *aParamsOverall);
 
   void SetUsemTScalingOfRadii(AnalysisType aParentAnType, double aPower=-0.5);
 
   //inline
   AnalysisType GetResidualType();
-  TH1D* GetNeutralResidualCorrelationHistogram(TString aTitle="fResCf");
-  TH1D* GetTransformedNeutralResidualCorrelationHistogram(TString aTitle="fTransformedResCf");
   double GetLambdaFactor();
   TH2D* GetTransformMatrix();
 
@@ -76,8 +76,6 @@ protected:
 };
 
 inline AnalysisType NeutralResidualCf::GetResidualType() {return fResidualType;}
-inline TH1D* NeutralResidualCf::GetNeutralResidualCorrelationHistogram(TString aTitle) {return Convert1dVecToHist(fResCf, fKStarBinCenters, aTitle);}
-inline TH1D* NeutralResidualCf::GetTransformedNeutralResidualCorrelationHistogram(TString aTitle) {return Convert1dVecToHist(fTransformedResCf, fKStarBinCenters, aTitle);}
 inline double NeutralResidualCf::GetLambdaFactor() {return fLambdaFactor;}
 inline TH2D* NeutralResidualCf::GetTransformMatrix() {return fTransformMatrix;}
 
