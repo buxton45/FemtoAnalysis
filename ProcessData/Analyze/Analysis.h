@@ -24,6 +24,7 @@
 #include "TGraph.h"
 #include "TMath.h"
 #include "TLegend.h"
+#include "TLatex.h"
 
 using std::cout;
 using std::cin;
@@ -123,11 +124,16 @@ public:
   void OutputPassFailInfo();
 
   void DrawPart1MassFail(TPad* aPad, bool aDrawWideRangeToo=false);
+  void GetMCKchPurity(bool aBeforePairCut);
 
   //-----
   TH1* GetMassAssumingK0ShortHypothesis();
   TH1* GetMassAssumingLambdaHypothesis();
   TH1* GetMassAssumingAntiLambdaHypothesis();
+
+  //-----
+
+  TCanvas* DrawKchdEdx(ParticleType aKchType, bool aLogz=false);
 
   //inline
   TString GetAnalysisName();
@@ -177,7 +183,6 @@ public:
 
   TH1* GetPart1MassFail();
 
-  void GetMCKchPurity(bool aBeforePairCut);
   bool AreTrainResults();
 
   void BuildKStarCfwErrorsByHand();

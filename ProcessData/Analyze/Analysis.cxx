@@ -2278,4 +2278,66 @@ TH1* Analysis::GetMassAssumingAntiLambdaHypothesis()
 
 
 
+//________________________________________________________________________________________________________________
+TCanvas* Analysis::DrawKchdEdx(ParticleType aKchType, bool aLogz)
+{
+  gStyle->SetOptStat(0);
+  gStyle->SetOptTitle(0);
+
+
+  assert(fAnalysisType==kLamKchP || fAnalysisType==kALamKchM || fAnalysisType==kLamKchM || fAnalysisType==kALamKchP);
+
+  TString tCanvasName = TString::Format("canDrawKchdEdx_%s%s_%s", cAnalysisBaseTags[fAnalysisType], 
+                                        cCentralityTags[fCentralityType], cParticleTags[aKchType]);
+  if(aLogz) tCanvasName += TString("_Logz");
+  TCanvas* tReturnCan = new TCanvas(tCanvasName, tCanvasName);
+  tReturnCan->SetRightMargin(0.11); //0.1 is standard
+  tReturnCan->cd();
+
+  TString tHistName = TString::Format("TPCdEdx_%s_Pass", cParticleTags[aKchType]);
+  TString tHistNewName = TString::Format("dEdX_%s%s_%s", cAnalysisBaseTags[fAnalysisType], 
+                                        cCentralityTags[fCentralityType], cParticleTags[aKchType]);
+  TH2* tCombineddEdX = (TH2*)fPartialAnalysisCollection[0]->Get2dHisto(tHistName, tHistNewName);
+  if(!tCombineddEdX->GetSumw2N()) tCombineddEdX->Sumw2();
+
+  for(unsigned int i=1; i<fPartialAnalysisCollection.size(); i++) 
+  {
+    TString tHistNewName = TString::Format("dEdX_%s%s_%s_%d", cAnalysisBaseTags[fAnalysisType], 
+                                          cCentralityTags[fCentralityType], cParticleTags[aKchType], i);
+    tCombineddEdX->Add((TH2*)fPartialAnalysisCollection[0]->Get2dHisto(tHistName, tHistNewName));
+  }
+
+  if(aLogz)
+  {
+    gPad->SetLogz();
+    tCombineddEdX->GetXaxis()->SetRangeUser(0.1, 2.05);
+  }
+  else tCombineddEdX->GetXaxis()->SetRangeUser(0., 2.05);
+
+  tCombineddEdX->GetXaxis()->SetTitle("#it{p} (GeV/#it{c})");
+    tCombineddEdX->GetXaxis()->SetTitleSize(0.04);
+    tCombineddEdX->GetXaxis()->SetTitleOffset(1.1);
+
+  tCombineddEdX->GetYaxis()->SetTitle("TPC d#it{E}/d#it{x}");
+    tCombineddEdX->GetYaxis()->SetTitleSize(0.04);
+    tCombineddEdX->GetYaxis()->SetTitleOffset(1.2);
+
+  tCombineddEdX->Draw("colz");
+
+  TLatex *tTex = new TLatex(1.2,450,"Pb-Pb #sqrt{#it{s}_{NN}} = 2.76 TeV");
+  tTex->SetTextFont(42);
+  tTex->SetTextSize(0.044);
+  tTex->SetLineWidth(2);
+  tTex->Draw();
+
+  tTex = new TLatex();
+  tTex->SetTextAlign(12);
+  tTex->SetTextFont(62);
+  tTex->SetTextSize(0.06);
+  tTex->DrawLatex(1.2, 400, TString::Format("%s (%s)", cRootParticleTags[aKchType], cPrettyCentralityTags[fCentralityType]));
+
+  return tReturnCan;
+}
+
+
 

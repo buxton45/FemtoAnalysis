@@ -36,70 +36,60 @@ int main(int argc, char **argv)
   //the program ends and closes everything
 //-----------------------------------------------------------------------------
 
-  //-----Data
-  TString FileLocationBase = "~/Analysis/FemtoAnalysis/Results/Results_cLamK0_AsRc_20150923/Results_cLamK0_AsRc_20150923";
-  //TString FileLocationBase = "~/Analysis/FemtoAnalysis/Results/Results_cLamK0_AsRc";
-  Analysis* LamK0 = new Analysis(FileLocationBase,kLamK0,k0010);
-  Analysis* ALamK0 = new Analysis(FileLocationBase,kALamK0,k0010);
+//  TString tResultsDate = "20161027";
+  TString tResultsDate = "20171227";
 
-  TString SaveFileName = "~/Analysis/FemtoAnalysis/Results/Results_cLamK0_AsRc_20150923/0010/Results_cLamK0_AsRc_20150923_0010TEST.root";
-
-
-  //-----MC
-
-  TString FileLocationBaseMC = "~/Analysis/FemtoAnalysis/Results/Results_cLamK0_AsRc_20150923/Results_cLamK0_AsRcMC_20150923";
-  Analysis* LamK0MC = new Analysis(FileLocationBaseMC,kLamK0,k0010);
-  Analysis* ALamK0MC = new Analysis(FileLocationBaseMC,kALamK0,k0010);
-
-  TString FileLocationBaseMCd = "~/Analysis/FemtoAnalysis/Results/Results_cLamK0_AsRc_20150923/Results_cLamK0_AsRcMCd_20150923";
-  Analysis* LamK0MCd = new Analysis(FileLocationBaseMCd,kLamK0,k0010);
-  Analysis* ALamK0MCd = new Analysis(FileLocationBaseMCd,kALamK0,k0010);
-
-  vector<PartialAnalysis*> tLamK0MCTotVec;
-  vector<PartialAnalysis*> tTempLamK0MCVec = LamK0MC->GetPartialAnalysisCollection();
-  vector<PartialAnalysis*> tTempLamK0MCdVec = LamK0MCd->GetPartialAnalysisCollection();
-  assert(tTempLamK0MCVec.size() == tTempLamK0MCdVec.size());
-  for(unsigned int i=0; i<tTempLamK0MCVec.size(); i++)
-  {
-    tLamK0MCTotVec.push_back(tTempLamK0MCVec[i]);
-    tLamK0MCTotVec.push_back(tTempLamK0MCdVec[i]);
-  }
-
-  vector<PartialAnalysis*> tALamK0MCTotVec;
-  vector<PartialAnalysis*> tTempALamK0MCVec = ALamK0MC->GetPartialAnalysisCollection();
-  vector<PartialAnalysis*> tTempALamK0MCdVec = ALamK0MCd->GetPartialAnalysisCollection();
-  assert(tTempALamK0MCVec.size() == tTempALamK0MCdVec.size());
-  for(unsigned int i=0; i<tTempALamK0MCVec.size(); i++)
-  {
-    tALamK0MCTotVec.push_back(tTempALamK0MCVec[i]);
-    tALamK0MCTotVec.push_back(tTempALamK0MCdVec[i]);
-  }
-
-  Analysis* LamK0MCTot = new Analysis("LamK0MCTot_0010",tLamK0MCTotVec);
-  Analysis* ALamK0MCTot = new Analysis("ALamK0MCTot_0010",tALamK0MCTotVec);
-
+  AnalysisType tAnType = kLamK0;
+  AnalysisType tConjAnType = kALamK0;
+  AnalysisRunType tAnRunType = kTrain;
+  int tNPartialAnalysis = 2;
+  CentralityType tCentType = k0010;  //TODO
 
 //-----------------------------------------------------------------------------
-
+  bool bSaveFigures = false;
   bool bSaveFile = false;
-  TFile *mySaveFile;
-  if(bSaveFile) {mySaveFile = new TFile(SaveFileName, "RECREATE");}
 
   bool bContainsPurity = true;
-  bool bContainsKStarCfs = true;
-  bool bContainsAvgSepCfs = true;
+  bool bContainsKStarCfs = false;
+  bool bContainsAvgSepCfs = false;
 
-  bool bContainsKStar2dCfs = true;
+  bool bContainsKStar2dCfs = false;
 
   bool bContainsSepHeavyCfs = false;
   bool bContainsAvgSepCowSailCfs = false;
 
-  bool bViewPart1MassFail = true;
+  bool bViewPart1MassFail = false;  //NOTE: kTrainSys do not include fail cut monitors
 
-  bool bDrawMC = true;
+  bool bDrawMC = false;
 
-  bool bSaveFigures = true;
-  TString tSaveFiguresLocation = "~/Analysis/FemtoAnalysis/Results/Results_cLamK0_AsRc_20150923/0010/";
+//-----------------------------------------------------------------------------
+
+  TString tGeneralAnTypeName;
+  if(tAnType==kLamK0 || tAnType==kALamK0) tGeneralAnTypeName = "cLamK0";
+  else if(tAnType==kLamKchP || tAnType==kALamKchM || tAnType==kLamKchM || tAnType==kALamKchP) tGeneralAnTypeName = "cLamcKch";
+  else assert(0);
+
+
+  TString tDirectoryBase = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_%s_%s/",tGeneralAnTypeName.Data(),tResultsDate.Data());
+  TString tFileLocationBase = TString::Format("%sResults_%s_%s",tDirectoryBase.Data(),tGeneralAnTypeName.Data(),tResultsDate.Data());
+  TString tFileLocationBaseMC = TString::Format("%sResults_%sMC_%s",tDirectoryBase.Data(),tGeneralAnTypeName.Data(),tResultsDate.Data());
+  //TODO PreTrain results with MCd?
+
+  TString tSaveDirectoryBase = "/home/jesse/Analysis/Presentations/PWGCF/LamKPaperProposal/ALICE_MiniWeek_20180117/Figures/";
+//  TString tSaveDirectoryBase = tDirectoryBase;
+
+  TFile *mySaveFile;
+  TString tSaveFileName = TString::Format("%sResults_%s_%s.root", tDirectoryBase.Data(),tGeneralAnTypeName.Data(),tResultsDate.Data());
+  if(bSaveFile) {mySaveFile = new TFile(tSaveFileName, "RECREATE");}
+
+  //-----Data
+  Analysis* LamK0 = new Analysis(tFileLocationBase,tAnType,tCentType);
+  Analysis* ALamK0 = new Analysis(tFileLocationBase,tConjAnType,tCentType);
+
+  //-----MC
+  Analysis* LamK0MC = new Analysis(tFileLocationBaseMC,tAnType,tCentType);
+  Analysis* ALamK0MC = new Analysis(tFileLocationBaseMC,tConjAnType,tCentType);
+
   //-------------------------------------------------------------------
 
   if(bContainsKStarCfs)
@@ -125,7 +115,7 @@ int main(int argc, char **argv)
     if(bSaveFigures)
     {
       TString aName = "cLamK0KStarCfs.eps";
-      canKStar->SaveAs(tSaveFiguresLocation+aName);
+      canKStar->SaveAs(tSaveDirectoryBase+aName);
     }
 
 
@@ -146,49 +136,49 @@ int main(int argc, char **argv)
     LamK0->BuildKStarHeavyCf();
     ALamK0->BuildKStarHeavyCf();
 
-    LamK0MCTot->BuildKStarHeavyCf();
-    ALamK0MCTot->BuildKStarHeavyCf();
+    LamK0MC->BuildKStarHeavyCf();
+    ALamK0MC->BuildKStarHeavyCf();
 
-    LamK0MCTot->BuildKStarHeavyCfMCTrue();
-    ALamK0MCTot->BuildKStarHeavyCfMCTrue();
+    LamK0MC->BuildKStarHeavyCfMCTrue();
+    ALamK0MC->BuildKStarHeavyCfMCTrue();
 
     TCanvas* canKStarvMC = new TCanvas("canKStarvMC","canKStarvMC");
     canKStarvMC->Divide(1,2);
 
     LamK0->DrawKStarHeavyCf((TPad*)canKStarvMC->cd(1),2);
-    LamK0MCTot->GetKStarHeavyCf()->Rebin(4);
-    LamK0MCTot->DrawKStarHeavyCf((TPad*)canKStarvMC->cd(1),1,"same",20);
-    LamK0MCTot->GetKStarHeavyCfMCTrue()->Rebin(4);
-    LamK0MCTot->DrawKStarHeavyCfMCTrue((TPad*)canKStarvMC->cd(1),1,"same",24);
+    LamK0MC->GetKStarHeavyCf()->Rebin(4);
+    LamK0MC->DrawKStarHeavyCf((TPad*)canKStarvMC->cd(1),1,"same",20);
+    LamK0MC->GetKStarHeavyCfMCTrue()->Rebin(4);
+    LamK0MC->DrawKStarHeavyCfMCTrue((TPad*)canKStarvMC->cd(1),1,"same",24);
 
     ALamK0->DrawKStarHeavyCf((TPad*)canKStarvMC->cd(2),4);
-    ALamK0MCTot->GetKStarHeavyCf()->Rebin(4);
-    ALamK0MCTot->DrawKStarHeavyCf((TPad*)canKStarvMC->cd(2),1,"same",20);
-    ALamK0MCTot->GetKStarHeavyCfMCTrue()->Rebin(4);
-    ALamK0MCTot->DrawKStarHeavyCfMCTrue((TPad*)canKStarvMC->cd(2),1,"same",24);
+    ALamK0MC->GetKStarHeavyCf()->Rebin(4);
+    ALamK0MC->DrawKStarHeavyCf((TPad*)canKStarvMC->cd(2),1,"same",20);
+    ALamK0MC->GetKStarHeavyCfMCTrue()->Rebin(4);
+    ALamK0MC->DrawKStarHeavyCfMCTrue((TPad*)canKStarvMC->cd(2),1,"same",24);
 
     //------------------------------------------------------------
 
     TLegend* leg1 = new TLegend(0.60,0.12,0.89,0.32);
       leg1->SetFillColor(0);
       leg1->AddEntry(LamK0->GetKStarHeavyCf()->GetHeavyCf(),LamK0->GetKStarHeavyCf()->GetHeavyCf()->GetTitle(),"lp");
-      leg1->AddEntry(LamK0MCTot->GetKStarHeavyCf()->GetHeavyCf(),TString(LamK0MCTot->GetKStarHeavyCf()->GetHeavyCf()->GetTitle())+"_{MC}","lp");
-      leg1->AddEntry(LamK0MCTot->GetKStarHeavyCfMCTrue()->GetHeavyCf(),TString(LamK0MCTot->GetKStarHeavyCfMCTrue()->GetHeavyCf()->GetTitle())+"_{MCTrue}","lp");
+      leg1->AddEntry(LamK0MC->GetKStarHeavyCf()->GetHeavyCf(),TString(LamK0MC->GetKStarHeavyCf()->GetHeavyCf()->GetTitle())+"_{MC}","lp");
+      leg1->AddEntry(LamK0MC->GetKStarHeavyCfMCTrue()->GetHeavyCf(),TString(LamK0MC->GetKStarHeavyCfMCTrue()->GetHeavyCf()->GetTitle())+"_{MCTrue}","lp");
     canKStarvMC->cd(1);
     leg1->Draw();
 
     TLegend* leg2 = new TLegend(0.60,0.12,0.89,0.32);
       leg2->SetFillColor(0);
       leg2->AddEntry(ALamK0->GetKStarHeavyCf()->GetHeavyCf(),ALamK0->GetKStarHeavyCf()->GetHeavyCf()->GetTitle(),"lp");
-      leg2->AddEntry(ALamK0MCTot->GetKStarHeavyCf()->GetHeavyCf(),TString(ALamK0MCTot->GetKStarHeavyCf()->GetHeavyCf()->GetTitle())+"_{MC}","lp");
-      leg2->AddEntry(ALamK0MCTot->GetKStarHeavyCfMCTrue()->GetHeavyCf(),TString(ALamK0MCTot->GetKStarHeavyCfMCTrue()->GetHeavyCf()->GetTitle())+"_{MCTrue}","lp");
+      leg2->AddEntry(ALamK0MC->GetKStarHeavyCf()->GetHeavyCf(),TString(ALamK0MC->GetKStarHeavyCf()->GetHeavyCf()->GetTitle())+"_{MC}","lp");
+      leg2->AddEntry(ALamK0MC->GetKStarHeavyCfMCTrue()->GetHeavyCf(),TString(ALamK0MC->GetKStarHeavyCfMCTrue()->GetHeavyCf()->GetTitle())+"_{MCTrue}","lp");
     canKStarvMC->cd(2);
     leg2->Draw();
 
     if(bSaveFigures)
     {
       TString aName = "cLamK0KStarvMCCfs.eps";
-      canKStarvMC->SaveAs(tSaveFiguresLocation+aName);
+      canKStarvMC->SaveAs(tSaveDirectoryBase+aName);
     }
 
   }
@@ -246,7 +236,7 @@ int main(int argc, char **argv)
     if(bSaveFigures)
     {
       TString aName = "cLamK0KStarCfRatios.eps";
-      canKStarRatios->SaveAs(tSaveFiguresLocation+aName);
+      canKStarRatios->SaveAs(tSaveDirectoryBase+aName);
     }
   }
 
@@ -318,7 +308,7 @@ int main(int argc, char **argv)
     if(bSaveFigures)
     {
       TString aName = "cLamK0Part1MassFail.eps";
-      canPart1MassFail->SaveAs(tSaveFiguresLocation+aName);
+      canPart1MassFail->SaveAs(tSaveDirectoryBase+aName);
     }
   }
 
@@ -339,13 +329,13 @@ int main(int argc, char **argv)
     if(bSaveFigures)
     {
       TString aName = "cLamK0Purity.eps";
-      canPurity->SaveAs(tSaveFiguresLocation+aName);
+      canPurity->SaveAs(tSaveDirectoryBase+aName);
 
       TString aName2 = "LamPurity_LamK0.eps";
-      canPurity->cd(1)->cd(1)->SaveAs(tSaveFiguresLocation+aName2);
+      canPurity->cd(1)->cd(1)->SaveAs(tSaveDirectoryBase+aName2);
 
       TString aName3 = "K0Purity_LamK0.eps";
-      canPurity->cd(1)->cd(2)->SaveAs(tSaveFiguresLocation+aName3);
+      canPurity->cd(1)->cd(2)->SaveAs(tSaveDirectoryBase+aName3);
     }
 
   }

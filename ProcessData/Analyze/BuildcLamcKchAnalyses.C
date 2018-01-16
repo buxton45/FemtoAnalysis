@@ -39,85 +39,24 @@ int main(int argc, char **argv)
   //the program ends and closes everything
 //-----------------------------------------------------------------------------
 
-  //-----Data
-  TString FileLocationBase = "~/Analysis/FemtoAnalysis/Results/PreTrain/Results_cLamcKch_AsRc_KchAndLamFix2_20160229/Results_cLamcKch_AsRc_KchAndLamFix2_20160229";
-  AnalysisRunType tAnRunType = kGrid;
-  //TString FileLocationBase = "~/Analysis/FemtoAnalysis/Results/Results_cLamcKch_As";
-  Analysis* LamKchP = new Analysis(FileLocationBase,kLamKchP,k0010,tAnRunType);
-  Analysis* ALamKchP = new Analysis(FileLocationBase,kALamKchP,k0010,tAnRunType);
-  Analysis* LamKchM = new Analysis(FileLocationBase,kLamKchM,k0010,tAnRunType);
-  Analysis* ALamKchM = new Analysis(FileLocationBase,kALamKchM,k0010,tAnRunType);
+//  TString tResultsDate = "20161027";
+  TString tResultsDate = "20171227";
 
-  TString SaveFileName = "~/Analysis/FemtoAnalysis/Results/Results_cLamcKch_AsRc_20151007/0010/Results_cLamcKch_AsRc_20151007_0010TEST.root";
+  AnalysisType tAnType1 = kLamKchP;
+  AnalysisType tConjAnType1 = kALamKchM;
 
-  //-----MC
+  AnalysisType tAnType2 = kLamKchM;
+  AnalysisType tConjAnType2 = kALamKchP;
 
-  TString FileLocationBaseMC = "~/Analysis/FemtoAnalysis/Results/PreTrain/Results_cLamcKch_AsRcMC_KchAndLamFix2_20160229/Results_cLamcKch_AsRcMC_KchAndLamFix2_20160229";
-  Analysis* LamKchPMC = new Analysis(FileLocationBaseMC,kLamKchP,k0010,tAnRunType);
-  Analysis* ALamKchPMC = new Analysis(FileLocationBaseMC,kALamKchP,k0010,tAnRunType);
-  Analysis* LamKchMMC = new Analysis(FileLocationBaseMC,kLamKchM,k0010,tAnRunType);
-  Analysis* ALamKchMMC = new Analysis(FileLocationBaseMC,kALamKchM,k0010,tAnRunType);
-/*
-  TString FileLocationBaseMCd = "~/Analysis/FemtoAnalysis/Results/Results_cLamcKch_AsRcMCd_KchAndLamFix2_20160229/Results_cLamcKch_AsRcMCd_KchAndLamFix2_20160229";
-  Analysis* LamKchPMCd = new Analysis(FileLocationBaseMCd,kLamKchP,k0010);
-  Analysis* ALamKchPMCd = new Analysis(FileLocationBaseMCd,kALamKchP,k0010);
-  Analysis* LamKchMMCd = new Analysis(FileLocationBaseMCd,kLamKchM,k0010);
-  Analysis* ALamKchMMCd = new Analysis(FileLocationBaseMCd,kALamKchM,k0010);
-*/
-  vector<PartialAnalysis*> tLamKchPMCTotVec;
-  vector<PartialAnalysis*> tTempLamKchPMCVec = LamKchPMC->GetPartialAnalysisCollection();
-  //vector<PartialAnalysis*> tTempLamKchPMCdVec = LamKchPMCd->GetPartialAnalysisCollection();
-  //assert(tTempLamKchPMCVec.size() == tTempLamKchPMCdVec.size());
-  for(unsigned int i=0; i<tTempLamKchPMCVec.size(); i++)
-  {
-    tLamKchPMCTotVec.push_back(tTempLamKchPMCVec[i]);
-    //tLamKchPMCTotVec.push_back(tTempLamKchPMCdVec[i]);
-  }
-
-  vector<PartialAnalysis*> tALamKchPMCTotVec;
-  vector<PartialAnalysis*> tTempALamKchPMCVec = ALamKchPMC->GetPartialAnalysisCollection();
-  //vector<PartialAnalysis*> tTempALamKchPMCdVec = ALamKchPMCd->GetPartialAnalysisCollection();
-  //assert(tTempALamKchPMCVec.size() == tTempALamKchPMCdVec.size());
-  for(unsigned int i=0; i<tTempALamKchPMCVec.size(); i++)
-  {
-    tALamKchPMCTotVec.push_back(tTempALamKchPMCVec[i]);
-    //tALamKchPMCTotVec.push_back(tTempALamKchPMCdVec[i]);
-  }
-
-  vector<PartialAnalysis*> tLamKchMMCTotVec;
-  vector<PartialAnalysis*> tTempLamKchMMCVec = LamKchMMC->GetPartialAnalysisCollection();
-  //vector<PartialAnalysis*> tTempLamKchMMCdVec = LamKchMMCd->GetPartialAnalysisCollection();
-  //assert(tTempLamKchMMCVec.size() == tTempLamKchMMCdVec.size());
-  for(unsigned int i=0; i<tTempLamKchMMCVec.size(); i++)
-  {
-    tLamKchMMCTotVec.push_back(tTempLamKchMMCVec[i]);
-    //tLamKchMMCTotVec.push_back(tTempLamKchMMCdVec[i]);
-  }
-
-  vector<PartialAnalysis*> tALamKchMMCTotVec;
-  vector<PartialAnalysis*> tTempALamKchMMCVec = ALamKchMMC->GetPartialAnalysisCollection();
-  //vector<PartialAnalysis*> tTempALamKchMMCdVec = ALamKchMMCd->GetPartialAnalysisCollection();
-  //assert(tTempALamKchMMCVec.size() == tTempALamKchMMCdVec.size());
-  for(unsigned int i=0; i<tTempALamKchMMCVec.size(); i++)
-  {
-    tALamKchMMCTotVec.push_back(tTempALamKchMMCVec[i]);
-    //tALamKchMMCTotVec.push_back(tTempALamKchMMCdVec[i]);
-  }
-
-  Analysis* LamKchPMCTot = new Analysis("LamKchPMCTot_0010",tLamKchPMCTotVec);
-  Analysis* ALamKchPMCTot = new Analysis("ALamKchPMCTot_0010",tALamKchPMCTotVec);
-  Analysis* LamKchMMCTot = new Analysis("LamKchMMCTot_0010",tLamKchMMCTotVec);
-  Analysis* ALamKchMMCTot = new Analysis("ALamKchMMCTot_0010",tALamKchMMCTotVec);
-
+  AnalysisRunType tAnRunType = kTrain;
+  int tNPartialAnalysis = 2;
+  CentralityType tCentType = k0010;  //TODO
 
 //-----------------------------------------------------------------------------
-
-
+  bool bSaveFigures = false;
   bool bSaveFile = false;
-  TFile *mySaveFile;
-  if(bSaveFile) {mySaveFile = new TFile(SaveFileName, "RECREATE");}
 
-  bool bContainsPurity = true;
+  bool bContainsPurity = false;
   bool bContainsKStarCfs = false;
   bool bContainsAvgSepCfs = false;
 
@@ -126,19 +65,52 @@ int main(int argc, char **argv)
   bool bContainsSepHeavyCfs = false;
   bool bContainsAvgSepCowSailCfs = false;
 
-  bool bViewPart1MassFail = true;
+  bool bViewPart1MassFail = false;  //NOTE: kTrainSys do not include fail cut monitors
 
-  bool bDrawMC = true;
+  bool bDrawMC = false;
 
-  bool bDrawModelCfTrueIdealCfTrueRatio = true;
-  bool bDrawModelCfFakeIdealCfFakeRatio = true;
+  bool bDrawModelCfTrueIdealCfTrueRatio = false;
+  bool bDrawModelCfFakeIdealCfFakeRatio = false;
   bool bDrawCorrectedKStarCfs = false;
   bool bDrawAllKStarCfs = false;
-  bool bDrawAllKStarTrueVsRec = true;
+  bool bDrawAllKStarTrueVsRec = false;
 
-  bool bSaveFigures = false;
-  TString tSaveFiguresLocation = "~/Analysis/FemtoAnalysis/Results/Results_cLamcKch_AsRc_20151007/0010/";
-  //-------------------------------------------------------------------
+  bool bDrawKchdEdx = true;
+//-----------------------------------------------------------------------------
+
+  TString tGeneralAnTypeName;
+  if(tAnType1==kLamK0 || tAnType1==kALamK0) tGeneralAnTypeName = "cLamK0";
+  else if(tAnType1==kLamKchP || tAnType1==kALamKchM || tAnType1==kLamKchM || tAnType1==kALamKchP) tGeneralAnTypeName = "cLamcKch";
+  else assert(0);
+
+
+  TString tDirectoryBase = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_%s_%s/",tGeneralAnTypeName.Data(),tResultsDate.Data());
+  TString tFileLocationBase = TString::Format("%sResults_%s_%s",tDirectoryBase.Data(),tGeneralAnTypeName.Data(),tResultsDate.Data());
+  TString tFileLocationBaseMC = TString::Format("%sResults_%sMC_%s",tDirectoryBase.Data(),tGeneralAnTypeName.Data(),tResultsDate.Data());
+  //TODO PreTrain results with MCd?
+
+  TString tSaveDirectoryBase = "/home/jesse/Analysis/Presentations/PWGCF/LamKPaperProposal/ALICE_MiniWeek_20180117/Figures/";
+//  TString tSaveDirectoryBase = tDirectoryBase;
+
+  TFile *mySaveFile;
+  TString tSaveFileName = TString::Format("%sResults_%s_%s.root", tDirectoryBase.Data(),tGeneralAnTypeName.Data(),tResultsDate.Data());
+  if(bSaveFile) {mySaveFile = new TFile(tSaveFileName, "RECREATE");}
+
+  //-----Data
+  Analysis* LamKchP = new Analysis(tFileLocationBase,tAnType1,tCentType,tAnRunType);
+  Analysis* ALamKchP = new Analysis(tFileLocationBase,tConjAnType2,tCentType,tAnRunType);
+  Analysis* LamKchM = new Analysis(tFileLocationBase,tAnType2,tCentType,tAnRunType);
+  Analysis* ALamKchM = new Analysis(tFileLocationBase,tConjAnType1,tCentType,tAnRunType);
+
+  //-----MC
+  Analysis* LamKchPMC = new Analysis(tFileLocationBaseMC,tAnType1,tCentType,tAnRunType);
+  Analysis* ALamKchPMC = new Analysis(tFileLocationBaseMC,tConjAnType2,tCentType,tAnRunType);
+  Analysis* LamKchMMC = new Analysis(tFileLocationBaseMC,tAnType2,tCentType,tAnRunType);
+  Analysis* ALamKchMMC = new Analysis(tFileLocationBaseMC,tConjAnType1,tCentType,tAnRunType);
+
+//-----------------------------------------------------------------------------
+
+
 
   if(bContainsKStarCfs)
   {
@@ -187,7 +159,7 @@ int main(int argc, char **argv)
     if(bSaveFigures)
     {
       TString aName = "cLamcKchKStarCfs.eps";
-      canKStar->SaveAs(tSaveFiguresLocation+aName);
+      canKStar->SaveAs(tSaveDirectoryBase+aName);
     }
 
     //----------------------------------
@@ -216,81 +188,81 @@ int main(int argc, char **argv)
     LamKchM->BuildKStarHeavyCf();
     ALamKchM->BuildKStarHeavyCf();
 
-    LamKchPMCTot->BuildKStarHeavyCf();
-    ALamKchPMCTot->BuildKStarHeavyCf();
-    LamKchMMCTot->BuildKStarHeavyCf();
-    ALamKchMMCTot->BuildKStarHeavyCf();
+    LamKchPMC->BuildKStarHeavyCf();
+    ALamKchPMC->BuildKStarHeavyCf();
+    LamKchMMC->BuildKStarHeavyCf();
+    ALamKchMMC->BuildKStarHeavyCf();
 
-    LamKchPMCTot->BuildKStarHeavyCfMCTrue();
-    ALamKchPMCTot->BuildKStarHeavyCfMCTrue();
-    LamKchMMCTot->BuildKStarHeavyCfMCTrue();
-    ALamKchMMCTot->BuildKStarHeavyCfMCTrue();
+    LamKchPMC->BuildKStarHeavyCfMCTrue();
+    ALamKchPMC->BuildKStarHeavyCfMCTrue();
+    LamKchMMC->BuildKStarHeavyCfMCTrue();
+    ALamKchMMC->BuildKStarHeavyCfMCTrue();
 
     TCanvas* canKStarvMC = new TCanvas("canKStarvMC","canKStarvMC");
     canKStarvMC->Divide(2,2);
 
     LamKchP->DrawKStarHeavyCf((TPad*)canKStarvMC->cd(1),2);
-    LamKchPMCTot->GetKStarHeavyCf()->Rebin(2);
-    LamKchPMCTot->DrawKStarHeavyCf((TPad*)canKStarvMC->cd(1),1,"same",20);
-    LamKchPMCTot->GetKStarHeavyCfMCTrue()->Rebin(2);
-    LamKchPMCTot->DrawKStarHeavyCfMCTrue((TPad*)canKStarvMC->cd(1),1,"same",24);
+    LamKchPMC->GetKStarHeavyCf()->Rebin(2);
+    LamKchPMC->DrawKStarHeavyCf((TPad*)canKStarvMC->cd(1),1,"same",20);
+    LamKchPMC->GetKStarHeavyCfMCTrue()->Rebin(2);
+    LamKchPMC->DrawKStarHeavyCfMCTrue((TPad*)canKStarvMC->cd(1),1,"same",24);
 
     ALamKchM->DrawKStarHeavyCf((TPad*)canKStarvMC->cd(2),2);
-    ALamKchMMCTot->GetKStarHeavyCf()->Rebin(2);
-    ALamKchMMCTot->DrawKStarHeavyCf((TPad*)canKStarvMC->cd(2),1,"same",20);
-    ALamKchMMCTot->GetKStarHeavyCfMCTrue()->Rebin(2);
-    ALamKchMMCTot->DrawKStarHeavyCfMCTrue((TPad*)canKStarvMC->cd(2),1,"same",24);
+    ALamKchMMC->GetKStarHeavyCf()->Rebin(2);
+    ALamKchMMC->DrawKStarHeavyCf((TPad*)canKStarvMC->cd(2),1,"same",20);
+    ALamKchMMC->GetKStarHeavyCfMCTrue()->Rebin(2);
+    ALamKchMMC->DrawKStarHeavyCfMCTrue((TPad*)canKStarvMC->cd(2),1,"same",24);
 
     LamKchM->DrawKStarHeavyCf((TPad*)canKStarvMC->cd(3),4);
-    LamKchMMCTot->GetKStarHeavyCf()->Rebin(2);
-    LamKchMMCTot->DrawKStarHeavyCf((TPad*)canKStarvMC->cd(3),1,"same",20);
-    LamKchMMCTot->GetKStarHeavyCfMCTrue()->Rebin(2);
-    LamKchMMCTot->DrawKStarHeavyCfMCTrue((TPad*)canKStarvMC->cd(3),1,"same",24);
+    LamKchMMC->GetKStarHeavyCf()->Rebin(2);
+    LamKchMMC->DrawKStarHeavyCf((TPad*)canKStarvMC->cd(3),1,"same",20);
+    LamKchMMC->GetKStarHeavyCfMCTrue()->Rebin(2);
+    LamKchMMC->DrawKStarHeavyCfMCTrue((TPad*)canKStarvMC->cd(3),1,"same",24);
 
     ALamKchP->DrawKStarHeavyCf((TPad*)canKStarvMC->cd(4),4);
-    ALamKchPMCTot->GetKStarHeavyCf()->Rebin(2);
-    ALamKchPMCTot->DrawKStarHeavyCf((TPad*)canKStarvMC->cd(4),1,"same",20);
-    ALamKchPMCTot->GetKStarHeavyCfMCTrue()->Rebin(2);
-    ALamKchPMCTot->DrawKStarHeavyCfMCTrue((TPad*)canKStarvMC->cd(4),1,"same",24);
+    ALamKchPMC->GetKStarHeavyCf()->Rebin(2);
+    ALamKchPMC->DrawKStarHeavyCf((TPad*)canKStarvMC->cd(4),1,"same",20);
+    ALamKchPMC->GetKStarHeavyCfMCTrue()->Rebin(2);
+    ALamKchPMC->DrawKStarHeavyCfMCTrue((TPad*)canKStarvMC->cd(4),1,"same",24);
 
     //------------------------------------------------------------
 
     TLegend* leg1 = new TLegend(0.60,0.12,0.89,0.32);
       leg1->SetFillColor(0);
       leg1->AddEntry(LamKchP->GetKStarHeavyCf()->GetHeavyCf(),LamKchP->GetKStarHeavyCf()->GetHeavyCf()->GetTitle(),"lp");
-      leg1->AddEntry(LamKchPMCTot->GetKStarHeavyCf()->GetHeavyCf(),TString(LamKchPMCTot->GetKStarHeavyCf()->GetHeavyCf()->GetTitle())+"_{MC}","lp");
-      leg1->AddEntry(LamKchPMCTot->GetKStarHeavyCfMCTrue()->GetHeavyCf(),TString(LamKchPMCTot->GetKStarHeavyCfMCTrue()->GetHeavyCf()->GetTitle())+"_{MCTrue}","lp");
+      leg1->AddEntry(LamKchPMC->GetKStarHeavyCf()->GetHeavyCf(),TString(LamKchPMC->GetKStarHeavyCf()->GetHeavyCf()->GetTitle())+"_{MC}","lp");
+      leg1->AddEntry(LamKchPMC->GetKStarHeavyCfMCTrue()->GetHeavyCf(),TString(LamKchPMC->GetKStarHeavyCfMCTrue()->GetHeavyCf()->GetTitle())+"_{MCTrue}","lp");
     canKStarvMC->cd(1);
     leg1->Draw();
 
     TLegend* leg2 = new TLegend(0.60,0.12,0.89,0.32);
       leg2->SetFillColor(0);
       leg2->AddEntry(ALamKchM->GetKStarHeavyCf()->GetHeavyCf(),ALamKchM->GetKStarHeavyCf()->GetHeavyCf()->GetTitle(),"lp");
-      leg2->AddEntry(ALamKchMMCTot->GetKStarHeavyCf()->GetHeavyCf(),TString(ALamKchMMCTot->GetKStarHeavyCf()->GetHeavyCf()->GetTitle())+"_{MC}","lp");
-      leg2->AddEntry(ALamKchMMCTot->GetKStarHeavyCfMCTrue()->GetHeavyCf(),TString(ALamKchMMCTot->GetKStarHeavyCfMCTrue()->GetHeavyCf()->GetTitle())+"_{MCTrue}","lp");
+      leg2->AddEntry(ALamKchMMC->GetKStarHeavyCf()->GetHeavyCf(),TString(ALamKchMMC->GetKStarHeavyCf()->GetHeavyCf()->GetTitle())+"_{MC}","lp");
+      leg2->AddEntry(ALamKchMMC->GetKStarHeavyCfMCTrue()->GetHeavyCf(),TString(ALamKchMMC->GetKStarHeavyCfMCTrue()->GetHeavyCf()->GetTitle())+"_{MCTrue}","lp");
     canKStarvMC->cd(2);
     leg2->Draw();
 
     TLegend* leg3 = new TLegend(0.60,0.12,0.89,0.32);
       leg3->SetFillColor(0);
       leg3->AddEntry(LamKchM->GetKStarHeavyCf()->GetHeavyCf(),LamKchM->GetKStarHeavyCf()->GetHeavyCf()->GetTitle(),"lp");
-      leg3->AddEntry(LamKchMMCTot->GetKStarHeavyCf()->GetHeavyCf(),TString(LamKchMMCTot->GetKStarHeavyCf()->GetHeavyCf()->GetTitle())+"_{MC}","lp");
-      leg3->AddEntry(LamKchMMCTot->GetKStarHeavyCfMCTrue()->GetHeavyCf(),TString(LamKchMMCTot->GetKStarHeavyCfMCTrue()->GetHeavyCf()->GetTitle())+"_{MCTrue}","lp");
+      leg3->AddEntry(LamKchMMC->GetKStarHeavyCf()->GetHeavyCf(),TString(LamKchMMC->GetKStarHeavyCf()->GetHeavyCf()->GetTitle())+"_{MC}","lp");
+      leg3->AddEntry(LamKchMMC->GetKStarHeavyCfMCTrue()->GetHeavyCf(),TString(LamKchMMC->GetKStarHeavyCfMCTrue()->GetHeavyCf()->GetTitle())+"_{MCTrue}","lp");
     canKStarvMC->cd(3);
     leg3->Draw();
 
     TLegend* leg4 = new TLegend(0.60,0.12,0.89,0.32);
       leg4->SetFillColor(0);
       leg4->AddEntry(ALamKchP->GetKStarHeavyCf()->GetHeavyCf(),ALamKchP->GetKStarHeavyCf()->GetHeavyCf()->GetTitle(),"lp");
-      leg4->AddEntry(ALamKchPMCTot->GetKStarHeavyCf()->GetHeavyCf(),TString(ALamKchPMCTot->GetKStarHeavyCf()->GetHeavyCf()->GetTitle())+"_{MC}","lp");
-      leg4->AddEntry(ALamKchPMCTot->GetKStarHeavyCfMCTrue()->GetHeavyCf(),TString(ALamKchPMCTot->GetKStarHeavyCfMCTrue()->GetHeavyCf()->GetTitle())+"_{MCTrue}","lp");
+      leg4->AddEntry(ALamKchPMC->GetKStarHeavyCf()->GetHeavyCf(),TString(ALamKchPMC->GetKStarHeavyCf()->GetHeavyCf()->GetTitle())+"_{MC}","lp");
+      leg4->AddEntry(ALamKchPMC->GetKStarHeavyCfMCTrue()->GetHeavyCf(),TString(ALamKchPMC->GetKStarHeavyCfMCTrue()->GetHeavyCf()->GetTitle())+"_{MCTrue}","lp");
     canKStarvMC->cd(4);
     leg4->Draw();
 
     if(bSaveFigures)
     {
       TString aName = "cLamcKchKStarvMCCfs.eps";
-      canKStarvMC->SaveAs(tSaveFiguresLocation+aName);
+      canKStarvMC->SaveAs(tSaveDirectoryBase+aName);
     }
 
   }
@@ -299,27 +271,27 @@ int main(int argc, char **argv)
 
   if(bDrawModelCfTrueIdealCfTrueRatio)
   {
-    LamKchPMCTot->BuildModelCfTrueIdealCfTrueRatio(0.32,0.40,2);
-    ALamKchPMCTot->BuildModelCfTrueIdealCfTrueRatio(0.32,0.40,2);
-    LamKchMMCTot->BuildModelCfTrueIdealCfTrueRatio(0.32,0.40,2);
-    ALamKchMMCTot->BuildModelCfTrueIdealCfTrueRatio(0.32,0.40,2);
+    LamKchPMC->BuildModelCfTrueIdealCfTrueRatio(0.32,0.40,2);
+    ALamKchPMC->BuildModelCfTrueIdealCfTrueRatio(0.32,0.40,2);
+    LamKchMMC->BuildModelCfTrueIdealCfTrueRatio(0.32,0.40,2);
+    ALamKchMMC->BuildModelCfTrueIdealCfTrueRatio(0.32,0.40,2);
 
-    LamKchPMCTot->FitModelCfTrueIdealCfTrueRatio();
-    ALamKchPMCTot->FitModelCfTrueIdealCfTrueRatio();
-    LamKchMMCTot->FitModelCfTrueIdealCfTrueRatio();
-    ALamKchMMCTot->FitModelCfTrueIdealCfTrueRatio();
+    LamKchPMC->FitModelCfTrueIdealCfTrueRatio();
+    ALamKchPMC->FitModelCfTrueIdealCfTrueRatio();
+    LamKchMMC->FitModelCfTrueIdealCfTrueRatio();
+    ALamKchMMC->FitModelCfTrueIdealCfTrueRatio();
 
     TCanvas* canTrueIdealTrueRatio = new TCanvas("canTrueIdealTrueRatio","canTrueIdealTrueRatio");
     canTrueIdealTrueRatio->Divide(2,2);
 
-    TH1* tRatioLamKchP = LamKchPMCTot->GetModelCfTrueIdealCfTrueRatio();
-      TF1* tMomResFitLamKchP = LamKchPMCTot->GetMomResFit();
-    TH1* tRatioALamKchP = ALamKchPMCTot->GetModelCfTrueIdealCfTrueRatio();
-      TF1* tMomResFitALamKchP = ALamKchPMCTot->GetMomResFit();
-    TH1* tRatioLamKchM = LamKchMMCTot->GetModelCfTrueIdealCfTrueRatio();
-      TF1* tMomResFitLamKchM = LamKchMMCTot->GetMomResFit();
-    TH1* tRatioALamKchM = ALamKchMMCTot->GetModelCfTrueIdealCfTrueRatio();
-      TF1* tMomResFitALamKchM = ALamKchMMCTot->GetMomResFit();
+    TH1* tRatioLamKchP = LamKchPMC->GetModelCfTrueIdealCfTrueRatio();
+      TF1* tMomResFitLamKchP = LamKchPMC->GetMomResFit();
+    TH1* tRatioALamKchP = ALamKchPMC->GetModelCfTrueIdealCfTrueRatio();
+      TF1* tMomResFitALamKchP = ALamKchPMC->GetMomResFit();
+    TH1* tRatioLamKchM = LamKchMMC->GetModelCfTrueIdealCfTrueRatio();
+      TF1* tMomResFitLamKchM = LamKchMMC->GetMomResFit();
+    TH1* tRatioALamKchM = ALamKchMMC->GetModelCfTrueIdealCfTrueRatio();
+      TF1* tMomResFitALamKchM = ALamKchMMC->GetMomResFit();
 
     double tYmin = 0.94;
     double tYmax = 1.02;
@@ -348,27 +320,27 @@ int main(int argc, char **argv)
 
   if(bDrawModelCfFakeIdealCfFakeRatio)
   {
-    LamKchPMCTot->BuildModelCfFakeIdealCfFakeRatio(/*0.32,0.40,2*/);
-    ALamKchPMCTot->BuildModelCfFakeIdealCfFakeRatio(/*0.32,0.40,2*/);
-    LamKchMMCTot->BuildModelCfFakeIdealCfFakeRatio(/*0.32,0.40,2*/);
-    ALamKchMMCTot->BuildModelCfFakeIdealCfFakeRatio(/*0.32,0.40,2*/);
+    LamKchPMC->BuildModelCfFakeIdealCfFakeRatio(/*0.32,0.40,2*/);
+    ALamKchPMC->BuildModelCfFakeIdealCfFakeRatio(/*0.32,0.40,2*/);
+    LamKchMMC->BuildModelCfFakeIdealCfFakeRatio(/*0.32,0.40,2*/);
+    ALamKchMMC->BuildModelCfFakeIdealCfFakeRatio(/*0.32,0.40,2*/);
 
-    LamKchPMCTot->FitModelCfFakeIdealCfFakeRatio();
-    ALamKchPMCTot->FitModelCfFakeIdealCfFakeRatio();
-    LamKchMMCTot->FitModelCfFakeIdealCfFakeRatio();
-    ALamKchMMCTot->FitModelCfFakeIdealCfFakeRatio();
+    LamKchPMC->FitModelCfFakeIdealCfFakeRatio();
+    ALamKchPMC->FitModelCfFakeIdealCfFakeRatio();
+    LamKchMMC->FitModelCfFakeIdealCfFakeRatio();
+    ALamKchMMC->FitModelCfFakeIdealCfFakeRatio();
 
     TCanvas* canFakeIdealFakeRatio = new TCanvas("canFakeIdealFakeRatio","canFakeIdealFakeRatio");
     canFakeIdealFakeRatio->Divide(2,2);
 
-    TH1* tFakeRatioLamKchP = LamKchPMCTot->GetModelCfFakeIdealCfFakeRatio();
-      TF1* tMomResFitFakeLamKchP = LamKchPMCTot->GetMomResFitFake();
-    TH1* tFakeRatioALamKchP = ALamKchPMCTot->GetModelCfFakeIdealCfFakeRatio();
-      TF1* tMomResFitFakeALamKchP = ALamKchPMCTot->GetMomResFitFake();
-    TH1* tFakeRatioLamKchM = LamKchMMCTot->GetModelCfFakeIdealCfFakeRatio();
-      TF1* tMomResFitFakeLamKchM = LamKchMMCTot->GetMomResFitFake();
-    TH1* tFakeRatioALamKchM = ALamKchMMCTot->GetModelCfFakeIdealCfFakeRatio();
-      TF1* tMomResFitFakeALamKchM = ALamKchMMCTot->GetMomResFitFake();
+    TH1* tFakeRatioLamKchP = LamKchPMC->GetModelCfFakeIdealCfFakeRatio();
+      TF1* tMomResFitFakeLamKchP = LamKchPMC->GetMomResFitFake();
+    TH1* tFakeRatioALamKchP = ALamKchPMC->GetModelCfFakeIdealCfFakeRatio();
+      TF1* tMomResFitFakeALamKchP = ALamKchPMC->GetMomResFitFake();
+    TH1* tFakeRatioLamKchM = LamKchMMC->GetModelCfFakeIdealCfFakeRatio();
+      TF1* tMomResFitFakeLamKchM = LamKchMMC->GetMomResFitFake();
+    TH1* tFakeRatioALamKchM = ALamKchMMC->GetModelCfFakeIdealCfFakeRatio();
+      TF1* tMomResFitFakeALamKchM = ALamKchMMC->GetMomResFitFake();
 
     double tYmin = 0.94;
     double tYmax = 1.02;
@@ -398,10 +370,10 @@ int main(int argc, char **argv)
 /*
   if(bDrawCorrectedKStarCfs)
   {
-    LamKchPMCTot->BuildModelCfTrueIdealCfTrueRatio(0.32,0.40,2);
-    ALamKchPMCTot->BuildModelCfTrueIdealCfTrueRatio(0.32,0.40,2);
-    LamKchMMCTot->BuildModelCfTrueIdealCfTrueRatio(0.32,0.40,2);
-    ALamKchMMCTot->BuildModelCfTrueIdealCfTrueRatio(0.32,0.40,2);
+    LamKchPMC->BuildModelCfTrueIdealCfTrueRatio(0.32,0.40,2);
+    ALamKchPMC->BuildModelCfTrueIdealCfTrueRatio(0.32,0.40,2);
+    LamKchMMC->BuildModelCfTrueIdealCfTrueRatio(0.32,0.40,2);
+    ALamKchMMC->BuildModelCfTrueIdealCfTrueRatio(0.32,0.40,2);
 
     LamKchP->BuildKStarHeavyCf();
     ALamKchP->BuildKStarHeavyCf();
@@ -416,14 +388,14 @@ int main(int argc, char **argv)
 
 
     //-----------------
-    TH1* tRatioLamKchP = LamKchPMCTot->GetModelCfTrueIdealCfTrueRatio();
-      TF1* tMomResFitLamKchP = LamKchPMCTot->GetMomResFit();
-    TH1* tRatioALamKchP = ALamKchPMCTot->GetModelCfTrueIdealCfTrueRatio();
-      TF1* tMomResFitALamKchP = ALamKchPMCTot->GetMomResFit();
-    TH1* tRatioLamKchM = LamKchMMCTot->GetModelCfTrueIdealCfTrueRatio();
-      TF1* tMomResFitLamKchM = LamKchMMCTot->GetMomResFit();
-    TH1* tRatioALamKchM = ALamKchMMCTot->GetModelCfTrueIdealCfTrueRatio();
-      TF1* tMomResFitALamKchM = ALamKchMMCTot->GetMomResFit();
+    TH1* tRatioLamKchP = LamKchPMC->GetModelCfTrueIdealCfTrueRatio();
+      TF1* tMomResFitLamKchP = LamKchPMC->GetMomResFit();
+    TH1* tRatioALamKchP = ALamKchPMC->GetModelCfTrueIdealCfTrueRatio();
+      TF1* tMomResFitALamKchP = ALamKchPMC->GetMomResFit();
+    TH1* tRatioLamKchM = LamKchMMC->GetModelCfTrueIdealCfTrueRatio();
+      TF1* tMomResFitLamKchM = LamKchMMC->GetMomResFit();
+    TH1* tRatioALamKchM = ALamKchMMC->GetModelCfTrueIdealCfTrueRatio();
+      TF1* tMomResFitALamKchM = ALamKchMMC->GetMomResFit();
     //-----
 
     double yMin = 0.86;
@@ -522,11 +494,11 @@ int main(int argc, char **argv)
 
   if(bDrawCorrectedKStarCfs)
   {
-    DataAndModel* tLamKchPwModel = new DataAndModel(LamKchP,LamKchPMCTot,0.32,0.40,2);
-    DataAndModel* tALamKchPwModel = new DataAndModel(ALamKchP,ALamKchPMCTot,0.32,0.40,2);
+    DataAndModel* tLamKchPwModel = new DataAndModel(LamKchP,LamKchPMC,0.32,0.40,2);
+    DataAndModel* tALamKchPwModel = new DataAndModel(ALamKchP,ALamKchPMC,0.32,0.40,2);
 
-    DataAndModel* tLamKchMwModel = new DataAndModel(LamKchM,LamKchMMCTot,0.32,0.40,2);
-    DataAndModel* tALamKchMwModel = new DataAndModel(ALamKchM,ALamKchMMCTot,0.32,0.40,2);
+    DataAndModel* tLamKchMwModel = new DataAndModel(LamKchM,LamKchMMC,0.32,0.40,2);
+    DataAndModel* tALamKchMwModel = new DataAndModel(ALamKchM,ALamKchMMC,0.32,0.40,2);
 
     TCanvas* canCorrected = new TCanvas("canCorrected","canCorrected");
     canCorrected->Divide(2,2);
@@ -568,15 +540,15 @@ int main(int argc, char **argv)
     double Color3 = 3;
     double Color4 = 4;
 
-    LamKchPMCTot->BuildModelCfTrueIdealCfTrueRatio(0.32,0.40,2);
-    ALamKchPMCTot->BuildModelCfTrueIdealCfTrueRatio(0.32,0.40,2);
-    LamKchMMCTot->BuildModelCfTrueIdealCfTrueRatio(0.32,0.40,2);
-    ALamKchMMCTot->BuildModelCfTrueIdealCfTrueRatio(0.32,0.40,2);
+    LamKchPMC->BuildModelCfTrueIdealCfTrueRatio(0.32,0.40,2);
+    ALamKchPMC->BuildModelCfTrueIdealCfTrueRatio(0.32,0.40,2);
+    LamKchMMC->BuildModelCfTrueIdealCfTrueRatio(0.32,0.40,2);
+    ALamKchMMC->BuildModelCfTrueIdealCfTrueRatio(0.32,0.40,2);
 
-    LamKchPMCTot->BuildModelCfFakeIdealCfFakeRatio(0.32,0.40,2);
-    ALamKchPMCTot->BuildModelCfFakeIdealCfFakeRatio(0.32,0.40,2);
-    LamKchMMCTot->BuildModelCfFakeIdealCfFakeRatio(0.32,0.40,2);
-    ALamKchMMCTot->BuildModelCfFakeIdealCfFakeRatio(0.32,0.40,2);
+    LamKchPMC->BuildModelCfFakeIdealCfFakeRatio(0.32,0.40,2);
+    ALamKchPMC->BuildModelCfFakeIdealCfFakeRatio(0.32,0.40,2);
+    LamKchMMC->BuildModelCfFakeIdealCfFakeRatio(0.32,0.40,2);
+    ALamKchMMC->BuildModelCfFakeIdealCfFakeRatio(0.32,0.40,2);
 
     LamKchP->BuildKStarHeavyCf();
     ALamKchP->BuildKStarHeavyCf();
@@ -590,70 +562,70 @@ int main(int argc, char **argv)
     ALamKchM->GetKStarHeavyCf()->Rebin(2);
 
     //--------------------------------------------------------------------------------------------
-    TH1* LamKchPTrue = LamKchPMCTot->GetModelKStarHeavyCfTrue()->GetHeavyCfClone();
+    TH1* LamKchPTrue = LamKchPMC->GetModelKStarHeavyCfTrue()->GetHeavyCfClone();
       LamKchPTrue->SetLineColor(Color1);
       LamKchPTrue->SetMarkerColor(Color1);
       LamKchPTrue->SetMarkerStyle(Style1);
-    TH1* LamKchPTrueIdeal = LamKchPMCTot->GetModelKStarHeavyCfTrueIdeal()->GetHeavyCfClone();
+    TH1* LamKchPTrueIdeal = LamKchPMC->GetModelKStarHeavyCfTrueIdeal()->GetHeavyCfClone();
       LamKchPTrueIdeal->SetLineColor(Color2);
       LamKchPTrueIdeal->SetMarkerColor(Color2);
       LamKchPTrueIdeal->SetMarkerStyle(Style2);
-    TH1* LamKchPFake = LamKchPMCTot->GetModelKStarHeavyCfFake()->GetHeavyCfClone();
+    TH1* LamKchPFake = LamKchPMC->GetModelKStarHeavyCfFake()->GetHeavyCfClone();
       LamKchPFake->SetLineColor(Color3);
       LamKchPFake->SetMarkerColor(Color3);
       LamKchPFake->SetMarkerStyle(Style3);
-    TH1* LamKchPFakeIdeal = LamKchPMCTot->GetModelKStarHeavyCfFakeIdeal()->GetHeavyCfClone();
+    TH1* LamKchPFakeIdeal = LamKchPMC->GetModelKStarHeavyCfFakeIdeal()->GetHeavyCfClone();
       LamKchPFakeIdeal->SetLineColor(Color4);
       LamKchPFakeIdeal->SetMarkerColor(Color4);
       LamKchPFakeIdeal->SetMarkerStyle(Style4);
 
-    TH1* ALamKchPTrue = ALamKchPMCTot->GetModelKStarHeavyCfTrue()->GetHeavyCfClone();
+    TH1* ALamKchPTrue = ALamKchPMC->GetModelKStarHeavyCfTrue()->GetHeavyCfClone();
       ALamKchPTrue->SetLineColor(Color1);
       ALamKchPTrue->SetMarkerColor(Color1);
       ALamKchPTrue->SetMarkerStyle(Style1);
-    TH1* ALamKchPTrueIdeal = ALamKchPMCTot->GetModelKStarHeavyCfTrueIdeal()->GetHeavyCfClone();
+    TH1* ALamKchPTrueIdeal = ALamKchPMC->GetModelKStarHeavyCfTrueIdeal()->GetHeavyCfClone();
       ALamKchPTrueIdeal->SetLineColor(Color2);
       ALamKchPTrueIdeal->SetMarkerColor(Color2);
       ALamKchPTrueIdeal->SetMarkerStyle(Style2);
-    TH1* ALamKchPFake = ALamKchPMCTot->GetModelKStarHeavyCfFake()->GetHeavyCfClone();
+    TH1* ALamKchPFake = ALamKchPMC->GetModelKStarHeavyCfFake()->GetHeavyCfClone();
       ALamKchPFake->SetLineColor(Color3);
       ALamKchPFake->SetMarkerColor(Color3);
       ALamKchPFake->SetMarkerStyle(Style3);
-    TH1* ALamKchPFakeIdeal = ALamKchPMCTot->GetModelKStarHeavyCfFakeIdeal()->GetHeavyCfClone();
+    TH1* ALamKchPFakeIdeal = ALamKchPMC->GetModelKStarHeavyCfFakeIdeal()->GetHeavyCfClone();
       ALamKchPFakeIdeal->SetLineColor(Color4);
       ALamKchPFakeIdeal->SetMarkerColor(Color4);
       ALamKchPFakeIdeal->SetMarkerStyle(Style4);
 
-    TH1* LamKchMTrue = LamKchMMCTot->GetModelKStarHeavyCfTrue()->GetHeavyCfClone();
+    TH1* LamKchMTrue = LamKchMMC->GetModelKStarHeavyCfTrue()->GetHeavyCfClone();
       LamKchMTrue->SetLineColor(Color1);
       LamKchMTrue->SetMarkerColor(Color1);
       LamKchMTrue->SetMarkerStyle(Style1);
-    TH1* LamKchMTrueIdeal = LamKchMMCTot->GetModelKStarHeavyCfTrueIdeal()->GetHeavyCfClone();
+    TH1* LamKchMTrueIdeal = LamKchMMC->GetModelKStarHeavyCfTrueIdeal()->GetHeavyCfClone();
       LamKchMTrueIdeal->SetLineColor(Color2);
       LamKchMTrueIdeal->SetMarkerColor(Color2);
       LamKchMTrueIdeal->SetMarkerStyle(Style2);
-    TH1* LamKchMFake = LamKchMMCTot->GetModelKStarHeavyCfFake()->GetHeavyCfClone();
+    TH1* LamKchMFake = LamKchMMC->GetModelKStarHeavyCfFake()->GetHeavyCfClone();
       LamKchMFake->SetLineColor(Color3);
       LamKchMFake->SetMarkerColor(Color3);
       LamKchMFake->SetMarkerStyle(Style3);
-    TH1* LamKchMFakeIdeal = LamKchMMCTot->GetModelKStarHeavyCfFakeIdeal()->GetHeavyCfClone();
+    TH1* LamKchMFakeIdeal = LamKchMMC->GetModelKStarHeavyCfFakeIdeal()->GetHeavyCfClone();
       LamKchMFakeIdeal->SetLineColor(Color4);
       LamKchMFakeIdeal->SetMarkerColor(Color4);
       LamKchMFakeIdeal->SetMarkerStyle(Style4);
 
-    TH1* ALamKchMTrue = ALamKchMMCTot->GetModelKStarHeavyCfTrue()->GetHeavyCfClone();
+    TH1* ALamKchMTrue = ALamKchMMC->GetModelKStarHeavyCfTrue()->GetHeavyCfClone();
       ALamKchMTrue->SetLineColor(Color1);
       ALamKchMTrue->SetMarkerColor(Color1);
       ALamKchMTrue->SetMarkerStyle(Style1);
-    TH1* ALamKchMTrueIdeal = ALamKchMMCTot->GetModelKStarHeavyCfTrueIdeal()->GetHeavyCfClone();
+    TH1* ALamKchMTrueIdeal = ALamKchMMC->GetModelKStarHeavyCfTrueIdeal()->GetHeavyCfClone();
       ALamKchMTrueIdeal->SetLineColor(Color2);
       ALamKchMTrueIdeal->SetMarkerColor(Color2);
       ALamKchMTrueIdeal->SetMarkerStyle(Style2);
-    TH1* ALamKchMFake = ALamKchMMCTot->GetModelKStarHeavyCfFake()->GetHeavyCfClone();
+    TH1* ALamKchMFake = ALamKchMMC->GetModelKStarHeavyCfFake()->GetHeavyCfClone();
       ALamKchMFake->SetLineColor(Color3);
       ALamKchMFake->SetMarkerColor(Color3);
       ALamKchMFake->SetMarkerStyle(Style3);
-    TH1* ALamKchMFakeIdeal = ALamKchMMCTot->GetModelKStarHeavyCfFakeIdeal()->GetHeavyCfClone();
+    TH1* ALamKchMFakeIdeal = ALamKchMMC->GetModelKStarHeavyCfFakeIdeal()->GetHeavyCfClone();
       ALamKchMFakeIdeal->SetLineColor(Color4);
       ALamKchMFakeIdeal->SetMarkerColor(Color4);
       ALamKchMFakeIdeal->SetMarkerStyle(Style4);
@@ -732,20 +704,20 @@ int main(int argc, char **argv)
 
   if(bDrawAllKStarTrueVsRec)
   {
-    LamKchPMCTot->BuildAllModelKStarTrueVsRecTotal();
-    ALamKchPMCTot->BuildAllModelKStarTrueVsRecTotal();
-    LamKchMMCTot->BuildAllModelKStarTrueVsRecTotal();
-    ALamKchMMCTot->BuildAllModelKStarTrueVsRecTotal();
+    LamKchPMC->BuildAllModelKStarTrueVsRecTotal();
+    ALamKchPMC->BuildAllModelKStarTrueVsRecTotal();
+    LamKchMMC->BuildAllModelKStarTrueVsRecTotal();
+    ALamKchMMC->BuildAllModelKStarTrueVsRecTotal();
 
-    TH2* LamKchPTrueVsRecSame = LamKchPMCTot->GetModelKStarTrueVsRecTotal(kSame);
-    TH2* LamKchPTrueVsRecRotSame = LamKchPMCTot->GetModelKStarTrueVsRecTotal(kRotSame);
-    TH2* LamKchPTrueVsRecMixed = LamKchPMCTot->GetModelKStarTrueVsRecTotal(kMixed);
-    TH2* LamKchPTrueVsRecRotMixed = LamKchPMCTot->GetModelKStarTrueVsRecTotal(kRotMixed);
+    TH2* LamKchPTrueVsRecSame = LamKchPMC->GetModelKStarTrueVsRecTotal(kSame);
+    TH2* LamKchPTrueVsRecRotSame = LamKchPMC->GetModelKStarTrueVsRecTotal(kRotSame);
+    TH2* LamKchPTrueVsRecMixed = LamKchPMC->GetModelKStarTrueVsRecTotal(kMixed);
+    TH2* LamKchPTrueVsRecRotMixed = LamKchPMC->GetModelKStarTrueVsRecTotal(kRotMixed);
 /*
     TH2* LamKchPTrueVsRecSame2 = (TH2*)LamKchPTrueVsRecSame->Clone();
-    TH2* ALamKchPTrueVsRecSame = ALamKchPMCTot->GetModelKStarTrueVsRecTotal(kSame);
-    TH2* LamKchMTrueVsRecSame = LamKchMMCTot->GetModelKStarTrueVsRecTotal(kSame);
-    TH2* ALamKchMTrueVsRecSame = ALamKchMMCTot->GetModelKStarTrueVsRecTotal(kSame);
+    TH2* ALamKchPTrueVsRecSame = ALamKchPMC->GetModelKStarTrueVsRecTotal(kSame);
+    TH2* LamKchMTrueVsRecSame = LamKchMMC->GetModelKStarTrueVsRecTotal(kSame);
+    TH2* ALamKchMTrueVsRecSame = ALamKchMMC->GetModelKStarTrueVsRecTotal(kSame);
 */
     TCanvas *canKStarTrueVsRec = new TCanvas("canKStarTrueVsRec","canKStarTrueVsRec");
     canKStarTrueVsRec->Divide(2,2);
@@ -874,7 +846,7 @@ tProject3->DrawCopy();
     if(bSaveFigures)
     {
       TString aName = "cLamcKchKStarCfRatios.eps";
-      canKStarRatios->SaveAs(tSaveFiguresLocation+aName);
+      canKStarRatios->SaveAs(tSaveDirectoryBase+aName);
     }
 
   }
@@ -965,7 +937,7 @@ tProject3->DrawCopy();
     if(bSaveFigures)
     {
       TString aName = "cLamcKchPart1MassFail.eps";
-      canPart1MassFail->SaveAs(tSaveFiguresLocation+aName);
+      canPart1MassFail->SaveAs(tSaveDirectoryBase+aName);
     }
   }
 
@@ -990,32 +962,46 @@ tProject3->DrawCopy();
     if(bSaveFigures)
     {
       TString aName = "cLamcKchPurity.eps";
-      canPurity->SaveAs(tSaveFiguresLocation+aName);
+      canPurity->SaveAs(tSaveDirectoryBase+aName);
 
       TString aName2 = "LamPurity_LamKchP.eps";
-      canPurity->cd(1)->SaveAs(tSaveFiguresLocation+aName2);
+      canPurity->cd(1)->SaveAs(tSaveDirectoryBase+aName2);
     }
 
   }
 
   if(bContainsPurity && bDrawMC)
   {
-    LamKchPMCTot->GetMCKchPurity(true);
-    LamKchPMCTot->GetMCKchPurity(false);
+    LamKchPMC->GetMCKchPurity(true);
+    LamKchPMC->GetMCKchPurity(false);
 
-    LamKchMMCTot->GetMCKchPurity(true);
-    LamKchMMCTot->GetMCKchPurity(false);
+    LamKchMMC->GetMCKchPurity(true);
+    LamKchMMC->GetMCKchPurity(false);
 
-    ALamKchPMCTot->GetMCKchPurity(true);
-    ALamKchPMCTot->GetMCKchPurity(false);
+    ALamKchPMC->GetMCKchPurity(true);
+    ALamKchPMC->GetMCKchPurity(false);
 
-    ALamKchMMCTot->GetMCKchPurity(true);
-    ALamKchMMCTot->GetMCKchPurity(false);
+    ALamKchMMC->GetMCKchPurity(true);
+    ALamKchMMC->GetMCKchPurity(false);
   }
 
 
+  if(bDrawKchdEdx)
+  {
+    bool tDrawLogz = false;
+    TCanvas* tCandEdX_LamKchP_KchP = LamKchP->DrawKchdEdx(kKchP, tDrawLogz);
+    TCanvas* tCandEdX_LamKchP_KchM = LamKchM->DrawKchdEdx(kKchM, tDrawLogz);
+
+    if(bSaveFigures)
+    {
+      tCandEdX_LamKchP_KchP->SaveAs(TString::Format("%s%s.eps", tSaveDirectoryBase.Data(), tCandEdX_LamKchP_KchP->GetName()));
+      tCandEdX_LamKchP_KchM->SaveAs(TString::Format("%s%s.eps", tSaveDirectoryBase.Data(), tCandEdX_LamKchP_KchM->GetName()));
+    }
+  }
+
 
 //-------------------------------------------------------------------------------
+  cout << "DONE" << endl;
   theApp->Run(kTRUE); //Run the TApp to pause the code.
   // Select "Exit ROOT" from Canvas "File" menu to exit
   // and execute the next statements.
