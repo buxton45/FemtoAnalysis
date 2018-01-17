@@ -1,4 +1,4 @@
-\begin{thebibliography}{1}
+\begin{thebibliography}{10}
 
 \bibitem{Lednicky:82}
 R.~Lednicky and V.~L. Lyuboshitz.
@@ -25,6 +25,29 @@ Richard Lednicky.
 \newblock {Finite-size effects on two-particle production in continuous and
   discrete spectrum}.
 \newblock {\em Phys. Part. Nucl.}, 40:307--352, 2009.
+
+\bibitem{Kisiel:2014mma}
+Adam Kisiel, Hanna Zbroszczyk, and Maciej Szymański.
+\newblock {Extracting baryon-antibaryon strong interaction potentials from
+  p$\bar{\Lambda}$ femtoscopic correlation functions}.
+\newblock {\em Phys. Rev.}, C89(5):054916, 2014.
+
+\bibitem{Salzwedel:2241303}
+Jai Salzwedel and Thomas Humanic.
+\newblock {Lambda femtoscopy in $\sqrt{s_{NN}}=2.76$ TeV Pb-Pb collisions at
+  ALICE}, Jan 2017.
+\newblock Presented 15 Dec 2016.
+
+\bibitem{Liu:2006xja}
+Yan-Rui Liu and Shi-Lin Zhu.
+\newblock {Meson-baryon scattering lengths in HB chi PT}.
+\newblock {\em Phys. Rev.}, D75:034003, 2007.
+
+\bibitem{Mai:2009ce}
+Maxim Mai, Peter~C. Bruns, Bastian Kubis, and Ulf-G. Meissner.
+\newblock {Aspects of meson-baryon scattering in three and two-flavor chiral
+  perturbation theory}.
+\newblock {\em Phys. Rev.}, D80:094006, 2009.
 
 \bibitem{Adam:2015vja}
 Jaroslav Adam et~al.

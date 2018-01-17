@@ -795,7 +795,7 @@ CanvasPartition* FitGenerator::BuildKStarCfswFitsCanvasPartition(TString aCanvas
       tCanPart->AddGraph(i,j,(TF1*)fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetPrimaryFit(),"");
       tCanPart->AddGraph(i,j,tCorrectedFitHisto,"",20,tColorCorrectFit,0.5,"lsame");
       if(aDrawSysErrors) tCanPart->AddGraph(i,j,tHistToPlot,"",20,tColorTransparent,0.5,"e2psame");
-      tCanPart->AddGraph(i,j,(TH1*)fSharedAn->GetKStarCfHeavy(tAnalysisNumber)->GetHeavyCfClone(),"",20,tColor,0.5,"ex0same");  //draw again so data on top
+      if(aZoomROP) tCanPart->AddGraph(i,j,(TH1*)fSharedAn->GetKStarCfHeavy(tAnalysisNumber)->GetHeavyCfClone(),"",20,tColor,0.5,"ex0same");  //draw again so data on top
 
       TString tTextAnType = TString(cAnalysisRootTags[fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetAnalysisType()]);
       //TPaveText* tAnTypeName = tCanPart->SetupTPaveText(tTextAnType,i,j,0.89,0.85,0.05);
@@ -1012,7 +1012,7 @@ TCanvas* FitGenerator::DrawResiduals(int aAnalysisNumber, CentralityType aCentra
   if(aSaveImage)
   {
     ExistsSaveLocationBase();
-    TString tSaveLocationDir = TString::Format("%sResiduals/%s/%s/", fSaveLocationBase.Data(), cAnalysisBaseTags[tAnType], cCentralityTags[aCentralityType]);
+    TString tSaveLocationDir = TString::Format("%sResiduals%s/%s/%s/", fSaveLocationBase.Data(), cIncludeResidualsTypeTags[fIncludeResidualsType], cAnalysisBaseTags[tAnType], cCentralityTags[aCentralityType]);
     gSystem->mkdir(tSaveLocationDir, true);
     tCan->SaveAs(tSaveLocationDir+tCan->GetName()+fSaveNameModifier+TString(".eps"));
   }
@@ -1232,7 +1232,7 @@ TObjArray* FitGenerator::DrawResidualsWithTransformMatrices(int aAnalysisNumber,
   if(aSaveImage)
   {
     ExistsSaveLocationBase();
-    TString tSaveLocationDir = TString::Format("%sResiduals/%s/%s/", fSaveLocationBase.Data(), cAnalysisBaseTags[tAnType], cCentralityTags[aCentralityType]);
+    TString tSaveLocationDir = TString::Format("%sResiduals%s/%s/%s/", fSaveLocationBase.Data(), cIncludeResidualsTypeTags[fIncludeResidualsType], cAnalysisBaseTags[tAnType], cCentralityTags[aCentralityType]);
     gSystem->mkdir(tSaveLocationDir, true);
     for(int i=0; i<tReturnArray->GetEntries(); i++)
     {
@@ -1541,7 +1541,7 @@ TObjArray* FitGenerator::DrawResidualsWithTransformMatrices(int aAnalysisNumber,
   if(aSaveImage)
   {
     ExistsSaveLocationBase();
-    TString tSaveLocationDir = TString::Format("%sResiduals/%s/%s/", fSaveLocationBase.Data(), cAnalysisBaseTags[tAnType], cCentralityTags[aCentralityType]);
+    TString tSaveLocationDir = TString::Format("%sResiduals%s/%s/%s/", fSaveLocationBase.Data(), cIncludeResidualsTypeTags[fIncludeResidualsType], cAnalysisBaseTags[tAnType], cCentralityTags[aCentralityType]);
     gSystem->mkdir(tSaveLocationDir, true);
     for(int i=0; i<tReturnArray->GetEntries(); i++)
     {
@@ -1816,7 +1816,7 @@ TCanvas* FitGenerator::DrawKStarCfswFitsAndResiduals(bool aMomResCorrectFit, boo
   if(aSaveImage)
   {
     ExistsSaveLocationBase();
-    TString tSaveLocationDir = TString::Format("%sResiduals/%s/", fSaveLocationBase.Data(), cAnalysisBaseTags[fSharedAn->GetFitPairAnalysis(0)->GetAnalysisType()]);
+    TString tSaveLocationDir = TString::Format("%sResiduals%s/%s/", fSaveLocationBase.Data(), cIncludeResidualsTypeTags[fIncludeResidualsType], cAnalysisBaseTags[fSharedAn->GetFitPairAnalysis(0)->GetAnalysisType()]);
     gSystem->mkdir(tSaveLocationDir, true);
     tCanPart->GetCanvas()->SaveAs(tSaveLocationDir+tCanPart->GetCanvas()->GetName()+fSaveNameModifier+TString(".eps"));
   }
