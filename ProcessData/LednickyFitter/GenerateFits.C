@@ -162,7 +162,20 @@ int main(int argc, char **argv)
       // Without limits, the fit converges (with lambda values within limits!)
   }
 
+  if(tAnType==kLamKchP && tIncludeResidualsType==kIncludeNoResiduals && tResultsDate.EqualTo("20171227"))
+  {
+//    tLamKchP->SetAllLambdaParamLimits(0.35,0.65);
+/*
+    tLamKchP->SetLambdaParamLimits(0.30, 0.50, false, k0010);
+    tLamKchP->SetLambdaParamLimits(0.30, 0.50, true, k0010);
 
+    tLamKchP->SetLambdaParamLimits(0.30, 0.50, false, k1030);
+    tLamKchP->SetLambdaParamLimits(0.30, 0.50, true, k1030);
+
+    tLamKchP->SetLambdaParamLimits(0.50, 0.70, false, k3050);
+    tLamKchP->SetLambdaParamLimits(0.50, 0.70, true, k3050);
+*/
+  }
 
 
 

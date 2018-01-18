@@ -1779,7 +1779,7 @@ struct FitInfo
   Color_t tColorQM_LamKchM = kBlue+1;
   Color_t tColorQM_LamK0 = kBlack;
 
-
+/*
   const FitInfo tFitInfoQM_LamKchP = FitInfo(TString("QM2017"), 
                                        kLamKchP,
                                        true, true, true, false, 
@@ -1799,7 +1799,77 @@ struct FitInfo
                                        336,
 
                                        tColorQM_LamKchP, tMarkerStyleA1);
+*/
+/*
+  //SingleLambdaLimit
+  const FitInfo tFitInfoQM_LamKchP = FitInfo(TString("FreeRadii_FreeD0_NoRes"), 
+                                       kLamKchP,
+                                       true, true, true, false, 
+                                       0.5*(0.56+0.56), 0.5*(0.23+0.23), 0.5*(0.22+0.22),
+                                       0.5*(0.62+0.54), 0.5*(0.27+0.23), 0.5*(0.24+0.20),
+                                       0.5*(0.65+0.64), 0.5*(0.28+0.23), 0.5*(0.20+0.20),
 
+                                       5.200, 0.830, 0.830,
+                                       4.580, 0.700, 0.663,
+                                       3.780, 0.590, 0.420,
+
+                                      -0.54, 0.13, 0.22,
+                                       0.51, 0.27, 0.11,
+                                       0.60, 0.78, 1.62,
+
+                                       415.4,
+                                       336,
+
+                                       tColorQM_LamKchP, tMarkerStyleA1);
+*/
+
+  //CustomLambdaLimits
+  const FitInfo tFitInfoQM_LamKchP = FitInfo(TString("FreeRadii_FreeD0_NoRes"), 
+                                       kLamKchP,
+                                       true, true, true, false, 
+                                       0.5*(0.47+0.46), 0.5*(0.17+0.17), 0.5*(0.22+0.22),
+                                       0.5*(0.50+0.44), 0.5*(0.17+0.03), 0.5*(0.24+0.20),
+                                       0.5*(0.59+0.58), 0.5*(0.14+0.13), 0.5*(0.20+0.20),
+
+                                       4.990, 0.830, 0.830,
+                                       4.350, 0.600, 0.663,
+                                       3.790, 0.700, 0.420,
+
+                                      -0.65, 0.13, 0.22,
+                                       0.56, 0.28, 0.11,
+                                       0.86, 0.54, 1.62,
+
+                                       415.7,
+                                       336,
+
+                                       tColorQM_LamKchP, tMarkerStyleA1);
+ 
+
+
+
+  const FitInfo tFitInfoQM_LamKchP_FixD0 = FitInfo(TString("FreeRadii_FixedD0_NoRes"), 
+                                       kLamKchP,
+                                       true, true, false, false, 
+                                       0.5*(0.75+0.74), 0.5*(0.31+0.30), 0.5*(0.22+0.22),
+                                       0.5*(0.79+0.69), 0.5*(0.29+0.25), 0.5*(0.24+0.20),
+                                       0.5*(0.87+0.86), 0.5*(0.37+0.36), 0.5*(0.20+0.20),
+
+                                       5.550, 1.190, 0.830,
+                                       4.790, 0.880, 0.663,
+                                       4.060, 0.860, 0.420,
+
+                                      -0.42, 0.12, 0.22,
+                                       0.45, 0.22, 0.11,
+                                       0.00, 0.00, 1.62,
+
+                                       415.0,
+                                       336,
+
+                                       tColorQM_LamKchP, tMarkerStyleA1);
+
+  //---------------------------------
+
+/*
   const FitInfo tFitInfoQM_LamKchM = FitInfo(TString("QM2017"), 
                                        kLamKchM,
                                        true, true, true, false, 
@@ -1819,7 +1889,51 @@ struct FitInfo
                                        288,
 
                                        tColorQM_LamKchM, tMarkerStyleA1);
+*/
 
+  const FitInfo tFitInfoQM_LamKchM = FitInfo(TString("FreeRadii_FreeD0_NoRes"), 
+                                       kLamKchM,
+                                       true, true, true, false, 
+                                       0.5*(0.46+0.49), 0.5*(0.16+0.16), 0.5*(0.19+0.15),
+                                       0.5*(0.37+0.40), 0.5*(0.12+0.13), 0.5*(0.20+0.15),
+                                       0.5*(0.21+0.22), 0.5*(0.08+0.08), 0.5*(0.13+0.11),
+
+                                       4.990, 0.750, 1.375,
+                                       3.950, 0.630, 0.978,
+                                       2.340, 0.530, 0.457,
+
+                                       0.22, 0.12, 0.10,
+                                       0.50, 0.16, 0.18,
+                                      -4.51, 2.05, 7.66,
+
+                                       279.1,
+                                       288,
+
+                                       tColorQM_LamKchM, tMarkerStyleA1);
+
+  const FitInfo tFitInfoQM_LamKchM_FixD0 = FitInfo(TString("FreeRadii_FixedD0_NoRes"), 
+                                       kLamKchM,
+                                       true, true, false, false, 
+                                       0.5*(0.82+0.87), 0.5*(0.48+0.50), 0.5*(0.19+0.15),
+                                       0.5*(0.67+0.71), 0.5*(0.40+0.43), 0.5*(0.20+0.15),
+                                       0.5*(0.38+0.40), 0.5*(0.24+0.25), 0.5*(0.13+0.11),
+
+                                       4.800, 0.660, 1.375,
+                                       3.840, 0.590, 0.978,
+                                       2.290, 0.490, 0.457,
+
+                                       0.12, 0.08, 0.10,
+                                       0.28, 0.15, 0.18,
+                                       0.00, 0.00, 7.66,
+
+                                       282.2,
+                                       288,
+
+                                       tColorQM_LamKchM, tMarkerStyleA1);
+
+  //---------------------------------
+
+/*
   const FitInfo tFitInfoQM_LamK0 = FitInfo(TString("QM2017"), 
                                        kLamK0,
                                        true, true, true, false, 
@@ -1839,6 +1953,48 @@ struct FitInfo
                                        341,
 
                                        tColorQM_LamK0, tMarkerStyleA1);
+*/
+
+  const FitInfo tFitInfoQM_LamK0 = FitInfo(TString("FreeRadii_FreeD0_NoRes"), 
+                                       kLamK0,
+                                       true, true, true, false, 
+                                       0.5*(0.40+0.40), 0.5*(0.20+0.20), 0.5*(0.12+0.12),
+                                       0.5*(0.40+0.40), 0.5*(0.20+0.20), 0.5*(0.12+0.12),
+                                       0.5*(0.40+0.40), 0.5*(0.20+0.20), 0.5*(0.12+0.12),
+
+                                       3.080, 0.810, 0.329,
+                                       2.320, 0.410, 0.324,
+                                       1.750, 0.300, 0.280,
+
+                                      -0.20, 0.04, 0.04,
+                                       0.19, 0.08, 0.06,
+                                       3.08, 0.81, 2.84,
+
+                                       361.9,
+                                       341,
+
+                                       tColorQM_LamK0, tMarkerStyleA1);
+
+  const FitInfo tFitInfoQM_LamK0_FixD0 = FitInfo(TString("FreeRadii_FixedD0_NoRes"), 
+                                       kLamK0,
+                                       true, true, false, false, 
+                                       0.5*(0.60+0.60), 0.5*(0.19+0.19), 0.5*(0.12+0.12),
+                                       0.5*(0.60+0.60), 0.5*(0.19+0.19), 0.5*(0.12+0.12),
+                                       0.5*(0.60+0.60), 0.5*(0.19+0.19), 0.5*(0.12+0.12),
+
+                                       3.150, 0.690, 0.329,
+                                       2.460, 0.530, 0.324,
+                                       1.820, 0.380, 0.280,
+
+                                      -0.11, 0.02, 0.04,
+                                       0.16, 0.10, 0.06,
+                                       0.00, 0.00, 2.84,
+
+                                       364.8,
+                                       341,
+
+                                       tColorQM_LamK0, tMarkerStyleA1);
+
 
 
 //------------------------------------------------------------------------------------------------
@@ -1997,6 +2153,7 @@ struct DrawAcrossAnalysesInfo
   //-----
 
   int tMarkerStyle_QM = 20;
+  int tMarkerStyle_QM_FixedD0 = 24;
 
   int tMarkerStyle_10and3_Avg_FreeD0 = 21;
   int tMarkerStyle_10and3_Avg_FixedD0 = 25;
@@ -2011,11 +2168,22 @@ struct DrawAcrossAnalysesInfo
   int tMarkerStyle_3_Avg = 49;
 
 //-------------------------------------------
-
+/*
   const DrawAcrossAnalysesInfo tDrawInfo_QM = DrawAcrossAnalysesInfo(TString("QM 2017"),
                                                                      TString("_QM2017"),
                                                                      kIncludeNoRes, kFreeD0Only,
                                                                      tMarkerStyle_QM, tMarkerSizeSingle);
+*/
+
+  const DrawAcrossAnalysesInfo tDrawInfo_QM = DrawAcrossAnalysesInfo(TString("No Res., Free d_{0}"),
+                                                                     TString("_NoRes_FreeD0"),
+                                                                     kIncludeNoRes, kFreeD0Only,
+                                                                     tMarkerStyle_QM, tMarkerSizeSingle);
+
+  const DrawAcrossAnalysesInfo tDrawInfo_QM_FixD0 = DrawAcrossAnalysesInfo(TString("No Res., Fix d_{0}"),
+                                                                     TString("_NoRes_FixD0"),
+                                                                     kIncludeNoRes, kFixedD0Only,
+                                                                     tMarkerStyle_QM_FixedD0, tMarkerSizeSingle);
 
   //-----
 
@@ -2071,17 +2239,17 @@ struct DrawAcrossAnalysesInfo
 
 //------------------------------------------------------------------------------------------------
 
-  const vector<DrawAcrossAnalysesInfo> tDrawAcrossAnalysesInfoVec{tDrawInfo_QM,
+  const vector<DrawAcrossAnalysesInfo> tDrawAcrossAnalysesInfoVec{tDrawInfo_QM, tDrawInfo_QM_FixD0,
                                                                   tDrawInfo_10and3_Avg_FreeD0, tDrawInfo_10and3_Avg_FixedD0, tDrawInfo_10and3_Avg, 
                                                                   tDrawInfo_10_FreeD0,         tDrawInfo_10_FixedD0,         tDrawInfo_10_Avg,
                                                                   tDrawInfo_3_FreeD0,          tDrawInfo_3_FixedD0,          tDrawInfo_3_Avg};
 
-  const vector<bool> tIncludePlotsv1{true,
+  const vector<bool> tIncludePlotsv1{true, false, 
                                      false, false, true, 
                                      true,  false, true, 
                                      true,  false, true};
 
-  const vector<bool> tIncludePlotsv2{true,
+  const vector<bool> tIncludePlotsv2{true, false,
                                      true, true, false, 
                                      true, true, false, 
                                      true, true, false};
