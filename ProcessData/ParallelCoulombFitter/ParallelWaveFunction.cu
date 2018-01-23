@@ -813,8 +813,6 @@ __global__ void GetEntireCfCompletewStaticPairs(double aRadiusScale, double aReF
 }
 
 
-
-
 //________________________________________________________________________________________________________________
 __global__ void RandInit(curandState *state, unsigned long seed, int aOffset)
 {
@@ -1462,8 +1460,9 @@ vector<double> ParallelWaveFunction::RunInterpolateEntireCfComplete(td3dVec &aPa
 //________________________________________________________________________________________________________________
 td2dVec ParallelWaveFunction::RunInterpolateEntireCfCompletewStaticPairs(int aAnalysisNumber, double aRadiusScale, double aReF0s, double aImF0s, double aD0s, double aReF0t, double aImF0t, double aD0t)
 {
-//  GpuTimer timerPre;
-//  timerPre.Start();
+  GpuTimer timer;
+  timer.Start();
+
   int tNBins = fSamplePairsBinInfo.nBinsK;
 //  int tNPairsPerBin = fSamplePairsBinInfo.nPairsPerBin;
   int tSizeOutput = tNBins*fNBlocks*sizeof(double); //the kernel reduces the values for tNPairs bins down to fNBlocks bins
@@ -1486,31 +1485,31 @@ td2dVec ParallelWaveFunction::RunInterpolateEntireCfCompletewStaticPairs(int aAn
     cudaStreamCreate(&tStreams[i]);
   }
 
-//  timerPre.Stop();
-//  std::cout << " timerPre: " << timerPre.Elapsed() << " ms" << std::endl;
+  timer.Stop();
+  std::cout << " Setup time: " << timer.Elapsed() << " ms" << std::endl;
 
 
   //----------Run the kernels-----------------------------------------------
-//  GpuTimer timer;
-//  timer.Start();
+  timer.Start();
 
   for(int i=0; i<tNBins; i++)
   {
     int tOffsetOutput = i*fNBlocks;
     GetEntireCfCompletewStaticPairs<<<fNBlocks,fNThreadsPerBlock,tSizeShared,tStreams[i]>>>(aRadiusScale, aReF0s, aImF0s, aD0s, aReF0t, aImF0t, aD0t, h_CfSums, h_CfCounts, aAnalysisNumber, i, tOffsetOutput);
   }
-//  timer.Stop();
-//  std::cout << "GetEntireCf kernel finished in " << timer.Elapsed() << " ms" << std::endl;
-
-//  GpuTimer timerPost;
-//  timerPost.Start();
-
   //The following is necessary for the host to be able to "see" the changes that have been done
   checkCudaErrors(cudaDeviceSynchronize());
+  timer.Stop();
+  std::cout << " GetEntireCfCompletewStaticPairs kernel and cudaDeviceSynchronize() finished in " << timer.Elapsed() << " ms" << std::endl;
+  //NOTE: cudaDeviceSynchronize should be included in kernel time calculation because...
+  //  The kernel call is asynchronous, meaning it launches the kernel and then immediately returns control to the host thread, allowing the host thread to continue. 
+  //  Therefore the overhead in the host thread for a kernel call may be as low as a few microseconds.
 
+  timer.Start();
   // return the CF
   td2dVec tReturnVec;
     tReturnVec.resize(tNBins,td1dVec(2));
+
   double tSum = 0.0;
   int tCounts = 0;
   for(int i=0; i<tNBins; i++)
@@ -1531,8 +1530,8 @@ td2dVec ParallelWaveFunction::RunInterpolateEntireCfCompletewStaticPairs(int aAn
 
   for(int i=0; i<tNStreams; i++) cudaStreamDestroy(tStreams[i]);
 
-//  timerPost.Stop();
-//  std::cout << " timerPost: " << timerPost.Elapsed() << " ms" << std::endl;
+  timer.Stop();
+  std::cout << " timerPost: " << timer.Elapsed() << " ms" << std::endl;
 
   return tReturnVec;
 }

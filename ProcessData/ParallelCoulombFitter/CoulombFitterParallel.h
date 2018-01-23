@@ -59,9 +59,8 @@ public:
 
   //void CalculateChi2(int &npar, double &chi2, double *par);
 
-  void CalculateChi2PMLParallel(int &npar, double &chi2, double *par);
-  void CalculateChi2Parallel(int &npar, double &chi2, double *par);
-  void CalculateFakeChi2Parallel(int &npar, double &chi2, double *par);
+  void CalculateFitFunction(int &npar, double &chi2, double *par);
+  void CalculateFitFunctionFake(int &npar, double &chi2, double *par);
 
   TH1* CreateFitHistogramParallel(TString aName, int aAnalysisNumber);
   TH1* CreateFitHistogramSampleParallel(TString aName, AnalysisType aAnalysisType, int aNbinsK, double aKMin, double aKMax, double aLambda, double aR, double aReF0, double aImF0, double aD0, double aNorm);
