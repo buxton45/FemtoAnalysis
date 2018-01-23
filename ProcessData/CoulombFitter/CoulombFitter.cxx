@@ -72,7 +72,7 @@ CoulombFitter::CoulombFitter(FitSharedAnalyses* aFitSharedAnalyses, double aMaxF
   SetCoulombAttributes(fFitSharedAnalyses->GetFitPairAnalysis(0)->GetAnalysisType());
 
   omp_set_num_threads(3);
-
+  fVerbose=true;
 }
 
 
@@ -1387,7 +1387,7 @@ void CoulombFitter::CalculateFitFunction(int &npar, double &chi2, double *par)
   {
     FitPairAnalysis* tFitPairAnalysis = fFitSharedAnalyses->GetFitPairAnalysis(iAnaly);
     AnalysisType tAnalysisType = tFitPairAnalysis->GetAnalysisType();
-    SetCoulombAttributes(tAnalysisType);
+    SetCoulombAttributes(tAnalysisType);  //TODO probably put this in Initialize
 
     TH2* tMomResMatrix = NULL;
     if(fApplyMomResCorrection)

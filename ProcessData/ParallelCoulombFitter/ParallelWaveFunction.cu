@@ -428,13 +428,11 @@ __device__ cuDoubleComplex HyperGeo1F1Interpolate(double aKStar, double aRStar, 
 __device__ double GetEta(double aKStar)
 {
   double d_hbarc = 0.197327;
-  double d_gBohrRadius = 75.23349845;
 
-  //TODO figure out how to load hbarc and gBohrRadius into GPU
   //TODO figure out how to use Pi here
   //TODO figure out how to make bohr radius negative when needed
 
-  double tEta = pow(((aKStar/d_hbarc)*d_gBohrRadius),-1);
+  double tEta = pow(((aKStar/d_hbarc)*d_fBohrRadius),-1);
   return tEta;
 }
 
@@ -443,13 +441,11 @@ __device__ double GetEta(double aKStar)
 __device__ double GetGamowFactor(double aKStar)
 {
   double d_hbarc = 0.197327;
-  double d_gBohrRadius = 75.23349845;
 
-  //TODO figure out how to load hbarc and gBohrRadius into GPU
   //TODO figure out how to use Pi here
   //TODO figure out how to make bohr radius negative when needed
 
-  double tEta = pow(((aKStar/d_hbarc)*d_gBohrRadius),-1);
+  double tEta = pow(((aKStar/d_hbarc)*d_fBohrRadius),-1);
   tEta *= 6.28318530718;  //eta always comes with 2Pi here
   double tGamow = tEta*pow((exp(tEta)-1),-1);
 
@@ -459,7 +455,6 @@ __device__ double GetGamowFactor(double aKStar)
 //________________________________________________________________________________________________________________
 __device__ cuDoubleComplex GetExpTerm(double aKStar, double aRStar, double aTheta)
 {
-  //TODO figure out how to load hbarc and gBohrRadius into GPU
   double d_hbarc = 0.197327;
 
   double tReal = cos((aKStar/d_hbarc)*aRStar*cos(aTheta));
@@ -512,9 +507,7 @@ __device__ double AssembleWfSquared(double aRStarMag, double aGamowFactor, cuDou
 //________________________________________________________________________________________________________________
 __device__ cuDoubleComplex BuildScatteringLength(double aKStarMag, double aReF0, double aImF0, double aD0)
 {
-  //TODO figure out how to load hbarc and gBohrRadius into GPU
   double d_hbarc = 0.197327;
-  double d_gBohrRadius = 75.23349845;
 
   cuDoubleComplex tRealUnity = make_cuDoubleComplex(1.0,0);
   cuDoubleComplex tF0 = make_cuDoubleComplex(aReF0, aImF0);
@@ -550,7 +543,7 @@ __device__ cuDoubleComplex BuildScatteringLength(double aKStarMag, double aReF0,
     double tTerm2 = 0.5*aD0*tKStar*tKStar;
     cuDoubleComplex tTerm2Complex = make_cuDoubleComplex(tTerm2,0);
 
-    double tStupid = 2.0/d_gBohrRadius;
+    double tStupid = 2.0/d_fBohrRadius;
     cuDoubleComplex tMultFact = make_cuDoubleComplex(tStupid, 0);
     cuDoubleComplex tTerm3Complex = cuCmul(tMultFact,tLednickyChi);
 
@@ -748,6 +741,66 @@ __device__ bool CanInterpPair(double aKStar, double aRStar, double aTheta)
   return true;
 }
 
+//________________________________________________________________________________________________________________
+__global__ void GetEntireCfwStaticPairs(double aRadiusScale, double aReF0, double aImF0, double aD0, double *g_odata, double *g_odata2, int aAnalysisNumber, int aBinKNumber, int aOffsetOutput)
+{
+//  int idx = threadIdx.x + blockIdx.x*blockDim.x;
+
+  extern __shared__ double sdata2[][2];
+
+  unsigned int tid = threadIdx.x;
+  unsigned int tPairNumber = blockIdx.x*blockDim.x + threadIdx.x;
+  unsigned int i = GetSamplePairOffset(aAnalysisNumber,aBinKNumber,tPairNumber);
+
+  double tWfSq;
+  double tRadius = aRadiusScale*d_fPairSample4dVec[i+1];
+  if(CanInterpPair(d_fPairSample4dVec[i],tRadius,d_fPairSample4dVec[i+2]))
+  {
+    tWfSq = InterpolateWfSquared(d_fPairSample4dVec[i],tRadius,d_fPairSample4dVec[i+2],aReF0,aImF0,aD0);
+    sdata2[tid][0] = tWfSq;
+    sdata2[tid][1] = 1.;
+  }
+
+  else
+  {
+    sdata2[tid][0] = 0.;
+    sdata2[tid][1] = 0.;
+  }
+
+  __syncthreads();
+
+  //do reduction in shared mem
+  //strided
+  for(unsigned int s=1; s<blockDim.x; s*=2)
+  {
+    int index = 2*s*tid;
+
+    if(index < blockDim.x)
+    {
+      sdata2[index][0] += sdata2[index+s][0];
+      sdata2[index][1] += sdata2[index+s][1];
+    }
+    __syncthreads();
+  }
+/*
+  //sequential
+  for(unsigned int s=blockDim.x/2; s>0; s>>=1) //>>= is bitwise shift, here reducing s in powers of 2
+  {
+    if(tid < s)
+    {
+      sdata[tid] += sdata[tid + s];
+    }
+    __syncthreads();
+  }
+*/
+  //write result for this block to global mem
+  if(tid == 0) 
+  {
+    g_odata[blockIdx.x+aOffsetOutput] = sdata2[0][0];
+    g_odata2[blockIdx.x+aOffsetOutput] = sdata2[0][1];
+  }
+}
+
 
 //________________________________________________________________________________________________________________
 __global__ void GetEntireCfCompletewStaticPairs(double aRadiusScale, double aReF0s, double aImF0s, double aD0s, double aReF0t, double aImF0t, double aD0t, double *g_odata, double *g_odata2, int aAnalysisNumber, int aBinKNumber, int aOffsetOutput)
@@ -925,6 +978,13 @@ ParallelWaveFunction::~ParallelWaveFunction()
   checkCudaErrors(cudaFree(d_fHyperGeo1F1Real));
   checkCudaErrors(cudaFree(d_fHyperGeo1F1Imag));
   checkCudaErrors(cudaFree(d_fHyperGeo1F1Info));
+}
+
+
+//________________________________________________________________________________________________________________
+void ParallelWaveFunction::LoadBohrRadius(double aRadius)
+{
+  d_fBohrRadius = aRadius;
 }
 
 
@@ -1451,6 +1511,86 @@ vector<double> ParallelWaveFunction::RunInterpolateEntireCfComplete(td3dVec &aPa
 
 //  timerPost.Stop();
 //  std::cout << " timerPost: " << timerPost.Elapsed() << " ms" << std::endl;
+
+  return tReturnVec;
+}
+
+
+//________________________________________________________________________________________________________________
+td2dVec ParallelWaveFunction::RunInterpolateEntireCfwStaticPairs(int aAnalysisNumber, double aRadiusScale, double aReF0, double aImF0, double aD0)
+{
+  GpuTimer timer;
+//  timer.Start();
+
+  int tNBins = fSamplePairsBinInfo.nBinsK;
+//  int tNPairsPerBin = fSamplePairsBinInfo.nPairsPerBin;
+  int tSizeOutput = tNBins*fNBlocks*sizeof(double); //the kernel reduces the values for tNPairs bins down to fNBlocks bins
+  int tSizeShared = fNThreadsPerBlock*sizeof(double);
+  tSizeShared *= 2; //to account for Cf values and counts
+
+  const int tNStreams = tNBins;
+
+  //---Host arrays and allocations
+  double * h_CfSums;
+  double * h_CfCounts;
+
+  checkCudaErrors(cudaMallocManaged(&h_CfSums, tSizeOutput));
+  checkCudaErrors(cudaMallocManaged(&h_CfCounts, tSizeOutput));
+
+  cudaStream_t tStreams[tNStreams];
+
+  for(int i=0; i<tNBins; i++)
+  {
+    cudaStreamCreate(&tStreams[i]);
+  }
+
+//  timer.Stop();
+//  std::cout << " Setup time: " << timer.Elapsed() << " ms" << std::endl;
+
+
+  //----------Run the kernels-----------------------------------------------
+//  timer.Start();
+
+  for(int i=0; i<tNBins; i++)
+  {
+    int tOffsetOutput = i*fNBlocks;
+    GetEntireCfwStaticPairs<<<fNBlocks,fNThreadsPerBlock,tSizeShared,tStreams[i]>>>(aRadiusScale, aReF0, aImF0, aD0, h_CfSums, h_CfCounts, aAnalysisNumber, i, tOffsetOutput);
+  }
+  //The following is necessary for the host to be able to "see" the changes that have been done
+  checkCudaErrors(cudaDeviceSynchronize());
+//  timer.Stop();
+//  std::cout << " GetEntireCfwStaticPairs kernel and cudaDeviceSynchronize() finished in " << timer.Elapsed() << " ms" << std::endl;
+  //NOTE: cudaDeviceSynchronize should be included in kernel time calculation because...
+  //  The kernel call is asynchronous, meaning it launches the kernel and then immediately returns control to the host thread, allowing the host thread to continue. 
+  //  Therefore the overhead in the host thread for a kernel call may be as low as a few microseconds.
+
+//  timer.Start();
+  // return the CF
+  td2dVec tReturnVec;
+    tReturnVec.resize(tNBins,td1dVec(2));
+
+  double tSum = 0.0;
+  int tCounts = 0;
+  for(int i=0; i<tNBins; i++)
+  {
+    tSum=0.0;
+    tCounts = 0;
+    for(int j=0; j<fNBlocks; j++)
+    {
+      tSum += h_CfSums[j+i*fNBlocks]; 
+      tCounts += h_CfCounts[j+i*fNBlocks]; 
+    }
+    tReturnVec[i][0] = tSum;
+    tReturnVec[i][1] = tCounts;
+  }
+
+  checkCudaErrors(cudaFree(h_CfSums));
+  checkCudaErrors(cudaFree(h_CfCounts));
+
+  for(int i=0; i<tNStreams; i++) cudaStreamDestroy(tStreams[i]);
+
+//  timer.Stop();
+//  std::cout << " timerPost: " << timer.Elapsed() << " ms" << std::endl;
 
   return tReturnVec;
 }

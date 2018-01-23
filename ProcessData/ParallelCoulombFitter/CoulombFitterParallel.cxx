@@ -56,6 +56,8 @@ CoulombFitterParallel::CoulombFitterParallel(FitSharedAnalyses* aFitSharedAnalys
 {
   fParallelWaveFunction = new ParallelWaveFunction();
   SetVerbose(true);
+
+  SetCoulombAttributes(fFitSharedAnalyses->GetFitPairAnalysis(0)->GetAnalysisType());
 }
 
 
@@ -65,11 +67,22 @@ CoulombFitterParallel::~CoulombFitterParallel()
   cout << "CoulombFitterParallel object is being deleted!!!" << endl;
 
   //---Clean up
-  //TODO
-  delete fLednickyHFunctionHist;
+  if(fInterpHistsLoaded)
+  {
+    delete fLednickyHFunctionHist;
 
-  fInterpHistFileLednickyHFunction->Close();
-  delete fInterpHistFileLednickyHFunction;
+    fInterpHistFileLednickyHFunction->Close();
+    delete fInterpHistFileLednickyHFunction;
+
+    delete fHyperGeo1F1RealHist;
+    delete fHyperGeo1F1ImagHist;
+
+    delete fGTildeRealHist;
+    delete fGTildeImagHist;
+
+    fInterpHistFile->Close();
+    delete fInterpHistFile;
+  }
 
   //TODO figure out how to deallocate and delete multi dimensional vectors
 /*
@@ -80,6 +93,14 @@ CoulombFitterParallel::~CoulombFitterParallel()
   delete fGTildeImag;
 */
 }
+
+//________________________________________________________________________________________________________________
+void CoulombFitterParallel::SetCoulombAttributes(AnalysisType aAnalysisType)
+{
+  CoulombFitter::SetCoulombAttributes(aAnalysisType);
+  fParallelWaveFunction->LoadBohrRadius(fBohrRadius);
+}
+
 
 //________________________________________________________________________________________________________________
 void CoulombFitterParallel::PassHyperGeo1F1AndGTildeToParallelWaveFunction()
@@ -719,6 +740,90 @@ td1dVec CoulombFitterParallel::GetEntireFitCfContentComplete(double aKStarMagMin
 
 }
 
+//________________________________________________________________________________________________________________
+td1dVec CoulombFitterParallel::GetEntireFitCfContentwStaticPairs(double aKStarMagMin, double aKStarMagMax, double *par, int aAnalysisNumber)
+{
+  //par[0] = kLambda
+  //par[1] = kRadius
+  //par[2] = kRef0
+  //par[3] = kImf0
+  //par[4] = kd0
+  //par[5] = kNorm
+
+
+//ChronoTimer tUpdateTimer;
+//tUpdateTimer.Start();
+
+  if(abs(par[1]-fCurrentRadii[aAnalysisNumber]) > std::numeric_limits< double >::min()) UpdatePairRadiusParameter(par[1], aAnalysisNumber);
+
+//tUpdateTimer.Stop();
+//cout << "tUpdateTimer: ";
+//tUpdateTimer.PrintInterval();
+
+
+//ChronoTimer CfParallelTimer;
+//CfParallelTimer.Start();
+
+  //--------Do parallel calculations!----------
+  td2dVec tResultsGPU = fParallelWaveFunction->RunInterpolateEntireCfwStaticPairs(aAnalysisNumber,par[1],par[2],par[3],par[4]);
+
+//CfParallelTimer.Stop();
+//cout << "CfParallelTimer in GetEntireFitCfContent: ";
+//CfParallelTimer.PrintInterval();
+
+
+
+
+//ChronoTimer CfSerialTimer;
+//CfSerialTimer.Start();
+
+  td3dVec tPairsCPU = GetCPUSamplePairs(aAnalysisNumber);
+  td1dVec tResultsCPU(tPairsCPU.size());
+  complex<double> tWaveFunction;
+  double tWaveFunctionSq;
+  double tCPUContent;
+  //---------Do serial calculations------------
+  assert(tResultsGPU.size() == tResultsCPU.size());
+  for(int i=0; i<(int)tPairsCPU.size(); i++)
+  {
+    if( ((int)tPairsCPU[i].size() + (int)tResultsGPU[i][1]) != fNPairsPerKStarBin)
+    {
+      cout << "tPairsCPU[i].size() + (int)tResultsGPU[i][1]) != fNPairsPerKStarBin!!!!!!!!!" << endl;
+      cout << "FAILURE IMMINENT!!!!!!!!!!!!!!!!!!" << endl;
+      cout << "tPairsCPU[" << i << "].size() = " << tPairsCPU[i].size() << endl;
+      cout << "tResultsGPU[" << i << "][1] = " << tResultsGPU[i][1] << endl;
+      cout << "fNPairsPerKStarBin = " << fNPairsPerKStarBin << endl;
+    }
+    assert( ((int)tPairsCPU[i].size() + (int)tResultsGPU[i][1]) == fNPairsPerKStarBin);
+    tCPUContent = 0.0;
+    for(int j=0; j<(int)tPairsCPU[i].size(); j++)
+    {
+      tWaveFunction = fWaveFunction->GetWaveFunction(tPairsCPU[i][j][0],tPairsCPU[i][j][1],tPairsCPU[i][j][2],par[2],par[3],par[4]);
+      tWaveFunctionSq = norm(tWaveFunction);
+      tCPUContent += tWaveFunctionSq;
+    }
+    tResultsCPU[i] = tCPUContent;
+  }
+
+//CfSerialTimer.Stop();
+//cout << "CfSerialTimer in GetEntireFitCfContent: ";
+//CfSerialTimer.PrintInterval();
+
+//ChronoTimer CfCombineTimer;
+//CfCombineTimer.Start();
+
+  td1dVec tReturnVec(tResultsGPU.size());
+  for(int i=0; i<(int)tResultsGPU.size(); i++)
+  {
+    tReturnVec[i] = (tResultsGPU[i][0] + tResultsCPU[i])/(tResultsGPU[i][1] + tPairsCPU[i].size());
+//    tReturnVec[i] = par[8]*(par[0]*tReturnVec[i] + (1.0-par[0]));  //C = Norm*(Lam*C_gen + (1-Lam));
+    tReturnVec[i] = (par[0]*tReturnVec[i] + (1.0-par[0]));  //C = (Lam*C_gen + (1-Lam));
+  }
+
+  return tReturnVec;
+
+}
+
 
 //________________________________________________________________________________________________________________
 td1dVec CoulombFitterParallel::GetEntireFitCfContentCompletewStaticPairs(double aKStarMagMin, double aKStarMagMax, double *par, int aAnalysisNumber)
@@ -769,6 +874,14 @@ td1dVec CoulombFitterParallel::GetEntireFitCfContentCompletewStaticPairs(double 
   assert(tResultsGPU.size() == tResultsCPU.size());
   for(int i=0; i<(int)tPairsCPU.size(); i++)
   {
+    if( ((int)tPairsCPU[i].size() + (int)tResultsGPU[i][1]) != fNPairsPerKStarBin)
+    {
+      cout << "tPairsCPU[i].size() + (int)tResultsGPU[i][1]) != fNPairsPerKStarBin!!!!!!!!!" << endl;
+      cout << "FAILURE IMMINENT!!!!!!!!!!!!!!!!!!" << endl;
+      cout << "tPairsCPU[" << i << "].size() = " << tPairsCPU[i].size() << endl;
+      cout << "tResultsGPU[" << i << "][1] = " << tResultsGPU[i][1] << endl;
+      cout << "fNPairsPerKStarBin = " << fNPairsPerKStarBin << endl;
+    }
     assert( ((int)tPairsCPU[i].size() + (int)tResultsGPU[i][1]) == fNPairsPerKStarBin);
     tCPUContent = 0.0;
     for(int j=0; j<(int)tPairsCPU[i].size(); j++)
@@ -867,7 +980,7 @@ tTotalTimer.Start();
   {
     FitPairAnalysis* tFitPairAnalysis = fFitSharedAnalyses->GetFitPairAnalysis(iAnaly);
     AnalysisType tAnalysisType = tFitPairAnalysis->GetAnalysisType();
-    SetCoulombAttributes(tAnalysisType);
+    SetCoulombAttributes(tAnalysisType);  //TODO probably put this in Initialize
 
     TH2* tMomResMatrix = NULL;
     if(fApplyMomResCorrection)
@@ -960,7 +1073,8 @@ tTotalTimer.Start();
       {
         if(fUseStaticPairs && fIncludeSingletAndTriplet) tPrimaryFitCfContent = GetEntireFitCfContentCompletewStaticPairs(0.,fMaxFitKStar,tParPrim,iAnaly);
         else if(fIncludeSingletAndTriplet) tPrimaryFitCfContent = GetEntireFitCfContentComplete(0.,fMaxFitKStar,fNbinsXToFit,tParPrim,iAnaly);  //TODO include fMinFitKStar
-        else assert(0); //TODO include else if(fUseStaticPairs) and else
+        else if(fUseStaticPairs) tPrimaryFitCfContent = GetEntireFitCfContentwStaticPairs(0.,fMaxFitKStar,tParPrim,iAnaly);
+        else tPrimaryFitCfContent = GetEntireFitCfContent(0.,fMaxFitKStar,fNbinsXToFit,tParPrim,iAnaly);  //TODO include fMinFitKStar
       }
 
 //      int tNPairsPerBin = 16384;
@@ -1232,6 +1346,14 @@ TH1* CoulombFitterParallel::CreateFitHistogramSampleCompleteParallel(TString aNa
   cout << "Beginning CreateFitHistogramSampleCompleteParallel" << endl;
 ChronoTimer tTimer;
 tTimer.Start();
+
+  //--------------------------------------------------------------
+  InitializeFitter();
+  if(!fUseStaticPairs) BuildPairSample4dVec(fNPairsPerKStarBin, fKStarBinWidth);
+  //--------------------------------------------------------------
+
+  SetCoulombAttributes(aAnalysisType);
+
 /*
   if(!fAllOfSameCoulombType)
   {
@@ -1265,7 +1387,8 @@ CfParallelTimer.Start();
   td1dVec tCfUnNorm;
   if(fUseStaticPairs && fIncludeSingletAndTriplet) tCfUnNorm = GetEntireFitCfContentCompletewStaticPairs(aKMin,aKMax,tPar,tAnalysisNumber);
   else if(fIncludeSingletAndTriplet) tCfUnNorm = GetEntireFitCfContentComplete(aKMin,aKMax,aNbinsK,tPar,tAnalysisNumber);
-  else assert(0); //TODO include other else if and else
+  else if(fUseStaticPairs) tCfUnNorm = GetEntireFitCfContentwStaticPairs(aKMin,aKMax,tPar,tAnalysisNumber);
+  else tCfUnNorm = GetEntireFitCfContent(aKMin,aKMax,aNbinsK,tPar,tAnalysisNumber);
 
 CfParallelTimer.Stop();
 cout << "CfParallelTimer in CreateFitHistogramSampleCompleteParallel: ";

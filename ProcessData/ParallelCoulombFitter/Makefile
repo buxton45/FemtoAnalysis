@@ -28,12 +28,15 @@ CFLAGS = $(shell root-config --cflags) -pthread -Wno-deprecated-declarations -m6
 
 MY_LIBS = $(addprefix build/, MathematicaSession.o WaveFunction.o Interpolator.o ChargedResidualCf.o SimpleChargedResidualCf.o NeutralResidualCf.o ResidualCollection.o CoulombFitter.o LednickyFitter.o InterpolationHistograms.o FitChi2Histograms.o FitParameter.o BackgroundFitter.o FitPartialAnalysis.o FitPairAnalysis.o FitSharedAnalyses.o CfLite.o CfHeavy.o Types.o Types_LambdaValues.o Types_FitParamValues.o Faddeeva.o ParallelTypes.o CoulombFitterParallel.o ParallelWaveFunction.o Interpolate.o InterpolateGPU.o )
 
-BINARIES = runTest runInterp
+BINARIES = runTest runWPCFStrongInfluence runInterp
 
 all : $(BINARIES)
 
 runTest: ${MY_LIBS} test.C
 	g++ test.C ${MY_LIBS} -I${INCDIR} -o runTest -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(LIBSC) $(CFLAGS) -I${CUDAINCDIR} -L${CUDALIBDIR}
+
+runWPCFStrongInfluence: ${MY_LIBS} BuildWPCFStrongInfluence.C
+	g++ BuildWPCFStrongInfluence.C ${MY_LIBS} -I${INCDIR} -o runWPCFStrongInfluence -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(LIBSC) $(CFLAGS) -I${CUDAINCDIR} -L${CUDALIBDIR}
 
 runInterp: ${MY_LIBS} testInterp.C
 	g++ testInterp.C ${MY_LIBS} -I${INCDIR} -o runInterp -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(LIBSC) $(CFLAGS) -I${CUDAINCDIR} -L${CUDALIBDIR}

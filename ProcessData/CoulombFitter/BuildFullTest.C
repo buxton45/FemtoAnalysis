@@ -231,7 +231,7 @@ int main(int argc, char **argv)
   tFitter->SetUseRandomKStarVectors(true);
   tFitter->SetUseStaticPairs(true);
 //  tFitter->SetNPairsPerKStarBin(16384);
-  tFitter->SetNPairsPerKStarBin(50000);
+  tFitter->SetNPairsPerKStarBin(65536);
   //-------------------------------------------
 
   tFitter->GetFitSharedAnalyses()->GetMinuitObject()->SetFCN(fcn);

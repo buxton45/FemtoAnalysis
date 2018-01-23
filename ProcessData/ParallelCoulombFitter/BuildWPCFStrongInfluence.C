@@ -1,5 +1,7 @@
+//Parallel version of ../CoulombFitter/BuildWPCFStrongInfluence.C
+
 #include "FitSharedAnalyses.h"
-#include "CoulombFitter.h"
+#include "CoulombFitterParallel.h"
 #include "TLegend.h"
 #include "CanvasPartition.h"
 
@@ -9,7 +11,7 @@
 #include "TPaveText.h"
 #include "TLegendEntry.h"
 
-CoulombFitter *myFitter = NULL;
+CoulombFitterParallel *myFitter = NULL;
 
 //______________________________________________________________________________
 void fcn(Int_t &npar, Double_t *gin, Double_t &f, Double_t *par, Int_t iflag)
@@ -80,7 +82,17 @@ int main(int argc, char **argv)
   double tKMin = 0.;
   double tKMax = 0.16;
   double tBinSize = (tKMax-tKMin)/tNbinsK;
-  int tNPairsPerKStarBin = 50000;
+/*
+  int tNPairsPerKStarBin = 16384;
+  int tNThreadsPerBlock = 512;
+  int tNBlocks = 32;
+*/
+
+  int tNPairsPerKStarBin = 65536;
+  int tNThreadsPerBlock = 512;
+  int tNBlocks = 128;
+
+  assert(tNThreadsPerBlock*tNBlocks == tNPairsPerKStarBin);
   //-----------------------------------------
 
 
@@ -101,18 +113,19 @@ int main(int argc, char **argv)
   tSharedAn->RebinAnalyses(2);
   tSharedAn->CreateMinuitParameters();
 //-----------------------------------------------------------------------------
-  CoulombFitter* tFitter = new CoulombFitter(tSharedAn,tKMax);
+  CoulombFitterParallel* tFitter = new CoulombFitterParallel(tSharedAn,tKMax);
     tFitter->SetIncludeSingletAndTriplet(false);
     tFitter->SetApplyMomResCorrection(false);
 
   TString tFileLocationInterpHistos;
-  if(tAnType==kAXiKchP || tAnType==kXiKchM) tFileLocationInterpHistos = "InterpHistsRepulsive";
-  else if(tAnType==kXiKchP || tAnType==kAXiKchM) tFileLocationInterpHistos = "InterpHistsAttractive";
+  if(tAnType==kAXiKchP || tAnType==kXiKchM) tFileLocationInterpHistos = "/home/jesse/Analysis/FemtoAnalysis/ProcessData/CoulombFitter/InterpHistsRepulsive";
+  else if(tAnType==kXiKchP || tAnType==kAXiKchM) tFileLocationInterpHistos = "/home/jesse/Analysis/FemtoAnalysis/ProcessData/CoulombFitter/InterpHistsAttractive";
   tFitter->LoadInterpHistFile(tFileLocationInterpHistos);
 
   tFitter->SetUseRandomKStarVectors(true);
   tFitter->SetUseStaticPairs(true);
   tFitter->SetNPairsPerKStarBin(tNPairsPerKStarBin);
+  tFitter->SetNThreadsPerBlockAndNBlocks(tNThreadsPerBlock, tNBlocks);
   tFitter->SetBinSizeKStar(tBinSize);
 
   tFitter->GetFitSharedAnalyses()->GetMinuitObject()->SetFCN(fcn);
@@ -139,7 +152,7 @@ int main(int argc, char **argv)
 
   tColorTransparent = TColor::GetColorTransparent(tColor,0.2);
 
-  TH1* tFullFit = tFitter->CreateFitHistogramSampleComplete("SampleHist1", tAnType, tNbinsK, tKMin, tKMax, tLambda, tRadius, tReF0, tImF0, tD0, 0., 0., 0., tNorm);
+  TH1* tFullFit = tFitter->CreateFitHistogramSampleCompleteParallel("SampleHist1", tAnType, tNbinsK, tKMin, tKMax, tLambda, tRadius, tReF0, tImF0, tD0, 0., 0., 0., tNorm);
     tFullFit->SetDirectory(0);
   tFullFit->SetMarkerStyle(22);
   tFullFit->SetMarkerColor(tColor);
@@ -147,7 +160,7 @@ int main(int argc, char **argv)
   tFullFit->SetLineStyle(7);
   tFullFit->SetLineWidth(2);
 
-  TH1* tCoulombOnlyFit = tFitter->CreateFitHistogramSampleComplete("tCoulombOnlyFit", tAnType, tNbinsK, tKMin, tKMax, tLambda, tRadius, 0., 0., 0., 0., 0., 0., tNorm);
+  TH1* tCoulombOnlyFit = tFitter->CreateFitHistogramSampleCompleteParallel("tCoulombOnlyFit", tAnType, tNbinsK, tKMin, tKMax, tLambda, tRadius, 0., 0., 0., 0., 0., 0., tNorm);
     tCoulombOnlyFit->SetDirectory(0);
   tCoulombOnlyFit->SetMarkerStyle(21);
   tCoulombOnlyFit->SetMarkerColor(tColor);
@@ -251,13 +264,13 @@ int main(int argc, char **argv)
     tCan->SaveAs(tSaveName);
   }
 
-
+/*
   delete tFitter;
 
   delete tSharedAn;
   delete tPairAn;
   delete tConjAn;
-
+*/
 //-------------------------------------------------------------------------------
   tFullTimer.Stop();
   cout << "Finished program: ";

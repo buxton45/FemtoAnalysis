@@ -135,6 +135,12 @@ int main(int argc, char **argv)
   //tAnType = kXiKchP;
   tAnType = kXiKchM;
 
+  int tNPairsPerKStarBin = 65536;
+  int tNThreadsPerBlock = 512;
+  int tNBlocks = 128;
+
+  assert(tNThreadsPerBlock*tNBlocks == tNPairsPerKStarBin);
+
   if(tAnType==kXiKchP) tConjType = kAXiKchM;
   else if(tAnType==kXiKchM) tConjType = kAXiKchP;
   else assert(0);
@@ -143,7 +149,7 @@ int main(int argc, char **argv)
   int tNPartialAnalysis = 5;
   if(tAnalysisRunType==kTrain || tAnalysisRunType==kTrainSys) tNPartialAnalysis = 2;
 
-  bool bIncludeSingletAndTriplet=true;
+  bool bIncludeSingletAndTriplet=false;
   bool bRunMB=false;
    
   TString tAnBaseName = TString(cAnalysisBaseTags[tAnType]);
@@ -254,7 +260,8 @@ int main(int argc, char **argv)
 //  tFitter->BuildPairKStar4dVecFromTxt(tOutputName);
   tFitter->SetUseRandomKStarVectors(true);
   tFitter->SetUseStaticPairs(true);
-  tFitter->SetNPairsPerKStarBin(16384);
+  tFitter->SetNPairsPerKStarBin(tNPairsPerKStarBin);
+  tFitter->SetNThreadsPerBlockAndNBlocks(tNThreadsPerBlock, tNBlocks);
 
   //-------------------------------------------
 

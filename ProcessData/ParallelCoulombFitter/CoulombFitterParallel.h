@@ -31,6 +31,8 @@ public:
   CoulombFitterParallel(FitSharedAnalyses* aFitSharedAnalyses, double aMaxFitKStar = 0.3);
   virtual ~CoulombFitterParallel();
 
+  void SetCoulombAttributes(AnalysisType aAnalysisType);
+
   void PassHyperGeo1F1AndGTildeToParallelWaveFunction();
   void LoadInterpHistFile(TString aFileBaseName);  //TODO should this be a vritual function?
 
@@ -53,6 +55,8 @@ public:
   td1dVec GetEntireFitCfContent(double aKStarMagMin, double aKStarMagMax, int aNbinsK, double *par, int aAnalysisNumber);
 
   td1dVec GetEntireFitCfContentComplete(double aKStarMagMin, double aKStarMagMax, int aNbinsK, double *par, int aAnalysisNumber);
+
+  td1dVec GetEntireFitCfContentwStaticPairs(double aKStarMagMin, double aKStarMagMax, double *par, int aAnalysisNumber);
   td1dVec GetEntireFitCfContentCompletewStaticPairs(double aKStarMagMin, double aKStarMagMax, double *par, int aAnalysisNumber);
 
   td1dVec GetEntireFitCfContentComplete2(int aNSimPairsPerBin, double aKStarMagMin, double aKStarMagMax, int aNbinsK, double *par);
@@ -72,6 +76,10 @@ public:
 
   //inline (i.e. simple) functions
   ParallelWaveFunction* GetParallelWaveFunctionObject();
+
+  void SetNThreadsPerBlock(double aNThreadsPerBlock);
+  void SetNBlocks(double aNBlocks);
+  void SetNThreadsPerBlockAndNBlocks(double aNThreadsPerBlock, double aNBlocks);
 
 private:
   BinInfoHyperGeo1F1 fHyperGeo1F1Info;
@@ -97,5 +105,9 @@ private:
 
 //inline stuff
 inline ParallelWaveFunction* CoulombFitterParallel::GetParallelWaveFunctionObject() {return fParallelWaveFunction;}
+
+inline void CoulombFitterParallel::SetNThreadsPerBlock(double aNThreadsPerBlock) {fParallelWaveFunction->SetNThreadsPerBlock(aNThreadsPerBlock);}
+inline void CoulombFitterParallel::SetNBlocks(double aNBlocks) {fParallelWaveFunction->SetNBlocks(aNBlocks);}
+inline void CoulombFitterParallel::SetNThreadsPerBlockAndNBlocks(double aNThreadsPerBlock, double aNBlocks) {fParallelWaveFunction->SetNThreadsPerBlockAndNBlocks(aNThreadsPerBlock, aNBlocks);}
 
 #endif

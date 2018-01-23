@@ -38,6 +38,8 @@ extern __managed__ BinInfoKStar *d_fPairKStar3dVecInfo;
 extern __managed__ double *d_fPairSample4dVec;
 extern __managed__ BinInfoSamplePairs *d_fPairSample4dVecInfo;
 
+extern __managed__ double d_fBohrRadius;
+
 /*
 __device__ double d_gBohrRadius = parallel_gBohrRadiusXiK;
 __device__ double d_hbarc = parallel_hbarc;
@@ -52,6 +54,7 @@ public:
   ParallelWaveFunction(int aNThreadsPerBlock=512, int aNBlocks=32); //TODO delete this constructor.  Only here for testing
   virtual ~ParallelWaveFunction();
 
+  void LoadBohrRadius(double aRadius);
   //--------------Load the arrays from c++ program dealing with the histograms
   void LoadPairSample4dVec(td4dVec &aPairSample4dVec, BinInfoSamplePairs &aBinInfo);
   void UpdatePairSampleRadii(double aScaleFactor);
@@ -80,11 +83,17 @@ public:
   vector<double> RunInterpolateWfSquared(td2dVec &aPairs, double aReF0, double aImF0, double aD0);
 
   vector<double> RunInterpolateEntireCf(td3dVec &aPairs, double aReF0, double aImF0, double aD0);
-
   vector<double> RunInterpolateEntireCfComplete(td3dVec &aPairs, double aReF0s, double aImF0s, double aD0s, double aReF0t, double aImF0t, double aD0t);
+
+  td2dVec RunInterpolateEntireCfwStaticPairs(int aAnalysisNumber, double aRadiusScale, double aReF0, double aImF0, double aD0);
   td2dVec RunInterpolateEntireCfCompletewStaticPairs(int aAnalysisNumber, double aRadiusScale, double aReF0s, double aImF0s, double aD0s, double aReF0t, double aImF0t, double aD0t);
 
   vector<double> RunInterpolateEntireCfComplete2(int aNSimPairsPerBin, double aKStarMin, double aKStarMax, double aNbinsK, double aR, double aReF0s, double aImF0s, double aD0s, double aReF0t, double aImF0t, double aD0t);
+
+//-----inline stuff
+  void SetNThreadsPerBlock(double aNThreadsPerBlock);
+  void SetNBlocks(double aNBlocks);
+  void SetNThreadsPerBlockAndNBlocks(double aNThreadsPerBlock, double aNBlocks);
 
 
 private:
@@ -107,6 +116,11 @@ private:
 
 
 //inline stuff
+inline void ParallelWaveFunction::SetNThreadsPerBlock(double aNThreadsPerBlock) {fNThreadsPerBlock = aNThreadsPerBlock;}
+inline void ParallelWaveFunction::SetNBlocks(double aNBlocks) {fNBlocks = aNBlocks;}
+inline void ParallelWaveFunction::SetNThreadsPerBlockAndNBlocks(double aNThreadsPerBlock, double aNBlocks) {fNThreadsPerBlock = aNThreadsPerBlock; fNBlocks = aNBlocks;}
+
+
 
 
 #endif
