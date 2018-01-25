@@ -644,9 +644,14 @@ void CoulombFitter::BuildPairKStar4dVecOnFly(TString aPairKStarNtupleBaseName, i
 
 }
 
+//________________________________________________________________________________________________________________
+bool CoulombFitter::Sort2dPairsByRadius(const td1dVec &aVec1, const td1dVec &aVec2)
+{
+  return aVec1[1] < aVec2[1];
+}
 
 //________________________________________________________________________________________________________________
-void CoulombFitter::BuildPairSample4dVec(int aNPairsPerKStarBin, double aBinSize)
+void CoulombFitter::BuildPairSample4dVec(int aNPairsPerKStarBin, double aBinSize, bool aSortByRadius)
 {
 ChronoTimer tTimer(kSec);
 tTimer.Start();
@@ -708,6 +713,7 @@ tTimer.Start();
 
         tTemp2dVec.push_back(tTempPair);
       }
+      if(aSortByRadius) sort(tTemp2dVec.begin(), tTemp2dVec.end(), Sort2dPairsByRadius);
       tTemp3dVec.push_back(tTemp2dVec);
     }
     fPairSample4dVec[iAnaly] = tTemp3dVec;
