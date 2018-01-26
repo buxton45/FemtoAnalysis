@@ -49,7 +49,7 @@ TPaveText* CreateParamValuesText(AnalysisType tAnType, td1dVec &tParams)
 
 int main(int argc, char **argv)
 {
-  TApplication* theApp = new TApplication("App", &argc, argv);
+//  TApplication* theApp = new TApplication("App", &argc, argv);
   //The TApplication object allows the execution of the code to pause.
   //This allows the user a chance to look at and manipulate a TBrowser before
   //the program ends and closes everything
@@ -276,7 +276,7 @@ int main(int argc, char **argv)
   cout << "Finished program: ";
   tFullTimer.PrintInterval();
 
-  theApp->Run(kTRUE); //Run the TApp to pause the code.
+//  theApp->Run(kTRUE); //Run the TApp to pause the code.
   // Select "Exit ROOT" from Canvas "File" menu to exit
   // and execute the next statements.
   return 0;
