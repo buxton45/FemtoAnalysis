@@ -20,7 +20,7 @@ void fcn(Int_t &npar, Double_t *gin, Double_t &f, Double_t *par, Int_t iflag)
 int main(int argc, char **argv)
 {
 
-  TApplication* theApp = new TApplication("App", &argc, argv);
+//  TApplication* theApp = new TApplication("App", &argc, argv);
   //The TApplication object allows the execution of the code to pause.
   //This allows the user a chance to look at and manipulate a TBrowser before
   //the program ends and closes everything
@@ -135,10 +135,15 @@ int main(int argc, char **argv)
   //tAnType = kXiKchP;
   tAnType = kXiKchM;
 
+  int tNPairsPerKStarBin = 16384;
+  int tNThreadsPerBlock = 512;
+  int tNBlocks = 32;
+
+/*
   int tNPairsPerKStarBin = 65536;
   int tNThreadsPerBlock = 512;
   int tNBlocks = 128;
-
+*/
   assert(tNThreadsPerBlock*tNBlocks == tNPairsPerKStarBin);
 
   if(tAnType==kXiKchP) tConjType = kAXiKchM;
@@ -234,7 +239,7 @@ int main(int argc, char **argv)
 
   tSharedAn->CreateMinuitParameters();
 
-  CoulombFitterParallel* tFitter = new CoulombFitterParallel(tSharedAn,0.15);
+  CoulombFitterParallel* tFitter = new CoulombFitterParallel(tSharedAn,0.30);
 //  CoulombFitterParallel* tFitter = new CoulombFitterParallel(tSharedAn,0.02);
   tFitter->SetIncludeSingletAndTriplet(bIncludeSingletAndTriplet);
   tFitter->SetApplyMomResCorrection(false);
@@ -381,7 +386,7 @@ int main(int argc, char **argv)
   cout << "Finished program in " << duration << " seconds" << endl;
 
 
-  theApp->Run(kTRUE); //Run the TApp to pause the code.
+//  theApp->Run(kTRUE); //Run the TApp to pause the code.
   // Select "Exit ROOT" from Canvas "File" menu to exit
   // and execute the next statements.
 

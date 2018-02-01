@@ -142,7 +142,7 @@ __device__ int GetInterpLowBin(InterpType aInterpType, InterpAxisType aAxisType,
   }
 
   //Check error
-  if(tErrorFlag) return -2;
+  if(tErrorFlag) assert(0);
 
   //---------------------------------
   tBin = GetBinNumber(tNbins,tMin,tMax,aVal);
@@ -150,108 +150,9 @@ __device__ int GetInterpLowBin(InterpType aInterpType, InterpAxisType aAxisType,
   if(aVal < tBinCenter) tReturnBin = tBin-1;
   else tReturnBin = tBin;
 
-  if(tReturnBin<0 || tReturnBin >= tNbins) return -2;
-  else return tReturnBin;
+  if(tReturnBin<0 || tReturnBin >= tNbins) assert(0);
 
-}
-
-//________________________________________________________________________________________________________________
-__device__ double GetInterpLowBinCenter(InterpType aInterpType, InterpAxisType aAxisType, double aVal)
-{
-  double tReturnValue;
-  int tReturnBin = -2;
-
-  int tNbins, tBin;
-  double tMin, tMax, tBinWidth, tBinCenter;
-
-  bool tErrorFlag = false;
-
-  switch(aInterpType)
-  {
-    case kGTilde:
-      switch(aAxisType)
-      {
-        case kKaxis:
-          tNbins = d_fGTildeInfo->nBinsK;
-          tBinWidth = d_fGTildeInfo->binWidthK;
-          tMin = d_fGTildeInfo->minK;
-          tMax = d_fGTildeInfo->maxK;
-          break;
-
-        case kRaxis:
-          tNbins = d_fGTildeInfo->nBinsR;
-          tBinWidth = d_fGTildeInfo->binWidthR;
-          tMin = d_fGTildeInfo->minR;
-          tMax = d_fGTildeInfo->maxR;
-          break;
-
-        //Invalid axis selection
-        case kThetaaxis:
-          tErrorFlag = true;
-          break;
-        case kReF0axis:
-          tErrorFlag = true;
-          break;
-        case kImF0axis:
-          tErrorFlag = true;
-          break;
-        case kD0axis:
-          tErrorFlag = true;
-          break;
-      }
-      break;
-
-    case kHyperGeo1F1:
-      switch(aAxisType)
-      {
-        case kKaxis:
-          tNbins = d_fHyperGeo1F1Info->nBinsK;
-          tBinWidth = d_fHyperGeo1F1Info->binWidthK;
-          tMin = d_fHyperGeo1F1Info->minK;
-          tMax = d_fHyperGeo1F1Info->maxK;
-          break;
-
-        case kRaxis:
-          tNbins = d_fHyperGeo1F1Info->nBinsR;
-          tBinWidth = d_fHyperGeo1F1Info->binWidthR;
-          tMin = d_fHyperGeo1F1Info->minR;
-          tMax = d_fHyperGeo1F1Info->maxR;
-          break;
-
-        case kThetaaxis:
-          tNbins = d_fHyperGeo1F1Info->nBinsTheta;
-          tBinWidth = d_fHyperGeo1F1Info->binWidthTheta;
-          tMin = d_fHyperGeo1F1Info->minTheta;
-          tMax = d_fHyperGeo1F1Info->maxTheta;
-          break;
-
-        //Invalid axis selection
-        case kReF0axis:
-          tErrorFlag = true;
-          break;
-        case kImF0axis:
-          tErrorFlag = true;
-          break;
-        case kD0axis:
-          tErrorFlag = true;
-          break;
-      }
-      break;
-  }
-
-  //Check error
-  if(tErrorFlag) return -2;
-
-  //---------------------------------
-  tBin = GetBinNumber(tNbins,tMin,tMax,aVal);
-  tBinCenter = tMin + (tBin+0.5)*tBinWidth;
-  if(aVal < tBinCenter) tReturnBin = tBin-1;
-  else tReturnBin = tBin;
-
-  if(tReturnBin<0 || tReturnBin >= tNbins) return -2;
-
-  tReturnValue = tMin + (tReturnBin+0.5)*tBinWidth;
-  return tReturnValue;
+  return tReturnBin;
 }
 
 //________________________________________________________________________________________________________________
@@ -260,14 +161,14 @@ __device__ double LednickyHFunctionInterpolate(double aKStar)
   double tResult = 0.0;
   //----------------------------
 
-  //TODO put in check to make sure GetInterpLowBinCenter does not return the error -2
+  //TODO put in check to make sure GetInterpLowBin does not return the error -2
   //TODO make HFunctionInfo objects instead of using GTilde
   //TODO check accuracy
 
   double tBinWidthK = d_fGTildeInfo->binWidthK;
   int tBinLowK = GetInterpLowBin(kGTilde,kKaxis,aKStar);
   int tBinHighK = tBinLowK+1;
-  double tBinLowCenterK = GetInterpLowBinCenter(kGTilde,kKaxis,aKStar);
+  double tBinLowCenterK = d_fGTildeInfo->minK + (tBinLowK+0.5)*d_fGTildeInfo->binWidthK;
   double tBinHighCenterK = tBinLowCenterK+tBinWidthK;
 
   double tX0 = tBinLowCenterK;
@@ -291,17 +192,17 @@ __device__ cuDoubleComplex GTildeInterpolate(double aKStar, double aRStar)
   int tNbinsR = d_fGTildeInfo->nBinsR;
   //----------------------------
 
-  //TODO put in check to make sure GetInterpLowBinCenter does not return the error -2
+  //TODO put in check to make sure GetInterpLowBin does not return the error -2
   double tBinWidthK = d_fGTildeInfo->binWidthK;
   int tBinLowK = GetInterpLowBin(kGTilde,kKaxis,aKStar);
   int tBinHighK = tBinLowK+1;
-  double tBinLowCenterK = GetInterpLowBinCenter(kGTilde,kKaxis,aKStar);
+  double tBinLowCenterK = d_fGTildeInfo->minK + (tBinLowK+0.5)*d_fGTildeInfo->binWidthK;
   double tBinHighCenterK = tBinLowCenterK+tBinWidthK;
 
   double tBinWidthR = d_fGTildeInfo->binWidthR;
   int tBinLowR = GetInterpLowBin(kGTilde,kRaxis,aRStar);
   int tBinHighR = tBinLowR+1;
-  double tBinLowCenterR = GetInterpLowBinCenter(kGTilde,kRaxis,aRStar);
+  double tBinLowCenterR = d_fGTildeInfo->minR + (tBinLowR+0.5)*d_fGTildeInfo->binWidthR;
   double tBinHighCenterR = tBinLowCenterR+tBinWidthR;
 
   //--------------------------
@@ -342,23 +243,23 @@ __device__ cuDoubleComplex HyperGeo1F1Interpolate(double aKStar, double aRStar, 
   int tNbinsR = d_fHyperGeo1F1Info->nBinsR;
   //----------------------------
 
-  //TODO put in check to make sure GetInterpLowBinCenter does not return the error -2
+  //TODO put in check to make sure GetInterpLowBin does not return the error -2
   double tBinWidthK = d_fHyperGeo1F1Info->binWidthK;
   int tBin0K = GetInterpLowBin(kHyperGeo1F1,kKaxis,aKStar);
   int tBin1K = tBin0K+1;
-  double tBin0CenterK = GetInterpLowBinCenter(kHyperGeo1F1,kKaxis,aKStar);
+  double tBin0CenterK = d_fHyperGeo1F1Info->minK + (tBin0K+0.5)*d_fHyperGeo1F1Info->binWidthK;
 //  double tBin1CenterK = tBin0CenterK+tBinWidthK;
 
   double tBinWidthR = d_fHyperGeo1F1Info->binWidthR;
   int tBin0R = GetInterpLowBin(kHyperGeo1F1,kRaxis,aRStar);
   int tBin1R = tBin0R+1;
-  double tBin0CenterR = GetInterpLowBinCenter(kHyperGeo1F1,kRaxis,aRStar);
+  double tBin0CenterR = d_fHyperGeo1F1Info->minR + (tBin0R+0.5)*d_fHyperGeo1F1Info->binWidthR;
 //  double tBin1CenterR = tBin0CenterR+tBinWidthR;
 
   double tBinWidthTheta = d_fHyperGeo1F1Info->binWidthTheta;
   int tBin0Theta = GetInterpLowBin(kHyperGeo1F1,kThetaaxis,aTheta);
   int tBin1Theta = tBin0Theta+1;
-  double tBin0CenterTheta = GetInterpLowBinCenter(kHyperGeo1F1,kThetaaxis,aTheta);
+  double tBin0CenterTheta = d_fHyperGeo1F1Info->minTheta + (tBin0Theta+0.5)*d_fHyperGeo1F1Info->binWidthTheta;
 //  double tBin1CenterTheta = tBin0CenterTheta+tBinWidthTheta;
 
   //--------------------------
@@ -578,7 +479,7 @@ __device__ double InterpolateWfSquared(double aKStarMag, double aRStarMag, doubl
 }
 
 //________________________________________________________________________________________________________________
-__device__ bool CanInterpolate(double aKStar, double aRStar, double aTheta)
+__device__ bool CanInterpPair(double aKStar, double aRStar, double aTheta)
 {
   if(aKStar < d_fGTildeInfo->minInterpK || aKStar > d_fGTildeInfo->maxInterpK) return false;
   if(aRStar < d_fGTildeInfo->minInterpR || aRStar > d_fGTildeInfo->maxInterpR) return false;
@@ -727,21 +628,6 @@ __device__ int GetSamplePairOffset(int aAnalysis, int aBinK, int aPair)
 }
 
 //________________________________________________________________________________________________________________
-__device__ bool CanInterpPair(double aKStar, double aRStar, double aTheta)
-{
-  if(aKStar < d_fHyperGeo1F1Info->minInterpK) return false;
-  if(aKStar > d_fHyperGeo1F1Info->maxInterpK) return false;
-
-  if(aRStar < d_fHyperGeo1F1Info->minInterpR) return false;
-  if(aRStar > d_fHyperGeo1F1Info->maxInterpR) return false;
-
-  if(aTheta < d_fHyperGeo1F1Info->minInterpTheta) return false;
-  if(aTheta > d_fHyperGeo1F1Info->maxInterpTheta) return false;
-
-  return true;
-}
-
-//________________________________________________________________________________________________________________
 __global__ void GetEntireCfwStaticPairs(double aRadiusScale, double aReF0, double aImF0, double aD0, double *g_odata, double *g_odata2, int aAnalysisNumber, int aBinKNumber, int aOffsetOutput)
 {
 //  int idx = threadIdx.x + blockIdx.x*blockDim.x;
@@ -752,11 +638,9 @@ __global__ void GetEntireCfwStaticPairs(double aRadiusScale, double aReF0, doubl
   unsigned int tPairNumber = blockIdx.x*blockDim.x + threadIdx.x;
   unsigned int i = GetSamplePairOffset(aAnalysisNumber,aBinKNumber,tPairNumber);
 
-  double tWfSq;
-  double tRadius = aRadiusScale*d_fPairSample4dVec[i+1];
-  if(CanInterpPair(d_fPairSample4dVec[i],tRadius,d_fPairSample4dVec[i+2]))
+  if(CanInterpPair(d_fPairSample4dVec[i], aRadiusScale*d_fPairSample4dVec[i+1], d_fPairSample4dVec[i+2]))
   {
-    tWfSq = InterpolateWfSquared(d_fPairSample4dVec[i],tRadius,d_fPairSample4dVec[i+2],aReF0,aImF0,aD0);
+    double tWfSq = InterpolateWfSquared(d_fPairSample4dVec[i], aRadiusScale*d_fPairSample4dVec[i+1], d_fPairSample4dVec[i+2], aReF0, aImF0, aD0);
     sdata2[tid][0] = tWfSq;
     sdata2[tid][1] = 1.;
   }
@@ -813,14 +697,12 @@ __global__ void GetEntireCfCompletewStaticPairs(double aRadiusScale, double aReF
   unsigned int tPairNumber = blockIdx.x*blockDim.x + threadIdx.x;
   unsigned int i = GetSamplePairOffset(aAnalysisNumber,aBinKNumber,tPairNumber);
 
-  double tWfSqSinglet, tWfSqTriplet, tWfSq;
-  double tRadius = aRadiusScale*d_fPairSample4dVec[i+1];
-  if(CanInterpPair(d_fPairSample4dVec[i],tRadius,d_fPairSample4dVec[i+2]))
+  if(CanInterpPair(d_fPairSample4dVec[i], aRadiusScale*d_fPairSample4dVec[i+1], d_fPairSample4dVec[i+2]))
   {
-    tWfSqSinglet = InterpolateWfSquared(d_fPairSample4dVec[i],tRadius,d_fPairSample4dVec[i+2],aReF0s,aImF0s,aD0s);
-    tWfSqTriplet = InterpolateWfSquared(d_fPairSample4dVec[i],tRadius,d_fPairSample4dVec[i+2],aReF0t,aImF0t,aD0t);
+    double tWfSqSinglet = InterpolateWfSquared(d_fPairSample4dVec[i], aRadiusScale*d_fPairSample4dVec[i+1], d_fPairSample4dVec[i+2], aReF0s, aImF0s, aD0s);
+    double tWfSqTriplet = InterpolateWfSquared(d_fPairSample4dVec[i], aRadiusScale*d_fPairSample4dVec[i+1], d_fPairSample4dVec[i+2], aReF0t, aImF0t, aD0t);
 
-    tWfSq = 0.25*tWfSqSinglet + 0.75*tWfSqTriplet;
+    double tWfSq = 0.25*tWfSqSinglet + 0.75*tWfSqTriplet;
     sdata2[tid][0] = tWfSq;
     sdata2[tid][1] = 1.;
   }
@@ -912,7 +794,7 @@ __global__ void GetEntireCfComplete2(curandState *state1, curandState *state2, c
     tCosTheta = (tKStarOut*tRStarOut + tKStarSide*tRStarSide + tKStarLong*tRStarLong)/(tKStarMag*tRStarMag);
     tTheta = acos(tCosTheta);
 
-    tPass = CanInterpolate(tKStarMag,tRStarMag,tTheta);
+    tPass = CanInterpPair(tKStarMag,tRStarMag,tTheta);
   }
 
   double tWfSqSinglet, tWfSqTriplet, tWfSq;
@@ -950,6 +832,196 @@ __global__ void GetEntireCfComplete2(curandState *state1, curandState *state2, c
   //write result for this block to global mem
   if(tid == 0) g_odata[blockIdx.x+aOffsetOutput] = sdata[0];
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//________________________________________________________________________________________________________________
+__global__ void GetAllGamowFactors(double *g_odata, int aAnalysisNumber, int aBinKNumber, int aOffsetOutput)
+{
+//  int idx = threadIdx.x + blockIdx.x*blockDim.x;
+
+  unsigned int tid = threadIdx.x;
+  unsigned int tPairNumber = blockIdx.x*blockDim.x + threadIdx.x;
+  unsigned int i = GetSamplePairOffset(aAnalysisNumber,aBinKNumber,tPairNumber);
+
+  double tGamow = GetGamowFactor(d_fPairSample4dVec[i]);
+  g_odata[tPairNumber+aOffsetOutput] = tGamow;
+}
+
+//________________________________________________________________________________________________________________
+__global__ void GetAllExpTermsCmplx(double aRadiusScale, double *g_odataReal, double *g_odataImag, int aAnalysisNumber, int aBinKNumber, int aOffsetOutput)
+{
+//  int idx = threadIdx.x + blockIdx.x*blockDim.x;
+
+  unsigned int tid = threadIdx.x;
+  unsigned int tPairNumber = blockIdx.x*blockDim.x + threadIdx.x;
+  unsigned int i = GetSamplePairOffset(aAnalysisNumber,aBinKNumber,tPairNumber);
+
+  cuDoubleComplex tExpTermCmplx = GetExpTerm(d_fPairSample4dVec[i],aRadiusScale*d_fPairSample4dVec[i+1],d_fPairSample4dVec[i+2]);
+
+  g_odataReal[tPairNumber+aOffsetOutput] = cuCreal(tExpTermCmplx);
+  g_odataImag[tPairNumber+aOffsetOutput] = cuCimag(tExpTermCmplx);
+}
+
+//________________________________________________________________________________________________________________
+__global__ void GetAllGTildeCmplx(double aRadiusScale, double *g_odataReal, double *g_odataImag, int aAnalysisNumber, int aBinKNumber, int aOffsetOutput)
+{
+//  int idx = threadIdx.x + blockIdx.x*blockDim.x;
+
+  unsigned int tid = threadIdx.x;
+  unsigned int tPairNumber = blockIdx.x*blockDim.x + threadIdx.x;
+  unsigned int i = GetSamplePairOffset(aAnalysisNumber,aBinKNumber,tPairNumber);
+
+  if(CanInterpPair(d_fPairSample4dVec[i], aRadiusScale*d_fPairSample4dVec[i+1], d_fPairSample4dVec[i+2]))
+  {
+    cuDoubleComplex tGTildeCmplx = GTildeInterpolate(d_fPairSample4dVec[i],aRadiusScale*d_fPairSample4dVec[i+1]);
+
+    g_odataReal[tPairNumber+aOffsetOutput] = cuCreal(tGTildeCmplx);
+    g_odataImag[tPairNumber+aOffsetOutput] = cuCimag(tGTildeCmplx);
+  }
+  else
+  {
+    g_odataReal[tPairNumber+aOffsetOutput] = 0.;
+    g_odataImag[tPairNumber+aOffsetOutput] = 0.;
+  }
+
+}
+
+//________________________________________________________________________________________________________________
+__global__ void GetAllHyperGeo1F1Cmplx(double aRadiusScale, double *g_odataReal, double *g_odataImag, int aAnalysisNumber, int aBinKNumber, int aOffsetOutput)
+{
+//  int idx = threadIdx.x + blockIdx.x*blockDim.x;
+
+  unsigned int tid = threadIdx.x;
+  unsigned int tPairNumber = blockIdx.x*blockDim.x + threadIdx.x;
+  unsigned int i = GetSamplePairOffset(aAnalysisNumber,aBinKNumber,tPairNumber);
+
+  if(CanInterpPair(d_fPairSample4dVec[i], aRadiusScale*d_fPairSample4dVec[i+1], d_fPairSample4dVec[i+2]))
+  {
+    cuDoubleComplex tHyperGeo1F1Cmplx = HyperGeo1F1Interpolate(d_fPairSample4dVec[i],aRadiusScale*d_fPairSample4dVec[i+1], d_fPairSample4dVec[i+2]);
+
+    g_odataReal[tPairNumber+aOffsetOutput] = cuCreal(tHyperGeo1F1Cmplx);
+    g_odataImag[tPairNumber+aOffsetOutput] = cuCimag(tHyperGeo1F1Cmplx);
+  }
+  else
+  {
+    g_odataReal[tPairNumber+aOffsetOutput] = 0.;
+    g_odataImag[tPairNumber+aOffsetOutput] = 0.;
+  }
+}
+
+
+//________________________________________________________________________________________________________________
+__global__ void GetAllScattLenCmplx(double aRadiusScale, double aReF0, double aImF0, double aD0, double *g_odataReal, double *g_odataImag, int aAnalysisNumber, int aBinKNumber, int aOffsetOutput)
+{
+//  int idx = threadIdx.x + blockIdx.x*blockDim.x;
+
+  unsigned int tid = threadIdx.x;
+  unsigned int tPairNumber = blockIdx.x*blockDim.x + threadIdx.x;
+  unsigned int i = GetSamplePairOffset(aAnalysisNumber,aBinKNumber,tPairNumber);
+
+  if(CanInterpPair(d_fPairSample4dVec[i], aRadiusScale*d_fPairSample4dVec[i+1], d_fPairSample4dVec[i+2]))
+  {
+    cuDoubleComplex tScattLenCmplx = BuildScatteringLength(d_fPairSample4dVec[i], aReF0, aImF0, aD0);
+
+    g_odataReal[tPairNumber+aOffsetOutput] = cuCreal(tScattLenCmplx);
+    g_odataImag[tPairNumber+aOffsetOutput] = cuCimag(tScattLenCmplx);
+  }
+  else
+  {
+    g_odataReal[tPairNumber+aOffsetOutput] = 0.;
+    g_odataImag[tPairNumber+aOffsetOutput] = 0.;
+  }
+}
+
+//________________________________________________________________________________________________________________
+__global__ void InterpolateAllWfSquared(double aRadiusScale, double* g_idataGamow, double* g_idataExpTermReal, double* g_idataExpTermImag, double* g_idataGTildeReal, double* g_idataGTildeImag, double* g_idataHyperGeo1F1Real, double* g_idataHyperGeo1F1Complex, double* g_idataScattLenReal, double* g_idataScattLenImag, double *g_odata, double *g_odata2, int aAnalysisNumber, int aBinKNumber, int tOffsetInput, int aOffsetOutput)
+{
+  extern __shared__ double sdata2[][2];
+
+  unsigned int tid = threadIdx.x;
+  unsigned int tPairNumber = blockIdx.x*blockDim.x + threadIdx.x;
+  unsigned int i = GetSamplePairOffset(aAnalysisNumber,aBinKNumber,tPairNumber);
+  tPairNumber += tOffsetInput;
+  if(CanInterpPair(d_fPairSample4dVec[i], aRadiusScale*d_fPairSample4dVec[i+1], d_fPairSample4dVec[i+2]))
+  {
+    double tGamow = g_idataGamow[tPairNumber];
+
+    cuDoubleComplex tExpTermCmplx = make_cuDoubleComplex(g_idataExpTermReal[tPairNumber], g_idataExpTermImag[tPairNumber]);
+
+    cuDoubleComplex tGTildeCmplx  = make_cuDoubleComplex(g_idataGTildeReal[tPairNumber], g_idataGTildeImag[tPairNumber]);
+
+    cuDoubleComplex tHyperGeo1F1Cmplx  = make_cuDoubleComplex(g_idataHyperGeo1F1Real[tPairNumber], g_idataHyperGeo1F1Complex[tPairNumber]);
+    cuDoubleComplex tScattLenCmplx  = make_cuDoubleComplex(g_idataScattLenReal[tPairNumber], g_idataScattLenImag[tPairNumber]);
+
+    //--------------------------
+
+    double tResult = AssembleWfSquared(aRadiusScale*d_fPairSample4dVec[i+1],tGamow,tExpTermCmplx,tGTildeCmplx,tHyperGeo1F1Cmplx,tScattLenCmplx);
+
+    //--------------------------
+
+    sdata2[tid][0] = tResult;
+    sdata2[tid][1] = 1.;
+  }
+
+  else
+  {
+    sdata2[tid][0] = 0.;
+    sdata2[tid][1] = 0.;
+  }
+
+  __syncthreads();
+
+  //do reduction in shared mem
+  //strided
+  for(unsigned int s=1; s<blockDim.x; s*=2)
+  {
+    int index = 2*s*tid;
+
+    if(index < blockDim.x)
+    {
+      sdata2[index][0] += sdata2[index+s][0];
+      sdata2[index][1] += sdata2[index+s][1];
+    }
+    __syncthreads();
+  }
+
+  if(tid == 0) 
+  {
+    g_odata[blockIdx.x+aOffsetOutput] = sdata2[0][0];
+    g_odata2[blockIdx.x+aOffsetOutput] = sdata2[0][1];
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 //________________________________________________________________________________________________________________
 //****************************************************************************************************************
@@ -1035,7 +1107,7 @@ void ParallelWaveFunction::LoadPairSample4dVec(td4dVec &aPairSample4dVec, BinInf
         d_fPairSample4dVec[tIndex] = aPairSample4dVec[iAnaly][iK][iPair][0];
         d_fPairSample4dVec[tIndex+1] = aPairSample4dVec[iAnaly][iK][iPair][1];
         d_fPairSample4dVec[tIndex+2] = aPairSample4dVec[iAnaly][iK][iPair][2];
-        tIndex += 3;
+        tIndex += d_fPairSample4dVecInfo->nElementsPerPair;
       }
     }
   }
@@ -1049,7 +1121,7 @@ void ParallelWaveFunction::UpdatePairSampleRadii(double aScaleFactor)
   int tTotalEntries = d_fPairSample4dVecInfo->nAnalyses * d_fPairSample4dVecInfo->nBinsK * d_fPairSample4dVecInfo->nPairsPerBin * d_fPairSample4dVecInfo->nElementsPerPair;
   for(int i=0; i<tTotalEntries; i++)
   {
-    if(i%3 == 1) d_fPairSample4dVec[i] *= aScaleFactor;
+    if(i%d_fPairSample4dVecInfo->nElementsPerPair == 1) d_fPairSample4dVec[i] *= aScaleFactor;
   }
 }
 
@@ -1515,12 +1587,12 @@ vector<double> ParallelWaveFunction::RunInterpolateEntireCfComplete(td3dVec &aPa
   return tReturnVec;
 }
 
-
+/*
 //________________________________________________________________________________________________________________
 td2dVec ParallelWaveFunction::RunInterpolateEntireCfwStaticPairs(int aAnalysisNumber, double aRadiusScale, double aReF0, double aImF0, double aD0)
 {
   GpuTimer timer;
-//  timer.Start();
+  timer.Start();
 
   int tNBins = fSamplePairsBinInfo.nBinsK;
 //  int tNPairsPerBin = fSamplePairsBinInfo.nPairsPerBin;
@@ -1544,12 +1616,12 @@ td2dVec ParallelWaveFunction::RunInterpolateEntireCfwStaticPairs(int aAnalysisNu
     cudaStreamCreate(&tStreams[i]);
   }
 
-//  timer.Stop();
-//  std::cout << " Setup time: " << timer.Elapsed() << " ms" << std::endl;
+  timer.Stop();
+  std::cout << " Setup time: " << timer.Elapsed() << " ms" << std::endl;
 
 
   //----------Run the kernels-----------------------------------------------
-//  timer.Start();
+  timer.Start();
 
   for(int i=0; i<tNBins; i++)
   {
@@ -1558,13 +1630,13 @@ td2dVec ParallelWaveFunction::RunInterpolateEntireCfwStaticPairs(int aAnalysisNu
   }
   //The following is necessary for the host to be able to "see" the changes that have been done
   checkCudaErrors(cudaDeviceSynchronize());
-//  timer.Stop();
-//  std::cout << " GetEntireCfwStaticPairs kernel and cudaDeviceSynchronize() finished in " << timer.Elapsed() << " ms" << std::endl;
+  timer.Stop();
+  std::cout << " GetEntireCfwStaticPairs kernel and cudaDeviceSynchronize() finished in " << timer.Elapsed() << " ms" << std::endl;
   //NOTE: cudaDeviceSynchronize should be included in kernel time calculation because...
   //  The kernel call is asynchronous, meaning it launches the kernel and then immediately returns control to the host thread, allowing the host thread to continue. 
   //  Therefore the overhead in the host thread for a kernel call may be as low as a few microseconds.
 
-//  timer.Start();
+  timer.Start();
   // return the CF
   td2dVec tReturnVec;
     tReturnVec.resize(tNBins,td1dVec(2));
@@ -1589,11 +1661,194 @@ td2dVec ParallelWaveFunction::RunInterpolateEntireCfwStaticPairs(int aAnalysisNu
 
   for(int i=0; i<tNStreams; i++) cudaStreamDestroy(tStreams[i]);
 
-//  timer.Stop();
-//  std::cout << " timerPost: " << timer.Elapsed() << " ms" << std::endl;
+  timer.Stop();
+  std::cout << " timerPost: " << timer.Elapsed() << " ms" << std::endl;
 
   return tReturnVec;
 }
+*/
+
+
+
+//________________________________________________________________________________________________________________
+td2dVec ParallelWaveFunction::RunInterpolateEntireCfwStaticPairs(int aAnalysisNumber, double aRadiusScale, double aReF0, double aImF0, double aD0)
+{
+  GpuTimer timer;
+  timer.Start();
+
+  int tNBins = fSamplePairsBinInfo.nBinsK;
+//  int tNPairsPerBin = fSamplePairsBinInfo.nPairsPerBin;
+  int tSizeOutput = tNBins*fNBlocks*sizeof(double); //the kernel reduces the values for tNPairs bins down to fNBlocks bins
+  int tSizeShared = fNThreadsPerBlock*sizeof(double);
+  tSizeShared *= 2; //to account for Cf values and counts
+
+  const int tNStreams = tNBins;
+
+  //---Host arrays and allocations
+  double * h_CfSums;
+  double * h_CfCounts;
+
+  checkCudaErrors(cudaMallocManaged(&h_CfSums, tSizeOutput));
+  checkCudaErrors(cudaMallocManaged(&h_CfCounts, tSizeOutput));
+
+  double * h_GamowFactors;
+
+  double * h_ExpTermsReal;
+  double * h_ExpTermsImag;
+
+  double * h_GTildeReal;
+  double * h_GTildeImag;
+
+  double * h_HyperGeo1F1Real;
+  double * h_HyperGeo1F1Imag;
+
+  double * h_ScattLenReal;
+  double * h_ScattLenImag;
+
+
+
+
+
+  int tSizeOutputBig = tNBins*fNThreadsPerBlock*fNBlocks*sizeof(double);
+  checkCudaErrors(cudaMallocManaged(&h_GamowFactors, tSizeOutputBig));
+
+  checkCudaErrors(cudaMallocManaged(&h_ExpTermsReal, tSizeOutputBig));
+  checkCudaErrors(cudaMallocManaged(&h_ExpTermsImag, tSizeOutputBig));
+
+  checkCudaErrors(cudaMallocManaged(&h_GTildeReal, tSizeOutputBig));
+  checkCudaErrors(cudaMallocManaged(&h_GTildeImag, tSizeOutputBig));
+
+  checkCudaErrors(cudaMallocManaged(&h_HyperGeo1F1Real, tSizeOutputBig));
+  checkCudaErrors(cudaMallocManaged(&h_HyperGeo1F1Imag, tSizeOutputBig));
+
+  checkCudaErrors(cudaMallocManaged(&h_ScattLenReal, tSizeOutputBig));
+  checkCudaErrors(cudaMallocManaged(&h_ScattLenImag, tSizeOutputBig));
+
+  cudaStream_t tStreams[tNStreams];
+
+  for(int i=0; i<tNStreams; i++)
+  {
+    cudaStreamCreate(&tStreams[i]);
+  }
+
+  timer.Stop();
+  std::cout << " Setup time: " << timer.Elapsed() << " ms" << std::endl;
+
+
+  //----------Run the kernels-----------------------------------------------
+  timer.Start();
+/*
+  for(int i=0; i<tNBins; i++)
+  {
+    int tOffsetOutput = i*fNBlocks;
+
+    GetAllGamowFactors<<<fNBlocks,fNThreadsPerBlock,tSizeShared,tStreams[0]>>>(h_GamowFactors, aAnalysisNumber, i, tOffsetOutput);
+    GetAllExpTermsCmplx<<<fNBlocks,fNThreadsPerBlock,tSizeShared,tStreams[1]>>>(aRadiusScale, h_ExpTermsReal, h_ExpTermsImag, aAnalysisNumber, i, tOffsetOutput);
+    GetAllGTildeCmplx<<<fNBlocks,fNThreadsPerBlock,tSizeShared,tStreams[2]>>>(aRadiusScale, h_GTildeReal, h_GTildeImag, aAnalysisNumber, i, tOffsetOutput);
+    GetAllHyperGeo1F1Cmplx<<<fNBlocks,fNThreadsPerBlock,tSizeShared,tStreams[3]>>>(aRadiusScale, h_HyperGeo1F1Real, h_HyperGeo1F1Imag, aAnalysisNumber, i, tOffsetOutput);
+    GetAllScattLenCmplx<<<fNBlocks,fNThreadsPerBlock,tSizeShared,tStreams[4]>>>(aRadiusScale, aReF0, aImF0, aD0, h_ScattLenReal, h_ScattLenImag, aAnalysisNumber, i, tOffsetOutput);
+
+    checkCudaErrors(cudaDeviceSynchronize());
+
+    InterpolateAllWfSquared<<<fNBlocks,fNThreadsPerBlock,tSizeShared,tStreams[5]>>>(aRadiusScale, h_GamowFactors, h_ExpTermsReal, h_ExpTermsImag, h_GTildeReal, h_GTildeImag, h_HyperGeo1F1Real, h_HyperGeo1F1Imag, h_ScattLenReal, h_ScattLenImag, h_CfSums, h_CfCounts, aAnalysisNumber, i, tOffsetOutput);
+  }
+*/
+  int tOffset = 0;
+  for(int i=0; i<tNBins; i++)
+  {
+    tOffset = i*fNThreadsPerBlock*fNBlocks;
+    GetAllGamowFactors<<<fNBlocks,fNThreadsPerBlock,tSizeShared,tStreams[i]>>>(h_GamowFactors, aAnalysisNumber, i, tOffset);
+  }
+
+  for(int i=0; i<tNBins; i++)
+  {
+    tOffset = i*fNThreadsPerBlock*fNBlocks;
+    GetAllExpTermsCmplx<<<fNBlocks,fNThreadsPerBlock,tSizeShared,tStreams[i]>>>(aRadiusScale, h_ExpTermsReal, h_ExpTermsImag, aAnalysisNumber, i, tOffset);
+  }
+
+  for(int i=0; i<tNBins; i++)
+  {
+    tOffset = i*fNThreadsPerBlock*fNBlocks;
+    GetAllGTildeCmplx<<<fNBlocks,fNThreadsPerBlock,tSizeShared,tStreams[i]>>>(aRadiusScale, h_GTildeReal, h_GTildeImag, aAnalysisNumber, i, tOffset);
+  }
+
+  for(int i=0; i<tNBins; i++)
+  {
+    tOffset = i*fNThreadsPerBlock*fNBlocks;
+    GetAllHyperGeo1F1Cmplx<<<fNBlocks,fNThreadsPerBlock,tSizeShared,tStreams[i]>>>(aRadiusScale, h_HyperGeo1F1Real, h_HyperGeo1F1Imag, aAnalysisNumber, i, tOffset);
+  }
+
+  for(int i=0; i<tNBins; i++)
+  {
+    tOffset = i*fNThreadsPerBlock*fNBlocks;
+    GetAllScattLenCmplx<<<fNBlocks,fNThreadsPerBlock,tSizeShared,tStreams[i]>>>(aRadiusScale, aReF0, aImF0, aD0, h_ScattLenReal, h_ScattLenImag, aAnalysisNumber, i, tOffset);
+  }
+
+  checkCudaErrors(cudaDeviceSynchronize());
+
+  int tOffsetInput=0, tOffsetOutput=0;
+  for(int i=0; i<tNBins; i++)
+  {
+    tOffsetInput = i*fNThreadsPerBlock*fNBlocks;
+    tOffsetOutput = i*fNBlocks;
+    InterpolateAllWfSquared<<<fNBlocks,fNThreadsPerBlock,tSizeShared,tStreams[i]>>>(aRadiusScale, h_GamowFactors, h_ExpTermsReal, h_ExpTermsImag, h_GTildeReal, h_GTildeImag, h_HyperGeo1F1Real, h_HyperGeo1F1Imag, h_ScattLenReal, h_ScattLenImag, h_CfSums, h_CfCounts, aAnalysisNumber, i, tOffsetInput, tOffsetOutput);
+  }
+
+  //The following is necessary for the host to be able to "see" the changes that have been done
+  checkCudaErrors(cudaDeviceSynchronize());
+  timer.Stop();
+  std::cout << " GetEntireCfwStaticPairs kernel and cudaDeviceSynchronize() finished in " << timer.Elapsed() << " ms" << std::endl;
+  //NOTE: cudaDeviceSynchronize should be included in kernel time calculation because...
+  //  The kernel call is asynchronous, meaning it launches the kernel and then immediately returns control to the host thread, allowing the host thread to continue. 
+  //  Therefore the overhead in the host thread for a kernel call may be as low as a few microseconds.
+
+  timer.Start();
+  // return the CF
+  td2dVec tReturnVec;
+    tReturnVec.resize(tNBins,td1dVec(2));
+
+  double tSum = 0.0;
+  int tCounts = 0;
+  for(int i=0; i<tNBins; i++)
+  {
+    tSum=0.0;
+    tCounts = 0;
+    for(int j=0; j<fNBlocks; j++)
+    {
+      tSum += h_CfSums[j+i*fNBlocks]; 
+      tCounts += h_CfCounts[j+i*fNBlocks]; 
+    }
+    tReturnVec[i][0] = tSum;
+    tReturnVec[i][1] = tCounts;
+  }
+
+  checkCudaErrors(cudaFree(h_CfSums));
+  checkCudaErrors(cudaFree(h_CfCounts));
+
+  checkCudaErrors(cudaFree(h_GamowFactors));
+
+  checkCudaErrors(cudaFree(h_ExpTermsReal));
+  checkCudaErrors(cudaFree(h_ExpTermsImag));
+
+  checkCudaErrors(cudaFree(h_GTildeReal));
+  checkCudaErrors(cudaFree(h_GTildeImag));
+
+  checkCudaErrors(cudaFree(h_HyperGeo1F1Real));
+  checkCudaErrors(cudaFree(h_HyperGeo1F1Imag));
+
+  checkCudaErrors(cudaFree(h_ScattLenReal));
+  checkCudaErrors(cudaFree(h_ScattLenImag));
+
+  for(int i=0; i<tNStreams; i++) cudaStreamDestroy(tStreams[i]);
+
+  timer.Stop();
+  std::cout << " timerPost: " << timer.Elapsed() << " ms" << std::endl;
+
+  return tReturnVec;
+}
+
+
+
 
 
 

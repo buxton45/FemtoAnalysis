@@ -64,6 +64,7 @@ CoulombFitterParallel::CoulombFitterParallel(FitSharedAnalyses* aFitSharedAnalys
 //________________________________________________________________________________________________________________
 CoulombFitterParallel::~CoulombFitterParallel()
 {
+/*
   cout << "CoulombFitterParallel object is being deleted!!!" << endl;
 
   //---Clean up
@@ -83,7 +84,7 @@ CoulombFitterParallel::~CoulombFitterParallel()
     fInterpHistFile->Close();
     delete fInterpHistFile;
   }
-
+*/
   //TODO figure out how to deallocate and delete multi dimensional vectors
 /*
   delete fHyperGeo1F1Real;
@@ -307,9 +308,57 @@ void CoulombFitterParallel::BuildPairKStar4dVecOnFly(TString aPairKStarNtupleBas
 }
 
 //________________________________________________________________________________________________________________
-void CoulombFitterParallel::BuildPairSample4dVec(int aNPairsPerKStarBin, double aBinSize)
+bool CoulombFitterParallel::Sort2dPairsByRadius(const td1dVec &aVec1, const td1dVec &aVec2)
+{
+  return aVec1[1] < aVec2[1];
+}
+
+//________________________________________________________________________________________________________________
+bool CoulombFitterParallel::Sort2dPairsByGlobalBin(const td1dVec &aVec1, const td1dVec &aVec2)
+{
+  return aVec1[3] < aVec2[3];
+}
+
+//________________________________________________________________________________________________________________
+void CoulombFitterParallel::FullSort2dPairVec(td2dVec &aPairs, BinInfoHyperGeo1F1 &aBinInfo)
+{
+  int tGlobalBin=-1;
+
+  int tBinNumberK=-1;
+  int tBinNumberR=-1;
+  int tBinNumberTheta=-1;
+  for(unsigned int i=0; i<aPairs.size(); i++)
+  {
+    tBinNumberK = Interpolator::GetBinNumber(aBinInfo.binWidthK, aBinInfo.minK, aBinInfo.maxK, aPairs[i][0]);
+    tBinNumberR = Interpolator::GetBinNumber(aBinInfo.binWidthR, aBinInfo.minR, aBinInfo.maxR, aPairs[i][1]);
+    tBinNumberTheta = Interpolator::GetBinNumber(aBinInfo.binWidthTheta, aBinInfo.minTheta, aBinInfo.maxTheta, aPairs[i][2]);
+
+    tGlobalBin = tBinNumberK*aBinInfo.nBinsR*aBinInfo.nBinsTheta + tBinNumberR*aBinInfo.nBinsTheta + tBinNumberTheta;
+
+    aPairs[i].push_back(tGlobalBin);
+  }
+  sort(aPairs.begin(), aPairs.end(), Sort2dPairsByGlobalBin);
+  for(unsigned int i=0; i<aPairs.size(); i++) aPairs[i].pop_back();
+}
+
+//________________________________________________________________________________________________________________
+void CoulombFitterParallel::FullSort4dPairVec(td4dVec &a4dPairs, BinInfoHyperGeo1F1 &aBinInfo)
+{
+  for(int iAnaly=0; iAnaly<fNAnalyses; iAnaly++)
+  {
+    for(int iKStarBin=0; iKStarBin<fNbinsXToBuild; iKStarBin++)
+    {
+      FullSort2dPairVec(a4dPairs[iAnaly][iKStarBin], aBinInfo);
+    }
+  }
+}
+
+//________________________________________________________________________________________________________________
+void CoulombFitterParallel::BuildPairSample4dVec(int aNPairsPerKStarBin, double aBinSize, bool aSort)
 {
   CoulombFitter::BuildPairSample4dVec(aNPairsPerKStarBin, aBinSize);
+
+  if(aSort) FullSort4dPairVec(fPairSample4dVec, fHyperGeo1F1Info);
 
   fSamplePairsBinInfo.nAnalyses = fNAnalyses;
   fSamplePairsBinInfo.nBinsK = fNbinsXToBuild;
@@ -1128,13 +1177,19 @@ tTotalTimer.Start();
       }
 
       double tNumContent=0., tDenContent=0.;
-      for(int ix=1; ix <= fNbinsXToFit; ix++)
+      for(int ix=0; ix < fNbinsXToFit; ix++)
       {
       //TODO check to make sure correct tCf bin and tNumContent tDenContent bins are being compared
 
-        tNumContent = tNum->GetBinContent(ix);
-        tDenContent = tDen->GetBinContent(ix);
-
+        tNumContent = tNum->GetBinContent(ix+1);
+        tDenContent = tDen->GetBinContent(ix+1);
+if(tNumContent==0 || tDenContent==0 || tCorrectedFitCfContent[ix]==0)
+{
+cout << "tNumContent = " << tNumContent << endl;
+cout << "tDenContent = " << tDenContent << endl;
+cout << "tCorrectedFitCfContent[" << ix << "] = " << tCorrectedFitCfContent[ix] << endl;
+}
+assert(tNumContent!=0 && tDenContent!=0 && tCorrectedFitCfContent[ix]!=0);
         if(tNumContent!=0 && tDenContent!=0 && tCorrectedFitCfContent[ix]!=0) //even if only in one single bin, t*Content=0 causes fChi2->nan
         {
           double tChi2 = 0.;

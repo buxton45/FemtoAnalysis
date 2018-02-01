@@ -43,7 +43,12 @@ public:
   td1dVec BuildPairKStar4dVecFromTxt(TString aFileBaseName);  //TODO fix the fPairKStar3dVecInfo and should this be a virtual function?
   void BuildPairKStar4dVecOnFly(TString aPairKStarNtupleBaseName, int aNFiles, int aNbinsKStar, double aKStarMin, double aKStarMax);
 
-  void BuildPairSample4dVec(int aNPairsPerKStarBin=16384, double aBinSize=0.01);
+  static bool Sort2dPairsByRadius(const td1dVec &aVec1, const td1dVec &aVec2);
+  static bool Sort2dPairsByGlobalBin(const td1dVec &aVec1, const td1dVec &aVec2);
+  void FullSort2dPairVec(td2dVec &aPairs, BinInfoHyperGeo1F1 &aBinInfo);
+  void FullSort4dPairVec(td4dVec &a4dPairs, BinInfoHyperGeo1F1 &aBinInfo);
+  void BuildPairSample4dVec(int aNPairsPerKStarBin=16384, double aBinSize=0.01, bool aSort=true);
+
   bool CanInterpAllSamplePairs();
   td3dVec GetCPUSamplePairs(int aAnalysisNumber);
 

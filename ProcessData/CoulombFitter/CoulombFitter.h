@@ -59,10 +59,7 @@ public:
   td1dVec BuildPairKStar4dVecFromTxt(TString aFileBaseName);
   void BuildPairKStar4dVecOnFly(TString aPairKStarNtupleBaseName, int aNFiles, int aNbinsKStar, double aKStarMin, double aKStarMax);
 
-  static bool Sort2dPairsByRadius(const td1dVec &aVec1, const td1dVec &aVec2);
-  static bool Sort2dPairsByGlobalBin(const td1dVec &aVec1, const td1dVec &aVec2);
-  void FullSort2dPairVec(td2dVec &aPairs, BinInfoHyperGeo1F1 &aBinInfo);
-  void BuildPairSample4dVec(int aNPairsPerKStarBin, double aBinSize, bool aSortByRadius=false);  //TODO make this parallel!!!!!
+  void BuildPairSample4dVec(int aNPairsPerKStarBin, double aBinSize);  //TODO make this parallel!!!!!
   void BuildPairSample4dVec();
   void UpdatePairRadiusParameter(double aNewRadius, int aAnalysisNumber);
 
