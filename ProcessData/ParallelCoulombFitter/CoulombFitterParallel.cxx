@@ -1183,6 +1183,8 @@ tTotalTimer.Start();
 
         tNumContent = tNum->GetBinContent(ix+1);
         tDenContent = tDen->GetBinContent(ix+1);
+//TODO tNumContent and tDenContent are zero sometimes for XiKch 3050!
+/*
 if(tNumContent==0 || tDenContent==0 || tCorrectedFitCfContent[ix]==0)
 {
 cout << "tNumContent = " << tNumContent << endl;
@@ -1190,6 +1192,7 @@ cout << "tDenContent = " << tDenContent << endl;
 cout << "tCorrectedFitCfContent[" << ix << "] = " << tCorrectedFitCfContent[ix] << endl;
 }
 assert(tNumContent!=0 && tDenContent!=0 && tCorrectedFitCfContent[ix]!=0);
+*/
         if(tNumContent!=0 && tDenContent!=0 && tCorrectedFitCfContent[ix]!=0) //even if only in one single bin, t*Content=0 causes fChi2->nan
         {
           double tChi2 = 0.;

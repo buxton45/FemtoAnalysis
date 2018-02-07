@@ -4,6 +4,12 @@
 
 #include "ParallelWaveFunction.h"
 
+texture<float, cudaTextureType2D, cudaReadModeElementType> texRefA;
+const textureReference* texRefAPtr;
+
+texture<float, cudaTextureType2D, cudaReadModeElementType> texRefB;
+const textureReference* texRefBPtr;
+
 //________________________________________________________________________________________________________________
 __device__ int GetBinNumber(double aBinSize, int aNbins, double aValue)
 {
@@ -231,6 +237,122 @@ __device__ cuDoubleComplex GTildeInterpolate(double aKStar, double aRStar)
   return tReturnValue;
 }
 
+/*
+//________________________________________________________________________________________________________________
+__device__ cuDoubleComplex GTildeInterpolate(double aKStar, double aRStar)
+{
+  double tResultReal = 0.;
+  double tResultImag = 0.;
+  //----------------------------
+
+  int tNbinsR = d_fGTildeInfo->nBinsR;
+  //----------------------------
+
+  //TODO put in check to make sure GetInterpLowBin does not return the error -2
+  double tBinWidthK = d_fGTildeInfo->binWidthK;
+  int tBinLowK = GetInterpLowBin(kGTilde,kKaxis,aKStar);
+  int tBinHighK = tBinLowK+1;
+  double tBinLowCenterK = d_fGTildeInfo->minK + (tBinLowK+0.5)*d_fGTildeInfo->binWidthK;
+  double tBinHighCenterK = tBinLowCenterK+tBinWidthK;
+
+  double tBinWidthR = d_fGTildeInfo->binWidthR;
+  int tBinLowR = GetInterpLowBin(kGTilde,kRaxis,aRStar);
+  int tBinHighR = tBinLowR+1;
+  double tBinLowCenterR = d_fGTildeInfo->minR + (tBinLowR+0.5)*d_fGTildeInfo->binWidthR;
+  double tBinHighCenterR = tBinLowCenterR+tBinWidthR;
+
+  //--------------------------
+
+  double tQ11Real = d_fGTildeReal[tBinLowR + tBinLowK*tNbinsR];
+  double tQ12Real = d_fGTildeReal[tBinHighR + tBinLowK*tNbinsR];
+  double tQ21Real = d_fGTildeReal[tBinLowR + tBinHighK*tNbinsR];
+  double tQ22Real = d_fGTildeReal[tBinHighR + tBinHighK*tNbinsR];
+
+//  float tQ11Realv2 = tex2D(texRefA, tBinLowR, tBinLowK);
+//  float tQ12Realv2 = tex2D(texRefA, tBinHighR, tBinLowK);
+//  float tQ21Realv2 = tex2D(texRefA, tBinLowR, tBinHighK);
+//  float tQ22Realv2 = tex2D(texRefA, tBinHighR, tBinHighK);
+
+  double tQ11Imag = d_fGTildeImag[tBinLowR + tBinLowK*tNbinsR];
+  double tQ12Imag = d_fGTildeImag[tBinHighR + tBinLowK*tNbinsR];
+  double tQ21Imag = d_fGTildeImag[tBinLowR + tBinHighK*tNbinsR];
+  double tQ22Imag = d_fGTildeImag[tBinHighR + tBinHighK*tNbinsR];
+
+//--------------------------
+
+  double tD = 1.0*tBinWidthK*tBinWidthR;
+
+  tResultReal = (1.0/tD)*(tQ11Real*(tBinHighCenterK-aKStar)*(tBinHighCenterR-aRStar) + tQ21Real*(aKStar-tBinLowCenterK)*(tBinHighCenterR-aRStar) + tQ12Real*(tBinHighCenterK-aKStar)*(aRStar-tBinLowCenterR) + tQ22Real*(aKStar-tBinLowCenterK)*(aRStar-tBinLowCenterR));
+
+//float tResultReal2 = (1.0/tD)*(tQ11Realv2*(tBinHighCenterK-aKStar)*(tBinHighCenterR-aRStar) + tQ21Realv2*(aKStar-tBinLowCenterK)*(tBinHighCenterR-aRStar) + tQ12Realv2*(tBinHighCenterK-aKStar)*(aRStar-tBinLowCenterR) + tQ22Realv2*(aKStar-tBinLowCenterK)*(aRStar-tBinLowCenterR));
+//printf("tResultReal = %0.4f \t tResultReal2 = %0.4f \n", tResultReal, tResultReal2);
+
+
+  float tDiffK2 = aKStar - (d_fGTildeInfo->minK + tBinLowK*d_fGTildeInfo->binWidthK);
+  float tNormDiffK2 = tBinLowK + tDiffK2/tBinLowK*d_fGTildeInfo->binWidthK;
+
+  float tDiffR2 = aRStar - (d_fGTildeInfo->minR + tBinLowR*d_fGTildeInfo->binWidthR);
+  float tNormDiffR2 = tBinLowR + tDiffR2/tBinLowR*d_fGTildeInfo->binWidthR;
+
+  float tResultReal2 = tex2D(texRefA, tNormDiffR2, tNormDiffK2);
+  //-------------------
+  float tDiffK3 = aKStar - (d_fGTildeInfo->minK + (tBinLowK+0.5)*d_fGTildeInfo->binWidthK);
+  float tNormDiffK3 = tBinLowK + tDiffK3/tBinLowK*d_fGTildeInfo->binWidthK;
+
+  float tDiffR3 = aRStar - (d_fGTildeInfo->minR + (tBinLowR+0.5)*d_fGTildeInfo->binWidthR);
+  float tNormDiffR3 = tBinLowR + tDiffR3/tBinLowR*d_fGTildeInfo->binWidthR;
+
+  float tResultReal3 = tex2D(texRefA, tNormDiffR3+0.5, tNormDiffK3+0.5);
+  //----------------------
+printf("tResultReal = %0.4f \t tResultReal2 = %0.4f \t tResultReal3 = %0.4f \n", tResultReal, tResultReal2, tResultReal3);
+
+  tResultImag = (1.0/tD)*(tQ11Imag*(tBinHighCenterK-aKStar)*(tBinHighCenterR-aRStar) + tQ21Imag*(aKStar-tBinLowCenterK)*(tBinHighCenterR-aRStar) + tQ12Imag*(tBinHighCenterK-aKStar)*(aRStar-tBinLowCenterR) + tQ22Imag*(aKStar-tBinLowCenterK)*(aRStar-tBinLowCenterR));
+
+
+//--------------------------
+  cuDoubleComplex tReturnValue = make_cuDoubleComplex(tResultReal,tResultImag);
+  return tReturnValue;
+}
+*/
+//________________________________________________________________________________________________________________
+__device__ cuDoubleComplex GTildeInterpolateTexture(double aKStar, double aRStar)
+{
+  float tResultReal = 0.;
+  float tResultImag = 0.;
+  //----------------------------
+
+  int tNbinsR = d_fGTildeInfo->nBinsR;
+  //----------------------------
+
+  //TODO put in check to make sure GetInterpLowBin does not return the error -2
+  double tBinWidthK = d_fGTildeInfo->binWidthK;
+  int tBinLowK = GetInterpLowBin(kGTilde,kKaxis,aKStar);
+  int tBinHighK = tBinLowK+1;
+  double tBinLowCenterK = d_fGTildeInfo->minK + (tBinLowK+0.5)*d_fGTildeInfo->binWidthK;
+  double tBinHighCenterK = tBinLowCenterK+tBinWidthK;
+
+  double tBinWidthR = d_fGTildeInfo->binWidthR;
+  int tBinLowR = GetInterpLowBin(kGTilde,kRaxis,aRStar);
+  int tBinHighR = tBinLowR+1;
+  double tBinLowCenterR = d_fGTildeInfo->minR + (tBinLowR+0.5)*d_fGTildeInfo->binWidthR;
+  double tBinHighCenterR = tBinLowCenterR+tBinWidthR;
+
+  //-------------------
+
+  float tDiffK = aKStar - (d_fGTildeInfo->minK + (tBinLowK+0.5)*d_fGTildeInfo->binWidthK);
+  float tNormDiffK = tBinLowK + tDiffK/tBinLowK*d_fGTildeInfo->binWidthK;
+
+  float tDiffR = aRStar - (d_fGTildeInfo->minR + (tBinLowR+0.5)*d_fGTildeInfo->binWidthR);
+  float tNormDiffR = tBinLowR + tDiffR/tBinLowR*d_fGTildeInfo->binWidthR;
+
+  tResultReal = tex2D(texRefA, tNormDiffR+0.5, tNormDiffK+0.5);
+  tResultImag = tex2D(texRefB, tNormDiffR+0.5, tNormDiffK+0.5);
+  //----------------------
+
+//--------------------------
+  cuDoubleComplex tReturnValue = make_cuDoubleComplex(tResultReal,tResultImag);
+  return tReturnValue;
+}
 
 //________________________________________________________________________________________________________________
 __device__ cuDoubleComplex HyperGeo1F1Interpolate(double aKStar, double aRStar, double aTheta)
@@ -899,6 +1021,30 @@ __global__ void GetAllGTildeCmplx(double aRadiusScale, double *g_odataReal, doub
 }
 
 //________________________________________________________________________________________________________________
+__global__ void GetAllGTildeCmplxTexture(double aRadiusScale, double *g_odataReal, double *g_odataImag, int aAnalysisNumber, int aBinKNumber, int aOffsetOutput)
+{
+//  int idx = threadIdx.x + blockIdx.x*blockDim.x;
+
+  unsigned int tid = threadIdx.x;
+  unsigned int tPairNumber = blockIdx.x*blockDim.x + threadIdx.x;
+  unsigned int i = GetSamplePairOffset(aAnalysisNumber,aBinKNumber,tPairNumber);
+
+  if(CanInterpPair(d_fPairSample4dVec[i], aRadiusScale*d_fPairSample4dVec[i+1], d_fPairSample4dVec[i+2]))
+  {
+    cuDoubleComplex tGTildeCmplx = GTildeInterpolateTexture(d_fPairSample4dVec[i],aRadiusScale*d_fPairSample4dVec[i+1]);
+
+    g_odataReal[tPairNumber+aOffsetOutput] = cuCreal(tGTildeCmplx);
+    g_odataImag[tPairNumber+aOffsetOutput] = cuCimag(tGTildeCmplx);
+  }
+  else
+  {
+    g_odataReal[tPairNumber+aOffsetOutput] = 0.;
+    g_odataImag[tPairNumber+aOffsetOutput] = 0.;
+  }
+
+}
+
+//________________________________________________________________________________________________________________
 __global__ void GetAllHyperGeo1F1Cmplx(double aRadiusScale, double *g_odataReal, double *g_odataImag, int aAnalysisNumber, int aBinKNumber, int aOffsetOutput)
 {
 //  int idx = threadIdx.x + blockIdx.x*blockDim.x;
@@ -1193,7 +1339,7 @@ void ParallelWaveFunction::LoadLednickyHFunction(td1dVec &aHFunc)
   }
 }
 
-
+/*
 //________________________________________________________________________________________________________________
 void ParallelWaveFunction::LoadGTildeReal(td2dVec &aGTildeReal)
 {
@@ -1215,8 +1361,51 @@ void ParallelWaveFunction::LoadGTildeReal(td2dVec &aGTildeReal)
   }
 
 }
+*/
 
+//________________________________________________________________________________________________________________
+void ParallelWaveFunction::LoadGTildeReal(td2dVec &aGTildeReal)
+{
+  int tNbinsK = aGTildeReal.size();
+  int tNbinsR = aGTildeReal[0].size();
 
+  int tSize = tNbinsK*tNbinsR*sizeof(double);
+
+  checkCudaErrors(cudaMallocManaged(&d_fGTildeReal, tSize));
+
+  int tIndex;
+  float *A = new float[tNbinsK*tNbinsR];
+  for(int iK=0; iK<tNbinsK; iK++)
+  {
+    for(int iR=0; iR<tNbinsR; iR++)
+    {
+      tIndex = iR + iK*tNbinsR;
+      d_fGTildeReal[tIndex] = aGTildeReal[iK][iR];
+      A[tIndex] = aGTildeReal[iK][iR];
+    }
+  }
+
+//----------------------------------
+
+texRefA.addressMode[0] = cudaAddressModeClamp;
+texRefA.addressMode[1] = cudaAddressModeClamp;
+texRefA.filterMode = cudaFilterModeLinear;
+texRefA.normalized = false;
+
+cudaGetTextureReference(&texRefAPtr, &texRefA);
+cudaChannelFormatDesc channelDescA = cudaCreateChannelDesc<float>();
+
+size_t pitchA;
+checkCudaErrors(cudaMallocPitch(&dA, &pitchA, sizeof(float)*tNbinsR, tNbinsK));
+checkCudaErrors(cudaMemcpy2D(dA, pitchA, A, sizeof(float)*tNbinsR, sizeof(float)*tNbinsR, tNbinsK, cudaMemcpyHostToDevice));
+
+size_t offset;
+cudaBindTexture2D(&offset, texRefAPtr, dA, &channelDescA, tNbinsR, tNbinsK, pitchA);
+
+delete[] A;
+}
+
+/*
 //________________________________________________________________________________________________________________
 void ParallelWaveFunction::LoadGTildeImag(td2dVec &aGTildeImag)
 {
@@ -1236,6 +1425,50 @@ void ParallelWaveFunction::LoadGTildeImag(td2dVec &aGTildeImag)
       d_fGTildeImag[tIndex] = aGTildeImag[iK][iR];
     }
   }
+
+}
+*/
+
+//________________________________________________________________________________________________________________
+void ParallelWaveFunction::LoadGTildeImag(td2dVec &aGTildeImag)
+{
+  int tNbinsK = aGTildeImag.size();
+  int tNbinsR = aGTildeImag[0].size();
+
+  int tSize = tNbinsK*tNbinsR*sizeof(double);
+
+  checkCudaErrors(cudaMallocManaged(&d_fGTildeImag, tSize));
+
+  int tIndex;
+  float *B = new float[tNbinsK*tNbinsR];
+  for(int iK=0; iK<tNbinsK; iK++)
+  {
+    for(int iR=0; iR<tNbinsR; iR++)
+    {
+      tIndex = iR + iK*tNbinsR;
+      d_fGTildeImag[tIndex] = aGTildeImag[iK][iR];
+      B[tIndex] = aGTildeImag[iK][iR];
+    }
+  }
+
+//----------------------------------
+
+texRefB.addressMode[0] = cudaAddressModeClamp;
+texRefB.addressMode[1] = cudaAddressModeClamp;
+texRefB.filterMode = cudaFilterModeLinear;
+texRefB.normalized = false;
+
+cudaGetTextureReference(&texRefBPtr, &texRefB);
+cudaChannelFormatDesc channelDescB = cudaCreateChannelDesc<float>();
+
+size_t pitchB;
+checkCudaErrors(cudaMallocPitch(&dB, &pitchB, sizeof(float)*tNbinsR, tNbinsK));
+checkCudaErrors(cudaMemcpy2D(dB, pitchB, B, sizeof(float)*tNbinsR, sizeof(float)*tNbinsR, tNbinsK, cudaMemcpyHostToDevice));
+
+size_t offset;
+cudaBindTexture2D(&offset, texRefBPtr, dB, &channelDescB, tNbinsR, tNbinsK, pitchB);
+
+delete[] B;
 
 }
 
@@ -1700,6 +1933,9 @@ td2dVec ParallelWaveFunction::RunInterpolateEntireCfwStaticPairs(int aAnalysisNu
   double * h_GTildeReal;
   double * h_GTildeImag;
 
+  double * h_GTildeRealTexture;
+  double * h_GTildeImagTexture;
+
   double * h_HyperGeo1F1Real;
   double * h_HyperGeo1F1Imag;
 
@@ -1718,6 +1954,9 @@ td2dVec ParallelWaveFunction::RunInterpolateEntireCfwStaticPairs(int aAnalysisNu
 
   checkCudaErrors(cudaMallocManaged(&h_GTildeReal, tSizeOutputBig));
   checkCudaErrors(cudaMallocManaged(&h_GTildeImag, tSizeOutputBig));
+
+  checkCudaErrors(cudaMallocManaged(&h_GTildeRealTexture, tSizeOutputBig));
+  checkCudaErrors(cudaMallocManaged(&h_GTildeImagTexture, tSizeOutputBig));
 
   checkCudaErrors(cudaMallocManaged(&h_HyperGeo1F1Real, tSizeOutputBig));
   checkCudaErrors(cudaMallocManaged(&h_HyperGeo1F1Imag, tSizeOutputBig));
@@ -1773,6 +2012,12 @@ td2dVec ParallelWaveFunction::RunInterpolateEntireCfwStaticPairs(int aAnalysisNu
   {
     tOffset = i*fNThreadsPerBlock*fNBlocks;
     GetAllGTildeCmplx<<<fNBlocks,fNThreadsPerBlock,tSizeShared,tStreams[i]>>>(aRadiusScale, h_GTildeReal, h_GTildeImag, aAnalysisNumber, i, tOffset);
+  }
+
+  for(int i=0; i<tNBins; i++)
+  {
+    tOffset = i*fNThreadsPerBlock*fNBlocks;
+    GetAllGTildeCmplxTexture<<<fNBlocks,fNThreadsPerBlock,tSizeShared,tStreams[i]>>>(aRadiusScale, h_GTildeRealTexture, h_GTildeImagTexture, aAnalysisNumber, i, tOffset);
   }
 
   for(int i=0; i<tNBins; i++)
@@ -1838,6 +2083,9 @@ td2dVec ParallelWaveFunction::RunInterpolateEntireCfwStaticPairs(int aAnalysisNu
 
   checkCudaErrors(cudaFree(h_GTildeReal));
   checkCudaErrors(cudaFree(h_GTildeImag));
+
+  checkCudaErrors(cudaFree(h_GTildeRealTexture));
+  checkCudaErrors(cudaFree(h_GTildeImagTexture));
 
   checkCudaErrors(cudaFree(h_HyperGeo1F1Real));
   checkCudaErrors(cudaFree(h_HyperGeo1F1Imag));

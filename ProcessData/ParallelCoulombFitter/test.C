@@ -132,8 +132,8 @@ int main(int argc, char **argv)
   TString tFileLocationBase = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cXicKch_20170423/Results_cXicKch_20170423";
 
   AnalysisType tAnType, tConjType;
-  //tAnType = kXiKchP;
-  tAnType = kXiKchM;
+  tAnType = kXiKchP;
+  //tAnType = kXiKchM;
 
   int tNPairsPerKStarBin = 16384;
   int tNThreadsPerBlock = 512;
@@ -155,7 +155,7 @@ int main(int argc, char **argv)
   if(tAnalysisRunType==kTrain || tAnalysisRunType==kTrainSys) tNPartialAnalysis = 2;
 
   bool bIncludeSingletAndTriplet=false;
-  bool bRunMB=false;
+  bool bRunMB=true;
    
   TString tAnBaseName = TString(cAnalysisBaseTags[tAnType]);
   TString tAnName0010 = tAnBaseName + TString(cCentralityTags[0]);
@@ -210,10 +210,10 @@ int main(int argc, char **argv)
   if(tAnType==kAXiKchP || tAnType==kXiKchM)
   {
     tSharedAn->SetSharedParameter(kLambda,{0,1},0.5,0.1,1.);
-    tSharedAn->SetSharedParameter(kRadius,{0,1},4.0,1.,6.);
-    tSharedAn->SetSharedParameter(kRef0,-0.2,-3.,3.);
-    tSharedAn->SetSharedParameter(kImf0,0.2,-3.,3.);
-    tSharedAn->SetSharedParameter(kd0,0.,-5.,5.);
+    tSharedAn->SetSharedParameter(kRadius,{0,1},4.0,1.,10.);
+    tSharedAn->SetSharedParameter(kRef0,-0.2,0.,0.);
+    tSharedAn->SetSharedParameter(kImf0,0.2,0.,0.);
+    tSharedAn->SetSharedParameter(kd0,0.,-0,0.);
     if(bIncludeSingletAndTriplet)
     {
       tSharedAn->SetSharedParameter(kRef02,-0.2,-3.,3.);
@@ -224,8 +224,8 @@ int main(int argc, char **argv)
     {
       tSharedAn->SetSharedParameter(kLambda,{2,3},0.5,0.1,1.);
       tSharedAn->SetSharedParameter(kLambda,{4,5},0.5,0.1,1.);
-      tSharedAn->SetSharedParameter(kRadius,{2,3},3.0,1.,6.);
-      tSharedAn->SetSharedParameter(kRadius,{4,5},2.0,1.,6.);
+      tSharedAn->SetSharedParameter(kRadius,{2,3},3.0,1.,10.);
+      tSharedAn->SetSharedParameter(kRadius,{4,5},2.0,1.,10.);
     }
   }
 
