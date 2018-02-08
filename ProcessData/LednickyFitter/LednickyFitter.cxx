@@ -165,6 +165,23 @@ double LednickyFitter::LednickyEq(double *x, double *par)
 }
 
 //________________________________________________________________________________________________________________
+void LednickyFitter::AppendFitInfo(TString &aSaveName, bool aApplyMomResCorrection, bool aApplyNonFlatBackgroundCorrection, 
+                                          IncludeResidualsType aIncludeResidualsType, ResPrimMaxDecayType aResPrimMaxDecayType, ChargedResidualsType aChargedResidualsType, bool aFixD0)
+{
+  if(aApplyMomResCorrection) aSaveName += TString("_MomResCrctn");
+  if(aApplyNonFlatBackgroundCorrection) aSaveName += TString("_NonFlatBgdCrctn");
+
+  aSaveName += cIncludeResidualsTypeTags[aIncludeResidualsType];
+  if(aIncludeResidualsType != kIncludeNoResiduals)
+  {
+    aSaveName += cResPrimMaxDecayTypeTags[aResPrimMaxDecayType];
+    aSaveName += cChargedResidualsTypeTags[aChargedResidualsType];
+  }
+  if(aFixD0) aSaveName += TString("_FixedD0");
+}
+
+
+//________________________________________________________________________________________________________________
 void LednickyFitter::PrintCurrentParamValues(int aNpar, double* aPar)
 {
   for(int i=0; i<aNpar; i++) cout << "par[" << i << "] = " << aPar[i] << endl;
@@ -980,9 +997,6 @@ vector<int> LednickyFitter::GetParamInfoFromMinuitParamNumber(int aMinuitParamNu
 //________________________________________________________________________________________________________________
 TGraph* LednickyFitter::GetContourPlot(int aNPoints, int aParam1, int aParam2)
 {
-  TGraph* tReturnGr = (TGraph*)fMinuit->Contour(aNPoints, aParam1, aParam2);
-
-  //-------------------
   //X-AXIS
   vector<int> tParamInfo1 = GetParamInfoFromMinuitParamNumber(aParam1);
   AnalysisType tAnType1 = static_cast<AnalysisType>(tParamInfo1[0]);
@@ -1003,6 +1017,22 @@ TGraph* LednickyFitter::GetContourPlot(int aNPoints, int aParam1, int aParam2)
   TString tTitle = TString::Format("%s %s %s vs. %s %s %s", cAnalysisRootTags[tAnType1], cPrettyCentralityTags[tCentType1], cParameterNames[tParamType1], 
                                                             cAnalysisRootTags[tAnType2], cPrettyCentralityTags[tCentType2], cParameterNames[tParamType2]);
 
+  cout << "GetContourPlot for " << tTitle << endl;
+
+  //-------------------------------------------------------------------------
+  TGraph* tReturnGr;
+
+  tReturnGr = (TGraph*)fMinuit->Contour(aNPoints, aParam1, aParam2);
+  int tStatus = fMinuit->GetStatus();
+
+  //NOTE: TMinuit documentation is not accurate in describing what tStatus will be in various situations
+  //      Look at code instead
+  if(tStatus != 0)  //i.e., if failure
+  {
+    if(tStatus==-1) assert(0);  //if this is the case, I did something wrong
+    else tReturnGr = new TGraph(0);
+  }
+
   tReturnGr->SetName(tName);
   tReturnGr->SetTitle(tTitle);
 
@@ -1014,114 +1044,31 @@ TGraph* LednickyFitter::GetContourPlot(int aNPoints, int aParam1, int aParam2)
 
 
 //________________________________________________________________________________________________________________
-TCanvas* LednickyFitter::GenerateContourPlots(const vector<double> &aErrVals)
+void LednickyFitter::FixAllOtherParameters(int aParam1Exclude, int aParam2Exclude, vector<double> &aParamFitValues)
 {
-  assert(aErrVals.size() <= 2);  //TODO for now, impose this restriction
+  int tNParams = fFitSharedAnalyses->GetNMinuitParams();
+  assert(tNParams == (int)aParamFitValues.size());
 
-  InitializeFitter();
+  double arglist[2];
+  int tErrFlg = 0;
 
-  cout << "*****************************************************************************" << endl;
-  cout << "Starting to fit " << endl;
-  cout << "*****************************************************************************" << endl;
-
-  fMinuit->SetPrintLevel(0);  // -1=quiet, 0=normal, 1=verbose (more options using mnexcm("SET PRI", ...)
-
-  double arglist[10];
-  fErrFlg = 0;
-
-  // for max likelihood = 0.5, for chisq = 1.0
-  arglist[0] = 1.;
-  fMinuit->mnexcm("SET ERR", arglist ,1,fErrFlg);
-
-  // Set strategy to be used
-  // 0 = economize (many params and/or fcn takes a long time to calculate and/or not interested in precise param erros)
-  // 1 = default
-  // 2 = Minuit allowed to waste calls in order to ensure precision (fcn evaluated in short time and/or param erros must be reliable)
-  arglist[0] = 2;
-  fMinuit->mnexcm("SET STR", arglist ,1,fErrFlg);
-
-  // Now ready for minimization step
-  arglist[0] = 50000;
-  arglist[1] = 0.1;
-  fMinuit->mnexcm("MIGRAD", arglist ,2,fErrFlg);
-
-  if(fErrFlg != 0)
+  //First, free any previously fixed parameters
+  fMinuit->mnexcm("RES",arglist,0,tErrFlg);
+  for(int i=0; i<tNParams; i++)
   {
-    cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
-    //cout << "WARNING!!!!!" << endl << "fErrFlg != 0 for the Cf: " << fCfName << endl;
-    cout << "WARNING!!!!!" << endl << "fErrFlg != 0 for the Cf: " << endl;
-    cout << "fErrFlg = " << fErrFlg << endl;
-    cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
+    //Next, make sure we have a fresh start, with all parameters set to their fit values
+    arglist[0] = i+1;  //because Minuit numbering starts at 1, not 0!
+    arglist[1] = aParamFitValues[i];
+    fMinuit->mnexcm("SET PAR",arglist,2,tErrFlg);
+
+    //Finally, fix appropriate parameters
+    if(i != aParam1Exclude && i != aParam2Exclude) fMinuit->FixParameter(i);
   }
-  assert(fErrFlg==0);
-
-  // Print results
-  fMinuit->mnstat(fChi2,fEdm,fErrDef,fNvpar,fNparx,fIcstat);
-  fMinuit->mnprin(3,fChi2);
-
-  //---------------------------------
-  fMinuit->mnexcm("SHO COR", arglist ,2,fErrFlg);
-  //---------------------------------
-  int tNContourPoints = 4;
-
-  int tNParamsOfInterest = 11;
-  int tOffset = 6;
-/*
-  int tNParamsOfInterest = 11;
-  int tOffset = 0;
-*/
-
-  int tGridWidth = 1 + (tNParamsOfInterest-tOffset);
-
-  TCanvas* tReturnCan = new TCanvas("tReturnCan", "tReturnCan");
-  tReturnCan->Divide(tGridWidth,tGridWidth);
-  tReturnCan->cd();
-
-  int tPadNum = 0;
-  TGraph* tGr;
-
-  TString tFileName = TString::Format("TestTFile_%s.root", cAnalysisBaseTags[fFitSharedAnalyses->GetFitPairAnalysis(0)->GetAnalysisType()]);
-  TFile *tSaveFile = new TFile(tFileName, "RECREATE");
-
-  double tErrVal = 0.;
-  for(unsigned int iErrVal=0; iErrVal<aErrVals.size(); iErrVal++)
-  {
-    tErrVal = aErrVals[iErrVal];
-    arglist[0] = tErrVal;
-    fMinuit->mnexcm("SET ERR", arglist ,1,fErrFlg);
-
-    for(int i=tOffset; i<=tNParamsOfInterest; i++)
-    {
-      for(int j=i+1; j<=tNParamsOfInterest; j++)
-      {
-        tPadNum = (i-tOffset)*tGridWidth + ((j+1)-tOffset);
-        tReturnCan->cd(tPadNum);
-        tGr = GetContourPlot(tNContourPoints, i, j);
-        if(iErrVal==0)
-        {
-          tGr->SetFillColor(42);
-          tGr->Draw("alf");
-        }
-        else
-        {
-          tGr->SetFillColor(38);
-          tGr->Draw("lf");
-        }
-        tReturnCan->Update();
-        tGr->Write(TString::Format("%s_tErrVal=%0.1f", tGr->GetName(), tErrVal));
-      }
-    }
-  }
-
-  tSaveFile->Close();
-  return tReturnCan;
-  //---------------------------------
-//  Finalize();
 
 }
 
 //________________________________________________________________________________________________________________
-TCanvas* LednickyFitter::GenerateContourPlots(int aNPoints, const vector<double> &aParams, const vector<double> &aErrVals)
+TCanvas* LednickyFitter::GenerateContourPlots(int aNPoints, const vector<double> &aParams, const vector<double> &aErrVals, bool aFixAllOthers)
 {
   assert(aErrVals.size() <= 2);  //TODO for now, impose this restriction
 
@@ -1165,6 +1112,17 @@ TCanvas* LednickyFitter::GenerateContourPlots(int aNPoints, const vector<double>
   // Print results
   fMinuit->mnstat(fChi2,fEdm,fErrDef,fNvpar,fNparx,fIcstat);
   fMinuit->mnprin(3,fChi2);
+
+  int tNParams = fFitSharedAnalyses->GetNMinuitParams();
+  td1dVec tMinParams;
+  for(int i=0; i<tNParams; i++)
+  {
+    double tempMinParam;
+    double tempParError;
+    fMinuit->GetParameter(i,tempMinParam,tempParError);
+    
+    tMinParams.push_back(tempMinParam);
+  }
 
   //---------------------------------
   fMinuit->mnexcm("SHO COR", arglist ,2,fErrFlg);
@@ -1179,6 +1137,8 @@ TCanvas* LednickyFitter::GenerateContourPlots(int aNPoints, const vector<double>
   TString tFileName = TString::Format("TestTFile_%s.root", cAnalysisBaseTags[fFitSharedAnalyses->GetFitPairAnalysis(0)->GetAnalysisType()]);
   TFile *tSaveFile = new TFile(tFileName, "RECREATE");
 
+  TString tFigureName = TString::Format("TestFigure_%s.eps", cAnalysisBaseTags[fFitSharedAnalyses->GetFitPairAnalysis(0)->GetAnalysisType()]);
+
   double tErrVal = 0.;
   for(unsigned int iErrVal=0; iErrVal<aErrVals.size(); iErrVal++)
   {
@@ -1192,6 +1152,9 @@ TCanvas* LednickyFitter::GenerateContourPlots(int aNPoints, const vector<double>
       {
         tPadNum = i*aParams.size() + j + 1;  //+1 because pad numbering starts at 1, not 0
         tReturnCan->cd(tPadNum);
+
+        if(aFixAllOthers) FixAllOtherParameters(aParams[i], aParams[j], tMinParams);
+
         tGr = GetContourPlot(aNPoints, aParams[i], aParams[j]);
         if(iErrVal==0)
         {
@@ -1210,12 +1173,40 @@ TCanvas* LednickyFitter::GenerateContourPlots(int aNPoints, const vector<double>
   }
 
   tSaveFile->Close();
+  tReturnCan->SaveAs(tFigureName);
   return tReturnCan;
   //---------------------------------
 //  Finalize();
 
 }
 
+//________________________________________________________________________________________________________________
+TCanvas* LednickyFitter::GenerateContourPlots(int aNPoints, CentralityType aCentType, const vector<double> &aErrVals, bool aFixAllOthers)
+{
+  assert(fNAnalyses==6);  //This procedure assumes a full analysis with all centralities and pair/conj
 
+  vector<double> aParams(0);
+  if(aCentType==k0010)
+  {
+    aParams = vector<double>{0, 1, 6, 9, 10, 11};
+  }
+  else if(aCentType==k1030)
+  {
+    aParams = vector<double>{2, 3, 7, 9, 10, 11};
+  }
+  else if(aCentType==k1030)
+  {
+    aParams = vector<double>{4, 5, 8, 9, 10, 11};
+  }
+  else
+  {
+    for(int i=0; i<fFitSharedAnalyses->GetNMinuitParams(); i++)
+    {
+      aParams.push_back(i);
+    }
+  }
+
+  return GenerateContourPlots(aNPoints, aParams, aErrVals, aFixAllOthers);
+}
 
 

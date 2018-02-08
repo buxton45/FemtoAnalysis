@@ -85,8 +85,9 @@ public:
   void SetAllParameters();
   void InitializeGenerator(double aMaxFitKStar=0.3);  //Called withith DoFit
   void DoFit(double aMaxFitKStar=0.3);
-  TCanvas* GenerateContourPlots(const vector<double> &aErrVals={4, 1}, double aMaxFitKStar=0.3);
-  TCanvas* GenerateContourPlots(int aNPoints, const vector<double> &aParams, const vector<double> &aErrVals={4,1}, double aMaxFitKStar=0.3);  //1=1sigma, 4=2sigma
+
+  TCanvas* GenerateContourPlots(int aNPoints, const vector<double> &aParams, const vector<double> &aErrVals={4,1}, bool aFixAllOthers=false, double aMaxFitKStar=0.3);  //1=1sigma, 4=2sigma
+  TCanvas* GenerateContourPlots(int aNPoints, CentralityType aCentType, const vector<double> &aErrVals={4,1}, bool aFixAllOthers=false, double aMaxFitKStar=0.3);  //1=1sigma, 4=2sigma
   void WriteAllFitParameters(ostream &aOut=std::cout);
   vector<TString> GetAllFitParametersTStringVector();
 

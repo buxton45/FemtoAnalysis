@@ -2381,20 +2381,20 @@ void FitGenerator::DoFit(double aMaxFitKStar)
 }
 
 //________________________________________________________________________________________________________________
-TCanvas* FitGenerator::GenerateContourPlots(const vector<double> &aErrVals, double aMaxFitKStar)
+TCanvas* FitGenerator::GenerateContourPlots(int aNPoints, const vector<double> &aParams, const vector<double> &aErrVals, bool aFixAllOthers, double aMaxFitKStar)
 {
   InitializeGenerator(aMaxFitKStar);
   GlobalFitter = fLednickyFitter;
-  TCanvas* tReturnCan = fLednickyFitter->GenerateContourPlots(aErrVals);
+  TCanvas* tReturnCan = fLednickyFitter->GenerateContourPlots(aNPoints, aParams, aErrVals, aFixAllOthers);
   return tReturnCan;
 }
 
 //________________________________________________________________________________________________________________
-TCanvas* FitGenerator::GenerateContourPlots(int aNPoints, const vector<double> &aParams, const vector<double> &aErrVals, double aMaxFitKStar)
+TCanvas* FitGenerator::GenerateContourPlots(int aNPoints, CentralityType aCentType, const vector<double> &aErrVals, bool aFixAllOthers, double aMaxFitKStar)
 {
   InitializeGenerator(aMaxFitKStar);
   GlobalFitter = fLednickyFitter;
-  TCanvas* tReturnCan = fLednickyFitter->GenerateContourPlots(aNPoints, aParams, aErrVals);
+  TCanvas* tReturnCan = fLednickyFitter->GenerateContourPlots(aNPoints, aCentType, aErrVals, aFixAllOthers);
   return tReturnCan;
 }
 

@@ -65,6 +65,8 @@ public:
   static double GetLednickyF2(double z);
   static double LednickyEq(double *x, double *par);
 
+  static void AppendFitInfo(TString &aSaveName, bool aApplyMomResCorrection, bool aApplyNonFlatBackgroundCorrection, IncludeResidualsType aIncludeResidualsType, 
+                            ResPrimMaxDecayType aResPrimMaxDecayType=k5fm, ChargedResidualsType aChargedResidualsType=kUseXiDataAndCoulombOnlyInterp, bool aFixD0=false);
 
   static void PrintCurrentParamValues(int aNpar, double* aPar);
   static double GetChi2Value(int aKStarBin, TH1* aCfToFit, double* aPar);
@@ -91,8 +93,10 @@ public:
 
   vector<int> GetParamInfoFromMinuitParamNumber(int aMinuitParamNumber);
   TGraph* GetContourPlot(int aNPoints, int aParam1, int aParam2);
-  TCanvas* GenerateContourPlots(const vector<double> &aErrVals={4,1});  //1=1sigma, 4=2sigma
-  TCanvas* GenerateContourPlots(int aNPoints, const vector<double> &aParams, const vector<double> &aErrVals={4,1});  //1=1sigma, 4=2sigma
+  void FixAllOtherParameters(int aParam1Exclude, int aParam2Exclude, vector<double> &aParamFitValues);
+  //BE CAREFULE:  Setting aFixAllOthers=true does not seems to generate the correct contour plots
+  TCanvas* GenerateContourPlots(int aNPoints, const vector<double> &aParams, const vector<double> &aErrVals={4,1}, bool aFixAllOthers=false);  //1=1sigma, 4=2sigma
+  TCanvas* GenerateContourPlots(int aNPoints, CentralityType aCentType, const vector<double> &aErrVals={4,1}, bool aFixAllOthers=false);  //1=1sigma, 4=2sigma
 
   //inline (i.e. simple) functions
   FitSharedAnalyses* GetFitSharedAnalyses();

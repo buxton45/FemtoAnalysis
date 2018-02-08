@@ -75,7 +75,6 @@ public:
   //----------Load the struct objects from the c++ program
   void LoadGTildeInfo(BinInfoGTilde &aBinInfo);
   void LoadHyperGeo1F1Info(BinInfoHyperGeo1F1 &aBinInfo);
-  void LoadScattLenInfo(BinInfoScattLen &aBinInfo);
   //------------------------------------------------------
 
 //  double* RunInterpolateWfSquared(td2dVec &aPairs, double aReF0, double aImF0, double aD0);

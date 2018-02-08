@@ -223,26 +223,9 @@ void FitSystematicAnalysis::PrintText2dVec(vector<vector<TString> > &a2dVec, ost
 }
 
 //________________________________________________________________________________________________________________
-void FitSystematicAnalysis::AppendFitInfo(TString &aSaveName, bool aApplyMomResCorrection, bool aApplyNonFlatBackgroundCorrection, 
-                                          IncludeResidualsType aIncludeResidualsType, ResPrimMaxDecayType aResPrimMaxDecayType, ChargedResidualsType aChargedResidualsType, bool aFixD0)
-{
-  if(aApplyMomResCorrection) aSaveName += TString("_MomResCrctn");
-  if(aApplyNonFlatBackgroundCorrection) aSaveName += TString("_NonFlatBgdCrctn");
-
-  aSaveName += cIncludeResidualsTypeTags[aIncludeResidualsType];
-  if(aIncludeResidualsType != kIncludeNoResiduals)
-  {
-    aSaveName += cResPrimMaxDecayTypeTags[aResPrimMaxDecayType];
-    aSaveName += cChargedResidualsTypeTags[aChargedResidualsType];
-  }
-  if(aFixD0) aSaveName += TString("_FixedD0");
-}
-
-
-//________________________________________________________________________________________________________________
 void FitSystematicAnalysis::AppendFitInfo(TString &aSaveName)
 {
-  AppendFitInfo(aSaveName, fApplyMomResCorrection, fApplyNonFlatBackgroundCorrection, fIncludeResidualsType, fResPrimMaxDecayType, fChargedResidualsType, fFixD0);
+  LednickyFitter::AppendFitInfo(aSaveName, fApplyMomResCorrection, fApplyNonFlatBackgroundCorrection, fIncludeResidualsType, fResPrimMaxDecayType, fChargedResidualsType, fFixD0);
 }
 
 

@@ -326,10 +326,10 @@ void ReadAllCutSys(TString aSystematicsDirectory, td4dVec &aAllCutSysToFill, Ana
     else
     {
       tFileLocationBase = tDirectoryBase;
-      FitSystematicAnalysis::AppendFitInfo(tFileLocationBase, aApplyMomResCrctn, aApplyNonFlatBgdCrctn, 
+      LednickyFitter::AppendFitInfo(tFileLocationBase, aApplyMomResCrctn, aApplyNonFlatBgdCrctn, 
                                            aIncResType, aMaxDecayType, aChargedResType, aFixD0);
       tFileLocationBase += TString::Format("/CfFitValues_%s%s", cAnalysisBaseTags[aAnType], cCentralityTags[aCentType]);
-      FitSystematicAnalysis::AppendFitInfo(tFileLocationBase, aApplyMomResCrctn, aApplyNonFlatBgdCrctn, 
+      LednickyFitter::AppendFitInfo(tFileLocationBase, aApplyMomResCrctn, aApplyNonFlatBgdCrctn, 
                                            aIncResType, aMaxDecayType, aChargedResType, aFixD0);
       tFileLocationBase += TString(".txt");
     }
@@ -364,18 +364,18 @@ void ReadFitRangeAndNonFlatBgdSys(TString aResultsDirectory, td4dVec &aAllFitSys
   else
   {
     TString tFileLocationBase_FitRangeAndNonFlat = TString::Format("%sSystematics/", aResultsDirectory.Data());
-    FitSystematicAnalysis::AppendFitInfo(tFileLocationBase_FitRangeAndNonFlat, aApplyMomResCrctn, aApplyNonFlatBgdCrctn, aIncResType, aMaxDecayType, aChargedResType, aFixD0);
+    LednickyFitter::AppendFitInfo(tFileLocationBase_FitRangeAndNonFlat, aApplyMomResCrctn, aApplyNonFlatBgdCrctn, aIncResType, aMaxDecayType, aChargedResType, aFixD0);
     tFileLocationBase_FitRangeAndNonFlat += TString("/");
 
     tFileLocationFitRangeSys = TString::Format("%sCfFitValues_VaryMaxFitKStar_%s%s", tFileLocationBase_FitRangeAndNonFlat.Data(), 
                                                cAnalysisBaseTags[aAnType], cCentralityTags[aCentType]);
-    FitSystematicAnalysis::AppendFitInfo(tFileLocationFitRangeSys, aApplyMomResCrctn, aApplyNonFlatBgdCrctn, aIncResType, aMaxDecayType, aChargedResType, aFixD0);
+    LednickyFitter::AppendFitInfo(tFileLocationFitRangeSys, aApplyMomResCrctn, aApplyNonFlatBgdCrctn, aIncResType, aMaxDecayType, aChargedResType, aFixD0);
     tFileLocationFitRangeSys += TString(".txt");
 
 
     tFileLocationNonFlatBgdSys = TString::Format("%sCfFitValues_VaryNonFlatBgdFitType_%s%s", tFileLocationBase_FitRangeAndNonFlat.Data(), 
                                                  cAnalysisBaseTags[aAnType], cCentralityTags[aCentType]);
-    FitSystematicAnalysis::AppendFitInfo(tFileLocationNonFlatBgdSys, aApplyMomResCrctn, aApplyNonFlatBgdCrctn, aIncResType, aMaxDecayType, aChargedResType, aFixD0);
+    LednickyFitter::AppendFitInfo(tFileLocationNonFlatBgdSys, aApplyMomResCrctn, aApplyNonFlatBgdCrctn, aIncResType, aMaxDecayType, aChargedResType, aFixD0);
     tFileLocationNonFlatBgdSys += TString(".txt");
   }
 
@@ -431,12 +431,12 @@ int main(int argc, char **argv)
   if(!bRunOldQMNaming)
   {
     tSaveDirectory_cLamK0 += TString("Systematics/");
-    FitSystematicAnalysis::AppendFitInfo(tSaveDirectory_cLamK0, ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, 
+    LednickyFitter::AppendFitInfo(tSaveDirectory_cLamK0, ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, 
                                          tIncludeResidualsType, tResPrimMaxDecayType, tChargedResidualsType, tFixD0);
     tSaveDirectory_cLamK0 += TString("/");
     //-----
     tSaveDirectory_cLamcKch += TString("Systematics/");
-    FitSystematicAnalysis::AppendFitInfo(tSaveDirectory_cLamcKch, ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, 
+    LednickyFitter::AppendFitInfo(tSaveDirectory_cLamcKch, ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, 
                                          tIncludeResidualsType, tResPrimMaxDecayType, tChargedResidualsType, tFixD0);
     tSaveDirectory_cLamcKch += TString("/");
   }
@@ -508,7 +508,7 @@ int main(int argc, char **argv)
     if(bIncludeFitRangeSys) tOutputLamKchName += TString("_wFitRangeSys");
     if(!bRunOldQMNaming)
     {
-      FitSystematicAnalysis::AppendFitInfo(tOutputLamKchName, ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, 
+      LednickyFitter::AppendFitInfo(tOutputLamKchName, ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, 
                                            tIncludeResidualsType, tResPrimMaxDecayType, tChargedResidualsType, tFixD0);
       tOutputLamKchName += TString("_");
     }
@@ -518,7 +518,7 @@ int main(int argc, char **argv)
     if(bIncludeFitRangeSys) tOutputLamK0Name += TString("_wFitRangeSys");
     if(!bRunOldQMNaming)
     {
-      FitSystematicAnalysis::AppendFitInfo(tOutputLamK0Name, ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, 
+      LednickyFitter::AppendFitInfo(tOutputLamK0Name, ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, 
                                            tIncludeResidualsType, tResPrimMaxDecayType, tChargedResidualsType, tFixD0);
       tOutputLamK0Name += TString("_");
     }

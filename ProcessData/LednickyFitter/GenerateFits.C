@@ -18,10 +18,10 @@ int main(int argc, char **argv)
 //  TString tResultsDate = "20180104_useIsProbableElectronMethodTrue";
 //  TString tResultsDate = "20180104_useIsProbableElectronMethodFalse";
 
-  bool bDoFit = true;
-  bool bGenerateContours = false;
+  bool bDoFit = false;
+  bool bGenerateContours = true;
 
-  AnalysisType tAnType = kLamKchP;
+  AnalysisType tAnType = kLamKchM;
   AnalysisRunType tAnRunType = kTrain;
   int tNPartialAnalysis = 2;
 //  CentralityType tCentType = k0010;  //TODO
@@ -37,7 +37,7 @@ int main(int argc, char **argv)
   bool ApplyNonFlatBackgroundCorrection = true;
   NonFlatBgdFitType tNonFlatBgdFitType = kLinear;
 
-  IncludeResidualsType tIncludeResidualsType = kInclude3Residuals; 
+  IncludeResidualsType tIncludeResidualsType = kIncludeNoResiduals; 
   ChargedResidualsType tChargedResidualsType = kUseXiDataAndCoulombOnlyInterp;
   ResPrimMaxDecayType tResPrimMaxDecayType = k4fm;
 
@@ -220,9 +220,12 @@ int main(int argc, char **argv)
 
   if(bGenerateContours)
   {
-    tLamKchP->GenerateContourPlots(4, {0, 6, 9, 10, 11}, {4, 1});
-//    tLamKchP->GenerateContourPlots(4, {2, 7, 9, 10, 11}, {4, 1});
-//    tLamKchP->GenerateContourPlots(4, {4, 8, 9, 10, 11}, {4, 1});
+    bool bFixAllOthers = false;
+
+    tLamKchP->GenerateContourPlots(10, k0010, {4, 1}, bFixAllOthers);
+//    tLamKchP->GenerateContourPlots(10, {0, 6, 9, 10, 11}, {4, 1}, bFixAllOthers);
+//    tLamKchP->GenerateContourPlots(10, {2, 7, 9, 10, 11}, {4, 1}, bFixAllOthers);
+//    tLamKchP->GenerateContourPlots(10, {4, 8, 9, 10, 11}, {4, 1}, bFixAllOthers);
   }
 
 //-------------------------------------------------------------------------------

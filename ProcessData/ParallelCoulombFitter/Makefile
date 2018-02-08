@@ -19,7 +19,7 @@ LEDNICKYFITTER_DIR = /home/jesse/Analysis/FemtoAnalysis/ProcessData/LednickyFitt
 COULOMBFITTER_DIR = /home/jesse/Analysis/FemtoAnalysis/ProcessData/CoulombFitter
 UTILITIES_DIR = /home/jesse/Analysis/FemtoAnalysis/ProcessData/Utilities
 
-LIBS	= -lcudart
+LIBSCUDA   = -lcudart
 CUDAINCDIR = /usr/local/cuda/include
 CUDALIBDIR = /usr/local/cuda/lib64
 
@@ -33,13 +33,13 @@ BINARIES = runTest runWPCFStrongInfluence runInterp
 all : $(BINARIES)
 
 runTest: ${MY_LIBS} test.C
-	g++ test.C ${MY_LIBS} -I${INCDIR} -o runTest -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(LIBSC) $(CFLAGS) -I${CUDAINCDIR} -L${CUDALIBDIR}
+	g++ test.C ${MY_LIBS} -I${INCDIR} -o runTest -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBSCUDA) $(LIBSC) $(CFLAGS) -I${CUDAINCDIR} -L${CUDALIBDIR}
 
 runWPCFStrongInfluence: ${MY_LIBS} BuildWPCFStrongInfluence.C
-	g++ BuildWPCFStrongInfluence.C ${MY_LIBS} -I${INCDIR} -o runWPCFStrongInfluence -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(LIBSC) $(CFLAGS) -I${CUDAINCDIR} -L${CUDALIBDIR}
+	g++ BuildWPCFStrongInfluence.C ${MY_LIBS} -I${INCDIR} -o runWPCFStrongInfluence -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBSCUDA) $(LIBSC) $(CFLAGS) -I${CUDAINCDIR} -L${CUDALIBDIR}
 
 runInterp: ${MY_LIBS} testInterp.C
-	g++ testInterp.C ${MY_LIBS} -I${INCDIR} -o runInterp -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(LIBSC) $(CFLAGS) -I${CUDAINCDIR} -L${CUDALIBDIR}
+	g++ testInterp.C ${MY_LIBS} -I${INCDIR} -o runInterp -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBSCUDA) $(LIBSC) $(CFLAGS) -I${CUDAINCDIR} -L${CUDALIBDIR}
 
 build/%.o: ${ANALYZE_DIR}/%.cxx ${ANALYZE_DIR}/%.h
 	g++ -c $< $(CFLAGS) -o $@
