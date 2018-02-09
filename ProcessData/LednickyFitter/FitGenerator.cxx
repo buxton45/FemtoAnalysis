@@ -2370,6 +2370,8 @@ void FitGenerator::InitializeGenerator(double aMaxFitKStar)
   fLednickyFitter->SetChargedResidualsType(fChargedResidualsType);
   fLednickyFitter->SetResPrimMaxDecayType(fResPrimMaxDecayType);
   fLednickyFitter->SetUsemTScalingOfResidualRadii(fUsemTScalingOfResidualRadii, fmTScalingPowerOfResidualRadii);
+
+  fLednickyFitter->SetSaveLocationBase(fSaveLocationBase, fSaveNameModifier);
 }
 
 //________________________________________________________________________________________________________________

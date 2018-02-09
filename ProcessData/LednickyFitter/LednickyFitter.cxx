@@ -24,6 +24,10 @@ double gMaxFitKStar;
 //________________________________________________________________________________________________________________
 LednickyFitter::LednickyFitter(FitSharedAnalyses* aFitSharedAnalyses, double aMaxFitKStar):
   fVerbose(false),
+
+  fSaveLocationBase(""),
+  fSaveNameModifier(""),
+
   fFitSharedAnalyses(aFitSharedAnalyses),
   fMinuit(fFitSharedAnalyses->GetMinuitObject()),
   fNAnalyses(fFitSharedAnalyses->GetNFitPairAnalysis()),
@@ -70,6 +74,10 @@ LednickyFitter::LednickyFitter(FitSharedAnalyses* aFitSharedAnalyses, double aMa
 //________________________________________________________________________________________________________________
 LednickyFitter::LednickyFitter(AnalysisType aAnalysisType, double aMaxBuildKStar, double aKStarBinWidth):
   fVerbose(false),
+
+  fSaveLocationBase(""),
+  fSaveNameModifier(""),
+
   fFitSharedAnalyses(nullptr),
   fMinuit(nullptr),
   fNAnalyses(0),
@@ -674,6 +682,27 @@ void LednickyFitter::InitializeFitter()
 
 
 //________________________________________________________________________________________________________________
+TString LednickyFitter::BuildParamCorrCoeffOutputFile(TString aFileBaseName, TString aFileType)
+{
+  ExistsSaveLocationBase();
+
+  AnalysisType tAnType = fFitSharedAnalyses->GetFitPairAnalysis(0)->GetAnalysisType();
+  bool tConjIncluded = fNAnalyses % 2==0 ? true : false;
+  TString tConjIncMod = "";
+  if(tConjIncluded) tConjIncMod = TString("wConj");
+
+  TString tOutputDir = TString::Format("%sParameterCorrelations/", fSaveLocationBase.Data());
+  gSystem->mkdir(tOutputDir, true);
+
+  TString tOutputName = TString::Format("%s%s_%s%s%s.%s", tOutputDir.Data(), aFileBaseName.Data(), cAnalysisBaseTags[tAnType], tConjIncMod.Data(), fSaveNameModifier.Data(), aFileType.Data());
+
+  return tOutputName;
+}
+
+
+
+
+//________________________________________________________________________________________________________________
 void LednickyFitter::DoFit()
 {
   InitializeFitter();
@@ -718,7 +747,10 @@ void LednickyFitter::DoFit()
   fMinuit->mnprin(3,fChi2);
 
   //---------------------------------
+  TString tParamCorrOutputName = BuildParamCorrCoeffOutputFile("ParameterCorrelationCoefficients", "txt");
+  gSystem->RedirectOutput(tParamCorrOutputName, "w");
   fMinuit->mnexcm("SHO COR", arglist ,2,fErrFlg);
+  gSystem->RedirectOutput(0);
   //---------------------------------
 
   Finalize();
@@ -946,6 +978,147 @@ vector<double> LednickyFitter::FindGoodInitialValues()
 }
 
 
+
+
+//______________________________________________________________________________
+td1dVec LednickyFitter::ReadLine(TString aLine)
+{
+  td1dVec tReturnVec(0);
+
+  TObjArray* tValues = aLine.Tokenize("  ");
+
+  double tValue;
+  for(int i=0; i<tValues->GetEntries(); i++)
+  {
+    tValue = ((TObjString*)tValues->At(i))->String().Atof();
+    tReturnVec.push_back(tValue);
+  }
+  return tReturnVec;
+}
+
+
+//______________________________________________________________________________
+vector<int> LednickyFitter::GetNParamsAndRowWidth(ifstream &aStream)
+{
+  std::string tStdString;
+  TString tLine;
+
+  int tNParams = 0;
+  int tRowWidth = 0;
+  while(getline(aStream, tStdString))
+  {
+    tLine = TString(tStdString);
+    if(tLine.Contains("*")) continue;
+    if(tLine.Contains("PARAMETER")) continue;
+    if(tLine.Contains("NO.")) continue;
+
+    TObjArray* tValues = tLine.Tokenize("  ");
+    if(tNParams==0) tRowWidth = tValues->GetEntries();
+    if(tValues->GetEntries() == tRowWidth) tNParams++;
+  }
+  aStream.clear();
+  aStream.seekg(0, ios::beg);
+
+  return vector<int>{tNParams, tRowWidth};
+}
+
+//______________________________________________________________________________
+void LednickyFitter::FinishMatrix(td2dVec &aMatrix, vector<int> &aNParamsAndRowWidth)
+{
+  //Due to how things are printed, and therefore, how I read them,
+  // the first RowWidth rows only have RowWidth entries, whereas the
+  // remaining (NParams-RowWidth) rows have full NParams entries
+  int tNParams = aNParamsAndRowWidth[0];
+  int tRowWidth = aNParamsAndRowWidth[1];
+
+  for(int i=0; i<tRowWidth; i++)
+  {
+    for(int j=tRowWidth; j<tNParams; j++)
+    {
+      aMatrix[i].push_back(aMatrix[j][i]);
+    }
+  }
+
+  //The matrix should now be symmetric about the diagonal, check this
+  assert((int)aMatrix.size()==tNParams);
+  for(unsigned int i=0; i<aMatrix.size(); i++)
+  {
+    assert((int)aMatrix[i].size()==tNParams);
+    for(unsigned int j=0; j<aMatrix[i].size(); j++)
+    {
+      assert(aMatrix[i][j]==aMatrix[j][i]);
+    }
+  }
+
+}
+
+
+//______________________________________________________________________________
+void LednickyFitter::PrintMatrix(td2dVec &aMatrix)
+{
+  cout << "Parameter Coefficient Matrix------------------------------" << endl;
+  for(unsigned int i=0; i<aMatrix.size(); i++)
+  {
+    for(unsigned int j=0; j<aMatrix[i].size(); j++)
+    {
+      printf("% 05.3f  ", aMatrix[i][j]);
+    }
+    cout << endl;
+  }
+}
+
+
+//________________________________________________________________________________________________________________
+td2dVec LednickyFitter::GetParamCorrCoefMatrix(TString aFileLocation)
+{
+  ifstream tFileIn(aFileLocation);
+  if(!tFileIn.is_open()) cout << "FAILURE - FILE NOT OPEN: " << aFileLocation << endl;
+  assert(tFileIn.is_open());
+
+  vector<int> tNParamsAndRowWidth = GetNParamsAndRowWidth(tFileIn);
+
+  td2dVec tValuesMatrix;
+  int tCounter = -1;
+
+  std::string tStdString;
+  TString tLine;
+  while(getline(tFileIn, tStdString))
+  {
+    tLine = TString(tStdString);
+    if(tLine.Contains("*")) continue;
+    if(tLine.Contains("PARAMETER")) continue;
+    if(tLine.Contains("NO.")) continue;
+
+    td1dVec tValuesVec = ReadLine(tLine);
+
+    if((int)tValuesVec.size() == tNParamsAndRowWidth[1])
+    {
+      tValuesVec.erase(tValuesVec.begin(), tValuesVec.begin()+2);  //First value is parameter number
+                                                                   //Second value is global correlation value
+
+      tValuesMatrix.push_back(tValuesVec);
+      tCounter++;
+    }
+    else
+    {
+      tValuesMatrix[tCounter].insert(tValuesMatrix[tCounter].end(), tValuesVec.begin(), tValuesVec.end());
+    }
+  }
+  tFileIn.close();
+
+  //Due to the erase call above, RowWidth has decreased by 2
+  tNParamsAndRowWidth[1] -= 2;
+  FinishMatrix(tValuesMatrix, tNParamsAndRowWidth);
+  PrintMatrix(tValuesMatrix);
+
+
+  return tValuesMatrix;
+}
+
+
+
+
+
 //________________________________________________________________________________________________________________
 vector<int> LednickyFitter::GetParamInfoFromMinuitParamNumber(int aMinuitParamNumber)
 {
@@ -1068,7 +1241,7 @@ void LednickyFitter::FixAllOtherParameters(int aParam1Exclude, int aParam2Exclud
 }
 
 //________________________________________________________________________________________________________________
-TCanvas* LednickyFitter::GenerateContourPlots(int aNPoints, const vector<double> &aParams, const vector<double> &aErrVals, bool aFixAllOthers)
+TCanvas* LednickyFitter::GenerateContourPlots(int aNPoints, const vector<double> &aParams, const vector<double> &aErrVals, TString aSaveNameModifier, bool aFixAllOthers)
 {
   assert(aErrVals.size() <= 2);  //TODO for now, impose this restriction
 
@@ -1125,19 +1298,29 @@ TCanvas* LednickyFitter::GenerateContourPlots(int aNPoints, const vector<double>
   }
 
   //---------------------------------
+  TString tParamCorrOutputName = BuildParamCorrCoeffOutputFile("ParameterCorrelationCoefficients", "txt");
+  gSystem->RedirectOutput(tParamCorrOutputName, "w");
   fMinuit->mnexcm("SHO COR", arglist ,2,fErrFlg);
+  gSystem->RedirectOutput(0);
   //---------------------------------
+
   TCanvas* tReturnCan = new TCanvas("tReturnCan", "tReturnCan");
-  tReturnCan->Divide(aParams.size(),aParams.size());
+  tReturnCan->Divide(aParams.size()-1,aParams.size()-1, 0.001, 0.001);  //-1 because I don't plot parameter correlation with itself
   tReturnCan->cd();
 
   int tPadNum = 0;
   TGraph* tGr;
 
-  TString tFileName = TString::Format("TestTFile_%s.root", cAnalysisBaseTags[fFitSharedAnalyses->GetFitPairAnalysis(0)->GetAnalysisType()]);
-  TFile *tSaveFile = new TFile(tFileName, "RECREATE");
+  //-----
+  TString tFixedAllOthersMod = "";
+  if(aFixAllOthers) tFixedAllOthersMod = TString("_FixedAllOthers");
 
-  TString tFigureName = TString::Format("TestFigure_%s.eps", cAnalysisBaseTags[fFitSharedAnalyses->GetFitPairAnalysis(0)->GetAnalysisType()]);
+  TString tParamContoursFileName = BuildParamCorrCoeffOutputFile(TString::Format("ParameterContoursFile%s%s", aSaveNameModifier.Data(), tFixedAllOthersMod.Data()), "root");
+  TFile *tSaveFile = new TFile(tParamContoursFileName, "RECREATE");
+  TString tParamContoursFigureName = BuildParamCorrCoeffOutputFile(TString::Format("ParameterContoursFigure%s%s", aSaveNameModifier.Data(), tFixedAllOthersMod.Data()), "eps");
+
+  td2dVec tParamCorrCoefMatrix = GetParamCorrCoefMatrix(tParamCorrOutputName);
+  //-----
 
   double tErrVal = 0.;
   for(unsigned int iErrVal=0; iErrVal<aErrVals.size(); iErrVal++)
@@ -1150,7 +1333,8 @@ TCanvas* LednickyFitter::GenerateContourPlots(int aNPoints, const vector<double>
     {
       for(int j=i+1; j< aParams.size(); j++)
       {
-        tPadNum = i*aParams.size() + j + 1;  //+1 because pad numbering starts at 1, not 0
+        tPadNum = i*(aParams.size()-1) + (j-1);  //-1's because I don't plot parameter correlation with itself
+        tPadNum += 1;                            //+1 because pad numbering starts at 1, not 0
         tReturnCan->cd(tPadNum);
 
         if(aFixAllOthers) FixAllOtherParameters(aParams[i], aParams[j], tMinParams);
@@ -1160,6 +1344,13 @@ TCanvas* LednickyFitter::GenerateContourPlots(int aNPoints, const vector<double>
         {
           tGr->SetFillColor(42);
           tGr->Draw("alf");
+
+          TPaveText* tText = new TPaveText(0.75, 0.75, 0.90, 0.85, "NDC");
+          tText->SetFillColor(0);
+          tText->SetBorderSize(0);
+          tText->SetTextAlign(22);
+          tText->AddText(TString::Format("CorrCoeff = % 05.3f", tParamCorrCoefMatrix[aParams[i]][aParams[j]]));
+          tText->Draw();
         }
         else
         {
@@ -1173,7 +1364,7 @@ TCanvas* LednickyFitter::GenerateContourPlots(int aNPoints, const vector<double>
   }
 
   tSaveFile->Close();
-  tReturnCan->SaveAs(tFigureName);
+  tReturnCan->SaveAs(tParamContoursFigureName);
   return tReturnCan;
   //---------------------------------
 //  Finalize();
@@ -1184,6 +1375,7 @@ TCanvas* LednickyFitter::GenerateContourPlots(int aNPoints, const vector<double>
 TCanvas* LednickyFitter::GenerateContourPlots(int aNPoints, CentralityType aCentType, const vector<double> &aErrVals, bool aFixAllOthers)
 {
   assert(fNAnalyses==6);  //This procedure assumes a full analysis with all centralities and pair/conj
+  TString tSaveNameMod = cCentralityTags[aCentType];
 
   vector<double> aParams(0);
   if(aCentType==k0010)
@@ -1200,13 +1392,39 @@ TCanvas* LednickyFitter::GenerateContourPlots(int aNPoints, CentralityType aCent
   }
   else
   {
+    tSaveNameMod = "_0010_1030_3050";
     for(int i=0; i<fFitSharedAnalyses->GetNMinuitParams(); i++)
     {
       aParams.push_back(i);
     }
   }
 
-  return GenerateContourPlots(aNPoints, aParams, aErrVals, aFixAllOthers);
+  return GenerateContourPlots(aNPoints, aParams, aErrVals, tSaveNameMod, aFixAllOthers);
+}
+
+//________________________________________________________________________________________________________________
+void LednickyFitter::SetSaveLocationBase(TString aBase, TString aSaveNameModifier)
+{
+  fSaveLocationBase=aBase;
+  if(!aSaveNameModifier.IsNull()) fSaveNameModifier = aSaveNameModifier;
+}
+
+//________________________________________________________________________________________________________________
+void LednickyFitter::ExistsSaveLocationBase()
+{
+  if(!fSaveLocationBase.IsNull()) return;
+
+  cout << "fSaveLocationBase is Null!!!!!" << endl;
+  cout << "Create? (0=No 1=Yes)" << endl;
+  int tResponse;
+  cin >> tResponse;
+  if(!tResponse) return;
+
+  cout << "Enter base:" << endl;
+  cin >> fSaveLocationBase;
+  if(fSaveLocationBase[fSaveLocationBase.Length()] != '/') fSaveLocationBase += TString("/");
+  return;
+
 }
 
 

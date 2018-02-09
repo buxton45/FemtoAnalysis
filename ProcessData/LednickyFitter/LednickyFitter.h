@@ -37,6 +37,8 @@
 #include "TMinuit.h"
 #include "TVirtualFitter.h"
 
+#include "TObjString.h"
+
 //const double hbarc = 0.197327;
 //const std::complex<double> ImI (0.,1.);
 
@@ -85,18 +87,29 @@ public:
   TF1* CreateFitFunction(int aAnalysisNumber, double *par, double *parErr, double aChi2, int aNDF);  //special case, used with PlotAllFitsCentral.C
 
   void InitializeFitter();  //Called within DoFit
+  TString BuildParamCorrCoeffOutputFile(TString aFileBaseName, TString aFileType);
   void DoFit();
   void Finalize();  //Send things back to analyses, etc.
 
 
   vector<double> FindGoodInitialValues();
 
+
+  td1dVec ReadLine(TString aLine);
+  vector<int> GetNParamsAndRowWidth(ifstream &aStream);
+  void FinishMatrix(td2dVec &aMatrix, vector<int> &aNParamsAndRowWidth);
+  void PrintMatrix(td2dVec &aMatrix);
+  td2dVec GetParamCorrCoefMatrix(TString aFileLocation);
+
   vector<int> GetParamInfoFromMinuitParamNumber(int aMinuitParamNumber);
   TGraph* GetContourPlot(int aNPoints, int aParam1, int aParam2);
   void FixAllOtherParameters(int aParam1Exclude, int aParam2Exclude, vector<double> &aParamFitValues);
   //BE CAREFULE:  Setting aFixAllOthers=true does not seems to generate the correct contour plots
-  TCanvas* GenerateContourPlots(int aNPoints, const vector<double> &aParams, const vector<double> &aErrVals={4,1}, bool aFixAllOthers=false);  //1=1sigma, 4=2sigma
+  TCanvas* GenerateContourPlots(int aNPoints, const vector<double> &aParams, const vector<double> &aErrVals={4,1}, TString aSaveNameModifier="", bool aFixAllOthers=false);  //1=1sigma, 4=2sigma
   TCanvas* GenerateContourPlots(int aNPoints, CentralityType aCentType, const vector<double> &aErrVals={4,1}, bool aFixAllOthers=false);  //1=1sigma, 4=2sigma
+
+  void SetSaveLocationBase(TString aBase, TString aSaveNameModifier="");
+  void ExistsSaveLocationBase();
 
   //inline (i.e. simple) functions
   FitSharedAnalyses* GetFitSharedAnalyses();
@@ -120,6 +133,10 @@ public:
 
 protected:
   bool fVerbose;
+
+  TString fSaveLocationBase;  //Set by, and same as, FitGenerator
+  TString fSaveNameModifier;  //Set by, and same as, FitGenerator
+
   FitSharedAnalyses* fFitSharedAnalyses;
   TMinuit* fMinuit;
   int fNAnalyses;

@@ -220,12 +220,12 @@ int main(int argc, char **argv)
 
   if(bGenerateContours)
   {
-    bool bFixAllOthers = false;
+    bool bFixAllOthers = true;
 
     tLamKchP->GenerateContourPlots(10, k0010, {4, 1}, bFixAllOthers);
-//    tLamKchP->GenerateContourPlots(10, {0, 6, 9, 10, 11}, {4, 1}, bFixAllOthers);
-//    tLamKchP->GenerateContourPlots(10, {2, 7, 9, 10, 11}, {4, 1}, bFixAllOthers);
-//    tLamKchP->GenerateContourPlots(10, {4, 8, 9, 10, 11}, {4, 1}, bFixAllOthers);
+//    tLamKchP->GenerateContourPlots(10, {0, 6, 9, 10, 11}, {4, 1}, "Custom", bFixAllOthers);
+//    tLamKchP->GenerateContourPlots(10, {2, 7, 9, 10, 11}, {4, 1}, "Custom", bFixAllOthers);
+//    tLamKchP->GenerateContourPlots(10, {4, 8, 9, 10, 11}, {4, 1}, "Custom", bFixAllOthers);
   }
 
 //-------------------------------------------------------------------------------
