@@ -1386,7 +1386,7 @@ TCanvas* LednickyFitter::GenerateContourPlots(int aNPoints, CentralityType aCent
   {
     aParams = vector<double>{2, 3, 7, 9, 10, 11};
   }
-  else if(aCentType==k1030)
+  else if(aCentType==k3050)
   {
     aParams = vector<double>{4, 5, 8, 9, 10, 11};
   }
