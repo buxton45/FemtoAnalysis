@@ -21,7 +21,7 @@ int main(int argc, char **argv)
   bool bDoFit = false;
   bool bGenerateContours = true;
 
-  AnalysisType tAnType = kLamKchM;
+  AnalysisType tAnType = kLamKchP;
   AnalysisRunType tAnRunType = kTrain;
   int tNPartialAnalysis = 2;
 //  CentralityType tCentType = k0010;  //TODO
@@ -37,13 +37,13 @@ int main(int argc, char **argv)
   bool ApplyNonFlatBackgroundCorrection = true;
   NonFlatBgdFitType tNonFlatBgdFitType = kLinear;
 
-  IncludeResidualsType tIncludeResidualsType = kIncludeNoResiduals; 
+  IncludeResidualsType tIncludeResidualsType = kInclude3Residuals; 
   ChargedResidualsType tChargedResidualsType = kUseXiDataAndCoulombOnlyInterp;
   ResPrimMaxDecayType tResPrimMaxDecayType = k4fm;
 
   bool UnboundLambda = true;
 
-  bool FixRadii = false;
+  bool FixRadii = true;
   bool FixD0 = false;
   bool FixAllScattParams = false;
   bool FixAllLambdaTo1 = false;
@@ -220,12 +220,21 @@ int main(int argc, char **argv)
 
   if(bGenerateContours)
   {
-    bool bFixAllOthers = true;
+    bool bFixAllOthers = false;
 
-    tLamKchP->GenerateContourPlots(10, k0010, {4, 1}, bFixAllOthers);
-//    tLamKchP->GenerateContourPlots(10, {0, 6, 9, 10, 11}, {4, 1}, "Custom", bFixAllOthers);
-//    tLamKchP->GenerateContourPlots(10, {2, 7, 9, 10, 11}, {4, 1}, "Custom", bFixAllOthers);
-//    tLamKchP->GenerateContourPlots(10, {4, 8, 9, 10, 11}, {4, 1}, "Custom", bFixAllOthers);
+    if(FixRadii)
+    {
+      tLamKchP->GenerateContourPlots(10, {0, 1, 9, 10, 11}, {4, 1}, "_0010", bFixAllOthers);
+      tLamKchP->GenerateContourPlots(10, {2, 3, 9, 10, 11}, {4, 1}, "_1030", bFixAllOthers);
+      tLamKchP->GenerateContourPlots(10, {4, 5, 9, 10, 11}, {4, 1}, "_3050", bFixAllOthers);
+    }
+    else
+    {
+      tLamKchP->GenerateContourPlots(10, k0010, {4, 1}, bFixAllOthers);
+//      tLamKchP->GenerateContourPlots(10, {0, 6, 9, 10, 11}, {4, 1}, "Custom", bFixAllOthers);
+//      tLamKchP->GenerateContourPlots(10, {2, 7, 9, 10, 11}, {4, 1}, "Custom", bFixAllOthers);
+//      tLamKchP->GenerateContourPlots(10, {4, 8, 9, 10, 11}, {4, 1}, "Custom", bFixAllOthers);
+    }
   }
 
 //-------------------------------------------------------------------------------

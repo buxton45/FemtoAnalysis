@@ -2383,11 +2383,11 @@ void FitGenerator::DoFit(double aMaxFitKStar)
 }
 
 //________________________________________________________________________________________________________________
-TCanvas* FitGenerator::GenerateContourPlots(int aNPoints, const vector<double> &aParams, const vector<double> &aErrVals, bool aFixAllOthers, double aMaxFitKStar)
+TCanvas* FitGenerator::GenerateContourPlots(int aNPoints, const vector<double> &aParams, const vector<double> &aErrVals, TString aSaveNameModifier, bool aFixAllOthers, double aMaxFitKStar)
 {
   InitializeGenerator(aMaxFitKStar);
   GlobalFitter = fLednickyFitter;
-  TCanvas* tReturnCan = fLednickyFitter->GenerateContourPlots(aNPoints, aParams, aErrVals, aFixAllOthers);
+  TCanvas* tReturnCan = fLednickyFitter->GenerateContourPlots(aNPoints, aParams, aErrVals, aSaveNameModifier, aFixAllOthers);
   return tReturnCan;
 }
 
