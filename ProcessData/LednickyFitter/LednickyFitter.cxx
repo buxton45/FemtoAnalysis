@@ -1377,18 +1377,23 @@ TCanvas* LednickyFitter::GenerateContourPlots(int aNPoints, CentralityType aCent
   assert(fNAnalyses==6);  //This procedure assumes a full analysis with all centralities and pair/conj
   TString tSaveNameMod = cCentralityTags[aCentType];
 
+  AnalysisType tAnType = fFitSharedAnalyses->GetFitPairAnalysis(0)->GetAnalysisType();
+
   vector<double> aParams(0);
   if(aCentType==k0010)
   {
-    aParams = vector<double>{0, 1, 6, 9, 10, 11};
+    if(tAnType != kLamK0) aParams = vector<double>{0, 1, 6, 9, 10, 11};
+    else aParams = vector<double>{0, 1, 4, 5, 6};
   }
   else if(aCentType==k1030)
   {
-    aParams = vector<double>{2, 3, 7, 9, 10, 11};
+    if(tAnType != kLamK0) aParams = vector<double>{2, 3, 7, 9, 10, 11};
+    else aParams = vector<double>{0, 2, 4, 5, 6};
   }
   else if(aCentType==k3050)
   {
-    aParams = vector<double>{4, 5, 8, 9, 10, 11};
+    if(tAnType != kLamK0) aParams = vector<double>{4, 5, 8, 9, 10, 11};
+    else aParams = vector<double>{0, 3, 4, 5, 6};
   }
   else
   {
