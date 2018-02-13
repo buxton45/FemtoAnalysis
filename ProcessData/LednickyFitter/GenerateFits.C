@@ -222,18 +222,53 @@ int main(int argc, char **argv)
   {
     bool bFixAllOthers = false;
 
-    if(FixRadii)
+    if(FixRadii && FixD0)
     {
-      tLamKchP->GenerateContourPlots(10, {0, 1, 9, 10, 11}, {4, 1}, "_0010", bFixAllOthers);
-      tLamKchP->GenerateContourPlots(10, {2, 3, 9, 10, 11}, {4, 1}, "_1030", bFixAllOthers);
-      tLamKchP->GenerateContourPlots(10, {4, 5, 9, 10, 11}, {4, 1}, "_3050", bFixAllOthers);
+      if(tAnType != kLamK0)
+      {
+        tLamKchP->GenerateContourPlots(10, {0, 1, 9, 10}, {4, 1}, "_0010", bFixAllOthers);
+//        tLamKchP->GenerateContourPlots(10, {2, 3, 9, 10}, {4, 1}, "_1030", bFixAllOthers);
+//        tLamKchP->GenerateContourPlots(10, {4, 5, 9, 10}, {4, 1}, "_3050", bFixAllOthers);
+      }
+      else
+      {
+        tLamKchP->GenerateContourPlots(10, {0, 4, 5}, {4, 1}, "_0010_1030_3050", bFixAllOthers);
+      }
+    }
+    else if(FixRadii)
+    {
+      if(tAnType != kLamK0)
+      {
+        tLamKchP->GenerateContourPlots(10, {0, 1, 9, 10, 11}, {4, 1}, "_0010", bFixAllOthers);
+//        tLamKchP->GenerateContourPlots(10, {2, 3, 9, 10, 11}, {4, 1}, "_1030", bFixAllOthers);
+//        tLamKchP->GenerateContourPlots(10, {4, 5, 9, 10, 11}, {4, 1}, "_3050", bFixAllOthers);
+      }
+      else
+      {
+        tLamKchP->GenerateContourPlots(10, {0, 4, 5, 6}, {4, 1}, "_0010_1030_3050", bFixAllOthers);
+      }
+    }
+    else if(FixD0)
+    {
+      if(tAnType != kLamK0)
+      {
+        tLamKchP->GenerateContourPlots(10, {0, 1, 6, 9, 10}, {4, 1}, "_0010", bFixAllOthers);
+//        tLamKchP->GenerateContourPlots(10, {2, 3, 7, 9, 10}, {4, 1}, "_1030", bFixAllOthers);
+//        tLamKchP->GenerateContourPlots(10, {4, 5, 8, 9, 10}, {4, 1}, "_3050", bFixAllOthers);
+      }
+      else
+      {
+        tLamKchP->GenerateContourPlots(10, {0, 1, 4, 5}, {4, 1}, "_0010", bFixAllOthers);
+//        tLamKchP->GenerateContourPlots(10, {0, 2, 4, 5}, {4, 1}, "_1030", bFixAllOthers);
+//        tLamKchP->GenerateContourPlots(10, {0, 3, 4, 5}, {4, 1}, "_3050", bFixAllOthers);
+      }
     }
     else
     {
       tLamKchP->GenerateContourPlots(10, k0010, {4, 1}, bFixAllOthers);
-//      tLamKchP->GenerateContourPlots(10, {0, 6, 9, 10, 11}, {4, 1}, "Custom", bFixAllOthers);
-//      tLamKchP->GenerateContourPlots(10, {2, 7, 9, 10, 11}, {4, 1}, "Custom", bFixAllOthers);
-//      tLamKchP->GenerateContourPlots(10, {4, 8, 9, 10, 11}, {4, 1}, "Custom", bFixAllOthers);
+//      tLamKchP->GenerateContourPlots(10, {0, 1, 6, 9, 10, 11}, {4, 1}, "Custom", bFixAllOthers);
+//      tLamKchP->GenerateContourPlots(10, {2, 3, 7, 9, 10, 11}, {4, 1}, "Custom", bFixAllOthers);
+//      tLamKchP->GenerateContourPlots(10, {4, 5, 8, 9, 10, 11}, {4, 1}, "Custom", bFixAllOthers);
     }
   }
 
