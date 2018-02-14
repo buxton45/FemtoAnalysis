@@ -107,6 +107,72 @@ So, in practice, we model the correlation function of the parents, and run the c
 \lambda_{AB} = \frac{N_{AB}}{N_{Total}}
 \end{equation}
 
+\begin{table}[htbp]
+ 
+ \begin{minipage}{0.3\textwidth}
+  \centering
+  \begin{tabular}{|c|c|}
+   \multicolumn{2}{c}{$\Lambda$K$^{+}$ Residuals} \\
+   \hline
+   \textbf{Pair System} & \textbf{$\lambda$ value} \\
+   \hline
+   $\Lambda$K$^{+}$ & 0.154 \\
+   $\Sigma^{0}$K$^{+}$ & 0.099 \\
+   $\Xi^{0}$K$^{+}$ & 0.072 \\
+   $\Xi^{-}$K$^{+}$ & 0.069 \\
+   Other & 0.558 \\
+   Fakes & 0.048 \\
+   \hline
+  \end{tabular}
+ \end{minipage}
+ \begin{minipage}{0.3\textwidth}
+  \centering
+  \begin{tabular}{|c|c|}
+   \multicolumn{2}{c}{$\Lambda$K$^{+}$ Residuals} \\
+   \hline
+   \textbf{Pair System} & \textbf{$\lambda$ value} \\
+   \hline
+   $\Lambda$K$^{+}$ & 0.154 \\
+   $\Sigma^{0}$K$^{+}$ & 0.099 \\
+   $\Xi^{0}$K$^{+}$ & 0.072 \\
+   $\Xi^{-}$K$^{+}$ & 0.069 \\
+   Other & 0.558 \\
+   Fakes & 0.048 \\
+   \hline
+  \end{tabular}
+ \end{minipage} 
+ 
+ \label{tab:LambdaValues_3Res_LamKchP}
+\end{table}
+
+
+\begin{table}[htbp]
+ \centering
+ \begin{tabular}{|c|c|}
+  \multicolumn{2}{c}{$\Lambda$K$^{+}$ Residuals} \\
+  \hline
+  \textbf{Pair System} & \textbf{$\lambda$ value} \\
+  \hline
+  $\Lambda$K$^{+}$ & 0.154 \\
+  $\Sigma^{0}$K$^{+}$ & 0.099 \\
+  $\Xi^{0}$K$^{+}$ & 0.072 \\
+  $\Xi^{-}$K$^{+}$ & 0.069 \\
+  $\Sigma^{*+}$K$^{+}$ & 0.046 \\
+  $\Sigma^{*-}$K$^{+}$ & 0.042 \\
+  $\Sigma^{*0}$K$^{+}$ & 0.042 \\
+  $\Lambda$K$^{*0}$ & 0.039 \\
+  $\Sigma^{0}$K$^{*0}$ & 0.035 \\
+  $\Xi^{0}$K$^{*0}$ & 0.025 \\
+  $\Xi^{-}$K$^{*0}$ & 0.024 \\
+  Other & 0.305 \\
+  Fakes & 0.048 \\
+  \hline
+ \end{tabular}
+ \label{tab:LambdaValues_10Res_LamKchP}
+\end{table}
+
+
+
 Now, the remaining question is how do we model the parent correlation functions?  In an ideal world, we would simply look up the parent interaction in some table, and input this into our Lednicky equation (for the case of one or more charge neutral particle in the pair), or run it through the CoulombFitter machinery described in Sec. \ref{ModelCascadeKaon}.  Unfortunately, the world in which we live is not perfect, such a table does not exists, and little is know about the interaction between the residual pairs in this study.  One solution would be to introduce a set of scattering parameters and radii for each residual system.  However, as will the case of the $\lambda$-parameters above, this would introduce a large number of additional fit parameters, and would make our fitter too unconstrained and would yield untrustworthy results.  The second option, which is adopted in this analysis, is to assume all residual pairs have the same source size as the daughter pair, and all Coulomb-neutral residual pairs also share the same scattering parameters as the daughter pair (the case of charged pairs will be described below).
 
 Concerning the radii of the residual parent pairs, it was suggested that these should be set to smaller values.  In the interest of minimizing the number of parameters in the fitter, we tested this by introducing an \textit{m}$_{\mathrm{T}}$-scaling of the parent radii.  The motivation for this scaling comes from the approximate \textit{m}$_{\mathrm{T}}$-scaling of the radii observed in \ref{fig:mTScalingOfRadii}.  To achieve this scaling, we assume the radii follow an inverse-square distribution: $R_{AB} = \alpha m_{\mathrm{T}}^{1/2}$.  Then, it follows that we should scale the parent radii as:
