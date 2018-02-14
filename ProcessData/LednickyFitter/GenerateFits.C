@@ -21,7 +21,7 @@ int main(int argc, char **argv)
   bool bDoFit = false;
   bool bGenerateContours = true;
 
-  AnalysisType tAnType = kLamKchP;
+  AnalysisType tAnType = kLamK0;
   AnalysisRunType tAnRunType = kTrain;
   int tNPartialAnalysis = 2;
 //  CentralityType tCentType = k0010;  //TODO
@@ -43,8 +43,8 @@ int main(int argc, char **argv)
 
   bool UnboundLambda = true;
 
-  bool FixRadii = true;
-  bool FixD0 = false;
+  bool FixRadii = false;
+  bool FixD0 = true;
   bool FixAllScattParams = false;
   bool FixAllLambdaTo1 = false;
   if(FixAllLambdaTo1) tAllShareSingleLambdaParam = true;
@@ -252,14 +252,14 @@ int main(int argc, char **argv)
     {
       if(tAnType != kLamK0)
       {
-        tLamKchP->GenerateContourPlots(10, {0, 1, 6, 9, 10}, {4, 1}, "_0010", bFixAllOthers);
-//        tLamKchP->GenerateContourPlots(10, {2, 3, 7, 9, 10}, {4, 1}, "_1030", bFixAllOthers);
+//        tLamKchP->GenerateContourPlots(10, {0, 1, 6, 9, 10}, {4, 1}, "_0010", bFixAllOthers);
+        tLamKchP->GenerateContourPlots(10, {2, 3, 7, 9, 10}, {4, 1}, "_1030", bFixAllOthers);
 //        tLamKchP->GenerateContourPlots(10, {4, 5, 8, 9, 10}, {4, 1}, "_3050", bFixAllOthers);
       }
       else
       {
-        tLamKchP->GenerateContourPlots(10, {0, 1, 4, 5}, {4, 1}, "_0010", bFixAllOthers);
-//        tLamKchP->GenerateContourPlots(10, {0, 2, 4, 5}, {4, 1}, "_1030", bFixAllOthers);
+//        tLamKchP->GenerateContourPlots(10, {0, 1, 4, 5}, {4, 1}, "_0010", bFixAllOthers);
+        tLamKchP->GenerateContourPlots(10, {0, 2, 4, 5}, {4, 1}, "_1030", bFixAllOthers);
 //        tLamKchP->GenerateContourPlots(10, {0, 3, 4, 5}, {4, 1}, "_3050", bFixAllOthers);
       }
     }
