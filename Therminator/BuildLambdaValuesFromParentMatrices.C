@@ -75,7 +75,7 @@ int main(int argc, char **argv)
 //-----------------------------------------------------------------------------
   bool bSaveImages = false;
 //  double tMaxDecayLength = -1.;
-  double tMaxDecayLength = 5.0;
+  double tMaxDecayLength = 4.0;
 
   TString tDirectory = "~/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b2/";
   TString tFileLocationPairFractions = tDirectory + "PairFractions.root";
