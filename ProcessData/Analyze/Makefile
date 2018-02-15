@@ -7,7 +7,7 @@ CFLAGS = $(shell root-config --cflags) -Wall -std=c++11 -I${UTILITIES_DIR} -g -O
 
 MY_LIBS = $(addprefix build/, CfLite.o CfHeavy.o Cf2dLite.o Cf2dHeavy.o Types.o AnalysisInfo.o Purity.o PartialAnalysis.o Analysis.o DataAndModel.o PlotPartners.o PlotPartnersLamKch.o PlotPartnersLamK0.o SystematicAnalysis.o CanvasPartition.o)
 
-all: runBuildcLamcKch runBuildcLamK0 runBuildcXicKch runBuildcXiK0 runBuildcLamcLam runCombineConjugatesLamKch runCombineConjugatesLamK0 runCombineConjugatesXiKch runBuildMomResMatrix runBuildMomResMatrix2 runCompareFixes runCorrectCfs runTest runV0PurityBgdEstimator
+all: runBuildcLamcKch runBuildcLamK0 runBuildcXicKch runBuildcXiK0 runBuildcLamcLam runCombineConjugatesLamKch runCombineConjugatesLamK0 runCombineConjugatesXiKch runBuildMomResMatrix runBuildMomResMatrix2 runCompareFixes runCorrectCfs runTest runV0PurityBgdEstimator runDrawMCCfs
 
 runBuildcLamcKch: ${MY_LIBS} BuildcLamcKchAnalyses.C
 	g++ BuildcLamcKchAnalyses.C ${MY_LIBS} -o runBuildcLamcKch $(LIBS) $(CFLAGS)
@@ -51,6 +51,9 @@ runTest: ${MY_LIBS} testPlotPartnersLamKch.C
 runV0PurityBgdEstimator: ${MY_LIBS} BuildV0PurityBgdEstimator.C
 	g++ BuildV0PurityBgdEstimator.C ${MY_LIBS} -o runV0PurityBgdEstimator $(LIBS) $(CFLAGS)
 
+runDrawMCCfs: ${MY_LIBS} DrawMCCfs.C
+	g++ DrawMCCfs.C ${MY_LIBS} -o runDrawMCCfs $(LIBS) $(CFLAGS)
+
 
 build/%.o: %.cxx %.h
 	g++ -c $< $(CFLAGS) -o $@
@@ -63,4 +66,4 @@ build/%.o: %.cc %.hh
 
 
 clean:
-	rm -f runBuildcLamcKch runBuildcLamK0 runBuildcXicKch runBuildcXiK0 runBuildcLamcLam runCombineConjugatesLamKch runCombineConjugatesLamK0 runCombineConjugatesXiKch runBuildMomResMatrix runBuildMomResMatrix2 runCompareFixes runCorrectCfs runTest ${MY_LIBS}
+	rm -f runBuildcLamcKch runBuildcLamK0 runBuildcXicKch runBuildcXiK0 runBuildcLamcLam runCombineConjugatesLamKch runCombineConjugatesLamK0 runCombineConjugatesXiKch runBuildMomResMatrix runBuildMomResMatrix2 runCompareFixes runCorrectCfs runTest runV0PurityBgdEstimator runDrawMCCfs ${MY_LIBS}
