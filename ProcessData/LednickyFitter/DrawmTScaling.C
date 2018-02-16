@@ -213,6 +213,8 @@ int main(int argc, char **argv)
     tIncludeD0Type = kFreeD0Only;
   }
 
+  bool bDrawJaiAndHans = false;
+
   DrawAcrossAnalysesInfo tDrawingInfo = GetDrawingInfo(tIncludeResType, tIncludeD0Type);
 
   //------------------------------------------------------
@@ -288,8 +290,9 @@ int main(int argc, char **argv)
   canmtcomb->SetFrameBorderMode(0);
   canmtcomb->SetFrameBorderMode(0);
    
-  TH1D *ramka = new TH1D("ramka","",100,0.2,1.99);
-//  TH1D *ramka = new TH1D("ramka","",100,0.2,2.2);
+  TH1D *ramka;
+  if(!bDrawJaiAndHans) ramka = new TH1D("ramka","",100,0.2,1.99);
+  else ramka = new TH1D("ramka","",100,0.2,2.24);
   ramka->SetMinimum(1.15);
   ramka->SetMaximum(9.99);
   ramka->SetStats(0);
@@ -722,6 +725,60 @@ int main(int argc, char **argv)
   tTex->DrawLatex(0.35, 2., tDrawingInfo.descriptor);
   tMarker->SetMarkerStyle(tDrawingInfo.markerStyle);
   tMarker->DrawMarker(0.3, 2.);
+
+//-------------------------------------------------------------------------------
+  if(bDrawJaiAndHans)
+  {
+    //---- LamLam --------------
+    //----- 0-10% -----
+    DrawPoints("GraphLamLam0010", tLamLam0010Sys, tLamLam0010Stat, myRedT, myRed, tMarkerStyleLamLam, tMarkerSize);
+    //----- 10-30% -----
+    DrawPoints("GraphLamLam1030", tLamLam1030Sys, tLamLam1030Stat, myGreenT, myGreen, tMarkerStyleLamLam, tMarkerSize);
+    //----- 30-50% -----
+    DrawPoints("GraphLamLam3050", tLamLam3050Sys, tLamLam3050Stat, myBlueT, myBlue, tMarkerStyleLamLam, tMarkerSize);
+
+    //---- LamALam --------------
+    //----- 0-10% -----
+    DrawPoints("GraphLamALam0010", tLamALam0010Sys, tLamALam0010Stat, myRedT, myRed, tMarkerStyleLamALam, tMarkerSize);
+    //----- 10-30% -----
+    DrawPoints("GraphLamALam1030", tLamALam1030Sys, tLamALam1030Stat, myGreenT, myGreen, tMarkerStyleLamALam, tMarkerSize);
+    //----- 30-50% -----
+    DrawPoints("GraphLamALam3050", tLamALam3050Sys, tLamALam3050Stat, myBlueT, myBlue, tMarkerStyleLamALam, tMarkerSize);
+
+
+    //---- PLam --------------
+    //----- 0-10% -----
+    DrawPoints("GraphPLam0010", tPLam0010Sys, tPLam0010Stat, myRedT, myRed, tMarkerStylePLam, tMarkerSize);
+    //----- 10-30% -----
+    DrawPoints("GraphPLam1030", tPLam1030Sys, tPLam1030Stat, myGreenT, myGreen, tMarkerStylePLam, tMarkerSize);
+    //----- 30-50% -----
+    DrawPoints("GraphPLam3050", tPLam3050Sys, tPLam3050Stat, myBlueT, myBlue, tMarkerStylePLam, tMarkerSize);
+
+
+    //----------------------------------------------------
+    TLatex* tex = new TLatex();
+    tex->SetTextAlign(12);
+    tex->SetTextFont(42);
+    tex->SetTextSize(0.04);
+    tex->SetLineWidth(2);
+
+
+    // species text and markers
+    TMarker *marker = new TMarker();
+    marker->SetMarkerSize(tMarkerSize);
+
+    tex->DrawLatex(2.05, 8.2, "p#Lambda");
+    marker->SetMarkerStyle(tMarkerStylePLam);
+    marker->DrawMarker(2.175, 8.2);
+
+    tex->DrawLatex(2.05, 7.6, "#Lambda#Lambda");
+    marker->SetMarkerStyle(tMarkerStyleLamLam);
+    marker->DrawMarker(2.175, 7.6);
+
+    tex->DrawLatex(2.05, 7.0, "#Lambda#bar{#Lambda}");
+    marker->SetMarkerStyle(tMarkerStyleLamALam);
+    marker->DrawMarker(2.175, 7.0);
+  }
 
 //---------------------------- Save file ----------------------------------------------------
   if(bSaveImage) canmtcomb->SaveAs(tSaveName);
