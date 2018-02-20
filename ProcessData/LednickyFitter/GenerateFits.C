@@ -253,14 +253,14 @@ int main(int argc, char **argv)
       if(tAnType != kLamK0)
       {
 //        tLamKchP->GenerateContourPlots(10, {0, 1, 6, 9, 10}, {4, 1}, "_0010", bFixAllOthers);
-        tLamKchP->GenerateContourPlots(10, {2, 3, 7, 9, 10}, {4, 1}, "_1030", bFixAllOthers);
-//        tLamKchP->GenerateContourPlots(10, {4, 5, 8, 9, 10}, {4, 1}, "_3050", bFixAllOthers);
+//        tLamKchP->GenerateContourPlots(10, {2, 3, 7, 9, 10}, {4, 1}, "_1030", bFixAllOthers);
+        tLamKchP->GenerateContourPlots(10, {4, 5, 8, 9, 10}, {4, 1}, "_3050", bFixAllOthers);
       }
       else
       {
 //        tLamKchP->GenerateContourPlots(10, {0, 1, 4, 5}, {4, 1}, "_0010", bFixAllOthers);
-        tLamKchP->GenerateContourPlots(10, {0, 2, 4, 5}, {4, 1}, "_1030", bFixAllOthers);
-//        tLamKchP->GenerateContourPlots(10, {0, 3, 4, 5}, {4, 1}, "_3050", bFixAllOthers);
+//        tLamKchP->GenerateContourPlots(10, {0, 2, 4, 5}, {4, 1}, "_1030", bFixAllOthers);
+        tLamKchP->GenerateContourPlots(10, {0, 3, 4, 5}, {4, 1}, "_3050", bFixAllOthers);
       }
     }
     else
