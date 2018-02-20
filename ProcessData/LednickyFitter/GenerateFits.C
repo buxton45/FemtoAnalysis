@@ -18,10 +18,10 @@ int main(int argc, char **argv)
 //  TString tResultsDate = "20180104_useIsProbableElectronMethodTrue";
 //  TString tResultsDate = "20180104_useIsProbableElectronMethodFalse";
 
-  bool bDoFit = false;
-  bool bGenerateContours = true;
+  bool bDoFit = true;
+  bool bGenerateContours = false;
 
-  AnalysisType tAnType = kLamK0;
+  AnalysisType tAnType = kLamKchP;
   AnalysisRunType tAnRunType = kTrain;
   int tNPartialAnalysis = 2;
 //  CentralityType tCentType = k0010;  //TODO
@@ -44,7 +44,7 @@ int main(int argc, char **argv)
   bool UnboundLambda = true;
 
   bool FixRadii = false;
-  bool FixD0 = true;
+  bool FixD0 = false;
   bool FixAllScattParams = false;
   bool FixAllLambdaTo1 = false;
   if(FixAllLambdaTo1) tAllShareSingleLambdaParam = true;
@@ -191,6 +191,7 @@ int main(int argc, char **argv)
     TObjArray* tAllCanLamKchP;
     TCanvas* tCanPrimwFitsAndResidual;
     TObjArray* tAllResWithTransMatrices;
+    TObjArray* tAllSingleKStarCfwFitAndResiduals;
 
     if(tIncludeResidualsType != kIncludeNoResiduals && bDrawResiduals)
     {
@@ -200,6 +201,10 @@ int main(int argc, char **argv)
       tCanPrimwFitsAndResidual = tLamKchP->DrawKStarCfswFitsAndResiduals(ApplyMomResCorrection,ApplyNonFlatBackgroundCorrection,tNonFlatBgdFitType,SaveImages,false,bZoomROP);
 
       tAllResWithTransMatrices = tLamKchP->DrawAllResidualsWithTransformMatrices(SaveImages);
+
+      bool bDrawData = false;
+      tAllSingleKStarCfwFitAndResiduals = tLamKchP->DrawAllSingleKStarCfwFitAndResiduals(bDrawData, ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, tNonFlatBgdFitType, SaveImages, false, bZoomROP);
+
     }
 
 //-------------------------------------------------------------------------------
@@ -252,15 +257,15 @@ int main(int argc, char **argv)
     {
       if(tAnType != kLamK0)
       {
-//        tLamKchP->GenerateContourPlots(10, {0, 1, 6, 9, 10}, {4, 1}, "_0010", bFixAllOthers);
+        tLamKchP->GenerateContourPlots(10, {0, 1, 6, 9, 10}, {4, 1}, "_0010", bFixAllOthers);
 //        tLamKchP->GenerateContourPlots(10, {2, 3, 7, 9, 10}, {4, 1}, "_1030", bFixAllOthers);
-        tLamKchP->GenerateContourPlots(10, {4, 5, 8, 9, 10}, {4, 1}, "_3050", bFixAllOthers);
+//        tLamKchP->GenerateContourPlots(10, {4, 5, 8, 9, 10}, {4, 1}, "_3050", bFixAllOthers);
       }
       else
       {
-//        tLamKchP->GenerateContourPlots(10, {0, 1, 4, 5}, {4, 1}, "_0010", bFixAllOthers);
+        tLamKchP->GenerateContourPlots(10, {0, 1, 4, 5}, {4, 1}, "_0010", bFixAllOthers);
 //        tLamKchP->GenerateContourPlots(10, {0, 2, 4, 5}, {4, 1}, "_1030", bFixAllOthers);
-        tLamKchP->GenerateContourPlots(10, {0, 3, 4, 5}, {4, 1}, "_3050", bFixAllOthers);
+//        tLamKchP->GenerateContourPlots(10, {0, 3, 4, 5}, {4, 1}, "_3050", bFixAllOthers);
       }
     }
     else

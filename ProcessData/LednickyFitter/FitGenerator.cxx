@@ -1899,8 +1899,26 @@ TCanvas* FitGenerator::DrawSingleKStarCfwFitAndResiduals(int aAnalysisNumber, bo
   tCanPart->DrawXaxisTitle("#it{k}* (GeV/#it{c})");
   tCanPart->DrawYaxisTitle("#it{C}(#it{k}*)",43,25,0.05,0.85);
 
+
+  if(aSaveImage)
+  {
+    ExistsSaveLocationBase();
+    TString tSaveLocationDir = TString::Format("%sResiduals%s/%s/", fSaveLocationBase.Data(), cIncludeResidualsTypeTags[fIncludeResidualsType], cAnalysisBaseTags[tAnType]);
+    gSystem->mkdir(tSaveLocationDir, true);
+    tCanPart->GetCanvas()->SaveAs(tSaveLocationDir+tCanPart->GetCanvas()->GetName()+fSaveNameModifier+TString(".eps"));
+  }
+
+
   return tCanPart->GetCanvas();
 
+}
+
+//________________________________________________________________________________________________________________
+TObjArray* FitGenerator::DrawAllSingleKStarCfwFitAndResiduals(bool aDrawData, bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, NonFlatBgdFitType aNonFlatBgdFitType, bool aSaveImage, bool aDrawSysErrors, bool aZoomROP)
+{
+  TObjArray* tReturnArray = new TObjArray();
+  for(int i=0; i<fNAnalyses; i++) tReturnArray->Add(DrawSingleKStarCfwFitAndResiduals(i, aDrawData, aMomResCorrectFit, aNonFlatBgdCorrectFit, aNonFlatBgdFitType, aSaveImage, aDrawSysErrors, aZoomROP));
+  return tReturnArray;
 }
 
 
