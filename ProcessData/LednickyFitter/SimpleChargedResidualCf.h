@@ -8,6 +8,7 @@
 #include <math.h>
 
 #include <omp.h>
+#include "ChronoTimer.h"
 
 #include "TH2.h"
 #include "TMath.h"

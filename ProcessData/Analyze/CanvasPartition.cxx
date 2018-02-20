@@ -306,7 +306,7 @@ void CanvasPartition::AddPadPaveText(TPaveText* aText, int aNx, int aNy)
 }
 
 //________________________________________________________________________________________________________________
-void CanvasPartition::SetupTLegend(TString aHeader, int aNx, int aNy, double aTextXmin, double aTextYmin, double aTextWidth, double aTextHeight)
+void CanvasPartition::SetupTLegend(TString aHeader, int aNx, int aNy, double aTextXmin, double aTextYmin, double aTextWidth, double aTextHeight, int aNColumns)
 {
   float tLeftMargin = fPadArray[aNx][aNy]->GetLeftMargin();
   float tRightMargin = fPadArray[aNx][aNy]->GetRightMargin();
@@ -327,6 +327,7 @@ void CanvasPartition::SetupTLegend(TString aHeader, int aNx, int aNy, double aTe
   //------------------------------------
 
   TLegend* tLeg = new TLegend(tNormalizedTextXmin,tNormalizedTextYmin,tNormalizedTextXmax,tNormalizedTextYmax,"NDC");
+  if(aNColumns != 1) tLeg->SetNColumns(aNColumns);
     tLeg->SetFillColor(0);
     tLeg->SetBorderSize(0);
     tLeg->SetTextAlign(22);
@@ -402,7 +403,7 @@ void CanvasPartition::DrawInPad(int aNx, int aNy)
     tLine->Draw();
   }
 
-  tGraphsToDraw->At(0)->Draw("ex0same");
+//  tGraphsToDraw->At(0)->Draw("ex0same");
 }
 
 //________________________________________________________________________________________________________________

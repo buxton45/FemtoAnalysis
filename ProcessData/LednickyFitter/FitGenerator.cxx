@@ -693,6 +693,73 @@ TCanvas* FitGenerator::DrawKStarCfswFits()
 
 
 //________________________________________________________________________________________________________________
+void FitGenerator::BuildKStarCfswFitsPanel(CanvasPartition* aCanPart, int aAnalysisNumber, int tColumn, int tRow, bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, NonFlatBgdFitType aNonFlatBgdFitType, bool aDrawSysErrors, bool aDrawDataOnTop)
+{
+  int tColor, tColorTransparent;
+  AnalysisType tAnType = fSharedAn->GetFitPairAnalysis(aAnalysisNumber)->GetAnalysisType();
+  if(tAnType==kLamK0 || tAnType==kALamK0) tColor=kBlack;
+  else if(tAnType==kLamKchP || tAnType==kALamKchM) tColor=kRed+1;
+  else if(tAnType==kLamKchM || tAnType==kALamKchP) tColor=kBlue+1;
+  else tColor=1;
+
+  tColorTransparent = TColor::GetColorTransparent(tColor,0.2);
+
+  int tColorCorrectFit = kMagenta+1;
+  int tColorNonFlatBgd = kGreen+2;
+
+//TODO currently GetCorrectedFitHistv2 is the method which can also include residuals in the fit
+//  TH1* tCorrectedFitHisto = (TH1*)fSharedAn->GetFitPairAnalysis(aAnalysisNumber)->GetCorrectedFitHisto(aMomResCorrectFit,aNonFlatBgdCorrectFit,false,aNonFlatBgdFitType);
+  TH1F* tCorrectedFitHisto = fSharedAn->GetFitPairAnalysis(aAnalysisNumber)->GetCorrectedFitHistv2();
+    tCorrectedFitHisto->SetLineWidth(2);
+
+  //Include the Cf with statistical errors, and make sure the binning is the same as the fitted Cf ----------
+  TH1* tHistToPlot;
+  if(aDrawSysErrors)
+  {
+    tHistToPlot = (TH1*)fSharedAn->GetFitPairAnalysis(aAnalysisNumber)->GetCfwSysErrors();
+      //tHistToPlot->SetFillStyle(0);  //for box error bars to draw correctly
+      tHistToPlot->SetFillColor(tColorTransparent);
+      tHistToPlot->SetFillStyle(1000);
+      tHistToPlot->SetLineColor(0);
+      tHistToPlot->SetLineWidth(0);
+  }
+
+//TODO 
+//If the binnings are unequal, I must regenerate the plots with Analyze/Systematics/BuildErrorBars.C
+//This is because a Cf should not simply be rebinned, but rather the Num and Den should be rebinned, and the Cf rebuilt
+//Ths incorrect method would be Cf->Rebin(aRebin); Cf->Scale(1./aRebin);
+/*
+      double tDesiredBinWidth, tBinWidth;
+      tDesiredBinWidth = ((TH1*)fSharedAn->GetKStarCfHeavy(aAnalysisNumber)->GetHeavyCfClone())->GetBinWidth(1);
+      tBinWidth = tHistToPlot->GetBinWidth(1);
+
+      if( (tDesiredBinWidth != tBinWidth) && (fmod(tDesiredBinWidth,tBinWidth) == 0) )
+      {
+        int tScale = tDesiredBinWidth/tBinWidth;
+        tHistToPlot->Rebin(tScale);
+        tHistToPlot->Scale(1./tScale);
+      }
+      else if(tDesiredBinWidth != tBinWidth)
+      {
+        cout << "ERROR: FitGenerator::DrawKStarCfswFits: Histogram containing systematic error bars does not have the correct bin size and" << endl;
+        cout << "DNE an appropriate scale to resolve the issue" << endl;
+        assert(0);
+      }
+*/
+//      assert(tHistToPlot->GetBinWidth(1) == tDesiredBinWidth);
+  if(aDrawSysErrors) assert(tHistToPlot->GetBinWidth(1) == ((TH1*)fSharedAn->GetKStarCfHeavy(aAnalysisNumber)->GetHeavyCfClone())->GetBinWidth(1));
+  //---------------------------------------------------------------------------------------------------------
+
+  aCanPart->AddGraph(tColumn,tRow,(TH1*)fSharedAn->GetKStarCfHeavy(aAnalysisNumber)->GetHeavyCfClone(),"",20,tColor,0.5,"ex0");  //ex0 suppresses the error along x
+  if(fApplyNonFlatBackgroundCorrection) aCanPart->AddGraph(tColumn,tRow,(TF1*)fSharedAn->GetFitPairAnalysis(aAnalysisNumber)->GetNonFlatBackground(aNonFlatBgdFitType, fSharedAn->GetFitType(), true, true),"",20,tColorNonFlatBgd);
+  aCanPart->AddGraph(tColumn,tRow,(TF1*)fSharedAn->GetFitPairAnalysis(aAnalysisNumber)->GetPrimaryFit(),"");
+  aCanPart->AddGraph(tColumn,tRow,tCorrectedFitHisto,"",20,tColorCorrectFit,0.5,"lsame");
+  if(aDrawSysErrors) aCanPart->AddGraph(tColumn,tRow,tHistToPlot,"",20,tColorTransparent,0.5,"e2psame");
+  if(aDrawDataOnTop) aCanPart->AddGraph(tColumn,tRow,(TH1*)fSharedAn->GetKStarCfHeavy(aAnalysisNumber)->GetHeavyCfClone(),"",20,tColor,0.5,"ex0same");  //draw again so data on top
+}
+
+
+//________________________________________________________________________________________________________________
 CanvasPartition* FitGenerator::BuildKStarCfswFitsCanvasPartition(TString aCanvasBaseName, bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, NonFlatBgdFitType aNonFlatBgdFitType, bool aDrawSysErrors, bool aZoomROP)
 {
   TString tCanvasName = aCanvasBaseName;
@@ -734,68 +801,9 @@ CanvasPartition* FitGenerator::BuildKStarCfswFitsCanvasPartition(TString aCanvas
     for(int i=0; i<tNx; i++)
     {
       tAnalysisNumber = j*tNx + i;
-
-      int tColor, tColorTransparent;
       AnalysisType tAnType = fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetAnalysisType();
-      if(tAnType==kLamK0 || tAnType==kALamK0) tColor=kBlack;
-      else if(tAnType==kLamKchP || tAnType==kALamKchM) tColor=kRed+1;
-      else if(tAnType==kLamKchM || tAnType==kALamKchP) tColor=kBlue+1;
-      else tColor=1;
 
-      tColorTransparent = TColor::GetColorTransparent(tColor,0.2);
-
-      int tColorCorrectFit = kMagenta+1;
-      int tColorNonFlatBgd = kGreen+2;
-
-//TODO currently GetCorrectedFitHistv2 is the method which can also include residuals in the fit
-//      TH1* tCorrectedFitHisto = (TH1*)fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetCorrectedFitHisto(aMomResCorrectFit,aNonFlatBgdCorrectFit,false,aNonFlatBgdFitType);
-      TH1F* tCorrectedFitHisto = fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetCorrectedFitHistv2();
-        tCorrectedFitHisto->SetLineWidth(2);
-
-      //Include the Cf with statistical errors, and make sure the binning is the same as the fitted Cf ----------
-      TH1* tHistToPlot;
-      if(aDrawSysErrors)
-      {
-        tHistToPlot = (TH1*)fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetCfwSysErrors();
-          //tHistToPlot->SetFillStyle(0);  //for box error bars to draw correctly
-          tHistToPlot->SetFillColor(tColorTransparent);
-          tHistToPlot->SetFillStyle(1000);
-          tHistToPlot->SetLineColor(0);
-          tHistToPlot->SetLineWidth(0);
-      }
-
-//TODO 
-//If the binnings are unequal, I must regenerate the plots with Analyze/Systematics/BuildErrorBars.C
-//This is because a Cf should not simply be rebinned, but rather the Num and Den should be rebinned, and the Cf rebuilt
-//Ths incorrect method would be Cf->Rebin(aRebin); Cf->Scale(1./aRebin);
-/*
-      double tDesiredBinWidth, tBinWidth;
-      tDesiredBinWidth = ((TH1*)fSharedAn->GetKStarCfHeavy(tAnalysisNumber)->GetHeavyCfClone())->GetBinWidth(1);
-      tBinWidth = tHistToPlot->GetBinWidth(1);
-
-      if( (tDesiredBinWidth != tBinWidth) && (fmod(tDesiredBinWidth,tBinWidth) == 0) )
-      {
-        int tScale = tDesiredBinWidth/tBinWidth;
-        tHistToPlot->Rebin(tScale);
-        tHistToPlot->Scale(1./tScale);
-      }
-      else if(tDesiredBinWidth != tBinWidth)
-      {
-        cout << "ERROR: FitGenerator::DrawKStarCfswFits: Histogram containing systematic error bars does not have the correct bin size and" << endl;
-        cout << "DNE an appropriate scale to resolve the issue" << endl;
-        assert(0);
-      }
-*/
-//      assert(tHistToPlot->GetBinWidth(1) == tDesiredBinWidth);
-      if(aDrawSysErrors) assert(tHistToPlot->GetBinWidth(1) == ((TH1*)fSharedAn->GetKStarCfHeavy(tAnalysisNumber)->GetHeavyCfClone())->GetBinWidth(1));
-      //---------------------------------------------------------------------------------------------------------
-
-      tCanPart->AddGraph(i,j,(TH1*)fSharedAn->GetKStarCfHeavy(tAnalysisNumber)->GetHeavyCfClone(),"",20,tColor,0.5,"ex0");  //ex0 suppresses the error along x
-      if(fApplyNonFlatBackgroundCorrection) tCanPart->AddGraph(i,j,(TF1*)fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetNonFlatBackground(aNonFlatBgdFitType, fSharedAn->GetFitType(), true, true),"",20,tColorNonFlatBgd);
-      tCanPart->AddGraph(i,j,(TF1*)fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetPrimaryFit(),"");
-      tCanPart->AddGraph(i,j,tCorrectedFitHisto,"",20,tColorCorrectFit,0.5,"lsame");
-      if(aDrawSysErrors) tCanPart->AddGraph(i,j,tHistToPlot,"",20,tColorTransparent,0.5,"e2psame");
-      if(aZoomROP) tCanPart->AddGraph(i,j,(TH1*)fSharedAn->GetKStarCfHeavy(tAnalysisNumber)->GetHeavyCfClone(),"",20,tColor,0.5,"ex0same");  //draw again so data on top
+      BuildKStarCfswFitsPanel(tCanPart, tAnalysisNumber, i, j, aMomResCorrectFit, aNonFlatBgdCorrectFit, aNonFlatBgdFitType, aDrawSysErrors, aZoomROP);
 
       TString tTextAnType = TString(cAnalysisRootTags[fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetAnalysisType()]);
       //TPaveText* tAnTypeName = tCanPart->SetupTPaveText(tTextAnType,i,j,0.89,0.85,0.05);
@@ -1744,6 +1752,158 @@ TCanvas* FitGenerator::DrawPrimaryWithResiduals(int aAnalysisNumber, CentralityT
 }
 */
 
+
+//________________________________________________________________________________________________________________
+TCanvas* FitGenerator::DrawSingleKStarCfwFitAndResiduals(int aAnalysisNumber, bool aDrawData, bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, NonFlatBgdFitType aNonFlatBgdFitType, bool aSaveImage, bool aDrawSysErrors, bool aZoomROP)
+{
+  AnalysisType tAnType = fSharedAn->GetFitPairAnalysis(aAnalysisNumber)->GetAnalysisType();
+  CentralityType tCentType = fSharedAn->GetFitPairAnalysis(aAnalysisNumber)->GetCentralityType();
+
+  TString tCanvasName = TString::Format("canKStarCfwFitsAndResiduals_AnNum%i_", aAnalysisNumber);
+
+  if(fGeneratorType==kPairwConj) tCanvasName += TString(cAnalysisBaseTags[fPairType]) + TString("wConj");
+  else if(fGeneratorType==kPair) tCanvasName += TString(cAnalysisBaseTags[fPairType]);
+  else if(fGeneratorType==kConjPair) tCanvasName += TString(cAnalysisBaseTags[fConjPairType]);
+  else assert(0);
+
+  for(unsigned int i=0; i<fCentralityTypes.size(); i++) tCanvasName += TString(cCentralityTags[fCentralityTypes[i]]);
+  if(!aZoomROP) tCanvasName += TString("UnZoomed");
+
+  int tNx=2, tNy=1;
+
+  double tXLow = -0.02;
+  double tXHigh = 0.99;
+  double tYLow = 0.71;
+  double tYHigh = 1.09;
+  if(aZoomROP)
+  {
+    tXLow = -0.02;
+    tXHigh = 0.329;
+    tYLow = 0.86;
+    tYHigh = 1.07;
+  }
+
+  CanvasPartition* tCanPart = new CanvasPartition(tCanvasName,tNx,tNy,tXLow,tXHigh,tYLow,tYHigh,0.12,0.05,0.13,0.0025);
+  tCanPart->SetDrawOptStat(false);
+//  tCanPart->GetCanvas()->SetCanvasSize(1400,1500);
+
+
+  int tColor, tColorTransparent;
+  if(tAnType==kLamK0 || tAnType==kALamK0) tColor=kBlack;
+  else if(tAnType==kLamKchP || tAnType==kALamKchM) tColor=kRed+1;
+  else if(tAnType==kLamKchM || tAnType==kALamKchP) tColor=kBlue+1;
+  else tColor=1;
+
+  tColorTransparent = TColor::GetColorTransparent(tColor,0.2);
+  double tMarkerSize = 0.50;
+  //---------------- Residuals ----------------------------------------
+  FitPairAnalysis* tFitPairAnalysis = fSharedAn->GetFitPairAnalysis(aAnalysisNumber);
+  double tOverallLambdaPrimary = tFitPairAnalysis->GetFitParameter(kLambda)->GetFitValue();
+  double tRadiusPrimary = tFitPairAnalysis->GetFitParameter(kRadius)->GetFitValue();
+  double tReF0Primary = tFitPairAnalysis->GetFitParameter(kRef0)->GetFitValue();
+  double tImF0Primary = tFitPairAnalysis->GetFitParameter(kImf0)->GetFitValue();
+  double tD0Primary = tFitPairAnalysis->GetFitParameter(kd0)->GetFitValue();
+
+  td1dVec tParamsOverall{tOverallLambdaPrimary, tRadiusPrimary, tReF0Primary, tImF0Primary, tD0Primary};
+      
+  vector<int> tNeutralResBaseColors{7,8,9,30,33,40,41};
+  vector<int> tNeutralResMarkerStyles{24,25,26,27,28,30,32};
+  vector<int> tChargedResBaseColors{44,46,47,49};
+  vector<int> tChargedResMarkerStyles{24,25,26,27};
+
+
+
+  //---------- Left Pad ----------
+  BuildKStarCfswFitsPanel(tCanPart, aAnalysisNumber, 0, 0, aMomResCorrectFit, aNonFlatBgdCorrectFit, aNonFlatBgdFitType, aDrawSysErrors, aZoomROP);
+
+  //Residuals-----
+  for(unsigned int iRes=0; iRes<tFitPairAnalysis->GetResidualCollection()->GetNeutralCollection().size(); iRes++)
+  {
+    AnalysisType tTempResidualType = tFitPairAnalysis->GetResidualCollection()->GetNeutralCollection()[iRes].GetResidualType();
+    TString tTempName = TString(cAnalysisRootTags[tTempResidualType]);
+    TH1D* tTempHist = tFitPairAnalysis->GetResidualCollection()->GetNeutralCollection()[iRes].GetTransformedResidualCorrelationHistogramWithLambdaApplied(tTempName, tParamsOverall.data());
+    tCanPart->AddGraph(0,0,tTempHist,"",tNeutralResMarkerStyles[iRes],tNeutralResBaseColors[iRes],tMarkerSize,"ex0same");
+  }
+  for(unsigned int iRes=0; iRes<tFitPairAnalysis->GetResidualCollection()->GetChargedCollection().size(); iRes++)
+  {
+    AnalysisType tTempResidualType = tFitPairAnalysis->GetResidualCollection()->GetChargedCollection()[iRes].GetResidualType();
+    TString tTempName = TString(cAnalysisRootTags[tTempResidualType]);
+    TH1D* tTempHist = tFitPairAnalysis->GetResidualCollection()->GetChargedCollection()[iRes].GetTransformedResidualCorrelationHistogramWithLambdaApplied(tTempName, tParamsOverall.data());
+    tCanPart->AddGraph(0,0,tTempHist,"",tChargedResMarkerStyles[iRes],tChargedResBaseColors[iRes],tMarkerSize,"ex0same");
+  }
+  tCanPart->AddGraph(0,0,(TH1*)fSharedAn->GetKStarCfHeavy(aAnalysisNumber)->GetHeavyCfClone(),"",20,tColor,0.5,"ex0same");  //draw again so data on top
+  //End Residuals
+
+  TString tTextAnType = TString(cAnalysisRootTags[tAnType]);
+  TString tTextCentrality = TString(cPrettyCentralityTags[tCentType]);
+
+  TString tCombinedText = tTextAnType + TString("  ") +  tTextCentrality;
+  TPaveText* tCombined = tCanPart->SetupTPaveText(tCombinedText,0,0,0.70,0.875,0.15,0.10,63,20);
+  tCanPart->AddPadPaveText(tCombined,0,0);
+
+
+  TString tTextAlicePrelim = TString("ALICE Preliminary");
+  TPaveText* tAlicePrelim = tCanPart->SetupTPaveText(tTextAlicePrelim,0,0,0.10,0.875,0.40,0.10,43,15);
+  tCanPart->AddPadPaveText(tAlicePrelim,0,0);
+
+
+  //---------- Right pad
+  if(aDrawData) BuildKStarCfswFitsPanel(tCanPart, aAnalysisNumber, 1, 0, aMomResCorrectFit, aNonFlatBgdCorrectFit, aNonFlatBgdFitType, aDrawSysErrors, aZoomROP);
+  else BuildKStarCfswFitsPanel(tCanPart, aAnalysisNumber, 1, 0, aMomResCorrectFit, aNonFlatBgdCorrectFit, aNonFlatBgdFitType, false, false);
+
+  //Residuals-----
+  tCanPart->SetupTLegend(TString("Residuals"), 1, 0, 0.45, 0.05, 0.50, 0.35, 2);
+  for(unsigned int iRes=0; iRes<tFitPairAnalysis->GetResidualCollection()->GetNeutralCollection().size(); iRes++)
+  {
+    AnalysisType tTempResidualType = tFitPairAnalysis->GetResidualCollection()->GetNeutralCollection()[iRes].GetResidualType();
+
+    if(tTempResidualType==kResOmegaK0 || tTempResidualType==kResAOmegaK0) continue;
+
+    TString tTempName = TString(cAnalysisRootTags[tTempResidualType]);
+    TH1D* tTempHist = tFitPairAnalysis->GetResidualCollection()->GetNeutralCollection()[iRes].GetTransformedResidualCorrelationHistogramWithLambdaApplied(tTempName, tParamsOverall.data());
+    tCanPart->AddGraph(1,0,tTempHist,"",tNeutralResMarkerStyles[iRes],tNeutralResBaseColors[iRes],tMarkerSize,"ex0same");
+    tCanPart->AddLegendEntry(1, 0, tTempHist, cAnalysisRootTags[tTempResidualType], "p");
+  }
+
+  for(unsigned int iRes=0; iRes<tFitPairAnalysis->GetResidualCollection()->GetChargedCollection().size(); iRes++)
+  {
+    AnalysisType tTempResidualType = tFitPairAnalysis->GetResidualCollection()->GetChargedCollection()[iRes].GetResidualType();
+
+    if(tTempResidualType==kResOmegaKchP || tTempResidualType==kResAOmegaKchM || tTempResidualType==kResOmegaKchM || tTempResidualType==kResAOmegaKchP) continue;
+
+    TString tTempName = TString(cAnalysisRootTags[tTempResidualType]);
+    TH1D* tTempHist = tFitPairAnalysis->GetResidualCollection()->GetChargedCollection()[iRes].GetTransformedResidualCorrelationHistogramWithLambdaApplied(tTempName, tParamsOverall.data());
+    tCanPart->AddGraph(1,0,tTempHist,"",tChargedResMarkerStyles[iRes],tChargedResBaseColors[iRes],tMarkerSize,"ex0same");
+    tCanPart->AddLegendEntry(1, 0, tTempHist, cAnalysisRootTags[tTempResidualType], "p");
+  }
+
+  //End Residuals
+
+  double tMinZoomRes = 0.985, tMaxZoomRes = 1.015;
+  ((TH1*)tCanPart->GetGraphsInPad(1,0)->At(0))->GetYaxis()->SetRangeUser(tMinZoomRes, tMaxZoomRes);
+  tCanPart->ReplaceGraphDrawOption(1, 0, 0, "AXIS Y+");
+
+
+  TString tTextSysInfo = TString("Pb-Pb #sqrt{#it{s}_{NN}} = 2.76 TeV");
+  TPaveText* tSysInfo = tCanPart->SetupTPaveText(tTextSysInfo,1,0,0.50,0.875,0.40,0.10,43,15);
+  tCanPart->AddPadPaveText(tSysInfo,1,0);
+
+  const double* tSysErrors = cSysErrors[tAnType][tCentType];
+
+  bool bDrawAll = true;
+  CreateParamFinalValuesText(tAnType, tCanPart,0,0,(TF1*)fSharedAn->GetFitPairAnalysis(aAnalysisNumber)->GetPrimaryFit(),tSysErrors,0.73,0.09,0.25,0.45,43,12.0,bDrawAll);
+
+
+  tCanPart->SetDrawUnityLine(true);
+  tCanPart->DrawAll();
+  tCanPart->DrawXaxisTitle("#it{k}* (GeV/#it{c})");
+  tCanPart->DrawYaxisTitle("#it{C}(#it{k}*)",43,25,0.05,0.85);
+
+  return tCanPart->GetCanvas();
+
+}
+
+
 //________________________________________________________________________________________________________________
 TCanvas* FitGenerator::DrawKStarCfswFitsAndResiduals(bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, NonFlatBgdFitType aNonFlatBgdFitType, bool aSaveImage, bool aDrawSysErrors, bool aZoomROP)
 {
@@ -1789,10 +1949,13 @@ TCanvas* FitGenerator::DrawKStarCfswFitsAndResiduals(bool aMomResCorrectFit, boo
       vector<int> tNeutralResMarkerStyles{24,25,26,27,28,30,32};
       vector<int> tChargedResBaseColors{44,46,47,49};
       vector<int> tChargedResMarkerStyles{24,25,26,27};
-      if((i==0 && j==1) || (i==1 && j==1)) tCanPart->SetupTLegend(TString("Residuals"), i, j, 0.35, 0.10, 0.25, 0.50);
+      if((i==0 && j==1) || (i==0 && j==2)) tCanPart->SetupTLegend(TString("Residuals"), i, j, 0.35, 0.10, 0.25, 0.50);
       for(unsigned int iRes=0; iRes<tFitPairAnalysis->GetResidualCollection()->GetNeutralCollection().size(); iRes++)
       {
         AnalysisType tTempResidualType = tFitPairAnalysis->GetResidualCollection()->GetNeutralCollection()[iRes].GetResidualType();
+
+        if(tTempResidualType==kResOmegaK0 || tTempResidualType==kResAOmegaK0) continue;
+
         TString tTempName = TString(cAnalysisRootTags[tTempResidualType]);
         TH1D* tTempHist = tFitPairAnalysis->GetResidualCollection()->GetNeutralCollection()[iRes].GetTransformedResidualCorrelationHistogramWithLambdaApplied(tTempName, tParamsOverall.data());
         tCanPart->AddGraph(i,j,tTempHist,"",tNeutralResMarkerStyles[iRes],tNeutralResBaseColors[iRes],tMarkerSize,"ex0same");
@@ -1801,10 +1964,13 @@ TCanvas* FitGenerator::DrawKStarCfswFitsAndResiduals(bool aMomResCorrectFit, boo
       for(unsigned int iRes=0; iRes<tFitPairAnalysis->GetResidualCollection()->GetChargedCollection().size(); iRes++)
       {
         AnalysisType tTempResidualType = tFitPairAnalysis->GetResidualCollection()->GetChargedCollection()[iRes].GetResidualType();
+
+        if(tTempResidualType==kResOmegaKchP || tTempResidualType==kResAOmegaKchM || tTempResidualType==kResOmegaKchM || tTempResidualType==kResAOmegaKchP) continue;
+
         TString tTempName = TString(cAnalysisRootTags[tTempResidualType]);
         TH1D* tTempHist = tFitPairAnalysis->GetResidualCollection()->GetChargedCollection()[iRes].GetTransformedResidualCorrelationHistogramWithLambdaApplied(tTempName, tParamsOverall.data());
         tCanPart->AddGraph(i,j,tTempHist,"",tChargedResMarkerStyles[iRes],tChargedResBaseColors[iRes],tMarkerSize,"ex0same");
-        if(i==1 && j==1) tCanPart->AddLegendEntry(i, j, tTempHist, cAnalysisRootTags[tTempResidualType], "p");
+        if(i==0 && j==2) tCanPart->AddLegendEntry(i, j, tTempHist, cAnalysisRootTags[tTempResidualType], "p");
       }
       tCanPart->AddGraph(i,j,(TH1*)fSharedAn->GetKStarCfHeavy(tAnalysisNumber)->GetHeavyCfClone(),"",20,tColor,0.5,"ex0same");  //draw again so data on top
     }

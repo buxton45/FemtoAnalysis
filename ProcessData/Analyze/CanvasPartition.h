@@ -59,7 +59,7 @@ public:
   void SetupOptStat(int aNx, int aNy, double aStatX, double aStatY, double aStatW, double aStatH);
   TPaveText* SetupTPaveText(TString aText, int aNx, int aNy, double aTextXmin=0.75, double aTextYmin=0.75, double aTextWidth=0.15, double aTextHeight=0.10, double aTextFont=63, double aTextSize=15);
   void AddPadPaveText(TPaveText* aText, int aNx, int aNy);
-  void SetupTLegend(TString aText, int aNx, int aNy, double aTextXmin=0.75, double aTextYmin=0.75, double aTextWidth=0.15, double aTextHeight=0.10);
+  void SetupTLegend(TString aText, int aNx, int aNy, double aTextXmin=0.75, double aTextYmin=0.75, double aTextWidth=0.15, double aTextHeight=0.10, int aNColumns=1);
   void AddLegendEntry(int aNx, int aNy, const TObject *tObj, const char *label="", Option_t *option="lpf", int tLegNumInPad=0);
 
   void DrawInPad(int aNx, int aNy);
@@ -75,6 +75,10 @@ public:
 
   double GetXScaleFactor(int aNx, int aNy);
   double GetYScaleFactor(int aNx, int aNy);
+
+  TObjArray* GetGraphsInPad(int aNx, int aNy);
+  void AppendGraphDrawOption(int aPadNx, int aPadNy, int aGraphNum, TString aOption);
+  void ReplaceGraphDrawOption(int aPadNx, int aPadNy, int aGraphNum, TString aOption);
 
 protected:
   bool fDrawUnityLine;
@@ -110,6 +114,10 @@ inline void CanvasPartition::SetDrawOptStat(bool aDraw) {fDrawOptStat = aDraw;}
 
 inline double CanvasPartition::GetXScaleFactor(int aNx, int aNy) {return fXScaleFactors[aNx][aNy];}
 inline double CanvasPartition::GetYScaleFactor(int aNx, int aNy) {return fYScaleFactors[aNx][aNy];}
+
+inline TObjArray* CanvasPartition::GetGraphsInPad(int aNx, int aNy) {return ((TObjArray*)fGraphs->At(aNx + aNy*fNx));}
+inline void CanvasPartition::AppendGraphDrawOption(int aPadNx, int aPadNy, int aGraphNum, TString aOption) {fGraphsDrawOptions[aPadNx + aPadNy*fNx][aGraphNum] += aOption;}
+inline void CanvasPartition::ReplaceGraphDrawOption(int aPadNx, int aPadNy, int aGraphNum, TString aOption) {fGraphsDrawOptions[aPadNx + aPadNy*fNx][aGraphNum] = aOption;}
 
 //________________________________________________________________________________________________________________
 template<typename T>

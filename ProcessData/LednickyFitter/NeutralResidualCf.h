@@ -5,8 +5,10 @@
 
 #include <cassert>
 #include <iostream>
+#include <math.h>
 
 #include <omp.h>
+#include "ChronoTimer.h"
 
 #include "Faddeeva.hh"
 
