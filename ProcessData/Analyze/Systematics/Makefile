@@ -1,3 +1,6 @@
+
+RM = rm
+
 ANALYZE_DIR = /home/jesse/Analysis/FemtoAnalysis/ProcessData/Analyze
 UTILITIES_DIR = /home/jesse/Analysis/FemtoAnalysis/ProcessData/Utilities
 
@@ -6,9 +9,11 @@ CFLAGS = $(shell root-config --cflags) -Wall -std=c++11 -I${ANALYZE_DIR} -I${UTI
 #IFLAGS = -I$(ROOTSYS)/include
 #.PHONY: clean
 
-MY_LIBS = $(addprefix build/, CfLite.o CfHeavy.o Cf2dLite.o Cf2dHeavy.o Types.o Purity.o PartialAnalysis.o Analysis.o DataAndModel.o PlotPartners.o PlotPartnersLamKch.o PlotPartnersLamK0.o SystematicAnalysis.o CanvasPartition.o)
+MY_LIBS = $(addprefix build/, CfLite.o CfHeavy.o Cf2dLite.o Cf2dHeavy.o Types.o Types_SysFileInfo.o Purity.o PartialAnalysis.o Analysis.o DataAndModel.o PlotPartners.o PlotPartnersLamKch.o PlotPartnersLamK0.o SystematicAnalysis.o CanvasPartition.o)
 
-all: runSingleSys runAllSysLamK0 runAllSysLamKch runCompare runBuildErrorBars runBuildErrorBarsXiKch runBuildErrorBarsXiKch2 runBuildLeadingErrorContributors
+BINARIES = runSingleSys runAllSysLamK0 runAllSysLamKch runAllSysXiKch runCompare runBuildErrorBars runBuildErrorBarsXiKch runBuildLeadingErrorContributors
+
+all: $(BINARIES)
 
 runSingleSys: ${MY_LIBS} BuildSingleSystematics.C
 	g++ BuildSingleSystematics.C ${MY_LIBS} -o runSingleSys $(LIBS) $(CFLAGS)
@@ -19,6 +24,9 @@ runAllSysLamK0: ${MY_LIBS} BuildAllSystematicsLamK0.C
 runAllSysLamKch: ${MY_LIBS} BuildAllSystematicsLamKch.C
 	g++ BuildAllSystematicsLamKch.C ${MY_LIBS} -o runAllSysLamKch $(LIBS) $(CFLAGS)
 
+runAllSysXiKch: ${MY_LIBS} BuildAllSystematicsXiKch.C
+	g++ BuildAllSystematicsXiKch.C ${MY_LIBS} -o runAllSysXiKch $(LIBS) $(CFLAGS)
+
 runCompare: ${MY_LIBS} CompareDiffFitResults.C
 	g++ CompareDiffFitResults.C ${MY_LIBS} -o runCompare $(LIBS) $(CFLAGS)
 
@@ -27,9 +35,6 @@ runBuildErrorBars: ${MY_LIBS} BuildErrorBars.C
 
 runBuildErrorBarsXiKch: ${MY_LIBS} BuildErrorBarsXiKch.C
 	g++ BuildErrorBarsXiKch.C ${MY_LIBS} -o runBuildErrorBarsXiKch $(LIBS) $(CFLAGS)
-
-runBuildErrorBarsXiKch2: ${MY_LIBS} BuildErrorBarsXiKch2.C
-	g++ BuildErrorBarsXiKch2.C ${MY_LIBS} -o runBuildErrorBarsXiKch2 $(LIBS) $(CFLAGS)
 
 runBuildLeadingErrorContributors: ${MY_LIBS} BuildLeadingErrorContributors.C
 	g++ BuildLeadingErrorContributors.C ${MY_LIBS} -o runBuildLeadingErrorContributors $(LIBS) $(CFLAGS)
@@ -44,4 +49,4 @@ build/%.o: %.cxx %.h
 	g++ -c $< $(CFLAGS) -o $@
 
 clean:
-	rm -f runSingleSys runAllSysLamK0 runAllSysLamKch runCompare runBuildErrorBars runBuildErrorBarsXiKch runBuildErrorBarsXiKch2 runBuildLeadingErrorContributors ${MY_LIBS}
+	@ ${RM} -rf *.o $(BINARIES) ${MY_LIBS}

@@ -13,6 +13,8 @@ using namespace std;
 
 #include "Types.h"
 
+//----------------------------------------------------
+
 extern const SystematicsFileInfo gInfoLamKch1;
 extern const SystematicsFileInfo gInfoLamKch2;
 extern const SystematicsFileInfo gInfoLamKch3;
@@ -46,9 +48,40 @@ extern const SystematicsFileInfo gInfoLamK015;
 extern const SystematicsFileInfo gInfoLamK016;
 extern const SystematicsFileInfo gInfoLamK017;
 
-//----------------------------------------------------
+//****************************************************
 
 extern const SystematicsFileInfo GetFileInfo_LamK(int aNumber);
+
+
+//----------------------------------------------------
+//****************************************************
+//----------------------------------------------------
+
+
+//----------------------------------------------------
+
+extern const SystematicsFileInfo gInfoXiKch1;
+extern const SystematicsFileInfo gInfoXiKch2;
+extern const SystematicsFileInfo gInfoXiKch3;
+extern const SystematicsFileInfo gInfoXiKch4;
+extern const SystematicsFileInfo gInfoXiKch5;
+extern const SystematicsFileInfo gInfoXiKch6;
+extern const SystematicsFileInfo gInfoXiKch7;
+extern const SystematicsFileInfo gInfoXiKch8;
+extern const SystematicsFileInfo gInfoXiKch9;
+extern const SystematicsFileInfo gInfoXiKch10;
+extern const SystematicsFileInfo gInfoXiKch11;
+extern const SystematicsFileInfo gInfoXiKch12;
+extern const SystematicsFileInfo gInfoXiKch13;
+extern const SystematicsFileInfo gInfoXiKch14;
+extern const SystematicsFileInfo gInfoXiKch15;
+extern const SystematicsFileInfo gInfoXiKch16;
+
+//****************************************************
+
+extern const SystematicsFileInfo GetFileInfo_XiKch(int aNumber);
+
+
 
 #endif
 
