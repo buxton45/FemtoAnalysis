@@ -50,7 +50,8 @@ int main(int argc, char **argv)
   AnalysisType tAnType = kLamKchP;
   CentralityType tCentType = k0010;
 
-  TString tResultsDate_Save = "20161027";
+//  TString tResultsDate_Save = "20161027";
+  TString tResultsDate_Save = "20171227";
 
   bool tSaveFile = true;
 

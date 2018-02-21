@@ -1,3 +1,6 @@
+
+RM = rm
+
 UTILITIES_DIR = /home/jesse/Analysis/FemtoAnalysis/ProcessData/Utilities
 
 LIBS   = $(shell root-config --libs)
@@ -7,7 +10,9 @@ CFLAGS = $(shell root-config --cflags) -Wall -std=c++11 -I${UTILITIES_DIR} -g -O
 
 MY_LIBS = $(addprefix build/, CfLite.o CfHeavy.o Cf2dLite.o Cf2dHeavy.o Types.o AnalysisInfo.o Purity.o PartialAnalysis.o Analysis.o DataAndModel.o PlotPartners.o PlotPartnersLamKch.o PlotPartnersLamK0.o SystematicAnalysis.o CanvasPartition.o)
 
-all: runBuildcLamcKch runBuildcLamK0 runBuildcXicKch runBuildcXiK0 runBuildcLamcLam runCombineConjugatesLamKch runCombineConjugatesLamK0 runCombineConjugatesXiKch runBuildMomResMatrix runBuildMomResMatrix2 runCompareFixes runCorrectCfs runTest runV0PurityBgdEstimator runDrawMCCfs
+BINARIES = runBuildcLamcKch runBuildcLamK0 runBuildcXicKch runBuildcXiK0 runBuildcLamcLam runCombineConjugatesLamKch runCombineConjugatesLamK0 runCombineConjugatesXiKch runBuildMomResMatrix runBuildMomResMatrix2 runCompareFixes runCorrectCfs runTest runV0PurityBgdEstimator runDrawMCCfs
+
+all: $(BINARIES)
 
 runBuildcLamcKch: ${MY_LIBS} BuildcLamcKchAnalyses.C
 	g++ BuildcLamcKchAnalyses.C ${MY_LIBS} -o runBuildcLamcKch $(LIBS) $(CFLAGS)
@@ -66,4 +71,4 @@ build/%.o: %.cc %.hh
 
 
 clean:
-	rm -f runBuildcLamcKch runBuildcLamK0 runBuildcXicKch runBuildcXiK0 runBuildcLamcLam runCombineConjugatesLamKch runCombineConjugatesLamK0 runCombineConjugatesXiKch runBuildMomResMatrix runBuildMomResMatrix2 runCompareFixes runCorrectCfs runTest runV0PurityBgdEstimator runDrawMCCfs ${MY_LIBS}
+	@ ${RM} -rf *.o $(BINARIES) ${MY_LIBS}

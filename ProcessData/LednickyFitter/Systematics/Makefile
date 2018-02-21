@@ -25,7 +25,9 @@ CFLAGS = $(shell root-config --cflags) -Wall -std=c++11 -I${ANALYZE_DIR} -I${LED
 
 MY_LIBS = $(addprefix build/, FitParameter.o FitChi2Histograms.o BackgroundFitter.o FitPartialAnalysis.o FitPairAnalysis.o FitSharedAnalyses.o MathematicaSession.o WaveFunction.o ChargedResidualCf.o SimpleChargedResidualCf.o NeutralResidualCf.o ResidualCollection.o LednickyFitter.o FitGenerator.o CfLite.o CfHeavy.o Types.o Types_LambdaValues.o Types_FitParamValues.o Types_SysFileInfo.o Faddeeva.o FitSystematicAnalysis.o CanvasPartition.o)
 
-all: runSingleSystematics runAllSystematics runRead runFindOutliers runFitRange runNonFlatBgdSys
+BINARIES = runSingleSystematics runAllSystematics runRead runFindOutliers runFitRange runNonFlatBgdSys
+
+all: $(BINARIES)
 
 runSingleSystematics: ${MY_LIBS} BuildSingleCutSystematics.C
 	g++ BuildSingleCutSystematics.C ${MY_LIBS} -I${INCDIR} -o runSingleSystematics -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS)
@@ -61,4 +63,4 @@ build/%.o: %.cxx %.h
 	g++ -c $< -I${INCDIR} $(CFLAGS) -o $@
 
 clean:
-	rm -f runSingleSystematics runAllSystematics runRead runFindOutliers runFitRange runNonFlatBgdSys ${MY_LIBS}
+	@ ${RM} -rf *.o $(BINARIES) ${MY_LIBS}

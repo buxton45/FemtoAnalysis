@@ -58,6 +58,8 @@ int main(int argc, char **argv)
   bool bZoomROP = true;
   bool bDrawResiduals = false;
 
+  bool bDrawSysErrs = true;
+
 
 //-----------------------------------------------------------------------------
 
@@ -182,7 +184,7 @@ int main(int argc, char **argv)
   if(bDoFit)
   {
     tLamKchP->DoFit();
-    TCanvas* tKStarwFitsCan = tLamKchP->DrawKStarCfswFits(ApplyMomResCorrection,ApplyNonFlatBackgroundCorrection,tNonFlatBgdFitType,SaveImages,false,bZoomROP);
+    TCanvas* tKStarwFitsCan = tLamKchP->DrawKStarCfswFits(ApplyMomResCorrection,ApplyNonFlatBackgroundCorrection,tNonFlatBgdFitType,SaveImages,bDrawSysErrs,bZoomROP);
 //    TCanvas* tKStarCfs = tLamKchP->DrawKStarCfs(SaveImages);
 //    TCanvas* tModelKStarCfs = tLamKchP->DrawModelKStarCfs(SaveImages);
 //    tLamKchP->FindGoodInitialValues(ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection);
@@ -198,12 +200,12 @@ int main(int argc, char **argv)
       tAllCanLamKchP = tLamKchP->DrawAllResiduals(SaveImages);
 
 //      TCanvas* tCanPrimWithRes = tLamKchP->DrawPrimaryWithResiduals(0,k0010,TString("PrimaryWithResidual_")+TString(cAnalysisBaseTags[tAnType]));
-      tCanPrimwFitsAndResidual = tLamKchP->DrawKStarCfswFitsAndResiduals(ApplyMomResCorrection,ApplyNonFlatBackgroundCorrection,tNonFlatBgdFitType,SaveImages,false,bZoomROP);
+      tCanPrimwFitsAndResidual = tLamKchP->DrawKStarCfswFitsAndResiduals(ApplyMomResCorrection,ApplyNonFlatBackgroundCorrection,tNonFlatBgdFitType,SaveImages,bDrawSysErrs,bZoomROP);
 
       tAllResWithTransMatrices = tLamKchP->DrawAllResidualsWithTransformMatrices(SaveImages);
 
       bool bDrawData = false;
-      tAllSingleKStarCfwFitAndResiduals = tLamKchP->DrawAllSingleKStarCfwFitAndResiduals(bDrawData, ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, tNonFlatBgdFitType, SaveImages, false, bZoomROP);
+      tAllSingleKStarCfwFitAndResiduals = tLamKchP->DrawAllSingleKStarCfwFitAndResiduals(bDrawData, ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, tNonFlatBgdFitType, SaveImages, bDrawSysErrs, bZoomROP);
 
     }
 
