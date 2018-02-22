@@ -65,6 +65,9 @@ public:
   void RebinKStarCfHeavy(int aRebinFactor, double aKStarMinNorm=0.32, double aKStarMaxNorm=0.4);
   void DrawKStarCfHeavy(TPad* aPad, int aMarkerColor=1, TString aOption = "", int aMarkerStyle=20);
 
+  void CreateFitFunction(IncludeResidualsType aIncResType, ResPrimMaxDecayType aResPrimMaxDecayType, double aChi2, int aNDF, 
+                         double aKStarMin=0.0, double aKStarMax=1.0, TString aBaseName="Fit");
+
   TF1* GetNonFlatBackground_FitCombinedPartials(NonFlatBgdFitType aBgdFitType, FitType aFitType, bool aNormalizeFitToCf);
   TF1* GetNonFlatBackground_CombinePartialFits(NonFlatBgdFitType aBgdFitType, FitType aFitType, bool aNormalizeFitToCf);
   TF1* GetNonFlatBackground(NonFlatBgdFitType aBgdFitType, FitType aFitType, bool aNormalizeFitToCf, bool aCombinePartialFits);

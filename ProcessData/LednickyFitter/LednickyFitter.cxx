@@ -130,48 +130,6 @@ LednickyFitter::~LednickyFitter()
   cout << "LednickyFitter object is being deleted!!!" << endl;
 }
 
-//________________________________________________________________________
-double LednickyFitter::GetLednickyF1(double z)
-{
-  double result = (1./z)*Faddeeva::Dawson(z);
-  return result;
-}
-
-//________________________________________________________________________
-double LednickyFitter::GetLednickyF2(double z)
-{
-  double result = (1./z)*(1.-exp(-z*z));
-  return result;
-}
-
-//________________________________________________________________________
-double LednickyFitter::LednickyEq(double *x, double *par)
-{
-  // par[0] = Lambda 
-  // par[1] = Radius
-  // par[2] = Ref0
-  // par[3] = Imf0
-  // par[4] = d0
-  // par[5] = Norm
-
-  //should probably do x[0] /= hbarc, but let me test first
-
-  std::complex<double> f0 (par[2],par[3]);
-  double Alpha = 0.; // alpha = 0 for non-identical
-  double z = 2.*(x[0]/hbarc)*par[1];  //z = 2k*R, to be fed to GetLednickyF1(2)
-
-  double C_QuantumStat = Alpha*exp(-z*z);  // will be zero for my analysis
-
-  std::complex<double> ScattAmp = pow( (1./f0) + 0.5*par[4]*(x[0]/hbarc)*(x[0]/hbarc) - ImI*(x[0]/hbarc),-1);
-
-  double C_FSI = (1+Alpha)*( 0.5*norm(ScattAmp)/(par[1]*par[1])*(1.-1./(2*sqrt(TMath::Pi()))*(par[4]/par[1])) + 2.*real(ScattAmp)/(par[1]*sqrt(TMath::Pi()))*GetLednickyF1(z) - (imag(ScattAmp)/par[1])*GetLednickyF2(z));
-
-  double Cf = 1. + par[0]*(C_QuantumStat + C_FSI);
-  //Cf *= par[5];
-
-  return Cf;
-}
-
 //________________________________________________________________________________________________________________
 void LednickyFitter::AppendFitInfo(TString &aSaveName, bool aApplyMomResCorrection, bool aApplyNonFlatBackgroundCorrection, 
                                           IncludeResidualsType aIncludeResidualsType, ResPrimMaxDecayType aResPrimMaxDecayType, ChargedResidualsType aChargedResidualsType, bool aFixD0)
@@ -202,7 +160,7 @@ double LednickyFitter::GetChi2Value(int aKStarBin, TH1* aCfToFit, double* aPar)
 //TODO this is dated, and only works if no corrections (i.e. no momentum resolution, non-flat bgd, residuals, etc.)
   double tKStar[1];
   tKStar[0] = aCfToFit->GetXaxis()->GetBinCenter(aKStarBin);
-  double tChi = (aCfToFit->GetBinContent(aKStarBin) - LednickyEq(tKStar,aPar))/aCfToFit->GetBinError(aKStarBin);
+  double tChi = (aCfToFit->GetBinContent(aKStarBin) - FitPartialAnalysis::LednickyEq(tKStar,aPar))/aCfToFit->GetBinError(aKStarBin);
   return tChi*tChi;
 }
 
@@ -371,7 +329,7 @@ void LednickyFitter::CalculateFitFunction(int &npar, double &chi2, double *par)
         tNumContent[ix-1] = tNum->GetBinContent(ix);
         tDenContent[ix-1] = tDen->GetBinContent(ix);
 
-        tPrimaryFitCfContent[ix-1] = LednickyEq(x,tParPrim);
+        tPrimaryFitCfContent[ix-1] = FitPartialAnalysis::LednickyEq(x,tParPrim);
       }
 
       if(fIncludeResidualsType != kIncludeNoResiduals) 
@@ -512,7 +470,7 @@ TF1* LednickyFitter::CreateFitFunction(TString aName, int aAnalysisNumber)
   FitPairAnalysis* tFitPairAnalysis = fFitSharedAnalyses->GetFitPairAnalysis(aAnalysisNumber);
 
   int tNFitParams = tFitPairAnalysis->GetNFitParams(); //should be equal to 5
-  TF1* ReturnFunction = new TF1(aName,LednickyEq,0.,0.5,tNFitParams+1);
+  TF1* ReturnFunction = new TF1(aName,FitPartialAnalysis::LednickyEq,0.,0.5,tNFitParams+1);
   double tParamValue, tParamError;
   for(int iPar=0; iPar<tNFitParams; iPar++)
   {
@@ -538,7 +496,6 @@ TF1* LednickyFitter::CreateFitFunction(TString aName, int aAnalysisNumber)
 
   ReturnFunction->SetParNames("Lambda","Radius","Ref0","Imf0","d0","Norm");
   fFitSharedAnalyses->GetFitPairAnalysis(aAnalysisNumber)->GetKStarCfHeavy()->GetHeavyCf()->GetListOfFunctions()->Add(ReturnFunction);
-  fFitSharedAnalyses->GetFitPairAnalysis(aAnalysisNumber)->GetKStarCf()->GetListOfFunctions()->Add(ReturnFunction);
 
   return ReturnFunction;
 }
@@ -547,7 +504,7 @@ TF1* LednickyFitter::CreateFitFunction(TString aName, int aAnalysisNumber)
 TF1* LednickyFitter::CreateFitFunction(int aAnalysisNumber, double *par, double *parErr, double aChi2, int aNDF)
 {
   int tNFitParams = 5;
-  TF1* ReturnFunction = new TF1("fit",LednickyEq,0.,0.5,tNFitParams+1);
+  TF1* ReturnFunction = new TF1("fit",FitPartialAnalysis::LednickyEq,0.,0.5,tNFitParams+1);
   for(int iPar=0; iPar<tNFitParams; iPar++)
   {
     ParameterType tParamType = static_cast<ParameterType>(iPar);
@@ -793,7 +750,9 @@ void LednickyFitter::Finalize()
 
   for(int iAnaly=0; iAnaly<fNAnalyses; iAnaly++)
   {
-    fFitSharedAnalyses->GetFitPairAnalysis(iAnaly)->SetPrimaryFit(CreateFitFunction("fit",iAnaly));
+//TODO TODO TODO
+//    fFitSharedAnalyses->GetFitPairAnalysis(iAnaly)->SetPrimaryFit(CreateFitFunction("fit",iAnaly));
+    fFitSharedAnalyses->GetFitPairAnalysis(iAnaly)->CreateFitFunction(fIncludeResidualsType, fResPrimMaxDecayType, fChi2, fNDF, 0.0, 1.0, "Fit");
   }
 
   for(int iAnaly=0; iAnaly<fNAnalyses; iAnaly++)

@@ -350,6 +350,67 @@ void FitPairAnalysis::DrawKStarCfHeavy(TPad* aPad, int aMarkerColor, TString aOp
 
 }
 
+
+//________________________________________________________________________________________________________________
+void FitPairAnalysis::CreateFitFunction(IncludeResidualsType aIncResType, ResPrimMaxDecayType aResPrimMaxDecayType, double aChi2, int aNDF, 
+                                        double aKStarMin, double aKStarMax, TString aBaseName)
+{
+  //Since the partial analyses in a pair analysis share all parameters except for normalization, the combined fit function is a simple
+  // rescaling of the singular fit functions
+
+  double tOverallNum=0., tOverallDen=0.;
+  double tNumScale=0., tNorm=0., tNormError=0.;
+  double tOverallScaleError=0.;
+  for(int iPartAn=0; iPartAn<fNFitPartialAnalysis; iPartAn++)
+  {
+    //Note: Use aApplyNorm=false in following so the LednickyEq from each PartialAnalysis are exactly the same, and the
+    //      simply combined/rescaled fit function is valid
+    fFitPartialAnalysisCollection[iPartAn]->CreateFitFunction(false, aIncResType, aResPrimMaxDecayType, aChi2, aNDF);
+
+    tNumScale = fFitPartialAnalysisCollection[iPartAn]->GetKStarCfLite()->GetNumScale();
+    tNorm = fFitPartialAnalysisCollection[iPartAn]->GetFitNormParameter()->GetFitValue();
+    tNormError = fFitPartialAnalysisCollection[iPartAn]->GetFitNormParameter()->GetFitValueError();
+
+    tOverallNum += tNumScale*tNorm;
+    tOverallDen += tNumScale;
+    tOverallScaleError += tNormError*tNormError;
+  }
+  double tOverallScale = tOverallNum/tOverallDen;
+
+  //--------------------------------------------------------
+  assert(fNFitParams==5);
+  TString tName = TString::Format("%s_%s%s", aBaseName.Data(), cAnalysisBaseTags[fAnalysisType], cCentralityTags[fCentralityType]);
+
+  fPrimaryFit = new TF1(tName, FitPartialAnalysis::LednickyEqWithNorm, aKStarMin, aKStarMax, fNFitParams+1);
+  double tParamValue, tParamError;
+  for(int iPar=0; iPar<fNFitParams; iPar++)
+  {
+    ParameterType tParamType = fFitParameters[iPar]->GetType();
+    tParamValue = fFitParameters[iPar]->GetFitValue();
+    tParamError = fFitParameters[iPar]->GetFitValueError();
+    if(tParamType==kLambda && aIncResType != kIncludeNoResiduals)
+    {
+      tParamValue *= cAnalysisLambdaFactorsArr[aIncResType][aResPrimMaxDecayType][fAnalysisType];
+      tParamError *= cAnalysisLambdaFactorsArr[aIncResType][aResPrimMaxDecayType][fAnalysisType];
+    }
+    fPrimaryFit->SetParameter(iPar,tParamValue);
+    fPrimaryFit->SetParError(iPar,tParamError);
+  }
+
+  fPrimaryFit->SetParameter(5, tOverallScale);
+  fPrimaryFit->SetParError(5, sqrt(tOverallScaleError));
+
+
+
+  fPrimaryFit->SetChisquare(aChi2);
+  fPrimaryFit->SetNDF(aNDF);
+
+  fPrimaryFit->SetParNames("Lambda","Radius","Ref0","Imf0","d0","Norm");
+//  fKStarCfHeavy->GetHeavyCf()->GetListOfFunctions()->Add(fPrimaryFit);
+}
+
+
+
 //________________________________________________________________________________________________________________
 TF1* FitPairAnalysis::GetNonFlatBackground_FitCombinedPartials(NonFlatBgdFitType aBgdFitType, FitType aFitType, bool aNormalizeFitToCf)
 {
@@ -395,11 +456,11 @@ TF1* FitPairAnalysis::GetNonFlatBackground_CombinePartialFits(NonFlatBgdFitType 
   assert(fNFitPartialAnalysis==2);  // i.e. this only works for train runs with _FemtoPlus and _FemtoMinus
                                     //      NOT with old grid runs with _Bp1, _Bp2, _Bm1, _Bm2, _Bm3
   fFitPartialAnalysisCollection[0]->SetMinMaxBgdFit(fMinBgdFit, fMaxBgdFit);
-  TF1* tFit1 = (TF1*)fFitPartialAnalysisCollection[0]->GetNonFlatBackground(aBgdFitType, aFitType, aNormalizeFitToCf);
+  const TF1* tFit1 = (TF1*)fFitPartialAnalysisCollection[0]->GetNonFlatBackground(aBgdFitType, aFitType, aNormalizeFitToCf);
   double tNumScale1 = fFitPartialAnalysisCollection[0]->GetKStarCfLite()->GetNumScale();
 
   fFitPartialAnalysisCollection[1]->SetMinMaxBgdFit(fMinBgdFit, fMaxBgdFit);
-  TF1* tFit2 = (TF1*)fFitPartialAnalysisCollection[1]->GetNonFlatBackground(aBgdFitType, aFitType, aNormalizeFitToCf);
+  const TF1* tFit2 = (TF1*)fFitPartialAnalysisCollection[1]->GetNonFlatBackground(aBgdFitType, aFitType, aNormalizeFitToCf);
   double tNumScale2 = fFitPartialAnalysisCollection[1]->GetKStarCfLite()->GetNumScale();
 
   TString tReturnName = TString::Format("NonFlatBgdFit%s_%s", cNonFlatBgdFitTypeTags[aBgdFitType], fKStarCfHeavy->GetHeavyCf()->GetName());
@@ -458,8 +519,8 @@ TF1* FitPairAnalysis::GetNonFlatBackground_CombinePartialFits(NonFlatBgdFitType 
 
   for(int i=0; i<tNParsTotal; i++) cout << "PairPar[" << i << "] = " << fNonFlatBackground->GetParameter(i) << endl;
 
-  delete tFit1;
-  delete tFit2;
+//  delete tFit1;  NO! Deleting these deletes fNonFlatBackground from FitPartialAnalysis!!!!!
+//  delete tFit2;
 
   return fNonFlatBackground;
 }

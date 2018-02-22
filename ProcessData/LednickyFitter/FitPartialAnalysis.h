@@ -67,6 +67,11 @@ public:
   FitPartialAnalysis(TString aFileLocation, TString aFileLocationMC, TString aAnalysisName, AnalysisType aAnalysisType, CentralityType aCentralityType, BFieldType aBFieldType, AnalysisRunType aRunType=kTrain, TString aDirNameModifier="", bool aIncludeSingletAndTriplet=false);
   virtual ~FitPartialAnalysis();
 
+  static double GetLednickyF1(double z);
+  static double GetLednickyF2(double z);
+  static double LednickyEq(double *x, double *par);
+  static double LednickyEqWithNorm(double *x, double *par);
+
   TObjArray* ConnectAnalysisDirectory(TString aFileLocation, TString aDirectoryName);
 
   void SetParticleTypes();
@@ -78,6 +83,9 @@ public:
 
   void BuildKStarCf(double aKStarMinNorm=0.32, double aKStarMaxNorm=0.4);
   void RebinKStarCf(int aRebinFactor, double aKStarMinNorm=0.32, double aKStarMaxNorm=0.4);
+
+  void CreateFitFunction(bool aApplyNorm, IncludeResidualsType aIncResType, ResPrimMaxDecayType aResPrimMaxDecayType, double aChi2, int aNDF, 
+                         double aKStarMin=0.0, double aKStarMax=1.0, TString aBaseName="Fit");
 
   static TF1* FitNonFlatBackground(TH1* aNum, TH1* aDen, TH1* aCf, NonFlatBgdFitType aBgdFitType, FitType aFitType, bool aNormalizeFitToCf, 
                                    double aMinBgdFit=0.60, double aMaxBhdFit=0.90, double aKStarMinNorm=0.32, double aKStarMaxNorm=0.40);
@@ -130,6 +138,8 @@ public:
   void SetCorrectedFitVec(td1dVec &aVec);
   td1dVec GetCorrectedFitVec();
 
+  TF1* GetPrimaryFit();
+
 private:
   AnalysisRunType fAnalysisRunType;
   TString fFileLocation;
@@ -167,6 +177,7 @@ private:
   CfLite* fModelKStarCfFake;
   CfLite* fModelKStarCfFakeIdeal;
 
+  TF1* fPrimaryFit;
   TF1* fNonFlatBackground;
   td1dVec fCorrectedFitVec;
 
@@ -214,4 +225,7 @@ inline TH2* FitPartialAnalysis::GetModelKStarTrueVsRecMixed() {return fModelKSta
 
 inline void FitPartialAnalysis::SetCorrectedFitVec(td1dVec &aVec) {fCorrectedFitVec = aVec;}
 inline td1dVec FitPartialAnalysis::GetCorrectedFitVec() {return fCorrectedFitVec;}
+
+inline TF1* FitPartialAnalysis::GetPrimaryFit() {return fPrimaryFit;}
+
 #endif

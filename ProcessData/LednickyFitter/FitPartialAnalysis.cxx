@@ -63,7 +63,8 @@ FitPartialAnalysis::FitPartialAnalysis(TString aFileLocation, TString aAnalysisN
   fModelKStarCfFake(0),
   fModelKStarCfFakeIdeal(0),
 
-  fNonFlatBackground(0),
+  fPrimaryFit(nullptr),
+  fNonFlatBackground(nullptr),
   fCorrectedFitVec(0)
 
 
@@ -203,7 +204,8 @@ FitPartialAnalysis::FitPartialAnalysis(TString aFileLocation, TString aFileLocat
   fModelKStarCfFake(0),
   fModelKStarCfFakeIdeal(0),
 
-  fNonFlatBackground(0),
+  fPrimaryFit(nullptr),
+  fNonFlatBackground(nullptr),
   fCorrectedFitVec(0)
 
 
@@ -320,6 +322,57 @@ FitPartialAnalysis::FitPartialAnalysis(TString aFileLocation, TString aFileLocat
 FitPartialAnalysis::~FitPartialAnalysis()
 {
   cout << "FitPartialAnalysis object (name: " << fAnalysisName << " ) is being deleted!!!" << endl;
+}
+
+//________________________________________________________________________
+double FitPartialAnalysis::GetLednickyF1(double z)
+{
+  double result = (1./z)*Faddeeva::Dawson(z);
+  return result;
+}
+
+//________________________________________________________________________
+double FitPartialAnalysis::GetLednickyF2(double z)
+{
+  double result = (1./z)*(1.-exp(-z*z));
+  return result;
+}
+
+//________________________________________________________________________
+double FitPartialAnalysis::LednickyEq(double *x, double *par)
+{
+  // par[0] = Lambda 
+  // par[1] = Radius
+  // par[2] = Ref0
+  // par[3] = Imf0
+  // par[4] = d0
+  // par[5] = Norm
+
+  //should probably do x[0] /= hbarc, but let me test first
+
+  std::complex<double> f0 (par[2],par[3]);
+  double Alpha = 0.; // alpha = 0 for non-identical
+  double z = 2.*(x[0]/hbarc)*par[1];  //z = 2k*R, to be fed to GetLednickyF1(2)
+
+  double C_QuantumStat = Alpha*exp(-z*z);  // will be zero for my analysis
+
+  std::complex<double> ScattAmp = pow( (1./f0) + 0.5*par[4]*(x[0]/hbarc)*(x[0]/hbarc) - ImI*(x[0]/hbarc),-1);
+
+  double C_FSI = (1+Alpha)*( 0.5*norm(ScattAmp)/(par[1]*par[1])*(1.-1./(2*sqrt(TMath::Pi()))*(par[4]/par[1])) + 2.*real(ScattAmp)/(par[1]*sqrt(TMath::Pi()))*GetLednickyF1(z) - (imag(ScattAmp)/par[1])*GetLednickyF2(z));
+
+  double Cf = 1. + par[0]*(C_QuantumStat + C_FSI);
+  //Cf *= par[5];
+
+  return Cf;
+}
+
+//________________________________________________________________________
+double FitPartialAnalysis::LednickyEqWithNorm(double *x, double *par)
+{
+
+  double tUnNormCf = LednickyEq(x, par);
+  double tNormCf = par[5]*tUnNormCf;
+  return tNormCf;
 }
 
 //________________________________________________________________________________________________________________
@@ -535,6 +588,50 @@ void FitPartialAnalysis::BuildKStarCf(double aKStarMinNorm, double aKStarMaxNorm
 void FitPartialAnalysis::RebinKStarCf(int aRebinFactor, double aKStarMinNorm, double aKStarMaxNorm)
 {
   fKStarCfLite->Rebin(aRebinFactor, aKStarMinNorm, aKStarMaxNorm);
+}
+
+
+//________________________________________________________________________________________________________________
+void FitPartialAnalysis::CreateFitFunction(bool aApplyNorm, IncludeResidualsType aIncResType, ResPrimMaxDecayType aResPrimMaxDecayType, double aChi2, int aNDF, 
+                                           double aKStarMin, double aKStarMax, TString aBaseName)
+{
+  TString tName = TString::Format("%s_%s%s%s", aBaseName.Data(), cAnalysisBaseTags[fAnalysisType], cCentralityTags[fCentralityType], cBFieldTags[fBFieldType]);
+  if(aApplyNorm) tName += TString("_WithNorm");
+  assert(fFitParameters.size()==5);  //unless I go back to singlet and triplet, this should be equal to 5 (not counting normalization parameter)
+  assert(fFitParameters.size()==fNFitParams);
+
+  fPrimaryFit = new TF1(tName, LednickyEqWithNorm, aKStarMin, aKStarMax, fNFitParams+1);
+  double tParamValue, tParamError;
+  for(int iPar=0; iPar<fNFitParams; iPar++)
+  {
+    ParameterType tParamType = fFitParameters[iPar]->GetType();
+    tParamValue = fFitParameters[iPar]->GetFitValue();
+    tParamError = fFitParameters[iPar]->GetFitValueError();
+    if(tParamType==kLambda && aIncResType != kIncludeNoResiduals)
+    {
+      tParamValue *= cAnalysisLambdaFactorsArr[aIncResType][aResPrimMaxDecayType][fAnalysisType];
+      tParamError *= cAnalysisLambdaFactorsArr[aIncResType][aResPrimMaxDecayType][fAnalysisType];
+    }
+    fPrimaryFit->SetParameter(iPar,tParamValue);
+    fPrimaryFit->SetParError(iPar,tParamError);
+  }
+
+  if(aApplyNorm)
+  {
+    fPrimaryFit->SetParameter(5, fNorm->GetFitValue());
+    fPrimaryFit->SetParError(5, fNorm->GetFitValueError());
+  }
+  else
+  {
+    fPrimaryFit->SetParameter(5, 1.);
+    fPrimaryFit->SetParError(5, 0.);
+  }
+
+  fPrimaryFit->SetChisquare(aChi2);
+  fPrimaryFit->SetNDF(aNDF);
+
+  fPrimaryFit->SetParNames("Lambda","Radius","Ref0","Imf0","d0","Norm");
+//  fKStarCfLite->Cf()->GetListOfFunctions()->Add(fPrimaryFit);
 }
 
 

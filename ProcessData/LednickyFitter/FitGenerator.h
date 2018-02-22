@@ -45,6 +45,11 @@ public:
   void DrawSingleKStarCfwFit(TPad* aPad, int aPairAnNumber, double aYmin=0.9, double aYmax=1.1, double aXmin=0.0, double aXmax=0.5, int aMarkerColor=1, TString aOption = "", int aMarkerStyle=20);
   virtual TCanvas* DrawKStarCfs(bool aSaveImage=false, bool aDrawSysErrors=true);
 
+  static TH1D* Convert1dVecToHist(td1dVec &aCfVec, td1dVec &aKStarBinCenters, TString aTitle = "tCf");
+  virtual void BuildKStarCfswFitsPanel_PartAn(CanvasPartition* aCanPart, int aAnalysisNumber, BFieldType aBFieldType, int tColumn, int tRow, bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, NonFlatBgdFitType aNonFlatBgdFitType, bool aDrawDataOnTop);
+  virtual CanvasPartition* BuildKStarCfswFitsCanvasPartition_PartAn(BFieldType aBFieldType, TString aCanvasBaseName, bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, NonFlatBgdFitType aNonFlatBgdFitType=kLinear, bool aZoomROP=true);
+  virtual TCanvas* DrawKStarCfswFits_PartAn(BFieldType aBFieldType, bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, NonFlatBgdFitType aNonFlatBgdFitType=kLinear, bool aSaveImage=false, bool aZoomROP=true);
+
   virtual void BuildKStarCfswFitsPanel(CanvasPartition* aCanPart, int aAnalysisNumber, int tColumn, int tRow, bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, NonFlatBgdFitType aNonFlatBgdFitType, bool aDrawSysErrors, bool aDrawDataOnTop);
   virtual CanvasPartition* BuildKStarCfswFitsCanvasPartition(TString aCanvasBaseName, bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, NonFlatBgdFitType aNonFlatBgdFitType=kLinear, bool aDrawSysErrors=true, bool aZoomROP=true);
   virtual TCanvas* DrawKStarCfswFits(bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, NonFlatBgdFitType aNonFlatBgdFitType=kLinear, bool aSaveImage=false, bool aDrawSysErrors=true, bool aZoomROP=true);
@@ -55,7 +60,9 @@ public:
   TCanvas* GetResidualsWithTransformMatrices(AnalysisType aAnType, CentralityType aCentType, T& aResidual, td1dVec &aParamsOverall, int aOffset=0);
   virtual TObjArray* DrawResidualsWithTransformMatrices(int aAnalysisNumber, CentralityType aCentralityType=k0010, bool aSaveImage=false);
   virtual TObjArray* DrawAllResidualsWithTransformMatrices(bool aSaveImage=false);
-//  virtual TCanvas* DrawPrimaryWithResiduals(int aAnalysisNumber, CentralityType aCentralityType=k0010, TString aCanvasName="tCan");
+
+  virtual TCanvas* DrawSingleKStarCfwFitAndResiduals_PartAn(int aAnalysisNumber, BFieldType aBFieldType, bool aDrawData, bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, NonFlatBgdFitType aNonFlatBgdFitType, bool aSaveImage=false, bool aZoomROP=true);
+  virtual TObjArray* DrawAllSingleKStarCfwFitAndResiduals_PartAn(BFieldType aBFieldType, bool aDrawData, bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, NonFlatBgdFitType aNonFlatBgdFitType, bool aSaveImage=false, bool aZoomROP=true);
 
   virtual TCanvas* DrawSingleKStarCfwFitAndResiduals(int aAnalysisNumber, bool aDrawData, bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, NonFlatBgdFitType aNonFlatBgdFitType, bool aSaveImage=false, bool aDrawSysErrors=true, bool aZoomROP=true);
   virtual TObjArray* DrawAllSingleKStarCfwFitAndResiduals(bool aDrawData, bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, NonFlatBgdFitType aNonFlatBgdFitType, bool aSaveImage=false, bool aDrawSysErrors=true, bool aZoomROP=true);

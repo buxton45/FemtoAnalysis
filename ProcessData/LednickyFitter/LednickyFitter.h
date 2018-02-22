@@ -63,10 +63,6 @@ public:
   LednickyFitter(AnalysisType aAnalysisType, double aMaxBuildKStar = 0.3, double aKStarBinWidth=0.01);  //Currently, just used for CoulombFitter::CoulombFitter(AnalysisType aAnalysisType, double aMaxFitKStar)
   virtual ~LednickyFitter();
 
-  static double GetLednickyF1(double z);
-  static double GetLednickyF2(double z);
-  static double LednickyEq(double *x, double *par);
-
   static void AppendFitInfo(TString &aSaveName, bool aApplyMomResCorrection, bool aApplyNonFlatBackgroundCorrection, IncludeResidualsType aIncludeResidualsType, 
                             ResPrimMaxDecayType aResPrimMaxDecayType=k5fm, ChargedResidualsType aChargedResidualsType=kUseXiDataAndCoulombOnlyInterp, bool aFixD0=false);
 
@@ -130,6 +126,8 @@ public:
   int GetNDF();
 
   void SetUsemTScalingOfResidualRadii(bool aUse=true, double aPower=-0.5);
+
+  td1dVec GetKStarBinCenters();
 
 protected:
   bool fVerbose;
@@ -209,5 +207,7 @@ inline double LednickyFitter::GetChi2() {return fChi2;}
 inline int LednickyFitter::GetNDF() {return fNDF;}
 
 inline void LednickyFitter::SetUsemTScalingOfResidualRadii(bool aUse, double aPower) {fUsemTScalingOfResidualRadii = aUse; fmTScalingPowerOfResidualRadii = aPower;}
+
+inline td1dVec LednickyFitter::GetKStarBinCenters() {return fKStarBinCenters;}
 
 #endif

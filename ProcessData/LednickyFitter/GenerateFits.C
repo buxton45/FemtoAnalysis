@@ -56,7 +56,7 @@ int main(int argc, char **argv)
   if(UnboundLambda) aLambdaMax=0.;
 
   bool bZoomROP = true;
-  bool bDrawResiduals = false;
+  bool bDrawResiduals = true;
 
   bool bDrawSysErrs = true;
 
@@ -185,6 +185,10 @@ int main(int argc, char **argv)
   {
     tLamKchP->DoFit();
     TCanvas* tKStarwFitsCan = tLamKchP->DrawKStarCfswFits(ApplyMomResCorrection,ApplyNonFlatBackgroundCorrection,tNonFlatBgdFitType,SaveImages,bDrawSysErrs,bZoomROP);
+
+    TCanvas* tKStarwFitsCan_FemtoMinus = tLamKchP->DrawKStarCfswFits_PartAn(kFemtoMinus,ApplyMomResCorrection,ApplyNonFlatBackgroundCorrection,tNonFlatBgdFitType,SaveImages,bZoomROP);
+    TCanvas* tKStarwFitsCan_FemtoPlus = tLamKchP->DrawKStarCfswFits_PartAn(kFemtoPlus,ApplyMomResCorrection,ApplyNonFlatBackgroundCorrection,tNonFlatBgdFitType,SaveImages,bZoomROP);
+
 //    TCanvas* tKStarCfs = tLamKchP->DrawKStarCfs(SaveImages);
 //    TCanvas* tModelKStarCfs = tLamKchP->DrawModelKStarCfs(SaveImages);
 //    tLamKchP->FindGoodInitialValues(ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection);
@@ -194,18 +198,23 @@ int main(int argc, char **argv)
     TCanvas* tCanPrimwFitsAndResidual;
     TObjArray* tAllResWithTransMatrices;
     TObjArray* tAllSingleKStarCfwFitAndResiduals;
+    TObjArray* tAllSingleKStarCfwFitAndResiduals_FemtoMinus;
+    TObjArray* tAllSingleKStarCfwFitAndResiduals_FemtoPlus;
 
     if(tIncludeResidualsType != kIncludeNoResiduals && bDrawResiduals)
     {
-      tAllCanLamKchP = tLamKchP->DrawAllResiduals(SaveImages);
+//      tAllCanLamKchP = tLamKchP->DrawAllResiduals(SaveImages);
 
 //      TCanvas* tCanPrimWithRes = tLamKchP->DrawPrimaryWithResiduals(0,k0010,TString("PrimaryWithResidual_")+TString(cAnalysisBaseTags[tAnType]));
-      tCanPrimwFitsAndResidual = tLamKchP->DrawKStarCfswFitsAndResiduals(ApplyMomResCorrection,ApplyNonFlatBackgroundCorrection,tNonFlatBgdFitType,SaveImages,bDrawSysErrs,bZoomROP);
+//      tCanPrimwFitsAndResidual = tLamKchP->DrawKStarCfswFitsAndResiduals(ApplyMomResCorrection,ApplyNonFlatBackgroundCorrection,tNonFlatBgdFitType,SaveImages,bDrawSysErrs,bZoomROP);
 
-      tAllResWithTransMatrices = tLamKchP->DrawAllResidualsWithTransformMatrices(SaveImages);
+//      tAllResWithTransMatrices = tLamKchP->DrawAllResidualsWithTransformMatrices(SaveImages);
 
       bool bDrawData = false;
       tAllSingleKStarCfwFitAndResiduals = tLamKchP->DrawAllSingleKStarCfwFitAndResiduals(bDrawData, ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, tNonFlatBgdFitType, SaveImages, bDrawSysErrs, bZoomROP);
+
+      tAllSingleKStarCfwFitAndResiduals_FemtoMinus = tLamKchP->DrawAllSingleKStarCfwFitAndResiduals_PartAn(kFemtoMinus, bDrawData, ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, tNonFlatBgdFitType, SaveImages, bZoomROP);
+      tAllSingleKStarCfwFitAndResiduals_FemtoPlus = tLamKchP->DrawAllSingleKStarCfwFitAndResiduals_PartAn(kFemtoPlus, bDrawData, ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, tNonFlatBgdFitType, SaveImages, bZoomROP);
 
     }
 

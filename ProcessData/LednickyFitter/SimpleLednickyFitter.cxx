@@ -387,7 +387,7 @@ void SimpleLednickyFitter::CalculateFitFunction(int &npar, double &chi2, double 
     tNumContent[ix-1] = tNum->GetBinContent(ix);
     tDenContent[ix-1] = tDen->GetBinContent(ix);
 
-    tPrimaryFitCfContent[ix-1] = LednickyFitter::LednickyEq(x,tParPrim);
+    tPrimaryFitCfContent[ix-1] = FitPartialAnalysis::LednickyEq(x,tParPrim);
   }
 
   if(fIncludeResidualsType != kIncludeNoResiduals) 
@@ -452,7 +452,7 @@ void SimpleLednickyFitter::CalculateFitFunction(int &npar, double &chi2, double 
 TF1* SimpleLednickyFitter::CreateFitFunction(TString aName)
 {
   int tNFitParams = 5;
-  TF1* ReturnFunction = new TF1(aName,LednickyFitter::LednickyEq,0.,0.5,tNFitParams+1);
+  TF1* ReturnFunction = new TF1(aName,FitPartialAnalysis::LednickyEq,0.,0.5,tNFitParams+1);
   double tParamValue, tParamError;
   for(int iPar=0; iPar<tNFitParams; iPar++)
   {
