@@ -430,14 +430,7 @@ void FitSharedAnalyses::CreateMinuitParametersMatrix()
 
     for(int iPartAn=0; iPartAn<fFitPairAnalysisCollection[iAnaly]->GetNFitPartialAnalysis(); iPartAn++)
     {
-      if(!fApplyNonFlatBackgroundCorrection && fFitType==kChi2PML)  //any other cases where norm != 1?
-      {
-        double tNumScale=0., tDenScale=0.;
-        tNumScale = fFitPairAnalysisCollection[iAnaly]->GetFitPartialAnalysis(iPartAn)->GetKStarNumScale();
-        tDenScale = fFitPairAnalysisCollection[iAnaly]->GetFitPartialAnalysis(iPartAn)->GetKStarDenScale();
-        tNormStartValue = tNumScale/tDenScale;
-      }
-      else tNormStartValue = 1.;
+      tNormStartValue = 1.;
       tempNormVec[iPartAn]->SetStartValue(tNormStartValue);
 
       if(fFixNormParams) tempNormVec[iPartAn]->SetFixed(true);

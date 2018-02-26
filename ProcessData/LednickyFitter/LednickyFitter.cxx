@@ -350,7 +350,7 @@ void LednickyFitter::CalculateFitFunction(int &npar, double &chi2, double *par)
       if(fApplyMomResCorrection) tCorrectedFitCfContent = ApplyMomResCorrection(tFitCfContent, fKStarBinCenters, tMomResMatrix);
       else tCorrectedFitCfContent = tFitCfContent;
 
-      bool tNormalizeBgdFitToCf=false;
+      bool tNormalizeBgdFitToCf=true;
       if(fApplyNonFlatBackgroundCorrection)
       {
         TF1* tNonFlatBgd;
@@ -360,18 +360,9 @@ void LednickyFitter::CalculateFitFunction(int &npar, double &chi2, double *par)
         ApplyNonFlatBackgroundCorrection(tCorrectedFitCfContent, fKStarBinCenters, tNonFlatBgd);
       }
 
-      fCorrectedFitVecs[iAnaly][iPartAn] = tCorrectedFitCfContent;
       ApplyNormalization(tParPrim[5], tCorrectedFitCfContent);
-      if(fApplyNonFlatBackgroundCorrection && fFitSharedAnalyses->GetFitType()==kChi2PML && !tNormalizeBgdFitToCf)
-      {
-        //In this case, ApplyNonFlatBackgroundCorrection essentially takes care of the normalization, since it fits raw Num and Den
-        // ApplyNormalization applies a normalization that is very close to 1.  Therefore, for the plots in fCorrectedFitVecs to look pretty,
-        // I must scale them back up to around unity...also need to apply normalization = tParPrim[5]
-        //TODO make this more general (to be sure, inclusion of tParPrim here is almost certainly correct)
-        //  Would simply putting ApplyNormalization(tParPrim[5], tCorrectedFitCfContent); before fCorrectedFitVecs[iAnaly][iPartAn] = tCorrectedFitCfContent; 
-        //  solve this FOR ALL CASES?
-        ApplyNormalization(tParPrim[5]*(tKStarCfLite->GetDenScale()/tKStarCfLite->GetNumScale()), fCorrectedFitVecs[iAnaly][iPartAn]);
-      }
+      fCorrectedFitVecs[iAnaly][iPartAn] = tCorrectedFitCfContent;
+      if(fFitSharedAnalyses->GetFitType() == kChi2PML) ApplyNormalization(tKStarCfLite->GetNumScale()/tKStarCfLite->GetDenScale(), tCorrectedFitCfContent);
 
       for(int ix=0; ix < fNbinsXToFit; ix++)
       {

@@ -1498,44 +1498,44 @@ void FitGenerator::CheckCorrectedCf_PartAn(int aAnalysisNumber, BFieldType aBFie
   for(unsigned int i=0; i<tResidualVecs.size(); i++) assert(tPrimaryFitVec.size() == tResidualVecs[i].size());
   //---------------------------------------------------------------------------------------------------------
 
+  td1dVec tPrimPlusRes(tCorrectedFitVec.size());
+  for(unsigned int i=0; i<tCorrectedFitVec.size(); i++)
+  {
+    tPrimPlusRes[i] = 0.;
+    tPrimPlusRes[i] += tPrimaryFitVec[i];
+    for(unsigned int iRes=0; iRes<tResidualVecs.size(); iRes++) tPrimPlusRes[i] += (tResidualVecs[iRes][i]-1.0);
+  }
+
+  td1dVec tCalculatedFitCf;
+  if(fApplyMomResCorrection)
+  {
+    td1dVec tKStarBinCenters = fLednickyFitter->GetKStarBinCenters();
+    tCalculatedFitCf = LednickyFitter::ApplyMomResCorrection(tPrimPlusRes, tKStarBinCenters, tPairAn->GetModelKStarTrueVsRecMixed());
+  }
+  else tCalculatedFitCf = tPrimPlusRes;
+
+  if(fApplyNonFlatBackgroundCorrection)
+  {
+    for(unsigned int i=0; i<tCorrectedFitVec.size(); i++) tCalculatedFitCf[i] *= tNonFlatBgdVec[i];
+  }
+
+  //---------------------------------------------------------------------------------------------------------
+
   cout << endl << "CheckCorrectedCf_PartAn for: " << endl;
   cout << "\t AnalysisType   = " << cAnalysisBaseTags[tPartAn->GetAnalysisType()] << endl;
   cout << "\t CentralityType = " << cCentralityTags[tPartAn->GetCentralityType()] << endl;
   cout << "\t BFieldType     = " << cBFieldTags[tPartAn->GetBFieldType()] << endl;
   cout << "--------------------------------------" << endl;
 
-  double tCalculatedBinValue=0.;
-  td1dVec tCalculatedFitCf(0);
   for(unsigned int i=0; i<tCorrectedFitVec.size(); i++)
   {
-    tCalculatedBinValue = 0.;
     cout << "tPrimaryFitVec[" << i << "] = " << tPrimaryFitVec[i] << endl;
-    tCalculatedBinValue += tPrimaryFitVec[i];
-    for(unsigned int iRes=0; iRes<tResidualVecs.size(); iRes++)
-    {
-      cout << "1.0 - tResidualVec[" << iRes << "][" << i << "] = " << (1.0-tResidualVecs[iRes][i]) << endl;
-      tCalculatedBinValue += (1.0-tResidualVecs[iRes][i]);
-    }
-    if(fApplyNonFlatBackgroundCorrection)
-    {
-      cout << "tCalculatedBinValue BEFORE NonFlatBgd = " << tCalculatedBinValue << endl;
-      cout << "tNonFlatBgdVec[" << i << "] = " << tNonFlatBgdVec[i] << endl;
-      tCalculatedBinValue *= tNonFlatBgdVec[i];
-    }
-    tCalculatedFitCf.push_back(tCalculatedBinValue);
-    cout << "tCalculatedBinValue = " << tCalculatedBinValue << endl;
-    cout << "tCorrectedFitVec[" << i << "] = " << tCorrectedFitVec[i] << endl;
-    cout << "% Diff = " << (tCalculatedBinValue-tCorrectedFitVec[i])/tCorrectedFitVec[i] << endl;
-    cout << endl;
-  }
-
-  cout << "Momentum resolution corrections!------------------------" << endl;
-  td1dVec tKStarBinCenters = fLednickyFitter->GetKStarBinCenters();
-  td1dVec tCalculatedFitCf_MomResCrctn = LednickyFitter::ApplyMomResCorrection(tCalculatedFitCf, tKStarBinCenters, tPairAn->GetModelKStarTrueVsRecMixed());
-  for(unsigned int i=0; i<tCorrectedFitVec.size(); i++)
-  {
-    cout << "tCalculatedFitCf_MomResCrctn[" << i << "] = " << tCalculatedFitCf_MomResCrctn[i] << endl;
-    cout << "tCorrectedFitVec[" << i << "] =             " << tCorrectedFitVec[i] << endl << endl;
+    for(unsigned int iRes=0; iRes<tResidualVecs.size(); iRes++) cout << TString::Format("tResidualVecs[%d][%d] - 1.0 = %0.6f", iRes, i, (tResidualVecs[iRes][i]-1.)) << endl;
+    cout << "tPrimPlusRes[" << i << "] = " << tPrimPlusRes[i] << endl;
+    cout << "tNonFlatBgdVec[" << i << "] = " << tNonFlatBgdVec[i] << endl;
+    cout << "\t tCalculatedFitCf[" << i << "] = " << tCalculatedFitCf[i] << endl;
+    cout << "\t tCorrectedFitVec[" << i << "] = " << tCorrectedFitVec[i] << endl;
+    cout << "\t\t % Diff = " << (tCalculatedFitCf[i]-tCorrectedFitVec[i])/tCorrectedFitVec[i] << endl << endl;
   }
   cout << endl << endl << endl;
 }
@@ -1781,43 +1781,43 @@ void FitGenerator::CheckCorrectedCf(int aAnalysisNumber, bool aMomResCorrectFit,
   for(unsigned int i=0; i<tResidualVecs.size(); i++) assert(tPrimaryFitVec.size() == tResidualVecs[i].size());
   //---------------------------------------------------------------------------------------------------------
 
+  td1dVec tPrimPlusRes(tCorrectedFitVec.size());
+  for(unsigned int i=0; i<tCorrectedFitVec.size(); i++)
+  {
+    tPrimPlusRes[i] = 0.;
+    tPrimPlusRes[i] += tPrimaryFitVec[i];
+    for(unsigned int iRes=0; iRes<tResidualVecs.size(); iRes++) tPrimPlusRes[i] += (tResidualVecs[iRes][i]-1.0);
+  }
+
+  td1dVec tCalculatedFitCf;
+  if(fApplyMomResCorrection)
+  {
+    td1dVec tKStarBinCenters = fLednickyFitter->GetKStarBinCenters();
+    tCalculatedFitCf = LednickyFitter::ApplyMomResCorrection(tPrimPlusRes, tKStarBinCenters, tFitPairAnalysis->GetModelKStarTrueVsRecMixed());
+  }
+  else tCalculatedFitCf = tPrimPlusRes;
+
+  if(fApplyNonFlatBackgroundCorrection)
+  {
+    for(unsigned int i=0; i<tCorrectedFitVec.size(); i++) tCalculatedFitCf[i] *= tNonFlatBgdVec[i];
+  }
+
+  //---------------------------------------------------------------------------------------------------------
+
   cout << endl << "CheckCorrectedCf for: " << endl;
   cout << "\t AnalysisType   = " << cAnalysisBaseTags[tFitPairAnalysis->GetAnalysisType()] << endl;
   cout << "\t CentralityType = " << cCentralityTags[tFitPairAnalysis->GetCentralityType()] << endl;
   cout << "--------------------------------------" << endl;
 
-  double tCalculatedBinValue=0.;
-  td1dVec tCalculatedFitCf(0);
   for(unsigned int i=0; i<tCorrectedFitVec.size(); i++)
   {
-    tCalculatedBinValue = 0.;
     cout << "tPrimaryFitVec[" << i << "] = " << tPrimaryFitVec[i] << endl;
-    tCalculatedBinValue += tPrimaryFitVec[i];
-    for(unsigned int iRes=0; iRes<tResidualVecs.size(); iRes++)
-    {
-      cout << "1.0 - tResidualVec[" << iRes << "][" << i << "] = " << (1.0-tResidualVecs[iRes][i]) << endl;
-      tCalculatedBinValue += (1.0-tResidualVecs[iRes][i]);
-    }
-    if(fApplyNonFlatBackgroundCorrection)
-    {
-      cout << "tCalculatedBinValue BEFORE NonFlatBgd = " << tCalculatedBinValue << endl;
-      cout << "tNonFlatBgdVec[" << i << "] = " << tNonFlatBgdVec[i] << endl;
-      tCalculatedBinValue *= tNonFlatBgdVec[i];
-    }
-    tCalculatedFitCf.push_back(tCalculatedBinValue);
-    cout << "tCalculatedBinValue = " << tCalculatedBinValue << endl;
-    cout << "tCorrectedFitVec[" << i << "] = " << tCorrectedFitVec[i] << endl;
-    cout << "% Diff = " << (tCalculatedBinValue-tCorrectedFitVec[i])/tCorrectedFitVec[i] << endl;
-    cout << endl;
-  }
-
-  cout << "Momentum resolution corrections!------------------------" << endl;
-  td1dVec tKStarBinCenters = fLednickyFitter->GetKStarBinCenters();
-  td1dVec tCalculatedFitCf_MomResCrctn = LednickyFitter::ApplyMomResCorrection(tCalculatedFitCf, tKStarBinCenters, tFitPairAnalysis->GetModelKStarTrueVsRecMixed());
-  for(unsigned int i=0; i<tCorrectedFitVec.size(); i++)
-  {
-    cout << "tCalculatedFitCf_MomResCrctn[" << i << "] = " << tCalculatedFitCf_MomResCrctn[i] << endl;
-    cout << "tCorrectedFitVec[" << i << "] =             " << tCorrectedFitVec[i] << endl << endl;
+    for(unsigned int iRes=0; iRes<tResidualVecs.size(); iRes++) cout << TString::Format("tResidualVecs[%d][%d] - 1.0 = %0.6f", iRes, i, (tResidualVecs[iRes][i]-1.)) << endl;
+    cout << "tPrimPlusRes[" << i << "] = " << tPrimPlusRes[i] << endl;
+    cout << "tNonFlatBgdVec[" << i << "] = " << tNonFlatBgdVec[i] << endl;
+    cout << "\t tCalculatedFitCf[" << i << "] = " << tCalculatedFitCf[i] << endl;
+    cout << "\t tCorrectedFitVec[" << i << "] = " << tCorrectedFitVec[i] << endl;
+    cout << "\t\t % Diff = " << (tCalculatedFitCf[i]-tCorrectedFitVec[i])/tCorrectedFitVec[i] << endl << endl;
   }
   cout << endl << endl << endl;
 }

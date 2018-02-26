@@ -254,8 +254,18 @@ TH1D* NeutralResidualCf::GetResidualCorrelationHistogramWithLambdaAndNormApplied
 //________________________________________________________________________________________________________________
 TH1D* NeutralResidualCf::GetTransformedResidualCorrelationHistogramWithLambdaAndNormApplied(TString aTitle, double *aParamsOverall, double aNorm)
 {
+/*
   TH1D* tReturnHist = GetTransformedResidualCorrelationHistogramWithLambdaApplied(aTitle, aParamsOverall);
   tReturnHist->Scale(aNorm);
+  return tReturnHist;
+*/
+  //Want this to return 1 + Norm*Lambda*C, not Norm*(1+Lambda*C)
+  // so that, by eye, 1-ReturnValue = contribution to fit Cf
+
+  td1dVec tContributionVec = GetContributionToFitCf(aParamsOverall);
+  td1dVec tReturnVec(tContributionVec.size());
+  for(unsigned int i=0; i<tContributionVec.size(); i++) tReturnVec[i] = 1.0 + aNorm*tContributionVec[i];
+  TH1D* tReturnHist = Convert1dVecToHist(tReturnVec, fKStarBinCenters, aTitle);
   return tReturnHist;
 }
 
