@@ -349,6 +349,23 @@ TH1D* SimpleChargedResidualCf::GetTransformedResidualCorrelationHistogramWithLam
 }
 
 //________________________________________________________________________________________________________________
+TH1D* SimpleChargedResidualCf::GetResidualCorrelationHistogramWithLambdaAndNormApplied(TString aTitle, double *aParamsOverall, double aNorm)
+{
+  TH1D* tReturnHist = GetResidualCorrelationHistogramWithLambdaApplied(aTitle, aParamsOverall);
+  tReturnHist->Scale(aNorm);
+  return tReturnHist;
+}
+
+//________________________________________________________________________________________________________________
+TH1D* SimpleChargedResidualCf::GetTransformedResidualCorrelationHistogramWithLambdaAndNormApplied(TString aTitle, double *aParamsOverall, double aNorm)
+{
+  TH1D* tReturnHist = GetTransformedResidualCorrelationHistogramWithLambdaApplied(aTitle, aParamsOverall);
+  tReturnHist->Scale(aNorm);
+  return tReturnHist;
+}
+
+
+//________________________________________________________________________________________________________________
 void SimpleChargedResidualCf::SetUsemTScalingOfRadii(AnalysisType aParentAnType, double aPower)
 {
   double tmTFactorParentPair = cmTFactorsFromTherminator[aParentAnType];

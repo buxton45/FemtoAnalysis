@@ -42,6 +42,9 @@ public:
   TH1D* GetResidualCorrelationHistogramWithLambdaApplied(TString aTitle, double *aParamsOverall);
   TH1D* GetTransformedResidualCorrelationHistogramWithLambdaApplied(TString aTitle, double *aParamsOverall);
 
+  TH1D* GetResidualCorrelationHistogramWithLambdaAndNormApplied(TString aTitle, double *aParamsOverall, double aNorm);
+  TH1D* GetTransformedResidualCorrelationHistogramWithLambdaAndNormApplied(TString aTitle, double *aParamsOverall, double aNorm);
+
   void SetUsemTScalingOfRadii(AnalysisType aParentAnType, double aPower=-0.5);
 
   //inline

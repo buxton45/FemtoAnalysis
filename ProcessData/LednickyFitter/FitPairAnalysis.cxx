@@ -1221,7 +1221,9 @@ td1dVec FitPairAnalysis::GetCorrectedFitVec()
 //________________________________________________________________________________________________________________
 TH1F* FitPairAnalysis::GetCorrectedFitHistv2(double aMaxDrawKStar)
 {
-  int tNbinsXToFit = fKStarCfHeavy->GetHeavyCf()->FindBin(aMaxDrawKStar);
+  int tNbinsXToFit = fKStarCfHeavy->GetHeavyCf()->FindBin(aMaxDrawKStar-0.0000001);  //-0.0000001 ensures we don't overshoot our desired bin, since xup excluded in TH1
+                                                                                     // i.e., if given aMaxDrawKStar=1.0 (with binsize=0.1), without subtraction, this 
+                                                                                     // would return 101 instead of 100
   double tKStarMin = fKStarCfHeavy->GetHeavyCf()->GetBinLowEdge(1);
   double tKStarMax = fKStarCfHeavy->GetHeavyCf()->GetBinLowEdge(tNbinsXToFit+1);
 

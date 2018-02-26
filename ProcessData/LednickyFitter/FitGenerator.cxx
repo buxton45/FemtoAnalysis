@@ -1017,6 +1017,23 @@ TCanvas* FitGenerator::DrawKStarCfswFits(bool aMomResCorrectFit, bool aNonFlatBg
   return tCanPart->GetCanvas();
 }
 
+//________________________________________________________________________________________________________________
+double FitGenerator::GetWeightedAnalysisNorm(FitPairAnalysis* aPairAn)
+{
+  double tOverallNum=0., tOverallDen=0.;
+  double tNumScale=0., tNorm=0.;
+  for(int iPartAn=0; iPartAn<aPairAn->GetNFitPartialAnalysis(); iPartAn++)
+  {
+    tNumScale = aPairAn->GetFitPartialAnalysis(iPartAn)->GetKStarCfLite()->GetNumScale();
+    tNorm = aPairAn->GetFitPartialAnalysis(iPartAn)->GetFitNormParameter()->GetFitValue();
+
+    tOverallNum += tNumScale*tNorm;
+    tOverallDen += tNumScale;
+  }
+  double tOverallScale = tOverallNum/tOverallDen;
+  return tOverallScale;
+}
+
 
 //________________________________________________________________________________________________________________
 TCanvas* FitGenerator::DrawResiduals(int aAnalysisNumber, CentralityType aCentralityType, TString aCanvasName, bool aSaveImage)
@@ -1031,6 +1048,7 @@ TCanvas* FitGenerator::DrawResiduals(int aAnalysisNumber, CentralityType aCentra
   double tD0Primary = tFitPairAnalysis->GetFitParameter(kd0)->GetFitValue();
 
   td1dVec tParamsOverall{tOverallLambdaPrimary, tRadiusPrimary, tReF0Primary, tImF0Primary, tD0Primary};
+  double tWeightedNorm = GetWeightedAnalysisNorm(tFitPairAnalysis);
   //-----------------------------------------------------------------------------------
 
   TString tCanvasName = aCanvasName;
@@ -1066,8 +1084,8 @@ TCanvas* FitGenerator::DrawResiduals(int aAnalysisNumber, CentralityType aCentra
       TString tTempName = TString(cAnalysisBaseTags[tTempResidualType]);
       TString tTempName1 = TString("Residual_") + tTempName;
       TString tTempName2 = TString("TransformedResidual_") + tTempName;
-      TH1D* tTempHist1 = tFitPairAnalysis->GetResidualCollection()->GetNeutralCollection()[iRes].GetResidualCorrelationHistogramWithLambdaApplied(tTempName1, tParamsOverall.data());
-      TH1D* tTempHist2 = tFitPairAnalysis->GetResidualCollection()->GetNeutralCollection()[iRes].GetTransformedResidualCorrelationHistogramWithLambdaApplied(tTempName2, tParamsOverall.data());
+      TH1D* tTempHist1 = tFitPairAnalysis->GetResidualCollection()->GetNeutralCollection()[iRes].GetResidualCorrelationHistogramWithLambdaAndNormApplied(tTempName1, tParamsOverall.data(), tWeightedNorm);
+      TH1D* tTempHist2 = tFitPairAnalysis->GetResidualCollection()->GetNeutralCollection()[iRes].GetTransformedResidualCorrelationHistogramWithLambdaAndNormApplied(tTempName2, tParamsOverall.data(), tWeightedNorm);
 
       tNNeutral++;
       tCan->cd(tNNeutral);
@@ -1113,8 +1131,8 @@ TCanvas* FitGenerator::DrawResiduals(int aAnalysisNumber, CentralityType aCentra
       TString tTempName = TString(cAnalysisBaseTags[tTempResidualType]);
       TString tTempName1 = TString("Residual_") + tTempName;
       TString tTempName2 = TString("TransformedResidual_") + tTempName;
-      TH1D* tTempHist1 = tFitPairAnalysis->GetResidualCollection()->GetChargedCollection()[iRes].GetResidualCorrelationHistogramWithLambdaApplied(tTempName1, tParamsOverall.data());
-      TH1D* tTempHist2 = tFitPairAnalysis->GetResidualCollection()->GetChargedCollection()[iRes].GetTransformedResidualCorrelationHistogramWithLambdaApplied(tTempName2, tParamsOverall.data());
+      TH1D* tTempHist1 = tFitPairAnalysis->GetResidualCollection()->GetChargedCollection()[iRes].GetResidualCorrelationHistogramWithLambdaAndNormApplied(tTempName1, tParamsOverall.data(), tWeightedNorm);
+      TH1D* tTempHist2 = tFitPairAnalysis->GetResidualCollection()->GetChargedCollection()[iRes].GetTransformedResidualCorrelationHistogramWithLambdaAndNormApplied(tTempName2, tParamsOverall.data(), tWeightedNorm);
 
       tNCharged++;
       tCan->cd(tNNeutral+tNCharged);
@@ -1182,8 +1200,12 @@ TObjArray* FitGenerator::DrawAllResiduals(bool aSaveImage)
 
 //________________________________________________________________________________________________________________
 template <typename T>
-TCanvas* FitGenerator::GetResidualsWithTransformMatrices(AnalysisType aAnType, CentralityType aCentType, T& aResidual, td1dVec &aParamsOverall, int aOffset)
+TCanvas* FitGenerator::GetResidualsWithTransformMatrices(int aAnalysisNumber, T& aResidual, td1dVec &aParamsOverall, int aOffset)
 {
+  FitPairAnalysis* tFitPairAnalysis = fSharedAn->GetFitPairAnalysis(aAnalysisNumber);
+  AnalysisType tAnType = tFitPairAnalysis->GetAnalysisType();
+  CentralityType tCentType = tFitPairAnalysis->GetCentralityType();
+  double tWeightedNorm = GetWeightedAnalysisNorm(tFitPairAnalysis);
   //-----------------------------------------------------------------------------------
   double tXLow = 0.0;
   double tXHigh = 0.3;
@@ -1195,7 +1217,7 @@ TCanvas* FitGenerator::GetResidualsWithTransformMatrices(AnalysisType aAnType, C
   //-----------------------------------------------------------------------------------
   TCanvas* tReturnCan;
   TPad *tPadA, *tPadB, *tPadC, *tPadD;
-  TString tCanvasBaseName = TString::Format("Residuals_%s%s", cAnalysisBaseTags[aAnType], cCentralityTags[aCentType]);
+  TString tCanvasBaseName = TString::Format("Residuals_%s%s", cAnalysisBaseTags[tAnType], cCentralityTags[tCentType]);
   TString tTempName, tTempName1, tTempName2;
   TString tMotherName1, tDaughterName1;
   TString tMotherName2, tDaughterName2;
@@ -1220,8 +1242,8 @@ TCanvas* FitGenerator::GetResidualsWithTransformMatrices(AnalysisType aAnType, C
 
   tBoxText = TString::Format("%s%s To %s%s", tMotherName1.Data(), tMotherName2.Data(), tDaughterName1.Data(), tDaughterName2.Data());
 
-  TH1D* tTempHist1 = aResidual.GetResidualCorrelationHistogramWithLambdaApplied(tTempName1, aParamsOverall.data());
-  TH1D* tTempHist2 = aResidual.GetTransformedResidualCorrelationHistogramWithLambdaApplied(tTempName2, aParamsOverall.data());
+  TH1D* tTempHist1 = aResidual.GetResidualCorrelationHistogramWithLambdaAndNormApplied(tTempName1, aParamsOverall.data(), tWeightedNorm);
+  TH1D* tTempHist2 = aResidual.GetTransformedResidualCorrelationHistogramWithLambdaAndNormApplied(tTempName2, aParamsOverall.data(), tWeightedNorm);
 
   TH2D* tTempTransformMatrix = aResidual.GetTransformMatrix();
   tTempTransformMatrix->GetXaxis()->SetTitle(TString("k*_{") + tDaughterName1 + tDaughterName2 + TString("}(GeV/c)"));
@@ -1328,12 +1350,13 @@ TCanvas* FitGenerator::GetResidualsWithTransformMatrices(AnalysisType aAnType, C
 }
 
 //________________________________________________________________________________________________________________
-TObjArray* FitGenerator::DrawResidualsWithTransformMatrices(int aAnalysisNumber, CentralityType aCentralityType, bool aSaveImage)
+TObjArray* FitGenerator::DrawResidualsWithTransformMatrices(int aAnalysisNumber, bool aSaveImage)
 {
   TObjArray* tReturnArray = new TObjArray();
 
   FitPairAnalysis* tFitPairAnalysis = fSharedAn->GetFitPairAnalysis(aAnalysisNumber);
   AnalysisType tAnType = tFitPairAnalysis->GetAnalysisType();
+  CentralityType tCentType = tFitPairAnalysis->GetCentralityType();
 
   double tOverallLambdaPrimary = tFitPairAnalysis->GetFitParameter(kLambda)->GetFitValue();
   double tRadiusPrimary = tFitPairAnalysis->GetFitParameter(kRadius)->GetFitValue();
@@ -1357,7 +1380,7 @@ TObjArray* FitGenerator::DrawResidualsWithTransformMatrices(int aAnalysisNumber,
     AnalysisType tTempResidualType = tFitPairAnalysis->GetResidualCollection()->GetNeutralCollection()[iRes].GetResidualType();
     if( (tTempResidualType != kResOmegaK0) && (tTempResidualType != kResAOmegaK0) )
     {
-      tCan = GetResidualsWithTransformMatrices(tAnType, aCentralityType, tFitPairAnalysis->GetResidualCollection()->GetNeutralCollection()[iRes], tParamsOverall, iRes);
+      tCan = GetResidualsWithTransformMatrices(aAnalysisNumber, tFitPairAnalysis->GetResidualCollection()->GetNeutralCollection()[iRes], tParamsOverall, iRes);
       tReturnArray->Add(tCan);
       tNNeutral++;
     }
@@ -1367,7 +1390,7 @@ TObjArray* FitGenerator::DrawResidualsWithTransformMatrices(int aAnalysisNumber,
     AnalysisType tTempResidualType = tFitPairAnalysis->GetResidualCollection()->GetChargedCollection()[iRes].GetResidualType();
     if( (tTempResidualType != kResOmegaKchP) && (tTempResidualType != kResAOmegaKchM) && (tTempResidualType != kResOmegaKchM) && (tTempResidualType != kResAOmegaKchP) )
     {
-      tCan = GetResidualsWithTransformMatrices(tAnType, aCentralityType, tFitPairAnalysis->GetResidualCollection()->GetChargedCollection()[iRes], tParamsOverall, iRes+tNNeutral);
+      tCan = GetResidualsWithTransformMatrices(aAnalysisNumber, tFitPairAnalysis->GetResidualCollection()->GetChargedCollection()[iRes], tParamsOverall, iRes+tNNeutral);
       tReturnArray->Add(tCan);
       tNCharged++;
     }
@@ -1378,7 +1401,7 @@ TObjArray* FitGenerator::DrawResidualsWithTransformMatrices(int aAnalysisNumber,
   if(aSaveImage)
   {
     ExistsSaveLocationBase();
-    TString tSaveLocationDir = TString::Format("%sResiduals%s/%s/%s/", fSaveLocationBase.Data(), cIncludeResidualsTypeTags[fIncludeResidualsType], cAnalysisBaseTags[tAnType], cCentralityTags[aCentralityType]);
+    TString tSaveLocationDir = TString::Format("%sResiduals%s/%s/%s/", fSaveLocationBase.Data(), cIncludeResidualsTypeTags[fIncludeResidualsType], cAnalysisBaseTags[tAnType], cCentralityTags[tCentType]);
     gSystem->mkdir(tSaveLocationDir, true);
     for(int i=0; i<tReturnArray->GetEntries(); i++)
     {
@@ -1399,16 +1422,130 @@ TObjArray* FitGenerator::DrawAllResidualsWithTransformMatrices(bool aSaveImage)
   for(int i=0; i<fNAnalyses; i++)
   {
     CentralityType tCentType = fSharedAn->GetFitPairAnalysis(i)->GetCentralityType();
-    TObjArray* tArr = DrawResidualsWithTransformMatrices(i,tCentType, aSaveImage);
+    TObjArray* tArr = DrawResidualsWithTransformMatrices(i, aSaveImage);
     tReturnArray->Add(tArr);
   }
   return tReturnArray;
 }
 
 
+
+
+
 //________________________________________________________________________________________________________________
-TCanvas* FitGenerator::DrawSingleKStarCfwFitAndResiduals_PartAn(int aAnalysisNumber, BFieldType aBFieldType, bool aDrawData, bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, NonFlatBgdFitType aNonFlatBgdFitType, bool aSaveImage, bool aZoomROP)
+void FitGenerator::CheckCorrectedCf_PartAn(int aAnalysisNumber, BFieldType aBFieldType, bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, NonFlatBgdFitType aNonFlatBgdFitType)
 {
+  int tOffset = 0;
+  if(!fSharedAn->GetFitPairAnalysis(aAnalysisNumber)->AreTrainResults()) tOffset = 2;
+
+  int iPartAn = static_cast<int>(aBFieldType)-tOffset;
+  FitPairAnalysis* tPairAn = fSharedAn->GetFitPairAnalysis(aAnalysisNumber);
+  FitPartialAnalysis* tPartAn = tPairAn->GetFitPartialAnalysis(iPartAn);
+
+  //---------------------------------------------------------------------------------------------------------
+  TH1* tCfData = (TH1*)fSharedAn->GetKStarCfHeavy(aAnalysisNumber)->GetCfLite(iPartAn)->Cf()->Clone();
+
+  TF1* tNonFlatBgd;
+  td1dVec tNonFlatBgdVec(0);
+  if(fApplyNonFlatBackgroundCorrection)
+  {
+    tNonFlatBgd = (TF1*)tPartAn->GetNonFlatBackground(aNonFlatBgdFitType, fSharedAn->GetFitType(), true);
+    for(int i=1; i<=tCfData->GetNbinsX(); i++) tNonFlatBgdVec.push_back(tNonFlatBgd->Eval(tCfData->GetBinCenter(i)));
+  }
+
+  tPartAn->CreateFitFunction(true, fIncludeResidualsType, fResPrimMaxDecayType, fLednickyFitter->GetChi2(), fLednickyFitter->GetNDF(), 0.0, 1.0);
+  TF1* tPrimaryFit = tPartAn->GetPrimaryFit();
+  td1dVec tPrimaryFitVec(0);
+  for(int i=1; i<=tCfData->GetNbinsX(); i++) tPrimaryFitVec.push_back(tPrimaryFit->Eval(tCfData->GetBinCenter(i)));
+
+  td1dVec tCorrectedFitVec = tPartAn->GetCorrectedFitVec();
+  //---------------------------------------------------------------------------------------------------------
+  //Residuals-----
+  double tOverallLambdaPrimary = tPairAn->GetFitParameter(kLambda)->GetFitValue();
+  double tRadiusPrimary = tPairAn->GetFitParameter(kRadius)->GetFitValue();
+  double tReF0Primary = tPairAn->GetFitParameter(kRef0)->GetFitValue();
+  double tImF0Primary = tPairAn->GetFitParameter(kImf0)->GetFitValue();
+  double tD0Primary = tPairAn->GetFitParameter(kd0)->GetFitValue();
+  double tNorm = tPartAn->GetFitNormParameter()->GetFitValue();
+
+  td1dVec tParamsOverall{tOverallLambdaPrimary, tRadiusPrimary, tReF0Primary, tImF0Primary, tD0Primary};
+
+  td2dVec tResidualVecs(0);
+
+  TH1D* tTempHist;
+  td1dVec tTempVec(0);
+  for(unsigned int iRes=0; iRes<tPairAn->GetResidualCollection()->GetNeutralCollection().size(); iRes++)
+  {
+    AnalysisType tTempResidualType = tPairAn->GetResidualCollection()->GetNeutralCollection()[iRes].GetResidualType();
+    TString tTempName = TString(cAnalysisRootTags[tTempResidualType]);
+    tTempHist = tPairAn->GetResidualCollection()->GetNeutralCollection()[iRes].GetTransformedResidualCorrelationHistogramWithLambdaAndNormApplied(tTempName, tParamsOverall.data(), tNorm);
+    for(int i=1; i<=tTempHist->GetNbinsX(); i++) tTempVec.push_back(tTempHist->GetBinContent(i));
+    tResidualVecs.push_back(tTempVec);
+    tTempVec.clear();
+  }
+  for(unsigned int iRes=0; iRes<tPairAn->GetResidualCollection()->GetChargedCollection().size(); iRes++)
+  {
+    AnalysisType tTempResidualType = tPairAn->GetResidualCollection()->GetChargedCollection()[iRes].GetResidualType();
+    TString tTempName = TString(cAnalysisRootTags[tTempResidualType]);
+    tTempHist = tPairAn->GetResidualCollection()->GetChargedCollection()[iRes].GetTransformedResidualCorrelationHistogramWithLambdaAndNormApplied(tTempName, tParamsOverall.data(), tNorm);
+    for(int i=1; i<=tTempHist->GetNbinsX(); i++) tTempVec.push_back(tTempHist->GetBinContent(i));
+    tResidualVecs.push_back(tTempVec);
+    tTempVec.clear();
+  }
+  //---------------------------------------------------------------------------------------------------------
+  assert(tPrimaryFitVec.size() >= tCorrectedFitVec.size());
+  if(fApplyNonFlatBackgroundCorrection) assert(tPrimaryFitVec.size() == tNonFlatBgdVec.size());
+  for(unsigned int i=0; i<tResidualVecs.size(); i++) assert(tPrimaryFitVec.size() == tResidualVecs[i].size());
+  //---------------------------------------------------------------------------------------------------------
+
+  cout << endl << "CheckCorrectedCf_PartAn for: " << endl;
+  cout << "\t AnalysisType   = " << cAnalysisBaseTags[tPartAn->GetAnalysisType()] << endl;
+  cout << "\t CentralityType = " << cCentralityTags[tPartAn->GetCentralityType()] << endl;
+  cout << "\t BFieldType     = " << cBFieldTags[tPartAn->GetBFieldType()] << endl;
+  cout << "--------------------------------------" << endl;
+
+  double tCalculatedBinValue=0.;
+  td1dVec tCalculatedFitCf(0);
+  for(unsigned int i=0; i<tCorrectedFitVec.size(); i++)
+  {
+    tCalculatedBinValue = 0.;
+    cout << "tPrimaryFitVec[" << i << "] = " << tPrimaryFitVec[i] << endl;
+    tCalculatedBinValue += tPrimaryFitVec[i];
+    for(unsigned int iRes=0; iRes<tResidualVecs.size(); iRes++)
+    {
+      cout << "1.0 - tResidualVec[" << iRes << "][" << i << "] = " << (1.0-tResidualVecs[iRes][i]) << endl;
+      tCalculatedBinValue += (1.0-tResidualVecs[iRes][i]);
+    }
+    if(fApplyNonFlatBackgroundCorrection)
+    {
+      cout << "tCalculatedBinValue BEFORE NonFlatBgd = " << tCalculatedBinValue << endl;
+      cout << "tNonFlatBgdVec[" << i << "] = " << tNonFlatBgdVec[i] << endl;
+      tCalculatedBinValue *= tNonFlatBgdVec[i];
+    }
+    tCalculatedFitCf.push_back(tCalculatedBinValue);
+    cout << "tCalculatedBinValue = " << tCalculatedBinValue << endl;
+    cout << "tCorrectedFitVec[" << i << "] = " << tCorrectedFitVec[i] << endl;
+    cout << "% Diff = " << (tCalculatedBinValue-tCorrectedFitVec[i])/tCorrectedFitVec[i] << endl;
+    cout << endl;
+  }
+
+  cout << "Momentum resolution corrections!------------------------" << endl;
+  td1dVec tKStarBinCenters = fLednickyFitter->GetKStarBinCenters();
+  td1dVec tCalculatedFitCf_MomResCrctn = LednickyFitter::ApplyMomResCorrection(tCalculatedFitCf, tKStarBinCenters, tPairAn->GetModelKStarTrueVsRecMixed());
+  for(unsigned int i=0; i<tCorrectedFitVec.size(); i++)
+  {
+    cout << "tCalculatedFitCf_MomResCrctn[" << i << "] = " << tCalculatedFitCf_MomResCrctn[i] << endl;
+    cout << "tCorrectedFitVec[" << i << "] =             " << tCorrectedFitVec[i] << endl << endl;
+  }
+  cout << endl << endl << endl;
+}
+
+
+//________________________________________________________________________________________________________________
+TCanvas* FitGenerator::DrawSingleKStarCfwFitAndResiduals_PartAn(int aAnalysisNumber, BFieldType aBFieldType, bool aDrawData, bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, NonFlatBgdFitType aNonFlatBgdFitType, bool aSaveImage, bool aZoomROP, bool aOutputCheckCorrectedCf)
+{
+  if(aOutputCheckCorrectedCf) CheckCorrectedCf_PartAn(aAnalysisNumber, aBFieldType, aMomResCorrectFit, aNonFlatBgdCorrectFit, aNonFlatBgdFitType);
+
   AnalysisType tAnType = fSharedAn->GetFitPairAnalysis(aAnalysisNumber)->GetAnalysisType();
   CentralityType tCentType = fSharedAn->GetFitPairAnalysis(aAnalysisNumber)->GetCentralityType();
 
@@ -1462,6 +1599,7 @@ TCanvas* FitGenerator::DrawSingleKStarCfwFitAndResiduals_PartAn(int aAnalysisNum
   double tReF0Primary = tPairAn->GetFitParameter(kRef0)->GetFitValue();
   double tImF0Primary = tPairAn->GetFitParameter(kImf0)->GetFitValue();
   double tD0Primary = tPairAn->GetFitParameter(kd0)->GetFitValue();
+  double tNorm = tPartAn->GetFitNormParameter()->GetFitValue();
 
   td1dVec tParamsOverall{tOverallLambdaPrimary, tRadiusPrimary, tReF0Primary, tImF0Primary, tD0Primary};
       
@@ -1480,14 +1618,14 @@ TCanvas* FitGenerator::DrawSingleKStarCfwFitAndResiduals_PartAn(int aAnalysisNum
   {
     AnalysisType tTempResidualType = tPairAn->GetResidualCollection()->GetNeutralCollection()[iRes].GetResidualType();
     TString tTempName = TString(cAnalysisRootTags[tTempResidualType]);
-    TH1D* tTempHist = tPairAn->GetResidualCollection()->GetNeutralCollection()[iRes].GetTransformedResidualCorrelationHistogramWithLambdaApplied(tTempName, tParamsOverall.data());
+    TH1D* tTempHist = tPairAn->GetResidualCollection()->GetNeutralCollection()[iRes].GetTransformedResidualCorrelationHistogramWithLambdaAndNormApplied(tTempName, tParamsOverall.data(), tNorm);
     tCanPart->AddGraph(0,0,tTempHist,"",tNeutralResMarkerStyles[iRes],tNeutralResBaseColors[iRes],tMarkerSize,"ex0same");
   }
   for(unsigned int iRes=0; iRes<tPairAn->GetResidualCollection()->GetChargedCollection().size(); iRes++)
   {
     AnalysisType tTempResidualType = tPairAn->GetResidualCollection()->GetChargedCollection()[iRes].GetResidualType();
     TString tTempName = TString(cAnalysisRootTags[tTempResidualType]);
-    TH1D* tTempHist = tPairAn->GetResidualCollection()->GetChargedCollection()[iRes].GetTransformedResidualCorrelationHistogramWithLambdaApplied(tTempName, tParamsOverall.data());
+    TH1D* tTempHist = tPairAn->GetResidualCollection()->GetChargedCollection()[iRes].GetTransformedResidualCorrelationHistogramWithLambdaAndNormApplied(tTempName, tParamsOverall.data(), tNorm);
     tCanPart->AddGraph(0,0,tTempHist,"",tChargedResMarkerStyles[iRes],tChargedResBaseColors[iRes],tMarkerSize,"ex0same");
   }
   tCanPart->AddGraph(0,0,(TH1*)fSharedAn->GetKStarCfHeavy(aAnalysisNumber)->GetHeavyCfClone(),"",20,tColor,0.5,"ex0same");  //draw again so data on top
@@ -1520,7 +1658,7 @@ TCanvas* FitGenerator::DrawSingleKStarCfwFitAndResiduals_PartAn(int aAnalysisNum
     if(tTempResidualType==kResOmegaK0 || tTempResidualType==kResAOmegaK0) continue;
 
     TString tTempName = TString(cAnalysisRootTags[tTempResidualType]);
-    TH1D* tTempHist = tPairAn->GetResidualCollection()->GetNeutralCollection()[iRes].GetTransformedResidualCorrelationHistogramWithLambdaApplied(tTempName, tParamsOverall.data());
+    TH1D* tTempHist = tPairAn->GetResidualCollection()->GetNeutralCollection()[iRes].GetTransformedResidualCorrelationHistogramWithLambdaAndNormApplied(tTempName, tParamsOverall.data(), tNorm);
     tCanPart->AddGraph(1,0,tTempHist,"",tNeutralResMarkerStyles[iRes],tNeutralResBaseColors[iRes],tMarkerSize,"ex0same");
     tCanPart->AddLegendEntry(1, 0, tTempHist, cAnalysisRootTags[tTempResidualType], "p");
   }
@@ -1532,7 +1670,7 @@ TCanvas* FitGenerator::DrawSingleKStarCfwFitAndResiduals_PartAn(int aAnalysisNum
     if(tTempResidualType==kResOmegaKchP || tTempResidualType==kResAOmegaKchM || tTempResidualType==kResOmegaKchM || tTempResidualType==kResAOmegaKchP) continue;
 
     TString tTempName = TString(cAnalysisRootTags[tTempResidualType]);
-    TH1D* tTempHist = tPairAn->GetResidualCollection()->GetChargedCollection()[iRes].GetTransformedResidualCorrelationHistogramWithLambdaApplied(tTempName, tParamsOverall.data());
+    TH1D* tTempHist = tPairAn->GetResidualCollection()->GetChargedCollection()[iRes].GetTransformedResidualCorrelationHistogramWithLambdaAndNormApplied(tTempName, tParamsOverall.data(), tNorm);
     tCanPart->AddGraph(1,0,tTempHist,"",tChargedResMarkerStyles[iRes],tChargedResBaseColors[iRes],tMarkerSize,"ex0same");
     tCanPart->AddLegendEntry(1, 0, tTempHist, cAnalysisRootTags[tTempResidualType], "p");
   }
@@ -1574,17 +1712,121 @@ TCanvas* FitGenerator::DrawSingleKStarCfwFitAndResiduals_PartAn(int aAnalysisNum
 }
 
 //________________________________________________________________________________________________________________
-TObjArray* FitGenerator::DrawAllSingleKStarCfwFitAndResiduals_PartAn(BFieldType aBFieldType, bool aDrawData, bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, NonFlatBgdFitType aNonFlatBgdFitType, bool aSaveImage, bool aZoomROP)
+TObjArray* FitGenerator::DrawAllSingleKStarCfwFitAndResiduals_PartAn(BFieldType aBFieldType, bool aDrawData, bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, NonFlatBgdFitType aNonFlatBgdFitType, bool aSaveImage, bool aZoomROP, bool aOutputCheckCorrectedCf)
 {
   TObjArray* tReturnArray = new TObjArray();
-  for(int i=0; i<fNAnalyses; i++) tReturnArray->Add(DrawSingleKStarCfwFitAndResiduals_PartAn(i, aBFieldType, aDrawData, aMomResCorrectFit, aNonFlatBgdCorrectFit, aNonFlatBgdFitType, aSaveImage, aZoomROP));
+  for(int i=0; i<fNAnalyses; i++) tReturnArray->Add(DrawSingleKStarCfwFitAndResiduals_PartAn(i, aBFieldType, aDrawData, aMomResCorrectFit, aNonFlatBgdCorrectFit, aNonFlatBgdFitType, aSaveImage, aZoomROP, aOutputCheckCorrectedCf));
   return tReturnArray;
 }
 
 
 //________________________________________________________________________________________________________________
-TCanvas* FitGenerator::DrawSingleKStarCfwFitAndResiduals(int aAnalysisNumber, bool aDrawData, bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, NonFlatBgdFitType aNonFlatBgdFitType, bool aSaveImage, bool aDrawSysErrors, bool aZoomROP)
+void FitGenerator::CheckCorrectedCf(int aAnalysisNumber, bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, NonFlatBgdFitType aNonFlatBgdFitType)
 {
+  //---------------------------------------------------------------------------------------------------------
+  TH1* tCfData = (TH1*)fSharedAn->GetKStarCfHeavy(aAnalysisNumber)->GetHeavyCfClone();
+
+  TF1* tNonFlatBgd;
+  td1dVec tNonFlatBgdVec(0);
+  if(fApplyNonFlatBackgroundCorrection)
+  {
+    tNonFlatBgd = (TF1*)fSharedAn->GetFitPairAnalysis(aAnalysisNumber)->GetNonFlatBackground(aNonFlatBgdFitType, fSharedAn->GetFitType(), true, true);
+    for(int i=1; i<=tCfData->GetNbinsX(); i++) tNonFlatBgdVec.push_back(tNonFlatBgd->Eval(tCfData->GetBinCenter(i)));
+  }
+
+  TF1* tPrimaryFit = (TF1*)fSharedAn->GetFitPairAnalysis(aAnalysisNumber)->GetPrimaryFit();
+  td1dVec tPrimaryFitVec(0);
+  for(int i=1; i<=tCfData->GetNbinsX(); i++) tPrimaryFitVec.push_back(tPrimaryFit->Eval(tCfData->GetBinCenter(i)));
+
+  td1dVec tCorrectedFitVec(0);
+  TH1F* tCorrectedFitHisto = fSharedAn->GetFitPairAnalysis(aAnalysisNumber)->GetCorrectedFitHistv2(tCfData->GetXaxis()->GetBinUpEdge(tCfData->GetNbinsX()));
+  for(int i=1; i<=tCorrectedFitHisto->GetNbinsX(); i++) tCorrectedFitVec.push_back(tCorrectedFitHisto->GetBinContent(i));
+  //---------------------------------------------------------------------------------------------------------
+  //Residuals-----
+  FitPairAnalysis* tFitPairAnalysis = fSharedAn->GetFitPairAnalysis(aAnalysisNumber);
+  double tOverallLambdaPrimary = tFitPairAnalysis->GetFitParameter(kLambda)->GetFitValue();
+  double tRadiusPrimary = tFitPairAnalysis->GetFitParameter(kRadius)->GetFitValue();
+  double tReF0Primary = tFitPairAnalysis->GetFitParameter(kRef0)->GetFitValue();
+  double tImF0Primary = tFitPairAnalysis->GetFitParameter(kImf0)->GetFitValue();
+  double tD0Primary = tFitPairAnalysis->GetFitParameter(kd0)->GetFitValue();
+
+  td1dVec tParamsOverall{tOverallLambdaPrimary, tRadiusPrimary, tReF0Primary, tImF0Primary, tD0Primary};
+  double tWeightedNorm = GetWeightedAnalysisNorm(tFitPairAnalysis);
+
+  td2dVec tResidualVecs(0);
+
+  TH1D* tTempHist;
+  td1dVec tTempVec(0);
+  for(unsigned int iRes=0; iRes<tFitPairAnalysis->GetResidualCollection()->GetNeutralCollection().size(); iRes++)
+  {
+    AnalysisType tTempResidualType = tFitPairAnalysis->GetResidualCollection()->GetNeutralCollection()[iRes].GetResidualType();
+    TString tTempName = TString(cAnalysisRootTags[tTempResidualType]);
+    tTempHist = tFitPairAnalysis->GetResidualCollection()->GetNeutralCollection()[iRes].GetTransformedResidualCorrelationHistogramWithLambdaAndNormApplied(tTempName, tParamsOverall.data(), tWeightedNorm);
+    for(int i=1; i<=tTempHist->GetNbinsX(); i++) tTempVec.push_back(tTempHist->GetBinContent(i));
+    tResidualVecs.push_back(tTempVec);
+    tTempVec.clear();
+  }
+  for(unsigned int iRes=0; iRes<tFitPairAnalysis->GetResidualCollection()->GetChargedCollection().size(); iRes++)
+  {
+    AnalysisType tTempResidualType = tFitPairAnalysis->GetResidualCollection()->GetChargedCollection()[iRes].GetResidualType();
+    TString tTempName = TString(cAnalysisRootTags[tTempResidualType]);
+    tTempHist = tFitPairAnalysis->GetResidualCollection()->GetChargedCollection()[iRes].GetTransformedResidualCorrelationHistogramWithLambdaAndNormApplied(tTempName, tParamsOverall.data(), tWeightedNorm);
+    for(int i=1; i<=tTempHist->GetNbinsX(); i++) tTempVec.push_back(tTempHist->GetBinContent(i));
+    tResidualVecs.push_back(tTempVec);
+    tTempVec.clear();
+  }
+  //---------------------------------------------------------------------------------------------------------
+  assert(tPrimaryFitVec.size() >= tCorrectedFitVec.size());
+  if(fApplyNonFlatBackgroundCorrection) assert(tPrimaryFitVec.size() == tNonFlatBgdVec.size());
+  for(unsigned int i=0; i<tResidualVecs.size(); i++) assert(tPrimaryFitVec.size() == tResidualVecs[i].size());
+  //---------------------------------------------------------------------------------------------------------
+
+  cout << endl << "CheckCorrectedCf for: " << endl;
+  cout << "\t AnalysisType   = " << cAnalysisBaseTags[tFitPairAnalysis->GetAnalysisType()] << endl;
+  cout << "\t CentralityType = " << cCentralityTags[tFitPairAnalysis->GetCentralityType()] << endl;
+  cout << "--------------------------------------" << endl;
+
+  double tCalculatedBinValue=0.;
+  td1dVec tCalculatedFitCf(0);
+  for(unsigned int i=0; i<tCorrectedFitVec.size(); i++)
+  {
+    tCalculatedBinValue = 0.;
+    cout << "tPrimaryFitVec[" << i << "] = " << tPrimaryFitVec[i] << endl;
+    tCalculatedBinValue += tPrimaryFitVec[i];
+    for(unsigned int iRes=0; iRes<tResidualVecs.size(); iRes++)
+    {
+      cout << "1.0 - tResidualVec[" << iRes << "][" << i << "] = " << (1.0-tResidualVecs[iRes][i]) << endl;
+      tCalculatedBinValue += (1.0-tResidualVecs[iRes][i]);
+    }
+    if(fApplyNonFlatBackgroundCorrection)
+    {
+      cout << "tCalculatedBinValue BEFORE NonFlatBgd = " << tCalculatedBinValue << endl;
+      cout << "tNonFlatBgdVec[" << i << "] = " << tNonFlatBgdVec[i] << endl;
+      tCalculatedBinValue *= tNonFlatBgdVec[i];
+    }
+    tCalculatedFitCf.push_back(tCalculatedBinValue);
+    cout << "tCalculatedBinValue = " << tCalculatedBinValue << endl;
+    cout << "tCorrectedFitVec[" << i << "] = " << tCorrectedFitVec[i] << endl;
+    cout << "% Diff = " << (tCalculatedBinValue-tCorrectedFitVec[i])/tCorrectedFitVec[i] << endl;
+    cout << endl;
+  }
+
+  cout << "Momentum resolution corrections!------------------------" << endl;
+  td1dVec tKStarBinCenters = fLednickyFitter->GetKStarBinCenters();
+  td1dVec tCalculatedFitCf_MomResCrctn = LednickyFitter::ApplyMomResCorrection(tCalculatedFitCf, tKStarBinCenters, tFitPairAnalysis->GetModelKStarTrueVsRecMixed());
+  for(unsigned int i=0; i<tCorrectedFitVec.size(); i++)
+  {
+    cout << "tCalculatedFitCf_MomResCrctn[" << i << "] = " << tCalculatedFitCf_MomResCrctn[i] << endl;
+    cout << "tCorrectedFitVec[" << i << "] =             " << tCorrectedFitVec[i] << endl << endl;
+  }
+  cout << endl << endl << endl;
+}
+
+//________________________________________________________________________________________________________________
+TCanvas* FitGenerator::DrawSingleKStarCfwFitAndResiduals(int aAnalysisNumber, bool aDrawData, bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, NonFlatBgdFitType aNonFlatBgdFitType, bool aSaveImage, bool aDrawSysErrors, bool aZoomROP, bool aOutputCheckCorrectedCf)
+{
+  if(aOutputCheckCorrectedCf) CheckCorrectedCf(aAnalysisNumber, aMomResCorrectFit, aNonFlatBgdCorrectFit, aNonFlatBgdFitType);
+
   AnalysisType tAnType = fSharedAn->GetFitPairAnalysis(aAnalysisNumber)->GetAnalysisType();
   CentralityType tCentType = fSharedAn->GetFitPairAnalysis(aAnalysisNumber)->GetCentralityType();
 
@@ -1634,6 +1876,7 @@ TCanvas* FitGenerator::DrawSingleKStarCfwFitAndResiduals(int aAnalysisNumber, bo
   double tD0Primary = tFitPairAnalysis->GetFitParameter(kd0)->GetFitValue();
 
   td1dVec tParamsOverall{tOverallLambdaPrimary, tRadiusPrimary, tReF0Primary, tImF0Primary, tD0Primary};
+  double tWeightedNorm = GetWeightedAnalysisNorm(tFitPairAnalysis);
       
   vector<int> tNeutralResBaseColors{7,8,9,30,33,40,41};
   vector<int> tNeutralResMarkerStyles{24,25,26,27,28,30,32};
@@ -1650,14 +1893,14 @@ TCanvas* FitGenerator::DrawSingleKStarCfwFitAndResiduals(int aAnalysisNumber, bo
   {
     AnalysisType tTempResidualType = tFitPairAnalysis->GetResidualCollection()->GetNeutralCollection()[iRes].GetResidualType();
     TString tTempName = TString(cAnalysisRootTags[tTempResidualType]);
-    TH1D* tTempHist = tFitPairAnalysis->GetResidualCollection()->GetNeutralCollection()[iRes].GetTransformedResidualCorrelationHistogramWithLambdaApplied(tTempName, tParamsOverall.data());
+    TH1D* tTempHist = tFitPairAnalysis->GetResidualCollection()->GetNeutralCollection()[iRes].GetTransformedResidualCorrelationHistogramWithLambdaAndNormApplied(tTempName, tParamsOverall.data(), tWeightedNorm);
     tCanPart->AddGraph(0,0,tTempHist,"",tNeutralResMarkerStyles[iRes],tNeutralResBaseColors[iRes],tMarkerSize,"ex0same");
   }
   for(unsigned int iRes=0; iRes<tFitPairAnalysis->GetResidualCollection()->GetChargedCollection().size(); iRes++)
   {
     AnalysisType tTempResidualType = tFitPairAnalysis->GetResidualCollection()->GetChargedCollection()[iRes].GetResidualType();
     TString tTempName = TString(cAnalysisRootTags[tTempResidualType]);
-    TH1D* tTempHist = tFitPairAnalysis->GetResidualCollection()->GetChargedCollection()[iRes].GetTransformedResidualCorrelationHistogramWithLambdaApplied(tTempName, tParamsOverall.data());
+    TH1D* tTempHist = tFitPairAnalysis->GetResidualCollection()->GetChargedCollection()[iRes].GetTransformedResidualCorrelationHistogramWithLambdaAndNormApplied(tTempName, tParamsOverall.data(), tWeightedNorm);
     tCanPart->AddGraph(0,0,tTempHist,"",tChargedResMarkerStyles[iRes],tChargedResBaseColors[iRes],tMarkerSize,"ex0same");
   }
   tCanPart->AddGraph(0,0,(TH1*)fSharedAn->GetKStarCfHeavy(aAnalysisNumber)->GetHeavyCfClone(),"",20,tColor,0.5,"ex0same");  //draw again so data on top
@@ -1689,7 +1932,7 @@ TCanvas* FitGenerator::DrawSingleKStarCfwFitAndResiduals(int aAnalysisNumber, bo
     if(tTempResidualType==kResOmegaK0 || tTempResidualType==kResAOmegaK0) continue;
 
     TString tTempName = TString(cAnalysisRootTags[tTempResidualType]);
-    TH1D* tTempHist = tFitPairAnalysis->GetResidualCollection()->GetNeutralCollection()[iRes].GetTransformedResidualCorrelationHistogramWithLambdaApplied(tTempName, tParamsOverall.data());
+    TH1D* tTempHist = tFitPairAnalysis->GetResidualCollection()->GetNeutralCollection()[iRes].GetTransformedResidualCorrelationHistogramWithLambdaAndNormApplied(tTempName, tParamsOverall.data(), tWeightedNorm);
     tCanPart->AddGraph(1,0,tTempHist,"",tNeutralResMarkerStyles[iRes],tNeutralResBaseColors[iRes],tMarkerSize,"ex0same");
     tCanPart->AddLegendEntry(1, 0, tTempHist, cAnalysisRootTags[tTempResidualType], "p");
   }
@@ -1701,7 +1944,7 @@ TCanvas* FitGenerator::DrawSingleKStarCfwFitAndResiduals(int aAnalysisNumber, bo
     if(tTempResidualType==kResOmegaKchP || tTempResidualType==kResAOmegaKchM || tTempResidualType==kResOmegaKchM || tTempResidualType==kResAOmegaKchP) continue;
 
     TString tTempName = TString(cAnalysisRootTags[tTempResidualType]);
-    TH1D* tTempHist = tFitPairAnalysis->GetResidualCollection()->GetChargedCollection()[iRes].GetTransformedResidualCorrelationHistogramWithLambdaApplied(tTempName, tParamsOverall.data());
+    TH1D* tTempHist = tFitPairAnalysis->GetResidualCollection()->GetChargedCollection()[iRes].GetTransformedResidualCorrelationHistogramWithLambdaAndNormApplied(tTempName, tParamsOverall.data(), tWeightedNorm);
     tCanPart->AddGraph(1,0,tTempHist,"",tChargedResMarkerStyles[iRes],tChargedResBaseColors[iRes],tMarkerSize,"ex0same");
     tCanPart->AddLegendEntry(1, 0, tTempHist, cAnalysisRootTags[tTempResidualType], "p");
   }
@@ -1743,10 +1986,10 @@ TCanvas* FitGenerator::DrawSingleKStarCfwFitAndResiduals(int aAnalysisNumber, bo
 }
 
 //________________________________________________________________________________________________________________
-TObjArray* FitGenerator::DrawAllSingleKStarCfwFitAndResiduals(bool aDrawData, bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, NonFlatBgdFitType aNonFlatBgdFitType, bool aSaveImage, bool aDrawSysErrors, bool aZoomROP)
+TObjArray* FitGenerator::DrawAllSingleKStarCfwFitAndResiduals(bool aDrawData, bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, NonFlatBgdFitType aNonFlatBgdFitType, bool aSaveImage, bool aDrawSysErrors, bool aZoomROP, bool aOutputCheckCorrectedCf)
 {
   TObjArray* tReturnArray = new TObjArray();
-  for(int i=0; i<fNAnalyses; i++) tReturnArray->Add(DrawSingleKStarCfwFitAndResiduals(i, aDrawData, aMomResCorrectFit, aNonFlatBgdCorrectFit, aNonFlatBgdFitType, aSaveImage, aDrawSysErrors, aZoomROP));
+  for(int i=0; i<fNAnalyses; i++) tReturnArray->Add(DrawSingleKStarCfwFitAndResiduals(i, aDrawData, aMomResCorrectFit, aNonFlatBgdCorrectFit, aNonFlatBgdFitType, aSaveImage, aDrawSysErrors, aZoomROP, aOutputCheckCorrectedCf));
   return tReturnArray;
 }
 
@@ -1791,6 +2034,7 @@ TCanvas* FitGenerator::DrawKStarCfswFitsAndResiduals(bool aMomResCorrectFit, boo
       double tD0Primary = tFitPairAnalysis->GetFitParameter(kd0)->GetFitValue();
 
       td1dVec tParamsOverall{tOverallLambdaPrimary, tRadiusPrimary, tReF0Primary, tImF0Primary, tD0Primary};
+      double tWeightedNorm = GetWeightedAnalysisNorm(tFitPairAnalysis);
       
       vector<int> tNeutralResBaseColors{7,8,9,30,33,40,41};
       vector<int> tNeutralResMarkerStyles{24,25,26,27,28,30,32};
@@ -1804,7 +2048,7 @@ TCanvas* FitGenerator::DrawKStarCfswFitsAndResiduals(bool aMomResCorrectFit, boo
         if(tTempResidualType==kResOmegaK0 || tTempResidualType==kResAOmegaK0) continue;
 
         TString tTempName = TString(cAnalysisRootTags[tTempResidualType]);
-        TH1D* tTempHist = tFitPairAnalysis->GetResidualCollection()->GetNeutralCollection()[iRes].GetTransformedResidualCorrelationHistogramWithLambdaApplied(tTempName, tParamsOverall.data());
+        TH1D* tTempHist = tFitPairAnalysis->GetResidualCollection()->GetNeutralCollection()[iRes].GetTransformedResidualCorrelationHistogramWithLambdaAndNormApplied(tTempName, tParamsOverall.data(), tWeightedNorm);
         tCanPart->AddGraph(i,j,tTempHist,"",tNeutralResMarkerStyles[iRes],tNeutralResBaseColors[iRes],tMarkerSize,"ex0same");
         if(i==0 && j==1) tCanPart->AddLegendEntry(i, j, tTempHist, cAnalysisRootTags[tTempResidualType], "p");
       }
@@ -1815,7 +2059,7 @@ TCanvas* FitGenerator::DrawKStarCfswFitsAndResiduals(bool aMomResCorrectFit, boo
         if(tTempResidualType==kResOmegaKchP || tTempResidualType==kResAOmegaKchM || tTempResidualType==kResOmegaKchM || tTempResidualType==kResAOmegaKchP) continue;
 
         TString tTempName = TString(cAnalysisRootTags[tTempResidualType]);
-        TH1D* tTempHist = tFitPairAnalysis->GetResidualCollection()->GetChargedCollection()[iRes].GetTransformedResidualCorrelationHistogramWithLambdaApplied(tTempName, tParamsOverall.data());
+        TH1D* tTempHist = tFitPairAnalysis->GetResidualCollection()->GetChargedCollection()[iRes].GetTransformedResidualCorrelationHistogramWithLambdaAndNormApplied(tTempName, tParamsOverall.data(), tWeightedNorm);
         tCanPart->AddGraph(i,j,tTempHist,"",tChargedResMarkerStyles[iRes],tChargedResBaseColors[iRes],tMarkerSize,"ex0same");
         if(i==0 && j==2) tCanPart->AddLegendEntry(i, j, tTempHist, cAnalysisRootTags[tTempResidualType], "p");
       }

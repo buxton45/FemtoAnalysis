@@ -244,6 +244,24 @@ TH1D* NeutralResidualCf::GetTransformedResidualCorrelationHistogramWithLambdaApp
 
 
 //________________________________________________________________________________________________________________
+TH1D* NeutralResidualCf::GetResidualCorrelationHistogramWithLambdaAndNormApplied(TString aTitle, double *aParamsOverall, double aNorm)
+{
+  TH1D* tReturnHist = GetResidualCorrelationHistogramWithLambdaApplied(aTitle, aParamsOverall);
+  tReturnHist->Scale(aNorm);
+  return tReturnHist;
+}
+
+//________________________________________________________________________________________________________________
+TH1D* NeutralResidualCf::GetTransformedResidualCorrelationHistogramWithLambdaAndNormApplied(TString aTitle, double *aParamsOverall, double aNorm)
+{
+  TH1D* tReturnHist = GetTransformedResidualCorrelationHistogramWithLambdaApplied(aTitle, aParamsOverall);
+  tReturnHist->Scale(aNorm);
+  return tReturnHist;
+}
+
+
+
+//________________________________________________________________________________________________________________
 void NeutralResidualCf::SetUsemTScalingOfRadii(AnalysisType aParentAnType, double aPower)
 {
   double tmTFactorParentPair = cmTFactorsFromTherminator[aParentAnType];
