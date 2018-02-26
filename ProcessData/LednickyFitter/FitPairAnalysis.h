@@ -95,7 +95,7 @@ public:
   TH1* GetCfwSysErrors();
 
   td1dVec GetCorrectedFitVec();
-  TH1F* GetCorrectedFitHistv2(double aMaxDrawKStar=0.3); //TODO
+  TH1F* GetCorrectedFitHistv2(double aMaxDrawKStar=1.0); //TODO
   void InitiateResidualCollection(td1dVec &aKStarBinCenters, IncludeResidualsType aIncludeResidualsType, ChargedResidualsType aChargedResidualsType, ResPrimMaxDecayType aResPrimMaxDecayType, TString aInterpCfsDirectory="/home/jesse/Analysis/FemtoAnalysis/ProcessData/CoulombFitter/");
 
   //inline (i.e. simple) functions
