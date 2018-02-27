@@ -651,7 +651,7 @@ TString LednickyFitter::BuildParamCorrCoeffOutputFile(TString aFileBaseName, TSt
 
 
 //________________________________________________________________________________________________________________
-void LednickyFitter::DoFit()
+void LednickyFitter::DoFit(bool aOutputCorrCoeffOutputFile)
 {
   InitializeFitter();
 
@@ -695,10 +695,13 @@ void LednickyFitter::DoFit()
   fMinuit->mnprin(3,fChi2);
 
   //---------------------------------
-  TString tParamCorrOutputName = BuildParamCorrCoeffOutputFile("ParameterCorrelationCoefficients", "txt");
-  gSystem->RedirectOutput(tParamCorrOutputName, "w");
-  fMinuit->mnexcm("SHO COR", arglist ,2,fErrFlg);
-  gSystem->RedirectOutput(0);
+  if(aOutputCorrCoeffOutputFile)
+  {
+    TString tParamCorrOutputName = BuildParamCorrCoeffOutputFile("ParameterCorrelationCoefficients", "txt");
+    gSystem->RedirectOutput(tParamCorrOutputName, "w");
+    fMinuit->mnexcm("SHO COR", arglist ,2,fErrFlg);
+    gSystem->RedirectOutput(0);
+  }
   //---------------------------------
 
   Finalize();
@@ -1369,6 +1372,7 @@ void LednickyFitter::ExistsSaveLocationBase()
 {
   if(!fSaveLocationBase.IsNull()) return;
 
+  cout << "In LednickyFitter" << endl;
   cout << "fSaveLocationBase is Null!!!!!" << endl;
   cout << "Create? (0=No 1=Yes)" << endl;
   int tResponse;

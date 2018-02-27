@@ -2732,6 +2732,7 @@ void FitGenerator::ExistsSaveLocationBase()
 {
   if(!fSaveLocationBase.IsNull()) return;
 
+  cout << "In FitGenerator" << endl;
   cout << "fSaveLocationBase is Null!!!!!" << endl;
   cout << "Create? (0=No 1=Yes)" << endl;
   int tResponse;
