@@ -13,7 +13,7 @@ int main(int argc, char **argv)
 
   bool bPlayCompletionBeep = true;
 //-----------------------------------------------------------------------------
-  AnalysisType tAnType = kLamK0;
+  AnalysisType tAnType = kLamKchP;
   CentralityType tCentralityType = kMB;
   FitGeneratorType tFitGeneratorType = kPairwConj;
   bool tShareLambdaParameters = false;
@@ -25,7 +25,7 @@ int main(int argc, char **argv)
 
   IncludeResidualsType tIncludeResidualsType = kInclude3Residuals; 
   ChargedResidualsType tChargedResidualsType = kUseXiDataAndCoulombOnlyInterp;
-  ResPrimMaxDecayType tResPrimMaxDecayType = k5fm;
+  ResPrimMaxDecayType tResPrimMaxDecayType = k4fm;
 
   bool FixD0 = true;
 

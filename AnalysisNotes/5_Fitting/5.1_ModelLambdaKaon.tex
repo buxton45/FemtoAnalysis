@@ -41,30 +41,4 @@ where $\alpha = (-1)^{2j}/(2j+1)$ for identical particles with spin j, and $\alp
 
 where $R$ is the source size, $f(k^{*})$ is the s-wave scattering amplitude, $f_{0}$ is the complex scattering length, and $d_{0}$ is the effective range of the interaction.
 
-The code developed to fit the data is called ``LednickyFitter", and utilizes the ROOT TMinuit implementation of the MINUIT fitting package.
-In short, given a function with a number of parameters, the fitter explores the parameter space searching for the minimum of the equation.
-In this implementation, the function to be minimized should represent the difference between the measure and theoretical correlation functions.
-However, a simple $\chi^{2}$ test in inappropriate for fitting correlation functions, as the ratio two Poisson distributions does not result in a Poisson distribution.
-Instead, a log-likelihood fit function of the following form is used \cite{Lisa:2005dd}:
-
-\begin{equation}
- \chi^{2}_{PML} = -2\left[A\ln\left(\frac{C(A+B)}{A(C+1)}\right) + B\ln\left(\frac{A+B}{B(C+1)}\right)\right]
-\label{eqn:Chi2PML}
-\end{equation}
-
-where $A$ is the experimental signal distribution (numerator), $B$ is the experimental background distribution (denominator), and $C$ is the theoretical fit correlation function.
-
-The LednickyFitter uses Equations \ref{eqn:LednickyEqn} -- \ref{eqn:CFSI} to build the theoretical fit, and Equation \ref{eqn:Chi2PML} as the statistic quantifying the quality of the fit.
-The parameters to be varied by MINUIT are: $\lambda$, $R$, $f_{0}$ ($\mathbb{R}f_{0}$ and $\mathbb{I}f_{0}$ separately), $d_{0}$, and normalization $N$.
-The fitter currently includes methods to correct for momentum resolution and a non-flat background.
-These corrections are applied to the fit function, the data is never touched.
-The fitter is able to share parameters between different analyses and fit all simultaneously.  
-
-In a typical fit, a given pair is fit with its conjugate (ex. $\Lambda$K$^{+}$ with $\bar{\Lambda}$K$^{-}$) across all centralities (0-10\%, 10-30\%, 30-50\%), for a total of 6 simultaneous analyses.
-Each analysis has a unique $\lambda$ and normalization parameter.
-The radii are shared between analyses of like centrality, as these should have similar source sizes.
-The scattering parameters ($\mathbb{R}f_{0}$, $\mathbb{I}f_{0}$, $d_{0}$) are shared amongst all.
-
-Figures \ref{fig:LamK0wConjFits_NoRes}, \ref{fig:LamKchPwConjFits_NoRes}, and \ref{fig:LamKchMwConjFits_NoRes} (\ref{fig:LamK0wConjFits_3Res}, \ref{fig:LamKchPwConjFits_3Res}, and \ref{fig:LamKchMwConjFits_3Res}, or \ref{fig:LamK0wConjFits_10Res}, \ref{fig:LamKchPwConjFits_10Res}, and \ref{fig:LamKchMwConjFits_10Res}), in Section \ref{ResultsAndDiscussion}, show experimental data with fits for all studied centralities for $\Lambda$K$^{0}_{S}$ with $\bar{\Lambda}$K$^{0}_{S}$, $\Lambda$K$^{+}$ with $\bar{\Lambda}$K$^{-}$, and $\Lambda$K$^{-}$ with $\bar{\Lambda}$K$^{+}$, respectively.  In the figures, the black solid line represents the ``raw" fit, i.e. not corrected for momentum resolution effects nor non-flat background.  The green line shows the fit to the non-flat background.  The purple points show the fit after momentum resolution, non-flat background, and residual correlations (if applicable) corrections have been applied.  The initial values of the parameters is listed, as well as the final fit values with uncertainties.
-
 \end{document}

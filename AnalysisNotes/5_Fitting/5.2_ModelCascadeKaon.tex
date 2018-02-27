@@ -4,13 +4,6 @@
 \subsection{Model: \texorpdfstring{$\Xi^{ch}K^{ch}$}{TEXT}}
 \label{ModelCascadeKaon}
 
-When fitting the $\Xi^{-}$($\bar{\Xi}^{+}$)K$^{\pm}$ results, it is necessary to include both strong and Coulomb effects.
-In this case, Equation \ref{eqn:LednickyEqn} is no longer valid, and, in fact, there is no analytical form with which to fit.
-Therefore, we must begin with the wave function describing the pair interaction, and simulate many particle pairs to obtain a theoretical fit correlation function.
-The code developed to achieve this functionality is called ``CoulombFitter".
-Currently, in order to generate the statistics needed for a stable fit, we find that $\sim 10^{4}$ simulated pairs per 10 MeV bin are necessary.
-Unfortunately, the nature of this process means that the ``CoulombFitter" takes much longer to run than the ``LednickyFitter" of Section \ref{ModelLambdaKaon}.
-
 The two-particle correlation function may be written as:
 
 \begin{equation}
@@ -38,61 +31,5 @@ where, the ``h-function", $h(\eta$), is expressed through the digamma function, 
  h(\eta) = 0.5[\psi(i\eta) + \psi(-i\eta) - \ln(\eta^{2})]
 \label{eqn:LednickyHFunction}
 \end{equation} 
-
-Unfortunately, with this analysis, we are not sensitive to, and therefore not able to distinguish between, the iso-spin singlet and triplet states.  We proceed with our analysis, but the results must be interpreted as iso-spin averaged scattering parameters.
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{comment}
-\begin{equation}
-\begin{array}{l}
-\vspace{2mm}
-  C(\mathbf{k^{*}}) = \sum\limits_{S}\rho_{S}\int S(\mathbf{r^{*}})|\Psi^{S}_{\mathbf{k^{*}}}(\mathbf{r^{*}})|^{2}d^{3}\mathbf{r^{*}} \\
-\vspace{3mm}
-  ~~~~~\Psi_{\mathbf{k^{*}}}(\mathbf{r^{*}}) = e^{i\delta_{c}}\sqrt{A_{c}(\eta)}[e^{i\mathbf{k^{*}} \cdot \mathbf{r^{*}}}F(-i\eta,1,i\xi) + f_{c}(k^{*})\frac{\tilde{G}(\rho,\eta)}{r^{*}}] \\
-\vspace{3mm}
-  ~~~~~f_{c}(k^{*}) = [\frac{1}{f_{0}} + \frac{1}{2}d_{0}k^{*2} - \frac{2}{a_{c}}h(\eta) - ik^{*}A_{c}(\eta)]^{-1} \\
-\vspace{3mm}
-  ~~~~~\rho = k^{*}r^{*};~ \eta = (k^{*}a)^{-1};~ a_{c} = (\mu z_{1}z_{2}e^{2})^{-1} \\  
-\vspace{2mm}
-  ~~~~~\xi = \mathbf{k^{*}} \cdot \mathbf{r^{*}} + k^{*}r^{*} \equiv \rho(1+\cos\theta^{*}) \\
-\end{array}
-\label{eqn:CoulombEqn}
-\end{equation}
-\end{comment}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-As stated before, to generate a fit correlation function, we must simulate a large number of pairs, calculate the wave-function, and average $\Psi^{2}$ over all pairs in a given k$^{*}$ bin.  Essentially, we calculate Equation \ref{eqn:GenCfEqn} by hand:
-
-\begin{equation}
-\begin{array}{l}
-\vspace{2mm}
-  C(\mathbf{k^{*}}) = \sum\limits_{S}\rho_{S}\int S(\mathbf{r^{*}})|\Psi^{S}_{\mathbf{k^{*}}}(\mathbf{r^{*}})|^{2}d^{3}\mathbf{r^{*}} \\
-\vspace{2mm}
-  \longrightarrow C(|\mathbf{k^{*}}|) \equiv C(k^{*}) = \sum\limits_{S}\rho_{S}\langle |\Psi^{S}(\mathbf{k^{*}_{i}},\mathbf{r^{*}_{i}})|^{2} \rangle_{i} \\
-\vspace{2mm}
-  \longrightarrow C(k^{*}) = \lambda\sum\limits_{S}\rho_{S}\langle |\Psi^{S}(\mathbf{k^{*}_{i}},\mathbf{r^{*}_{i}})|^{2} \rangle_{i} + (1-\lambda)
-
-\end{array}
-\label{eqn:CoulombEqn2}
-\end{equation}
-
-where $\langle \rangle_{i}$ represents an average over all pairs in a given k$^{*}$ bin.
-
-In summary, for a given k$^{*}$ bin, we must draw $N_{pairs} \sim 10^{4}$ pairs, and for each pair:
-
-\begin{enumerate}
- \item Draw a random $\mathbf{r}^{*}$ vector according to our Gaussian source distribution $S(\mathbf{r}^{*})$
- \item Draw a random $\mathbf{k}^{*}$ vector satisfying the $|\mathbf{k}^{*}|$ restriction of the bin
- \begin{itemize}
-  \item We draw from real $k^{*}$ vectors obtained from the data
-  \item However, we find that drawing from a distribution flat in $k^{*}$ gives similar results
- \end{itemize}
- \item Construct the wave-function $\Psi$
-\end{enumerate}
-
-After all pairs for a given k$^{*}$ bin are simulated and wave-functions obtained, the results are averaged to give the fit result.
-
-Construction of the wave-functions, Equation \ref{eqn:CoulombWaveFcn}, involves a number of complex functions not included in standard C++ or ROOT libraries (namely, $h(\eta$), $\tilde{G}(\rho,\eta)$), and $F(-i\eta,1,i\xi)$.  These functions were even difficult to find and implement from elsewhere.  Our solution was to embed a Mathematica kernel into our C++ code to evaluate these functions.  However, having Mathematica work on-the-fly with the fitter was far too time consuming (fitter would have taken day, maybe weeks to finish).  Our solution was to use Mathematica to create matrices representing these functions for different parameter values.  During fitting, these matrices were then interpolated and the results used to build the wave-functions.  This method decreased the running time dramatically, and we are not able to generate results in under $\sim$ 1 hour. This process will be explained in more detail in future versions of the note.
-
 
 \end{document}
