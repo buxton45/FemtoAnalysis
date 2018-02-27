@@ -84,7 +84,7 @@ public:
 
   void InitializeFitter();  //Called within DoFit
   TString BuildParamCorrCoeffOutputFile(TString aFileBaseName, TString aFileType);
-  void DoFit(bool aOutputCorrCoeffOutputFile=false);
+  void DoFit(bool aOutputCorrCoeffFile=false);
   void Finalize();  //Send things back to analyses, etc.
 
 

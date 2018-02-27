@@ -651,7 +651,7 @@ TString LednickyFitter::BuildParamCorrCoeffOutputFile(TString aFileBaseName, TSt
 
 
 //________________________________________________________________________________________________________________
-void LednickyFitter::DoFit(bool aOutputCorrCoeffOutputFile)
+void LednickyFitter::DoFit(bool aOutputCorrCoeffFile)
 {
   InitializeFitter();
 
@@ -695,7 +695,7 @@ void LednickyFitter::DoFit(bool aOutputCorrCoeffOutputFile)
   fMinuit->mnprin(3,fChi2);
 
   //---------------------------------
-  if(aOutputCorrCoeffOutputFile)
+  if(aOutputCorrCoeffFile)
   {
     TString tParamCorrOutputName = BuildParamCorrCoeffOutputFile("ParameterCorrelationCoefficients", "txt");
     gSystem->RedirectOutput(tParamCorrOutputName, "w");
