@@ -13,7 +13,7 @@ int main(int argc, char **argv)
 
   bool bPlayCompletionBeep = true;
 //-----------------------------------------------------------------------------
-  AnalysisType tAnType = kLamKchP;
+  AnalysisType tAnType = kLamK0;
   CentralityType tCentralityType = kMB;
   FitGeneratorType tFitGeneratorType = kPairwConj;
   bool tShareLambdaParameters = false;
@@ -34,7 +34,7 @@ int main(int argc, char **argv)
 
   if(tAnType==kLamK0) tAllShareSingleLambdaParam = true;
 
-  SystematicsFileInfo tFileInfo = GetFileInfo_LamK(1);
+  SystematicsFileInfo tFileInfo = GetFileInfo_LamK(-7);
     TString tResultsDate = tFileInfo.resultsDate;
     TString tDirNameModifierBase1 = tFileInfo.dirNameModifierBase1;
     vector<double> tModifierValues1 = tFileInfo.modifierValues1;
