@@ -252,27 +252,27 @@ FitGenerator* FitSystematicAnalysis::BuildFitGenerator(AnalysisRunType aRunType,
   //----- Set appropriate parameter start values, and limits, to keep fitter from accidentally doing something crazy
   assert(fCentralityType==kMB);  //This will fail otherwise
 
-  tFitGenerator->SetRadiusStartValues({cFitParamValues[fIncludeResidualsType][fAnalysisType][k0010][kRadius], 
-                                       cFitParamValues[fIncludeResidualsType][fAnalysisType][k1030][kRadius], 
-                                       cFitParamValues[fIncludeResidualsType][fAnalysisType][k3050][kRadius]});
+  tFitGenerator->SetRadiusStartValues({cFitParamValues[fIncludeResidualsType][fAnalysisType][k0010][kRadius][kValue], 
+                                       cFitParamValues[fIncludeResidualsType][fAnalysisType][k1030][kRadius][kValue], 
+                                       cFitParamValues[fIncludeResidualsType][fAnalysisType][k3050][kRadius][kValue]});
 
-  if(fAllShareSingleLambdaParam) tFitGenerator->SetLambdaParamStartValue(cFitParamValues[fIncludeResidualsType][fAnalysisType][k0010][kLambda]);
+  if(fAllShareSingleLambdaParam) tFitGenerator->SetLambdaParamStartValue(cFitParamValues[fIncludeResidualsType][fAnalysisType][k0010][kLambda][kValue]);
   else
   {
-    tFitGenerator->SetAllLambdaParamStartValues({cFitParamValues[fIncludeResidualsType][fAnalysisType][k0010][kLambda], 
-                                                 cFitParamValues[fIncludeResidualsType][fConjAnalysisType][k0010][kLambda], 
-                                                 cFitParamValues[fIncludeResidualsType][fAnalysisType][k1030][kLambda], 
-                                                 cFitParamValues[fIncludeResidualsType][fConjAnalysisType][k1030][kLambda], 
-                                                 cFitParamValues[fIncludeResidualsType][fAnalysisType][k3050][kLambda], 
-                                                 cFitParamValues[fIncludeResidualsType][fConjAnalysisType][k3050][kLambda]});
+    tFitGenerator->SetAllLambdaParamStartValues({cFitParamValues[fIncludeResidualsType][fAnalysisType][k0010][kLambda][kValue], 
+                                                 cFitParamValues[fIncludeResidualsType][fConjAnalysisType][k0010][kLambda][kValue], 
+                                                 cFitParamValues[fIncludeResidualsType][fAnalysisType][k1030][kLambda][kValue], 
+                                                 cFitParamValues[fIncludeResidualsType][fConjAnalysisType][k1030][kLambda][kValue], 
+                                                 cFitParamValues[fIncludeResidualsType][fAnalysisType][k3050][kLambda][kValue], 
+                                                 cFitParamValues[fIncludeResidualsType][fConjAnalysisType][k3050][kLambda][kValue]});
   }
 
   if((fAnalysisType==kLamK0 || fAnalysisType==kALamK0) && fIncludeResidualsType == kIncludeNoResiduals) tFitGenerator->SetAllLambdaParamLimits(0.4, 0.6);
   if((fAnalysisType==kLamK0 || fAnalysisType==kALamK0) && fIncludeResidualsType != kIncludeNoResiduals) tFitGenerator->SetAllLambdaParamLimits(0.6, 1.5);
 
-  tFitGenerator->SetScattParamStartValues(cFitParamValues[fIncludeResidualsType][fAnalysisType][k0010][kRef0], 
-                                          cFitParamValues[fIncludeResidualsType][fAnalysisType][k0010][kImf0],
-                                          cFitParamValues[fIncludeResidualsType][fAnalysisType][k0010][kd0]);
+  tFitGenerator->SetScattParamStartValues(cFitParamValues[fIncludeResidualsType][fAnalysisType][k0010][kRef0][kValue], 
+                                          cFitParamValues[fIncludeResidualsType][fAnalysisType][k0010][kImf0][kValue],
+                                          cFitParamValues[fIncludeResidualsType][fAnalysisType][k0010][kd0][kValue]);
 
   if(fFixD0) tFitGenerator->SetScattParamStartValue(0., kd0, true);
   //----------------------------------------------------------------------------------------------------------------

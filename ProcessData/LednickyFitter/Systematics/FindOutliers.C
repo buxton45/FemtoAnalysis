@@ -339,8 +339,8 @@ int main(int argc, char **argv)
   bool ApplyNonFlatBackgroundCorrection = true;
   NonFlatBgdFitType tNonFlatBgdFitType = kLinear;
 
-  IncludeResidualsType tIncludeResidualsType = kIncludeNoResiduals; 
-  ResPrimMaxDecayType tResPrimMaxDecayType = k5fm;
+  IncludeResidualsType tIncludeResidualsType = kInclude3Residuals; 
+  ResPrimMaxDecayType tResPrimMaxDecayType = k4fm;
   ChargedResidualsType tChargedResidualsType = kUseXiDataAndCoulombOnlyInterp;
 
   bool tFixD0 = false;
@@ -351,8 +351,8 @@ int main(int argc, char **argv)
 
   TString tSystematicsDirectory = "/home/jesse/Analysis/FemtoAnalysis/Results/Systematics/";
 
-  TString tResultsDirectory_cLamK0 = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamK0_20161027/";
-  TString tResultsDirectory_cLamcKch = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_20161027/";
+  TString tResultsDirectory_cLamK0 = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamK0_20171227/";
+  TString tResultsDirectory_cLamcKch = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_20171227/";
 
   //-------------------------------
 

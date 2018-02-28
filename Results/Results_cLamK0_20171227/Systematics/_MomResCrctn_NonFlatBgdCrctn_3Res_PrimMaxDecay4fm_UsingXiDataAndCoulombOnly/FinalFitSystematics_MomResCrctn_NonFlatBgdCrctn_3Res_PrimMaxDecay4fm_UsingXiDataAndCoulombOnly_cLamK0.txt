@@ -1,0 +1,168 @@
+  --------------------------------------------- |   --------------------------------------------- |   --------------------------------------------- | 
+AnalysisType = LamK0                            | AnalysisType = LamK0                            | AnalysisType = LamK0                            | 
+CentralityType = 0-10%                          | CentralityType = 10-30%                         | CentralityType = 30-50%                         | 
+	ParamType = Lambda                      | 	ParamType = Lambda                       | 	ParamType = Lambda                        | 
+		Average = 0.600001              | 		Average = 0.600001               | 		Average = 0.600001                | 
+		Error   = 0.000001              | 		Error   = 0.000001               | 		Error   = 0.000001                | 
+			%Error = 0.000229%      | 			%Error = 0.000229%       | 			%Error = 0.000229%        | 
+                                                |                                                 |                                                 | 
+	ParamType = Radius                      | 	ParamType = Radius                       | 	ParamType = Radius                        | 
+		Average = 2.770400              | 		Average = 2.141143               | 		Average = 1.559664                | 
+		Error   = 0.088554              | 		Error   = 0.070218               | 		Error   = 0.055305                | 
+			%Error = 3.196427%      | 			%Error = 3.279474%       | 			%Error = 3.545974%        | 
+                                                |                                                 |                                                 | 
+	ParamType = Ref0                        | 	ParamType = Ref0                         | 	ParamType = Ref0                          | 
+		Average = -0.314845             | 		Average = -0.314845              | 		Average = -0.314845               | 
+		Error   = 0.016117              | 		Error   = 0.016117               | 		Error   = 0.016117                | 
+			%Error = 5.119174%      | 			%Error = 5.119174%       | 			%Error = 5.119174%        | 
+                                                |                                                 |                                                 | 
+	ParamType = Imf0                        | 	ParamType = Imf0                         | 	ParamType = Imf0                          | 
+		Average = 0.200803              | 		Average = 0.200803               | 		Average = 0.200803                | 
+		Error   = 0.018276              | 		Error   = 0.018276               | 		Error   = 0.018276                | 
+			%Error = 9.101243%      | 			%Error = 9.101243%       | 			%Error = 9.101243%        | 
+                                                |                                                 |                                                 | 
+	ParamType = d0                          | 	ParamType = d0                           | 	ParamType = d0                            | 
+		Average = 2.354112              | 		Average = 2.354112               | 		Average = 2.354112                | 
+		Error   = 0.118838              | 		Error   = 0.118838               | 		Error   = 0.118838                | 
+			%Error = 5.048116%      | 			%Error = 5.048116%       | 			%Error = 5.048116%        | 
+                                                |                                                 |                                                 | 
+  --------------------------------------------- |   --------------------------------------------- |   --------------------------------------------- | 
+AnalysisType = ALamK0                           | AnalysisType = ALamK0                           | AnalysisType = ALamK0                           | 
+CentralityType = 0-10%                          | CentralityType = 10-30%                         | CentralityType = 30-50%                         | 
+	ParamType = Lambda                      | 	ParamType = Lambda                       | 	ParamType = Lambda                        | 
+		Average = 0.600001              | 		Average = 0.600001               | 		Average = 0.600001                | 
+		Error   = 0.000001              | 		Error   = 0.000001               | 		Error   = 0.000001                | 
+			%Error = 0.000229%      | 			%Error = 0.000229%       | 			%Error = 0.000229%        | 
+                                                |                                                 |                                                 | 
+	ParamType = Radius                      | 	ParamType = Radius                       | 	ParamType = Radius                        | 
+		Average = 2.770400              | 		Average = 2.141143               | 		Average = 1.559664                | 
+		Error   = 0.088554              | 		Error   = 0.070218               | 		Error   = 0.055305                | 
+			%Error = 3.196427%      | 			%Error = 3.279474%       | 			%Error = 3.545974%        | 
+                                                |                                                 |                                                 | 
+	ParamType = Ref0                        | 	ParamType = Ref0                         | 	ParamType = Ref0                          | 
+		Average = -0.314845             | 		Average = -0.314845              | 		Average = -0.314845               | 
+		Error   = 0.016117              | 		Error   = 0.016117               | 		Error   = 0.016117                | 
+			%Error = 5.119174%      | 			%Error = 5.119174%       | 			%Error = 5.119174%        | 
+                                                |                                                 |                                                 | 
+	ParamType = Imf0                        | 	ParamType = Imf0                         | 	ParamType = Imf0                          | 
+		Average = 0.200803              | 		Average = 0.200803               | 		Average = 0.200803                | 
+		Error   = 0.018276              | 		Error   = 0.018276               | 		Error   = 0.018276                | 
+			%Error = 9.101243%      | 			%Error = 9.101243%       | 			%Error = 9.101243%        | 
+                                                |                                                 |                                                 | 
+	ParamType = d0                          | 	ParamType = d0                           | 	ParamType = d0                            | 
+		Average = 2.354112              | 		Average = 2.354112               | 		Average = 2.354112                | 
+		Error   = 0.118838              | 		Error   = 0.118838               | 		Error   = 0.118838                | 
+			%Error = 5.048116%      | 			%Error = 5.048116%       | 			%Error = 5.048116%        | 
+                                                |                                                 |                                                 | 
+  --------------------------------------------- |   --------------------------------------------- |   --------------------------------------------- | 
+AnalysisType = LamKchP                          | AnalysisType = LamKchP                          | AnalysisType = LamKchP                          | 
+CentralityType = 0-10%                          | CentralityType = 10-30%                         | CentralityType = 30-50%                         | 
+	ParamType = Lambda                      | 	ParamType = Lambda                       | 	ParamType = Lambda                        | 
+		Average = 1.175836              | 		Average = 1.394568               | 		Average = 1.149991                | 
+		Error   = 0.122011              | 		Error   = 0.126256               | 		Error   = 0.073443                | 
+			%Error = 10.376537%     | 			%Error = 9.053402%       | 			%Error = 6.386434%        | 
+                                                |                                                 |                                                 | 
+	ParamType = Radius                      | 	ParamType = Radius                       | 	ParamType = Radius                        | 
+		Average = 4.795706              | 		Average = 4.549892               | 		Average = 3.274963                | 
+		Error   = 0.274375              | 		Error   = 0.244577               | 		Error   = 0.053099                | 
+			%Error = 5.721267%      | 			%Error = 5.375435%       | 			%Error = 1.621354%        | 
+                                                |                                                 |                                                 | 
+	ParamType = Ref0                        | 	ParamType = Ref0                         | 	ParamType = Ref0                          | 
+		Average = -1.326283             | 		Average = -1.326283              | 		Average = -1.326283               | 
+		Error   = 0.034185              | 		Error   = 0.034185               | 		Error   = 0.034185                | 
+			%Error = 2.577536%      | 			%Error = 2.577536%       | 			%Error = 2.577536%        | 
+                                                |                                                 |                                                 | 
+	ParamType = Imf0                        | 	ParamType = Imf0                         | 	ParamType = Imf0                          | 
+		Average = 0.522177              | 		Average = 0.522177               | 		Average = 0.522177                | 
+		Error   = 0.046133              | 		Error   = 0.046133               | 		Error   = 0.046133                | 
+			%Error = 8.834777%      | 			%Error = 8.834777%       | 			%Error = 8.834777%        | 
+                                                |                                                 |                                                 | 
+	ParamType = d0                          | 	ParamType = d0                           | 	ParamType = d0                            | 
+		Average = 1.132733              | 		Average = 1.132733               | 		Average = 1.132733                | 
+		Error   = 0.047831              | 		Error   = 0.047831               | 		Error   = 0.047831                | 
+			%Error = 4.222640%      | 			%Error = 4.222640%       | 			%Error = 4.222640%        | 
+                                                |                                                 |                                                 | 
+  --------------------------------------------- |   --------------------------------------------- |   --------------------------------------------- | 
+AnalysisType = ALamKchM                         | AnalysisType = ALamKchM                         | AnalysisType = ALamKchM                         | 
+CentralityType = 0-10%                          | CentralityType = 10-30%                         | CentralityType = 30-50%                         | 
+	ParamType = Lambda                      | 	ParamType = Lambda                       | 	ParamType = Lambda                        | 
+		Average = 1.156737              | 		Average = 1.186672               | 		Average = 1.079690                | 
+		Error   = 0.123525              | 		Error   = 0.112695               | 		Error   = 0.030436                | 
+			%Error = 10.678780%     | 			%Error = 9.496741%       | 			%Error = 2.818950%        | 
+                                                |                                                 |                                                 | 
+	ParamType = Radius                      | 	ParamType = Radius                       | 	ParamType = Radius                        | 
+		Average = 4.795706              | 		Average = 4.549892               | 		Average = 3.274963                | 
+		Error   = 0.274375              | 		Error   = 0.244577               | 		Error   = 0.053099                | 
+			%Error = 5.721267%      | 			%Error = 5.375435%       | 			%Error = 1.621354%        | 
+                                                |                                                 |                                                 | 
+	ParamType = Ref0                        | 	ParamType = Ref0                         | 	ParamType = Ref0                          | 
+		Average = -1.326283             | 		Average = -1.326283              | 		Average = -1.326283               | 
+		Error   = 0.034185              | 		Error   = 0.034185               | 		Error   = 0.034185                | 
+			%Error = 2.577536%      | 			%Error = 2.577536%       | 			%Error = 2.577536%        | 
+                                                |                                                 |                                                 | 
+	ParamType = Imf0                        | 	ParamType = Imf0                         | 	ParamType = Imf0                          | 
+		Average = 0.522177              | 		Average = 0.522177               | 		Average = 0.522177                | 
+		Error   = 0.046133              | 		Error   = 0.046133               | 		Error   = 0.046133                | 
+			%Error = 8.834777%      | 			%Error = 8.834777%       | 			%Error = 8.834777%        | 
+                                                |                                                 |                                                 | 
+	ParamType = d0                          | 	ParamType = d0                           | 	ParamType = d0                            | 
+		Average = 1.132733              | 		Average = 1.132733               | 		Average = 1.132733                | 
+		Error   = 0.047831              | 		Error   = 0.047831               | 		Error   = 0.047831                | 
+			%Error = 4.222640%      | 			%Error = 4.222640%       | 			%Error = 4.222640%        | 
+                                                |                                                 |                                                 | 
+  --------------------------------------------- |   --------------------------------------------- |   --------------------------------------------- | 
+AnalysisType = LamKchM                          | AnalysisType = LamKchM                          | AnalysisType = LamKchM                          | 
+CentralityType = 0-10%                          | CentralityType = 10-30%                         | CentralityType = 30-50%                         | 
+	ParamType = Lambda                      | 	ParamType = Lambda                       | 	ParamType = Lambda                        | 
+		Average = 1.763075              | 		Average = 1.319248               | 		Average = 1.423751                | 
+		Error   = 0.210228              | 		Error   = 0.160615               | 		Error   = 0.292827                | 
+			%Error = 11.923948%     | 			%Error = 12.174743%      | 			%Error = 20.567324%       | 
+                                                |                                                 |                                                 | 
+	ParamType = Radius                      | 	ParamType = Radius                       | 	ParamType = Radius                        | 
+		Average = 5.846924              | 		Average = 4.488186               | 		Average = 2.665271                | 
+		Error   = 0.442192              | 		Error   = 0.340262               | 		Error   = 0.295002                | 
+			%Error = 7.562818%      | 			%Error = 7.581290%       | 			%Error = 11.068374%       | 
+                                                |                                                 |                                                 | 
+	ParamType = Ref0                        | 	ParamType = Ref0                         | 	ParamType = Ref0                          | 
+		Average = 0.360728              | 		Average = 0.360728               | 		Average = 0.360728                | 
+		Error   = 0.062672              | 		Error   = 0.062672               | 		Error   = 0.062672                | 
+			%Error = 17.373693%     | 			%Error = 17.373693%      | 			%Error = 17.373693%       | 
+                                                |                                                 |                                                 | 
+	ParamType = Imf0                        | 	ParamType = Imf0                         | 	ParamType = Imf0                          | 
+		Average = 0.448516              | 		Average = 0.448516               | 		Average = 0.448516                | 
+		Error   = 0.045522              | 		Error   = 0.045522               | 		Error   = 0.045522                | 
+			%Error = 10.149443%     | 			%Error = 10.149443%      | 			%Error = 10.149443%       | 
+                                                |                                                 |                                                 | 
+	ParamType = d0                          | 	ParamType = d0                           | 	ParamType = d0                            | 
+		Average = -5.467931             | 		Average = -5.467931              | 		Average = -5.467931               | 
+		Error   = 0.687345              | 		Error   = 0.687345               | 		Error   = 0.687345                | 
+			%Error = 12.570469%     | 			%Error = 12.570469%      | 			%Error = 12.570469%       | 
+                                                |                                                 |                                                 | 
+  --------------------------------------------- |   --------------------------------------------- |   --------------------------------------------- | 
+AnalysisType = ALamKchP                         | AnalysisType = ALamKchP                         | AnalysisType = ALamKchP                         | 
+CentralityType = 0-10%                          | CentralityType = 10-30%                         | CentralityType = 30-50%                         | 
+	ParamType = Lambda                      | 	ParamType = Lambda                       | 	ParamType = Lambda                        | 
+		Average = 1.715604              | 		Average = 1.620295               | 		Average = 0.929891                | 
+		Error   = 0.219486              | 		Error   = 0.192240               | 		Error   = 0.142216                | 
+			%Error = 12.793513%     | 			%Error = 11.864490%      | 			%Error = 15.293864%       | 
+                                                |                                                 |                                                 | 
+	ParamType = Radius                      | 	ParamType = Radius                       | 	ParamType = Radius                        | 
+		Average = 5.846924              | 		Average = 4.488186               | 		Average = 2.665271                | 
+		Error   = 0.442192              | 		Error   = 0.340262               | 		Error   = 0.295002                | 
+			%Error = 7.562818%      | 			%Error = 7.581290%       | 			%Error = 11.068374%       | 
+                                                |                                                 |                                                 | 
+	ParamType = Ref0                        | 	ParamType = Ref0                         | 	ParamType = Ref0                          | 
+		Average = 0.360728              | 		Average = 0.360728               | 		Average = 0.360728                | 
+		Error   = 0.062672              | 		Error   = 0.062672               | 		Error   = 0.062672                | 
+			%Error = 17.373693%     | 			%Error = 17.373693%      | 			%Error = 17.373693%       | 
+                                                |                                                 |                                                 | 
+	ParamType = Imf0                        | 	ParamType = Imf0                         | 	ParamType = Imf0                          | 
+		Average = 0.448516              | 		Average = 0.448516               | 		Average = 0.448516                | 
+		Error   = 0.045522              | 		Error   = 0.045522               | 		Error   = 0.045522                | 
+			%Error = 10.149443%     | 			%Error = 10.149443%      | 			%Error = 10.149443%       | 
+                                                |                                                 |                                                 | 
+	ParamType = d0                          | 	ParamType = d0                           | 	ParamType = d0                            | 
+		Average = -5.467931             | 		Average = -5.467931              | 		Average = -5.467931               | 
+		Error   = 0.687345              | 		Error   = 0.687345               | 		Error   = 0.687345                | 
+			%Error = 12.570469%     | 			%Error = 12.570469%      | 			%Error = 12.570469%       | 
+                                                |                                                 |                                                 | 

@@ -454,6 +454,18 @@ void CoulombFitGenerator::AddTextCorrectionInfo(CanvasPartition *aCanPart, int a
 }
 
 //________________________________________________________________________________________________________________
+td1dVec CoulombFitGenerator::GetSystErrs(IncludeResidualsType aIncResType, AnalysisType aAnType, CentralityType aCentType)
+{
+  td1dVec tReturnVec = {cFitParamValues[aIncResType][aAnType][aCentType][kLambda][kSystErr], 
+                        cFitParamValues[aIncResType][aAnType][aCentType][kRadius][kSystErr], 
+                        cFitParamValues[aIncResType][aAnType][aCentType][kRef0][kSystErr], 
+                        cFitParamValues[aIncResType][aAnType][aCentType][kImf0][kSystErr], 
+                        cFitParamValues[aIncResType][aAnType][aCentType][kd0][kSystErr]};
+
+  return tReturnVec;
+}
+
+//________________________________________________________________________________________________________________
 void CoulombFitGenerator::DrawSingleKStarCf(TPad* aPad, int aPairAnNumber, double aYmin, double aYmax, double aXmin, double aXmax, int aMarkerColor, TString aOption, int aMarkerStyle)
 {
   aPad->cd();
@@ -665,7 +677,7 @@ TCanvas* CoulombFitGenerator::DrawKStarCfswFits()
 */
 
 //________________________________________________________________________________________________________________
-TCanvas* CoulombFitGenerator::DrawKStarCfswFits(bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, NonFlatBgdFitType aNonFlatBgdFitType, bool aSaveImage, bool aDrawSysErrors, bool aZoomROP)
+TCanvas* CoulombFitGenerator::DrawKStarCfswFits(IncludeResidualsType aIncResType, bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, NonFlatBgdFitType aNonFlatBgdFitType, bool aSaveImage, bool aDrawSysErrors, bool aZoomROP)
 {
   TString tCanvasName = TString("canKStarCfwFits");
   if(fGeneratorType==kPairwConj) tCanvasName += TString(cAnalysisBaseTags[fPairType]) + TString("wConj");
@@ -802,13 +814,14 @@ TCanvas* CoulombFitGenerator::DrawKStarCfswFits(bool aMomResCorrectFit, bool aNo
       else CreateParamInitValuesText(tCanPart,i,j,0.25,0.20,0.15,0.45,43,10);
       AddTextCorrectionInfo(tCanPart,i,j,aMomResCorrectFit,aNonFlatBgdCorrectFit,0.25,0.08,0.15,0.10,43,7.5);
 */
-      const double* tSysErrors = cSysErrors[fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetAnalysisType()][fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetCentralityType()];
-
+      td1dVec tSysErrors = GetSystErrs(aIncResType, 
+                                       fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetAnalysisType(), 
+                                       fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetCentralityType());
 //      bool bDrawAll = true;
 
       bool bDrawAll = false;
       if(i==0 && j==0) bDrawAll = true;
-      CreateParamFinalValuesText(tCanPart,i,j,(TF1*)fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetPrimaryFit(),tSysErrors,0.73,0.09,0.25,0.53,43,12.0,bDrawAll);
+      CreateParamFinalValuesText(tCanPart,i,j,(TF1*)fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetPrimaryFit(),tSysErrors.data(),0.73,0.09,0.25,0.53,43,12.0,bDrawAll);
 /*
       bool bDrawText1 = true;
       bool bDrawText2 = false;

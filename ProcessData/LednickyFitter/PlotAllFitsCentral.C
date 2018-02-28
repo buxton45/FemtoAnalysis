@@ -5,7 +5,7 @@ class FitGenerator;
 class CanvasPartition;
 
 //________________________________________________________________________________________________________________
-void CreateParamText(CanvasPartition *aCanPart, int aNx, int aNy, TF1* aFit, const double* aSysErrors, double aTextXmin, double aTextYmin, double aTextWidth, double aTextHeight, double aTextFont, double aTextSize, bool aDrawAll, double aChi2, double aNDF)
+void CreateParamText(CanvasPartition *aCanPart, int aNx, int aNy, TF1* aFit, const td1dVec &aSysErrors, double aTextXmin, double aTextYmin, double aTextWidth, double aTextHeight, double aTextFont, double aTextSize, bool aDrawAll, double aChi2, double aNDF)
 {
   int tNx=2, tNy=3;
   int tPosition = aNx + aNy*tNx;
@@ -57,7 +57,7 @@ void CreateParamText(CanvasPartition *aCanPart, int aNx, int aNy, TF1* aFit, con
 
 
 //________________________________________________________________________________________________________________
-TCanvas* DrawAll(vector<LednickyFitter*> &aFitters, bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, NonFlatBgdFitType aNonFlatBgdFitType, FitType aFitType, bool aSaveImage, bool aDrawSysErrors, bool aZoomROP, double* aChi2All, double* aNDFAll)
+TCanvas* DrawAll(vector<LednickyFitter*> &aFitters, IncludeResidualsType aIncResType, bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, NonFlatBgdFitType aNonFlatBgdFitType, FitType aFitType, bool aSaveImage, bool aDrawSysErrors, bool aZoomROP, double* aChi2All, double* aNDFAll)
 {
   TString tCanvasName = TString("canKStarCfwFits");
   if(!aZoomROP) tCanvasName += TString("UnZoomed");
@@ -158,7 +158,9 @@ TCanvas* DrawAll(vector<LednickyFitter*> &aFitters, bool aMomResCorrectFit, bool
         tCanPart->AddPadPaveText(tkTInfo,i,j);
       }
 
-      const double* tSysErrors = cSysErrors[aFitters[j]->GetFitSharedAnalyses()->GetFitPairAnalysis(i)->GetAnalysisType()][aFitters[j]->GetFitSharedAnalyses()->GetFitPairAnalysis(i)->GetCentralityType()];
+      td1dVec tSysErrors = FitGenerator::GetSystErrs(aIncResType, 
+                                                     aFitters[j]->GetFitSharedAnalyses()->GetFitPairAnalysis(i)->GetAnalysisType(), 
+                                                     aFitters[j]->GetFitSharedAnalyses()->GetFitPairAnalysis(i)->GetCentralityType());
 
       bool bDrawAll = false;
       if(i==0) bDrawAll = true;
@@ -315,7 +317,7 @@ int main(int argc, char **argv)
   }
 
 
-  TCanvas* tCan = DrawAll(tVecOfLednickyFit, ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, tNonFlatBgdFitType, tFitType, false, true, true, tOrderedChi2All, tOrderedNDFAll);
+  TCanvas* tCan = DrawAll(tVecOfLednickyFit, tIncludeResidualsType, ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, tNonFlatBgdFitType, tFitType, false, true, true, tOrderedChi2All, tOrderedNDFAll);
   if(SaveImages)
   {
     TString tSaveName = "AllFitsCentral";

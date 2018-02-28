@@ -14,6 +14,7 @@
 
 #include "Types.h"
 #include "Types_LambdaValues.h"
+#include "Types_FitParamValues.h"
 
 #include <iostream>
 #include <vector>
@@ -160,6 +161,107 @@ struct FitInfo
     radiusSysErrVec = vector<double>{radiusSysErr1, radiusSysErr2, radiusSysErr3};
   }
 
+
+  FitInfo(TString aDescriptor, 
+          AnalysisType aAnalysisType, AnalysisType aConjAnType, IncludeResidualsType aIncResType, 
+          bool aFreeLambda, bool aFreeRadii, bool aFreeD0, bool aAll10ResidualsUsed,
+          double aChi2, int aNDF,
+          Color_t aMarkerColor, int aMarkerStyle)
+  {
+    descriptor = aDescriptor;
+    analysisType = aAnalysisType;
+
+    freeLambda = aFreeLambda;
+    freeRadii = aFreeRadii;
+    freeD0 = aFreeD0;
+    all10ResidualsUsed = aAll10ResidualsUsed;
+
+    //-------------------------------------------------------------------------------
+
+    double lambda1a = cFitParamValues[aIncResType][aAnalysisType][k0010][kLambda][kValue];
+    double lambda2a = cFitParamValues[aIncResType][aAnalysisType][k1030][kLambda][kValue];
+    double lambda3a = cFitParamValues[aIncResType][aAnalysisType][k3050][kLambda][kValue];
+
+    double lambda1b = cFitParamValues[aIncResType][aConjAnType][k0010][kLambda][kValue];
+    double lambda2b = cFitParamValues[aIncResType][aConjAnType][k1030][kLambda][kValue];
+    double lambda3b = cFitParamValues[aIncResType][aConjAnType][k3050][kLambda][kValue];
+
+    lambda1 = 0.5*(lambda1a + lambda1b);
+    lambda2 = 0.5*(lambda2a + lambda2b);
+    lambda3 = 0.5*(lambda3a + lambda3b);
+
+
+    radius1 = cFitParamValues[aIncResType][aAnalysisType][k0010][kRadius][kValue];
+    radius2 = cFitParamValues[aIncResType][aAnalysisType][k1030][kRadius][kValue];
+    radius3 = cFitParamValues[aIncResType][aAnalysisType][k3050][kRadius][kValue];
+
+    ref0 = cFitParamValues[aIncResType][aAnalysisType][k0010][kRef0][kValue];
+    imf0 = cFitParamValues[aIncResType][aAnalysisType][k0010][kImf0][kValue];
+    d0 =   cFitParamValues[aIncResType][aAnalysisType][k0010][kd0][kValue];
+
+    //--------------------------------------
+
+    double lambdaStatErr1a = cFitParamValues[aIncResType][aAnalysisType][k0010][kLambda][kStatErr];
+    double lambdaStatErr2a = cFitParamValues[aIncResType][aAnalysisType][k1030][kLambda][kStatErr];
+    double lambdaStatErr3a = cFitParamValues[aIncResType][aAnalysisType][k3050][kLambda][kStatErr];
+
+    double lambdaStatErr1b = cFitParamValues[aIncResType][aConjAnType][k0010][kLambda][kStatErr];
+    double lambdaStatErr2b = cFitParamValues[aIncResType][aConjAnType][k1030][kLambda][kStatErr];
+    double lambdaStatErr3b = cFitParamValues[aIncResType][aConjAnType][k3050][kLambda][kStatErr];
+
+    lambdaStatErr1 = 0.5*(lambdaStatErr1a + lambdaStatErr1b);
+    lambdaStatErr2 = 0.5*(lambdaStatErr2a + lambdaStatErr2b);
+    lambdaStatErr3 = 0.5*(lambdaStatErr3a + lambdaStatErr3b);
+
+
+    radiusStatErr1 = cFitParamValues[aIncResType][aAnalysisType][k0010][kRadius][kStatErr];
+    radiusStatErr2 = cFitParamValues[aIncResType][aAnalysisType][k1030][kRadius][kStatErr];
+    radiusStatErr3 = cFitParamValues[aIncResType][aAnalysisType][k3050][kRadius][kStatErr];
+
+    ref0StatErr = cFitParamValues[aIncResType][aAnalysisType][k0010][kRef0][kStatErr];
+    imf0StatErr = cFitParamValues[aIncResType][aAnalysisType][k0010][kImf0][kStatErr];
+    d0StatErr =   cFitParamValues[aIncResType][aAnalysisType][k0010][kd0][kStatErr];
+
+    //--------------------------------------
+
+    double lambdaSysErr1a = cFitParamValues[aIncResType][aAnalysisType][k0010][kLambda][kSystErr];
+    double lambdaSysErr2a = cFitParamValues[aIncResType][aAnalysisType][k1030][kLambda][kSystErr];
+    double lambdaSysErr3a = cFitParamValues[aIncResType][aAnalysisType][k3050][kLambda][kSystErr];
+
+    double lambdaSysErr1b = cFitParamValues[aIncResType][aConjAnType][k0010][kLambda][kSystErr];
+    double lambdaSysErr2b = cFitParamValues[aIncResType][aConjAnType][k1030][kLambda][kSystErr];
+    double lambdaSysErr3b = cFitParamValues[aIncResType][aConjAnType][k3050][kLambda][kSystErr];
+
+    lambdaSysErr1 = 0.5*(lambdaSysErr1a + lambdaSysErr1b);
+    lambdaSysErr2 = 0.5*(lambdaSysErr2a + lambdaSysErr2b);
+    lambdaSysErr3 = 0.5*(lambdaSysErr3a + lambdaSysErr3b);
+
+
+    radiusSysErr1 = cFitParamValues[aIncResType][aAnalysisType][k0010][kRadius][kSystErr];
+    radiusSysErr2 = cFitParamValues[aIncResType][aAnalysisType][k1030][kRadius][kSystErr];
+    radiusSysErr3 = cFitParamValues[aIncResType][aAnalysisType][k3050][kRadius][kSystErr];
+
+    ref0SysErr = cFitParamValues[aIncResType][aAnalysisType][k0010][kRef0][kSystErr];
+    imf0SysErr = cFitParamValues[aIncResType][aAnalysisType][k0010][kImf0][kSystErr];
+    d0SysErr =   cFitParamValues[aIncResType][aAnalysisType][k0010][kd0][kSystErr];
+
+    //-------------------------------------------------------------------------------
+
+    chi2 = aChi2;
+    ndf = aNDF;
+
+    markerColor = aMarkerColor;
+    markerStyle = aMarkerStyle;
+
+    //-------------------------
+    lambdaVec = vector<double>{lambda1, lambda2, lambda3};
+    radiusVec = vector<double>{radius1, radius2, radius3};
+    lambdaStatErrVec = vector<double>{lambdaStatErr1, lambdaStatErr2, lambdaStatErr3};
+    radiusStatErrVec = vector<double>{radiusStatErr1, radiusStatErr2, radiusStatErr3};
+    lambdaSysErrVec = vector<double>{lambdaSysErr1, lambdaSysErr2, lambdaSysErr3};
+    radiusSysErrVec = vector<double>{radiusSysErr1, radiusSysErr2, radiusSysErr3};
+  }
+
 };
 
 
@@ -187,59 +289,9 @@ struct FitInfo
 
   //--------------- 10 Residuals ----------
   const FitInfo tFitInfo1a_LamKchP = FitInfo(TString("FreeRadii_FreeD0_10Res"), 
-                                       kLamKchP,
+                                       kLamKchP, kALamKchM, kInclude10Residuals, 
                                        true, true, true, true, 
-/*
-                                       //ResPrimMaxDecayType = k5fm (20161027)
-                                       0.5*(0.94+0.93), 0.5*(0.36+0.35), 0.5*(0.20+0.22),
-                                       0.5*(1.17+0.99), 0.5*(0.51+0.43), 0.5*(0.22+0.16),
-                                       0.5*(1.02+0.97), 0.5*(0.30+0.29), 0.5*(0.28+0.11),
-
-                                       4.95, 0.91, 0.43,
-                                       4.78, 0.98, 0.44,
-                                       3.57, 0.53, 0.34,
-
-                                      -1.53, 0.39, 0.35,
-                                       0.66, 0.41, 0.18,
-                                       1.13, 0.79, 0.65,
-
-                                       423.4,
-                                       336,
-*/
-/*
-                                       //ResPrimMaxDecayType = k4fm (20161027)
-                                       0.5*(1.11+1.10), 0.5*(0.40+0.40), 0.5*(0.20+0.22),
-                                       0.5*(1.36+1.14), 0.5*(0.58+0.49), 0.5*(0.22+0.16),
-                                       0.5*(1.09+1.04), 0.5*(0.31+0.29), 0.5*(0.28+0.11),
-
-                                       5.15, 0.92, 0.43,
-                                       4.91, 1.01, 0.44,
-                                       3.53, 0.52, 0.34,
-
-                                      -1.58, 0.36, 0.35,
-                                       0.66, 0.42, 0.18,
-                                       1.13, 0.74, 0.65,
-
-                                       423.7,
-                                       336,
-*/
-
-                                       //ResPrimMaxDecayType = k4fm (20171227)
-                                       0.5*(1.51+1.52), 0.5*(0.56+0.58), 0.5*(0.20+0.22),
-                                       0.5*(1.47+1.28), 0.5*(0.55+0.47), 0.5*(0.22+0.16),
-                                       0.5*(1.10+1.06), 0.5*(0.30+0.28), 0.5*(0.28+0.11),
-
-                                       5.92, 1.08, 0.43,
-                                       4.98, 0.86, 0.44,
-                                       3.38, 0.45, 0.34,
-
-                                      -1.38, 0.32, 0.35,
-                                       0.61, 0.34, 0.18,
-                                       0.97, 0.66, 0.65,
-
-                                       411.3,
-                                       336,
-
+                                       411.3, 336,
                                        tColor1, tMarkerStyleA1);
 
   const FitInfo tFitInfo2a_LamKchP = FitInfo(TString("FreeRadii_FixedD0_10Res"), 
@@ -451,58 +503,9 @@ struct FitInfo
 
   //--------------- 3 Residuals ----------
   const FitInfo tFitInfo1b_LamKchP = FitInfo(TString("FreeRadii_FreeD0_3Res"), 
-                                       kLamKchP,
+                                       kLamKchP, kALamKchM, kInclude3Residuals, 
                                        true, true, true, false, 
-/*
-                                       //ResPrimMaxDecayType = k5fm (20161027)
-                                       0.5*(0.82+0.81), 0.5*(0.30+0.30), 0.5*(0.18+0.20),
-                                       0.5*(1.08+0.90), 0.5*(0.45+0.37), 0.5*(0.22+0.16),
-                                       0.5*(1.02+0.97), 0.5*(0.30+0.29), 0.5*(0.31+0.13),
-
-                                       4.42, 0.83, 0.50,
-                                       4.36, 0.88, 0.46,
-                                       3.40, 0.50, 0.38,
-
-                                      -1.25, 0.32, 0.37,
-                                       0.51, 0.34, 0.21,
-                                       1.11, 0.52, 0.79,
-
-                                       426.4,
-                                       336,
-*/
-/*
-                                       //ResPrimMaxDecayType = k4fm (20161027)
-                                       0.5*(1.11+1.10), 0.5*(0.40+0.40), 0.5*(0.18+0.20),
-                                       0.5*(1.43+1.19), 0.5*(0.59+0.49), 0.5*(0.22+0.16),
-                                       0.5*(1.18+1.12), 0.5*(0.32+0.31), 0.5*(0.31+0.13),
-
-                                       4.64, 0.90, 0.50,
-                                       4.54, 0.93, 0.46,
-                                       3.31, 0.45, 0.38,
-
-                                      -1.32, 0.29, 0.37,
-                                       0.50, 0.33, 0.21,
-                                       1.13, 0.48, 0.79,
-
-                                       427.8,
-                                       336,
-*/
-                                       //ResPrimMaxDecayType = k4fm (20171227)
-                                       0.5*(1.53+1.53), 0.5*(0.56+0.57), 0.5*(0.18+0.20),
-                                       0.5*(1.62+1.39), 0.5*(0.58+0.49), 0.5*(0.22+0.16),
-                                       0.5*(1.21+1.17), 0.5*(0.31+0.30), 0.5*(0.31+0.13),
-
-                                       5.43, 1.09, 0.50,
-                                       4.75, 0.82, 0.46,
-                                       3.22, 0.41, 0.38,
-
-                                      -1.16, 0.25, 0.37,
-                                       0.51, 0.28, 0.21,
-                                       1.08, 0.43, 0.79,
-
-                                       415.1,
-                                       336,
-
+                                       415.1, 336,
                                        tColor1, tMarkerStyleB1);
 
   const FitInfo tFitInfo2b_LamKchP = FitInfo(TString("FreeRadii_FixedD0_3Res"), 
@@ -719,58 +722,9 @@ struct FitInfo
 
   //--------------- 10 Residuals ----------
   const FitInfo tFitInfo1a_LamKchM = FitInfo(TString("FreeRadii_FreeD0_10Res"), 
-                                       kLamKchM,
+                                       kLamKchM, kALamKchP, kInclude10Residuals, 
                                        true, true, true, true, 
-/*
-                                       //ResPrimMaxDecayType = k5fm (20161027)
-                                       0.5*(1.48+1.48), 0.5*(0.76+0.73), 0.5*(0.31+0.30),
-                                       0.5*(1.13+1.41), 0.5*(0.52+0.64), 0.5*(0.28+0.29),
-                                       0.5*(1.10+0.78), 0.5*(0.77+0.38), 0.5*(0.37+0.25),
-
-                                       6.22, 1.60, 0.96,
-                                       4.84, 1.17, 0.76,
-                                       2.86, 0.83, 0.45,
-
-                                       0.45, 0.23, 0.16,
-                                       0.52, 0.22, 0.11,
-                                      -4.78, 2.72, 1.88,
-
-                                       285.7,
-                                       288,
-*/
-/*
-                                       //ResPrimMaxDecayType = k4fm (20161027)
-                                       0.5*(1.61+1.60), 0.5*(0.83+0.78), 0.5*(0.31+0.30),
-                                       0.5*(1.22+1.53), 0.5*(0.56+0.69), 0.5*(0.28+0.29),
-                                       0.5*(1.28+0.86), 0.5*(0.92+0.41), 0.5*(0.37+0.25),
-
-                                       6.25, 1.56, 0.96,
-                                       4.85, 1.14, 0.76,
-                                       2.89, 0.80, 0.45,
-
-                                       0.48, 0.24, 0.16,
-                                       0.53, 0.24, 0.11,
-                                      -4.70, 2.80, 1.88,
-
-                                       286.2,
-                                       288,
-*/
-                                       //ResPrimMaxDecayType = k4fm (20171227)
-                                       0.5*(1.72+1.72), 0.5*(0.61+0.58), 0.5*(0.31+0.30),
-                                       0.5*(1.24+1.33), 0.5*(0.43+0.46), 0.5*(0.28+0.29),
-                                       0.5*(1.34+0.84), 0.5*(0.75+0.31), 0.5*(0.37+0.25),
-
-                                       6.54, 1.22, 0.96,
-                                       4.90, 0.94, 0.76,
-                                       3.10, 0.67, 0.45,
-
-                                       0.53, 0.20, 0.16,
-                                       0.57, 0.17, 0.11,
-                                      -4.13, 1.74, 1.88,
-
-                                       282.2,
-                                       288,
-
+                                       282.2, 288,
                                        tColor1, tMarkerStyleA1);
 
   const FitInfo tFitInfo2a_LamKchM = FitInfo(TString("FreeRadii_FixedD0_10Res"), 
@@ -983,58 +937,9 @@ struct FitInfo
 
   //--------------- 3 Residuals ----------
   const FitInfo tFitInfo1b_LamKchM = FitInfo(TString("FreeRadii_FreeD0_3Res"), 
-                                       kLamKchM,
+                                       kLamKchM, kALamKchP, kInclude3Residuals, 
                                        true, true, true, false, 
-/*
-                                       //ResPrimMaxDecayType = k5fm (20161027)
-                                       0.5*(1.53+1.53), 0.5*(0.71+0.68), 0.5*(0.28+0.27),
-                                       0.5*(1.17+1.47), 0.5*(0.49+0.61), 0.5*(0.29+0.27),
-                                       0.5*(1.11+0.78), 0.5*(0.71+0.35), 0.5*(0.41+0.28),
-
-                                       6.03, 1.43, 0.95,
-                                       4.72, 1.08, 0.73,
-                                       2.75, 0.78, 0.44,
-
-                                       0.34, 0.21, 0.14,
-                                       0.43, 0.20, 0.10,
-                                      -5.68, 3.49, 2.13,
-
-                                       284.6,
-                                       288,
-*/
-/*
-                                       //ResPrimMaxDecayType = k4fm (20161027)
-                                       0.5*(1.79+1.78), 0.5*(0.71+0.68), 0.5*(0.28+0.27),
-                                       0.5*(1.37+1.72), 0.5*(0.51+0.63), 0.5*(0.29+0.27),
-                                       0.5*(1.50+0.96), 0.5*(0.93+0.38), 0.5*(0.41+0.28),
-
-                                       5.96, 1.23, 0.95,
-                                       4.67, 0.98, 0.73,
-                                       2.77, 0.71, 0.44,
-
-                                       0.36, 0.21, 0.14,
-                                       0.43, 0.19, 0.10,
-                                      -5.53, 3.25, 2.13,
-
-                                       285.4,
-                                       288,
-*/
-                                       //ResPrimMaxDecayType = k4fm (20171227)
-                                       0.5*(1.91+1.90), 0.5*(0.60+0.57), 0.5*(0.28+0.27),
-                                       0.5*(1.39+1.50), 0.5*(0.43+0.46), 0.5*(0.29+0.27),
-                                       0.5*(1.57+0.92), 0.5*(0.82+0.31), 0.5*(0.41+0.28),
-
-                                       6.25, 1.08, 0.95,
-                                       4.74, 0.86, 0.73,
-                                       2.98, 0.61, 0.44,
-
-                                       0.41, 0.18, 0.14,
-                                       0.47, 0.15, 0.10,
-                                      -4.89, 2.16, 2.13,
-
-                                       281.2,
-                                       288,
-
+                                       281.2, 288,
                                        tColor1, tMarkerStyleB1);
 
   const FitInfo tFitInfo2b_LamKchM = FitInfo(TString("FreeRadii_FixedD0_3Res"), 
@@ -1250,58 +1155,9 @@ struct FitInfo
 
   //--------------- 10 Residuals ----------
   const FitInfo tFitInfo1a_LamK0 = FitInfo(TString("FreeRadii_FreeD0_10Res"), 
-                                       kLamK0,
+                                       kLamK0, kALamK0, kInclude10Residuals, 
                                        true, true, true, true, 
-/*
-                                       //ResPrimMaxDecayType = k5fm (20161027)
-                                       0.5*(0.60+0.60), 0.5*(0.77+0.77), 0.5*(0.18+0.18),
-                                       0.5*(0.60+0.60), 0.5*(0.77+0.77), 0.5*(0.18+0.18),
-                                       0.5*(0.60+0.60), 0.5*(0.77+0.77), 0.5*(0.18+0.18),
-
-                                       2.96, 0.49, 0.37,
-                                       2.29, 0.39, 0.22,
-                                       1.70, 0.30, 0.12,
-
-                                      -0.26, 0.07, 0.21,
-                                       0.17, 0.07, 0.11,
-                                       2.52, 0.70, 0.93,
-
-                                       358.3,
-                                       341,
-*/
-/*
-                                       //ResPrimMaxDecayType = k4fm (20161027)
-                                       0.5*(0.60+0.60), 0.5*(0.69+0.69), 0.5*(0.18+0.18),
-                                       0.5*(0.60+0.60), 0.5*(0.69+0.69), 0.5*(0.18+0.18),
-                                       0.5*(0.60+0.60), 0.5*(0.69+0.69), 0.5*(0.18+0.18),
-
-                                       2.94, 0.50, 0.37,
-                                       2.28, 0.40, 0.22,
-                                       1.71, 0.30, 0.12,
-
-                                      -0.30, 0.09, 0.21,
-                                       0.17, 0.08, 0.11,
-                                       2.30, 0.61, 0.93,
-
-                                       358.4,
-                                       341,
-*/
-                                       //ResPrimMaxDecayType = k4fm (20171227)
-                                       0.5*(0.60+0.60), 0.5*(0.63+0.63), 0.5*(0.18+0.18),
-                                       0.5*(0.60+0.60), 0.5*(0.63+0.63), 0.5*(0.18+0.18),
-                                       0.5*(0.60+0.60), 0.5*(0.63+0.63), 0.5*(0.18+0.18),
-
-                                       2.94, 0.45, 0.37,
-                                       2.39, 0.38, 0.22,
-                                       1.81, 0.29, 0.12,
-
-                                      -0.40, 0.12, 0.21,
-                                       0.17, 0.08, 0.11,
-                                       1.94, 0.47, 0.93,
-
-                                       362.5,
-                                       341,
-
+                                       362.5, 341,
                                        tColor1, tMarkerStyleA1);
 
   const FitInfo tFitInfo2a_LamK0 = FitInfo(TString("FreeRadii_FixedD0_10Res"), 
@@ -1512,58 +1368,9 @@ struct FitInfo
 
   //--------------- 3 Residuals ----------
   const FitInfo tFitInfo1b_LamK0 = FitInfo(TString("FreeRadii_FreeD0_3Res"), 
-                                       kLamK0,
+                                       kLamK0, kALamK0, kInclude3Residuals, 
                                        true, true, true, false, 
-/*
-                                       //ResPrimMaxDecayType = k5fm (20161027)
-                                       0.5*(0.60+0.60), 0.5*(0.74+0.74), 0.5*(0.60+0.60),
-                                       0.5*(0.60+0.60), 0.5*(0.74+0.74), 0.5*(0.60+0.60),
-                                       0.5*(0.60+0.60), 0.5*(0.74+0.74), 0.5*(0.60+0.60),
-
-                                       2.90, 0.52, 0.34,
-                                       2.21, 0.40, 0.22,
-                                       1.64, 0.30, 0.10,
-
-                                      -0.26, 0.06, 0.24,
-                                       0.20, 0.10, 0.13,
-                                       2.65, 0.60, 1.61,
-
-                                       357.7,
-                                       341,
-*/
-/*
-                                       //ResPrimMaxDecayType = k4fm (20161027)
-                                       0.5*(0.60+0.60), 0.5*(0.72+0.72), 0.5*(0.60+0.60),
-                                       0.5*(0.60+0.60), 0.5*(0.72+0.72), 0.5*(0.60+0.60),
-                                       0.5*(0.60+0.60), 0.5*(0.72+0.72), 0.5*(0.60+0.60),
-
-                                       2.84, 0.49, 0.34,
-                                       2.17, 0.39, 0.22,
-                                       1.62, 0.29, 0.10,
-
-                                      -0.32, 0.08, 0.24,
-                                       0.21, 0.11, 0.13,
-                                       2.39, 0.49, 1.61,
-
-                                       357.6,
-                                       341,
-*/
-                                       //ResPrimMaxDecayType = k4fm (20171227)
-                                       0.5*(0.60+0.60), 0.5*(0.63+0.63), 0.5*(0.60+0.60),
-                                       0.5*(0.60+0.60), 0.5*(0.63+0.63), 0.5*(0.60+0.60),
-                                       0.5*(0.60+0.60), 0.5*(0.63+0.63), 0.5*(0.60+0.60),
-
-                                       2.78, 0.45, 0.34,
-                                       2.22, 0.37, 0.22,
-                                       1.68, 0.28, 0.10,
-
-                                      -0.41, 0.10, 0.24,
-                                       0.20, 0.10, 0.13,
-                                       2.08, 0.39, 1.61,
-
-                                       361.8,
-                                       341,
-
+                                       361.8, 341,
                                        tColor1, tMarkerStyleB1);
 
   const FitInfo tFitInfo2b_LamK0 = FitInfo(TString("FreeRadii_FixedD0_3Res"), 

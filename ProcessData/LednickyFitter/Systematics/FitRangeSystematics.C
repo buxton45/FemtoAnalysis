@@ -29,7 +29,7 @@ int main(int argc, char **argv)
   bool bWriteToFile = true;
   bool bSaveImages = true;
 
-  TString tResultsDate = "20161027";
+  TString tResultsDate = "20171227";
 
   if(tAnType==kLamK0) tAllShareSingleLambdaParam = true;
 

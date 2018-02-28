@@ -338,7 +338,7 @@ void FitGenerator::CreateParamFinalValuesText(CanvasPartition *aCanPart, int aNx
 }
 
 //________________________________________________________________________________________________________________
-void FitGenerator::CreateParamFinalValuesText(AnalysisType aAnType, CanvasPartition *aCanPart, int aNx, int aNy, TF1* aFit, const double* aSysErrors, double aTextXmin, double aTextYmin, double aTextWidth, double aTextHeight, double aTextFont, double aTextSize, bool aDrawAll)
+void FitGenerator::CreateParamFinalValuesText(AnalysisType aAnType, CanvasPartition *aCanPart, int aNx, int aNy, TF1* aFit, const td1dVec &aSysErrors, double aTextXmin, double aTextYmin, double aTextWidth, double aTextHeight, double aTextFont, double aTextSize, bool aDrawAll)
 {
   int tNx=0, tNy=0;
   if(fNAnalyses == 6) {tNx=2; tNy=3;}
@@ -417,7 +417,7 @@ void FitGenerator::CreateParamFinalValuesText(AnalysisType aAnType, CanvasPartit
 }
 
 //________________________________________________________________________________________________________________
-void FitGenerator::CreateParamFinalValuesTextTwoColumns(CanvasPartition *aCanPart, int aNx, int aNy, TF1* aFit, const double* aSysErrors, double aText1Xmin, double aText1Ymin, double aText1Width, double aText1Height, bool aDrawText1, double aText2Xmin, double aText2Ymin, double aText2Width, double aText2Height, bool aDrawText2, double aTextFont, double aTextSize)
+void FitGenerator::CreateParamFinalValuesTextTwoColumns(CanvasPartition *aCanPart, int aNx, int aNy, TF1* aFit, const td1dVec &aSysErrors, double aText1Xmin, double aText1Ymin, double aText1Width, double aText1Height, bool aDrawText1, double aText2Xmin, double aText2Ymin, double aText2Width, double aText2Height, bool aDrawText2, double aTextFont, double aTextSize)
 {
   int tNx=0, tNy=0;
   if(fNAnalyses == 6) {tNx=2; tNy=3;}
@@ -665,6 +665,19 @@ TH1D* FitGenerator::Convert1dVecToHist(td1dVec &aCfVec, td1dVec &aKStarBinCenter
 }
 
 
+//________________________________________________________________________________________________________________
+td1dVec FitGenerator::GetSystErrs(IncludeResidualsType aIncResType, AnalysisType aAnType, CentralityType aCentType)
+{
+  td1dVec tReturnVec = {cFitParamValues[aIncResType][aAnType][aCentType][kLambda][kSystErr], 
+                        cFitParamValues[aIncResType][aAnType][aCentType][kRadius][kSystErr], 
+                        cFitParamValues[aIncResType][aAnType][aCentType][kRef0][kSystErr], 
+                        cFitParamValues[aIncResType][aAnType][aCentType][kImf0][kSystErr], 
+                        cFitParamValues[aIncResType][aAnType][aCentType][kd0][kSystErr]};
+
+  return tReturnVec;
+}
+
+
 
 //________________________________________________________________________________________________________________
 void FitGenerator::BuildKStarCfswFitsPanel_PartAn(CanvasPartition* aCanPart, int aAnalysisNumber, BFieldType aBFieldType, int tColumn, int tRow, bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, NonFlatBgdFitType aNonFlatBgdFitType, bool aDrawDataOnTop)
@@ -758,11 +771,12 @@ CanvasPartition* FitGenerator::BuildKStarCfswFitsCanvasPartition_PartAn(BFieldTy
     {
       tAnalysisNumber = j*tNx + i;
       AnalysisType tAnType = fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetAnalysisType();
+      CentralityType tCentType = fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetCentralityType();
 
       BuildKStarCfswFitsPanel_PartAn(tCanPart, tAnalysisNumber, aBFieldType, i, j, aMomResCorrectFit, aNonFlatBgdCorrectFit, aNonFlatBgdFitType, aZoomROP);
 
-      TString tTextAnType = TString(cAnalysisRootTags[fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetAnalysisType()]);
-      TString tTextCentrality = TString(cPrettyCentralityTags[fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetCentralityType()]);
+      TString tTextAnType = TString(cAnalysisRootTags[tAnType]);
+      TString tTextCentrality = TString(cPrettyCentralityTags[tCentType]);
       TString tTextBField = TString(cBFieldTags[aBFieldType]);
 
       TString tCombinedText = TString::Format("%s  %s%s", tTextAnType.Data(), tTextCentrality.Data(), tTextBField.Data());
@@ -783,7 +797,7 @@ CanvasPartition* FitGenerator::BuildKStarCfswFitsCanvasPartition_PartAn(BFieldTy
         tCanPart->AddPadPaveText(tSysInfo,i,j);
       }
 
-      const double* tSysErrors = cSysErrors[fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetAnalysisType()][fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetCentralityType()];
+      td1dVec tSysErrors = GetSystErrs(fIncludeResidualsType, tAnType, tCentType);
 
       bool bDrawAll = false;
       if(i==0 && j==0) bDrawAll = true;
@@ -940,15 +954,16 @@ CanvasPartition* FitGenerator::BuildKStarCfswFitsCanvasPartition(TString aCanvas
     {
       tAnalysisNumber = j*tNx + i;
       AnalysisType tAnType = fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetAnalysisType();
+      CentralityType tCentType = fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetCentralityType();
 
       BuildKStarCfswFitsPanel(tCanPart, tAnalysisNumber, i, j, aMomResCorrectFit, aNonFlatBgdCorrectFit, aNonFlatBgdFitType, aDrawSysErrors, aZoomROP);
 
-      TString tTextAnType = TString(cAnalysisRootTags[fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetAnalysisType()]);
+      TString tTextAnType = TString(cAnalysisRootTags[tAnType]);
       //TPaveText* tAnTypeName = tCanPart->SetupTPaveText(tTextAnType,i,j,0.89,0.85,0.05);
       //TPaveText* tAnTypeName = tCanPart->SetupTPaveText(tTextAnType,i,j,0.715,0.825,0.05);
       //tCanPart->AddPadPaveText(tAnTypeName,i,j);
 
-      TString tTextCentrality = TString(cPrettyCentralityTags[fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetCentralityType()]);
+      TString tTextCentrality = TString(cPrettyCentralityTags[tCentType]);
       //TPaveText* tCentralityName = tCanPart->SetupTPaveText(tTextCentrality,i,j,0.12,0.85,0.075);
       //TPaveText* tCentralityName = tCanPart->SetupTPaveText(tTextCentrality,i,j,0.865,0.825,0.075);
       //tCanPart->AddPadPaveText(tCentralityName,i,j);
@@ -977,7 +992,7 @@ CanvasPartition* FitGenerator::BuildKStarCfswFitsCanvasPartition(TString aCanvas
       else CreateParamInitValuesText(tCanPart,i,j,0.25,0.20,0.15,0.45,43,10);
       AddTextCorrectionInfo(tCanPart,i,j,aMomResCorrectFit,aNonFlatBgdCorrectFit,0.25,0.08,0.15,0.10,43,7.5);
 */
-      const double* tSysErrors = cSysErrors[fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetAnalysisType()][fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetCentralityType()];
+      td1dVec tSysErrors = GetSystErrs(fIncludeResidualsType, tAnType, tCentType);
 
 //      bool bDrawAll = true;
 
@@ -1688,7 +1703,7 @@ TCanvas* FitGenerator::DrawSingleKStarCfwFitAndResiduals_PartAn(int aAnalysisNum
   TPaveText* tSysInfo = tCanPart->SetupTPaveText(tTextSysInfo,1,0,0.50,0.875,0.40,0.10,43,15);
   tCanPart->AddPadPaveText(tSysInfo,1,0);
 
-  const double* tSysErrors = cSysErrors[tAnType][tCentType];
+  td1dVec tSysErrors = GetSystErrs(fIncludeResidualsType, tAnType, tCentType);
 
   bool bDrawAll = true;
   CreateParamFinalValuesText(tAnType, tCanPart,0,0,(TF1*)fSharedAn->GetFitPairAnalysis(aAnalysisNumber)->GetPrimaryFit(),tSysErrors,0.73,0.09,0.25,0.45,43,12.0,bDrawAll);
@@ -1964,7 +1979,7 @@ TCanvas* FitGenerator::DrawSingleKStarCfwFitAndResiduals(int aAnalysisNumber, bo
   TPaveText* tSysInfo = tCanPart->SetupTPaveText(tTextSysInfo,1,0,0.50,0.875,0.40,0.10,43,15);
   tCanPart->AddPadPaveText(tSysInfo,1,0);
 
-  const double* tSysErrors = cSysErrors[tAnType][tCentType];
+  td1dVec tSysErrors = GetSystErrs(fIncludeResidualsType, tAnType, tCentType);
 
   bool bDrawAll = true;
   CreateParamFinalValuesText(tAnType, tCanPart,0,0,(TF1*)fSharedAn->GetFitPairAnalysis(aAnalysisNumber)->GetPrimaryFit(),tSysErrors,0.73,0.09,0.25,0.45,43,12.0,bDrawAll);

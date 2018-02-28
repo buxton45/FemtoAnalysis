@@ -20,6 +20,7 @@
 #include "CanvasPartition.h"
 class CanvasPartition;
 
+#include "FitGenerator.h"
 
 class CoulombFitGenerator {
 
@@ -41,10 +42,12 @@ public:
   void CreateParamFinalValuesTextTwoColumns(CanvasPartition *aCanPart, int aNx, int aNy, TF1* aFit, const double* aSysErrors, double aText1Xmin=0.75, double aText1Ymin=0.75, double aText1Width=0.15, double aText1Height=0.10, bool aDrawText1=true, double aText2Xmin=0.50, double aText2Ymin=0.75, double aText2Width=0.15, double aText2Height=0.10, bool aDrawText2=true, double aTextFont=63, double aTextSize=15);
   void AddTextCorrectionInfo(CanvasPartition *aCanPart, int aNx, int aNy, bool aMomResCorrect, bool aNonFlatCorrect, double aTextXmin=0.75, double aTextYmin=0.75, double aTextWidth=0.15, double aTextHeight=0.10, double aTextFont=63, double aTextSize=15);
 
+  static td1dVec GetSystErrs(IncludeResidualsType aIncResType, AnalysisType aAnType, CentralityType aCentType);
+
   void DrawSingleKStarCf(TPad* aPad, int aPairAnNumber, double aYmin=0.9, double aYmax=1.1, double aXmin=0.0, double aXmax=0.5, int aMarkerColor=1, TString aOption = "", int aMarkerStyle=20);
   void DrawSingleKStarCfwFit(TPad* aPad, int aPairAnNumber, double aYmin=0.9, double aYmax=1.1, double aXmin=0.0, double aXmax=0.5, int aMarkerColor=1, TString aOption = "", int aMarkerStyle=20);
   virtual TCanvas* DrawKStarCfs(bool aSaveImage=false, bool aDrawSysErrors=true);
-  virtual TCanvas* DrawKStarCfswFits(bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, NonFlatBgdFitType aNonFlatBgdFitType=kLinear, bool aSaveImage=false, bool aDrawSysErrors=true, bool aZoomROP=true);
+  virtual TCanvas* DrawKStarCfswFits(IncludeResidualsType aIncResType, bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, NonFlatBgdFitType aNonFlatBgdFitType=kLinear, bool aSaveImage=false, bool aDrawSysErrors=true, bool aZoomROP=true);
 
   virtual TCanvas* DrawModelKStarCfs(bool aSaveImage=false);  //TODO add option to choose true, fake, no weight, etc.
 
