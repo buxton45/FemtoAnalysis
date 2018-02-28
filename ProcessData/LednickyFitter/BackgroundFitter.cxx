@@ -333,7 +333,7 @@ TF1* BackgroundFitter::FitNonFlatBackgroundPML()
   fMinuit->SetPrintLevel(0);
   // Now ready for minimization step
   arglist[0] = 50000;
-  arglist[1] = 0.1;
+  arglist[1] = 0.001;
 //  arglist[1] = 0.1;
   fMinuit->mnexcm("MIGRAD", arglist ,2,tErrFlg);
 

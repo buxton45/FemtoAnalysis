@@ -407,8 +407,8 @@ int main(int argc, char **argv)
   bool ApplyNonFlatBackgroundCorrection = true;
   NonFlatBgdFitType tNonFlatBgdFitType = kLinear;
 
-  IncludeResidualsType tIncludeResidualsType = kIncludeNoResiduals; 
-  ResPrimMaxDecayType tResPrimMaxDecayType = k5fm;
+  IncludeResidualsType tIncludeResidualsType = kInclude3Residuals; 
+  ResPrimMaxDecayType tResPrimMaxDecayType = k4fm;
   ChargedResidualsType tChargedResidualsType = kUseXiDataAndCoulombOnlyInterp;
 
   bool tFixD0 = false;
