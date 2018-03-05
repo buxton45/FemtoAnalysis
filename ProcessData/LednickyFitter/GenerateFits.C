@@ -56,7 +56,7 @@ int main(int argc, char **argv)
   if(UnboundLambda) aLambdaMax=0.;
 
   bool bZoomROP = true;
-  bool bDrawResiduals = true;
+  bool bDrawResiduals = false;
 
   bool bDrawSysErrs = true;
 
@@ -167,7 +167,7 @@ int main(int argc, char **argv)
   if(tAnType==kLamKchP && tIncludeResidualsType==kIncludeNoResiduals && tResultsDate.EqualTo("20171227"))
   {
 //    tLamKchP->SetAllLambdaParamLimits(0.35,0.65);
-/*
+
     tLamKchP->SetLambdaParamLimits(0.30, 0.50, false, k0010);
     tLamKchP->SetLambdaParamLimits(0.30, 0.50, true, k0010);
 
@@ -176,7 +176,7 @@ int main(int argc, char **argv)
 
     tLamKchP->SetLambdaParamLimits(0.50, 0.70, false, k3050);
     tLamKchP->SetLambdaParamLimits(0.50, 0.70, true, k3050);
-*/
+
   }
 
 
@@ -184,7 +184,9 @@ int main(int argc, char **argv)
   if(bDoFit)
   {
     tLamKchP->DoFit();
-    TCanvas* tKStarwFitsCan = tLamKchP->DrawKStarCfswFits(ApplyMomResCorrection,ApplyNonFlatBackgroundCorrection,tNonFlatBgdFitType,SaveImages,bDrawSysErrs,bZoomROP);
+//    TCanvas* tKStarwFitsCan = tLamKchP->DrawKStarCfswFits(ApplyMomResCorrection,ApplyNonFlatBackgroundCorrection,tNonFlatBgdFitType,SaveImages,bDrawSysErrs,bZoomROP);
+    TCanvas* tKStarwFitsCan_Zoom = tLamKchP->DrawKStarCfswFits(ApplyMomResCorrection,ApplyNonFlatBackgroundCorrection,tNonFlatBgdFitType,SaveImages,bDrawSysErrs,true);
+    TCanvas* tKStarwFitsCan_UnZoom = tLamKchP->DrawKStarCfswFits(ApplyMomResCorrection,ApplyNonFlatBackgroundCorrection,tNonFlatBgdFitType,SaveImages,bDrawSysErrs,false);
 
     TCanvas* tKStarwFitsCan_FemtoMinus = tLamKchP->DrawKStarCfswFits_PartAn(kFemtoMinus,ApplyMomResCorrection,ApplyNonFlatBackgroundCorrection,tNonFlatBgdFitType,SaveImages,bZoomROP);
     TCanvas* tKStarwFitsCan_FemtoPlus = tLamKchP->DrawKStarCfswFits_PartAn(kFemtoPlus,ApplyMomResCorrection,ApplyNonFlatBackgroundCorrection,tNonFlatBgdFitType,SaveImages,bZoomROP);
@@ -224,7 +226,9 @@ int main(int argc, char **argv)
     if(SaveImagesInRootFile)
     {
       TFile *tFile = new TFile(tLamKchP->GetSaveLocationBase() + TString(cAnalysisBaseTags[tAnType]) + TString("Plots") + tLamKchP->GetSaveNameModifier() + TString(".root"), "RECREATE");
-      tKStarwFitsCan->Write();
+//      tKStarwFitsCan->Write();
+      tKStarwFitsCan_Zoom->Write();
+      tKStarwFitsCan_UnZoom->Write();
       if(tIncludeResidualsType != kIncludeNoResiduals && bDrawResiduals)
       {
         for(int i=0; i<tAllCanLamKchP->GetEntries(); i++) (TCanvas*)tAllCanLamKchP->At(i)->Write();
