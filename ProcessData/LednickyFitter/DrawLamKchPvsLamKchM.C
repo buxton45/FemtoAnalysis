@@ -13,7 +13,7 @@ int main(int argc, char **argv)
   ChronoTimer tFullTimer(kSec);
   tFullTimer.Start();
 //-----------------------------------------------------------------------------
-  TString tResultsDate = "20161027";
+  TString tResultsDate = "20171227";
 
   AnalysisRunType tAnRunType = kTrain;
   int tNPartialAnalysis = 2;
