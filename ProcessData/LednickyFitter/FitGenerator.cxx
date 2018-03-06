@@ -55,7 +55,9 @@ FitGenerator::FitGenerator(TString aFileLocationBase, TString aFileLocationBaseM
   fmTScalingPowerOfResidualRadii(-0.5),
 
   fSharedAn(0),
-  fLednickyFitter(0)
+  fLednickyFitter(0),
+
+  fSaveFileType("eps")
 
 {
   switch(aAnalysisType) {
@@ -155,7 +157,9 @@ FitGenerator::FitGenerator(TString aFileLocationBase, TString aFileLocationBaseM
   fmTScalingPowerOfResidualRadii(-0.5),
 
   fSharedAn(0),
-  fLednickyFitter(0)
+  fLednickyFitter(0),
+
+  fSaveFileType("eps")
 
 {
   vector<CentralityType> tCentralityTypes(0);
@@ -640,7 +644,7 @@ TCanvas* FitGenerator::DrawKStarCfs(bool aSaveImage, bool aDrawSysErrors)
   if(aSaveImage)
   {
     ExistsSaveLocationBase();
-    tCanPart->GetCanvas()->SaveAs(fSaveLocationBase+tCanvasName+fSaveNameModifier+TString(".eps"));
+    tCanPart->GetCanvas()->SaveAs(fSaveLocationBase+tCanvasName+fSaveNameModifier+TString::Format(".%s", fSaveFileType.Data()));
   }
 
   return tCanPart->GetCanvas();
@@ -749,14 +753,12 @@ CanvasPartition* FitGenerator::BuildKStarCfswFitsCanvasPartition_PartAn(BFieldTy
 
   double tXLow = -0.02;
   double tXHigh = 0.99;
-  double tYLow = 0.71;
-  double tYHigh = 1.09;
+  double tYLow = 0.86;
+  double tYHigh = 1.07;
   if(aZoomROP)
   {
     tXLow = -0.02;
     tXHigh = 0.329;
-    tYLow = 0.86;
-    tYHigh = 1.07;
   }
 
   CanvasPartition* tCanPart = new CanvasPartition(tCanvasName,tNx,tNy,tXLow,tXHigh,tYLow,tYHigh,0.12,0.0025,0.13,0.0025);
@@ -823,7 +825,7 @@ TCanvas* FitGenerator::DrawKStarCfswFits_PartAn(BFieldType aBFieldType, bool aMo
   if(aSaveImage)
   {
     ExistsSaveLocationBase();
-    tCanPart->GetCanvas()->SaveAs(fSaveLocationBase+tCanPart->GetCanvas()->GetName()+fSaveNameModifier+TString(".eps"));
+    tCanPart->GetCanvas()->SaveAs(fSaveLocationBase+tCanPart->GetCanvas()->GetName()+fSaveNameModifier+TString::Format(".%s", fSaveFileType.Data()));
   }
 
   return tCanPart->GetCanvas();
@@ -912,7 +914,7 @@ void FitGenerator::BuildKStarCfswFitsPanel(CanvasPartition* aCanPart, int aAnaly
 
 
 //________________________________________________________________________________________________________________
-CanvasPartition* FitGenerator::BuildKStarCfswFitsCanvasPartition(TString aCanvasBaseName, bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, NonFlatBgdFitType aNonFlatBgdFitType, bool aDrawSysErrors, bool aZoomROP)
+CanvasPartition* FitGenerator::BuildKStarCfswFitsCanvasPartition(TString aCanvasBaseName, bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, NonFlatBgdFitType aNonFlatBgdFitType, bool aDrawSysErrors, bool aZoomROP, bool aSuppressFitInfoOutput)
 {
   TString tCanvasName = aCanvasBaseName;
   if(fGeneratorType==kPairwConj) tCanvasName += TString(cAnalysisBaseTags[fPairType]) + TString("wConj");
@@ -932,14 +934,12 @@ CanvasPartition* FitGenerator::BuildKStarCfswFitsCanvasPartition(TString aCanvas
 
   double tXLow = -0.02;
   double tXHigh = 0.99;
-  double tYLow = 0.71;
-  double tYHigh = 1.09;
+  double tYLow = 0.86;
+  double tYHigh = 1.07;
   if(aZoomROP)
   {
     tXLow = -0.02;
     tXHigh = 0.329;
-    tYLow = 0.86;
-    tYHigh = 1.07;
   }
 
   CanvasPartition* tCanPart = new CanvasPartition(tCanvasName,tNx,tNy,tXLow,tXHigh,tYLow,tYHigh,0.12,0.0025,0.13,0.0025);
@@ -969,7 +969,7 @@ CanvasPartition* FitGenerator::BuildKStarCfswFitsCanvasPartition(TString aCanvas
       //tCanPart->AddPadPaveText(tCentralityName,i,j);
 
       TString tCombinedText = tTextAnType + TString("  ") +  tTextCentrality;
-      TPaveText* tCombined = tCanPart->SetupTPaveText(tCombinedText,i,j,0.70,0.825,0.15,0.10,63,20);
+      TPaveText* tCombined = tCanPart->SetupTPaveText(tCombinedText,i,j,0.70,0.825,0.15,0.10,63,20);;
       tCanPart->AddPadPaveText(tCombined,i,j);
 
       if(i==0 && j==0)
@@ -998,7 +998,7 @@ CanvasPartition* FitGenerator::BuildKStarCfswFitsCanvasPartition(TString aCanvas
 
       bool bDrawAll = false;
       if(i==0 && j==0) bDrawAll = true;
-      CreateParamFinalValuesText(tAnType, tCanPart,i,j,(TF1*)fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetPrimaryFit(),tSysErrors,0.73,0.09,0.25,0.53,43,12.0,bDrawAll);
+      if(!aSuppressFitInfoOutput) CreateParamFinalValuesText(tAnType, tCanPart,i,j,(TF1*)fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetPrimaryFit(),tSysErrors,0.73,0.09,0.25,0.53,43,12.0,bDrawAll);
 /*
       bool bDrawText1 = true;
       bool bDrawText2 = false;
@@ -1026,7 +1026,7 @@ TCanvas* FitGenerator::DrawKStarCfswFits(bool aMomResCorrectFit, bool aNonFlatBg
   if(aSaveImage)
   {
     ExistsSaveLocationBase();
-    tCanPart->GetCanvas()->SaveAs(fSaveLocationBase+tCanPart->GetCanvas()->GetName()+fSaveNameModifier+TString(".eps"));
+    tCanPart->GetCanvas()->SaveAs(fSaveLocationBase+tCanPart->GetCanvas()->GetName()+fSaveNameModifier+TString::Format(".%s", fSaveFileType.Data()));
   }
 
   return tCanPart->GetCanvas();
@@ -1193,7 +1193,7 @@ TCanvas* FitGenerator::DrawResiduals(int aAnalysisNumber, CentralityType aCentra
     ExistsSaveLocationBase();
     TString tSaveLocationDir = TString::Format("%sResiduals%s/%s/%s/", fSaveLocationBase.Data(), cIncludeResidualsTypeTags[fIncludeResidualsType], cAnalysisBaseTags[tAnType], cCentralityTags[aCentralityType]);
     gSystem->mkdir(tSaveLocationDir, true);
-    tCan->SaveAs(tSaveLocationDir+tCan->GetName()+fSaveNameModifier+TString(".eps"));
+    tCan->SaveAs(tSaveLocationDir+tCan->GetName()+fSaveNameModifier+TString::Format(".%s", fSaveFileType.Data()));
   }
 
 
@@ -1421,7 +1421,7 @@ TObjArray* FitGenerator::DrawResidualsWithTransformMatrices(int aAnalysisNumber,
     for(int i=0; i<tReturnArray->GetEntries(); i++)
     {
       TCanvas* tSaveCan = (TCanvas*)tReturnArray->At(i);
-      tSaveCan->SaveAs(tSaveLocationDir+tSaveCan->GetName()+fSaveNameModifier+TString(".eps"));
+      tSaveCan->SaveAs(tSaveLocationDir+tSaveCan->GetName()+fSaveNameModifier+TString::Format(".%s", fSaveFileType.Data()));
     }
   }
 
@@ -1547,11 +1547,11 @@ void FitGenerator::CheckCorrectedCf_PartAn(int aAnalysisNumber, BFieldType aBFie
     cout << "tPrimaryFitVec[" << i << "] = " << tPrimaryFitVec[i] << endl;
     for(unsigned int iRes=0; iRes<tResidualVecs.size(); iRes++) cout << TString::Format("tResidualVecs[%d][%d] - 1.0 = %0.6f", iRes, i, (tResidualVecs[iRes][i]-1.)) << endl;
     cout << "tPrimPlusRes[" << i << "] = " << tPrimPlusRes[i] << endl;
-    cout << "tNonFlatBgdVec[" << i << "] = " << tNonFlatBgdVec[i] << endl;
+    if(fApplyNonFlatBackgroundCorrection) cout << "tNonFlatBgdVec[" << i << "] = " << tNonFlatBgdVec[i] << endl;
     cout << "\t tCalculatedFitCf[" << i << "] = " << tCalculatedFitCf[i] << endl;
     cout << "\t tCorrectedFitVec[" << i << "] = " << tCorrectedFitVec[i] << endl;
     cout << "\t\t % Diff = " << (tCalculatedFitCf[i]-tCorrectedFitVec[i])/tCorrectedFitVec[i] << endl;
-    if((tCalculatedFitCf[i]-tCorrectedFitVec[i])/tCorrectedFitVec[i] > 0.00001) {cout << "WARNING!!!!!!!!!!!!!!!!!!!!!!!!!!!! Diff > 0.00001 !!!!!!!!!!!!!!!!!!!" << endl; assert(0);}
+    if((tCalculatedFitCf[i]-tCorrectedFitVec[i])/tCorrectedFitVec[i] > 0.0001) {cout << "WARNING!!!!!!!!!!!!!!!!!!!!!!!!!!!! Diff > 0.00001 !!!!!!!!!!!!!!!!!!!" << endl; assert(0);}
     cout << endl;
   }
   cout << endl << endl << endl;
@@ -1587,14 +1587,12 @@ TCanvas* FitGenerator::DrawSingleKStarCfwFitAndResiduals_PartAn(int aAnalysisNum
 
   double tXLow = -0.02;
   double tXHigh = 0.99;
-  double tYLow = 0.71;
-  double tYHigh = 1.09;
+  double tYLow = 0.86;
+  double tYHigh = 1.07;
   if(aZoomROP)
   {
     tXLow = -0.02;
     tXHigh = 0.329;
-    tYLow = 0.86;
-    tYHigh = 1.07;
   }
 
   CanvasPartition* tCanPart = new CanvasPartition(tCanvasName,tNx,tNy,tXLow,tXHigh,tYLow,tYHigh,0.12,0.05,0.13,0.0025);
@@ -1720,7 +1718,7 @@ TCanvas* FitGenerator::DrawSingleKStarCfwFitAndResiduals_PartAn(int aAnalysisNum
     ExistsSaveLocationBase();
     TString tSaveLocationDir = TString::Format("%sResiduals%s/%s/", fSaveLocationBase.Data(), cIncludeResidualsTypeTags[fIncludeResidualsType], cAnalysisBaseTags[tAnType]);
     gSystem->mkdir(tSaveLocationDir, true);
-    tCanPart->GetCanvas()->SaveAs(tSaveLocationDir+tCanPart->GetCanvas()->GetName()+fSaveNameModifier+TString(".eps"));
+    tCanPart->GetCanvas()->SaveAs(tSaveLocationDir+tCanPart->GetCanvas()->GetName()+fSaveNameModifier+TString::Format(".%s", fSaveFileType.Data()));
   }
 
 
@@ -1831,11 +1829,11 @@ void FitGenerator::CheckCorrectedCf(int aAnalysisNumber, bool aMomResCorrectFit,
     cout << "tPrimaryFitVec[" << i << "] = " << tPrimaryFitVec[i] << endl;
     for(unsigned int iRes=0; iRes<tResidualVecs.size(); iRes++) cout << TString::Format("tResidualVecs[%d][%d] - 1.0 = %0.6f", iRes, i, (tResidualVecs[iRes][i]-1.)) << endl;
     cout << "tPrimPlusRes[" << i << "] = " << tPrimPlusRes[i] << endl;
-    cout << "tNonFlatBgdVec[" << i << "] = " << tNonFlatBgdVec[i] << endl;
+    if(fApplyNonFlatBackgroundCorrection) cout << "tNonFlatBgdVec[" << i << "] = " << tNonFlatBgdVec[i] << endl;
     cout << "\t tCalculatedFitCf[" << i << "] = " << tCalculatedFitCf[i] << endl;
     cout << "\t tCorrectedFitVec[" << i << "] = " << tCorrectedFitVec[i] << endl;
     cout << "\t\t % Diff = " << (tCalculatedFitCf[i]-tCorrectedFitVec[i])/tCorrectedFitVec[i] << endl;
-    if((tCalculatedFitCf[i]-tCorrectedFitVec[i])/tCorrectedFitVec[i] > 0.00001) {cout << "WARNING!!!!!!!!!!!!!!!!!!!!!!!!!!!! Diff > 0.00001 !!!!!!!!!!!!!!!!!!!" << endl; assert(0);}
+    if((tCalculatedFitCf[i]-tCorrectedFitVec[i])/tCorrectedFitVec[i] > 0.0001) {cout << "WARNING!!!!!!!!!!!!!!!!!!!!!!!!!!!! Diff > 0.00001 !!!!!!!!!!!!!!!!!!!" << endl; assert(0);}
     cout << endl;
   }
   cout << endl << endl << endl;
@@ -1863,19 +1861,17 @@ TCanvas* FitGenerator::DrawSingleKStarCfwFitAndResiduals(int aAnalysisNumber, bo
 
   double tXLow = -0.02;
   double tXHigh = 0.99;
-  double tYLow = 0.71;
-  double tYHigh = 1.09;
+  double tYLow = 0.86;
+  double tYHigh = 1.07;
   if(aZoomROP)
   {
     tXLow = -0.02;
     tXHigh = 0.329;
-    tYLow = 0.86;
-    tYHigh = 1.07;
   }
 
   CanvasPartition* tCanPart = new CanvasPartition(tCanvasName,tNx,tNy,tXLow,tXHigh,tYLow,tYHigh,0.12,0.05,0.13,0.0025);
   tCanPart->SetDrawOptStat(false);
-//  tCanPart->GetCanvas()->SetCanvasSize(1400,1500);
+  tCanPart->GetCanvas()->SetCanvasSize(1400,500);
 
 
   int tColor, tColorTransparent;
@@ -1885,7 +1881,7 @@ TCanvas* FitGenerator::DrawSingleKStarCfwFitAndResiduals(int aAnalysisNumber, bo
   else tColor=1;
 
   tColorTransparent = TColor::GetColorTransparent(tColor,0.2);
-  double tMarkerSize = 0.50;
+  double tMarkerSize = 0.75;
   //---------------- Residuals ----------------------------------------
   FitPairAnalysis* tFitPairAnalysis = fSharedAn->GetFitPairAnalysis(aAnalysisNumber);
   double tOverallLambdaPrimary = tFitPairAnalysis->GetFitParameter(kLambda)->GetFitValue();
@@ -1929,12 +1925,12 @@ TCanvas* FitGenerator::DrawSingleKStarCfwFitAndResiduals(int aAnalysisNumber, bo
   TString tTextCentrality = TString(cPrettyCentralityTags[tCentType]);
 
   TString tCombinedText = tTextAnType + TString("  ") +  tTextCentrality;
-  TPaveText* tCombined = tCanPart->SetupTPaveText(tCombinedText,0,0,0.70,0.875,0.15,0.10,63,20);
+  TPaveText* tCombined = tCanPart->SetupTPaveText(tCombinedText,0,0,0.70,0.875,0.15,0.10,63,25);
   tCanPart->AddPadPaveText(tCombined,0,0);
 
 
   TString tTextAlicePrelim = TString("ALICE Preliminary");
-  TPaveText* tAlicePrelim = tCanPart->SetupTPaveText(tTextAlicePrelim,0,0,0.10,0.875,0.40,0.10,43,15);
+  TPaveText* tAlicePrelim = tCanPart->SetupTPaveText(tTextAlicePrelim,0,0,0.10,0.875,0.40,0.10,43,25);
   tCanPart->AddPadPaveText(tAlicePrelim,0,0);
 
 
@@ -1976,7 +1972,7 @@ TCanvas* FitGenerator::DrawSingleKStarCfwFitAndResiduals(int aAnalysisNumber, bo
 
 
   TString tTextSysInfo = TString("Pb-Pb #sqrt{#it{s}_{NN}} = 2.76 TeV");
-  TPaveText* tSysInfo = tCanPart->SetupTPaveText(tTextSysInfo,1,0,0.50,0.875,0.40,0.10,43,15);
+  TPaveText* tSysInfo = tCanPart->SetupTPaveText(tTextSysInfo,1,0,0.50,0.875,0.40,0.10,43,25);
   tCanPart->AddPadPaveText(tSysInfo,1,0);
 
   td1dVec tSysErrors = GetSystErrs(fIncludeResidualsType, tAnType, tCentType);
@@ -1996,7 +1992,7 @@ TCanvas* FitGenerator::DrawSingleKStarCfwFitAndResiduals(int aAnalysisNumber, bo
     ExistsSaveLocationBase();
     TString tSaveLocationDir = TString::Format("%sResiduals%s/%s/", fSaveLocationBase.Data(), cIncludeResidualsTypeTags[fIncludeResidualsType], cAnalysisBaseTags[tAnType]);
     gSystem->mkdir(tSaveLocationDir, true);
-    tCanPart->GetCanvas()->SaveAs(tSaveLocationDir+tCanPart->GetCanvas()->GetName()+fSaveNameModifier+TString(".eps"));
+    tCanPart->GetCanvas()->SaveAs(tSaveLocationDir+tCanPart->GetCanvas()->GetName()+fSaveNameModifier+TString::Format(".%s", fSaveFileType.Data()));
   }
 
 
@@ -2014,10 +2010,13 @@ TObjArray* FitGenerator::DrawAllSingleKStarCfwFitAndResiduals(bool aDrawData, bo
 
 
 //________________________________________________________________________________________________________________
-TCanvas* FitGenerator::DrawKStarCfswFitsAndResiduals(bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, NonFlatBgdFitType aNonFlatBgdFitType, bool aSaveImage, bool aDrawSysErrors, bool aZoomROP)
+TCanvas* FitGenerator::DrawKStarCfswFitsAndResiduals(bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, NonFlatBgdFitType aNonFlatBgdFitType, bool aSaveImage, bool aDrawSysErrors, bool aZoomROP, bool aZoomResiduals)
 {
   TString tCanvasName = "canKStarCfwFitsAndResiduals";
-  CanvasPartition* tCanPart = BuildKStarCfswFitsCanvasPartition(tCanvasName, aMomResCorrectFit, aNonFlatBgdCorrectFit, aNonFlatBgdFitType, aDrawSysErrors, aZoomROP);
+  CanvasPartition* tCanPart = BuildKStarCfswFitsCanvasPartition(tCanvasName, aMomResCorrectFit, aNonFlatBgdCorrectFit, aNonFlatBgdFitType, aDrawSysErrors, aZoomROP, aZoomResiduals);
+
+  TString tZoomResModifier = "";
+  if(aZoomResiduals) tZoomResModifier = TString("_ZoomResiduals");
 
   int tNx=0, tNy=0;
   if(fNAnalyses == 6) {tNx=2; tNy=3;}
@@ -2027,6 +2026,9 @@ TCanvas* FitGenerator::DrawKStarCfswFitsAndResiduals(bool aMomResCorrectFit, boo
   else assert(0);
 
   double tMarkerSize = 0.35;
+
+  int tNx_Leg=0, tNy_Leg=1;
+  if(aZoomResiduals) tNy_Leg=0;
 
   assert(tNx*tNy == fNAnalyses);
   int tAnalysisNumber=0;
@@ -2059,7 +2061,11 @@ TCanvas* FitGenerator::DrawKStarCfswFitsAndResiduals(bool aMomResCorrectFit, boo
       vector<int> tNeutralResMarkerStyles{24,25,26,27,28,30,32};
       vector<int> tChargedResBaseColors{44,46,47,49};
       vector<int> tChargedResMarkerStyles{24,25,26,27};
-      if((i==0 && j==1) || (i==0 && j==2)) tCanPart->SetupTLegend(TString("Residuals"), i, j, 0.35, 0.10, 0.25, 0.50);
+      if(i==tNx_Leg && j==tNy_Leg) 
+      {
+        if(!aZoomResiduals) tCanPart->SetupTLegend(TString("Residuals"), i, j, 0.25, 0.05, 0.35, 0.50, 2);
+        else tCanPart->SetupTLegend(TString("Residuals"), i, j, 0.50, 0.05, 0.35, 0.50, 2);
+      }
       for(unsigned int iRes=0; iRes<tFitPairAnalysis->GetResidualCollection()->GetNeutralCollection().size(); iRes++)
       {
         AnalysisType tTempResidualType = tFitPairAnalysis->GetResidualCollection()->GetNeutralCollection()[iRes].GetResidualType();
@@ -2069,7 +2075,7 @@ TCanvas* FitGenerator::DrawKStarCfswFitsAndResiduals(bool aMomResCorrectFit, boo
         TString tTempName = TString(cAnalysisRootTags[tTempResidualType]);
         TH1D* tTempHist = tFitPairAnalysis->GetResidualCollection()->GetNeutralCollection()[iRes].GetTransformedResidualCorrelationHistogramWithLambdaAndNormApplied(tTempName, tParamsOverall.data(), tWeightedNorm);
         tCanPart->AddGraph(i,j,tTempHist,"",tNeutralResMarkerStyles[iRes],tNeutralResBaseColors[iRes],tMarkerSize,"ex0same");
-        if(i==0 && j==1) tCanPart->AddLegendEntry(i, j, tTempHist, cAnalysisRootTags[tTempResidualType], "p");
+        if(i==tNx_Leg && j==tNy_Leg) tCanPart->AddLegendEntry(i, j, tTempHist, cAnalysisRootTags[tTempResidualType], "p");
       }
       for(unsigned int iRes=0; iRes<tFitPairAnalysis->GetResidualCollection()->GetChargedCollection().size(); iRes++)
       {
@@ -2080,9 +2086,15 @@ TCanvas* FitGenerator::DrawKStarCfswFitsAndResiduals(bool aMomResCorrectFit, boo
         TString tTempName = TString(cAnalysisRootTags[tTempResidualType]);
         TH1D* tTempHist = tFitPairAnalysis->GetResidualCollection()->GetChargedCollection()[iRes].GetTransformedResidualCorrelationHistogramWithLambdaAndNormApplied(tTempName, tParamsOverall.data(), tWeightedNorm);
         tCanPart->AddGraph(i,j,tTempHist,"",tChargedResMarkerStyles[iRes],tChargedResBaseColors[iRes],tMarkerSize,"ex0same");
-        if(i==0 && j==2) tCanPart->AddLegendEntry(i, j, tTempHist, cAnalysisRootTags[tTempResidualType], "p");
+        if(i==tNx_Leg && j==tNy_Leg) tCanPart->AddLegendEntry(i, j, tTempHist, cAnalysisRootTags[tTempResidualType], "p");
       }
       tCanPart->AddGraph(i,j,(TH1*)fSharedAn->GetKStarCfHeavy(tAnalysisNumber)->GetHeavyCfClone(),"",20,tColor,0.5,"ex0same");  //draw again so data on top
+
+      if(aZoomResiduals)
+      {
+        double tMinZoomRes = 0.961, tMaxZoomRes = 1.024;
+        ((TH1*)tCanPart->GetGraphsInPad(i,j)->At(0))->GetYaxis()->SetRangeUser(tMinZoomRes, tMaxZoomRes);
+      }
     }
   }
 
@@ -2096,7 +2108,7 @@ TCanvas* FitGenerator::DrawKStarCfswFitsAndResiduals(bool aMomResCorrectFit, boo
     ExistsSaveLocationBase();
     TString tSaveLocationDir = TString::Format("%sResiduals%s/%s/", fSaveLocationBase.Data(), cIncludeResidualsTypeTags[fIncludeResidualsType], cAnalysisBaseTags[fSharedAn->GetFitPairAnalysis(0)->GetAnalysisType()]);
     gSystem->mkdir(tSaveLocationDir, true);
-    tCanPart->GetCanvas()->SaveAs(tSaveLocationDir+tCanPart->GetCanvas()->GetName()+fSaveNameModifier+TString(".eps"));
+    tCanPart->GetCanvas()->SaveAs(tSaveLocationDir+tCanPart->GetCanvas()->GetName()+tZoomResModifier.Data()+fSaveNameModifier+TString::Format(".%s", fSaveFileType.Data()));
   }
 
   return tCanPart->GetCanvas();
@@ -2165,7 +2177,7 @@ TCanvas* FitGenerator::DrawModelKStarCfs(bool aSaveImage)
   if(aSaveImage)
   {
     ExistsSaveLocationBase();
-    tCanPart->GetCanvas()->SaveAs(fSaveLocationBase+tCanvasName+fSaveNameModifier+TString(".eps"));
+    tCanPart->GetCanvas()->SaveAs(fSaveLocationBase+tCanvasName+fSaveNameModifier+TString::Format(".%s", fSaveFileType.Data()));
   }
 
   return tCanPart->GetCanvas();

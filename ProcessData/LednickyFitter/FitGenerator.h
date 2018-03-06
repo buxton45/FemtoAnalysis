@@ -54,7 +54,7 @@ public:
   virtual TCanvas* DrawKStarCfswFits_PartAn(BFieldType aBFieldType, bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, NonFlatBgdFitType aNonFlatBgdFitType=kLinear, bool aSaveImage=false, bool aZoomROP=true);
 
   virtual void BuildKStarCfswFitsPanel(CanvasPartition* aCanPart, int aAnalysisNumber, int tColumn, int tRow, bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, NonFlatBgdFitType aNonFlatBgdFitType, bool aDrawSysErrors, bool aDrawDataOnTop);
-  virtual CanvasPartition* BuildKStarCfswFitsCanvasPartition(TString aCanvasBaseName, bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, NonFlatBgdFitType aNonFlatBgdFitType=kLinear, bool aDrawSysErrors=true, bool aZoomROP=true);
+  virtual CanvasPartition* BuildKStarCfswFitsCanvasPartition(TString aCanvasBaseName, bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, NonFlatBgdFitType aNonFlatBgdFitType=kLinear, bool aDrawSysErrors=true, bool aZoomROP=true, bool aSuppressFitInfoOutput=false);
   virtual TCanvas* DrawKStarCfswFits(bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, NonFlatBgdFitType aNonFlatBgdFitType=kLinear, bool aSaveImage=false, bool aDrawSysErrors=true, bool aZoomROP=true);
 
   double GetWeightedAnalysisNorm(FitPairAnalysis* aPairAn);
@@ -73,7 +73,7 @@ public:
   void CheckCorrectedCf(int aAnalysisNumber, bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, NonFlatBgdFitType aNonFlatBgdFitType);
   virtual TCanvas* DrawSingleKStarCfwFitAndResiduals(int aAnalysisNumber, bool aDrawData, bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, NonFlatBgdFitType aNonFlatBgdFitType, bool aSaveImage=false, bool aDrawSysErrors=true, bool aZoomROP=true, bool aOutputCheckCorrectedCf=false);
   virtual TObjArray* DrawAllSingleKStarCfwFitAndResiduals(bool aDrawData, bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, NonFlatBgdFitType aNonFlatBgdFitType, bool aSaveImage=false, bool aDrawSysErrors=true, bool aZoomROP=true, bool aOutputCheckCorrectedCf=false);
-  virtual TCanvas* DrawKStarCfswFitsAndResiduals(bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, NonFlatBgdFitType aNonFlatBgdFitType, bool aSaveImage=false, bool aDrawSysErrors=true, bool aZoomROP=true);
+  virtual TCanvas* DrawKStarCfswFitsAndResiduals(bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, NonFlatBgdFitType aNonFlatBgdFitType, bool aSaveImage=false, bool aDrawSysErrors=true, bool aZoomROP=true, bool aZoomResiduals=false);
 
   virtual TCanvas* DrawModelKStarCfs(bool aSaveImage=false);  //TODO add option to choose true, fake, no weight, etc.
 
@@ -150,6 +150,8 @@ public:
 
   void SetUsemTScalingOfResidualRadii(bool aUse=true, double aPower=-0.5);
 
+  void SetSaveFileType(TString aType);
+
 protected:
   TString fSaveLocationBase;
   TString fSaveNameModifier;
@@ -182,7 +184,7 @@ protected:
   FitSharedAnalyses* fSharedAn;
   LednickyFitter* fLednickyFitter;
 
-
+  TString fSaveFileType;
 
 #ifdef __ROOT__
   ClassDef(FitGenerator, 1)
@@ -231,6 +233,8 @@ inline void FitGenerator::SetChargedResidualsType(ChargedResidualsType aChargedR
 inline void FitGenerator::SetResPrimMaxDecayType(ResPrimMaxDecayType aResPrimMaxDecayType) {fResPrimMaxDecayType = aResPrimMaxDecayType;}
 
 inline void FitGenerator::SetUsemTScalingOfResidualRadii(bool aUse, double aPower) {fUsemTScalingOfResidualRadii = aUse; fmTScalingPowerOfResidualRadii = aPower;}
+
+inline void FitGenerator::SetSaveFileType(TString aType) {fSaveFileType = aType;}
 
 #endif
 

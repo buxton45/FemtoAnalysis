@@ -19,6 +19,7 @@
 
 #include "AliFemtoXiTrackCut.h"
 #include "AliFemtoXiTrackPairCut.h"
+#include "AliFemtoXiV0PairCut.h"
 
 #include "AliFemtoV0PairCut.h"
 #include "AliFemtoV0TrackPairCut.h"
@@ -27,9 +28,12 @@
 #include "AliFemtoCorrFctnKStar.h"
 #include "AliFemtoAvgSepCorrFctn.h"
 
+#include "AliFemtoDummyPairCut.h"
+#include "AliFemtoV0PurityBgdEstimator.h"
 
 #include "AliFemtoNSigmaFilter.h"
 #include "AliFemtoV0TrackCutNSigmaFilter.h"
+#include "AliFemtoXiTrackCutNSigmaFilter.h"
 #include "AliFemtoESDTrackCutNSigmaFilter.h"
 
 #include "AliFemtoCutMonitorEventPartCollSize.h"
@@ -51,9 +55,11 @@ public:
                      kLamKchP=2, kALamKchP=3, kLamKchM=4, kALamKchM=5, 
                      kLamLam=6, kALamALam=7, kLamALam=8, 
                      kLamPiP=9, kALamPiP=10, kLamPiM=11, kALamPiM=12, 
-                     kXiKchP=13, kAXiKchP=14, kXiKchM=15, kAXiKchM=16};
+                     kXiKchP=13, kAXiKchP=14, kXiKchM=15, kAXiKchM=16,
+                     kXiK0=17, kAXiK0=18,
+                     kProtPiM=19, kAProtPiP=20, kPiPPiM=21};
 
-  enum GeneralAnalysisType {kV0V0=0, kV0Track=1, kXiTrack=2};
+  enum GeneralAnalysisType {kV0V0=0, kV0Track=1, kXiTrack=2, kXiV0=3, kTrackTrack=4};
 
   enum ParticlePDGType {kPDGProt   = 2212,  kPDGAntiProt = -2212, 
 		        kPDGPiP    = 211,   kPDGPiM      = -211, 
@@ -78,6 +84,9 @@ struct AnalysisParams
   double minMult, 
          maxMult;
 
+  bool binEventsInRP;  //bin events in reaction plane angle (in addition to vertex z-position and multiplicity)
+  int nBinsRP;
+
   AnalysisType analysisType;
   GeneralAnalysisType generalAnalysisType;
 
@@ -93,6 +102,12 @@ struct AnalysisParams
   bool implementVertexCorrections;
   bool removeMisidentifiedMCParticles;
   bool setV0SharedDaughterCut;
+
+  bool monitorEvCutPassOnly;
+  bool monitorPart1CutPassOnly;
+  bool monitorPart2CutPassOnly;
+  bool monitorPairCutPassOnly;
+  bool useMCWeightGenerator;
 };
 
 struct EventCutParams
@@ -105,6 +120,8 @@ struct EventCutParams
 
   double minVertexZ,
          maxVertexZ;
+
+  bool verboseMode;
 };
 
 struct V0CutParams
@@ -154,6 +171,10 @@ struct V0CutParams
   double minPosDaughterToPrimVertex,
          minNegDaughterToPrimVertex;
 
+  double radiusV0Min,
+         radiusV0Max;
+
+  bool ignoreOnFlyStatus;
 };
 
 struct ESDCutParams
@@ -183,12 +204,15 @@ struct ESDCutParams
   double maxITSChiNdof;
   double maxTPCChiNdof;
   double maxSigmaToVertex;
+  double minImpactXY;
   double maxImpactXY;
   double maxImpactZ;
 
   bool useCustomFilter;
   bool useCustomMisID;
   bool useElectronRejection;
+  bool useCustomElectronRejection;
+  bool useIsProbableElectronMethod;
   bool usePionRejection;
 };
 
@@ -208,6 +232,7 @@ struct XiCutParams
 
   double maxDecayLengthXi;
   double minCosPointingAngleXi;
+  double minCosPointingAngleV0toXi;
   double maxDcaXi;
   double maxDcaXiDaughters;
 
@@ -217,18 +242,21 @@ struct XiCutParams
   double minPtBac,
          maxPtBac;
 
+  double radiusXiMin,
+         radiusXiMax;
+
   int v0Type;
   double minDcaV0;
   double minInvMassV0,
          maxInvMassV0;
-  double minCosPointingAngleV0;
+  double minCosPointingAngleV0;  //this is V0 to primary vertex, not terribly useful for Xi analysis
   double etaV0;
   double minPtV0,
          maxPtV0;
   bool onFlyStatusV0;
   double maxV0DecayLength;
-  double minV0DaughtersToPrimVertex,
-         maxV0DaughtersToPrimVertex;
+  double minV0PosDaughterToPrimVertex,
+         minV0NegDaughterToPrimVertex;
   double maxDcaV0Daughters;
   double etaV0Daughters;
   double minPtPosV0Daughter,
@@ -236,8 +264,17 @@ struct XiCutParams
   double minPtNegV0Daughter,
          maxPtNegV0Daughter;
 
+  double radiusV0Min,
+         radiusV0Max;
+
   int minTPCnclsV0Daughters;
 
+  bool useCustomV0Filter;
+  bool useCustomV0MisID;
+  bool useCustomBacPionFilter;
+  bool useCustomBacPionMisID;
+
+  bool ignoreOnFlyStatusV0;
 };
 
 struct PairCutParams
@@ -257,18 +294,25 @@ struct PairCutParams
 
   double minAvgSepTrackPos,  // Set these for V0-PosTrack; V0-NegTrack, AntiV0-Pos, etc. cases
          minAvgSepTrackNeg;  // will automatically be handled by AliFemtoAnalysisLambdaKaon::CreateV0TrackPairCut
+
+  double minAvgSepTrackBacPion;
+
+  double minAvgSepBacPos;
+  double minAvgSepBacNeg;
 };
 
 //----------------------------------------------------------------------------------------------------------------------------------------------------------
 //**********************************************************************************************************************************************************
 //----------------------------------------------------------------------------------------------------------------------------------------------------------
 
-  AliFemtoAnalysisLambdaKaon(AnalysisType aAnalysisType, unsigned int binsVertex, double minVertex, double maxVertex, unsigned int binsMult, double minMult, double maxMult, bool aIsMCRun, bool aImplementAvgSepCuts, bool aWritePairKinematics=false);
+  AliFemtoAnalysisLambdaKaon(AnalysisType aAnalysisType, unsigned int binsVertex, double minVertex, double maxVertex, unsigned int binsMult, double minMult, double maxMult, bool aIsMCRun, bool aImplementAvgSepCuts, bool aWritePairKinematics=false, TString aDirNameModifier="");
 
-  AliFemtoAnalysisLambdaKaon(AnalysisParams &aAnParams, EventCutParams &aEvCutParams);
-  AliFemtoAnalysisLambdaKaon(AnalysisParams &aAnParams, EventCutParams &aEvCutParams, PairCutParams &aPairCutParams, V0CutParams &aV0CutParams1, V0CutParams &aV0CutParams2);
-  AliFemtoAnalysisLambdaKaon(AnalysisParams &aAnParams, EventCutParams &aEvCutParams, PairCutParams &aPairCutParams, V0CutParams &aV0CutParams1, ESDCutParams &aESDCutParams2);
-  AliFemtoAnalysisLambdaKaon(AnalysisParams &aAnParams, EventCutParams &aEvCutParams, PairCutParams &aPairCutParams, XiCutParams &aXiCutParams1, ESDCutParams &aESDCutParams2);
+  AliFemtoAnalysisLambdaKaon(AnalysisParams &aAnParams, EventCutParams &aEvCutParams, TString aDirNameModifier="");
+  AliFemtoAnalysisLambdaKaon(AnalysisParams &aAnParams, EventCutParams &aEvCutParams, PairCutParams &aPairCutParams, V0CutParams &aV0CutParams1, V0CutParams &aV0CutParams2, TString aDirNameModifier="");
+  AliFemtoAnalysisLambdaKaon(AnalysisParams &aAnParams, EventCutParams &aEvCutParams, PairCutParams &aPairCutParams, V0CutParams &aV0CutParams1, ESDCutParams &aESDCutParams2, TString aDirNameModifier="");
+  AliFemtoAnalysisLambdaKaon(AnalysisParams &aAnParams, EventCutParams &aEvCutParams, PairCutParams &aPairCutParams, XiCutParams &aXiCutParams1, ESDCutParams &aESDCutParams2, TString aDirNameModifier="");
+  AliFemtoAnalysisLambdaKaon(AnalysisParams &aAnParams, EventCutParams &aEvCutParams, PairCutParams &aPairCutParams, XiCutParams &aXiCutParams1, V0CutParams &aV0CutParams1, TString aDirNameModifier="");
+  AliFemtoAnalysisLambdaKaon(AnalysisParams &aAnParams, EventCutParams &aEvCutParams, PairCutParams &aPairCutParams, ESDCutParams &aESDCutParams1, ESDCutParams &aESDCutParams2, TString aDirNameModifier="");
 
     //Since I am using rdr->SetUseMultiplicity(AliFemtoEventReaderAOD::kCentrality), 
       // in AliFemtoEventReaderAOD.cxx this causes tEvent->SetNormalizedMult(lrint(10*cent->GetCentralityPercentile("V0A"))), i.e. fNormalizedMult in [0,1000]
@@ -299,15 +343,19 @@ struct PairCutParams
   void AddCustomESDRejectionFilters(ParticlePDGType aESDType, AliFemtoESDTrackCutNSigmaFilter* aCut);
   AliFemtoESDTrackCutNSigmaFilter* CreateESDCut(ESDCutParams &aCutParams);
 
-  AliFemtoXiTrackCut* CreateXiCut(XiCutParams &aCutParams);
+  void AddCustomXiSelectionFilters(ParticlePDGType aXiType, AliFemtoXiTrackCutNSigmaFilter* aCut);
+  void AddCustomXiV0RejectionFilters(ParticlePDGType aXiType, AliFemtoXiTrackCutNSigmaFilter* aCut);
+  AliFemtoXiTrackCutNSigmaFilter* CreateXiCut(XiCutParams &aCutParams);
 
   AliFemtoV0PairCut* CreateV0PairCut(PairCutParams &aPairCutParams);
   AliFemtoV0TrackPairCut* CreateV0TrackPairCut(PairCutParams &aPairCutParams);
   AliFemtoXiTrackPairCut* CreateXiTrackPairCut(PairCutParams &aPairCutParams);
+  AliFemtoXiV0PairCut* CreateXiV0PairCut(PairCutParams &aPairCutParams);
 
   AliFemtoCorrFctnKStar* CreateCorrFctnKStar(const char* name, unsigned int bins, double min, double max);
   AliFemtoAvgSepCorrFctn* CreateAvgSepCorrFctn(const char* name, unsigned int bins, double min, double max);
   AliFemtoModelCorrFctnKStarFull* CreateModelCorrFctnKStarFull(const char* name, unsigned int bins, double min, double max);    //TODO check that enum to int is working
+  AliFemtoV0PurityBgdEstimator* CreateV0PurityBgdEstimator();
 
   void AddCutMonitors(AliFemtoEventCut* aEventCut, AliFemtoParticleCut* aPartCut1, AliFemtoParticleCut* aPartCut2, AliFemtoPairCut* aPairCut);
   void SetAnalysis(AliFemtoEventCut* aEventCut, AliFemtoParticleCut* aPartCut1, AliFemtoParticleCut* aPartCut2, AliFemtoPairCut* aPairCut);
@@ -328,6 +376,12 @@ struct PairCutParams
   static XiCutParams DefaultAXiCutParams();
 
   static PairCutParams DefaultPairParams();
+
+  static ESDCutParams LambdaPurityPiCutParams(int aCharge);
+  static ESDCutParams K0ShortPurityPiCutParams(int aCharge);
+  static ESDCutParams LambdaPurityProtonCutParams(int aCharge);
+
+
   //----------------------------------------
 
 
