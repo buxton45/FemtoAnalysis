@@ -20,9 +20,9 @@ int main(int argc, char **argv)
   //This allows the user a chance to look at and manipulate a TBrowser before
   //the program ends and closes everything
 //-----------------------------------------------------------------------------
+  int tImpactParam = 2;
 
-
-  TString tDirectory = "/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b2/";
+  TString tDirectory = TString::Format("/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b%d/", tImpactParam);
   TString tFileLocationCfs = tDirectory + "CorrelationFunctions_10MixedEvNum.root";
 
   AnalysisType tAnType = kLamKchP;

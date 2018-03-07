@@ -77,7 +77,9 @@ int main(int argc, char **argv)
 //  double tMaxDecayLength = -1.;
   double tMaxDecayLength = 4.0;
 
-  TString tDirectory = "~/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b2/";
+  int tImpactParam = 2;
+
+  TString tDirectory = TString::Format("~/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b%d/", tImpactParam);
   TString tFileLocationPairFractions = tDirectory + "PairFractions.root";
   TString tFileLocationTransformMatrices = tDirectory + "TransformMatrices_Mix5.root";
 

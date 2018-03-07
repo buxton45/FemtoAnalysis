@@ -405,8 +405,9 @@ int main(int argc, char **argv)
   //the program ends and closes everything
 //-----------------------------------------------------------------------------
 
+  int tImpactParam = 2;
 
-  TString tDirectory = "~/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b2/";
+  TString tDirectory = TString::Format("~/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b%d/", tImpactParam);
   TString tFileLocationSingleParticleAnalyses = tDirectory + "SingleParticleAnalysesv2.root";
 
 /*

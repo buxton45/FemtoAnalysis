@@ -296,7 +296,9 @@ int main(int argc, char **argv)
   double tMinNorm = 0.80/*0.80*//*0.32*/;
   double tMaxNorm = 0.99/*0.99*//*0.40*/;
 
-  TString tFileLocationCfs = "/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b2/CorrelationFunctions_JaiEventsOnly_10MixedEvNum";
+  int tImpactParam = 2;
+
+  TString tFileLocationCfs = TString::Format("/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b%d/CorrelationFunctions_JaiEventsOnly_10MixedEvNum", tImpactParam);
 
 //  TString tFileNameModifier = "";
   TString tFileNameModifier = "_WeightParentsInteraction";

@@ -37,16 +37,17 @@ int main(int argc, char **argv)
 //  double tMaxPrimaryDecayLength = -1.; 
   double tMaxPrimaryDecayLength = 3.01; 
 
+  int tImpactParam = 2;
   //-----------------------------------------
   TString tEventsDirectory, tMatricesSaveFileName, tPairFractionSaveName, tSingleParticlesSaveName, tCorrelationFunctionsSaveName;
 
   if(bRunFull)
   {
-    tEventsDirectory = "/home/jesse/Analysis/Therminator2/events/lhyqid3v_LHCPbPb_2760_b2/";
-    tMatricesSaveFileName = "/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b2/TransformMatricesv2";
-    tPairFractionSaveName = "/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b2/PairFractionsv2";
-    tSingleParticlesSaveName = "/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b2/SingleParticleAnalysesv2";
-    tCorrelationFunctionsSaveName  = "/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b2/CorrelationFunctions";
+    tEventsDirectory = TString::Format("/home/jesse/Analysis/Therminator2/events/lhyqid3v_LHCPbPb_2760_b%d/", tImpactParam);
+    tMatricesSaveFileName = TString::Format("/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b%d/TransformMatricesv2", tImpactParam);
+    tPairFractionSaveName = TString::Format("/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b%d/PairFractionsv2", tImpactParam);
+    tSingleParticlesSaveName = TString::Format("/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b%d/SingleParticleAnalysesv2", tImpactParam);
+    tCorrelationFunctionsSaveName  = TString::Format("/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b%d/CorrelationFunctions", tImpactParam);
   }
   else
   {

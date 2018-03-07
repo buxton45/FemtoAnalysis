@@ -26,7 +26,9 @@ int main(int argc, char **argv)
   bool bSaveImages = false;
   bool bZoomProtonParents = true;
 
-  TString tDirectory = "~/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b2/";
+  int tImpactParam = 2;
+
+  TString tDirectory = TString::Format("~/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b%d/", tImpactParam);
   TString tFileLocationPairFractions = tDirectory + "PairFractions.root";
 
 //-----------------------------------------------------------------------------

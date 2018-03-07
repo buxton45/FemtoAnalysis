@@ -112,7 +112,9 @@ int main(int argc, char **argv)
   bool bDrawLogY = true;
   bool bSaveFigures = false;
 
-  TString tFileName = "/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b2/CorrelationFunctions_10MixedEvNum.root";
+  int tImpactParam = 2;
+
+  TString tFileName = TString::Format("/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b%d/CorrelationFunctions_10MixedEvNum.root", tImpactParam);
   TString tSaveLocationBase = "/home/jesse/Analysis/Presentations/GroupMeetings/20170928/Figures/";
 
   TString tSaveLocationBaseLamKchP = tSaveLocationBase + TString("LamKchP/");

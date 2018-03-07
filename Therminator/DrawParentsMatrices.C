@@ -39,8 +39,9 @@ int main(int argc, char **argv)
   bool bDrawMatrixBackground = false;
   bool bDrawOnlyPairsInOthers = false;
 
+  int tImpactParam = 2;
 
-  TString tDirectory = "~/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b2/";
+  TString tDirectory = TString::Format("~/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b%d/", tImpactParam);
   TString tFileLocationPairFractions = tDirectory + "PairFractions.root";
 
   TString tSaveDirectory = "/home/jesse/Analysis/Presentations/AliFemto/20170913/";

@@ -28,15 +28,16 @@ int main(int argc, char **argv)
   bool bPrintUniqueParents = false;
   assert(!(bReadFromRoot && bReadFromTxt));
 
-  TString tEventsDirectory, tEventsSaveFileNameBase, tMatricesSaveFileName, tPairFractionSaveName;
+  int tImpactParam = 2;
 
+  TString tEventsDirectory, tEventsSaveFileNameBase, tMatricesSaveFileName, tPairFractionSaveName;
   //-----------------------------------------
   if(bRunFull)
   {
-    tEventsDirectory = "/home/jesse/Analysis/Therminator2/events/lhyqid3v_LHCPbPb_2760_b2/";
-    tEventsSaveFileNameBase = "/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b2/";
-    tMatricesSaveFileName = "/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b2/TransformMatrices.root";
-    tPairFractionSaveName = "/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b2/PairFractions.root";
+    tEventsDirectory = TString::Format("/home/jesse/Analysis/Therminator2/events/lhyqid3v_LHCPbPb_2760_b%d/", tImpactParam);
+    tEventsSaveFileNameBase = TString::Format("/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b%d/", tImpactParam);
+    tMatricesSaveFileName = TString::Format("/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b%d/TransformMatrices.root", tImpactParam);
+    tPairFractionSaveName = TString::Format("/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b%d/PairFractions.root", tImpactParam);
   }
   else
   {

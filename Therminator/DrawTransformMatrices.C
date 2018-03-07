@@ -89,8 +89,10 @@ int main(int argc, char **argv)
   bool bDrawLogZ = false;
   bool bSaveFigures = false;
 
-  TString tFileName = "/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b2/TransformMatrices_Mix5.root";
-  TString tSaveLocationBase = "/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b2/Figures/";
+  int tImpactParam = 2;
+
+  TString tFileName = TString::Format("/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b%d/TransformMatrices_Mix5.root", tImpactParam);
+  TString tSaveLocationBase = TString::Format("/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b%d/Figures/", tImpactParam);
 
   TString tSaveLocationBaseLamKchP = tSaveLocationBase + TString("LamKchP/");
   TString tSaveLocationBaseALamKchP = tSaveLocationBase + TString("ALamKchP/");

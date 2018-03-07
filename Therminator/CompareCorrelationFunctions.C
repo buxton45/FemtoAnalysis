@@ -66,8 +66,10 @@ int main(int argc, char **argv)
   double tMinNorm = 0.8/*0.32*/;
   double tMaxNorm = 1.0/*0.40*/;
 
-  TString tFileLocationCfs1 = "/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b2/CorrelationFunctions_10MixedEvNum.root";
-  TString tFileLocationCfs2 = "/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b2/CorrelationFunctions_10MixedEvNum_WeightParentsInteraction.root";
+  int tImpactParam = 2;
+
+  TString tFileLocationCfs1 = TString::Format("/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b%d/CorrelationFunctions_10MixedEvNum.root", tImpactParam);
+  TString tFileLocationCfs2 = TString::Format("/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b%d/CorrelationFunctions_10MixedEvNum_WeightParentsInteraction.root", tImpactParam);
 
   TString tSaveLocationBase = "/home/jesse/Analysis/Presentations/GroupMeetings/20171012/Figures/";
 

@@ -68,14 +68,17 @@ int main(int argc, char **argv)
   int tRebin=2;
   double tMinNorm = 0.80/*0.32*/;
   double tMaxNorm = 0.99/*0.40*/;
+
+  int tImpactParam = 2;
+
 /*
-  TString tFileLocationCfs1 = "/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b2/CorrelationFunctions.root";
-  TString tFileLocationCfs2 = "/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b2/CorrelationFunctions_WeightParentsInteraction.root";
-  TString tFileLocationCfs3 = "/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b2/CorrelationFunctions_WeightParentsInteraction_OnlyWeightLongDecayParents.root";
+  TString tFileLocationCfs1 = TString::Format("/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b%d/CorrelationFunctions.root", tImpactParam);
+  TString tFileLocationCfs2 = TString::Format("/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b%d/CorrelationFunctions_WeightParentsInteraction.root", tImpactParam);
+  TString tFileLocationCfs3 = TString::Format("/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b%d/CorrelationFunctions_WeightParentsInteraction_OnlyWeightLongDecayParents.root", tImpactParam);
 */
-  TString tFileLocationCfs1 = "/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b2/CorrelationFunctions_JaiEventsOnly_10MixedEvNum.root";
-  TString tFileLocationCfs2 = "/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b2/CorrelationFunctions_JaiEventsOnly_10MixedEvNum_WeightParentsInteraction.root";
-  TString tFileLocationCfs3 = "/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b2/CorrelationFunctions_JaiEventsOnly_10MixedEvNum_WeightParentsInteraction_OnlyWeightLongDecayParents.root";
+  TString tFileLocationCfs1 = TString::Format("/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b%d/CorrelationFunctions_JaiEventsOnly_10MixedEvNum.root", tImpactParam);
+  TString tFileLocationCfs2 = TString::Format("/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b%d/CorrelationFunctions_JaiEventsOnly_10MixedEvNum_WeightParentsInteraction.root", tImpactParam);
+  TString tFileLocationCfs3 = TString::Format("/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b%d/CorrelationFunctions_JaiEventsOnly_10MixedEvNum_WeightParentsInteraction_OnlyWeightLongDecayParents.root", tImpactParam);
 
   TString tSaveLocationBase = "/home/jesse/Analysis/Presentations/GroupMeetings/20171102/Figures/";
 
