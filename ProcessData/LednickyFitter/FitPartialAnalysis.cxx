@@ -39,29 +39,30 @@ FitPartialAnalysis::FitPartialAnalysis(TString aFileLocation, TString aAnalysisN
 
   fParticleTypes(2),
 
-  fKStarCfLite(0),
+  fKStarCfLite(nullptr),
 
   fMinBgdFit(0.60),
   fMaxBgdFit(0.90),
   fNormalizeBgdFitToCf(false),
 
   fNFitParams(5),  //should be initialized here to the correct number of parameters, excluding fNorm
-  fLambda(0),
-  fRadius(0),
-  fRef0(0),
-  fImf0(0),
-  fd0(0),
-  fRef02(0),
-  fImf02(0),
-  fd02(0),
+  fLambda(nullptr),
+  fRadius(nullptr),
+  fRef0(nullptr),
+  fImf0(nullptr),
+  fd0(nullptr),
+  fRef02(nullptr),
+  fImf02(nullptr),
+  fd02(nullptr),
   fFitParameters(fNFitParams),
-  fNorm(0),
+  fNorm(nullptr),
+  fBgdParameters(0),
 
   fRejectOmega(false),
 
-  fModelKStarTrueVsRecMixed(0),
-  fModelKStarCfFake(0),
-  fModelKStarCfFakeIdeal(0),
+  fModelKStarTrueVsRecMixed(nullptr),
+  fModelKStarCfFake(nullptr),
+  fModelKStarCfFakeIdeal(nullptr),
 
   fPrimaryFit(nullptr),
   fNonFlatBackground(nullptr),
@@ -180,29 +181,30 @@ FitPartialAnalysis::FitPartialAnalysis(TString aFileLocation, TString aFileLocat
 
   fParticleTypes(2),
 
-  fKStarCfLite(0),
+  fKStarCfLite(nullptr),
 
   fMinBgdFit(0.60),
   fMaxBgdFit(0.90),
   fNormalizeBgdFitToCf(false),
 
   fNFitParams(5),  //should be initialized here to the correct number of parameters, excluding fNorm
-  fLambda(0),
-  fRadius(0),
-  fRef0(0),
-  fImf0(0),
-  fd0(0),
-  fRef02(0),
-  fImf02(0),
-  fd02(0),
+  fLambda(nullptr),
+  fRadius(nullptr),
+  fRef0(nullptr),
+  fImf0(nullptr),
+  fd0(nullptr),
+  fRef02(nullptr),
+  fImf02(nullptr),
+  fd02(nullptr),
   fFitParameters(fNFitParams),
-  fNorm(0),
+  fNorm(nullptr),
+  fBgdParameters(0),
 
   fRejectOmega(false),
 
-  fModelKStarTrueVsRecMixed(0),
-  fModelKStarCfFake(0),
-  fModelKStarCfFakeIdeal(0),
+  fModelKStarTrueVsRecMixed(nullptr),
+  fModelKStarCfFake(nullptr),
+  fModelKStarCfFakeIdeal(nullptr),
 
   fPrimaryFit(nullptr),
   fNonFlatBackground(nullptr),
@@ -679,6 +681,56 @@ TF1* FitPartialAnalysis::GetNonFlatBackground(NonFlatBgdFitType aBgdFitType, Fit
   else assert(0);
 
   return fNonFlatBackground;
+}
+
+
+//________________________________________________________________________________________________________________
+void FitPartialAnalysis::InitializeBackgroundParams(NonFlatBgdFitType aNonFlatBgdType)
+{
+  fBgdParameters.clear();
+//  double tScale = fKStarCfLite->GetNumScale()/fKStarCfLite->GetDenScale();
+  double tScale = 1.;
+
+  //FitParameter::FitParameter(ParameterType aParamType, double aStartValue, bool aIsFixed, double aLowerParamBound, double aUpperParamBound, double aStepSize);
+  switch(aNonFlatBgdType) {
+  case kLinear:
+    //2 parameters
+    //par[0]*x[0] + par[1]
+    fBgdParameters.push_back(new FitParameter(kBgd, 0.,     false, 0., 0., 0.01));       //par[0]
+    fBgdParameters.push_back(new FitParameter(kBgd, tScale, false, 0., 0., 0.001));      //par[1]
+    break;
+
+  case kQuadratic:
+    //3 parameters
+    //par[0]*x[0]*x[0] + par[1]*x[0] + par[2]
+    fBgdParameters.push_back(new FitParameter(kBgd, 0.,     false, 0., 0., 0.01));       //par[0]
+    fBgdParameters.push_back(new FitParameter(kBgd, 0.,     false, 0., 0., 0.01));       //par[1]
+    fBgdParameters.push_back(new FitParameter(kBgd, tScale, false, 0., 0., 0.01));       //par[2]
+    break;
+
+  case kGaussian:
+    //4 parameters (although, likely par[1] fixed to zero
+    //par[0]*exp(-0.5*(pow((x[0]-par[1])/par[2],2.0))) + par[3]
+    fBgdParameters.push_back(new FitParameter(kBgd, 0.0001, false, 0., 0., 0.0001));       //par[0]
+    fBgdParameters.push_back(new FitParameter(kBgd, 0.,     true,  0., 0., 0.1));          //par[1]
+    fBgdParameters.push_back(new FitParameter(kBgd, 0.5,    false, 0., 0., 0.01));         //par[2]
+    fBgdParameters.push_back(new FitParameter(kBgd, tScale, false, 0., 0., 0.1));          //par[3]
+    break;
+
+  default:
+    cout << "FitPartialAnalysis::InitializeBackgroundParams: Invalid NonFlatBgdFitType = " << aNonFlatBgdType << " selected" << endl;
+    assert(0);
+  }
+}
+
+
+//________________________________________________________________________________________________________________
+void FitPartialAnalysis::SetBgdParametersSharedLocal(bool aIsShared, vector<int> &aSharedAnalyses)
+{
+  for(unsigned int i=0; i<fBgdParameters.size(); i++)
+  {
+    fBgdParameters[i]->SetSharedLocal(aIsShared, aSharedAnalyses);
+  }
 }
 
 

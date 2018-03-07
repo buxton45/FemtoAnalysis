@@ -68,9 +68,12 @@ public:
   void CreateFitFunction(IncludeResidualsType aIncResType, ResPrimMaxDecayType aResPrimMaxDecayType, double aChi2, int aNDF, 
                          double aKStarMin=0.0, double aKStarMax=1.0, TString aBaseName="Fit");
 
+  //----------- Used when fitting background first and separate from everything else (old method)
   TF1* GetNonFlatBackground_FitCombinedPartials(NonFlatBgdFitType aBgdFitType, FitType aFitType, bool aNormalizeFitToCf);
   TF1* GetNonFlatBackground_CombinePartialFits(NonFlatBgdFitType aBgdFitType, FitType aFitType, bool aNormalizeFitToCf);
   TF1* GetNonFlatBackground(NonFlatBgdFitType aBgdFitType, FitType aFitType, bool aNormalizeFitToCf, bool aCombinePartialFits);
+  //---------------------------------------------------------------------------------------------
+//  void InitializeBackgroundParams(NonFlatBgdFitType aNonFlatBgdType, bool aShareAmongstPartials);
 
   void CreateFitNormParameters();
   void ShareFitParameters(bool aIncludeSingletAndTriplet=false);
@@ -180,17 +183,10 @@ private:
   int fNFitParamsToShare;
   int fNFitNormParams;
 
-//TODO I don't think I actually need these specific FitParameter* objects
-  FitParameter* fLambda;
-  FitParameter* fRadius;
-  FitParameter* fRef0;
-  FitParameter* fImf0;
-  FitParameter* fd0;
-  FitParameter* fRef02;
-  FitParameter* fImf02;
-  FitParameter* fd02;
-  vector<FitParameter*> fFitNormParameters; //typical case, there will be 5 (one for each Bp1, Bp2, etc.)
-  vector<FitParameter*> fFitParameters;  //typical case, there will be 5(Lambda,Radius,Ref0,Imf0,d0)
+  vector<FitParameter*> fFitNormParameters;        //typical case, there will be 5 (one for each Bp1, Bp2, etc.)
+  vector<FitParameter*> fFitParameters;            //typical case, there will be 5(Lambda,Radius,Ref0,Imf0,d0)
+  vector<vector<FitParameter*> > fBgdParameters;   //If sharing between partials, fBgdParameters.size()==1
+                                                   //  otherwise, fBgdParameters.size() == fNFitPartialAnalysis
 
   TH2* fModelKStarTrueVsRecMixed;
   CfHeavy* fModelKStarHeavyCfFake;

@@ -31,25 +31,27 @@ FitPairAnalysis::FitPairAnalysis(TString aAnalysisName, vector<FitPartialAnalysi
 
   fParticleTypes(2),
 
-  fKStarCfHeavy(0),
+  fKStarCfHeavy(nullptr),
 
   fMinBgdFit(0.60),
   fMaxBgdFit(0.90),
   fNormalizeBgdFitToCf(false),
 
-  fPrimaryFit(0),
-  fNonFlatBackground(0),
+  fPrimaryFit(nullptr),
+  fNonFlatBackground(nullptr),
 
   fNFitParams(0),
   fNFitParamsToShare(5),  //sharing Lambda, Radius, Ref0, Imf0, d0
   fNFitNormParams(0),
   fFitNormParameters(0),
   fFitParameters(0),
+  fBgdParameters(0),
 
-  fModelKStarTrueVsRecMixed(0),
-  fModelKStarHeavyCfFake(0),
-  fModelKStarHeavyCfFakeIdeal(0),
-  fModelCfFakeIdealCfFakeRatio(0),
+  fModelKStarTrueVsRecMixed(nullptr),
+  fModelKStarHeavyCfFake(nullptr),
+  fModelKStarHeavyCfFakeIdeal(nullptr),
+  fModelCfFakeIdealCfFakeRatio(nullptr),
+
   fTransformMatrices(0),
   fTransformStorageMapping(0),
 
@@ -99,25 +101,27 @@ FitPairAnalysis::FitPairAnalysis(TString aFileLocationBase, AnalysisType aAnalys
 
   fParticleTypes(2),
 
-  fKStarCfHeavy(0),
+  fKStarCfHeavy(nullptr),
 
   fMinBgdFit(0.60),
   fMaxBgdFit(0.90),
   fNormalizeBgdFitToCf(false),
 
-  fPrimaryFit(0),
-  fNonFlatBackground(0),
+  fPrimaryFit(nullptr),
+  fNonFlatBackground(nullptr),
 
   fNFitParams(0),
   fNFitParamsToShare(5),  //sharing Lambda, Radius, Ref0, Imf0, d0
   fNFitNormParams(0),
   fFitNormParameters(0),
   fFitParameters(0),
+  fBgdParameters(0),
 
-  fModelKStarTrueVsRecMixed(0),
-  fModelKStarHeavyCfFake(0),
-  fModelKStarHeavyCfFakeIdeal(0),
-  fModelCfFakeIdealCfFakeRatio(0),
+  fModelKStarTrueVsRecMixed(nullptr),
+  fModelKStarHeavyCfFake(nullptr),
+  fModelKStarHeavyCfFakeIdeal(nullptr),
+  fModelCfFakeIdealCfFakeRatio(nullptr),
+
   fTransformMatrices(0),
   fTransformStorageMapping(0),
 
@@ -178,25 +182,27 @@ FitPairAnalysis::FitPairAnalysis(TString aFileLocationBase, TString aFileLocatio
 
   fParticleTypes(2),
 
-  fKStarCfHeavy(0),
+  fKStarCfHeavy(nullptr),
 
   fMinBgdFit(0.60),
   fMaxBgdFit(0.90),
   fNormalizeBgdFitToCf(false),
 
-  fPrimaryFit(0),
-  fNonFlatBackground(0),
+  fPrimaryFit(nullptr),
+  fNonFlatBackground(nullptr),
 
   fNFitParams(0),
   fNFitParamsToShare(5),  //sharing Lambda, Radius, Ref0, Imf0, d0
   fNFitNormParams(0),
   fFitNormParameters(0),
   fFitParameters(0),
+  fBgdParameters(0),
 
-  fModelKStarTrueVsRecMixed(0),
-  fModelKStarHeavyCfFake(0),
-  fModelKStarHeavyCfFakeIdeal(0),
-  fModelCfFakeIdealCfFakeRatio(0),
+  fModelKStarTrueVsRecMixed(nullptr),
+  fModelKStarHeavyCfFake(nullptr),
+  fModelKStarHeavyCfFakeIdeal(nullptr),
+  fModelCfFakeIdealCfFakeRatio(nullptr),
+
   fTransformMatrices(0),
   fTransformStorageMapping(0),
 
@@ -540,6 +546,31 @@ TF1* FitPairAnalysis::GetNonFlatBackground(NonFlatBgdFitType aBgdFitType, FitTyp
   
   return fNonFlatBackground;
 }
+
+/*
+//________________________________________________________________________________________________________________
+void FitPairAnalysis::InitializeBackgroundParams(NonFlatBgdFitType aNonFlatBgdType, bool aShareAmongstPartials)
+{
+  fBgdParameters.clear();
+  for(int i=0; i<fNFitPartialAnalysis; i++) fFitPartialAnalysisCollection[i]->InitializeBackgroundParams(aNonFlatBgdType);
+
+  vector<FitParameter*> tTempVec(0);
+  if(aShareAmongstPartials)
+  {
+    vector<int> tAllShared (fNFitPartialAnalysis);
+    for(int i=0; i<fNFitPartialAnalysis; i++) {tAllShared[i] = i;}
+    
+    fFitPartialAnalysisCollection[0]->SetBgdParametersSharedLocal(true, tAllShared);
+    tTempVec = fFitPartialAnalysisCollection[0]->GetBgdParameters();
+    fBgdParameters.push_back(tTempVec);
+  }
+  else
+  {
+
+  }
+
+}
+*/
 
 
 //________________________________________________________________________________________________________________

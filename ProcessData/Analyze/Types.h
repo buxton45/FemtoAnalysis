@@ -64,7 +64,7 @@ kResXiCKSt0ToLamK0=83, kResAXiCKSt0ToALamK0=84,
 
   enum AxisType {kXaxis=0, kYaxis=1};
 
-  enum ParameterType {kLambda=0, kRadius=1, kRef0=2, kImf0=3, kd0=4, kRef02=5, kImf02=6, kd02=7, kNorm=8};
+  enum ParameterType {kLambda=0, kRadius=1, kRef0=2, kImf0=3, kd0=4, kRef02=5, kImf02=6, kd02=7, kNorm=8, kBgd=9};
   enum ParamValueType {kValue=0, kStatErr=1, kSystErr=2};
 
   enum KStarTrueVsRecType {kSame=0, kRotSame=1, kMixed=2, kRotMixed=3};

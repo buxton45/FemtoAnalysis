@@ -87,11 +87,15 @@ public:
   void CreateFitFunction(bool aApplyNorm, IncludeResidualsType aIncResType, ResPrimMaxDecayType aResPrimMaxDecayType, double aChi2, int aNDF, 
                          double aKStarMin=0.0, double aKStarMax=1.0, TString aBaseName="Fit");
 
+  //----------- Used when fitting background first and separate from everything else (old method)
   static TF1* FitNonFlatBackground(TH1* aNum, TH1* aDen, TH1* aCf, NonFlatBgdFitType aBgdFitType, FitType aFitType, bool aNormalizeFitToCf, 
                                    double aMinBgdFit=0.60, double aMaxBhdFit=0.90, double aKStarMinNorm=0.32, double aKStarMaxNorm=0.40);
   static TF1* FitNonFlatBackground(TH1* aCf, NonFlatBgdFitType aBgdFitType, 
                                    double aMinBgdFit=0.6, double aMaxBgdFit=0.9, double aKStarMinNorm=0.32, double aKStarMaxNorm=0.40);
   TF1* GetNonFlatBackground(NonFlatBgdFitType aBgdFitType, FitType aFitType, bool aNormalizeFitToCf);
+  //---------------------------------------------------------------------------------------------
+  void InitializeBackgroundParams(NonFlatBgdFitType aNonFlatBgdType);
+  void SetBgdParametersSharedLocal(bool aIsShared, vector<int> &aSharedAnalyses);
 
   void SetFitParameter(FitParameter* aParam);
 
@@ -129,6 +133,9 @@ public:
   vector<FitParameter*> GetFitParameters();
   FitParameter* GetFitNormParameter();
   FitParameter* GetFitParameter(ParameterType aParamType);
+
+  vector<FitParameter*> GetBgdParameters();
+  FitParameter* GetBgdParameter(int aIdx);
 
   void SetRejectOmega(bool aRejectOmega);
   bool RejectOmega();
@@ -170,6 +177,7 @@ private:
   FitParameter* fd02;
   vector<FitParameter*> fFitParameters;
   FitParameter* fNorm;
+  vector<FitParameter*> fBgdParameters;
 
   bool fRejectOmega;
 
@@ -217,6 +225,9 @@ inline int FitPartialAnalysis::GetNFitParams() {return fNFitParams;}
 inline vector<FitParameter*> FitPartialAnalysis::GetFitParameters() {return fFitParameters;}
 inline FitParameter* FitPartialAnalysis::GetFitNormParameter() {return fNorm;}
 inline FitParameter* FitPartialAnalysis::GetFitParameter(ParameterType aParamType) {return fFitParameters[aParamType];}
+
+inline vector<FitParameter*> FitPartialAnalysis::GetBgdParameters() {return fBgdParameters;}
+inline FitParameter* FitPartialAnalysis::GetBgdParameter(int aIdx) {return fBgdParameters[aIdx];}
 
 inline void FitPartialAnalysis::SetRejectOmega(bool aRejectOmega) {fRejectOmega = aRejectOmega;}
 inline bool FitPartialAnalysis::RejectOmega() {return fRejectOmega;}
