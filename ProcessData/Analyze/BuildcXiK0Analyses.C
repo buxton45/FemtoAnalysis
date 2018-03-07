@@ -35,13 +35,13 @@ int main(int argc, char **argv)
   //This allows the user a chance to look at and manipulate a TBrowser before
   //the program ends and closes everything
 //-----------------------------------------------------------------------------
-
+  CentralityType tCentType = k0010;
   //-----Data
 
 
   TString FileLocationBase = "~/Analysis/FemtoAnalysis/Results/Results_cXiK0_20170615/Results_cXiK0_20170615";
-  Analysis* XiK0 = new Analysis(FileLocationBase,kXiK0,k0010);
-  Analysis* AXiK0 = new Analysis(FileLocationBase,kAXiK0,k0010);
+  Analysis* XiK0 = new Analysis(FileLocationBase,kXiK0,tCentType);
+  Analysis* AXiK0 = new Analysis(FileLocationBase,kAXiK0,tCentType);
 
 
   TString SaveFileName = "~/Analysis/FemtoAnalysis/Results/Results_cXiK0_20170615/0010/Results_cXiK0_20170615_0010.root";
@@ -53,13 +53,13 @@ int main(int argc, char **argv)
   TFile *mySaveFile;
   if(bSaveFile) {mySaveFile = new TFile(SaveFileName, "RECREATE");}
 
-  bool bContainsPurity = true;
+  bool bContainsPurity = false;
   bool bContainsKStarCfs = true;
   bool bContainsAvgSepCfs = false;
 
   bool bDrawMC = false;
 
-  bool bSaveFigures = true;
+  bool bSaveFigures = false;
   TString tSaveFiguresLocation = "~/Analysis/FemtoAnalysis/Results/Results_cXiK0_20170615/0010/";
   //-------------------------------------------------------------------
 
@@ -68,8 +68,8 @@ int main(int argc, char **argv)
     XiK0->BuildKStarHeavyCf();
     AXiK0->BuildKStarHeavyCf();
 
-    XiK0->GetKStarHeavyCf()->Rebin(2);
-    AXiK0->GetKStarHeavyCf()->Rebin(2);
+    XiK0->GetKStarHeavyCf()->Rebin(4);
+    AXiK0->GetKStarHeavyCf()->Rebin(4);
 
     TLegend* leg1 = new TLegend(0.60,0.12,0.89,0.32);
       leg1->SetFillColor(0);
@@ -84,7 +84,7 @@ int main(int argc, char **argv)
     gStyle->SetOptTitle(0);
 
     double tXMin = 0.0;
-    double tXMax = 0.15;
+    double tXMax = 1.0;
 
     double tYMin = 0.38;
     double tYMax = 1.7;

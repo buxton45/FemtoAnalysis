@@ -35,15 +35,20 @@ int main(int argc, char **argv)
   //This allows the user a chance to look at and manipulate a TBrowser before
   //the program ends and closes everything
 //-----------------------------------------------------------------------------
-
+  CentralityType tCentType = k0010;
+  bool bDrawXiK0 = false;
   //-----Data
 
 
   TString FileLocationBase = "~/Analysis/FemtoAnalysis/Results/Results_cXicKch_20170505_ignoreOnFlyStatus/Results_cXicKch_20170505_ignoreOnFlyStatus";
-  Analysis* XiKchP = new Analysis(FileLocationBase,kXiKchP,k0010);
-  Analysis* AXiKchP = new Analysis(FileLocationBase,kAXiKchP,k0010);
-  Analysis* XiKchM = new Analysis(FileLocationBase,kXiKchM,k0010);
-  Analysis* AXiKchM = new Analysis(FileLocationBase,kAXiKchM,k0010);
+  Analysis* XiKchP = new Analysis(FileLocationBase,kXiKchP,tCentType);
+  Analysis* AXiKchP = new Analysis(FileLocationBase,kAXiKchP,tCentType);
+  Analysis* XiKchM = new Analysis(FileLocationBase,kXiKchM,tCentType);
+  Analysis* AXiKchM = new Analysis(FileLocationBase,kAXiKchM,tCentType);
+
+  TString FileLocationBase_XiK0 = "~/Analysis/FemtoAnalysis/Results/Results_cXiK0_20170615/Results_cXiK0_20170615";
+  Analysis* XiK0 = new Analysis(FileLocationBase_XiK0,kXiK0,tCentType);
+  Analysis* AXiK0 = new Analysis(FileLocationBase_XiK0,kAXiK0,tCentType);
 
 
   TString SaveFileName = "~/Analysis/FemtoAnalysis/Results/Results_cXicKch_20170505_ignoreOnFlyStatus/0010/Results_cXicKch_20170505_ignoreOnFlyStatus_0010.root";
@@ -51,16 +56,16 @@ int main(int argc, char **argv)
   //-----MC
 /*
   TString FileLocationBaseMC = "~/Analysis/FemtoAnalysis/Results/Results_cXicKch_20160125/Results_cXicKch_MC_20160125";
-  Analysis* XiKchPMC = new Analysis(FileLocationBaseMC,kXiKchP,k0010);
-  Analysis* AXiKchPMC = new Analysis(FileLocationBaseMC,kAXiKchP,k0010);
-  Analysis* XiKchMMC = new Analysis(FileLocationBaseMC,kXiKchM,k0010);
-  Analysis* AXiKchMMC = new Analysis(FileLocationBaseMC,kAXiKchM,k0010);
+  Analysis* XiKchPMC = new Analysis(FileLocationBaseMC,kXiKchP,tCentType);
+  Analysis* AXiKchPMC = new Analysis(FileLocationBaseMC,kAXiKchP,tCentType);
+  Analysis* XiKchMMC = new Analysis(FileLocationBaseMC,kXiKchM,tCentType);
+  Analysis* AXiKchMMC = new Analysis(FileLocationBaseMC,kAXiKchM,tCentType);
 
   TString FileLocationBaseMCd = "~/Analysis/FemtoAnalysis/Results/Results_cXicKch_20160125/Results_cXicKch_MCd_20160125";
-  Analysis* XiKchPMCd = new Analysis(FileLocationBaseMCd,kXiKchP,k0010);
-  Analysis* AXiKchPMCd = new Analysis(FileLocationBaseMCd,kAXiKchP,k0010);
-  Analysis* XiKchMMCd = new Analysis(FileLocationBaseMCd,kXiKchM,k0010);
-  Analysis* AXiKchMMCd = new Analysis(FileLocationBaseMCd,kAXiKchM,k0010);
+  Analysis* XiKchPMCd = new Analysis(FileLocationBaseMCd,kXiKchP,tCentType);
+  Analysis* AXiKchPMCd = new Analysis(FileLocationBaseMCd,kAXiKchP,tCentType);
+  Analysis* XiKchMMCd = new Analysis(FileLocationBaseMCd,kXiKchM,tCentType);
+  Analysis* AXiKchMMCd = new Analysis(FileLocationBaseMCd,kAXiKchM,tCentType);
 
   vector<PartialAnalysis*> tXiKchPMCTotVec;
   vector<PartialAnalysis*> tTempXiKchPMCVec = XiKchPMC->GetPartialAnalysisCollection();
@@ -115,9 +120,9 @@ int main(int argc, char **argv)
   TFile *mySaveFile;
   if(bSaveFile) {mySaveFile = new TFile(SaveFileName, "RECREATE");}
 
-  bool bContainsPurity = true;
+  bool bContainsPurity = false;
   bool bContainsKStarCfs = true;
-  bool bCheckErrorBarConstruction = true;
+  bool bCheckErrorBarConstruction = false;
 
   bool bContainsAvgSepCfs = false;
 
@@ -132,7 +137,7 @@ int main(int argc, char **argv)
 
   bool bDrawMC = false;
 
-  bool bSaveFigures = true;
+  bool bSaveFigures = false;
   TString tSaveFiguresLocation = "~/Analysis/FemtoAnalysis/Results/Results_cXicKch_20170505_ignoreOnFlyStatus/0010/";
   //-------------------------------------------------------------------
 
@@ -142,11 +147,15 @@ int main(int argc, char **argv)
     AXiKchP->BuildKStarHeavyCf();
     XiKchM->BuildKStarHeavyCf();
     AXiKchM->BuildKStarHeavyCf();
+    XiK0->BuildKStarHeavyCf();
+    AXiK0->BuildKStarHeavyCf();
 
-    XiKchP->GetKStarHeavyCf()->Rebin(2);
-    AXiKchP->GetKStarHeavyCf()->Rebin(2);
-    XiKchM->GetKStarHeavyCf()->Rebin(2);
-    AXiKchM->GetKStarHeavyCf()->Rebin(2);
+    XiKchP->GetKStarHeavyCf()->Rebin(4);
+    AXiKchP->GetKStarHeavyCf()->Rebin(4);
+    XiKchM->GetKStarHeavyCf()->Rebin(4);
+    AXiKchM->GetKStarHeavyCf()->Rebin(4);
+    XiK0->GetKStarHeavyCf()->Rebin(4);
+    AXiK0->GetKStarHeavyCf()->Rebin(4);
 
     if(bCheckErrorBarConstruction)
     {
@@ -162,11 +171,13 @@ int main(int argc, char **argv)
       leg1->SetFillColor(0);
       leg1->AddEntry(XiKchP->GetKStarHeavyCf()->GetHeavyCf(),XiKchP->GetKStarHeavyCf()->GetHeavyCf()->GetTitle(),"lp");
       leg1->AddEntry(XiKchM->GetKStarHeavyCf()->GetHeavyCf(),XiKchM->GetKStarHeavyCf()->GetHeavyCf()->GetTitle(),"lp");
+      if(bDrawXiK0) leg1->AddEntry(XiK0->GetKStarHeavyCf()->GetHeavyCf(),XiK0->GetKStarHeavyCf()->GetHeavyCf()->GetTitle(),"lp");
 
     TLegend* leg2 = new TLegend(0.60,0.12,0.89,0.32);
       leg2->SetFillColor(0);
       leg2->AddEntry(AXiKchP->GetKStarHeavyCf()->GetHeavyCf(),AXiKchP->GetKStarHeavyCf()->GetHeavyCf()->GetTitle(),"lp");
       leg2->AddEntry(AXiKchM->GetKStarHeavyCf()->GetHeavyCf(),AXiKchM->GetKStarHeavyCf()->GetHeavyCf()->GetTitle(),"lp");
+      if(bDrawXiK0) leg2->AddEntry(AXiK0->GetKStarHeavyCf()->GetHeavyCf(),AXiK0->GetKStarHeavyCf()->GetHeavyCf()->GetTitle(),"lp");
 
     TString tNewNameXiKchP = XiKchP->GetKStarHeavyCf()->GetHeavyCf()->GetTitle();
       tNewNameXiKchP += " & " ;
@@ -185,19 +196,21 @@ int main(int argc, char **argv)
     gStyle->SetOptTitle(0);
 
     double tXMin = 0.0;
-    double tXMax = 0.15;
+    double tXMax = 1.0;
 
     double tYMin = 0.38;
     double tYMax = 1.7;
 
     XiKchP->DrawKStarHeavyCf((TPad*)canKStar->cd(1),2,"",20,tXMin,tXMax,tYMin,tYMax);
-    XiKchM->DrawKStarHeavyCf((TPad*)canKStar->cd(1),4,"same");
+    XiKchM->DrawKStarHeavyCf((TPad*)canKStar->cd(1),4,"same",20,tXMin,tXMax,tYMin,tYMax);
+    if(bDrawXiK0) XiK0->DrawKStarHeavyCf((TPad*)canKStar->cd(1),1,"same",20,tXMin,tXMax,tYMin,tYMax);
     canKStar->cd(1);
     leg1->Draw();
 
 
     AXiKchP->DrawKStarHeavyCf((TPad*)canKStar->cd(2),4,"",20,tXMin,tXMax,tYMin,tYMax);
-    AXiKchM->DrawKStarHeavyCf((TPad*)canKStar->cd(2),2,"same");
+    AXiKchM->DrawKStarHeavyCf((TPad*)canKStar->cd(2),2,"same",20,tXMin,tXMax,tYMin,tYMax);
+    if(bDrawXiK0) AXiK0->DrawKStarHeavyCf((TPad*)canKStar->cd(2),1,"same",20,tXMin,tXMax,tYMin,tYMax);
     canKStar->cd(2);
     leg2->Draw();
 

@@ -152,6 +152,11 @@ public:
 
   void SetSaveFileType(TString aType);
 
+  int GetNAnalyses();
+  FitGeneratorType GetGeneratorType();
+  const vector<CentralityType> GetCentralityTypes();
+  FitSharedAnalyses* GetSharedAn();
+
 protected:
   TString fSaveLocationBase;
   TString fSaveNameModifier;
@@ -235,6 +240,11 @@ inline void FitGenerator::SetResPrimMaxDecayType(ResPrimMaxDecayType aResPrimMax
 inline void FitGenerator::SetUsemTScalingOfResidualRadii(bool aUse, double aPower) {fUsemTScalingOfResidualRadii = aUse; fmTScalingPowerOfResidualRadii = aPower;}
 
 inline void FitGenerator::SetSaveFileType(TString aType) {fSaveFileType = aType;}
+
+inline int FitGenerator::GetNAnalyses() {return fNAnalyses;}
+inline FitGeneratorType FitGenerator::GetGeneratorType() {return fGeneratorType;}
+inline const vector<CentralityType> FitGenerator::GetCentralityTypes() {return fCentralityTypes;}
+inline FitSharedAnalyses* FitGenerator::GetSharedAn() {return fSharedAn;}
 
 #endif
 

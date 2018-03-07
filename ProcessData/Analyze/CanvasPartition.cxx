@@ -326,7 +326,7 @@ void CanvasPartition::SetupTLegend(TString aHeader, int aNx, int aNy, double aTe
 
   //------------------------------------
 
-  TLegend* tLeg = new TLegend(tNormalizedTextXmin,tNormalizedTextYmin,tNormalizedTextXmax,tNormalizedTextYmax,"NDC");
+  TLegend* tLeg = new TLegend(tNormalizedTextXmin,tNormalizedTextYmin,tNormalizedTextXmax,tNormalizedTextYmax, "","NDC");
   if(aNColumns != 1) tLeg->SetNColumns(aNColumns);
     tLeg->SetFillColor(0);
     tLeg->SetBorderSize(0);

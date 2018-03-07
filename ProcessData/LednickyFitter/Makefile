@@ -25,7 +25,7 @@ CFLAGS = $(shell root-config --cflags) -Wall -std=c++11 -I${ANALYZE_DIR} -I${LED
 
 MY_LIBS = $(addprefix build/, FitParameter.o FitChi2Histograms.o BackgroundFitter.o FitPartialAnalysis.o FitPairAnalysis.o FitSharedAnalyses.o MathematicaSession.o WaveFunction.o ChargedResidualCf.o SimpleChargedResidualCf.o NeutralResidualCf.o ResidualCollection.o SimpleLednickyFitter.o LednickyFitter.o FitGenerator.o CfLite.o CfHeavy.o Types.o Types_LambdaValues.o Types_FitParamValues.o AnalysisInfo.o Faddeeva.o CanvasPartition.o)
 
-BINARIES = runLamKchP runLamKchPTest runCompareKchFix2 runFits runTest runGenerator runCompareIgnoreOnFlyStatus runScattParamValues runLamKchPvsKchM runPlotAll runSimpleLednicky runCompareFittingMethods runmTScaling
+BINARIES = runLamKchP runLamKchPTest runCompareKchFix2 runFits runTest runGenerator runCompareIgnoreOnFlyStatus runScattParamValues runLamKchPvsKchM runPlotAll runSimpleLednicky runCompareFittingMethods runmTScaling runCompareBackgrounds
 
 all: $(BINARIES)
 
@@ -67,6 +67,9 @@ runCompareFittingMethods: ${MY_LIBS} CompareFittingMethods.C
 
 runmTScaling: ${MY_LIBS} DrawmTScaling.C
 	g++ DrawmTScaling.C ${MY_LIBS} -I${INCDIR} -o runmTScaling -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS)
+
+runCompareBackgrounds: ${MY_LIBS} CompareBackgrounds.C
+	g++ CompareBackgrounds.C ${MY_LIBS} -I${INCDIR} -o runCompareBackgrounds -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS)
 
 build/%.o: ${ANALYZE_DIR}/%.cxx ${ANALYZE_DIR}/%.h
 	g++ -c $< $(CFLAGS) -o $@
