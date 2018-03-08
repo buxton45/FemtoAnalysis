@@ -257,7 +257,7 @@ int main(int argc, char **argv)
 
   TObjArray* tDrawCfRatiosAndDiffs_LamKchM_LamKchP = DrawCfRatiosAndDiffs(tLamKchM, tLamKchP);
   TObjArray* tDrawCfRatiosAndDiffs_LamKchM_LamK0 = DrawCfRatiosAndDiffs(tLamKchM, tLamK0);
-  TObjArray* tDrawCfRatiosAndDiffs_LamK0_LamKchP = DrawCfRatiosAndDiffs(tLamK0, tLamKchP);
+  TObjArray* tDrawCfRatiosAndDiffs_LamKchP_LamK0 = DrawCfRatiosAndDiffs(tLamKchP, tLamK0);
 
 //-------------------------------------------------------------------------------
 
@@ -277,10 +277,10 @@ int main(int argc, char **argv)
         + ((TCanvas*)tDrawCfRatiosAndDiffs_LamKchM_LamK0->At(i))->GetName() + TString::Format(".%s", tSaveFileType.Data()));
     }
 
-    for(int i=0; i<tDrawCfRatiosAndDiffs_LamK0_LamKchP->GetEntries(); i++)
+    for(int i=0; i<tDrawCfRatiosAndDiffs_LamKchP_LamK0->GetEntries(); i++)
     {
-      ((TCanvas*)tDrawCfRatiosAndDiffs_LamK0_LamKchP->At(i))->SaveAs(tSaveDir 
-        + ((TCanvas*)tDrawCfRatiosAndDiffs_LamK0_LamKchP->At(i))->GetName() + TString::Format(".%s", tSaveFileType.Data()));
+      ((TCanvas*)tDrawCfRatiosAndDiffs_LamKchP_LamK0->At(i))->SaveAs(tSaveDir 
+        + ((TCanvas*)tDrawCfRatiosAndDiffs_LamKchP_LamK0->At(i))->GetName() + TString::Format(".%s", tSaveFileType.Data()));
     }
 
 

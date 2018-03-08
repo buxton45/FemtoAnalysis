@@ -210,7 +210,7 @@ void FitGenerator::SetNAnalyses()
   fFitParamsPerPad.resize(fNAnalyses);
   for(int i=0; i<fNAnalyses; i++)
   {
-    fFitParamsPerPad[i].reserve(8);  //big enough for case of singlet in triplet
+    fFitParamsPerPad[i].reserve(8);  //big enough for case of singlet or triplet
     fFitParamsPerPad[i].emplace_back(kLambda,0.);
     fFitParamsPerPad[i].emplace_back(kRadius,0.);
     fFitParamsPerPad[i].emplace_back(kRef0,0.);

@@ -264,3 +264,18 @@ vector<int> FitParameter::GetSharedWithGlobal()
   return fSharedWithGlobal;
 }
 
+
+//________________________________________________________________________________________________________________
+void FitParameter::SetAttributes(double aStartValue, bool aIsFixed, double aLowerParamBound, double aUpperParamBound, double aStepSize)
+{
+  fStartValue = aStartValue;
+  fIsFixed = aIsFixed;
+  fLowerParamBound = aLowerParamBound;
+  fUpperParamBound = aUpperParamBound;
+  if(aStepSize > 0.) fStepSize = aStepSize;
+}
+
+
+
+
+

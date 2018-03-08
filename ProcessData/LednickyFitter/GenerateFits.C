@@ -57,7 +57,7 @@ int main(int argc, char **argv)
   if(UnboundLambda) aLambdaMax=0.;
 
   bool bZoomROP = true;
-  bool bDrawResiduals = true;
+  bool bDrawResiduals = false;
 
   bool bDrawSysErrs = true;
 

@@ -45,6 +45,8 @@ public:
   void SetSharedGlobal(bool aIsShared, const vector<int> &aSharedAnalyses);
   vector<int> GetSharedWithGlobal();
 
+  void SetAttributes(double aStartValue, bool aIsFixed, double aLowerParamBound, double aUpperParamBound, double aStepSize = -1.);
+
   //inline (i.e. simple) functions
   void SetType(ParameterType aParamType);
   void SetName(TString aName);

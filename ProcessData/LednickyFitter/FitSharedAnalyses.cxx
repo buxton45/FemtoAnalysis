@@ -101,10 +101,7 @@ FitSharedAnalyses::~FitSharedAnalyses()
 //________________________________________________________________________________________________________________
 void FitSharedAnalyses::SetParameter(ParameterType aParamType, int aAnalysisNumber, double aStartValue, double aLowerBound, double aUpperBound, bool aIsFixed)
 {
-  fFitPairAnalysisCollection[aAnalysisNumber]->GetFitParameter(aParamType)->SetStartValue(aStartValue);
-  fFitPairAnalysisCollection[aAnalysisNumber]->GetFitParameter(aParamType)->SetLowerBound(aLowerBound);
-  fFitPairAnalysisCollection[aAnalysisNumber]->GetFitParameter(aParamType)->SetUpperBound(aUpperBound);
-  fFitPairAnalysisCollection[aAnalysisNumber]->GetFitParameter(aParamType)->SetFixed(aIsFixed);
+  fFitPairAnalysisCollection[aAnalysisNumber]->GetFitParameter(aParamType)->SetAttributes(aStartValue, aIsFixed, aLowerBound, aUpperBound);
 }
 
 
@@ -260,10 +257,7 @@ void FitSharedAnalyses::SetSharedParameter(ParameterType aParamType, double aSta
 
   //----------
   fFitPairAnalysisCollection[0]->GetFitParameter(aParamType)->SetSharedGlobal(true,tAllShared);
-  fFitPairAnalysisCollection[0]->GetFitParameter(aParamType)->SetStartValue(aStartValue);
-  fFitPairAnalysisCollection[0]->GetFitParameter(aParamType)->SetLowerBound(aLowerBound);
-  fFitPairAnalysisCollection[0]->GetFitParameter(aParamType)->SetUpperBound(aUpperBound);
-  fFitPairAnalysisCollection[0]->GetFitParameter(aParamType)->SetFixed(aIsFixed);
+  fFitPairAnalysisCollection[0]->GetFitParameter(aParamType)->SetAttributes(aStartValue, aIsFixed, aLowerBound, aUpperBound);
 
   for(int i=1; i<fNFitPairAnalysis; i++)
   {
@@ -318,10 +312,7 @@ void FitSharedAnalyses::SetSharedParameter(ParameterType aParamType, const vecto
 
   //----------
   fFitPairAnalysisCollection[aSharedAnalyses[0]]->GetFitParameter(aParamType)->SetSharedGlobal(true,aSharedAnalyses);
-  fFitPairAnalysisCollection[aSharedAnalyses[0]]->GetFitParameter(aParamType)->SetStartValue(aStartValue);
-  fFitPairAnalysisCollection[aSharedAnalyses[0]]->GetFitParameter(aParamType)->SetLowerBound(aLowerBound);
-  fFitPairAnalysisCollection[aSharedAnalyses[0]]->GetFitParameter(aParamType)->SetUpperBound(aUpperBound);
-  fFitPairAnalysisCollection[aSharedAnalyses[0]]->GetFitParameter(aParamType)->SetFixed(aIsFixed);
+  fFitPairAnalysisCollection[aSharedAnalyses[0]]->GetFitParameter(aParamType)->SetAttributes(aStartValue, aIsFixed, aLowerBound, aUpperBound);
 
   for(unsigned int i=1; i<aSharedAnalyses.size(); i++)
   {
