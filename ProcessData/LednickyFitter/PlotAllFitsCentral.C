@@ -1,5 +1,5 @@
-#include "FitGenerator.h"
-class FitGenerator;
+#include "FitGeneratorAndDraw.h"
+class FitGeneratorAndDraw;
 
 #include "CanvasPartition.h"
 class CanvasPartition;
@@ -158,7 +158,7 @@ TCanvas* DrawAll(vector<LednickyFitter*> &aFitters, IncludeResidualsType aIncRes
         tCanPart->AddPadPaveText(tkTInfo,i,j);
       }
 
-      td1dVec tSysErrors = FitGenerator::GetSystErrs(aIncResType, 
+      td1dVec tSysErrors = FitGeneratorAndDraw::GetSystErrs(aIncResType, 
                                                      aFitters[j]->GetFitSharedAnalyses()->GetFitPairAnalysis(i)->GetAnalysisType(), 
                                                      aFitters[j]->GetFitSharedAnalyses()->GetFitPairAnalysis(i)->GetCentralityType());
 

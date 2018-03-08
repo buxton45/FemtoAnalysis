@@ -1,5 +1,5 @@
-#include "FitGenerator.h"
-class FitGenerator;
+#include "FitGeneratorAndDraw.h"
+class FitGeneratorAndDraw;
 
 int main(int argc, char **argv) 
 {
@@ -114,8 +114,8 @@ int main(int argc, char **argv)
   if(UsemTScalingOfResidualRadii) tSaveNameModifier += TString::Format("_UsingmTScalingOfResidualRadii");
 
 
-  FitGenerator* tLamKchP = new FitGenerator(tFileLocationBase,tFileLocationBaseMC,tAnType, tCentType,tAnRunType,tNPartialAnalysis,tGenType,tShareLambdaParams,tAllShareSingleLambdaParam);
-//  FitGenerator* tLamKchP = new FitGenerator(tFileLocationBase,tFileLocationBaseMC,tAnType,{k0010,k1030},tAnRunType,tNPartialAnalysis,tGenType,tShareLambdaParams,tAllShareSingleLambdaParam);
+  FitGeneratorAndDraw* tLamKchP = new FitGeneratorAndDraw(tFileLocationBase,tFileLocationBaseMC,tAnType, tCentType,tAnRunType,tNPartialAnalysis,tGenType,tShareLambdaParams,tAllShareSingleLambdaParam);
+//  FitGeneratorAndDraw* tLamKchP = new FitGeneratorAndDraw(tFileLocationBase,tFileLocationBaseMC,tAnType,{k0010,k1030},tAnRunType,tNPartialAnalysis,tGenType,tShareLambdaParams,tAllShareSingleLambdaParam);
 //  tLamKchP->SetRadiusStartValues({3.0,4.0,5.0});
 //  tLamKchP->SetRadiusLimits({{0.,10.},{0.,10.},{0.,10.}});
   tLamKchP->SetSaveLocationBase(tSaveDirectoryBase,tSaveNameModifier);
