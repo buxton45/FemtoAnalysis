@@ -99,6 +99,7 @@ public:
 
   void SetApplyNonFlatBackgroundCorrection(bool aApply);
   void SetNonFlatBgdFitType(NonFlatBgdFitType aNonFlatBgdFitType);
+  void SetUseNewBgdTreatment(bool aUse);
   void SetApplyMomResCorrection(bool aApplyMomResCorrection);
   virtual void SetIncludeResidualCorrelationsType(IncludeResidualsType aIncludeResidualsType, double aMinLambda=0., double aMaxLambda=1.0);
   void SetChargedResidualsType(ChargedResidualsType aChargedResidualsType);
@@ -188,6 +189,7 @@ inline FitSharedAnalyses* FitGenerator::GetFitSharedAnalyses() {return fSharedAn
 
 inline void FitGenerator::SetApplyNonFlatBackgroundCorrection(bool aApply) {fApplyNonFlatBackgroundCorrection = aApply; fSharedAn->SetApplyNonFlatBackgroundCorrection(aApply);}
 inline void FitGenerator::SetNonFlatBgdFitType(NonFlatBgdFitType aNonFlatBgdFitType) {fNonFlatBgdFitType = aNonFlatBgdFitType; fSharedAn->SetNonFlatBgdFitType(aNonFlatBgdFitType);}
+inline void FitGenerator::SetUseNewBgdTreatment(bool aUse) {fSharedAn->SetUseNewBgdTreatment(aUse);}
 inline void FitGenerator::SetApplyMomResCorrection(bool aApplyMomResCorrection) {fApplyMomResCorrection = aApplyMomResCorrection;}
 inline void FitGenerator::SetIncludeResidualCorrelationsType(IncludeResidualsType aIncludeResidualsType, double aMinLambda, double aMaxLambda) {fIncludeResidualsType = aIncludeResidualsType; if(aIncludeResidualsType != kIncludeNoResiduals) SetDefaultLambdaParametersWithResiduals(aMinLambda, aMaxLambda);}
 inline void FitGenerator::SetChargedResidualsType(ChargedResidualsType aChargedResidualsType) {fChargedResidualsType = aChargedResidualsType;}

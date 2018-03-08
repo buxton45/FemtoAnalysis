@@ -65,6 +65,7 @@ public:
   void CreateMinuitParametersMatrix();  //call after all parameters shared!!!!!
 
   void CreateMinuitParameter(int aMinuitParamNumber, FitParameter* aParam);
+  void CreateBackgroundParams(NonFlatBgdFitType aNonFlatBgdType, bool aShareAmongstPairs, bool aShareAmongstPartials);
   void CreateMinuitParameters();
 
   void ReturnFitParametersToAnalyses();
@@ -87,6 +88,8 @@ public:
 
   void SetNonFlatBgdFitType(NonFlatBgdFitType aFitType);
   NonFlatBgdFitType GetNonFlatBgdFitType();
+  void SetUseNewBgdTreatment(bool aUse);
+  bool UsingNewBgdTreatment();
 
   TMinuit* GetMinuitObject();
   int GetNFitPairAnalysis();
@@ -120,6 +123,7 @@ private:
   FitType fFitType; //kChi2PML = default, or kChi2;
   bool fApplyNonFlatBackgroundCorrection;
   NonFlatBgdFitType fNonFlatBgdFitType; //kLinear = default
+  bool fUseNewBgdTreatment;
   int fNFitPairAnalysis;
 
   int fNFitParamsPerAnalysis;
@@ -156,6 +160,8 @@ inline bool FitSharedAnalyses::GetApplyNonFlatBackgroundCorrection() {return fAp
 
 inline void FitSharedAnalyses::SetNonFlatBgdFitType(NonFlatBgdFitType aFitType) {fNonFlatBgdFitType = aFitType;}
 inline NonFlatBgdFitType FitSharedAnalyses::GetNonFlatBgdFitType() {return fNonFlatBgdFitType;}
+inline void FitSharedAnalyses::SetUseNewBgdTreatment(bool aUse) {fUseNewBgdTreatment = aUse;}
+inline bool FitSharedAnalyses::UsingNewBgdTreatment() {return fUseNewBgdTreatment;}
 
 inline TMinuit* FitSharedAnalyses::GetMinuitObject() {return fMinuit;}
 inline int FitSharedAnalyses::GetNFitPairAnalysis() {return fNFitPairAnalysis;}

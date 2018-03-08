@@ -73,7 +73,7 @@ public:
   TF1* GetNonFlatBackground_CombinePartialFits(NonFlatBgdFitType aBgdFitType, FitType aFitType, bool aNormalizeFitToCf);
   TF1* GetNonFlatBackground(NonFlatBgdFitType aBgdFitType, FitType aFitType, bool aNormalizeFitToCf, bool aCombinePartialFits);
   //---------------------------------------------------------------------------------------------
-//  void InitializeBackgroundParams(NonFlatBgdFitType aNonFlatBgdType, bool aShareAmongstPartials);
+  void InitializeBackgroundParams(NonFlatBgdFitType aNonFlatBgdType, bool aShareAmongstPartials);
 
   void CreateFitNormParameters();
   void ShareFitParameters(bool aIncludeSingletAndTriplet=false);
@@ -81,7 +81,7 @@ public:
   vector<TString> GetFitParametersTStringVector();
   vector<double> GetFitParametersVector();
 
-  void SetFitParameter(FitParameter* aParam);
+  void SetFitParameterShallow(FitParameter* aParam);
 
   CfHeavy* GetModelKStarHeavyCf(double aKStarMinNorm=0.32, double aKStarMaxNorm=0.40, int aRebin=4);
   void BuildModelKStarHeavyCfFake(double aKStarMinNorm, double aKStarMaxNorm, int aRebin=1);
@@ -121,6 +121,9 @@ public:
 
   vector<FitParameter*> GetFitParameters();
   FitParameter* GetFitParameter(ParameterType aParamType);
+
+  vector<vector<FitParameter*> > Get2dBgdParameters();
+  vector<FitParameter*> Get1dBgdParameters(int aPartAn);
 
   vector<FitParameter*> GetFitNormParameters();
   FitParameter* GetFitNormParameter(int aFitPartialAnalysisNumber);
@@ -185,8 +188,8 @@ private:
 
   vector<FitParameter*> fFitNormParameters;        //typical case, there will be 5 (one for each Bp1, Bp2, etc.)
   vector<FitParameter*> fFitParameters;            //typical case, there will be 5(Lambda,Radius,Ref0,Imf0,d0)
-  vector<vector<FitParameter*> > fBgdParameters;   //If sharing between partials, fBgdParameters.size()==1
-                                                   //  otherwise, fBgdParameters.size() == fNFitPartialAnalysis
+  vector<vector<FitParameter*> > f2dBgdParameters;   //If sharing between partials, f2dBgdParameters.size()==1
+                                                     //  otherwise, f2dBgdParameters.size() == fNFitPartialAnalysis
 
   TH2* fModelKStarTrueVsRecMixed;
   CfHeavy* fModelKStarHeavyCfFake;
@@ -225,6 +228,9 @@ inline int FitPairAnalysis::GetNFitNormParams() {return fNFitNormParams;}
 
 inline vector<FitParameter*> FitPairAnalysis::GetFitParameters() {return fFitParameters;}
 inline FitParameter* FitPairAnalysis::GetFitParameter(ParameterType aParamType) {return fFitParameters[aParamType];}
+
+inline vector<vector<FitParameter*> > FitPairAnalysis::Get2dBgdParameters() {return f2dBgdParameters;}
+inline vector<FitParameter*> FitPairAnalysis::Get1dBgdParameters(int aPartAn) {return f2dBgdParameters[aPartAn];}
 
 inline vector<FitParameter*> FitPairAnalysis::GetFitNormParameters() {return fFitNormParameters;}
 inline FitParameter* FitPairAnalysis::GetFitNormParameter(int aFitPartialAnalysisNumber) {return fFitNormParameters[aFitPartialAnalysisNumber];}

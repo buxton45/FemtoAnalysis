@@ -405,7 +405,7 @@ const char* const cAvgSepCfCowboysAndSailorsBaseTagsNum[8] = {"NumPosPosAvgSepCf
 const char* const cAvgSepCfCowboysAndSailorsBaseTagsDen[8] = {"DenPosPosAvgSepCfCowboysAndSailors_", "DenPosNegAvgSepCfCowboysAndSailors_", "DenNegPosAvgSepCfCowboysAndSailors_", "DenNegNegAvgSepCfCowboysAndSailors_", "DenTrackPosAvgSepCfCowboysAndSailors_", "DenTrackNegAvgSepCfCowboysAndSailors_", "DenTrackTrackAvgSepCfCowboysAndSailors_", "DenTrackBacAvgSepCfCowboysAndSailors_"};
 
 //----*----*----*----*----*----*----*----*----*----*----*----*----*----*----*----*----*----*----*----*----*----*----*----*----*
-const char* const cParameterNames[9] = {"Lambda", "Radius", "Ref0", "Imf0", "d0", "Ref02", "Imf02", "d02", "Norm"};
+const char* const cParameterNames[10] = {"Lambda", "Radius", "Ref0", "Imf0", "d0", "Ref02", "Imf02", "d02", "Norm", "Bgd"};
 
 //________________________________________________________________________________________________________________
 

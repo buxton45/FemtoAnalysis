@@ -330,7 +330,7 @@ kXiCKSt0=40, kAXiCAKSt0=41, kXiCAKSt0=42, kAXiCKSt0=43
   //--**--**--**--**--**--**--**--**--**--**--**--**--**--**--**--**--**--**//
   //--**--**--**--**--**--**--**--**--**--**--**--**--**--**--**--**--**--**//
 
-  extern const char* const cParameterNames[9];
+  extern const char* const cParameterNames[10];
 
   //-------------------------------------------------
   extern const double cLamK0_0010StartValues[6];

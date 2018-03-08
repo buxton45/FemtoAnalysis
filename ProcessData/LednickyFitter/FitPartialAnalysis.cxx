@@ -721,6 +721,11 @@ void FitPartialAnalysis::InitializeBackgroundParams(NonFlatBgdFitType aNonFlatBg
     cout << "FitPartialAnalysis::InitializeBackgroundParams: Invalid NonFlatBgdFitType = " << aNonFlatBgdType << " selected" << endl;
     assert(0);
   }
+
+  //Default naming in FitParameter is to name them cParameterNames[fParamType] = Bgd, in this case
+  //So, I want to give them each a unique name
+  for(unsigned int i=0; i<fBgdParameters.size(); i++) fBgdParameters[i]->SetName(TString::Format("%s_%i", cParameterNames[kBgd], i));
+
 }
 
 
@@ -735,11 +740,19 @@ void FitPartialAnalysis::SetBgdParametersSharedLocal(bool aIsShared, vector<int>
 
 
 //________________________________________________________________________________________________________________
-void FitPartialAnalysis::SetFitParameter(FitParameter* aParam)
+void FitPartialAnalysis::SetFitParameterShallow(FitParameter* aParam)
 {
   //Created a shallow copy, which I think is what I want
   fFitParameters[aParam->GetType()] = aParam;
 }
+
+//________________________________________________________________________________________________________________
+void FitPartialAnalysis::SetBgdParametersShallow(vector<FitParameter*> &aBgdParameters)
+{
+  assert(fBgdParameters.size() == aBgdParameters.size());
+  for(unsigned int i=0; i<fBgdParameters.size(); i++) fBgdParameters[i] = aBgdParameters[i];
+}
+
 
 //________________________________________________________________________________________________________________
 CfLite* FitPartialAnalysis::GetModelKStarCf(double aKStarMinNorm, double aKStarMaxNorm, int aRebin)

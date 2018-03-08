@@ -45,7 +45,7 @@ FitPairAnalysis::FitPairAnalysis(TString aAnalysisName, vector<FitPartialAnalysi
   fNFitNormParams(0),
   fFitNormParameters(0),
   fFitParameters(0),
-  fBgdParameters(0),
+  f2dBgdParameters(0),
 
   fModelKStarTrueVsRecMixed(nullptr),
   fModelKStarHeavyCfFake(nullptr),
@@ -115,7 +115,7 @@ FitPairAnalysis::FitPairAnalysis(TString aFileLocationBase, AnalysisType aAnalys
   fNFitNormParams(0),
   fFitNormParameters(0),
   fFitParameters(0),
-  fBgdParameters(0),
+  f2dBgdParameters(0),
 
   fModelKStarTrueVsRecMixed(nullptr),
   fModelKStarHeavyCfFake(nullptr),
@@ -196,7 +196,7 @@ FitPairAnalysis::FitPairAnalysis(TString aFileLocationBase, TString aFileLocatio
   fNFitNormParams(0),
   fFitNormParameters(0),
   fFitParameters(0),
-  fBgdParameters(0),
+  f2dBgdParameters(0),
 
   fModelKStarTrueVsRecMixed(nullptr),
   fModelKStarHeavyCfFake(nullptr),
@@ -547,11 +547,11 @@ TF1* FitPairAnalysis::GetNonFlatBackground(NonFlatBgdFitType aBgdFitType, FitTyp
   return fNonFlatBackground;
 }
 
-/*
+
 //________________________________________________________________________________________________________________
 void FitPairAnalysis::InitializeBackgroundParams(NonFlatBgdFitType aNonFlatBgdType, bool aShareAmongstPartials)
 {
-  fBgdParameters.clear();
+  f2dBgdParameters.clear();
   for(int i=0; i<fNFitPartialAnalysis; i++) fFitPartialAnalysisCollection[i]->InitializeBackgroundParams(aNonFlatBgdType);
 
   vector<FitParameter*> tTempVec(0);
@@ -562,15 +562,24 @@ void FitPairAnalysis::InitializeBackgroundParams(NonFlatBgdFitType aNonFlatBgdTy
     
     fFitPartialAnalysisCollection[0]->SetBgdParametersSharedLocal(true, tAllShared);
     tTempVec = fFitPartialAnalysisCollection[0]->GetBgdParameters();
-    fBgdParameters.push_back(tTempVec);
+    f2dBgdParameters.push_back(tTempVec);
+
+    for(int i=1; i<fNFitPartialAnalysis; i++)
+    {
+      fFitPartialAnalysisCollection[i]->SetBgdParametersSharedLocal(true, tAllShared);
+      fFitPartialAnalysisCollection[i]->SetBgdParametersShallow(tTempVec);
+    }
   }
   else
   {
-
+    for(int i=0; i<fNFitPartialAnalysis; i++)
+    {
+      tTempVec = fFitPartialAnalysisCollection[i]->GetBgdParameters();
+      f2dBgdParameters.push_back(tTempVec);
+    }
   }
-
 }
-*/
+
 
 
 //________________________________________________________________________________________________________________
@@ -631,7 +640,7 @@ void FitPairAnalysis::ShareFitParameters(bool aIncludeSingletAndTriplet)
     {
       ParameterType tParamType = static_cast<ParameterType>(iPar);
       fFitPartialAnalysisCollection[iAnaly]->GetFitParameter(tParamType)->SetSharedLocal(true,tAllShared);
-      fFitPartialAnalysisCollection[iAnaly]->SetFitParameter(fFitPartialAnalysisCollection[0]->GetFitParameter(tParamType));
+      fFitPartialAnalysisCollection[iAnaly]->SetFitParameterShallow(fFitPartialAnalysisCollection[0]->GetFitParameter(tParamType));
     }
   }
 
@@ -708,7 +717,7 @@ vector<double> FitPairAnalysis::GetFitParametersVector()
 
 /*
 //________________________________________________________________________________________________________________
-void FitPairAnalysis::SetFitParameter(FitParameter* aParam)
+void FitPairAnalysis::SetFitParameterShallow(FitParameter* aParam)
 {
   //Created a shallow copy, which I think is what I want
   fFitParameters[aParam->GetType()] = aParam;
@@ -716,11 +725,11 @@ void FitPairAnalysis::SetFitParameter(FitParameter* aParam)
 */
 
 //________________________________________________________________________________________________________________
-void FitPairAnalysis::SetFitParameter(FitParameter* aParam)
+void FitPairAnalysis::SetFitParameterShallow(FitParameter* aParam)
 {
   assert(int(aParam->GetType()) < 8); //I do not want this function to touch the normalizations (kNorm = 8)
 
-  for(int i=0; i<fNFitPartialAnalysis; i++) {fFitPartialAnalysisCollection[i]->SetFitParameter(aParam);}
+  for(int i=0; i<fNFitPartialAnalysis; i++) {fFitPartialAnalysisCollection[i]->SetFitParameterShallow(aParam);}
   fFitParameters[aParam->GetType()] = aParam;
 }
 

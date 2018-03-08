@@ -97,7 +97,8 @@ public:
   void InitializeBackgroundParams(NonFlatBgdFitType aNonFlatBgdType);
   void SetBgdParametersSharedLocal(bool aIsShared, vector<int> &aSharedAnalyses);
 
-  void SetFitParameter(FitParameter* aParam);
+  void SetFitParameterShallow(FitParameter* aParam);
+  void SetBgdParametersShallow(vector<FitParameter*> &aBgdParameters);
 
   CfLite* GetModelKStarCf(double aKStarMinNorm=0.32, double aKStarMaxNorm=0.40, int aRebin=1);
   CfLite* GetModelKStarCfFake(double aKStarMinNorm, double aKStarMaxNorm, int aRebin=1);

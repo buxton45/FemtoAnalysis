@@ -21,6 +21,7 @@ FitSharedAnalyses::FitSharedAnalyses(vector<FitPairAnalysis*> &aVecOfFitPairAnal
   fFitType(kChi2PML),
   fApplyNonFlatBackgroundCorrection(false),
   fNonFlatBgdFitType(kLinear),
+  fUseNewBgdTreatment(true),
   fNFitPairAnalysis(aVecOfFitPairAnalyses.size()),
   fNFitParamsPerAnalysis(0),
   fNFitNormParamsPerAnalysis(0),
@@ -60,6 +61,7 @@ FitSharedAnalyses::FitSharedAnalyses(vector<FitPairAnalysis*> &aVecOfFitPairAnal
   fFitType(kChi2PML),
   fApplyNonFlatBackgroundCorrection(false),
   fNonFlatBgdFitType(kLinear),
+  fUseNewBgdTreatment(true),
   fNFitPairAnalysis(aVecOfFitPairAnalyses.size()),
   fNFitParamsPerAnalysis(0),
   fNFitNormParamsPerAnalysis(0),
@@ -235,7 +237,7 @@ void FitSharedAnalyses::SetSharedParameter(ParameterType aParamType, bool aIsFix
     {
       CompareParameters(fFitPairAnalysisCollection[0]->GetAnalysisName(), fFitPairAnalysisCollection[0]->GetFitParameter(aParamType), fFitPairAnalysisCollection[i]->GetAnalysisName(), fFitPairAnalysisCollection[i]->GetFitParameter(aParamType));
 
-      fFitPairAnalysisCollection[i]->SetFitParameter(fFitPairAnalysisCollection[0]->GetFitParameter(aParamType));
+      fFitPairAnalysisCollection[i]->SetFitParameterShallow(fFitPairAnalysisCollection[0]->GetFitParameter(aParamType));
     }
 
   }
@@ -262,7 +264,7 @@ void FitSharedAnalyses::SetSharedParameter(ParameterType aParamType, double aSta
   for(int i=1; i<fNFitPairAnalysis; i++)
   {
     fFitPairAnalysisCollection[i]->GetFitParameter(aParamType)->SetSharedGlobal(true,tAllShared);
-    fFitPairAnalysisCollection[i]->SetFitParameter(fFitPairAnalysisCollection[0]->GetFitParameter(aParamType));
+    fFitPairAnalysisCollection[i]->SetFitParameterShallow(fFitPairAnalysisCollection[0]->GetFitParameter(aParamType));
   }
 
 
@@ -294,7 +296,7 @@ void FitSharedAnalyses::SetSharedParameter(ParameterType aParamType, const vecto
     {
       CompareParameters(fFitPairAnalysisCollection[aSharedAnalyses[0]]->GetAnalysisName(), fFitPairAnalysisCollection[aSharedAnalyses[0]]->GetFitParameter(aParamType), fFitPairAnalysisCollection[aSharedAnalyses[i]]->GetAnalysisName(), fFitPairAnalysisCollection[aSharedAnalyses[i]]->GetFitParameter(aParamType));
 
-      fFitPairAnalysisCollection[aSharedAnalyses[i]]->SetFitParameter(fFitPairAnalysisCollection[aSharedAnalyses[0]]->GetFitParameter(aParamType));
+      fFitPairAnalysisCollection[aSharedAnalyses[i]]->SetFitParameterShallow(fFitPairAnalysisCollection[aSharedAnalyses[0]]->GetFitParameter(aParamType));
     }
 
   }
@@ -317,7 +319,7 @@ void FitSharedAnalyses::SetSharedParameter(ParameterType aParamType, const vecto
   for(unsigned int i=1; i<aSharedAnalyses.size(); i++)
   {
     fFitPairAnalysisCollection[aSharedAnalyses[i]]->GetFitParameter(aParamType)->SetSharedGlobal(true,aSharedAnalyses);
-    fFitPairAnalysisCollection[aSharedAnalyses[i]]->SetFitParameter(fFitPairAnalysisCollection[aSharedAnalyses[0]]->GetFitParameter(aParamType));
+    fFitPairAnalysisCollection[aSharedAnalyses[i]]->SetFitParameterShallow(fFitPairAnalysisCollection[aSharedAnalyses[0]]->GetFitParameter(aParamType));
   } 
 
 
@@ -352,14 +354,13 @@ void FitSharedAnalyses::SetSharedAndFixedParameter(ParameterType aParamType, dou
     {
       CompareParameters(fFitPairAnalysisCollection[0]->GetAnalysisName(), fFitPairAnalysisCollection[0]->GetFitParameter(aParamType), fFitPairAnalysisCollection[i]->GetAnalysisName(), fFitPairAnalysisCollection[i]->GetFitParameter(aParamType));
 
-      fFitPairAnalysisCollection[i]->SetFitParameter(fFitPairAnalysisCollection[0]->GetFitParameter(aParamType));
+      fFitPairAnalysisCollection[i]->SetFitParameterShallow(fFitPairAnalysisCollection[0]->GetFitParameter(aParamType));
     }
 
   }
 
 
 }
-
 
 
 //________________________________________________________________________________________________________________
@@ -409,6 +410,7 @@ void FitSharedAnalyses::CreateMinuitParametersMatrix()
     fMinuitFitParametersMatrix.push_back(tempParamVec);
   }
 
+/*
   vector<FitParameter*> tempNormVec;
   double tNormStartValue = 1.;
   for(int iAnaly=0; iAnaly<fNFitPairAnalysis; iAnaly++)
@@ -429,7 +431,7 @@ void FitSharedAnalyses::CreateMinuitParametersMatrix()
 
     fMinuitFitParametersMatrix.push_back(tempNormVec);
   }
-
+*/
 }
 
 
@@ -449,6 +451,41 @@ void FitSharedAnalyses::CreateMinuitParameter(int aMinuitParamNumber, FitParamet
 }
 
 
+//________________________________________________________________________________________________________________
+void FitSharedAnalyses::CreateBackgroundParams(NonFlatBgdFitType aNonFlatBgdType, bool aShareAmongstPairs, bool aShareAmongstPartials)
+{
+  assert(fUseNewBgdTreatment);
+  if(aShareAmongstPairs) assert(aShareAmongstPartials);
+
+  for(unsigned int i=0; i<fNFitPairAnalysis; i++)
+  {
+    fFitPairAnalysisCollection[i]->InitializeBackgroundParams(aNonFlatBgdType, aShareAmongstPartials);
+    if(aShareAmongstPartials) assert(fFitPairAnalysisCollection[i]->Get2dBgdParameters().size()==1);
+  }
+
+  vector<vector<FitParameter*> > tTemp2dBgdParams;
+  if(aShareAmongstPairs)
+  {
+//TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO
+  }
+  else
+  {
+    for(int iAn=0; iAn<fNFitPairAnalysis; iAn++)
+    {
+      tTemp2dBgdParams = fFitPairAnalysisCollection[iAn]->Get2dBgdParameters();
+      for(unsigned int i1dBgd=0; i1dBgd<tTemp2dBgdParams.size(); i1dBgd++)
+      {
+        for(unsigned int iBgdParam=0; iBgdParam<tTemp2dBgdParams[i1dBgd].size(); iBgdParam++)
+        {
+          CreateMinuitParameter(fNMinuitParams, tTemp2dBgdParams[i1dBgd][iBgdParam]);
+          fNMinuitParams++;
+        }
+      }
+    }
+  }
+}
+
+
 
 //________________________________________________________________________________________________________________
 void FitSharedAnalyses::CreateMinuitParameters()
@@ -456,7 +493,8 @@ void FitSharedAnalyses::CreateMinuitParameters()
   //call AFTER all parameters have been shared!!!!!
 
   CreateMinuitParametersMatrix();
-  assert((fNFitParamsPerAnalysis+fNFitPairAnalysis) == (int)fMinuitFitParametersMatrix.size());
+//  assert((fNFitParamsPerAnalysis+fNFitPairAnalysis) == (int)fMinuitFitParametersMatrix.size());
+  assert(fNFitParamsPerAnalysis == (int)fMinuitFitParametersMatrix.size());
 
   fNMinuitParams = 0;  //for some reason, this makes fNMinuitParams = 0 outside of this function?
 
@@ -469,20 +507,41 @@ void FitSharedAnalyses::CreateMinuitParameters()
       fNMinuitParams++;
     }
   }
-  
-// TODO  fFitChi2Histograms->InitiateHistograms();
+
+
+  if(fUseNewBgdTreatment) CreateBackgroundParams(fNonFlatBgdFitType, false, true);
+
+
+  //--Create all of the normalization parameters
+  double tNormStartValue = 1.;
+  for(int iAnaly=0; iAnaly<fNFitPairAnalysis; iAnaly++)
+  {
+    assert(fFitPairAnalysisCollection[iAnaly]->GetFitNormParameters().size() == fNFitNormParamsPerAnalysis);
+    assert(fFitPairAnalysisCollection[iAnaly]->GetNFitPartialAnalysis() == fNFitNormParamsPerAnalysis); //always let each have own normalization, so I can't forsee
+                                                                                                        //when this would ever fail
+    for(int iPartAn=0; iPartAn<fFitPairAnalysisCollection[iAnaly]->GetNFitPartialAnalysis(); iPartAn++)
+    {
+      tNormStartValue = 1.;
+      fFitPairAnalysisCollection[iAnaly]->GetFitNormParameter(iPartAn)->SetStartValue(tNormStartValue);
+      if(fFixNormParams) fFitPairAnalysisCollection[iAnaly]->GetFitNormParameter(iPartAn)->SetFixed(true);
+
+      CreateMinuitParameter(fNMinuitParams, fFitPairAnalysisCollection[iAnaly]->GetFitNormParameter(iPartAn));
+      fNMinuitParams++;
+    }
+  }
 }
 
 
 //________________________________________________________________________________________________________________
 void FitSharedAnalyses::ReturnFitParametersToAnalyses()
 {
+  int tMinuitParamNumber = -1;
   for(int iAnaly=0; iAnaly < fNFitPairAnalysis; iAnaly++)
   {
     for(int iPar=0; iPar < fNFitParamsPerAnalysis; iPar++)
     {
       ParameterType tParamType = static_cast<ParameterType>(iPar);
-      int tMinuitParamNumber = fFitPairAnalysisCollection[iAnaly]->GetFitParameter(tParamType)->GetMinuitParamNumber();
+      tMinuitParamNumber = fFitPairAnalysisCollection[iAnaly]->GetFitParameter(tParamType)->GetMinuitParamNumber();
 
       fFitPairAnalysisCollection[iAnaly]->GetFitParameter(tParamType)->SetFitValue(fMinuitMinParams[tMinuitParamNumber]);
       fFitPairAnalysisCollection[iAnaly]->GetFitParameter(tParamType)->SetFitValueError(fMinuitParErrors[tMinuitParamNumber]);
@@ -490,14 +549,29 @@ void FitSharedAnalyses::ReturnFitParametersToAnalyses()
 
     for(int iNorm=0; iNorm<fNFitNormParamsPerAnalysis; iNorm++)
     {
-      int tMinuitParamNumber = fFitPairAnalysisCollection[iAnaly]->GetFitNormParameter(iNorm)->GetMinuitParamNumber();
+      tMinuitParamNumber = fFitPairAnalysisCollection[iAnaly]->GetFitNormParameter(iNorm)->GetMinuitParamNumber();
       fFitPairAnalysisCollection[iAnaly]->GetFitNormParameter(iNorm)->SetFitValue(fMinuitMinParams[tMinuitParamNumber]);
       fFitPairAnalysisCollection[iAnaly]->GetFitNormParameter(iNorm)->SetFitValueError(fMinuitParErrors[tMinuitParamNumber]);
     }
 
-  }
+    if(fUseNewBgdTreatment)
+    {
+      vector<vector<FitParameter*> > tTemp2dBgdParams = fFitPairAnalysisCollection[iAnaly]->Get2dBgdParameters();
+      for(unsigned int i1dBgd=0; i1dBgd<tTemp2dBgdParams.size(); i1dBgd++)
+      {
+        for(unsigned int iBgdParam=0; iBgdParam<tTemp2dBgdParams[i1dBgd].size(); iBgdParam++)
+        {
+          tMinuitParamNumber = tTemp2dBgdParams[i1dBgd][iBgdParam]->GetMinuitParamNumber();
+          tTemp2dBgdParams[i1dBgd][iBgdParam]->SetFitValue(fMinuitMinParams[tMinuitParamNumber]);
+          tTemp2dBgdParams[i1dBgd][iBgdParam]->SetFitValueError(fMinuitParErrors[tMinuitParamNumber]);
+        }
+      }
+    }
 
+  }
 }
+
+
 
 //________________________________________________________________________________________________________________
 double FitSharedAnalyses::GetKStarMinNorm()

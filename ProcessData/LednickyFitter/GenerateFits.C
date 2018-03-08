@@ -21,6 +21,8 @@ int main(int argc, char **argv)
   bool bDoFit = true;
   bool bGenerateContours = false;
 
+  double tMaxFitKStar=0.3;
+
   AnalysisType tAnType = kLamKchP;
   AnalysisRunType tAnRunType = kTrain;
   int tNPartialAnalysis = 2;
@@ -37,6 +39,8 @@ int main(int argc, char **argv)
   bool ApplyMomResCorrection = true;
   bool ApplyNonFlatBackgroundCorrection = true;
   NonFlatBgdFitType tNonFlatBgdFitType = kLinear;
+  bool UseNewBgdTreatment = true;
+    if(UseNewBgdTreatment) tMaxFitKStar = 0.5;
 
   IncludeResidualsType tIncludeResidualsType = kInclude3Residuals; 
   ChargedResidualsType tChargedResidualsType = kUseXiDataAndCoulombOnlyInterp;
@@ -56,7 +60,7 @@ int main(int argc, char **argv)
   double aLambdaMin=0., aLambdaMax=1.;
   if(UnboundLambda) aLambdaMax=0.;
 
-  bool bZoomROP = true;
+  bool bZoomROP = false;
   bool bDrawResiduals = false;
 
   bool bDrawSysErrs = true;
@@ -132,6 +136,7 @@ int main(int argc, char **argv)
   tLamKchP->SetFitType(tFitType);
   tLamKchP->SetApplyNonFlatBackgroundCorrection(ApplyNonFlatBackgroundCorrection);
   tLamKchP->SetNonFlatBgdFitType(tNonFlatBgdFitType);
+  tLamKchP->SetUseNewBgdTreatment(UseNewBgdTreatment);
   tLamKchP->SetApplyMomResCorrection(ApplyMomResCorrection);
   tLamKchP->SetIncludeResidualCorrelationsType(tIncludeResidualsType, aLambdaMin, aLambdaMax);  //TODO fix this in FitGenerator
   if(!UnboundLambda) tLamKchP->SetAllLambdaParamLimits(aLambdaMin, aLambdaMax);
@@ -185,7 +190,7 @@ int main(int argc, char **argv)
 
   if(bDoFit)
   {
-    tLamKchP->DoFit();
+    tLamKchP->DoFit(tMaxFitKStar);
 //    TCanvas* tKStarwFitsCan = tLamKchP->DrawKStarCfswFits(ApplyMomResCorrection,ApplyNonFlatBackgroundCorrection,tNonFlatBgdFitType,SaveImages,bDrawSysErrs,bZoomROP);
     TCanvas* tKStarwFitsCan_Zoom = tLamKchP->DrawKStarCfswFits(ApplyMomResCorrection,ApplyNonFlatBackgroundCorrection,tNonFlatBgdFitType,SaveImages,bDrawSysErrs,true);
     TCanvas* tKStarwFitsCan_UnZoom = tLamKchP->DrawKStarCfswFits(ApplyMomResCorrection,ApplyNonFlatBackgroundCorrection,tNonFlatBgdFitType,SaveImages,bDrawSysErrs,false);

@@ -182,6 +182,39 @@ double LednickyFitter::GetPmlValue(double aNumContent, double aDenContent, doubl
 }
 
 
+//________________________________________________________________________________________________________________
+void LednickyFitter::ApplyNewNonFlatBackgroundCorrection(vector<double> &aCf, vector<double> &aKStarBinCenters, FitPartialAnalysis* aPartAn, double *par)
+{
+  vector<FitParameter*> tBgdParams = aPartAn->GetBgdParameters();
+  if     (fNonFlatBgdFitType==kLinear)    assert(tBgdParams.size()==2);
+  else if(fNonFlatBgdFitType==kQuadratic) assert(tBgdParams.size()==3);
+  else if(fNonFlatBgdFitType==kGaussian)  assert(tBgdParams.size()==4);
+  else assert(0);
+
+  td1dVec tMinuitParams(0);
+  int tIndex = -1;
+  for(unsigned int i=0; i<tBgdParams.size(); i++)
+  {
+    tIndex = tBgdParams[i]->GetMinuitParamNumber();
+    tMinuitParams.push_back(par[tIndex]);
+  }
+
+  double x[1];
+  double tNonFlatBgd = 0.;
+  for(int ix=0; ix<fNbinsXToBuild; ix++)
+  {
+    x[0] = aKStarBinCenters[ix];
+    if(fNonFlatBgdFitType==kLinear)         tNonFlatBgd = BackgroundFitter::FitFunctionLinear(x, tMinuitParams.data());
+    else if(fNonFlatBgdFitType==kQuadratic) tNonFlatBgd = BackgroundFitter::FitFunctionQuadratic(x, tMinuitParams.data());
+    else if(fNonFlatBgdFitType==kGaussian)  tNonFlatBgd = BackgroundFitter::FitFunctionGaussian(x, tMinuitParams.data());
+    else assert(0);
+
+    aCf[ix] = aCf[ix]*tNonFlatBgd;
+  }
+}
+
+
+
 
 //________________________________________________________________________________________________________________
 void LednickyFitter::ApplyNonFlatBackgroundCorrection(vector<double> &aCf, vector<double> &aKStarBinCenters, TF1* aNonFlatBgd)
@@ -353,11 +386,14 @@ void LednickyFitter::CalculateFitFunction(int &npar, double &chi2, double *par)
       bool tNormalizeBgdFitToCf=true;
       if(fApplyNonFlatBackgroundCorrection)
       {
-        TF1* tNonFlatBgd;
-        //I thought using PairAnalysis, when BgdFitType != kLinear, would help stabilize things, but it doesn't seem to help all that much.
-        //  Things have been stabilized with other tweaks.
-        tNonFlatBgd = tFitPartialAnalysis->GetNonFlatBackground(fNonFlatBgdFitType, fFitSharedAnalyses->GetFitType(), tNormalizeBgdFitToCf);
-        ApplyNonFlatBackgroundCorrection(tCorrectedFitCfContent, fKStarBinCenters, tNonFlatBgd);
+        if(!fFitSharedAnalyses->UsingNewBgdTreatment())
+        {
+          //I thought using PairAnalysis, when BgdFitType != kLinear, would help stabilize things, but it doesn't seem to help all that much.
+          //  Things have been stabilized with other tweaks.
+          TF1* tNonFlatBgd = tFitPartialAnalysis->GetNonFlatBackground(fNonFlatBgdFitType, fFitSharedAnalyses->GetFitType(), tNormalizeBgdFitToCf);
+          ApplyNonFlatBackgroundCorrection(tCorrectedFitCfContent, fKStarBinCenters, tNonFlatBgd);
+        }
+        else ApplyNewNonFlatBackgroundCorrection(tCorrectedFitCfContent, fKStarBinCenters, tFitPartialAnalysis, par);
       }
 
       ApplyNormalization(tParPrim[5], tCorrectedFitCfContent);
@@ -528,7 +564,7 @@ void LednickyFitter::InitializeFitter()
   if(fApplyNonFlatBackgroundCorrection) assert(fFitSharedAnalyses->GetKStarMaxNorm() < fFitSharedAnalyses->GetMinBgdFit());
 */
   //Bare minimum, the KStar fit region and the NonFlatBgd fit region definitely should not overlap
-  if(fApplyNonFlatBackgroundCorrection) assert(fMaxFitKStar < fFitSharedAnalyses->GetMinBgdFit());
+  if(fApplyNonFlatBackgroundCorrection && !fFitSharedAnalyses->UsingNewBgdTreatment()) assert(fMaxFitKStar < fFitSharedAnalyses->GetMinBgdFit());
 
   fNbinsXToBuild = 0;
   fNbinsXToFit = 0;
