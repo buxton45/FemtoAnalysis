@@ -549,6 +549,66 @@ TF1* FitPairAnalysis::GetNonFlatBackground(NonFlatBgdFitType aBgdFitType, FitTyp
 
 
 //________________________________________________________________________________________________________________
+TF1* FitPairAnalysis::GetNewNonFlatBackground(NonFlatBgdFitType aBgdFitType, bool aShareAmongstPartials)
+{
+  TString tFitName = TString::Format("NonFlatBackgroundFit%s_%s%s", cNonFlatBgdFitTypeTags[aBgdFitType], 
+                                                                    cAnalysisBaseTags[fAnalysisType],
+                                                                    cCentralityTags[fCentralityType]);
+  if(aShareAmongstPartials)
+  {
+    fNonFlatBackground = fFitPartialAnalysisCollection[0]->GetNewNonFlatBackground(aBgdFitType);
+    tFitName += TString("_ShareAmongstPartials");
+    fNonFlatBackground->SetName(tFitName);
+    return fNonFlatBackground;
+  }
+
+  assert(fNFitPartialAnalysis==2);  // i.e. this only works for train runs with _FemtoPlus and _FemtoMinus
+                                    //      NOT with old grid runs with _Bp1, _Bp2, _Bm1, _Bm2, _Bm3
+
+  double tNumScale1 = fFitPartialAnalysisCollection[0]->GetKStarCfLite()->GetNumScale();
+  double tNumScale2 = fFitPartialAnalysisCollection[1]->GetKStarCfLite()->GetNumScale();
+
+  assert(fFitPartialAnalysisCollection[0]->GetBgdParameters().size() == fFitPartialAnalysisCollection[1]->GetBgdParameters().size());
+  int tNParsSingle = fFitPartialAnalysisCollection[0]->GetBgdParameters().size();
+  int tNParsTotal = 2*(tNParsSingle+1); //tNParsTotal equals 2*(tNParsSingle+1) (+1 from inclusion of num scales)
+
+  switch(aBgdFitType) {
+  case kLinear:
+    //2 parameters
+    //par[0]*x[0] + par[1]
+    assert(tNParsTotal==8);
+    fNonFlatBackground = new TF1(tFitName, BackgroundFitter::AddTwoFitFunctionsLinear, 0., 1., tNParsTotal);
+    break;
+
+  case kQuadratic:
+    //3 parameters
+    //par[0]*x[0]*x[0] + par[1]*x[0] + par[2]
+    assert(tNParsTotal==8);
+    fNonFlatBackground = new TF1(tFitName, BackgroundFitter::AddTwoFitFunctionsQuadratic, 0., 1., tNParsTotal);
+    break;
+
+  case kGaussian:
+    //4 parameters (although, likely par[1] fixed to zero
+    //par[0]*exp(-0.5*(pow((x[0]-par[1])/par[2],2.0))) + par[3]
+    assert(tNParsTotal==10);
+    fNonFlatBackground = new TF1(tFitName, BackgroundFitter::AddTwoFitFunctionsGaussian, 0., 1., tNParsTotal);
+    break;
+
+  default:
+    cout << "FitPairAnalysis::GetNewNonFlatBackground: Invalid NonFlatBgdFitType = " << aBgdFitType << " selected" << endl;
+    assert(0);
+  }
+
+  for(int i=0; i<tNParsSingle; i++) fNonFlatBackground->SetParameter(i, fFitPartialAnalysisCollection[0]->GetBgdParameter(i)->GetFitValue());
+  fNonFlatBackground->SetParameter(tNParsSingle, tNumScale1);
+
+  for(int i=0; i<tNParsSingle; i++) fNonFlatBackground->SetParameter(i+tNParsSingle+1, fFitPartialAnalysisCollection[1]->GetBgdParameter(i)->GetFitValue());
+  fNonFlatBackground->SetParameter(tNParsTotal-1, tNumScale2);
+
+
+}
+
+//________________________________________________________________________________________________________________
 void FitPairAnalysis::InitializeBackgroundParams(NonFlatBgdFitType aNonFlatBgdType, bool aShareAmongstPartials)
 {
   f2dBgdParameters.clear();

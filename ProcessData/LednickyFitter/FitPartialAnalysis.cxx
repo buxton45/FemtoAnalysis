@@ -685,6 +685,43 @@ TF1* FitPartialAnalysis::GetNonFlatBackground(NonFlatBgdFitType aBgdFitType, Fit
 
 
 //________________________________________________________________________________________________________________
+TF1* FitPartialAnalysis::GetNewNonFlatBackground(NonFlatBgdFitType aBgdFitType)
+{
+  TString tFitName = TString::Format("NonFlatBackgroundFit%s_%s%s%s", cNonFlatBgdFitTypeTags[aBgdFitType], 
+                                                                    cAnalysisBaseTags[fAnalysisType],
+                                                                    cCentralityTags[fCentralityType],
+                                                                    cBFieldTags[fBFieldType]);
+  switch(aBgdFitType) {
+  case kLinear:
+    //2 parameters
+    //par[0]*x[0] + par[1]
+    fNonFlatBackground = new TF1(tFitName, BackgroundFitter::FitFunctionLinear, 0., 1., 2);
+    break;
+
+  case kQuadratic:
+    //3 parameters
+    //par[0]*x[0]*x[0] + par[1]*x[0] + par[2]
+    fNonFlatBackground = new TF1(tFitName, BackgroundFitter::FitFunctionQuadratic, 0., 1., 3);
+    break;
+
+  case kGaussian:
+    //4 parameters (although, likely par[1] fixed to zero
+    //par[0]*exp(-0.5*(pow((x[0]-par[1])/par[2],2.0))) + par[3]
+    fNonFlatBackground = new TF1(tFitName, BackgroundFitter::FitFunctionGaussian, 0., 1., 4);
+    break;
+
+  default:
+    cout << "FitPartialAnalysis::GetNewNonFlatBackground: Invalid NonFlatBgdFitType = " << aBgdFitType << " selected" << endl;
+    assert(0);
+  }
+
+  for(unsigned int i=0; i<fBgdParameters.size(); i++) fNonFlatBackground->SetParameter(i, fBgdParameters[i]->GetFitValue());
+
+  return fNonFlatBackground;
+}
+
+
+//________________________________________________________________________________________________________________
 void FitPartialAnalysis::InitializeBackgroundParams(NonFlatBgdFitType aNonFlatBgdType)
 {
   fBgdParameters.clear();

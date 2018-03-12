@@ -525,7 +525,11 @@ void FitGeneratorAndDraw::BuildKStarCfswFitsPanel_PartAn(CanvasPartition* aCanPa
   TH1* tCfData = (TH1*)fSharedAn->GetKStarCfHeavy(aAnalysisNumber)->GetCfLite(iPartAn)->Cf()->Clone();
 
   TF1* tNonFlatBgd;
-  if(fApplyNonFlatBackgroundCorrection) tNonFlatBgd = (TF1*)tPartAn->GetNonFlatBackground(aNonFlatBgdFitType, fSharedAn->GetFitType(), true);
+  if(fApplyNonFlatBackgroundCorrection)
+  {
+    if(!fSharedAn->UsingNewBgdTreatment()) tNonFlatBgd = (TF1*)tPartAn->GetNonFlatBackground(aNonFlatBgdFitType, fSharedAn->GetFitType(), true);
+    else tNonFlatBgd = (TF1*)tPartAn->GetNewNonFlatBackground(aNonFlatBgdFitType);
+  }
 
   tPartAn->CreateFitFunction(true, fIncludeResidualsType, fResPrimMaxDecayType, fLednickyFitter->GetChi2(), fLednickyFitter->GetNDF(), 0.0, 1.0);
   TF1* tPrimaryFit = tPartAn->GetPrimaryFit();
@@ -670,7 +674,11 @@ void FitGeneratorAndDraw::BuildKStarCfswFitsPanel(CanvasPartition* aCanPart, int
   TH1* tCfData = (TH1*)fSharedAn->GetKStarCfHeavy(aAnalysisNumber)->GetHeavyCfClone();
 
   TF1* tNonFlatBgd;
-  if(fApplyNonFlatBackgroundCorrection) tNonFlatBgd = (TF1*)fSharedAn->GetFitPairAnalysis(aAnalysisNumber)->GetNonFlatBackground(aNonFlatBgdFitType, fSharedAn->GetFitType(), true, true);
+  if(fApplyNonFlatBackgroundCorrection)
+  {
+    if(!fSharedAn->UsingNewBgdTreatment()) tNonFlatBgd = (TF1*)fSharedAn->GetFitPairAnalysis(aAnalysisNumber)->GetNonFlatBackground(aNonFlatBgdFitType, fSharedAn->GetFitType(), true, true);
+    else tNonFlatBgd = (TF1*)fSharedAn->GetFitPairAnalysis(aAnalysisNumber)->GetNewNonFlatBackground(aNonFlatBgdFitType, true);  //TODO second argument should be set automatically
+  }
 
   TF1* tPrimaryFit = (TF1*)fSharedAn->GetFitPairAnalysis(aAnalysisNumber)->GetPrimaryFit();
 
@@ -1279,7 +1287,9 @@ void FitGeneratorAndDraw::CheckCorrectedCf_PartAn(int aAnalysisNumber, BFieldTyp
   td1dVec tNonFlatBgdVec(0);
   if(fApplyNonFlatBackgroundCorrection)
   {
-    tNonFlatBgd = (TF1*)tPartAn->GetNonFlatBackground(aNonFlatBgdFitType, fSharedAn->GetFitType(), true);
+    if(!fSharedAn->UsingNewBgdTreatment()) tNonFlatBgd = (TF1*)tPartAn->GetNonFlatBackground(aNonFlatBgdFitType, fSharedAn->GetFitType(), true);
+    else tNonFlatBgd = (TF1*)tPartAn->GetNewNonFlatBackground(aNonFlatBgdFitType);
+
     for(int i=1; i<=tCfData->GetNbinsX(); i++) tNonFlatBgdVec.push_back(tNonFlatBgd->Eval(tCfData->GetBinCenter(i)));
   }
 
@@ -1560,7 +1570,9 @@ void FitGeneratorAndDraw::CheckCorrectedCf(int aAnalysisNumber, bool aMomResCorr
   td1dVec tNonFlatBgdVec(0);
   if(fApplyNonFlatBackgroundCorrection)
   {
-    tNonFlatBgd = (TF1*)fSharedAn->GetFitPairAnalysis(aAnalysisNumber)->GetNonFlatBackground(aNonFlatBgdFitType, fSharedAn->GetFitType(), true, true);
+    if(!fSharedAn->UsingNewBgdTreatment()) tNonFlatBgd = (TF1*)fSharedAn->GetFitPairAnalysis(aAnalysisNumber)->GetNonFlatBackground(aNonFlatBgdFitType, fSharedAn->GetFitType(), true, true);
+    else tNonFlatBgd = (TF1*)fSharedAn->GetFitPairAnalysis(aAnalysisNumber)->GetNewNonFlatBackground(aNonFlatBgdFitType, true);  //TODO second argument should be set automatically
+
     for(int i=1; i<=tCfData->GetNbinsX(); i++) tNonFlatBgdVec.push_back(tNonFlatBgd->Eval(tCfData->GetBinCenter(i)));
   }
 

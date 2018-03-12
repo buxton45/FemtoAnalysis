@@ -73,6 +73,7 @@ public:
   TF1* GetNonFlatBackground_CombinePartialFits(NonFlatBgdFitType aBgdFitType, FitType aFitType, bool aNormalizeFitToCf);
   TF1* GetNonFlatBackground(NonFlatBgdFitType aBgdFitType, FitType aFitType, bool aNormalizeFitToCf, bool aCombinePartialFits);
   //---------------------------------------------------------------------------------------------
+  TF1* GetNewNonFlatBackground(NonFlatBgdFitType aBgdFitType, bool aShareAmongstPartials);
   void InitializeBackgroundParams(NonFlatBgdFitType aNonFlatBgdType, bool aShareAmongstPartials);
 
   void CreateFitNormParameters();

@@ -94,6 +94,7 @@ public:
                                    double aMinBgdFit=0.6, double aMaxBgdFit=0.9, double aKStarMinNorm=0.32, double aKStarMaxNorm=0.40);
   TF1* GetNonFlatBackground(NonFlatBgdFitType aBgdFitType, FitType aFitType, bool aNormalizeFitToCf);
   //---------------------------------------------------------------------------------------------
+  TF1* GetNewNonFlatBackground(NonFlatBgdFitType aBgdFitType);
   void InitializeBackgroundParams(NonFlatBgdFitType aNonFlatBgdType);
   void SetBgdParametersSharedLocal(bool aIsShared, vector<int> &aSharedAnalyses);
 

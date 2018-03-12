@@ -523,7 +523,7 @@ void FitSharedAnalyses::CreateMinuitParameters()
     {
       tNormStartValue = 1.;
       fFitPairAnalysisCollection[iAnaly]->GetFitNormParameter(iPartAn)->SetStartValue(tNormStartValue);
-      if(fFixNormParams) fFitPairAnalysisCollection[iAnaly]->GetFitNormParameter(iPartAn)->SetFixed(true);
+      if(fFixNormParams || fUseNewBgdTreatment) fFitPairAnalysisCollection[iAnaly]->GetFitNormParameter(iPartAn)->SetFixed(true);
 
       CreateMinuitParameter(fNMinuitParams, fFitPairAnalysisCollection[iAnaly]->GetFitNormParameter(iPartAn));
       fNMinuitParams++;
