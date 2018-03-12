@@ -641,6 +641,29 @@ void FitPairAnalysis::InitializeBackgroundParams(NonFlatBgdFitType aNonFlatBgdTy
 }
 
 
+//________________________________________________________________________________________________________________
+void FitPairAnalysis::SetBgdParametersShallow(vector<FitParameter*> &aBgdParameters)
+{
+//TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO
+
+  for(int i=0; i<fNFitPartialAnalysis; i++) fFitPartialAnalysisCollection[i]->SetBgdParametersShallow(aBgdParameters);
+/*
+  for(unsigned int i=0; i<f2dBgdParameters.size(); i++)
+  {
+    assert(f2dBgdParameters[i].size() == aBgdParameters.size());
+    for(unsigned int j=0; j<f2dBgdParameters[i].size(); j++) f2dBgdParameters[i][j] = aBgdParameters[j];
+  }
+*/
+}
+
+
+
+//________________________________________________________________________________________________________________
+void FitPairAnalysis::SetBgdParametersSharedGlobal(bool aIsShared, vector<int> &aSharedAnalyses)
+{
+  for(int i=0; i<fNFitPartialAnalysis; i++) fFitPartialAnalysisCollection[i]->SetBgdParametersSharedGlobal(aIsShared, aSharedAnalyses);
+}
+
 
 //________________________________________________________________________________________________________________
 void FitPairAnalysis::CreateFitNormParameters()

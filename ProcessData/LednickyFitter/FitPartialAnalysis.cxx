@@ -775,6 +775,16 @@ void FitPartialAnalysis::SetBgdParametersSharedLocal(bool aIsShared, vector<int>
   }
 }
 
+//________________________________________________________________________________________________________________
+void FitPartialAnalysis::SetBgdParametersSharedGlobal(bool aIsShared, vector<int> &aSharedAnalyses)
+{
+  for(unsigned int i=0; i<fBgdParameters.size(); i++)
+  {
+    fBgdParameters[i]->SetSharedGlobal(aIsShared, aSharedAnalyses);
+  }
+}
+
+
 
 //________________________________________________________________________________________________________________
 void FitPartialAnalysis::SetFitParameterShallow(FitParameter* aParam)

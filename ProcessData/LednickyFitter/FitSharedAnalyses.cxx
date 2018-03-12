@@ -467,6 +467,39 @@ void FitSharedAnalyses::CreateBackgroundParams(NonFlatBgdFitType aNonFlatBgdType
   if(aShareAmongstPairs)
   {
 //TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO
+    //first, figure out who should be shared
+    vector<vector<int> > t2dShared(3, vector<int>(0));
+    for(unsigned int iAn=0; iAn<fNFitPairAnalysis; iAn++)
+    {
+      if     (fFitPairAnalysisCollection[iAn]->GetCentralityType()==k0010) t2dShared[0].push_back(iAn);
+      else if(fFitPairAnalysisCollection[iAn]->GetCentralityType()==k1030) t2dShared[1].push_back(iAn);
+      else if(fFitPairAnalysisCollection[iAn]->GetCentralityType()==k3050) t2dShared[2].push_back(iAn);
+      else assert(0);
+    }
+
+    //Next, share
+    vector<FitParameter*> tTempVec(0);
+    for(unsigned int iCent=0; iCent<t2dShared.size(); iCent++)
+    {
+      fFitPairAnalysisCollection[t2dShared[iCent][0]]->SetBgdParametersSharedGlobal(true, t2dShared[iCent]);
+      tTempVec = fFitPairAnalysisCollection[t2dShared[iCent][0]]->Get1dBgdParameters(0);
+      for(unsigned int j=1; j<t2dShared[iCent].size(); j++)
+      {
+        fFitPairAnalysisCollection[t2dShared[iCent][j]]->SetBgdParametersSharedGlobal(true, t2dShared[iCent]);
+        fFitPairAnalysisCollection[t2dShared[iCent][j]]->SetBgdParametersShallow(tTempVec);
+      }
+    }
+
+    //Finally, set
+    for(unsigned int iCent=0; iCent<t2dShared.size(); iCent++)
+    {
+      tTempVec = fFitPairAnalysisCollection[t2dShared[iCent][0]]->Get1dBgdParameters(0);
+      for(unsigned int j=0; j<tTempVec.size(); j++)
+      {
+        CreateMinuitParameter(fNMinuitParams, tTempVec[j]);
+        fNMinuitParams++;
+      }
+    }
   }
   else
   {
@@ -509,7 +542,7 @@ void FitSharedAnalyses::CreateMinuitParameters()
   }
 
 
-  if(fUseNewBgdTreatment) CreateBackgroundParams(fNonFlatBgdFitType, false, true);
+  if(fUseNewBgdTreatment) CreateBackgroundParams(fNonFlatBgdFitType, true, true);
 
 
   //--Create all of the normalization parameters

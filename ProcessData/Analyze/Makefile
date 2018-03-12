@@ -10,7 +10,7 @@ CFLAGS = $(shell root-config --cflags) -Wall -std=c++11 -I${UTILITIES_DIR} -g -O
 
 MY_LIBS = $(addprefix build/, CfLite.o CfHeavy.o Cf2dLite.o Cf2dHeavy.o Types.o AnalysisInfo.o Purity.o PartialAnalysis.o Analysis.o DataAndModel.o PlotPartners.o PlotPartnersLamKch.o PlotPartnersLamK0.o SystematicAnalysis.o CanvasPartition.o)
 
-BINARIES = runBuildcLamcKch runBuildcLamK0 runBuildcXicKch runBuildcXiK0 runBuildcLamcLam runCombineConjugatesLamKch runCombineConjugatesLamK0 runCombineConjugatesXiKch runBuildMomResMatrix runBuildMomResMatrix2 runCompareFixes runCorrectCfs runTest runV0PurityBgdEstimator runDrawMCCfs
+BINARIES = runBuildcLamcKch runBuildcLamK0 runBuildcXicKch runBuildcXiK0 runBuildcLamcLam runCombineConjugatesLamKch runCombineConjugatesLamK0 runCombineConjugatesXiKch runBuildMomResMatrix runBuildMomResMatrix2 runCompareFixes runCorrectCfs runTest runV0PurityBgdEstimator runDrawMCCfs runDrawAMPTCfs
 
 all: $(BINARIES)
 
@@ -58,6 +58,9 @@ runV0PurityBgdEstimator: ${MY_LIBS} BuildV0PurityBgdEstimator.C
 
 runDrawMCCfs: ${MY_LIBS} DrawMCCfs.C
 	g++ DrawMCCfs.C ${MY_LIBS} -o runDrawMCCfs $(LIBS) $(CFLAGS)
+
+runDrawAMPTCfs: ${MY_LIBS} DrawAMPTCfs.C
+	g++ DrawAMPTCfs.C ${MY_LIBS} -o runDrawAMPTCfs $(LIBS) $(CFLAGS)
 
 
 build/%.o: %.cxx %.h

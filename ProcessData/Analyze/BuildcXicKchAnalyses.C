@@ -36,7 +36,7 @@ int main(int argc, char **argv)
   //the program ends and closes everything
 //-----------------------------------------------------------------------------
   CentralityType tCentType = k0010;
-  bool bDrawXiK0 = false;
+  bool bDrawXiK0 = true;
   //-----Data
 
 

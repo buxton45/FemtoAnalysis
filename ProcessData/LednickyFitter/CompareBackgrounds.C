@@ -203,6 +203,112 @@ TObjArray* DrawCfRatiosAndDiffs(FitGenerator* aGen1, FitGenerator* aGen2)
   return tReturnArray;
 }
 
+//________________________________________________________________________________________________________________
+TObjArray* DrawCfRatiosAndDiffs_LamKchAvgToLamK0(FitGenerator* aLamKchP, FitGenerator* aLamKchM, FitGenerator* aLamK0)
+{
+  TString tCanvasName1 = "DrawCfRatios_LamKchAvgToLamK0";
+  TString tCanvasName2 = "DrawCfDiffs_LamKchAvgToLamK0";
+
+
+  vector<CentralityType> tCentralityTypes = aLamKchP->GetCentralityTypes();
+  int tNAnalyses = aLamKchP->GetNAnalyses();
+  for(unsigned int i=0; i<tCentralityTypes.size(); i++) 
+  {
+    tCanvasName1 += TString(cCentralityTags[tCentralityTypes[i]]);
+    tCanvasName2 += TString(cCentralityTags[tCentralityTypes[i]]);
+  }
+
+
+  int tNx=0, tNy=0;
+  if(tNAnalyses == 6) {tNx=2; tNy=3;}
+  else if(tNAnalyses == 4) {tNx=2; tNy=2;}
+  else if(tNAnalyses == 3) {tNx=1; tNy=tNAnalyses;}
+  else if(tNAnalyses == 2 || tNAnalyses==1) {tNx=tNAnalyses; tNy=1;}
+  else assert(0);
+
+  double tXLow = -0.02;
+  double tXHigh = 0.99;
+
+  double tYLow1 = 0.97;
+  double tYHigh1 = 1.09;
+
+  double tYLow2 = -0.09;
+  double tYHigh2 = 0.19;
+
+
+  CanvasPartition* tCanPart1 = new CanvasPartition(tCanvasName1,tNx,tNy,tXLow,tXHigh,tYLow1,tYHigh1,0.12,0.05,0.13,0.05);
+  CanvasPartition* tCanPart2 = new CanvasPartition(tCanvasName2,tNx,tNy,tXLow,tXHigh,tYLow2,tYHigh2,0.12,0.05,0.13,0.05);
+
+  assert(tNx*tNy == tNAnalyses);
+  int tAnalysisNumber=0;
+
+
+  int tColor = kGray;
+  int tMarkerStyle = 20;
+  double tMarkerSize = 0.5;
+
+  int tNx_Leg=0, tNy_Leg=0;
+
+  TString tTitle1 = "#frac{C_{#LambdaK+ + #LambdaK-}(k*)}{C_{#LambdaK^{0}_{S}}(k*)}";
+  TString tTitle2 = "C_{#LambdaK+ + #LambdaK-}(k*)-C_{#LambdaK^{0}_{S}}(k*)";
+
+
+  TH1 *tCfLamKchP, *tCfLamKchM, *tCfLamK0;
+  TH1 *tCfLamKchAvg;
+  TH1 *tCfRatio, *tCfDiff;
+  for(int j=0; j<tNy; j++)
+  {
+    for(int i=0; i<tNx; i++)
+    {
+      tAnalysisNumber = j*tNx + i;
+
+      tCfLamKchP = aLamKchP->GetSharedAn()->GetKStarCfHeavy(tAnalysisNumber)->GetHeavyCfClone();
+      tCfLamKchM = aLamKchM->GetSharedAn()->GetKStarCfHeavy(tAnalysisNumber)->GetHeavyCfClone();
+      tCfLamK0 = aLamK0->GetSharedAn()->GetKStarCfHeavy(tAnalysisNumber)->GetHeavyCfClone();
+      //---------------------------------------------------------------------------------------------------------
+      tCfLamKchAvg = (TH1*)tCfLamKchP->Clone();
+      tCfLamKchAvg->Add(tCfLamKchM);
+      tCfLamKchAvg->Scale(0.5);
+      //---------------------------------------------------------------------------------------------------------
+      tCfRatio = (TH1*)tCfLamKchAvg->Clone();
+      tCfRatio->Divide(tCfLamK0);
+
+      tCfDiff = (TH1*)tCfLamKchAvg->Clone();
+      tCfDiff->Add(tCfLamK0, -1.0);
+
+      tCanPart1->AddGraph(i, j, tCfRatio, "", tMarkerStyle, tColor, tMarkerSize);
+      tCanPart2->AddGraph(i, j, tCfDiff, "", tMarkerStyle, tColor, tMarkerSize);
+      if(i==tNx_Leg && j==tNy_Leg)
+      {
+        tCanPart1->SetupTLegend("", i, j, 0.25, 0.50, 0.35, 0.25);
+        tCanPart1->AddLegendEntry(i, j, tCfRatio, tTitle1.Data(), "p");
+
+        tCanPart2->SetupTLegend("", i, j, 0.25, 0.50, 0.60, 0.25);
+        tCanPart2->AddLegendEntry(i, j, tCfDiff, tTitle2.Data(), "p");
+
+      }
+    }
+  }
+
+  TString tYaxisTitle1 = "C_{#LambdaK+ + #LambdaK-}(k*)/C_{#LambdaK^{0}_{S}}(k*)";
+  tCanPart1->SetDrawUnityLine(true);
+  tCanPart1->DrawAll();
+  tCanPart1->DrawXaxisTitle("k* (GeV/#it{c})");
+  tCanPart1->DrawYaxisTitle(tYaxisTitle1,43,20,0.075,0.65);
+
+  TString tYaxisTitle2 = "C_{#LambdaK+ + #LambdaK-}(k*)-C_{#LambdaK^{0}_{S}}(k*)";
+  tCanPart2->SetDrawUnityLine(true);
+  tCanPart2->DrawAll();
+  tCanPart2->DrawXaxisTitle("k* (GeV/#it{c})");
+  tCanPart2->DrawYaxisTitle(tYaxisTitle2,43,20,0.075,0.65);
+
+
+  TObjArray* tReturnArray = new TObjArray();
+  tReturnArray->Add((TCanvas*)tCanPart1->GetCanvas());
+  tReturnArray->Add((TCanvas*)tCanPart2->GetCanvas());
+  return tReturnArray;
+}
+
 
 //________________________________________________________________________________________________________________
 //****************************************************************************************************************
@@ -259,6 +365,8 @@ int main(int argc, char **argv)
   TObjArray* tDrawCfRatiosAndDiffs_LamKchM_LamK0 = DrawCfRatiosAndDiffs(tLamKchM, tLamK0);
   TObjArray* tDrawCfRatiosAndDiffs_LamKchP_LamK0 = DrawCfRatiosAndDiffs(tLamKchP, tLamK0);
 
+  TObjArray* tDrawCfRatiosAndDiffs_LamKchAvgToLamK0 = DrawCfRatiosAndDiffs_LamKchAvgToLamK0(tLamKchP, tLamKchM, tLamK0);
+
 //-------------------------------------------------------------------------------
 
   if(SaveImages)
@@ -281,6 +389,12 @@ int main(int argc, char **argv)
     {
       ((TCanvas*)tDrawCfRatiosAndDiffs_LamKchP_LamK0->At(i))->SaveAs(tSaveDir 
         + ((TCanvas*)tDrawCfRatiosAndDiffs_LamKchP_LamK0->At(i))->GetName() + TString::Format(".%s", tSaveFileType.Data()));
+    }
+
+    for(int i=0; i<tDrawCfRatiosAndDiffs_LamKchAvgToLamK0->GetEntries(); i++)
+    {
+      ((TCanvas*)tDrawCfRatiosAndDiffs_LamKchAvgToLamK0->At(i))->SaveAs(tSaveDir 
+        + ((TCanvas*)tDrawCfRatiosAndDiffs_LamKchAvgToLamK0->At(i))->GetName() + TString::Format(".%s", tSaveFileType.Data()));
     }
 
 

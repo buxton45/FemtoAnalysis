@@ -108,6 +108,22 @@ cout << "tParams = " << tParams << endl;
     input_files->Add("/aliceData/sim/2012/LHC12a17a_fix/170572/AOD149/0002/AliAOD.root");
     input_files->Add("/aliceData/sim/2012/LHC12a17a_fix/170388/AOD149/0001/AliAOD.root");
     input_files->Add("/aliceData/sim/2012/LHC12a17a_fix/170388/AOD149/0002/AliAOD.root");
+/*
+    input_files->Add("/aliceData/sim/2012/LHC12a11a/139437/AOD157/0001/AliAOD.root");
+    input_files->Add("/aliceData/sim/2012/LHC12a11a/139437/AOD157/0002/AliAOD.root");
+    input_files->Add("/aliceData/sim/2012/LHC12a11a/139437/AOD157/0003/AliAOD.root");
+    input_files->Add("/aliceData/sim/2012/LHC12a11a/139437/AOD157/0004/AliAOD.root");
+    input_files->Add("/aliceData/sim/2012/LHC12a11a/139437/AOD157/0005/AliAOD.root");
+    input_files->Add("/aliceData/sim/2012/LHC12a11a/139437/AOD157/0006/AliAOD.root");
+*/
+/*
+    input_files->Add("/aliceData/sim/2012/LHC12a11f/139437/AOD157/0001/AliAOD.root");
+    input_files->Add("/aliceData/sim/2012/LHC12a11f/139437/AOD157/0002/AliAOD.root");
+    input_files->Add("/aliceData/sim/2012/LHC12a11f/139437/AOD157/0003/AliAOD.root");
+    input_files->Add("/aliceData/sim/2012/LHC12a11f/139437/AOD157/0004/AliAOD.root");
+    input_files->Add("/aliceData/sim/2012/LHC12a11f/139437/AOD157/0005/AliAOD.root");
+    input_files->Add("/aliceData/sim/2012/LHC12a11f/139437/AOD157/0006/AliAOD.root");
+*/
   }
 
   // Tell manager to do a local analysis on the supplied input files.

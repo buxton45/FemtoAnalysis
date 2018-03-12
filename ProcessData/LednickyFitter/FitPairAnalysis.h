@@ -75,6 +75,8 @@ public:
   //---------------------------------------------------------------------------------------------
   TF1* GetNewNonFlatBackground(NonFlatBgdFitType aBgdFitType, bool aShareAmongstPartials);
   void InitializeBackgroundParams(NonFlatBgdFitType aNonFlatBgdType, bool aShareAmongstPartials);
+  void SetBgdParametersShallow(vector<FitParameter*> &aBgdParameters);
+  void SetBgdParametersSharedGlobal(bool aIsShared, vector<int> &aSharedAnalyses);
 
   void CreateFitNormParameters();
   void ShareFitParameters(bool aIncludeSingletAndTriplet=false);
