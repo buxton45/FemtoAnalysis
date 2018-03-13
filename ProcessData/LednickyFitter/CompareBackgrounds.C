@@ -1,6 +1,119 @@
 #include "FitGenerator.h"
 class FitGenerator;
 
+#include "DrawAMPTCfs.h"
+
+
+//________________________________________________________________________________________________________________
+TH1* GetAMPTCf(AnalysisType aAnType, CentralityType aCentType, bool aCombineAllcLamcKch, bool aCombineConjugates)
+{
+  bool tCombineAllcLamcKch = aCombineAllcLamcKch;
+  bool tCombineConjugates = aCombineConjugates;
+  if( (aAnType==kLamK0 || aAnType==kALamK0) && tCombineAllcLamcKch) {tCombineAllcLamcKch=false; tCombineConjugates=true;}
+
+
+  TString tResultsDate = "20180312";
+  CentralityType tAnDirCentType = kMB;    //If data stored in separate directories for each centrality, 0010, 1030, 3050
+                                          //    choose corresponding CentralityType
+                                          //If data stored in one, large, 0100 directory, choose kMB
+  if(tResultsDate.EqualTo("20180312")) tAnDirCentType = kMB;
+  else tAnDirCentType = aCentType;
+
+  bool tCombineCentFiles = true;
+  TString tCentralityFile;
+  if     (aCentType==k0010) tCentralityFile = "0005";
+  else if(aCentType==k1030) tCentralityFile = "1020";
+  else if(aCentType==k3050) tCentralityFile = "3040";
+  else assert(0);
+  //----------
+  int tRebin = 4;
+  double tMinNorm=0.32, tMaxNorm=0.40;
+
+  //-----------------------------------------------------------------------------
+  TH1* tCf = TypicalGetAMPTCf(tResultsDate, tAnDirCentType, aAnType, tCentralityFile, tCombineAllcLamcKch, tCombineConjugates, tCombineCentFiles, tRebin, tMinNorm, tMaxNorm);
+
+  return tCf;
+}
+
+//________________________________________________________________________________________________________________
+TCanvas* CompareDataToAMPT(FitGenerator* aGen)
+{
+  bool tCombineAllcLamcKch = false; 
+  bool tCombineConjugates = true;
+
+  AnalysisType tAnType = aGen->GetSharedAn()->GetFitPairAnalysis(0)->GetAnalysisType();
+  vector<CentralityType> tCentralityTypes = aGen->GetCentralityTypes();
+  int tNAnalyses = aGen->GetNAnalyses();
+
+  TString tCanvasName = TString::Format("CompareDataToAMPT_%s", cAnalysisBaseTags[tAnType]);
+  for(unsigned int i=0; i<tCentralityTypes.size(); i++) tCanvasName += TString(cCentralityTags[tCentralityTypes[i]]);
+
+
+  int tNx=0, tNy=0;
+  if(tNAnalyses == 6) {tNx=2; tNy=3;}
+  else if(tNAnalyses == 4) {tNx=2; tNy=2;}
+  else if(tNAnalyses == 3) {tNx=1; tNy=tNAnalyses;}
+  else if(tNAnalyses == 2 || tNAnalyses==1) {tNx=tNAnalyses; tNy=1;}
+  else assert(0);
+
+  double tXLow = -0.02;
+  double tXHigh = 1.99;
+  double tYLow = 0.86;
+  double tYHigh = 1.07;
+  CanvasPartition* tCanPart = new CanvasPartition(tCanvasName,tNx,tNy,tXLow,tXHigh,tYLow,tYHigh,0.12,0.05,0.13,0.05);
+
+  assert(tNx*tNy == tNAnalyses);
+  int tAnalysisNumber=0;
+
+  int tMarkerStyleData = 20;
+  int tMarkerStyleAMPT = 25;
+  double tMarkerSize = 0.5;
+
+  int tColorData, tColorAMPT;
+  if     (tAnType==kLamK0 || tAnType==kALamK0)     tColorData = kBlack;
+  else if(tAnType==kLamKchP || tAnType==kALamKchM) tColorData = kRed+1;
+  else if(tAnType==kLamKchM || tAnType==kALamKchP) tColorData = kBlue+1;
+  else assert(0);
+
+  tColorAMPT = TColor::GetColorTransparent(tColorData,0.3);
+
+  int tNx_Leg=0, tNy_Leg=0;
+
+  TH1 *tDataCf, *tAMPTCf;
+  CentralityType tCentType;
+  for(int j=0; j<tNy; j++)
+  {
+    for(int i=0; i<tNx; i++)
+    {
+      tAnalysisNumber = j*tNx + i;
+      tAnType = aGen->GetSharedAn()->GetFitPairAnalysis(tAnalysisNumber)->GetAnalysisType();
+      tCentType = aGen->GetSharedAn()->GetFitPairAnalysis(tAnalysisNumber)->GetCentralityType();
+
+      tDataCf = aGen->GetSharedAn()->GetKStarCfHeavy(tAnalysisNumber)->GetHeavyCfClone();
+      tAMPTCf = GetAMPTCf(tAnType, tCentType, tCombineAllcLamcKch, tCombineConjugates);
+      //---------------------------------------------------------------------------------------------------------
+      tCanPart->AddGraph(i, j, tDataCf, "", tMarkerStyleData, tColorData, tMarkerSize);
+      tCanPart->AddGraph(i, j, tAMPTCf, "", tMarkerStyleAMPT, tColorAMPT, tMarkerSize);
+      if(i==tNx_Leg && j==tNy_Leg)
+      {
+        tCanPart->SetupTLegend(cAnalysisRootTags[tAnType], i, j, 0.25, 0.05, 0.35, 0.50);
+        tCanPart->AddLegendEntry(i, j, tDataCf, "Data", "p");
+        tCanPart->AddLegendEntry(i, j, tAMPTCf, "AMPT", "p");
+      }
+    }
+  }
+
+  tCanPart->SetDrawUnityLine(true);
+  tCanPart->DrawAll();
+  tCanPart->DrawXaxisTitle("k* (GeV/c)");
+  tCanPart->DrawYaxisTitle("C(k*)",43,25,0.05,0.75);
+
+
+  return tCanPart->GetCanvas();
+
+}
+
+
 
 //________________________________________________________________________________________________________________
 TCanvas* CompareLamKchAvgToLamK0(FitGenerator* aLamKchP, FitGenerator* aLamKchM, FitGenerator* aLamK0, bool aDrawIndividualKchAlso=false)
@@ -326,7 +439,7 @@ int main(int argc, char **argv)
 //-----------------------------------------------------------------------------
 //  TString tResultsDate = "20161027";
 //  TString tResultsDate = "20171220_onFlyStatusFalse";
-  TString tResultsDate = "20171227";
+  TString tResultsDate = "20180307";
 //  TString tResultsDate = "20171227_LHC10h";
 //  TString tResultsDate = "20180104_useIsProbableElectronMethodTrue";
 //  TString tResultsDate = "20180104_useIsProbableElectronMethodFalse";
@@ -357,10 +470,14 @@ int main(int argc, char **argv)
   FitGenerator* tLamK0 = new FitGenerator(tFileLocationBase_cLamK0,tFileLocationBaseMC_cLamK0,kLamK0, tCentType,tAnRunType,tNPartialAnalysis,tGenType);
 
 //-------------------------------------------------------------------------------
-
+/*
   bool tDrawIndividualKchAlso = false;
   TCanvas* tCanCompareLamKchAvgToLamK0 = CompareLamKchAvgToLamK0(tLamKchP, tLamKchM, tLamK0, tDrawIndividualKchAlso);
-
+*/
+  TCanvas* tCompareDataToAMPT_LamK0 = CompareDataToAMPT(tLamK0);
+  TCanvas* tCompareDataToAMPT_LamKchP = CompareDataToAMPT(tLamKchP);
+  TCanvas* tCompareDataToAMPT_LamKchM = CompareDataToAMPT(tLamKchM);
+/*
   TObjArray* tDrawCfRatiosAndDiffs_LamKchM_LamKchP = DrawCfRatiosAndDiffs(tLamKchM, tLamKchP);
   TObjArray* tDrawCfRatiosAndDiffs_LamKchM_LamK0 = DrawCfRatiosAndDiffs(tLamKchM, tLamK0);
   TObjArray* tDrawCfRatiosAndDiffs_LamKchP_LamK0 = DrawCfRatiosAndDiffs(tLamKchP, tLamK0);
@@ -396,10 +513,8 @@ int main(int argc, char **argv)
       ((TCanvas*)tDrawCfRatiosAndDiffs_LamKchAvgToLamK0->At(i))->SaveAs(tSaveDir 
         + ((TCanvas*)tDrawCfRatiosAndDiffs_LamKchAvgToLamK0->At(i))->GetName() + TString::Format(".%s", tSaveFileType.Data()));
     }
-
-
   }
-
+*/
 //-------------------------------------------------------------------------------
 
   tFullTimer.Stop();
