@@ -224,7 +224,29 @@ void ThermEvent::ClearThermEvent()
 //________________________________________________________________________________________________________________
 void ThermEvent::AssertAllLambdaFathersFoundDaughters()
 {
+//  for(unsigned int i=0; i<fLambdaCollection.size(); i++) assert(fLambdaCollection[i].BothDaughtersFound());
+//  for(unsigned int i=0; i<fAntiLambdaCollection.size(); i++) assert(fAntiLambdaCollection[i].BothDaughtersFound());
+
+  for(unsigned int i=0; i<fLambdaCollection.size(); i++)
+  {
+    if(!fLambdaCollection[i].BothDaughtersFound()) 
+    {
+      cout << "WARNING: !fLambdaCollection[" << i << "].BothDaughtersFound()" << endl;
+      cout << "\t Deleting element..." << endl << endl;
+      fLambdaCollection.erase(fLambdaCollection.begin()+i);
+    }
+  }
   for(unsigned int i=0; i<fLambdaCollection.size(); i++) assert(fLambdaCollection[i].BothDaughtersFound());
+  //----------------------------------------------------
+  for(unsigned int i=0; i<fAntiLambdaCollection.size(); i++)
+  {
+    if(!fAntiLambdaCollection[i].BothDaughtersFound()) 
+    {
+      cout << "WARNING: !fAntiLambdaCollection[" << i << "].BothDaughtersFound()" << endl;
+      cout << "\t Deleting element..." << endl << endl;
+      fAntiLambdaCollection.erase(fAntiLambdaCollection.begin()+i);
+    }
+  }
   for(unsigned int i=0; i<fAntiLambdaCollection.size(); i++) assert(fAntiLambdaCollection[i].BothDaughtersFound());
 
 }

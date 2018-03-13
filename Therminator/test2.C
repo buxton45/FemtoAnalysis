@@ -17,7 +17,7 @@ int main(int argc, char **argv)
   tFullTimer.Start();
 
 //-----------------------------------------------------------------------------
-  bool bRunFull = false;
+  bool bRunFull = true;
   bool bUseMixedEvents = true;
   bool bPrintUniqueParents = false;
 
@@ -34,10 +34,10 @@ int main(int argc, char **argv)
   bool bCheckCoECoM = false;
   bool bOnlyRunOverJaiEvents = false;
 
-//  double tMaxPrimaryDecayLength = -1.; 
-  double tMaxPrimaryDecayLength = 3.01; 
+  double tMaxPrimaryDecayLength = -1.; 
+//  double tMaxPrimaryDecayLength = 3.01; 
 
-  int tImpactParam = 2;
+  int tImpactParam = 8;
   //-----------------------------------------
   TString tEventsDirectory, tMatricesSaveFileName, tPairFractionSaveName, tSingleParticlesSaveName, tCorrelationFunctionsSaveName;
 
