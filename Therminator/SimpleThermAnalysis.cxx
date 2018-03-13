@@ -60,7 +60,8 @@ SimpleThermAnalysis::SimpleThermAnalysis() :
   fSPAnalysisAProt(nullptr),
   fSPAnalysisK0(nullptr),
 
-  fCheckCoECoM(false)
+  fCheckCoECoM(false),
+  fRotateEventsByRandAzAngles(false)
 
 {
   fAnalysisLamKchP = new ThermPairAnalysis(kLamKchP);
@@ -216,6 +217,7 @@ vector<ThermEvent> SimpleThermAnalysis::ExtractEventsFromRootFile(TString aFileL
 
     if(tParticleEntry->eventid != tEventID)
     {
+      if(fRotateEventsByRandAzAngles) tThermEvent.RotateAllParticlesByRandomAzimuthalAngle(false);
       tThermEvent.MatchDaughtersWithFathers();
       if(fCheckCoECoM) tThermEvent.CheckCoECoM();
       tThermEvent.FindAllFathers();
@@ -231,6 +233,7 @@ vector<ThermEvent> SimpleThermAnalysis::ExtractEventsFromRootFile(TString aFileL
     if(tThermEvent.IsDaughterOfInterest(tParticleEntry)) tThermEvent.PushBackThermDaughterOfInterest(tParticleEntry);
     if(tThermEvent.IsParticleOfInterest(tParticleEntry)) tThermEvent.PushBackThermParticleOfInterest(tParticleEntry);
   }
+  if(fRotateEventsByRandAzAngles) tThermEvent.RotateAllParticlesByRandomAzimuthalAngle(false);
   tThermEvent.MatchDaughtersWithFathers();
   if(fCheckCoECoM) tThermEvent.CheckCoECoM();
   tThermEvent.FindAllFathers();

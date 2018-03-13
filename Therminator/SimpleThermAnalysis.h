@@ -68,6 +68,7 @@ public:
   void SetMaxPrimaryDecayLength(double aMax);
 
   void SetCheckCoECoM(bool aCheck=true);
+  void SetRotateEventsByRandomAzimuthalAngles(bool aRotate=true);
 private:
   int fNFiles;
   int fNEvents;
@@ -109,6 +110,7 @@ private:
   ThermSingleParticleAnalysis *fSPAnalysisK0;
 
   bool fCheckCoECoM;
+  bool fRotateEventsByRandAzAngles;
 
 #ifdef __ROOT__
   ClassDef(SimpleThermAnalysis, 1)
@@ -126,4 +128,6 @@ inline void SimpleThermAnalysis::SetSingleParticlesSaveName(TString aSaveName) {
 inline void SimpleThermAnalysis::SetMaxPrimaryDecayLength(double aMax) {fMaxPrimaryDecayLength = aMax;}
 
 inline void SimpleThermAnalysis::SetCheckCoECoM(bool aCheck) {fCheckCoECoM = aCheck;}
+inline void SimpleThermAnalysis::SetRotateEventsByRandomAzimuthalAngles(bool aRotate) {fRotateEventsByRandAzAngles = aRotate;}
+
 #endif

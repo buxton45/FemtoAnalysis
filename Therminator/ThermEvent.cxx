@@ -422,4 +422,105 @@ void ThermEvent::CheckCoECoM()
 }
 
 
+//________________________________________________________________________________________________________________
+double ThermEvent::CalculateEventPlane(vector<ThermParticle> &aCollection)
+{
+  unsigned int tMult = aCollection.size();
+  complex<double> tImI (0., 1.);
+  complex<double> tQn(0., 0.);
+
+  for(unsigned int iPart=0; iPart<tMult; iPart++) tQn = tQn + exp(tImI*2.0*aCollection[iPart].GetPhiP());
+  double tReturnEP = atan2(imag(tQn), real(tQn))/2.0;
+  return tReturnEP;
+}
+
+//________________________________________________________________________________________________________________
+double ThermEvent::CalculateEventPlane(vector<ThermV0Particle> &aCollection)
+{
+  unsigned int tMult = aCollection.size();
+  complex<double> tImI (0., 1.);
+  complex<double> tQn(0., 0.);
+
+  for(unsigned int iPart=0; iPart<tMult; iPart++) tQn = tQn + exp(tImI*2.0*aCollection[iPart].GetPhiP());
+  double tReturnEP = atan2(imag(tQn), real(tQn))/2.0;
+  return tReturnEP;
+}
+
+
+//________________________________________________________________________________________________________________
+void ThermEvent::RotateParticlesByRandomAzimuthalAngle(double aPhi, vector<ThermParticle> &aCollection, bool aOutputEP)
+{
+  double tEventPlane=0.;
+  double tExpectedEP = 0.;
+  if(aOutputEP)
+  {
+    tEventPlane = CalculateEventPlane(aCollection);
+    cout << TString::Format("EP before rotation = %0.4f (%0.2f deg.)", tEventPlane, (180./TMath::Pi())*tEventPlane) << endl;
+  }
+
+  for(unsigned int iPart=0; iPart<aCollection.size(); iPart++) aCollection[iPart].TransformRotateZ(-aPhi);  //Negative sign because
+                                                                                                            //want CCW rotation
+  if(aOutputEP)
+  {
+    tExpectedEP = aPhi+tEventPlane;
+    tExpectedEP = atan(tan(tExpectedEP));
+    cout << TString::Format("\t aPhi for rotation = %0.4f (%0.2f deg.)", aPhi, (180./TMath::Pi())*aPhi) << endl;
+    cout << TString::Format("\t aPhi + EP         = %0.4f (%0.2f deg.)", tExpectedEP, (180./TMath::Pi())*tExpectedEP) << endl;
+    tEventPlane = CalculateEventPlane(aCollection);
+    cout << TString::Format("EP after rotation  = %0.4f (%0.2f deg.)", tEventPlane, (180./TMath::Pi())*tEventPlane) << endl;
+    cout << TString::Format("\t Diff = %0.4f", tEventPlane-tExpectedEP) << endl << endl;
+    assert(abs(tEventPlane-tExpectedEP) < 0.0001);
+  }
+}
+
+//________________________________________________________________________________________________________________
+void ThermEvent::RotateParticlesByRandomAzimuthalAngle(double aPhi, vector<ThermV0Particle> &aCollection, bool aOutputEP)
+{
+  double tEventPlane=0.;
+  double tExpectedEP = 0.;
+  if(aOutputEP)
+  {
+    tEventPlane = CalculateEventPlane(aCollection);
+    cout << TString::Format("EP before rotation = %0.4f (%0.2f deg.)", tEventPlane, (180./TMath::Pi())*tEventPlane) << endl;
+  }
+
+  for(unsigned int iPart=0; iPart<aCollection.size(); iPart++) aCollection[iPart].TransformRotateZ(-aPhi);  //Negative sign because
+                                                                                                            //want CCW rotation
+  if(aOutputEP)
+  {
+    tExpectedEP = aPhi+tEventPlane;
+    tExpectedEP = atan(tan(tExpectedEP));
+    cout << TString::Format("\t aPhi for rotation = %0.4f (%0.2f deg.)", aPhi, (180./TMath::Pi())*aPhi) << endl;
+    cout << TString::Format("\t aPhi + EP         = %0.4f (%0.2f deg.)", tExpectedEP, (180./TMath::Pi())*tExpectedEP) << endl;
+    tEventPlane = CalculateEventPlane(aCollection);
+    cout << TString::Format("EP after rotation  = %0.4f (%0.2f deg.)", tEventPlane, (180./TMath::Pi())*tEventPlane) << endl;
+    cout << TString::Format("\t Diff = %0.4f", tEventPlane-tExpectedEP) << endl << endl;
+    assert(abs(tEventPlane-tExpectedEP) < 0.0001);
+  }
+}
+
+//________________________________________________________________________________________________________________
+void ThermEvent::RotateAllParticlesByRandomAzimuthalAngle(bool aOutputEP)
+{
+  std::default_random_engine tGenerator (std::clock());  //std::clock() is seed
+  std::uniform_real_distribution<double> tUnityDistribution(0.,1.);
+  double tU = tUnityDistribution(tGenerator);
+  double tPhi = 2.*TMath::Pi()*tU; //azimuthal angle
+
+
+  RotateParticlesByRandomAzimuthalAngle(tPhi, fAllParticlesCollection, aOutputEP);
+  RotateParticlesByRandomAzimuthalAngle(tPhi, fAllDaughtersCollection, aOutputEP);
+
+  RotateParticlesByRandomAzimuthalAngle(tPhi, fLambdaCollection, aOutputEP);
+  RotateParticlesByRandomAzimuthalAngle(tPhi, fAntiLambdaCollection, aOutputEP);
+  RotateParticlesByRandomAzimuthalAngle(tPhi, fK0ShortCollection, aOutputEP);
+
+  RotateParticlesByRandomAzimuthalAngle(tPhi, fKchPCollection, aOutputEP);
+  RotateParticlesByRandomAzimuthalAngle(tPhi, fKchMCollection, aOutputEP);
+
+  RotateParticlesByRandomAzimuthalAngle(tPhi, fProtCollection, aOutputEP);
+  RotateParticlesByRandomAzimuthalAngle(tPhi, fAProtCollection, aOutputEP);
+
+}
+
 

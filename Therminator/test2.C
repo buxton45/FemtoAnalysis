@@ -32,6 +32,7 @@ int main(int argc, char **argv)
   bool bOnlyWeightLongDecayParents = false;
 
   bool bCheckCoECoM = false;
+  bool bRotateEventsByRandomAzimuthalAngles = true;
   bool bOnlyRunOverJaiEvents = false;
 
   double tMaxPrimaryDecayLength = -1.; 
@@ -67,6 +68,14 @@ int main(int argc, char **argv)
     tSingleParticlesSaveName += TString("_JaiEventsOnly");
     tCorrelationFunctionsSaveName += TString("_JaiEventsOnly");
   }
+
+  if(bRotateEventsByRandomAzimuthalAngles)
+  {
+    tMatricesSaveFileName += TString("_RandomEPs");
+    tPairFractionSaveName += TString("_RandomEPs");
+    tSingleParticlesSaveName += TString("_RandomEPs");
+    tCorrelationFunctionsSaveName += TString("_RandomEPs");
+  }
   //-----------------------------------------
 
   SimpleThermAnalysis *tSimpleThermAnalysis = new SimpleThermAnalysis();
@@ -92,6 +101,7 @@ int main(int argc, char **argv)
   if(tMaxPrimaryDecayLength > 0.) tSimpleThermAnalysis->SetMaxPrimaryDecayLength(tMaxPrimaryDecayLength);
 
   tSimpleThermAnalysis->SetCheckCoECoM(bCheckCoECoM);
+  tSimpleThermAnalysis->SetRotateEventsByRandomAzimuthalAngles(bRotateEventsByRandomAzimuthalAngles);
 
   tSimpleThermAnalysis->ProcessAll();
 

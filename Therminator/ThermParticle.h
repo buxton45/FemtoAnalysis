@@ -65,7 +65,7 @@ public:
   double GetEtaP() const;
 
   void TransformToLCMS(double aBetaZ);
-  void TransformRotateZ(double aPhi);
+  void TransformRotateZ(double aPhi);  //NOTE: Clockwise rotation!!!
   void TransformToPRF(double aBetaT);
 
   TLorentzVector GetFourPosition();

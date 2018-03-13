@@ -62,9 +62,17 @@ public:
 
   void CheckCoECoM();
 
+  double CalculateEventPlane(vector<ThermParticle> &aCollection);
+  double CalculateEventPlane(vector<ThermV0Particle> &aCollection);
+
+  void RotateParticlesByRandomAzimuthalAngle(double aPhi, vector<ThermParticle> &aCollection, bool aOutputEP=false);
+  void RotateParticlesByRandomAzimuthalAngle(double aPhi, vector<ThermV0Particle> &aCollection, bool aOutputEP=false);
+  void RotateAllParticlesByRandomAzimuthalAngle(bool aOutputEP=false);
+
   //inline stuff
   void SetEventID(unsigned int aEventID);
   unsigned int GetEventID();
+  vector<ThermParticle> GetAllParticlesCollection();
 
 private:
   unsigned int fEventID;
@@ -91,7 +99,7 @@ private:
 //inline stuff
 inline void ThermEvent::SetEventID(unsigned int aEventID) {fEventID = aEventID;}
 inline unsigned int ThermEvent::GetEventID() {return fEventID;}
-
+inline vector<ThermParticle> ThermEvent::GetAllParticlesCollection() {return fAllParticlesCollection;}
 
 #endif
 

@@ -261,6 +261,7 @@ void ThermParticle::TransformToLCMS(double aBetaZ)
 //________________________________________________________________________________________________________________
 void ThermParticle::TransformRotateZ(double aPhi)
 {
+  //NOTE: Clockwise rotation!!! (to be consistent with ParticleCoor::TransformRotateZ
   double tmp;
   double tCosPhi = TMath::Cos(aPhi);
   double tSinPhi = TMath::Sin(aPhi);
