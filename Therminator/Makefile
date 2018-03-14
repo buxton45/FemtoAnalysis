@@ -11,7 +11,7 @@ RM = rm
 
 MY_LIBS = $(addprefix build/, ParticleCoor.o Interpolator.o Types.o PIDMapping.o ThermCommon.o ThermParticle.o ThermV0Particle.o ThermEvent.o ThermChargedResidual.o ThermPairAnalysis.o ThermSingleParticleAnalysis.o ThermEventsCollection.o SimpleThermAnalysis.o Therm3dCf.o)
 
-BINARIES = runTest runTest2 runDrawTransforms runDrawPairFractions runDrawParentsMatrices runBuildLambdaValuesFromParentMatrices runProject3dRadii runProjectTransverseEmission runDrawPairSources runDrawCfs runDrawCfsv2 runCompareCfs runCompareCfsv2 runProject3dCfs runGetmT runRenameEventFiles
+BINARIES = runTest runTest2 runDrawTransforms runDrawPairFractions runDrawParentsMatrices runBuildLambdaValuesFromParentMatrices runProject3dRadii runProjectTransverseEmission runDrawPairSources runDrawCfs runDrawCfsv2 runCompareCfs runCompareCfsv2 runProject3dCfs runGetmT runRenameEventFiles runCompareBackground
 
 all: $(BINARIES)
 
@@ -63,6 +63,9 @@ runGetmT: ${MY_LIBS} GetmT.C
 
 runRenameEventFiles: ${MY_LIBS} RenameEventFiles.C
 	g++ RenameEventFiles.C ${MY_LIBS} -o runRenameEventFiles $(LIBS) $(CFLAGS)
+
+runCompareBackground: ${MY_LIBS} CompareBackground.C
+	g++ CompareBackground.C ${MY_LIBS} -o runCompareBackground $(LIBS) $(CFLAGS)
 
 build/%.o: ${ANALYZE_DIR}/%.cxx ${ANALYZE_DIR}/%.h
 	g++ -c $< $(CFLAGS) -o $@

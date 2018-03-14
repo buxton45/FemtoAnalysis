@@ -107,8 +107,8 @@ CfLite* BuildCfLite(TString aFileLocationBase, TString aCentralityFile, Analysis
   TH1* tDen = Get1dHist(tAnDir, TString::Format("DenKStarCf_%s", cAnalysisBaseTags[aAnType]));
 
   CfLite* tCfLite = new CfLite(TString::Format("CfLite_%s_%s", cAnalysisBaseTags[aAnType], aCentralityFile.Data()), 
-                                 TString::Format("CfLite_%s_%s", cAnalysisBaseTags[aAnType], aCentralityFile.Data()), 
-                                 tNum, tDen, aMinNorm, aMaxNorm);
+                               TString::Format("CfLite_%s_%s", cAnalysisBaseTags[aAnType], aCentralityFile.Data()), 
+                               tNum, tDen, aMinNorm, aMaxNorm);
   tCfLite->Rebin(aRebin);
 
   delete tAnDir;

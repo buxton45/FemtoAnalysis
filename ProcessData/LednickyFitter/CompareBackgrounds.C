@@ -4,6 +4,64 @@ class FitGenerator;
 #include "DrawAMPTCfs.h"
 
 
+//_________________________________________________________________________________________
+TH1D* Get1dTHERMHist(TString FileName, TString HistName)
+{
+  TFile f1(FileName);
+  TH1D *ReturnHist = (TH1D*)f1.Get(HistName);
+
+  TH1D *ReturnHistClone = (TH1D*)ReturnHist->Clone();
+  ReturnHistClone->SetDirectory(0);
+
+  return ReturnHistClone;
+}
+
+
+//________________________________________________________________________________________________________________
+TH1* GetTHERMCf(AnalysisType aAnType, int aImpactParam=8, bool aCombineConj = true, int aRebin=2, double aMinNorm=0.32, double aMaxNorm=0.40)
+{
+  AnalysisType tConjAnType;
+  if     (aAnType==kLamK0)    {tConjAnType=kALamK0;}
+  else if(aAnType==kALamK0)   {tConjAnType=kLamK0;}
+  else if(aAnType==kLamKchP)  {tConjAnType=kALamKchM;}
+  else if(aAnType==kALamKchM) {tConjAnType=kLamKchP;}
+  else if(aAnType==kLamKchM)  {tConjAnType=kALamKchP;}
+  else if(aAnType==kALamKchP) {tConjAnType=kLamKchM;}
+  else assert(0);
+
+  //--------------------------------
+
+  TString tDirectory = TString::Format("/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b%d/", aImpactParam);
+  TString tFileName = "CorrelationFunctions_RandomEPs.root";
+  TString tFileLocation = TString::Format("%s%s", tDirectory.Data(), tFileName.Data());
+  //--------------------------------
+  TH1D* tNum1 = Get1dTHERMHist(tFileLocation, TString::Format("NumFull%s", cAnalysisBaseTags[aAnType]));
+  TH1D* tDen1 = Get1dTHERMHist(tFileLocation, TString::Format("DenFull%s", cAnalysisBaseTags[aAnType]));
+  CfLite* tCfLite1 = new CfLite(TString::Format("CfLite_%s", cAnalysisBaseTags[aAnType]), 
+                                TString::Format("CfLite_%s", cAnalysisBaseTags[aAnType]), 
+                                tNum1, tDen1, aMinNorm, aMaxNorm);
+  tCfLite1->Rebin(aRebin);
+
+  TH1D* tNum2 = Get1dTHERMHist(tFileLocation, TString::Format("NumFull%s", cAnalysisBaseTags[tConjAnType]));
+  TH1D* tDen2 = Get1dTHERMHist(tFileLocation, TString::Format("DenFull%s", cAnalysisBaseTags[tConjAnType]));
+  CfLite* tCfLite2 = new CfLite(TString::Format("CfLite_%s", cAnalysisBaseTags[tConjAnType]), 
+                                TString::Format("CfLite_%s", cAnalysisBaseTags[tConjAnType]), 
+                                tNum2, tDen2, aMinNorm, aMaxNorm);
+  tCfLite2->Rebin(aRebin);
+
+  if(!aCombineConj) return tCfLite1->Cf();
+  else
+  {
+    vector<CfLite*> tCfLiteVec {tCfLite1, tCfLite2};
+    CfHeavy* tCfHeavy = new CfHeavy(TString::Format("CfHeavy_%s_%s", cAnalysisBaseTags[aAnType], cAnalysisBaseTags[tConjAnType]), 
+                                    TString::Format("CfHeavy_%s_%s", cAnalysisBaseTags[aAnType], cAnalysisBaseTags[tConjAnType]), 
+                                    tCfLiteVec, aMinNorm, aMaxNorm);
+    return tCfHeavy->GetHeavyCf();
+  }
+}
+
+
+
 //________________________________________________________________________________________________________________
 TH1* GetAMPTCf(AnalysisType aAnType, CentralityType aCentType, bool aCombineAllcLamcKch, bool aCombineConjugates)
 {
@@ -36,7 +94,7 @@ TH1* GetAMPTCf(AnalysisType aAnType, CentralityType aCentType, bool aCombineAllc
 }
 
 //________________________________________________________________________________________________________________
-TCanvas* CompareDataToAMPT(FitGenerator* aGen)
+TCanvas* CompareDataToAMPT(FitGenerator* aGen, bool aDrawTHERM)
 {
   bool tCombineAllcLamcKch = false; 
   bool tCombineConjugates = true;
@@ -67,19 +125,21 @@ TCanvas* CompareDataToAMPT(FitGenerator* aGen)
 
   int tMarkerStyleData = 20;
   int tMarkerStyleAMPT = 25;
+  int tMarkerStyleTHERM = 26;
   double tMarkerSize = 0.5;
 
-  int tColorData, tColorAMPT;
+  int tColorData, tColorAMPT, tColorTHERM;
   if     (tAnType==kLamK0 || tAnType==kALamK0)     tColorData = kBlack;
   else if(tAnType==kLamKchP || tAnType==kALamKchM) tColorData = kRed+1;
   else if(tAnType==kLamKchM || tAnType==kALamKchP) tColorData = kBlue+1;
   else assert(0);
 
-  tColorAMPT = TColor::GetColorTransparent(tColorData,0.3);
+  tColorAMPT = kMagenta;
+  tColorTHERM = kGreen;
 
   int tNx_Leg=0, tNy_Leg=0;
 
-  TH1 *tDataCf, *tAMPTCf;
+  TH1 *tDataCf, *tAMPTCf, *tTHERMCf;
   CentralityType tCentType;
   for(int j=0; j<tNy; j++)
   {
@@ -94,11 +154,17 @@ TCanvas* CompareDataToAMPT(FitGenerator* aGen)
       //---------------------------------------------------------------------------------------------------------
       tCanPart->AddGraph(i, j, tDataCf, "", tMarkerStyleData, tColorData, tMarkerSize);
       tCanPart->AddGraph(i, j, tAMPTCf, "", tMarkerStyleAMPT, tColorAMPT, tMarkerSize);
+      if(aDrawTHERM) 
+      {
+        tTHERMCf = GetTHERMCf(tAnType, 8, tCombineConjugates);
+        tCanPart->AddGraph(i, j, tTHERMCf, "", tMarkerStyleTHERM, tColorTHERM, tMarkerSize);
+      }
       if(i==tNx_Leg && j==tNy_Leg)
       {
         tCanPart->SetupTLegend(cAnalysisRootTags[tAnType], i, j, 0.25, 0.05, 0.35, 0.50);
         tCanPart->AddLegendEntry(i, j, tDataCf, "Data", "p");
         tCanPart->AddLegendEntry(i, j, tAMPTCf, "AMPT", "p");
+        if(aDrawTHERM) tCanPart->AddLegendEntry(i, j, tTHERMCf, "AMPT", "p");
       }
     }
   }
@@ -474,9 +540,9 @@ int main(int argc, char **argv)
   bool tDrawIndividualKchAlso = false;
   TCanvas* tCanCompareLamKchAvgToLamK0 = CompareLamKchAvgToLamK0(tLamKchP, tLamKchM, tLamK0, tDrawIndividualKchAlso);
 */
-  TCanvas* tCompareDataToAMPT_LamK0 = CompareDataToAMPT(tLamK0);
-  TCanvas* tCompareDataToAMPT_LamKchP = CompareDataToAMPT(tLamKchP);
-  TCanvas* tCompareDataToAMPT_LamKchM = CompareDataToAMPT(tLamKchM);
+  TCanvas* tCompareDataToAMPT_LamK0 = CompareDataToAMPT(tLamK0, true);
+  TCanvas* tCompareDataToAMPT_LamKchP = CompareDataToAMPT(tLamKchP, true);
+  TCanvas* tCompareDataToAMPT_LamKchM = CompareDataToAMPT(tLamKchM, true);
 /*
   TObjArray* tDrawCfRatiosAndDiffs_LamKchM_LamKchP = DrawCfRatiosAndDiffs(tLamKchM, tLamKchP);
   TObjArray* tDrawCfRatiosAndDiffs_LamKchM_LamK0 = DrawCfRatiosAndDiffs(tLamKchM, tLamK0);
