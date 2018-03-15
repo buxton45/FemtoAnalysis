@@ -35,6 +35,7 @@ FitPairAnalysis::FitPairAnalysis(TString aAnalysisName, vector<FitPartialAnalysi
 
   fMinBgdFit(0.60),
   fMaxBgdFit(0.90),
+  fMaxBgdBuild(2.0),
   fNormalizeBgdFitToCf(false),
 
   fPrimaryFit(nullptr),
@@ -105,6 +106,7 @@ FitPairAnalysis::FitPairAnalysis(TString aFileLocationBase, AnalysisType aAnalys
 
   fMinBgdFit(0.60),
   fMaxBgdFit(0.90),
+  fMaxBgdBuild(2.0),
   fNormalizeBgdFitToCf(false),
 
   fPrimaryFit(nullptr),
@@ -186,6 +188,7 @@ FitPairAnalysis::FitPairAnalysis(TString aFileLocationBase, TString aFileLocatio
 
   fMinBgdFit(0.60),
   fMaxBgdFit(0.90),
+  fMaxBgdBuild(2.0),
   fNormalizeBgdFitToCf(false),
 
   fPrimaryFit(nullptr),
@@ -435,13 +438,13 @@ TF1* FitPairAnalysis::GetNonFlatBackground_FitCombinedPartials(NonFlatBgdFitType
     TH1* tDen = fKStarCfHeavy->GetSimplyAddedNumDen("SimplyAddedDen", false);
 
     fNonFlatBackground = FitPartialAnalysis::FitNonFlatBackground(tNum, tDen, fKStarCfHeavy->GetHeavyCfClone(), aBgdFitType, aFitType, aNormalizeFitToCf, 
-                                                                  fMinBgdFit, fMaxBgdFit, fKStarCfHeavy->GetMinNorm(), fKStarCfHeavy->GetMaxNorm());
+                                                                  fMinBgdFit, fMaxBgdFit, fMaxBgdBuild, fKStarCfHeavy->GetMinNorm(), fKStarCfHeavy->GetMaxNorm());
   }
   else 
   {
     assert(!aNormalizeFitToCf);
     fNonFlatBackground = FitPartialAnalysis::FitNonFlatBackground(fKStarCfHeavy->GetHeavyCfClone(), aBgdFitType,
-                                                                  fMinBgdFit, fMaxBgdFit, fKStarCfHeavy->GetMinNorm(), fKStarCfHeavy->GetMaxNorm());
+                                                                  fMinBgdFit, fMaxBgdFit, fMaxBgdBuild, fKStarCfHeavy->GetMinNorm(), fKStarCfHeavy->GetMaxNorm());
   }
 
   return fNonFlatBackground;
@@ -462,10 +465,12 @@ TF1* FitPairAnalysis::GetNonFlatBackground_CombinePartialFits(NonFlatBgdFitType 
   assert(fNFitPartialAnalysis==2);  // i.e. this only works for train runs with _FemtoPlus and _FemtoMinus
                                     //      NOT with old grid runs with _Bp1, _Bp2, _Bm1, _Bm2, _Bm3
   fFitPartialAnalysisCollection[0]->SetMinMaxBgdFit(fMinBgdFit, fMaxBgdFit);
+  fFitPartialAnalysisCollection[0]->SetMaxBgdBuild(fMaxBgdBuild);
   const TF1* tFit1 = (TF1*)fFitPartialAnalysisCollection[0]->GetNonFlatBackground(aBgdFitType, aFitType, aNormalizeFitToCf);
   double tNumScale1 = fFitPartialAnalysisCollection[0]->GetKStarCfLite()->GetNumScale();
 
   fFitPartialAnalysisCollection[1]->SetMinMaxBgdFit(fMinBgdFit, fMaxBgdFit);
+  fFitPartialAnalysisCollection[1]->SetMaxBgdBuild(fMaxBgdBuild);
   const TF1* tFit2 = (TF1*)fFitPartialAnalysisCollection[1]->GetNonFlatBackground(aBgdFitType, aFitType, aNormalizeFitToCf);
   double tNumScale2 = fFitPartialAnalysisCollection[1]->GetKStarCfLite()->GetNumScale();
 
@@ -481,17 +486,22 @@ TF1* FitPairAnalysis::GetNonFlatBackground_CombinePartialFits(NonFlatBgdFitType 
     if(aBgdFitType==kLinear)
     {
       assert(tNParsTotal==6);
-      fNonFlatBackground = new TF1(tReturnName, BackgroundFitter::AddTwoFitFunctionsLinear, 0., 1., tNParsTotal);
+      fNonFlatBackground = new TF1(tReturnName, BackgroundFitter::AddTwoFitFunctionsLinear, 0., fMaxBgdBuild, tNParsTotal);
     }
     else if(aBgdFitType == kQuadratic)
     {
       assert(tNParsTotal==8);
-      fNonFlatBackground = new TF1(tReturnName, BackgroundFitter::AddTwoFitFunctionsQuadratic, 0., 1., tNParsTotal);
+      fNonFlatBackground = new TF1(tReturnName, BackgroundFitter::AddTwoFitFunctionsQuadratic, 0., fMaxBgdBuild, tNParsTotal);
     }
     else if(aBgdFitType == kGaussian)
     {
       assert(tNParsTotal==10);
-      fNonFlatBackground = new TF1(tReturnName, BackgroundFitter::AddTwoFitFunctionsGaussian, 0., 1., tNParsTotal);
+      fNonFlatBackground = new TF1(tReturnName, BackgroundFitter::AddTwoFitFunctionsGaussian, 0., fMaxBgdBuild, tNParsTotal);
+    }
+    else if(aBgdFitType == kPolynomial)
+    {
+      assert(tNParsTotal==16);
+      fNonFlatBackground = new TF1(tReturnName, BackgroundFitter::AddTwoFitFunctionsPolynomial, 0., fMaxBgdBuild, tNParsTotal);
     }
     else assert(0);
   }
@@ -500,17 +510,22 @@ TF1* FitPairAnalysis::GetNonFlatBackground_CombinePartialFits(NonFlatBgdFitType 
     if(aBgdFitType==kLinear)
     {
       assert(tNParsTotal==8);
-      fNonFlatBackground = new TF1(tReturnName, BackgroundFitter::AddTwoNormalizedFitFunctionsLinear, 0., 1., tNParsTotal);
+      fNonFlatBackground = new TF1(tReturnName, BackgroundFitter::AddTwoNormalizedFitFunctionsLinear, 0., fMaxBgdBuild, tNParsTotal);
     }
     else if(aBgdFitType == kQuadratic)
     {
       assert(tNParsTotal==10);
-      fNonFlatBackground = new TF1(tReturnName, BackgroundFitter::AddTwoNormalizedFitFunctionsQuadratic, 0., 1., tNParsTotal);
+      fNonFlatBackground = new TF1(tReturnName, BackgroundFitter::AddTwoNormalizedFitFunctionsQuadratic, 0., fMaxBgdBuild, tNParsTotal);
     }
     else if(aBgdFitType == kGaussian)
     {
       assert(tNParsTotal==12);
-      fNonFlatBackground = new TF1(tReturnName, BackgroundFitter::AddTwoNormalizedFitFunctionsGaussian, 0., 1., tNParsTotal);
+      fNonFlatBackground = new TF1(tReturnName, BackgroundFitter::AddTwoNormalizedFitFunctionsGaussian, 0., fMaxBgdBuild, tNParsTotal);
+    }
+    else if(aBgdFitType == kPolynomial)
+    {
+      assert(tNParsTotal==18);
+      fNonFlatBackground = new TF1(tReturnName, BackgroundFitter::AddTwoNormalizedFitFunctionsPolynomial, 0., fMaxBgdBuild, tNParsTotal);
     }
     else assert(0);
   }
@@ -577,21 +592,28 @@ TF1* FitPairAnalysis::GetNewNonFlatBackground(NonFlatBgdFitType aBgdFitType, boo
     //2 parameters
     //par[0]*x[0] + par[1]
     assert(tNParsTotal==8);
-    fNonFlatBackground = new TF1(tFitName, BackgroundFitter::AddTwoFitFunctionsLinear, 0., 1., tNParsTotal);
+    fNonFlatBackground = new TF1(tFitName, BackgroundFitter::AddTwoFitFunctionsLinear, 0., fMaxBgdBuild, tNParsTotal);
     break;
 
   case kQuadratic:
     //3 parameters
     //par[0]*x[0]*x[0] + par[1]*x[0] + par[2]
     assert(tNParsTotal==8);
-    fNonFlatBackground = new TF1(tFitName, BackgroundFitter::AddTwoFitFunctionsQuadratic, 0., 1., tNParsTotal);
+    fNonFlatBackground = new TF1(tFitName, BackgroundFitter::AddTwoFitFunctionsQuadratic, 0., fMaxBgdBuild, tNParsTotal);
     break;
 
   case kGaussian:
     //4 parameters (although, likely par[1] fixed to zero
     //par[0]*exp(-0.5*(pow((x[0]-par[1])/par[2],2.0))) + par[3]
     assert(tNParsTotal==10);
-    fNonFlatBackground = new TF1(tFitName, BackgroundFitter::AddTwoFitFunctionsGaussian, 0., 1., tNParsTotal);
+    fNonFlatBackground = new TF1(tFitName, BackgroundFitter::AddTwoFitFunctionsGaussian, 0., fMaxBgdBuild, tNParsTotal);
+    break;
+
+  case kPolynomial:
+    //7 parameters
+    //par[0] + par[1]*x[0] + par[2]*pow(x[0],2) + par[3]*pow(x[0],3) + par[4]*pow(x[0],4) + par[5]*pow(x[0],5) + par[6]*pow(x[0],6);
+    assert(tNParsTotal==16);
+    fNonFlatBackground = new TF1(tFitName, BackgroundFitter::AddTwoFitFunctionsPolynomial, 0., fMaxBgdBuild, tNParsTotal);
     break;
 
   default:

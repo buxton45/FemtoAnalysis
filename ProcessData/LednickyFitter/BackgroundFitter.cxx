@@ -17,7 +17,7 @@ ClassImp(BackgroundFitter)
 
 //________________________________________________________________________________________________________________
 BackgroundFitter::BackgroundFitter(TH1* aNum, TH1* aDen, TH1* aCf, NonFlatBgdFitType aBgdFitType, FitType aFitType, bool aNormalizeFitToCf, 
-                                   double aMinBgdFit, double aMaxBgdFit, double aKStarMinNorm, double aKStarMaxNorm):
+                                   double aMinBgdFit, double aMaxBgdFit, double aMaxBgdBuild, double aKStarMinNorm, double aKStarMaxNorm):
   fNum(aNum),
   fDen(aDen),
   fCf(aCf),
@@ -29,11 +29,14 @@ BackgroundFitter::BackgroundFitter(TH1* aNum, TH1* aDen, TH1* aCf, NonFlatBgdFit
 
   fMinBgdFit(aMinBgdFit),
   fMaxBgdFit(aMaxBgdFit),
+  fMaxBgdBuild(aMaxBgdBuild),
   fKStarMinNorm(aKStarMinNorm),
   fKStarMaxNorm(aKStarMaxNorm),
 
   fMinuit(nullptr)
 {
+  assert(fMaxBgdBuild >= fMaxBgdFit);
+
   fMinuit = new TMinuit(50);
   fMinuit->SetPrintLevel(-1); //Same as fMinuit->Command("SET PRINT -1");
 
@@ -56,7 +59,6 @@ BackgroundFitter::BackgroundFitter(TH1* aNum, TH1* aDen, TH1* aCf, NonFlatBgdFit
       fMinuit->mnparm(0, "Par0", 0., 0.01, 0., 0., tErrFlg);
       fMinuit->mnparm(1, "Par1", 0., 0.01, 0., 0., tErrFlg);
       fMinuit->mnparm(2, "Par2", fScale, 0.01, 0., 0., tErrFlg);
-
     }
     else if(fNonFlatBgdFitType == kGaussian)
     {
@@ -69,10 +71,28 @@ BackgroundFitter::BackgroundFitter(TH1* aNum, TH1* aDen, TH1* aCf, NonFlatBgdFit
 
       fMinuit->FixParameter(1);
     }
+    else if(fNonFlatBgdFitType == kPolynomial)
+    {
+      //par[0] + par[1]*x[0] + par[2]*pow(x[0],2) + par[3]*pow(x[0],3) + par[4]*pow(x[0],4) + ...
+      // + par[5]*pow(x[0],5) + par[6]*pow(x[0],6);
+
+      double tPar0Init = 1.01*fScale;
+      double tPar0Low = fScale;
+      double tPar0High = 1.05*fScale;
+
+      fMinuit->mnparm(0, "Par0", fScale, 0.01, 0., 0., tErrFlg);
+//      fMinuit->mnparm(0, "Par0", tPar0Init, 0.001, tPar0Low, tPar0High, tErrFlg);
+      fMinuit->mnparm(1, "Par1", 0., 0.01, 0., 0., tErrFlg);
+      fMinuit->mnparm(2, "Par2", 0., 0.01, 0., 0., tErrFlg);
+      fMinuit->mnparm(3, "Par3", 0., 0.01, 0., 0., tErrFlg);
+      fMinuit->mnparm(4, "Par4", 0., 0.01, 0., 0., tErrFlg);
+      fMinuit->mnparm(5, "Par5", 0., 0.01, 0., 0., tErrFlg);
+      fMinuit->mnparm(6, "Par6", 0., 0.01, 0., 0., tErrFlg);
+    }
     else assert(0);
   }
 
-  assert(fMinBgdFit > fKStarMaxNorm);
+//  assert(fMinBgdFit > fKStarMaxNorm);
 
 }
 
@@ -104,6 +124,12 @@ void BackgroundFitter::PrintFitFunctionInfo()
       cout << "Using fNonFlatBgdFitType=kGaussian" << endl;
       cout << "==> \t Form: par[0]*exp(-0.5*(pow((x[0]-par[1])/par[2],2.0))) + par[3]" << endl;
     }
+    else if(fNonFlatBgdFitType == kPolynomial)
+    {
+      cout << "Using fNonFlatBgdFitType=kPolynomial" << endl;
+      cout << "==> \t Form: par[0] + par[1]*x[0] + par[2]*pow(x[0],2) + par[3]*pow(x[0],3) + ";
+      cout << "par[4]*pow(x[0],4) + par[5]*pow(x[0],5) + par[6]*pow(x[0],6)" << endl;
+    }
     else assert(0);
   }
   else
@@ -123,6 +149,12 @@ void BackgroundFitter::PrintFitFunctionInfo()
       cout << "Using fNonFlatBgdFitType=kGaussian" << endl;
       cout << "==> \t Form: par[4]*(par[0]*exp(-0.5*(pow((x[0]-par[1])/par[2],2.0))) + par[3])" << endl;
     }
+    else if(fNonFlatBgdFitType == kPolynomial)
+    {
+      cout << "Using fNonFlatBgdFitType=kPolynomial" << endl;
+      cout << "==> \t Form: par[7]*(par[0] + par[1]*x[0] + par[2]*pow(x[0],2) + par[3]*pow(x[0],3) + ";
+      cout << "par[4]*pow(x[0],4) + par[5]*pow(x[0],5) + par[6]*pow(x[0],6))" << endl;
+    }
     else assert(0);
   }
 
@@ -134,37 +166,54 @@ void BackgroundFitter::PrintFitFunctionInfo()
 //________________________________________________________________________________________________________________
 double BackgroundFitter::FitFunctionLinear(double *x, double *par)
 {
+  //2 parameters
   return par[0]*x[0] + par[1];
 }
 
 //________________________________________________________________________________________________________________
 double BackgroundFitter::FitFunctionQuadratic(double *x, double *par)
 {
+  //3 parameters
   return par[0]*x[0]*x[0] + par[1]*x[0] + par[2];
 }
 //________________________________________________________________________________________________________________
 double BackgroundFitter::FitFunctionGaussian(double *x, double *par)
 {
+  //4 parameters
   return par[0]*exp(-0.5*(pow((x[0]-par[1])/par[2],2.0))) + par[3];
 }
-
+//________________________________________________________________________________________________________________
+double BackgroundFitter::FitFunctionPolynomial(double *x, double *par)
+{
+  //7 parameters
+  return par[0] + par[1]*x[0] + par[2]*pow(x[0],2) + par[3]*pow(x[0],3) + par[4]*pow(x[0],4) + par[5]*pow(x[0],5) + par[6]*pow(x[0],6);
+}
 
 
 //________________________________________________________________________________________________________________
 double BackgroundFitter::NormalizedFitFunctionLinear(double *x, double *par)
 {
+  //3 parameters
   return par[2]*FitFunctionLinear(x, par);
 }
 
 //________________________________________________________________________________________________________________
 double BackgroundFitter::NormalizedFitFunctionQuadratic(double *x, double *par)
 {
+  //4 parameters
   return par[3]*FitFunctionQuadratic(x, par);
 }
 //________________________________________________________________________________________________________________
 double BackgroundFitter::NormalizedFitFunctionGaussian(double *x, double *par)
 {
+  //5 parameters
   return par[4]*FitFunctionGaussian(x, par);
+}
+//________________________________________________________________________________________________________________
+double BackgroundFitter::NormalizedFitFunctionPolynomial(double *x, double *par)
+{
+  //8 parameters
+  return par[7]*FitFunctionPolynomial(x, par);
 }
 
 
@@ -172,6 +221,7 @@ double BackgroundFitter::NormalizedFitFunctionGaussian(double *x, double *par)
 //________________________________________________________________________________________________________________
 double BackgroundFitter::AddTwoFitFunctionsLinear(double *x, double *par)
 {
+  //6 parameters
   //Num counts are par[2] and par[5]!
   td1dVec tParsLin1{par[0], par[1]};
   double tNumCounts1 = par[2];
@@ -188,6 +238,7 @@ double BackgroundFitter::AddTwoFitFunctionsLinear(double *x, double *par)
 //________________________________________________________________________________________________________________
 double BackgroundFitter::AddTwoFitFunctionsQuadratic(double *x, double *par)
 {
+  //8 parameters
   //Num counts are par[3] and par[7]!
   td1dVec tParsQuad1{par[0], par[1], par[2]};
   double tNumCounts1 = par[3];
@@ -203,6 +254,7 @@ double BackgroundFitter::AddTwoFitFunctionsQuadratic(double *x, double *par)
 //________________________________________________________________________________________________________________
 double BackgroundFitter::AddTwoFitFunctionsGaussian(double *x, double *par)
 {
+  //10 parameters
   //Num counts are par[4] and par[9]
   td1dVec tParsGauss1{par[0], par[1], par[2], par[3]};
   double tNumCounts1 = par[4];
@@ -215,10 +267,28 @@ double BackgroundFitter::AddTwoFitFunctionsGaussian(double *x, double *par)
 
   return (tNumCounts1*tGauss1 + tNumCounts2*tGauss2)/(tNumCounts1+tNumCounts2);
 }
+//________________________________________________________________________________________________________________
+double BackgroundFitter::AddTwoFitFunctionsPolynomial(double *x, double *par)
+{
+  //16 parameters
+  //Num counts are par[7] and par[15]
+  td1dVec tParsPoly1{par[0], par[1], par[2], par[3], par[4], par[5], par[6]};
+  double tNumCounts1 = par[7];
+
+  td1dVec tParsPoly2{par[8], par[9], par[10], par[11], par[12], par[13], par[14]};
+  double tNumCounts2 = par[15];
+
+  double tPoly1 = FitFunctionPolynomial(x, tParsPoly1.data());
+  double tPoly2 = FitFunctionPolynomial(x, tParsPoly2.data());
+
+  return (tNumCounts1*tPoly1 + tNumCounts2*tPoly2)/(tNumCounts1+tNumCounts2);
+}
+
 
 //________________________________________________________________________________________________________________
 double BackgroundFitter::AddTwoNormalizedFitFunctionsLinear(double *x, double *par)
 {
+  //8 parameters
   //Num counts are par[3] and par[7]!
   td1dVec tParsNormLin1{par[0], par[1], par[2]};
   double tNumCounts1 = par[3];
@@ -235,6 +305,7 @@ double BackgroundFitter::AddTwoNormalizedFitFunctionsLinear(double *x, double *p
 //________________________________________________________________________________________________________________
 double BackgroundFitter::AddTwoNormalizedFitFunctionsQuadratic(double *x, double *par)
 {
+  //10 parameters
   //Num counts are par[4] and par[9]!
   td1dVec tParsNormQuad1{par[0], par[1], par[2], par[3]};
   double tNumCounts1 = par[4];
@@ -250,6 +321,7 @@ double BackgroundFitter::AddTwoNormalizedFitFunctionsQuadratic(double *x, double
 //________________________________________________________________________________________________________________
 double BackgroundFitter::AddTwoNormalizedFitFunctionsGaussian(double *x, double *par)
 {
+  //12 parameters
   //Num counts are par[5] and par[11]
   td1dVec tParsNormGauss1{par[0], par[1], par[2], par[3], par[4]};
   double tNumCounts1 = par[5];
@@ -262,7 +334,22 @@ double BackgroundFitter::AddTwoNormalizedFitFunctionsGaussian(double *x, double 
 
   return (tNumCounts1*tNormGauss1 + tNumCounts2*tNormGauss2)/(tNumCounts1+tNumCounts2);
 }
+//________________________________________________________________________________________________________________
+double BackgroundFitter::AddTwoNormalizedFitFunctionsPolynomial(double *x, double *par)
+{
+  //18 parameters
+  //Num counts are par[8] and par[17]
+  td1dVec tParsNormPoly1{par[0], par[1], par[2], par[3], par[4], par[5], par[6], par[7]};
+  double tNumCounts1 = par[8];
 
+  td1dVec tParsNormPoly2{par[9], par[10], par[11], par[12], par[13], par[14], par[15], par[16]};
+  double tNumCounts2 = par[17];
+
+  double tNormPoly1 = NormalizedFitFunctionPolynomial(x, tParsNormPoly1.data());
+  double tNormPoly2 = NormalizedFitFunctionPolynomial(x, tParsNormPoly2.data());
+
+  return (tNumCounts1*tNormPoly1 + tNumCounts2*tNormPoly2)/(tNumCounts1+tNumCounts2);
+}
 
 
 
@@ -292,9 +379,10 @@ void BackgroundFitter::CalculateBgdFitFunction(int &npar, double &chi2, double *
 
     x[0] = fNum->GetBinCenter(iBin);
 
-    if(fNonFlatBgdFitType==kLinear) tFitVal = FitFunctionLinear(x, par);
-    else if(fNonFlatBgdFitType == kQuadratic) tFitVal = FitFunctionQuadratic(x, par);
-    else if(fNonFlatBgdFitType == kGaussian) tFitVal = FitFunctionGaussian(x, par);
+    if     (fNonFlatBgdFitType==kLinear)       tFitVal = FitFunctionLinear(x, par);
+    else if(fNonFlatBgdFitType == kQuadratic)  tFitVal = FitFunctionQuadratic(x, par);
+    else if(fNonFlatBgdFitType == kGaussian)   tFitVal = FitFunctionGaussian(x, par);
+    else if(fNonFlatBgdFitType == kPolynomial) tFitVal = FitFunctionPolynomial(x, par);
     else assert(0);
 
     tChi2 += GetPmlValue(tNumContent, tDenContent, tFitVal);
@@ -358,17 +446,22 @@ TF1* BackgroundFitter::FitNonFlatBackgroundPML()
     if(fNonFlatBgdFitType==kLinear)
     {
       tNPars=2;
-      tNonFlatBackground = new TF1(tFitName,FitFunctionLinear,0.,1.,tNPars);
+      tNonFlatBackground = new TF1(tFitName,FitFunctionLinear,0.,fMaxBgdBuild,tNPars);
     }
     else if(fNonFlatBgdFitType == kQuadratic)
     {
       tNPars=3;
-      tNonFlatBackground = new TF1(tFitName,FitFunctionQuadratic,0.,1.,tNPars);
+      tNonFlatBackground = new TF1(tFitName,FitFunctionQuadratic,0.,fMaxBgdBuild,tNPars);
     }
     else if(fNonFlatBgdFitType == kGaussian)
     {
       tNPars=4;
-      tNonFlatBackground = new TF1(tFitName,FitFunctionGaussian,0.,1.,tNPars);
+      tNonFlatBackground = new TF1(tFitName,FitFunctionGaussian,0.,fMaxBgdBuild,tNPars);
+    }
+    else if(fNonFlatBgdFitType == kPolynomial)
+    {
+      tNPars=7;
+      tNonFlatBackground = new TF1(tFitName,FitFunctionPolynomial,0.,fMaxBgdBuild,tNPars);
     }
     else assert(0);
   }
@@ -378,17 +471,22 @@ TF1* BackgroundFitter::FitNonFlatBackgroundPML()
     if(fNonFlatBgdFitType==kLinear)
     {
       tNPars=2;
-      tNonFlatBackground = new TF1(tFitName,NormalizedFitFunctionLinear,0.,1.,tNPars+1);
+      tNonFlatBackground = new TF1(tFitName,NormalizedFitFunctionLinear,0.,fMaxBgdBuild,tNPars+1);
     }
     else if(fNonFlatBgdFitType == kQuadratic)
     {
       tNPars=3;
-      tNonFlatBackground = new TF1(tFitName,NormalizedFitFunctionQuadratic,0.,1.,tNPars+1);
+      tNonFlatBackground = new TF1(tFitName,NormalizedFitFunctionQuadratic,0.,fMaxBgdBuild,tNPars+1);
     }
     else if(fNonFlatBgdFitType == kGaussian)
     {
       tNPars=4;
-      tNonFlatBackground = new TF1(tFitName,NormalizedFitFunctionGaussian,0.,1.,tNPars+1);
+      tNonFlatBackground = new TF1(tFitName,NormalizedFitFunctionGaussian,0.,fMaxBgdBuild,tNPars+1);
+    }
+    else if(fNonFlatBgdFitType == kPolynomial)
+    {
+      tNPars=7;
+      tNonFlatBackground = new TF1(tFitName,NormalizedFitFunctionPolynomial,0.,fMaxBgdBuild,tNPars+1);
     }
     else assert(0);
   }
@@ -423,14 +521,14 @@ TF1* BackgroundFitter::FitNonFlatBackgroundSimple()
 
   if(fNonFlatBgdFitType==kLinear)
   {
-    tNonFlatBackground = new TF1(tFitName,FitFunctionLinear,0.,1.,2);
+    tNonFlatBackground = new TF1(tFitName,FitFunctionLinear,0.,fMaxBgdBuild,2);
       tNonFlatBackground->SetParameter(0,0.);
       tNonFlatBackground->SetParameter(1,1.);
     fCf->Fit(tFitName,"0q","",fMinBgdFit,fMaxBgdFit);
   }
   else if(fNonFlatBgdFitType == kQuadratic)
   {
-    tNonFlatBackground = new TF1(tFitName,FitFunctionQuadratic,0.,1.,3);
+    tNonFlatBackground = new TF1(tFitName,FitFunctionQuadratic,0.,fMaxBgdBuild,3);
       tNonFlatBackground->SetParameter(0,0.);
       tNonFlatBackground->SetParameter(1,0.);
       tNonFlatBackground->SetParameter(2,1.);
@@ -438,7 +536,7 @@ TF1* BackgroundFitter::FitNonFlatBackgroundSimple()
   }
   else if(fNonFlatBgdFitType == kGaussian)
   {
-    tNonFlatBackground = new TF1(tFitName,FitFunctionGaussian,0.,1.,4);
+    tNonFlatBackground = new TF1(tFitName,FitFunctionGaussian,0.,fMaxBgdBuild,4);
       tNonFlatBackground->SetParameter(0,0.1);
       tNonFlatBackground->SetParameter(1,0.);
       tNonFlatBackground->SetParameter(2,0.5);
@@ -446,6 +544,19 @@ TF1* BackgroundFitter::FitNonFlatBackgroundSimple()
 
 //      tNonFlatBackground->SetParLimits(1,-0.05,0.05);
       tNonFlatBackground->FixParameter(1,0.);
+
+    fCf->Fit(tFitName,"0q","",fMinBgdFit,fMaxBgdFit);
+  }
+  else if(fNonFlatBgdFitType == kPolynomial)
+  {
+    tNonFlatBackground = new TF1(tFitName,FitFunctionPolynomial,0.,fMaxBgdBuild,7);
+      tNonFlatBackground->SetParameter(0, 1.);
+      tNonFlatBackground->SetParameter(1, 0.);
+      tNonFlatBackground->SetParameter(2, 0.);
+      tNonFlatBackground->SetParameter(3, 0.);
+      tNonFlatBackground->SetParameter(4, 0.);
+      tNonFlatBackground->SetParameter(5, 0.);
+      tNonFlatBackground->SetParameter(6, 0.);
 
     fCf->Fit(tFitName,"0q","",fMinBgdFit,fMaxBgdFit);
   }

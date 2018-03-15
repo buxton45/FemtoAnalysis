@@ -9,9 +9,26 @@
 #include "TPaveText.h"
 #include "TLegend.h"
 #include "TF1.h"
+#include "TLatex.h"
 
 #include "Therm3dCf.h"
 class Therm3dCf;
+
+//---------------------------------------------------------------------------------------------------------------------------------
+void PrintInfo(TPad* aPad, AnalysisType aAnType, double aTextSize=0.04)
+{
+  aPad->cd();
+
+  TLatex* tTex = new TLatex();
+  tTex->SetTextAlign(12);
+  tTex->SetLineWidth(2);
+  tTex->SetTextFont(42);
+  tTex->SetTextSize(aTextSize);
+
+  tTex->DrawLatex(0.2, 1.05, "THERMINATOR");
+  tTex->DrawLatex(1.4, 1.05, cAnalysisRootTags[aAnType]);
+}
+
 
 //________________________________________________________________________________________________________________
 void SetStyleAndColor(TH1* aHist, int aMarkerStyle, int aColor)
@@ -89,7 +106,7 @@ void Draw1vs2vs3(TPad* aPad, AnalysisType aAnType, TH1D* aCf1, TH1D* aCf2, TH1D*
     tLeg->SetFillColor(0);
     tLeg->SetBorderSize(0);
     tLeg->SetTextAlign(22);
-  tLeg->SetHeader(TString::Format("%s %s Cfs", cAnalysisRootTags[aAnType], aOverallDescriptor.Data()));
+  tLeg->SetHeader(TString::Format("%s %s", cAnalysisRootTags[aAnType], aOverallDescriptor.Data()));
 
   tLeg->AddEntry(aCf1, aDescriptor1.Data());
   tLeg->AddEntry(aCf2, aDescriptor2.Data());
@@ -135,8 +152,8 @@ void Draw1vs2vs3(TPad* aPad, AnalysisType aAnType, TH1D* aCf1, TH1D* aCf2, TH1D*
     SetStyleAndColor(tCfRatio, 20, kMagenta);
     tCfRatio->Draw("same");
 
-    tLeg->AddEntry(tCfDiff, "1+Diff");
-    tLeg->AddEntry(tCfRatio, "Ratio");
+    tLeg->AddEntry(tCfDiff, "1+Diff (B-C)");
+    tLeg->AddEntry(tCfRatio, "Ratio (B/C)");
   }
   //---------------------------------------------------------------
 
@@ -149,6 +166,8 @@ void Draw1vs2vs3(TPad* aPad, AnalysisType aAnType, TH1D* aCf1, TH1D* aCf2, TH1D*
     tLine->SetLineColor(14);
     tLine->Draw();
   }
+
+  PrintInfo(aPad, aAnType, 0.04);
 }
 
 
@@ -164,7 +183,7 @@ int main(int argc, char **argv)
   //the program ends and closes everything
 //-----------------------------------------------------------------------------
 
-  AnalysisType tAnType = kLamKchM;
+  AnalysisType tAnType = kLamKchP;
   if(tAnType==kLamKchM || tAnType==kALamKchP) gRejectOmega=true;
   else gRejectOmega=false;
 
@@ -183,11 +202,11 @@ int main(int argc, char **argv)
   TString tFileLocationCfs2 = TString::Format("%sCorrelationFunctions_RandomEPs.root", tDirectory.Data());
   TString tFileLocationCfs3 = TString::Format("%sCorrelationFunctions_RandomEPs_NumWeight1.root", tDirectory.Data());
 
-  TString tSaveLocationBase = "/home/jesse/Analysis/Presentations/GroupMeetings/20171102/Figures/";
+  TString tSaveDir = "/home/jesse/Analysis/FemtoAnalysis/AnalysisNotes/Comments/Laura/20180117/Figures/";
 
-  TString tDescriptor1 = "Cf w. no Bgd";
-  TString tDescriptor2 = "Cf w. Bgd";
-  TString tDescriptor3 = "Bgd";
+  TString tDescriptor1 = "Cf w/o Bgd (A)";
+  TString tDescriptor2 = "Cf w. Bgd (B)";
+  TString tDescriptor3 = "Bgd (C)";
   TString tOverallDescriptorA = "Cfs";
   TString tOverallDescriptorB = "Nums";
   TString tOverallDescriptorC = "Dens";
@@ -216,13 +235,13 @@ int main(int argc, char **argv)
 
 
 //-------------------------------------------------------------------------------
-
-  TCanvas* tCanCfs = new TCanvas("CompareBgds_Cfs", "CompareBgds_Cfs");
+  TString tCanCfsName = TString::Format("CompareBgds_Cfs_b%d", tImpactParam);
+  TCanvas* tCanCfs = new TCanvas(tCanCfsName, tCanCfsName);
   Draw1vs2vs3((TPad*)tCanCfs, tAnType, tCf1, tCf2, tCf3, tDescriptor1, tDescriptor2, tDescriptor3, tOverallDescriptorA);
 
   if(bSaveFigures)
   {
-    TString tSaveFileBase = tSaveLocationBase + TString::Format("%s/", cAnalysisBaseTags[tAnType]);
+    TString tSaveFileBase = tSaveDir + TString::Format("%s/", cAnalysisBaseTags[tAnType]);
 
     TString tSaveName_Cfs = TString::Format("%s%s_%s.eps", tSaveFileBase.Data(), tCanCfs->GetName(), cAnalysisBaseTags[tAnType]);
     tCanCfs->SaveAs(tSaveName_Cfs);
@@ -247,15 +266,17 @@ int main(int argc, char **argv)
     TH1D* tDen3 = t3dCf3->GetFullDen();
       SetStyleAndColor(tDen3, tMarkerStyle3, tColor3);
 
-    TCanvas* tCanNums = new TCanvas("CompareBgds_Nums", "CompareBgds_Nums");
+    TString tCanNumsName = TString::Format("CompareBgds_Nums_b%d", tImpactParam);
+    TCanvas* tCanNums = new TCanvas(tCanNumsName, tCanNumsName);
     Draw1vs2vs3((TPad*)tCanNums, tAnType, tNum1, tNum2, tNum3, tDescriptor1, tDescriptor2, tDescriptor3, tOverallDescriptorB);
 
-    TCanvas* tCanDens = new TCanvas("CompareBgds_Dens", "CompareBgds_Dens");
+    TString tCanDensName = TString::Format("CompareBgds_Dens_b%d", tImpactParam);
+    TCanvas* tCanDens = new TCanvas(tCanDensName, tCanDensName);
     Draw1vs2vs3((TPad*)tCanDens, tAnType, tDen1, tDen2, tDen3, tDescriptor1, tDescriptor2, tDescriptor3, tOverallDescriptorC);
 
     if(bSaveFigures)
     {
-      TString tSaveFileBase = tSaveLocationBase + TString::Format("%s/", cAnalysisBaseTags[tAnType]);
+      TString tSaveFileBase = tSaveDir + TString::Format("%s/", cAnalysisBaseTags[tAnType]);
 
       TString tSaveName_Nums = TString::Format("%s%s_%s.eps", tSaveFileBase.Data(), tCanNums->GetName(), cAnalysisBaseTags[tAnType]);
       tCanNums->SaveAs(tSaveName_Nums);

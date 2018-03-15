@@ -43,6 +43,7 @@ FitPartialAnalysis::FitPartialAnalysis(TString aFileLocation, TString aAnalysisN
 
   fMinBgdFit(0.60),
   fMaxBgdFit(0.90),
+  fMaxBgdBuild(2.0),
   fNormalizeBgdFitToCf(false),
 
   fNFitParams(5),  //should be initialized here to the correct number of parameters, excluding fNorm
@@ -185,6 +186,7 @@ FitPartialAnalysis::FitPartialAnalysis(TString aFileLocation, TString aFileLocat
 
   fMinBgdFit(0.60),
   fMaxBgdFit(0.90),
+  fMaxBgdBuild(2.0),
   fNormalizeBgdFitToCf(false),
 
   fNFitParams(5),  //should be initialized here to the correct number of parameters, excluding fNorm
@@ -639,9 +641,9 @@ void FitPartialAnalysis::CreateFitFunction(bool aApplyNorm, IncludeResidualsType
 
 //________________________________________________________________________________________________________________
 TF1* FitPartialAnalysis::FitNonFlatBackground(TH1* aNum, TH1* aDen, TH1* aCf, NonFlatBgdFitType aBgdFitType, FitType aFitType, bool aNormalizeFitToCf, 
-                                              double aMinBgdFit, double aMaxBgdFit, double aKStarMinNorm, double aKStarMaxNorm)
+                                              double aMinBgdFit, double aMaxBgdFit, double aMaxBgdBuild, double aKStarMinNorm, double aKStarMaxNorm)
 {
-  BackgroundFitter* tBgdFitter = new BackgroundFitter(aNum, aDen, aCf, aBgdFitType, aFitType, aNormalizeFitToCf, aMinBgdFit, aMaxBgdFit, aKStarMinNorm, aKStarMaxNorm);
+  BackgroundFitter* tBgdFitter = new BackgroundFitter(aNum, aDen, aCf, aBgdFitType, aFitType, aNormalizeFitToCf, aMinBgdFit, aMaxBgdFit, aMaxBgdBuild, aKStarMinNorm, aKStarMaxNorm);
   tBgdFitter->GetMinuitObject()->SetFCN(GlobalBgdFCN);
   GlobalBgdFitter = tBgdFitter;
 
@@ -653,12 +655,12 @@ TF1* FitPartialAnalysis::FitNonFlatBackground(TH1* aNum, TH1* aDen, TH1* aCf, No
 
 //________________________________________________________________________________________________________________
 TF1* FitPartialAnalysis::FitNonFlatBackground(TH1* aCf, NonFlatBgdFitType aBgdFitType, 
-                                              double aMinBgdFit, double aMaxBgdFit, double aKStarMinNorm, double aKStarMaxNorm)
+                                              double aMinBgdFit, double aMaxBgdFit, double aMaxBgdBuild, double aKStarMinNorm, double aKStarMaxNorm)
 {
   TH1* tDummyNum=nullptr;
   TH1* tDummyDen=nullptr;
 
-  return FitNonFlatBackground(tDummyNum, tDummyDen, aCf, aBgdFitType, kChi2, false, aMinBgdFit, aMaxBgdFit, aKStarMinNorm, aKStarMaxNorm);
+  return FitNonFlatBackground(tDummyNum, tDummyDen, aCf, aBgdFitType, kChi2, false, aMinBgdFit, aMaxBgdFit, aMaxBgdBuild, aKStarMinNorm, aKStarMaxNorm);
 }
 
 
@@ -671,12 +673,12 @@ TF1* FitPartialAnalysis::GetNonFlatBackground(NonFlatBgdFitType aBgdFitType, Fit
   if(aFitType==kChi2PML)
   {
     fNonFlatBackground = FitNonFlatBackground(fKStarCfLite->Num(), fKStarCfLite->Den(), fKStarCfLite->Cf(), aBgdFitType, aFitType, aNormalizeFitToCf, 
-                                              fMinBgdFit, fMaxBgdFit, fKStarCfLite->GetMinNorm(), fKStarCfLite->GetMaxNorm());
+                                              fMinBgdFit, fMaxBgdFit, fMaxBgdBuild, fKStarCfLite->GetMinNorm(), fKStarCfLite->GetMaxNorm());
   }
   else if(aFitType==kChi2)
   {
     assert(!aNormalizeFitToCf);  //It is already normalized by fitting to Cf
-    fNonFlatBackground = FitNonFlatBackground(fKStarCfLite->Cf(), aBgdFitType, fMinBgdFit, fMaxBgdFit, fKStarCfLite->GetMinNorm(), fKStarCfLite->GetMaxNorm());
+    fNonFlatBackground = FitNonFlatBackground(fKStarCfLite->Cf(), aBgdFitType, fMinBgdFit, fMaxBgdFit, fMaxBgdBuild, fKStarCfLite->GetMinNorm(), fKStarCfLite->GetMaxNorm());
   }
   else assert(0);
 
@@ -695,19 +697,26 @@ TF1* FitPartialAnalysis::GetNewNonFlatBackground(NonFlatBgdFitType aBgdFitType)
   case kLinear:
     //2 parameters
     //par[0]*x[0] + par[1]
-    fNonFlatBackground = new TF1(tFitName, BackgroundFitter::FitFunctionLinear, 0., 1., 2);
+    fNonFlatBackground = new TF1(tFitName, BackgroundFitter::FitFunctionLinear, 0., fMaxBgdBuild, 2);
     break;
 
   case kQuadratic:
     //3 parameters
     //par[0]*x[0]*x[0] + par[1]*x[0] + par[2]
-    fNonFlatBackground = new TF1(tFitName, BackgroundFitter::FitFunctionQuadratic, 0., 1., 3);
+    fNonFlatBackground = new TF1(tFitName, BackgroundFitter::FitFunctionQuadratic, 0., fMaxBgdBuild, 3);
     break;
 
   case kGaussian:
     //4 parameters (although, likely par[1] fixed to zero
     //par[0]*exp(-0.5*(pow((x[0]-par[1])/par[2],2.0))) + par[3]
-    fNonFlatBackground = new TF1(tFitName, BackgroundFitter::FitFunctionGaussian, 0., 1., 4);
+    fNonFlatBackground = new TF1(tFitName, BackgroundFitter::FitFunctionGaussian, 0., fMaxBgdBuild, 4);
+    break;
+
+  case kPolynomial:
+    //7 parameters
+    //par[0] + par[1]*x[0] + par[2]*pow(x[0],2) + par[3]*pow(x[0],3) + par[4]*pow(x[0],4) + ...
+    // + par[5]*pow(x[0],5) + par[6]*pow(x[0],6);
+    fNonFlatBackground = new TF1(tFitName, BackgroundFitter::FitFunctionPolynomial, 0., fMaxBgdBuild, 7);
     break;
 
   default:
@@ -752,6 +761,20 @@ void FitPartialAnalysis::InitializeBackgroundParams(NonFlatBgdFitType aNonFlatBg
     fBgdParameters.push_back(new FitParameter(kBgd, 0.,     true,  0., 0., 0.1));          //par[1]
     fBgdParameters.push_back(new FitParameter(kBgd, 0.5,    false, 0., 0., 0.01));         //par[2]
     fBgdParameters.push_back(new FitParameter(kBgd, tScale, false, 0., 0., 0.1));          //par[3]
+    break;
+
+  case kPolynomial:
+    //7 parameters
+    //par[0] + par[1]*x[0] + par[2]*pow(x[0],2) + par[3]*pow(x[0],3) + par[4]*pow(x[0],4) + ...
+    // + par[5]*pow(x[0],5) + par[6]*pow(x[0],6);
+    fBgdParameters.push_back(new FitParameter(kBgd, tScale, false, 0., 0., 0.01));         //par[0]
+//    fBgdParameters.push_back(new FitParameter(kBgd, 1.0100, false, 1., 1.05, 0.01));         //par[0]
+    fBgdParameters.push_back(new FitParameter(kBgd, 0.,     false, 0., 0., 0.01));         //par[1]
+    fBgdParameters.push_back(new FitParameter(kBgd, 0.,     false, 0., 0., 0.01));         //par[2]
+    fBgdParameters.push_back(new FitParameter(kBgd, 0.,     false, 0., 0., 0.01));         //par[3]
+    fBgdParameters.push_back(new FitParameter(kBgd, 0.,     false, 0., 0., 0.01));         //par[4]
+    fBgdParameters.push_back(new FitParameter(kBgd, 0.,     false, 0., 0., 0.01));         //par[5]
+    fBgdParameters.push_back(new FitParameter(kBgd, 0.,     false, 0., 0., 0.01));         //par[6]
     break;
 
   default:

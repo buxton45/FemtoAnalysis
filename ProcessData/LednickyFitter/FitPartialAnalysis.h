@@ -89,9 +89,9 @@ public:
 
   //----------- Used when fitting background first and separate from everything else (old method)
   static TF1* FitNonFlatBackground(TH1* aNum, TH1* aDen, TH1* aCf, NonFlatBgdFitType aBgdFitType, FitType aFitType, bool aNormalizeFitToCf, 
-                                   double aMinBgdFit=0.60, double aMaxBhdFit=0.90, double aKStarMinNorm=0.32, double aKStarMaxNorm=0.40);
+                                   double aMinBgdFit=0.60, double aMaxBgdFit=0.90, double aMaxBgdBuild=2.0, double aKStarMinNorm=0.32, double aKStarMaxNorm=0.40);
   static TF1* FitNonFlatBackground(TH1* aCf, NonFlatBgdFitType aBgdFitType, 
-                                   double aMinBgdFit=0.6, double aMaxBgdFit=0.9, double aKStarMinNorm=0.32, double aKStarMaxNorm=0.40);
+                                   double aMinBgdFit=0.6, double aMaxBgdFit=0.9, double aMaxBgdBuild=2.0, double aKStarMinNorm=0.32, double aKStarMaxNorm=0.40);
   TF1* GetNonFlatBackground(NonFlatBgdFitType aBgdFitType, FitType aFitType, bool aNormalizeFitToCf);
   //---------------------------------------------------------------------------------------------
   TF1* GetNewNonFlatBackground(NonFlatBgdFitType aBgdFitType);
@@ -126,6 +126,7 @@ public:
   double GetMinBgdFit();
   double GetMaxBgdFit();
   void SetMinMaxBgdFit(double aMin, double aMax);
+  void SetMaxBgdBuild(double aMaxBuild);
 
   double GetKStarNumScale();
   double GetKStarDenScale();
@@ -167,6 +168,7 @@ private:
 
   CfLite *fKStarCfLite;
   double fMinBgdFit, fMaxBgdFit;
+  double fMaxBgdBuild;
   bool fNormalizeBgdFitToCf;
 
   int fNFitParams;
@@ -218,6 +220,7 @@ inline void FitPartialAnalysis::SetKStarMinMaxNorm(double aMin, double aMax) {Re
 inline double FitPartialAnalysis::GetMinBgdFit() {return fMinBgdFit;}
 inline double FitPartialAnalysis::GetMaxBgdFit() {return fMaxBgdFit;}
 inline void FitPartialAnalysis::SetMinMaxBgdFit(double aMin, double aMax) {fMinBgdFit=aMin; fMaxBgdFit=aMax;}
+inline void FitPartialAnalysis::SetMaxBgdBuild(double aMaxBuild) {fMaxBgdBuild=aMaxBuild;}
 
 inline double FitPartialAnalysis::GetKStarNumScale() {return fKStarCfLite->GetNumScale();}
 inline double FitPartialAnalysis::GetKStarDenScale() {return fKStarCfLite->GetDenScale();}

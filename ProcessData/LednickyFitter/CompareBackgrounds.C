@@ -156,7 +156,13 @@ TCanvas* CompareDataToAMPT(FitGenerator* aGen, bool aDrawTHERM)
       tCanPart->AddGraph(i, j, tAMPTCf, "", tMarkerStyleAMPT, tColorAMPT, tMarkerSize);
       if(aDrawTHERM) 
       {
-        tTHERMCf = GetTHERMCf(tAnType, 8, tCombineConjugates);
+        int tImpactParam = 2;
+        if     (tCentType==k0010) tImpactParam=2;
+        else if(tCentType==k1030) tImpactParam=8;
+        else if(tCentType==k3050) tImpactParam=8;
+        else assert(0);
+
+        tTHERMCf = GetTHERMCf(tAnType, tImpactParam, tCombineConjugates);
         tCanPart->AddGraph(i, j, tTHERMCf, "", tMarkerStyleTHERM, tColorTHERM, tMarkerSize);
       }
       if(i==tNx_Leg && j==tNy_Leg)
@@ -164,7 +170,7 @@ TCanvas* CompareDataToAMPT(FitGenerator* aGen, bool aDrawTHERM)
         tCanPart->SetupTLegend(cAnalysisRootTags[tAnType], i, j, 0.25, 0.05, 0.35, 0.50);
         tCanPart->AddLegendEntry(i, j, tDataCf, "Data", "p");
         tCanPart->AddLegendEntry(i, j, tAMPTCf, "AMPT", "p");
-        if(aDrawTHERM) tCanPart->AddLegendEntry(i, j, tTHERMCf, "AMPT", "p");
+        if(aDrawTHERM) tCanPart->AddLegendEntry(i, j, tTHERMCf, "THERM", "p");
       }
     }
   }
@@ -200,7 +206,7 @@ TCanvas* CompareLamKchAvgToLamK0(FitGenerator* aLamKchP, FitGenerator* aLamKchM,
   else assert(0);
 
   double tXLow = -0.02;
-  double tXHigh = 0.99;
+  double tXHigh = 1.99;
   double tYLow = 0.86;
   double tYHigh = 1.07;
   CanvasPartition* tCanPart = new CanvasPartition(tCanvasName,tNx,tNy,tXLow,tXHigh,tYLow,tYHigh,0.12,0.05,0.13,0.05);
@@ -490,6 +496,174 @@ TObjArray* DrawCfRatiosAndDiffs_LamKchAvgToLamK0(FitGenerator* aLamKchP, FitGene
 
 
 //________________________________________________________________________________________________________________
+TObjArray* DrawCfRatiosAndDiffs_Centralities(FitGenerator* aGen1)
+{
+  AnalysisType tAnType1 = aGen1->GetSharedAn()->GetFitPairAnalysis(0)->GetAnalysisType();
+  AnalysisType tConjAnType1 = aGen1->GetSharedAn()->GetFitPairAnalysis(1)->GetAnalysisType();
+  TString tCanvasName1 = TString::Format("DrawCfRatios_Centralities_%s", cAnalysisBaseTags[tAnType1]);
+  TString tCanvasName2 = TString::Format("DrawCfDiffs_Centralities_%s", cAnalysisBaseTags[tAnType1]);
+
+  vector<CentralityType> tCentralityTypes = aGen1->GetCentralityTypes();
+  int tNAnalyses = aGen1->GetNAnalyses();
+
+  assert(tCentralityTypes.size()==3);  //expecting k0010, k1030, and k3050
+  assert(tNAnalyses==6);  //expecting pair with conj
+
+  int tNx=2, tNy=1;
+
+  double tXLow = -0.02;
+  double tXHigh = 1.99;
+
+  double tYLow1 = 0.97;
+  double tYHigh1 = 1.09;
+
+  double tYLow2 = -0.09;
+  double tYHigh2 = 0.19;
+
+  CanvasPartition* tCanPart1 = new CanvasPartition(tCanvasName1,tNx,tNy,tXLow,tXHigh,tYLow1,tYHigh1,0.12,0.05,0.13,0.05);
+  CanvasPartition* tCanPart2 = new CanvasPartition(tCanvasName2,tNx,tNy,tXLow,tXHigh,tYLow2,tYHigh2,0.12,0.05,0.13,0.05);
+
+  int tMarkerStyle = 20;
+  double tMarkerSize = 0.5;
+
+  int tColor1, tColor2, tColor3;
+  tColor1 = kBlack;
+  tColor2 = kRed;
+  tColor3 = kBlue;
+
+  TH1 *tCf_0010, *tCf_1030, *tCf_3050;
+  TH1 *tRatio1, *tRatio2, *tRatio3;
+  TH1 *tDiff1, *tDiff2, *tDiff3;
+
+  TH1 *tConjCf_0010, *tConjCf_1030, *tConjCf_3050;
+  TH1 *tConjRatio1, *tConjRatio2, *tConjRatio3;
+  TH1 *tConjDiff1, *tConjDiff2, *tConjDiff3;
+
+  //----------------------------------------------------------------------------
+
+  tCf_0010     = aGen1->GetSharedAn()->GetKStarCfHeavy(0)->GetHeavyCfClone();
+  tConjCf_0010 = aGen1->GetSharedAn()->GetKStarCfHeavy(1)->GetHeavyCfClone();
+
+  tCf_1030     = aGen1->GetSharedAn()->GetKStarCfHeavy(2)->GetHeavyCfClone();
+  tConjCf_1030 = aGen1->GetSharedAn()->GetKStarCfHeavy(3)->GetHeavyCfClone();
+
+  tCf_3050     = aGen1->GetSharedAn()->GetKStarCfHeavy(4)->GetHeavyCfClone();
+  tConjCf_3050 = aGen1->GetSharedAn()->GetKStarCfHeavy(5)->GetHeavyCfClone();
+
+  //----------------------------------------------------------------------------
+
+  tRatio1 = (TH1*)tCf_0010->Clone();
+  tRatio1->Divide(tCf_1030);
+
+  tRatio2 = (TH1*)tCf_1030->Clone();
+  tRatio2->Divide(tCf_3050);
+
+  tRatio3 = (TH1*)tCf_0010->Clone();
+  tRatio3->Divide(tCf_3050);
+
+  //------------
+
+  tDiff1 = (TH1*)tCf_0010->Clone();
+  tDiff1->Add(tCf_1030, -1.);
+
+  tDiff2 = (TH1*)tCf_1030->Clone();
+  tDiff2->Add(tCf_3050, -1.);
+
+  tDiff3 = (TH1*)tCf_0010->Clone();
+  tDiff3->Add(tCf_3050, -1.);
+
+  //-------------------------------------
+
+  tConjRatio1 = (TH1*)tConjCf_0010->Clone();
+  tConjRatio1->Divide(tConjCf_1030);
+
+  tConjRatio2 = (TH1*)tConjCf_1030->Clone();
+  tConjRatio2->Divide(tConjCf_3050);
+
+  tConjRatio3 = (TH1*)tConjCf_0010->Clone();
+  tConjRatio3->Divide(tConjCf_3050);
+
+  //------------
+
+  tConjDiff1 = (TH1*)tConjCf_0010->Clone();
+  tConjDiff1->Add(tConjCf_1030, -1.);
+
+  tConjDiff2 = (TH1*)tConjCf_1030->Clone();
+  tConjDiff2->Add(tConjCf_3050, -1.);
+
+  tConjDiff3 = (TH1*)tConjCf_0010->Clone();
+  tConjDiff3->Add(tConjCf_3050, -1.);
+
+  //---------------------------------------------------------------------------------------------------------
+
+  tCanPart1->AddGraph(0, 0, tRatio1, "", tMarkerStyle, tColor1, tMarkerSize);
+  tCanPart1->AddGraph(0, 0, tRatio2, "", tMarkerStyle, tColor2, tMarkerSize);
+  tCanPart1->AddGraph(0, 0, tRatio3, "", tMarkerStyle, tColor3, tMarkerSize);
+  
+  tCanPart1->SetupTLegend(TString::Format("%s (Ratios)", cAnalysisRootTags[tAnType1]), 0, 0, 0.25, 0.70, 0.50, 0.25);
+  tCanPart1->AddLegendEntry(0, 0, tRatio1, TString::Format("%s / %s",cPrettyCentralityTags[k0010], cPrettyCentralityTags[k1030]), "p");
+  tCanPart1->AddLegendEntry(0, 0, tRatio2, TString::Format("%s / %s",cPrettyCentralityTags[k1030], cPrettyCentralityTags[k3050]), "p");
+  tCanPart1->AddLegendEntry(0, 0, tRatio3, TString::Format("%s / %s",cPrettyCentralityTags[k0010], cPrettyCentralityTags[k3050]), "p");
+
+  //------------
+
+  tCanPart1->AddGraph(1, 0, tConjRatio1, "", tMarkerStyle, tColor1, tMarkerSize);
+  tCanPart1->AddGraph(1, 0, tConjRatio2, "", tMarkerStyle, tColor2, tMarkerSize);
+  tCanPart1->AddGraph(1, 0, tConjRatio3, "", tMarkerStyle, tColor3, tMarkerSize);
+
+  tCanPart1->SetupTLegend(TString::Format("%s (Ratios)", cAnalysisRootTags[tConjAnType1]), 1, 0, 0.25, 0.70, 0.50, 0.25);
+  tCanPart1->AddLegendEntry(1, 0, tRatio1, TString::Format("%s / %s",cPrettyCentralityTags[k0010], cPrettyCentralityTags[k1030]), "p");
+  tCanPart1->AddLegendEntry(1, 0, tRatio2, TString::Format("%s / %s",cPrettyCentralityTags[k1030], cPrettyCentralityTags[k3050]), "p");
+  tCanPart1->AddLegendEntry(1, 0, tRatio3, TString::Format("%s / %s",cPrettyCentralityTags[k0010], cPrettyCentralityTags[k3050]), "p");
+
+  //---------------------------------------------------------------------------------------------------------
+
+  tCanPart2->AddGraph(0, 0, tDiff1, "", tMarkerStyle, tColor1, tMarkerSize);
+  tCanPart2->AddGraph(0, 0, tDiff2, "", tMarkerStyle, tColor2, tMarkerSize);
+  tCanPart2->AddGraph(0, 0, tDiff3, "", tMarkerStyle, tColor3, tMarkerSize);
+
+  tCanPart2->SetupTLegend(TString::Format("%s (Diffs)", cAnalysisRootTags[tAnType1]), 0, 0, 0.25, 0.70, 0.50, 0.25);
+  tCanPart2->AddLegendEntry(0, 0, tRatio1, TString::Format("%s - %s",cPrettyCentralityTags[k0010], cPrettyCentralityTags[k1030]), "p");
+  tCanPart2->AddLegendEntry(0, 0, tRatio2, TString::Format("%s - %s",cPrettyCentralityTags[k1030], cPrettyCentralityTags[k3050]), "p");
+  tCanPart2->AddLegendEntry(0, 0, tRatio3, TString::Format("%s - %s",cPrettyCentralityTags[k0010], cPrettyCentralityTags[k3050]), "p");
+
+  //------------
+
+  tCanPart2->AddGraph(1, 0, tConjDiff1, "", tMarkerStyle, tColor1, tMarkerSize);
+  tCanPart2->AddGraph(1, 0, tConjDiff2, "", tMarkerStyle, tColor2, tMarkerSize);
+  tCanPart2->AddGraph(1, 0, tConjDiff3, "", tMarkerStyle, tColor3, tMarkerSize);
+
+  tCanPart2->SetupTLegend(TString::Format("%s (Diffs)", cAnalysisRootTags[tConjAnType1]), 1, 0, 0.25, 0.70, 0.50, 0.25);
+  tCanPart2->AddLegendEntry(1, 0, tRatio1, TString::Format("%s - %s",cPrettyCentralityTags[k0010], cPrettyCentralityTags[k1030]), "p");
+  tCanPart2->AddLegendEntry(1, 0, tRatio2, TString::Format("%s - %s",cPrettyCentralityTags[k1030], cPrettyCentralityTags[k3050]), "p");
+  tCanPart2->AddLegendEntry(1, 0, tRatio3, TString::Format("%s - %s",cPrettyCentralityTags[k0010], cPrettyCentralityTags[k3050]), "p");
+
+  //---------------------------------------------------------------------------------------------------------
+
+
+
+  TString tYaxisTitle1 = "C_{1}(k*)/C_{2}(k*)";
+  tCanPart1->SetDrawUnityLine(true);
+  tCanPart1->DrawAll();
+  tCanPart1->DrawXaxisTitle("k* (GeV/#it{c})");
+  tCanPart1->DrawYaxisTitle(tYaxisTitle1,43,20,0.075,0.65);
+
+  TString tYaxisTitle2 = "C_{1}(k*)-C_{2}(k*)";
+  tCanPart2->SetDrawUnityLine(true);
+  tCanPart2->DrawAll();
+  tCanPart2->DrawXaxisTitle("k* (GeV/#it{c})");
+  tCanPart2->DrawYaxisTitle(tYaxisTitle2,43,20,0.075,0.65);
+
+
+  TObjArray* tReturnArray = new TObjArray();
+  tReturnArray->Add((TCanvas*)tCanPart1->GetCanvas());
+  tReturnArray->Add((TCanvas*)tCanPart2->GetCanvas());
+  return tReturnArray;
+}
+
+
+
+//________________________________________________________________________________________________________________
 //****************************************************************************************************************
 //________________________________________________________________________________________________________________
 
@@ -518,7 +692,7 @@ int main(int argc, char **argv)
 
   bool SaveImages = false;
   TString tSaveFileType = "eps";
-  TString tSaveDir = "/home/jesse/Analysis/Presentations/GroupMeetings/20180308/Figures/";
+  TString tSaveDir = "/home/jesse/Analysis/FemtoAnalysis/AnalysisNotes/Comments/Laura/20180117/Figures/";
 
 
 //-----------------------------------------------------------------------------
@@ -536,26 +710,57 @@ int main(int argc, char **argv)
   FitGenerator* tLamK0 = new FitGenerator(tFileLocationBase_cLamK0,tFileLocationBaseMC_cLamK0,kLamK0, tCentType,tAnRunType,tNPartialAnalysis,tGenType);
 
 //-------------------------------------------------------------------------------
-/*
-  bool tDrawIndividualKchAlso = false;
+
+  bool tDrawIndividualKchAlso = true;
   TCanvas* tCanCompareLamKchAvgToLamK0 = CompareLamKchAvgToLamK0(tLamKchP, tLamKchM, tLamK0, tDrawIndividualKchAlso);
-*/
+  if(SaveImages) tCanCompareLamKchAvgToLamK0->SaveAs(tSaveDir + tCanCompareLamKchAvgToLamK0->GetName() + TString::Format(".%s", tSaveFileType.Data()));
+
+  //-----------------
+
   TCanvas* tCompareDataToAMPT_LamK0 = CompareDataToAMPT(tLamK0, true);
   TCanvas* tCompareDataToAMPT_LamKchP = CompareDataToAMPT(tLamKchP, true);
   TCanvas* tCompareDataToAMPT_LamKchM = CompareDataToAMPT(tLamKchM, true);
+  if(SaveImages)
+  {
+    tCompareDataToAMPT_LamK0->SaveAs(tSaveDir + tCompareDataToAMPT_LamK0->GetName() + TString::Format(".%s", tSaveFileType.Data()));
+    tCompareDataToAMPT_LamKchP->SaveAs(tSaveDir + tCompareDataToAMPT_LamKchP->GetName() + TString::Format(".%s", tSaveFileType.Data()));
+    tCompareDataToAMPT_LamKchM->SaveAs(tSaveDir + tCompareDataToAMPT_LamKchM->GetName() + TString::Format(".%s", tSaveFileType.Data()));
+  }
+
+  //-----------------
 /*
+  TObjArray* DrawCfRatiosAndDiffs_Centralities_LamK0 = DrawCfRatiosAndDiffs_Centralities(tLamK0);
+  TObjArray* DrawCfRatiosAndDiffs_Centralities_LamKchP = DrawCfRatiosAndDiffs_Centralities(tLamKchP);
+  TObjArray* DrawCfRatiosAndDiffs_Centralities_LamKchM = DrawCfRatiosAndDiffs_Centralities(tLamKchM);
+  if(SaveImages)
+  {
+    for(int i=0; i<DrawCfRatiosAndDiffs_Centralities_LamK0->GetEntries(); i++)
+    {
+      ((TCanvas*)DrawCfRatiosAndDiffs_Centralities_LamK0->At(i))->SaveAs(tSaveDir 
+        + ((TCanvas*)DrawCfRatiosAndDiffs_Centralities_LamK0->At(i))->GetName() + TString::Format(".%s", tSaveFileType.Data()));
+    }
+
+    for(int i=0; i<DrawCfRatiosAndDiffs_Centralities_LamKchP->GetEntries(); i++)
+    {
+      ((TCanvas*)DrawCfRatiosAndDiffs_Centralities_LamKchP->At(i))->SaveAs(tSaveDir 
+        + ((TCanvas*)DrawCfRatiosAndDiffs_Centralities_LamKchP->At(i))->GetName() + TString::Format(".%s", tSaveFileType.Data()));
+    }
+
+    for(int i=0; i<DrawCfRatiosAndDiffs_Centralities_LamKchM->GetEntries(); i++)
+    {
+      ((TCanvas*)DrawCfRatiosAndDiffs_Centralities_LamKchM->At(i))->SaveAs(tSaveDir 
+        + ((TCanvas*)DrawCfRatiosAndDiffs_Centralities_LamKchM->At(i))->GetName() + TString::Format(".%s", tSaveFileType.Data()));
+    }
+  }
+
+  //-----------------
+
+
   TObjArray* tDrawCfRatiosAndDiffs_LamKchM_LamKchP = DrawCfRatiosAndDiffs(tLamKchM, tLamKchP);
   TObjArray* tDrawCfRatiosAndDiffs_LamKchM_LamK0 = DrawCfRatiosAndDiffs(tLamKchM, tLamK0);
   TObjArray* tDrawCfRatiosAndDiffs_LamKchP_LamK0 = DrawCfRatiosAndDiffs(tLamKchP, tLamK0);
-
-  TObjArray* tDrawCfRatiosAndDiffs_LamKchAvgToLamK0 = DrawCfRatiosAndDiffs_LamKchAvgToLamK0(tLamKchP, tLamKchM, tLamK0);
-
-//-------------------------------------------------------------------------------
-
   if(SaveImages)
   {
-    tCanCompareLamKchAvgToLamK0->SaveAs(tSaveDir + tCanCompareLamKchAvgToLamK0->GetName() + TString::Format(".%s", tSaveFileType.Data()));
-
     for(int i=0; i<tDrawCfRatiosAndDiffs_LamKchM_LamKchP->GetEntries(); i++)
     {
       ((TCanvas*)tDrawCfRatiosAndDiffs_LamKchM_LamKchP->At(i))->SaveAs(tSaveDir 
@@ -573,7 +778,13 @@ int main(int argc, char **argv)
       ((TCanvas*)tDrawCfRatiosAndDiffs_LamKchP_LamK0->At(i))->SaveAs(tSaveDir 
         + ((TCanvas*)tDrawCfRatiosAndDiffs_LamKchP_LamK0->At(i))->GetName() + TString::Format(".%s", tSaveFileType.Data()));
     }
+  }
 
+  //-----------------
+
+  TObjArray* tDrawCfRatiosAndDiffs_LamKchAvgToLamK0 = DrawCfRatiosAndDiffs_LamKchAvgToLamK0(tLamKchP, tLamKchM, tLamK0);
+  if(SaveImages)
+  {
     for(int i=0; i<tDrawCfRatiosAndDiffs_LamKchAvgToLamK0->GetEntries(); i++)
     {
       ((TCanvas*)tDrawCfRatiosAndDiffs_LamKchAvgToLamK0->At(i))->SaveAs(tSaveDir 

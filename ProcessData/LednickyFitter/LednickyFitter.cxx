@@ -186,9 +186,10 @@ double LednickyFitter::GetPmlValue(double aNumContent, double aDenContent, doubl
 void LednickyFitter::ApplyNewNonFlatBackgroundCorrection(vector<double> &aCf, vector<double> &aKStarBinCenters, FitPartialAnalysis* aPartAn, double *par)
 {
   vector<FitParameter*> tBgdParams = aPartAn->GetBgdParameters();
-  if     (fNonFlatBgdFitType==kLinear)    assert(tBgdParams.size()==2);
-  else if(fNonFlatBgdFitType==kQuadratic) assert(tBgdParams.size()==3);
-  else if(fNonFlatBgdFitType==kGaussian)  assert(tBgdParams.size()==4);
+  if     (fNonFlatBgdFitType==kLinear)      assert(tBgdParams.size()==2);
+  else if(fNonFlatBgdFitType==kQuadratic)   assert(tBgdParams.size()==3);
+  else if(fNonFlatBgdFitType==kGaussian)    assert(tBgdParams.size()==4);
+  else if(fNonFlatBgdFitType==kPolynomial)  assert(tBgdParams.size()==7);
   else assert(0);
 
   td1dVec tMinuitParams(0);
@@ -204,9 +205,10 @@ void LednickyFitter::ApplyNewNonFlatBackgroundCorrection(vector<double> &aCf, ve
   for(int ix=0; ix<fNbinsXToBuild; ix++)
   {
     x[0] = aKStarBinCenters[ix];
-    if(fNonFlatBgdFitType==kLinear)         tNonFlatBgd = BackgroundFitter::FitFunctionLinear(x, tMinuitParams.data());
-    else if(fNonFlatBgdFitType==kQuadratic) tNonFlatBgd = BackgroundFitter::FitFunctionQuadratic(x, tMinuitParams.data());
-    else if(fNonFlatBgdFitType==kGaussian)  tNonFlatBgd = BackgroundFitter::FitFunctionGaussian(x, tMinuitParams.data());
+    if(fNonFlatBgdFitType==kLinear)           tNonFlatBgd = BackgroundFitter::FitFunctionLinear(x, tMinuitParams.data());
+    else if(fNonFlatBgdFitType==kQuadratic)   tNonFlatBgd = BackgroundFitter::FitFunctionQuadratic(x, tMinuitParams.data());
+    else if(fNonFlatBgdFitType==kGaussian)    tNonFlatBgd = BackgroundFitter::FitFunctionGaussian(x, tMinuitParams.data());
+    else if(fNonFlatBgdFitType==kPolynomial)  tNonFlatBgd = BackgroundFitter::FitFunctionPolynomial(x, tMinuitParams.data());
     else assert(0);
 
     aCf[ix] = aCf[ix]*tNonFlatBgd;

@@ -141,6 +141,7 @@ public:
   double GetMinBgdFit();
   double GetMaxBgdFit();
   void SetMinMaxBgdFit(double aMin, double aMax);
+  void SetMaxBgdBuild(double aMaxBuild);
 
   void SetPrimaryFit(TF1* aFit);
   TF1* GetPrimaryFit();
@@ -179,6 +180,7 @@ private:
 
   CfHeavy *fKStarCfHeavy;
   double fMinBgdFit, fMaxBgdFit;
+  double fMaxBgdBuild;
   bool fNormalizeBgdFitToCf;
 
   TF1* fPrimaryFit;
@@ -249,6 +251,7 @@ inline void FitPairAnalysis::SetKStarMinMaxNorm(double aMin, double aMax) {Rebin
 inline double FitPairAnalysis::GetMinBgdFit() {return fMinBgdFit;}
 inline double FitPairAnalysis::GetMaxBgdFit() {return fMaxBgdFit;}
 inline void FitPairAnalysis::SetMinMaxBgdFit(double aMin, double aMax) {fMinBgdFit=aMin; fMaxBgdFit=aMax; for(int i=0; i<fNFitPartialAnalysis; i++) fFitPartialAnalysisCollection[i]->SetMinMaxBgdFit(aMin, aMax);}
+inline void FitPairAnalysis::SetMaxBgdBuild(double aMaxBuild) {fMaxBgdBuild=aMaxBuild; for(int i=0; i<fNFitPartialAnalysis; i++) fFitPartialAnalysisCollection[i]->SetMaxBgdBuild(aMaxBuild);}
 
 inline void FitPairAnalysis::SetPrimaryFit(TF1* aFit) {fPrimaryFit = aFit;}
 inline TF1* FitPairAnalysis::GetPrimaryFit() {return fPrimaryFit;}

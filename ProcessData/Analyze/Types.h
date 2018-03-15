@@ -71,7 +71,7 @@ kResXiCKSt0ToLamK0=83, kResAXiCKSt0ToALamK0=84,
 
   enum FitType {kChi2PML=0, kChi2=1};
   enum FitGeneratorType {kPair=0, kConjPair=1, kPairwConj=2};
-  enum NonFlatBgdFitType {kLinear=0, kQuadratic=1, kGaussian=2};
+  enum NonFlatBgdFitType {kLinear=0, kQuadratic=1, kGaussian=2, kPolynomial=3};
 
   enum IncludeResidualsType {kIncludeNoResiduals=0, kInclude10Residuals=1, kInclude3Residuals=2};
   enum ChargedResidualsType {kUseXiDataForAll=0, kUseXiDataAndCoulombOnlyInterp=1, kUseCoulombOnlyInterpForAll=2};
@@ -272,7 +272,7 @@ kXiCKSt0=40, kAXiCAKSt0=41, kXiCAKSt0=42, kAXiCKSt0=43
   extern const char* const cPrettyCentralityTags[4];
   extern const char* const cKStarTrueVsRecTypeTags[4];
 
-  extern const char* const cNonFlatBgdFitTypeTags[3];
+  extern const char* const cNonFlatBgdFitTypeTags[4];
 
   extern const char* const cIncludeResidualsTypeTags[3];
   extern const char* const cChargedResidualsTypeTags[3];

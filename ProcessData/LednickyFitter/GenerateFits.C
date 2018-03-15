@@ -39,11 +39,11 @@ int main(int argc, char **argv)
   bool ApplyMomResCorrection = true;
   bool ApplyNonFlatBackgroundCorrection = true;
   NonFlatBgdFitType tNonFlatBgdFitType = kLinear;
-  bool UseNewBgdTreatment = true;
+  bool UseNewBgdTreatment = false;
     if(UseNewBgdTreatment) tMaxFitKStar = 0.5;
 
   IncludeResidualsType tIncludeResidualsType = kInclude3Residuals; 
-  ChargedResidualsType tChargedResidualsType = kUseXiDataAndCoulombOnlyInterp;
+  ChargedResidualsType tChargedResidualsType = kUseXiDataAndCoulombOnlyInterp/*kUseCoulombOnlyInterpForAll*/;
   ResPrimMaxDecayType tResPrimMaxDecayType = k4fm;
 
   bool UnboundLambda = true;
@@ -170,6 +170,8 @@ int main(int argc, char **argv)
       //Don't seem to need lambda limits with residuals.  In fact, when limits in place, the fit doesn't converge
       // Without limits, the fit converges (with lambda values within limits!)
   }
+
+  if(tNonFlatBgdFitType==kPolynomial) tLamKchP->SetMinMaxBgdFit(0.3, 1.99);
 
   if(tAnType==kLamKchP && tIncludeResidualsType==kIncludeNoResiduals && tResultsDate.EqualTo("20171227"))
   {

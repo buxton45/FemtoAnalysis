@@ -29,7 +29,7 @@ public:
 
   //Constructor, destructor, copy constructor, assignment operator
   BackgroundFitter(TH1* aNum, TH1* aDen, TH1* aCf, NonFlatBgdFitType aBgdFitType, FitType aFitType=kChi2PML, bool aNormalizeFitToCf=false, 
-                   double aMinBgdFit=0.60, double aMaxBgdFit=0.90, double aKStarMinNorm=0.32, double aKStarMaxNorm=0.40);
+                   double aMinBgdFit=0.60, double aMaxBgdFit=0.90, double aMaxBgdBuild=2., double aKStarMinNorm=0.32, double aKStarMaxNorm=0.40);
   virtual ~BackgroundFitter();
 
   void PrintFitFunctionInfo();
@@ -37,20 +37,24 @@ public:
   static double FitFunctionLinear(double *x, double *par);
   static double FitFunctionQuadratic(double *x, double *par);
   static double FitFunctionGaussian(double *x, double *par);
+  static double FitFunctionPolynomial(double *x, double *par);
 
   //These are used when plotting and fFitType==kChi2PML
   static double NormalizedFitFunctionLinear(double *x, double *par);
   static double NormalizedFitFunctionQuadratic(double *x, double *par);
   static double NormalizedFitFunctionGaussian(double *x, double *par);
+  static double NormalizedFitFunctionPolynomial(double *x, double *par);
   //--------------------------------------------------------------------
   //These are used in FitPairAnalysis
   static double AddTwoFitFunctionsLinear(double *x, double *par);
   static double AddTwoFitFunctionsQuadratic(double *x, double *par);
   static double AddTwoFitFunctionsGaussian(double *x, double *par);
+  static double AddTwoFitFunctionsPolynomial(double *x, double *par);
 
   static double AddTwoNormalizedFitFunctionsLinear(double *x, double *par);
   static double AddTwoNormalizedFitFunctionsQuadratic(double *x, double *par);
   static double AddTwoNormalizedFitFunctionsGaussian(double *x, double *par);
+  static double AddTwoNormalizedFitFunctionsPolynomial(double *x, double *par);
   //--------------------------------------------------------------------
 
   static double GetPmlValue(double aNumContent, double aDenContent, double aCfContent);
@@ -76,6 +80,7 @@ private:
   double fScale;
 
   double fMinBgdFit, fMaxBgdFit;
+  double fMaxBgdBuild;
   double fKStarMinNorm, fKStarMaxNorm;
 
   TMinuit* fMinuit;
