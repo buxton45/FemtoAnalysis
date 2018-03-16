@@ -272,6 +272,86 @@ TCanvas* CompareLamKchAvgToLamK0(FitGenerator* aLamKchP, FitGenerator* aLamKchM,
   return tCanPart->GetCanvas();
 }
 
+
+//________________________________________________________________________________________________________________
+TCanvas* CompareEPBinning(FitGenerator* aGenNoEPBin, FitGenerator* aGenEPBin8, FitGenerator* aGenEPBin16)
+{
+  AnalysisType tAnType = aGenNoEPBin->GetSharedAn()->GetFitPairAnalysis(0)->GetAnalysisType();
+
+  TString tCanvasName = TString::Format("CompareEPBinning_%s", cAnalysisBaseTags[tAnType]);
+  vector<CentralityType> tCentralityTypes = aGenNoEPBin->GetCentralityTypes();
+  int tNAnalyses = aGenNoEPBin->GetNAnalyses();
+  for(unsigned int i=0; i<tCentralityTypes.size(); i++) tCanvasName += TString(cCentralityTags[tCentralityTypes[i]]);
+
+
+  int tNx=0, tNy=0;
+  if(tNAnalyses == 6) {tNx=2; tNy=3;}
+  else if(tNAnalyses == 4) {tNx=2; tNy=2;}
+  else if(tNAnalyses == 3) {tNx=1; tNy=tNAnalyses;}
+  else if(tNAnalyses == 2 || tNAnalyses==1) {tNx=tNAnalyses; tNy=1;}
+  else assert(0);
+
+  double tXLow = -0.02;
+  double tXHigh = 1.99;
+  double tYLow = 0.86;
+  double tYHigh = 1.07;
+  CanvasPartition* tCanPart = new CanvasPartition(tCanvasName,tNx,tNy,tXLow,tXHigh,tYLow,tYHigh,0.12,0.05,0.13,0.05);
+
+  assert(tNx*tNy == tNAnalyses);
+  int tAnalysisNumber=0;
+
+  int tMarkerStyleNoBin = 20;
+  int tMarkerStyleBin8 = 22;
+  int tMarkerStyleBin16 = 32;
+
+  double tMarkerSize = 0.5;
+
+  int tColor;
+  if     (tAnType==kLamK0 || tAnType==kALamK0)     tColor = kBlack;
+  else if(tAnType==kLamKchP || tAnType==kALamKchM) tColor = kRed+1;
+  else if(tAnType==kLamKchM || tAnType==kALamKchP) tColor = kBlue+1;
+  else assert(0);
+
+  int tColorBin8 = kMagenta;
+  int tColorBin16 = kGreen;
+
+  int tNx_Leg=0, tNy_Leg=0;
+
+  TH1 *tCfNoEPBin, *tCfEPBin8, *tCfEPBin16;
+  for(int j=0; j<tNy; j++)
+  {
+    for(int i=0; i<tNx; i++)
+    {
+      tAnalysisNumber = j*tNx + i;
+
+      tCfNoEPBin = aGenNoEPBin->GetSharedAn()->GetKStarCfHeavy(tAnalysisNumber)->GetHeavyCfClone();
+      tCfEPBin8 = aGenEPBin8->GetSharedAn()->GetKStarCfHeavy(tAnalysisNumber)->GetHeavyCfClone();
+      tCfEPBin16 = aGenEPBin16->GetSharedAn()->GetKStarCfHeavy(tAnalysisNumber)->GetHeavyCfClone();
+      //---------------------------------------------------------------------------------------------------------
+      tCanPart->AddGraph(i, j, tCfNoEPBin, "", tMarkerStyleNoBin, tColor, tMarkerSize);
+      tCanPart->AddGraph(i, j, tCfEPBin8, "", tMarkerStyleBin8, tColorBin8, tMarkerSize);
+      tCanPart->AddGraph(i, j, tCfEPBin16, "", tMarkerStyleBin16, tColorBin16, tMarkerSize);
+      if(i==tNx_Leg && j==tNy_Leg)
+      {
+        tCanPart->SetupTLegend("", i, j, 0.25, 0.05, 0.35, 0.50);
+        tCanPart->AddLegendEntry(i, j, tCfNoEPBin, "No Binning", "p");
+        tCanPart->AddLegendEntry(i, j, tCfEPBin8, "8 Bins", "p");
+        tCanPart->AddLegendEntry(i, j, tCfEPBin16, "16 Bins", "p");
+      }
+    }
+  }
+
+  tCanPart->SetDrawUnityLine(true);
+  tCanPart->DrawAll();
+  tCanPart->DrawXaxisTitle("k* (GeV/c)");
+  tCanPart->DrawYaxisTitle("C(k*)",43,25,0.05,0.75);
+
+
+  return tCanPart->GetCanvas();
+}
+
+
+
 //________________________________________________________________________________________________________________
 TObjArray* DrawCfRatiosAndDiffs(FitGenerator* aGen1, FitGenerator* aGen2)
 {
@@ -710,6 +790,45 @@ int main(int argc, char **argv)
   FitGenerator* tLamK0 = new FitGenerator(tFileLocationBase_cLamK0,tFileLocationBaseMC_cLamK0,kLamK0, tCentType,tAnRunType,tNPartialAnalysis,tGenType);
 
 //-------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+  TString tResultsDate_EPBin8 = "20180313_EPBinning8";
+
+  TString tDirectoryBase_cLamcKch_EPBin8 = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_%s/",tResultsDate_EPBin8.Data());
+  TString tFileLocationBase_cLamcKch_EPBin8 = TString::Format("%sResults_cLamcKch_%s",tDirectoryBase_cLamcKch_EPBin8.Data(),tResultsDate_EPBin8.Data());
+  TString tFileLocationBaseMC_cLamcKch_EPBin8 = TString::Format("%sResults_cLamcKchMC_%s",tDirectoryBase_cLamcKch_EPBin8.Data(),tResultsDate_EPBin8.Data());
+
+  TString tDirectoryBase_cLamK0_EPBin8 = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamK0_%s/",tResultsDate_EPBin8.Data());
+  TString tFileLocationBase_cLamK0_EPBin8 = TString::Format("%sResults_cLamK0_%s",tDirectoryBase_cLamK0_EPBin8.Data(),tResultsDate_EPBin8.Data());
+  TString tFileLocationBaseMC_cLamK0_EPBin8 = TString::Format("%sResults_cLamK0MC_%s",tDirectoryBase_cLamK0_EPBin8.Data(),tResultsDate_EPBin8.Data());
+//-----------------------------------------------------------------------------
+
+  FitGenerator* tLamKchP_EPBin8 = new FitGenerator(tFileLocationBase_cLamcKch_EPBin8,tFileLocationBaseMC_cLamcKch_EPBin8,kLamKchP, tCentType,tAnRunType,tNPartialAnalysis,tGenType);
+  FitGenerator* tLamKchM_EPBin8 = new FitGenerator(tFileLocationBase_cLamcKch_EPBin8,tFileLocationBaseMC_cLamcKch_EPBin8,kLamKchM, tCentType,tAnRunType,tNPartialAnalysis,tGenType);
+  FitGenerator* tLamK0_EPBin8 = new FitGenerator(tFileLocationBase_cLamK0_EPBin8,tFileLocationBaseMC_cLamK0_EPBin8,kLamK0, tCentType,tAnRunType,tNPartialAnalysis,tGenType);
+
+//-------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+  TString tResultsDate_EPBin16 = "20180314_EPBinning16";
+
+  TString tDirectoryBase_cLamcKch_EPBin16 = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_%s/",tResultsDate_EPBin16.Data());
+  TString tFileLocationBase_cLamcKch_EPBin16 = TString::Format("%sResults_cLamcKch_%s",tDirectoryBase_cLamcKch_EPBin16.Data(),tResultsDate_EPBin16.Data());
+  TString tFileLocationBaseMC_cLamcKch_EPBin16 = TString::Format("%sResults_cLamcKchMC_%s",tDirectoryBase_cLamcKch_EPBin16.Data(),tResultsDate_EPBin16.Data());
+
+  TString tDirectoryBase_cLamK0_EPBin16 = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamK0_%s/",tResultsDate_EPBin16.Data());
+  TString tFileLocationBase_cLamK0_EPBin16 = TString::Format("%sResults_cLamK0_%s",tDirectoryBase_cLamK0_EPBin16.Data(),tResultsDate_EPBin16.Data());
+  TString tFileLocationBaseMC_cLamK0_EPBin16 = TString::Format("%sResults_cLamK0MC_%s",tDirectoryBase_cLamK0_EPBin16.Data(),tResultsDate_EPBin16.Data());
+//-----------------------------------------------------------------------------
+
+  FitGenerator* tLamKchP_EPBin16 = new FitGenerator(tFileLocationBase_cLamcKch_EPBin16,tFileLocationBaseMC_cLamcKch_EPBin16,kLamKchP, tCentType,tAnRunType,tNPartialAnalysis,tGenType);
+  FitGenerator* tLamKchM_EPBin16 = new FitGenerator(tFileLocationBase_cLamcKch_EPBin16,tFileLocationBaseMC_cLamcKch_EPBin16,kLamKchM, tCentType,tAnRunType,tNPartialAnalysis,tGenType);
+  FitGenerator* tLamK0_EPBin16 = new FitGenerator(tFileLocationBase_cLamK0_EPBin16,tFileLocationBaseMC_cLamK0_EPBin16,kLamK0, tCentType,tAnRunType,tNPartialAnalysis,tGenType);
+
+//-------------------------------------------------------------------------------
+
+
+
+
+
 
   bool tDrawIndividualKchAlso = true;
   TCanvas* tCanCompareLamKchAvgToLamK0 = CompareLamKchAvgToLamK0(tLamKchP, tLamKchM, tLamK0, tDrawIndividualKchAlso);
@@ -726,6 +845,19 @@ int main(int argc, char **argv)
     tCompareDataToAMPT_LamKchP->SaveAs(tSaveDir + tCompareDataToAMPT_LamKchP->GetName() + TString::Format(".%s", tSaveFileType.Data()));
     tCompareDataToAMPT_LamKchM->SaveAs(tSaveDir + tCompareDataToAMPT_LamKchM->GetName() + TString::Format(".%s", tSaveFileType.Data()));
   }
+
+  //-----------------
+
+  TCanvas* tCompareEPBinning_LamK0 = CompareEPBinning(tLamK0, tLamK0_EPBin8, tLamK0_EPBin16);
+  TCanvas* tCompareEPBinning_LamKchP = CompareEPBinning(tLamKchP, tLamKchP_EPBin8, tLamKchP_EPBin16);
+  TCanvas* tCompareEPBinning_LamKchM = CompareEPBinning(tLamKchM, tLamKchM_EPBin8, tLamKchM_EPBin16);
+  if(SaveImages)
+  {
+    tCompareEPBinning_LamK0->SaveAs(tSaveDir + tCompareEPBinning_LamK0->GetName() + TString::Format(".%s", tSaveFileType.Data()));
+    tCompareEPBinning_LamKchP->SaveAs(tSaveDir + tCompareEPBinning_LamKchP->GetName() + TString::Format(".%s", tSaveFileType.Data()));
+    tCompareEPBinning_LamKchM->SaveAs(tSaveDir + tCompareEPBinning_LamKchM->GetName() + TString::Format(".%s", tSaveFileType.Data()));
+  }
+
 
   //-----------------
 /*
