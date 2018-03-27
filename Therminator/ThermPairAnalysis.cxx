@@ -1696,7 +1696,9 @@ void ThermPairAnalysis::FillCorrelationFunctionsNumAndDenParticleV0(vector<Therm
 
         tRStar = CalcRStar(tV0, tParticle);
         tKStar = CalcKStar(tV0, tParticle);
-        if(fWeightCfsWithParentInteraction) tWeight = GetParentPairWaveFunctionSq(tV0, tParticle);
+
+        if(fUnitWeightCfNums) tWeight = 1.;
+        else if(fWeightCfsWithParentInteraction) tWeight = GetParentPairWaveFunctionSq(tV0, tParticle);
         else tWeight = GetStrongOnlyWaveFunctionSq(GetKStar3Vec(tV0, tParticle), GetRStar3Vec(tV0, tParticle));
 
         fNum3d->Fill(tParentIndex1, tParentIndex2, tKStar, tWeight);
@@ -1779,7 +1781,9 @@ void ThermPairAnalysis::FillCorrelationFunctionsNumAndDenV0V0(vector<ThermV0Part
 
           tRStar = CalcRStar(tV01, tV02);
           tKStar = CalcKStar(tV01, tV02);
-          if(fWeightCfsWithParentInteraction) tWeight = GetParentPairWaveFunctionSq(tV01, tV02);
+
+          if(fUnitWeightCfNums) tWeight = 1.;
+          else if(fWeightCfsWithParentInteraction) tWeight = GetParentPairWaveFunctionSq(tV01, tV02);
           else tWeight = GetStrongOnlyWaveFunctionSq(GetKStar3Vec(tV01, tV02), GetRStar3Vec(tV01, tV02));
 
           fNum3d->Fill(tParentIndex1, tParentIndex2, tKStar, tWeight);

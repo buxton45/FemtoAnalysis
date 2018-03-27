@@ -566,7 +566,7 @@ void LednickyFitter::InitializeFitter()
   if(fApplyNonFlatBackgroundCorrection) assert(fFitSharedAnalyses->GetKStarMaxNorm() < fFitSharedAnalyses->GetMinBgdFit());
 */
   //Bare minimum, the KStar fit region and the NonFlatBgd fit region definitely should not overlap
-  if(fApplyNonFlatBackgroundCorrection && !fFitSharedAnalyses->UsingNewBgdTreatment()) assert(fMaxFitKStar < fFitSharedAnalyses->GetMinBgdFit());
+  if(fApplyNonFlatBackgroundCorrection && !fFitSharedAnalyses->UsingNewBgdTreatment()) assert(fMaxFitKStar <= fFitSharedAnalyses->GetMinBgdFit());
 
   fNbinsXToBuild = 0;
   fNbinsXToFit = 0;

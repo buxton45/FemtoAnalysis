@@ -551,7 +551,7 @@ TF1* FitPairAnalysis::GetNonFlatBackground_CombinePartialFits(NonFlatBgdFitType 
 TF1* FitPairAnalysis::GetNonFlatBackground(NonFlatBgdFitType aBgdFitType, FitType aFitType, bool aNormalizeFitToCf, bool aCombinePartialFits)
 {
   if(fNonFlatBackground && aNormalizeFitToCf==fNormalizeBgdFitToCf) return fNonFlatBackground;
-  if(aBgdFitType==kPolynomial) aNormalizeFitToCf = false;  //TODO work-around for now.
+//  if(aBgdFitType==kPolynomial) aNormalizeFitToCf = false;  //TODO work-around for now.
                                                            //ThermBgd object does not need to be scaled by fScale
   cout << endl << endl;
   cout << "-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**" << endl;

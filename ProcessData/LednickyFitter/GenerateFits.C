@@ -171,7 +171,7 @@ int main(int argc, char **argv)
       // Without limits, the fit converges (with lambda values within limits!)
   }
 
-  if(tNonFlatBgdFitType==kPolynomial) tLamKchP->SetMinMaxBgdFit(0.3, 1.99);
+//  if(tNonFlatBgdFitType==kPolynomial) tLamKchP->SetMinMaxBgdFit(0.3, 1.99);
 
   if(tAnType==kLamKchP && tIncludeResidualsType==kIncludeNoResiduals && tResultsDate.EqualTo("20171227"))
   {

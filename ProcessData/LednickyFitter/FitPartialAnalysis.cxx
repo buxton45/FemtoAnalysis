@@ -670,15 +670,19 @@ TF1* FitPartialAnalysis::GetThermNonFlatBackground()
   if(fNonFlatBackground) return fNonFlatBackground;
 
   TString tFitName = TString::Format("ThermNonFlatBgd_%s%s", cAnalysisBaseTags[fAnalysisType], cCentralityTags[fCentralityType]);
-  fNonFlatBackground = new TF1(tFitName, BackgroundFitter::FitFunctionPolynomial, 0., fMaxBgdBuild, 7);
+  fNonFlatBackground = new TF1(tFitName, BackgroundFitter::NormalizedFitFunctionPolynomial, 0., fMaxBgdBuild, 8);
 
-  fNonFlatBackground->SetParameter(0, cThermBgdParamValues[fAnalysisType][fCentralityType][0]);
-  fNonFlatBackground->SetParameter(1, cThermBgdParamValues[fAnalysisType][fCentralityType][1]);
-  fNonFlatBackground->SetParameter(2, cThermBgdParamValues[fAnalysisType][fCentralityType][2]);
-  fNonFlatBackground->SetParameter(3, cThermBgdParamValues[fAnalysisType][fCentralityType][3]);
-  fNonFlatBackground->SetParameter(4, cThermBgdParamValues[fAnalysisType][fCentralityType][4]);
-  fNonFlatBackground->SetParameter(5, cThermBgdParamValues[fAnalysisType][fCentralityType][5]);
-  fNonFlatBackground->SetParameter(6, cThermBgdParamValues[fAnalysisType][fCentralityType][6]);
+  fNonFlatBackground->FixParameter(0, cThermBgdParamValues[fAnalysisType][fCentralityType][0]);
+  fNonFlatBackground->FixParameter(1, cThermBgdParamValues[fAnalysisType][fCentralityType][1]);
+  fNonFlatBackground->FixParameter(2, cThermBgdParamValues[fAnalysisType][fCentralityType][2]);
+  fNonFlatBackground->FixParameter(3, cThermBgdParamValues[fAnalysisType][fCentralityType][3]);
+  fNonFlatBackground->FixParameter(4, cThermBgdParamValues[fAnalysisType][fCentralityType][4]);
+  fNonFlatBackground->FixParameter(5, cThermBgdParamValues[fAnalysisType][fCentralityType][5]);
+  fNonFlatBackground->FixParameter(6, cThermBgdParamValues[fAnalysisType][fCentralityType][6]);
+  fNonFlatBackground->SetParameter(7, 1.);
+
+  TH1* tCf = fKStarCfLite->Cf();
+  tCf->Fit(tFitName, "0q", "", fMinBgdFit, fMaxBgdFit);
 
   return fNonFlatBackground;
 }
