@@ -54,6 +54,7 @@ class CfLite;
 
 #include "Types.h"
 #include "Types_LambdaValues.h"
+#include "Types_ThermBgdParams.h"
 
 #include "AnalysisInfo.h"
 class AnalysisInfo;
@@ -92,7 +93,11 @@ public:
                                    double aMinBgdFit=0.60, double aMaxBgdFit=0.90, double aMaxBgdBuild=2.0, double aKStarMinNorm=0.32, double aKStarMaxNorm=0.40);
   static TF1* FitNonFlatBackground(TH1* aCf, NonFlatBgdFitType aBgdFitType, 
                                    double aMinBgdFit=0.6, double aMaxBgdFit=0.9, double aMaxBgdBuild=2.0, double aKStarMinNorm=0.32, double aKStarMaxNorm=0.40);
+
+  TF1* GetThermNonFlatBackground();
   TF1* GetNonFlatBackground(NonFlatBgdFitType aBgdFitType, FitType aFitType, bool aNormalizeFitToCf);
+
+
   //---------------------------------------------------------------------------------------------
   TF1* GetNewNonFlatBackground(NonFlatBgdFitType aBgdFitType);
   void InitializeBackgroundParams(NonFlatBgdFitType aNonFlatBgdType);

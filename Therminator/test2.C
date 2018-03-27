@@ -28,6 +28,8 @@ int main(int argc, char **argv)
   bool bBuildCorrelationFunctions = true;
   bool bBuildMixedEventNumerators = false;
   int tNEventsToMix = 5;
+
+  bool bUnitWeightCfNums = false;
   bool bWeightCfsWithParentInteraction = false;
   bool bOnlyWeightLongDecayParents = false;
 
@@ -76,6 +78,8 @@ int main(int argc, char **argv)
     tSingleParticlesSaveName += TString("_RandomEPs");
     tCorrelationFunctionsSaveName += TString("_RandomEPs");
   }
+
+  if(bUnitWeightCfNums) tCorrelationFunctionsSaveName += TString("_NumWeight1");
   //-----------------------------------------
 
   SimpleThermAnalysis *tSimpleThermAnalysis = new SimpleThermAnalysis();
@@ -87,6 +91,7 @@ int main(int argc, char **argv)
 
   tSimpleThermAnalysis->SetBuildCorrelationFunctions(bBuildCorrelationFunctions);
   tSimpleThermAnalysis->SetBuildMixedEventNumerators(bBuildMixedEventNumerators);
+  tSimpleThermAnalysis->SetUnitWeightCfNums(bUnitWeightCfNums);
   tSimpleThermAnalysis->SetWeightCfsWithParentInteraction(bWeightCfsWithParentInteraction);
   tSimpleThermAnalysis->SetOnlyWeightLongDecayParents(bOnlyWeightLongDecayParents);
   tSimpleThermAnalysis->SetNEventsToMix(tNEventsToMix);

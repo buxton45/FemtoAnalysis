@@ -42,6 +42,7 @@ ThermPairAnalysis::ThermPairAnalysis(AnalysisType aAnType) :
   fPrimaryPairInfo(0),
   fOtherPairInfo(0),
 
+  fUnitWeightCfNums(false),
   fWeightCfsWithParentInteraction(false),
   fOnlyWeightLongDecayParents(false),
 
@@ -1365,9 +1366,15 @@ complex<double> ThermPairAnalysis::GetStrongOnlyWaveFunction(TVector3 &aKStar3Ve
   complex<double> ImI (0., 1.);
   complex<double> tF0 (0., 0.);
   double tD0 = 0.;
+/*
   if(fAnalysisType==kLamKchP || fAnalysisType==kALamKchM) tF0 = complex<double>(-0.5,0.5);
   else if(fAnalysisType==kLamKchM || fAnalysisType==kALamKchP) tF0 = complex<double>(0.25,0.5);
   else if(fAnalysisType==kLamK0 || fAnalysisType==kALamK0) tF0 = complex<double>(-0.25,0.25);
+  else assert(0);
+*/
+  if(fAnalysisType==kLamKchP || fAnalysisType==kALamKchM)      {tF0 = complex<double>(-1.16, 0.51); tD0 = 1.08;}
+  else if(fAnalysisType==kLamKchM || fAnalysisType==kALamKchP) {tF0 = complex<double>(0.41, 0.47); tD0 = -4.89;}
+  else if(fAnalysisType==kLamK0 || fAnalysisType==kALamK0)     {tF0 = complex<double>(-0.41, 0.20); tD0 = 2.08;}
   else assert(0);
 
   double tKdotR = aKStar3Vec.Dot(aRStar3Vec);
@@ -1505,7 +1512,8 @@ void ThermPairAnalysis::FillCorrelationFunctionsNumOrDenParticleV0(vector<ThermP
         tKStar = CalcKStar(tV0, tParticle);
         if(aFillNumerator)
         {
-          if(fWeightCfsWithParentInteraction) tWeight = GetParentPairWaveFunctionSq(tV0, tParticle);
+          if(fUnitWeightCfNums) tWeight = 1.;
+          else if(fWeightCfsWithParentInteraction) tWeight = GetParentPairWaveFunctionSq(tV0, tParticle);
           else tWeight = GetStrongOnlyWaveFunctionSq(GetKStar3Vec(tV0, tParticle), GetRStar3Vec(tV0, tParticle));
         }
 
@@ -1610,7 +1618,8 @@ void ThermPairAnalysis::FillCorrelationFunctionsNumOrDenV0V0(vector<ThermV0Parti
           tKStar = CalcKStar(tV01, tV02);
           if(aFillNumerator)
           {
-            if(fWeightCfsWithParentInteraction) tWeight = GetParentPairWaveFunctionSq(tV01, tV02);
+            if(fUnitWeightCfNums) tWeight = 1.;
+            else if(fWeightCfsWithParentInteraction) tWeight = GetParentPairWaveFunctionSq(tV01, tV02);
             else tWeight = GetStrongOnlyWaveFunctionSq(GetKStar3Vec(tV01, tV02), GetRStar3Vec(tV01, tV02));
           }
 

@@ -52,6 +52,7 @@ public:
   void SetBuildTransformMatrices(bool aBuild);
   void SetBuildCorrelationFunctions(bool aBuild);
   void SetBuildMixedEventNumerators(bool aBuild);
+  void SetUnitWeightCfNums(bool aSet);
   void SetWeightCfsWithParentInteraction(bool aSet);
   void SetOnlyWeightLongDecayParents(bool aSet);
   void SetBuildSingleParticleAnalyses(bool aBuild);
@@ -96,6 +97,7 @@ private:
   bool fBuildTransformMatrices;
   bool fBuildCorrelationFunctions;
   bool fBuildMixedEventNumerators;
+  bool fUnitWeightCfNums;
   bool fWeightCfsWithParentInteraction;
   bool fOnlyWeightLongDecayParents;
   bool fBuildSingleParticleAnalyses;

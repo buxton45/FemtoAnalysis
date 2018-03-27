@@ -124,6 +124,7 @@ public:
   void SetBuildSingleParticleAnalyses(bool aBuild);
 
   void SetBuildMixedEventNumerators(bool aBuild);
+  void SetUnitWeightCfNums(bool aUse);
 
 
 private:
@@ -155,6 +156,8 @@ private:
 
   vector<AnalysisType> fChargedResidualsTypeMap;
   vector<ThermChargedResidual> fChargedResiduals;
+
+  bool fUnitWeightCfNums;
   bool fWeightCfsWithParentInteraction;
   bool fOnlyWeightLongDecayParents;
 
@@ -210,7 +213,7 @@ inline void ThermPairAnalysis::SetBuildTransformMatrices(bool aBuild) {fBuildTra
 inline void ThermPairAnalysis::SetBuildCorrelationFunctions(bool aBuild) {fBuildCorrelationFunctions = aBuild;}
 
 inline void ThermPairAnalysis::SetBuildMixedEventNumerators(bool aBuild) {fBuildMixedEventNumerators = aBuild;}
-
+inline void ThermPairAnalysis::SetUnitWeightCfNums(bool aUse) {fUnitWeightCfNums = aUse;}
 
 #endif
 

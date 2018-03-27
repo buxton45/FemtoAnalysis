@@ -1,65 +1,5 @@
-#include "FitGenerator.h"
-class FitGenerator;
-
+#include "CompareBackgrounds.h"
 #include "DrawAMPTCfs.h"
-
-
-//_________________________________________________________________________________________
-TH1D* Get1dTHERMHist(TString FileName, TString HistName)
-{
-  TFile f1(FileName);
-  TH1D *ReturnHist = (TH1D*)f1.Get(HistName);
-
-  TH1D *ReturnHistClone = (TH1D*)ReturnHist->Clone();
-  ReturnHistClone->SetDirectory(0);
-
-  return ReturnHistClone;
-}
-
-
-//________________________________________________________________________________________________________________
-TH1* GetTHERMCf(AnalysisType aAnType, int aImpactParam=8, bool aCombineConj = true, int aRebin=2, double aMinNorm=0.32, double aMaxNorm=0.40)
-{
-  AnalysisType tConjAnType;
-  if     (aAnType==kLamK0)    {tConjAnType=kALamK0;}
-  else if(aAnType==kALamK0)   {tConjAnType=kLamK0;}
-  else if(aAnType==kLamKchP)  {tConjAnType=kALamKchM;}
-  else if(aAnType==kALamKchM) {tConjAnType=kLamKchP;}
-  else if(aAnType==kLamKchM)  {tConjAnType=kALamKchP;}
-  else if(aAnType==kALamKchP) {tConjAnType=kLamKchM;}
-  else assert(0);
-
-  //--------------------------------
-
-  TString tDirectory = TString::Format("/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b%d/", aImpactParam);
-  TString tFileName = "CorrelationFunctions_RandomEPs.root";
-  TString tFileLocation = TString::Format("%s%s", tDirectory.Data(), tFileName.Data());
-  //--------------------------------
-  TH1D* tNum1 = Get1dTHERMHist(tFileLocation, TString::Format("NumFull%s", cAnalysisBaseTags[aAnType]));
-  TH1D* tDen1 = Get1dTHERMHist(tFileLocation, TString::Format("DenFull%s", cAnalysisBaseTags[aAnType]));
-  CfLite* tCfLite1 = new CfLite(TString::Format("CfLite_%s", cAnalysisBaseTags[aAnType]), 
-                                TString::Format("CfLite_%s", cAnalysisBaseTags[aAnType]), 
-                                tNum1, tDen1, aMinNorm, aMaxNorm);
-  tCfLite1->Rebin(aRebin);
-
-  TH1D* tNum2 = Get1dTHERMHist(tFileLocation, TString::Format("NumFull%s", cAnalysisBaseTags[tConjAnType]));
-  TH1D* tDen2 = Get1dTHERMHist(tFileLocation, TString::Format("DenFull%s", cAnalysisBaseTags[tConjAnType]));
-  CfLite* tCfLite2 = new CfLite(TString::Format("CfLite_%s", cAnalysisBaseTags[tConjAnType]), 
-                                TString::Format("CfLite_%s", cAnalysisBaseTags[tConjAnType]), 
-                                tNum2, tDen2, aMinNorm, aMaxNorm);
-  tCfLite2->Rebin(aRebin);
-
-  if(!aCombineConj) return tCfLite1->Cf();
-  else
-  {
-    vector<CfLite*> tCfLiteVec {tCfLite1, tCfLite2};
-    CfHeavy* tCfHeavy = new CfHeavy(TString::Format("CfHeavy_%s_%s", cAnalysisBaseTags[aAnType], cAnalysisBaseTags[tConjAnType]), 
-                                    TString::Format("CfHeavy_%s_%s", cAnalysisBaseTags[aAnType], cAnalysisBaseTags[tConjAnType]), 
-                                    tCfLiteVec, aMinNorm, aMaxNorm);
-    return tCfHeavy->GetHeavyCf();
-  }
-}
-
 
 
 //________________________________________________________________________________________________________________
@@ -94,7 +34,7 @@ TH1* GetAMPTCf(AnalysisType aAnType, CentralityType aCentType, bool aCombineAllc
 }
 
 //________________________________________________________________________________________________________________
-TCanvas* CompareDataToAMPT(FitGenerator* aGen, bool aDrawTHERM, bool aZoom0010=false)
+TCanvas* CompareDataToTHERM(FitGenerator* aGen, bool aDrawAMPT, bool aZoom0010=false)
 {
   bool tCombineAllcLamcKch = false; 
   bool tCombineConjugates = true;
@@ -103,7 +43,7 @@ TCanvas* CompareDataToAMPT(FitGenerator* aGen, bool aDrawTHERM, bool aZoom0010=f
   vector<CentralityType> tCentralityTypes = aGen->GetCentralityTypes();
   int tNAnalyses = aGen->GetNAnalyses();
 
-  TString tCanvasName = TString::Format("CompareDataToAMPT_%s", cAnalysisBaseTags[tAnType]);
+  TString tCanvasName = TString::Format("CompareDataToTHERM_%s", cAnalysisBaseTags[tAnType]);
   for(unsigned int i=0; i<tCentralityTypes.size(); i++) tCanvasName += TString(cCentralityTags[tCentralityTypes[i]]);
   if(aZoom0010) tCanvasName += TString("_Zoom0010");
 
@@ -150,27 +90,23 @@ TCanvas* CompareDataToAMPT(FitGenerator* aGen, bool aDrawTHERM, bool aZoom0010=f
       tCentType = aGen->GetSharedAn()->GetFitPairAnalysis(tAnalysisNumber)->GetCentralityType();
 
       tDataCf = aGen->GetSharedAn()->GetKStarCfHeavy(tAnalysisNumber)->GetHeavyCfClone();
-      tAMPTCf = GetAMPTCf(tAnType, tCentType, tCombineAllcLamcKch, tCombineConjugates);
-      //---------------------------------------------------------------------------------------------------------
       tCanPart->AddGraph(i, j, tDataCf, "", tMarkerStyleData, tColorData, tMarkerSize);
-      tCanPart->AddGraph(i, j, tAMPTCf, "", tMarkerStyleAMPT, tColorAMPT, tMarkerSize);
-      if(aDrawTHERM) 
-      {
-        int tImpactParam = 2;
-        if     (tCentType==k0010) tImpactParam=2;
-        else if(tCentType==k1030) tImpactParam=8;
-        else if(tCentType==k3050) tImpactParam=8;
-        else assert(0);
 
-        tTHERMCf = GetTHERMCf(tAnType, tImpactParam, tCombineConjugates);
-        tCanPart->AddGraph(i, j, tTHERMCf, "", tMarkerStyleTHERM, tColorTHERM, tMarkerSize);
+      tTHERMCf = GetCombinedTHERMCfs(tAnType, tCentType, tCombineConjugates);
+      tCanPart->AddGraph(i, j, tTHERMCf, "", tMarkerStyleTHERM, tColorTHERM, tMarkerSize);
+
+      if(aDrawAMPT)
+      {
+        tAMPTCf = GetAMPTCf(tAnType, tCentType, tCombineAllcLamcKch, tCombineConjugates);
+        tCanPart->AddGraph(i, j, tAMPTCf, "", tMarkerStyleAMPT, tColorAMPT, tMarkerSize);
       }
+
       if(i==tNx_Leg && j==tNy_Leg)
       {
         tCanPart->SetupTLegend(cAnalysisRootTags[tAnType], i, j, 0.25, 0.05, 0.35, 0.50);
         tCanPart->AddLegendEntry(i, j, tDataCf, "Data", "p");
-        tCanPart->AddLegendEntry(i, j, tAMPTCf, "AMPT", "p");
-        if(aDrawTHERM) tCanPart->AddLegendEntry(i, j, tTHERMCf, "THERM", "p");
+        tCanPart->AddLegendEntry(i, j, tTHERMCf, "THERM", "p");
+        if(aDrawAMPT) tCanPart->AddLegendEntry(i, j, tAMPTCf, "AMPT", "p");
       }
     }
   }
@@ -193,6 +129,118 @@ TCanvas* CompareDataToAMPT(FitGenerator* aGen, bool aDrawTHERM, bool aZoom0010=f
   return tCanPart->GetCanvas();
 
 }
+
+//________________________________________________________________________________________________________________
+TCanvas* CompareDataToTHERMv2(FitGenerator* aGen, bool aDrawAMPT, bool aZoom0010=false)
+{
+  bool tCombineAllcLamcKch = false; 
+  bool tCombineConjugates = true;
+
+  AnalysisType tAnType = aGen->GetSharedAn()->GetFitPairAnalysis(0)->GetAnalysisType();
+  vector<CentralityType> tCentralityTypes = aGen->GetCentralityTypes();
+  int tNAnalyses = aGen->GetNAnalyses();
+
+  TString tCanvasName = TString::Format("CompareDataToTHERM_%s", cAnalysisBaseTags[tAnType]);
+  for(unsigned int i=0; i<tCentralityTypes.size(); i++) tCanvasName += TString(cCentralityTags[tCentralityTypes[i]]);
+  if(aZoom0010) tCanvasName += TString("_Zoom0010");
+
+  int tNx=0, tNy=0;
+  if(tNAnalyses == 6) {tNx=2; tNy=3;}
+  else if(tNAnalyses == 4) {tNx=2; tNy=2;}
+  else if(tNAnalyses == 3) {tNx=1; tNy=tNAnalyses;}
+  else if(tNAnalyses == 2 || tNAnalyses==1) {tNx=tNAnalyses; tNy=1;}
+  else assert(0);
+
+  double tXLow = -0.02;
+  double tXHigh = 1.99;
+  double tYLow = 0.86;
+  double tYHigh = 1.07;
+  CanvasPartition* tCanPart = new CanvasPartition(tCanvasName,tNx,tNy,tXLow,tXHigh,tYLow,tYHigh,0.12,0.05,0.13,0.05);
+
+  assert(tNx*tNy == tNAnalyses);
+  int tAnalysisNumber=0;
+
+  int tMarkerStyleData = 20;
+  int tMarkerStyleAMPT = 25;
+  int tMarkerStyleTHERM = 26;
+  double tMarkerSize = 0.5;
+
+  int tColorData, tColorAMPT, tColorTHERM;
+  if     (tAnType==kLamK0 || tAnType==kALamK0)     tColorData = kBlack;
+  else if(tAnType==kLamKchP || tAnType==kALamKchM) tColorData = kRed+1;
+  else if(tAnType==kLamKchM || tAnType==kALamKchP) tColorData = kBlue+1;
+  else assert(0);
+
+  tColorAMPT = kMagenta;
+  tColorTHERM = kGreen;
+
+  int tNx_Leg=0, tNy_Leg=0;
+
+  TH1 *tDataCf, *tAMPTCf, *tTHERMCf;
+  CentralityType tCentType;
+  for(int j=0; j<tNy; j++)
+  {
+    for(int i=0; i<tNx; i++)
+    {
+      tAnalysisNumber = j*tNx + i;
+      tAnType = aGen->GetSharedAn()->GetFitPairAnalysis(tAnalysisNumber)->GetAnalysisType();
+      tCentType = aGen->GetSharedAn()->GetFitPairAnalysis(tAnalysisNumber)->GetCentralityType();
+
+      tDataCf = aGen->GetSharedAn()->GetKStarCfHeavy(tAnalysisNumber)->GetHeavyCfClone();
+      tCanPart->AddGraph(i, j, tDataCf, "", tMarkerStyleData, tColorData, tMarkerSize);
+
+      //--------------------------------
+      vector<int> tImpactParams;
+      if     (tCentType == k0010) tImpactParams = vector<int>{3};
+      else if(tCentType == k1030) tImpactParams = vector<int>{5, 7};
+      else if(tCentType == k3050) tImpactParams = vector<int>{8, 9};
+      else assert(0);
+
+      for(unsigned int iIP=0; iIP<tImpactParams.size(); iIP++)
+      {
+        if(iIP==0) tColorTHERM=kGreen;
+        else tColorTHERM=kMagenta;
+
+        tTHERMCf = GetTHERMCf(tAnType, tImpactParams[iIP], tCombineConjugates);
+        tCanPart->AddGraph(i, j, tTHERMCf, "", tMarkerStyleTHERM, tColorTHERM, tMarkerSize);
+      }
+      //--------------------------------
+
+      if(aDrawAMPT)
+      {
+        tAMPTCf = GetAMPTCf(tAnType, tCentType, tCombineAllcLamcKch, tCombineConjugates);
+        tCanPart->AddGraph(i, j, tAMPTCf, "", tMarkerStyleAMPT, tColorAMPT, tMarkerSize);
+      }
+
+      if(i==tNx_Leg && j==tNy_Leg)
+      {
+        tCanPart->SetupTLegend(cAnalysisRootTags[tAnType], i, j, 0.25, 0.05, 0.35, 0.50);
+        tCanPart->AddLegendEntry(i, j, tDataCf, "Data", "p");
+        tCanPart->AddLegendEntry(i, j, tTHERMCf, "THERM", "p");
+        if(aDrawAMPT) tCanPart->AddLegendEntry(i, j, tAMPTCf, "AMPT", "p");
+      }
+    }
+  }
+
+  if(aZoom0010)
+  {
+    double tZoomYLow = 0.965;
+    double tZoomYHigh = 1.015;
+
+    ((TH1*)tCanPart->GetGraphsInPad(0,0)->At(0))->GetYaxis()->SetRangeUser(tZoomYLow, tZoomYHigh);
+    ((TH1*)tCanPart->GetGraphsInPad(1,0)->At(0))->GetYaxis()->SetRangeUser(tZoomYLow, tZoomYHigh);
+  }
+
+  tCanPart->SetDrawUnityLine(true);
+  tCanPart->DrawAll();
+  tCanPart->DrawXaxisTitle("k* (GeV/c)");
+  tCanPart->DrawYaxisTitle("C(k*)",43,25,0.05,0.75);
+
+
+  return tCanPart->GetCanvas();
+
+}
+
 
 
 
@@ -808,16 +856,16 @@ int main(int argc, char **argv)
   if(SaveImages) tCanCompareLamKchAvgToLamK0->SaveAs(tSaveDir + tCanCompareLamKchAvgToLamK0->GetName() + TString::Format(".%s", tSaveFileType.Data()));
 
   //-----------------
-  bool aDrawTHERM = true;
+  bool aDrawAMPT = false;
   bool aZoom0010=false;
-  TCanvas* tCompareDataToAMPT_LamK0 = CompareDataToAMPT(tLamK0, aDrawTHERM, aZoom0010);
-  TCanvas* tCompareDataToAMPT_LamKchP = CompareDataToAMPT(tLamKchP, aDrawTHERM, aZoom0010);
-  TCanvas* tCompareDataToAMPT_LamKchM = CompareDataToAMPT(tLamKchM, aDrawTHERM, aZoom0010);
+  TCanvas* tCompareDataToTHERM_LamK0 = CompareDataToTHERMv2(tLamK0, aDrawAMPT, aZoom0010);
+  TCanvas* tCompareDataToTHERM_LamKchP = CompareDataToTHERMv2(tLamKchP, aDrawAMPT, aZoom0010);
+  TCanvas* tCompareDataToTHERM_LamKchM = CompareDataToTHERMv2(tLamKchM, aDrawAMPT, aZoom0010);
   if(SaveImages)
   {
-    tCompareDataToAMPT_LamK0->SaveAs(tSaveDir + tCompareDataToAMPT_LamK0->GetName() + TString::Format(".%s", tSaveFileType.Data()));
-    tCompareDataToAMPT_LamKchP->SaveAs(tSaveDir + tCompareDataToAMPT_LamKchP->GetName() + TString::Format(".%s", tSaveFileType.Data()));
-    tCompareDataToAMPT_LamKchM->SaveAs(tSaveDir + tCompareDataToAMPT_LamKchM->GetName() + TString::Format(".%s", tSaveFileType.Data()));
+    tCompareDataToTHERM_LamK0->SaveAs(tSaveDir + tCompareDataToTHERM_LamK0->GetName() + TString::Format(".%s", tSaveFileType.Data()));
+    tCompareDataToTHERM_LamKchP->SaveAs(tSaveDir + tCompareDataToTHERM_LamKchP->GetName() + TString::Format(".%s", tSaveFileType.Data()));
+    tCompareDataToTHERM_LamKchM->SaveAs(tSaveDir + tCompareDataToTHERM_LamKchM->GetName() + TString::Format(".%s", tSaveFileType.Data()));
   }
 
   //-----------------

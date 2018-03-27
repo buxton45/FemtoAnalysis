@@ -665,9 +665,30 @@ TF1* FitPartialAnalysis::FitNonFlatBackground(TH1* aCf, NonFlatBgdFitType aBgdFi
 
 
 //________________________________________________________________________________________________________________
+TF1* FitPartialAnalysis::GetThermNonFlatBackground()
+{
+  if(fNonFlatBackground) return fNonFlatBackground;
+
+  TString tFitName = TString::Format("ThermNonFlatBgd_%s%s", cAnalysisBaseTags[fAnalysisType], cCentralityTags[fCentralityType]);
+  fNonFlatBackground = new TF1(tFitName, BackgroundFitter::FitFunctionPolynomial, 0., fMaxBgdBuild, 7);
+
+  fNonFlatBackground->SetParameter(0, cThermBgdParamValues[fAnalysisType][fCentralityType][0]);
+  fNonFlatBackground->SetParameter(1, cThermBgdParamValues[fAnalysisType][fCentralityType][1]);
+  fNonFlatBackground->SetParameter(2, cThermBgdParamValues[fAnalysisType][fCentralityType][2]);
+  fNonFlatBackground->SetParameter(3, cThermBgdParamValues[fAnalysisType][fCentralityType][3]);
+  fNonFlatBackground->SetParameter(4, cThermBgdParamValues[fAnalysisType][fCentralityType][4]);
+  fNonFlatBackground->SetParameter(5, cThermBgdParamValues[fAnalysisType][fCentralityType][5]);
+  fNonFlatBackground->SetParameter(6, cThermBgdParamValues[fAnalysisType][fCentralityType][6]);
+
+  return fNonFlatBackground;
+}
+
+
+//________________________________________________________________________________________________________________
 TF1* FitPartialAnalysis::GetNonFlatBackground(NonFlatBgdFitType aBgdFitType, FitType aFitType, bool aNormalizeFitToCf)
 {
   if(fNonFlatBackground && aNormalizeFitToCf==fNormalizeBgdFitToCf) return fNonFlatBackground;
+  if(aBgdFitType==kPolynomial) return GetThermNonFlatBackground();
 
   fNormalizeBgdFitToCf = aNormalizeFitToCf;
   if(aFitType==kChi2PML)

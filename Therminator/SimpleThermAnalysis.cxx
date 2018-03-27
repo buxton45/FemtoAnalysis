@@ -41,6 +41,7 @@ SimpleThermAnalysis::SimpleThermAnalysis() :
   fBuildTransformMatrices(true),
   fBuildCorrelationFunctions(true),
   fBuildMixedEventNumerators(false),
+  fUnitWeightCfNums(false),
   fWeightCfsWithParentInteraction(false),
   fOnlyWeightLongDecayParents(false),
   fBuildSingleParticleAnalyses(true),
@@ -457,6 +458,21 @@ void SimpleThermAnalysis::SetBuildMixedEventNumerators(bool aBuild)
 
   fAnalysisLamK0->SetBuildMixedEventNumerators(aBuild);
   fAnalysisALamK0->SetBuildMixedEventNumerators(aBuild);
+}
+
+//________________________________________________________________________________________________________________
+void SimpleThermAnalysis::SetUnitWeightCfNums(bool aSet)
+{
+  fUnitWeightCfNums = aSet;
+
+  fAnalysisLamKchP->SetUnitWeightCfNums(aSet);
+  fAnalysisALamKchM->SetUnitWeightCfNums(aSet);
+
+  fAnalysisLamKchM->SetUnitWeightCfNums(aSet);
+  fAnalysisALamKchP->SetUnitWeightCfNums(aSet);
+
+  fAnalysisLamK0->SetUnitWeightCfNums(aSet);
+  fAnalysisALamK0->SetUnitWeightCfNums(aSet);
 }
 
 //________________________________________________________________________________________________________________
