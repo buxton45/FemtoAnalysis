@@ -26,6 +26,7 @@ SimpleThermAnalysis::SimpleThermAnalysis() :
   fEventsCollection(0),
 
   fMixEvents(false),
+  fMixEventsForTransforms(false),
   fNEventsToMix(5),
   fMixingEventsCollection(0),
 
@@ -40,6 +41,7 @@ SimpleThermAnalysis::SimpleThermAnalysis() :
   fBuildPairFractions(true),
   fBuildTransformMatrices(true),
   fBuildCorrelationFunctions(true),
+  fBuild3dHists(false),
   fBuildMixedEventNumerators(false),
   fUnitWeightCfNums(false),
   fWeightCfsWithParentInteraction(false),
@@ -93,16 +95,17 @@ SimpleThermAnalysis::~SimpleThermAnalysis()
 
 
 //________________________________________________________________________________________________________________
-void SimpleThermAnalysis::SetUseMixedEvents(bool aUse)
+void SimpleThermAnalysis::SetUseMixedEventsForTransforms(bool aUse)
 {
-  fMixEvents = aUse;
+  fMixEventsForTransforms = aUse;
+  if(fMixEventsForTransforms) fMixEvents = true;
 
-  fAnalysisLamKchP->SetUseMixedEvents(aUse);
-  fAnalysisALamKchM->SetUseMixedEvents(aUse);
-  fAnalysisLamKchM->SetUseMixedEvents(aUse);
-  fAnalysisALamKchP->SetUseMixedEvents(aUse);
-  fAnalysisLamK0->SetUseMixedEvents(aUse);
-  fAnalysisALamK0->SetUseMixedEvents(aUse);
+  fAnalysisLamKchP->SetUseMixedEventsForTransforms(aUse);
+  fAnalysisALamKchM->SetUseMixedEventsForTransforms(aUse);
+  fAnalysisLamKchM->SetUseMixedEventsForTransforms(aUse);
+  fAnalysisALamKchP->SetUseMixedEventsForTransforms(aUse);
+  fAnalysisLamK0->SetUseMixedEventsForTransforms(aUse);
+  fAnalysisALamK0->SetUseMixedEventsForTransforms(aUse);
 }
 
 //________________________________________________________________________________________________________________
@@ -361,14 +364,14 @@ void SimpleThermAnalysis::ProcessEventByEvent(vector<ThermEvent> &aEventsCollect
 
   for(unsigned int iEv=0; iEv < fEventsCollection.size(); iEv++)
   {
-    fAnalysisLamKchP->ProcessEvent(fEventsCollection[iEv], fMixingEventsCollection, fMaxPrimaryDecayLength);
-    fAnalysisALamKchM->ProcessEvent(fEventsCollection[iEv], fMixingEventsCollection, fMaxPrimaryDecayLength);
+    fAnalysisLamKchP->ProcessEvent(fEventsCollection[iEv], fMixingEventsCollection);
+    fAnalysisALamKchM->ProcessEvent(fEventsCollection[iEv], fMixingEventsCollection);
 
-    fAnalysisLamKchM->ProcessEvent(fEventsCollection[iEv], fMixingEventsCollection, fMaxPrimaryDecayLength);
-    fAnalysisALamKchP->ProcessEvent(fEventsCollection[iEv], fMixingEventsCollection, fMaxPrimaryDecayLength);
+    fAnalysisLamKchM->ProcessEvent(fEventsCollection[iEv], fMixingEventsCollection);
+    fAnalysisALamKchP->ProcessEvent(fEventsCollection[iEv], fMixingEventsCollection);
 
-    fAnalysisLamK0->ProcessEvent(fEventsCollection[iEv], fMixingEventsCollection, fMaxPrimaryDecayLength);
-    fAnalysisALamK0->ProcessEvent(fEventsCollection[iEv], fMixingEventsCollection, fMaxPrimaryDecayLength);
+    fAnalysisLamK0->ProcessEvent(fEventsCollection[iEv], fMixingEventsCollection);
+    fAnalysisALamK0->ProcessEvent(fEventsCollection[iEv], fMixingEventsCollection);
 
     //--------------------------------------------
     if(fBuildSingleParticleAnalyses)
@@ -431,18 +434,21 @@ void SimpleThermAnalysis::SetBuildTransformMatrices(bool aBuild)
 
 
 //________________________________________________________________________________________________________________
-void SimpleThermAnalysis::SetBuildCorrelationFunctions(bool aBuild)
+void SimpleThermAnalysis::SetBuildCorrelationFunctions(bool aBuild, bool aBuild3dHists)
 {
   fBuildCorrelationFunctions = aBuild;
+  fBuild3dHists = aBuild3dHists;
 
-  fAnalysisLamKchP->SetBuildCorrelationFunctions(aBuild);
-  fAnalysisALamKchM->SetBuildCorrelationFunctions(aBuild);
+  if(fBuildCorrelationFunctions) fMixEvents = true;
 
-  fAnalysisLamKchM->SetBuildCorrelationFunctions(aBuild);
-  fAnalysisALamKchP->SetBuildCorrelationFunctions(aBuild);
+  fAnalysisLamKchP->SetBuildCorrelationFunctions(fBuildCorrelationFunctions, fBuild3dHists);
+  fAnalysisALamKchM->SetBuildCorrelationFunctions(fBuildCorrelationFunctions, fBuild3dHists);
 
-  fAnalysisLamK0->SetBuildCorrelationFunctions(aBuild);
-  fAnalysisALamK0->SetBuildCorrelationFunctions(aBuild);
+  fAnalysisLamKchM->SetBuildCorrelationFunctions(fBuildCorrelationFunctions, fBuild3dHists);
+  fAnalysisALamKchP->SetBuildCorrelationFunctions(fBuildCorrelationFunctions, fBuild3dHists);
+
+  fAnalysisLamK0->SetBuildCorrelationFunctions(fBuildCorrelationFunctions, fBuild3dHists);
+  fAnalysisALamK0->SetBuildCorrelationFunctions(fBuildCorrelationFunctions, fBuild3dHists);
 }
 
 //________________________________________________________________________________________________________________
@@ -511,7 +517,20 @@ void SimpleThermAnalysis::SetBuildSingleParticleAnalyses(bool aBuild)
   fBuildSingleParticleAnalyses = aBuild;
 }
 
+//________________________________________________________________________________________________________________
+void SimpleThermAnalysis::SetMaxPrimaryDecayLength(double aMax)
+{
+  fMaxPrimaryDecayLength = aMax;
 
+  fAnalysisLamKchP->SetMaxPrimaryDecayLength(fMaxPrimaryDecayLength);
+  fAnalysisALamKchM->SetMaxPrimaryDecayLength(fMaxPrimaryDecayLength);
+
+  fAnalysisLamKchM->SetMaxPrimaryDecayLength(fMaxPrimaryDecayLength);
+  fAnalysisALamKchP->SetMaxPrimaryDecayLength(fMaxPrimaryDecayLength);
+
+  fAnalysisLamK0->SetMaxPrimaryDecayLength(fMaxPrimaryDecayLength);
+  fAnalysisALamK0->SetMaxPrimaryDecayLength(fMaxPrimaryDecayLength);
+}
 
 
 

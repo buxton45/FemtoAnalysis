@@ -38,7 +38,15 @@ public:
 
   static vector<ParticlePDGType> GetPartTypes(AnalysisType aAnType);
   void SetPartTypes();
+
   void InitiateTransformMatrices();
+  void SetBuildTransformMatrices(bool aBuild);
+
+  void InitiateCorrelations();
+  void SetBuildCorrelationFunctions(bool aBuild, bool aBuild3dHists=false);
+
+  void InitiatePairFractionsAndParentsMatrix();
+  void SetBuildPairFractions(bool aBuild);
 
   void LoadChargedResiduals();
   void SetWeightCfsWithParentInteraction(bool aSet);
@@ -66,17 +74,18 @@ public:
   static vector<int> UniqueCombineVectors(vector<int> &aVec1, vector<int> &aVec2);
   void PrintUniqueParents();
 
-  void FillPrimaryAndOtherPairInfo(int aParentType1, int aParentType2, double aMaxPrimaryDecayLength=-1.);
+  void FillPrimaryAndOtherPairInfo(int aParentType1, int aParentType2);
   void PrintPrimaryAndOtherPairInfo();
 
   static void MapAndFillPairFractionHistogramParticleV0(TH1* aHistogram, int aV0FatherType, int aTrackFatherType, double aMaxPrimaryDecayLength=-1., double tWeight=1.);
   static void MapAndFillPairFractionHistogramV0V0(TH1* aHistogram, int aV01FatherType, int aV02FatherType, double aMaxPrimaryDecayLength=-1., double tWeight=1.);
 
 
-  void BuildPairFractionHistogramsParticleV0(ThermEvent &aEvent, double aMaxPrimaryDecayLength=-1.);
-  void BuildPairFractionHistogramsV0V0(ThermEvent &aEvent, double aMaxPrimaryDecayLength=-1.);
+  void BuildPairFractionHistogramsParticleV0(ThermEvent &aEvent);
+  void BuildPairFractionHistogramsV0V0(ThermEvent &aEvent);
 
   void SavePairFractionsAndParentsMatrix(TFile *aFile);
+
 
   double CalcKStar(TLorentzVector &p1, TLorentzVector &p2);
   double CalcKStar(ThermParticle &tPart1, ThermParticle &tPart2);
@@ -99,6 +108,7 @@ public:
   double GetStrongOnlyWaveFunctionSq(TVector3 aKStar3Vec, TVector3 aRStar3Vec);
   double GetParentPairWaveFunctionSq(ThermParticle &tPart1, ThermParticle &tPart2);
 
+  void FillCorrelations(ThermParticle &aParticle1, ThermParticle &aParticle2, bool aFillNumerator);  //For ParticleV0, aParticle1=V0 and aParticle2=Particle
   void FillCorrelationFunctionsNumOrDenParticleV0(vector<ThermParticle> &aParticleCollection, vector<ThermV0Particle> &aV0Collection, bool aFillNumerator);
   void FillCorrelationFunctionsNumOrDenV0V0(vector<ThermV0Particle> &aV01Collection, vector<ThermV0Particle> &aV02Collection, bool aFillNumerator);
 
@@ -111,21 +121,19 @@ public:
   TH1* BuildFinalCf(TH1* aNum, TH1* aDen, TString aName);
   void SaveAllCorrelationFunctions(TFile *aFile);
 
-  void ProcessEvent(ThermEvent &aEvent, vector<ThermEvent> &aMixingEventsCollection, double aMaxPrimaryDecayLength=-1.);
+  void ProcessEvent(ThermEvent &aEvent, vector<ThermEvent> &aMixingEventsCollection);
 
   //-- inline
-  void SetUseMixedEvents(bool aUse);
+  void SetUseMixedEventsForTransforms(bool aUse);
   void SetBuildUniqueParents(bool aBuild);
   TH2D* GetTransformMatrix(int aIndex);
 
-  void SetBuildPairFractions(bool aBuild);
-  void SetBuildTransformMatrices(bool aBuild);
-  void SetBuildCorrelationFunctions(bool aBuild);
   void SetBuildSingleParticleAnalyses(bool aBuild);
 
   void SetBuildMixedEventNumerators(bool aBuild);
   void SetUnitWeightCfNums(bool aUse);
 
+  void SetMaxPrimaryDecayLength(double aMax);
 
 private:
   AnalysisType fAnalysisType;
@@ -133,8 +141,10 @@ private:
 
   double fKStarMin, fKStarMax;
   int fNBinsKStar;
+
+  double fMaxPrimaryDecayLength;
   
-  bool fMixEvents;
+  bool fMixEventsForTransforms;
   bool fBuildUniqueParents;
   vector<int> fUniqueParents1;
   vector<int> fUniqueParents2;
@@ -142,6 +152,8 @@ private:
   bool fBuildPairFractions;
   bool fBuildTransformMatrices;
   bool fBuildCorrelationFunctions;
+  bool fBuild3dHists;                //Advantage of 3dHists is ability to tweak primary definition after processing
+                                     //Disadvantage is they consume a huge amount of memory
   bool fBuildMixedEventNumerators;
 
   vector<AnalysisType> fTransformStorageMapping;
@@ -203,17 +215,15 @@ private:
 #endif
 };
 
-inline void ThermPairAnalysis::SetUseMixedEvents(bool aUse) {fMixEvents = aUse;}
+inline void ThermPairAnalysis::SetUseMixedEventsForTransforms(bool aUse) {fMixEventsForTransforms = aUse;}
 inline void ThermPairAnalysis::SetBuildUniqueParents(bool aBuild) {fBuildUniqueParents = aBuild;}
 
 inline TH2D* ThermPairAnalysis::GetTransformMatrix(int aIndex) {return ((TH2D*)fTransformMatrices->At(aIndex));}
- 
-inline void ThermPairAnalysis::SetBuildPairFractions(bool aBuild) {fBuildPairFractions = aBuild;}
-inline void ThermPairAnalysis::SetBuildTransformMatrices(bool aBuild) {fBuildTransformMatrices = aBuild;}
-inline void ThermPairAnalysis::SetBuildCorrelationFunctions(bool aBuild) {fBuildCorrelationFunctions = aBuild;}
 
 inline void ThermPairAnalysis::SetBuildMixedEventNumerators(bool aBuild) {fBuildMixedEventNumerators = aBuild;}
 inline void ThermPairAnalysis::SetUnitWeightCfNums(bool aUse) {fUnitWeightCfNums = aUse;}
+
+inline void ThermPairAnalysis::SetMaxPrimaryDecayLength(double aMax) {fMaxPrimaryDecayLength = aMax;}
 
 #endif
 

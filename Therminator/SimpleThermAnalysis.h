@@ -39,7 +39,7 @@ public:
   SimpleThermAnalysis();
   virtual ~SimpleThermAnalysis();
 
-  void SetUseMixedEvents(bool aUse);
+  void SetUseMixedEventsForTransforms(bool aUse);
   void SetBuildUniqueParents(bool aBuild);
   void SaveAll();
 
@@ -50,12 +50,14 @@ public:
 
   void SetBuildPairFractions(bool aBuild);
   void SetBuildTransformMatrices(bool aBuild);
-  void SetBuildCorrelationFunctions(bool aBuild);
+  void SetBuildCorrelationFunctions(bool aBuild, bool aBuild3dHists=false);
   void SetBuildMixedEventNumerators(bool aBuild);
   void SetUnitWeightCfNums(bool aSet);
   void SetWeightCfsWithParentInteraction(bool aSet);
   void SetOnlyWeightLongDecayParents(bool aSet);
   void SetBuildSingleParticleAnalyses(bool aBuild);
+
+  void SetMaxPrimaryDecayLength(double aMax);
 
   //-- inline
   void SetNEventsToMix(int aNEventsToMix);
@@ -65,8 +67,6 @@ public:
   void SetTransformMatricesSaveName(TString aSaveName);
   void SetCorrelationFunctionsSaveName(TString aSaveName);
   void SetSingleParticlesSaveName(TString aSaveName);
-
-  void SetMaxPrimaryDecayLength(double aMax);
 
   void SetCheckCoECoM(bool aCheck=true);
   void SetRotateEventsByRandomAzimuthalAngles(bool aRotate=true);
@@ -83,6 +83,7 @@ private:
   vector<ThermEvent> fEventsCollection;
 
   bool fMixEvents;
+  bool fMixEventsForTransforms;
   unsigned int fNEventsToMix;
   vector<ThermEvent> fMixingEventsCollection;
 
@@ -96,6 +97,7 @@ private:
   bool fBuildPairFractions;
   bool fBuildTransformMatrices;
   bool fBuildCorrelationFunctions;
+  bool fBuild3dHists;
   bool fBuildMixedEventNumerators;
   bool fUnitWeightCfNums;
   bool fWeightCfsWithParentInteraction;
@@ -126,8 +128,6 @@ inline void SimpleThermAnalysis::SetPairFractionsSaveName(TString aSaveName) {fP
 inline void SimpleThermAnalysis::SetTransformMatricesSaveName(TString aSaveName) {fTransformMatricesSaveName = aSaveName;}
 inline void SimpleThermAnalysis::SetCorrelationFunctionsSaveName(TString aSaveName) {fCorrelationFunctionsSaveName = aSaveName;}
 inline void SimpleThermAnalysis::SetSingleParticlesSaveName(TString aSaveName) {fSingleParticlesSaveName = aSaveName;}
-
-inline void SimpleThermAnalysis::SetMaxPrimaryDecayLength(double aMax) {fMaxPrimaryDecayLength = aMax;}
 
 inline void SimpleThermAnalysis::SetCheckCoECoM(bool aCheck) {fCheckCoECoM = aCheck;}
 inline void SimpleThermAnalysis::SetRotateEventsByRandomAzimuthalAngles(bool aRotate) {fRotateEventsByRandAzAngles = aRotate;}

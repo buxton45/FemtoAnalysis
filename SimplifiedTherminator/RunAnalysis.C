@@ -7,7 +7,7 @@
 int main(int argc, char **argv)
 {
   bool bRunFull = true;
-  bool bUseMixedEvents = true;
+  bool bUseMixedEventsForTransforms = true;
   bool bPrintUniqueParents = false;
 
   bool bBuildPairFractions = false;
@@ -15,6 +15,7 @@ int main(int argc, char **argv)
   bool bBuildSingleParticleAnalyses = false;
 
   bool bBuildCorrelationFunctions = true;
+  bool bBuild3dHists = false;
   bool bBuildMixedEventNumerators = false;
   int tNEventsToMix = 5;
 
@@ -27,7 +28,7 @@ int main(int argc, char **argv)
   bool bOnlyRunOverJaiEvents = false;
 
   double tMaxPrimaryDecayLength = -1.; 
-//  double tMaxPrimaryDecayLength = 3.01; 
+//  double tMaxPrimaryDecayLength = 4.01; 
 
   int tImpactParam = 8;
   //-----------------------------------------
@@ -72,13 +73,13 @@ int main(int argc, char **argv)
   //-----------------------------------------
 
   SimpleThermAnalysis *tSimpleThermAnalysis = new SimpleThermAnalysis();
-  tSimpleThermAnalysis->SetUseMixedEvents(bUseMixedEvents);
+  tSimpleThermAnalysis->SetUseMixedEventsForTransforms(bUseMixedEventsForTransforms);
   tSimpleThermAnalysis->SetBuildUniqueParents(bPrintUniqueParents);
 
   tSimpleThermAnalysis->SetBuildPairFractions(bBuildPairFractions);
   tSimpleThermAnalysis->SetBuildTransformMatrices(bBuildTransformMatrices);
 
-  tSimpleThermAnalysis->SetBuildCorrelationFunctions(bBuildCorrelationFunctions);
+  tSimpleThermAnalysis->SetBuildCorrelationFunctions(bBuildCorrelationFunctions, bBuild3dHists);
   tSimpleThermAnalysis->SetBuildMixedEventNumerators(bBuildMixedEventNumerators);
   tSimpleThermAnalysis->SetUnitWeightCfNums(bUnitWeightCfNums);
   tSimpleThermAnalysis->SetWeightCfsWithParentInteraction(bWeightCfsWithParentInteraction);
