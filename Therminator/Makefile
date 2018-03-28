@@ -12,15 +12,15 @@ RM = rm
 
 MY_LIBS = $(addprefix build/, ParticleCoor.o Interpolator.o Types.o PIDMapping.o ThermCommon.o ThermParticle.o ThermV0Particle.o ThermEvent.o ThermChargedResidual.o ThermPairAnalysis.o ThermSingleParticleAnalysis.o ThermEventsCollection.o SimpleThermAnalysis.o Therm3dCf.o CfLite.o CfHeavy.o)
 
-BINARIES = runTest runTest2 runDrawTransforms runDrawPairFractions runDrawParentsMatrices runBuildLambdaValuesFromParentMatrices runProject3dRadii runProjectTransverseEmission runDrawPairSources runDrawCfs runDrawCfsv2 runCompareCfs runCompareCfsv2 runProject3dCfs runGetmT runRenameEventFiles runCompareBackgroundsAndFit
+BINARIES = runTest runAnalysis runDrawTransforms runDrawPairFractions runDrawParentsMatrices runBuildLambdaValuesFromParentMatrices runProject3dRadii runProjectTransverseEmission runDrawPairSources runDrawCfs runDrawCfsv2 runCompareCfs runCompareCfsv2 runProject3dCfs runGetmT runRenameEventFiles runCompareBackgroundsAndFit
 
 all: $(BINARIES)
 
 runTest: ${MY_LIBS} test.C
 	g++ test.C ${MY_LIBS} -o runTest $(LIBS) $(CFLAGS)
 
-runTest2: ${MY_LIBS} test2.C
-	g++ test2.C ${MY_LIBS} -o runTest2 $(LIBS) $(CFLAGS)
+runAnalysis: ${MY_LIBS} RunAnalysis.C
+	g++ RunAnalysis.C ${MY_LIBS} -o runAnalysis $(LIBS) $(CFLAGS)
 
 runDrawTransforms: ${MY_LIBS} DrawTransformMatrices.C
 	g++ DrawTransformMatrices.C ${MY_LIBS} -o runDrawTransforms $(LIBS) $(CFLAGS)
