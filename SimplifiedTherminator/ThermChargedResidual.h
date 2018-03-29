@@ -34,7 +34,7 @@ public:
 
   void SetPartTypes();
 
-  void LoadCoulombOnlyInterpWfs(TString aFileDirectory="/home/jesse/Analysis/FemtoAnalysis/SimplifiedTherminator/CoulombOnlyInterpWfs/");
+  void LoadCoulombOnlyInterpWfs(TString aFileDirectory="/home/jbuxton/SimplifiedTherminator/CoulombOnlyInterpWfs/");
   bool CanInterp(double aKStarMag, double aRStarMag, double aTheta);
   bool CanInterp(TVector3* aKStar3Vec, TVector3* aRStar3Vec);
 
