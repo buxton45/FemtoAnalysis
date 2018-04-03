@@ -373,6 +373,18 @@ void ThermEvent::EnforceKinematicCuts()
     if(!fKchMCollection[i].PassKinematicCuts()) fKchMCollection.erase(fKchMCollection.begin()+i);
     else i++;
   }
+  //---------------
+  for(unsigned int i=0; i<fProtCollection.size();)
+  {
+    if(!fProtCollection[i].PassKinematicCuts()) fProtCollection.erase(fProtCollection.begin()+i);
+    else i++;
+  }
+  for(unsigned int i=0; i<fAProtCollection.size();)
+  {
+    if(!fAProtCollection[i].PassKinematicCuts()) fAProtCollection.erase(fAProtCollection.begin()+i);
+    else i++;
+  }
+
 }
 
 //________________________________________________________________________________________________________________
