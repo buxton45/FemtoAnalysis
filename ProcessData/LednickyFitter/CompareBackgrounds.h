@@ -23,7 +23,7 @@ TH1D* Get1dTHERMHist(TString FileName, TString HistName)
 }
 
 //________________________________________________________________________________________________________________
-TH1* GetTHERMCf(TString aFileName, TString aCfDescriptor, AnalysisType aAnType, int aImpactParam=8, bool aCombineConj = true, int aRebin=2, double aMinNorm=0.32, double aMaxNorm=0.40, int aMarkerStyle=20, int aColor=1)
+TH1* GetTHERMCf(TString aFileName, TString aCfDescriptor, AnalysisType aAnType, int aImpactParam=8, bool aCombineConj=true, bool aUseAdamEvents=false, int aRebin=2, double aMinNorm=0.32, double aMaxNorm=0.40, int aMarkerStyle=20, int aColor=1)
 {
   AnalysisType tConjAnType;
   if     (aAnType==kLamK0)    {tConjAnType=kALamK0;}
@@ -35,7 +35,9 @@ TH1* GetTHERMCf(TString aFileName, TString aCfDescriptor, AnalysisType aAnType, 
   else assert(0);
 
   //--------------------------------
-  TString tDirectory = TString::Format("/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b%d/", aImpactParam);
+  TString tDirectory;
+  if(!aUseAdamEvents) tDirectory = TString::Format("/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b%d/", aImpactParam);
+  else                tDirectory = TString::Format("/home/jesse/Analysis/ReducedTherminator2Events/AdamCPUResults/lhyqid3v_LHCPbPb_2760_b%d/", aImpactParam);
   TString tFileLocation = TString::Format("%s%s", tDirectory.Data(), aFileName.Data());
   //--------------------------------
   TH1D* tNum1 = Get1dTHERMHist(tFileLocation, TString::Format("Num%s%s", aCfDescriptor.Data(), cAnalysisBaseTags[aAnType]));
@@ -68,15 +70,15 @@ TH1* GetTHERMCf(TString aFileName, TString aCfDescriptor, AnalysisType aAnType, 
 }
 
 //________________________________________________________________________________________________________________
-TH1* GetTHERMCf(AnalysisType aAnType, int aImpactParam=8, bool aCombineConj = true, int aRebin=2, double aMinNorm=0.32, double aMaxNorm=0.40, int aMarkerStyle=20, int aColor=1)
+TH1* GetTHERMCf(AnalysisType aAnType, int aImpactParam=8, bool aCombineConj=true, bool aUseAdamEvents=false, int aRebin=2, double aMinNorm=0.32, double aMaxNorm=0.40, int aMarkerStyle=20, int aColor=1)
 {
   TString tFileName = "CorrelationFunctions_RandomEPs_NumWeight1.root";
   TString tCfDescriptor = "Full";
-  return GetTHERMCf(tFileName, tCfDescriptor, aAnType, aImpactParam, aCombineConj, aRebin, aMinNorm, aMaxNorm, aMarkerStyle, aColor);
+  return GetTHERMCf(tFileName, tCfDescriptor, aAnType, aImpactParam, aCombineConj, aUseAdamEvents, aRebin, aMinNorm, aMaxNorm, aMarkerStyle, aColor);
 }
 
 //________________________________________________________________________________________________________________
-TH1* GetCombinedTHERMCfs(TString aFileName, TString aCfDescriptor, AnalysisType aAnType, CentralityType aCentType, bool aCombineConj = true, int aRebin=2, double aMinNorm=0.32, double aMaxNorm=0.40, int aMarkerStyle=20, int aColor=1)
+TH1* GetCombinedTHERMCfs(TString aFileName, TString aCfDescriptor, AnalysisType aAnType, CentralityType aCentType, bool aCombineConj=true, bool aUseAdamEvents=false, int aRebin=2, double aMinNorm=0.32, double aMaxNorm=0.40, int aMarkerStyle=20, int aColor=1)
 {
   AnalysisType tConjAnType;
   if     (aAnType==kLamK0)    {tConjAnType=kALamK0;}
@@ -98,7 +100,8 @@ TH1* GetCombinedTHERMCfs(TString aFileName, TString aCfDescriptor, AnalysisType 
   vector<CfLite*> tCfLiteVec;
   for(unsigned int iIP=0; iIP < tImpactParams.size(); iIP++)
   {
-    tDirectory = TString::Format("/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b%d/", tImpactParams[iIP]);
+    if(!aUseAdamEvents) tDirectory = TString::Format("/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b%d/", tImpactParams[iIP]);
+    else                tDirectory = TString::Format("/home/jesse/Analysis/ReducedTherminator2Events/AdamCPUResults/lhyqid3v_LHCPbPb_2760_b%d/", tImpactParams[iIP]);
     tFileLocation = TString::Format("%s%s", tDirectory.Data(), aFileName.Data());
     //--------------------------------
     TH1D* tNum1 = Get1dTHERMHist(tFileLocation, TString::Format("Num%s%s", aCfDescriptor.Data(), cAnalysisBaseTags[aAnType]));
@@ -131,16 +134,16 @@ TH1* GetCombinedTHERMCfs(TString aFileName, TString aCfDescriptor, AnalysisType 
 }
 
 //________________________________________________________________________________________________________________
-TH1* GetCombinedTHERMCfs(AnalysisType aAnType, CentralityType aCentType, bool aCombineConj = true, int aRebin=2, double aMinNorm=0.32, double aMaxNorm=0.40, int aMarkerStyle=20, int aColor=1)
+TH1* GetCombinedTHERMCfs(AnalysisType aAnType, CentralityType aCentType, bool aCombineConj=true, bool aUseAdamEvents=false, int aRebin=2, double aMinNorm=0.32, double aMaxNorm=0.40, int aMarkerStyle=20, int aColor=1)
 {
   TString tFileName = "CorrelationFunctions_RandomEPs_NumWeight1.root";
   TString tCfDescriptor = "Full";
-  return GetCombinedTHERMCfs(tFileName, tCfDescriptor, aAnType, aCentType, aCombineConj, aRebin, aMinNorm, aMaxNorm, aMarkerStyle, aColor);
+  return GetCombinedTHERMCfs(tFileName, tCfDescriptor, aAnType, aCentType, aCombineConj, aUseAdamEvents, aRebin, aMinNorm, aMaxNorm, aMarkerStyle, aColor);
 }
 
 
 //________________________________________________________________________________________________________________
-TH1* GetLamKchPMCombinedTHERMCfs(TString aFileName, TString aCfDescriptor, CentralityType aCentType, int aRebin=2, double aMinNorm=0.32, double aMaxNorm=0.40, int aMarkerStyle=20, int aColor=1)
+TH1* GetLamKchPMCombinedTHERMCfs(TString aFileName, TString aCfDescriptor, CentralityType aCentType, bool aUseAdamEvents=false, int aRebin=2, double aMinNorm=0.32, double aMaxNorm=0.40, int aMarkerStyle=20, int aColor=1)
 {
   vector<int> tImpactParams;
   if     (aCentType == k0010) tImpactParams = vector<int>{3};
@@ -152,7 +155,8 @@ TH1* GetLamKchPMCombinedTHERMCfs(TString aFileName, TString aCfDescriptor, Centr
   vector<CfLite*> tCfLiteVec;
   for(unsigned int iIP=0; iIP < tImpactParams.size(); iIP++)
   {
-    tDirectory = TString::Format("/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b%d/", tImpactParams[iIP]);
+    if(!aUseAdamEvents) tDirectory = TString::Format("/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b%d/", tImpactParams[iIP]);
+    else                tDirectory = TString::Format("/home/jesse/Analysis/ReducedTherminator2Events/AdamCPUResults/lhyqid3v_LHCPbPb_2760_b%d/", tImpactParams[iIP]);
     tFileLocation = TString::Format("%s%s", tDirectory.Data(), aFileName.Data());
     //--------------------------------
     TH1D* tNum1 = Get1dTHERMHist(tFileLocation, TString::Format("Num%s%s", aCfDescriptor.Data(), cAnalysisBaseTags[kLamKchP]));
