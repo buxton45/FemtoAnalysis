@@ -74,8 +74,9 @@ public:
   TLorentzVector GetFatherFourPosition();
   TLorentzVector GetFatherFourMomentum();
 
-
   void LoadFather(ThermParticle& aFather);
+
+  bool PassKinematicCuts();
 
   //inline-----------------------------
   bool IsPrimordial();

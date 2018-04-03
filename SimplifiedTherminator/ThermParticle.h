@@ -33,6 +33,7 @@ using std::vector;
 
 
 #include "Types.h"
+#include "ChronoTimer.h"
 #include "THGlobal.h"
 #include "ParticleCoor.h"
 
@@ -73,8 +74,9 @@ public:
   TLorentzVector GetFatherFourPosition();
   TLorentzVector GetFatherFourMomentum();
 
-
   void LoadFather(ThermParticle& aFather);
+
+  bool PassKinematicCuts();
 
   //inline-----------------------------
   bool IsPrimordial();

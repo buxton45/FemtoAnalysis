@@ -227,7 +227,7 @@ void ThermEvent::AssertAllLambdaFathersFoundDaughters()
 //  for(unsigned int i=0; i<fLambdaCollection.size(); i++) assert(fLambdaCollection[i].BothDaughtersFound());
 //  for(unsigned int i=0; i<fAntiLambdaCollection.size(); i++) assert(fAntiLambdaCollection[i].BothDaughtersFound());
 
-  for(unsigned int i=0; i<fLambdaCollection.size(); i++)
+  for(unsigned int i=0; i<fLambdaCollection.size();)
   {
     if(!fLambdaCollection[i].BothDaughtersFound()) 
     {
@@ -235,10 +235,11 @@ void ThermEvent::AssertAllLambdaFathersFoundDaughters()
       cout << "\t Deleting element..." << endl << endl;
       fLambdaCollection.erase(fLambdaCollection.begin()+i);
     }
+    else i++;
   }
   for(unsigned int i=0; i<fLambdaCollection.size(); i++) assert(fLambdaCollection[i].BothDaughtersFound());
   //----------------------------------------------------
-  for(unsigned int i=0; i<fAntiLambdaCollection.size(); i++)
+  for(unsigned int i=0; i<fAntiLambdaCollection.size();)
   {
     if(!fAntiLambdaCollection[i].BothDaughtersFound()) 
     {
@@ -246,6 +247,7 @@ void ThermEvent::AssertAllLambdaFathersFoundDaughters()
       cout << "\t Deleting element..." << endl << endl;
       fAntiLambdaCollection.erase(fAntiLambdaCollection.begin()+i);
     }
+    else i++;
   }
   for(unsigned int i=0; i<fAntiLambdaCollection.size(); i++) assert(fAntiLambdaCollection[i].BothDaughtersFound());
 
@@ -350,6 +352,27 @@ void ThermEvent::FindAllFathers()
 
   //No longer need fAllParticlesCollection, so I should clear it and free up memory before it is pushed to ThermEventsCollection
   ClearCollection(fAllParticlesCollection);
+}
+
+//________________________________________________________________________________________________________________
+void ThermEvent::EnforceKinematicCuts()
+{
+  //Note: This is already done for V0 collections in ThermEvent::FindFatherandLoadDaughter, by way of 
+  //      ThermV0Particle::LoadDaughter (which uses ThermV0Particle::PassV0Cuts, ThermV0Particle::PassDaughterCuts)
+
+  //Note:  //TODO? Could impose eta cut at IsParticleOfInterest and IsDaughterOfInterest level
+  //       Only issue is this would also remove any fathers which are outside of the eta range, so this issue would
+  //       need to be resolved first
+  for(unsigned int i=0; i<fKchPCollection.size();)
+  {
+    if(!fKchPCollection[i].PassKinematicCuts()) fKchPCollection.erase(fKchPCollection.begin()+i);
+    else i++;
+  }
+  for(unsigned int i=0; i<fKchMCollection.size();)
+  {
+    if(!fKchMCollection[i].PassKinematicCuts()) fKchMCollection.erase(fKchMCollection.begin()+i);
+    else i++;
+  }
 }
 
 //________________________________________________________________________________________________________________

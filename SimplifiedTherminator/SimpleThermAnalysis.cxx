@@ -227,6 +227,7 @@ vector<ThermEvent> SimpleThermAnalysis::ExtractEventsFromRootFile(TString aFileL
       tThermEvent.MatchDaughtersWithFathers();
       if(fCheckCoECoM) tThermEvent.CheckCoECoM();
       tThermEvent.FindAllFathers();
+      tThermEvent.EnforceKinematicCuts();
       tThermEvent.SetEventID(tEventID);
       tEventsCollection.push_back(tThermEvent);
       tThermEvent.ClearThermEvent();
@@ -243,6 +244,7 @@ vector<ThermEvent> SimpleThermAnalysis::ExtractEventsFromRootFile(TString aFileL
   tThermEvent.MatchDaughtersWithFathers();
   if(fCheckCoECoM) tThermEvent.CheckCoECoM();
   tThermEvent.FindAllFathers();
+  tThermEvent.EnforceKinematicCuts();
   tThermEvent.SetEventID(tEventID);
   tEventsCollection.push_back(tThermEvent);
 

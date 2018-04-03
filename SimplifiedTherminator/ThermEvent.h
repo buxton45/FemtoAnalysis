@@ -53,6 +53,7 @@ public:
 
   void FindFather(ThermParticle &aParticle);
   void FindAllFathers();
+  void EnforceKinematicCuts();
 
   vector<ThermV0Particle> GetV0ParticleCollection(ParticlePDGType aPDGType);
   vector<ThermParticle> GetParticleCollection(ParticlePDGType aPDGType);

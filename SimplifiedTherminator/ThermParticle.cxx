@@ -360,8 +360,18 @@ void ThermParticle::LoadFather(ThermParticle& aFather)
 
 }
 
+//________________________________________________________________________________________________________________
+bool ThermParticle::PassKinematicCuts()
+{
+  if(abs(GetEtaP()) > 0.8) return false;
 
+  if(fPID==kPDGKchP || fPID==kPDGKchM)
+  {
+    if(GetPt()<0.14 || GetPt()>1.5) return false;
+  }
 
+  return true;
+}
 
 
 

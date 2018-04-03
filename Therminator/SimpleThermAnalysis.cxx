@@ -200,7 +200,11 @@ void SimpleThermAnalysis::SaveAll()
 //________________________________________________________________________________________________________________
 vector<ThermEvent> SimpleThermAnalysis::ExtractEventsFromRootFile(TString aFileLocation)
 {
+  vector<ThermEvent> tEventsCollection(0);
+
   TFile *tFile = TFile::Open(aFileLocation);
+  if(!tFile || tFile->IsZombie() || !tFile->IsOpen()) return tEventsCollection;
+
   TTree *tTree = (TTree*)tFile->Get("particles");
 
   ParticleCoor *tParticleEntry = new ParticleCoor();
@@ -210,8 +214,6 @@ vector<ThermEvent> SimpleThermAnalysis::ExtractEventsFromRootFile(TString aFileL
   int tNEvents = 1;
   unsigned int tEventID;
   ThermEvent tThermEvent;
-
-  vector<ThermEvent> tEventsCollection(0);
 
   for(int i=0; i<tParticleBranch->GetEntries(); i++)
   {
@@ -225,6 +227,7 @@ vector<ThermEvent> SimpleThermAnalysis::ExtractEventsFromRootFile(TString aFileL
       tThermEvent.MatchDaughtersWithFathers();
       if(fCheckCoECoM) tThermEvent.CheckCoECoM();
       tThermEvent.FindAllFathers();
+      tThermEvent.EnforceKinematicCuts();
       tThermEvent.SetEventID(tEventID);
       tEventsCollection.push_back(tThermEvent);
       tThermEvent.ClearThermEvent();
@@ -241,6 +244,7 @@ vector<ThermEvent> SimpleThermAnalysis::ExtractEventsFromRootFile(TString aFileL
   tThermEvent.MatchDaughtersWithFathers();
   if(fCheckCoECoM) tThermEvent.CheckCoECoM();
   tThermEvent.FindAllFathers();
+  tThermEvent.EnforceKinematicCuts();
   tThermEvent.SetEventID(tEventID);
   tEventsCollection.push_back(tThermEvent);
 
