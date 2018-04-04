@@ -141,6 +141,22 @@ AnalysisType GetConjAnType(AnalysisType aAnType)
 }
 
 //________________________________________________________________________________________________________________
+TH1* GetQuickData(AnalysisType aAnType, CentralityType aCentType, bool aCombineConjugates, TString aResultsData="20180307")
+{
+  TString tFileName = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Therminator/QuickData/QuickDataCfs_%s.root", aResultsData.Data());
+  TFile tFile(tFileName);
+
+  TString tReturnHistName;
+  if(!aCombineConjugates) tReturnHistName = TString::Format("KStarHeavyCf_%s%s", cAnalysisBaseTags[aAnType], cCentralityTags[aCentType]);
+  else tReturnHistName = TString::Format("KStarHeavyCf_%s%s%s", cAnalysisBaseTags[aAnType], cAnalysisBaseTags[GetConjAnType(aAnType)], cCentralityTags[aCentType]);
+  TH1* tReturnHist = (TH1*)tFile.Get(tReturnHistName);
+  tReturnHist->SetDirectory(0);
+
+  return tReturnHist;
+}
+
+
+//________________________________________________________________________________________________________________
 void Draw1vs2vs3(TPad* aPad, AnalysisType aAnType, TH1D* aCf1, TH1D* aCf2, TH1D* aCf3, TString aDescriptor1, TString aDescriptor2, TString aDescriptor3, TString aOverallDescriptor, bool aFitBgd=true)
 {
   aPad->cd();
@@ -384,6 +400,18 @@ TCanvas* DrawBgdwFit(TString aCfDescriptor, TString aFileNameCfs, AnalysisType a
   PrintFitParams((TPad*)tCanBgdwFit, tBgdFitDraw, 0.035);
 
   //---------------------------------------------------------------
+  if(aCombineImpactParams)
+  {
+    TH1* tData = GetQuickData(aAnType, tCentType, aCombineConjugates);
+    tData->SetMarkerStyle(20);
+    tData->SetMarkerColor(kGreen);
+    tData->SetLineColor(kGreen);
+    tData->Draw("same");
+
+    tCf->Draw("same");
+    tBgdFitDraw->Draw("lsame");
+  }
+
 
   return tCanBgdwFit;
 }
@@ -665,13 +693,13 @@ int main(int argc, char **argv)
   bool bCombineConjugates = true;
   bool bCombineImpactParams = true;
 
-  ThermEventsType tEventsType = kMe;  //kMe, kAdam, kMeAndAdam
+  ThermEventsType tEventsType = kMeAndAdam;  //kMe, kAdam, kMeAndAdam
 
   bool bCompareWithAndWithoutBgd = false;
   bool bDrawBgdwFitOnly = true;
   bool bDrawLamKchPMBgdwFitOnly = false;
   bool bCompareAnalyses = false;
-  bool bCompareToAdam = true;
+  bool bCompareToAdam = false;
 
   bool bSaveFigures = false;
   int tRebin=2;

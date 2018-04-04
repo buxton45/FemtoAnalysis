@@ -833,7 +833,8 @@ int main(int argc, char **argv)
   TString tSaveFileType = "eps";
   TString tSaveDir = "/home/jesse/Analysis/FemtoAnalysis/AnalysisNotes/Comments/Laura/20180117/Figures/";
 
-
+  bool bSaveCfsToRootFile = false;
+  TString tRootFilesSaveDir = "/home/jesse/Analysis/FemtoAnalysis/Therminator/QuickData/";
 //-----------------------------------------------------------------------------
   TString tDirectoryBase_cLamcKch = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_%s/",tResultsDate.Data());
   TString tFileLocationBase_cLamcKch = TString::Format("%sResults_cLamcKch_%s",tDirectoryBase_cLamcKch.Data(),tResultsDate.Data());
@@ -984,6 +985,76 @@ int main(int argc, char **argv)
     }
   }
 
+//-------------------------------------------------------------------------------
+
+  if(bSaveCfsToRootFile)
+  {
+    TString tSaveFileName = TString::Format("%sQuickDataCfs_%s.root", tRootFilesSaveDir.Data(), tResultsDate.Data());
+    TFile *tSaveFile = new TFile(tSaveFileName, "RECREATE");
+    assert(tSaveFile->IsOpen());
+
+    TH1* tCombConjHist;
+    CfHeavy *tCfHeavy1, *tCfHeavy2, *tCombinedCfHeavy;
+    TString tCombConjHistName;
+    //---------------------------------------------
+    for(int i=0; i<tLamK0->GetNAnalyses(); i++)
+    {
+      tLamK0->GetKStarCf(i)->Write();
+
+      if(i%2==1)
+      {
+        tCombConjHistName = TString::Format("KStarHeavyCf_%s%s%s", cAnalysisBaseTags[tLamK0->GetSharedAn()->GetFitPairAnalysis(i-1)->GetAnalysisType()], 
+                                                                   cAnalysisBaseTags[tLamK0->GetSharedAn()->GetFitPairAnalysis(i)->GetAnalysisType()], 
+                                                                   cCentralityTags[tLamK0->GetSharedAn()->GetFitPairAnalysis(i)->GetCentralityType()]);
+        tCfHeavy1 = tLamK0->GetKStarCfHeavy(i-1);
+        tCfHeavy2 = tLamK0->GetKStarCfHeavy(i);
+        
+        tCombinedCfHeavy = CombineTwoCfHeavy(tCombConjHistName, tCfHeavy1, tCfHeavy2);
+        tCombinedCfHeavy->GetHeavyCfClone()->Write();
+      }
+    }
+
+
+    //---------------------------------------------
+    for(int i=0; i<tLamKchP->GetNAnalyses(); i++)
+    {
+      tLamKchP->GetKStarCf(i)->Write();
+
+      if(i%2==1)
+      {
+        tCombConjHistName = TString::Format("KStarHeavyCf_%s%s%s", cAnalysisBaseTags[tLamKchP->GetSharedAn()->GetFitPairAnalysis(i-1)->GetAnalysisType()], 
+                                                                   cAnalysisBaseTags[tLamKchP->GetSharedAn()->GetFitPairAnalysis(i)->GetAnalysisType()], 
+                                                                   cCentralityTags[tLamKchP->GetSharedAn()->GetFitPairAnalysis(i)->GetCentralityType()]);
+        tCfHeavy1 = tLamKchP->GetKStarCfHeavy(i-1);
+        tCfHeavy2 = tLamKchP->GetKStarCfHeavy(i);
+        
+        tCombinedCfHeavy = CombineTwoCfHeavy(tCombConjHistName, tCfHeavy1, tCfHeavy2);
+        tCombinedCfHeavy->GetHeavyCfClone()->Write();
+      }
+    }
+
+
+    //---------------------------------------------
+    for(int i=0; i<tLamKchM->GetNAnalyses(); i++)
+    {
+      tLamKchM->GetKStarCf(i)->Write();
+
+      if(i%2==1)
+      {
+        tCombConjHistName = TString::Format("KStarHeavyCf_%s%s%s", cAnalysisBaseTags[tLamKchM->GetSharedAn()->GetFitPairAnalysis(i-1)->GetAnalysisType()], 
+                                                                   cAnalysisBaseTags[tLamKchM->GetSharedAn()->GetFitPairAnalysis(i)->GetAnalysisType()], 
+                                                                   cCentralityTags[tLamKchM->GetSharedAn()->GetFitPairAnalysis(i)->GetCentralityType()]);
+        tCfHeavy1 = tLamKchM->GetKStarCfHeavy(i-1);
+        tCfHeavy2 = tLamKchM->GetKStarCfHeavy(i);
+        
+        tCombinedCfHeavy = CombineTwoCfHeavy(tCombConjHistName, tCfHeavy1, tCfHeavy2);
+        tCombinedCfHeavy->GetHeavyCfClone()->Write();
+      }
+    }
+
+    //---------------------------------------------
+    tSaveFile->Close();
+  }
 
 
 //-------------------------------------------------------------------------------
