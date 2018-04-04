@@ -562,6 +562,89 @@ TCanvas* CompareAnalyses(TString aCfDescriptor, TString aFileNameCfs, int aImpac
   return tCanCfs;
 }
 
+//________________________________________________________________________________________________________________
+TCanvas* CompareToAdam(TString aCfDescriptor, TString aFileNameCfs, AnalysisType aAnType, int aImpactParam, bool aCombineConjugates, bool aCombineImpactParams, int aRebin, double aMinNorm, double aMaxNorm)
+{
+  CentralityType tCentType=kMB;
+  if(aCombineImpactParams) tCentType = GetCentralityType(aImpactParam);
+  //-------------------------------------------------
+
+  TString tDescriptor1 = "Me";
+  TString tDescriptor2 = "Adam";
+
+  TString tOverallDescriptor = cAnalysisRootTags[aAnType];
+  if(aCombineConjugates) tOverallDescriptor += TString::Format(" & %s", cAnalysisRootTags[GetConjAnType(aAnType)]);
+  if(!aCombineImpactParams) tOverallDescriptor += TString::Format(" (b=%d)", aImpactParam);
+  else tOverallDescriptor += TString::Format(" (%s)", cPrettyCentralityTags[tCentType]);
+
+  int tMarkerStyle1 = 20;
+  int tMarkerStyle2 = 20;
+
+  int tColor1 = kBlack;
+  int tColor2 = kRed+1;
+
+  //--------------------------------------------
+  TH1D *tCf1, *tCf2;
+  if(!aCombineImpactParams)
+  {
+    tCf1 = (TH1D*)GetTHERMCf(aFileNameCfs, aCfDescriptor, aAnType, aImpactParam, aCombineConjugates, false, aRebin, aMinNorm, aMaxNorm, tMarkerStyle1, tColor1);
+    tCf2 = (TH1D*)GetTHERMCf(aFileNameCfs, aCfDescriptor, aAnType, aImpactParam, aCombineConjugates, true, aRebin, aMinNorm, aMaxNorm, tMarkerStyle2, tColor2);
+  }
+  else
+  {
+    tCf1 = (TH1D*)GetCombinedTHERMCfs(aFileNameCfs, aCfDescriptor, aAnType, tCentType, aCombineConjugates, false, aRebin, aMinNorm, aMaxNorm, tMarkerStyle1, tColor1);
+    tCf2 = (TH1D*)GetCombinedTHERMCfs(aFileNameCfs, aCfDescriptor, aAnType, tCentType, aCombineConjugates, true, aRebin, aMinNorm, aMaxNorm, tMarkerStyle2, tColor2);
+  }
+//-------------------------------------------------------------------------------
+  TString tCanCfsName;
+  tCanCfsName = TString::Format("CompareToAdam_%s", cAnalysisRootTags[aAnType]);
+  if(aCombineConjugates) tCanCfsName += TString("wConj");
+
+  if(!aCombineImpactParams) tCanCfsName += TString::Format("_b%d", aImpactParam);
+  else tCanCfsName += TString(cCentralityTags[tCentType]);
+
+  if(aFileNameCfs.Contains("_RandomEPs_NumWeight1")) tCanCfsName += TString("_RandomEPs_NumWeight1");
+  else if(aFileNameCfs.Contains("_RandomEPs")) tCanCfsName += TString("_RandomEPs");
+  else tCanCfsName += TString("");
+
+  tCanCfsName += TString::Format("_%s_", aCfDescriptor.Data());
+
+  TCanvas* tCanCfs = new TCanvas(tCanCfsName, tCanCfsName);
+  tCanCfs->cd();
+  gStyle->SetOptStat(0);
+  gStyle->SetOptTitle(0);
+  //---------------------------------------------------------------
+  tCf1->GetXaxis()->SetTitle("#it{k}* (GeV/#it{c})");
+  tCf1->GetYaxis()->SetTitle("#it{C}(#it{k}*)");
+
+  tCf1->GetXaxis()->SetRangeUser(0.,2.0);
+  tCf1->GetYaxis()->SetRangeUser(0.86, 1.07);
+
+  tCf1->Draw();
+  tCf2->Draw("same");
+  //---------------------------------------------------------------
+
+  TLegend* tLeg = new TLegend(0.60, 0.15, 0.85, 0.40);
+    tLeg->SetFillColor(0);
+    tLeg->SetBorderSize(0);
+    tLeg->SetTextAlign(22);
+
+  tLeg->AddEntry(tCf1, tDescriptor1.Data());
+  tLeg->AddEntry(tCf2, tDescriptor2.Data());
+
+  tLeg->Draw();
+  //---------------------------------------------------------------
+
+  TLine* tLine = new TLine(0, 1, 2, 1);
+  tLine->SetLineColor(14);
+  tLine->Draw();
+
+  PrintInfo((TPad*)tCanCfs, tOverallDescriptor, 0.04);
+
+  return tCanCfs;
+}
+
+
 
 //________________________________________________________________________________________________________________
 //****************************************************************************************************************
@@ -584,10 +667,11 @@ int main(int argc, char **argv)
 
   bool bUseAdamEvents = false;
 
-  bool bCompareWithAndWithoutBgd = true;
+  bool bCompareWithAndWithoutBgd = false;
   bool bDrawBgdwFitOnly = true;
   bool bDrawLamKchPMBgdwFitOnly = false;
   bool bCompareAnalyses = false;
+  bool bCompareToAdam = true;
 
   bool bSaveFigures = false;
   int tRebin=2;
@@ -605,7 +689,7 @@ int main(int argc, char **argv)
   TString tSaveFileBase = tSaveDir + TString::Format("%s/", cAnalysisBaseTags[tAnType]);
 
 
-  TCanvas *tCanCfs, *tCanBgdwFit, *tCanCompareAnalyses, *tCanLamKchPMBgdwFit;
+  TCanvas *tCanCfs, *tCanBgdwFit, *tCanCompareAnalyses, *tCanCompareToAdam, *tCanLamKchPMBgdwFit;
 
   if(bCompareWithAndWithoutBgd)
   {
@@ -624,6 +708,13 @@ int main(int argc, char **argv)
     tCanCompareAnalyses = CompareAnalyses(tCfDescriptor, tSingleFileName, tImpactParam, bCombineConjugates, bCombineImpactParams, bUseAdamEvents, tRebin, tMinNorm, tMaxNorm);
     if(bSaveFigures) tCanCompareAnalyses->SaveAs(TString::Format("%s%s.eps", tSaveFileBase.Data(), tCanCompareAnalyses->GetName()));
   }
+
+  if(bCompareToAdam)
+  {
+    tCanCompareToAdam = CompareToAdam(tCfDescriptor, tSingleFileName, tAnType, tImpactParam, bCombineConjugates, bCombineImpactParams, tRebin, tMinNorm, tMaxNorm);
+    if(bSaveFigures) tCanCompareToAdam->SaveAs(TString::Format("%s%s.eps", tSaveFileBase.Data(), tCanCompareToAdam->GetName()));
+  }
+
 
   if(bDrawLamKchPMBgdwFitOnly)
   {

@@ -17,7 +17,7 @@ int main(int argc, char **argv)
   tFullTimer.Start();
 
 //-----------------------------------------------------------------------------
-  bool bRunFull = false;
+  bool bRunFull = true;
   bool bUseMixedEventsForTransforms = true;
   bool bPrintUniqueParents = false;
 
@@ -30,7 +30,7 @@ int main(int argc, char **argv)
   bool bBuildMixedEventNumerators = false;
   int tNEventsToMix = 5;
 
-  bool bUnitWeightCfNums = false;
+  bool bUnitWeightCfNums = true;
   bool bWeightCfsWithParentInteraction = false;
   bool bOnlyWeightLongDecayParents = false;
 
@@ -41,7 +41,7 @@ int main(int argc, char **argv)
   double tMaxPrimaryDecayLength = -1; 
 //  double tMaxPrimaryDecayLength = 4.01; 
 
-  int tImpactParam = 8;
+  int tImpactParam = 5;
   //-----------------------------------------
   TString tEventsDirectory, tMatricesSaveFileName, tPairFractionSaveName, tSingleParticlesSaveName, tCorrelationFunctionsSaveName;
 
