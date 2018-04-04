@@ -71,7 +71,11 @@ public:
   double GetMinNorm();
   double GetMaxNorm();
 
+  TString GetHeavyCfName();
+  TString GetHeavyCfTitle();
+
   CfLite* GetCfLite(int aPartAnNumber);
+  vector<CfLite*> GetCfLiteCollection();
 
 private:
 
@@ -102,8 +106,11 @@ inline TH1* CfHeavy::GetHeavyCfwErrorsByHand() {return fHeavyCfwErrorsByHand;}
 inline double CfHeavy::GetMinNorm() {return fMinNorm;}
 inline double CfHeavy::GetMaxNorm() {return fMaxNorm;}
 
-inline CfLite* CfHeavy::GetCfLite(int aPartAnNumber) {return fCfLiteCollection[aPartAnNumber];}
+inline TString CfHeavy::GetHeavyCfName() {return fHeavyCfName;}
+inline TString CfHeavy::GetHeavyCfTitle() {return fHeavyCfTitle;}
 
+inline CfLite* CfHeavy::GetCfLite(int aPartAnNumber) {return fCfLiteCollection[aPartAnNumber];}
+inline vector<CfLite*> CfHeavy::GetCfLiteCollection() {return fCfLiteCollection;}
 
 #endif
 

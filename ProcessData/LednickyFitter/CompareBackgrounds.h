@@ -1,6 +1,9 @@
 #include "FitGenerator.h"
 class FitGenerator;
 
+enum ThermEventsType {kMe=0, kAdam=1, kMeAndAdam=2};
+const char* const cThermEventsTypeTags[3] = {"_Me", "_Adam", "_MeAndAdam"};
+
 //________________________________________________________________________________________________________________
 void SetStyleAndColor(TH1* aHist, int aMarkerStyle, int aColor)
 {
@@ -22,8 +25,27 @@ TH1D* Get1dTHERMHist(TString FileName, TString HistName)
   return ReturnHistClone;
 }
 
+//_________________________________________________________________________________________
+CfHeavy* CombineTwoCfHeavy(TString aName, CfHeavy* aCfHeavy1, CfHeavy* aCfHeavy2)
+{
+  vector<CfLite*> tCfLiteVec1 = aCfHeavy1->GetCfLiteCollection();
+  vector<CfLite*> tCfLiteVec2 = aCfHeavy2->GetCfLiteCollection();
+
+  vector<CfLite*> tCfLiteVec(0);
+  for(unsigned int i=0; i<tCfLiteVec1.size(); i++) tCfLiteVec.push_back(tCfLiteVec1[i]);
+  for(unsigned int i=0; i<tCfLiteVec2.size(); i++) tCfLiteVec.push_back(tCfLiteVec2[i]);
+
+  double tMinNorm = aCfHeavy1->GetMinNorm();
+  assert(tMinNorm == aCfHeavy2->GetMinNorm());
+  double tMaxNorm = aCfHeavy1->GetMaxNorm();
+  assert(tMaxNorm == aCfHeavy2->GetMaxNorm());
+
+  CfHeavy* tCfHeavy = new CfHeavy(aName, aName, tCfLiteVec, tMinNorm, tMaxNorm);
+  return tCfHeavy;
+}
+
 //________________________________________________________________________________________________________________
-TH1* GetTHERMCf(TString aFileName, TString aCfDescriptor, AnalysisType aAnType, int aImpactParam=8, bool aCombineConj=true, bool aUseAdamEvents=false, int aRebin=2, double aMinNorm=0.32, double aMaxNorm=0.40, int aMarkerStyle=20, int aColor=1)
+CfHeavy* GetTHERMHeavyCf(TString aFileName, TString aCfDescriptor, AnalysisType aAnType, int aImpactParam=8, bool aCombineConj=true, bool aUseAdamEvents=false, int aRebin=2, double aMinNorm=0.32, double aMaxNorm=0.40)
 {
   AnalysisType tConjAnType;
   if     (aAnType==kLamK0)    {tConjAnType=kALamK0;}
@@ -54,31 +76,58 @@ TH1* GetTHERMCf(TString aFileName, TString aCfDescriptor, AnalysisType aAnType, 
                                 tNum2, tDen2, aMinNorm, aMaxNorm);
   tCfLite2->Rebin(aRebin);
 
-  TH1* tReturnHist;
-  if(!aCombineConj) tReturnHist = tCfLite1->Cf();
+  CfHeavy* tCfHeavy;
+  if(!aCombineConj)
+  {
+    vector<CfLite*> tCfLiteVec {tCfLite1};
+    tCfHeavy = new CfHeavy(TString::Format("CfHeavy_%s", cAnalysisBaseTags[aAnType]), 
+                           TString::Format("CfHeavy_%s", cAnalysisBaseTags[aAnType]), 
+                           tCfLiteVec, aMinNorm, aMaxNorm);
+  }
   else
   {
     vector<CfLite*> tCfLiteVec {tCfLite1, tCfLite2};
-    CfHeavy* tCfHeavy = new CfHeavy(TString::Format("CfHeavy_%s_%s", cAnalysisBaseTags[aAnType], cAnalysisBaseTags[tConjAnType]), 
-                                    TString::Format("CfHeavy_%s_%s", cAnalysisBaseTags[aAnType], cAnalysisBaseTags[tConjAnType]), 
-                                    tCfLiteVec, aMinNorm, aMaxNorm);
-    tReturnHist = tCfHeavy->GetHeavyCf();
+    tCfHeavy = new CfHeavy(TString::Format("CfHeavy_%s_%s", cAnalysisBaseTags[aAnType], cAnalysisBaseTags[tConjAnType]), 
+                           TString::Format("CfHeavy_%s_%s", cAnalysisBaseTags[aAnType], cAnalysisBaseTags[tConjAnType]), 
+                           tCfLiteVec, aMinNorm, aMaxNorm);
   }
+
+  return tCfHeavy;
+}
+
+//________________________________________________________________________________________________________________
+TH1* GetTHERMCf(TString aFileName, TString aCfDescriptor, AnalysisType aAnType, int aImpactParam=8, bool aCombineConj=true, ThermEventsType aEventsType=kMe, int aRebin=2, double aMinNorm=0.32, double aMaxNorm=0.40, int aMarkerStyle=20, int aColor=1)
+{
+  CfHeavy* tCfHeavy;
+  if(aEventsType==kMe)        tCfHeavy = GetTHERMHeavyCf(aFileName, aCfDescriptor, aAnType, aImpactParam, aCombineConj, false, aRebin, aMinNorm, aMaxNorm);
+  else if(aEventsType==kAdam) tCfHeavy = GetTHERMHeavyCf(aFileName, aCfDescriptor, aAnType, aImpactParam, aCombineConj, true, aRebin, aMinNorm, aMaxNorm);
+  else
+  {
+    CfHeavy* tCfHeavy_Me   = GetTHERMHeavyCf(aFileName, aCfDescriptor, aAnType, aImpactParam, aCombineConj, false, aRebin, aMinNorm, aMaxNorm);
+    CfHeavy* tCfHeavy_Adam = GetTHERMHeavyCf(aFileName, aCfDescriptor, aAnType, aImpactParam, aCombineConj, true, aRebin, aMinNorm, aMaxNorm);
+
+    TString tName = tCfHeavy_Me->GetHeavyCfName();
+    tName += TString(cThermEventsTypeTags[aEventsType]);
+
+    tCfHeavy = CombineTwoCfHeavy(tName, tCfHeavy_Me, tCfHeavy_Adam);
+  }
+
+  TH1* tReturnHist = tCfHeavy->GetHeavyCf();
 
   SetStyleAndColor(tReturnHist, aMarkerStyle, aColor);
   return tReturnHist;
 }
 
 //________________________________________________________________________________________________________________
-TH1* GetTHERMCf(AnalysisType aAnType, int aImpactParam=8, bool aCombineConj=true, bool aUseAdamEvents=false, int aRebin=2, double aMinNorm=0.32, double aMaxNorm=0.40, int aMarkerStyle=20, int aColor=1)
+TH1* GetTHERMCf(AnalysisType aAnType, int aImpactParam=8, bool aCombineConj=true, ThermEventsType aEventsType=kMe, int aRebin=2, double aMinNorm=0.32, double aMaxNorm=0.40, int aMarkerStyle=20, int aColor=1)
 {
   TString tFileName = "CorrelationFunctions_RandomEPs_NumWeight1.root";
   TString tCfDescriptor = "Full";
-  return GetTHERMCf(tFileName, tCfDescriptor, aAnType, aImpactParam, aCombineConj, aUseAdamEvents, aRebin, aMinNorm, aMaxNorm, aMarkerStyle, aColor);
+  return GetTHERMCf(tFileName, tCfDescriptor, aAnType, aImpactParam, aCombineConj, aEventsType, aRebin, aMinNorm, aMaxNorm, aMarkerStyle, aColor);
 }
 
 //________________________________________________________________________________________________________________
-TH1* GetCombinedTHERMCfs(TString aFileName, TString aCfDescriptor, AnalysisType aAnType, CentralityType aCentType, bool aCombineConj=true, bool aUseAdamEvents=false, int aRebin=2, double aMinNorm=0.32, double aMaxNorm=0.40, int aMarkerStyle=20, int aColor=1)
+CfHeavy* GetCombinedTHERMCfsHeavy(TString aFileName, TString aCfDescriptor, AnalysisType aAnType, CentralityType aCentType, bool aCombineConj=true, bool aUseAdamEvents=false, int aRebin=2, double aMinNorm=0.32, double aMaxNorm=0.40)
 {
   AnalysisType tConjAnType;
   if     (aAnType==kLamK0)    {tConjAnType=kALamK0;}
@@ -128,22 +177,43 @@ TH1* GetCombinedTHERMCfs(TString aFileName, TString aCfDescriptor, AnalysisType 
                                   TString::Format("CfHeavy_%s_%s_%s", cAnalysisBaseTags[aAnType], cAnalysisBaseTags[tConjAnType], cCentralityTags[aCentType]), 
                                   tCfLiteVec, aMinNorm, aMaxNorm);
 
+  return tCfHeavy;
+}
+
+
+//________________________________________________________________________________________________________________
+TH1* GetCombinedTHERMCfs(TString aFileName, TString aCfDescriptor, AnalysisType aAnType, CentralityType aCentType, bool aCombineConj=true, ThermEventsType aEventsType=kMe, int aRebin=2, double aMinNorm=0.32, double aMaxNorm=0.40, int aMarkerStyle=20, int aColor=1)
+{
+  CfHeavy* tCfHeavy;
+  if(aEventsType==kMe)        tCfHeavy = GetCombinedTHERMCfsHeavy(aFileName, aCfDescriptor, aAnType, aCentType, aCombineConj, false, aRebin, aMinNorm, aMaxNorm);
+  else if(aEventsType==kAdam) tCfHeavy = GetCombinedTHERMCfsHeavy(aFileName, aCfDescriptor, aAnType, aCentType, aCombineConj, true, aRebin, aMinNorm, aMaxNorm);
+  else
+  {
+    CfHeavy* tCfHeavy_Me   = GetCombinedTHERMCfsHeavy(aFileName, aCfDescriptor, aAnType, aCentType, aCombineConj, false, aRebin, aMinNorm, aMaxNorm);
+    CfHeavy* tCfHeavy_Adam = GetCombinedTHERMCfsHeavy(aFileName, aCfDescriptor, aAnType, aCentType, aCombineConj, true, aRebin, aMinNorm, aMaxNorm);
+
+    TString tName = tCfHeavy_Me->GetHeavyCfName();
+    tName += TString(cThermEventsTypeTags[aEventsType]);
+
+    tCfHeavy = CombineTwoCfHeavy(tName, tCfHeavy_Me, tCfHeavy_Adam);
+  }
+
   TH1* tReturnHist = tCfHeavy->GetHeavyCf();
   SetStyleAndColor(tReturnHist, aMarkerStyle, aColor);
   return tReturnHist;
 }
 
 //________________________________________________________________________________________________________________
-TH1* GetCombinedTHERMCfs(AnalysisType aAnType, CentralityType aCentType, bool aCombineConj=true, bool aUseAdamEvents=false, int aRebin=2, double aMinNorm=0.32, double aMaxNorm=0.40, int aMarkerStyle=20, int aColor=1)
+TH1* GetCombinedTHERMCfs(AnalysisType aAnType, CentralityType aCentType, bool aCombineConj=true, ThermEventsType aEventsType=kMe, int aRebin=2, double aMinNorm=0.32, double aMaxNorm=0.40, int aMarkerStyle=20, int aColor=1)
 {
   TString tFileName = "CorrelationFunctions_RandomEPs_NumWeight1.root";
   TString tCfDescriptor = "Full";
-  return GetCombinedTHERMCfs(tFileName, tCfDescriptor, aAnType, aCentType, aCombineConj, aUseAdamEvents, aRebin, aMinNorm, aMaxNorm, aMarkerStyle, aColor);
+  return GetCombinedTHERMCfs(tFileName, tCfDescriptor, aAnType, aCentType, aCombineConj, aEventsType, aRebin, aMinNorm, aMaxNorm, aMarkerStyle, aColor);
 }
 
 
 //________________________________________________________________________________________________________________
-TH1* GetLamKchPMCombinedTHERMCfs(TString aFileName, TString aCfDescriptor, CentralityType aCentType, bool aUseAdamEvents=false, int aRebin=2, double aMinNorm=0.32, double aMaxNorm=0.40, int aMarkerStyle=20, int aColor=1)
+CfHeavy* GetLamKchPMCombinedTHERMCfsHeavy(TString aFileName, TString aCfDescriptor, CentralityType aCentType, bool aUseAdamEvents=false, int aRebin=2, double aMinNorm=0.32, double aMaxNorm=0.40)
 {
   vector<int> tImpactParams;
   if     (aCentType == k0010) tImpactParams = vector<int>{3};
@@ -195,8 +265,31 @@ TH1* GetLamKchPMCombinedTHERMCfs(TString aFileName, TString aCfDescriptor, Centr
   CfHeavy* tCfHeavy = new CfHeavy(TString::Format("CfHeavy_LamKchPM_%s", cCentralityTags[aCentType]), 
                                   TString::Format("CfHeavy_LamKchPM_%s", cCentralityTags[aCentType]), 
                                   tCfLiteVec, aMinNorm, aMaxNorm);
+  return tCfHeavy;
+}
+
+
+//________________________________________________________________________________________________________________
+TH1* GetLamKchPMCombinedTHERMCfs(TString aFileName, TString aCfDescriptor, CentralityType aCentType, ThermEventsType aEventsType=kMe, int aRebin=2, double aMinNorm=0.32, double aMaxNorm=0.40, int aMarkerStyle=20, int aColor=1)
+{
+  CfHeavy* tCfHeavy;
+  if(aEventsType==kMe)        tCfHeavy = GetLamKchPMCombinedTHERMCfsHeavy(aFileName, aCfDescriptor, aCentType, false, aRebin, aMinNorm, aMaxNorm);
+  else if(aEventsType==kAdam) tCfHeavy = GetLamKchPMCombinedTHERMCfsHeavy(aFileName, aCfDescriptor, aCentType, true, aRebin, aMinNorm, aMaxNorm);
+  else
+  {
+    CfHeavy* tCfHeavy_Me   = GetLamKchPMCombinedTHERMCfsHeavy(aFileName, aCfDescriptor, aCentType, false, aRebin, aMinNorm, aMaxNorm);
+    CfHeavy* tCfHeavy_Adam = GetLamKchPMCombinedTHERMCfsHeavy(aFileName, aCfDescriptor, aCentType, true, aRebin, aMinNorm, aMaxNorm);
+
+    TString tName = tCfHeavy_Me->GetHeavyCfName();
+    tName += TString(cThermEventsTypeTags[aEventsType]);
+
+    tCfHeavy = CombineTwoCfHeavy(tName, tCfHeavy_Me, tCfHeavy_Adam);
+  }
 
   TH1* tReturnHist = tCfHeavy->GetHeavyCf();
   SetStyleAndColor(tReturnHist, aMarkerStyle, aColor);
   return tReturnHist;
 }
+
+
+

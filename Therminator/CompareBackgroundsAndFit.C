@@ -230,7 +230,7 @@ void Draw1vs2vs3(TPad* aPad, AnalysisType aAnType, TH1D* aCf1, TH1D* aCf2, TH1D*
 
 
 //________________________________________________________________________________________________________________
-TCanvas* CompareCfWithAndWithoutBgd(TString aCfDescriptor, AnalysisType aAnType, int aImpactParam, bool aCombineConjugates, bool aCombineImpactParams, bool aUseAdamEvents, int aRebin, double aMinNorm, double aMaxNorm)
+TCanvas* CompareCfWithAndWithoutBgd(TString aCfDescriptor, AnalysisType aAnType, int aImpactParam, bool aCombineConjugates, bool aCombineImpactParams, ThermEventsType aEventsType, int aRebin, double aMinNorm, double aMaxNorm)
 {
   if(aAnType==kLamKchM || aAnType==kALamKchP) gRejectOmega=true;
   else gRejectOmega=false;
@@ -265,15 +265,15 @@ TCanvas* CompareCfWithAndWithoutBgd(TString aCfDescriptor, AnalysisType aAnType,
   TH1D *tCf1, *tCf2, *tCf3;
   if(!aCombineImpactParams)
   {
-    tCf1 = (TH1D*)GetTHERMCf(tFileNameCfs1, aCfDescriptor, aAnType, aImpactParam, aCombineConjugates, aUseAdamEvents, aRebin, aMinNorm, aMaxNorm, tMarkerStyle1, tColor1);
-    tCf2 = (TH1D*)GetTHERMCf(tFileNameCfs2, aCfDescriptor, aAnType, aImpactParam, aCombineConjugates, aUseAdamEvents, aRebin, aMinNorm, aMaxNorm, tMarkerStyle2, tColor2);
-    tCf3 = (TH1D*)GetTHERMCf(tFileNameCfs3, aCfDescriptor, aAnType, aImpactParam, aCombineConjugates, aUseAdamEvents, aRebin, aMinNorm, aMaxNorm, tMarkerStyle3, tColor3);
+    tCf1 = (TH1D*)GetTHERMCf(tFileNameCfs1, aCfDescriptor, aAnType, aImpactParam, aCombineConjugates, aEventsType, aRebin, aMinNorm, aMaxNorm, tMarkerStyle1, tColor1);
+    tCf2 = (TH1D*)GetTHERMCf(tFileNameCfs2, aCfDescriptor, aAnType, aImpactParam, aCombineConjugates, aEventsType, aRebin, aMinNorm, aMaxNorm, tMarkerStyle2, tColor2);
+    tCf3 = (TH1D*)GetTHERMCf(tFileNameCfs3, aCfDescriptor, aAnType, aImpactParam, aCombineConjugates, aEventsType, aRebin, aMinNorm, aMaxNorm, tMarkerStyle3, tColor3);
   }
   else
   {
-    tCf1 = (TH1D*)GetCombinedTHERMCfs(tFileNameCfs1, aCfDescriptor, aAnType, tCentType, aCombineConjugates, aUseAdamEvents, aRebin, aMinNorm, aMaxNorm, tMarkerStyle1, tColor1);
-    tCf2 = (TH1D*)GetCombinedTHERMCfs(tFileNameCfs2, aCfDescriptor, aAnType, tCentType, aCombineConjugates, aUseAdamEvents, aRebin, aMinNorm, aMaxNorm, tMarkerStyle2, tColor2);
-    tCf3 = (TH1D*)GetCombinedTHERMCfs(tFileNameCfs3, aCfDescriptor, aAnType, tCentType, aCombineConjugates, aUseAdamEvents, aRebin, aMinNorm, aMaxNorm, tMarkerStyle3, tColor3);
+    tCf1 = (TH1D*)GetCombinedTHERMCfs(tFileNameCfs1, aCfDescriptor, aAnType, tCentType, aCombineConjugates, aEventsType, aRebin, aMinNorm, aMaxNorm, tMarkerStyle1, tColor1);
+    tCf2 = (TH1D*)GetCombinedTHERMCfs(tFileNameCfs2, aCfDescriptor, aAnType, tCentType, aCombineConjugates, aEventsType, aRebin, aMinNorm, aMaxNorm, tMarkerStyle2, tColor2);
+    tCf3 = (TH1D*)GetCombinedTHERMCfs(tFileNameCfs3, aCfDescriptor, aAnType, tCentType, aCombineConjugates, aEventsType, aRebin, aMinNorm, aMaxNorm, tMarkerStyle3, tColor3);
   }
 //-------------------------------------------------------------------------------
   TString tCanCfsName;
@@ -293,7 +293,7 @@ TCanvas* CompareCfWithAndWithoutBgd(TString aCfDescriptor, AnalysisType aAnType,
 
 
 //________________________________________________________________________________________________________________
-TCanvas* DrawBgdwFit(TString aCfDescriptor, TString aFileNameCfs, AnalysisType aAnType, int aImpactParam, bool aCombineConjugates, bool aCombineImpactParams, bool aUseAdamEvents, int aRebin, double aMinNorm, double aMaxNorm)
+TCanvas* DrawBgdwFit(TString aCfDescriptor, TString aFileNameCfs, AnalysisType aAnType, int aImpactParam, bool aCombineConjugates, bool aCombineImpactParams, ThermEventsType aEventsType, int aRebin, double aMinNorm, double aMaxNorm)
 {
   if(aAnType==kLamKchM || aAnType==kALamKchP) gRejectOmega=true;
   else gRejectOmega=false;
@@ -316,8 +316,8 @@ TCanvas* DrawBgdwFit(TString aCfDescriptor, TString aFileNameCfs, AnalysisType a
 
   //--------------------------------------------
   TH1D *tCf;
-  if(!aCombineImpactParams) tCf = (TH1D*)GetTHERMCf(aFileNameCfs, aCfDescriptor, aAnType, aImpactParam, aCombineConjugates, aUseAdamEvents, aRebin, aMinNorm, aMaxNorm, tMarkerStyle, tColor);
-  else tCf = (TH1D*)GetCombinedTHERMCfs(aFileNameCfs, aCfDescriptor, aAnType, tCentType, aCombineConjugates, aUseAdamEvents, aRebin, aMinNorm, aMaxNorm, tMarkerStyle, tColor);
+  if(!aCombineImpactParams) tCf = (TH1D*)GetTHERMCf(aFileNameCfs, aCfDescriptor, aAnType, aImpactParam, aCombineConjugates, aEventsType, aRebin, aMinNorm, aMaxNorm, tMarkerStyle, tColor);
+  else tCf = (TH1D*)GetCombinedTHERMCfs(aFileNameCfs, aCfDescriptor, aAnType, tCentType, aCombineConjugates, aEventsType, aRebin, aMinNorm, aMaxNorm, tMarkerStyle, tColor);
 //-------------------------------------------------------------------------------
   TString tCanBgdwFitName = "BgdwFitOnly";
 
@@ -389,7 +389,7 @@ TCanvas* DrawBgdwFit(TString aCfDescriptor, TString aFileNameCfs, AnalysisType a
 }
 
 //________________________________________________________________________________________________________________
-TCanvas* DrawLamKchPMBgdwFit(TString aCfDescriptor, TString aFileNameCfs, int aImpactParam, bool aUseAdamEvents, int aRebin, double aMinNorm, double aMaxNorm)
+TCanvas* DrawLamKchPMBgdwFit(TString aCfDescriptor, TString aFileNameCfs, int aImpactParam, ThermEventsType aEventsType, int aRebin, double aMinNorm, double aMaxNorm)
 {
   gRejectOmega=true;
   //-------------------------------------------------
@@ -403,7 +403,7 @@ TCanvas* DrawLamKchPMBgdwFit(TString aCfDescriptor, TString aFileNameCfs, int aI
   int tColor = 4;
 
   //--------------------------------------------
-  TH1D *tCf = (TH1D*)GetLamKchPMCombinedTHERMCfs(aFileNameCfs, aCfDescriptor, tCentType, aUseAdamEvents, aRebin, aMinNorm, aMaxNorm, tMarkerStyle, tColor);
+  TH1D *tCf = (TH1D*)GetLamKchPMCombinedTHERMCfs(aFileNameCfs, aCfDescriptor, tCentType, aEventsType, aRebin, aMinNorm, aMaxNorm, tMarkerStyle, tColor);
 //-------------------------------------------------------------------------------
   TString tCanBgdwFitName = "LamKchPMBgdwFitOnly";
 
@@ -468,7 +468,7 @@ TCanvas* DrawLamKchPMBgdwFit(TString aCfDescriptor, TString aFileNameCfs, int aI
 }
 
 //________________________________________________________________________________________________________________
-TCanvas* CompareAnalyses(TString aCfDescriptor, TString aFileNameCfs, int aImpactParam, bool aCombineConjugates, bool aCombineImpactParams, bool aUseAdamEvents, int aRebin, double aMinNorm, double aMaxNorm)
+TCanvas* CompareAnalyses(TString aCfDescriptor, TString aFileNameCfs, int aImpactParam, bool aCombineConjugates, bool aCombineImpactParams, ThermEventsType aEventsType, int aRebin, double aMinNorm, double aMaxNorm)
 {
   CentralityType tCentType=kMB;
   if(aCombineImpactParams) tCentType = GetCentralityType(aImpactParam);
@@ -501,15 +501,15 @@ TCanvas* CompareAnalyses(TString aCfDescriptor, TString aFileNameCfs, int aImpac
   TH1D *tCf1, *tCf2, *tCf3;
   if(!aCombineImpactParams)
   {
-    tCf1 = (TH1D*)GetTHERMCf(aFileNameCfs, aCfDescriptor, kLamK0, aImpactParam, aCombineConjugates, aUseAdamEvents, aRebin, aMinNorm, aMaxNorm, tMarkerStyle1, tColor1);
-    tCf2 = (TH1D*)GetTHERMCf(aFileNameCfs, aCfDescriptor, kLamKchP, aImpactParam, aCombineConjugates, aUseAdamEvents, aRebin, aMinNorm, aMaxNorm, tMarkerStyle2, tColor2);
-    tCf3 = (TH1D*)GetTHERMCf(aFileNameCfs, aCfDescriptor, kLamKchM, aImpactParam, aCombineConjugates, aUseAdamEvents, aRebin, aMinNorm, aMaxNorm, tMarkerStyle3, tColor3);
+    tCf1 = (TH1D*)GetTHERMCf(aFileNameCfs, aCfDescriptor, kLamK0, aImpactParam, aCombineConjugates, aEventsType, aRebin, aMinNorm, aMaxNorm, tMarkerStyle1, tColor1);
+    tCf2 = (TH1D*)GetTHERMCf(aFileNameCfs, aCfDescriptor, kLamKchP, aImpactParam, aCombineConjugates, aEventsType, aRebin, aMinNorm, aMaxNorm, tMarkerStyle2, tColor2);
+    tCf3 = (TH1D*)GetTHERMCf(aFileNameCfs, aCfDescriptor, kLamKchM, aImpactParam, aCombineConjugates, aEventsType, aRebin, aMinNorm, aMaxNorm, tMarkerStyle3, tColor3);
   }
   else
   {
-    tCf1 = (TH1D*)GetCombinedTHERMCfs(aFileNameCfs, aCfDescriptor, kLamK0, tCentType, aCombineConjugates, aUseAdamEvents, aRebin, aMinNorm, aMaxNorm, tMarkerStyle1, tColor1);
-    tCf2 = (TH1D*)GetCombinedTHERMCfs(aFileNameCfs, aCfDescriptor, kLamKchP, tCentType, aCombineConjugates, aUseAdamEvents, aRebin, aMinNorm, aMaxNorm, tMarkerStyle2, tColor2);
-    tCf3 = (TH1D*)GetCombinedTHERMCfs(aFileNameCfs, aCfDescriptor, kLamKchM, tCentType, aCombineConjugates, aUseAdamEvents, aRebin, aMinNorm, aMaxNorm, tMarkerStyle3, tColor3);
+    tCf1 = (TH1D*)GetCombinedTHERMCfs(aFileNameCfs, aCfDescriptor, kLamK0, tCentType, aCombineConjugates, aEventsType, aRebin, aMinNorm, aMaxNorm, tMarkerStyle1, tColor1);
+    tCf2 = (TH1D*)GetCombinedTHERMCfs(aFileNameCfs, aCfDescriptor, kLamKchP, tCentType, aCombineConjugates, aEventsType, aRebin, aMinNorm, aMaxNorm, tMarkerStyle2, tColor2);
+    tCf3 = (TH1D*)GetCombinedTHERMCfs(aFileNameCfs, aCfDescriptor, kLamKchM, tCentType, aCombineConjugates, aEventsType, aRebin, aMinNorm, aMaxNorm, tMarkerStyle3, tColor3);
   }
 //-------------------------------------------------------------------------------
   TString tCanCfsName;
@@ -587,17 +587,17 @@ TCanvas* CompareToAdam(TString aCfDescriptor, TString aFileNameCfs, AnalysisType
   TH1D *tCf1, *tCf2;
   if(!aCombineImpactParams)
   {
-    tCf1 = (TH1D*)GetTHERMCf(aFileNameCfs, aCfDescriptor, aAnType, aImpactParam, aCombineConjugates, false, aRebin, aMinNorm, aMaxNorm, tMarkerStyle1, tColor1);
-    tCf2 = (TH1D*)GetTHERMCf(aFileNameCfs, aCfDescriptor, aAnType, aImpactParam, aCombineConjugates, true, aRebin, aMinNorm, aMaxNorm, tMarkerStyle2, tColor2);
+    tCf1 = (TH1D*)GetTHERMCf(aFileNameCfs, aCfDescriptor, aAnType, aImpactParam, aCombineConjugates, kMe, aRebin, aMinNorm, aMaxNorm, tMarkerStyle1, tColor1);
+    tCf2 = (TH1D*)GetTHERMCf(aFileNameCfs, aCfDescriptor, aAnType, aImpactParam, aCombineConjugates, kAdam, aRebin, aMinNorm, aMaxNorm, tMarkerStyle2, tColor2);
   }
   else
   {
-    tCf1 = (TH1D*)GetCombinedTHERMCfs(aFileNameCfs, aCfDescriptor, aAnType, tCentType, aCombineConjugates, false, aRebin, aMinNorm, aMaxNorm, tMarkerStyle1, tColor1);
-    tCf2 = (TH1D*)GetCombinedTHERMCfs(aFileNameCfs, aCfDescriptor, aAnType, tCentType, aCombineConjugates, true, aRebin, aMinNorm, aMaxNorm, tMarkerStyle2, tColor2);
+    tCf1 = (TH1D*)GetCombinedTHERMCfs(aFileNameCfs, aCfDescriptor, aAnType, tCentType, aCombineConjugates, kMe, aRebin, aMinNorm, aMaxNorm, tMarkerStyle1, tColor1);
+    tCf2 = (TH1D*)GetCombinedTHERMCfs(aFileNameCfs, aCfDescriptor, aAnType, tCentType, aCombineConjugates, kAdam, aRebin, aMinNorm, aMaxNorm, tMarkerStyle2, tColor2);
   }
 //-------------------------------------------------------------------------------
   TString tCanCfsName;
-  tCanCfsName = TString::Format("CompareToAdam_%s", cAnalysisRootTags[aAnType]);
+  tCanCfsName = TString::Format("CompareToAdam_%s", cAnalysisBaseTags[aAnType]);
   if(aCombineConjugates) tCanCfsName += TString("wConj");
 
   if(!aCombineImpactParams) tCanCfsName += TString::Format("_b%d", aImpactParam);
@@ -665,7 +665,7 @@ int main(int argc, char **argv)
   bool bCombineConjugates = true;
   bool bCombineImpactParams = true;
 
-  bool bUseAdamEvents = false;
+  ThermEventsType tEventsType = kMe;  //kMe, kAdam, kMeAndAdam
 
   bool bCompareWithAndWithoutBgd = false;
   bool bDrawBgdwFitOnly = true;
@@ -678,7 +678,7 @@ int main(int argc, char **argv)
   double tMinNorm = 0.32;
   double tMaxNorm = 0.40;
 
-  int tImpactParam = 8;
+  int tImpactParam = 3;
 
   TString tCfDescriptor = "Full";
 //  TString tCfDescriptor = "PrimaryOnly";
@@ -693,19 +693,19 @@ int main(int argc, char **argv)
 
   if(bCompareWithAndWithoutBgd)
   {
-    tCanCfs = CompareCfWithAndWithoutBgd(tCfDescriptor, tAnType, tImpactParam, bCombineConjugates, bCombineImpactParams, bUseAdamEvents, tRebin, tMinNorm, tMaxNorm);
+    tCanCfs = CompareCfWithAndWithoutBgd(tCfDescriptor, tAnType, tImpactParam, bCombineConjugates, bCombineImpactParams, tEventsType, tRebin, tMinNorm, tMaxNorm);
     if(bSaveFigures) tCanCfs->SaveAs(TString::Format("%s%s.eps", tSaveFileBase.Data(), tCanCfs->GetName()));
   }
 
   if(bDrawBgdwFitOnly)
   {
-    tCanBgdwFit = DrawBgdwFit(tCfDescriptor, tSingleFileName, tAnType, tImpactParam, bCombineConjugates, bCombineImpactParams, bUseAdamEvents, tRebin, tMinNorm, tMaxNorm);
+    tCanBgdwFit = DrawBgdwFit(tCfDescriptor, tSingleFileName, tAnType, tImpactParam, bCombineConjugates, bCombineImpactParams, tEventsType, tRebin, tMinNorm, tMaxNorm);
     if(bSaveFigures) tCanBgdwFit->SaveAs(TString::Format("%s%s.eps", tSaveFileBase.Data(), tCanBgdwFit->GetName()));
   }
 
   if(bCompareAnalyses)
   {
-    tCanCompareAnalyses = CompareAnalyses(tCfDescriptor, tSingleFileName, tImpactParam, bCombineConjugates, bCombineImpactParams, bUseAdamEvents, tRebin, tMinNorm, tMaxNorm);
+    tCanCompareAnalyses = CompareAnalyses(tCfDescriptor, tSingleFileName, tImpactParam, bCombineConjugates, bCombineImpactParams, tEventsType, tRebin, tMinNorm, tMaxNorm);
     if(bSaveFigures) tCanCompareAnalyses->SaveAs(TString::Format("%s%s.eps", tSaveFileBase.Data(), tCanCompareAnalyses->GetName()));
   }
 
@@ -718,7 +718,7 @@ int main(int argc, char **argv)
 
   if(bDrawLamKchPMBgdwFitOnly)
   {
-    tCanLamKchPMBgdwFit = DrawLamKchPMBgdwFit(tCfDescriptor, tSingleFileName, tImpactParam, bUseAdamEvents, tRebin, tMinNorm, tMaxNorm);
+    tCanLamKchPMBgdwFit = DrawLamKchPMBgdwFit(tCfDescriptor, tSingleFileName, tImpactParam, tEventsType, tRebin, tMinNorm, tMaxNorm);
     if(bSaveFigures) tCanLamKchPMBgdwFit->SaveAs(TString::Format("%s%s.eps", tSaveFileBase.Data(), tCanLamKchPMBgdwFit->GetName()));
   }
 
