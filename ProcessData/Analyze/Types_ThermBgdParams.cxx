@@ -9,37 +9,37 @@
 
 
 
-const double  cLamK0_ThermBgdParamValues_0010[7] = {1.00530031, -0.01452789,  0.00278913, -0.01805203,  0.02653437, -0.01179845,  0.00169353};
-const double  cLamK0_ThermBgdParamValues_1030[7] = {1.00022827,  0.05843885, -0.23789186,  0.25472520, -0.11899432,  0.02614068, -0.00218247};
-const double  cLamK0_ThermBgdParamValues_3050[7] = {0.98400987,  0.24885546, -0.86208158,  1.01453018, -0.55721039,  0.14853543, -0.01544907};
+const double  cLamK0_ThermBgdParamValues_0010[7] = {1.00685371, -0.02283374,  0.01796114, -0.02615002,  0.02491367, -0.00953017,  0.00126252};
+const double  cLamK0_ThermBgdParamValues_1030[7] = {0.99948146,  0.06618974, -0.26299477,  0.28401306, -0.13496627,  0.03024689, -0.00258031};
+const double  cLamK0_ThermBgdParamValues_3050[7] = {0.99072158,  0.18640644, -0.68128008,  0.79389433, -0.42581996,  0.11052764, -0.01116572};
 
 const double*  cLamK0_ThermBgdParamValues[3] = {cLamK0_ThermBgdParamValues_0010, cLamK0_ThermBgdParamValues_1030, cLamK0_ThermBgdParamValues_3050};
 const double*  cALamK0_ThermBgdParamValues[3] = {cLamK0_ThermBgdParamValues_0010, cLamK0_ThermBgdParamValues_1030, cLamK0_ThermBgdParamValues_3050};
 
   //-----------------------------------------------------------
 //----- When LamKchP and ALamKchM only fit together
-const double  cLamKchP_ThermBgdParamValues_0010[7] = {1.00134582,  0.00584625, -0.03979721,  0.04717569, -0.02471905,  0.00652870, -0.00070812};
-const double  cLamKchP_ThermBgdParamValues_1030[7] = {1.00525959,  0.00863245, -0.10047383,  0.13040648, -0.07248078,  0.01970768, -0.00212067};
-const double  cLamKchP_ThermBgdParamValues_3050[7] = {1.01560715, -0.01599201, -0.12304742,  0.17498130, -0.09290104,  0.02368836, -0.00242570};
+const double  cLamKchP_ThermBgdParamValues_0010[7] = {1.00201685,  0.00213347, -0.02511291,  0.01530264,  0.00463876, -0.00448999,  0.00072070};
+const double  cLamKchP_ThermBgdParamValues_1030[7] = {1.00290306,  0.03691869, -0.18444741,  0.20665661, -0.09153570,  0.01705584, -0.00093664};
+const double  cLamKchP_ThermBgdParamValues_3050[7] = {1.00945247,  0.04105291, -0.28787474,  0.33678902, -0.14843588,  0.02709794, -0.00142652};
 /*
 //----- When all (A)LamKchPM fit together
-const double  cLamKchP_ThermBgdParamValues_0010[7] = {1.00256972,  0.00019213, -0.03325485,  0.04509279, -0.02563115,  0.00720430, -0.00081415};
-const double  cLamKchP_ThermBgdParamValues_1030[7] = {1.00632110,  0.00154589, -0.08313435,  0.10891484, -0.05844228,  0.01518648, -0.00156089};
-const double  cLamKchP_ThermBgdParamValues_3050[7] = {1.01783697, -0.03269580, -0.08009869,  0.11909762, -0.05525593,  0.01119210, -0.00081785};
+const double  cLamKchP_ThermBgdParamValues_0010[7] = {1.00299127, -0.00098046, -0.02740270,  0.02587529, -0.00410908, -0.00184383,  0.00048164};
+const double  cLamKchP_ThermBgdParamValues_1030[7] = {1.00500904,  0.02222310, -0.15044241,  0.16842872, -0.06930795,  0.01066954, -0.00022459};
+const double  cLamKchP_ThermBgdParamValues_3050[7] = {1.01270736,  0.01639683, -0.22112452,  0.24814525, -0.08867010,  0.00762095,  0.00097910};
 */
 const double*  cLamKchP_ThermBgdParamValues[3] = {cLamKchP_ThermBgdParamValues_0010, cLamKchP_ThermBgdParamValues_1030, cLamKchP_ThermBgdParamValues_3050};
 const double*  cALamKchM_ThermBgdParamValues[3] = {cLamKchP_ThermBgdParamValues_0010, cLamKchP_ThermBgdParamValues_1030, cLamKchP_ThermBgdParamValues_3050};
 
   //-----------------------------------------------------------
 //----- When LamKchM and ALamKchP only fit together
-const double  cLamKchM_ThermBgdParamValues_0010[7] = {1.00360811, -0.00458890, -0.02825906,  0.04434643, -0.02714457,  0.00801474, -0.00093208};
-const double  cLamKchM_ThermBgdParamValues_1030[7] = {1.00703760, -0.00398266, -0.06839438,  0.08948639, -0.04522686,  0.01082094, -0.00101188};
-const double  cLamKchM_ThermBgdParamValues_3050[7] = {1.01998869, -0.04868902, -0.03935482,  0.06633902, -0.01981400, -0.00055505,  0.00069224};
+const double  cLamKchM_ThermBgdParamValues_0010[7] = {1.00406785, -0.00562252, -0.02418825,  0.02822291, -0.00699019, -0.00117052,  0.00049263};
+const double  cLamKchM_ThermBgdParamValues_1030[7] = {1.00702551,  0.00789538, -0.11696622,  0.13053939, -0.04719024,  0.00430984,  0.00048219};
+const double  cLamKchM_ThermBgdParamValues_3050[7] = {1.01596225, -0.00706925, -0.16005701,  0.16949828, -0.03711488, -0.00867313,  0.00291430};
 /*
 //----- When all (A)LamKchPM fit together
-const double  cLamKchM_ThermBgdParamValues_0010[7] = {1.00256972,  0.00019213, -0.03325485,  0.04509279, -0.02563115,  0.00720430, -0.00081415};
-const double  cLamKchM_ThermBgdParamValues_1030[7] = {1.00632110,  0.00154589, -0.08313435,  0.10891484, -0.05844228,  0.01518648, -0.00156089};
-const double  cLamKchM_ThermBgdParamValues_3050[7] = {1.01783697, -0.03269580, -0.08009869,  0.11909762, -0.05525593,  0.01119210, -0.00081785};
+const double  cLamKchM_ThermBgdParamValues_0010[7] = {1.00299127, -0.00098046, -0.02740270,  0.02587529, -0.00410908, -0.00184383,  0.00048164};
+const double  cLamKchM_ThermBgdParamValues_1030[7] = {1.00500904,  0.02222310, -0.15044241,  0.16842872, -0.06930795,  0.01066954, -0.00022459};
+const double  cLamKchM_ThermBgdParamValues_3050[7] = {1.01270736,  0.01639683, -0.22112452,  0.24814525, -0.08867010,  0.00762095,  0.00097910};
 */
 const double*  cLamKchM_ThermBgdParamValues[3] = {cLamKchM_ThermBgdParamValues_0010, cLamKchM_ThermBgdParamValues_1030, cLamKchM_ThermBgdParamValues_3050};
 const double*  cALamKchP_ThermBgdParamValues[3] = {cLamKchM_ThermBgdParamValues_0010, cLamKchM_ThermBgdParamValues_1030, cLamKchM_ThermBgdParamValues_3050};

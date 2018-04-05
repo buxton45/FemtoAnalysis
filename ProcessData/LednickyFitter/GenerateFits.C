@@ -36,6 +36,7 @@ int main(int argc, char **argv)
   bool SaveImages = false;
   TString tSaveFileType = "pdf";
   bool SaveImagesInRootFile = false;
+
   bool ApplyMomResCorrection = true;
   bool ApplyNonFlatBackgroundCorrection = true;
   NonFlatBgdFitType tNonFlatBgdFitType = kLinear;
