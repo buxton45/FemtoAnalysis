@@ -5,12 +5,12 @@ enum ThermEventsType {kMe=0, kAdam=1, kMeAndAdam=2};
 const char* const cThermEventsTypeTags[3] = {"_Me", "_Adam", "_MeAndAdam"};
 
 //________________________________________________________________________________________________________________
-void SetStyleAndColor(TH1* aHist, int aMarkerStyle, int aColor)
+void SetStyleAndColor(TH1* aHist, int aMarkerStyle, int aColor, double aMarkerSize=0.75)
 {
   aHist->SetLineColor(aColor);
   aHist->SetMarkerColor(aColor);
   aHist->SetMarkerStyle(aMarkerStyle);
-  aHist->SetMarkerSize(0.5);
+  aHist->SetMarkerSize(aMarkerSize);
 }
 
 //_________________________________________________________________________________________
