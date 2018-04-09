@@ -26,7 +26,7 @@ CUDALIBDIR = /usr/local/cuda/lib64
 LIBSC   = $(shell root-config --libs) -lMinuit
 CFLAGS = $(shell root-config --cflags) -pthread -Wno-deprecated-declarations -m64 -Wall -std=c++11 -I${ANALYZE_DIR} -I${LEDNICKYFITTER_DIR} -I${COULOMBFITTER_DIR} -I${UTILITIES_DIR} -g -O0 -fopenmp
 
-MY_LIBS = $(addprefix build/, MathematicaSession.o WaveFunction.o Interpolator.o ChargedResidualCf.o SimpleChargedResidualCf.o NeutralResidualCf.o ResidualCollection.o CoulombFitter.o LednickyFitter.o InterpolationHistograms.o FitChi2Histograms.o FitParameter.o BackgroundFitter.o FitPartialAnalysis.o FitPairAnalysis.o FitSharedAnalyses.o CfLite.o CfHeavy.o Types.o Types_LambdaValues.o Types_FitParamValues.o Faddeeva.o ParallelTypes.o CoulombFitterParallel.o ParallelWaveFunction.o Interpolate.o InterpolateGPU.o )
+MY_LIBS = $(addprefix build/, MathematicaSession.o WaveFunction.o Interpolator.o ChargedResidualCf.o SimpleChargedResidualCf.o NeutralResidualCf.o ResidualCollection.o CoulombFitter.o LednickyFitter.o InterpolationHistograms.o FitChi2Histograms.o FitParameter.o BackgroundFitter.o FitPartialAnalysis.o FitPairAnalysis.o FitSharedAnalyses.o CfLite.o CfHeavy.o Types.o Types_LambdaValues.o Types_FitParamValues.o Types_ThermBgdParams.o Faddeeva.o ParallelTypes.o CoulombFitterParallel.o ParallelWaveFunction.o Interpolate.o InterpolateGPU.o )
 
 BINARIES = runTest runWPCFStrongInfluence runInterp
 

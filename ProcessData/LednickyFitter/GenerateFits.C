@@ -198,8 +198,8 @@ int main(int argc, char **argv)
     TCanvas* tKStarwFitsCan_Zoom = tLamKchP->DrawKStarCfswFits(ApplyMomResCorrection,ApplyNonFlatBackgroundCorrection,tNonFlatBgdFitType,SaveImages,bDrawSysErrs,true);
     TCanvas* tKStarwFitsCan_UnZoom = tLamKchP->DrawKStarCfswFits(ApplyMomResCorrection,ApplyNonFlatBackgroundCorrection,tNonFlatBgdFitType,SaveImages,bDrawSysErrs,false);
 
-    TCanvas* tKStarwFitsCan_FemtoMinus = tLamKchP->DrawKStarCfswFits_PartAn(kFemtoMinus,ApplyMomResCorrection,ApplyNonFlatBackgroundCorrection,tNonFlatBgdFitType,SaveImages,bZoomROP);
-    TCanvas* tKStarwFitsCan_FemtoPlus = tLamKchP->DrawKStarCfswFits_PartAn(kFemtoPlus,ApplyMomResCorrection,ApplyNonFlatBackgroundCorrection,tNonFlatBgdFitType,SaveImages,bZoomROP);
+//    TCanvas* tKStarwFitsCan_FemtoMinus = tLamKchP->DrawKStarCfswFits_PartAn(kFemtoMinus,ApplyMomResCorrection,ApplyNonFlatBackgroundCorrection,tNonFlatBgdFitType,SaveImages,bZoomROP);
+//    TCanvas* tKStarwFitsCan_FemtoPlus = tLamKchP->DrawKStarCfswFits_PartAn(kFemtoPlus,ApplyMomResCorrection,ApplyNonFlatBackgroundCorrection,tNonFlatBgdFitType,SaveImages,bZoomROP);
 
 //    TCanvas* tKStarCfs = tLamKchP->DrawKStarCfs(SaveImages);
 //    TCanvas* tModelKStarCfs = tLamKchP->DrawModelKStarCfs(SaveImages);
