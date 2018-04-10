@@ -213,7 +213,7 @@ void FitGeneratorAndDraw2::InitializeGenerator(bool aShareLambda, bool aShareRad
   fMasterLednickyFitter->GetFitSharedAnalyses()->GetMinuitObject()->SetFCN(GlobalFCN2);
   fMasterLednickyFitter->SetApplyMomResCorrection(true);
   fMasterLednickyFitter->SetApplyNonFlatBackgroundCorrection(true);
-  fMasterLednickyFitter->SetNonFlatBgdFitType(kPolynomial);
+  fMasterLednickyFitter->SetNonFlatBgdFitType(kLinear);
   fMasterLednickyFitter->SetIncludeResidualCorrelationsType(kInclude3Residuals);
   fMasterLednickyFitter->SetChargedResidualsType(kUseXiDataAndCoulombOnlyInterp);
   fMasterLednickyFitter->SetResPrimMaxDecayType(k4fm);

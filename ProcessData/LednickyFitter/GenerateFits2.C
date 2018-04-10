@@ -93,7 +93,7 @@ int main(int argc, char **argv)
   if(FixAllLambdaTo1) tLamKchP->SetLambdaParamStartValue(1.0, false, kMB, true);
 
 
-  if(bDoFit) tLamKchP->DoFit(true, true, tMaxFitKStar);
+  if(bDoFit) tLamKchP->DoFit(false, false, tMaxFitKStar);
 
 //-------------------------------------------------------------------------------
 
