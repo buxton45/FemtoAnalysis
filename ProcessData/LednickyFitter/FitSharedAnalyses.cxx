@@ -21,7 +21,7 @@ FitSharedAnalyses::FitSharedAnalyses(vector<FitPairAnalysis*> &aVecOfFitPairAnal
   fFitType(kChi2PML),
   fApplyNonFlatBackgroundCorrection(false),
   fNonFlatBgdFitType(kLinear),
-  fUseNewBgdTreatment(true),
+  fUseNewBgdTreatment(false),
   fNFitPairAnalysis(aVecOfFitPairAnalyses.size()),
   fNFitParamsPerAnalysis(0),
   fNFitNormParamsPerAnalysis(0),
@@ -61,7 +61,7 @@ FitSharedAnalyses::FitSharedAnalyses(vector<FitPairAnalysis*> &aVecOfFitPairAnal
   fFitType(kChi2PML),
   fApplyNonFlatBackgroundCorrection(false),
   fNonFlatBgdFitType(kLinear),
-  fUseNewBgdTreatment(true),
+  fUseNewBgdTreatment(false),
   fNFitPairAnalysis(aVecOfFitPairAnalyses.size()),
   fNFitParamsPerAnalysis(0),
   fNFitNormParamsPerAnalysis(0),
@@ -434,19 +434,23 @@ void FitSharedAnalyses::CreateMinuitParametersMatrix()
 */
 }
 
+//________________________________________________________________________________________________________________
+void FitSharedAnalyses::CreateMinuitParameter(TMinuit* aMinuit, int aMinuitParamNumber, FitParameter* aParam)
+{
+  int tErrFlg = 0;
+
+  aMinuit->mnparm(aMinuitParamNumber,aParam->GetName(),aParam->GetStartValue(),aParam->GetStepSize(),aParam->GetLowerBound(), aParam->GetUpperBound(),tErrFlg);
+  if(tErrFlg != 0) {cout << "Error setting minuit parameter #: " << aMinuitParamNumber << endl << "and name: " << aParam->GetName() << endl;}
+
+  if(aParam->IsFixed()) {aMinuit->FixParameter(aMinuitParamNumber);}
+
+  aParam->SetMinuitParamNumber(aMinuitParamNumber);
+}
 
 //________________________________________________________________________________________________________________
 void FitSharedAnalyses::CreateMinuitParameter(int aMinuitParamNumber, FitParameter* aParam)
 {
-  int tErrFlg = 0;
-
-  fMinuit->mnparm(aMinuitParamNumber,aParam->GetName(),aParam->GetStartValue(),aParam->GetStepSize(),aParam->GetLowerBound(), aParam->GetUpperBound(),tErrFlg);
-  if(tErrFlg != 0) {cout << "Error setting minuit parameter #: " << aMinuitParamNumber << endl << "and name: " << aParam->GetName() << endl;}
-
-  if(aParam->IsFixed()) {fMinuit->FixParameter(aMinuitParamNumber);}
-
-  aParam->SetMinuitParamNumber(aMinuitParamNumber);
-
+  CreateMinuitParameter(fMinuit, aMinuitParamNumber, aParam);
 //TODO  if(aParam->GetType() != kNorm) fFitChi2Histograms->AddParameter(aMinuitParamNumber,aParam);
 }
 

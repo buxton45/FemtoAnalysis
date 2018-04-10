@@ -64,7 +64,9 @@ public:
   vector<FitParameter*> GetDistinctParamsOfCommonType(ParameterType aParamType);  
   void CreateMinuitParametersMatrix();  //call after all parameters shared!!!!!
 
+  static void CreateMinuitParameter(TMinuit* aMinuit, int aMinuitParamNumber, FitParameter* aParam);
   void CreateMinuitParameter(int aMinuitParamNumber, FitParameter* aParam);
+
   void CreateBackgroundParams(NonFlatBgdFitType aNonFlatBgdType, bool aShareAmongstPairs, bool aShareAmongstPartials);
   void CreateMinuitParameters();
 
@@ -103,6 +105,7 @@ public:
   vector<double> GetMinuitMinParams();
   vector<double> GetMinuitParErrors();
 
+  vector<FitPairAnalysis*> GetFitPairAnalysisCollection();
   FitPairAnalysis* GetFitPairAnalysis(int aPairAnalysisNumber);
   CfHeavy* GetKStarCfHeavy(int aPairAnalysisNumber);
   CfHeavy* GetModelKStarCfHeavy(int aPairAnalysisNumber);
@@ -117,6 +120,9 @@ public:
   FitChi2Histograms* GetFitChi2Histograms();
 
   void SetFixNormParams(bool aFixNormParams);
+  bool GetFixNormParams();
+
+  vector<vector<FitParameter*> > GetMinuitFitParametersMatrix();
 
 private:
   TMinuit* fMinuit;
@@ -175,7 +181,7 @@ inline void FitSharedAnalyses::SetMinuitParErrors(vector<double> &aMinuitParErro
 inline vector<double> FitSharedAnalyses::GetMinuitMinParams() {return fMinuitMinParams;}
 inline vector<double> FitSharedAnalyses::GetMinuitParErrors() {return fMinuitParErrors;}
 
-
+inline vector<FitPairAnalysis*> FitSharedAnalyses::GetFitPairAnalysisCollection() {return fFitPairAnalysisCollection;}
 inline FitPairAnalysis* FitSharedAnalyses::GetFitPairAnalysis(int aPairAnalysisNumber) {return fFitPairAnalysisCollection[aPairAnalysisNumber];}
 inline CfHeavy* FitSharedAnalyses::GetKStarCfHeavy(int aPairAnalysisNumber) {return fFitPairAnalysisCollection[aPairAnalysisNumber]->GetKStarCfHeavy();}
 inline CfHeavy* FitSharedAnalyses::GetModelKStarCfHeavy(int aPairAnalysisNumber) {return fFitPairAnalysisCollection[aPairAnalysisNumber]->GetModelKStarHeavyCf();}
@@ -189,6 +195,10 @@ inline void FitSharedAnalyses::SetMinMaxBgdFit(double aMin, double aMax) {for(in
 inline FitChi2Histograms* FitSharedAnalyses::GetFitChi2Histograms() {return fFitChi2Histograms;}
 
 inline void FitSharedAnalyses::SetFixNormParams(bool aFixNormParams) {fFixNormParams = aFixNormParams;}
+inline bool FitSharedAnalyses::GetFixNormParams() {return fFixNormParams;}
+
+inline vector<vector<FitParameter*> > FitSharedAnalyses::GetMinuitFitParametersMatrix() {return fMinuitFitParametersMatrix;}
+
 
 #endif
 
