@@ -164,6 +164,9 @@ FitPartialAnalysis::FitPartialAnalysis(TString aFileLocation, TString aAnalysisN
 
   if( (fAnalysisType == kLamKchM) || (fAnalysisType == kALamKchP) /*|| (fAnalysisType == kLamKchMwConjugate)*/ ) {fRejectOmega = true;}
 
+  //-----Set owner information
+  for(unsigned int i=0; i<fFitParameters.size(); i++) fFitParameters[i]->SetOwnerInfo(fAnalysisType, fCentralityType, fBFieldType);
+  fNorm->SetOwnerInfo(fAnalysisType, fCentralityType, fBFieldType);
 }
 
 
@@ -318,7 +321,9 @@ FitPartialAnalysis::FitPartialAnalysis(TString aFileLocation, TString aFileLocat
   delete tTempHisto;
 //---***---***---***---***---***---***---***---***---***---***---***---***---***---***---***---***---***
 
-
+  //-----Set owner information
+  for(unsigned int i=0; i<fFitParameters.size(); i++) fFitParameters[i]->SetOwnerInfo(fAnalysisType, fCentralityType, fBFieldType);
+  fNorm->SetOwnerInfo(fAnalysisType, fCentralityType, fBFieldType);
 }
 
 
@@ -811,6 +816,8 @@ void FitPartialAnalysis::InitializeBackgroundParams(NonFlatBgdFitType aNonFlatBg
   //So, I want to give them each a unique name
   for(unsigned int i=0; i<fBgdParameters.size(); i++) fBgdParameters[i]->SetName(TString::Format("%s_%i", cParameterNames[kBgd], i));
 
+  //-----Set owner information
+  for(unsigned int i=0; i<fBgdParameters.size(); i++) fBgdParameters[i]->SetOwnerInfo(fAnalysisType, fCentralityType, fBFieldType);
 }
 
 

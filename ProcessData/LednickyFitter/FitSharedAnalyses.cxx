@@ -435,23 +435,23 @@ void FitSharedAnalyses::CreateMinuitParametersMatrix()
 }
 
 //________________________________________________________________________________________________________________
-void FitSharedAnalyses::CreateMinuitParameter(TMinuit* aMinuit, int aMinuitParamNumber, FitParameter* aParam)
+void FitSharedAnalyses::CreateMinuitParameter(FitParameter* aParam)
 {
   int tErrFlg = 0;
 
-  aMinuit->mnparm(aMinuitParamNumber,aParam->GetName(),aParam->GetStartValue(),aParam->GetStepSize(),aParam->GetLowerBound(), aParam->GetUpperBound(),tErrFlg);
-  if(tErrFlg != 0) {cout << "Error setting minuit parameter #: " << aMinuitParamNumber << endl << "and name: " << aParam->GetName() << endl;}
+//  TString tMinuitParamName = aParam->GetName();
+  TString tMinuitParamName = TString::Format("%s_%s", aParam->GetName().Data(), aParam->GetOwnerName().Data());
 
-  if(aParam->IsFixed()) {aMinuit->FixParameter(aMinuitParamNumber);}
+  fMinuit->mnparm(fNMinuitParams, tMinuitParamName, aParam->GetStartValue(), aParam->GetStepSize(), aParam->GetLowerBound(), aParam->GetUpperBound(), tErrFlg);
+  if(tErrFlg != 0) {cout << "Error setting minuit parameter #: " << fNMinuitParams << endl << "and name: " << aParam->GetName() << endl;}
 
-  aParam->SetMinuitParamNumber(aMinuitParamNumber);
-}
+  if(aParam->IsFixed()) {fMinuit->FixParameter(fNMinuitParams);}
 
-//________________________________________________________________________________________________________________
-void FitSharedAnalyses::CreateMinuitParameter(int aMinuitParamNumber, FitParameter* aParam)
-{
-  CreateMinuitParameter(fMinuit, aMinuitParamNumber, aParam);
-//TODO  if(aParam->GetType() != kNorm) fFitChi2Histograms->AddParameter(aMinuitParamNumber,aParam);
+  aParam->SetMinuitParamNumber(fNMinuitParams);
+//TODO  if(aParam->GetType() != kNorm) fFitChi2Histograms->AddParameter(fNMinuitParams,aParam);
+
+  //Increment fNMinuitParams
+  fNMinuitParams++;
 }
 
 
@@ -500,8 +500,7 @@ void FitSharedAnalyses::CreateBackgroundParams(NonFlatBgdFitType aNonFlatBgdType
       tTempVec = fFitPairAnalysisCollection[t2dShared[iCent][0]]->Get1dBgdParameters(0);
       for(unsigned int j=0; j<tTempVec.size(); j++)
       {
-        CreateMinuitParameter(fNMinuitParams, tTempVec[j]);
-        fNMinuitParams++;
+        CreateMinuitParameter(tTempVec[j]);
       }
     }
   }
@@ -514,8 +513,7 @@ void FitSharedAnalyses::CreateBackgroundParams(NonFlatBgdFitType aNonFlatBgdType
       {
         for(unsigned int iBgdParam=0; iBgdParam<tTemp2dBgdParams[i1dBgd].size(); iBgdParam++)
         {
-          CreateMinuitParameter(fNMinuitParams, tTemp2dBgdParams[i1dBgd][iBgdParam]);
-          fNMinuitParams++;
+          CreateMinuitParameter(tTemp2dBgdParams[i1dBgd][iBgdParam]);
         }
       }
     }
@@ -540,8 +538,7 @@ void FitSharedAnalyses::CreateMinuitParameters()
     vector<FitParameter*> tempVec = fMinuitFitParametersMatrix[iPar];
     for(unsigned int itemp=0; itemp < tempVec.size(); itemp++)
     {
-      CreateMinuitParameter(fNMinuitParams,tempVec[itemp]);
-      fNMinuitParams++;
+      CreateMinuitParameter(tempVec[itemp]);
     }
   }
 
@@ -562,8 +559,7 @@ void FitSharedAnalyses::CreateMinuitParameters()
       fFitPairAnalysisCollection[iAnaly]->GetFitNormParameter(iPartAn)->SetStartValue(tNormStartValue);
       if(fFixNormParams || fUseNewBgdTreatment) fFitPairAnalysisCollection[iAnaly]->GetFitNormParameter(iPartAn)->SetFixed(true);
 
-      CreateMinuitParameter(fNMinuitParams, fFitPairAnalysisCollection[iAnaly]->GetFitNormParameter(iPartAn));
-      fNMinuitParams++;
+      CreateMinuitParameter(fFitPairAnalysisCollection[iAnaly]->GetFitNormParameter(iPartAn));
     }
   }
 }

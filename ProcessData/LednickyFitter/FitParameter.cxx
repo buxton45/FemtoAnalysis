@@ -33,7 +33,8 @@ FitParameter::FitParameter(ParameterType aParamType, double aStartValue, bool aI
   fFitValueError(0),
   fSharedWithLocal(0),
   fSharedWithGlobal(0),
-  fMinuitParamNumber(-1)
+  fMinuitParamNumber(-1),
+  fOwnerInfo()
 
 
 {
@@ -275,7 +276,19 @@ void FitParameter::SetAttributes(double aStartValue, bool aIsFixed, double aLowe
   if(aStepSize > 0.) fStepSize = aStepSize;
 }
 
+//________________________________________________________________________________________________________________
+void FitParameter::SetOwnerInfo(AnalysisType aAnType, CentralityType aCentType, BFieldType aBFieldType)
+{
+  fOwnerInfo = ParamOwnerInfo(aAnType, aCentType, aBFieldType);
+}
 
-
+//________________________________________________________________________________________________________________
+TString FitParameter::GetOwnerName()
+{
+  return TString::Format("%s%s%s", cAnalysisBaseTags[fOwnerInfo.analysisType], 
+                                   cCentralityTags[fOwnerInfo.centralityType], 
+                                   cBFieldTags[fOwnerInfo.bFieldType]);
+  //ex. LamK0_0010_FemtoPlus
+}
 
 

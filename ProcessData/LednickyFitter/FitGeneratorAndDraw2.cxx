@@ -26,7 +26,7 @@ void GlobalFCN2(Int_t &npar, Double_t *gin, Double_t &f, Double_t *par, Int_t if
 FitGeneratorAndDraw2::FitGeneratorAndDraw2(TString aFileLocationBase, TString aFileLocationBaseMC, AnalysisType aAnalysisType, const vector<CentralityType> &aCentralityTypes, AnalysisRunType aRunType, int aNPartialAnalysis, FitGeneratorType aGeneratorType, bool aShareLambdaParams, bool aAllShareSingleLambdaParam, TString aDirNameModifier) :
   fFitGen1(nullptr),
   fFitGen2(nullptr),
-  fMasterMinuit(nullptr),
+
   fMasterLednickyFitter(nullptr),
   fMasterSharedAn(nullptr),
 
@@ -39,7 +39,6 @@ FitGeneratorAndDraw2::FitGeneratorAndDraw2(TString aFileLocationBase, TString aF
   fFitGen1 = new FitGeneratorAndDraw(aFileLocationBase, aFileLocationBaseMC, kLamKchP, aCentralityTypes, aRunType, aNPartialAnalysis, kPairwConj, aShareLambdaParams, aAllShareSingleLambdaParam, aDirNameModifier);
   fFitGen2 = new FitGeneratorAndDraw(aFileLocationBase, aFileLocationBaseMC, kLamKchM, aCentralityTypes, aRunType, aNPartialAnalysis, kPairwConj, aShareLambdaParams, aAllShareSingleLambdaParam, aDirNameModifier);
 
-  fMasterMinuit = new TMinuit(50);
 }
 
 
@@ -47,7 +46,7 @@ FitGeneratorAndDraw2::FitGeneratorAndDraw2(TString aFileLocationBase, TString aF
 FitGeneratorAndDraw2::FitGeneratorAndDraw2(TString aFileLocationBase, TString aFileLocationBaseMC, AnalysisType aAnalysisType, CentralityType aCentralityType, AnalysisRunType aRunType, int aNPartialAnalysis, FitGeneratorType aGeneratorType, bool aShareLambdaParams, bool aAllShareSingleLambdaParam, TString aDirNameModifier) :
   fFitGen1(nullptr),
   fFitGen2(nullptr),
-  fMasterMinuit(nullptr),
+
   fMasterLednickyFitter(nullptr),
   fMasterSharedAn(nullptr),
 
@@ -60,14 +59,12 @@ FitGeneratorAndDraw2::FitGeneratorAndDraw2(TString aFileLocationBase, TString aF
   fFitGen1 = new FitGeneratorAndDraw(aFileLocationBase, aFileLocationBaseMC, kLamKchP, aCentralityType, aRunType, aNPartialAnalysis, kPairwConj, aShareLambdaParams, aAllShareSingleLambdaParam, aDirNameModifier);
   fFitGen2 = new FitGeneratorAndDraw(aFileLocationBase, aFileLocationBaseMC, kLamKchM, aCentralityType, aRunType, aNPartialAnalysis, kPairwConj, aShareLambdaParams, aAllShareSingleLambdaParam, aDirNameModifier);
 
-  fMasterMinuit = new TMinuit(50);
 }
 
 //________________________________________________________________________________________________________________
 FitGeneratorAndDraw2::FitGeneratorAndDraw2(FitGeneratorAndDraw* aFitGen1, FitGeneratorAndDraw* aFitGen2) :
   fFitGen1(aFitGen1),
   fFitGen2(aFitGen2),
-  fMasterMinuit(nullptr),
   fMasterSharedAn(nullptr),
 
   fNMinuitParams(0),
@@ -76,7 +73,7 @@ FitGeneratorAndDraw2::FitGeneratorAndDraw2(FitGeneratorAndDraw* aFitGen1, FitGen
 
   fMasterMinuitFitParametersMatrix(0)
 {
-  fMasterMinuit = new TMinuit(50);
+
 }
 
 //________________________________________________________________________________________________________________
@@ -97,56 +94,54 @@ void FitGeneratorAndDraw2::CreateMinuitParametersMatrix(bool aShareLambda, bool 
   fFitGen1->SetAllParameters();
   fFitGen2->SetAllParameters();
 
-  fFitGen1->GetSharedAn()->CreateMinuitParametersMatrix();
-  fFitGen2->GetSharedAn()->CreateMinuitParametersMatrix();
+  assert(fFitGen1->GetSharedAn()->GetNFitParamsPerAnalysis() == fFitGen2->GetSharedAn()->GetNFitParamsPerAnalysis());
+  int tNFitParamsPerAnalysis = fFitGen1->GetSharedAn()->GetNFitParamsPerAnalysis();
 
-  vector<vector<FitParameter*> > tMinuitParamMatrix1 = fFitGen1->GetSharedAn()->GetMinuitFitParametersMatrix();
-  vector<vector<FitParameter*> > tMinuitParamMatrix2 = fFitGen2->GetSharedAn()->GetMinuitFitParametersMatrix();
+  assert(fFitGen1->GetSharedAn()->GetNFitPairAnalysis() == fFitGen2->GetSharedAn()->GetNFitPairAnalysis());
+  int tNFitPairAnalysis = fFitGen1->GetSharedAn()->GetNFitPairAnalysis();
 
-  assert(tMinuitParamMatrix1.size()==tMinuitParamMatrix2.size());
-  fMasterMinuitFitParametersMatrix.clear();
-  vector<FitParameter*> tTempParamVec;
-  for(unsigned int iPar=0; iPar<tMinuitParamMatrix1.size(); iPar++)
+  for(int iPairAn=0; iPairAn<tNFitPairAnalysis; iPairAn++)
   {
-    tTempParamVec.clear();
-    for(unsigned int i=0; i<tMinuitParamMatrix1[iPar].size(); i++) tTempParamVec.push_back(tMinuitParamMatrix1[iPar][i]);
-
-
-
-    if(tMinuitParamMatrix1[iPar][0]->GetType()==kLambda)
+    for(int iPar=0; iPar<tNFitParamsPerAnalysis; iPar++)
     {
-      if(aShareLambda)
+      ParameterType tParamType = static_cast<ParameterType>(iPar);
+      if((tParamType==kLambda && aShareLambda) || (tParamType==kRadius && aShareRadii)) 
       {
-        for(unsigned int iLam=1; iLam<tMinuitParamMatrix1[iPar].size(); iLam++)
-        {
-          tMinuitParamMatrix2[iPar][iLam]=tMinuitParamMatrix1[iPar][iLam];
-        }
-      }
-      else
-      {
-        for(unsigned int i=0; i<tMinuitParamMatrix2[iPar].size(); i++) tTempParamVec.push_back(tMinuitParamMatrix2[iPar][i]);
-      }
-
-    }
-    else if(tMinuitParamMatrix1[iPar][0]->GetType()==kRadius)
-    {
-      if(aShareRadii)
-      {
-        for(unsigned int iR=1; iR<tMinuitParamMatrix1[iPar].size(); iR++)
-        {
-          tMinuitParamMatrix2[iPar][iR]=tMinuitParamMatrix1[iPar][iR];
-        }
-      }
-      else
-      {
-        for(unsigned int i=0; i<tMinuitParamMatrix2[iPar].size(); i++) tTempParamVec.push_back(tMinuitParamMatrix2[iPar][i]);
+        fFitGen2->GetSharedAn()->GetFitPairAnalysis(iPairAn)->SetFitParameterShallow(fFitGen1->GetSharedAn()->GetFitPairAnalysis(iPairAn)->GetFitParameter(tParamType));
       }
     }
-    else for(unsigned int i=0; i<tMinuitParamMatrix2[iPar].size(); i++) tTempParamVec.push_back(tMinuitParamMatrix2[iPar][i]);
+  }
+
+
+  for(int iPar=0; iPar<tNFitParamsPerAnalysis; iPar++)
+  {
+    vector<FitParameter*> tTempParamVec(0);
+
+    ParameterType tParamType = static_cast<ParameterType>(iPar);
+    vector<FitParameter*> tTempParamVec1 = fFitGen1->GetSharedAn()->GetDistinctParamsOfCommonType(tParamType);
+    vector<FitParameter*> tTempParamVec2 = fFitGen2->GetSharedAn()->GetDistinctParamsOfCommonType(tParamType);
+    assert(tTempParamVec1.size()==tTempParamVec2.size());
+
+    for(unsigned int i=0; i<tTempParamVec1.size(); i++) tTempParamVec.push_back(tTempParamVec1[i]);
+
+    if(tParamType==kLambda)  //NOTE: Cannot simply combine into if(tParamType==kLambda && !aShareLambda)
+    {
+      if(!aShareLambda)
+      {
+        for(unsigned int iLam=0; iLam<tTempParamVec2.size(); iLam++) tTempParamVec.push_back(tTempParamVec2[iLam]);
+      }
+    }
+    else if(tParamType==kRadius)  //NOTE: Cannot simply combine into if(tParamType==kRadius && !aShareRadii)
+    {
+      if(!aShareRadii)
+      {
+        for(unsigned int iR=0; iR<tTempParamVec2.size(); iR++) tTempParamVec.push_back(tTempParamVec2[iR]);
+      }
+    }
+    else for(unsigned int i=0; i<tTempParamVec2.size(); i++) tTempParamVec.push_back(tTempParamVec2[i]);
 
     fMasterMinuitFitParametersMatrix.push_back(tTempParamVec);
   }
-
   //--------------------------------
 
 }
@@ -183,8 +178,7 @@ void FitGeneratorAndDraw2::CreateMinuitParameters(bool aShareLambda, bool aShare
     vector<FitParameter*> tempVec = fMasterMinuitFitParametersMatrix[iPar];
     for(unsigned int itemp=0; itemp < tempVec.size(); itemp++)
     {
-      FitSharedAnalyses::CreateMinuitParameter(fMasterMinuit, fNMinuitParams,tempVec[itemp]);
-      fNMinuitParams++;
+      fMasterSharedAn->CreateMinuitParameter(tempVec[itemp]);
     }
   }
 
@@ -198,8 +192,7 @@ void FitGeneratorAndDraw2::CreateMinuitParameters(bool aShareLambda, bool aShare
       fMasterSharedAn->GetFitPairAnalysis(iAnaly)->GetFitNormParameter(iPartAn)->SetStartValue(tNormStartValue);
 //      if(fFixNormParams || fUseNewBgdTreatment) fMasterSharedAn->GetFitPairAnalysis(iAnaly)->GetFitNormParameter(iPartAn)->SetFixed(true);
 
-      FitSharedAnalyses::CreateMinuitParameter(fMasterMinuit, fNMinuitParams, fMasterSharedAn->GetFitPairAnalysis(iAnaly)->GetFitNormParameter(iPartAn));
-      fNMinuitParams++;
+      fMasterSharedAn->CreateMinuitParameter(fMasterSharedAn->GetFitPairAnalysis(iAnaly)->GetFitNormParameter(iPartAn));
     }
   }
 }

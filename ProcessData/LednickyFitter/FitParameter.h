@@ -46,6 +46,8 @@ public:
   vector<int> GetSharedWithGlobal();
 
   void SetAttributes(double aStartValue, bool aIsFixed, double aLowerParamBound, double aUpperParamBound, double aStepSize = -1.);
+  void SetOwnerInfo(AnalysisType aAnType, CentralityType aCentType, BFieldType aBFieldType);
+  TString GetOwnerName();
 
   //inline (i.e. simple) functions
   void SetType(ParameterType aParamType);
@@ -95,8 +97,8 @@ private:
   vector<int> fSharedWithGlobal;
 
   int fMinuitParamNumber;
-
-
+  
+  ParamOwnerInfo fOwnerInfo;
 
 #ifdef __ROOT__
   ClassDef(FitParameter, 1)

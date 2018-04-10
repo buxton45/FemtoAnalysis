@@ -247,6 +247,28 @@ kXiCKSt0=40, kAXiCAKSt0=41, kXiCAKSt0=42, kAXiCKSt0=43
     }
   };
 
+//------------------
+  struct ParamOwnerInfo
+  {
+    AnalysisType analysisType;
+    CentralityType centralityType;
+    BFieldType bFieldType;
+
+    ParamOwnerInfo(AnalysisType aAnType, CentralityType aCentType, BFieldType aBFieldType)
+    {
+      analysisType   = aAnType;
+      centralityType = aCentType;
+      bFieldType     = aBFieldType;
+    }
+
+    ParamOwnerInfo()
+    {
+      analysisType   = kLamK0;
+      centralityType = k0010;
+      bFieldType     = kFemtoPlus;
+    }
+  };
+
   //----------------------------------------------------------
 
   //--------------typedefs------------------------------------------------

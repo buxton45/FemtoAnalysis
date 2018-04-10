@@ -51,7 +51,6 @@ protected:
   FitGeneratorAndDraw* fFitGen1;
   FitGeneratorAndDraw* fFitGen2;
 
-  TMinuit* fMasterMinuit;
   LednickyFitter* fMasterLednickyFitter;
   FitSharedAnalyses* fMasterSharedAn;
 

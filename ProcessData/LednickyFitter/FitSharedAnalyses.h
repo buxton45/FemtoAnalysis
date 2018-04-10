@@ -64,8 +64,7 @@ public:
   vector<FitParameter*> GetDistinctParamsOfCommonType(ParameterType aParamType);  
   void CreateMinuitParametersMatrix();  //call after all parameters shared!!!!!
 
-  static void CreateMinuitParameter(TMinuit* aMinuit, int aMinuitParamNumber, FitParameter* aParam);
-  void CreateMinuitParameter(int aMinuitParamNumber, FitParameter* aParam);
+  void CreateMinuitParameter(FitParameter* aParam);
 
   void CreateBackgroundParams(NonFlatBgdFitType aNonFlatBgdType, bool aShareAmongstPairs, bool aShareAmongstPartials);
   void CreateMinuitParameters();
@@ -121,8 +120,6 @@ public:
 
   void SetFixNormParams(bool aFixNormParams);
   bool GetFixNormParams();
-
-  vector<vector<FitParameter*> > GetMinuitFitParametersMatrix();
 
 private:
   TMinuit* fMinuit;
@@ -196,8 +193,6 @@ inline FitChi2Histograms* FitSharedAnalyses::GetFitChi2Histograms() {return fFit
 
 inline void FitSharedAnalyses::SetFixNormParams(bool aFixNormParams) {fFixNormParams = aFixNormParams;}
 inline bool FitSharedAnalyses::GetFixNormParams() {return fFixNormParams;}
-
-inline vector<vector<FitParameter*> > FitSharedAnalyses::GetMinuitFitParametersMatrix() {return fMinuitFitParametersMatrix;}
 
 
 #endif
