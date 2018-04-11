@@ -113,7 +113,7 @@ int main(int argc, char **argv)
   if(FixAllLambdaTo1) tSaveNameModifier += TString("_FixAllLambdaTo1");
   if(FixRadii) tSaveNameModifier += TString("_FixedRadii");
   if(FixAllScattParams) tSaveNameModifier += TString("_FixedScattParams");
-  if(tShareLambdaParams) tSaveNameModifier += TString("_ShareLamAcrossCent");
+  if(tShareLambdaParams) tSaveNameModifier += TString("_ShareLam");
   if(tAllShareSingleLambdaParam && !FixAllLambdaTo1) tSaveNameModifier += TString("_SingleLamParam");
   if(UsemTScalingOfResidualRadii) tSaveNameModifier += TString::Format("_UsingmTScalingOfResidualRadii");
 
