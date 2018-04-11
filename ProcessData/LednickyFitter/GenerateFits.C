@@ -99,24 +99,14 @@ int main(int argc, char **argv)
   TString tSaveDirectoryBase = tDirectoryBase;
 
   TString tSaveNameModifier = "";
-  if(ApplyMomResCorrection) tSaveNameModifier += TString("_MomResCrctn");
-  if(ApplyNonFlatBackgroundCorrection) tSaveNameModifier += TString("_NonFlatBgdCrctn");
+  LednickyFitter::AppendFitInfo(tSaveNameModifier, ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, tIncludeResidualsType, tResPrimMaxDecayType, tChargedResidualsType, FixD0);
 
-  if(tAllShareSingleLambdaParam && !FixAllLambdaTo1) tSaveNameModifier += TString("_SingleLamParam");
   if(FixAllLambdaTo1) tSaveNameModifier += TString("_FixAllLambdaTo1");
-
   if(FixRadii) tSaveNameModifier += TString("_FixedRadii");
-  if(FixD0) tSaveNameModifier += TString("_FixedD0");
   if(FixAllScattParams) tSaveNameModifier += TString("_FixedScattParams");
-
-  tSaveNameModifier += cIncludeResidualsTypeTags[tIncludeResidualsType];
-  if(tIncludeResidualsType != kIncludeNoResiduals)
-  {
-    tSaveNameModifier += cResPrimMaxDecayTypeTags[tResPrimMaxDecayType];
-    tSaveNameModifier += cChargedResidualsTypeTags[tChargedResidualsType];
-  }
-
+  if(tAllShareSingleLambdaParam && !FixAllLambdaTo1) tSaveNameModifier += TString("_SingleLamParam");
   if(UsemTScalingOfResidualRadii) tSaveNameModifier += TString::Format("_UsingmTScalingOfResidualRadii");
+
 
 
   FitGeneratorAndDraw* tLamKchP = new FitGeneratorAndDraw(tFileLocationBase,tFileLocationBaseMC,tAnType, tCentType,tAnRunType,tNPartialAnalysis,tGenType,tShareLambdaParams,tAllShareSingleLambdaParam);

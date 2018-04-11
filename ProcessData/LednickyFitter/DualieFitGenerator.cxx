@@ -1,9 +1,9 @@
-/* FitGeneratorAndDraw2.cxx */
+/* DualieFitGenerator.cxx */
 
-#include "FitGeneratorAndDraw2.h"
+#include "DualieFitGenerator.h"
 
 #ifdef __ROOT__
-ClassImp(FitGeneratorAndDraw2)
+ClassImp(DualieFitGenerator)
 #endif
 
 //GLOBAL!!!!!!!!!!!!!!!
@@ -23,7 +23,7 @@ void GlobalFCN2(Int_t &npar, Double_t *gin, Double_t &f, Double_t *par, Int_t if
 
 
 //________________________________________________________________________________________________________________
-FitGeneratorAndDraw2::FitGeneratorAndDraw2(TString aFileLocationBase, TString aFileLocationBaseMC, AnalysisType aAnalysisType, const vector<CentralityType> &aCentralityTypes, AnalysisRunType aRunType, int aNPartialAnalysis, FitGeneratorType aGeneratorType, bool aShareLambdaParams, bool aAllShareSingleLambdaParam, TString aDirNameModifier) :
+DualieFitGenerator::DualieFitGenerator(TString aFileLocationBase, TString aFileLocationBaseMC, AnalysisType aAnalysisType, const vector<CentralityType> &aCentralityTypes, AnalysisRunType aRunType, int aNPartialAnalysis, FitGeneratorType aGeneratorType, bool aShareLambdaParams, bool aAllShareSingleLambdaParam, TString aDirNameModifier) :
   fFitGen1(nullptr),
   fFitGen2(nullptr),
 
@@ -43,7 +43,7 @@ FitGeneratorAndDraw2::FitGeneratorAndDraw2(TString aFileLocationBase, TString aF
 
 
 //________________________________________________________________________________________________________________
-FitGeneratorAndDraw2::FitGeneratorAndDraw2(TString aFileLocationBase, TString aFileLocationBaseMC, AnalysisType aAnalysisType, CentralityType aCentralityType, AnalysisRunType aRunType, int aNPartialAnalysis, FitGeneratorType aGeneratorType, bool aShareLambdaParams, bool aAllShareSingleLambdaParam, TString aDirNameModifier) :
+DualieFitGenerator::DualieFitGenerator(TString aFileLocationBase, TString aFileLocationBaseMC, AnalysisType aAnalysisType, CentralityType aCentralityType, AnalysisRunType aRunType, int aNPartialAnalysis, FitGeneratorType aGeneratorType, bool aShareLambdaParams, bool aAllShareSingleLambdaParam, TString aDirNameModifier) :
   fFitGen1(nullptr),
   fFitGen2(nullptr),
 
@@ -62,7 +62,7 @@ FitGeneratorAndDraw2::FitGeneratorAndDraw2(TString aFileLocationBase, TString aF
 }
 
 //________________________________________________________________________________________________________________
-FitGeneratorAndDraw2::FitGeneratorAndDraw2(FitGeneratorAndDraw* aFitGen1, FitGeneratorAndDraw* aFitGen2) :
+DualieFitGenerator::DualieFitGenerator(FitGeneratorAndDraw* aFitGen1, FitGeneratorAndDraw* aFitGen2) :
   fFitGen1(aFitGen1),
   fFitGen2(aFitGen2),
   fMasterSharedAn(nullptr),
@@ -77,14 +77,14 @@ FitGeneratorAndDraw2::FitGeneratorAndDraw2(FitGeneratorAndDraw* aFitGen1, FitGen
 }
 
 //________________________________________________________________________________________________________________
-FitGeneratorAndDraw2::~FitGeneratorAndDraw2()
+DualieFitGenerator::~DualieFitGenerator()
 {
-  cout << "FitGeneratorAndDraw2 object is being deleted!!!!!" << endl;
+  cout << "DualieFitGenerator object is being deleted!!!!!" << endl;
 }
 
 
 //________________________________________________________________________________________________________________
-void FitGeneratorAndDraw2::CreateMinuitParametersMatrix(bool aShareLambda, bool aShareRadii)
+void DualieFitGenerator::CreateMinuitParametersMatrix(bool aShareLambda, bool aShareRadii)
 {
   //TODO For now, not worrying about complications of "new" background treatment
   //     Anyway, I don't like this "new" method, and it will probably be abandoned
@@ -148,7 +148,7 @@ void FitGeneratorAndDraw2::CreateMinuitParametersMatrix(bool aShareLambda, bool 
 
 
 //________________________________________________________________________________________________________________
-void FitGeneratorAndDraw2::CreateMasterSharedAn()
+void DualieFitGenerator::CreateMasterSharedAn()
 {
   vector<FitPairAnalysis*> tTempFitPairAnColl(0);
   for(unsigned int i=0; i<fFitGen1->GetSharedAn()->GetFitPairAnalysisCollection().size(); i++) tTempFitPairAnColl.push_back(fFitGen1->GetSharedAn()->GetFitPairAnalysisCollection()[i]);
@@ -164,7 +164,7 @@ void FitGeneratorAndDraw2::CreateMasterSharedAn()
 }
 
 //________________________________________________________________________________________________________________
-void FitGeneratorAndDraw2::CreateMinuitParameters(bool aShareLambda, bool aShareRadii)
+void DualieFitGenerator::CreateMinuitParameters(bool aShareLambda, bool aShareRadii)
 {
   //call AFTER all parameters have been shared!!!!!
 
@@ -199,7 +199,7 @@ void FitGeneratorAndDraw2::CreateMinuitParameters(bool aShareLambda, bool aShare
 
 
 //________________________________________________________________________________________________________________
-void FitGeneratorAndDraw2::InitializeGenerator(bool aShareLambda, bool aShareRadii, double aMaxFitKStar)
+void DualieFitGenerator::InitializeGenerator(bool aShareLambda, bool aShareRadii, double aMaxFitKStar)
 {
 //  if(fIncludeResidualsType != kIncludeNoResiduals && fChargedResidualsType != kUseXiDataForAll)
 //  {
@@ -213,14 +213,14 @@ void FitGeneratorAndDraw2::InitializeGenerator(bool aShareLambda, bool aShareRad
   fMasterLednickyFitter->GetFitSharedAnalyses()->GetMinuitObject()->SetFCN(GlobalFCN2);
   fMasterLednickyFitter->SetApplyMomResCorrection(true);
   fMasterLednickyFitter->SetApplyNonFlatBackgroundCorrection(true);
-  fMasterLednickyFitter->SetNonFlatBgdFitType(kLinear);
+  fMasterLednickyFitter->SetNonFlatBgdFitType(kPolynomial);
   fMasterLednickyFitter->SetIncludeResidualCorrelationsType(kInclude3Residuals);
   fMasterLednickyFitter->SetChargedResidualsType(kUseXiDataAndCoulombOnlyInterp);
   fMasterLednickyFitter->SetResPrimMaxDecayType(k4fm);
 }
 
 //________________________________________________________________________________________________________________
-void FitGeneratorAndDraw2::DoFit(bool aShareLambda, bool aShareRadii, double aMaxFitKStar)
+void DualieFitGenerator::DoFit(bool aShareLambda, bool aShareRadii, double aMaxFitKStar)
 {
   InitializeGenerator(aShareLambda, aShareRadii, aMaxFitKStar);
   GlobalFitter2 = fMasterLednickyFitter;

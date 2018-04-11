@@ -1,5 +1,5 @@
-#include "FitGeneratorAndDraw2.h"
-class FitGeneratorAndDraw2;
+#include "DualieFitGenerator.h"
+class DualieFitGenerator;
 
 void SetAttributes();
 
@@ -77,7 +77,7 @@ int main(int argc, char **argv)
   TString tFileLocationBase = TString::Format("%sResults_%s_%s",tDirectoryBase.Data(),tGeneralAnTypeName.Data(),tResultsDate.Data());
   TString tFileLocationBaseMC = TString::Format("%sResults_%sMC_%s",tDirectoryBase.Data(),tGeneralAnTypeName.Data(),tResultsDate.Data());
 
-  FitGeneratorAndDraw2* tLamKchP = new FitGeneratorAndDraw2(tFileLocationBase,tFileLocationBaseMC,tAnType, tCentType,tAnRunType,tNPartialAnalysis,tGenType,tShareLambdaParams,tAllShareSingleLambdaParam);
+  DualieFitGenerator* tLamKchP = new DualieFitGenerator(tFileLocationBase,tFileLocationBaseMC,tAnType, tCentType,tAnRunType,tNPartialAnalysis,tGenType,tShareLambdaParams,tAllShareSingleLambdaParam);
 
   tLamKchP->SetFitType(tFitType);
   tLamKchP->SetApplyNonFlatBackgroundCorrection(ApplyNonFlatBackgroundCorrection);
@@ -93,7 +93,7 @@ int main(int argc, char **argv)
   if(FixAllLambdaTo1) tLamKchP->SetLambdaParamStartValue(1.0, false, kMB, true);
 
 
-  if(bDoFit) tLamKchP->DoFit(false, false, tMaxFitKStar);
+  if(bDoFit) tLamKchP->DoFit(true, true, tMaxFitKStar);
 
 //-------------------------------------------------------------------------------
 
