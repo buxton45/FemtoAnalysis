@@ -211,12 +211,13 @@ void DualieFitGenerator::InitializeGenerator(bool aShareLambda, bool aShareRadii
 
   fMasterLednickyFitter = new LednickyFitter(fMasterSharedAn, aMaxFitKStar);
   fMasterLednickyFitter->GetFitSharedAnalyses()->GetMinuitObject()->SetFCN(GlobalFCN2);
-  fMasterLednickyFitter->SetApplyMomResCorrection(true);
-  fMasterLednickyFitter->SetApplyNonFlatBackgroundCorrection(true);
-  fMasterLednickyFitter->SetNonFlatBgdFitType(kPolynomial);
-  fMasterLednickyFitter->SetIncludeResidualCorrelationsType(kInclude3Residuals);
-  fMasterLednickyFitter->SetChargedResidualsType(kUseXiDataAndCoulombOnlyInterp);
-  fMasterLednickyFitter->SetResPrimMaxDecayType(k4fm);
+
+  fMasterLednickyFitter->SetApplyMomResCorrection(fFitGen1->fApplyMomResCorrection);
+  fMasterLednickyFitter->SetApplyNonFlatBackgroundCorrection(fFitGen1->fApplyNonFlatBackgroundCorrection);
+  fMasterLednickyFitter->SetNonFlatBgdFitType(fFitGen1->fNonFlatBgdFitType);
+  fMasterLednickyFitter->SetIncludeResidualCorrelationsType(fFitGen1->fIncludeResidualsType);
+  fMasterLednickyFitter->SetChargedResidualsType(fFitGen1->fChargedResidualsType);
+  fMasterLednickyFitter->SetResPrimMaxDecayType(fFitGen1->fResPrimMaxDecayType);
 }
 
 //________________________________________________________________________________________________________________
@@ -225,7 +226,121 @@ void DualieFitGenerator::DoFit(bool aShareLambda, bool aShareRadii, double aMaxF
   InitializeGenerator(aShareLambda, aShareRadii, aMaxFitKStar);
   GlobalFitter2 = fMasterLednickyFitter;
   fMasterLednickyFitter->DoFit();
+
+  ReturnNecessaryInfoToFitGenerators();
 }
+
+
+//________________________________________________________________________________________________________________
+void DualieFitGenerator::ReturnNecessaryInfoToFitGenerators()
+{
+  //This isn't needed for the fitting process, just for drawing
+  //Currently, it seems to only thing needed is a somewhat functioning LednickyFitter member
+  //  and this fLednickyFitter only needs to know fChi2, fNDF and fKStarBinCenters
+  //Making shallow copies, as I so frequently and dangerously I like to do, should work here
+
+  fFitGen1->fLednickyFitter = fMasterLednickyFitter;
+  fFitGen2->fLednickyFitter = fMasterLednickyFitter;
+}
+
+
+//******************************************* DRAWING ************************************************************
+
+//________________________________________________________________________________________________________________
+TObjArray* DualieFitGenerator::DrawKStarCfs(bool aSaveImage, bool aDrawSysErrors)
+{
+  TObjArray* tReturnArray = new TObjArray();
+  tReturnArray->Add((TCanvas*)fFitGen1->DrawKStarCfs(aSaveImage, aDrawSysErrors));
+  tReturnArray->Add((TCanvas*)fFitGen2->DrawKStarCfs(aSaveImage, aDrawSysErrors));
+  return tReturnArray;
+}
+
+//________________________________________________________________________________________________________________
+TObjArray* DualieFitGenerator::DrawKStarCfswFits_PartAn(BFieldType aBFieldType, bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, NonFlatBgdFitType aNonFlatBgdFitType, bool aSaveImage, bool aZoomROP)
+{
+  TObjArray* tReturnArray = new TObjArray();
+  tReturnArray->Add((TCanvas*)fFitGen1->DrawKStarCfswFits_PartAn(aBFieldType, aMomResCorrectFit, aNonFlatBgdCorrectFit, aNonFlatBgdFitType, aSaveImage, aZoomROP));
+  tReturnArray->Add((TCanvas*)fFitGen2->DrawKStarCfswFits_PartAn(aBFieldType, aMomResCorrectFit, aNonFlatBgdCorrectFit, aNonFlatBgdFitType, aSaveImage, aZoomROP));
+  return tReturnArray;
+}
+
+//________________________________________________________________________________________________________________
+TObjArray* DualieFitGenerator::DrawKStarCfswFits(bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, NonFlatBgdFitType aNonFlatBgdFitType, bool aSaveImage, bool aDrawSysErrors, bool aZoomROP)
+{
+  TObjArray* tReturnArray = new TObjArray();
+  tReturnArray->Add((TCanvas*)fFitGen1->DrawKStarCfswFits(aMomResCorrectFit, aNonFlatBgdCorrectFit, aNonFlatBgdFitType, aSaveImage, aDrawSysErrors, aZoomROP));
+  tReturnArray->Add((TCanvas*)fFitGen2->DrawKStarCfswFits(aMomResCorrectFit, aNonFlatBgdCorrectFit, aNonFlatBgdFitType, aSaveImage, aDrawSysErrors, aZoomROP));
+  return tReturnArray;
+}
+
+//________________________________________________________________________________________________________________
+TObjArray* DualieFitGenerator::DrawAllResiduals(bool aSaveImage)
+{
+  TObjArray* tReturnArray = new TObjArray();
+  tReturnArray->Add((TObjArray*)fFitGen1->DrawAllResiduals(aSaveImage));
+  tReturnArray->Add((TObjArray*)fFitGen2->DrawAllResiduals(aSaveImage));
+  return tReturnArray;
+}
+
+//________________________________________________________________________________________________________________
+TObjArray* DualieFitGenerator::DrawAllResidualsWithTransformMatrices(bool aSaveImage)
+{
+  TObjArray* tReturnArray = new TObjArray();
+  tReturnArray->Add((TObjArray*)fFitGen1->DrawAllResidualsWithTransformMatrices(aSaveImage));
+  tReturnArray->Add((TObjArray*)fFitGen2->DrawAllResidualsWithTransformMatrices(aSaveImage));
+  return tReturnArray;
+}
+
+//________________________________________________________________________________________________________________
+TObjArray* DualieFitGenerator::DrawAllSingleKStarCfwFitAndResiduals_PartAn(BFieldType aBFieldType, bool aDrawData, bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, NonFlatBgdFitType aNonFlatBgdFitType, bool aSaveImage, bool aZoomROP, bool aOutputCheckCorrectedCf)
+{
+  TObjArray* tReturnArray = new TObjArray();
+  tReturnArray->Add((TObjArray*)fFitGen1->DrawAllSingleKStarCfwFitAndResiduals_PartAn(aBFieldType, aDrawData, aMomResCorrectFit, aNonFlatBgdCorrectFit, aNonFlatBgdFitType, aSaveImage, aZoomROP, aOutputCheckCorrectedCf));
+  tReturnArray->Add((TObjArray*)fFitGen2->DrawAllSingleKStarCfwFitAndResiduals_PartAn(aBFieldType, aDrawData, aMomResCorrectFit, aNonFlatBgdCorrectFit, aNonFlatBgdFitType, aSaveImage, aZoomROP, aOutputCheckCorrectedCf));
+  return tReturnArray;
+}
+
+//________________________________________________________________________________________________________________
+TObjArray* DualieFitGenerator::DrawAllSingleKStarCfwFitAndResiduals(bool aDrawData, bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, NonFlatBgdFitType aNonFlatBgdFitType, bool aSaveImage, bool aDrawSysErrors, bool aZoomROP, bool aOutputCheckCorrectedCf)
+{
+  TObjArray* tReturnArray = new TObjArray();
+  tReturnArray->Add((TObjArray*)fFitGen1->DrawAllSingleKStarCfwFitAndResiduals(aDrawData, aMomResCorrectFit, aNonFlatBgdCorrectFit, aNonFlatBgdFitType, aSaveImage, aDrawSysErrors, aZoomROP, aOutputCheckCorrectedCf));
+  tReturnArray->Add((TObjArray*)fFitGen2->DrawAllSingleKStarCfwFitAndResiduals(aDrawData, aMomResCorrectFit, aNonFlatBgdCorrectFit, aNonFlatBgdFitType, aSaveImage, aDrawSysErrors, aZoomROP, aOutputCheckCorrectedCf));
+  return tReturnArray;
+}
+
+//________________________________________________________________________________________________________________
+TObjArray* DualieFitGenerator::DrawKStarCfswFitsAndResiduals(bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, NonFlatBgdFitType aNonFlatBgdFitType, bool aSaveImage, bool aDrawSysErrors, bool aZoomROP, bool aZoomResiduals)
+{
+  TObjArray* tReturnArray = new TObjArray();
+  tReturnArray->Add((TCanvas*)fFitGen1->DrawKStarCfswFitsAndResiduals(aMomResCorrectFit, aNonFlatBgdCorrectFit, aNonFlatBgdFitType, aSaveImage, aDrawSysErrors, aZoomROP, aZoomResiduals));
+  tReturnArray->Add((TCanvas*)fFitGen2->DrawKStarCfswFitsAndResiduals(aMomResCorrectFit, aNonFlatBgdCorrectFit, aNonFlatBgdFitType, aSaveImage, aDrawSysErrors, aZoomROP, aZoomResiduals));
+  return tReturnArray;
+}
+
+
+//________________________________________________________________________________________________________________
+TObjArray* DualieFitGenerator::DrawModelKStarCfs(bool aSaveImage)
+{
+  TObjArray* tReturnArray = new TObjArray();
+  tReturnArray->Add((TCanvas*)fFitGen1->DrawModelKStarCfs(aSaveImage));
+  tReturnArray->Add((TCanvas*)fFitGen2->DrawModelKStarCfs(aSaveImage));
+  return tReturnArray;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -11,61 +11,68 @@ int main(int argc, char **argv)
   ChronoTimer tFullTimer(kSec);
   tFullTimer.Start();
 //-----------------------------------------------------------------------------
-//  TString tResultsDate = "20161027";
-//  TString tResultsDate = "20171220_onFlyStatusFalse";
-  TString tResultsDate = "20171227";
-//  TString tResultsDate = "20171227_LHC10h";
-//  TString tResultsDate = "20180104_useIsProbableElectronMethodTrue";
-//  TString tResultsDate = "20180104_useIsProbableElectronMethodFalse";
 
+  //--Rarely change---------------------
+  AnalysisRunType tAnRunType = kTrain;
+  int tNPartialAnalysis = 2;
+  CentralityType tCentType = kMB/*k0010*/;
+  FitGeneratorType tGenType = kPairwConj;
+  FitType tFitType = kChi2PML;
+  //------------------------------------
+
+  //*****************************************
   bool bDoFit = true;
   bool bGenerateContours = false;
 
-  double tMaxFitKStar=0.3;
-
+  TString tResultsDate = "20171227"/*"20161027"*//*"20171220_onFlyStatusFalse"*//*"20171227_LHC10h"*//*"20180104_useIsProbableElectronMethodTrue"*//*"20180104_useIsProbableElectronMethodFalse"*/;
   AnalysisType tAnType = kLamKchP;
-  AnalysisRunType tAnRunType = kTrain;
-  int tNPartialAnalysis = 2;
-//  CentralityType tCentType = k0010;  //TODO
-  CentralityType tCentType = kMB;  //TODO
-  FitGeneratorType tGenType = kPairwConj;
-  FitType tFitType = kChi2PML;
-  bool tShareLambdaParams = false;
-  bool tAllShareSingleLambdaParam = false;
 
+  double tMaxFitKStar=0.3;
+  //*****************************************
+
+  //--Save options
   bool SaveImages = false;
   TString tSaveFileType = "pdf";
   bool SaveImagesInRootFile = false;
 
+  //--Sharing lambda
+  bool tShareLambdaParams = false;          //If true, only share lambda parameters across like-centralities
+  bool tAllShareSingleLambdaParam = false;
+
+  //--Corrections
   bool ApplyMomResCorrection = true;
   bool ApplyNonFlatBackgroundCorrection = true;
   NonFlatBgdFitType tNonFlatBgdFitType = kLinear;
   bool UseNewBgdTreatment = false;
     if(UseNewBgdTreatment) tMaxFitKStar = 0.5;
 
+  //--Residuals
   IncludeResidualsType tIncludeResidualsType = kInclude3Residuals; 
   ChargedResidualsType tChargedResidualsType = kUseXiDataAndCoulombOnlyInterp/*kUseCoulombOnlyInterpForAll*/;
   ResPrimMaxDecayType tResPrimMaxDecayType = k4fm;
 
+  //--Bound lambda
   bool UnboundLambda = true;
+  double aLambdaMin=0., aLambdaMax=1.;
+  if(UnboundLambda) aLambdaMax=0.;
 
+  //--Fix parameters
   bool FixRadii = false;
   bool FixD0 = false;
   bool FixAllScattParams = false;
   bool FixAllLambdaTo1 = false;
   if(FixAllLambdaTo1) tAllShareSingleLambdaParam = true;
 
+  //--mT scaling
   bool UsemTScalingOfResidualRadii = false;
   double mTScalingPowerOfResidualRadii = -0.5;
 
-  double aLambdaMin=0., aLambdaMax=1.;
-  if(UnboundLambda) aLambdaMax=0.;
-
+  //--Plotting options
   bool bZoomROP = false;
   bool bDrawResiduals = false;
+  bool bDrawPartAn = false;
 
   bool bDrawSysErrs = true;
-
 
 //-----------------------------------------------------------------------------
 
@@ -98,16 +105,19 @@ int main(int argc, char **argv)
 //  TString tSaveDirectoryBase = TString::Format("/home/jesse/Analysis/Presentations/AliFemto/20171108/Figures/%s/", cAnalysisBaseTags[tAnType]);
   TString tSaveDirectoryBase = tDirectoryBase;
 
+//-----------------------------------------------------------------------------
+
   TString tSaveNameModifier = "";
   LednickyFitter::AppendFitInfo(tSaveNameModifier, ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, tIncludeResidualsType, tResPrimMaxDecayType, tChargedResidualsType, FixD0);
 
   if(FixAllLambdaTo1) tSaveNameModifier += TString("_FixAllLambdaTo1");
   if(FixRadii) tSaveNameModifier += TString("_FixedRadii");
   if(FixAllScattParams) tSaveNameModifier += TString("_FixedScattParams");
+  if(tShareLambdaParams) tSaveNameModifier += TString("_ShareLamAcrossCent");
   if(tAllShareSingleLambdaParam && !FixAllLambdaTo1) tSaveNameModifier += TString("_SingleLamParam");
   if(UsemTScalingOfResidualRadii) tSaveNameModifier += TString::Format("_UsingmTScalingOfResidualRadii");
 
-
+//-----------------------------------------------------------------------------
 
   FitGeneratorAndDraw* tLamKchP = new FitGeneratorAndDraw(tFileLocationBase,tFileLocationBaseMC,tAnType, tCentType,tAnRunType,tNPartialAnalysis,tGenType,tShareLambdaParams,tAllShareSingleLambdaParam);
 //  FitGeneratorAndDraw* tLamKchP = new FitGeneratorAndDraw(tFileLocationBase,tFileLocationBaseMC,tAnType,{k0010,k1030},tAnRunType,tNPartialAnalysis,tGenType,tShareLambdaParams,tAllShareSingleLambdaParam);
@@ -180,7 +190,7 @@ int main(int argc, char **argv)
   }
 
 
-
+//-------------------------------------------------------------------------------
   if(bDoFit)
   {
     tLamKchP->DoFit(tMaxFitKStar);
@@ -188,14 +198,17 @@ int main(int argc, char **argv)
     TCanvas* tKStarwFitsCan_Zoom = tLamKchP->DrawKStarCfswFits(ApplyMomResCorrection,ApplyNonFlatBackgroundCorrection,tNonFlatBgdFitType,SaveImages,bDrawSysErrs,true);
     TCanvas* tKStarwFitsCan_UnZoom = tLamKchP->DrawKStarCfswFits(ApplyMomResCorrection,ApplyNonFlatBackgroundCorrection,tNonFlatBgdFitType,SaveImages,bDrawSysErrs,false);
 
-//    TCanvas* tKStarwFitsCan_FemtoMinus = tLamKchP->DrawKStarCfswFits_PartAn(kFemtoMinus,ApplyMomResCorrection,ApplyNonFlatBackgroundCorrection,tNonFlatBgdFitType,SaveImages,bZoomROP);
-//    TCanvas* tKStarwFitsCan_FemtoPlus = tLamKchP->DrawKStarCfswFits_PartAn(kFemtoPlus,ApplyMomResCorrection,ApplyNonFlatBackgroundCorrection,tNonFlatBgdFitType,SaveImages,bZoomROP);
+    if(bDrawPartAn)
+    {
+      TCanvas* tKStarwFitsCan_FemtoMinus = tLamKchP->DrawKStarCfswFits_PartAn(kFemtoMinus,ApplyMomResCorrection,ApplyNonFlatBackgroundCorrection,tNonFlatBgdFitType,SaveImages,bZoomROP);
+      TCanvas* tKStarwFitsCan_FemtoPlus = tLamKchP->DrawKStarCfswFits_PartAn(kFemtoPlus,ApplyMomResCorrection,ApplyNonFlatBackgroundCorrection,tNonFlatBgdFitType,SaveImages,bZoomROP);
+    }
 
 //    TCanvas* tKStarCfs = tLamKchP->DrawKStarCfs(SaveImages);
 //    TCanvas* tModelKStarCfs = tLamKchP->DrawModelKStarCfs(SaveImages);
 //    tLamKchP->FindGoodInitialValues(ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection);
 
-//-------------------------------------------------------------------------------
+    //-------------------------------------------------------------------------------
     TObjArray* tAllCanLamKchP;
     TCanvas* tCanPrimwFitsAndResidual;
     TObjArray* tAllResWithTransMatrices;
@@ -210,7 +223,7 @@ int main(int argc, char **argv)
     {
 //      tAllCanLamKchP = tLamKchP->DrawAllResiduals(SaveImages);
 
-//      TCanvas* tCanPrimWithRes = tLamKchP->DrawPrimaryWithResiduals(0,k0010,TString("PrimaryWithResidual_")+TString(cAnalysisBaseTags[tAnType]));
+
       tCanPrimwFitsAndResidual = tLamKchP->DrawKStarCfswFitsAndResiduals(ApplyMomResCorrection,ApplyNonFlatBackgroundCorrection,tNonFlatBgdFitType,SaveImages,bDrawSysErrs,bZoomROP,aZoomResiduals);
 
 //      tAllResWithTransMatrices = tLamKchP->DrawAllResidualsWithTransformMatrices(SaveImages);
@@ -219,11 +232,14 @@ int main(int argc, char **argv)
 
       tAllSingleKStarCfwFitAndResiduals = tLamKchP->DrawAllSingleKStarCfwFitAndResiduals(bDrawData, ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, tNonFlatBgdFitType, SaveImages, bDrawSysErrs, bZoomROP, aOutputCheckCorrectedCf);
 
-//      tAllSingleKStarCfwFitAndResiduals_FemtoMinus = tLamKchP->DrawAllSingleKStarCfwFitAndResiduals_PartAn(kFemtoMinus, bDrawData, ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, tNonFlatBgdFitType, SaveImages, bZoomROP, aOutputCheckCorrectedCf);
-//      tAllSingleKStarCfwFitAndResiduals_FemtoPlus = tLamKchP->DrawAllSingleKStarCfwFitAndResiduals_PartAn(kFemtoPlus, bDrawData, ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, tNonFlatBgdFitType, SaveImages, bZoomROP, aOutputCheckCorrectedCf);
+      if(bDrawPartAn)
+      {
+        tAllSingleKStarCfwFitAndResiduals_FemtoMinus = tLamKchP->DrawAllSingleKStarCfwFitAndResiduals_PartAn(kFemtoMinus, bDrawData, ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, tNonFlatBgdFitType, SaveImages, bZoomROP, aOutputCheckCorrectedCf);
+        tAllSingleKStarCfwFitAndResiduals_FemtoPlus = tLamKchP->DrawAllSingleKStarCfwFitAndResiduals_PartAn(kFemtoPlus, bDrawData, ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, tNonFlatBgdFitType, SaveImages, bZoomROP, aOutputCheckCorrectedCf);
+      }
     }
 
-//-------------------------------------------------------------------------------
+    //-------------------------------------------------------------------------------
     if(SaveImagesInRootFile)
     {
       TFile *tFile = new TFile(tLamKchP->GetSaveLocationBase() + TString(cAnalysisBaseTags[tAnType]) + TString("Plots") + tLamKchP->GetSaveNameModifier() + TString(".root"), "RECREATE");
