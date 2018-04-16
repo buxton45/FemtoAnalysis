@@ -1,9 +1,6 @@
 #include "FitGenerator.h"
 class FitGenerator;
 
-enum ThermEventsType {kMe=0, kAdam=1, kMeAndAdam=2};
-const char* const cThermEventsTypeTags[3] = {"_Me", "_Adam", "_MeAndAdam"};
-
 //________________________________________________________________________________________________________________
 void SetStyleAndColor(TH1* aHist, int aMarkerStyle, int aColor, double aMarkerSize=0.75)
 {

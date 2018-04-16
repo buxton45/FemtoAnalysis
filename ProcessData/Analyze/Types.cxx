@@ -330,7 +330,10 @@ const char* const cPrettyCentralityTags[4] = {"0-10%", "10-30%", "30-50%", ""};
 const char* const cKStarTrueVsRecTypeTags[4] = {"Same","RotSame","Mixed","RotMixed"};
 
 //enum NonFlatBgdFitType
-const char* const cNonFlatBgdFitTypeTags[4] = {"Linear", "Quadratic", "Gaussian", "Polynomial"};
+const char* const cNonFlatBgdFitTypeTags[5] = {"Linear", "Quadratic", "Gaussian", "Polynomial", "DivideByTherm"};
+
+//enum ThermEventsType
+const char* const cThermEventsTypeTags[3] = {"_Me", "_Adam", "_MeAndAdam"};
 
 //enum IncludeResidualsType
 const char* const cIncludeResidualsTypeTags[3] = {"_NoRes", "_10Res", "_3Res"};

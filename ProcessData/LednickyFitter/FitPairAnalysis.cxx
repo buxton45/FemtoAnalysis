@@ -40,6 +40,7 @@ FitPairAnalysis::FitPairAnalysis(TString aAnalysisName, vector<FitPartialAnalysi
 
   fPrimaryFit(nullptr),
   fNonFlatBackground(nullptr),
+  fThermNonFlatBgd(nullptr),
 
   fNFitParams(0),
   fNFitParamsToShare(5),  //sharing Lambda, Radius, Ref0, Imf0, d0
@@ -111,6 +112,7 @@ FitPairAnalysis::FitPairAnalysis(TString aFileLocationBase, AnalysisType aAnalys
 
   fPrimaryFit(nullptr),
   fNonFlatBackground(nullptr),
+  fThermNonFlatBgd(nullptr),
 
   fNFitParams(0),
   fNFitParamsToShare(5),  //sharing Lambda, Radius, Ref0, Imf0, d0
@@ -193,6 +195,7 @@ FitPairAnalysis::FitPairAnalysis(TString aFileLocationBase, TString aFileLocatio
 
   fPrimaryFit(nullptr),
   fNonFlatBackground(nullptr),
+  fThermNonFlatBgd(nullptr),
 
   fNFitParams(0),
   fNFitParamsToShare(5),  //sharing Lambda, Radius, Ref0, Imf0, d0
@@ -418,6 +421,18 @@ void FitPairAnalysis::CreateFitFunction(IncludeResidualsType aIncResType, ResPri
 //  fKStarCfHeavy->GetHeavyCf()->GetListOfFunctions()->Add(fPrimaryFit);
 }
 
+
+//________________________________________________________________________________________________________________
+TH1* FitPairAnalysis::GetThermNonFlatBackground()
+{
+  if(fThermNonFlatBgd) return fThermNonFlatBgd;
+
+  fThermNonFlatBgd = (TH1*)fFitPartialAnalysisCollection[0]->GetThermNonFlatBackground()->Clone();  //Doesn't matter from which FitPartialAnalysis I grab the
+                                                                                                    // THERMINATOR histogram, because they do not differ
+
+  assert(fThermNonFlatBgd->GetBinWidth(1) == fKStarCfHeavy->GetHeavyCf()->GetBinWidth(1));
+  return fThermNonFlatBgd;
+}
 
 
 //________________________________________________________________________________________________________________

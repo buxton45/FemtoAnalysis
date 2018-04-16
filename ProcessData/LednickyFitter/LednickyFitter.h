@@ -72,6 +72,7 @@ public:
   static double GetPmlValue(double aNumContent, double aDenContent, double aCfContent);
 
   void ApplyNewNonFlatBackgroundCorrection(vector<double> &aCf, vector<double> &aKStarBinCenters, FitPartialAnalysis* aPartAn, double *par);
+  void DivideByTherminatorBackground(vector<double> &aCf, vector<double> &aKStarBinCenters, TH1* aThermNonFlatBgd);
   static void ApplyNonFlatBackgroundCorrection(vector<double> &aCf, vector<double> &aKStarBinCenters, TF1* aNonFlatBgd);
   static vector<double> ApplyMomResCorrection(vector<double> &aCf, vector<double> &aKStarBinCenters, TH2* aMomResMatrix);
   static void ApplyNormalization(double aNorm, td1dVec &aCf);

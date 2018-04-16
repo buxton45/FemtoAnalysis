@@ -668,9 +668,17 @@ TF1* FitPartialAnalysis::FitNonFlatBackground(TH1* aCf, NonFlatBgdFitType aBgdFi
   return FitNonFlatBackground(tDummyNum, tDummyDen, aCf, aBgdFitType, kChi2, false, aMinBgdFit, aMaxBgdFit, aMaxBgdBuild, aKStarMinNorm, aKStarMaxNorm);
 }
 
+//________________________________________________________________________________________________________________
+TH1* FitPartialAnalysis::GetThermNonFlatBackground()
+{
+  TH1* tReturnHist;
+//TODO
+  return tReturnHist;
+}
+
 
 //________________________________________________________________________________________________________________
-TF1* FitPartialAnalysis::GetThermNonFlatBackground()
+TF1* FitPartialAnalysis::GetThermNonFlatBackgroundFit()
 {
   if(fNonFlatBackground) return fNonFlatBackground;
 
@@ -697,7 +705,7 @@ TF1* FitPartialAnalysis::GetThermNonFlatBackground()
 TF1* FitPartialAnalysis::GetNonFlatBackground(NonFlatBgdFitType aBgdFitType, FitType aFitType, bool aNormalizeFitToCf)
 {
   if(fNonFlatBackground && aNormalizeFitToCf==fNormalizeBgdFitToCf) return fNonFlatBackground;
-  if(aBgdFitType==kPolynomial) return GetThermNonFlatBackground();
+  if(aBgdFitType==kPolynomial) return GetThermNonFlatBackgroundFit();
 
   fNormalizeBgdFitToCf = aNormalizeFitToCf;
   if(aFitType==kChi2PML)

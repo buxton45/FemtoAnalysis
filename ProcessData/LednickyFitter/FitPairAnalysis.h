@@ -44,9 +44,6 @@ using std::vector;
 #include "FitPartialAnalysis.h"
 class FitPartialAnalysis;
 
-#include "CfHeavy.h"
-class CfHeavy;
-
 #include "ResidualCollection.h"
 class ResidualCollection;
 
@@ -68,6 +65,7 @@ public:
   void CreateFitFunction(IncludeResidualsType aIncResType, ResPrimMaxDecayType aResPrimMaxDecayType, double aChi2, int aNDF, 
                          double aKStarMin=0.0, double aKStarMax=1.0, TString aBaseName="Fit");
 
+  TH1* GetThermNonFlatBackground();
   //----------- Used when fitting background first and separate from everything else (old method)
   TF1* GetNonFlatBackground_FitCombinedPartials(NonFlatBgdFitType aBgdFitType, FitType aFitType, bool aNormalizeFitToCf);
   TF1* GetNonFlatBackground_CombinePartialFits(NonFlatBgdFitType aBgdFitType, FitType aFitType, bool aNormalizeFitToCf);
@@ -185,6 +183,7 @@ private:
 
   TF1* fPrimaryFit;
   TF1* fNonFlatBackground;
+  TH1* fThermNonFlatBgd;
 
 
   int fNFitParams;

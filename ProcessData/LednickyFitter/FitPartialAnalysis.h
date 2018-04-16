@@ -52,6 +52,9 @@ class BackgroundFitter;
 #include "CfLite.h"
 class CfLite;
 
+#include "CfHeavy.h"
+class CfHeavy;
+
 #include "Types.h"
 #include "Types_LambdaValues.h"
 #include "Types_ThermBgdParams.h"
@@ -94,7 +97,9 @@ public:
   static TF1* FitNonFlatBackground(TH1* aCf, NonFlatBgdFitType aBgdFitType, 
                                    double aMinBgdFit=0.6, double aMaxBgdFit=0.9, double aMaxBgdBuild=2.0, double aKStarMinNorm=0.32, double aKStarMaxNorm=0.40);
 
-  TF1* GetThermNonFlatBackground();
+  TH1* GetThermNonFlatBackground();
+
+  TF1* GetThermNonFlatBackgroundFit();
   TF1* GetNonFlatBackground(NonFlatBgdFitType aBgdFitType, FitType aFitType, bool aNormalizeFitToCf);
 
 
