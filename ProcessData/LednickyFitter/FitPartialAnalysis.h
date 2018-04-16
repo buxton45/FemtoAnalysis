@@ -55,6 +55,9 @@ class CfLite;
 #include "CfHeavy.h"
 class CfHeavy;
 
+#include "ThermCf.h"
+class ThermCf;
+
 #include "Types.h"
 #include "Types_LambdaValues.h"
 #include "Types_ThermBgdParams.h"

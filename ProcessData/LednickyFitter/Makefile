@@ -23,7 +23,7 @@ CFLAGS = $(shell root-config --cflags) -Wall -std=c++11 -I${ANALYZE_DIR} -I${LED
 #IFLAGS = -I$(ROOTSYS)/include
 #.PHONY: clean
 
-MY_LIBS = $(addprefix build/, FitParameter.o FitChi2Histograms.o BackgroundFitter.o FitPartialAnalysis.o FitPairAnalysis.o FitSharedAnalyses.o MathematicaSession.o WaveFunction.o ChargedResidualCf.o SimpleChargedResidualCf.o NeutralResidualCf.o ResidualCollection.o SimpleLednickyFitter.o LednickyFitter.o FitGenerator.o FitGeneratorAndDraw.o DualieFitGenerator.o CfLite.o CfHeavy.o Types.o Types_LambdaValues.o Types_FitParamValues.o Types_ThermBgdParams.o AnalysisInfo.o Faddeeva.o CanvasPartition.o)
+MY_LIBS = $(addprefix build/, FitParameter.o FitChi2Histograms.o BackgroundFitter.o FitPartialAnalysis.o FitPairAnalysis.o FitSharedAnalyses.o MathematicaSession.o WaveFunction.o ChargedResidualCf.o SimpleChargedResidualCf.o NeutralResidualCf.o ResidualCollection.o SimpleLednickyFitter.o LednickyFitter.o FitGenerator.o FitGeneratorAndDraw.o DualieFitGenerator.o ThermCf.o CfLite.o CfHeavy.o Types.o Types_LambdaValues.o Types_FitParamValues.o Types_ThermBgdParams.o AnalysisInfo.o Faddeeva.o CanvasPartition.o)
 
 BINARIES = runLamKchP runLamKchPTest runCompareKchFix2 runFits runTest runGenerator runDualieGenerator runCompareIgnoreOnFlyStatus runScattParamValues runLamKchPvsKchM runPlotAll runSimpleLednicky runCompareFittingMethods runmTScaling runCompareBackgrounds
 
