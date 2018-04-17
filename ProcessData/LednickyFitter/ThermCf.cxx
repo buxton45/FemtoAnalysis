@@ -31,6 +31,7 @@ ThermCf::ThermCf(TString aFileName, TString aCfDescriptor, AnalysisType aAnalysi
   if(fCombineLamKchPM) assert(fAnalysisType==kLamKchP || fAnalysisType==kALamKchM ||
                               fAnalysisType==kLamKchM || fAnalysisType==kALamKchP);
 
+  BuildThermCf();
 }
 
 

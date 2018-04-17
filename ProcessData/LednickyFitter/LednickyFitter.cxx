@@ -217,14 +217,9 @@ void LednickyFitter::ApplyNewNonFlatBackgroundCorrection(vector<double> &aCf, ve
 
 
 //________________________________________________________________________________________________________________
-void LednickyFitter::DivideByTherminatorBackground(vector<double> &aCf, vector<double> &aKStarBinCenters, TH1* aThermNonFlatBgd)
+void LednickyFitter::DivideByTherminatorBackground(TH1* aCfData, TH1* aThermNonFlatBgd)
 {
-  assert(aCf.size() == aKStarBinCenters.size());
-  for(unsigned int i=0; i<aCf.size(); i++)
-  {
-    assert(aKStarBinCenters[i] == aThermNonFlatBgd->GetBinCenter(i+1));
-    aCf[i] = aCf[i]/aThermNonFlatBgd->GetBinContent(i+1);
-  }
+  aCfData->Divide(aThermNonFlatBgd);
 }
 
 
@@ -396,13 +391,10 @@ void LednickyFitter::CalculateFitFunction(int &npar, double &chi2, double *par)
       else tCorrectedFitCfContent = tFitCfContent;
 
       bool tNormalizeBgdFitToCf=true;
-      if(fApplyNonFlatBackgroundCorrection)
+      if(fNonFlatBgdFitType==kDivideByTherm) DivideByTherminatorBackground(tCf, tFitPartialAnalysis->GetThermNonFlatBackground());
+      else if(fApplyNonFlatBackgroundCorrection)
       {
-        if(fNonFlatBgdFitType==kDivideByTherm)
-        {
-          DivideByTherminatorBackground(tCorrectedFitCfContent, fKStarBinCenters, tFitPartialAnalysis->GetThermNonFlatBackground());
-        }
-        else if(!fFitSharedAnalyses->UsingNewBgdTreatment())
+        if(!fFitSharedAnalyses->UsingNewBgdTreatment())
         {
           //I thought using PairAnalysis, when BgdFitType != kLinear, would help stabilize things, but it doesn't seem to help all that much.
           //  Things have been stabilized with other tweaks.

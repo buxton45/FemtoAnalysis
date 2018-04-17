@@ -62,6 +62,8 @@ public:
 
   void BuildHeavyCfwErrorsByHand();
 
+  void DivideCfByThermBgd(TH1* aThermBgd);
+
   //inline-----------------------
   TH1* GetHeavyCf();
   TH1* GetHeavyCfClone();

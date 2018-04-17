@@ -67,6 +67,7 @@ FitPartialAnalysis::FitPartialAnalysis(TString aFileLocation, TString aAnalysisN
 
   fPrimaryFit(nullptr),
   fNonFlatBackground(nullptr),
+  fThermNonFlatBgd(nullptr),
   fCorrectedFitVec(0)
 
 
@@ -213,6 +214,7 @@ FitPartialAnalysis::FitPartialAnalysis(TString aFileLocation, TString aFileLocat
 
   fPrimaryFit(nullptr),
   fNonFlatBackground(nullptr),
+  fThermNonFlatBgd(nullptr),
   fCorrectedFitVec(0)
 
 
@@ -669,11 +671,29 @@ TF1* FitPartialAnalysis::FitNonFlatBackground(TH1* aCf, NonFlatBgdFitType aBgdFi
 }
 
 //________________________________________________________________________________________________________________
-TH1* FitPartialAnalysis::GetThermNonFlatBackground()
+TH1* FitPartialAnalysis::GetThermNonFlatBackground(bool aCombineConj, bool aCombineLamKchPM, ThermEventsType aThermEventsType)
 {
-  TH1* tReturnHist;
-//TODO
-  return tReturnHist;
+  if(fThermNonFlatBgd) return fThermNonFlatBgd->GetThermCf();
+
+  //------------------------------------
+  TString tFileName = "CorrelationFunctions_RandomEPs_NumWeight1.root";
+  TString tCfDescriptor = "Full";
+//  TString tCfDescriptor = "PrimaryOnly";
+
+  int aRebin = 1;
+
+  fThermNonFlatBgd = new ThermCf(tFileName, tCfDescriptor, fAnalysisType, fCentralityType, aCombineConj, aCombineLamKchPM, aThermEventsType, 
+                                 aRebin, fKStarCfLite->GetMinNorm(), fKStarCfLite->GetMaxNorm());
+
+  return fThermNonFlatBgd->GetThermCf();
+}
+
+
+//________________________________________________________________________________________________________________
+void FitPartialAnalysis::DivideCfByThermBgd(bool aCombineConj, bool aCombineLamKchPM, ThermEventsType aThermEventsType)
+{
+  TH1* tThermBgd = GetThermNonFlatBackground(aCombineConj, aCombineLamKchPM, aThermEventsType);
+  fKStarCfLite->DivideCfByThermBgd(tThermBgd);
 }
 
 

@@ -54,6 +54,8 @@ public:
   void BuildCfwErrorsByHand();
   TH1* GetUnNormalizedCf();
 
+  void DivideCfByThermBgd(TH1* aThermBgd);
+
   //inline-----------------------
   TString CfName();
   TString CfTitle();

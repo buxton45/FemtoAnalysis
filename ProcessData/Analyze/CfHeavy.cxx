@@ -351,3 +351,27 @@ void CfHeavy::BuildHeavyCfwErrorsByHand()
 }
 
 
+//________________________________________________________________________________________________________________
+void CfHeavy::DivideCfByThermBgd(TH1* aThermBgd)
+{
+  assert(fHeavyCf->GetBinWidth(1)==aThermBgd->GetBinWidth(1));
+  assert(aThermBgd->GetNbinsX() >= fHeavyCf->GetNbinsX());
+
+  TH1* aThermBgdToUse;
+  if(aThermBgd->GetNbinsX() > fHeavyCf->GetNbinsX())
+  {
+    TString tName = aThermBgd->GetName();
+    aThermBgdToUse = (TH1*)fHeavyCf->Clone(tName);
+
+    for(int i=1; i<=fHeavyCf->GetNbinsX(); i++)
+    {
+      aThermBgdToUse->SetBinContent(i, aThermBgd->GetBinContent(i));
+      aThermBgdToUse->SetBinError(i, aThermBgd->GetBinError(i));
+    }
+  }
+  else aThermBgdToUse = aThermBgd;
+
+  fHeavyCf->Divide(aThermBgdToUse);
+}
+
+

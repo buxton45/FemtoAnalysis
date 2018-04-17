@@ -100,7 +100,8 @@ public:
   static TF1* FitNonFlatBackground(TH1* aCf, NonFlatBgdFitType aBgdFitType, 
                                    double aMinBgdFit=0.6, double aMaxBgdFit=0.9, double aMaxBgdBuild=2.0, double aKStarMinNorm=0.32, double aKStarMaxNorm=0.40);
 
-  TH1* GetThermNonFlatBackground();
+  TH1* GetThermNonFlatBackground(bool aCombineConj=true, bool aCombineLamKchPM=false, ThermEventsType aThermEventsType=kMeAndAdam);
+  void DivideCfByThermBgd(bool aCombineConj=true, bool aCombineLamKchPM=false, ThermEventsType aThermEventsType=kMeAndAdam);
 
   TF1* GetThermNonFlatBackgroundFit();
   TF1* GetNonFlatBackground(NonFlatBgdFitType aBgdFitType, FitType aFitType, bool aNormalizeFitToCf);
@@ -205,6 +206,7 @@ private:
 
   TF1* fPrimaryFit;
   TF1* fNonFlatBackground;
+  ThermCf* fThermNonFlatBgd;
   td1dVec fCorrectedFitVec;
 
 #ifdef __ROOT__

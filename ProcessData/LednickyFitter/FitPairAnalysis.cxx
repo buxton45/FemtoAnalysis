@@ -40,7 +40,7 @@ FitPairAnalysis::FitPairAnalysis(TString aAnalysisName, vector<FitPartialAnalysi
 
   fPrimaryFit(nullptr),
   fNonFlatBackground(nullptr),
-  fThermNonFlatBgd(nullptr),
+  fThermNonFlatBgdHist(nullptr),
 
   fNFitParams(0),
   fNFitParamsToShare(5),  //sharing Lambda, Radius, Ref0, Imf0, d0
@@ -112,7 +112,7 @@ FitPairAnalysis::FitPairAnalysis(TString aFileLocationBase, AnalysisType aAnalys
 
   fPrimaryFit(nullptr),
   fNonFlatBackground(nullptr),
-  fThermNonFlatBgd(nullptr),
+  fThermNonFlatBgdHist(nullptr),
 
   fNFitParams(0),
   fNFitParamsToShare(5),  //sharing Lambda, Radius, Ref0, Imf0, d0
@@ -195,7 +195,7 @@ FitPairAnalysis::FitPairAnalysis(TString aFileLocationBase, TString aFileLocatio
 
   fPrimaryFit(nullptr),
   fNonFlatBackground(nullptr),
-  fThermNonFlatBgd(nullptr),
+  fThermNonFlatBgdHist(nullptr),
 
   fNFitParams(0),
   fNFitParamsToShare(5),  //sharing Lambda, Radius, Ref0, Imf0, d0
@@ -423,15 +423,48 @@ void FitPairAnalysis::CreateFitFunction(IncludeResidualsType aIncResType, ResPri
 
 
 //________________________________________________________________________________________________________________
-TH1* FitPairAnalysis::GetThermNonFlatBackground()
+TH1* FitPairAnalysis::GetThermNonFlatBackground(bool aCombineConj, bool aCombineLamKchPM, ThermEventsType aThermEventsType)
 {
-  if(fThermNonFlatBgd) return fThermNonFlatBgd;
+  if(fThermNonFlatBgdHist) return fThermNonFlatBgdHist;
 
-  fThermNonFlatBgd = (TH1*)fFitPartialAnalysisCollection[0]->GetThermNonFlatBackground()->Clone();  //Doesn't matter from which FitPartialAnalysis I grab the
-                                                                                                    // THERMINATOR histogram, because they do not differ
+  double tOverallScale=0.;
+  double tTempScale=0., tTempNorm=0.;
 
-  assert(fThermNonFlatBgd->GetBinWidth(1) == fKStarCfHeavy->GetHeavyCf()->GetBinWidth(1));
-  return fThermNonFlatBgd;
+  fThermNonFlatBgdHist = (TH1*)fFitPartialAnalysisCollection[0]->GetThermNonFlatBackground(aCombineConj, aCombineLamKchPM, aThermEventsType)->Clone();
+  assert(fThermNonFlatBgdHist->GetBinWidth(1) == fKStarCfHeavy->GetHeavyCf()->GetBinWidth(1));
+
+  tTempScale = fFitPartialAnalysisCollection[0]->GetKStarCfLite()->GetNumScale();
+  tTempNorm = fFitPartialAnalysisCollection[0]->GetFitNormParameter()->GetFitValue();
+//TODO tTempNorm = 1.?
+
+  fThermNonFlatBgdHist->Scale(tTempScale*tTempNorm);
+  tOverallScale += tTempScale;
+
+  for(int iPartAn=1; iPartAn<fNFitPartialAnalysis; iPartAn++)
+  {
+    assert(((TH1*)fFitPartialAnalysisCollection[iPartAn]->GetThermNonFlatBackground(aCombineConj, aCombineLamKchPM, aThermEventsType))->GetBinWidth(1) == fKStarCfHeavy->GetHeavyCf()->GetBinWidth(1));
+
+    tTempScale = fFitPartialAnalysisCollection[iPartAn]->GetKStarCfLite()->GetNumScale();
+    tTempNorm = fFitPartialAnalysisCollection[iPartAn]->GetFitNormParameter()->GetFitValue();
+
+    fThermNonFlatBgdHist->Add((TH1*)fFitPartialAnalysisCollection[iPartAn]->GetThermNonFlatBackground(aCombineConj, aCombineLamKchPM, aThermEventsType), tTempScale*tTempNorm);
+    tOverallScale += tTempScale;
+  }
+  fThermNonFlatBgdHist->Scale(1./tOverallScale);
+
+  return fThermNonFlatBgdHist;
+}
+
+//________________________________________________________________________________________________________________
+void FitPairAnalysis::DivideCfByThermBgd(bool aCombineConj, bool aCombineLamKchPM, ThermEventsType aThermEventsType)
+{
+  for(int iPartAn=0; iPartAn<fNFitPartialAnalysis; iPartAn++)
+  {
+    fFitPartialAnalysisCollection[iPartAn]->DivideCfByThermBgd(aCombineConj, aCombineLamKchPM, aThermEventsType);
+  }
+
+  TH1* tThermBgd = GetThermNonFlatBackground(aCombineConj, aCombineLamKchPM, aThermEventsType);
+  fKStarCfHeavy->DivideCfByThermBgd(tThermBgd);
 }
 
 

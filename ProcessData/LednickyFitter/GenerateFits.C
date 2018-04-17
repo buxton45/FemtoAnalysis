@@ -43,6 +43,11 @@ int main(int argc, char **argv)
   bool ApplyMomResCorrection = true;
   bool ApplyNonFlatBackgroundCorrection = true;
   NonFlatBgdFitType tNonFlatBgdFitType = kLinear;
+    if(tNonFlatBgdFitType==kDivideByTherm)
+    {
+      tFitType = kChi2;
+      ApplyNonFlatBackgroundCorrection = false;
+    }
   bool UseNewBgdTreatment = false;
     if(UseNewBgdTreatment) tMaxFitKStar = 0.5;
 

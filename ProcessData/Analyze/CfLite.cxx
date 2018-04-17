@@ -220,5 +220,28 @@ TH1* CfLite::GetUnNormalizedCf()
   return tReturnCf;
 }
 
+//________________________________________________________________________________________________________________
+void CfLite::DivideCfByThermBgd(TH1* aThermBgd)
+{
+  assert(fCf->GetBinWidth(1)==aThermBgd->GetBinWidth(1));
+  assert(aThermBgd->GetNbinsX() >= fCf->GetNbinsX());
+
+  TH1* aThermBgdToUse;
+  if(aThermBgd->GetNbinsX() > fCf->GetNbinsX())
+  {
+    TString tName = aThermBgd->GetName();
+    aThermBgdToUse = (TH1*)fCf->Clone(tName);
+
+    for(int i=1; i<=fCf->GetNbinsX(); i++)
+    {
+      aThermBgdToUse->SetBinContent(i, aThermBgd->GetBinContent(i));
+      aThermBgdToUse->SetBinError(i, aThermBgd->GetBinError(i));
+    }
+  }
+  else aThermBgdToUse = aThermBgd;
+
+  fCf->Divide(aThermBgdToUse);
+}
+
 
 
