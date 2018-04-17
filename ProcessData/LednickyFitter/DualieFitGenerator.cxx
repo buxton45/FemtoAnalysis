@@ -23,7 +23,7 @@ void GlobalFCN2(Int_t &npar, Double_t *gin, Double_t &f, Double_t *par, Int_t if
 
 
 //________________________________________________________________________________________________________________
-DualieFitGenerator::DualieFitGenerator(TString aFileLocationBase, TString aFileLocationBaseMC, AnalysisType aAnalysisType, const vector<CentralityType> &aCentralityTypes, AnalysisRunType aRunType, int aNPartialAnalysis, FitGeneratorType aGeneratorType, bool aShareLambdaParams, bool aAllShareSingleLambdaParam, TString aDirNameModifier) :
+DualieFitGenerator::DualieFitGenerator(TString aFileLocationBase, TString aFileLocationBaseMC, AnalysisType aAnalysisType, const vector<CentralityType> &aCentralityTypes, AnalysisRunType aRunType, int aNPartialAnalysis, FitGeneratorType aGeneratorType, bool aShareLambdaParams, bool aAllShareSingleLambdaParam, TString aDirNameModifier, bool aUseNumRotPar2InsteadOfDen) :
   fFitGen1(nullptr),
   fFitGen2(nullptr),
 
@@ -36,14 +36,14 @@ DualieFitGenerator::DualieFitGenerator(TString aFileLocationBase, TString aFileL
 
   fMasterMinuitFitParametersMatrix(0)
 {
-  fFitGen1 = new FitGeneratorAndDraw(aFileLocationBase, aFileLocationBaseMC, kLamKchP, aCentralityTypes, aRunType, aNPartialAnalysis, kPairwConj, aShareLambdaParams, aAllShareSingleLambdaParam, aDirNameModifier);
-  fFitGen2 = new FitGeneratorAndDraw(aFileLocationBase, aFileLocationBaseMC, kLamKchM, aCentralityTypes, aRunType, aNPartialAnalysis, kPairwConj, aShareLambdaParams, aAllShareSingleLambdaParam, aDirNameModifier);
+  fFitGen1 = new FitGeneratorAndDraw(aFileLocationBase, aFileLocationBaseMC, kLamKchP, aCentralityTypes, aRunType, aNPartialAnalysis, kPairwConj, aShareLambdaParams, aAllShareSingleLambdaParam, aDirNameModifier, aUseNumRotPar2InsteadOfDen);
+  fFitGen2 = new FitGeneratorAndDraw(aFileLocationBase, aFileLocationBaseMC, kLamKchM, aCentralityTypes, aRunType, aNPartialAnalysis, kPairwConj, aShareLambdaParams, aAllShareSingleLambdaParam, aDirNameModifier, aUseNumRotPar2InsteadOfDen);
 
 }
 
 
 //________________________________________________________________________________________________________________
-DualieFitGenerator::DualieFitGenerator(TString aFileLocationBase, TString aFileLocationBaseMC, AnalysisType aAnalysisType, CentralityType aCentralityType, AnalysisRunType aRunType, int aNPartialAnalysis, FitGeneratorType aGeneratorType, bool aShareLambdaParams, bool aAllShareSingleLambdaParam, TString aDirNameModifier) :
+DualieFitGenerator::DualieFitGenerator(TString aFileLocationBase, TString aFileLocationBaseMC, AnalysisType aAnalysisType, CentralityType aCentralityType, AnalysisRunType aRunType, int aNPartialAnalysis, FitGeneratorType aGeneratorType, bool aShareLambdaParams, bool aAllShareSingleLambdaParam, TString aDirNameModifier, bool aUseNumRotPar2InsteadOfDen) :
   fFitGen1(nullptr),
   fFitGen2(nullptr),
 
@@ -56,8 +56,8 @@ DualieFitGenerator::DualieFitGenerator(TString aFileLocationBase, TString aFileL
 
   fMasterMinuitFitParametersMatrix(0)
 {
-  fFitGen1 = new FitGeneratorAndDraw(aFileLocationBase, aFileLocationBaseMC, kLamKchP, aCentralityType, aRunType, aNPartialAnalysis, kPairwConj, aShareLambdaParams, aAllShareSingleLambdaParam, aDirNameModifier);
-  fFitGen2 = new FitGeneratorAndDraw(aFileLocationBase, aFileLocationBaseMC, kLamKchM, aCentralityType, aRunType, aNPartialAnalysis, kPairwConj, aShareLambdaParams, aAllShareSingleLambdaParam, aDirNameModifier);
+  fFitGen1 = new FitGeneratorAndDraw(aFileLocationBase, aFileLocationBaseMC, kLamKchP, aCentralityType, aRunType, aNPartialAnalysis, kPairwConj, aShareLambdaParams, aAllShareSingleLambdaParam, aDirNameModifier, aUseNumRotPar2InsteadOfDen);
+  fFitGen2 = new FitGeneratorAndDraw(aFileLocationBase, aFileLocationBaseMC, kLamKchM, aCentralityType, aRunType, aNPartialAnalysis, kPairwConj, aShareLambdaParams, aAllShareSingleLambdaParam, aDirNameModifier, aUseNumRotPar2InsteadOfDen);
 
 }
 

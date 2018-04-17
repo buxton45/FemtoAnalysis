@@ -54,6 +54,8 @@ int main(int argc, char **argv)
   AnalysisType tAnType = kLamKchP;
 
   double tMaxFitKStar=0.3;
+
+  bool bUseNumRotPar2InsteadOfDen=false;
   //*****************************************
 
   //--Save options
@@ -167,7 +169,7 @@ int main(int argc, char **argv)
 
 //-----------------------------------------------------------------------------
 
-  DualieFitGenerator* tDualie = new DualieFitGenerator(tFileLocationBase,tFileLocationBaseMC,tAnType, tCentType,tAnRunType,tNPartialAnalysis,tGenType,tShareLambdaParams,tAllShareSingleLambdaParam);
+  DualieFitGenerator* tDualie = new DualieFitGenerator(tFileLocationBase, tFileLocationBaseMC, tAnType, tCentType, tAnRunType, tNPartialAnalysis, tGenType, tShareLambdaParams, tAllShareSingleLambdaParam, "", bUseNumRotPar2InsteadOfDen);
   tDualie->SetSaveLocationBase(tSaveDirectoryBase,tSaveNameModifier);
   tDualie->SetSaveFileType(tSaveFileType);
 

@@ -1,3 +1,7 @@
+/* CompareTwoAnalyses.C */
+/* Originally CompareIgnoreOnFlyStatus.C, used to compare different settings of
+   ignoreOnFlyStatus of V0s in analyses */
+
 #include "FitGenerator.h"
 class FitGenerator;
 
@@ -17,9 +21,9 @@ TCanvas* DrawKStarCfs(FitGenerator* aFG1, FitGenerator* aFG2, bool aZoom=false)
 
   int tNx=2, tNy=3;
 
-
   double tXLow = -0.02;
-  double tXHigh = 0.99;
+//  double tXHigh = 0.99;
+  double tXHigh = aFG1->GetKStarCf(0)->GetXaxis()->GetBinUpEdge(aFG1->GetKStarCf(0)->GetNbinsX());
   if(aZoom) tXHigh = 0.32;
 
   double tYLow = 0.71;
@@ -60,11 +64,8 @@ TCanvas* DrawKStarCfs(FitGenerator* aFG1, FitGenerator* aFG2, bool aZoom=false)
       TPaveText* tAnTypeName = tCanPart->SetupTPaveText(tTextAnType,i,j,0.8,0.85);
       tCanPart->AddPadPaveText(tAnTypeName,i,j);
 
-      CentralityType tCentType;
-      if(tAnalysisNumber==0 || tAnalysisNumber==1) tCentType = k0010;
-      else if(tAnalysisNumber==2 || tAnalysisNumber==3) tCentType = k0010;
-      else if(tAnalysisNumber==4 || tAnalysisNumber==5) tCentType = k0010;
-      else assert(0);
+      CentralityType tCentType = aFG1->GetSharedAn()->GetFitPairAnalysis(tAnalysisNumber)->GetCentralityType();
+
       TString tTextCentrality = TString(cPrettyCentralityTags[tCentType]);
       TPaveText* tCentralityName = tCanPart->SetupTPaveText(tTextCentrality,i,j,0.05,0.85);
       tCanPart->AddPadPaveText(tCentralityName,i,j);
@@ -82,18 +83,22 @@ TCanvas* DrawKStarCfs(FitGenerator* aFG1, FitGenerator* aFG2, bool aZoom=false)
 
 
 //________________________________________________________________________________________________________________
-TCanvas* DrawKStarCfRatios(FitGenerator* aFG1, FitGenerator* aFG2)
+TCanvas* DrawKStarCfRatios(FitGenerator* aFG1, FitGenerator* aFG2, bool aZoom=false)
 {
   AnalysisType aAnType = aFG1->GetFitSharedAnalyses()->GetFitPairAnalysis(0)->GetAnalysisType();
   AnalysisType aConjType = aFG1->GetFitSharedAnalyses()->GetFitPairAnalysis(1)->GetAnalysisType();
 
   TString tCanvasName = TString("canKStarCfsRatios");
+  if(aZoom) tCanvasName += TString("Zoom");
   tCanvasName += TString(cAnalysisBaseTags[aAnType]) + TString("wConj");
 
   int tNx=2, tNy=3;
 
   double tXLow = -0.02;
-  double tXHigh = 0.32;
+//  double tXHigh = 0.32;
+  double tXHigh = aFG1->GetKStarCf(0)->GetXaxis()->GetBinUpEdge(aFG1->GetKStarCf(0)->GetNbinsX());
+  if(aZoom) tXHigh = 0.32;
+
   double tYLow = 0.88;
   double tYHigh = 1.05;
   CanvasPartition* tCanPart = new CanvasPartition(tCanvasName,tNx,tNy,tXLow,tXHigh,tYLow,tYHigh,0.12,0.05,0.13,0.05);
@@ -131,11 +136,8 @@ TCanvas* DrawKStarCfRatios(FitGenerator* aFG1, FitGenerator* aFG2)
       TPaveText* tAnTypeName = tCanPart->SetupTPaveText(tTextAnType,i,j,0.8,0.85);
       tCanPart->AddPadPaveText(tAnTypeName,i,j);
 
-      CentralityType tCentType;
-      if(tAnalysisNumber==0 || tAnalysisNumber==1) tCentType = k0010;
-      else if(tAnalysisNumber==2 || tAnalysisNumber==3) tCentType = k0010;
-      else if(tAnalysisNumber==4 || tAnalysisNumber==5) tCentType = k0010;
-      else assert(0);
+      CentralityType tCentType = aFG1->GetSharedAn()->GetFitPairAnalysis(tAnalysisNumber)->GetCentralityType();
+
       TString tTextCentrality = TString(cPrettyCentralityTags[tCentType]);
       TPaveText* tCentralityName = tCanPart->SetupTPaveText(tTextCentrality,i,j,0.05,0.85);
       tCanPart->AddPadPaveText(tCentralityName,i,j);
@@ -321,13 +323,21 @@ int main(int argc, char **argv)
   ChronoTimer tFullTimer(kSec);
   tFullTimer.Start();
 //-----------------------------------------------------------------------------
-  TString tResultsDate1 = "20161027";
-//  TString tResultsDate2 = "20170505_ignoreOnFlyStatus";
-//  TString tResultsDate2 = "20171220_onFlyStatusFalse";
-  TString tResultsDate2 = "20171227";
-//  TString tResultsDate2 = "20171227_LHC10h";
+  TString tResultsDate1, tResultsDate2;
 
-  AnalysisType tAnType = kLamKchP;
+  tResultsDate1 = "20161027";
+  tResultsDate2 = "20171227";
+
+//  tResultsDate1 = "20180416";
+//  tResultsDate2 = "20180416";
+
+//  tResultsDate1 = "20170505_ignoreOnFlyStatus";
+//  tResultsDate2 = "20171220_onFlyStatusFalse";
+
+//  tResultsDate1 = "20171227";
+//  tResultsDate2 = "20171227_LHC10h";
+
+  AnalysisType tAnType = kLamK0;
   AnalysisRunType tAnRunType = kTrain;
   int tNPartialAnalysis = 2;
   CentralityType tCentType = kMB;  //TODO
@@ -337,6 +347,9 @@ int main(int argc, char **argv)
   if(tAnType==kLamK0) {tConjType=kALamK0;}
   else if(tAnType==kLamKchP) {tConjType=kALamKchM;}
   else if(tAnType==kLamKchM) {tConjType=kALamKchP;}
+
+  bool bUseNumRotPar2InsteadOfDen1 = false;
+  bool bUseNumRotPar2InsteadOfDen2 = false;
 
   bool SaveImages = false;
   TString tSaveDir = "/home/jesse/Analysis/Presentations/GroupMeetings/20180104/";
@@ -356,31 +369,51 @@ int main(int argc, char **argv)
   TString tFileLocationBaseMC2 = TString::Format("%sResults_%sMC_%s",tDirectoryBase1.Data(),tGeneralAnTypeName.Data(),tResultsDate1.Data());
 
   TString tSaveNameModifier = "";
-  FitGenerator* tLamKchP1 = new FitGenerator(tFileLocationBase1,tFileLocationBaseMC1,tAnType, tCentType,tAnRunType,tNPartialAnalysis,tGenType);
-  FitGenerator* tLamKchP2 = new FitGenerator(tFileLocationBase2,tFileLocationBaseMC2,tAnType, tCentType,tAnRunType,tNPartialAnalysis,tGenType);
-
+  FitGenerator* tLamKchP1 = new FitGenerator(tFileLocationBase1, tFileLocationBaseMC1, tAnType, tCentType, tAnRunType, tNPartialAnalysis, tGenType, false, false, "", bUseNumRotPar2InsteadOfDen1);
+  FitGenerator* tLamKchP2 = new FitGenerator(tFileLocationBase2, tFileLocationBaseMC2, tAnType, tCentType, tAnRunType, tNPartialAnalysis, tGenType, false, false, "", bUseNumRotPar2InsteadOfDen2);
   //-----------------------------------------------------------------------------
   bool bZoom = false;
-  TCanvas* tCan = DrawKStarCfs(tLamKchP1, tLamKchP2, bZoom);
-  TCanvas* tRatioCan = DrawKStarCfRatios(tLamKchP1, tLamKchP2);
+  bool bDrawKStarCfs = true;
+  bool bDrawKStarCfRatios = false;
 
-  TCanvas* tRatioNumPartAn = DrawNumDenRatiosPartAn(true, tLamKchP1, tLamKchP2);
-  TCanvas* tRatioDenPartAn = DrawNumDenRatiosPartAn(false, tLamKchP1, tLamKchP2);
+  bool bDrawNumDenRatiosPartAn = false;
+  bool bDrawNumDenRatiosAn = false;
 
-  TCanvas* tRatioNumAn = DrawNumDenRatiosAn(true, tLamKchP1, tLamKchP2);
-  TCanvas* tRatioDenAn = DrawNumDenRatiosAn(false, tLamKchP1, tLamKchP2);
-
-  if(SaveImages)
+  //-----------------------------------------------------------------------------
+  if(bDrawKStarCfs)
   {
-    tCan->SaveAs(TString::Format("%s%s.eps", tSaveDir.Data(), tCan->GetName()));
-    tRatioCan->SaveAs(TString::Format("%s%s.eps", tSaveDir.Data(), tRatioCan->GetName()));
-
-    tRatioNumPartAn->SaveAs(TString::Format("%s%s.eps", tSaveDir.Data(), tRatioNumPartAn->GetName()));
-    tRatioDenPartAn->SaveAs(TString::Format("%s%s.eps", tSaveDir.Data(), tRatioDenPartAn->GetName()));
-
-    tRatioNumAn->SaveAs(TString::Format("%s%s.eps", tSaveDir.Data(), tRatioNumAn->GetName()));
-    tRatioDenAn->SaveAs(TString::Format("%s%s.eps", tSaveDir.Data(), tRatioDenAn->GetName()));
+    TCanvas* tCan = DrawKStarCfs(tLamKchP1, tLamKchP2, bZoom);
+    if(SaveImages) tCan->SaveAs(TString::Format("%s%s.eps", tSaveDir.Data(), tCan->GetName()));
   }
+
+  if(bDrawKStarCfRatios)
+  {
+    TCanvas* tRatioCan = DrawKStarCfRatios(tLamKchP1, tLamKchP2, bZoom);
+    if(SaveImages) tRatioCan->SaveAs(TString::Format("%s%s.eps", tSaveDir.Data(), tRatioCan->GetName()));
+  }
+
+  if(bDrawNumDenRatiosPartAn)
+  {
+    TCanvas* tRatioNumPartAn = DrawNumDenRatiosPartAn(true, tLamKchP1, tLamKchP2);
+    TCanvas* tRatioDenPartAn = DrawNumDenRatiosPartAn(false, tLamKchP1, tLamKchP2);
+    if(SaveImages)
+    {
+      tRatioNumPartAn->SaveAs(TString::Format("%s%s.eps", tSaveDir.Data(), tRatioNumPartAn->GetName()));
+      tRatioDenPartAn->SaveAs(TString::Format("%s%s.eps", tSaveDir.Data(), tRatioDenPartAn->GetName()));
+    }
+  }
+
+  if(bDrawNumDenRatiosAn)
+  {
+    TCanvas* tRatioNumAn = DrawNumDenRatiosAn(true, tLamKchP1, tLamKchP2);
+    TCanvas* tRatioDenAn = DrawNumDenRatiosAn(false, tLamKchP1, tLamKchP2);
+    if(SaveImages)
+    {
+      tRatioNumAn->SaveAs(TString::Format("%s%s.eps", tSaveDir.Data(), tRatioNumAn->GetName()));
+      tRatioDenAn->SaveAs(TString::Format("%s%s.eps", tSaveDir.Data(), tRatioDenAn->GetName()));
+    }
+  }
+
 
 //-------------------------------------------------------------------------------
   tFullTimer.Stop();

@@ -304,6 +304,7 @@ kXiCKSt0=40, kAXiCAKSt0=41, kXiCAKSt0=42, kAXiCKSt0=43
 
   extern const char* cKStarCfBaseTagNum;
   extern const char* cKStarCfBaseTagDen;
+  extern const char* cKStarCfBaseTagNumRotatePar2;
 
   extern const char* cKStarCfMCTrueBaseTagNum;
   extern const char* cKStarCfMCTrueBaseTagDen;

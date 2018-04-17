@@ -25,7 +25,7 @@ void GlobalBgdFCN(Int_t &npar, Double_t *gin, Double_t &f, Double_t *par, Int_t 
 
 
 //________________________________________________________________________________________________________________
-FitPartialAnalysis::FitPartialAnalysis(TString aFileLocation, TString aAnalysisName, AnalysisType aAnalysisType, CentralityType aCentralityType, BFieldType aBFieldType, AnalysisRunType aRunType, TString aDirNameModifier, bool aIncludeSingletAndTriplet) : 
+FitPartialAnalysis::FitPartialAnalysis(TString aFileLocation, TString aAnalysisName, AnalysisType aAnalysisType, CentralityType aCentralityType, BFieldType aBFieldType, AnalysisRunType aRunType, TString aDirNameModifier, bool aUseNumRotPar2InsteadOfDen, bool aIncludeSingletAndTriplet) : 
   fAnalysisRunType(aRunType),
   fFileLocation(aFileLocation),
   fFileLocationMC(0),
@@ -68,9 +68,9 @@ FitPartialAnalysis::FitPartialAnalysis(TString aFileLocation, TString aAnalysisN
   fPrimaryFit(nullptr),
   fNonFlatBackground(nullptr),
   fThermNonFlatBgd(nullptr),
-  fCorrectedFitVec(0)
+  fCorrectedFitVec(0),
 
-
+  fUseNumRotPar2InsteadOfDen(aUseNumRotPar2InsteadOfDen)
 {
 
   fDirectoryName = TString(cAnalysisBaseTags[fAnalysisType]) + TString(cCentralityTags[fCentralityType]);
@@ -172,7 +172,7 @@ FitPartialAnalysis::FitPartialAnalysis(TString aFileLocation, TString aAnalysisN
 
 
 //________________________________________________________________________________________________________________
-FitPartialAnalysis::FitPartialAnalysis(TString aFileLocation, TString aFileLocationMC, TString aAnalysisName, AnalysisType aAnalysisType, CentralityType aCentralityType, BFieldType aBFieldType, AnalysisRunType aRunType, TString aDirNameModifier, bool aIncludeSingletAndTriplet) : 
+FitPartialAnalysis::FitPartialAnalysis(TString aFileLocation, TString aFileLocationMC, TString aAnalysisName, AnalysisType aAnalysisType, CentralityType aCentralityType, BFieldType aBFieldType, AnalysisRunType aRunType, TString aDirNameModifier, bool aUseNumRotPar2InsteadOfDen, bool aIncludeSingletAndTriplet) : 
   fAnalysisRunType(aRunType),
   fFileLocation(aFileLocation),
   fFileLocationMC(aFileLocationMC),
@@ -215,9 +215,9 @@ FitPartialAnalysis::FitPartialAnalysis(TString aFileLocation, TString aFileLocat
   fPrimaryFit(nullptr),
   fNonFlatBackground(nullptr),
   fThermNonFlatBgd(nullptr),
-  fCorrectedFitVec(0)
+  fCorrectedFitVec(0),
 
-
+  fUseNumRotPar2InsteadOfDen(aUseNumRotPar2InsteadOfDen)
 {
 
   fDirectoryName = TString(cAnalysisBaseTags[fAnalysisType]) + TString(cCentralityTags[fCentralityType]);
@@ -586,7 +586,10 @@ void FitPartialAnalysis::BuildKStarCf(double aKStarMinNorm, double aKStarMaxNorm
   TString tNewNumName = tNumName + TString(cBFieldTags[fBFieldType]);
   TH1* tNum = Get1dHisto(tNumName,tNewNumName);
 
-  TString tDenName = cKStarCfBaseTagDen + TString(cAnalysisBaseTags[fAnalysisType]);
+  TString tDenName;
+  if(!fUseNumRotPar2InsteadOfDen) tDenName = cKStarCfBaseTagDen;
+  else tDenName = cKStarCfBaseTagNumRotatePar2;
+  tDenName += TString(cAnalysisBaseTags[fAnalysisType]);
   TString tNewDenName = tDenName + TString(cBFieldTags[fBFieldType]);
   TH1* tDen = Get1dHisto(tDenName,tNewDenName);
 
@@ -891,7 +894,10 @@ CfLite* FitPartialAnalysis::GetModelKStarCf(double aKStarMinNorm, double aKStarM
   TString tNewNumName = tNumName + TString(cBFieldTags[fBFieldType]);
   TH1* tNum = Get1dHisto(fFileLocationMC,tNumName,tNewNumName);
 
-  TString tDenName = cKStarCfBaseTagDen + TString(cAnalysisBaseTags[fAnalysisType]);
+  TString tDenName;
+  if(!fUseNumRotPar2InsteadOfDen) tDenName = cKStarCfBaseTagDen;
+  else tDenName = cKStarCfBaseTagNumRotatePar2;
+  tDenName += TString(cAnalysisBaseTags[fAnalysisType]);
   TString tNewDenName = tDenName + TString(cBFieldTags[fBFieldType]);
   TH1* tDen = Get1dHisto(fFileLocationMC,tDenName,tNewDenName);
 

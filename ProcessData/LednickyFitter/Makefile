@@ -25,7 +25,7 @@ CFLAGS = $(shell root-config --cflags) -Wall -std=c++11 -I${ANALYZE_DIR} -I${LED
 
 MY_LIBS = $(addprefix build/, FitParameter.o FitChi2Histograms.o BackgroundFitter.o FitPartialAnalysis.o FitPairAnalysis.o FitSharedAnalyses.o MathematicaSession.o WaveFunction.o ChargedResidualCf.o SimpleChargedResidualCf.o NeutralResidualCf.o ResidualCollection.o SimpleLednickyFitter.o LednickyFitter.o FitGenerator.o FitGeneratorAndDraw.o DualieFitGenerator.o ThermCf.o CfLite.o CfHeavy.o Types.o Types_LambdaValues.o Types_FitParamValues.o Types_ThermBgdParams.o AnalysisInfo.o Faddeeva.o CanvasPartition.o)
 
-BINARIES = runLamKchP runLamKchPTest runCompareKchFix2 runFits runTest runGenerator runDualieGenerator runCompareIgnoreOnFlyStatus runScattParamValues runLamKchPvsKchM runPlotAll runSimpleLednicky runCompareFittingMethods runmTScaling runCompareBackgrounds
+BINARIES = runLamKchP runLamKchPTest runCompareKchFix2 runFits runTest runGenerator runDualieGenerator runCompareTwoAnalyses runScattParamValues runLamKchPvsKchM runPlotAll runSimpleLednicky runCompareFittingMethods runmTScaling runCompareBackgrounds
 
 all: $(BINARIES)
 
@@ -50,8 +50,8 @@ runGenerator: ${MY_LIBS} GenerateFits.C
 runDualieGenerator: ${MY_LIBS} DualieGenerateFits.C
 	g++ DualieGenerateFits.C ${MY_LIBS} -I${INCDIR} -o runDualieGenerator -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS)
 
-runCompareIgnoreOnFlyStatus: ${MY_LIBS} CompareIgnoreOnFlyStatus.C
-	g++ CompareIgnoreOnFlyStatus.C ${MY_LIBS} -I${INCDIR} -o runCompareIgnoreOnFlyStatus -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS)
+runCompareTwoAnalyses: ${MY_LIBS} CompareTwoAnalyses.C
+	g++ CompareTwoAnalyses.C ${MY_LIBS} -I${INCDIR} -o runCompareTwoAnalyses -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS)
 
 runScattParamValues: ${MY_LIBS} ScattParamValues.C
 	g++ ScattParamValues.C ${MY_LIBS} -I${INCDIR} -o runScattParamValues -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS)

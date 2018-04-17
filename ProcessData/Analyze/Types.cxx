@@ -344,6 +344,7 @@ const char* const cResPrimMaxDecayTypeTags[6] = {"_PrimMaxDecay0fm", "_PrimMaxDe
 
 const char* cKStarCfBaseTagNum = "NumKStarCf_";
 const char* cKStarCfBaseTagDen = "DenKStarCf_";
+const char* cKStarCfBaseTagNumRotatePar2 = "Num_RotatePar2KStarCf_";
 
 const char* cKStarCfMCTrueBaseTagNum = "NumKStarCfTrue_";
 const char* cKStarCfMCTrueBaseTagDen = "DenKStarCfTrue_";
