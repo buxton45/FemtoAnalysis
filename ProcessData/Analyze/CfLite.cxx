@@ -223,24 +223,27 @@ TH1* CfLite::GetUnNormalizedCf()
 //________________________________________________________________________________________________________________
 void CfLite::DivideCfByThermBgd(TH1* aThermBgd)
 {
+
   assert(fCf->GetBinWidth(1)==aThermBgd->GetBinWidth(1));
   assert(aThermBgd->GetNbinsX() >= fCf->GetNbinsX());
 
-  TH1* aThermBgdToUse;
-  if(aThermBgd->GetNbinsX() > fCf->GetNbinsX())
-  {
-    TString tName = aThermBgd->GetName();
-    aThermBgdToUse = (TH1*)fCf->Clone(tName);
+  if(aThermBgd->GetNbinsX() > fCf->GetNbinsX()) aThermBgd->SetBins(fCf->GetNbinsX(), 
+                                                                   fCf->GetXaxis()->GetBinLowEdge(1), 
+                                                                   fCf->GetXaxis()->GetBinUpEdge(fCf->GetNbinsX()));
+  assert(aThermBgd->GetNbinsX() == fCf->GetNbinsX());
+  fCf->Divide(aThermBgd);
 
-    for(int i=1; i<=fCf->GetNbinsX(); i++)
-    {
-      aThermBgdToUse->SetBinContent(i, aThermBgd->GetBinContent(i));
-      aThermBgdToUse->SetBinError(i, aThermBgd->GetBinError(i));
-    }
-  }
-  else aThermBgdToUse = aThermBgd;
+/*
+  assert(fDen->GetBinWidth(1)==aThermBgd->GetBinWidth(1));
+  assert(aThermBgd->GetNbinsX() >= fDen->GetNbinsX());
 
-  fCf->Divide(aThermBgdToUse);
+  if(aThermBgd->GetNbinsX() > fDen->GetNbinsX()) aThermBgd->SetBins(fDen->GetNbinsX(), 
+                                                                    fDen->GetXaxis()->GetBinLowEdge(1), 
+                                                                    fDen->GetXaxis()->GetBinUpEdge(fDen->GetNbinsX()));
+  assert(aThermBgd->GetNbinsX() == fDen->GetNbinsX());
+  fDen->Multiply(aThermBgd);
+  Rebin(1);
+*/
 }
 
 

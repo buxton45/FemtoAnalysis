@@ -437,8 +437,8 @@ TH1* FitPairAnalysis::GetThermNonFlatBackground(bool aCombineConj, bool aCombine
   assert(fThermNonFlatBgdHist->GetBinWidth(1) == fKStarCfHeavy->GetHeavyCf()->GetBinWidth(1));
 
   tTempScale = fFitPartialAnalysisCollection[0]->GetKStarCfLite()->GetNumScale();
-  tTempNorm = fFitPartialAnalysisCollection[0]->GetFitNormParameter()->GetFitValue();
-//TODO tTempNorm = 1.?
+//  tTempNorm = fFitPartialAnalysisCollection[0]->GetFitNormParameter()->GetFitValue();
+  tTempNorm = 1.;
 
   fThermNonFlatBgdHist->Scale(tTempScale*tTempNorm);
   tOverallScale += tTempScale;
@@ -448,7 +448,7 @@ TH1* FitPairAnalysis::GetThermNonFlatBackground(bool aCombineConj, bool aCombine
     assert(((TH1*)fFitPartialAnalysisCollection[iPartAn]->GetThermNonFlatBackground(aCombineConj, aCombineLamKchPM, aThermEventsType))->GetBinWidth(1) == fKStarCfHeavy->GetHeavyCf()->GetBinWidth(1));
 
     tTempScale = fFitPartialAnalysisCollection[iPartAn]->GetKStarCfLite()->GetNumScale();
-    tTempNorm = fFitPartialAnalysisCollection[iPartAn]->GetFitNormParameter()->GetFitValue();
+//    tTempNorm = fFitPartialAnalysisCollection[iPartAn]->GetFitNormParameter()->GetFitValue();
 
     fThermNonFlatBgdHist->Add((TH1*)fFitPartialAnalysisCollection[iPartAn]->GetThermNonFlatBackground(aCombineConj, aCombineLamKchPM, aThermEventsType), tTempScale*tTempNorm);
     tOverallScale += tTempScale;

@@ -215,14 +215,6 @@ void LednickyFitter::ApplyNewNonFlatBackgroundCorrection(vector<double> &aCf, ve
   }
 }
 
-
-//________________________________________________________________________________________________________________
-void LednickyFitter::DivideByTherminatorBackground(TH1* aCfData, TH1* aThermNonFlatBgd)
-{
-  aCfData->Divide(aThermNonFlatBgd);
-}
-
-
 //________________________________________________________________________________________________________________
 void LednickyFitter::ApplyNonFlatBackgroundCorrection(vector<double> &aCf, vector<double> &aKStarBinCenters, TF1* aNonFlatBgd)
 {
@@ -391,8 +383,7 @@ void LednickyFitter::CalculateFitFunction(int &npar, double &chi2, double *par)
       else tCorrectedFitCfContent = tFitCfContent;
 
       bool tNormalizeBgdFitToCf=true;
-      if(fNonFlatBgdFitType==kDivideByTherm) DivideByTherminatorBackground(tCf, tFitPartialAnalysis->GetThermNonFlatBackground());
-      else if(fApplyNonFlatBackgroundCorrection)
+      if(fApplyNonFlatBackgroundCorrection && fNonFlatBgdFitType != kDivideByTherm)
       {
         if(!fFitSharedAnalyses->UsingNewBgdTreatment())
         {
@@ -668,6 +659,13 @@ void LednickyFitter::InitializeFitter()
     }
   }
 
+  if(fNonFlatBgdFitType==kDivideByTherm)
+  {
+    for(int iAnaly=0; iAnaly<fNAnalyses; iAnaly++)
+    {
+      fFitSharedAnalyses->GetFitPairAnalysis(iAnaly)->DivideCfByThermBgd();
+    }
+  }
 
 
 }
