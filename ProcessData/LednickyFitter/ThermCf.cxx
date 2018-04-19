@@ -25,6 +25,8 @@ ThermCf::ThermCf(TString aFileName, TString aCfDescriptor, AnalysisType aAnalysi
   fMinNorm(aMinNorm),
   fMaxNorm(aMaxNorm),
 
+  fUseNumRotPar2InsteadOfDen(false),
+
   fThermCfHeavy(nullptr)
 
 {
@@ -92,7 +94,7 @@ CfHeavy* ThermCf::CombineTwoCfHeavy(TString aName, CfHeavy* aCfHeavy1, CfHeavy* 
 
 
 //________________________________________________________________________________________________________________
-CfHeavy* ThermCf::GetThermHeavyCf(TString aFileName, TString aCfDescriptor, AnalysisType aAnType, int aImpactParam, bool aCombineConj, bool aUseAdamEvents, int aRebin, double aMinNorm, double aMaxNorm)
+CfHeavy* ThermCf::GetThermHeavyCf(TString aFileName, TString aCfDescriptor, AnalysisType aAnType, int aImpactParam, bool aCombineConj, bool aUseAdamEvents, int aRebin, double aMinNorm, double aMaxNorm, bool aUseNumRotPar2InsteadOfDen)
 {
   AnalysisType tConjAnType;
   if     (aAnType==kLamK0)    {tConjAnType=kALamK0;}
@@ -110,14 +112,18 @@ CfHeavy* ThermCf::GetThermHeavyCf(TString aFileName, TString aCfDescriptor, Anal
   TString tFileLocation = TString::Format("%s%s", tDirectory.Data(), aFileName.Data());
   //--------------------------------
   TH1* tNum1 = GetThermHist(tFileLocation, TString::Format("Num%s%s", aCfDescriptor.Data(), cAnalysisBaseTags[aAnType]));
-  TH1* tDen1 = GetThermHist(tFileLocation, TString::Format("Den%s%s", aCfDescriptor.Data(), cAnalysisBaseTags[aAnType]));
+  TH1* tDen1;
+  if(!aUseNumRotPar2InsteadOfDen) tDen1 = GetThermHist(tFileLocation, TString::Format("Den%s%s", aCfDescriptor.Data(), cAnalysisBaseTags[aAnType]));
+  else tDen1 = GetThermHist(tFileLocation, TString::Format("Num%s_RotatePar2%s", aCfDescriptor.Data(), cAnalysisBaseTags[aAnType]));
   CfLite* tCfLite1 = new CfLite(TString::Format("CfLite_%s", cAnalysisBaseTags[aAnType]), 
                                 TString::Format("CfLite_%s", cAnalysisBaseTags[aAnType]), 
                                 tNum1, tDen1, aMinNorm, aMaxNorm);
   tCfLite1->Rebin(aRebin);
 
   TH1* tNum2 = GetThermHist(tFileLocation, TString::Format("Num%s%s", aCfDescriptor.Data(), cAnalysisBaseTags[tConjAnType]));
-  TH1* tDen2 = GetThermHist(tFileLocation, TString::Format("Den%s%s", aCfDescriptor.Data(), cAnalysisBaseTags[tConjAnType]));
+  TH1* tDen2;
+  if(!aUseNumRotPar2InsteadOfDen) tDen2 = GetThermHist(tFileLocation, TString::Format("Den%s%s", aCfDescriptor.Data(), cAnalysisBaseTags[tConjAnType]));
+  else tDen2 = GetThermHist(tFileLocation, TString::Format("Num%s_RotatePar2%s", aCfDescriptor.Data(), cAnalysisBaseTags[tConjAnType]));
   CfLite* tCfLite2 = new CfLite(TString::Format("CfLite_%s", cAnalysisBaseTags[tConjAnType]), 
                                 TString::Format("CfLite_%s", cAnalysisBaseTags[tConjAnType]), 
                                 tNum2, tDen2, aMinNorm, aMaxNorm);
@@ -143,15 +149,15 @@ CfHeavy* ThermCf::GetThermHeavyCf(TString aFileName, TString aCfDescriptor, Anal
 }
 
 //________________________________________________________________________________________________________________
-TH1* ThermCf::GetThermCf(TString aFileName, TString aCfDescriptor, AnalysisType aAnType, int aImpactParam, bool aCombineConj, ThermEventsType aEventsType, int aRebin, double aMinNorm, double aMaxNorm, int aMarkerStyle, int aColor)
+TH1* ThermCf::GetThermCf(TString aFileName, TString aCfDescriptor, AnalysisType aAnType, int aImpactParam, bool aCombineConj, ThermEventsType aEventsType, int aRebin, double aMinNorm, double aMaxNorm, int aMarkerStyle, int aColor, bool aUseNumRotPar2InsteadOfDen)
 {
   CfHeavy* tCfHeavy;
-  if(aEventsType==kMe)        tCfHeavy = GetThermHeavyCf(aFileName, aCfDescriptor, aAnType, aImpactParam, aCombineConj, false, aRebin, aMinNorm, aMaxNorm);
-  else if(aEventsType==kAdam) tCfHeavy = GetThermHeavyCf(aFileName, aCfDescriptor, aAnType, aImpactParam, aCombineConj, true, aRebin, aMinNorm, aMaxNorm);
+  if(aEventsType==kMe)        tCfHeavy = GetThermHeavyCf(aFileName, aCfDescriptor, aAnType, aImpactParam, aCombineConj, false, aRebin, aMinNorm, aMaxNorm, aUseNumRotPar2InsteadOfDen);
+  else if(aEventsType==kAdam) tCfHeavy = GetThermHeavyCf(aFileName, aCfDescriptor, aAnType, aImpactParam, aCombineConj, true, aRebin, aMinNorm, aMaxNorm, aUseNumRotPar2InsteadOfDen);
   else
   {
-    CfHeavy* tCfHeavy_Me   = GetThermHeavyCf(aFileName, aCfDescriptor, aAnType, aImpactParam, aCombineConj, false, aRebin, aMinNorm, aMaxNorm);
-    CfHeavy* tCfHeavy_Adam = GetThermHeavyCf(aFileName, aCfDescriptor, aAnType, aImpactParam, aCombineConj, true, aRebin, aMinNorm, aMaxNorm);
+    CfHeavy* tCfHeavy_Me   = GetThermHeavyCf(aFileName, aCfDescriptor, aAnType, aImpactParam, aCombineConj, false, aRebin, aMinNorm, aMaxNorm, aUseNumRotPar2InsteadOfDen);
+    CfHeavy* tCfHeavy_Adam = GetThermHeavyCf(aFileName, aCfDescriptor, aAnType, aImpactParam, aCombineConj, true, aRebin, aMinNorm, aMaxNorm, aUseNumRotPar2InsteadOfDen);
 
     TString tName = tCfHeavy_Me->GetHeavyCfName();
     tName += TString(cThermEventsTypeTags[aEventsType]);
@@ -166,15 +172,15 @@ TH1* ThermCf::GetThermCf(TString aFileName, TString aCfDescriptor, AnalysisType 
 }
 
 //________________________________________________________________________________________________________________
-TH1* ThermCf::GetThermCf(AnalysisType aAnType, int aImpactParam, bool aCombineConj, ThermEventsType aEventsType, int aRebin, double aMinNorm, double aMaxNorm, int aMarkerStyle, int aColor)
+TH1* ThermCf::GetThermCf(AnalysisType aAnType, int aImpactParam, bool aCombineConj, ThermEventsType aEventsType, int aRebin, double aMinNorm, double aMaxNorm, int aMarkerStyle, int aColor, bool aUseNumRotPar2InsteadOfDen)
 {
   TString tFileName = "CorrelationFunctions_RandomEPs_NumWeight1.root";
   TString tCfDescriptor = "Full";
-  return GetThermCf(tFileName, tCfDescriptor, aAnType, aImpactParam, aCombineConj, aEventsType, aRebin, aMinNorm, aMaxNorm, aMarkerStyle, aColor);
+  return GetThermCf(tFileName, tCfDescriptor, aAnType, aImpactParam, aCombineConj, aEventsType, aRebin, aMinNorm, aMaxNorm, aMarkerStyle, aColor, aUseNumRotPar2InsteadOfDen);
 }
 
 //________________________________________________________________________________________________________________
-CfHeavy* ThermCf::GetCentralityCombinedThermCfsHeavy(TString aFileName, TString aCfDescriptor, AnalysisType aAnType, CentralityType aCentType, bool aCombineConj, bool aUseAdamEvents, int aRebin, double aMinNorm, double aMaxNorm)
+CfHeavy* ThermCf::GetCentralityCombinedThermCfsHeavy(TString aFileName, TString aCfDescriptor, AnalysisType aAnType, CentralityType aCentType, bool aCombineConj, bool aUseAdamEvents, int aRebin, double aMinNorm, double aMaxNorm, bool aUseNumRotPar2InsteadOfDen)
 {
   AnalysisType tConjAnType;
   if     (aAnType==kLamK0)    {tConjAnType=kALamK0;}
@@ -201,7 +207,9 @@ CfHeavy* ThermCf::GetCentralityCombinedThermCfsHeavy(TString aFileName, TString 
     tFileLocation = TString::Format("%s%s", tDirectory.Data(), aFileName.Data());
     //--------------------------------
     TH1* tNum1 = GetThermHist(tFileLocation, TString::Format("Num%s%s", aCfDescriptor.Data(), cAnalysisBaseTags[aAnType]));
-    TH1* tDen1 = GetThermHist(tFileLocation, TString::Format("Den%s%s", aCfDescriptor.Data(), cAnalysisBaseTags[aAnType]));
+    TH1* tDen1;
+    if(!aUseNumRotPar2InsteadOfDen) tDen1 = GetThermHist(tFileLocation, TString::Format("Den%s%s", aCfDescriptor.Data(), cAnalysisBaseTags[aAnType]));
+    else tDen1 = GetThermHist(tFileLocation, TString::Format("Num%s_RotatePar2%s", aCfDescriptor.Data(), cAnalysisBaseTags[aAnType]));
     CfLite* tCfLite1 = new CfLite(TString::Format("CfLite_%s_%d", cAnalysisBaseTags[aAnType], tImpactParams[iIP]), 
                                   TString::Format("CfLite_%s_%d", cAnalysisBaseTags[aAnType], tImpactParams[iIP]), 
                                   tNum1, tDen1, aMinNorm, aMaxNorm);
@@ -211,7 +219,9 @@ CfHeavy* ThermCf::GetCentralityCombinedThermCfsHeavy(TString aFileName, TString 
     if(aCombineConj)
     {
       TH1* tNum2 = GetThermHist(tFileLocation, TString::Format("Num%s%s", aCfDescriptor.Data(), cAnalysisBaseTags[tConjAnType]));
-      TH1* tDen2 = GetThermHist(tFileLocation, TString::Format("Den%s%s", aCfDescriptor.Data(), cAnalysisBaseTags[tConjAnType]));
+      TH1* tDen2;
+      if(!aUseNumRotPar2InsteadOfDen) tDen2 = GetThermHist(tFileLocation, TString::Format("Den%s%s", aCfDescriptor.Data(), cAnalysisBaseTags[tConjAnType]));
+      else tDen2 = GetThermHist(tFileLocation, TString::Format("Num%s_RotatePar2%s", aCfDescriptor.Data(), cAnalysisBaseTags[tConjAnType]));
       CfLite* tCfLite2 = new CfLite(TString::Format("CfLite_%s_%d", cAnalysisBaseTags[tConjAnType], tImpactParams[iIP]), 
                                     TString::Format("CfLite_%s_%d", cAnalysisBaseTags[tConjAnType], tImpactParams[iIP]), 
                                     tNum2, tDen2, aMinNorm, aMaxNorm);
@@ -228,15 +238,15 @@ CfHeavy* ThermCf::GetCentralityCombinedThermCfsHeavy(TString aFileName, TString 
 }
 
 //________________________________________________________________________________________________________________
-CfHeavy* ThermCf::GetCentralityCombinedThermCfsHeavy(TString aFileName, TString aCfDescriptor, AnalysisType aAnType, CentralityType aCentType, bool aCombineConj, ThermEventsType aEventsType, int aRebin, double aMinNorm, double aMaxNorm)
+CfHeavy* ThermCf::GetCentralityCombinedThermCfsHeavy(TString aFileName, TString aCfDescriptor, AnalysisType aAnType, CentralityType aCentType, bool aCombineConj, ThermEventsType aEventsType, int aRebin, double aMinNorm, double aMaxNorm, bool aUseNumRotPar2InsteadOfDen)
 {
   CfHeavy* tCfHeavy;
-  if(aEventsType==kMe)        tCfHeavy = GetCentralityCombinedThermCfsHeavy(aFileName, aCfDescriptor, aAnType, aCentType, aCombineConj, false, aRebin, aMinNorm, aMaxNorm);
-  else if(aEventsType==kAdam) tCfHeavy = GetCentralityCombinedThermCfsHeavy(aFileName, aCfDescriptor, aAnType, aCentType, aCombineConj, true, aRebin, aMinNorm, aMaxNorm);
+  if(aEventsType==kMe)        tCfHeavy = GetCentralityCombinedThermCfsHeavy(aFileName, aCfDescriptor, aAnType, aCentType, aCombineConj, false, aRebin, aMinNorm, aMaxNorm, aUseNumRotPar2InsteadOfDen);
+  else if(aEventsType==kAdam) tCfHeavy = GetCentralityCombinedThermCfsHeavy(aFileName, aCfDescriptor, aAnType, aCentType, aCombineConj, true, aRebin, aMinNorm, aMaxNorm, aUseNumRotPar2InsteadOfDen);
   else
   {
-    CfHeavy* tCfHeavy_Me   = GetCentralityCombinedThermCfsHeavy(aFileName, aCfDescriptor, aAnType, aCentType, aCombineConj, false, aRebin, aMinNorm, aMaxNorm);
-    CfHeavy* tCfHeavy_Adam = GetCentralityCombinedThermCfsHeavy(aFileName, aCfDescriptor, aAnType, aCentType, aCombineConj, true, aRebin, aMinNorm, aMaxNorm);
+    CfHeavy* tCfHeavy_Me   = GetCentralityCombinedThermCfsHeavy(aFileName, aCfDescriptor, aAnType, aCentType, aCombineConj, false, aRebin, aMinNorm, aMaxNorm, aUseNumRotPar2InsteadOfDen);
+    CfHeavy* tCfHeavy_Adam = GetCentralityCombinedThermCfsHeavy(aFileName, aCfDescriptor, aAnType, aCentType, aCombineConj, true, aRebin, aMinNorm, aMaxNorm, aUseNumRotPar2InsteadOfDen);
 
     TString tName = tCfHeavy_Me->GetHeavyCfName();
     tName += TString(cThermEventsTypeTags[aEventsType]);
@@ -248,25 +258,25 @@ CfHeavy* ThermCf::GetCentralityCombinedThermCfsHeavy(TString aFileName, TString 
 
 
 //________________________________________________________________________________________________________________
-TH1* ThermCf::GetCentralityCombinedThermCfs(TString aFileName, TString aCfDescriptor, AnalysisType aAnType, CentralityType aCentType, bool aCombineConj, ThermEventsType aEventsType, int aRebin, double aMinNorm, double aMaxNorm, int aMarkerStyle, int aColor)
+TH1* ThermCf::GetCentralityCombinedThermCfs(TString aFileName, TString aCfDescriptor, AnalysisType aAnType, CentralityType aCentType, bool aCombineConj, ThermEventsType aEventsType, int aRebin, double aMinNorm, double aMaxNorm, int aMarkerStyle, int aColor, bool aUseNumRotPar2InsteadOfDen)
 {
-  CfHeavy* tCfHeavy = GetCentralityCombinedThermCfsHeavy(aFileName, aCfDescriptor, aAnType, aCentType, aCombineConj, aEventsType, aRebin, aMinNorm, aMaxNorm);
+  CfHeavy* tCfHeavy = GetCentralityCombinedThermCfsHeavy(aFileName, aCfDescriptor, aAnType, aCentType, aCombineConj, aEventsType, aRebin, aMinNorm, aMaxNorm, aUseNumRotPar2InsteadOfDen);
   TH1* tReturnHist = tCfHeavy->GetHeavyCf();
   SetStyleAndColor(tReturnHist, aMarkerStyle, aColor);
   return tReturnHist;
 }
 
 //________________________________________________________________________________________________________________
-TH1* ThermCf::GetCentralityCombinedThermCfs(AnalysisType aAnType, CentralityType aCentType, bool aCombineConj, ThermEventsType aEventsType, int aRebin, double aMinNorm, double aMaxNorm, int aMarkerStyle, int aColor)
+TH1* ThermCf::GetCentralityCombinedThermCfs(AnalysisType aAnType, CentralityType aCentType, bool aCombineConj, ThermEventsType aEventsType, int aRebin, double aMinNorm, double aMaxNorm, int aMarkerStyle, int aColor, bool aUseNumRotPar2InsteadOfDen)
 {
   TString tFileName = "CorrelationFunctions_RandomEPs_NumWeight1.root";
   TString tCfDescriptor = "Full";
-  return GetCentralityCombinedThermCfs(tFileName, tCfDescriptor, aAnType, aCentType, aCombineConj, aEventsType, aRebin, aMinNorm, aMaxNorm, aMarkerStyle, aColor);
+  return GetCentralityCombinedThermCfs(tFileName, tCfDescriptor, aAnType, aCentType, aCombineConj, aEventsType, aRebin, aMinNorm, aMaxNorm, aMarkerStyle, aColor, aUseNumRotPar2InsteadOfDen);
 }
 
 
 //________________________________________________________________________________________________________________
-CfHeavy* ThermCf::GetLamKchPMCombinedThermCfsHeavy(TString aFileName, TString aCfDescriptor, CentralityType aCentType, bool aUseAdamEvents, int aRebin, double aMinNorm, double aMaxNorm)
+CfHeavy* ThermCf::GetLamKchPMCombinedThermCfsHeavy(TString aFileName, TString aCfDescriptor, CentralityType aCentType, bool aUseAdamEvents, int aRebin, double aMinNorm, double aMaxNorm, bool aUseNumRotPar2InsteadOfDen)
 {
   vector<int> tImpactParams;
   if     (aCentType == k0010) tImpactParams = vector<int>{3};
@@ -283,7 +293,9 @@ CfHeavy* ThermCf::GetLamKchPMCombinedThermCfsHeavy(TString aFileName, TString aC
     tFileLocation = TString::Format("%s%s", tDirectory.Data(), aFileName.Data());
     //--------------------------------
     TH1* tNum1 = GetThermHist(tFileLocation, TString::Format("Num%s%s", aCfDescriptor.Data(), cAnalysisBaseTags[kLamKchP]));
-    TH1* tDen1 = GetThermHist(tFileLocation, TString::Format("Den%s%s", aCfDescriptor.Data(), cAnalysisBaseTags[kLamKchP]));
+    TH1* tDen1;
+    if(!aUseNumRotPar2InsteadOfDen) tDen1 = GetThermHist(tFileLocation, TString::Format("Den%s%s", aCfDescriptor.Data(), cAnalysisBaseTags[kLamKchP]));
+    else tDen1 = GetThermHist(tFileLocation, TString::Format("Num%s_RotatePar2%s", aCfDescriptor.Data(), cAnalysisBaseTags[kLamKchP]));
     CfLite* tCfLite1 = new CfLite(TString::Format("CfLite_%s_%d", cAnalysisBaseTags[kLamKchP], tImpactParams[iIP]), 
                                   TString::Format("CfLite_%s_%d", cAnalysisBaseTags[kLamKchP], tImpactParams[iIP]), 
                                   tNum1, tDen1, aMinNorm, aMaxNorm);
@@ -291,7 +303,9 @@ CfHeavy* ThermCf::GetLamKchPMCombinedThermCfsHeavy(TString aFileName, TString aC
     tCfLiteVec.push_back(tCfLite1);
 
     TH1* tNum2 = GetThermHist(tFileLocation, TString::Format("Num%s%s", aCfDescriptor.Data(), cAnalysisBaseTags[kALamKchM]));
-    TH1* tDen2 = GetThermHist(tFileLocation, TString::Format("Den%s%s", aCfDescriptor.Data(), cAnalysisBaseTags[kALamKchM]));
+    TH1* tDen2;
+    if(!aUseNumRotPar2InsteadOfDen) tDen2 = GetThermHist(tFileLocation, TString::Format("Den%s%s", aCfDescriptor.Data(), cAnalysisBaseTags[kALamKchM]));
+    else tDen2 = GetThermHist(tFileLocation, TString::Format("Num%s_RotatePar2%s", aCfDescriptor.Data(), cAnalysisBaseTags[kALamKchM]));
     CfLite* tCfLite2 = new CfLite(TString::Format("CfLite_%s_%d", cAnalysisBaseTags[kALamKchM], tImpactParams[iIP]), 
                                   TString::Format("CfLite_%s_%d", cAnalysisBaseTags[kALamKchM], tImpactParams[iIP]), 
                                   tNum2, tDen2, aMinNorm, aMaxNorm);
@@ -299,7 +313,9 @@ CfHeavy* ThermCf::GetLamKchPMCombinedThermCfsHeavy(TString aFileName, TString aC
     tCfLiteVec.push_back(tCfLite2);
     //--------------------------------
     TH1* tNum3 = GetThermHist(tFileLocation, TString::Format("Num%s%s", aCfDescriptor.Data(), cAnalysisBaseTags[kLamKchM]));
-    TH1* tDen3 = GetThermHist(tFileLocation, TString::Format("Den%s%s", aCfDescriptor.Data(), cAnalysisBaseTags[kLamKchM]));
+    TH1* tDen3;
+    if(!aUseNumRotPar2InsteadOfDen) tDen3 = GetThermHist(tFileLocation, TString::Format("Den%s%s", aCfDescriptor.Data(), cAnalysisBaseTags[kLamKchM]));
+    else tDen3 = GetThermHist(tFileLocation, TString::Format("Num%s_RotatePar2%s", aCfDescriptor.Data(), cAnalysisBaseTags[kLamKchM]));
     CfLite* tCfLite3 = new CfLite(TString::Format("CfLite_%s_%d", cAnalysisBaseTags[kLamKchM], tImpactParams[iIP]), 
                                   TString::Format("CfLite_%s_%d", cAnalysisBaseTags[kLamKchM], tImpactParams[iIP]), 
                                   tNum3, tDen3, aMinNorm, aMaxNorm);
@@ -307,7 +323,9 @@ CfHeavy* ThermCf::GetLamKchPMCombinedThermCfsHeavy(TString aFileName, TString aC
     tCfLiteVec.push_back(tCfLite3);
 
     TH1* tNum4 = GetThermHist(tFileLocation, TString::Format("Num%s%s", aCfDescriptor.Data(), cAnalysisBaseTags[kALamKchP]));
-    TH1* tDen4 = GetThermHist(tFileLocation, TString::Format("Den%s%s", aCfDescriptor.Data(), cAnalysisBaseTags[kALamKchP]));
+    TH1* tDen4;
+    if(!aUseNumRotPar2InsteadOfDen) tDen4 = GetThermHist(tFileLocation, TString::Format("Den%s%s", aCfDescriptor.Data(), cAnalysisBaseTags[kALamKchP]));
+    else tDen4 = GetThermHist(tFileLocation, TString::Format("Num%s_RotatePar2%s", aCfDescriptor.Data(), cAnalysisBaseTags[kALamKchP]));
     CfLite* tCfLite4 = new CfLite(TString::Format("CfLite_%s_%d", cAnalysisBaseTags[kALamKchP], tImpactParams[iIP]), 
                                   TString::Format("CfLite_%s_%d", cAnalysisBaseTags[kALamKchP], tImpactParams[iIP]), 
                                   tNum4, tDen4, aMinNorm, aMaxNorm);
@@ -323,15 +341,15 @@ CfHeavy* ThermCf::GetLamKchPMCombinedThermCfsHeavy(TString aFileName, TString aC
 
 
 //________________________________________________________________________________________________________________
-CfHeavy* ThermCf::GetLamKchPMCombinedThermCfsHeavy(TString aFileName, TString aCfDescriptor, CentralityType aCentType, ThermEventsType aEventsType, int aRebin, double aMinNorm, double aMaxNorm)
+CfHeavy* ThermCf::GetLamKchPMCombinedThermCfsHeavy(TString aFileName, TString aCfDescriptor, CentralityType aCentType, ThermEventsType aEventsType, int aRebin, double aMinNorm, double aMaxNorm, bool aUseNumRotPar2InsteadOfDen)
 {
   CfHeavy* tCfHeavy;
-  if(aEventsType==kMe)        tCfHeavy = GetLamKchPMCombinedThermCfsHeavy(aFileName, aCfDescriptor, aCentType, false, aRebin, aMinNorm, aMaxNorm);
-  else if(aEventsType==kAdam) tCfHeavy = GetLamKchPMCombinedThermCfsHeavy(aFileName, aCfDescriptor, aCentType, true, aRebin, aMinNorm, aMaxNorm);
+  if(aEventsType==kMe)        tCfHeavy = GetLamKchPMCombinedThermCfsHeavy(aFileName, aCfDescriptor, aCentType, false, aRebin, aMinNorm, aMaxNorm, aUseNumRotPar2InsteadOfDen);
+  else if(aEventsType==kAdam) tCfHeavy = GetLamKchPMCombinedThermCfsHeavy(aFileName, aCfDescriptor, aCentType, true, aRebin, aMinNorm, aMaxNorm, aUseNumRotPar2InsteadOfDen);
   else
   {
-    CfHeavy* tCfHeavy_Me   = GetLamKchPMCombinedThermCfsHeavy(aFileName, aCfDescriptor, aCentType, false, aRebin, aMinNorm, aMaxNorm);
-    CfHeavy* tCfHeavy_Adam = GetLamKchPMCombinedThermCfsHeavy(aFileName, aCfDescriptor, aCentType, true, aRebin, aMinNorm, aMaxNorm);
+    CfHeavy* tCfHeavy_Me   = GetLamKchPMCombinedThermCfsHeavy(aFileName, aCfDescriptor, aCentType, false, aRebin, aMinNorm, aMaxNorm, aUseNumRotPar2InsteadOfDen);
+    CfHeavy* tCfHeavy_Adam = GetLamKchPMCombinedThermCfsHeavy(aFileName, aCfDescriptor, aCentType, true, aRebin, aMinNorm, aMaxNorm, aUseNumRotPar2InsteadOfDen);
 
     TString tName = tCfHeavy_Me->GetHeavyCfName();
     tName += TString(cThermEventsTypeTags[aEventsType]);
@@ -343,9 +361,9 @@ CfHeavy* ThermCf::GetLamKchPMCombinedThermCfsHeavy(TString aFileName, TString aC
 
 
 //________________________________________________________________________________________________________________
-TH1* ThermCf::GetLamKchPMCombinedThermCfs(TString aFileName, TString aCfDescriptor, CentralityType aCentType, ThermEventsType aEventsType, int aRebin, double aMinNorm, double aMaxNorm, int aMarkerStyle, int aColor)
+TH1* ThermCf::GetLamKchPMCombinedThermCfs(TString aFileName, TString aCfDescriptor, CentralityType aCentType, ThermEventsType aEventsType, int aRebin, double aMinNorm, double aMaxNorm, int aMarkerStyle, int aColor, bool aUseNumRotPar2InsteadOfDen)
 {
-  CfHeavy* tCfHeavy = GetLamKchPMCombinedThermCfsHeavy(aFileName, aCfDescriptor, aCentType, aEventsType, aRebin, aMinNorm, aMaxNorm);
+  CfHeavy* tCfHeavy = GetLamKchPMCombinedThermCfsHeavy(aFileName, aCfDescriptor, aCentType, aEventsType, aRebin, aMinNorm, aMaxNorm, aUseNumRotPar2InsteadOfDen);
   TH1* tReturnHist = tCfHeavy->GetHeavyCf();
   SetStyleAndColor(tReturnHist, aMarkerStyle, aColor);
   return tReturnHist;
@@ -360,11 +378,11 @@ void ThermCf::BuildThermCf()
     assert(fAnalysisType==kLamKchP || fAnalysisType==kALamKchM ||
            fAnalysisType==kLamKchM || fAnalysisType==kALamKchP);
 
-    fThermCfHeavy = GetLamKchPMCombinedThermCfsHeavy(fFileName, fCfDescriptor, fCentralityType, fThermEventsType, fRebin, fMinNorm, fMaxNorm);
+    fThermCfHeavy = GetLamKchPMCombinedThermCfsHeavy(fFileName, fCfDescriptor, fCentralityType, fThermEventsType, fRebin, fMinNorm, fMaxNorm, fUseNumRotPar2InsteadOfDen);
   }
   else
   {
-    fThermCfHeavy = GetCentralityCombinedThermCfsHeavy(fFileName, fCfDescriptor, fAnalysisType, fCentralityType, fCombineConjugates, fThermEventsType, fRebin, fMinNorm, fMaxNorm);
+    fThermCfHeavy = GetCentralityCombinedThermCfsHeavy(fFileName, fCfDescriptor, fAnalysisType, fCentralityType, fCombineConjugates, fThermEventsType, fRebin, fMinNorm, fMaxNorm, fUseNumRotPar2InsteadOfDen);
   }
 
 }

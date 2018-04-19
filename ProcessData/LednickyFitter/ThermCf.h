@@ -58,18 +58,18 @@ public:
   static TH1* GetThermHist(TString aFileLocation, TString aHistName);
   static CfHeavy* CombineTwoCfHeavy(TString aName, CfHeavy* aCfHeavy1, CfHeavy* aCfHeavy2);
 
-  static CfHeavy* GetThermHeavyCf(TString aFileName, TString aCfDescriptor, AnalysisType aAnType, int aImpactParam=8, bool aCombineConj=true, bool aUseAdamEvents=false, int aRebin=2, double aMinNorm=0.32, double aMaxNorm=0.40);
-  static TH1* GetThermCf(TString aFileName, TString aCfDescriptor, AnalysisType aAnType, int aImpactParam=8, bool aCombineConj=true, ThermEventsType aEventsType=kMe, int aRebin=2, double aMinNorm=0.32, double aMaxNorm=0.40, int aMarkerStyle=20, int aColor=1);
-  static TH1* GetThermCf(AnalysisType aAnType, int aImpactParam=8, bool aCombineConj=true, ThermEventsType aEventsType=kMe, int aRebin=2, double aMinNorm=0.32, double aMaxNorm=0.40, int aMarkerStyle=20, int aColor=1);
+  static CfHeavy* GetThermHeavyCf(TString aFileName, TString aCfDescriptor, AnalysisType aAnType, int aImpactParam=8, bool aCombineConj=true, bool aUseAdamEvents=false, int aRebin=2, double aMinNorm=0.32, double aMaxNorm=0.40, bool aUseNumRotPar2InsteadOfDen=false);
+  static TH1* GetThermCf(TString aFileName, TString aCfDescriptor, AnalysisType aAnType, int aImpactParam=8, bool aCombineConj=true, ThermEventsType aEventsType=kMe, int aRebin=2, double aMinNorm=0.32, double aMaxNorm=0.40, int aMarkerStyle=20, int aColor=1, bool aUseNumRotPar2InsteadOfDen=false);
+  static TH1* GetThermCf(AnalysisType aAnType, int aImpactParam=8, bool aCombineConj=true, ThermEventsType aEventsType=kMe, int aRebin=2, double aMinNorm=0.32, double aMaxNorm=0.40, int aMarkerStyle=20, int aColor=1, bool aUseNumRotPar2InsteadOfDen=false);
 
-  static CfHeavy* GetCentralityCombinedThermCfsHeavy(TString aFileName, TString aCfDescriptor, AnalysisType aAnType, CentralityType aCentType, bool aCombineConj=true, bool aUseAdamEvents=false, int aRebin=2, double aMinNorm=0.32, double aMaxNorm=0.40);
-  static CfHeavy* GetCentralityCombinedThermCfsHeavy(TString aFileName, TString aCfDescriptor, AnalysisType aAnType, CentralityType aCentType, bool aCombineConj=true, ThermEventsType aEventsType=kMe, int aRebin=2, double aMinNorm=0.32, double aMaxNorm=0.40);
-  static TH1* GetCentralityCombinedThermCfs(TString aFileName, TString aCfDescriptor, AnalysisType aAnType, CentralityType aCentType, bool aCombineConj=true, ThermEventsType aEventsType=kMe, int aRebin=2, double aMinNorm=0.32, double aMaxNorm=0.40, int aMarkerStyle=20, int aColor=1);
-  static TH1* GetCentralityCombinedThermCfs(AnalysisType aAnType, CentralityType aCentType, bool aCombineConj=true, ThermEventsType aEventsType=kMe, int aRebin=2, double aMinNorm=0.32, double aMaxNorm=0.40, int aMarkerStyle=20, int aColor=1);
+  static CfHeavy* GetCentralityCombinedThermCfsHeavy(TString aFileName, TString aCfDescriptor, AnalysisType aAnType, CentralityType aCentType, bool aCombineConj=true, bool aUseAdamEvents=false, int aRebin=2, double aMinNorm=0.32, double aMaxNorm=0.40, bool aUseNumRotPar2InsteadOfDen=false);
+  static CfHeavy* GetCentralityCombinedThermCfsHeavy(TString aFileName, TString aCfDescriptor, AnalysisType aAnType, CentralityType aCentType, bool aCombineConj=true, ThermEventsType aEventsType=kMe, int aRebin=2, double aMinNorm=0.32, double aMaxNorm=0.40, bool aUseNumRotPar2InsteadOfDen=false);
+  static TH1* GetCentralityCombinedThermCfs(TString aFileName, TString aCfDescriptor, AnalysisType aAnType, CentralityType aCentType, bool aCombineConj=true, ThermEventsType aEventsType=kMe, int aRebin=2, double aMinNorm=0.32, double aMaxNorm=0.40, int aMarkerStyle=20, int aColor=1, bool aUseNumRotPar2InsteadOfDen=false);
+  static TH1* GetCentralityCombinedThermCfs(AnalysisType aAnType, CentralityType aCentType, bool aCombineConj=true, ThermEventsType aEventsType=kMe, int aRebin=2, double aMinNorm=0.32, double aMaxNorm=0.40, int aMarkerStyle=20, int aColor=1, bool aUseNumRotPar2InsteadOfDen=false);
 
-  static CfHeavy* GetLamKchPMCombinedThermCfsHeavy(TString aFileName, TString aCfDescriptor, CentralityType aCentType, bool aUseAdamEvents=false, int aRebin=2, double aMinNorm=0.32, double aMaxNorm=0.40);
-  static CfHeavy* GetLamKchPMCombinedThermCfsHeavy(TString aFileName, TString aCfDescriptor, CentralityType aCentType, ThermEventsType aEventsType=kMe, int aRebin=2, double aMinNorm=0.32, double aMaxNorm=0.40);
-  static TH1* GetLamKchPMCombinedThermCfs(TString aFileName, TString aCfDescriptor, CentralityType aCentType, ThermEventsType aEventsType=kMe, int aRebin=2, double aMinNorm=0.32, double aMaxNorm=0.40, int aMarkerStyle=20, int aColor=1);
+  static CfHeavy* GetLamKchPMCombinedThermCfsHeavy(TString aFileName, TString aCfDescriptor, CentralityType aCentType, bool aUseAdamEvents=false, int aRebin=2, double aMinNorm=0.32, double aMaxNorm=0.40, bool aUseNumRotPar2InsteadOfDen=false);
+  static CfHeavy* GetLamKchPMCombinedThermCfsHeavy(TString aFileName, TString aCfDescriptor, CentralityType aCentType, ThermEventsType aEventsType=kMe, int aRebin=2, double aMinNorm=0.32, double aMaxNorm=0.40, bool aUseNumRotPar2InsteadOfDen=false);
+  static TH1* GetLamKchPMCombinedThermCfs(TString aFileName, TString aCfDescriptor, CentralityType aCentType, ThermEventsType aEventsType=kMe, int aRebin=2, double aMinNorm=0.32, double aMaxNorm=0.40, int aMarkerStyle=20, int aColor=1, bool aUseNumRotPar2InsteadOfDen=false);
 
   //------------------------------------------------------------------------
 
@@ -97,6 +97,8 @@ public:
   void SetMinNorm(double aMin);
   void SetMaxNorm(double aMax);
 
+  void SetUseNumRotPar2InsteadOfDen(bool aUse);
+
 private:
   TString fFileName;
   TString fCfDescriptor;
@@ -111,6 +113,8 @@ private:
   int fRebin;
   double fMinNorm;
   double fMaxNorm;
+
+  bool fUseNumRotPar2InsteadOfDen;
 
   CfHeavy *fThermCfHeavy;
 
@@ -143,5 +147,6 @@ inline void ThermCf::SetRebin(int aRebin) {fRebin=aRebin; BuildThermCf();}
 inline void ThermCf::SetMinNorm(double aMin) {fMinNorm=aMin; BuildThermCf();}
 inline void ThermCf::SetMaxNorm(double aMax) {fMaxNorm=aMax; BuildThermCf();}
 
+inline void ThermCf::SetUseNumRotPar2InsteadOfDen(bool aUse) {fUseNumRotPar2InsteadOfDen = aUse;}
 
 #endif
