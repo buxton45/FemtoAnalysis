@@ -90,9 +90,15 @@ public:
   double CalcKStar(TLorentzVector &p1, TLorentzVector &p2);
   double CalcKStar(ThermParticle &tPart1, ThermParticle &tPart2);
 
+  double CalcKStar_RotatePar2(TLorentzVector &p1, TLorentzVector &p2);           //Rotate the second particle in the pair by 180 degrees about the z-axis
+  double CalcKStar_RotatePar2(ThermParticle &tPart1, ThermParticle &tPart2);     //Rotate the second particle in the pair by 180 degrees about the z-axis
+
 //TODO combine GetKStar3Vec and GetRStar3Vec
   TVector3 GetKStar3Vec(TLorentzVector &p1, TLorentzVector &p2);
   TVector3 GetKStar3Vec(ThermParticle &tPart1, ThermParticle &tPart2);
+
+  TVector3 GetKStar3Vec_RotatePar2(TLorentzVector &p1, TLorentzVector &p2);
+  TVector3 GetKStar3Vec_RotatePar2(ThermParticle &tPart1, ThermParticle &tPart2);
 
   TVector3 GetRStar3Vec(TLorentzVector &p1, TLorentzVector &x1, TLorentzVector &p2, TLorentzVector &x2);
   TVector3 GetRStar3Vec(ThermParticle &tPart1, ThermParticle &tPart2);
@@ -107,6 +113,7 @@ public:
   complex<double> GetStrongOnlyWaveFunction(TVector3 &aKStar3Vec, TVector3 &aRStar3Vec);
   double GetStrongOnlyWaveFunctionSq(TVector3 aKStar3Vec, TVector3 aRStar3Vec);
   double GetParentPairWaveFunctionSq(ThermParticle &tPart1, ThermParticle &tPart2);
+  double GetParentPairWaveFunctionSq_RotatePar2(ThermParticle &tPart1, ThermParticle &tPart2);
 
   void FillCorrelations(ThermParticle &aParticle1, ThermParticle &aParticle2, bool aFillNumerator);  //For ParticleV0, aParticle1=V0 and aParticle2=Particle
   void FillCorrelationFunctionsNumOrDenParticleV0(vector<ThermParticle> &aParticleCollection, vector<ThermV0Particle> &aV0Collection, bool aFillNumerator);
@@ -181,6 +188,7 @@ private:
   TH1* fNumFull;
   TH1* fDenFull;
   TH1* fCfFull;
+  TH1* fNumFull_RotatePar2;
 
   TH1* fPairSourcePrimaryOnly;
   TH1* fNumPrimaryOnly;

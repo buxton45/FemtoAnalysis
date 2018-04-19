@@ -57,6 +57,7 @@ ThermPairAnalysis::ThermPairAnalysis(AnalysisType aAnType) :
   fNumFull(nullptr),
   fDenFull(nullptr),
   fCfFull(nullptr),
+  fNumFull_RotatePar2(nullptr),
 
   fPairSourcePrimaryOnly(nullptr),
   fNumPrimaryOnly(nullptr),
@@ -373,9 +374,13 @@ void ThermPairAnalysis::InitiateCorrelations()
   fDenFull = new TH1D(TString::Format("DenFull%s", cAnalysisBaseTags[fAnalysisType]),
                       TString::Format("DenFull%s", cAnalysisBaseTags[fAnalysisType]), 
                       tNbinsKStar, tKStarMin, tKStarMax);
+  fNumFull_RotatePar2 = new TH1D(TString::Format("NumFull_RotatePar2%s", cAnalysisBaseTags[fAnalysisType]),
+                                 TString::Format("NumFull_RotatePar2%s", cAnalysisBaseTags[fAnalysisType]), 
+                                 tNbinsKStar, tKStarMin, tKStarMax);
   fPairSourceFull->Sumw2();
   fNumFull->Sumw2();
   fDenFull->Sumw2();
+  fNumFull_RotatePar2->Sumw2();
 
 
   fPairSourcePrimaryOnly = new TH1D(TString::Format("PairSourcePrimaryOnly%s", cAnalysisBaseTags[fAnalysisType]), 
@@ -1111,6 +1116,23 @@ double ThermPairAnalysis::CalcKStar(ThermParticle &tPart1, ThermParticle &tPart2
   return CalcKStar(p1, p2);
 }
 
+//________________________________________________________________________________________________________________
+double ThermPairAnalysis::CalcKStar_RotatePar2(TLorentzVector &p1, TLorentzVector &p2)
+{
+  TLorentzVector p2_Rot = TLorentzVector(-1.*p2.Px(), -1.*p2.Py(), p2.Pz(), p2.E());
+  return CalcKStar(p1, p2_Rot);
+}
+
+
+//________________________________________________________________________________________________________________
+double ThermPairAnalysis::CalcKStar_RotatePar2(ThermParticle &tPart1, ThermParticle &tPart2)
+{
+  TLorentzVector p1 = tPart1.GetFourMomentum();
+  TLorentzVector p2 = tPart2.GetFourMomentum();
+
+  return CalcKStar_RotatePar2(p1, p2);
+}
+
 
 //________________________________________________________________________________________________________________
 TVector3 ThermPairAnalysis::GetKStar3Vec(TLorentzVector &p1, TLorentzVector &p2)
@@ -1166,6 +1188,64 @@ TVector3 ThermPairAnalysis::GetKStar3Vec(ThermParticle &tPart1, ThermParticle &t
   //---------------------------------
 
   return GetKStar3Vec(p1, p2);
+}
+
+//________________________________________________________________________________________________________________
+TVector3 ThermPairAnalysis::GetKStar3Vec_RotatePar2(TLorentzVector &p1, TLorentzVector &p2)
+{
+  TLorentzVector p2_Rot = TLorentzVector(-1.*p2.Px(), -1.*p2.Py(), p2.Pz(), p2.E());
+
+  TLorentzVector P = p1 + p2_Rot;
+
+  // Calculate pair variables
+  const double tPx = P.X(),
+               tPy = P.Y(),
+               tPz = P.Z();
+
+  double tE1 = p1.E();
+  double tE2 = p2_Rot.E();
+
+  double tE  = tE1 + tE2;
+  double tPt = tPx*tPx + tPy*tPy;
+  double tMt = tE*tE - tPz*tPz;//mCVK;
+  double tM  = (tMt - tPt > 0.0) ? sqrt(tMt - tPt) : 0.0;
+
+  if (tMt == 0 || tE == 0 || tM == 0 || tPt == 0 ) {
+    assert(0);
+  }
+
+  tMt = sqrt(tMt);
+  tPt = sqrt(tPt);
+
+  double pX = p1.X();
+  double pY = p1.Y();
+  double pZ = p1.Z();
+
+  // Boost to LCMS
+  double tBeta = tPz/tE;
+  double tGamma = tE/tMt;
+  double tKStarLong = tGamma * (pZ - tBeta * tE1);
+  double tE1L = tGamma * (tE1  - tBeta * pZ);
+
+  // Rotate in transverse plane
+  double tKStarOut  = ( pX*tPx + pY*tPy)/tPt;
+  double tKStarSide = (-pX*tPy + pY*tPx)/tPt;
+
+  // Boost to pair cms
+  tKStarOut = tMt/tM * (tKStarOut - tPt/tMt * tE1L);
+
+  return TVector3(tKStarOut, tKStarSide, tKStarLong);
+}
+
+//________________________________________________________________________________________________________________
+TVector3 ThermPairAnalysis::GetKStar3Vec_RotatePar2(ThermParticle &tPart1, ThermParticle &tPart2)
+{
+  TLorentzVector p1 = tPart1.GetFourMomentum();
+  TLorentzVector p2 = tPart2.GetFourMomentum();
+
+  //---------------------------------
+
+  return GetKStar3Vec_RotatePar2(p1, p2);
 }
 
 //________________________________________________________________________________________________________________
@@ -1513,6 +1593,70 @@ double ThermPairAnalysis::GetParentPairWaveFunctionSq(ThermParticle &tPart1, The
 
 }
 
+
+//________________________________________________________________________________________________________________
+double ThermPairAnalysis::GetParentPairWaveFunctionSq_RotatePar2(ThermParticle &tPart1, ThermParticle &tPart2)
+{
+//  assert(!(tPart1.IsPrimordial() && tPart2.IsPrimordial()));
+  //--------------------------------------------------------------
+  TLorentzVector p1, x1, p2, x2;
+  ParticlePDGType tResType1, tResType2;
+  //----------
+  if(tPart1.IsPrimordial())
+  {
+    p1 = tPart1.GetFourMomentum();
+    x1 = tPart1.GetFourPosition();
+    tResType1 = static_cast<ParticlePDGType>(tPart1.GetPID());
+  }
+  else
+  {
+    p1 = tPart1.GetFatherFourMomentum();
+    x1 = tPart1.GetFatherFourPosition();
+    tResType1 = static_cast<ParticlePDGType>(tPart1.GetFatherPID());
+
+    if(fOnlyWeightLongDecayParents && GetParticleDecayLength(tResType1) < 1000.)
+    {
+      p1 = tPart1.GetFourMomentum();
+      x1 = tPart1.GetFourPosition();
+      tResType1 = static_cast<ParticlePDGType>(tPart1.GetPID());
+    }
+  }
+  //----------
+  if(tPart2.IsPrimordial())
+  {
+    p2 = tPart2.GetFourMomentum();
+    x2 = tPart2.GetFourPosition();
+    tResType2 = static_cast<ParticlePDGType>(tPart2.GetPID());
+  }
+  else
+  {
+    p2 = tPart2.GetFatherFourMomentum();
+    x2 = tPart2.GetFatherFourPosition();
+    tResType2 = static_cast<ParticlePDGType>(tPart2.GetFatherPID());
+
+    if(fOnlyWeightLongDecayParents && GetParticleDecayLength(tResType2) < 1000.)
+    {
+      p2 = tPart2.GetFourMomentum();
+      x2 = tPart2.GetFourPosition();
+      tResType2 = static_cast<ParticlePDGType>(tPart2.GetPID());
+    }
+  }
+  //--------------------------------------------------------------
+
+  TVector3 tRStar3Vec = GetRStar3Vec(p1, x1, p2, x2);
+  TVector3 tKStar3Vec = GetKStar3Vec_RotatePar2(p1, p2);
+
+  //--------------------------------------------------------------
+
+  if(!IsChargedResidual(tResType1, tResType2)) return GetStrongOnlyWaveFunctionSq(tKStar3Vec, tRStar3Vec);
+  else
+  {
+    int tResIndex = GetChargedResidualIndex(tResType1, tResType2);
+    return fChargedResiduals[tResIndex].InterpolateWfSquared(&tKStar3Vec, &tRStar3Vec);
+  }
+
+}
+
 //________________________________________________________________________________________________________________
 void ThermPairAnalysis::FillCorrelations(ThermParticle &aParticle1, ThermParticle &aParticle2, bool aFillNumerator)
 {
@@ -1565,6 +1709,12 @@ void ThermPairAnalysis::FillCorrelations(ThermParticle &aParticle1, ThermParticl
   {
     if(fBuild3dHists) fPairSource3d->Fill(tParentIndex1, tParentIndex2, tRStar);
     fPairSourceFull->Fill(tRStar);
+
+    //--------------------------------------
+    if(fUnitWeightCfNums) fNumFull_RotatePar2->Fill(CalcKStar_RotatePar2(aParticle1, aParticle2), 1.);
+    else if(fWeightCfsWithParentInteraction) fNumFull_RotatePar2->Fill(CalcKStar_RotatePar2(aParticle1, aParticle2), GetParentPairWaveFunctionSq_RotatePar2(aParticle1, aParticle2));
+    else fNumFull_RotatePar2->Fill(CalcKStar_RotatePar2(aParticle1, aParticle2), GetStrongOnlyWaveFunctionSq(GetKStar3Vec_RotatePar2(aParticle1, aParticle2), GetRStar3Vec(aParticle1, aParticle2)));
+    //--------------------------------------    
 
     fPairKStarVsmT->Fill(tKStar, CalcmT(aParticle1, aParticle2));
     if(tKStar <= 0.3 && fBuild3dHists) FillParentmT3d(fPairmT3d, aParticle1, aParticle2);
@@ -1784,6 +1934,7 @@ void ThermPairAnalysis::SaveAllCorrelationFunctions(TFile *aFile)
   fDenFull->Write();
   fCfFull = BuildFinalCf(fNumFull, fDenFull, TString::Format("CfFull%s", cAnalysisBaseTags[fAnalysisType]));
   fCfFull->Write();
+  fNumFull_RotatePar2->Write();
 
   fPairSourcePrimaryOnly->Write();
   fNumPrimaryOnly->Write();

@@ -35,7 +35,7 @@ int main(int argc, char **argv)
   bool bOnlyWeightLongDecayParents = false;
 
   bool bCheckCoECoM = false;
-  bool bRotateEventsByRandomAzimuthalAngles = true;
+  bool bRotateEventsByRandomAzimuthalAngles = false;
   bool bOnlyRunOverJaiEvents = false;
 
   double tMaxPrimaryDecayLength = -1; 
