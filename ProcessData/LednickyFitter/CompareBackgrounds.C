@@ -845,9 +845,9 @@ int main(int argc, char **argv)
   TString tFileLocationBaseMC_cLamK0 = TString::Format("%sResults_cLamK0MC_%s",tDirectoryBase_cLamK0.Data(),tResultsDate.Data());
 //-----------------------------------------------------------------------------
 
-  FitGenerator* tLamKchP = new FitGenerator(tFileLocationBase_cLamcKch,tFileLocationBaseMC_cLamcKch,kLamKchP, tCentType,tAnRunType,tNPartialAnalysis,tGenType);
-  FitGenerator* tLamKchM = new FitGenerator(tFileLocationBase_cLamcKch,tFileLocationBaseMC_cLamcKch,kLamKchM, tCentType,tAnRunType,tNPartialAnalysis,tGenType);
-  FitGenerator* tLamK0 = new FitGenerator(tFileLocationBase_cLamK0,tFileLocationBaseMC_cLamK0,kLamK0, tCentType,tAnRunType,tNPartialAnalysis,tGenType);
+  FitGenerator* tLamKchP = new FitGenerator(tFileLocationBase_cLamcKch, tFileLocationBaseMC_cLamcKch, kLamKchP, tCentType, tAnRunType, tNPartialAnalysis, tGenType);
+  FitGenerator* tLamKchM = new FitGenerator(tFileLocationBase_cLamcKch, tFileLocationBaseMC_cLamcKch, kLamKchM, tCentType, tAnRunType, tNPartialAnalysis, tGenType);
+  FitGenerator* tLamK0 =   new FitGenerator(tFileLocationBase_cLamK0,   tFileLocationBaseMC_cLamK0,   kLamK0,   tCentType, tAnRunType, tNPartialAnalysis, tGenType);
 
 //-------------------------------------------------------------------------------
 

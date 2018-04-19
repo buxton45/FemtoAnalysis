@@ -223,7 +223,7 @@ TH1* CfLite::GetUnNormalizedCf()
 //________________________________________________________________________________________________________________
 void CfLite::DivideCfByThermBgd(TH1* aThermBgd)
 {
-
+/*
   assert(fCf->GetBinWidth(1)==aThermBgd->GetBinWidth(1));
   assert(aThermBgd->GetNbinsX() >= fCf->GetNbinsX());
 
@@ -232,8 +232,8 @@ void CfLite::DivideCfByThermBgd(TH1* aThermBgd)
                                                                    fCf->GetXaxis()->GetBinUpEdge(fCf->GetNbinsX()));
   assert(aThermBgd->GetNbinsX() == fCf->GetNbinsX());
   fCf->Divide(aThermBgd);
+*/
 
-/*
   assert(fDen->GetBinWidth(1)==aThermBgd->GetBinWidth(1));
   assert(aThermBgd->GetNbinsX() >= fDen->GetNbinsX());
 
@@ -243,7 +243,7 @@ void CfLite::DivideCfByThermBgd(TH1* aThermBgd)
   assert(aThermBgd->GetNbinsX() == fDen->GetNbinsX());
   fDen->Multiply(aThermBgd);
   Rebin(1);
-*/
+
 }
 
 

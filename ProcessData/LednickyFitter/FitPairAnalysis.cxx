@@ -465,9 +465,11 @@ void FitPairAnalysis::DivideCfByThermBgd(bool aCombineConj, bool aCombineLamKchP
   {
     fFitPartialAnalysisCollection[iPartAn]->DivideCfByThermBgd(aCombineConj, aCombineLamKchPM, aThermEventsType);
   }
-
+/*
   TH1* tThermBgd = GetThermNonFlatBackground(aCombineConj, aCombineLamKchPM, aThermEventsType);
   fKStarCfHeavy->DivideCfByThermBgd(tThermBgd);
+*/
+  fKStarCfHeavy->CombineCfs();
 }
 
 

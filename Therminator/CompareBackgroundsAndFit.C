@@ -1028,6 +1028,13 @@ TCanvas* DrawDataVsTherm(TString aCfDescriptor, TString aFileNameCfs, AnalysisTy
   PrintInfo((TPad*)tCanDataVsThem, tOverallDescriptor, 0.04);
 
   //---------------------------------------------------------------
+
+  TH1D* tData2 = GetQuickData(aAnType, tCentTypeData, aCombineConjugates, "20180416");
+  SetStyleAndColor(tData2, 24, GetColor(aAnType));
+  tData2->Draw("same");
+  //---------------------------------------------------------------
+
+
   return tCanDataVsThem;
 }
 
@@ -1086,11 +1093,11 @@ int main(int argc, char **argv)
   ThermEventsType tEventsType = kMeAndAdam;  //kMe, kAdam, kMeAndAdam
 
   bool bCompareWithAndWithoutBgd = false;
-  bool bDrawBgdwFitOnly = true;
+  bool bDrawBgdwFitOnly = false;
   bool bDrawLamKchPMBgdwFitOnly = false;
   bool bCompareAnalyses = false;
   bool bCompareToAdam = false;
-  bool bDrawDataVsTherm = false;
+  bool bDrawDataVsTherm = true;
 
   bool bDrawAllCentralities = true;
 
