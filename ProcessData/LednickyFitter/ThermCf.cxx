@@ -10,7 +10,7 @@ ClassImp(ThermCf)
 
 
 //________________________________________________________________________________________________________________
-ThermCf::ThermCf(TString aFileName, TString aCfDescriptor, AnalysisType aAnalysisType, CentralityType aCentralityType, bool aCombineConj, bool aCombineLamKchPM, ThermEventsType aThermEventsType, int aRebin, double aMinNorm, double aMaxNorm) : 
+ThermCf::ThermCf(TString aFileName, TString aCfDescriptor, AnalysisType aAnalysisType, CentralityType aCentralityType, bool aCombineConj, ThermEventsType aThermEventsType, int aRebin, double aMinNorm, double aMaxNorm, bool aUseNumRotPar2InsteadOfDen) : 
   fFileName(aFileName),
   fCfDescriptor(aCfDescriptor),
 
@@ -18,14 +18,17 @@ ThermCf::ThermCf(TString aFileName, TString aCfDescriptor, AnalysisType aAnalysi
   fCentralityType(aCentralityType),
 
   fCombineConjugates(aCombineConj),
-  fCombineLamKchPM(aCombineLamKchPM),
+  fCombineLamKchPM(false),
   fThermEventsType(aThermEventsType), 
+
+  fCombineImpactParams(true),
+  fImpactParam(-1),
 
   fRebin(aRebin),
   fMinNorm(aMinNorm),
   fMaxNorm(aMaxNorm),
 
-  fUseNumRotPar2InsteadOfDen(false),
+  fUseNumRotPar2InsteadOfDen(aUseNumRotPar2InsteadOfDen),
 
   fThermCfHeavy(nullptr)
 
@@ -147,6 +150,27 @@ CfHeavy* ThermCf::GetThermHeavyCf(TString aFileName, TString aCfDescriptor, Anal
 
   return tCfHeavy;
 }
+
+
+//________________________________________________________________________________________________________________
+CfHeavy* ThermCf::GetThermHeavyCf(TString aFileName, TString aCfDescriptor, AnalysisType aAnType, int aImpactParam, bool aCombineConj, ThermEventsType aEventsType, int aRebin, double aMinNorm, double aMaxNorm, bool aUseNumRotPar2InsteadOfDen)
+{
+  CfHeavy* tCfHeavy;
+  if(aEventsType==kMe)        tCfHeavy = GetThermHeavyCf(aFileName, aCfDescriptor, aAnType, aImpactParam, aCombineConj, false, aRebin, aMinNorm, aMaxNorm, aUseNumRotPar2InsteadOfDen);
+  else if(aEventsType==kAdam) tCfHeavy = GetThermHeavyCf(aFileName, aCfDescriptor, aAnType, aImpactParam, aCombineConj, true, aRebin, aMinNorm, aMaxNorm, aUseNumRotPar2InsteadOfDen);
+  else
+  {
+    CfHeavy* tCfHeavy_Me   = GetThermHeavyCf(aFileName, aCfDescriptor, aAnType, aImpactParam, aCombineConj, false, aRebin, aMinNorm, aMaxNorm, aUseNumRotPar2InsteadOfDen);
+    CfHeavy* tCfHeavy_Adam = GetThermHeavyCf(aFileName, aCfDescriptor, aAnType, aImpactParam, aCombineConj, true, aRebin, aMinNorm, aMaxNorm, aUseNumRotPar2InsteadOfDen);
+
+    TString tName = tCfHeavy_Me->GetHeavyCfName();
+    tName += TString(cThermEventsTypeTags[aEventsType]);
+
+    tCfHeavy = CombineTwoCfHeavy(tName, tCfHeavy_Me, tCfHeavy_Adam);
+  }
+  return tCfHeavy;
+}
+
 
 //________________________________________________________________________________________________________________
 TH1* ThermCf::GetThermCf(TString aFileName, TString aCfDescriptor, AnalysisType aAnType, int aImpactParam, bool aCombineConj, ThermEventsType aEventsType, int aRebin, double aMinNorm, double aMaxNorm, int aMarkerStyle, int aColor, bool aUseNumRotPar2InsteadOfDen)
@@ -373,10 +397,16 @@ TH1* ThermCf::GetLamKchPMCombinedThermCfs(TString aFileName, TString aCfDescript
 //________________________________________________________________________________________________________________
 void ThermCf::BuildThermCf()
 {
-  if(fCombineLamKchPM)
+  if(!fCombineImpactParams)
+  {
+    assert(fImpactParam > 0);
+    fThermCfHeavy = GetThermHeavyCf(fFileName, fCfDescriptor, fAnalysisType, fImpactParam, fCombineConjugates, fThermEventsType, fRebin, fMinNorm, fMaxNorm, fUseNumRotPar2InsteadOfDen);
+  }
+  else if(fCombineLamKchPM)
   {
     assert(fAnalysisType==kLamKchP || fAnalysisType==kALamKchM ||
            fAnalysisType==kLamKchM || fAnalysisType==kALamKchP);
+    assert(fCombineImpactParams);
 
     fThermCfHeavy = GetLamKchPMCombinedThermCfsHeavy(fFileName, fCfDescriptor, fCentralityType, fThermEventsType, fRebin, fMinNorm, fMaxNorm, fUseNumRotPar2InsteadOfDen);
   }
@@ -388,5 +418,13 @@ void ThermCf::BuildThermCf()
 }
 
 
+//________________________________________________________________________________________________________________
+TH1* ThermCf::GetThermCf(int aMarkerStyle, int aColor, double aMarkerSize)
+{
+  BuildThermCf();
+  TH1* tReturnHist = fThermCfHeavy->GetHeavyCf();
+  SetStyleAndColor(tReturnHist, aMarkerStyle, aColor, aMarkerSize);
+  return tReturnHist;
+}
 
 

@@ -10,7 +10,7 @@ CFLAGS = $(shell root-config --cflags) -Wall -std=c++11 -I${ANALYZE_DIR} -I${LED
 
 RM = rm
 
-MY_LIBS = $(addprefix build/, ParticleCoor.o Interpolator.o Types.o PIDMapping.o ThermCommon.o ThermParticle.o ThermV0Particle.o ThermEvent.o ThermChargedResidual.o ThermPairAnalysis.o ThermSingleParticleAnalysis.o ThermEventsCollection.o SimpleThermAnalysis.o Therm3dCf.o CfLite.o CfHeavy.o)
+MY_LIBS = $(addprefix build/, ParticleCoor.o Interpolator.o Types.o PIDMapping.o ThermCommon.o ThermParticle.o ThermV0Particle.o ThermEvent.o ThermChargedResidual.o ThermPairAnalysis.o ThermSingleParticleAnalysis.o ThermEventsCollection.o SimpleThermAnalysis.o Therm3dCf.o ThermCf.o CfLite.o CfHeavy.o)
 
 BINARIES = runTest runAnalysis runDrawTransforms runDrawPairFractions runDrawParentsMatrices runBuildLambdaValuesFromParentMatrices runProject3dRadii runProjectTransverseEmission runDrawPairSources runDrawCfs runDrawCfsv2 runCompareCfs runCompareCfsv2 runProject3dCfs runGetmT runRenameEventFiles runCompareBackgroundsAndFit
 
@@ -69,6 +69,9 @@ runCompareBackgroundsAndFit: ${MY_LIBS} CompareBackgroundsAndFit.C
 	g++ CompareBackgroundsAndFit.C ${MY_LIBS} -o runCompareBackgroundsAndFit $(LIBS) $(CFLAGS)
 
 build/%.o: ${ANALYZE_DIR}/%.cxx ${ANALYZE_DIR}/%.h
+	g++ -c $< $(CFLAGS) -o $@
+
+build/%.o: ${LEDNICKYFITTER_DIR}/%.cxx ${LEDNICKYFITTER_DIR}/%.h
 	g++ -c $< $(CFLAGS) -o $@
 
 build/%.o: ${COULOMBFITTER_DIR}/%.cxx ${COULOMBFITTER_DIR}/%.h

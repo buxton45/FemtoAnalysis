@@ -1,5 +1,8 @@
-#include "CompareBackgrounds.h"
 #include "DrawAMPTCfs.h"
+#include "FitGenerator.h"
+class FitGenerator;
+#include "ThermCf.h"
+class ThermCf;
 
 
 //________________________________________________________________________________________________________________
@@ -92,7 +95,7 @@ TCanvas* CompareDataToTHERM(FitGenerator* aGen, bool aDrawAMPT, bool aZoom0010=f
       tDataCf = aGen->GetSharedAn()->GetKStarCfHeavy(tAnalysisNumber)->GetHeavyCfClone();
       tCanPart->AddGraph(i, j, tDataCf, "", tMarkerStyleData, tColorData, tMarkerSize);
 
-      tTHERMCf = GetCombinedTHERMCfs(tAnType, tCentType, tCombineConjugates);
+      tTHERMCf = ThermCf::GetCentralityCombinedThermCfs(tAnType, tCentType, tCombineConjugates);
       tCanPart->AddGraph(i, j, tTHERMCf, "", tMarkerStyleTHERM, tColorTHERM, tMarkerSize);
 
       if(aDrawAMPT)
@@ -201,7 +204,7 @@ TCanvas* CompareDataToTHERMv2(FitGenerator* aGen, bool aDrawAMPT, bool aZoom0010
         if(iIP==0) tColorTHERM=kGreen;
         else tColorTHERM=kMagenta;
 
-        tTHERMCf = GetTHERMCf(tAnType, tImpactParams[iIP], tCombineConjugates);
+        tTHERMCf = ThermCf::GetThermCf(tAnType, tImpactParams[iIP], tCombineConjugates);
         tCanPart->AddGraph(i, j, tTHERMCf, "", tMarkerStyleTHERM, tColorTHERM, tMarkerSize);
       }
       //--------------------------------
@@ -1009,7 +1012,7 @@ int main(int argc, char **argv)
         tCfHeavy1 = tLamK0->GetKStarCfHeavy(i-1);
         tCfHeavy2 = tLamK0->GetKStarCfHeavy(i);
         
-        tCombinedCfHeavy = CombineTwoCfHeavy(tCombConjHistName, tCfHeavy1, tCfHeavy2);
+        tCombinedCfHeavy = ThermCf::CombineTwoCfHeavy(tCombConjHistName, tCfHeavy1, tCfHeavy2);
         tCombinedCfHeavy->GetHeavyCfClone()->Write();
       }
     }
@@ -1028,7 +1031,7 @@ int main(int argc, char **argv)
         tCfHeavy1 = tLamKchP->GetKStarCfHeavy(i-1);
         tCfHeavy2 = tLamKchP->GetKStarCfHeavy(i);
         
-        tCombinedCfHeavy = CombineTwoCfHeavy(tCombConjHistName, tCfHeavy1, tCfHeavy2);
+        tCombinedCfHeavy = ThermCf::CombineTwoCfHeavy(tCombConjHistName, tCfHeavy1, tCfHeavy2);
         tCombinedCfHeavy->GetHeavyCfClone()->Write();
       }
     }
@@ -1047,7 +1050,7 @@ int main(int argc, char **argv)
         tCfHeavy1 = tLamKchM->GetKStarCfHeavy(i-1);
         tCfHeavy2 = tLamKchM->GetKStarCfHeavy(i);
         
-        tCombinedCfHeavy = CombineTwoCfHeavy(tCombConjHistName, tCfHeavy1, tCfHeavy2);
+        tCombinedCfHeavy = ThermCf::CombineTwoCfHeavy(tCombConjHistName, tCfHeavy1, tCfHeavy2);
         tCombinedCfHeavy->GetHeavyCfClone()->Write();
       }
     }

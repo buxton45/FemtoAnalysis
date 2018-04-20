@@ -685,8 +685,9 @@ TH1* FitPartialAnalysis::GetThermNonFlatBackground(bool aCombineConj, bool aComb
 
   int aRebin = 1;
 
-  fThermNonFlatBgd = new ThermCf(tFileName, tCfDescriptor, fAnalysisType, fCentralityType, aCombineConj, aCombineLamKchPM, aThermEventsType, 
+  fThermNonFlatBgd = new ThermCf(tFileName, tCfDescriptor, fAnalysisType, fCentralityType, aCombineConj, aThermEventsType, 
                                  aRebin, fKStarCfLite->GetMinNorm(), fKStarCfLite->GetMaxNorm());
+  fThermNonFlatBgd->SetCombineLamKchPM(aCombineLamKchPM);
 
   return fThermNonFlatBgd->GetThermCf();
 }
