@@ -1067,6 +1067,186 @@ TCanvas* DrawDataVsTherm_AllCent(TString aCfDescriptor, TString aFileNameCfs, An
 }
 
 
+//________________________________________________________________________________________________________________
+TCanvas* CompareBackgroundReductionMethods(TString aCfDescriptor, AnalysisType aAnType, int aImpactParam, bool aCombineConjugates, bool aCombineImpactParams, ThermEventsType aEventsType, int aRebin, double aMinNorm, double aMaxNorm, bool aNumWeight1, bool aDrawData, bool bVerbose)
+{
+  CentralityType tCentType=kMB;
+  if(aCombineImpactParams) tCentType = GetCentralityType(aImpactParam);
+  //-------------------------------------------------
+  AnalysisType tConjAnType = GetConjAnType(aAnType);
+  //-------------------------------------------------
+
+  TString tOverallDescriptor = cAnalysisRootTags[aAnType];
+  if(aCombineConjugates) tOverallDescriptor += TString::Format(" & %s", cAnalysisRootTags[tConjAnType]);
+  if(!aCombineImpactParams) tOverallDescriptor += TString::Format(" (b=%d)", aImpactParam);
+  else tOverallDescriptor += TString::Format(" (%s)", cPrettyCentralityTags[tCentType]);
+
+  //--------------------------------------------
+  TString tFileName_AlignEPs, tFileName_RandomEPs;
+  if(aNumWeight1)
+  {
+    tFileName_AlignEPs = "CorrelationFunctions_NumWeight1.root";
+    tFileName_RandomEPs = "CorrelationFunctions_RandomEPs_NumWeight1.root";
+  }
+  else
+  {
+    tFileName_AlignEPs = "CorrelationFunctions.root";
+    tFileName_RandomEPs = "CorrelationFunctions_RandomEPs.root";
+  }
+  //--------------------------------------------
+
+  int tMarkerStyle_AlignEPs                = 20;
+  int tColor_AlignEPs                      = kOrange;
+
+  int tMarkerStyle_AlignEPs_UseNumRotPar2  = 20;
+  int tColor_AlignEPs_UseNumRotPar2        = kCyan;
+
+  int tMarkerStyle_RandomEPs               = 20;
+  int tColor_RandomEPs                     = kGreen;
+
+  int tMarkerStyle_RandomEPs_UseNumRotPar2 = 24;
+  int tColor_RandomEPs_UseNumRotPar2       = kMagenta;
+  //--------------------------------------------
+
+  ThermCf* tThermCf_AlignEPs                = new ThermCf(tFileName_AlignEPs, 
+                                                          aCfDescriptor, aAnType, GetCentralityType(aImpactParam), aCombineConjugates, aEventsType, aRebin, aMinNorm, aMaxNorm, false);
+  ThermCf* tThermCf_AlignEPs_UseNumRotPar2  = new ThermCf(tFileName_AlignEPs, 
+                                                          aCfDescriptor, aAnType, GetCentralityType(aImpactParam), aCombineConjugates, aEventsType, aRebin, aMinNorm, aMaxNorm, true);
+
+  ThermCf* tThermCf_RandomEPs               = new ThermCf(tFileName_RandomEPs, 
+                                                          aCfDescriptor, aAnType, GetCentralityType(aImpactParam), aCombineConjugates, aEventsType, aRebin, aMinNorm, aMaxNorm, false);
+  ThermCf* tThermCf_RandomEPs_UseNumRotPar2 = new ThermCf(tFileName_RandomEPs, 
+                                                          aCfDescriptor, aAnType, GetCentralityType(aImpactParam), aCombineConjugates, aEventsType, aRebin, aMinNorm, aMaxNorm, true);
+
+  if(!aCombineImpactParams)
+  {
+    tThermCf_AlignEPs->SetSpecificImpactParam(aImpactParam, aCombineImpactParams);
+    tThermCf_AlignEPs_UseNumRotPar2->SetSpecificImpactParam(aImpactParam, aCombineImpactParams);
+    tThermCf_RandomEPs->SetSpecificImpactParam(aImpactParam, aCombineImpactParams);
+    tThermCf_RandomEPs_UseNumRotPar2->SetSpecificImpactParam(aImpactParam, aCombineImpactParams);
+  }
+
+  TH1* tCf_AlignEPs = tThermCf_AlignEPs->GetThermCf(tMarkerStyle_AlignEPs, tColor_AlignEPs, 0.75);
+  TH1* tCf_AlignEPs_UseNumRotPar2 = tThermCf_AlignEPs_UseNumRotPar2->GetThermCf(tMarkerStyle_AlignEPs_UseNumRotPar2, tColor_AlignEPs_UseNumRotPar2, 0.75);
+  TH1* tCf_RandomEPs = tThermCf_RandomEPs->GetThermCf(tMarkerStyle_RandomEPs, tColor_RandomEPs, 0.75);
+  TH1* tCf_RandomEPs_UseNumRotPar2 = tThermCf_RandomEPs_UseNumRotPar2->GetThermCf(tMarkerStyle_RandomEPs_UseNumRotPar2, tColor_RandomEPs_UseNumRotPar2, 0.75);
+
+  if(bVerbose)
+  {
+    for(int i=1; i<=tCf_AlignEPs_UseNumRotPar2->GetNbinsX(); i++)
+    {
+      cout << "tCf_AlignEPs_UseNumRotPar2->GetBinContent(" << i << ") = " << tCf_AlignEPs_UseNumRotPar2->GetBinContent(i) << endl;
+      cout << "tCf_RandomEPs_UseNumRotPar2->GetBinContent(" << i << ") = " << tCf_RandomEPs_UseNumRotPar2->GetBinContent(i) << endl;
+      cout << "difference = " << tCf_AlignEPs_UseNumRotPar2->GetBinContent(i) - tCf_RandomEPs_UseNumRotPar2->GetBinContent(i) << endl;
+      cout << "----------" << endl;
+      cout << "tCf_AlignEPs_UseNumRotPar2->GetBinError(" << i << ") = " << tCf_AlignEPs_UseNumRotPar2->GetBinError(i) << endl;
+      cout << "tCf_RandomEPs_UseNumRotPar2->GetBinError(" << i << ") = " << tCf_RandomEPs_UseNumRotPar2->GetBinError(i) << endl;
+      cout << "difference = " << tCf_AlignEPs_UseNumRotPar2->GetBinError(i) - tCf_RandomEPs_UseNumRotPar2->GetBinError(i) << endl;
+      cout << endl << endl;
+    }
+  }
+
+//-------------------------------------------------------------------------------
+  TString tCanName = "CompareBackgroundReductionMethods";
+
+  tCanName += TString::Format("_%s_", aCfDescriptor.Data());
+  tCanName += TString(cAnalysisBaseTags[aAnType]);
+
+  if(aCombineConjugates) tCanName += TString("wConj");
+  if(!aCombineImpactParams) tCanName += TString::Format("_b%d", aImpactParam);
+  else tCanName += TString(cCentralityTags[tCentType]);
+
+  if(aNumWeight1) tCanName += TString("_NumWeight1");
+  if(aDrawData) tCanName += TString("_wData");
+//-------------------------------------------------------------------------------
+
+  TCanvas* tCan = new TCanvas(tCanName, tCanName);
+  gStyle->SetOptStat(0);
+  gStyle->SetOptTitle(0);
+  //---------------------------------------------------------------
+  tCf_AlignEPs->GetXaxis()->SetTitle("#it{k}* (GeV/#it{c})");
+  tCf_AlignEPs->GetYaxis()->SetTitle("#it{C}(#it{k}*)");
+
+  tCf_AlignEPs->GetXaxis()->SetRangeUser(0.,3.0);
+  tCf_AlignEPs->GetYaxis()->SetRangeUser(0.86, 1.07);
+
+  tCf_AlignEPs->Draw();
+  tCf_AlignEPs_UseNumRotPar2->Draw("same");
+  tCf_RandomEPs->Draw("same");
+  tCf_RandomEPs_UseNumRotPar2->Draw("same");
+  //---------------------------------------------------------------
+
+  TLine* tLine = new TLine(0, 1, 2, 1);
+  tLine->SetLineColor(14);
+  tLine->Draw();
+
+  PrintInfo((TPad*)tCan, tOverallDescriptor, 0.04);
+
+  //---------------------------------------------------------------
+  TLegend* tLeg = new TLegend(0.55, 0.15, 0.90, 0.30);
+    tLeg->SetFillColor(0);
+    tLeg->SetBorderSize(0);
+    tLeg->SetTextAlign(22);
+
+  tLeg->AddEntry(tCf_AlignEPs, "Aligns EPs");
+  tLeg->AddEntry(tCf_AlignEPs_UseNumRotPar2, "Aligns EPs, Rotate Par2");
+  tLeg->AddEntry(tCf_RandomEPs, "Random EPs");
+  tLeg->AddEntry(tCf_RandomEPs_UseNumRotPar2, "Random EPs, Rotate Par2");
+
+  //---------------------------------------------------------------
+
+  if(aDrawData)
+  {
+    CentralityType tCentTypeData = GetCentralityType(aImpactParam);
+
+    TH1D* tData = GetQuickData(aAnType, tCentTypeData, aCombineConjugates, "20180307");
+    ThermCf::SetStyleAndColor(tData, 21, GetColor(aAnType));
+
+    TH1D* tData_UseNumRotPar2 = GetQuickData(aAnType, tCentTypeData, aCombineConjugates, "20180416");
+    ThermCf::SetStyleAndColor(tData_UseNumRotPar2, 22, GetColor(aAnType));
+
+    tData->Draw("same");
+    tData_UseNumRotPar2->Draw("same");
+
+    tLeg->AddEntry(tData, TString::Format("Data (%s)", cPrettyCentralityTags[tCentTypeData]));
+    tLeg->AddEntry(tData_UseNumRotPar2, "Data, Rotate Par2");
+  }
+
+  //---------------------------------------------------------------
+
+  tLeg->Draw();
+  return tCan;
+}
+
+//________________________________________________________________________________________________________________
+TCanvas* CompareBackgroundReductionMethods_AllCent(TString aCfDescriptor, AnalysisType aAnType, bool aCombineConjugates, ThermEventsType aEventsType, int aRebin, double aMinNorm, double aMaxNorm, bool aNumWeight1, bool aDrawData, bool bVerbose)
+{
+  TCanvas *tReturnCan, *tCan_0010, *tCan_1030, *tCan_3050;
+
+  bool tCombineImpactParams = true; //Should always be true here
+  tCan_0010 = CompareBackgroundReductionMethods(aCfDescriptor, aAnType, 3, aCombineConjugates, tCombineImpactParams, aEventsType, aRebin, aMinNorm, aMaxNorm, aNumWeight1, aDrawData, bVerbose);
+  tCan_1030 = CompareBackgroundReductionMethods(aCfDescriptor, aAnType, 5, aCombineConjugates, tCombineImpactParams, aEventsType, aRebin, aMinNorm, aMaxNorm, aNumWeight1, aDrawData, bVerbose);
+  tCan_3050 = CompareBackgroundReductionMethods(aCfDescriptor, aAnType, 8, aCombineConjugates, tCombineImpactParams, aEventsType, aRebin, aMinNorm, aMaxNorm, aNumWeight1, aDrawData, bVerbose);
+  //-----------------
+  TString tCanName = tCan_0010->GetName();
+  tCanName += TString("_1030_3050");
+
+  tReturnCan = new TCanvas(tCanName, tCanName, 700, 1500);
+  tReturnCan->Divide(1,3, 0.01, 0.001);
+  tReturnCan->cd(1);
+  tCan_0010->DrawClonePad();
+  tReturnCan->cd(2);
+  tCan_1030->DrawClonePad();
+  tReturnCan->cd(3);
+  tCan_3050->DrawClonePad();
+  //-----------------
+  delete tCan_0010;
+  delete tCan_1030;
+  delete tCan_3050;
+  //-----------------
+  return tReturnCan;
+}
+
 
 //________________________________________________________________________________________________________________
 //****************************************************************************************************************
@@ -1093,8 +1273,14 @@ int main(int argc, char **argv)
   bool bDrawBgdwFitOnly = false;
   bool bDrawLamKchPMBgdwFitOnly = false;
   bool bCompareAnalyses = false;
-  bool bCompareToAdam = true;
+  bool bCompareToAdam = false;
   bool bDrawDataVsTherm = false;
+
+  bool bCompareBackgroundReductionMethods = true;
+    bool bNumWeight1 = true; 
+    bool bDrawData = false;
+    bool bVerbose = false;
+  if(bCompareBackgroundReductionMethods) tEventsType = kMe;  //TODO for now, I haven't run over Adam's results
 
   bool bUseNumRotPar2InsteadOfDen=false;
 
@@ -1118,7 +1304,7 @@ int main(int argc, char **argv)
   TString tSaveFileBase = tSaveDir + TString::Format("%s/", cAnalysisBaseTags[tAnType]);
 
 
-  TCanvas *tCanCfs, *tCanBgdwFit, *tCanCompareAnalyses, *tCanCompareToAdam, *tCanLamKchPMBgdwFit, *tCanDataVsTherm;
+  TCanvas *tCanCfs, *tCanBgdwFit, *tCanCompareAnalyses, *tCanCompareToAdam, *tCanLamKchPMBgdwFit, *tCanDataVsTherm, *tCanCompBgdRedMethods;
 
   if(bCompareWithAndWithoutBgd)
   {
@@ -1161,6 +1347,14 @@ int main(int argc, char **argv)
     if(bDrawAllCentralities) tCanDataVsTherm = DrawDataVsTherm_AllCent(tCfDescriptor, tSingleFileName, tAnType, bCombineConjugates, tEventsType, 1, tMinNorm, tMaxNorm, bUseNumRotPar2InsteadOfDen);
     else tCanDataVsTherm = DrawDataVsTherm(tCfDescriptor, tSingleFileName, tAnType, tImpactParam, bCombineConjugates, bCombineImpactParams, tEventsType, 1, tMinNorm, tMaxNorm, bUseNumRotPar2InsteadOfDen);
     if(bSaveFigures) tCanDataVsTherm->SaveAs(TString::Format("%s%s.eps", tSaveFileBase.Data(), tCanDataVsTherm->GetName()));
+  }
+
+  if(bCompareBackgroundReductionMethods)
+  {
+    if(bDrawAllCentralities) tCanCompBgdRedMethods = CompareBackgroundReductionMethods_AllCent(tCfDescriptor, tAnType, bCombineConjugates, tEventsType, tRebin, tMinNorm, tMaxNorm, bNumWeight1, bDrawData, bVerbose);
+    else tCanCompBgdRedMethods = CompareBackgroundReductionMethods(tCfDescriptor, tAnType, tImpactParam, bCombineConjugates, bCombineImpactParams, tEventsType, tRebin, tMinNorm, tMaxNorm, bNumWeight1, bDrawData, bVerbose);
+    if(bSaveFigures) tCanCompBgdRedMethods->SaveAs(TString::Format("%s%s.eps", tSaveFileBase.Data(), tCanCompBgdRedMethods->GetName()));
+
   }
 
 //-------------------------------------------------------------------------------
