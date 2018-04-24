@@ -214,7 +214,7 @@ TObjArray* CfHeavy::GetNumCollection()
 
   for(unsigned int i=0; i<fCfLiteCollection.size(); i++)
   {
-    ReturnCollection->Add(fCfLiteCollection[i]->Num());
+    ReturnCollection->Add(fCfLiteCollection[i]->Num()->Clone());
   }
 
   return ReturnCollection;
@@ -228,7 +228,7 @@ TObjArray* CfHeavy::GetDenCollection()
 
   for(unsigned int i=0; i<fCfLiteCollection.size(); i++)
   {
-    ReturnCollection->Add(fCfLiteCollection[i]->Den());
+    ReturnCollection->Add(fCfLiteCollection[i]->Den()->Clone());
   }
 
   return ReturnCollection;

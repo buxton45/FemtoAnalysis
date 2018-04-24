@@ -163,6 +163,8 @@ public:
   td1dVec CombinePrimaryWithResiduals(double *aCfParams, td1dVec &aPrimaryCf);
   ResidualCollection* GetResidualCollection();
 
+  bool GetUseNumRotPar2InsteadOfDen();
+
 private:
   AnalysisRunType fAnalysisRunType;
   TString fAnalysisName;
@@ -270,6 +272,8 @@ inline td1dVec FitPairAnalysis::GetNeutralResidualCorrelation(AnalysisType aResi
 inline td1dVec FitPairAnalysis::GetTransformedNeutralResidualCorrelation(AnalysisType aResidualType, double *aParentCfParams) {return fResidualCollection->GetTransformedNeutralResidualCorrelation(aResidualType, aParentCfParams);}
 inline td1dVec FitPairAnalysis::CombinePrimaryWithResiduals(double *aCfParams, td1dVec &aPrimaryCf) {return fResidualCollection->CombinePrimaryWithResiduals(aCfParams, aPrimaryCf);}
 inline ResidualCollection* FitPairAnalysis::GetResidualCollection() {return fResidualCollection;}
+
+inline bool FitPairAnalysis::GetUseNumRotPar2InsteadOfDen() {return fUseNumRotPar2InsteadOfDen;}
 
 #endif
 

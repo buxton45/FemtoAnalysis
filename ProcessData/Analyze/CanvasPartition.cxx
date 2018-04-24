@@ -113,6 +113,7 @@ td2dTPadVec CanvasPartition::BuildPartition(TCanvas *aCanvas,const Int_t Nx,cons
          hfactor = hposr-hposl;
          hmarl = lMargin / hfactor;
          hmarr = 0.0;
+         if(Nx==1) hmarr = 0.06;  //TODO make more general
       } else if (i == Nx-1) {
          hposl = hposr + hSpacing;
          hposr = hposl + hStep + rMargin;
