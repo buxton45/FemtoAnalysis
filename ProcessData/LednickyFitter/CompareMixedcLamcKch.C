@@ -82,9 +82,21 @@ CfHeavy* BuildMixedCfHeavy(int aAnNum, FitGenerator* aFG1, FitGenerator* aFG2, b
   assert(tCentType1==tCentType2);
 
   const char* const tUseNumTags[2] = {"Den", "Num"};
-  TString tCfHeavyName = TString::Format("CfHeavy_%s%s_%s%s%s", cAnalysisBaseTags[tAnType1], tUseNumTags[aUseNum1], 
-                                                                cAnalysisBaseTags[tAnType2], tUseNumTags[aUseNum2],
-                                                                cCentralityTags[tCentType1]);
+  TString tCfHeavyName = "CfHeavy";
+  TString tAnInfo1 = TString(cAnalysisBaseTags[tAnType1]);
+  TString tAnInfo2 = TString(cAnalysisBaseTags[tAnType2]);
+  if(aFG1->GetFitSharedAnalyses()->GetFitPairAnalysis(aAnNum)->GetUseNumRotPar2InsteadOfDen() && !aUseNum1) 
+  {
+    tAnInfo1 += TString("NumRotPar2");
+  }
+  else tAnInfo1 += TString(tUseNumTags[aUseNum1]);
+  if(aFG2->GetFitSharedAnalyses()->GetFitPairAnalysis(aAnNum)->GetUseNumRotPar2InsteadOfDen() && !aUseNum2) 
+  {
+    tAnInfo2 += TString("NumRotPar2");
+  }
+  else tAnInfo2 += TString(tUseNumTags[aUseNum2]);
+
+  tCfHeavyName += TString::Format("_%s_%s%s", tAnInfo1.Data(), tAnInfo2.Data(), cCentralityTags[tCentType1]);
   //---------------------------------------------------------------------------------------------------------
   CfHeavy *tCfHeavy1 = tAn1->GetKStarCfHeavy();
   CfHeavy *tCfHeavy2 = tAn2->GetKStarCfHeavy();
@@ -132,12 +144,26 @@ TCanvas* DrawKStarCfs(FitGenerator* aFG1, FitGenerator* aFG2, bool aUseNum1=true
   CentralityType tCentType2 = aFG2->GetFitSharedAnalyses()->GetFitPairAnalysis(0)->GetCentralityType();
   assert(tCentType1==tCentType2);
 
+
   const char* const tUseNumTags[2] = {"Den", "Num"};
-  TString tCanvasName = TString::Format("canKStarCfs_%s%s_%s%s", cAnalysisBaseTags[tAnType1], tUseNumTags[aUseNum1], 
-                                                                 cAnalysisBaseTags[tAnType2], tUseNumTags[aUseNum2]);
+  TString tCanvasName = "canKStarCfs";
+  TString tAnInfo1 = TString(cAnalysisBaseTags[tAnType1]);
+  TString tAnInfo2 = TString(cAnalysisBaseTags[tAnType2]);
+  if(aFG1->GetFitSharedAnalyses()->GetFitPairAnalysis(0)->GetUseNumRotPar2InsteadOfDen() && !aUseNum1) 
+  {
+    tAnInfo1 += TString("NumRotPar2");
+  }
+  else tAnInfo1 += TString(tUseNumTags[aUseNum1]);
+  if(aFG2->GetFitSharedAnalyses()->GetFitPairAnalysis(0)->GetUseNumRotPar2InsteadOfDen() && !aUseNum2) 
+  {
+    tAnInfo2 += TString("NumRotPar2");
+  }
+  else tAnInfo2 += TString(tUseNumTags[aUseNum2]);
+
+  tCanvasName += TString::Format("_%s_%s%s", tAnInfo1.Data(), tAnInfo2.Data(), cCentralityTags[tCentType1]);
+
   if(aZoom) tCanvasName += TString("Zoom");
   if(aFG1->GetGeneratorType()==kPairwConj) tCanvasName += TString("wConj");
-  if(aFG1->GetFitSharedAnalyses()->GetFitPairAnalysis(0)->GetUseNumRotPar2InsteadOfDen()) tCanvasName += TString("_UseNumRotPar2");
 
   int tNx=2, tNy=3;
   assert(aFG1->GetFitSharedAnalyses()->GetNFitPairAnalysis()==aFG2->GetFitSharedAnalyses()->GetNFitPairAnalysis());
@@ -176,8 +202,21 @@ TCanvas* DrawKStarCfs(FitGenerator* aFG1, FitGenerator* aFG2, bool aUseNum1=true
       tCentType2 = aFG2->GetFitSharedAnalyses()->GetFitPairAnalysis(tAnalysisNumber)->GetCentralityType();
       assert(tCentType1==tCentType2);
       //---------------------------------------------------------------------------------------------------------
-      tTextAnType = TString::Format("%s%s / %s%s", cAnalysisRootTags[tAnType1], tUseNumTags[aUseNum1],
-                                                   cAnalysisRootTags[tAnType2], tUseNumTags[aUseNum2]);
+      tAnInfo1 = TString(cAnalysisRootTags[tAnType1]);
+      tAnInfo2 = TString(cAnalysisRootTags[tAnType2]);
+      if(aFG1->GetFitSharedAnalyses()->GetFitPairAnalysis(tAnalysisNumber)->GetUseNumRotPar2InsteadOfDen() && !aUseNum1) 
+      {
+        tAnInfo1 += TString("NumRotPar2");
+      }
+      else tAnInfo1 += TString(tUseNumTags[aUseNum1]);
+      if(aFG2->GetFitSharedAnalyses()->GetFitPairAnalysis(tAnalysisNumber)->GetUseNumRotPar2InsteadOfDen() && !aUseNum2) 
+      {
+        tAnInfo2 += TString("NumRotPar2");
+      }
+      else tAnInfo2 += TString(tUseNumTags[aUseNum2]);
+
+
+      tTextAnType = TString::Format("%s / %s", tAnInfo1.Data(), tAnInfo2.Data());
 
       TPaveText* tAnTypeName = tCanPart->SetupTPaveText(tTextAnType,i,j,0.8,0.85);
       tCanPart->AddPadPaveText(tAnTypeName,i,j);
@@ -210,13 +249,24 @@ TCanvas* DrawNumDenRatiosPartAn(bool aDrawNum, FitGenerator* aFG1, FitGenerator*
   CentralityType tCentType2 = aFG2->GetFitSharedAnalyses()->GetFitPairAnalysis(0)->GetCentralityType();
   assert(tCentType1==tCentType2);
 
-  TString tCanvasName;
-  if(aDrawNum) tCanvasName = TString("canNumRatiosPartAn");
-  else tCanvasName = TString("canDenRatiosPartAn");
-  tCanvasName += TString::Format("_%s_%s", cAnalysisBaseTags[tAnType1], 
-                                           cAnalysisBaseTags[tAnType2]);
+  const char* const tUseNumTags[2] = {"Den", "Num"};
+  TString tAnInfo1 = TString(cAnalysisBaseTags[tAnType1]);
+  TString tAnInfo2 = TString(cAnalysisBaseTags[tAnType2]);
+  if(aFG1->GetFitSharedAnalyses()->GetFitPairAnalysis(0)->GetUseNumRotPar2InsteadOfDen() && !aDrawNum) 
+  {
+    tAnInfo1 += TString("NumRotPar2");
+  }
+  else tAnInfo1 += TString(tUseNumTags[aDrawNum]);
+  if(aFG2->GetFitSharedAnalyses()->GetFitPairAnalysis(0)->GetUseNumRotPar2InsteadOfDen() && !aDrawNum) 
+  {
+    tAnInfo2 += TString("NumRotPar2");
+  }
+  else tAnInfo2 += TString(tUseNumTags[aDrawNum]);
+
+  TString tCanvasName = TString("canNumDenRatiosPartAn");
+  tCanvasName += TString::Format("_%s_%s", tAnInfo1.Data(), tAnInfo2.Data());
   if(aFG1->GetGeneratorType()==kPairwConj) tCanvasName += TString("wConj");
-  if(aFG1->GetFitSharedAnalyses()->GetFitPairAnalysis(0)->GetUseNumRotPar2InsteadOfDen()) tCanvasName += TString("_UseNumRotPar2");
+
 
   int tNx=2, tNy=6;
   assert(aFG1->GetFitSharedAnalyses()->GetNFitPairAnalysis()==aFG2->GetFitSharedAnalyses()->GetNFitPairAnalysis());
@@ -265,8 +315,19 @@ TCanvas* DrawNumDenRatiosPartAn(bool aDrawNum, FitGenerator* aFG1, FitGenerator*
       assert(tPartAn1->GetBFieldType() == tPartAn2->GetBFieldType());
       assert(tPartAn1->GetCentralityType() == tPartAn2->GetCentralityType());
 
-      TString tTextAnType = TString::Format("%s / %s (%s)", cAnalysisRootTags[tPartAn1->GetAnalysisType()], cAnalysisRootTags[tPartAn2->GetAnalysisType()], cBFieldTags[tPartAn1->GetBFieldType()]);
-
+      tAnInfo1 = TString(cAnalysisRootTags[tAnType1]);
+      tAnInfo2 = TString(cAnalysisRootTags[tAnType2]);
+      if(aFG1->GetFitSharedAnalyses()->GetFitPairAnalysis(tAnalysisNumber)->GetUseNumRotPar2InsteadOfDen() && !aDrawNum) 
+      {
+        tAnInfo1 += TString("NumRotPar2");
+      }
+      else tAnInfo1 += TString(tUseNumTags[aDrawNum]);
+      if(aFG2->GetFitSharedAnalyses()->GetFitPairAnalysis(tAnalysisNumber)->GetUseNumRotPar2InsteadOfDen() && !aDrawNum) 
+      {
+        tAnInfo2 += TString("NumRotPar2");
+      }
+      else tAnInfo2 += TString(tUseNumTags[aDrawNum]);
+      TString tTextAnType = TString::Format("%s / %s (%s)", tAnInfo1.Data(), tAnInfo2.Data(), cBFieldTags[tPartAn1->GetBFieldType()]);
 
       TPaveText* tAnTypeName = tCanPart->SetupTPaveText(tTextAnType,i,j,0.6,0.85);
       tCanPart->AddPadPaveText(tAnTypeName,i,j);
@@ -298,13 +359,23 @@ TCanvas* DrawNumDenRatiosAn(bool aDrawNum, FitGenerator* aFG1, FitGenerator* aFG
   CentralityType tCentType2 = aFG2->GetFitSharedAnalyses()->GetFitPairAnalysis(0)->GetCentralityType();
   assert(tCentType1==tCentType2);
 
-  TString tCanvasName;
-  if(aDrawNum) tCanvasName = TString("canNumRatios");
-  else tCanvasName = TString("canDenRatios");
-  tCanvasName += TString::Format("_%s_%s", cAnalysisBaseTags[tAnType1], 
-                                           cAnalysisBaseTags[tAnType2]);
+  const char* const tUseNumTags[2] = {"Den", "Num"};
+  TString tAnInfo1 = TString(cAnalysisBaseTags[tAnType1]);
+  TString tAnInfo2 = TString(cAnalysisBaseTags[tAnType2]);
+  if(aFG1->GetFitSharedAnalyses()->GetFitPairAnalysis(0)->GetUseNumRotPar2InsteadOfDen() && !aDrawNum) 
+  {
+    tAnInfo1 += TString("NumRotPar2");
+  }
+  else tAnInfo1 += TString(tUseNumTags[aDrawNum]);
+  if(aFG2->GetFitSharedAnalyses()->GetFitPairAnalysis(0)->GetUseNumRotPar2InsteadOfDen() && !aDrawNum) 
+  {
+    tAnInfo2 += TString("NumRotPar2");
+  }
+  else tAnInfo2 += TString(tUseNumTags[aDrawNum]);
+
+  TString tCanvasName = TString("canNumDenRatios");
+  tCanvasName += TString::Format("_%s_%s", tAnInfo1.Data(), tAnInfo2.Data());
   if(aFG1->GetGeneratorType()==kPairwConj) tCanvasName += TString("wConj");
-  if(aFG1->GetFitSharedAnalyses()->GetFitPairAnalysis(0)->GetUseNumRotPar2InsteadOfDen()) tCanvasName += TString("_UseNumRotPar2");
 
   int tNx=2, tNy=3;
   assert(aFG1->GetFitSharedAnalyses()->GetNFitPairAnalysis()==aFG2->GetFitSharedAnalyses()->GetNFitPairAnalysis());
@@ -345,7 +416,20 @@ TCanvas* DrawNumDenRatiosAn(bool aDrawNum, FitGenerator* aFG1, FitGenerator* aFG
 
       assert(tAn1->GetCentralityType() == tAn2->GetCentralityType());
 
-      TString tTextAnType = TString::Format("%s / %s", cAnalysisRootTags[tAn1->GetAnalysisType()], cAnalysisRootTags[tAn2->GetAnalysisType()]);
+      tAnInfo1 = TString(cAnalysisRootTags[tAnType1]);
+      tAnInfo2 = TString(cAnalysisRootTags[tAnType2]);
+      if(aFG1->GetFitSharedAnalyses()->GetFitPairAnalysis(tAnalysisNumber)->GetUseNumRotPar2InsteadOfDen() && !aDrawNum) 
+      {
+        tAnInfo1 += TString("NumRotPar2");
+      }
+      else tAnInfo1 += TString(tUseNumTags[aDrawNum]);
+      if(aFG2->GetFitSharedAnalyses()->GetFitPairAnalysis(tAnalysisNumber)->GetUseNumRotPar2InsteadOfDen() && !aDrawNum) 
+      {
+        tAnInfo2 += TString("NumRotPar2");
+      }
+      else tAnInfo2 += TString(tUseNumTags[aDrawNum]);
+      TString tTextAnType = TString::Format("%s / %s", tAnInfo1.Data(), tAnInfo2.Data());
+
 
       TPaveText* tAnTypeName = tCanPart->SetupTPaveText(tTextAnType,i,j,0.6,0.85);
       tCanPart->AddPadPaveText(tAnTypeName,i,j);
@@ -378,16 +462,70 @@ void Run1vs2(FitGenerator* aFG1, FitGenerator* aFG2, bool aUseNum1, bool aUseNum
   TString tSaveDir = TString::Format("%s%s_%s/", aSaveDir.Data(), cAnalysisBaseTags[tAnType1], cAnalysisBaseTags[tAnType2]);
   gSystem->mkdir(tSaveDir.Data());
 
+  //-----------------------------------------------------------------------------------------------
+  bool tSwitchGenOrder = false;
+  if(!aUseNum1 && !aUseNum2) //both false => both denominators, but one or both could be NumRotPar2
+  {
+    bool tUseNumRotPar2_1 = aFG1->GetFitSharedAnalyses()->GetFitPairAnalysis(0)->GetUseNumRotPar2InsteadOfDen();
+    bool tUseNumRotPar2_2 = aFG2->GetFitSharedAnalyses()->GetFitPairAnalysis(0)->GetUseNumRotPar2InsteadOfDen();
+    if(tUseNumRotPar2_1 == tUseNumRotPar2_2)  //both Dens, or both NumRotPar2, either way, order doesn't matter
+    {
+      tSwitchGenOrder = false;
+    }
+    else
+    {
+      if(tUseNumRotPar2_1) //aFG1 is NumRotPar2, and aFG2 is Den
+      {
+        tSwitchGenOrder = false;
+      }
+      else if(tUseNumRotPar2_2) //aFG2 is NumRotPar2, and aFG1 is Den
+      {
+        tSwitchGenOrder = true;
+      }
+      else assert(0);
+    }
+  }
+  else if(aUseNum1 && aUseNum2)  //if both true  => both numerators, no ordering problem
+  {
+    tSwitchGenOrder = false;
+  }
+  else
+  {
+    if(aUseNum1)  //aFG1 is Num, and aFG2 is Den or NumRotPar2
+    {
+      tSwitchGenOrder = false;
+    }
+    else if(aUseNum2)  //aFG2 is Num, and aFG1 is Den or NumRotPar2
+    {
+      tSwitchGenOrder = true;
+    }
+    else assert(0);
+  }
+  //-----------------------------------------------------------------------------------------------
+
   if(aDrawKStarCfs)
   {
-    TCanvas* tCan = DrawKStarCfs(aFG1, aFG2, aUseNum1, aUseNum2, aZoom);
+    TCanvas* tCan;
+    if(!tSwitchGenOrder) tCan = DrawKStarCfs(aFG1, aFG2, aUseNum1, aUseNum2, aZoom);
+    else                 tCan = DrawKStarCfs(aFG2, aFG1, aUseNum2, aUseNum1, aZoom);
+
     if(aSave) tCan->SaveAs(TString::Format("%s%s.eps", tSaveDir.Data(), tCan->GetName()));
   }
 
   if(aDrawNumDenRatiosPartAn)
   {
-    TCanvas* tRatioNumPartAn = DrawNumDenRatiosPartAn(true, aFG1, aFG2);
-    TCanvas* tRatioDenPartAn = DrawNumDenRatiosPartAn(false, aFG1, aFG2);
+    TCanvas *tRatioNumPartAn, *tRatioDenPartAn;
+    if(!tSwitchGenOrder)
+    {
+      tRatioNumPartAn = DrawNumDenRatiosPartAn(true, aFG1, aFG2);
+      tRatioDenPartAn = DrawNumDenRatiosPartAn(false, aFG1, aFG2);
+    }
+    else
+    {
+      tRatioNumPartAn = DrawNumDenRatiosPartAn(true, aFG2, aFG1);
+      tRatioDenPartAn = DrawNumDenRatiosPartAn(false, aFG2, aFG1);
+    }
+
     if(aSave)
     {
       tRatioNumPartAn->SaveAs(TString::Format("%s%s.eps", tSaveDir.Data(), tRatioNumPartAn->GetName()));
@@ -397,8 +535,18 @@ void Run1vs2(FitGenerator* aFG1, FitGenerator* aFG2, bool aUseNum1, bool aUseNum
 
   if(aDrawNumDenRatiosAn)
   {
-    TCanvas* tRatioNumAn = DrawNumDenRatiosAn(true, aFG1, aFG2, false);
-    TCanvas* tRatioDenAn = DrawNumDenRatiosAn(false, aFG1, aFG2, false);
+    TCanvas *tRatioNumAn, *tRatioDenAn;
+    if(!tSwitchGenOrder)
+    {
+      tRatioNumAn = DrawNumDenRatiosAn(true, aFG1, aFG2, false);
+      tRatioDenAn = DrawNumDenRatiosAn(false, aFG1, aFG2, false);
+    }
+    else
+    {
+      tRatioNumAn = DrawNumDenRatiosAn(true, aFG2, aFG1, false);
+      tRatioDenAn = DrawNumDenRatiosAn(false, aFG2, aFG1, false);
+    }
+
     if(aSave)
     {
       tRatioNumAn->SaveAs(TString::Format("%s%s.eps", tSaveDir.Data(), tRatioNumAn->GetName()));
@@ -489,7 +637,7 @@ int main(int argc, char **argv)
   bool bDrawNumDenRatiosPartAn = true;
   bool bDrawNumDenRatiosAn = true;
 
-  bool bDrawNumRotPar2OverBgd = true;
+  bool bDrawNumRotPar2OverBgd = false;
   if(bDrawNumRotPar2OverBgd) assert(!bUseNumRotPar2InsteadOfDen_LamKchP && !bUseNumRotPar2InsteadOfDen_ALamKchM && 
                                     !bUseNumRotPar2InsteadOfDen_LamKchM && !bUseNumRotPar2InsteadOfDen_ALamKchP && 
                                     !bUseNumRotPar2InsteadOfDen_LamK0 && !bUseNumRotPar2InsteadOfDen_ALamK0);
@@ -557,15 +705,15 @@ int main(int argc, char **argv)
                                               tAnRunType, tNPartialAnalysis, tGenType, false, false, "", true);
 
     Run1vs2(tLamKchP_RotatePar2, tLamKchP, false, false, 
-            bZoom, bDrawKStarCfs, bDrawNumDenRatiosPartAn, bDrawNumDenRatiosAn, 
+            bZoom, bDrawKStarCfs, false, false, 
             SaveImages, tSaveDir);
 
     Run1vs2(tLamKchM_RotatePar2, tLamKchM, false, false, 
-            bZoom, bDrawKStarCfs, bDrawNumDenRatiosPartAn, bDrawNumDenRatiosAn, 
+            bZoom, bDrawKStarCfs, false, false, 
             SaveImages, tSaveDir);
 
     Run1vs2(tLamK0_RotatePar2, tLamK0, false, false, 
-            bZoom, bDrawKStarCfs, bDrawNumDenRatiosPartAn, bDrawNumDenRatiosAn, 
+            bZoom, bDrawKStarCfs, false, false, 
             SaveImages, tSaveDir);
 
     if(tGenType == kPair)
@@ -578,15 +726,15 @@ int main(int argc, char **argv)
                                                tAnRunType, tNPartialAnalysis, kConjPair, false, false, "", true);
 
       Run1vs2(tALamKchM_RotatePar2, tALamKchM, false, false, 
-              bZoom, bDrawKStarCfs, bDrawNumDenRatiosPartAn, bDrawNumDenRatiosAn, 
+              bZoom, bDrawKStarCfs, false, false, 
               SaveImages, tSaveDir);
 
       Run1vs2(tALamKchP_RotatePar2, tALamKchP, false, false, 
-              bZoom, bDrawKStarCfs, bDrawNumDenRatiosPartAn, bDrawNumDenRatiosAn, 
+              bZoom, bDrawKStarCfs, false, false, 
               SaveImages, tSaveDir);
 
       Run1vs2(tALamK0_RotatePar2, tALamK0, false, false, 
-              bZoom, bDrawKStarCfs, bDrawNumDenRatiosPartAn, bDrawNumDenRatiosAn, 
+              bZoom, bDrawKStarCfs, false, false, 
               SaveImages, tSaveDir);
     }
 
