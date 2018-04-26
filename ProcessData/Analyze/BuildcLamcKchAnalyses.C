@@ -40,7 +40,7 @@ int main(int argc, char **argv)
 //-----------------------------------------------------------------------------
 
 //  TString tResultsDate = "20161027";
-  TString tResultsDate = "20171227";
+  TString tResultsDate = "20180423_NoAvgSepCut";
 
   AnalysisType tAnType1 = kLamKchP;
   AnalysisType tConjAnType1 = kALamKchM;
@@ -58,7 +58,7 @@ int main(int argc, char **argv)
 
   bool bContainsPurity = false;
   bool bContainsKStarCfs = false;
-  bool bContainsAvgSepCfs = false;
+  bool bContainsAvgSepCfs = true;
 
   bool bContainsKStar2dCfs = false;
 
@@ -67,7 +67,7 @@ int main(int argc, char **argv)
 
   bool bViewPart1MassFail = false;  //NOTE: kTrainSys do not include fail cut monitors
 
-  bool bDrawMC = false;
+  bool bDrawMC = true;
 
   bool bDrawModelCfTrueIdealCfTrueRatio = false;
   bool bDrawModelCfFakeIdealCfFakeRatio = false;
@@ -75,7 +75,7 @@ int main(int argc, char **argv)
   bool bDrawAllKStarCfs = false;
   bool bDrawAllKStarTrueVsRec = false;
 
-  bool bDrawKchdEdx = true;
+  bool bDrawKchdEdx = false;
 //-----------------------------------------------------------------------------
 
   TString tGeneralAnTypeName;
@@ -819,7 +819,62 @@ tProject3->DrawCopy();
 
 
   }
+  if(bContainsAvgSepCfs && bDrawMC)
+  {
+    LamKchPMC->BuildAllAvgSepHeavyCfs();
+    ALamKchPMC->BuildAllAvgSepHeavyCfs();
+    LamKchMMC->BuildAllAvgSepHeavyCfs();
+    ALamKchMMC->BuildAllAvgSepHeavyCfs();
 
+    //---- Rebinning ------------------------
+    int tRebin = 2;
+    LamKchPMC->GetAvgSepHeavyCf(kTrackPos, tRebin);
+    LamKchPMC->GetAvgSepHeavyCf(kTrackNeg, tRebin);
+
+    ALamKchPMC->GetAvgSepHeavyCf(kTrackPos, tRebin);
+    ALamKchPMC->GetAvgSepHeavyCf(kTrackNeg, tRebin);
+
+    LamKchMMC->GetAvgSepHeavyCf(kTrackPos, tRebin);
+    LamKchMMC->GetAvgSepHeavyCf(kTrackNeg, tRebin);
+
+    ALamKchMMC->GetAvgSepHeavyCf(kTrackPos, tRebin);
+    ALamKchMMC->GetAvgSepHeavyCf(kTrackNeg, tRebin);
+
+    //---------------------------------------
+
+    TCanvas *canAvgSepLamKchPMC = new TCanvas("canAvgSepLamKchPMC","canAvgSepLamKchPMC");
+    TCanvas *canAvgSepALamKchPMC = new TCanvas("canAvgSepALamKchPMC","canAvgSepALamKchPMC");
+    TCanvas *canAvgSepLamKchMMC = new TCanvas("canAvgSepLamKchMMC","canAvgSepLamKchMMC");
+    TCanvas *canAvgSepALamKchMMC = new TCanvas("canAvgSepALamKchMMC","canAvgSepALamKchMMC");
+
+    canAvgSepLamKchPMC->Divide(1,2);
+    canAvgSepALamKchPMC->Divide(1,2);
+    canAvgSepLamKchMMC->Divide(1,2);
+    canAvgSepALamKchMMC->Divide(1,2);
+
+    LamKchPMC->DrawAvgSepHeavyCf(kTrackPos,(TPad*)canAvgSepLamKchPMC->cd(1));
+    LamKchPMC->DrawAvgSepHeavyCf(kTrackNeg,(TPad*)canAvgSepLamKchPMC->cd(2));
+
+    ALamKchPMC->DrawAvgSepHeavyCf(kTrackPos,(TPad*)canAvgSepALamKchPMC->cd(1));
+    ALamKchPMC->DrawAvgSepHeavyCf(kTrackNeg,(TPad*)canAvgSepALamKchPMC->cd(2));
+
+    LamKchMMC->DrawAvgSepHeavyCf(kTrackPos,(TPad*)canAvgSepLamKchMMC->cd(1));
+    LamKchMMC->DrawAvgSepHeavyCf(kTrackNeg,(TPad*)canAvgSepLamKchMMC->cd(2));
+
+    ALamKchMMC->DrawAvgSepHeavyCf(kTrackPos,(TPad*)canAvgSepALamKchMMC->cd(1));
+    ALamKchMMC->DrawAvgSepHeavyCf(kTrackNeg,(TPad*)canAvgSepALamKchMMC->cd(2));
+
+    //----------------------------------
+    if(bSaveFile)
+    {
+      LamKchPMC->SaveAllAvgSepHeavyCfs(mySaveFile);
+      LamKchMMC->SaveAllAvgSepHeavyCfs(mySaveFile);
+      ALamKchPMC->SaveAllAvgSepHeavyCfs(mySaveFile);
+      ALamKchMMC->SaveAllAvgSepHeavyCfs(mySaveFile);
+    }
+
+
+  }
 
 
 
