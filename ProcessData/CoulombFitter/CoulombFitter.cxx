@@ -1531,19 +1531,16 @@ void CoulombFitter::CalculateFitFunction(int &npar, double &chi2, double *par)
         if(tRejectOmega && (fKStarBinCenters[ix] > tRejectOmegaLow) && (fKStarBinCenters[ix] < tRejectOmegaHigh)) {fChi2+=0;}
         else
         {
-          if(tNumContent[ix]!=0 && tDenContent[ix]!=0 && tCorrectedFitCfContent[ix]!=0) //even if only in one single bin, t*Content=0 causes fChi2->nan
-          {
-            double tChi2 = 0.;
-            if(fFitSharedAnalyses->GetFitType() == kChi2PML) tChi2 = GetPmlValue(tNumContent[ix],tDenContent[ix],tCorrectedFitCfContent[ix]);
-            else if(fFitSharedAnalyses->GetFitType() == kChi2) tChi2 = GetChi2Value(ix+1,tCf,tCorrectedFitCfContent[ix]);
-            else tChi2 = 0.;
+          double tChi2 = 0.;
+          if(fFitSharedAnalyses->GetFitType() == kChi2PML) tChi2 = GetPmlValue(tNumContent[ix],tDenContent[ix],tCorrectedFitCfContent[ix]);
+          else if(fFitSharedAnalyses->GetFitType() == kChi2) tChi2 = GetChi2Value(ix+1,tCf,tCorrectedFitCfContent[ix]);
+          else tChi2 = 0.;
 
-            fChi2Vec[iAnaly] += tChi2;
-            fChi2 += tChi2;
+          fChi2Vec[iAnaly] += tChi2;
+          fChi2 += tChi2;
 
-            fNpFitsVec[iAnaly]++;
-            fNpFits++;
-          }
+          fNpFitsVec[iAnaly]++;
+          fNpFits++;
         }
 
       }

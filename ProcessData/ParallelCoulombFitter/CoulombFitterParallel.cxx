@@ -1193,19 +1193,17 @@ cout << "tCorrectedFitCfContent[" << ix << "] = " << tCorrectedFitCfContent[ix] 
 }
 assert(tNumContent!=0 && tDenContent!=0 && tCorrectedFitCfContent[ix]!=0);
 */
-        if(tNumContent!=0 && tDenContent!=0 && tCorrectedFitCfContent[ix]!=0) //even if only in one single bin, t*Content=0 causes fChi2->nan
-        {
-          double tChi2 = 0.;
-          if(fFitSharedAnalyses->GetFitType() == kChi2PML) tChi2 = GetPmlValue(tNumContent,tDenContent,tCorrectedFitCfContent[ix]);
-          else if(fFitSharedAnalyses->GetFitType() == kChi2) tChi2 = GetChi2Value(ix+1,tCf,tCorrectedFitCfContent[ix]);
-          else tChi2 = 0.;
 
-          fChi2Vec[iAnaly] += tChi2;
-          fChi2 += tChi2;
+        double tChi2 = 0.;
+        if(fFitSharedAnalyses->GetFitType() == kChi2PML) tChi2 = GetPmlValue(tNumContent,tDenContent,tCorrectedFitCfContent[ix]);
+        else if(fFitSharedAnalyses->GetFitType() == kChi2) tChi2 = GetChi2Value(ix+1,tCf,tCorrectedFitCfContent[ix]);
+        else tChi2 = 0.;
 
-          fNpFitsVec[iAnaly]++;
-          fNpFits++;
-        }
+        fChi2Vec[iAnaly] += tChi2;
+        fChi2 += tChi2;
+
+        fNpFitsVec[iAnaly]++;
+        fNpFits++;
       }
 
       delete[] tParPrim;

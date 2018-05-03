@@ -356,8 +356,14 @@ double BackgroundFitter::AddTwoNormalizedFitFunctionsPolynomial(double *x, doubl
 //________________________________________________________________________________________________________________
 double BackgroundFitter::GetPmlValue(double aNumContent, double aDenContent, double aCfContent)
 {
-  double tTerm1 = aNumContent*log(  (aCfContent*(aNumContent+aDenContent)) / (aNumContent*(aCfContent+1))  );
-  double tTerm2 = aDenContent*log(  (aNumContent+aDenContent) / (aDenContent*(aCfContent+1))  );
+  double tTerm1=0, tTerm2=0.;
+
+  if(aNumContent==0.) tTerm1 = 0.;
+  else tTerm1 = aNumContent*log(  (aCfContent*(aNumContent+aDenContent)) / (aNumContent*(aCfContent+1))  );
+
+  if(aDenContent==0.) tTerm2 = 0.;
+  else tTerm2 = aDenContent*log(  (aNumContent+aDenContent) / (aDenContent*(aCfContent+1))  );
+
   double tChi2PML = -2.0*(tTerm1+tTerm2);
   return tChi2PML;
 }
