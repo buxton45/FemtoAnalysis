@@ -617,7 +617,7 @@ int main(int argc, char **argv)
 
 
   bool SaveImages = false;
-  TString tSaveDir = "/home/jesse/Analysis/Presentations/GroupMeetings/20180426/Figures/";
+  TString tSaveDir = TString::Format("/home/jesse/Analysis/Presentations/GroupMeetings/20180426/Figures/%s/", tResultsDate.Data());
 
   //-----------------------------------------------------------------------------
   TString tDirBase_cLamcKch = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_%s_%s/", "cLamcKch" , tResultsDate.Data());

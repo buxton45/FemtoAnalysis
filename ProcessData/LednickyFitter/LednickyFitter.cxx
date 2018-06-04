@@ -241,8 +241,8 @@ vector<double> LednickyFitter::ApplyMomResCorrection(vector<double> &aCf, vector
   unsigned int tKStarRecBin, tKStarTrueBin;
   double tKStarRec, tKStarTrue;
   assert(aCf.size() == aKStarBinCenters.size());
-  assert(aCf.size() == (unsigned int)aMomResMatrix->GetNbinsX());
-  assert(aCf.size() == (unsigned int)aMomResMatrix->GetNbinsY());
+//  assert(aCf.size() == (unsigned int)aMomResMatrix->GetNbinsX());
+//  assert(aCf.size() == (unsigned int)aMomResMatrix->GetNbinsY());
 
   vector<double> tReturnCf(aCf.size(),0.);
   vector<double> tNormVec(aCf.size(),0.);  //TODO once I match bin size, I should be able to call /= by integral, instead of tracking normVec
@@ -582,7 +582,7 @@ void LednickyFitter::InitializeFitter()
   fNbinsXToFit = fFitSharedAnalyses->GetFitPairAnalysis(0)->GetFitPartialAnalysis(0)->GetKStarCfLite()->Num()->FindBin(fMaxFitKStar);
   if(fFitSharedAnalyses->GetFitPairAnalysis(0)->GetFitPartialAnalysis(0)->GetKStarCfLite()->Num()->GetBinLowEdge(fNbinsXToFit) == fMaxFitKStar) fNbinsXToFit--;
 
-  if(fApplyMomResCorrection) tNbinsXToBuildMomResCrctn = fFitSharedAnalyses->GetFitPairAnalysis(0)->GetModelKStarTrueVsRecMixed()->GetNbinsX();
+//  if(fApplyMomResCorrection) tNbinsXToBuildMomResCrctn = fFitSharedAnalyses->GetFitPairAnalysis(0)->GetModelKStarTrueVsRecMixed()->GetNbinsX();
   if(fIncludeResidualsType != kIncludeNoResiduals) tNbinsXToBuildResiduals = fFitSharedAnalyses->GetFitPairAnalysis(0)->GetTransformMatrix(fIncludeResidualsType, 0)->GetNbinsX();
   fNbinsXToBuild = std::max({tNbinsXToBuildMomResCrctn, tNbinsXToBuildResiduals, fNbinsXToFit});
 
@@ -600,7 +600,7 @@ void LednickyFitter::InitializeFitter()
       tMomResMatrix = tFitPairAnalysis->GetModelKStarTrueVsRecMixed();
       assert(tMomResMatrix);
       tTempNbinsXToBuild = tMomResMatrix->GetNbinsX();
-      assert(tTempNbinsXToBuild == fNbinsXToBuild);
+//      assert(tTempNbinsXToBuild == fNbinsXToBuild);
     }
 
     int tNFitPartialAnalysis = tFitPairAnalysis->GetNFitPartialAnalysis();

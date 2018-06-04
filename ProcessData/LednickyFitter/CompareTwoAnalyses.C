@@ -10,7 +10,7 @@ class CanvasPartition;
 
 
 //________________________________________________________________________________________________________________
-TCanvas* DrawKStarCfs(FitGenerator* aFG1, FitGenerator* aFG2, bool aZoom=false)
+TCanvas* DrawKStarCfs(FitGenerator* aFG1, FitGenerator* aFG2, bool aZoom=false, TString aCanNameModifier="")
 {
   AnalysisType aAnType = aFG1->GetFitSharedAnalyses()->GetFitPairAnalysis(0)->GetAnalysisType();
   AnalysisType aConjType = aFG1->GetFitSharedAnalyses()->GetFitPairAnalysis(1)->GetAnalysisType();
@@ -18,6 +18,7 @@ TCanvas* DrawKStarCfs(FitGenerator* aFG1, FitGenerator* aFG2, bool aZoom=false)
   TString tCanvasName = TString("canKStarCfs");
   if(aZoom) tCanvasName += TString("Zoom");
   tCanvasName += TString(cAnalysisBaseTags[aAnType]) + TString("wConj");
+  tCanvasName += aCanNameModifier;
 
   int tNx=2, tNy=3;
 
@@ -378,11 +379,15 @@ int main(int argc, char **argv)
 
   bool bDrawNumDenRatiosPartAn = false;
   bool bDrawNumDenRatiosAn = false;
+  //-----------------------------------------------------------------------------
+  vector<TString> tUseNumRot2Tags = {"", "NumRotPar2"};
+  TString tCanNameModifier = TString::Format("_%s%svs%s%s", tResultsDate1.Data(), tUseNumRot2Tags[bUseNumRotPar2InsteadOfDen1].Data(), 
+                                                            tResultsDate2.Data(), tUseNumRot2Tags[bUseNumRotPar2InsteadOfDen2].Data());
 
   //-----------------------------------------------------------------------------
   if(bDrawKStarCfs)
   {
-    TCanvas* tCan = DrawKStarCfs(tLamKchP1, tLamKchP2, bZoom);
+    TCanvas* tCan = DrawKStarCfs(tLamKchP1, tLamKchP2, bZoom, tCanNameModifier);
     if(SaveImages) tCan->SaveAs(TString::Format("%s%s.eps", tSaveDir.Data(), tCan->GetName()));
   }
 
