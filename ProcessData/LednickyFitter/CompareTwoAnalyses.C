@@ -15,21 +15,30 @@ TCanvas* DrawKStarCfs(FitGenerator* aFG1, FitGenerator* aFG2, bool aZoom=false, 
   AnalysisType aAnType = aFG1->GetFitSharedAnalyses()->GetFitPairAnalysis(0)->GetAnalysisType();
   AnalysisType aConjType = aFG1->GetFitSharedAnalyses()->GetFitPairAnalysis(1)->GetAnalysisType();
 
+  //-------------------------
+  int tNAnlyses = aFG1->GetFitSharedAnalyses()->GetNFitPairAnalysis();  //NOTE: this macro designed for 3 or 6 pair analyses!
+  bool tConjIncluded = true;
+  if(tNAnlyses%2 != 0) tConjIncluded=false;
+  //-------------------------
+
   TString tCanvasName = TString("canKStarCfs");
   if(aZoom) tCanvasName += TString("Zoom");
-  tCanvasName += TString(cAnalysisBaseTags[aAnType]) + TString("wConj");
+  tCanvasName += TString(cAnalysisBaseTags[aAnType]);
+  if(tConjIncluded) tCanvasName += TString("wConj");
   tCanvasName += aCanNameModifier;
 
   int tNx=2, tNy=3;
+  if(!tConjIncluded) tNx=1;
 
   double tXLow = -0.02;
 //  double tXHigh = 0.99;
-  double tXHigh = aFG1->GetKStarCf(0)->GetXaxis()->GetBinUpEdge(aFG1->GetKStarCf(0)->GetNbinsX());
+  double tXHigh = aFG1->GetKStarCf(0)->GetXaxis()->GetBinUpEdge(aFG1->GetKStarCf(0)->GetNbinsX())-0.01;
   if(aZoom) tXHigh = 0.32;
 
   double tYLow = 0.71;
   double tYHigh = 1.09;
   CanvasPartition* tCanPart = new CanvasPartition(tCanvasName,tNx,tNy,tXLow,tXHigh,tYLow,tYHigh,0.12,0.05,0.13,0.05);
+  if(!tConjIncluded) tCanPart->GetCanvas()->SetCanvasSize(350,500);
 
   int tAnalysisNumber=0;
 
@@ -76,7 +85,8 @@ TCanvas* DrawKStarCfs(FitGenerator* aFG1, FitGenerator* aFG2, bool aZoom=false, 
   tCanPart->SetDrawUnityLine(true);
   tCanPart->DrawAll();
   tCanPart->DrawXaxisTitle("k* (GeV/c)");
-  tCanPart->DrawYaxisTitle("C(k*)",43,25,0.05,0.75);
+  if(tConjIncluded) tCanPart->DrawYaxisTitle("C(k*)",43,25,0.05,0.75);
+  else tCanPart->DrawYaxisTitle("C(k*)",43,25,0.075,0.875);
 
   return tCanPart->GetCanvas();
 }
@@ -326,11 +336,11 @@ int main(int argc, char **argv)
 //-----------------------------------------------------------------------------
   TString tResultsDate1, tResultsDate2;
 
-  tResultsDate1 = "20161027";
-  tResultsDate2 = "20171227";
+//  tResultsDate1 = "20161027";
+//  tResultsDate2 = "20171227";
 
-//  tResultsDate1 = "20180416";
-//  tResultsDate2 = "20180416";
+  tResultsDate1 = "20180416";
+  tResultsDate2 = "20180416";
 
 //  tResultsDate1 = "20170505_ignoreOnFlyStatus";
 //  tResultsDate2 = "20171220_onFlyStatusFalse";
@@ -338,7 +348,7 @@ int main(int argc, char **argv)
 //  tResultsDate1 = "20171227";
 //  tResultsDate2 = "20171227_LHC10h";
 
-  AnalysisType tAnType = kLamK0;
+  AnalysisType tAnType = kLamKchP;
   AnalysisRunType tAnRunType = kTrain;
   int tNPartialAnalysis = 2;
   CentralityType tCentType = kMB;  //TODO
@@ -350,10 +360,10 @@ int main(int argc, char **argv)
   else if(tAnType==kLamKchM) {tConjType=kALamKchP;}
 
   bool bUseNumRotPar2InsteadOfDen1 = false;
-  bool bUseNumRotPar2InsteadOfDen2 = false;
+  bool bUseNumRotPar2InsteadOfDen2 = true;
 
   bool SaveImages = false;
-  TString tSaveDir = "/home/jesse/Analysis/Presentations/GroupMeetings/20180104/";
+  TString tSaveDir = "/home/jesse/Analysis/Presentations/GroupMeetings/20180607/Figures/";
 
   TString tGeneralAnTypeName;
   if(tAnType==kLamK0 || tAnType==kALamK0) tGeneralAnTypeName = "cLamK0";

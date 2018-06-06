@@ -87,12 +87,12 @@ CfHeavy* BuildMixedCfHeavy(int aAnNum, FitGenerator* aFG1, FitGenerator* aFG2, b
   TString tAnInfo2 = TString(cAnalysisBaseTags[tAnType2]);
   if(aFG1->GetFitSharedAnalyses()->GetFitPairAnalysis(aAnNum)->GetUseNumRotPar2InsteadOfDen() && !aUseNum1) 
   {
-    tAnInfo1 += TString("NumRotPar2");
+    tAnInfo1 += TString("Num_{Stan}");
   }
   else tAnInfo1 += TString(tUseNumTags[aUseNum1]);
   if(aFG2->GetFitSharedAnalyses()->GetFitPairAnalysis(aAnNum)->GetUseNumRotPar2InsteadOfDen() && !aUseNum2) 
   {
-    tAnInfo2 += TString("NumRotPar2");
+    tAnInfo2 += TString("Num_{Stan}");
   }
   else tAnInfo2 += TString(tUseNumTags[aUseNum2]);
 
@@ -151,12 +151,12 @@ TCanvas* DrawKStarCfs(FitGenerator* aFG1, FitGenerator* aFG2, bool aUseNum1=true
   TString tAnInfo2 = TString(cAnalysisBaseTags[tAnType2]);
   if(aFG1->GetFitSharedAnalyses()->GetFitPairAnalysis(0)->GetUseNumRotPar2InsteadOfDen() && !aUseNum1) 
   {
-    tAnInfo1 += TString("NumRotPar2");
+    tAnInfo1 += TString("Num_{Stan}");
   }
   else tAnInfo1 += TString(tUseNumTags[aUseNum1]);
   if(aFG2->GetFitSharedAnalyses()->GetFitPairAnalysis(0)->GetUseNumRotPar2InsteadOfDen() && !aUseNum2) 
   {
-    tAnInfo2 += TString("NumRotPar2");
+    tAnInfo2 += TString("Num_{Stan}");
   }
   else tAnInfo2 += TString(tUseNumTags[aUseNum2]);
 
@@ -206,12 +206,12 @@ TCanvas* DrawKStarCfs(FitGenerator* aFG1, FitGenerator* aFG2, bool aUseNum1=true
       tAnInfo2 = TString(cAnalysisRootTags[tAnType2]);
       if(aFG1->GetFitSharedAnalyses()->GetFitPairAnalysis(tAnalysisNumber)->GetUseNumRotPar2InsteadOfDen() && !aUseNum1) 
       {
-        tAnInfo1 += TString("NumRotPar2");
+        tAnInfo1 += TString("Num_{Stan}");
       }
       else tAnInfo1 += TString(tUseNumTags[aUseNum1]);
       if(aFG2->GetFitSharedAnalyses()->GetFitPairAnalysis(tAnalysisNumber)->GetUseNumRotPar2InsteadOfDen() && !aUseNum2) 
       {
-        tAnInfo2 += TString("NumRotPar2");
+        tAnInfo2 += TString("Num_{Stan}");
       }
       else tAnInfo2 += TString(tUseNumTags[aUseNum2]);
 
@@ -254,12 +254,12 @@ TCanvas* DrawNumDenRatiosPartAn(bool aDrawNum, FitGenerator* aFG1, FitGenerator*
   TString tAnInfo2 = TString(cAnalysisBaseTags[tAnType2]);
   if(aFG1->GetFitSharedAnalyses()->GetFitPairAnalysis(0)->GetUseNumRotPar2InsteadOfDen() && !aDrawNum) 
   {
-    tAnInfo1 += TString("NumRotPar2");
+    tAnInfo1 += TString("Num_{Stan}");
   }
   else tAnInfo1 += TString(tUseNumTags[aDrawNum]);
   if(aFG2->GetFitSharedAnalyses()->GetFitPairAnalysis(0)->GetUseNumRotPar2InsteadOfDen() && !aDrawNum) 
   {
-    tAnInfo2 += TString("NumRotPar2");
+    tAnInfo2 += TString("Num_{Stan}");
   }
   else tAnInfo2 += TString(tUseNumTags[aDrawNum]);
 
@@ -319,12 +319,12 @@ TCanvas* DrawNumDenRatiosPartAn(bool aDrawNum, FitGenerator* aFG1, FitGenerator*
       tAnInfo2 = TString(cAnalysisRootTags[tAnType2]);
       if(aFG1->GetFitSharedAnalyses()->GetFitPairAnalysis(tAnalysisNumber)->GetUseNumRotPar2InsteadOfDen() && !aDrawNum) 
       {
-        tAnInfo1 += TString("NumRotPar2");
+        tAnInfo1 += TString("Num_{Stan}");
       }
       else tAnInfo1 += TString(tUseNumTags[aDrawNum]);
       if(aFG2->GetFitSharedAnalyses()->GetFitPairAnalysis(tAnalysisNumber)->GetUseNumRotPar2InsteadOfDen() && !aDrawNum) 
       {
-        tAnInfo2 += TString("NumRotPar2");
+        tAnInfo2 += TString("Num_{Stan}");
       }
       else tAnInfo2 += TString(tUseNumTags[aDrawNum]);
       TString tTextAnType = TString::Format("%s / %s (%s)", tAnInfo1.Data(), tAnInfo2.Data(), cBFieldTags[tPartAn1->GetBFieldType()]);
@@ -364,12 +364,12 @@ TCanvas* DrawNumDenRatiosAn(bool aDrawNum, FitGenerator* aFG1, FitGenerator* aFG
   TString tAnInfo2 = TString(cAnalysisBaseTags[tAnType2]);
   if(aFG1->GetFitSharedAnalyses()->GetFitPairAnalysis(0)->GetUseNumRotPar2InsteadOfDen() && !aDrawNum) 
   {
-    tAnInfo1 += TString("NumRotPar2");
+    tAnInfo1 += TString("Num_{Stan}");
   }
   else tAnInfo1 += TString(tUseNumTags[aDrawNum]);
   if(aFG2->GetFitSharedAnalyses()->GetFitPairAnalysis(0)->GetUseNumRotPar2InsteadOfDen() && !aDrawNum) 
   {
-    tAnInfo2 += TString("NumRotPar2");
+    tAnInfo2 += TString("Num_{Stan}");
   }
   else tAnInfo2 += TString(tUseNumTags[aDrawNum]);
 
@@ -420,12 +420,12 @@ TCanvas* DrawNumDenRatiosAn(bool aDrawNum, FitGenerator* aFG1, FitGenerator* aFG
       tAnInfo2 = TString(cAnalysisRootTags[tAnType2]);
       if(aFG1->GetFitSharedAnalyses()->GetFitPairAnalysis(tAnalysisNumber)->GetUseNumRotPar2InsteadOfDen() && !aDrawNum) 
       {
-        tAnInfo1 += TString("NumRotPar2");
+        tAnInfo1 += TString("Num_{Stan}");
       }
       else tAnInfo1 += TString(tUseNumTags[aDrawNum]);
       if(aFG2->GetFitSharedAnalyses()->GetFitPairAnalysis(tAnalysisNumber)->GetUseNumRotPar2InsteadOfDen() && !aDrawNum) 
       {
-        tAnInfo2 += TString("NumRotPar2");
+        tAnInfo2 += TString("Num_{Stan}");
       }
       else tAnInfo2 += TString(tUseNumTags[aDrawNum]);
       TString tTextAnType = TString::Format("%s / %s", tAnInfo1.Data(), tAnInfo2.Data());
@@ -460,7 +460,7 @@ void Run1vs2(FitGenerator* aFG1, FitGenerator* aFG2, bool aUseNum1, bool aUseNum
   AnalysisType tAnType2 = aFG2->GetFitSharedAnalyses()->GetFitPairAnalysis(0)->GetAnalysisType();
 
   TString tSaveDir = TString::Format("%s%s_%s/", aSaveDir.Data(), cAnalysisBaseTags[tAnType1], cAnalysisBaseTags[tAnType2]);
-  gSystem->mkdir(tSaveDir.Data());
+  gSystem->mkdir(tSaveDir.Data(), true);
 
   //-----------------------------------------------------------------------------------------------
   bool tSwitchGenOrder = false;
@@ -617,7 +617,7 @@ int main(int argc, char **argv)
 
 
   bool SaveImages = false;
-  TString tSaveDir = TString::Format("/home/jesse/Analysis/Presentations/GroupMeetings/20180426/Figures/%s/", tResultsDate.Data());
+  TString tSaveDir = TString::Format("/home/jesse/Analysis/Presentations/GroupMeetings/20180607/Figures/%s/", tResultsDate.Data());
 
   //-----------------------------------------------------------------------------
   TString tDirBase_cLamcKch = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_%s_%s/", "cLamcKch" , tResultsDate.Data());
@@ -634,7 +634,7 @@ int main(int argc, char **argv)
   bool bZoom = false;
   bool bDrawKStarCfs = true;
 
-  bool bDrawNumDenRatiosPartAn = true;
+  bool bDrawNumDenRatiosPartAn = false;
   bool bDrawNumDenRatiosAn = true;
 
   bool bDrawNumRotPar2OverBgd = false;

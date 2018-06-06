@@ -50,7 +50,7 @@ int main(int argc, char **argv)
   //*****************************************
   bool bDoFit = true;
 
-  TString tResultsDate = "20171227";
+  TString tResultsDate = "20180505";
   AnalysisType tAnType = kLamKchP;
 
   double tMaxFitKStar=0.3;
@@ -74,7 +74,7 @@ int main(int argc, char **argv)
   //--Corrections
   bool ApplyMomResCorrection = true;
   bool ApplyNonFlatBackgroundCorrection = true;
-  NonFlatBgdFitType tNonFlatBgdFitType = kLinear;
+  NonFlatBgdFitType tNonFlatBgdFitType = kPolynomial;
     if(tNonFlatBgdFitType==kDivideByTherm)
     {
       tFitType = kChi2;
@@ -109,7 +109,7 @@ int main(int argc, char **argv)
   bool bDrawResiduals = false;
   bool bDrawPartAn = false;
 
-  bool bDrawSysErrs = true;
+  bool bDrawSysErrs = false;
 
 //-----------------------------------------------------------------------------
   if(tShareLambdaParams==false && tDualieShareLambda==true)

@@ -24,7 +24,7 @@ int main(int argc, char **argv)
   bool bDoFit = true;
   bool bGenerateContours = false;
 
-  TString tResultsDate = "20171227"/*"20161027"*//*"20171220_onFlyStatusFalse"*//*"20171227_LHC10h"*//*"20180104_useIsProbableElectronMethodTrue"*//*"20180104_useIsProbableElectronMethodFalse"*/;
+  TString tResultsDate = "20180505"/*"20171227"*//*"20161027"*//*"20171220_onFlyStatusFalse"*//*"20171227_LHC10h"*//*"20180104_useIsProbableElectronMethodTrue"*//*"20180104_useIsProbableElectronMethodFalse"*/;
   AnalysisType tAnType = kLamKchP;
 
   double tMaxFitKStar=0.3;
@@ -79,7 +79,7 @@ int main(int argc, char **argv)
   bool bDrawResiduals = false;
   bool bDrawPartAn = false;
 
-  bool bDrawSysErrs = true;
+  bool bDrawSysErrs = false;
 
 //-----------------------------------------------------------------------------
 
