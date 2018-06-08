@@ -287,7 +287,7 @@ int main(int argc, char **argv)
   bool bCombineConj = true;
 //  bool bSaveFigures = false;
 
-  TString tFileBase = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_20180605/Results_cLamcKch_20180605";
+  TString tFileBase = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_20180606/Results_cLamcKch_20180606";
   TString tSaveLocationBase = "/home/jesse/Analysis/Presentations/GroupMeetings/20180607/Figures/";
 
   //TODO NOTE: For this function, aCentType==kMB means 50-90%

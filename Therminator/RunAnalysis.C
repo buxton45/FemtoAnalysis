@@ -38,6 +38,8 @@ int main(int argc, char **argv)
   bool bRotateEventsByRandomAzimuthalAngles = false;
   bool bOnlyRunOverJaiEvents = false;
 
+  bool bPerformFlowAnalysis = false;
+
   double tMaxPrimaryDecayLength = -1; 
 //  double tMaxPrimaryDecayLength = 4.01; 
 
@@ -108,6 +110,7 @@ int main(int argc, char **argv)
 
   tSimpleThermAnalysis->SetCheckCoECoM(bCheckCoECoM);
   tSimpleThermAnalysis->SetRotateEventsByRandomAzimuthalAngles(bRotateEventsByRandomAzimuthalAngles);
+  tSimpleThermAnalysis->SetPerformFlowAnalysis(bPerformFlowAnalysis);
 
   tSimpleThermAnalysis->ProcessAll();
 

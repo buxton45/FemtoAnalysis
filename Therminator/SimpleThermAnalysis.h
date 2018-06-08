@@ -27,6 +27,9 @@ class ThermPairAnalysis;
 #include "ThermSingleParticleAnalysis.h"
 class ThermSingleParticleAnalysis;
 
+#include "ThermFlowAnalysis.h"
+class ThermFlowAnalysis;
+
 #include "ThermEvent.h"
 class ThermEvent;
 
@@ -70,6 +73,7 @@ public:
 
   void SetCheckCoECoM(bool aCheck=true);
   void SetRotateEventsByRandomAzimuthalAngles(bool aRotate=true);
+  void SetPerformFlowAnalysis(bool aPerform=true);
 private:
   int fNFiles;
   int fNEvents;
@@ -113,8 +117,11 @@ private:
   ThermSingleParticleAnalysis *fSPAnalysisProt, *fSPAnalysisAProt;
   ThermSingleParticleAnalysis *fSPAnalysisK0;
 
+  ThermFlowAnalysis *fFlowAnalysis;
+
   bool fCheckCoECoM;
   bool fRotateEventsByRandAzAngles;
+  bool fPerformFlowAnalysis;
 
 #ifdef __ROOT__
   ClassDef(SimpleThermAnalysis, 1)
@@ -131,5 +138,6 @@ inline void SimpleThermAnalysis::SetSingleParticlesSaveName(TString aSaveName) {
 
 inline void SimpleThermAnalysis::SetCheckCoECoM(bool aCheck) {fCheckCoECoM = aCheck;}
 inline void SimpleThermAnalysis::SetRotateEventsByRandomAzimuthalAngles(bool aRotate) {fRotateEventsByRandAzAngles = aRotate;}
+inline void SimpleThermAnalysis::SetPerformFlowAnalysis(bool aPerform) {fPerformFlowAnalysis = aPerform;}
 
 #endif

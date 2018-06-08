@@ -63,8 +63,11 @@ SimpleThermAnalysis::SimpleThermAnalysis() :
   fSPAnalysisAProt(nullptr),
   fSPAnalysisK0(nullptr),
 
+  fFlowAnalysis(nullptr),
+
   fCheckCoECoM(false),
-  fRotateEventsByRandAzAngles(false)
+  fRotateEventsByRandAzAngles(false),
+  fPerformFlowAnalysis(false)
 
 {
   fAnalysisLamKchP = new ThermPairAnalysis(kLamKchP);
@@ -83,6 +86,7 @@ SimpleThermAnalysis::SimpleThermAnalysis() :
   fSPAnalysisAProt = new ThermSingleParticleAnalysis(kPDGAntiProt);
   fSPAnalysisK0 = new ThermSingleParticleAnalysis(kPDGK0);
 
+  fFlowAnalysis = new ThermFlowAnalysis();
 }
 
 
@@ -223,6 +227,8 @@ vector<ThermEvent> SimpleThermAnalysis::ExtractEventsFromRootFile(TString aFileL
 
     if(tParticleEntry->eventid != tEventID)
     {
+      if(fPerformFlowAnalysis) fFlowAnalysis->BuildVnEPIngredients(tThermEvent); //Want to do this BEFORE EnforceKinematicCuts is called because need large eta 
+                                                                                 //for calculation (shouldn't matter if before or after event rotation)
       if(fRotateEventsByRandAzAngles) tThermEvent.RotateAllParticlesByRandomAzimuthalAngle(false);
       tThermEvent.MatchDaughtersWithFathers();
       if(fCheckCoECoM) tThermEvent.CheckCoECoM();
@@ -240,6 +246,7 @@ vector<ThermEvent> SimpleThermAnalysis::ExtractEventsFromRootFile(TString aFileL
     if(tThermEvent.IsDaughterOfInterest(tParticleEntry)) tThermEvent.PushBackThermDaughterOfInterest(tParticleEntry);
     if(tThermEvent.IsParticleOfInterest(tParticleEntry)) tThermEvent.PushBackThermParticleOfInterest(tParticleEntry);
   }
+  if(fPerformFlowAnalysis) fFlowAnalysis->BuildVnEPIngredients(tThermEvent);
   if(fRotateEventsByRandAzAngles) tThermEvent.RotateAllParticlesByRandomAzimuthalAngle(false);
   tThermEvent.MatchDaughtersWithFathers();
   if(fCheckCoECoM) tThermEvent.CheckCoECoM();
@@ -356,6 +363,8 @@ void SimpleThermAnalysis::ProcessAll()
   fAnalysisALamKchP->PrintPrimaryAndOtherPairInfo();
   fAnalysisLamK0->PrintPrimaryAndOtherPairInfo();
   fAnalysisALamK0->PrintPrimaryAndOtherPairInfo();
+
+  fFlowAnalysis->Finalize();
 
   SaveAll();
   tDir->Delete();
