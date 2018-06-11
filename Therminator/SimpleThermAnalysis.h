@@ -74,6 +74,7 @@ public:
   void SetCheckCoECoM(bool aCheck=true);
   void SetRotateEventsByRandomAzimuthalAngles(bool aRotate=true);
   void SetPerformFlowAnalysis(bool aPerform=true);
+  void SetBuildArtificialV3Signal(bool aBuild=true);  //NOTE: This kills v2 signal and creates v3 signal
 private:
   int fNFiles;
   int fNEvents;
@@ -122,6 +123,7 @@ private:
   bool fCheckCoECoM;
   bool fRotateEventsByRandAzAngles;
   bool fPerformFlowAnalysis;
+  bool fBuildArtificialV3Signal;
 
 #ifdef __ROOT__
   ClassDef(SimpleThermAnalysis, 1)
@@ -139,5 +141,6 @@ inline void SimpleThermAnalysis::SetSingleParticlesSaveName(TString aSaveName) {
 inline void SimpleThermAnalysis::SetCheckCoECoM(bool aCheck) {fCheckCoECoM = aCheck;}
 inline void SimpleThermAnalysis::SetRotateEventsByRandomAzimuthalAngles(bool aRotate) {fRotateEventsByRandAzAngles = aRotate;}
 inline void SimpleThermAnalysis::SetPerformFlowAnalysis(bool aPerform) {fPerformFlowAnalysis = aPerform;}
+inline void SimpleThermAnalysis::SetBuildArtificialV3Signal(bool aBuild) {fBuildArtificialV3Signal=aBuild;}
 
 #endif

@@ -39,6 +39,7 @@ int main(int argc, char **argv)
   bool bOnlyRunOverJaiEvents = false;
 
   bool bPerformFlowAnalysis = false;
+  bool bBuildArtificialV3Signal = false;
 
   double tMaxPrimaryDecayLength = -1; 
 //  double tMaxPrimaryDecayLength = 4.01; 
@@ -82,6 +83,14 @@ int main(int argc, char **argv)
     tCorrelationFunctionsSaveName += TString("_RandomEPs");
   }
 
+  if(bBuildArtificialV3Signal)
+  {
+    tMatricesSaveFileName += TString("_ArtificialV3Signal");
+    tPairFractionSaveName += TString("_ArtificialV3Signal");
+    tSingleParticlesSaveName += TString("_ArtificialV3Signal");
+    tCorrelationFunctionsSaveName += TString("_ArtificialV3Signal");
+  }
+
   if(bUnitWeightCfNums) tCorrelationFunctionsSaveName += TString("_NumWeight1");
   //-----------------------------------------
 
@@ -111,6 +120,7 @@ int main(int argc, char **argv)
   tSimpleThermAnalysis->SetCheckCoECoM(bCheckCoECoM);
   tSimpleThermAnalysis->SetRotateEventsByRandomAzimuthalAngles(bRotateEventsByRandomAzimuthalAngles);
   tSimpleThermAnalysis->SetPerformFlowAnalysis(bPerformFlowAnalysis);
+  tSimpleThermAnalysis->SetBuildArtificialV3Signal(bBuildArtificialV3Signal);
 
   tSimpleThermAnalysis->ProcessAll();
 

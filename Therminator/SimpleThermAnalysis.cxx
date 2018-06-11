@@ -67,7 +67,8 @@ SimpleThermAnalysis::SimpleThermAnalysis() :
 
   fCheckCoECoM(false),
   fRotateEventsByRandAzAngles(false),
-  fPerformFlowAnalysis(false)
+  fPerformFlowAnalysis(false),
+  fBuildArtificialV3Signal(false)
 
 {
   fAnalysisLamKchP = new ThermPairAnalysis(kLamKchP);
@@ -227,6 +228,7 @@ vector<ThermEvent> SimpleThermAnalysis::ExtractEventsFromRootFile(TString aFileL
 
     if(tParticleEntry->eventid != tEventID)
     {
+      if(fBuildArtificialV3Signal) tThermEvent.BuildArtificialV3Signal();
       if(fPerformFlowAnalysis) fFlowAnalysis->BuildVnEPIngredients(tThermEvent); //Want to do this BEFORE EnforceKinematicCuts is called because need large eta 
                                                                                  //for calculation (shouldn't matter if before or after event rotation)
       if(fRotateEventsByRandAzAngles) tThermEvent.RotateAllParticlesByRandomAzimuthalAngle(false);
@@ -246,6 +248,7 @@ vector<ThermEvent> SimpleThermAnalysis::ExtractEventsFromRootFile(TString aFileL
     if(tThermEvent.IsDaughterOfInterest(tParticleEntry)) tThermEvent.PushBackThermDaughterOfInterest(tParticleEntry);
     if(tThermEvent.IsParticleOfInterest(tParticleEntry)) tThermEvent.PushBackThermParticleOfInterest(tParticleEntry);
   }
+  if(fBuildArtificialV3Signal) tThermEvent.BuildArtificialV3Signal();
   if(fPerformFlowAnalysis) fFlowAnalysis->BuildVnEPIngredients(tThermEvent);
   if(fRotateEventsByRandAzAngles) tThermEvent.RotateAllParticlesByRandomAzimuthalAngle(false);
   tThermEvent.MatchDaughtersWithFathers();

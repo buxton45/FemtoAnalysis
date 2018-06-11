@@ -12,6 +12,7 @@
 #include "TTree.h"
 #include "TFile.h"
 #include "TH2.h"
+#include "TF1.h"
 
 #include "ThermParticle.h"
 class ThermParticle;
@@ -69,6 +70,8 @@ public:
   void RotateParticlesByRandomAzimuthalAngle(double aPhi, vector<ThermParticle> &aCollection, bool aOutputEP=false);
   void RotateParticlesByRandomAzimuthalAngle(double aPhi, vector<ThermV0Particle> &aCollection, bool aOutputEP=false);
   void RotateAllParticlesByRandomAzimuthalAngle(bool aOutputEP=false);
+
+  void BuildArtificialV3Signal();  //NOTE: This kills v2 signal and builds v3 signal
 
   //inline stuff
   void SetEventID(unsigned int aEventID);

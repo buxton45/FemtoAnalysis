@@ -559,3 +559,25 @@ void ThermEvent::RotateAllParticlesByRandomAzimuthalAngle(bool aOutputEP)
 }
 
 
+//________________________________________________________________________________________________________________
+void ThermEvent::BuildArtificialV3Signal()
+{
+
+  std::default_random_engine tGenerator (std::clock());  //std::clock() is seed
+  std::uniform_real_distribution<double> tUnityDistribution(0.,1.);
+  double tU = tUnityDistribution(tGenerator);
+  double tPsi3 = 2.*TMath::Pi()*tU; //azimuthal angle
+
+  TF1 *f1 = new TF1("f1", "0.5*(cos(3*x)+1)", 0, 2.*TMath::Pi());
+  double tNewPhi, tGenPhi;
+
+  for(unsigned int iPart=0; iPart<fAllParticlesCollection.size(); iPart++) 
+  {
+    tGenPhi = f1->GetRandom();
+    tNewPhi = tGenPhi-fAllParticlesCollection[iPart].GetPhiP()+tPsi3;
+    fAllParticlesCollection[iPart].TransformRotateZ(-tNewPhi);  //Negative sign because
+                                                                //want CCW rotation
+  }
+}
+
+
