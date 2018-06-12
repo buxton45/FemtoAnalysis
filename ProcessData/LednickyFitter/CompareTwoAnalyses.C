@@ -84,9 +84,9 @@ TCanvas* DrawKStarCfs(FitGenerator* aFG1, FitGenerator* aFG2, bool aZoom=false, 
 
   tCanPart->SetDrawUnityLine(true);
   tCanPart->DrawAll();
-  tCanPart->DrawXaxisTitle("k* (GeV/c)");
+  tCanPart->DrawXaxisTitle("#it{k}* (GeV/#it{c})");
   if(tConjIncluded) tCanPart->DrawYaxisTitle("C(k*)",43,25,0.05,0.75);
-  else tCanPart->DrawYaxisTitle("C(k*)",43,25,0.075,0.875);
+  else tCanPart->DrawYaxisTitle("#it{C}(#it{k}*)",43,25,0.075,0.875);
 
   return tCanPart->GetCanvas();
 }
@@ -157,8 +157,8 @@ TCanvas* DrawKStarCfRatios(FitGenerator* aFG1, FitGenerator* aFG2, bool aZoom=fa
 
   tCanPart->SetDrawUnityLine(true);
   tCanPart->DrawAll();
-  tCanPart->DrawXaxisTitle("k* (GeV/c)");
-  tCanPart->DrawYaxisTitle("C_{1}(k*)/C_{2}(k*)",43,25,0.05,0.75);
+  tCanPart->DrawXaxisTitle("#it{k}* (GeV/#it{c})");
+  tCanPart->DrawYaxisTitle("#it{C}_{1}(#it{k}*)/#it{C}_{2}(#it{k}*)",43,25,0.05,0.75);
 
   return tCanPart->GetCanvas();
 }
@@ -239,7 +239,7 @@ TCanvas* DrawNumDenRatiosPartAn(bool aDrawNum, FitGenerator* aFG1, FitGenerator*
 
   tCanPart->SetDrawUnityLine(true);
   tCanPart->DrawAll();
-  tCanPart->DrawXaxisTitle("k* (GeV/c)");
+  tCanPart->DrawXaxisTitle("#it{k}* (GeV/#it{c})");
   if(aDrawNum) tCanPart->DrawYaxisTitle("Num1/Num2",43,25,0.05,0.75);
   else tCanPart->DrawYaxisTitle("Den1/Den2",43,25,0.05,0.75);
 
@@ -313,7 +313,7 @@ TCanvas* DrawNumDenRatiosAn(bool aDrawNum, FitGenerator* aFG1, FitGenerator* aFG
 
   tCanPart->SetDrawUnityLine(true);
   tCanPart->DrawAll();
-  tCanPart->DrawXaxisTitle("k* (GeV/c)");
+  tCanPart->DrawXaxisTitle("#it{k}* (GeV/#it{c})");
   if(aDrawNum) tCanPart->DrawYaxisTitle("Num1/Num2",43,25,0.05,0.75);
   else tCanPart->DrawYaxisTitle("Den1/Den2",43,25,0.05,0.75);
 
@@ -359,11 +359,11 @@ int main(int argc, char **argv)
   else if(tAnType==kLamKchP) {tConjType=kALamKchM;}
   else if(tAnType==kLamKchM) {tConjType=kALamKchP;}
 
-  bool bUseNumRotPar2InsteadOfDen1 = false;
-  bool bUseNumRotPar2InsteadOfDen2 = true;
+  bool bUseStavCf1 = false;
+  bool bUseStavCf2 = true;
 
   bool SaveImages = false;
-  TString tSaveDir = "/home/jesse/Analysis/Presentations/GroupMeetings/20180607/Figures/";
+  TString tSaveDir = "/home/jesse/Analysis/Presentations/AliFemto/20180613/Figures/";
 
   TString tGeneralAnTypeName;
   if(tAnType==kLamK0 || tAnType==kALamK0) tGeneralAnTypeName = "cLamK0";
@@ -380,8 +380,8 @@ int main(int argc, char **argv)
   TString tFileLocationBaseMC2 = TString::Format("%sResults_%sMC_%s",tDirectoryBase1.Data(),tGeneralAnTypeName.Data(),tResultsDate1.Data());
 
   TString tSaveNameModifier = "";
-  FitGenerator* tLamKchP1 = new FitGenerator(tFileLocationBase1, tFileLocationBaseMC1, tAnType, tCentType, tAnRunType, tNPartialAnalysis, tGenType, false, false, "", bUseNumRotPar2InsteadOfDen1);
-  FitGenerator* tLamKchP2 = new FitGenerator(tFileLocationBase2, tFileLocationBaseMC2, tAnType, tCentType, tAnRunType, tNPartialAnalysis, tGenType, false, false, "", bUseNumRotPar2InsteadOfDen2);
+  FitGenerator* tLamKchP1 = new FitGenerator(tFileLocationBase1, tFileLocationBaseMC1, tAnType, tCentType, tAnRunType, tNPartialAnalysis, tGenType, false, false, "", bUseStavCf1);
+  FitGenerator* tLamKchP2 = new FitGenerator(tFileLocationBase2, tFileLocationBaseMC2, tAnType, tCentType, tAnRunType, tNPartialAnalysis, tGenType, false, false, "", bUseStavCf2);
   //-----------------------------------------------------------------------------
   bool bZoom = false;
   bool bDrawKStarCfs = true;
@@ -390,9 +390,9 @@ int main(int argc, char **argv)
   bool bDrawNumDenRatiosPartAn = false;
   bool bDrawNumDenRatiosAn = false;
   //-----------------------------------------------------------------------------
-  vector<TString> tUseNumRot2Tags = {"", "NumRotPar2"};
-  TString tCanNameModifier = TString::Format("_%s%svs%s%s", tResultsDate1.Data(), tUseNumRot2Tags[bUseNumRotPar2InsteadOfDen1].Data(), 
-                                                            tResultsDate2.Data(), tUseNumRot2Tags[bUseNumRotPar2InsteadOfDen2].Data());
+  vector<TString> tUseStavCfTags = {"", "StavCf"};
+  TString tCanNameModifier = TString::Format("_%s%svs%s%s", tResultsDate1.Data(), tUseStavCfTags[bUseStavCf1].Data(), 
+                                                            tResultsDate2.Data(), tUseStavCfTags[bUseStavCf2].Data());
 
   //-----------------------------------------------------------------------------
   if(bDrawKStarCfs)

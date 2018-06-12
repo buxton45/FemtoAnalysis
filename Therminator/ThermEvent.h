@@ -13,6 +13,7 @@
 #include "TFile.h"
 #include "TH2.h"
 #include "TF1.h"
+#include "TRandom.h"
 
 #include "ThermParticle.h"
 class ThermParticle;
@@ -71,6 +72,8 @@ public:
   void RotateParticlesByRandomAzimuthalAngle(double aPhi, vector<ThermV0Particle> &aCollection, bool aOutputEP=false);
   void RotateAllParticlesByRandomAzimuthalAngle(bool aOutputEP=false);
 
+  void BuildArtificialV3SignalInCollection(double aPsi3, TF1* aDist, vector<ThermParticle> &aCollection);  //NOTE: This kills v2 signal and builds v3 signal
+  void BuildArtificialV3SignalInCollection(double aPsi3, TF1* aDist, vector<ThermV0Particle> &aCollection);  //NOTE: This kills v2 signal and builds v3 signal
   void BuildArtificialV3Signal();  //NOTE: This kills v2 signal and builds v3 signal
 
   //inline stuff

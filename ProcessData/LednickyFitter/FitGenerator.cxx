@@ -27,7 +27,7 @@ void GlobalFCN(Int_t &npar, Double_t *gin, Double_t &f, Double_t *par, Int_t ifl
 
 
 //________________________________________________________________________________________________________________
-FitGenerator::FitGenerator(TString aFileLocationBase, TString aFileLocationBaseMC, AnalysisType aAnalysisType, const vector<CentralityType> &aCentralityTypes, AnalysisRunType aRunType, int aNPartialAnalysis, FitGeneratorType aGeneratorType, bool aShareLambdaParams, bool aAllShareSingleLambdaParam, TString aDirNameModifier, bool aUseNumRotPar2InsteadOfDen) :
+FitGenerator::FitGenerator(TString aFileLocationBase, TString aFileLocationBaseMC, AnalysisType aAnalysisType, const vector<CentralityType> &aCentralityTypes, AnalysisRunType aRunType, int aNPartialAnalysis, FitGeneratorType aGeneratorType, bool aShareLambdaParams, bool aAllShareSingleLambdaParam, TString aDirNameModifier, bool aUseStavCf) :
   fSaveLocationBase(""),
   fSaveNameModifier(""),
   fContainsMC(false),
@@ -101,16 +101,16 @@ FitGenerator::FitGenerator(TString aFileLocationBase, TString aFileLocationBaseM
 
     switch(fGeneratorType) {
     case kPair:
-      tVecOfPairAn.push_back(new FitPairAnalysis(aFileLocationBase,aFileLocationBaseMC,fPairType,fCentralityTypes[i],aRunType,aNPartialAnalysis,aDirNameModifier, aUseNumRotPar2InsteadOfDen));
+      tVecOfPairAn.push_back(new FitPairAnalysis(aFileLocationBase,aFileLocationBaseMC,fPairType,fCentralityTypes[i],aRunType,aNPartialAnalysis,aDirNameModifier, aUseStavCf));
       break;
 
     case kConjPair:
-      tVecOfPairAn.push_back(new FitPairAnalysis(aFileLocationBase,aFileLocationBaseMC,fConjPairType,fCentralityTypes[i],aRunType,aNPartialAnalysis,aDirNameModifier, aUseNumRotPar2InsteadOfDen));
+      tVecOfPairAn.push_back(new FitPairAnalysis(aFileLocationBase,aFileLocationBaseMC,fConjPairType,fCentralityTypes[i],aRunType,aNPartialAnalysis,aDirNameModifier, aUseStavCf));
       break;
 
     case kPairwConj:
-      tVecOfPairAn.push_back(new FitPairAnalysis(aFileLocationBase,aFileLocationBaseMC,fPairType,fCentralityTypes[i],aRunType,aNPartialAnalysis,aDirNameModifier, aUseNumRotPar2InsteadOfDen));
-      tVecOfPairAn.push_back(new FitPairAnalysis(aFileLocationBase,aFileLocationBaseMC,fConjPairType,fCentralityTypes[i],aRunType,aNPartialAnalysis,aDirNameModifier, aUseNumRotPar2InsteadOfDen));
+      tVecOfPairAn.push_back(new FitPairAnalysis(aFileLocationBase,aFileLocationBaseMC,fPairType,fCentralityTypes[i],aRunType,aNPartialAnalysis,aDirNameModifier, aUseStavCf));
+      tVecOfPairAn.push_back(new FitPairAnalysis(aFileLocationBase,aFileLocationBaseMC,fConjPairType,fCentralityTypes[i],aRunType,aNPartialAnalysis,aDirNameModifier, aUseStavCf));
       break;
 
     default:
@@ -129,7 +129,7 @@ FitGenerator::FitGenerator(TString aFileLocationBase, TString aFileLocationBaseM
 
 
 //________________________________________________________________________________________________________________
-FitGenerator::FitGenerator(TString aFileLocationBase, TString aFileLocationBaseMC, AnalysisType aAnalysisType, CentralityType aCentralityType, AnalysisRunType aRunType, int aNPartialAnalysis, FitGeneratorType aGeneratorType, bool aShareLambdaParams, bool aAllShareSingleLambdaParam, TString aDirNameModifier, bool aUseNumRotPar2InsteadOfDen) :
+FitGenerator::FitGenerator(TString aFileLocationBase, TString aFileLocationBaseMC, AnalysisType aAnalysisType, CentralityType aCentralityType, AnalysisRunType aRunType, int aNPartialAnalysis, FitGeneratorType aGeneratorType, bool aShareLambdaParams, bool aAllShareSingleLambdaParam, TString aDirNameModifier, bool aUseStavCf) :
   fSaveLocationBase(""),
   fSaveNameModifier(""),
   fContainsMC(false),
@@ -181,7 +181,7 @@ FitGenerator::FitGenerator(TString aFileLocationBase, TString aFileLocationBaseM
     assert(0);
   }
 
-  *this = FitGenerator(aFileLocationBase, aFileLocationBaseMC, aAnalysisType, tCentralityTypes, aRunType, aNPartialAnalysis, aGeneratorType, aShareLambdaParams, aAllShareSingleLambdaParam, aDirNameModifier, aUseNumRotPar2InsteadOfDen);
+  *this = FitGenerator(aFileLocationBase, aFileLocationBaseMC, aAnalysisType, tCentralityTypes, aRunType, aNPartialAnalysis, aGeneratorType, aShareLambdaParams, aAllShareSingleLambdaParam, aDirNameModifier, aUseStavCf);
 }
 
 

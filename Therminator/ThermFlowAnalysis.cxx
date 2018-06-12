@@ -17,8 +17,8 @@ ThermFlowAnalysis::ThermFlowAnalysis(int aNpTBins, double apTBinSize) :
   fNpTBins(aNpTBins),
   fpTBinSize(apTBinSize),
 
-  fEtaA(1.5),
-  fEtaB(-1.5),
+  fEtaA(1.0),
+  fEtaB(-1.0),
   fEtaOI(0.8),
 
   fNEvTot(0),

@@ -367,9 +367,8 @@ void SimpleThermAnalysis::ProcessAll()
   fAnalysisLamK0->PrintPrimaryAndOtherPairInfo();
   fAnalysisALamK0->PrintPrimaryAndOtherPairInfo();
 
-  fFlowAnalysis->Finalize();
-
   SaveAll();
+  if(fPerformFlowAnalysis) fFlowAnalysis->Finalize();
   tDir->Delete();
 }
 

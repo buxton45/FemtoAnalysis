@@ -558,26 +558,84 @@ void ThermEvent::RotateAllParticlesByRandomAzimuthalAngle(bool aOutputEP)
 
 }
 
+//________________________________________________________________________________________________________________
+void ThermEvent::BuildArtificialV3SignalInCollection(double aPsi3, TF1* aDist, vector<ThermParticle> &aCollection)
+{
+  std::default_random_engine tGenerator (std::clock());  //std::clock() is seed
+  std::normal_distribution<double> tNormDist(0., 2.);
+  std::uniform_real_distribution<double> tUnityDistribution(0.,1.);
+
+  double tRand;
+  double tAcceptableDistFrom3;
+  double tNewPhi, tGenPhi;
+  for(unsigned int iPart=0; iPart<aCollection.size(); iPart++) 
+  {
+    tRand = 100*tUnityDistribution(tGenerator);
+    tAcceptableDistFrom3 = abs(tNormDist(tGenerator));
+    if(tRand > 75 && abs(aCollection[iPart].GetPt()-3.0)<tAcceptableDistFrom3 )
+    {
+      tGenPhi = aDist->GetRandom();
+      tNewPhi = tGenPhi-aCollection[iPart].GetPhiP()+aPsi3;
+      aCollection[iPart].TransformRotateZ(-tNewPhi);  //Negative sign because
+                                                      //want CCW rotation
+    }
+  }
+}
+
+//________________________________________________________________________________________________________________
+void ThermEvent::BuildArtificialV3SignalInCollection(double aPsi3, TF1* aDist, vector<ThermV0Particle> &aCollection)
+{
+  std::default_random_engine tGenerator (std::clock());  //std::clock() is seed
+  std::normal_distribution<double> tNormDist(0., 2.);
+  std::uniform_real_distribution<double> tUnityDistribution(0.,1.);
+
+  int tRand;
+  double tAcceptableDistFrom3;
+  double tNewPhi, tGenPhi;
+  for(unsigned int iPart=0; iPart<aCollection.size(); iPart++) 
+  {
+    tRand = 100*tUnityDistribution(tGenerator);
+    tAcceptableDistFrom3 = abs(tNormDist(tGenerator));
+    if(tRand > 75 && abs(aCollection[iPart].GetPt()-3.0)<tAcceptableDistFrom3 )
+    {
+      tGenPhi = aDist->GetRandom();
+      tNewPhi = tGenPhi-aCollection[iPart].GetPhiP()+aPsi3;
+      aCollection[iPart].TransformRotateZ(-tNewPhi);  //Negative sign because
+                                                      //want CCW rotation
+    }
+  }
+}
+ 
+
 
 //________________________________________________________________________________________________________________
 void ThermEvent::BuildArtificialV3Signal()
 {
+  gRandom->SetSeed();
+
 
   std::default_random_engine tGenerator (std::clock());  //std::clock() is seed
   std::uniform_real_distribution<double> tUnityDistribution(0.,1.);
   double tU = tUnityDistribution(tGenerator);
   double tPsi3 = 2.*TMath::Pi()*tU; //azimuthal angle
 
+//  double tPsi3 = 0.;  //For now, implement a random Psi3 via the RotateAllParticlesByRandomAzimuthalAngle method
   TF1 *f1 = new TF1("f1", "0.5*(cos(3*x)+1)", 0, 2.*TMath::Pi());
-  double tNewPhi, tGenPhi;
 
-  for(unsigned int iPart=0; iPart<fAllParticlesCollection.size(); iPart++) 
-  {
-    tGenPhi = f1->GetRandom();
-    tNewPhi = tGenPhi-fAllParticlesCollection[iPart].GetPhiP()+tPsi3;
-    fAllParticlesCollection[iPart].TransformRotateZ(-tNewPhi);  //Negative sign because
-                                                                //want CCW rotation
-  }
+  BuildArtificialV3SignalInCollection(tPsi3, f1, fAllParticlesCollection);
+  BuildArtificialV3SignalInCollection(tPsi3, f1, fAllDaughtersCollection);
+
+  BuildArtificialV3SignalInCollection(tPsi3, f1, fLambdaCollection);
+  BuildArtificialV3SignalInCollection(tPsi3, f1, fAntiLambdaCollection);
+  BuildArtificialV3SignalInCollection(tPsi3, f1, fK0ShortCollection);
+
+  BuildArtificialV3SignalInCollection(tPsi3, f1, fKchPCollection);
+  BuildArtificialV3SignalInCollection(tPsi3, f1, fKchMCollection);
+
+  BuildArtificialV3SignalInCollection(tPsi3, f1, fProtCollection);
+  BuildArtificialV3SignalInCollection(tPsi3, f1, fAProtCollection);
+
+  delete f1;
 }
 
 

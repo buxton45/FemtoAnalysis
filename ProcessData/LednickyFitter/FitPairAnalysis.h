@@ -53,8 +53,8 @@ public:
 
   //Constructor, destructor, copy constructor, assignment operator
   FitPairAnalysis(TString aAnalysisName, vector<FitPartialAnalysis*> &aFitPartialAnalysisCollection, bool aIncludeSingletAndTriplet=false);
-  FitPairAnalysis(TString aFileLocationBase, AnalysisType aAnalysisType, CentralityType aCentralityType, AnalysisRunType aRunType=kTrain, int aNFitPartialAnalysis=2, TString aDirNameModifier="", bool aUseNumRotPar2InsteadOfDen=false, bool aIncludeSingletAndTriplet=false);
-  FitPairAnalysis(TString aFileLocationBase, TString aFileLocationBaseMC, AnalysisType aAnalysisType, CentralityType aCentralityType, AnalysisRunType aRunType=kTrain, int aNFitPartialAnalysis=2, TString aDirNameModifier="", bool aUseNumRotPar2InsteadOfDen=false, bool aIncludeSingletAndTriplet=false);
+  FitPairAnalysis(TString aFileLocationBase, AnalysisType aAnalysisType, CentralityType aCentralityType, AnalysisRunType aRunType=kTrain, int aNFitPartialAnalysis=2, TString aDirNameModifier="", bool aUseStavCf=false, bool aIncludeSingletAndTriplet=false);
+  FitPairAnalysis(TString aFileLocationBase, TString aFileLocationBaseMC, AnalysisType aAnalysisType, CentralityType aCentralityType, AnalysisRunType aRunType=kTrain, int aNFitPartialAnalysis=2, TString aDirNameModifier="", bool aUseStavCf=false, bool aIncludeSingletAndTriplet=false);
   virtual ~FitPairAnalysis();
 
   void BuildModelKStarTrueVsRecMixed(int aRebinFactor=1);
@@ -163,7 +163,7 @@ public:
   td1dVec CombinePrimaryWithResiduals(double *aCfParams, td1dVec &aPrimaryCf);
   ResidualCollection* GetResidualCollection();
 
-  bool GetUseNumRotPar2InsteadOfDen();
+  bool GetUseStavCf();
 
 private:
   AnalysisRunType fAnalysisRunType;
@@ -209,7 +209,7 @@ private:
   ResidualCollection *fResidualCollection;
   td1dVec fPrimaryWithResiduals;
 
-  bool fUseNumRotPar2InsteadOfDen;
+  bool fUseStavCf;
 
 #ifdef __ROOT__
   ClassDef(FitPairAnalysis, 1)
@@ -273,7 +273,7 @@ inline td1dVec FitPairAnalysis::GetTransformedNeutralResidualCorrelation(Analysi
 inline td1dVec FitPairAnalysis::CombinePrimaryWithResiduals(double *aCfParams, td1dVec &aPrimaryCf) {return fResidualCollection->CombinePrimaryWithResiduals(aCfParams, aPrimaryCf);}
 inline ResidualCollection* FitPairAnalysis::GetResidualCollection() {return fResidualCollection;}
 
-inline bool FitPairAnalysis::GetUseNumRotPar2InsteadOfDen() {return fUseNumRotPar2InsteadOfDen;}
+inline bool FitPairAnalysis::GetUseStavCf() {return fUseStavCf;}
 
 #endif
 

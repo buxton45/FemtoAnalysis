@@ -60,7 +60,7 @@ FitPairAnalysis::FitPairAnalysis(TString aAnalysisName, vector<FitPartialAnalysi
   fResidualCollection(nullptr),
   fPrimaryWithResiduals(0),
 
-  fUseNumRotPar2InsteadOfDen(fFitPartialAnalysisCollection[0]->GetUseNumRotPar2InsteadOfDen())
+  fUseStavCf(fFitPartialAnalysisCollection[0]->GetUseStavCf())
 {
 
   //set fFitPartialAnalysisNumber in each FitPartialAnalysis object
@@ -91,7 +91,7 @@ FitPairAnalysis::FitPairAnalysis(TString aAnalysisName, vector<FitPartialAnalysi
 
 
 //________________________________________________________________________________________________________________
-FitPairAnalysis::FitPairAnalysis(TString aFileLocationBase, AnalysisType aAnalysisType, CentralityType aCentralityType, AnalysisRunType aRunType, int aNFitPartialAnalysis, TString aDirNameModifier, bool aUseNumRotPar2InsteadOfDen, bool aIncludeSingletAndTriplet) :
+FitPairAnalysis::FitPairAnalysis(TString aFileLocationBase, AnalysisType aAnalysisType, CentralityType aCentralityType, AnalysisRunType aRunType, int aNFitPartialAnalysis, TString aDirNameModifier, bool aUseStavCf, bool aIncludeSingletAndTriplet) :
   fAnalysisRunType(aRunType),
   fAnalysisName(0),
   fAnalysisDirectoryName(""),
@@ -133,7 +133,7 @@ FitPairAnalysis::FitPairAnalysis(TString aFileLocationBase, AnalysisType aAnalys
   fResidualCollection(nullptr),
   fPrimaryWithResiduals(0),
 
-  fUseNumRotPar2InsteadOfDen(aUseNumRotPar2InsteadOfDen)
+  fUseStavCf(aUseStavCf)
 {
   fAnalysisName = TString(cAnalysisBaseTags[fAnalysisType]) + TString(cCentralityTags[fCentralityType]);
 
@@ -155,7 +155,7 @@ FitPairAnalysis::FitPairAnalysis(TString aFileLocationBase, AnalysisType aAnalys
 
     TString tFitPartialAnalysisName = fAnalysisName + cBFieldTags[tBFieldType];
 
-    FitPartialAnalysis* tFitPartialAnalysis = new FitPartialAnalysis(tFileLocation, tFitPartialAnalysisName, fAnalysisType, fCentralityType, tBFieldType, fAnalysisRunType, aDirNameModifier, fUseNumRotPar2InsteadOfDen, aIncludeSingletAndTriplet);
+    FitPartialAnalysis* tFitPartialAnalysis = new FitPartialAnalysis(tFileLocation, tFitPartialAnalysisName, fAnalysisType, fCentralityType, tBFieldType, fAnalysisRunType, aDirNameModifier, fUseStavCf, aIncludeSingletAndTriplet);
 
     fFitPartialAnalysisCollection.push_back(tFitPartialAnalysis);
   } 
@@ -175,7 +175,7 @@ FitPairAnalysis::FitPairAnalysis(TString aFileLocationBase, AnalysisType aAnalys
 }
 
 //________________________________________________________________________________________________________________
-FitPairAnalysis::FitPairAnalysis(TString aFileLocationBase, TString aFileLocationBaseMC, AnalysisType aAnalysisType, CentralityType aCentralityType, AnalysisRunType aRunType, int aNFitPartialAnalysis, TString aDirNameModifier, bool aUseNumRotPar2InsteadOfDen, bool aIncludeSingletAndTriplet) :
+FitPairAnalysis::FitPairAnalysis(TString aFileLocationBase, TString aFileLocationBaseMC, AnalysisType aAnalysisType, CentralityType aCentralityType, AnalysisRunType aRunType, int aNFitPartialAnalysis, TString aDirNameModifier, bool aUseStavCf, bool aIncludeSingletAndTriplet) :
   fAnalysisRunType(aRunType),
   fAnalysisName(0),
   fAnalysisDirectoryName(""),
@@ -217,7 +217,7 @@ FitPairAnalysis::FitPairAnalysis(TString aFileLocationBase, TString aFileLocatio
   fResidualCollection(nullptr),
   fPrimaryWithResiduals(0),
 
-  fUseNumRotPar2InsteadOfDen(aUseNumRotPar2InsteadOfDen)
+  fUseStavCf(aUseStavCf)
 {
   fAnalysisName = TString(cAnalysisBaseTags[fAnalysisType]) + TString(cCentralityTags[fCentralityType]);
 
@@ -242,7 +242,7 @@ FitPairAnalysis::FitPairAnalysis(TString aFileLocationBase, TString aFileLocatio
 
     TString tFitPartialAnalysisName = fAnalysisName + cBFieldTags[tBFieldType];
 
-    FitPartialAnalysis* tFitPartialAnalysis = new FitPartialAnalysis(tFileLocation, tFileLocationMC, tFitPartialAnalysisName, fAnalysisType, fCentralityType, tBFieldType, fAnalysisRunType, aDirNameModifier, fUseNumRotPar2InsteadOfDen, aIncludeSingletAndTriplet);
+    FitPartialAnalysis* tFitPartialAnalysis = new FitPartialAnalysis(tFileLocation, tFileLocationMC, tFitPartialAnalysisName, fAnalysisType, fCentralityType, tBFieldType, fAnalysisRunType, aDirNameModifier, fUseStavCf, aIncludeSingletAndTriplet);
 
     fFitPartialAnalysisCollection.push_back(tFitPartialAnalysis);
   } 

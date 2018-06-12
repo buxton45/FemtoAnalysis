@@ -29,7 +29,7 @@ int main(int argc, char **argv)
 
   double tMaxFitKStar=0.3;
 
-  bool bUseNumRotPar2InsteadOfDen=false;
+  bool bUseStavCf=false;
   //*****************************************
 
   //--Save options
@@ -126,8 +126,8 @@ int main(int argc, char **argv)
 
 //-----------------------------------------------------------------------------
 
-  FitGeneratorAndDraw* tLamKchP = new FitGeneratorAndDraw(tFileLocationBase, tFileLocationBaseMC, tAnType, tCentType, tAnRunType, tNPartialAnalysis, tGenType, tShareLambdaParams, tAllShareSingleLambdaParam, "", bUseNumRotPar2InsteadOfDen);
-//  FitGeneratorAndDraw* tLamKchP = new FitGeneratorAndDraw(tFileLocationBase, tFileLocationBaseMC, tAnType, {k0010,k1030}, tAnRunType, tNPartialAnalysis, tGenType, tShareLambdaParams, tAllShareSingleLambdaParam, "", bUseNumRotPar2InsteadOfDen);
+  FitGeneratorAndDraw* tLamKchP = new FitGeneratorAndDraw(tFileLocationBase, tFileLocationBaseMC, tAnType, tCentType, tAnRunType, tNPartialAnalysis, tGenType, tShareLambdaParams, tAllShareSingleLambdaParam, "", bUseStavCf);
+//  FitGeneratorAndDraw* tLamKchP = new FitGeneratorAndDraw(tFileLocationBase, tFileLocationBaseMC, tAnType, {k0010,k1030}, tAnRunType, tNPartialAnalysis, tGenType, tShareLambdaParams, tAllShareSingleLambdaParam, "", bUseStavCf);
 //  tLamKchP->SetRadiusStartValues({3.0,4.0,5.0});
 //  tLamKchP->SetRadiusLimits({{0.,10.},{0.,10.},{0.,10.}});
   tLamKchP->SetSaveLocationBase(tSaveDirectoryBase,tSaveNameModifier);

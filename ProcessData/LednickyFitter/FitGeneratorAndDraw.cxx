@@ -13,16 +13,16 @@ ClassImp(FitGeneratorAndDraw)
 
 
 //________________________________________________________________________________________________________________
-FitGeneratorAndDraw::FitGeneratorAndDraw(TString aFileLocationBase, TString aFileLocationBaseMC, AnalysisType aAnalysisType, const vector<CentralityType> &aCentralityTypes, AnalysisRunType aRunType, int aNPartialAnalysis, FitGeneratorType aGeneratorType, bool aShareLambdaParams, bool aAllShareSingleLambdaParam, TString aDirNameModifier, bool aUseNumRotPar2InsteadOfDen) :
-  FitGenerator(aFileLocationBase, aFileLocationBaseMC, aAnalysisType, aCentralityTypes, aRunType, aNPartialAnalysis, aGeneratorType, aShareLambdaParams, aAllShareSingleLambdaParam, aDirNameModifier, aUseNumRotPar2InsteadOfDen)
+FitGeneratorAndDraw::FitGeneratorAndDraw(TString aFileLocationBase, TString aFileLocationBaseMC, AnalysisType aAnalysisType, const vector<CentralityType> &aCentralityTypes, AnalysisRunType aRunType, int aNPartialAnalysis, FitGeneratorType aGeneratorType, bool aShareLambdaParams, bool aAllShareSingleLambdaParam, TString aDirNameModifier, bool aUseStavCf) :
+  FitGenerator(aFileLocationBase, aFileLocationBaseMC, aAnalysisType, aCentralityTypes, aRunType, aNPartialAnalysis, aGeneratorType, aShareLambdaParams, aAllShareSingleLambdaParam, aDirNameModifier, aUseStavCf)
 {
 
 }
 
 
 //________________________________________________________________________________________________________________
-FitGeneratorAndDraw::FitGeneratorAndDraw(TString aFileLocationBase, TString aFileLocationBaseMC, AnalysisType aAnalysisType, CentralityType aCentralityType, AnalysisRunType aRunType, int aNPartialAnalysis, FitGeneratorType aGeneratorType, bool aShareLambdaParams, bool aAllShareSingleLambdaParam, TString aDirNameModifier, bool aUseNumRotPar2InsteadOfDen) :
-  FitGenerator(aFileLocationBase, aFileLocationBaseMC, aAnalysisType, aCentralityType, aRunType, aNPartialAnalysis, aGeneratorType, aShareLambdaParams, aAllShareSingleLambdaParam, aDirNameModifier, aUseNumRotPar2InsteadOfDen)
+FitGeneratorAndDraw::FitGeneratorAndDraw(TString aFileLocationBase, TString aFileLocationBaseMC, AnalysisType aAnalysisType, CentralityType aCentralityType, AnalysisRunType aRunType, int aNPartialAnalysis, FitGeneratorType aGeneratorType, bool aShareLambdaParams, bool aAllShareSingleLambdaParam, TString aDirNameModifier, bool aUseStavCf) :
+  FitGenerator(aFileLocationBase, aFileLocationBaseMC, aAnalysisType, aCentralityType, aRunType, aNPartialAnalysis, aGeneratorType, aShareLambdaParams, aAllShareSingleLambdaParam, aDirNameModifier, aUseStavCf)
 {
 
 }

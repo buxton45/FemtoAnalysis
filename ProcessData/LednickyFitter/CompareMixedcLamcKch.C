@@ -85,14 +85,14 @@ CfHeavy* BuildMixedCfHeavy(int aAnNum, FitGenerator* aFG1, FitGenerator* aFG2, b
   TString tCfHeavyName = "CfHeavy";
   TString tAnInfo1 = TString(cAnalysisBaseTags[tAnType1]);
   TString tAnInfo2 = TString(cAnalysisBaseTags[tAnType2]);
-  if(aFG1->GetFitSharedAnalyses()->GetFitPairAnalysis(aAnNum)->GetUseNumRotPar2InsteadOfDen() && !aUseNum1) 
+  if(aFG1->GetFitSharedAnalyses()->GetFitPairAnalysis(aAnNum)->GetUseStavCf() && !aUseNum1) 
   {
-    tAnInfo1 += TString("Num_{Stan}");
+    tAnInfo1 += TString("Num_{Stav}");
   }
   else tAnInfo1 += TString(tUseNumTags[aUseNum1]);
-  if(aFG2->GetFitSharedAnalyses()->GetFitPairAnalysis(aAnNum)->GetUseNumRotPar2InsteadOfDen() && !aUseNum2) 
+  if(aFG2->GetFitSharedAnalyses()->GetFitPairAnalysis(aAnNum)->GetUseStavCf() && !aUseNum2) 
   {
-    tAnInfo2 += TString("Num_{Stan}");
+    tAnInfo2 += TString("Num_{Stav}");
   }
   else tAnInfo2 += TString(tUseNumTags[aUseNum2]);
 
@@ -149,14 +149,14 @@ TCanvas* DrawKStarCfs(FitGenerator* aFG1, FitGenerator* aFG2, bool aUseNum1=true
   TString tCanvasName = "canKStarCfs";
   TString tAnInfo1 = TString(cAnalysisBaseTags[tAnType1]);
   TString tAnInfo2 = TString(cAnalysisBaseTags[tAnType2]);
-  if(aFG1->GetFitSharedAnalyses()->GetFitPairAnalysis(0)->GetUseNumRotPar2InsteadOfDen() && !aUseNum1) 
+  if(aFG1->GetFitSharedAnalyses()->GetFitPairAnalysis(0)->GetUseStavCf() && !aUseNum1) 
   {
-    tAnInfo1 += TString("Num_{Stan}");
+    tAnInfo1 += TString("Num_{Stav}");
   }
   else tAnInfo1 += TString(tUseNumTags[aUseNum1]);
-  if(aFG2->GetFitSharedAnalyses()->GetFitPairAnalysis(0)->GetUseNumRotPar2InsteadOfDen() && !aUseNum2) 
+  if(aFG2->GetFitSharedAnalyses()->GetFitPairAnalysis(0)->GetUseStavCf() && !aUseNum2) 
   {
-    tAnInfo2 += TString("Num_{Stan}");
+    tAnInfo2 += TString("Num_{Stav}");
   }
   else tAnInfo2 += TString(tUseNumTags[aUseNum2]);
 
@@ -204,21 +204,21 @@ TCanvas* DrawKStarCfs(FitGenerator* aFG1, FitGenerator* aFG2, bool aUseNum1=true
       //---------------------------------------------------------------------------------------------------------
       tAnInfo1 = TString(cAnalysisRootTags[tAnType1]);
       tAnInfo2 = TString(cAnalysisRootTags[tAnType2]);
-      if(aFG1->GetFitSharedAnalyses()->GetFitPairAnalysis(tAnalysisNumber)->GetUseNumRotPar2InsteadOfDen() && !aUseNum1) 
+      if(aFG1->GetFitSharedAnalyses()->GetFitPairAnalysis(tAnalysisNumber)->GetUseStavCf() && !aUseNum1) 
       {
-        tAnInfo1 += TString("Num_{Stan}");
+        tAnInfo1 += TString("Num_{Stav}");
       }
       else tAnInfo1 += TString(tUseNumTags[aUseNum1]);
-      if(aFG2->GetFitSharedAnalyses()->GetFitPairAnalysis(tAnalysisNumber)->GetUseNumRotPar2InsteadOfDen() && !aUseNum2) 
+      if(aFG2->GetFitSharedAnalyses()->GetFitPairAnalysis(tAnalysisNumber)->GetUseStavCf() && !aUseNum2) 
       {
-        tAnInfo2 += TString("Num_{Stan}");
+        tAnInfo2 += TString("Num_{Stav}");
       }
       else tAnInfo2 += TString(tUseNumTags[aUseNum2]);
 
 
       tTextAnType = TString::Format("%s / %s", tAnInfo1.Data(), tAnInfo2.Data());
 
-      TPaveText* tAnTypeName = tCanPart->SetupTPaveText(tTextAnType,i,j,0.8,0.85);
+      TPaveText* tAnTypeName = tCanPart->SetupTPaveText(tTextAnType,i,j,0.70,0.85);
       tCanPart->AddPadPaveText(tAnTypeName,i,j);
 
       TString tTextCentrality = TString(cPrettyCentralityTags[tCentType1]);
@@ -229,8 +229,8 @@ TCanvas* DrawKStarCfs(FitGenerator* aFG1, FitGenerator* aFG2, bool aUseNum1=true
 
   tCanPart->SetDrawUnityLine(true);
   tCanPart->DrawAll();
-  tCanPart->DrawXaxisTitle("k* (GeV/c)");
-  tCanPart->DrawYaxisTitle("C(k*)",43,25,0.05,0.75);
+  tCanPart->DrawXaxisTitle("#it{k}* (GeV/#it{c})");
+  tCanPart->DrawYaxisTitle("#it{C}(#it{k}*)",43,25,0.05,0.75);
 
   return tCanPart->GetCanvas();
 }
@@ -252,14 +252,14 @@ TCanvas* DrawNumDenRatiosPartAn(bool aDrawNum, FitGenerator* aFG1, FitGenerator*
   const char* const tUseNumTags[2] = {"Den", "Num"};
   TString tAnInfo1 = TString(cAnalysisBaseTags[tAnType1]);
   TString tAnInfo2 = TString(cAnalysisBaseTags[tAnType2]);
-  if(aFG1->GetFitSharedAnalyses()->GetFitPairAnalysis(0)->GetUseNumRotPar2InsteadOfDen() && !aDrawNum) 
+  if(aFG1->GetFitSharedAnalyses()->GetFitPairAnalysis(0)->GetUseStavCf() && !aDrawNum) 
   {
-    tAnInfo1 += TString("Num_{Stan}");
+    tAnInfo1 += TString("Num_{Stav}");
   }
   else tAnInfo1 += TString(tUseNumTags[aDrawNum]);
-  if(aFG2->GetFitSharedAnalyses()->GetFitPairAnalysis(0)->GetUseNumRotPar2InsteadOfDen() && !aDrawNum) 
+  if(aFG2->GetFitSharedAnalyses()->GetFitPairAnalysis(0)->GetUseStavCf() && !aDrawNum) 
   {
-    tAnInfo2 += TString("Num_{Stan}");
+    tAnInfo2 += TString("Num_{Stav}");
   }
   else tAnInfo2 += TString(tUseNumTags[aDrawNum]);
 
@@ -317,14 +317,14 @@ TCanvas* DrawNumDenRatiosPartAn(bool aDrawNum, FitGenerator* aFG1, FitGenerator*
 
       tAnInfo1 = TString(cAnalysisRootTags[tAnType1]);
       tAnInfo2 = TString(cAnalysisRootTags[tAnType2]);
-      if(aFG1->GetFitSharedAnalyses()->GetFitPairAnalysis(tAnalysisNumber)->GetUseNumRotPar2InsteadOfDen() && !aDrawNum) 
+      if(aFG1->GetFitSharedAnalyses()->GetFitPairAnalysis(tAnalysisNumber)->GetUseStavCf() && !aDrawNum) 
       {
-        tAnInfo1 += TString("Num_{Stan}");
+        tAnInfo1 += TString("Num_{Stav}");
       }
       else tAnInfo1 += TString(tUseNumTags[aDrawNum]);
-      if(aFG2->GetFitSharedAnalyses()->GetFitPairAnalysis(tAnalysisNumber)->GetUseNumRotPar2InsteadOfDen() && !aDrawNum) 
+      if(aFG2->GetFitSharedAnalyses()->GetFitPairAnalysis(tAnalysisNumber)->GetUseStavCf() && !aDrawNum) 
       {
-        tAnInfo2 += TString("Num_{Stan}");
+        tAnInfo2 += TString("Num_{Stav}");
       }
       else tAnInfo2 += TString(tUseNumTags[aDrawNum]);
       TString tTextAnType = TString::Format("%s / %s (%s)", tAnInfo1.Data(), tAnInfo2.Data(), cBFieldTags[tPartAn1->GetBFieldType()]);
@@ -342,7 +342,7 @@ TCanvas* DrawNumDenRatiosPartAn(bool aDrawNum, FitGenerator* aFG1, FitGenerator*
 
   tCanPart->SetDrawUnityLine(true);
   tCanPart->DrawAll();
-  tCanPart->DrawXaxisTitle("k* (GeV/c)");
+  tCanPart->DrawXaxisTitle("#it{k}* (GeV/#it{c})");
   if(aDrawNum) tCanPart->DrawYaxisTitle("Num1/Num2",43,25,0.05,0.75);
   else tCanPart->DrawYaxisTitle("Den1/Den2",43,25,0.05,0.75);
 
@@ -362,14 +362,14 @@ TCanvas* DrawNumDenRatiosAn(bool aDrawNum, FitGenerator* aFG1, FitGenerator* aFG
   const char* const tUseNumTags[2] = {"Den", "Num"};
   TString tAnInfo1 = TString(cAnalysisBaseTags[tAnType1]);
   TString tAnInfo2 = TString(cAnalysisBaseTags[tAnType2]);
-  if(aFG1->GetFitSharedAnalyses()->GetFitPairAnalysis(0)->GetUseNumRotPar2InsteadOfDen() && !aDrawNum) 
+  if(aFG1->GetFitSharedAnalyses()->GetFitPairAnalysis(0)->GetUseStavCf() && !aDrawNum) 
   {
-    tAnInfo1 += TString("Num_{Stan}");
+    tAnInfo1 += TString("Num_{Stav}");
   }
   else tAnInfo1 += TString(tUseNumTags[aDrawNum]);
-  if(aFG2->GetFitSharedAnalyses()->GetFitPairAnalysis(0)->GetUseNumRotPar2InsteadOfDen() && !aDrawNum) 
+  if(aFG2->GetFitSharedAnalyses()->GetFitPairAnalysis(0)->GetUseStavCf() && !aDrawNum) 
   {
-    tAnInfo2 += TString("Num_{Stan}");
+    tAnInfo2 += TString("Num_{Stav}");
   }
   else tAnInfo2 += TString(tUseNumTags[aDrawNum]);
 
@@ -418,14 +418,14 @@ TCanvas* DrawNumDenRatiosAn(bool aDrawNum, FitGenerator* aFG1, FitGenerator* aFG
 
       tAnInfo1 = TString(cAnalysisRootTags[tAnType1]);
       tAnInfo2 = TString(cAnalysisRootTags[tAnType2]);
-      if(aFG1->GetFitSharedAnalyses()->GetFitPairAnalysis(tAnalysisNumber)->GetUseNumRotPar2InsteadOfDen() && !aDrawNum) 
+      if(aFG1->GetFitSharedAnalyses()->GetFitPairAnalysis(tAnalysisNumber)->GetUseStavCf() && !aDrawNum) 
       {
-        tAnInfo1 += TString("Num_{Stan}");
+        tAnInfo1 += TString("Num_{Stav}");
       }
       else tAnInfo1 += TString(tUseNumTags[aDrawNum]);
-      if(aFG2->GetFitSharedAnalyses()->GetFitPairAnalysis(tAnalysisNumber)->GetUseNumRotPar2InsteadOfDen() && !aDrawNum) 
+      if(aFG2->GetFitSharedAnalyses()->GetFitPairAnalysis(tAnalysisNumber)->GetUseStavCf() && !aDrawNum) 
       {
-        tAnInfo2 += TString("Num_{Stan}");
+        tAnInfo2 += TString("Num_{Stav}");
       }
       else tAnInfo2 += TString(tUseNumTags[aDrawNum]);
       TString tTextAnType = TString::Format("%s / %s", tAnInfo1.Data(), tAnInfo2.Data());
@@ -443,7 +443,7 @@ TCanvas* DrawNumDenRatiosAn(bool aDrawNum, FitGenerator* aFG1, FitGenerator* aFG
 
   tCanPart->SetDrawUnityLine(true);
   tCanPart->DrawAll();
-  tCanPart->DrawXaxisTitle("k* (GeV/c)");
+  tCanPart->DrawXaxisTitle("#it{k}* (GeV/#it{c})");
   if(aDrawNum) tCanPart->DrawYaxisTitle("Num1/Num2",43,25,0.05,0.75);
   else tCanPart->DrawYaxisTitle("Den1/Den2",43,25,0.05,0.75);
 
@@ -464,21 +464,21 @@ void Run1vs2(FitGenerator* aFG1, FitGenerator* aFG2, bool aUseNum1, bool aUseNum
 
   //-----------------------------------------------------------------------------------------------
   bool tSwitchGenOrder = false;
-  if(!aUseNum1 && !aUseNum2) //both false => both denominators, but one or both could be NumRotPar2
+  if(!aUseNum1 && !aUseNum2) //both false => both denominators, but one or both could be NumStav
   {
-    bool tUseNumRotPar2_1 = aFG1->GetFitSharedAnalyses()->GetFitPairAnalysis(0)->GetUseNumRotPar2InsteadOfDen();
-    bool tUseNumRotPar2_2 = aFG2->GetFitSharedAnalyses()->GetFitPairAnalysis(0)->GetUseNumRotPar2InsteadOfDen();
-    if(tUseNumRotPar2_1 == tUseNumRotPar2_2)  //both Dens, or both NumRotPar2, either way, order doesn't matter
+    bool tUseStavCf_1 = aFG1->GetFitSharedAnalyses()->GetFitPairAnalysis(0)->GetUseStavCf();
+    bool tUseStavCf_2 = aFG2->GetFitSharedAnalyses()->GetFitPairAnalysis(0)->GetUseStavCf();
+    if(tUseStavCf_1 == tUseStavCf_2)  //both Dens, or both NumStav, either way, order doesn't matter
     {
       tSwitchGenOrder = false;
     }
     else
     {
-      if(tUseNumRotPar2_1) //aFG1 is NumRotPar2, and aFG2 is Den
+      if(tUseStavCf_1) //aFG1 is NumStav, and aFG2 is Den
       {
         tSwitchGenOrder = false;
       }
-      else if(tUseNumRotPar2_2) //aFG2 is NumRotPar2, and aFG1 is Den
+      else if(tUseStavCf_2) //aFG2 is NumStav, and aFG1 is Den
       {
         tSwitchGenOrder = true;
       }
@@ -491,11 +491,11 @@ void Run1vs2(FitGenerator* aFG1, FitGenerator* aFG2, bool aUseNum1, bool aUseNum
   }
   else
   {
-    if(aUseNum1)  //aFG1 is Num, and aFG2 is Den or NumRotPar2
+    if(aUseNum1)  //aFG1 is Num, and aFG2 is Den or NumStav
     {
       tSwitchGenOrder = false;
     }
-    else if(aUseNum2)  //aFG2 is Num, and aFG1 is Den or NumRotPar2
+    else if(aUseNum2)  //aFG2 is Num, and aFG1 is Den or NumStav
     {
       tSwitchGenOrder = true;
     }
@@ -562,9 +562,14 @@ void RunAll1vs2(FitGenerator* aFG1, FitGenerator* aFG2,
                 bool aZoom, bool aDrawKStarCfs, bool aDrawNumDenRatiosPartAn, bool aDrawNumDenRatiosAn,
                 bool aSave, TString aSaveDir="")
 {
-  Run1vs2(aFG1, aFG2, true, true,
-          aZoom, aDrawKStarCfs, aDrawNumDenRatiosPartAn, aDrawNumDenRatiosAn,
-          aSave, aSaveDir);
+/*
+void Run1vs2(FitGenerator* aFG1, FitGenerator* aFG2, bool aUseNum1, bool aUseNum2, 
+             bool aZoom, bool aDrawKStarCfs, bool aDrawNumDenRatiosPartAn, bool aDrawNumDenRatiosAn,
+             bool aSave, TString aSaveDir="")
+*/
+  if(aFG1 != aFG2) Run1vs2(aFG1, aFG2, true, true,
+                           aZoom, aDrawKStarCfs, aDrawNumDenRatiosPartAn, aDrawNumDenRatiosAn,
+                           aSave, aSaveDir);
 
   //Only have to run DrawKStarCfs for other permutations
   Run1vs2(aFG1, aFG2, true, false,
@@ -575,9 +580,9 @@ void RunAll1vs2(FitGenerator* aFG1, FitGenerator* aFG2,
           aZoom, true, false, false,
           aSave, aSaveDir);
 
-  Run1vs2(aFG1, aFG2, false, false,
-          aZoom, true, false, false,
-          aSave, aSaveDir);
+  if(aFG1 != aFG2) Run1vs2(aFG1, aFG2, false, false,
+                           aZoom, true, false, false,
+                           aSave, aSaveDir);
 
 }
 
@@ -606,18 +611,8 @@ int main(int argc, char **argv)
   TString tResultsDate;
   tResultsDate = "20180416";
 
-  bool bUseNumRotPar2InsteadOfDen_LamKchP = false;
-  bool bUseNumRotPar2InsteadOfDen_ALamKchM = false;
-
-  bool bUseNumRotPar2InsteadOfDen_LamKchM = false;
-  bool bUseNumRotPar2InsteadOfDen_ALamKchP = false;
-
-  bool bUseNumRotPar2InsteadOfDen_LamK0 = false;
-  bool bUseNumRotPar2InsteadOfDen_ALamK0 = false;
-
-
   bool SaveImages = false;
-  TString tSaveDir = TString::Format("/home/jesse/Analysis/Presentations/GroupMeetings/20180607/Figures/%s/", tResultsDate.Data());
+  TString tSaveDir = TString::Format("/home/jesse/Analysis/Presentations/AliFemto/20180613/Figures/%s/", tResultsDate.Data());
 
   //-----------------------------------------------------------------------------
   TString tDirBase_cLamcKch = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_%s_%s/", "cLamcKch" , tResultsDate.Data());
@@ -637,21 +632,21 @@ int main(int argc, char **argv)
   bool bDrawNumDenRatiosPartAn = false;
   bool bDrawNumDenRatiosAn = true;
 
-  bool bDrawNumRotPar2OverBgd = false;
-  if(bDrawNumRotPar2OverBgd) assert(!bUseNumRotPar2InsteadOfDen_LamKchP && !bUseNumRotPar2InsteadOfDen_ALamKchM && 
-                                    !bUseNumRotPar2InsteadOfDen_LamKchM && !bUseNumRotPar2InsteadOfDen_ALamKchP && 
-                                    !bUseNumRotPar2InsteadOfDen_LamK0 && !bUseNumRotPar2InsteadOfDen_ALamK0);
+  bool bUseStavCf = false;
+  bool bDrawNumStavOverBgd = false;
+  if(bDrawNumStavOverBgd) assert(!bUseStavCf);  //Must have !bUseStavCf so that original FitGenerator objects (ex. tLamKchP) contain the denominators
+                                                //to be used (with, ex. tLamKchP_StavCf) to generate NumStav/Bgd
 
   //-----------------------------------------------------------------------------
   FitGenerator *tLamKchP, *tLamKchM, *tLamK0;
   FitGenerator *tALamKchM, *tALamKchP, *tALamK0;
 
   tLamKchP = new FitGenerator(tFileLocationBase_cLamcKch, tFileLocationBaseMC_cLamcKch, kLamKchP, tCentType, 
-                                            tAnRunType, tNPartialAnalysis, tGenType, false, false, "", bUseNumRotPar2InsteadOfDen_LamKchP);
+                                            tAnRunType, tNPartialAnalysis, tGenType, false, false, "", bUseStavCf);
   tLamKchM = new FitGenerator(tFileLocationBase_cLamcKch, tFileLocationBaseMC_cLamcKch, kLamKchM, tCentType, 
-                                            tAnRunType, tNPartialAnalysis, tGenType, false, false, "", bUseNumRotPar2InsteadOfDen_LamKchM);
+                                            tAnRunType, tNPartialAnalysis, tGenType, false, false, "", bUseStavCf);
   tLamK0 =   new FitGenerator(tFileLocationBase_cLamK0, tFileLocationBaseMC_cLamK0, kLamK0, tCentType, 
-                                            tAnRunType, tNPartialAnalysis, tGenType, false, false, "", bUseNumRotPar2InsteadOfDen_LamK0);
+                                            tAnRunType, tNPartialAnalysis, tGenType, false, false, "", bUseStavCf);
 
   vector<FitGenerator*> tFGVec(0);
   if(tGenType == kPairwConj)
@@ -663,11 +658,11 @@ int main(int argc, char **argv)
   else if(tGenType == kPair)
   {
     tALamKchM = new FitGenerator(tFileLocationBase_cLamcKch, tFileLocationBaseMC_cLamcKch, kLamKchP, tCentType, 
-                                               tAnRunType, tNPartialAnalysis, kConjPair, false, false, "", bUseNumRotPar2InsteadOfDen_ALamKchM);
+                                               tAnRunType, tNPartialAnalysis, kConjPair, false, false, "", bUseStavCf);
     tALamKchP = new FitGenerator(tFileLocationBase_cLamcKch, tFileLocationBaseMC_cLamcKch, kLamKchM, tCentType, 
-                                               tAnRunType, tNPartialAnalysis, kConjPair, false, false, "", bUseNumRotPar2InsteadOfDen_ALamKchP);
+                                               tAnRunType, tNPartialAnalysis, kConjPair, false, false, "", bUseStavCf);
     tALamK0 =   new FitGenerator(tFileLocationBase_cLamK0, tFileLocationBaseMC_cLamK0, kLamK0, tCentType, 
-                                               tAnRunType, tNPartialAnalysis, kConjPair, false, false, "", bUseNumRotPar2InsteadOfDen_ALamK0);
+                                               tAnRunType, tNPartialAnalysis, kConjPair, false, false, "", bUseStavCf);
     //--------------------------------
     tFGVec.push_back(tLamKchP);
     tFGVec.push_back(tALamKchM);
@@ -685,7 +680,7 @@ int main(int argc, char **argv)
 
   for(int i=0; i<tFGVec.size(); i++)
   {
-    for(int j=i+1; j<tFGVec.size(); j++)
+    for(int j=i; j<tFGVec.size(); j++)
     {
       RunAll1vs2(tFGVec[i], tFGVec[j],
                  bZoom, bDrawKStarCfs, bDrawNumDenRatiosPartAn, bDrawNumDenRatiosAn, 
@@ -695,45 +690,45 @@ int main(int argc, char **argv)
 
 //-------------------------------------------------------------------------------
 
-  if(bDrawNumRotPar2OverBgd)
+  if(bDrawNumStavOverBgd)
   {
-    FitGenerator* tLamKchP_RotatePar2 = new FitGenerator(tFileLocationBase_cLamcKch, tFileLocationBaseMC_cLamcKch, kLamKchP, tCentType, 
+    FitGenerator* tLamKchP_StavCf = new FitGenerator(tFileLocationBase_cLamcKch, tFileLocationBaseMC_cLamcKch, kLamKchP, tCentType, 
                                               tAnRunType, tNPartialAnalysis, tGenType, false, false, "", true);
-    FitGenerator* tLamKchM_RotatePar2 = new FitGenerator(tFileLocationBase_cLamcKch, tFileLocationBaseMC_cLamcKch, kLamKchM, tCentType, 
+    FitGenerator* tLamKchM_StavCf = new FitGenerator(tFileLocationBase_cLamcKch, tFileLocationBaseMC_cLamcKch, kLamKchM, tCentType, 
                                               tAnRunType, tNPartialAnalysis, tGenType, false, false, "", true);
-    FitGenerator* tLamK0_RotatePar2 =   new FitGenerator(tFileLocationBase_cLamK0, tFileLocationBaseMC_cLamK0, kLamK0, tCentType, 
+    FitGenerator* tLamK0_StavCf =   new FitGenerator(tFileLocationBase_cLamK0, tFileLocationBaseMC_cLamK0, kLamK0, tCentType, 
                                               tAnRunType, tNPartialAnalysis, tGenType, false, false, "", true);
 
-    Run1vs2(tLamKchP_RotatePar2, tLamKchP, false, false, 
+    Run1vs2(tLamKchP_StavCf, tLamKchP, false, false, 
             bZoom, bDrawKStarCfs, false, false, 
             SaveImages, tSaveDir);
 
-    Run1vs2(tLamKchM_RotatePar2, tLamKchM, false, false, 
+    Run1vs2(tLamKchM_StavCf, tLamKchM, false, false, 
             bZoom, bDrawKStarCfs, false, false, 
             SaveImages, tSaveDir);
 
-    Run1vs2(tLamK0_RotatePar2, tLamK0, false, false, 
+    Run1vs2(tLamK0_StavCf, tLamK0, false, false, 
             bZoom, bDrawKStarCfs, false, false, 
             SaveImages, tSaveDir);
 
     if(tGenType == kPair)
     {
-      FitGenerator* tALamKchM_RotatePar2 = new FitGenerator(tFileLocationBase_cLamcKch, tFileLocationBaseMC_cLamcKch, kLamKchP, tCentType, 
+      FitGenerator* tALamKchM_StavCf = new FitGenerator(tFileLocationBase_cLamcKch, tFileLocationBaseMC_cLamcKch, kLamKchP, tCentType, 
                                                tAnRunType, tNPartialAnalysis, kConjPair, false, false, "", true);
-      FitGenerator* tALamKchP_RotatePar2 = new FitGenerator(tFileLocationBase_cLamcKch, tFileLocationBaseMC_cLamcKch, kLamKchM, tCentType, 
+      FitGenerator* tALamKchP_StavCf = new FitGenerator(tFileLocationBase_cLamcKch, tFileLocationBaseMC_cLamcKch, kLamKchM, tCentType, 
                                                tAnRunType, tNPartialAnalysis, kConjPair, false, false, "", true);
-      FitGenerator* tALamK0_RotatePar2 =   new FitGenerator(tFileLocationBase_cLamK0, tFileLocationBaseMC_cLamK0, kLamK0, tCentType, 
+      FitGenerator* tALamK0_StavCf =   new FitGenerator(tFileLocationBase_cLamK0, tFileLocationBaseMC_cLamK0, kLamK0, tCentType, 
                                                tAnRunType, tNPartialAnalysis, kConjPair, false, false, "", true);
 
-      Run1vs2(tALamKchM_RotatePar2, tALamKchM, false, false, 
+      Run1vs2(tALamKchM_StavCf, tALamKchM, false, false, 
               bZoom, bDrawKStarCfs, false, false, 
               SaveImages, tSaveDir);
 
-      Run1vs2(tALamKchP_RotatePar2, tALamKchP, false, false, 
+      Run1vs2(tALamKchP_StavCf, tALamKchP, false, false, 
               bZoom, bDrawKStarCfs, false, false, 
               SaveImages, tSaveDir);
 
-      Run1vs2(tALamK0_RotatePar2, tALamK0, false, false, 
+      Run1vs2(tALamK0_StavCf, tALamK0, false, false, 
               bZoom, bDrawKStarCfs, false, false, 
               SaveImages, tSaveDir);
     }

@@ -51,26 +51,26 @@ class ThermCf {
 public:
 
   //Constructor, destructor, copy constructor, assignment operator
-  ThermCf(TString aFileName, TString aCfDescriptor, AnalysisType aAnalysisType, CentralityType aCentralityType, bool aCombineConj, ThermEventsType aThermEventsType, int aRebin, double aMinNorm, double aMaxNorm, bool aUseNumRotPar2InsteadOfDen=false);
+  ThermCf(TString aFileName, TString aCfDescriptor, AnalysisType aAnalysisType, CentralityType aCentralityType, bool aCombineConj, ThermEventsType aThermEventsType, int aRebin, double aMinNorm, double aMaxNorm, bool aUseStavCf=false);
   virtual ~ThermCf();
 
   static void SetStyleAndColor(TH1* aHist, int aMarkerStyle, int aColor, double aMarkerSize=0.75);
   static TH1* GetThermHist(TString aFileLocation, TString aHistName);
   static CfHeavy* CombineTwoCfHeavy(TString aName, CfHeavy* aCfHeavy1, CfHeavy* aCfHeavy2);
 
-  static CfHeavy* GetThermHeavyCf(TString aFileName, TString aCfDescriptor, AnalysisType aAnType, int aImpactParam=8, bool aCombineConj=true, bool aUseAdamEvents=false, int aRebin=2, double aMinNorm=0.32, double aMaxNorm=0.40, bool aUseNumRotPar2InsteadOfDen=false);
-  static CfHeavy* GetThermHeavyCf(TString aFileName, TString aCfDescriptor, AnalysisType aAnType, int aImpactParam=8, bool aCombineConj=true, ThermEventsType aEventsType=kMe, int aRebin=2, double aMinNorm=0.32, double aMaxNorm=0.40, bool aUseNumRotPar2InsteadOfDen=false);
-  static TH1* GetThermCf(TString aFileName, TString aCfDescriptor, AnalysisType aAnType, int aImpactParam=8, bool aCombineConj=true, ThermEventsType aEventsType=kMe, int aRebin=2, double aMinNorm=0.32, double aMaxNorm=0.40, int aMarkerStyle=20, int aColor=1, bool aUseNumRotPar2InsteadOfDen=false);
-  static TH1* GetThermCf(AnalysisType aAnType, int aImpactParam=8, bool aCombineConj=true, ThermEventsType aEventsType=kMe, int aRebin=2, double aMinNorm=0.32, double aMaxNorm=0.40, int aMarkerStyle=20, int aColor=1, bool aUseNumRotPar2InsteadOfDen=false);
+  static CfHeavy* GetThermHeavyCf(TString aFileName, TString aCfDescriptor, AnalysisType aAnType, int aImpactParam=8, bool aCombineConj=true, bool aUseAdamEvents=false, int aRebin=2, double aMinNorm=0.32, double aMaxNorm=0.40, bool aUseStavCf=false);
+  static CfHeavy* GetThermHeavyCf(TString aFileName, TString aCfDescriptor, AnalysisType aAnType, int aImpactParam=8, bool aCombineConj=true, ThermEventsType aEventsType=kMe, int aRebin=2, double aMinNorm=0.32, double aMaxNorm=0.40, bool aUseStavCf=false);
+  static TH1* GetThermCf(TString aFileName, TString aCfDescriptor, AnalysisType aAnType, int aImpactParam=8, bool aCombineConj=true, ThermEventsType aEventsType=kMe, int aRebin=2, double aMinNorm=0.32, double aMaxNorm=0.40, int aMarkerStyle=20, int aColor=1, bool aUseStavCf=false);
+  static TH1* GetThermCf(AnalysisType aAnType, int aImpactParam=8, bool aCombineConj=true, ThermEventsType aEventsType=kMe, int aRebin=2, double aMinNorm=0.32, double aMaxNorm=0.40, int aMarkerStyle=20, int aColor=1, bool aUseStavCf=false);
 
-  static CfHeavy* GetCentralityCombinedThermCfsHeavy(TString aFileName, TString aCfDescriptor, AnalysisType aAnType, CentralityType aCentType, bool aCombineConj=true, bool aUseAdamEvents=false, int aRebin=2, double aMinNorm=0.32, double aMaxNorm=0.40, bool aUseNumRotPar2InsteadOfDen=false);
-  static CfHeavy* GetCentralityCombinedThermCfsHeavy(TString aFileName, TString aCfDescriptor, AnalysisType aAnType, CentralityType aCentType, bool aCombineConj=true, ThermEventsType aEventsType=kMe, int aRebin=2, double aMinNorm=0.32, double aMaxNorm=0.40, bool aUseNumRotPar2InsteadOfDen=false);
-  static TH1* GetCentralityCombinedThermCfs(TString aFileName, TString aCfDescriptor, AnalysisType aAnType, CentralityType aCentType, bool aCombineConj=true, ThermEventsType aEventsType=kMe, int aRebin=2, double aMinNorm=0.32, double aMaxNorm=0.40, int aMarkerStyle=20, int aColor=1, bool aUseNumRotPar2InsteadOfDen=false);
-  static TH1* GetCentralityCombinedThermCfs(AnalysisType aAnType, CentralityType aCentType, bool aCombineConj=true, ThermEventsType aEventsType=kMe, int aRebin=2, double aMinNorm=0.32, double aMaxNorm=0.40, int aMarkerStyle=20, int aColor=1, bool aUseNumRotPar2InsteadOfDen=false);
+  static CfHeavy* GetCentralityCombinedThermCfsHeavy(TString aFileName, TString aCfDescriptor, AnalysisType aAnType, CentralityType aCentType, bool aCombineConj=true, bool aUseAdamEvents=false, int aRebin=2, double aMinNorm=0.32, double aMaxNorm=0.40, bool aUseStavCf=false);
+  static CfHeavy* GetCentralityCombinedThermCfsHeavy(TString aFileName, TString aCfDescriptor, AnalysisType aAnType, CentralityType aCentType, bool aCombineConj=true, ThermEventsType aEventsType=kMe, int aRebin=2, double aMinNorm=0.32, double aMaxNorm=0.40, bool aUseStavCf=false);
+  static TH1* GetCentralityCombinedThermCfs(TString aFileName, TString aCfDescriptor, AnalysisType aAnType, CentralityType aCentType, bool aCombineConj=true, ThermEventsType aEventsType=kMe, int aRebin=2, double aMinNorm=0.32, double aMaxNorm=0.40, int aMarkerStyle=20, int aColor=1, bool aUseStavCf=false);
+  static TH1* GetCentralityCombinedThermCfs(AnalysisType aAnType, CentralityType aCentType, bool aCombineConj=true, ThermEventsType aEventsType=kMe, int aRebin=2, double aMinNorm=0.32, double aMaxNorm=0.40, int aMarkerStyle=20, int aColor=1, bool aUseStavCf=false);
 
-  static CfHeavy* GetLamKchPMCombinedThermCfsHeavy(TString aFileName, TString aCfDescriptor, CentralityType aCentType, bool aUseAdamEvents=false, int aRebin=2, double aMinNorm=0.32, double aMaxNorm=0.40, bool aUseNumRotPar2InsteadOfDen=false);
-  static CfHeavy* GetLamKchPMCombinedThermCfsHeavy(TString aFileName, TString aCfDescriptor, CentralityType aCentType, ThermEventsType aEventsType=kMe, int aRebin=2, double aMinNorm=0.32, double aMaxNorm=0.40, bool aUseNumRotPar2InsteadOfDen=false);
-  static TH1* GetLamKchPMCombinedThermCfs(TString aFileName, TString aCfDescriptor, CentralityType aCentType, ThermEventsType aEventsType=kMe, int aRebin=2, double aMinNorm=0.32, double aMaxNorm=0.40, int aMarkerStyle=20, int aColor=1, bool aUseNumRotPar2InsteadOfDen=false);
+  static CfHeavy* GetLamKchPMCombinedThermCfsHeavy(TString aFileName, TString aCfDescriptor, CentralityType aCentType, bool aUseAdamEvents=false, int aRebin=2, double aMinNorm=0.32, double aMaxNorm=0.40, bool aUseStavCf=false);
+  static CfHeavy* GetLamKchPMCombinedThermCfsHeavy(TString aFileName, TString aCfDescriptor, CentralityType aCentType, ThermEventsType aEventsType=kMe, int aRebin=2, double aMinNorm=0.32, double aMaxNorm=0.40, bool aUseStavCf=false);
+  static TH1* GetLamKchPMCombinedThermCfs(TString aFileName, TString aCfDescriptor, CentralityType aCentType, ThermEventsType aEventsType=kMe, int aRebin=2, double aMinNorm=0.32, double aMaxNorm=0.40, int aMarkerStyle=20, int aColor=1, bool aUseStavCf=false);
 
   //------------------------------------------------------------------------
 
@@ -98,7 +98,7 @@ public:
   void SetMinNorm(double aMin);
   void SetMaxNorm(double aMax);
 
-  void SetUseNumRotPar2InsteadOfDen(bool aUse);
+  void SetUseStavCf(bool aUse);
   void SetSpecificImpactParam(int aImpactParam, bool aCombineImpactParams=true);
 
 private:
@@ -119,7 +119,7 @@ private:
   double fMinNorm;
   double fMaxNorm;
 
-  bool fUseNumRotPar2InsteadOfDen;
+  bool fUseStavCf;
 
   CfHeavy *fThermCfHeavy;
 
@@ -150,7 +150,7 @@ inline void ThermCf::SetRebin(int aRebin) {fRebin=aRebin; BuildThermCf();}
 inline void ThermCf::SetMinNorm(double aMin) {fMinNorm=aMin; BuildThermCf();}
 inline void ThermCf::SetMaxNorm(double aMax) {fMaxNorm=aMax; BuildThermCf();}
 
-inline void ThermCf::SetUseNumRotPar2InsteadOfDen(bool aUse) {fUseNumRotPar2InsteadOfDen = aUse; BuildThermCf();}
+inline void ThermCf::SetUseStavCf(bool aUse) {fUseStavCf = aUse; BuildThermCf();}
 inline void ThermCf::SetSpecificImpactParam(int aImpactParam, bool aCombineImpactParams) {fImpactParam=aImpactParam; fCombineImpactParams=aCombineImpactParams; BuildThermCf();}
 
 #endif
