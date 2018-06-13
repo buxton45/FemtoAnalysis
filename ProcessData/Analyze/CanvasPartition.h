@@ -80,6 +80,8 @@ public:
   void AppendGraphDrawOption(int aPadNx, int aPadNy, int aGraphNum, TString aOption);
   void ReplaceGraphDrawOption(int aPadNx, int aPadNy, int aGraphNum, TString aOption);
 
+  vector<double> GetAxesRanges();
+
 protected:
   bool fDrawUnityLine;
   bool fDrawOptStat;
@@ -118,6 +120,8 @@ inline double CanvasPartition::GetYScaleFactor(int aNx, int aNy) {return fYScale
 inline TObjArray* CanvasPartition::GetGraphsInPad(int aNx, int aNy) {return ((TObjArray*)fGraphs->At(aNx + aNy*fNx));}
 inline void CanvasPartition::AppendGraphDrawOption(int aPadNx, int aPadNy, int aGraphNum, TString aOption) {fGraphsDrawOptions[aPadNx + aPadNy*fNx][aGraphNum] += aOption;}
 inline void CanvasPartition::ReplaceGraphDrawOption(int aPadNx, int aPadNy, int aGraphNum, TString aOption) {fGraphsDrawOptions[aPadNx + aPadNy*fNx][aGraphNum] = aOption;}
+
+inline vector<double> CanvasPartition::GetAxesRanges() {return vector<double>{fXaxisRangeLow, fXaxisRangeHigh, fYaxisRangeLow, fYaxisRangeHigh};}
 
 //________________________________________________________________________________________________________________
 template<typename T>
