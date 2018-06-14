@@ -46,7 +46,7 @@ int main(int argc, char **argv)
 
   int tImpactParam = 5;
   //-----------------------------------------
-  TString tEventsDirectory, tMatricesSaveFileName, tPairFractionSaveName, tSingleParticlesSaveName, tCorrelationFunctionsSaveName;
+  TString tEventsDirectory, tMatricesSaveFileName, tPairFractionSaveName, tSingleParticlesSaveName, tCorrelationFunctionsSaveName, tFlowSaveName;
 
   if(bRunFull)
   {
@@ -55,6 +55,7 @@ int main(int argc, char **argv)
     tPairFractionSaveName = TString::Format("/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b%d/PairFractionsv2", tImpactParam);
     tSingleParticlesSaveName = TString::Format("/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b%d/SingleParticleAnalysesv2", tImpactParam);
     tCorrelationFunctionsSaveName  = TString::Format("/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b%d/CorrelationFunctions", tImpactParam);
+    tFlowSaveName  = TString::Format("/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b%d/FlowGraphs", tImpactParam);
   }
   else
   {
@@ -63,6 +64,7 @@ int main(int argc, char **argv)
     tPairFractionSaveName = "/home/jesse/Analysis/ReducedTherminator2Events/test/testPairFractionsv2";
     tSingleParticlesSaveName = "/home/jesse/Analysis/ReducedTherminator2Events/test/testSingleParticleAnalysesv2";
     tCorrelationFunctionsSaveName  = "/home/jesse/Analysis/ReducedTherminator2Events/test/testCorrelationFunctions";
+    tFlowSaveName  = "/home/jesse/Analysis/ReducedTherminator2Events/test/testFlowGraphs";
   }
 
   if(bOnlyRunOverJaiEvents) 
@@ -73,6 +75,7 @@ int main(int argc, char **argv)
     tPairFractionSaveName += TString("_JaiEventsOnly");
     tSingleParticlesSaveName += TString("_JaiEventsOnly");
     tCorrelationFunctionsSaveName += TString("_JaiEventsOnly");
+    tFlowSaveName += TString("_JaiEventsOnly");
   }
 
   if(bRotateEventsByRandomAzimuthalAngles)
@@ -81,6 +84,7 @@ int main(int argc, char **argv)
     tPairFractionSaveName += TString("_RandomEPs");
     tSingleParticlesSaveName += TString("_RandomEPs");
     tCorrelationFunctionsSaveName += TString("_RandomEPs");
+    tFlowSaveName += TString("_RandomEPs");
   }
 
   if(bBuildArtificialV3Signal)
@@ -89,6 +93,7 @@ int main(int argc, char **argv)
     tPairFractionSaveName += TString("_ArtificialV3Signal");
     tSingleParticlesSaveName += TString("_ArtificialV3Signal");
     tCorrelationFunctionsSaveName += TString("_ArtificialV3Signal");
+    tFlowSaveName += TString("_ArtificialV3Signal");
   }
 
   if(bUnitWeightCfNums) tCorrelationFunctionsSaveName += TString("_NumWeight1");
@@ -115,6 +120,7 @@ int main(int argc, char **argv)
   tSimpleThermAnalysis->SetTransformMatricesSaveName(tMatricesSaveFileName);
   tSimpleThermAnalysis->SetSingleParticlesSaveName(tSingleParticlesSaveName);
   tSimpleThermAnalysis->SetCorrelationFunctionsSaveName(tCorrelationFunctionsSaveName);
+  tSimpleThermAnalysis->SetFlowAnalysisSaveName(tFlowSaveName);
   if(tMaxPrimaryDecayLength > 0.) tSimpleThermAnalysis->SetMaxPrimaryDecayLength(tMaxPrimaryDecayLength);
 
   tSimpleThermAnalysis->SetCheckCoECoM(bCheckCoECoM);

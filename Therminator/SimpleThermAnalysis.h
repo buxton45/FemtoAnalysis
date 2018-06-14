@@ -27,8 +27,8 @@ class ThermPairAnalysis;
 #include "ThermSingleParticleAnalysis.h"
 class ThermSingleParticleAnalysis;
 
-#include "ThermFlowAnalysis.h"
-class ThermFlowAnalysis;
+#include "ThermFlowCollection.h"
+class ThermFlowCollection;
 
 #include "ThermEvent.h"
 class ThermEvent;
@@ -70,6 +70,7 @@ public:
   void SetTransformMatricesSaveName(TString aSaveName);
   void SetCorrelationFunctionsSaveName(TString aSaveName);
   void SetSingleParticlesSaveName(TString aSaveName);
+  void SetFlowAnalysisSaveName(TString aSaveName);
 
   void SetCheckCoECoM(bool aCheck=true);
   void SetRotateEventsByRandomAzimuthalAngles(bool aRotate=true);
@@ -118,7 +119,7 @@ private:
   ThermSingleParticleAnalysis *fSPAnalysisProt, *fSPAnalysisAProt;
   ThermSingleParticleAnalysis *fSPAnalysisK0;
 
-  ThermFlowAnalysis *fFlowAnalysis;
+  ThermFlowCollection *fFlowCollection;
 
   bool fCheckCoECoM;
   bool fRotateEventsByRandAzAngles;
@@ -137,6 +138,7 @@ inline void SimpleThermAnalysis::SetPairFractionsSaveName(TString aSaveName) {fP
 inline void SimpleThermAnalysis::SetTransformMatricesSaveName(TString aSaveName) {fTransformMatricesSaveName = aSaveName;}
 inline void SimpleThermAnalysis::SetCorrelationFunctionsSaveName(TString aSaveName) {fCorrelationFunctionsSaveName = aSaveName;}
 inline void SimpleThermAnalysis::SetSingleParticlesSaveName(TString aSaveName) {fSingleParticlesSaveName = aSaveName;}
+inline void SimpleThermAnalysis::SetFlowAnalysisSaveName(TString aSaveName) {fFlowCollection->SetSaveFileName(aSaveName);}
 
 inline void SimpleThermAnalysis::SetCheckCoECoM(bool aCheck) {fCheckCoECoM = aCheck;}
 inline void SimpleThermAnalysis::SetRotateEventsByRandomAzimuthalAngles(bool aRotate) {fRotateEventsByRandAzAngles = aRotate;}

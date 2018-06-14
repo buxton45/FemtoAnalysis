@@ -559,6 +559,20 @@ void ThermEvent::RotateAllParticlesByRandomAzimuthalAngle(bool aOutputEP)
 }
 
 //________________________________________________________________________________________________________________
+bool ThermEvent::IncludeInV3(ThermParticle& aParticle)
+{
+  std::default_random_engine tGenerator (std::clock());  //std::clock() is seed
+  std::normal_distribution<double> tNormDist(0., 2.);
+  std::uniform_real_distribution<double> tUnityDistribution(0.,1.);
+
+  double tRand = 100*tUnityDistribution(tGenerator);
+  double tAcceptableDistFrom3 = abs(tNormDist(tGenerator));
+
+  if(tRand > 75 && abs(aParticle.GetPt()-3.0)<tAcceptableDistFrom3) return true;
+  else return false;
+}
+
+//________________________________________________________________________________________________________________
 void ThermEvent::BuildArtificialV3SignalInCollection(double aPsi3, TF1* aDist, vector<ThermParticle> &aCollection)
 {
   std::default_random_engine tGenerator (std::clock());  //std::clock() is seed

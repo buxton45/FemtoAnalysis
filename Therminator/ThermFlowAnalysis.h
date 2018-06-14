@@ -19,22 +19,26 @@
 #include "ThermEvent.h"
 class ThermEvent;
 
-
+#include "PIDMapping.h"
 
 using namespace std;
 
 class ThermFlowAnalysis {
 
 public:
-  ThermFlowAnalysis(int aNpTBins=30, double apTBinSize=0.1);
+  ThermFlowAnalysis(int aNpTBins=60, double apTBinSize=0.1, int aPID=0);
   virtual ~ThermFlowAnalysis();
 
   void BuildVnEPIngredients(ThermEvent &aEvent, double aHarmonic);
   void BuildVnEPIngredients(ThermEvent &aEvent);
-  void DrawFlowHarmonics();
+  void BuildVnGraphs();
+  TObjArray* GetVnGraphs();
+  TCanvas* DrawFlowHarmonics();
+  void SaveGraphs(TFile* aFile);
   void Finalize();
 
 private:
+  int fPID;  //fPID=0 means unidentified analysis
   int fNpTBins;
   double fpTBinSize;
 
@@ -53,7 +57,7 @@ private:
 
   vector<double> fEns_pT, fEns_pT_Sq, fVarEns_pT;
 
-
+  TGraphErrors *fGraphV2, *fGraphV3;
 
 #ifdef __ROOT__
   ClassDef(ThermFlowAnalysis, 1)

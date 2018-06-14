@@ -96,7 +96,7 @@ public:
   double GetMagP();
 
   int GetDecayed();
-  int GetPID();
+  int GetPID() const;
   int GetFatherPID();
   int GetRootPID();
   int GetEID();
@@ -164,7 +164,7 @@ inline double ThermParticle::GetPz() {return fPz;}
 inline double ThermParticle::GetMagP() {return sqrt(fPx*fPx + fPy*fPy + fPz*fPz);}
 
 inline int ThermParticle::GetDecayed() {return fDecayed;}
-inline int ThermParticle::GetPID() {return fPID;}
+inline int ThermParticle::GetPID() const {return fPID;}
 inline int ThermParticle::GetFatherPID() {return fFatherPID;}
 inline int ThermParticle::GetRootPID() {return fRootPID;}
 inline int ThermParticle::GetEID() {return fEID;}

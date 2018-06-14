@@ -63,7 +63,7 @@ SimpleThermAnalysis::SimpleThermAnalysis() :
   fSPAnalysisAProt(nullptr),
   fSPAnalysisK0(nullptr),
 
-  fFlowAnalysis(nullptr),
+  fFlowCollection(nullptr),
 
   fCheckCoECoM(false),
   fRotateEventsByRandAzAngles(false),
@@ -87,7 +87,7 @@ SimpleThermAnalysis::SimpleThermAnalysis() :
   fSPAnalysisAProt = new ThermSingleParticleAnalysis(kPDGAntiProt);
   fSPAnalysisK0 = new ThermSingleParticleAnalysis(kPDGK0);
 
-  fFlowAnalysis = new ThermFlowAnalysis();
+  fFlowCollection = new ThermFlowCollection();
 }
 
 
@@ -229,8 +229,8 @@ vector<ThermEvent> SimpleThermAnalysis::ExtractEventsFromRootFile(TString aFileL
     if(tParticleEntry->eventid != tEventID)
     {
       if(fBuildArtificialV3Signal) tThermEvent.BuildArtificialV3Signal();
-      if(fPerformFlowAnalysis) fFlowAnalysis->BuildVnEPIngredients(tThermEvent); //Want to do this BEFORE EnforceKinematicCuts is called because need large eta 
-                                                                                 //for calculation (shouldn't matter if before or after event rotation)
+      if(fPerformFlowAnalysis) fFlowCollection->BuildVnEPIngredients(tThermEvent); //Want to do this BEFORE EnforceKinematicCuts is called because need large eta 
+                                                                                   //for calculation (shouldn't matter if before or after event rotation)
       if(fRotateEventsByRandAzAngles) tThermEvent.RotateAllParticlesByRandomAzimuthalAngle(false);
       tThermEvent.MatchDaughtersWithFathers();
       if(fCheckCoECoM) tThermEvent.CheckCoECoM();
@@ -249,7 +249,7 @@ vector<ThermEvent> SimpleThermAnalysis::ExtractEventsFromRootFile(TString aFileL
     if(tThermEvent.IsParticleOfInterest(tParticleEntry)) tThermEvent.PushBackThermParticleOfInterest(tParticleEntry);
   }
   if(fBuildArtificialV3Signal) tThermEvent.BuildArtificialV3Signal();
-  if(fPerformFlowAnalysis) fFlowAnalysis->BuildVnEPIngredients(tThermEvent);
+  if(fPerformFlowAnalysis) fFlowCollection->BuildVnEPIngredients(tThermEvent);
   if(fRotateEventsByRandAzAngles) tThermEvent.RotateAllParticlesByRandomAzimuthalAngle(false);
   tThermEvent.MatchDaughtersWithFathers();
   if(fCheckCoECoM) tThermEvent.CheckCoECoM();
@@ -368,7 +368,7 @@ void SimpleThermAnalysis::ProcessAll()
   fAnalysisALamK0->PrintPrimaryAndOtherPairInfo();
 
   SaveAll();
-  if(fPerformFlowAnalysis) fFlowAnalysis->Finalize();
+  if(fPerformFlowAnalysis) fFlowCollection->Finalize();
   tDir->Delete();
 }
 

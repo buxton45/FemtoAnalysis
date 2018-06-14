@@ -10,7 +10,7 @@ CFLAGS = $(shell root-config --cflags) -Wall -std=c++11 -I${ANALYZE_DIR} -I${LED
 
 RM = rm
 
-MY_LIBS = $(addprefix build/, ParticleCoor.o Interpolator.o Types.o CanvasPartition.o PIDMapping.o ThermCommon.o ThermParticle.o ThermV0Particle.o ThermEvent.o ThermChargedResidual.o ThermPairAnalysis.o ThermSingleParticleAnalysis.o ThermFlowAnalysis.o ThermEventsCollection.o SimpleThermAnalysis.o Therm3dCf.o ThermCf.o CfLite.o CfHeavy.o)
+MY_LIBS = $(addprefix build/, ParticleCoor.o Interpolator.o Types.o CanvasPartition.o PIDMapping.o ThermCommon.o ThermParticle.o ThermV0Particle.o ThermEvent.o ThermChargedResidual.o ThermPairAnalysis.o ThermSingleParticleAnalysis.o ThermFlowAnalysis.o ThermFlowCollection.o ThermEventsCollection.o SimpleThermAnalysis.o Therm3dCf.o ThermCf.o CfLite.o CfHeavy.o)
 
 BINARIES = runTest runAnalysis runDrawTransforms runDrawPairFractions runDrawParentsMatrices runBuildLambdaValuesFromParentMatrices runProject3dRadii runProjectTransverseEmission runDrawPairSources runDrawCfs runDrawCfsv2 runCompareCfs runCompareCfsv2 runProject3dCfs runGetmT runRenameEventFiles runCompareBackgroundsAndFit runDrawIdentifiedv2
 
