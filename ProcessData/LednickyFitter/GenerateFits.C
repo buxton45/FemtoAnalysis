@@ -44,7 +44,7 @@ int main(int argc, char **argv)
   //--Corrections
   bool ApplyMomResCorrection = true;
   bool ApplyNonFlatBackgroundCorrection = true;
-  NonFlatBgdFitType tNonFlatBgdFitType = kLinear;
+  NonFlatBgdFitType tNonFlatBgdFitType = kPolynomial;
     if(tNonFlatBgdFitType==kDivideByTherm)
     {
       tFitType = kChi2;

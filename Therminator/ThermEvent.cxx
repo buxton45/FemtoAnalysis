@@ -351,7 +351,9 @@ void ThermEvent::FindAllFathers()
   for(unsigned int i=0; i<fAProtCollection.size(); i++) FindFather(fAProtCollection[i]);
 
   //No longer need fAllParticlesCollection, so I should clear it and free up memory before it is pushed to ThermEventsCollection
-  ClearCollection(fAllParticlesCollection);
+  //TODO this is now still needed for FlowAnalysis objects, so do not clear it yet
+  //  For the most central of events, this adds ~0.5 GB to the memory consumption (5.0 GB -> 5.5 GB)
+  //ClearCollection(fAllParticlesCollection);
 }
 
 //________________________________________________________________________________________________________________
@@ -409,6 +411,64 @@ vector<ThermParticle> ThermEvent::GetParticleCollection(ParticlePDGType aPDGType
 
   else assert(0);
 }
+
+//________________________________________________________________________________________________________________
+vector<ThermParticle> ThermEvent::GetGoodParticleCollectionCastAsThermParticle(ParticlePDGType aPDGType)
+{
+  bool tV0Coll = false;
+  vector<ThermParticle> tThermPartColl;
+  vector<ThermV0Particle> tThermV0Coll;
+
+  if(aPDGType == kPDGKchP || aPDGType == kPDGKchM || 
+     aPDGType == kPDGProt || aPDGType == kPDGAntiProt) 
+  {
+    tThermPartColl = GetParticleCollection(aPDGType);
+    tV0Coll = false;
+  }
+  else if(aPDGType == kPDGLam || aPDGType == kPDGALam || aPDGType == kPDGK0) 
+  {
+    tThermV0Coll = GetV0ParticleCollection(aPDGType);
+    tV0Coll = true;
+  }
+  else assert(0);
+
+  //---------------------
+
+  vector<ThermParticle> tReturnColl(0);
+  if(tV0Coll)
+  {
+    for(unsigned int i=0; i<tThermV0Coll.size(); i++) if(tThermV0Coll[i].GoodV0()) tReturnColl.push_back(tThermV0Coll[i]);
+  }
+  else
+  {
+    for(unsigned int i=0; i<tThermPartColl.size(); i++) tReturnColl.push_back(tThermPartColl[i]);
+  }
+
+  return tReturnColl;
+}
+
+//________________________________________________________________________________________________________________
+vector<ThermParticle> ThermEvent::GetGoodParticleCollectionCastAsThermParticle(int aPID)
+{
+  ParticlePDGType tPDGType = static_cast<ParticlePDGType>(aPID);
+  return GetGoodParticleCollectionCastAsThermParticle(tPDGType);
+}
+
+//________________________________________________________________________________________________________________
+vector<ThermParticle> ThermEvent::GetGoodParticleCollectionwConjCastAsThermParticle(int aPID)
+{
+  if(aPID==311) return GetGoodParticleCollectionCastAsThermParticle(aPID);  //K0Short is its own anti-particle
+
+  vector<ThermParticle> tColl1 = GetGoodParticleCollectionCastAsThermParticle(aPID);
+  vector<ThermParticle> tColl2 = GetGoodParticleCollectionCastAsThermParticle(-1*aPID);
+
+  vector<ThermParticle> tReturnColl(0);
+  for(unsigned int i=0; i<tColl1.size(); i++) tReturnColl.push_back(tColl1[i]);
+  for(unsigned int i=0; i<tColl2.size(); i++) tReturnColl.push_back(tColl2[i]);
+
+  return tReturnColl;
+}
+
 
 //________________________________________________________________________________________________________________
 void ThermEvent::SetV0ParticleCollection(unsigned int aEventID, ParticlePDGType aPDGType, vector<ThermV0Particle> &aCollection)

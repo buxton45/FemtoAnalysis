@@ -65,13 +65,17 @@ void ThermFlowAnalysis::BuildVnEPIngredients(ThermEvent &aEvent, double aHarmoni
   complex<double> tImI (0., 1.);
   complex<double> tNull (0., 0.);
 
-  const vector<ThermParticle> tCollection = aEvent.GetAllParticlesCollection();
-  unsigned int tMult = tCollection.size();
+  const vector<ThermParticle> tAllPartColl = aEvent.GetAllParticlesCollection();
+  unsigned int tAllMult = tAllPartColl.size();
   double tM_QnA=0., tM_QnB=0.;
-
   complex<double> tQnA (0., 0.);
   complex<double> tQnB (0., 0.);
 
+
+  vector<ThermParticle> tPOIColl;
+  if(fPID==0) tPOIColl = aEvent.GetAllParticlesCollection();
+  else tPOIColl = aEvent.GetGoodParticleCollectionwConjCastAsThermParticle(fPID);
+  unsigned int tPOIMult = tPOIColl.size();
   vector<complex<double>> tQn(fNpTBins, tNull);
   vector<double> tM_Qn(fNpTBins, 0.);
   vector<double> tInd_pT(fNpTBins, 0.);
@@ -81,28 +85,32 @@ void ThermFlowAnalysis::BuildVnEPIngredients(ThermEvent &aEvent, double aHarmoni
 
   double tInd_Res=0., tInd_Res_Sq=0.;
 
-
-  for(unsigned int iPart=0; iPart<tMult; iPart++)
+  //First, build reference flow using all particles
+  for(unsigned int iPart=0; iPart<tAllMult; iPart++)
   {
-    if(tCollection[iPart].GetEtaP() >= fEtaA)
+    if(tAllPartColl[iPart].GetEtaP() >= fEtaA)
     {
-      tQnA += exp(tImI*aHarmonic*tCollection[iPart].GetPhiP());
+      tQnA += exp(tImI*aHarmonic*tAllPartColl[iPart].GetPhiP());
       tM_QnA++;
     }
-    else if(tCollection[iPart].GetEtaP() <= fEtaB)
+    else if(tAllPartColl[iPart].GetEtaP() <= fEtaB)
     {
-      tQnB += exp(tImI*aHarmonic*tCollection[iPart].GetPhiP());
+      tQnB += exp(tImI*aHarmonic*tAllPartColl[iPart].GetPhiP());
       tM_QnB++;
     }
-    else if(abs(tCollection[iPart].GetEtaP()) < fEtaOI && (fPID==0 || abs(tCollection[iPart].GetPID())==fPID))
+  }
+
+  for(unsigned int iPart=0; iPart<tPOIMult; iPart++)
+  {
+    if(abs(tPOIColl[iPart].GetEtaP()) < fEtaOI && (fPID==0 || abs(tPOIColl[iPart].GetPID())==fPID))
     {
       for(int iBin=0; iBin<fNpTBins; iBin++)
       {
-        if( (tCollection[iPart].GetPt() > iBin*fpTBinSize) && (tCollection[iPart].GetPt() <= (iBin+1)*fpTBinSize) )
+        if( (tPOIColl[iPart].GetPt() > iBin*fpTBinSize) && (tPOIColl[iPart].GetPt() <= (iBin+1)*fpTBinSize) )
         {
-          tQn[iBin] += exp(tImI*aHarmonic*tCollection[iPart].GetPhiP());
-          tInd_pT[iBin] += tCollection[iPart].GetPt();
-          tInd_pT_Sq[iBin] += pow(tCollection[iPart].GetPt(), 2);
+          tQn[iBin] += exp(tImI*aHarmonic*tPOIColl[iPart].GetPhiP());
+          tInd_pT[iBin] += tPOIColl[iPart].GetPt();
+          tInd_pT_Sq[iBin] += pow(tPOIColl[iPart].GetPt(), 2);
           tM_Qn[iBin]++;
           break;
         }
@@ -186,18 +194,24 @@ void ThermFlowAnalysis::BuildVnGraphs()
   double tv3EP[fNpTBins], tv3EP_Err[fNpTBins];
   double tpT[fNpTBins], tpT_Err[fNpTBins];
 
+  if(fEns_Res_v2 < 0) cout << "WARNING!!!!!!!!" << endl << "fEns_Res_v2<0 so no resolution correction used! (PID = " << fPID << ")" << endl;
   if(fEns_Res_v3 < 0) cout << "WARNING!!!!!!!!" << endl << "fEns_Res_v3<0 so no resolution correction used! (PID = " << fPID << ")" << endl;
 
   double tVar_v2EP=0., tVar_v3EP=0.;
   for(int i=0; i<fNpTBins; i++)
   {
-    tv2EP[i] = fEns_v2[i]/sqrt(fEns_Res_v2);
-    tpT[i] = fEns_pT[i];
-
-    tVar_v2EP = pow(tv2EP[i], 2)*(fVarEns_v2[i]/pow(fEns_v2[i], 2) + 0.25*fVarEns_Res_v2/pow(fEns_Res_v2, 2));
+    if(fEns_Res_v2 > 0)
+    {
+      tv2EP[i] = fEns_v2[i]/sqrt(fEns_Res_v2);
+      tVar_v2EP = pow(tv2EP[i], 2)*(fVarEns_v2[i]/pow(fEns_v2[i], 2) + 0.25*fVarEns_Res_v2/pow(fEns_Res_v2, 2));
+    }
+    else
+    {
+      tv2EP[i] = fEns_v2[i];
+      tVar_v2EP = fVarEns_v2[i];
+    }
     tv2EP_Err[i] = sqrt(tVar_v2EP);
-    tpT_Err[i] = sqrt(fVarEns_pT[i]);
-
+    //-----------------------------
     if(fEns_Res_v3 > 0)
     {
       tv3EP[i] = fEns_v3[i]/sqrt(fEns_Res_v3);
@@ -209,6 +223,9 @@ void ThermFlowAnalysis::BuildVnGraphs()
       tVar_v3EP = fVarEns_v3[i];
     }
     tv3EP_Err[i] = sqrt(tVar_v3EP);
+    //-----------------------------
+    tpT[i] = fEns_pT[i];
+    tpT_Err[i] = sqrt(fVarEns_pT[i]);
   }
 
 /*
@@ -306,20 +323,23 @@ void ThermFlowAnalysis::Finalize()
 
   for(int iBin=0; iBin<fNpTBins; iBin++)
   {
-    fEns_v2[iBin] /= fNEv_pTBins[iBin];
-    fEns_v2_Sq[iBin] /= fNEv_pTBins[iBin];
+    if(fNEv_pTBins[iBin] > 0)
+    {
+      fEns_v2[iBin] /= fNEv_pTBins[iBin];
+      fEns_v2_Sq[iBin] /= fNEv_pTBins[iBin];
 
-    fEns_v3[iBin] /= fNEv_pTBins[iBin];
-    fEns_v3_Sq[iBin] /= fNEv_pTBins[iBin];
+      fEns_v3[iBin] /= fNEv_pTBins[iBin];
+      fEns_v3_Sq[iBin] /= fNEv_pTBins[iBin];
 
-    fEns_pT[iBin] /= fNEv_pTBins[iBin];
-    fEns_pT_Sq[iBin] /= fNEv_pTBins[iBin];
+      fEns_pT[iBin] /= fNEv_pTBins[iBin];
+      fEns_pT_Sq[iBin] /= fNEv_pTBins[iBin];
 
-    //---------
+      //---------
 
-    fVarEns_v2[iBin] = (fEns_v2_Sq[iBin] - pow(fEns_v2[iBin], 2))/fNEv_pTBins[iBin]; //Not sure these should be divided by fNEv_pTBins[iBin]
-    fVarEns_v3[iBin] = (fEns_v3_Sq[iBin] - pow(fEns_v3[iBin], 2))/fNEv_pTBins[iBin];
-    fVarEns_pT[iBin] = (fEns_pT_Sq[iBin] - pow(fEns_pT[iBin], 2))/fNEv_pTBins[iBin];
+      fVarEns_v2[iBin] = (fEns_v2_Sq[iBin] - pow(fEns_v2[iBin], 2))/fNEv_pTBins[iBin]; //Not sure these should be divided by fNEv_pTBins[iBin]
+      fVarEns_v3[iBin] = (fEns_v3_Sq[iBin] - pow(fEns_v3[iBin], 2))/fNEv_pTBins[iBin];
+      fVarEns_pT[iBin] = (fEns_pT_Sq[iBin] - pow(fEns_pT[iBin], 2))/fNEv_pTBins[iBin];
+    }
   }
 
   //----------------------------

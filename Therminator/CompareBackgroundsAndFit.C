@@ -320,6 +320,7 @@ TCanvas* CompareCfWithAndWithoutBgd(TString aCfDescriptor, AnalysisType aAnType,
 {
   if(aAnType==kLamKchM || aAnType==kALamKchP) gRejectOmega=true;
   else gRejectOmega=false;
+  if(aCfDescriptor.EqualTo("PrimaryOnly") || aCfDescriptor.EqualTo("PrimaryAndShortDecays")) gRejectOmega=false;  //In this case, Omega peak not present
   //-------------------------------------------------
   CentralityType tCentType=kMB;
   if(aCombineImpactParams) tCentType = GetCentralityType(aImpactParam);
@@ -385,7 +386,7 @@ TCanvas* DrawBgdwFit(TString aCfDescriptor, TString aFileNameCfs, AnalysisType a
 {
   if(aAnType==kLamKchM || aAnType==kALamKchP) gRejectOmega=true;
   else gRejectOmega=false;
-
+  if(aCfDescriptor.EqualTo("PrimaryOnly") || aCfDescriptor.EqualTo("PrimaryAndShortDecays")) gRejectOmega=false;  //In this case, Omega peak not present
   //-------------------------------------------------
   CentralityType tCentType=kMB;
   if(aCombineImpactParams) tCentType = GetCentralityType(aImpactParam);
@@ -545,6 +546,7 @@ TCanvas* DrawBgdwFit_AllCent(TString aCfDescriptor, TString aFileNameCfs, Analys
 TCanvas* DrawLamKchPMBgdwFit(TString aCfDescriptor, TString aFileNameCfs, int aImpactParam, ThermEventsType aEventsType, int aRebin, double aMinNorm, double aMaxNorm, double aMaxBgdFit=3.0, bool aUseStavCf=false)
 {
   gRejectOmega=true;
+  if(aCfDescriptor.EqualTo("PrimaryOnly") || aCfDescriptor.EqualTo("PrimaryAndShortDecays")) gRejectOmega=false;  //In this case, Omega peak not present
   //-------------------------------------------------
   CentralityType tCentType = GetCentralityType(aImpactParam);
   //-------------------------------------------------
@@ -982,6 +984,7 @@ TCanvas* DrawDataVsTherm(TString aCfDescriptor, TString aFileNameCfs, AnalysisTy
   //---------------------------------------------------------------
   if(aAnType==kLamKchM || aAnType==kALamKchP) gRejectOmega=true;
   else gRejectOmega=false;
+  if(aCfDescriptor.EqualTo("PrimaryOnly") || aCfDescriptor.EqualTo("PrimaryAndShortDecays")) gRejectOmega=false;  //In this case, Omega peak not present
 
   cout << "**************************************************" << endl;
   cout << "Fitting call from: DrawDataVsTherm" << endl;
@@ -1297,6 +1300,8 @@ int main(int argc, char **argv)
   TString tCfDescriptor = "Full";
 //  TString tCfDescriptor = "PrimaryOnly";
 //  TString tCfDescriptor = "PrimaryAndShortDecays";
+
+  if(tCfDescriptor.EqualTo("PrimaryOnly") || tCfDescriptor.EqualTo("PrimaryAndShortDecays")) gRejectOmega=false;  //In this case, Omega peak not present
 
   TString tSingleFileName = "CorrelationFunctions_RandomEPs_NumWeight1.root";
 

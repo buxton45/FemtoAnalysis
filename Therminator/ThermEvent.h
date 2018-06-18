@@ -60,6 +60,10 @@ public:
   vector<ThermV0Particle> GetV0ParticleCollection(ParticlePDGType aPDGType);
   vector<ThermParticle> GetParticleCollection(ParticlePDGType aPDGType);
 
+  vector<ThermParticle> GetGoodParticleCollectionCastAsThermParticle(ParticlePDGType aPDGType);
+  vector<ThermParticle> GetGoodParticleCollectionCastAsThermParticle(int aPID);
+  vector<ThermParticle> GetGoodParticleCollectionwConjCastAsThermParticle(int aPID);
+
   void SetV0ParticleCollection(unsigned int aEventID, ParticlePDGType aPDGType, vector<ThermV0Particle> &aCollection);
   void SetParticleCollection(unsigned int aEventID, ParticlePDGType aPDGType, vector<ThermParticle> &aCollection);
 

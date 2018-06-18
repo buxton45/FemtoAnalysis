@@ -229,8 +229,6 @@ vector<ThermEvent> SimpleThermAnalysis::ExtractEventsFromRootFile(TString aFileL
     if(tParticleEntry->eventid != tEventID)
     {
       if(fBuildArtificialV3Signal) tThermEvent.BuildArtificialV3Signal();
-      if(fPerformFlowAnalysis) fFlowCollection->BuildVnEPIngredients(tThermEvent); //Want to do this BEFORE EnforceKinematicCuts is called because need large eta 
-                                                                                   //for calculation (shouldn't matter if before or after event rotation)
       if(fRotateEventsByRandAzAngles) tThermEvent.RotateAllParticlesByRandomAzimuthalAngle(false);
       tThermEvent.MatchDaughtersWithFathers();
       if(fCheckCoECoM) tThermEvent.CheckCoECoM();
@@ -249,7 +247,6 @@ vector<ThermEvent> SimpleThermAnalysis::ExtractEventsFromRootFile(TString aFileL
     if(tThermEvent.IsParticleOfInterest(tParticleEntry)) tThermEvent.PushBackThermParticleOfInterest(tParticleEntry);
   }
   if(fBuildArtificialV3Signal) tThermEvent.BuildArtificialV3Signal();
-  if(fPerformFlowAnalysis) fFlowCollection->BuildVnEPIngredients(tThermEvent);
   if(fRotateEventsByRandAzAngles) tThermEvent.RotateAllParticlesByRandomAzimuthalAngle(false);
   tThermEvent.MatchDaughtersWithFathers();
   if(fCheckCoECoM) tThermEvent.CheckCoECoM();
@@ -399,6 +396,8 @@ void SimpleThermAnalysis::ProcessEventByEvent(vector<ThermEvent> &aEventsCollect
       fSPAnalysisAProt->ProcessEvent(fEventsCollection[iEv]);
       fSPAnalysisK0->ProcessEvent(fEventsCollection[iEv]);
     }
+
+    if(fPerformFlowAnalysis) fFlowCollection->BuildVnEPIngredients(fEventsCollection[iEv]);
 
     if(fMixEvents)
     {

@@ -105,7 +105,7 @@ void ThermFlowCollection::Finalize()
   fAnK0s->Finalize();
   fAnLam->Finalize();
 
-  DrawAllFlowHarmonics();
   SaveAllGraphs();
+  DrawAllFlowHarmonics();
 }
 
