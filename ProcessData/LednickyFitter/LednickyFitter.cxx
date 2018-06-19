@@ -146,6 +146,26 @@ void LednickyFitter::AppendFitInfo(TString &aSaveName, bool aApplyMomResCorrecti
   if(aFixD0) aSaveName += TString("_FixedD0");
 }
 
+//________________________________________________________________________________________________________________
+void LednickyFitter::AppendFitInfo(TString &aSaveName, bool aApplyMomResCorrection, bool aApplyNonFlatBackgroundCorrection, NonFlatBgdFitType aNonFlatBgdFitType, 
+                                          IncludeResidualsType aIncludeResidualsType, ResPrimMaxDecayType aResPrimMaxDecayType, ChargedResidualsType aChargedResidualsType, bool aFixD0)
+{
+  if(aApplyMomResCorrection) aSaveName += TString("_MomResCrctn");
+  if(aApplyNonFlatBackgroundCorrection)
+  {
+    aSaveName += TString("_NonFlatBgdCrctn");
+    aSaveName += cNonFlatBgdFitTypeTags[aNonFlatBgdFitType];
+  }
+
+  aSaveName += cIncludeResidualsTypeTags[aIncludeResidualsType];
+  if(aIncludeResidualsType != kIncludeNoResiduals)
+  {
+    aSaveName += cResPrimMaxDecayTypeTags[aResPrimMaxDecayType];
+    aSaveName += cChargedResidualsTypeTags[aChargedResidualsType];
+  }
+  if(aFixD0) aSaveName += TString("_FixedD0");
+}
+
 
 //________________________________________________________________________________________________________________
 void LednickyFitter::PrintCurrentParamValues(int aNpar, double* aPar)

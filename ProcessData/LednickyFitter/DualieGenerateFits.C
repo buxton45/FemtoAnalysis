@@ -153,14 +153,15 @@ int main(int argc, char **argv)
   TString tFileLocationBase = TString::Format("%sResults_%s_%s",tDirectoryBase.Data(),tGeneralAnTypeName.Data(),tResultsDate.Data());
   TString tFileLocationBaseMC = TString::Format("%sResults_%sMC_%s",tDirectoryBase.Data(),tGeneralAnTypeName.Data(),tResultsDate.Data());
 
-//  TString tSaveDirectoryBase = TString::Format("/home/jesse/Analysis/Presentations/AliFemto/20171108/Figures/%s/", cAnalysisBaseTags[tAnType]);
-  TString tSaveDirectoryBase = tDirectoryBase;
+  TString tSaveDirectoryBase = TString::Format("/home/jesse/Analysis/Presentations/AliFemto/20180620/Figures/Fits/Dualie/%s/", cAnalysisBaseTags[tAnType]);
+//  TString tSaveDirectoryBase = tDirectoryBase;
 
 //-----------------------------------------------------------------------------
 
   TString tSaveNameModifier = "";
-  LednickyFitter::AppendFitInfo(tSaveNameModifier, ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, tIncludeResidualsType, tResPrimMaxDecayType, tChargedResidualsType, FixD0);
+  LednickyFitter::AppendFitInfo(tSaveNameModifier, ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, tNonFlatBgdFitType, tIncludeResidualsType, tResPrimMaxDecayType, tChargedResidualsType, FixD0);
 
+  if(bUseStavCf) tSaveNameModifier += TString("_StavCf");
   if(FixAllLambdaTo1) tSaveNameModifier += TString("_FixAllLambdaTo1");
   if(FixRadii) tSaveNameModifier += TString("_FixedRadii");
   if(FixAllScattParams) tSaveNameModifier += TString("_FixedScattParams");

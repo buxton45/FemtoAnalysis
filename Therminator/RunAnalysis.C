@@ -35,17 +35,17 @@ int main(int argc, char **argv)
   bool bOnlyWeightLongDecayParents = false;
 
   bool bCheckCoECoM = false;
-  bool bRotateEventsByRandomAzimuthalAngles = false;
+  bool bRotateEventsByRandomAzimuthalAngles = true;
   bool bOnlyRunOverJaiEvents = false;
 
-  bool bPerformFlowAnalysis = false;
-  bool bBuildArtificialV3Signal = false;
+  bool bPerformFlowAnalysis = true;
+  bool bBuildArtificialV3Signal = true;
   int tV3InclusionProb1 = 25;  //NOTE: A value of -1 turns entire V2 signal into V3
 
   double tMaxPrimaryDecayLength = -1; 
 //  double tMaxPrimaryDecayLength = 4.01; 
 
-  int tImpactParam = 5;
+  int tImpactParam = 9;
   //-----------------------------------------
   TString tEventsDirectory, tMatricesSaveFileName, tPairFractionSaveName, tSingleParticlesSaveName, tCorrelationFunctionsSaveName, tFlowSaveName;
 
@@ -95,7 +95,6 @@ int main(int argc, char **argv)
     tSingleParticlesSaveName += TString::Format("_ArtificialV3Signal%d", tV3InclusionProb1);
     tCorrelationFunctionsSaveName += TString::Format("_ArtificialV3Signal%d", tV3InclusionProb1);
     tFlowSaveName += TString::Format("_ArtificialV3Signal%d", tV3InclusionProb1);
-cout << "tFlowSaveName = " << tFlowSaveName << endl << endl << endl;
   }
 
   if(bUnitWeightCfNums) tCorrelationFunctionsSaveName += TString("_NumWeight1");
