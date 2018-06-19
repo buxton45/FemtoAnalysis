@@ -619,8 +619,10 @@ void ThermEvent::RotateAllParticlesByRandomAzimuthalAngle(bool aOutputEP)
 }
 
 //________________________________________________________________________________________________________________
-bool ThermEvent::IncludeInV3(ThermParticle& aParticle)
+bool ThermEvent::IncludeInV3(int aV3InclusionProb1, ThermParticle& aParticle)
 {
+  if(aV3InclusionProb1<0) return true; //Include all
+
   std::default_random_engine tGenerator (std::clock());  //std::clock() is seed
   std::normal_distribution<double> tNormDist(0., 2.);
   std::uniform_real_distribution<double> tUnityDistribution(0.,1.);
@@ -628,12 +630,12 @@ bool ThermEvent::IncludeInV3(ThermParticle& aParticle)
   double tRand = 100*tUnityDistribution(tGenerator);
   double tAcceptableDistFrom3 = abs(tNormDist(tGenerator));
 
-  if(tRand > 75 && abs(aParticle.GetPt()-3.0)<tAcceptableDistFrom3) return true;
+  if(tRand < aV3InclusionProb1 && abs(aParticle.GetPt()-3.0)<tAcceptableDistFrom3) return true;
   else return false;
 }
 
 //________________________________________________________________________________________________________________
-void ThermEvent::BuildArtificialV3SignalInCollection(double aPsi3, TF1* aDist, vector<ThermParticle> &aCollection)
+void ThermEvent::BuildArtificialV3SignalInCollection(int aV3InclusionProb1, double aPsi3, TF1* aDist, vector<ThermParticle> &aCollection)
 {
   std::default_random_engine tGenerator (std::clock());  //std::clock() is seed
   std::normal_distribution<double> tNormDist(0., 2.);
@@ -642,11 +644,18 @@ void ThermEvent::BuildArtificialV3SignalInCollection(double aPsi3, TF1* aDist, v
   double tRand;
   double tAcceptableDistFrom3;
   double tNewPhi, tGenPhi;
+  bool tInclude;
   for(unsigned int iPart=0; iPart<aCollection.size(); iPart++) 
   {
-    tRand = 100*tUnityDistribution(tGenerator);
-    tAcceptableDistFrom3 = abs(tNormDist(tGenerator));
-    if(tRand > 75 && abs(aCollection[iPart].GetPt()-3.0)<tAcceptableDistFrom3 )
+    if(aV3InclusionProb1<0) tInclude = true; //Include all
+    else
+    {
+      tRand = 100*tUnityDistribution(tGenerator);
+      tAcceptableDistFrom3 = abs(tNormDist(tGenerator));
+      if(tRand < aV3InclusionProb1 && abs(aCollection[iPart].GetPt()-3.0)<tAcceptableDistFrom3) tInclude = true;
+      else tInclude = false;
+    }
+    if(tInclude)
     {
       tGenPhi = aDist->GetRandom();
       tNewPhi = tGenPhi-aCollection[iPart].GetPhiP()+aPsi3;
@@ -657,7 +666,7 @@ void ThermEvent::BuildArtificialV3SignalInCollection(double aPsi3, TF1* aDist, v
 }
 
 //________________________________________________________________________________________________________________
-void ThermEvent::BuildArtificialV3SignalInCollection(double aPsi3, TF1* aDist, vector<ThermV0Particle> &aCollection)
+void ThermEvent::BuildArtificialV3SignalInCollection(int aV3InclusionProb1, double aPsi3, TF1* aDist, vector<ThermV0Particle> &aCollection)
 {
   std::default_random_engine tGenerator (std::clock());  //std::clock() is seed
   std::normal_distribution<double> tNormDist(0., 2.);
@@ -666,11 +675,18 @@ void ThermEvent::BuildArtificialV3SignalInCollection(double aPsi3, TF1* aDist, v
   int tRand;
   double tAcceptableDistFrom3;
   double tNewPhi, tGenPhi;
+  bool tInclude;
   for(unsigned int iPart=0; iPart<aCollection.size(); iPart++) 
   {
-    tRand = 100*tUnityDistribution(tGenerator);
-    tAcceptableDistFrom3 = abs(tNormDist(tGenerator));
-    if(tRand > 75 && abs(aCollection[iPart].GetPt()-3.0)<tAcceptableDistFrom3 )
+    if(aV3InclusionProb1<0) tInclude = true; //Include all
+    else
+    {
+      tRand = 100*tUnityDistribution(tGenerator);
+      tAcceptableDistFrom3 = abs(tNormDist(tGenerator));
+      if(tRand < aV3InclusionProb1 && abs(aCollection[iPart].GetPt()-3.0)<tAcceptableDistFrom3) tInclude = true;
+      else tInclude = false;
+    }
+    if(tInclude)
     {
       tGenPhi = aDist->GetRandom();
       tNewPhi = tGenPhi-aCollection[iPart].GetPhiP()+aPsi3;
@@ -683,7 +699,7 @@ void ThermEvent::BuildArtificialV3SignalInCollection(double aPsi3, TF1* aDist, v
 
 
 //________________________________________________________________________________________________________________
-void ThermEvent::BuildArtificialV3Signal()
+void ThermEvent::BuildArtificialV3Signal(int aV3InclusionProb1)
 {
   gRandom->SetSeed();
 
@@ -696,18 +712,18 @@ void ThermEvent::BuildArtificialV3Signal()
 //  double tPsi3 = 0.;  //For now, implement a random Psi3 via the RotateAllParticlesByRandomAzimuthalAngle method
   TF1 *f1 = new TF1("f1", "0.5*(cos(3*x)+1)", 0, 2.*TMath::Pi());
 
-  BuildArtificialV3SignalInCollection(tPsi3, f1, fAllParticlesCollection);
-  BuildArtificialV3SignalInCollection(tPsi3, f1, fAllDaughtersCollection);
+  BuildArtificialV3SignalInCollection(aV3InclusionProb1, tPsi3, f1, fAllParticlesCollection);
+  BuildArtificialV3SignalInCollection(aV3InclusionProb1, tPsi3, f1, fAllDaughtersCollection);
 
-  BuildArtificialV3SignalInCollection(tPsi3, f1, fLambdaCollection);
-  BuildArtificialV3SignalInCollection(tPsi3, f1, fAntiLambdaCollection);
-  BuildArtificialV3SignalInCollection(tPsi3, f1, fK0ShortCollection);
+  BuildArtificialV3SignalInCollection(aV3InclusionProb1, tPsi3, f1, fLambdaCollection);
+  BuildArtificialV3SignalInCollection(aV3InclusionProb1, tPsi3, f1, fAntiLambdaCollection);
+  BuildArtificialV3SignalInCollection(aV3InclusionProb1, tPsi3, f1, fK0ShortCollection);
 
-  BuildArtificialV3SignalInCollection(tPsi3, f1, fKchPCollection);
-  BuildArtificialV3SignalInCollection(tPsi3, f1, fKchMCollection);
+  BuildArtificialV3SignalInCollection(aV3InclusionProb1, tPsi3, f1, fKchPCollection);
+  BuildArtificialV3SignalInCollection(aV3InclusionProb1, tPsi3, f1, fKchMCollection);
 
-  BuildArtificialV3SignalInCollection(tPsi3, f1, fProtCollection);
-  BuildArtificialV3SignalInCollection(tPsi3, f1, fAProtCollection);
+  BuildArtificialV3SignalInCollection(aV3InclusionProb1, tPsi3, f1, fProtCollection);
+  BuildArtificialV3SignalInCollection(aV3InclusionProb1, tPsi3, f1, fAProtCollection);
 
   delete f1;
 }

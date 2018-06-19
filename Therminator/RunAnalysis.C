@@ -40,6 +40,7 @@ int main(int argc, char **argv)
 
   bool bPerformFlowAnalysis = false;
   bool bBuildArtificialV3Signal = false;
+  int tV3InclusionProb1 = 25;  //NOTE: A value of -1 turns entire V2 signal into V3
 
   double tMaxPrimaryDecayLength = -1; 
 //  double tMaxPrimaryDecayLength = 4.01; 
@@ -89,11 +90,12 @@ int main(int argc, char **argv)
 
   if(bBuildArtificialV3Signal)
   {
-    tMatricesSaveFileName += TString("_ArtificialV3Signal");
-    tPairFractionSaveName += TString("_ArtificialV3Signal");
-    tSingleParticlesSaveName += TString("_ArtificialV3Signal");
-    tCorrelationFunctionsSaveName += TString("_ArtificialV3Signal");
-    tFlowSaveName += TString("_ArtificialV3Signal");
+    tMatricesSaveFileName += TString::Format("_ArtificialV3Signal%d", tV3InclusionProb1);
+    tPairFractionSaveName += TString::Format("_ArtificialV3Signal%d", tV3InclusionProb1);
+    tSingleParticlesSaveName += TString::Format("_ArtificialV3Signal%d", tV3InclusionProb1);
+    tCorrelationFunctionsSaveName += TString::Format("_ArtificialV3Signal%d", tV3InclusionProb1);
+    tFlowSaveName += TString::Format("_ArtificialV3Signal%d", tV3InclusionProb1);
+cout << "tFlowSaveName = " << tFlowSaveName << endl << endl << endl;
   }
 
   if(bUnitWeightCfNums) tCorrelationFunctionsSaveName += TString("_NumWeight1");
@@ -126,7 +128,7 @@ int main(int argc, char **argv)
   tSimpleThermAnalysis->SetCheckCoECoM(bCheckCoECoM);
   tSimpleThermAnalysis->SetRotateEventsByRandomAzimuthalAngles(bRotateEventsByRandomAzimuthalAngles);
   tSimpleThermAnalysis->SetPerformFlowAnalysis(bPerformFlowAnalysis);
-  tSimpleThermAnalysis->SetBuildArtificialV3Signal(bBuildArtificialV3Signal);
+  tSimpleThermAnalysis->SetBuildArtificialV3Signal(bBuildArtificialV3Signal, tV3InclusionProb1);
 
   tSimpleThermAnalysis->ProcessAll();
 

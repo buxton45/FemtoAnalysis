@@ -76,10 +76,10 @@ public:
   void RotateParticlesByRandomAzimuthalAngle(double aPhi, vector<ThermV0Particle> &aCollection, bool aOutputEP=false);
   void RotateAllParticlesByRandomAzimuthalAngle(bool aOutputEP=false);
 
-  bool IncludeInV3(ThermParticle& aParticle);
-  void BuildArtificialV3SignalInCollection(double aPsi3, TF1* aDist, vector<ThermParticle> &aCollection);  //NOTE: This kills v2 signal and builds v3 signal
-  void BuildArtificialV3SignalInCollection(double aPsi3, TF1* aDist, vector<ThermV0Particle> &aCollection);  //NOTE: This kills v2 signal and builds v3 signal
-  void BuildArtificialV3Signal();  //NOTE: This kills v2 signal and builds v3 signal
+  bool IncludeInV3(int aV3InclusionProb1, ThermParticle& aParticle);
+  void BuildArtificialV3SignalInCollection(int aV3InclusionProb1, double aPsi3, TF1* aDist, vector<ThermParticle> &aCollection);  //NOTE: This kills v2 signal and builds v3 signal
+  void BuildArtificialV3SignalInCollection(int aV3InclusionProb1, double aPsi3, TF1* aDist, vector<ThermV0Particle> &aCollection);  //NOTE: This kills v2 signal and builds v3 signal
+  void BuildArtificialV3Signal(int aV3InclusionProb1=25);  //NOTE: This kills v2 signal and builds v3 signal
 
   //inline stuff
   void SetEventID(unsigned int aEventID);
