@@ -12,7 +12,7 @@ RM = rm
 
 MY_LIBS = $(addprefix build/, ParticleCoor.o Interpolator.o Types.o CanvasPartition.o PIDMapping.o ThermCommon.o ThermParticle.o ThermV0Particle.o ThermEvent.o ThermChargedResidual.o ThermPairAnalysis.o ThermSingleParticleAnalysis.o ThermFlowAnalysis.o ThermFlowCollection.o ThermEventsCollection.o SimpleThermAnalysis.o Therm3dCf.o ThermCf.o CfLite.o CfHeavy.o)
 
-BINARIES = runTest runAnalysis runDrawTransforms runDrawPairFractions runDrawParentsMatrices runBuildLambdaValuesFromParentMatrices runProject3dRadii runProjectTransverseEmission runDrawPairSources runDrawCfs runDrawCfsv2 runCompareCfs runCompareCfsv2 runProject3dCfs runGetmT runRenameEventFiles runCompareBackgroundsAndFit runDrawIdentifiedv2
+BINARIES = runTest runAnalysis runDrawTransforms runDrawPairFractions runDrawParentsMatrices runBuildLambdaValuesFromParentMatrices runProject3dRadii runProjectTransverseEmission runDrawPairSources runDrawCfs runDrawCfsv2 runCompareCfs runCompareCfsv2 runProject3dCfs runGetmT runRenameEventFiles runCompareBackgroundsAndFit runDrawIdentifiedv2 runDrawThermFlow
 
 all: $(BINARIES)
 
@@ -70,6 +70,9 @@ runCompareBackgroundsAndFit: ${MY_LIBS} CompareBackgroundsAndFit.C
 
 runDrawIdentifiedv2: ${MY_LIBS} DrawIdentifiedv2.C
 	g++ DrawIdentifiedv2.C ${MY_LIBS} -o runDrawIdentifiedv2 $(LIBS) $(CFLAGS)
+
+runDrawThermFlow: ${MY_LIBS} DrawThermFlow.C
+	g++ DrawThermFlow.C ${MY_LIBS} -o runDrawThermFlow $(LIBS) $(CFLAGS)
 
 build/%.o: ${ANALYZE_DIR}/%.cxx ${ANALYZE_DIR}/%.h
 	g++ -c $< $(CFLAGS) -o $@
