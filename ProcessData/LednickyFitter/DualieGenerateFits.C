@@ -153,7 +153,7 @@ int main(int argc, char **argv)
   TString tFileLocationBase = TString::Format("%sResults_%s_%s",tDirectoryBase.Data(),tGeneralAnTypeName.Data(),tResultsDate.Data());
   TString tFileLocationBaseMC = TString::Format("%sResults_%sMC_%s",tDirectoryBase.Data(),tGeneralAnTypeName.Data(),tResultsDate.Data());
 
-  TString tSaveDirectoryBase = TString::Format("/home/jesse/Analysis/Presentations/AliFemto/20180620/Figures/Fits/Dualie/%s/", cAnalysisBaseTags[tAnType]);
+  TString tSaveDirectoryBase = TString::Format("/home/jesse/Analysis/Presentations/AliFemto/20180627/Figures/Fits/Dualie/%s/", cAnalysisBaseTags[tAnType]);
 //  TString tSaveDirectoryBase = tDirectoryBase;
 
 //-----------------------------------------------------------------------------

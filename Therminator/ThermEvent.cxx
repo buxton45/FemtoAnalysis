@@ -699,7 +699,7 @@ void ThermEvent::BuildArtificialV3SignalInCollection(int aV3InclusionProb1, doub
 
 
 //________________________________________________________________________________________________________________
-void ThermEvent::BuildArtificialV3Signal(int aV3InclusionProb1)
+void ThermEvent::BuildArtificialV3Signal(int aV3InclusionProb1, bool aRotateEventsByRandAzAngles)
 {
   gRandom->SetSeed();
 
@@ -709,7 +709,9 @@ void ThermEvent::BuildArtificialV3Signal(int aV3InclusionProb1)
   double tU = tUnityDistribution(tGenerator);
   double tPsi3 = 2.*TMath::Pi()*tU; //azimuthal angle
 
-//  double tPsi3 = 0.;  //For now, implement a random Psi3 via the RotateAllParticlesByRandomAzimuthalAngle method
+  if(aV3InclusionProb1==-1 && !aRotateEventsByRandAzAngles) tPsi3=0.;  //In this special case, since there is no v2 and the entire
+                                                                       //signal is v3, I want the third harmonic flow planes to align
+
   TF1 *f1 = new TF1("f1", "0.5*(cos(3*x)+1)", 0, 2.*TMath::Pi());
 
   BuildArtificialV3SignalInCollection(aV3InclusionProb1, tPsi3, f1, fAllParticlesCollection);

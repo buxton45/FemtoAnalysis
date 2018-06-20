@@ -228,7 +228,7 @@ vector<ThermEvent> SimpleThermAnalysis::ExtractEventsFromRootFile(TString aFileL
 
     if(tParticleEntry->eventid != tEventID)
     {
-      if(fArtificialV3Info.first) tThermEvent.BuildArtificialV3Signal(fArtificialV3Info.second);
+      if(fArtificialV3Info.first) tThermEvent.BuildArtificialV3Signal(fArtificialV3Info.second, fRotateEventsByRandAzAngles);
       if(fRotateEventsByRandAzAngles) tThermEvent.RotateAllParticlesByRandomAzimuthalAngle(false);
       tThermEvent.MatchDaughtersWithFathers();
       if(fCheckCoECoM) tThermEvent.CheckCoECoM();
@@ -246,7 +246,7 @@ vector<ThermEvent> SimpleThermAnalysis::ExtractEventsFromRootFile(TString aFileL
     if(tThermEvent.IsDaughterOfInterest(tParticleEntry)) tThermEvent.PushBackThermDaughterOfInterest(tParticleEntry);
     if(tThermEvent.IsParticleOfInterest(tParticleEntry)) tThermEvent.PushBackThermParticleOfInterest(tParticleEntry);
   }
-  if(fArtificialV3Info.first) tThermEvent.BuildArtificialV3Signal(fArtificialV3Info.second);
+  if(fArtificialV3Info.first) tThermEvent.BuildArtificialV3Signal(fArtificialV3Info.second, fRotateEventsByRandAzAngles);
   if(fRotateEventsByRandAzAngles) tThermEvent.RotateAllParticlesByRandomAzimuthalAngle(false);
   tThermEvent.MatchDaughtersWithFathers();
   if(fCheckCoECoM) tThermEvent.CheckCoECoM();
