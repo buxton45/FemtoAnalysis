@@ -9,17 +9,18 @@
 \usepackage{boldline}  % to make lines in table bold
                        % V{<factor>} vertical rule in \begin{tabular} command
                        % also \clinB{<spec>}{<factor>} and \hlineB{<factor>}
+\usepackage{arrayjobx} % To use the array structures stored in FitResults_cLamcKch_20180505.tex                      
+
+\input{FitResults_cLamcKch_20180505.tex}
+
 
 \begin{document}
-
 \pagestyle{empty}
 
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% FOR RESULT COMPARISON PURPOSES %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
 \clearpage
 \begin{table}[htbp]
 \begin{adjustwidth}{-.5in}{-.5in}
@@ -37,53 +38,100 @@
    \clineB{4-8}{5.0}
     & & & Unique $\lambda$ & Share $\lambda_{\mathrm{Conj}}$ & Unique $\lambda$ & Share $\lambda_{\mathrm{Conj}}$ & Share Single $\lambda$ \\ 
    \hlineB{8.0}
-   
+   %%----------------------------- 0-10% ------------------------------------------------
    \multirow{5}{*}{0-10\%} 
-   & \LamKchP & $\lambda$  & 1.37 & \multirow{2}{*}{1.37} & 1.97 & \multirow{2}{*}{1.91} & \multirow{4}{*}{1.83} \\
-   & \ALamKchM & $\lambda$ & 1.39 &                       & 2.00 & & \\
+   & \LamKchP & $\lambda$  
+   & \AaLamKchP(1) & \multirow{2}{*}{\BaLamKchP(1)} & \CaLamKchP(1) & \multirow{2}{*}{\DaLamKchP(1)} & \multirow{4}{*}{\EaLamKchP(1)} \\
+   
+   & \ALamKchM & $\lambda$ & 
+   \AaALamKchM(1) &                                 & \CaALamKchM(1) & & \\
+   
    \cline{2-7}
-   & \LamKchM & $\lambda$  & 1.58 & \multirow{2}{*}{1.87} & 2.04 & \multirow{2}{*}{1.83} & \\
-   & \ALamKchP & $\lambda$ & 1.60 &                       & 2.07 & & \\   
+   
+   & \LamKchM & $\lambda$  
+   & \AaLamKchM(1) & \multirow{2}{*}{\BaLamKchM(1)} & \CaLamKchM(1) & \multirow{2}{*}{\DaLamKchM(1)} & \\
+   & \ALamKchP & $\lambda$ 
+   & \AaALamKchP(1) &                               & \CaALamKchP(1) & & \\   
+   
    \clineB{2-8}{4.0}
-   & \LamKchP \& \ALamKchM & R & 4.90 & 4.89 & \multirow{2}{*}{6.18} & \multirow{2}{*}{5.83} & \multirow{2}{*}{5.81} \\  
+   
+   & \LamKchP \& \ALamKchM & R 
+   & \AaLamKchP(2) & \BaLamKchP(2) & \multirow{2}{*}{\CaLamKchP(2)} & \multirow{2}{*}{\DaLamKchP(2)} & \multirow{2}{*}{\EaLamKchP(2)} \\ 
+    
    \cline{2-5} 
-   & \LamKchM \& \ALamKchP & R & 4.11 & 5.75 & & & \\  
+   
+   & \LamKchM \& \ALamKchP & R 
+   & \AaLamKchM(2) & \BaLamKchM(2) & & & \\  
+   
    \hlineB{5.0}
    
+   %%----------------------------- 10-30% ------------------------------------------------   
    \multirow{5}{*}{10-30\%} 
-   & \LamKchP & $\lambda$  & 1.70 & \multirow{2}{*}{1.54} & 1.50 & \multirow{2}{*}{1.39} & \multirow{4}{*}{1.31} \\
-   & \ALamKchM & $\lambda$ & 1.51 &                       & 1.33 & & \\
+   & \LamKchP & $\lambda$  
+   & \AaLamKchP(3) & \multirow{2}{*}{\BaLamKchP(3)} & \CaLamKchP(3) & \multirow{2}{*}{\DaLamKchP(3)} & \multirow{4}{*}{\EaLamKchP(3)} \\
+   
+   & \ALamKchM & $\lambda$ 
+   & \AaALamKchM(3) &                               & \CaALamKchM(3) & & \\
+   
    \cline{2-7}
-   & \LamKchM & $\lambda$  & 1.08 & \multirow{2}{*}{1.18} & 1.43 & \multirow{2}{*}{1.31} & \\
-   & \ALamKchP & $\lambda$ & 1.10 &                       & 1.48 & & \\   
+   
+   & \LamKchM & $\lambda$  
+   & \AaLamKchM(3) & \multirow{2}{*}{\BaLamKchM(3)} & \CaLamKchM(3) & \multirow{2}{*}{\DaLamKchM(3)} & \\
+   
+   & \ALamKchP & $\lambda$ 
+   & \AaALamKchP(3) &                               & \CaALamKchP(3) & & \\   
+   
    \clineB{2-8}{4.0}
-   & \LamKchP \& \ALamKchM & R & 4.78 & 4.68 & \multirow{2}{*}{4.75} & \multirow{2}{*}{4.53} & \multirow{2}{*}{4.50} \\   
+   
+   & \LamKchP \& \ALamKchM & R 
+   & \AaLamKchP(4) & \BaLamKchP(4) & \multirow{2}{*}{\CaLamKchP(4)} & \multirow{2}{*}{\DaLamKchP(4)} & \multirow{2}{*}{\EaLamKchP(4)} \\   
+   
    \cline{2-5}
-   & \LamKchM \& \ALamKchP & R & 3.05 & 4.05 & & & \\  
+   
+   & \LamKchM \& \ALamKchP & R 
+   & \AaLamKchM(4) & \BaLamKchM(4) & & & \\  
+   
    \hlineB{5.0}
    
+   %%----------------------------- 30-50% ------------------------------------------------   
    \multirow{5}{*}{30-50\%} 
-   & \LamKchP & $\lambda$  & 1.30 & \multirow{2}{*}{1.23} & 1.16 & \multirow{2}{*}{1.02} & \multirow{4}{*}{1.07} \\
-   & \ALamKchM & $\lambda$ & 1.18 &                       & 1.06 & & \\
+   & \LamKchP & $\lambda$  
+   & \AaLamKchP(5) & \multirow{2}{*}{\BaLamKchP(5)} & \CaLamKchP(5) & \multirow{2}{*}{\DaLamKchP(5)} & \multirow{4}{*}{\EaLamKchP(5)} \\
+   
+   & \ALamKchM & $\lambda$ 
+   & \AaALamKchM(5) &                               & \CaALamKchM(5) & & \\
+   
    \cline{2-7}
-   & \LamKchM & $\lambda$  & 1.27 & \multirow{2}{*}{0.91} & 2.07 & \multirow{2}{*}{1.11} & \\
-   & \ALamKchP & $\lambda$ & 0.83 &                       & 1.06 & & \\   
+   
+   & \LamKchM & $\lambda$  
+   & \AaLamKchM(5) & \multirow{2}{*}{\BaLamKchM(5)} & \CaLamKchM(5) & \multirow{2}{*}{\DaLamKchM(5)} & \\
+   
+   & \ALamKchP & $\lambda$ 
+   & \AaALamKchP(5) &                               & \CaALamKchP(5) & & \\   
+   
    \clineB{2-8}{4.0}
-   & \LamKchP \& \ALamKchM & R & 3.24 & 3.23 & \multirow{2}{*}{3.21} & \multirow{2}{*}{2.99} & \multirow{2}{*}{3.09} \\  
+   
+   & \LamKchP \& \ALamKchM & R 
+   & \AaLamKchP(6) & \BaLamKchP(6) & \multirow{2}{*}{\CaLamKchP(6)} & \multirow{2}{*}{\DaLamKchP(6)} & \multirow{2}{*}{\EaLamKchP(6)} \\  
+   
    \cline{2-5} 
-   & \LamKchM \& \ALamKchP & R & 1.98 & 2.47 & & & \\  
+   
+   & \LamKchM \& \ALamKchP & R 
+   & \AaLamKchM(6) & \BaLamKchM(6) & & & \\  
+   
    \hlineB{7.0}
    
+   %%----------------------------- Scattering parameters ------------------------------------------------      
    & \multirow{3}{*}{\LamKchP \& \ALamKchM} 
-   & $\mathbb{R}f_{0}$   & -1.13 & -1.13 & -1.13 & -1.09 & -1.12 \\      
-   & & $\mathbb{I}f_{0}$ &  0.36 &  0.36 &  0.53 &  0.44 &  0.48 \\
-   & & $d_{0}$           &  1.09 &  1.11 &  1.02 &  0.99 &  1.01 \\
+   & $\mathbb{R}f_{0}$   & \AaLamKchP(7) & \BaLamKchP(7) & \CaLamKchP(7) & \DaLamKchP(7) & \EaLamKchP(7) \\      
+   & & $\mathbb{I}f_{0}$ & \AaLamKchP(8) & \BaLamKchP(8) & \CaLamKchP(8) & \DaLamKchP(8) & \EaLamKchP(8) \\
+   & & $d_{0}$           & \AaLamKchP(9) & \BaLamKchP(9) & \CaLamKchP(9) & \DaLamKchP(9) & \EaLamKchP(9) \\
    \hlineB{5.0}
    
    & \multirow{3}{*}{\LamKchM \& \ALamKchP} 
-   & $\mathbb{R}f_{0}$   &  0.15 &  0.30 &  0.40 &  0.40 &  0.39 \\      
-   & & $\mathbb{I}f_{0}$ &  0.30 &  0.40 &  0.41 &  0.45 &  0.45 \\
-   & & $d_{0}$           &  2.07 & -5.15 & -4.81 & -4.37 & -4.35 \\
+   & $\mathbb{R}f_{0}$   &  \AaLamKchM(7) & \BaLamKchM(7) & \CaLamKchM(7) & \DaLamKchM(7) & \EaLamKchM(7) \\      
+   & & $\mathbb{I}f_{0}$ &  \AaLamKchM(8) & \BaLamKchM(8) & \CaLamKchM(8) & \DaLamKchM(8) & \EaLamKchM(8) \\
+   & & $d_{0}$           &  \AaLamKchM(9) & \BaLamKchM(9) & \CaLamKchM(9) & \DaLamKchM(9) & \EaLamKchM(9) \\
    \hline   
   \end{tabular}
 % \end{minipage}
@@ -91,6 +139,134 @@
  \label{tab:Comparison_Poly_ThermTogether}
 \end{adjustwidth} 
 \end{table}
+
+
+\clearpage
+\begin{table}[htbp]
+\begin{adjustwidth}{-.5in}{-.5in}
+ \centering
+ %------------------------------------LamKchP
+% \begin{minipage}{0.3\textwidth}
+  \centering
+  \renewcommand{\arraystretch}{1.5}
+  \begin{tabular}{|c|c|cV{5.0}c|cV{3.0}c|c|c|}  
+   \multicolumn{8}{c}{Polynomial Bgds, THERM Bgds fit together(v2)} \\
+   \hline
+   \multirow{3}{*}{\textbf{Centrality}} & \multirow{3}{*}{\textbf{System}} & \multirow{3}{*}{\textbf{Parameter}} & \multicolumn{5}{c|}{\textbf{Methods}} \\
+   \cline{4-8}
+    & & & \multicolumn{2}{cV{3.0}}{Separate Radii} & \multicolumn{3}{c|}{Shared Radii} \\
+   \clineB{4-8}{5.0}
+    & & & Unique $\lambda$ & Share $\lambda_{\mathrm{Conj}}$ & Unique $\lambda$ & Share $\lambda_{\mathrm{Conj}}$ & Share Single $\lambda$ \\ 
+   \hlineB{8.0}
+   %%----------------------------- 0-10% ------------------------------------------------
+   \multirow{5}{*}{0-10\%} 
+   & \LamKchP & \multirow{4}{*}{$\lambda$}  
+   & \AaLamKchP(1) & \multirow{2}{*}{\BaLamKchP(1)} & \CaLamKchP(1) & \multirow{2}{*}{\DaLamKchP(1)} & \multirow{4}{*}{\EaLamKchP(1)} \\
+   
+   & \ALamKchM & & 
+   \AaALamKchM(1) &                                 & \CaALamKchM(1) & & \\
+   
+   \cline{2-2}
+   \cline{4-7}
+   
+   & \LamKchM &  
+   & \AaLamKchM(1) & \multirow{2}{*}{\BaLamKchM(1)} & \CaLamKchM(1) & \multirow{2}{*}{\DaLamKchM(1)} & \\
+   & \ALamKchP &  
+   & \AaALamKchP(1) &                               & \CaALamKchP(1) & & \\   
+   
+   \clineB{2-8}{4.0}
+   
+   & \LamKchP \& \ALamKchM & \multirow{2}{*}{R} 
+   & \AaLamKchP(2) & \BaLamKchP(2) & \multirow{2}{*}{\CaLamKchP(2)} & \multirow{2}{*}{\DaLamKchP(2)} & \multirow{2}{*}{\EaLamKchP(2)} \\ 
+    
+   \cline{2-2} 
+   \cline{4-5}    
+   
+   & \LamKchM \& \ALamKchP &  
+   & \AaLamKchM(2) & \BaLamKchM(2) & & & \\  
+   
+   \hlineB{5.0}
+   
+   %%----------------------------- 10-30% ------------------------------------------------   
+   \multirow{5}{*}{10-30\%} 
+   & \LamKchP & \multirow{4}{*}{$\lambda$}  
+   & \AaLamKchP(3) & \multirow{2}{*}{\BaLamKchP(3)} & \CaLamKchP(3) & \multirow{2}{*}{\DaLamKchP(3)} & \multirow{4}{*}{\EaLamKchP(3)} \\
+   
+   & \ALamKchM &  
+   & \AaALamKchM(3) &                               & \CaALamKchM(3) & & \\
+   
+   \cline{2-2}
+   \cline{4-7}
+   
+   & \LamKchM &   
+   & \AaLamKchM(3) & \multirow{2}{*}{\BaLamKchM(3)} & \CaLamKchM(3) & \multirow{2}{*}{\DaLamKchM(3)} & \\
+   
+   & \ALamKchP & 
+   & \AaALamKchP(3) &                               & \CaALamKchP(3) & & \\   
+   
+   \clineB{2-8}{4.0}
+   
+   & \LamKchP \& \ALamKchM & \multirow{2}{*}{R} 
+   & \AaLamKchP(4) & \BaLamKchP(4) & \multirow{2}{*}{\CaLamKchP(4)} & \multirow{2}{*}{\DaLamKchP(4)} & \multirow{2}{*}{\EaLamKchP(4)} \\   
+   
+   \cline{2-2} 
+   \cline{4-5}
+   
+   & \LamKchM \& \ALamKchP & 
+   & \AaLamKchM(4) & \BaLamKchM(4) & & & \\  
+   
+   \hlineB{5.0}
+   
+   %%----------------------------- 30-50% ------------------------------------------------   
+   \multirow{5}{*}{30-50\%} 
+   & \LamKchP & \multirow{4}{*}{$\lambda$}  
+   & \AaLamKchP(5) & \multirow{2}{*}{\BaLamKchP(5)} & \CaLamKchP(5) & \multirow{2}{*}{\DaLamKchP(5)} & \multirow{4}{*}{\EaLamKchP(5)} \\
+   
+   & \ALamKchM &  
+   & \AaALamKchM(5) &                               & \CaALamKchM(5) & & \\
+   
+   \cline{2-2}
+   \cline{4-7}
+   
+   & \LamKchM &   
+   & \AaLamKchM(5) & \multirow{2}{*}{\BaLamKchM(5)} & \CaLamKchM(5) & \multirow{2}{*}{\DaLamKchM(5)} & \\
+   
+   & \ALamKchP & 
+   & \AaALamKchP(5) &                               & \CaALamKchP(5) & & \\   
+   
+   \clineB{2-8}{4.0}
+   
+   & \LamKchP \& \ALamKchM & \multirow{2}{*}{R} 
+   & \AaLamKchP(6) & \BaLamKchP(6) & \multirow{2}{*}{\CaLamKchP(6)} & \multirow{2}{*}{\DaLamKchP(6)} & \multirow{2}{*}{\EaLamKchP(6)} \\  
+   
+   \cline{2-2} 
+   \cline{4-5} 
+   
+   & \LamKchM \& \ALamKchP & 
+   & \AaLamKchM(6) & \BaLamKchM(6) & & & \\  
+   
+   \hlineB{7.0}
+   
+   %%----------------------------- Scattering parameters ------------------------------------------------      
+   & \multirow{3}{*}{\LamKchP \& \ALamKchM} 
+   & $\mathbb{R}f_{0}$   & \AaLamKchP(7) & \BaLamKchP(7) & \CaLamKchP(7) & \DaLamKchP(7) & \EaLamKchP(7) \\      
+   & & $\mathbb{I}f_{0}$ & \AaLamKchP(8) & \BaLamKchP(8) & \CaLamKchP(8) & \DaLamKchP(8) & \EaLamKchP(8) \\
+   & & $d_{0}$           & \AaLamKchP(9) & \BaLamKchP(9) & \CaLamKchP(9) & \DaLamKchP(9) & \EaLamKchP(9) \\
+   \hlineB{5.0}
+   
+   & \multirow{3}{*}{\LamKchM \& \ALamKchP} 
+   & $\mathbb{R}f_{0}$   &  \AaLamKchM(7) & \BaLamKchM(7) & \CaLamKchM(7) & \DaLamKchM(7) & \EaLamKchM(7) \\      
+   & & $\mathbb{I}f_{0}$ &  \AaLamKchM(8) & \BaLamKchM(8) & \CaLamKchM(8) & \DaLamKchM(8) & \EaLamKchM(8) \\
+   & & $d_{0}$           &  \AaLamKchM(9) & \BaLamKchM(9) & \CaLamKchM(9) & \DaLamKchM(9) & \EaLamKchM(9) \\
+   \hline   
+  \end{tabular}
+% \end{minipage}
+ \caption{Comparison: Polynomial non-flat background, THERMINATOR backgrounds fit together(v2)}
+ \label{tab:Comparison_Poly_ThermTogetherv2}
+\end{adjustwidth} 
+\end{table}
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -111,53 +287,100 @@
    \clineB{4-8}{5.0}
     & & & Unique $\lambda$ & Share $\lambda_{\mathrm{Conj}}$ & Unique $\lambda$ & Share $\lambda_{\mathrm{Conj}}$ & Share Single $\lambda$ \\ 
    \hlineB{8.0}
-   
+   %%----------------------------- 0-10% ------------------------------------------------
    \multirow{5}{*}{0-10\%} 
-   & \LamKchP & $\lambda$  & 1.38 & \multirow{2}{*}{1.37} & 1.85 & \multirow{2}{*}{1.75} & \multirow{4}{*}{1.65} \\
-   & \ALamKchM & $\lambda$ & 1.39 &                       & 1.87 & & \\
+   & \LamKchP & $\lambda$  
+   & \AbLamKchP(1) & \multirow{2}{*}{\BbLamKchP(1)} & \CbLamKchP(1) & \multirow{2}{*}{\DbLamKchP(1)} & \multirow{4}{*}{\EbLamKchP(1)} \\
+   
+   & \ALamKchM & $\lambda$ & 
+   \AbALamKchM(1) &                                 & \CbALamKchM(1) & & \\
+   
    \cline{2-7}
-   & \LamKchM & $\lambda$  & 2.04 & \multirow{2}{*}{1.63} & 1.87 & \multirow{2}{*}{1.64} & \\
-   & \ALamKchP & $\lambda$ & 2.07 &                       & 1.91 & & \\   
+   
+   & \LamKchM & $\lambda$  
+   & \AbLamKchM(1) & \multirow{2}{*}{\BbLamKchM(1)} & \CbLamKchM(1) & \multirow{2}{*}{\DbLamKchM(1)} & \\
+   & \ALamKchP & $\lambda$ 
+   & \AbALamKchP(1) &                               & \CbALamKchP(1) & & \\   
+   
    \clineB{2-8}{4.0}
-   & \LamKchP \& \ALamKchM & R & 5.27 & 5.25 & \multirow{2}{*}{6.22} & \multirow{2}{*}{5.83} & \multirow{2}{*}{5.81} \\  
+   
+   & \LamKchP \& \ALamKchM & R 
+   & \AbLamKchP(2) & \BbLamKchP(2) & \multirow{2}{*}{\CbLamKchP(2)} & \multirow{2}{*}{\DbLamKchP(2)} & \multirow{2}{*}{\EbLamKchP(2)} \\ 
+    
    \cline{2-5} 
-   & \LamKchM \& \ALamKchP & R & 6.51 & 5.67 & & & \\  
+   
+   & \LamKchM \& \ALamKchP & R 
+   & \AbLamKchM(2) & \BbLamKchM(2) & & & \\  
+   
    \hlineB{5.0}
    
+   %%----------------------------- 10-30% ------------------------------------------------   
    \multirow{5}{*}{10-30\%} 
-   & \LamKchP & $\lambda$  & 1.68 & \multirow{2}{*}{1.49} & 1.56 & \multirow{2}{*}{1.39} & \multirow{4}{*}{1.31} \\
-   & \ALamKchM & $\lambda$ & 1.46 &                       & 1.36 & & \\
+   & \LamKchP & $\lambda$  
+   & \AbLamKchP(3) & \multirow{2}{*}{\BbLamKchP(3)} & \CbLamKchP(3) & \multirow{2}{*}{\DbLamKchP(3)} & \multirow{4}{*}{\EbLamKchP(3)} \\
+   
+   & \ALamKchM & $\lambda$ 
+   & \AbALamKchM(3) &                               & \CbALamKchM(3) & & \\
+   
    \cline{2-7}
-   & \LamKchM & $\lambda$  & 1.43 & \multirow{2}{*}{1.16} & 1.46 & \multirow{2}{*}{1.30} & \\
-   & \ALamKchP & $\lambda$ & 1.47 &                       & 1.50 & & \\   
+   
+   & \LamKchM & $\lambda$  
+   & \AbLamKchM(3) & \multirow{2}{*}{\BbLamKchM(3)} & \CbLamKchM(3) & \multirow{2}{*}{\DbLamKchM(3)} & \\
+   
+   & \ALamKchP & $\lambda$ 
+   & \AbALamKchP(3) &                               & \CbALamKchP(3) & & \\   
+   
    \clineB{2-8}{4.0}
-   & \LamKchP \& \ALamKchM & R & 4.94 & 4.81 & \multirow{2}{*}{4.86} & \multirow{2}{*}{4.59} & \multirow{2}{*}{4.57} \\   
+   
+   & \LamKchP \& \ALamKchM & R 
+   & \AbLamKchP(4) & \BbLamKchP(4) & \multirow{2}{*}{\CbLamKchP(4)} & \multirow{2}{*}{\DbLamKchP(4)} & \multirow{2}{*}{\EbLamKchP(4)} \\   
+   
    \cline{2-5}
-   & \LamKchM \& \ALamKchP & R & 4.70 & 4.14 & & & \\  
+   
+   & \LamKchM \& \ALamKchP & R 
+   & \AbLamKchM(4) & \BbLamKchM(4) & & & \\  
+   
    \hlineB{5.0}
    
+   %%----------------------------- 30-50% ------------------------------------------------   
    \multirow{5}{*}{30-50\%} 
-   & \LamKchP & $\lambda$  & 1.19 & \multirow{2}{*}{1.16} & 1.13 & \multirow{2}{*}{1.01} & \multirow{4}{*}{1.04} \\
-   & \ALamKchM & $\lambda$ & 1.15 &                       & 1.09 & & \\
+   & \LamKchP & $\lambda$  
+   & \AbLamKchP(5) & \multirow{2}{*}{\BbLamKchP(5)} & \CbLamKchP(5) & \multirow{2}{*}{\DbLamKchP(5)} & \multirow{4}{*}{\EbLamKchP(5)} \\
+   
+   & \ALamKchM & $\lambda$ 
+   & \AbALamKchM(5) &                               & \CbALamKchM(5) & & \\
+   
    \cline{2-7}
-   & \LamKchM & $\lambda$  & 1.92 & \multirow{2}{*}{0.88} & 2.00 & \multirow{2}{*}{1.07} & \\
-   & \ALamKchP & $\lambda$ & 1.01 &                       & 1.03 & & \\   
+   
+   & \LamKchM & $\lambda$  
+   & \AbLamKchM(5) & \multirow{2}{*}{\BbLamKchM(5)} & \CbLamKchM(5) & \multirow{2}{*}{\DbLamKchM(5)} & \\
+   
+   & \ALamKchP & $\lambda$ 
+   & \AbALamKchP(5) &                               & \CbALamKchP(5) & & \\   
+   
    \clineB{2-8}{4.0}
-   & \LamKchP \& \ALamKchM & R & 3.28 & 3.28 & \multirow{2}{*}{3.24} & \multirow{2}{*}{3.03} & \multirow{2}{*}{3.11} \\  
+   
+   & \LamKchP \& \ALamKchM & R 
+   & \AbLamKchP(6) & \BbLamKchP(6) & \multirow{2}{*}{\CbLamKchP(6)} & \multirow{2}{*}{\DbLamKchP(6)} & \multirow{2}{*}{\EbLamKchP(6)} \\  
+   
    \cline{2-5} 
-   & \LamKchM \& \ALamKchP & R & 3.11 & 2.54 & & & \\  
+   
+   & \LamKchM \& \ALamKchP & R 
+   & \AbLamKchM(6) & \BbLamKchM(6) & & & \\  
+   
    \hlineB{7.0}
    
+   %%----------------------------- Scattering parameters ------------------------------------------------      
    & \multirow{3}{*}{\LamKchP \& \ALamKchM} 
-   & $\mathbb{R}f_{0}$   & -1.22 & -1.23 & -1.18 & -1.16 & -1.20 \\      
-   & & $\mathbb{I}f_{0}$ &  0.53 &  0.52 &  0.64 &  0.53 &  0.59 \\
-   & & $d_{0}$           &  1.12 &  1.14 &  1.07 &  1.01 &  1.07 \\
+   & $\mathbb{R}f_{0}$   & \AbLamKchP(7) & \BbLamKchP(7) & \CbLamKchP(7) & \DbLamKchP(7) & \EbLamKchP(7) \\      
+   & & $\mathbb{I}f_{0}$ & \AbLamKchP(8) & \BbLamKchP(8) & \CbLamKchP(8) & \DbLamKchP(8) & \EbLamKchP(8) \\
+   & & $d_{0}$           & \AbLamKchP(9) & \BbLamKchP(9) & \CbLamKchP(9) & \DbLamKchP(9) & \EbLamKchP(9) \\
    \hlineB{5.0}
    
    & \multirow{3}{*}{\LamKchM \& \ALamKchP} 
-   & $\mathbb{R}f_{0}$   &  0.40 &  0.33 &  0.43 &  0.43 &  0.42 \\      
-   & & $\mathbb{I}f_{0}$ &  0.44 &  0.47 &  0.46 &  0.52 &  0.51 \\
-   & & $d_{0}$           & -5.20 & -4.85 & -4.78 & -4.20 & -4.22 \\
+   & $\mathbb{R}f_{0}$   &  \AbLamKchM(7) & \BbLamKchM(7) & \CbLamKchM(7) & \DbLamKchM(7) & \EbLamKchM(7) \\      
+   & & $\mathbb{I}f_{0}$ &  \AbLamKchM(8) & \BbLamKchM(8) & \CbLamKchM(8) & \DbLamKchM(8) & \EbLamKchM(8) \\
+   & & $d_{0}$           &  \AbLamKchM(9) & \BbLamKchM(9) & \CbLamKchM(9) & \DbLamKchM(9) & \EbLamKchM(9) \\
    \hline   
   \end{tabular}
 % \end{minipage}
@@ -165,6 +388,7 @@
  \label{tab:Comparison_Linear}
 \end{adjustwidth} 
 \end{table}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -185,53 +409,100 @@
    \clineB{4-8}{5.0}
     & & & Unique $\lambda$ & Share $\lambda_{\mathrm{Conj}}$ & Unique $\lambda$ & Share $\lambda_{\mathrm{Conj}}$ & Share Single $\lambda$ \\ 
    \hlineB{8.0}
-   
+   %%----------------------------- 0-10% ------------------------------------------------
    \multirow{5}{*}{0-10\%} 
-   & \LamKchP & $\lambda$  & 0.95 & \multirow{2}{*}{0.93} & 1.34 & \multirow{2}{*}{1.21} & \multirow{4}{*}{1.05} \\
-   & \ALamKchM & $\lambda$ & 0.90 &                       & 1.27 & & \\
+   & \LamKchP & $\lambda$  
+   & \AdLamKchP(1) & \multirow{2}{*}{\BdLamKchP(1)} & \CdLamKchP(1) & \multirow{2}{*}{\DdLamKchP(1)} & \multirow{4}{*}{\EdLamKchP(1)} \\
+   
+   & \ALamKchM & $\lambda$ & 
+   \AdALamKchM(1) &                                 & \CdALamKchM(1) & & \\
+   
    \cline{2-7}
-   & \LamKchM & $\lambda$  & 2.38 & \multirow{2}{*}{1.28} & 2.15 & \multirow{2}{*}{1.15} & \\
-   & \ALamKchP & $\lambda$ & 2.26 &                       & 2.06 & & \\   
+   
+   & \LamKchM & $\lambda$  
+   & \AdLamKchM(1) & \multirow{2}{*}{\BdLamKchM(1)} & \CdLamKchM(1) & \multirow{2}{*}{\DdLamKchM(1)} & \\
+   & \ALamKchP & $\lambda$ 
+   & \AdALamKchP(1) &                               & \CdALamKchP(1) & & \\   
+   
    \clineB{2-8}{4.0}
-   & \LamKchP \& \ALamKchM & R & 5.44 & 5.43 & \multirow{2}{*}{5.75} & \multirow{2}{*}{5.25} & \multirow{2}{*}{5.04} \\  
+   
+   & \LamKchP \& \ALamKchM & R 
+   & \AdLamKchP(2) & \BdLamKchP(2) & \multirow{2}{*}{\CdLamKchP(2)} & \multirow{2}{*}{\DdLamKchP(2)} & \multirow{2}{*}{\EdLamKchP(2)} \\ 
+    
    \cline{2-5} 
-   & \LamKchM \& \ALamKchP & R & 5.54 & 5.06 & & & \\  
+   
+   & \LamKchM \& \ALamKchP & R 
+   & \AdLamKchM(2) & \BdLamKchM(2) & & & \\  
+   
    \hlineB{5.0}
    
+   %%----------------------------- 10-30% ------------------------------------------------   
    \multirow{5}{*}{10-30\%} 
-   & \LamKchP & $\lambda$  & 0.71 & \multirow{2}{*}{0.68} & 0.87 & \multirow{2}{*}{0.80} & \multirow{4}{*}{0.82} \\
-   & \ALamKchM & $\lambda$ & 0.67 &                       & 0.81 & & \\
+   & \LamKchP & $\lambda$  
+   & \AdLamKchP(3) & \multirow{2}{*}{\BdLamKchP(3)} & \CdLamKchP(3) & \multirow{2}{*}{\DdLamKchP(3)} & \multirow{4}{*}{\EdLamKchP(3)} \\
+   
+   & \ALamKchM & $\lambda$ 
+   & \AdALamKchM(3) &                               & \CdALamKchM(3) & & \\
+   
    \cline{2-7}
-   & \LamKchM & $\lambda$  & 1.56 & \multirow{2}{*}{0.90} & 1.47 & \multirow{2}{*}{0.88} & \\
-   & \ALamKchP & $\lambda$ & 1.77 &                       & 1.66 & & \\   
+   
+   & \LamKchM & $\lambda$  
+   & \AdLamKchM(3) & \multirow{2}{*}{\BdLamKchM(3)} & \CdLamKchM(3) & \multirow{2}{*}{\DdLamKchM(3)} & \\
+   
+   & \ALamKchP & $\lambda$ 
+   & \AdALamKchP(3) &                               & \CdALamKchP(3) & & \\   
+   
    \clineB{2-8}{4.0}
-   & \LamKchP \& \ALamKchM & R & 4.21 & 4.17 & \multirow{2}{*}{4.16} & \multirow{2}{*}{3.90} & \multirow{2}{*}{3.99} \\   
+   
+   & \LamKchP \& \ALamKchM & R 
+   & \AdLamKchP(4) & \BdLamKchP(4) & \multirow{2}{*}{\CdLamKchP(4)} & \multirow{2}{*}{\DdLamKchP(4)} & \multirow{2}{*}{\EdLamKchP(4)} \\   
+   
    \cline{2-5}
-   & \LamKchM \& \ALamKchP & R & 3.89 & 3.57 & & & \\  
+   
+   & \LamKchM \& \ALamKchP & R 
+   & \AdLamKchM(4) & \BdLamKchM(4) & & & \\  
+   
    \hlineB{5.0}
    
+   %%----------------------------- 30-50% ------------------------------------------------   
    \multirow{5}{*}{30-50\%} 
-   & \LamKchP & $\lambda$  & 0.98 & \multirow{2}{*}{1.11} & 0.70 & \multirow{2}{*}{0.82} & \multirow{4}{*}{0.88} \\
-   & \ALamKchM & $\lambda$ & 1.14 &                       & 0.82 & & \\
+   & \LamKchP & $\lambda$  
+   & \AdLamKchP(5) & \multirow{2}{*}{\BdLamKchP(5)} & \CdLamKchP(5) & \multirow{2}{*}{\DdLamKchP(5)} & \multirow{4}{*}{\EdLamKchP(5)} \\
+   
+   & \ALamKchM & $\lambda$ 
+   & \AdALamKchM(5) &                               & \CdALamKchM(5) & & \\
+   
    \cline{2-7}
-   & \LamKchM & $\lambda$  & 4.14 & \multirow{2}{*}{0.84} & 3.99 & \multirow{2}{*}{0.98} & \\
-   & \ALamKchP & $\lambda$ & 1.38 &                       & 1.36 & & \\   
+   
+   & \LamKchM & $\lambda$  
+   & \AdLamKchM(5) & \multirow{2}{*}{\BdLamKchM(5)} & \CdLamKchM(5) & \multirow{2}{*}{\DdLamKchM(5)} & \\
+   
+   & \ALamKchP & $\lambda$ 
+   & \AdALamKchP(5) &                               & \CdALamKchP(5) & & \\   
+   
    \clineB{2-8}{4.0}
-   & \LamKchP \& \ALamKchM & R & 4.01 & 4.07 & \multirow{2}{*}{3.03} & \multirow{2}{*}{3.03} & \multirow{2}{*}{3.17} \\  
+   
+   & \LamKchP \& \ALamKchM & R 
+   & \AdLamKchP(6) & \BdLamKchP(6) & \multirow{2}{*}{\CdLamKchP(6)} & \multirow{2}{*}{\DdLamKchP(6)} & \multirow{2}{*}{\EdLamKchP(6)} \\  
+   
    \cline{2-5} 
-   & \LamKchM \& \ALamKchP & R & 2.65 & 2.36 & & & \\  
+   
+   & \LamKchM \& \ALamKchP & R 
+   & \AdLamKchM(6) & \BdLamKchM(6) & & & \\  
+   
    \hlineB{7.0}
    
+   %%----------------------------- Scattering parameters ------------------------------------------------      
    & \multirow{3}{*}{\LamKchP \& \ALamKchM} 
-   & $\mathbb{R}f_{0}$   & -1.96 & -1.92 & -1.51 & -1.46 & -1.52 \\      
-   & & $\mathbb{I}f_{0}$ &  1.13 &  1.12 &  0.77 &  0.57 &  0.65 \\
-   & & $d_{0}$           &  0.58 &  0.51 & -0.47 & -0.42 & -0.44 \\
+   & $\mathbb{R}f_{0}$   & \AdLamKchP(7) & \BdLamKchP(7) & \CdLamKchP(7) & \DdLamKchP(7) & \EdLamKchP(7) \\      
+   & & $\mathbb{I}f_{0}$ & \AdLamKchP(8) & \BdLamKchP(8) & \CdLamKchP(8) & \DdLamKchP(8) & \EdLamKchP(8) \\
+   & & $d_{0}$           & \AdLamKchP(9) & \BdLamKchP(9) & \CdLamKchP(9) & \DdLamKchP(9) & \EdLamKchP(9) \\
    \hlineB{5.0}
    
    & \multirow{3}{*}{\LamKchM \& \ALamKchP} 
-   & $\mathbb{R}f_{0}$   &  0.24 &  0.32 &  0.34 &  0.53 &  0.55 \\      
-   & & $\mathbb{I}f_{0}$ &  0.27 &  0.54 &  0.36 &  0.75 &  0.82 \\
-   & & $d_{0}$           &  6.28 &  4.36 &  4.13 &  2.35 &  2.14 \\
+   & $\mathbb{R}f_{0}$   &  \AdLamKchM(7) & \BdLamKchM(7) & \CdLamKchM(7) & \DdLamKchM(7) & \EdLamKchM(7) \\      
+   & & $\mathbb{I}f_{0}$ &  \AdLamKchM(8) & \BdLamKchM(8) & \CdLamKchM(8) & \DdLamKchM(8) & \EdLamKchM(8) \\
+   & & $d_{0}$           &  \AdLamKchM(9) & \BdLamKchM(9) & \CdLamKchM(9) & \DdLamKchM(9) & \EdLamKchM(9) \\
    \hline   
   \end{tabular}
 % \end{minipage}
@@ -239,6 +510,552 @@
  \label{tab:Comparison_Stav_NoBgd}
 \end{adjustwidth} 
 \end{table}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\clearpage
+\begin{table}[htbp]
+\begin{adjustwidth}{-.5in}{-.5in}
+ \centering
+ %------------------------------------LamKchP
+% \begin{minipage}{0.3\textwidth}
+  \centering
+  \renewcommand{\arraystretch}{1.5}
+  \begin{tabular}{|c|c|cV{5.0}c|cV{3.0}c|c|c|}  
+   \multicolumn{8}{c}{Comparison 1} \\
+   \hline
+   \multirow{2}{*}{\textbf{Centrality}} & \multirow{2}{*}{\textbf{System}} & \multirow{2}{*}{\textbf{Parameter}} & \multicolumn{5}{c|}{\textbf{Methods}} \\
+   \clineB{4-8}{5.0}
+    & & & Poly. Bgd & Lin. Bgd & Stav.(No Bgd) & Stav.(Lin. Bgd) & Method 5 \\ 
+   \hlineB{8.0}
+   %%----------------------------- 0-10% ------------------------------------------------
+   \multirow{5}{*}{0-10\%} 
+   & \LamKchP & $\lambda$  
+   & \AdLamKchP(1) & \BdLamKchP(1) & \CdLamKchP(1) & \DdLamKchP(1) & \EdLamKchP(1) \\
+   
+   & \ALamKchM & $\lambda$ & 
+   \AdALamKchM(1) &  0.00          & \CdALamKchM(1) & 0.00 & 0.00 \\
+   
+   \cline{2-8}
+   
+   & \LamKchM & $\lambda$  
+   & \AdLamKchM(1) & \BdLamKchM(1) & \CdLamKchM(1) & \DdLamKchM(1) & 0.00 \\
+   & \ALamKchP & $\lambda$ 
+   & \AdALamKchP(1) & 0.00         & \CdALamKchP(1) & 0.00 & 0.00 \\   
+   
+   \clineB{2-8}{4.0}
+   
+   & \LamKchP \& \ALamKchM & R 
+   & \AdLamKchP(2) & \BdLamKchP(2) & \CdLamKchP(2) & \DdLamKchP(2) & \EdLamKchP(2) \\ 
+    
+   \cline{2-8} 
+   
+   & \LamKchM \& \ALamKchP & R 
+   & \AdLamKchM(2) & \BdLamKchM(2) & 0.00 & 0.00 & 0.00 \\  
+   
+   \hlineB{5.0}
+   
+   %%----------------------------- 10-30% ------------------------------------------------   
+   \multirow{5}{*}{10-30\%} 
+   & \LamKchP & $\lambda$  
+   & \AdLamKchP(3) & \BdLamKchP(3) & \CdLamKchP(3) & \DdLamKchP(3) & \EdLamKchP(3) \\
+   
+   & \ALamKchM & $\lambda$ 
+   & \AdALamKchM(3) & 0.00         & \CdALamKchM(3) & 0.00 & 0.00 \\
+   
+   \cline{2-8}
+   
+   & \LamKchM & $\lambda$  
+   & \AdLamKchM(3) & \BdLamKchM(3) & \CdLamKchM(3) & \DdLamKchM(3) & 0.00 \\
+   
+   & \ALamKchP & $\lambda$ 
+   & \AdALamKchP(3) & 0.00         & \CdALamKchP(3) & 0.00 & 0.00 \\   
+   
+   \clineB{2-8}{4.0}
+   
+   & \LamKchP \& \ALamKchM & R 
+   & \AdLamKchP(4) & \BdLamKchP(4) & \CdLamKchP(4) & \DdLamKchP(4) & \EdLamKchP(4) \\   
+   
+   \cline{2-8}
+   
+   & \LamKchM \& \ALamKchP & R 
+   & \AdLamKchM(4) & \BdLamKchM(4) & 0.00 & 0.00 & 0.00 \\  
+   
+   \hlineB{5.0}
+   
+   %%----------------------------- 30-50% ------------------------------------------------   
+   \multirow{5}{*}{30-50\%} 
+   & \LamKchP & $\lambda$  
+   & \AdLamKchP(5) & \BdLamKchP(5) & \CdLamKchP(5) & \DdLamKchP(5) & \EdLamKchP(5) \\
+   
+   & \ALamKchM & $\lambda$ 
+   & \AdALamKchM(5) & 0.00         & \CdALamKchM(5) & 0.00 & 0.00 \\
+   
+   \cline{2-8}
+   
+   & \LamKchM & $\lambda$  
+   & \AdLamKchM(5) & \BdLamKchM(5) & \CdLamKchM(5) & \DdLamKchM(5) & 0.00 \\
+   
+   & \ALamKchP & $\lambda$ 
+   & \AdALamKchP(5) & 0.00         & \CdALamKchP(5) & 0.00 & 0.00 \\   
+   
+   \clineB{2-8}{4.0}
+   
+   & \LamKchP \& \ALamKchM & R 
+   & \AdLamKchP(6) & \BdLamKchP(6) & \CdLamKchP(6) & \DdLamKchP(6) & \EdLamKchP(6) \\  
+   
+   \cline{2-8} 
+   
+   & \LamKchM \& \ALamKchP & R 
+   & \AdLamKchM(6) & \BdLamKchM(6) & 0.00 & 0.00 & 0.00 \\  
+   
+   \hlineB{7.0}
+   
+   %%----------------------------- Scattering parameters ------------------------------------------------      
+   & \multirow{3}{*}{\LamKchP \& \ALamKchM} 
+   & $\mathbb{R}f_{0}$   & \AdLamKchP(7) & \BdLamKchP(7) & \CdLamKchP(7) & \DdLamKchP(7) & \EdLamKchP(7) \\      
+   & & $\mathbb{I}f_{0}$ & \AdLamKchP(8) & \BdLamKchP(8) & \CdLamKchP(8) & \DdLamKchP(8) & \EdLamKchP(8) \\
+   & & $d_{0}$           & \AdLamKchP(9) & \BdLamKchP(9) & \CdLamKchP(9) & \DdLamKchP(9) & \EdLamKchP(9) \\
+   \hlineB{5.0}
+   
+   & \multirow{3}{*}{\LamKchM \& \ALamKchP} 
+   & $\mathbb{R}f_{0}$   &  \AdLamKchM(7) & \BdLamKchM(7) & \CdLamKchM(7) & \DdLamKchM(7) & \EdLamKchM(7) \\      
+   & & $\mathbb{I}f_{0}$ &  \AdLamKchM(8) & \BdLamKchM(8) & \CdLamKchM(8) & \DdLamKchM(8) & \EdLamKchM(8) \\
+   & & $d_{0}$           &  \AdLamKchM(9) & \BdLamKchM(9) & \CdLamKchM(9) & \DdLamKchM(9) & \EdLamKchM(9) \\
+   \hline   
+  \end{tabular}
+% \end{minipage}
+ \caption{Comparison1}
+ \label{tab:Comparison_1}
+\end{adjustwidth} 
+\end{table}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\clearpage
+\begin{table}[htbp]
+\begin{adjustwidth}{-.5in}{-.5in}
+ \centering
+ %------------------------------------LamKchP
+% \begin{minipage}{0.3\textwidth}
+  \centering
+  \renewcommand{\arraystretch}{1.5}
+  \begin{tabular}{|c|c|cV{5.0}c|cV{3.0}c|c|c|}  
+   \multicolumn{8}{c}{Comparison 2} \\
+   \hline
+   \multirow{2}{*}{\textbf{Centrality}} & \multirow{2}{*}{\textbf{System}} & \multirow{2}{*}{\textbf{Parameter}} & \multicolumn{5}{c|}{\textbf{Methods}} \\
+   \clineB{4-8}{5.0}
+    & & & Poly. Bgd & Lin. Bgd & Stav.(No Bgd) & Stav.(Lin. Bgd) & Method 5 \\ 
+   \hlineB{8.0}
+   %%----------------------------- 0-10% ------------------------------------------------
+   \multirow{5}{*}{0-10\%} 
+   & \LamKchP & \multirow{2}{*}{$\lambda$}  
+   & \multirow{2}{*}{\AdLamKchP(1)} & \multirow{2}{*}{\BdLamKchP(1)} & \multirow{2}{*}{\CdLamKchP(1)} & \multirow{2}{*}{\DdLamKchP(1)} & \multirow{2}{*}{\EdLamKchP(1)} \\
+   
+   & \ALamKchM & & & & & & \\
+   
+   \cline{2-8}
+   
+   & \LamKchM & \multirow{2}{*}{$\lambda$}  
+   & \multirow{2}{*}{\AdLamKchM(1)} & \multirow{2}{*}{\BdLamKchM(1)} & \multirow{2}{*}{\CdLamKchM(1)} & \multirow{2}{*}{\DdLamKchM(1)} & \multirow{2}{*}{0.00} \\
+   & \ALamKchP & & & & & & \\   
+   
+   \clineB{2-8}{4.0}
+   
+   & \LamKchP \& \ALamKchM & R 
+   & \AdLamKchP(2) & \BdLamKchP(2) & \CdLamKchP(2) & \DdLamKchP(2) & \EdLamKchP(2) \\ 
+    
+   \cline{2-8} 
+   
+   & \LamKchM \& \ALamKchP & R 
+   & \AdLamKchM(2) & \BdLamKchM(2) & 0.00 & 0.00 & 0.00 \\  
+   
+   \hlineB{5.0}
+   
+   %%----------------------------- 10-30% ------------------------------------------------   
+   \multirow{5}{*}{10-30\%} 
+   & \LamKchP & \multirow{2}{*}{$\lambda$}  
+   & \multirow{2}{*}{\AdLamKchP(3)} & \multirow{2}{*}{\BdLamKchP(3)} & \multirow{2}{*}{\CdLamKchP(3)} & \multirow{2}{*}{\DdLamKchP(3)} & \multirow{2}{*}{\EdLamKchP(3)} \\
+   
+   & \ALamKchM & & & & & & \\
+   
+   \cline{2-8}
+   
+   & \LamKchM & \multirow{2}{*}{$\lambda$}  
+   & \multirow{2}{*}{\AdLamKchM(3)} & \multirow{2}{*}{\BdLamKchM(3)} & \multirow{2}{*}{\CdLamKchM(3)} & \multirow{2}{*}{\DdLamKchM(3)} & \multirow{2}{*}{0.00} \\
+   
+   & \ALamKchP & & & & & & \\   
+   
+   \clineB{2-8}{4.0}
+   
+   & \LamKchP \& \ALamKchM & R 
+   & \AdLamKchP(4) & \BdLamKchP(4) & \CdLamKchP(4) & \DdLamKchP(4) & \EdLamKchP(4) \\   
+   
+   \cline{2-8}
+   
+   & \LamKchM \& \ALamKchP & R 
+   & \AdLamKchM(4) & \BdLamKchM(4) & 0.00 & 0.00 & 0.00 \\  
+   
+   \hlineB{5.0}
+   
+   %%----------------------------- 30-50% ------------------------------------------------   
+   \multirow{5}{*}{30-50\%} 
+   & \LamKchP & \multirow{2}{*}{$\lambda$} 
+   & \multirow{2}{*}{\AdLamKchP(5)} & \multirow{2}{*}{\BdLamKchP(5)} & \multirow{2}{*}{\CdLamKchP(5)} & \multirow{2}{*}{\DdLamKchP(5)} & \multirow{2}{*}{\EdLamKchP(5)} \\
+   
+   & \ALamKchM & & & & & & \\
+   
+   \cline{2-8}
+   
+   & \LamKchM & \multirow{2}{*}{$\lambda$}  
+   & \multirow{2}{*}{\AdLamKchM(5)} & \multirow{2}{*}{\BdLamKchM(5)} & \multirow{2}{*}{\CdLamKchM(5)} & \multirow{2}{*}{\DdLamKchM(5)} & \multirow{2}{*}{0.00} \\
+   
+   & \ALamKchP & & & & & & \\   
+   
+   \clineB{2-8}{4.0}
+   
+   & \LamKchP \& \ALamKchM & R 
+   & \AdLamKchP(6) & \BdLamKchP(6) & \CdLamKchP(6) & \DdLamKchP(6) & \EdLamKchP(6) \\  
+   
+   \cline{2-8} 
+   
+   & \LamKchM \& \ALamKchP & R 
+   & \AdLamKchM(6) & \BdLamKchM(6) & 0.00 & 0.00 & 0.00 \\  
+   
+   \hlineB{7.0}
+   
+   %%----------------------------- Scattering parameters ------------------------------------------------      
+   & \multirow{3}{*}{\LamKchP \& \ALamKchM} 
+   & $\mathbb{R}f_{0}$   & \AdLamKchP(7) & \BdLamKchP(7) & \CdLamKchP(7) & \DdLamKchP(7) & \EdLamKchP(7) \\      
+   & & $\mathbb{I}f_{0}$ & \AdLamKchP(8) & \BdLamKchP(8) & \CdLamKchP(8) & \DdLamKchP(8) & \EdLamKchP(8) \\
+   & & $d_{0}$           & \AdLamKchP(9) & \BdLamKchP(9) & \CdLamKchP(9) & \DdLamKchP(9) & \EdLamKchP(9) \\
+   \hlineB{5.0}
+   
+   & \multirow{3}{*}{\LamKchM \& \ALamKchP} 
+   & $\mathbb{R}f_{0}$   &  \AdLamKchM(7) & \BdLamKchM(7) & \CdLamKchM(7) & \DdLamKchM(7) & \EdLamKchM(7) \\      
+   & & $\mathbb{I}f_{0}$ &  \AdLamKchM(8) & \BdLamKchM(8) & \CdLamKchM(8) & \DdLamKchM(8) & \EdLamKchM(8) \\
+   & & $d_{0}$           &  \AdLamKchM(9) & \BdLamKchM(9) & \CdLamKchM(9) & \DdLamKchM(9) & \EdLamKchM(9) \\
+   \hline   
+  \end{tabular}
+% \end{minipage}
+ \caption{Comparison2}
+ \label{tab:Comparison_2}
+\end{adjustwidth} 
+\end{table}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\clearpage
+\begin{table}[htbp]
+\begin{adjustwidth}{-.5in}{-.5in}
+ \centering
+ %------------------------------------LamKchP
+% \begin{minipage}{0.3\textwidth}
+  \centering
+  \renewcommand{\arraystretch}{1.5}
+  \begin{tabular}{|c|c|cV{5.0}c|cV{3.0}c|c|c|}  
+   \multicolumn{8}{c}{Comparison 3} \\
+   \hline
+   \multirow{2}{*}{\textbf{Centrality}} & \multirow{2}{*}{\textbf{System}} & \multirow{2}{*}{\textbf{Parameter}} & \multicolumn{5}{c|}{\textbf{Methods}} \\
+   \clineB{4-8}{5.0}
+    & & & Poly. Bgd & Lin. Bgd & Stav.(No Bgd) & Stav.(Lin. Bgd) & Method 5 \\ 
+   \hlineB{8.0}
+   %%----------------------------- 0-10% ------------------------------------------------
+   \multirow{5}{*}{0-10\%} 
+   & \LamKchP & $\lambda$  
+   & \AdLamKchP(1) & \BdLamKchP(1) & \CdLamKchP(1) & \DdLamKchP(1) & \EdLamKchP(1) \\
+   
+   & \ALamKchM & $\lambda$ & 
+   \AdALamKchM(1) & 0.00           & \CdALamKchM(1) & 0.00 & 0.00 \\
+   
+   \cline{2-8}
+   
+   & \LamKchM & $\lambda$  
+   & \AdLamKchM(1) & \BdLamKchM(1) & \CdLamKchM(1) & \DdLamKchM(1) & 0.00 \\
+   & \ALamKchP & $\lambda$ 
+   & \AdALamKchP(1) & 0.00         & \CdALamKchP(1) & 0.00 & 0.00 \\   
+   
+   \clineB{2-8}{4.0}
+   
+   & \LamKchP \& \ALamKchM & \multirow{2}{*}{R}
+   & \multirow{2}{*}{\AdLamKchP(2)} & \multirow{2}{*}{\BdLamKchP(2)} & \multirow{2}{*}{\CdLamKchP(2)} & \multirow{2}{*}{\DdLamKchP(2)} & \multirow{2}{*}{\EdLamKchP(2)} \\ 
+       
+   & \LamKchM \& \ALamKchP & & & & & & \\  
+   
+   \hlineB{5.0}
+   
+   %%----------------------------- 10-30% ------------------------------------------------   
+   \multirow{5}{*}{10-30\%} 
+   & \LamKchP & $\lambda$  
+   & \AdLamKchP(3) & \BdLamKchP(3) & \CdLamKchP(3) & \DdLamKchP(3) & \EdLamKchP(3) \\
+   
+   & \ALamKchM & $\lambda$ 
+   & \AdALamKchM(3) & 0.00         & \CdALamKchM(3) & 0.00 & 0.00 \\
+   
+   \cline{2-8}
+   
+   & \LamKchM & $\lambda$  
+   & \AdLamKchM(3) & \BdLamKchM(3) & \CdLamKchM(3) & \DdLamKchM(3) & 0.00 \\
+   
+   & \ALamKchP & $\lambda$ 
+   & \AdALamKchP(3) & 0.00         & \CdALamKchP(3) & 0.00 & 0.00 \\   
+   
+   \clineB{2-8}{4.0}
+   
+   & \LamKchP \& \ALamKchM & \multirow{2}{*}{R}
+   & \multirow{2}{*}{\AdLamKchP(4)} & \multirow{2}{*}{\BdLamKchP(4)} & \multirow{2}{*}{\CdLamKchP(4)} & \multirow{2}{*}{\DdLamKchP(4)} & \multirow{2}{*}{\EdLamKchP(4)} \\   
+      
+   & \LamKchM \& \ALamKchP & & & & & & \\  
+   
+   \hlineB{5.0}
+   
+   %%----------------------------- 30-50% ------------------------------------------------   
+   \multirow{5}{*}{30-50\%} 
+   & \LamKchP & $\lambda$  
+   & \AdLamKchP(5) & \BdLamKchP(5) & \CdLamKchP(5) & \DdLamKchP(5) & \EdLamKchP(5) \\
+   
+   & \ALamKchM & $\lambda$ 
+   & \AdALamKchM(5) & 0.00         & \CdALamKchM(5) & 0.00 & 0.00 \\
+   
+   \cline{2-8}
+   
+   & \LamKchM & $\lambda$  
+   & \AdLamKchM(5) & \BdLamKchM(5) & \CdLamKchM(5) & \DdLamKchM(5) & 0.00 \\
+   
+   & \ALamKchP & $\lambda$ 
+   & \AdALamKchP(5) & 0.00         & \CdALamKchP(5) & 0.00 & 0.00 \\   
+   
+   \clineB{2-8}{4.0}
+   
+   & \LamKchP \& \ALamKchM & \multirow{2}{*}{R} 
+   & \multirow{2}{*}{\AdLamKchP(6)} & \multirow{2}{*}{\BdLamKchP(6)} & \multirow{2}{*}{\CdLamKchP(6)} & \multirow{2}{*}{\DdLamKchP(6)} & \multirow{2}{*}{\EdLamKchP(6)} \\  
+      
+   & \LamKchM \& \ALamKchP & & & & & & \\  
+   
+   \hlineB{7.0}
+   
+   %%----------------------------- Scattering parameters ------------------------------------------------      
+   & \multirow{3}{*}{\LamKchP \& \ALamKchM} 
+   & $\mathbb{R}f_{0}$   & \AdLamKchP(7) & \BdLamKchP(7) & \CdLamKchP(7) & \DdLamKchP(7) & \EdLamKchP(7) \\      
+   & & $\mathbb{I}f_{0}$ & \AdLamKchP(8) & \BdLamKchP(8) & \CdLamKchP(8) & \DdLamKchP(8) & \EdLamKchP(8) \\
+   & & $d_{0}$           & \AdLamKchP(9) & \BdLamKchP(9) & \CdLamKchP(9) & \DdLamKchP(9) & \EdLamKchP(9) \\
+   \hlineB{5.0}
+   
+   & \multirow{3}{*}{\LamKchM \& \ALamKchP} 
+   & $\mathbb{R}f_{0}$   &  \AdLamKchM(7) & \BdLamKchM(7) & \CdLamKchM(7) & \DdLamKchM(7) & \EdLamKchM(7) \\      
+   & & $\mathbb{I}f_{0}$ &  \AdLamKchM(8) & \BdLamKchM(8) & \CdLamKchM(8) & \DdLamKchM(8) & \EdLamKchM(8) \\
+   & & $d_{0}$           &  \AdLamKchM(9) & \BdLamKchM(9) & \CdLamKchM(9) & \DdLamKchM(9) & \EdLamKchM(9) \\
+   \hline   
+  \end{tabular}
+% \end{minipage}
+ \caption{Comparison3}
+ \label{tab:Comparison_3}
+\end{adjustwidth} 
+\end{table}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\clearpage
+\begin{table}[htbp]
+\begin{adjustwidth}{-.5in}{-.5in}
+ \centering
+ %------------------------------------LamKchP
+% \begin{minipage}{0.3\textwidth}
+  \centering
+  \renewcommand{\arraystretch}{1.5}
+  \begin{tabular}{|c|c|cV{5.0}c|cV{3.0}c|c|c|}  
+   \multicolumn{8}{c}{Comparison 4} \\
+   \hline
+   \multirow{2}{*}{\textbf{Centrality}} & \multirow{2}{*}{\textbf{System}} & \multirow{2}{*}{\textbf{Parameter}} & \multicolumn{5}{c|}{\textbf{Methods}} \\
+   \clineB{4-8}{5.0}
+    & & & Poly. Bgd & Lin. Bgd & Stav.(No Bgd) & Stav.(Lin. Bgd) & Method 5 \\ 
+   \hlineB{8.0}
+   %%----------------------------- 0-10% ------------------------------------------------
+   \multirow{5}{*}{0-10\%} 
+   & \LamKchP & \multirow{2}{*}{$\lambda$}  
+   & \multirow{2}{*}{\AdLamKchP(1)} & \multirow{2}{*}{\BdLamKchP(1)} & \multirow{2}{*}{\CdLamKchP(1)} & \multirow{2}{*}{\DdLamKchP(1)} & \multirow{2}{*}{\EdLamKchP(1)} \\
+   
+   & \ALamKchM & & & & & & \\
+   
+   \cline{2-8}
+   
+   & \LamKchM & \multirow{2}{*}{$\lambda$}  
+   & \multirow{2}{*}{\AdLamKchM(1)} & \multirow{2}{*}{\BdLamKchM(1)} & \multirow{2}{*}{\CdLamKchM(1)} & \multirow{2}{*}{\DdLamKchM(1)} & \multirow{2}{*}{0.00} \\
+   & \ALamKchP & & & & & & \\   
+   
+   \clineB{2-8}{4.0}
+   
+   & \LamKchP \& \ALamKchM & \multirow{2}{*}{R}
+   & \multirow{2}{*}{\AdLamKchP(2)} & \multirow{2}{*}{\BdLamKchP(2)} & \multirow{2}{*}{\CdLamKchP(2)} & \multirow{2}{*}{\DdLamKchP(2)} & \multirow{2}{*}{\EdLamKchP(2)} \\ 
+       
+   & \LamKchM \& \ALamKchP & & & & & & \\  
+   
+   \hlineB{5.0}
+   
+   %%----------------------------- 10-30% ------------------------------------------------   
+   \multirow{5}{*}{10-30\%} 
+   & \LamKchP & \multirow{2}{*}{$\lambda$}  
+   & \multirow{2}{*}{\AdLamKchP(3)} & \multirow{2}{*}{\BdLamKchP(3)} & \multirow{2}{*}{\CdLamKchP(3)} & \multirow{2}{*}{\DdLamKchP(3)} & \multirow{2}{*}{\EdLamKchP(3)} \\
+   
+   & \ALamKchM & & & & & & \\
+   
+   \cline{2-8}
+   
+   & \LamKchM & \multirow{2}{*}{$\lambda$}  
+   & \multirow{2}{*}{\AdLamKchM(3)} & \multirow{2}{*}{\BdLamKchM(3)} & \multirow{2}{*}{\CdLamKchM(3)} & \multirow{2}{*}{\DdLamKchM(3)} & \multirow{2}{*}{0.00} \\
+   
+   & \ALamKchP & & & & & & \\   
+   
+   \clineB{2-8}{4.0}
+   
+   & \LamKchP \& \ALamKchM & \multirow{2}{*}{R} 
+   & \multirow{2}{*}{\AdLamKchP(4)} & \multirow{2}{*}{\BdLamKchP(4)} & \multirow{2}{*}{\CdLamKchP(4)} & \multirow{2}{*}{\DdLamKchP(4)} & \multirow{2}{*}{\EdLamKchP(4)} \\   
+   
+   
+   & \LamKchM \& \ALamKchP & & & & & & \\  
+   
+   \hlineB{5.0}
+   
+   %%----------------------------- 30-50% ------------------------------------------------   
+   \multirow{5}{*}{30-50\%} 
+   & \LamKchP & \multirow{2}{*}{$\lambda$}  
+   & \multirow{2}{*}{\AdLamKchP(5)} & \multirow{2}{*}{\BdLamKchP(5)} & \multirow{2}{*}{\CdLamKchP(5)} & \multirow{2}{*}{\DdLamKchP(5)} & \multirow{2}{*}{\EdLamKchP(5)} \\
+   
+   & \ALamKchM & & & & & & \\
+   
+   \cline{2-8}
+   
+   & \LamKchM & \multirow{2}{*}{$\lambda$}  
+   & \multirow{2}{*}{\AdLamKchM(5)} & \multirow{2}{*}{\BdLamKchM(5)} & \multirow{2}{*}{\CdLamKchM(5)} & \multirow{2}{*}{\DdLamKchM(5)} & \multirow{2}{*}{0.00} \\
+   
+   & \ALamKchP & & & & & & \\   
+   
+   \clineB{2-8}{4.0}
+   
+   & \LamKchP \& \ALamKchM & \multirow{2}{*}{R} 
+   & \multirow{2}{*}{\AdLamKchP(6)} & \multirow{2}{*}{\BdLamKchP(6)} & \multirow{2}{*}{\CdLamKchP(6)} & \multirow{2}{*}{\DdLamKchP(6)} & \multirow{2}{*}{\EdLamKchP(6)} \\  
+      
+   & \LamKchM \& \ALamKchP & & & & & & \\  
+   
+   \hlineB{7.0}
+   
+   %%----------------------------- Scattering parameters ------------------------------------------------      
+   & \multirow{3}{*}{\LamKchP \& \ALamKchM} 
+   & $\mathbb{R}f_{0}$   & \AdLamKchP(7) & \BdLamKchP(7) & \CdLamKchP(7) & \DdLamKchP(7) & \EdLamKchP(7) \\      
+   & & $\mathbb{I}f_{0}$ & \AdLamKchP(8) & \BdLamKchP(8) & \CdLamKchP(8) & \DdLamKchP(8) & \EdLamKchP(8) \\
+   & & $d_{0}$           & \AdLamKchP(9) & \BdLamKchP(9) & \CdLamKchP(9) & \DdLamKchP(9) & \EdLamKchP(9) \\
+   \hlineB{5.0}
+   
+   & \multirow{3}{*}{\LamKchM \& \ALamKchP} 
+   & $\mathbb{R}f_{0}$   &  \AdLamKchM(7) & \BdLamKchM(7) & \CdLamKchM(7) & \DdLamKchM(7) & \EdLamKchM(7) \\      
+   & & $\mathbb{I}f_{0}$ &  \AdLamKchM(8) & \BdLamKchM(8) & \CdLamKchM(8) & \DdLamKchM(8) & \EdLamKchM(8) \\
+   & & $d_{0}$           &  \AdLamKchM(9) & \BdLamKchM(9) & \CdLamKchM(9) & \DdLamKchM(9) & \EdLamKchM(9) \\
+   \hline   
+  \end{tabular}
+% \end{minipage}
+ \caption{Comparison4}
+ \label{tab:Comparison_4}
+\end{adjustwidth} 
+\end{table}
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\clearpage
+\begin{table}[htbp]
+\begin{adjustwidth}{-.5in}{-.5in}
+ \centering
+ %------------------------------------LamKchP
+% \begin{minipage}{0.3\textwidth}
+  \centering
+  \renewcommand{\arraystretch}{1.5}
+  \begin{tabular}{|c|c|cV{5.0}c|cV{3.0}c|c|c|}  
+   \multicolumn{8}{c}{Comparison 5} \\
+   \hline
+   \multirow{2}{*}{\textbf{Centrality}} & \multirow{2}{*}{\textbf{System}} & \multirow{2}{*}{\textbf{Parameter}} & \multicolumn{5}{c|}{\textbf{Methods}} \\
+   \clineB{4-8}{5.0}
+    & & & Poly. Bgd & Lin. Bgd & Stav.(No Bgd) & Stav.(Lin. Bgd) & Method 5 \\ 
+   \hlineB{8.0}
+   %%----------------------------- 0-10% ------------------------------------------------
+   \multirow{5}{*}{0-10\%} 
+   & \LamKchP & \multirow{4}{*}{$\lambda$}  
+   & \multirow{4}{*}{\AdLamKchP(1)} & \multirow{4}{*}{\BdLamKchP(1)} & \multirow{4}{*}{\CdLamKchP(1)} & \multirow{4}{*}{\DdLamKchP(1)} & \multirow{4}{*}{\EdLamKchP(1)} \\
+   
+   & \ALamKchM & & & & & & \\
+   & \LamKchM & & & & & & \\  
+   & \ALamKchP & & & & & & \\   
+   
+   \clineB{2-8}{4.0}
+   
+   & \LamKchP \& \ALamKchM & \multirow{2}{*}{R} 
+   & \multirow{2}{*}{\AdLamKchP(2)} & \multirow{2}{*}{\BdLamKchP(2)} & \multirow{2}{*}{\CdLamKchP(2)} & \multirow{2}{*}{\DdLamKchP(2)} & \multirow{2}{*}{\EdLamKchP(2)} \\ 
+       
+   & \LamKchM \& \ALamKchP & & & & & & \\  
+   
+   \hlineB{5.0}
+   
+   %%----------------------------- 10-30% ------------------------------------------------   
+   \multirow{5}{*}{10-30\%} 
+   & \LamKchP & \multirow{4}{*}{$\lambda$}  
+   & \multirow{4}{*}{\AdLamKchP(3)} & \multirow{4}{*}{\BdLamKchP(3)} & \multirow{4}{*}{\CdLamKchP(3)} & \multirow{4}{*}{\DdLamKchP(3)} & \multirow{4}{*}{\EdLamKchP(3)} \\
+   
+   & \ALamKchM & & & & & & \\   
+   & \LamKchM & & & & & & \\  
+   & \ALamKchP & & & & & & \\   
+   
+   \clineB{2-8}{4.0}
+   
+   & \LamKchP \& \ALamKchM & \multirow{2}{*}{R} 
+   & \multirow{2}{*}{\AdLamKchP(4)} & \multirow{2}{*}{\BdLamKchP(4)} & \multirow{2}{*}{\CdLamKchP(4)} & \multirow{2}{*}{\DdLamKchP(4)} & \multirow{2}{*}{\EdLamKchP(4)} \\   
+   
+   
+   & \LamKchM \& \ALamKchP & & & & & & \\  
+   
+   \hlineB{5.0}
+   
+   %%----------------------------- 30-50% ------------------------------------------------   
+   \multirow{5}{*}{30-50\%} 
+   & \LamKchP & \multirow{4}{*}{$\lambda$}  
+   & \multirow{4}{*}{\AdLamKchP(5)} & \multirow{4}{*}{\BdLamKchP(5)} & \multirow{4}{*}{\CdLamKchP(5)} & \multirow{4}{*}{\DdLamKchP(5)} & \multirow{4}{*}{\EdLamKchP(5)} \\
+   
+   & \ALamKchM & & & & & & \\      
+   & \LamKchM & & & & & & \\  
+   & \ALamKchP & & & & & & \\   
+   
+   \clineB{2-8}{4.0}
+   
+   & \LamKchP \& \ALamKchM & \multirow{2}{*}{R} 
+   & \multirow{2}{*}{\AdLamKchP(6)} & \multirow{2}{*}{\BdLamKchP(6)} & \multirow{2}{*}{\CdLamKchP(6)} & \multirow{2}{*}{\DdLamKchP(6)} & \multirow{2}{*}{\EdLamKchP(6)} \\  
+      
+   & \LamKchM \& \ALamKchP & & & & & & \\  
+   
+   \hlineB{7.0}
+   
+   %%----------------------------- Scattering parameters ------------------------------------------------      
+   & \multirow{3}{*}{\LamKchP \& \ALamKchM} 
+   & $\mathbb{R}f_{0}$   & \AdLamKchP(7) & \BdLamKchP(7) & \CdLamKchP(7) & \DdLamKchP(7) & \EdLamKchP(7) \\      
+   & & $\mathbb{I}f_{0}$ & \AdLamKchP(8) & \BdLamKchP(8) & \CdLamKchP(8) & \DdLamKchP(8) & \EdLamKchP(8) \\
+   & & $d_{0}$           & \AdLamKchP(9) & \BdLamKchP(9) & \CdLamKchP(9) & \DdLamKchP(9) & \EdLamKchP(9) \\
+   \hlineB{5.0}
+   
+   & \multirow{3}{*}{\LamKchM \& \ALamKchP} 
+   & $\mathbb{R}f_{0}$   &  \AdLamKchM(7) & \BdLamKchM(7) & \CdLamKchM(7) & \DdLamKchM(7) & \EdLamKchM(7) \\      
+   & & $\mathbb{I}f_{0}$ &  \AdLamKchM(8) & \BdLamKchM(8) & \CdLamKchM(8) & \DdLamKchM(8) & \EdLamKchM(8) \\
+   & & $d_{0}$           &  \AdLamKchM(9) & \BdLamKchM(9) & \CdLamKchM(9) & \DdLamKchM(9) & \EdLamKchM(9) \\
+   \hline   
+  \end{tabular}
+% \end{minipage}
+ \caption{Comparison5}
+ \label{tab:Comparison_5}
+\end{adjustwidth} 
+\end{table}
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

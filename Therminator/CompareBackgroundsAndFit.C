@@ -1305,7 +1305,7 @@ int main(int argc, char **argv)
 
   TString tSingleFileName = "CorrelationFunctions_RandomEPs_NumWeight1.root";
 
-  TString tSaveDir = "/home/jesse/Analysis/Presentations/AliFemto/20180620/Figures/";
+  TString tSaveDir = "/home/jesse/Analysis/Presentations/AliFemto/20180627/Figures/";
   TString tSaveFileBase = tSaveDir + TString::Format("%s/", cAnalysisBaseTags[tAnType]);
 
 

@@ -1,0 +1,714 @@
+%NOTE: Arrays seem to only be able to be named with alphabetical characters
+%      No "_" or event numbers
+
+% ----------Shorthand definitions----------
+% A = FitGen_NoLamShare
+% B = FitGen_ShareLamConj
+
+% C = Dualie_NoLamShare
+% D = Dualie_ShareLamConj
+% E = Dualie_ShareSingleLam
+
+%   ------------------
+% a = PolyNFB
+% b = LinrNFB
+% c = LinrNFB_StavCf
+% d = NoNFB_StavCf
+
+% ----------How arrays are stores----------
+% aArray = {lam0010(1), R0010(2),
+%           lam1030(3), R1030(4),
+%           lam3050(5), R3050(6),
+%           ReF0(7), ImF0(8), d0(9)}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% --------------- Aa = FitGen_PolyNFB_NoLamShare ---------------
+\newarray\AaLamKchP
+\readarray{AaLamKchP}{
+                      1.37 & 4.90 &
+                      1.70 & 4.78 &
+                      1.30 & 3.24 &
+                     -1.13 & 0.36 & 1.09
+                      }
+                      
+\newarray\AaALamKchM
+\readarray{AaALamKchM}{
+                       1.39 & \AaLamKchP(2) &
+                       1.51 & \AaLamKchP(4) &
+                       1.18 & \AaLamKchP(6) &
+                       \AaLamKchP(7) & \AaLamKchP(8) & \AaLamKchP(9)
+                      }  
+                      
+\newarray\AaLamKchM
+\readarray{AaLamKchM}{
+                      1.58 & 4.11 &
+                      1.08 & 3.05 &
+                      1.27 & 1.98 &
+                      0.15 & 0.30 & 2.07
+                      }
+                      
+\newarray\AaALamKchP
+\readarray{AaALamKchP}{
+                       1.60 & \AaLamKchM(2) &
+                       1.10 & \AaLamKchM(4) &
+                       0.83 & \AaLamKchM(6) &
+                       \AaLamKchM(7) & \AaLamKchM(8) & \AaLamKchM(9)
+                       }     
+
+
+% --------------- Ba = FitGen_PolyNFB_ShareLamConj ---------------
+\newarray\BaLamKchP
+\readarray{BaLamKchP}{
+                      1.37 & 4.89 &
+                      1.54 & 4.68 &
+                      1.23 & 3.23 &
+                     -1.13 & 0.36 & 1.11
+                      }
+                      
+\newarray\BaALamKchM
+\readarray{BaALamKchM}{
+                       \BaLamKchP(1) & \BaLamKchP(2) &
+                       \BaLamKchP(3) & \BaLamKchP(4) &
+                       \BaLamKchP(5) & \BaLamKchP(6) &
+                       \BaLamKchP(7) & \BaLamKchP(8) & \BaLamKchP(9)
+                      }  
+                      
+\newarray\BaLamKchM
+\readarray{BaLamKchM}{
+                      1.87 & 5.75 &
+                      1.18 & 4.05 &
+                      0.91 & 2.47 &
+                      0.30 & 0.40 & -5.15
+                      }
+                      
+\newarray\BaALamKchP
+\readarray{BaALamKchP}{
+                       \BaLamKchM(1) & \BaLamKchM(2) &
+                       \BaLamKchM(3) & \BaLamKchM(4) &
+                       \BaLamKchM(5) & \BaLamKchM(6) &
+                       \BaLamKchM(7) & \BaLamKchM(8) & \BaLamKchM(9)
+                       }                          
+
+
+% --------------- Ca = Dualie_PolyNFB_NoLamShare ---------------
+\newarray\CaLamKchP
+\readarray{CaLamKchP}{
+                      1.97 & 6.18 &
+                      1.50 & 4.75 &
+                      1.16 & 3.21 &
+                     -1.13 & 0.53 & 1.02
+                      }
+                      
+\newarray\CaALamKchM
+\readarray{CaALamKchM}{
+                       2.00 & \CaLamKchP(2) &
+                       1.33 & \CaLamKchP(4) &
+                       1.06 & \CaLamKchP(6) &
+                       \CaLamKchP(7) & \CaLamKchP(8) & \CaLamKchP(9)
+                      }  
+                      
+\newarray\CaLamKchM
+\readarray{CaLamKchM}{
+                      2.04 & \CaLamKchP(2) &
+                      1.43 & \CaLamKchP(4) &
+                      2.07 & \CaLamKchP(6) &
+                      0.40 & 0.41 & -4.81
+                      }
+                      
+\newarray\CaALamKchP
+\readarray{CaALamKchP}{
+                       2.07 & \CaLamKchM(2) &
+                       1.48 & \CaLamKchM(4) &
+                       1.06 & \CaLamKchM(6) &
+                       \CaLamKchM(7) & \CaLamKchM(8) & \CaLamKchM(9)
+                       }      
+
+
+                            
+% --------------- Da = Dualie_PolyNFB_ShareLamConj ---------------
+\newarray\DaLamKchP
+\readarray{DaLamKchP}{
+                      1.91 & 5.83 &
+                      1.39 & 4.53 &
+                      1.02 & 2.99 &
+                     -1.09 & 0.44 & 0.99
+                      }
+                      
+\newarray\DaALamKchM
+\readarray{DaALamKchM}{
+                       \DaLamKchP(1) & \DaLamKchP(2) &
+                       \DaLamKchP(3) & \DaLamKchP(4) &
+                       \DaLamKchP(5) & \DaLamKchP(6) &
+                       \DaLamKchP(7) & \DaLamKchP(8) & \DaLamKchP(9)
+                      }  
+                      
+\newarray\DaLamKchM
+\readarray{DaLamKchM}{
+                      1.83 & \DaLamKchP(2) &
+                      1.31 & \DaLamKchP(4) &
+                      1.11 & \DaLamKchP(6) &
+                      0.40 & 0.45 & -4.37
+                      }
+                      
+\newarray\DaALamKchP
+\readarray{DaALamKchP}{
+                       \DaLamKchM(1) & \DaLamKchM(2) &
+                       \DaLamKchM(3) & \DaLamKchM(4) &
+                       \DaLamKchM(5) & \DaLamKchM(6) &
+                       \DaLamKchM(7) & \DaLamKchM(8) & \DaLamKchM(9)
+                       }       
+
+
+% --------------- Ea = Dualie_PolyNFB_ShareSingleLam ---------------
+\newarray\EaLamKchP
+\readarray{EaLamKchP}{
+                      1.83 & 5.81 &
+                      1.31 & 4.50 &
+                      1.07 & 3.09 &
+                     -1.12 & 0.48 & 1.01
+                      }
+                      
+\newarray\EaALamKchM
+\readarray{EaALamKchM}{
+                       \EaLamKchP(1) & \EaLamKchP(2) &
+                       \EaLamKchP(3) & \EaLamKchP(4) &
+                       \EaLamKchP(5) & \EaLamKchP(6) &
+                       \EaLamKchP(7) & \EaLamKchP(8) & \EaLamKchP(9)
+                      }  
+                      
+\newarray\EaLamKchM
+\readarray{EaLamKchM}{
+                      \EaLamKchP(1) & \EaLamKchP(2) &
+                      \EaLamKchP(3) & \EaLamKchP(4) &
+                      \EaLamKchP(5) & \EaLamKchP(6) &
+                      0.39 & 0.45 & -4.35
+                      }
+                      
+\newarray\EaALamKchP
+\readarray{EaALamKchP}{
+                       \EaLamKchM(1) & \EaLamKchM(2) &
+                       \EaLamKchM(3) & \EaLamKchM(4) &
+                       \EaLamKchM(5) & \EaLamKchM(6) &
+                       \EaLamKchM(7) & \EaLamKchM(8) & \EaLamKchM(9)
+                       }  
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% --------------- Ab = FitGen_LinrNFB_NoLamShare ---------------
+\newarray\AbLamKchP
+\readarray{AbLamKchP}{
+                      1.38 & 5.27 &
+                      1.68 & 4.94 &
+                      1.19 & 3.28 &
+                     -1.22 & 0.53 & 1.12
+                      }
+                      
+\newarray\AbALamKchM
+\readarray{AbALamKchM}{
+                       1.39 & \AbLamKchP(2) &
+                       1.46 & \AbLamKchP(4) &
+                       1.15 & \AbLamKchP(6) &
+                      \AbLamKchP(7) & \AbLamKchP(8) & \AbLamKchP(9)
+                      }  
+                      
+\newarray\AbLamKchM
+\readarray{AbLamKchM}{
+                      2.04 & 6.51 &
+                      1.43 & 4.70 &
+                      1.92 & 3.11 &
+                      0.40 & 0.44 & -5.20
+                      }
+                      
+\newarray\AbALamKchP
+\readarray{AbALamKchP}{
+                       2.07 & \AbLamKchM(2) &
+                       1.47 & \AbLamKchM(4) &
+                       1.01 & \AbLamKchM(6) &
+                       \AbLamKchM(7) & \AbLamKchM(8) & \AbLamKchM(9)
+                       }     
+
+
+% --------------- Bb = FitGen_LinrNFB_ShareLamConj ---------------
+\newarray\BbLamKchP
+\readarray{BbLamKchP}{
+                      1.37 & 5.25 &
+                      1.49 & 4.81 &
+                      1.16 & 3.28 &
+                      -1.23 & 0.52 & 1.14
+                      }
+                      
+\newarray\BbALamKchM
+\readarray{BbALamKchM}{
+                       \BbLamKchP(1) & \BbLamKchP(2) &
+                       \BbLamKchP(3) & \BbLamKchP(4) &
+                       \BbLamKchP(5) & \BbLamKchP(6) &
+                       \BbLamKchP(7) & \BbLamKchP(8) & \BbLamKchP(9)
+                      }  
+                      
+\newarray\BbLamKchM
+\readarray{BbLamKchM}{
+                      1.63 & 5.67 &
+                      1.16 & 4.14 &
+                      0.88 & 2.54 &
+                      0.33 & 0.47 & -4.85
+                      }
+                      
+\newarray\BbALamKchP
+\readarray{BbALamKchP}{
+                       \BbLamKchM(1) & \BbLamKchM(2) &
+                       \BbLamKchM(3) & \BbLamKchM(4) &
+                       \BbLamKchM(5) & \BbLamKchM(6) &
+                       \BbLamKchM(7) & \BbLamKchM(8) & \BbLamKchM(9)
+                       }                          
+
+
+% --------------- Cb = Dualie_LinrNFB_NoLamShare ---------------
+\newarray\CbLamKchP
+\readarray{CbLamKchP}{
+                      1.85 & 6.22 &
+                      1.56 & 4.86 &
+                      1.13 & 3.24 &
+                     -1.18 & 0.64 & 1.07
+                      }
+                      
+\newarray\CbALamKchM
+\readarray{CbALamKchM}{
+                       1.87 & \CbLamKchP(2) &
+                       1.36 & \CbLamKchP(4) &
+                       1.09 & \CbLamKchP(6) &
+                      \CbLamKchP(7) & \CbLamKchP(8) & \CbLamKchP(9)
+                      }  
+                      
+\newarray\CbLamKchM
+\readarray{CbLamKchM}{
+                      1.87 & \CbLamKchP(2) &
+                      1.46 & \CbLamKchP(4) &
+                      2.00 & \CbLamKchP(6) &
+                      0.43 & 0.46 & -4.78
+                      }
+                      
+\newarray\CbALamKchP
+\readarray{CbALamKchP}{
+                       1.91 & \CbLamKchM(2) &
+                       1.50 & \CbLamKchM(4) &
+                       1.03 & \CbLamKchM(6) &
+                       \CbLamKchM(7) & \CbLamKchM(8) & \CbLamKchM(9)
+                       }      
+
+
+                            
+% --------------- Db = Dualie_LinrNFB_ShareLamConj ---------------
+\newarray\DbLamKchP
+\readarray{DbLamKchP}{
+                      1.75 & 5.83 &
+                      1.39 & 4.59 &
+                      1.01 & 3.03 &
+                      -1.16 & 0.53 & 1.01
+                      }
+                      
+\newarray\DbALamKchM
+\readarray{DbALamKchM}{
+                       \DbLamKchP(1) & \DbLamKchP(2) &
+                       \DbLamKchP(3) & \DbLamKchP(4) &
+                       \DbLamKchP(5) & \DbLamKchP(6) &
+                       \DbLamKchP(7) & \DbLamKchP(8) & \DbLamKchP(9)
+                      }  
+                      
+\newarray\DbLamKchM
+\readarray{DbLamKchM}{
+                      1.64 & \DbLamKchP(2) &
+                      1.30 & \DbLamKchP(4) &
+                      1.07 & \DbLamKchP(6) &
+                      0.43 & 0.52 & -4.20
+                      }
+                      
+\newarray\DbALamKchP
+\readarray{DbALamKchP}{
+                       \DbLamKchM(1) & \DbLamKchM(2) &
+                       \DbLamKchM(3) & \DbLamKchM(4) &
+                       \DbLamKchM(5) & \DbLamKchM(6) &
+                       \DbLamKchM(7) & \DbLamKchM(8) & \DbLamKchM(9)
+                       }       
+
+
+% --------------- Eb = Dualie_LinrNFB_ShareSingleLam ---------------
+\newarray\EbLamKchP
+\readarray{EbLamKchP}{
+                      1.65 & 5.81 &
+                      1.31 & 4.57 &
+                      1.04 & 3.11 &
+                      -1.20 & 0.59 & 1.07
+                      }
+                      
+\newarray\EbALamKchM
+\readarray{EbALamKchM}{
+                       \EbLamKchP(1) & \EbLamKchP(2) &
+                       \EbLamKchP(3) & \EbLamKchP(4) &
+                       \EbLamKchP(5) & \EbLamKchP(6) &
+                       \EbLamKchP(7) & \EbLamKchP(8) & \EbLamKchP(9)
+                      }  
+                      
+\newarray\EbLamKchM
+\readarray{EbLamKchM}{
+                      \EbLamKchP(1) & \EbLamKchP(2) &
+                      \EbLamKchP(3) & \EbLamKchP(4) &
+                      \EbLamKchP(5) & \EbLamKchP(6) &
+                      0.42 & 0.51 & -4.22
+                      }
+                      
+\newarray\EbALamKchP
+\readarray{EbALamKchP}{
+                       \EbLamKchM(1) & \EbLamKchM(2) &
+                       \EbLamKchM(3) & \EbLamKchM(4) &
+                       \EbLamKchM(5) & \EbLamKchM(6) &
+                       \EbLamKchM(7) & \EbLamKchM(8) & \EbLamKchM(9)
+                       }  
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% --------------- Ac = FitGen_LinrNFB_StavCf_NoLamShare ---------------
+\newarray\AcLamKchP
+\readarray{AcLamKchP}{
+                      0.00 & 0.00 &
+                      0.00 & 0.00 &
+                      0.00 & 0.00 &
+                      0.00 & 0.00 & 0.00
+                      }
+                      
+\newarray\AcALamKchM
+\readarray{AcALamKchM}{
+                       0.00 & \AcLamKchP(2) &
+                       0.00 & \AcLamKchP(4) &
+                       0.00 & \AcLamKchP(6) &
+                      \AcLamKchP(7) & \AcLamKchP(8) & \AcLamKchP(9)
+                      }  
+                      
+\newarray\AcLamKchM
+\readarray{AcLamKchM}{
+                      0.00 & 0.00 &
+                      0.00 & 0.00 &
+                      0.00 & 0.00 &
+                      0.00 & 0.00 & 0.00
+                      }
+                      
+\newarray\AcALamKchP
+\readarray{AcALamKchP}{
+                       0.00 & \AcLamKchM(2) &
+                       0.00 & \AcLamKchM(4) &
+                       0.00 & \AcLamKchM(6) &
+                       \AcLamKchM(7) & \AcLamKchM(8) & \AcLamKchM(9)
+                       }     
+
+
+% --------------- Bc = FitGen_LinrNFB_StavCf_ShareLamConj ---------------
+\newarray\BcLamKchP
+\readarray{BcLamKchP}{
+                      0.00 & 0.00 &
+                      0.00 & 0.00 &
+                      0.00 & 0.00 &
+                      0.00 & 0.00 & 0.00
+                      }
+                      
+\newarray\BcALamKchM
+\readarray{BcALamKchM}{
+                       \BcLamKchP(1) & \BcLamKchP(2) &
+                       \BcLamKchP(3) & \BcLamKchP(4) &
+                       \BcLamKchP(5) & \BcLamKchP(6) &
+                       \BcLamKchP(7) & \BcLamKchP(8) & \BcLamKchP(9)
+                      }  
+                      
+\newarray\BcLamKchM
+\readarray{BcLamKchM}{
+                      0.00 & 0.00 &
+                      0.00 & 0.00 &
+                      0.00 & 0.00 &
+                      0.00 & 0.00 & 0.00
+                      }
+                      
+\newarray\BcALamKchP
+\readarray{BcALamKchP}{
+                       \BcLamKchM(1) & \BcLamKchM(2) &
+                       \BcLamKchM(3) & \BcLamKchM(4) &
+                       \BcLamKchM(5) & \BcLamKchM(6) &
+                       \BcLamKchM(7) & \BcLamKchM(8) & \BcLamKchM(9)
+                       }                          
+
+
+% --------------- Cc = Dualie_LinrNFB_StavCf_NoLamShare ---------------
+\newarray\CcLamKchP
+\readarray{CcLamKchP}{
+                      0.00 & 0.00 &
+                      0.00 & 0.00 &
+                      0.00 & 0.00 &
+                      0.00 & 0.00 & 0.00
+                      }
+                      
+\newarray\CcALamKchM
+\readarray{CcALamKchM}{
+                       0.00 & \CcLamKchP(2) &
+                       0.00 & \CcLamKchP(4) &
+                       0.00 & \CcLamKchP(6) &
+                      \CcLamKchP(7) & \CcLamKchP(8) & \CcLamKchP(9)
+                      }  
+                      
+\newarray\CcLamKchM
+\readarray{CcLamKchM}{
+                      0.00 & \CcLamKchP(2) &
+                      0.00 & \CcLamKchP(4) &
+                      0.00 & \CcLamKchP(6) &
+                      0.00 & 0.00 & 0.00
+                      }
+                      
+\newarray\CcALamKchP
+\readarray{CcALamKchP}{
+                       0.00 & \CcLamKchM(2) &
+                       0.00 & \CcLamKchM(4) &
+                       0.00 & \CcLamKchM(6) &
+                       \CcLamKchM(7) & \CcLamKchM(8) & \CcLamKchM(9)
+                       }      
+
+
+                            
+% --------------- Dc = Dualie_LinrNFB_StavCf_ShareLamConj ---------------
+\newarray\DcLamKchP
+\readarray{DcLamKchP}{
+                      0.00 & 0.00 &
+                      0.00 & 0.00 &
+                      0.00 & 0.00 &
+                      0.00 & 0.00 & 0.00
+                      }
+                      
+\newarray\DcALamKchM
+\readarray{DcALamKchM}{
+                       \DcLamKchP(1) & \DcLamKchP(2) &
+                       \DcLamKchP(3) & \DcLamKchP(4) &
+                       \DcLamKchP(5) & \DcLamKchP(6) &
+                       \DcLamKchP(7) & \DcLamKchP(8) & \DcLamKchP(9)
+                      }  
+                      
+\newarray\DcLamKchM
+\readarray{DcLamKchM}{
+                      0.00 & \DcLamKchP(2) &
+                      0.00 & \DcLamKchP(4) &
+                      0.00 & \DcLamKchP(6) &
+                      0.00 & 0.00 & 0.00
+                      }
+                      
+\newarray\DcALamKchP
+\readarray{DcALamKchP}{
+                       \DcLamKchM(1) & \DcLamKchM(2) &
+                       \DcLamKchM(3) & \DcLamKchM(4) &
+                       \DcLamKchM(5) & \DcLamKchM(6) &
+                       \DcLamKchM(7) & \DcLamKchM(8) & \DcLamKchM(9)
+                       }       
+
+
+% --------------- Ec = Dualie_LinrNFB_StavCf_ShareSingleLam ---------------
+\newarray\EcLamKchP
+\readarray{EcLamKchP}{
+                      0.00 & 0.00 &
+                      0.00 & 0.00 &
+                      0.00 & 0.00 &
+                      0.00 & 0.00 & 0.00
+                      }
+                      
+\newarray\EcALamKchM
+\readarray{EcALamKchM}{
+                       \EcLamKchP(1) & \EcLamKchP(2) &
+                       \EcLamKchP(3) & \EcLamKchP(4) &
+                       \EcLamKchP(5) & \EcLamKchP(6) &
+                       \EcLamKchP(7) & \EcLamKchP(8) & \EcLamKchP(9)
+                      }  
+                      
+\newarray\EcLamKchM
+\readarray{EcLamKchM}{
+                      \EcLamKchP(1) & \EcLamKchP(2) &
+                      \EcLamKchP(3) & \EcLamKchP(4) &
+                      \EcLamKchP(5) & \EcLamKchP(6) &
+                      0.00 & 0.00 & 0.00
+                      }
+                      
+\newarray\EcALamKchP
+\readarray{EcALamKchP}{
+                       \EcLamKchM(1) & \EcLamKchM(2) &
+                       \EcLamKchM(3) & \EcLamKchM(4) &
+                       \EcLamKchM(5) & \EcLamKchM(6) &
+                       \EcLamKchM(7) & \EcLamKchM(8) & \EcLamKchM(9)
+                       }  
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% --------------- Ad = FitGen_NoNFB_StavCf_NoLamShare ---------------
+\newarray\AdLamKchP
+\readarray{AdLamKchP}{
+                      0.95 & 5.44 &
+                      0.71 & 4.21 &
+                      0.98 & 4.01 &
+                     -1.96 & 1.13 & 0.58
+                      }
+                      
+\newarray\AdALamKchM
+\readarray{AdALamKchM}{
+                       0.90 & \AdLamKchP(2) &
+                       0.67 & \AdLamKchP(4) &
+                       1.14 & \AdLamKchP(6) &
+                      \AdLamKchP(7) & \AdLamKchP(8) & \AdLamKchP(9)
+                      }  
+                      
+\newarray\AdLamKchM
+\readarray{AdLamKchM}{
+                      2.38 & 5.54 &
+                      1.56 & 3.89 &
+                      4.14 & 2.65 &
+                      0.24 & 0.27 & 6.28
+                      }
+                      
+\newarray\AdALamKchP
+\readarray{AdALamKchP}{
+                       2.26 & \AdLamKchM(2) &
+                       1.77 & \AdLamKchM(4) &
+                       1.38 & \AdLamKchM(6) &
+                       \AdLamKchM(7) & \AdLamKchM(8) & \AdLamKchM(9)
+                       }     
+
+
+% --------------- Bd = FitGen_NoNFB_StavCf_ShareLamConj ---------------
+\newarray\BdLamKchP
+\readarray{BdLamKchP}{
+                      0.93 & 5.43 &
+                      0.68 & 4.17 &
+                      1.11 & 4.07 &
+                     -1.92 & 1.12 & 0.51
+                      }
+                      
+\newarray\BdALamKchM
+\readarray{BdALamKchM}{
+                       \BdLamKchP(1) & \BdLamKchP(2) &
+                       \BdLamKchP(3) & \BdLamKchP(4) &
+                       \BdLamKchP(5) & \BdLamKchP(6) &
+                       \BdLamKchP(7) & \BdLamKchP(8) & \BdLamKchP(9)
+                      }  
+                      
+\newarray\BdLamKchM
+\readarray{BdLamKchM}{
+                      1.28 & 5.06 &
+                      0.90 & 3.57 &
+                      0.84 & 2.36 &
+                      0.32 & 0.54 & 4.36
+                      }
+                      
+\newarray\BdALamKchP
+\readarray{BdALamKchP}{
+                       \BdLamKchM(1) & \BdLamKchM(2) &
+                       \BdLamKchM(3) & \BdLamKchM(4) &
+                       \BdLamKchM(5) & \BdLamKchM(6) &
+                       \BdLamKchM(7) & \BdLamKchM(8) & \BdLamKchM(9)
+                       }                          
+
+
+% --------------- Cd = Dualie_NoNFB_StavCf_NoLamShare ---------------
+\newarray\CdLamKchP
+\readarray{CdLamKchP}{
+                      1.34 & 5.75 &
+                      0.87 & 4.16 &
+                      0.70 & 3.03 &
+                     -1.51 & 0.77 & -0.47
+                      }
+                      
+\newarray\CdALamKchM
+\readarray{CdALamKchM}{
+                       1.27 & \CdLamKchP(2) &
+                       0.81 & \CdLamKchP(4) &
+                       0.82 & \CdLamKchP(6) &
+                      \CdLamKchP(7) & \CdLamKchP(8) & \CdLamKchP(9)
+                      }  
+                      
+\newarray\CdLamKchM
+\readarray{CdLamKchM}{
+                      2.15 & \CdLamKchP(2) &
+                      1.47 & \CdLamKchP(4) &
+                      3.99 & \CdLamKchP(6) &
+                      0.34 & 0.36 & 4.13
+                      }
+                      
+\newarray\CdALamKchP
+\readarray{CdALamKchP}{
+                       2.06 & \CdLamKchM(2) &
+                       1.66 & \CdLamKchM(4) &
+                       1.36 & \CdLamKchM(6) &
+                       \CdLamKchM(7) & \CdLamKchM(8) & \CdLamKchM(9)
+                       }      
+
+
+                            
+% --------------- Dd = Dualie_NoNFB_StavCf_ShareLamConj ---------------
+\newarray\DdLamKchP
+\readarray{DdLamKchP}{
+                      1.21 & 5.25 &
+                      0.80 & 3.90 &
+                      0.82 & 3.03 &
+                     -1.46 & 0.57 & -0.42
+                      }
+                      
+\newarray\DdALamKchM
+\readarray{DdALamKchM}{
+                       \DdLamKchP(1) & \DdLamKchP(2) &
+                       \DdLamKchP(3) & \DdLamKchP(4) &
+                       \DdLamKchP(5) & \DdLamKchP(6) &
+                       \DdLamKchP(7) & \DdLamKchP(8) & \DdLamKchP(9)
+                      }  
+                      
+\newarray\DdLamKchM
+\readarray{DdLamKchM}{
+                      1.15 & \DdLamKchP(2) &
+                      0.88 & \DdLamKchP(4) &
+                      0.98 & \DdLamKchP(6) &
+                      0.53 & 0.75 & 2.35
+                      }
+                      
+\newarray\DdALamKchP
+\readarray{DdALamKchP}{
+                       \DdLamKchM(1) & \DdLamKchM(2) &
+                       \DdLamKchM(3) & \DdLamKchM(4) &
+                       \DdLamKchM(5) & \DdLamKchM(6) &
+                       \DdLamKchM(7) & \DdLamKchM(8) & \DdLamKchM(9)
+                       }       
+
+
+% --------------- Ed = Dualie_NoNFB_StavCf_ShareSingleLam ---------------
+\newarray\EdLamKchP
+\readarray{EdLamKchP}{
+                      1.05 & 5.04 &
+                      0.82 & 3.99 &
+                      0.88 & 3.17 &
+                     -1.52 & 0.65 & -0.44
+                      }
+                      
+\newarray\EdALamKchM
+\readarray{EdALamKchM}{
+                       \EdLamKchP(1) & \EdLamKchP(2) &
+                       \EdLamKchP(3) & \EdLamKchP(4) &
+                       \EdLamKchP(5) & \EdLamKchP(6) &
+                       \EdLamKchP(7) & \EdLamKchP(8) & \EdLamKchP(9)
+                      }  
+                      
+\newarray\EdLamKchM
+\readarray{EdLamKchM}{
+                      \EdLamKchP(1) & \EdLamKchP(2) &
+                      \EdLamKchP(3) & \EdLamKchP(4) &
+                      \EdLamKchP(5) & \EdLamKchP(6) &
+                      0.55 & 0.82 & 2.14
+                      }
+                      
+\newarray\EdALamKchP
+\readarray{EdALamKchP}{
+                       \EdLamKchM(1) & \EdLamKchM(2) &
+                       \EdLamKchM(3) & \EdLamKchM(4) &
+                       \EdLamKchM(5) & \EdLamKchM(6) &
+                       \EdLamKchM(7) & \EdLamKchM(8) & \EdLamKchM(9)
+                       }  
+
+
