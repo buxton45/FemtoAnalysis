@@ -1376,7 +1376,7 @@ void FitGeneratorAndDraw::CheckCorrectedCf_PartAn(int aAnalysisNumber, BFieldTyp
     cout << "\t tCalculatedFitCf[" << i << "] = " << tCalculatedFitCf[i] << endl;
     cout << "\t tCorrectedFitVec[" << i << "] = " << tCorrectedFitVec[i] << endl;
     cout << "\t\t % Diff = " << (tCalculatedFitCf[i]-tCorrectedFitVec[i])/tCorrectedFitVec[i] << endl;
-    if((tCalculatedFitCf[i]-tCorrectedFitVec[i])/tCorrectedFitVec[i] > 0.0001) {cout << "WARNING!!!!!!!!!!!!!!!!!!!!!!!!!!!! Diff > 0.00001 !!!!!!!!!!!!!!!!!!!" << endl; assert(0);}
+    if(abs(tCalculatedFitCf[i]-tCorrectedFitVec[i])/tCorrectedFitVec[i] > 0.0001) {cout << "WARNING!!!!!!!!!!!!!!!!!!!!!!!!!!!! Diff > 0.00001 !!!!!!!!!!!!!!!!!!!" << endl; assert(0);}
     cout << endl;
   }
   cout << endl << endl << endl;
@@ -1660,7 +1660,7 @@ void FitGeneratorAndDraw::CheckCorrectedCf(int aAnalysisNumber, bool aMomResCorr
     cout << "\t tCalculatedFitCf[" << i << "] = " << tCalculatedFitCf[i] << endl;
     cout << "\t tCorrectedFitVec[" << i << "] = " << tCorrectedFitVec[i] << endl;
     cout << "\t\t % Diff = " << (tCalculatedFitCf[i]-tCorrectedFitVec[i])/tCorrectedFitVec[i] << endl;
-    if((tCalculatedFitCf[i]-tCorrectedFitVec[i])/tCorrectedFitVec[i] > 0.0001) {cout << "WARNING!!!!!!!!!!!!!!!!!!!!!!!!!!!! Diff > 0.00001 !!!!!!!!!!!!!!!!!!!" << endl; assert(0);}
+    if(abs(tCalculatedFitCf[i]-tCorrectedFitVec[i])/tCorrectedFitVec[i] > 0.0001) {cout << "WARNING!!!!!!!!!!!!!!!!!!!!!!!!!!!! Diff > 0.00001 !!!!!!!!!!!!!!!!!!!" << endl; assert(0);}
     cout << endl;
   }
   cout << endl << endl << endl;

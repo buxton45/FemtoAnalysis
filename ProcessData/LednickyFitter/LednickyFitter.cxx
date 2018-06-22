@@ -792,6 +792,14 @@ void LednickyFitter::Finalize()
 
     tPar[i] = tempMinParam;
   }
+
+  //Call CalculateFitFunction one more time, to ensure correct fCorrectedFitVecs are set
+  //I think this is only an issue when the fitter fails.
+  //  fCorrectedFitVecs are created from the last CalculateFitFunction call, and sometimes, when minuit fails
+  //  the parameter set used in the last call does not match the parameter set chosen by minut
+  double tChi2 = fChi2;
+  CalculateFitFunction(tNParams,tChi2,tPar);
+
 /*
   if(fErrFlg==0)
   {
@@ -801,8 +809,9 @@ void LednickyFitter::Finalize()
     CalculateFitFunction(tNpar,tChi2,tPar);
     fReturnPrimaryWithResidualsToAnalyses = false;
   }
-  delete[] tPar;
 */
+  delete[] tPar;
+
   fFitSharedAnalyses->SetMinuitMinParams(fMinParams);
   fFitSharedAnalyses->SetMinuitParErrors(fParErrors);
   fFitSharedAnalyses->ReturnFitParametersToAnalyses();
