@@ -81,11 +81,15 @@ int main(int argc, char **argv)
 
   int tImpactParam = 8;
   int tV3InclusionProb1 = 25;
+  bool bDrawUnIdentOnly = false;
+
+  vector<TString> tUnIdentOnlyTag = {"", "_UnIdentOnly"};
+
   TString tFileName = TString::Format("FlowGraphs_ArtificialV3Signal%d", tV3InclusionProb1);
 //  TString tFileName = TString("FlowGraphs_RandomEPs");
   TString tFileLocation = TString::Format("/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b%d/%s.root", tImpactParam, tFileName.Data());
 
-  TString tSaveDir = "/home/jesse/Analysis/Presentations/AliFemto/20180620/Figures/Flow/";
+  TString tSaveDir = "/home/jesse/Analysis/Presentations/AliFemto/20180627/Figures/Flow/";
 
   //-------------------------------------------------------------------------------------
 
@@ -111,15 +115,21 @@ int main(int argc, char **argv)
   tFlowCan->cd();
   gStyle->SetOptTitle(0);
 
-  tGraphv2_UnIdent->Draw("AP");  
-  tGraphv2_K0s->Draw("Psame");
-  tGraphv2_Kch->Draw("Psame");
-  tGraphv2_Lam->Draw("Psame");
+  tGraphv2_UnIdent->Draw("AP");
+  if(!bDrawUnIdentOnly)
+  {
+    tGraphv2_K0s->Draw("Psame");
+    tGraphv2_Kch->Draw("Psame");
+    tGraphv2_Lam->Draw("Psame");
+  }
 
   tGraphv3_UnIdent->Draw("Psame");  
-  tGraphv3_K0s->Draw("Psame");
-  tGraphv3_Kch->Draw("Psame");
-  tGraphv3_Lam->Draw("Psame");
+  if(!bDrawUnIdentOnly)
+  {
+    tGraphv3_K0s->Draw("Psame");
+    tGraphv3_Kch->Draw("Psame");
+    tGraphv3_Lam->Draw("Psame");
+  }
 
   //------------------------
   TLegend* tLeg1 = new TLegend(0.15, 0.60, 0.35, 0.80, "v_{2}", "NDC");
@@ -127,9 +137,12 @@ int main(int argc, char **argv)
   //tLeg1->SetBorderSize(0);
   tLeg1->SetTextAlign(22);
     tLeg1->AddEntry(tGraphv2_UnIdent, "UnIdent", "p");
-    tLeg1->AddEntry(tGraphv2_K0s, GetParticleNamev2(tPIDK0s), "p");
-    tLeg1->AddEntry(tGraphv2_Kch, GetParticleNamev2(tPIDKch), "p");
-    tLeg1->AddEntry(tGraphv2_Lam, GetParticleNamev2(tPIDLam), "p");
+    if(!bDrawUnIdentOnly)
+    {
+      tLeg1->AddEntry(tGraphv2_K0s, GetParticleNamev2(tPIDK0s), "p");
+      tLeg1->AddEntry(tGraphv2_Kch, GetParticleNamev2(tPIDKch), "p");
+      tLeg1->AddEntry(tGraphv2_Lam, GetParticleNamev2(tPIDLam), "p");
+    }
   tLeg1->Draw();
 
   //------------------------
@@ -139,14 +152,17 @@ int main(int argc, char **argv)
   //tLeg2->SetBorderSize(0);
   tLeg2->SetTextAlign(22);
     tLeg2->AddEntry(tGraphv3_UnIdent, "UnIdent", "p");
-    tLeg2->AddEntry(tGraphv3_K0s, GetParticleNamev2(tPIDK0s), "p");
-    tLeg2->AddEntry(tGraphv3_Kch, GetParticleNamev2(tPIDKch), "p");
-    tLeg2->AddEntry(tGraphv3_Lam, GetParticleNamev2(tPIDLam), "p");
+    if(!bDrawUnIdentOnly)
+    {
+      tLeg2->AddEntry(tGraphv3_K0s, GetParticleNamev2(tPIDK0s), "p");
+      tLeg2->AddEntry(tGraphv3_Kch, GetParticleNamev2(tPIDKch), "p");
+      tLeg2->AddEntry(tGraphv3_Lam, GetParticleNamev2(tPIDLam), "p");
+    }
   tLeg2->Draw();
 
   //---------------------------------------
 
-  if(bSaveFigures) tFlowCan->SaveAs(TString::Format("%s%s_b%d.eps", tSaveDir.Data(), tFileName.Data(), tImpactParam));
+  if(bSaveFigures) tFlowCan->SaveAs(TString::Format("%s%s_b%d%s.eps", tSaveDir.Data(), tFileName.Data(), tImpactParam, tUnIdentOnlyTag[bDrawUnIdentOnly].Data()));
 
 //-------------------------------------------------------------------------------
 

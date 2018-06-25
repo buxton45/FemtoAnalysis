@@ -171,6 +171,11 @@ void PrintInfo(TPad* aPad, TString aOverallDescriptor, double aTextSize=0.04)
 
   tTex->DrawLatex(0.2, 1.05, "THERMINATOR");
   tTex->DrawLatex(1.2, 1.05, aOverallDescriptor);
+
+  //For CompareBackgroundReductionMethods when using ArtificialV3Signal-1
+  //tTex->DrawLatex(0.3, 3.05, "THERMINATOR");
+  //tTex->DrawLatex(1.2, 3.05, aOverallDescriptor);
+
 }
 
 //________________________________________________________________________________________________________________
@@ -1170,8 +1175,10 @@ TCanvas* CompareBackgroundReductionMethods(TString aCfDescriptor, AnalysisType a
   tCf_AlignEPs->GetXaxis()->SetTitle("#it{k}* (GeV/#it{c})");
   tCf_AlignEPs->GetYaxis()->SetTitle("#it{C}(#it{k}*)");
 
-  tCf_AlignEPs->GetXaxis()->SetRangeUser(0.,3.0);
+//  tCf_AlignEPs->GetXaxis()->SetRangeUser(0.,3.0);
+  tCf_AlignEPs->GetXaxis()->SetRangeUser(0.,2.0);
   tCf_AlignEPs->GetYaxis()->SetRangeUser(0.86, 1.07);
+//  tCf_AlignEPs->GetYaxis()->SetRangeUser(0.71, 3.31);  //when using ArtificialV3Signal-1
 
   tCf_AlignEPs->Draw();
   tCf_AlignEPs_UseStavCf->Draw("same");
@@ -1187,6 +1194,7 @@ TCanvas* CompareBackgroundReductionMethods(TString aCfDescriptor, AnalysisType a
 
   //---------------------------------------------------------------
   TLegend* tLeg = new TLegend(0.55, 0.15, 0.90, 0.30);
+//  TLegend* tLeg = new TLegend(0.55, 0.40, 0.90, 0.55);  //when using ArtificialV3Signal-1
     tLeg->SetFillColor(0);
     tLeg->SetBorderSize(0);
     tLeg->SetTextAlign(22);
