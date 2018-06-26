@@ -1,0 +1,59 @@
+\documentclass[ALICE,manyauthors]{cernphprep}
+
+\usepackage[comma,square,numbers,sort&compress]{natbib}
+\usepackage{hyperref}
+\usepackage{lineno}
+\linenumbers
+
+\begin{document}%
+
+%%%%%%%%%%%%%%%  Title page %%%%%%%%%%%%%%%%%%%%%%%%
+\begin{titlepage}
+%
+\PHyear{2015}
+\PHnumber{XXX}      % required, will be obtained from PH
+\PHdate{Day Month}  % required, will be obtained from PH
+%
+
+%%% Put your own title + short title here:
+\title{Put the full title here, make sure equations are bold}
+\ShortTitle{Put a short title here in case the long title is too long}   % appears on right page headers
+
+%%% Do not change the next lines
+\Collaboration{ALICE Collaboration\thanks{See Appendix~\ref{app:collab} for the list of collaboration members}}
+\ShortAuthor{ALICE Collaboration} % appears on left page headers, do not change
+
+\begin{abstract}
+This is a dummy document showing the layout of a CERN PH preprint for ALICE with the full authorlist and acknowledgments.
+\end{abstract}
+\end{titlepage}
+\setcounter{page}{2}
+
+%
+%
+%\input{}               %%%%%%%%%%% put the body of the article here
+%
+%
+
+%%%%% acknowledgements
+\newenvironment{acknowledgement}{\relax}{\relax}
+\begin{acknowledgement}
+\section*{Acknowledgements}
+%\input{acknowledgements.tex}    %%%%%%% done by webmaster team
+\end{acknowledgement}
+
+%%%%%%%% Bibliography (In case of using bibtex generate the bbl requested by arXiv)
+%\bibliographystyle{utphys}   % Remember we use title in the biblio
+%\bibliography{biblio}
+%\input {bibliography.tex}  
+
+%%%%%%%%% appendix with author list
+\newpage
+\appendix
+%
+%\input{}               %%%%%%%%%%% put your appendices here
+%
+\section{The ALICE Collaboration}
+\label{app:collab}
+%\input{authorlist-preprint.tex}  %%%%%%% done by webmaster team
+\end{document}

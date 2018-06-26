@@ -1,12 +1,24 @@
-% ****** Start of file apssamp.tex ******
-%
-%   This file is part of the APS files in the REVTeX 4.1 distribution.
-%   Version 4.1r of REVTeX, August 2010
-%
-%   Copyright (c) 2009, 2010 The American Physical Society.
-%
-%   See the REVTeX 4 README file for restrictions and more information.
-%
+%%%%%% This document is based off of, and contains pieces of, both apssamp.tex
+%%%%%% and apstemplate.tex
+
+
+% Group addresses by affiliation; use superscriptaddress for long
+% author lists, or if there are many overlapping affiliations.
+% For Phys. Rev. appearance, change preprint to twocolumn.
+% Choose pra, prb, prc, prd, pre, prl, prstab, prstper, or rmp for journal
+%  Add 'draft' option to mark overfull boxes with black boxes
+%  Add 'showpacs' option to make PACS codes appear
+%  Add 'showkeys' option to make keywords appear
+\documentclass[aps,prc,preprint,superscriptaddress]{revtex4-1}
+%\documentclass[aps,prl,preprint,superscriptaddress]{revtex4-1}
+%\documentclass[aps,prl,reprint,groupedaddress]{revtex4-1}
+
+% You should use BibTeX and apsrev.bst for references
+% Choosing a journal automatically selects the correct APS
+% BibTeX style file (bst file), so only uncomment the line
+% below if necessary.
+%\bibliographystyle{apsrev4-1}
+
 % TeX'ing this file requires that you have AMS-LaTeX 2.0 installed
 % as well as the rest of the prerequisites for REVTeX 4.1
 %
@@ -17,28 +29,6 @@
 %  2)  bibtex apssamp
 %  3)  latex apssamp.tex
 %  4)  latex apssamp.tex
-%
-\documentclass[%
- reprint,
-%superscriptaddress,
-%groupedaddress,
-%unsortedaddress,
-%runinaddress,
-%frontmatterverbose, 
-%preprint,
-%showpacs,preprintnumbers,
-%nofootinbib,
-%nobibnotes,
-%bibnotes,
- amsmath,amssymb,
- aps,
-%pra,
-%prb,
-%rmp,
-%prstab,
-%prstper,
-%floatfix,
-]{revtex4-1}
 
 \usepackage{graphicx}% Include figure files
 \usepackage{dcolumn}% Align table columns on decimal point
@@ -55,63 +45,170 @@
 %%height=10in,a5paper,hmargin={3cm,0.8in},
 %]{geometry}
 
+\usepackage{amsmath,amssymb}
+
+
 \begin{document}
 
-\preprint{APS/123-QED}
+% Use the \preprint command to place your local institutional report
+% number in the upper righthand corner of the title page in preprint mode.
+% Multiple \preprint commands are allowed.
+% Use the 'preprintnumbers' class option to override journal defaults
+% to display numbers if necessary
+%\preprint{}
 
-\title{Manuscript Title:\\with Forced Linebreak}% Force line breaks with \\
-\thanks{A footnote to the article title}%
+%Title of paper
+%\title{Manuscript Title:\\with Forced Linebreak}% Force line breaks with \\
+\title{$\Lambda$K femtoscopy in Pb-Pb collisions at $\sqrt{s_{\mathrm{NN}}} = $ 2.76 TeV with the LHC ALICE experiment}
 
-\author{Ann Author}
- \altaffiliation[Also at ]{Physics Department, XYZ University.}%Lines break automatically or can be forced with \\
-\author{Second Author}%
- \email{Second.Author@institution.edu}
-\affiliation{%
- Authors' institution and/or address\\
- This line break forced with \textbackslash\textbackslash
-}%
+% repeat the \author .. \affiliation  etc. as needed
+% \email, \thanks, \homepage, \altaffiliation all apply to the current
+% author. Explanatory text should go in the []'s, actual e-mail
+% address or url should go in the {}'s for \email and \homepage.
+% Please use the appropriate macro foreach each type of information
 
-\collaboration{MUSO Collaboration}%\noaffiliation
+% \affiliation command applies to all authors since the last
+% \affiliation command. The \affiliation command should follow the
+% other information
+% \affiliation can be followed by \email, \homepage, \thanks as well.
+%\author{Your name}
+%\email[]{Your e-mail address}
+%\homepage[]{Your web page}
+%\thanks{}
+%\altaffiliation{}
+%\affiliation{}
 
-\author{Charlie Author}
- \homepage{http://www.Second.institution.edu/~Charlie.Author}
-\affiliation{
- Second institution and/or address\\
- This line break forced% with \\
-}%
-\affiliation{
- Third institution, the second for Charlie Author
-}%
-\author{Delta Author}
-\affiliation{%
- Authors' institution and/or address\\
- This line break forced with \textbackslash\textbackslash
-}%
+%Collaboration name if desired (requires use of superscriptaddress
+%option in \documentclass). \noaffiliation is required (may also be
+%used with the \author command).
+%\collaboration can be followed by \email, \homepage, \thanks as well.
+%\collaboration{}
+%\noaffiliation
 
-\collaboration{CLEO Collaboration}%\noaffiliation
+
+%\thanks{A footnote to the article title}%
+
+
+\collaboration{ALICE Collaboration}%\noaffiliation
+\thanks{See Appendix for the list of collaboration members}
 
 \date{\today}% It is always \today, today,
              %  but any date may be explicitly specified
 
+
+
 \begin{abstract}
 An article usually includes an abstract, a concise summary of the work
 covered at length in the main body of the article. 
-\begin{description}
-\item[Usage]
-Secondary publications and information retrieval purposes.
-\item[PACS numbers]
-May be entered using the \verb+\pacs{#1}+ command.
-\item[Structure]
-You may use the \texttt{description} environment to structure your abstract;
-use the optional argument of the \verb+\item+ command to give the category of each item. 
-\end{description}
 \end{abstract}
 
+% insert suggested PACS numbers in braces on next line=
 \pacs{Valid PACS appear here}% PACS, the Physics and Astronomy
                              % Classification Scheme.
+                             
+% insert suggested keywords - APS authors don't need to do this                             
 %\keywords{Suggested keywords}%Use showkeys class option if keyword
                               %display desired
+                    
+%\maketitle must follow title, authors, abstract, \pacs, and \keywords                              
 \maketitle
+
+
+
+
+
+
+% body of paper here - Use proper section commands
+% References should be done using the \cite, \ref, and \label commands
+%\section{}
+% Put \label in argument of \section for cross-referencing
+%\section{\label{}}
+%\subsection{}
+%\subsubsection{}
+
+% If in two-column mode, this environment will change to single-column
+% format so that long equations can be displayed. Use
+% sparingly.
+%\begin{widetext}
+% put long equation here
+%\end{widetext}
+
+% figures should be put into the text as floats.
+% Use the graphics or graphicx packages (distributed with LaTeX2e)
+% and the \includegraphics macro defined in those packages.
+% See the LaTeX Graphics Companion by Michel Goosens, Sebastian Rahtz,
+% and Frank Mittelbach for instance.
+%
+% Here is an example of the general form of a figure:
+% Fill in the caption in the braces of the \caption{} command. Put the label
+% that you will use with \ref{} command in the braces of the \label{} command.
+% Use the figure* environment if the figure should span across the
+% entire page. There is no need to do explicit centering.
+
+% \begin{figure}
+% \includegraphics{}%
+% \caption{\label{}}
+% \end{figure}
+
+% Surround figure environment with turnpage environment for landscape
+% figure
+% \begin{turnpage}
+% \begin{figure}
+% \includegraphics{}%
+% \caption{\label{}}
+% \end{figure}
+% \end{turnpage}
+
+% tables should appear as floats within the text
+%
+% Here is an example of the general form of a table:
+% Fill in the caption in the braces of the \caption{} command. Put the label
+% that you will use with \ref{} command in the braces of the \label{} command.
+% Insert the column specifiers (l, r, c, d, etc.) in the empty braces of the
+% \begin{tabular}{} command.
+% The ruledtabular enviroment adds doubled rules to table and sets a
+% reasonable default table settings.
+% Use the table* environment to get a full-width table in two-column
+% Add \usepackage{longtable} and the longtable (or longtable*}
+% environment for nicely formatted long tables. Or use the the [H]
+% placement option to break a long table (with less control than 
+% in longtable).
+% \begin{table}%[H] add [H] placement to break table across pages
+% \caption{\label{}}
+% \begin{ruledtabular}
+% \begin{tabular}{}
+% Lines of table here ending with \\
+% \end{tabular}
+% \end{ruledtabular}
+% \end{table}
+
+% Surround table environment with turnpage environment for landscape
+% table
+% \begin{turnpage}
+% \begin{table}
+% \caption{\label{}}
+% \begin{ruledtabular}
+% \begin{tabular}{}
+% \end{tabular}
+% \end{ruledtabular}
+% \end{table}
+% \end{turnpage}
+
+% Specify following sections are appendices. Use \appendix* if there
+% only one appendix.
+%\appendix
+%\section{}
+
+% If you have acknowledgments, this puts in the proper section head.
+%\begin{acknowledgments}
+% put your acknowledgments here.
+%\end{acknowledgments}
+
+% Create the reference section using BibTeX:
+%\bibliography{basename of .bib file}
+
+
+
 
 %\tableofcontents
 
@@ -486,7 +583,7 @@ Scotch (double) rules above and below the alignment, per APS style.
 \end{table}
 and Fig.~\ref{fig:epsart}.%
 \begin{figure}[b]
-\includegraphics{fig_1}% Here is how to import EPS art
+\includegraphics{/home/jesse/Analysis/FemtoAnalysis/LamKPublication/Figures/LamPurity_LamK0.pdf}% Here is how to import EPS art
 \caption{\label{fig:epsart} A figure caption. The figure captions are
 automatically numbered.}
 \end{figure}
@@ -502,7 +599,7 @@ a key for referring to this figure or table.
 The typical content of a figure is an image of some kind; 
 that of a table is an alignment.%
 \begin{figure*}
-\includegraphics{fig_2}% Here is how to import EPS art
+\includegraphics{/home/jesse/Analysis/FemtoAnalysis/LamKPublication/Figures/K0Purity_LamK0.pdf}% Here is how to import EPS art
 \caption{\label{fig:wide}Use the figure* environment to get a wide
 figure that spans the page in \texttt{twocolumn} formatting.}
 \end{figure*}
@@ -656,28 +753,6 @@ environment. Examine the \LaTeX\ source and output for
 Tables~\ref{tab:table1} and \ref{tab:table2}
 for examples.
 
-Video~\ref{vid:PRSTPER.4.010101} 
-illustrates several features new with REV\TeX4.1,
-starting with the \texttt{video} environment, which is in the same category with
-\texttt{figure} and \texttt{table}.%
-\begin{video}
-\href{http://prst-per.aps.org/multimedia/PRSTPER/v4/i1/e010101/e010101_vid1a.mpg}{\includegraphics{vid_1a}}%
- \quad
-\href{http://prst-per.aps.org/multimedia/PRSTPER/v4/i1/e010101/e010101_vid1b.mpg}{\includegraphics{vid_1b}}
- \setfloatlink{http://link.aps.org/multimedia/PRSTPER/v4/i1/e010101}%
- \caption{\label{vid:PRSTPER.4.010101}%
-  Students explain their initial idea about Newton's third law to a teaching assistant. 
-  Clip (a): same force.
-  Clip (b): move backwards.
- }%
-\end{video}
-The \verb+\setfloatlink+ command causes the title of the video to be a hyperlink to the
-indicated URL; it may be used with any environment that takes the \verb+\caption+
-command.
-The \verb+\href+ command has the same significance as it does in the context of
-the \texttt{hyperref} package: the second argument is a piece of text to be 
-typeset in your document; the first is its hyperlink, a URL.
-
 \textit{Physical Review} style requires that the initial citation of
 figures or tables be in numerical order in text, so don't cite
 Fig.~\ref{fig:wide} until Fig.~\ref{fig:epsart} has been cited.
@@ -750,7 +825,7 @@ They turn out to be Eqs.~(\ref{appa}), (\ref{appb}), and (\ref{appc}).
 % most likely will not want to use it.
 \nocite{*}
 
-\bibliography{apssamp}% Produces the bibliography via BibTeX.
+\bibliography{LamK_bibfile}% Produces the bibliography via BibTeX.
 
 \end{document}
 %

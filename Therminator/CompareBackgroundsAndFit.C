@@ -289,21 +289,21 @@ void Draw1vs2vs3(TPad* aPad, AnalysisType aAnType, TH1* aCf1, TH1* aCf2, TH1* aC
 
 
   //---------------------------------------------------------------
+  TH1D* tCfRatio = (TH1D*)aCf2->Clone();
+  tCfRatio->Divide(aCf3);
+  ThermCf::SetStyleAndColor(tCfRatio, 20, kCyan);
+  tCfRatio->Draw("same");
+
   TH1D* tCfDiff = (TH1D*)aCf2->Clone();
   tCfDiff->Add(aCf3, -1.);
   TH1D* tUnity = (TH1D*)aCf2->Clone();
   for(int i=1; i<=tUnity->GetNbinsX(); i++) tUnity->SetBinContent(i, 1.);
   tCfDiff->Add(tUnity, 1.);
-  ThermCf::SetStyleAndColor(tCfDiff, 20, kGreen);
+  ThermCf::SetStyleAndColor(tCfDiff, 24, kMagenta);
   tCfDiff->Draw("same");
 
-  TH1D* tCfRatio = (TH1D*)aCf2->Clone();
-  tCfRatio->Divide(aCf3);
-  ThermCf::SetStyleAndColor(tCfRatio, 20, kMagenta);
-  tCfRatio->Draw("same");
-
-  tLeg->AddEntry(tCfDiff, "1+Diff (B-C)");
   tLeg->AddEntry(tCfRatio, "Ratio (B/C)");
+  tLeg->AddEntry(tCfDiff, "1+Diff (B-C)");
 
   //---------------------------------------------------------------
 
@@ -346,12 +346,12 @@ TCanvas* CompareCfWithAndWithoutBgd(TString aCfDescriptor, AnalysisType aAnType,
   else tOverallDescriptor += TString::Format(" (%s)", cPrettyCentralityTags[tCentType]);
 
   int tMarkerStyle1 = 20;
-  int tMarkerStyle2 = 24;
+  int tMarkerStyle2 = 21;
   int tMarkerStyle3 = 26;
 
-  int tColor1 = 1;
-  int tColor2 = 2;
-  int tColor3 = 4;
+  int tColor1 = kBlack;
+  int tColor2 = kGreen+1;
+  int tColor3 = kOrange;
 
   //--------------------------------------------
 
@@ -1104,13 +1104,13 @@ TCanvas* CompareBackgroundReductionMethods(TString aCfDescriptor, AnalysisType a
   //--------------------------------------------
 
   int tMarkerStyle_AlignEPs                = 20;
-  int tColor_AlignEPs                      = kOrange;
+  int tColor_AlignEPs                      = kBlack;
 
   int tMarkerStyle_AlignEPs_UseStavCf  = 20;
   int tColor_AlignEPs_UseStavCf        = kCyan;
 
   int tMarkerStyle_RandomEPs               = 20;
-  int tColor_RandomEPs                     = kGreen;
+  int tColor_RandomEPs                     = kGreen+1;
 
   int tMarkerStyle_RandomEPs_UseStavCf = 24;
   int tColor_RandomEPs_UseStavCf       = kMagenta;
@@ -1200,9 +1200,9 @@ TCanvas* CompareBackgroundReductionMethods(TString aCfDescriptor, AnalysisType a
     tLeg->SetTextAlign(22);
 
   tLeg->AddEntry(tCf_AlignEPs, "Aligns EPs");
-  tLeg->AddEntry(tCf_AlignEPs_UseStavCf, "Aligns EPs, Rotate Par2");
   tLeg->AddEntry(tCf_RandomEPs, "Random EPs");
-  tLeg->AddEntry(tCf_RandomEPs_UseStavCf, "Random EPs, Rotate Par2");
+  tLeg->AddEntry(tCf_RandomEPs_UseStavCf, "Random EPs, Stav.");
+  tLeg->AddEntry(tCf_AlignEPs_UseStavCf, "Aligns EPs, Stav.");
 
   //---------------------------------------------------------------
 

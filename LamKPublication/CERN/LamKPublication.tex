@@ -1,0 +1,97 @@
+\documentclass[ALICE,manyauthors]{cernphprep}
+
+\usepackage[comma,square,numbers,sort&compress]{natbib}
+\usepackage{hyperref}
+\usepackage{lineno}
+%\linenumbers
+
+\begin{document}%
+
+%%%%%%%%%%%%%%%  Title page %%%%%%%%%%%%%%%%%%%%%%%%
+\begin{titlepage}
+%
+\PHyear{2015}
+\PHnumber{XXX}      % required, will be obtained from PH
+\PHdate{Day Month}  % required, will be obtained from PH
+%
+
+%%% Put your own title + short title here:
+\title{$\Lambda$K femtoscopy in Pb-Pb collisions at $\sqrt{s_{\mathrm{NN}}} = $ 2.76 TeV}
+\ShortTitle{$\Lambda$K femtoscopy in Pb-Pb collisions}   % appears on right page headers
+
+%%% Do not change the next lines
+\Collaboration{ALICE Collaboration\thanks{See Appendix~\ref{app:collab} for the list of collaboration members}}
+\ShortAuthor{ALICE Collaboration} % appears on left page headers, do not change
+
+\begin{abstract}
+We present our femtoscopy analysis of $\Lambda$K correlations in Pb-Pb collisions at $\sqrt{s_{\mathrm{NN}}}$ = 2.76 TeV from ALICE.  The femtoscopic correlations result from strong final-state interactions, and are fit with a parametrization based on a model by Lednicky and Lyuboshitz.  This allows us to both characterize the emission source and measure the scattering parameters for the particle pairs.  We observe a large difference in the $\Lambda$K$^{+}$ and $\Lambda$K$^{-}$ correlations in pairs with low relative momenta.  This might suggest an effect arising from different quark-antiquark interactions between the pairs ($\mathrm{s}\bar{\mathrm{s}}$ in $\Lambda$K$^{+}$ and $\mathrm{u}\bar{\mathrm{u}}$ in $\Lambda$K$^{-}$), or from different net strangeness for each system.
+\end{abstract}
+\end{titlepage}
+\setcounter{page}{2}
+
+\section{Introduction}
+\label{sec:Introduction}
+This is where the introduction goes.
+
+\section{Data Analysis}
+\label{sec:DataAnalysis}
+This is where the data analysis section goes.
+
+\subsection{V0 selection}
+\label{sec:V0Selection}
+This is how we select V0s.
+
+\subsubsection{$\Lambda$ selection}
+\label{sec:LambdaSelection}
+This is how we select $\Lambda$ candidates.
+
+\subsubsection{K$^{0}_{S}$ selection}
+\label{sec:K0sSelection}
+This is how we select K$^{0}_{S}$ candidates.
+
+\subsection{K$^{\pm}$ selection}
+\label{sec:KchSelection}
+This is how we select K$^{\mathrm{ch}}$ or K$^{\pm}$ candidates.
+
+\section{Construction of correlation functions and fitting}
+\label{sec:CfConstructionAndFitting}
+This is how we do it.
+
+\subsection{Fit Function}
+\label{sec:FitFunction}
+Ya boys Lednicky and Lyuboshitz!
+
+\subsection{Systematic uncertainties}
+\label{sec:SysErrs}
+This is the worst.
+
+\section{Results}
+\label{sec:Results}
+Hooray, finally some results!
+
+\section{Summary}
+\label{sec:Summary}
+We did physics, and we found physics.
+
+%%%%% acknowledgements
+\newenvironment{acknowledgement}{\relax}{\relax}
+\begin{acknowledgement}
+\section*{Acknowledgements}
+%\input{acknowledgements.tex}    %%%%%%% done by webmaster team
+\end{acknowledgement}
+
+%%%%%%%% Bibliography (In case of using bibtex generate the bbl requested by arXiv)
+%\bibliographystyle{utphys}   % Remember we use title in the biblio
+%\bibliography{biblio}
+%\input {bibliography.tex}  
+
+%%%%%%%%% appendix with author list
+\newpage
+\appendix
+%
+%\input{}               %%%%%%%%%%% put your appendices here
+%
+\section{The ALICE Collaboration}
+\label{app:collab}
+%\input{authorlist-preprint.tex}  %%%%%%% done by webmaster team
+\end{document}
