@@ -700,7 +700,7 @@ TCanvas* CompareAnalyses(TString aCfDescriptor, TString aFileNameCfs, int aImpac
   TH1* tCf3 = tThermCf3->GetThermCf(tMarkerStyle3, tColor3, 0.75);
 //-------------------------------------------------------------------------------
   TString tCanCfsName;
-  tCanCfsName = "CompareAnalyses";
+  tCanCfsName = TString::Format("CompareAnalyses_%s", aCfDescriptor.Data());
 
   if(aFileNameCfs.Contains("_RandomEPs_NumWeight1")) tCanCfsName += TString("_RandomEPs_NumWeight1");
   else if(aFileNameCfs.Contains("_RandomEPs")) tCanCfsName += TString("_RandomEPs");
