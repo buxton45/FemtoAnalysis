@@ -21,6 +21,8 @@ This same reasoning suggests that the background should lead to an enhancement a
 
 We can split our correlation functions into three main regions.  First, the low-$k^{*}$ region ($k^{*} \lesssim 0.3$ GeV/$c$) contains the femtoscopic correlations, as well as a likely enhancement from the background.  The intermediate-$k^{*}$ region (0.3 $\lesssim k^{*} \gtrsim$ 1.5 GeV/$c$) contains a suppression from the background.  Finally, the high-$k^{*}$ region ($k^{*} \gtrsim$ 1.5 GeV/$c$) contains an enhancement with unknown origin.
 
+THERMINATOR 2 simulation has been shown to reproduce the background features in a $\pi$K analysis \cite{Kisiel:2017}.  As the background effect can be attributed mainly to elliptic flow, which is a global feature of the system, we suspected THERMINATOR 2 could also, at least qualitatively, describe our backgrounds.  After ensuring each simulated event received a random event-plane angle ($\Psi_{\mathrm{EP}}$)\footnote{default was for all events to share a common event plane}, we found THERMINATOR 2 did a good job of describing our data qualitatively, and, in some cases, quantitatively.  Figure \ref{fig:BgdswTHERM} shows the THERMINATOR 2 simulation (gold) together with experimental data (red, blue, or black)  The figure also shows a 6$^{th}$-order polynomial fit to the simulation (gold), as well as the fit polynomial scaled to match the data (red, blue, black).  
+
 
 \begin{figure}[h!]
   \centering
@@ -37,26 +39,44 @@ We can split our correlation functions into three main regions.  First, the low-
     \label{fig:BgdswTHERM:c}
     \includegraphics[width=0.33\textwidth]{5_Fitting/Figures/BgdwFitOnly_RandomEPs_NumWeight1_PrimaryOnly_LamK0wConj_0010_1030_3050.pdf}}    
   %%----overall caption----
-  \caption[Backgrounds with THERMINATOR]{Backgrounds with THERMINATOR}
+  \caption[Backgrounds with THERMINATOR]{THERMINATOR 2 simulation (gold) together with experimental data (red, blue, or black).  The left column shows results for \LamKchP (\ref{fig:BgdswTHERM:a}), middle for \LamKchM (\ref{fig:BgdswTHERM:b}), and right for \LamKs (\ref{fig:BgdswTHERM:c}).  A 6$^{th}$-order polynomial fit to the simulation is shown as a solid gold line, and whose fit parameters are printed on the lower left of each plot.  This polynomial is scaled to match the experimental data; the value of this scale is printed in the lower left corner of each plot.  The polynomial fit with scale factor applied is drawn in a color matching the experimental data (red, blue, black).}
   \label{fig:BgdswTHERM}
 \end{figure}
 
 
-\begin{figure}[h]
-  \centering
-  \includegraphics[width=\textwidth]{5_Fitting/Figures/CompareBackgroundReductionMethods_Full_LamKchPwConj_3050_NumWeight1.pdf}
-  \caption[Background reduction methods with THERMINATOR]{Background reduction methods with THERMINATOR}
-  \label{fig:BgdRedMethodsTHERM}
-\end{figure}
-
+Figure \ref{fig:THERMCfBgdDecomposition} shows three different correlation function generated using THERMINATOR 2 simulation ("Cf w/o Bgd (A)", "Cf w. Bgd (B)", "Bgd(C)"), as well as two histograms describing the relation between the three ("Ratio (B/C)", "1+Diff(B-C)").  Cf w/o Bgd (A)" shows a correlation function with a femtoscopic correlation, but without background.  When THERMINATOR 2 is run without randomizing event planes, and therefore having all events share a common event plane, no non-flat background is observed, as expected.  The femtoscopic correlation effect was introduced by assuming scattering parameters for the system, and weighting the numerators appropriately.  The second correlation, "Cf w. Bgd (B)", shows a correlation function with both a femtoscopic correlation and a background (most closely matches our situation in experiment).  To generate the background, each event was given a random event-plane angle, as is given to us in experiment.  To generate the femtoscopic correlation, the same numerator weighting procedure was used.  Finally, "Bgd (C)", shows a correlation function with a non-femtoscopic background, but no femtoscopic correlation, i.e. background only.  This is generated just as "Cf w. Bgd (B)", with randomized event planes, but unit weights are used when filling the numerators, so no femtoscopic effects are included.
 
 
 \begin{figure}[h]
   \centering
   \includegraphics[width=\textwidth]{5_Fitting/Figures/CompareBgds_Full_LamKchPwConj_3050.pdf}
-  \caption[Correlation with background decomposition (THERM)]{Correlation with background decomposition with THERMINATOR}
+  \caption[Correlation with background decomposition (THERM)]{Correlation with background decomposition with THERMINATOR.  "Cf w/o Bgd (A)" shows a correlation function with a femtoscopic correlation, but without background.  "Cf w. Bgd (B)", shows a correlation function with both a femtoscopic correlation and a background (most closely matches our situation in experiment).  "Bgd (C)", shows a correlation function with a non-femtoscopic background, but no femtoscopic correlation, i.e. background only.}
   \label{fig:THERMCfBgdDecomposition}
 \end{figure}
+
+
+The main point of Fig. \ref{fig:THERMCfBgdDecomposition} is that the black points match the blue (and purple) points; or, equivalently:
+
+\begin{equation}
+  Cf w/o Bgd = \dfrac{Cf w. Bgd}{Bgd} \to C_{theory} = \dfrac{C_{exp}}{F_{Bgd}} \to C_{exp} = C_{theory}\cdot F_{Bgd}
+  \label{eq:BgdDecomp}
+\end{equation}
+
+As shown and described in Fig \ref{fig:THERMCfBgdDecomposition} and Eq. \ref{eq:BgdDecomp}, THERMINATOR 2 simulation shows the non-femtoscopic background affects the correlation function as a separable scale factor.  We expect this behavior to be roughly the same in the experimental data.
+
+Figure \ref{fig:BgdRedMethodsTHERM} demonstrates the use of the Stavinsky method with THERMINATOR 2.  In the figure, unit weights were used for all numerators, so no femtoscopic signal is included, only background effects.  The black points show an ideal, experimentally unreachable, situation of aligning all of the event-plane angles.  With THERMINATOR 2, when the event-planes are aligned, the background signal is killed.  The green points show the experimental situation of random event-plane angles.  The purple points shown the affect of applying the Stavinsky method to the case of random event-planes.  The figure shows that this method effectively kills the non-flat background (i.e. the procedure takes the green points to the purple).  Finally, the blue points show the effect of applying the Stavinsky method when all of the event-planes are aligned.  This shows that the Stavinsky method does not introduce any signal to an already flat background.
+
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=\textwidth]{5_Fitting/Figures/CompareBackgroundReductionMethods_Full_LamKchPwConj_3050_NumWeight1.pdf}
+  \caption[Background reduction methods with THERMINATOR]{The use of the Stavinsky method with THERMINATOR 2.  Unit weights were used for all numerators, so no femtoscopic signal is included, only background effects.  The black points show an ideal, experimentally unreachable, situation of aligning all of the event-plane angles.  The green points show the experimental situation of random event-plane angles.  The purple points shown the affect of applying the Stavinsky method to the case of random event-planes.  Finally, the blue points show the effect of applying the Stavinsky method when all of the event-planes are aligned.}
+  \label{fig:BgdRedMethodsTHERM}
+\end{figure}
+
+
+
+
 
 
 

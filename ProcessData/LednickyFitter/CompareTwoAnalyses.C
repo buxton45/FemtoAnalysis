@@ -35,8 +35,8 @@ TCanvas* DrawKStarCfs(FitGenerator* aFG1, FitGenerator* aFG2, bool aZoom=false, 
   double tXHigh = aFG1->GetKStarCf(0)->GetXaxis()->GetBinUpEdge(aFG1->GetKStarCf(0)->GetNbinsX())-0.01;
   if(aZoom) tXHigh = 0.32;
 
-  double tYLow = 0.71;
-  double tYHigh = 1.09;
+  double tYLow = 0.86;
+  double tYHigh = 1.07;
   CanvasPartition* tCanPart = new CanvasPartition(tCanvasName,tNx,tNy,tXLow,tXHigh,tYLow,tYHigh,0.12,0.05,0.13,0.05);
   if(!tConjIncluded) tCanPart->GetCanvas()->SetCanvasSize(350,500);
 
