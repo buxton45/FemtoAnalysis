@@ -320,6 +320,18 @@ TCanvas* CompareLamKchAvgToLamK0(FitGenerator* aLamKchP, FitGenerator* aLamKchM,
           tCanPart->AddLegendEntry(i, j, tCfLamKchM, cAnalysisRootTags[kLamKchM], "p");
         }
       }
+
+
+      TString tTextAnType;
+      if(tAnalysisNumber%2==0) tTextAnType = TString("#LambdaK");
+      else tTextAnType = TString("#bar{#Lambda}#bar{K}");
+      TPaveText* tAnTypeName = tCanPart->SetupTPaveText(tTextAnType,i,j,0.8,0.85);
+      tCanPart->AddPadPaveText(tAnTypeName,i,j);
+
+      TString tTextCentrality = TString(cPrettyCentralityTags[aLamKchP->GetSharedAn()->GetFitPairAnalysis(tAnalysisNumber)->GetCentralityType()]);
+      TPaveText* tCentralityName = tCanPart->SetupTPaveText(tTextCentrality,i,j,0.075,0.85);
+      tCanPart->AddPadPaveText(tCentralityName,i,j);
+
     }
   }
 

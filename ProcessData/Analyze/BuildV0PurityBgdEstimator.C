@@ -164,14 +164,24 @@ int main(int argc, char **argv)
 
 //-----------------------------------------------------------------------------
   bool bSaveFigures = false;
-  TString tSaveFiguresLocation = "~/Analysis/Presentations/";
+  TString tSaveFiguresLocation = "~/Analysis/FemtoAnalysis/AnalysisNotes/3_DataSelection/Figures/";
 //-------------------------------------------------------------------
+
+  int tMarkerStyle_Data = 20;
+  int tMarkerColor_Data = kBlack;
+
+  int tMarkerStyle_Num = 20;
+  int tMarkerColor_Num = kRed;
+
+  int tMarkerStyle_Den = 20;
+  int tMarkerColor_Den = kBlue;
 
   LamK0->BuildPurityCollection();
   ALamK0->BuildPurityCollection();
 
   TH1* tDataPurity = LamK0->GetCombinedPurityHisto(tV0Type);
-  tDataPurity->SetMarkerStyle(20);
+  tDataPurity->SetMarkerStyle(tMarkerStyle_Data);
+  tDataPurity->SetMarkerColor(tMarkerColor_Data);
 
   double tTestSignalPlusBgd = LamK0->GetPurityObject(tV0Type)->GetSignalPlusBgd();
 
@@ -182,8 +192,8 @@ int main(int argc, char **argv)
   TH1* tV0BgdEstNumHist = tV0BgdEstNum->GetCombinedPurity();
   cout << "tTestSignalPlusBgd/tV0BgdEstNumSignalPlusBgd = scale = " << tTestSignalPlusBgd/tV0BgdEstNumSignalPlusBgd << endl;
   tV0BgdEstNumHist->Scale(tTestSignalPlusBgd/tV0BgdEstNumSignalPlusBgd);
-  tV0BgdEstNumHist->SetMarkerStyle(20);
-  tV0BgdEstNumHist->SetMarkerColor(2);
+  tV0BgdEstNumHist->SetMarkerStyle(tMarkerStyle_Num);
+  tV0BgdEstNumHist->SetMarkerColor(tMarkerColor_Num);
   canPurity->cd();
   if(bZoomBgd)
   {
@@ -209,8 +219,8 @@ int main(int argc, char **argv)
 
   TCanvas* canPurity2 = new TCanvas("canPurity2", "canPurity2");
   TH1* tV0BgdEstDenHist = tV0BgdEstDen->GetCombinedPurity();
-  tV0BgdEstDenHist->SetMarkerStyle(20);
-  tV0BgdEstDenHist->SetMarkerColor(4);
+  tV0BgdEstDenHist->SetMarkerStyle(tMarkerStyle_Den);
+  tV0BgdEstDenHist->SetMarkerColor(tMarkerColor_Den);
   canPurity2->cd();
   double tScaleNum=0, tScaleDen=0;
   if(tV0Type==kLam || tV0Type==kALam)
@@ -240,18 +250,62 @@ int main(int argc, char **argv)
     tLeg2->Draw();
 
 
+  //-------------------------------------------------------------
+
+
+  TCanvas* canPurity3 = new TCanvas("canPurity3", "canPurity3");
+  canPurity3->cd();
+  //------------------
+  TPad *tPad1 = new TPad("tPad1","tPad1",0.0,0.3,1.0,1.0);
+  tPad1->Draw();
+  TPad *tPad2 = new TPad("tPad2","tPad2",0.0,0.0,1.0,0.3);
+  tPad2->Draw();
+
+  tPad1->cd();
+  tDataPurity->GetYaxis()->SetRangeUser(0.9*tV0BgdEstDenHist->GetMinimum(), 1.1*tDataPurity->GetMaximum());
+  tDataPurity->DrawCopy();
+  tV0BgdEstDenHist->DrawCopy("same");
+  tV0BgdEstNumHist->DrawCopy("same");
+
+  double tScale_DenWrtNum = (tScaleNum/tScaleDen)/(tTestSignalPlusBgd/tV0BgdEstNumSignalPlusBgd);
+  TLegend *tLeg3 = new TLegend(0.60,0.50,0.89,0.89);
+    tLeg3->SetFillColor(0);
+    tLeg3->SetHeader(cRootParticleTags[tV0Type]);
+    tLeg3->AddEntry(tDataPurity, "Data", "p");
+    tLeg3->AddEntry(tV0BgdEstNumHist, TString::Format("Same Event Pairs (x%0.2f)", tTestSignalPlusBgd/tV0BgdEstNumSignalPlusBgd), "p");
+    tLeg3->AddEntry(tV0BgdEstDenHist, TString::Format("Mixed Event Pairs (x%0.2f)", tScaleNum/tScaleDen), "p");
+    TLegendEntry* tHeader3 = (TLegendEntry*)tLeg3->GetListOfPrimitives()->First();
+    tHeader3->SetTextAlign(22);
+    tLeg3->Draw();
+
+  //------------------
+  tPad2->cd();
+
+  tDataPurity->GetYaxis()->SetRangeUser(0.9*tV0BgdEstDenHist->GetMinimum(), 1.1*tV0BgdEstDenHist->GetMaximum());
+  tDataPurity->DrawCopy();
+  tV0BgdEstDenHist->DrawCopy("same");
+  tV0BgdEstNumHist->DrawCopy("same");
+
+
+  //-------------------------------------------------------------
+
   if(bSaveFigures)
   {
-    TString tName1 = "DataVsNum";
+    TString tName1 = "V0PurBgdEst_DataVsNum";
       tName1 += cParticleTags[tV0Type];
       if(bZoomBgd) tName1 += TString("_Zoomed");
-      tName1 += TString(".eps");
+      tName1 += TString(".pdf");
       canPurity->SaveAs(tSaveFiguresLocation+tName1);
 
-    TString tName2 = "NumVsDen";
+    TString tName2 = "V0PurBgdEst_NumVsDen";
       tName2 += cParticleTags[tV0Type];
-      tName2 += TString(".eps");
+      tName2 += TString(".pdf");
       canPurity2->SaveAs(tSaveFiguresLocation+tName2);
+
+    TString tName3 = "V0PurBgdEst_DataVsNumVsDen";
+      tName3 += cParticleTags[tV0Type];
+      tName3 += TString(".pdf");
+      canPurity3->SaveAs(tSaveFiguresLocation+tName3);
   }
 
 

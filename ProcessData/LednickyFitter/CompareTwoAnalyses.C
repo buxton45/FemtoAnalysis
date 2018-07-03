@@ -363,7 +363,7 @@ int main(int argc, char **argv)
   bool bUseStavCf2 = true;
 
   bool SaveImages = false;
-  TString tSaveDir = "/home/jesse/Analysis/Presentations/AliFemto/20180620/Figures/";
+  TString tSaveDir = "/home/jesse/Analysis/Presentations/AliFemto/20180627/Figures/";
 
   TString tGeneralAnTypeName;
   if(tAnType==kLamK0 || tAnType==kALamK0) tGeneralAnTypeName = "cLamK0";
