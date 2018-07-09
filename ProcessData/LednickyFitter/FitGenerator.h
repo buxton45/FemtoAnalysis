@@ -22,6 +22,8 @@ class CanvasPartition;
 
 #include "Types_FitParamValues.h"
 
+#include "FitValuesWriter.h"
+
 class FitGenerator {
 friend class DualieFitGenerator;  //So DualieFitGenerator can access private FitGenerator members/functions
 
@@ -64,6 +66,7 @@ public:
 
   void WriteAllFitParameters(ostream &aOut=std::cout);
   vector<TString> GetAllFitParametersTStringVector();
+  void WriteToMasterFitValuesFile(TString aFileLocation);
 
   void FindGoodInitialValues(bool aApplyMomResCorrection=false, bool aApplyNonFlatBackgroundCorrection=false);
 

@@ -68,6 +68,7 @@ public:
   static void AppendFitInfo(TString &aSaveName, bool aApplyMomResCorrection, bool aApplyNonFlatBackgroundCorrection, NonFlatBgdFitType aNonFlatBgdFitType, 
                             IncludeResidualsType aIncludeResidualsType, ResPrimMaxDecayType aResPrimMaxDecayType=k5fm, 
                             ChargedResidualsType aChargedResidualsType=kUseXiDataAndCoulombOnlyInterp, bool aFixD0=false);
+  void AppendFitInfo(TString &aSaveName);
 
   static void PrintCurrentParamValues(int aNpar, double* aPar);
   static double GetChi2Value(int aKStarBin, TH1* aCfToFit, double* aPar);

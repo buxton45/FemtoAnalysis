@@ -112,6 +112,8 @@ int main(int argc, char **argv)
   TString tSaveDirectoryBase = TString::Format("/home/jesse/Analysis/Presentations/AliFemto/20180627/Figures/Fits/%s/", cAnalysisBaseTags[tAnType]);
 //  TString tSaveDirectoryBase = tDirectoryBase;
 
+  TString tLocationMasterFitResults = TString::Format("%sMasterFitResults_%s.txt", tDirectoryBase.Data(), tResultsDate.Data());
+
 //-----------------------------------------------------------------------------
 
   TString tSaveNameModifier = "";
@@ -202,6 +204,8 @@ int main(int argc, char **argv)
   if(bDoFit)
   {
     tLamKchP->DoFit(tMaxFitKStar);
+    tLamKchP->WriteToMasterFitValuesFile(tLocationMasterFitResults);
+
 //    TCanvas* tKStarwFitsCan = tLamKchP->DrawKStarCfswFits(ApplyMomResCorrection,ApplyNonFlatBackgroundCorrection,tNonFlatBgdFitType,SaveImages,bDrawSysErrs,bZoomROP);
     TCanvas* tKStarwFitsCan_Zoom = tLamKchP->DrawKStarCfswFits(ApplyMomResCorrection,ApplyNonFlatBackgroundCorrection,tNonFlatBgdFitType,SaveImages,bDrawSysErrs,true);
     TCanvas* tKStarwFitsCan_UnZoom = tLamKchP->DrawKStarCfswFits(ApplyMomResCorrection,ApplyNonFlatBackgroundCorrection,tNonFlatBgdFitType,SaveImages,bDrawSysErrs,false);

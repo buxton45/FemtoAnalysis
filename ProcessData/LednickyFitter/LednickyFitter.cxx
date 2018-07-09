@@ -132,7 +132,7 @@ LednickyFitter::~LednickyFitter()
 
 //________________________________________________________________________________________________________________
 void LednickyFitter::AppendFitInfo(TString &aSaveName, bool aApplyMomResCorrection, bool aApplyNonFlatBackgroundCorrection, 
-                                          IncludeResidualsType aIncludeResidualsType, ResPrimMaxDecayType aResPrimMaxDecayType, ChargedResidualsType aChargedResidualsType, bool aFixD0)
+                                   IncludeResidualsType aIncludeResidualsType, ResPrimMaxDecayType aResPrimMaxDecayType, ChargedResidualsType aChargedResidualsType, bool aFixD0)
 {
   if(aApplyMomResCorrection) aSaveName += TString("_MomResCrctn");
   if(aApplyNonFlatBackgroundCorrection) aSaveName += TString("_NonFlatBgdCrctn");
@@ -148,7 +148,7 @@ void LednickyFitter::AppendFitInfo(TString &aSaveName, bool aApplyMomResCorrecti
 
 //________________________________________________________________________________________________________________
 void LednickyFitter::AppendFitInfo(TString &aSaveName, bool aApplyMomResCorrection, bool aApplyNonFlatBackgroundCorrection, NonFlatBgdFitType aNonFlatBgdFitType, 
-                                          IncludeResidualsType aIncludeResidualsType, ResPrimMaxDecayType aResPrimMaxDecayType, ChargedResidualsType aChargedResidualsType, bool aFixD0)
+                                   IncludeResidualsType aIncludeResidualsType, ResPrimMaxDecayType aResPrimMaxDecayType, ChargedResidualsType aChargedResidualsType, bool aFixD0)
 {
   if(aApplyMomResCorrection) aSaveName += TString("_MomResCrctn");
   if(aApplyNonFlatBackgroundCorrection)
@@ -164,6 +164,17 @@ void LednickyFitter::AppendFitInfo(TString &aSaveName, bool aApplyMomResCorrecti
     aSaveName += cChargedResidualsTypeTags[aChargedResidualsType];
   }
   if(aFixD0) aSaveName += TString("_FixedD0");
+}
+
+//________________________________________________________________________________________________________________
+void LednickyFitter::AppendFitInfo(TString &aSaveName)
+{
+  bool tFixD0 = false;
+  if(fFitSharedAnalyses->GetFitPairAnalysis(0)->GetFitParameter(kd0)->IsFixed()) tFixD0 = true;
+
+  AppendFitInfo(aSaveName, fApplyMomResCorrection, fApplyNonFlatBackgroundCorrection, fNonFlatBgdFitType, 
+                fIncludeResidualsType, fResPrimMaxDecayType, fChargedResidualsType, tFixD0);
+
 }
 
 

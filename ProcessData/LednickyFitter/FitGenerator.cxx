@@ -769,6 +769,17 @@ vector<TString> FitGenerator::GetAllFitParametersTStringVector()
   return tReturnVec;
 }
 
+
+//________________________________________________________________________________________________________________
+void FitGenerator::WriteToMasterFitValuesFile(TString aFileLocation)
+{
+  vector<TString> tFitParamsTStringVec = GetAllFitParametersTStringVector();
+  TString tFitInfo = "";
+  fLednickyFitter->AppendFitInfo(tFitInfo);
+  FitValuesWriter* tFitValWriter = new FitValuesWriter(tFitParamsTStringVec, tFitInfo);
+  tFitValWriter->WriteToMaster(aFileLocation);
+}
+
 //________________________________________________________________________________________________________________
 void FitGenerator::FindGoodInitialValues(bool aApplyMomResCorrection, bool aApplyNonFlatBackgroundCorrection)
 {
