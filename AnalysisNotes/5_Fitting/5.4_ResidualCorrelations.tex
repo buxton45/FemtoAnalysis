@@ -10,8 +10,19 @@ In practice, this is difficult to achieve for our $\Lambda$ and $\bar{\Lambda}$ 
 Many of our $\Lambda$ particles are not primary, but originate as decay products from other hyperons, including $\Sigma^{0}$, $\Xi^{0}$, $\Xi^{-}$ and $\Sigma^{*(+,-,0)}(1385)$.  Additionally, many of our K particles are not primary, but decay from K$^{*(+,-,0)}(892)$ parents.
 In these decays, the $\Lambda$ carries away a momentum very similar to that of its parent.
 As a result, the correlation function between a secondary $\Lambda$ and, for instance, a K$^{+}$  will be sensitive to, and dependent upon, the interaction between the parent of the $\Lambda$ and the K$^{+}$.
-In effect, the correlation between the parent of the $\Lambda$ and the K$^{+}$ (ex. $\Sigma^{0}$K$^{+}$) will be visible, although smeared out, in the $\Lambda$K$^{+}$ data.
-We call this a residual correlation resulting from feed-down.  Residual correlations are important in an analysis when three criteria are met \cite{Kisiel:2014mma}: i) the parent correlation signal is large, ii) a large fraction of pairs in the sample originate from the particular parent system, and iii) the decay momenta are comparable to the expected correlation width in \textit{k}*. 
+In effect, the correlation between the parent of the $\Lambda$ and the K$^{+}$ (ex. $\Sigma^{0}$K$^{+}$) will be visible, although smeared out, in the $\Lambda$K$^{+}$ data; we call this a residual correlation resulting from feed-down.
+The contributions from the primary correlation, residual correlations, and fake pairs on the finally measure data is shown schematically in Figure \ref{fig:ResidualsCartoon}.
+Residual correlations are important in an analysis when three criteria are met \cite{Kisiel:2014mma}: i) the parent correlation signal is large, ii) a large fraction of pairs in the sample originate from the particular parent system, and iii) the decay momenta are comparable to the expected correlation width in \textit{k}*. 
+
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=\textwidth]{5_Fitting/Figures/ResidualCartoons_p3.pdf}
+  \caption[Residual Contributions Cartoon]{A schematic representation of the contributions to the finally measured data from the primary correlation, residual correlations, and fake pairs.}
+  \label{fig:ResidualsCartoon}
+\end{figure}
+
+
 
 As it is difficult for us to eliminate these residual correlations in our analyses, we must attempt to account for them in our fitter.
 To achieve this, we will simultaneously fit the data for both the primary correlation function and the residual correlations.  For example, in the simple case of a $\Lambda$K$^{+}$ analysis with residuals arising solely from $\Sigma^{0}$K$^{+}$ feed-down:

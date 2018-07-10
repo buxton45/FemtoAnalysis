@@ -329,8 +329,12 @@ TObjArray* DualieFitGenerator::DrawModelKStarCfs(bool aSaveImage)
 }
 
 
-
-
+//________________________________________________________________________________________________________________
+void DualieFitGenerator::WriteToMasterFitValuesFile(TString aFileLocation, TString aResultsDate)
+{
+  fFitGen1->WriteToMasterFitValuesFile(aFileLocation, aResultsDate);
+  fFitGen2->WriteToMasterFitValuesFile(aFileLocation, aResultsDate);
+}
 
 
 

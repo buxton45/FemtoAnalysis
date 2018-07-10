@@ -34,7 +34,8 @@ FitParameter::FitParameter(ParameterType aParamType, double aStartValue, bool aI
   fSharedWithLocal(0),
   fSharedWithGlobal(0),
   fMinuitParamNumber(-1),
-  fOwnerInfo()
+  fOwnerInfo(),
+  fFitInfo("")
 
 
 {

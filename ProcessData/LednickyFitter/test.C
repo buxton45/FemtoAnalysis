@@ -1,5 +1,6 @@
 #include "FitSharedAnalyses.h"
 #include "LednickyFitter.h"
+#include "FitValuesWriter.h"
 
 #include "TObjString.h"
 
@@ -181,9 +182,14 @@ int main(int argc, char **argv)
   PrintMatrix(tValuesMatrix);
 
 
+/*
+  TString tFileLocation = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_20180505/MasterFitResults_20180505.txt";
+  TString tResultsDate = "20180505";
+  AnalysisType tAnType = kLamKchP;
 
-
-
+  FitValuesWriter* tFitValWriter = new FitValuesWriter(tFileLocation, tResultsDate, tAnType);
+  vector<vector<FitParameter*> > tAllFitResults = tFitValWriter->GetAllFitResults(tFileLocation, "_MomResCrctn_NonFlatBgdCrctnPolynomial_3Res_PrimMaxDecay4fm_UsingXiDataAndCoulombOnly", "");
+*/
 //-------------------------------------------------------------------------------
   theApp->Run(kTRUE); //Run the TApp to pause the code.
   // Select "Exit ROOT" from Canvas "File" menu to exit

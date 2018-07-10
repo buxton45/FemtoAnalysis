@@ -32,6 +32,8 @@ public:
   void DoFit(bool aShareLambda, bool aShareRadii=true, double aMaxFitKStar=0.3);
   void ReturnNecessaryInfoToFitGenerators();  //This isn't needed for the fitting process, just for drawing
 
+  void WriteToMasterFitValuesFile(TString aFileLocation, TString aResultsDate);
+
 /*
   void WriteAllFitParameters(ostream &aOut);
   vector<TString> GetAllFitParametersTStringVector();

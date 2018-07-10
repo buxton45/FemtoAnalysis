@@ -10,14 +10,12 @@ ClassImp(FitValuesWriter)
 
 
 //________________________________________________________________________________________________________________
-FitValuesWriter::FitValuesWriter(vector<TString> &aFitParamsTStringVec, TString &aFitInfoTString) : 
-  fFitParamsTStringVec(aFitParamsTStringVec),
-  fFitInfoTString(aFitInfoTString)
-
+FitValuesWriter::FitValuesWriter(TString aMasterFileLocation, TString aResultsDate, AnalysisType aAnType) : 
+  fMasterFileLocation(aMasterFileLocation),
+  fResultsDate(aResultsDate),
+  fAnalysisType(aAnType)
 {
-  fFitParamsTStringVec.push_back(TString("**********************************************************************************************"));
-  fFitParamsTStringVec.push_back(TString(""));
-  fFitParamsTStringVec.push_back(TString(""));
+
 }
 
 
@@ -104,7 +102,7 @@ td1dVec FitValuesWriter::ReadParameterValue(TString aLine)
 
   int tBeg1 = 0;
   int tEnd1 = tSubLine1.First(':');
-  tSubLine1.Remove(tEnd1, tSubLine1.Length()-tEnd1);
+  TString tTest = tSubLine1.Remove(tEnd1, tSubLine1.Length()-tEnd1);
 
   int tBeg2 = tSubLine2.First(':')+1;
   tSubLine2.Remove(0, tBeg2);
@@ -117,10 +115,6 @@ td1dVec FitValuesWriter::ReadParameterValue(TString aLine)
   tSubLine3.Remove(tEnd3, tSubLine3.Length()-tEnd3);
 
   //------------------------------------
-cout << "tSubLine1 = " << tSubLine1 << endl;
-cout << "tSubLine2 = " << tSubLine2 << endl;
-cout << "tSubLine3 = " << tSubLine3 << endl;
-
 
   int tParamType = (int)GetParamTypeFromName(tSubLine1);
   double tFitVal = tSubLine2.Atof();
@@ -135,49 +129,67 @@ cout << "tSubLine3 = " << tSubLine3 << endl;
 
 
 //________________________________________________________________________________________________________________
-void FitValuesWriter::InterpretFitParamsTStringVec()
+vector<vector<FitParameter*> > FitValuesWriter::InterpretFitParamsTStringVec(vector<TString> &aTStringVec)
 {
-
+  TString tFitInfo = "";
   AnalysisType tCurrentAnType;
   CentralityType tCurrentCentralityType;
-  ParameterType tCurrentParameterType;
 
   TString tLine;
-  for(unsigned int i=0; i<fFitParamsTStringVec.size(); i++)
+  td1dVec tValuesVec;    // = [(int)ParamType, value, stat. err]
+  vector<FitParameter*> tParams1dVec; // All parameters for a given analysis and centrality
+  vector<vector<FitParameter*> > tParams2dVec;
+
+
+  for(unsigned int i=0; i<aTStringVec.size(); i++)
   {
-    tLine = fFitParamsTStringVec[i];
+    tLine = aTStringVec[i];
 
-    if(tLine.Contains("AnalysisType")) tCurrentAnType = GetAnalysisType(tLine);
-    if(tLine.Contains("CentralityType")) tCurrentCentralityType = GetCentralityType(tLine);
-    if(tLine.Contains("Lambda") || tLine.Contains("Radius") || tLine.Contains("Ref0") || tLine.Contains("Imf0") || tLine.Contains("d0"))
+    if(tLine.Contains("FitInfo")) tFitInfo = GetFitInfoTString(tLine);
+    else if(tLine.Contains("AnalysisType")) tCurrentAnType = GetAnalysisType(tLine);
+    else if(tLine.Contains("CentralityType")) tCurrentCentralityType = GetCentralityType(tLine);
+    else if(tLine.Contains("Lambda") || tLine.Contains("Radius") || tLine.Contains("Ref0") || tLine.Contains("Imf0") || tLine.Contains("d0"))
     {
-      td1dVec tValuesVec = ReadParameterValue(tLine);
+      tValuesVec = ReadParameterValue(tLine);
 
-      cout << "i = " << i << endl;
-      cout << "ParamType = " << tValuesVec[0] << "(" << cParameterNames[(int)tValuesVec[0]] << ")" << endl;
-      cout << "Value     = " << tValuesVec[1] << endl;
-      cout << "Error     = " << tValuesVec[2] << endl << endl;
-
+      FitParameter* tFitParam = new FitParameter(static_cast<ParameterType>((int)tValuesVec[0]), 0.);
+      tFitParam->SetFitValue(tValuesVec[1]);
+      tFitParam->SetFitValueError(tValuesVec[2]);
+      tFitParam->SetFitInfo(tFitInfo);
+      tFitParam->SetOwnerInfo(tCurrentAnType, tCurrentCentralityType, kFemtoPlus);
 /*
-      if(tLine.Contains("Lambda")) tCurrentParameterType = kLambda;
-      else if(tLine.Contains("Radius")) tCurrentParameterType = kRadius;
-      else if(tLine.Contains("Ref0")) tCurrentParameterType = kRef0;
-      else if(tLine.Contains("Imf0")) tCurrentParameterType = kImf0;
-      else if(tLine.Contains("d0")) tCurrentParameterType = kd0;
-      else assert(0);
+cout << "tFitParam->GetType() = " << cParameterNames[tFitParam->GetType()] << endl;
+cout << "tFitParam->GetFitValue() = " << tFitParam->GetFitValue() << endl;
+cout << "tFitParam->GetFitValueError() = " << tFitParam->GetFitValueError() << endl;
+cout << "tFitParam->GetFitInfo() = " << tFitParam->GetFitInfo() << endl;
+cout << "tFitParam->GetOwnerName() = " << tFitParam->GetOwnerName() << endl << endl;
 */
-//      FillCutsVector(aAll, tValuesVec, tCurrentParameterType, tCurrentAnType, tCurrentCentralityType);
+      tParams1dVec.push_back(tFitParam);
+
+      if(static_cast<ParameterType>((int)tValuesVec[0]) == kd0)
+      {
+        assert(tParams1dVec.size()==5);  //Lambda, Radius, Ref0, Imf0, d0
+        tParams2dVec.push_back(tParams1dVec);
+        tParams1dVec.clear();
+      }
     }
-
+    else continue;
   }
-
+  return tParams2dVec;
 }
 
 
 //________________________________________________________________________________________________________________
 vector<vector<TString> > FitValuesWriter::ConvertMasterTo2dVec(TString aFileLocation)
 {
-  ifstream tFileIn(aFileLocation);
+  ifstream tFileIn;
+  tFileIn.open(aFileLocation);
+  if(!tFileIn)
+  {
+    ofstream tTempFile(aFileLocation);
+    tTempFile.close();
+    tFileIn.open(aFileLocation);
+  }
   assert(tFileIn);
 
   vector<TString> tFitParams1dVec(0);
@@ -207,13 +219,16 @@ vector<vector<TString> > FitValuesWriter::ConvertMasterTo2dVec(TString aFileLoca
 
 
 //________________________________________________________________________________________________________________
-void FitValuesWriter::WriteToMaster(TString aFileLocation)
+void FitValuesWriter::WriteToMaster(TString aFileLocation, vector<TString> &aFitParamsTStringVec, TString &aFitInfoTString, TString aSaveNameModifier)
 {
   vector<vector<TString> > tMaster2dVec = ConvertMasterTo2dVec(aFileLocation);
   bool tResultIncluded = false;
 
-  vector<TString> tVecToInclude = fFitParamsTStringVec;
-  tVecToInclude.insert(tVecToInclude.begin(), TString::Format("FitInfo = %s", fFitInfoTString.Data()));
+  vector<TString> tVecToInclude = aFitParamsTStringVec;
+  tVecToInclude.insert(tVecToInclude.begin(), TString::Format("FitInfo = %s%s", aFitInfoTString.Data(), aSaveNameModifier.Data()));
+  tVecToInclude.push_back(TString("**********************************************************************************************"));
+  tVecToInclude.push_back(TString(""));
+  tVecToInclude.push_back(TString(""));
 
   for(unsigned int i=0; i<tMaster2dVec.size(); i++)
   {
@@ -245,10 +260,39 @@ void FitValuesWriter::WriteToMaster(TString aFileLocation)
 }
 
 
+//________________________________________________________________________________________________________________
+vector<vector<FitParameter*> > FitValuesWriter::GetAllFitResults(TString aFileLocation, TString aFitInfoTString, TString aSaveNameModifier)
+{
+  vector<vector<TString> > tMaster2dVec = ConvertMasterTo2dVec(aFileLocation);
+  vector<TString> tFitParams1dVec, tReturnVec;
+  for(unsigned int i=0; i<tMaster2dVec.size(); i++)
+  {
+    if(GetFitInfoTString(tMaster2dVec[i][0]).EqualTo(TString(aFitInfoTString+aSaveNameModifier)))
+    {
+      tFitParams1dVec = tMaster2dVec[i];
+      vector<vector<FitParameter*> > tParams2dVec = InterpretFitParamsTStringVec(tFitParams1dVec);
+    }
+  }
+
+}
 
 
 
 
+/*
+//________________________________________________________________________________________________________________
+td1dVec FitValuesWriter::GetFitResults(TString aFileLocation, TString &aFitInfoTString, AnalysisType aAnType, CentralityType aCentType)
+{
+  vector<vector<TString> > tMaster2dVec = ConvertMasterTo2dVec(aFileLocation);
+
+  for(unsigned int i=0; i<tMaster2dVec.size(); i++)
+  {
+
+  }
+
+
+}
+*/
 
 
 

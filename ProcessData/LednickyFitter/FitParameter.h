@@ -78,6 +78,9 @@ public:
   void SetMinuitParamNumber(int aParamNumber);
   int GetMinuitParamNumber();
 
+  void SetFitInfo(TString aFitInfo);
+  TString GetFitInfo();
+
 private:
 
   ParameterType fParamType;
@@ -99,6 +102,7 @@ private:
   int fMinuitParamNumber;
   
   ParamOwnerInfo fOwnerInfo;
+  TString fFitInfo;
 
 #ifdef __ROOT__
   ClassDef(FitParameter, 1)
@@ -133,6 +137,9 @@ inline double FitParameter::GetFitValueError() {return fFitValueError;}
 
 inline void FitParameter::SetMinuitParamNumber(int aParamNumber) {fMinuitParamNumber = aParamNumber;}
 inline int FitParameter::GetMinuitParamNumber() {return fMinuitParamNumber;}
+
+inline void FitParameter::SetFitInfo(TString aFitInfo) {fFitInfo=aFitInfo;}
+inline TString FitParameter::GetFitInfo() {return fFitInfo;}
 
 #endif
 

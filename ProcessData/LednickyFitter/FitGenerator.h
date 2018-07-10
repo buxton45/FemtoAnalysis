@@ -66,7 +66,7 @@ public:
 
   void WriteAllFitParameters(ostream &aOut=std::cout);
   vector<TString> GetAllFitParametersTStringVector();
-  void WriteToMasterFitValuesFile(TString aFileLocation);
+  void WriteToMasterFitValuesFile(TString aFileLocation, TString aResultsDate);
 
   void FindGoodInitialValues(bool aApplyMomResCorrection=false, bool aApplyNonFlatBackgroundCorrection=false);
 

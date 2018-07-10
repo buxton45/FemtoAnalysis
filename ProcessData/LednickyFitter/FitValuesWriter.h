@@ -27,30 +27,37 @@ using std::vector;
 #include "AnalysisInfo.h"
 class AnalysisInfo;
 
+#include "FitParameter.h"
+
 class FitValuesWriter {
 
 public:
 
   //Constructor, destructor, copy constructor, assignment operator
-  FitValuesWriter(vector<TString> &aFitParamsTStringVec, TString &aFitInfoTString);
+  FitValuesWriter(TString aMasterFileLocation, TString aResultsDate, AnalysisType aAnType);
   virtual ~FitValuesWriter();
 
-  TString GetFitInfoTString(TString aLine);
-  AnalysisType GetAnalysisType(TString aLine);
-  CentralityType GetCentralityType(TString aLine);
-  ParameterType GetParamTypeFromName(TString aName);
-  td1dVec ReadParameterValue(TString aLine);
-  void InterpretFitParamsTStringVec();
+  static TString GetFitInfoTString(TString aLine);
+  static AnalysisType GetAnalysisType(TString aLine);
+  static CentralityType GetCentralityType(TString aLine);
+  static ParameterType GetParamTypeFromName(TString aName);
+  static td1dVec ReadParameterValue(TString aLine);
+  static vector<vector<FitParameter*> > InterpretFitParamsTStringVec(vector<TString> &aTStringVec);
 
 
-  vector<vector<TString> > ConvertMasterTo2dVec(TString aFileLocation);
-  void WriteToMaster(TString aFileLocation);
+  static vector<vector<TString> > ConvertMasterTo2dVec(TString aFileLocation);
+  static void WriteToMaster(TString aFileLocation, vector<TString> &aFitParamsTStringVec, TString &aFitInfoTString, TString aSaveNameModifier="");
 
+  static vector<vector<FitParameter*> > GetAllFitResults(TString aFileLocation, TString aFitInfoTString, TString aSaveNameModifier="");
+//  static td1dVec GetFitResults(TString aFileLocation, TString &aFitInfoTString, AnalysisType aAnType, CentralityType aCentType);
 
   //inline (i.e. simple) functions
 
 
 private:
+  TString fMasterFileLocation;
+  TString fResultsDate;
+  AnalysisType fAnalysisType;
 
   vector<TString> fFitParamsTStringVec;
   TString fFitInfoTString;

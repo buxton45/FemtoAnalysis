@@ -156,6 +156,8 @@ int main(int argc, char **argv)
   TString tSaveDirectoryBase = TString::Format("/home/jesse/Analysis/Presentations/AliFemto/20180627/Figures/Fits/Dualie/%s/", cAnalysisBaseTags[tAnType]);
 //  TString tSaveDirectoryBase = tDirectoryBase;
 
+  TString tLocationMasterFitResults = TString::Format("%sMasterFitResults_%s.txt", tDirectoryBase.Data(), tResultsDate.Data());
+
 //-----------------------------------------------------------------------------
 
   TString tSaveNameModifier = "";
@@ -242,6 +244,7 @@ int main(int argc, char **argv)
   if(bDoFit)
   {
     tDualie->DoFit(tDualieShareLambda, tDualieShareRadii, tMaxFitKStar);
+    tDualie->WriteToMasterFitValuesFile(tLocationMasterFitResults, tResultsDate);
 
 //    TObjArray* tKStarwFitsCan = tDualie->DrawKStarCfswFits(ApplyMomResCorrection,ApplyNonFlatBackgroundCorrection,tNonFlatBgdFitType,SaveImages,bDrawSysErrs,bZoomROP);
     TObjArray* tKStarwFitsCan_Zoom = tDualie->DrawKStarCfswFits(ApplyMomResCorrection,ApplyNonFlatBackgroundCorrection,tNonFlatBgdFitType,SaveImages,bDrawSysErrs,true);

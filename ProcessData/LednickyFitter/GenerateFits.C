@@ -204,7 +204,7 @@ int main(int argc, char **argv)
   if(bDoFit)
   {
     tLamKchP->DoFit(tMaxFitKStar);
-    tLamKchP->WriteToMasterFitValuesFile(tLocationMasterFitResults);
+    tLamKchP->WriteToMasterFitValuesFile(tLocationMasterFitResults, tResultsDate);
 
 //    TCanvas* tKStarwFitsCan = tLamKchP->DrawKStarCfswFits(ApplyMomResCorrection,ApplyNonFlatBackgroundCorrection,tNonFlatBgdFitType,SaveImages,bDrawSysErrs,bZoomROP);
     TCanvas* tKStarwFitsCan_Zoom = tLamKchP->DrawKStarCfswFits(ApplyMomResCorrection,ApplyNonFlatBackgroundCorrection,tNonFlatBgdFitType,SaveImages,bDrawSysErrs,true);
