@@ -81,6 +81,10 @@ public:
   void SetFitInfo(TString aFitInfo);
   TString GetFitInfo();
 
+  AnalysisType GetOwnerAnalysisType();
+  CentralityType GetOwnerCentralityType();
+  BFieldType GetOwnerBFieldType();
+
 private:
 
   ParameterType fParamType;
@@ -140,6 +144,11 @@ inline int FitParameter::GetMinuitParamNumber() {return fMinuitParamNumber;}
 
 inline void FitParameter::SetFitInfo(TString aFitInfo) {fFitInfo=aFitInfo;}
 inline TString FitParameter::GetFitInfo() {return fFitInfo;}
+
+
+inline AnalysisType FitParameter::GetOwnerAnalysisType() {return fOwnerInfo.analysisType;}
+inline CentralityType FitParameter::GetOwnerCentralityType() {return fOwnerInfo.centralityType;}
+inline BFieldType FitParameter::GetOwnerBFieldType() {return fOwnerInfo.bFieldType;}
 
 #endif
 

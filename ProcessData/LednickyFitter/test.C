@@ -189,6 +189,8 @@ int main(int argc, char **argv)
 
   FitValuesWriter* tFitValWriter = new FitValuesWriter(tFileLocation, tResultsDate, tAnType);
   vector<vector<FitParameter*> > tAllFitResults = tFitValWriter->GetAllFitResults(tFileLocation, "_MomResCrctn_NonFlatBgdCrctnPolynomial_3Res_PrimMaxDecay4fm_UsingXiDataAndCoulombOnly", "");
+  vector<FitParameter*> tFitResults = tFitValWriter->GetFitResults(tFileLocation, "_MomResCrctn_NonFlatBgdCrctnPolynomial_3Res_PrimMaxDecay4fm_UsingXiDataAndCoulombOnly", "", kALamKchM, k1030);
+  FitParameter* tFitParam = tFitValWriter->GetFitParameter(tFileLocation, "_MomResCrctn_NonFlatBgdCrctnPolynomial_3Res_PrimMaxDecay4fm_UsingXiDataAndCoulombOnly", "", kALamKchM, k1030, kLambda);
 */
 //-------------------------------------------------------------------------------
   theApp->Run(kTRUE); //Run the TApp to pause the code.

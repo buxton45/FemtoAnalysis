@@ -28,6 +28,21 @@ FitValuesWriter::~FitValuesWriter()
   //no-op
 }
 
+//________________________________________________________________________________________________________________
+TString FitValuesWriter::BuildFitInfoTString(bool aApplyMomResCorrection, bool aApplyNonFlatBackgroundCorrection, NonFlatBgdFitType aNonFlatBgdFitType, 
+                                             IncludeResidualsType aIncludeResidualsType, ResPrimMaxDecayType aResPrimMaxDecayType, 
+                                             ChargedResidualsType aChargedResidualsType, bool aFixD0,
+                                             bool aUseStavCf, bool aFixAllLambdaTo1, bool aFixRadii, bool aFixAllScattParams, bool aShareLambdaParams, 
+                                             bool aAllShareSingleLambdaParam, bool aUsemTScalingOfResidualRadii, bool aIsDualie, bool aDualieShareLambda, 
+                                             bool aDualieShareRadii)
+{
+  return LednickyFitter::BuildSaveNameModifier(aApplyMomResCorrection, aApplyNonFlatBackgroundCorrection, aNonFlatBgdFitType, 
+                                             aIncludeResidualsType, aResPrimMaxDecayType, aChargedResidualsType, aFixD0,
+                                             aUseStavCf, aFixAllLambdaTo1, aFixRadii, aFixAllScattParams, aShareLambdaParams, 
+                                             aAllShareSingleLambdaParam, aUsemTScalingOfResidualRadii, aIsDualie, aDualieShareLambda, 
+                                             aDualieShareRadii);
+}
+
 
 //________________________________________________________________________________________________________________
 TString FitValuesWriter::GetFitInfoTString(TString aLine)
@@ -219,13 +234,13 @@ vector<vector<TString> > FitValuesWriter::ConvertMasterTo2dVec(TString aFileLoca
 
 
 //________________________________________________________________________________________________________________
-void FitValuesWriter::WriteToMaster(TString aFileLocation, vector<TString> &aFitParamsTStringVec, TString &aFitInfoTString, TString aSaveNameModifier)
+void FitValuesWriter::WriteToMaster(TString aFileLocation, vector<TString> &aFitParamsTStringVec, TString &aFitInfoTString)
 {
   vector<vector<TString> > tMaster2dVec = ConvertMasterTo2dVec(aFileLocation);
   bool tResultIncluded = false;
 
   vector<TString> tVecToInclude = aFitParamsTStringVec;
-  tVecToInclude.insert(tVecToInclude.begin(), TString::Format("FitInfo = %s%s", aFitInfoTString.Data(), aSaveNameModifier.Data()));
+  tVecToInclude.insert(tVecToInclude.begin(), TString::Format("FitInfo = %s", aFitInfoTString.Data()));
   tVecToInclude.push_back(TString("**********************************************************************************************"));
   tVecToInclude.push_back(TString(""));
   tVecToInclude.push_back(TString(""));
@@ -234,7 +249,7 @@ void FitValuesWriter::WriteToMaster(TString aFileLocation, vector<TString> &aFit
   {
     if( tMaster2dVec[i][0].EqualTo(tVecToInclude[0])   //Is fit info the same?
      && tMaster2dVec[i][2].EqualTo(tVecToInclude[2])   //Is first analysis type the same?
-     && tMaster2dVec[i].size()==tVecToInclude.size())  //Are there the same number of line, i.e. same number of analyses
+     && tMaster2dVec[i].size()==tVecToInclude.size())  //Are there the same number of lines, i.e. same number of analyses
     {
       tMaster2dVec[i] = tVecToInclude;
       tResultIncluded = true;
@@ -261,49 +276,192 @@ void FitValuesWriter::WriteToMaster(TString aFileLocation, vector<TString> &aFit
 
 
 //________________________________________________________________________________________________________________
-vector<vector<FitParameter*> > FitValuesWriter::GetAllFitResults(TString aFileLocation, TString aFitInfoTString, TString aSaveNameModifier)
+vector<vector<FitParameter*> > FitValuesWriter::GetAllFitResults(TString aFileLocation, TString aFitInfoTString, AnalysisType aPairAnType)
 {
+  AnalysisType tAnType = aPairAnType;  //Should always be pair, not conj pair, but correct if otherwise
+  if     (aPairAnType==kLamK0   || aPairAnType==kALamK0)   tAnType = kLamK0;
+  else if(aPairAnType==kLamKchP || aPairAnType==kALamKchM) tAnType = kLamKchP;
+  else if(aPairAnType==kLamKchM || aPairAnType==kALamKchP) tAnType = kLamKchM;
+  else assert(0); 
+
   vector<vector<TString> > tMaster2dVec = ConvertMasterTo2dVec(aFileLocation);
-  vector<TString> tFitParams1dVec, tReturnVec;
+  vector<TString> tFitParams1dVec;
+  vector<vector<FitParameter*> > tParams2dVec;
   for(unsigned int i=0; i<tMaster2dVec.size(); i++)
   {
-    if(GetFitInfoTString(tMaster2dVec[i][0]).EqualTo(TString(aFitInfoTString+aSaveNameModifier)))
+    //If correct fit into AND analysis type, then correct vector element
+    if(GetFitInfoTString(tMaster2dVec[i][0]).EqualTo(aFitInfoTString) && GetAnalysisType(tMaster2dVec[i][2])==tAnType)
     {
       tFitParams1dVec = tMaster2dVec[i];
-      vector<vector<FitParameter*> > tParams2dVec = InterpretFitParamsTStringVec(tFitParams1dVec);
+      tParams2dVec = InterpretFitParamsTStringVec(tFitParams1dVec);
     }
   }
 
+  return tParams2dVec;
 }
 
 
 
 
-/*
+
 //________________________________________________________________________________________________________________
-td1dVec FitValuesWriter::GetFitResults(TString aFileLocation, TString &aFitInfoTString, AnalysisType aAnType, CentralityType aCentType)
+vector<FitParameter*> FitValuesWriter::GetFitResults(TString aFileLocation, TString aFitInfoTString, AnalysisType aAnType, CentralityType aCentType)
 {
-  vector<vector<TString> > tMaster2dVec = ConvertMasterTo2dVec(aFileLocation);
+  vector<vector<FitParameter*> > tParams2dVec = GetAllFitResults(aFileLocation, aFitInfoTString, aAnType);
+  vector<FitParameter*> tReturnVec(0);
 
-  for(unsigned int i=0; i<tMaster2dVec.size(); i++)
+  //Probably overkill, but let's make sure tParams2dVec has expected dimensions----------
+  int tResponse = -1;
+  if(tParams2dVec.size() != 6)  //Expect 6 analyses
   {
-
+    cout << "In FitValuesWriter::GetFitResults, and tParams2dVec.size() != 6" << endl;
+    cout << "  Instead, tParams2dVec.size() = " << tParams2dVec.size() << endl;
+    cout << "OK to continue? (0=No, 1=Yes)" << endl;
+    cin >> tResponse;
+    assert(tResponse);
   }
-
-
-}
+  for(unsigned int i=0; i<tParams2dVec.size(); i++)
+  {
+    if(tParams2dVec[i].size() != 5)
+    {
+      cout << "In FitValuesWriter::GetFitResults, and tParams2dVec[" << i << "].size() != 5" << endl;
+      cout << "  Instead tParams2dVec[" << i << "].size() != " << tParams2dVec[i].size() << endl;
+      cout << "OK to continue? (0=No, 1=Yes)" << endl;
+      cin >> tResponse;
+      assert(tResponse);
+    }
+  }
+  //-------------------------------------------------------------------------------------
+  
+  //Now, find correct analysis type and centrality type
+  for(unsigned int iAn=0; iAn<tParams2dVec.size(); iAn++)
+  {
+    if(tParams2dVec[iAn][0]->GetOwnerAnalysisType()==aAnType && tParams2dVec[iAn][0]->GetOwnerCentralityType()==aCentType)
+    tReturnVec = tParams2dVec[iAn];
+  }
+  //Make sure a vector was actually found
+  assert(tReturnVec.size() > 0);
+  //Make sure all parameters in return vector agree on their analysis and centrality type
+  for(unsigned int iParam=0; iParam<tReturnVec.size(); iParam++)
+  {
+    assert(tReturnVec[iParam]->GetOwnerAnalysisType()==aAnType && tReturnVec[iParam]->GetOwnerCentralityType()==aCentType);
+/*
+cout << "tReturnVec[" << iParam << "]->GetType() = " << cParameterNames[tReturnVec[iParam]->GetType()] << endl;
+cout << "tReturnVec[" << iParam << "]->GetFitValue() = " << tReturnVec[iParam]->GetFitValue() << endl;
+cout << "tReturnVec[" << iParam << "]->GetFitValueError() = " << tReturnVec[iParam]->GetFitValueError() << endl << endl;
 */
+  }
+  return tReturnVec;
+}
+
+
+//________________________________________________________________________________________________________________
+FitParameter* FitValuesWriter::GetFitParameter(TString aFileLocation, TString aFitInfoTString, AnalysisType aAnType, CentralityType aCentType, ParameterType aParamType)
+{
+  vector<FitParameter*> tParamVec = GetFitResults(aFileLocation, aFitInfoTString, aAnType, aCentType);
+  FitParameter* tReturnParam;
+  for(unsigned int iParam=0; iParam<tParamVec.size(); iParam++)
+  {
+    if(tParamVec[iParam]->GetType()==aParamType)
+    {
+      tReturnParam = tParamVec[iParam];
+/*
+cout << "tReturnParam->GetType() = " << cParameterNames[tReturnParam->GetType()] << endl;
+cout << "tReturnParam->GetFitValue() = " << tReturnParam->GetFitValue() << endl;
+cout << "tReturnParam->GetFitValueError() = " << tReturnParam->GetFitValueError() << endl << endl;
+*/
+      return tReturnParam;
+    }
+  }
+  assert(0);
+  return tReturnParam;
+}
 
 
 
+//________________________________________________________________________________________________________________
+TGraphAsymmErrors* FitValuesWriter::GetYvsXGraph(TString aFileLocation, TString aFitInfoTString, AnalysisType aAnType, CentralityType aCentType, ParameterType aParamTypeY, ParameterType aParamTypeX)
+{
+  //Currently, just designed for statistical errors
+  TGraphAsymmErrors* tReturnGr = new TGraphAsymmErrors(1);
+
+  FitParameter* tFitParamY = GetFitParameter(aFileLocation, aFitInfoTString, aAnType, aCentType, aParamTypeY);
+  FitParameter* tFitParamX = GetFitParameter(aFileLocation, aFitInfoTString, aAnType, aCentType, aParamTypeX);
+
+  tReturnGr->SetPoint(0, tFitParamX->GetFitValue(), tFitParamY->GetFitValue());
+  tReturnGr->SetPointError(0, tFitParamX->GetFitValueError(), tFitParamX->GetFitValueError(), tFitParamY->GetFitValueError(), tFitParamY->GetFitValueError());
+
+  return tReturnGr;
+}
+
+//________________________________________________________________________________________________________________
+void FitValuesWriter::DrawYvsXGraph(TPad* aPad, TString aFileLocation, TString aFitInfoTString, AnalysisType aAnType, CentralityType aCentType, ParameterType aParamTypeY, ParameterType aParamTypeX, int aMarkerColor, int aMarkerStyle, double aMarkerSize, TString aDrawOption)
+{
+  aPad->cd();
+
+  TGraphAsymmErrors* tGraphToDraw = GetYvsXGraph(aFileLocation, aFitInfoTString, aAnType, aCentType, aParamTypeY, aParamTypeX);
+  tGraphToDraw->SetMarkerColor(aMarkerColor);
+  tGraphToDraw->SetMarkerStyle(aMarkerStyle);
+  tGraphToDraw->SetMarkerSize(aMarkerSize);
+  tGraphToDraw->SetFillColor(aMarkerColor);
+  tGraphToDraw->SetFillStyle(1000);
+  tGraphToDraw->SetLineColor(aMarkerColor);
+
+  tGraphToDraw->Draw(aDrawOption);
+}
+
+
+//________________________________________________________________________________________________________________
+TGraphAsymmErrors* FitValuesWriter::GetImF0vsReF0Graph(TString aFileLocation, TString aFitInfoTString, AnalysisType aAnType, CentralityType aCentType)
+{
+  return GetYvsXGraph(aFileLocation, aFitInfoTString, aAnType, aCentType, kImf0, kRef0);
+}
+
+//________________________________________________________________________________________________________________
+void FitValuesWriter::DrawImF0vsReF0Graph(TPad* aPad, TString aFileLocation, TString aFitInfoTString, AnalysisType aAnType, CentralityType aCentType, int aMarkerColor, int aMarkerStyle, double aMarkerSize, TString aDrawOption)
+{
+  DrawYvsXGraph(aPad, aFileLocation, aFitInfoTString, aAnType, aCentType, kImf0, kRef0, aMarkerColor, aMarkerStyle, aMarkerSize, aDrawOption);
+}
 
 
 
+//________________________________________________________________________________________________________________
+TGraphAsymmErrors* FitValuesWriter::GetLambdavsRadiusGraph(TString aFileLocation, TString aFitInfoTString, AnalysisType aAnType, CentralityType aCentType)
+{
+  return GetYvsXGraph(aFileLocation, aFitInfoTString, aAnType, aCentType, kLambda, kRadius);
+}
+
+//________________________________________________________________________________________________________________
+void FitValuesWriter::DrawLambdavsRadiusGraph(TPad* aPad, TString aFileLocation, TString aFitInfoTString, AnalysisType aAnType, CentralityType aCentType, int aMarkerColor, int aMarkerStyle, double aMarkerSize, TString aDrawOption)
+{
+  DrawYvsXGraph(aPad, aFileLocation, aFitInfoTString, aAnType, aCentType, kLambda, kRadius, aMarkerColor, aMarkerStyle, aMarkerSize, aDrawOption);
+}
 
 
+//________________________________________________________________________________________________________________
+TGraphAsymmErrors* FitValuesWriter::GetD0Graph(TString aFileLocation, TString aFitInfoTString, AnalysisType aAnType, CentralityType aCentType, double aXOffset)
+{
+  TGraphAsymmErrors* tReturnGr = new TGraphAsymmErrors(1);
+  FitParameter* tFitParamD0 = GetFitParameter(aFileLocation, aFitInfoTString, aAnType, aCentType, kd0);
 
+  tReturnGr->SetPoint(0, aXOffset, tFitParamD0->GetFitValue());
+  tReturnGr->SetPointError(0, 0., 0., tFitParamD0->GetFitValueError(), tFitParamD0->GetFitValueError());
+  return tReturnGr;
+}
 
+//________________________________________________________________________________________________________________
+void FitValuesWriter::DrawD0Graph(TPad* aPad, TString aFileLocation, TString aFitInfoTString, AnalysisType aAnType, CentralityType aCentType, double aXOffset, int aMarkerColor, int aMarkerStyle, double aMarkerSize, TString aDrawOption)
+{
+  aPad->cd();
 
+  TGraphAsymmErrors* tGraphToDraw = GetD0Graph(aFileLocation, aFitInfoTString, aAnType, aCentType, aXOffset);
+  tGraphToDraw->SetMarkerColor(aMarkerColor);
+  tGraphToDraw->SetMarkerStyle(aMarkerStyle);
+  tGraphToDraw->SetMarkerSize(aMarkerSize);
+  tGraphToDraw->SetFillColor(aMarkerColor);
+  tGraphToDraw->SetFillStyle(1000);
+  tGraphToDraw->SetLineColor(aMarkerColor);
 
-
+  tGraphToDraw->Draw(aDrawOption);
+}
 

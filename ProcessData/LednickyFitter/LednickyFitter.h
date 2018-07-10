@@ -69,6 +69,12 @@ public:
                             IncludeResidualsType aIncludeResidualsType, ResPrimMaxDecayType aResPrimMaxDecayType=k5fm, 
                             ChargedResidualsType aChargedResidualsType=kUseXiDataAndCoulombOnlyInterp, bool aFixD0=false);
   void AppendFitInfo(TString &aSaveName);
+  static TString BuildSaveNameModifier(bool aApplyMomResCorrection, bool aApplyNonFlatBackgroundCorrection, NonFlatBgdFitType aNonFlatBgdFitType, 
+                                       IncludeResidualsType aIncludeResidualsType, ResPrimMaxDecayType aResPrimMaxDecayType=k5fm, 
+                                       ChargedResidualsType aChargedResidualsType=kUseXiDataAndCoulombOnlyInterp, bool aFixD0=false,
+                                       bool aUseStavCf=false, bool aFixAllLambdaTo1=false, bool aFixRadii=false, bool aFixAllScattParams=false, bool aShareLambdaParams=false, 
+                                       bool aAllShareSingleLambdaParam=false, bool aUsemTScalingOfResidualRadii=false, bool aIsDualie=false, bool aDualieShareLambda=false, 
+                                       bool aDualieShareRadii=false);
 
   static void PrintCurrentParamValues(int aNpar, double* aPar);
   static double GetChi2Value(int aKStarBin, TH1* aCfToFit, double* aPar);

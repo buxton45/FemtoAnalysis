@@ -774,10 +774,8 @@ vector<TString> FitGenerator::GetAllFitParametersTStringVector()
 void FitGenerator::WriteToMasterFitValuesFile(TString aFileLocation, TString aResultsDate)
 {
   vector<TString> tFitParamsTStringVec = GetAllFitParametersTStringVector();
-  TString tFitInfo = "";
-  fLednickyFitter->AppendFitInfo(tFitInfo);
   FitValuesWriter* tFitValWriter = new FitValuesWriter(aFileLocation, aResultsDate, fPairType);
-  tFitValWriter->WriteToMaster(aFileLocation, tFitParamsTStringVec, tFitInfo, fSaveNameModifier);
+  tFitValWriter->WriteToMaster(aFileLocation, tFitParamsTStringVec, fSaveNameModifier);
 }
 
 //________________________________________________________________________________________________________________

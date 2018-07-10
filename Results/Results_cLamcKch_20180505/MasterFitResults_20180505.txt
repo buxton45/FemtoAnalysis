@@ -132,7 +132,7 @@ Chi2 = 413.262  NDF = 336  Chi2/NDF = 1.230
 **********************************************************************************************
 
 
-FitInfo = _MomResCrctn_NonFlatBgdCrctnPolynomial_3Res_PrimMaxDecay4fm_UsingXiDataAndCoulombOnly_MomResCrctn_NonFlatBgdCrctnPolynomial_3Res_PrimMaxDecay4fm_UsingXiDataAndCoulombOnly_ShareLam_Dualie_ShareLam_ShareRadii
+FitInfo = _MomResCrctn_NonFlatBgdCrctnPolynomial_3Res_PrimMaxDecay4fm_UsingXiDataAndCoulombOnly_ShareLam_Dualie_ShareLam_ShareRadii
 ______________________________
 AnalysisType = LamKchP
 CentralityType = 0-10%
@@ -199,7 +199,7 @@ Chi2 = 714.124  NDF = 636  Chi2/NDF = 1.123
 **********************************************************************************************
 
 
-FitInfo = _MomResCrctn_NonFlatBgdCrctnPolynomial_3Res_PrimMaxDecay4fm_UsingXiDataAndCoulombOnly_MomResCrctn_NonFlatBgdCrctnPolynomial_3Res_PrimMaxDecay4fm_UsingXiDataAndCoulombOnly_ShareLam_Dualie_ShareLam_ShareRadii
+FitInfo = _MomResCrctn_NonFlatBgdCrctnPolynomial_3Res_PrimMaxDecay4fm_UsingXiDataAndCoulombOnly_ShareLam_Dualie_ShareLam_ShareRadii
 ______________________________
 AnalysisType = LamKchM
 CentralityType = 0-10%
@@ -262,6 +262,944 @@ d0: -4.350002 +- 1.379489
 
 ******************************
 Chi2 = 714.124  NDF = 636  Chi2/NDF = 1.123
+
+**********************************************************************************************
+
+
+FitInfo = _MomResCrctn_NonFlatBgdCrctnPolynomial_3Res_PrimMaxDecay4fm_UsingXiDataAndCoulombOnly
+______________________________
+AnalysisType = LamKchM
+CentralityType = 0-10%
+
+Lambda: 1.577006 +- 0.599446
+Radius: 4.111101 +- 0.580744
+Ref0: 0.150358 +- 0.114792
+Imf0: 0.304191 +- 0.156542
+d0: 2.074130 +- 3.170876
+
+______________________________
+AnalysisType = ALamKchP
+CentralityType = 0-10%
+
+Lambda: 1.598477 +- 0.583590
+Radius: 4.111101 +- 0.580744
+Ref0: 0.150358 +- 0.114792
+Imf0: 0.304191 +- 0.156542
+d0: 2.074130 +- 3.170876
+
+______________________________
+AnalysisType = LamKchM
+CentralityType = 10-30%
+
+Lambda: 1.075044 +- 0.455293
+Radius: 3.054162 +- 0.553821
+Ref0: 0.150358 +- 0.114792
+Imf0: 0.304191 +- 0.156542
+d0: 2.074130 +- 3.170876
+
+______________________________
+AnalysisType = ALamKchP
+CentralityType = 10-30%
+
+Lambda: 1.102330 +- 0.461131
+Radius: 3.054162 +- 0.553821
+Ref0: 0.150358 +- 0.114792
+Imf0: 0.304191 +- 0.156542
+d0: 2.074130 +- 3.170876
+
+______________________________
+AnalysisType = LamKchM
+CentralityType = 30-50%
+
+Lambda: 1.266595 +- 0.965686
+Radius: 1.976288 +- 0.456475
+Ref0: 0.150358 +- 0.114792
+Imf0: 0.304191 +- 0.156542
+d0: 2.074130 +- 3.170876
+
+______________________________
+AnalysisType = ALamKchP
+CentralityType = 30-50%
+
+Lambda: 0.826682 +- 0.392385
+Radius: 1.976288 +- 0.456475
+Ref0: 0.150358 +- 0.114792
+Imf0: 0.304191 +- 0.156542
+d0: 2.074130 +- 3.170876
+
+******************************
+Chi2 = 301.040  NDF = 288  Chi2/NDF = 1.045
+
+**********************************************************************************************
+
+
+FitInfo = _MomResCrctn_NonFlatBgdCrctnLinear_3Res_PrimMaxDecay4fm_UsingXiDataAndCoulombOnly
+______________________________
+AnalysisType = LamKchM
+CentralityType = 0-10%
+
+Lambda: 2.040914 +- 0.605882
+Radius: 6.514094 +- 1.041006
+Ref0: 0.403410 +- 0.169645
+Imf0: 0.436199 +- 0.142643
+d0: -5.199023 +- 2.276879
+
+______________________________
+AnalysisType = ALamKchP
+CentralityType = 0-10%
+
+Lambda: 2.065918 +- 0.580287
+Radius: 6.514094 +- 1.041006
+Ref0: 0.403410 +- 0.169645
+Imf0: 0.436199 +- 0.142643
+d0: -5.199023 +- 2.276879
+
+______________________________
+AnalysisType = LamKchM
+CentralityType = 10-30%
+
+Lambda: 1.433101 +- 0.423456
+Radius: 4.703805 +- 0.799605
+Ref0: 0.403410 +- 0.169645
+Imf0: 0.436199 +- 0.142643
+d0: -5.199023 +- 2.276879
+
+______________________________
+AnalysisType = ALamKchP
+CentralityType = 10-30%
+
+Lambda: 1.470897 +- 0.432846
+Radius: 4.703805 +- 0.799605
+Ref0: 0.403410 +- 0.169645
+Imf0: 0.436199 +- 0.142643
+d0: -5.199023 +- 2.276879
+
+______________________________
+AnalysisType = LamKchM
+CentralityType = 30-50%
+
+Lambda: 1.919669 +- 0.958954
+Radius: 3.110533 +- 0.576217
+Ref0: 0.403410 +- 0.169645
+Imf0: 0.436199 +- 0.142643
+d0: -5.199023 +- 2.276879
+
+______________________________
+AnalysisType = ALamKchP
+CentralityType = 30-50%
+
+Lambda: 1.006511 +- 0.318713
+Radius: 3.110533 +- 0.576217
+Ref0: 0.403410 +- 0.169645
+Imf0: 0.436199 +- 0.142643
+d0: -5.199023 +- 2.276879
+
+******************************
+Chi2 = 286.827  NDF = 288  Chi2/NDF = 0.996
+
+**********************************************************************************************
+
+
+FitInfo = _MomResCrctn_3Res_PrimMaxDecay4fm_UsingXiDataAndCoulombOnly_MomResCrctn_3Res_PrimMaxDecay4fm_UsingXiDataAndCoulombOnly_StavCf
+______________________________
+AnalysisType = LamKchP
+CentralityType = 0-10%
+
+Lambda: 0.951466 +- 0.470309
+Radius: 5.442405 +- 1.331958
+Ref0: -1.957436 +- 0.719262
+Imf0: 1.125997 +- 1.166952
+d0: 0.578812 +- 1.395221
+
+______________________________
+AnalysisType = ALamKchM
+CentralityType = 0-10%
+
+Lambda: 0.899973 +- 0.446116
+Radius: 5.442405 +- 1.331958
+Ref0: -1.957436 +- 0.719262
+Imf0: 1.125997 +- 1.166952
+d0: 0.578812 +- 1.395221
+
+______________________________
+AnalysisType = LamKchP
+CentralityType = 10-30%
+
+Lambda: 0.709064 +- 0.318899
+Radius: 4.209380 +- 0.961650
+Ref0: -1.957436 +- 0.719262
+Imf0: 1.125997 +- 1.166952
+d0: 0.578812 +- 1.395221
+
+______________________________
+AnalysisType = ALamKchM
+CentralityType = 10-30%
+
+Lambda: 0.669273 +- 0.293437
+Radius: 4.209380 +- 0.961650
+Ref0: -1.957436 +- 0.719262
+Imf0: 1.125997 +- 1.166952
+d0: 0.578812 +- 1.395221
+
+______________________________
+AnalysisType = LamKchP
+CentralityType = 30-50%
+
+Lambda: 0.984623 +- 0.435454
+Radius: 4.012056 +- 0.886372
+Ref0: -1.957436 +- 0.719262
+Imf0: 1.125997 +- 1.166952
+d0: 0.578812 +- 1.395221
+
+______________________________
+AnalysisType = ALamKchM
+CentralityType = 30-50%
+
+Lambda: 1.135684 +- 0.466736
+Radius: 4.012056 +- 0.886372
+Ref0: -1.957436 +- 0.719262
+Imf0: 1.125997 +- 1.166952
+d0: 0.578812 +- 1.395221
+
+******************************
+Chi2 = 410.345  NDF = 336  Chi2/NDF = 1.221
+
+**********************************************************************************************
+
+
+FitInfo = _MomResCrctn_3Res_PrimMaxDecay4fm_UsingXiDataAndCoulombOnly_MomResCrctn_3Res_PrimMaxDecay4fm_UsingXiDataAndCoulombOnly_StavCf
+______________________________
+AnalysisType = LamKchM
+CentralityType = 0-10%
+
+Lambda: 2.375250 +- 0.619577
+Radius: 5.542336 +- 1.015352
+Ref0: 0.240708 +- 0.157991
+Imf0: 0.273193 +- 0.142553
+d0: 6.281140 +- 4.793421
+
+______________________________
+AnalysisType = ALamKchP
+CentralityType = 0-10%
+
+Lambda: 2.260950 +- 0.548997
+Radius: 5.542336 +- 1.015352
+Ref0: 0.240708 +- 0.157991
+Imf0: 0.273193 +- 0.142553
+d0: 6.281140 +- 4.793421
+
+______________________________
+AnalysisType = LamKchM
+CentralityType = 10-30%
+
+Lambda: 1.558912 +- 0.486222
+Radius: 3.886278 +- 0.837202
+Ref0: 0.240708 +- 0.157991
+Imf0: 0.273193 +- 0.142553
+d0: 6.281140 +- 4.793421
+
+______________________________
+AnalysisType = ALamKchP
+CentralityType = 10-30%
+
+Lambda: 1.774711 +- 0.525479
+Radius: 3.886278 +- 0.837202
+Ref0: 0.240708 +- 0.157991
+Imf0: 0.273193 +- 0.142553
+d0: 6.281140 +- 4.793421
+
+______________________________
+AnalysisType = LamKchM
+CentralityType = 30-50%
+
+Lambda: 4.144980 +- 2.503426
+Radius: 2.653867 +- 0.472796
+Ref0: 0.240708 +- 0.157991
+Imf0: 0.273193 +- 0.142553
+d0: 6.281140 +- 4.793421
+
+______________________________
+AnalysisType = ALamKchP
+CentralityType = 30-50%
+
+Lambda: 1.380349 +- 0.451942
+Radius: 2.653867 +- 0.472796
+Ref0: 0.240708 +- 0.157991
+Imf0: 0.273193 +- 0.142553
+d0: 6.281140 +- 4.793421
+
+******************************
+Chi2 = 270.364  NDF = 288  Chi2/NDF = 0.939
+
+**********************************************************************************************
+
+
+FitInfo = _MomResCrctn_NonFlatBgdCrctnLinear_3Res_PrimMaxDecay4fm_UsingXiDataAndCoulombOnly_ShareLam_Dualie_ShareLam_ShareRadii
+______________________________
+AnalysisType = LamKchP
+CentralityType = 0-10%
+
+Lambda: 1.649875 +- 0.301210
+Radius: 5.810483 +- 0.571117
+Ref0: -1.202610 +- 0.160802
+Imf0: 0.586017 +- 0.160201
+d0: 1.068473 +- 0.351810
+
+______________________________
+AnalysisType = ALamKchM
+CentralityType = 0-10%
+
+Lambda: 1.649875 +- 0.301210
+Radius: 5.810483 +- 0.571117
+Ref0: -1.202610 +- 0.160802
+Imf0: 0.586017 +- 0.160201
+d0: 1.068473 +- 0.351810
+
+______________________________
+AnalysisType = LamKchP
+CentralityType = 10-30%
+
+Lambda: 1.308470 +- 0.238126
+Radius: 4.568077 +- 0.438017
+Ref0: -1.202610 +- 0.160802
+Imf0: 0.586017 +- 0.160201
+d0: 1.068473 +- 0.351810
+
+______________________________
+AnalysisType = ALamKchM
+CentralityType = 10-30%
+
+Lambda: 1.308470 +- 0.238126
+Radius: 4.568077 +- 0.438017
+Ref0: -1.202610 +- 0.160802
+Imf0: 0.586017 +- 0.160201
+d0: 1.068473 +- 0.351810
+
+______________________________
+AnalysisType = LamKchP
+CentralityType = 30-50%
+
+Lambda: 1.040367 +- 0.183502
+Radius: 3.109985 +- 0.272000
+Ref0: -1.202610 +- 0.160802
+Imf0: 0.586017 +- 0.160201
+d0: 1.068473 +- 0.351810
+
+______________________________
+AnalysisType = ALamKchM
+CentralityType = 30-50%
+
+Lambda: 1.040367 +- 0.183502
+Radius: 3.109985 +- 0.272000
+Ref0: -1.202610 +- 0.160802
+Imf0: 0.586017 +- 0.160201
+d0: 1.068473 +- 0.351810
+
+******************************
+Chi2 = 710.637  NDF = 636  Chi2/NDF = 1.117
+
+**********************************************************************************************
+
+
+FitInfo = _MomResCrctn_NonFlatBgdCrctnLinear_3Res_PrimMaxDecay4fm_UsingXiDataAndCoulombOnly_ShareLam_Dualie_ShareLam_ShareRadii
+______________________________
+AnalysisType = LamKchM
+CentralityType = 0-10%
+
+Lambda: 1.649875 +- 0.301210
+Radius: 5.810483 +- 0.571117
+Ref0: 0.424593 +- 0.130921
+Imf0: 0.514213 +- 0.113198
+d0: -4.217785 +- 1.419128
+
+______________________________
+AnalysisType = ALamKchP
+CentralityType = 0-10%
+
+Lambda: 1.649875 +- 0.301210
+Radius: 5.810483 +- 0.571117
+Ref0: 0.424593 +- 0.130921
+Imf0: 0.514213 +- 0.113198
+d0: -4.217785 +- 1.419128
+
+______________________________
+AnalysisType = LamKchM
+CentralityType = 10-30%
+
+Lambda: 1.308470 +- 0.238126
+Radius: 4.568077 +- 0.438017
+Ref0: 0.424593 +- 0.130921
+Imf0: 0.514213 +- 0.113198
+d0: -4.217785 +- 1.419128
+
+______________________________
+AnalysisType = ALamKchP
+CentralityType = 10-30%
+
+Lambda: 1.308470 +- 0.238126
+Radius: 4.568077 +- 0.438017
+Ref0: 0.424593 +- 0.130921
+Imf0: 0.514213 +- 0.113198
+d0: -4.217785 +- 1.419128
+
+______________________________
+AnalysisType = LamKchM
+CentralityType = 30-50%
+
+Lambda: 1.040367 +- 0.183502
+Radius: 3.109985 +- 0.272000
+Ref0: 0.424593 +- 0.130921
+Imf0: 0.514213 +- 0.113198
+d0: -4.217785 +- 1.419128
+
+______________________________
+AnalysisType = ALamKchP
+CentralityType = 30-50%
+
+Lambda: 1.040367 +- 0.183502
+Radius: 3.109985 +- 0.272000
+Ref0: 0.424593 +- 0.130921
+Imf0: 0.514213 +- 0.113198
+d0: -4.217785 +- 1.419128
+
+******************************
+Chi2 = 710.637  NDF = 636  Chi2/NDF = 1.117
+
+**********************************************************************************************
+
+
+FitInfo = _MomResCrctn_NonFlatBgdCrctnPolynomial_3Res_PrimMaxDecay4fm_UsingXiDataAndCoulombOnly_ShareLam
+______________________________
+AnalysisType = LamKchP
+CentralityType = 0-10%
+
+Lambda: 1.372154 +- 0.405377
+Radius: 4.888610 +- 0.764006
+Ref0: -1.128413 +- 0.258940
+Imf0: 0.358686 +- 0.223206
+d0: 1.106197 +- 0.323539
+
+______________________________
+AnalysisType = ALamKchM
+CentralityType = 0-10%
+
+Lambda: 1.372154 +- 0.405377
+Radius: 4.888610 +- 0.764006
+Ref0: -1.128413 +- 0.258940
+Imf0: 0.358686 +- 0.223206
+d0: 1.106197 +- 0.323539
+
+______________________________
+AnalysisType = LamKchP
+CentralityType = 10-30%
+
+Lambda: 1.544991 +- 0.505956
+Radius: 4.681143 +- 0.710071
+Ref0: -1.128413 +- 0.258940
+Imf0: 0.358686 +- 0.223206
+d0: 1.106197 +- 0.323539
+
+______________________________
+AnalysisType = ALamKchM
+CentralityType = 10-30%
+
+Lambda: 1.544991 +- 0.505956
+Radius: 4.681143 +- 0.710071
+Ref0: -1.128413 +- 0.258940
+Imf0: 0.358686 +- 0.223206
+d0: 1.106197 +- 0.323539
+
+______________________________
+AnalysisType = LamKchP
+CentralityType = 30-50%
+
+Lambda: 1.230947 +- 0.310942
+Radius: 3.230885 +- 0.409667
+Ref0: -1.128413 +- 0.258940
+Imf0: 0.358686 +- 0.223206
+d0: 1.106197 +- 0.323539
+
+______________________________
+AnalysisType = ALamKchM
+CentralityType = 30-50%
+
+Lambda: 1.230947 +- 0.310942
+Radius: 3.230885 +- 0.409667
+Ref0: -1.128413 +- 0.258940
+Imf0: 0.358686 +- 0.223206
+d0: 1.106197 +- 0.323539
+
+******************************
+Chi2 = 416.323  NDF = 339  Chi2/NDF = 1.228
+
+**********************************************************************************************
+
+
+FitInfo = _MomResCrctn_NonFlatBgdCrctnPolynomial_3Res_PrimMaxDecay4fm_UsingXiDataAndCoulombOnly_ShareLam
+______________________________
+AnalysisType = LamKchM
+CentralityType = 0-10%
+
+Lambda: 1.868041 +- 0.498747
+Radius: 5.745106 +- 0.900270
+Ref0: 0.304150 +- 0.141711
+Imf0: 0.401841 +- 0.124549
+d0: -5.149938 +- 2.148485
+
+______________________________
+AnalysisType = ALamKchP
+CentralityType = 0-10%
+
+Lambda: 1.868041 +- 0.498747
+Radius: 5.745106 +- 0.900270
+Ref0: 0.304150 +- 0.141711
+Imf0: 0.401841 +- 0.124549
+d0: -5.149938 +- 2.148485
+
+______________________________
+AnalysisType = LamKchM
+CentralityType = 10-30%
+
+Lambda: 1.177432 +- 0.327708
+Radius: 4.051755 +- 0.694083
+Ref0: 0.304150 +- 0.141711
+Imf0: 0.401841 +- 0.124549
+d0: -5.149938 +- 2.148485
+
+______________________________
+AnalysisType = ALamKchP
+CentralityType = 10-30%
+
+Lambda: 1.177432 +- 0.327708
+Radius: 4.051755 +- 0.694083
+Ref0: 0.304150 +- 0.141711
+Imf0: 0.401841 +- 0.124549
+d0: -5.149938 +- 2.148485
+
+______________________________
+AnalysisType = LamKchM
+CentralityType = 30-50%
+
+Lambda: 0.909036 +- 0.269655
+Radius: 2.473502 +- 0.464305
+Ref0: 0.304150 +- 0.141711
+Imf0: 0.401841 +- 0.124549
+d0: -5.149938 +- 2.148485
+
+______________________________
+AnalysisType = ALamKchP
+CentralityType = 30-50%
+
+Lambda: 0.909036 +- 0.269655
+Radius: 2.473502 +- 0.464305
+Ref0: 0.304150 +- 0.141711
+Imf0: 0.401841 +- 0.124549
+d0: -5.149938 +- 2.148485
+
+******************************
+Chi2 = 293.082  NDF = 291  Chi2/NDF = 1.007
+
+**********************************************************************************************
+
+
+FitInfo = _MomResCrctn_NonFlatBgdCrctnLinear_3Res_PrimMaxDecay4fm_UsingXiDataAndCoulombOnly_ShareLam
+______________________________
+AnalysisType = LamKchP
+CentralityType = 0-10%
+
+Lambda: 1.365786 +- 0.405144
+Radius: 5.247425 +- 0.762965
+Ref0: -1.231959 +- 0.260071
+Imf0: 0.523870 +- 0.261464
+d0: 1.140145 +- 0.461908
+
+______________________________
+AnalysisType = ALamKchM
+CentralityType = 0-10%
+
+Lambda: 1.365786 +- 0.405144
+Radius: 5.247425 +- 0.762965
+Ref0: -1.231959 +- 0.260071
+Imf0: 0.523870 +- 0.261464
+d0: 1.140145 +- 0.461908
+
+______________________________
+AnalysisType = LamKchP
+CentralityType = 10-30%
+
+Lambda: 1.486158 +- 0.497059
+Radius: 4.808961 +- 0.757079
+Ref0: -1.231959 +- 0.260071
+Imf0: 0.523870 +- 0.261464
+d0: 1.140145 +- 0.461908
+
+______________________________
+AnalysisType = ALamKchM
+CentralityType = 10-30%
+
+Lambda: 1.486158 +- 0.497059
+Radius: 4.808961 +- 0.757079
+Ref0: -1.231959 +- 0.260071
+Imf0: 0.523870 +- 0.261464
+d0: 1.140145 +- 0.461908
+
+______________________________
+AnalysisType = LamKchP
+CentralityType = 30-50%
+
+Lambda: 1.161780 +- 0.285200
+Radius: 3.277905 +- 0.404523
+Ref0: -1.231959 +- 0.260071
+Imf0: 0.523870 +- 0.261464
+d0: 1.140145 +- 0.461908
+
+______________________________
+AnalysisType = ALamKchM
+CentralityType = 30-50%
+
+Lambda: 1.161780 +- 0.285200
+Radius: 3.277905 +- 0.404523
+Ref0: -1.231959 +- 0.260071
+Imf0: 0.523870 +- 0.261464
+d0: 1.140145 +- 0.461908
+
+******************************
+Chi2 = 416.626  NDF = 339  Chi2/NDF = 1.229
+
+**********************************************************************************************
+
+
+FitInfo = _MomResCrctn_NonFlatBgdCrctnLinear_3Res_PrimMaxDecay4fm_UsingXiDataAndCoulombOnly_ShareLam
+______________________________
+AnalysisType = LamKchM
+CentralityType = 0-10%
+
+Lambda: 1.630907 +- 0.478349
+Radius: 5.667078 +- 0.957191
+Ref0: 0.330995 +- 0.164553
+Imf0: 0.472447 +- 0.149340
+d0: -4.853295 +- 2.084269
+
+______________________________
+AnalysisType = ALamKchP
+CentralityType = 0-10%
+
+Lambda: 1.630907 +- 0.478349
+Radius: 5.667078 +- 0.957191
+Ref0: 0.330995 +- 0.164553
+Imf0: 0.472447 +- 0.149340
+d0: -4.853295 +- 2.084269
+
+______________________________
+AnalysisType = LamKchM
+CentralityType = 10-30%
+
+Lambda: 1.163642 +- 0.339762
+Radius: 4.136407 +- 0.729581
+Ref0: 0.330995 +- 0.164553
+Imf0: 0.472447 +- 0.149340
+d0: -4.853295 +- 2.084269
+
+______________________________
+AnalysisType = ALamKchP
+CentralityType = 10-30%
+
+Lambda: 1.163642 +- 0.339762
+Radius: 4.136407 +- 0.729581
+Ref0: 0.330995 +- 0.164553
+Imf0: 0.472447 +- 0.149340
+d0: -4.853295 +- 2.084269
+
+______________________________
+AnalysisType = LamKchM
+CentralityType = 30-50%
+
+Lambda: 0.878437 +- 0.269948
+Radius: 2.544258 +- 0.494777
+Ref0: 0.330995 +- 0.164553
+Imf0: 0.472447 +- 0.149340
+d0: -4.853295 +- 2.084269
+
+______________________________
+AnalysisType = ALamKchP
+CentralityType = 30-50%
+
+Lambda: 0.878437 +- 0.269948
+Radius: 2.544258 +- 0.494777
+Ref0: 0.330995 +- 0.164553
+Imf0: 0.472447 +- 0.149340
+d0: -4.853295 +- 2.084269
+
+******************************
+Chi2 = 290.920  NDF = 291  Chi2/NDF = 1.000
+
+**********************************************************************************************
+
+
+FitInfo = _MomResCrctn_3Res_PrimMaxDecay4fm_UsingXiDataAndCoulombOnly_MomResCrctn_3Res_PrimMaxDecay4fm_UsingXiDataAndCoulombOnly_StavCf_ShareLam
+______________________________
+AnalysisType = LamKchM
+CentralityType = 0-10%
+
+Lambda: 1.279145 +- 0.997792
+Radius: 5.056107 +- 0.958478
+Ref0: 0.323576 +- 0.370797
+Imf0: 0.539705 +- 0.599663
+d0: 4.364578 +- 5.323361
+
+______________________________
+AnalysisType = ALamKchP
+CentralityType = 0-10%
+
+Lambda: 1.279145 +- 0.997792
+Radius: 5.056107 +- 0.958478
+Ref0: 0.323576 +- 0.370797
+Imf0: 0.539705 +- 0.599663
+d0: 4.364578 +- 5.323361
+
+______________________________
+AnalysisType = LamKchM
+CentralityType = 10-30%
+
+Lambda: 0.904484 +- 0.664327
+Radius: 3.571003 +- 0.832531
+Ref0: 0.323576 +- 0.370797
+Imf0: 0.539705 +- 0.599663
+d0: 4.364578 +- 5.323361
+
+______________________________
+AnalysisType = ALamKchP
+CentralityType = 10-30%
+
+Lambda: 0.904484 +- 0.664327
+Radius: 3.571003 +- 0.832531
+Ref0: 0.323576 +- 0.370797
+Imf0: 0.539705 +- 0.599663
+d0: 4.364578 +- 5.323361
+
+______________________________
+AnalysisType = LamKchM
+CentralityType = 30-50%
+
+Lambda: 0.843429 +- 0.596845
+Radius: 2.358732 +- 0.593673
+Ref0: 0.323576 +- 0.370797
+Imf0: 0.539705 +- 0.599663
+d0: 4.364578 +- 5.323361
+
+______________________________
+AnalysisType = ALamKchP
+CentralityType = 30-50%
+
+Lambda: 0.843429 +- 0.596845
+Radius: 2.358732 +- 0.593673
+Ref0: 0.323576 +- 0.370797
+Imf0: 0.539705 +- 0.599663
+d0: 4.364578 +- 5.323361
+
+******************************
+Chi2 = 274.597  NDF = 291  Chi2/NDF = 0.944
+
+**********************************************************************************************
+
+
+FitInfo = _MomResCrctn_3Res_PrimMaxDecay4fm_UsingXiDataAndCoulombOnly_MomResCrctn_3Res_PrimMaxDecay4fm_UsingXiDataAndCoulombOnly_StavCf_ShareLam
+______________________________
+AnalysisType = LamKchP
+CentralityType = 0-10%
+
+Lambda: 0.930499 +- 0.465318
+Radius: 5.426392 +- 1.327165
+Ref0: -1.924829 +- 0.739789
+Imf0: 1.121399 +- 1.197575
+d0: 0.509998 +- 1.487179
+
+______________________________
+AnalysisType = ALamKchM
+CentralityType = 0-10%
+
+Lambda: 0.930499 +- 0.465318
+Radius: 5.426392 +- 1.327165
+Ref0: -1.924829 +- 0.739789
+Imf0: 1.121399 +- 1.197575
+d0: 0.509998 +- 1.487179
+
+______________________________
+AnalysisType = LamKchP
+CentralityType = 10-30%
+
+Lambda: 0.684927 +- 0.296600
+Radius: 4.171676 +- 0.942546
+Ref0: -1.924829 +- 0.739789
+Imf0: 1.121399 +- 1.197575
+d0: 0.509998 +- 1.487179
+
+______________________________
+AnalysisType = ALamKchM
+CentralityType = 10-30%
+
+Lambda: 0.684927 +- 0.296600
+Radius: 4.171676 +- 0.942546
+Ref0: -1.924829 +- 0.739789
+Imf0: 1.121399 +- 1.197575
+d0: 0.509998 +- 1.487179
+
+______________________________
+AnalysisType = LamKchP
+CentralityType = 30-50%
+
+Lambda: 1.107486 +- 0.455321
+Radius: 4.073436 +- 0.911209
+Ref0: -1.924829 +- 0.739789
+Imf0: 1.121399 +- 1.197575
+d0: 0.509998 +- 1.487179
+
+______________________________
+AnalysisType = ALamKchM
+CentralityType = 30-50%
+
+Lambda: 1.107486 +- 0.455321
+Radius: 4.073436 +- 0.911209
+Ref0: -1.924829 +- 0.739789
+Imf0: 1.121399 +- 1.197575
+d0: 0.509998 +- 1.487179
+
+******************************
+Chi2 = 411.608  NDF = 339  Chi2/NDF = 1.214
+
+**********************************************************************************************
+
+
+FitInfo = _MomResCrctn_3Res_PrimMaxDecay4fm_UsingXiDataAndCoulombOnly_MomResCrctn_3Res_PrimMaxDecay4fm_UsingXiDataAndCoulombOnly_StavCf_ShareLam_Dualie_ShareLam_ShareRadii
+______________________________
+AnalysisType = LamKchP
+CentralityType = 0-10%
+
+Lambda: 1.045338 +- 0.411698
+Radius: 5.040442 +- 0.703136
+Ref0: -1.519124 +- 0.555243
+Imf0: 0.650445 +- 0.435586
+d0: -0.437362 +- 1.769828
+
+______________________________
+AnalysisType = ALamKchM
+CentralityType = 0-10%
+
+Lambda: 1.045338 +- 0.411698
+Radius: 5.040442 +- 0.703136
+Ref0: -1.519124 +- 0.555243
+Imf0: 0.650445 +- 0.435586
+d0: -0.437362 +- 1.769828
+
+______________________________
+AnalysisType = LamKchP
+CentralityType = 10-30%
+
+Lambda: 0.818183 +- 0.308608
+Radius: 3.993866 +- 0.558635
+Ref0: -1.519124 +- 0.555243
+Imf0: 0.650445 +- 0.435586
+d0: -0.437362 +- 1.769828
+
+______________________________
+AnalysisType = ALamKchM
+CentralityType = 10-30%
+
+Lambda: 0.818183 +- 0.308608
+Radius: 3.993866 +- 0.558635
+Ref0: -1.519124 +- 0.555243
+Imf0: 0.650445 +- 0.435586
+d0: -0.437362 +- 1.769828
+
+______________________________
+AnalysisType = LamKchP
+CentralityType = 30-50%
+
+Lambda: 0.878307 +- 0.301993
+Radius: 3.168737 +- 0.410748
+Ref0: -1.519124 +- 0.555243
+Imf0: 0.650445 +- 0.435586
+d0: -0.437362 +- 1.769828
+
+______________________________
+AnalysisType = ALamKchM
+CentralityType = 30-50%
+
+Lambda: 0.878307 +- 0.301993
+Radius: 3.168737 +- 0.410748
+Ref0: -1.519124 +- 0.555243
+Imf0: 0.650445 +- 0.435586
+d0: -0.437362 +- 1.769828
+
+******************************
+Chi2 = 690.335  NDF = 636  Chi2/NDF = 1.085
+
+**********************************************************************************************
+
+
+FitInfo = _MomResCrctn_3Res_PrimMaxDecay4fm_UsingXiDataAndCoulombOnly_MomResCrctn_3Res_PrimMaxDecay4fm_UsingXiDataAndCoulombOnly_StavCf_ShareLam_Dualie_ShareLam_ShareRadii
+______________________________
+AnalysisType = LamKchM
+CentralityType = 0-10%
+
+Lambda: 1.045338 +- 0.411698
+Radius: 5.040442 +- 0.703136
+Ref0: 0.545728 +- 0.302843
+Imf0: 0.820407 +- 0.422449
+d0: 2.139815 +- 2.256661
+
+______________________________
+AnalysisType = ALamKchP
+CentralityType = 0-10%
+
+Lambda: 1.045338 +- 0.411698
+Radius: 5.040442 +- 0.703136
+Ref0: 0.545728 +- 0.302843
+Imf0: 0.820407 +- 0.422449
+d0: 2.139815 +- 2.256661
+
+______________________________
+AnalysisType = LamKchM
+CentralityType = 10-30%
+
+Lambda: 0.818183 +- 0.308608
+Radius: 3.993866 +- 0.558635
+Ref0: 0.545728 +- 0.302843
+Imf0: 0.820407 +- 0.422449
+d0: 2.139815 +- 2.256661
+
+______________________________
+AnalysisType = ALamKchP
+CentralityType = 10-30%
+
+Lambda: 0.818183 +- 0.308608
+Radius: 3.993866 +- 0.558635
+Ref0: 0.545728 +- 0.302843
+Imf0: 0.820407 +- 0.422449
+d0: 2.139815 +- 2.256661
+
+______________________________
+AnalysisType = LamKchM
+CentralityType = 30-50%
+
+Lambda: 0.878307 +- 0.301993
+Radius: 3.168737 +- 0.410748
+Ref0: 0.545728 +- 0.302843
+Imf0: 0.820407 +- 0.422449
+d0: 2.139815 +- 2.256661
+
+______________________________
+AnalysisType = ALamKchP
+CentralityType = 30-50%
+
+Lambda: 0.878307 +- 0.301993
+Radius: 3.168737 +- 0.410748
+Ref0: 0.545728 +- 0.302843
+Imf0: 0.820407 +- 0.422449
+d0: 2.139815 +- 2.256661
+
+******************************
+Chi2 = 690.335  NDF = 636  Chi2/NDF = 1.085
 
 **********************************************************************************************
 

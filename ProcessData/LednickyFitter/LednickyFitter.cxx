@@ -179,6 +179,36 @@ void LednickyFitter::AppendFitInfo(TString &aSaveName)
 
 
 //________________________________________________________________________________________________________________
+TString LednickyFitter::BuildSaveNameModifier(bool aApplyMomResCorrection, bool aApplyNonFlatBackgroundCorrection, NonFlatBgdFitType aNonFlatBgdFitType, 
+                                              IncludeResidualsType aIncludeResidualsType, ResPrimMaxDecayType aResPrimMaxDecayType, 
+                                              ChargedResidualsType aChargedResidualsType, bool aFixD0,
+                                              bool aUseStavCf, bool aFixAllLambdaTo1, bool aFixRadii, bool aFixAllScattParams, bool aShareLambdaParams, 
+                                              bool aAllShareSingleLambdaParam, bool aUsemTScalingOfResidualRadii, bool aIsDualie, bool aDualieShareLambda, 
+                                              bool aDualieShareRadii)
+{
+  TString tReturnTString = "";
+  LednickyFitter::AppendFitInfo(tReturnTString, aApplyMomResCorrection, aApplyNonFlatBackgroundCorrection, aNonFlatBgdFitType, 
+                                aIncludeResidualsType, aResPrimMaxDecayType, aChargedResidualsType, aFixD0);
+
+  if(aUseStavCf)                                      tReturnTString += TString("_StavCf");
+  if(aFixAllLambdaTo1)                                tReturnTString += TString("_FixAllLambdaTo1");
+  if(aFixRadii)                                       tReturnTString += TString("_FixedRadii");
+  if(aFixAllScattParams)                              tReturnTString += TString("_FixedScattParams");
+  if(aShareLambdaParams)                              tReturnTString += TString("_ShareLam");
+  if(aAllShareSingleLambdaParam && !aFixAllLambdaTo1) tReturnTString += TString("_SingleLamParam");
+  if(aUsemTScalingOfResidualRadii)                    tReturnTString += TString::Format("_UsingmTScalingOfResidualRadii");
+
+  if(aIsDualie)
+  {
+    tReturnTString += TString("_Dualie");
+    if(aDualieShareLambda) tReturnTString += TString("_ShareLam");
+    if(aDualieShareRadii) tReturnTString += TString("_ShareRadii");
+  }
+
+  return tReturnTString;
+}
+
+//________________________________________________________________________________________________________________
 void LednickyFitter::PrintCurrentParamValues(int aNpar, double* aPar)
 {
   for(int i=0; i<aNpar; i++) cout << "par[" << i << "] = " << aPar[i] << endl;

@@ -160,20 +160,7 @@ int main(int argc, char **argv)
 
 //-----------------------------------------------------------------------------
 
-  TString tSaveNameModifier = "";
-  LednickyFitter::AppendFitInfo(tSaveNameModifier, ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, tNonFlatBgdFitType, tIncludeResidualsType, tResPrimMaxDecayType, tChargedResidualsType, FixD0);
-
-  if(bUseStavCf) tSaveNameModifier += TString("_StavCf");
-  if(FixAllLambdaTo1) tSaveNameModifier += TString("_FixAllLambdaTo1");
-  if(FixRadii) tSaveNameModifier += TString("_FixedRadii");
-  if(FixAllScattParams) tSaveNameModifier += TString("_FixedScattParams");
-  if(tShareLambdaParams) tSaveNameModifier += TString("_ShareLam");
-  if(tAllShareSingleLambdaParam && !FixAllLambdaTo1) tSaveNameModifier += TString("_SingleLamParam");
-  if(UsemTScalingOfResidualRadii) tSaveNameModifier += TString::Format("_UsingmTScalingOfResidualRadii");
-
-  tSaveNameModifier += TString("_Dualie");
-  if(tDualieShareLambda) tSaveNameModifier += TString("_ShareLam");
-  if(tDualieShareRadii) tSaveNameModifier += TString("_ShareRadii");
+  TString tSaveNameModifier = LednickyFitter::BuildSaveNameModifier(ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, tNonFlatBgdFitType, tIncludeResidualsType, tResPrimMaxDecayType, tChargedResidualsType, FixD0, bUseStavCf, FixAllLambdaTo1, FixRadii, FixAllScattParams, tShareLambdaParams, tAllShareSingleLambdaParam, UsemTScalingOfResidualRadii, true, tDualieShareLambda, tDualieShareRadii);
 
 //-----------------------------------------------------------------------------
 
