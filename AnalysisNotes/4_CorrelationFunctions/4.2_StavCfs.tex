@@ -49,13 +49,13 @@ The results of correctly implementing such a procedure are shown in Figure \ref{
 
 
 
-Now, one must be somewhat careful when applying this Stavinsky method.  We found that, in order to obtain correct results, we had to run our pseudo-pairs through the same pair cuts used in our analyses.  In an ideal world, our pair cut would only remove truly bad pairs results from splitting, merging, etc.  In the real world, the pair cut always throws out some of the good with the bad.  For the pseudo-pairs to form a reliable background, they too must experience the pair cut, and the loss of "good" pairs.  We found this issue affected mainly our \LamKchP \& \ALamKchM analysis, as can be seen in Figure \ref{fig:AllStavCfs_Incorrect}, which shows an incorrect implementation of the Stavinsky method lacking the additional pair cut on the pseudo-pairs.
+Now, one must be somewhat careful when applying this Stavinsky method.  We found that, in order to obtain correct results, we had to run our pseudo-pairs through the same pair cuts used in our analyses.  In an ideal world, our pair cut would only remove truly bad pairs results from splitting, merging, etc.  In the real world, the pair cut always throws out some of the good with the bad.  For the pseudo-pairs to form a reliable background, they too must experience the pair cut, and the loss of "good" pairs.  We found this issue affected mainly our \LamKchP \& \ALamKchM analysis, as can be seen in Figure \ref{fig:AllStavCfs_CorrectAndIncorrect}, which shows both a correct implementation of the Stavinsky method, and an incorrect implementation lacking the additional pair cut on the pseudo-pairs.
 
 
 
 
 
-
+\begin{comment}
 \begin{figure}[h!]
   \centering
   %%----start of first subfigure---  
@@ -92,7 +92,7 @@ Now, one must be somewhat careful when applying this Stavinsky method.  We found
   \caption[\LamK Stavinsky Correlation Functions (Incorrect)]{\LamK and \ALamAK correlation functions built using the incorrect Stavinsky method for 0-10\%, 10-30\%, and 30-50\% centralities.  In the incorrect method, the pseudo-pairs (same-event pairs with one particle rotated by 180$^\circ$ in the transverse plane) are not run through the pair cuts used in the analysis.  Closed symbols represent correlations built using the normal mixed-event background, while open symbols represent correlations formed using the Stavinsky same-event pseudo-pairs as a background.  Figures in the right column are zoomed-in versions of figures in the left column.}
   \label{fig:AllStavCfs_Incorrect}
 \end{figure}
-
+\end{comment}
 
 
 

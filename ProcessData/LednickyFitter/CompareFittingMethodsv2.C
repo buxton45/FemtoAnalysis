@@ -586,8 +586,35 @@ int main(int argc, char **argv)
 //  tFVWIVec = tFVWIVec_ShareR_Sharelam;
 //  tCanNameMod = TString("_ShareR_Sharelam");
 
+//  tFVWIVec = tFVWIVec_ShareR_SharelamConj;
+//  tCanNameMod = TString("_ShareR_SharelamConj");
+
 //  tFVWIVec = tFVWIVec_SharevsSepR;
 //  tCanNameMod = TString("_SharevsSepR");
+
+//  tFVWIVec = tFVWIVec_FreevsFixlam_SepR;
+//  tCanNameMod = TString("_FreevsFixlam_SepR");
+
+//  tFVWIVec = tFVWIVec_FreevsFixlam_SepR_PolyBgd;
+//  tCanNameMod = TString("_FreevsFixlam_SepR_PolyBgd");
+
+//  tFVWIVec = tFVWIVec_FreevsFixlam_SepR_LinrBgd;
+//  tCanNameMod = TString("_FreevsFixlam_SepR_LinrBgd");
+
+//  tFVWIVec = tFVWIVec_FreevsFixlam_SepR_StavCf_NoBgd;
+//  tCanNameMod = TString("_FreevsFixlam_SepR_StavCf_NoBgd");
+
+//  tFVWIVec = tFVWIVec_FreevsFixlam_ShareR;
+//  tCanNameMod = TString("_FreevsFixlam_ShareR");
+
+//  tFVWIVec = tFVWIVec_FreevsFixlam_ShareR_PolyBgd;
+//  tCanNameMod = TString("_FreevsFixlam_ShareR_PolyBgd");
+
+//  tFVWIVec = tFVWIVec_FreevsFixlam_ShareR_LinrBgd;
+//  tCanNameMod = TString("_FreevsFixlam_ShareR_LinrBgd");
+
+//  tFVWIVec = tFVWIVec_FreevsFixlam_ShareR_StavCf_NoBgd;
+//  tCanNameMod = TString("_FreevsFixlam_ShareR_StavCf_NoBgd");
 
   TCanvas* tCanLambdavsRadius = CompareLambdavsRadius(tFVWIVec, k0010, tCanNameMod);
   TCanvas* tCanImF0vsReF0 = CompareImF0vsReF0(tFVWIVec, true, tCanNameMod);
