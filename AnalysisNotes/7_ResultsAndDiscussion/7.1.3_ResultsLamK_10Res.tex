@@ -1,21 +1,40 @@
 \documentclass[../AnalysisNoteJBuxton.tex]{subfiles}
+
+\renewcommand{\ResNum}{_10Res}
+\renewcommand{\SaveNameModLamKch}{\MomRes\NonFlatBgd\ResNum\PrimMaxDecay\ResMethod\ParamFixAndShareLamKch}
+\renewcommand{\SaveNameModLamKs}{\MomRes\NonFlatBgd\ResNum\PrimMaxDecay\ResMethod\ParamFixAndShareLamKs}
+
 \begin{document}
 
 \subsubsection{Results: \texorpdfstring{$\Lambda$K$^{0}_{S}$ and $\Lambda$K$^{\pm}$: 10 Residual Correlations Included in Fit}{TEXT}}
 \label{ResultsLamK_10Res}
 
+Figures \ref{fig:LamK0wConjFits_10Res}, \ref{fig:LamKchPwConjFits_10Res}, and \ref{fig:LamKchMwConjFits_10Res} (Section \ref{ResultsAndDiscussion}) show experimental data with fits for all studied centralities for \LamKs with \ALamKs, \LamKchP with \ALamKchM, and \LamKchM with \ALamKchP, respectively.
+The parameter sets extracted from the fits can be found in Tables \ref{tab:FitResultsLamK0_10Res} and \ref{tab:FitResultsLamKch_10Res}.
+All correlation functions were normalized in the range 0.32 $< k^{*} <$ 0.40 GeV/c, and fit in the range 0.0 $< k^{*} <$ 0.30 GeV/c.
+For the $\Lambda$K$^{-}$ and $\bar{\Lambda}$K$^{+}$ analyses, the region 0.19 $< k^{*} <$ 0.23 GeV/c was excluded from the fit to exclude the bump caused by the $\Omega^{-}$ resonance.
+The non-flat background was fit with a linear form from 0.6 $< k^{*} <$ 0.9 GeV/c.
+The theoretical fit function was then multiplied by this background during the fitting process.
+
+In the figures (\ref{fig:LamK0wConjFits_10Res}, \ref{fig:LamKchPwConjFits_10Res}, and \ref{fig:LamKchMwConjFits_10Res}), the black solid line represents the ``raw" fit, i.e. not corrected for momentum resolution effects nor non-flat background.
+The green line shows the fit to the non-flat background.  The purple points show the fit after momentum resolution and non-flat background corrections have been applied.
+The initial values of the parameters is listed, as well as the final fit values with uncertainties.
+
+For the $\Lambda$K$^{0}_{S}$ fits without residuals, $\lambda$ was restricted to [0.4, 0.6].
+
+\pagestyle{empty}
+\begin{landscape}
 
 \begin{figure}[h!]
   \centering
   %%----start of first subfigure---  
   \subfloat[Signal region view ($k^{*} \lesssim 0.3$ GeV/$c$)]{
     \label{fig:LamK0wConjFits_10Res:a}
-    \includegraphics[width=0.90\textwidth]{\ResultsDirLamKs canKStarCfwFitsLamK0wConj_0010_1030_3050_MomResCrctn_NonFlatBgdCrctn_SingleLamParam_10Res_PrimMaxDecay4fm_UsingXiDataAndCoulombOnly.pdf}}
-  \\  
+    \includegraphics[width=0.50\linewidth]{\ResultsDirBaseLamKs\SaveNameModLamKs/canKStarCfwFitsLamK0wConj_0010_1030_3050\SaveNameModLamKs.pdf}}
   %%----start of second subfigure---
   \subfloat[Wide view ($k^{*} \lesssim 1.0$ GeV/$c$)]{
     \label{fig:LamK0wConjFits_10Res:b}
-    \includegraphics[width=0.90\textwidth]{\ResultsDirLamKs canKStarCfwFitsLamK0wConj_0010_1030_3050UnZoomed_MomResCrctn_NonFlatBgdCrctn_SingleLamParam_10Res_PrimMaxDecay4fm_UsingXiDataAndCoulombOnly.pdf}}  
+    \includegraphics[width=0.50\linewidth]{\ResultsDirBaseLamKs\SaveNameModLamKs/canKStarCfwFitsLamK0wConj_0010_1030_3050UnZoomed\SaveNameModLamKs.pdf}}  
   %%----overall caption----
   \caption[$\Lambda$K$^{0}_{S}$($\bar{\Lambda}$K$^{0}_{S}$) Fits with 10 Residuals]{Fits, with 10 residual correlations included, to the $\Lambda$K$^{0}_{S}$ (left) and $\bar{\Lambda}$K$^{0}_{S}$ (right) data for the centralities 0-10\% (top), 10-30\% (middle), and 30-50\% (bottom).
 The lines represent the statistical errors, while the boxes represent the systematic errors.
@@ -30,31 +49,16 @@ Here, $R$ was restricted to [2.,10.] and $\Lambda$ was restricted to [0.1,0.8].}
 \end{figure}
 
 
-
-\begin{figure}[h]
-  \centering
-  \includegraphics[width=\textwidth]{\ResultsDirLamKs Residuals_10Res/LamK0/canKStarCfwFitsAndResidualsLamK0wConj_0010_1030_3050_ZoomResiduals_MomResCrctn_NonFlatBgdCrctn_SingleLamParam_10Res_PrimMaxDecay4fm_UsingXiDataAndCoulombOnly.pdf}
-  \caption[\LamALamKs Fits showing 10 Residuals]{Fits, with 10 residual correlations included and shown, to the \LamKs (left) and \ALamKs (right) data for the centralities 0-10\% (top), 10-30\% (middle), and 30-50\% (bottom).  The ten parent pairs used for the residual correction to the \LamKs (\ALamKs) fit are $\Sigma^{0}$\Ks, $\Xi^{0}$\Ks, $\Xi^{-}$\Ks, $\Sigma^{*(+,-,0)}$\Ks, $\Lambda$K$^{*0}$, $\Sigma^{0}$K$^{*0}$, $\Xi^{0}$K$^{*0}$, and $\Xi^{-}$K$^{*0}$ ($\bar{\Sigma}^{0}$\Ks, $\bar{\Xi}^{0}$\Ks, $\bar{\Xi}^{+}$\Ks, $\bar{\Sigma}^{*(+,-,0)}$\Ks, $\bar{\Lambda}\bar{\mathrm{K}}^{*0}$, $\bar{\Sigma}^{0}\bar{\mathrm{K}}^{*0}$, $\bar{\Xi}^{0}\bar{\mathrm{K}}^{*0}$, and $\bar{\Xi}^{+}\bar{\mathrm{K}}^{*0}$).}
-  \label{fig:LamK0wConjFitsAndResiduals_10Res}
-\end{figure}
-
-
-
-
-
-
-
 \begin{figure}[h!]
   \centering
   %%----start of first subfigure---  
   \subfloat[Signal region view ($k^{*} \lesssim 0.3$ GeV/$c$)]{
     \label{fig:LamKchPwConjFits_10Res:a}
-    \includegraphics[width=0.90\textwidth]{\ResultsDirLamKch canKStarCfwFitsLamKchPwConj_0010_1030_3050_MomResCrctn_NonFlatBgdCrctn_10Res_PrimMaxDecay4fm_UsingXiDataAndCoulombOnly.pdf}}
-  \\  
+    \includegraphics[width=0.50\linewidth]{\ResultsDirBaseLamKch\SaveNameModLamKch/canKStarCfwFitsLamKchPwConj_0010_1030_3050\SaveNameModLamKch.pdf}}
   %%----start of second subfigure---
   \subfloat[Wide view ($k^{*} \lesssim 1.0$ GeV/$c$)]{
     \label{fig:LamKchPwConjFits_10Res:b}
-    \includegraphics[width=0.90\textwidth]{\ResultsDirLamKch canKStarCfwFitsLamKchPwConj_0010_1030_3050UnZoomed_MomResCrctn_NonFlatBgdCrctn_10Res_PrimMaxDecay4fm_UsingXiDataAndCoulombOnly.pdf}}  
+    \includegraphics[width=0.50\linewidth]{\ResultsDirBaseLamKch\SaveNameModLamKch/canKStarCfwFitsLamKchPwConj_0010_1030_3050UnZoomed\SaveNameModLamKch.pdf}}  
   %%----overall caption----
   \caption[$\Lambda$K$^{+}$($\bar{\Lambda}$K$^{-}$) Fits with 10 Residuals]{Fits, with 10 residual correlations included, to the $\Lambda$K$^{+}$ (left) and $\bar{\Lambda}$K$^{-}$ (right) data for the centralities 0-10\% (top), 10-30\% (middle), and 30-50\% (bottom).
 The lines represent the statistical errors, while the boxes represent the systematic errors.  
@@ -69,29 +73,16 @@ The initial values of the parameters is listed, as well as the final fit values 
 
 
 
-\begin{figure}[h]
-  \centering
-  \includegraphics[width=\textwidth]{\ResultsDirLamKch Residuals_10Res/LamKchP/canKStarCfwFitsAndResidualsLamKchPwConj_0010_1030_3050_ZoomResiduals_MomResCrctn_NonFlatBgdCrctn_10Res_PrimMaxDecay4fm_UsingXiDataAndCoulombOnly.pdf}
-  \caption[\LamKchPALamKchM Fits showing 10 Residuals]{Fits, with 10 residual correlations included and shown, to the \LamKchP (left) and \ALamKchM (right) data for the centralities 0-10\% (top), 10-30\% (middle), and 30-50\% (bottom).  The ten parent pairs used for the residual correction to the \LamKchP (\ALamKchM) fit are $\Sigma^{0}$\KchP, $\Xi^{0}$\KchP, $\Xi^{-}$\KchP, $\Sigma^{*(+,-,0)}$\KchP, $\Lambda$K$^{*0}$, $\Sigma^{0}$K$^{*0}$, $\Xi^{0}$K$^{*0}$, and $\Xi^{-}$K$^{*0}$ ($\bar{\Sigma}^{0}$\KchM, $\bar{\Xi}^{0}$\KchM, $\bar{\Xi}^{+}$\KchM, $\bar{\Sigma}^{*(+,-,0)}$\KchM, $\bar{\Lambda}\bar{\mathrm{K}}^{*0}$, $\bar{\Sigma}^{0}\bar{\mathrm{K}}^{*0}$, $\bar{\Xi}^{0}\bar{\mathrm{K}}^{*0}$, and $\bar{\Xi}^{+}\bar{\mathrm{K}}^{*0}$).}
-  \label{fig:LamKchPwConjFitsAndResiduals_10Res}
-\end{figure}
-
-
-
-
-
-
 \begin{figure}[h!]
   \centering
   %%----start of first subfigure---  
   \subfloat[Signal region view ($k^{*} \lesssim 0.3$ GeV/$c$)]{
     \label{fig:LamKchMwConjFits_10Res:a}
-    \includegraphics[width=0.90\textwidth]{\ResultsDirLamKch canKStarCfwFitsLamKchMwConj_0010_1030_3050_MomResCrctn_NonFlatBgdCrctn_10Res_PrimMaxDecay4fm_UsingXiDataAndCoulombOnly.pdf}}
-  \\  
+    \includegraphics[width=0.50\linewidth]{\ResultsDirBaseLamKch\SaveNameModLamKch/canKStarCfwFitsLamKchMwConj_0010_1030_3050\SaveNameModLamKch.pdf}}
   %%----start of second subfigure---
   \subfloat[Wide view ($k^{*} \lesssim 1.0$ GeV/$c$)]{
     \label{fig:LamKchMwConjFits_10Res:b}
-    \includegraphics[width=0.90\textwidth]{\ResultsDirLamKch canKStarCfwFitsLamKchMwConj_0010_1030_3050UnZoomed_MomResCrctn_NonFlatBgdCrctn_10Res_PrimMaxDecay4fm_UsingXiDataAndCoulombOnly.pdf}}  
+    \includegraphics[width=0.50\linewidth]{\ResultsDirBaseLamKch\SaveNameModLamKch/canKStarCfwFitsLamKchMwConj_0010_1030_3050UnZoomed\SaveNameModLamKch.pdf}}  
   %%----overall caption----
   \caption[$\Lambda$K$^{-}$($\bar{\Lambda}$K$^{+}$) Fits with 10 Residuals]{Fits, with 10 residual correlations included, to the $\Lambda$K$^{-}$(left) with $\bar{\Lambda}$K$^{+}$ (right) data for the centralities 0-10\% (top), 10-30\% (middle), and 30-50\% (bottom).
 The lines represent the statistical errors, while the boxes represent the systematic errors.  
@@ -108,174 +99,37 @@ The initial values of the parameters is listed, as well as the final fit values 
 
 \begin{figure}[h]
   \centering
-  \includegraphics[width=\textwidth]{\ResultsDirLamKch Residuals_10Res/LamKchM/canKStarCfwFitsAndResidualsLamKchMwConj_0010_1030_3050_ZoomResiduals_MomResCrctn_NonFlatBgdCrctn_10Res_PrimMaxDecay4fm_UsingXiDataAndCoulombOnly.pdf}
-  \caption[\LamKchMALamKchP Fits showing 10 Residuals]{Fits, with 10 residual correlations included and shown, to the \LamKchM (left) and \ALamKchP (right) data for the centralities 0-10\% (top), 10-30\% (middle), and 30-50\% (bottom).  The ten parent pairs used for the residual correction to the \LamKchM (\ALamKchP) fit are $\Sigma^{0}$\KchM, $\Xi^{0}$\KchM, $\Xi^{-}$\KchM, $\Sigma^{*(+,-,0)}$\KchM, $\Lambda\bar{\mathrm{K}}^{*0}$, $\Sigma^{0}\bar{\mathrm{K}}^{*0}$, $\Xi^{0}\bar{\mathrm{K}}^{*0}$, and $\Xi^{-}\bar{\mathrm{K}}^{*0}$ ($\bar{\Sigma}^{0}$\KchP, $\bar{\Xi}^{0}$\KchP, $\bar{\Xi}^{+}$\KchP, $\bar{\Sigma}^{*(+,-,0)}$\KchP, $\bar{\Lambda}$K$^{*0}$, $\bar{\Sigma}^{0}$K$^{*0}$, $\bar{\Xi}^{0}$K$^{*0}$, and $\bar{\Xi}^{+}$K$^{*0}$).}
-  \label{fig:LamKchMwConjFitsAndResiduals_10Res}
+  \includegraphics[width=\textwidth]{\ResultsDirBaseLamKs\SaveNameModLamKs/Residuals\ResNum/LamK0/canKStarCfwFitsAndResidualsLamK0wConj_0010_1030_3050UnZoomed_ZoomResiduals\SaveNameModLamKs.pdf}
+  \caption[\LamALamKs Fits showing 10 Residuals]{Fits, with 10 residual correlations included and shown, to the \LamKs (left) and \ALamKs (right) data for the centralities 0-10\% (top), 10-30\% (middle), and 30-50\% (bottom).  The ten parent pairs used for the residual correction to the \LamKs (\ALamKs) fit are $\Sigma^{0}$\Ks, $\Xi^{0}$\Ks, $\Xi^{-}$\Ks, $\Sigma^{*(+,-,0)}$\Ks, $\Lambda$K$^{*0}$, $\Sigma^{0}$K$^{*0}$, $\Xi^{0}$K$^{*0}$, and $\Xi^{-}$K$^{*0}$ ($\bar{\Sigma}^{0}$\Ks, $\bar{\Xi}^{0}$\Ks, $\bar{\Xi}^{+}$\Ks, $\bar{\Sigma}^{*(+,-,0)}$\Ks, $\bar{\Lambda}\bar{\mathrm{K}}^{*0}$, $\bar{\Sigma}^{0}\bar{\mathrm{K}}^{*0}$, $\bar{\Xi}^{0}\bar{\mathrm{K}}^{*0}$, and $\bar{\Xi}^{+}\bar{\mathrm{K}}^{*0}$).}
+  \label{fig:LamK0wConjFitsAndResiduals_10Res}
+\end{figure}
+
+
+\begin{figure}[h!]
+  \centering
+  %%----start of first subfigure---  
+  \subfloat[\LamKchPALamKchM fits with residual contributions shown for the centralities 0-10\% (top), 10-30\% (middle), and 30-50\% (bottom)]{
+    \label{fig:LamKchwConjFitsAndResiduals_10Res:a}
+    \includegraphics[width=0.50\linewidth]{\ResultsDirBaseLamKch\SaveNameModLamKch/Residuals\ResNum/LamKchP/canKStarCfwFitsAndResidualsLamKchPwConj_0010_1030_3050UnZoomed_ZoomResiduals\SaveNameModLamKch.pdf}}
+  %%----start of second subfigure---
+  \subfloat[\LamKchMALamKchP fits with residual contributions shown for the centralities 0-10\% (top), 10-30\% (middle), and 30-50\% (bottom)]{
+    \label{fig:LamKchwConjFitsAndResiduals_10Res:b}
+    \includegraphics[width=0.50\linewidth]{\ResultsDirBaseLamKch\SaveNameModLamKch/Residuals\ResNum/LamKchM/canKStarCfwFitsAndResidualsLamKchMwConj_0010_1030_3050UnZoomed_ZoomResiduals\SaveNameModLamKch.pdf}}  
+  %%----overall caption----
+  \caption[\LamKchPALamKchM and \LamKchMALamKchP Fits with 10 Residuals]{Fits, with 10 residual correlations included and shown, to the \LamKchP \& \ALamKchM (left) and \LamKchM \& \ALamKchP (right) data for the centralities 0-10\% (top), 10-30\% (middle), and 30-50\% (bottom).  The ten parent pairs used for the residual correction to the \LamKchP (\ALamKchM) fit are $\Sigma^{0}$\KchP, $\Xi^{0}$\KchP, $\Xi^{-}$\KchP, $\Sigma^{*(+,-,0)}$\KchP, $\Lambda$K$^{*0}$, $\Sigma^{0}$K$^{*0}$, $\Xi^{0}$K$^{*0}$, and $\Xi^{-}$K$^{*0}$ ($\bar{\Sigma}^{0}$\KchM, $\bar{\Xi}^{0}$\KchM, $\bar{\Xi}^{+}$\KchM, $\bar{\Sigma}^{*(+,-,0)}$\KchM, $\bar{\Lambda}\bar{\mathrm{K}}^{*0}$, $\bar{\Sigma}^{0}\bar{\mathrm{K}}^{*0}$, $\bar{\Xi}^{0}\bar{\mathrm{K}}^{*0}$, and $\bar{\Xi}^{+}\bar{\mathrm{K}}^{*0}$).}
+  \label{fig:LamKchwConjFitsAndResiduals_10Res}
 \end{figure}
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-\pagestyle{empty}
-\begin{landscape}
-
-\begin{table}[htbp]
- \centering
- \resizebox{\paperwidth}{!}{
- \begin{tabular}{|c|c|c|c|c|c|c|}
-  \multicolumn{7}{c}{Fit Results $\Lambda$($\bar{\Lambda}$)K$^{0}_{S}$} \\
-  \hline
-  \multirow{3}{*}{Pair Type} & \multirow{3}{*}{Centrality} & \multicolumn{5}{c|}{Fit Parameters} \\
-  \cline{3-7}
-   & & $\lambda$ & $R$ & $\mathbb{R}f_{0}$ & $\mathbb{I}f_{0}$ & $d_{0}$ \\
-  \hline  
-  \multirow{3}{*}{$\Lambda$K$^{0}_{S}$}  
-   &  0-10\% & \multirow{6}{*}{0.60 $\pm$ 0.63 (stat.) $\pm$ 0.17 (sys.)}  %Lambda
-             & 2.94 $\pm$ 0.45 (stat.) $\pm$ 0.35 (sys.)  %Radius
-             & \multirow{6}{*}{-0.40 $\pm$ 0.12 (stat.) $\pm$ 0.17 (sys.)}  %Ref0
-             & \multirow{6}{*}{0.17 $\pm$ 0.08 (stat.) $\pm$ 0.12 (sys.)}  %Imf0
-             & \multirow{6}{*}{1.94 $\pm$ 0.47 (stat.) $\pm$ 0.77 (sys.)} \\ %d0
-             
-   & 10-30\% & 
-             & 2.39 $\pm$ 0.38 (stat.) $\pm$ 0.25 (sys.)  %Radius
-             & & & \\
-             
-   & 30-50\% & 
-             & 1.81 $\pm$ 0.29 (stat.) $\pm$ 0.12 (sys.)  %Radius
-             & & & \\
-  \cline{1-2}
-  \cline{4-4}
-  \multirow{3}{*}{$\bar{\Lambda}$K$^{0}_{S}$}  
-   &  0-10\% & 
-             & 2.94 $\pm$ 0.45 (stat.) $\pm$ 0.35 (sys.)  %Radius
-             & & & \\
-             
-   & 10-30\% & 
-             & 2.39 $\pm$ 0.38 (stat.) $\pm$ 0.25 (sys.)  %Radius
-             & & & \\
-             
-   & 30-50\% & 
-             & 1.81 $\pm$ 0.29 (stat.) $\pm$ 0.12 (sys.)  %Radius
-             & & & \\
-  \hline
- \end{tabular}}
- \caption{Fit Results $\Lambda$($\bar{\Lambda}$)K$^{0}_{S}$, with 10 residual correlations included. 
- Each pair is fit simultaneously with its conjugate (ie. $\Lambda$K$^{0}_{S}$ with $\bar{\Lambda}$K$^{0}_{S}$) across all centralities (0-10\%, 10-30\%, 30-50\%), for a total of 6 simultaneous analyses in the fit.
- Each analysis has a unique $\lambda$ and normalization parameter.
- The radii are shared between analyses of like centrality, as these should have similar source sizes.
- The scattering parameters ($\mathbb{R}f_{0}$, $\mathbb{I}f_{0}$, $d_{0}$) are shared amongst all.
- The fit is done on the data with only statistical error bars.
- The errors marked as ``stat." are those returned by MINUIT.
- The errors marked as ``sys." are those which result from my systematic analysis (as outlined in Section \ref{SystematicErrors}).}
- \label{tab:FitResultsLamK0_10Res}
-\end{table}
-
-
-
-%\end{landscape}
-%\pagestyle{plain}
-
-%\pagestyle{empty}
-%\begin{landscape}
-
-\begin{table}[htbp]
- \centering
- \resizebox{\paperwidth}{!}{
- \begin{tabular}{|c|c|c|c|c|c|c|}
-  \multicolumn{7}{c}{Fit Results $\Lambda$($\bar{\Lambda}$)K$^{\pm}$} \\
-  \hline
-  \multirow{3}{*}{Pair Type} & \multirow{3}{*}{Centrality} & \multicolumn{5}{c|}{Fit Parameters} \\
-  \cline{3-7}
-   & & $\lambda$ & $R$ & $\mathbb{R}f_{0}$ & $\mathbb{I}f_{0}$ & $d_{0}$ \\
-  \hline  
-  \multirow{3}{*}{$\Lambda$K$^{+}$}  
-   &  0-10\% & 1.51 $\pm$ 0.56 (stat.) $\pm$ 0.27 (sys.)  %Lambda
-             & 5.92 $\pm$ 1.08 (stat.) $\pm$ 0.51 (sys.)  %Radius
-             & \multirow{6}{*}{-1.38 $\pm$ 0.32 (stat.) $\pm$ 0.34 (sys.)}  %Ref0
-             & \multirow{6}{*}{0.61 $\pm$ 0.34 (stat.) $\pm$ 0.20 (sys.)}  %Imf0
-             & \multirow{6}{*}{0.97 $\pm$ 0.66 (stat.) $\pm$ 0.42 (sys.)} \\ %d0
-             
-   & 10-30\% & 1.47 $\pm$ 0.55 (stat.) $\pm$ 0.31 (sys.)  %Lambda
-             & 4.98 $\pm$ 0.86 (stat.) $\pm$ 0.40 (sys.)  %Radius
-             & & & \\
-             
-   & 30-50\% & 1.10 $\pm$ 0.30 (stat.) $\pm$ 0.27 (sys.)  %Lambda
-             & 3.38 $\pm$ 0.45 (stat.) $\pm$ 0.28 (sys.)  %Radius
-             & & & \\
-  \cline{1-4}  
-  \multirow{3}{*}{$\bar{\Lambda}$K$^{-}$}  
-   &  0-10\% & 1.52 $\pm$ 0.58 (stat.) $\pm$ 0.33 (sys.)  %Lambda
-             & 5.92 $\pm$ 1.08 (stat.) $\pm$ 0.51 (sys.)  %Radius
-             & & & \\
-             
-   & 10-30\% & 1.28 $\pm$ 0.47 (stat.) $\pm$ 0.25 (sys.)  %Lambda
-             & 4.98 $\pm$ 0.86 (stat.) $\pm$ 0.40 (sys.)  %Radius
-             & & & \\
-             
-   & 30-50\% & 1.06 $\pm$ 0.28 (stat.) $\pm$ 0.16 (sys.)  %Lambda
-             & 3.38 $\pm$ 0.45 (stat.) $\pm$ 0.28 (sys.)  %Radius
-             & & & \\
-  \hline
-  \hline  
-  \multirow{3}{*}{$\Lambda$K$^{-}$}  
-   &  0-10\% & 1.72 $\pm$ 0.61 (stat.) $\pm$ 0.28 (sys.)  %Lambda
-             & 6.54 $\pm$ 1.22 (stat.) $\pm$ 0.90 (sys.)  %Radius
-             & \multirow{6}{*}{0.53 $\pm$ 0.20 (stat.) $\pm$ 0.15 (sys.)}  %Ref0
-             & \multirow{6}{*}{0.57 $\pm$ 0.17 (stat.) $\pm$ 0.11 (sys.)}  %Imf0
-             & \multirow{6}{*}{-4.13 $\pm$ 1.74 (stat.) $\pm$ 1.53 (sys.)} \\ %d0
-             
-   & 10-30\% & 1.24 $\pm$ 0.43 (stat.) $\pm$ 0.25 (sys.)  %Lambda
-             & 4.90 $\pm$ 0.94 (stat.) $\pm$ 0.64 (sys.)  %Radius
-             & & & \\
-             
-   & 30-50\% & 1.34 $\pm$ 0.75 (stat.) $\pm$ 0.42 (sys.)  %Lambda
-             & 3.10 $\pm$ 0.67 (stat.) $\pm$ 0.40 (sys.)  %Radius
-             & & & \\
-  \cline{1-4}  
-  \multirow{3}{*}{$\bar{\Lambda}$K$^{+}$}  
-   &  0-10\% & 1.72 $\pm$ 0.58 (stat.) $\pm$ 0.31 (sys.)  %Lambda
-             & 6.54 $\pm$ 1.22 (stat.) $\pm$ 0.90 (sys.)  %Radius
-             & & & \\
-             
-   & 10-30\% & 1.33 $\pm$ 0.46 (stat.) $\pm$ 0.26 (sys.)  %Lambda
-             & 4.90 $\pm$ 0.94 (stat.) $\pm$ 0.64 (sys.)  %Radius
-             & & & \\
-             
-   & 30-50\% & 0.84 $\pm$ 0.31 (stat.) $\pm$ 0.31 (sys.)  %Lambda
-             & 3.10 $\pm$ 0.67 (stat.) $\pm$ 0.40 (sys.)  %Radius
-             & & & \\
-  \hline
- \end{tabular}}
- \caption{Fit Results $\Lambda$($\bar{\Lambda}$)K$^{\pm}$, with 10 residual correlations included..
- Each pair is fit simultaneously with its conjugate (ie. $\Lambda$K$^{+}$ with $\bar{\Lambda}$K$^{-}$ and $\Lambda$K$^{-}$ with $\bar{\Lambda}$K$^{+}$) across all centralities (0-10\%, 10-30\%, 30-50\%), for a total of 6 simultaneous analyses in the fit.
- Each analysis has a unique $\lambda$ and normalization parameter.
- The radii are shared between analyses of like centrality, as these should have similar source sizes.
- The scattering parameters ($\mathbb{R}f_{0}$, $\mathbb{I}f_{0}$, $d_{0}$) are shared amongst all.
- The fit is done on the data with only statistical error bars.
- The errors marked as ``stat." are those returned by MINUIT.
- The errors marked as ``sys." are those which result from my systematic analysis (as outlined in Section \ref{SystematicErrors}).}
- \label{tab:FitResultsLamKch_10Res}
-\end{table}
-
 \end{landscape}
 \pagestyle{plain}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%     TABLES!!!!!     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subfile{7_ResultsAndDiscussion/7.1.3_ResultsTables_10Res.tex}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 
 \begin{figure}[h]
   \centering

@@ -40,7 +40,7 @@ In the case of fitting with residuals, the $\lambda_{Fit}$ parameter serves as a
 \label{eqn:ResidualsvLambdaNorm}
 \end{equation}
 
-where $\lambda_{i}$ is obtained from THERMINATOR, as explained in Section \ref{ResidualCorrelations}, and whose values are presented in Tables \ref{tab:LambdaValues_3Res_LamKchP} through \ref{tab:LambdaValues_10Res_LamK0}.  For Coulomb-neutral pairs, such as $\Lambda$K, $\Sigma^{0}$K, and $\Xi^{0}$K, $C_{i}(k^{*}_{\Lambda K})$ is calculated from Eqn. \ref{eqn:LednickyEqn}, with the help of Eqn. \ref{eqn:CFSI}.  For those residual pairs which include a Coulomb interaction, $C_{i}(k^{*}_{\Lambda K})$ is either calculated using the CoulombFitter method (Sections \ref{ModelCascadeKaon} and \ref{CoulombFitter}) with no strong interaction, or by using the $\Xi^{\mathrm{ch}}\mathrm{K^{ch}}$ data directly.  Unless otherwise stated, the $\Xi^{\mathrm{ch}}\mathrm{K^{ch}}$ residual contribution is modeled using the experimental $\Xi^{\mathrm{ch}}\mathrm{K^{ch}}$ data, and all other charged contributors (ex. $\Sigma^{*\mathrm{ch}}\mathrm{K^{ch}}$) are modeled using the CoulombFitter technique with no strong interaction contribution.
+where $\lambda_{i}$ is obtained from THERMINATOR, as explained in Section \ref{ResidualCorrelations}, and whose values are presented in Tables \ref{tab:LambdaValues_LamKchP} through \ref{tab:LambdaValues_LamK0}.  For Coulomb-neutral pairs, such as $\Lambda$K, $\Sigma^{0}$K, and $\Xi^{0}$K, $C_{i}(k^{*}_{\Lambda K})$ is calculated from Eqn. \ref{eqn:LednickyEqn}, with the help of Eqn. \ref{eqn:CFSI}.  For those residual pairs which include a Coulomb interaction, $C_{i}(k^{*}_{\Lambda K})$ is either calculated using the CoulombFitter method (Sections \ref{ModelCascadeKaon} and \ref{CoulombFitter}) with no strong interaction, or by using the $\Xi^{\mathrm{ch}}\mathrm{K^{ch}}$ data directly.  Unless otherwise stated, the $\Xi^{\mathrm{ch}}\mathrm{K^{ch}}$ residual contribution is modeled using the experimental $\Xi^{\mathrm{ch}}\mathrm{K^{ch}}$ data, and all other charged contributors (ex. $\Sigma^{*\mathrm{ch}}\mathrm{K^{ch}}$) are modeled using the CoulombFitter technique with no strong interaction contribution.
 
 To summarize, the complete fit function is constructed as follows:
 
@@ -48,7 +48,7 @@ To summarize, the complete fit function is constructed as follows:
  \item The uncorrected correlation function, $C'_{Fit}(k^{*}_{True})$, is constructed using Eq. \ref{eqn:ResidualsvLambdaNorm} (with the help of Eqns. \ref{eqn:LednickyEqn} and \ref{eqn:CFSI}, as well as Secs. \ref{ModelCascadeKaon} and \ref{CoulombFitter})
  \begin{itemize}
  \item in the case of no residual contributions included in the fit, $\lambda_{i}$ = $\lambda_{\Lambda\mathrm{K}}$ in Eq. \ref{eqn:ResidualsvLambdaNorm} is set equal to 1.  Then, the extracted $\lambda_{Fit}$ parameter should be roughly equal to the pair purity.
- \item when residuals are included, the $\lambda_{i}$ values are presented in Tables \ref{tab:LambdaValues_3Res_LamKchP} through \ref{tab:LambdaValues_10Res_LamK0}.
+ \item when residuals are included, the $\lambda_{i}$ values are presented in Tables \ref{tab:LambdaValues_LamKchP} through \ref{tab:LambdaValues_LamK0}.
  \end{itemize}
  \item The correlation function is corrected to account for momentum resolution effects using Eq. \ref{eqn:MomResCorrection}
  \begin{itemize}
