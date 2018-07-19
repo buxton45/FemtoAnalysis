@@ -321,6 +321,8 @@ _MomResCrctn_3Res_PrimMaxDecay4fm_UsingXiDataAndCoulombOnly_StavCf_FixAllLambdaT
                                                                     tLegDesc_SepR_Seplam_PolyBgd, tColorLamKchM, 28, tMarkerSize)};
 
 
+//-----------------------------------------------------------------
+
   vector<FitValWriterInfo> tFVWIVec_FreevsFixlam_SepR = {tFVWI_SepR_Sharelam_PolyBgd_LamKchP, tFVWI_SepR_Sharelam_LinrBgd_LamKchP, tFVWI_SepR_Sharelam_StavCf_NoBgd_LamKchP,
                                                          tFVWI_SepR_Sharelam_PolyBgd_LamKchM, tFVWI_SepR_Sharelam_LinrBgd_LamKchM, tFVWI_SepR_Sharelam_StavCf_NoBgd_LamKchM,
                                                          FitValWriterInfo(kLamKchP, tFileLocation, tResultsDate, tFitInfoTString_SepR_Fixlam_PolyBgd, 
@@ -335,6 +337,17 @@ _MomResCrctn_3Res_PrimMaxDecay4fm_UsingXiDataAndCoulombOnly_StavCf_FixAllLambdaT
                                                                           tLegDesc_SepR_Fixlam_LinrBgd, tColorLamKchM, 25, tMarkerSize), 
                                                          FitValWriterInfo(kLamKchM, tFileLocation, tResultsDate, tFitInfoTString_SepR_Fixlam_StavCf_NoBgd, 
                                                                           tLegDesc_SepR_Fixlam_StavCf_NoBgd, tColorLamKchM, 28, tMarkerSize)};
+
+  vector<FitValWriterInfo> tFVWIVec_FreevsFixlam_SepR_NoStav = {tFVWI_SepR_Sharelam_PolyBgd_LamKchP, tFVWI_SepR_Sharelam_LinrBgd_LamKchP,
+                                                                tFVWI_SepR_Sharelam_PolyBgd_LamKchM, tFVWI_SepR_Sharelam_LinrBgd_LamKchM,
+                                                               FitValWriterInfo(kLamKchP, tFileLocation, tResultsDate, tFitInfoTString_SepR_Fixlam_PolyBgd, 
+                                                                                tLegDesc_SepR_Fixlam_PolyBgd, tColorLamKchP, 24, tMarkerSize), 
+                                                               FitValWriterInfo(kLamKchP, tFileLocation, tResultsDate, tFitInfoTString_SepR_Fixlam_LinrBgd, 
+                                                                                tLegDesc_SepR_Fixlam_LinrBgd, tColorLamKchP, 25, tMarkerSize), 
+                                                               FitValWriterInfo(kLamKchM, tFileLocation, tResultsDate, tFitInfoTString_SepR_Fixlam_PolyBgd, 
+                                                                                tLegDesc_SepR_Fixlam_PolyBgd, tColorLamKchM, 24, tMarkerSize), 
+                                                               FitValWriterInfo(kLamKchM, tFileLocation, tResultsDate, tFitInfoTString_SepR_Fixlam_LinrBgd, 
+                                                                                tLegDesc_SepR_Fixlam_LinrBgd, tColorLamKchM, 25, tMarkerSize)};
 
   vector<FitValWriterInfo> tFVWIVec_FreevsFixlam_SepR_PolyBgd = {tFVWI_SepR_Sharelam_PolyBgd_LamKchP, 
                                                                  tFVWI_SepR_Sharelam_PolyBgd_LamKchM,
@@ -357,6 +370,8 @@ _MomResCrctn_3Res_PrimMaxDecay4fm_UsingXiDataAndCoulombOnly_StavCf_FixAllLambdaT
                                                                  FitValWriterInfo(kLamKchM, tFileLocation, tResultsDate, tFitInfoTString_SepR_Fixlam_StavCf_NoBgd, 
                                                                                   tLegDesc_SepR_Fixlam_StavCf_NoBgd, tColorLamKchM, 24, tMarkerSize)};
 
+//-----------------------------------------------------------------
+
   vector<FitValWriterInfo> tFVWIVec_FreevsFixlam_ShareR = {tFVWI_ShareR_Sharelam_PolyBgd_LamKchP, tFVWI_ShareR_Sharelam_LinrBgd_LamKchP, tFVWI_ShareR_Sharelam_StavCf_NoBgd_LamKchP,
                                                            tFVWI_ShareR_Sharelam_PolyBgd_LamKchM, tFVWI_ShareR_Sharelam_LinrBgd_LamKchM, tFVWI_ShareR_Sharelam_StavCf_NoBgd_LamKchM,
                                                            FitValWriterInfo(kLamKchP, tFileLocation, tResultsDate, tFitInfoTString_ShareR_Fixlam_PolyBgd, 
@@ -371,6 +386,17 @@ _MomResCrctn_3Res_PrimMaxDecay4fm_UsingXiDataAndCoulombOnly_StavCf_FixAllLambdaT
                                                                             tLegDesc_ShareR_Fixlam_LinrBgd, tColorLamKchM, 25, tMarkerSize), 
                                                            FitValWriterInfo(kLamKchM, tFileLocation, tResultsDate, tFitInfoTString_ShareR_Fixlam_StavCf_NoBgd, 
                                                                             tLegDesc_ShareR_Fixlam_StavCf_NoBgd, tColorLamKchM, 28, tMarkerSize)};
+
+  vector<FitValWriterInfo> tFVWIVec_FreevsFixlam_ShareR_NoStav = {tFVWI_ShareR_Sharelam_PolyBgd_LamKchP, tFVWI_ShareR_Sharelam_LinrBgd_LamKchP,
+                                                                  tFVWI_ShareR_Sharelam_PolyBgd_LamKchM, tFVWI_ShareR_Sharelam_LinrBgd_LamKchM,
+                                                                  FitValWriterInfo(kLamKchP, tFileLocation, tResultsDate, tFitInfoTString_ShareR_Fixlam_PolyBgd, 
+                                                                                   tLegDesc_ShareR_Fixlam_PolyBgd, tColorLamKchP, 24, tMarkerSize), 
+                                                                  FitValWriterInfo(kLamKchP, tFileLocation, tResultsDate, tFitInfoTString_ShareR_Fixlam_LinrBgd, 
+                                                                                   tLegDesc_ShareR_Fixlam_LinrBgd, tColorLamKchP, 25, tMarkerSize), 
+                                                                  FitValWriterInfo(kLamKchM, tFileLocation, tResultsDate, tFitInfoTString_ShareR_Fixlam_PolyBgd, 
+                                                                                   tLegDesc_ShareR_Fixlam_PolyBgd, tColorLamKchM, 24, tMarkerSize), 
+                                                                  FitValWriterInfo(kLamKchM, tFileLocation, tResultsDate, tFitInfoTString_ShareR_Fixlam_LinrBgd, 
+                                                                                   tLegDesc_ShareR_Fixlam_LinrBgd, tColorLamKchM, 25, tMarkerSize)};
 
   vector<FitValWriterInfo> tFVWIVec_FreevsFixlam_ShareR_PolyBgd = {tFVWI_ShareR_Sharelam_PolyBgd_LamKchP,
                                                                    tFVWI_ShareR_Sharelam_PolyBgd_LamKchM,

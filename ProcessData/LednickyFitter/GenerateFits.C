@@ -109,8 +109,8 @@ int main(int argc, char **argv)
   TString tFileLocationBase = TString::Format("%sResults_%s_%s",tDirectoryBase.Data(),tGeneralAnTypeName.Data(),tResultsDate.Data());
   TString tFileLocationBaseMC = TString::Format("%sResults_%sMC_%s",tDirectoryBase.Data(),tGeneralAnTypeName.Data(),tResultsDate.Data());
 
-  TString tSaveDirectoryBase = TString::Format("/home/jesse/Analysis/Presentations/AliFemto/20180627/Figures/Fits/%s/", cAnalysisBaseTags[tAnType]);
-//  TString tSaveDirectoryBase = tDirectoryBase;
+//  TString tSaveDirectoryBase = TString::Format("/home/jesse/Analysis/Presentations/AliFemto/20180627/Figures/Fits/%s/", cAnalysisBaseTags[tAnType]);
+  TString tSaveDirectoryBase = tDirectoryBase;
 
   TString tLocationMasterFitResults = TString::Format("%sMasterFitResults_%s.txt", tDirectoryBase.Data(), tResultsDate.Data());
 
@@ -229,7 +229,7 @@ int main(int argc, char **argv)
 
       tCanPrimwFitsAndResidual = tLamKchP->DrawKStarCfswFitsAndResiduals(ApplyMomResCorrection,ApplyNonFlatBackgroundCorrection,tNonFlatBgdFitType,SaveImages,bDrawSysErrs,bZoomROP,aZoomResiduals);
 
-//      tAllResWithTransMatrices = tLamKchP->DrawAllResidualsWithTransformMatrices(SaveImages);
+      tAllResWithTransMatrices = tLamKchP->DrawAllResidualsWithTransformMatrices(SaveImages);
 
       bool bDrawData = false;
 

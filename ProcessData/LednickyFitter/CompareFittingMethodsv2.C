@@ -592,8 +592,13 @@ int main(int argc, char **argv)
 //  tFVWIVec = tFVWIVec_SharevsSepR;
 //  tCanNameMod = TString("_SharevsSepR");
 
+//---------------------------------------------------------------------
+
 //  tFVWIVec = tFVWIVec_FreevsFixlam_SepR;
 //  tCanNameMod = TString("_FreevsFixlam_SepR");
+
+//  tFVWIVec = tFVWIVec_FreevsFixlam_SepR_NoStav;
+//  tCanNameMod = TString("_FreevsFixlam_SepR_NoStav");
 
 //  tFVWIVec = tFVWIVec_FreevsFixlam_SepR_PolyBgd;
 //  tCanNameMod = TString("_FreevsFixlam_SepR_PolyBgd");
@@ -604,8 +609,13 @@ int main(int argc, char **argv)
 //  tFVWIVec = tFVWIVec_FreevsFixlam_SepR_StavCf_NoBgd;
 //  tCanNameMod = TString("_FreevsFixlam_SepR_StavCf_NoBgd");
 
+//---------------------------------------------------------------------
+
 //  tFVWIVec = tFVWIVec_FreevsFixlam_ShareR;
 //  tCanNameMod = TString("_FreevsFixlam_ShareR");
+
+//  tFVWIVec = tFVWIVec_FreevsFixlam_ShareR_NoStav;
+//  tCanNameMod = TString("_FreevsFixlam_ShareR_NoStav");
 
 //  tFVWIVec = tFVWIVec_FreevsFixlam_ShareR_PolyBgd;
 //  tCanNameMod = TString("_FreevsFixlam_ShareR_PolyBgd");

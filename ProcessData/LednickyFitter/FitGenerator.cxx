@@ -800,7 +800,9 @@ void FitGenerator::FindGoodInitialValues(bool aApplyMomResCorrection, bool aAppl
 //________________________________________________________________________________________________________________
 void FitGenerator::SetSaveLocationBase(TString aBase, TString aSaveNameModifier)
 {
-  fSaveLocationBase=aBase;
+//  fSaveLocationBase=aBase;
+  fSaveLocationBase = TString::Format("%s%s/", aBase.Data(), aSaveNameModifier.Data());
+  gSystem->mkdir(fSaveLocationBase, true);
   if(!aSaveNameModifier.IsNull()) fSaveNameModifier = aSaveNameModifier;
 }
 
