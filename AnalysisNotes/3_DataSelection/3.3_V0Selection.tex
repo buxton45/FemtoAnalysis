@@ -9,6 +9,22 @@ This process is illustrated in Figure \ref{fig:V0Reconstruction}.
 In general, particles which are topologically reconstructed in this fashion are called V0 particles.
 The class AliFemtoV0TrackCutNSigmaFilter (which is an extension of AliFemtoV0TrackCut) is used to reconstruct the V0s.
 
+\begin{comment}
+\begin{wrapfigure}{L}{0.50\textwidth}
+  \includegraphics[width=0.9\linewidth]{3_DataSelection/Figures/V0CutsGeneral.pdf} 
+  \caption[V0 Reconstruction]{V0 Reconstruction}
+  \label{fig:V0Reconstruction}
+\end{wrapfigure}
+\end{comment}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.5\textwidth]{3_DataSelection/Figures/V0CutsGeneral.pdf}
+  \caption[V0 Reconstruction]{V0 Reconstruction}
+  \label{fig:V0Reconstruction}
+\end{figure}
+
+
 In order to obtain a true and reliable signal, one must ensure good purity of the V0 collection.  The purity of the collection is calculated as:
 
 \begin{equation}
@@ -21,13 +37,6 @@ Examples of such distribtions can be found in Figures \ref{fig:cLamPurity} and \
 It is vital that this distribution be constructed immediately before the final $m_{\mathrm{inv}}$ cut, otherwise it would be impossible to estimate the background.
 As shown in Figures \ref{fig:cLamPurity} and \ref{fig:K0Purity}, the background is fit (with a polynomial) outside of the peak region of interest to obtain an estimate for the background within the region.
 Within the $m_{\mathrm{inv}}$ cut limits, the background is the region below the fit while the signal is the region above the fit.
-
-\begin{figure}[h]
-  \centering
-  \includegraphics[width=0.5\textwidth]{3_DataSelection/Figures/V0CutsGeneral.pdf}
-  \caption[V0 Reconstruction]{V0 Reconstruction}
-  \label{fig:V0Reconstruction}
-\end{figure}
 
 \subfile{3_DataSelection/3.3.1_LambdaReconstruction.tex}
 \subfile{3_DataSelection/3.3.2_K0sReconstruction.tex}
