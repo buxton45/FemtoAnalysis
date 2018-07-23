@@ -1,0 +1,69 @@
+\providecommand{\href}[2]{#2}\begingroup\raggedright\begin{thebibliography}{1}
+
+\bibitem{Lisa:2005dd}
+M.~A. Lisa, S.~Pratt, R.~Soltz, and U.~Wiedemann, ``{Femtoscopy in relativistic
+  heavy ion collisions},''
+  \href{http://dx.doi.org/10.1146/annurev.nucl.55.090704.151533}{{\em Ann. Rev.
+  Nucl. Part. Sci.} {\bfseries 55} (2005) 357--402},
+\href{http://arxiv.org/abs/nucl-ex/0505014}{{\ttfamily arXiv:nucl-ex/0505014
+  [nucl-ex]}}.
+%%CITATION = NUCL-EX/0505014;%%.
+
+\bibitem{Koonin:1977fh}
+S.~E. Koonin, ``{Proton Pictures of High-Energy Nuclear Collisions},''
+\href{http://dx.doi.org/10.1016/0370-2693(77)90340-9}{{\em Phys. Lett.}
+  {\bfseries B70} (1977) 43--47}.
+%%CITATION = PHLTA,B70,43;%%.
+
+\bibitem{Pratt:1990zq}
+S.~Pratt, T.~Csorgo, and J.~Zimanyi, ``{Detailed predictions for two pion
+  correlations in ultrarelativistic heavy ion collisions},''
+\href{http://dx.doi.org/10.1103/PhysRevC.42.2646}{{\em Phys. Rev.} {\bfseries
+  C42} (1990) 2646--2652}.
+%%CITATION = PHRVA,C42,2646;%%.
+
+\bibitem{Lednicky:2005tb}
+R.~Lednicky, ``{Finite-size effects on two-particle production in continuous
+  and discrete spectrum},''
+  \href{http://dx.doi.org/10.1134/S1063779609030034}{{\em Phys. Part. Nucl.}
+  {\bfseries 40} (2009) 307--352},
+\href{http://arxiv.org/abs/nucl-th/0501065}{{\ttfamily arXiv:nucl-th/0501065
+  [nucl-th]}}.
+%%CITATION = NUCL-TH/0501065;%%.
+
+\bibitem{Kisiel:2014mma}
+A.~Kisiel, H.~Zbroszczyk, and M.~Szymański, ``{Extracting baryon-antibaryon
+  strong interaction potentials from p$\bar{\Lambda}$ femtoscopic correlation
+  functions},'' \href{http://dx.doi.org/10.1103/PhysRevC.89.054916}{{\em Phys.
+  Rev.} {\bfseries C89} no.~5, (2014) 054916},
+\href{http://arxiv.org/abs/1403.0433}{{\ttfamily arXiv:1403.0433 [nucl-th]}}.
+%%CITATION = ARXIV:1403.0433;%%.
+
+\bibitem{Salzwedel:2241303}
+J.~Salzwedel and T.~Humanic, ``{Lambda femtoscopy in $\sqrt{s_{NN}}=2.76$ TeV
+  Pb-Pb collisions at ALICE},'' Jan, 2017.
+\newblock \url{http://cds.cern.ch/record/2241303}. Presented 15 Dec 2016.
+
+\bibitem{Kisiel:2017}
+A.~Kisiel, ``Non-identical particle correlation analysis in the presence of
+  non-femtoscopic correlations,''
+  \href{http://dx.doi.org/10.5506/APhysPolB.48.717}{{\em Acta Physica Polonica
+  B} {\bfseries 48} (04, 2017) 717}.
+
+\bibitem{Liu:2006xja}
+Y.-R. Liu and S.-L. Zhu, ``{Meson-baryon scattering lengths in HB chi PT},''
+  \href{http://dx.doi.org/10.1103/PhysRevD.75.034003}{{\em Phys. Rev.}
+  {\bfseries D75} (2007) 034003},
+\href{http://arxiv.org/abs/hep-ph/0607100}{{\ttfamily arXiv:hep-ph/0607100
+  [hep-ph]}}.
+%%CITATION = HEP-PH/0607100;%%.
+
+\bibitem{Mai:2009ce}
+M.~Mai, P.~C. Bruns, B.~Kubis, and U.-G. Meissner, ``{Aspects of meson-baryon
+  scattering in three and two-flavor chiral perturbation theory},''
+  \href{http://dx.doi.org/10.1103/PhysRevD.80.094006}{{\em Phys. Rev.}
+  {\bfseries D80} (2009) 094006},
+\href{http://arxiv.org/abs/0905.2810}{{\ttfamily arXiv:0905.2810 [hep-ph]}}.
+%%CITATION = ARXIV:0905.2810;%%.
+
+\end{thebibliography}\endgroup

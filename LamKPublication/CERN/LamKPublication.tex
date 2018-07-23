@@ -72,7 +72,16 @@ We present our femtoscopy analysis of \LamK correlations in Pb-Pb collisions at 
 
 \section{Introduction}
 \label{sec:Introduction}
-This is where the introduction goes.
+What is femtoscopy?
+Sensitive to QS, strong and Coulomb.
+Source sizes (traditional).
+Interaction, i.e. scattering parameters (new, interesting).
+mT-scaling, signature of hydrodynamic flow in heavy-ion collisions.  Decrease in source radii with increasing transverse mass.  Signature of deconfined quark matter.
+Motivation for comparing studies with different particle species, and for \LamK in particular.
+
+This paper presents...
+
+The organization of this paper is as follow...
 
 \section{Data Analysis}
 \label{sec:DataAnalysis}
@@ -100,42 +109,56 @@ In general, particles which are topologically reconstructed in this fashion are 
   \label{fig:V0Reconstruction}
 \end{figure}
 
-In order to obtain a true and reliable signal, one must ensure good purity of the V0 collection.  The purity of the collection is calculated as:
+The decay channel \Lam $\rightarrow$ p$\pi^{-}$ (\ALam $\rightarrow$ $\bar{\mathrm{p}}\pi^{+}$) was used for the identification of \LamALam candidates, and \Ks $\rightarrow$ $\pi^{+}\pi^{-}$ for the identification of neutral kaon candidates.
+Main cuts shown in Tables \ref{tab:LamCuts} and \ref{tab:K0sCuts}.
+PID for pion daughters using both TPC (what momenta?) and TOF (what momenta?).
+Figure \ref{fig:Purity:b} shows $\pi^{+}\pi^{-}$ invariant mass distribution showing \Ks peak.
 
-\begin{equation}
- Purity = \frac{Signal}{Signal + Background}
-\label{eqn:Purity}
-\end{equation}
-
-To obtain both the signal and background, the invariant mass distribution (\minv) of all V0 candidates must be constructed immediately before the final invariant mass cut.
-Examples of such distribtions can be found in Figure \ref{fig:Purity}].
-It is vital that this distribution be constructed immediately before the final \minv cut, otherwise it would be impossible to estimate the background.
-As shown in Figure \ref{fig:Purity}, the background is fit (with a polynomial) outside of the peak region of interest to obtain an estimate for the backfround within the region.
-Within the \minv cut limits, the background is the region below the fit while the signal is the region above the fit.
-
-
-\begin{figure}[htp]
-  \centering
-  %%----start of first subfigure---
-  \subfigure[Extracted scattering parameter results, Im(f$_{0}$) vs. Re(f$_{0}$), with d$_{0}$ to the right, for all of our $\Lambda$K systems.]{
-    \label{fig:Purity:a}
-    \includegraphics[width=0.49\linewidth]{/home/jesse/Analysis/FemtoAnalysis/LamKPublication/Figures/PDF/LamPurity_LamK0.pdf}}
-  %%----start of second subfigure---  
-  \subfigure[Extracted $\lambda$ vs Radius results, for the 0-10\% centrality bin, for all of our \LamKchP systems.]{
-    \label{fig:Purity:b}
-    \includegraphics[width=0.49\linewidth]{/home/jesse/Analysis/FemtoAnalysis/LamKPublication/Figures/PDF/K0Purity_LamK0.pdf}}
-  %%----overall caption----
-  \caption{Invariant mass (m$_{\mathrm{inv}}$) distribution of all \Lam \ref{fig:Purity:a} and \Ks \ref{fig:Purity:b} candidates immediately before the final invariant mass cut.  The bottom figures are zoomed to show the background with fit.  The vertical green lines represent the m$_{\mathrm{inv}}$ cuts used in the analyses, the red vertical lines delineate the region over which the background was fit, and the blue line shows the background fit.  These distributions (or similar, for \ALam) are used to calculate the collection purities, Purity(\Lam) $\approx$ Purity(\ALam) $\approx$ 95\%, and Purity(\Ks) $\approx$ 98\%.}  
-  \label{fig:Purity}
-\end{figure}
+Figure \ref{fig:Purity} shows the invariant mass (m$_{\mathrm{inv}}$) distribution of all \Lam and \Ks candidates (in the 0-10\% centrality bin) immediately before the final invariant mass cut.
+These distributions (and similar for \ALam) are used to calculate the collections' purities (defined in Eq. \ref{eqn:Purity}).
+The \Lam and \ALam purities was found to be $\approx$ 95\%.
+The neutral kaon purity was found to be $\approx$ 98\%.
 
 
 
+Shared daughter cut iterates through V0 collection to ensure that no daughter is used in more than one V0 candidate.
 
+On occasion, \LamALam particles are misidentified as \Ks, and vice versa.  To attempt to remove these contaminations without throwing away good candidates, we impose a set of misidentification cuts.  The intent of these cuts is to judge whether a candidate is more likely a \LamALam or a \Ks.  
 
-\subsubsection{$\Lambda$ selection}
-\label{sec:LambdaSelection}
-The following cuts were used to select good \LamALam candidates: 
+For a given V0, we calculate the mass assuming different identities (\Lam, \ALam, \Ks); the mass assuming \Ks hypothesis ($m_{\mathrm{inv,~ K^{0}_{S}~ Hypothesis}}$) is calculated assuming both of the daughters are pions, the mass assuming \Lam hypothesis ($m_{\mathrm{inv,~ \Lambda~ Hypothesis}}$) is calculated assuming the positive daughter is a proton and the negative daughter a pion, and the mass assuming \ALam hypothesis ($m_{\mathrm{inv,~ \bar{\Lambda}~ Hypothesis}}$) is calculated assuming the positive daughter is a pion and the negative an anti-proton.  In addition to the notation just introduced, in the following, $m_{\mathrm{PDG,~ K^{0}_{S}}}$ and $m_{\mathrm{PDG,~ \Lambda(\bar{\Lambda})}}$ denote the particle masses of the \Ks and \LamALam, respectively, as recorded by the Particle Data Group.
+
+ For \LamALam selection, a candidate is rejected if all of the following criteria are satisfied:
+
+\begin{enumerate}
+ \item $\left|m_{\mathrm{inv,~ K^{0}_{S}~ Hypothesis}} - m_{\mathrm{PDG,~ K^{0}_{S}}}\right| < $ 9.0 MeV/c$^{2}$
+ \item Daughter particles pass daughter cuts intended for \Ks reconstruction
+ \begin{enumerate}
+  \item \Lam selection
+  \begin{enumerate}
+   \item p daughter passes $\pi^{+}$ cuts intended for \Ks reconstruction
+   \item $\pi^{-}$ daughter passes $\pi^{-}$ cuts intended for \Ks reconstruction.
+  \end{enumerate}
+  \item \ALam selection
+  \begin{enumerate}
+   \item $\pi^{+}$ daughter passes $\pi^{+}$ cuts intended for \Ks reconstruction
+   \item $\bar{\mathrm{p}}$ daughter passes $\pi^{-}$ cuts intended for \Ks reconstruction.
+  \end{enumerate}  
+ \end{enumerate}
+ \item $\left|m_{\mathrm{inv,~ K^{0}_{S}~ Hypothesis}} - m_{\mathrm{PDG,~ K^{0}_{S}}}\right|~ < ~\left|m_{\mathrm{inv,~ \Lambda(\bar{\Lambda})~ Hypothesis}} - m_{\mathrm{PDG,~ \Lambda(\bar{\Lambda})}}\right|$
+\end{enumerate} 
+
+For \Ks selection, a candidate is rejected if all of the following criteria are satisfied for the \Lam case, or for the \ALam case:
+
+\begin{enumerate}
+ \item $\left|m_{\mathrm{inv}, \ \Lambda(\bar{\Lambda}) \ \mathrm{Hypothesis}} - m_{\mathrm{PDG},\ \Lambda(\bar{\Lambda})}\right| < $ 9.0 MeV/$c^{2}$
+ \item Daughter particles pass daughter cuts intended for \LamALam reconstruction
+ \begin{enumerate}
+  \item $\pi^{+}$ daughter passes p($\pi^{+}$) daughter cut intended for \LamALam reconstruction
+  \item $\pi^{-}$ daughter passes $\pi^{-}$($\bar{\mathrm{p}}$)
+ \end{enumerate}
+ \item $\left|m_{\mathrm{inv}, \ \Lambda(\bar{\Lambda}) \ \mathrm{Hypothesis}} - m_{\mathrm{PDG},\ \Lambda(\bar{\Lambda})}\right|~ < ~\left|m_{\mathrm{inv},~ \mathrm{K}^{0}_{S}~ \mathrm{Hypothesis}} - m_{\mathrm{PDG},~ \mathrm{K}^{0}_{S}}\right|$
+\end{enumerate} 
+
 
 
 \begin{table}[htbp]
@@ -214,26 +237,6 @@ The following cuts were used to select good \LamALam candidates:
 \end{table}
 
 
-Shared daughter cut iterates through V0 collection to ensure that no daughter is used in more than one V0 candidate.
-
-To attempt to remove these \Ks contaminations without throwing away good \Lam and \ALam particles, the following misidentification cuts are imposed; a \LamALam candidate is rejected if all of the following criteria are satisfied:
-\begin{itemize}
- \item $\left|m_{\mathrm{inv,~ K^{0}_{S}~ Hypothesis}} - m_{\mathrm{PDG,~ K^{0}_{S}}}\right| < $ 9.0 MeV/c$^{2}$
- \item Positive and negative daughters pass $\pi$ daughter cut implemented for \Ks reconstruction
- \item $\left|m_{\mathrm{inv,~ K^{0}_{S}~ Hypothesis}} - m_{\mathrm{PDG,~ K^{0}_{S}}}\right|~ < ~\left|m_{\mathrm{inv,~ \Lambda(\bar{\Lambda})~ Hypothesis}} - m_{\mathrm{PDG,~ \Lambda(\bar{\Lambda})}}\right|$
-\end{itemize} 
-
-
-Figure \ref{fig:Purity:a} shows the invariant mass (m$_{\mathrm{inv}}$) distribution of all \Lam candidates immediately before the final invariant mass cut.
-This distribution (and similar for \ALam) is used to calculate the collection purity.
-The \Lam and \ALam purities are found to be: Purity(\Lam) $\approx$ Purity(\ALam) $\approx$ 95\%.
-
-
-\subsubsection{K$^{0}_{\mathrm{S}}$ selection}
-\label{sec:K0sSelection}
-The following cuts were used to select good \Ks candidates:
-
-
 
 \begin{table}[htbp]
  \centering
@@ -246,7 +249,7 @@ The following cuts were used to select good \Ks candidates:
    \hline
    \multicolumn{3}{l|}{$p_{\mathrm{T}}$} & $> 0.2$ GeV/\textit{c} \\
    \hline
-   \multicolumn{4}{l|}{$m_{PDG}-13.677 \ \mathrm{MeV} < m_{\mathrm{inv}} < m_{\mathrm{PDG}} + 2.0323 \ \mathrm{MeV}$} \\ 
+   \multicolumn{4}{l}{$m_{PDG}-13.677 \ \mathrm{MeV} < m_{\mathrm{inv}} < m_{\mathrm{PDG}} + 2.0323 \ \mathrm{MeV}$} \\ 
    \hline
    \multicolumn{3}{l|}{DCA to prim. vertex} & $<$ 0.3 cm \\
    \hline
@@ -290,20 +293,42 @@ The following cuts were used to select good \Ks candidates:
  \label{tab:K0sCuts} 
 \end{table}
 
+In order to obtain a true and reliable signal, one must ensure good purity of the V0 collection.  The purity of the collection is calculated as:
 
-To attempt to remove these \Lam and \ALam contaminations without throwing away good \Ks particles, the following misidentification cuts are imposed; a \Ks candidate is rejected if all of the following criteria are satisfied (for either \Lam or \ALam hypothesis):
-\begin{itemize}
- \item $\left|m_{\mathrm{inv}, \ \Lambda(\bar{\Lambda}) \ \mathrm{Hypothesis}} - m_{\mathrm{PDG},\ \Lambda(\bar{\Lambda})}\right| < $ 9.0 MeV/$c^{2}$
- \item Positive daughter passes $p^{+}$($\pi^{+}$) daughter cut implemented for $\Lambda$($\bar{\Lambda}$) reconstruction
- \item Negative daughter passes $\pi^{-}$($\bar{p}^{-}$) daughter cut implemented by $\Lambda$($\bar{\Lambda}$) reconstruction
- \item $\left|m_{\mathrm{inv}, \ \Lambda(\bar{\Lambda}) \ \mathrm{Hypothesis}} - m_{\mathrm{PDG},\ \Lambda(\bar{\Lambda})}\right|~ < ~\left|m_{\mathrm{inv},~ \mathrm{K}^{0}_{S}~ \mathrm{Hypothesis}} - m_{\mathrm{PDG},~ \mathrm{K}^{0}_{S}}\right|$
-\end{itemize} 
+\begin{equation}
+ Purity = \frac{Signal}{Signal + Background}
+\label{eqn:Purity}
+\end{equation}
+
+To obtain both the signal and background, the invariant mass distribution (\minv) of all V0 candidates must be constructed immediately before the final invariant mass cut.
+Examples of such distributions can be found in Figure \ref{fig:Purity}].
+It is vital that this distribution be constructed immediately before the final \minv cut, otherwise it would be impossible to estimate the background.
+As shown in Figure \ref{fig:Purity}, the background is fit (with a polynomial) outside of the peak region of interest to obtain an estimate for the background within the region.
+Within the \minv cut limits, the background is the region below the fit while the signal is the region above the fit.
+
+
+\begin{figure}[htp]
+  \centering
+  %%----start of first subfigure---
+  \subfigure[p$\pi^{-}$ invariant mass distribution where the \Lam peak is seen.]{
+    \label{fig:Purity:a}
+    \includegraphics[width=0.49\linewidth]{/home/jesse/Analysis/FemtoAnalysis/LamKPublication/Figures/PDF/LamPurity_LamK0.pdf}}
+  %%----start of second subfigure---  
+  \subfigure[$\pi^{+}\pi^{-}$ invariant mass distribution where the \Ks peak is seen.]{
+    \label{fig:Purity:b}
+    \includegraphics[width=0.49\linewidth]{/home/jesse/Analysis/FemtoAnalysis/LamKPublication/Figures/PDF/K0Purity_LamK0.pdf}}
+  %%----overall caption----
+  \caption{Invariant mass (m$_{\mathrm{inv}}$) distribution of all \Lam \ref{fig:Purity:a} and \Ks \ref{fig:Purity:b} candidates immediately before the final invariant mass cut.  The bottom figures are zoomed to show the background with fit.  The vertical green lines represent the m$_{\mathrm{inv}}$ cuts used in the analyses, the red vertical lines delineate the region over which the background was fit, and the blue line shows the background fit.  These distributions (or similar, for \ALam) are used to calculate the collection purities, Purity(\Lam) $\approx$ Purity(\ALam) $\approx$ 95\%, and Purity(\Ks) $\approx$ 98\%.}  
+  \label{fig:Purity}
+\end{figure}
 
 
 
 \subsection{K$^{\pm}$ selection}
 \label{sec:KchSelection}
-This is how we select \Kpm candidates.
+The single-particle selection criteria used to select charged kaon candidates are summarized in Table \ref{tab:KchCuts}.
+\Kpm identification utilized both TPC (what momenta?) and TOF (what momenta?).
+Figure \ref{fig:KchPdEdx} shows d$E$/d$x$.
 
 \begin{figure}[h]
  \centering
@@ -312,14 +337,12 @@ This is how we select \Kpm candidates.
 automatically numbered.}
 \end{figure}
 
-Charged kaons are identified using the AliFemtoESDTrackCutNSigmaFilter class.  The specific cuts used in this analysis are as follows:
-
 \begin{table}[htbp]
  \centering
 %  \renewcommand{\arraystretch}{1.5}
   \begin{tabular}{lc|c|l}
    \hline  
-   \multicolumn{4}{c}{\Kpm selection} \\
+   \multicolumn{4}{c}{\textbf{\Kpm selection}} \\
    \hline
    \multicolumn{3}{l|}{$|\eta|$} & $< 0.8$ \\
    \hline
@@ -398,56 +421,19 @@ The purity of the \Kpm collections was estimated using the MC data, for which th
 
 Purity(\KchP) $\approx$ Purity(\KchM) $\approx$ 97\%
 
-Stuff can also be seen in \ref{fig:KchPdEdx}
-
 
 \subsection{Pair Selection}
 \label{PairSelection}
+I suppose I should probably briefly explain how pairs are formed?
 
-It is important to obtain true particle pairs in the analysis.  In particular, contamination from pairs constructed with split or merged tracks, and pairs sharing daughters, can introduce an artificial signal into the correlation function, obscuring the actual physics.
+It is important to obtain true particle pairs in the analysis.  In particular, contamination from pairs constructed with split or merged tracks, and pairs sharing daughters, can introduce an artificial signal into the correlation function, obscuring the actual physics.  In an effort to remove contamination, we impose two main two-particle cuts: a shared daughter cut, and an average separation cut.  
 
-\begin{enumerate}
- \item Shared Daughter Cut for Pairs
- \begin{enumerate}
-  \item V0-V0 Pairs (i.e. \LamALamKs analyses)
-  \begin{itemize}
-   \item Remove all pairs which share a daughter 
-   \begin{itemize}
-    \item Ex. \Lam and \Ks particles which share a $\pi^{-}$ daughter are not included
-   \end{itemize} 
-  \end{itemize}
-  \item V0-Track Pairs (i.e. \LamALamKpm analyses)
-  \begin{itemize}
-   \item Remove pairs if Track is also used as a daughter of the V0
-   \begin{itemize}
-    \item In these analyses, this could only occur if, for instance, a \Kpm is misidentified as a $\pi$ or $p$ in the V0 reconstruction
-   \end{itemize}
-  \end{itemize}  
- \end{enumerate}
- \item Average Separation Cuts
- \begin{itemize}
-  \item Used to cut out splitting and merging effects
-  \item The motivation for these cuts can be seen in Figures \ref{fig:AvgSepLamK0}, \ref{fig:AvgSepLamKch}, and \ref{fig:AvgSepXiKch}, in which average separation correlation functions are presented
- \end{itemize}
- \begin{enumerate}
-  \item \LamALamKs Analyses
-  \begin{itemize}
-   \item Average separation $>$ 6.0 cm for like charge sign daughters
-   \begin{itemize}
-    \item ex. $p$ daughter of $\Lambda$ and $\pi^{+}$ daughter of K$^{0}_{S}$
-   \end{itemize}
-   \item No cut for unlike-sign daughters
-  \end{itemize}
-  \item \LamALamKpm Analyses
-  \begin{itemize}
-   \item Average Separation $>$ 8.0 cm for daughter of $\Lambda$($\bar{\Lambda}$) sharing charge sign of K$^{\pm}$
-   \begin{itemize}
-    \item ex. in $\Lambda$K$^{+}$ analysis, $p$ daughter of $\Lambda$ with K$^{+}$
-   \end{itemize}
-   \item No cut for unlike signs
-  \end{itemize}   
- \end{enumerate}
-\end{enumerate}
+The purpose of the shared daughter cut is to ensure the first particle in the pair is unique from the second.  For pairs formed of two V0s (i.e. \LamKs), this cut is implemented by removing all pairs which share a daughter (ex. in \LamKs analysis, if the \Lam and \Ks in a potential pair claim the same $\pi^{-}$ daughter, the pair is excluded from the analysis).  For a pair formed of a single V0 and a charged track (i.e. \LamKpm), the cut removes all pairs in which the charged track is also claimed as a daughter of the V0.  This mistake could only occur if, for instance, a \Kpm is misidentified as a $\pi$ or p either in the V0 reconstruction or in the \Kpm selection.
+
+The purpose of the average separation cut in to remove splitting and merging effects.  How do we estimate the cut values?  How do we implement the cut?
+
+For the \LamALamKs analysis, the average separation for like-charge daughters must be greater than 6.0 cm.  We enforce no cut for unlike-charge daughters.  For example, we impose this cut in a \LamKs analysis on the p daughter of the \Lam and the $\pi^{+}$ daughter of the \Ks.  For the \LamKpm analyses, the average separation between the \LamALam daughter (sharing the same charge as the \Kpm) and the \Kpm is 8.0 cm.  We enforce no cut for unlike signs.  For a \LamKchP analysis, we impose this cut between the p daughter of the \Lam and the \KchP in the pair.
+
 
 
 
@@ -490,7 +476,7 @@ The correlation functions are constructed separately for the two magnetic field 
 where the sum runs over the correlation functions to be combined, and the weight, $w_{i}$, is the number of numerator pairs in $C_{i}(k^{*})$.
 Here, the sum is over the two field configurations.
 
-Figures \ref{fig:cLamK0Cfs}, \ref{fig:LamKchPwConjCfs}, and \ref{fig:LamKchMwConjCfs} show the correlation functions for all centalities studied for \LamKsALamKs, \LamKchPALamKchM, and \LamKchMALamKchP, respectively. All were normalized in the range 0.32 $< k^{*} < $ 0.4 GeV/$c$.
+Figures \ref{fig:LamKFits_3Res:a}, \ref{fig:LamKFits_3Res:b}, and \ref{fig:LamKFits_3Res:c} show the correlation functions for all centalities studied for \LamKchPALamKchM, \LamKchMALamKchP, and \LamKsALamKs, respectively. All were normalized in the range 0.32 $< k^{*} < $ 0.4 GeV/$c$.
 
 
 \subsection{Fit Function}
@@ -594,8 +580,8 @@ Information gained from looking at $k^{*}_{Rec}$ vs $k^{*}_{True}$ can be used t
 
 
 
-A second approach is to use information gained from plots like those in Figure \ref{fig:TrueVsRecLamKchP}, which can be considered response matrices.
-The reponse matrix describes quantitatively how each $k^{*}_{Rec}$ bin receives contributions from multiple $k^{*}_{True}$ bins, and can be used to account for the effects of finite momentum resolution.
+A second approach is to use information gained from response matrices.
+The response matrix describes quantitatively how each $k^{*}_{Rec}$ bin receives contributions from multiple $k^{*}_{True}$ bins, and can be used to account for the effects of finite momentum resolution.
 With this approach, the resolution correction is applied on-the-fly during the fitting process by propagating the theoretical (fit) correlation function through the response matrix, according to:  
 
 \begin{equation}
@@ -603,7 +589,7 @@ With this approach, the resolution correction is applied on-the-fly during the f
 \label{eqn:MomResCorrection}
 \end{equation}
 
-where $M_{k^{*}_{Rec},k^{*}_{True}}$ is the response matrix (Figure \ref{fig:TrueVsRecLamKchP}), $C_{fit}(k^{*}_{True})$ is the fit binned in $k^{*}_{True}$, and the denominator normalizes the result.
+where $M_{k^{*}_{Rec},k^{*}_{True}}$ is the response matrix, $C_{fit}(k^{*}_{True})$ is the fit binned in $k^{*}_{True}$, and the denominator normalizes the result.
 
 Equation \ref{eqn:MomResCorrection} describes that, for a given $k^{*}_{Rec}$ bin, the observed value of $C(k^{*}_{Rec})$ is a weighted average of all $C(k^{*}_{True})$ values, where the weights are the normalized number of counts in the [$k^{*}_{Rec}$, $k^{*}_{True}$] bin.
 
@@ -984,8 +970,8 @@ We did physics, and we found physics.
 \end{acknowledgement}
 
 %%%%%%%% Bibliography (In case of using bibtex generate the bbl requested by arXiv)
-%\bibliographystyle{utphys}   % Remember we use title in the biblio
-%\bibliography{biblio}
+\bibliographystyle{utphys}   % Remember we use title in the biblio
+\bibliography{LamK_bibfile}
 %\input {bibliography.tex}  
 
 %%%%%%%%% appendix with author list

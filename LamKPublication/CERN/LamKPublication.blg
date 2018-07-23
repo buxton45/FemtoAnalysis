@@ -1,0 +1,49 @@
+This is BibTeX, Version 0.99d (TeX Live 2015/Debian)
+Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
+The top-level auxiliary file: LamKPublication.aux
+The style file: utphys.bst
+Database file #1: LamK_bibfile.bib
+Warning--entry type for "Salzwedel:2241303" isn't style-file defined
+--line 101 of file LamK_bibfile.bib
+You've used 9 entries,
+            2328 wiz_defined-function locations,
+            650 strings with 6023 characters,
+and the built_in function-call counts, 3055 in all, are:
+= -- 323
+> -- 78
+< -- 0
++ -- 30
+- -- 21
+* -- 286
+:= -- 350
+add.period$ -- 18
+call.type$ -- 9
+change.case$ -- 13
+chr.to.int$ -- 0
+cite$ -- 9
+duplicate$ -- 167
+empty$ -- 299
+format.name$ -- 21
+if$ -- 805
+int.to.chr$ -- 0
+int.to.str$ -- 9
+missing$ -- 32
+newline$ -- 45
+num.names$ -- 9
+pop$ -- 47
+preamble$ -- 1
+purify$ -- 0
+quote$ -- 0
+skip$ -- 128
+stack$ -- 0
+substring$ -- 154
+swap$ -- 90
+text.length$ -- 0
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 0
+warning$ -- 0
+while$ -- 21
+width$ -- 10
+write$ -- 80
+(There was 1 warning)
