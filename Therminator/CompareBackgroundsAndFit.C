@@ -14,6 +14,23 @@
 #include "ThermCf.h"
 class ThermCf;
 
+#include "SuperpositionFitBgd.h"
+class SuperpositionFitBgd;
+
+
+
+//GLOBAL!!!!!!!!!!!!!!!
+SuperpositionFitBgd *GlobalBgdFitter = NULL;
+
+//______________________________________________________________________________
+void GlobalBgdFCN(Int_t &npar, Double_t *gin, Double_t &f, Double_t *par, Int_t iflag)
+{
+  GlobalBgdFitter->CalculateBgdFitFunction(npar,f,par);
+}
+
+
+
+
 bool gRejectOmega=false;
 //________________________________________________________________________________________________________________
 double FitFunctionPolynomial(double *x, double *par)
@@ -788,24 +805,14 @@ TCanvas* DrawBgdwFitv2(TString aCfDescriptor, TString aFileNameCfs, AnalysisType
   //--------------------------------------------
   ThermCf* tThermCf1 = new ThermCf(aFileNameCfs, aCfDescriptor, aAnType, aCentType, aCombineConjugates, aEventsType, aRebin, aMinNorm, aMaxNorm, aUseStavCf);
   tThermCf1->SetSpecificImpactParam(tImpactParams[0], false);
-  TH1* tCf1 = tThermCf1->GetThermCf(26, kOrange+10, 0.75);
+  TH1D* tCf1 = (TH1D*)tThermCf1->GetThermCf(26, kOrange+10, 0.75);
 
   ThermCf* tThermCf2 = new ThermCf(aFileNameCfs, aCfDescriptor, aAnType, aCentType, aCombineConjugates, aEventsType, aRebin, aMinNorm, aMaxNorm, aUseStavCf);
   tThermCf2->SetSpecificImpactParam(tImpactParams[1], false);
-  TH1* tCf2 = tThermCf2->GetThermCf(32, kOrange-6, 0.75);
+  TH1D* tCf2 = (TH1D*)tThermCf2->GetThermCf(32, kOrange-6, 0.75);
 
   TH1D* tData = GetQuickData(aAnType, aCentType, aCombineConjugates);
   ThermCf::SetStyleAndColor(tData, 20, GetColor(aAnType));
-
-  //--------------------------------------------
-  TH1D* tCfToFitNum = (TH1D*)tData->Clone("tCfToFitNum");
-  tCfToFitNum->Add(tCf2, -1.);
-
-  TH1D* tCfToFitDen = (TH1D*)tCf1->Clone("tCfToFitDen");
-  tCfToFitDen->Add(tCf2, -1.);
-
-  TH1D* tCfToFit = (TH1D*)tCfToFitNum->Clone("tCfToFit");
-  tCfToFit->Divide(tCfToFitDen);
 //-------------------------------------------------------------------------------
   TString tCanBgdwFitName = "BgdwFitOnlyv2";
 
@@ -832,27 +839,25 @@ TCanvas* DrawBgdwFitv2(TString aCfDescriptor, TString aFileNameCfs, AnalysisType
   tData->GetYaxis()->SetRangeUser(0.86, 1.07);
 
   tData->Draw();
-  //---------------------------------------------------------------
-  cout << "**************************************************" << endl;
-  cout << "Fitting to find N1" << endl;
-  TF1 *tN1Fit = TempFit(tCfToFit, 0., 2.);
 
-  double tN1 = tN1Fit->GetParameter(0);
-  double tN2 = 1.-tN1;
-  TH1D* tComboHist = (TH1D*)tCf1->Clone("tComboHist");
-  tComboHist->Scale(tN1);
-  tComboHist->Add(tCf2, tN2);
+  SuperpositionFitBgd *tSupFitBgd = new SuperpositionFitBgd(tData, tCf1, tCf2, 0.50, 2.0);
+  tSupFitBgd->GetMinuitObject()->SetFCN(GlobalBgdFCN);
+  GlobalBgdFitter = tSupFitBgd;
+  tSupFitBgd->DoFit();
+  TH1D* tSupCf = tSupFitBgd->GetSupCf();
+  tSupCf->SetMarkerStyle(20);
+  tSupCf->SetMarkerColor(kOrange);
+  tSupCf->Draw("same");
 
-  tComboHist->SetLineColor(tColor);
-  tComboHist->SetMarkerColor(tColor);
-  tComboHist->SetMarkerStyle(34);
-  tComboHist->GetXaxis()->SetRangeUser(0., aMaxBgdFit);
-
+  tSupCf->SetLineColor(tColor);
+  tSupCf->SetMarkerColor(tColor);
+  tSupCf->SetMarkerStyle(34);
+  tSupCf->GetXaxis()->SetRangeUser(0., aMaxBgdFit);
   //---------------------------------------------------------------
   cout << "Fitting combo hist (i.e. N1C1 + N2C2)" << endl;
   TF1 *tBgdFit, *tBgdFitDraw;
   int tPower = 6;
-  tBgdFit = FitBackground(tComboHist, tPower, 0., aMaxBgdFit);
+  tBgdFit = FitBackground(tSupCf, tPower, 0., aMaxBgdFit);
   cout << "**************************************************" << endl;
   if(aAnType==kLamKchM || aAnType==kALamKchP) //Want to draw fit function without gaping gap where Omega peak omitted
   {
@@ -877,11 +882,11 @@ TCanvas* DrawBgdwFitv2(TString aCfDescriptor, TString aFileNameCfs, AnalysisType
 
   tCf1->SetMarkerSize(0.75);
   tCf2->SetMarkerSize(0.75);
-  tComboHist->SetMarkerSize(1.25);
+  tSupCf->SetMarkerSize(1.25);
   tData->SetMarkerSize(1.25);
 
   tData->Draw("same");
-  tComboHist->Draw("lsame");
+  tSupCf->Draw("lsame");
 
   tCf1->Draw("same");
   tCf2->Draw("same");
@@ -903,7 +908,7 @@ TCanvas* DrawBgdwFitv2(TString aCfDescriptor, TString aFileNameCfs, AnalysisType
   tLeg->AddEntry(tData, TString::Format("Data (%s)", cPrettyCentralityTags[aCentType]));
   tLeg->AddEntry(tCf1, TString::Format("Therm (b=%i)", tImpactParams[0]));
   tLeg->AddEntry(tCf2, TString::Format("Therm (b=%i)", tImpactParams[1]));
-  tLeg->AddEntry(tComboHist, TString::Format("%0.3f*C(b=%i) + %0.3f*C(b=%i)", tN1, tImpactParams[0], tN2, tImpactParams[1]));
+  tLeg->AddEntry(tSupCf, TString::Format("%0.3f*C(b=%i) + %0.3f*C(b=%i)", tSupFitBgd->GetN1(), tImpactParams[0], tSupFitBgd->GetN2(), tImpactParams[1]));
   //---------------------------------------------------------------
 
   TF1* tBgdFitDataDraw = GetTHERMBgdFitScaledToData(tPower, aCfDescriptor, aFileNameCfs, aAnType, tImpactParams[0], aCombineConjugates, true, aEventsType, aRebin, aMinNorm, aMaxNorm, aMaxBgdFit, aUseStavCf);
