@@ -46,6 +46,8 @@
 \usepackage{multirow}
 \usepackage{boldline}  % to make lines in table bold
 
+\usepackage{pdflscape}
+
 \begin{document}%
 
 %%%%%%%%%%%%%%%  Title page %%%%%%%%%%%%%%%%%%%%%%%%
@@ -980,246 +982,58 @@ We did physics, and we found physics.
 %
 %\input{}               %%%%%%%%%%% put your appendices here
 %
+
+
+\pagestyle{empty}
+\begin{landscape}
+
 \section{$\lambda$ Parameters}
 \label{App:LamParams}
 
-%\clearpage
 \begin{table}[htbp]
  \centering
  \renewcommand{\arraystretch}{1.2}
- %------------------------------------LamKchP
- \begin{minipage}{0.3\textwidth}
-  \centering
-  \begin{tabular}{|c|c|}
-   \multicolumn{2}{c}{$\Lambda$K$^{+}$ Residuals} \\
-   \hline
-   \textbf{Pair System} & \textbf{$\lambda$ value} \\
-   \hlineB{3.0}
-   \multicolumn{2}{|c|}{3 Residuals} \\
-   \hlineB{3.0}   
-   $\Lambda$K$^{+}$ & 0.154 \\
-   $\Sigma^{0}$K$^{+}$ & 0.099 \\
-   $\Xi^{0}$K$^{+}$ & 0.072 \\
-   $\Xi^{-}$K$^{+}$ & 0.069 \\
-   Other & 0.558 \\
-   Fakes & 0.048 \\
-   \hlineB{3.0}
-   \multicolumn{2}{|c|}{10 Residuals} \\
-   \hlineB{3.0}
-   $\Lambda$K$^{+}$ & 0.154 \\
-   $\Sigma^{0}$K$^{+}$ & 0.099 \\
-   $\Xi^{0}$K$^{+}$ & 0.072 \\
-   $\Xi^{-}$K$^{+}$ & 0.069 \\
-   $\Sigma^{*+}$K$^{+}$ & 0.046 \\
-   $\Sigma^{*-}$K$^{+}$ & 0.042 \\
-   $\Sigma^{*0}$K$^{+}$ & 0.042 \\
-   $\Lambda$K$^{*0}$ & 0.039 \\
-   $\Sigma^{0}$K$^{*0}$ & 0.035 \\
-   $\Xi^{0}$K$^{*0}$ & 0.025 \\
-   $\Xi^{-}$K$^{*0}$ & 0.024 \\
-   Other & 0.305 \\
-   Fakes & 0.048 \\  
-   \hline 
-  \end{tabular}
- \end{minipage}
- %------------------------------------ALamKchM
- \begin{minipage}{0.3\textwidth}
-  \centering
-  \begin{tabular}{|c|c|}
-   \multicolumn{2}{c}{$\bar{\Lambda}$K$^{-}$ Residuals} \\
-   \hline
-   \textbf{Pair System} & \textbf{$\lambda$ value} \\
-   \hlineB{3.0}
-   \multicolumn{2}{|c|}{3 Residuals} \\
-   \hlineB{3.0}   
-   $\bar{\Lambda}$K$^{-}$ & 0.158 \\
-   $\bar{\Sigma}^{0}$K$^{-}$ & 0.102 \\
-   $\bar{\Xi}^{0}$K$^{-}$ & 0.067 \\
-   $\bar{\Xi}^{+}$K$^{-}$ & 0.065 \\
-   Other & 0.560 \\
-   Fakes & 0.048 \\
-   \hlineB{3.0}
-   \multicolumn{2}{|c|}{10 Residuals} \\
-   \hlineB{3.0}
-   $\bar{\Lambda}$K$^{-}$ & 0.158 \\
-   $\bar{\Sigma}^{0}$K$^{-}$ & 0.102 \\
-   $\bar{\Xi}^{0}$K$^{-}$ & 0.067 \\
-   $\bar{\Xi}^{+}$K$^{-}$ & 0.065 \\
-   $\bar{\Sigma}^{*-}$K$^{-}$ & 0.046 \\
-   $\bar{\Sigma}^{*+}$K$^{-}$ & 0.045 \\
-   $\bar{\Sigma}^{*0}$K$^{-}$ & 0.040 \\
-   $\bar{\Lambda}\bar{\mathrm{K}}^{*0}$ & 0.041 \\
-   $\bar{\Sigma}^{0}\bar{\mathrm{K}}^{*0}$ & 0.036 \\
-   $\bar{\Xi}^{0}\bar{\mathrm{K}}^{*0}$ & 0.024 \\
-   $\bar{\Xi}^{+}\bar{\mathrm{K}}^{*0}$ & 0.023 \\
-   Other & 0.305 \\
-   Fakes & 0.048 \\
-   \hline      
-  \end{tabular}
- \end{minipage}  
- \caption{$\lambda$ values for the individual components of the $\Lambda$K$^{+}$ (left) and $\bar{\Lambda}$K$^{-}$ (right) correlation functions for the case of 3 and 10 residual contributions.}
- \label{tab:LambdaValues_LamKchP}
+ \resizebox{\paperwidth}{!}{
+ \begin{tabular}{|c|cV{5.0}c|cV{5.0}c|cV{5.0}c|cV{5.0}c|cV{5.0}c|c|}
+  \multicolumn{2}{c}{\LamKchP residuals} & \multicolumn{2}{c}{\ALamKchM residuals} & \multicolumn{2}{c}{\LamKchM residuals} & \multicolumn{2}{c}{\ALamKchP residuals} & \multicolumn{2}{c}{\LamKs residuals} & \multicolumn{2}{c}{\ALamKs residuals} \\
+  \hline
+  \textbf{Pair System} & \textbf{$\lambda$ value} & \textbf{Pair System} & \textbf{$\lambda$ value} & \textbf{Pair System} & \textbf{$\lambda$ value} & \textbf{Pair System} & \textbf{$\lambda$ value} & \textbf{Pair System} & \textbf{$\lambda$ value} & \textbf{Pair System} & \textbf{$\lambda$ value} \\
+  \hlineB{3.0}
+  \multicolumn{12}{|c|}{3 Residuals} \\
+  \hlineB{3.0}
+  $\Lambda$K$^{+}$ & 0.154 & $\bar{\Lambda}$K$^{-}$ & 0.158 & $\Lambda$K$^{-}$ & 0.154 & $\bar{\Lambda}$K$^{+}$ & 0.158 & $\Lambda$K$^{0}_{\mathrm{S}}$ & 0.165 & $\bar{\Lambda}$K$^{0}_{\mathrm{S}}$ & 0.169 \\
+  $\Sigma^{0}$K$^{+}$ & 0.099 & $\bar{\Sigma}^{0}$K$^{-}$ & 0.102 & $\Sigma^{0}$K$^{-}$ & 0.099 & $\bar{\Sigma}^{0}$K$^{+}$ & 0.103 & $\Sigma^{0}$K$^{0}_{\mathrm{S}}$ & 0.107 & $\bar{\Sigma}^{0}$K$^{0}_{\mathrm{S}}$ & 0.111 \\
+  $\Xi^{0}$K$^{+}$ & 0.072 & $\bar{\Xi}^{0}$K$^{-}$ & 0.067 & $\Xi^{0}$K$^{-}$ & 0.071 & $\bar{\Xi}^{0}$K$^{+}$ & 0.068 & $\Xi^{0}$K$^{0}_{\mathrm{S}}$ & 0.077 & $\bar{\Xi}^{0}$K$^{0}_{\mathrm{S}}$ & 0.073 \\
+  $\Xi^{-}$K$^{+}$ & 0.069 & $\bar{\Xi}^{+}$K$^{-}$ & 0.065 & $\Xi^{-}$K$^{-}$ & 0.068 & $\bar{\Xi}^{+}$K$^{+}$ & 0.066 & $\Xi^{-}$K$^{0}_{\mathrm{S}}$ & 0.075 & $\bar{\Xi}^{+}$K$^{0}_{\mathrm{S}}$ & 0.071 \\
+  Other & 0.558 & Other & 0.560 & Other & 0.561 & Other & 0.557 & Other & 0.528 & Other & 0.528 \\
+  Fakes & 0.048 & Fakes & 0.048 & Fakes & 0.048 & Fakes & 0.048 & Fakes & 0.048 & Fakes & 0.048 \\
+  \hlineB{3.0}  
+  \multicolumn{12}{|c|}{10 Residuals} \\
+  \hlineB{3.0}
+  $\Lambda$K$^{+}$ & 0.154 & $\bar{\Lambda}$K$^{-}$ & 0.158 & $\Lambda$K$^{-}$ & 0.154 & $\bar{\Lambda}$K$^{+}$ & 0.158 & $\Lambda$K$^{0}_{\mathrm{S}}$ & 0.165 & $\bar{\Lambda}$K$^{0}_{\mathrm{S}}$ & 0.169 \\
+  $\Sigma^{0}$K$^{+}$ & 0.099 & $\bar{\Sigma}^{0}$K$^{-}$ & 0.102 & $\Sigma^{0}$K$^{-}$ & 0.099 & $\bar{\Sigma}^{0}$K$^{+}$ & 0.103 & $\Sigma^{0}$K$^{0}_{\mathrm{S}}$ & 0.107 & $\bar{\Sigma}^{0}$K$^{0}_{\mathrm{S}}$ & 0.111 \\
+  $\Xi^{0}$K$^{+}$ & 0.072 & $\bar{\Xi}^{0}$K$^{-}$ & 0.067 & $\Xi^{0}$K$^{-}$ & 0.071 & $\bar{\Xi}^{0}$K$^{+}$ & 0.068 & $\Xi^{0}$K$^{0}_{\mathrm{S}}$ & 0.077 & $\bar{\Xi}^{0}$K$^{0}_{\mathrm{S}}$ & 0.073 \\
+  $\Xi^{-}$K$^{+}$ & 0.069 & $\bar{\Xi}^{+}$K$^{-}$ & 0.065 & $\Xi^{-}$K$^{-}$ & 0.068 & $\bar{\Xi}^{+}$K$^{+}$ & 0.066 & $\Xi^{-}$K$^{0}_{\mathrm{S}}$ & 0.075 & $\bar{\Xi}^{+}$K$^{0}_{\mathrm{S}}$ & 0.071 \\
+  $\Sigma^{*+}$K$^{+}$ & 0.046 & $\bar{\Sigma}^{*-}$K$^{-}$ & 0.046 & $\Sigma^{*+}$K$^{-}$ & 0.046 & $\bar{\Sigma}^{*-}$K$^{+}$ & 0.046 & $\Sigma^{*+}$K$^{0}_{\mathrm{S}}$ & 0.050 & $\bar{\Sigma}^{*-}$K$^{0}_{\mathrm{S}}$ & 0.050 \\
+  $\Sigma^{*-}$K$^{+}$ & 0.042 & $\bar{\Sigma}^{*+}$K$^{-}$ & 0.045 & $\Sigma^{*-}$K$^{-}$ & 0.041 & $\bar{\Sigma}^{*+}$K$^{+}$ & 0.045 & $\Sigma^{*-}$K$^{0}_{\mathrm{S}}$ & 0.045 & $\bar{\Sigma}^{*+}$K$^{0}_{\mathrm{S}}$ & 0.049 \\
+  $\Sigma^{*0}$K$^{+}$ & 0.042 & $\bar{\Sigma}^{*0}$K$^{-}$ & 0.040 & $\Sigma^{*0}$K$^{-}$ & 0.041 & $\bar{\Sigma}^{*0}$K$^{+}$ & 0.041 & $\Sigma^{*0}$K$^{0}_{\mathrm{S}}$ & 0.045 & $\bar{\Sigma}^{*0}$K$^{0}_{\mathrm{S}}$ & 0.044 \\
+  $\Lambda$K$^{*0}$ & 0.039 & $\bar{\Lambda}\bar{\mathrm{K}}^{*0}$ & 0.041 & $\Lambda\bar{\mathrm{K}}^{*0}$ & 0.039 & $\bar{\Lambda}$K$^{*0}$ & 0.041 & $\Lambda$K$^{*0}$ & 0.019 & $\bar{\Lambda}$K$^{*0}$ & 0.020 \\
+  $\Sigma^{0}$K$^{*0}$ & 0.035 & $\bar{\Sigma}^{0}\bar{\mathrm{K}}^{*0}$ & 0.036 & $\Sigma^{0}\bar{\mathrm{K}}^{*0}$ & 0.035 & $\bar{\Sigma}^{0}$K$^{*0}$ & 0.036 & $\Sigma^{0}$K$^{*0}$ & 0.017 & $\bar{\Sigma}^{0}$K$^{*0}$ & 0.017 \\
+  $\Xi^{0}$K$^{*0}$ & 0.025 & $\bar{\Xi}^{0}\bar{\mathrm{K}}^{*0}$ & 0.024 & $\Xi^{0}\bar{\mathrm{K}}^{*0}$ & 0.025 & $\bar{\Xi}^{0}$K$^{*0}$ & 0.024 & $\Xi^{0}$K$^{*0}$ & 0.012 & $\bar{\Xi}^{0}$K$^{*0}$ & 0.011 \\
+  $\Xi^{-}$K$^{*0}$ & 0.024 & $\bar{\Xi}^{+}\bar{\mathrm{K}}^{*0}$ & 0.023 & $\Xi^{-}\bar{\mathrm{K}}^{*0}$ & 0.024 & $\bar{\Xi}^{+}$K$^{*0}$ & 0.023 & $\Xi^{-}$K$^{*0}$ & 0.012 & $\bar{\Xi}^{+}$K$^{*0}$ & 0.011 \\
+  Other & 0.305 & Other & 0.305 & Other & 0.308 & Other & 0.301 & Other & 0.329 & Other & 0.326 \\
+  Fakes & 0.048 & Fakes & 0.048 & Fakes & 0.048 & Fakes & 0.048 & Fakes & 0.048 & Fakes & 0.048 \\
+  \hlineB{3.0}
+ \end{tabular}}
+ \caption{$\lambda$ values for the individual components of the \LamK correlation functions for the case of 3 and 10 residual contributions.}
+ \label{tab:LambdaValues_All}
 \end{table}
 
+\end{landscape}
+\pagestyle{plain}
 
 
 
-%\clearpage
-\begin{table}[htbp]
- \centering
- \renewcommand{\arraystretch}{1.2}
-  %------------------------------------LamKchM
- \begin{minipage}{0.3\textwidth}
-  \centering
-  \begin{tabular}{|c|c|}
-   \multicolumn{2}{c}{$\Lambda$K$^{-}$ Residuals} \\
-   \hline
-   \textbf{Pair System} & \textbf{$\lambda$ value} \\
-   \hlineB{3.0}
-   \multicolumn{2}{|c|}{3 Residuals} \\
-   \hlineB{3.0}   
-   $\Lambda$K$^{-}$ & 0.154 \\
-   $\Sigma^{0}$K$^{-}$ & 0.099 \\
-   $\Xi^{0}$K$^{-}$ & 0.071 \\
-   $\Xi^{-}$K$^{-}$ & 0.068 \\
-   Other & 0.561 \\
-   Fakes & 0.048 \\
-   \hlineB{3.0}
-   \multicolumn{2}{|c|}{10 Residuals}\\
-   \hlineB{3.0}
-   $\Lambda$K$^{-}$ & 0.154 \\
-   $\Sigma^{0}$K$^{-}$ & 0.099 \\
-   $\Xi^{0}$K$^{-}$ & 0.071 \\
-   $\Xi^{-}$K$^{-}$ & 0.068 \\
-   $\Sigma^{*+}$K$^{-}$ & 0.046 \\
-   $\Sigma^{*-}$K$^{-}$ & 0.041 \\
-   $\Sigma^{*0}$K$^{-}$ & 0.041 \\
-   $\Lambda\bar{\mathrm{K}}^{*0}$ & 0.039 \\
-   $\Sigma^{0}\bar{\mathrm{K}}^{*0}$ & 0.035 \\
-   $\Xi^{0}\bar{\mathrm{K}}^{*0}$ & 0.025 \\
-   $\Xi^{-}\bar{\mathrm{K}}^{*0}$ & 0.024 \\
-   Other & 0.308 \\
-   Fakes & 0.048 \\
-   \hline   
-  \end{tabular}
- \end{minipage}
- %------------------------------------ALamKchP
- \begin{minipage}{0.3\textwidth}
-  \centering
-  \begin{tabular}{|c|c|}
-   \multicolumn{2}{c}{$\bar{\Lambda}$K$^{+}$ Residuals} \\
-   \hline
-   \textbf{Pair System} & \textbf{$\lambda$ value} \\
-   \hlineB{3.0}
-   \multicolumn{2}{|c|}{3 Residuals} \\
-   \hlineB{3.0}   
-   $\bar{\Lambda}$K$^{+}$ & 0.158 \\
-   $\bar{\Sigma}^{0}$K$^{+}$ & 0.103 \\
-   $\bar{\Xi}^{0}$K$^{+}$ & 0.068 \\
-   $\bar{\Xi}^{+}$K$^{+}$ & 0.066 \\
-   Other & 0.557 \\
-   Fakes & 0.048 \\
-   \hlineB{3.0}
-   \multicolumn{2}{|c|}{10 Residuals} \\
-   \hlineB{3.0}
-   $\bar{\Lambda}$K$^{+}$ & 0.158 \\
-   $\bar{\Sigma}^{0}$K$^{+}$ & 0.103 \\
-   $\bar{\Xi}^{0}$K$^{+}$ & 0.068 \\
-   $\bar{\Xi}^{+}$K$^{+}$ & 0.066 \\
-   $\bar{\Sigma}^{*-}$K$^{+}$ & 0.046 \\
-   $\bar{\Sigma}^{*+}$K$^{+}$ & 0.045 \\
-   $\bar{\Sigma}^{*0}$K$^{+}$ & 0.041 \\
-   $\bar{\Lambda}$K$^{*0}$ & 0.041 \\
-   $\bar{\Sigma}^{0}$K$^{*0}$ & 0.036 \\
-   $\bar{\Xi}^{0}$K$^{*0}$ & 0.024 \\
-   $\bar{\Xi}^{+}$K$^{*0}$ & 0.023 \\
-   Other & 0.301 \\
-   Fakes & 0.048 \\
-   \hline   
-  \end{tabular}
- \end{minipage} 
- \caption{$\lambda$ values for the individual components of the $\Lambda$K$^{-}$ (left) and $\bar{\Lambda}$K$^{+}$ (right) correlation functions for the case of 3 and 10 residual contributions.}
- \label{tab:LambdaValues_LamKchM}
-\end{table}
-
-
-%\clearpage
-\begin{table}[htbp]
- \centering
-  \renewcommand{\arraystretch}{1.2}
-  %------------------------------------LamK0
- \begin{minipage}{0.3\textwidth}
-  \centering
-  \begin{tabular}{|c|c|}
-   \multicolumn{2}{c}{$\Lambda$K$^{0}_{\mathrm{S}}$ Residuals} \\
-   \hline
-   \textbf{Pair System} & \textbf{$\lambda$ value} \\
-   \hlineB{3.0}
-   \multicolumn{2}{|c|}{3 Residuals} \\
-   \hlineB{3.0}   
-   $\Lambda$K$^{0}_{\mathrm{S}}$ & 0.165 \\
-   $\Sigma^{0}$K$^{0}_{\mathrm{S}}$ & 0.107 \\
-   $\Xi^{0}$K$^{0}_{\mathrm{S}}$ & 0.077 \\
-   $\Xi^{-}$K$^{0}_{\mathrm{S}}$ & 0.075 \\
-   Other & 0.528 \\
-   Fakes & 0.048 \\
-   \hlineB{3.0}
-   \multicolumn{2}{|c|}{10 Residuals} \\
-   \hlineB{3.0}   
-   $\Lambda$K$^{0}_{\mathrm{S}}$ & 0.165 \\
-   $\Sigma^{0}$K$^{0}_{\mathrm{S}}$ & 0.107 \\
-   $\Xi^{0}$K$^{0}_{\mathrm{S}}$ & 0.077 \\
-   $\Xi^{-}$K$^{0}_{\mathrm{S}}$ & 0.075 \\
-   $\Sigma^{*+}$K$^{0}_{\mathrm{S}}$ & 0.050 \\
-   $\Sigma^{*-}$K$^{0}_{\mathrm{S}}$ & 0.045 \\
-   $\Sigma^{*0}$K$^{0}_{\mathrm{S}}$ & 0.045 \\
-   $\Lambda$K$^{*0}$ & 0.019 \\
-   $\Sigma^{0}$K$^{*0}$ & 0.017 \\
-   $\Xi^{0}$K$^{*0}$ & 0.012 \\
-   $\Xi^{-}$K$^{*0}$ & 0.012 \\
-   Other & 0.329 \\
-   Fakes & 0.048 \\
-   \hline   
-  \end{tabular}
- \end{minipage}
- %------------------------------------ALamK0
- \begin{minipage}{0.3\textwidth}
-  \centering
-  \begin{tabular}{|c|c|}
-   \multicolumn{2}{c}{$\bar{\Lambda}$K$^{0}_{\mathrm{S}}$ Residuals} \\
-   \hline
-   \textbf{Pair System} & \textbf{$\lambda$ value} \\
-   \hlineB{3.0}
-   \multicolumn{2}{|c|}{3 Residuals} \\
-   \hlineB{3.0}   
-   $\bar{\Lambda}$K$^{0}_{\mathrm{S}}$ & 0.169 \\
-   $\bar{\Sigma}^{0}$K$^{0}_{\mathrm{S}}$ & 0.111 \\
-   $\bar{\Xi}^{0}$K$^{0}_{\mathrm{S}}$ & 0.073 \\
-   $\bar{\Xi}^{+}$K$^{0}_{\mathrm{S}}$ & 0.071 \\
-   Other & 0.528 \\
-   Fakes & 0.048 \\
-   \hlineB{3.0}
-   \multicolumn{2}{|c|}{10 Residuals} \\
-   \hlineB{3.0}   
-   $\bar{\Lambda}$K$^{0}_{\mathrm{S}}$ & 0.169 \\
-   $\bar{\Sigma}^{0}$K$^{0}_{\mathrm{S}}$ & 0.111 \\
-   $\bar{\Xi}^{0}$K$^{0}_{\mathrm{S}}$ & 0.073 \\
-   $\bar{\Xi}^{+}$K$^{0}_{\mathrm{S}}$ & 0.071 \\
-   $\bar{\Sigma}^{*-}$K$^{0}_{\mathrm{S}}$ & 0.050 \\
-   $\bar{\Sigma}^{*+}$K$^{0}_{\mathrm{S}}$ & 0.049 \\
-   $\bar{\Sigma}^{*0}$K$^{0}_{\mathrm{S}}$ & 0.044 \\
-   $\bar{\Lambda}$K$^{*0}$ & 0.020 \\
-   $\bar{\Sigma}^{0}$K$^{*0}$ & 0.017 \\
-   $\bar{\Xi}^{0}$K$^{*0}$ & 0.011 \\
-   $\bar{\Xi}^{+}$K$^{*0}$ & 0.011 \\
-   Other & 0.326 \\
-   Fakes & 0.048 \\
-   \hline   
-  \end{tabular}
- \end{minipage} 
- \caption{$\lambda$ values for the individual components of the $\Lambda$K$^{0}_{\mathrm{S}}$ (left) and $\bar{\Lambda}$K$^{0}_{\mathrm{S}}$ (right) correlation functions for the case of 3 and 10 residual contributions.}
- \label{tab:LambdaValues_LamK0}
-\end{table}
 
 
 \section{The ALICE Collaboration}
