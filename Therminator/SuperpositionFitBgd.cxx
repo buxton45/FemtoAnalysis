@@ -35,9 +35,9 @@ SuperpositionFitBgd::SuperpositionFitBgd(TH1D* aData, TH1D* aCf1, TH1D* aCf2, do
 {
 
   fMinuit = new TMinuit(50);
-  fMinuit->SetPrintLevel(-1); //Same as fMinuit->Command("SET PRINT -1");
+//  fMinuit->SetPrintLevel(-1); //Same as fMinuit->Command("SET PRINT -1");
   int tErrFlg = 0;
-  fMinuit->mnparm(0, "Par0", 0.5, 0.1, 0., 1., tErrFlg);
+  fMinuit->mnparm(0, "Par0", 0.5, 0.001, 0., 1., tErrFlg);
 
   assert(fData->GetBinWidth(1)==fCf1->GetBinWidth(1));
   assert(fData->GetBinWidth(1)==fCf2->GetBinWidth(1));
@@ -60,7 +60,7 @@ void SuperpositionFitBgd::CalculateBgdFitFunction(int &npar, double &chi2, doubl
 {
   double tChi=0., tChi2=0.;
   double tSuperpos = 0.;
-  for(int i=fMinBgdFitBin; i<=fMaxBgdFitBin; i++)
+  for(int i=fMinBgdFitBin; i<fMaxBgdFitBin; i++)
   {
     tSuperpos = par[0]*fCf1->GetBinContent(i) + (1.-par[0])*fCf2->GetBinContent(i);
     tChi = (fData->GetBinContent(i)-tSuperpos)/fData->GetBinError(i);
