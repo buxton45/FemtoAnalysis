@@ -30,6 +30,6 @@ run*
 *.gz
 *.toc
 *.aux
-*.cls
+#*.cls
 *.lof
 *.out
