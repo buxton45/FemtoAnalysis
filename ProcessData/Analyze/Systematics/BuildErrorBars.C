@@ -139,11 +139,29 @@ int main(int argc, char **argv)
 //-------------------------------------------------------------------------------
   Analysis* tSaveAnalysis = new Analysis(tFileLocationBase_Save,tAnType,tCentType);
     tSaveAnalysis->BuildKStarHeavyCf(0.32,0.4,2);
-  TH1* tCfwErrors = tSaveAnalysis->GetKStarHeavyCf()->GetHeavyCfClone();
+  TH1* tCfwErrorsFull = tSaveAnalysis->GetKStarHeavyCf()->GetHeavyCfClone();
   TString tCfwErrorsTitle = TString(cAnalysisRootTags[tAnType])+TString(cCentralityTags[tCentType])+TString("_wSysErrors");
   TString tCfwErrorsName = TString(cAnalysisBaseTags[tAnType])+TString(cCentralityTags[tCentType])+TString("_wSysErrors");
-    tCfwErrors->SetTitle(tCfwErrorsTitle);
-    tCfwErrors->SetName(tCfwErrorsName);
+
+  assert(tCfwErrorsFull->GetNbinsX() >= (int)tErrorsVec.size());
+  TH1D* tCfwErrors;
+  if(tCfwErrorsFull->GetNbinsX() > (int)tErrorsVec.size())
+  {
+    int tNbins = (int)tErrorsVec.size();
+    double tMin = tCfwErrorsFull->GetXaxis()->GetBinLowEdge(1);
+    double tMax = tCfwErrorsFull->GetXaxis()->GetBinUpEdge(tNbins);
+    tCfwErrors = new TH1D(tCfwErrorsName, tCfwErrorsTitle, tNbins, tMin, tMax);
+    tCfwErrors->Sumw2();
+    for(int i=1; i<=tNbins; i++)
+    {
+      tCfwErrors->SetBinContent(i, tCfwErrorsFull->GetBinContent(i));
+      tCfwErrors->SetBinError(i, tCfwErrorsFull->GetBinError(i));
+    }
+  }
+  else tCfwErrors = (TH1D*)tCfwErrorsFull->Clone();
+
+  tCfwErrors->SetTitle(tCfwErrorsTitle);
+  tCfwErrors->SetName(tCfwErrorsName);
 
   assert(tCfwErrors->GetNbinsX() == (int)tErrorsVec.size());
   for(int i=0; i<tCfwErrors->GetNbinsX(); i++)
