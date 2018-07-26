@@ -119,6 +119,8 @@ public:
   const vector<CentralityType> GetCentralityTypes();
   FitSharedAnalyses* GetSharedAn();
 
+  void SetFixNormParams(bool aFixNormParams);
+
 protected:
   TString fSaveLocationBase;
   TString fSaveNameModifier;
@@ -210,5 +212,6 @@ inline FitGeneratorType FitGenerator::GetGeneratorType() {return fGeneratorType;
 inline const vector<CentralityType> FitGenerator::GetCentralityTypes() {return fCentralityTypes;}
 inline FitSharedAnalyses* FitGenerator::GetSharedAn() {return fSharedAn;}
 
+inline void FitGenerator::SetFixNormParams(bool aFixNormParams) {fSharedAn->SetFixNormParams(aFixNormParams);}
 #endif
 

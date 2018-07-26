@@ -32,15 +32,15 @@ FitValuesWriter::~FitValuesWriter()
 TString FitValuesWriter::BuildFitInfoTString(bool aApplyMomResCorrection, bool aApplyNonFlatBackgroundCorrection, NonFlatBgdFitType aNonFlatBgdFitType, 
                                              IncludeResidualsType aIncludeResidualsType, ResPrimMaxDecayType aResPrimMaxDecayType, 
                                              ChargedResidualsType aChargedResidualsType, bool aFixD0,
-                                             bool aUseStavCf, bool aFixAllLambdaTo1, bool aFixRadii, bool aFixAllScattParams, bool aShareLambdaParams, 
-                                             bool aAllShareSingleLambdaParam, bool aUsemTScalingOfResidualRadii, bool aIsDualie, bool aDualieShareLambda, 
-                                             bool aDualieShareRadii)
+                                             bool aUseStavCf, bool aFixAllLambdaTo1, bool aFixAllNormTo1, bool aFixRadii, bool aFixAllScattParams, 
+                                             bool aShareLambdaParams, bool aAllShareSingleLambdaParam, bool aUsemTScalingOfResidualRadii, bool aIsDualie, 
+                                             bool aDualieShareLambda, bool aDualieShareRadii)
 {
   return LednickyFitter::BuildSaveNameModifier(aApplyMomResCorrection, aApplyNonFlatBackgroundCorrection, aNonFlatBgdFitType, 
                                              aIncludeResidualsType, aResPrimMaxDecayType, aChargedResidualsType, aFixD0,
-                                             aUseStavCf, aFixAllLambdaTo1, aFixRadii, aFixAllScattParams, aShareLambdaParams, 
-                                             aAllShareSingleLambdaParam, aUsemTScalingOfResidualRadii, aIsDualie, aDualieShareLambda, 
-                                             aDualieShareRadii);
+                                             aUseStavCf, aFixAllLambdaTo1, aFixAllNormTo1, aFixRadii, aFixAllScattParams, 
+                                             aShareLambdaParams, aAllShareSingleLambdaParam, aUsemTScalingOfResidualRadii, aIsDualie, 
+                                             aDualieShareLambda, aDualieShareRadii);
 }
 
 

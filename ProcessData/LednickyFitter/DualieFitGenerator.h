@@ -98,6 +98,8 @@ public:
 
   void SetSaveFileType(TString aType);
 
+  void SetFixNormParams(bool aFixNormParams);
+
 protected:
 
   FitGeneratorAndDraw* fFitGen1;
@@ -154,6 +156,8 @@ inline void DualieFitGenerator::SetResPrimMaxDecayType(ResPrimMaxDecayType aResP
 inline void DualieFitGenerator::SetUsemTScalingOfResidualRadii(bool aUse, double aPower) {fFitGen1->SetUsemTScalingOfResidualRadii(aUse, aPower); fFitGen2->SetUsemTScalingOfResidualRadii(aUse, aPower);}
 
 inline void DualieFitGenerator::SetSaveFileType(TString aType) {fFitGen1->SetSaveFileType(aType); fFitGen2->SetSaveFileType(aType);}
+
+inline void DualieFitGenerator::SetFixNormParams(bool aFixNormParams) {fFitGen1->SetFixNormParams(aFixNormParams); fFitGen2->SetFixNormParams(aFixNormParams);}
 #endif
 
 

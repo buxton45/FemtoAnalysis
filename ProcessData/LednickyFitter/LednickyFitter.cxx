@@ -182,9 +182,9 @@ void LednickyFitter::AppendFitInfo(TString &aSaveName)
 TString LednickyFitter::BuildSaveNameModifier(bool aApplyMomResCorrection, bool aApplyNonFlatBackgroundCorrection, NonFlatBgdFitType aNonFlatBgdFitType, 
                                               IncludeResidualsType aIncludeResidualsType, ResPrimMaxDecayType aResPrimMaxDecayType, 
                                               ChargedResidualsType aChargedResidualsType, bool aFixD0,
-                                              bool aUseStavCf, bool aFixAllLambdaTo1, bool aFixRadii, bool aFixAllScattParams, bool aShareLambdaParams, 
-                                              bool aAllShareSingleLambdaParam, bool aUsemTScalingOfResidualRadii, bool aIsDualie, bool aDualieShareLambda, 
-                                              bool aDualieShareRadii)
+                                              bool aUseStavCf, bool aFixAllLambdaTo1, bool aFixAllNormTo1, bool aFixRadii, bool aFixAllScattParams, 
+                                              bool aShareLambdaParams, bool aAllShareSingleLambdaParam, bool aUsemTScalingOfResidualRadii, bool aIsDualie,
+                                              bool aDualieShareLambda, bool aDualieShareRadii)
 {
   TString tReturnTString = "";
   LednickyFitter::AppendFitInfo(tReturnTString, aApplyMomResCorrection, aApplyNonFlatBackgroundCorrection, aNonFlatBgdFitType, 
@@ -192,6 +192,7 @@ TString LednickyFitter::BuildSaveNameModifier(bool aApplyMomResCorrection, bool 
 
   if(aUseStavCf)                                      tReturnTString += TString("_StavCf");
   if(aFixAllLambdaTo1)                                tReturnTString += TString("_FixAllLambdaTo1");
+  if(aFixAllNormTo1)                                  tReturnTString += TString("_FixAllNormTo1");
   if(aFixRadii)                                       tReturnTString += TString("_FixedRadii");
   if(aFixAllScattParams)                              tReturnTString += TString("_FixedScattParams");
   if(aShareLambdaParams)                              tReturnTString += TString("_ShareLam");

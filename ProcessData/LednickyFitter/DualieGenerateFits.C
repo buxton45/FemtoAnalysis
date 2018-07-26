@@ -99,6 +99,7 @@ int main(int argc, char **argv)
   bool FixAllScattParams = false;
   bool FixAllLambdaTo1 = false;
   if(FixAllLambdaTo1) tAllShareSingleLambdaParam = true;
+  bool FixAllNormTo1 = false;
 
   //--mT scaling
   bool UsemTScalingOfResidualRadii = false;
@@ -160,7 +161,7 @@ int main(int argc, char **argv)
 
 //-----------------------------------------------------------------------------
 
-  TString tSaveNameModifier = LednickyFitter::BuildSaveNameModifier(ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, tNonFlatBgdFitType, tIncludeResidualsType, tResPrimMaxDecayType, tChargedResidualsType, FixD0, bUseStavCf, FixAllLambdaTo1, FixRadii, FixAllScattParams, tShareLambdaParams, tAllShareSingleLambdaParam, UsemTScalingOfResidualRadii, true, tDualieShareLambda, tDualieShareRadii);
+  TString tSaveNameModifier = LednickyFitter::BuildSaveNameModifier(ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, tNonFlatBgdFitType, tIncludeResidualsType, tResPrimMaxDecayType, tChargedResidualsType, FixD0, bUseStavCf, FixAllLambdaTo1, FixAllNormTo1, FixRadii, FixAllScattParams, tShareLambdaParams, tAllShareSingleLambdaParam, UsemTScalingOfResidualRadii, true, tDualieShareLambda, tDualieShareRadii);
 
 //-----------------------------------------------------------------------------
 
@@ -193,6 +194,7 @@ int main(int argc, char **argv)
   }
 
   if(FixAllLambdaTo1) tDualie->SetLambdaParamStartValue(1.0, false, kMB, true);
+  if(FixAllNormTo1) tDualie->SetFixNormParams(FixAllNormTo1);
   if(UsemTScalingOfResidualRadii) tDualie->SetUsemTScalingOfResidualRadii(UsemTScalingOfResidualRadii, mTScalingPowerOfResidualRadii);
 
 
