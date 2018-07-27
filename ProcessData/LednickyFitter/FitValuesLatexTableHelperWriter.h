@@ -11,7 +11,7 @@ class FitValuesLatexTableHelperWriter : public FitValuesWriter {
 public:
 
   //Constructor, destructor, copy constructor, assignment operator
-  FitValuesLatexTableHelperWriter(TString aMasterFileLocation, TString aResultsDate, AnalysisType aAnType);
+  FitValuesLatexTableHelperWriter();
   virtual ~FitValuesLatexTableHelperWriter();
 
 
@@ -19,10 +19,10 @@ public:
 
   static TString GetTwoLetterID(TString aFitInfoTString, IncludeResidualsType aResType);
   static TString GetFitInfoTStringFromTwoLetterID(TString aTwoLetterID, IncludeResidualsType aResType);
-  static TString GetLatexTableOverallLabel(TString aFitInfoTString);
+  static TString GetLatexTableOverallLabel(TString aTwoLetterID);
   static vector<TString> GetFitInfoTStringAndLatexTableOverallLabel(TString aTwoLetterID, IncludeResidualsType aResType);
-  static void WriteLatexTableHelperEntry(ostream &aOut, TString aMasterFileLocation, TString aFitInfoTString, AnalysisType aAnType);
-  static void WriteLatexTableHelperSection(ostream &aOut, TString aMasterFileLocation, TString aFitInfoTString);
+  static void WriteLatexTableHelperEntry(ostream &aOut, TString aMasterFileLocation, TString aTwoLetterID, IncludeResidualsType aResType, AnalysisType aAnType);
+  static void WriteLatexTableHelperSection(ostream &aOut, TString aMasterFileLocation, TString aTwoLetterID, IncludeResidualsType aResType);
   static void WriteLatexTableHelperHeader(ostream &aOut);
   static void WriteLatexTableHelper(TString aHelperLocation, TString aMasterFileLocation, IncludeResidualsType aResType);
 

@@ -10,10 +10,7 @@ ClassImp(FitValuesWriter)
 
 
 //________________________________________________________________________________________________________________
-FitValuesWriter::FitValuesWriter(TString aMasterFileLocation, TString aResultsDate, AnalysisType aAnType) : 
-  fMasterFileLocation(aMasterFileLocation),
-  fResultsDate(aResultsDate),
-  fAnalysisType(aAnType)
+FitValuesWriter::FitValuesWriter()
 {
 
 }
@@ -316,6 +313,10 @@ vector<FitParameter*> FitValuesWriter::GetFitResults(TString aFileLocation, TStr
   {
     cout << "In FitValuesWriter::GetFitResults, and tParams2dVec.size() != 6" << endl;
     cout << "  Instead, tParams2dVec.size() = " << tParams2dVec.size() << endl;
+    cout << "\t aFileLocation = " << aFileLocation << endl;
+    cout << "\t aFitInfoTString = " << aFitInfoTString << endl;
+    cout << "\t aAnType = " << cAnalysisBaseTags[aAnType] << endl;
+    cout << "\t aCentType = " << cCentralityTags[aCentType] << endl;
     cout << "OK to continue? (0=No, 1=Yes)" << endl;
     cin >> tResponse;
     assert(tResponse);

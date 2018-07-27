@@ -1,6 +1,7 @@
 #include "FitSharedAnalyses.h"
 #include "LednickyFitter.h"
 #include "FitValuesWriter.h"
+#include "FitValuesLatexTableHelperWriter.h"
 
 #include "TObjString.h"
 
@@ -137,7 +138,7 @@ int main(int argc, char **argv)
   FitPairAnalysis* tFitPairAnalysis = new FitPairAnalysis("LamK0",tempVec);
 */
 
-
+/*
   TString aFileLocation = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_20171227/ParameterCorrelations/ParameterCorrelationCoefficients_LamKchMwConj_MomResCrctn_NonFlatBgdCrctn_NoRes.txt";
   ifstream tFileIn(aFileLocation);
   if(!tFileIn.is_open()) cout << "FAILURE - FILE NOT OPEN: " << aFileLocation << endl;
@@ -180,18 +181,28 @@ int main(int argc, char **argv)
   tNParamsAndRowWidth[1] -= 2;
   FinishMatrix(tValuesMatrix, tNParamsAndRowWidth);
   PrintMatrix(tValuesMatrix);
-
+*/
 
 /*
   TString tFileLocation = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_20180505/MasterFitResults_20180505.txt";
   TString tResultsDate = "20180505";
   AnalysisType tAnType = kLamKchP;
 
-  FitValuesWriter* tFitValWriter = new FitValuesWriter(tFileLocation, tResultsDate, tAnType);
+  FitValuesWriter* tFitValWriter = new FitValuesWriter();
   vector<vector<FitParameter*> > tAllFitResults = tFitValWriter->GetAllFitResults(tFileLocation, "_MomResCrctn_NonFlatBgdCrctnPolynomial_3Res_PrimMaxDecay4fm_UsingXiDataAndCoulombOnly", "");
   vector<FitParameter*> tFitResults = tFitValWriter->GetFitResults(tFileLocation, "_MomResCrctn_NonFlatBgdCrctnPolynomial_3Res_PrimMaxDecay4fm_UsingXiDataAndCoulombOnly", "", kALamKchM, k1030);
   FitParameter* tFitParam = tFitValWriter->GetFitParameter(tFileLocation, "_MomResCrctn_NonFlatBgdCrctnPolynomial_3Res_PrimMaxDecay4fm_UsingXiDataAndCoulombOnly", "", kALamKchM, k1030, kLambda);
 */
+
+
+  TString tFileLocation = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_20180505/MasterFitResults_20180505.txt";
+  TString tResultsDate = "20180505";
+  AnalysisType tAnType = kLamKchP;
+
+  TString tHelperLocation = "/home/jesse/Analysis/FemtoAnalysis/ProcessData/LednickyFitter/testHelper.tex";
+
+  FitValuesLatexTableHelperWriter* tFitValLaTaHelpWriter = new FitValuesLatexTableHelperWriter();
+  tFitValLaTaHelpWriter->WriteLatexTableHelper(tHelperLocation, tFileLocation, kInclude3Residuals);
 //-------------------------------------------------------------------------------
   theApp->Run(kTRUE); //Run the TApp to pause the code.
   // Select "Exit ROOT" from Canvas "File" menu to exit

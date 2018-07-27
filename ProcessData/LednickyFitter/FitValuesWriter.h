@@ -39,7 +39,7 @@ class FitValuesWriter {
 public:
 
   //Constructor, destructor, copy constructor, assignment operator
-  FitValuesWriter(TString aMasterFileLocation, TString aResultsDate, AnalysisType aAnType);
+  FitValuesWriter();
   virtual ~FitValuesWriter();
 
   static TString BuildFitInfoTString(bool aApplyMomResCorrection, bool aApplyNonFlatBackgroundCorrection, NonFlatBgdFitType aNonFlatBgdFitType, 
@@ -80,12 +80,7 @@ public:
 
 
 private:
-  TString fMasterFileLocation;
-  TString fResultsDate;
-  AnalysisType fAnalysisType;
 
-  vector<TString> fFitParamsTStringVec;
-  TString fFitInfoTString;
 
 #ifdef __ROOT__
   ClassDef(FitValuesWriter, 1)
