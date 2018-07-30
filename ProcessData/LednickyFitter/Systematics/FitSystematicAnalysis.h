@@ -8,6 +8,7 @@
 #include "TSystem.h"
 
 #include "FitGenerator.h"
+#include "FitGeneratorAndDraw.h"
 #include "FitSharedAnalyses.h"
 #include "LednickyFitter.h"
 
@@ -41,7 +42,7 @@ public:
   void PrintText2dVec(vector<vector<TString> > &a2dVec, ostream &aOut=std::cout);
 
   void AppendFitInfo(TString &aSaveName);
-  FitGenerator* BuildFitGenerator(AnalysisRunType aRunType, TString aDirNameModifier, NonFlatBgdFitType aNonFlatBgdFitType);
+  FitGeneratorAndDraw* BuildFitGenerator(AnalysisRunType aRunType, TString aDirNameModifier, NonFlatBgdFitType aNonFlatBgdFitType);
 
   void RunAllFits(bool aSaveImages=false, bool aWriteToTxtFile=false);
   void RunVaryFitRange(bool aSaveImages=false, bool aWriteToTxtFile=false, double aMaxKStar1=0.225, double aMaxKStar2=0.300, double aMaxKStar3=0.375);

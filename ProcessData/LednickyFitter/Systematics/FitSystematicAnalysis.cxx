@@ -230,13 +230,13 @@ void FitSystematicAnalysis::AppendFitInfo(TString &aSaveName)
 
 
 //________________________________________________________________________________________________________________
-FitGenerator* FitSystematicAnalysis::BuildFitGenerator(AnalysisRunType aRunType, TString aDirNameModifier, NonFlatBgdFitType aNonFlatBgdFitType)
+FitGeneratorAndDraw* FitSystematicAnalysis::BuildFitGenerator(AnalysisRunType aRunType, TString aDirNameModifier, NonFlatBgdFitType aNonFlatBgdFitType)
 {
   //For now, it appears only needed parameters here are AnalysisRunType aRunType and TString aDirNameModifier (for FitGenerator constructor)
   // and NonFlatBgdFitType aNonFlatBgdFitType for assigning attributes
   // Otherwise, default members used
 
-  FitGenerator* tFitGenerator = new FitGenerator(fFileLocationBase, fFileLocationBaseMC, fAnalysisType, fCentralityType, aRunType, 2, fFitGeneratorType, fShareLambdaParams, fAllShareSingleLambdaParam, aDirNameModifier);
+  FitGeneratorAndDraw* tFitGenerator = new FitGeneratorAndDraw(fFileLocationBase, fFileLocationBaseMC, fAnalysisType, fCentralityType, aRunType, 2, fFitGeneratorType, fShareLambdaParams, fAllShareSingleLambdaParam, aDirNameModifier);
 
   tFitGenerator->SetApplyNonFlatBackgroundCorrection(fApplyNonFlatBackgroundCorrection);
   tFitGenerator->SetNonFlatBgdFitType(aNonFlatBgdFitType);
@@ -301,7 +301,7 @@ void FitSystematicAnalysis::RunAllFits(bool aSaveImages, bool aWriteToTxtFile)
     TString tDirNameModifier = fDirNameModifierBase1 + TString::Format("%0.6f",fModifierValues1[i]);
     if(!fDirNameModifierBase2.IsNull()) tDirNameModifier += fDirNameModifierBase2 + TString::Format("%0.6f",fModifierValues2[i]);
 
-    FitGenerator* tFitGenerator = BuildFitGenerator(kTrainSys, tDirNameModifier, fNonFlatBgdFitType);
+    FitGeneratorAndDraw* tFitGenerator = BuildFitGenerator(kTrainSys, tDirNameModifier, fNonFlatBgdFitType);
     tFitGenerator->DoFit();
 
 //    OutputCutValues(i,aOut);
@@ -364,7 +364,7 @@ void FitSystematicAnalysis::RunVaryFitRange(bool aSaveImages, bool aWriteToTxtFi
 
   for(int i=0; i<tNRangeValues; i++)
   {
-    FitGenerator* tFitGenerator = BuildFitGenerator(kTrain, "", fNonFlatBgdFitType);
+    FitGeneratorAndDraw* tFitGenerator = BuildFitGenerator(kTrain, "", fNonFlatBgdFitType);
     //TODO are these limits necessary?
     tFitGenerator->SetAllRadiiLimits(1., 10.);
     if(fIncludeResidualsType == kIncludeNoResiduals) tFitGenerator->SetAllLambdaParamLimits(0.1, 1.);
@@ -429,7 +429,7 @@ void FitSystematicAnalysis::RunVaryNonFlatBackgroundFit(bool aSaveImages, bool a
   bool tZoomROP=false;
   for(int i=0; i<tNFitTypeValues; i++)
   {
-    FitGenerator* tFitGenerator = BuildFitGenerator(kTrain, "", static_cast<NonFlatBgdFitType>(tFitTypeVec[i]));
+    FitGeneratorAndDraw* tFitGenerator = BuildFitGenerator(kTrain, "", static_cast<NonFlatBgdFitType>(tFitTypeVec[i]));
 
     //--------------------------------
     //For a few cases, fitting with kQuadratic and kGaussian can be difficult, so these restrictions are put in place to combat that

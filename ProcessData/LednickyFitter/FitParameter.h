@@ -75,6 +75,9 @@ public:
   void SetFitValueError(double aFitValueError);
   double GetFitValueError();
 
+  void SetFitValueSysError(double aFitValueSysError);
+  double GetFitValueSysError();
+
   void SetMinuitParamNumber(int aParamNumber);
   int GetMinuitParamNumber();
 
@@ -99,6 +102,7 @@ private:
 
   double fFitValue;
   double fFitValueError;
+  double fFitValueSysError;
 
   vector<int> fSharedWithLocal;
   vector<int> fSharedWithGlobal;
@@ -138,6 +142,9 @@ inline double FitParameter::GetFitValue() {return fFitValue;}
 
 inline void FitParameter::SetFitValueError(double aFitValueError) {fFitValueError = aFitValueError;}
 inline double FitParameter::GetFitValueError() {return fFitValueError;}
+
+inline void FitParameter::SetFitValueSysError(double aFitValueSysError) {fFitValueSysError = aFitValueSysError;}
+inline double FitParameter::GetFitValueSysError() {return fFitValueSysError;}
 
 inline void FitParameter::SetMinuitParamNumber(int aParamNumber) {fMinuitParamNumber = aParamNumber;}
 inline int FitParameter::GetMinuitParamNumber() {return fMinuitParamNumber;}

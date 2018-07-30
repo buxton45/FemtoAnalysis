@@ -31,6 +31,7 @@ FitParameter::FitParameter(ParameterType aParamType, double aStartValue, bool aI
   fStepSize(aStepSize),
   fFitValue(0),
   fFitValueError(0),
+  fFitValueSysError(0),
   fSharedWithLocal(0),
   fSharedWithGlobal(0),
   fMinuitParamNumber(-1),
