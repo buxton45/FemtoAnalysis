@@ -381,7 +381,7 @@ cout << "tReturnParam->GetFitValueError() = " << tReturnParam->GetFitValueError(
 
 
 //________________________________________________________________________________________________________________
-TGraphAsymmErrors* FitValuesWriter::GetYvsXGraph(TString aFileLocation, TString aFitInfoTString, AnalysisType aAnType, CentralityType aCentType, ParameterType aParamTypeY, ParameterType aParamTypeX)
+TGraphAsymmErrors* FitValuesWriter::GetYvsXGraphStat(TString aFileLocation, TString aFitInfoTString, AnalysisType aAnType, CentralityType aCentType, ParameterType aParamTypeY, ParameterType aParamTypeX)
 {
   //Currently, just designed for statistical errors
   TGraphAsymmErrors* tReturnGr = new TGraphAsymmErrors(1);
@@ -396,11 +396,11 @@ TGraphAsymmErrors* FitValuesWriter::GetYvsXGraph(TString aFileLocation, TString 
 }
 
 //________________________________________________________________________________________________________________
-void FitValuesWriter::DrawYvsXGraph(TPad* aPad, TString aFileLocation, TString aFitInfoTString, AnalysisType aAnType, CentralityType aCentType, ParameterType aParamTypeY, ParameterType aParamTypeX, int aMarkerColor, int aMarkerStyle, double aMarkerSize, TString aDrawOption)
+void FitValuesWriter::DrawYvsXGraphStat(TPad* aPad, TString aFileLocation, TString aFitInfoTString, AnalysisType aAnType, CentralityType aCentType, ParameterType aParamTypeY, ParameterType aParamTypeX, int aMarkerColor, int aMarkerStyle, double aMarkerSize, TString aDrawOption)
 {
   aPad->cd();
 
-  TGraphAsymmErrors* tGraphToDraw = GetYvsXGraph(aFileLocation, aFitInfoTString, aAnType, aCentType, aParamTypeY, aParamTypeX);
+  TGraphAsymmErrors* tGraphToDraw = GetYvsXGraphStat(aFileLocation, aFitInfoTString, aAnType, aCentType, aParamTypeY, aParamTypeX);
   tGraphToDraw->SetMarkerColor(aMarkerColor);
   tGraphToDraw->SetMarkerStyle(aMarkerStyle);
   tGraphToDraw->SetMarkerSize(aMarkerSize);
@@ -413,34 +413,34 @@ void FitValuesWriter::DrawYvsXGraph(TPad* aPad, TString aFileLocation, TString a
 
 
 //________________________________________________________________________________________________________________
-TGraphAsymmErrors* FitValuesWriter::GetImF0vsReF0Graph(TString aFileLocation, TString aFitInfoTString, AnalysisType aAnType, CentralityType aCentType)
+TGraphAsymmErrors* FitValuesWriter::GetImF0vsReF0GraphStat(TString aFileLocation, TString aFitInfoTString, AnalysisType aAnType, CentralityType aCentType)
 {
-  return GetYvsXGraph(aFileLocation, aFitInfoTString, aAnType, aCentType, kImf0, kRef0);
+  return GetYvsXGraphStat(aFileLocation, aFitInfoTString, aAnType, aCentType, kImf0, kRef0);
 }
 
 //________________________________________________________________________________________________________________
-void FitValuesWriter::DrawImF0vsReF0Graph(TPad* aPad, TString aFileLocation, TString aFitInfoTString, AnalysisType aAnType, CentralityType aCentType, int aMarkerColor, int aMarkerStyle, double aMarkerSize, TString aDrawOption)
+void FitValuesWriter::DrawImF0vsReF0GraphStat(TPad* aPad, TString aFileLocation, TString aFitInfoTString, AnalysisType aAnType, CentralityType aCentType, int aMarkerColor, int aMarkerStyle, double aMarkerSize, TString aDrawOption)
 {
-  DrawYvsXGraph(aPad, aFileLocation, aFitInfoTString, aAnType, aCentType, kImf0, kRef0, aMarkerColor, aMarkerStyle, aMarkerSize, aDrawOption);
+  DrawYvsXGraphStat(aPad, aFileLocation, aFitInfoTString, aAnType, aCentType, kImf0, kRef0, aMarkerColor, aMarkerStyle, aMarkerSize, aDrawOption);
 }
 
 
 
 //________________________________________________________________________________________________________________
-TGraphAsymmErrors* FitValuesWriter::GetLambdavsRadiusGraph(TString aFileLocation, TString aFitInfoTString, AnalysisType aAnType, CentralityType aCentType)
+TGraphAsymmErrors* FitValuesWriter::GetLambdavsRadiusGraphStat(TString aFileLocation, TString aFitInfoTString, AnalysisType aAnType, CentralityType aCentType)
 {
-  return GetYvsXGraph(aFileLocation, aFitInfoTString, aAnType, aCentType, kLambda, kRadius);
+  return GetYvsXGraphStat(aFileLocation, aFitInfoTString, aAnType, aCentType, kLambda, kRadius);
 }
 
 //________________________________________________________________________________________________________________
-void FitValuesWriter::DrawLambdavsRadiusGraph(TPad* aPad, TString aFileLocation, TString aFitInfoTString, AnalysisType aAnType, CentralityType aCentType, int aMarkerColor, int aMarkerStyle, double aMarkerSize, TString aDrawOption)
+void FitValuesWriter::DrawLambdavsRadiusGraphStat(TPad* aPad, TString aFileLocation, TString aFitInfoTString, AnalysisType aAnType, CentralityType aCentType, int aMarkerColor, int aMarkerStyle, double aMarkerSize, TString aDrawOption)
 {
-  DrawYvsXGraph(aPad, aFileLocation, aFitInfoTString, aAnType, aCentType, kLambda, kRadius, aMarkerColor, aMarkerStyle, aMarkerSize, aDrawOption);
+  DrawYvsXGraphStat(aPad, aFileLocation, aFitInfoTString, aAnType, aCentType, kLambda, kRadius, aMarkerColor, aMarkerStyle, aMarkerSize, aDrawOption);
 }
 
 
 //________________________________________________________________________________________________________________
-TGraphAsymmErrors* FitValuesWriter::GetD0Graph(TString aFileLocation, TString aFitInfoTString, AnalysisType aAnType, CentralityType aCentType, double aXOffset)
+TGraphAsymmErrors* FitValuesWriter::GetD0GraphStat(TString aFileLocation, TString aFitInfoTString, AnalysisType aAnType, CentralityType aCentType, double aXOffset)
 {
   TGraphAsymmErrors* tReturnGr = new TGraphAsymmErrors(1);
   FitParameter* tFitParamD0 = GetFitParameter(aFileLocation, aFitInfoTString, aAnType, aCentType, kd0);
@@ -451,11 +451,11 @@ TGraphAsymmErrors* FitValuesWriter::GetD0Graph(TString aFileLocation, TString aF
 }
 
 //________________________________________________________________________________________________________________
-void FitValuesWriter::DrawD0Graph(TPad* aPad, TString aFileLocation, TString aFitInfoTString, AnalysisType aAnType, CentralityType aCentType, double aXOffset, int aMarkerColor, int aMarkerStyle, double aMarkerSize, TString aDrawOption)
+void FitValuesWriter::DrawD0GraphStat(TPad* aPad, TString aFileLocation, TString aFitInfoTString, AnalysisType aAnType, CentralityType aCentType, double aXOffset, int aMarkerColor, int aMarkerStyle, double aMarkerSize, TString aDrawOption)
 {
   aPad->cd();
 
-  TGraphAsymmErrors* tGraphToDraw = GetD0Graph(aFileLocation, aFitInfoTString, aAnType, aCentType, aXOffset);
+  TGraphAsymmErrors* tGraphToDraw = GetD0GraphStat(aFileLocation, aFitInfoTString, aAnType, aCentType, aXOffset);
   tGraphToDraw->SetMarkerColor(aMarkerColor);
   tGraphToDraw->SetMarkerStyle(aMarkerStyle);
   tGraphToDraw->SetMarkerSize(aMarkerSize);

@@ -1,7 +1,7 @@
 #include "FitSharedAnalyses.h"
 #include "LednickyFitter.h"
 #include "FitValuesWriter.h"
-#include "FitValuesWriterwErrs.h"
+#include "FitValuesWriterwSysErrs.h"
 
 #include "TObjString.h"
 
@@ -25,8 +25,8 @@ int main(int argc, char **argv)
 
 
 
-  FitValuesWriterwErrs* tFitValWriterwErrs = new FitValuesWriterwErrs(tMasterFileLocation, tSystematicsFileLocation, tFitInfoTString);
-  vector<vector<FitParameter*> > tTest = tFitValWriterwErrs->ReadAllParameters(tAnType);
+  FitValuesWriterwSysErrs* tFitValWriterwSysErrs = new FitValuesWriterwSysErrs();
+  vector<vector<FitParameter*> > tTest = tFitValWriterwSysErrs->ReadAllParameters(tMasterFileLocation, tSystematicsFileLocation, tFitInfoTString, tAnType);
 //-------------------------------------------------------------------------------
   cout << "DONE" << endl;
   theApp->Run(kTRUE); //Run the TApp to pause the code.

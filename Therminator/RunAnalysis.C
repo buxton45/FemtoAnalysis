@@ -45,7 +45,7 @@ int main(int argc, char **argv)
   double tMaxPrimaryDecayLength = -1; 
 //  double tMaxPrimaryDecayLength = 4.01; 
 
-  int tImpactParam = 7;
+  int tImpactParam = 3;
   //-----------------------------------------
   TString tEventsDirectory, tMatricesSaveFileName, tPairFractionSaveName, tSingleParticlesSaveName, tCorrelationFunctionsSaveName, tFlowSaveName;
 

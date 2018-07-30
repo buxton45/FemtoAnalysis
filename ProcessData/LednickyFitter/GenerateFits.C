@@ -169,7 +169,7 @@ int main(int argc, char **argv)
     tLamKchP->SetMinMaxBgdFit(0.45, 0.95);
     tLamKchP->SetAllRadiiLimits(1., 10.);
 
-    if(tIncludeResidualsType == kIncludeNoResiduals) tLamKchP->SetAllLambdaParamLimits(0.1,1.0);
+//    if(tIncludeResidualsType == kIncludeNoResiduals) tLamKchP->SetAllLambdaParamLimits(0.1,1.0);
 //    else tLamKchP->SetAllLambdaParamLimits(0.1,2.0);
       //Don't seem to need lambda limits with residuals.  In fact, when limits in place, the fit doesn't converge
       // Without limits, the fit converges (with lambda values within limits!)

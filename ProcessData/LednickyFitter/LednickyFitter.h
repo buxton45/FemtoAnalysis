@@ -93,7 +93,7 @@ public:
   TF1* CreateFitFunction(TString aName, int aAnalysisNumber);
   TF1* CreateFitFunction(int aAnalysisNumber, double *par, double *parErr, double aChi2, int aNDF);  //special case, used with PlotAllFitsCentral.C
 
-  void InitializeFitter();  //Called within DoFit
+  void InitializeFitter(int aNbinsXToBuild=-1);  //Called within DoFit
   TString BuildParamCorrCoeffOutputFile(TString aFileBaseName, TString aFileType);
   void DoFit(bool aOutputCorrCoeffFile=false);
   void Finalize();  //Send things back to analyses, etc.

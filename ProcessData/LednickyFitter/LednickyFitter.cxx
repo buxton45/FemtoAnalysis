@@ -617,7 +617,7 @@ TF1* LednickyFitter::CreateFitFunction(int aAnalysisNumber, double *par, double 
 }
 
 //________________________________________________________________________________________________________________
-void LednickyFitter::InitializeFitter()
+void LednickyFitter::InitializeFitter(int aNbinsXToBuild)
 {
   cout << "----- Initializing fitter -----" << endl;
 
@@ -647,6 +647,7 @@ void LednickyFitter::InitializeFitter()
 //  if(fApplyMomResCorrection) tNbinsXToBuildMomResCrctn = fFitSharedAnalyses->GetFitPairAnalysis(0)->GetModelKStarTrueVsRecMixed()->GetNbinsX();
   if(fIncludeResidualsType != kIncludeNoResiduals) tNbinsXToBuildResiduals = fFitSharedAnalyses->GetFitPairAnalysis(0)->GetTransformMatrix(fIncludeResidualsType, 0)->GetNbinsX();
   fNbinsXToBuild = std::max({tNbinsXToBuildMomResCrctn, tNbinsXToBuildResiduals, fNbinsXToFit});
+  if(aNbinsXToBuild>0) fNbinsXToBuild=aNbinsXToBuild;
 
   if(fKStarBinWidth==0.) fKStarBinWidth = fFitSharedAnalyses->GetFitPairAnalysis(0)->GetFitPartialAnalysis(0)->GetKStarCfLite()->Num()->GetXaxis()->GetBinWidth(1);
   else assert(fKStarBinWidth == fFitSharedAnalyses->GetFitPairAnalysis(0)->GetFitPartialAnalysis(0)->GetKStarCfLite()->Num()->GetXaxis()->GetBinWidth(1));
@@ -839,7 +840,10 @@ void LednickyFitter::Finalize()
   //I think this is only an issue when the fitter fails.
   //  fCorrectedFitVecs are created from the last CalculateFitFunction call, and sometimes, when minuit fails
   //  the parameter set used in the last call does not match the parameter set chosen by minut
+  //  Also, I want to make sure everything can be drawn out to 1 GeV/c, so I will increase fNbinsXToBuild.
+  //    This is typically only an issue when no residuals are included
   double tChi2 = fChi2;
+  if(fNbinsXToBuild < 100) InitializeFitter(100);
   CalculateFitFunction(tNParams,tChi2,tPar);
 
 /*

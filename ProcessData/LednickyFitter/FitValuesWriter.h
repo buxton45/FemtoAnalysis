@@ -64,17 +64,17 @@ public:
   static vector<FitParameter*> GetFitResults(TString aFileLocation, TString aFitInfoTString, AnalysisType aAnType, CentralityType aCentType);
   static FitParameter* GetFitParameter(TString aFileLocation, TString aFitInfoTString, AnalysisType aAnType, CentralityType aCentType, ParameterType aParamType);
 
-  static TGraphAsymmErrors* GetYvsXGraph(TString aFileLocation, TString aFitInfoTString, AnalysisType aAnType, CentralityType aCentType, ParameterType aParamTypeY, ParameterType aParamTypeX);
-  static void DrawYvsXGraph(TPad* aPad, TString aFileLocation, TString aFitInfoTString, AnalysisType aAnType, CentralityType aCentType, ParameterType aParamTypeY, ParameterType aParamTypeX, int aMarkerColor, int aMarkerStyle, double aMarkerSize=0.75, TString aDrawOption = "epsame");
+  static TGraphAsymmErrors* GetYvsXGraphStat(TString aFileLocation, TString aFitInfoTString, AnalysisType aAnType, CentralityType aCentType, ParameterType aParamTypeY, ParameterType aParamTypeX);
+  static void DrawYvsXGraphStat(TPad* aPad, TString aFileLocation, TString aFitInfoTString, AnalysisType aAnType, CentralityType aCentType, ParameterType aParamTypeY, ParameterType aParamTypeX, int aMarkerColor, int aMarkerStyle, double aMarkerSize=0.75, TString aDrawOption = "epsame");
 
-  static TGraphAsymmErrors* GetImF0vsReF0Graph(TString aFileLocation, TString aFitInfoTString, AnalysisType aAnType, CentralityType aCentType);
-  static void DrawImF0vsReF0Graph(TPad* aPad, TString aFileLocation, TString aFitInfoTString, AnalysisType aAnType, CentralityType aCentType, int aMarkerColor, int aMarkerStyle, double aMarkerSize=0.75, TString aDrawOption = "epsame");
+  static TGraphAsymmErrors* GetImF0vsReF0GraphStat(TString aFileLocation, TString aFitInfoTString, AnalysisType aAnType, CentralityType aCentType);
+  static void DrawImF0vsReF0GraphStat(TPad* aPad, TString aFileLocation, TString aFitInfoTString, AnalysisType aAnType, CentralityType aCentType, int aMarkerColor, int aMarkerStyle, double aMarkerSize=0.75, TString aDrawOption = "epsame");
 
-  static TGraphAsymmErrors* GetLambdavsRadiusGraph(TString aFileLocation, TString aFitInfoTString, AnalysisType aAnType, CentralityType aCentType);
-  static void DrawLambdavsRadiusGraph(TPad* aPad, TString aFileLocation, TString aFitInfoTString, AnalysisType aAnType, CentralityType aCentType, int aMarkerColor, int aMarkerStyle, double aMarkerSize=0.75, TString aDrawOption = "epsame");
+  static TGraphAsymmErrors* GetLambdavsRadiusGraphStat(TString aFileLocation, TString aFitInfoTString, AnalysisType aAnType, CentralityType aCentType);
+  static void DrawLambdavsRadiusGraphStat(TPad* aPad, TString aFileLocation, TString aFitInfoTString, AnalysisType aAnType, CentralityType aCentType, int aMarkerColor, int aMarkerStyle, double aMarkerSize=0.75, TString aDrawOption = "epsame");
 
-  static TGraphAsymmErrors* GetD0Graph(TString aFileLocation, TString aFitInfoTString, AnalysisType aAnType, CentralityType aCentType, double aXOffset=0.5);
-  static void DrawD0Graph(TPad* aPad, TString aFileLocation, TString aFitInfoTString, AnalysisType aAnType, CentralityType aCentType, double aXOffset, int aMarkerColor, int aMarkerStyle, double aMarkerSize=0.75, TString aDrawOption = "epsame");
+  static TGraphAsymmErrors* GetD0GraphStat(TString aFileLocation, TString aFitInfoTString, AnalysisType aAnType, CentralityType aCentType, double aXOffset=0.5);
+  static void DrawD0GraphStat(TPad* aPad, TString aFileLocation, TString aFitInfoTString, AnalysisType aAnType, CentralityType aCentType, double aXOffset, int aMarkerColor, int aMarkerStyle, double aMarkerSize=0.75, TString aDrawOption = "epsame");
 
   //inline (i.e. simple) functions
 
