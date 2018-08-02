@@ -61,6 +61,11 @@ TF1* FitBackground(TH1* aBgdOnlyCf, int aPower=6, double aMinBgdFit=0., double a
   tBgdFit->SetParameter(5, 0.);
   tBgdFit->SetParameter(6, 0.);
 
+  //If I want the fit to be symmetric about the y-axis
+//  tBgdFit->FixParameter(1, 0.);
+//  tBgdFit->FixParameter(3, 0.);
+//  tBgdFit->FixParameter(5, 0.);
+
   if(aPower<6)
   {
     for(int i=6; i>aPower; i--)

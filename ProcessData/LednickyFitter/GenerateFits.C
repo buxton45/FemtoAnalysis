@@ -35,6 +35,7 @@ int main(int argc, char **argv)
   //--Save options
   bool SaveImages = false;
   TString tSaveFileType = "pdf";
+  bool bWriteToMasterFitValuesFile = true;
   bool SaveImagesInRootFile = false;
 
   //--Sharing lambda
@@ -197,7 +198,7 @@ int main(int argc, char **argv)
   if(bDoFit)
   {
     tLamKchP->DoFit(tMaxFitKStar);
-    tLamKchP->WriteToMasterFitValuesFile(tLocationMasterFitResults, tResultsDate);
+    if(bWriteToMasterFitValuesFile) tLamKchP->WriteToMasterFitValuesFile(tLocationMasterFitResults, tResultsDate);
 
 //    TCanvas* tKStarwFitsCan = tLamKchP->DrawKStarCfswFits(ApplyMomResCorrection,ApplyNonFlatBackgroundCorrection,tNonFlatBgdFitType,SaveImages,bDrawSysErrs,bZoomROP);
     TCanvas* tKStarwFitsCan_Zoom = tLamKchP->DrawKStarCfswFits(ApplyMomResCorrection,ApplyNonFlatBackgroundCorrection,tNonFlatBgdFitType,SaveImages,bDrawSysErrs,true);

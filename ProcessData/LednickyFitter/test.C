@@ -199,10 +199,10 @@ int main(int argc, char **argv)
   TString tResultsDate = "20180505";
   AnalysisType tAnType = kLamKchP;
 
-  TString tHelperLocation = "/home/jesse/Analysis/FemtoAnalysis/ProcessData/LednickyFitter/testHelper.tex";
+  TString tHelperBaseLocation = "/home/jesse/Analysis/FemtoAnalysis/ProcessData/LednickyFitter/testHelper";
 
   FitValuesLatexTableHelperWriter* tFitValLaTaHelpWriter = new FitValuesLatexTableHelperWriter();
-  tFitValLaTaHelpWriter->WriteLatexTableHelper(tHelperLocation, tFileLocation, kInclude3Residuals);
+  tFitValLaTaHelpWriter->WriteLatexTableHelper(tHelperBaseLocation, tFileLocation, tAnType, kInclude3Residuals);
 //-------------------------------------------------------------------------------
   theApp->Run(kTRUE); //Run the TApp to pause the code.
   // Select "Exit ROOT" from Canvas "File" menu to exit

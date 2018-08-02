@@ -61,6 +61,7 @@ int main(int argc, char **argv)
   //--Save options
   bool SaveImages = false;
   TString tSaveFileType = "pdf";
+  bool bWriteToMasterFitValuesFile = true;
   bool SaveImagesInRootFile = false;
 
   //--Sharing lambda
@@ -233,7 +234,7 @@ int main(int argc, char **argv)
   if(bDoFit)
   {
     tDualie->DoFit(tDualieShareLambda, tDualieShareRadii, tMaxFitKStar);
-    tDualie->WriteToMasterFitValuesFile(tLocationMasterFitResults, tResultsDate);
+    if(bWriteToMasterFitValuesFile) tDualie->WriteToMasterFitValuesFile(tLocationMasterFitResults, tResultsDate);
 
 //    TObjArray* tKStarwFitsCan = tDualie->DrawKStarCfswFits(ApplyMomResCorrection,ApplyNonFlatBackgroundCorrection,tNonFlatBgdFitType,SaveImages,bDrawSysErrs,bZoomROP);
     TObjArray* tKStarwFitsCan_Zoom = tDualie->DrawKStarCfswFits(ApplyMomResCorrection,ApplyNonFlatBackgroundCorrection,tNonFlatBgdFitType,SaveImages,bDrawSysErrs,true);

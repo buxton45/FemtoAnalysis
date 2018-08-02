@@ -15,16 +15,15 @@ public:
   virtual ~FitValuesLatexTableHelperWriter();
 
 
+  static TString GetFitInfoTStringFromTwoLetterID(TString aTwoLetterID, AnalysisType aAnType, IncludeResidualsType aResType);
+  static TString GetFitInfoTStringFromTwoLetterID_LamKch(TString aTwoLetterID, IncludeResidualsType aResType);
+  static TString GetFitInfoTStringFromTwoLetterID_LamK0(TString aTwoLetterID, IncludeResidualsType aResType);
 
-
-  static TString GetTwoLetterID(TString aFitInfoTString, IncludeResidualsType aResType);
-  static TString GetFitInfoTStringFromTwoLetterID(TString aTwoLetterID, IncludeResidualsType aResType);
   static TString GetLatexTableOverallLabel(TString aTwoLetterID);
-  static vector<TString> GetFitInfoTStringAndLatexTableOverallLabel(TString aTwoLetterID, IncludeResidualsType aResType);
-  static void WriteLatexTableHelperEntry(ostream &aOut, TString aMasterFileLocation, TString aTwoLetterID, IncludeResidualsType aResType, AnalysisType aAnType);
-  static void WriteLatexTableHelperSection(ostream &aOut, TString aMasterFileLocation, TString aTwoLetterID, IncludeResidualsType aResType);
+  static void WriteLatexTableHelperEntry(ostream &aOut, TString aMasterFileLocation, TString aTwoLetterID, AnalysisType aAnType, IncludeResidualsType aResType);
+  static void WriteLatexTableHelperSection(ostream &aOut, TString aMasterFileLocation, TString aTwoLetterID, AnalysisType aAnType, IncludeResidualsType aResType);
   static void WriteLatexTableHelperHeader(ostream &aOut);
-  static void WriteLatexTableHelper(TString aHelperLocation, TString aMasterFileLocation, IncludeResidualsType aResType);
+  static void WriteLatexTableHelper(TString aHelperBaseLocation, TString aMasterFileLocation, AnalysisType aAnType, IncludeResidualsType aResType);
 
   //inline (i.e. simple) functions
 

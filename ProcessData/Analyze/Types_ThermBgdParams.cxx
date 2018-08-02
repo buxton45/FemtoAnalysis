@@ -9,9 +9,9 @@
 
 
 
-const double  cLamK0_ThermBgdParamValues_0010[7] = {1.00698258, -0.02291412,  0.01312921, -0.00875929,  0.00185616,  0.00336635, -0.00129966};
-const double  cLamK0_ThermBgdParamValues_1030[7] = {1.00073498,  0.04608827, -0.17458269,  0.11667504,  0.01847243, -0.03675633,  0.00855837};
-const double  cLamK0_ThermBgdParamValues_3050[7] = {0.99519167,  0.12422358, -0.41231021,  0.28483665,  0.04387198, -0.09666038,  0.02375852};
+const double  cLamK0_ThermBgdParamValues_0010[7] = {1.00214451,  0.00000000, -0.01657213,  0.00000000,  0.00807705,  0.00000000, -0.00110710};
+const double  cLamK0_ThermBgdParamValues_1030[7] = {1.00492401,  0.00000000, -0.04119692,  0.00000000,  0.02036970,  0.00000000, -0.00277144};
+const double  cLamK0_ThermBgdParamValues_3050[7] = {1.00737360,  0.00000000, -0.07046257,  0.00000000,  0.03591421,  0.00000000, -0.00489105};
   //-----------------------------------------------------------
 const double*  cLamK0_ThermBgdParamValues[3] = {cLamK0_ThermBgdParamValues_0010, cLamK0_ThermBgdParamValues_1030, cLamK0_ThermBgdParamValues_3050};
 const double*  cALamK0_ThermBgdParamValues[3] = {cLamK0_ThermBgdParamValues_0010, cLamK0_ThermBgdParamValues_1030, cLamK0_ThermBgdParamValues_3050};

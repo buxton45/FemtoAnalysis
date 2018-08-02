@@ -29,111 +29,21 @@ FitValuesLatexTableHelperWriter::~FitValuesLatexTableHelperWriter()
 
 
 //________________________________________________________________________________________________________________
-TString FitValuesLatexTableHelperWriter::GetTwoLetterID(TString aFitInfoTString, IncludeResidualsType aResType)
+TString FitValuesLatexTableHelperWriter::GetFitInfoTStringFromTwoLetterID(TString aTwoLetterID, AnalysisType aAnType, IncludeResidualsType aResType)
 {
-  TString tCommon1 = "_MomResCrctn";
-  TString tCommon2 = "_PrimMaxDecay4fm_UsingXiDataAndCoulombOnly";
+  TString tReturnFitInfoTString;
+  if(aAnType==kLamKchP || aAnType==kALamKchM || aAnType==kLamKchM || aAnType==kALamKchP) tReturnFitInfoTString = GetFitInfoTStringFromTwoLetterID_LamKch(aTwoLetterID, aResType);
+  else if(aAnType==kLamK0 || aAnType==kALamK0)   tReturnFitInfoTString = GetFitInfoTStringFromTwoLetterID_LamK0(aTwoLetterID, aResType);
 
-  TString tReturnID = "";
-  if     (aFitInfoTString.EqualTo(TString::Format("%s_NonFlatBgdCrctnPolynomial%s%s", tCommon1.Data(), cIncludeResidualsTypeTags[aResType], tCommon2.Data())))
-  {
-    tReturnID = TString("Aa");
-  }
-  else if(aFitInfoTString.EqualTo(TString::Format("%s_NonFlatBgdCrctnPolynomial%s%s_ShareLam", tCommon1.Data(), cIncludeResidualsTypeTags[aResType], tCommon2.Data())))
-  {
-    tReturnID = TString("Ba");
-  }
-  else if(aFitInfoTString.EqualTo(TString::Format("%s_NonFlatBgdCrctnPolynomial%s%s_Dualie_ShareRadii", tCommon1.Data(), cIncludeResidualsTypeTags[aResType], tCommon2.Data())))
-  {
-    tReturnID = TString("Ca");
-  }
-  else if(aFitInfoTString.EqualTo(TString::Format("%s_NonFlatBgdCrctnPolynomial%s%s_ShareLam_Dualie_ShareRadii", tCommon1.Data(), cIncludeResidualsTypeTags[aResType], tCommon2.Data())))
-  {
-    tReturnID = TString("Da");
-  }
-  else if(aFitInfoTString.EqualTo(TString::Format("%s_NonFlatBgdCrctnPolynomial%s%s_ShareLam_Dualie_ShareLam_ShareRadii", tCommon1.Data(), cIncludeResidualsTypeTags[aResType], tCommon2.Data())))
-  {
-    tReturnID = TString("Ea");
-  }
-  //--------------------------------------------------------------
-  else if(aFitInfoTString.EqualTo(TString::Format("%s_NonFlatBgdCrctnLinear%s%s", tCommon1.Data(), cIncludeResidualsTypeTags[aResType], tCommon2.Data())))
-  {
-    tReturnID = TString("Ab");
-  }
-  else if(aFitInfoTString.EqualTo(TString::Format("%s_NonFlatBgdCrctnLinear%s%s_ShareLam", tCommon1.Data(), cIncludeResidualsTypeTags[aResType], tCommon2.Data())))
-  {
-    tReturnID = TString("Bb");
-  }
-  else if(aFitInfoTString.EqualTo(TString::Format("%s_NonFlatBgdCrctnLinear%s%s_Dualie_ShareRadii", tCommon1.Data(), cIncludeResidualsTypeTags[aResType], tCommon2.Data())))
-  {
-    tReturnID = TString("Cb");
-  }
-  else if(aFitInfoTString.EqualTo(TString::Format("%s_NonFlatBgdCrctnLinear%s%s_ShareLam_Dualie_ShareRadii", tCommon1.Data(), cIncludeResidualsTypeTags[aResType], tCommon2.Data())))
-  {
-    tReturnID = TString("Db");
-  }
-  else if(aFitInfoTString.EqualTo(TString::Format("%s_NonFlatBgdCrctnLinear%s%s_ShareLam_Dualie_ShareLam_ShareRadii", tCommon1.Data(), cIncludeResidualsTypeTags[aResType], tCommon2.Data())))
-  {
-    tReturnID = TString("Eb");
-  }
-  //--------------------------------------------------------------
-  else if(aFitInfoTString.EqualTo(TString::Format("%s%s%s_StavCf", tCommon1.Data(), cIncludeResidualsTypeTags[aResType], tCommon2.Data())))
-  {
-    tReturnID = TString("Ac");
-  }
-  else if(aFitInfoTString.EqualTo(TString::Format("%s%s%s_StavCf_ShareLam", tCommon1.Data(), cIncludeResidualsTypeTags[aResType], tCommon2.Data())))
-  {
-    tReturnID = TString("Bc");
-  }
-  else if(aFitInfoTString.EqualTo(TString::Format("%s%s%s_StavCf_Dualie_ShareRadii", tCommon1.Data(), cIncludeResidualsTypeTags[aResType], tCommon2.Data())))
-  {
-    tReturnID = TString("Cc");
-  }
-  else if(aFitInfoTString.EqualTo(TString::Format("%s%s%s_StavCf_ShareLam_Dualie_ShareRadii", tCommon1.Data(), cIncludeResidualsTypeTags[aResType], tCommon2.Data())))
-  {
-    tReturnID = TString("Dc");
-  }
-  else if(aFitInfoTString.EqualTo(TString::Format("%s%s%s_StavCf_ShareLam_Dualie_ShareLam_ShareRadii", tCommon1.Data(), cIncludeResidualsTypeTags[aResType], tCommon2.Data())))
-  {
-    tReturnID = TString("Ec");
-  }
-  //--------------------------------------------------------------
-  else if(aFitInfoTString.EqualTo(TString::Format("%s_NonFlatBgdCrctnLinear%s%s_StavCf", tCommon1.Data(), cIncludeResidualsTypeTags[aResType], tCommon2.Data())))
-  {
-    tReturnID = TString("Ad");
-  }
-  else if(aFitInfoTString.EqualTo(TString::Format("%s_NonFlatBgdCrctnLinear%s%s_StavCf_ShareLam", tCommon1.Data(), cIncludeResidualsTypeTags[aResType], tCommon2.Data())))
-  {
-    tReturnID = TString("Bd");
-  }
-  else if(aFitInfoTString.EqualTo(TString::Format("%s_NonFlatBgdCrctnLinear%s%s_StavCf_Dualie_ShareRadii", tCommon1.Data(), cIncludeResidualsTypeTags[aResType], tCommon2.Data())))
-  {
-    tReturnID = TString("Cd");
-  }
-  else if(aFitInfoTString.EqualTo(TString::Format("%s_NonFlatBgdCrctnLinear%s%s_StavCf_ShareLam_Dualie_ShareRadii", tCommon1.Data(), cIncludeResidualsTypeTags[aResType], tCommon2.Data())))
-  {
-    tReturnID = TString("Dd");
-  }
-  else if(aFitInfoTString.EqualTo(TString::Format("%s_NonFlatBgdCrctnLinear%s%s_StavCf_ShareLam_Dualie_ShareLam_ShareRadii", tCommon1.Data(), cIncludeResidualsTypeTags[aResType], tCommon2.Data())))
-  {
-    tReturnID = TString("Ed");
-  }
-  //--------------------------------------------------------------
-  else
-  {
-    cout << "In FitValuesLatexTableHelperWriter::GetTwoLetterID: NO return ID found for aFitInfoTString = " << aFitInfoTString << " and aResType = " << cIncludeResidualsTypeTags[aResType] << endl;
-    assert(0);
-  }
-
-  return tReturnID;
+  return tReturnFitInfoTString;
 }
 
-
 //________________________________________________________________________________________________________________
-TString FitValuesLatexTableHelperWriter::GetFitInfoTStringFromTwoLetterID(TString aTwoLetterID, IncludeResidualsType aResType)
+TString FitValuesLatexTableHelperWriter::GetFitInfoTStringFromTwoLetterID_LamKch(TString aTwoLetterID, IncludeResidualsType aResType)
 {
   TString tCommon1 = "_MomResCrctn";
   TString tCommon2 = "_PrimMaxDecay4fm_UsingXiDataAndCoulombOnly";
+  if(aResType==kIncludeNoResiduals) tCommon2 = TString("");
 
   TString tReturnFitInfoTString = "";
 
@@ -162,6 +72,25 @@ TString FitValuesLatexTableHelperWriter::GetFitInfoTStringFromTwoLetterID(TStrin
   else if(aTwoLetterID.EqualTo("Ed")) tReturnFitInfoTString = TString::Format("%s_NonFlatBgdCrctnLinear%s%s_StavCf_ShareLam_Dualie_ShareLam_ShareRadii", tCommon1.Data(), cIncludeResidualsTypeTags[aResType], tCommon2.Data());
   //--------------------------------------------------------------
   else assert(0);
+
+  return tReturnFitInfoTString;
+}
+
+//________________________________________________________________________________________________________________
+TString FitValuesLatexTableHelperWriter::GetFitInfoTStringFromTwoLetterID_LamK0(TString aTwoLetterID, IncludeResidualsType aResType)
+{
+  TString tCommon1 = "_MomResCrctn";
+  TString tCommon2 = "_PrimMaxDecay4fm_UsingXiDataAndCoulombOnly";
+  if(aResType==kIncludeNoResiduals) tCommon2 = TString("");
+
+  TString tReturnFitInfoTString = "";
+
+  if     (aTwoLetterID.EqualTo("Aa")) tReturnFitInfoTString = TString::Format("%s_NonFlatBgdCrctnPolynomial%s%s", tCommon1.Data(), cIncludeResidualsTypeTags[aResType], tCommon2.Data());
+  else if(aTwoLetterID.EqualTo("Ab")) tReturnFitInfoTString = TString::Format("%s_NonFlatBgdCrctnLinear%s%s", tCommon1.Data(), cIncludeResidualsTypeTags[aResType], tCommon2.Data());
+  else if(aTwoLetterID.EqualTo("Ac")) tReturnFitInfoTString = TString::Format("%s%s%s_StavCf", tCommon1.Data(), cIncludeResidualsTypeTags[aResType], tCommon2.Data());
+  else assert(0);
+
+  tReturnFitInfoTString += TString("_SingleLamParam");
 
   return tReturnFitInfoTString;
 }
@@ -201,22 +130,11 @@ TString FitValuesLatexTableHelperWriter::GetLatexTableOverallLabel(TString aTwoL
   return tReturnLabel;
 }
 
-//________________________________________________________________________________________________________________
-vector<TString> FitValuesLatexTableHelperWriter::GetFitInfoTStringAndLatexTableOverallLabel(TString aTwoLetterID, IncludeResidualsType aResType)
-{
-  vector<TString> tReturnVec(0);
-  TString tFitInfoTString = GetFitInfoTStringFromTwoLetterID(aTwoLetterID, aResType);
-  TString tLatexTableOverallLabel = GetLatexTableOverallLabel(aTwoLetterID);
-
-  tReturnVec = vector<TString>{tFitInfoTString, tLatexTableOverallLabel};
-  return tReturnVec;
-}
-
 
 //________________________________________________________________________________________________________________
-void FitValuesLatexTableHelperWriter::WriteLatexTableHelperEntry(ostream &aOut, TString aMasterFileLocation, TString aTwoLetterID, IncludeResidualsType aResType, AnalysisType aAnType)
+void FitValuesLatexTableHelperWriter::WriteLatexTableHelperEntry(ostream &aOut, TString aMasterFileLocation, TString aTwoLetterID, AnalysisType aAnType, IncludeResidualsType aResType)
 {
-  TString tFitInfoTString = GetFitInfoTStringFromTwoLetterID(aTwoLetterID, aResType);
+  TString tFitInfoTString = GetFitInfoTStringFromTwoLetterID(aTwoLetterID, aAnType, aResType);
 
   FitParameter *tPar_lam0010, *tPar_lam1030, *tPar_lam3050;
   FitParameter *tPar_R0010, *tPar_R1030, *tPar_R3050;
@@ -236,8 +154,14 @@ void FitValuesLatexTableHelperWriter::WriteLatexTableHelperEntry(ostream &aOut, 
 
 
   //------------------------------------------------------------------
-  aOut << TString::Format("\\newarray\\%s%s", aTwoLetterID.Data(), cAnalysisBaseTags[aAnType]) << endl;
-  aOut << TString::Format("\\readarray{%s%s}{", aTwoLetterID.Data(), cAnalysisBaseTags[aAnType]) << endl;
+  TString tAnalysisTag;
+  if(aAnType==kLamKchP || aAnType==kALamKchM || aAnType==kLamKchM || aAnType==kALamKchP) tAnalysisTag = cAnalysisBaseTags[aAnType];
+  else if(aAnType==kLamK0) tAnalysisTag = TString("LamKs");
+  else if(aAnType==kALamK0) tAnalysisTag = TString("ALamKs");
+  else assert(0);
+
+  aOut << TString::Format("\\newarray\\%s%s", aTwoLetterID.Data(), tAnalysisTag.Data()) << endl;
+  aOut << TString::Format("\\readarray{%s%s}{", aTwoLetterID.Data(), tAnalysisTag.Data()) << endl;
   aOut << TString::Format("                       %0.2f & %0.2f & ", tPar_lam0010->GetFitValue(), tPar_R0010->GetFitValue()) << endl;
   aOut << TString::Format("                       %0.2f & %0.2f & ", tPar_lam1030->GetFitValue(), tPar_R1030->GetFitValue()) << endl;
   aOut << TString::Format("                       %0.2f & %0.2f & ", tPar_lam3050->GetFitValue(), tPar_R3050->GetFitValue()) << endl;
@@ -248,12 +172,21 @@ void FitValuesLatexTableHelperWriter::WriteLatexTableHelperEntry(ostream &aOut, 
 
 
 //________________________________________________________________________________________________________________
-void FitValuesLatexTableHelperWriter::WriteLatexTableHelperSection(ostream &aOut, TString aMasterFileLocation, TString aTwoLetterID, IncludeResidualsType aResType)
+void FitValuesLatexTableHelperWriter::WriteLatexTableHelperSection(ostream &aOut, TString aMasterFileLocation, TString aTwoLetterID, AnalysisType aAnType, IncludeResidualsType aResType)
 {
-  WriteLatexTableHelperEntry(aOut, aMasterFileLocation, aTwoLetterID, aResType, kLamKchP);
-  WriteLatexTableHelperEntry(aOut, aMasterFileLocation, aTwoLetterID, aResType, kALamKchM);
-  WriteLatexTableHelperEntry(aOut, aMasterFileLocation, aTwoLetterID, aResType, kLamKchM);
-  WriteLatexTableHelperEntry(aOut, aMasterFileLocation, aTwoLetterID, aResType, kALamKchP);
+  if(aAnType==kLamKchP || aAnType==kALamKchM || aAnType==kLamKchM || aAnType==kALamKchP)
+  {
+    WriteLatexTableHelperEntry(aOut, aMasterFileLocation, aTwoLetterID, kLamKchP,  aResType);
+    WriteLatexTableHelperEntry(aOut, aMasterFileLocation, aTwoLetterID, kALamKchM, aResType);
+    WriteLatexTableHelperEntry(aOut, aMasterFileLocation, aTwoLetterID, kLamKchM,  aResType);
+    WriteLatexTableHelperEntry(aOut, aMasterFileLocation, aTwoLetterID, kALamKchP, aResType);
+  }
+  else if(aAnType==kLamK0 || aAnType==kALamK0)
+  {
+    WriteLatexTableHelperEntry(aOut, aMasterFileLocation, aTwoLetterID, kLamK0,  aResType);
+    WriteLatexTableHelperEntry(aOut, aMasterFileLocation, aTwoLetterID, kALamK0, aResType);
+  }
+  else assert(0);
 }
 
 
@@ -289,15 +222,23 @@ void FitValuesLatexTableHelperWriter::WriteLatexTableHelperHeader(ostream &aOut)
 
 
 //________________________________________________________________________________________________________________
-void FitValuesLatexTableHelperWriter::WriteLatexTableHelper(TString aHelperLocation, TString aMasterFileLocation, IncludeResidualsType aResType)
+void FitValuesLatexTableHelperWriter::WriteLatexTableHelper(TString aHelperBaseLocation, TString aMasterFileLocation, AnalysisType aAnType, IncludeResidualsType aResType)
 {
+  assert(aAnType==kLamKchP || aAnType==kLamK0);
+  TString tPairDesc = "";
+  if     (aAnType==kLamKchP) tPairDesc = TString("_cLamcKch");
+  else if(aAnType==kLamK0) tPairDesc = TString("_cLamK0");
+
+  TString tHelperLocation = TString::Format("%s%s%s.tex", aHelperBaseLocation.Data(), tPairDesc.Data(), cIncludeResidualsTypeTags[aResType]);
+
   std::ofstream tOut;
-  tOut.open(aHelperLocation);
+  tOut.open(tHelperLocation);
   WriteLatexTableHelperHeader(tOut);
 
   vector<vector<TString> > tAllTwoLetterID = {{"Aa", "Ba", "Ca", "Da", "Ea"},
                                               {"Ab", "Bb", "Cb", "Db", "Eb"},
                                               {"Ac", "Bc", "Cc", "Dc", "Ec"}};
+  if(aAnType==kLamK0 || aAnType==kALamK0) tAllTwoLetterID = vector<vector<TString> > {{"Aa"}, {"Ab"}, {"Ac"}};
   //-------------------------------------------
   TString tTwoLetterID = "";
   for(unsigned int i=0; i<tAllTwoLetterID.size(); i++)
@@ -306,7 +247,7 @@ void FitValuesLatexTableHelperWriter::WriteLatexTableHelper(TString aHelperLocat
     {
       tTwoLetterID = tAllTwoLetterID[i][j];
       tOut << TString::Format("%% --------------- %s = %s%s ---------------", tTwoLetterID.Data(), GetLatexTableOverallLabel(tTwoLetterID).Data(), cIncludeResidualsTypeTags[aResType]) << endl;
-      WriteLatexTableHelperSection(tOut, aMasterFileLocation, tTwoLetterID, aResType);
+      WriteLatexTableHelperSection(tOut, aMasterFileLocation, tTwoLetterID, aAnType, aResType);
     }
     tOut << "\%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%" << endl << endl;
   }
