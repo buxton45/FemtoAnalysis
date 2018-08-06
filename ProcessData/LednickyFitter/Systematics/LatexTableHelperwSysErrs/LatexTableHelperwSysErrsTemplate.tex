@@ -1,3 +1,6 @@
+%%% NOTE: If I want to run this standalone, uncomment out lines below
+%%%       But lines must be commented out to run within larger project
+%\begin{comment}
 \makeatletter
 \def\input@path{{/home/jesse/Analysis/FemtoAnalysis/AnalysisNotes/}}
 \makeatother
@@ -9,10 +12,11 @@
 \usepackage{boldline}  % to make lines in table bold
                        % V{<factor>} vertical rule in \begin{tabular} command
                        % also \clinB{<spec>}{<factor>} and \hlineB{<factor>}
-\usepackage{arrayjobx} % To use the array structures stored in FitResults_cLamcKch_20180505.tex     
+\usepackage{arrayjobx} % To use the array structures stored in FitResults_cLamcKch_20180505.tex   
+%\end{comment}  
 
-\input{/home/jesse/Analysis/FemtoAnalysis/ProcessData/LednickyFitter/Systematics/LatexTableHelperwSysErrs/testHelper_cLamcKch_3Res.tex}
-\input{/home/jesse/Analysis/FemtoAnalysis/ProcessData/LednickyFitter/Systematics/LatexTableHelperwSysErrs/testHelper_cLamK0_3Res.tex}
+\input{/home/jesse/Analysis/FemtoAnalysis/ProcessData/LednickyFitter/Systematics/LatexTableHelperwSysErrs/TableHelper_cLamcKch_3Res.tex}
+\input{/home/jesse/Analysis/FemtoAnalysis/ProcessData/LednickyFitter/Systematics/LatexTableHelperwSysErrs/TableHelper_cLamK0_3Res.tex}
 
 
 \begin{document}
@@ -21,6 +25,12 @@
 \pagestyle{empty}
 \begin{landscape}
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%          LamK0             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%% LamK0, polynomial background, single lambda parameter
+%\begin{comment}
 \begin{table}[htbp]
  \centering
  \renewcommand{\arraystretch}{1.25}
@@ -51,16 +61,114 @@
  \end{tabular}}
  \caption{Fit Results \LamALamKs, with 3 residual correlations included. 
  Each pair is fit simultaneously with its conjugate (ie. \LamKs with \ALamKs) across all centralities (0-10\%, 10-30\%, 30-50\%), for a total of 6 simultaneous analyses in the fit.
- Each analysis has a unique $\lambda$ and normalization parameter.
+ A single $\lambda$ parameter is shared amongst all.
+ Each analysis has a unique normalization parameter.
  The radii are shared between analyses of like centrality, as these should have similar source sizes.
  The scattering parameters ($\mathbb{R}f_{0}$, $\mathbb{I}f_{0}$, $d_{0}$) are shared amongst all.
+ The background is modeled by a (6$^{\mathrm{th}}$-)degree polynomial fit to THERMINATOR simulation.
  The fit is done on the data with only statistical error bars.
  The errors marked as ``stat." are those returned by MINUIT.
  The errors marked as ``sys." are those which result from my systematic analysis (as outlined in Section \ref{SystematicErrors}).}
  \label{tab:FitResultsLamK0_3Res}
 \end{table}  
+%\end{comment}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%% LamK0, linear background, single lambda parameter
+%\begin{comment}
+\begin{table}[htbp]
+ \centering
+ \renewcommand{\arraystretch}{1.25}
+ \resizebox{\paperwidth}{!}{
+ \begin{tabular}{|c|c|c|c|c|c|c|}
+  \multicolumn{7}{c}{Fit Results \LamALamKs} \\
+  \hline
+  \multirow{2}{*}{System} & \multirow{2}{*}{Centrality} & \multicolumn{5}{c|}{Fit Parameters} \\
+  \cline{3-7}
+   & & $\lambda$ & $R$ & $\mathbb{R}f_{0}$ & $\mathbb{I}f_{0}$ & $d_{0}$ \\
+  \hline  
+  \multirow{3}{*}{\LamKs \& \ALamKs}  
+     & 0-10\%
+     & \multirow{3}{*}{\AbLamKs(1) $\pm$ \AbLamKs(2) (stat.) $\pm$ \AbLamKs(3) (sys.)}    %Lambda (LamK0 & ALamK0 AllCent)
+     & \AbLamKs(4) $\pm$ \AbLamKs(5) (stat.) $\pm$ \AbLamKs(6) (sys.)                     %Radius (LamK0 & ALamK0 0010)
+     & \multirow{3}{*}{\AbLamKs(19) $\pm$ \AbLamKs(20) (stat.) $\pm$ \AbLamKs(21) (sys.)}   %Ref0   (LamK0 & ALamK0)
+     & \multirow{3}{*}{\AbLamKs(22) $\pm$ \AbLamKs(23) (stat.) $\pm$ \AbLamKs(24) (sys.)}    %Imf0   (LamK0 & ALamK0)
+     & \multirow{3}{*}{\AbLamKs(25) $\pm$ \AbLamKs(26) (stat.) $\pm$ \AbLamKs(27) (sys.)} \\ %d0     (LamK0 & ALamK0)
+   
+     & 10-30\%
+     & & \AbLamKs(10) $\pm$ \AbLamKs(11) (stat.) $\pm$ \AbLamKs(12) (sys.)                   %Radius (LamK0 & ALamK0 1030)
+     & & & \\
+   
+     & 30-50\%
+     & & \AbLamKs(16) $\pm$ \AbLamKs(17) (stat.) $\pm$ \AbLamKs(18) (sys.)                   %Radius (LamK0 & ALamK0 3050)
+     & & & \\
+   \hline
+ \end{tabular}}
+ \caption{Fit Results \LamALamKs, with 3 residual correlations included. 
+ Each pair is fit simultaneously with its conjugate (ie. \LamKs with \ALamKs) across all centralities (0-10\%, 10-30\%, 30-50\%), for a total of 6 simultaneous analyses in the fit.
+ A single $\lambda$ parameter is shared amongst all.
+ Each analysis has a unique normalization parameter.
+ The radii are shared between analyses of like centrality, as these should have similar source sizes.
+ The scattering parameters ($\mathbb{R}f_{0}$, $\mathbb{I}f_{0}$, $d_{0}$) are shared amongst all.
+ The background is modeled with a linear form.
+ The fit is done on the data with only statistical error bars.
+ The errors marked as ``stat." are those returned by MINUIT.
+ The errors marked as ``sys." are those which result from my systematic analysis (as outlined in Section \ref{SystematicErrors}).}
+ \label{tab:FitResultsLamK0_3Res}
+\end{table} 
+%\end{comment} 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%% LamK0, Stav method with no bgd, single lambda parameter
+%\begin{comment}
+\begin{table}[htbp]
+ \centering
+ \renewcommand{\arraystretch}{1.25}
+ \resizebox{\paperwidth}{!}{
+ \begin{tabular}{|c|c|c|c|c|c|c|}
+  \multicolumn{7}{c}{Fit Results \LamALamKs} \\
+  \hline
+  \multirow{2}{*}{System} & \multirow{2}{*}{Centrality} & \multicolumn{5}{c|}{Fit Parameters} \\
+  \cline{3-7}
+   & & $\lambda$ & $R$ & $\mathbb{R}f_{0}$ & $\mathbb{I}f_{0}$ & $d_{0}$ \\
+  \hline  
+  \multirow{3}{*}{\LamKs \& \ALamKs}  
+     & 0-10\%
+     & \multirow{3}{*}{\AcLamKs(1) $\pm$ \AcLamKs(2) (stat.) $\pm$ \AcLamKs(3) (sys.)}    %Lambda (LamK0 & ALamK0 AllCent)
+     & \AcLamKs(4) $\pm$ \AcLamKs(5) (stat.) $\pm$ \AcLamKs(6) (sys.)                     %Radius (LamK0 & ALamK0 0010)
+     & \multirow{3}{*}{\AcLamKs(19) $\pm$ \AcLamKs(20) (stat.) $\pm$ \AcLamKs(21) (sys.)}   %Ref0   (LamK0 & ALamK0)
+     & \multirow{3}{*}{\AcLamKs(22) $\pm$ \AcLamKs(23) (stat.) $\pm$ \AcLamKs(24) (sys.)}    %Imf0   (LamK0 & ALamK0)
+     & \multirow{3}{*}{\AcLamKs(25) $\pm$ \AcLamKs(26) (stat.) $\pm$ \AcLamKs(27) (sys.)} \\ %d0     (LamK0 & ALamK0)
+   
+     & 10-30\%
+     & & \AcLamKs(10) $\pm$ \AcLamKs(11) (stat.) $\pm$ \AcLamKs(12) (sys.)                   %Radius (LamK0 & ALamK0 1030)
+     & & & \\
+   
+     & 30-50\%
+     & & \AcLamKs(16) $\pm$ \AcLamKs(17) (stat.) $\pm$ \AcLamKs(18) (sys.)                   %Radius (LamK0 & ALamK0 3050)
+     & & & \\
+   \hline
+ \end{tabular}}
+ \caption{Fit Results \LamALamKs, with 3 residual correlations included, using the Stavinsky method to reduce the non-femtoscopic background. 
+ Each pair is fit simultaneously with its conjugate (ie. \LamKs with \ALamKs) across all centralities (0-10\%, 10-30\%, 30-50\%), for a total of 6 simultaneous analyses in the fit.
+ A single $\lambda$ parameter is shared amongst all.
+ Each analysis has a unique normalization parameter.
+ The radii are shared between analyses of like centrality, as these should have similar source sizes.
+ The scattering parameters ($\mathbb{R}f_{0}$, $\mathbb{I}f_{0}$, $d_{0}$) are shared amongst all.
+ The background is assumed flat.
+ The fit is done on the data with only statistical error bars.
+ The errors marked as ``stat." are those returned by MINUIT.
+ The errors marked as ``sys." are those which result from my systematic analysis (as outlined in Section \ref{SystematicErrors}).}
+ \label{tab:FitResultsLamK0_3Res}
+\end{table} 
+%\end{comment} 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%          LamKch             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%% LamKch, polynomial background, unique radii and unique lambda
+%\begin{comment}
+\clearpage
 \begin{table}[htbp]
  \centering
  \renewcommand{\arraystretch}{1.25}
@@ -149,14 +257,101 @@
  Each analysis has a unique $\lambda$ and normalization parameter.
  The radii are shared between analyses of like centrality, as these should have similar source sizes.
  The scattering parameters ($\mathbb{R}f_{0}$, $\mathbb{I}f_{0}$, $d_{0}$) are shared amongst all.
+ The background is modeled by a (6$^{\mathrm{th}}$-)degree polynomial fit to THERMINATOR simulation.
  The fit is done on the data with only statistical error bars.
  The errors marked as ``stat." are those returned by MINUIT.
  The errors marked as ``sys." are those which result from my systematic analysis (as outlined in Section \ref{SystematicErrors}).}
  \label{tab:FitResultsLamKch_3Res}
 \end{table}  
+%\end{comment}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%% LamKch, polynomial background, unique radii and share lamconj
+%\begin{comment}
+\clearpage
+\begin{table}[htbp]
+ \centering
+ \renewcommand{\arraystretch}{1.25}
+ \resizebox{\paperwidth}{!}{
+ \begin{tabular}{|c|c|c|c|c|c|c|}
+  \multicolumn{7}{c}{Fit Results \LamALamKpm} \\
+  \hline
+  \multirow{2}{*}{System} & \multirow{2}{*}{Centrality} & \multicolumn{5}{c|}{Fit Parameters} \\
+  \cline{3-7}
+   & & $\lambda$ & $R$ & $\mathbb{R}f_{0}$ & $\mathbb{I}f_{0}$ & $d_{0}$ \\
+  \hline  
+  \multirow{6}{*}{\LamKchP \& \ALamKchM}  
+   & \multirow{2}{*}{0-10\%} 
+     & \multirow{2}{*}{\BaLamKchP(1) $\pm$ \BaLamKchP(2) (stat.) $\pm$ \BaLamKchP(3) (sys.)}    %Lambda (LamKchP 0010)
+     & \multirow{2}{*}{\BaLamKchP(4) $\pm$ \BaLamKchP(5) (stat.) $\pm$ \BaLamKchP(6) (sys.)}    %Radius (LamKchP & ALamKchM 0010)
+     & \multirow{6}{*}{\BaLamKchP(19) $\pm$ \BaLamKchP(20) (stat.) $\pm$ \BaLamKchP(21) (sys.)}   %Ref0   (LamKchP & ALamKchM)
+     & \multirow{6}{*}{\BaLamKchP(22) $\pm$ \BaLamKchP(23) (stat.) $\pm$ \BaLamKchP(24) (sys.)}    %Imf0   (LamKchP & ALamKchM)
+     & \multirow{6}{*}{\BaLamKchP(25) $\pm$ \BaLamKchP(26) (stat.) $\pm$ \BaLamKchP(27) (sys.)} \\ %d0     (LamKchP & ALamKchM)
+     
+     & & & & & & \\          
+   \cline{2-4}
+   
+   & \multirow{2}{*}{10-30\%}
+     & \multirow{2}{*}{\BaLamKchP(7) $\pm$ \BaLamKchP(8) (stat.) $\pm$ \BaLamKchP(9) (sys.)}       %Lambda (LamKchP 1030)
+     & \multirow{2}{*}{\BaLamKchP(10) $\pm$ \BaLamKchP(11) (stat.) $\pm$ \BaLamKchP(12) (sys.)}    %Radius (LamKchP & ALamKchM 1030) 
+     & & & \\
+             
+     & & & & & & \\  
+   \cline{2-4}
+   
+   & \multirow{2}{*}{30-50\%}
+     & \multirow{2}{*}{\BaLamKchP(13) $\pm$ \BaLamKchP(14) (stat.) $\pm$ \BaLamKchP(15) (sys.)}    %Lambda (LamKchP 3050)
+     & \multirow{2}{*}{\BaLamKchP(16) $\pm$ \BaLamKchP(17) (stat.) $\pm$ \BaLamKchP(18) (sys.)}    %Radius (LamKchP & ALamKchM 3050)
+     & & & \\
+             
+     & & & & & & \\  
+   \hline
+   \hline
+  \multirow{6}{*}{\LamKchM \& \ALamKchP}  
+   & \multirow{2}{*}{0-10\%} 
+     & \multirow{2}{*}{\BaLamKchM(1) $\pm$ \BaLamKchM(2) (stat.) $\pm$ \BaLamKchM(3) (sys.)}     %Lambda (LamKchM 0010)
+     & \multirow{2}{*}{\BaLamKchM(4) $\pm$ \BaLamKchM(5) (stat.) $\pm$ \BaLamKchM(6) (sys.)}     %Radius (LamKchM & ALamKchP 0010)
+     & \multirow{6}{*}{\BaLamKchM(19) $\pm$ \BaLamKchM(20) (stat.) $\pm$ \BaLamKchM(21) (sys.)}     %Ref0   (LamKchM & ALamKchP)
+     & \multirow{6}{*}{\BaLamKchM(22) $\pm$ \BaLamKchM(23) (stat.) $\pm$ \BaLamKchM(24) (sys.)}     %Imf0   (LamKchM & ALamKchP)
+     & \multirow{6}{*}{\BaLamKchM(25) $\pm$ \BaLamKchM(26) (stat.) $\pm$ \BaLamKchM(27) (sys.)} \\ %d0     (LamKchM & ALamKchP)
+     
+     & & & & & & \\          
+   \cline{2-4}
+   
+   & \multirow{2}{*}{10-30\%}
+     & \multirow{2}{*}{\BaLamKchM(7) $\pm$ \BaLamKchM(8) (stat.) $\pm$ \BaLamKchM(9) (sys.)}        %Lambda (LamKchM 1030) 
+     & \multirow{2}{*}{\BaLamKchM(10) $\pm$ \BaLamKchM(11) (stat.) $\pm$ \BaLamKchM(12) (sys.)}     %Radius (LamKchM & ALamKchP 1030)
+     & & & \\
+             
+     & & & & & & \\  
+   \cline{2-4}
+   
+   & \multirow{2}{*}{30-50\%}
+     & \multirow{2}{*}{\BaLamKchM(13) $\pm$ \BaLamKchM(14) (stat.) $\pm$ \BaLamKchM(15) (sys.)}     %Lambda (LamKchM 3050) 
+     & \multirow{2}{*}{\BaLamKchM(16) $\pm$ \BaLamKchM(17) (stat.) $\pm$ \BaLamKchM(18) (sys.)}     %Radius (LamKchM & ALamKchP 3050)
+     & & & \\
+             
+     & & & & & & \\     
+   \hline
+ \end{tabular}}
+ \caption{Fit Results \LamALamKpm, with 3 residual correlations included.
+ Each pair is fit simultaneously with its conjugate (ie. \LamKchP with \ALamKchM and \LamKchM with \ALamKchP) across all centralities (0-10\%, 10-30\%, 30-50\%), for a total of 6 simultaneous analyses in the fit.
+ A $\lambda$ parameter is shared between a pair and its conjugate for each centrality.
+ Each analysis has a unique normalization parameter.
+ The radii are shared between analyses of like centrality, as these should have similar source sizes.
+ The scattering parameters ($\mathbb{R}f_{0}$, $\mathbb{I}f_{0}$, $d_{0}$) are shared amongst all.
+ The background is modeled by a (6$^{\mathrm{th}}$-)degree polynomial fit to THERMINATOR simulation.
+ The fit is done on the data with only statistical error bars.
+ The errors marked as ``stat." are those returned by MINUIT.
+ The errors marked as ``sys." are those which result from my systematic analysis (as outlined in Section \ref{SystematicErrors}).}
+ \label{tab:FitResultsLamKch_3Res}
+\end{table}  
+%\end{comment}
 
 
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%% LamKch, polynomial background, share radii and single lambda
+%\begin{comment}
 \clearpage
 \begin{table}[htbp]
  \centering
@@ -202,16 +397,22 @@
    \hline
  \end{tabular}}
  \caption{Fit Results \LamALamKpm, with 3 residual correlations included.
- Each pair is fit simultaneously with its conjugate (ie. \LamKchP with \ALamKchM and \LamKchM with \ALamKchP) across all centralities (0-10\%, 10-30\%, 30-50\%), for a total of 6 simultaneous analyses in the fit.
- Each analysis has a unique $\lambda$ and normalization parameter.
- The radii are shared between analyses of like centrality, as these should have similar source sizes.
- The scattering parameters ($\mathbb{R}f_{0}$, $\mathbb{I}f_{0}$, $d_{0}$) are shared amongst all.
+ All \LamKpm analyses are fit simultaneously across all centralities (0-10\%, 10-30\%, 30-50\%).
+ Scattering parameters ($\mathbb{R}f_{0}$, $\mathbb{I}f_{0}$, $d_{0}$) are shared between pair-conjugate systems (i.e. a parameter set describing the \LamKchP \& \ALamKchM system, and a separate set describing the \LamKchM \& \ALamKchP system).
+ For each centrality, a radius and $\lambda$ parameters are shared between all pairs (\LamKchP, \ALamKchM, \LamKchM, \ALamKchP).
+ Each analysis has a unique normalization parameter.
+ The background is modeled by a (6$^{\mathrm{th}}$-)degree polynomial fit to THERMINATOR simulation.
  The fit is done on the data with only statistical error bars.
  The errors marked as ``stat." are those returned by MINUIT.
  The errors marked as ``sys." are those which result from my systematic analysis (as outlined in Section \ref{SystematicErrors}).}
  \label{tab:FitResultsLamKch_3Res}
-\end{table}  
+\end{table}
+%\end{comment}
 
+  
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%% LamKch, polynomial background, share radii, share lamconj
+%\begin{comment}
 \clearpage
 \begin{table}[htbp]
  \centering
@@ -280,17 +481,18 @@
    \hline
  \end{tabular}}
  \caption{Fit Results \LamALamKpm, with 3 residual correlations included.
- Each pair is fit simultaneously with its conjugate (ie. \LamKchP with \ALamKchM and \LamKchM with \ALamKchP) across all centralities (0-10\%, 10-30\%, 30-50\%), for a total of 6 simultaneous analyses in the fit.
- Each analysis has a unique $\lambda$ and normalization parameter.
- The radii are shared between analyses of like centrality, as these should have similar source sizes.
- The scattering parameters ($\mathbb{R}f_{0}$, $\mathbb{I}f_{0}$, $d_{0}$) are shared amongst all.
+ All \LamKpm analyses are fit simultaneously across all centralities (0-10\%, 10-30\%, 30-50\%).
+ Scattering parameters ($\mathbb{R}f_{0}$, $\mathbb{I}f_{0}$, $d_{0}$) are shared between pair-conjugate systems (i.e. a parameter set describing the \LamKchP \& \ALamKchM system, and a separate set describing the \LamKchM \& \ALamKchP system).
+ For each centrality, a radius parameter is shared between all pairs (\LamKchP, \ALamKchM, \LamKchM, \ALamKchP), and a $\lambda$ parameter is shared between a pair and its conjugate.
+ Each analysis has a unique normalization parameter.
+ The background is modeled by a (6$^{\mathrm{th}}$-)degree polynomial fit to THERMINATOR simulation.
  The fit is done on the data with only statistical error bars.
  The errors marked as ``stat." are those returned by MINUIT.
  The errors marked as ``sys." are those which result from my systematic analysis (as outlined in Section \ref{SystematicErrors}).}
  \label{tab:FitResultsLamKch_3Res}
 \end{table}  
-
-
+%\end{comment}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \end{landscape}
 \pagestyle{plain}

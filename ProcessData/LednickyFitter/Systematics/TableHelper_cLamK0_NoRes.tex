@@ -1,0 +1,85 @@
+%NOTE: Arrays seem to only be able to be named with alphabetical characters
+%      No '_' or event numbers
+
+% ----------Shorthand definitions----------
+% A = FitGen_NoLamShare
+% B = FitGen_ShareLamConj
+
+% C = Dualie_NoLamShare
+% D = Dualie_ShareLamConj
+% E = Dualie_ShareSingleLam
+
+%   ------------------
+% a = PolyNFB
+% b = LinrNFB
+% c = LinrNFB_StavCf
+% d = NoNFB_StavCf
+
+% ----------How arrays are stored----------
+% aArray = {lam0010(1), lam0010StatErr(2), lam0010SysErr(3)
+%           R0010(4),   R0010StatErr(5),   R0010SysErr(6)
+%           lam1030(7), lam1030StatErr(8), lam1030SysErr(9)
+%           R1030(10),  R1030StatErr(11),  R1030SysErr(12)
+%           lam3050(13), lam3050StatErr(14), lam3050SysErr(15)
+%           R3050(16),   R3050StatErr(17),   R3050SysErr(18)
+%           ReF0(19),   ReF0StatErr(20),   ReF0SysErr(21)
+%           ImF0(22),   ImF0StatErr(23),   ImF0SysErr(24)
+%           d0(25),     d0StatErr(26),     d0SysErr(27)}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% --------------- Aa = FitGen_PolyNFB_NoLamShare_NoRes ---------------
+\newarray\AaLamKs
+\readarray{AaLamKs}{
+                       0.40 & 0.17 & 0.16 & 
+                       2.73 & 0.70 & 0.33 & 
+                       0.40 & 0.17 & 0.16 & 
+                       2.37 & 0.62 & 0.23 & 
+                       0.40 & 0.17 & 0.16 & 
+                       1.74 & 0.42 & 0.11 & 
+                       -0.18 & 0.04 & 0.16 & 
+                       0.12 & 0.12 & 0.13 & 
+                       -0.19 & 4.95 & 0.62}
+
+\newarray\AaALamKs
+\readarray{AaALamKs}{
+                       0.40 & 0.17 & 0.16 & 
+                       2.73 & 0.70 & 0.33 & 
+                       0.40 & 0.17 & 0.16 & 
+                       2.37 & 0.62 & 0.23 & 
+                       0.40 & 0.17 & 0.16 & 
+                       1.74 & 0.42 & 0.11 & 
+                       -0.18 & 0.04 & 0.16 & 
+                       0.12 & 0.12 & 0.13 & 
+                       -0.19 & 4.95 & 0.62}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% --------------- Ab = FitGen_LinrNFB_NoLamShare_NoRes ---------------
+\newarray\AbLamKs
+\readarray{AbLamKs}{
+                       0.40 & 0.20 & 0.16 & 
+                       3.10 & 0.67 & 0.33 & 
+                       0.40 & 0.20 & 0.16 & 
+                       2.42 & 0.53 & 0.23 & 
+                       0.40 & 0.20 & 0.16 & 
+                       1.77 & 0.37 & 0.11 & 
+                       -0.18 & 0.04 & 0.16 & 
+                       0.22 & 0.12 & 0.13 & 
+                       2.74 & 0.96 & 0.62}
+
+\newarray\AbALamKs
+\readarray{AbALamKs}{
+                       0.40 & 0.20 & 0.16 & 
+                       3.10 & 0.67 & 0.33 & 
+                       0.40 & 0.20 & 0.16 & 
+                       2.42 & 0.53 & 0.23 & 
+                       0.40 & 0.20 & 0.16 & 
+                       1.77 & 0.37 & 0.11 & 
+                       -0.18 & 0.04 & 0.16 & 
+                       0.22 & 0.12 & 0.13 & 
+                       2.74 & 0.96 & 0.62}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+

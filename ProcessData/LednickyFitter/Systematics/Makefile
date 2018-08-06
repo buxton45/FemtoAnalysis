@@ -25,7 +25,7 @@ CFLAGS = $(shell root-config --cflags) -Wall -std=c++11 -I${ANALYZE_DIR} -I${LED
 
 MY_LIBS = $(addprefix build/, FitParameter.o FitChi2Histograms.o BackgroundFitter.o FitPartialAnalysis.o FitPairAnalysis.o FitSharedAnalyses.o MathematicaSession.o WaveFunction.o ChargedResidualCf.o SimpleChargedResidualCf.o NeutralResidualCf.o ResidualCollection.o LednickyFitter.o FitValuesWriter.o FitValuesLatexTableHelperWriter.o FitValuesWriterwSysErrs.o FitValuesLatexTableHelperWriterwSysErrs.o FitGenerator.o FitGeneratorAndDraw.o ThermCf.o CfLite.o CfHeavy.o Types.o Types_LambdaValues.o Types_FitParamValues.o Types_ThermBgdParams.o Types_SysFileInfo.o Faddeeva.o FitSystematicAnalysis.o CanvasPartition.o)
 
-BINARIES = runSingleSystematics runAllSystematics runRead runFindOutliers runFitRange runNonFlatBgdSys runTest runCompareFittingMethodsv2wSysErrs
+BINARIES = runSingleSystematics runAllSystematics runRead runFindOutliers runFitRange runNonFlatBgdSys runTest runBuildLatexTableHelperwSysErrs runCompareFittingMethodsv2wSysErrs runDrawmTScalingv2
 
 all: $(BINARIES)
 
@@ -47,11 +47,17 @@ runFitRange: ${MY_LIBS} FitRangeSystematics.C
 runNonFlatBgdSys: ${MY_LIBS} NonFlatBgdFitTypeSystematics.C
 	g++ NonFlatBgdFitTypeSystematics.C ${MY_LIBS} -I${INCDIR} -o runNonFlatBgdSys -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS)
 
+runBuildLatexTableHelperwSysErrs: ${MY_LIBS} BuildLatexTableHelperwSysErrs.C
+	g++ BuildLatexTableHelperwSysErrs.C ${MY_LIBS} -I${INCDIR} -o runBuildLatexTableHelperwSysErrs -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS)
+
 runTest: ${MY_LIBS} test.C
 	g++ test.C ${MY_LIBS} -I${INCDIR} -o runTest -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS)
 
 runCompareFittingMethodsv2wSysErrs: ${MY_LIBS} CompareFittingMethodsv2wSysErrs.C
 	g++ CompareFittingMethodsv2wSysErrs.C ${MY_LIBS} -I${INCDIR} -o runCompareFittingMethodsv2wSysErrs -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS)
+
+runDrawmTScalingv2: ${MY_LIBS} DrawmTScalingv2.C
+	g++ DrawmTScalingv2.C ${MY_LIBS} -I${INCDIR} -o runDrawmTScalingv2 -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS)
 
 build/%.o: ${ANALYZE_DIR}/%.cxx ${ANALYZE_DIR}/%.h
 	g++ -c $< $(CFLAGS) -o $@

@@ -201,10 +201,10 @@ void DualieFitGenerator::CreateMinuitParameters(bool aShareLambda, bool aShareRa
 //________________________________________________________________________________________________________________
 void DualieFitGenerator::InitializeGenerator(bool aShareLambda, bool aShareRadii, double aMaxFitKStar)
 {
-//  if(fIncludeResidualsType != kIncludeNoResiduals && fChargedResidualsType != kUseXiDataForAll)
-//  {
-//   for(unsigned int iCent=0; iCent<fCentralityTypes.size(); iCent++) SetRadiusLimits(1.,12.,iCent);
-//  }
+  if(fFitGen1->fIncludeResidualsType != kIncludeNoResiduals && fFitGen1->fChargedResidualsType != kUseXiDataForAll)
+  {
+   for(unsigned int iCent=0; iCent<fFitGen1->fCentralityTypes.size(); iCent++) SetRadiusLimits(1.,12.,iCent);
+  }
 
 
   CreateMinuitParameters(aShareLambda, aShareRadii);
