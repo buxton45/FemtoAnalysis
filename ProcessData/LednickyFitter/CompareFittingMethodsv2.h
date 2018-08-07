@@ -447,6 +447,16 @@ _MomResCrctn_NonFlatBgdCrctnLinear_3Res_PrimMaxDecay4fm_UsingXiDataAndCoulombOnl
 
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+/*
+  static TString BuildFitInfoTString(bool aApplyMomResCorrection, bool aApplyNonFlatBackgroundCorrection, NonFlatBgdFitType aNonFlatBgdFitType, 
+                                     IncludeResidualsType aIncludeResidualsType, ResPrimMaxDecayType aResPrimMaxDecayType=k4fm, 
+                                     ChargedResidualsType aChargedResidualsType=kUseXiDataAndCoulombOnlyInterp, bool aFixD0=false,
+                                     bool aUseStavCf=false, bool aFixAllLambdaTo1=false, bool aFixAllNormTo1=false, bool aFixRadii=false, bool aFixAllScattParams=false, 
+                                     bool aShareLambdaParams=false, bool aAllShareSingleLambdaParam=false, bool aUsemTScalingOfResidualRadii=false, bool aIsDualie=false, 
+                                     bool aDualieShareLambda=false, bool aDualieShareRadii=false);
+*/
+
+
   TString tFitInfoTString_LamKch_3Res_PolyBgd = FitValuesWriter::BuildFitInfoTString(true, true, kPolynomial, 
                                                                                      kInclude3Residuals, k4fm, 
                                                                                      kUseXiDataAndCoulombOnlyInterp, false, 
@@ -468,7 +478,7 @@ _MomResCrctn_NonFlatBgdCrctnLinear_3Res_PrimMaxDecay4fm_UsingXiDataAndCoulombOnl
                                                                                      true, false, false, true, 
                                                                                      true, true);
 
-  //-----------
+  //-------------------------------------------------------------------------
 
   TString tFitInfoTString_LamK0_3Res_PolyBgd = FitValuesWriter::BuildFitInfoTString(true, true, kPolynomial, 
                                                                                     kInclude3Residuals, k4fm, 
@@ -491,6 +501,54 @@ _MomResCrctn_NonFlatBgdCrctnLinear_3Res_PrimMaxDecay4fm_UsingXiDataAndCoulombOnl
                                                                                     false, true, false, false, 
                                                                                     false, false);
 
+  //---------------
+
+  TString tFitInfoTString_LamK0_3Res_LinrBgd = FitValuesWriter::BuildFitInfoTString(true, true, kLinear, 
+                                                                                    kInclude3Residuals, k4fm, 
+                                                                                    kUseXiDataAndCoulombOnlyInterp, false, 
+                                                                                    false, false, false, false, false, 
+                                                                                    false, true, false, false, 
+                                                                                    false, false);
+
+  TString tFitInfoTString_LamK0_10Res_LinrBgd = FitValuesWriter::BuildFitInfoTString(true, true, kLinear, 
+                                                                                    kInclude10Residuals, k4fm, 
+                                                                                    kUseXiDataAndCoulombOnlyInterp, false, 
+                                                                                    false, false, false, false, false, 
+                                                                                    false, true, false, false, 
+                                                                                    false, false);
+
+  TString tFitInfoTString_LamK0_NoRes_LinrBgd = FitValuesWriter::BuildFitInfoTString(true, true, kLinear, 
+                                                                                    kIncludeNoResiduals, k4fm, 
+                                                                                    kUseXiDataAndCoulombOnlyInterp, false, 
+                                                                                    false, false, false, false, false, 
+                                                                                    false, true, false, false, 
+                                                                                    false, false);
+
+  //---------------
+
+  TString tFitInfoTString_LamK0_3Res_StavCf = FitValuesWriter::BuildFitInfoTString(true, false, kLinear, 
+                                                                                    kInclude3Residuals, k4fm, 
+                                                                                    kUseXiDataAndCoulombOnlyInterp, false, 
+                                                                                    true, false, false, false, false, 
+                                                                                    false, true, false, false, 
+                                                                                    false, false);
+
+  TString tFitInfoTString_LamK0_10Res_StavCf = FitValuesWriter::BuildFitInfoTString(true, false, kLinear, 
+                                                                                    kInclude10Residuals, k4fm, 
+                                                                                    kUseXiDataAndCoulombOnlyInterp, false, 
+                                                                                    true, false, false, false, false, 
+                                                                                    false, true, false, false, 
+                                                                                    false, false);
+
+  TString tFitInfoTString_LamK0_NoRes_StavCf = FitValuesWriter::BuildFitInfoTString(true, false, kLinear, 
+                                                                                    kIncludeNoResiduals, k4fm, 
+                                                                                    kUseXiDataAndCoulombOnlyInterp, false, 
+                                                                                    true, false, false, false, false, 
+                                                                                    false, true, false, false, 
+                                                                                    false, false);
+
+  //-------------------------------------------------------------------------
+
 
   vector<FitValWriterInfo> tFVWIVec_CompNumRes_ShareR_PolyBgd = {FitValWriterInfo(kLamKchP, tFileLocation_LamKch, tResultsDate, tFitInfoTString_LamKch_3Res_PolyBgd, 
                                                                                   "3 Res., Share R and #lambda, Poly. Bgd", tColorLamKchP, 34, tMarkerSize), 
@@ -512,5 +570,217 @@ _MomResCrctn_NonFlatBgdCrctnLinear_3Res_PrimMaxDecay4fm_UsingXiDataAndCoulombOnl
                                                                                   "10 Res., Share R and #lambda, Poly. Bgd", tColorLamK0, 47, tMarkerSize), 
                                                                  FitValWriterInfo(kLamK0, tFileLocation_LamK0, tResultsDate, tFitInfoTString_LamK0_NoRes_PolyBgd, 
                                                                                   "No Res., Share R and #lambda, Poly. Bgd", tColorLamK0, 20, tMarkerSize)};
+
+
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  Comparison plots for results sections of analysis note  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  vector<FitValWriterInfo> tFVWIVec_Comp3An_3Res = {FitValWriterInfo(kLamKchP, tFileLocation_LamKch, tResultsDate, tFitInfoTString_LamKch_3Res_PolyBgd, 
+                                                                     "3 Residuals (Suppress Markers)", tColorLamKchP, 20, tMarkerSize), 
+                                                    FitValWriterInfo(kLamKchM, tFileLocation_LamKch, tResultsDate, tFitInfoTString_LamKch_3Res_PolyBgd, 
+                                                                     "#LambdaK^{#pm}: Share R and #lambda, Poly. Bgd (Suppress Markers)", tColorLamKchM, 20, tMarkerSize), 
+                                                    FitValWriterInfo(kLamK0, tFileLocation_LamK0, tResultsDate, tFitInfoTString_LamK0_3Res_PolyBgd, 
+                                                                     "#LambdaK^{0}_{S}: Single #lambda, Poly. Bgd (Suppress Markers)", tColorLamK0, 20, tMarkerSize)};
+/*
+  vector<FitValWriterInfo> tFVWIVec_Comp3An_3Res = {FitValWriterInfo(kLamKchP, tFileLocation_LamKch, tResultsDate, tFitInfoTString_LamKch_3Res_PolyBgd, 
+                                                                     "3 Residuals (Suppress Markers)", tColorLamKchP, 20, tMarkerSize), 
+                                                    FitValWriterInfo(kLamKchM, tFileLocation_LamKch, tResultsDate, tFitInfoTString_LamKch_3Res_PolyBgd, 
+                                                                     "#LambdaK^{#pm}: Share R and #lambda, Poly. Bgd (Suppress Markers)", tColorLamKchM, 20, tMarkerSize), 
+                                                    FitValWriterInfo(kLamK0, tFileLocation_LamK0, tResultsDate, tFitInfoTString_LamK0_3Res_LinrBgd, 
+                                                                     "#LambdaK^{0}_{S}: Single #lambda, Linr. Bgd (Suppress Markers)", tColorLamK0, 20, tMarkerSize)};
+*/
+
+
+
+  vector<FitValWriterInfo> tFVWIVec_Comp3An_10Res = {FitValWriterInfo(kLamKchP, tFileLocation_LamKch, tResultsDate, tFitInfoTString_LamKch_10Res_PolyBgd, 
+                                                                      "3 Residuals (Suppress Markers)", tColorLamKchP, 20, tMarkerSize), 
+                                                    FitValWriterInfo(kLamKchM, tFileLocation_LamKch, tResultsDate, tFitInfoTString_LamKch_10Res_PolyBgd, 
+                                                                      "#LambdaK^{#pm}: Share R and #lambda, Poly. Bgd (Suppress Markers)", tColorLamKchM, 20, tMarkerSize), 
+                                                    FitValWriterInfo(kLamK0, tFileLocation_LamK0, tResultsDate, tFitInfoTString_LamK0_10Res_PolyBgd, 
+                                                                      "#LambdaK^{0}_{S}: Single #lambda, Poly. Bgd (Suppress Markers)", tColorLamK0, 20, tMarkerSize)};
+/*
+  vector<FitValWriterInfo> tFVWIVec_Comp3An_10Res = {FitValWriterInfo(kLamKchP, tFileLocation_LamKch, tResultsDate, tFitInfoTString_LamKch_10Res_PolyBgd, 
+                                                                      "3 Residuals (Suppress Markers)", tColorLamKchP, 20, tMarkerSize), 
+                                                    FitValWriterInfo(kLamKchM, tFileLocation_LamKch, tResultsDate, tFitInfoTString_LamKch_10Res_PolyBgd, 
+                                                                     "#LambdaK^{#pm}: Share R and #lambda, Poly. Bgd (Suppress Markers)", tColorLamKchM, 20, tMarkerSize), 
+                                                    FitValWriterInfo(kLamK0, tFileLocation_LamK0, tResultsDate, tFitInfoTString_LamK0_10Res_LinrBgd, 
+                                                                     "#LambdaK^{0}_{S}: Single #lambda, Linr. Bgd (Suppress Markers)", tColorLamK0, 20, tMarkerSize)};
+*/
+
+
+  vector<FitValWriterInfo> tFVWIVec_Comp3An_NoRes = {FitValWriterInfo(kLamKchP, tFileLocation_LamKch, tResultsDate, tFitInfoTString_LamKch_NoRes_PolyBgd, 
+                                                                      "3 Residuals (Suppress Markers)", tColorLamKchP, 20, tMarkerSize), 
+                                                    FitValWriterInfo(kLamKchM, tFileLocation_LamKch, tResultsDate, tFitInfoTString_LamKch_NoRes_PolyBgd, 
+                                                                     "#LambdaK^{#pm}: Share R and #lambda, Poly. Bgd (Suppress Markers)", tColorLamKchM, 20, tMarkerSize), 
+                                                    FitValWriterInfo(kLamK0, tFileLocation_LamK0, tResultsDate, tFitInfoTString_LamK0_NoRes_PolyBgd, 
+                                                                     "#LambdaK^{0}_{S}: Single #lambda, Poly. Bgd (Suppress Markers)", tColorLamK0, 20, tMarkerSize)};
+/*
+  vector<FitValWriterInfo> tFVWIVec_Comp3An_NoRes = {FitValWriterInfo(kLamKchP, tFileLocation_LamKch, tResultsDate, tFitInfoTString_LamKch_NoRes_PolyBgd, 
+                                                                      "3 Residuals (Suppress Markers)", tColorLamKchP, 20, tMarkerSize), 
+                                                    FitValWriterInfo(kLamKchM, tFileLocation_LamKch, tResultsDate, tFitInfoTString_LamKch_NoRes_PolyBgd, 
+                                                                     "#LambdaK^{#pm}: Share R and #lambda, Poly. Bgd (Suppress Markers)", tColorLamKchM, 20, tMarkerSize), 
+                                                    FitValWriterInfo(kLamK0, tFileLocation_LamK0, tResultsDate, tFitInfoTString_LamK0_NoRes_LinrBgd, 
+                                                                     "#LambdaK^{0}_{S}: Single #lambda, Linr. Bgd (Suppress Markers)", tColorLamK0, 20, tMarkerSize)};
+*/
+
+
+
+
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  Comparison plots for comparison section of results  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+//--------- #Residuals used (Poly Bgd, Share R, Share lam)
+  vector<FitValWriterInfo> tFVWIVec_CompNumRes = {FitValWriterInfo(kLamKchP, tFileLocation_LamKch, tResultsDate, tFitInfoTString_LamKch_3Res_PolyBgd, 
+                                                                   "3 Residuals", tColorLamKchP, 34, tMarkerSize), 
+                                                  FitValWriterInfo(kLamKchP, tFileLocation_LamKch, tResultsDate, tFitInfoTString_LamKch_10Res_PolyBgd, 
+                                                                   "10 Residuals", tColorLamKchP, 47, tMarkerSize), 
+                                                  FitValWriterInfo(kLamKchP, tFileLocation_LamKch, tResultsDate, tFitInfoTString_LamKch_NoRes_PolyBgd, 
+                                                                   "No Residuals", tColorLamKchP, 20, tMarkerSize), 
+
+                                                  FitValWriterInfo(kLamKchM, tFileLocation_LamKch, tResultsDate, tFitInfoTString_LamKch_3Res_PolyBgd, 
+                                                                   "3 Residuals", tColorLamKchM, 34, tMarkerSize), 
+                                                  FitValWriterInfo(kLamKchM, tFileLocation_LamKch, tResultsDate, tFitInfoTString_LamKch_10Res_PolyBgd, 
+                                                                   "10 Residuals", tColorLamKchM, 47, tMarkerSize), 
+                                                  FitValWriterInfo(kLamKchM, tFileLocation_LamKch, tResultsDate, tFitInfoTString_LamKch_NoRes_PolyBgd, 
+                                                                   "No Residuals", tColorLamKchM, 20, tMarkerSize), 
+
+                                                  FitValWriterInfo(kLamK0, tFileLocation_LamK0, tResultsDate, tFitInfoTString_LamK0_3Res_PolyBgd, 
+                                                                   "3 Residuals", tColorLamK0, 34, tMarkerSize), 
+                                                  FitValWriterInfo(kLamK0, tFileLocation_LamK0, tResultsDate, tFitInfoTString_LamK0_10Res_PolyBgd, 
+                                                                   "10 Residuals", tColorLamK0, 47, tMarkerSize), 
+                                                  FitValWriterInfo(kLamK0, tFileLocation_LamK0, tResultsDate, tFitInfoTString_LamK0_NoRes_PolyBgd, 
+                                                                   "No Residuals", tColorLamK0, 20, tMarkerSize)};
+
+//--------- Background treatment (3Res, Share R, Share lam)
+  vector<FitValWriterInfo> tFVWIVec_CompBgdTreatment = {FitValWriterInfo(kLamKchP, tFileLocation_LamKch, tResultsDate, tFitInfoTString_ShareR_Sharelam_PolyBgd, 
+                                                                         "Polynomial Bgd.", tColorLamKchP, tMarkerStyle_PolyBgd, tMarkerSize), 
+                                                        FitValWriterInfo(kLamKchP, tFileLocation_LamKch, tResultsDate, tFitInfoTString_ShareR_Sharelam_LinrBgd, 
+                                                                         "Linear Bgd.", tColorLamKchP, tMarkerStyle_LinrBgd, tMarkerSize), 
+                                                        FitValWriterInfo(kLamKchP, tFileLocation_LamKch, tResultsDate, tFitInfoTString_ShareR_Sharelam_StavCf_NoBgd, 
+                                                                         "Stav Cf (Assumed No Bgd.)", tColorLamKchP, tMarkerStyle_StavCf, tMarkerSize), 
+      
+                                                        FitValWriterInfo(kLamKchM, tFileLocation_LamKch, tResultsDate, tFitInfoTString_ShareR_Sharelam_PolyBgd, 
+                                                                         "Polynomial Bgd.", tColorLamKchM, tMarkerStyle_PolyBgd, tMarkerSize), 
+                                                        FitValWriterInfo(kLamKchM, tFileLocation_LamKch, tResultsDate, tFitInfoTString_ShareR_Sharelam_LinrBgd, 
+                                                                         "Linear Bgd.", tColorLamKchM, tMarkerStyle_LinrBgd, tMarkerSize), 
+                                                        FitValWriterInfo(kLamKchM, tFileLocation_LamKch, tResultsDate, tFitInfoTString_ShareR_Sharelam_StavCf_NoBgd, 
+                                                                         "Stav Cf (Assumed No Bgd.)", tColorLamKchM, tMarkerStyle_StavCf, tMarkerSize),
+
+                                                        FitValWriterInfo(kLamK0, tFileLocation_LamK0, tResultsDate, tFitInfoTString_LamK0_3Res_PolyBgd, 
+                                                                         "Polynomial Bgd.", tColorLamK0, tMarkerStyle_PolyBgd, tMarkerSize), 
+                                                        FitValWriterInfo(kLamK0, tFileLocation_LamK0, tResultsDate, tFitInfoTString_LamK0_3Res_LinrBgd, 
+                                                                         "Linear Bgd.", tColorLamK0, tMarkerStyle_LinrBgd, tMarkerSize), 
+                                                        FitValWriterInfo(kLamK0, tFileLocation_LamK0, tResultsDate, tFitInfoTString_LamK0_3Res_StavCf, 
+                                                                         "Stav Cf (Assumed No Bgd.)", tColorLamK0, tMarkerStyle_StavCf, tMarkerSize)};
+
+//--------- Free vs fixed lam, sharing radii (3Res, Poly Bgd, Share R, Share lam)
+  TString tFitInfoTString_LamK0_3Res_PolyBgd_Fixlam = FitValuesWriter::BuildFitInfoTString(true, true, kPolynomial, 
+                                                                                           kInclude3Residuals, k4fm, 
+                                                                                           kUseXiDataAndCoulombOnlyInterp, false, 
+                                                                                           false, true, false, false, false, 
+                                                                                           false, false, false, false, 
+                                                                                           false, false);
+
+  vector<FitValWriterInfo> tFVWIVec_CompFreevsFixedlam_ShareR = {FitValWriterInfo(kLamKchP, tFileLocation_LamKch, tResultsDate, tFitInfoTString_ShareR_Sharelam_PolyBgd, 
+                                                                           "Free #lambda", tColorLamKchP, tMarkerStyle_PolyBgd, tMarkerSize),
+                                                                 FitValWriterInfo(kLamKchP, tFileLocation_LamKch, tResultsDate, tFitInfoTString_ShareR_Fixlam_PolyBgd, 
+                                                                                  "#lambda = 1", tColorLamKchP, 24, tMarkerSize), 
+
+                                                                 FitValWriterInfo(kLamKchM, tFileLocation_LamKch, tResultsDate, tFitInfoTString_ShareR_Sharelam_PolyBgd, 
+                                                                                  "Free #lambda", tColorLamKchM, tMarkerStyle_PolyBgd, tMarkerSize),
+                                                                 FitValWriterInfo(kLamKchM, tFileLocation_LamKch, tResultsDate, tFitInfoTString_ShareR_Fixlam_PolyBgd, 
+                                                                                  "#lambda = 1", tColorLamKchM, 24, tMarkerSize),
+
+                                                                 FitValWriterInfo(kLamK0, tFileLocation_LamK0, tResultsDate, tFitInfoTString_LamK0_3Res_PolyBgd, 
+                                                                                  "Free #lambda", tColorLamK0, tMarkerStyle_PolyBgd, tMarkerSize),
+                                                                 FitValWriterInfo(kLamK0, tFileLocation_LamK0, tResultsDate, tFitInfoTString_LamK0_3Res_PolyBgd_Fixlam, 
+                                                                                  "#lambda = 1", tColorLamK0, 24, tMarkerSize)};
+
+
+
+//--------- Free vs fixed lam, separate radii (3Res, Poly Bgd, Sep R, Share lamconj)
+  vector<FitValWriterInfo> tFVWIVec_CompFreevsFixedlam_SepR = {FitValWriterInfo(kLamKchP, tFileLocation_LamKch, tResultsDate, tFitInfoTString_SepR_Sharelam_PolyBgd, 
+                                                                                "Free #lambda", tColorLamKchP, tMarkerStyle_PolyBgd, tMarkerSize), 
+                                                               FitValWriterInfo(kLamKchP, tFileLocation_LamKch, tResultsDate, tFitInfoTString_SepR_Fixlam_PolyBgd, 
+                                                                                "#lambda = 1", tColorLamKchP, 24, tMarkerSize), 
+
+                                                               FitValWriterInfo(kLamKchM, tFileLocation_LamKch, tResultsDate, tFitInfoTString_SepR_Sharelam_PolyBgd, 
+                                                                                "Free #lambda", tColorLamKchM, tMarkerStyle_PolyBgd, tMarkerSize),
+                                                               FitValWriterInfo(kLamKchM, tFileLocation_LamKch, tResultsDate, tFitInfoTString_SepR_Fixlam_PolyBgd, 
+                                                                                "#lambda = 1", tColorLamKchM, 24, tMarkerSize),
+
+                                                               FitValWriterInfo(kLamK0, tFileLocation_LamK0, tResultsDate, tFitInfoTString_LamK0_3Res_PolyBgd, 
+                                                                                "Free #lambda", tColorLamK0, tMarkerStyle_PolyBgd, tMarkerSize),
+                                                               FitValWriterInfo(kLamK0, tFileLocation_LamK0, tResultsDate, tFitInfoTString_LamK0_3Res_PolyBgd_Fixlam, 
+                                                                                "#lambda = 1", tColorLamK0, 24, tMarkerSize)};
+
+//--------- Free vs fixed lam, separate radii, unique lambda (3Res, Poly Bgd, Share R, Share lamconj)
+  vector<FitValWriterInfo> tFVWIVec_CompFreevsFixedlam_SepR_Seplam = {FitValWriterInfo(kLamKchP, tFileLocation_LamKch, tResultsDate, tFitInfoTString_SepR_Seplam_PolyBgd, 
+                                                                                "Free #lambda", tColorLamKchP, tMarkerStyle_PolyBgd, tMarkerSize), 
+                                                               FitValWriterInfo(kALamKchM, tFileLocation_LamKch, tResultsDate, tFitInfoTString_SepR_Seplam_PolyBgd, 
+                                                                                "Free #lambda", tColorLamKchP, tMarkerStyle_PolyBgd, tMarkerSize), 
+                                                               FitValWriterInfo(kLamKchP, tFileLocation_LamKch, tResultsDate, tFitInfoTString_SepR_Fixlam_PolyBgd, 
+                                                                                "#lambda = 1", tColorLamKchP, 24, tMarkerSize), 
+
+                                                               FitValWriterInfo(kLamKchM, tFileLocation_LamKch, tResultsDate, tFitInfoTString_SepR_Seplam_PolyBgd, 
+                                                                                "Free #lambda", tColorLamKchM, tMarkerStyle_PolyBgd, tMarkerSize),
+                                                               FitValWriterInfo(kALamKchP, tFileLocation_LamKch, tResultsDate, tFitInfoTString_SepR_Seplam_PolyBgd, 
+                                                                                "Free #lambda", tColorLamKchM, tMarkerStyle_PolyBgd, tMarkerSize),
+                                                               FitValWriterInfo(kLamKchM, tFileLocation_LamKch, tResultsDate, tFitInfoTString_SepR_Fixlam_PolyBgd, 
+                                                                                "#lambda = 1", tColorLamKchM, 24, tMarkerSize),
+
+                                                               FitValWriterInfo(kLamK0, tFileLocation_LamK0, tResultsDate, tFitInfoTString_LamK0_3Res_PolyBgd, 
+                                                                                "Free #lambda", tColorLamK0, tMarkerStyle_PolyBgd, tMarkerSize),
+                                                               FitValWriterInfo(kLamK0, tFileLocation_LamK0, tResultsDate, tFitInfoTString_LamK0_3Res_PolyBgd_Fixlam, 
+                                                                                "#lambda = 1", tColorLamK0, 24, tMarkerSize)};
+
+
+
+
+
+//--------- Shared vs separate R (3Res, Poly Bgd, Share lam)
+  vector<FitValWriterInfo> tFVWIVec_CompSharesvsSepR = {FitValWriterInfo(kLamKchP, tFileLocation_LamKch, tResultsDate, tFitInfoTString_ShareR_Sharelam_PolyBgd, 
+                                                                         "Shared Radii", tColorLamKchP, 20, tMarkerSize), 
+                                                        FitValWriterInfo(kLamKchP, tFileLocation_LamKch, tResultsDate, tFitInfoTString_SepR_Sharelam_PolyBgd, 
+                                                                         "Separate Radii", tColorLamKchP, 21, tMarkerSize), 
+
+                                                        FitValWriterInfo(kLamKchM, tFileLocation_LamKch, tResultsDate, tFitInfoTString_ShareR_Sharelam_PolyBgd, 
+                                                                         "Shared Radii", tColorLamKchM, 20, tMarkerSize), 
+                                                        FitValWriterInfo(kLamKchM, tFileLocation_LamKch, tResultsDate, tFitInfoTString_SepR_Sharelam_PolyBgd, 
+                                                                         "Separate Radii", tColorLamKchM, 21, tMarkerSize)};
+
+
+//--------- Share lamconj vs unique lam (3Res, Poly Bgd, Sep R)
+  vector<FitValWriterInfo> tFVWIVec_CompSharelam_SepR = {FitValWriterInfo(kLamKchP, tFileLocation_LamKch, tResultsDate, tFitInfoTString_SepR_Sharelam_PolyBgd, 
+                                                                          "Share #lambda_{Conj}", tColorLamKchP, 21, tMarkerSize), 
+                                                         FitValWriterInfo(kLamKchP, tFileLocation_LamKch, tResultsDate, tFitInfoTString_SepR_Seplam_PolyBgd, 
+                                                                          "Unqiue #lambda", tColorLamKchP, 34, tMarkerSize), 
+                                                         FitValWriterInfo(kALamKchM, tFileLocation_LamKch, tResultsDate, tFitInfoTString_SepR_Seplam_PolyBgd, 
+                                                                          "Unqiue #lambda", tColorLamKchP, 28, tMarkerSize), 
+ 
+                                                         FitValWriterInfo(kLamKchM, tFileLocation_LamKch, tResultsDate, tFitInfoTString_SepR_Sharelam_PolyBgd, 
+                                                                          "Share #lambda_{Conj}", tColorLamKchM, 21, tMarkerSize), 
+                                                         FitValWriterInfo(kLamKchM, tFileLocation_LamKch, tResultsDate, tFitInfoTString_SepR_Seplam_PolyBgd, 
+                                                                          "Unqiue #lambda", tColorLamKchM, 34, tMarkerSize), 
+                                                         FitValWriterInfo(kALamKchP, tFileLocation_LamKch, tResultsDate, tFitInfoTString_SepR_Seplam_PolyBgd, 
+                                                                          "Unqiue #lambda", tColorLamKchM, 28, tMarkerSize)};
+
+//--------- Share lam vs share lamconj vs unique lam (3Res, Poly Bgd, Share R)
+  TString tFitInfoTString_ShareR_UniqueLam_PolyBgd      = "_MomResCrctn_NonFlatBgdCrctnPolynomial_3Res_PrimMaxDecay4fm_UsingXiDataAndCoulombOnly_Dualie_ShareRadii";
+
+  vector<FitValWriterInfo> tFVWIVec_CompSharelam_SharedR = {FitValWriterInfo(kLamKchP, tFileLocation_LamKch, tResultsDate, tFitInfoTString_ShareR_Sharelam_PolyBgd, 
+                                                                              "Share #lambda", tColorLamKchP, 20, tMarkerSize), 
+                                                            FitValWriterInfo(kLamKchP, tFileLocation_LamKch, tResultsDate, tFitInfoTString_ShareR_SharelamConj_PolyBgd, 
+                                                                              "Share #lambda_{Conj}", tColorLamKchP, 21, tMarkerSize), 
+                                                            FitValWriterInfo(kLamKchP, tFileLocation_LamKch, tResultsDate, tFitInfoTString_ShareR_UniqueLam_PolyBgd, 
+                                                                              "Unique #lambda", tColorLamKchP, 34, tMarkerSize),
+                                                            FitValWriterInfo(kALamKchM, tFileLocation_LamKch, tResultsDate, tFitInfoTString_ShareR_UniqueLam_PolyBgd, 
+                                                                              "Unique #lambda", tColorLamKchP, 34, tMarkerSize),
+
+                                                            FitValWriterInfo(kLamKchM, tFileLocation_LamKch, tResultsDate, tFitInfoTString_ShareR_Sharelam_PolyBgd, 
+                                                                              "Share #lambda", tColorLamKchM, 20, tMarkerSize), 
+                                                            FitValWriterInfo(kLamKchM, tFileLocation_LamKch, tResultsDate, tFitInfoTString_ShareR_SharelamConj_PolyBgd, 
+                                                                              "Share #lambda_{Conj}", tColorLamKchM, 21, tMarkerSize), 
+                                                            FitValWriterInfo(kLamKchM, tFileLocation_LamKch, tResultsDate, tFitInfoTString_ShareR_UniqueLam_PolyBgd, 
+                                                                              "Unique #lambda", tColorLamKchM, 34, tMarkerSize),
+                                                            FitValWriterInfo(kALamKchP, tFileLocation_LamKch, tResultsDate, tFitInfoTString_ShareR_UniqueLam_PolyBgd, 
+                                                                              "Unique #lambda", tColorLamKchM, 34, tMarkerSize)};
 
 

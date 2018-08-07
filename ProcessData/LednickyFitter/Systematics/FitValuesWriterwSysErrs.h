@@ -35,11 +35,11 @@ public:
   static void DrawD0GraphSys(TPad* aPad, TString aMasterFileLocation, TString aSystematicsFileLocation, TString aFitInfoTString, AnalysisType aAnType, CentralityType aCentType, double aXOffset, int aMarkerColor, int aMarkerStyle, double aMarkerSize=0.75, TString aDrawOption = "e2same");
 
   //-----------------------------------
-  static void DrawImF0vsReF0Graph(TPad* aPad, TString aMasterFileLocation, TString aSystematicsFileLocation, TString aFitInfoTString, AnalysisType aAnType, CentralityType aCentType, int aMarkerColor, int aMarkerStyle, double aMarkerSize=0.75, TString aDrawOptionStat = "epsame", TString aDrawOptionSys = "e2same");
+  static void DrawImF0vsReF0Graph(TPad* aPad, TString aMasterFileLocation, TString aSystematicsFileLocation, TString aFitInfoTString, AnalysisType aAnType, CentralityType aCentType, int aMarkerColor, int aMarkerStyle, double aMarkerSize=0.75, TString aDrawOptionStat = "epsame", TString aDrawOptionSys = "e2same", bool aDrawStatOnly=false);
 
-  static void DrawLambdavsRadiusGraph(TPad* aPad, TString aMasterFileLocation, TString aSystematicsFileLocation, TString aFitInfoTString, AnalysisType aAnType, CentralityType aCentType, int aMarkerColor, int aMarkerStyle, double aMarkerSize=0.75, TString aDrawOptionStat = "epsame", TString aDrawOptionSys = "e2same");
+  static void DrawLambdavsRadiusGraph(TPad* aPad, TString aMasterFileLocation, TString aSystematicsFileLocation, TString aFitInfoTString, AnalysisType aAnType, CentralityType aCentType, int aMarkerColor, int aMarkerStyle, double aMarkerSize=0.75, TString aDrawOptionStat = "epsame", TString aDrawOptionSys = "e2same", bool aDrawStatOnly=false);
 
-  static void DrawD0Graph(TPad* aPad, TString aMasterFileLocation, TString aSystematicsFileLocation, TString aFitInfoTString, AnalysisType aAnType, CentralityType aCentType, double aXOffset, int aMarkerColor, int aMarkerStyle, double aMarkerSize=0.75, TString aDrawOptionStat = "epsame", TString aDrawOptionSys = "e2same");
+  static void DrawD0Graph(TPad* aPad, TString aMasterFileLocation, TString aSystematicsFileLocation, TString aFitInfoTString, AnalysisType aAnType, CentralityType aCentType, double aXOffset, int aMarkerColor, int aMarkerStyle, double aMarkerSize=0.75, TString aDrawOptionStat = "epsame", TString aDrawOptionSys = "e2same", bool aDrawStatOnly=false);
 
   //inline (i.e. simple) functions
 

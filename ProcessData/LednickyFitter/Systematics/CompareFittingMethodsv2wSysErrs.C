@@ -299,7 +299,16 @@ bool DescriptorAlreadyIncluded(vector<TString> &aUsedDescriptors, vector<int> &a
 }
 
 //_________________________________________________________________________________________________________________________________
-TCanvas* CompareImF0vsReF0(vector<FitValWriterInfo> &aFitValWriterInfo, TString aSystematicsFileLocation_LamKch, TString aSystematicsFileLocation_LamK0, bool aDrawPredictions=false, TString aCanNameMod="", bool aSuppressDescs=false, bool aSuppressAnStamps=false)
+TString StripSuppressMarkersFlat(TString aString)
+{
+  if(!aString.Contains("Suppress Markers")) return aString;
+
+  TObjArray* tContents = aString.Tokenize("(");
+  return ((TObjString*)tContents->At(0))->String().Strip(TString::kBoth, ' ');
+}
+
+//_________________________________________________________________________________________________________________________________
+TCanvas* CompareImF0vsReF0(vector<FitValWriterInfo> &aFitValWriterInfo, TString aSystematicsFileLocation_LamKch, TString aSystematicsFileLocation_LamK0, bool aDrawPredictions=false, TString aCanNameMod="", bool aSuppressDescs=false, bool aSuppressAnStamps=false, bool aDrawStatOnly=false)
 {
   CentralityType tCentType = k0010;  //Doesn't matter which centrality chosen, because all share same scattering parameters
 
@@ -345,8 +354,6 @@ TCanvas* CompareImF0vsReF0(vector<FitValWriterInfo> &aFitValWriterInfo, TString 
   tMarker->SetMarkerColor(kBlack);
 
   //------------------------------------------------------
-  TString tDrawOption = "epsame";
-
   double tD0XOffset = 0.5;
 
   //I don't want to repeat entries in the legend
@@ -359,6 +366,8 @@ TCanvas* CompareImF0vsReF0(vector<FitValWriterInfo> &aFitValWriterInfo, TString 
   int iD0Inc = 0;
   double tIncrementSize = 1./(aFitValWriterInfo.size()+1);
   TString aSystematicsFileLocation;
+  bool bSuppressMarkers = false;
+  TString tLegDesc;
   for(unsigned int iAn=0; iAn<aFitValWriterInfo.size(); iAn++)
   {
     if     (aFitValWriterInfo[iAn].analysisType==kLamKchP || aFitValWriterInfo[iAn].analysisType==kALamKchM
@@ -366,17 +375,26 @@ TCanvas* CompareImF0vsReF0(vector<FitValWriterInfo> &aFitValWriterInfo, TString 
     else if(aFitValWriterInfo[iAn].analysisType==kLamK0 || aFitValWriterInfo[iAn].analysisType==kALamK0) aSystematicsFileLocation = aSystematicsFileLocation_LamK0;
     else assert(0);
 
-    FitValuesWriterwSysErrs::DrawImF0vsReF0Graph(tPadReF0vsImF0, aFitValWriterInfo[iAn].masterFileLocation, aSystematicsFileLocation, aFitValWriterInfo[iAn].fitInfoTString, aFitValWriterInfo[iAn].analysisType, tCentType, aFitValWriterInfo[iAn].markerColor, aFitValWriterInfo[iAn].markerStyle, aFitValWriterInfo[iAn].markerSize, tDrawOption);
-    FitValuesWriterwSysErrs::DrawD0Graph(tPadD0, aFitValWriterInfo[iAn].masterFileLocation, aSystematicsFileLocation, aFitValWriterInfo[iAn].fitInfoTString, aFitValWriterInfo[iAn].analysisType, tCentType, (iD0Inc+1)*tIncrementSize, aFitValWriterInfo[iAn].markerColor, aFitValWriterInfo[iAn].markerStyle, aFitValWriterInfo[iAn].markerSize, tDrawOption);
+    FitValuesWriterwSysErrs::DrawImF0vsReF0Graph(tPadReF0vsImF0, aFitValWriterInfo[iAn].masterFileLocation, aSystematicsFileLocation, aFitValWriterInfo[iAn].fitInfoTString, aFitValWriterInfo[iAn].analysisType, tCentType, aFitValWriterInfo[iAn].markerColor, aFitValWriterInfo[iAn].markerStyle, aFitValWriterInfo[iAn].markerSize, "epsame", "e2same", aDrawStatOnly);
+    FitValuesWriterwSysErrs::DrawD0Graph(tPadD0, aFitValWriterInfo[iAn].masterFileLocation, aSystematicsFileLocation, aFitValWriterInfo[iAn].fitInfoTString, aFitValWriterInfo[iAn].analysisType, tCentType, (iD0Inc+1)*tIncrementSize, aFitValWriterInfo[iAn].markerColor, aFitValWriterInfo[iAn].markerStyle, aFitValWriterInfo[iAn].markerSize, "epsame", "e2same", aDrawStatOnly);
     tAnTypes.push_back(aFitValWriterInfo[iAn].analysisType);
 
     if(!DescriptorAlreadyIncluded(tUsedDescriptors, tUsedMarkerStyles, aFitValWriterInfo[iAn].legendDescriptor, aFitValWriterInfo[iAn].markerStyle) && !aSuppressDescs)
     {
       tPadReF0vsImF0->cd();
-      if(aFitValWriterInfo[iAn].legendDescriptor.Contains("d_{0}")) tTex->DrawLatex(tStartX, tStartY-iTex*tIncrementY-0.1*tIncrementY, aFitValWriterInfo[iAn].legendDescriptor);
-      else tTex->DrawLatex(tStartX, tStartY-iTex*tIncrementY, aFitValWriterInfo[iAn].legendDescriptor);
-      tMarker->SetMarkerStyle(aFitValWriterInfo[iAn].markerStyle);
-      tMarker->DrawMarker(tStartX-tIncrementX, tStartY-iTex*tIncrementY);
+
+      if(aFitValWriterInfo[iAn].legendDescriptor.Contains("Suppress Markers")) bSuppressMarkers=true;
+      else bSuppressMarkers=false;
+
+      tLegDesc = StripSuppressMarkersFlat(aFitValWriterInfo[iAn].legendDescriptor);
+
+      if(tLegDesc.Contains("d_{0}")) tTex->DrawLatex(tStartX, tStartY-iTex*tIncrementY-0.1*tIncrementY, tLegDesc);
+      else tTex->DrawLatex(tStartX, tStartY-iTex*tIncrementY, tLegDesc);
+      if(!bSuppressMarkers)
+      {
+        tMarker->SetMarkerStyle(aFitValWriterInfo[iAn].markerStyle);
+        tMarker->DrawMarker(tStartX-tIncrementX, tStartY-iTex*tIncrementY);
+      }
       iTex++;
 
     }
@@ -452,7 +470,7 @@ TCanvas* CompareImF0vsReF0(vector<FitValWriterInfo> &aFitValWriterInfo, TString 
 }
 
 //_________________________________________________________________________________________________________________________________
-TCanvas* CompareLambdavsRadius(vector<FitValWriterInfo> &aFitValWriterInfo, TString aSystematicsFileLocation_LamKch, TString aSystematicsFileLocation_LamK0, CentralityType aCentType, TString aCanNameMod="", bool aSuppressDescs=false, bool aSuppressAnStamps=false)
+TCanvas* CompareLambdavsRadius(vector<FitValWriterInfo> &aFitValWriterInfo, TString aSystematicsFileLocation_LamKch, TString aSystematicsFileLocation_LamK0, CentralityType aCentType, TString aCanNameMod="", bool aSuppressDescs=false, bool aSuppressAnStamps=false, bool aDrawStatOnly=false)
 {
   TString tCanBaseName = TString::Format("CompareLambdavsRadius%s%s", aCanNameMod.Data(), cCentralityTags[aCentType]);
   TString tCanName = tCanBaseName;
@@ -484,8 +502,6 @@ TCanvas* CompareLambdavsRadius(vector<FitValWriterInfo> &aFitValWriterInfo, TStr
   tMarker->SetMarkerColor(kBlack);
 
   //------------------------------------------------------
-  TString tDrawOption = "epsame";
-
   //I don't want to repeat entries in the legend
   //  For instance, without the "used" check, "3 Res., Poly Bgd" would be printed for LamKchP and LamKchM (and LamK0 if it is included)
   vector<TString> tUsedDescriptors(0);
@@ -494,6 +510,8 @@ TCanvas* CompareLambdavsRadius(vector<FitValWriterInfo> &aFitValWriterInfo, TStr
 
   int iTex = 0;
   TString aSystematicsFileLocation;
+  bool bSuppressMarkers = false;
+  TString tLegDesc;
   for(unsigned int iAn=0; iAn<aFitValWriterInfo.size(); iAn++)
   {
     if     (aFitValWriterInfo[iAn].analysisType==kLamKchP || aFitValWriterInfo[iAn].analysisType==kALamKchM
@@ -501,15 +519,23 @@ TCanvas* CompareLambdavsRadius(vector<FitValWriterInfo> &aFitValWriterInfo, TStr
     else if(aFitValWriterInfo[iAn].analysisType==kLamK0 || aFitValWriterInfo[iAn].analysisType==kALamK0) aSystematicsFileLocation = aSystematicsFileLocation_LamK0;
     else assert(0);
 
-    FitValuesWriterwSysErrs::DrawLambdavsRadiusGraph((TPad*)tReturnCan, aFitValWriterInfo[iAn].masterFileLocation, aSystematicsFileLocation, aFitValWriterInfo[iAn].fitInfoTString, aFitValWriterInfo[iAn].analysisType, aCentType, aFitValWriterInfo[iAn].markerColor, aFitValWriterInfo[iAn].markerStyle, aFitValWriterInfo[iAn].markerSize, tDrawOption);
+    FitValuesWriterwSysErrs::DrawLambdavsRadiusGraph((TPad*)tReturnCan, aFitValWriterInfo[iAn].masterFileLocation, aSystematicsFileLocation, aFitValWriterInfo[iAn].fitInfoTString, aFitValWriterInfo[iAn].analysisType, aCentType, aFitValWriterInfo[iAn].markerColor, aFitValWriterInfo[iAn].markerStyle, aFitValWriterInfo[iAn].markerSize, "epsame", "e2same", aDrawStatOnly);
     tAnTypes.push_back(aFitValWriterInfo[iAn].analysisType);
 
     if(!DescriptorAlreadyIncluded(tUsedDescriptors, tUsedMarkerStyles, aFitValWriterInfo[iAn].legendDescriptor, aFitValWriterInfo[iAn].markerStyle) && !aSuppressDescs)
     {
-      if(aFitValWriterInfo[iAn].legendDescriptor.Contains("d_{0}")) tTex->DrawLatex(tStartX, tStartY-iTex*tIncrementY-0.1*tIncrementY, aFitValWriterInfo[iAn].legendDescriptor);
-      else tTex->DrawLatex(tStartX, tStartY-iTex*tIncrementY, aFitValWriterInfo[iAn].legendDescriptor);
-      tMarker->SetMarkerStyle(aFitValWriterInfo[iAn].markerStyle);
-      tMarker->DrawMarker(tStartX-tIncrementX, tStartY-iTex*tIncrementY);
+      if(aFitValWriterInfo[iAn].legendDescriptor.Contains("Suppress Markers")) bSuppressMarkers=true;
+      else bSuppressMarkers=false;
+
+      tLegDesc = StripSuppressMarkersFlat(aFitValWriterInfo[iAn].legendDescriptor);
+
+      if(tLegDesc.Contains("d_{0}")) tTex->DrawLatex(tStartX, tStartY-iTex*tIncrementY-0.1*tIncrementY, tLegDesc);
+      else tTex->DrawLatex(tStartX, tStartY-iTex*tIncrementY, tLegDesc);
+      if(!bSuppressMarkers)
+      {
+        tMarker->SetMarkerStyle(aFitValWriterInfo[iAn].markerStyle);
+        tMarker->DrawMarker(tStartX-tIncrementX, tStartY-iTex*tIncrementY);
+      }
       iTex++;
     }
 
@@ -538,15 +564,15 @@ TCanvas* CompareLambdavsRadius(vector<FitValWriterInfo> &aFitValWriterInfo, TStr
 
 
 //_________________________________________________________________________________________________________________________________
-TCanvas* CompareAll(vector<FitValWriterInfo> &aFitValWriterInfo, TString aSystematicsFileLocation_LamKch, TString aSystematicsFileLocation_LamK0, bool aDrawPredictions=false, TString aCanNameMod="")
+TCanvas* CompareAll(vector<FitValWriterInfo> &aFitValWriterInfo, TString aSystematicsFileLocation_LamKch, TString aSystematicsFileLocation_LamK0, bool aDrawPredictions=false, TString aCanNameMod="", bool aDrawStatOnly=false)
 {
   TCanvas *tReturnCan, *tCanImF0vsReF0, *tCanLamvsR0010, *tCanLamvsR1030, *tCanLamvsR3050;
 
   TString tSubCanNameMod = TString::Format("%sForAll", aCanNameMod.Data());
-  tCanImF0vsReF0 = CompareImF0vsReF0(aFitValWriterInfo, aSystematicsFileLocation_LamKch, aSystematicsFileLocation_LamK0, aDrawPredictions, tSubCanNameMod, false, false);
-  tCanLamvsR0010 = CompareLambdavsRadius(aFitValWriterInfo, aSystematicsFileLocation_LamKch, aSystematicsFileLocation_LamK0, k0010, tSubCanNameMod, true, false);
-  tCanLamvsR1030 = CompareLambdavsRadius(aFitValWriterInfo, aSystematicsFileLocation_LamKch, aSystematicsFileLocation_LamK0, k1030, tSubCanNameMod, true, true);
-  tCanLamvsR3050 = CompareLambdavsRadius(aFitValWriterInfo, aSystematicsFileLocation_LamKch, aSystematicsFileLocation_LamK0, k3050, tSubCanNameMod, true, true);
+  tCanImF0vsReF0 = CompareImF0vsReF0(aFitValWriterInfo, aSystematicsFileLocation_LamKch, aSystematicsFileLocation_LamK0, aDrawPredictions, tSubCanNameMod, false, false, aDrawStatOnly);
+  tCanLamvsR0010 = CompareLambdavsRadius(aFitValWriterInfo, aSystematicsFileLocation_LamKch, aSystematicsFileLocation_LamK0, k0010, tSubCanNameMod, true, false, aDrawStatOnly);
+  tCanLamvsR1030 = CompareLambdavsRadius(aFitValWriterInfo, aSystematicsFileLocation_LamKch, aSystematicsFileLocation_LamK0, k1030, tSubCanNameMod, true, true, aDrawStatOnly);
+  tCanLamvsR3050 = CompareLambdavsRadius(aFitValWriterInfo, aSystematicsFileLocation_LamKch, aSystematicsFileLocation_LamK0, k3050, tSubCanNameMod, true, true, aDrawStatOnly);
 
 
   TString tCanBaseName = TString::Format("CompareAllScattParams%s", aCanNameMod.Data());
@@ -585,78 +611,68 @@ int main(int argc, char **argv)
   //the program ends and closes everything
 
   bool bSaveFigures = false;
+  bool bDrawStatOnly = false;
+
   TString tSaveFileType = "pdf";  //Needs to be pdf for systematics to be transparent!
 //  TString tSaveDir = "/home/jesse/Analysis/Presentations/AliFemto/20180627/Figures/";
   TString tSaveDir = "/home/jesse/Analysis/FemtoAnalysis/ProcessData/LednickyFitter/Systematics/";
   TString tSystematicsFileLocation_LamKch = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_20171227/Systematics/_MomResCrctn_NonFlatBgdCrctn_3Res_PrimMaxDecay4fm_UsingXiDataAndCoulombOnly/FinalFitSystematics_wFitRangeSys_MomResCrctn_NonFlatBgdCrctn_3Res_PrimMaxDecay4fm_UsingXiDataAndCoulombOnly_cLamcKch.txt";
   TString tSystematicsFileLocation_LamK0 = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamK0_20171227/Systematics/_MomResCrctn_NonFlatBgdCrctn_3Res_PrimMaxDecay4fm_UsingXiDataAndCoulombOnly/FinalFitSystematics_wFitRangeSys_MomResCrctn_NonFlatBgdCrctn_3Res_PrimMaxDecay4fm_UsingXiDataAndCoulombOnly_cLamK0.txt";
 
+  vector<TString> tStatOnlyTags = {"", "_StatOnly"};
+
   vector<FitValWriterInfo> tFVWIVec;
   TString tCanNameMod = "";
 
-  tFVWIVec = tFVWIVec_CompNumRes_ShareR_PolyBgd;
-  tCanNameMod = TString("_CompNumRes_ShareR_PolyBgd");
+//  tFVWIVec = tFVWIVec_CompNumRes_ShareR_PolyBgd;
+//  tCanNameMod = TString("_CompNumRes_ShareR_PolyBgd");
+
+//--------------------------------------------
+//  tFVWIVec = tFVWIVec_Comp3An_3Res;
+//  tCanNameMod = TString("_Comp3An_3Res");
+
+//  tFVWIVec = tFVWIVec_Comp3An_10Res;
+//  tCanNameMod = TString("_Comp3An_10Res");
+
+//  tFVWIVec = tFVWIVec_Comp3An_NoRes;
+//  tCanNameMod = TString("_Comp3An_NoRes");
+//--------------------------------------------
+
+//  tFVWIVec = tFVWIVec_CompNumRes;
+//  tCanNameMod = TString("_CompNumRes");
+
+//  tFVWIVec = tFVWIVec_CompBgdTreatment;
+//  tCanNameMod = TString("_CompBgdTreatment");
+
+//  tFVWIVec = tFVWIVec_CompFreevsFixedlam_ShareR;
+//  tCanNameMod = TString("_CompFreevsFixedlam_ShareR");
+
+//  tFVWIVec = tFVWIVec_CompFreevsFixedlam_SepR;
+//  tCanNameMod = TString("_CompFreevsFixedlam_SepR");
+
+//  tFVWIVec = tFVWIVec_CompFreevsFixedlam_SepR_Seplam;
+//  tCanNameMod = TString("_CompFreevsFixedlam_SepR_Seplam");
+
+//  tFVWIVec = tFVWIVec_CompSharesvsSepR;
+//  tCanNameMod = TString("_CompSharedvsSepR");
+
+//  tFVWIVec = tFVWIVec_CompSharelam_SepR;
+//  tCanNameMod = TString("_CompSharelam_SepR");
+
+  tFVWIVec = tFVWIVec_CompSharelam_SharedR;
+  tCanNameMod = TString("_CompSharelam_SharedR");
 
 
 
-//  tFVWIVec = tFVWIVec_SepR_Seplam;
-//  tCanNameMod = TString("_SepR_Seplam");
-
-//  tFVWIVec = tFVWIVec_SepR_Sharelam;
-//  tCanNameMod = TString("_SepR_Sharelam");
-
-//  tFVWIVec = tFVWIVec_ShareR_Sharelam;
-//  tCanNameMod = TString("_ShareR_Sharelam");
-
-//  tFVWIVec = tFVWIVec_ShareR_SharelamConj;
-//  tCanNameMod = TString("_ShareR_SharelamConj");
-
-//  tFVWIVec = tFVWIVec_SharevsSepR;
-//  tCanNameMod = TString("_SharevsSepR");
-
-//---------------------------------------------------------------------
-
-//  tFVWIVec = tFVWIVec_FreevsFixlam_SepR;
-//  tCanNameMod = TString("_FreevsFixlam_SepR");
-
-//  tFVWIVec = tFVWIVec_FreevsFixlam_SepR_NoStav;
-//  tCanNameMod = TString("_FreevsFixlam_SepR_NoStav");
-
-//  tFVWIVec = tFVWIVec_FreevsFixlam_SepR_PolyBgd;
-//  tCanNameMod = TString("_FreevsFixlam_SepR_PolyBgd");
-
-//  tFVWIVec = tFVWIVec_FreevsFixlam_SepR_LinrBgd;
-//  tCanNameMod = TString("_FreevsFixlam_SepR_LinrBgd");
-
-//  tFVWIVec = tFVWIVec_FreevsFixlam_SepR_StavCf_NoBgd;
-//  tCanNameMod = TString("_FreevsFixlam_SepR_StavCf_NoBgd");
-
-//---------------------------------------------------------------------
-
-//  tFVWIVec = tFVWIVec_FreevsFixlam_ShareR;
-//  tCanNameMod = TString("_FreevsFixlam_ShareR");
-
-//  tFVWIVec = tFVWIVec_FreevsFixlam_ShareR_NoStav;
-//  tCanNameMod = TString("_FreevsFixlam_ShareR_NoStav");
-
-//  tFVWIVec = tFVWIVec_FreevsFixlam_ShareR_PolyBgd;
-//  tCanNameMod = TString("_FreevsFixlam_ShareR_PolyBgd");
-
-//  tFVWIVec = tFVWIVec_FreevsFixlam_ShareR_LinrBgd;
-//  tCanNameMod = TString("_FreevsFixlam_ShareR_LinrBgd");
-
-//  tFVWIVec = tFVWIVec_FreevsFixlam_ShareR_StavCf_NoBgd;
-//  tCanNameMod = TString("_FreevsFixlam_ShareR_StavCf_NoBgd");
-
-  TCanvas* tCanLambdavsRadius = CompareLambdavsRadius(tFVWIVec, tSystematicsFileLocation_LamKch, tSystematicsFileLocation_LamK0, k0010, tCanNameMod);
-  TCanvas* tCanImF0vsReF0 = CompareImF0vsReF0(tFVWIVec, tSystematicsFileLocation_LamKch, tSystematicsFileLocation_LamK0, true, tCanNameMod);
-  TCanvas* tCanAll = CompareAll(tFVWIVec, tSystematicsFileLocation_LamKch, tSystematicsFileLocation_LamK0, true, tCanNameMod);
+  TCanvas* tCanLambdavsRadius = CompareLambdavsRadius(tFVWIVec, tSystematicsFileLocation_LamKch, tSystematicsFileLocation_LamK0, k0010, tCanNameMod, false, false, bDrawStatOnly);
+  TCanvas* tCanImF0vsReF0 = CompareImF0vsReF0(tFVWIVec, tSystematicsFileLocation_LamKch, tSystematicsFileLocation_LamK0, true, tCanNameMod, false, false, bDrawStatOnly);
+  TCanvas* tCanAll = CompareAll(tFVWIVec, tSystematicsFileLocation_LamKch, tSystematicsFileLocation_LamK0, true, tCanNameMod, bDrawStatOnly);
 
 
 
   if(bSaveFigures)
   {
-    tCanAll->SaveAs(TString::Format("%s%s.%s", tSaveDir.Data(), tCanAll->GetName(), tSaveFileType.Data()));
+    tCanAll->SaveAs(TString::Format("%s%s%s.%s", tSaveDir.Data(), tCanAll->GetName(), tStatOnlyTags[bDrawStatOnly].Data(), tSaveFileType.Data()));
   }
 
 

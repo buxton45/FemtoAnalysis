@@ -1,5 +1,6 @@
 #include "DrawmTScaling.h"
 #include "CompareFittingMethodsv2.h"
+#include "FitValuesLatexTableHelperWriter.h"
 #include "FitValuesWriterwSysErrs.h"
 
 
@@ -107,6 +108,8 @@ int main(int argc, char **argv)
 //=========  (Fri May  8 11:29:01 2015) by ROOT version5.34/26
 
   bool bSaveImage = false;
+  IncludeResidualsType tIncResType = kInclude3Residuals;
+
   TString tSaveFileType = "pdf";  //Needs to be pdf for systematics to be transparent!
 //  TString tSaveDir = "/home/jesse/Analysis/Presentations/AliFemto/20180627/Figures/";
   TString tSaveDir = "/home/jesse/Analysis/FemtoAnalysis/ProcessData/LednickyFitter/Systematics/";
@@ -114,16 +117,29 @@ int main(int argc, char **argv)
 
   TString tMasterFileLocation_LamKch = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_20180505/MasterFitResults_20180505.txt";
   TString tSystematicsFileLocation_LamKch = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_20171227/Systematics/_MomResCrctn_NonFlatBgdCrctn_3Res_PrimMaxDecay4fm_UsingXiDataAndCoulombOnly/FinalFitSystematics_wFitRangeSys_MomResCrctn_NonFlatBgdCrctn_3Res_PrimMaxDecay4fm_UsingXiDataAndCoulombOnly_cLamcKch.txt";
-  TString tFitInfoTString_LamKch = "_MomResCrctn_NonFlatBgdCrctnPolynomial_3Res_PrimMaxDecay4fm_UsingXiDataAndCoulombOnly_ShareLam_Dualie_ShareLam_ShareRadii";
+  TString tFitInfoTString_LamKch = FitValuesLatexTableHelperWriter::GetFitInfoTStringFromTwoLetterID_LamKch("Ea", tIncResType);
 
   TString tMasterFileLocation_LamK0 = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamK0_20180505/MasterFitResults_20180505.txt";
   TString tSystematicsFileLocation_LamK0 = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamK0_20171227/Systematics/_MomResCrctn_NonFlatBgdCrctn_3Res_PrimMaxDecay4fm_UsingXiDataAndCoulombOnly/FinalFitSystematics_wFitRangeSys_MomResCrctn_NonFlatBgdCrctn_3Res_PrimMaxDecay4fm_UsingXiDataAndCoulombOnly_cLamK0.txt";
-  TString tFitInfoTString_LamK0 = "_MomResCrctn_NonFlatBgdCrctnPolynomial_3Res_PrimMaxDecay4fm_UsingXiDataAndCoulombOnly_SingleLamParam";
+  TString tFitInfoTString_LamK0 = FitValuesLatexTableHelperWriter::GetFitInfoTStringFromTwoLetterID_LamK0("Aa", tIncResType);
 
-  TString tCanNameMod = TString("_3Res");
-  TString tLegInfo = TString("3 Res.");
-
-
+  TString tCanNameMod, tLegInfo;
+  if(tIncResType==kIncludeNoResiduals)
+  {
+    tCanNameMod = TString("_NoRes");
+    tLegInfo = TString("No Res.");
+  }
+  else if(tIncResType==kInclude3Residuals)
+  {
+    tCanNameMod = TString("_3Res");
+    tLegInfo = TString("3 Res.");
+  }
+  else if(tIncResType==kInclude10Residuals)
+  {
+    tCanNameMod = TString("_10Res");
+    tLegInfo = TString("10 Res.");
+  }
+  else assert(0);
 
 
   bool bRunAveragedKchPKchM = false;
@@ -148,6 +164,8 @@ int main(int argc, char **argv)
 
   if(bOutlinePoints) tSaveName += TString("_OutlinedPoints");
   if(bMakeOthersTransparent) tSaveName += TString("_OthersTransparent");
+
+  if(bDrawJaiAndHans) tSaveName += TString("_wJaiAndHans");
 
   tSaveName += tCanNameMod;
   tSaveName += TString::Format(".%s", tSaveFileType.Data());

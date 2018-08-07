@@ -299,6 +299,15 @@ bool DescriptorAlreadyIncluded(vector<TString> &aUsedDescriptors, vector<int> &a
 }
 
 //_________________________________________________________________________________________________________________________________
+TString StripSuppressMarkersFlat(TString aString)
+{
+  if(!aString.Contains("Suppress Markers")) return aString;
+
+  TObjArray* tContents = aString.Tokenize("(");
+  return ((TObjString*)tContents->At(0))->String().Strip(TString::kBoth, ' ');
+}
+
+//_________________________________________________________________________________________________________________________________
 TCanvas* CompareImF0vsReF0(vector<FitValWriterInfo> &aFitValWriterInfo, bool aDrawPredictions=false, TString aCanNameMod="", bool aSuppressDescs=false, bool aSuppressAnStamps=false)
 {
   CentralityType tCentType = k0010;  //Doesn't matter which centrality chosen, because all share same scattering parameters
@@ -357,6 +366,8 @@ TCanvas* CompareImF0vsReF0(vector<FitValWriterInfo> &aFitValWriterInfo, bool aDr
 
   int iTex = 0;
   int iD0Inc = 0;
+  bool bSuppressMarkers = false;
+  TString tLegDesc;
   for(unsigned int iAn=0; iAn<aFitValWriterInfo.size(); iAn++)
   {
     FitValuesWriter::DrawImF0vsReF0GraphStat(tPadReF0vsImF0, aFitValWriterInfo[iAn].masterFileLocation, aFitValWriterInfo[iAn].fitInfoTString, aFitValWriterInfo[iAn].analysisType, tCentType, aFitValWriterInfo[iAn].markerColor, aFitValWriterInfo[iAn].markerStyle, aFitValWriterInfo[iAn].markerSize, tDrawOption);
@@ -366,10 +377,19 @@ TCanvas* CompareImF0vsReF0(vector<FitValWriterInfo> &aFitValWriterInfo, bool aDr
     if(!DescriptorAlreadyIncluded(tUsedDescriptors, tUsedMarkerStyles, aFitValWriterInfo[iAn].legendDescriptor, aFitValWriterInfo[iAn].markerStyle) && !aSuppressDescs)
     {
       tPadReF0vsImF0->cd();
-      if(aFitValWriterInfo[iAn].legendDescriptor.Contains("d_{0}")) tTex->DrawLatex(tStartX, tStartY-iTex*tIncrementY-0.1*tIncrementY, aFitValWriterInfo[iAn].legendDescriptor);
-      else tTex->DrawLatex(tStartX, tStartY-iTex*tIncrementY, aFitValWriterInfo[iAn].legendDescriptor);
-      tMarker->SetMarkerStyle(aFitValWriterInfo[iAn].markerStyle);
-      tMarker->DrawMarker(tStartX-tIncrementX, tStartY-iTex*tIncrementY);
+
+      if(aFitValWriterInfo[iAn].legendDescriptor.Contains("Suppress Markers")) bSuppressMarkers=true;
+      else bSuppressMarkers=false;
+
+      tLegDesc = StripSuppressMarkersFlat(aFitValWriterInfo[iAn].legendDescriptor);
+
+      if(tLegDesc.Contains("d_{0}")) tTex->DrawLatex(tStartX, tStartY-iTex*tIncrementY-0.1*tIncrementY, tLegDesc);
+      else tTex->DrawLatex(tStartX, tStartY-iTex*tIncrementY, tLegDesc);
+      if(!bSuppressMarkers)
+      {
+        tMarker->SetMarkerStyle(aFitValWriterInfo[iAn].markerStyle);
+        tMarker->DrawMarker(tStartX-tIncrementX, tStartY-iTex*tIncrementY);
+      }
       iTex++;
       iD0Inc++;
     }
@@ -485,6 +505,8 @@ TCanvas* CompareLambdavsRadius(vector<FitValWriterInfo> &aFitValWriterInfo, Cent
   vector<AnalysisType> tAnTypes(0);
 
   int iTex = 0;
+  bool bSuppressMarkers = false;
+  TString tLegDesc;
   for(unsigned int iAn=0; iAn<aFitValWriterInfo.size(); iAn++)
   {
     FitValuesWriter::DrawLambdavsRadiusGraphStat((TPad*)tReturnCan, aFitValWriterInfo[iAn].masterFileLocation, aFitValWriterInfo[iAn].fitInfoTString, aFitValWriterInfo[iAn].analysisType, aCentType, aFitValWriterInfo[iAn].markerColor, aFitValWriterInfo[iAn].markerStyle, aFitValWriterInfo[iAn].markerSize, tDrawOption);
@@ -492,10 +514,18 @@ TCanvas* CompareLambdavsRadius(vector<FitValWriterInfo> &aFitValWriterInfo, Cent
 
     if(!DescriptorAlreadyIncluded(tUsedDescriptors, tUsedMarkerStyles, aFitValWriterInfo[iAn].legendDescriptor, aFitValWriterInfo[iAn].markerStyle) && !aSuppressDescs)
     {
-      if(aFitValWriterInfo[iAn].legendDescriptor.Contains("d_{0}")) tTex->DrawLatex(tStartX, tStartY-iTex*tIncrementY-0.1*tIncrementY, aFitValWriterInfo[iAn].legendDescriptor);
-      else tTex->DrawLatex(tStartX, tStartY-iTex*tIncrementY, aFitValWriterInfo[iAn].legendDescriptor);
-      tMarker->SetMarkerStyle(aFitValWriterInfo[iAn].markerStyle);
-      tMarker->DrawMarker(tStartX-tIncrementX, tStartY-iTex*tIncrementY);
+      if(aFitValWriterInfo[iAn].legendDescriptor.Contains("Suppress Markers")) bSuppressMarkers=true;
+      else bSuppressMarkers=false;
+
+      tLegDesc = StripSuppressMarkersFlat(aFitValWriterInfo[iAn].legendDescriptor);
+
+      if(tLegDesc.Contains("d_{0}")) tTex->DrawLatex(tStartX, tStartY-iTex*tIncrementY-0.1*tIncrementY, tLegDesc);
+      else tTex->DrawLatex(tStartX, tStartY-iTex*tIncrementY, tLegDesc);
+      if(!bSuppressMarkers)
+      {
+        tMarker->SetMarkerStyle(aFitValWriterInfo[iAn].markerStyle);
+        tMarker->DrawMarker(tStartX-tIncrementX, tStartY-iTex*tIncrementY);
+      }
       iTex++;
     }
 

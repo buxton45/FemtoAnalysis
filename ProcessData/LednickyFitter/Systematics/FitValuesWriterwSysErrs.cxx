@@ -250,26 +250,26 @@ void FitValuesWriterwSysErrs::DrawD0GraphSys(TPad* aPad, TString aMasterFileLoca
 
 
 //________________________________________________________________________________________________________________
-void FitValuesWriterwSysErrs::DrawImF0vsReF0Graph(TPad* aPad, TString aMasterFileLocation, TString aSystematicsFileLocation, TString aFitInfoTString, AnalysisType aAnType, CentralityType aCentType, int aMarkerColor, int aMarkerStyle, double aMarkerSize, TString aDrawOptionStat, TString aDrawOptionSys)
+void FitValuesWriterwSysErrs::DrawImF0vsReF0Graph(TPad* aPad, TString aMasterFileLocation, TString aSystematicsFileLocation, TString aFitInfoTString, AnalysisType aAnType, CentralityType aCentType, int aMarkerColor, int aMarkerStyle, double aMarkerSize, TString aDrawOptionStat, TString aDrawOptionSys, bool aDrawStatOnly)
 {
   int tColorSys = TColor::GetColorTransparent(aMarkerColor, 0.3);
-  DrawImF0vsReF0GraphSys(aPad, aMasterFileLocation, aSystematicsFileLocation, aFitInfoTString, aAnType, aCentType, tColorSys, aMarkerStyle, aMarkerSize, aDrawOptionSys);
+  if(!aDrawStatOnly) DrawImF0vsReF0GraphSys(aPad, aMasterFileLocation, aSystematicsFileLocation, aFitInfoTString, aAnType, aCentType, tColorSys, aMarkerStyle, aMarkerSize, aDrawOptionSys);
   DrawImF0vsReF0GraphStat(aPad, aMasterFileLocation, aFitInfoTString, aAnType, aCentType, aMarkerColor, aMarkerStyle, aMarkerSize, aDrawOptionStat);
 }
 
 //________________________________________________________________________________________________________________
-void FitValuesWriterwSysErrs::DrawLambdavsRadiusGraph(TPad* aPad, TString aMasterFileLocation, TString aSystematicsFileLocation, TString aFitInfoTString, AnalysisType aAnType, CentralityType aCentType, int aMarkerColor, int aMarkerStyle, double aMarkerSize, TString aDrawOptionStat, TString aDrawOptionSys)
+void FitValuesWriterwSysErrs::DrawLambdavsRadiusGraph(TPad* aPad, TString aMasterFileLocation, TString aSystematicsFileLocation, TString aFitInfoTString, AnalysisType aAnType, CentralityType aCentType, int aMarkerColor, int aMarkerStyle, double aMarkerSize, TString aDrawOptionStat, TString aDrawOptionSys, bool aDrawStatOnly)
 {
   int tColorSys = TColor::GetColorTransparent(aMarkerColor, 0.3);
-  DrawLambdavsRadiusGraphSys(aPad, aMasterFileLocation, aSystematicsFileLocation, aFitInfoTString, aAnType, aCentType, tColorSys, aMarkerStyle, aMarkerSize, aDrawOptionSys);
+  if(!aDrawStatOnly) DrawLambdavsRadiusGraphSys(aPad, aMasterFileLocation, aSystematicsFileLocation, aFitInfoTString, aAnType, aCentType, tColorSys, aMarkerStyle, aMarkerSize, aDrawOptionSys);
   DrawLambdavsRadiusGraphStat(aPad, aMasterFileLocation, aFitInfoTString, aAnType, aCentType, aMarkerColor, aMarkerStyle, aMarkerSize, aDrawOptionStat);
 }
 
 //________________________________________________________________________________________________________________
-void FitValuesWriterwSysErrs::DrawD0Graph(TPad* aPad, TString aMasterFileLocation, TString aSystematicsFileLocation, TString aFitInfoTString, AnalysisType aAnType, CentralityType aCentType, double aXOffset, int aMarkerColor, int aMarkerStyle, double aMarkerSize, TString aDrawOptionStat, TString aDrawOptionSys)
+void FitValuesWriterwSysErrs::DrawD0Graph(TPad* aPad, TString aMasterFileLocation, TString aSystematicsFileLocation, TString aFitInfoTString, AnalysisType aAnType, CentralityType aCentType, double aXOffset, int aMarkerColor, int aMarkerStyle, double aMarkerSize, TString aDrawOptionStat, TString aDrawOptionSys, bool aDrawStatOnly)
 {
   int tColorSys = TColor::GetColorTransparent(aMarkerColor, 0.3);
-  DrawD0GraphSys(aPad, aMasterFileLocation, aSystematicsFileLocation, aFitInfoTString, aAnType, aCentType, aXOffset, tColorSys, aMarkerStyle, aMarkerSize, aDrawOptionSys);
+  if(!aDrawStatOnly) DrawD0GraphSys(aPad, aMasterFileLocation, aSystematicsFileLocation, aFitInfoTString, aAnType, aCentType, aXOffset, tColorSys, aMarkerStyle, aMarkerSize, aDrawOptionSys);
   DrawD0GraphStat(aPad, aMasterFileLocation, aFitInfoTString, aAnType, aCentType, aXOffset, aMarkerColor, aMarkerStyle, aMarkerSize, aDrawOptionStat);
 }
 
