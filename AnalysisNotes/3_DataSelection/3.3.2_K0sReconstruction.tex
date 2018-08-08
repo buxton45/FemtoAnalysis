@@ -1,10 +1,10 @@
 \documentclass[../AnalysisNoteJBuxton.tex]{subfiles}
 \begin{document}
 
-\subsubsection{\texorpdfstring{K$^{0}_{S}$}{TEXT} Reconstruction}
+\subsubsection{\texorpdfstring{$\rm K^{0}_{S}$}{TEXT} Reconstruction}
 \label{K0sReconstruction}
 
-The following cuts were used to select good K$^{0}_{S}$ candidates:
+The following cuts were used to select good \Ks candidates:
 
 \begin{enumerate}
  \item{Pion Daughter Cuts}
@@ -26,11 +26,11 @@ The following cuts were used to select good K$^{0}_{S}$ candidates:
    \end{enumerate}  
  \end{enumerate}
 
- \item K$^{0}_{S}$ Cuts
+ \item \Ks Cuts
  \begin{enumerate}
   \item $|\eta| < 0.8$
   \item $p_{\mathrm{T}} > 0.2$ GeV/\textit{c}
-  \item $m_{PDG}-13.677 \ \mathrm{MeV} < m_{\mathrm{inv}} < m_{\mathrm{PDG}} + 2.0323 \ \mathrm{MeV}$
+  \item $m_{\mathrm{PDG}}-13.677 \ \mathrm{MeV} < m_{\mathrm{inv}} < m_{\mathrm{PDG}} + 2.0323 \ \mathrm{MeV}$
   \item DCA to prim. vertex $<$ 0.3 cm
   \item Cosine of pointing angle $>$ 0.9993
   \item OnFlyStatus = false
@@ -45,38 +45,38 @@ The following cuts were used to select good K$^{0}_{S}$ candidates:
 \begin{figure}[h!]
   \centering
   %%----start of first subfigure---  
-  \subfloat[Mass assuming $\Lambda$-hypothesis for K$^{0}_{S}$ collection, i.e. assume the daughters are $p^{+}\pi^{-}$ instead of $\pi^{+}\pi^{-}$.]{
+  \subfloat[Mass assuming \Lam-hypothesis for \Ks collection, i.e. assume the daughters are $p^{+}\pi^{-}$ instead of $\pi^{+}\pi^{-}$.]{
     \label{fig:MassAsscLamHyp:a}
     \includegraphics[width=0.5\textwidth]{3_DataSelection/Figures/MassAssHypotheses/canMassAssLamHypCompare_LamK0_wNoMisID.pdf}}
   %%----start of second subfigure---
-  \subfloat[Mass assuming $\bar{\Lambda}$-hypothesis for K$^{0}_{S}$ collection, i.e. assume the daughters are $\pi^{+}\bar{p}^{-}$ instead of $\pi^{+}\pi^{-}$.]{
+  \subfloat[Mass assuming \ALam-hypothesis for \Ks collection, i.e. assume the daughters are $\pi^{+}\bar{p}^{-}$ instead of $\pi^{+}\pi^{-}$.]{
     \label{fig:MassAsscLamHyp:b}
     \includegraphics[width=0.5\textwidth]{3_DataSelection/Figures/MassAssHypotheses/canMassAssALamHypCompare_LamK0_wNoMisID.pdf}}
   %%----overall caption----
-  \caption[$\Lambda$($\bar{\Lambda}$) contamination in K$^{0}_{S}$ collection]{Mass assuming $\Lambda$-hypothesis (\ref{fig:MassAsscLamHyp:a}) and $\bar{\Lambda}$-hypothesis (\ref{fig:MassAsscLamHyp:b}) for K$^{0}_{S}$ collection.
-  The ``NoMisID" distribution (black triangles) uses the V0 finder without any attempt to remove misidentified $\Lambda$ and $\bar{\Lambda}$.
-  The peak in the ``NoMisID" distribution around $m_{\mathrm{inv}} = $ 1.115 GeV/$c^{2}$ contains misidentified $\Lambda$ (\ref{fig:MassAsscLamHyp:a}) and $\bar{\Lambda}$ (\ref{fig:MassAsscLamHyp:b}) particles in our K$^{0}_{S}$ collection.  
-  ``SimpleMisID" (pink squares) simply cuts out the entire peak, which throws away some good K$^{0}_{S}$ particles.
-  ``MisID\_NoM$_{inv}$Comp" (green squares) uses the misidentification cut outlined in the text, but does not utilize the invariant mass comparison method.
-  ``MisID\_M$_{inv}$Comp" (red circles) utilizes the full misidentification methods, and is currently used for this analysis.
-  ``N$_{pass}$/N$_{ev}$" is the total number of K$^{0}_{S}$ particles found, normalized by the total number of events.  The purity of the collection is also listed. 
-  Also note, the relative excess of the ``NoMisID" distribution around 1.65 $<$ $m_{\mathrm{inv}}$ $<$ 2.1 GeV/$c^{2}$ shows misidified $\bar{\Lambda}$ (\ref{fig:MassAsscLamHyp:a}) and $\Lambda$ (\ref{fig:MassAsscLamHyp:b}) particles in our K$^{0}_{S}$ collection.}
+  \caption[\LamALam contamination in \Ks collection]{Mass assuming \Lam-hypothesis (\ref{fig:MassAsscLamHyp:a}) and \ALam-hypothesis (\ref{fig:MassAsscLamHyp:b}) for \Ks collection.
+  The ``NoMisID" distribution (black triangles) uses the V0 finder without any attempt to remove misidentified \Lam and \ALam.
+  The peak in the ``NoMisID" distribution around \minv = 1.115 GeV/$c^{2}$ contains misidentified \Lam (\ref{fig:MassAsscLamHyp:a}) and \ALam (\ref{fig:MassAsscLamHyp:b}) particles in our \Ks collection.  
+  ``SimpleMisID" (pink squares) simply cuts out the entire peak, which throws away some good \Ks particles.
+  ``MisID\_NoM$_{\mathrm{inv}}$Comp" (green squares) uses the misidentification cut outlined in the text, but does not utilize the final invariant mass comparison step.
+  ``MisID\_M$_{\mathrm{inv}}$Comp" (red circles) utilizes the full misidentification methods, and is currently used for this analysis.
+  ``N$_{\mathrm{pass}}$/N$_{\mathrm{ev}}$" is the total number of \Ks particles found, normalized by the total number of events.  The purity of the collection is also listed. 
+  Also note, the relative excess of the ``NoMisID" distribution around 1.65 $<$ \minv $<$ 2.1 GeV/$c^{2}$ shows misidentified \ALam (\ref{fig:MassAsscLamHyp:a}) and \Lam (\ref{fig:MassAsscLamHyp:b}) particles in our \Ks collection.}
   \label{fig:MassAsscLamHyp}
 \end{figure}
 
 
 
-As can be seen in Figure \ref{fig:MassAsscLamHyp}, some misidentified $\Lambda$ and $\bar{\Lambda}$ particles contaminate our K$^{0}_{S}$ sample.
-Figure \ref{fig:MassAsscLamHyp:a} shows the mass assuming $\Lambda$-hypothesis for the K$^{0}_{S}$ collection, i.e. assume the daughters are $p^{+}\pi^{-}$ instead of $\pi^{+}\pi^{-}$.
-Figure \ref{fig:MassAsscLamHyp:b} is similar, but shows the mass assuming $\bar{\Lambda}$ hypothesis for the collection, i.e. assume the daughters are $\pi^{+}\bar{p}^{-}$ instead of $\pi^{+}\pi^{-}$.
-The $\Lambda$ contamination can be seen in \ref{fig:MassAsscLamHyp:a}, and the $\bar{\Lambda}$ contamination in \ref{fig:MassAsscLamHyp:b}, in the peaks around $m_{\mathrm{inv}}$ = 1.115 GeV/$c^{2}$.
-Additionally, the $\bar{\Lambda}$ contamination is visible in Figure \ref{fig:MassAsscLamHyp:a}, and the $\Lambda$ contamination visible in Figure \ref{fig:MassAsscLamHyp:b}, in the region of excess around 1.65 $<$ $m_{\mathrm{inv}}$ $<$ 2.1 GeV/$c^{2}$.
-This is confirmed as the number of misidentified $\Lambda$ particles in the sharp peak of Figure \ref{fig:MassAsscLamHyp:a} (misidentified $\bar{\Lambda}$ particles in the sharp peak of Figure \ref{fig:MassAsscLamHyp:b}) approximately equals the excess found in the 1.65 $<$ $m_{\mathrm{inv}}$ $<$ 2.1 GeV/$c^{2}$ region of Figure \ref{fig:MassAsscLamHyp:a} (Figure \ref{fig:MassAsscLamHyp:b}).
+As can be seen in Figure \ref{fig:MassAsscLamHyp}, some misidentified \Lam and \ALam particles contaminate our \Ks sample.
+Figure \ref{fig:MassAsscLamHyp:a} shows the mass assuming \Lam-hypothesis for the \Ks collection, i.e. assume the daughters are p$^{+}\pi^{-}$ instead of $\pi^{+}\pi^{-}$.
+Figure \ref{fig:MassAsscLamHyp:b} is similar, but shows the mass assuming \ALam-hypothesis for the collection, i.e. assume the daughters are $\pi^{+}\bar{p}^{-}$ instead of $\pi^{+}\pi^{-}$.
+The \Lam contamination can be seen in \ref{fig:MassAsscLamHyp:a}, and the \ALam contamination in \ref{fig:MassAsscLamHyp:b}, in the peaks around \minv = 1.115 GeV/$c^{2}$.
+Additionally, the \ALam contamination is visible in Figure \ref{fig:MassAsscLamHyp:a}, and the \Lam contamination visible in Figure \ref{fig:MassAsscLamHyp:b}, in the region of excess around 1.65 $<$ \minv $<$ 2.1 GeV/$c^{2}$.
+This is confirmed as the number of misidentified \Lam particles in the sharp peak of Figure \ref{fig:MassAsscLamHyp:a} (misidentified \ALam particles in the sharp peak of Figure \ref{fig:MassAsscLamHyp:b}) approximately equals the excess found in the 1.65 $<$ \minv $<$ 2.1 GeV/$c^{2}$ region of Figure \ref{fig:MassAsscLamHyp:a} (Figure \ref{fig:MassAsscLamHyp:b}).
 
-The peaks around $m_{\mathrm{inv}} = $ 1.115 GeV/$c^{2}$ in Figure \ref{fig:MassAsscLamHyp} contain both misidentified $\Lambda$ ($\bar{\Lambda}$) particles and good K$^{0}_{S}$.
-If one simply cuts out the entire peak, some good K$^{0}_{S}$ particles will be lost.
-Ideally, the K$^{0}_{S}$ selection and $\Lambda$($\bar{\Lambda}$) misidentification cuts can be selected such that the peak is removed from this plot while leaving the distribution continuous.
-To attempt to remove these $\Lambda$ and $\bar{\Lambda}$ contaminations without throwing away good K$^{0}_{S}$ particles, the following misidentification cuts are imposed; a K$^{0}_{S}$ candidate is rejected if all of the following criteria are satisfied (for either $\Lambda$ or $\bar{\Lambda}$ hypothesis):
+The peaks around \minv = 1.115 GeV/$c^{2}$ in Figure \ref{fig:MassAsscLamHyp} contain both misidentified \LamALam particles and good \Ks.
+If one simply cuts out the entire peak, some good \Ks particles will be lost.
+Ideally, the \Ks selection and \LamALam misidentification cuts can be selected such that the peak is removed from this plot while leaving the underlying distribution continuous.
+To attempt to remove these \Lam and \ALam contaminations without throwing away good \Ks particles, the following misidentification cuts are imposed; a \Ks candidate is rejected if all of the following criteria are satisfied (for either \Lam- or \ALam-hypothesis):
 \begin{itemize}
  \item $\left|m_{\mathrm{inv}, \ \Lambda(\bar{\Lambda}) \ \mathrm{Hypothesis}} - m_{\mathrm{PDG},\ \Lambda(\bar{\Lambda})}\right| < $ 9.0 MeV/$c^{2}$
  \item Positive daughter passes $p^{+}$($\pi^{+}$) daughter cut implemented for $\Lambda$($\bar{\Lambda}$) reconstruction
@@ -88,7 +88,7 @@ To attempt to remove these $\Lambda$ and $\bar{\Lambda}$ contaminations without 
 \begin{figure}[h]
   \centering
   \includegraphics[width=0.5\textwidth]{3_DataSelection/Figures/K0Purity_LamK0.pdf}
-  \caption[K$^{0}_{S}$ Purity]{Invariant mass (m$_{\mathrm{inv}}$) distribution of all K$^{0}_{S}$ candidates immediately before the final invariant mass cut.  The bottom figure is zoomed to show the background with fit.  The vertical green lines represent the m$_{\mathrm{inv}}$ cut used in the analyses, the red vertical lines delineate the region over which the background was fit, and the blue line shows the background fit.  This distribution is used to calculate the collection purity, Purity(K$^{0}_{S}$) $\approx$ 98\%.}
+  \caption[\Ks Purity]{Invariant mass (\minv) distribution for all \Ks candidates immediately before the final invariant mass cut.  The bottom figure is zoomed to show the background with fit.  The vertical green lines represent the \minv cut used in the analyses, the red vertical lines delineate the regions over which the background was fit, and the blue line shows the background fit.  This distribution is used to calculate the collection purity, Purity(\Ks) $\approx$ 98\%.}
   \label{fig:K0Purity}
 \end{figure}
 

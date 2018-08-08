@@ -4,31 +4,12 @@
 \section{Systematic Errors}
 \label{SystematicErrors}
 
-In order to understand my systematic uncertainties, the analysis code was run many times using slightly different values for a number of important cuts, and the results were compared.
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{comment}
-
-To quantify the effect, the difference in two correlation functions obtained using different values for a given cut was fit with a simple exponential decay function:
-
-\begin{equation}
-  \Delta C(k^{*}) = Ae^{-Bk^{*}}
-\label{eqn:ExpDecay}
-\end{equation}
-
-The amplitude, $A$, and its associated uncertainty for the various cuts can be found in Tables \ref{tab:LamDcaLamK0} through \ref{tab:AvgSepLamKch}.
-The systematic effect of the variation is marked as significant (``Sig" column) if the amplitude is not withih 2$\sigma$ of 0.
-Although this proves qualitatively useful, these fits will likely not be used to quantify the systematic effects.
-
-\end{comment}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-In order to quantify the systematic errors on the data, all correlation functions built using all varied cut values were bin-by-bin averaged, and the resulting variance of each bin was taken as the systematic error.  The cuts which were utilized in this study are presented in Sections \ref{SysErrsLamK0:ParticleAndPairCuts} ($\Lambda$K$^{0}_{S}$) and \ref{SysErrsLamKch:ParticleAndPairCuts} ($\Lambda$K$^{\pm}$).
+In order to understand my systematic uncertainties, the analysis code was run many times using slightly different values for a number of important cuts, and the results were compared.  To quantify the systematic errors on the data, all correlation functions built using all varied cut values were bin-by-bin averaged, and the resulting variance of each bin was taken as the systematic error.  The cuts which were utilized in this study are presented in Sections \ref{SysErrsLamK0:ParticleAndPairCuts} ($\Lambda$K$^{0}_{S}$) and \ref{SysErrsLamKch:ParticleAndPairCuts} ($\Lambda$K$^{\pm}$).
 
 
 Similarly, the fit parameters extracted from all of these correlation functions were averaged, and the resulting variances were taken as the systematic errors for the fit parameters.
 As with the systematic errors on the data, this was performed for all varied cut values.
-Additionally, a systematic analysis was done on our fit method (which, for now, just includes our choice of fit range).
+Additionally, a systematic analysis was done on our fit method (which, for now, just includes our choice of fit range and functional form used to model the non-femtoscopic background).
 These two sources of uncertainty were combined in quadrature to obtain the final systematic uncertainties on the extracted fit parameters.
 
 

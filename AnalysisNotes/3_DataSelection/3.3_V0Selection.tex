@@ -4,7 +4,7 @@
 \subsection{V0 Selection}
 \label{V0Selection}
 
-$\Lambda$ ($\bar{\Lambda}$) and K$^{0}_{S}$ are neutral particles which cannot be directly detected, but must instead be reconstructed through detection of their decay products, or daughters.  
+\LamALam and \Ks are neutral particles which cannot be directly detected, but must instead be reconstructed through detection of their decay products, or daughters.  
 This process is illustrated in Figure \ref{fig:V0Reconstruction}.
 In general, particles which are topologically reconstructed in this fashion are called V0 particles.
 The class AliFemtoV0TrackCutNSigmaFilter (which is an extension of AliFemtoV0TrackCut) is used to reconstruct the V0s.
@@ -25,7 +25,7 @@ The class AliFemtoV0TrackCutNSigmaFilter (which is an extension of AliFemtoV0Tra
 \end{figure}
 
 
-In order to obtain a true and reliable signal, one must ensure good purity of the V0 collection.  The purity of the collection is calculated as:
+In order to ensure a true and reliable signal, one must ensure good purity of the V0 collection.  The purity of the collection is calculated as:
 
 \begin{equation}
  Purity = \frac{Signal}{Signal + Background}
@@ -33,9 +33,9 @@ In order to obtain a true and reliable signal, one must ensure good purity of th
 \end{equation}
 
 To obtain both the signal and background, the invariant mass distribution ($m_{\mathrm{inv}}$) of all V0 candidates must be constructed immediately before the final invariant mass cut.
-Examples of such distribtions can be found in Figures \ref{fig:cLamPurity} and \ref{fig:K0Purity}.
-It is vital that this distribution be constructed immediately before the final $m_{\mathrm{inv}}$ cut, otherwise it would be impossible to estimate the background.
-As shown in Figures \ref{fig:cLamPurity} and \ref{fig:K0Purity}, the background is fit (with a polynomial) outside of the peak region of interest to obtain an estimate for the background within the region.
+Examples of such distributions can be found in Figures \ref{fig:cLamPurity} and \ref{fig:K0Purity}.
+It is vital that the distribution be constructed immediately before the final $m_{\mathrm{inv}}$ cut, otherwise, it would be impossible to estimate the background.
+As demonstrated in Figures \ref{fig:cLamPurity} and \ref{fig:K0Purity}, the background is fit with a polynomial outside of the peak region of interest in order to extrapolate an estimate for the background within the region.
 Within the $m_{\mathrm{inv}}$ cut limits, the background is the region below the fit while the signal is the region above the fit.
 
 \subfile{3_DataSelection/3.3.1_LambdaReconstruction.tex}

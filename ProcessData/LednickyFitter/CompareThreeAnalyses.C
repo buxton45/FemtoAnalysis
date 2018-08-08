@@ -33,7 +33,7 @@ TCanvas* DrawKStarCfs(FitGenerator* aFG1, FitGenerator* aFG2, FitGenerator* aFG3
   double tXLow = -0.02;
 //  double tXHigh = 0.99;
   double tXHigh = aFG1->GetKStarCf(0)->GetXaxis()->GetBinUpEdge(aFG1->GetKStarCf(0)->GetNbinsX())-0.01;
-  if(aZoom) tXHigh = 0.32;
+  if(aZoom) tXHigh = 0.329;
 
   double tYLow = 0.86;
   double tYHigh = 1.07;
@@ -52,19 +52,19 @@ TCanvas* DrawKStarCfs(FitGenerator* aFG1, FitGenerator* aFG2, FitGenerator* aFG3
 
 
   double tMarkerSize = 0.5;
-/*
+
   if     (aAnType==kLamK0 || aAnType==kALamK0)     {tMarkerColor1 = kBlack; tMarkerColor2 = kGray+2; tMarkerColor3 = kGray+2;}
   else if(aAnType==kLamKchP || aAnType==kALamKchM) {tMarkerColor1 = kRed;   tMarkerColor2 = kRed+2;  tMarkerColor3 = kRed+2;}
   else if(aAnType==kLamKchM || aAnType==kALamKchP) {tMarkerColor1 = kBlue;  tMarkerColor2 = kBlue+2; tMarkerColor3 = kBlue+2;}
   else {tMarkerColor1=1; tMarkerColor2=1; tMarkerColor3=1;}
-*/
 
+/*
   if     (aAnType==kLamK0 || aAnType==kALamK0)     tMarkerColor1 = kBlack;
   else if(aAnType==kLamKchP || aAnType==kALamKchM) tMarkerColor1 = kRed;
   else if(aAnType==kLamKchM || aAnType==kALamKchP) tMarkerColor1 = kBlue;
   else tMarkerColor1=1;
-
   tMarkerColor2 = kCyan+1;
+*/
   tMarkerColor3 = kMagenta;
 
   for(int j=0; j<tNy; j++)
@@ -78,7 +78,7 @@ TCanvas* DrawKStarCfs(FitGenerator* aFG1, FitGenerator* aFG2, FitGenerator* aFG3
       tCanPart->AddGraph(i,j,(TH1*)aFG2->GetKStarCf(tAnalysisNumber),"",tMarkerStyle2,tMarkerColor2,tMarkerSize);
       tCanPart->AddGraph(i,j,(TH1*)aFG3->GetKStarCf(tAnalysisNumber),"",tMarkerStyle3,tMarkerColor3,tMarkerSize);
 
-
+      tCanPart->AddGraph(i,j,(TH1*)aFG2->GetKStarCf(tAnalysisNumber),"",tMarkerStyle2,tMarkerColor2,tMarkerSize);
 
       TString tTextAnType;
       if(tAnalysisNumber==0 || tAnalysisNumber==2 || tAnalysisNumber==4) tTextAnType = TString(cAnalysisRootTags[aAnType]);

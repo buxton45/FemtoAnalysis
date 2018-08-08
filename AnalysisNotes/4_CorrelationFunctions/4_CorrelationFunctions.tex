@@ -6,12 +6,12 @@
 
 %General remarks about formaton of correlation functions and what information they provide.
 
-This analysis studies the momentum correlations of both $\Lambda$-K and $\Xi$-K pairs using the two-particle correlation function, defined as $C(k^{*}) = A(k^{*})/B(k^{*})$, where $A(k^{*})$ is the signal distribution, $B(k^{*})$ is the reference (or background) distribution, and $k^{*}$ is the momentum of one of the particles in the pair rest frame.
+This analysis studies the momentum correlations of both \LamK and \XiKpm pairs using the two-particle correlation function, defined as $C(k^{*}) = A(k^{*})/B(k^{*})$, where $A(k^{*})$ is the signal distribution, $B(k^{*})$ is the reference (or background) distribution, and $k^{*}$ is the momentum of one of the particles in the pair rest frame.
 In practice, $A(k^{*})$ is constructed by binning in $k^{*}$ pairs from the same event.
 Ideally, $B(k^{*})$ is similar to $A(k^{*})$ in all respects excluding the presence of femtoscopic correlations \cite{Lisa:2005dd}; as such, $B(k^{*})$ is used to divide out the phase-space effects, leaving only the femtoscopic effects in the correlation function. 
 
-This analysis presents correlation functions for three centrality bins (0-10\%, 10-30\%, and 30-50\%), and is currently pair transverse momentum ($k_{T} = 0.5|\mathbf{p}_{T,1}+\mathbf{p}_{T,2}|$) integrated (i.e. not binned in $k_{T}$).  
-The correlation functions are constructed separately for the two magnetic field configurations, and are combined using a weighted average:
+This analysis presents correlation functions for three centrality bins (0-10\%, 10-30\%, and 30-50\%), and is currently pair transverse momentum ($k_{\mathrm{T}} = 0.5|\mathbf{p}_{\mathrm{T},1}+\mathbf{p}_{\mathrm{T},2}|$) integrated (i.e. not binned in $k_{\mathrm{T}}$).  
+The correlation functions are constructed separately for the two magnetic field configurations, and, after assuring consistency, are combined using a weighted average:
 
 \begin{equation}
   C_{combined}(k^{*}) = \frac{\sum\limits_{i}w_{i}C_{i}(k^{*})}{\sum\limits_{i}w_{i}} 
@@ -19,7 +19,7 @@ The correlation functions are constructed separately for the two magnetic field 
 \end{equation}
 
 where the sum runs over the correlation functions to be combined, and the weight, $w_{i}$, is the number of numerator pairs in $C_{i}(k^{*})$.
-Here, the sum is over the two field configurations.
+Here, the sum is over the two field configurations (++ and -~-).
 
 \subfile{4_CorrelationFunctions/4.1_NormalCfs.tex}
 \subfile{4_CorrelationFunctions/4.2_StavCfs.tex}

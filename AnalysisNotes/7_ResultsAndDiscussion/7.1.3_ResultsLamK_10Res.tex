@@ -6,21 +6,28 @@
 
 \begin{document}
 
-\subsubsection{Results: \texorpdfstring{$\Lambda$K$^{0}_{S}$ and $\Lambda$K$^{\pm}$: 10 Residual Correlations Included in Fit}{TEXT}}
+\subsubsection{Results: \LamKs and \LamKpm: 10 Residual Correlations Included in Fit}
 \label{ResultsLamK_10Res}
 
-Figures \ref{fig:LamK0wConjFits_10Res}, \ref{fig:LamKchPwConjFits_10Res}, and \ref{fig:LamKchMwConjFits_10Res} (Section \ref{ResultsAndDiscussion}) show experimental data with fits for all studied centralities for \LamKs with \ALamKs, \LamKchP with \ALamKchM, and \LamKchM with \ALamKchP, respectively.
+Figure \ref{fig:ScattParams_10Res} nicely collects and summarizes all of our extracted fit parameters for the case of 10 included residual contributors.  Figure \ref{fig:mTScalingOfRadii_10Res} presents our extracted fit radii, along with those of other systems previously analyzed by ALICE \cite{Adam:2015vja}, as a function of pair transverse mass (\mt).
+Figures \ref{fig:LamK0wConjFits_10Res}, \ref{fig:LamKchPwConjFits_10Res}, and \ref{fig:LamKchMwConjFits_10Res} show the experimental correlation functions with fits, assuming 10 residual contributors, for all studied centralities for \LamKs with \ALamKs, \LamKchP with \ALamKchM, and \LamKchM with \ALamKchP, respectively.
 The parameter sets extracted from the fits can be found in Tables \ref{tab:FitResultsLamK0_10Res} and \ref{tab:FitResultsLamKch_10Res}.
-All correlation functions were normalized in the range 0.32 $< k^{*} <$ 0.40 GeV/c, and fit in the range 0.0 $< k^{*} <$ 0.30 GeV/c.
-For the $\Lambda$K$^{-}$ and $\bar{\Lambda}$K$^{+}$ analyses, the region 0.19 $< k^{*} <$ 0.23 GeV/c was excluded from the fit to exclude the bump caused by the $\Omega^{-}$ resonance.
-The non-flat background was fit with a linear form from 0.6 $< k^{*} <$ 0.9 GeV/c.
-The theoretical fit function was then multiplied by this background during the fitting process.
 
-In the figures (\ref{fig:LamK0wConjFits_10Res}, \ref{fig:LamKchPwConjFits_10Res}, and \ref{fig:LamKchMwConjFits_10Res}), the black solid line represents the ``raw" fit, i.e. not corrected for momentum resolution effects nor non-flat background.
-The green line shows the fit to the non-flat background.  The purple points show the fit after momentum resolution and non-flat background corrections have been applied.
-The initial values of the parameters is listed, as well as the final fit values with uncertainties.
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.80\textwidth]{7_ResultsAndDiscussion/Figures/CompareAllScattParams_Comp3An_10Res.pdf}
+  \caption[Extracted Scattering Parameters: 3 Residuals in Fit]{Extracted scattering parameters for the case of 10 residual contributors for all of our $\Lambda$K systems.  [Top Left]: $\mathbb{I}f_{0}$ vs. $\mathbb{R}f_{0}$, together with d$_{0}$ to the right.  [Top Right (Bottom Left, Bottom Right)]: $\lambda$ vs. Radius for the 0-10\% (10-30\%, 30-50\%) bin.  The green \cite{Liu:2006xja} and yellow \cite{Mai:2009ce} points show theoretical predictions made using chiral perturbation theory.}
+  \label{fig:ScattParams_10Res}
+\end{figure}
 
-For the $\Lambda$K$^{0}_{S}$ fits without residuals, $\lambda$ was restricted to [0.4, 0.6].
+
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.50\textwidth]{7_ResultsAndDiscussion/Figures/mTscaling_MinvCalc_OutlinedPoints_OthersTransparent_wJaiAndHans_10Res.pdf}
+  \caption[$m_{\mathrm{T}}$ Scaling of Radii: 10 Residuals in Fit]{10 residual correlations in $\Lambda$K fits.  Extracted fit $R_{\mathrm{inv}}$ parameters as a function of pair transverse mass ($m_{\mathrm{T}}$) for various pair systems over several centralities. The ALICE published data \cite{Adam:2015vja} is shown with transparent, open symbols.  The new $\Lambda$K results are shown with opaque, filled symbols.  In the left, the $\Lambda$K$^{+}$ (with it's conjugate pair) results are shown separately from the $\Lambda$K$^{-}$ (with it's conjugate pair) results.  In the right, all $\Lambda$K$^{\pm}$ results are averaged.}
+  \label{fig:mTScalingOfRadii_10Res}
+\end{figure}	
 
 \pagestyle{empty}
 \begin{landscape}
@@ -37,14 +44,16 @@ For the $\Lambda$K$^{0}_{S}$ fits without residuals, $\lambda$ was restricted to
     \includegraphics[width=0.50\linewidth]{\ResultsDirBaseLamKs\SaveNameModLamKs/canKStarCfwFitsLamK0wConj_0010_1030_3050UnZoomed\SaveNameModLamKs.pdf}}  
   %%----overall caption----
   \caption[$\Lambda$K$^{0}_{S}$($\bar{\Lambda}$K$^{0}_{S}$) Fits with 10 Residuals]{Fits, with 10 residual correlations included, to the $\Lambda$K$^{0}_{S}$ (left) and $\bar{\Lambda}$K$^{0}_{S}$ (right) data for the centralities 0-10\% (top), 10-30\% (middle), and 30-50\% (bottom).
-The lines represent the statistical errors, while the boxes represent the systematic errors.
-Each has unique $\lambda$ and normalization parameters.
-The radii are shared amongst like centralities; the scattering parameters ($\mathbb{R}f_{0}$, $\mathbb{I}f_{0}$, $d_{0}$) are shared amongst all.
-The black solid line represents the ``raw" fit, i.e. not corrected for momentum resolution effects nor non-flat background.  
-The green line shows the fit to the non-flat background.
-The purple points show the fit after momentum resolution and non-flat background corrections have been applied.
-The initial values of the parameters is listed, as well as the final fit values with uncertainties.
-Here, $R$ was restricted to [2.,10.] and $\Lambda$ was restricted to [0.1,0.8].}
+ The lines represent the statistical errors, while the boxes represent the systematic errors.
+ A single $\lambda$ parameter is shared amongst all.
+ Each analysis has a unique normalization parameter.
+ The radii are shared between analyses of like centrality, as these should have similar source sizes.
+ The scattering parameters ($\mathbb{R}f_{0}$, $\mathbb{I}f_{0}$, $d_{0}$) are shared amongst all.
+ The background is modeled by a (6$^{\mathrm{th}}$-)degree polynomial fit to THERMINATOR simulation.
+ The black solid line represents the primary (\LamK) correlation's contribution to the fit.  
+ The green line shows the fit to the non-flat background.
+ The purple points show the fit after all residuals' contributions have been included, and momentum resolution and non-flat background corrections have been applied.
+ The extracted fit values with uncertainties are printed.}
   \label{fig:LamK0wConjFits_10Res}
 \end{figure}
 
@@ -61,13 +70,16 @@ Here, $R$ was restricted to [2.,10.] and $\Lambda$ was restricted to [0.1,0.8].}
     \includegraphics[width=0.50\linewidth]{\ResultsDirBaseLamKch\SaveNameModLamKch/canKStarCfwFitsLamKchPwConj_0010_1030_3050UnZoomed\SaveNameModLamKch.pdf}}  
   %%----overall caption----
   \caption[$\Lambda$K$^{+}$($\bar{\Lambda}$K$^{-}$) Fits with 10 Residuals]{Fits, with 10 residual correlations included, to the $\Lambda$K$^{+}$ (left) and $\bar{\Lambda}$K$^{-}$ (right) data for the centralities 0-10\% (top), 10-30\% (middle), and 30-50\% (bottom).
-The lines represent the statistical errors, while the boxes represent the systematic errors.  
-Each has unique $\lambda$ and normalization parameters.
-The radii are shared amongst like centralities; the scattering parameters ($\mathbb{R}f_{0}$, $\mathbb{I}f_{0}$, $d_{0}$) are shared amongst all.
-The black solid line represents the ``raw" fit, i.e. not corrected for momentum resolution effects nor non-flat background.  
-The green line shows the fit to the non-flat background.
-The purple points show the fit after momentum resolution and non-flat background corrections have been applied.
-The initial values of the parameters is listed, as well as the final fit values with uncertainties.}
+ The lines represent the statistical errors, while the boxes represent the systematic errors.  
+ All \LamKpm analyses are fit simultaneously across all centralities (0-10\%, 10-30\%, 30-50\%).
+ Scattering parameters ($\mathbb{R}f_{0}$, $\mathbb{I}f_{0}$, $d_{0}$) are shared between pair-conjugate systems (i.e. a parameter set describing the \LamKchP \& \ALamKchM system, and a separate set describing the \LamKchM \& \ALamKchP system).
+ For each centrality, a radius and $\lambda$ parameters are shared between all pairs (\LamKchP, \ALamKchM, \LamKchM, \ALamKchP).
+ Each analysis has a unique normalization parameter.
+ The background is modeled by a (6$^{\mathrm{th}}$-)degree polynomial fit to THERMINATOR simulation.
+ The black solid line represents the primary (\LamK) correlation's contribution to the fit.  
+ The green line shows the fit to the non-flat background.
+ The purple points show the fit after all residuals' contributions have been included, and momentum resolution and non-flat background corrections have been applied.
+ The extracted fit values with uncertainties are printed.}
   \label{fig:LamKchPwConjFits_10Res}
 \end{figure}
 
@@ -85,13 +97,16 @@ The initial values of the parameters is listed, as well as the final fit values 
     \includegraphics[width=0.50\linewidth]{\ResultsDirBaseLamKch\SaveNameModLamKch/canKStarCfwFitsLamKchMwConj_0010_1030_3050UnZoomed\SaveNameModLamKch.pdf}}  
   %%----overall caption----
   \caption[$\Lambda$K$^{-}$($\bar{\Lambda}$K$^{+}$) Fits with 10 Residuals]{Fits, with 10 residual correlations included, to the $\Lambda$K$^{-}$(left) with $\bar{\Lambda}$K$^{+}$ (right) data for the centralities 0-10\% (top), 10-30\% (middle), and 30-50\% (bottom).
-The lines represent the statistical errors, while the boxes represent the systematic errors.  
-Each has unique $\lambda$ and normalization parameters.
-The radii are shared amongst like centralities; the scattering parameters ($\mathbb{R}f_{0}$, $\mathbb{I}f_{0}$, $d_{0}$) are shared amongst all.
-The black solid line represents the ``raw" fit, i.e. not corrected for momentum resolution effects nor non-flat background.  
-The green line shows the fit to the non-flat background.
-The purple points show the fit after momentum resolution and non-flat background corrections have been applied.
-The initial values of the parameters is listed, as well as the final fit values with uncertainties.}
+ The lines represent the statistical errors, while the boxes represent the systematic errors.  
+ All \LamKpm analyses are fit simultaneously across all centralities (0-10\%, 10-30\%, 30-50\%).
+ Scattering parameters ($\mathbb{R}f_{0}$, $\mathbb{I}f_{0}$, $d_{0}$) are shared between pair-conjugate systems (i.e. a parameter set describing the \LamKchP \& \ALamKchM system, and a separate set describing the \LamKchM \& \ALamKchP system).
+ For each centrality, a radius and $\lambda$ parameters are shared between all pairs (\LamKchP, \ALamKchM, \LamKchM, \ALamKchP).
+ Each analysis has a unique normalization parameter.
+ The background is modeled by a (6$^{\mathrm{th}}$-)degree polynomial fit to THERMINATOR simulation.
+ The black solid line represents the primary (\LamK) correlation's contribution to the fit.  
+ The green line shows the fit to the non-flat background.
+ The purple points show the fit after all residuals' contributions have been included, and momentum resolution and non-flat background corrections have been applied.
+ The extracted fit values with uncertainties are printed.}
   \label{fig:LamKchMwConjFits_10Res}
 \end{figure}
 
@@ -130,21 +145,6 @@ The initial values of the parameters is listed, as well as the final fit values 
 \subfile{7_ResultsAndDiscussion/7.1.3_ResultsTables_10Res/7.1.3_ResultsTables_10Res.tex}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\begin{figure}[h]
-  \centering
-  \includegraphics[width=0.80\textwidth]{7_ResultsAndDiscussion/Figures/CompareAllScattParams_Comp3An_10Res.pdf}
-  \caption[Extracted Scattering Parameters: 3 Residuals in Fit]{Extracted scattering parameters for the case of 10 residual contributors for all of our $\Lambda$K systems.  [Top Left]: $\mathbb{I}f_{0}$ vs. $\mathbb{R}f_{0}$, together with d$_{0}$ to the right.  [Top Right (Bottom Left, Bottom Right)]: $\lambda$ vs. Radius for the 0-10\% (10-30\%, 30-50\%) bin.  The green \cite{Liu:2006xja} and yellow \cite{Mai:2009ce} points show theoretical predictions made using chiral perturbation theory.}
-  \label{fig:ScattParams_10Res}
-\end{figure}
-
-
-
-\begin{figure}[h]
-  \centering
-  \includegraphics[width=0.50\textwidth]{7_ResultsAndDiscussion/Figures/mTscaling_MinvCalc_OutlinedPoints_OthersTransparent_wJaiAndHans_10Res.pdf}
-  \caption[$m_{\mathrm{T}}$ Scaling of Radii: 10 Residuals in Fit]{10 residual correlations in $\Lambda$K fits.  Extracted fit $R_{\mathrm{inv}}$ parameters as a function of pair transverse mass ($m_{\mathrm{T}}$) for various pair systems over several centralities. The ALICE published data \cite{Adam:2015vja} is shown with transparent, open symbols.  The new $\Lambda$K results are shown with opaque, filled symbols.  In the left, the $\Lambda$K$^{+}$ (with it's conjugate pair) results are shown separately from the $\Lambda$K$^{-}$ (with it's conjugate pair) results.  In the right, all $\Lambda$K$^{\pm}$ results are averaged.}
-  \label{fig:mTScalingOfRadii_10Res}
-\end{figure}
 
 \clearpage
 
