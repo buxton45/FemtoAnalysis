@@ -13,6 +13,8 @@ int main(int argc, char **argv)
 
   bool bPlayCompletionBeep = true;
 //-----------------------------------------------------------------------------
+  TString tParentResultsDate = "20161027";  //Parent analysis these systematics are to accompany
+
   AnalysisType tAnType = kLamKchP;
   CentralityType tCentralityType = kMB;
   FitGeneratorType tFitGeneratorType = kPairwConj;
@@ -63,7 +65,7 @@ int main(int argc, char **argv)
       vector<double> tModifierValues2 = tFileInfo.modifierValues2;
       bool tAllCent = tFileInfo.allCentralities;
 
-    TString tDirectoryBase = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Systematics/Results_%s_Systematics%s",tGeneralAnTypeName.Data(),tDirNameModifierBase1.Data());
+    TString tDirectoryBase = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Systematics_LamK_%s/Results_%s_Systematics%s", tParentResultsDate.Data(), tGeneralAnTypeName.Data(), tDirNameModifierBase1.Data());
     if(!tDirNameModifierBase2.IsNull())
     {
       tDirectoryBase.Remove(TString::kTrailing,'_');

@@ -329,6 +329,7 @@ int main(int argc, char **argv)
   //This allows the user a chance to look at and manipulate a TBrowser before
   //the program ends and closes everything
 //-----------------------------------------------------------------------------
+  TString tParentResultsDate = "20161027";  //Parent analysis these systematics are to accompany
 
   bool bRunOldQMNaming = false;
 
@@ -349,7 +350,7 @@ int main(int argc, char **argv)
 
   //-------------------------------
 
-  TString tSystematicsDirectory = "/home/jesse/Analysis/FemtoAnalysis/Results/Systematics/";
+  TString tSystematicsDirectory = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Systematics_LamK_%s/", tParentResultsDate.Data());
 
   TString tResultsDirectory_cLamK0 = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamK0_20171227/";
   TString tResultsDirectory_cLamcKch = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_20171227/";
