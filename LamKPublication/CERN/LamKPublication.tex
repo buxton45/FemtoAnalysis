@@ -93,7 +93,7 @@ This might suggest an effect arising from different quark-antiquark interactions
 \section{Introduction}
 \label{sec:Introduction}
 
-Femtoscopy is an experimental method used to study the space-time characteristic of the particle emitting sources in relativistic particle collisions.  With this method, two(or many)-particle relative-momentum correlation functions are used to connect the final-state momentum distributions to the space-time distributions of particle emission at freeze-out.  The correlation functions are sensitive to quantum statistics, as well as strong and Coulomb final-state interactions (FSI).  In addition to characterizing the source region, femtoscopy offers a unique opportunity to measure nuclear scattering parameters, many of which are difficult, if not impossible, to measure otherwise.  In many pair systems, the contributions to the correlation function from quantum statistics and/or the Coulomb interaction overwhelm that of the strong interaction, making it difficult to extract scattering information.  In this article, we study npn-identical particle pairs, with at least one electrically neutral particle in the pair.  Therefore, quantum statistics and the Coulomb interaction do not contribute, giving us a clear signal from the strong interaction.
+Femtoscopy is an experimental method used to study the space-time characteristic of the particle emitting sources in relativistic particle collisions \cite{Lisa:2005dd}.  With this method, two(or many)-particle relative-momentum correlation functions are used to connect the final-state momentum distributions to the space-time distributions of particle emission at freeze-out.  The correlation functions are sensitive to quantum statistics, as well as strong and Coulomb final-state interactions (FSI).  In addition to characterizing the source region, femtoscopy offers a unique opportunity to measure nuclear scattering parameters, many of which are difficult, if not impossible, to measure otherwise.  In many pair systems, the contributions to the correlation function from quantum statistics and/or the Coulomb interaction overwhelm that of the strong interaction, making it difficult to extract scattering information.  In this article, we study npn-identical particle pairs, with at least one electrically neutral particle in the pair.  Therefore, quantum statistics and the Coulomb interaction do not contribute, giving us a clear signal from the strong interaction.
 
 Femtoscopy analyses of pion, kaons, and protons have revealed a trend of decreasing source radii with increasing transverse mass, $m_{\mathrm{T}}^{2} = (\frac{m_{\mathrm{inv}}}{2})^{2} + k_{\mathrm{T}}^{2}$, where $k_{\mathrm{T}} = \frac{1}{2}|\mathbf{p}_{\mathrm{T},1} + \mathbf{p}_{\mathrm{T},2}|$.  This is interpreted as a signature of hydrodynamic flow, and therefore deconfined quark matter, in the heavy-ion collisions.
 
@@ -116,15 +116,16 @@ The organization of this paper is as follows.  Sec. \ref{sec:DataAnalysis}, Sec.
 \section{Data Analysis}
 \label{sec:DataAnalysis}
 
-The dataset analyzed is from Pb-Pb collisions at $\sqrt{s_{\mathrm{NN}}}$ = 2.76 TeV at the LHC measured by the ALICE detector.
+The dataset analyzed is from Pb-Pb collisions at $\sqrt{s_{\mathrm{NN}}}$ = 2.76 TeV at the LHC measured by the ALICE detector \cite{1748-0221-3-08-S08002}.
 Approximately 40 million combined central, semi-central, and minimum bias events were analyzed.
-The events were classified according to their centrality determined using the measured amplitudes in the V0 detectors [citation].  
+The events were classified according to their centrality determined using the measured amplitudes in the V0 detectors \cite{Abelev:2013qoq}.  
 In order for an event to be included in the analysis, the z-position of the reconstructed event vertex must be within 10 cm of the center of the ALICE detector, and the event must contain at least one particle of each type from the pair of interest (ex. for \LamKchP analysis, an accepted event must contain at least one \Lam and at lease one \Ks).
-Charged particle tracking was performed using the Time Projection Chamber (TPC) [citation] and the Inner Tracking System [citation].  
+Charged particle tracking was performed using the Time Projection Chamber (TPC) \cite{2010NIMPA.622..316A} (Tom) or \cite{Dellacasa:451098} (1dPionKaonProton) and the Inner Tracking System \cite{1748-0221-3-08-S08002}.  
 The ITS allows for high spatial resolution in determining the primary (collision) vertex.
+The determination of the momenta of the tracks was performed using tracks reconstructed with the TPC only and constrained to the primary vertex.
 
-Particle identification (PID) for reconstructed tracks was carried out using both the TPC and Time-of-Flight (TOF) detector [citation] in the pseudorapidity range $|\eta| < 0.8$.  
-For TPC PID. a parametrized Bethe-Bloch formula was used to calculate the specific energy loss $\langle \mathrm{d}E/\mathrm{d}x \rangle$ in the detector expected for a particle with a given mass and momentum.  
+Particle identification (PID) for reconstructed tracks was carried out using both the TPC and Time-of-Flight (TOF) detector \cite{Abelev:2014ffa, Akindinov:2013tea} (Tom) or \cite{Cortese:545834} (1dPionKaonProton) in the pseudorapidity range $|\eta| < 0.8$.  
+For TPC PID, a parametrized Bethe-Bloch formula was used to calculate the specific energy loss $\langle \mathrm{d}E/\mathrm{d}x \rangle$ in the detector expected for a particle with a given mass and momentum.  
 For TOF PID, the particle mass was used to calculate the expected time-of-flight as a function of track length and momentum.  
 For each PID method, a value ($N\sigma$) was assigned to each track denoting the number of standard deviations between the measured track information and calculated values.  
 This procedure was repeated for four "particle species hypotheses" - electron, pion, kaon, and proton-, and, for each hypothesis, a different $N\sigma$ value was obtained per detector.
@@ -140,6 +141,19 @@ This procedure was repeated for four "particle species hypotheses" - electron, p
 \LamALam and \Ks particles are electrically neutral, and cannot be directly detected, but must instead be reconstructed through detection of their decay products, or daughters.  
 This process is illustrated in Figure \ref{fig:V0Reconstruction}.
 In general, particles which are topologically reconstructed in this fashion are called V0 particles.
+
+Daughter tracks selected by requiring a minimum impact parameter with respect to primary vertex.
+Positive and negative tracks combined to form a pair.
+V0 vertex is then point of closest approach of tracks.
+This distance is used for additional quality criterion.
+
+V0 momentum calculated as sum of daughters momenta.
+Minimum transverse momentum to reduce contribution from fakes.
+Selection on opening angle between V0 momentum and and vector pointing from primary vertex to secondary V0 decay vertex
+Finally, invariant mass cut.
+
+To avoid auto-correlation, all candidates checked for shared daughters.
+If shared daughters, how do I decide which V0 to keep? (Cosine of pointing angle?)
 
 \begin{figure}[h]
   \centering
@@ -167,7 +181,7 @@ To attempt to remove these contaminations without throwing away good candidates,
 The intent of these cuts is to judge whether a candidate is more likely a \LamALam or a \Ks.  
 
 For a given V0, we calculate the mass assuming different identities (\Lam, \ALam, \Ks); the mass assuming \Ks hypothesis ($m_{\mathrm{inv,~ K^{0}_{S}~ Hypothesis}}$) is calculated assuming both of the daughters are pions, the mass assuming \Lam hypothesis ($m_{\mathrm{inv,~ \Lambda~ Hypothesis}}$) is calculated assuming the positive daughter is a proton and the negative daughter a pion, and the mass assuming \ALam hypothesis ($m_{\mathrm{inv,~ \bar{\Lambda}~ Hypothesis}}$) is calculated assuming the positive daughter is a pion and the negative an anti-proton.  
-In addition to the notation just introduced, in the following, $m_{\mathrm{PDG,~ K^{0}_{S}}}$ and $m_{\mathrm{PDG,~ \Lambda(\bar{\Lambda})}}$ denote the particle masses of the \Ks and \LamALam, respectively, as recorded by the Particle Data Group.
+In addition to the notation just introduced, in the following, $m_{\mathrm{PDG,~ K^{0}_{S}}}$ and $m_{\mathrm{PDG,~ \Lambda(\bar{\Lambda})}}$ denote the particle masses of the \Ks and \LamALam, respectively, as recorded by the Particle Data Group \cite{Patrignani:2016xqp}.
 
 For \LamALam selection, a candidate is rejected if all of the following criteria are satisfied:
 
@@ -210,33 +224,23 @@ Similarly, for \Ks selection, a candidate is rejected if all of the following cr
    \hline  
    \multicolumn{4}{c}{\textbf{\Lam selection}} \\
    \hline
-   \multicolumn{3}{l|}{$|\eta|$} & $< 0.8$ \\
+   \multicolumn{3}{l|}{Transverse momentum $p_{\mathrm{T}}$} & $> 0.4$ GeV/\textit{c} \\
    \hline
-   \multicolumn{3}{l|}{$p_{\mathrm{T}}$} & $> 0.4$ GeV/\textit{c} \\
+   \multicolumn{3}{l|}{$|\eta|$} & $< 0.8$ \\
    \hline
    \multicolumn{3}{l|}{$|m_{\mathrm{inv}} - m_{\mathrm{PDG}}|$} & $< 3.8$ MeV \\ 
    \hline
-   \multicolumn{3}{l|}{DCA to prim. vertex} & $<$ 0.5 cm \\
+   \multicolumn{3}{l|}{DCA to primary vertex} & $<$ 0.5 cm \\
    \hline
    \multicolumn{3}{l|}{Cosine of pointing angle} & $>$ 0.9993 \\
    \hline
-   \multicolumn{3}{l|}{OnFlyStatus} & false \\
-   \hline
    \multicolumn{3}{l|}{Decay Length} & $<$ 60 cm \\
    \hline
-   \multicolumn{3}{l|}{Shared Daughter Cut} & true \\
-   \hline
-   \multicolumn{3}{l|}{Misidentification Cut} & true \\
-   \hline   
    
    
    \multicolumn{4}{c}{\textbf{Daughter Cuts ($\pi$ and p)}} \\
    \hline
    \multicolumn{3}{l|}{$|\eta|$} &  $< 0.8$ \\
-   \hline
-   \multicolumn{3}{l|}{SetTPCnclsDaughters} & (80) \\
-   \hline
-   \multicolumn{3}{l|}{SetStatusDaughters} & (AliESDtrack::kTPCrefit) \\
    \hline
    \multicolumn{3}{l|}{DCA $\pi$p Daughters} & $<$ 0.4 cm \\
    \hline
@@ -246,31 +250,33 @@ Similarly, for \Ks selection, a candidate is rejected if all of the following cr
    \hline
    \multicolumn{3}{l|}{$p_{\mathrm{T}}$} & $> 0.16$ GeV/\textit{c} \\
    \hline
-   \multicolumn{3}{l|}{DCA to prim vertex} & $>$ 0.3 cm \\
+   \multicolumn{3}{l|}{DCA to primary vertex} & $>$ 0.3 cm \\
    \hline
    \multicolumn{4}{l}{TPC and TOF N$\sigma$ Cuts} \\
-   \hline
+   \cline{2-4}
     & \multicolumn{1}{c}{$p <$ 0.5 GeV/\textit{c}} &  & N$\sigma_{\mathrm{TPC}} <$ 3 \\
-   \hline
-    & \multirow{2}{*}{$p >$ 0.5 GeV/\textit{c}} &  if TOF \& TPC available & N$\sigma_{\mathrm{TPC}} <$ 3 \& N$\sigma_{\mathrm{TOF}} <$ 3 \\
+   \cline{2-4}
+    & \multicolumn{1}{c}{\multirow{3}{*}{$p >$ 0.5 GeV/\textit{c}}} &  \multirow{2}{*}{if TOF \& TPC available} & N$\sigma_{\mathrm{TPC}} <$ 3 \\
+    & \multicolumn{2}{c|}{} & N$\sigma_{\mathrm{TOF}} <$ 3 \\
    \cline{3-4}
-    & & else & N$\sigma_{\mathrm{TOF}} <$ 3 \\
+    & \multicolumn{1}{c}{} & else & N$\sigma_{\mathrm{TOF}} <$ 3 \\
    \hline
    
    
    \multicolumn{4}{c}{\textbf{p-specific cuts}} \\
    \hline
-   \multicolumn{3}{l|}{$p_{\mathrm{T}}$} & $ > $ 0.5($p$) [0.3($\bar{p}$)] GeV/\textit{c} \\
+   \multicolumn{3}{l|}{$p_{\mathrm{T}}$} & $ > $ 0.5(p) [0.3($\bar{\mathrm{p}}$)] GeV/\textit{c} \\
    \hline
-   \multicolumn{3}{l|}{DCA to prim vertex} & $>$ 0.1 cm \\
+   \multicolumn{3}{l|}{DCA to primary vertex} & $>$ 0.1 cm \\
    \hline
    \multicolumn{4}{l}{TPC and TOF N$\sigma$ Cuts} \\
-   \hline
+   \cline{2-4}
     & \multicolumn{1}{c}{$p <$ 0.8 GeV/\textit{c}} & & N$\sigma_{\mathrm{TPC}} <$ 3 \\
-   \hline
-    & \multirow{2}{*}{$p >$ 0.8 GeV/\textit{c}} &  if TOF \& TPC available & N$\sigma_{\mathrm{TPC}} <$ 3 \& N$\sigma_{\mathrm{TOF}} <$ 3 \\
+   \cline{2-4}
+    & \multicolumn{1}{c}{\multirow{3}{*}{$p >$ 0.8 GeV/\textit{c}}} &  \multirow{2}{*}{if TOF \& TPC available} & N$\sigma_{\mathrm{TPC}} <$ 3 \\
+    & \multicolumn{2}{c|}{} & N$\sigma_{\mathrm{TOF}} <$ 3 \\
    \cline{3-4}
-    & & else & N$\sigma_{\mathrm{TOF}} <$ 3 \\
+    & \multicolumn{1}{c}{} & else & N$\sigma_{\mathrm{TOF}} <$ 3 \\
    \hline   
   \end{tabular}
 % \end{minipage}
@@ -287,47 +293,38 @@ Similarly, for \Ks selection, a candidate is rejected if all of the following cr
    \hline  
    \multicolumn{4}{c}{\textbf{\Ks selection}} \\
    \hline
-   \multicolumn{3}{l|}{$|\eta|$} & $< 0.8$ \\
+   \multicolumn{3}{l|}{Transverse momentum $p_{\mathrm{T}}$} & $> 0.2$ GeV/\textit{c} \\
    \hline
-   \multicolumn{3}{l|}{$p_{\mathrm{T}}$} & $> 0.2$ GeV/\textit{c} \\
+   \multicolumn{3}{l|}{$|\eta|$} & $< 0.8$ \\
    \hline
    \multicolumn{4}{l}{$m_{PDG}-13.677 \ \mathrm{MeV} < m_{\mathrm{inv}} < m_{\mathrm{PDG}} + 2.0323 \ \mathrm{MeV}$} \\ 
    \hline
-   \multicolumn{3}{l|}{DCA to prim. vertex} & $<$ 0.3 cm \\
+   \multicolumn{3}{l|}{DCA to primary vertex} & $<$ 0.3 cm \\
    \hline
    \multicolumn{3}{l|}{Cosine of pointing angle} & $>$ 0.9993 \\
    \hline
-   \multicolumn{3}{l|}{OnFlyStatus} & false \\
-   \hline
    \multicolumn{3}{l|}{Decay Length} & $<$ 30 cm \\
    \hline
-   \multicolumn{3}{l|}{Shared Daughter Cut} & true \\
-   \hline
-   \multicolumn{3}{l|}{Misidentification Cut} & true \\
-   \hline   
       
    
    \multicolumn{4}{c}{\textbf{$\pi^{\pm}$ Daughter Cuts}} \\
    \hline
+   \multicolumn{3}{l|}{$p_{\mathrm{T}}$} & $>$ 0.15 GeV/\textit{c} \\
+   \hline
    \multicolumn{3}{l|}{$|\eta|$} &  $< 0.8$ \\
-   \hline
-   \multicolumn{3}{l|}{SetTPCnclsDaughters} & (80) \\
-   \hline
-   \multicolumn{3}{l|}{SetStatusDaughters} & (AliESDtrack::kTPCrefit) \\
    \hline
    \multicolumn{3}{l|}{DCA $\pi^{+}\pi^{-}$ Daughters} & $<$ 0.3 cm \\
    \hline
-   \multicolumn{3}{l|}{$p_{\mathrm{T}}$} & $>$ 0.15 GeV/\textit{c} \\
-   \hline
-   \multicolumn{3}{l|}{DCA to prim vertex} & $>$ 0.3 cm \\
+   \multicolumn{3}{l|}{DCA to primary vertex} & $>$ 0.3 cm \\
    \hline
    \multicolumn{4}{l}{TPC and TOF N$\sigma$ Cuts} \\
-   \hline
+   \cline{2-4}
     & \multicolumn{1}{c}{$p <$ 0.5 GeV/\textit{c}} &  & N$\sigma_{\mathrm{TPC}} <$ 3 \\
-   \hline
-    & \multirow{2}{*}{$p >$ 0.5 GeV/\textit{c}} &  if TOF \& TPC available & N$\sigma_{\mathrm{TPC}} <$ 3 \& N$\sigma_{\mathrm{TOF}} <$ 3 \\
+   \cline{2-4}
+    & \multicolumn{1}{c}{\multirow{3}{*}{$p >$ 0.5 GeV/\textit{c}}} &  \multirow{2}{*}{if TOF \& TPC available} & N$\sigma_{\mathrm{TPC}} <$ 3 \\
+    & \multicolumn{2}{c|}{} & N$\sigma_{\mathrm{TOF}} <$ 3 \\
    \cline{3-4}
-    & & else & N$\sigma_{\mathrm{TOF}} <$ 3 \\
+    & \multicolumn{1}{c}{} & else & N$\sigma_{\mathrm{TOF}} <$ 3 \\
    \hline   
   \end{tabular}
 % \end{minipage}
@@ -372,6 +369,11 @@ The single-particle selection criteria used to select charged kaon candidates ar
 \Kpm identification utilized both TPC (what momenta?) and TOF (what momenta?).
 Figure \ref{fig:KchPdEdx} shows d$E$/d$x$.
 
+Selection on number of reconstructed TPC clusters ensure quality of track, ensure good pT resolution at large momenta and to remove fake tracks.
+DCA in transverse and longitudinal to enhance number produced at primary vertex.
+Low pT (for protons!! True for others too?) to minimize the fraction originating from interaction of primary particles with detector material.
+High pT to ensure purity, due to decreasing separation power of combined TPC and TOF.
+
 \begin{figure}[h]
  \centering
  \includegraphics[width=1.0\textwidth]{/home/jesse/Analysis/FemtoAnalysis/LamKPublication/Figures/PDF/canDrawKchdEdx_LamKchP_0010_KchP.pdf}% Here is how to import EPS art
@@ -386,67 +388,47 @@ automatically numbered.}
    \hline  
    \multicolumn{4}{c}{\textbf{\Kpm selection}} \\
    \hline
+   \multicolumn{3}{l|}{Transverse momentum $p_{\mathrm{T}}$} & 0.14 $< p_{\mathrm{T}} < 1.5$ GeV/\textit{c} \\
+   \hline
    \multicolumn{3}{l|}{$|\eta|$} & $< 0.8$ \\
    \hline
-   \multicolumn{3}{l|}{$p_{\mathrm{T}}$} & 0.14 $< p_{\mathrm{T}} < 1.5$ GeV/\textit{c} \\
+   \multicolumn{3}{l|}{Transverse DCA to primary vertex} & $<$ 2.4 cm \\
    \hline
-   \multicolumn{3}{l|}{FilterBit} & 7 \\
+   \multicolumn{3}{l|}{Longitudinal DCA to primary vertex} & $<$ 3.0 cm \\
    \hline
-   \multicolumn{3}{l|}{Min. number of clusters in the TPC} & 80 \\
-   \hline
-   \multicolumn{3}{l|}{Max. allowed $\chi^{2}/N_{DOF}$ for ITS clusters} & 3.0 \\
-   \hline
-   \multicolumn{3}{l|}{Max. allowed $\chi^{2}/N_{DOF}$ for TPC clusters} & 4.0 \\
-   \hline   
-   \multicolumn{3}{l|}{Maximum XY impact parameter} & 2.4 cm \\
-   \hline
-   \multicolumn{3}{l|}{Maximum Z impact parameter} & 3.0 cm \\
-   \hline
-   \multicolumn{3}{l|}{Remove particles with any kink labels} & true \\
-   \hline
-   \multicolumn{3}{l|}{Maximum allowed sigma to primary vertex} & 3.0 \\
-   \hline   
-   
-   \multicolumn{4}{l}{PID Probabilities} \\
-   \hline
-    & \multicolumn{2}{l|}{K} & $>$ 0.2 \\
-   \hline
-    & \multicolumn{2}{l|}{$\pi$} & $<$ 0.1 \\
-   \hline
-    & \multicolumn{2}{l|}{$\mu$} & $<$ 0.8 \\
-   \hline
-    & \multicolumn{2}{l|}{p} & $<$ 0.1 \\
-   \hline
-   
-   \multicolumn{3}{l|}{Most probable particle type} & Kaon (fMostProbable=3) \\
-   \hline
-   
-   \multicolumn{4}{l}{TPC and TOF N$\sigma$ Cuts} \\
+
+   TPC and TOF N$\sigma$ Cuts & \multicolumn{3}{c}{} \\
    \cline{2-4}
     & \multicolumn{1}{l}{$p <$ 0.4 GeV/\textit{c}} &  & N$_{\sigma \mathrm{K,TPC}} <$ 2 \\
    \cline{2-4}
     & \multicolumn{1}{l}{0.4 $< p <$ 0.45 GeV/\textit{c}} & & N$_{\sigma \mathrm{K,TPC}} <$ 1 \\
    \cline{2-4}     
-    & \multicolumn{1}{l}{0.45 $< p <$ 0.80 GeV/\textit{c}} & & N$_{\sigma \mathrm{K,TPC}} <$ 3 \& N$_{\sigma \mathrm{K,TOF}} <$ 2 \\ 
+    & \multicolumn{1}{l}{0.45 $< p <$ 0.80 GeV/\textit{c}} & & N$_{\sigma \mathrm{K,TPC}} <$ 3 \\ 
+   \multicolumn{3}{c|}{} & N$_{\sigma \mathrm{K,TOF}} <$ 2 \\
    \cline{2-4}
-    & \multicolumn{1}{l}{0.80 $< p <$ 1.0 GeV/\textit{c}} & & N$_{\sigma \mathrm{K,TPC}} <$ 3 \& N$_{\sigma \mathrm{K,TOF}} <$ 1.5 \\ 
+    & \multicolumn{1}{l}{0.80 $< p <$ 1.0 GeV/\textit{c}} & & N$_{\sigma \mathrm{K,TPC}} <$ 3 \\
+   \multicolumn{3}{c|}{} & N$_{\sigma \mathrm{K,TOF}} <$ 1.5 \\  
    \cline{2-4}
-    & \multicolumn{1}{l}{$p >$ 1.0 GeV/\textit{c}} & & N$_{\sigma \mathrm{K,TPC}} <$ 3 \& N$_{\sigma \mathrm{K,TOF}} <$ 1 \\ 
+    & \multicolumn{1}{l}{$p >$ 1.0 GeV/\textit{c}} & & N$_{\sigma \mathrm{K,TPC}} <$ 3 \\
+   \multicolumn{3}{c|}{} & N$_{\sigma \mathrm{K,TOF}} <$ 1 \\  
    \hline
    \multicolumn{3}{l|}{Electron Rejection} & Reject if N$_{\sigma e^{-},\mathrm{TPC}} < $ 3 \\
    \hline
    
    \multicolumn{4}{l}{Pion Rejection:  Reject if:} \\
-   \hline
-   \multirow{3}{*}{$p <$ 0.65 GeV/\textit{c}} & if TOF and TPC available & \multicolumn{1}{c}{} & N$_{\sigma \pi,\mathrm{TPC}} <$ 3 \& N$_{\sigma \pi,\mathrm{TOF}} <$ 3 \\
+   \cline{1-1}
+   \multirow{4}{*}{$p <$ 0.65 GeV/\textit{c}} & \multicolumn{1}{l}{if TOF and TPC available} & \multicolumn{1}{c|}{} & N$_{\sigma \pi,\mathrm{TPC}} <$ 3 \\
+   \multicolumn{3}{c|}{} & N$_{\sigma \pi,\mathrm{TOF}} <$ 3 \\
    \cline{2-4}
     & \multirow{2}{*}{else} & $p <$ 0.5 GeV/\textit{c} & N$_{\sigma \pi,\mathrm{TPC}} <$ 3 \\
    \cline{3-4}
     &  & 0.5 $< p <$ 0.65 GeV/\textit{c} & N$_{\sigma \pi,\mathrm{TPC}} <$ 2 \\
    \cline{2-4}
-   \multicolumn{3}{l|}{0.65 $< p <$ 1.5 GeV/\textit{c}} & N$_{\sigma \pi,\mathrm{TPC}} <$ 5 \& N$_{\sigma \pi,\mathrm{TOF}} <$ 3 \\
+   \multicolumn{3}{l|}{\multirow{2}{*}{0.65 $< p <$ 1.5 GeV/\textit{c}}} & N$_{\sigma \pi,\mathrm{TPC}} <$ 5 \\
+    & \multicolumn{2}{c|}{} & N$_{\sigma \pi,\mathrm{TOF}} <$ 3 \\
    \cline{2-4}
-   \multicolumn{3}{l|}{$p >$ 1.5 GeV/\textit{c}} & N$_{\sigma \pi,\mathrm{TPC}} <$ 5 \& N$_{\sigma \pi,\mathrm{TOF}} <$ 2 \\
+   \multicolumn{3}{l|}{\multirow{2}{*}{$p >$ 1.5 GeV/\textit{c}}} & N$_{\sigma \pi,\mathrm{TPC}} <$ 5 \\
+    & \multicolumn{2}{c|}{} & N$_{\sigma \pi,\mathrm{TOF}} <$ 2 \\
    \hline
   \end{tabular}
 % \end{minipage}
@@ -454,10 +436,10 @@ automatically numbered.}
  \label{tab:KchCuts} 
 \end{table}
 
-The purity of the \Kpm collections was estimated using the MC data, for which the true identity of each reconstructed K$^{\pm}$ particle is known.  Therefore, the purity may be estimated as:
+The purity of the \Kpm collections was estimated from a Monte-Carlo (MC) study based on HIJING \cite{PhysRevD.44.3501} simulations using GEANT3 \cite{Brun:1994aa} to model particle transport through the ALICE detectors. In these simulations, the true identity of each reconstructed K$^{\pm}$ particle is known;  therefore, the purity may be estimated as:
 
 \begin{equation}
- Purity(K^{\pm}) = \frac{N_{true}}{N_{reconstructed}} \\
+ \rm Purity(K^{\pm}) = \frac{N_{true}}{N_{reconstructed}} \\
 \label{eqn:KchPurity}
 \end{equation}
 
@@ -659,7 +641,7 @@ This can be written more compactly as:
 \end{equation}
 
 
-The transform matrix generated with THERMINATOR, and is formed for a given parent pair, AB, by taking all $\Lambda$K pairs originating from AB, calculating the relative momentum of the parents (\textit{k}*$_{AB}$) and daughters (\textit{k}*$_{\Lambda K}$), and filling a two-dimensional histogram with the values. 
+The transform matrix generated with THERMINATOR \cite{Chojnacki:2011hb}, and is formed for a given parent pair, AB, by taking all $\Lambda$K pairs originating from AB, calculating the relative momentum of the parents (\textit{k}*$_{AB}$) and daughters (\textit{k}*$_{\Lambda K}$), and filling a two-dimensional histogram with the values. 
 The transform matrix is essentially an unnormalized probability distribution mapping the \textit{k}* of the parent pair to that of the daughter pair when one or both parents decay.
 
 The $\lambda$ parameters roughly dictate the strength of the parent contribution to the daughter pair.  

@@ -5,45 +5,46 @@ The style file: utphys.bst
 Database file #1: LamK_bibfile.bib
 Warning--entry type for "Salzwedel:2241303" isn't style-file defined
 --line 101 of file LamK_bibfile.bib
-You've used 9 entries,
+Warning--empty title in Lednicky:82
+You've used 22 entries,
             2328 wiz_defined-function locations,
-            650 strings with 6023 characters,
-and the built_in function-call counts, 3055 in all, are:
-= -- 323
-> -- 78
+            773 strings with 8759 characters,
+and the built_in function-call counts, 7227 in all, are:
+= -- 779
+> -- 202
 < -- 0
-+ -- 30
-- -- 21
-* -- 286
-:= -- 350
-add.period$ -- 18
-call.type$ -- 9
-change.case$ -- 13
++ -- 76
+- -- 54
+* -- 649
+:= -- 834
+add.period$ -- 46
+call.type$ -- 22
+change.case$ -- 25
 chr.to.int$ -- 0
-cite$ -- 9
-duplicate$ -- 167
-empty$ -- 299
-format.name$ -- 21
-if$ -- 805
+cite$ -- 23
+duplicate$ -- 409
+empty$ -- 697
+format.name$ -- 54
+if$ -- 1912
 int.to.chr$ -- 0
-int.to.str$ -- 9
-missing$ -- 32
-newline$ -- 45
-num.names$ -- 9
-pop$ -- 47
+int.to.str$ -- 22
+missing$ -- 79
+newline$ -- 102
+num.names$ -- 22
+pop$ -- 110
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 0
-skip$ -- 128
+skip$ -- 304
 stack$ -- 0
-substring$ -- 154
-swap$ -- 90
+substring$ -- 322
+swap$ -- 208
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
 type$ -- 0
-warning$ -- 0
-while$ -- 21
-width$ -- 10
-write$ -- 80
-(There was 1 warning)
+warning$ -- 1
+while$ -- 48
+width$ -- 24
+write$ -- 202
+(There were 2 warnings)

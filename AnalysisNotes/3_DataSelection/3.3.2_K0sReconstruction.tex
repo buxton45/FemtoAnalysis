@@ -42,6 +42,62 @@ The following cuts were used to select good \Ks candidates:
  \end{itemize} 
 \end{enumerate}
 
+
+\begin{table}[htbp]
+ \centering
+%  \renewcommand{\arraystretch}{1.5}
+  \begin{tabular}{lc|c|l}
+   \hline  
+   \multicolumn{4}{c}{\textbf{\Ks selection}} \\
+   \hline
+   \multicolumn{3}{l|}{$|\eta|$} & $< 0.8$ \\
+   \hline
+   \multicolumn{3}{l|}{$p_{\mathrm{T}}$} & $> 0.2$ GeV/\textit{c} \\
+   \hline
+   \multicolumn{4}{l}{$m_{PDG}-13.677 \ \mathrm{MeV} < m_{\mathrm{inv}} < m_{\mathrm{PDG}} + 2.0323 \ \mathrm{MeV}$} \\ 
+   \hline
+   \multicolumn{3}{l|}{DCA to prim. vertex} & $<$ 0.3 cm \\
+   \hline
+   \multicolumn{3}{l|}{Cosine of pointing angle} & $>$ 0.9993 \\
+   \hline
+   \multicolumn{3}{l|}{OnFlyStatus} & false \\
+   \hline
+   \multicolumn{3}{l|}{Decay Length} & $<$ 30 cm \\
+   \hline
+   \multicolumn{3}{l|}{Shared Daughter Cut} & true \\
+   \hline
+   \multicolumn{3}{l|}{Misidentification Cut} & true \\
+   \hline   
+      
+   
+   \multicolumn{4}{c}{\textbf{$\pi^{\pm}$ Daughter Cuts}} \\
+   \hline
+   \multicolumn{3}{l|}{$|\eta|$} &  $< 0.8$ \\
+   \hline
+   \multicolumn{3}{l|}{SetTPCnclsDaughters} & (80) \\
+   \hline
+   \multicolumn{3}{l|}{SetStatusDaughters} & (AliESDtrack::kTPCrefit) \\
+   \hline
+   \multicolumn{3}{l|}{DCA $\pi^{+}\pi^{-}$ Daughters} & $<$ 0.3 cm \\
+   \hline
+   \multicolumn{3}{l|}{$p_{\mathrm{T}}$} & $>$ 0.15 GeV/\textit{c} \\
+   \hline
+   \multicolumn{3}{l|}{DCA to prim vertex} & $>$ 0.3 cm \\
+   \hline
+   \multicolumn{4}{l}{TPC and TOF N$\sigma$ Cuts} \\
+   \hline
+    & \multicolumn{1}{c}{$p <$ 0.5 GeV/\textit{c}} &  & N$\sigma_{\mathrm{TPC}} <$ 3 \\
+   \hline
+    & \multirow{2}{*}{$p >$ 0.5 GeV/\textit{c}} &  if TOF \& TPC available & N$\sigma_{\mathrm{TPC}} <$ 3 \& N$\sigma_{\mathrm{TOF}} <$ 3 \\
+   \cline{3-4}
+    & & else & N$\sigma_{\mathrm{TOF}} <$ 3 \\
+   \hline   
+  \end{tabular}
+% \end{minipage}
+ \caption{\Ks selection}
+ \label{tab:K0sCuts} 
+\end{table}
+
 \begin{figure}[h!]
   \centering
   %%----start of first subfigure---  
