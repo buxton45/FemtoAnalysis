@@ -141,6 +141,8 @@ int main(int argc, char **argv)
   }
   else assert(0);
 
+  bool bLamKchCombined = false;
+  if(tFitInfoTString_LamKch.Contains("Dualie")) bLamKchCombined = true;
 
   bool bRunAveragedKchPKchM = false;
 
@@ -398,18 +400,32 @@ int main(int argc, char **argv)
     marker->DrawMarker(1.66,6.4);
   
     //------- Column 2 ----------------------
+    if(!bLamKchCombined)
+    {
+      tex->DrawLatex(1.8,8.2,"#LambdaK^{+}");
+      marker->SetMarkerStyle(tMarkerStyleLamKchP); //LamK+
+      marker->DrawMarker(1.95,8.2);
   
-    tex->DrawLatex(1.8,8.2,"#LambdaK^{+}");
-    marker->SetMarkerStyle(tMarkerStyleLamKchP); //LamK+
-    marker->DrawMarker(1.95,8.2);
-  
-    tex->DrawLatex(1.8,7.6,"#LambdaK^{-}");
-    marker->SetMarkerStyle(tMarkerStyleLamKchM); //LamK-
-    marker->DrawMarker(1.95,7.6);
-  
-    tex->DrawLatex(1.8,7.0,"#LambdaK^{0}_{S}");
-    marker->SetMarkerStyle(tMarkerStyleLamK0); //LamK0
-    marker->DrawMarker(1.95,7.0);
+      tex->DrawLatex(1.8,7.6,"#LambdaK^{-}");
+      marker->SetMarkerStyle(tMarkerStyleLamKchM); //LamK-
+      marker->DrawMarker(1.95,7.6);
+
+      tex->DrawLatex(1.8,7.0,"#LambdaK^{0}_{S}");
+      marker->SetMarkerStyle(tMarkerStyleLamK0); //LamK0
+      marker->DrawMarker(1.95,7.0);
+    }  
+    else
+    {
+      tex->DrawLatex(1.8,7.9,"#LambdaK^{#pm}");
+      marker->SetMarkerStyle(tMarkerStyleLamKchP); //LamKpm
+      marker->DrawMarker(1.95,7.9);
+
+      tex->DrawLatex(1.8,7.3,"#LambdaK^{0}_{S}");
+      marker->SetMarkerStyle(tMarkerStyleLamK0); //LamK0
+      marker->DrawMarker(1.95,7.3);
+    }
+
+
   
   
   
@@ -605,23 +621,26 @@ int main(int argc, char **argv)
     DrawPoints("GraphLamKchP3050",tLamKchP3050Sys,tLamKchP3050Stat,myBlueT,myBlue,tMarkerStyleLamKchP,tMarkerSize,tMarkerStyleLamKchPo);
 
 //---------------------------------------- Lambda-KchM --------------------------------------
-    if(!bOutlinePoints) tMarkerStyleLamKchMo=0;
-    //----- 0-10% Lambda-K0 -----
-    td2dVec tLamKchM0010Sys = {{tLamKchM0010mT,0.015,tLamKchM0010R,tLamKchM0010RerrSys}};
-    td2dVec tLamKchM0010Stat = {{tLamKchM0010mT,0.,tLamKchM0010R,tLamKchM0010Rerr}};
-    DrawPoints("GraphLamKchM0010",tLamKchM0010Sys,tLamKchM0010Stat,myRedT,myRed,tMarkerStyleLamKchM,tMarkerSize,tMarkerStyleLamKchMo);
+    if(!bLamKchCombined)
+    {
+      if(!bOutlinePoints) tMarkerStyleLamKchMo=0;
+      //----- 0-10% Lambda-K0 -----
+      td2dVec tLamKchM0010Sys = {{tLamKchM0010mT,0.015,tLamKchM0010R,tLamKchM0010RerrSys}};
+      td2dVec tLamKchM0010Stat = {{tLamKchM0010mT,0.,tLamKchM0010R,tLamKchM0010Rerr}};
+      DrawPoints("GraphLamKchM0010",tLamKchM0010Sys,tLamKchM0010Stat,myRedT,myRed,tMarkerStyleLamKchM,tMarkerSize,tMarkerStyleLamKchMo);
 
 
-    //----- 10-30% Lambda-K0 -----
-    td2dVec tLamKchM1030Sys = {{tLamKchM1030mT,0.015,tLamKchM1030R,tLamKchM1030RerrSys}};
-    td2dVec tLamKchM1030Stat = {{tLamKchM1030mT,0.,tLamKchM1030R,tLamKchM1030Rerr}};
-    DrawPoints("GraphLamKchM1030",tLamKchM1030Sys,tLamKchM1030Stat,myGreenT,myGreen,tMarkerStyleLamKchM,tMarkerSize,tMarkerStyleLamKchMo);
+      //----- 10-30% Lambda-K0 -----
+      td2dVec tLamKchM1030Sys = {{tLamKchM1030mT,0.015,tLamKchM1030R,tLamKchM1030RerrSys}};
+      td2dVec tLamKchM1030Stat = {{tLamKchM1030mT,0.,tLamKchM1030R,tLamKchM1030Rerr}};
+      DrawPoints("GraphLamKchM1030",tLamKchM1030Sys,tLamKchM1030Stat,myGreenT,myGreen,tMarkerStyleLamKchM,tMarkerSize,tMarkerStyleLamKchMo);
 
 
-    //----- 30-50% Lambda-K0 -----
-    td2dVec tLamKchM3050Sys = {{tLamKchM3050mT,0.015,tLamKchM3050R,tLamKchM3050RerrSys}};
-    td2dVec tLamKchM3050Stat = {{tLamKchM3050mT,0.,tLamKchM3050R,tLamKchM3050Rerr}};
-    DrawPoints("GraphLamKchM3050",tLamKchM3050Sys,tLamKchM3050Stat,myBlueT,myBlue,tMarkerStyleLamKchM,tMarkerSize,tMarkerStyleLamKchMo);
+      //----- 30-50% Lambda-K0 -----
+      td2dVec tLamKchM3050Sys = {{tLamKchM3050mT,0.015,tLamKchM3050R,tLamKchM3050RerrSys}};
+      td2dVec tLamKchM3050Stat = {{tLamKchM3050mT,0.,tLamKchM3050R,tLamKchM3050Rerr}};
+      DrawPoints("GraphLamKchM3050",tLamKchM3050Sys,tLamKchM3050Stat,myBlueT,myBlue,tMarkerStyleLamKchM,tMarkerSize,tMarkerStyleLamKchMo);
+    }
   }
   else /*if(bRunAveragedKchPKchM)*/
   {

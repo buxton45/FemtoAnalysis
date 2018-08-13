@@ -58,7 +58,7 @@ void DrawAnalysisStamps(TPad* aPad, vector<AnalysisType> &aAnTypes, double aStar
 }
 
 //_________________________________________________________________________________________________________________________________
-void DrawAnalysisAndConjStamps(TPad* aPad, vector<AnalysisType> &aAnTypes, double aStartX, double aStartY, double aIncrementX, double aIncrementY, double aSecondColumnShiftX, double aTextSize=0.04, int aMarkerStyle=20, int aConjMarkerStyle=24)
+void DrawAnalysisAndConjStamps(TPad* aPad, vector<AnalysisType> &aAnTypes, double aStartX, double aStartY, double aIncrementX, double aIncrementY, double aSecondColumnShiftX, double aTextSize=0.04, int aMarkerStyle=20, int aConjMarkerStyle=24, bool aLamKchCombined=false)
 {
   aPad->cd();
 
@@ -87,8 +87,24 @@ void DrawAnalysisAndConjStamps(TPad* aPad, vector<AnalysisType> &aAnTypes, doubl
     else if(aAnTypes[i]==kALamK0) bIncALamK0=true;
   }
 
+  if(aLamKchCombined)
+  {
+    bIncLamKchP = false;
+    bIncLamKchM = false;
+  }
+
 
   int iTex = 0;
+  //----------
+  if(aLamKchCombined)
+  {
+    tMarker->SetMarkerStyle(aMarkerStyle);
+    tTex->DrawLatex(aStartX, aStartY-iTex*aIncrementY, "#LambdaK^{#pm}");
+    tMarker->SetMarkerColor(kViolet);
+    tMarker->DrawMarker(aStartX-aIncrementX, aStartY-iTex*aIncrementY);
+
+    iTex++;
+  }
   //----------
   if(bIncLamKchP)
   {
@@ -470,7 +486,7 @@ TCanvas* CompareImF0vsReF0(vector<FitValWriterInfo> &aFitValWriterInfo, TString 
 }
 
 //_________________________________________________________________________________________________________________________________
-TCanvas* CompareLambdavsRadius(vector<FitValWriterInfo> &aFitValWriterInfo, TString aSystematicsFileLocation_LamKch, TString aSystematicsFileLocation_LamK0, CentralityType aCentType, TString aCanNameMod="", bool aSuppressDescs=false, bool aSuppressAnStamps=false, bool aDrawStatOnly=false)
+TCanvas* CompareLambdavsRadius(vector<FitValWriterInfo> &aFitValWriterInfo, TString aSystematicsFileLocation_LamKch, TString aSystematicsFileLocation_LamK0, CentralityType aCentType, TString aCanNameMod="", bool aSuppressDescs=false, bool aSuppressAnStamps=false, bool aDrawStatOnly=false, bool aLamKchCombined=false)
 {
   TString tCanBaseName = TString::Format("CompareLambdavsRadius%s%s", aCanNameMod.Data(), cCentralityTags[aCentType]);
   TString tCanName = tCanBaseName;
@@ -519,8 +535,21 @@ TCanvas* CompareLambdavsRadius(vector<FitValWriterInfo> &aFitValWriterInfo, TStr
     else if(aFitValWriterInfo[iAn].analysisType==kLamK0 || aFitValWriterInfo[iAn].analysisType==kALamK0) aSystematicsFileLocation = aSystematicsFileLocation_LamK0;
     else assert(0);
 
-    FitValuesWriterwSysErrs::DrawLambdavsRadiusGraph((TPad*)tReturnCan, aFitValWriterInfo[iAn].masterFileLocation, aSystematicsFileLocation, aFitValWriterInfo[iAn].fitInfoTString, aFitValWriterInfo[iAn].analysisType, aCentType, aFitValWriterInfo[iAn].markerColor, aFitValWriterInfo[iAn].markerStyle, aFitValWriterInfo[iAn].markerSize, "epsame", "e2same", aDrawStatOnly);
-    tAnTypes.push_back(aFitValWriterInfo[iAn].analysisType);
+    if(!aLamKchCombined || aFitValWriterInfo[iAn].analysisType==kLamK0)
+    {
+      FitValuesWriterwSysErrs::DrawLambdavsRadiusGraph((TPad*)tReturnCan, aFitValWriterInfo[iAn].masterFileLocation, aSystematicsFileLocation, aFitValWriterInfo[iAn].fitInfoTString, aFitValWriterInfo[iAn].analysisType, aCentType, aFitValWriterInfo[iAn].markerColor, aFitValWriterInfo[iAn].markerStyle, aFitValWriterInfo[iAn].markerSize, "epsame", "e2same", aDrawStatOnly);
+      tAnTypes.push_back(aFitValWriterInfo[iAn].analysisType);
+    }
+    else
+    {
+      //If LamKch are combined, draw only LamKchP, and draw it with purple.  Also alter the legend entry to be LamKpm
+      if(aFitValWriterInfo[iAn].analysisType==kLamKchP)
+      {
+        int tColor = kViolet;
+        FitValuesWriterwSysErrs::DrawLambdavsRadiusGraph((TPad*)tReturnCan, aFitValWriterInfo[iAn].masterFileLocation, aSystematicsFileLocation, aFitValWriterInfo[iAn].fitInfoTString, aFitValWriterInfo[iAn].analysisType, aCentType, tColor, aFitValWriterInfo[iAn].markerStyle, aFitValWriterInfo[iAn].markerSize, "epsame", "e2same", aDrawStatOnly);
+        tAnTypes.push_back(aFitValWriterInfo[iAn].analysisType);
+      }
+    }
 
     if(!DescriptorAlreadyIncluded(tUsedDescriptors, tUsedMarkerStyles, aFitValWriterInfo[iAn].legendDescriptor, aFitValWriterInfo[iAn].markerStyle) && !aSuppressDescs)
     {
@@ -551,12 +580,12 @@ TCanvas* CompareLambdavsRadius(vector<FitValWriterInfo> &aFitValWriterInfo, TStr
   double tStartXStamp = 0.7;
   double tStartYStamp = 2.1;
   double tIncrementXStamp = 0.125;
-  double tIncrementYStamp = 0.125;
+  double tIncrementYStamp = 0.15;
   double tSecondColumnShiftX = 1.0;
   double tTextSizeStamp = 0.04;
   int tMarkerStyleStamp = 21;
   int tConjMarkerStyleStamp = 25;
-  if(!aSuppressAnStamps) DrawAnalysisAndConjStamps((TPad*)tReturnCan, tAnTypes, tStartXStamp, tStartYStamp, tIncrementXStamp, tIncrementYStamp, tSecondColumnShiftX, tTextSizeStamp, tMarkerStyleStamp, tConjMarkerStyleStamp);
+  if(!aSuppressAnStamps) DrawAnalysisAndConjStamps((TPad*)tReturnCan, tAnTypes, tStartXStamp, tStartYStamp, tIncrementXStamp, tIncrementYStamp, tSecondColumnShiftX, tTextSizeStamp, tMarkerStyleStamp, tConjMarkerStyleStamp, aLamKchCombined);
 
   return tReturnCan;
 }
@@ -564,15 +593,15 @@ TCanvas* CompareLambdavsRadius(vector<FitValWriterInfo> &aFitValWriterInfo, TStr
 
 
 //_________________________________________________________________________________________________________________________________
-TCanvas* CompareAll(vector<FitValWriterInfo> &aFitValWriterInfo, TString aSystematicsFileLocation_LamKch, TString aSystematicsFileLocation_LamK0, bool aDrawPredictions=false, TString aCanNameMod="", bool aDrawStatOnly=false)
+TCanvas* CompareAll(vector<FitValWriterInfo> &aFitValWriterInfo, TString aSystematicsFileLocation_LamKch, TString aSystematicsFileLocation_LamK0, bool aDrawPredictions=false, TString aCanNameMod="", bool aDrawStatOnly=false, bool aLamKchCombined=false)
 {
   TCanvas *tReturnCan, *tCanImF0vsReF0, *tCanLamvsR0010, *tCanLamvsR1030, *tCanLamvsR3050;
 
   TString tSubCanNameMod = TString::Format("%sForAll", aCanNameMod.Data());
   tCanImF0vsReF0 = CompareImF0vsReF0(aFitValWriterInfo, aSystematicsFileLocation_LamKch, aSystematicsFileLocation_LamK0, aDrawPredictions, tSubCanNameMod, false, false, aDrawStatOnly);
-  tCanLamvsR0010 = CompareLambdavsRadius(aFitValWriterInfo, aSystematicsFileLocation_LamKch, aSystematicsFileLocation_LamK0, k0010, tSubCanNameMod, true, false, aDrawStatOnly);
-  tCanLamvsR1030 = CompareLambdavsRadius(aFitValWriterInfo, aSystematicsFileLocation_LamKch, aSystematicsFileLocation_LamK0, k1030, tSubCanNameMod, true, true, aDrawStatOnly);
-  tCanLamvsR3050 = CompareLambdavsRadius(aFitValWriterInfo, aSystematicsFileLocation_LamKch, aSystematicsFileLocation_LamK0, k3050, tSubCanNameMod, true, true, aDrawStatOnly);
+  tCanLamvsR0010 = CompareLambdavsRadius(aFitValWriterInfo, aSystematicsFileLocation_LamKch, aSystematicsFileLocation_LamK0, k0010, tSubCanNameMod, true, false, aDrawStatOnly, aLamKchCombined);
+  tCanLamvsR1030 = CompareLambdavsRadius(aFitValWriterInfo, aSystematicsFileLocation_LamKch, aSystematicsFileLocation_LamK0, k1030, tSubCanNameMod, true, true, aDrawStatOnly, aLamKchCombined);
+  tCanLamvsR3050 = CompareLambdavsRadius(aFitValWriterInfo, aSystematicsFileLocation_LamKch, aSystematicsFileLocation_LamK0, k3050, tSubCanNameMod, true, true, aDrawStatOnly, aLamKchCombined);
 
 
   TString tCanBaseName = TString::Format("CompareAllScattParams%s", aCanNameMod.Data());
@@ -612,6 +641,7 @@ int main(int argc, char **argv)
 
   bool bSaveFigures = false;
   bool bDrawStatOnly = false;
+  bool bLamKchCombined = false;
 
   TString tSaveFileType = "pdf";  //Needs to be pdf for systematics to be transparent!
 //  TString tSaveDir = "/home/jesse/Analysis/Presentations/AliFemto/20180627/Figures/";
@@ -628,8 +658,9 @@ int main(int argc, char **argv)
 //  tCanNameMod = TString("_CompNumRes_ShareR_PolyBgd");
 
 //--------------------------------------------
-//  tFVWIVec = tFVWIVec_Comp3An_3Res;
-//  tCanNameMod = TString("_Comp3An_3Res");
+  tFVWIVec = tFVWIVec_Comp3An_3Res;
+  tCanNameMod = TString("_Comp3An_3Res");
+  bLamKchCombined = true;
 
 //  tFVWIVec = tFVWIVec_Comp3An_10Res;
 //  tCanNameMod = TString("_Comp3An_10Res");
@@ -659,14 +690,14 @@ int main(int argc, char **argv)
 //  tFVWIVec = tFVWIVec_CompSharelam_SepR;
 //  tCanNameMod = TString("_CompSharelam_SepR");
 
-  tFVWIVec = tFVWIVec_CompSharelam_SharedR;
-  tCanNameMod = TString("_CompSharelam_SharedR");
+//  tFVWIVec = tFVWIVec_CompSharelam_SharedR;
+//  tCanNameMod = TString("_CompSharelam_SharedR");
 
 
 
-  TCanvas* tCanLambdavsRadius = CompareLambdavsRadius(tFVWIVec, tSystematicsFileLocation_LamKch, tSystematicsFileLocation_LamK0, k0010, tCanNameMod, false, false, bDrawStatOnly);
+  TCanvas* tCanLambdavsRadius = CompareLambdavsRadius(tFVWIVec, tSystematicsFileLocation_LamKch, tSystematicsFileLocation_LamK0, k0010, tCanNameMod, false, false, bDrawStatOnly, bLamKchCombined);
   TCanvas* tCanImF0vsReF0 = CompareImF0vsReF0(tFVWIVec, tSystematicsFileLocation_LamKch, tSystematicsFileLocation_LamK0, true, tCanNameMod, false, false, bDrawStatOnly);
-  TCanvas* tCanAll = CompareAll(tFVWIVec, tSystematicsFileLocation_LamKch, tSystematicsFileLocation_LamK0, true, tCanNameMod, bDrawStatOnly);
+  TCanvas* tCanAll = CompareAll(tFVWIVec, tSystematicsFileLocation_LamKch, tSystematicsFileLocation_LamK0, true, tCanNameMod, bDrawStatOnly, bLamKchCombined);
 
 
 

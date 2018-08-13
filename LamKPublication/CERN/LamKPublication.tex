@@ -93,15 +93,15 @@ This might suggest an effect arising from different quark-antiquark interactions
 \section{Introduction}
 \label{sec:Introduction}
 
- 
+Femtoscopy is an experimental method used to study the space-time characteristic of the particle emitting sources in relativistic particle collisions.  With this method, two(or many)-particle relative-momentum correlation functions are used to connect the final-state momentum distributions to the space-time distributions of particle emission at freeze-out.  The correlation functions are sensitive to quantum statistics, as well as strong and Coulomb final-state interactions (FSI).  In addition to characterizing the source region, femtoscopy offers a unique opportunity to measure nuclear scattering parameters, many of which are difficult, if not impossible, to measure otherwise.  In many pair systems, the contributions to the correlation function from quantum statistics and/or the Coulomb interaction overwhelm that of the strong interaction, making it difficult to extract scattering information.  In this article, we study npn-identical particle pairs, with at least one electrically neutral particle in the pair.  Therefore, quantum statistics and the Coulomb interaction do not contribute, giving us a clear signal from the strong interaction.
+
+Femtoscopy analyses of pion, kaons, and protons have revealed a trend of decreasing source radii with increasing transverse mass, $m_{\mathrm{T}}^{2} = (\frac{m_{\mathrm{inv}}}{2})^{2} + k_{\mathrm{T}}^{2}$, where $k_{\mathrm{T}} = \frac{1}{2}|\mathbf{p}_{\mathrm{T},1} + \mathbf{p}_{\mathrm{T},2}|$.  This is interpreted as a signature of hydrodynamic flow, and therefore deconfined quark matter, in the heavy-ion collisions.
+
+We observe mT-scaling.  However, remember plot is for identical particle femtoscopy.  When dealing with \LamK, don't necessarily expect exact same trend.  mT-scaling has to do with hydro, and single particle distributions.  With femtoscopy, we are dealing with pairs of particles.  If we look at \LamK as a function of mT, we certainly would expect a decreasing behavior with increasing mT, but the exact shape may not be same of pipi, kk, pp, etc.
 
 
-What is femtoscopy?
-Sensitive to QS, strong and Coulomb.
-Source sizes (traditional).
-Interaction, i.e. scattering parameters (new, interesting).
-mT-scaling, signature of hydrodynamic flow in heavy-ion collisions.  Decrease in source radii with increasing transverse mass.  Signature of deconfined quark matter.
 Motivation for comparing studies with different particle species, and for \LamK in particular.
+
 
 This paper presents results from a femtoscopic analysis of \LamK correlations in Pb-Pb collisions at $\sqrt{s_{\mathrm{NN}}}$ = 2.76 TeV by the ALICE experiment at the LHC.  
 All pair combinations of \Lam and \ALam with \KchP, \KchM and \Ks are analyzed. 
@@ -111,7 +111,7 @@ We observe a large difference in the \LamKchPALamKchM and \LamKchMALamKchP corre
 The results suggest an effect arising from different quark-antiquark interactions in the pairs, i.e. $\rm s\bar{s}$ in \LamKchPALamKchM and $\rm u\bar{u}$ in \LamKchMALamKchP.  
 The femtoscopic radii, $\lambda$ parameters, and scattering parameters are extracted from...
 
-The organization of this paper is as follows.  Sec. \ref{sec:DataAnalysis}, Sec. \ref{sec:CfConstructionAndFitting}, Sec. \ref{sec:SysErrs}, Sec. \ref{sec:Results}, Sec. \ref{sec:Summary}.
+The organization of this paper is as follows.  Sec. \ref{sec:DataAnalysis}, Sec. \ref{sec:CfConstructionAndFitting}, Sec. \ref{sec:Results}, Sec. \ref{sec:Summary}.
 
 \section{Data Analysis}
 \label{sec:DataAnalysis}
@@ -189,7 +189,7 @@ For \LamALam selection, a candidate is rejected if all of the following criteria
  \item $\left|m_{\mathrm{inv,~ K^{0}_{S}~ Hypothesis}} - m_{\mathrm{PDG,~ K^{0}_{S}}}\right|~ < ~\left|m_{\mathrm{inv,~ \Lambda(\bar{\Lambda})~ Hypothesis}} - m_{\mathrm{PDG,~ \Lambda(\bar{\Lambda})}}\right|$
 \end{enumerate} 
 
-For \Ks selection, a candidate is rejected if all of the following criteria are satisfied for the \Lam case, or for the \ALam case:
+Similarly, for \Ks selection, a candidate is rejected if all of the following criteria are satisfied for the \Lam case, or for the \ALam case:
 
 \begin{enumerate}
  \item $\left|m_{\mathrm{inv}, \ \Lambda(\bar{\Lambda}) \ \mathrm{Hypothesis}} - m_{\mathrm{PDG},\ \Lambda(\bar{\Lambda})}\right| < $ 9.0 MeV/$c^{2}$
@@ -586,44 +586,6 @@ In the case of no residual correlations (to be discussed in Section \ref{Residua
 
 
 
-The two-particle correlation function may be written as:
-
-\begin{equation}
- C(\mathbf{k^{*}}) = \sum\limits_{S}\rho_{S}\int S(\mathbf{r^{*}})|\Psi^{S}_{\mathbf{k^{*}}}(\mathbf{r^{*}})|^{2}d^{3}\mathbf{r^{*}}
-\label{eqn:GenCfEqn}
-\end{equation}
-
-where $\rho_{S}$ is the normalized emission probability of particles in a state with spin S, $S(\mathbf{r}^{*})$ is the pair emission source distribution (assumed to be Gaussian), and $\Psi^{S}_{\mathbf{k}^{*}}(\mathbf{r}^{*})$ is the two-particle wave-function including both strong and Coulomb interactions \cite{Lednicky:2005tb}:
-
-\begin{equation}
- \Psi_{\mathbf{k^{*}}}(\mathbf{r^{*}}) = e^{i\delta_{c}}\sqrt{A_{c}(\eta)}[e^{i\mathbf{k^{*}} \cdot \mathbf{r^{*}}}F(-i\eta,1,i\xi) + f_{c}(k^{*})\frac{\tilde{G}(\rho,\eta)}{r^{*}}]
-\label{eqn:CoulombWaveFcn}
-\end{equation}
-
-where $\rho = k^{*}r^{*}$, $\eta = (k^{*}a_{c})^{-1}$, $\xi = \mathbf{k^{*}} \cdot \mathbf{r^{*}} + k^{*}r^{*} \equiv \rho(1+\cos\theta^{*})$, and $a_{c} = (\mu z_{1}z_{2}e^{2})^{-1}$ is the two-particle Bohr radius (including the sign of the interaction).  
-$\delta_{c}$ is the Coulomb s-wave phase shift, $A_{c}(\eta)$ is the Coulomb penetration factor, $\tilde{G} = \sqrt{A_{c}}(G_{0} + iF_{0})$ is a combination of the regular ($F_{0}$) and singular ($G_{0}$) s-wave Coulomb functions.  
-$f_{c}(k^{*})$ is the s-wave scattering amplitude:
-
-\begin{equation}
- f_{c}(k^{*}) = [\frac{1}{f_{0}} + \frac{1}{2}d_{0}k^{*2} - \frac{2}{a_{c}}h(\eta) - ik^{*}A_{c}(\eta)]^{-1}
-\label{eqn:CoulombScattAmp}
-\end{equation}
-
-where, the ``h-function", $h(\eta$), is expressed through the digamma function, $\psi(z)$ = $\Gamma'(z)/\Gamma(z)$ as:
-
-\begin{equation}
- h(\eta) = 0.5[\psi(i\eta) + \psi(-i\eta) - \ln(\eta^{2})]
-\label{eqn:LednickyHFunction}
-\end{equation} 
-
-In this case, the $\lambda$ parameter may be included as: 
-
-\begin{equation}
- C(\mathbf{k^{*}}) = (1 - \lambda) + \lambda\sum\limits_{S}\rho_{S}\int S(\mathbf{r^{*}})|\Psi^{S}_{\mathbf{k^{*}}}(\mathbf{r^{*}})|^{2}d^{3}\mathbf{r^{*}}
-\label{eqn:GenCfEqnwLambda}
-\end{equation}
-
-
 \subsection{Momentum Resolution Corrections}
 \label{MomentumResolutionCorrections}
 
@@ -668,25 +630,11 @@ In effect, the correlation between the parent of the $\Lambda$ and the K$^{+}$ (
 We call this a residual correlation resulting from feed-down.  
 Residual correlations are important in an analysis when three criteria are met \cite{Kisiel:2014mma}: i) the parent correlation signal is large, ii) a large fraction of pairs in the sample originate from the particular parent system, and iii) the decay momenta are comparable to the expected correlation width in \textit{k}*. 
 
-As it is difficult for us to eliminate these residual correlations in our analyses, we must attempt to account for them in our fitter.
-To achieve this, we will simultaneously fit the data for both the primary correlation function and the residual correlations.  
-For example, in the simple case of a $\Lambda$K$^{+}$ analysis with residuals arising solely from $\Sigma^{0}$K$^{+}$ feed-down:
-
-\begin{equation}
-\begin{array}{l}
-\vspace{4mm}
- C_{measured}(k^{*}_{\Lambda K^{+}}) = 1 + \lambda_{\Lambda K^{+}}[C_{\Lambda K^{+}}(k^{*}_{\Lambda K^{+}})-1] + \lambda_{\Sigma^{0}K^{+}}[C_{\Sigma^{0}K^{+}}(k^{*}_{\Lambda K^{+}})-1] \\
-\vspace{2mm}
-  ~~~~~C_{\Sigma^{0}K^{+}}(k^{*}_{\Lambda K^{+}}) \equiv \frac{\sum\limits_{k^{*}_{\Sigma^{0}K^{+}}} C_{\Sigma^{0}K^{+}}\left(k^{*}_{\Sigma^{0}K^{+}}\right) T\left(k^{*}_{\Sigma^{0}K^{+}},k^{*}_{\Lambda K^{+}}\right)}{\sum\limits_{k^{*}_{\Sigma^{0}K^{+}}} T\left(k^{*}_{\Sigma^{0}K^{+}},k^{*}_{\Lambda K^{+}}\right)}
-\end{array} 
-\label{eqn:SimpleResiduals}
-\end{equation}
-
-$C_{\Sigma^{0}K^{+}}(k^{*}_{\Sigma^{0}K^{+}})$ is the $\Sigma^{0}$K$^{+}$ correlation function from, for instance, Equation \ref{eqn:LednickyEqn}, and $T$ is the transform matrix generated with THERMINATOR.  
-The transform matrix is formed for a given parent pair, AB, by taking all $\Lambda$K pairs originating from AB, calculating the relative momentum of the parents (\textit{k}*$_{AB}$) and daughters (\textit{k}*$_{\Lambda K}$), and filling a two-dimensional histogram with the values. 
-The transform matrix is essentially an unnormalized probability distribution mapping the \textit{k}* of the parent pair to that of the daughter pair when one or both parents decay.
-
-The above equation can be easily extended to include feed-down from more sources:
+As it is difficult for us to eliminate these residual correlations in our analyses, we must attempt to account for them in our fit.
+To achieve this, we model the correlation function of the parents, and run the correlation function through the appropriate transform matrix to determine the contribution to the daughter correlation function.
+The transform matrix describes the decay kinematics, and maps the \kstar of the parent pair to that of the daughter.
+Finally, the primary correlation function, along with all contributions from residuals, are combined to form the complete correlation function.
+This process, for a \LamK correlation function with example contribution from a $\Sigma^{0}$K residual, is described in Eq. \ref{eqn:ResidualsFull}
 
 \begin{equation}
 \begin{array}{l}
@@ -702,7 +650,8 @@ The above equation can be easily extended to include feed-down from more sources
 \label{eqn:ResidualsFull}
 \end{equation}
 
-  Or, more compactly:
+$C_{\Sigma^{0}K^{+}}(k^{*}_{\Sigma^{0}K^{+}})$ is the $\Sigma^{0}$K$^{+}$ correlation function, and $T$ is the transform matrix.  
+This can be written more compactly as:
 
 \begin{equation}
  C_{measured}(k^{*}_{\Lambda K}) = 1 + \sum\limits_{i}  \lambda_{i}[C_{i}(k^{*}_{\Lambda K})-1]
@@ -710,12 +659,9 @@ The above equation can be easily extended to include feed-down from more sources
 \end{equation}
 
 
+The transform matrix generated with THERMINATOR, and is formed for a given parent pair, AB, by taking all $\Lambda$K pairs originating from AB, calculating the relative momentum of the parents (\textit{k}*$_{AB}$) and daughters (\textit{k}*$_{\Lambda K}$), and filling a two-dimensional histogram with the values. 
+The transform matrix is essentially an unnormalized probability distribution mapping the \textit{k}* of the parent pair to that of the daughter pair when one or both parents decay.
 
-So, in practice, we model the correlation function of the parents, and run the correlation function through the appropriate transform matrix to determine the contribution to the daughter correlation function.  
-A few questions still remain.  
-First, what $\lambda$ values should be used in the above equation?  
-One option would be to leave all of these $\lambda$-parameters free during the fit process.  
-However, this would introduce a huge number of new parameters into the fitter, and would make the fit results less trustworthy.  
 The $\lambda$ parameters roughly dictate the strength of the parent contribution to the daughter pair.  
 Additionally, as found in \cite{Salzwedel:2241303}, the reconstruction efficiency for primary $\Lambda$ particles is nearly equal to that of $\Lambda$ particles originating from $\Sigma$, $\Sigma^{*}$, $\Xi^{0}$, $\Xi^{-}$, and $\Omega$ hyperons.  
 Therefore, the $\lambda$ parameter for parent system AB can be estimated using THERMINATOR as the total number of $\Lambda$K pairs originating from AB (N$_{AB}$) divided by the total number of $\Lambda$K pairs (N$_{Total}$): 
@@ -724,28 +670,29 @@ Therefore, the $\lambda$ parameter for parent system AB can be estimated using T
 \lambda_{AB} = \frac{N_{AB}}{N_{Total}}
 \end{equation}
 
+The $\lambda$ parameters used for this study can be found in Tab. \ref{tab:LambdaValues_All} in Appendix \ref{App:LamParams}.
 
-Now, the remaining question is how do we model the parent correlation functions?  
+Now, on to the question of how we model the parent correlation functions.  
 In an ideal world, we would simply look up the parent interaction in some table, and input this into our model.  
-Unfortunately, the world in which we live is not perfect, such a table does not exists, and little is know about the interaction between the particles in the residual pairs of this study.  
-One solution would be to introduce a set of scattering parameters and radii for each residual system.  
-However, as will the case of the $\lambda$-parameters above, this would introduce a large number of additional fit parameters, and would make our fitter too unconstrained and would yield untrustworthy results.  
-The second option, which is adopted in this analysis, is to assume all residual pairs have the same source size as the daughter pair, and all Coulomb-neutral residual pairs also share the same scattering parameters as the daughter pair (the case of charged pairs will be described below).
+Unfortunately, the world in which we live is not perfect, such a table does not exists, and little is know about the interaction between the particles in the residual pairs of this study. 
+Additionally, introducing a unique set of scattering parameters and radii for each residual system would introduce a large number of additional fit parameters, for which we do not have many constraints, and would cause our fitter to be too unconstrained and yield untrustworthy results. 
+For this analysis, we assume all residual pairs have the same source size as the daughter pair.
+Furthermore, we assume Coulomb-neutral residual pairs share the same scattering parameters as the daughter pair.
 
 
-
-Now, as hinted above, accounting for charged residuals adds a complication in that they necessitate the inclusion of the CoulombFitter into the process.  
-We have two solutions to bypass such a large increase in run time.  
-First, we can use our experimental $\Xi^{\mathrm{ch}}$K$^{\mathrm{ch}}$ data to represent all charged parent pair system.  
-In this case, there is no need to make any assumption about scattering parameters or source sizes, as we already have the experimental data.  
-The downside is that, especially in the 30-50\% centrality bin, the error bars on the data are large.  
-Alternatively, we can assume the strong interaction is negligible in the charged residual, and generate the parent correlation function given radius and $\lambda$ parameters.  
-We find in our $\Xi^{\mathrm{ch}}$K$^{\mathrm{ch}}$ study that a Coulomb-only description of the system describes, reasonably well, the broad features of the correlation.  
+For residual pairs affected by both the strong and Coulomb interactions, things are a bit more complicated.
+This is due to the fact that, for the case of both strong and Coulomb interaction, we no longer have a nice analytical form with which to fit.
+Generating a correlation function including both is also time consuming, as described further in Appendix \ref{App:CoulombFitter}.
+Therefore, to treat this case, we have two different methods.
+First, we can use our experimental \XiKpm data to represent the charged parent pair system.  
+Alternatively, we can assume the strong interaction is negligible in the charged residual, and generate the parent correlation function given radius and $\lambda$ parameters (see Appendix \ref{App:CoulombFitter} for more details).  
+We find in our \XiKpm study that a Coulomb-only description of the system describes, reasonably well, the broad features of the correlation.  
 The strong interaction is necessary for the fine details.  
 However, as these correlations are run through a transform matrix, which largely flattens out and fine details, a Coulomb-only description should be sufficient.  
-We find consistent results between using the $\Xi$K data and the Coulomb-only interpolation method.  
-When the number of residual pairs used is increased to 10, so that pairs such as $\Sigma^{*+}$K$^{-}$ enter the picture, the Coulomb-only interpolation method is used.  
-In other words, the $\Xi$K experimental data is only used to model the $\Xi$K residual contribution, all other charged pairs are treated with the Coulomb-only interpolation method.
+We find consistent results between using the $\Xi$K data and the Coulomb-only interpolation method. 
+When modeling \XiKpm residual correlations, we use the experimental \XiKpm data; in this case, there is no need to make any assumptions about scattering parameters or source sizes, as we already have the experimental data.  
+When the number of residual pairs used is increased to 10, so that additional charged residual pairs such as $\Sigma^{*+}$K$^{-}$ enter the picture, the Coulomb-only interpolation method is used.  Heh
+
 
 
 \subsection{Non-Flat Background}
@@ -842,51 +789,8 @@ To summarize, the complete fit function is constructed as follows:
  \end{itemize}
 \end{enumerate}
 
-
-\subsection{Coulomb Fitter}
-\label{CoulombFitter}
-
-When modeling systems which include both strong and Coulomb effects, Eq. \ref{eqn:LednickyEqn} is no longer valid, and, in fact, there is no analytical form with which to fit.
-Therefore, we must begin with the wave function describing the pair interaction, and simulate many particle pairs to obtain a theoretical fit correlation function.
-Unfortunately, the nature of this process means that the run time increases dramatically.
-
-
-As stated before, to generate a fit correlation function, we must simulate a large number of pairs, calculate the wave-function, and average $\Psi^{2}$ over all pairs in a given k$^{*}$ bin.  
-Essentially, we calculate Equation \ref{eqn:GenCfEqn} by hand:
-
-\begin{equation}
-\begin{array}{l}
-\vspace{2mm}
-  C(\mathbf{k^{*}}) = \sum\limits_{S}\rho_{S}\int S(\mathbf{r^{*}})|\Psi^{S}_{\mathbf{k^{*}}}(\mathbf{r^{*}})|^{2}d^{3}\mathbf{r^{*}} \\
-\vspace{2mm}
-  \longrightarrow C(|\mathbf{k^{*}}|) \equiv C(k^{*}) = \sum\limits_{S}\rho_{S}\langle |\Psi^{S}(\mathbf{k^{*}_{i}},\mathbf{r^{*}_{i}})|^{2} \rangle_{i} \\
-\vspace{2mm}
-  \longrightarrow C(k^{*}) = \lambda\sum\limits_{S}\rho_{S}\langle |\Psi^{S}(\mathbf{k^{*}_{i}},\mathbf{r^{*}_{i}})|^{2} \rangle_{i} + (1-\lambda)
-
-\end{array}
-\label{eqn:CoulombEqn2}
-\end{equation}
-
-where $\langle \rangle_{i}$ represents an average over all pairs in a given k$^{*}$ bin.
-
-In summary, for a given k$^{*}$ bin, we must draw $N_{pairs} \sim 10^{4}$ pairs, and for each pair:
-
-\begin{enumerate}
- \item Draw a random $\mathbf{r}^{*}$ vector according to our Gaussian source distribution $S(\mathbf{r}^{*})$
- \item Draw a random $\mathbf{k}^{*}$ vector satisfying the $|\mathbf{k}^{*}|$ restriction of the bin
- \begin{itemize}
-  \item We draw from real $k^{*}$ vectors obtained from the data
-  \item However, we find that drawing from a distribution flat in $k^{*}$ gives similar results
- \end{itemize}
- \item Construct the wave-function $\Psi$
-\end{enumerate}
-
-After all pairs for a given k$^{*}$ bin are simulated and wave-functions obtained, the results are averaged to give the fit result.
-
-
-
-\section{Systematic uncertainties}
-\label{sec:SysErrs}
+\subsection{Systematic uncertainties}
+\label{SysErrs}
 
 In order to understand my systematic uncertainties, the analysis code was run many times using slightly different values for a number of important cuts, and the results were compared.
 
@@ -980,7 +884,16 @@ The resulting uncertainties in the extracted parameter sets were combined with o
 \label{sec:Results}
 Hooray, finally some results!
 
-
+Figure \ref{fig:LamKFits_3Res} shows fits, with 3 residual correlations included, for all \LamK analyses across all studied centralities (0-10\%, 10-30\%, and 30-50\%).
+For the \LamKs results, all analyses are fit simultaneously across all centralities.
+A single $\lambda$ parameter is shared amongst all.
+Each analysis has a unique normalization parameter.
+The radii are shared between analyses of like centrality.
+The scattering parameters ($\mathbb{R}f_{0}$, $\mathbb{I}f_{0}$, $d_{0}$) are shared amongst all.
+For the \LamKpm results, all analyses are fit simultaneously across all centralities.
+Scattering parameters ($\mathbb{R}f_{0}$, $\mathbb{I}f_{0}$, $d_{0}$) are shared between pair-conjugate systems (i.e. a parameter set describing the \LamKchP \& \ALamKchM system, and a separate set describing the \LamKchM \& \ALamKchP system).
+For each centrality, a radius and $\lambda$ parameters are shared between all pairs (\LamKchP, \ALamKchM, \LamKchM, \ALamKchP).
+Each analysis has a unique normalization parameter.
 
 \begin{figure}[htp]
   \centering
@@ -998,53 +911,38 @@ Hooray, finally some results!
     \label{fig:LamKFits_3Res:c}
     \includegraphics[width=0.49\linewidth]{/home/jesse/Analysis/FemtoAnalysis/LamKPublication/Figures/20171227/PDF/canKStarCfwFitsLamK0wConj_0010_1030_3050_MomResCrctn_NonFlatBgdCrctn_SingleLamParam_3Res_PrimMaxDecay4fm_UsingXiDataAndCoulombOnly.pdf}}    
   %%----overall caption----
-  \caption{Fits, with 3 residual correlations included, to the \LamKchPALamKchM (\ref{fig:LamKFits_3Res:a}), \LamKchMALamKchP (\ref{fig:LamKFits_3Res:b}), and \LamKsALamKs (\ref{fig:LamKFits_3Res:c}) data for the centralities 0-10\%, 10-30\%, and 30-50\%.
-The lines represent the statistical errors, while the boxes represent the systematic errors.  
-Each has unique $\lambda$ and normalization parameters.
-The radii are shared amongst like centralities; the scattering parameters ($\mathbb{R}f_{0}$, $\mathbb{I}f_{0}$, $d_{0}$) are shared amongst all.
-The black solid line represents the ``raw" fit, i.e. not corrected for momentum resolution effects nor non-flat background.  
-The green line shows the fit to the non-flat background.
-The purple points show the fit after momentum resolution and non-flat background corrections have been applied.
-The initial values of the parameters is listed, as well as the final fit values with uncertainties.
-For the \LamKsALamKs systems, $R$ was restricted to [2.,10.] and $\lambda$ was restricted to [0.1,0.8].}  
+  \caption{Fits, with 3 residual correlations included, for all \LamK analyses across all studied centralities (0-10\%, 10-30\%, and 30-50\%).
+ The lines represent the statistical errors, while the boxes represent the systematic errors.
+ The backgrounds are modeled by (6$^{\mathrm{th}}$-)degree polynomials fit to THERMINATOR simulation.
+ The black solid line represents the primary (\LamK) correlation's contribution to the fit.  
+ The green line shows the fit to the non-flat background.
+ The purple points show the fit after all residuals' contributions have been included, and momentum resolution and non-flat background corrections have been applied.
+ The extracted fit values with uncertainties are printed.}  
   \label{fig:LamKFits_3Res}
 \end{figure}
 
-
-
-
-\begin{figure}[htp]
+\begin{figure}[h]
   \centering
-  %%----start of first subfigure---
-  \subfigure[Extracted scattering parameter results, Im(f$_{0}$) vs. Re(f$_{0}$), with d$_{0}$ to the right, for all of our \LamK systems.]{
-    \label{fig:LamKFitParams:a}
-    \includegraphics[width=0.49\linewidth]{/home/jesse/Analysis/FemtoAnalysis/LamKPublication/Figures/20171227/PDF/CompareAllReF0vsImF0AcrossAnalyses_3Res_10and3SeparateOnly_FreeD0Only_wFixedRadiiResults_wScattLenPredictions.pdf}}
-  %%----start of second subfigure---  
-  \subfigure[Extracted $\lambda$ vs Radius results, for the 0-10\% centrality bin, for all of our \LamK systems.]{
-    \label{fig:LamKFitParams:b}
-    \includegraphics[width=0.49\linewidth]{/home/jesse/Analysis/FemtoAnalysis/LamKPublication/Figures/20171227/PDF/CompareAllRadiusvsLambdaAcrossAnalyses_0010_3Res_10and3SeparateOnly_FreeD0Only.pdf}}
-  \\  
-  %%----start of third subfigure---  
-  \subfigure[Extracted $\lambda$ vs Radius results, for the 10-30\% centrality bin, for all of our \LamK systems.]{
-    \label{fig:LamKFitParams:c}
-    \includegraphics[width=0.49\linewidth]{/home/jesse/Analysis/FemtoAnalysis/LamKPublication/Figures/20171227/PDF/CompareAllRadiusvsLambdaAcrossAnalyses_1030_3Res_10and3SeparateOnly_FreeD0Only.pdf}}    
-  %%----start of fourth subfigure---  
-  \subfigure[Extracted $\lambda$ vs Radius results, for the 30-50\% centrality bin, for all of our \LamK systems.]{
-    \label{fig:LamKFitParams:d}
-    \includegraphics[width=0.49\linewidth]{/home/jesse/Analysis/FemtoAnalysis/LamKPublication/Figures/20171227/PDF/CompareAllRadiusvsLambdaAcrossAnalyses_3050_3Res_10and3SeparateOnly_FreeD0Only.pdf}}    
-  %%----overall caption----
-  \caption{Extracted fit results for all of our $\Lambda$K systems across all studied centrality bins (0-10\%, 10-30\%, 30-50\%).  The plots show results including no residuals (circles), 10 residual pairs (X), and 3 residual pairs (+).  Note, \LamKchP on the plot is shorthand for \LamKchP and \ALamKchM, and similar for the others.  In Fig. \ref{fig:LamKFitParams:a}, the lighter color markers (pink, sky blue, gray) show the extracted parameters when we fix the radii to roughly align with the $m_{\mathrm{T}}$-scaling plot (Fig. \ref{fig:mTScalingOfRadii_NoRes}).  Additionally, the green \cite{Liu:2006xja} and yellow \cite{Mai:2009ce} points show theoretical predictions made using chiral perturbation theory.}  
-  \label{fig:LamKFitParams}
+  \includegraphics[width=0.80\textwidth]{/home/jesse/Analysis/FemtoAnalysis/AnalysisNotes/7_ResultsAndDiscussion/Figures/CompareAllScattParams_Comp3An_3Res.pdf}
+  \caption[Extracted Scattering Parameters: 3 Residuals in Fit]{Extracted scattering parameters for the case of 3 residual contributors for all of our $\Lambda$K systems.  [Top Left]: $\mathbb{I}f_{0}$ vs. $\mathbb{R}f_{0}$, together with d$_{0}$ to the right.  [Top Right (Bottom Left, Bottom Right)]: $\lambda$ vs. Radius for the 0-10\% (10-30\%, 30-50\%) bin.  The green \cite{Liu:2006xja} and yellow \cite{Mai:2009ce} points show theoretical predictions made using chiral perturbation theory.}
+  \label{fig:ScattParams_3Res}
+\end{figure}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=\textwidth]{/home/jesse/Analysis/FemtoAnalysis/AnalysisNotes/7_ResultsAndDiscussion/Figures/CompareAllScattParams_CompNumRes_StatOnly.pdf}
+  \caption[Compare Fit Parameters: Number of residuals]{Compare Fit Parameters: Number of residuals: Results shown for the case of 3 (+), 10 (X), and no (circles) residual contributors.}
+  \label{fig:CompareAllScattParams_CompNumRes}
 \end{figure}
 
 
-
-
-\begin{figure}[b]
-\includegraphics[width=1.0\textwidth]{/home/jesse/Analysis/FemtoAnalysis/LamKPublication/Figures/20171227/PDF/mTscaling_MinvCalc_OutlinedPoints_OthersTransparent_3Res_FreeD0.pdf}% Here is how to import EPS art
-\caption{\label{fig:mTScalingOfRadii_NoRes} A figure caption. The figure captions are
-automatically numbered.}
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.5\textwidth]{/home/jesse/Analysis/FemtoAnalysis/AnalysisNotes/7_ResultsAndDiscussion/Figures/mTscaling_MinvCalc_OutlinedPoints_OthersTransparent_3Res.pdf}
+  \caption[$m_{\mathrm{T}}$ Scaling of Radii: 3 Residuals in Fit]{3 residual correlations in \LamK fits.  Extracted fit $R_{\mathrm{inv}}$ parameters as a function of pair transverse mass ($m_{\mathrm{T}}$) for various pair systems over several centralities. The ALICE published data \cite{Adam:2015vja} is shown with transparent, open symbols.  The new $\Lambda$K results are shown with opaque, filled symbols.  In the left, the \LamKchP (with it's conjugate pair) results are shown separately from the \LamKchM (with it's conjugate pair) results.  In the right, all \LamKpm results are averaged.}
+  \label{fig:mTScalingOfRadii_3Res}
 \end{figure}
+
 
 
 
@@ -1121,7 +1019,82 @@ We did physics, and we found physics.
 \pagestyle{plain}
 
 
+\section{Strong and Coulomb Fitter}
+\label{App:CoulombFitter}
 
+When modeling systems which include both strong and Coulomb effects, Eq. \ref{eqn:LednickyEqn} is no longer valid, and, in fact, there is no analytical form with which to fit.
+Therefore, we must begin with the wave function describing the pair interaction, and simulate many particle pairs to obtain a theoretical fit correlation function.
+Unfortunately, the nature of this process means that the run time increases dramatically.
+
+The two-particle correlation function may be written as:
+
+\begin{equation}
+ C(\mathbf{k^{*}}) = \sum\limits_{S}\rho_{S}\int S(\mathbf{r^{*}})|\Psi^{S}_{\mathbf{k^{*}}}(\mathbf{r^{*}})|^{2}d^{3}\mathbf{r^{*}}
+\label{eqn:GenCfEqn}
+\end{equation}
+
+where $\rho_{S}$ is the normalized emission probability of particles in a state with spin S, $S(\mathbf{r}^{*})$ is the pair emission source distribution (assumed to be Gaussian), and $\Psi^{S}_{\mathbf{k}^{*}}(\mathbf{r}^{*})$ is the two-particle wave-function including both strong and Coulomb interactions \cite{Lednicky:2005tb}:
+
+\begin{equation}
+ \Psi_{\mathbf{k^{*}}}(\mathbf{r^{*}}) = e^{i\delta_{c}}\sqrt{A_{c}(\eta)}[e^{i\mathbf{k^{*}} \cdot \mathbf{r^{*}}}F(-i\eta,1,i\xi) + f_{c}(k^{*})\frac{\tilde{G}(\rho,\eta)}{r^{*}}]
+\label{eqn:CoulombWaveFcn}
+\end{equation}
+
+where $\rho = k^{*}r^{*}$, $\eta = (k^{*}a_{c})^{-1}$, $\xi = \mathbf{k^{*}} \cdot \mathbf{r^{*}} + k^{*}r^{*} \equiv \rho(1+\cos\theta^{*})$, and $a_{c} = (\mu z_{1}z_{2}e^{2})^{-1}$ is the two-particle Bohr radius (including the sign of the interaction).  
+$\delta_{c}$ is the Coulomb s-wave phase shift, $A_{c}(\eta)$ is the Coulomb penetration factor, $\tilde{G} = \sqrt{A_{c}}(G_{0} + iF_{0})$ is a combination of the regular ($F_{0}$) and singular ($G_{0}$) s-wave Coulomb functions.  
+$f_{c}(k^{*})$ is the s-wave scattering amplitude:
+
+\begin{equation}
+ f_{c}(k^{*}) = [\frac{1}{f_{0}} + \frac{1}{2}d_{0}k^{*2} - \frac{2}{a_{c}}h(\eta) - ik^{*}A_{c}(\eta)]^{-1}
+\label{eqn:CoulombScattAmp}
+\end{equation}
+
+where, the ``h-function", $h(\eta$), is expressed through the digamma function, $\psi(z)$ = $\Gamma'(z)/\Gamma(z)$ as:
+
+\begin{equation}
+ h(\eta) = 0.5[\psi(i\eta) + \psi(-i\eta) - \ln(\eta^{2})]
+\label{eqn:LednickyHFunction}
+\end{equation} 
+
+In this case, the $\lambda$ parameter may be included as: 
+
+\begin{equation}
+ C(\mathbf{k^{*}}) = (1 - \lambda) + \lambda\sum\limits_{S}\rho_{S}\int S(\mathbf{r^{*}})|\Psi^{S}_{\mathbf{k^{*}}}(\mathbf{r^{*}})|^{2}d^{3}\mathbf{r^{*}}
+\label{eqn:GenCfEqnwLambda}
+\end{equation}
+
+
+To generate a fit correlation function, we must simulate a large number of pairs, calculate the wave-function, and average $\Psi^{2}$ over all pairs in a given k$^{*}$ bin.  
+Essentially, we calculate Equation \ref{eqn:GenCfEqn} by hand:
+
+\begin{equation}
+\begin{array}{l}
+\vspace{2mm}
+  C(\mathbf{k^{*}}) = \sum\limits_{S}\rho_{S}\int S(\mathbf{r^{*}})|\Psi^{S}_{\mathbf{k^{*}}}(\mathbf{r^{*}})|^{2}d^{3}\mathbf{r^{*}} \\
+\vspace{2mm}
+  \longrightarrow C(|\mathbf{k^{*}}|) \equiv C(k^{*}) = \sum\limits_{S}\rho_{S}\langle |\Psi^{S}(\mathbf{k^{*}_{i}},\mathbf{r^{*}_{i}})|^{2} \rangle_{i} \\
+\vspace{2mm}
+  \longrightarrow C(k^{*}) = \lambda\sum\limits_{S}\rho_{S}\langle |\Psi^{S}(\mathbf{k^{*}_{i}},\mathbf{r^{*}_{i}})|^{2} \rangle_{i} + (1-\lambda)
+
+\end{array}
+\label{eqn:CoulombEqn2}
+\end{equation}
+
+where $\langle \rangle_{i}$ represents an average over all pairs in a given k$^{*}$ bin.
+
+In summary, for a given k$^{*}$ bin, we must draw $N_{pairs} \sim 10^{4}$ pairs, and for each pair:
+
+\begin{enumerate}
+ \item Draw a random $\mathbf{r}^{*}$ vector according to our Gaussian source distribution $S(\mathbf{r}^{*})$
+ \item Draw a random $\mathbf{k}^{*}$ vector satisfying the $|\mathbf{k}^{*}|$ restriction of the bin
+ \begin{itemize}
+  \item We draw from real $k^{*}$ vectors obtained from the data
+  \item However, we find that drawing from a distribution flat in $k^{*}$ gives similar results
+ \end{itemize}
+ \item Construct the wave-function $\Psi$
+\end{enumerate}
+
+After all pairs for a given k$^{*}$ bin are simulated and wave-functions obtained, the results are averaged to give the fit result.
 
 
 \section{The ALICE Collaboration}
