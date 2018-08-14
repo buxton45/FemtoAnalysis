@@ -6,6 +6,7 @@
 \newcommand{\krec}{$k^{*}_{\mathrm{Rec}}$\xspace}
 \newcommand{\minv}{$m_{\mathrm{inv}}$\xspace}
 \newcommand{\mt}{$m_{\mathrm{T}}$\xspace}
+\newcommand{\pt}{$p_{\mathrm{T}}$\xspace}
 
 \newcommand{\Lam}{$\Lambda$\xspace}
 \newcommand{\ALam}{$\bar{\Lambda}$\xspace}
@@ -102,6 +103,9 @@ We observe mT-scaling.  However, remember plot is for identical particle femtosc
 
 Motivation for comparing studies with different particle species, and for \LamK in particular.
 
+Note, we expect and observe consistent results between a particle pair and its conjugate (ex. \LamKchP and \ALamKchM); therefore, we group the two together as a single analysis, and will refer to the joined analysis by the pair name, excluding the conjugate.  
+So, for instance, \LamKs $\oplus$ \ALamKs is simply \LamKs, \LamKchP $\oplus$ \ALamKchM is \LamKchP, etc. 
+
 
 This paper presents results from a femtoscopic analysis of \LamK correlations in Pb-Pb collisions at $\sqrt{s_{\mathrm{NN}}}$ = 2.76 TeV by the ALICE experiment at the LHC.  
 All pair combinations of \Lam and \ALam with \KchP, \KchM and \Ks are analyzed. 
@@ -111,7 +115,7 @@ We observe a large difference in the \LamKchPALamKchM and \LamKchMALamKchP corre
 The results suggest an effect arising from different quark-antiquark interactions in the pairs, i.e. $\rm s\bar{s}$ in \LamKchPALamKchM and $\rm u\bar{u}$ in \LamKchMALamKchP.  
 The femtoscopic radii, $\lambda$ parameters, and scattering parameters are extracted from...
 
-The organization of this paper is as follows.  Sec. \ref{sec:DataAnalysis}, Sec. \ref{sec:CfConstructionAndFitting}, Sec. \ref{sec:Results}, Sec. \ref{sec:Summary}.
+The organization of this paper is as follows.  Sec. \ref{sec:DataAnalysis}, Sec. \ref{sec:AnalysisMethods}, Sec. \ref{sec:Results}, Sec. \ref{sec:Summary}.
 
 \section{Data Analysis}
 \label{sec:DataAnalysis}
@@ -119,10 +123,12 @@ The organization of this paper is as follows.  Sec. \ref{sec:DataAnalysis}, Sec.
 The dataset analyzed is from Pb-Pb collisions at $\sqrt{s_{\mathrm{NN}}}$ = 2.76 TeV at the LHC measured by the ALICE detector \cite{1748-0221-3-08-S08002}.
 Approximately 40 million combined central, semi-central, and minimum bias events were analyzed.
 The events were classified according to their centrality determined using the measured amplitudes in the V0 detectors \cite{Abelev:2013qoq}.  
-In order for an event to be included in the analysis, the z-position of the reconstructed event vertex must be within 10 cm of the center of the ALICE detector, and the event must contain at least one particle of each type from the pair of interest (ex. for \LamKchP analysis, an accepted event must contain at least one \Lam and at lease one \Ks).
+In order for an event to be included in the analysis, the z-position of the reconstructed event vertex must be within 10 cm of the center of the ALICE detector, and the event must contain at least one particle of each type from the pair of interest (ex. for \LamKchP analysis, an accepted event must contain at least one \Lam and at lease one \Ks). 
+
 Charged particle tracking was performed using the Time Projection Chamber (TPC) \cite{2010NIMPA.622..316A} (Tom) or \cite{Dellacasa:451098} (1dPionKaonProton) and the Inner Tracking System \cite{1748-0221-3-08-S08002}.  
 The ITS allows for high spatial resolution in determining the primary (collision) vertex.
 The determination of the momenta of the tracks was performed using tracks reconstructed with the TPC only and constrained to the primary vertex.
+A minimum requirement on the number of reconstructed TPC clusters was imposed, the purpose of which is to ensure both the quality of the track and good \pt resolution at large momenta, as well as to remove fake tracks.
 
 Particle identification (PID) for reconstructed tracks was carried out using both the TPC and Time-of-Flight (TOF) detector \cite{Abelev:2014ffa, Akindinov:2013tea} (Tom) or \cite{Cortese:545834} (1dPionKaonProton) in the pseudorapidity range $|\eta| < 0.8$.  
 For TPC PID, a parametrized Bethe-Bloch formula was used to calculate the specific energy loss $\langle \mathrm{d}E/\mathrm{d}x \rangle$ in the detector expected for a particle with a given mass and momentum.  
@@ -131,7 +137,90 @@ For each PID method, a value ($N\sigma$) was assigned to each track denoting the
 This procedure was repeated for four "particle species hypotheses" - electron, pion, kaon, and proton-, and, for each hypothesis, a different $N\sigma$ value was obtained per detector.
 
 
+\subsection{K$^{\pm}$ selection}
+\label{sec:KchSelection}
+The single-particle selection criteria used to select charged kaon candidates are summarized in Table \ref{tab:KchCuts}.
+\Kpm track detection utilized both TPC and TOF detectors, and tracks within the range 0.14 $<$ \pt $<$ 1.5 GeV/$c$ were accepted.
+As we are interested in primary particles originating from the primary vertex, to reduce the number of secondaries (for instance, charged particles produced in the detector material, particles from weak decays, etc.) in our sample, we established a maximum cut on the distance-of-closest-approach (DCA) of the track the the primary vertex.
+This restriction is realized by imposing a DCA cut in both the transverse and beam directions.
 
+PID was performed using both the TPC and TOF detectors via the $\mathrm{N}\sigma$ method.  
+The exact cuts for the various \pt regions can be found in Table \ref{tab:KchCuts}.  
+Additionally, we include methods to reduce the contamination in our \Kpm samples from electrons and pions.  Again, the specifics for these cuts are contained in Table \ref{tab:KchCuts}.
+
+
+\begin{figure}[h]
+ \centering
+ \includegraphics[width=0.5\textwidth]{/home/jesse/Analysis/FemtoAnalysis/LamKPublication/Figures/PDF/canDrawKchdEdx_LamKchP_0010_KchP.pdf}% Here is how to import EPS art
+ \caption{\label{fig:KchPdEdx} Sample d$E$/d$x$ distribution for the \KchP collection from our 0-10\% central \LamKchP analysis.}
+\end{figure}
+
+\begin{table}[htbp]
+ \centering
+%  \renewcommand{\arraystretch}{1.5}
+  \begin{tabular}{lc|c|l}
+   \hline  
+   \multicolumn{4}{c}{\textbf{\Kpm selection}} \\
+   \hline
+   \multicolumn{3}{l|}{Transverse momentum $p_{\mathrm{T}}$} & 0.14 $< p_{\mathrm{T}} < 1.5$ GeV/\textit{c} \\
+   \hline
+   \multicolumn{3}{l|}{$|\eta|$} & $< 0.8$ \\
+   \hline
+   \multicolumn{3}{l|}{Transverse DCA to primary vertex} & $<$ 2.4 cm \\
+   \hline
+   \multicolumn{3}{l|}{Longitudinal DCA to primary vertex} & $<$ 3.0 cm \\
+   \hline
+
+   TPC and TOF N$\sigma$ Cuts & \multicolumn{3}{c}{} \\
+   \cline{2-4}
+    & \multicolumn{1}{l}{$p <$ 0.4 GeV/\textit{c}} &  & N$_{\sigma \mathrm{K,TPC}} <$ 2 \\
+   \cline{2-4}
+    & \multicolumn{1}{l}{0.4 $< p <$ 0.45 GeV/\textit{c}} & & N$_{\sigma \mathrm{K,TPC}} <$ 1 \\
+   \cline{2-4}     
+    & \multicolumn{1}{l}{0.45 $< p <$ 0.80 GeV/\textit{c}} & & N$_{\sigma \mathrm{K,TPC}} <$ 3 \\ 
+   \multicolumn{3}{c|}{} & N$_{\sigma \mathrm{K,TOF}} <$ 2 \\
+   \cline{2-4}
+    & \multicolumn{1}{l}{0.80 $< p <$ 1.0 GeV/\textit{c}} & & N$_{\sigma \mathrm{K,TPC}} <$ 3 \\
+   \multicolumn{3}{c|}{} & N$_{\sigma \mathrm{K,TOF}} <$ 1.5 \\  
+   \cline{2-4}
+    & \multicolumn{1}{l}{$p >$ 1.0 GeV/\textit{c}} & & N$_{\sigma \mathrm{K,TPC}} <$ 3 \\
+   \multicolumn{3}{c|}{} & N$_{\sigma \mathrm{K,TOF}} <$ 1 \\  
+   \hline
+   \multicolumn{3}{l|}{\multirow{3}{*}{Electron Rejection: Reject if all satisfied}} & $\mathrm{N}_{\sigma e^{-},\mathrm{TPC}} < $ 3 \\
+   \multicolumn{3}{c|}{} & $\mathrm{N}_{\sigma e^{-},\mathrm{TPC}} < \mathrm{N}_{\sigma K^{\pm},\mathrm{TPC}}$ \\
+   \multicolumn{3}{c|}{} & $\mathrm{N}_{\sigma e^{-},\mathrm{TOF}} < \mathrm{N}_{\sigma K^{\pm},\mathrm{TOF}}$ \\
+   \hline
+   
+   \multicolumn{4}{l}{Pion Rejection:  Reject if:} \\
+   %\cline{1-1}
+   \multirow{4}{*}{$p <$ 0.65 GeV/\textit{c}} & \multicolumn{1}{l}{TOF and TPC available} & \multicolumn{1}{c|}{} & N$_{\sigma \pi,\mathrm{TPC}} <$ 3 \\
+   \multicolumn{3}{c|}{} & N$_{\sigma \pi,\mathrm{TOF}} <$ 3 \\
+   \cline{2-4}
+    & \multirow{2}{*}{Only TPC available} & $p <$ 0.5 GeV/\textit{c} & N$_{\sigma \pi,\mathrm{TPC}} <$ 3 \\
+   \cline{3-4}
+    &  & 0.5 $< p <$ 0.65 GeV/\textit{c} & N$_{\sigma \pi,\mathrm{TPC}} <$ 2 \\
+   \cline{2-4}
+   \multicolumn{3}{l|}{\multirow{2}{*}{0.65 $< p <$ 1.5 GeV/\textit{c}}} & N$_{\sigma \pi,\mathrm{TPC}} <$ 5 \\
+    & \multicolumn{2}{c|}{} & N$_{\sigma \pi,\mathrm{TOF}} <$ 3 \\
+   \cline{2-4}
+   \multicolumn{3}{l|}{\multirow{2}{*}{$p >$ 1.5 GeV/\textit{c}}} & N$_{\sigma \pi,\mathrm{TPC}} <$ 5 \\
+    & \multicolumn{2}{c|}{} & N$_{\sigma \pi,\mathrm{TOF}} <$ 2 \\
+   \hline
+  \end{tabular}
+% \end{minipage}
+ \caption{\Kpm selection}
+ \label{tab:KchCuts} 
+\end{table}
+
+The purity of the \Kpm collections was estimated from a Monte-Carlo (MC) study based on HIJING \cite{PhysRevD.44.3501} simulations using GEANT3 \cite{Brun:1994aa} to model particle transport through the ALICE detectors. In these simulations, the true identity of each reconstructed K$^{\pm}$ particle is known;  therefore, the purity may be estimated as:
+
+\begin{equation}
+ \rm Purity(K^{\pm}) = \frac{N_{true}}{N_{reconstructed}} \\
+\label{eqn:KchPurity}
+\end{equation}
+
+For our analysis, we find Purity(\KchP) $\approx$ Purity(\KchM) $\approx$ 97\%.
+Figure \ref{fig:KchPdEdx} shows a sample d$E$/d$x$ for the \KchP collection in the 0-10\% centrality bin (from our \LamKchP study).
 
 
 
@@ -139,21 +228,9 @@ This procedure was repeated for four "particle species hypotheses" - electron, p
 \label{sec:V0Selection}
 
 \LamALam and \Ks particles are electrically neutral, and cannot be directly detected, but must instead be reconstructed through detection of their decay products, or daughters.  
-This process is illustrated in Figure \ref{fig:V0Reconstruction}.
+This process is illustrated in Figure \ref{fig:V0Reconstruction}, and the main cuts used are shown in Tables \ref{tab:LamCuts} and \ref{tab:K0sCuts}..
 In general, particles which are topologically reconstructed in this fashion are called V0 particles.
-
-Daughter tracks selected by requiring a minimum impact parameter with respect to primary vertex.
-Positive and negative tracks combined to form a pair.
-V0 vertex is then point of closest approach of tracks.
-This distance is used for additional quality criterion.
-
-V0 momentum calculated as sum of daughters momenta.
-Minimum transverse momentum to reduce contribution from fakes.
-Selection on opening angle between V0 momentum and and vector pointing from primary vertex to secondary V0 decay vertex
-Finally, invariant mass cut.
-
-To avoid auto-correlation, all candidates checked for shared daughters.
-If shared daughters, how do I decide which V0 to keep? (Cosine of pointing angle?)
+The decay channel \Lam $\rightarrow$ p$\pi^{-}$ was used for the identification of \Lam hyperons (and, similarly the charge-conjugate decay for the \ALam identification), and \Ks $\rightarrow$ $\pi^{+}\pi^{-}$ for the identification of \Ks mesons.
 
 \begin{figure}[h]
   \centering
@@ -162,19 +239,17 @@ If shared daughters, how do I decide which V0 to keep? (Cosine of pointing angle
   \label{fig:V0Reconstruction}
 \end{figure}
 
-The decay channel \Lam $\rightarrow$ p$\pi^{-}$ (\ALam $\rightarrow$ $\bar{\mathrm{p}}\pi^{+}$) was used for the identification of \LamALam hyperons, and \Ks $\rightarrow$ $\pi^{+}\pi^{-}$ for the identification of \Ks mesons.
-Main cuts shown in Tables \ref{tab:LamCuts} and \ref{tab:K0sCuts}.
-PID for pion daughters using both TPC (what momenta?) and TOF (what momenta?).
-Figure \ref{fig:Purity:b} shows $\pi^{+}\pi^{-}$ invariant mass distribution showing \Ks peak.
+To construct a V0 particle, the charged daughter tracks must first be found.  
+Aside from typical kinematic and PID cuts (using TPC and TOF detectors), the daughter tracks are also exposed to a minimum cut on the impact parameter with respect to the primary vertex.  
+The daughters of a V0 particle should not originate from the primary vertex, but rather from the decay vertex of the V0, hence the minimum cut imposition.  The positive and negative daughter tracks are combined to form the V0 candidate, the momentum of which is simply the sum of the momenta of the daughters.
+The decay vertex of the V0 is assumed to be the point of closest approach between the daughter tracks.
+To help ensure quality, a maximum value cut is demanded on the distance-of-closest-approach between the daughters (DCA V0 Daughters).
 
-Figure \ref{fig:Purity} shows the invariant mass ($m_{\mathrm{inv}}$) distribution of all \Lam and \Ks candidates (in the 0-10\% centrality bin) immediately before the final invariant mass cut.
-These distributions (and similar for \ALam) are used to calculate the collections' purities (defined in Eq. \ref{eqn:Purity}).
-The \Lam and \ALam purities was found to be $\approx$ 95\%.
-The neutral kaon purity was found to be $\approx$ 98\%.
-
-
-
-Shared daughter cut iterates through V0 collection to ensure that no daughter is used in more than one V0 candidate.
+A minimum transverse momentum cut on the V0 candidate is introduced to reduce contamination from fake candidates.
+Opposite to the daughter tracks, the V0 candidate is exposed to a maximum cut on the impact parameter with respect to the primary vertex.
+In this case, we do want our V0 candidates to be primary, hence the maximum cut imposition.
+To further strengthen our selection of primary V0 candidates, we impose a selection on the pointing angle, $\theta_{\mathrm{pa}}$, between the V0 momentum and the vector pointing from the primary vertex to the secondary V0 decay vertex.
+We want to V0 candidate's momentum to point back to the primary decay vertex, and therefor a small $\theta_{\mathrm{pa}}$; we achieve this by appointing a minimum value on $\cos(\theta_{\mathrm{pa}})$ (``Cosine of pointing angle'' in Tables \ref{tab:LamCuts} and \ref{tab:K0sCuts}).
 
 On occasion, \LamALam particles are misidentified as \Ks, and vice versa.  
 To attempt to remove these contaminations without throwing away good candidates, we impose a set of misidentification cuts.  
@@ -215,7 +290,7 @@ Similarly, for \Ks selection, a candidate is rejected if all of the following cr
  \item $\left|m_{\mathrm{inv}, \ \Lambda(\bar{\Lambda}) \ \mathrm{Hypothesis}} - m_{\mathrm{PDG},\ \Lambda(\bar{\Lambda})}\right|~ < ~\left|m_{\mathrm{inv},~ \mathrm{K}^{0}_{S}~ \mathrm{Hypothesis}} - m_{\mathrm{PDG},~ \mathrm{K}^{0}_{S}}\right|$
 \end{enumerate} 
 
-
+Finally, invariant mass cut.
 
 \begin{table}[htbp]
  \centering 
@@ -332,6 +407,11 @@ Similarly, for \Ks selection, a candidate is rejected if all of the following cr
  \label{tab:K0sCuts} 
 \end{table}
 
+To avoid any auto-correlation effects, for each event, we impose a single particle shared daughter cut on each collection of V0 candidates.
+This cut iterates through the V0 collection to ensure that no daughter is claimed by more than one V0 candidate.
+If a shared daughter is found between two V0 candidate, that with a smaller DCA to primary vertex is kept while the other is excluded from the analysis.
+Note, this single particle shared daughter cut is unique from the pair shared daughter cut discussed in Sec. \ref{PairConstruction}, the latter of which ensure there is no daughter sharing between particles in a given pair.
+
 In order to obtain a true and reliable signal, one must ensure good purity of the V0 collection.  The purity of the collection is calculated as:
 
 \begin{equation}
@@ -339,11 +419,20 @@ In order to obtain a true and reliable signal, one must ensure good purity of th
 \label{eqn:Purity}
 \end{equation}
 
-To obtain both the signal and background, the invariant mass distribution (\minv) of all V0 candidates must be constructed immediately before the final invariant mass cut.
-Examples of such distributions can be found in Figure \ref{fig:Purity}].
+To access both the signal and background, the invariant mass distribution (\minv) of all V0 candidates must be constructed immediately before the final invariant mass cut.
+Examples of such distributions, and \Lam and \Ks candidates in the 0-10\% centrality bin, can be found in Figure \ref{fig:Purity}.
+Figure \ref{fig:Purity:a} presents the p$\pi^{-}$ invariant mass distribution showing the \Lam peak, and Figure \ref{fig:Purity:b} presents the $\pi^{+}\pi^{-}$ invariant mass distribution showing the \Ks peak.
 It is vital that this distribution be constructed immediately before the final \minv cut, otherwise it would be impossible to estimate the background.
+These distributions (and similar for \ALam) are used to calculate the collections' purities (defined in Eq. \ref{eqn:Purity}).
 As shown in Figure \ref{fig:Purity}, the background is fit (with a polynomial) outside of the peak region of interest to obtain an estimate for the background within the region.
 Within the \minv cut limits, the background is the region below the fit while the signal is the region above the fit.
+The \Lam and \ALam purities were found to be $\approx$ 95\%.
+The \Ks purity was found to be $\approx$ 98\%.
+
+
+
+
+
 
 
 \begin{figure}[htp]
@@ -357,175 +446,107 @@ Within the \minv cut limits, the background is the region below the fit while th
     \label{fig:Purity:b}
     \includegraphics[width=0.49\linewidth]{/home/jesse/Analysis/FemtoAnalysis/LamKPublication/Figures/PDF/K0Purity_LamK0.pdf}}
   %%----overall caption----
-  \caption{Invariant mass (\minv) distribution of all \Lam \ref{fig:Purity:a} and \Ks \ref{fig:Purity:b} candidates immediately before the final invariant mass cut.  The bottom figures are zoomed to show the background with fit.  The vertical green lines represent the \minv cuts used in the analyses, the red vertical lines delineate the region over which the background was fit, and the blue line shows the background fit.  These distributions (or similar, for \ALam) are used to calculate the collection purities, Purity(\Lam) $\approx$ Purity(\ALam) $\approx$ 95\%, and Purity(\Ks) $\approx$ 98\%.}  
+  \caption{Invariant mass (\minv) distribution of p$\pi^{+}$ pairs showing the \Lam peak \ref{fig:Purity:a}, and of $\pi^{+}\pi^{-}$ pairs showing the \Ks peak \ref{fig:Purity:b}, for V0 candidates immediately before the final invariant mass cut (for the 0-10\% centrality bin).  The bottom figures are zoomed to show the background with fit.  The vertical green lines represent the \minv cuts used in the analyses, the red vertical lines delineate the region over which the background was fit, and the blue line shows the background fit.  These distributions (or similar, for \ALam) are used to calculate the collection purities, Purity(\Lam) $\approx$ Purity(\ALam) $\approx$ 95\%, and Purity(\Ks) $\approx$ 98\%.}  
   \label{fig:Purity}
 \end{figure}
 
 
 
-\subsection{K$^{\pm}$ selection}
-\label{sec:KchSelection}
-The single-particle selection criteria used to select charged kaon candidates are summarized in Table \ref{tab:KchCuts}.
-\Kpm identification utilized both TPC (what momenta?) and TOF (what momenta?).
-Figure \ref{fig:KchPdEdx} shows d$E$/d$x$.
-
-Selection on number of reconstructed TPC clusters ensure quality of track, ensure good pT resolution at large momenta and to remove fake tracks.
-DCA in transverse and longitudinal to enhance number produced at primary vertex.
-Low pT (for protons!! True for others too?) to minimize the fraction originating from interaction of primary particles with detector material.
-High pT to ensure purity, due to decreasing separation power of combined TPC and TOF.
-
-\begin{figure}[h]
- \centering
- \includegraphics[width=1.0\textwidth]{/home/jesse/Analysis/FemtoAnalysis/LamKPublication/Figures/PDF/canDrawKchdEdx_LamKchP_0010_KchP.pdf}% Here is how to import EPS art
- \caption{\label{fig:KchPdEdx} A figure caption. The figure captions are
-automatically numbered.}
-\end{figure}
-
-\begin{table}[htbp]
- \centering
-%  \renewcommand{\arraystretch}{1.5}
-  \begin{tabular}{lc|c|l}
-   \hline  
-   \multicolumn{4}{c}{\textbf{\Kpm selection}} \\
-   \hline
-   \multicolumn{3}{l|}{Transverse momentum $p_{\mathrm{T}}$} & 0.14 $< p_{\mathrm{T}} < 1.5$ GeV/\textit{c} \\
-   \hline
-   \multicolumn{3}{l|}{$|\eta|$} & $< 0.8$ \\
-   \hline
-   \multicolumn{3}{l|}{Transverse DCA to primary vertex} & $<$ 2.4 cm \\
-   \hline
-   \multicolumn{3}{l|}{Longitudinal DCA to primary vertex} & $<$ 3.0 cm \\
-   \hline
-
-   TPC and TOF N$\sigma$ Cuts & \multicolumn{3}{c}{} \\
-   \cline{2-4}
-    & \multicolumn{1}{l}{$p <$ 0.4 GeV/\textit{c}} &  & N$_{\sigma \mathrm{K,TPC}} <$ 2 \\
-   \cline{2-4}
-    & \multicolumn{1}{l}{0.4 $< p <$ 0.45 GeV/\textit{c}} & & N$_{\sigma \mathrm{K,TPC}} <$ 1 \\
-   \cline{2-4}     
-    & \multicolumn{1}{l}{0.45 $< p <$ 0.80 GeV/\textit{c}} & & N$_{\sigma \mathrm{K,TPC}} <$ 3 \\ 
-   \multicolumn{3}{c|}{} & N$_{\sigma \mathrm{K,TOF}} <$ 2 \\
-   \cline{2-4}
-    & \multicolumn{1}{l}{0.80 $< p <$ 1.0 GeV/\textit{c}} & & N$_{\sigma \mathrm{K,TPC}} <$ 3 \\
-   \multicolumn{3}{c|}{} & N$_{\sigma \mathrm{K,TOF}} <$ 1.5 \\  
-   \cline{2-4}
-    & \multicolumn{1}{l}{$p >$ 1.0 GeV/\textit{c}} & & N$_{\sigma \mathrm{K,TPC}} <$ 3 \\
-   \multicolumn{3}{c|}{} & N$_{\sigma \mathrm{K,TOF}} <$ 1 \\  
-   \hline
-   \multicolumn{3}{l|}{Electron Rejection} & Reject if N$_{\sigma e^{-},\mathrm{TPC}} < $ 3 \\
-   \hline
-   
-   \multicolumn{4}{l}{Pion Rejection:  Reject if:} \\
-   \cline{1-1}
-   \multirow{4}{*}{$p <$ 0.65 GeV/\textit{c}} & \multicolumn{1}{l}{if TOF and TPC available} & \multicolumn{1}{c|}{} & N$_{\sigma \pi,\mathrm{TPC}} <$ 3 \\
-   \multicolumn{3}{c|}{} & N$_{\sigma \pi,\mathrm{TOF}} <$ 3 \\
-   \cline{2-4}
-    & \multirow{2}{*}{else} & $p <$ 0.5 GeV/\textit{c} & N$_{\sigma \pi,\mathrm{TPC}} <$ 3 \\
-   \cline{3-4}
-    &  & 0.5 $< p <$ 0.65 GeV/\textit{c} & N$_{\sigma \pi,\mathrm{TPC}} <$ 2 \\
-   \cline{2-4}
-   \multicolumn{3}{l|}{\multirow{2}{*}{0.65 $< p <$ 1.5 GeV/\textit{c}}} & N$_{\sigma \pi,\mathrm{TPC}} <$ 5 \\
-    & \multicolumn{2}{c|}{} & N$_{\sigma \pi,\mathrm{TOF}} <$ 3 \\
-   \cline{2-4}
-   \multicolumn{3}{l|}{\multirow{2}{*}{$p >$ 1.5 GeV/\textit{c}}} & N$_{\sigma \pi,\mathrm{TPC}} <$ 5 \\
-    & \multicolumn{2}{c|}{} & N$_{\sigma \pi,\mathrm{TOF}} <$ 2 \\
-   \hline
-  \end{tabular}
-% \end{minipage}
- \caption{\Kpm selection}
- \label{tab:KchCuts} 
-\end{table}
-
-The purity of the \Kpm collections was estimated from a Monte-Carlo (MC) study based on HIJING \cite{PhysRevD.44.3501} simulations using GEANT3 \cite{Brun:1994aa} to model particle transport through the ALICE detectors. In these simulations, the true identity of each reconstructed K$^{\pm}$ particle is known;  therefore, the purity may be estimated as:
-
-\begin{equation}
- \rm Purity(K^{\pm}) = \frac{N_{true}}{N_{reconstructed}} \\
-\label{eqn:KchPurity}
-\end{equation}
-
-Purity(\KchP) $\approx$ Purity(\KchM) $\approx$ 97\%
 
 
-\subsection{Pair Selection}
-\label{PairSelection}
-I suppose I should probably briefly explain how pairs are formed?
 
-It is important to obtain true particle pairs in the analysis.  
+\subsection{Pair Construction}
+\label{PairConstruction}
+The femtoscopic analysis of two-particle correlation functions relies on the proper formation of particle pairs.
+As such, it is important to obtain true particle pairs in the analysis.  
 In particular, contamination from pairs constructed with split or merged tracks, and pairs sharing daughters, can introduce an artificial signal into the correlation function, obscuring the actual physics.  
-In an effort to remove contamination, we impose two main two-particle cuts: a shared daughter cut, and an average separation cut.  
+In an effort to remove contamination, we impose two main pair cuts: a shared daughter cut, and an average separation cut.  
 
 The purpose of the shared daughter cut is to ensure the first particle in the pair is unique from the second.  
 For pairs formed of two V0s (i.e. \LamKs), this cut is implemented by removing all pairs which share a daughter (ex. in \LamKs analysis, if the \Lam and \Ks in a potential pair claim the same $\pi^{-}$ daughter, the pair is excluded from the analysis).  
 For a pair formed of a single V0 and a charged track (i.e. \LamKpm), the cut removes all pairs in which the charged track is also claimed as a daughter of the V0.  
 This mistake could only occur if, for instance, a \Kpm is misidentified as a $\pi$ or p either in the V0 reconstruction or in the \Kpm selection.
 
-The purpose of the average separation cut in to remove splitting and merging effects.  How do we estimate the cut values?  How do we implement the cut?
-
-For the \LamALamKs analysis, the average separation for like-charge daughters must be greater than 6.0 cm.  
-We enforce no cut for unlike-charge daughters.  
+The purpose of the average separation cut is to remove splitting and merging effects, and it is employed in the following way.  
+For each V0-V0 pair (\LamKs), the spatial separation between the same-sign daughters was calculated at several points throughout the TPC (every 20 cm radially from 85 cm to 245 cm), and the results averaged.
+Similarly, in the case of a V0-Track pair (\LamKpm), the average separation between the track and the daughter of the V0 sharing the same charge as the track was calculated.
+For the \LamALamKs analysis, the average separation for like-charge daughters must be greater than 6.0 cm (we enforce no cut for unlike-charge daughters).  
 For example, we impose this cut in a \LamKs analysis on the p daughter of the \Lam and the $\pi^{+}$ daughter of the \Ks.  
-For the \LamKpm analyses, the average separation between the \LamALam daughter (sharing the same charge as the \Kpm) and the \Kpm is 8.0 cm.  
-We enforce no cut for unlike signs.  
+For the \LamKpm analyses, the average separation between the \LamALam daughter (sharing the same charge as the \Kpm) and the \Kpm is 8.0 cm (we enforce no cut for unlike signs).  
 For a \LamKchP analysis, we impose this cut between the p daughter of the \Lam and the \KchP in the pair.
+These cut values were obtained by first forming average separation correlation functions.
+This is done just as for our relative-momentum correlation functions, but we instead bin in average separation.
+Looking at these average separation correlation functions, at lowest average separation we see an enhancement due to track splitting, followed by a suppression due to track merging.
+When the average separation correlation function stabilizes to unity, these effects are no longer abundant, and we choose our cut value.
 
 
 
 
+\section{Analysis Methods}
+\label{sec:AnalysisMethods}
 
+\subsection{Correlation Function}
+\label{sec:CorrelationFunction}
+General remarks about formation of correlation functions and what information they provide.
 
-
-
-\section{Construction of correlation functions and fitting}
-\label{sec:CfConstructionAndFitting}
-The event mixing was handled by the AliFemtoVertexMultAnalysis class, which only mixes events with like vertex position and centrality.
-The following criteria were used for event mixing:
-
-\begin{itemize}
- \itemsep0em
- \item Number of events to mix = 5
- \item Vertex position bin width = 2 cm
- \item Centrality bin width = 5%
-\end{itemize}
-
-
-General remarks about formaton of correlation functions and what information they provide.
-
-This analysis studies the momentum correlations of both \LamK and $\Xi$K pairs using the two-particle correlation function, defined as $C(k^{*}) = A(k^{*})/B(k^{*})$, where $A(k^{*})$ is the signal distribution, $B(k^{*})$ is the reference (or background) distribution, and $k^{*}$ is the momentum of one of the particles in the pair rest frame.
-In practice, $A(k^{*})$ is constructed by binning in \kstar pairs from the same event.
-Ideally, $B(k^{*})$ is similar to $A(k^{*})$ in all respects excluding the presence of femtoscopic correlations \cite{Lisa:2005dd}; as such, $B(k^{*})$ is used to divide out the phase-space effects, leaving only the femtoscopic effects in the correlation function. 
-
-In practice, $B(k^{*})$ is obtained by forming mixed-event pairs, i.e. particles from a given event are paired with particles from N$_{mix}$(= 5) other events, and these pairs are then binned in \kstar.
-In forming the background distribution, it is important to mix only similar events; mixing events with different phase-spaces can lead to artificial signals in the correlaton function.
-Therefore, in this analysis, we mix events with primary vertices within 2 cm and centralities within 5\% of each other.
-Also note, a vertex correction is also applied to each event, which essentially recenters the the primary vertices to z = 0.
-
-This analysis presents correlation functions for three centrality bins (0-10\%, 10-30\%, and 30-50\%), and is currently pair transverse momentum ($k_{\mathrm{T}} = 0.5|\mathbf{p}_{\mathrm{T,1}}+\mathbf{p}_{\mathrm{T,2}}|$) integrated (i.e. not binned in $k_{T}$).  
-The correlation functions are constructed separately for the two magnetic field configurations, and are combined using a weighted average:
+Two-particle correlation functions are built as the ratio of the covariant two-particle and single-particle spectra:
 
 \begin{equation}
-  C_{combined}(k^{*}) = \frac{\sum\limits_{i}w_{i}C_{i}(k^{*})}{\sum\limits_{i}w_{i}} 
-\label{eqn:CombineCfs}
+  C^{ab}(\vec{\mathrm{p}_{a}},\vec{\mathrm{p}_{b}}) = \frac{E_{a}E_{b}\frac{dN^{ab}}{d^{3}p_{a}d^{3}p_{b}}}{\big( E_{a}\frac{dN^{a}}{d^{3}p_{a}} \big) \big( E_{b}\frac{dN^{b}}{d^{3}p_{b}} \big)}
+\label{eqn:CfRatioSpectra}
 \end{equation}
 
-where the sum runs over the correlation functions to be combined, and the weight, $w_{i}$, is the number of numerator pairs in $C_{i}(k^{*})$.
-Here, the sum is over the two field configurations.
-
-Figures \ref{fig:LamKFits_3Res:a}, \ref{fig:LamKFits_3Res:b}, and \ref{fig:LamKFits_3Res:c} show the correlation functions for all centalities studied for \LamKchPALamKchM, \LamKchMALamKchP, and \LamKsALamKs, respectively. All were normalized in the range 0.32 $< k^{*} < $ 0.4 GeV/$c$.
-
-
-\subsection{Fit Function}
-\label{sec:FitFunction}
-Ya boys Lednicky and Lyuboshitz!
-
-The two-particle relative momentum correlation function may be written theoretically by the Koonin-Pratt equation \cite{Koonin:1977fh, Pratt:1990zq}:
+After a few approximations and assumptions, the two-particle relative momentum correlation function (Eq. \ref{eqn:CfRatioSpectra}) may be written as in the Koonin-Pratt equation \cite{Koonin:1977fh, Pratt:1990zq}:
 
 \begin{equation}
  C(\mathbf{k^{*}}) = \int S(\mathbf{r^{*}})|\Psi_{\mathbf{k^{*}}}(\mathbf{r^{*}})|^{2}d^{3}\mathbf{r^{*}}
 \label{eqn:KooninPrattEqn}
 \end{equation}
 
-where $S(\mathbf{r^{*}})$ is the pair source distribution, $\Psi_{\mathbf{k^{*}}}(\mathbf{r^{*}})$ is the two-particle wave-function, and \kstar is the momentum of one particle in the pair rest frame.  
-In the absence of Coulomb effects, and assuming a spherically Gaussian source of width $R$, and s-wave scattering, the 1D femtoscopic correlation function can be calculated analytically using:
+where $S(\mathbf{r^{*}})$ is the pair source distribution, $\Psi_{\mathbf{k^{*}}}(\mathbf{r^{*}})$ is the two-particle wave-function, and \kstar is the momentum of one particle in the pair rest frame.
+This form emphasizes that $|\Psi|^{2}$ can be considered a kernel with which to transform from a coordinate-space basis to a relative-momentum basis.
+This also reveals limitations; distribution of relative positions of particles with identical velocities and total momentum P as they move in asymptotic state.  Therefore, not size of entire source, but "region of homogeneity" [citation Sinyukov].
+
+Within the $|\Psi|^{2}$ term is contained the particle interaction term, allowing us to extract scattering parameters.
+
+In practice, the correlation function is formed experimentally as:
+
+\begin{equation}
+  C(k^{*}) = \mathcal{N}\frac{A(k^{*})}{B(k^{*})}
+\label{eqn:CfExp}
+\end{equation}
+
+
+where $A(k^{*})$ is the signal distribution, $B(k^{*})$ is the reference (or background) distribution, $\mathcal{N}$ is a normalization parameter, and $k^{*}$ is the momentum of one of the particles in the pair rest frame.  The normalization parameter is chosen such that the mean value of the correlation function equal unity for \kstar $\in$ [0.32, 0.4] GeV/$c$.
+
+
+In practice, $A(k^{*})$ is constructed by binning in \kstar pairs from the same event.
+Ideally, $B(k^{*})$ is similar to $A(k^{*})$ in all respects excluding the presence of femtoscopic correlations \cite{Lisa:2005dd}; as such, $B(k^{*})$ is used to divide out the phase-space effects, leaving only the femtoscopic effects in the correlation function. 
+Typically, $B(k^{*})$ is obtained by forming mixed-event pairs, i.e. particles from a given event are paired with particles from $\rm N_{mix}$ other events, and these pairs are then binned in \kstar.
+In forming the background distribution, it is important to mix only similar events; mixing events with different phase-spaces can result in an unreliable background distribution, and can introduce artificial signals in the correlation function.
+Therefore, in this analysis, we bin our events both in primary vertex location (2 cm bin width) and in centrality (5\% bin width), and we only mix events within a given bin; i.e. we only mix events of like centrality and of like primary vertex location.
+Additionally, we use $\rm N_{mix} = 5$ as the size of our mixing pool.
+Also note, a vertex correction is also applied to each event, which essentially recenters the the primary vertices to z = 0.
+
+Another option for obtaining the background is to use the Stavinsky method...
+
+This analysis presents correlation functions for three centrality bins (0-10\%, 10-30\%, and 30-50\%), and is currently pair transverse momentum ($k_{\mathrm{T}} = \frac{1}{2}|\mathbf{p}_{\mathrm{T,1}}+\mathbf{p}_{\mathrm{T,2}}|$) integrated (i.e. not binned in $k_{\mathrm{T}}$).  
+The correlation functions are constructed separately for the two magnetic field configurations (++ and -~-), and are combined using a weighted average:
+
+\begin{equation}
+  C(k^{*}) = \frac{\sum\limits_{i}w_{i}C_{i}(k^{*})}{\sum\limits_{i}w_{i}} 
+\label{eqn:CombineCfs}
+\end{equation}
+
+where the sum runs over the correlation functions to be combined, and the weight, $w_{i}$, is the number of numerator pairs in the normalization range for $C_{i}(k^{*})$.
+In this analysis, the sum is over the two field configurations.
+
+
+\subsection{Modeling the correlation function}
+\label{sec:ModelingCF}
+
+
+In the absence of Coulomb effects, and assuming a spherically Gaussian source of width $R$, and s-wave scattering, the 1D femtoscopic correlation function can be calculated analytically using \cite{Lednicky:82}:
 
 \begin{equation}
  C(k^{*}) = 1 + C_{QI}(k^{*}) + C_{FSI}(k^{*})
@@ -540,7 +561,7 @@ $C_{QI}$ describes plane-wave quantum interference:
 \end{equation}
 
 where $\alpha = (-1)^{2j}/(2j+1)$ for identical particles with spin j, and $\alpha = 0$ for non-identical particles.  
-Obviously, $\alpha = 0$ for all analyses presented in this note.  
+For all pairs studied in this analysis, $\alpha = 0$.  
 $C_{FSI}$ describes the s-wave strong final state interaction between the particles:
 
 \begin{equation}
@@ -566,101 +587,69 @@ In the case of no residual correlations (to be discussed in Section \ref{Residua
 \end{equation}
 
 
-
-
-\subsection{Momentum Resolution Corrections}
-\label{MomentumResolutionCorrections}
-
-Finite track momentum resolution causes the reconstructed momentum of a particle to smear around the true value.
-This, of course, also holds true for V0 particles.
-The effect is propagated up to the pairs of interest, which causes the reconstructed relative momentum ($k^{*}_{Rec}$) to differ from the true momentum ($k^{*}_{True}$).
-Smearing of the momentum typically will result in a suppression of the signal.
-
-The effect of finite momentum resolution can be investigated using the MC data, for which both the true and reconstructed momenta are available.
-
-Information gained from looking at $k^{*}_{Rec}$ vs $k^{*}_{True}$ can be used to apply corrections to account for the effects of finite momentum resolution on the correlation functions.
-
-
-
-A second approach is to use information gained from response matrices.
-The response matrix describes quantitatively how each $k^{*}_{Rec}$ bin receives contributions from multiple $k^{*}_{True}$ bins, and can be used to account for the effects of finite momentum resolution.
-With this approach, the resolution correction is applied on-the-fly during the fitting process by propagating the theoretical (fit) correlation function through the response matrix, according to:  
-
-\begin{equation}
-  C_{fit}(k^{*}_{Rec}) = \dfrac{\sum\limits_{k^{*}_{True}}M_{k^{*}_{Rec},k^{*}_{True}}C_{fit}(k^{*}_{True})}{\sum\limits_{k^{*}_{True}}M_{k^{*}_{Rec},k^{*}_{True}}}
-\label{eqn:MomResCorrection}
-\end{equation}
-
-where $M_{k^{*}_{Rec},k^{*}_{True}}$ is the response matrix, $C_{fit}(k^{*}_{True})$ is the fit binned in $k^{*}_{True}$, and the denominator normalizes the result.
-
-Equation \ref{eqn:MomResCorrection} describes that, for a given $k^{*}_{Rec}$ bin, the observed value of $C(k^{*}_{Rec})$ is a weighted average of all $C(k^{*}_{True})$ values, where the weights are the normalized number of counts in the [$k^{*}_{Rec}$, $k^{*}_{True}$] bin.
-
-
-
-
 \subsection{Residual Correlations}
 \label{ResidualCorrelations}
 
 The purpose of this analysis is study the interaction and scale of the emitting source of the pairs.
 In order to obtain correct results, it is important for our particle collections to consist of primary particles.
-In practice, this is difficult to achieve for our $\Lambda$ and $\bar{\Lambda}$ collections.
-Many of our $\Lambda$ particles are not primary, but originate as decay products from other hyperons, including $\Sigma^{0}$, $\Xi^{0}$, $\Xi^{-}$ and $\Sigma^{*(+,-,0)}(1385)$.  
+In practice, this is difficult to achieve for our \Lam and \ALam collections.
+Many of our \Lam particles are not primary, but originate as decay products from other hyperons, including $\Sigma^{0}$, $\Xi^{0}$, $\Xi^{-}$ and $\Sigma^{*(+,-,0)}(1385)$.  
 Additionally, many of our K particles are not primary, but decay from K$^{*(+,-,0)}(892)$ parents.
-In these decays, the $\Lambda$ carries away a momentum very similar to that of its parent.
-As a result, the correlation function between a secondary $\Lambda$ and, for instance, a K$^{+}$  will be sensitive to, and dependent upon, the interaction between the parent of the $\Lambda$ and the K$^{+}$.
-In effect, the correlation between the parent of the $\Lambda$ and the K$^{+}$ (ex. $\Sigma^{0}$K$^{+}$) will be visible, although smeared out, in the $\Lambda$K$^{+}$ data.
+In these decays, the \Lam carries away a momentum very similar to that of its parent.
+As a result, the correlation function between a secondary \Lam and, for instance, a \KchP  will be sensitive to, and dependent upon, the interaction between the parent of the \Lam and the \KchP.
+In effect, the correlation between the parent of the \Lam and the \KchP (ex. $\Sigma^{0}$\KchP) will be visible, although smeared out, in the \LamKchP data.
 We call this a residual correlation resulting from feed-down.  
-Residual correlations are important in an analysis when three criteria are met \cite{Kisiel:2014mma}: i) the parent correlation signal is large, ii) a large fraction of pairs in the sample originate from the particular parent system, and iii) the decay momenta are comparable to the expected correlation width in \textit{k}*. 
+Residual correlations are important in an analysis when three criteria are met \cite{Kisiel:2014mma}: i) the parent correlation signal is large, ii) a large fraction of pairs in the sample originate from the particular parent system, and iii) the decay momenta are comparable to the expected correlation width in \kstar. 
 
 As it is difficult for us to eliminate these residual correlations in our analyses, we must attempt to account for them in our fit.
-To achieve this, we model the correlation function of the parents, and run the correlation function through the appropriate transform matrix to determine the contribution to the daughter correlation function.
-The transform matrix describes the decay kinematics, and maps the \kstar of the parent pair to that of the daughter.
-Finally, the primary correlation function, along with all contributions from residuals, are combined to form the complete correlation function.
-This process, for a \LamK correlation function with example contribution from a $\Sigma^{0}$K residual, is described in Eq. \ref{eqn:ResidualsFull}
+The genuine \LamK correlation function may be combined with the contributions from residual feed-down and misidentified particles to obtain the final, measured correlation function:
+
+
+\begin{eqnarray}
+\label{eqn:Residuals} 
+ C_{\mathrm{measured}}(k^{*}_{\Lambda\mathrm{K}}) &=& 1 + \lambda'_{\Lambda\mathrm{K}}[C_{\Lambda\mathrm{K}}(k^{*}_{\Lambda\mathrm{K}}) - 1] + \sum\limits_{i,j}  \lambda'_{ij}[C_{ij}(k^{*}_{\Lambda\mathrm{K}})-1] \\
+ \lambda_{ij}' &=& \lambda_{\mathrm{Fit}}\lambda_{ij} \notag \\
+ \sum\limits_{ij}\lambda_{ij}' &=&  \lambda_{\mathrm{Fit}}\sum\limits_{ij}\lambda_{ij} = \lambda_{\mathrm{Fit}} \notag
+\end{eqnarray}
+
+where the \LamK term represents the genuine \LamK correlation, and the $i$, $j$ terms denote the contributions from residual feed-down and possible impurities.
+More specifically, $C_{ij}(k^{*}_{\Lambda\mathrm{K}})$ is the correlation function between particles of parent species $i$ and $j$, expressed in the basis of the relative momentum of the observed daughter \LamK pairs.  
+The $\lambda$ parameters serve as weight dictating the strength of the parent contribution to the daughter pair, and are normalized to unity.
+The individual $\lambda_{ij}$ are fixed (and whose values can be found in Table \ref{tab:LambdaValues_All}), but the parameter $\lambda_{\mathrm{Fit}}$ is left free.
+The $\lambda_{\mathrm{Fit}}$ parameter serves as an overall normalization shared by all contributors.
+
+In order to obtain the parent correlation function expressed in the relative momentum of the daughter pair, one must use a transform matrix.
+The transform matrix describes the decay kinematics of the parent system into the daughter, and maps the \kstar of the parent pair to that of the daughter.
+Using this matrix, the transformed residual correlation function can be obtained:
+
 
 \begin{equation}
-\begin{array}{l}
-\vspace{4mm}
-\begin{split}
- C_{measured}(k^{*}_{\Lambda K}) & = 1 + \lambda_{\Lambda K}[C_{\Lambda K}(k^{*}_{\Lambda K})-1] + \lambda_{\Sigma^{0}K}[C_{\Sigma^{0}K}(k^{*}_{\Lambda K})-1] + ... \\ &
- + \lambda_{P_{1}P_{2}}[C_{P_{1}P_{2}}(k^{*}_{\Lambda K})-1] + \lambda_{other}[C_{other}(k^{*}_{\Lambda K})-1] 
-\end{split}
-\\
-\vspace{2mm}
-  ~~~~~C_{P_{1}P_{2}}(k^{*}_{\Lambda K}) \equiv \frac{\sum\limits_{k^{*}_{P_{1}P_{2}}} C_{P_{1}P_{2}}\left(k^{*}_{P_{1}P_{2}}\right) T\left(k^{*}_{P_{1}P_{2}},k^{*}_{\Lambda K}\right)}{\sum\limits_{k^{*}_{P_{1}P_{2}}} T\left(k^{*}_{P_{1}P_{2}},k^{*}_{\Lambda K}\right)}
-\end{array} 
-\label{eqn:ResidualsFull}
+  C_{ij}(k^{*}_{\Lambda\mathrm{K}}) \equiv \frac{\sum\limits_{k^{*}_{ij}} C_{ij}\left(k^{*}_{ij}\right) T\left(k^{*}_{ij},k^{*}_{\Lambda\mathrm{K}}\right)}{\sum\limits_{k^{*}_{ij}} T\left(k^{*}_{ij},k^{*}_{\Lambda\mathrm{K}}\right)}
+\label{eqn:ResidualsTransform}
 \end{equation}
 
-$C_{\Sigma^{0}K^{+}}(k^{*}_{\Sigma^{0}K^{+}})$ is the $\Sigma^{0}$K$^{+}$ correlation function, and $T$ is the transform matrix.  
-This can be written more compactly as:
+
+This transform matrix is generated with THERMINATOR 2 \cite{Chojnacki:2011hb} simulation, and is formed for a given parent pair, $ij$, by taking all \LamK pairs originating from $ij$, calculating the relative momentum of the parents ($k^{*}_{ij}$) and daughters ($k^{*}_{\Lambda\mathrm{K}}$), and filling a two-dimensional histogram with the values. 
+The transform matrix is essentially an unnormalized probability distribution mapping the \kstar of the parent pair to that of the daughter pair when one or both parents decay.
+
+
+For this analysis, the $\lambda$ parameters can be estimated from simulation.  
+The reconstruction efficiency for primary \Lam particles is nearly equal to that of \Lam particles originating from $\Sigma$, $\Sigma^{*}$, $\Xi^{0}$, $\Xi^{-}$, and $\Omega$ hyperons \cite{Salzwedel:2241303}.  
+Therefore, the $\lambda$ parameter for parent system $ij$ can be estimated using THERMINATOR 2 as the total number of \LamK pairs originating from $ij$ ($\mathrm{N}_{ij}$) divided by the total number of \LamK pairs ($\rm N_{Total}$): 
 
 \begin{equation}
- C_{measured}(k^{*}_{\Lambda K}) = 1 + \sum\limits_{i}  \lambda_{i}[C_{i}(k^{*}_{\Lambda K})-1]
-\label{eqn:Residuals}
-\end{equation}
-
-
-The transform matrix generated with THERMINATOR \cite{Chojnacki:2011hb}, and is formed for a given parent pair, AB, by taking all $\Lambda$K pairs originating from AB, calculating the relative momentum of the parents (\textit{k}*$_{AB}$) and daughters (\textit{k}*$_{\Lambda K}$), and filling a two-dimensional histogram with the values. 
-The transform matrix is essentially an unnormalized probability distribution mapping the \textit{k}* of the parent pair to that of the daughter pair when one or both parents decay.
-
-The $\lambda$ parameters roughly dictate the strength of the parent contribution to the daughter pair.  
-Additionally, as found in \cite{Salzwedel:2241303}, the reconstruction efficiency for primary $\Lambda$ particles is nearly equal to that of $\Lambda$ particles originating from $\Sigma$, $\Sigma^{*}$, $\Xi^{0}$, $\Xi^{-}$, and $\Omega$ hyperons.  
-Therefore, the $\lambda$ parameter for parent system AB can be estimated using THERMINATOR as the total number of $\Lambda$K pairs originating from AB (N$_{AB}$) divided by the total number of $\Lambda$K pairs (N$_{Total}$): 
-
-\begin{equation}
-\lambda_{AB} = \frac{N_{AB}}{N_{Total}}
+\lambda_{ij} = \frac{\mathrm{N}_{ij}}{\mathrm{N_{Total}}}
 \end{equation}
 
 The $\lambda$ parameters used for this study can be found in Tab. \ref{tab:LambdaValues_All} in Appendix \ref{App:LamParams}.
 
-Now, on to the question of how we model the parent correlation functions.  
+Now, on to the question of how we model the parent correlation functions, $C_{ij}$.  
 In an ideal world, we would simply look up the parent interaction in some table, and input this into our model.  
 Unfortunately, the world in which we live is not perfect, such a table does not exists, and little is know about the interaction between the particles in the residual pairs of this study. 
 Additionally, introducing a unique set of scattering parameters and radii for each residual system would introduce a large number of additional fit parameters, for which we do not have many constraints, and would cause our fitter to be too unconstrained and yield untrustworthy results. 
 For this analysis, we assume all residual pairs have the same source size as the daughter pair.
 Furthermore, we assume Coulomb-neutral residual pairs share the same scattering parameters as the daughter pair.
-
+Therefore, for Coulomb-neutral pairs, such as \LamK, $\Sigma^{0}$K, and $\Xi^{0}$K, $C_{ij}(k^{*}_{ij})$ is calculated from Eqn. \ref{eqn:LednickyEqn}, with the help of Eqn. \ref{eqn:CFSI}; $C_{ij}(k^{*}_{\Lambda\mathrm{K}})$ is then obtained by transforming $C_{ij}(k^{*}_{ij})$ with Eq. \ref{eqn:ResidualsTransform}.  
 
 For residual pairs affected by both the strong and Coulomb interactions, things are a bit more complicated.
 This is due to the fact that, for the case of both strong and Coulomb interaction, we no longer have a nice analytical form with which to fit.
@@ -673,14 +662,42 @@ The strong interaction is necessary for the fine details.
 However, as these correlations are run through a transform matrix, which largely flattens out and fine details, a Coulomb-only description should be sufficient.  
 We find consistent results between using the $\Xi$K data and the Coulomb-only interpolation method. 
 When modeling \XiKpm residual correlations, we use the experimental \XiKpm data; in this case, there is no need to make any assumptions about scattering parameters or source sizes, as we already have the experimental data.  
-When the number of residual pairs used is increased to 10, so that additional charged residual pairs such as $\Sigma^{*+}$K$^{-}$ enter the picture, the Coulomb-only interpolation method is used.  Heh
+When the number of residual pairs used is increased to 10, so that additional charged residual pairs such as $\Sigma^{*+}$K$^{-}$ enter the picture, the Coulomb-only interpolation method is used.
+
+
+\subsection{Momentum Resolution Corrections}
+\label{MomentumResolutionCorrections}
+
+Finite track momentum resolution causes the reconstructed momentum of a particle to smear around the true value.
+This, of course, also holds true for V0 particles.
+The effect is propagated up to the pairs of interest, which causes the reconstructed relative momentum (\krec) to differ from the true momentum (\ktrue).
+Smearing of the momentum typically will result in a suppression of the signal.
+
+The effect of finite momentum resolution can be investigated using the MC data, for which both the true and reconstructed momenta are available.
+
+Information gained from looking at \krec vs \ktrue can be used to apply corrections to account for the effects of finite momentum resolution on the correlation functions.
+
+
+
+A second approach is to use information gained from response matrices.
+The response matrix describes quantitatively how each \krec bin receives contributions from multiple \ktrue bins, and can be used to account for the effects of finite momentum resolution.
+With this approach, the resolution correction is applied on-the-fly during the fitting process by propagating the theoretical (fit) correlation function through the response matrix, according to:  
+
+\begin{equation}
+  C_{\mathrm{fit}}(k^{*}_{\mathrm{Rec}}) = \dfrac{\sum\limits_{k^{*}_{\mathrm{True}}}M_{k^{*}_{\mathrm{Rec}},k^{*}_{\mathrm{True}}}C_{\mathrm{fit}}(k^{*}_{\mathrm{True}})}{\sum\limits_{k^{*}_{\mathrm{True}}}M_{k^{*}_{\mathrm{Rec}},k^{*}_{\mathrm{True}}}}
+\label{eqn:MomResCorrection}
+\end{equation}
+
+where $M_{k^{*}_{\mathrm{Rec}},k^{*}_{\mathrm{True}}}$ is the response matrix, $C_{\mathrm{fit}}(k^{*}_{\mathrm{True}})$ is the fit binned in \ktrue, and the denominator normalizes the result.
+
+Equation \ref{eqn:MomResCorrection} describes that, for a given \krec bin, the observed value of $C(k^{*}_{\mathrm{Rec}})$ is a weighted average of all $C(k^{*}_{\mathrm{True}})$ values, where the weights are the normalized number of counts in the [\krec, \ktrue] bin.
 
 
 
 \subsection{Non-Flat Background}
 \label{NonFlatBackground}
 
-We observe a significant non-femtoscopic, non-flat, background in all of our correlations at large $k^{*}$.  
+We observe a significant non-femtoscopic, non-flat, background in all of our correlations at large \kstar.  
 This background increases with decreasing centrality, is the same amongst all \LamKpm pairs, and is more pronounced in the \LamKs system.
 This difference in \LamKpm and \LamKs backgrounds is due mainly to the difference in kinematic cuts, not due to any interesting physics.  
 
@@ -691,10 +708,10 @@ As explained in \cite{Kisiel:2017}, when elliptic flow is present, all particles
 Therefore, the difference in momenta for pairs of particles tends to be smaller, compared to the case of no flow.  
 In the case of mixed-event pairs, the two events used do not share an event-plane, and therefore there is no collimation effect in the pairs from flow.  
 As a result, pairs with larger momentum are more likely when mixed-events are used, causing the correlation function to be observed below unity.  
-In general, a dip below unity, at a given $k^{*}$, means it is more probable to find a pair at that $k^{*}$ when the daughters are taken from mixed-events, as compared to when they are taken from the same event.
+In general, a dip below unity, at a given \kstar, means it is more probable to find a pair at that \kstar when the daughters are taken from mixed-events, as compared to when they are taken from the same event.
 
-This same reasoning suggests that the background should lead to an enhancement at low-$k^{*}$.  
-The enhancement at high-$k^{*}$ ($k^{*} \gtrsim$ 1.5 GeV/$c$) does not result from the collective flow of the system.  
+This same reasoning suggests that the background should lead to an enhancement at low-\kstar.  
+The enhancement at high-\kstar (\kstar $\gtrsim$ 1.5 GeV/$c$) does not result from the collective flow of the system.  
 We are not certain was causes this enhancement, but typical suspects are jet-like correlations and resonance decays.
 
 
@@ -723,51 +740,37 @@ The fitter currently includes methods to correct for momentum resolution and a n
 These corrections are applied to the fit function, the data is never touched.
 The fitter is able to share parameters between different analyses and fit all simultaneously.  
 
-In a typical fit, a given pair is fit with its conjugate (ex. $\Lambda$K$^{+}$ with $\bar{\Lambda}$K$^{-}$) across all centralities (0-10\%, 10-30\%, 30-50\%), for a total of 6 simultaneous analyses.
+In a typical fit, a given pair is fit with its conjugate (ex. \LamKchP with \ALamKchM) across all centralities (0-10\%, 10-30\%, 30-50\%), for a total of 6 simultaneous analyses.
 Each analysis has a unique $\lambda$ and normalization parameter.
 The radii are shared between analyses of like centrality, as these should have similar source sizes.
 The scattering parameters ($\mathbb{R}f_{0}$, $\mathbb{I}f_{0}$, $d_{0}$) are shared amongst all.
 
-In the case of fitting with residuals, the $\lambda_{Fit}$ parameter serves as an overall normalization shared by all contributors, such that Eqn \ref{eqn:Residuals} becomes:
-
-\begin{eqnarray}
- C_{measured}(k^{*}_{\Lambda K}) &=& 1 + \sum\limits_{i}\lambda_{i}'[C_{i}(k^{*}_{\Lambda K})-1] \\
- \lambda_{i}' &=& \lambda_{Fit}\lambda_{i} \notag \\
- \sum\limits_{i}\lambda_{i}' &=&  \lambda_{Fit}\sum\limits_{i}\lambda_{i} = \lambda_{Fit} \notag
-\label{eqn:ResidualsvLambdaNorm} 
-\end{eqnarray}
-
-where $\lambda_{i}$ is obtained from THERMINATOR, as explained in Section \ref{ResidualCorrelations}, and whose values are presented in Tables \ref{tab:LambdaValues_LamKchP} through \ref{tab:LambdaValues_LamK0}.  
-For Coulomb-neutral pairs, such as $\Lambda$K, $\Sigma^{0}$K, and $\Xi^{0}$K, $C_{i}(k^{*}_{\Lambda K})$ is calculated from Eqn. \ref{eqn:LednickyEqn}, with the help of Eqn. \ref{eqn:CFSI}.  
-For those residual pairs which include a Coulomb interaction, $C_{i}(k^{*}_{\Lambda K})$ is either calculated assuming no strong interaction, or by using the $\Xi^{\mathrm{ch}}\mathrm{K^{ch}}$ data directly.  
-Unless otherwise stated, the $\Xi^{\mathrm{ch}}\mathrm{K^{ch}}$ residual contribution is modeled using the experimental $\Xi^{\mathrm{ch}}\mathrm{K^{ch}}$ data, and all other charged contributors (ex. $\Sigma^{*\mathrm{ch}}\mathrm{K^{ch}}$) are modeled using the Coulomb-only technique with no strong interaction contribution.
-
 To summarize, the complete fit function is constructed as follows:
 
 \begin{enumerate}
- \item The uncorrected, primary, correlation function, $C_{\Lambda K}$(\ktrue), is constructed using Eq. \ref{eqn:ResidualsvLambdaNorm} (with the help of Eqns. \ref{eqn:LednickyEqn} and \ref{eqn:CFSI})
+ \item The uncorrected, primary, correlation function, $C_{\Lambda\mathrm{K}}$(\ktrue), is constructed using Eqns. \ref{eqn:LednickyEqn} and \ref{eqn:CFSI}
  \item If residuals are included:
  \begin{itemize}
   \item the parent correlation functions are obtained using:
   \begin{itemize}
-   \item Eq. \ref{eqn:ResidualsvLambdaNorm} (with the help of Eqns. \ref{eqn:LednickyEqn} and \ref{eqn:CFSI}) for the case of Coulomb-neutral pairs
+   \item Eqns. \ref{eqn:LednickyEqn} and \ref{eqn:CFSI} for the case of Coulomb-neutral pairs
    \item \XiKpm experimental data for \XiKpm contributions
-   \item a Coulomb-only curve, with the help of Secs. \ref{ModelCascadeKaon} and \ref{CoulombFitter}, for pairs including the Coulomb interaction 
+   \item a Coulomb-only curve, with the help of Appendix \ref{App:CoulombFitter}, for pairs including the Coulomb interaction 
   \end{itemize} 
- \item the contribution to the \LamK correlation function is found by running the parent correlation function through the appropriate transform, via Eq.\ref{eqn:ResidualsFull} 
+ \item the contribution to the \LamK correlation function is found by running the parent correlation function through the appropriate transform, via Eq.\ref{eqn:ResidualsTransform} 
  \end{itemize} 
  \item The primary and residual correlations are combined, via Eq.\ref{eqn:Residuals}, to form $C'_{Fit}$(\ktrue)
  \begin{itemize}
-  \item in the case of no residual contributions included in the fit, $\lambda_{i}$ = $\lambda_{\Lambda\mathrm{K}}$ in Eq. \ref{eqn:ResidualsvLambdaNorm} is set equal to 1.  Then, the extracted $\lambda_{Fit}$ parameter should be roughly equal to the pair purity
+  \item in the case of no residual contributions included in the fit, $\lambda_{i}$ = $\lambda_{\Lambda\mathrm{K}}$ in Eq. \ref{eqn:Residuals} is set equal to 1.  Then, the extracted $\lambda_{\mathrm{Fit}}$ parameter should be roughly equal to the pair purity
   \item when residuals are included, the $\lambda_{i}$ values are presented in Table \ref{tab:LambdaValues_All}
  \end{itemize} 
  \item The correlation function is corrected to account for momentum resolution effects using Eq. \ref{eqn:MomResCorrection}
  \begin{itemize}
-  \item $C'_{fit}(k^{*}_{Rec}) = \dfrac{\sum\limits_{k^{*}_{True}}M_{k^{*}_{Rec},k^{*}_{True}}C'_{fit}(k^{*}_{True})}{\sum\limits_{k^{*}_{True}}M_{k^{*}_{Rec},k^{*}_{True}}}$
+  \item $C'_{\mathrm{Fit}}(k^{*}_{\mathrm{Rec}}) = \dfrac{\sum\limits_{k^{*}_{\mathrm{True}}}M_{k^{*}_{\mathrm{Rec}},k^{*}_{\mathrm{True}}}C'_{\mathrm{Fit}}(k^{*}_{\mathrm{True}})}{\sum\limits_{k^{*}_{\mathrm{True}}}M_{k^{*}_{\mathrm{Rec}},k^{*}_{\mathrm{True}}}}$
  \end{itemize}
  \item Finally, the non-flat background correction is applied, and the final fit function is obtained
  \begin{itemize}
-  \item $C_{Fit}(k^{*}_{Rec}) = C'_{Fit}(k^{*}_{Rec})*F_{Bgd}(k^{*}_{Rec})$
+  \item $C_{\mathrm{Fit}}(k^{*}_{\mathrm{Rec}}) = C'_{\mathrm{Fit}}(k^{*}_{\mathrm{Rec}})*F_{\mathrm{Bgd}}(k^{*}_{\mathrm{Rec}})$
  \end{itemize}
 \end{enumerate}
 
@@ -864,7 +867,6 @@ The resulting uncertainties in the extracted parameter sets were combined with o
 
 \section{Results}
 \label{sec:Results}
-Hooray, finally some results!
 
 Figure \ref{fig:LamKFits_3Res} shows fits, with 3 residual correlations included, for all \LamK analyses across all studied centralities (0-10\%, 10-30\%, and 30-50\%).
 For the \LamKs results, all analyses are fit simultaneously across all centralities.
@@ -921,7 +923,7 @@ Each analysis has a unique normalization parameter.
 \begin{figure}[h]
   \centering
   \includegraphics[width=0.5\textwidth]{/home/jesse/Analysis/FemtoAnalysis/AnalysisNotes/7_ResultsAndDiscussion/Figures/mTscaling_MinvCalc_OutlinedPoints_OthersTransparent_3Res.pdf}
-  \caption[$m_{\mathrm{T}}$ Scaling of Radii: 3 Residuals in Fit]{3 residual correlations in \LamK fits.  Extracted fit $R_{\mathrm{inv}}$ parameters as a function of pair transverse mass ($m_{\mathrm{T}}$) for various pair systems over several centralities. The ALICE published data \cite{Adam:2015vja} is shown with transparent, open symbols.  The new $\Lambda$K results are shown with opaque, filled symbols.  In the left, the \LamKchP (with it's conjugate pair) results are shown separately from the \LamKchM (with it's conjugate pair) results.  In the right, all \LamKpm results are averaged.}
+  \caption[\mt Scaling of Radii: 3 Residuals in Fit]{3 residual correlations in \LamK fits.  Extracted fit $R_{\mathrm{inv}}$ parameters as a function of pair transverse mass (\mt) for various pair systems over several centralities. The ALICE published data \cite{Adam:2015vja} is shown with transparent, open symbols.  The new \LamK results are shown with opaque, filled symbols.  In the left, the \LamKchP (with it's conjugate pair) results are shown separately from the \LamKchM (with it's conjugate pair) results.  In the right, all \LamKpm results are averaged.}
   \label{fig:mTScalingOfRadii_3Res}
 \end{figure}
 
@@ -931,6 +933,9 @@ Each analysis has a unique normalization parameter.
 \section{Summary}
 \label{sec:Summary}
 We did physics, and we found physics.
+But, most importantly, in the end, physics found us.
+
+\clearpage
 
 %%%%% acknowledgements
 \newenvironment{acknowledgement}{\relax}{\relax}
@@ -969,7 +974,7 @@ We did physics, and we found physics.
   \hlineB{3.0}
   \multicolumn{12}{|c|}{3 Residuals} \\
   \hlineB{3.0}
-  $\Lambda$K$^{+}$ & 0.154 & $\bar{\Lambda}$K$^{-}$ & 0.158 & $\Lambda$K$^{-}$ & 0.154 & $\bar{\Lambda}$K$^{+}$ & 0.158 & $\Lambda$K$^{0}_{\mathrm{S}}$ & 0.165 & $\bar{\Lambda}$K$^{0}_{\mathrm{S}}$ & 0.169 \\
+  \LamKchP & 0.154 & \ALamKchM & 0.158 & \LamKchM & 0.154 & \ALamKchP & 0.158 & \LamKs & 0.165 & \ALamKs & 0.169 \\
   $\Sigma^{0}$K$^{+}$ & 0.099 & $\bar{\Sigma}^{0}$K$^{-}$ & 0.102 & $\Sigma^{0}$K$^{-}$ & 0.099 & $\bar{\Sigma}^{0}$K$^{+}$ & 0.103 & $\Sigma^{0}$K$^{0}_{\mathrm{S}}$ & 0.107 & $\bar{\Sigma}^{0}$K$^{0}_{\mathrm{S}}$ & 0.111 \\
   $\Xi^{0}$K$^{+}$ & 0.072 & $\bar{\Xi}^{0}$K$^{-}$ & 0.067 & $\Xi^{0}$K$^{-}$ & 0.071 & $\bar{\Xi}^{0}$K$^{+}$ & 0.068 & $\Xi^{0}$K$^{0}_{\mathrm{S}}$ & 0.077 & $\bar{\Xi}^{0}$K$^{0}_{\mathrm{S}}$ & 0.073 \\
   $\Xi^{-}$K$^{+}$ & 0.069 & $\bar{\Xi}^{+}$K$^{-}$ & 0.065 & $\Xi^{-}$K$^{-}$ & 0.068 & $\bar{\Xi}^{+}$K$^{+}$ & 0.066 & $\Xi^{-}$K$^{0}_{\mathrm{S}}$ & 0.075 & $\bar{\Xi}^{+}$K$^{0}_{\mathrm{S}}$ & 0.071 \\
@@ -978,7 +983,7 @@ We did physics, and we found physics.
   \hlineB{3.0}  
   \multicolumn{12}{|c|}{10 Residuals} \\
   \hlineB{3.0}
-  $\Lambda$K$^{+}$ & 0.154 & $\bar{\Lambda}$K$^{-}$ & 0.158 & $\Lambda$K$^{-}$ & 0.154 & $\bar{\Lambda}$K$^{+}$ & 0.158 & $\Lambda$K$^{0}_{\mathrm{S}}$ & 0.165 & $\bar{\Lambda}$K$^{0}_{\mathrm{S}}$ & 0.169 \\
+  \LamKchP & 0.154 & \ALamKchM & 0.158 & \LamKchM & 0.154 & \ALamKchP & 0.158 & \LamKs & 0.165 & \ALamKs & 0.169 \\
   $\Sigma^{0}$K$^{+}$ & 0.099 & $\bar{\Sigma}^{0}$K$^{-}$ & 0.102 & $\Sigma^{0}$K$^{-}$ & 0.099 & $\bar{\Sigma}^{0}$K$^{+}$ & 0.103 & $\Sigma^{0}$K$^{0}_{\mathrm{S}}$ & 0.107 & $\bar{\Sigma}^{0}$K$^{0}_{\mathrm{S}}$ & 0.111 \\
   $\Xi^{0}$K$^{+}$ & 0.072 & $\bar{\Xi}^{0}$K$^{-}$ & 0.067 & $\Xi^{0}$K$^{-}$ & 0.071 & $\bar{\Xi}^{0}$K$^{+}$ & 0.068 & $\Xi^{0}$K$^{0}_{\mathrm{S}}$ & 0.077 & $\bar{\Xi}^{0}$K$^{0}_{\mathrm{S}}$ & 0.073 \\
   $\Xi^{-}$K$^{+}$ & 0.069 & $\bar{\Xi}^{+}$K$^{-}$ & 0.065 & $\Xi^{-}$K$^{-}$ & 0.068 & $\bar{\Xi}^{+}$K$^{+}$ & 0.066 & $\Xi^{-}$K$^{0}_{\mathrm{S}}$ & 0.075 & $\bar{\Xi}^{+}$K$^{0}_{\mathrm{S}}$ & 0.071 \\
@@ -1050,6 +1055,7 @@ To generate a fit correlation function, we must simulate a large number of pairs
 Essentially, we calculate Equation \ref{eqn:GenCfEqn} by hand:
 
 \begin{equation}
+\label{eqn:CoulombEqn2}
 \begin{array}{l}
 \vspace{2mm}
   C(\mathbf{k^{*}}) = \sum\limits_{S}\rho_{S}\int S(\mathbf{r^{*}})|\Psi^{S}_{\mathbf{k^{*}}}(\mathbf{r^{*}})|^{2}d^{3}\mathbf{r^{*}} \\
@@ -1059,7 +1065,6 @@ Essentially, we calculate Equation \ref{eqn:GenCfEqn} by hand:
   \longrightarrow C(k^{*}) = \lambda\sum\limits_{S}\rho_{S}\langle |\Psi^{S}(\mathbf{k^{*}_{i}},\mathbf{r^{*}_{i}})|^{2} \rangle_{i} + (1-\lambda)
 
 \end{array}
-\label{eqn:CoulombEqn2}
 \end{equation}
 
 where $\langle \rangle_{i}$ represents an average over all pairs in a given k$^{*}$ bin.
@@ -1070,13 +1075,13 @@ In summary, for a given k$^{*}$ bin, we must draw $N_{pairs} \sim 10^{4}$ pairs,
  \item Draw a random $\mathbf{r}^{*}$ vector according to our Gaussian source distribution $S(\mathbf{r}^{*})$
  \item Draw a random $\mathbf{k}^{*}$ vector satisfying the $|\mathbf{k}^{*}|$ restriction of the bin
  \begin{itemize}
-  \item We draw from real $k^{*}$ vectors obtained from the data
-  \item However, we find that drawing from a distribution flat in $k^{*}$ gives similar results
+  \item We draw from real \kstar vectors obtained from the data
+  \item However, we find that drawing from a distribution flat in \kstar gives similar results
  \end{itemize}
  \item Construct the wave-function $\Psi$
 \end{enumerate}
 
-After all pairs for a given k$^{*}$ bin are simulated and wave-functions obtained, the results are averaged to give the fit result.
+After all pairs for a given \kstar bin are simulated and wave-functions obtained, the results are averaged to give the fit result.
 
 
 \section{The ALICE Collaboration}
