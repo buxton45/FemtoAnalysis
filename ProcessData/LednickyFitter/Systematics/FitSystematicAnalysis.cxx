@@ -225,7 +225,15 @@ void FitSystematicAnalysis::PrintText2dVec(vector<vector<TString> > &a2dVec, ost
 //________________________________________________________________________________________________________________
 void FitSystematicAnalysis::AppendFitInfo(TString &aSaveName)
 {
-  LednickyFitter::AppendFitInfo(aSaveName, fApplyMomResCorrection, fApplyNonFlatBackgroundCorrection, fIncludeResidualsType, fResPrimMaxDecayType, fChargedResidualsType, fFixD0);
+//  LednickyFitter::AppendFitInfo(aSaveName, fApplyMomResCorrection, fApplyNonFlatBackgroundCorrection, fIncludeResidualsType, fResPrimMaxDecayType, fChargedResidualsType, fFixD0);
+
+  TString tModifier = LednickyFitter::BuildSaveNameModifier(fApplyMomResCorrection, fApplyNonFlatBackgroundCorrection, fNonFlatBgdFitType, 
+                                                            fIncludeResidualsType, fResPrimMaxDecayType, 
+                                                            fChargedResidualsType, fFixD0,
+                                                            false, false, false, false, false,
+                                                            fShareLambdaParams, fAllShareSingleLambdaParam, false, false,
+                                                            false, false);
+  aSaveName += tModifier;
 }
 
 

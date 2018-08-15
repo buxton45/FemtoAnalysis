@@ -61,7 +61,8 @@ int main(int argc, char **argv)
 
   bool bPlayCompletionBeep = true;
 //-----------------------------------------------------------------------------
-  TString tResultsDate_Save = "20161027";
+  TString tParentResultsDate = "20161027";  //Parent analysis these systematics are to accompany
+
   TH1D* tMaxContrHist = new TH1D("tMaxContrHist","tMaxContrHist",20,0,20);
 
   for(int iAn=(int)kLamKchP; iAn<(int)kXiKchP; iAn++)
@@ -76,8 +77,8 @@ int main(int argc, char **argv)
       else if(tAnType==kLamKchP || tAnType==kALamKchM || tAnType==kLamKchM || tAnType==kALamKchP) tGeneralAnTypeName = "cLamcKch";
       else assert(0);
 
-      TString tDirectoryBase_Save = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_%s_%s/",tGeneralAnTypeName.Data(),tResultsDate_Save.Data());
-      TString tFileLocationBase_Save = tDirectoryBase_Save + TString::Format("Results_%s_%s",tGeneralAnTypeName.Data(),tResultsDate_Save.Data());
+      TString tDirectoryBase_Save = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_%s_%s/",tGeneralAnTypeName.Data(),tParentResultsDate.Data());
+      TString tFileLocationBase_Save = tDirectoryBase_Save + TString::Format("Results_%s_%s",tGeneralAnTypeName.Data(),tParentResultsDate.Data());
 
       td2dVec tAllCfValues(0);
 
@@ -96,14 +97,14 @@ int main(int argc, char **argv)
         if(tAnType==kLamK0 || tAnType==kALamK0) tCut *= -1;
         cout << "tCut = " << tCut << endl;
 
-        SystematicsFileInfo tFileInfo = GetFileInfo_LamK(tCut);
+        SystematicsFileInfo tFileInfo = GetFileInfo_LamK(tCut, tParentResultsDate);
           TString tResultsDate = tFileInfo.resultsDate;
           TString tDirNameModifierBase1 = tFileInfo.dirNameModifierBase1;
           vector<double> tModifierValues1 = tFileInfo.modifierValues1;
           TString tDirNameModifierBase2 = tFileInfo.dirNameModifierBase2;
           vector<double> tModifierValues2 = tFileInfo.modifierValues2;
 
-        TString tDirectoryBase = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Systematics/Results_%s_Systematics%s",tGeneralAnTypeName.Data(),tDirNameModifierBase1.Data());
+        TString tDirectoryBase = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Systematics_LamK_%s/Results_%s_Systematics%s", tParentResultsDate.Data(), tGeneralAnTypeName.Data(), tDirNameModifierBase1.Data());
         if(!tDirNameModifierBase2.IsNull())
         {
           tDirectoryBase.Remove(TString::kTrailing,'_');

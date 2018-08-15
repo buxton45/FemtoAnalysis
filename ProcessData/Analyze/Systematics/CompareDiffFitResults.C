@@ -10,6 +10,8 @@ int main(int argc, char **argv)
   //This allows the user a chance to look at and manipulate a TBrowser before
   //the program ends and closes everything
 //-----------------------------------------------------------------------------
+  TString tParentResultsDate = "20161027";  //Parent analysis these systematics are to accompany
+
   AnalysisType tAnType = kALamK0;
   CentralityType tCentType = k0010;
   int tFileInfoNumber = -3;
@@ -23,7 +25,7 @@ int main(int argc, char **argv)
 
   bool bWriteToFile = true;
 
-  SystematicsFileInfo tFileInfo = GetFileInfo_LamK(tFileInfoNumber);
+  SystematicsFileInfo tFileInfo = GetFileInfo_LamK(tFileInfoNumber, tParentResultsDate);
     TString tResultsDate = tFileInfo.resultsDate;
     TString tDirNameModifierBase1 = tFileInfo.dirNameModifierBase1;
     vector<double> tModifierValues1 = tFileInfo.modifierValues1;
@@ -31,7 +33,7 @@ int main(int argc, char **argv)
     vector<double> tModifierValues2 = tFileInfo.modifierValues2;
     bool tAllCent = tFileInfo.allCentralities;
 
-  TString tDirectoryBase = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Systematics/Results_%s_Systematics%s",tGeneralAnTypeName.Data(),tDirNameModifierBase1.Data());
+  TString tDirectoryBase = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Systematics_LamK_%s/Results_%s_Systematics%s", tParentResultsDate, tGeneralAnTypeName.Data(), tDirNameModifierBase1.Data());
   if(!tDirNameModifierBase2.IsNull())
   {
     tDirectoryBase.Remove(TString::kTrailing,'_');

@@ -100,6 +100,9 @@ public:
 
   void SetFixNormParams(bool aFixNormParams);
 
+  FitGeneratorAndDraw* GetFitGen1();
+  FitGeneratorAndDraw* GetFitGen2();
+
 protected:
 
   FitGeneratorAndDraw* fFitGen1;
@@ -158,6 +161,10 @@ inline void DualieFitGenerator::SetUsemTScalingOfResidualRadii(bool aUse, double
 inline void DualieFitGenerator::SetSaveFileType(TString aType) {fFitGen1->SetSaveFileType(aType); fFitGen2->SetSaveFileType(aType);}
 
 inline void DualieFitGenerator::SetFixNormParams(bool aFixNormParams) {fFitGen1->SetFixNormParams(aFixNormParams); fFitGen2->SetFixNormParams(aFixNormParams);}
+
+
+inline FitGeneratorAndDraw* DualieFitGenerator::GetFitGen1() {return fFitGen1;}
+inline FitGeneratorAndDraw* DualieFitGenerator::GetFitGen2() {return fFitGen2;}
 #endif
 
 

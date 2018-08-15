@@ -9,6 +9,21 @@ M.~A. Lisa, S.~Pratt, R.~Soltz, and U.~Wiedemann, ``{Femtoscopy in relativistic
   [nucl-ex]}}.
 %%CITATION = NUCL-EX/0505014;%%.
 
+\bibitem{Adam:2015vja}
+{\bfseries ALICE} Collaboration, J.~Adam {\em et~al.}, ``{One-dimensional pion,
+  kaon, and proton femtoscopy in Pb-Pb collisions at $\sqrt{s_{\rm {NN}}}$
+  =2.76 TeV},'' \href{http://dx.doi.org/10.1103/PhysRevC.92.054908}{{\em Phys.
+  Rev.} {\bfseries C92} no.~5, (2015) 054908},
+\href{http://arxiv.org/abs/1506.07884}{{\ttfamily arXiv:1506.07884 [nucl-ex]}}.
+%%CITATION = ARXIV:1506.07884;%%.
+
+\bibitem{Akkelin:1995gh}
+S.~V. Akkelin and {\relax Yu}.~M. Sinyukov, ``{The HBT interferometry of
+  expanding sources},''
+\href{http://dx.doi.org/10.1016/0370-2693(95)00765-D}{{\em Phys. Lett.}
+  {\bfseries B356} (1995) 525--530}.
+%%CITATION = PHLTA,B356,525;%%.
+
 \bibitem{Lednicky:82}
 R.~Lednicky and V.~L. Lyuboshitz {\em Sov. J. Nucl. Phys.} {\bfseries 35}
   (1982) 770.
@@ -61,13 +76,6 @@ A.~Akindinov {\em et~al.}, ``{Performance of the ALICE Time-Of-Flight detector
 \newblock Technical Design Report ALICE. CERN, Geneva, 2002.
 \newblock \url{http://cds.cern.ch/record/545834}.
 
-\bibitem{Patrignani:2016xqp}
-{\bfseries Particle Data Group} Collaboration, C.~Patrignani {\em et~al.},
-  ``{Review of Particle Physics},''
-\href{http://dx.doi.org/10.1088/1674-1137/40/10/100001}{{\em Chin. Phys.}
-  {\bfseries C40} no.~10, (2016) 100001}.
-%%CITATION = CHPHD,C40,100001;%%.
-
 \bibitem{PhysRevD.44.3501}
 X.-N. Wang and M.~Gyulassy, ``hijing: A monte carlo model for multiple jet
   production in $\mathrm{pp}$, $\mathrm{pA}$, and $\mathrm{AA}$ collisions,''
@@ -80,6 +88,13 @@ R.~Brun, F.~Bruyant, F.~Carminati, S.~Giani, M.~Maire, A.~McPherson,
   G.~Patrick, and L.~Urban,
 ``{GEANT Detector Description and Simulation Tool},''.
 %%CITATION = CERN-W5013;%%.
+
+\bibitem{Patrignani:2016xqp}
+{\bfseries Particle Data Group} Collaboration, C.~Patrignani {\em et~al.},
+  ``{Review of Particle Physics},''
+\href{http://dx.doi.org/10.1088/1674-1137/40/10/100001}{{\em Chin. Phys.}
+  {\bfseries C40} no.~10, (2016) 100001}.
+%%CITATION = CHPHD,C40,100001;%%.
 
 \bibitem{Koonin:1977fh}
 S.~E. Koonin, ``{Proton Pictures of High-Energy Nuclear Collisions},''
@@ -136,14 +151,6 @@ M.~Mai, P.~C. Bruns, B.~Kubis, and U.-G. Meissner, ``{Aspects of meson-baryon
   {\bfseries D80} (2009) 094006},
 \href{http://arxiv.org/abs/0905.2810}{{\ttfamily arXiv:0905.2810 [hep-ph]}}.
 %%CITATION = ARXIV:0905.2810;%%.
-
-\bibitem{Adam:2015vja}
-{\bfseries ALICE} Collaboration, J.~Adam {\em et~al.}, ``{One-dimensional pion,
-  kaon, and proton femtoscopy in Pb-Pb collisions at $\sqrt{s_{\rm {NN}}}$
-  =2.76 TeV},'' \href{http://dx.doi.org/10.1103/PhysRevC.92.054908}{{\em Phys.
-  Rev.} {\bfseries C92} no.~5, (2015) 054908},
-\href{http://arxiv.org/abs/1506.07884}{{\ttfamily arXiv:1506.07884 [nucl-ex]}}.
-%%CITATION = ARXIV:1506.07884;%%.
 
 \bibitem{Lednicky:2005tb}
 R.~Lednicky, ``{Finite-size effects on two-particle production in continuous

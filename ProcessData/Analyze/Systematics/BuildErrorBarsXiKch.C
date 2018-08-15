@@ -47,6 +47,10 @@ int main(int argc, char **argv)
 
   bool bPlayCompletionBeep = true;
 //-----------------------------------------------------------------------------
+
+  TString tParentResultsDate = "20161027";  //Parent analysis these systematics are to accompany
+
+
   AnalysisType tAnType = kXiKchP;
   CentralityType tCentType = k0010;
 
@@ -71,14 +75,15 @@ int main(int argc, char **argv)
     if(iCut==6) continue;
     cout << "tCut = " << tCut << endl;
 
-    SystematicsFileInfo tFileInfo = GetFileInfo_XiKch(tCut);
+    SystematicsFileInfo tFileInfo = GetFileInfo_XiKch(tCut, tParentResultsDate);
       TString tResultsDate = tFileInfo.resultsDate;
       TString tDirNameModifierBase1 = tFileInfo.dirNameModifierBase1;
       vector<double> tModifierValues1 = tFileInfo.modifierValues1;
       TString tDirNameModifierBase2 = tFileInfo.dirNameModifierBase2;
       vector<double> tModifierValues2 = tFileInfo.modifierValues2;
 
-    TString tDirectoryBase = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Systematics/Results_%s_Systematics%s",tGeneralAnTypeName.Data(),tDirNameModifierBase1.Data());
+    TString tDirectoryBase = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Systematics_XiK/Results_%s_Systematics%s",tGeneralAnTypeName.Data(),tDirNameModifierBase1.Data());
+//    TString tDirectoryBase = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Systematics_XiK_%s/Results_%s_Systematics%s", tParentResultsDate.Data(), tGeneralAnTypeName.Data(), tDirNameModifierBase1.Data());
     if(!tDirNameModifierBase2.IsNull())
     {
       tDirectoryBase.Remove(TString::kTrailing,'_');

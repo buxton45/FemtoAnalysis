@@ -273,6 +273,8 @@ int main(int argc, char **argv)
   //This allows the user a chance to look at and manipulate a TBrowser before
   //the program ends and closes everything
 //-----------------------------------------------------------------------------
+  TString tParentResultsDate = "20161027";  //Parent analysis these systematics are to accompany
+                                            //TODO Make sure appropriate #include "Types_SysFileInfo_xxxxxx.h" is included at top of file!!!!!
 
   bool bRunOldQMNaming = true;
 
@@ -290,7 +292,7 @@ int main(int argc, char **argv)
 
   //-------------------------------
 
-  TString tSystematicsDirectory = "/home/jesse/Analysis/FemtoAnalysis/Results/Systematics/";
+  TString tSystematicsDirectory = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Systematics_LamK_%s/", tParentResultsDate.Data());
 
   TString tResultsDirectory_cLamK0 = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamK0_20161027/";
   TString tResultsDirectory_cLamcKch = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_20161027/";
@@ -313,7 +315,7 @@ int main(int argc, char **argv)
     if(iCut==6 || iCut==12) continue;
     cout << "iCut = " << iCut << endl;
 
-    SystematicsFileInfo tFileInfo = GetFileInfo_LamK(iCut);
+    SystematicsFileInfo tFileInfo = GetFileInfo_LamK(iCut, tParentResultsDate);
       TString tResultsDate = tFileInfo.resultsDate;
       TString tDirNameModifierBase1 = tFileInfo.dirNameModifierBase1;
       vector<double> tModifierValues1 = tFileInfo.modifierValues1;

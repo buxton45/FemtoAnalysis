@@ -57,7 +57,7 @@ int main(int argc, char **argv)
     cout << "tCut = " << tCut;
     cout << " +++++++++++++++++++++++++++++++++++++++++++++++++++++++ " << endl << endl;
 
-    SystematicsFileInfo tFileInfo = GetFileInfo_LamK(tCut);
+    SystematicsFileInfo tFileInfo = GetFileInfo_LamK(tCut, tParentResultsDate);
       TString tResultsDate = tFileInfo.resultsDate;
       TString tDirNameModifierBase1 = tFileInfo.dirNameModifierBase1;
       vector<double> tModifierValues1 = tFileInfo.modifierValues1;

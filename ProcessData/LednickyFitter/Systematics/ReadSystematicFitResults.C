@@ -275,6 +275,10 @@ void ReadAllCutSys(TString aSystematicsDirectory, td4dVec &aAllCutSysToFill, Ana
                    bool aFixD0, bool aRunOldQMNaming)
 {
   TString tGeneralAnTypeName;
+  TString tParentResultsDate;
+  if     (aSystematicsDirectory.Contains("20161027")) tParentResultsDate = TString("20161027");
+  else if(aSystematicsDirectory.Contains("20180505")) tParentResultsDate = TString("20180505");
+  else assert(0);
 
   assert(aAnType==kLamK0 || aAnType==kLamKchP || aAnType==kLamKchM);
   if(aAnType==kLamK0) tGeneralAnTypeName = "cLamK0";
@@ -303,7 +307,7 @@ void ReadAllCutSys(TString aSystematicsDirectory, td4dVec &aAllCutSysToFill, Ana
     else tCut = iCut;
     cout << "tCut = " << tCut << endl;
 
-    SystematicsFileInfo tFileInfo = GetFileInfo_LamK(tCut);
+    SystematicsFileInfo tFileInfo = GetFileInfo_LamK(tCut, tParentResultsDate);
       TString tResultsDate = tFileInfo.resultsDate;
       TString tDirNameModifierBase1 = tFileInfo.dirNameModifierBase1;
       vector<double> tModifierValues1 = tFileInfo.modifierValues1;

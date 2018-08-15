@@ -83,8 +83,7 @@
 
 \begin{abstract}
 We present our femtoscopy analysis of \LamK correlations in Pb-Pb collisions at $\sqrt{s_{\mathrm{NN}}}$ = 2.76 TeV from ALICE.  
-The femtoscopic correlations result from strong final-state interactions, and are fit with a parametrization based on a model by Lednicky and Lyuboshitz.  
-This allows us to both characterize the emission source and measure the scattering parameters for the particle pairs.  
+The femtoscopic correlations result from strong final-state interactions, and are fit with a parametrization allowing us to both characterize the emission source and measure the scattering parameters for the particle pairs.  
 We observe a large difference in the \LamKchP and \LamKchM correlations in pairs with low relative momenta.  
 This might suggest an effect arising from different quark-antiquark interactions between the pairs ($\mathrm{s}\bar{\mathrm{s}}$ in \LamKchP and $\mathrm{u}\bar{\mathrm{u}}$ in \LamKchM), or from different net strangeness for each system.
 \end{abstract}
@@ -96,10 +95,16 @@ This might suggest an effect arising from different quark-antiquark interactions
 
 Femtoscopy is an experimental method used to study the space-time characteristic of the particle emitting sources in relativistic particle collisions \cite{Lisa:2005dd}.  With this method, two(or many)-particle relative-momentum correlation functions are used to connect the final-state momentum distributions to the space-time distributions of particle emission at freeze-out.  The correlation functions are sensitive to quantum statistics, as well as strong and Coulomb final-state interactions (FSI).  In addition to characterizing the source region, femtoscopy offers a unique opportunity to measure nuclear scattering parameters, many of which are difficult, if not impossible, to measure otherwise.  In many pair systems, the contributions to the correlation function from quantum statistics and/or the Coulomb interaction overwhelm that of the strong interaction, making it difficult to extract scattering information.  In this article, we study npn-identical particle pairs, with at least one electrically neutral particle in the pair.  Therefore, quantum statistics and the Coulomb interaction do not contribute, giving us a clear signal from the strong interaction.
 
-Femtoscopy analyses of pion, kaons, and protons have revealed a trend of decreasing source radii with increasing transverse mass, $m_{\mathrm{T}}^{2} = (\frac{m_{\mathrm{inv}}}{2})^{2} + k_{\mathrm{T}}^{2}$, where $k_{\mathrm{T}} = \frac{1}{2}|\mathbf{p}_{\mathrm{T},1} + \mathbf{p}_{\mathrm{T},2}|$.  This is interpreted as a signature of hydrodynamic flow, and therefore deconfined quark matter, in the heavy-ion collisions.
+Femtoscopy analyses of pion, kaons, and protons have revealed a trend of decreasing source radii with increasing transverse mass \cite{Adam:2015vja}, $m_{\mathrm{T}}^{2} = (\frac{m_{\mathrm{inv}}}{2})^{2} + k_{\mathrm{T}}^{2}$, where $k_{\mathrm{T}} = \frac{1}{2}|\mathbf{p}_{\mathrm{T},1} + \mathbf{p}_{\mathrm{T},2}|$.  This is interpreted as a signature of hydrodynamic flow, and therefore deconfined quark matter, in the heavy-ion collisions \cite{Akkelin:1995gh}. A common \mt-scaling for all pairs has been proposed.
 
-We observe mT-scaling.  However, remember plot is for identical particle femtoscopy.  When dealing with \LamK, don't necessarily expect exact same trend.  mT-scaling has to do with hydro, and single particle distributions.  With femtoscopy, we are dealing with pairs of particles.  If we look at \LamK as a function of mT, we certainly would expect a decreasing behavior with increasing mT, but the exact shape may not be same of pipi, kk, pp, etc.
-
+We observe good agreement in \mt-scaling with our \LamKs analysis, but our \LamKpm analysis yields radii higher than one would naively expect with the simple hydrodynamic picture.  
+However, it is important to remember that the prediction of shrinking radii is really suited for single particle distributions, not pair distributions.  
+The previous studies dealt with identical particles, so one would expect the pair source distributions to shrink in a similar fashion as the single particle source.  
+When dealing with non-identical particles, such as with \LamK analyses, we should not necessarily expect the exact same trend. 
+The pair source distribution is dependent upon each of the single particle source distributions.
+In the case of non-identical particles, the two particles typically will have different single particle distributions, and we should not expect them to follow the nice \mt-scaling observed for identical particle pairs.
+To be certain, we do expect our systems to follow \mt-scaling qualitatively, but not necessarily quantitatively.
+For example, if we look at \LamK radii as a function of \mt, we certainly would expect to see a decreasing behavior with increasing \mt, but the exact shape may not be that same as for $\pi^{\pm}\pi^{\pm}$, $\mathrm{K}^{\pm}\mathrm{K}^{\pm}$, pp, and $\bar{\mathrm{p}}\bar{\mathrm{p}}$.
 
 Motivation for comparing studies with different particle species, and for \LamK in particular.
 
@@ -922,7 +927,7 @@ Each analysis has a unique normalization parameter.
 
 \begin{figure}[h]
   \centering
-  \includegraphics[width=0.5\textwidth]{/home/jesse/Analysis/FemtoAnalysis/AnalysisNotes/7_ResultsAndDiscussion/Figures/mTscaling_MinvCalc_OutlinedPoints_OthersTransparent_3Res.pdf}
+  \includegraphics[width=0.75\textwidth]{/home/jesse/Analysis/FemtoAnalysis/AnalysisNotes/7_ResultsAndDiscussion/Figures/mTscaling_MinvCalc_OutlinedPoints_OthersTransparent_3Res.pdf}
   \caption[\mt Scaling of Radii: 3 Residuals in Fit]{3 residual correlations in \LamK fits.  Extracted fit $R_{\mathrm{inv}}$ parameters as a function of pair transverse mass (\mt) for various pair systems over several centralities. The ALICE published data \cite{Adam:2015vja} is shown with transparent, open symbols.  The new \LamK results are shown with opaque, filled symbols.  In the left, the \LamKchP (with it's conjugate pair) results are shown separately from the \LamKchM (with it's conjugate pair) results.  In the right, all \LamKpm results are averaged.}
   \label{fig:mTScalingOfRadii_3Res}
 \end{figure}

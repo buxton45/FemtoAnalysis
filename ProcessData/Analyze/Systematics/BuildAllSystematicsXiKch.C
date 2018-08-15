@@ -13,12 +13,16 @@ int main(int argc, char **argv)
   //This allows the user a chance to look at and manipulate a TBrowser before
   //the program ends and closes everything
 //-----------------------------------------------------------------------------
+
+  TString tParentResultsDate = "20161027";  //Parent analysis these systematics are to accompany
+
+
   TString tGeneralAnTypeName = "cXicKch";
   bool bWriteToFile = true;
   SystematicAnalysis::DiffHistFitType tFitType = SystematicAnalysis::kExpDecay;
   bool tFixOffsetParam = false;
 
-  SystematicsFileInfo tFileInfo = GetFileInfo_XiKch(12);
+  SystematicsFileInfo tFileInfo = GetFileInfo_XiKch(12, tParentResultsDate);
     TString tResultsDate = tFileInfo.resultsDate;
     TString tDirNameModifierBase1 = tFileInfo.dirNameModifierBase1;
     vector<double> tModifierValues1 = tFileInfo.modifierValues1;
@@ -30,7 +34,8 @@ int main(int argc, char **argv)
   if(!tAllCent) tMaxCentType = k1030;
 
 
-  TString tDirectoryBase = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Systematics/Results_%s_Systematics%s",tGeneralAnTypeName.Data(),tDirNameModifierBase1.Data());
+  TString tDirectoryBase = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Systematics_XiK/Results_%s_Systematics%s",tGeneralAnTypeName.Data(),tDirNameModifierBase1.Data());
+//  TString tDirectoryBase = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Systematics_XiK_%s/Results_%s_Systematics%s", tParentResultsDate.Data(), tGeneralAnTypeName.Data(), tDirNameModifierBase1.Data());
   if(!tDirNameModifierBase2.IsNull())
   {
     tDirectoryBase.Remove(TString::kTrailing,'_');
