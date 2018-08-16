@@ -245,6 +245,166 @@ void DualieFitSystematicAnalysis::AppendFitInfo(TString &aSaveName)
   aSaveName += tModifier;
 }
 
+//________________________________________________________________________________________________________________
+void DualieFitSystematicAnalysis::SetRadiusStartValues(DualieFitGenerator* aFitGen)
+{
+  TString tFitInfoTString = "";
+  AppendFitInfo(tFitInfoTString);
+
+  TString tParentResultsDate = "";
+  if     (fSaveDirectory.Contains("20161027")) tParentResultsDate = TString("20161027");
+  else if(fSaveDirectory.Contains("20180505")) tParentResultsDate = TString("20180505");
+  else assert(0);
+
+  TString tMasterFileLocation = "";
+  assert(fAnalysisType==kLamKchP || fAnalysisType==kALamKchM || fAnalysisType==kLamKchM || fAnalysisType==kALamKchP);
+  tMasterFileLocation = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_%s/MasterFitResults_%s.txt", tParentResultsDate.Data(), tParentResultsDate.Data());
+
+  if(fDualieShareRadii)
+  {
+    td1dVec tRStartValues(3);  //Currently only set up for typical case of 0-10, 10-30, 30-50 together
+    tRStartValues[0] = FitValuesWriter::GetFitParameter(tMasterFileLocation, tFitInfoTString, kLamKchP, k0010, kRadius)->GetFitValue();
+    tRStartValues[1] = FitValuesWriter::GetFitParameter(tMasterFileLocation, tFitInfoTString, kLamKchP, k1030, kRadius)->GetFitValue();
+    tRStartValues[2] = FitValuesWriter::GetFitParameter(tMasterFileLocation, tFitInfoTString, kLamKchP, k3050, kRadius)->GetFitValue();
+
+    aFitGen->SetRadiusStartValues(tRStartValues);
+  }
+  else
+  {
+    td1dVec tRStartValues_LamKchP(3);  //Currently only set up for typical case of 0-10, 10-30, 30-50 together
+    tRStartValues_LamKchP[0] = FitValuesWriter::GetFitParameter(tMasterFileLocation, tFitInfoTString, kLamKchP, k0010, kRadius)->GetFitValue();
+    tRStartValues_LamKchP[1] = FitValuesWriter::GetFitParameter(tMasterFileLocation, tFitInfoTString, kLamKchP, k1030, kRadius)->GetFitValue();
+    tRStartValues_LamKchP[2] = FitValuesWriter::GetFitParameter(tMasterFileLocation, tFitInfoTString, kLamKchP, k3050, kRadius)->GetFitValue();
+    aFitGen->GetFitGen1()->SetRadiusStartValues(tRStartValues_LamKchP);
+
+    td1dVec tRStartValues_LamKchM(3);  //Currently only set up for typical case of 0-10, 10-30, 30-50 together
+    tRStartValues_LamKchM[0] = FitValuesWriter::GetFitParameter(tMasterFileLocation, tFitInfoTString, kLamKchM, k0010, kRadius)->GetFitValue();
+    tRStartValues_LamKchM[1] = FitValuesWriter::GetFitParameter(tMasterFileLocation, tFitInfoTString, kLamKchM, k1030, kRadius)->GetFitValue();
+    tRStartValues_LamKchM[2] = FitValuesWriter::GetFitParameter(tMasterFileLocation, tFitInfoTString, kLamKchM, k3050, kRadius)->GetFitValue();
+    aFitGen->GetFitGen1()->SetRadiusStartValues(tRStartValues_LamKchM);
+  }
+}
+
+
+
+//________________________________________________________________________________________________________________
+void DualieFitSystematicAnalysis::SetLambdaStartValues(DualieFitGenerator* aFitGen)
+{
+  assert(!(fShareLambdaParams==false && fDualieShareLambda==true));  //See DualieGenerateFits.C for explanation why this setting does not make much sense
+
+  int tNLamParams = 0;
+  if(fAllShareSingleLambdaParam) tNLamParams = 1;
+  else if(fShareLambdaParams==true && fDualieShareLambda==true) tNLamParams = 3;
+  else if(fShareLambdaParams==true && fDualieShareLambda==false) tNLamParams = 6;
+  else if(fShareLambdaParams==false && fDualieShareLambda==false) tNLamParams = 12;
+  else assert(0);
+
+
+  TString tFitInfoTString = "";
+  AppendFitInfo(tFitInfoTString);
+
+  TString tParentResultsDate = "";
+  if     (fSaveDirectory.Contains("20161027")) tParentResultsDate = TString("20161027");
+  else if(fSaveDirectory.Contains("20180505")) tParentResultsDate = TString("20180505");
+  else assert(0);
+
+  TString tMasterFileLocation = "";
+  assert(fAnalysisType==kLamKchP || fAnalysisType==kALamKchM || fAnalysisType==kLamKchM || fAnalysisType==kALamKchP);
+  tMasterFileLocation = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_%s/MasterFitResults_%s.txt", tParentResultsDate.Data(), tParentResultsDate.Data());
+
+  if     (tNLamParams==1) 
+  {
+    aFitGen->GetFitGen1()->SetLambdaParamStartValue(FitValuesWriter::GetFitParameter(tMasterFileLocation, tFitInfoTString, kLamKchP, k0010, kLambda)->GetFitValue(), 
+                                                    false, k0010, false);
+  }
+  else if(tNLamParams==3)
+  {
+    aFitGen->GetFitGen1()->SetLambdaParamStartValue(FitValuesWriter::GetFitParameter(tMasterFileLocation, tFitInfoTString, kLamKchP, k0010, kLambda)->GetFitValue(),
+                                                    false, k0010, false);
+    aFitGen->GetFitGen1()->SetLambdaParamStartValue(FitValuesWriter::GetFitParameter(tMasterFileLocation, tFitInfoTString, kLamKchP, k1030, kLambda)->GetFitValue(),
+                                                    false, k1030, false);
+    aFitGen->GetFitGen1()->SetLambdaParamStartValue(FitValuesWriter::GetFitParameter(tMasterFileLocation, tFitInfoTString, kLamKchP, k3050, kLambda)->GetFitValue(),
+                                                    false, k3050, false);
+  }
+  else if(tNLamParams==6)
+  {
+    aFitGen->GetFitGen1()->SetLambdaParamStartValue(FitValuesWriter::GetFitParameter(tMasterFileLocation, tFitInfoTString, kLamKchP, k0010, kLambda)->GetFitValue(),
+                                                    false, k0010, false);
+    aFitGen->GetFitGen1()->SetLambdaParamStartValue(FitValuesWriter::GetFitParameter(tMasterFileLocation, tFitInfoTString, kLamKchP, k1030, kLambda)->GetFitValue(),
+                                                    false, k1030, false);
+    aFitGen->GetFitGen1()->SetLambdaParamStartValue(FitValuesWriter::GetFitParameter(tMasterFileLocation, tFitInfoTString, kLamKchP, k3050, kLambda)->GetFitValue(),
+                                                    false, k3050, false);
+    //----------------------------
+    aFitGen->GetFitGen2()->SetLambdaParamStartValue(FitValuesWriter::GetFitParameter(tMasterFileLocation, tFitInfoTString, kLamKchM, k0010, kLambda)->GetFitValue(),
+                                                    false, k0010, false);
+    aFitGen->GetFitGen2()->SetLambdaParamStartValue(FitValuesWriter::GetFitParameter(tMasterFileLocation, tFitInfoTString, kLamKchM, k1030, kLambda)->GetFitValue(),
+                                                    false, k1030, false);
+    aFitGen->GetFitGen2()->SetLambdaParamStartValue(FitValuesWriter::GetFitParameter(tMasterFileLocation, tFitInfoTString, kLamKchM, k3050, kLambda)->GetFitValue(),
+                                                    false, k3050, false);
+  }
+  else if(tNLamParams==12)
+  {
+    td1dVec tLamStartValues_LamKchP(6);
+
+    tLamStartValues_LamKchP[0] = FitValuesWriter::GetFitParameter(tMasterFileLocation, tFitInfoTString, kLamKchP, k0010, kLambda)->GetFitValue();
+    tLamStartValues_LamKchP[1] = FitValuesWriter::GetFitParameter(tMasterFileLocation, tFitInfoTString, kALamKchM, k0010, kLambda)->GetFitValue();
+
+    tLamStartValues_LamKchP[2] = FitValuesWriter::GetFitParameter(tMasterFileLocation, tFitInfoTString, kLamKchP, k1030, kLambda)->GetFitValue();
+    tLamStartValues_LamKchP[3] = FitValuesWriter::GetFitParameter(tMasterFileLocation, tFitInfoTString, kALamKchM, k1030, kLambda)->GetFitValue();
+
+    tLamStartValues_LamKchP[4] = FitValuesWriter::GetFitParameter(tMasterFileLocation, tFitInfoTString, kLamKchP, k3050, kLambda)->GetFitValue();
+    tLamStartValues_LamKchP[5] = FitValuesWriter::GetFitParameter(tMasterFileLocation, tFitInfoTString, kALamKchM, k3050, kLambda)->GetFitValue();
+
+    aFitGen->GetFitGen1()->SetAllLambdaParamStartValues(tLamStartValues_LamKchP, false);
+    //----------------------------
+    td1dVec tLamStartValues_LamKchM(6);
+
+    tLamStartValues_LamKchM[0] = FitValuesWriter::GetFitParameter(tMasterFileLocation, tFitInfoTString, kLamKchP, k0010, kLambda)->GetFitValue();
+    tLamStartValues_LamKchM[1] = FitValuesWriter::GetFitParameter(tMasterFileLocation, tFitInfoTString, kALamKchP, k0010, kLambda)->GetFitValue();
+
+    tLamStartValues_LamKchM[2] = FitValuesWriter::GetFitParameter(tMasterFileLocation, tFitInfoTString, kLamKchM, k1030, kLambda)->GetFitValue();
+    tLamStartValues_LamKchM[3] = FitValuesWriter::GetFitParameter(tMasterFileLocation, tFitInfoTString, kALamKchP, k1030, kLambda)->GetFitValue();
+
+    tLamStartValues_LamKchM[4] = FitValuesWriter::GetFitParameter(tMasterFileLocation, tFitInfoTString, kLamKchM, k3050, kLambda)->GetFitValue();
+    tLamStartValues_LamKchM[5] = FitValuesWriter::GetFitParameter(tMasterFileLocation, tFitInfoTString, kALamKchP, k3050, kLambda)->GetFitValue();
+
+    aFitGen->GetFitGen2()->SetAllLambdaParamStartValues(tLamStartValues_LamKchM, false);
+
+  }
+  else assert(0);
+
+//  if((fAnalysisType==kLamK0 || fAnalysisType==kALamK0) && fIncludeResidualsType == kIncludeNoResiduals) aFitGen->SetAllLambdaParamLimits(0.4, 0.6);
+//  if((fAnalysisType==kLamK0 || fAnalysisType==kALamK0) && fIncludeResidualsType != kIncludeNoResiduals) aFitGen->SetAllLambdaParamLimits(0.6, 1.5);
+}
+
+//________________________________________________________________________________________________________________
+void DualieFitSystematicAnalysis::SetScattParamStartValues(DualieFitGenerator* aFitGen)
+{
+  TString tFitInfoTString = "";
+  AppendFitInfo(tFitInfoTString);
+
+  TString tParentResultsDate = "";
+  if     (fSaveDirectory.Contains("20161027")) tParentResultsDate = TString("20161027");
+  else if(fSaveDirectory.Contains("20180505")) tParentResultsDate = TString("20180505");
+  else assert(0);
+
+  TString tMasterFileLocation = "";
+  assert(fAnalysisType==kLamKchP || fAnalysisType==kALamKchM || fAnalysisType==kLamKchM || fAnalysisType==kALamKchP);
+  tMasterFileLocation = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_%s/MasterFitResults_%s.txt", tParentResultsDate.Data(), tParentResultsDate.Data());
+
+  aFitGen->GetFitGen1()->SetScattParamStartValues(FitValuesWriter::GetFitParameter(tMasterFileLocation, tFitInfoTString, kLamKchP, k0010, kRef0)->GetFitValue(),
+                                               FitValuesWriter::GetFitParameter(tMasterFileLocation, tFitInfoTString, kLamKchP, k0010, kImf0)->GetFitValue(),
+                                               FitValuesWriter::GetFitParameter(tMasterFileLocation, tFitInfoTString, kLamKchP, k0010, kd0)->GetFitValue(), 
+                                               false);
+  if(fFixD0) aFitGen->GetFitGen1()->SetScattParamStartValue(0., kd0, true);
+
+  aFitGen->GetFitGen2()->SetScattParamStartValues(FitValuesWriter::GetFitParameter(tMasterFileLocation, tFitInfoTString, kLamKchM, k0010, kRef0)->GetFitValue(),
+                                               FitValuesWriter::GetFitParameter(tMasterFileLocation, tFitInfoTString, kLamKchM, k0010, kImf0)->GetFitValue(),
+                                               FitValuesWriter::GetFitParameter(tMasterFileLocation, tFitInfoTString, kLamKchM, k0010, kd0)->GetFitValue(), 
+                                               false);
+  if(fFixD0) aFitGen->GetFitGen2()->SetScattParamStartValue(0., kd0, true);
+}
+
 
 //________________________________________________________________________________________________________________
 DualieFitGenerator* DualieFitSystematicAnalysis::BuildDualieFitGenerator(AnalysisRunType aRunType, TString aDirNameModifier, NonFlatBgdFitType aNonFlatBgdFitType)
@@ -268,31 +428,10 @@ DualieFitGenerator* DualieFitSystematicAnalysis::BuildDualieFitGenerator(Analysi
 
   //----- Set appropriate parameter start values, and limits, to keep fitter from accidentally doing something crazy
   assert(fCentralityType==kMB);  //This will fail otherwise
-/*
-  tDualieFitGenerator->SetRadiusStartValues({cFitParamValues[fIncludeResidualsType][fAnalysisType][k0010][kRadius][kValue], 
-                                             cFitParamValues[fIncludeResidualsType][fAnalysisType][k1030][kRadius][kValue], 
-                                             cFitParamValues[fIncludeResidualsType][fAnalysisType][k3050][kRadius][kValue]});
-*/
-/*
-  if(fAllShareSingleLambdaParam) tDualieFitGenerator->SetLambdaParamStartValue(cFitParamValues[fIncludeResidualsType][fAnalysisType][k0010][kLambda][kValue]);
-  else
-  {
-    tDualieFitGenerator->SetAllLambdaParamStartValues({cFitParamValues[fIncludeResidualsType][fAnalysisType][k0010][kLambda][kValue], 
-                                                       cFitParamValues[fIncludeResidualsType][fConjAnalysisType][k0010][kLambda][kValue], 
-                                                       cFitParamValues[fIncludeResidualsType][fAnalysisType][k1030][kLambda][kValue], 
-                                                       cFitParamValues[fIncludeResidualsType][fConjAnalysisType][k1030][kLambda][kValue], 
-                                                       cFitParamValues[fIncludeResidualsType][fAnalysisType][k3050][kLambda][kValue], 
-                                                       cFitParamValues[fIncludeResidualsType][fConjAnalysisType][k3050][kLambda][kValue]});
-  }
-*/
-  if((fAnalysisType==kLamK0 || fAnalysisType==kALamK0) && fIncludeResidualsType == kIncludeNoResiduals) tDualieFitGenerator->SetAllLambdaParamLimits(0.4, 0.6);
-  if((fAnalysisType==kLamK0 || fAnalysisType==kALamK0) && fIncludeResidualsType != kIncludeNoResiduals) tDualieFitGenerator->SetAllLambdaParamLimits(0.6, 1.5);
-/*
-  tDualieFitGenerator->SetScattParamStartValues(cFitParamValues[fIncludeResidualsType][fAnalysisType][k0010][kRef0][kValue], 
-                                                cFitParamValues[fIncludeResidualsType][fAnalysisType][k0010][kImf0][kValue],
-                                                cFitParamValues[fIncludeResidualsType][fAnalysisType][k0010][kd0][kValue]);
-*/
-  if(fFixD0) tDualieFitGenerator->SetScattParamStartValue(0., kd0, true);
+
+  SetRadiusStartValues(tDualieFitGenerator);
+  SetLambdaStartValues(tDualieFitGenerator);  
+  SetScattParamStartValues(tDualieFitGenerator);
   //----------------------------------------------------------------------------------------------------------------
 
   return tDualieFitGenerator;

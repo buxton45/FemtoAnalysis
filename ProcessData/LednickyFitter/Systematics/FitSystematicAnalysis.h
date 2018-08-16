@@ -11,6 +11,7 @@
 #include "FitGeneratorAndDraw.h"
 #include "FitSharedAnalyses.h"
 #include "LednickyFitter.h"
+#include "FitValuesWriter.h"
 
 #include "CanvasPartition.h"
 class CanvasPartition;
@@ -42,6 +43,9 @@ public:
   void PrintText2dVec(vector<vector<TString> > &a2dVec, ostream &aOut=std::cout);
 
   void AppendFitInfo(TString &aSaveName);
+  void SetRadiusStartValues(FitGeneratorAndDraw* aFitGen);
+  void SetLambdaStartValues(FitGeneratorAndDraw* aFitGen);
+  void SetScattParamStartValues(FitGeneratorAndDraw* aFitGen);
   FitGeneratorAndDraw* BuildFitGenerator(AnalysisRunType aRunType, TString aDirNameModifier, NonFlatBgdFitType aNonFlatBgdFitType);
 
   void RunAllFits(bool aSaveImages=false, bool aWriteToTxtFile=false);

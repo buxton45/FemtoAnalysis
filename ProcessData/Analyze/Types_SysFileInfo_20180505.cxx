@@ -5,7 +5,7 @@
 
 //---------------------------------------------------------------------------------------------------------------------------------------
 
-const SystematicsFileInfo gInfoLamKch1_20180505 = SystematicsFileInfo("201808xx", 
+const SystematicsFileInfo gInfoLamKch1_20180505 = SystematicsFileInfo("20180813", 
                                                                       "_ALam_minNegDaughterToPrimVertex_", {0.05,0.10,0.20}, 
                                                                       "", {}, 
                                                                       true);
@@ -40,7 +40,7 @@ const SystematicsFileInfo gInfoLamKch7_20180505 = SystematicsFileInfo("20180813"
                                                                       "", {}, 
                                                                       true);
 
-const SystematicsFileInfo gInfoLamKch8_20180505 = SystematicsFileInfo("201808xx", 
+const SystematicsFileInfo gInfoLamKch8_20180505 = SystematicsFileInfo("20180814", 
                                                                       "_CLAM_minCosPointingAngle_", {0.9992, 0.9993, 0.9994}, 
                                                                       "", {}, 
                                                                       true);
@@ -92,12 +92,12 @@ const SystematicsFileInfo gInfoLamK05_20180505 = SystematicsFileInfo("20180810",
                                                                      "", {}, 
                                                                      true);
 
-const SystematicsFileInfo gInfoLamK06_20180505 = SystematicsFileInfo("201808xx", 
+const SystematicsFileInfo gInfoLamK06_20180505 = SystematicsFileInfo("20180813", 
                                                                      "_K0s_maxDcaV0_", {0.20,0.30,0.40}, 
                                                                      "", {}, 
                                                                      true);
 
-const SystematicsFileInfo gInfoLamK07_20180505 = SystematicsFileInfo("201808xx", 
+const SystematicsFileInfo gInfoLamK07_20180505 = SystematicsFileInfo("20180813", 
                                                                      "_K0s_maxDcaV0Daughters_", {0.20,0.30,0.40}, 
                                                                      "", {}, 
                                                                      true);
@@ -112,7 +112,7 @@ const SystematicsFileInfo gInfoLamK09_20180505 = SystematicsFileInfo("201808xx",
                                                                      "_K0s_maxInvMassReject_", {1.118683, 1.120683, 1.124683, 1.130683}, 
                                                                      false);
 
-const SystematicsFileInfo gInfoLamK010_20180505 = SystematicsFileInfo("201808xx", 
+const SystematicsFileInfo gInfoLamK010_20180505 = SystematicsFileInfo("20180814", 
                                                                       "_K0s_minNegDaughterToPrimVertex_", {0.2, 0.3, 0.4}, 
                                                                       "", {}, 
                                                                       true);

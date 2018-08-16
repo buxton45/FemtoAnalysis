@@ -236,6 +236,134 @@ void FitSystematicAnalysis::AppendFitInfo(TString &aSaveName)
   aSaveName += tModifier;
 }
 
+//________________________________________________________________________________________________________________
+void FitSystematicAnalysis::SetRadiusStartValues(FitGeneratorAndDraw* aFitGen)
+{
+  TString tFitInfoTString = "";
+  AppendFitInfo(tFitInfoTString);
+
+  TString tParentResultsDate = "";
+  if     (fSaveDirectory.Contains("20161027")) tParentResultsDate = TString("20161027");
+  else if(fSaveDirectory.Contains("20180505")) tParentResultsDate = TString("20180505");
+  else assert(0);
+
+  TString tMasterFileLocation = "";
+  if(fAnalysisType==kLamK0 || fAnalysisType==kALamK0)
+  {
+    tMasterFileLocation = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamK0_%s/MasterFitResults_%s.txt", tParentResultsDate.Data(), tParentResultsDate.Data());
+  }
+  else if(fAnalysisType==kLamKchP || fAnalysisType==kALamKchM || fAnalysisType==kLamKchM || fAnalysisType==kALamKchP) 
+  {
+    tMasterFileLocation = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_%s/MasterFitResults_%s.txt", tParentResultsDate.Data(), tParentResultsDate.Data());
+  }
+  else assert(0);  //Not currently set up for XiK analysis
+
+
+  td1dVec tRStartValues(3);  //Currently only set up for typical case of 0-10, 10-30, 30-50 together
+  tRStartValues[0] = FitValuesWriter::GetFitParameter(tMasterFileLocation, tFitInfoTString, fAnalysisType, k0010, kRadius)->GetFitValue();
+  tRStartValues[1] = FitValuesWriter::GetFitParameter(tMasterFileLocation, tFitInfoTString, fAnalysisType, k1030, kRadius)->GetFitValue();
+  tRStartValues[2] = FitValuesWriter::GetFitParameter(tMasterFileLocation, tFitInfoTString, fAnalysisType, k3050, kRadius)->GetFitValue();
+
+  aFitGen->SetRadiusStartValues(tRStartValues);
+}
+
+
+
+//________________________________________________________________________________________________________________
+void FitSystematicAnalysis::SetLambdaStartValues(FitGeneratorAndDraw* aFitGen)
+{
+  int tNLamParams = 0;
+  if(fAllShareSingleLambdaParam) tNLamParams = 1;
+  else if(fShareLambdaParams) tNLamParams = 3;
+  else tNLamParams = 6;
+
+
+  TString tFitInfoTString = "";
+  AppendFitInfo(tFitInfoTString);
+
+  TString tParentResultsDate = "";
+  if     (fSaveDirectory.Contains("20161027")) tParentResultsDate = TString("20161027");
+  else if(fSaveDirectory.Contains("20180505")) tParentResultsDate = TString("20180505");
+  else assert(0);
+
+  TString tMasterFileLocation = "";
+  if(fAnalysisType==kLamK0 || fAnalysisType==kALamK0)
+  {
+    tMasterFileLocation = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamK0_%s/MasterFitResults_%s.txt", tParentResultsDate.Data(), tParentResultsDate.Data());
+  }
+  else if(fAnalysisType==kLamKchP || fAnalysisType==kALamKchM || fAnalysisType==kLamKchM || fAnalysisType==kALamKchP) 
+  {
+    tMasterFileLocation = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_%s/MasterFitResults_%s.txt", tParentResultsDate.Data(), tParentResultsDate.Data());
+  }
+  else assert(0);  //Not currently set up for XiK analysis
+
+
+
+  if     (tNLamParams==1) 
+  {
+    aFitGen->SetLambdaParamStartValue(FitValuesWriter::GetFitParameter(tMasterFileLocation, tFitInfoTString, fAnalysisType, k0010, kLambda)->GetFitValue(), 
+                                      false, k0010, false);
+  }
+  else if(tNLamParams==3)
+  {
+    aFitGen->SetLambdaParamStartValue(FitValuesWriter::GetFitParameter(tMasterFileLocation, tFitInfoTString, fAnalysisType, k0010, kLambda)->GetFitValue(),
+                                      false, k0010, false);
+    aFitGen->SetLambdaParamStartValue(FitValuesWriter::GetFitParameter(tMasterFileLocation, tFitInfoTString, fAnalysisType, k1030, kLambda)->GetFitValue(),
+                                      false, k1030, false);
+    aFitGen->SetLambdaParamStartValue(FitValuesWriter::GetFitParameter(tMasterFileLocation, tFitInfoTString, fAnalysisType, k3050, kLambda)->GetFitValue(),
+                                      false, k3050, false);
+  }
+  else if(tNLamParams==6)
+  {
+    td1dVec tLamStartValues(tNLamParams);
+
+    tLamStartValues[0] = FitValuesWriter::GetFitParameter(tMasterFileLocation, tFitInfoTString, fAnalysisType, k0010, kLambda)->GetFitValue();
+    tLamStartValues[1] = FitValuesWriter::GetFitParameter(tMasterFileLocation, tFitInfoTString, fConjAnalysisType, k0010, kLambda)->GetFitValue();
+
+    tLamStartValues[2] = FitValuesWriter::GetFitParameter(tMasterFileLocation, tFitInfoTString, fAnalysisType, k1030, kLambda)->GetFitValue();
+    tLamStartValues[3] = FitValuesWriter::GetFitParameter(tMasterFileLocation, tFitInfoTString, fConjAnalysisType, k1030, kLambda)->GetFitValue();
+
+    tLamStartValues[4] = FitValuesWriter::GetFitParameter(tMasterFileLocation, tFitInfoTString, fAnalysisType, k3050, kLambda)->GetFitValue();
+    tLamStartValues[5] = FitValuesWriter::GetFitParameter(tMasterFileLocation, tFitInfoTString, fConjAnalysisType, k3050, kLambda)->GetFitValue();
+
+    aFitGen->SetAllLambdaParamStartValues(tLamStartValues, false);
+  }
+  else assert(0);
+
+  if((fAnalysisType==kLamK0 || fAnalysisType==kALamK0) && fIncludeResidualsType == kIncludeNoResiduals) aFitGen->SetAllLambdaParamLimits(0.4, 0.6);
+  if((fAnalysisType==kLamK0 || fAnalysisType==kALamK0) && fIncludeResidualsType != kIncludeNoResiduals) aFitGen->SetAllLambdaParamLimits(0.6, 1.5);
+}
+
+//________________________________________________________________________________________________________________
+void FitSystematicAnalysis::SetScattParamStartValues(FitGeneratorAndDraw* aFitGen)
+{
+  TString tFitInfoTString = "";
+  AppendFitInfo(tFitInfoTString);
+
+  TString tParentResultsDate = "";
+  if     (fSaveDirectory.Contains("20161027")) tParentResultsDate = TString("20161027");
+  else if(fSaveDirectory.Contains("20180505")) tParentResultsDate = TString("20180505");
+  else assert(0);
+
+  TString tMasterFileLocation = "";
+  if(fAnalysisType==kLamK0 || fAnalysisType==kALamK0)
+  {
+    tMasterFileLocation = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamK0_%s/MasterFitResults_%s.txt", tParentResultsDate.Data(), tParentResultsDate.Data());
+  }
+  else if(fAnalysisType==kLamKchP || fAnalysisType==kALamKchM || fAnalysisType==kLamKchM || fAnalysisType==kALamKchP) 
+  {
+    tMasterFileLocation = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_%s/MasterFitResults_%s.txt", tParentResultsDate.Data(), tParentResultsDate.Data());
+  }
+  else assert(0);  //Not currently set up for XiK analysis
+
+
+  aFitGen->SetScattParamStartValues(FitValuesWriter::GetFitParameter(tMasterFileLocation, tFitInfoTString, fAnalysisType, k0010, kRef0)->GetFitValue(),
+                                    FitValuesWriter::GetFitParameter(tMasterFileLocation, tFitInfoTString, fAnalysisType, k0010, kImf0)->GetFitValue(),
+                                    FitValuesWriter::GetFitParameter(tMasterFileLocation, tFitInfoTString, fAnalysisType, k0010, kd0)->GetFitValue(), 
+                                    false);
+  if(fFixD0) aFitGen->SetScattParamStartValue(0., kd0, true);
+}
+
 
 //________________________________________________________________________________________________________________
 FitGeneratorAndDraw* FitSystematicAnalysis::BuildFitGenerator(AnalysisRunType aRunType, TString aDirNameModifier, NonFlatBgdFitType aNonFlatBgdFitType)
@@ -260,29 +388,9 @@ FitGeneratorAndDraw* FitSystematicAnalysis::BuildFitGenerator(AnalysisRunType aR
   //----- Set appropriate parameter start values, and limits, to keep fitter from accidentally doing something crazy
   assert(fCentralityType==kMB);  //This will fail otherwise
 
-  tFitGenerator->SetRadiusStartValues({cFitParamValues[fIncludeResidualsType][fAnalysisType][k0010][kRadius][kValue], 
-                                       cFitParamValues[fIncludeResidualsType][fAnalysisType][k1030][kRadius][kValue], 
-                                       cFitParamValues[fIncludeResidualsType][fAnalysisType][k3050][kRadius][kValue]});
-
-  if(fAllShareSingleLambdaParam) tFitGenerator->SetLambdaParamStartValue(cFitParamValues[fIncludeResidualsType][fAnalysisType][k0010][kLambda][kValue]);
-  else
-  {
-    tFitGenerator->SetAllLambdaParamStartValues({cFitParamValues[fIncludeResidualsType][fAnalysisType][k0010][kLambda][kValue], 
-                                                 cFitParamValues[fIncludeResidualsType][fConjAnalysisType][k0010][kLambda][kValue], 
-                                                 cFitParamValues[fIncludeResidualsType][fAnalysisType][k1030][kLambda][kValue], 
-                                                 cFitParamValues[fIncludeResidualsType][fConjAnalysisType][k1030][kLambda][kValue], 
-                                                 cFitParamValues[fIncludeResidualsType][fAnalysisType][k3050][kLambda][kValue], 
-                                                 cFitParamValues[fIncludeResidualsType][fConjAnalysisType][k3050][kLambda][kValue]});
-  }
-
-  if((fAnalysisType==kLamK0 || fAnalysisType==kALamK0) && fIncludeResidualsType == kIncludeNoResiduals) tFitGenerator->SetAllLambdaParamLimits(0.4, 0.6);
-  if((fAnalysisType==kLamK0 || fAnalysisType==kALamK0) && fIncludeResidualsType != kIncludeNoResiduals) tFitGenerator->SetAllLambdaParamLimits(0.6, 1.5);
-
-  tFitGenerator->SetScattParamStartValues(cFitParamValues[fIncludeResidualsType][fAnalysisType][k0010][kRef0][kValue], 
-                                          cFitParamValues[fIncludeResidualsType][fAnalysisType][k0010][kImf0][kValue],
-                                          cFitParamValues[fIncludeResidualsType][fAnalysisType][k0010][kd0][kValue]);
-
-  if(fFixD0) tFitGenerator->SetScattParamStartValue(0., kd0, true);
+  SetRadiusStartValues(tFitGenerator);
+  SetLambdaStartValues(tFitGenerator);  
+  SetScattParamStartValues(tFitGenerator);
   //----------------------------------------------------------------------------------------------------------------
 
   return tFitGenerator;

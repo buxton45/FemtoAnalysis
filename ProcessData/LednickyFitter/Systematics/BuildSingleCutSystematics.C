@@ -13,7 +13,7 @@ int main(int argc, char **argv)
 
   bool bPlayCompletionBeep = true;
 //-----------------------------------------------------------------------------
-  TString tParentResultsDate = "20161027";  //Parent analysis these systematics are to accompany
+  TString tParentResultsDate = "20180505";  //Parent analysis these systematics are to accompany
 
   AnalysisType tAnType = kLamK0;
   CentralityType tCentralityType = kMB;
@@ -23,7 +23,7 @@ int main(int argc, char **argv)
 
   bool ApplyMomResCorrection = true;
   bool ApplyNonFlatBackgroundCorrection = true;
-  NonFlatBgdFitType tNonFlatBgdFitType = kLinear;
+  NonFlatBgdFitType tNonFlatBgdFitType = kPolynomial;
 
   IncludeResidualsType tIncludeResidualsType = kInclude3Residuals; 
   ChargedResidualsType tChargedResidualsType = kUseXiDataAndCoulombOnlyInterp;
@@ -36,7 +36,7 @@ int main(int argc, char **argv)
 
   if(tAnType==kLamK0) tAllShareSingleLambdaParam = true;
 
-  SystematicsFileInfo tFileInfo = GetFileInfo_LamK(-13, tParentResultsDate);
+  SystematicsFileInfo tFileInfo = GetFileInfo_LamK(-2, tParentResultsDate);
     TString tResultsDate = tFileInfo.resultsDate;
     TString tDirNameModifierBase1 = tFileInfo.dirNameModifierBase1;
     vector<double> tModifierValues1 = tFileInfo.modifierValues1;
