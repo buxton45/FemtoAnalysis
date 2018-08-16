@@ -35,7 +35,7 @@ int main(int argc, char **argv)
   //--Save options
   bool SaveImages = false;
   TString tSaveFileType = "pdf";
-  bool bWriteToMasterFitValuesFile = true;
+  bool bWriteToMasterFitValuesFile = false;
   bool SaveImagesInRootFile = false;
 
   //--Sharing lambda
