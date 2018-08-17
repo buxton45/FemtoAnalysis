@@ -24,6 +24,14 @@ S.~V. Akkelin and {\relax Yu}.~M. Sinyukov, ``{The HBT interferometry of
   {\bfseries B356} (1995) 525--530}.
 %%CITATION = PHLTA,B356,525;%%.
 
+\bibitem{Kisiel:2014upa}
+A.~Kisiel, M.~Gałażyn, and P.~Bożek, ``{Pion, kaon, and proton femtoscopy in
+  Pb--Pb collisions at $\sqrt{s_{\rm NN}}$=2.76 TeV modeled in (3+1)D
+  hydrodynamics},'' \href{http://dx.doi.org/10.1103/PhysRevC.90.064914}{{\em
+  Phys. Rev.} {\bfseries C90} no.~6, (2014) 064914},
+\href{http://arxiv.org/abs/1409.4571}{{\ttfamily arXiv:1409.4571 [nucl-th]}}.
+%%CITATION = ARXIV:1409.4571;%%.
+
 \bibitem{Lednicky:82}
 R.~Lednicky and V.~L. Lyuboshitz {\em Sov. J. Nucl. Phys.} {\bfseries 35}
   (1982) 770.
@@ -49,12 +57,6 @@ J.~{Alme} {\em et~al.}, ``{The ALICE TPC, a large 3-dimensional tracking device
   \href{http://arxiv.org/abs/1001.1950}{{\ttfamily arXiv:1001.1950
   [physics.ins-det]}}.
 
-\bibitem{Dellacasa:451098}
-{\bfseries ALICE} Collaboration, G.~Dellacasa {\em et~al.}, {\em {ALICE time
-  projection chamber: Technical Design Report}}.
-\newblock Technical Design Report ALICE. CERN, Geneva, 2000.
-\newblock \url{http://cds.cern.ch/record/451098}.
-
 \bibitem{Abelev:2014ffa}
 {\bfseries ALICE} Collaboration, B.~B. Abelev {\em et~al.}, ``{Performance of
   the ALICE Experiment at the CERN LHC},''
@@ -69,12 +71,6 @@ A.~Akindinov {\em et~al.}, ``{Performance of the ALICE Time-Of-Flight detector
 \href{http://dx.doi.org/10.1140/epjp/i2013-13044-x}{{\em Eur. Phys. J. Plus}
   {\bfseries 128} (2013) 44}.
 %%CITATION = EPHJP,128,44;%%.
-
-\bibitem{Cortese:545834}
-{\bfseries ALICE Collaboration} Collaboration, P.~Cortese, {\em {ALICE Time-Of
-  Flight system (TOF): addendum to the Technical Design Report}}.
-\newblock Technical Design Report ALICE. CERN, Geneva, 2002.
-\newblock \url{http://cds.cern.ch/record/545834}.
 
 \bibitem{PhysRevD.44.3501}
 X.-N. Wang and M.~Gyulassy, ``hijing: A monte carlo model for multiple jet

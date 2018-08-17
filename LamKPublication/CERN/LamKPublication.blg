@@ -6,45 +6,45 @@ Database file #1: LamK_bibfile.bib
 Warning--entry type for "Salzwedel:2241303" isn't style-file defined
 --line 101 of file LamK_bibfile.bib
 Warning--empty title in Lednicky:82
-You've used 23 entries,
+You've used 22 entries,
             2328 wiz_defined-function locations,
-            782 strings with 8949 characters,
-and the built_in function-call counts, 7590 in all, are:
-= -- 819
-> -- 210
+            776 strings with 8871 characters,
+and the built_in function-call counts, 7482 in all, are:
+= -- 795
+> -- 209
 < -- 0
-+ -- 79
++ -- 78
 - -- 56
-* -- 678
-:= -- 875
-add.period$ -- 48
-call.type$ -- 23
-change.case$ -- 26
+* -- 691
+:= -- 851
+add.period$ -- 42
+call.type$ -- 22
+change.case$ -- 27
 chr.to.int$ -- 0
-cite$ -- 24
-duplicate$ -- 428
-empty$ -- 733
+cite$ -- 23
+duplicate$ -- 421
+empty$ -- 708
 format.name$ -- 56
-if$ -- 2009
+if$ -- 1975
 int.to.chr$ -- 0
-int.to.str$ -- 23
+int.to.str$ -- 22
 missing$ -- 83
-newline$ -- 107
-num.names$ -- 23
-pop$ -- 115
+newline$ -- 102
+num.names$ -- 22
+pop$ -- 108
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 0
-skip$ -- 319
+skip$ -- 331
 stack$ -- 0
-substring$ -- 350
-swap$ -- 218
+substring$ -- 362
+swap$ -- 230
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
 type$ -- 0
 warning$ -- 1
 while$ -- 51
-width$ -- 25
-write$ -- 210
+width$ -- 24
+write$ -- 191
 (There were 2 warnings)
