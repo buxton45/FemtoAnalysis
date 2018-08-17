@@ -127,7 +127,7 @@ We observe a large difference in the \LamKchPALamKchM and \LamKchMALamKchP corre
 The results suggest an effect arising from different quark-antiquark interactions in the pairs, i.e. $\rm s\bar{s}$ in \LamKchPALamKchM and $\rm u\bar{u}$ in \LamKchMALamKchP.  
 The femtoscopic radii, $\lambda$ parameters, and scattering parameters are extracted from...
 
-The organization of this paper is as follows.  Sec. \ref{sec:DataAnalysis}, Sec. \ref{sec:AnalysisMethods}, Sec. \ref{sec:Results}, Sec. \ref{sec:Summary}.
+The organization of this paper is as follows.  In Sec. \ref{sec:DataAnalysis} we discuss briefly our methods for selecting the data.  In Sec. \ref{sec:AnalysisMethods} we present our analysis technique.  We introduce the two particle correlation function, as well as the theoretical models with which we fit.  This section includes also descriptions of our handling of residual correlations, corrections accounting for finite track momentum resolution, treatment of the non-femtoscopic background, as well as a brief description of our estimation systematic uncertainties.  Our results are presented in Sec. \ref{sec:Results}, and concluding remarks are given in Sec. \ref{sec:Summary}.
 
 \section{Data Analysis}
 \label{sec:DataAnalysis}
@@ -302,7 +302,11 @@ Similarly, for \Ks selection, a candidate is rejected if all of the following cr
  \item $\left|m_{\mathrm{inv}, \ \Lambda(\bar{\Lambda}) \ \mathrm{Hypothesis}} - m_{\mathrm{PDG},\ \Lambda(\bar{\Lambda})}\right|~ < ~\left|m_{\mathrm{inv},~ \mathrm{K}^{0}_{S}~ \mathrm{Hypothesis}} - m_{\mathrm{PDG},~ \mathrm{K}^{0}_{S}}\right|$
 \end{enumerate} 
 
-Finally, invariant mass cut.
+At this stage, we have a collection of V0 candidates satisfying all of the aforementioned cuts.
+However, this collection is still polluted by fake V0s, for which the daughter particles happen to pass all of our cuts, but which do not actually originate from a V0.
+Although the two daughter particles appear to reconstruct a V0 candidate, they are lacking one critical requirement: the system invariant mass does not match that of our desired V0 species (these can be seen outside of the mass peak in Fig. \ref{fig:Purity}).
+Therefore, as our final cut, we require the invariant mass of the V0 candidate to fall within the mass peak of our desired species.
+Note, however, that some fake V0s still make it past this final cut, as their invariant mass happens to fall without our acceptance window.
 
 \begin{table}[htbp]
  \centering 
@@ -340,13 +344,13 @@ Finally, invariant mass cut.
    \multicolumn{3}{l|}{DCA to primary vertex} & $>$ 0.3 cm \\
    \hline
    \multicolumn{4}{l}{TPC and TOF N$\sigma$ Cuts} \\
-   \cline{2-4}
+%   \cline{2-4}
     & \multicolumn{1}{c}{$p <$ 0.5 GeV/\textit{c}} &  & N$\sigma_{\mathrm{TPC}} <$ 3 \\
    \cline{2-4}
-    & \multicolumn{1}{c}{\multirow{3}{*}{$p >$ 0.5 GeV/\textit{c}}} &  \multirow{2}{*}{if TOF \& TPC available} & N$\sigma_{\mathrm{TPC}} <$ 3 \\
+    & \multicolumn{1}{c}{\multirow{3}{*}{$p >$ 0.5 GeV/\textit{c}}} &  \multirow{2}{*}{TOF \& TPC available} & N$\sigma_{\mathrm{TPC}} <$ 3 \\
     & \multicolumn{2}{c|}{} & N$\sigma_{\mathrm{TOF}} <$ 3 \\
    \cline{3-4}
-    & \multicolumn{1}{c}{} & else & N$\sigma_{\mathrm{TOF}} <$ 3 \\
+    & \multicolumn{1}{c}{} & Only TPC available & N$\sigma_{\mathrm{TPC}} <$ 3 \\
    \hline
    
    
@@ -360,10 +364,10 @@ Finally, invariant mass cut.
    \cline{2-4}
     & \multicolumn{1}{c}{$p <$ 0.8 GeV/\textit{c}} & & N$\sigma_{\mathrm{TPC}} <$ 3 \\
    \cline{2-4}
-    & \multicolumn{1}{c}{\multirow{3}{*}{$p >$ 0.8 GeV/\textit{c}}} &  \multirow{2}{*}{if TOF \& TPC available} & N$\sigma_{\mathrm{TPC}} <$ 3 \\
+    & \multicolumn{1}{c}{\multirow{3}{*}{$p >$ 0.8 GeV/\textit{c}}} &  \multirow{2}{*}{TOF \& TPC available} & N$\sigma_{\mathrm{TPC}} <$ 3 \\
     & \multicolumn{2}{c|}{} & N$\sigma_{\mathrm{TOF}} <$ 3 \\
    \cline{3-4}
-    & \multicolumn{1}{c}{} & else & N$\sigma_{\mathrm{TOF}} <$ 3 \\
+    & \multicolumn{1}{c}{} & Only TPC available & N$\sigma_{\mathrm{TPC}} <$ 3 \\
    \hline   
   \end{tabular}
 % \end{minipage}
@@ -405,13 +409,13 @@ Finally, invariant mass cut.
    \multicolumn{3}{l|}{DCA to primary vertex} & $>$ 0.3 cm \\
    \hline
    \multicolumn{4}{l}{TPC and TOF N$\sigma$ Cuts} \\
-   \cline{2-4}
+%   \cline{2-4}
     & \multicolumn{1}{c}{$p <$ 0.5 GeV/\textit{c}} &  & N$\sigma_{\mathrm{TPC}} <$ 3 \\
    \cline{2-4}
-    & \multicolumn{1}{c}{\multirow{3}{*}{$p >$ 0.5 GeV/\textit{c}}} &  \multirow{2}{*}{if TOF \& TPC available} & N$\sigma_{\mathrm{TPC}} <$ 3 \\
+    & \multicolumn{1}{c}{\multirow{3}{*}{$p >$ 0.5 GeV/\textit{c}}} &  \multirow{2}{*}{TOF \& TPC available} & N$\sigma_{\mathrm{TPC}} <$ 3 \\
     & \multicolumn{2}{c|}{} & N$\sigma_{\mathrm{TOF}} <$ 3 \\
    \cline{3-4}
-    & \multicolumn{1}{c}{} & else & N$\sigma_{\mathrm{TOF}} <$ 3 \\
+    & \multicolumn{1}{c}{} & Only TPC available & N$\sigma_{\mathrm{TPC}} <$ 3 \\
    \hline   
   \end{tabular}
 % \end{minipage}
@@ -419,6 +423,8 @@ Finally, invariant mass cut.
  \label{tab:K0sCuts} 
 \end{table}
 
+Occasionally, we encounter a situation where two V0 candidates share a common daughter.
+Not both of these candidates can be real V0s, and including both could introduce an artificial signal into our data.
 To avoid any auto-correlation effects, for each event, we impose a single particle shared daughter cut on each collection of V0 candidates.
 This cut iterates through the V0 collection to ensure that no daughter is claimed by more than one V0 candidate.
 If a shared daughter is found between two V0 candidate, that with a smaller DCA to primary vertex is kept while the other is excluded from the analysis.
@@ -499,8 +505,6 @@ When the average separation correlation function stabilizes to unity, these effe
 
 \subsection{Correlation Function}
 \label{sec:CorrelationFunction}
-General remarks about formation of correlation functions and what information they provide.
-
 Two-particle correlation functions are built as the ratio of the covariant two-particle and single-particle spectra:
 
 \begin{equation}
@@ -516,10 +520,9 @@ After a few approximations and assumptions, the two-particle relative momentum c
 \end{equation}
 
 where $S(\mathbf{r^{*}})$ is the pair source distribution, $\Psi_{\mathbf{k^{*}}}(\mathbf{r^{*}})$ is the two-particle wave-function, and \kstar is the momentum of one particle in the pair rest frame.
+Within the $|\Psi|^{2}$ term is contained the particle interaction information.
 This form emphasizes that $|\Psi|^{2}$ can be considered a kernel with which to transform from a coordinate-space basis to a relative-momentum basis.
 This also reveals limitations; distribution of relative positions of particles with identical velocities and total momentum P as they move in asymptotic state.  Therefore, not size of entire source, but "region of homogeneity" [citation Sinyukov].
-
-Within the $|\Psi|^{2}$ term is contained the particle interaction term, allowing us to extract scattering parameters.
 
 In practice, the correlation function is formed experimentally as:
 
@@ -732,8 +735,8 @@ THERMINATOR 2 simulation has been shown to reproduce the background features in 
 As the background effect can be attributed mainly to elliptic flow, which is a global feature of the system, we suspected THERMINATOR 2 could also, at least qualitatively, describe our backgrounds.  
 After ensuring each simulated event received a random event-plane angle ($\Psi_{\mathrm{EP}}$), we found THERMINATOR 2 did a good job of describing our data qualitatively, and, in many cases, quantitatively.  
 
-\subsection{LednickyFitter}
-\label{LednickyFitter}
+\subsection{Summarized Fit Procedure}
+\label{SummarizedFitProcedure}
 
 
 A simple $\chi^{2}$ test is inappropriate for fitting correlation functions, as the ratio two Poisson distributions does not result in a Poisson distribution.
@@ -789,9 +792,8 @@ To summarize, the complete fit function is constructed as follows:
 \subsection{Systematic uncertainties}
 \label{SysErrs}
 
-In order to understand my systematic uncertainties, the analysis code was run many times using slightly different values for a number of important cuts, and the results were compared.
-
-In order to quantify the systematic errors on the data, all correlation functions built using all varied cut values were bin-by-bin averaged, and the resulting variance of each bin was taken as the systematic error.  
+In order to understand my systematic uncertainties, the analysis code was run many times using slightly different values for a number of important cuts, and the results were compared.  
+To quantify the systematic errors on the data, all correlation functions built using all varied cut values were bin-by-bin averaged, and the resulting variance of each bin was taken as the systematic error.  
 The cuts which were utilized in this study are presented in Sections \ref{SysErrsLamK0:ParticleAndPairCuts} (\LamKs) and \ref{SysErrsLamKch:ParticleAndPairCuts} (\LamKpm).
 
 
