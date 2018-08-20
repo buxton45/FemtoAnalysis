@@ -140,6 +140,8 @@ public:
 
   td1dVec GetKStarBinCenters();
 
+  IncludeResidualsType GetIncludeResidualsType();
+
 protected:
   bool fVerbose;
 
@@ -220,5 +222,7 @@ inline int LednickyFitter::GetNDF() {return fNDF;}
 inline void LednickyFitter::SetUsemTScalingOfResidualRadii(bool aUse, double aPower) {fUsemTScalingOfResidualRadii = aUse; fmTScalingPowerOfResidualRadii = aPower;}
 
 inline td1dVec LednickyFitter::GetKStarBinCenters() {return fKStarBinCenters;}
+
+inline IncludeResidualsType LednickyFitter::GetIncludeResidualsType() {return fIncludeResidualsType;}
 
 #endif

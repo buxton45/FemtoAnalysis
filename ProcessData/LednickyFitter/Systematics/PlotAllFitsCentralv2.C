@@ -1,11 +1,14 @@
 #include "FitGeneratorAndDraw.h"
 class FitGeneratorAndDraw;
 
+#include "FitValuesWriterwSysErrs.h"
+class FitValuesWriterwSysErrs;
+
 #include "CanvasPartition.h"
 class CanvasPartition;
 
 //________________________________________________________________________________________________________________
-void CreateParamText(CanvasPartition *aCanPart, int aNx, int aNy, TF1* aFit, const td1dVec &aSysErrors, double aTextXmin, double aTextYmin, double aTextWidth, double aTextHeight, double aTextFont, double aTextSize, bool aDrawAll, double aChi2, double aNDF)
+void CreateParamText(AnalysisType aAnType, IncludeResidualsType aIncResType, CanvasPartition *aCanPart, int aNx, int aNy, TF1* aFit, const td1dVec &aSysErrors, double aTextXmin, double aTextYmin, double aTextWidth, double aTextHeight, double aTextFont, double aTextSize, bool aDrawAll, double aChi2, double aNDF)
 {
   int tNx=2, tNy=3;
   int tPosition = aNx + aNy*tNx;
@@ -24,6 +27,13 @@ void CreateParamText(CanvasPartition *aCanPart, int aNx, int aNy, TF1* aFit, con
   tReF0Err = aFit->GetParError(2);
   tImF0Err = aFit->GetParError(3);
   tD0Err = aFit->GetParError(4);
+
+  if(aIncResType != kIncludeNoResiduals)
+  {
+    double tScale = cAnalysisLambdaFactorsArr[aIncResType][k4fm][aAnType];
+    tLambda /= tScale;
+    tLambdaErr /= tScale;
+  }
 
   double tChi2 = aChi2;
   int tNDF = aNDF;
@@ -46,8 +56,8 @@ void CreateParamText(CanvasPartition *aCanPart, int aNx, int aNy, TF1* aFit, con
   //--------------------------------
   if(aNx==0)
   {
-    TPaveText *tText2 = aCanPart->SetupTPaveText(TString::Format("#chi^{2}/NDF = %0.1f/%d",tChi2,tNDF),aNx,aNy,0.125,0.05,aTextWidth,0.10,aTextFont,0.9*aTextSize);
-    aCanPart->AddPadPaveText(tText2,aNx,aNy);
+//    TPaveText *tText2 = aCanPart->SetupTPaveText(TString::Format("#chi^{2}/NDF = %0.1f/%d",tChi2,tNDF),aNx,aNy,0.125,0.05,aTextWidth,0.10,aTextFont,0.9*aTextSize);
+//    aCanPart->AddPadPaveText(tText2,aNx,aNy);
 
     TPaveText *tText3 = aCanPart->SetupTPaveText("val. #pm stat. #pm sys.",aNx,aNy,0.255,0.48,aTextWidth,0.10,aTextFont,aTextSize);
     aCanPart->AddPadPaveText(tText3,aNx,aNy);
@@ -57,7 +67,7 @@ void CreateParamText(CanvasPartition *aCanPart, int aNx, int aNy, TF1* aFit, con
 
 
 //________________________________________________________________________________________________________________
-TCanvas* DrawAll(vector<LednickyFitter*> &aFitters, IncludeResidualsType aIncResType, bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, NonFlatBgdFitType aNonFlatBgdFitType, FitType aFitType, bool aSaveImage, bool aDrawSysErrors, bool aZoomROP, double* aChi2All, double* aNDFAll)
+TCanvas* DrawAll(vector<LednickyFitter*> &aFitters, td2dVec &aParamsSysErrs, IncludeResidualsType aIncResType, bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, NonFlatBgdFitType aNonFlatBgdFitType, FitType aFitType, bool aSaveImage, bool aDrawSysErrors, bool aZoomROP, double* aChi2All, double* aNDFAll)
 {
   TString tCanvasName = TString("canKStarCfwFits");
   if(!aZoomROP) tCanvasName += TString("UnZoomed");
@@ -134,7 +144,7 @@ TCanvas* DrawAll(vector<LednickyFitter*> &aFitters, IncludeResidualsType aIncRes
       TString tCombinedText = tTextAnType + TString("  ") +  tTextCentrality;
       TPaveText* tCombined = tCanPart->SetupTPaveText(tCombinedText,i,j,0.70,0.825,0.15,0.10,63,20);
       tCanPart->AddPadPaveText(tCombined,i,j);
-
+/*
       if(i==0 && j==0)
       {
         TString tTextAlicePrelim = TString("ALICE Preliminary");
@@ -142,7 +152,7 @@ TCanvas* DrawAll(vector<LednickyFitter*> &aFitters, IncludeResidualsType aIncRes
         TPaveText* tAlicePrelim = tCanPart->SetupTPaveText(tTextAlicePrelim,i,j,0.175,0.825,0.40,0.10,43,15);
         tCanPart->AddPadPaveText(tAlicePrelim,i,j);
       }
-
+*/
       if(i==1 && j==0)
       {
         TString tTextSysInfo = TString("Pb-Pb #sqrt{#it{s}_{NN}} = 2.76 TeV");
@@ -158,13 +168,11 @@ TCanvas* DrawAll(vector<LednickyFitter*> &aFitters, IncludeResidualsType aIncRes
         tCanPart->AddPadPaveText(tkTInfo,i,j);
       }
 
-      td1dVec tSysErrors = FitGeneratorAndDraw::GetSystErrs(aIncResType, 
-                                                     aFitters[j]->GetFitSharedAnalyses()->GetFitPairAnalysis(i)->GetAnalysisType(), 
-                                                     aFitters[j]->GetFitSharedAnalyses()->GetFitPairAnalysis(i)->GetCentralityType());
+      td1dVec tSysErrors = aParamsSysErrs[tAnalysisNumber];
 
       bool bDrawAll = false;
       if(i==0) bDrawAll = true;
-      CreateParamText(tCanPart,i,j,(TF1*)aFitters[j]->GetFitSharedAnalyses()->GetFitPairAnalysis(i)->GetPrimaryFit(),tSysErrors,0.73,0.09,0.25,0.53,43,12.0,bDrawAll,aChi2All[j],aNDFAll[j]);
+      CreateParamText(tAnType, aFitters[j]->GetIncludeResidualsType(), tCanPart, i, j,(TF1*)aFitters[j]->GetFitSharedAnalyses()->GetFitPairAnalysis(i)->GetPrimaryFit(), tSysErrors, 0.73, 0.09, 0.25, 0.53, 43, 12.0, bDrawAll, aChi2All[j], aNDFAll[j]);
     }
   }
 
@@ -178,7 +186,34 @@ TCanvas* DrawAll(vector<LednickyFitter*> &aFitters, IncludeResidualsType aIncRes
 
 
 
+//________________________________________________________________________________________________________________
+td2dVec GetParamValuesAndErrors(TString aMasterFileLocation, TString aSystematicsFileLocation, TString aFitInfoTString, AnalysisType aAnType, CentralityType aCentType)
+{
+  td1dVec tParVals(6), tParStatErr(6), tParSystErr(6);
+  td2dVec tReturnVec;
 
+  ParameterType tParamType;
+  FitParameter* tFitParam;
+  for(unsigned int iParam=0; iParam<5; iParam++)
+  {
+    tParamType = static_cast<ParameterType>(iParam);
+    tFitParam = FitValuesWriterwSysErrs::GetFitParameterSys(aMasterFileLocation, aSystematicsFileLocation, aFitInfoTString, aAnType, aCentType, tParamType);
+
+    tParVals[iParam] = tFitParam->GetFitValue();
+    tParStatErr[iParam] = tFitParam->GetFitValueError();
+    tParSystErr[iParam] = tFitParam->GetFitValueSysError();
+  }
+  //Normalization
+  tParVals[5] = 1.;
+  tParStatErr[5] = 0.;
+  tParSystErr[5] = 0.;
+
+  tReturnVec.push_back(tParVals);
+  tReturnVec.push_back(tParStatErr);
+  tReturnVec.push_back(tParSystErr);
+
+  return tReturnVec;
+}
 
 
 
@@ -197,50 +232,44 @@ int main(int argc, char **argv)
   ChronoTimer tFullTimer(kSec);
   tFullTimer.Start();
 //-----------------------------------------------------------------------------
-  TString tResultsDate = "20161027";
+  TString tResultsDate = "20180505";
 
-  AnalysisType tAnType = kLamK0;
-  AnalysisType tConjAnType = kALamK0;
-  AnalysisRunType tAnRunType = kTrain;
-  int tNPartialAnalysis = 2;
+  TString tMasterFileLocation_LamKch = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_20180505/MasterFitResults_20180505.txt";
+  TString tSystematicsFileLocation_LamKch = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_20171227/Systematics/_MomResCrctn_NonFlatBgdCrctn_3Res_PrimMaxDecay4fm_UsingXiDataAndCoulombOnly/FinalFitSystematics_wFitRangeSys_MomResCrctn_NonFlatBgdCrctn_3Res_PrimMaxDecay4fm_UsingXiDataAndCoulombOnly_cLamcKch.txt";
+  TString tFitInfoTString_LamKch = "_MomResCrctn_NonFlatBgdCrctnPolynomial_3Res_PrimMaxDecay4fm_UsingXiDataAndCoulombOnly_ShareLam_Dualie_ShareLam_ShareRadii";
+
+  TString tMasterFileLocation_LamK0 = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamK0_20180505/MasterFitResults_20180505.txt";
+  TString tSystematicsFileLocation_LamK0 = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamK0_20171227/Systematics/_MomResCrctn_NonFlatBgdCrctn_3Res_PrimMaxDecay4fm_UsingXiDataAndCoulombOnly/FinalFitSystematics_wFitRangeSys_MomResCrctn_NonFlatBgdCrctn_3Res_PrimMaxDecay4fm_UsingXiDataAndCoulombOnly_cLamK0.txt";
+  TString tFitInfoTString_LamK0 = "_MomResCrctn_NonFlatBgdCrctnPolynomial_3Res_PrimMaxDecay4fm_UsingXiDataAndCoulombOnly_SingleLamParam";
+
+
+
   CentralityType tCentType = k0010;  //TODO
-  FitGeneratorType tGenType = kPairwConj;
   FitType tFitType = kChi2PML;
 
   bool SaveImages = false;
   bool ApplyMomResCorrection = true;
   bool ApplyNonFlatBackgroundCorrection = true;
-  NonFlatBgdFitType tNonFlatBgdFitType = kLinear;
-  IncludeResidualsType tIncludeResidualsType = kIncludeNoResiduals; 
-
-  double tParLamK0[6] =       {0.400, 3.024, -0.157, 0.176, 3.566, 1.};
-  double tParErrLamK0[6] =    {0.187, 0.541, 0.031, 0.077, 0.947, 0.};
-  double tParSysErrLamK0[6] = {0.120, 0.330, 0.040, 0.060, 2.840, 0.};
-
-  double tParALamK0[6] =       {0.400, 3.024, -0.157, 0.176, 3.566, 1.};
-  double tParErrALamK0[6] =    {0.187, 0.541, 0.031, 0.077, 0.947, 0.};
-  double tParSysErrALamK0[6] = {0.120, 0.330, 0.040, 0.060, 2.840, 0.};
+  NonFlatBgdFitType tNonFlatBgdFitType = kPolynomial;
+  IncludeResidualsType tIncludeResidualsType = kInclude3Residuals; 
+  ChargedResidualsType tChargedResidualsType = kUseXiDataAndCoulombOnlyInterp/*kUseCoulombOnlyInterpForAll*/;
+  ResPrimMaxDecayType tResPrimMaxDecayType = k4fm;
 
 
-  double tParLamKchP[6] =       {0.379, 4.045, -0.687, 0.391, 0.639, 1.};
-  double tParErrLamKchP[6] =    {0.085, 0.381, 0.160, 0.143, 0.534, 0.};
-  double tParSysErrLamKchP[6] = {0.220, 0.830, 0.220, 0.110, 1.620, 0.};
+  td2dVec tParsAndErrs_LamK0 = GetParamValuesAndErrors(tMasterFileLocation_LamK0, tSystematicsFileLocation_LamK0, tFitInfoTString_LamK0, kLamK0, tCentType);
+  td2dVec tParsAndErrs_ALamK0 = GetParamValuesAndErrors(tMasterFileLocation_LamK0, tSystematicsFileLocation_LamK0, tFitInfoTString_LamK0, kALamK0, tCentType);
 
-  double tParALamKchM[6] =       {0.371, 4.045, -0.687, 0.391, 0.639, 1.};
-  double tParErrALamKchM[6] =    {0.083, 0.381, 0.160, 0.143, 0.534, 0.};
-  double tParSysErrALamKchM[6] = {0.220, 0.830, 0.220, 0.110, 1.620, 0.};
+  td2dVec tParsAndErrs_LamKchP = GetParamValuesAndErrors(tMasterFileLocation_LamKch, tSystematicsFileLocation_LamKch, tFitInfoTString_LamKch, kLamKchP, tCentType);
+  td2dVec tParsAndErrs_ALamKchM = GetParamValuesAndErrors(tMasterFileLocation_LamKch, tSystematicsFileLocation_LamKch, tFitInfoTString_LamKch, kALamKchM, tCentType);
+
+  td2dVec tParsAndErrs_LamKchM = GetParamValuesAndErrors(tMasterFileLocation_LamKch, tSystematicsFileLocation_LamKch, tFitInfoTString_LamKch, kLamKchM, tCentType);
+  td2dVec tParsAndErrs_ALamKchP = GetParamValuesAndErrors(tMasterFileLocation_LamKch, tSystematicsFileLocation_LamKch, tFitInfoTString_LamKch, kALamKchP, tCentType);
+
+  td2dVec tParsAll{tParsAndErrs_LamK0[0], tParsAndErrs_ALamK0[0], tParsAndErrs_LamKchP[0], tParsAndErrs_ALamKchM[0], tParsAndErrs_LamKchM[0], tParsAndErrs_ALamKchP[0]};
+  td2dVec tParErrsAll{tParsAndErrs_LamK0[1], tParsAndErrs_ALamK0[1], tParsAndErrs_LamKchP[1], tParsAndErrs_ALamKchM[1], tParsAndErrs_LamKchM[1], tParsAndErrs_ALamKchP[1]};
+  td2dVec tParSysErrsAll{tParsAndErrs_LamK0[2], tParsAndErrs_ALamK0[2], tParsAndErrs_LamKchP[2], tParsAndErrs_ALamKchM[2], tParsAndErrs_LamKchM[2], tParsAndErrs_ALamKchP[2]};
 
 
-  double tParLamKchM[6] =       {0.453, 4.787, 0.183, 0.453, -5.292, 1.};
-  double tParErrLamKchM[6] =    {0.162, 0.788, 0.134, 0.181, 2.940, 0.};
-  double tParSysErrLamKchM[6] = {0.190, 1.380, 0.100, 0.180, 7.660, 0.};
-
-  double tParALamKchP[6] =       {0.479, 4.787, 0.183, 0.453, -5.292, 1.};
-  double tParErrALamKchP[6] =    {0.170, 0.788, 0.134, 0.181, 2.940, 0.};
-  double tParSysErrALamKchP[6] = {0.150, 1.380, 0.100, 0.180, 7.660, 0.};
-
-  double* tParsAll[6] = {tParLamK0, tParALamK0, tParLamKchP, tParALamKchM, tParLamKchM, tParALamKchP};
-  double * tParErrsAll[6] = {tParErrLamK0, tParErrALamK0, tParErrLamKchP, tParErrALamKchM, tParErrLamKchM, tParErrALamKchP};
 
   double tChi2All[6] = {357.0, 357.0, 425.8, 425.8, 284.0, 284.0};
   double tNDFAll[6] = {341, 341, 336, 336, 288, 288};
@@ -259,6 +288,7 @@ int main(int argc, char **argv)
 //  for(int iAnType=0; iAnType<kXiKchP; iAnType+=2)
   double tOrderedChi2All[3];
   double tOrderedNDFAll[3];
+  AnalysisType tAnType, tConjAnType;
   for(unsigned int i=0; i<tOrder.size(); i++)
   {
     int iAnType = tOrder[i];
@@ -279,12 +309,9 @@ int main(int argc, char **argv)
     tFileLocationBase = TString::Format("%sResults_%s_%s",tDirectoryBase.Data(),tGeneralAnTypeName.Data(),tResultsDate.Data());
     tFileLocationBaseMC = TString::Format("%sResults_%sMC_%s",tDirectoryBase.Data(),tGeneralAnTypeName.Data(),tResultsDate.Data());
 
-    tVecOfPairAn.push_back(new FitPairAnalysis(tFileLocationBase,tFileLocationBaseMC,tAnType,tCentType,tAnRunType,tNPartialAnalysis));
-    tVecOfPairAn.push_back(new FitPairAnalysis(tFileLocationBase,tFileLocationBaseMC,tConjAnType,tCentType,tAnRunType,tNPartialAnalysis));
-/*
-    tVecOfSharedAn.push_back(new FitSharedAnalyses(tVecOfPairAn));
-    tVecOfLednickyFit.push_back(new LednickyFitter(tVecOfSharedAn[iAnType/2]));
-*/
+    tVecOfPairAn.push_back(new FitPairAnalysis(tFileLocationBase,tFileLocationBaseMC,tAnType,tCentType,kTrain,2));
+    tVecOfPairAn.push_back(new FitPairAnalysis(tFileLocationBase,tFileLocationBaseMC,tConjAnType,tCentType,kTrain,2));
+
 
     FitSharedAnalyses* tFitSharedAn = new FitSharedAnalyses(tVecOfPairAn);
     tFitSharedAn->GetFitPairAnalysis(0)->GetFitParameter(kLambda)->SetStartValue(tParsAll[iAnType][0]);
@@ -305,6 +332,8 @@ int main(int argc, char **argv)
     tLednickyFitter->SetNonFlatBgdFitType(tNonFlatBgdFitType);
     tLednickyFitter->SetApplyMomResCorrection(ApplyMomResCorrection);
     tLednickyFitter->SetIncludeResidualCorrelationsType(tIncludeResidualsType);
+    tLednickyFitter->SetChargedResidualsType(tChargedResidualsType);
+    tLednickyFitter->SetResPrimMaxDecayType(tResPrimMaxDecayType);
 
     int tNpar = 10;
     double tChi2 = 0.;
@@ -319,7 +348,7 @@ int main(int argc, char **argv)
   }
 
 
-  TCanvas* tCan = DrawAll(tVecOfLednickyFit, tIncludeResidualsType, ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, tNonFlatBgdFitType, tFitType, false, true, true, tOrderedChi2All, tOrderedNDFAll);
+  TCanvas* tCan = DrawAll(tVecOfLednickyFit, tParSysErrsAll, tIncludeResidualsType, ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, tNonFlatBgdFitType, tFitType, false, true, true, tOrderedChi2All, tOrderedNDFAll);
   if(SaveImages)
   {
     TString tSaveName = "AllFitsCentral";

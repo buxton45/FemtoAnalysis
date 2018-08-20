@@ -25,7 +25,7 @@ CFLAGS = $(shell root-config --cflags) -Wall -std=c++11 -I${ANALYZE_DIR} -I${LED
 
 MY_LIBS = $(addprefix build/, FitParameter.o FitChi2Histograms.o BackgroundFitter.o FitPartialAnalysis.o FitPairAnalysis.o FitSharedAnalyses.o MathematicaSession.o WaveFunction.o ChargedResidualCf.o SimpleChargedResidualCf.o NeutralResidualCf.o ResidualCollection.o LednickyFitter.o FitValuesWriter.o FitValuesLatexTableHelperWriter.o FitValuesWriterwSysErrs.o FitValuesLatexTableHelperWriterwSysErrs.o FitGenerator.o FitGeneratorAndDraw.o DualieFitGenerator.o ThermCf.o CfLite.o CfHeavy.o Types.o Types_LambdaValues.o Types_FitParamValues.o Types_ThermBgdParams.o Types_SysFileInfo.o Faddeeva.o FitSystematicAnalysis.o DualieFitSystematicAnalysis.o CanvasPartition.o)
 
-BINARIES = runSingleSystematics runAllSystematics runRead runFindOutliers runFitRange runNonFlatBgdSys runTest runBuildLatexTableHelperwSysErrs runCompareFittingMethodsv2wSysErrs runDrawmTScalingv2 runSingleDualieSystematics runAllDualieSystematics runFitRangeDualie runNonFlatBgdDualieSys
+BINARIES = runSingleSystematics runAllSystematics runRead runFindOutliers runFitRange runNonFlatBgdSys runTest runBuildLatexTableHelperwSysErrs runCompareFittingMethodsv2wSysErrs runDrawmTScalingv2 runSingleDualieSystematics runAllDualieSystematics runFitRangeDualie runNonFlatBgdDualieSys runPlotAll
 
 all: $(BINARIES)
 
@@ -70,6 +70,9 @@ runFitRangeDualie: ${MY_LIBS} FitRangeDualieSystematics.C
 
 runNonFlatBgdDualieSys: ${MY_LIBS} NonFlatBgdFitTypeDualieSystematics.C
 	g++ NonFlatBgdFitTypeDualieSystematics.C ${MY_LIBS} -I${INCDIR} -o runNonFlatBgdDualieSys -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS)
+
+runPlotAll: ${MY_LIBS} PlotAllFitsCentralv2.C
+	g++ PlotAllFitsCentralv2.C ${MY_LIBS} -I${INCDIR} -o runPlotAll -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS)
 
 build/%.o: ${ANALYZE_DIR}/%.cxx ${ANALYZE_DIR}/%.h
 	g++ -c $< $(CFLAGS) -o $@

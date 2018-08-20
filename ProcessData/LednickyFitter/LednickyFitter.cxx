@@ -530,6 +530,12 @@ void LednickyFitter::CalculateFitFunctionOnce(int &npar, double &chi2, double *p
 
     tFitParams[0] = par[tLambdaParamNumber];
     tFitParamErrs[0] = parErr[tLambdaParamNumber];
+    if(fIncludeResidualsType != kIncludeNoResiduals)
+    {
+      double tScale = cAnalysisLambdaFactorsArr[fIncludeResidualsType][fResPrimMaxDecayType][fFitSharedAnalyses->GetFitPairAnalysis(iAnaly)->GetAnalysisType()];
+      tFitParams[0] *= tScale;
+      tFitParamErrs[0] *= tScale;
+    }
 
     tFitParams[1] = par[tRadiusParamNumber];
     tFitParamErrs[1] = parErr[tRadiusParamNumber];
