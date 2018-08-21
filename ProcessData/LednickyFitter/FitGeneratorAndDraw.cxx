@@ -496,6 +496,21 @@ td1dVec FitGeneratorAndDraw::GetSystErrs(IncludeResidualsType aIncResType, Analy
   return tReturnVec;
 }
 
+//________________________________________________________________________________________________________________
+td1dVec FitGeneratorAndDraw::GetSystErrs(TString aMasterFileLocation, TString aSystematicsFileLocation, TString aFitInfoTString, AnalysisType aAnType, CentralityType aCentType)
+{
+  td1dVec tReturnVec(5);
+  ParameterType tParamType;
+  FitParameter* tFitParam;
+  for(unsigned int iParam=0; iParam<5; iParam++)
+  {
+    tParamType = static_cast<ParameterType>(iParam);
+    tFitParam = FitValuesWriterwSysErrs::GetFitParameterSys(aMasterFileLocation, aSystematicsFileLocation, aFitInfoTString, aAnType, aCentType, tParamType);
+    tReturnVec[iParam] = tFitParam->GetFitValueSysError();
+  }
+  return tReturnVec;
+}
+
 
 
 //________________________________________________________________________________________________________________
@@ -618,7 +633,9 @@ CanvasPartition* FitGeneratorAndDraw::BuildKStarCfswFitsCanvasPartition_PartAn(B
         tCanPart->AddPadPaveText(tSysInfo,i,j);
       }
 
-      td1dVec tSysErrors = GetSystErrs(fIncludeResidualsType, tAnType, tCentType);
+      td1dVec tSysErrors;
+      if(fMasterFileLocation.IsNull() || fSystematicsFileLocation.IsNull()) tSysErrors = GetSystErrs(fIncludeResidualsType, tAnType, tCentType);
+      else tSysErrors = GetSystErrs(fMasterFileLocation, fSystematicsFileLocation, fSaveNameModifier, tAnType, tCentType);
 
       bool bDrawAll = false;
       if(i==0 && j==0) bDrawAll = true;
@@ -815,7 +832,9 @@ CanvasPartition* FitGeneratorAndDraw::BuildKStarCfswFitsCanvasPartition(TString 
       else CreateParamInitValuesText(tCanPart,i,j,0.25,0.20,0.15,0.45,43,10);
       AddTextCorrectionInfo(tCanPart,i,j,aMomResCorrectFit,aNonFlatBgdCorrectFit,0.25,0.08,0.15,0.10,43,7.5);
 */
-      td1dVec tSysErrors = GetSystErrs(fIncludeResidualsType, tAnType, tCentType);
+      td1dVec tSysErrors;
+      if(fMasterFileLocation.IsNull() || fSystematicsFileLocation.IsNull()) tSysErrors = GetSystErrs(fIncludeResidualsType, tAnType, tCentType);
+      else tSysErrors = GetSystErrs(fMasterFileLocation, fSystematicsFileLocation, fSaveNameModifier, tAnType, tCentType);
 
 //      bool bDrawAll = true;
 
@@ -1526,7 +1545,9 @@ TCanvas* FitGeneratorAndDraw::DrawSingleKStarCfwFitAndResiduals_PartAn(int aAnal
   TPaveText* tSysInfo = tCanPart->SetupTPaveText(tTextSysInfo,1,0,0.50,0.875,0.40,0.10,43,15);
   tCanPart->AddPadPaveText(tSysInfo,1,0);
 
-  td1dVec tSysErrors = GetSystErrs(fIncludeResidualsType, tAnType, tCentType);
+  td1dVec tSysErrors;
+  if(fMasterFileLocation.IsNull() || fSystematicsFileLocation.IsNull()) tSysErrors = GetSystErrs(fIncludeResidualsType, tAnType, tCentType);
+  else tSysErrors = GetSystErrs(fMasterFileLocation, fSystematicsFileLocation, fSaveNameModifier, tAnType, tCentType);
 
   bool bDrawAll = true;
   CreateParamFinalValuesText(tAnType, tCanPart,0,0,(TF1*)fSharedAn->GetFitPairAnalysis(aAnalysisNumber)->GetPrimaryFit(),tSysErrors,0.73,0.09,0.25,0.45,43,12.0,bDrawAll);
@@ -1802,7 +1823,9 @@ TCanvas* FitGeneratorAndDraw::DrawSingleKStarCfwFitAndResiduals(int aAnalysisNum
   TPaveText* tSysInfo = tCanPart->SetupTPaveText(tTextSysInfo,1,0,0.50,0.875,0.40,0.10,43,25);
   tCanPart->AddPadPaveText(tSysInfo,1,0);
 
-  td1dVec tSysErrors = GetSystErrs(fIncludeResidualsType, tAnType, tCentType);
+  td1dVec tSysErrors;
+  if(fMasterFileLocation.IsNull() || fSystematicsFileLocation.IsNull()) tSysErrors = GetSystErrs(fIncludeResidualsType, tAnType, tCentType);
+  else tSysErrors = GetSystErrs(fMasterFileLocation, fSystematicsFileLocation, fSaveNameModifier, tAnType, tCentType);
 
   bool bDrawAll = true;
   CreateParamFinalValuesText(tAnType, tCanPart,0,0,(TF1*)fSharedAn->GetFitPairAnalysis(aAnalysisNumber)->GetPrimaryFit(),tSysErrors,0.73,0.09,0.25,0.45,43,12.0,bDrawAll);

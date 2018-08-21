@@ -8,7 +8,7 @@
 
 
 #include "FitGenerator.h"
-
+#include "FitValuesWriterwSysErrs.h"
 
 class FitGeneratorAndDraw : public FitGenerator {
 
@@ -36,6 +36,7 @@ public:
 
   static TH1D* Convert1dVecToHist(td1dVec &aCfVec, td1dVec &aKStarBinCenters, TString aTitle = "tCf");
   static td1dVec GetSystErrs(IncludeResidualsType aIncResType, AnalysisType aAnType, CentralityType aCentType);
+  static td1dVec GetSystErrs(TString aMasterFileLocation, TString aSystematicsFileLocation, TString aFitInfoTString, AnalysisType aAnType, CentralityType aCentType);
 
   virtual void BuildKStarCfswFitsPanel_PartAn(CanvasPartition* aCanPart, int aAnalysisNumber, BFieldType aBFieldType, int tColumn, int tRow, bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, NonFlatBgdFitType aNonFlatBgdFitType, bool aDrawDataOnTop);
   virtual CanvasPartition* BuildKStarCfswFitsCanvasPartition_PartAn(BFieldType aBFieldType, TString aCanvasBaseName, bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, NonFlatBgdFitType aNonFlatBgdFitType=kLinear, bool aZoomROP=true);

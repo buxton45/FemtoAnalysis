@@ -159,11 +159,24 @@ int main(int argc, char **argv)
   TString tSaveDirectoryBase = tDirectoryBase;
 
   TString tLocationMasterFitResults = TString::Format("%sMasterFitResults_%s.txt", tDirectoryBase.Data(), tResultsDate.Data());
+  TString tSystematicsFileLocation = TString::Format("%sSystematics/", tDirectoryBase.Data());
 
 //-----------------------------------------------------------------------------
 
   TString tSaveNameModifier = LednickyFitter::BuildSaveNameModifier(ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, tNonFlatBgdFitType, tIncludeResidualsType, tResPrimMaxDecayType, tChargedResidualsType, FixD0, bUseStavCf, FixAllLambdaTo1, FixAllNormTo1, FixRadii, FixAllScattParams, tShareLambdaParams, tAllShareSingleLambdaParam, UsemTScalingOfResidualRadii, true, tDualieShareLambda, tDualieShareRadii);
 
+  tSystematicsFileLocation += TString::Format("%s/FinalFitSystematics_wFitRangeSys%s", tSaveNameModifier.Data(), tSaveNameModifier.Data());
+  if(tAnType==kLamK0 || tAnType==kALamK0) tSystematicsFileLocation += TString("_cLamK0.txt");
+  else if(tAnType==kLamKchP || tAnType==kALamKchM || tAnType==kLamKchM || tAnType==kALamKchP) tSystematicsFileLocation += TString("_cLamcKch.txt");
+  else assert(0);
+
+  bool bExistsCurrentSysFile;
+  ifstream tFileIn;
+  tFileIn.open(tSystematicsFileLocation);
+  if(tFileIn) bExistsCurrentSysFile=true;
+  else bExistsCurrentSysFile = false;
+  tFileIn.close();
+  if(!bExistsCurrentSysFile) cout << "WARNING!!!!!!!!!!!!!!!!!!!!!" << endl << "!bExistsCurrentSysFile, so syst. errs. on fit parameters not precisely accurate" << endl << endl;
 //-----------------------------------------------------------------------------
 
   DualieFitGenerator* tDualie = new DualieFitGenerator(tFileLocationBase, tFileLocationBaseMC, tAnType, tCentType, tAnRunType, tNPartialAnalysis, tGenType, tShareLambdaParams, tAllShareSingleLambdaParam, "", bUseStavCf);
@@ -179,6 +192,8 @@ int main(int argc, char **argv)
   if(!UnboundLambda) tDualie->SetAllLambdaParamLimits(aLambdaMin, aLambdaMax);
   tDualie->SetChargedResidualsType(tChargedResidualsType);
   tDualie->SetResPrimMaxDecayType(tResPrimMaxDecayType);
+  tDualie->SetMasterFileLocation(tLocationMasterFitResults);
+  if(bExistsCurrentSysFile) tDualie->SetSystematicsFileLocation(tSystematicsFileLocation);
 
   if(FixRadii) 
   {

@@ -57,7 +57,10 @@ FitGenerator::FitGenerator(TString aFileLocationBase, TString aFileLocationBaseM
   fSharedAn(0),
   fLednickyFitter(0),
 
-  fSaveFileType("eps")
+  fSaveFileType("eps"),
+
+  fMasterFileLocation(""),
+  fSystematicsFileLocation("")
 
 {
   switch(aAnalysisType) {
@@ -159,7 +162,10 @@ FitGenerator::FitGenerator(TString aFileLocationBase, TString aFileLocationBaseM
   fSharedAn(0),
   fLednickyFitter(0),
 
-  fSaveFileType("eps")
+  fSaveFileType("eps"),
+
+  fMasterFileLocation(""),
+  fSystematicsFileLocation("")
 
 {
   vector<CentralityType> tCentralityTypes(0);

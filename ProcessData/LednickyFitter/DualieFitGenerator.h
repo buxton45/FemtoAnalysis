@@ -103,6 +103,9 @@ public:
   FitGeneratorAndDraw* GetFitGen1();
   FitGeneratorAndDraw* GetFitGen2();
 
+  void SetMasterFileLocation(TString aLocation);
+  void SetSystematicsFileLocation(TString aLocation);
+
 protected:
 
   FitGeneratorAndDraw* fFitGen1;
@@ -165,6 +168,9 @@ inline void DualieFitGenerator::SetFixNormParams(bool aFixNormParams) {fFitGen1-
 
 inline FitGeneratorAndDraw* DualieFitGenerator::GetFitGen1() {return fFitGen1;}
 inline FitGeneratorAndDraw* DualieFitGenerator::GetFitGen2() {return fFitGen2;}
+
+inline void DualieFitGenerator::SetMasterFileLocation(TString aLocation) {fFitGen1->SetMasterFileLocation(aLocation); fFitGen2->SetMasterFileLocation(aLocation);}
+inline void DualieFitGenerator::SetSystematicsFileLocation(TString aLocation) {fFitGen1->SetSystematicsFileLocation(aLocation); fFitGen2->SetSystematicsFileLocation(aLocation);}
 #endif
 
 

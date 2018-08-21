@@ -269,10 +269,7 @@ void PrintFinalVec(td4dVec &aFinal, ostream &aOut=std::cout)
 
 
 //----------------------------------------------------------------------
-void ReadAllCutSys(TString aSystematicsDirectory, td4dVec &aAllCutSysToFill, AnalysisType aAnType, CentralityType aCentType, 
-                   bool aApplyMomResCrctn, bool aApplyNonFlatBgdCrctn, 
-                   IncludeResidualsType aIncResType, ResPrimMaxDecayType aMaxDecayType, ChargedResidualsType aChargedResType, 
-                   bool aFixD0, bool aRunOldQMNaming)
+void ReadAllCutSys(TString aSystematicsDirectory, td4dVec &aAllCutSysToFill, AnalysisType aAnType, CentralityType aCentType, TString aFitInfoTString, bool aRunOldQMNaming)
 {
   TString tGeneralAnTypeName;
   TString tParentResultsDate;
@@ -329,13 +326,7 @@ void ReadAllCutSys(TString aSystematicsDirectory, td4dVec &aAllCutSysToFill, Ana
     }
     else
     {
-      tFileLocationBase = tDirectoryBase;
-      LednickyFitter::AppendFitInfo(tFileLocationBase, aApplyMomResCrctn, aApplyNonFlatBgdCrctn, 
-                                           aIncResType, aMaxDecayType, aChargedResType, aFixD0);
-      tFileLocationBase += TString::Format("/CfFitValues_%s%s", cAnalysisBaseTags[aAnType], cCentralityTags[aCentType]);
-      LednickyFitter::AppendFitInfo(tFileLocationBase, aApplyMomResCrctn, aApplyNonFlatBgdCrctn, 
-                                           aIncResType, aMaxDecayType, aChargedResType, aFixD0);
-      tFileLocationBase += TString(".txt");
+      tFileLocationBase = TString::Format("%s%s/CfFitValues_%s%s%s.txt", tDirectoryBase.Data(), aFitInfoTString.Data(), cAnalysisBaseTags[aAnType], cCentralityTags[aCentType], aFitInfoTString.Data());
     }
 
     ReadFile(tFileLocationBase,aAllCutSysToFill);
@@ -346,10 +337,7 @@ void ReadAllCutSys(TString aSystematicsDirectory, td4dVec &aAllCutSysToFill, Ana
 
 
 //----------------------------------------------------------------------
-void ReadFitRangeAndNonFlatBgdSys(TString aResultsDirectory, td4dVec &aAllFitSysToFill, AnalysisType aAnType, CentralityType aCentType, 
-                                  bool aApplyMomResCrctn, bool aApplyNonFlatBgdCrctn, 
-                                  IncludeResidualsType aIncResType, ResPrimMaxDecayType aMaxDecayType, ChargedResidualsType aChargedResType, 
-                                  bool aFixD0, bool aRunOldQMNaming)
+void ReadFitRangeAndNonFlatBgdSys(TString aResultsDirectory, td4dVec &aAllFitSysToFill, AnalysisType aAnType, CentralityType aCentType, TString aFitInfoTString, bool aRunOldQMNaming)
 {
   //----------------------------------------------
   cout << endl;
@@ -367,20 +355,11 @@ void ReadFitRangeAndNonFlatBgdSys(TString aResultsDirectory, td4dVec &aAllFitSys
   }
   else
   {
-    TString tFileLocationBase_FitRangeAndNonFlat = TString::Format("%sSystematics/", aResultsDirectory.Data());
-    LednickyFitter::AppendFitInfo(tFileLocationBase_FitRangeAndNonFlat, aApplyMomResCrctn, aApplyNonFlatBgdCrctn, aIncResType, aMaxDecayType, aChargedResType, aFixD0);
-    tFileLocationBase_FitRangeAndNonFlat += TString("/");
-
-    tFileLocationFitRangeSys = TString::Format("%sCfFitValues_VaryMaxFitKStar_%s%s", tFileLocationBase_FitRangeAndNonFlat.Data(), 
-                                               cAnalysisBaseTags[aAnType], cCentralityTags[aCentType]);
-    LednickyFitter::AppendFitInfo(tFileLocationFitRangeSys, aApplyMomResCrctn, aApplyNonFlatBgdCrctn, aIncResType, aMaxDecayType, aChargedResType, aFixD0);
-    tFileLocationFitRangeSys += TString(".txt");
-
-
-    tFileLocationNonFlatBgdSys = TString::Format("%sCfFitValues_VaryNonFlatBgdFitType_%s%s", tFileLocationBase_FitRangeAndNonFlat.Data(), 
-                                                 cAnalysisBaseTags[aAnType], cCentralityTags[aCentType]);
-    LednickyFitter::AppendFitInfo(tFileLocationNonFlatBgdSys, aApplyMomResCrctn, aApplyNonFlatBgdCrctn, aIncResType, aMaxDecayType, aChargedResType, aFixD0);
-    tFileLocationNonFlatBgdSys += TString(".txt");
+    TString tFileLocationBase_FitRangeAndNonFlat = TString::Format("%sSystematics/%s/", aResultsDirectory.Data(), aFitInfoTString.Data());
+    tFileLocationFitRangeSys = TString::Format("%sCfFitValues_VaryMaxFitKStar_%s%s%s.txt", tFileLocationBase_FitRangeAndNonFlat.Data(), 
+                                               cAnalysisBaseTags[aAnType], cCentralityTags[aCentType], aFitInfoTString.Data());
+    tFileLocationNonFlatBgdSys = TString::Format("%sCfFitValues_VaryNonFlatBgdFitType_%s%s%s.txt", tFileLocationBase_FitRangeAndNonFlat.Data(), 
+                                                 cAnalysisBaseTags[aAnType], cCentralityTags[aCentType], aFitInfoTString.Data());
   }
 
   ReadFile(tFileLocationFitRangeSys, aAllFitSysToFill);
@@ -402,33 +381,77 @@ int main(int argc, char **argv)
   //This allows the user a chance to look at and manipulate a TBrowser before
   //the program ends and closes everything
 //-----------------------------------------------------------------------------
-  TString tParentResultsDate = "20161027";  //Parent analysis these systematics are to accompany
+  TString tParentResultsDate = "20180505";  //Parent analysis these systematics are to accompany
 
   bool bRunOldQMNaming = false;
 
   CentralityType tCentralityType = kMB;  //Probably should always be kMB
-
-  bool ApplyMomResCorrection = true;
-  bool ApplyNonFlatBackgroundCorrection = true;
-  NonFlatBgdFitType tNonFlatBgdFitType = kLinear;
-
-  IncludeResidualsType tIncludeResidualsType = kInclude3Residuals; 
-  ResPrimMaxDecayType tResPrimMaxDecayType = k4fm;
-  ChargedResidualsType tChargedResidualsType = kUseXiDataAndCoulombOnlyInterp;
-
-  bool tFixD0 = false;
-
   bool bIncludeFitRangeSys = true;
   bool bWriteToFile = false;
+
+  bool tIsDualie_cLamcKch = true;
+  bool tIsDualie_cLamK0 = false;
+  //--Sharing lambda
+  bool tShareLambdaParams_cLamcKch = true;          //If true, only share lambda parameters across like-centralities
+  bool tAllShareSingleLambdaParam_cLamcKch = false;
+
+  bool tShareLambdaParams_cLamK0 = false;          
+  bool tAllShareSingleLambdaParam_cLamK0 = true;
+
+  //--Dualie sharing options
+  bool tDualieShareLambda_cLamcKch = true;
+  bool tDualieShareRadii_cLamcKch = true;
+
+  //--Corrections
+  bool ApplyMomResCorrection = true;
+  bool ApplyNonFlatBackgroundCorrection = true;
+  NonFlatBgdFitType tNonFlatBgdFitType_cLamcKch = kPolynomial;
+  NonFlatBgdFitType tNonFlatBgdFitType_cLamK0 = kPolynomial;
+
+  //--Residuals
+  IncludeResidualsType tIncludeResidualsType = kInclude3Residuals; 
+  ChargedResidualsType tChargedResidualsType = kUseXiDataAndCoulombOnlyInterp/*kUseCoulombOnlyInterpForAll*/;
+  ResPrimMaxDecayType tResPrimMaxDecayType = k4fm;
+
+
+  //--Fix parameters
+  bool FixRadii = false;
+  bool FixD0 = false;
+  bool FixAllScattParams = false;
+  bool FixAllLambdaTo1 = false;
+  if(FixAllLambdaTo1)
+  {
+    tAllShareSingleLambdaParam_cLamcKch = true;
+    tAllShareSingleLambdaParam_cLamK0 = true;
+  }
+  bool FixAllNormTo1 = false;
+
+  //--mT scaling
+  bool UsemTScalingOfResidualRadii = false;
+  double mTScalingPowerOfResidualRadii = -0.5;
+
 
   if(bRunOldQMNaming) tIncludeResidualsType = kIncludeNoResiduals; 
 
   //-------------------------------
+  TString tFitInfoTString_cLamcKch = LednickyFitter::BuildSaveNameModifier(ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, tNonFlatBgdFitType_cLamcKch,
+                                                                          tIncludeResidualsType, tResPrimMaxDecayType, 
+                                                                          tChargedResidualsType, FixD0,
+                                                                          false, FixAllLambdaTo1, FixAllNormTo1, FixRadii, FixAllScattParams,
+                                                                          tShareLambdaParams_cLamcKch, tAllShareSingleLambdaParam_cLamcKch, UsemTScalingOfResidualRadii, tIsDualie_cLamcKch,
+                                                                          tDualieShareLambda_cLamcKch, tDualieShareRadii_cLamcKch);
+
+  TString tFitInfoTString_cLamK0 = LednickyFitter::BuildSaveNameModifier(ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, tNonFlatBgdFitType_cLamK0,
+                                                                          tIncludeResidualsType, tResPrimMaxDecayType, 
+                                                                          tChargedResidualsType, FixD0,
+                                                                          false, FixAllLambdaTo1, FixAllNormTo1, FixRadii, FixAllScattParams,
+                                                                          tShareLambdaParams_cLamK0, tAllShareSingleLambdaParam_cLamK0, UsemTScalingOfResidualRadii, tIsDualie_cLamK0,
+                                                                          false, false);
 
   TString tSystematicsDirectory = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Systematics_LamK_%s/", tParentResultsDate.Data());
 
-  TString tResultsDirectory_cLamK0 = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamK0_20171227/";
-  TString tResultsDirectory_cLamcKch = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_20171227/";
+  TString tResultsDirectory_cLamK0 = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamK0_%s/", tParentResultsDate.Data());
+  TString tResultsDirectory_cLamcKch = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_%s/",tParentResultsDate.Data());
 
   TString tSaveDirectory_cLamK0 = tResultsDirectory_cLamK0;
   TString tSaveDirectory_cLamcKch = tResultsDirectory_cLamcKch;
@@ -437,12 +460,12 @@ int main(int argc, char **argv)
   {
     tSaveDirectory_cLamK0 += TString("Systematics/");
     LednickyFitter::AppendFitInfo(tSaveDirectory_cLamK0, ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, 
-                                         tIncludeResidualsType, tResPrimMaxDecayType, tChargedResidualsType, tFixD0);
+                                         tIncludeResidualsType, tResPrimMaxDecayType, tChargedResidualsType, FixD0);
     tSaveDirectory_cLamK0 += TString("/");
     //-----
     tSaveDirectory_cLamcKch += TString("Systematics/");
     LednickyFitter::AppendFitInfo(tSaveDirectory_cLamcKch, ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, 
-                                         tIncludeResidualsType, tResPrimMaxDecayType, tChargedResidualsType, tFixD0);
+                                         tIncludeResidualsType, tResPrimMaxDecayType, tChargedResidualsType, FixD0);
     tSaveDirectory_cLamcKch += TString("/");
   }
 
@@ -456,20 +479,9 @@ int main(int argc, char **argv)
 
   //---------------------------------------------------------------------------------------
 
-  ReadAllCutSys(tSystematicsDirectory, tAllCutSys, kLamKchP, tCentralityType, 
-                ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, 
-                tIncludeResidualsType, tResPrimMaxDecayType, tChargedResidualsType, 
-                tFixD0, bRunOldQMNaming);
-
-  ReadAllCutSys(tSystematicsDirectory, tAllCutSys, kLamKchM, tCentralityType, 
-                ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, 
-                tIncludeResidualsType, tResPrimMaxDecayType, tChargedResidualsType, 
-                tFixD0, bRunOldQMNaming);
-
-  ReadAllCutSys(tSystematicsDirectory, tAllCutSys, kLamK0, tCentralityType, 
-                ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, 
-                tIncludeResidualsType, tResPrimMaxDecayType, tChargedResidualsType, 
-                tFixD0, bRunOldQMNaming);
+  ReadAllCutSys(tSystematicsDirectory, tAllCutSys, kLamKchP, tCentralityType, tFitInfoTString_cLamcKch, bRunOldQMNaming);
+  ReadAllCutSys(tSystematicsDirectory, tAllCutSys, kLamKchM, tCentralityType, tFitInfoTString_cLamcKch, bRunOldQMNaming);
+  ReadAllCutSys(tSystematicsDirectory, tAllCutSys, kLamK0, tCentralityType, tFitInfoTString_cLamK0, bRunOldQMNaming);
 
   //---------------------------------------------------------------------------------------
   td4dVec tFinalCutSysVec = ReduceCutsVector(tAllCutSys);
@@ -483,20 +495,9 @@ int main(int argc, char **argv)
     td4dVec tAllFitSys(0);
       tAllFitSys.resize(tNAnalysisTypes, td3dVec(tNCentralityTypes, td2dVec(tNParameterTypes, td1dVec(0))));
 
-    ReadFitRangeAndNonFlatBgdSys(tResultsDirectory_cLamcKch, tAllFitSys, kLamKchP, tCentralityType,
-                                 ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, 
-                                 tIncludeResidualsType, tResPrimMaxDecayType, tChargedResidualsType, 
-                                 tFixD0, bRunOldQMNaming);
-
-    ReadFitRangeAndNonFlatBgdSys(tResultsDirectory_cLamcKch, tAllFitSys, kLamKchM, tCentralityType,
-                                 ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, 
-                                 tIncludeResidualsType, tResPrimMaxDecayType, tChargedResidualsType, 
-                                 tFixD0, bRunOldQMNaming);
-
-    ReadFitRangeAndNonFlatBgdSys(tResultsDirectory_cLamK0, tAllFitSys, kLamK0, tCentralityType,
-                                 ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, 
-                                 tIncludeResidualsType, tResPrimMaxDecayType, tChargedResidualsType, 
-                                 tFixD0, bRunOldQMNaming);
+    ReadFitRangeAndNonFlatBgdSys(tResultsDirectory_cLamcKch, tAllFitSys, kLamKchP, tCentralityType, tFitInfoTString_cLamcKch, bRunOldQMNaming);
+    ReadFitRangeAndNonFlatBgdSys(tResultsDirectory_cLamcKch, tAllFitSys, kLamKchM, tCentralityType, tFitInfoTString_cLamcKch, bRunOldQMNaming);
+    ReadFitRangeAndNonFlatBgdSys(tResultsDirectory_cLamK0, tAllFitSys, kLamK0, tCentralityType, tFitInfoTString_cLamK0, bRunOldQMNaming);
 
     td4dVec tFinalFitSysVec = ReduceCutsVector(tAllFitSys);
     tFinalVec = CombineCutSyswFitSys(tFinalCutSysVec,tFinalFitSysVec);
@@ -514,7 +515,7 @@ int main(int argc, char **argv)
     if(!bRunOldQMNaming)
     {
       LednickyFitter::AppendFitInfo(tOutputLamKchName, ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, 
-                                           tIncludeResidualsType, tResPrimMaxDecayType, tChargedResidualsType, tFixD0);
+                                           tIncludeResidualsType, tResPrimMaxDecayType, tChargedResidualsType, FixD0);
       tOutputLamKchName += TString("_");
     }
     tOutputLamKchName += TString("cLamcKch.txt");
@@ -524,7 +525,7 @@ int main(int argc, char **argv)
     if(!bRunOldQMNaming)
     {
       LednickyFitter::AppendFitInfo(tOutputLamK0Name, ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, 
-                                           tIncludeResidualsType, tResPrimMaxDecayType, tChargedResidualsType, tFixD0);
+                                           tIncludeResidualsType, tResPrimMaxDecayType, tChargedResidualsType, FixD0);
       tOutputLamK0Name += TString("_");
     }
     tOutputLamK0Name += TString("cLamK0.txt");

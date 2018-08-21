@@ -121,6 +121,12 @@ public:
 
   void SetFixNormParams(bool aFixNormParams);
 
+  void SetMasterFileLocation(TString aLocation);
+  void SetSystematicsFileLocation(TString aLocation);
+
+  TString GetMasterFileLocation();
+  TString GetSystematicsFileLocation();
+
 protected:
   TString fSaveLocationBase;
   TString fSaveNameModifier;
@@ -154,6 +160,9 @@ protected:
   LednickyFitter* fLednickyFitter;
 
   TString fSaveFileType;
+
+  TString fMasterFileLocation;
+  TString fSystematicsFileLocation;
 
 #ifdef __ROOT__
   ClassDef(FitGenerator, 1)
@@ -213,5 +222,12 @@ inline const vector<CentralityType> FitGenerator::GetCentralityTypes() {return f
 inline FitSharedAnalyses* FitGenerator::GetSharedAn() {return fSharedAn;}
 
 inline void FitGenerator::SetFixNormParams(bool aFixNormParams) {fSharedAn->SetFixNormParams(aFixNormParams);}
+
+inline void FitGenerator::SetMasterFileLocation(TString aLocation) {fMasterFileLocation = aLocation;}
+inline void FitGenerator::SetSystematicsFileLocation(TString aLocation) {fSystematicsFileLocation = aLocation;}
+
+inline TString FitGenerator::GetMasterFileLocation() {return fMasterFileLocation;}
+inline TString FitGenerator::GetSystematicsFileLocation() {return fSystematicsFileLocation;}
+
 #endif
 
