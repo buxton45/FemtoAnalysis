@@ -40,7 +40,7 @@ public:
 
   double ExtractParamValue(TString aString);
   void AppendDifference(vector<vector<TString> > &a2dVec, int aCut, int aLineNumber);
-  void PrintText2dVec(vector<vector<TString> > &a2dVec, ostream &aOut=std::cout);
+  void PrintText2dVec(vector<vector<TString> > &a2dVec, ostream &aOut=std::cout, int aNCuts=3);
 
   void AppendFitInfo(TString &aSaveName);
   void SetRadiusStartValues(FitGeneratorAndDraw* aFitGen);

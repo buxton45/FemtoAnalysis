@@ -205,10 +205,10 @@ void FitSystematicAnalysis::AppendDifference(vector<vector<TString> > &a2dVec, i
 
 
 //________________________________________________________________________________________________________________
-void FitSystematicAnalysis::PrintText2dVec(vector<vector<TString> > &a2dVec, ostream &aOut)
+void FitSystematicAnalysis::PrintText2dVec(vector<vector<TString> > &a2dVec, ostream &aOut, int aNCuts)
 {
   int tNCuts = (int)a2dVec.size();
-  assert(tNCuts==3);
+  assert(tNCuts==aNCuts);
   for(unsigned int i=1; i<a2dVec.size(); i++) assert(a2dVec[i-1].size() == a2dVec[i].size());
   int tSize = a2dVec[0].size();
   for(int iLineNumber=0; iLineNumber<tSize; iLineNumber++)
@@ -472,9 +472,9 @@ void FitSystematicAnalysis::RunVaryFitRange(bool aSaveImages, bool aWriteToTxtFi
   TString tSpecificSaveDirectory;
   if(aSaveImages || aWriteToTxtFile)
   {
-    tSpecificSaveDirectory = TString::Format("%sSystematics/", fSaveDirectory.Data());
+    tSpecificSaveDirectory = fSaveDirectory;
     AppendFitInfo(tSpecificSaveDirectory);
-    tSpecificSaveDirectory += TString("/");
+    tSpecificSaveDirectory += TString("/Systematics/");
     gSystem->mkdir(tSpecificSaveDirectory, true);
   }
 
@@ -528,17 +528,17 @@ void FitSystematicAnalysis::RunVaryNonFlatBackgroundFit(bool aSaveImages, bool a
 {
   assert(fModifierValues1.size()==0);  //this is not intended for use with various modifier values, but for the final analysis
   assert(fApplyNonFlatBackgroundCorrection);  //This better be true, since I'm varying to NonFlatBgd method here!
-  int tNFitTypeValues = 3;
-  vector<int> tFitTypeVec = {0,1,2};
+  int tNFitTypeValues = 4;
+  vector<int> tFitTypeVec = {0,1,2,3};
 
   vector<vector<TString> > tText2dVector(0);
 
   TString tSpecificSaveDirectory;
   if(aSaveImages || aWriteToTxtFile)
   {
-    tSpecificSaveDirectory = TString::Format("%sSystematics/", fSaveDirectory.Data());
+    tSpecificSaveDirectory = fSaveDirectory;
     AppendFitInfo(tSpecificSaveDirectory);
-    tSpecificSaveDirectory += TString("/");
+    tSpecificSaveDirectory += TString("/Systematics/");
     gSystem->mkdir(tSpecificSaveDirectory, true);
   }
 
@@ -586,7 +586,7 @@ void FitSystematicAnalysis::RunVaryNonFlatBackgroundFit(bool aSaveImages, bool a
     delete tFitGenerator;
   }
 
-  if(!aWriteToTxtFile) PrintText2dVec(tText2dVector);
+  if(!aWriteToTxtFile) PrintText2dVec(tText2dVector, std::cout, tNFitTypeValues);
   else
   {
     TString tOutputFileName = TString::Format("%sCfFitValues_VaryNonFlatBgdFitType_%s%s", tSpecificSaveDirectory.Data(), cAnalysisBaseTags[fAnalysisType], cCentralityTags[fCentralityType]);
@@ -595,7 +595,7 @@ void FitSystematicAnalysis::RunVaryNonFlatBackgroundFit(bool aSaveImages, bool a
     std::ofstream tOutputFile;
     tOutputFile.open(tOutputFileName);
 
-    PrintText2dVec(tText2dVector,tOutputFile);
+    PrintText2dVec(tText2dVector, tOutputFile, tNFitTypeValues);
 
     tOutputFile.close();
   }

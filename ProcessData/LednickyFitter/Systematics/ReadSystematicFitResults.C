@@ -60,12 +60,13 @@ CentralityType GetCentralityType(TString aLine)
 }
 
 //----------------------------------------------------------------------
-td1dVec ReadParameterValue(TString aLine)
+td1dVec ReadParameterValue(TString aLine, int aNValsPerCut=3)
 {
+  assert(aNValsPerCut <= 4);
   td1dVec tReturnVec(0);
 
   TObjArray* tCuts = aLine.Tokenize('|');
-  assert(tCuts->GetEntries()==4);
+  assert(tCuts->GetEntries()==aNValsPerCut+1);
 
   TString tCut1 = ((TObjString*)tCuts->At(0))->String().Strip(TString::kBoth, ' ');
   TString tCut2 = ((TObjString*)tCuts->At(1))->String().Strip(TString::kBoth, ' ');
@@ -93,6 +94,19 @@ td1dVec ReadParameterValue(TString aLine)
   tReturnVec.push_back(tCut2.Atof());
   tReturnVec.push_back(tCut3.Atof());
 
+  if(aNValsPerCut==4)
+  {
+    TString tCut4 = ((TObjString*)tCuts->At(3))->String().Strip(TString::kBoth, ' ');
+
+    int tBeg4 = tCut4.First(':');
+    tCut4.Remove(0,tBeg4+1);
+    int tEnd4 = tCut4.First("+");
+    tCut4.Remove(tEnd4,tCut4.Length()-tEnd4);
+    tCut4.Strip(TString::kBoth, ' ');
+
+    tReturnVec.push_back(tCut4.Atof());
+  }
+
   return tReturnVec;
 }
 
@@ -106,7 +120,7 @@ void FillCutsVector(td4dVec &aAll, td1dVec &aValues, ParameterType aParamType, A
 }
 
 //----------------------------------------------------------------------
-void ReadFile(TString aFileLocation, td4dVec &aAll)
+void ReadFile(TString aFileLocation, td4dVec &aAll, int aNValsPerCut=3)
 {
   ifstream tFileIn(aFileLocation);
   if(!tFileIn.is_open()) cout << "FAILURE - FILE NOT OPEN: " << aFileLocation << endl;
@@ -126,7 +140,7 @@ void ReadFile(TString aFileLocation, td4dVec &aAll)
     if(tLine.Contains("CentralityType")) tCurrentCentralityType = GetCentralityType(tLine);
     if(tLine.Contains("Lambda") || tLine.Contains("Radius") || tLine.Contains("Ref0") || tLine.Contains("Imf0") || tLine.Contains("d0"))
     {
-      td1dVec tValuesVec = ReadParameterValue(tLine);
+      td1dVec tValuesVec = ReadParameterValue(tLine, aNValsPerCut);
       if(tLine.Contains("Lambda")) tCurrentParameterType = kLambda;
       else if(tLine.Contains("Radius")) tCurrentParameterType = kRadius;
       else if(tLine.Contains("Ref0")) tCurrentParameterType = kRef0;
@@ -355,7 +369,7 @@ void ReadFitRangeAndNonFlatBgdSys(TString aResultsDirectory, td4dVec &aAllFitSys
   }
   else
   {
-    TString tFileLocationBase_FitRangeAndNonFlat = TString::Format("%sSystematics/%s/", aResultsDirectory.Data(), aFitInfoTString.Data());
+    TString tFileLocationBase_FitRangeAndNonFlat = TString::Format("%s%s/Systematics/", aResultsDirectory.Data(), aFitInfoTString.Data());
     tFileLocationFitRangeSys = TString::Format("%sCfFitValues_VaryMaxFitKStar_%s%s%s.txt", tFileLocationBase_FitRangeAndNonFlat.Data(), 
                                                cAnalysisBaseTags[aAnType], cCentralityTags[aCentType], aFitInfoTString.Data());
     tFileLocationNonFlatBgdSys = TString::Format("%sCfFitValues_VaryNonFlatBgdFitType_%s%s%s.txt", tFileLocationBase_FitRangeAndNonFlat.Data(), 
@@ -363,7 +377,7 @@ void ReadFitRangeAndNonFlatBgdSys(TString aResultsDirectory, td4dVec &aAllFitSys
   }
 
   ReadFile(tFileLocationFitRangeSys, aAllFitSysToFill);
-  ReadFile(tFileLocationNonFlatBgdSys, aAllFitSysToFill);
+  ReadFile(tFileLocationNonFlatBgdSys, aAllFitSysToFill, 4);
 
   cout << "Read file " << tFileLocationFitRangeSys << endl;
   cout << "Read file " << tFileLocationNonFlatBgdSys << endl;

@@ -13,7 +13,8 @@ int main(int argc, char **argv)
   AnalysisType tAnType = kLamKchP;
   CentralityType tCentralityType = kMB;
   FitGeneratorType tFitGeneratorType = kPairwConj;
-  bool tShareLambdaParameters = false;
+
+  bool tShareLambdaParameters = true;
   bool tAllShareSingleLambdaParam = false;
 
   //--Dualie sharing options
@@ -22,7 +23,7 @@ int main(int argc, char **argv)
 
   bool ApplyMomResCorrection = true;
   bool ApplyNonFlatBackgroundCorrection = true;
-  NonFlatBgdFitType tNonFlatBgdFitType = kLinear;
+  NonFlatBgdFitType tNonFlatBgdFitType = kPolynomial;
 
   IncludeResidualsType tIncludeResidualsType = kInclude3Residuals; 
   ChargedResidualsType tChargedResidualsType = kUseXiDataAndCoulombOnlyInterp;
@@ -33,7 +34,7 @@ int main(int argc, char **argv)
   bool bWriteToFile = true;
   bool bSaveImages = true;
 
-  TString tResultsDate = "20171227";
+  TString tResultsDate = "20180505";
 
   if(tAnType==kLamK0) tAllShareSingleLambdaParam = true;
 

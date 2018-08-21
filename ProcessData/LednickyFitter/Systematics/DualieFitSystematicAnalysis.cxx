@@ -214,10 +214,10 @@ void DualieFitSystematicAnalysis::AppendDifference(vector<vector<TString> > &a2d
 
 
 //________________________________________________________________________________________________________________
-void DualieFitSystematicAnalysis::PrintText2dVec(vector<vector<TString> > &a2dVec, ostream &aOut)
+void DualieFitSystematicAnalysis::PrintText2dVec(vector<vector<TString> > &a2dVec, ostream &aOut, int aNCuts)
 {
   int tNCuts = (int)a2dVec.size();
-  assert(tNCuts==3);
+  assert(tNCuts==aNCuts);
   for(unsigned int i=1; i<a2dVec.size(); i++) assert(a2dVec[i-1].size() == a2dVec[i].size());
   int tSize = a2dVec[0].size();
   for(int iLineNumber=0; iLineNumber<tSize; iLineNumber++)
@@ -550,9 +550,9 @@ void DualieFitSystematicAnalysis::RunVaryFitRange(bool aSaveImages, bool aWriteT
   TString tSpecificSaveDirectory;
   if(aSaveImages || aWriteToTxtFile)
   {
-    tSpecificSaveDirectory = TString::Format("%sSystematics/", fSaveDirectory.Data());
+    tSpecificSaveDirectory = fSaveDirectory;
     AppendFitInfo(tSpecificSaveDirectory);
-    tSpecificSaveDirectory += TString("/");
+    tSpecificSaveDirectory += TString("/Systematics/");
     gSystem->mkdir(tSpecificSaveDirectory, true);
   }
 
@@ -640,8 +640,8 @@ void DualieFitSystematicAnalysis::RunVaryNonFlatBackgroundFit(bool aSaveImages, 
 {
   assert(fModifierValues1.size()==0);  //this is not intended for use with various modifier values, but for the final analysis
   assert(fApplyNonFlatBackgroundCorrection);  //This better be true, since I'm varying to NonFlatBgd method here!
-  int tNFitTypeValues = 3;
-  vector<int> tFitTypeVec = {0,1,2};
+  int tNFitTypeValues = 4;
+  vector<int> tFitTypeVec = {0,1,2,3};
 
   vector<vector<TString> > tText2dVector1(0);
   vector<vector<TString> > tText2dVector2(0);
@@ -649,9 +649,9 @@ void DualieFitSystematicAnalysis::RunVaryNonFlatBackgroundFit(bool aSaveImages, 
   TString tSpecificSaveDirectory;
   if(aSaveImages || aWriteToTxtFile)
   {
-    tSpecificSaveDirectory = TString::Format("%sSystematics/", fSaveDirectory.Data());
+    tSpecificSaveDirectory = fSaveDirectory;
     AppendFitInfo(tSpecificSaveDirectory);
-    tSpecificSaveDirectory += TString("/");
+    tSpecificSaveDirectory += TString("/Systematics/");
     gSystem->mkdir(tSpecificSaveDirectory, true);
   }
 
@@ -716,8 +716,8 @@ void DualieFitSystematicAnalysis::RunVaryNonFlatBackgroundFit(bool aSaveImages, 
 
   if(!aWriteToTxtFile) 
   {
-    PrintText2dVec(tText2dVector1);
-    PrintText2dVec(tText2dVector2);
+    PrintText2dVec(tText2dVector1, std::cout, tNFitTypeValues);
+    PrintText2dVec(tText2dVector2, std::cout, tNFitTypeValues);
   }
   else
   {
@@ -728,7 +728,7 @@ void DualieFitSystematicAnalysis::RunVaryNonFlatBackgroundFit(bool aSaveImages, 
     std::ofstream tOutputFile1;
     tOutputFile1.open(tOutputFileName1);
 
-    PrintText2dVec(tText2dVector1,tOutputFile1);
+    PrintText2dVec(tText2dVector1, tOutputFile1, tNFitTypeValues);
 
     tOutputFile1.close();
 
@@ -741,7 +741,7 @@ void DualieFitSystematicAnalysis::RunVaryNonFlatBackgroundFit(bool aSaveImages, 
     std::ofstream tOutputFile2;
     tOutputFile2.open(tOutputFileName2);
 
-    PrintText2dVec(tText2dVector2,tOutputFile2);
+    PrintText2dVec(tText2dVector2, tOutputFile2, tNFitTypeValues);
 
     tOutputFile2.close();
   }

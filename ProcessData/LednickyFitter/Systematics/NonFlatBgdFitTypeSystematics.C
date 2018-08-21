@@ -10,15 +10,16 @@ int main(int argc, char **argv)
 
   bool bPlayCompletionBeep = true;
 //-----------------------------------------------------------------------------
-  AnalysisType tAnType = kLamKchP;
+  AnalysisType tAnType = kLamK0;
   CentralityType tCentralityType = kMB;
   FitGeneratorType tFitGeneratorType = kPairwConj;
+
   bool tShareLambdaParameters = false;
   bool tAllShareSingleLambdaParam = false;
 
   bool ApplyMomResCorrection = true;
   bool ApplyNonFlatBackgroundCorrection = true;
-  NonFlatBgdFitType tNonFlatBgdFitType = kLinear;
+  NonFlatBgdFitType tNonFlatBgdFitType = kPolynomial;
 
   IncludeResidualsType tIncludeResidualsType = kInclude3Residuals; 
   ChargedResidualsType tChargedResidualsType = kUseXiDataAndCoulombOnlyInterp;
@@ -29,7 +30,7 @@ int main(int argc, char **argv)
   bool bWriteToFile = true;
   bool bSaveImages = true;
 
-  TString tResultsDate = "20171227";
+  TString tResultsDate = "20180505";
 
   if(tAnType==kLamK0) tAllShareSingleLambdaParam = true;
 
