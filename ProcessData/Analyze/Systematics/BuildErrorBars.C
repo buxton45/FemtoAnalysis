@@ -47,7 +47,7 @@ int main(int argc, char **argv)
 
   bool bPlayCompletionBeep = true;
 //-----------------------------------------------------------------------------
-  TString tParentResultsDate = "20161027";  //Parent analysis these systematics are to accompany
+  TString tParentResultsDate = "20180505";  //Parent analysis these systematics are to accompany
 
   AnalysisType tAnType = kLamKchP;
   CentralityType tCentType = k0010;

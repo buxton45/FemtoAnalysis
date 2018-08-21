@@ -13,12 +13,12 @@ int main(int argc, char **argv)
 
   bool bPlayCompletionBeep = true;
 //-----------------------------------------------------------------------------
-  TString tParentResultsDate = "20161027";  //Parent analysis these systematics are to accompany
+  TString tParentResultsDate = "20180505";  //Parent analysis these systematics are to accompany
 
   AnalysisType tAnType = kLamKchP;
   CentralityType tCentralityType = kMB;
   FitGeneratorType tFitGeneratorType = kPairwConj;
-  bool tShareLambdaParameters = false;
+  bool tShareLambdaParameters = true;
   bool tAllShareSingleLambdaParam = false;
 
   //--Dualie sharing options
@@ -27,7 +27,7 @@ int main(int argc, char **argv)
 
   bool ApplyMomResCorrection = true;
   bool ApplyNonFlatBackgroundCorrection = true;
-  NonFlatBgdFitType tNonFlatBgdFitType = kLinear;
+  NonFlatBgdFitType tNonFlatBgdFitType = kPolynomial;
 
   IncludeResidualsType tIncludeResidualsType = kInclude3Residuals; 
   ChargedResidualsType tChargedResidualsType = kUseXiDataAndCoulombOnlyInterp;
@@ -52,8 +52,8 @@ int main(int argc, char **argv)
 
   for(int iCut=1; iCut<=tMaxCut; iCut++)
   {
-    if(tGeneralAnTypeName=="cLamcKch" && iCut==6) continue;
-    if(tGeneralAnTypeName=="cLamK0" && iCut==9) continue;
+    if(tGeneralAnTypeName=="cLamcKch" && (iCut==6 || iCut==12)) continue;
+    if(tGeneralAnTypeName=="cLamK0" && (iCut==9 || iCut==15 || iCut==17)) continue;
 
     int tCut = iCut;
     if(tAnType==kLamK0 || tAnType==kALamK0) tCut *= -1;
