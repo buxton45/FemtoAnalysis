@@ -248,10 +248,10 @@ TCanvas* CompareDataToTHERMv2(FitGenerator* aGen, bool aDrawAMPT, bool aZoom0010
 
 
 //________________________________________________________________________________________________________________
-TCanvas* CompareLamKchAvgToLamK0(FitGenerator* aLamKchP, FitGenerator* aLamKchM, FitGenerator* aLamK0, bool aDrawIndividualKchAlso=false)
+CanvasPartition* CompareLamKchToLamK0(FitGenerator* aLamKchP, FitGenerator* aLamKchM, FitGenerator* aLamK0, bool aDrawKchAvgAlso=false)
 {
-  TString tCanvasName = "CompareLamKchAvgToLamK0";
-  if(aDrawIndividualKchAlso) tCanvasName += TString("_wIndivKch");
+  TString tCanvasName = "CompareLamKchToLamK0";
+  if(aDrawKchAvgAlso) tCanvasName += TString("_wKchAvg");
 
   vector<CentralityType> tCentralityTypes = aLamKchP->GetCentralityTypes();
   int tNAnalyses = aLamKchP->GetNAnalyses();
@@ -301,26 +301,18 @@ TCanvas* CompareLamKchAvgToLamK0(FitGenerator* aLamKchP, FitGenerator* aLamKchM,
       tCfLamKchAvg->Add(tCfLamKchM);
       tCfLamKchAvg->Scale(0.5);
 
-      tCanPart->AddGraph(i, j, tCfLamKchAvg, "", tMarkerStyle, tColorLamKchAvg, tMarkerSizeLarge);
+      if(aDrawKchAvgAlso) tCanPart->AddGraph(i, j, tCfLamKchAvg, "", tMarkerStyle, tColorLamKchAvg, tMarkerSizeSmall);
       tCanPart->AddGraph(i, j, tCfLamK0, "", tMarkerStyle, tColorLamK0, tMarkerSizeLarge);
+      tCanPart->AddGraph(i, j, tCfLamKchP, "", tMarkerStyle, tColorLamKchP, tMarkerSizeLarge);
+      tCanPart->AddGraph(i, j, tCfLamKchM, "", tMarkerStyle, tColorLamKchM, tMarkerSizeLarge);
       if(i==tNx_Leg && j==tNy_Leg)
       {
         tCanPart->SetupTLegend("", i, j, 0.25, 0.05, 0.35, 0.50);
         tCanPart->AddLegendEntry(i, j, tCfLamK0, cAnalysisRootTags[kLamK0], "p");
-        tCanPart->AddLegendEntry(i, j, tCfLamKchAvg, TString::Format("0.5*(%s+%s)", cAnalysisRootTags[kLamKchP], cAnalysisRootTags[kLamKchM]), "p");
+        tCanPart->AddLegendEntry(i, j, tCfLamKchP, cAnalysisRootTags[kLamKchP], "p");
+        tCanPart->AddLegendEntry(i, j, tCfLamKchM, cAnalysisRootTags[kLamKchM], "p");
+        if(aDrawKchAvgAlso) tCanPart->AddLegendEntry(i, j, tCfLamKchAvg, TString::Format("0.5*(%s+%s)", cAnalysisRootTags[kLamKchP], cAnalysisRootTags[kLamKchM]), "p");
       }
-
-      if(aDrawIndividualKchAlso)
-      {
-        tCanPart->AddGraph(i, j, tCfLamKchP, "", tMarkerStyle, tColorLamKchP, tMarkerSizeSmall);
-        tCanPart->AddGraph(i, j, tCfLamKchM, "", tMarkerStyle, tColorLamKchM, tMarkerSizeSmall);
-        if(i==tNx_Leg && j==tNy_Leg)
-        {
-          tCanPart->AddLegendEntry(i, j, tCfLamKchP, cAnalysisRootTags[kLamKchP], "p");
-          tCanPart->AddLegendEntry(i, j, tCfLamKchM, cAnalysisRootTags[kLamKchM], "p");
-        }
-      }
-
 
       TString tTextAnType;
       if(tAnalysisNumber%2==0) tTextAnType = TString("#LambdaK");
@@ -337,11 +329,135 @@ TCanvas* CompareLamKchAvgToLamK0(FitGenerator* aLamKchP, FitGenerator* aLamKchM,
 
   tCanPart->SetDrawUnityLine(true);
   tCanPart->DrawAll();
-  tCanPart->DrawXaxisTitle("k* (GeV/c)");
-  tCanPart->DrawYaxisTitle("C(k*)",43,25,0.05,0.75);
+  tCanPart->DrawXaxisTitle("#it{k}* (GeV/#it{c})");
+  tCanPart->DrawYaxisTitle("#it{C}(#it{k}*)",43,25,0.05,0.75);
 
 
-  return tCanPart->GetCanvas();
+  return tCanPart;
+}
+
+//________________________________________________________________________________________________________________
+TCanvas* CompareLamKchToLamK0_SinglePanel(FitGenerator* aLamKchP, FitGenerator* aLamKchM, FitGenerator* aLamK0, CentralityType aCentType, bool aDrawConj=false, bool aDrawKchAvgAlso=false)
+{
+  TString tCanvasName = "CompareLamKchToLamK0_SinglePanel";
+  if(aDrawConj) tCanvasName += TString("_Conjs");
+  if(aDrawKchAvgAlso) tCanvasName += TString("_wKchAvg");
+  tCanvasName += TString(cCentralityTags[aCentType]);
+
+  double tXLow = 0.00;
+  double tXHigh = 1.99;
+  double tYLow = 0.86;
+  double tYHigh = 1.07;
+
+  TCanvas* tCan = new TCanvas(tCanvasName, tCanvasName);
+  gStyle->SetOptStat(0); 
+  tCan->cd();
+
+  tCan->SetTopMargin(0.05);
+  tCan->SetRightMargin(0.05);
+
+  int tMarkerStyle = 20;
+  double tMarkerSizeLarge = 0.5;
+  double tMarkerSizeSmall = 0.25;
+
+  int tColorLamK0 = kBlack;
+  int tColorLamKchP = kRed+1;
+  int tColorLamKchM = kBlue+1;
+  int tColorLamKchAvg = kMagenta+1;
+
+  TH1 *tCfLamKchP, *tCfLamKchM, *tCfLamK0;
+  TH1 *tCfLamKchAvg;
+
+  int tAnalysisNumber;
+  if     (aCentType=k0010) tAnalysisNumber=0;
+  else if(aCentType=k1030) tAnalysisNumber=2;
+  else if(aCentType=k3050) tAnalysisNumber=4;
+  else assert(0);
+
+  if(aDrawConj) tAnalysisNumber++;
+
+  //---------------------------------------------------------------------------------------------------------
+  tCfLamKchP = aLamKchP->GetSharedAn()->GetKStarCfHeavy(tAnalysisNumber)->GetHeavyCfClone();
+    tCfLamKchP->SetMarkerStyle(tMarkerStyle);
+    tCfLamKchP->SetMarkerColor(tColorLamKchP);
+    tCfLamKchP->SetLineColor(tColorLamKchP);
+    tCfLamKchP->SetMarkerSize(tMarkerSizeLarge);
+
+  tCfLamKchM = aLamKchM->GetSharedAn()->GetKStarCfHeavy(tAnalysisNumber)->GetHeavyCfClone();
+    tCfLamKchM->SetMarkerStyle(tMarkerStyle);
+    tCfLamKchM->SetMarkerColor(tColorLamKchM);
+    tCfLamKchM->SetLineColor(tColorLamKchM);
+    tCfLamKchM->SetMarkerSize(tMarkerSizeLarge);
+
+  tCfLamK0 = aLamK0->GetSharedAn()->GetKStarCfHeavy(tAnalysisNumber)->GetHeavyCfClone();
+    tCfLamK0->SetMarkerStyle(tMarkerStyle);
+    tCfLamK0->SetMarkerColor(tColorLamK0);
+    tCfLamK0->SetLineColor(tColorLamK0);
+    tCfLamK0->SetMarkerSize(tMarkerSizeLarge);
+
+  tCfLamKchAvg = (TH1*)tCfLamKchP->Clone();
+  tCfLamKchAvg->Add(tCfLamKchM);
+  tCfLamKchAvg->Scale(0.5);
+    tCfLamKchAvg->SetMarkerStyle(tMarkerStyle);
+    tCfLamKchAvg->SetMarkerColor(tColorLamKchAvg);
+    tCfLamKchAvg->SetLineColor(tColorLamKchAvg);
+    tCfLamKchAvg->SetMarkerSize(tMarkerSizeSmall);
+
+  //---------------------------------------------------------------------------------------------------------
+
+  tCfLamK0->GetXaxis()->SetRangeUser(tXLow, tXHigh);
+  tCfLamK0->GetXaxis()->SetTitle("#it{k}* (GeV/#it{c})");
+    tCfLamK0->GetXaxis()->SetTitleSize(0.045);
+    tCfLamK0->GetXaxis()->SetTitleOffset(1.15);
+
+  tCfLamK0->GetYaxis()->SetRangeUser(tYLow, tYHigh);
+  tCfLamK0->GetYaxis()->SetTitle("#it{C}(#it{k}*)");
+    tCfLamK0->GetYaxis()->SetTitleSize(0.045);
+    tCfLamK0->GetYaxis()->SetTitleOffset(1.1);
+
+  tCfLamK0->Draw("AXIS");
+  tCfLamK0->Draw("p");
+  tCfLamKchP->Draw("psame");
+  tCfLamKchM->Draw("psame");
+  if(aDrawKchAvgAlso) tCfLamKchAvg->Draw("psame");
+
+  //---------------------------------------------------------------------------------------------------------
+
+  TLegend* tLeg = new TLegend(0.45, 0.68, 0.65, 0.88, "", "NDC");
+    tLeg->SetFillColor(0);
+    tLeg->SetBorderSize(0);
+    tLeg->AddEntry(tCfLamK0, cAnalysisRootTags[kLamK0], "p");
+    tLeg->AddEntry(tCfLamKchP, cAnalysisRootTags[kLamKchP], "p");
+    tLeg->AddEntry(tCfLamKchM, cAnalysisRootTags[kLamKchM], "p");
+    if(aDrawKchAvgAlso) tLeg->AddEntry(tCfLamKchAvg, TString::Format("0.5*(%s+%s)", cAnalysisRootTags[kLamKchP], cAnalysisRootTags[kLamKchM]), "p");
+  tLeg->Draw();
+  //---------------------------------------------------------------------------------------------------------
+
+  TString tTextAnType = TString("#LambdaK");
+  if(aDrawConj) tTextAnType = TString("#bar{#Lambda}#bar{K}");
+
+  TPaveText* tAnTypeName = new TPaveText(0.7, 0.78, 0.85, 0.88, "NDC");
+    tAnTypeName->SetFillColor(0);
+    tAnTypeName->SetBorderSize(0);
+    tAnTypeName->SetTextAlign(22);
+    tAnTypeName->SetTextFont(63);
+    tAnTypeName->SetTextSize(25);
+  tAnTypeName->AddText(tTextAnType);
+  tAnTypeName->Draw();
+
+
+
+  TString tTextCentrality = TString(cPrettyCentralityTags[aLamKchP->GetSharedAn()->GetFitPairAnalysis(tAnalysisNumber)->GetCentralityType()]);
+  TPaveText* tCentralityName = new TPaveText(0.15, 0.78, 0.30, 0.88, "NDC");
+    tCentralityName->SetFillColor(0);
+    tCentralityName->SetBorderSize(0);
+    tCentralityName->SetTextAlign(22);
+    tCentralityName->SetTextFont(63);
+    tCentralityName->SetTextSize(25);
+  tCentralityName->AddText(tTextCentrality);
+  tCentralityName->Draw();
+
+  return tCan;
 }
 
 
@@ -373,8 +489,8 @@ TCanvas* CompareEPBinning(FitGenerator* aGenNoEPBin, FitGenerator* aGenEPBin8, F
   int tAnalysisNumber=0;
 
   int tMarkerStyleNoBin = 20;
-  int tMarkerStyleBin8 = 22;
-  int tMarkerStyleBin16 = 32;
+  int tMarkerStyleBin8 = 20;
+  int tMarkerStyleBin16 = 24;
 
   double tMarkerSize = 0.5;
 
@@ -384,8 +500,8 @@ TCanvas* CompareEPBinning(FitGenerator* aGenNoEPBin, FitGenerator* aGenEPBin8, F
   else if(tAnType==kLamKchM || tAnType==kALamKchP) tColor = kBlue+1;
   else assert(0);
 
-  int tColorBin8 = kMagenta;
-  int tColorBin16 = kGreen;
+  int tColorBin8 = kCyan;
+  int tColorBin16 = kMagenta;
 
   int tNx_Leg=0, tNy_Leg=0;
 
@@ -410,13 +526,19 @@ TCanvas* CompareEPBinning(FitGenerator* aGenNoEPBin, FitGenerator* aGenEPBin8, F
         tCanPart->AddLegendEntry(i, j, tCfEPBin8, "8 Bins", "p");
         tCanPart->AddLegendEntry(i, j, tCfEPBin16, "16 Bins", "p");
       }
+
+      TString tTextAnType = TString(cAnalysisRootTags[aGenNoEPBin->GetSharedAn()->GetFitPairAnalysis(tAnalysisNumber)->GetAnalysisType()]);
+      TString tTextCentrality = TString(cPrettyCentralityTags[aGenNoEPBin->GetSharedAn()->GetFitPairAnalysis(tAnalysisNumber)->GetCentralityType()]);
+      TString tCombinedText = tTextAnType + TString("  ") +  tTextCentrality;
+      TPaveText* tCombined = tCanPart->SetupTPaveText(tCombinedText,i,j,0.70,0.825,0.15,0.10,63,20);;
+      tCanPart->AddPadPaveText(tCombined,i,j);
     }
   }
 
   tCanPart->SetDrawUnityLine(true);
   tCanPart->DrawAll();
-  tCanPart->DrawXaxisTitle("k* (GeV/c)");
-  tCanPart->DrawYaxisTitle("C(k*)",43,25,0.05,0.75);
+  tCanPart->DrawXaxisTitle("#it{k}* (GeV/#it{c})");
+  tCanPart->DrawYaxisTitle("#it{C}(#it{k}*)",43,25,0.05,0.75);
 
 
   return tCanPart->GetCanvas();
@@ -867,9 +989,14 @@ int main(int argc, char **argv)
 //-------------------------------------------------------------------------------
 
 
-  bool tDrawIndividualKchAlso = true;
-  TCanvas* tCanCompareLamKchAvgToLamK0 = CompareLamKchAvgToLamK0(tLamKchP, tLamKchM, tLamK0, tDrawIndividualKchAlso);
-  if(SaveImages) tCanCompareLamKchAvgToLamK0->SaveAs(tSaveDir + tCanCompareLamKchAvgToLamK0->GetName() + TString::Format(".%s", tSaveFileType.Data()));
+  bool tDrawKchAvgAlso = false;
+  CanvasPartition* tCanPartCompareLamKchToLamK0 = CompareLamKchToLamK0(tLamKchP, tLamKchM, tLamK0, tDrawKchAvgAlso);
+  TCanvas* tCanCompLamKchToLamK0_SinglaPanel = CompareLamKchToLamK0_SinglePanel(tLamKchP, tLamKchM, tLamK0, k3050, false, tDrawKchAvgAlso);
+  if(SaveImages)
+  {
+    tCanPartCompareLamKchToLamK0->GetCanvas()->SaveAs(tSaveDir + tCanPartCompareLamKchToLamK0->GetCanvas()->GetName() + TString::Format(".%s", tSaveFileType.Data()));
+    tCanCompLamKchToLamK0_SinglaPanel->SaveAs(tSaveDir + tCanCompLamKchToLamK0_SinglaPanel->GetName() + TString::Format(".%s", tSaveFileType.Data()));
+  }
 
   //-----------------
   bool aDrawAMPT = false;

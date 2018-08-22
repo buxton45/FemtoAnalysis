@@ -1080,8 +1080,8 @@ TCanvas* FitGeneratorAndDraw::GetResidualsWithTransformMatrices(int aAnalysisNum
   TString tMotherName2, tDaughterName2;
   TString tBoxText;
   TPaveText* tText;
-    double tTextXmin = 0.15;
-    double tTextXmax = 0.35;
+    double tTextXmin = 0.20;
+    double tTextXmax = 0.40;
     double tTextYmin = 0.75;
     double tTextYmax = 0.85;
 
@@ -1103,16 +1103,16 @@ TCanvas* FitGeneratorAndDraw::GetResidualsWithTransformMatrices(int aAnalysisNum
   TH1D* tTempHist2 = aResidual.GetTransformedResidualCorrelationHistogramWithLambdaAndNormApplied(tTempName2, aParamsOverall.data(), tWeightedNorm);
 
   TH2D* tTempTransformMatrix = aResidual.GetTransformMatrix();
-  tTempTransformMatrix->GetXaxis()->SetTitle(TString("k*_{") + tDaughterName1 + tDaughterName2 + TString("}(GeV/c)"));
-    tTempTransformMatrix->GetXaxis()->SetTitleSize(0.04);
-    tTempTransformMatrix->GetXaxis()->SetTitleOffset(1.1);
+  tTempTransformMatrix->GetXaxis()->SetTitle(TString("#it{k}*_{") + tDaughterName1 + tDaughterName2 + TString("}(GeV/#it{c})"));
+    tTempTransformMatrix->GetXaxis()->SetTitleSize(0.045);
+    tTempTransformMatrix->GetXaxis()->SetTitleOffset(1.15);
 
-  tTempTransformMatrix->GetYaxis()->SetTitle(TString("k*_{") + tMotherName1 + tMotherName2 + TString("}(GeV/c)"));
-    tTempTransformMatrix->GetYaxis()->SetTitleSize(0.04);
-    tTempTransformMatrix->GetYaxis()->SetTitleOffset(1.2);
+  tTempTransformMatrix->GetYaxis()->SetTitle(TString("#it{k}*_{") + tMotherName1 + tMotherName2 + TString("}(GeV/#it{c})"));
+    tTempTransformMatrix->GetYaxis()->SetTitleSize(0.045);
+    tTempTransformMatrix->GetYaxis()->SetTitleOffset(1.1);
 
-  tTempTransformMatrix->GetZaxis()->SetLabelSize(0.03);
-  tTempTransformMatrix->GetZaxis()->SetLabelOffset(0.004);
+  tTempTransformMatrix->GetZaxis()->SetLabelSize(0.045);
+  tTempTransformMatrix->GetZaxis()->SetLabelOffset(0.0045);
 
   tReturnCan = new TCanvas(TString::Format("%s_%s", tCanvasBaseName.Data(), cAnalysisBaseTags[tTempResidualType]),
                            TString::Format("%s_%s", tCanvasBaseName.Data(), cAnalysisBaseTags[tTempResidualType]));
@@ -1121,23 +1121,31 @@ TCanvas* FitGeneratorAndDraw::GetResidualsWithTransformMatrices(int aAnalysisNum
   tPadA = new TPad(TString::Format("tPadA_%s_%s",tCanvasBaseName.Data(), cAnalysisBaseTags[tTempResidualType]), 
                    TString::Format("tPadA_%s_%s",tCanvasBaseName.Data(), cAnalysisBaseTags[tTempResidualType]), 
                    0.0, 0.5, 0.5, 1.0);
+  tPadA->SetLeftMargin(0.125);
+  tPadA->SetBottomMargin(0.125);
   tPadA->Draw();
 
   tPadB = new TPad(TString::Format("tPadB_%s_%s",tCanvasBaseName.Data(), cAnalysisBaseTags[tTempResidualType]), 
                    TString::Format("tPadB_%s_%s",tCanvasBaseName.Data(), cAnalysisBaseTags[tTempResidualType]), 
                    0.0, 0.0, 0.5, 0.5);
+  tPadB->SetLeftMargin(0.125);
+  tPadB->SetBottomMargin(0.125);
   tPadB->Draw();
 
   tPadC = new TPad(TString::Format("tPadC_%s_%s",tCanvasBaseName.Data(), cAnalysisBaseTags[tTempResidualType]), 
                    TString::Format("tPadC_%s_%s",tCanvasBaseName.Data(), cAnalysisBaseTags[tTempResidualType]), 
                    0.5, 0.5, 1.0, 1.0);
   tPadC->SetRightMargin(0.15);
+  tPadC->SetLeftMargin(0.125);
+  tPadC->SetBottomMargin(0.125);
   tPadC->Draw();
 
   tPadD = new TPad(TString::Format("tPadD_%s_%s",tCanvasBaseName.Data(), cAnalysisBaseTags[tTempResidualType]), 
                    TString::Format("tPadD_%s_%s",tCanvasBaseName.Data(), cAnalysisBaseTags[tTempResidualType]), 
                    0.5, 0.0, 1.0, 0.5);
   tPadD->SetRightMargin(0.15);
+  tPadD->SetLeftMargin(0.125);
+  tPadD->SetBottomMargin(0.125);
   tPadD->Draw();
 
   tTempHist1->SetMarkerStyle(tResMarkerStyles[aOffset]);
@@ -1154,18 +1162,18 @@ TCanvas* FitGeneratorAndDraw::GetResidualsWithTransformMatrices(int aAnalysisNum
   tTempHist2->GetXaxis()->SetRangeUser(tXLow,tXHigh);
 
   tTempHist1->GetXaxis()->SetTitle("#it{k}* (GeV/#it{c})");
-    tTempHist1->GetXaxis()->SetTitleSize(0.04);
+    tTempHist1->GetXaxis()->SetTitleSize(0.045);
     tTempHist1->GetXaxis()->SetTitleOffset(1.1);
   tTempHist2->GetXaxis()->SetTitle("#it{k}* (GeV/#it{c})");
-    tTempHist2->GetXaxis()->SetTitleSize(0.04);
+    tTempHist2->GetXaxis()->SetTitleSize(0.045);
     tTempHist2->GetXaxis()->SetTitleOffset(1.1);
 
   tTempHist1->GetYaxis()->SetTitle("#it{C}(#it{k}*)");
-    tTempHist1->GetYaxis()->SetTitleSize(0.04);
-    tTempHist1->GetYaxis()->SetTitleOffset(1.2);
+    tTempHist1->GetYaxis()->SetTitleSize(0.05);
+    tTempHist1->GetYaxis()->SetTitleOffset(1.1);
   tTempHist2->GetYaxis()->SetTitle("#it{C}(#it{k}*)");
-    tTempHist2->GetYaxis()->SetTitleSize(0.04);
-    tTempHist2->GetYaxis()->SetTitleOffset(1.2);
+    tTempHist2->GetYaxis()->SetTitleSize(0.05);
+    tTempHist2->GetYaxis()->SetTitleOffset(1.1);
 
   tPadA->cd();
   tTempHist1->Draw("ex0");
@@ -1776,18 +1784,18 @@ TCanvas* FitGeneratorAndDraw::DrawSingleKStarCfwFitAndResiduals(int aAnalysisNum
   TPaveText* tCombined = tCanPart->SetupTPaveText(tCombinedText,0,0,0.70,0.875,0.15,0.10,63,25);
   tCanPart->AddPadPaveText(tCombined,0,0);
 
-
+/*
   TString tTextAlicePrelim = TString("ALICE Preliminary");
   TPaveText* tAlicePrelim = tCanPart->SetupTPaveText(tTextAlicePrelim,0,0,0.10,0.875,0.40,0.10,43,25);
   tCanPart->AddPadPaveText(tAlicePrelim,0,0);
-
+*/
 
   //---------- Right pad
   if(aDrawData) BuildKStarCfswFitsPanel(tCanPart, aAnalysisNumber, 1, 0, aMomResCorrectFit, aNonFlatBgdCorrectFit, aNonFlatBgdFitType, aDrawSysErrors, aZoomROP);
   else BuildKStarCfswFitsPanel(tCanPart, aAnalysisNumber, 1, 0, aMomResCorrectFit, aNonFlatBgdCorrectFit, aNonFlatBgdFitType, false, false);
 
   //Residuals-----
-  tCanPart->SetupTLegend(TString("Residuals"), 1, 0, 0.45, 0.05, 0.50, 0.35, 2);
+  tCanPart->SetupTLegend(TString("Residuals"), 1, 0, 0.45, 0.65, 0.50, 0.35, 2);
   for(unsigned int iRes=0; iRes<tFitPairAnalysis->GetResidualCollection()->GetNeutralCollection().size(); iRes++)
   {
     AnalysisType tTempResidualType = tFitPairAnalysis->GetResidualCollection()->GetNeutralCollection()[iRes].GetResidualType();
@@ -1811,7 +1819,7 @@ TCanvas* FitGeneratorAndDraw::DrawSingleKStarCfwFitAndResiduals(int aAnalysisNum
     tCanPart->AddGraph(1,0,tTempHist,"",tChargedResMarkerStyles[iRes],tChargedResBaseColors[iRes],tMarkerSize,"ex0same");
     tCanPart->AddLegendEntry(1, 0, tTempHist, cAnalysisRootTags[tTempResidualType], "p");
   }
-
+  tCanPart->AddGraph(1,0,(TH1*)fSharedAn->GetKStarCfHeavy(aAnalysisNumber)->GetHeavyCfClone(),"",20,tColor,0.5,"ex0same");  //draw again so data on top
   //End Residuals
 
   double tMinZoomRes = 0.985, tMaxZoomRes = 1.015;
@@ -1820,7 +1828,8 @@ TCanvas* FitGeneratorAndDraw::DrawSingleKStarCfwFitAndResiduals(int aAnalysisNum
 
 
   TString tTextSysInfo = TString("Pb-Pb #sqrt{#it{s}_{NN}} = 2.76 TeV");
-  TPaveText* tSysInfo = tCanPart->SetupTPaveText(tTextSysInfo,1,0,0.50,0.875,0.40,0.10,43,25);
+//  TPaveText* tSysInfo = tCanPart->SetupTPaveText(tTextSysInfo,1,0,0.50,0.875,0.40,0.10,43,25);
+  TPaveText* tSysInfo = tCanPart->SetupTPaveText(tTextSysInfo,0,0,0.10,0.875,0.40,0.10,43,25);
   tCanPart->AddPadPaveText(tSysInfo,1,0);
 
   td1dVec tSysErrors;
