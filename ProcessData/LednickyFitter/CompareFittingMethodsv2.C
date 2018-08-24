@@ -600,6 +600,8 @@ int main(int argc, char **argv)
   //This allows the user a chance to look at and manipulate a TBrowser before
   //the program ends and closes everything
 
+  bool bDrawPredictions = true;
+
   bool bSaveFigures = false;
   TString tSaveFileType = "eps";
   TString tSaveDir = "/home/jesse/Analysis/Presentations/AliFemto/20180627/Figures/";
@@ -657,8 +659,8 @@ int main(int argc, char **argv)
 //  tCanNameMod = TString("_FreevsFixlam_ShareR_StavCf_NoBgd");
 
   TCanvas* tCanLambdavsRadius = CompareLambdavsRadius(tFVWIVec, k0010, tCanNameMod);
-  TCanvas* tCanImF0vsReF0 = CompareImF0vsReF0(tFVWIVec, true, tCanNameMod);
-  TCanvas* tCanAll = CompareAll(tFVWIVec, true, tCanNameMod);
+  TCanvas* tCanImF0vsReF0 = CompareImF0vsReF0(tFVWIVec, bDrawPredictions, tCanNameMod);
+  TCanvas* tCanAll = CompareAll(tFVWIVec, bDrawPredictions, tCanNameMod);
 
 
 

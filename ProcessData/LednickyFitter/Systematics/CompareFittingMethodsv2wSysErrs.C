@@ -643,6 +643,9 @@ int main(int argc, char **argv)
   bool bDrawStatOnly = false;
   bool bLamKchCombined = false;
 
+  bool bDrawPredictions = true;
+  bLamKchCombined = true;
+
   TString tSaveFileType = "pdf";  //Needs to be pdf for systematics to be transparent!
 //  TString tSaveDir = "/home/jesse/Analysis/Presentations/AliFemto/20180627/Figures/";
   TString tSaveDir = "/home/jesse/Analysis/FemtoAnalysis/ProcessData/LednickyFitter/Systematics/";
@@ -660,7 +663,6 @@ int main(int argc, char **argv)
 //--------------------------------------------
   tFVWIVec = tFVWIVec_Comp3An_3Res;
   tCanNameMod = TString("_Comp3An_3Res");
-  bLamKchCombined = true;
 
 //  tFVWIVec = tFVWIVec_Comp3An_10Res;
 //  tCanNameMod = TString("_Comp3An_10Res");
@@ -696,8 +698,8 @@ int main(int argc, char **argv)
 
 
   TCanvas* tCanLambdavsRadius = CompareLambdavsRadius(tFVWIVec, tSystematicsFileLocation_LamKch, tSystematicsFileLocation_LamK0, k0010, tCanNameMod, false, false, bDrawStatOnly, bLamKchCombined);
-  TCanvas* tCanImF0vsReF0 = CompareImF0vsReF0(tFVWIVec, tSystematicsFileLocation_LamKch, tSystematicsFileLocation_LamK0, true, tCanNameMod, false, false, bDrawStatOnly);
-  TCanvas* tCanAll = CompareAll(tFVWIVec, tSystematicsFileLocation_LamKch, tSystematicsFileLocation_LamK0, true, tCanNameMod, bDrawStatOnly, bLamKchCombined);
+  TCanvas* tCanImF0vsReF0 = CompareImF0vsReF0(tFVWIVec, tSystematicsFileLocation_LamKch, tSystematicsFileLocation_LamK0, bDrawPredictions, tCanNameMod, false, false, bDrawStatOnly);
+  TCanvas* tCanAll = CompareAll(tFVWIVec, tSystematicsFileLocation_LamKch, tSystematicsFileLocation_LamK0, bDrawPredictions, tCanNameMod, bDrawStatOnly, bLamKchCombined);
 
 
 
