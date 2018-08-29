@@ -127,7 +127,7 @@ const SystematicsFileInfo gInfoLamK012_20180505 = SystematicsFileInfo("20180814"
                                                                       "", {}, 
                                                                       true);
 
-const SystematicsFileInfo gInfoLamK013_20180505 = SystematicsFileInfo("201808xx", 
+const SystematicsFileInfo gInfoLamK013_20180505 = SystematicsFileInfo("20180820", 
                                                                       "_Lam_minPosDaughterToPrimVertex_", {0.05, 0.1, 0.2}, 
                                                                       "", {}, 
                                                                       true);
