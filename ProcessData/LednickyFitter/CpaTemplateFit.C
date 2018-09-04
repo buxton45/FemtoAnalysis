@@ -24,9 +24,6 @@ TH1F* Get1dHist(TString aFileLocation, TString aDirectoryName, TString aHistName
   else if(aDirectoryName.Contains("XiKch")) tFemtoListName = "cXicKch";
   else assert(0);
 
-  //TODO
-  tFemtoListName = TString("LambdaKaon");
-
   tFemtoListName += TString("_femtolist");
   tFemtolist = (TList*)tDirFile->Get(tFemtoListName);
   aDirectoryName.ReplaceAll("0010","010");
@@ -94,9 +91,6 @@ TH2F* Get2dHist(TString aFileLocation, TString aDirectoryName, TString aHistName
   else if(aDirectoryName.Contains("XiKch")) tFemtoListName = "cXicKch";
   else assert(0);
 
-  //TODO
-  tFemtoListName = TString("LambdaKaon");
-
   tFemtoListName += TString("_femtolist");
   tFemtolist = (TList*)tDirFile->Get(tFemtoListName);
   aDirectoryName.ReplaceAll("0010","010");
@@ -159,7 +153,7 @@ TH1F* Get1dProjection(TH2F* a2dHist, TString aBinName)
   assert(tBinNumber > 0);
 
   TString tNewName = TString::Format("%s CPA", aBinName.Data());
-  TH1F* tReturnHist = (TH1F*)a2dHist->ProjectionX("", tBinNumber, tBinNumber);
+  TH1F* tReturnHist = (TH1F*)a2dHist->ProjectionX(tNewName, tBinNumber, tBinNumber);
 
   return tReturnHist;
 }
@@ -171,16 +165,9 @@ TH1F* Get1dProjection(TH2F* a2dHist, int aDefaultBin)
   return Get1dProjection(a2dHist, tBinName);
 }
 
-
 //________________________________________________________________________________________________________________
-void DoTemplateFit(TH1F* aData, TH2F* a2dMC, int tNRes=3)
+TObjArray* DoProjections(TH2F* a2dMC, int aNRes=3)
 {
-/*
-  int tNHist=0;
-  if(tNRes==3) tNHist = 7;
-  if(tNRes==10) tNHist = 12;
-*/
-
   //First, grab all MC hisograms
   TH1F* tPrimary  = Get1dProjection(a2dMC, 0);
   TH1F* tLambda   = Get1dProjection(a2dMC, 1);
@@ -197,14 +184,14 @@ void DoTemplateFit(TH1F* aData, TH2F* a2dMC, int tNRes=3)
   TH1F* tFake     = Get1dProjection(a2dMC, 12);
   TH1F* tMaterial = Get1dProjection(a2dMC, 13);
 
-  assert(tPrimary->GetXaxis()->GetBinWidth(1)==aData->GetXaxis()->GetBinWidth(1));
   //---------------------------------------------
+
   TObjArray* tMCArr = new TObjArray();
   tMCArr->Add(tPrimary);
   tMCArr->Add(tSig0);
   tMCArr->Add(tXi0);
   tMCArr->Add(tXiC);
-  if(tNRes==10)
+  if(aNRes==10)
   {
     tMCArr->Add(tSigStP);
     tMCArr->Add(tSigStM);
@@ -223,13 +210,31 @@ void DoTemplateFit(TH1F* aData, TH2F* a2dMC, int tNRes=3)
   tMCArr->Add(tOther);
   tMCArr->Add(tFake);
   tMCArr->Add(tMaterial);
+
+  //---------------------------------------------
+  return tMCArr;
+}
+
+
+//________________________________________________________________________________________________________________
+void DoTemplateFit(TH1F* aData, TH2F* a2dMC, int aNRes=3)
+{
+/*
+  int tNHist=0;
+  if(aNRes==3) tNHist = 7;
+  if(aNRes==10) tNHist = 12;
+*/
+
+  TObjArray* tMCArr = DoProjections(a2dMC, aNRes);
+  assert(((TH1F*)tMCArr->At(0))->GetXaxis()->GetBinWidth(1)==aData->GetXaxis()->GetBinWidth(1));
+
   //---------------------------------------------
   TCanvas* tCan = new TCanvas("tCan", "tCan");
   tCan->cd();
   gStyle->SetOptStat(0);
 
   TFractionFitter* tFracFit = new TFractionFitter(aData, tMCArr);
-  for(int i=0; i<tMCArr->GetEntries(); i++) tFracFit->Constrain(0, 0., 1.);  //Constrain all parameters between 0 and 1
+  for(int i=0; i<tMCArr->GetEntries(); i++) tFracFit->Constrain(i, 0., 1.);  //Constrain all parameters between 0 and 1
   tFracFit->SetRangeX(1, aData->GetNbinsX());  //set the number of bins to fit
   int tStatus = tFracFit->Fit();
   cout << "Fit status: " << tStatus << endl;
@@ -242,7 +247,138 @@ void DoTemplateFit(TH1F* aData, TH2F* a2dMC, int tNRes=3)
 
 }
 
+//________________________________________________________________________________________________________________
+TH1F* GetSumOf2d(TH2F* a2dMC)
+{
+  TObjArray* tMCArr = DoProjections(a2dMC, 10);
 
+  TH1F* tSumHist;
+  for(int i=0; i<tMCArr->GetEntries(); i++)
+  {
+    if(i==0) tSumHist = (TH1F*)tMCArr->At(i)->Clone("tSumHist");
+    else tSumHist->Add((TH1F*)tMCArr->At(i));
+  }
+  return tSumHist;
+}
+
+
+//________________________________________________________________________________________________________________
+TCanvas* DrawAllIn2d(TH1F* aData, TH2F* a2dMC, int aNRes)
+{
+  TObjArray* tMCArr = DoProjections(a2dMC, aNRes);
+  TCanvas *tCanDrawAllIn2d = new TCanvas("tCanDrawAllIn2d", "tCanDrawAllIn2d");
+  tCanDrawAllIn2d->cd();
+  tCanDrawAllIn2d->SetLogy();
+  gStyle->SetOptStat(0);
+
+  vector<int> tColors{1, 2, 3, 4, 5, 6, 7, 8, 9, 28, 46, 41};
+//  vector<int> tFillStyles{0, 0, 0, 0, 3305, 3325, 3352, 3395, 3644, 3481, 3418, 3357};
+  vector<int> tFillStyles{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+  TLegend* tLeg = new TLegend(0.15, 0.50, 0.45, 0.90, "", "NDC");
+  tLeg->SetBorderSize(1);
+  tLeg->SetFillColor(0);
+
+  aData->GetYaxis()->SetRangeUser(1, 100000000);
+  aData->SetMarkerStyle(20);
+  aData->SetMarkerColor(1);
+  aData->SetLineColor(1);
+  aData->Draw("Ep");
+
+
+  TH1F* tHistToDraw;
+  TH1F* tSumHist;
+  for(int i=0; i<tMCArr->GetEntries(); i++)
+  {
+    if(i==0) tSumHist = (TH1F*)tMCArr->At(i)->Clone("tSumHist");
+    else tSumHist->Add((TH1F*)tMCArr->At(i));
+
+    tHistToDraw = (TH1F*)tMCArr->At(i);
+    tHistToDraw->Rebin(2);
+    tHistToDraw->SetMarkerStyle(20);
+    tHistToDraw->SetMarkerColor(tColors[i]);
+    tHistToDraw->SetLineColor(tColors[i]);
+    tHistToDraw->SetLineWidth(2);
+    tHistToDraw->SetFillStyle(tFillStyles[i]);
+    tHistToDraw->SetFillColor(tColors[i]);
+    tHistToDraw->DrawCopy("HISTsame");
+
+    tLeg->AddEntry(tHistToDraw, tHistToDraw->GetName(), "lpf");
+  }
+  tLeg->Draw();
+
+  tSumHist->SetMarkerStyle(20);
+  tSumHist->SetMarkerColor(2);
+  tSumHist->SetLineColor(2);
+  tSumHist->Draw("Epsame");
+
+  TH1F* tRatio = (TH1F*)aData->Clone("tRatio");
+  tRatio->Divide(tSumHist);
+  tRatio->SetMarkerStyle(20);
+  tRatio->SetMarkerColor(3);
+  tRatio->SetLineColor(3);
+  tRatio->Draw("Epsame");
+
+  return tCanDrawAllIn2d;
+}
+
+//________________________________________________________________________________________________________________
+TCanvas* CompareTotalDataToMC(TH1F* aData, TH2F* a2dMC, TH1F* a1dMCUnbiased)
+{
+  //It appears that the CPA distribution from MC matches better the shape of the data when 
+  //all particles are accepted (as in case of CosPointing histograms) as compared to when
+  //only particles with HiddenInfo are selected (as in case of summing histograms in CosPointingAnglewParentInfo)
+
+  TCanvas *tCanCompTotDataToMC = new TCanvas("tCanCompTotDataToMC", "tCanCompTotDataToMC");
+  tCanCompTotDataToMC->cd();
+  tCanCompTotDataToMC->SetLogy();
+  gStyle->SetOptStat(0);
+
+  TLegend* tLeg = new TLegend(0.15, 0.50, 0.45, 0.90, "", "NDC");
+  tLeg->SetBorderSize(1);
+  tLeg->SetFillColor(0);
+
+  aData->GetYaxis()->SetRangeUser(1, 100000000);
+  aData->SetMarkerStyle(20);
+  aData->SetMarkerColor(1);
+  aData->SetLineColor(1);
+  aData->Draw("Ep");
+
+  TH1F* tSumHist = GetSumOf2d(a2dMC);
+  tSumHist->SetMarkerStyle(20);
+  tSumHist->SetMarkerColor(2);
+  tSumHist->SetLineColor(2);
+  tSumHist->Draw("Epsame");
+
+  a1dMCUnbiased->SetMarkerStyle(20);
+  a1dMCUnbiased->SetMarkerColor(4);
+  a1dMCUnbiased->SetLineColor(4);
+  a1dMCUnbiased->Draw("Epsame");
+
+
+  TH1F* tRatio = (TH1F*)aData->Clone("tRatio");
+  tRatio->Divide(tSumHist);
+  tRatio->SetMarkerStyle(20);
+  tRatio->SetMarkerColor(kRed+2);
+  tRatio->SetLineColor(kRed+2);
+  tRatio->Draw("Epsame");
+
+  TH1F* tRatioUnbiased = (TH1F*)aData->Clone("tRatioUnbiased");
+  tRatioUnbiased->Divide(a1dMCUnbiased);
+  tRatioUnbiased->SetMarkerStyle(20);
+  tRatioUnbiased->SetMarkerColor(kBlue+2);
+  tRatioUnbiased->SetLineColor(kBlue+2);
+  tRatioUnbiased->Draw("Epsame");
+
+  tLeg->AddEntry(aData, "Data", "lpf");
+  tLeg->AddEntry(tSumHist, "MC (Sum)", "lpf");
+  tLeg->AddEntry(a1dMCUnbiased, "MC (Unbiased)", "lpf");
+  tLeg->AddEntry(tRatio, "Ratio", "lpf");
+  tLeg->AddEntry(tRatioUnbiased, "Ratio (Unbiased)", "lpf");
+  tLeg->Draw();
+
+  return tCanCompTotDataToMC;
+}
 
 //________________________________________________________________________________________________________________
 //****************************************************************************************************************
@@ -259,8 +395,8 @@ int main(int argc, char **argv)
   tFullTimer.Start();
 //-----------------------------------------------------------------------------
 
-  TString tResultsDate_Data = "20180505";
-  TString tResultsDate_MC   = "20180830";
+  TString tResultsDate_Data = "20180830_NoCpaCut";
+  TString tResultsDate_MC   = "20180830_NoCpaCut";
 
   AnalysisType tAnType = kLamK0;
   ParticleType tParticleType = kLam; //kLam, kALam, kK0
@@ -285,12 +421,10 @@ int main(int argc, char **argv)
   TString tFileLocation_Data_FemtoPlus  = TString::Format("%s_FemtoPlus.root", tFileLocationBase_Data.Data());
 
   TString tDirectoryBase_MC = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_%s_%s/",tGeneralAnTypeName.Data(),tResultsDate_MC.Data());
-  TString tFileLocationBase_MC = TString::Format("%sResults_%s_%s",tDirectoryBase_MC.Data(),tGeneralAnTypeName.Data(),tResultsDate_MC.Data());
+  TString tFileLocationBase_MC = TString::Format("%sResults_%sMC_%s",tDirectoryBase_MC.Data(),tGeneralAnTypeName.Data(),tResultsDate_MC.Data());
   TString tFileLocation_MC_FemtoMinus = TString::Format("%s_FemtoMinus.root", tFileLocationBase_MC.Data());
   TString tFileLocation_MC_FemtoPlus  = TString::Format("%s_FemtoPlus.root", tFileLocationBase_MC.Data());
 
-  //TODO
-  tFileLocation_MC_FemtoMinus = TString("/home/jesse/Analysis/FemtoAnalysis/RunAnalysis/Test/AnalysisResults.root");
 //-----------------------------------------------------------------------------
 
   TString t1dHistName = TString::Format("CosPointingAngle_%s_Pass", cParticleTags[tParticleType]);
@@ -298,20 +432,37 @@ int main(int argc, char **argv)
   TString tDirName = TString::Format("%s%s", cAnalysisBaseTags[tAnType], cCentralityTags[tCentType]);
 
 //-------------------------------------------------------------------------------
+
   TH1F* tData_FemtoMinus = Get1dHist(tFileLocation_Data_FemtoMinus, tDirName, t1dHistName, t1dHistName);
   TH1F* tData_FemtoPlus  = Get1dHist(tFileLocation_Data_FemtoPlus,  tDirName, t1dHistName, t1dHistName);
   TH1F* tData = (TH1F*)tData_FemtoMinus->Clone(TString::Format("Data_%s%s", cAnalysisBaseTags[tAnType], cCentralityTags[tCentType]));
     tData->Add(tData_FemtoPlus);
 
   TH2F* tMC_FemtoMinus = Get2dHist(tFileLocation_MC_FemtoMinus, tDirName, t2dHistName, t2dHistName);
-//  TH2F* tMC_FemtoPlus  = Get2dHist(tFileLocation_MC_FemtoPlus, tDirName, t2dHistName, t2dHistName);
+  TH2F* tMC_FemtoPlus  = Get2dHist(tFileLocation_MC_FemtoPlus, tDirName, t2dHistName, t2dHistName);
   TH2F* tMC = (TH2F*)tMC_FemtoMinus->Clone(TString::Format("MC_%s%s", cAnalysisBaseTags[tAnType], cCentralityTags[tCentType]));
-//    tMC->Add(tMC_FemtoPlus);
+    tMC->Add(tMC_FemtoPlus);
 
-  TH2F* tTest2d = Get2dHist(tFileLocation_MC_FemtoMinus, tDirName, t2dHistName, t2dHistName);
+  TH1F* tMCUnbiased_FemtoMinus = Get1dHist(tFileLocation_MC_FemtoMinus, tDirName, t1dHistName, t1dHistName);
+  TH1F* tMCUnbiased_FemtoPlus  = Get1dHist(tFileLocation_MC_FemtoPlus, tDirName, t1dHistName, t1dHistName);
+  TH1F* tMCUnbiased = (TH1F*)tMCUnbiased_FemtoMinus->Clone(TString::Format("MCUnbiased_%s%s", cAnalysisBaseTags[tAnType], cCentralityTags[tCentType]));
+    tMCUnbiased->Add(tMCUnbiased_FemtoPlus);
 
+//  TH2F* tTest2d = Get2dHist(tFileLocation_MC_FemtoMinus, tDirName, t2dHistName, t2dHistName);
 
-  DoTemplateFit(tData, tMC, 3);
+  TCanvas* tCanDrawAllIn2d = DrawAllIn2d(tData, tMC, 10);
+
+  TCanvas* tCompTotDataToMC = CompareTotalDataToMC(tData, tMC, tMCUnbiased);
+
+/*  
+  TH1F* tTestProj = Get1dProjection(tMC, 11);
+  TCanvas* tCanTestProj = new TCanvas("tCanTestProj", "tCanTestProj");
+  tCanTestProj->cd();
+  tCanTestProj->SetLogy();
+  tTestProj->Draw();
+*/
+
+//  DoTemplateFit(tData, tMC, 3);
 
 //-------------------------------------------------------------------------------
 
