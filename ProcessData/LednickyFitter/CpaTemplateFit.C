@@ -310,6 +310,7 @@ void DrawAllIn2d(TCanvas* aCan, TH1F* aData, TH2F* a2dMC, int aNRes, bool tDrawS
     else tSumHist->Add((TH1F*)tMCArr->At(i));
 
     tHistToDraw = (TH1F*)tMCArr->At(i);
+    if(TString(tHistToDraw->GetName()).Contains("Other")) tHistToDraw->SetLineWidth(4);  //Emphasize Other category in plots
     tHistToDraw->DrawCopy("HISTsame");
 
     tLeg->AddEntry(tHistToDraw, tHistToDraw->GetName(), "lf");
@@ -350,17 +351,14 @@ void DoTemplateFit(TH1F* aData, TH2F* a2dMC, int aNRes=3)
   TObjArray* tMCArr = DoProjections(a2dMC, aNRes);
   assert(((TH1F*)tMCArr->At(0))->GetXaxis()->GetBinWidth(1)==aData->GetXaxis()->GetBinWidth(1));
 
-  //-----
-  TH1F* tDataScaled = GetScaledData(aData, a2dMC);
-
   //---------------------------------------------
   TCanvas* tCan = new TCanvas(tCanName, tCanName);
   tCan->cd();
   gStyle->SetOptStat(0);
 
-  TFractionFitter* tFracFit = new TFractionFitter(tDataScaled, tMCArr);
+  TFractionFitter* tFracFit = new TFractionFitter(aData, tMCArr);
   for(int i=0; i<tMCArr->GetEntries(); i++) tFracFit->Constrain(i, 0., 1.);  //Constrain all parameters between 0 and 1
-  tFracFit->SetRangeX(1, tDataScaled->GetNbinsX());  //set the number of bins to fit
+  tFracFit->SetRangeX(1, aData->GetNbinsX());  //set the number of bins to fit
 
   //-------- Set start values, etc. ----------------------------------------------------------
   ((ROOT::Fit::Fitter*)tFracFit->GetFitter())->Config().ParSettings(0).SetValue(0.40);
@@ -407,7 +405,7 @@ void DoTemplateFit(TH1F* aData, TH2F* a2dMC, int aNRes=3)
   int tStatus = tFracFit->Fit();
   cout << "Fit status: " << tStatus << endl;
 
-  DrawAllIn2d(tCan, tDataScaled, a2dMC, aNRes, false);
+  DrawAllIn2d(tCan, aData, a2dMC, aNRes, false);
 //  if(tStatus==0)
 //  {
     TH1F* tResult = (TH1F*)tFracFit->GetPlot();
