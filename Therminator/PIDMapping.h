@@ -58,10 +58,10 @@ extern bool IncludeAsPrimary(int aPID1, int aPID2, double aMaxDecayLength);
 extern void PrintIncludeAsPrimary(int aPID1, int aPID2);
 extern void PrintIncludeAsPrimary(double aMaxDecayLength);
 
-extern bool PairAccountedForInResiduals(int aPID1, int aPID2);
+extern bool PairAccountedForInResiduals(int aPID1, int aPID2, IncludeResidualsType aIncResType = kInclude10Residuals);
 
-extern bool IncludeInOthers(int aPID1, int aPID2);
-extern bool IncludeInOthers(int aPID1, int aPID2, double aMaxDecayLength);
+extern bool IncludeInOthers(int aPID1, int aPID2, IncludeResidualsType aIncResType = kInclude10Residuals);
+extern bool IncludeInOthers(int aPID1, int aPID2, double aMaxDecayLength, IncludeResidualsType aIncResType = kInclude10Residuals);
 //------------------------------------------
 
 extern vector<int> cUniqueFathersPIDsFull;

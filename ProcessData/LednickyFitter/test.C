@@ -202,7 +202,7 @@ int main(int argc, char **argv)
   TString tHelperBaseLocation = "/home/jesse/Analysis/FemtoAnalysis/ProcessData/LednickyFitter/testHelper";
 
   FitValuesLatexTableHelperWriter* tFitValLaTaHelpWriter = new FitValuesLatexTableHelperWriter();
-  tFitValLaTaHelpWriter->WriteLatexTableHelper(tHelperBaseLocation, tFileLocation, tAnType, kInclude3Residuals);
+  tFitValLaTaHelpWriter->WriteLatexTableHelper(tHelperBaseLocation, tFileLocation, tAnType, kInclude3Residuals, k4fm);
 //-------------------------------------------------------------------------------
   theApp->Run(kTRUE); //Run the TApp to pause the code.
   // Select "Exit ROOT" from Canvas "File" menu to exit

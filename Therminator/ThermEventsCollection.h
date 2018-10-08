@@ -77,8 +77,8 @@ public:
   void PrintPrimaryAndOtherPairInfo(int aType1, int aType2);
   void PrintAllPrimaryAndOtherPairInfo();
 
-  static void MapAndFillPairFractionHistogramParticleV0(TH1* aHistogram, int aV0FatherType, int aTrackFatherType, double aMaxPrimaryDecayLength=-1., double tWeight=1.);
-  static void MapAndFillPairFractionHistogramV0V0(TH1* aHistogram, int aV01FatherType, int aV02FatherType, double aMaxPrimaryDecayLength=-1., double tWeight=1.);
+  static void MapAndFillPairFractionHistogramParticleV0(TH1* aHistogram, int aV0FatherType, int aTrackFatherType, double aMaxPrimaryDecayLength=-1., double tWeight=1., IncludeResidualsType aIncResType = kInclude10Residuals);
+  static void MapAndFillPairFractionHistogramV0V0(TH1* aHistogram, int aV01FatherType, int aV02FatherType, double aMaxPrimaryDecayLength=-1., double tWeight=1., IncludeResidualsType aIncResType = kInclude10Residuals);
 
   void BuildPairFractionHistogramsParticleV0(ParticlePDGType aParticleType, ParticlePDGType aV0Type, TH1* aHistogram, TH2* aMatrix, double aMaxPrimaryDecayLength=-1.);
   void BuildPairFractionHistogramsV0V0(ParticlePDGType aV01Type, ParticlePDGType aV02Type, TH1* aHistogram, TH2* aMatrix, double aMaxPrimaryDecayLength=-1.);
