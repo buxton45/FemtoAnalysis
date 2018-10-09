@@ -134,6 +134,7 @@ AliFemtoManager* ConfigFemtoAnalysis(const TString& aParamString="")
     rdr->SetPrimaryVertexCorrectionTPCPoints(tAnalysisConfig.implementVertexCorrections);
     rdr->SetReadMC(tAnalysisConfig.isMCRun);
     rdr->SetDCAglobalTrack(tMacroConfig.dca_global_track);
+    rdr->SetRunV0Efficiency(true, true);
   tManager->SetEventReader(rdr);
 
 

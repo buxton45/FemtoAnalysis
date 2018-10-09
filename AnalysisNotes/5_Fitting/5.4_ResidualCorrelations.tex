@@ -167,6 +167,70 @@ The $\lambda$ values used can be found in Table \ref{tab:LambdaValues_All}, for 
 \end{landscape}
 \pagestyle{plain}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{comment}
+\clearpage
+\begin{table}[htbp]
+ \centering
+ \renewcommand{\arraystretch}{1.2}
+ \begin{tabular}{|cV{5.0}c|c|c|c|c|c|}
+  \multicolumn{7}{c}{\LamKchP Residuals} \\
+  \hline
+  \multicolumn{1}{c}{} & \multicolumn{6}{c}{Decay Length} \\
+  \hline
+  \textbf{Pair System} & \textbf{0 fm} & \textbf{4 fm} & \textbf{5 fm} & \textbf{6 fm} & \textbf{10 fm} & \textbf{100 fm} \\
+  \hlineB{3.0}
+  \multicolumn{7}{|c|}{3 Residuals} \\
+  \hlineB{3.0}
+  $\Lambda$K$^{+}$    & 0.111 & 0.154 & 0.228 & 0.445 & 0.470 & 0.508 \\
+  \cline{2-7}
+  $\Sigma^{0}$K$^{+}$ & \multicolumn{6}{c|}{0.099} \\
+  \cline{2-7}
+  $\Xi^{0}$K$^{+}$    & \multicolumn{6}{c|}{0.072} \\
+  \cline{2-7}
+  $\Xi^{-}$K$^{+}$    & \multicolumn{6}{c|}{0.069} \\
+  \cline{2-7}
+  Other               & 0.601 & 0.558 & 0.484 & 0.267 & 0.242 & 0.204 \\
+  \cline{2-7}
+  Fakes               & \multicolumn{6}{c|}{0.048} \\
+  \hlineB{3.0}  
+  \multicolumn{7}{|c|}{10 Residuals} \\
+  \hlineB{3.0}
+  $\Lambda$K$^{+}$     & 0.111 & 0.154 & 0.188 & 0.277 & 0.301 & 0.340 \\
+  \cline{2-7}
+  $\Sigma^{0}$K$^{+}$  & \multicolumn{6}{c|}{0.099} \\
+  \cline{2-7}
+  $\Xi^{0}$K$^{+}$     & \multicolumn{6}{c|}{0.072} \\
+  \cline{2-7}
+  $\Xi^{-}$K$^{+}$     & \multicolumn{6}{c|}{0.069} \\
+  \cline{2-7}
+  $\Sigma^{*+}$K$^{+}$ & \multicolumn{6}{c|}{0.046} \\
+  \cline{2-7}
+  $\Sigma^{*-}$K$^{+}$ & \multicolumn{6}{c|}{0.042} \\
+  \cline{2-7}
+  $\Sigma^{*0}$K$^{+}$ & \multicolumn{6}{c|}{0.042} \\
+  \cline{2-7}
+  $\Lambda$K$^{*0}$    & \multicolumn{6}{c|}{0.039} \\
+  \cline{2-7}
+  $\Sigma^{0}$K$^{*0}$ & \multicolumn{6}{c|}{0.035} \\
+  \cline{2-7}
+  $\Xi^{0}$K$^{*0}$    & \multicolumn{6}{c|}{0.025} \\
+  \cline{2-7}
+  $\Xi^{-}$K$^{*0}$    & \multicolumn{6}{c|}{0.024} \\
+  \cline{2-7}
+  Other                & 0.348 & 0.305 & 0.271 & 0.182 & 0.158 & 0.119 \\
+  \cline{2-7}
+  Fakes                & \multicolumn{6}{c|}{0.048} \\
+  \hlineB{3.0}  
+ \end{tabular}
+ \caption{$\lambda$ values for the individual components of the \LamKchP correlation functions, assuming various maximum values of c$\tau$ for parents systems to be considered primary, for the case of 3 and 10 residual contributions.}
+ \label{tab:LambdaValues_LamKchP_VaryPrimDecayLength}
+\end{table}
+\clearpage
+
+\end{comment}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 
 
 Now, the remaining question is how do we model the parent correlation functions?  In an ideal world, we would simply look up the parent interaction in some table, and input this into our Lednicky equation (for the case of one or more charge neutral particle in the pair), or run it through the CoulombFitter machinery described in Sec.\ref{ModelCascadeKaon}.  Unfortunately, the world in which we live is not perfect, such a table does not exists, and little is know about the interaction between the residual pairs in this study.  One solution would be to introduce a set of scattering parameters and radii for each residual system.  However, as was the case of the $\lambda$-parameters above, this would introduce a large number of additional fit parameters, and would make our fitter too unconstrained and would yield untrustworthy results.  The second option, which is adopted in this analysis, is to assume all residual pairs have the same source size as the daughter pair, and all Coulomb-neutral residual pairs also share the same scattering parameters as the daughter pair (the case of charged pairs, such as \XiKpm or $\Sigma^{*\pm}$\Kpm, will be described below).
