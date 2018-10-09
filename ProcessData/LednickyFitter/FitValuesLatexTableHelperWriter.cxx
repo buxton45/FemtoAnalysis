@@ -29,20 +29,20 @@ FitValuesLatexTableHelperWriter::~FitValuesLatexTableHelperWriter()
 
 
 //________________________________________________________________________________________________________________
-TString FitValuesLatexTableHelperWriter::GetFitInfoTStringFromTwoLetterID(TString aTwoLetterID, AnalysisType aAnType, IncludeResidualsType aResType)
+TString FitValuesLatexTableHelperWriter::GetFitInfoTStringFromTwoLetterID(TString aTwoLetterID, AnalysisType aAnType, IncludeResidualsType aResType, ResPrimMaxDecayType tResPrimMaxDecayType)
 {
   TString tReturnFitInfoTString;
-  if(aAnType==kLamKchP || aAnType==kALamKchM || aAnType==kLamKchM || aAnType==kALamKchP) tReturnFitInfoTString = GetFitInfoTStringFromTwoLetterID_LamKch(aTwoLetterID, aResType);
-  else if(aAnType==kLamK0 || aAnType==kALamK0)   tReturnFitInfoTString = GetFitInfoTStringFromTwoLetterID_LamK0(aTwoLetterID, aResType);
+  if(aAnType==kLamKchP || aAnType==kALamKchM || aAnType==kLamKchM || aAnType==kALamKchP) tReturnFitInfoTString = GetFitInfoTStringFromTwoLetterID_LamKch(aTwoLetterID, aResType, tResPrimMaxDecayType);
+  else if(aAnType==kLamK0 || aAnType==kALamK0)   tReturnFitInfoTString = GetFitInfoTStringFromTwoLetterID_LamK0(aTwoLetterID, aResType, tResPrimMaxDecayType);
 
   return tReturnFitInfoTString;
 }
 
 //________________________________________________________________________________________________________________
-TString FitValuesLatexTableHelperWriter::GetFitInfoTStringFromTwoLetterID_LamKch(TString aTwoLetterID, IncludeResidualsType aResType)
+TString FitValuesLatexTableHelperWriter::GetFitInfoTStringFromTwoLetterID_LamKch(TString aTwoLetterID, IncludeResidualsType aResType, ResPrimMaxDecayType tResPrimMaxDecayType)
 {
   TString tCommon1 = "_MomResCrctn";
-  TString tCommon2 = "_PrimMaxDecay4fm_UsingXiDataAndCoulombOnly";
+  TString tCommon2 = TString::Format("%s_UsingXiDataAndCoulombOnly", cResPrimMaxDecayTypeTags[tResPrimMaxDecayType]);
   if(aResType==kIncludeNoResiduals) tCommon2 = TString("");
 
   TString tReturnFitInfoTString = "";
@@ -77,10 +77,10 @@ TString FitValuesLatexTableHelperWriter::GetFitInfoTStringFromTwoLetterID_LamKch
 }
 
 //________________________________________________________________________________________________________________
-TString FitValuesLatexTableHelperWriter::GetFitInfoTStringFromTwoLetterID_LamK0(TString aTwoLetterID, IncludeResidualsType aResType)
+TString FitValuesLatexTableHelperWriter::GetFitInfoTStringFromTwoLetterID_LamK0(TString aTwoLetterID, IncludeResidualsType aResType, ResPrimMaxDecayType tResPrimMaxDecayType)
 {
   TString tCommon1 = "_MomResCrctn";
-  TString tCommon2 = "_PrimMaxDecay4fm_UsingXiDataAndCoulombOnly";
+  TString tCommon2 = TString::Format("%s_UsingXiDataAndCoulombOnly", cResPrimMaxDecayTypeTags[tResPrimMaxDecayType]);
   if(aResType==kIncludeNoResiduals) tCommon2 = TString("");
 
   TString tReturnFitInfoTString = "";
@@ -132,9 +132,9 @@ TString FitValuesLatexTableHelperWriter::GetLatexTableOverallLabel(TString aTwoL
 
 
 //________________________________________________________________________________________________________________
-void FitValuesLatexTableHelperWriter::WriteLatexTableHelperEntry(ostream &aOut, TString aMasterFileLocation, TString aTwoLetterID, AnalysisType aAnType, IncludeResidualsType aResType)
+void FitValuesLatexTableHelperWriter::WriteLatexTableHelperEntry(ostream &aOut, TString aMasterFileLocation, TString aTwoLetterID, AnalysisType aAnType, IncludeResidualsType aResType, ResPrimMaxDecayType tResPrimMaxDecayType)
 {
-  TString tFitInfoTString = GetFitInfoTStringFromTwoLetterID(aTwoLetterID, aAnType, aResType);
+  TString tFitInfoTString = GetFitInfoTStringFromTwoLetterID(aTwoLetterID, aAnType, aResType, tResPrimMaxDecayType);
 
   FitParameter *tPar_lam0010, *tPar_lam1030, *tPar_lam3050;
   FitParameter *tPar_R0010, *tPar_R1030, *tPar_R3050;
@@ -172,19 +172,19 @@ void FitValuesLatexTableHelperWriter::WriteLatexTableHelperEntry(ostream &aOut, 
 
 
 //________________________________________________________________________________________________________________
-void FitValuesLatexTableHelperWriter::WriteLatexTableHelperSection(ostream &aOut, TString aMasterFileLocation, TString aTwoLetterID, AnalysisType aAnType, IncludeResidualsType aResType)
+void FitValuesLatexTableHelperWriter::WriteLatexTableHelperSection(ostream &aOut, TString aMasterFileLocation, TString aTwoLetterID, AnalysisType aAnType, IncludeResidualsType aResType, ResPrimMaxDecayType tResPrimMaxDecayType)
 {
   if(aAnType==kLamKchP || aAnType==kALamKchM || aAnType==kLamKchM || aAnType==kALamKchP)
   {
-    WriteLatexTableHelperEntry(aOut, aMasterFileLocation, aTwoLetterID, kLamKchP,  aResType);
-    WriteLatexTableHelperEntry(aOut, aMasterFileLocation, aTwoLetterID, kALamKchM, aResType);
-    WriteLatexTableHelperEntry(aOut, aMasterFileLocation, aTwoLetterID, kLamKchM,  aResType);
-    WriteLatexTableHelperEntry(aOut, aMasterFileLocation, aTwoLetterID, kALamKchP, aResType);
+    WriteLatexTableHelperEntry(aOut, aMasterFileLocation, aTwoLetterID, kLamKchP,  aResType, tResPrimMaxDecayType);
+    WriteLatexTableHelperEntry(aOut, aMasterFileLocation, aTwoLetterID, kALamKchM, aResType, tResPrimMaxDecayType);
+    WriteLatexTableHelperEntry(aOut, aMasterFileLocation, aTwoLetterID, kLamKchM,  aResType, tResPrimMaxDecayType);
+    WriteLatexTableHelperEntry(aOut, aMasterFileLocation, aTwoLetterID, kALamKchP, aResType, tResPrimMaxDecayType);
   }
   else if(aAnType==kLamK0 || aAnType==kALamK0)
   {
-    WriteLatexTableHelperEntry(aOut, aMasterFileLocation, aTwoLetterID, kLamK0,  aResType);
-    WriteLatexTableHelperEntry(aOut, aMasterFileLocation, aTwoLetterID, kALamK0, aResType);
+    WriteLatexTableHelperEntry(aOut, aMasterFileLocation, aTwoLetterID, kLamK0,  aResType, tResPrimMaxDecayType);
+    WriteLatexTableHelperEntry(aOut, aMasterFileLocation, aTwoLetterID, kALamK0, aResType, tResPrimMaxDecayType);
   }
   else assert(0);
 }
@@ -222,14 +222,14 @@ void FitValuesLatexTableHelperWriter::WriteLatexTableHelperHeader(ostream &aOut)
 
 
 //________________________________________________________________________________________________________________
-void FitValuesLatexTableHelperWriter::WriteLatexTableHelper(TString aHelperBaseLocation, TString aMasterFileLocation, AnalysisType aAnType, IncludeResidualsType aResType)
+void FitValuesLatexTableHelperWriter::WriteLatexTableHelper(TString aHelperBaseLocation, TString aMasterFileLocation, AnalysisType aAnType, IncludeResidualsType aResType, ResPrimMaxDecayType tResPrimMaxDecayType)
 {
   assert(aAnType==kLamKchP || aAnType==kLamK0);
   TString tPairDesc = "";
   if     (aAnType==kLamKchP) tPairDesc = TString("_cLamcKch");
   else if(aAnType==kLamK0) tPairDesc = TString("_cLamK0");
 
-  TString tHelperLocation = TString::Format("%s%s%s.tex", aHelperBaseLocation.Data(), tPairDesc.Data(), cIncludeResidualsTypeTags[aResType]);
+  TString tHelperLocation = TString::Format("%s%s%s%s.tex", aHelperBaseLocation.Data(), tPairDesc.Data(), cIncludeResidualsTypeTags[aResType], cResPrimMaxDecayTypeTags[tResPrimMaxDecayType]);
 
   std::ofstream tOut;
   tOut.open(tHelperLocation);
@@ -247,7 +247,7 @@ void FitValuesLatexTableHelperWriter::WriteLatexTableHelper(TString aHelperBaseL
     {
       tTwoLetterID = tAllTwoLetterID[i][j];
       tOut << TString::Format("%% --------------- %s = %s%s ---------------", tTwoLetterID.Data(), GetLatexTableOverallLabel(tTwoLetterID).Data(), cIncludeResidualsTypeTags[aResType]) << endl;
-      WriteLatexTableHelperSection(tOut, aMasterFileLocation, tTwoLetterID, aAnType, aResType);
+      WriteLatexTableHelperSection(tOut, aMasterFileLocation, tTwoLetterID, aAnType, aResType, tResPrimMaxDecayType);
     }
     tOut << "\%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%" << endl << endl;
   }

@@ -161,51 +161,57 @@ void PrintIncludeAsPrimary(double aMaxDecayLength)
 
 
 //________________________________________________________________________________________________________________
-bool PairAccountedForInResiduals(int aPID1, int aPID2)
+bool PairAccountedForInResiduals(int aPID1, int aPID2, IncludeResidualsType aIncResType)
 {
+  assert(aIncResType != kIncludeNoResiduals);
+
   bool tAccountedFor = false;
+
+  //-------------(A)LamKchP
   if((aPID1==kPDGSigma || aPID1==kPDGASigma) && (aPID2 == kPDGKchP || aPID2 == kPDGKchM)) tAccountedFor = true;
   else if((aPID1==kPDGXi0 || aPID1==kPDGAXi0) && (aPID2 == kPDGKchP || aPID2 == kPDGKchM)) tAccountedFor = true;
   else if((aPID1==kPDGXiC || aPID1==kPDGAXiC) && (aPID2 == kPDGKchP || aPID2 == kPDGKchM)) tAccountedFor = true;
-  else if((aPID1==kPDGSigStP || aPID1==kPDGASigStM) && (aPID2 == kPDGKchP || aPID2 == kPDGKchM)) tAccountedFor = true;
-  else if((aPID1==kPDGSigStM || aPID1==kPDGASigStP) && (aPID2 == kPDGKchP || aPID2 == kPDGKchM)) tAccountedFor = true;
-  else if((aPID1==kPDGSigSt0 || aPID1==kPDGASigSt0) && (aPID2 == kPDGKchP || aPID2 == kPDGKchM)) tAccountedFor = true;
 
-  else if((aPID1 == kPDGLam || aPID1 == kPDGALam) && (aPID2 == kPDGKSt0 || aPID2 == kPDGAKSt0)) tAccountedFor = true;
-  else if((aPID1==kPDGSigma || aPID1==kPDGASigma) && (aPID2 == kPDGKSt0 || aPID2 == kPDGAKSt0)) tAccountedFor = true;
-  else if((aPID1==kPDGXi0 || aPID1==kPDGAXi0) && (aPID2 == kPDGKSt0 || aPID2 == kPDGAKSt0)) tAccountedFor = true;
-  else if((aPID1==kPDGXiC || aPID1==kPDGAXiC) && (aPID2 == kPDGKSt0 || aPID2 == kPDGAKSt0)) tAccountedFor = true;
+  else if((aPID1==kPDGSigStP || aPID1==kPDGASigStM) && (aPID2 == kPDGKchP || aPID2 == kPDGKchM) && aIncResType==kInclude10Residuals) tAccountedFor = true;
+  else if((aPID1==kPDGSigStM || aPID1==kPDGASigStP) && (aPID2 == kPDGKchP || aPID2 == kPDGKchM) && aIncResType==kInclude10Residuals) tAccountedFor = true;
+  else if((aPID1==kPDGSigSt0 || aPID1==kPDGASigSt0) && (aPID2 == kPDGKchP || aPID2 == kPDGKchM) && aIncResType==kInclude10Residuals) tAccountedFor = true;
 
+  else if((aPID1 == kPDGLam || aPID1 == kPDGALam) && (aPID2 == kPDGKSt0 || aPID2 == kPDGAKSt0) && aIncResType==kInclude10Residuals) tAccountedFor = true;
+  else if((aPID1==kPDGSigma || aPID1==kPDGASigma) && (aPID2 == kPDGKSt0 || aPID2 == kPDGAKSt0) && aIncResType==kInclude10Residuals) tAccountedFor = true;
+  else if((aPID1==kPDGXi0 || aPID1==kPDGAXi0) && (aPID2 == kPDGKSt0 || aPID2 == kPDGAKSt0) && aIncResType==kInclude10Residuals) tAccountedFor = true;
+  else if((aPID1==kPDGXiC || aPID1==kPDGAXiC) && (aPID2 == kPDGKSt0 || aPID2 == kPDGAKSt0) && aIncResType==kInclude10Residuals) tAccountedFor = true;
 
+  //-------------(A)LamK0
   else if((aPID1==kPDGSigma || aPID1==kPDGASigma) && (aPID2 == kPDGK0)) tAccountedFor = true;
   else if((aPID1==kPDGXi0 || aPID1==kPDGAXi0) && (aPID2 == kPDGK0)) tAccountedFor = true;
   else if((aPID1==kPDGXiC || aPID1==kPDGAXiC) && (aPID2 == kPDGK0)) tAccountedFor = true;
-  else if((aPID1==kPDGSigStP || aPID1==kPDGASigStM) && (aPID2 == kPDGK0)) tAccountedFor = true;
-  else if((aPID1==kPDGSigStM || aPID1==kPDGASigStP) && (aPID2 == kPDGK0)) tAccountedFor = true;
-  else if((aPID1==kPDGSigSt0 || aPID1==kPDGASigSt0) && (aPID2 == kPDGK0)) tAccountedFor = true;
 
-  else if((aPID1 == kPDGLam || aPID1 == kPDGALam) && (aPID2 == kPDGKSt0 || aPID2 == kPDGAKSt0)) tAccountedFor = true;
-  else if((aPID1==kPDGSigma || aPID1==kPDGASigma) && (aPID2 == kPDGKSt0 || aPID2 == kPDGAKSt0)) tAccountedFor = true;
-  else if((aPID1==kPDGXi0 || aPID1==kPDGAXi0) && (aPID2 == kPDGKSt0 || aPID2 == kPDGAKSt0)) tAccountedFor = true;
-  else if((aPID1==kPDGXiC || aPID1==kPDGAXiC) && (aPID2 == kPDGKSt0 || aPID2 == kPDGAKSt0)) tAccountedFor = true;
+  else if((aPID1==kPDGSigStP || aPID1==kPDGASigStM) && (aPID2 == kPDGK0) && aIncResType==kInclude10Residuals) tAccountedFor = true;
+  else if((aPID1==kPDGSigStM || aPID1==kPDGASigStP) && (aPID2 == kPDGK0) && aIncResType==kInclude10Residuals) tAccountedFor = true;
+  else if((aPID1==kPDGSigSt0 || aPID1==kPDGASigSt0) && (aPID2 == kPDGK0) && aIncResType==kInclude10Residuals) tAccountedFor = true;
+
+  else if((aPID1 == kPDGLam || aPID1 == kPDGALam) && (aPID2 == kPDGKSt0 || aPID2 == kPDGAKSt0) && aIncResType==kInclude10Residuals) tAccountedFor = true;
+  else if((aPID1==kPDGSigma || aPID1==kPDGASigma) && (aPID2 == kPDGKSt0 || aPID2 == kPDGAKSt0) && aIncResType==kInclude10Residuals) tAccountedFor = true;
+  else if((aPID1==kPDGXi0 || aPID1==kPDGAXi0) && (aPID2 == kPDGKSt0 || aPID2 == kPDGAKSt0) && aIncResType==kInclude10Residuals) tAccountedFor = true;
+  else if((aPID1==kPDGXiC || aPID1==kPDGAXiC) && (aPID2 == kPDGKSt0 || aPID2 == kPDGAKSt0) && aIncResType==kInclude10Residuals) tAccountedFor = true;
 
   return tAccountedFor;
 }
 
 //________________________________________________________________________________________________________________
-bool IncludeInOthers(int aPID1, int aPID2)
+bool IncludeInOthers(int aPID1, int aPID2, IncludeResidualsType aIncResType)
 {
-  if(!IncludeAsPrimary(aPID1,aPID2) && !PairAccountedForInResiduals(aPID1,aPID2)) return true;
+  if(!IncludeAsPrimary(aPID1,aPID2) && !PairAccountedForInResiduals(aPID1, aPID2, aIncResType)) return true;
   else return false;
 }
 
 //________________________________________________________________________________________________________________
-bool IncludeInOthers(int aPID1, int aPID2, double aMaxDecayLength)
+bool IncludeInOthers(int aPID1, int aPID2, double aMaxDecayLength, IncludeResidualsType aIncResType)
 {
   if(aMaxDecayLength < 0.) return IncludeInOthers(aPID1,aPID2);
   else
   {
-    if(!IncludeAsPrimary(aPID1,aPID2,aMaxDecayLength) && !PairAccountedForInResiduals(aPID1,aPID2)) return true;
+    if(!IncludeAsPrimary(aPID1,aPID2,aMaxDecayLength) && !PairAccountedForInResiduals(aPID1, aPID2, aIncResType)) return true;
     else return false;
   }
 }

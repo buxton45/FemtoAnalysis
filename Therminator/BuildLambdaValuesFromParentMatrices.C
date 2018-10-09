@@ -13,7 +13,58 @@
 #include "ThermCommon.h"
 
 //________________________________________________________________________________________________________________
-TH1D* BuildPairFractions(AnalysisType aAnType, TH2D* aMatrix, double aMaxDecayLength=-1.)
+void ApplyReconstructionEfficiencies(AnalysisType aAnType, TH1D* aHist)
+{
+  vector<double> tEffVec;
+  if(aAnType==kLamKchP || aAnType==kLamKchM || aAnType==kLamK0)
+  {
+    tEffVec = vector<double>{0.16, //Primary
+                             
+                             0.16, //Sig0
+                             0.10, //Xi0
+                             0.14, //XiC
+
+                             0.16, //SigStP
+                             0.16, //SigStM
+                             0.16, //SigSt0
+
+                             0.16, //(A)LamKSt0
+                             0.16, //(A)Sig0KSt0
+                             0.10, //(A)Xi0KSt0
+                             0.14, //(A)XiCKSt0
+
+                             0.16  //Other
+                            };
+  }
+  else if(aAnType==kALamKchP || aAnType==kALamKchM || aAnType==kALamK0)
+  {
+    tEffVec = vector<double>{0.15, //Primary
+                             
+                             0.15, //Sig0
+                             0.09, //Xi0
+                             0.13, //XiC
+
+                             0.15, //SigStP
+                             0.15, //SigStM
+                             0.15, //SigSt0
+
+                             0.15, //(A)LamKSt0
+                             0.15, //(A)Sig0KSt0
+                             0.09, //(A)Xi0KSt0
+                             0.13, //(A)XiCKSt0
+
+                             0.16  //Other
+                            };
+  }
+  else assert(0);
+
+  assert(tEffVec.size() == aHist->GetNbinsX()-1); //Last bin of aHist is for fakes, to be filled in ThermCommon::DrawPairFractions
+
+  for(int i=0; i<tEffVec.size(); i++) aHist->SetBinContent(i+1, tEffVec[i]*aHist->GetBinContent(i+1));
+}
+
+//________________________________________________________________________________________________________________
+TH1D* BuildPairFractions(AnalysisType aAnType, TH2D* aMatrix, double aMaxDecayLength=-1., IncludeResidualsType aIncResType = kInclude10Residuals, bool aApplyRecoEff=false)
 {
   TString tName = TString::Format("#lambda Estimates: %s", cAnalysisRootTags[aAnType]);
   TH1D* tReturnHist = new TH1D(tName, tName, 13, 0, 13);
@@ -51,12 +102,15 @@ TH1D* BuildPairFractions(AnalysisType aAnType, TH2D* aMatrix, double aMaxDecayLe
     {
       tPDG2 = (*tFatherCollection2)[iPar2];
       tWeight = aMatrix->GetBinContent(iPar1+1, iPar2+1);
-      if(bParticleV0) ThermEventsCollection::MapAndFillPairFractionHistogramParticleV0(tReturnHist, tPDG1, tPDG2, aMaxDecayLength, tWeight);
-      else ThermEventsCollection::MapAndFillPairFractionHistogramV0V0(tReturnHist, tPDG1, tPDG2, aMaxDecayLength, tWeight);
+      if(bParticleV0) ThermEventsCollection::MapAndFillPairFractionHistogramParticleV0(tReturnHist, tPDG1, tPDG2, aMaxDecayLength, tWeight, aIncResType);
+      else ThermEventsCollection::MapAndFillPairFractionHistogramV0V0(tReturnHist, tPDG1, tPDG2, aMaxDecayLength, tWeight, aIncResType);
     }
   }
   PrintIncludeAsPrimary(aMaxDecayLength);
   SetXAxisLabels(aAnType, tReturnHist);
+
+  if(aApplyRecoEff) ApplyReconstructionEfficiencies(aAnType, tReturnHist);
+
   return tReturnHist;
 }
 
@@ -76,6 +130,8 @@ int main(int argc, char **argv)
   bool bSaveImages = false;
 //  double tMaxDecayLength = -1.;
   double tMaxDecayLength = 4.0;
+  IncludeResidualsType tIncResType = kInclude10Residuals;
+  bool tApplyRecoEff=false;
 
   int tImpactParam = 2;
 
@@ -98,14 +154,14 @@ int main(int argc, char **argv)
   TH2D* tParentsMatrix_ALamK0 = Get2dHisto(tFileLocationPairFractions, "fParentsMatrixALamK0");
 
   //------------------------------------------------------------------------------
-  TH1D* tPairFractions_LamKchP = BuildPairFractions(kLamKchP, tParentsMatrix_LamKchP, tMaxDecayLength);
-  TH1D* tPairFractions_ALamKchM = BuildPairFractions(kALamKchM, tParentsMatrix_ALamKchM, tMaxDecayLength);
+  TH1D* tPairFractions_LamKchP = BuildPairFractions(kLamKchP, tParentsMatrix_LamKchP, tMaxDecayLength, tIncResType, tApplyRecoEff);
+  TH1D* tPairFractions_ALamKchM = BuildPairFractions(kALamKchM, tParentsMatrix_ALamKchM, tMaxDecayLength, tIncResType, tApplyRecoEff);
 
-  TH1D* tPairFractions_LamKchM = BuildPairFractions(kLamKchM, tParentsMatrix_LamKchM, tMaxDecayLength);
-  TH1D* tPairFractions_ALamKchP = BuildPairFractions(kALamKchP, tParentsMatrix_ALamKchP, tMaxDecayLength);
+  TH1D* tPairFractions_LamKchM = BuildPairFractions(kLamKchM, tParentsMatrix_LamKchM, tMaxDecayLength, tIncResType, tApplyRecoEff);
+  TH1D* tPairFractions_ALamKchP = BuildPairFractions(kALamKchP, tParentsMatrix_ALamKchP, tMaxDecayLength, tIncResType, tApplyRecoEff);
 
-  TH1D* tPairFractions_LamK0 = BuildPairFractions(kLamK0, tParentsMatrix_LamK0, tMaxDecayLength);
-  TH1D* tPairFractions_ALamK0 = BuildPairFractions(kALamK0, tParentsMatrix_ALamK0, tMaxDecayLength);
+  TH1D* tPairFractions_LamK0 = BuildPairFractions(kLamK0, tParentsMatrix_LamK0, tMaxDecayLength, tIncResType, tApplyRecoEff);
+  TH1D* tPairFractions_ALamK0 = BuildPairFractions(kALamK0, tParentsMatrix_ALamK0, tMaxDecayLength, tIncResType, tApplyRecoEff);
 
   //------------------------------------------------------------------------------
   TCanvas* tCan_LamKchP = new TCanvas("tCan_LamKchP", "tCan_LamKchP");

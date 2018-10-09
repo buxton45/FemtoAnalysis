@@ -15,10 +15,10 @@ public:
   FitValuesLatexTableHelperWriterwSysErrs();
   virtual ~FitValuesLatexTableHelperWriterwSysErrs();
 
-  static void WriteLatexTableHelperEntry(ostream &aOut, TString aMasterFileLocation, TString aSystematicsFileLocation, TString aTwoLetterID, AnalysisType aAnType, IncludeResidualsType aResType);
-  static void WriteLatexTableHelperSection(ostream &aOut, TString aMasterFileLocation, TString aSystematicsFileLocation, TString aTwoLetterID, AnalysisType aAnType, IncludeResidualsType aResType);
+  static void WriteLatexTableHelperEntry(ostream &aOut, TString aMasterFileLocation, TString aSystematicsFileLocation, TString aTwoLetterID, AnalysisType aAnType, IncludeResidualsType aResType,   ResPrimMaxDecayType tResPrimMaxDecayType);
+  static void WriteLatexTableHelperSection(ostream &aOut, TString aMasterFileLocation, TString aSystematicsFileLocation, TString aTwoLetterID, AnalysisType aAnType, IncludeResidualsType aResType, ResPrimMaxDecayType tResPrimMaxDecayType);
   static void WriteLatexTableHelperHeader(ostream &aOut);
-  static void WriteLatexTableHelper(TString aHelperBaseLocation, TString aMasterFileLocatio, TString aSystematicsFileLocationn, AnalysisType aAnType, IncludeResidualsType aResType);
+  static void WriteLatexTableHelper(TString aHelperBaseLocation, TString aMasterFileLocatio, TString aSystematicsFileLocation, AnalysisType aAnType, IncludeResidualsType aResType, ResPrimMaxDecayType tResPrimMaxDecayType);
 
   //inline (i.e. simple) functions
 

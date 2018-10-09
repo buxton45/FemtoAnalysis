@@ -8,7 +8,7 @@ class FitValuesWriterwSysErrs;
 class CanvasPartition;
 
 //________________________________________________________________________________________________________________
-void CreateParamText(AnalysisType aAnType, IncludeResidualsType aIncResType, CanvasPartition *aCanPart, int aNx, int aNy, TF1* aFit, const td1dVec &aSysErrors, double aTextXmin, double aTextYmin, double aTextWidth, double aTextHeight, double aTextFont, double aTextSize, bool aDrawAll, double aChi2, double aNDF)
+void CreateParamText(AnalysisType aAnType, IncludeResidualsType aIncResType, ResPrimMaxDecayType aResPrimMaxDecayType, CanvasPartition *aCanPart, int aNx, int aNy, TF1* aFit, const td1dVec &aSysErrors, double aTextXmin, double aTextYmin, double aTextWidth, double aTextHeight, double aTextFont, double aTextSize, bool aDrawAll, double aChi2, double aNDF)
 {
   int tNx=2, tNy=3;
   int tPosition = aNx + aNy*tNx;
@@ -30,7 +30,7 @@ void CreateParamText(AnalysisType aAnType, IncludeResidualsType aIncResType, Can
 
   if(aIncResType != kIncludeNoResiduals)
   {
-    double tScale = cAnalysisLambdaFactorsArr[aIncResType][k4fm][aAnType];
+    double tScale = cAnalysisLambdaFactorsArr[aIncResType][aResPrimMaxDecayType][aAnType];
     tLambda /= tScale;
     tLambdaErr /= tScale;
   }
@@ -67,7 +67,7 @@ void CreateParamText(AnalysisType aAnType, IncludeResidualsType aIncResType, Can
 
 
 //________________________________________________________________________________________________________________
-TCanvas* DrawAll(vector<LednickyFitter*> &aFitters, td2dVec &aParamsSysErrs, IncludeResidualsType aIncResType, bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, NonFlatBgdFitType aNonFlatBgdFitType, FitType aFitType, bool aSaveImage, bool aDrawSysErrors, bool aZoomROP, double* aChi2All, double* aNDFAll)
+TCanvas* DrawAll(vector<LednickyFitter*> &aFitters, td2dVec &aParamsSysErrs, IncludeResidualsType aIncResType, ResPrimMaxDecayType aResPrimMaxDecayType, bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, NonFlatBgdFitType aNonFlatBgdFitType, FitType aFitType, bool aSaveImage, bool aDrawSysErrors, bool aZoomROP, double* aChi2All, double* aNDFAll)
 {
   TString tCanvasName = TString("canKStarCfwFits");
   if(!aZoomROP) tCanvasName += TString("UnZoomed");
@@ -172,7 +172,7 @@ TCanvas* DrawAll(vector<LednickyFitter*> &aFitters, td2dVec &aParamsSysErrs, Inc
 
       bool bDrawAll = false;
       if(i==0) bDrawAll = true;
-      CreateParamText(tAnType, aFitters[j]->GetIncludeResidualsType(), tCanPart, i, j,(TF1*)aFitters[j]->GetFitSharedAnalyses()->GetFitPairAnalysis(i)->GetPrimaryFit(), tSysErrors, 0.73, 0.09, 0.25, 0.53, 43, 12.0, bDrawAll, aChi2All[j], aNDFAll[j]);
+      CreateParamText(tAnType, aFitters[j]->GetIncludeResidualsType(), aResPrimMaxDecayType, tCanPart, i, j,(TF1*)aFitters[j]->GetFitSharedAnalyses()->GetFitPairAnalysis(i)->GetPrimaryFit(), tSysErrors, 0.73, 0.09, 0.25, 0.53, 43, 12.0, bDrawAll, aChi2All[j], aNDFAll[j]);
     }
   }
 
@@ -234,15 +234,6 @@ int main(int argc, char **argv)
 //-----------------------------------------------------------------------------
   TString tResultsDate = "20180505";
 
-  TString tMasterFileLocation_LamKch = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_20180505/MasterFitResults_20180505.txt";
-  TString tSystematicsFileLocation_LamKch = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_20171227/Systematics/_MomResCrctn_NonFlatBgdCrctn_3Res_PrimMaxDecay4fm_UsingXiDataAndCoulombOnly/FinalFitSystematics_wFitRangeSys_MomResCrctn_NonFlatBgdCrctn_3Res_PrimMaxDecay4fm_UsingXiDataAndCoulombOnly_cLamcKch.txt";
-  TString tFitInfoTString_LamKch = "_MomResCrctn_NonFlatBgdCrctnPolynomial_3Res_PrimMaxDecay4fm_UsingXiDataAndCoulombOnly_ShareLam_Dualie_ShareLam_ShareRadii";
-
-  TString tMasterFileLocation_LamK0 = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamK0_20180505/MasterFitResults_20180505.txt";
-  TString tSystematicsFileLocation_LamK0 = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamK0_20171227/Systematics/_MomResCrctn_NonFlatBgdCrctn_3Res_PrimMaxDecay4fm_UsingXiDataAndCoulombOnly/FinalFitSystematics_wFitRangeSys_MomResCrctn_NonFlatBgdCrctn_3Res_PrimMaxDecay4fm_UsingXiDataAndCoulombOnly_cLamK0.txt";
-  TString tFitInfoTString_LamK0 = "_MomResCrctn_NonFlatBgdCrctnPolynomial_3Res_PrimMaxDecay4fm_UsingXiDataAndCoulombOnly_SingleLamParam";
-
-
 
   CentralityType tCentType = k0010;  //TODO
   FitType tFitType = kChi2PML;
@@ -254,6 +245,16 @@ int main(int argc, char **argv)
   IncludeResidualsType tIncludeResidualsType = kInclude3Residuals; 
   ChargedResidualsType tChargedResidualsType = kUseXiDataAndCoulombOnlyInterp/*kUseCoulombOnlyInterpForAll*/;
   ResPrimMaxDecayType tResPrimMaxDecayType = k4fm;
+
+
+  TString tMasterFileLocation_LamKch = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_20180505/MasterFitResults_20180505.txt";
+  TString tSystematicsFileLocation_LamKch = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_20171227/Systematics/_MomResCrctn_NonFlatBgdCrctn%s%s_UsingXiDataAndCoulombOnly/FinalFitSystematics_wFitRangeSys_MomResCrctn_NonFlatBgdCrctn%s%s_UsingXiDataAndCoulombOnly_cLamcKch.txt", cIncludeResidualsTypeTags[tIncludeResidualsType], cResPrimMaxDecayTypeTags[tResPrimMaxDecayType], cIncludeResidualsTypeTags[tIncludeResidualsType], cResPrimMaxDecayTypeTags[tResPrimMaxDecayType]);
+  TString tFitInfoTString_LamKch = TString::Format("_MomResCrctn_NonFlatBgdCrctnPolynomial%s%s_UsingXiDataAndCoulombOnly_ShareLam_Dualie_ShareLam_ShareRadii", cIncludeResidualsTypeTags[tIncludeResidualsType], cResPrimMaxDecayTypeTags[tResPrimMaxDecayType]);
+
+  TString tMasterFileLocation_LamK0 = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamK0_20180505/MasterFitResults_20180505.txt";
+  TString tSystematicsFileLocation_LamK0 = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamK0_20171227/Systematics/_MomResCrctn_NonFlatBgdCrctn%s%s_UsingXiDataAndCoulombOnly/FinalFitSystematics_wFitRangeSys_MomResCrctn_NonFlatBgdCrctn%s%s_UsingXiDataAndCoulombOnly_cLamK0.txt", cIncludeResidualsTypeTags[tIncludeResidualsType], cResPrimMaxDecayTypeTags[tResPrimMaxDecayType], cIncludeResidualsTypeTags[tIncludeResidualsType], cResPrimMaxDecayTypeTags[tResPrimMaxDecayType]);
+  TString tFitInfoTString_LamK0 = TString::Format("_MomResCrctn_NonFlatBgdCrctnPolynomial%s%s_UsingXiDataAndCoulombOnly_SingleLamParam", cIncludeResidualsTypeTags[tIncludeResidualsType], cResPrimMaxDecayTypeTags[tResPrimMaxDecayType]);
+
 
 
   td2dVec tParsAndErrs_LamK0 = GetParamValuesAndErrors(tMasterFileLocation_LamK0, tSystematicsFileLocation_LamK0, tFitInfoTString_LamK0, kLamK0, tCentType);
@@ -348,7 +349,7 @@ int main(int argc, char **argv)
   }
 
 
-  TCanvas* tCan = DrawAll(tVecOfLednickyFit, tParSysErrsAll, tIncludeResidualsType, ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, tNonFlatBgdFitType, tFitType, false, true, true, tOrderedChi2All, tOrderedNDFAll);
+  TCanvas* tCan = DrawAll(tVecOfLednickyFit, tParSysErrsAll, tIncludeResidualsType, tResPrimMaxDecayType, ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, tNonFlatBgdFitType, tFitType, false, true, true, tOrderedChi2All, tOrderedNDFAll);
   if(SaveImages)
   {
     TString tSaveName = "AllFitsCentral";
