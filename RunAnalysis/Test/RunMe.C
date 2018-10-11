@@ -28,7 +28,7 @@ TString outputname = "Results_cLamK0_20160928_Bm1_New.root";
 
 TString tConfiguration = "tMacroPath='%%/ConfigFemtoAnalysis.C'; tContainerName = 'cLamK0_femtolist'; ";
 //TString tParams = "@implementVertexCorrections = true; $|Lam|maxInvariantMass=1.165683; ";
-TString tParams = "@implementVertexCorrections = true; @analysisType = AliFemtoAnalysisLambdaKaon::kLamKchP; [0:10:30:50]; @isMCRun = true; $|ALLV0S|minCosPointingAngle=0.; $|ALLV0S|maxDcaV0=9999.0;  ";
+TString tParams = "@implementVertexCorrections = true; @analysisType = AliFemtoAnalysisLambdaKaon::kLamK0; [0:10:30:50]; @isMCRun = true;  ";
 
 void RunMe()
 {

@@ -29,9 +29,9 @@ int main(int argc, char **argv)
   bool ApplyNonFlatBackgroundCorrection = true;
   NonFlatBgdFitType tNonFlatBgdFitType = kPolynomial;
 
-  IncludeResidualsType tIncludeResidualsType = kInclude3Residuals; 
+  IncludeResidualsType tIncludeResidualsType = kInclude10Residuals; 
   ChargedResidualsType tChargedResidualsType = kUseXiDataAndCoulombOnlyInterp;
-  ResPrimMaxDecayType tResPrimMaxDecayType = k4fm;
+  ResPrimMaxDecayType tResPrimMaxDecayType = k10fm;
 
   bool FixD0 = false;
 
