@@ -301,6 +301,7 @@ void DrawRecoEffs(TPad* aPad, TList* aHistList, bool aDrawK0s=false, bool aDrawL
 
   gStyle->SetOptStat(0);
 //  gStyle->SetOptTitle(0);
+  gStyle->SetPaintTextFormat("0.3f");  //For precision of values printed with ->Draw("TEXT")
 
   //---------------------------
  
@@ -333,12 +334,12 @@ void DrawRecoEffs(TPad* aPad, TList* aHistList, bool aDrawK0s=false, bool aDrawL
   }
   //---------------------------
   tRecoHist_Lam->SetTitle(TString::Format("%s_RecoEffs", aTitle.Data()));
-  tRecoHist_Lam->GetYaxis()->SetRangeUser(0.0, 0.2);
+  tRecoHist_Lam->GetYaxis()->SetRangeUser(0.0, 0.3);
   tRecoHist_Lam->GetXaxis()->SetLabelSize(0.05);
 
-  tRecoHist_Lam->Draw("H");
-  tRecoHist_ALam->Draw("Hsame");
-  if(aDrawK0s) tRecoHist_K0s->Draw("Hsame");
+  tRecoHist_Lam->Draw("HTEXT25");
+  tRecoHist_ALam->Draw("HTEXT25same");
+  if(aDrawK0s) tRecoHist_K0s->Draw("TEXT25Hsame");
 
   //----------------------------------
   if(aDrawLegend)
@@ -384,7 +385,7 @@ TCanvas* DrawMCTruthsAndRecoEffs(TList* aHistList, bool aDrawV0Finder=false, boo
   //-----------------------------
 
   DrawMCTruths(tPad1, aHistList, aDrawV0Finder, aDrawK0s, aTitle);
-  DrawRecoEffs(tPad2, aHistList, aDrawK0s, false, aTitle);
+  DrawRecoEffs(tPad2, aHistList, aDrawK0s, true, aTitle);
 
   return tCan;
 }
@@ -459,7 +460,7 @@ int DrawEfficiencyPlots()
   
   TString tBaseDirLocation = "/home/jesse/Analysis/FemtoAnalysis/Results/V0Efficiency/";
 
-  TString tResultDate = "20181010";
+  TString tResultDate = "20181011";
   bool tWithInjected = true;
   bool t12a17a = true;
 
