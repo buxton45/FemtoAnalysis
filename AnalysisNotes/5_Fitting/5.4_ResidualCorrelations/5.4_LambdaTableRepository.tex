@@ -1,0 +1,229 @@
+%%% NOTE: If I want to run this standalone, uncomment out lines below
+%%%       But lines must be commented out to run within larger project
+%\begin{comment}
+\makeatletter
+\def\input@path{{/home/jesse/Analysis/FemtoAnalysis/AnalysisNotes/}}
+\makeatother
+
+\documentclass[ALICE,manyauthors]{ALICE_analysis_notes}
+
+\usepackage{MyStyle}
+\usepackage{chngpage}  % for adjustwidth
+\usepackage{boldline}  % to make lines in table bold
+                       % V{<factor>} vertical rule in \begin{tabular} command
+                       % also \clinB{<spec>}{<factor>} and \hlineB{<factor>}
+\usepackage{arrayjobx} % To use the array structures stored in FitResults_cLamcKch_20180505.tex   
+%\end{comment}  
+
+
+\begin{document}
+\pagestyle{empty}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% ResPrimMaxDecayType = 4fm, NO reconstruction efficiency %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\pagestyle{empty}
+\begin{landscape}
+
+\begin{table}[htbp]
+ \centering
+ \renewcommand{\arraystretch}{1.2}
+ \resizebox{\paperwidth}{!}{
+ \begin{tabular}{|c|cV{5.0}c|cV{5.0}c|cV{5.0}c|cV{5.0}c|cV{5.0}c|c|}
+  \multicolumn{2}{c}{\LamKchP residuals} & \multicolumn{2}{c}{\ALamKchM residuals} & \multicolumn{2}{c}{\LamKchM residuals} & \multicolumn{2}{c}{\ALamKchP residuals} & \multicolumn{2}{c}{\LamKs residuals} & \multicolumn{2}{c}{\ALamKs residuals} \\
+  \hline
+  \textbf{Pair System} & \textbf{$\lambda$ value} & \textbf{Pair System} & \textbf{$\lambda$ value} & \textbf{Pair System} & \textbf{$\lambda$ value} & \textbf{Pair System} & \textbf{$\lambda$ value} & \textbf{Pair System} & \textbf{$\lambda$ value} & \textbf{Pair System} & \textbf{$\lambda$ value} \\
+  \hlineB{3.0}
+  \multicolumn{12}{|c|}{3 Residuals} \\
+  \hlineB{3.0}
+  $\Lambda$K$^{+}$ & 0.154 & $\bar{\Lambda}$K$^{-}$ & 0.158 & $\Lambda$K$^{-}$ & 0.154 & $\bar{\Lambda}$K$^{+}$ & 0.158 & $\Lambda$K$^{0}_{\mathrm{S}}$ & 0.165 & $\bar{\Lambda}$K$^{0}_{\mathrm{S}}$ & 0.169 \\
+  
+  $\Sigma^{0}$K$^{+}$ & 0.099 & $\bar{\Sigma}^{0}$K$^{-}$ & 0.102 & $\Sigma^{0}$K$^{-}$ & 0.099 & $\bar{\Sigma}^{0}$K$^{+}$ & 0.103 & $\Sigma^{0}$K$^{0}_{\mathrm{S}}$ & 0.107 & $\bar{\Sigma}^{0}$K$^{0}_{\mathrm{S}}$ & 0.111 \\
+  
+  $\Xi^{0}$K$^{+}$ & 0.072 & $\bar{\Xi}^{0}$K$^{-}$ & 0.067 & $\Xi^{0}$K$^{-}$ & 0.071 & $\bar{\Xi}^{0}$K$^{+}$ & 0.068 & $\Xi^{0}$K$^{0}_{\mathrm{S}}$ & 0.077 & $\bar{\Xi}^{0}$K$^{0}_{\mathrm{S}}$ & 0.073 \\
+  
+  $\Xi^{-}$K$^{+}$ & 0.069 & $\bar{\Xi}^{+}$K$^{-}$ & 0.065 & $\Xi^{-}$K$^{-}$ & 0.068 & $\bar{\Xi}^{+}$K$^{+}$ & 0.066 & $\Xi^{-}$K$^{0}_{\mathrm{S}}$ & 0.075 & $\bar{\Xi}^{+}$K$^{0}_{\mathrm{S}}$ & 0.071 \\
+  
+  Other & 0.558 & Other & 0.560 & Other & 0.561 & Other & 0.557 & Other & 0.528 & Other & 0.528 \\
+  
+  Fakes & 0.048 & Fakes & 0.048 & Fakes & 0.048 & Fakes & 0.048 & Fakes & 0.048 & Fakes & 0.048 \\
+  
+  \hlineB{3.0}  
+  \multicolumn{12}{|c|}{10 Residuals} \\
+  \hlineB{3.0}
+  $\Lambda$K$^{+}$ & 0.154 & $\bar{\Lambda}$K$^{-}$ & 0.158 & $\Lambda$K$^{-}$ & 0.154 & $\bar{\Lambda}$K$^{+}$ & 0.158 & $\Lambda$K$^{0}_{\mathrm{S}}$ & 0.165 & $\bar{\Lambda}$K$^{0}_{\mathrm{S}}$ & 0.169 \\
+  
+  $\Sigma^{0}$K$^{+}$ & 0.099 & $\bar{\Sigma}^{0}$K$^{-}$ & 0.102 & $\Sigma^{0}$K$^{-}$ & 0.099 & $\bar{\Sigma}^{0}$K$^{+}$ & 0.103 & $\Sigma^{0}$K$^{0}_{\mathrm{S}}$ & 0.107 & $\bar{\Sigma}^{0}$K$^{0}_{\mathrm{S}}$ & 0.111 \\
+  
+  $\Xi^{0}$K$^{+}$ & 0.072 & $\bar{\Xi}^{0}$K$^{-}$ & 0.067 & $\Xi^{0}$K$^{-}$ & 0.071 & $\bar{\Xi}^{0}$K$^{+}$ & 0.068 & $\Xi^{0}$K$^{0}_{\mathrm{S}}$ & 0.077 & $\bar{\Xi}^{0}$K$^{0}_{\mathrm{S}}$ & 0.073 \\
+  
+  $\Xi^{-}$K$^{+}$ & 0.069 & $\bar{\Xi}^{+}$K$^{-}$ & 0.065 & $\Xi^{-}$K$^{-}$ & 0.068 & $\bar{\Xi}^{+}$K$^{+}$ & 0.066 & $\Xi^{-}$K$^{0}_{\mathrm{S}}$ & 0.075 & $\bar{\Xi}^{+}$K$^{0}_{\mathrm{S}}$ & 0.071 \\
+  
+  $\Sigma^{*+}$K$^{+}$ & 0.046 & $\bar{\Sigma}^{*-}$K$^{-}$ & 0.046 & $\Sigma^{*+}$K$^{-}$ & 0.046 & $\bar{\Sigma}^{*-}$K$^{+}$ & 0.046 & $\Sigma^{*+}$K$^{0}_{\mathrm{S}}$ & 0.050 & $\bar{\Sigma}^{*-}$K$^{0}_{\mathrm{S}}$ & 0.050 \\
+  
+  $\Sigma^{*-}$K$^{+}$ & 0.042 & $\bar{\Sigma}^{*+}$K$^{-}$ & 0.045 & $\Sigma^{*-}$K$^{-}$ & 0.041 & $\bar{\Sigma}^{*+}$K$^{+}$ & 0.045 & $\Sigma^{*-}$K$^{0}_{\mathrm{S}}$ & 0.045 & $\bar{\Sigma}^{*+}$K$^{0}_{\mathrm{S}}$ & 0.049 \\
+  
+  $\Sigma^{*0}$K$^{+}$ & 0.042 & $\bar{\Sigma}^{*0}$K$^{-}$ & 0.040 & $\Sigma^{*0}$K$^{-}$ & 0.041 & $\bar{\Sigma}^{*0}$K$^{+}$ & 0.041 & $\Sigma^{*0}$K$^{0}_{\mathrm{S}}$ & 0.045 & $\bar{\Sigma}^{*0}$K$^{0}_{\mathrm{S}}$ & 0.044 \\
+  
+  $\Lambda$K$^{*0}$ & 0.039 & $\bar{\Lambda}\bar{\mathrm{K}}^{*0}$ & 0.041 & $\Lambda\bar{\mathrm{K}}^{*0}$ & 0.039 & $\bar{\Lambda}$K$^{*0}$ & 0.041 & $\Lambda$K$^{*0}$ & 0.019 & $\bar{\Lambda}$K$^{*0}$ & 0.020 \\
+  
+  $\Sigma^{0}$K$^{*0}$ & 0.035 & $\bar{\Sigma}^{0}\bar{\mathrm{K}}^{*0}$ & 0.036 & $\Sigma^{0}\bar{\mathrm{K}}^{*0}$ & 0.035 & $\bar{\Sigma}^{0}$K$^{*0}$ & 0.036 & $\Sigma^{0}$K$^{*0}$ & 0.017 & $\bar{\Sigma}^{0}$K$^{*0}$ & 0.017 \\
+  
+  $\Xi^{0}$K$^{*0}$ & 0.025 & $\bar{\Xi}^{0}\bar{\mathrm{K}}^{*0}$ & 0.024 & $\Xi^{0}\bar{\mathrm{K}}^{*0}$ & 0.025 & $\bar{\Xi}^{0}$K$^{*0}$ & 0.024 & $\Xi^{0}$K$^{*0}$ & 0.012 & $\bar{\Xi}^{0}$K$^{*0}$ & 0.011 \\
+  
+  $\Xi^{-}$K$^{*0}$ & 0.024 & $\bar{\Xi}^{+}\bar{\mathrm{K}}^{*0}$ & 0.023 & $\Xi^{-}\bar{\mathrm{K}}^{*0}$ & 0.024 & $\bar{\Xi}^{+}$K$^{*0}$ & 0.023 & $\Xi^{-}$K$^{*0}$ & 0.012 & $\bar{\Xi}^{+}$K$^{*0}$ & 0.011 \\
+  
+  Other & 0.305 & Other & 0.305 & Other & 0.308 & Other & 0.301 & Other & 0.329 & Other & 0.326 \\
+  
+  Fakes & 0.048 & Fakes & 0.048 & Fakes & 0.048 & Fakes & 0.048 & Fakes & 0.048 & Fakes & 0.048 \\
+  
+  \hlineB{3.0}
+ \end{tabular}}
+ \caption{$\lambda$ values for the individual components of the \LamK correlation functions for the case of 3 and 10 residual contributions.}
+ \label{tab:LambdaValues_All}
+\end{table}
+
+\end{landscape}
+\pagestyle{plain}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% ResPrimMaxDecayType = 10fm, with reconstruction efficiency %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\pagestyle{empty}
+\begin{landscape}
+
+\begin{table}[htbp]
+ \centering
+ \renewcommand{\arraystretch}{1.2}
+ \resizebox{\paperwidth}{!}{
+ \begin{tabular}{|c|cV{5.0}c|cV{5.0}c|cV{5.0}c|cV{5.0}c|cV{5.0}c|c|}
+  \multicolumn{2}{c}{\LamKchP residuals} & \multicolumn{2}{c}{\ALamKchM residuals} & \multicolumn{2}{c}{\LamKchM residuals} & \multicolumn{2}{c}{\ALamKchP residuals} & \multicolumn{2}{c}{\LamKs residuals} & \multicolumn{2}{c}{\ALamKs residuals} \\
+  \hline
+  \textbf{Pair System} & \textbf{$\lambda$ value} & \textbf{Pair System} & \textbf{$\lambda$ value} & \textbf{Pair System} & \textbf{$\lambda$ value} & \textbf{Pair System} & \textbf{$\lambda$ value} & \textbf{Pair System} & \textbf{$\lambda$ value} & \textbf{Pair System} & \textbf{$\lambda$ value} \\
+  \hlineB{3.0}
+  \multicolumn{12}{|c|}{3 Residuals} \\
+  \hlineB{3.0}
+  $\Lambda$K$^{+}$ & 0.488 & $\bar{\Lambda}$K$^{-}$ & 0.488 & $\Lambda$K$^{-}$ & 0.487 & $\bar{\Lambda}$K$^{+}$ & 0.489 & $\Lambda$K$^{0}_{\mathrm{S}}$ & 0.505 & $\bar{\Lambda}$K$^{0}_{\mathrm{S}}$ & 0.507 \\
+  
+  $\Sigma^{0}$K$^{+}$ & 0.103 & $\bar{\Sigma}^{0}$K$^{-}$ & 0.102 & $\Sigma^{0}$K$^{-}$ & 0.102 & $\bar{\Sigma}^{0}$K$^{+}$ & 0.102 & $\Sigma^{0}$K$^{0}_{\mathrm{S}}$ & 0.112 & $\bar{\Sigma}^{0}$K$^{0}_{\mathrm{S}}$ & 0.111 \\
+  
+  $\Xi^{0}$K$^{+}$ & 0.046 & $\bar{\Xi}^{0}$K$^{-}$ & 0.040 & $\Xi^{0}$K$^{-}$ & 0.046 & $\bar{\Xi}^{0}$K$^{+}$ & 0.041 & $\Xi^{0}$K$^{0}_{\mathrm{S}}$ & 0.050 & $\bar{\Xi}^{0}$K$^{0}_{\mathrm{S}}$ & 0.044 \\
+  
+  $\Xi^{-}$K$^{+}$ & 0.063 & $\bar{\Xi}^{+}$K$^{-}$ & 0.056 & $\Xi^{-}$K$^{-}$ & 0.062 & $\bar{\Xi}^{+}$K$^{+}$ & 0.057 & $\Xi^{-}$K$^{0}_{\mathrm{S}}$ & 0.068 & $\bar{\Xi}^{+}$K$^{0}_{\mathrm{S}}$ & 0.062 \\
+  
+  Other & 0.252 & Other & 0.261 & Other & 0.255 & Other & 0.259 & Other & 0.217 & Other & 0.222 \\
+  
+  Fakes & 0.048 & Fakes & 0.048 & Fakes & 0.048 & Fakes & 0.048 & Fakes & 0.048 & Fakes & 0.048 \\
+  
+  \hlineB{3.0}  
+  \multicolumn{12}{|c|}{10 Residuals} \\
+  \hlineB{3.0}
+  $\Lambda$K$^{+}$ & 0.317 & $\bar{\Lambda}$K$^{-}$ & 0.319 & $\Lambda$K$^{-}$ & 0.317 & $\bar{\Lambda}$K$^{+}$ & 0.318 & $\Lambda$K$^{0}_{\mathrm{S}}$ & 0.342 & $\bar{\Lambda}$K$^{0}_{\mathrm{S}}$ & 0.344 \\
+  
+  $\Sigma^{0}$K$^{+}$ & 0.105 & $\bar{\Sigma}^{0}$K$^{-}$ & 0.105 & $\Sigma^{0}$K$^{-}$ & 0.104 & $\bar{\Sigma}^{0}$K$^{+}$ & 0.106 & $\Sigma^{0}$K$^{0}_{\mathrm{S}}$ & 0.113 & $\bar{\Sigma}^{0}$K$^{0}_{\mathrm{S}}$ & 0.114 \\
+  
+  $\Xi^{0}$K$^{+}$ & 0.047 & $\bar{\Xi}^{0}$K$^{-}$ & 0.042 & $\Xi^{0}$K$^{-}$ & 0.047 & $\bar{\Xi}^{0}$K$^{+}$ & 0.042 & $\Xi^{0}$K$^{0}_{\mathrm{S}}$ & 0.051 & $\bar{\Xi}^{0}$K$^{0}_{\mathrm{S}}$ & 0.045 \\
+  
+  $\Xi^{-}$K$^{+}$ & 0.064 & $\bar{\Xi}^{+}$K$^{-}$ & 0.058 & $\Xi^{-}$K$^{-}$ & 0.063 & $\bar{\Xi}^{+}$K$^{+}$ & 0.059 & $\Xi^{-}$K$^{0}_{\mathrm{S}}$ & 0.069 & $\bar{\Xi}^{+}$K$^{0}_{\mathrm{S}}$ & 0.063 \\
+  
+  $\Sigma^{*+}$K$^{+}$ & 0.049 & $\bar{\Sigma}^{*-}$K$^{-}$ & 0.047 & $\Sigma^{*+}$K$^{-}$ & 0.048 & $\bar{\Sigma}^{*-}$K$^{+}$ & 0.048 & $\Sigma^{*+}$K$^{0}_{\mathrm{S}}$ & 0.052 & $\bar{\Sigma}^{*-}$K$^{0}_{\mathrm{S}}$ & 0.051 \\
+  
+  $\Sigma^{*-}$K$^{+}$ & 0.044 & $\bar{\Sigma}^{*+}$K$^{-}$ & 0.046 & $\Sigma^{*-}$K$^{-}$ & 0.044 & $\bar{\Sigma}^{*+}$K$^{+}$ & 0.047 & $\Sigma^{*-}$K$^{0}_{\mathrm{S}}$ & 0.047 & $\bar{\Sigma}^{*+}$K$^{0}_{\mathrm{S}}$ & 0.050 \\
+  
+  $\Sigma^{*0}$K$^{+}$ & 0.044 & $\bar{\Sigma}^{*0}$K$^{-}$ & 0.041 & $\Sigma^{*0}$K$^{-}$ & 0.044 & $\bar{\Sigma}^{*0}$K$^{+}$ & 0.042 & $\Sigma^{*0}$K$^{0}_{\mathrm{S}}$ & 0.047 & $\bar{\Sigma}^{*0}$K$^{0}_{\mathrm{S}}$ & 0.045 \\
+  
+  $\Lambda$K$^{*0}$ & 0.041 & $\bar{\Lambda}\bar{\mathrm{K}}^{*0}$ & 0.042 & $\Lambda\bar{\mathrm{K}}^{*0}$ & 0.041 & $\bar{\Lambda}$K$^{*0}$ & 0.042 & $\Lambda$K$^{*0}$ & 0.020 & $\bar{\Lambda}$K$^{*0}$ & 0.020 \\
+  
+  $\Sigma^{0}$K$^{*0}$ & 0.037 & $\bar{\Sigma}^{0}\bar{\mathrm{K}}^{*0}$ & 0.037 & $\Sigma^{0}\bar{\mathrm{K}}^{*0}$ & 0.037 & $\bar{\Sigma}^{0}$K$^{*0}$ & 0.037 & $\Sigma^{0}$K$^{*0}$ & 0.017 & $\bar{\Sigma}^{0}$K$^{*0}$ & 0.018 \\
+  
+  $\Xi^{0}$K$^{*0}$ & 0.017 & $\bar{\Xi}^{0}\bar{\mathrm{K}}^{*0}$ & 0.015 & $\Xi^{0}\bar{\mathrm{K}}^{*0}$ & 0.017 & $\bar{\Xi}^{0}$K$^{*0}$ & 0.015 & $\Xi^{0}$K$^{*0}$ & 0.008 & $\bar{\Xi}^{0}$K$^{*0}$ & 0.007 \\
+  
+  $\Xi^{-}$K$^{*0}$ & 0.022 & $\bar{\Xi}^{+}\bar{\mathrm{K}}^{*0}$ & 0.021 & $\Xi^{-}\bar{\mathrm{K}}^{*0}$ & 0.022 & $\bar{\Xi}^{+}$K$^{*0}$ & 0.021 & $\Xi^{-}$K$^{*0}$ & 0.011 & $\bar{\Xi}^{+}$K$^{*0}$ & 0.010 \\
+  
+  Other & 0.166 & Other & 0.174 & Other & 0.169 & Other & 0.171 & Other & 0.176 & Other & 0.181 \\
+  
+  Fakes & 0.048 & Fakes & 0.048 & Fakes & 0.048 & Fakes & 0.048 & Fakes & 0.048 & Fakes & 0.048 \\
+  
+  \hlineB{3.0}
+ \end{tabular}}
+ \caption{$\lambda$ values for the individual components of the \LamK correlation functions for the case of 3 and 10 residual contributions.}
+ \label{tab:LambdaValues_All}
+\end{table}
+
+\end{landscape}
+\pagestyle{plain}
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Compare ResPrimMaxDecayType = {0, 4, 5, 6, 10, 100 fm}, NO reconstruction efficiency %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\clearpage
+\begin{table}[htbp]
+ \centering
+ \renewcommand{\arraystretch}{1.2}
+ \begin{tabular}{|cV{5.0}c|c|c|c|c|c|}
+  \multicolumn{7}{c}{\LamKchP Residuals} \\
+  \hline
+  \multicolumn{1}{c}{} & \multicolumn{6}{c}{Decay Length} \\
+  \hline
+  \textbf{Pair System} & \textbf{0 fm} & \textbf{4 fm} & \textbf{5 fm} & \textbf{6 fm} & \textbf{10 fm} & \textbf{100 fm} \\
+  \hlineB{3.0}
+  \multicolumn{7}{|c|}{3 Residuals} \\
+  \hlineB{3.0}
+  $\Lambda$K$^{+}$    & 0.111 & 0.154 & 0.228 & 0.445 & 0.470 & 0.508 \\
+  \cline{2-7}
+  $\Sigma^{0}$K$^{+}$ & \multicolumn{6}{c|}{0.099} \\
+  \cline{2-7}
+  $\Xi^{0}$K$^{+}$    & \multicolumn{6}{c|}{0.072} \\
+  \cline{2-7}
+  $\Xi^{-}$K$^{+}$    & \multicolumn{6}{c|}{0.069} \\
+  \cline{2-7}
+  Other               & 0.601 & 0.558 & 0.484 & 0.267 & 0.242 & 0.204 \\
+  \cline{2-7}
+  Fakes               & \multicolumn{6}{c|}{0.048} \\
+  \hlineB{3.0}  
+  \multicolumn{7}{|c|}{10 Residuals} \\
+  \hlineB{3.0}
+  $\Lambda$K$^{+}$     & 0.111 & 0.154 & 0.188 & 0.277 & 0.301 & 0.340 \\
+  \cline{2-7}
+  $\Sigma^{0}$K$^{+}$  & \multicolumn{6}{c|}{0.099} \\
+  \cline{2-7}
+  $\Xi^{0}$K$^{+}$     & \multicolumn{6}{c|}{0.072} \\
+  \cline{2-7}
+  $\Xi^{-}$K$^{+}$     & \multicolumn{6}{c|}{0.069} \\
+  \cline{2-7}
+  $\Sigma^{*+}$K$^{+}$ & \multicolumn{6}{c|}{0.046} \\
+  \cline{2-7}
+  $\Sigma^{*-}$K$^{+}$ & \multicolumn{6}{c|}{0.042} \\
+  \cline{2-7}
+  $\Sigma^{*0}$K$^{+}$ & \multicolumn{6}{c|}{0.042} \\
+  \cline{2-7}
+  $\Lambda$K$^{*0}$    & \multicolumn{6}{c|}{0.039} \\
+  \cline{2-7}
+  $\Sigma^{0}$K$^{*0}$ & \multicolumn{6}{c|}{0.035} \\
+  \cline{2-7}
+  $\Xi^{0}$K$^{*0}$    & \multicolumn{6}{c|}{0.025} \\
+  \cline{2-7}
+  $\Xi^{-}$K$^{*0}$    & \multicolumn{6}{c|}{0.024} \\
+  \cline{2-7}
+  Other                & 0.348 & 0.305 & 0.271 & 0.182 & 0.158 & 0.119 \\
+  \cline{2-7}
+  Fakes                & \multicolumn{6}{c|}{0.048} \\
+  \hlineB{3.0}  
+ \end{tabular}
+ \caption{$\lambda$ values for the individual components of the \LamKchP correlation functions, assuming various maximum values of c$\tau$ for parents systems to be considered primary, for the case of 3 and 10 residual contributions.}
+ \label{tab:LambdaValues_LamKchP_VaryPrimDecayLength}
+\end{table}
+\clearpage
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\pagestyle{empty}
+\begin{landscape}
+
+
+\end{landscape}
+\pagestyle{plain}
+
+
+\end{document}

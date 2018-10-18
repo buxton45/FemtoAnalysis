@@ -1,0 +1,38 @@
+\documentclass[../AnalysisNoteJBuxton.tex]{subfiles}
+\begin{document}
+
+\subsection{Event Selection and Mixing}
+\label{EventSelection}
+
+The events used in this study were selected with the class AliFemtoEventCutEstimators according to the following criteria:
+
+\begin{itemize}
+ \itemsep0em
+ \item Triggers
+ \begin{itemize}
+  \itemsep0em
+  \item minimum bias (kMB)
+  \item central (kCentral)
+  \item semi-central (kSemiCentral)
+ \end{itemize}
+ \item z-position of reconstructed event vertex must be within 10 cm of the center of the ALICE detector
+ \item the event must contain at least one particle of each type from the pair of interest
+\end{itemize}
+
+The event mixing was handled by the AliFemtoVertexMultAnalysis class, which only mixes events with like vertex position and centrality.
+The following criteria were used for event mixing:
+
+\begin{itemize}
+ \itemsep0em
+ \item Number of events to mix = 5
+ \item Vertex position bin width = 2 cm
+ \item Centrality bin width = 5%
+\end{itemize}
+
+The AliFemtoEventReaderAODChain class is used to read the events.
+Event flatteneing is not currently used.
+FilterBit(7).
+The centrality is determined by the ``V0M" method of AliCentrality, set by calling AliFemtoEventReaderAOD::SetUseMultiplicity(kCentrality).
+We utilize the SetPrimaryVertexCorrectionTPCPoints switch, which causes the reader to shift all TPC points to be relative to the event vertex.
+
+\end{document}
