@@ -122,7 +122,11 @@ int main(int argc, char **argv)
 
   TString tMasterFileLocation_LamK0 = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamK0_20180505/MasterFitResults_20180505.txt";
   TString tSystematicsFileLocation_LamK0 = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamK0_20171227/Systematics/_MomResCrctn_NonFlatBgdCrctn%s%s_UsingXiDataAndCoulombOnly/FinalFitSystematics_wFitRangeSys_MomResCrctn_NonFlatBgdCrctn%s%s_UsingXiDataAndCoulombOnly_cLamK0.txt", cIncludeResidualsTypeTags[tIncResType], cResPrimMaxDecayTypeTags[tResPrimMaxDecayType], cIncludeResidualsTypeTags[tIncResType], cResPrimMaxDecayTypeTags[tResPrimMaxDecayType]);
-  TString tFitInfoTString_LamK0 = FitValuesLatexTableHelperWriter::GetFitInfoTStringFromTwoLetterID_LamK0("Aa", tIncResType, tResPrimMaxDecayType);
+//  TString tFitInfoTString_LamK0 = FitValuesLatexTableHelperWriter::GetFitInfoTStringFromTwoLetterID_LamK0("Aa", tIncResType, tResPrimMaxDecayType);
+  TString tFitInfoTString_LamK0 = FitValuesLatexTableHelperWriter::GetFitInfoTStringFromTwoLetterID_LamK0("Ab", tIncResType, tResPrimMaxDecayType);
+
+  cout << "tFitInfoTString_LamKch = " << tFitInfoTString_LamKch << endl << endl;
+  cout << "tFitInfoTString_LamK0 = " << tFitInfoTString_LamK0 << endl << endl;
 
   TString tCanNameMod, tLegInfo;
   if(tIncResType==kIncludeNoResiduals)
@@ -358,6 +362,30 @@ int main(int argc, char **argv)
   double tLamKchAvg3050R = 0.5*(tLamKchP3050R+tLamKchM3050R);
   double tLamKchAvg3050Rerr = sqrt(pow(0.5*tLamKchP3050Rerr,2)+pow(0.5*tLamKchM3050Rerr,2));
   double tLamKchAvg3050RerrSys = sqrt(pow(0.5*tLamKchP3050RerrSys,2)+pow(0.5*tLamKchM3050RerrSys,2));
+
+//------------------------------------------------------------------------------------------- 
+//cout values so there's no confusion
+cout << "RInfo_LamK0_0010 = " << RInfo_LamK0_0010[0] << " +- " << RInfo_LamK0_0010[1] << " +- " << RInfo_LamK0_0010[2] << endl;
+cout << "RInfo_LamK0_1030 = " << RInfo_LamK0_1030[0] << " +- " << RInfo_LamK0_1030[1] << " +- " << RInfo_LamK0_1030[2] << endl;
+cout << "RInfo_LamK0_3050 = " << RInfo_LamK0_3050[0] << " +- " << RInfo_LamK0_3050[1] << " +- " << RInfo_LamK0_3050[2] << endl;
+cout << endl << endl;
+
+cout << "RInfo_LamKchP_0010 = " << RInfo_LamKchP_0010[0] << " +- " << RInfo_LamKchP_0010[1] << " +- " << RInfo_LamKchP_0010[2] << endl;
+cout << "RInfo_LamKchP_1030 = " << RInfo_LamKchP_1030[0] << " +- " << RInfo_LamKchP_1030[1] << " +- " << RInfo_LamKchP_1030[2] << endl;
+cout << "RInfo_LamKchP_3050 = " << RInfo_LamKchP_3050[0] << " +- " << RInfo_LamKchP_3050[1] << " +- " << RInfo_LamKchP_3050[2] << endl;
+cout << endl << endl;
+
+cout << "RInfo_LamKchM_0010 = " << RInfo_LamKchM_0010[0] << " +- " << RInfo_LamKchM_0010[1] << " +- " << RInfo_LamKchM_0010[2] << endl;
+cout << "RInfo_LamKchM_1030 = " << RInfo_LamKchM_1030[0] << " +- " << RInfo_LamKchM_1030[1] << " +- " << RInfo_LamKchM_1030[2] << endl;
+cout << "RInfo_LamKchM_3050 = " << RInfo_LamKchM_3050[0] << " +- " << RInfo_LamKchM_3050[1] << " +- " << RInfo_LamKchM_3050[2] << endl;
+cout << endl << endl;
+
+cout << "tLamKchAvg0010R = " << tLamKchAvg0010R << " +- " << tLamKchAvg0010Rerr << " +- " << tLamKchAvg0010RerrSys << endl;
+cout << "tLamKchAvg1030R = " << tLamKchAvg1030R << " +- " << tLamKchAvg1030Rerr << " +- " << tLamKchAvg1030RerrSys << endl;
+cout << "tLamKchAvg3050R = " << tLamKchAvg3050R << " +- " << tLamKchAvg3050Rerr << " +- " << tLamKchAvg3050RerrSys << endl;
+
+
+//------------------------------------------------------------------------------------------- 
 
 
 //---------------------------------- Draw Legend -------------------------------------------- 

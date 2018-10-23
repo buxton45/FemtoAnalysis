@@ -10,7 +10,7 @@ class CanvasPartition;
 
 
 //________________________________________________________________________________________________________________
-TCanvas* DrawKStarCfs(FitGenerator* aFG1, FitGenerator* aFG2, bool aZoom=false, TString aCanNameModifier="")
+TCanvas* DrawKStarCfs(FitGenerator* aFG1, FitGenerator* aFG2, bool aZoomX=false, bool aZoomY=false, TString aCanNameModifier="")
 {
   AnalysisType aAnType = aFG1->GetFitSharedAnalyses()->GetFitPairAnalysis(0)->GetAnalysisType();
   AnalysisType aConjType = aFG1->GetFitSharedAnalyses()->GetFitPairAnalysis(1)->GetAnalysisType();
@@ -22,7 +22,8 @@ TCanvas* DrawKStarCfs(FitGenerator* aFG1, FitGenerator* aFG2, bool aZoom=false, 
   //-------------------------
 
   TString tCanvasName = TString("canKStarCfs");
-  if(aZoom) tCanvasName += TString("Zoom");
+  if(aZoomX) tCanvasName += TString("ZoomX");
+  if(aZoomY) tCanvasName += TString("ZoomY");
   tCanvasName += TString(cAnalysisBaseTags[aAnType]);
   if(tConjIncluded) tCanvasName += TString("wConj");
   tCanvasName += aCanNameModifier;
@@ -33,12 +34,23 @@ TCanvas* DrawKStarCfs(FitGenerator* aFG1, FitGenerator* aFG2, bool aZoom=false, 
   double tXLow = -0.02;
 //  double tXHigh = 0.99;
   double tXHigh = aFG1->GetKStarCf(0)->GetXaxis()->GetBinUpEdge(aFG1->GetKStarCf(0)->GetNbinsX())-0.01;
-  if(aZoom) tXHigh = 0.32;
+  if(aZoomX) tXHigh = 0.32;
 
   double tYLow = 0.86;
   double tYHigh = 1.07;
-  CanvasPartition* tCanPart = new CanvasPartition(tCanvasName,tNx,tNy,tXLow,tXHigh,tYLow,tYHigh,0.12,0.05,0.13,0.05);
-  if(!tConjIncluded) tCanPart->GetCanvas()->SetCanvasSize(350,500);
+  if(aZoomY)
+  {
+    tYLow = 0.95;
+    tYHigh = 1.03;
+  }
+
+  CanvasPartition* tCanPart;
+  if(tConjIncluded) tCanPart = new CanvasPartition(tCanvasName,tNx,tNy,tXLow,tXHigh,tYLow,tYHigh,0.12,0.025,0.13,0.05);
+  else
+  {
+    tCanPart = new CanvasPartition(tCanvasName,tNx,tNy,tXLow,tXHigh,tYLow,tYHigh,0.15,0.0,0.13,0.01);
+    tCanPart->GetCanvas()->SetCanvasSize(350,500);
+  }
 
   int tAnalysisNumber=0;
 
@@ -84,9 +96,16 @@ TCanvas* DrawKStarCfs(FitGenerator* aFG1, FitGenerator* aFG2, bool aZoom=false, 
 
   tCanPart->SetDrawUnityLine(true);
   tCanPart->DrawAll();
-  tCanPart->DrawXaxisTitle("#it{k}* (GeV/#it{c})");
-  if(tConjIncluded) tCanPart->DrawYaxisTitle("C(k*)",43,25,0.05,0.75);
-  else tCanPart->DrawYaxisTitle("#it{C}(#it{k}*)",43,25,0.075,0.875);
+  if(tConjIncluded) 
+  {
+    tCanPart->DrawXaxisTitle("#it{k}* (GeV/#it{c})");
+    tCanPart->DrawYaxisTitle("#it{C}(#it{k}*)",43,25,0.05,0.75);
+  }
+  else
+  {
+    tCanPart->DrawXaxisTitle("#it{k}* (GeV/#it{c})", 43, 20);
+    tCanPart->DrawYaxisTitle("#it{C}(#it{k}*)", 43, 20, 0.065, 0.85);
+  }
 
   return tCanPart->GetCanvas();
 }
@@ -339,8 +358,11 @@ int main(int argc, char **argv)
 //  tResultsDate1 = "20161027";
 //  tResultsDate2 = "20171227";
 
-  tResultsDate1 = "20180416";
-  tResultsDate2 = "20180416";
+  tResultsDate1 = "20180416_IncorrectStav";
+  tResultsDate2 = "20180416_IncorrectStav";
+
+//  tResultsDate1 = "20180505";
+//  tResultsDate2 = "20180505";
 
 //  tResultsDate1 = "20170505_ignoreOnFlyStatus";
 //  tResultsDate2 = "20171220_onFlyStatusFalse";
@@ -363,7 +385,7 @@ int main(int argc, char **argv)
   bool bUseStavCf2 = true;
 
   bool SaveImages = false;
-  TString tSaveDir = "/home/jesse/Analysis/Presentations/AliFemto/20180627/Figures/";
+  TString tSaveDir = "/home/jesse/Analysis/Presentations/AlicePhysicsWeek/20181025/Figures/";
 
   TString tGeneralAnTypeName;
   if(tAnType==kLamK0 || tAnType==kALamK0) tGeneralAnTypeName = "cLamK0";
@@ -383,7 +405,8 @@ int main(int argc, char **argv)
   FitGenerator* tLamKchP1 = new FitGenerator(tFileLocationBase1, tFileLocationBaseMC1, tAnType, tCentType, tAnRunType, tNPartialAnalysis, tGenType, false, false, "", bUseStavCf1);
   FitGenerator* tLamKchP2 = new FitGenerator(tFileLocationBase2, tFileLocationBaseMC2, tAnType, tCentType, tAnRunType, tNPartialAnalysis, tGenType, false, false, "", bUseStavCf2);
   //-----------------------------------------------------------------------------
-  bool bZoom = false;
+  bool bZoomX = false;
+  bool bZoomY = false;
   bool bDrawKStarCfs = true;
   bool bDrawKStarCfRatios = false;
 
@@ -397,13 +420,13 @@ int main(int argc, char **argv)
   //-----------------------------------------------------------------------------
   if(bDrawKStarCfs)
   {
-    TCanvas* tCan = DrawKStarCfs(tLamKchP1, tLamKchP2, bZoom, tCanNameModifier);
+    TCanvas* tCan = DrawKStarCfs(tLamKchP1, tLamKchP2, bZoomX, bZoomY, tCanNameModifier);
     if(SaveImages) tCan->SaveAs(TString::Format("%s%s.eps", tSaveDir.Data(), tCan->GetName()));
   }
 
   if(bDrawKStarCfRatios)
   {
-    TCanvas* tRatioCan = DrawKStarCfRatios(tLamKchP1, tLamKchP2, bZoom);
+    TCanvas* tRatioCan = DrawKStarCfRatios(tLamKchP1, tLamKchP2, bZoomX);
     if(SaveImages) tRatioCan->SaveAs(TString::Format("%s%s.eps", tSaveDir.Data(), tRatioCan->GetName()));
   }
 

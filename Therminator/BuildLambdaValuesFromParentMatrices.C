@@ -18,42 +18,42 @@ void ApplyReconstructionEfficiencies(AnalysisType aAnType, TH1D* aHist)
   vector<double> tEffVec;
   if(aAnType==kLamKchP || aAnType==kLamKchM || aAnType==kLamK0)
   {
-    tEffVec = vector<double>{0.16, //Primary
+    tEffVec = vector<double>{0.189, //Primary
                              
-                             0.16, //Sig0
-                             0.10, //Xi0
-                             0.14, //XiC
+                             0.189, //Sig0
+                             0.091, //Xi0
+                             0.122, //XiC
 
-                             0.16, //SigStP
-                             0.16, //SigStM
-                             0.16, //SigSt0
+                             0.188, //SigStP
+                             0.188, //SigStM
+                             0.188, //SigSt0
 
-                             0.16, //(A)LamKSt0
-                             0.16, //(A)Sig0KSt0
-                             0.10, //(A)Xi0KSt0
-                             0.14, //(A)XiCKSt0
+                             0.189, //(A)LamKSt0
+                             0.189, //(A)Sig0KSt0
+                             0.091, //(A)Xi0KSt0
+                             0.122, //(A)XiCKSt0
 
-                             0.16  //Other
+                             0.157  //Other
                             };
   }
   else if(aAnType==kALamKchP || aAnType==kALamKchM || aAnType==kALamK0)
   {
-    tEffVec = vector<double>{0.15, //Primary
+    tEffVec = vector<double>{0.165, //Primary
                              
-                             0.15, //Sig0
-                             0.09, //Xi0
-                             0.13, //XiC
+                             0.162, //Sig0
+                             0.079, //Xi0
+                             0.105, //XiC
 
-                             0.15, //SigStP
-                             0.15, //SigStM
-                             0.15, //SigSt0
+                             0.160, //SigStP
+                             0.160, //SigStM
+                             0.160, //SigSt0
 
-                             0.15, //(A)LamKSt0
-                             0.15, //(A)Sig0KSt0
-                             0.09, //(A)Xi0KSt0
-                             0.13, //(A)XiCKSt0
+                             0.165, //(A)LamKSt0
+                             0.162, //(A)Sig0KSt0
+                             0.079, //(A)Xi0KSt0
+                             0.105, //(A)XiCKSt0
 
-                             0.16  //Other
+                             0.147  //Other
                             };
   }
   else assert(0);
@@ -129,9 +129,9 @@ int main(int argc, char **argv)
 //-----------------------------------------------------------------------------
   bool bSaveImages = false;
 //  double tMaxDecayLength = -1.;
-  double tMaxDecayLength = 4.0;
-  IncludeResidualsType tIncResType = kInclude10Residuals;
-  bool tApplyRecoEff=false;
+  double tMaxDecayLength = 10.0;
+  IncludeResidualsType tIncResType = kInclude3Residuals;
+  bool tApplyRecoEff=true;
 
   int tImpactParam = 2;
 

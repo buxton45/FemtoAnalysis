@@ -460,7 +460,7 @@ int DrawEfficiencyPlots()
   
   TString tBaseDirLocation = "/home/jesse/Analysis/FemtoAnalysis/Results/V0Efficiency/";
 
-  TString tResultDate = "20181016";
+  TString tResultDate = "20181019";
   bool tWithInjected = true;
   bool t12a17a = true;
 

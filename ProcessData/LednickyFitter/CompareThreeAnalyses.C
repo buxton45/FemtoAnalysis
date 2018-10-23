@@ -137,7 +137,7 @@ int main(int argc, char **argv)
 
   tResultsDate1 = "20180505";
   tResultsDate2 = "20180505";
-  tResultsDate3 = "20180416";
+  tResultsDate3 = "20180416_IncorrectStav";
 
 
   AnalysisType tAnType = kLamKchP;

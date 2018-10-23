@@ -25,7 +25,7 @@ int main(int argc, char **argv)
   bool bGenerateContours = false;
 
   TString tResultsDate = "20180505"/*"20171227"*//*"20161027"*//*"20171220_onFlyStatusFalse"*//*"20171227_LHC10h"*//*"20180104_useIsProbableElectronMethodTrue"*//*"20180104_useIsProbableElectronMethodFalse"*/;
-  AnalysisType tAnType = kLamKchP;
+  AnalysisType tAnType = kLamK0;
 
   double tMaxFitKStar=0.3;
 
@@ -45,7 +45,7 @@ int main(int argc, char **argv)
   //--Corrections
   bool ApplyMomResCorrection = true;
   bool ApplyNonFlatBackgroundCorrection = true;
-  NonFlatBgdFitType tNonFlatBgdFitType = kPolynomial;
+  NonFlatBgdFitType tNonFlatBgdFitType = kLinear;
     if(tNonFlatBgdFitType==kDivideByTherm)
     {
       tFitType = kChi2;
@@ -182,7 +182,8 @@ int main(int argc, char **argv)
   if(ApplyNonFlatBackgroundCorrection && tNonFlatBgdFitType != kLinear)
   {
 //    tLamKchP->SetKStarMinMaxNorm(0.5,0.6);
-    tLamKchP->SetMinMaxBgdFit(0.45, 0.95);
+    if(tAnType==kLamK0 || tAnType==kALamK0) tLamKchP->SetMinMaxBgdFit(0.35, 0.55);  //THERMINATOR does not fit shape as well for LamK0
+    else tLamKchP->SetMinMaxBgdFit(0.45, 0.95);
     tLamKchP->SetAllRadiiLimits(1., 10.);
 
 //    if(tIncludeResidualsType == kIncludeNoResiduals) tLamKchP->SetAllLambdaParamLimits(0.1,1.0);
