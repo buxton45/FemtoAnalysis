@@ -107,26 +107,39 @@ int main(int argc, char **argv)
 //=========Macro generated from canvas: canmtcomb/canmtcomb
 //=========  (Fri May  8 11:29:01 2015) by ROOT version5.34/26
 
+  TString tResultsDate = "20180505";
+
   bool bSaveImage = false;
   IncludeResidualsType tIncResType = kInclude3Residuals;
-  ResPrimMaxDecayType tResPrimMaxDecayType = k4fm;
+  ResPrimMaxDecayType tResPrimMaxDecayType = k10fm;
 
   TString tSaveFileType = "pdf";  //Needs to be pdf for systematics to be transparent!
 //  TString tSaveDir = "/home/jesse/Analysis/Presentations/AliFemto/20180627/Figures/";
   TString tSaveDir = "/home/jesse/Analysis/FemtoAnalysis/ProcessData/LednickyFitter/Systematics/";
   TString tSaveName = TString::Format("%smTscaling", tSaveDir.Data());
 
-  TString tMasterFileLocation_LamKch = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_20180505/MasterFitResults_20180505.txt";
-  TString tSystematicsFileLocation_LamKch = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_20171227/Systematics/_MomResCrctn_NonFlatBgdCrctn%s%s_UsingXiDataAndCoulombOnly/FinalFitSystematics_wFitRangeSys_MomResCrctn_NonFlatBgdCrctn%s%s_UsingXiDataAndCoulombOnly_cLamcKch.txt", cIncludeResidualsTypeTags[tIncResType], cResPrimMaxDecayTypeTags[tResPrimMaxDecayType], cIncludeResidualsTypeTags[tIncResType], cResPrimMaxDecayTypeTags[tResPrimMaxDecayType]);
   TString tFitInfoTString_LamKch = FitValuesLatexTableHelperWriter::GetFitInfoTStringFromTwoLetterID_LamKch("Ea", tIncResType, tResPrimMaxDecayType);
-
-  TString tMasterFileLocation_LamK0 = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamK0_20180505/MasterFitResults_20180505.txt";
-  TString tSystematicsFileLocation_LamK0 = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamK0_20171227/Systematics/_MomResCrctn_NonFlatBgdCrctn%s%s_UsingXiDataAndCoulombOnly/FinalFitSystematics_wFitRangeSys_MomResCrctn_NonFlatBgdCrctn%s%s_UsingXiDataAndCoulombOnly_cLamK0.txt", cIncludeResidualsTypeTags[tIncResType], cResPrimMaxDecayTypeTags[tResPrimMaxDecayType], cIncludeResidualsTypeTags[tIncResType], cResPrimMaxDecayTypeTags[tResPrimMaxDecayType]);
 //  TString tFitInfoTString_LamK0 = FitValuesLatexTableHelperWriter::GetFitInfoTStringFromTwoLetterID_LamK0("Aa", tIncResType, tResPrimMaxDecayType);
   TString tFitInfoTString_LamK0 = FitValuesLatexTableHelperWriter::GetFitInfoTStringFromTwoLetterID_LamK0("Ab", tIncResType, tResPrimMaxDecayType);
 
   cout << "tFitInfoTString_LamKch = " << tFitInfoTString_LamKch << endl << endl;
   cout << "tFitInfoTString_LamK0 = " << tFitInfoTString_LamK0 << endl << endl;
+
+  TString tMasterFileLocation_LamKch = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_%s/MasterFitResults_%s.txt", tResultsDate.Data(), tResultsDate.Data());
+  TString tMasterFileLocation_LamK0 = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamK0_%s/MasterFitResults_%s.txt", tResultsDate.Data(), tResultsDate.Data());
+
+
+  TString tSystematicsFileLocation_LamKch = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_%s/%s/Systematics/FinalFitSystematics_wFitRangeSys%s_cLamcKch.txt", tResultsDate.Data(), tFitInfoTString_LamKch.Data(), tFitInfoTString_LamKch.Data());
+  TString tSystematicsFileLocation_LamK0 = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamK0_%s/%s/Systematics/FinalFitSystematics_wFitRangeSys%s_cLamK0.txt", tResultsDate.Data(), tFitInfoTString_LamK0.Data(), tFitInfoTString_LamK0.Data());
+
+
+/*
+  TString tSystematicsFileLocation_LamKch = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_20171227/Systematics/_MomResCrctn_NonFlatBgdCrctn%s%s_UsingXiDataAndCoulombOnly/FinalFitSystematics_wFitRangeSys_MomResCrctn_NonFlatBgdCrctn%s%s_UsingXiDataAndCoulombOnly_cLamcKch.txt", cIncludeResidualsTypeTags[tIncResType], cResPrimMaxDecayTypeTags[tResPrimMaxDecayType], cIncludeResidualsTypeTags[tIncResType], cResPrimMaxDecayTypeTags[tResPrimMaxDecayType]);
+
+  TString tSystematicsFileLocation_LamK0 = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamK0_20171227/Systematics/_MomResCrctn_NonFlatBgdCrctn%s%s_UsingXiDataAndCoulombOnly/FinalFitSystematics_wFitRangeSys_MomResCrctn_NonFlatBgdCrctn%s%s_UsingXiDataAndCoulombOnly_cLamK0.txt", cIncludeResidualsTypeTags[tIncResType], cResPrimMaxDecayTypeTags[tResPrimMaxDecayType], cIncludeResidualsTypeTags[tIncResType], cResPrimMaxDecayTypeTags[tResPrimMaxDecayType]);
+*/
+
+
 
   TString tCanNameMod, tLegInfo;
   if(tIncResType==kIncludeNoResiduals)

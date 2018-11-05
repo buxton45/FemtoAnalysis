@@ -27,7 +27,7 @@ int main(int argc, char **argv)
 
   IncludeResidualsType tIncludeResidualsType = kInclude3Residuals; 
   ChargedResidualsType tChargedResidualsType = kUseXiDataAndCoulombOnlyInterp;
-  ResPrimMaxDecayType tResPrimMaxDecayType = k4fm;
+  ResPrimMaxDecayType tResPrimMaxDecayType = k10fm;
 
   bool FixD0 = false;
 

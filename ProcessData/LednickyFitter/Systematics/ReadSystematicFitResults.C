@@ -401,10 +401,13 @@ int main(int argc, char **argv)
 
   CentralityType tCentralityType = kMB;  //Probably should always be kMB
   bool bIncludeFitRangeSys = true;
-  bool bWriteToFile = false;
+  bool bWriteToFile = true;
 
   bool tIsDualie_cLamcKch = true;
   bool tIsDualie_cLamK0 = false;
+
+  bool bUseStavCf=false;
+
   //--Sharing lambda
   bool tShareLambdaParams_cLamcKch = true;          //If true, only share lambda parameters across like-centralities
   bool tAllShareSingleLambdaParam_cLamcKch = false;
@@ -420,12 +423,12 @@ int main(int argc, char **argv)
   bool ApplyMomResCorrection = true;
   bool ApplyNonFlatBackgroundCorrection = true;
   NonFlatBgdFitType tNonFlatBgdFitType_cLamcKch = kPolynomial;
-  NonFlatBgdFitType tNonFlatBgdFitType_cLamK0 = kPolynomial;
+  NonFlatBgdFitType tNonFlatBgdFitType_cLamK0 = kLinear;
 
   //--Residuals
   IncludeResidualsType tIncludeResidualsType = kInclude3Residuals; 
   ChargedResidualsType tChargedResidualsType = kUseXiDataAndCoulombOnlyInterp/*kUseCoulombOnlyInterpForAll*/;
-  ResPrimMaxDecayType tResPrimMaxDecayType = k4fm;
+  ResPrimMaxDecayType tResPrimMaxDecayType = k10fm;
 
 
   //--Fix parameters
@@ -451,14 +454,14 @@ int main(int argc, char **argv)
   TString tFitInfoTString_cLamcKch = LednickyFitter::BuildSaveNameModifier(ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, tNonFlatBgdFitType_cLamcKch,
                                                                           tIncludeResidualsType, tResPrimMaxDecayType, 
                                                                           tChargedResidualsType, FixD0,
-                                                                          false, FixAllLambdaTo1, FixAllNormTo1, FixRadii, FixAllScattParams,
+                                                                          bUseStavCf, FixAllLambdaTo1, FixAllNormTo1, FixRadii, FixAllScattParams,
                                                                           tShareLambdaParams_cLamcKch, tAllShareSingleLambdaParam_cLamcKch, UsemTScalingOfResidualRadii, tIsDualie_cLamcKch,
                                                                           tDualieShareLambda_cLamcKch, tDualieShareRadii_cLamcKch);
 
   TString tFitInfoTString_cLamK0 = LednickyFitter::BuildSaveNameModifier(ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, tNonFlatBgdFitType_cLamK0,
                                                                           tIncludeResidualsType, tResPrimMaxDecayType, 
                                                                           tChargedResidualsType, FixD0,
-                                                                          false, FixAllLambdaTo1, FixAllNormTo1, FixRadii, FixAllScattParams,
+                                                                          bUseStavCf, FixAllLambdaTo1, FixAllNormTo1, FixRadii, FixAllScattParams,
                                                                           tShareLambdaParams_cLamK0, tAllShareSingleLambdaParam_cLamK0, UsemTScalingOfResidualRadii, tIsDualie_cLamK0,
                                                                           false, false);
 
@@ -472,15 +475,11 @@ int main(int argc, char **argv)
 
   if(!bRunOldQMNaming)
   {
-    tSaveDirectory_cLamK0 += TString("Systematics/");
-    LednickyFitter::AppendFitInfo(tSaveDirectory_cLamK0, ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, 
-                                         tIncludeResidualsType, tResPrimMaxDecayType, tChargedResidualsType, FixD0);
-    tSaveDirectory_cLamK0 += TString("/");
+    tSaveDirectory_cLamK0 += tFitInfoTString_cLamK0;
+    tSaveDirectory_cLamK0 += TString("/Systematics/");
     //-----
-    tSaveDirectory_cLamcKch += TString("Systematics/");
-    LednickyFitter::AppendFitInfo(tSaveDirectory_cLamcKch, ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, 
-                                         tIncludeResidualsType, tResPrimMaxDecayType, tChargedResidualsType, FixD0);
-    tSaveDirectory_cLamcKch += TString("/");
+    tSaveDirectory_cLamcKch += tFitInfoTString_cLamcKch;
+    tSaveDirectory_cLamcKch += TString("/Systematics/");
   }
 
   //-------------------------------
@@ -528,8 +527,7 @@ int main(int argc, char **argv)
     if(bIncludeFitRangeSys) tOutputLamKchName += TString("_wFitRangeSys");
     if(!bRunOldQMNaming)
     {
-      LednickyFitter::AppendFitInfo(tOutputLamKchName, ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, 
-                                           tIncludeResidualsType, tResPrimMaxDecayType, tChargedResidualsType, FixD0);
+      tOutputLamKchName += tFitInfoTString_cLamcKch;
       tOutputLamKchName += TString("_");
     }
     tOutputLamKchName += TString("cLamcKch.txt");
@@ -538,17 +536,18 @@ int main(int argc, char **argv)
     if(bIncludeFitRangeSys) tOutputLamK0Name += TString("_wFitRangeSys");
     if(!bRunOldQMNaming)
     {
-      LednickyFitter::AppendFitInfo(tOutputLamK0Name, ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, 
-                                           tIncludeResidualsType, tResPrimMaxDecayType, tChargedResidualsType, FixD0);
+      tOutputLamK0Name += tFitInfoTString_cLamK0;
       tOutputLamK0Name += TString("_");
     }
     tOutputLamK0Name += TString("cLamK0.txt");
 
     std::ofstream tOutputLamKch;
     tOutputLamKch.open(tOutputLamKchName);
+    assert(tOutputLamKch.is_open());
 
     std::ofstream tOutputLamK0;
     tOutputLamK0.open(tOutputLamK0Name);
+    assert(tOutputLamK0.is_open());
 
     PrintFinalVec(tFinalVec, tOutputLamKch);
       cout << "****************** Output LamKch info to file: " << tOutputLamKchName << endl;

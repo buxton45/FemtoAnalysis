@@ -19,7 +19,7 @@
 #include "TDirectoryFile.h"
 #include "TLegend.h"
 
-
+using namespace std;
 
 //________________________________________________________________________________________________________________
 TString GetBinLabels(int aBin)
@@ -36,7 +36,7 @@ TString GetBinLabels(int aBin)
   else if(aBin==10) return TString("K^{*ch}");
   else if(aBin==11) return TString("Other");
   else if(aBin==12) return TString("Fake");
-  else if(aBin==12) return TString("W.E.");
+  else if(aBin==13) return TString("W.E.");
   else assert(0);
 
   return TString("");
@@ -69,7 +69,7 @@ TList* GetAllHistograms(TString aFileLocation)
 TList* SimpleCombineBFields(TList* aListMinus, TList* aListPlus)
 {
   assert(aListMinus->GetEntries() == aListPlus->GetEntries());
-  for(int i=0; i<aListMinus->GetEntries(); i++) assert(aListMinus->At(i)->GetName() == aListPlus->At(i)->GetName());
+  for(int i=0; i<aListMinus->GetEntries(); i++) assert(TString(aListMinus->At(i)->GetName()).EqualTo(aListPlus->At(i)->GetName()));
 
   TList* tReturnList = new TList();
   TH1F *tHistMinus, *tHistPlus, *tHistCombined;
@@ -86,7 +86,7 @@ TList* SimpleCombineBFields(TList* aListMinus, TList* aListPlus)
     //Make sure everything appears in order
     assert(tHistMinus->GetNbinsX() == tHistPlus->GetNbinsX());
     assert(tHistPlus->GetBinWidth(1) == tHistPlus->GetBinWidth(1));
-    for(int j=1; j<=tHistMinus->GetNbinsX(); j++) assert(tHistMinus->GetXaxis()->GetName()==tHistPlus->GetXaxis()->GetName());
+    for(int j=1; j<=tHistMinus->GetNbinsX(); j++) assert(TString(tHistMinus->GetXaxis()->GetName()).EqualTo(tHistPlus->GetXaxis()->GetName()));
 
     tHistCombined = (TH1F*)tHistMinus->Clone();
     tHistCombined->Add(tHistPlus);
@@ -199,7 +199,7 @@ vector<double> GetAllRecoEff(TList* aHistList, TString aV0Name="Lam")
   TString tBinName="";
   double tRecoEff=-1.;
   vector<double> tReturnVec(0);
-  for(int i=1; i<=12; i++)
+  for(int i=1; i<=13; i++)
   {
     tBinName = GetBinLabels(i);
     tRecoEff = GetRecoEff(aHistList, aV0Name, tBinName);
@@ -454,13 +454,17 @@ void SetupAndDrawAll(TString aBaseDirLocation, TString aResultDate,
 //****************************************************************************************************************
 //________________________________________________________________________________________________________________
 
-int DrawEfficiencyPlots() 
+int main(int argc, char **argv) 
 {
+  TApplication* theApp = new TApplication("App", &argc, argv);
+  //The TApplication object allows the execution of the code to pause.
+  //This allows the user a chance to look at and manipulate a TBrowser before
+  //the program ends and closes everything
 //-----------------------------------------------------------------------------
   
   TString tBaseDirLocation = "/home/jesse/Analysis/FemtoAnalysis/Results/V0Efficiency/";
 
-  TString tResultDate = "20181019";
+  TString tResultDate = "20181024";
   bool tWithInjected = true;
   bool t12a17a = true;
 
@@ -533,6 +537,10 @@ int DrawEfficiencyPlots()
 
 
 //-----------------------------------------------------------------------------
+//-------------------------------------------------------------------------------
+  theApp->Run(kTRUE); //Run the TApp to pause the code.
+  // Select "Exit ROOT" from Canvas "File" menu to exit
+  // and execute the next statements.
 cout << "DONE" << endl;
   return 0;
 }

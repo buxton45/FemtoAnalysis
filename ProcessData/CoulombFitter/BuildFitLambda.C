@@ -38,8 +38,8 @@ int main(int argc, char **argv)
 
 //-----------------------------------------------------------------------------
 
-  TString tFileLocationBase = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_20161027/Results_cLamcKch_20161027";
-  TString tFileLocationBaseMC = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_20161027/Results_cLamcKchMC_20161027";
+  TString tFileLocationBase = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_20180505/Results_cLamcKch_20180505";
+  TString tFileLocationBaseMC = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_20180505/Results_cLamcKchMC_20180505";
 
   AnalysisType tAnType = kLamKchP;
   AnalysisType tConjType = kALamKchM;
@@ -71,14 +71,20 @@ int main(int argc, char **argv)
 
   if(tAnType==kLamKchP || tAnType==kALamKchM)
   {
+    tSharedAn->SetParameter(kLambda,0,1.00,0.,0.);
+    tSharedAn->SetParameter(kLambda,1,1.00,0.,0.);
+    tSharedAn->SetParameter(kLambda,2,1.00,0.,0.);
+    tSharedAn->SetParameter(kLambda,3,1.00,0.,0.);
+    tSharedAn->SetParameter(kLambda,4,1.00,0.,0.);
+    tSharedAn->SetParameter(kLambda,5,1.00,0.,0.);
 
-    tSharedAn->SetSharedParameter(kRadius,{0,1},4.0,0.,0.);
-    tSharedAn->SetSharedParameter(kRadius,{2,3},3.5,0.,0.);
-    tSharedAn->SetSharedParameter(kRadius,{4,5},3.0,0.,0.);
+    tSharedAn->SetSharedParameter(kRadius,{0,1},6.00,0.,0.);
+    tSharedAn->SetSharedParameter(kRadius,{2,3},4.75,0.,0.);
+    tSharedAn->SetSharedParameter(kRadius,{4,5},3.50,0.,0.);
 
-    tSharedAn->SetSharedParameter(kRef0,-0.69,0.,0.);
-    tSharedAn->SetSharedParameter(kImf0,0.39,0.,0.);
-    tSharedAn->SetSharedParameter(kd0,0.,0.,0.);
+    tSharedAn->SetSharedParameter(kRef0,-0.66,0.,0.);
+    tSharedAn->SetSharedParameter(kImf0,0.58,0.,0.);
+    tSharedAn->SetSharedParameter(kd0,0.77,0.,0.);
   }
 
   if(tAnType==kLamKchM || tAnType==kALamKchP)
@@ -109,7 +115,7 @@ int main(int argc, char **argv)
 
     tFitter->SetApplyMomResCorrection(true);                             //TODO
     tFitter->SetApplyNonFlatBackgroundCorrection(true);                  //TODO
-    tFitter->SetIncludeResidualCorrelationsType(kIncludeNoResiduals);    //TODO
+    tFitter->SetIncludeResidualCorrelationsType(kInclude3Residuals);    //TODO
 
     tFitter->SetVerbose(true);
 

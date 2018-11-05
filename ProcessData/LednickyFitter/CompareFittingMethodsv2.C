@@ -58,7 +58,7 @@ void DrawAnalysisStamps(TPad* aPad, vector<AnalysisType> &aAnTypes, double aStar
 }
 
 //_________________________________________________________________________________________________________________________________
-void DrawAnalysisAndConjStamps(TPad* aPad, vector<AnalysisType> &aAnTypes, double aStartX, double aStartY, double aIncrementX, double aIncrementY, double aSecondColumnShiftX, double aTextSize=0.04, int aMarkerStyle=20, int aConjMarkerStyle=24)
+void DrawAnalysisAndConjStamps(TPad* aPad, vector<AnalysisType> &aAnTypes, double aStartX, double aStartY, double aIncrementX, double aIncrementY, double aSecondColumnShiftX, double aTextSize=0.04, int aMarkerStyle=20, int aConjMarkerStyle=24, bool aLamKchCombined=false)
 {
   aPad->cd();
 
@@ -87,8 +87,24 @@ void DrawAnalysisAndConjStamps(TPad* aPad, vector<AnalysisType> &aAnTypes, doubl
     else if(aAnTypes[i]==kALamK0) bIncALamK0=true;
   }
 
+  if(aLamKchCombined)
+  {
+    bIncLamKchP = false;
+    bIncLamKchM = false;
+  }
+
 
   int iTex = 0;
+  //----------
+  if(aLamKchCombined)
+  {
+    tMarker->SetMarkerStyle(aMarkerStyle);
+    tTex->DrawLatex(aStartX, aStartY-iTex*aIncrementY, "#LambdaK^{#pm}");
+    tMarker->SetMarkerColor(kViolet);
+    tMarker->DrawMarker(aStartX-aIncrementX, aStartY-iTex*aIncrementY);
+
+    iTex++;
+  }
   //----------
   if(bIncLamKchP)
   {
@@ -464,7 +480,7 @@ TCanvas* CompareImF0vsReF0(vector<FitValWriterInfo> &aFitValWriterInfo, bool aDr
 }
 
 //_________________________________________________________________________________________________________________________________
-TCanvas* CompareLambdavsRadius(vector<FitValWriterInfo> &aFitValWriterInfo, CentralityType aCentType, TString aCanNameMod="", bool aSuppressDescs=false, bool aSuppressAnStamps=false)
+TCanvas* CompareLambdavsRadius(vector<FitValWriterInfo> &aFitValWriterInfo, CentralityType aCentType, TString aCanNameMod="", bool aSuppressDescs=false, bool aSuppressAnStamps=false, bool aLamKchCombined=false)
 {
   TString tCanBaseName = TString::Format("CompareLambdavsRadius%s%s", aCanNameMod.Data(), cCentralityTags[aCentType]);
   TString tCanName = tCanBaseName;
@@ -509,8 +525,25 @@ TCanvas* CompareLambdavsRadius(vector<FitValWriterInfo> &aFitValWriterInfo, Cent
   TString tLegDesc;
   for(unsigned int iAn=0; iAn<aFitValWriterInfo.size(); iAn++)
   {
-    FitValuesWriter::DrawLambdavsRadiusGraphStat((TPad*)tReturnCan, aFitValWriterInfo[iAn].masterFileLocation, aFitValWriterInfo[iAn].fitInfoTString, aFitValWriterInfo[iAn].analysisType, aCentType, aFitValWriterInfo[iAn].markerColor, aFitValWriterInfo[iAn].markerStyle, aFitValWriterInfo[iAn].markerSize, tDrawOption);
-    tAnTypes.push_back(aFitValWriterInfo[iAn].analysisType);
+    if(!aLamKchCombined || aFitValWriterInfo[iAn].analysisType==kLamK0)
+    {
+      FitValuesWriter::DrawLambdavsRadiusGraphStat((TPad*)tReturnCan, aFitValWriterInfo[iAn].masterFileLocation, aFitValWriterInfo[iAn].fitInfoTString, aFitValWriterInfo[iAn].analysisType, aCentType, aFitValWriterInfo[iAn].markerColor, aFitValWriterInfo[iAn].markerStyle, aFitValWriterInfo[iAn].markerSize, tDrawOption);
+      tAnTypes.push_back(aFitValWriterInfo[iAn].analysisType);
+    }
+    else
+    {
+      //If LamKch are combined, draw only LamKchP, and draw it with purple.  Also alter the legend entry to be LamKpm
+      if(aFitValWriterInfo[iAn].analysisType==kLamKchP)
+      {
+        int tColor = kViolet;
+        FitValuesWriter::DrawLambdavsRadiusGraphStat((TPad*)tReturnCan, aFitValWriterInfo[iAn].masterFileLocation, aFitValWriterInfo[iAn].fitInfoTString, aFitValWriterInfo[iAn].analysisType, aCentType, tColor, aFitValWriterInfo[iAn].markerStyle, aFitValWriterInfo[iAn].markerSize, tDrawOption);
+        tAnTypes.push_back(aFitValWriterInfo[iAn].analysisType);
+      }
+    }
+
+
+
+
 
     if(!DescriptorAlreadyIncluded(tUsedDescriptors, tUsedMarkerStyles, aFitValWriterInfo[iAn].legendDescriptor, aFitValWriterInfo[iAn].markerStyle) && !aSuppressDescs)
     {
@@ -546,7 +579,7 @@ TCanvas* CompareLambdavsRadius(vector<FitValWriterInfo> &aFitValWriterInfo, Cent
   double tTextSizeStamp = 0.04;
   int tMarkerStyleStamp = 21;
   int tConjMarkerStyleStamp = 25;
-  if(!aSuppressAnStamps) DrawAnalysisAndConjStamps((TPad*)tReturnCan, tAnTypes, tStartXStamp, tStartYStamp, tIncrementXStamp, tIncrementYStamp, tSecondColumnShiftX, tTextSizeStamp, tMarkerStyleStamp, tConjMarkerStyleStamp);
+  if(!aSuppressAnStamps) DrawAnalysisAndConjStamps((TPad*)tReturnCan, tAnTypes, tStartXStamp, tStartYStamp, tIncrementXStamp, tIncrementYStamp, tSecondColumnShiftX, tTextSizeStamp, tMarkerStyleStamp, tConjMarkerStyleStamp, aLamKchCombined);
 
   return tReturnCan;
 }
@@ -554,15 +587,15 @@ TCanvas* CompareLambdavsRadius(vector<FitValWriterInfo> &aFitValWriterInfo, Cent
 
 
 //_________________________________________________________________________________________________________________________________
-TCanvas* CompareAll(vector<FitValWriterInfo> &aFitValWriterInfo, bool aDrawPredictions=false, TString aCanNameMod="")
+TCanvas* CompareAll(vector<FitValWriterInfo> &aFitValWriterInfo, bool aDrawPredictions=false, TString aCanNameMod="", bool aLamKchCombined=false)
 {
   TCanvas *tReturnCan, *tCanImF0vsReF0, *tCanLamvsR0010, *tCanLamvsR1030, *tCanLamvsR3050;
 
   TString tSubCanNameMod = TString::Format("%sForAll", aCanNameMod.Data());
   tCanImF0vsReF0 = CompareImF0vsReF0(aFitValWriterInfo, aDrawPredictions, tSubCanNameMod, false, false);
-  tCanLamvsR0010 = CompareLambdavsRadius(aFitValWriterInfo, k0010, tSubCanNameMod, true, false);
-  tCanLamvsR1030 = CompareLambdavsRadius(aFitValWriterInfo, k1030, tSubCanNameMod, true, true);
-  tCanLamvsR3050 = CompareLambdavsRadius(aFitValWriterInfo, k3050, tSubCanNameMod, true, true);
+  tCanLamvsR0010 = CompareLambdavsRadius(aFitValWriterInfo, k0010, tSubCanNameMod, true, false, aLamKchCombined);
+  tCanLamvsR1030 = CompareLambdavsRadius(aFitValWriterInfo, k1030, tSubCanNameMod, true, true, aLamKchCombined);
+  tCanLamvsR3050 = CompareLambdavsRadius(aFitValWriterInfo, k3050, tSubCanNameMod, true, true, aLamKchCombined);
 
 
   TString tCanBaseName = TString::Format("CompareAllScattParams%s", aCanNameMod.Data());
@@ -600,17 +633,122 @@ int main(int argc, char **argv)
   //This allows the user a chance to look at and manipulate a TBrowser before
   //the program ends and closes everything
 
-  bool bDrawPredictions = true;
+  bool bDrawPredictions = false;
+  bool bLamKchCombined = true;
 
   bool bSaveFigures = false;
-  TString tSaveFileType = "eps";
-  TString tSaveDir = "/home/jesse/Analysis/Presentations/AliFemto/20180627/Figures/";
+  TString tSaveFileType = "pdf";
+  TString tSaveDir = "/home/jesse/Analysis/Presentations/AlicePhysicsWeek/20181025/Figures/";
 
   vector<FitValWriterInfo> tFVWIVec;
   TString tCanNameMod = "";
 
-  tFVWIVec = tFVWIVec_SepR_Seplam;
-  tCanNameMod = TString("_SepR_Seplam");
+
+//---------------------------------------------------------------------
+
+
+
+  TString tFitInfoTString_LamKch_3Res_PolyBgd_10fm = FitValuesWriter::BuildFitInfoTString(true, true, kPolynomial, 
+                                                                                         kInclude3Residuals, k10fm, 
+                                                                                         kUseXiDataAndCoulombOnlyInterp, false, 
+                                                                                         false, false, false, false, false, 
+                                                                                         true, false, false, true, 
+                                                                                         true, true);
+
+  TString tFitInfoTString_LamKch_3Res_LinrBgd_10fm = FitValuesWriter::BuildFitInfoTString(true, true, kLinear, 
+                                                                                         kInclude3Residuals, k10fm, 
+                                                                                         kUseXiDataAndCoulombOnlyInterp, false, 
+                                                                                         false, false, false, false, false, 
+                                                                                         true, false, false, true, 
+                                                                                         true, true);
+
+  TString tFitInfoTString_LamKch_3Res_StavCf_10fm = FitValuesWriter::BuildFitInfoTString(true, false, kPolynomial, 
+                                                                                         kInclude3Residuals, k10fm, 
+                                                                                         kUseXiDataAndCoulombOnlyInterp, false, 
+                                                                                         true, false, false, false, false, 
+                                                                                         true, false, false, true, 
+                                                                                         true, true);
+
+  //----------
+
+  TString tFitInfoTString_LamK0_3Res_LinrBgd_10fm = FitValuesWriter::BuildFitInfoTString(true, true, kLinear, 
+                                                                                    kInclude3Residuals, k10fm, 
+                                                                                    kUseXiDataAndCoulombOnlyInterp, false, 
+                                                                                    false, false, false, false, false, 
+                                                                                    false, true, false, false, 
+                                                                                    false, false);
+
+  TString tFitInfoTString_LamK0_3Res_PolyBgd_10fm = FitValuesWriter::BuildFitInfoTString(true, true, kPolynomial, 
+                                                                                    kInclude3Residuals, k10fm, 
+                                                                                    kUseXiDataAndCoulombOnlyInterp, false, 
+                                                                                    false, false, false, false, false, 
+                                                                                    false, true, false, false, 
+                                                                                    false, false);
+
+  TString tFitInfoTString_LamK0_3Res_StavCf_10fm = FitValuesWriter::BuildFitInfoTString(true, false, kLinear, 
+                                                                                    kInclude3Residuals, k10fm, 
+                                                                                    kUseXiDataAndCoulombOnlyInterp, false, 
+                                                                                    true, false, false, false, false, 
+                                                                                    false, true, false, false, 
+                                                                                    false, false);
+
+//---------------------------------------------------------------------
+
+
+  vector<FitValWriterInfo> tFVWIVec_Comp3An_3Res_10fm = {FitValWriterInfo(kLamKchP, tFileLocation_LamKch, tResultsDate, tFitInfoTString_LamKch_3Res_PolyBgd_10fm, 
+                                                                         "3 Residuals (Suppress Markers)", tColorLamKchP, 20, tMarkerSize), 
+                                                        FitValWriterInfo(kLamKchM, tFileLocation_LamKch, tResultsDate, tFitInfoTString_LamKch_3Res_PolyBgd_10fm, 
+                                                                         "#LambdaK^{#pm}: Share R and #lambda, Poly. Bgd (Suppress Markers)", tColorLamKchM, 20, tMarkerSize), 
+                                                        FitValWriterInfo(kLamK0, tFileLocation_LamK0, tResultsDate, tFitInfoTString_LamK0_3Res_LinrBgd_10fm, 
+                                                                         "#LambdaK^{0}_{S}: Single #lambda, Linr. Bgd (Suppress Markers)", tColorLamK0, 20, tMarkerSize)};
+//  tFVWIVec = tFVWIVec_Comp3An_3Res_10fm;
+//  tCanNameMod = TString("_Comp3An_3Res_10fm");
+//---------------------------------------------------------------------
+
+
+  vector<FitValWriterInfo> tFVWIVec_Comp3An_WithBgdVsStav_10fm = {FitValWriterInfo(kLamKchP, tFileLocation_LamKch, tResultsDate, tFitInfoTString_LamKch_3Res_PolyBgd_10fm, 
+                                                                                   "3 Residuals (Suppress Markers)", tColorLamKchP, 20, tMarkerSize), 
+                                                                  FitValWriterInfo(kLamKchM, tFileLocation_LamKch, tResultsDate, tFitInfoTString_LamKch_3Res_PolyBgd_10fm, 
+                                                                                   "#LambdaK^{#pm}: Share R and #lambda, Poly. Bgd", tColorLamKchM, 20, tMarkerSize), 
+                                                                  FitValWriterInfo(kLamK0, tFileLocation_LamK0, tResultsDate, tFitInfoTString_LamK0_3Res_LinrBgd_10fm, 
+                                                                                   "#LambdaK^{0}_{S}: Single #lambda, Linr. Bgd (Suppress Markers)", tColorLamK0, 20, tMarkerSize),
+                                                                  FitValWriterInfo(kLamKchP, tFileLocation_LamKch, tResultsDate, tFitInfoTString_LamKch_3Res_StavCf_10fm, 
+                                                                                   "3 Residuals (Suppress Markers)", tColorLamKchP, 34, tMarkerSize),
+                                                                  FitValWriterInfo(kLamKchM, tFileLocation_LamKch, tResultsDate, tFitInfoTString_LamKch_3Res_StavCf_10fm, 
+                                                                                   "Stav. Cf", tColorLamKchM, 34, tMarkerSize), 
+                                                                  FitValWriterInfo(kLamK0, tFileLocation_LamK0, tResultsDate, tFitInfoTString_LamK0_3Res_StavCf_10fm, 
+                                                                                   "#LambdaK^{0}_{S}: Single #lambda, Linr. Bgd (Suppress Markers)", tColorLamK0, 34, tMarkerSize)};
+//  tFVWIVec = tFVWIVec_Comp3An_WithBgdVsStav_10fm;
+//  tCanNameMod = TString("_Comp3An_WithBgdVsStav_10fm");
+//---------------------------------------------------------------------
+
+
+  vector<FitValWriterInfo> tFVWIVec_Comp3An_LinrPolyStav_10fm = {FitValWriterInfo(kLamKchP, tFileLocation_LamKch, tResultsDate, tFitInfoTString_LamKch_3Res_PolyBgd_10fm, 
+                                                                                  "3 Residuals (Suppress Markers)", tColorLamKchP, 20, tMarkerSize), 
+                                                                 FitValWriterInfo(kLamKchM, tFileLocation_LamKch, tResultsDate, tFitInfoTString_LamKch_3Res_PolyBgd_10fm, 
+                                                                                  "Poly. Bgd", tColorLamKchM, 20, tMarkerSize), 
+                                                                 FitValWriterInfo(kLamK0, tFileLocation_LamK0, tResultsDate, tFitInfoTString_LamK0_3Res_PolyBgd_10fm, 
+                                                                                  "Poly. Bgd", tColorLamK0, 20, tMarkerSize),
+
+                                                                 FitValWriterInfo(kLamKchP, tFileLocation_LamKch, tResultsDate, tFitInfoTString_LamKch_3Res_LinrBgd_10fm, 
+                                                                                  "Linr. Bgd", tColorLamKchP, 21, tMarkerSize), 
+                                                                 FitValWriterInfo(kLamKchM, tFileLocation_LamKch, tResultsDate, tFitInfoTString_LamKch_3Res_LinrBgd_10fm, 
+                                                                                  "Linr. Bgd", tColorLamKchM, 21, tMarkerSize), 
+                                                                 FitValWriterInfo(kLamK0, tFileLocation_LamK0, tResultsDate, tFitInfoTString_LamK0_3Res_LinrBgd_10fm, 
+                                                                                  "Linr. Bgd", tColorLamK0, 21, tMarkerSize),
+
+                                                                 FitValWriterInfo(kLamKchP, tFileLocation_LamKch, tResultsDate, tFitInfoTString_LamKch_3Res_StavCf_10fm, 
+                                                                                  "Stav. Cf", tColorLamKchP, 34, tMarkerSize),
+                                                                 FitValWriterInfo(kLamKchM, tFileLocation_LamKch, tResultsDate, tFitInfoTString_LamKch_3Res_StavCf_10fm, 
+                                                                                  "Stav. Cf", tColorLamKchM, 34, tMarkerSize), 
+                                                                 FitValWriterInfo(kLamK0, tFileLocation_LamK0, tResultsDate, tFitInfoTString_LamK0_3Res_StavCf_10fm, 
+                                                                                  "Stav. Cf", tColorLamK0, 34, tMarkerSize)};
+  tFVWIVec = tFVWIVec_Comp3An_LinrPolyStav_10fm;
+  tCanNameMod = TString("_Comp3An_LinrPolyStav_10fm");
+//---------------------------------------------------------------------
+
+//  tFVWIVec = tFVWIVec_SepR_Seplam;
+//  tCanNameMod = TString("_SepR_Seplam");
 
 //  tFVWIVec = tFVWIVec_SepR_Sharelam;
 //  tCanNameMod = TString("_SepR_Sharelam");
@@ -660,7 +798,7 @@ int main(int argc, char **argv)
 
   TCanvas* tCanLambdavsRadius = CompareLambdavsRadius(tFVWIVec, k0010, tCanNameMod);
   TCanvas* tCanImF0vsReF0 = CompareImF0vsReF0(tFVWIVec, bDrawPredictions, tCanNameMod);
-  TCanvas* tCanAll = CompareAll(tFVWIVec, bDrawPredictions, tCanNameMod);
+  TCanvas* tCanAll = CompareAll(tFVWIVec, bDrawPredictions, tCanNameMod, bLamKchCombined);
 
 
 

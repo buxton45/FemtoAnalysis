@@ -1,4 +1,5 @@
 #include "FitValuesWriterwSysErrs.h"
+#include "FitValuesLatexTableHelperWriter.h"
 #include "CompareFittingMethodsv2.h"
 
 
@@ -647,25 +648,71 @@ int main(int argc, char **argv)
   bLamKchCombined = true;
 
   IncludeResidualsType tIncResType = kInclude3Residuals;
-  ResPrimMaxDecayType tResPrimMaxDecayType = k4fm;
+  ResPrimMaxDecayType tResPrimMaxDecayType = k10fm;
 
   TString tSaveFileType = "pdf";  //Needs to be pdf for systematics to be transparent!
 //  TString tSaveDir = "/home/jesse/Analysis/Presentations/AliFemto/20180627/Figures/";
   TString tSaveDir = "/home/jesse/Analysis/FemtoAnalysis/ProcessData/LednickyFitter/Systematics/";
+
+/*
   TString tSystematicsFileLocation_LamKch = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_20171227/Systematics/_MomResCrctn_NonFlatBgdCrctn%s%s_UsingXiDataAndCoulombOnly/FinalFitSystematics_wFitRangeSys_MomResCrctn_NonFlatBgdCrctn%s%s_UsingXiDataAndCoulombOnly_cLamcKch.txt", cIncludeResidualsTypeTags[tIncResType], cResPrimMaxDecayTypeTags[tResPrimMaxDecayType], cIncludeResidualsTypeTags[tIncResType], cResPrimMaxDecayTypeTags[tResPrimMaxDecayType]);
   TString tSystematicsFileLocation_LamK0 = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamK0_20171227/Systematics/_MomResCrctn_NonFlatBgdCrctn%s%s_UsingXiDataAndCoulombOnly/FinalFitSystematics_wFitRangeSys_MomResCrctn_NonFlatBgdCrctn%s%s_UsingXiDataAndCoulombOnly_cLamK0.txt", cIncludeResidualsTypeTags[tIncResType], cResPrimMaxDecayTypeTags[tResPrimMaxDecayType], cIncludeResidualsTypeTags[tIncResType], cResPrimMaxDecayTypeTags[tResPrimMaxDecayType]);
+*/
+
+  TString tFitInfoTString_LamKch = FitValuesLatexTableHelperWriter::GetFitInfoTStringFromTwoLetterID_LamKch("Ea", tIncResType, tResPrimMaxDecayType);
+//  TString tFitInfoTString_LamK0 = FitValuesLatexTableHelperWriter::GetFitInfoTStringFromTwoLetterID_LamK0("Aa", tIncResType, tResPrimMaxDecayType);
+  TString tFitInfoTString_LamK0 = FitValuesLatexTableHelperWriter::GetFitInfoTStringFromTwoLetterID_LamK0("Ab", tIncResType, tResPrimMaxDecayType);
+
+  cout << "tFitInfoTString_LamKch = " << tFitInfoTString_LamKch << endl << endl;
+  cout << "tFitInfoTString_LamK0 = " << tFitInfoTString_LamK0 << endl << endl; 
+
+
+  TString tSystematicsFileLocation_LamKch = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_%s/%s/Systematics/FinalFitSystematics_wFitRangeSys%s_cLamcKch.txt", tResultsDate.Data(), tFitInfoTString_LamKch.Data(), tFitInfoTString_LamKch.Data());
+  TString tSystematicsFileLocation_LamK0 = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamK0_%s/%s/Systematics/FinalFitSystematics_wFitRangeSys%s_cLamK0.txt", tResultsDate.Data(), tFitInfoTString_LamK0.Data(), tFitInfoTString_LamK0.Data());
+
+  //--------------------------------------------------------------------------
 
   vector<TString> tStatOnlyTags = {"", "_StatOnly"};
 
   vector<FitValWriterInfo> tFVWIVec;
   TString tCanNameMod = "";
 
+  //--------------------------------------------------------------------------
+
+  TString tFitInfoTString_LamKch_3Res_PolyBgd_10fm = FitValuesWriter::BuildFitInfoTString(true, true, kPolynomial, 
+                                                                                         kInclude3Residuals, k10fm, 
+                                                                                         kUseXiDataAndCoulombOnlyInterp, false, 
+                                                                                         false, false, false, false, false, 
+                                                                                         true, false, false, true, 
+                                                                                         true, true);
+
+  TString tFitInfoTString_LamK0_3Res_LinrBgd_10fm = FitValuesWriter::BuildFitInfoTString(true, true, kLinear, 
+                                                                                    kInclude3Residuals, k10fm, 
+                                                                                    kUseXiDataAndCoulombOnlyInterp, false, 
+                                                                                    false, false, false, false, false, 
+                                                                                    false, true, false, false, 
+                                                                                    false, false);
+
+
+  vector<FitValWriterInfo> tFVWIVec_Comp3An_3Res_10fm = {FitValWriterInfo(kLamKchP, tFileLocation_LamKch, tResultsDate, tFitInfoTString_LamKch_3Res_PolyBgd_10fm, 
+                                                                         "3 Residuals (Suppress Markers)", tColorLamKchP, 20, tMarkerSize), 
+                                                        FitValWriterInfo(kLamKchM, tFileLocation_LamKch, tResultsDate, tFitInfoTString_LamKch_3Res_PolyBgd_10fm, 
+                                                                         "#LambdaK^{#pm}: Share R and #lambda, Poly. Bgd (Suppress Markers)", tColorLamKchM, 20, tMarkerSize), 
+                                                        FitValWriterInfo(kLamK0, tFileLocation_LamK0, tResultsDate, tFitInfoTString_LamK0_3Res_LinrBgd_10fm, 
+                                                                         "#LambdaK^{0}_{S}: Single #lambda, Linr. Bgd (Suppress Markers)", tColorLamK0, 20, tMarkerSize)};
+  tFVWIVec = tFVWIVec_Comp3An_3Res_10fm;
+  tCanNameMod = TString("_Comp3An_3Res_10fm");
+
+
+
+  //--------------------------------------------------------------------------
+
 //  tFVWIVec = tFVWIVec_CompNumRes_ShareR_PolyBgd;
 //  tCanNameMod = TString("_CompNumRes_ShareR_PolyBgd");
 
 //--------------------------------------------
-  tFVWIVec = tFVWIVec_Comp3An_3Res;
-  tCanNameMod = TString("_Comp3An_3Res");
+//  tFVWIVec = tFVWIVec_Comp3An_3Res;
+//  tCanNameMod = TString("_Comp3An_3Res");
 
 //  tFVWIVec = tFVWIVec_Comp3An_10Res;
 //  tCanNameMod = TString("_Comp3An_10Res");

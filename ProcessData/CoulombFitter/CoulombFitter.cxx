@@ -1481,8 +1481,8 @@ void CoulombFitter::CalculateFitFunction(int &npar, double &chi2, double *par)
 
       if(fIncludeResidualsType != kIncludeNoResiduals) 
       {
-/*
 //TODO
+        assert(!fIncludeSingletAndTriplet); //Do not think this currently works with singlet and triplet
         double *tParOverall = new double[tNFitParams];
         tParOverall[0] = par[tLambdaMinuitParamNumber];
         tParOverall[1] = par[tRadiusMinuitParamNumber];
@@ -1492,7 +1492,6 @@ void CoulombFitter::CalculateFitFunction(int &npar, double &chi2, double *par)
         tParOverall[5] = par[tNormMinuitParamNumber];
         tFitCfContent = GetFitCfIncludingResiduals(tFitPairAnalysis, tPrimaryFitCfContent, tParOverall);
         delete[] tParOverall;
-*/
       }
       else tFitCfContent = tPrimaryFitCfContent;
 
@@ -1500,31 +1499,25 @@ void CoulombFitter::CalculateFitFunction(int &npar, double &chi2, double *par)
       if(fApplyMomResCorrection) tCorrectedFitCfContent = ApplyMomResCorrection(tFitCfContent, fKStarBinCenters, tMomResMatrix);
       else tCorrectedFitCfContent = tFitCfContent;
 
-      bool tNormalizeBgdFitToCf=false;
-      if(fApplyNonFlatBackgroundCorrection)
+      bool tNormalizeBgdFitToCf=true;
+      if(fApplyNonFlatBackgroundCorrection && fNonFlatBgdFitType != kDivideByTherm)
       {
-        TF1* tNonFlatBgd;
-        //I thought using PairAnalysis, when BgdFitType != kLinear, would help stabilize things, but it doesn't seem to help all that much.
-        //  Things have been stabilized with other tweaks.
-        tNonFlatBgd = tFitPartialAnalysis->GetNonFlatBackground(fNonFlatBgdFitType, fFitSharedAnalyses->GetFitType(), tNormalizeBgdFitToCf);
-        ApplyNonFlatBackgroundCorrection(tCorrectedFitCfContent, fKStarBinCenters, tNonFlatBgd);
+        if(!fFitSharedAnalyses->UsingNewBgdTreatment())
+        {
+          //I thought using PairAnalysis, when BgdFitType != kLinear, would help stabilize things, but it doesn't seem to help all that much.
+          //  Things have been stabilized with other tweaks.
+          TF1* tNonFlatBgd = tFitPartialAnalysis->GetNonFlatBackground(fNonFlatBgdFitType, fFitSharedAnalyses->GetFitType(), tNormalizeBgdFitToCf);
+          ApplyNonFlatBackgroundCorrection(tCorrectedFitCfContent, fKStarBinCenters, tNonFlatBgd);
+        }
+        else ApplyNewNonFlatBackgroundCorrection(tCorrectedFitCfContent, fKStarBinCenters, tFitPartialAnalysis, par);
       }
 
-      fCorrectedFitVecs[iAnaly][iPartAn] = tCorrectedFitCfContent;
       if(!fIncludeSingletAndTriplet) ApplyNormalization(tParPrim[5], tCorrectedFitCfContent);
       else ApplyNormalization(tParPrim[8], tCorrectedFitCfContent);
 
-      if(fApplyNonFlatBackgroundCorrection && fFitSharedAnalyses->GetFitType()==kChi2PML && !tNormalizeBgdFitToCf)
-      {
-        //In this case, ApplyNonFlatBackgroundCorrection essentially takes care of the normalization, since it fits raw Num and Den
-        // ApplyNormalization applies a normalization that is very close to 1.  Therefore, for the plots in fCorrectedFitVecs to look pretty,
-        // I must scale them back up to around unity...also need to apply normalization = tParPrim[5]
-        //TODO make this more general (to be sure, inclusion of tParPrim here is almost certainly correct)
-        //  Would simply putting ApplyNormalization(tParPrim[5], tCorrectedFitCfContent); before fCorrectedFitVecs[iAnaly][iPartAn] = tCorrectedFitCfContent; 
-        //  solve this FOR ALL CASES?
-        if(!fIncludeSingletAndTriplet) ApplyNormalization(tParPrim[5]*(tKStarCfLite->GetDenScale()/tKStarCfLite->GetNumScale()), fCorrectedFitVecs[iAnaly][iPartAn]);
-        else ApplyNormalization(tParPrim[8]*(tKStarCfLite->GetDenScale()/tKStarCfLite->GetNumScale()), fCorrectedFitVecs[iAnaly][iPartAn]);
-      }
+      fCorrectedFitVecs[iAnaly][iPartAn] = tCorrectedFitCfContent;
+
+      if(fFitSharedAnalyses->GetFitType() == kChi2PML) ApplyNormalization(tKStarCfLite->GetNumScale()/tKStarCfLite->GetDenScale(), tCorrectedFitCfContent);
 
       for(int ix=0; ix < fNbinsXToFit; ix++)
       {

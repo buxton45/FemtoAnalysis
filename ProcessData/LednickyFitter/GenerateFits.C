@@ -95,7 +95,11 @@ int main(int argc, char **argv)
     if(tIncludeResidualsType != kIncludeNoResiduals)
     {
       aLambdaMin = 0.6;
+/*
       aLambdaMax = 1.5;
+      if(bUseStavCf) aLambdaMax = 1.1;
+*/
+      aLambdaMax = 1.1;
     }
   }
 
@@ -182,7 +186,7 @@ int main(int argc, char **argv)
   if(ApplyNonFlatBackgroundCorrection && tNonFlatBgdFitType != kLinear)
   {
 //    tLamKchP->SetKStarMinMaxNorm(0.5,0.6);
-    if(tAnType==kLamK0 || tAnType==kALamK0) tLamKchP->SetMinMaxBgdFit(0.35, 0.55);  //THERMINATOR does not fit shape as well for LamK0
+    if((tAnType==kLamK0 || tAnType==kALamK0) && tNonFlatBgdFitType==kPolynomial) tLamKchP->SetMinMaxBgdFit(0.20, 0.40);  //THERMINATOR does not fit shape as well for LamK0
     else tLamKchP->SetMinMaxBgdFit(0.45, 0.95);
     tLamKchP->SetAllRadiiLimits(1., 10.);
 

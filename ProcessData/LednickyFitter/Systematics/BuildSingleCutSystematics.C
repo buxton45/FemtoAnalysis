@@ -23,11 +23,11 @@ int main(int argc, char **argv)
 
   bool ApplyMomResCorrection = true;
   bool ApplyNonFlatBackgroundCorrection = true;
-  NonFlatBgdFitType tNonFlatBgdFitType = kPolynomial;
+  NonFlatBgdFitType tNonFlatBgdFitType = kLinear;
 
   IncludeResidualsType tIncludeResidualsType = kInclude3Residuals; 
   ChargedResidualsType tChargedResidualsType = kUseXiDataAndCoulombOnlyInterp;
-  ResPrimMaxDecayType tResPrimMaxDecayType = k4fm;
+  ResPrimMaxDecayType tResPrimMaxDecayType = k10fm;
 
   bool FixD0 = false;
 
@@ -36,7 +36,7 @@ int main(int argc, char **argv)
 
   if(tAnType==kLamK0) tAllShareSingleLambdaParam = true;
 
-  SystematicsFileInfo tFileInfo = GetFileInfo_LamK(-13, tParentResultsDate);
+  SystematicsFileInfo tFileInfo = GetFileInfo_LamK(-10, tParentResultsDate);
     TString tResultsDate = tFileInfo.resultsDate;
     TString tDirNameModifierBase1 = tFileInfo.dirNameModifierBase1;
     vector<double> tModifierValues1 = tFileInfo.modifierValues1;

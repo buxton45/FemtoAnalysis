@@ -19,11 +19,11 @@ int main(int argc, char **argv)
 
   bool ApplyMomResCorrection = true;
   bool ApplyNonFlatBackgroundCorrection = true;
-  NonFlatBgdFitType tNonFlatBgdFitType = kPolynomial;
+  NonFlatBgdFitType tNonFlatBgdFitType = kLinear;
 
   IncludeResidualsType tIncludeResidualsType = kInclude3Residuals; 
   ChargedResidualsType tChargedResidualsType = kUseXiDataAndCoulombOnlyInterp;
-  ResPrimMaxDecayType tResPrimMaxDecayType = k4fm;
+  ResPrimMaxDecayType tResPrimMaxDecayType = k10fm;
 
   bool FixD0 = false;
 
