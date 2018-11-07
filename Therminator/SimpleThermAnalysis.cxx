@@ -55,6 +55,10 @@ SimpleThermAnalysis::SimpleThermAnalysis() :
   fAnalysisLamK0(nullptr),
   fAnalysisALamK0(nullptr),
 
+  fAnalysisKchPKchP(nullptr),
+  fAnalysisK0K0(nullptr),
+  fAnalysisLamLam(nullptr),
+
   fSPAnalysisLam(nullptr),
   fSPAnalysisALam(nullptr),
   fSPAnalysisKchP(nullptr), 
@@ -68,7 +72,9 @@ SimpleThermAnalysis::SimpleThermAnalysis() :
   fCheckCoECoM(false),
   fRotateEventsByRandAzAngles(false),
   fPerformFlowAnalysis(false),
-  fArtificialV3Info(0,-1)
+  fArtificialV3Info(0,-1),
+
+  fBuildOtherPairs(false)
 
 {
   fAnalysisLamKchP = new ThermPairAnalysis(kLamKchP);
@@ -77,6 +83,10 @@ SimpleThermAnalysis::SimpleThermAnalysis() :
   fAnalysisALamKchP = new ThermPairAnalysis(kALamKchP);
   fAnalysisLamK0 = new ThermPairAnalysis(kLamK0);
   fAnalysisALamK0 = new ThermPairAnalysis(kALamK0);
+
+  fAnalysisKchPKchP = new ThermPairAnalysis(kKchPKchP);
+  fAnalysisK0K0 = new ThermPairAnalysis(kK0K0);
+  fAnalysisLamLam = new ThermPairAnalysis(kLamLam);
 
 
   fSPAnalysisLam = new ThermSingleParticleAnalysis(kPDGLam);
@@ -124,6 +134,13 @@ void SimpleThermAnalysis::SetBuildUniqueParents(bool aBuild)
   fAnalysisALamKchP->SetBuildUniqueParents(aBuild);
   fAnalysisLamK0->SetBuildUniqueParents(aBuild);
   fAnalysisALamK0->SetBuildUniqueParents(aBuild);
+
+  if(fBuildOtherPairs)
+  {
+    fAnalysisKchPKchP->SetBuildUniqueParents(false);
+    fAnalysisK0K0->SetBuildUniqueParents(false);
+    fAnalysisLamLam->SetBuildUniqueParents(false);
+  }
 
   fSPAnalysisLam->SetBuildUniqueParents(aBuild);
   fSPAnalysisALam->SetBuildUniqueParents(aBuild);
@@ -181,6 +198,13 @@ void SimpleThermAnalysis::SaveAll()
     fAnalysisALamKchP->SaveAllCorrelationFunctions(tFileCorrelationFunctions);
     fAnalysisLamK0->SaveAllCorrelationFunctions(tFileCorrelationFunctions);
     fAnalysisALamK0->SaveAllCorrelationFunctions(tFileCorrelationFunctions);
+
+    if(fBuildOtherPairs)
+    {
+      fAnalysisKchPKchP->SaveAllCorrelationFunctions(tFileCorrelationFunctions);
+      fAnalysisK0K0->SaveAllCorrelationFunctions(tFileCorrelationFunctions);
+      fAnalysisLamLam->SaveAllCorrelationFunctions(tFileCorrelationFunctions);
+    }
 
     tFileCorrelationFunctions->Close();
   }
@@ -385,6 +409,13 @@ void SimpleThermAnalysis::ProcessEventByEvent(vector<ThermEvent> &aEventsCollect
     fAnalysisLamK0->ProcessEvent(fEventsCollection[iEv], fMixingEventsCollection);
     fAnalysisALamK0->ProcessEvent(fEventsCollection[iEv], fMixingEventsCollection);
 
+    if(fBuildOtherPairs)
+    {
+      fAnalysisKchPKchP->ProcessEvent(fEventsCollection[iEv], fMixingEventsCollection);
+      fAnalysisK0K0->ProcessEvent(fEventsCollection[iEv], fMixingEventsCollection);
+      fAnalysisLamLam->ProcessEvent(fEventsCollection[iEv], fMixingEventsCollection);
+    }
+
     //--------------------------------------------
     if(fBuildSingleParticleAnalyses)
     {
@@ -428,6 +459,13 @@ void SimpleThermAnalysis::SetBuildPairFractions(bool aBuild)
 
   fAnalysisLamK0->SetBuildPairFractions(aBuild);
   fAnalysisALamK0->SetBuildPairFractions(aBuild);
+
+  if(fBuildOtherPairs)
+  {
+    fAnalysisKchPKchP->SetBuildPairFractions(false);
+    fAnalysisK0K0->SetBuildPairFractions(false);
+    fAnalysisLamLam->SetBuildPairFractions(false);
+  }
 }
 
 
@@ -444,6 +482,13 @@ void SimpleThermAnalysis::SetBuildTransformMatrices(bool aBuild)
 
   fAnalysisLamK0->SetBuildTransformMatrices(aBuild);
   fAnalysisALamK0->SetBuildTransformMatrices(aBuild);
+
+  if(fBuildOtherPairs)
+  {
+    fAnalysisKchPKchP->SetBuildTransformMatrices(false);
+    fAnalysisK0K0->SetBuildTransformMatrices(false);
+    fAnalysisLamLam->SetBuildTransformMatrices(false);
+  }
 }
 
 
@@ -463,6 +508,13 @@ void SimpleThermAnalysis::SetBuildCorrelationFunctions(bool aBuild, bool aBuild3
 
   fAnalysisLamK0->SetBuildCorrelationFunctions(fBuildCorrelationFunctions, fBuild3dHists);
   fAnalysisALamK0->SetBuildCorrelationFunctions(fBuildCorrelationFunctions, fBuild3dHists);
+
+  if(fBuildOtherPairs)
+  {
+    fAnalysisKchPKchP->SetBuildCorrelationFunctions(fBuildCorrelationFunctions, fBuild3dHists);
+    fAnalysisK0K0->SetBuildCorrelationFunctions(fBuildCorrelationFunctions, fBuild3dHists);
+    fAnalysisLamLam->SetBuildCorrelationFunctions(fBuildCorrelationFunctions, fBuild3dHists);
+  }
 }
 
 //________________________________________________________________________________________________________________
@@ -478,6 +530,13 @@ void SimpleThermAnalysis::SetBuildMixedEventNumerators(bool aBuild)
 
   fAnalysisLamK0->SetBuildMixedEventNumerators(aBuild);
   fAnalysisALamK0->SetBuildMixedEventNumerators(aBuild);
+
+  if(fBuildOtherPairs)
+  {
+    fAnalysisKchPKchP->SetBuildMixedEventNumerators(aBuild);
+    fAnalysisK0K0->SetBuildMixedEventNumerators(aBuild);
+    fAnalysisLamLam->SetBuildMixedEventNumerators(aBuild);
+  }
 }
 
 //________________________________________________________________________________________________________________
@@ -493,6 +552,13 @@ void SimpleThermAnalysis::SetUnitWeightCfNums(bool aSet)
 
   fAnalysisLamK0->SetUnitWeightCfNums(aSet);
   fAnalysisALamK0->SetUnitWeightCfNums(aSet);
+
+  if(fBuildOtherPairs)
+  {
+    fAnalysisKchPKchP->SetUnitWeightCfNums(aSet);
+    fAnalysisK0K0->SetUnitWeightCfNums(aSet);
+    fAnalysisLamLam->SetUnitWeightCfNums(aSet);
+  }
 }
 
 //________________________________________________________________________________________________________________
@@ -508,6 +574,13 @@ void SimpleThermAnalysis::SetWeightCfsWithParentInteraction(bool aSet)
 
   fAnalysisLamK0->SetWeightCfsWithParentInteraction(aSet);
   fAnalysisALamK0->SetWeightCfsWithParentInteraction(aSet);
+
+  if(fBuildOtherPairs)
+  {
+    fAnalysisKchPKchP->SetWeightCfsWithParentInteraction(aSet);
+    fAnalysisK0K0->SetWeightCfsWithParentInteraction(aSet);
+    fAnalysisLamLam->SetWeightCfsWithParentInteraction(aSet);
+  }
 }
 
 //________________________________________________________________________________________________________________
@@ -523,6 +596,13 @@ void SimpleThermAnalysis::SetOnlyWeightLongDecayParents(bool aSet)
 
   fAnalysisLamK0->SetOnlyWeightLongDecayParents(aSet);
   fAnalysisALamK0->SetOnlyWeightLongDecayParents(aSet);
+
+  if(fBuildOtherPairs)
+  {
+    fAnalysisKchPKchP->SetOnlyWeightLongDecayParents(aSet);
+    fAnalysisK0K0->SetOnlyWeightLongDecayParents(aSet);
+    fAnalysisLamLam->SetOnlyWeightLongDecayParents(aSet);
+  }
 }
 
 //________________________________________________________________________________________________________________
@@ -544,6 +624,13 @@ void SimpleThermAnalysis::SetMaxPrimaryDecayLength(double aMax)
 
   fAnalysisLamK0->SetMaxPrimaryDecayLength(fMaxPrimaryDecayLength);
   fAnalysisALamK0->SetMaxPrimaryDecayLength(fMaxPrimaryDecayLength);
+
+  if(fBuildOtherPairs)
+  {
+    fAnalysisKchPKchP->SetMaxPrimaryDecayLength(fMaxPrimaryDecayLength);
+    fAnalysisK0K0->SetMaxPrimaryDecayLength(fMaxPrimaryDecayLength);
+    fAnalysisLamLam->SetMaxPrimaryDecayLength(fMaxPrimaryDecayLength);
+  }
 }
 
 

@@ -63,7 +63,7 @@ const char* const cRootParticleTags[25] = {
 
 
 //enum AnalysisType
-const char* const cAnalysisBaseTags[85] = {
+const char* const cAnalysisBaseTags[87] = {
 "LamK0", "ALamK0", 
 "LamKchP", "ALamKchM", "LamKchM", "ALamKchP", 
 "XiKchP", "AXiKchM", "XiKchM", "AXiKchP", 
@@ -95,11 +95,12 @@ const char* const cAnalysisBaseTags[85] = {
 "LamKSt0ToLamK0", "ALamKSt0ToALamK0", 
 "Sig0KSt0ToLamK0", "ASigma0KSt0ToALamK0", 
 "Xi0KSt0ToLamK0", "AXi0KSt0ToALamK0",
-"XiKSt0ToLamK0", "AXiKSt0ToALamK0"
+"XiKSt0ToLamK0", "AXiKSt0ToALamK0",
+"KchPKchP", "K0K0"
 
 };
 
-const char* const cAnalysisRootTags[85] = {
+const char* const cAnalysisRootTags[87] = {
 "#LambdaK^{0}_{S}", "#bar{#Lambda}K^{0}_{S}", 
 "#LambdaK+", "#bar{#Lambda}K-", "#LambdaK-", "#bar{#Lambda}K+", 
 "#Xi-K+", "#bar{#Xi}+K-", "#Xi-K-", "#bar{#Xi}+K+",
@@ -131,7 +132,8 @@ const char* const cAnalysisRootTags[85] = {
 "#LambdaK*^{0}", "#bar{#Lambda}#bar{K*}^{0}",
 "#Sigma^{0}K*^{0}", "#bar{#Sigma}^{0}#bar{K*}^{0}",
 "#Xi^{0}K*^{0}", "#bar{#Xi}^{0}#bar{K*}^{0}",
-"#Xi-K*^{0}", "#bar{#Xi}+#bar{K*}^{0}"
+"#Xi-K*^{0}", "#bar{#Xi}+#bar{K*}^{0}",
+"K+K+", "K^{0}_{S}K^{0}_{S}"
 
 };
 

@@ -486,7 +486,7 @@ int GetMCTruthBinFromParticleOriginBin(int aParticleOriginBin, double aMaxDecayL
   else if(aIncResType==kInclude10Residuals && tMotherPDG==313) return 8;
   else if(aIncResType==kInclude10Residuals && tMotherPDG==323) return 9;
   else if(IncludeAsPrimary(tMotherPDG, kPDGKchP, aMaxDecayLength)) return 1;
-  else if(IncludeInOthers(tMotherPDG, kPDGKchP, aMaxDecayLength, aIncResType)) {cout << "tMotherPDG = " << tMotherPDG << endl; return 10;} // 10=Other(1); 11=Other(2); 12=Other(1+2)
+  else if(IncludeInOthers(tMotherPDG, kPDGKchP, aMaxDecayLength, aIncResType)) return 10; // 10=Other(1); 11=Other(2); 12=Other(1+2)
   else
   {
     cout << "DO NOT RECOGNIZE: tMotherPDG = " << tMotherPDG << endl;

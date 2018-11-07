@@ -28,6 +28,7 @@ int main(int argc, char **argv)
   bool bBuildCorrelationFunctions = true;
   bool bBuild3dHists = false;
   bool bBuildMixedEventNumerators = false;
+  bool bBuildOtherPairs=true;
   int tNEventsToMix = 5;
 
   bool bUnitWeightCfNums = true;
@@ -98,9 +99,11 @@ int main(int argc, char **argv)
   }
 
   if(bUnitWeightCfNums) tCorrelationFunctionsSaveName += TString("_NumWeight1");
+  if(bBuildOtherPairs) tCorrelationFunctionsSaveName += TString("_wOtherPairs");
   //-----------------------------------------
 
   SimpleThermAnalysis *tSimpleThermAnalysis = new SimpleThermAnalysis();
+  tSimpleThermAnalysis->SetBuildOtherPairs(bBuildOtherPairs);
   tSimpleThermAnalysis->SetUseMixedEventsForTransforms(bUseMixedEventsForTransforms);
   tSimpleThermAnalysis->SetBuildUniqueParents(bPrintUniqueParents);
 

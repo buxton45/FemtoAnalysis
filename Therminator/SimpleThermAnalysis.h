@@ -76,6 +76,8 @@ public:
   void SetRotateEventsByRandomAzimuthalAngles(bool aRotate=true);
   void SetPerformFlowAnalysis(bool aPerform=true);
   void SetBuildArtificialV3Signal(bool aBuild=true, int aV3InclusionProb1=25);  //NOTE: This kills v2 signal and creates v3 signal
+
+  void SetBuildOtherPairs(bool aSet);
 private:
   int fNFiles;
   int fNEvents;
@@ -114,6 +116,10 @@ private:
   ThermPairAnalysis *fAnalysisLamKchM, *fAnalysisALamKchP;
   ThermPairAnalysis *fAnalysisLamK0, *fAnalysisALamK0;
 
+  ThermPairAnalysis *fAnalysisKchPKchP;
+  ThermPairAnalysis *fAnalysisK0K0;
+  ThermPairAnalysis *fAnalysisLamLam;
+
   ThermSingleParticleAnalysis *fSPAnalysisLam, *fSPAnalysisALam;
   ThermSingleParticleAnalysis *fSPAnalysisKchP, *fSPAnalysisKchM;
   ThermSingleParticleAnalysis *fSPAnalysisProt, *fSPAnalysisAProt;
@@ -125,6 +131,8 @@ private:
   bool fRotateEventsByRandAzAngles;
   bool fPerformFlowAnalysis;
   std::pair <int, int> fArtificialV3Info;
+
+  bool fBuildOtherPairs;
 
 #ifdef __ROOT__
   ClassDef(SimpleThermAnalysis, 1)
@@ -144,5 +152,7 @@ inline void SimpleThermAnalysis::SetCheckCoECoM(bool aCheck) {fCheckCoECoM = aCh
 inline void SimpleThermAnalysis::SetRotateEventsByRandomAzimuthalAngles(bool aRotate) {fRotateEventsByRandAzAngles = aRotate;}
 inline void SimpleThermAnalysis::SetPerformFlowAnalysis(bool aPerform) {fPerformFlowAnalysis = aPerform;}
 inline void SimpleThermAnalysis::SetBuildArtificialV3Signal(bool aBuild, int aV3InclusionProb1) {fArtificialV3Info=std::make_pair((int)aBuild, aV3InclusionProb1);}
+
+inline void SimpleThermAnalysis::SetBuildOtherPairs(bool aSet) {fBuildOtherPairs = aSet;}
 
 #endif

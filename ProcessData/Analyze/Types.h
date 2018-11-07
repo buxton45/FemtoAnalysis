@@ -55,6 +55,7 @@ kResLamKSt0ToLamK0=77, kResALamKSt0ToALamK0=78,
 kResSig0KSt0ToLamK0=79, kResASig0KSt0ToALamK0=80, 
 kResXi0KSt0ToLamK0=81, kResAXi0KSt0ToALamK0=82, 
 kResXiCKSt0ToLamK0=83, kResAXiCKSt0ToALamK0=84,
+kKchPKchP=85, kK0K0=86
 };
 
   enum BFieldType {kFemtoPlus=0, kFemtoMinus=1, kBp1=2, kBp2=3, kBm1=4, kBm2=5, kBm3=6};
@@ -281,8 +282,8 @@ kXiCKSt0=40, kAXiCAKSt0=41, kXiCAKSt0=42, kAXiCKSt0=43
 
 
   //-------------------------------------------------
-  extern const char* const cAnalysisBaseTags[85];
-  extern const char* const cAnalysisRootTags[85];
+  extern const char* const cAnalysisBaseTags[87];
+  extern const char* const cAnalysisRootTags[87];
   extern const double cAnalysisLambdaFactors[85];
   extern const double cAnalysisLambdaFactors2[85];  //NOTE if I want to use this, switch name with cAnalysisLambdaFactors
   extern const double cAnalysisLambdaFactorsOLD[85];  //NOTE if I want to use this, switch name with cAnalysisLambdaFactors

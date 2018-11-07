@@ -105,6 +105,8 @@ public:
 
   double CalcRStar(TLorentzVector &p1, TLorentzVector &x1, TLorentzVector &p2, TLorentzVector &x2);
   double CalcRStar(ThermParticle &tPart1, ThermParticle &tPart2);
+  vector<double> CalcR1R2inPRF(TLorentzVector &p1, TLorentzVector &x1, TLorentzVector &p2, TLorentzVector &x2);
+  vector<double> CalcR1R2inPRF(ThermParticle &tPart1, ThermParticle &tPart2);
 
   double CalcmT(TLorentzVector &p1, TLorentzVector &p2);
   double CalcmT(ThermParticle &tPart1, ThermParticle &tPart2);
@@ -116,12 +118,16 @@ public:
   double GetParentPairWaveFunctionSq_RotatePar2(ThermParticle &tPart1, ThermParticle &tPart2);
 
   void FillCorrelations(ThermParticle &aParticle1, ThermParticle &aParticle2, bool aFillNumerator);  //For ParticleV0, aParticle1=V0 and aParticle2=Particle
+
+  void FillCorrelationFunctionsNumOrDenParticleParticle(vector<ThermParticle> &aParticleCollection1, vector<ThermParticle> &aParticleCollection2, bool aFillNumerator);
   void FillCorrelationFunctionsNumOrDenParticleV0(vector<ThermParticle> &aParticleCollection, vector<ThermV0Particle> &aV0Collection, bool aFillNumerator);
   void FillCorrelationFunctionsNumOrDenV0V0(vector<ThermV0Particle> &aV01Collection, vector<ThermV0Particle> &aV02Collection, bool aFillNumerator);
 
+  void FillCorrelationFunctionsNumAndDenParticleParticle(vector<ThermParticle> &aParticleCollection1, vector<ThermParticle> &aParticleCollection2);
   void FillCorrelationFunctionsNumAndDenParticleV0(vector<ThermParticle> &aParticleCollection, vector<ThermV0Particle> &aV0Collection);
   void FillCorrelationFunctionsNumAndDenV0V0(vector<ThermV0Particle> &aV01Collection, vector<ThermV0Particle> &aV02Collection);
 
+  void BuildCorrelationFunctionsParticleParticle(ThermEvent &aEvent, vector<ThermEvent> &aMixingEventsCollection);
   void BuildCorrelationFunctionsParticleV0(ThermEvent &aEvent, vector<ThermEvent> &aMixingEventsCollection);
   void BuildCorrelationFunctionsV0V0(ThermEvent &aEvent, vector<ThermEvent> &aMixingEventsCollection);
 
@@ -217,6 +223,13 @@ private:
 
   TH2* fPairKStarVsmT;
   TH3* fPairmT3d;
+
+  TH3* fPairSource3d_mT1vmT2vRinv;
+  TH2* fPairSource2d_PairmTvRinv;
+  TH2* fPairSource2d_mT1vRinv;
+  TH2* fPairSource2d_mT2vRinv;
+  TH2* fPairSource2d_mT1vR1PRF;
+  TH2* fPairSource2d_mT2vR2PRF;
 
 #ifdef __ROOT__
   ClassDef(ThermPairAnalysis, 1)
