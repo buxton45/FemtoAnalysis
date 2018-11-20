@@ -25,7 +25,7 @@ CFLAGS = $(shell root-config --cflags) -Wall -std=c++11 -I${ANALYZE_DIR} -I${LED
 
 MY_LIBS = $(addprefix build/, FitParameter.o FitChi2Histograms.o BackgroundFitter.o FitPartialAnalysis.o FitPairAnalysis.o FitSharedAnalyses.o MathematicaSession.o WaveFunction.o ChargedResidualCf.o SimpleChargedResidualCf.o NeutralResidualCf.o ResidualCollection.o SimpleLednickyFitter.o LednickyFitter.o FitValuesWriter.o FitValuesLatexTableHelperWriter.o FitValuesWriterwSysErrs.o FitValuesLatexTableHelperWriterwSysErrs.o FitGenerator.o FitGeneratorAndDraw.o DualieFitGenerator.o ThermCf.o CfLite.o CfHeavy.o Types.o Types_LambdaValues.o Types_FitParamValues.o Types_ThermBgdParams.o AnalysisInfo.o Faddeeva.o CanvasPartition.o)
 
-BINARIES = runLamKchP runLamKchPTest runCompareKchFix2 runFits runTest runGenerator runDualieGenerator runCompareTwoAnalyses runCompareThreeAnalyses runCompareMixedcLamcKch runScattParamValues runLamKchPvsKchM runPlotAll runSimpleLednicky runCompareFittingMethods runCompareFittingMethodsv2 runmTScaling runCompareBackgrounds runCpaFit
+BINARIES = runLamKchP runLamKchPTest runCompareKchFix2 runFits runTest runGenerator runDualieGenerator runCompareTwoAnalyses runCompareThreeAnalyses runCompareMixedcLamcKch runScattParamValues runLamKchPvsKchM runPlotAll runSimpleLednicky runCompareFittingMethods runCompareFittingMethodsv2 runmTScaling runCompareBackgrounds runCpaFit runFitThermCfs
 
 all: $(BINARIES)
 
@@ -85,6 +85,9 @@ runCompareBackgrounds: ${MY_LIBS} CompareBackgrounds.C
 
 runCpaFit: ${MY_LIBS} CpaTemplateFit.C
 	g++ CpaTemplateFit.C ${MY_LIBS} -I${INCDIR} -o runCpaFit -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS)
+
+runFitThermCfs: ${MY_LIBS} FitThermCfs.C
+	g++ FitThermCfs.C ${MY_LIBS} -I${INCDIR} -o runFitThermCfs -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS)
 
 build/%.o: ${ANALYZE_DIR}/%.cxx ${ANALYZE_DIR}/%.h
 	g++ -c $< $(CFLAGS) -o $@

@@ -224,6 +224,7 @@ private:
   TH2* fPairKStarVsmT;
   TH3* fPairmT3d;
 
+  TH3* fPairSource3d_osl;
   TH3* fPairSource3d_mT1vmT2vRinv;
   TH2* fPairSource2d_PairmTvRinv;
   TH2* fPairSource2d_mT1vRinv;

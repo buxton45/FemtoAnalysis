@@ -28,15 +28,15 @@ int main(int argc, char **argv)
   bool bBuildCorrelationFunctions = true;
   bool bBuild3dHists = false;
   bool bBuildMixedEventNumerators = false;
-  bool bBuildOtherPairs=true;
+  bool bBuildOtherPairs=false;
   int tNEventsToMix = 5;
 
-  bool bUnitWeightCfNums = true;
+  bool bUnitWeightCfNums = false;
   bool bWeightCfsWithParentInteraction = false;
   bool bOnlyWeightLongDecayParents = false;
 
   bool bCheckCoECoM = false;
-  bool bRotateEventsByRandomAzimuthalAngles = true;
+  bool bRotateEventsByRandomAzimuthalAngles = false;
   bool bOnlyRunOverJaiEvents = false;
 
   bool bPerformFlowAnalysis = false;
@@ -46,7 +46,7 @@ int main(int argc, char **argv)
   double tMaxPrimaryDecayLength = -1; 
 //  double tMaxPrimaryDecayLength = 4.01; 
 
-  int tImpactParam = 3;
+  int tImpactParam = 2;
   //-----------------------------------------
   TString tEventsDirectory, tMatricesSaveFileName, tPairFractionSaveName, tSingleParticlesSaveName, tCorrelationFunctionsSaveName, tFlowSaveName;
 

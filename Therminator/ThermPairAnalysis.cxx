@@ -87,6 +87,7 @@ ThermPairAnalysis::ThermPairAnalysis(AnalysisType aAnType) :
   fPairKStarVsmT(nullptr),
   fPairmT3d(nullptr),
 
+  fPairSource3d_osl(nullptr),
   fPairSource3d_mT1vmT2vRinv(nullptr),
   fPairSource2d_PairmTvRinv(nullptr),
   fPairSource2d_mT1vRinv(nullptr),
@@ -494,6 +495,12 @@ void ThermPairAnalysis::InitiateCorrelations()
     fPairmT3d->Sumw2();
   }
 
+  fPairSource3d_osl = new TH3D(TString::Format("PairSource3d_osl%s", cAnalysisBaseTags[fAnalysisType]),
+                               TString::Format("PairSource3d_osl%s", cAnalysisBaseTags[fAnalysisType]),
+                               100, 0., 50., 
+                               100, 0., 50., 
+                               100, 0., 50.);
+
   fPairSource3d_mT1vmT2vRinv = new TH3D(TString::Format("PairSource3d_mT1vmT2vRinv%s", cAnalysisBaseTags[fAnalysisType]),
                                         TString::Format("PairSource3d_mT1vmT2vRinv%s", cAnalysisBaseTags[fAnalysisType]),
                                         400, 0., 10., 
@@ -520,6 +527,7 @@ void ThermPairAnalysis::InitiateCorrelations()
                                      400, 0., 10.,
                                      100, 0., 50.);
 
+  fPairSource3d_osl->Sumw2();
   fPairSource3d_mT1vmT2vRinv->Sumw2();
   fPairSource2d_PairmTvRinv->Sumw2();
   fPairSource2d_mT1vRinv->Sumw2();
@@ -1865,15 +1873,18 @@ void ThermPairAnalysis::FillCorrelations(ThermParticle &aParticle1, ThermParticl
     if(fBuild3dHists) fPairSource3d->Fill(tParentIndex1, tParentIndex2, tRStar);
     fPairSourceFull->Fill(tRStar);
 
-    if(tKStar < 0.2)
+    if(tKStar < 0.3)
     {
-    fPairSource3d_mT1vmT2vRinv->Fill(aParticle1.GetMt(), aParticle2.GetMt(), tRStar);
-    fPairSource2d_PairmTvRinv->Fill(CalcmT(aParticle1, aParticle2), tRStar);
-    fPairSource2d_mT1vRinv->Fill(aParticle1.GetMt(), tRStar);
-    fPairSource2d_mT2vRinv->Fill(aParticle2.GetMt(), tRStar);
-    vector<double> tR1R2inPRF = CalcR1R2inPRF(aParticle1, aParticle2);
-    fPairSource2d_mT1vR1PRF->Fill(aParticle1.GetMt(), tR1R2inPRF[0]);
-    fPairSource2d_mT2vR2PRF->Fill(aParticle2.GetMt(), tR1R2inPRF[1]);
+      TVector3 t3Vec = GetRStar3Vec(aParticle1, aParticle2);
+      fPairSource3d_osl->Fill(t3Vec.x(), t3Vec.y(), t3Vec.z());
+
+      fPairSource3d_mT1vmT2vRinv->Fill(aParticle1.GetMt(), aParticle2.GetMt(), tRStar);
+      fPairSource2d_PairmTvRinv->Fill(CalcmT(aParticle1, aParticle2), tRStar);
+      fPairSource2d_mT1vRinv->Fill(aParticle1.GetMt(), tRStar);
+      fPairSource2d_mT2vRinv->Fill(aParticle2.GetMt(), tRStar);
+      vector<double> tR1R2inPRF = CalcR1R2inPRF(aParticle1, aParticle2);
+      fPairSource2d_mT1vR1PRF->Fill(aParticle1.GetMt(), tR1R2inPRF[0]);
+      fPairSource2d_mT2vR2PRF->Fill(aParticle2.GetMt(), tR1R2inPRF[1]);
     }
     //--------------------------------------
     if(fUnitWeightCfNums) fNumFull_RotatePar2->Fill(CalcKStar_RotatePar2(aParticle1, aParticle2), 1.);
@@ -2194,6 +2205,7 @@ void ThermPairAnalysis::SaveAllCorrelationFunctions(TFile *aFile)
   fPairKStarVsmT->Write();
   if(fBuild3dHists) fPairmT3d->Write();
 
+  fPairSource3d_osl->Write();
   fPairSource3d_mT1vmT2vRinv->Write();
   fPairSource2d_PairmTvRinv->Write();
   fPairSource2d_mT1vRinv->Write();
