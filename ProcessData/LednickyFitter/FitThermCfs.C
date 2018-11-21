@@ -8,10 +8,51 @@
 #include "TStyle.h"
 #include "TPaveText.h"
 #include "TLegend.h"
+#include "TH3.h"
 
 #include "ThermCf.h"
 #include "FitPartialAnalysis.h"
 
+
+//________________________________________________________________________________________________________________
+TH3* GetThermHist3d(TString aFileLocation, TString aHistName)
+{
+  TFile *tFile = TFile::Open(aFileLocation);
+
+  TH3 *tReturnHist = (TH3*)tFile->Get(aHistName);
+  TH3 *tReturnHistClone = (TH3*)tReturnHist->Clone();
+  tReturnHistClone->SetDirectory(0);
+
+  tFile->Close();
+  delete tFile;
+
+  return tReturnHistClone;
+}
+
+//________________________________________________________________________________________________________________
+TF1* FitwGauss(TH1* aHist, double aMinFit=0., double aMaxFit=50.)
+{
+  TString tFitName = TString::Format("%s_FitGauss", aHist->GetName());
+  TF1* tReturnFunction = new TF1(tFitName, BackgroundFitter::FitFunctionGaussian, aMinFit, aMaxFit, 4);
+
+  double tMaxVal = aHist->GetMaximum();
+  double tMaxPos = aHist->GetBinCenter(aHist->GetMaximumBin());
+  int tApproxSigBin = aHist->FindLastBinAbove(tMaxVal/2.);
+  double tApproxSig = aHist->GetBinCenter(tApproxSigBin);
+
+  tReturnFunction->SetParameter(0, tMaxVal);
+
+  tReturnFunction->SetParameter(1, tMaxPos);
+  tReturnFunction->SetParLimits(1, 0., 50.);
+//  tReturnFunction->FixParameter(1, 0.);
+
+  tReturnFunction->SetParameter(2, tApproxSig);
+
+  tReturnFunction->FixParameter(3, 0.);
+
+  aHist->Fit(tFitName, "0", "", aMinFit, aMaxFit);
+  return tReturnFunction;
+}
 
 
 //________________________________________________________________________________________________________________
@@ -34,7 +75,7 @@ int main(int argc, char **argv)
   double tMinNorm = /*0.80*//*0.80*/0.32;
   double tMaxNorm = /*0.99*//*0.99*/0.40;
 
-  int tImpactParam = 3;
+  int tImpactParam = 2;
 
 
   TString tFilaNameBase = "CorrelationFunctions";
@@ -50,6 +91,7 @@ int main(int argc, char **argv)
 
   //--------------------------------------------
 
+  //ThermCf already knows the default directory, so it only needs the name of the file, not the complete path
   TH1* tThermCf = ThermCf::GetThermCf(tFileName, "PrimaryOnly", tAnType, 3, true, kMe, tRebin, tMinNorm, tMaxNorm);
 
   TCanvas* tCan = new TCanvas("tCan", "tCan");
@@ -95,6 +137,75 @@ int main(int argc, char **argv)
   tThermCf->Fit(tFitName, "0", "", 0.0, 0.3);
 
   tFitFcn->Draw("same");
+
+//-------------------------------------------------------------------------------
+
+  TString tFileDir = TString::Format("/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b%d/", tImpactParam);
+  TString tFileLocation = TString::Format("%s%s", tFileDir.Data(), tFileName.Data());
+
+  TString tHistName3d = TString::Format("PairSource3d_osl%s", cAnalysisBaseTags[tAnType]);
+
+  TH3* tTest3d = GetThermHist3d(tFileLocation, tHistName3d);
+
+  //----------
+
+  TH2D* tSourceSO = (TH2D*)tTest3d->Project3D("yx");
+    tSourceSO->SetTitle("Side(y) vs. Out(x)");
+    tSourceSO->GetYaxis()->SetTitle("Side");
+    tSourceSO->GetXaxis()->SetTitle("Out");
+
+  TH2D* tSourceLO = (TH2D*)tTest3d->Project3D("zx");
+    tSourceLO->SetTitle("Long(y) vs. Out(x)");
+    tSourceLO->GetYaxis()->SetTitle("Long");
+    tSourceLO->GetXaxis()->SetTitle("Out");
+
+
+  TH2D* tSourceLS = (TH2D*)tTest3d->Project3D("zy");
+    tSourceLS->SetTitle("Long(y) vs. Side(x)");
+    tSourceLS->GetYaxis()->SetTitle("Long");
+    tSourceLS->GetXaxis()->SetTitle("Side");
+
+  TCanvas* tCanSO = new TCanvas("tCanSO", "tCanSO");
+  TCanvas* tCanLO = new TCanvas("tCanLO", "tCanLO");
+  TCanvas* tCanLS = new TCanvas("tCanLS", "tCanLS");
+
+  tCanSO->cd();
+  tSourceSO->Draw("colz");
+
+  tCanLO->cd();
+  tSourceLO->Draw("colz");
+
+  tCanLS->cd();
+  tSourceLS->Draw("colz");
+
+  //----------
+
+  TH1D* tSourceO = tTest3d->ProjectionX("Out"/*, 1, 5, 1, 5*/);
+  TH1D* tSourceS = tTest3d->ProjectionY("Side"/*, 1, 5, 1, 5*/);
+  TH1D* tSourceL = tTest3d->ProjectionZ("Long"/*, 1, 5, 1, 5*/);
+
+  TCanvas* tCanO = new TCanvas("tCanO", "tCanO");
+  TCanvas* tCanS = new TCanvas("tCanS", "tCanS");
+  TCanvas* tCanL = new TCanvas("tCanL", "tCanL");
+
+
+  double tGaussFitMin = 0.;
+  double tGaussFitMax = 25.;
+  TF1* tGaussFitO = FitwGauss(tSourceO, tGaussFitMin, tGaussFitMax);
+  TF1* tGaussFitS = FitwGauss(tSourceS, tGaussFitMin, tGaussFitMax);
+  TF1* tGaussFitL = FitwGauss(tSourceL, tGaussFitMin, tGaussFitMax);
+
+  tCanO->cd();
+  tSourceO->Draw();
+  tGaussFitO->Draw("same");
+
+  tCanS->cd();
+  tSourceS->Draw();
+  tGaussFitS->Draw("same");
+
+  tCanL->cd();
+  tSourceL->Draw();
+  tGaussFitL->Draw("same");
 
 //-------------------------------------------------------------------------------
   theApp->Run(kTRUE); //Run the TApp to pause the code.

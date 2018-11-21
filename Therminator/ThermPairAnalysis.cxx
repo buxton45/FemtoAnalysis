@@ -88,6 +88,8 @@ ThermPairAnalysis::ThermPairAnalysis(AnalysisType aAnType) :
   fPairmT3d(nullptr),
 
   fPairSource3d_osl(nullptr),
+  fPairSource3d_oslPrimaryOnly(nullptr),
+
   fPairSource3d_mT1vmT2vRinv(nullptr),
   fPairSource2d_PairmTvRinv(nullptr),
   fPairSource2d_mT1vRinv(nullptr),
@@ -501,6 +503,12 @@ void ThermPairAnalysis::InitiateCorrelations()
                                100, 0., 50., 
                                100, 0., 50.);
 
+  fPairSource3d_oslPrimaryOnly = new TH3D(TString::Format("PairSource3d_oslPrimaryOnly%s", cAnalysisBaseTags[fAnalysisType]),
+                                          TString::Format("PairSource3d_oslPrimaryOnly%s", cAnalysisBaseTags[fAnalysisType]),
+                                          100, 0., 50., 
+                                          100, 0., 50., 
+                                          100, 0., 50.);
+
   fPairSource3d_mT1vmT2vRinv = new TH3D(TString::Format("PairSource3d_mT1vmT2vRinv%s", cAnalysisBaseTags[fAnalysisType]),
                                         TString::Format("PairSource3d_mT1vmT2vRinv%s", cAnalysisBaseTags[fAnalysisType]),
                                         400, 0., 10., 
@@ -528,6 +536,8 @@ void ThermPairAnalysis::InitiateCorrelations()
                                      100, 0., 50.);
 
   fPairSource3d_osl->Sumw2();
+  fPairSource3d_oslPrimaryOnly->Sumw2();
+
   fPairSource3d_mT1vmT2vRinv->Sumw2();
   fPairSource2d_PairmTvRinv->Sumw2();
   fPairSource2d_mT1vRinv->Sumw2();
@@ -1877,6 +1887,7 @@ void ThermPairAnalysis::FillCorrelations(ThermParticle &aParticle1, ThermParticl
     {
       TVector3 t3Vec = GetRStar3Vec(aParticle1, aParticle2);
       fPairSource3d_osl->Fill(t3Vec.x(), t3Vec.y(), t3Vec.z());
+      if(aParticle1.IsPrimordial() && aParticle2.IsPrimordial()) fPairSource3d_oslPrimaryOnly->Fill(t3Vec.x(), t3Vec.y(), t3Vec.z());
 
       fPairSource3d_mT1vmT2vRinv->Fill(aParticle1.GetMt(), aParticle2.GetMt(), tRStar);
       fPairSource2d_PairmTvRinv->Fill(CalcmT(aParticle1, aParticle2), tRStar);
@@ -2206,6 +2217,7 @@ void ThermPairAnalysis::SaveAllCorrelationFunctions(TFile *aFile)
   if(fBuild3dHists) fPairmT3d->Write();
 
   fPairSource3d_osl->Write();
+  fPairSource3d_oslPrimaryOnly->Write();
   fPairSource3d_mT1vmT2vRinv->Write();
   fPairSource2d_PairmTvRinv->Write();
   fPairSource2d_mT1vRinv->Write();
