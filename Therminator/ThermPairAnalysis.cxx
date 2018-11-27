@@ -499,15 +499,15 @@ void ThermPairAnalysis::InitiateCorrelations()
 
   fPairSource3d_osl = new TH3D(TString::Format("PairSource3d_osl%s", cAnalysisBaseTags[fAnalysisType]),
                                TString::Format("PairSource3d_osl%s", cAnalysisBaseTags[fAnalysisType]),
-                               100, 0., 50., 
-                               100, 0., 50., 
-                               100, 0., 50.);
+                               200, -50., 50., 
+                               200, -50., 50., 
+                               200, -50., 50.);
 
   fPairSource3d_oslPrimaryOnly = new TH3D(TString::Format("PairSource3d_oslPrimaryOnly%s", cAnalysisBaseTags[fAnalysisType]),
                                           TString::Format("PairSource3d_oslPrimaryOnly%s", cAnalysisBaseTags[fAnalysisType]),
-                                          100, 0., 50., 
-                                          100, 0., 50., 
-                                          100, 0., 50.);
+                                          200, -50., 50., 
+                                          200, -50., 50., 
+                                          200, -50., 50.); 
 
   fPairSource3d_mT1vmT2vRinv = new TH3D(TString::Format("PairSource3d_mT1vmT2vRinv%s", cAnalysisBaseTags[fAnalysisType]),
                                         TString::Format("PairSource3d_mT1vmT2vRinv%s", cAnalysisBaseTags[fAnalysisType]),
@@ -1677,6 +1677,7 @@ complex<double> ThermPairAnalysis::GetStrongOnlyWaveFunction(TVector3 &aKStar3Ve
   if(fAnalysisType==kLamKchP || fAnalysisType==kALamKchM)      {tF0 = complex<double>(-1.16, 0.51); tD0 = 1.08;}
   else if(fAnalysisType==kLamKchM || fAnalysisType==kALamKchP) {tF0 = complex<double>(0.41, 0.47); tD0 = -4.89;}
   else if(fAnalysisType==kLamK0 || fAnalysisType==kALamK0)     {tF0 = complex<double>(-0.41, 0.20); tD0 = 2.08;}
+  else if(fAnalysisType==kKchPKchP || fAnalysisType==kK0K0 || fAnalysisType==kLamLam)      {tF0 = complex<double>(-1.16, 0.51); tD0 = 1.08;}
   else assert(0);
 
   double tKdotR = aKStar3Vec.Dot(aRStar3Vec);

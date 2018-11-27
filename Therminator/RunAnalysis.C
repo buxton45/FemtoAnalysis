@@ -28,7 +28,7 @@ int main(int argc, char **argv)
   bool bBuildCorrelationFunctions = true;
   bool bBuild3dHists = false;
   bool bBuildMixedEventNumerators = false;
-  bool bBuildOtherPairs=false;
+  bool bBuildOtherPairs=true;
   int tNEventsToMix = 5;
 
   bool bUnitWeightCfNums = false;

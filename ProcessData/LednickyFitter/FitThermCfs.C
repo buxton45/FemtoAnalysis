@@ -43,7 +43,7 @@ TF1* FitwGauss(TH1* aHist, double aMinFit=0., double aMaxFit=50.)
   tReturnFunction->SetParameter(0, tMaxVal);
 
   tReturnFunction->SetParameter(1, tMaxPos);
-  tReturnFunction->SetParLimits(1, 0., 50.);
+//  tReturnFunction->SetParLimits(1, 0., 50.);
 //  tReturnFunction->FixParameter(1, 0.);
 
   tReturnFunction->SetParameter(2, tApproxSig);
@@ -78,7 +78,7 @@ int main(int argc, char **argv)
   int tImpactParam = 2;
 
 
-  TString tFilaNameBase = "CorrelationFunctions";
+  TString tFilaNameBase = "CorrelationFunctions_wOtherPairs";
   TString tFileNameModifier = "";
 //  TString tFileNameModifier = "_WeightParentsInteraction";
 //  TString tFileNameModifier = "_WeightParentsInteraction_OnlyWeightLongDecayParents";
@@ -92,7 +92,7 @@ int main(int argc, char **argv)
   //--------------------------------------------
 
   //ThermCf already knows the default directory, so it only needs the name of the file, not the complete path
-  TH1* tThermCf = ThermCf::GetThermCf(tFileName, "PrimaryOnly", tAnType, 3, true, kMe, tRebin, tMinNorm, tMaxNorm);
+  TH1* tThermCf = ThermCf::GetThermCf(tFileName, "PrimaryOnly", tAnType, tImpactParam, true, kMe, tRebin, tMinNorm, tMaxNorm);
 
   TCanvas* tCan = new TCanvas("tCan", "tCan");
   tCan->cd();
@@ -143,7 +143,7 @@ int main(int argc, char **argv)
   TString tFileDir = TString::Format("/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b%d/", tImpactParam);
   TString tFileLocation = TString::Format("%s%s", tFileDir.Data(), tFileName.Data());
 
-  TString tHistName3d = TString::Format("PairSource3d_osl%s", cAnalysisBaseTags[tAnType]);
+  TString tHistName3d = TString::Format("PairSource3d_oslPrimaryOnly%s", cAnalysisBaseTags[tAnType]);
 
   TH3* tTest3d = GetThermHist3d(tFileLocation, tHistName3d);
 
@@ -179,18 +179,25 @@ int main(int argc, char **argv)
   tSourceLS->Draw("colz");
 
   //----------
+  int tBinProjLow, tBinProjHigh;
 
-  TH1D* tSourceO = tTest3d->ProjectionX("Out"/*, 1, 5, 1, 5*/);
-  TH1D* tSourceS = tTest3d->ProjectionY("Side"/*, 1, 5, 1, 5*/);
-  TH1D* tSourceL = tTest3d->ProjectionZ("Long"/*, 1, 5, 1, 5*/);
+  tBinProjLow=-1;
+  tBinProjHigh=-1;
+
+//  tBinProjLow = tTest3d->GetXaxis()->FindBin(-1.);
+//  tBinProjHigh = tTest3d->GetXaxis()->FindBin(1.);
+
+  TH1D* tSourceO = tTest3d->ProjectionX("Out", tBinProjLow, tBinProjHigh, tBinProjLow, tBinProjHigh);
+  TH1D* tSourceS = tTest3d->ProjectionY("Side", tBinProjLow, tBinProjHigh, tBinProjLow, tBinProjHigh);
+  TH1D* tSourceL = tTest3d->ProjectionZ("Long", tBinProjLow, tBinProjHigh, tBinProjLow, tBinProjHigh);
 
   TCanvas* tCanO = new TCanvas("tCanO", "tCanO");
   TCanvas* tCanS = new TCanvas("tCanS", "tCanS");
   TCanvas* tCanL = new TCanvas("tCanL", "tCanL");
 
 
-  double tGaussFitMin = 0.;
-  double tGaussFitMax = 25.;
+  double tGaussFitMin = -20.;
+  double tGaussFitMax = 20.;
   TF1* tGaussFitO = FitwGauss(tSourceO, tGaussFitMin, tGaussFitMax);
   TF1* tGaussFitS = FitwGauss(tSourceS, tGaussFitMin, tGaussFitMax);
   TF1* tGaussFitL = FitwGauss(tSourceL, tGaussFitMin, tGaussFitMax);
