@@ -49,6 +49,8 @@ ThermPairAnalysis::ThermPairAnalysis(AnalysisType aAnType) :
   fWeightCfsWithParentInteraction(false),
   fOnlyWeightLongDecayParents(false),
 
+  fDrawRStarFromGaussian(false),
+
   fPairSource3d(nullptr),
   fNum3d(nullptr),
   fDen3d(nullptr),
@@ -1328,6 +1330,65 @@ TVector3 ThermPairAnalysis::GetKStar3Vec_RotatePar2(ThermParticle &tPart1, Therm
 }
 
 //________________________________________________________________________________________________________________
+TVector3 ThermPairAnalysis::DrawRStar3VecFromGaussian(double tROut, double tMuOut, double tRSide, double tMuSide, double tRLong, double tMuLong)
+{
+  //Create the source Gaussians
+  double tRoot2 = sqrt(2.);  //need this scale to get 4 on denominator of exp in normal dist instead of 2
+
+  std::default_random_engine generator (std::clock());  //std::clock() is seed
+  std::normal_distribution<double> tROutSource(tMuOut,tRoot2*tROut);
+  std::normal_distribution<double> tRSideSource(tMuSide,tRoot2*tRSide);
+  std::normal_distribution<double> tRLongSource(tMuLong,tRoot2*tRLong);
+
+  return TVector3(tROutSource(generator),tRSideSource(generator),tRLongSource(generator));
+}
+
+//________________________________________________________________________________________________________________
+TVector3 ThermPairAnalysis::DrawRStar3VecFromGaussian()
+{
+  double tROut, tMuOut, tRSide, tMuSide, tRLong, tMuLong;
+
+  tROut = 5.;
+  tMuOut = 0.;
+
+  tRSide = 5.;
+  tMuSide = 0.;
+
+  tRLong = 5.;
+  tMuLong = 0.;
+
+  if(fAnalysisType==kLamKchP || fAnalysisType==kALamKchM || fAnalysisType==kLamKchM || fAnalysisType==kALamKchP)
+  {
+    tMuOut = 3.;
+  }
+  else if(fAnalysisType==kLamK0 || fAnalysisType==kALamK0)
+  {
+    tMuOut = 1.;
+  }
+  else if(fAnalysisType==kKchPKchP)
+  {
+    tROut = 8.;
+    tRSide = 8.;
+    tRLong = 8.;
+  }
+  else if(fAnalysisType==kK0K0)
+  {
+    tROut = 6.;
+    tRSide = 6.;
+    tRLong = 6.;
+  }
+  else if(fAnalysisType==kLamLam)
+  {
+    tROut = 3.;
+    tRSide = 3.;
+    tRLong = 3.;
+  }
+  else assert(0);
+
+  return DrawRStar3VecFromGaussian(tROut, tMuOut, tRSide, tMuSide, tRLong, tMuLong);
+}
+
+//________________________________________________________________________________________________________________
 TVector3 ThermPairAnalysis::GetRStar3Vec(TLorentzVector &p1, TLorentzVector &x1, TLorentzVector &p2, TLorentzVector &x2)
 {
   TLorentzVector P = p1 + p2;
@@ -1420,89 +1481,7 @@ double ThermPairAnalysis::CalcRStar(TLorentzVector &p1, TLorentzVector &x1, TLor
 //________________________________________________________________________________________________________________
 double ThermPairAnalysis::CalcRStar(ThermParticle &tPart1, ThermParticle &tPart2)
 {
-/*
-  double tRStar = 0.;
-
-  TLorentzVector p1 = tPart1.GetFourMomentum();
-  TLorentzVector p2 = tPart2.GetFourMomentum();
-
-  TLorentzVector x1 = tPart1.GetFourPosition();
-  TLorentzVector x2 = tPart2.GetFourPosition();
-
-  //---------------------------------
-
-  TLorentzVector P = p1 + p2;
-
-  // Calculate pair variables
-
-  const double tPx = P.X(),
-               tPy = P.Y(),
-               tPz = P.Z();
-
-  double tE1 = p1.E();
-  double tE2 = p2.E();
-
-  double tE  = tE1 + tE2;
-  double tPt = tPx*tPx + tPy*tPy;
-  double tMt = tE*tE - tPz*tPz;//mCVK;
-  double tM  = (tMt - tPt > 0.0) ? sqrt(tMt - tPt) : 0.0;
-
-  if (tMt == 0 || tE == 0 || tM == 0 || tPt == 0 ) {
-    assert(0);
-    return 0.0;
-  }
-
-  tMt = sqrt(tMt);
-  tPt = sqrt(tPt);
-
-  double pX = p1.X();
-  double pY = p1.Y();
-  double pZ = p1.Z();
-
-  // Boost to LCMS
-  double tBeta = tPz/tE;
-  double tGamma = tE/tMt;
-  double tKStarLong = tGamma * (pZ - tBeta * tE1);
-  double tE1L = tGamma * (tE1  - tBeta * pZ);
-
-  // Rotate in transverse plane
-  double tKStarOut  = ( pX*tPx + pY*tPy)/tPt;
-  double tKStarSide = (-pX*tPy + pY*tPx)/tPt;
-
-  // Boost to pair cms
-  tKStarOut = tMt/tM * (tKStarOut - tPt/tMt * tE1L);
-
-  // separation distance
-  TLorentzVector D = x1 - x2;
-
-  double tDX = D.X();
-  double tDY = D.Y();
-  double tRLong = D.Z();
-  double tDTime = D.T();
-
-  double tROut = (tDX*tPx + tDY*tPy)/tPt;
-  double tRSide = (-tDX*tPy + tDY*tPx)/tPt;
-
-  double tRStarSide = tRSide;
-
-  double tRStarLong = tGamma*(tRLong - tBeta* tDTime);
-  double tDTimePairLCMS = tGamma*(tDTime - tBeta* tRLong);
-
-  tBeta = tPt/tMt;
-  tGamma = tMt/tM;
-
-  double tRStarOut = tGamma*(tROut - tBeta* tDTimePairLCMS);
-
-  tRStar = ::sqrt(tRStarOut*tRStarOut + tRStarSide*tRStarSide + tRStarLong*tRStarLong);
-*/
   TVector3 tRStar3Vec = GetRStar3Vec(tPart1, tPart2);
-
-/*
-  double tKStar = ::sqrt(tKStarOut*tKStarOut + tKStarSide*tKStarSide + tKStarLong*tKStarLong);
-  cout << "tRStar = " << tRStar << endl;
-  cout << "tKStar1 = " << tKStar << endl;
-  cout << "CalcKStar(p1,p2) = " << CalcKStar(p1,p2) << endl << endl; 
-*/
   return tRStar3Vec.Mag();
 }
 
@@ -1705,6 +1684,14 @@ double ThermPairAnalysis::GetStrongOnlyWaveFunctionSq(TVector3 aKStar3Vec, TVect
 double ThermPairAnalysis::GetParentPairWaveFunctionSq(ThermParticle &tPart1, ThermParticle &tPart2)
 {
 //  assert(!(tPart1.IsPrimordial() && tPart2.IsPrimordial()));
+  if(fDrawRStarFromGaussian)
+  {
+    cout << "fDrawRStarFromGaussian=true!" << endl;
+    cout << "\tIncompatible with fWeightCfsWithParentInteraction=true, ";
+    cout << "\tas pair source will be drawn from random Gaussian, but parent source will still use space information from THERMINATOR" << endl;
+    cout << "\t\tPREPARE FOR CRASH" << endl;
+  }
+  assert(!fDrawRStarFromGaussian);
   //--------------------------------------------------------------
   TLorentzVector p1, x1, p2, x2;
   ParticlePDGType tResType1, tResType2;
@@ -1769,6 +1756,14 @@ double ThermPairAnalysis::GetParentPairWaveFunctionSq(ThermParticle &tPart1, The
 double ThermPairAnalysis::GetParentPairWaveFunctionSq_RotatePar2(ThermParticle &tPart1, ThermParticle &tPart2)
 {
 //  assert(!(tPart1.IsPrimordial() && tPart2.IsPrimordial()));
+  if(fDrawRStarFromGaussian)
+  {
+    cout << "fDrawRStarFromGaussian=true!" << endl;
+    cout << "\tIncompatible with fWeightCfsWithParentInteraction=true, ";
+    cout << "\tas pair source will be drawn from random Gaussian, but parent source will still use space information from THERMINATOR" << endl;
+    cout << "\t\tPREPARE FOR CRASH" << endl;
+  }
+  assert(!fDrawRStarFromGaussian);
   //--------------------------------------------------------------
   TLorentzVector p1, x1, p2, x2;
   ParticlePDGType tResType1, tResType2;
@@ -1868,13 +1863,18 @@ void ThermPairAnalysis::FillCorrelations(ThermParticle &aParticle1, ThermParticl
   tParentIndex1 = GetParticleIndexInPidInfo(aParticle1.GetFatherPID());
   tParentIndex2 = GetParticleIndexInPidInfo(aParticle2.GetFatherPID());
 
-  tRStar = CalcRStar(aParticle1, aParticle2);
   tKStar = CalcKStar(aParticle1, aParticle2);
+
+  TVector3 tRStar3Vec;
+  if(!fDrawRStarFromGaussian) tRStar3Vec = GetRStar3Vec(aParticle1, aParticle2);
+  else tRStar3Vec = DrawRStar3VecFromGaussian();
+  tRStar = tRStar3Vec.Mag();
+
   if(aFillNumerator)
   {
     if(fUnitWeightCfNums) tWeight = 1.;
     else if(fWeightCfsWithParentInteraction) tWeight = GetParentPairWaveFunctionSq(aParticle1, aParticle2);
-    else tWeight = GetStrongOnlyWaveFunctionSq(GetKStar3Vec(aParticle1, aParticle2), GetRStar3Vec(aParticle1, aParticle2));
+    else tWeight = GetStrongOnlyWaveFunctionSq(GetKStar3Vec(aParticle1, aParticle2), tRStar3Vec);
   }
 
   if(fBuild3dHists) tCf3d->Fill(tParentIndex1, tParentIndex2, tKStar, tWeight);
@@ -1886,9 +1886,8 @@ void ThermPairAnalysis::FillCorrelations(ThermParticle &aParticle1, ThermParticl
 
     if(tKStar < 0.3)
     {
-      TVector3 t3Vec = GetRStar3Vec(aParticle1, aParticle2);
-      fPairSource3d_osl->Fill(t3Vec.x(), t3Vec.y(), t3Vec.z());
-      if(aParticle1.IsPrimordial() && aParticle2.IsPrimordial()) fPairSource3d_oslPrimaryOnly->Fill(t3Vec.x(), t3Vec.y(), t3Vec.z());
+      fPairSource3d_osl->Fill(tRStar3Vec.x(), tRStar3Vec.y(), tRStar3Vec.z());
+      if(aParticle1.IsPrimordial() && aParticle2.IsPrimordial()) fPairSource3d_oslPrimaryOnly->Fill(tRStar3Vec.x(), tRStar3Vec.y(), tRStar3Vec.z());
 
       fPairSource3d_mT1vmT2vRinv->Fill(aParticle1.GetMt(), aParticle2.GetMt(), tRStar);
       fPairSource2d_PairmTvRinv->Fill(CalcmT(aParticle1, aParticle2), tRStar);
@@ -1901,7 +1900,7 @@ void ThermPairAnalysis::FillCorrelations(ThermParticle &aParticle1, ThermParticl
     //--------------------------------------
     if(fUnitWeightCfNums) fNumFull_RotatePar2->Fill(CalcKStar_RotatePar2(aParticle1, aParticle2), 1.);
     else if(fWeightCfsWithParentInteraction) fNumFull_RotatePar2->Fill(CalcKStar_RotatePar2(aParticle1, aParticle2), GetParentPairWaveFunctionSq_RotatePar2(aParticle1, aParticle2));
-    else fNumFull_RotatePar2->Fill(CalcKStar_RotatePar2(aParticle1, aParticle2), GetStrongOnlyWaveFunctionSq(GetKStar3Vec_RotatePar2(aParticle1, aParticle2), GetRStar3Vec(aParticle1, aParticle2)));
+    else fNumFull_RotatePar2->Fill(CalcKStar_RotatePar2(aParticle1, aParticle2), GetStrongOnlyWaveFunctionSq(GetKStar3Vec_RotatePar2(aParticle1, aParticle2), tRStar3Vec));
     //--------------------------------------    
 
     fPairKStarVsmT->Fill(tKStar, CalcmT(aParticle1, aParticle2));

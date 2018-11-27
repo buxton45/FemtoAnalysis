@@ -30,10 +30,18 @@ TH3* GetThermHist3d(TString aFileLocation, TString aHistName)
 }
 
 //________________________________________________________________________________________________________________
+double FitFunctionGaussian(double *x, double *par)
+{
+  //4 parameters
+  return par[0]*exp(-0.5*(pow((x[0]-par[1])/(sqrt(2)*par[2]),2.0))) + par[3];
+}
+
+//________________________________________________________________________________________________________________
 TF1* FitwGauss(TH1* aHist, double aMinFit=0., double aMaxFit=50.)
 {
   TString tFitName = TString::Format("%s_FitGauss", aHist->GetName());
-  TF1* tReturnFunction = new TF1(tFitName, BackgroundFitter::FitFunctionGaussian, aMinFit, aMaxFit, 4);
+//  TF1* tReturnFunction = new TF1(tFitName, BackgroundFitter::FitFunctionGaussian, aMinFit, aMaxFit, 4);  //No sqrt(2) with sigma
+  TF1* tReturnFunction = new TF1(tFitName, FitFunctionGaussian, aMinFit, aMaxFit, 4);
 
   double tMaxVal = aHist->GetMaximum();
   double tMaxPos = aHist->GetBinCenter(aHist->GetMaximumBin());

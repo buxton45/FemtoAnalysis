@@ -100,6 +100,9 @@ public:
   TVector3 GetKStar3Vec_RotatePar2(TLorentzVector &p1, TLorentzVector &p2);
   TVector3 GetKStar3Vec_RotatePar2(ThermParticle &tPart1, ThermParticle &tPart2);
 
+  TVector3 DrawRStar3VecFromGaussian(double tROut, double tMuOut, double tRSide, double tMuSide, double tRLong, double tMuLong);
+  TVector3 DrawRStar3VecFromGaussian();
+
   TVector3 GetRStar3Vec(TLorentzVector &p1, TLorentzVector &x1, TLorentzVector &p2, TLorentzVector &x2);
   TVector3 GetRStar3Vec(ThermParticle &tPart1, ThermParticle &tPart2);
 
@@ -146,6 +149,8 @@ public:
   void SetBuildMixedEventNumerators(bool aBuild);
   void SetUnitWeightCfNums(bool aUse);
 
+  void SetDrawRStarFromGaussian(bool aSet);
+
   void SetMaxPrimaryDecayLength(double aMax);
 
 private:
@@ -185,6 +190,8 @@ private:
   bool fUnitWeightCfNums;
   bool fWeightCfsWithParentInteraction;
   bool fOnlyWeightLongDecayParents;
+
+  bool fDrawRStarFromGaussian;
 
   TH3* fPairSource3d;
   TH3* fNum3d;
@@ -246,6 +253,8 @@ inline TH2D* ThermPairAnalysis::GetTransformMatrix(int aIndex) {return ((TH2D*)f
 
 inline void ThermPairAnalysis::SetBuildMixedEventNumerators(bool aBuild) {fBuildMixedEventNumerators = aBuild;}
 inline void ThermPairAnalysis::SetUnitWeightCfNums(bool aUse) {fUnitWeightCfNums = aUse;}
+
+inline void ThermPairAnalysis::SetDrawRStarFromGaussian(bool aSet) {fDrawRStarFromGaussian = aSet;}
 
 inline void ThermPairAnalysis::SetMaxPrimaryDecayLength(double aMax) {fMaxPrimaryDecayLength = aMax;}
 

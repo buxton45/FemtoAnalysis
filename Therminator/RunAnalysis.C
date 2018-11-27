@@ -35,6 +35,8 @@ int main(int argc, char **argv)
   bool bWeightCfsWithParentInteraction = false;
   bool bOnlyWeightLongDecayParents = false;
 
+  bool bDrawRStarFromGaussian = true;
+
   bool bCheckCoECoM = false;
   bool bRotateEventsByRandomAzimuthalAngles = false;
   bool bOnlyRunOverJaiEvents = false;
@@ -115,6 +117,7 @@ int main(int argc, char **argv)
   tSimpleThermAnalysis->SetUnitWeightCfNums(bUnitWeightCfNums);
   tSimpleThermAnalysis->SetWeightCfsWithParentInteraction(bWeightCfsWithParentInteraction);
   tSimpleThermAnalysis->SetOnlyWeightLongDecayParents(bOnlyWeightLongDecayParents);
+  tSimpleThermAnalysis->SetDrawRStarFromGaussian(bDrawRStarFromGaussian);
   tSimpleThermAnalysis->SetNEventsToMix(tNEventsToMix);
 
   tSimpleThermAnalysis->SetBuildSingleParticleAnalyses(bBuildSingleParticleAnalyses);

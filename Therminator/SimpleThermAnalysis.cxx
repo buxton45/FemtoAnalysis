@@ -46,6 +46,7 @@ SimpleThermAnalysis::SimpleThermAnalysis() :
   fUnitWeightCfNums(false),
   fWeightCfsWithParentInteraction(false),
   fOnlyWeightLongDecayParents(false),
+  fDrawRStarFromGaussian(false),
   fBuildSingleParticleAnalyses(true),
 
   fAnalysisLamKchP(nullptr),
@@ -189,6 +190,7 @@ void SimpleThermAnalysis::SaveAll()
     if(fBuildMixedEventNumerators) fCorrelationFunctionsSaveName += TString::Format("_%iMixedEvNum", fNEventsToMix);
     if(fWeightCfsWithParentInteraction) fCorrelationFunctionsSaveName += TString("_WeightParentsInteraction");
     if(fOnlyWeightLongDecayParents) fCorrelationFunctionsSaveName += TString("_OnlyWeightLongDecayParents");
+    if(fDrawRStarFromGaussian) fCorrelationFunctionsSaveName += TString("_DrawRStarFromGaussian");
     fCorrelationFunctionsSaveName += TString(".root");
     TFile* tFileCorrelationFunctions = new TFile(fCorrelationFunctionsSaveName, "RECREATE");
 
@@ -602,6 +604,28 @@ void SimpleThermAnalysis::SetOnlyWeightLongDecayParents(bool aSet)
     fAnalysisKchPKchP->SetOnlyWeightLongDecayParents(aSet);
     fAnalysisK0K0->SetOnlyWeightLongDecayParents(aSet);
     fAnalysisLamLam->SetOnlyWeightLongDecayParents(aSet);
+  }
+}
+
+//________________________________________________________________________________________________________________
+void SimpleThermAnalysis::SetDrawRStarFromGaussian(bool aSet)
+{
+  fDrawRStarFromGaussian = aSet;
+
+  fAnalysisLamKchP->SetDrawRStarFromGaussian(aSet);
+  fAnalysisALamKchM->SetDrawRStarFromGaussian(aSet);
+
+  fAnalysisLamKchM->SetDrawRStarFromGaussian(aSet);
+  fAnalysisALamKchP->SetDrawRStarFromGaussian(aSet);
+
+  fAnalysisLamK0->SetDrawRStarFromGaussian(aSet);
+  fAnalysisALamK0->SetDrawRStarFromGaussian(aSet);
+
+  if(fBuildOtherPairs)
+  {
+    fAnalysisKchPKchP->SetDrawRStarFromGaussian(aSet);
+    fAnalysisK0K0->SetDrawRStarFromGaussian(aSet);
+    fAnalysisLamLam->SetDrawRStarFromGaussian(aSet);
   }
 }
 

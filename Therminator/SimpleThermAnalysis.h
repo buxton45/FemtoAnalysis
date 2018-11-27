@@ -58,6 +58,7 @@ public:
   void SetUnitWeightCfNums(bool aSet);
   void SetWeightCfsWithParentInteraction(bool aSet);
   void SetOnlyWeightLongDecayParents(bool aSet);
+  void SetDrawRStarFromGaussian(bool aSet);
   void SetBuildSingleParticleAnalyses(bool aBuild);
 
   void SetMaxPrimaryDecayLength(double aMax);
@@ -110,6 +111,7 @@ private:
   bool fUnitWeightCfNums;
   bool fWeightCfsWithParentInteraction;
   bool fOnlyWeightLongDecayParents;
+  bool fDrawRStarFromGaussian;
   bool fBuildSingleParticleAnalyses;
 
   ThermPairAnalysis *fAnalysisLamKchP, *fAnalysisALamKchM;
