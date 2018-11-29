@@ -14,6 +14,7 @@ ClassImp(ThermPairAnalysis)
 
 //________________________________________________________________________________________________________________
 ThermPairAnalysis::ThermPairAnalysis(AnalysisType aAnType) :
+  fGenerator(std::chrono::system_clock::now().time_since_epoch().count()),
   fAnalysisType(aAnType),
   fPartType1(kPDGNull),
   fPartType2(kPDGNull),
@@ -1335,13 +1336,13 @@ TVector3 ThermPairAnalysis::DrawRStar3VecFromGaussian(double tROut, double tMuOu
   //Create the source Gaussians
   double tRoot2 = sqrt(2.);  //need this scale to get 4 on denominator of exp in normal dist instead of 2
 
-  unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
-  std::default_random_engine generator (seed);  //std::clock() is seed
+//  unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+//  std::default_random_engine generator (seed);  //std::clock() is seed
   std::normal_distribution<double> tROutSource(tMuOut,tRoot2*tROut);
   std::normal_distribution<double> tRSideSource(tMuSide,tRoot2*tRSide);
   std::normal_distribution<double> tRLongSource(tMuLong,tRoot2*tRLong);
 
-  return TVector3(tROutSource(generator),tRSideSource(generator),tRLongSource(generator));
+  return TVector3(tROutSource(fGenerator),tRSideSource(fGenerator),tRLongSource(fGenerator));
 }
 
 //________________________________________________________________________________________________________________

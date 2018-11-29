@@ -154,6 +154,8 @@ public:
   void SetMaxPrimaryDecayLength(double aMax);
 
 private:
+  std::default_random_engine fGenerator;
+
   AnalysisType fAnalysisType;
   ParticlePDGType fPartType1, fPartType2;
 
