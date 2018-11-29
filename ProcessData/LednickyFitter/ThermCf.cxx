@@ -106,6 +106,10 @@ CfHeavy* ThermCf::GetThermHeavyCf(TString aFileName, TString aCfDescriptor, Anal
   else if(aAnType==kALamKchM) {tConjAnType=kLamKchP;}
   else if(aAnType==kLamKchM)  {tConjAnType=kALamKchP;}
   else if(aAnType==kALamKchP) {tConjAnType=kLamKchM;}
+
+  else if(aAnType==kKchPKchP || aAnType==kK0K0) {assert(!aCombineConj);}  //Do not have conjugate analyses for these
+  else if(aAnType==kLamLam)   {tConjAnType=kALamALam;}  
+
   else assert(0);
 
   //--------------------------------
@@ -123,15 +127,6 @@ CfHeavy* ThermCf::GetThermHeavyCf(TString aFileName, TString aCfDescriptor, Anal
                                 tNum1, tDen1, aMinNorm, aMaxNorm);
   tCfLite1->Rebin(aRebin);
 
-  TH1* tNum2 = GetThermHist(tFileLocation, TString::Format("Num%s%s", aCfDescriptor.Data(), cAnalysisBaseTags[tConjAnType]));
-  TH1* tDen2;
-  if(!aUseStavCf) tDen2 = GetThermHist(tFileLocation, TString::Format("Den%s%s", aCfDescriptor.Data(), cAnalysisBaseTags[tConjAnType]));
-  else tDen2 = GetThermHist(tFileLocation, TString::Format("Num%s_RotatePar2%s", aCfDescriptor.Data(), cAnalysisBaseTags[tConjAnType]));
-  CfLite* tCfLite2 = new CfLite(TString::Format("CfLite_%s", cAnalysisBaseTags[tConjAnType]), 
-                                TString::Format("CfLite_%s", cAnalysisBaseTags[tConjAnType]), 
-                                tNum2, tDen2, aMinNorm, aMaxNorm);
-  tCfLite2->Rebin(aRebin);
-
   CfHeavy* tCfHeavy;
   if(!aCombineConj)
   {
@@ -142,6 +137,16 @@ CfHeavy* ThermCf::GetThermHeavyCf(TString aFileName, TString aCfDescriptor, Anal
   }
   else
   {
+    TH1* tNum2 = GetThermHist(tFileLocation, TString::Format("Num%s%s", aCfDescriptor.Data(), cAnalysisBaseTags[tConjAnType]));
+    TH1* tDen2;
+    if(!aUseStavCf) tDen2 = GetThermHist(tFileLocation, TString::Format("Den%s%s", aCfDescriptor.Data(), cAnalysisBaseTags[tConjAnType]));
+    else tDen2 = GetThermHist(tFileLocation, TString::Format("Num%s_RotatePar2%s", aCfDescriptor.Data(), cAnalysisBaseTags[tConjAnType]));
+    CfLite* tCfLite2 = new CfLite(TString::Format("CfLite_%s", cAnalysisBaseTags[tConjAnType]), 
+                                  TString::Format("CfLite_%s", cAnalysisBaseTags[tConjAnType]), 
+                                  tNum2, tDen2, aMinNorm, aMaxNorm);
+    tCfLite2->Rebin(aRebin);
+    //----------
+
     vector<CfLite*> tCfLiteVec {tCfLite1, tCfLite2};
     tCfHeavy = new CfHeavy(TString::Format("CfHeavy_%s_%s", cAnalysisBaseTags[aAnType], cAnalysisBaseTags[tConjAnType]), 
                            TString::Format("CfHeavy_%s_%s", cAnalysisBaseTags[aAnType], cAnalysisBaseTags[tConjAnType]), 

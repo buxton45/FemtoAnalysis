@@ -116,7 +116,7 @@ public:
   void FillParentmT3d(TH3* aPairmT3d, ThermParticle &tPart1, ThermParticle &tPart2);
 
   complex<double> GetStrongOnlyWaveFunction(TVector3 &aKStar3Vec, TVector3 &aRStar3Vec);
-  double GetStrongOnlyWaveFunctionSq(TVector3 aKStar3Vec, TVector3 aRStar3Vec);
+  double GetStrongOnlyWaveFunctionSq(TVector3 &aKStar3Vec, TVector3 &aRStar3Vec); 
   double GetParentPairWaveFunctionSq(ThermParticle &tPart1, ThermParticle &tPart2);
   double GetParentPairWaveFunctionSq_RotatePar2(ThermParticle &tPart1, ThermParticle &tPart2);
 

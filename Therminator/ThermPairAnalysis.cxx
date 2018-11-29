@@ -1335,7 +1335,8 @@ TVector3 ThermPairAnalysis::DrawRStar3VecFromGaussian(double tROut, double tMuOu
   //Create the source Gaussians
   double tRoot2 = sqrt(2.);  //need this scale to get 4 on denominator of exp in normal dist instead of 2
 
-  std::default_random_engine generator (std::clock());  //std::clock() is seed
+  unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+  std::default_random_engine generator (seed);  //std::clock() is seed
   std::normal_distribution<double> tROutSource(tMuOut,tRoot2*tROut);
   std::normal_distribution<double> tRSideSource(tMuSide,tRoot2*tRSide);
   std::normal_distribution<double> tRLongSource(tMuLong,tRoot2*tRLong);
@@ -1357,9 +1358,13 @@ TVector3 ThermPairAnalysis::DrawRStar3VecFromGaussian()
   tRLong = 5.;
   tMuLong = 0.;
 
-  if(fAnalysisType==kLamKchP || fAnalysisType==kALamKchM || fAnalysisType==kLamKchM || fAnalysisType==kALamKchP)
+  if(fAnalysisType==kLamKchP || fAnalysisType==kALamKchM)
   {
-    tMuOut = 3.;
+    tMuOut = 6.;
+  }
+  else if(fAnalysisType==kLamKchM || fAnalysisType==kALamKchP)
+  {
+    tMuOut = 6.;
   }
   else if(fAnalysisType==kLamK0 || fAnalysisType==kALamK0)
   {
@@ -1373,9 +1378,9 @@ TVector3 ThermPairAnalysis::DrawRStar3VecFromGaussian()
   }
   else if(fAnalysisType==kK0K0)
   {
-    tROut = 6.;
-    tRSide = 6.;
-    tRLong = 6.;
+    tROut = 5.;
+    tRSide = 5.;
+    tRLong = 5.;
   }
   else if(fAnalysisType==kLamLam)
   {
@@ -1673,7 +1678,7 @@ complex<double> ThermPairAnalysis::GetStrongOnlyWaveFunction(TVector3 &aKStar3Ve
 }
 
 //________________________________________________________________________________________________________________
-double ThermPairAnalysis::GetStrongOnlyWaveFunctionSq(TVector3 aKStar3Vec, TVector3 aRStar3Vec)
+double ThermPairAnalysis::GetStrongOnlyWaveFunctionSq(TVector3 &aKStar3Vec, TVector3 &aRStar3Vec)
 {
   complex<double> tWf = GetStrongOnlyWaveFunction(aKStar3Vec, aRStar3Vec);
   double tWfSq = norm(tWf);
@@ -1863,18 +1868,20 @@ void ThermPairAnalysis::FillCorrelations(ThermParticle &aParticle1, ThermParticl
   tParentIndex1 = GetParticleIndexInPidInfo(aParticle1.GetFatherPID());
   tParentIndex2 = GetParticleIndexInPidInfo(aParticle2.GetFatherPID());
 
+  TVector3 tKStar3Vec = GetKStar3Vec(aParticle1, aParticle2);
+  TVector3 tKStar3Vec_RotatePar2 = GetKStar3Vec_RotatePar2(aParticle1, aParticle2);
   tKStar = CalcKStar(aParticle1, aParticle2);
 
   TVector3 tRStar3Vec;
   if(!fDrawRStarFromGaussian) tRStar3Vec = GetRStar3Vec(aParticle1, aParticle2);
-  else tRStar3Vec = DrawRStar3VecFromGaussian();
+  else                        tRStar3Vec = DrawRStar3VecFromGaussian();
   tRStar = tRStar3Vec.Mag();
 
   if(aFillNumerator)
   {
     if(fUnitWeightCfNums) tWeight = 1.;
     else if(fWeightCfsWithParentInteraction) tWeight = GetParentPairWaveFunctionSq(aParticle1, aParticle2);
-    else tWeight = GetStrongOnlyWaveFunctionSq(GetKStar3Vec(aParticle1, aParticle2), tRStar3Vec);
+    else tWeight = GetStrongOnlyWaveFunctionSq(tKStar3Vec, tRStar3Vec);
   }
 
   if(fBuild3dHists) tCf3d->Fill(tParentIndex1, tParentIndex2, tKStar, tWeight);
@@ -1900,7 +1907,7 @@ void ThermPairAnalysis::FillCorrelations(ThermParticle &aParticle1, ThermParticl
     //--------------------------------------
     if(fUnitWeightCfNums) fNumFull_RotatePar2->Fill(CalcKStar_RotatePar2(aParticle1, aParticle2), 1.);
     else if(fWeightCfsWithParentInteraction) fNumFull_RotatePar2->Fill(CalcKStar_RotatePar2(aParticle1, aParticle2), GetParentPairWaveFunctionSq_RotatePar2(aParticle1, aParticle2));
-    else fNumFull_RotatePar2->Fill(CalcKStar_RotatePar2(aParticle1, aParticle2), GetStrongOnlyWaveFunctionSq(GetKStar3Vec_RotatePar2(aParticle1, aParticle2), tRStar3Vec));
+    else fNumFull_RotatePar2->Fill(CalcKStar_RotatePar2(aParticle1, aParticle2), GetStrongOnlyWaveFunctionSq(tKStar3Vec_RotatePar2, tRStar3Vec));
     //--------------------------------------    
 
     fPairKStarVsmT->Fill(tKStar, CalcmT(aParticle1, aParticle2));
@@ -2235,16 +2242,16 @@ void ThermPairAnalysis::ProcessEvent(ThermEvent &aEvent, vector<ThermEvent> &aMi
   if(fAnalysisType==kLamK0 || fAnalysisType==kALamK0 || fAnalysisType==kLamLam || fAnalysisType==kK0K0)
   {
     if(fBuildPairFractions) BuildPairFractionHistogramsV0V0(aEvent);
-    if(fBuildCorrelationFunctions)BuildCorrelationFunctionsV0V0(aEvent, aMixingEventsCollection);
+    if(fBuildCorrelationFunctions) BuildCorrelationFunctionsV0V0(aEvent, aMixingEventsCollection);
   }
   else if(fAnalysisType==kKchPKchP)
   {
-    if(fBuildCorrelationFunctions)BuildCorrelationFunctionsParticleParticle(aEvent, aMixingEventsCollection);
+    if(fBuildCorrelationFunctions) BuildCorrelationFunctionsParticleParticle(aEvent, aMixingEventsCollection);
   }
   else
   {
     if(fBuildPairFractions) BuildPairFractionHistogramsParticleV0(aEvent);
-    if(fBuildCorrelationFunctions)BuildCorrelationFunctionsParticleV0(aEvent, aMixingEventsCollection);
+    if(fBuildCorrelationFunctions) BuildCorrelationFunctionsParticleV0(aEvent, aMixingEventsCollection);
   }
 }
 
