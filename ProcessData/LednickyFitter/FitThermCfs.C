@@ -150,9 +150,15 @@ void Draw1DSourceProjwFit(TPad* aPad, TH3* a3DoslHist, TString aComponent, doubl
     tText->SetFillColor(0);
     tText->SetBorderSize(0);
     tText->SetTextColor(kRed);
+/*
     tText->AddText("[0]*exp#left(- #frac{#left(x-[1]#right)^{2}}{4[2]^{2}}#right)");
     tText->AddText(TString::Format("[1] = %0.3e", tGaussFit->GetParameter(1)));
     tText->AddText(TString::Format("[2] = %0.3e", tGaussFit->GetParameter(2)));
+*/
+    tText->AddText(TString::Format("N*exp#left(- #frac{#left(x-#mu_{%s}#right)^{2}}{4R_{%s}^{2}}#right)", aComponent.Data(), aComponent.Data()));
+    tText->AddText("");
+    tText->AddText(TString::Format("#mu_{%s} = %0.3e", aComponent.Data(), tGaussFit->GetParameter(1)));
+    tText->AddText(TString::Format("R_{%s} = %0.3e",   aComponent.Data(), tGaussFit->GetParameter(2)));
     tText->Draw();
 }
 
@@ -234,23 +240,25 @@ int main(int argc, char **argv)
   //This allows the user a chance to look at and manipulate a TBrowser before
   //the program ends and closes everything
 //-----------------------------------------------------------------------------
-  AnalysisType tAnType = kLamKchM;
+  AnalysisType tAnType = kLamKchP;
   if(tAnType==kLamKchM) gRejectPoints=true;
 
   bool bCombineConjugates = true;
   bool bDraw2DHists = false;
   bool bSaveFigures = false;
+  TString tSaveDir = "/home/jesse/Analysis/Presentations/GroupMeetings/20181204/Figures/";
 
   int tRebin=1;
   double tMinNorm = /*0.80*//*0.80*/0.32;
   double tMaxNorm = /*0.99*//*0.99*/0.40;
 
   int tImpactParam = 2;
-//  TString aCfDescriptor = "Full";
-  TString aCfDescriptor = "PrimaryOnly";
+  TString aCfDescriptor = "Full";
+//  TString aCfDescriptor = "PrimaryOnly";
 
 //  TString tFilaNameBase = "CorrelationFunctions_wOtherPairs";
-  TString tFilaNameBase = "CorrelationFunctions_wOtherPairs_DrawRStarFromGaussian";
+  TString tFilaNameBase = "CorrelationFunctions_wOtherPairs_DrawRStarFromGaussian_LamKchPMuOut3_LamKchMMuOut6";
+//  TString tFilaNameBase = "CorrelationFunctions_wOtherPairs_DrawRStarFromGaussian_cLamcKchMuOut6";
 
   TString tFileNameModifier = "";
 //  TString tFileNameModifier = "_WeightParentsInteraction";
@@ -296,6 +304,8 @@ int main(int argc, char **argv)
   Draw1DSourceProjwFit((TPad*)tCanCfwSource->cd(2), tTest3d, "Out", tGaussFitMin, tGaussFitMax, tProjLow, tProjHigh);
   Draw1DSourceProjwFit((TPad*)tCanCfwSource->cd(3), tTest3d, "Side", tGaussFitMin, tGaussFitMax, tProjLow, tProjHigh);
   Draw1DSourceProjwFit((TPad*)tCanCfwSource->cd(4), tTest3d, "Long", tGaussFitMin, tGaussFitMax, tProjLow, tProjHigh);
+
+  if(bSaveFigures) tCanCfwSource->SaveAs(TString::Format("%s%s_%s_%s.eps", tSaveDir.Data(), tFilaNameBase.Data(), aCfDescriptor.Data(), cAnalysisBaseTags[tAnType]));
 
   //-------------------------------------------------------------------------------
 
