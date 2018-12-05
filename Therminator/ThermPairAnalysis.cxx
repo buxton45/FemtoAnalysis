@@ -1215,50 +1215,61 @@ double ThermPairAnalysis::CalcKStar_RotatePar2(ThermParticle &tPart1, ThermParti
   return CalcKStar_RotatePar2(p1, p2);
 }
 
+//________________________________________________________________________________________________________________
+TLorentzVector ThermPairAnalysis::Boost4VecToOSLinLCMS(const TLorentzVector &p1, const TLorentzVector &p2, const TLorentzVector &aVecToBoost)
+{
+  const TLorentzVector tPTot = p1 + p2;
+
+  assert(tPTot.Mt() - tPTot.Pt() > 0.0);
+  if (tPTot.Mt() == 0 || tPTot.E() == 0 || tPTot.M() == 0 || tPTot.Pt() == 0 ) assert(0);
+
+  // Boost to LCMS
+  double tBeta = tPTot.Pz()/tPTot.E();
+  double tGamma = tPTot.E()/tPTot.Mt();
+  double tVtbLcmsLong = tGamma*(aVecToBoost.Z() - tBeta*aVecToBoost.T());
+  double tVtbLcmsT    = tGamma*(aVecToBoost.T()  - tBeta*aVecToBoost.Z());
+
+  // Rotate in transverse plane
+  double tVtbLcmsOut  = ( aVecToBoost.X()*tPTot.Px() + aVecToBoost.Y()*tPTot.Py())/tPTot.Pt();
+  double tVtbLcmsSide = (-aVecToBoost.X()*tPTot.Py() + aVecToBoost.Y()*tPTot.Px())/tPTot.Pt();
+
+  return TLorentzVector(tVtbLcmsOut, tVtbLcmsSide, tVtbLcmsLong, tVtbLcmsT);
+}
+
+
+//________________________________________________________________________________________________________________
+TLorentzVector ThermPairAnalysis::Boost4VecToOSLinPRF(const TLorentzVector &p1, const TLorentzVector &p2, const TLorentzVector &aVecToBoost)
+{
+  const TLorentzVector tPTot = p1 + p2;
+
+  assert(tPTot.Mt() - tPTot.Pt() > 0.0);
+  if (tPTot.Mt() == 0 || tPTot.E() == 0 || tPTot.M() == 0 || tPTot.Pt() == 0 ) assert(0);
+
+  // Boost to LCMS and rotate in transverse plane to OSL
+  TLorentzVector tVtbOslInLcms = Boost4VecToOSLinLCMS(p1, p2, aVecToBoost);
+  double tVtbLcmsOut  = tVtbOslInLcms.X();
+  double tVtbLcmsSide = tVtbOslInLcms.Y();
+  double tVtbLcmsLong = tVtbOslInLcms.Z();
+  double tVtbLcmsT    = tVtbOslInLcms.T();
+
+
+  // Boost to pair cms
+  double tBeta = tPTot.Pt()/tPTot.Mt();
+  double tGamma = tPTot.Mt()/tPTot.M();
+  double tVtbPrfOut  = tGamma*(tVtbLcmsOut - tBeta*tVtbLcmsT);
+  double tVtbPrfSide = tVtbLcmsSide;
+  double tVtbPrfLong = tVtbLcmsLong;
+  double tVtbPrfT    = tGamma*(tVtbLcmsT - tBeta*tVtbLcmsOut);
+
+  return TLorentzVector(tVtbPrfOut, tVtbPrfSide, tVtbPrfLong, tVtbPrfT);
+}
+
 
 //________________________________________________________________________________________________________________
 TVector3 ThermPairAnalysis::GetKStar3Vec(TLorentzVector &p1, TLorentzVector &p2)
 {
-  TLorentzVector P = p1 + p2;
-
-  // Calculate pair variables
-  const double tPx = P.X(),
-               tPy = P.Y(),
-               tPz = P.Z();
-
-  double tE1 = p1.E();
-  double tE2 = p2.E();
-
-  double tE  = tE1 + tE2;
-  double tPt = tPx*tPx + tPy*tPy;
-  double tMt = tE*tE - tPz*tPz;//mCVK;
-  double tM  = (tMt - tPt > 0.0) ? sqrt(tMt - tPt) : 0.0;
-
-  if (tMt == 0 || tE == 0 || tM == 0 || tPt == 0 ) {
-    assert(0);
-  }
-
-  tMt = sqrt(tMt);
-  tPt = sqrt(tPt);
-
-  double pX = p1.X();
-  double pY = p1.Y();
-  double pZ = p1.Z();
-
-  // Boost to LCMS
-  double tBeta = tPz/tE;
-  double tGamma = tE/tMt;
-  double tKStarLong = tGamma * (pZ - tBeta * tE1);
-  double tE1L = tGamma * (tE1  - tBeta * pZ);
-
-  // Rotate in transverse plane
-  double tKStarOut  = ( pX*tPx + pY*tPy)/tPt;
-  double tKStarSide = (-pX*tPy + pY*tPx)/tPt;
-
-  // Boost to pair cms
-  tKStarOut = tMt/tM * (tKStarOut - tPt/tMt * tE1L);
-
-  return TVector3(tKStarOut, tKStarSide, tKStarLong);
+  TLorentzVector tKStar4Vec = Boost4VecToOSLinPRF(p1, p2, p1);
+  return tKStar4Vec.Vect();
 }
 
 //________________________________________________________________________________________________________________
@@ -1276,47 +1287,8 @@ TVector3 ThermPairAnalysis::GetKStar3Vec(ThermParticle &tPart1, ThermParticle &t
 TVector3 ThermPairAnalysis::GetKStar3Vec_RotatePar2(TLorentzVector &p1, TLorentzVector &p2)
 {
   TLorentzVector p2_Rot = TLorentzVector(-1.*p2.Px(), -1.*p2.Py(), p2.Pz(), p2.E());
-
-  TLorentzVector P = p1 + p2_Rot;
-
-  // Calculate pair variables
-  const double tPx = P.X(),
-               tPy = P.Y(),
-               tPz = P.Z();
-
-  double tE1 = p1.E();
-  double tE2 = p2_Rot.E();
-
-  double tE  = tE1 + tE2;
-  double tPt = tPx*tPx + tPy*tPy;
-  double tMt = tE*tE - tPz*tPz;//mCVK;
-  double tM  = (tMt - tPt > 0.0) ? sqrt(tMt - tPt) : 0.0;
-
-  if (tMt == 0 || tE == 0 || tM == 0 || tPt == 0 ) {
-    assert(0);
-  }
-
-  tMt = sqrt(tMt);
-  tPt = sqrt(tPt);
-
-  double pX = p1.X();
-  double pY = p1.Y();
-  double pZ = p1.Z();
-
-  // Boost to LCMS
-  double tBeta = tPz/tE;
-  double tGamma = tE/tMt;
-  double tKStarLong = tGamma * (pZ - tBeta * tE1);
-  double tE1L = tGamma * (tE1  - tBeta * pZ);
-
-  // Rotate in transverse plane
-  double tKStarOut  = ( pX*tPx + pY*tPy)/tPt;
-  double tKStarSide = (-pX*tPy + pY*tPx)/tPt;
-
-  // Boost to pair cms
-  tKStarOut = tMt/tM * (tKStarOut - tPt/tMt * tE1L);
-
-  return TVector3(tKStarOut, tKStarSide, tKStarLong);
+  TVector3 tKStar3Vec = GetKStar3Vec(p1, p2_Rot);
+  return tKStar3Vec;
 }
 
 //________________________________________________________________________________________________________________
@@ -1361,20 +1333,20 @@ TVector3 ThermPairAnalysis::DrawRStar3VecFromGaussian()
 
   if(fAnalysisType==kLamKchP || fAnalysisType==kALamKchM)
   {
-    tMuOut = 6.;
+    tMuOut = 3.;
   }
   else if(fAnalysisType==kLamKchM || fAnalysisType==kALamKchP)
   {
-    tMuOut = 6.;
+    tMuOut = 3.;
   }
   else if(fAnalysisType==kLamK0 || fAnalysisType==kALamK0)
   {
-    tMuOut = 1.;
+    tMuOut = 3.;
   }
   else if(fAnalysisType==kKchPKchP)
   {
-    tROut = 8.;
-    tRSide = 8.;
+    tROut = 5.;
+    tRSide = 3.;
     tRLong = 8.;
   }
   else if(fAnalysisType==kK0K0)
@@ -1397,69 +1369,10 @@ TVector3 ThermPairAnalysis::DrawRStar3VecFromGaussian()
 //________________________________________________________________________________________________________________
 TVector3 ThermPairAnalysis::GetRStar3Vec(TLorentzVector &p1, TLorentzVector &x1, TLorentzVector &p2, TLorentzVector &x2)
 {
-  TLorentzVector P = p1 + p2;
+  TLorentzVector tRInLabFrame4Vec = x1 - x2;
+  TLorentzVector tRStar4Vec = Boost4VecToOSLinPRF(p1, p2, tRInLabFrame4Vec);
 
-  // Calculate pair variables
-  const double tPx = P.X(),
-               tPy = P.Y(),
-               tPz = P.Z();
-
-  double tE1 = p1.E();
-  double tE2 = p2.E();
-
-  double tE  = tE1 + tE2;
-  double tPt = tPx*tPx + tPy*tPy;
-  double tMt = tE*tE - tPz*tPz;//mCVK;
-  double tM  = (tMt - tPt > 0.0) ? sqrt(tMt - tPt) : 0.0;
-
-  if (tMt == 0 || tE == 0 || tM == 0 || tPt == 0 ) {
-    assert(0);
-  }
-
-  tMt = sqrt(tMt);
-  tPt = sqrt(tPt);
-
-  double pX = p1.X();
-  double pY = p1.Y();
-  double pZ = p1.Z();
-
-  // Boost to LCMS
-  double tBeta = tPz/tE;
-  double tGamma = tE/tMt;
-  double tKStarLong = tGamma * (pZ - tBeta * tE1);
-  double tE1L = tGamma * (tE1  - tBeta * pZ);
-
-  // Rotate in transverse plane
-  double tKStarOut  = ( pX*tPx + pY*tPy)/tPt;
-  double tKStarSide = (-pX*tPy + pY*tPx)/tPt;
-
-  // Boost to pair cms
-  tKStarOut = tMt/tM * (tKStarOut - tPt/tMt * tE1L);
-
-  // separation distance
-  TLorentzVector D = x1 - x2;
-
-  double tDX = D.X();
-  double tDY = D.Y();
-  double tRLong = D.Z();
-  double tDTime = D.T();
-
-  double tROut = (tDX*tPx + tDY*tPy)/tPt;
-  double tRSide = (-tDX*tPy + tDY*tPx)/tPt;
-
-  double tRStarSide = tRSide;
-
-  double tRStarLong = tGamma*(tRLong - tBeta* tDTime);
-  double tDTimePairLCMS = tGamma*(tDTime - tBeta* tRLong);
-
-  tBeta = tPt/tMt;
-  tGamma = tMt/tM;
-
-  double tRStarOut = tGamma*(tROut - tBeta* tDTimePairLCMS);
-
-  TVector3 tReturnVec = TVector3(tRStarOut, tRStarSide, tRStarLong);
-
-  return tReturnVec;
+  return tRStar4Vec.Vect();
 }
 
 
@@ -1496,74 +1409,15 @@ double ThermPairAnalysis::CalcRStar(ThermParticle &tPart1, ThermParticle &tPart2
 //________________________________________________________________________________________________________________
 vector<double> ThermPairAnalysis::CalcR1R2inPRF(TLorentzVector &p1, TLorentzVector &x1, TLorentzVector &p2, TLorentzVector &x2)
 {
-  TLorentzVector P = p1 + p2;
+  TLorentzVector tR1InLabFrame4Vec = x1;
+  TLorentzVector tR1Star4Vec = Boost4VecToOSLinPRF(p1, p2, tR1InLabFrame4Vec);
+  TVector3 tR1Star3Vec = tR1Star4Vec.Vect();
 
-  // Calculate pair variables
-  const double tPx = P.X(),
-               tPy = P.Y(),
-               tPz = P.Z();
+  TLorentzVector tR2InLabFrame4Vec = x2;
+  TLorentzVector tR2Star4Vec = Boost4VecToOSLinPRF(p1, p2, tR2InLabFrame4Vec);
+  TVector3 tR2Star3Vec = tR2Star4Vec.Vect();
 
-  double tE1 = p1.E();
-  double tE2 = p2.E();
-
-  double tE  = tE1 + tE2;
-  double tPt = tPx*tPx + tPy*tPy;
-  double tMt = tE*tE - tPz*tPz;//mCVK;
-  double tM  = (tMt - tPt > 0.0) ? sqrt(tMt - tPt) : 0.0;
-
-  if (tMt == 0 || tE == 0 || tM == 0 || tPt == 0 ) {
-    assert(0);
-  }
-
-  tMt = sqrt(tMt);
-  tPt = sqrt(tPt);
-
-  // separation distance
-  TLorentzVector D1 = x1;
-    double tDX1 = D1.X();
-    double tDY1 = D1.Y();
-    double tRLong1 = D1.Z();
-    double tDTime1 = D1.T();
-
-  TLorentzVector D2 = x2;
-    double tDX2 = D2.X();
-    double tDY2 = D2.Y();
-    double tRLong2 = D2.Z();
-    double tDTime2 = D2.T();
-
-  // Boost to LCMS
-  double tBeta = tPz/tE;
-  double tGamma = tE/tMt;
-
-  double tRStarLong1 = tGamma*(tRLong1 - tBeta* tDTime1);
-  double tDTimePairLCMS1 = tGamma*(tDTime1 - tBeta* tRLong1);
-
-  double tRStarLong2 = tGamma*(tRLong2 - tBeta* tDTime2);
-  double tDTimePairLCMS2 = tGamma*(tDTime2 - tBeta* tRLong2);
-
-  // Rotate in transverse plane
-  double tROut1 = (tDX1*tPx + tDY1*tPy)/tPt;
-  double tRSide1 = (-tDX1*tPy + tDY1*tPx)/tPt;
-  double tRStarSide1 = tRSide1;
-
-  double tROut2 = (tDX2*tPx + tDY2*tPy)/tPt;
-  double tRSide2 = (-tDX2*tPy + tDY2*tPx)/tPt;
-  double tRStarSide2 = tRSide2;
-
-  // Boost to pair cms
-  tBeta = tPt/tMt;
-  tGamma = tMt/tM;
-  double tRStarOut1 = tGamma*(tROut1 - tBeta* tDTimePairLCMS1);
-  double tRStarOut2 = tGamma*(tROut2 - tBeta* tDTimePairLCMS2);
-
-  //----------
-  TVector3 tR1inPRF = TVector3(tRStarOut1, tRStarSide1, tRStarLong1);
-  TVector3 tR2inPRF = TVector3(tRStarOut2, tRStarSide2, tRStarLong2);
-
-  double tR1 = tR1inPRF.Mag();
-  double tR2 = tR2inPRF.Mag();
-
-  return vector<double>{tR1, tR2};
+  return vector<double>{tR1Star3Vec.Mag(), tR2Star3Vec.Mag()};
 }
 
 //________________________________________________________________________________________________________________

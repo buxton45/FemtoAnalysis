@@ -240,7 +240,7 @@ int main(int argc, char **argv)
   //This allows the user a chance to look at and manipulate a TBrowser before
   //the program ends and closes everything
 //-----------------------------------------------------------------------------
-  AnalysisType tAnType = kLamKchP;
+  AnalysisType tAnType = kKchPKchP;
   if(tAnType==kLamKchM) gRejectPoints=true;
 
   bool bCombineConjugates = true;
@@ -257,8 +257,9 @@ int main(int argc, char **argv)
 //  TString aCfDescriptor = "PrimaryOnly";
 
 //  TString tFilaNameBase = "CorrelationFunctions_wOtherPairs";
-  TString tFilaNameBase = "CorrelationFunctions_wOtherPairs_DrawRStarFromGaussian_LamKchPMuOut3_LamKchMMuOut6";
-//  TString tFilaNameBase = "CorrelationFunctions_wOtherPairs_DrawRStarFromGaussian_cLamcKchMuOut6";
+//  TString tFilaNameBase = "CorrelationFunctions_wOtherPairs_DrawRStarFromGaussian_LamKchPMuOut3_LamKchMMuOut6";
+//  TString tFilaNameBase = "CorrelationFunctions_wOtherPairs_DrawRStarFromGaussian_cLamcKchMuOut6_cLamK0MuOut1";
+  TString tFilaNameBase = "CorrelationFunctions_wOtherPairs_DrawRStarFromGaussian_cLamcKchMuOut3_cLamK0MuOut3_KchPKchPR538";
 
   TString tFileNameModifier = "";
 //  TString tFileNameModifier = "_WeightParentsInteraction";

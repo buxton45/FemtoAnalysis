@@ -93,7 +93,9 @@ public:
   double CalcKStar_RotatePar2(TLorentzVector &p1, TLorentzVector &p2);           //Rotate the second particle in the pair by 180 degrees about the z-axis
   double CalcKStar_RotatePar2(ThermParticle &tPart1, ThermParticle &tPart2);     //Rotate the second particle in the pair by 180 degrees about the z-axis
 
-//TODO combine GetKStar3Vec and GetRStar3Vec
+  TLorentzVector Boost4VecToOSLinLCMS(const TLorentzVector &p1, const TLorentzVector &p2, const TLorentzVector &aVecToBoost);
+  TLorentzVector Boost4VecToOSLinPRF(const TLorentzVector &p1, const TLorentzVector &p2, const TLorentzVector &aVecToBoost);
+
   TVector3 GetKStar3Vec(TLorentzVector &p1, TLorentzVector &p2);
   TVector3 GetKStar3Vec(ThermParticle &tPart1, ThermParticle &tPart2);
 

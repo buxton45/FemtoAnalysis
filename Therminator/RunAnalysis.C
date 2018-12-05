@@ -35,7 +35,7 @@ int main(int argc, char **argv)
   bool bWeightCfsWithParentInteraction = false;
   bool bOnlyWeightLongDecayParents = false;
 
-  bool bDrawRStarFromGaussian = true;
+  bool bDrawRStarFromGaussian = false;
 
   bool bCheckCoECoM = false;
   bool bRotateEventsByRandomAzimuthalAngles = false;
