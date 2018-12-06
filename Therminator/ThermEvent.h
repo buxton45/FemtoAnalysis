@@ -57,12 +57,12 @@ public:
   void FindAllFathers();
   void EnforceKinematicCuts();
 
-  vector<ThermV0Particle> GetV0ParticleCollection(ParticlePDGType aPDGType);
-  vector<ThermParticle> GetParticleCollection(ParticlePDGType aPDGType);
+  vector<ThermV0Particle> GetV0ParticleCollection(ParticlePDGType aPDGType) const;
+  vector<ThermParticle> GetParticleCollection(ParticlePDGType aPDGType) const;
 
-  vector<ThermParticle> GetGoodParticleCollectionCastAsThermParticle(ParticlePDGType aPDGType);
-  vector<ThermParticle> GetGoodParticleCollectionCastAsThermParticle(int aPID);
-  vector<ThermParticle> GetGoodParticleCollectionwConjCastAsThermParticle(int aPID);
+  vector<ThermParticle> GetGoodParticleCollectionCastAsThermParticle(ParticlePDGType aPDGType) const;
+  vector<ThermParticle> GetGoodParticleCollectionCastAsThermParticle(int aPID) const;
+  vector<ThermParticle> GetGoodParticleCollectionwConjCastAsThermParticle(int aPID) const;
 
   void SetV0ParticleCollection(unsigned int aEventID, ParticlePDGType aPDGType, vector<ThermV0Particle> &aCollection);
   void SetParticleCollection(unsigned int aEventID, ParticlePDGType aPDGType, vector<ThermParticle> &aCollection);
@@ -83,8 +83,8 @@ public:
 
   //inline stuff
   void SetEventID(unsigned int aEventID);
-  unsigned int GetEventID();
-  vector<ThermParticle> GetAllParticlesCollection();
+  unsigned int GetEventID() const;
+  vector<ThermParticle> GetAllParticlesCollection() const;
 
 private:
   unsigned int fEventID;
@@ -110,8 +110,8 @@ private:
 
 //inline stuff
 inline void ThermEvent::SetEventID(unsigned int aEventID) {fEventID = aEventID;}
-inline unsigned int ThermEvent::GetEventID() {return fEventID;}
-inline vector<ThermParticle> ThermEvent::GetAllParticlesCollection() {return fAllParticlesCollection;}
+inline unsigned int ThermEvent::GetEventID() const {return fEventID;}
+inline vector<ThermParticle> ThermEvent::GetAllParticlesCollection() const {return fAllParticlesCollection;}
 
 #endif
 

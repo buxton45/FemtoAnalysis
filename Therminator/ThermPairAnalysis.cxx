@@ -673,7 +673,7 @@ int ThermPairAnalysis::GetChargedResidualIndex(ParticlePDGType aType1, ParticleP
 
 
 //________________________________________________________________________________________________________________
-double ThermPairAnalysis::GetFatherKStar(ThermParticle &aParticle1, ThermParticle &aParticle2, bool aUseParticleFather1, bool aUseParticleFather2)
+double ThermPairAnalysis::GetFatherKStar(const ThermParticle &aParticle1, const ThermParticle &aParticle2, bool aUseParticleFather1, bool aUseParticleFather2)
 {
   double px1, py1, pz1, mass1, E1;
   double px2, py2, pz2, mass2, E2;
@@ -720,14 +720,14 @@ double ThermPairAnalysis::GetFatherKStar(ThermParticle &aParticle1, ThermParticl
 }
 
 //________________________________________________________________________________________________________________
-double ThermPairAnalysis::GetKStar(ThermParticle &aParticle1, ThermParticle &aParticle2)
+double ThermPairAnalysis::GetKStar(const ThermParticle &aParticle1, const ThermParticle &aParticle2)
 {
   return GetFatherKStar(aParticle1, aParticle2, false, false);
 }
 
 
 //________________________________________________________________________________________________________________
-void ThermPairAnalysis::FillTransformMatrixParticleV0(vector<ThermParticle> &aParticleCollection, vector<ThermV0Particle> &aV0Collection, ParticlePDGType aParticleFatherType, ParticlePDGType aV0FatherType, TH2* aMatrix)
+void ThermPairAnalysis::FillTransformMatrixParticleV0(const vector<ThermParticle> &aParticleCollection, const vector<ThermV0Particle> &aV0Collection, ParticlePDGType aParticleFatherType, ParticlePDGType aV0FatherType, TH2* aMatrix)
 {
   ThermParticle tParticle;
   ThermV0Particle tV0;
@@ -772,7 +772,7 @@ void ThermPairAnalysis::FillTransformMatrixParticleV0(vector<ThermParticle> &aPa
 }
 
 //________________________________________________________________________________________________________________
-void ThermPairAnalysis::FillTransformMatrixV0V0(vector<ThermV0Particle> &aV01Collection, vector<ThermV0Particle> &aV02Collection, ParticlePDGType aV01FatherType, ParticlePDGType aV02FatherType, TH2* aMatrix)
+void ThermPairAnalysis::FillTransformMatrixV0V0(const vector<ThermV0Particle> &aV01Collection, const vector<ThermV0Particle> &aV02Collection, ParticlePDGType aV01FatherType, ParticlePDGType aV02FatherType, TH2* aMatrix)
 {
   ThermV0Particle tV01, tV02;
   double tKStar, tFatherKStar;
@@ -819,7 +819,7 @@ void ThermPairAnalysis::FillTransformMatrixV0V0(vector<ThermV0Particle> &aV01Col
 
 
 //________________________________________________________________________________________________________________
-void ThermPairAnalysis::BuildTransformMatrixParticleV0(ThermEvent &aEvent, vector<ThermEvent> &aMixingEventsCollection, ParticlePDGType aParticleFatherType, ParticlePDGType aV0FatherType, TH2* aMatrix)
+void ThermPairAnalysis::BuildTransformMatrixParticleV0(const ThermEvent &aEvent, const vector<ThermEvent> &aMixingEventsCollection, ParticlePDGType aParticleFatherType, ParticlePDGType aV0FatherType, TH2* aMatrix)
 {
   ParticlePDGType tParticleType = fTransformInfo[0].particleType2;
   ParticlePDGType tV0Type       = fTransformInfo[0].particleType1;
@@ -847,7 +847,7 @@ void ThermPairAnalysis::BuildTransformMatrixParticleV0(ThermEvent &aEvent, vecto
 
 
 //________________________________________________________________________________________________________________
-void ThermPairAnalysis::BuildTransformMatrixV0V0(ThermEvent &aEvent, vector<ThermEvent> &aMixingEventsCollection, ParticlePDGType aV01FatherType, ParticlePDGType aV02FatherType, TH2* aMatrix)
+void ThermPairAnalysis::BuildTransformMatrixV0V0(const ThermEvent &aEvent, const vector<ThermEvent> &aMixingEventsCollection, ParticlePDGType aV01FatherType, ParticlePDGType aV02FatherType, TH2* aMatrix)
 {
   ParticlePDGType tV01Type = fTransformInfo[0].particleType1;
   ParticlePDGType tV02Type = fTransformInfo[0].particleType2;
@@ -873,7 +873,7 @@ void ThermPairAnalysis::BuildTransformMatrixV0V0(ThermEvent &aEvent, vector<Ther
 }
 
 //________________________________________________________________________________________________________________
-void ThermPairAnalysis::BuildAllTransformMatrices(ThermEvent &aEvent, vector<ThermEvent> &aMixingEventsCollection)
+void ThermPairAnalysis::BuildAllTransformMatrices(const ThermEvent &aEvent, const vector<ThermEvent> &aMixingEventsCollection)
 {
   bool bIsV0V0 = false;
   if(fTransformInfo[0].particleType2==kPDGK0 || fTransformInfo[0].particleType2==kPDGLam || fTransformInfo[0].particleType2==kPDGALam) bIsV0V0=true;
@@ -943,7 +943,7 @@ void ThermPairAnalysis::FillUniqueParents(vector<int> &aUniqueParents, int aFath
 }
 
 //________________________________________________________________________________________________________________
-vector<int> ThermPairAnalysis::UniqueCombineVectors(vector<int> &aVec1, vector<int> &aVec2)
+vector<int> ThermPairAnalysis::UniqueCombineVectors(const vector<int> &aVec1, const vector<int> &aVec2)
 {
   vector<int> tReturnVector = aVec1;
   bool bAlreadyIncluded = false;
@@ -1084,16 +1084,13 @@ void ThermPairAnalysis::MapAndFillPairFractionHistogramV0V0(TH1* aHistogram, int
 
 
 //________________________________________________________________________________________________________________
-void ThermPairAnalysis::BuildPairFractionHistogramsParticleV0(ThermEvent &aEvent)
+void ThermPairAnalysis::BuildPairFractionHistogramsParticleV0(const ThermEvent &aEvent)
 {
   ParticlePDGType tParticleType = fTransformInfo[0].particleType2;
   ParticlePDGType tV0Type       = fTransformInfo[0].particleType1;
 
-  vector<ThermParticle> aParticleCollection;
-  vector<ThermV0Particle> aV0Collection;
-
-  aV0Collection =  aEvent.GetV0ParticleCollection(tV0Type);
-  aParticleCollection = aEvent.GetParticleCollection(tParticleType);
+  const vector<ThermV0Particle> aV0Collection =  aEvent.GetV0ParticleCollection(tV0Type);
+  const vector<ThermParticle>   aParticleCollection = aEvent.GetParticleCollection(tParticleType);
 
   ThermV0Particle tV0;
 
@@ -1124,16 +1121,13 @@ void ThermPairAnalysis::BuildPairFractionHistogramsParticleV0(ThermEvent &aEvent
 }
 
 //________________________________________________________________________________________________________________
-void ThermPairAnalysis::BuildPairFractionHistogramsV0V0(ThermEvent &aEvent)
+void ThermPairAnalysis::BuildPairFractionHistogramsV0V0(const ThermEvent &aEvent)
 {
   ParticlePDGType tV01Type = fTransformInfo[0].particleType1;
   ParticlePDGType tV02Type = fTransformInfo[0].particleType2;
 
-  vector<ThermV0Particle> aV01Collection, aV02Collection;
-
-
-  aV01Collection =  aEvent.GetV0ParticleCollection(tV01Type);
-  aV02Collection =  aEvent.GetV0ParticleCollection(tV02Type);
+  const vector<ThermV0Particle> aV01Collection =  aEvent.GetV0ParticleCollection(tV01Type);
+  const vector<ThermV0Particle> aV02Collection =  aEvent.GetV0ParticleCollection(tV02Type);
 
   ThermV0Particle tV01;
 
@@ -1178,7 +1172,7 @@ void ThermPairAnalysis::SavePairFractionsAndParentsMatrix(TFile *aFile)
 
 
 //________________________________________________________________________________________________________________
-double ThermPairAnalysis::CalcKStar(TLorentzVector &p1, TLorentzVector &p2)
+double ThermPairAnalysis::CalcKStar(const TLorentzVector &p1, const TLorentzVector &p2)
 {
   const double p_inv = (p1 + p2).Mag2(),
                q_inv = (p1 - p2).Mag2(),
@@ -1190,7 +1184,7 @@ double ThermPairAnalysis::CalcKStar(TLorentzVector &p1, TLorentzVector &p2)
 
 
 //________________________________________________________________________________________________________________
-double ThermPairAnalysis::CalcKStar(ThermParticle &tPart1, ThermParticle &tPart2)
+double ThermPairAnalysis::CalcKStar(const ThermParticle &tPart1, const ThermParticle &tPart2)
 {
   TLorentzVector p1 = tPart1.GetFourMomentum();
   TLorentzVector p2 = tPart2.GetFourMomentum();
@@ -1199,7 +1193,7 @@ double ThermPairAnalysis::CalcKStar(ThermParticle &tPart1, ThermParticle &tPart2
 }
 
 //________________________________________________________________________________________________________________
-double ThermPairAnalysis::CalcKStar_RotatePar2(TLorentzVector &p1, TLorentzVector &p2)
+double ThermPairAnalysis::CalcKStar_RotatePar2(const TLorentzVector &p1, const TLorentzVector &p2)
 {
   TLorentzVector p2_Rot = TLorentzVector(-1.*p2.Px(), -1.*p2.Py(), p2.Pz(), p2.E());
   return CalcKStar(p1, p2_Rot);
@@ -1207,7 +1201,7 @@ double ThermPairAnalysis::CalcKStar_RotatePar2(TLorentzVector &p1, TLorentzVecto
 
 
 //________________________________________________________________________________________________________________
-double ThermPairAnalysis::CalcKStar_RotatePar2(ThermParticle &tPart1, ThermParticle &tPart2)
+double ThermPairAnalysis::CalcKStar_RotatePar2(const ThermParticle &tPart1, const ThermParticle &tPart2)
 {
   TLorentzVector p1 = tPart1.GetFourMomentum();
   TLorentzVector p2 = tPart2.GetFourMomentum();
@@ -1266,14 +1260,14 @@ TLorentzVector ThermPairAnalysis::Boost4VecToOSLinPRF(const TLorentzVector &p1, 
 
 
 //________________________________________________________________________________________________________________
-TVector3 ThermPairAnalysis::GetKStar3Vec(TLorentzVector &p1, TLorentzVector &p2)
+TVector3 ThermPairAnalysis::GetKStar3Vec(const TLorentzVector &p1, const TLorentzVector &p2)
 {
   TLorentzVector tKStar4Vec = Boost4VecToOSLinPRF(p1, p2, p1);
   return tKStar4Vec.Vect();
 }
 
 //________________________________________________________________________________________________________________
-TVector3 ThermPairAnalysis::GetKStar3Vec(ThermParticle &tPart1, ThermParticle &tPart2)
+TVector3 ThermPairAnalysis::GetKStar3Vec(const ThermParticle &tPart1, const ThermParticle &tPart2)
 {
   TLorentzVector p1 = tPart1.GetFourMomentum();
   TLorentzVector p2 = tPart2.GetFourMomentum();
@@ -1284,7 +1278,7 @@ TVector3 ThermPairAnalysis::GetKStar3Vec(ThermParticle &tPart1, ThermParticle &t
 }
 
 //________________________________________________________________________________________________________________
-TVector3 ThermPairAnalysis::GetKStar3Vec_RotatePar2(TLorentzVector &p1, TLorentzVector &p2)
+TVector3 ThermPairAnalysis::GetKStar3Vec_RotatePar2(const TLorentzVector &p1, const TLorentzVector &p2)
 {
   TLorentzVector p2_Rot = TLorentzVector(-1.*p2.Px(), -1.*p2.Py(), p2.Pz(), p2.E());
   TVector3 tKStar3Vec = GetKStar3Vec(p1, p2_Rot);
@@ -1292,7 +1286,7 @@ TVector3 ThermPairAnalysis::GetKStar3Vec_RotatePar2(TLorentzVector &p1, TLorentz
 }
 
 //________________________________________________________________________________________________________________
-TVector3 ThermPairAnalysis::GetKStar3Vec_RotatePar2(ThermParticle &tPart1, ThermParticle &tPart2)
+TVector3 ThermPairAnalysis::GetKStar3Vec_RotatePar2(const ThermParticle &tPart1, const ThermParticle &tPart2)
 {
   TLorentzVector p1 = tPart1.GetFourMomentum();
   TLorentzVector p2 = tPart2.GetFourMomentum();
@@ -1367,7 +1361,7 @@ TVector3 ThermPairAnalysis::DrawRStar3VecFromGaussian()
 }
 
 //________________________________________________________________________________________________________________
-TVector3 ThermPairAnalysis::GetRStar3Vec(TLorentzVector &p1, TLorentzVector &x1, TLorentzVector &p2, TLorentzVector &x2)
+TVector3 ThermPairAnalysis::GetRStar3Vec(const TLorentzVector &p1, const TLorentzVector &x1, const TLorentzVector &p2, const TLorentzVector &x2)
 {
   TLorentzVector tRInLabFrame4Vec = x1 - x2;
   TLorentzVector tRStar4Vec = Boost4VecToOSLinPRF(p1, p2, tRInLabFrame4Vec);
@@ -1377,7 +1371,7 @@ TVector3 ThermPairAnalysis::GetRStar3Vec(TLorentzVector &p1, TLorentzVector &x1,
 
 
 //________________________________________________________________________________________________________________
-TVector3 ThermPairAnalysis::GetRStar3Vec(ThermParticle &tPart1, ThermParticle &tPart2)
+TVector3 ThermPairAnalysis::GetRStar3Vec(const ThermParticle &tPart1, const ThermParticle &tPart2)
 {
   TLorentzVector p1 = tPart1.GetFourMomentum();
   TLorentzVector p2 = tPart2.GetFourMomentum();
@@ -1391,14 +1385,14 @@ TVector3 ThermPairAnalysis::GetRStar3Vec(ThermParticle &tPart1, ThermParticle &t
 }
 
 //________________________________________________________________________________________________________________
-double ThermPairAnalysis::CalcRStar(TLorentzVector &p1, TLorentzVector &x1, TLorentzVector &p2, TLorentzVector &x2)
+double ThermPairAnalysis::CalcRStar(const TLorentzVector &p1, const TLorentzVector &x1, const TLorentzVector &p2, const TLorentzVector &x2)
 {
   TVector3 tRStar3Vec = GetRStar3Vec(p1, x1, p2, x2);
   return tRStar3Vec.Mag();
 }
 
 //________________________________________________________________________________________________________________
-double ThermPairAnalysis::CalcRStar(ThermParticle &tPart1, ThermParticle &tPart2)
+double ThermPairAnalysis::CalcRStar(const ThermParticle &tPart1, const ThermParticle &tPart2)
 {
   TVector3 tRStar3Vec = GetRStar3Vec(tPart1, tPart2);
   return tRStar3Vec.Mag();
@@ -1407,7 +1401,7 @@ double ThermPairAnalysis::CalcRStar(ThermParticle &tPart1, ThermParticle &tPart2
 
 
 //________________________________________________________________________________________________________________
-vector<double> ThermPairAnalysis::CalcR1R2inPRF(TLorentzVector &p1, TLorentzVector &x1, TLorentzVector &p2, TLorentzVector &x2)
+vector<double> ThermPairAnalysis::CalcR1R2inPRF(const TLorentzVector &p1, const TLorentzVector &x1, const TLorentzVector &p2, const TLorentzVector &x2)
 {
   TLorentzVector tR1InLabFrame4Vec = x1;
   TLorentzVector tR1Star4Vec = Boost4VecToOSLinPRF(p1, p2, tR1InLabFrame4Vec);
@@ -1421,7 +1415,7 @@ vector<double> ThermPairAnalysis::CalcR1R2inPRF(TLorentzVector &p1, TLorentzVect
 }
 
 //________________________________________________________________________________________________________________
-vector<double> ThermPairAnalysis::CalcR1R2inPRF(ThermParticle &tPart1, ThermParticle &tPart2)
+vector<double> ThermPairAnalysis::CalcR1R2inPRF(const ThermParticle &tPart1, const ThermParticle &tPart2)
 {
   TLorentzVector p1 = tPart1.GetFourMomentum();
   TLorentzVector p2 = tPart2.GetFourMomentum();
@@ -1437,14 +1431,14 @@ vector<double> ThermPairAnalysis::CalcR1R2inPRF(ThermParticle &tPart1, ThermPart
 
 
 //________________________________________________________________________________________________________________
-double ThermPairAnalysis::CalcmT(TLorentzVector &p1, TLorentzVector &p2)
+double ThermPairAnalysis::CalcmT(const TLorentzVector &p1, const TLorentzVector &p2)
 {
   TLorentzVector tPTot = p1+p2;
   return 0.5*tPTot.Mt();
 }
 
 //________________________________________________________________________________________________________________
-double ThermPairAnalysis::CalcmT(ThermParticle &tPart1, ThermParticle &tPart2)
+double ThermPairAnalysis::CalcmT(const ThermParticle &tPart1, const ThermParticle &tPart2)
 {
   TLorentzVector tP1 = tPart1.GetFourMomentum();
   TLorentzVector tP2 = tPart2.GetFourMomentum();
@@ -1453,7 +1447,7 @@ double ThermPairAnalysis::CalcmT(ThermParticle &tPart1, ThermParticle &tPart2)
 
 
 //________________________________________________________________________________________________________________
-void ThermPairAnalysis::FillParentmT3d(TH3* aPairmT3d, ThermParticle &tPart1, ThermParticle &tPart2)
+void ThermPairAnalysis::FillParentmT3d(TH3* aPairmT3d, const ThermParticle &tPart1, const ThermParticle &tPart2)
 {
   //--------------------------------------------------------------
   TLorentzVector p1, p2;
@@ -1489,8 +1483,9 @@ void ThermPairAnalysis::FillParentmT3d(TH3* aPairmT3d, ThermParticle &tPart1, Th
 
 
 //________________________________________________________________________________________________________________
-complex<double> ThermPairAnalysis::GetStrongOnlyWaveFunction(TVector3 &aKStar3Vec, TVector3 &aRStar3Vec)
+complex<double> ThermPairAnalysis::GetStrongOnlyWaveFunction(const TVector3 &aKStar3Vec, const TVector3 &aRStar3Vec)
 {
+  TVector3 tRStar3Vec;
   if(aRStar3Vec.X()==0 && aRStar3Vec.Y()==0 && aRStar3Vec.Z()==0)  //TODO i.e. if pair originate from single resonance
   {
     double tRoot2 = sqrt(2.);
@@ -1500,8 +1495,9 @@ complex<double> ThermPairAnalysis::GetStrongOnlyWaveFunction(TVector3 &aKStar3Ve
     std::normal_distribution<double> tRSideSource(0.,tRoot2*tRadius);
     std::normal_distribution<double> tRLongSource(0.,tRoot2*tRadius);
 
-    aRStar3Vec.SetXYZ(tROutSource(generator),tRSideSource(generator),tRLongSource(generator));
+    tRStar3Vec.SetXYZ(tROutSource(generator),tRSideSource(generator),tRLongSource(generator));
   }
+  else tRStar3Vec = aRStar3Vec;
 
 
   complex<double> ImI (0., 1.);
@@ -1519,11 +1515,11 @@ complex<double> ThermPairAnalysis::GetStrongOnlyWaveFunction(TVector3 &aKStar3Ve
   else if(fAnalysisType==kKchPKchP || fAnalysisType==kK0K0 || fAnalysisType==kLamLam)      {tF0 = complex<double>(-1.16, 0.51); tD0 = 1.08;}
   else assert(0);
 
-  double tKdotR = aKStar3Vec.Dot(aRStar3Vec);
+  double tKdotR = aKStar3Vec.Dot(tRStar3Vec);
     tKdotR /= hbarc;
   double tKStarMag = aKStar3Vec.Mag();
     tKStarMag /= hbarc;
-  double tRStarMag = aRStar3Vec.Mag();
+  double tRStarMag = tRStar3Vec.Mag();
 
   complex<double> tScattLenLastTerm (0., tKStarMag);
   complex<double> tScattAmp = pow((1./tF0) + 0.5*tD0*tKStarMag*tKStarMag - tScattLenLastTerm,-1);
@@ -1533,7 +1529,7 @@ complex<double> ThermPairAnalysis::GetStrongOnlyWaveFunction(TVector3 &aKStar3Ve
 }
 
 //________________________________________________________________________________________________________________
-double ThermPairAnalysis::GetStrongOnlyWaveFunctionSq(TVector3 &aKStar3Vec, TVector3 &aRStar3Vec)
+double ThermPairAnalysis::GetStrongOnlyWaveFunctionSq(const TVector3 &aKStar3Vec, const TVector3 &aRStar3Vec)
 {
   complex<double> tWf = GetStrongOnlyWaveFunction(aKStar3Vec, aRStar3Vec);
   double tWfSq = norm(tWf);
@@ -1541,7 +1537,7 @@ double ThermPairAnalysis::GetStrongOnlyWaveFunctionSq(TVector3 &aKStar3Vec, TVec
 }
 
 //________________________________________________________________________________________________________________
-double ThermPairAnalysis::GetParentPairWaveFunctionSq(ThermParticle &tPart1, ThermParticle &tPart2)
+double ThermPairAnalysis::GetParentPairWaveFunctionSq(const ThermParticle &tPart1, const ThermParticle &tPart2)
 {
 //  assert(!(tPart1.IsPrimordial() && tPart2.IsPrimordial()));
   if(fDrawRStarFromGaussian)
@@ -1613,7 +1609,7 @@ double ThermPairAnalysis::GetParentPairWaveFunctionSq(ThermParticle &tPart1, The
 
 
 //________________________________________________________________________________________________________________
-double ThermPairAnalysis::GetParentPairWaveFunctionSq_RotatePar2(ThermParticle &tPart1, ThermParticle &tPart2)
+double ThermPairAnalysis::GetParentPairWaveFunctionSq_RotatePar2(const ThermParticle &tPart1, const ThermParticle &tPart2)
 {
 //  assert(!(tPart1.IsPrimordial() && tPart2.IsPrimordial()));
   if(fDrawRStarFromGaussian)
@@ -1684,7 +1680,7 @@ double ThermPairAnalysis::GetParentPairWaveFunctionSq_RotatePar2(ThermParticle &
 }
 
 //________________________________________________________________________________________________________________
-void ThermPairAnalysis::FillCorrelations(ThermParticle &aParticle1, ThermParticle &aParticle2, bool aFillNumerator)
+void ThermPairAnalysis::FillCorrelations(const ThermParticle &aParticle1, const ThermParticle &aParticle2, bool aFillNumerator)
 {
   //For ParticleV0, aParticle1=V0 and aParticle2=Particle
   TH3 *tCf3d;
@@ -1804,7 +1800,7 @@ void ThermPairAnalysis::FillCorrelations(ThermParticle &aParticle1, ThermParticl
 
 
 //________________________________________________________________________________________________________________
-void ThermPairAnalysis::FillCorrelationFunctionsNumOrDenParticleParticle(vector<ThermParticle> &aParticleCollection1, vector<ThermParticle> &aParticleCollection2, bool aFillNumerator)
+void ThermPairAnalysis::FillCorrelationFunctionsNumOrDenParticleParticle(const vector<ThermParticle> &aParticleCollection1, const vector<ThermParticle> &aParticleCollection2, bool aFillNumerator)
 {
   ThermParticle tParticle1, tParticle2;
 
@@ -1822,7 +1818,7 @@ void ThermPairAnalysis::FillCorrelationFunctionsNumOrDenParticleParticle(vector<
 }
 
 //________________________________________________________________________________________________________________
-void ThermPairAnalysis::FillCorrelationFunctionsNumOrDenParticleV0(vector<ThermParticle> &aParticleCollection, vector<ThermV0Particle> &aV0Collection, bool aFillNumerator)
+void ThermPairAnalysis::FillCorrelationFunctionsNumOrDenParticleV0(const vector<ThermParticle> &aParticleCollection, const vector<ThermV0Particle> &aV0Collection, bool aFillNumerator)
 {
   ThermParticle tParticle;
   ThermV0Particle tV0;
@@ -1844,7 +1840,7 @@ void ThermPairAnalysis::FillCorrelationFunctionsNumOrDenParticleV0(vector<ThermP
 
 
 //________________________________________________________________________________________________________________
-void ThermPairAnalysis::FillCorrelationFunctionsNumOrDenV0V0(vector<ThermV0Particle> &aV01Collection, vector<ThermV0Particle> &aV02Collection, bool aFillNumerator)
+void ThermPairAnalysis::FillCorrelationFunctionsNumOrDenV0V0(const vector<ThermV0Particle> &aV01Collection, const vector<ThermV0Particle> &aV02Collection, bool aFillNumerator)
 {
   ThermV0Particle tV01, tV02;
 
@@ -1863,7 +1859,7 @@ void ThermPairAnalysis::FillCorrelationFunctionsNumOrDenV0V0(vector<ThermV0Parti
 }
 
 //________________________________________________________________________________________________________________
-void ThermPairAnalysis::FillCorrelationFunctionsNumAndDenParticleParticle(vector<ThermParticle> &aParticleCollection1, vector<ThermParticle> &aParticleCollection2)
+void ThermPairAnalysis::FillCorrelationFunctionsNumAndDenParticleParticle(const vector<ThermParticle> &aParticleCollection1, const vector<ThermParticle> &aParticleCollection2)
 {
   ThermParticle tParticle1, tParticle2;
 
@@ -1882,7 +1878,7 @@ void ThermPairAnalysis::FillCorrelationFunctionsNumAndDenParticleParticle(vector
 }
 
 //________________________________________________________________________________________________________________
-void ThermPairAnalysis::FillCorrelationFunctionsNumAndDenParticleV0(vector<ThermParticle> &aParticleCollection, vector<ThermV0Particle> &aV0Collection)
+void ThermPairAnalysis::FillCorrelationFunctionsNumAndDenParticleV0(const vector<ThermParticle> &aParticleCollection, const vector<ThermV0Particle> &aV0Collection)
 {
   ThermParticle tParticle;
   ThermV0Particle tV0;
@@ -1905,7 +1901,7 @@ void ThermPairAnalysis::FillCorrelationFunctionsNumAndDenParticleV0(vector<Therm
 
 
 //________________________________________________________________________________________________________________
-void ThermPairAnalysis::FillCorrelationFunctionsNumAndDenV0V0(vector<ThermV0Particle> &aV01Collection, vector<ThermV0Particle> &aV02Collection)
+void ThermPairAnalysis::FillCorrelationFunctionsNumAndDenV0V0(const vector<ThermV0Particle> &aV01Collection, const vector<ThermV0Particle> &aV02Collection)
 {
   ThermV0Particle tV01, tV02;
 
@@ -1928,7 +1924,7 @@ void ThermPairAnalysis::FillCorrelationFunctionsNumAndDenV0V0(vector<ThermV0Part
 }
 
 //________________________________________________________________________________________________________________
-void ThermPairAnalysis::BuildCorrelationFunctionsParticleParticle(ThermEvent &aEvent, vector<ThermEvent> &aMixingEventsCollection)
+void ThermPairAnalysis::BuildCorrelationFunctionsParticleParticle(const ThermEvent &aEvent, const vector<ThermEvent> &aMixingEventsCollection)
 {
   vector<ThermParticle> aParticleCollection1;
   vector<ThermParticle> aParticleCollection2;
@@ -1951,7 +1947,7 @@ void ThermPairAnalysis::BuildCorrelationFunctionsParticleParticle(ThermEvent &aE
 
 
 //________________________________________________________________________________________________________________
-void ThermPairAnalysis::BuildCorrelationFunctionsParticleV0(ThermEvent &aEvent, vector<ThermEvent> &aMixingEventsCollection)
+void ThermPairAnalysis::BuildCorrelationFunctionsParticleV0(const ThermEvent &aEvent, const vector<ThermEvent> &aMixingEventsCollection)
 {
   vector<ThermParticle> aParticleCollection;
   vector<ThermV0Particle> aV0Collection;
@@ -1974,7 +1970,7 @@ void ThermPairAnalysis::BuildCorrelationFunctionsParticleV0(ThermEvent &aEvent, 
 
 
 //________________________________________________________________________________________________________________
-void ThermPairAnalysis::BuildCorrelationFunctionsV0V0(ThermEvent &aEvent, vector<ThermEvent> &aMixingEventsCollection)
+void ThermPairAnalysis::BuildCorrelationFunctionsV0V0(const ThermEvent &aEvent, const vector<ThermEvent> &aMixingEventsCollection)
 {
   vector<ThermV0Particle> aV01Collection;
   vector<ThermV0Particle> aV02Collection;
@@ -2090,7 +2086,7 @@ void ThermPairAnalysis::SaveAllCorrelationFunctions(TFile *aFile)
 
 
 //________________________________________________________________________________________________________________
-void ThermPairAnalysis::ProcessEvent(ThermEvent &aEvent, vector<ThermEvent> &aMixingEventsCollection)
+void ThermPairAnalysis::ProcessEvent(const ThermEvent &aEvent, const vector<ThermEvent> &aMixingEventsCollection)
 {
   if(fBuildTransformMatrices) BuildAllTransformMatrices(aEvent, aMixingEventsCollection);
 

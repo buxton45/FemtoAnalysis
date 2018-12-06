@@ -55,15 +55,15 @@ public:
   AnalysisType GetChargedResidualType(ParticlePDGType aType1, ParticlePDGType aType2);
   int GetChargedResidualIndex(ParticlePDGType aType1, ParticlePDGType aType2);
 
-  double GetFatherKStar(ThermParticle &aParticle1, ThermParticle &aParticle2, bool aUseParticleFather1, bool aUseParticleFather2);
-  double GetKStar(ThermParticle &aParticle1, ThermParticle &aParticle2);
+  double GetFatherKStar(const ThermParticle &aParticle1, const ThermParticle &aParticle2, bool aUseParticleFather1, bool aUseParticleFather2);
+  double GetKStar(const ThermParticle &aParticle1, const ThermParticle &aParticle2);
 
-  void FillTransformMatrixParticleV0(vector<ThermParticle> &aParticleCollection, vector<ThermV0Particle> &aV0Collection, ParticlePDGType aParticleFatherType, ParticlePDGType aV0FatherType, TH2* aMatrix);
-  void FillTransformMatrixV0V0(vector<ThermV0Particle> &aV01Collection, vector<ThermV0Particle> &aV02Collection, ParticlePDGType aV01FatherType, ParticlePDGType aV02FatherType, TH2* aMatrix);
+  void FillTransformMatrixParticleV0(const vector<ThermParticle> &aParticleCollection, const vector<ThermV0Particle> &aV0Collection, ParticlePDGType aParticleFatherType, ParticlePDGType aV0FatherType, TH2* aMatrix);
+  void FillTransformMatrixV0V0(const vector<ThermV0Particle> &aV01Collection, const vector<ThermV0Particle> &aV02Collection, ParticlePDGType aV01FatherType, ParticlePDGType aV02FatherType, TH2* aMatrix);
 
-  void BuildTransformMatrixParticleV0(ThermEvent &aEvent, vector<ThermEvent> &aMixingEventsCollection, ParticlePDGType aParticleFatherType, ParticlePDGType aV0FatherType, TH2* aMatrix);
-  void BuildTransformMatrixV0V0(ThermEvent &aEvent, vector<ThermEvent> &aMixingEventsCollection, ParticlePDGType aV01FatherType, ParticlePDGType aV02FatherType, TH2* aMatrix);
-  void BuildAllTransformMatrices(ThermEvent &aEvent, vector<ThermEvent> &aMixingEventsCollection);
+  void BuildTransformMatrixParticleV0(const ThermEvent &aEvent, const vector<ThermEvent> &aMixingEventsCollection, ParticlePDGType aParticleFatherType, ParticlePDGType aV0FatherType, TH2* aMatrix);
+  void BuildTransformMatrixV0V0(const ThermEvent &aEvent, const vector<ThermEvent> &aMixingEventsCollection, ParticlePDGType aV01FatherType, ParticlePDGType aV02FatherType, TH2* aMatrix);
+  void BuildAllTransformMatrices(const ThermEvent &aEvent, const vector<ThermEvent> &aMixingEventsCollection);
   void SaveAllTransformMatrices(TFile *aFile);
 
 
@@ -71,7 +71,7 @@ public:
   void MapAndFillParentsMatrixV0V0(TH2* aMatrix, int aV01FatherType, int aV02Type);
 
   void FillUniqueParents(vector<int> &aUniqueParents, int aFatherType);
-  static vector<int> UniqueCombineVectors(vector<int> &aVec1, vector<int> &aVec2);
+  static vector<int> UniqueCombineVectors(const vector<int> &aVec1, const vector<int> &aVec2);
   void PrintUniqueParents();
 
   void FillPrimaryAndOtherPairInfo(int aParentType1, int aParentType2);
@@ -81,70 +81,70 @@ public:
   static void MapAndFillPairFractionHistogramV0V0(TH1* aHistogram, int aV01FatherType, int aV02FatherType, double aMaxPrimaryDecayLength=-1., double tWeight=1.);
 
 
-  void BuildPairFractionHistogramsParticleV0(ThermEvent &aEvent);
-  void BuildPairFractionHistogramsV0V0(ThermEvent &aEvent);
+  void BuildPairFractionHistogramsParticleV0(const ThermEvent &aEvent);
+  void BuildPairFractionHistogramsV0V0(const ThermEvent &aEvent);
 
   void SavePairFractionsAndParentsMatrix(TFile *aFile);
 
 
-  double CalcKStar(TLorentzVector &p1, TLorentzVector &p2);
-  double CalcKStar(ThermParticle &tPart1, ThermParticle &tPart2);
+  double CalcKStar(const TLorentzVector &p1, const TLorentzVector &p2);
+  double CalcKStar(const ThermParticle &tPart1, const ThermParticle &tPart2);
 
-  double CalcKStar_RotatePar2(TLorentzVector &p1, TLorentzVector &p2);           //Rotate the second particle in the pair by 180 degrees about the z-axis
-  double CalcKStar_RotatePar2(ThermParticle &tPart1, ThermParticle &tPart2);     //Rotate the second particle in the pair by 180 degrees about the z-axis
+  double CalcKStar_RotatePar2(const TLorentzVector &p1, const TLorentzVector &p2);           //Rotate the second particle in the pair by 180 degrees about the z-axis
+  double CalcKStar_RotatePar2(const ThermParticle &tPart1, const ThermParticle &tPart2);     //Rotate the second particle in the pair by 180 degrees about the z-axis
 
   TLorentzVector Boost4VecToOSLinLCMS(const TLorentzVector &p1, const TLorentzVector &p2, const TLorentzVector &aVecToBoost);
   TLorentzVector Boost4VecToOSLinPRF(const TLorentzVector &p1, const TLorentzVector &p2, const TLorentzVector &aVecToBoost);
 
-  TVector3 GetKStar3Vec(TLorentzVector &p1, TLorentzVector &p2);
-  TVector3 GetKStar3Vec(ThermParticle &tPart1, ThermParticle &tPart2);
+  TVector3 GetKStar3Vec(const TLorentzVector &p1, const TLorentzVector &p2);
+  TVector3 GetKStar3Vec(const ThermParticle &tPart1, const ThermParticle &tPart2);
 
-  TVector3 GetKStar3Vec_RotatePar2(TLorentzVector &p1, TLorentzVector &p2);
-  TVector3 GetKStar3Vec_RotatePar2(ThermParticle &tPart1, ThermParticle &tPart2);
+  TVector3 GetKStar3Vec_RotatePar2(const TLorentzVector &p1, const TLorentzVector &p2);
+  TVector3 GetKStar3Vec_RotatePar2(const ThermParticle &tPart1, const ThermParticle &tPart2);
 
   TVector3 DrawRStar3VecFromGaussian(double tROut, double tMuOut, double tRSide, double tMuSide, double tRLong, double tMuLong);
   TVector3 DrawRStar3VecFromGaussian();
 
-  TVector3 GetRStar3Vec(TLorentzVector &p1, TLorentzVector &x1, TLorentzVector &p2, TLorentzVector &x2);
-  TVector3 GetRStar3Vec(ThermParticle &tPart1, ThermParticle &tPart2);
+  TVector3 GetRStar3Vec(const TLorentzVector &p1, const TLorentzVector &x1, const TLorentzVector &p2, const TLorentzVector &x2);
+  TVector3 GetRStar3Vec(const ThermParticle &tPart1, const ThermParticle &tPart2);
 
-  double CalcRStar(TLorentzVector &p1, TLorentzVector &x1, TLorentzVector &p2, TLorentzVector &x2);
-  double CalcRStar(ThermParticle &tPart1, ThermParticle &tPart2);
-  vector<double> CalcR1R2inPRF(TLorentzVector &p1, TLorentzVector &x1, TLorentzVector &p2, TLorentzVector &x2);
-  vector<double> CalcR1R2inPRF(ThermParticle &tPart1, ThermParticle &tPart2);
+  double CalcRStar(const TLorentzVector &p1, const TLorentzVector &x1, const TLorentzVector &p2, const TLorentzVector &x2);
+  double CalcRStar(const ThermParticle &tPart1, const ThermParticle &tPart2);
+  vector<double> CalcR1R2inPRF(const TLorentzVector &p1, const TLorentzVector &x1, const TLorentzVector &p2, const TLorentzVector &x2);
+  vector<double> CalcR1R2inPRF(const ThermParticle &tPart1, const ThermParticle &tPart2);
 
-  double CalcmT(TLorentzVector &p1, TLorentzVector &p2);
-  double CalcmT(ThermParticle &tPart1, ThermParticle &tPart2);
-  void FillParentmT3d(TH3* aPairmT3d, ThermParticle &tPart1, ThermParticle &tPart2);
+  double CalcmT(const TLorentzVector &p1, const TLorentzVector &p2);
+  double CalcmT(const ThermParticle &tPart1, const ThermParticle &tPart2);
+  void FillParentmT3d(TH3* aPairmT3d, const ThermParticle &tPart1, const ThermParticle &tPart2);
 
-  complex<double> GetStrongOnlyWaveFunction(TVector3 &aKStar3Vec, TVector3 &aRStar3Vec);
-  double GetStrongOnlyWaveFunctionSq(TVector3 &aKStar3Vec, TVector3 &aRStar3Vec); 
-  double GetParentPairWaveFunctionSq(ThermParticle &tPart1, ThermParticle &tPart2);
-  double GetParentPairWaveFunctionSq_RotatePar2(ThermParticle &tPart1, ThermParticle &tPart2);
+  complex<double> GetStrongOnlyWaveFunction(const TVector3 &aKStar3Vec, const TVector3 &aRStar3Vec);  //TODO decide what to do about resonances! (i.e. R=0 pairs)
+  double GetStrongOnlyWaveFunctionSq(const TVector3 &aKStar3Vec, const TVector3 &aRStar3Vec); 
+  double GetParentPairWaveFunctionSq(const ThermParticle &tPart1, const ThermParticle &tPart2);
+  double GetParentPairWaveFunctionSq_RotatePar2(const ThermParticle &tPart1, const ThermParticle &tPart2);
 
-  void FillCorrelations(ThermParticle &aParticle1, ThermParticle &aParticle2, bool aFillNumerator);  //For ParticleV0, aParticle1=V0 and aParticle2=Particle
+  void FillCorrelations(const ThermParticle &aParticle1, const ThermParticle &aParticle2, bool aFillNumerator);  //For ParticleV0, aParticle1=V0 and aParticle2=Particle
 
-  void FillCorrelationFunctionsNumOrDenParticleParticle(vector<ThermParticle> &aParticleCollection1, vector<ThermParticle> &aParticleCollection2, bool aFillNumerator);
-  void FillCorrelationFunctionsNumOrDenParticleV0(vector<ThermParticle> &aParticleCollection, vector<ThermV0Particle> &aV0Collection, bool aFillNumerator);
-  void FillCorrelationFunctionsNumOrDenV0V0(vector<ThermV0Particle> &aV01Collection, vector<ThermV0Particle> &aV02Collection, bool aFillNumerator);
+  void FillCorrelationFunctionsNumOrDenParticleParticle(const vector<ThermParticle> &aParticleCollection1, const vector<ThermParticle> &aParticleCollection2, bool aFillNumerator);
+  void FillCorrelationFunctionsNumOrDenParticleV0(const vector<ThermParticle> &aParticleCollection, const vector<ThermV0Particle> &aV0Collection, bool aFillNumerator);
+  void FillCorrelationFunctionsNumOrDenV0V0(const vector<ThermV0Particle> &aV01Collection, const vector<ThermV0Particle> &aV02Collection, bool aFillNumerator);
 
-  void FillCorrelationFunctionsNumAndDenParticleParticle(vector<ThermParticle> &aParticleCollection1, vector<ThermParticle> &aParticleCollection2);
-  void FillCorrelationFunctionsNumAndDenParticleV0(vector<ThermParticle> &aParticleCollection, vector<ThermV0Particle> &aV0Collection);
-  void FillCorrelationFunctionsNumAndDenV0V0(vector<ThermV0Particle> &aV01Collection, vector<ThermV0Particle> &aV02Collection);
+  void FillCorrelationFunctionsNumAndDenParticleParticle(const vector<ThermParticle> &aParticleCollection1, const vector<ThermParticle> &aParticleCollection2);
+  void FillCorrelationFunctionsNumAndDenParticleV0(const vector<ThermParticle> &aParticleCollection, const vector<ThermV0Particle> &aV0Collection);
+  void FillCorrelationFunctionsNumAndDenV0V0(const vector<ThermV0Particle> &aV01Collection, const vector<ThermV0Particle> &aV02Collection);
 
-  void BuildCorrelationFunctionsParticleParticle(ThermEvent &aEvent, vector<ThermEvent> &aMixingEventsCollection);
-  void BuildCorrelationFunctionsParticleV0(ThermEvent &aEvent, vector<ThermEvent> &aMixingEventsCollection);
-  void BuildCorrelationFunctionsV0V0(ThermEvent &aEvent, vector<ThermEvent> &aMixingEventsCollection);
+  void BuildCorrelationFunctionsParticleParticle(const ThermEvent &aEvent, const vector<ThermEvent> &aMixingEventsCollection);
+  void BuildCorrelationFunctionsParticleV0(const ThermEvent &aEvent, const vector<ThermEvent> &aMixingEventsCollection);
+  void BuildCorrelationFunctionsV0V0(const ThermEvent &aEvent, const vector<ThermEvent> &aMixingEventsCollection);
 
   TH1* BuildFinalCf(TH1* aNum, TH1* aDen, TString aName);
   void SaveAllCorrelationFunctions(TFile *aFile);
 
-  void ProcessEvent(ThermEvent &aEvent, vector<ThermEvent> &aMixingEventsCollection);
+  void ProcessEvent(const ThermEvent &aEvent, const vector<ThermEvent> &aMixingEventsCollection);
 
   //-- inline
   void SetUseMixedEventsForTransforms(bool aUse);
   void SetBuildUniqueParents(bool aBuild);
-  TH2D* GetTransformMatrix(int aIndex);
+  TH2D* GetTransformMatrix(int aIndex) const;
 
   void SetBuildSingleParticleAnalyses(bool aBuild);
 
@@ -253,7 +253,7 @@ private:
 inline void ThermPairAnalysis::SetUseMixedEventsForTransforms(bool aUse) {fMixEventsForTransforms = aUse;}
 inline void ThermPairAnalysis::SetBuildUniqueParents(bool aBuild) {fBuildUniqueParents = aBuild;}
 
-inline TH2D* ThermPairAnalysis::GetTransformMatrix(int aIndex) {return ((TH2D*)fTransformMatrices->At(aIndex));}
+inline TH2D* ThermPairAnalysis::GetTransformMatrix(int aIndex) const {return ((TH2D*)fTransformMatrices->At(aIndex));}
 
 inline void ThermPairAnalysis::SetBuildMixedEventNumerators(bool aBuild) {fBuildMixedEventNumerators = aBuild;}
 inline void ThermPairAnalysis::SetUnitWeightCfNums(bool aUse) {fUnitWeightCfNums = aUse;}

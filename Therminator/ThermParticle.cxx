@@ -293,27 +293,27 @@ void ThermParticle::TransformToPRF(double aBetaT)
 
 
 //________________________________________________________________________________________________________________
-TLorentzVector ThermParticle::GetFourPosition()
+TLorentzVector ThermParticle::GetFourPosition() const
 {
   return TLorentzVector(fX,fY,fZ,fT);
 }
 
 
 //________________________________________________________________________________________________________________
-TLorentzVector ThermParticle::GetFourMomentum()
+TLorentzVector ThermParticle::GetFourMomentum() const
 {
   return TLorentzVector(fPx,fPy,fPz,fE);
 }
 
 //________________________________________________________________________________________________________________
-TLorentzVector ThermParticle::GetFatherFourPosition()
+TLorentzVector ThermParticle::GetFatherFourPosition() const
 {
   return TLorentzVector(fFatherX,fFatherY,fFatherZ,fFatherT);
 }
 
 
 //________________________________________________________________________________________________________________
-TLorentzVector ThermParticle::GetFatherFourMomentum()
+TLorentzVector ThermParticle::GetFatherFourMomentum() const
 {
   return TLorentzVector(fFatherPx,fFatherPy,fFatherPz,fFatherE);
 }

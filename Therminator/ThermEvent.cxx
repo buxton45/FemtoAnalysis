@@ -390,7 +390,7 @@ void ThermEvent::EnforceKinematicCuts()
 }
 
 //________________________________________________________________________________________________________________
-vector<ThermV0Particle> ThermEvent::GetV0ParticleCollection(ParticlePDGType aPDGType)
+vector<ThermV0Particle> ThermEvent::GetV0ParticleCollection(ParticlePDGType aPDGType) const
 {
   if(aPDGType == kPDGLam) return fLambdaCollection;
   else if(aPDGType == kPDGALam) return fAntiLambdaCollection;
@@ -401,7 +401,7 @@ vector<ThermV0Particle> ThermEvent::GetV0ParticleCollection(ParticlePDGType aPDG
 
 
 //________________________________________________________________________________________________________________
-vector<ThermParticle> ThermEvent::GetParticleCollection(ParticlePDGType aPDGType)
+vector<ThermParticle> ThermEvent::GetParticleCollection(ParticlePDGType aPDGType) const
 {
 
   if(aPDGType == kPDGKchP) return fKchPCollection;
@@ -413,7 +413,7 @@ vector<ThermParticle> ThermEvent::GetParticleCollection(ParticlePDGType aPDGType
 }
 
 //________________________________________________________________________________________________________________
-vector<ThermParticle> ThermEvent::GetGoodParticleCollectionCastAsThermParticle(ParticlePDGType aPDGType)
+vector<ThermParticle> ThermEvent::GetGoodParticleCollectionCastAsThermParticle(ParticlePDGType aPDGType) const
 {
   bool tV0Coll = false;
   vector<ThermParticle> tThermPartColl;
@@ -448,14 +448,14 @@ vector<ThermParticle> ThermEvent::GetGoodParticleCollectionCastAsThermParticle(P
 }
 
 //________________________________________________________________________________________________________________
-vector<ThermParticle> ThermEvent::GetGoodParticleCollectionCastAsThermParticle(int aPID)
+vector<ThermParticle> ThermEvent::GetGoodParticleCollectionCastAsThermParticle(int aPID) const
 {
   ParticlePDGType tPDGType = static_cast<ParticlePDGType>(aPID);
   return GetGoodParticleCollectionCastAsThermParticle(tPDGType);
 }
 
 //________________________________________________________________________________________________________________
-vector<ThermParticle> ThermEvent::GetGoodParticleCollectionwConjCastAsThermParticle(int aPID)
+vector<ThermParticle> ThermEvent::GetGoodParticleCollectionwConjCastAsThermParticle(int aPID) const
 {
   if(aPID==311) return GetGoodParticleCollectionCastAsThermParticle(aPID);  //K0Short is its own anti-particle
 
