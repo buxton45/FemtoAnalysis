@@ -2341,3 +2341,26 @@ TCanvas* Analysis::DrawKchdEdx(ParticleType aKchType, bool aLogz)
 
 
 
+
+//________________________________________________________________________________________________________________
+CfHeavy* Analysis::GetSHCfHeavy(int al, int am, bool aRealComponent, double aMinNorm, double aMaxNorm, int aRebin)
+{
+  vector<TString> tReImVec{"Im", "Re"};
+
+  vector<CfLite*> tTempCfLiteCollection;
+  for(int iAnaly=0; iAnaly<fNPartialAnalysis; iAnaly++) 
+  {
+    tTempCfLiteCollection.push_back(fPartialAnalysisCollection[iAnaly]->GetSHCfLite(al, am, aRealComponent, aMinNorm, aMaxNorm, aRebin));
+  }
+  TString tCfName = TString::Format("%sYlmCfHeavy%d%d_%s%s", tReImVec[aRealComponent].Data(), al, am, cAnalysisBaseTags[fAnalysisType], cCentralityTags[fCentralityType]);
+  CfHeavy* tReturnCfHeavy = new CfHeavy(tCfName, tCfName, tTempCfLiteCollection, aMinNorm, aMaxNorm);
+}
+
+//________________________________________________________________________________________________________________
+TH1* Analysis::GetSHCf(int al, int am, bool aRealComponent, double aMinNorm, double aMaxNorm, int aRebin)
+{
+  CfHeavy* tCfHeavy = GetSHCfHeavy(al, am, aRealComponent, aMinNorm, aMaxNorm, aRebin);
+  return tCfHeavy->GetHeavyCfClone();
+}
+
+

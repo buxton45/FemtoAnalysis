@@ -135,6 +135,9 @@ public:
 
   TCanvas* DrawKchdEdx(ParticleType aKchType, bool aLogz=false);
 
+  CfHeavy* GetSHCfHeavy(int al, int am, bool aRealComponent=true, double aMinNorm=0.32, double aMaxNorm=0.4, int aRebin=1);
+  TH1* GetSHCf(int al, int am, bool aRealComponent=true, double aMinNorm=0.32, double aMaxNorm=0.4, int aRebin=1);
+
   //inline
   TString GetAnalysisName();
   AnalysisType GetAnalysisType();

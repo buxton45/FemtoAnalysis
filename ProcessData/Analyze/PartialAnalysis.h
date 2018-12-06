@@ -105,6 +105,9 @@ public:
 
   TH1* GetMCKchPurityHisto(bool aBeforePairCut);
 
+  CfLite* GetSHCfLite(int al, int am, bool aRealComponent=true, double aMinNorm=0.32, double aMaxNorm=0.4, int aRebin=1);
+  TH1* GetSHCf(int al, int am, bool aRealComponent=true, double aMinNorm=0.32, double aMaxNorm=0.4, int aRebin=1);
+
   //inline
   AnalysisType GetAnalysisType();
   BFieldType GetBFieldType();
