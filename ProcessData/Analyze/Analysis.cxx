@@ -2354,6 +2354,7 @@ CfHeavy* Analysis::GetSHCfHeavy(int al, int am, bool aRealComponent, double aMin
   }
   TString tCfName = TString::Format("%sYlmCfHeavy%d%d_%s%s", tReImVec[aRealComponent].Data(), al, am, cAnalysisBaseTags[fAnalysisType], cCentralityTags[fCentralityType]);
   CfHeavy* tReturnCfHeavy = new CfHeavy(tCfName, tCfName, tTempCfLiteCollection, aMinNorm, aMaxNorm);
+  return tReturnCfHeavy;
 }
 
 //________________________________________________________________________________________________________________

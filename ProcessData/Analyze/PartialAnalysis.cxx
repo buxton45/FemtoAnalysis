@@ -1087,8 +1087,8 @@ CfLite* PartialAnalysis::GetSHCfLite(int al, int am, bool aRealComponent, double
 {
   vector<TString> tReImVec{"Im", "Re"};
   TString tCommonBase = TString::Format("%sYlm%d%dDirectYlmCf_%s", tReImVec[aRealComponent].Data(), al, am, fAnalysisBaseTag.Data());
-  TString tNumName = TString::Format("Num", tCommonBase.Data());
-  TString tDenName = TString::Format("Den", tCommonBase.Data());
+  TString tNumName = TString::Format("Num%s", tCommonBase.Data());
+  TString tDenName = TString::Format("Den%s", tCommonBase.Data());
 
   TH1* tNum = Get1dHisto(tNumName, TString::Format("%s%s", tNumName.Data(), fBFieldTag.Data()));
   TH1* tDen = Get1dHisto(tDenName, TString::Format("%s%s", tDenName.Data(), fBFieldTag.Data()));
