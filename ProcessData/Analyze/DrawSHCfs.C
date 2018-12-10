@@ -31,13 +31,13 @@ int main(int argc, char **argv)
 
   bool bSaveFigures = false;
 
-  int tl = 0;
-  int tm = 0;
+  int tl = 1;
+  int tm = 1;
   bool tRealComponent=true;
 
   double tMinNorm=0.32;
   double tMaxNorm=0.40;
-  int tRebin=1;
+  int tRebin=2;
 
 //-----------------------------------------------------------------------------
 
@@ -55,8 +55,9 @@ int main(int argc, char **argv)
 
 //-----------------------------------------------------------------------------
 
-  Analysis* tAnaly = new Analysis(tFileLocationBase, tAnType, tCentType, tAnRunType);
+  Analysis* tAnaly = new Analysis(tFileLocationBase, tAnType, tCentType, tAnRunType, 2, "", false);
   TH1D* tSHCf = (TH1D*)tAnaly->GetSHCf(tl, tm, tRealComponent, tMinNorm, tMaxNorm, tRebin);
+  tSHCf->GetXaxis()->SetRangeUser(0., 0.5);
 
   TCanvas* tCan = new TCanvas("tCan", "tCan");
   tCan->cd();

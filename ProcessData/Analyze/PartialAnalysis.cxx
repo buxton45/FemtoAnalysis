@@ -16,7 +16,7 @@ ClassImp(PartialAnalysis)
 
 
 //________________________________________________________________________________________________________________
-PartialAnalysis::PartialAnalysis(TString aFileLocation, TString aAnalysisName, AnalysisType aAnalysisType, BFieldType aBFieldType, CentralityType aCentralityType, AnalysisRunType aRunType, TString aDirNameModifier) :
+PartialAnalysis::PartialAnalysis(TString aFileLocation, TString aAnalysisName, AnalysisType aAnalysisType, BFieldType aBFieldType, CentralityType aCentralityType, AnalysisRunType aRunType, TString aDirNameModifier, bool aCountPassFail) :
   fAnalysisRunType(aRunType),
   fFileLocation(aFileLocation),
   fAnalysisName(aAnalysisName),
@@ -125,7 +125,7 @@ PartialAnalysis::PartialAnalysis(TString aFileLocation, TString aAnalysisName, A
   SetParticleTypes();
   SetDaughterParticleTypes();
 
-  if(fAnalysisRunType != kTrainSys)  //TrainSys analyses DO NOT include FAIL cut monitors
+  if(fAnalysisRunType != kTrainSys && aCountPassFail)  //TrainSys analyses DO NOT include FAIL cut monitors
   {
     SetNEventsPassFail();
     SetNPart1PassFail();

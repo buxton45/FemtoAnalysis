@@ -49,7 +49,7 @@ public:
 
   Analysis(TString aAnalysisName, vector<PartialAnalysis*> &aPartialAnalysisCollection, bool aCombineConjugates=false);
 
-  Analysis(TString aFileLocationBase, AnalysisType aAnalysisType, CentralityType aCentralityType, AnalysisRunType aRunType=kTrain, int aNPartialAnalysis=2, TString aDirNameModifier="");
+  Analysis(TString aFileLocationBase, AnalysisType aAnalysisType, CentralityType aCentralityType, AnalysisRunType aRunType=kTrain, int aNPartialAnalysis=2, TString aDirNameModifier="", bool aCountPassFail=true);
   virtual ~Analysis();
 
   TH1* SimpleAddTH1Collection(TString tHistosName);

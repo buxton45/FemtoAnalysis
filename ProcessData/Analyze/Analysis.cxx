@@ -258,7 +258,7 @@ Analysis::Analysis(TString aAnalysisName, vector<PartialAnalysis*> &aPartialAnal
 
 
 //________________________________________________________________________________________________________________
-Analysis::Analysis(TString aFileLocationBase, AnalysisType aAnalysisType, CentralityType aCentralityType, AnalysisRunType aRunType, int aNPartialAnalysis, TString aDirNameModifier) :
+Analysis::Analysis(TString aFileLocationBase, AnalysisType aAnalysisType, CentralityType aCentralityType, AnalysisRunType aRunType, int aNPartialAnalysis, TString aDirNameModifier, bool aCountPassFail) :
   fAnalysisRunType(aRunType),
   fCombineConjugates(false),
   fAnalysisName(0),
@@ -350,7 +350,7 @@ Analysis::Analysis(TString aFileLocationBase, AnalysisType aAnalysisType, Centra
 
     TString tPartialAnalysisName = fAnalysisName + cBFieldTags[tBFieldType];
 
-    PartialAnalysis* tPartialAnalysis = new PartialAnalysis(tFileLocation, tPartialAnalysisName, fAnalysisType, tBFieldType, fCentralityType, fAnalysisRunType, aDirNameModifier);
+    PartialAnalysis* tPartialAnalysis = new PartialAnalysis(tFileLocation, tPartialAnalysisName, fAnalysisType, tBFieldType, fCentralityType, fAnalysisRunType, aDirNameModifier, aCountPassFail);
 
     fPartialAnalysisCollection.push_back(tPartialAnalysis);
   } 
@@ -360,32 +360,36 @@ Analysis::Analysis(TString aFileLocationBase, AnalysisType aAnalysisType, Centra
   fParticleTypes = fPartialAnalysisCollection[0]->GetParticleTypes();
   fDaughterParticleTypes = fPartialAnalysisCollection[0]->GetDaughterParticleTypes();
 
-  for(int i=0; i<fNPartialAnalysis; i++)
-  {
-    fNEventsPass += fPartialAnalysisCollection[i]->GetNEventsPass();
-    fNEventsFail += fPartialAnalysisCollection[i]->GetNEventsFail();
-
-    fNPart1Pass += fPartialAnalysisCollection[i]->GetNPart1Pass();
-    fNPart1Fail += fPartialAnalysisCollection[i]->GetNPart1Fail();
-
-    fNPart2Pass += fPartialAnalysisCollection[i]->GetNPart2Pass();
-    fNPart2Fail += fPartialAnalysisCollection[i]->GetNPart2Fail();
-
-    fNKStarNumEntries += fPartialAnalysisCollection[i]->GetNKStarNumEntries();
-  }
-
-  //---------------------------------
-  TString tPart1MassFailName;
-  if(fParticleTypes[0]==kLam)  {tPart1MassFailName = "LambdaMass_" + TString(cParticleTags[fParticleTypes[0]]) + "_Fail";}
-  else if(fParticleTypes[0]==kALam) {tPart1MassFailName = "AntiLambdaMass_" + TString(cParticleTags[fParticleTypes[0]]) + "_Fail";}
-
-  if(fAnalysisRunType != kTrainSys)  //TrainSys analyses DO NOT include FAIL cut monitors
+  if(aCountPassFail)
   {
     for(int i=0; i<fNPartialAnalysis; i++)
     {
-      if(i==0) {fPart1MassFail = (TH1*)fPartialAnalysisCollection[i]->GetPart1MassFail()->Clone(tPart1MassFailName);}
-      else{fPart1MassFail->Add(fPartialAnalysisCollection[i]->GetPart1MassFail());}
+      fNEventsPass += fPartialAnalysisCollection[i]->GetNEventsPass();
+      fNEventsFail += fPartialAnalysisCollection[i]->GetNEventsFail();
+
+      fNPart1Pass += fPartialAnalysisCollection[i]->GetNPart1Pass();
+      fNPart1Fail += fPartialAnalysisCollection[i]->GetNPart1Fail();
+
+      fNPart2Pass += fPartialAnalysisCollection[i]->GetNPart2Pass();
+      fNPart2Fail += fPartialAnalysisCollection[i]->GetNPart2Fail();
+
+      fNKStarNumEntries += fPartialAnalysisCollection[i]->GetNKStarNumEntries();
     }
+
+    //---------------------------------
+    TString tPart1MassFailName;
+    if(fParticleTypes[0]==kLam)  {tPart1MassFailName = "LambdaMass_" + TString(cParticleTags[fParticleTypes[0]]) + "_Fail";}
+    else if(fParticleTypes[0]==kALam) {tPart1MassFailName = "AntiLambdaMass_" + TString(cParticleTags[fParticleTypes[0]]) + "_Fail";}
+
+    if(fAnalysisRunType != kTrainSys)  //TrainSys analyses DO NOT include FAIL cut monitors
+    {
+      for(int i=0; i<fNPartialAnalysis; i++)
+      {
+        if(i==0) {fPart1MassFail = (TH1*)fPartialAnalysisCollection[i]->GetPart1MassFail()->Clone(tPart1MassFailName);}
+        else{fPart1MassFail->Add(fPartialAnalysisCollection[i]->GetPart1MassFail());}
+      }
+    }
+
   }
 
 }

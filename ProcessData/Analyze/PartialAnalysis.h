@@ -53,7 +53,7 @@ class PartialAnalysis {
 
 public:
 
-  PartialAnalysis(TString aFileLocation, TString aAnalysisName, AnalysisType aAnalysisType, BFieldType aBFieldType, CentralityType aCentralityType, AnalysisRunType aRunType=kTrain, TString aDirNameModifier="");
+  PartialAnalysis(TString aFileLocation, TString aAnalysisName, AnalysisType aAnalysisType, BFieldType aBFieldType, CentralityType aCentralityType, AnalysisRunType aRunType=kTrain, TString aDirNameModifier="", bool aCountPassFail=true);
   virtual ~PartialAnalysis();
 
   TObjArray* ConnectAnalysisDirectory(TString aFileLocation, TString aDirectoryName);
