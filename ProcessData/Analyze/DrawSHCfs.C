@@ -126,7 +126,7 @@ int main(int argc, char **argv)
   tCan->Divide(2, 3);
 
   DrawSHCfComponent((TPad*)tCan->cd(1), tAnaly0010, 0, 0, tRealComponent, tMinNorm, tMaxNorm, tRebin);
-  DrawSHCfComponent((TPad*)tCan->cd(2), tAnaly0010, 1, 0, tRealComponent, tMinNorm, tMaxNorm, tRebin);
+  DrawSHCfComponent((TPad*)tCan->cd(2), tAnaly0010, 1, 1, tRealComponent, tMinNorm, tMaxNorm, tRebin);
 
   DrawSHCfComponent((TPad*)tCan->cd(3), tAnaly1030, 0, 0, tRealComponent, tMinNorm, tMaxNorm, tRebin);
   DrawSHCfComponent((TPad*)tCan->cd(4), tAnaly1030, 1, 1, tRealComponent, tMinNorm, tMaxNorm, tRebin);
