@@ -85,6 +85,9 @@ kKchPKchP=85, kK0K0=86
   enum GeneralFitterType {kLedEq=0, kLedViaSimPairs=1, kCoulomb=2};
 
   enum CoulombType {kAttractive=0, kRepulsive=1, kNeutral=2};
+
+  enum YlmComponent{kYlmReal=0, kYlmImag=1};
+  enum YlmHistType{kYlmNum=0, kYlmDen=1, kYlmCf=2};
 /*
   enum ResidualType {
 kSig0KchP=0, kASig0KchM=1, kSig0KchM=2, kASig0KchP=3, 

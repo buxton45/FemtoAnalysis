@@ -209,7 +209,9 @@ Analysis::Analysis(TString aAnalysisName, vector<PartialAnalysis*> &aPartialAnal
 
   fPurityCollection(0),
 
-  fPart1MassFail(0)
+  fPart1MassFail(0),
+
+  fCfYlmHeavy(nullptr)
 
 
 {
@@ -330,8 +332,9 @@ Analysis::Analysis(TString aFileLocationBase, AnalysisType aAnalysisType, Centra
 
   fPurityCollection(0),
  
-  fPart1MassFail(0)
+  fPart1MassFail(0),
 
+  fCfYlmHeavy(nullptr)
 
 {
 
@@ -2344,28 +2347,29 @@ TCanvas* Analysis::DrawKchdEdx(ParticleType aKchType, bool aLogz)
 }
 
 
-
-
 //________________________________________________________________________________________________________________
-CfHeavy* Analysis::GetSHCfHeavy(int al, int am, bool aRealComponent, double aMinNorm, double aMaxNorm, int aRebin)
+void Analysis::BuildYlmCfHeavy()
 {
-  vector<TString> tReImVec{"Im", "Re"};
-
-  vector<CfLite*> tTempCfLiteCollection;
+  vector<CorrFctnDirectYlmLite*> tTempCfLiteColl;
   for(int iAnaly=0; iAnaly<fNPartialAnalysis; iAnaly++) 
   {
-    tTempCfLiteCollection.push_back(fPartialAnalysisCollection[iAnaly]->GetSHCfLite(al, am, aRealComponent, aMinNorm, aMaxNorm, aRebin));
+    tTempCfLiteColl.push_back(fPartialAnalysisCollection[iAnaly]->GetYlmCfLite());
   }
-  TString tCfName = TString::Format("%sYlmCfHeavy%d%d_%s%s", tReImVec[aRealComponent].Data(), al, am, cAnalysisBaseTags[fAnalysisType], cCentralityTags[fCentralityType]);
-  CfHeavy* tReturnCfHeavy = new CfHeavy(tCfName, tCfName, tTempCfLiteCollection, aMinNorm, aMaxNorm);
-  return tReturnCfHeavy;
+  fCfYlmHeavy = new CorrFctnDirectYlmHeavy(tTempCfLiteColl);
 }
 
 //________________________________________________________________________________________________________________
-TH1* Analysis::GetSHCf(int al, int am, bool aRealComponent, double aMinNorm, double aMaxNorm, int aRebin)
+CorrFctnDirectYlmHeavy* Analysis::GetYlmCfHeavy()
 {
-  CfHeavy* tCfHeavy = GetSHCfHeavy(al, am, aRealComponent, aMinNorm, aMaxNorm, aRebin);
-  return tCfHeavy->GetHeavyCfClone();
+  if(!fCfYlmHeavy) BuildYlmCfHeavy();
+  return fCfYlmHeavy;
+}
+
+//________________________________________________________________________________________________________________
+TH1D* Analysis::GetYlmCfnHist(YlmComponent aComponent, int al, int am)
+{
+  if(!fCfYlmHeavy) BuildYlmCfHeavy();
+  return fCfYlmHeavy->GetYlmCfnHist(aComponent, al, am);
 }
 
 

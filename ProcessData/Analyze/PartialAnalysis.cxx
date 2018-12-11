@@ -82,7 +82,9 @@ PartialAnalysis::PartialAnalysis(TString aFileLocation, TString aAnalysisName, A
   fKStar1dCfKStarLongNeg(0),
   fKStar1dKStarLongPosNegRatio(0),
 
-  fPart1MassFail(0)
+  fPart1MassFail(0),
+
+  fCfYlmLite(nullptr)
 
 
 {
@@ -1081,32 +1083,49 @@ TH1* PartialAnalysis::GetMCKchPurityHisto(bool aBeforePairCut)
 }
 
 
+//________________________________________________________________________________________________________________
+void PartialAnalysis::BuildYlmCfLite()
+{
+  TString tSavedNameMod = TString::Format("DirectYlmCf_%s", cAnalysisBaseTags[fAnalysisType]);
+  TString tNewNameMod = TString::Format("%s%s", cCentralityTags[fCentralityType], cBFieldTags[fBFieldType]);
+  int tMaxl=2;
+  int tNbins=400;
+  double tKStarMin=0.;
+  double tKStarMax=2.;
+
+  fCfYlmLite = new CorrFctnDirectYlmLite(fDir, tSavedNameMod, tNewNameMod, tMaxl, tNbins, tKStarMin, tKStarMax, fKStarCf->GetNumScale());
+}
+
 
 //________________________________________________________________________________________________________________
-CfLite* PartialAnalysis::GetSHCfLite(int al, int am, bool aRealComponent, double aMinNorm, double aMaxNorm, int aRebin)
+CorrFctnDirectYlmLite* PartialAnalysis::GetYlmCfLite()
 {
-  vector<TString> tReImVec{"Im", "Re"};
-  TString tCommonBase = TString::Format("%sYlm%d%dDirectYlmCf_%s", tReImVec[aRealComponent].Data(), al, am, fAnalysisBaseTag.Data());
-  TString tNumName = TString::Format("Num%s", tCommonBase.Data());
-  TString tDenName = TString::Format("Den%s", tCommonBase.Data());
+  if(!fCfYlmLite) BuildYlmCfLite();
+  return fCfYlmLite;
+}
 
-  TH1* tNum = Get1dHisto(tNumName, TString::Format("%s%s", tNumName.Data(), fBFieldTag.Data()));
-  TH1* tDen = Get1dHisto(tDenName, TString::Format("%s%s", tDenName.Data(), fBFieldTag.Data()));
+//________________________________________________________________________________________________________________
+TH1D* PartialAnalysis::GetYlmHist(YlmComponent aComponent, YlmHistType aHistType, int al, int am)
+{
+  if(!fCfYlmLite) BuildYlmCfLite();
 
-  TString tCfName = TString::Format("%sYlmCfLite%d%d_%s%s%s", tReImVec[aRealComponent].Data(), al, am, fAnalysisBaseTag.Data(), fCentralityTag.Data(), fBFieldTag.Data());
-  CfLite* tReturnCfLite = new CfLite(tCfName, tCfName, tNum, tDen, aMinNorm, aMaxNorm);
-  if(aRebin != 1) tReturnCfLite->Rebin(aRebin);
-  return tReturnCfLite;
+  if     (aComponent==kYlmReal && aHistType==kYlmNum) return fCfYlmLite->GetNumRealHist(al, am);
+  else if(aComponent==kYlmImag && aHistType==kYlmNum) return fCfYlmLite->GetNumImagHist(al, am);
+
+  else if(aComponent==kYlmReal && aHistType==kYlmDen) return fCfYlmLite->GetDenRealHist(al, am);
+  else if(aComponent==kYlmImag && aHistType==kYlmDen) return fCfYlmLite->GetDenImagHist(al, am);
+
+  else if(aComponent==kYlmReal && aHistType==kYlmCf) return fCfYlmLite->GetCfnRealHist(al, am);
+  else if(aComponent==kYlmImag && aHistType==kYlmCf) return fCfYlmLite->GetCfnImagHist(al, am);
+  else assert(0);
+
+  return nullptr;
 }
 
 
 
-//________________________________________________________________________________________________________________
-TH1* PartialAnalysis::GetSHCf(int al, int am, bool aRealComponent, double aMinNorm, double aMaxNorm, int aRebin)
-{
-  CfLite* tCfLite = GetSHCfLite(al, am, aRealComponent, aMinNorm, aMaxNorm, aRebin);
-  return tCfLite->Cf();
-}
+
+
 
 
 

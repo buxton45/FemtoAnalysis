@@ -43,6 +43,8 @@ class Cf2dHeavy;
 #include "Purity.h"
 class Purity;
 
+#include "CorrFctnDirectYlmHeavy.h"
+
 class Analysis {
 
 public:
@@ -135,8 +137,9 @@ public:
 
   TCanvas* DrawKchdEdx(ParticleType aKchType, bool aLogz=false);
 
-  CfHeavy* GetSHCfHeavy(int al, int am, bool aRealComponent=true, double aMinNorm=0.32, double aMaxNorm=0.4, int aRebin=1);
-  TH1* GetSHCf(int al, int am, bool aRealComponent=true, double aMinNorm=0.32, double aMaxNorm=0.4, int aRebin=1);
+  void BuildYlmCfHeavy();
+  CorrFctnDirectYlmHeavy* GetYlmCfHeavy();
+  TH1D* GetYlmCfnHist(YlmComponent aComponent, int al, int am);
 
   //inline
   TString GetAnalysisName();
@@ -269,6 +272,7 @@ private:
 
   TH1* fPart1MassFail;
 
+  CorrFctnDirectYlmHeavy* fCfYlmHeavy;
 
 #ifdef __ROOT__
   ClassDef(Analysis, 1)

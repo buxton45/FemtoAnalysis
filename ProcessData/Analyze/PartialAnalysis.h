@@ -48,6 +48,8 @@ class Cf2dLite;
 #include "AnalysisInfo.h"
 class AnalysisInfo;
 
+#include "CorrFctnDirectYlmLite.h"
+
 
 class PartialAnalysis {
 
@@ -105,8 +107,9 @@ public:
 
   TH1* GetMCKchPurityHisto(bool aBeforePairCut);
 
-  CfLite* GetSHCfLite(int al, int am, bool aRealComponent=true, double aMinNorm=0.32, double aMaxNorm=0.4, int aRebin=1);
-  TH1* GetSHCf(int al, int am, bool aRealComponent=true, double aMinNorm=0.32, double aMaxNorm=0.4, int aRebin=1);
+  void BuildYlmCfLite();
+  CorrFctnDirectYlmLite* GetYlmCfLite();
+  TH1D* GetYlmHist(YlmComponent aComponent, YlmHistType aHistType, int al, int am);
 
   //inline
   AnalysisType GetAnalysisType();
@@ -218,7 +221,7 @@ private:
 
   TH1* fPart1MassFail;
 
-
+  CorrFctnDirectYlmLite* fCfYlmLite;
 
 
 

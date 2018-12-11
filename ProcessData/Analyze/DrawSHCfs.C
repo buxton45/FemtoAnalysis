@@ -14,7 +14,7 @@ class PartialAnalysis;
 class Analysis;
 
 
-
+/*
 //_________________________________________________________________________________________
 void DrawSHCfComponent(TPad* aPad, Analysis* aAnaly, int al, int am, bool aRealComponent, double aMinNorm=0.32, double aMaxNorm=0.40, int aRebin=2)
 {
@@ -70,7 +70,7 @@ void DrawSHCfComponent(TPad* aPad, Analysis* aAnaly, int al, int am, bool aRealC
   tText->Draw();
 
 }
-
+*/
 
 
 //_________________________________________________________________________________________
@@ -117,7 +117,7 @@ int main(int argc, char **argv)
   TString tSaveDirectoryBase = tDirectoryBase;
 
 //-----------------------------------------------------------------------------
-
+/*
   Analysis* tAnaly0010 = new Analysis(tFileLocationBase, tAnType, k0010, tAnRunType, 2, "", false);
   Analysis* tAnaly1030 = new Analysis(tFileLocationBase, tAnType, k1030, tAnRunType, 2, "", false);
   Analysis* tAnaly3050 = new Analysis(tFileLocationBase, tAnType, k3050, tAnRunType, 2, "", false);
@@ -133,6 +133,17 @@ int main(int argc, char **argv)
 
   DrawSHCfComponent((TPad*)tCan->cd(5), tAnaly3050, 0, 0, tRealComponent, tMinNorm, tMaxNorm, tRebin);
   DrawSHCfComponent((TPad*)tCan->cd(6), tAnaly3050, 1, 1, tRealComponent, tMinNorm, tMaxNorm, tRebin);
+*/
+
+  Analysis* tAnaly0010 = new Analysis(tFileLocationBase, tAnType, k0010, tAnRunType, 2, "", false);
+
+  TCanvas* tCan = new TCanvas("tCan", "tCan");
+  tCan->cd();
+
+
+  TH1D* tTestCfn = tAnaly0010->GetYlmCfnHist(kYlmReal, 1, 1); 
+
+  tTestCfn->Draw();
 
 //-------------------------------------------------------------------------------
   theApp->Run(kTRUE); //Run the TApp to pause the code.
