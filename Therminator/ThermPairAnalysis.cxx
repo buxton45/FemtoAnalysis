@@ -52,6 +52,8 @@ ThermPairAnalysis::ThermPairAnalysis(AnalysisType aAnType) :
 
   fDrawRStarFromGaussian(false),
 
+  fBuildPairSourcewmTInfo(false),
+
   fPairSource3d(nullptr),
   fNum3d(nullptr),
   fDen3d(nullptr),
@@ -98,7 +100,10 @@ ThermPairAnalysis::ThermPairAnalysis(AnalysisType aAnType) :
   fPairSource2d_mT1vRinv(nullptr),
   fPairSource2d_mT2vRinv(nullptr),
   fPairSource2d_mT1vR1PRF(nullptr),
-  fPairSource2d_mT2vR2PRF(nullptr)
+  fPairSource2d_mT2vR2PRF(nullptr),
+
+  fBuildCfYlm(false),
+  fCfYlm(nullptr)
 
 {
   SetPartTypes();
@@ -109,7 +114,60 @@ ThermPairAnalysis::ThermPairAnalysis(AnalysisType aAnType) :
 //________________________________________________________________________________________________________________
 ThermPairAnalysis::~ThermPairAnalysis()
 {
-/*no-op*/
+  if(fTransformMatrices) fTransformMatrices->Delete();
+
+  delete fPairFractions;
+  delete fParentsMatrix;
+
+  delete fPairSource3d;
+  delete fNum3d;
+  delete fDen3d;
+
+  delete fPairSourceFull;
+  delete fNumFull;
+  delete fDenFull;
+  delete fCfFull;
+  delete fNumFull_RotatePar2;
+
+  delete fPairSourcePrimaryOnly;
+  delete fNumPrimaryOnly;
+  delete fDenPrimaryOnly;
+  delete fCfPrimaryOnly;
+
+  delete fPairSourcePrimaryAndShortDecays;
+  delete fNumPrimaryAndShortDecays;
+  delete fDenPrimaryAndShortDecays;
+  delete fCfPrimaryAndShortDecays;
+
+  delete fPairSourceWithoutSigmaSt;
+  delete fNumWithoutSigmaSt;
+  delete fDenWithoutSigmaSt;
+  delete fCfWithoutSigmaSt;
+
+  delete fPairSourceSigmaStOnly;
+  delete fNumSigmaStOnly;
+  delete fDenSigmaStOnly;
+  delete fCfSigmaStOnly;
+
+  delete fPairSourceSecondaryOnly;
+  delete fNumSecondaryOnly;
+  delete fDenSecondaryOnly;
+  delete fCfSecondaryOnly;
+
+  delete fPairKStarVsmT;
+  delete fPairmT3d;
+
+  delete fPairSource3d_osl;
+  delete fPairSource3d_oslPrimaryOnly;
+
+  delete fPairSource3d_mT1vmT2vRinv;
+  delete fPairSource2d_PairmTvRinv;
+  delete fPairSource2d_mT1vRinv;
+  delete fPairSource2d_mT2vRinv;
+  delete fPairSource2d_mT1vR1PRF;
+  delete fPairSource2d_mT2vR2PRF;
+
+  delete fCfYlm;
 }
 
 
@@ -511,52 +569,70 @@ void ThermPairAnalysis::InitiateCorrelations()
                                           200, -50., 50., 
                                           200, -50., 50., 
                                           200, -50., 50.); 
-
-  fPairSource3d_mT1vmT2vRinv = new TH3D(TString::Format("PairSource3d_mT1vmT2vRinv%s", cAnalysisBaseTags[fAnalysisType]),
-                                        TString::Format("PairSource3d_mT1vmT2vRinv%s", cAnalysisBaseTags[fAnalysisType]),
-                                        400, 0., 10., 
-                                        400, 0., 10., 
-                                        100, 0., 50.);
-  fPairSource2d_PairmTvRinv = new TH2D(TString::Format("PairSource2d_PairmTvRinv%s", cAnalysisBaseTags[fAnalysisType]),
-                                       TString::Format("PairSource2d_PairmTvRinv%s", cAnalysisBaseTags[fAnalysisType]),
-                                       400, 0., 10., 
-                                       100, 0., 50.);
-  fPairSource2d_mT1vRinv = new TH2D(TString::Format("PairSource2d_mT1vRinv%s", cAnalysisBaseTags[fAnalysisType]),
-                                     TString::Format("PairSource2d_mT1vRinv%s", cAnalysisBaseTags[fAnalysisType]),
-                                     400, 0., 10., 
-                                     100, 0., 50.);
-  fPairSource2d_mT2vRinv = new TH2D(TString::Format("PairSource2d_mT2vRinv%s", cAnalysisBaseTags[fAnalysisType]),
-                                     TString::Format("PairSource2d_mT2vRinv%s", cAnalysisBaseTags[fAnalysisType]),
-                                     400, 0., 10.,
-                                     100, 0., 50.);
-  fPairSource2d_mT1vR1PRF = new TH2D(TString::Format("PairSource2d_mT1vR1PRF%s", cAnalysisBaseTags[fAnalysisType]),
-                                     TString::Format("PairSource2d_mT1vR1PRF%s", cAnalysisBaseTags[fAnalysisType]),
-                                     400, 0., 10., 
-                                     100, 0., 50.);
-  fPairSource2d_mT2vR2PRF = new TH2D(TString::Format("PairSource2d_mT2vR2PRF%s", cAnalysisBaseTags[fAnalysisType]),
-                                     TString::Format("PairSource2d_mT2vR2PRF%s", cAnalysisBaseTags[fAnalysisType]),
-                                     400, 0., 10.,
-                                     100, 0., 50.);
-
   fPairSource3d_osl->Sumw2();
   fPairSource3d_oslPrimaryOnly->Sumw2();
 
-  fPairSource3d_mT1vmT2vRinv->Sumw2();
-  fPairSource2d_PairmTvRinv->Sumw2();
-  fPairSource2d_mT1vRinv->Sumw2();
-  fPairSource2d_mT2vRinv->Sumw2();
-  fPairSource2d_mT1vR1PRF->Sumw2();
-  fPairSource2d_mT2vR2PRF->Sumw2();
+
+  if(fBuildPairSourcewmTInfo)
+  {
+    fPairSource3d_mT1vmT2vRinv = new TH3D(TString::Format("PairSource3d_mT1vmT2vRinv%s", cAnalysisBaseTags[fAnalysisType]),
+                                          TString::Format("PairSource3d_mT1vmT2vRinv%s", cAnalysisBaseTags[fAnalysisType]),
+                                          400, 0., 10., 
+                                          400, 0., 10., 
+                                          100, 0., 50.);
+    fPairSource2d_PairmTvRinv = new TH2D(TString::Format("PairSource2d_PairmTvRinv%s", cAnalysisBaseTags[fAnalysisType]),
+                                         TString::Format("PairSource2d_PairmTvRinv%s", cAnalysisBaseTags[fAnalysisType]),
+                                         400, 0., 10., 
+                                         100, 0., 50.);
+    fPairSource2d_mT1vRinv = new TH2D(TString::Format("PairSource2d_mT1vRinv%s", cAnalysisBaseTags[fAnalysisType]),
+                                       TString::Format("PairSource2d_mT1vRinv%s", cAnalysisBaseTags[fAnalysisType]),
+                                       400, 0., 10., 
+                                       100, 0., 50.);
+    fPairSource2d_mT2vRinv = new TH2D(TString::Format("PairSource2d_mT2vRinv%s", cAnalysisBaseTags[fAnalysisType]),
+                                       TString::Format("PairSource2d_mT2vRinv%s", cAnalysisBaseTags[fAnalysisType]),
+                                       400, 0., 10.,
+                                       100, 0., 50.);
+    fPairSource2d_mT1vR1PRF = new TH2D(TString::Format("PairSource2d_mT1vR1PRF%s", cAnalysisBaseTags[fAnalysisType]),
+                                       TString::Format("PairSource2d_mT1vR1PRF%s", cAnalysisBaseTags[fAnalysisType]),
+                                       400, 0., 10., 
+                                       100, 0., 50.);
+    fPairSource2d_mT2vR2PRF = new TH2D(TString::Format("PairSource2d_mT2vR2PRF%s", cAnalysisBaseTags[fAnalysisType]),
+                                       TString::Format("PairSource2d_mT2vR2PRF%s", cAnalysisBaseTags[fAnalysisType]),
+                                       400, 0., 10.,
+                                       100, 0., 50.);
+
+    fPairSource3d_mT1vmT2vRinv->Sumw2();
+    fPairSource2d_PairmTvRinv->Sumw2();
+    fPairSource2d_mT1vRinv->Sumw2();
+    fPairSource2d_mT2vRinv->Sumw2();
+    fPairSource2d_mT1vR1PRF->Sumw2();
+    fPairSource2d_mT2vR2PRF->Sumw2();
+  }
 
 }
 
 
 //________________________________________________________________________________________________________________
-void ThermPairAnalysis::SetBuildCorrelationFunctions(bool aBuild, bool aBuild3dHists)
+void ThermPairAnalysis::SetBuildCorrelationFunctions(bool aBuild, bool aBuild3dHists, bool aBuildPairSourcewmTInfo)
 {
   fBuildCorrelationFunctions = aBuild;
   fBuild3dHists = aBuild3dHists;
+  fBuildPairSourcewmTInfo = aBuildPairSourcewmTInfo;
   if(fBuildCorrelationFunctions) InitiateCorrelations();
+}
+
+//________________________________________________________________________________________________________________
+void ThermPairAnalysis::SetBuildCfYlm(bool aSet)
+{
+  fBuildCfYlm = aSet;
+  if(fBuildCfYlm) 
+  {
+    assert(fBuildCorrelationFunctions);
+
+    TString tName = TString::Format("DirectYlmCf_%s", cAnalysisBaseTags[fAnalysisType]);
+    int tMaxl=2;
+    fCfYlm = new CorrFctnDirectYlm(tName.Data(), tMaxl, fNumFull->GetNbinsX(), fNumFull->GetXaxis()->GetXmin(), fNumFull->GetXaxis()->GetXmax());
+  }
 }
 
 
@@ -1737,6 +1813,13 @@ void ThermPairAnalysis::FillCorrelations(const ThermParticle &aParticle1, const 
 
   if(fBuild3dHists) tCf3d->Fill(tParentIndex1, tParentIndex2, tKStar, tWeight);
   tCfFull->Fill(tKStar, tWeight);
+
+  if(fBuildCfYlm)
+  {
+    if(aFillNumerator) fCfYlm->AddRealPair(tKStar3Vec.X(), tKStar3Vec.Y(), tKStar3Vec.Z(), tWeight);
+    else               fCfYlm->AddMixedPair(tKStar3Vec.X(), tKStar3Vec.Y(), tKStar3Vec.Z(), tWeight);
+  }
+
   if(aFillNumerator)
   {
     if(fBuild3dHists) fPairSource3d->Fill(tParentIndex1, tParentIndex2, tRStar);
@@ -1747,13 +1830,16 @@ void ThermPairAnalysis::FillCorrelations(const ThermParticle &aParticle1, const 
       fPairSource3d_osl->Fill(tRStar3Vec.x(), tRStar3Vec.y(), tRStar3Vec.z());
       if(aParticle1.IsPrimordial() && aParticle2.IsPrimordial()) fPairSource3d_oslPrimaryOnly->Fill(tRStar3Vec.x(), tRStar3Vec.y(), tRStar3Vec.z());
 
-      fPairSource3d_mT1vmT2vRinv->Fill(aParticle1.GetMt(), aParticle2.GetMt(), tRStar);
-      fPairSource2d_PairmTvRinv->Fill(CalcmT(aParticle1, aParticle2), tRStar);
-      fPairSource2d_mT1vRinv->Fill(aParticle1.GetMt(), tRStar);
-      fPairSource2d_mT2vRinv->Fill(aParticle2.GetMt(), tRStar);
-      vector<double> tR1R2inPRF = CalcR1R2inPRF(aParticle1, aParticle2);
-      fPairSource2d_mT1vR1PRF->Fill(aParticle1.GetMt(), tR1R2inPRF[0]);
-      fPairSource2d_mT2vR2PRF->Fill(aParticle2.GetMt(), tR1R2inPRF[1]);
+      if(fBuildPairSourcewmTInfo)
+      {
+        fPairSource3d_mT1vmT2vRinv->Fill(aParticle1.GetMt(), aParticle2.GetMt(), tRStar);
+        fPairSource2d_PairmTvRinv->Fill(CalcmT(aParticle1, aParticle2), tRStar);
+        fPairSource2d_mT1vRinv->Fill(aParticle1.GetMt(), tRStar);
+        fPairSource2d_mT2vRinv->Fill(aParticle2.GetMt(), tRStar);
+        vector<double> tR1R2inPRF = CalcR1R2inPRF(aParticle1, aParticle2);
+        fPairSource2d_mT1vR1PRF->Fill(aParticle1.GetMt(), tR1R2inPRF[0]);
+        fPairSource2d_mT2vR2PRF->Fill(aParticle2.GetMt(), tR1R2inPRF[1]);
+      }
     }
     //--------------------------------------
     if(fUnitWeightCfNums) fNumFull_RotatePar2->Fill(CalcKStar_RotatePar2(aParticle1, aParticle2), 1.);
@@ -2076,12 +2162,19 @@ void ThermPairAnalysis::SaveAllCorrelationFunctions(TFile *aFile)
 
   fPairSource3d_osl->Write();
   fPairSource3d_oslPrimaryOnly->Write();
-  fPairSource3d_mT1vmT2vRinv->Write();
-  fPairSource2d_PairmTvRinv->Write();
-  fPairSource2d_mT1vRinv->Write();
-  fPairSource2d_mT2vRinv->Write();
-  fPairSource2d_mT1vR1PRF->Write();
-  fPairSource2d_mT2vR2PRF->Write();
+
+  if(fBuildPairSourcewmTInfo)
+  {
+    fPairSource3d_mT1vmT2vRinv->Write();
+    fPairSource2d_PairmTvRinv->Write();
+    fPairSource2d_mT1vRinv->Write();
+    fPairSource2d_mT2vRinv->Write();
+    fPairSource2d_mT1vR1PRF->Write();
+    fPairSource2d_mT2vR2PRF->Write();
+  }
+
+  if(fBuildCfYlm) fCfYlm->Write();
+
 }
 
 

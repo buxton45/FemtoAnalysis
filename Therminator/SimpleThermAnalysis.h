@@ -46,6 +46,8 @@ public:
   void SetBuildUniqueParents(bool aBuild);
   void SaveAll();
 
+  void DeactivateUnnecessary();
+
   vector<ThermEvent> ExtractEventsFromRootFile(TString aFileLocation);
   void ProcessAllInDirectory(TSystemDirectory* aEventsDirectory);
   void ProcessAll();
@@ -53,7 +55,8 @@ public:
 
   void SetBuildPairFractions(bool aBuild);
   void SetBuildTransformMatrices(bool aBuild);
-  void SetBuildCorrelationFunctions(bool aBuild, bool aBuild3dHists=false);
+  void SetBuildCorrelationFunctions(bool aBuild, bool aBuild3dHists=false, bool aBuildPairSourcewmTInfo=false);
+  void SetBuildCfYlm(bool aSet);
   void SetBuildMixedEventNumerators(bool aBuild);
   void SetUnitWeightCfNums(bool aSet);
   void SetWeightCfsWithParentInteraction(bool aSet);
@@ -107,6 +110,8 @@ private:
   bool fBuildTransformMatrices;
   bool fBuildCorrelationFunctions;
   bool fBuild3dHists;
+  bool fBuildPairSourcewmTInfo;
+  bool fBuildCfYlm;
   bool fBuildMixedEventNumerators;
   bool fUnitWeightCfNums;
   bool fWeightCfsWithParentInteraction;

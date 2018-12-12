@@ -2348,27 +2348,27 @@ TCanvas* Analysis::DrawKchdEdx(ParticleType aKchType, bool aLogz)
 
 
 //________________________________________________________________________________________________________________
-void Analysis::BuildYlmCfHeavy()
+void Analysis::BuildYlmCfHeavy(int aRebin)
 {
   vector<CorrFctnDirectYlmLite*> tTempCfLiteColl;
   for(int iAnaly=0; iAnaly<fNPartialAnalysis; iAnaly++) 
   {
-    tTempCfLiteColl.push_back(fPartialAnalysisCollection[iAnaly]->GetYlmCfLite());
+    tTempCfLiteColl.push_back(fPartialAnalysisCollection[iAnaly]->GetYlmCfLite(aRebin));
   }
   fCfYlmHeavy = new CorrFctnDirectYlmHeavy(tTempCfLiteColl);
 }
 
 //________________________________________________________________________________________________________________
-CorrFctnDirectYlmHeavy* Analysis::GetYlmCfHeavy()
+CorrFctnDirectYlmHeavy* Analysis::GetYlmCfHeavy(int aRebin)
 {
-  if(!fCfYlmHeavy) BuildYlmCfHeavy();
+  if(!fCfYlmHeavy) BuildYlmCfHeavy(aRebin);
   return fCfYlmHeavy;
 }
 
 //________________________________________________________________________________________________________________
-TH1D* Analysis::GetYlmCfnHist(YlmComponent aComponent, int al, int am)
+TH1D* Analysis::GetYlmCfnHist(YlmComponent aComponent, int al, int am, int aRebin)
 {
-  if(!fCfYlmHeavy) BuildYlmCfHeavy();
+  if(!fCfYlmHeavy) BuildYlmCfHeavy(aRebin);
   return fCfYlmHeavy->GetYlmCfnHist(aComponent, al, am);
 }
 

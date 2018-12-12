@@ -27,7 +27,8 @@ int main(int argc, char **argv)
   TString tSavedNameMod = "DirectYlmCf_LamKchP";
   TString tNewNameMod = "_0010_FemtoMinus";
 
-  CorrFctnDirectYlmLite* tTestCfYlm = new CorrFctnDirectYlmLite(tFileLocation, tDirectoryName, tSavedNameMod, tNewNameMod, 2, 400, 0., 2.);
+  int aRebin=1;
+  CorrFctnDirectYlmLite* tTestCfYlm = new CorrFctnDirectYlmLite(tFileLocation, tDirectoryName, tSavedNameMod, tNewNameMod, 2, 400, 0., 2., aRebin);
 
 
   TCanvas* tCan = new TCanvas("tCan", "tCan");

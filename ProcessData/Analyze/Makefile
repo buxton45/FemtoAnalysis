@@ -3,6 +3,7 @@ RM = rm
 
 UTILITIES_DIR = /home/jesse/Analysis/FemtoAnalysis/ProcessData/Utilities
 
+##gsl-config stuff needed to use Adam's SpherHarmonics and CorrFctnDirectYlm
 LIBS   = $(shell gsl-config --libs) $(shell root-config --libs)
 CFLAGS = $(shell gsl-config --cflags) $(shell root-config --cflags) -Wall -std=c++11 -I${UTILITIES_DIR} -g -O0
 #IFLAGS = -I$(ROOTSYS)/include

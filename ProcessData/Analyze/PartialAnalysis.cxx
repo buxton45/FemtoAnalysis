@@ -1084,7 +1084,7 @@ TH1* PartialAnalysis::GetMCKchPurityHisto(bool aBeforePairCut)
 
 
 //________________________________________________________________________________________________________________
-void PartialAnalysis::BuildYlmCfLite()
+void PartialAnalysis::BuildYlmCfLite(int aRebin)
 {
   TString tSavedNameMod = TString::Format("DirectYlmCf_%s", cAnalysisBaseTags[fAnalysisType]);
   TString tNewNameMod = TString::Format("%s%s", cCentralityTags[fCentralityType], cBFieldTags[fBFieldType]);
@@ -1093,33 +1093,22 @@ void PartialAnalysis::BuildYlmCfLite()
   double tKStarMin=0.;
   double tKStarMax=2.;
 
-  fCfYlmLite = new CorrFctnDirectYlmLite(fDir, tSavedNameMod, tNewNameMod, tMaxl, tNbins, tKStarMin, tKStarMax, fKStarCf->GetNumScale());
+  fCfYlmLite = new CorrFctnDirectYlmLite(fDir, tSavedNameMod, tNewNameMod, tMaxl, tNbins, tKStarMin, tKStarMax, aRebin, fKStarCf->GetNumScale());
 }
 
 
 //________________________________________________________________________________________________________________
-CorrFctnDirectYlmLite* PartialAnalysis::GetYlmCfLite()
+CorrFctnDirectYlmLite* PartialAnalysis::GetYlmCfLite(int aRebin)
 {
-  if(!fCfYlmLite) BuildYlmCfLite();
+  if(!fCfYlmLite) BuildYlmCfLite(aRebin);
   return fCfYlmLite;
 }
 
 //________________________________________________________________________________________________________________
-TH1D* PartialAnalysis::GetYlmHist(YlmComponent aComponent, YlmHistType aHistType, int al, int am)
+TH1D* PartialAnalysis::GetYlmHist(YlmComponent aComponent, YlmHistType aHistType, int al, int am, int aRebin)
 {
-  if(!fCfYlmLite) BuildYlmCfLite();
-
-  if     (aComponent==kYlmReal && aHistType==kYlmNum) return fCfYlmLite->GetNumRealHist(al, am);
-  else if(aComponent==kYlmImag && aHistType==kYlmNum) return fCfYlmLite->GetNumImagHist(al, am);
-
-  else if(aComponent==kYlmReal && aHistType==kYlmDen) return fCfYlmLite->GetDenRealHist(al, am);
-  else if(aComponent==kYlmImag && aHistType==kYlmDen) return fCfYlmLite->GetDenImagHist(al, am);
-
-  else if(aComponent==kYlmReal && aHistType==kYlmCf) return fCfYlmLite->GetCfnRealHist(al, am);
-  else if(aComponent==kYlmImag && aHistType==kYlmCf) return fCfYlmLite->GetCfnImagHist(al, am);
-  else assert(0);
-
-  return nullptr;
+  if(!fCfYlmLite) BuildYlmCfLite(aRebin);
+  return fCfYlmLite->GetYlmHist(aComponent, aHistType, al, am);
 }
 
 

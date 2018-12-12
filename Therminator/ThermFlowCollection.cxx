@@ -32,7 +32,10 @@ ThermFlowCollection::ThermFlowCollection(int aNpTBins, double apTBinSize) :
 //________________________________________________________________________________________________________________
 ThermFlowCollection::~ThermFlowCollection()
 {
-/*no-op*/
+  delete fAnUnIdent;
+  delete fAnKch;
+  delete fAnK0s;
+  delete fAnLam;
 }
 
 

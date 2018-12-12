@@ -42,6 +42,8 @@ SimpleThermAnalysis::SimpleThermAnalysis() :
   fBuildTransformMatrices(true),
   fBuildCorrelationFunctions(true),
   fBuild3dHists(false),
+  fBuildPairSourcewmTInfo(false),
+  fBuildCfYlm(false),
   fBuildMixedEventNumerators(false),
   fUnitWeightCfNums(false),
   fWeightCfsWithParentInteraction(false),
@@ -191,6 +193,8 @@ void SimpleThermAnalysis::SaveAll()
     if(fWeightCfsWithParentInteraction) fCorrelationFunctionsSaveName += TString("_WeightParentsInteraction");
     if(fOnlyWeightLongDecayParents) fCorrelationFunctionsSaveName += TString("_OnlyWeightLongDecayParents");
     if(fDrawRStarFromGaussian) fCorrelationFunctionsSaveName += TString("_DrawRStarFromGaussian");
+    if(fBuildPairSourcewmTInfo) fCorrelationFunctionsSaveName += TString("_BuildPairSourcewmTInfo");
+    if(fBuildCfYlm) fCorrelationFunctionsSaveName += TString("_BuildCfYlm");
     fCorrelationFunctionsSaveName += TString(".root");
     TFile* tFileCorrelationFunctions = new TFile(fCorrelationFunctionsSaveName, "RECREATE");
 
@@ -226,6 +230,53 @@ void SimpleThermAnalysis::SaveAll()
 
     tFileSingleParticleAnalyses->Close();
   }
+}
+
+//________________________________________________________________________________________________________________
+void SimpleThermAnalysis::DeactivateUnnecessary()
+{
+  //Some things are set up in a funky order, and if I simply set things to nullptr I might seg fault
+  //So, the lazy solution here is to keep everything functioning as is, but then to deactivate what is not used
+
+  if(!fBuildSingleParticleAnalyses)
+  {
+    delete fSPAnalysisLam;
+    fSPAnalysisLam = nullptr;
+
+    delete fSPAnalysisALam;
+    fSPAnalysisALam = nullptr;
+
+    delete fSPAnalysisKchP;
+    fSPAnalysisKchP = nullptr;
+
+    delete fSPAnalysisKchM;
+    fSPAnalysisKchM = nullptr;
+
+    delete fSPAnalysisProt;
+    fSPAnalysisProt = nullptr;
+
+    delete fSPAnalysisAProt;
+    fSPAnalysisAProt = nullptr;
+
+    delete fSPAnalysisK0;
+    fSPAnalysisK0 = nullptr;
+  }
+
+  if(!fBuildOtherPairs)
+  {
+    delete fAnalysisKchPKchP;
+    fAnalysisKchPKchP = nullptr;
+
+    delete fAnalysisK0K0;
+    fAnalysisK0K0 = nullptr;
+
+    delete fAnalysisLamLam;
+    fAnalysisLamLam = nullptr;
+  }
+
+  if(!fPerformFlowAnalysis) delete fFlowCollection;
+
+
 }
 
 //________________________________________________________________________________________________________________
@@ -340,6 +391,8 @@ void SimpleThermAnalysis::ProcessAllInDirectory(TSystemDirectory* aEventsDirecto
 //________________________________________________________________________________________________________________
 void SimpleThermAnalysis::ProcessAll()
 {
+  DeactivateUnnecessary();
+
   TSystemDirectory *tDir = new TSystemDirectory(fEventsDirectory.Data(), fEventsDirectory.Data());
   TList* tSubDirectories = tDir->GetListOfFiles(); 
 
@@ -495,27 +548,51 @@ void SimpleThermAnalysis::SetBuildTransformMatrices(bool aBuild)
 
 
 //________________________________________________________________________________________________________________
-void SimpleThermAnalysis::SetBuildCorrelationFunctions(bool aBuild, bool aBuild3dHists)
+void SimpleThermAnalysis::SetBuildCorrelationFunctions(bool aBuild, bool aBuild3dHists, bool aBuildPairSourcewmTInfo)
 {
   fBuildCorrelationFunctions = aBuild;
   fBuild3dHists = aBuild3dHists;
+  fBuildPairSourcewmTInfo = aBuildPairSourcewmTInfo;
 
   if(fBuildCorrelationFunctions) fMixEvents = true;
 
-  fAnalysisLamKchP->SetBuildCorrelationFunctions(fBuildCorrelationFunctions, fBuild3dHists);
-  fAnalysisALamKchM->SetBuildCorrelationFunctions(fBuildCorrelationFunctions, fBuild3dHists);
+  fAnalysisLamKchP->SetBuildCorrelationFunctions(fBuildCorrelationFunctions, fBuild3dHists, fBuildPairSourcewmTInfo);
+  fAnalysisALamKchM->SetBuildCorrelationFunctions(fBuildCorrelationFunctions, fBuild3dHists, fBuildPairSourcewmTInfo);
 
-  fAnalysisLamKchM->SetBuildCorrelationFunctions(fBuildCorrelationFunctions, fBuild3dHists);
-  fAnalysisALamKchP->SetBuildCorrelationFunctions(fBuildCorrelationFunctions, fBuild3dHists);
+  fAnalysisLamKchM->SetBuildCorrelationFunctions(fBuildCorrelationFunctions, fBuild3dHists, fBuildPairSourcewmTInfo);
+  fAnalysisALamKchP->SetBuildCorrelationFunctions(fBuildCorrelationFunctions, fBuild3dHists, fBuildPairSourcewmTInfo);
 
-  fAnalysisLamK0->SetBuildCorrelationFunctions(fBuildCorrelationFunctions, fBuild3dHists);
-  fAnalysisALamK0->SetBuildCorrelationFunctions(fBuildCorrelationFunctions, fBuild3dHists);
+  fAnalysisLamK0->SetBuildCorrelationFunctions(fBuildCorrelationFunctions, fBuild3dHists, fBuildPairSourcewmTInfo);
+  fAnalysisALamK0->SetBuildCorrelationFunctions(fBuildCorrelationFunctions, fBuild3dHists, fBuildPairSourcewmTInfo);
 
   if(fBuildOtherPairs)
   {
-    fAnalysisKchPKchP->SetBuildCorrelationFunctions(fBuildCorrelationFunctions, fBuild3dHists);
-    fAnalysisK0K0->SetBuildCorrelationFunctions(fBuildCorrelationFunctions, fBuild3dHists);
-    fAnalysisLamLam->SetBuildCorrelationFunctions(fBuildCorrelationFunctions, fBuild3dHists);
+    fAnalysisKchPKchP->SetBuildCorrelationFunctions(fBuildCorrelationFunctions, fBuild3dHists, fBuildPairSourcewmTInfo);
+    fAnalysisK0K0->SetBuildCorrelationFunctions(fBuildCorrelationFunctions, fBuild3dHists, fBuildPairSourcewmTInfo);
+    fAnalysisLamLam->SetBuildCorrelationFunctions(fBuildCorrelationFunctions, fBuild3dHists, fBuildPairSourcewmTInfo);
+  }
+}
+
+//________________________________________________________________________________________________________________
+void SimpleThermAnalysis::SetBuildCfYlm(bool aSet)
+{
+  fBuildCfYlm = aSet;
+  if(fBuildCfYlm) assert(fBuildCorrelationFunctions);
+
+  fAnalysisLamKchP->SetBuildCfYlm(aSet);
+  fAnalysisALamKchM->SetBuildCfYlm(aSet);
+
+  fAnalysisLamKchM->SetBuildCfYlm(aSet);
+  fAnalysisALamKchP->SetBuildCfYlm(aSet);
+
+  fAnalysisLamK0->SetBuildCfYlm(aSet);
+  fAnalysisALamK0->SetBuildCfYlm(aSet);
+
+  if(fBuildOtherPairs)
+  {
+    fAnalysisKchPKchP->SetBuildCfYlm(aSet);
+    fAnalysisK0K0->SetBuildCfYlm(aSet);
+    fAnalysisLamLam->SetBuildCfYlm(aSet);
   }
 }
 

@@ -107,9 +107,9 @@ public:
 
   TH1* GetMCKchPurityHisto(bool aBeforePairCut);
 
-  void BuildYlmCfLite();
-  CorrFctnDirectYlmLite* GetYlmCfLite();
-  TH1D* GetYlmHist(YlmComponent aComponent, YlmHistType aHistType, int al, int am);
+  void BuildYlmCfLite(int aRebin=1);
+  CorrFctnDirectYlmLite* GetYlmCfLite(int aRebin=1);
+  TH1D* GetYlmHist(YlmComponent aComponent, YlmHistType aHistType, int al, int am, int aRebin=1);
 
   //inline
   AnalysisType GetAnalysisType();

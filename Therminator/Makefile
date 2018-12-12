@@ -3,14 +3,15 @@ LEDNICKYFITTER_DIR = /home/jesse/Analysis/FemtoAnalysis/ProcessData/LednickyFitt
 UTILITIES_DIR = /home/jesse/Analysis/FemtoAnalysis/ProcessData/Utilities
 COULOMBFITTER_DIR = /home/jesse/Analysis/FemtoAnalysis/ProcessData/CoulombFitter
 
-LIBS   = $(shell root-config --libs) -lMinuit
-CFLAGS = $(shell root-config --cflags) -Wall -std=c++11 -I${ANALYZE_DIR} -I${LEDNICKYFITTER_DIR} -I${UTILITIES_DIR} -I${COULOMBFITTER_DIR} -g -O0
+##gsl-config stuff needed to use Adam's SpherHarmonics and CorrFctnDirectYlm
+LIBS   = $(shell gsl-config --libs) $(shell root-config --libs) -lMinuit
+CFLAGS = $(shell gsl-config --cflags) $(shell root-config --cflags) -Wall -std=c++11 -I${ANALYZE_DIR} -I${LEDNICKYFITTER_DIR} -I${UTILITIES_DIR} -I${COULOMBFITTER_DIR} -g -O0
 #IFLAGS = -I$(ROOTSYS)/include
 #.PHONY: clean
 
 RM = rm
 
-MY_LIBS = $(addprefix build/, ParticleCoor.o Interpolator.o Types.o CanvasPartition.o PIDMapping.o ThermCommon.o ThermParticle.o ThermV0Particle.o ThermEvent.o ThermChargedResidual.o ThermPairAnalysis.o ThermSingleParticleAnalysis.o ThermFlowAnalysis.o ThermFlowCollection.o ThermEventsCollection.o SimpleThermAnalysis.o Therm3dCf.o ThermCf.o CfLite.o CfHeavy.o SuperpositionFitBgd.o)
+MY_LIBS = $(addprefix build/, ParticleCoor.o Interpolator.o Types.o CanvasPartition.o PIDMapping.o ThermCommon.o ThermParticle.o ThermV0Particle.o ThermEvent.o ThermChargedResidual.o ThermPairAnalysis.o ThermSingleParticleAnalysis.o ThermFlowAnalysis.o ThermFlowCollection.o ThermEventsCollection.o SimpleThermAnalysis.o Therm3dCf.o ThermCf.o CfLite.o CfHeavy.o SuperpositionFitBgd.o SpherHarmonics.o CorrFctnDirectYlm.o)
 
 BINARIES = runTest runAnalysis runDrawTransforms runDrawPairFractions runDrawParentsMatrices runBuildLambdaValuesFromParentMatrices runProject3dRadii runProjectTransverseEmission runDrawPairSources runDrawCfs runDrawCfsv2 runCompareCfs runCompareCfsv2 runProject3dCfs runGetmT runRenameEventFiles runCompareBackgroundsAndFit runDrawIdentifiedv2 runDrawThermFlow runBuildSources
 

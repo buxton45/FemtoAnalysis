@@ -55,7 +55,8 @@ ThermFlowAnalysis::ThermFlowAnalysis(int aNpTBins, double apTBinSize, int aPID) 
 //________________________________________________________________________________________________________________
 ThermFlowAnalysis::~ThermFlowAnalysis()
 {
-/*no-op*/
+  delete fGraphV2;
+  delete fGraphV3;
 }
 
 

@@ -23,8 +23,8 @@ using namespace std;
 
 class CorrFctnDirectYlmLite : public CorrFctnDirectYlm {
  public:
-  CorrFctnDirectYlmLite(TString aFileLocation, TString aDirectoryName, TString aSavedNameMod, TString aNewNameMod, int aMaxl, int aNbins, double aKStarMin, double aKStarMax, double aNumScale=0.);
-  CorrFctnDirectYlmLite(TObjArray *aDir, TString aSavedNameMod, TString aNewNameMod, int aMaxl, int aNbins, double aKStarMin, double aKStarMax, double aNumScale=0.);
+  CorrFctnDirectYlmLite(TString aFileLocation, TString aDirectoryName, TString aSavedNameMod, TString aNewNameMod, int aMaxl, int aNbins, double aKStarMin, double aKStarMax, int aRebin, double aNumScale=0.);
+  CorrFctnDirectYlmLite(TObjArray *aDir, TString aSavedNameMod, TString aNewNameMod, int aMaxl, int aNbins, double aKStarMin, double aKStarMax, int aRebin, double aNumScale=0.);
   ~CorrFctnDirectYlmLite();
 
   TObjArray* ConnectAnalysisDirectory(TString aFileLocation, TString aDirectoryName);
@@ -32,7 +32,9 @@ class CorrFctnDirectYlmLite : public CorrFctnDirectYlm {
   TH2* Get2dHisto(TString aHistoName, TString aNewName);
   TH3* Get3dHisto(TString aHistoName, TString aNewName);
 
-  void ReadFromDir();
+  void ReadFromDir(int aRebin=1);
+
+  TH1D* GetYlmHist(YlmComponent aComponent, YlmHistType aHistType, int al, int am);
 
   //inline--------------------------
   double GetNumScale();
@@ -42,7 +44,7 @@ class CorrFctnDirectYlmLite : public CorrFctnDirectYlm {
   TString fSavedNameMod;
   TString fNewNameMod;
   double fNumScale; //Taken from normal KStarCf
-
+  int fRebin;
   
 };
 

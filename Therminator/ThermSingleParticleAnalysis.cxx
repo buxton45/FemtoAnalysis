@@ -111,7 +111,17 @@ ThermSingleParticleAnalysis::ThermSingleParticleAnalysis(ParticlePDGType aPartic
 //________________________________________________________________________________________________________________
 ThermSingleParticleAnalysis::~ThermSingleParticleAnalysis()
 {
-/*no-op*/
+  delete fParents;
+  delete fRadii;
+  delete f2dRadiiVsPid;
+  delete f2dRadiiVsBeta;
+  delete f3dRadii;
+
+  delete fTransverseEmission;
+  delete fTransverseEmissionPrimaryOnly;
+
+  delete fTransverseEmissionVsTau;
+  delete fTransverseEmissionVsTauPrimaryOnly;
 }
 
 //________________________________________________________________________________________________________________

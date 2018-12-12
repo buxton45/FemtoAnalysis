@@ -17,25 +17,30 @@ int main(int argc, char **argv)
   tFullTimer.Start();
 
 //-----------------------------------------------------------------------------
-  bool bRunFull = true;
+  FitGeneratorType tFitGenType = kPairwConj;
+  bool bBuildOtherPairs=true;
+  bool bBuildSingleParticleAnalyses = false;
+
+  bool bRunFull = false;
   bool bUseMixedEventsForTransforms = true;
   bool bPrintUniqueParents = false;
 
   bool bBuildPairFractions = false;
   bool bBuildTransformMatrices = false;
-  bool bBuildSingleParticleAnalyses = false;
 
   bool bBuildCorrelationFunctions = true;
   bool bBuild3dHists = false;
+  bool bBuildPairSourcewmTInfo = false;
+  bool bBuildCfYlm = true;
+
   bool bBuildMixedEventNumerators = false;
-  bool bBuildOtherPairs=true;
   int tNEventsToMix = 5;
 
   bool bUnitWeightCfNums = false;
   bool bWeightCfsWithParentInteraction = false;
   bool bOnlyWeightLongDecayParents = false;
 
-  bool bDrawRStarFromGaussian = false;
+  bool bDrawRStarFromGaussian = true;
 
   bool bCheckCoECoM = false;
   bool bRotateEventsByRandomAzimuthalAngles = false;
@@ -104,23 +109,21 @@ int main(int argc, char **argv)
   if(bBuildOtherPairs) tCorrelationFunctionsSaveName += TString("_wOtherPairs");
   //-----------------------------------------
 
-  SimpleThermAnalysis *tSimpleThermAnalysis = new SimpleThermAnalysis();
-  tSimpleThermAnalysis->SetBuildOtherPairs(bBuildOtherPairs);
+  SimpleThermAnalysis *tSimpleThermAnalysis = new SimpleThermAnalysis(tFitGenType, bBuildOtherPairs, bBuildSingleParticleAnalyses);
   tSimpleThermAnalysis->SetUseMixedEventsForTransforms(bUseMixedEventsForTransforms);
   tSimpleThermAnalysis->SetBuildUniqueParents(bPrintUniqueParents);
 
   tSimpleThermAnalysis->SetBuildPairFractions(bBuildPairFractions);
   tSimpleThermAnalysis->SetBuildTransformMatrices(bBuildTransformMatrices);
 
-  tSimpleThermAnalysis->SetBuildCorrelationFunctions(bBuildCorrelationFunctions, bBuild3dHists);
+  tSimpleThermAnalysis->SetBuildCorrelationFunctions(bBuildCorrelationFunctions, bBuild3dHists, bBuildPairSourcewmTInfo);
+  tSimpleThermAnalysis->SetBuildCfYlm(bBuildCfYlm);
   tSimpleThermAnalysis->SetBuildMixedEventNumerators(bBuildMixedEventNumerators);
   tSimpleThermAnalysis->SetUnitWeightCfNums(bUnitWeightCfNums);
   tSimpleThermAnalysis->SetWeightCfsWithParentInteraction(bWeightCfsWithParentInteraction);
   tSimpleThermAnalysis->SetOnlyWeightLongDecayParents(bOnlyWeightLongDecayParents);
   tSimpleThermAnalysis->SetDrawRStarFromGaussian(bDrawRStarFromGaussian);
   tSimpleThermAnalysis->SetNEventsToMix(tNEventsToMix);
-
-  tSimpleThermAnalysis->SetBuildSingleParticleAnalyses(bBuildSingleParticleAnalyses);
 
   tSimpleThermAnalysis->SetEventsDirectory(tEventsDirectory);
   tSimpleThermAnalysis->SetPairFractionsSaveName(tPairFractionSaveName);

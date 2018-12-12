@@ -28,6 +28,8 @@ class ThermEvent;
 #include "ThermChargedResidual.h"
 class ThermChargedResidual;
 
+#include "CorrFctnDirectYlm.h"
+
 using namespace std;
 
 class ThermPairAnalysis {
@@ -43,7 +45,8 @@ public:
   void SetBuildTransformMatrices(bool aBuild);
 
   void InitiateCorrelations();
-  void SetBuildCorrelationFunctions(bool aBuild, bool aBuild3dHists=false);
+  void SetBuildCorrelationFunctions(bool aBuild, bool aBuild3dHists=false, bool aBuildPairSourcewmTInfo=false);
+  void SetBuildCfYlm(bool aSet);
 
   void InitiatePairFractionsAndParentsMatrix();
   void SetBuildPairFractions(bool aBuild);
@@ -176,6 +179,7 @@ private:
   bool fBuildCorrelationFunctions;
   bool fBuild3dHists;                //Advantage of 3dHists is ability to tweak primary definition after processing
                                      //Disadvantage is they consume a huge amount of memory
+  bool fBuildPairSourcewmTInfo;
   bool fBuildMixedEventNumerators;
 
   vector<AnalysisType> fTransformStorageMapping;
@@ -244,6 +248,9 @@ private:
   TH2* fPairSource2d_mT2vRinv;
   TH2* fPairSource2d_mT1vR1PRF;
   TH2* fPairSource2d_mT2vR2PRF;
+
+  bool fBuildCfYlm;
+  CorrFctnDirectYlm* fCfYlm;
 
 #ifdef __ROOT__
   ClassDef(ThermPairAnalysis, 1)

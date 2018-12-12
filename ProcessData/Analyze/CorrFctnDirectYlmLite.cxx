@@ -10,27 +10,29 @@
 using namespace std;
 
 //________________________________________________________________________________________________________________
-CorrFctnDirectYlmLite::CorrFctnDirectYlmLite(TString aFileLocation, TString aDirectoryName, TString aSavedNameMod, TString aNewNameMod, int aMaxl, int aNbins, double aKStarMin, double aKStarMax, double aNumScale) :
+CorrFctnDirectYlmLite::CorrFctnDirectYlmLite(TString aFileLocation, TString aDirectoryName, TString aSavedNameMod, TString aNewNameMod, int aMaxl, int aNbins, double aKStarMin, double aKStarMax, int aRebin, double aNumScale) :
   CorrFctnDirectYlm(aSavedNameMod.Data(), aMaxl, aNbins, aKStarMin, aKStarMax), 
   fDir(nullptr),
   fSavedNameMod(aSavedNameMod),
   fNewNameMod(aNewNameMod),
+  fRebin(aRebin),
   fNumScale(aNumScale)
 
 {
   fDir = ConnectAnalysisDirectory(aFileLocation, aDirectoryName);
-  ReadFromDir();
+  ReadFromDir(fRebin);
 }
 
 //________________________________________________________________________________________________________________
-CorrFctnDirectYlmLite::CorrFctnDirectYlmLite(TObjArray *aDir, TString aSavedNameMod, TString aNewNameMod, int aMaxl, int aNbins, double aKStarMin, double aKStarMax, double aNumScale) :
+CorrFctnDirectYlmLite::CorrFctnDirectYlmLite(TObjArray *aDir, TString aSavedNameMod, TString aNewNameMod, int aMaxl, int aNbins, double aKStarMin, double aKStarMax, int aRebin, double aNumScale) :
   CorrFctnDirectYlm(aSavedNameMod.Data(), aMaxl, aNbins, aKStarMin, aKStarMax), 
   fDir(aDir),
   fSavedNameMod(aSavedNameMod),
   fNewNameMod(aNewNameMod),
+  fRebin(aRebin),
   fNumScale(aNumScale)
 {
-  ReadFromDir();
+  ReadFromDir(fRebin);
 } 
 
 
@@ -163,7 +165,7 @@ TH3* CorrFctnDirectYlmLite::Get3dHisto(TString aHistoName, TString aNewName)
 
 
 //________________________________________________________________________________________________________________
-void CorrFctnDirectYlmLite::ReadFromDir()
+void CorrFctnDirectYlmLite::ReadFromDir(int aRebin)
 {
   cout << "Reading in numerators and denominators" << endl;
   cout << "Reading function " << fSavedNameMod << fNewNameMod << endl;
@@ -185,6 +187,14 @@ void CorrFctnDirectYlmLite::ReadFromDir()
     sprintf(bufname, "DenImYlm%i%i%s", elsi[ihist], emsi[ihist]<0 ? elsi[ihist]-emsi[ihist] : emsi[ihist], fSavedNameMod.Data());
     if (densimag[ihist]) delete densimag[ihist];
     densimag[ihist] = new TH1D(*((TH1D *) Get1dHisto(bufname, TString::Format("%s%s", bufname, fNewNameMod.Data()))));
+
+    if(aRebin != 1)
+    {
+      numsreal[ihist]->Rebin(aRebin);
+      numsimag[ihist]->Rebin(aRebin);
+      densreal[ihist]->Rebin(aRebin);
+      densimag[ihist]->Rebin(aRebin);
+    }
   }
 
   if (covnum) delete covnum;
@@ -200,6 +210,13 @@ void CorrFctnDirectYlmLite::ReadFromDir()
     covden = new TH3D (*((TH3D *) Get3dHisto(bufname, TString::Format("%s%s", bufname, fNewNameMod.Data()))));
   else
     covden = 0;
+
+  if(aRebin != 1)  //for covariance 3d histograms, only x-axis gets rebinned
+  {
+    covnum->RebinX(aRebin);
+    covden->RebinX(aRebin);
+    if(covcfc) covcfc->RebinX(aRebin);
+  }
 
   if ((covnum) && (covden)) {
     cout << "Unpacking covariance matrices from file " << endl;
@@ -244,9 +261,6 @@ void CorrFctnDirectYlmLite::ReadFromDir()
     }
   }
 
-  // Recalculating the correlation functions
-  Finish();
-
   //Add fNewNameMod to all Cfs etc (already done on Nums and Dens above)
   for(int ihist=0; ihist<maxjm; ihist++)
   {
@@ -255,10 +269,54 @@ void CorrFctnDirectYlmLite::ReadFromDir()
 
     cfctimag[ihist]->SetName(TString::Format("%s%s", cfctimag[ihist]->GetName(), fNewNameMod.Data()));
     cfctimag[ihist]->SetTitle(TString::Format("%s%s", cfctimag[ihist]->GetTitle(), fNewNameMod.Data()));
+
+    if(aRebin != 1)
+    {
+      cfctreal[ihist]->Rebin(aRebin);
+      cfctimag[ihist]->Rebin(aRebin);
+    }
   }
   binctn->SetName(TString::Format("%s%s", binctn->GetName(), fNewNameMod.Data()));
   binctn->SetTitle(TString::Format("%s%s", binctn->GetTitle(), fNewNameMod.Data()));
 
   binctd->SetName(TString::Format("%s%s", binctd->GetName(), fNewNameMod.Data()));
   binctd->SetTitle(TString::Format("%s%s", binctd->GetTitle(), fNewNameMod.Data()));
+
+  if(aRebin != 1)
+  {
+    binctn->Rebin(aRebin);
+    binctd->Rebin(aRebin);
+  }
+
+  // Recalculating the correlation functions
+  Finish();
 }
+
+
+
+//________________________________________________________________________________________________________________
+TH1D* CorrFctnDirectYlmLite::GetYlmHist(YlmComponent aComponent, YlmHistType aHistType, int al, int am)
+{
+  if     (aComponent==kYlmReal && aHistType==kYlmNum) return GetNumRealHist(al, am);
+  else if(aComponent==kYlmImag && aHistType==kYlmNum) return GetNumImagHist(al, am);
+
+  else if(aComponent==kYlmReal && aHistType==kYlmDen) return GetDenRealHist(al, am);
+  else if(aComponent==kYlmImag && aHistType==kYlmDen) return GetDenImagHist(al, am);
+
+  else if(aComponent==kYlmReal && aHistType==kYlmCf) return GetCfnRealHist(al, am);
+  else if(aComponent==kYlmImag && aHistType==kYlmCf) return GetCfnImagHist(al, am);
+  else assert(0);
+
+  return nullptr;
+}
+
+
+
+
+
+
+
+
+
+
+

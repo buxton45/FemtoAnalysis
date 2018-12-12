@@ -137,9 +137,9 @@ public:
 
   TCanvas* DrawKchdEdx(ParticleType aKchType, bool aLogz=false);
 
-  void BuildYlmCfHeavy();
-  CorrFctnDirectYlmHeavy* GetYlmCfHeavy();
-  TH1D* GetYlmCfnHist(YlmComponent aComponent, int al, int am);
+  void BuildYlmCfHeavy(int aRebin=1);
+  CorrFctnDirectYlmHeavy* GetYlmCfHeavy(int aRebin=1);
+  TH1D* GetYlmCfnHist(YlmComponent aComponent, int al, int am, int aRebin=1);
 
   //inline
   TString GetAnalysisName();
