@@ -12,7 +12,12 @@ ClassImp(SimpleThermAnalysis)
 
 
 //________________________________________________________________________________________________________________
-SimpleThermAnalysis::SimpleThermAnalysis() :
+SimpleThermAnalysis::SimpleThermAnalysis(FitGeneratorType aFitGenType, bool aBuildOtherPairs, bool aBuildSingleParticleAnalyses, bool aPerformFlowAnalysis) :
+  fFitGenType(aFitGenType),
+  fBuildOtherPairs(aBuildOtherPairs),
+  fBuildSingleParticleAnalyses(aBuildSingleParticleAnalyses),
+  fPerformFlowAnalysis(aPerformFlowAnalysis),
+
   fNFiles(0),
   fNEvents(0),
 
@@ -49,58 +54,50 @@ SimpleThermAnalysis::SimpleThermAnalysis() :
   fWeightCfsWithParentInteraction(false),
   fOnlyWeightLongDecayParents(false),
   fDrawRStarFromGaussian(false),
-  fBuildSingleParticleAnalyses(true),
 
-  fAnalysisLamKchP(nullptr),
-  fAnalysisALamKchM(nullptr),
-  fAnalysisLamKchM(nullptr),
-  fAnalysisALamKchP(nullptr),
-  fAnalysisLamK0(nullptr),
-  fAnalysisALamK0(nullptr),
-
-  fAnalysisKchPKchP(nullptr),
-  fAnalysisK0K0(nullptr),
-  fAnalysisLamLam(nullptr),
-
-  fSPAnalysisLam(nullptr),
-  fSPAnalysisALam(nullptr),
-  fSPAnalysisKchP(nullptr), 
-  fSPAnalysisKchM(nullptr),
-  fSPAnalysisProt(nullptr), 
-  fSPAnalysisAProt(nullptr),
-  fSPAnalysisK0(nullptr),
+  fPairAnalysisVec(0),
+  fOtherPairAnalysisVec(0),
+  fSPAnalysisVec(0),
 
   fFlowCollection(nullptr),
 
   fCheckCoECoM(false),
   fRotateEventsByRandAzAngles(false),
-  fPerformFlowAnalysis(false),
-  fArtificialV3Info(0,-1),
-
-  fBuildOtherPairs(false)
+  fArtificialV3Info(0,-1)
 
 {
-  fAnalysisLamKchP = new ThermPairAnalysis(kLamKchP);
-  fAnalysisALamKchM = new ThermPairAnalysis(kALamKchM);
-  fAnalysisLamKchM = new ThermPairAnalysis(kLamKchM);
-  fAnalysisALamKchP = new ThermPairAnalysis(kALamKchP);
-  fAnalysisLamK0 = new ThermPairAnalysis(kLamK0);
-  fAnalysisALamK0 = new ThermPairAnalysis(kALamK0);
+  if(fFitGenType==kPair || fFitGenType==kPairwConj)
+  {
+    fPairAnalysisVec.push_back(new ThermPairAnalysis(kLamKchP));
+    fPairAnalysisVec.push_back(new ThermPairAnalysis(kLamKchM));
+    fPairAnalysisVec.push_back(new ThermPairAnalysis(kLamK0));
+  }
+  if(fFitGenType==kConjPair || fFitGenType==kPairwConj)
+  {
+    fPairAnalysisVec.push_back(new ThermPairAnalysis(kALamKchM));
+    fPairAnalysisVec.push_back(new ThermPairAnalysis(kALamKchP));
+    fPairAnalysisVec.push_back(new ThermPairAnalysis(kALamK0));
+  }
 
-  fAnalysisKchPKchP = new ThermPairAnalysis(kKchPKchP);
-  fAnalysisK0K0 = new ThermPairAnalysis(kK0K0);
-  fAnalysisLamLam = new ThermPairAnalysis(kLamLam);
+  if(fBuildOtherPairs)
+  {
+    fOtherPairAnalysisVec.push_back(new ThermPairAnalysis(kKchPKchP));
+    fOtherPairAnalysisVec.push_back(new ThermPairAnalysis(kK0K0));
+    fOtherPairAnalysisVec.push_back(new ThermPairAnalysis(kLamLam));
+  }
 
+  if(fBuildSingleParticleAnalyses)
+  {
+    fSPAnalysisVec.push_back(new ThermSingleParticleAnalysis(kPDGLam));
+    fSPAnalysisVec.push_back(new ThermSingleParticleAnalysis(kPDGALam));
+    fSPAnalysisVec.push_back(new ThermSingleParticleAnalysis(kPDGKchP));
+    fSPAnalysisVec.push_back(new ThermSingleParticleAnalysis(kPDGKchM));
+    fSPAnalysisVec.push_back(new ThermSingleParticleAnalysis(kPDGProt));
+    fSPAnalysisVec.push_back(new ThermSingleParticleAnalysis(kPDGAntiProt));
+    fSPAnalysisVec.push_back(new ThermSingleParticleAnalysis(kPDGK0));
+  }
 
-  fSPAnalysisLam = new ThermSingleParticleAnalysis(kPDGLam);
-  fSPAnalysisALam = new ThermSingleParticleAnalysis(kPDGALam);
-  fSPAnalysisKchP = new ThermSingleParticleAnalysis(kPDGKchP);
-  fSPAnalysisKchM = new ThermSingleParticleAnalysis(kPDGKchM);
-  fSPAnalysisProt = new ThermSingleParticleAnalysis(kPDGProt);
-  fSPAnalysisAProt = new ThermSingleParticleAnalysis(kPDGAntiProt);
-  fSPAnalysisK0 = new ThermSingleParticleAnalysis(kPDGK0);
-
-  fFlowCollection = new ThermFlowCollection();
+  if(fPerformFlowAnalysis) fFlowCollection = new ThermFlowCollection();
 }
 
 
@@ -118,12 +115,7 @@ void SimpleThermAnalysis::SetUseMixedEventsForTransforms(bool aUse)
   fMixEventsForTransforms = aUse;
   if(fMixEventsForTransforms) fMixEvents = true;
 
-  fAnalysisLamKchP->SetUseMixedEventsForTransforms(aUse);
-  fAnalysisALamKchM->SetUseMixedEventsForTransforms(aUse);
-  fAnalysisLamKchM->SetUseMixedEventsForTransforms(aUse);
-  fAnalysisALamKchP->SetUseMixedEventsForTransforms(aUse);
-  fAnalysisLamK0->SetUseMixedEventsForTransforms(aUse);
-  fAnalysisALamK0->SetUseMixedEventsForTransforms(aUse);
+  for(unsigned int iP=0; iP<fPairAnalysisVec.size(); iP++) fPairAnalysisVec[iP]->SetUseMixedEventsForTransforms(aUse);
 }
 
 //________________________________________________________________________________________________________________
@@ -131,27 +123,15 @@ void SimpleThermAnalysis::SetBuildUniqueParents(bool aBuild)
 {
   fBuildUniqueParents = aBuild;
 
-  fAnalysisLamKchP->SetBuildUniqueParents(aBuild);
-  fAnalysisALamKchM->SetBuildUniqueParents(aBuild);
-  fAnalysisLamKchM->SetBuildUniqueParents(aBuild);
-  fAnalysisALamKchP->SetBuildUniqueParents(aBuild);
-  fAnalysisLamK0->SetBuildUniqueParents(aBuild);
-  fAnalysisALamK0->SetBuildUniqueParents(aBuild);
-
+  for(unsigned int iP=0; iP<fPairAnalysisVec.size(); iP++) fPairAnalysisVec[iP]->SetBuildUniqueParents(aBuild);
   if(fBuildOtherPairs)
   {
-    fAnalysisKchPKchP->SetBuildUniqueParents(false);
-    fAnalysisK0K0->SetBuildUniqueParents(false);
-    fAnalysisLamLam->SetBuildUniqueParents(false);
+    for(unsigned int iOP=0; iOP<fOtherPairAnalysisVec.size(); iOP++) fOtherPairAnalysisVec[iOP]->SetBuildUniqueParents(false);
   }
-
-  fSPAnalysisLam->SetBuildUniqueParents(aBuild);
-  fSPAnalysisALam->SetBuildUniqueParents(aBuild);
-  fSPAnalysisKchP->SetBuildUniqueParents(aBuild);
-  fSPAnalysisKchM->SetBuildUniqueParents(aBuild);
-  fSPAnalysisProt->SetBuildUniqueParents(aBuild);
-  fSPAnalysisAProt->SetBuildUniqueParents(aBuild);
-  fSPAnalysisK0->SetBuildUniqueParents(aBuild);
+  if(fBuildSingleParticleAnalyses)
+  {
+    for(unsigned int iSP=0; iSP<fSPAnalysisVec.size(); iSP++) fSPAnalysisVec[iSP]->SetBuildUniqueParents(aBuild);
+  }
 }
 
 //________________________________________________________________________________________________________________
@@ -159,31 +139,25 @@ void SimpleThermAnalysis::SaveAll()
 {
   if(fBuildPairFractions)
   {
+    if(fFitGenType==kPair)     fPairFractionsSaveName += TString("_PairOnly");
+    if(fFitGenType==kConjPair) fPairFractionsSaveName += TString("_ConjPairOnly");
+
     fPairFractionsSaveName += TString(".root");
     TFile *tFilePairFractions = new TFile(fPairFractionsSaveName, "RECREATE");
 
-    fAnalysisLamKchP->SavePairFractionsAndParentsMatrix(tFilePairFractions);
-    fAnalysisALamKchM->SavePairFractionsAndParentsMatrix(tFilePairFractions);
-    fAnalysisLamKchM->SavePairFractionsAndParentsMatrix(tFilePairFractions);
-    fAnalysisALamKchP->SavePairFractionsAndParentsMatrix(tFilePairFractions);
-    fAnalysisLamK0->SavePairFractionsAndParentsMatrix(tFilePairFractions);
-    fAnalysisALamK0->SavePairFractionsAndParentsMatrix(tFilePairFractions);
-
+    for(unsigned int iP=0; iP<fPairAnalysisVec.size(); iP++) fPairAnalysisVec[iP]->SavePairFractionsAndParentsMatrix(tFilePairFractions);
     tFilePairFractions->Close();
   }
   //---------------------------------------------
   if(fBuildTransformMatrices)
   {
+    if(fFitGenType==kPair)     fTransformMatricesSaveName += TString("_PairOnly");
+    if(fFitGenType==kConjPair) fTransformMatricesSaveName += TString("_ConjPairOnly");
+
     fTransformMatricesSaveName += TString(".root");
     TFile* tFileTransformMatrices = new TFile(fTransformMatricesSaveName, "RECREATE");
 
-    fAnalysisLamKchP->SaveAllTransformMatrices(tFileTransformMatrices);
-    fAnalysisALamKchM->SaveAllTransformMatrices(tFileTransformMatrices);
-    fAnalysisLamKchM->SaveAllTransformMatrices(tFileTransformMatrices);
-    fAnalysisALamKchP->SaveAllTransformMatrices(tFileTransformMatrices);
-    fAnalysisLamK0->SaveAllTransformMatrices(tFileTransformMatrices);
-    fAnalysisALamK0->SaveAllTransformMatrices(tFileTransformMatrices);
-
+    for(unsigned int iP=0; iP<fPairAnalysisVec.size(); iP++) fPairAnalysisVec[iP]->SaveAllTransformMatrices(tFileTransformMatrices);
     tFileTransformMatrices->Close();
   }
   //---------------------------------------------
@@ -195,21 +169,18 @@ void SimpleThermAnalysis::SaveAll()
     if(fDrawRStarFromGaussian) fCorrelationFunctionsSaveName += TString("_DrawRStarFromGaussian");
     if(fBuildPairSourcewmTInfo) fCorrelationFunctionsSaveName += TString("_BuildPairSourcewmTInfo");
     if(fBuildCfYlm) fCorrelationFunctionsSaveName += TString("_BuildCfYlm");
+
+    if(fFitGenType==kPair)     fCorrelationFunctionsSaveName += TString("_PairOnly");
+    if(fFitGenType==kConjPair) fCorrelationFunctionsSaveName += TString("_ConjPairOnly");
+
     fCorrelationFunctionsSaveName += TString(".root");
     TFile* tFileCorrelationFunctions = new TFile(fCorrelationFunctionsSaveName, "RECREATE");
 
-    fAnalysisLamKchP->SaveAllCorrelationFunctions(tFileCorrelationFunctions);
-    fAnalysisALamKchM->SaveAllCorrelationFunctions(tFileCorrelationFunctions);
-    fAnalysisLamKchM->SaveAllCorrelationFunctions(tFileCorrelationFunctions);
-    fAnalysisALamKchP->SaveAllCorrelationFunctions(tFileCorrelationFunctions);
-    fAnalysisLamK0->SaveAllCorrelationFunctions(tFileCorrelationFunctions);
-    fAnalysisALamK0->SaveAllCorrelationFunctions(tFileCorrelationFunctions);
+    for(unsigned int iP=0; iP<fPairAnalysisVec.size(); iP++) fPairAnalysisVec[iP]->SaveAllCorrelationFunctions(tFileCorrelationFunctions);
 
     if(fBuildOtherPairs)
     {
-      fAnalysisKchPKchP->SaveAllCorrelationFunctions(tFileCorrelationFunctions);
-      fAnalysisK0K0->SaveAllCorrelationFunctions(tFileCorrelationFunctions);
-      fAnalysisLamLam->SaveAllCorrelationFunctions(tFileCorrelationFunctions);
+      for(unsigned int iOP=0; iOP<fOtherPairAnalysisVec.size(); iOP++) fOtherPairAnalysisVec[iOP]->SaveAllCorrelationFunctions(tFileCorrelationFunctions);
     }
 
     tFileCorrelationFunctions->Close();
@@ -220,64 +191,11 @@ void SimpleThermAnalysis::SaveAll()
     fSingleParticlesSaveName += TString(".root");
     TFile* tFileSingleParticleAnalyses = new TFile(fSingleParticlesSaveName, "RECREATE");
 
-    fSPAnalysisLam->SaveAll(tFileSingleParticleAnalyses);
-    fSPAnalysisALam->SaveAll(tFileSingleParticleAnalyses);
-    fSPAnalysisKchP->SaveAll(tFileSingleParticleAnalyses);
-    fSPAnalysisKchM->SaveAll(tFileSingleParticleAnalyses);
-    fSPAnalysisProt->SaveAll(tFileSingleParticleAnalyses);
-    fSPAnalysisAProt->SaveAll(tFileSingleParticleAnalyses);
-    fSPAnalysisK0->SaveAll(tFileSingleParticleAnalyses);
-
+    for(unsigned int iSP=0; iSP<fSPAnalysisVec.size(); iSP++) fSPAnalysisVec[iSP]->SaveAll(tFileSingleParticleAnalyses);
     tFileSingleParticleAnalyses->Close();
   }
 }
 
-//________________________________________________________________________________________________________________
-void SimpleThermAnalysis::DeactivateUnnecessary()
-{
-  //Some things are set up in a funky order, and if I simply set things to nullptr I might seg fault
-  //So, the lazy solution here is to keep everything functioning as is, but then to deactivate what is not used
-
-  if(!fBuildSingleParticleAnalyses)
-  {
-    delete fSPAnalysisLam;
-    fSPAnalysisLam = nullptr;
-
-    delete fSPAnalysisALam;
-    fSPAnalysisALam = nullptr;
-
-    delete fSPAnalysisKchP;
-    fSPAnalysisKchP = nullptr;
-
-    delete fSPAnalysisKchM;
-    fSPAnalysisKchM = nullptr;
-
-    delete fSPAnalysisProt;
-    fSPAnalysisProt = nullptr;
-
-    delete fSPAnalysisAProt;
-    fSPAnalysisAProt = nullptr;
-
-    delete fSPAnalysisK0;
-    fSPAnalysisK0 = nullptr;
-  }
-
-  if(!fBuildOtherPairs)
-  {
-    delete fAnalysisKchPKchP;
-    fAnalysisKchPKchP = nullptr;
-
-    delete fAnalysisK0K0;
-    fAnalysisK0K0 = nullptr;
-
-    delete fAnalysisLamLam;
-    fAnalysisLamLam = nullptr;
-  }
-
-  if(!fPerformFlowAnalysis) delete fFlowCollection;
-
-
-}
 
 //________________________________________________________________________________________________________________
 vector<ThermEvent> SimpleThermAnalysis::ExtractEventsFromRootFile(TString aFileLocation)
@@ -391,8 +309,6 @@ void SimpleThermAnalysis::ProcessAllInDirectory(TSystemDirectory* aEventsDirecto
 //________________________________________________________________________________________________________________
 void SimpleThermAnalysis::ProcessAll()
 {
-  DeactivateUnnecessary();
-
   TSystemDirectory *tDir = new TSystemDirectory(fEventsDirectory.Data(), fEventsDirectory.Data());
   TList* tSubDirectories = tDir->GetListOfFiles(); 
 
@@ -427,21 +343,9 @@ void SimpleThermAnalysis::ProcessAll()
 
   if(fBuildUniqueParents)
   {
-    fAnalysisLamKchP->PrintUniqueParents();
-    fAnalysisALamKchM->PrintUniqueParents();
-    fAnalysisLamKchM->PrintUniqueParents();
-    fAnalysisALamKchP->PrintUniqueParents();
-    fAnalysisLamK0->PrintUniqueParents();
-    fAnalysisALamK0->PrintUniqueParents();
+    for(unsigned int iP=0; iP<fPairAnalysisVec.size(); iP++) fPairAnalysisVec[iP]->PrintUniqueParents();
   }
-
-
-  fAnalysisLamKchP->PrintPrimaryAndOtherPairInfo();
-  fAnalysisALamKchM->PrintPrimaryAndOtherPairInfo();
-  fAnalysisLamKchM->PrintPrimaryAndOtherPairInfo();
-  fAnalysisALamKchP->PrintPrimaryAndOtherPairInfo();
-  fAnalysisLamK0->PrintPrimaryAndOtherPairInfo();
-  fAnalysisALamK0->PrintPrimaryAndOtherPairInfo();
+  for(unsigned int iP=0; iP<fPairAnalysisVec.size(); iP++) fPairAnalysisVec[iP]->PrintPrimaryAndOtherPairInfo();
 
   SaveAll();
   if(fPerformFlowAnalysis) fFlowCollection->Finalize();
@@ -455,32 +359,16 @@ void SimpleThermAnalysis::ProcessEventByEvent(vector<ThermEvent> &aEventsCollect
 
   for(unsigned int iEv=0; iEv < fEventsCollection.size(); iEv++)
   {
-    fAnalysisLamKchP->ProcessEvent(fEventsCollection[iEv], fMixingEventsCollection);
-    fAnalysisALamKchM->ProcessEvent(fEventsCollection[iEv], fMixingEventsCollection);
-
-    fAnalysisLamKchM->ProcessEvent(fEventsCollection[iEv], fMixingEventsCollection);
-    fAnalysisALamKchP->ProcessEvent(fEventsCollection[iEv], fMixingEventsCollection);
-
-    fAnalysisLamK0->ProcessEvent(fEventsCollection[iEv], fMixingEventsCollection);
-    fAnalysisALamK0->ProcessEvent(fEventsCollection[iEv], fMixingEventsCollection);
-
+    for(unsigned int iP=0; iP<fPairAnalysisVec.size(); iP++) fPairAnalysisVec[iP]->ProcessEvent(fEventsCollection[iEv], fMixingEventsCollection);
     if(fBuildOtherPairs)
     {
-      fAnalysisKchPKchP->ProcessEvent(fEventsCollection[iEv], fMixingEventsCollection);
-      fAnalysisK0K0->ProcessEvent(fEventsCollection[iEv], fMixingEventsCollection);
-      fAnalysisLamLam->ProcessEvent(fEventsCollection[iEv], fMixingEventsCollection);
+      for(unsigned int iOP=0; iOP<fOtherPairAnalysisVec.size(); iOP++) fOtherPairAnalysisVec[iOP]->ProcessEvent(fEventsCollection[iEv], fMixingEventsCollection);
     }
 
     //--------------------------------------------
     if(fBuildSingleParticleAnalyses)
     {
-      fSPAnalysisLam->ProcessEvent(fEventsCollection[iEv]);
-      fSPAnalysisALam->ProcessEvent(fEventsCollection[iEv]);
-      fSPAnalysisKchP->ProcessEvent(fEventsCollection[iEv]);
-      fSPAnalysisKchM->ProcessEvent(fEventsCollection[iEv]);
-      fSPAnalysisProt->ProcessEvent(fEventsCollection[iEv]); 
-      fSPAnalysisAProt->ProcessEvent(fEventsCollection[iEv]);
-      fSPAnalysisK0->ProcessEvent(fEventsCollection[iEv]);
+      for(unsigned int iSP=0; iSP<fSPAnalysisVec.size(); iSP++) fSPAnalysisVec[iSP]->ProcessEvent(fEventsCollection[iEv]);
     }
 
     if(fPerformFlowAnalysis) fFlowCollection->BuildVnEPIngredients(fEventsCollection[iEv]);
@@ -506,20 +394,10 @@ void SimpleThermAnalysis::SetBuildPairFractions(bool aBuild)
 {
   fBuildPairFractions = aBuild;
 
-  fAnalysisLamKchP->SetBuildPairFractions(aBuild);
-  fAnalysisALamKchM->SetBuildPairFractions(aBuild);
-
-  fAnalysisLamKchM->SetBuildPairFractions(aBuild);
-  fAnalysisALamKchP->SetBuildPairFractions(aBuild);
-
-  fAnalysisLamK0->SetBuildPairFractions(aBuild);
-  fAnalysisALamK0->SetBuildPairFractions(aBuild);
-
+  for(unsigned int iP=0; iP<fPairAnalysisVec.size(); iP++) fPairAnalysisVec[iP]->SetBuildPairFractions(aBuild);
   if(fBuildOtherPairs)
   {
-    fAnalysisKchPKchP->SetBuildPairFractions(false);
-    fAnalysisK0K0->SetBuildPairFractions(false);
-    fAnalysisLamLam->SetBuildPairFractions(false);
+    for(unsigned int iOP=0; iOP<fOtherPairAnalysisVec.size(); iOP++) fOtherPairAnalysisVec[iOP]->SetBuildPairFractions(false);
   }
 }
 
@@ -529,20 +407,10 @@ void SimpleThermAnalysis::SetBuildTransformMatrices(bool aBuild)
 {
   fBuildTransformMatrices = aBuild;
 
-  fAnalysisLamKchP->SetBuildTransformMatrices(aBuild);
-  fAnalysisALamKchM->SetBuildTransformMatrices(aBuild);
-
-  fAnalysisLamKchM->SetBuildTransformMatrices(aBuild);
-  fAnalysisALamKchP->SetBuildTransformMatrices(aBuild);
-
-  fAnalysisLamK0->SetBuildTransformMatrices(aBuild);
-  fAnalysisALamK0->SetBuildTransformMatrices(aBuild);
-
+  for(unsigned int iP=0; iP<fPairAnalysisVec.size(); iP++) fPairAnalysisVec[iP]->SetBuildTransformMatrices(aBuild);
   if(fBuildOtherPairs)
   {
-    fAnalysisKchPKchP->SetBuildTransformMatrices(false);
-    fAnalysisK0K0->SetBuildTransformMatrices(false);
-    fAnalysisLamLam->SetBuildTransformMatrices(false);
+    for(unsigned int iOP=0; iOP<fOtherPairAnalysisVec.size(); iOP++) fOtherPairAnalysisVec[iOP]->SetBuildTransformMatrices(false);
   }
 }
 
@@ -556,20 +424,10 @@ void SimpleThermAnalysis::SetBuildCorrelationFunctions(bool aBuild, bool aBuild3
 
   if(fBuildCorrelationFunctions) fMixEvents = true;
 
-  fAnalysisLamKchP->SetBuildCorrelationFunctions(fBuildCorrelationFunctions, fBuild3dHists, fBuildPairSourcewmTInfo);
-  fAnalysisALamKchM->SetBuildCorrelationFunctions(fBuildCorrelationFunctions, fBuild3dHists, fBuildPairSourcewmTInfo);
-
-  fAnalysisLamKchM->SetBuildCorrelationFunctions(fBuildCorrelationFunctions, fBuild3dHists, fBuildPairSourcewmTInfo);
-  fAnalysisALamKchP->SetBuildCorrelationFunctions(fBuildCorrelationFunctions, fBuild3dHists, fBuildPairSourcewmTInfo);
-
-  fAnalysisLamK0->SetBuildCorrelationFunctions(fBuildCorrelationFunctions, fBuild3dHists, fBuildPairSourcewmTInfo);
-  fAnalysisALamK0->SetBuildCorrelationFunctions(fBuildCorrelationFunctions, fBuild3dHists, fBuildPairSourcewmTInfo);
-
+  for(unsigned int iP=0; iP<fPairAnalysisVec.size(); iP++) fPairAnalysisVec[iP]->SetBuildCorrelationFunctions(fBuildCorrelationFunctions, fBuild3dHists, fBuildPairSourcewmTInfo);
   if(fBuildOtherPairs)
   {
-    fAnalysisKchPKchP->SetBuildCorrelationFunctions(fBuildCorrelationFunctions, fBuild3dHists, fBuildPairSourcewmTInfo);
-    fAnalysisK0K0->SetBuildCorrelationFunctions(fBuildCorrelationFunctions, fBuild3dHists, fBuildPairSourcewmTInfo);
-    fAnalysisLamLam->SetBuildCorrelationFunctions(fBuildCorrelationFunctions, fBuild3dHists, fBuildPairSourcewmTInfo);
+    for(unsigned int iOP=0; iOP<fOtherPairAnalysisVec.size(); iOP++) fOtherPairAnalysisVec[iOP]->SetBuildCorrelationFunctions(fBuildCorrelationFunctions, fBuild3dHists, fBuildPairSourcewmTInfo);
   }
 }
 
@@ -579,20 +437,10 @@ void SimpleThermAnalysis::SetBuildCfYlm(bool aSet)
   fBuildCfYlm = aSet;
   if(fBuildCfYlm) assert(fBuildCorrelationFunctions);
 
-  fAnalysisLamKchP->SetBuildCfYlm(aSet);
-  fAnalysisALamKchM->SetBuildCfYlm(aSet);
-
-  fAnalysisLamKchM->SetBuildCfYlm(aSet);
-  fAnalysisALamKchP->SetBuildCfYlm(aSet);
-
-  fAnalysisLamK0->SetBuildCfYlm(aSet);
-  fAnalysisALamK0->SetBuildCfYlm(aSet);
-
+  for(unsigned int iP=0; iP<fPairAnalysisVec.size(); iP++) fPairAnalysisVec[iP]->SetBuildCfYlm(aSet);
   if(fBuildOtherPairs)
   {
-    fAnalysisKchPKchP->SetBuildCfYlm(aSet);
-    fAnalysisK0K0->SetBuildCfYlm(aSet);
-    fAnalysisLamLam->SetBuildCfYlm(aSet);
+    for(unsigned int iOP=0; iOP<fOtherPairAnalysisVec.size(); iOP++) fOtherPairAnalysisVec[iOP]->SetBuildCfYlm(aSet);
   }
 }
 
@@ -601,20 +449,10 @@ void SimpleThermAnalysis::SetBuildMixedEventNumerators(bool aBuild)
 {
   fBuildMixedEventNumerators = aBuild;
 
-  fAnalysisLamKchP->SetBuildMixedEventNumerators(aBuild);
-  fAnalysisALamKchM->SetBuildMixedEventNumerators(aBuild);
-
-  fAnalysisLamKchM->SetBuildMixedEventNumerators(aBuild);
-  fAnalysisALamKchP->SetBuildMixedEventNumerators(aBuild);
-
-  fAnalysisLamK0->SetBuildMixedEventNumerators(aBuild);
-  fAnalysisALamK0->SetBuildMixedEventNumerators(aBuild);
-
+  for(unsigned int iP=0; iP<fPairAnalysisVec.size(); iP++) fPairAnalysisVec[iP]->SetBuildMixedEventNumerators(aBuild);
   if(fBuildOtherPairs)
   {
-    fAnalysisKchPKchP->SetBuildMixedEventNumerators(aBuild);
-    fAnalysisK0K0->SetBuildMixedEventNumerators(aBuild);
-    fAnalysisLamLam->SetBuildMixedEventNumerators(aBuild);
+    for(unsigned int iOP=0; iOP<fOtherPairAnalysisVec.size(); iOP++) fOtherPairAnalysisVec[iOP]->SetBuildMixedEventNumerators(aBuild);
   }
 }
 
@@ -623,20 +461,10 @@ void SimpleThermAnalysis::SetUnitWeightCfNums(bool aSet)
 {
   fUnitWeightCfNums = aSet;
 
-  fAnalysisLamKchP->SetUnitWeightCfNums(aSet);
-  fAnalysisALamKchM->SetUnitWeightCfNums(aSet);
-
-  fAnalysisLamKchM->SetUnitWeightCfNums(aSet);
-  fAnalysisALamKchP->SetUnitWeightCfNums(aSet);
-
-  fAnalysisLamK0->SetUnitWeightCfNums(aSet);
-  fAnalysisALamK0->SetUnitWeightCfNums(aSet);
-
+  for(unsigned int iP=0; iP<fPairAnalysisVec.size(); iP++) fPairAnalysisVec[iP]->SetUnitWeightCfNums(aSet);
   if(fBuildOtherPairs)
   {
-    fAnalysisKchPKchP->SetUnitWeightCfNums(aSet);
-    fAnalysisK0K0->SetUnitWeightCfNums(aSet);
-    fAnalysisLamLam->SetUnitWeightCfNums(aSet);
+    for(unsigned int iOP=0; iOP<fOtherPairAnalysisVec.size(); iOP++) fOtherPairAnalysisVec[iOP]->SetUnitWeightCfNums(aSet);
   }
 }
 
@@ -645,20 +473,10 @@ void SimpleThermAnalysis::SetWeightCfsWithParentInteraction(bool aSet)
 {
   fWeightCfsWithParentInteraction = aSet;
 
-  fAnalysisLamKchP->SetWeightCfsWithParentInteraction(aSet);
-  fAnalysisALamKchM->SetWeightCfsWithParentInteraction(aSet);
-
-  fAnalysisLamKchM->SetWeightCfsWithParentInteraction(aSet);
-  fAnalysisALamKchP->SetWeightCfsWithParentInteraction(aSet);
-
-  fAnalysisLamK0->SetWeightCfsWithParentInteraction(aSet);
-  fAnalysisALamK0->SetWeightCfsWithParentInteraction(aSet);
-
+  for(unsigned int iP=0; iP<fPairAnalysisVec.size(); iP++) fPairAnalysisVec[iP]->SetWeightCfsWithParentInteraction(aSet);
   if(fBuildOtherPairs)
   {
-    fAnalysisKchPKchP->SetWeightCfsWithParentInteraction(aSet);
-    fAnalysisK0K0->SetWeightCfsWithParentInteraction(aSet);
-    fAnalysisLamLam->SetWeightCfsWithParentInteraction(aSet);
+    for(unsigned int iOP=0; iOP<fOtherPairAnalysisVec.size(); iOP++) fOtherPairAnalysisVec[iOP]->SetWeightCfsWithParentInteraction(aSet);
   }
 }
 
@@ -667,20 +485,10 @@ void SimpleThermAnalysis::SetOnlyWeightLongDecayParents(bool aSet)
 {
   fOnlyWeightLongDecayParents = aSet;
 
-  fAnalysisLamKchP->SetOnlyWeightLongDecayParents(aSet);
-  fAnalysisALamKchM->SetOnlyWeightLongDecayParents(aSet);
-
-  fAnalysisLamKchM->SetOnlyWeightLongDecayParents(aSet);
-  fAnalysisALamKchP->SetOnlyWeightLongDecayParents(aSet);
-
-  fAnalysisLamK0->SetOnlyWeightLongDecayParents(aSet);
-  fAnalysisALamK0->SetOnlyWeightLongDecayParents(aSet);
-
+  for(unsigned int iP=0; iP<fPairAnalysisVec.size(); iP++) fPairAnalysisVec[iP]->SetOnlyWeightLongDecayParents(aSet);
   if(fBuildOtherPairs)
   {
-    fAnalysisKchPKchP->SetOnlyWeightLongDecayParents(aSet);
-    fAnalysisK0K0->SetOnlyWeightLongDecayParents(aSet);
-    fAnalysisLamLam->SetOnlyWeightLongDecayParents(aSet);
+    for(unsigned int iOP=0; iOP<fOtherPairAnalysisVec.size(); iOP++) fOtherPairAnalysisVec[iOP]->SetOnlyWeightLongDecayParents(aSet);
   }
 }
 
@@ -689,48 +497,23 @@ void SimpleThermAnalysis::SetDrawRStarFromGaussian(bool aSet)
 {
   fDrawRStarFromGaussian = aSet;
 
-  fAnalysisLamKchP->SetDrawRStarFromGaussian(aSet);
-  fAnalysisALamKchM->SetDrawRStarFromGaussian(aSet);
-
-  fAnalysisLamKchM->SetDrawRStarFromGaussian(aSet);
-  fAnalysisALamKchP->SetDrawRStarFromGaussian(aSet);
-
-  fAnalysisLamK0->SetDrawRStarFromGaussian(aSet);
-  fAnalysisALamK0->SetDrawRStarFromGaussian(aSet);
-
+  for(unsigned int iP=0; iP<fPairAnalysisVec.size(); iP++) fPairAnalysisVec[iP]->SetDrawRStarFromGaussian(aSet);
   if(fBuildOtherPairs)
   {
-    fAnalysisKchPKchP->SetDrawRStarFromGaussian(aSet);
-    fAnalysisK0K0->SetDrawRStarFromGaussian(aSet);
-    fAnalysisLamLam->SetDrawRStarFromGaussian(aSet);
+    for(unsigned int iOP=0; iOP<fOtherPairAnalysisVec.size(); iOP++) fOtherPairAnalysisVec[iOP]->SetDrawRStarFromGaussian(aSet);
   }
 }
 
-//________________________________________________________________________________________________________________
-void SimpleThermAnalysis::SetBuildSingleParticleAnalyses(bool aBuild)
-{
-  fBuildSingleParticleAnalyses = aBuild;
-}
 
 //________________________________________________________________________________________________________________
 void SimpleThermAnalysis::SetMaxPrimaryDecayLength(double aMax)
 {
   fMaxPrimaryDecayLength = aMax;
 
-  fAnalysisLamKchP->SetMaxPrimaryDecayLength(fMaxPrimaryDecayLength);
-  fAnalysisALamKchM->SetMaxPrimaryDecayLength(fMaxPrimaryDecayLength);
-
-  fAnalysisLamKchM->SetMaxPrimaryDecayLength(fMaxPrimaryDecayLength);
-  fAnalysisALamKchP->SetMaxPrimaryDecayLength(fMaxPrimaryDecayLength);
-
-  fAnalysisLamK0->SetMaxPrimaryDecayLength(fMaxPrimaryDecayLength);
-  fAnalysisALamK0->SetMaxPrimaryDecayLength(fMaxPrimaryDecayLength);
-
+  for(unsigned int iP=0; iP<fPairAnalysisVec.size(); iP++) fPairAnalysisVec[iP]->SetMaxPrimaryDecayLength(fMaxPrimaryDecayLength);
   if(fBuildOtherPairs)
   {
-    fAnalysisKchPKchP->SetMaxPrimaryDecayLength(fMaxPrimaryDecayLength);
-    fAnalysisK0K0->SetMaxPrimaryDecayLength(fMaxPrimaryDecayLength);
-    fAnalysisLamLam->SetMaxPrimaryDecayLength(fMaxPrimaryDecayLength);
+    for(unsigned int iOP=0; iOP<fOtherPairAnalysisVec.size(); iOP++) fOtherPairAnalysisVec[iOP]->SetMaxPrimaryDecayLength(fMaxPrimaryDecayLength);
   }
 }
 

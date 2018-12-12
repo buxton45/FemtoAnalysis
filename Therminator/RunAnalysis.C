@@ -20,6 +20,7 @@ int main(int argc, char **argv)
   FitGeneratorType tFitGenType = kPairwConj;
   bool bBuildOtherPairs=true;
   bool bBuildSingleParticleAnalyses = false;
+  bool bPerformFlowAnalysis = false;
 
   bool bRunFull = false;
   bool bUseMixedEventsForTransforms = true;
@@ -46,7 +47,6 @@ int main(int argc, char **argv)
   bool bRotateEventsByRandomAzimuthalAngles = false;
   bool bOnlyRunOverJaiEvents = false;
 
-  bool bPerformFlowAnalysis = false;
   bool bBuildArtificialV3Signal = false;
   int tV3InclusionProb1 = 25;  //NOTE: A value of -1 turns entire V2 signal into V3
 
@@ -109,7 +109,7 @@ int main(int argc, char **argv)
   if(bBuildOtherPairs) tCorrelationFunctionsSaveName += TString("_wOtherPairs");
   //-----------------------------------------
 
-  SimpleThermAnalysis *tSimpleThermAnalysis = new SimpleThermAnalysis(tFitGenType, bBuildOtherPairs, bBuildSingleParticleAnalyses);
+  SimpleThermAnalysis *tSimpleThermAnalysis = new SimpleThermAnalysis(tFitGenType, bBuildOtherPairs, bBuildSingleParticleAnalyses, bPerformFlowAnalysis);
   tSimpleThermAnalysis->SetUseMixedEventsForTransforms(bUseMixedEventsForTransforms);
   tSimpleThermAnalysis->SetBuildUniqueParents(bPrintUniqueParents);
 
@@ -135,7 +135,6 @@ int main(int argc, char **argv)
 
   tSimpleThermAnalysis->SetCheckCoECoM(bCheckCoECoM);
   tSimpleThermAnalysis->SetRotateEventsByRandomAzimuthalAngles(bRotateEventsByRandomAzimuthalAngles);
-  tSimpleThermAnalysis->SetPerformFlowAnalysis(bPerformFlowAnalysis);
   tSimpleThermAnalysis->SetBuildArtificialV3Signal(bBuildArtificialV3Signal, tV3InclusionProb1);
 
   tSimpleThermAnalysis->ProcessAll();

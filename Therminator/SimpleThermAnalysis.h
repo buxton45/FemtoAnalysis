@@ -39,14 +39,12 @@ using namespace std;
 class SimpleThermAnalysis {
 
 public:
-  SimpleThermAnalysis();
+  SimpleThermAnalysis(FitGeneratorType aFitGenType=kPairwConj, bool aBuildOtherPairs=false, bool aBuildSingleParticleAnalyses=true, bool aPerformFlowAnalysis=false);
   virtual ~SimpleThermAnalysis();
 
   void SetUseMixedEventsForTransforms(bool aUse);
   void SetBuildUniqueParents(bool aBuild);
   void SaveAll();
-
-  void DeactivateUnnecessary();
 
   vector<ThermEvent> ExtractEventsFromRootFile(TString aFileLocation);
   void ProcessAllInDirectory(TSystemDirectory* aEventsDirectory);
@@ -62,7 +60,6 @@ public:
   void SetWeightCfsWithParentInteraction(bool aSet);
   void SetOnlyWeightLongDecayParents(bool aSet);
   void SetDrawRStarFromGaussian(bool aSet);
-  void SetBuildSingleParticleAnalyses(bool aBuild);
 
   void SetMaxPrimaryDecayLength(double aMax);
 
@@ -78,11 +75,14 @@ public:
 
   void SetCheckCoECoM(bool aCheck=true);
   void SetRotateEventsByRandomAzimuthalAngles(bool aRotate=true);
-  void SetPerformFlowAnalysis(bool aPerform=true);
   void SetBuildArtificialV3Signal(bool aBuild=true, int aV3InclusionProb1=25);  //NOTE: This kills v2 signal and creates v3 signal
 
-  void SetBuildOtherPairs(bool aSet);
 private:
+  FitGeneratorType fFitGenType;
+  bool fBuildOtherPairs;
+  bool fBuildSingleParticleAnalyses;
+  bool fPerformFlowAnalysis;
+
   int fNFiles;
   int fNEvents;
   TString fEventsDirectory;
@@ -117,29 +117,18 @@ private:
   bool fWeightCfsWithParentInteraction;
   bool fOnlyWeightLongDecayParents;
   bool fDrawRStarFromGaussian;
-  bool fBuildSingleParticleAnalyses;
 
-  ThermPairAnalysis *fAnalysisLamKchP, *fAnalysisALamKchM;
-  ThermPairAnalysis *fAnalysisLamKchM, *fAnalysisALamKchP;
-  ThermPairAnalysis *fAnalysisLamK0, *fAnalysisALamK0;
-
-  ThermPairAnalysis *fAnalysisKchPKchP;
-  ThermPairAnalysis *fAnalysisK0K0;
-  ThermPairAnalysis *fAnalysisLamLam;
-
-  ThermSingleParticleAnalysis *fSPAnalysisLam, *fSPAnalysisALam;
-  ThermSingleParticleAnalysis *fSPAnalysisKchP, *fSPAnalysisKchM;
-  ThermSingleParticleAnalysis *fSPAnalysisProt, *fSPAnalysisAProt;
-  ThermSingleParticleAnalysis *fSPAnalysisK0;
+  vector<ThermPairAnalysis*> fPairAnalysisVec;
+  vector<ThermPairAnalysis*> fOtherPairAnalysisVec;
+  vector<ThermSingleParticleAnalysis*> fSPAnalysisVec;
 
   ThermFlowCollection *fFlowCollection;
 
   bool fCheckCoECoM;
   bool fRotateEventsByRandAzAngles;
-  bool fPerformFlowAnalysis;
   std::pair <int, int> fArtificialV3Info;
 
-  bool fBuildOtherPairs;
+
 
 #ifdef __ROOT__
   ClassDef(SimpleThermAnalysis, 1)
@@ -153,13 +142,10 @@ inline void SimpleThermAnalysis::SetPairFractionsSaveName(TString aSaveName) {fP
 inline void SimpleThermAnalysis::SetTransformMatricesSaveName(TString aSaveName) {fTransformMatricesSaveName = aSaveName;}
 inline void SimpleThermAnalysis::SetCorrelationFunctionsSaveName(TString aSaveName) {fCorrelationFunctionsSaveName = aSaveName;}
 inline void SimpleThermAnalysis::SetSingleParticlesSaveName(TString aSaveName) {fSingleParticlesSaveName = aSaveName;}
-inline void SimpleThermAnalysis::SetFlowAnalysisSaveName(TString aSaveName) {fFlowCollection->SetSaveFileName(aSaveName);}
+inline void SimpleThermAnalysis::SetFlowAnalysisSaveName(TString aSaveName) {if(fFlowCollection) fFlowCollection->SetSaveFileName(aSaveName);}
 
 inline void SimpleThermAnalysis::SetCheckCoECoM(bool aCheck) {fCheckCoECoM = aCheck;}
 inline void SimpleThermAnalysis::SetRotateEventsByRandomAzimuthalAngles(bool aRotate) {fRotateEventsByRandAzAngles = aRotate;}
-inline void SimpleThermAnalysis::SetPerformFlowAnalysis(bool aPerform) {fPerformFlowAnalysis = aPerform;}
 inline void SimpleThermAnalysis::SetBuildArtificialV3Signal(bool aBuild, int aV3InclusionProb1) {fArtificialV3Info=std::make_pair((int)aBuild, aV3InclusionProb1);}
-
-inline void SimpleThermAnalysis::SetBuildOtherPairs(bool aSet) {fBuildOtherPairs = aSet;}
 
 #endif
