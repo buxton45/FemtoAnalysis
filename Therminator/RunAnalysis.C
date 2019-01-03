@@ -17,12 +17,12 @@ int main(int argc, char **argv)
   tFullTimer.Start();
 
 //-----------------------------------------------------------------------------
-  FitGeneratorType tFitGenType = kPairwConj;
-  bool bBuildOtherPairs=true;
+  FitGeneratorType tFitGenType = kPair;
+  bool bBuildOtherPairs=false;
   bool bBuildSingleParticleAnalyses = false;
   bool bPerformFlowAnalysis = false;
 
-  bool bRunFull = false;
+  bool bRunFull = true;
   bool bUseMixedEventsForTransforms = true;
   bool bPrintUniqueParents = false;
 
@@ -33,6 +33,7 @@ int main(int argc, char **argv)
   bool bBuild3dHists = false;
   bool bBuildPairSourcewmTInfo = false;
   bool bBuildCfYlm = true;
+  bool bBuildAliFemtoCfYlm = true;
 
   bool bBuildMixedEventNumerators = false;
   int tNEventsToMix = 5;
@@ -118,6 +119,7 @@ int main(int argc, char **argv)
 
   tSimpleThermAnalysis->SetBuildCorrelationFunctions(bBuildCorrelationFunctions, bBuild3dHists, bBuildPairSourcewmTInfo);
   tSimpleThermAnalysis->SetBuildCfYlm(bBuildCfYlm);
+  tSimpleThermAnalysis->SetBuildAliFemtoCfYlm(bBuildAliFemtoCfYlm);
   tSimpleThermAnalysis->SetBuildMixedEventNumerators(bBuildMixedEventNumerators);
   tSimpleThermAnalysis->SetUnitWeightCfNums(bUnitWeightCfNums);
   tSimpleThermAnalysis->SetWeightCfsWithParentInteraction(bWeightCfsWithParentInteraction);
