@@ -13,6 +13,8 @@ class PartialAnalysis;
 #include "Analysis.h"
 class Analysis;
 
+#include "CorrFctnDirectYlmTherm.h"
+
 
 
 //_________________________________________________________________________________________
@@ -74,6 +76,28 @@ void DrawSHCfComponent(TPad* aPad, Analysis* aAnaly, YlmComponent aComponent, in
 
 }
 
+//________________________________________________________________________________________________________________
+CorrFctnDirectYlmTherm* GetYlmCfTherm(TString aFileLocation, int aImpactParam, AnalysisType aAnType, int aMaxl, int aNbins, double aKStarMin, double aKStarMax, int aRebin, double aNumScale=0.)
+{
+  CorrFctnDirectYlmTherm* tCfYlmTherm = new CorrFctnDirectYlmTherm(aFileLocation, aImpactParam, aAnType, aMaxl, aNbins, aKStarMin, aKStarMax, aRebin, aNumScale);
+  return tCfYlmTherm;
+}
+
+//_________________________________________________________________________________________
+void DrawSHCfThermComponent(TPad* aPad, CorrFctnDirectYlmTherm* aCfYlmTherm, YlmComponent aComponent, int al, int am/*, double aMinNorm=0.32, double aMaxNorm=0.40, int aRebin=2*/, int aMarkerStyle=20, int aColor=1)
+{
+  aPad->cd();
+
+  TH1D* tSHCf = (TH1D*)aCfYlmTherm->GetYlmHist(aComponent, kYlmCf, al, am);
+
+  tSHCf->SetMarkerStyle(aMarkerStyle);
+  tSHCf->SetMarkerSize(0.75);
+  tSHCf->SetMarkerColor(aColor);
+  tSHCf->SetLineColor(aColor);
+
+  tSHCf->Draw("same");
+}
+
 
 
 //_________________________________________________________________________________________
@@ -95,6 +119,7 @@ int main(int argc, char **argv)
   TString tResultsDate = "20181205";
   AnalysisType tAnType = kLamKchP;
 
+  bool bDrawThermCfs = false;
   bool bSaveFigures = false;
 
   int tl = 1;
@@ -136,6 +161,25 @@ int main(int argc, char **argv)
 
   DrawSHCfComponent((TPad*)tCan->cd(5), tAnaly3050, tComponent, 0, 0, tRebin);
   DrawSHCfComponent((TPad*)tCan->cd(6), tAnaly3050, tComponent, 1, 1, tRebin);
+
+  if(bDrawThermCfs)
+  {
+    int tImpactParam = 2;
+    TString aCfDescriptor = "Full";
+
+    TString tFileNameBaseTherm = "CorrelationFunctions_DrawRStarFromGaussian_BuildCfYlm_BuildAliFemtoCfYlm_PairOnly_cLamcKchMuOut3_cLamK0MuOut3_KchPKchPR538";
+    TString tFileNameModifierTherm = "";
+
+    TString tFileNameTherm = TString::Format("%s%s.root", tFileNameBaseTherm.Data(), tFileNameModifierTherm.Data());
+
+    TString tFileDirTherm = TString::Format("/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b%d/", tImpactParam);
+    TString tFileLocationTherm = TString::Format("%s%s", tFileDirTherm.Data(), tFileNameTherm.Data());
+
+    CorrFctnDirectYlmTherm* tCfYlmTherm = GetYlmCfTherm(tFileLocationTherm, tImpactParam, tAnType, 2, 300, 0., 3., tRebin);
+
+    DrawSHCfThermComponent((TPad*)tCan->cd(1), tCfYlmTherm, tComponent, 0, 0, 29, kOrange);
+    DrawSHCfThermComponent((TPad*)tCan->cd(2), tCfYlmTherm, tComponent, 1, 1, 29, kOrange);
+  }
 
 /*
   Analysis* tAnaly0010 = new Analysis(tFileLocationBase, tAnType, k0010, tAnRunType, 2, "", false);

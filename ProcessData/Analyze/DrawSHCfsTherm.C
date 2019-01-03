@@ -14,6 +14,8 @@
 #include "Types.h"
 #include "CorrFctnDirectYlmTherm.h"
 
+#include "ThermCf.h"
+
 using std::cout;
 using std::endl;
 using std::vector;
@@ -85,6 +87,18 @@ void DrawSHCfThermComponent(TPad* aPad, CorrFctnDirectYlmTherm* aCfYlmTherm, Ylm
 
 }
 
+//________________________________________________________________________________________________________________
+//ThermCf already knows the default directory, so it only needs the name of the file, not the complete path
+void Draw1DCf(TPad* aPad, TString aFileName, TString aCfDescriptor, AnalysisType aAnType, int aImpactParam=2, bool aCombineConj=true, ThermEventsType aEventsType=kMe, int aRebin=2, double aMinNorm=0.32, double aMaxNorm=0.40, double aAdditionalScale=1., int aMarkerStyle=20, int aColor=1, bool aUseStavCf=false)
+{
+  TH1* aThermCf = ThermCf::GetThermCf(aFileName, aCfDescriptor, aAnType, aImpactParam, aCombineConj, aEventsType, aRebin, aMinNorm, aMaxNorm, aMarkerStyle, aColor, aUseStavCf);
+  double tThermCfScale = aThermCf->Integral(aMinNorm, aMaxNorm);
+  aThermCf->Scale(aAdditionalScale/tThermCfScale);
+
+  aPad->cd();
+  aThermCf->Draw("same");
+}
+
 
 
 //________________________________________________________________________________________________________________
@@ -100,14 +114,20 @@ int main(int argc, char **argv)
 //-----------------------------------------------------------------------------
   AnalysisType tAnType = kLamKchP;
 
+  bool aDrawNormalCfOnC00 = true;
+  bool bCombineConjugates = false;
+
   bool bSaveFigures = false;
   TString tSaveDir = "/home/jesse/Analysis/Presentations/GroupMeetings/20181204/Figures/";
 
-  int tRebin=1;
+  int tRebin=2;
   double tMinNorm = /*0.80*//*0.80*/0.32;
   double tMaxNorm = /*0.99*//*0.99*/0.40;
 
   int tImpactParam = 2;
+
+  TString aCfDescriptor = "Full";
+//  TString aCfDescriptor = "PrimaryOnly";
 
   int tl = 1;
   int tm = 1;
@@ -129,12 +149,21 @@ int main(int argc, char **argv)
 
 
   //--------------------------------------------
-  CorrFctnDirectYlmTherm* tYCfYlmTherm = GetYlmCfTherm(tFileLocation, tImpactParam, tAnType, 2, 300, 0., 3., tRebin);
+  CorrFctnDirectYlmTherm* tCfYlmTherm = GetYlmCfTherm(tFileLocation, tImpactParam, tAnType, 2, 300, 0., 3., tRebin);
 
   TCanvas* tCan = new TCanvas("tCan", "tCan");
   tCan->Divide(2,1);
-  DrawSHCfThermComponent((TPad*)tCan->cd(1), tYCfYlmTherm, tComponent, 0, 0);
-  DrawSHCfThermComponent((TPad*)tCan->cd(2), tYCfYlmTherm, tComponent, 1, 1);
+  DrawSHCfThermComponent((TPad*)tCan->cd(1), tCfYlmTherm, tComponent, 0, 0);
+  if(aDrawNormalCfOnC00) 
+  {
+    //TODO Not sure how to set normalization range for CfYlm's, so I will simply scale the regular Cf to the CfYlm
+    TH1D* tTempSHCf00 = (TH1D*)tCfYlmTherm->GetYlmHist(tComponent, kYlmCf, 0, 0);
+    double tTempNorm = tTempSHCf00->Integral(tMinNorm, tMaxNorm);
+
+    Draw1DCf((TPad*)tCan->cd(1), tFileName, aCfDescriptor, tAnType, tImpactParam, bCombineConjugates, kMe, tRebin, tMinNorm, tMaxNorm, tTempNorm, 30, kBlack);    
+  }
+
+  DrawSHCfThermComponent((TPad*)tCan->cd(2), tCfYlmTherm, tComponent, 1, 1);
 
 //-------------------------------------------------------------------------------
   theApp->Run(kTRUE); //Run the TApp to pause the code.
