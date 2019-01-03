@@ -92,8 +92,11 @@ ThermPairAnalysis::ThermPairAnalysis(AnalysisType aAnType) :
   fPairKStarVsmT(nullptr),
   fPairmT3d(nullptr),
 
-  fPairSource3d_osl(nullptr),
-  fPairSource3d_oslPrimaryOnly(nullptr),
+  fPairSource3d_OSLinPRF(nullptr),
+  fPairSource3d_OSLinPRFPrimaryOnly(nullptr),
+
+  fPairDeltaT_inPRF(nullptr),
+  fPairDeltaT_inPRFPrimaryOnly(nullptr),
 
   fPairSource3d_mT1vmT2vRinv(nullptr),
   fPairSource2d_PairmTvRinv(nullptr),
@@ -160,8 +163,11 @@ ThermPairAnalysis::~ThermPairAnalysis()
   delete fPairKStarVsmT;
   delete fPairmT3d;
 
-  delete fPairSource3d_osl;
-  delete fPairSource3d_oslPrimaryOnly;
+  delete fPairSource3d_OSLinPRF;
+  delete fPairSource3d_OSLinPRFPrimaryOnly;
+
+  delete fPairDeltaT_inPRF;
+  delete fPairDeltaT_inPRFPrimaryOnly;
 
   delete fPairSource3d_mT1vmT2vRinv;
   delete fPairSource2d_PairmTvRinv;
@@ -563,19 +569,31 @@ void ThermPairAnalysis::InitiateCorrelations()
     fPairmT3d->Sumw2();
   }
 
-  fPairSource3d_osl = new TH3D(TString::Format("PairSource3d_osl%s", cAnalysisBaseTags[fAnalysisType]),
+  fPairSource3d_OSLinPRF = new TH3D(TString::Format("PairSource3d_osl%s", cAnalysisBaseTags[fAnalysisType]),
                                TString::Format("PairSource3d_osl%s", cAnalysisBaseTags[fAnalysisType]),
                                200, -50., 50., 
                                200, -50., 50., 
                                200, -50., 50.);
 
-  fPairSource3d_oslPrimaryOnly = new TH3D(TString::Format("PairSource3d_oslPrimaryOnly%s", cAnalysisBaseTags[fAnalysisType]),
+  fPairSource3d_OSLinPRFPrimaryOnly = new TH3D(TString::Format("PairSource3d_oslPrimaryOnly%s", cAnalysisBaseTags[fAnalysisType]),
                                           TString::Format("PairSource3d_oslPrimaryOnly%s", cAnalysisBaseTags[fAnalysisType]),
                                           200, -50., 50., 
                                           200, -50., 50., 
                                           200, -50., 50.); 
-  fPairSource3d_osl->Sumw2();
-  fPairSource3d_oslPrimaryOnly->Sumw2();
+  fPairSource3d_OSLinPRF->Sumw2();
+  fPairSource3d_OSLinPRFPrimaryOnly->Sumw2();
+
+
+  fPairDeltaT_inPRF = new TH1D(TString::Format("PairDeltaT_inPRF%s", cAnalysisBaseTags[fAnalysisType]),
+                               TString::Format("PairDeltaT_inPRF%s", cAnalysisBaseTags[fAnalysisType]),
+                               200, -100., 100.);
+
+  fPairDeltaT_inPRFPrimaryOnly = new TH1D(TString::Format("PairDeltaT_inPRFPrimaryOnly%s", cAnalysisBaseTags[fAnalysisType]),
+                               TString::Format("PairDeltaT_inPRFPrimaryOnly%s", cAnalysisBaseTags[fAnalysisType]),
+                               200, -100., 100.);
+
+  fPairDeltaT_inPRF->Sumw2();
+  fPairDeltaT_inPRFPrimaryOnly->Sumw2();
 
 
   if(fBuildPairSourcewmTInfo)
@@ -1455,18 +1473,19 @@ TVector3 ThermPairAnalysis::DrawRStar3VecFromGaussian()
   return DrawRStar3VecFromGaussian(tROut, tMuOut, tRSide, tMuSide, tRLong, tMuLong);
 }
 
+
 //________________________________________________________________________________________________________________
-TVector3 ThermPairAnalysis::GetRStar3Vec(const TLorentzVector &p1, const TLorentzVector &x1, const TLorentzVector &p2, const TLorentzVector &x2)
+TLorentzVector ThermPairAnalysis::GetRStar4Vec(const TLorentzVector &p1, const TLorentzVector &x1, const TLorentzVector &p2, const TLorentzVector &x2)
 {
   TLorentzVector tRInLabFrame4Vec = x1 - x2;
   TLorentzVector tRStar4Vec = Boost4VecToOSLinPRF(p1, p2, tRInLabFrame4Vec);
 
-  return tRStar4Vec.Vect();
+  return tRStar4Vec;
 }
 
 
 //________________________________________________________________________________________________________________
-TVector3 ThermPairAnalysis::GetRStar3Vec(const ThermParticle &tPart1, const ThermParticle &tPart2)
+TLorentzVector ThermPairAnalysis::GetRStar4Vec(const ThermParticle &tPart1, const ThermParticle &tPart2)
 {
   TLorentzVector p1 = tPart1.GetFourMomentum();
   TLorentzVector p2 = tPart2.GetFourMomentum();
@@ -1476,7 +1495,23 @@ TVector3 ThermPairAnalysis::GetRStar3Vec(const ThermParticle &tPart1, const Ther
 
   //---------------------------------
 
-  return GetRStar3Vec(p1, x1, p2, x2);
+  return GetRStar4Vec(p1, x1, p2, x2);
+}
+
+
+//________________________________________________________________________________________________________________
+TVector3 ThermPairAnalysis::GetRStar3Vec(const TLorentzVector &p1, const TLorentzVector &x1, const TLorentzVector &p2, const TLorentzVector &x2)
+{
+  TLorentzVector tRStar4Vec = GetRStar4Vec(p1, x1, p2, x2);
+  return tRStar4Vec.Vect();
+}
+
+
+//________________________________________________________________________________________________________________
+TVector3 ThermPairAnalysis::GetRStar3Vec(const ThermParticle &tPart1, const ThermParticle &tPart2)
+{
+  TLorentzVector tRStar4Vec = GetRStar4Vec(tPart1, tPart2);
+  return tRStar4Vec.Vect();
 }
 
 //________________________________________________________________________________________________________________
@@ -1819,8 +1854,11 @@ void ThermPairAnalysis::FillCorrelations(const ThermParticle &aParticle1, const 
   TVector3 tKStar3Vec_RotatePar2 = GetKStar3Vec_RotatePar2(aParticle1, aParticle2);
   tKStar = CalcKStar(aParticle1, aParticle2);
 
+  TLorentzVector tRStar4Vec = TLorentzVector(0., 0., 0., 0.);
+  if(!fDrawRStarFromGaussian) tRStar4Vec = GetRStar4Vec(aParticle1, aParticle2);
+
   TVector3 tRStar3Vec;
-  if(!fDrawRStarFromGaussian) tRStar3Vec = GetRStar3Vec(aParticle1, aParticle2);
+  if(!fDrawRStarFromGaussian) tRStar3Vec = tRStar4Vec.Vect();
   else                        tRStar3Vec = DrawRStar3VecFromGaussian();
   tRStar = tRStar3Vec.Mag();
 
@@ -1853,8 +1891,14 @@ void ThermPairAnalysis::FillCorrelations(const ThermParticle &aParticle1, const 
 
     if(tKStar < 0.3)
     {
-      fPairSource3d_osl->Fill(tRStar3Vec.x(), tRStar3Vec.y(), tRStar3Vec.z());
-      if(aParticle1.IsPrimordial() && aParticle2.IsPrimordial()) fPairSource3d_oslPrimaryOnly->Fill(tRStar3Vec.x(), tRStar3Vec.y(), tRStar3Vec.z());
+      fPairSource3d_OSLinPRF->Fill(tRStar3Vec.x(), tRStar3Vec.y(), tRStar3Vec.z());
+      if(aParticle1.IsPrimordial() && aParticle2.IsPrimordial()) fPairSource3d_OSLinPRFPrimaryOnly->Fill(tRStar3Vec.x(), tRStar3Vec.y(), tRStar3Vec.z());
+
+      if(!fDrawRStarFromGaussian)
+      {
+        fPairDeltaT_inPRF->Fill(tRStar4Vec.T());
+        if(aParticle1.IsPrimordial() && aParticle2.IsPrimordial()) fPairDeltaT_inPRFPrimaryOnly->Fill(tRStar4Vec.T());
+      }
 
       if(fBuildPairSourcewmTInfo)
       {
@@ -2186,8 +2230,11 @@ void ThermPairAnalysis::SaveAllCorrelationFunctions(TFile *aFile)
   fPairKStarVsmT->Write();
   if(fBuild3dHists) fPairmT3d->Write();
 
-  fPairSource3d_osl->Write();
-  fPairSource3d_oslPrimaryOnly->Write();
+  fPairSource3d_OSLinPRF->Write();
+  fPairSource3d_OSLinPRFPrimaryOnly->Write();
+
+  fPairDeltaT_inPRF->Write();
+  fPairDeltaT_inPRFPrimaryOnly->Write();
 
   if(fBuildPairSourcewmTInfo)
   {

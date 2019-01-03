@@ -110,6 +110,9 @@ public:
   TVector3 DrawRStar3VecFromGaussian(double tROut, double tMuOut, double tRSide, double tMuSide, double tRLong, double tMuLong);
   TVector3 DrawRStar3VecFromGaussian();
 
+  TLorentzVector GetRStar4Vec(const TLorentzVector &p1, const TLorentzVector &x1, const TLorentzVector &p2, const TLorentzVector &x2);
+  TLorentzVector GetRStar4Vec(const ThermParticle &tPart1, const ThermParticle &tPart2);
+
   TVector3 GetRStar3Vec(const TLorentzVector &p1, const TLorentzVector &x1, const TLorentzVector &p2, const TLorentzVector &x2);
   TVector3 GetRStar3Vec(const ThermParticle &tPart1, const ThermParticle &tPart2);
 
@@ -241,8 +244,11 @@ private:
   TH2* fPairKStarVsmT;
   TH3* fPairmT3d;
 
-  TH3* fPairSource3d_osl;
-  TH3* fPairSource3d_oslPrimaryOnly;
+  TH3* fPairSource3d_OSLinPRF;
+  TH3* fPairSource3d_OSLinPRFPrimaryOnly;
+
+  TH1* fPairDeltaT_inPRF;
+  TH1* fPairDeltaT_inPRFPrimaryOnly;
 
   TH3* fPairSource3d_mT1vmT2vRinv;
   TH2* fPairSource2d_PairmTvRinv;

@@ -17,7 +17,7 @@ int main(int argc, char **argv)
   tFullTimer.Start();
 
 //-----------------------------------------------------------------------------
-  FitGeneratorType tFitGenType = kPair;
+  FitGeneratorType tFitGenType = kPairwConj;
   bool bBuildOtherPairs=false;
   bool bBuildSingleParticleAnalyses = false;
   bool bPerformFlowAnalysis = false;
@@ -42,7 +42,7 @@ int main(int argc, char **argv)
   bool bWeightCfsWithParentInteraction = false;
   bool bOnlyWeightLongDecayParents = false;
 
-  bool bDrawRStarFromGaussian = true;
+  bool bDrawRStarFromGaussian = false;
 
   bool bCheckCoECoM = false;
   bool bRotateEventsByRandomAzimuthalAngles = false;
