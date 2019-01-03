@@ -17,7 +17,7 @@ int main(int argc, char **argv)
   tFullTimer.Start();
 
 //-----------------------------------------------------------------------------
-  FitGeneratorType tFitGenType = kPairwConj;
+  FitGeneratorType tFitGenType = kPair;
   bool bBuildOtherPairs=false;
   bool bBuildSingleParticleAnalyses = false;
   bool bPerformFlowAnalysis = false;
