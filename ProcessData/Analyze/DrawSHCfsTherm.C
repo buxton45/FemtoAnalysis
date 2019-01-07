@@ -32,6 +32,8 @@ CorrFctnDirectYlmTherm* GetYlmCfTherm(TString aFileLocation, int aImpactParam, A
 void DrawSHCfThermComponent(TPad* aPad, CorrFctnDirectYlmTherm* aCfYlmTherm, YlmComponent aComponent, int al, int am/*, double aMinNorm=0.32, double aMaxNorm=0.40, int aRebin=2*/)
 {
   aPad->cd();
+  aPad->SetLeftMargin(0.15);
+  aPad->SetRightMargin(0.025);
 
   gStyle->SetOptStat(0);
   gStyle->SetOptTitle(0);
@@ -92,7 +94,7 @@ void DrawSHCfThermComponent(TPad* aPad, CorrFctnDirectYlmTherm* aCfYlmTherm, Ylm
 void Draw1DCf(TPad* aPad, TString aFileName, TString aCfDescriptor, AnalysisType aAnType, int aImpactParam=2, bool aCombineConj=true, ThermEventsType aEventsType=kMe, int aRebin=2, double aMinNorm=0.32, double aMaxNorm=0.40, double aAdditionalScale=1., int aMarkerStyle=20, int aColor=1, bool aUseStavCf=false)
 {
   TH1* aThermCf = ThermCf::GetThermCf(aFileName, aCfDescriptor, aAnType, aImpactParam, aCombineConj, aEventsType, aRebin, aMinNorm, aMaxNorm, aMarkerStyle, aColor, aUseStavCf);
-  double tThermCfScale = aThermCf->Integral(aMinNorm, aMaxNorm);
+  double tThermCfScale = aThermCf->Integral(aThermCf->FindBin(aMinNorm), aThermCf->FindBin(aMaxNorm));
   aThermCf->Scale(aAdditionalScale/tThermCfScale);
 
   aPad->cd();
@@ -115,10 +117,10 @@ int main(int argc, char **argv)
   AnalysisType tAnType = kLamKchP;
 
   bool aDrawNormalCfOnC00 = true;
-  bool bCombineConjugates = false;
+  bool bCombineConjugates = true;
 
   bool bSaveFigures = false;
-  TString tSaveDir = "/home/jesse/Analysis/Presentations/GroupMeetings/20181204/Figures/";
+  TString tSaveDir = "/home/jesse/Analysis/Presentations/GroupMeetings/20190108/Figures/";
 
   int tRebin=2;
   double tMinNorm = /*0.80*//*0.80*/0.32;
@@ -133,7 +135,8 @@ int main(int argc, char **argv)
   int tm = 1;
   YlmComponent tComponent = kYlmReal;
 
-  TString tFileNameBase = "CorrelationFunctions_DrawRStarFromGaussian_BuildCfYlm_BuildAliFemtoCfYlm_PairOnly_cLamcKchMuOut3_cLamK0MuOut3_KchPKchPR538";
+//  TString tFileNameBase = "CorrelationFunctions_DrawRStarFromGaussian_BuildCfYlm_BuildAliFemtoCfYlm_PairOnly_cLamcKchMuOut3_cLamK0MuOut3_KchPKchPR538";
+  TString tFileNameBase = "CorrelationFunctions_wOtherPairs_DrawRStarFromGaussian_BuildCfYlm_cLamcKchMuOut3_cLamK0MuOut3_KchPKchPR538";
 
   TString tFileNameModifier = "";
 //  TString tFileNameModifier = "_WeightParentsInteraction";
@@ -147,24 +150,28 @@ int main(int argc, char **argv)
   TString tFileDir = TString::Format("/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b%d/", tImpactParam);
   TString tFileLocation = TString::Format("%s%s", tFileDir.Data(), tFileName.Data());
 
+  if(tAnType==kKchPKchP || tAnType==kK0K0 || tAnType==kLamLam) bCombineConjugates = false;
+  if(tFileNameBase.Contains("PairOnly")) bCombineConjugates = false;
 
   //--------------------------------------------
   CorrFctnDirectYlmTherm* tCfYlmTherm = GetYlmCfTherm(tFileLocation, tImpactParam, tAnType, 2, 300, 0., 3., tRebin);
 
-  TCanvas* tCan = new TCanvas("tCan", "tCan");
-  tCan->Divide(2,1);
-  DrawSHCfThermComponent((TPad*)tCan->cd(1), tCfYlmTherm, tComponent, 0, 0);
+  TString tCanC00C11Name = TString::Format("CanCfYlmReC00C11_%s_%s", aCfDescriptor.Data(), cAnalysisBaseTags[tAnType]);
+  TCanvas* tCanC00C11 = new TCanvas(tCanC00C11Name, tCanC00C11Name);
+  tCanC00C11->Divide(2,1);
+  DrawSHCfThermComponent((TPad*)tCanC00C11->cd(1), tCfYlmTherm, tComponent, 0, 0);
   if(aDrawNormalCfOnC00) 
   {
     //TODO Not sure how to set normalization range for CfYlm's, so I will simply scale the regular Cf to the CfYlm
     TH1D* tTempSHCf00 = (TH1D*)tCfYlmTherm->GetYlmHist(tComponent, kYlmCf, 0, 0);
-    double tTempNorm = tTempSHCf00->Integral(tMinNorm, tMaxNorm);
+    double tTempNorm = tTempSHCf00->Integral(tTempSHCf00->FindBin(tMinNorm), tTempSHCf00->FindBin(tMaxNorm));
 
-    Draw1DCf((TPad*)tCan->cd(1), tFileName, aCfDescriptor, tAnType, tImpactParam, bCombineConjugates, kMe, tRebin, tMinNorm, tMaxNorm, tTempNorm, 30, kBlack);    
+    Draw1DCf((TPad*)tCanC00C11->cd(1), tFileName, aCfDescriptor, tAnType, tImpactParam, bCombineConjugates, kMe, tRebin, tMinNorm, tMaxNorm, tTempNorm, 30, kBlack);    
   }
 
-  DrawSHCfThermComponent((TPad*)tCan->cd(2), tCfYlmTherm, tComponent, 1, 1);
+  DrawSHCfThermComponent((TPad*)tCanC00C11->cd(2), tCfYlmTherm, tComponent, 1, 1);
 
+  if(bSaveFigures) tCanC00C11->SaveAs(TString::Format("%s%s_FromFile%s.eps", tSaveDir.Data(), tCanC00C11Name.Data(), tFileNameBase.Data()));
 //-------------------------------------------------------------------------------
   theApp->Run(kTRUE); //Run the TApp to pause the code.
   // Select "Exit ROOT" from Canvas "File" menu to exit

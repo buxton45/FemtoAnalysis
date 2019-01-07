@@ -17,8 +17,8 @@ int main(int argc, char **argv)
   tFullTimer.Start();
 
 //-----------------------------------------------------------------------------
-  FitGeneratorType tFitGenType = kPair;
-  bool bBuildOtherPairs=false;
+  FitGeneratorType tFitGenType = kPairwConj;
+  bool bBuildOtherPairs=true;
   bool bBuildSingleParticleAnalyses = false;
   bool bPerformFlowAnalysis = false;
 
@@ -33,7 +33,7 @@ int main(int argc, char **argv)
   bool bBuild3dHists = false;
   bool bBuildPairSourcewmTInfo = false;
   bool bBuildCfYlm = true;
-  bool bBuildAliFemtoCfYlm = true;
+  bool bBuildAliFemtoCfYlm = false;
 
   bool bBuildMixedEventNumerators = false;
   int tNEventsToMix = 5;
@@ -42,7 +42,7 @@ int main(int argc, char **argv)
   bool bWeightCfsWithParentInteraction = false;
   bool bOnlyWeightLongDecayParents = false;
 
-  bool bDrawRStarFromGaussian = false;
+  bool bDrawRStarFromGaussian = true;
 
   bool bCheckCoECoM = false;
   bool bRotateEventsByRandomAzimuthalAngles = false;

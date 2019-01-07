@@ -18,6 +18,21 @@ double tRejectOmegaLow = 0.19;
 double tRejectOmegaHigh = 0.24;
 
 //________________________________________________________________________________________________________________
+TH1* GetThermHist1d(TString aFileLocation, TString aHistName)
+{
+  TFile *tFile = TFile::Open(aFileLocation);
+
+  TH1 *tReturnHist = (TH1*)tFile->Get(aHistName);
+  TH1 *tReturnHistClone = (TH1*)tReturnHist->Clone();
+  tReturnHistClone->SetDirectory(0);
+
+  tFile->Close();
+  delete tFile;
+
+  return tReturnHistClone;
+}
+
+//________________________________________________________________________________________________________________
 TH3* GetThermHist3d(TString aFileLocation, TString aHistName)
 {
   TFile *tFile = TFile::Open(aFileLocation);
@@ -81,6 +96,46 @@ TF1* FitwGauss(TH1* aHist, double aMinFit=0., double aMaxFit=50.)
   return tReturnFunction;
 }
 
+
+//________________________________________________________________________________________________________________
+void DrawHistwGaussFit(TPad* aPad, TH1* aHist, double aGaussFitMin, double aGaussFitMax, TString aMuName="#mu_{Out}", TString aSigmaName="R_{Out}")
+{
+  TF1* tGaussFit = FitwGauss(aHist, aGaussFitMin, aGaussFitMax);
+
+  aPad->cd();
+  aHist->Draw();
+  tGaussFit->Draw("same");
+
+  //----- Draw lines to show fit range -----
+  TLine* tLineMin = new TLine(aGaussFitMin, 0., aGaussFitMin, 0.25*aHist->GetMaximum());
+  TLine* tLineMax = new TLine(aGaussFitMax, 0., aGaussFitMax, 0.25*aHist->GetMaximum());
+
+  tLineMin->SetLineColor(TColor::GetColorTransparent(kRed,0.75));
+  tLineMin->SetLineStyle(2);
+  tLineMin->Draw();
+
+  tLineMax->SetLineColor(TColor::GetColorTransparent(kRed,0.75));
+  tLineMax->SetLineStyle(2);
+  tLineMax->Draw();
+  //----------------------------------------
+
+  TPaveText* tText = new TPaveText(0.15, 0.50, 0.40, 0.85, "NDC");
+    tText->SetFillColor(0);
+    tText->SetBorderSize(0);
+    tText->SetTextColor(kRed);
+/*
+    tText->AddText("[0]*exp#left(- #frac{#left(x-[1]#right)^{2}}{4[2]^{2}}#right)");
+    tText->AddText(TString::Format("[1] = %0.3e", tGaussFit->GetParameter(1)));
+    tText->AddText(TString::Format("[2] = %0.3e", tGaussFit->GetParameter(2)));
+*/
+    tText->AddText(TString::Format("N*exp#left(- #frac{#left(x-%s#right)^{2}}{4%s^{2}}#right)", aMuName.Data(), aSigmaName.Data()));
+    tText->AddText("");
+    tText->AddText(TString::Format("%s = %0.3e", aMuName.Data(), tGaussFit->GetParameter(1)));
+    tText->AddText(TString::Format("%s = %0.3e",   aSigmaName.Data(), tGaussFit->GetParameter(2)));
+    tText->Draw();
+
+}
+
 //________________________________________________________________________________________________________________
 void Draw1DSourceProjwFit(TPad* aPad, TH3* a3DoslHist, TString aComponent, double aGaussFitMin=-20., double aGaussFitMax=20., double aProjLow=-100, double aProjHigh=-100)
 {
@@ -126,40 +181,9 @@ void Draw1DSourceProjwFit(TPad* aPad, TH3* a3DoslHist, TString aComponent, doubl
   t1DSource->SetMarkerColor(kBlack);
 
   //-----------------------------------------------------------
-
-  TF1* tGaussFit = FitwGauss(t1DSource, aGaussFitMin, aGaussFitMax);
-
-  aPad->cd();
-  t1DSource->Draw();
-  tGaussFit->Draw("same");
-
-  //----- Draw lines to show fit range -----
-  TLine* tLineMin = new TLine(aGaussFitMin, 0., aGaussFitMin, 0.25*t1DSource->GetMaximum());
-  TLine* tLineMax = new TLine(aGaussFitMax, 0., aGaussFitMax, 0.25*t1DSource->GetMaximum());
-
-  tLineMin->SetLineColor(TColor::GetColorTransparent(kRed,0.75));
-  tLineMin->SetLineStyle(2);
-  tLineMin->Draw();
-
-  tLineMax->SetLineColor(TColor::GetColorTransparent(kRed,0.75));
-  tLineMax->SetLineStyle(2);
-  tLineMax->Draw();
-  //----------------------------------------
-
-  TPaveText* tText = new TPaveText(0.15, 0.50, 0.40, 0.85, "NDC");
-    tText->SetFillColor(0);
-    tText->SetBorderSize(0);
-    tText->SetTextColor(kRed);
-/*
-    tText->AddText("[0]*exp#left(- #frac{#left(x-[1]#right)^{2}}{4[2]^{2}}#right)");
-    tText->AddText(TString::Format("[1] = %0.3e", tGaussFit->GetParameter(1)));
-    tText->AddText(TString::Format("[2] = %0.3e", tGaussFit->GetParameter(2)));
-*/
-    tText->AddText(TString::Format("N*exp#left(- #frac{#left(x-#mu_{%s}#right)^{2}}{4R_{%s}^{2}}#right)", aComponent.Data(), aComponent.Data()));
-    tText->AddText("");
-    tText->AddText(TString::Format("#mu_{%s} = %0.3e", aComponent.Data(), tGaussFit->GetParameter(1)));
-    tText->AddText(TString::Format("R_{%s} = %0.3e",   aComponent.Data(), tGaussFit->GetParameter(2)));
-    tText->Draw();
+  TString tMuName = TString::Format("#mu_{%s}", aComponent.Data());
+  TString tSigmaName = TString::Format("R_{%s}", aComponent.Data());
+  DrawHistwGaussFit(aPad, t1DSource, aGaussFitMin, aGaussFitMax, tMuName, tSigmaName);
 }
 
 //________________________________________________________________________________________________________________
@@ -240,13 +264,14 @@ int main(int argc, char **argv)
   //This allows the user a chance to look at and manipulate a TBrowser before
   //the program ends and closes everything
 //-----------------------------------------------------------------------------
-  AnalysisType tAnType = kKchPKchP;
+  AnalysisType tAnType = kLamKchP;
   if(tAnType==kLamKchM) gRejectPoints=true;
 
   bool bCombineConjugates = true;
+  bool bDrawDeltaT = true;
   bool bDraw2DHists = false;
   bool bSaveFigures = false;
-  TString tSaveDir = "/home/jesse/Analysis/Presentations/GroupMeetings/20181204/Figures/";
+  TString tSaveDir = "/home/jesse/Analysis/Presentations/GroupMeetings/20190108/Figures/";
 
   int tRebin=1;
   double tMinNorm = /*0.80*//*0.80*/0.32;
@@ -256,10 +281,12 @@ int main(int argc, char **argv)
   TString aCfDescriptor = "Full";
 //  TString aCfDescriptor = "PrimaryOnly";
 
-//  TString tFilaNameBase = "CorrelationFunctions_wOtherPairs";
-//  TString tFilaNameBase = "CorrelationFunctions_wOtherPairs_DrawRStarFromGaussian_LamKchPMuOut3_LamKchMMuOut6";
-//  TString tFilaNameBase = "CorrelationFunctions_wOtherPairs_DrawRStarFromGaussian_cLamcKchMuOut6_cLamK0MuOut1";
-  TString tFilaNameBase = "CorrelationFunctions_wOtherPairs_DrawRStarFromGaussian_cLamcKchMuOut3_cLamK0MuOut3_KchPKchPR538";
+//  TString tFileNameBase = "CorrelationFunctions_wOtherPairs";
+//  TString tFileNameBase = "CorrelationFunctions_wOtherPairs_DrawRStarFromGaussian_LamKchPMuOut3_LamKchMMuOut6";
+//  TString tFileNameBase = "CorrelationFunctions_wOtherPairs_DrawRStarFromGaussian_cLamcKchMuOut6_cLamK0MuOut1";
+//  TString tFileNameBase = "CorrelationFunctions_wOtherPairs_DrawRStarFromGaussian_BuildCfYlm_cLamcKchMuOut3_cLamK0MuOut3_KchPKchPR538";
+  TString tFileNameBase = "CorrelationFunctions_wOtherPairs_BuildCfYlm";
+
 
   TString tFileNameModifier = "";
 //  TString tFileNameModifier = "_WeightParentsInteraction";
@@ -268,7 +295,7 @@ int main(int argc, char **argv)
 
   //--------------------------------------------
 
-  TString tFileName = TString::Format("%s%s.root", tFilaNameBase.Data(), tFileNameModifier.Data());
+  TString tFileName = TString::Format("%s%s.root", tFileNameBase.Data(), tFileNameModifier.Data());
 
   TString tFileDir = TString::Format("/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b%d/", tImpactParam);
   TString tFileLocation = TString::Format("%s%s", tFileDir.Data(), tFileName.Data());
@@ -280,6 +307,7 @@ int main(int argc, char **argv)
   TString tHistName3d = TString::Format("PairSource3d_osl%s%s", t3dDescriptor.Data(), cAnalysisBaseTags[tAnType]);
 
   if(tAnType==kKchPKchP || tAnType==kK0K0 || tAnType==kLamLam) bCombineConjugates = false;
+  if(tFileNameBase.Contains("PairOnly")) bCombineConjugates = false;
 
   //--------------------------------------------
 
@@ -296,7 +324,8 @@ int main(int argc, char **argv)
   bool tFixLambdaInFit = true;
   double tKStarFitMax = 0.3;
 
-  TCanvas* tCanCfwSource = new TCanvas("tCanCfwSource", "tCanCfwSource");
+  TString tCanCfwSourceName = TString::Format("CanCfwSource_%s_%s", aCfDescriptor.Data(), cAnalysisBaseTags[tAnType]);
+  TCanvas* tCanCfwSource = new TCanvas(tCanCfwSourceName, tCanCfwSourceName);
   tCanCfwSource->Divide(2,2);
 
 
@@ -306,7 +335,31 @@ int main(int argc, char **argv)
   Draw1DSourceProjwFit((TPad*)tCanCfwSource->cd(3), tTest3d, "Side", tGaussFitMin, tGaussFitMax, tProjLow, tProjHigh);
   Draw1DSourceProjwFit((TPad*)tCanCfwSource->cd(4), tTest3d, "Long", tGaussFitMin, tGaussFitMax, tProjLow, tProjHigh);
 
-  if(bSaveFigures) tCanCfwSource->SaveAs(TString::Format("%s%s_%s_%s.eps", tSaveDir.Data(), tFilaNameBase.Data(), aCfDescriptor.Data(), cAnalysisBaseTags[tAnType]));
+//  if(bSaveFigures) tCanCfwSource->SaveAs(TString::Format("%s%s_%s_%s.eps", tSaveDir.Data(), tFileNameBase.Data(), aCfDescriptor.Data(), cAnalysisBaseTags[tAnType]));
+  if(bSaveFigures) tCanCfwSource->SaveAs(TString::Format("%s%s_FromFile%s.eps", tSaveDir.Data(), tCanCfwSourceName.Data(), tFileNameBase.Data()));
+  //-------------------------------------------------------------------------------
+
+
+  if(bDrawDeltaT)
+  {
+    TString tHistNameDeltaT;
+    if(aCfDescriptor.EqualTo("Full")) tHistNameDeltaT = TString::Format("PairDeltaT_inPRF%s", cAnalysisBaseTags[tAnType]);
+    else                              tHistNameDeltaT = TString::Format("PairDeltaT_inPRF%s%s", aCfDescriptor.Data(), cAnalysisBaseTags[tAnType]);
+
+    TH1* tDeltaTHist = GetThermHist1d(tFileLocation, tHistNameDeltaT);
+
+    TString tCanDeltaTName = TString::Format("CanDeltaT_%s_%s", aCfDescriptor.Data(), cAnalysisBaseTags[tAnType]);
+    TCanvas* tCanDeltaT = new TCanvas(tCanDeltaTName, tCanDeltaTName); 
+    tCanDeltaT->cd();
+
+    tDeltaTHist->GetXaxis()->SetTitle("#Deltat_{PRF}");
+
+    TString tMuName = "#mu_{#Deltat}";
+    TString tSigmaName = "#Deltat";
+
+    DrawHistwGaussFit((TPad*)tCanDeltaT->cd(), tDeltaTHist, -20., 20., tMuName, tSigmaName);
+    if(bSaveFigures) tCanDeltaT->SaveAs(TString::Format("%s%s_FromFile%s.eps", tSaveDir.Data(), tCanDeltaTName.Data(), tFileNameBase.Data()));
+  }
 
   //-------------------------------------------------------------------------------
 
