@@ -21,6 +21,8 @@ class Analysis;
 void DrawSHCfComponent(TPad* aPad, Analysis* aAnaly, YlmComponent aComponent, int al, int am, int aRebin/*, double aMinNorm=0.32, double aMaxNorm=0.40, int aRebin=2*/)
 {
   aPad->cd();
+  aPad->SetLeftMargin(0.15);
+  aPad->SetRightMargin(0.025);
 
   gStyle->SetOptStat(0);
   gStyle->SetOptTitle(0);
@@ -119,7 +121,7 @@ int main(int argc, char **argv)
   TString tResultsDate = "20181205";
   AnalysisType tAnType = kLamKchP;
 
-  bool bDrawThermCfs = false;
+  bool bDrawThermCfs = true;
   bool bSaveFigures = false;
 
   int tl = 1;
@@ -141,33 +143,43 @@ int main(int argc, char **argv)
   TString tDirectoryBase = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_%s_%s/",tGeneralAnTypeName.Data(),tResultsDate.Data());
   TString tFileLocationBase = TString::Format("%sResults_%s_%s",tDirectoryBase.Data(),tGeneralAnTypeName.Data(),tResultsDate.Data());
 
-//  TString tSaveDirectoryBase = TString::Format("/home/jesse/Analysis/Presentations/AliFemto/20180627/Figures/Fits/%s/", cAnalysisBaseTags[tAnType]);
-  TString tSaveDirectoryBase = tDirectoryBase;
-
+//  TString tSaveDirectoryBase = tDirectoryBase;
+  TString tSaveDirectoryBase = "/home/jesse/Analysis/Presentations/GroupMeetings/20190108/Figures/";
 //-----------------------------------------------------------------------------
 
   Analysis* tAnaly0010 = new Analysis(tFileLocationBase, tAnType, k0010, tAnRunType, 2, "", false);
   Analysis* tAnaly1030 = new Analysis(tFileLocationBase, tAnType, k1030, tAnRunType, 2, "", false);
   Analysis* tAnaly3050 = new Analysis(tFileLocationBase, tAnType, k3050, tAnRunType, 2, "", false);
 
-  TCanvas* tCan = new TCanvas("tCan", "tCan");
-  tCan->Divide(2, 3);
+  //----------
+  TString tCanNameAll = TString::Format("CanCfYlmReC00C11_%s_All", cAnalysisBaseTags[tAnType]);
+  TCanvas* tCanAll = new TCanvas(tCanNameAll, tCanNameAll);
+  tCanAll->Divide(2, 3);
 
-  DrawSHCfComponent((TPad*)tCan->cd(1), tAnaly0010, tComponent, 0, 0, tRebin);
-  DrawSHCfComponent((TPad*)tCan->cd(2), tAnaly0010, tComponent, 1, 1, tRebin);
+  DrawSHCfComponent((TPad*)tCanAll->cd(1), tAnaly0010, tComponent, 0, 0, tRebin);
+  DrawSHCfComponent((TPad*)tCanAll->cd(2), tAnaly0010, tComponent, 1, 1, tRebin);
 
-  DrawSHCfComponent((TPad*)tCan->cd(3), tAnaly1030, tComponent, 0, 0, tRebin);
-  DrawSHCfComponent((TPad*)tCan->cd(4), tAnaly1030, tComponent, 1, 1, tRebin);
+  DrawSHCfComponent((TPad*)tCanAll->cd(3), tAnaly1030, tComponent, 0, 0, tRebin);
+  DrawSHCfComponent((TPad*)tCanAll->cd(4), tAnaly1030, tComponent, 1, 1, tRebin);
 
-  DrawSHCfComponent((TPad*)tCan->cd(5), tAnaly3050, tComponent, 0, 0, tRebin);
-  DrawSHCfComponent((TPad*)tCan->cd(6), tAnaly3050, tComponent, 1, 1, tRebin);
+  DrawSHCfComponent((TPad*)tCanAll->cd(5), tAnaly3050, tComponent, 0, 0, tRebin);
+  DrawSHCfComponent((TPad*)tCanAll->cd(6), tAnaly3050, tComponent, 1, 1, tRebin);
+
+  //----------
+
+  TString tCanName0010 = TString::Format("CanCfYlmReC00C11_%s_0010", cAnalysisBaseTags[tAnType]);
+  TCanvas* tCan0010 = new TCanvas(tCanName0010, tCanName0010);
+  tCan0010->Divide(2, 1);
+
+  DrawSHCfComponent((TPad*)tCan0010->cd(1), tAnaly0010, tComponent, 0, 0, tRebin);
+  DrawSHCfComponent((TPad*)tCan0010->cd(2), tAnaly0010, tComponent, 1, 1, tRebin);
 
   if(bDrawThermCfs)
   {
     int tImpactParam = 2;
     TString aCfDescriptor = "Full";
 
-    TString tFileNameBaseTherm = "CorrelationFunctions_DrawRStarFromGaussian_BuildCfYlm_BuildAliFemtoCfYlm_PairOnly_cLamcKchMuOut3_cLamK0MuOut3_KchPKchPR538";
+    TString tFileNameBaseTherm = "CorrelationFunctions_wOtherPairs_BuildCfYlm";
     TString tFileNameModifierTherm = "";
 
     TString tFileNameTherm = TString::Format("%s%s.root", tFileNameBaseTherm.Data(), tFileNameModifierTherm.Data());
@@ -177,8 +189,21 @@ int main(int argc, char **argv)
 
     CorrFctnDirectYlmTherm* tCfYlmTherm = GetYlmCfTherm(tFileLocationTherm, tImpactParam, tAnType, 2, 300, 0., 3., tRebin);
 
-    DrawSHCfThermComponent((TPad*)tCan->cd(1), tCfYlmTherm, tComponent, 0, 0, 29, kOrange);
-    DrawSHCfThermComponent((TPad*)tCan->cd(2), tCfYlmTherm, tComponent, 1, 1, 29, kOrange);
+    DrawSHCfThermComponent((TPad*)tCanAll->cd(1), tCfYlmTherm, tComponent, 0, 0, 29, kOrange);
+    DrawSHCfThermComponent((TPad*)tCanAll->cd(2), tCfYlmTherm, tComponent, 1, 1, 29, kOrange);
+    //----------
+    DrawSHCfThermComponent((TPad*)tCan0010->cd(1), tCfYlmTherm, tComponent, 0, 0, 29, kOrange);
+    DrawSHCfThermComponent((TPad*)tCan0010->cd(2), tCfYlmTherm, tComponent, 1, 1, 29, kOrange);
+  }
+
+
+
+
+
+  if(bSaveFigures)
+  {
+    tCanAll->SaveAs(TString::Format("%s%s.eps", tSaveDirectoryBase.Data(), tCanNameAll.Data()));
+    tCan0010->SaveAs(TString::Format("%s%s.eps", tSaveDirectoryBase.Data(), tCanName0010.Data()));
   }
 
 /*

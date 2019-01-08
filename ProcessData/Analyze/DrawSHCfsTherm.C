@@ -136,7 +136,8 @@ int main(int argc, char **argv)
   YlmComponent tComponent = kYlmReal;
 
 //  TString tFileNameBase = "CorrelationFunctions_DrawRStarFromGaussian_BuildCfYlm_BuildAliFemtoCfYlm_PairOnly_cLamcKchMuOut3_cLamK0MuOut3_KchPKchPR538";
-  TString tFileNameBase = "CorrelationFunctions_wOtherPairs_DrawRStarFromGaussian_BuildCfYlm_cLamcKchMuOut3_cLamK0MuOut3_KchPKchPR538";
+//  TString tFileNameBase = "CorrelationFunctions_wOtherPairs_DrawRStarFromGaussian_BuildCfYlm_cLamcKchMuOut3_cLamK0MuOut3_KchPKchPR538";
+  TString tFileNameBase = "CorrelationFunctions_wOtherPairs_BuildCfYlm";
 
   TString tFileNameModifier = "";
 //  TString tFileNameModifier = "_WeightParentsInteraction";
@@ -156,7 +157,7 @@ int main(int argc, char **argv)
   //--------------------------------------------
   CorrFctnDirectYlmTherm* tCfYlmTherm = GetYlmCfTherm(tFileLocation, tImpactParam, tAnType, 2, 300, 0., 3., tRebin);
 
-  TString tCanC00C11Name = TString::Format("CanCfYlmReC00C11_%s_%s", aCfDescriptor.Data(), cAnalysisBaseTags[tAnType]);
+  TString tCanC00C11Name = TString::Format("CanThermCfYlmReC00C11_%s_%s", aCfDescriptor.Data(), cAnalysisBaseTags[tAnType]);
   TCanvas* tCanC00C11 = new TCanvas(tCanC00C11Name, tCanC00C11Name);
   tCanC00C11->Divide(2,1);
   DrawSHCfThermComponent((TPad*)tCanC00C11->cd(1), tCfYlmTherm, tComponent, 0, 0);

@@ -339,7 +339,7 @@ int main(int argc, char **argv)
   if(bSaveFigures) tCanCfwSource->SaveAs(TString::Format("%s%s_FromFile%s.eps", tSaveDir.Data(), tCanCfwSourceName.Data(), tFileNameBase.Data()));
   //-------------------------------------------------------------------------------
 
-
+  if(tFileNameBase.Contains("DrawRStarFromGaussian")) bDrawDeltaT=false;
   if(bDrawDeltaT)
   {
     TString tHistNameDeltaT;
