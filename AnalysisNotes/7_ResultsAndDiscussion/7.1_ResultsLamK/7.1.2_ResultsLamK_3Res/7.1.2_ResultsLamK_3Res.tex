@@ -1,10 +1,13 @@
 \documentclass[/home/jesse/Analysis/FemtoAnalysis/AnalysisNotes/AnalysisNoteJBuxton.tex]{subfiles}
 
-\renewcommand{\ResNum}{_3Res}
-\renewcommand{\PrimMaxDecay}{_PrimMaxDecay4fm}
+\renewcommand{\NonFlatBgdLamKch}{_NonFlatBgdCrctnPolynomial}
+\renewcommand{\NonFlatBgdLamKs}{_NonFlatBgdCrctnLinear}
 
-\renewcommand{\SaveNameModLamKch}{\MomRes\NonFlatBgd\ResNum\PrimMaxDecay\ResMethod\ParamFixAndShareLamKch}
-\renewcommand{\SaveNameModLamKs}{\MomRes\NonFlatBgd\ResNum\PrimMaxDecay\ResMethod\ParamFixAndShareLamKs}
+\renewcommand{\ResNum}{_3Res}
+\renewcommand{\PrimMaxDecay}{_PrimMaxDecay10fm}
+
+\renewcommand{\SaveNameModLamKch}{\MomRes\NonFlatBgdLamKch\ResNum\PrimMaxDecay\ResMethod\ParamFixAndShareLamKch}
+\renewcommand{\SaveNameModLamKs}{\MomRes\NonFlatBgdLamKs\ResNum\PrimMaxDecay\ResMethod\ParamFixAndShareLamKs}
 
 \begin{document}
 
@@ -17,7 +20,7 @@ The parameter sets extracted from the fits can be found in Tables \ref{tab:FitRe
 
 \begin{figure}[h]
   \centering
-  \includegraphics[width=0.80\textwidth]{7_ResultsAndDiscussion/Figures/CompareAllScattParams_Comp3An_3Res.pdf}
+  \includegraphics[width=0.80\textwidth]{\ResultsDirBaseLamKch\SaveNameModLamKch/Comparisons/LAMKCH\SaveNameModLamKch_vs_LAMK0\SaveNameModLamKs/CompareAllScattParamswSys_wPredictions_Comp3An.pdf}
   \caption[Extracted Scattering Parameters: 3 Residuals in Fit]{Extracted scattering parameters for the case of 3 residual contributors for all of our $\Lambda$K systems.  [Top Left]: $\mathbb{I}f_{0}$ vs. $\mathbb{R}f_{0}$, together with d$_{0}$ to the right.  [Top Right (Bottom Left, Bottom Right)]: $\lambda$ vs. Radius for the 0-10\% (10-30\%, 30-50\%) bin.  The green \cite{Liu:2006xja} and yellow \cite{Mai:2009ce} points show theoretical predictions made using chiral perturbation theory.}
   \label{fig:ScattParams_3Res}
 \end{figure}
