@@ -170,3 +170,97 @@ void FitValuesLatexTableHelperWriterwSysErrs::WriteLatexTableHelper(TString aHel
   tOut.close();
 }
 
+
+
+//________________________________________________________________________________________________________________
+//****************************************************************************************************************
+//________________________________________________________________________________________________________________
+
+//________________________________________________________________________________________________________________
+void FitValuesLatexTableHelperWriterwSysErrs::WriteLatexTableHelperEntryForSingle(ostream &aOut, TString aMasterFileLocation, TString aSystematicsFileLocation, AnalysisType aAnType, TString aFitInfoTString)
+{
+  FitParameter *tPar_lam0010, *tPar_lam1030, *tPar_lam3050;
+  FitParameter *tPar_R0010, *tPar_R1030, *tPar_R3050;
+  FitParameter *tPar_Ref0, *tPar_Imf0, *tPar_d0;
+
+  tPar_lam0010 = GetFitParameterSys(aMasterFileLocation, aSystematicsFileLocation, aFitInfoTString, aAnType, k0010, kLambda);
+  tPar_lam1030 = GetFitParameterSys(aMasterFileLocation, aSystematicsFileLocation, aFitInfoTString, aAnType, k1030, kLambda);
+  tPar_lam3050 = GetFitParameterSys(aMasterFileLocation, aSystematicsFileLocation, aFitInfoTString, aAnType, k3050, kLambda);
+
+  tPar_R0010 = GetFitParameterSys(aMasterFileLocation, aSystematicsFileLocation, aFitInfoTString, aAnType, k0010, kRadius);
+  tPar_R1030 = GetFitParameterSys(aMasterFileLocation, aSystematicsFileLocation, aFitInfoTString, aAnType, k1030, kRadius);
+  tPar_R3050 = GetFitParameterSys(aMasterFileLocation, aSystematicsFileLocation, aFitInfoTString, aAnType, k3050, kRadius);
+
+  tPar_Ref0 = GetFitParameterSys(aMasterFileLocation, aSystematicsFileLocation, aFitInfoTString, aAnType, k0010, kRef0);
+  tPar_Imf0 = GetFitParameterSys(aMasterFileLocation, aSystematicsFileLocation, aFitInfoTString, aAnType, k0010, kImf0);
+  tPar_d0 = GetFitParameterSys(aMasterFileLocation, aSystematicsFileLocation, aFitInfoTString, aAnType, k0010, kd0);
+
+
+  //------------------------------------------------------------------
+  TString tAnalysisTag;
+  if(aAnType==kLamKchP || aAnType==kALamKchM || aAnType==kLamKchM || aAnType==kALamKchP) tAnalysisTag = cAnalysisBaseTags[aAnType];
+  else if(aAnType==kLamK0) tAnalysisTag = TString("LamKs");
+  else if(aAnType==kALamK0) tAnalysisTag = TString("ALamKs");
+  else assert(0);
+
+  aOut << TString::Format("\\newarray\\Arr%s", tAnalysisTag.Data()) << endl;
+  aOut << TString::Format("\\readarray{Arr%s}{", tAnalysisTag.Data()) << endl;
+
+  aOut << TString::Format("                       %0.2f & %0.2f & %0.2f & ", tPar_lam0010->GetFitValue(), tPar_lam0010->GetFitValueError(), tPar_lam0010->GetFitValueSysError()) << endl;
+  aOut << TString::Format("                       %0.2f & %0.2f & %0.2f & ", tPar_R0010->GetFitValue(), tPar_R0010->GetFitValueError(), tPar_R0010->GetFitValueSysError()) << endl;
+
+  aOut << TString::Format("                       %0.2f & %0.2f & %0.2f & ", tPar_lam1030->GetFitValue(), tPar_lam1030->GetFitValueError(), tPar_lam1030->GetFitValueSysError()) << endl;
+  aOut << TString::Format("                       %0.2f & %0.2f & %0.2f & ", tPar_R1030->GetFitValue(), tPar_R1030->GetFitValueError(), tPar_R1030->GetFitValueSysError()) << endl;
+
+  aOut << TString::Format("                       %0.2f & %0.2f & %0.2f & ", tPar_lam3050->GetFitValue(), tPar_lam3050->GetFitValueError(), tPar_lam3050->GetFitValueSysError()) << endl;
+  aOut << TString::Format("                       %0.2f & %0.2f & %0.2f & ", tPar_R3050->GetFitValue(), tPar_R3050->GetFitValueError(), tPar_R3050->GetFitValueSysError()) << endl;
+
+  aOut << TString::Format("                       %0.2f & %0.2f & %0.2f & ", tPar_Ref0->GetFitValue(), tPar_Ref0->GetFitValueError(), tPar_Ref0->GetFitValueSysError()) << endl;
+  aOut << TString::Format("                       %0.2f & %0.2f & %0.2f & ", tPar_Imf0->GetFitValue(), tPar_Imf0->GetFitValueError(), tPar_Imf0->GetFitValueSysError()) << endl;
+  aOut << TString::Format("                       %0.2f & %0.2f & %0.2f}", tPar_d0->GetFitValue(), tPar_d0->GetFitValueError(), tPar_d0->GetFitValueSysError()) << endl << endl;
+
+
+}
+
+
+
+
+//________________________________________________________________________________________________________________
+void FitValuesLatexTableHelperWriterwSysErrs::WriteSingleLatexTableHelper(TString aResultsDate, AnalysisType aAnType, TString aFitInfoTString)
+{
+  assert(aAnType==kLamKchP || aAnType==kLamK0);
+  TString tPairDesc = "";
+  if     (aAnType==kLamKchP) tPairDesc = TString("_cLamcKch");
+  else if(aAnType==kLamK0) tPairDesc = TString("_cLamK0");
+
+  TString tResultsBaseDir = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results%s_%s/", tPairDesc.Data(), aResultsDate.Data());
+  TString tMasterFileLocation = TString::Format("%sMasterFitResults_%s.txt", tResultsBaseDir.Data(), aResultsDate.Data());
+  TString tSystematicsFileLocation = TString::Format("%s%s/Systematics/FinalFitSystematics_wFitRangeSys%s%s.txt", tResultsBaseDir.Data(), aFitInfoTString.Data(), aFitInfoTString.Data(), tPairDesc.Data());
+
+  TString tTableSaveDir = TString::Format("%s%s/Tables/", tResultsBaseDir.Data(), aFitInfoTString.Data());
+    gSystem->mkdir(tTableSaveDir);
+  TString tTableSaveLocation = TString::Format("%sTableHelper.tex", tTableSaveDir.Data());
+
+
+  std::ofstream tOut;
+  tOut.open(tTableSaveLocation);
+
+  if(aAnType==kLamKchP || aAnType==kALamKchM || aAnType==kLamKchM || aAnType==kALamKchP)
+  {
+    WriteLatexTableHelperEntryForSingle(tOut, tMasterFileLocation, tSystematicsFileLocation, kLamKchP,  aFitInfoTString);
+    WriteLatexTableHelperEntryForSingle(tOut, tMasterFileLocation, tSystematicsFileLocation, kALamKchM, aFitInfoTString);
+    WriteLatexTableHelperEntryForSingle(tOut, tMasterFileLocation, tSystematicsFileLocation, kLamKchM,  aFitInfoTString);
+    WriteLatexTableHelperEntryForSingle(tOut, tMasterFileLocation, tSystematicsFileLocation, kALamKchP, aFitInfoTString);
+  }
+  else if(aAnType==kLamK0 || aAnType==kALamK0)
+  {
+    WriteLatexTableHelperEntryForSingle(tOut, tMasterFileLocation, tSystematicsFileLocation, kLamK0,   aFitInfoTString);
+    WriteLatexTableHelperEntryForSingle(tOut, tMasterFileLocation, tSystematicsFileLocation, kALamK0,  aFitInfoTString);
+  }
+  else assert(0);
+
+  tOut.close();
+}
+
+
+

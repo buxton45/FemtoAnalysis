@@ -25,7 +25,7 @@ CFLAGS = $(shell root-config --cflags) -Wall -std=c++11 -I${ANALYZE_DIR} -I${LED
 
 MY_LIBS = $(addprefix build/, FitParameter.o FitChi2Histograms.o BackgroundFitter.o FitPartialAnalysis.o FitPairAnalysis.o FitSharedAnalyses.o MathematicaSession.o WaveFunction.o ChargedResidualCf.o SimpleChargedResidualCf.o NeutralResidualCf.o ResidualCollection.o LednickyFitter.o FitValuesWriter.o FitValuesLatexTableHelperWriter.o FitValuesWriterwSysErrs.o FitValuesLatexTableHelperWriterwSysErrs.o FitGenerator.o FitGeneratorAndDraw.o DualieFitGenerator.o ThermCf.o CfLite.o CfHeavy.o Types.o Types_LambdaValues.o Types_FitParamValues.o Types_ThermBgdParams.o Types_SysFileInfo.o Faddeeva.o FitSystematicAnalysis.o DualieFitSystematicAnalysis.o CanvasPartition.o)
 
-BINARIES = runSingleSystematics runAllSystematics runRead runFindOutliers runFitRange runNonFlatBgdSys runTest runBuildLatexTableHelperwSysErrs runCompareFittingMethodsv2wSysErrs runSingleDualieSystematics runAllDualieSystematics runFitRangeDualie runNonFlatBgdDualieSys
+BINARIES = runSingleSystematics runAllSystematics runRead runFindOutliers runFitRange runNonFlatBgdSys runTest runBuildLatexTableHelperwSysErrs runBuildLatexTableHelperwSysErrsForSingle runCompareFittingMethodsv2wSysErrs runSingleDualieSystematics runAllDualieSystematics runFitRangeDualie runNonFlatBgdDualieSys
 
 all: $(BINARIES)
 
@@ -49,6 +49,9 @@ runNonFlatBgdSys: ${MY_LIBS} NonFlatBgdFitTypeSystematics.C
 
 runBuildLatexTableHelperwSysErrs: ${MY_LIBS} BuildLatexTableHelperwSysErrs.C
 	g++ BuildLatexTableHelperwSysErrs.C ${MY_LIBS} -I${INCDIR} -o runBuildLatexTableHelperwSysErrs -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS)
+
+runBuildLatexTableHelperwSysErrsForSingle: ${MY_LIBS} BuildLatexTableHelperwSysErrsForSingle.C
+	g++ BuildLatexTableHelperwSysErrsForSingle.C ${MY_LIBS} -I${INCDIR} -o runBuildLatexTableHelperwSysErrsForSingle -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS)
 
 runTest: ${MY_LIBS} test.C
 	g++ test.C ${MY_LIBS} -I${INCDIR} -o runTest -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS)

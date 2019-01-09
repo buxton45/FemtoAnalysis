@@ -20,6 +20,9 @@ public:
   static void WriteLatexTableHelperHeader(ostream &aOut);
   static void WriteLatexTableHelper(TString aHelperBaseLocation, TString aMasterFileLocatio, TString aSystematicsFileLocation, AnalysisType aAnType, IncludeResidualsType aResType, ResPrimMaxDecayType tResPrimMaxDecayType);
 
+  static void WriteLatexTableHelperEntryForSingle(ostream &aOut, TString aMasterFileLocation, TString aSystematicsFileLocation, AnalysisType aAnType, TString aFitInfoTString);
+  static void WriteSingleLatexTableHelper(TString aResultsDate, AnalysisType aAnType, TString aFitInfoTString);
+
   //inline (i.e. simple) functions
 
 
