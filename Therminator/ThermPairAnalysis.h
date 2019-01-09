@@ -141,8 +141,8 @@ public:
   void FillCorrelationFunctionsNumAndDenV0V0(const vector<ThermV0Particle> &aV01Collection, const vector<ThermV0Particle> &aV02Collection);
 
   td2dVec GetTrueRoslContributions(const ThermParticle &aParticle1, const ThermParticle &aParticle2);
-  void AddRoslContributionToMasterVector(td2dVec &aMasterVec, int &aNPairs, const ThermParticle &aParticle1, const ThermParticle &aParticle2);
-  td1dVec FinalizeTrueRoslMaster(td2dVec &aMasterVec, int aNPairs);
+  void AddRoslContributionToMasterVector(td2dVec &aTrueRoslMaster, int &aNPairs, const ThermParticle &aParticle1, const ThermParticle &aParticle2);
+  td2dVec FinalizeTrueRoslMaster(td2dVec &aTrueRoslMaster, int aNPairs);
 
   void BuildTrueRoslParticleParticle(const vector<ThermParticle> &aParticleCollection1, const vector<ThermParticle> &aParticleCollection2);
   void BuildTrueRoslParticleV0(const vector<ThermParticle> &aParticleCollection, const vector<ThermV0Particle> &aV0Collection);
@@ -259,6 +259,7 @@ private:
   TH1* fPairDeltaT_inPRFPrimaryOnly;
 
   TH3* fTrueRosl;
+  TH3* fSimpleRosl;
 
   TH3* fPairSource3d_mT1vmT2vRinv;
   TH2* fPairSource2d_PairmTvRinv;

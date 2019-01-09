@@ -99,6 +99,7 @@ ThermPairAnalysis::ThermPairAnalysis(AnalysisType aAnType) :
   fPairDeltaT_inPRFPrimaryOnly(nullptr),
 
   fTrueRosl(nullptr),
+  fSimpleRosl(nullptr),
 
   fPairSource3d_mT1vmT2vRinv(nullptr),
   fPairSource2d_PairmTvRinv(nullptr),
@@ -172,6 +173,7 @@ ThermPairAnalysis::~ThermPairAnalysis()
   delete fPairDeltaT_inPRFPrimaryOnly;
 
   delete fTrueRosl;
+  delete fSimpleRosl;
 
   delete fPairSource3d_mT1vmT2vRinv;
   delete fPairSource2d_PairmTvRinv;
@@ -611,6 +613,14 @@ void ThermPairAnalysis::InitiateCorrelations()
 
   fTrueRosl->Sumw2();
 
+
+  fSimpleRosl = new TH3D(TString::Format("SimpleRosl%s", cAnalysisBaseTags[fAnalysisType]),
+                               TString::Format("SimpleRosl%s", cAnalysisBaseTags[fAnalysisType]),
+                               200, -50., 50., 
+                               200, -50., 50., 
+                               200, -50., 50.); 
+
+  fSimpleRosl->Sumw2();
 
   //--------------------------------------
   if(fBuildPairSourcewmTInfo)
@@ -2159,7 +2169,7 @@ td2dVec ThermPairAnalysis::GetTrueRoslContributions(const ThermParticle &aPartic
 }
 
 //________________________________________________________________________________________________________________
-void ThermPairAnalysis::AddRoslContributionToMasterVector(td2dVec &aMasterVec, int &aNPairs, const ThermParticle &aParticle1, const ThermParticle &aParticle2)
+void ThermPairAnalysis::AddRoslContributionToMasterVector(td2dVec &aTrueRoslMaster, int &aNPairs, const ThermParticle &aParticle1, const ThermParticle &aParticle2)
 {
   //Only add pairs if k* < 0.3, and are primary or short decays
   if(CalcKStar(aParticle1, aParticle2) > 0.3) return;
@@ -2170,52 +2180,52 @@ void ThermPairAnalysis::AddRoslContributionToMasterVector(td2dVec &aMasterVec, i
   td2dVec tTrueRoslContribution = GetTrueRoslContributions(aParticle1, aParticle2);
     //Overkill, but ensure everything looks right...-----------------------------
     assert(tTrueRoslContribution.size()==3); //Out, side, long
-    assert(tTrueRoslContribution.size()==aMasterVec.size());
+    assert(tTrueRoslContribution.size()==aTrueRoslMaster.size());
 
     assert(tTrueRoslContribution[0].size()==10); //Out contributors
-    assert(tTrueRoslContribution[0].size()==aMasterVec[0].size());
+    assert(tTrueRoslContribution[0].size()==aTrueRoslMaster[0].size());
 
     assert(tTrueRoslContribution[1].size()==2);  //Side contributors
-    assert(tTrueRoslContribution[1].size()==aMasterVec[1].size());
+    assert(tTrueRoslContribution[1].size()==aTrueRoslMaster[1].size());
 
     assert(tTrueRoslContribution[2].size()==10); //Long contributors
-    assert(tTrueRoslContribution[2].size()==aMasterVec[2].size());
+    assert(tTrueRoslContribution[2].size()==aTrueRoslMaster[2].size());
     //---------------------------------------------------------------------------
 
   for(unsigned int iOSL=0; iOSL<tTrueRoslContribution.size(); iOSL++)
   {
     for(unsigned int iContr=0; iContr<tTrueRoslContribution[iOSL].size(); iContr++)
     {
-      aMasterVec[iOSL][iContr] += tTrueRoslContribution[iOSL][iContr];
+      aTrueRoslMaster[iOSL][iContr] += tTrueRoslContribution[iOSL][iContr];
     }
   }
 }
 
 //________________________________________________________________________________________________________________
-td1dVec ThermPairAnalysis::FinalizeTrueRoslMaster(td2dVec &aMasterVec, int aNPairs)
+td2dVec ThermPairAnalysis::FinalizeTrueRoslMaster(td2dVec &aTrueRoslMaster, int aNPairs)
 {
   //Perform final division to complete averages--------------------
-  for(unsigned int iOSL=0; iOSL<aMasterVec.size(); iOSL++)
+  for(unsigned int iOSL=0; iOSL<aTrueRoslMaster.size(); iOSL++)
   {
-    for(unsigned int iContr=0; iContr<aMasterVec[iOSL].size(); iContr++)
+    for(unsigned int iContr=0; iContr<aTrueRoslMaster[iOSL].size(); iContr++)
     {
-      aMasterVec[iOSL][iContr] /= aNPairs;
+      aTrueRoslMaster[iOSL][iContr] /= aNPairs;
     }
   }
 
   //------------------ Out ---------------------------------------
   //td1dVec tVecOut = {tXoSq, tXo, tt, tXoBetaTt, tXoBetaT, tBetaTt, tBetaT, tBetaTSqtSq, tBetaTSqt, tBetaTSq};
 
-  double tAvgXoSq       = aMasterVec[0][0];
-  double tAvgXo         = aMasterVec[0][1];
-  double tAvgt          = aMasterVec[0][2];
-  double tAvgXoBetaTt   = aMasterVec[0][3];
-  double tAvgXoBetaT    = aMasterVec[0][4];
-  double tAvgBetaTt     = aMasterVec[0][5];
-  double tAvgBetaT      = aMasterVec[0][6];
-  double tAvgBetaTSqtSq = aMasterVec[0][7];
-  double tAvgBetaTSqt   = aMasterVec[0][8];
-  double tAvgBetaTSq    = aMasterVec[0][9];
+  double tAvgXoSq       = aTrueRoslMaster[0][0];
+  double tAvgXo         = aTrueRoslMaster[0][1];
+  double tAvgt          = aTrueRoslMaster[0][2];
+  double tAvgXoBetaTt   = aTrueRoslMaster[0][3];
+  double tAvgXoBetaT    = aTrueRoslMaster[0][4];
+  double tAvgBetaTt     = aTrueRoslMaster[0][5];
+  double tAvgBetaT      = aTrueRoslMaster[0][6];
+  double tAvgBetaTSqtSq = aTrueRoslMaster[0][7];
+  double tAvgBetaTSqt   = aTrueRoslMaster[0][8];
+  double tAvgBetaTSq    = aTrueRoslMaster[0][9];
 
   double tRoSq = tAvgXoSq - tAvgXo*tAvgXo 
                 -2.*tAvgXoBetaTt + 2.*tAvgt*tAvgXoBetaT + 2.*tAvgXo*tAvgBetaTt - 2.*tAvgXo*tAvgt*tAvgBetaT
@@ -2224,8 +2234,8 @@ td1dVec ThermPairAnalysis::FinalizeTrueRoslMaster(td2dVec &aMasterVec, int aNPai
 
   //------------------ Side --------------------------------------
   //td1dVec tVecSide = {tXsSq, tXs};
-  double tAvgXsSq = aMasterVec[1][0];
-  double tAvgXs   = aMasterVec[1][1];
+  double tAvgXsSq = aTrueRoslMaster[1][0];
+  double tAvgXs   = aTrueRoslMaster[1][1];
 
   double tRsSq = tAvgXsSq - tAvgXs*tAvgXs;
 
@@ -2233,23 +2243,26 @@ td1dVec ThermPairAnalysis::FinalizeTrueRoslMaster(td2dVec &aMasterVec, int aNPai
   //------------------ Long --------------------------------------
   //td1dVec tVecLong = {tXlSq, tXl, tt, tXlBetaLt, tXlBetaL, tBetaLt, tBetaL, tBetaLSqtSq, tBetaLSqt, tBetaLSq};
 
-  double tAvgXlSq       = aMasterVec[2][0];
-  double tAvgXl         = aMasterVec[2][1];
-  assert(tAvgt==aMasterVec[2][2]);
-  double tAvgXlBetaLt   = aMasterVec[2][3];
-  double tAvgXlBetaL    = aMasterVec[2][4];
-  double tAvgBetaLt     = aMasterVec[2][5];
-  double tAvgBetaL      = aMasterVec[2][6];
-  double tAvgBetaLSqtSq = aMasterVec[2][7];
-  double tAvgBetaLSqt   = aMasterVec[2][8];
-  double tAvgBetaLSq    = aMasterVec[2][9];
+  double tAvgXlSq       = aTrueRoslMaster[2][0];
+  double tAvgXl         = aTrueRoslMaster[2][1];
+  assert(tAvgt==aTrueRoslMaster[2][2]);
+  double tAvgXlBetaLt   = aTrueRoslMaster[2][3];
+  double tAvgXlBetaL    = aTrueRoslMaster[2][4];
+  double tAvgBetaLt     = aTrueRoslMaster[2][5];
+  double tAvgBetaL      = aTrueRoslMaster[2][6];
+  double tAvgBetaLSqtSq = aTrueRoslMaster[2][7];
+  double tAvgBetaLSqt   = aTrueRoslMaster[2][8];
+  double tAvgBetaLSq    = aTrueRoslMaster[2][9];
 
   double tRlSq = tAvgXlSq - tAvgXl*tAvgXl 
                 -2.*tAvgXlBetaLt + 2.*tAvgt*tAvgXlBetaL + 2.*tAvgXl*tAvgBetaLt - 2.*tAvgXl*tAvgt*tAvgBetaL
                 + tAvgBetaLSqtSq - 2.*tAvgt*tAvgBetaLSqt + tAvgt*tAvgt*tAvgBetaLSq;
 
   //-----------------------------------------------------------------------------------
-  td1dVec tReturnVec = {sqrt(tRoSq), sqrt(tRsSq), sqrt(tRlSq)};
+  td1dVec tTrueRosl = {sqrt(tRoSq), sqrt(tRsSq), sqrt(tRlSq)};
+  td1dVec tSimpleRosl = {tAvgXo, tAvgXs, tAvgXl};
+
+  td2dVec tReturnVec{tTrueRosl, tSimpleRosl};
   return tReturnVec;
 }
 
@@ -2277,8 +2290,9 @@ void ThermPairAnalysis::BuildTrueRoslParticleParticle(const vector<ThermParticle
   //---------------
   if(tNPairs>0)
   {
-    td1dVec tTrueRosl = FinalizeTrueRoslMaster(tTrueRoslMaster, tNPairs);
-    fTrueRosl->Fill(tTrueRosl[0], tTrueRosl[1], tTrueRosl[2]);
+    td2dVec tTrueAndSimpleRosl = FinalizeTrueRoslMaster(tTrueRoslMaster, tNPairs);
+    fTrueRosl->Fill(tTrueAndSimpleRosl[0][0], tTrueAndSimpleRosl[0][1], tTrueAndSimpleRosl[0][2]);
+    fSimpleRosl->Fill(tTrueAndSimpleRosl[1][0], tTrueAndSimpleRosl[1][1], tTrueAndSimpleRosl[1][2]);
   }
 }
 
@@ -2309,8 +2323,9 @@ void ThermPairAnalysis::BuildTrueRoslParticleV0(const vector<ThermParticle> &aPa
   //---------------
   if(tNPairs>0)
   {
-    td1dVec tTrueRosl = FinalizeTrueRoslMaster(tTrueRoslMaster, tNPairs);
-    fTrueRosl->Fill(tTrueRosl[0], tTrueRosl[1], tTrueRosl[2]);
+    td2dVec tTrueAndSimpleRosl = FinalizeTrueRoslMaster(tTrueRoslMaster, tNPairs);
+    fTrueRosl->Fill(tTrueAndSimpleRosl[0][0], tTrueAndSimpleRosl[0][1], tTrueAndSimpleRosl[0][2]);
+    fSimpleRosl->Fill(tTrueAndSimpleRosl[1][0], tTrueAndSimpleRosl[1][1], tTrueAndSimpleRosl[1][2]);
   }
 }
 
@@ -2341,8 +2356,9 @@ void ThermPairAnalysis::BuildTrueRoslV0V0(const vector<ThermV0Particle> &aV01Col
   //---------------
   if(tNPairs>0)
   {
-    td1dVec tTrueRosl = FinalizeTrueRoslMaster(tTrueRoslMaster, tNPairs);
-    fTrueRosl->Fill(tTrueRosl[0], tTrueRosl[1], tTrueRosl[2]);
+    td2dVec tTrueAndSimpleRosl = FinalizeTrueRoslMaster(tTrueRoslMaster, tNPairs);
+    fTrueRosl->Fill(tTrueAndSimpleRosl[0][0], tTrueAndSimpleRosl[0][1], tTrueAndSimpleRosl[0][2]);
+    fSimpleRosl->Fill(tTrueAndSimpleRosl[1][0], tTrueAndSimpleRosl[1][1], tTrueAndSimpleRosl[1][2]);
   }
 }
 
@@ -2510,6 +2526,7 @@ void ThermPairAnalysis::SaveAllCorrelationFunctions(TFile *aFile)
   fPairDeltaT_inPRFPrimaryOnly->Write();
 
   fTrueRosl->Write();
+  fSimpleRosl->Write();
 
   if(fBuildPairSourcewmTInfo)
   {
