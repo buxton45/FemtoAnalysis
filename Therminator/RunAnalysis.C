@@ -32,7 +32,7 @@ int main(int argc, char **argv)
   bool bBuildCorrelationFunctions = true;
   bool bBuild3dHists = false;
   bool bBuildPairSourcewmTInfo = false;
-  bool bBuildCfYlm = true;
+  bool bBuildCfYlm = false;
   bool bBuildAliFemtoCfYlm = false;
 
   bool bBuildMixedEventNumerators = false;
@@ -42,7 +42,7 @@ int main(int argc, char **argv)
   bool bWeightCfsWithParentInteraction = false;
   bool bOnlyWeightLongDecayParents = false;
 
-  bool bDrawRStarFromGaussian = true;
+  bool bDrawRStarFromGaussian = false;
 
   bool bCheckCoECoM = false;
   bool bRotateEventsByRandomAzimuthalAngles = false;
