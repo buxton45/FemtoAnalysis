@@ -1,6 +1,6 @@
 #include "FitValuesWriterwSysErrs.h"
 #include "FitValuesLatexTableHelperWriter.h"
-#include "CompareFittingMethodsv2.h"
+#include "CompareFittingMethods.h"
 
 
 //_________________________________________________________________________________________________________________________________
@@ -329,7 +329,8 @@ TCanvas* CompareImF0vsReF0(vector<FitValWriterInfo> &aFitValWriterInfo, TString 
 {
   CentralityType tCentType = k0010;  //Doesn't matter which centrality chosen, because all share same scattering parameters
 
-  TString tCanBaseName = TString::Format("CompareImF0vsReF0%s", aCanNameMod.Data());
+  vector<TString> twPredVec{"", "_wPredictions"};
+  TString tCanBaseName = TString::Format("CompareImF0vsReF0wSys%s%s", twPredVec[aDrawPredictions].Data(), aCanNameMod.Data());
   TString tCanName = tCanBaseName;
 
   TCanvas* tReturnCan = new TCanvas(tCanName, tCanName);
@@ -489,7 +490,7 @@ TCanvas* CompareImF0vsReF0(vector<FitValWriterInfo> &aFitValWriterInfo, TString 
 //_________________________________________________________________________________________________________________________________
 TCanvas* CompareLambdavsRadius(vector<FitValWriterInfo> &aFitValWriterInfo, TString aSystematicsFileLocation_LamKch, TString aSystematicsFileLocation_LamK0, CentralityType aCentType, TString aCanNameMod="", bool aSuppressDescs=false, bool aSuppressAnStamps=false, bool aDrawStatOnly=false, bool aLamKchCombined=false)
 {
-  TString tCanBaseName = TString::Format("CompareLambdavsRadius%s%s", aCanNameMod.Data(), cCentralityTags[aCentType]);
+  TString tCanBaseName = TString::Format("CompareLambdavsRadiuswSys%s%s", aCanNameMod.Data(), cCentralityTags[aCentType]);
   TString tCanName = tCanBaseName;
 
   TCanvas* tReturnCan = new TCanvas(tCanName, tCanName);
@@ -604,8 +605,8 @@ TCanvas* CompareAll(vector<FitValWriterInfo> &aFitValWriterInfo, TString aSystem
   tCanLamvsR1030 = CompareLambdavsRadius(aFitValWriterInfo, aSystematicsFileLocation_LamKch, aSystematicsFileLocation_LamK0, k1030, tSubCanNameMod, true, true, aDrawStatOnly, aLamKchCombined);
   tCanLamvsR3050 = CompareLambdavsRadius(aFitValWriterInfo, aSystematicsFileLocation_LamKch, aSystematicsFileLocation_LamK0, k3050, tSubCanNameMod, true, true, aDrawStatOnly, aLamKchCombined);
 
-
-  TString tCanBaseName = TString::Format("CompareAllScattParams%s", aCanNameMod.Data());
+  vector<TString> twPredVec{"", "_wPredictions"};
+  TString tCanBaseName = TString::Format("CompareAllScattParamswSys%s%s", twPredVec[aDrawPredictions].Data(), aCanNameMod.Data());
   TString tCanName = tCanBaseName;
 
   tReturnCan = new TCanvas(tCanName, tCanName, 1400, 1000);
@@ -641,6 +642,8 @@ int main(int argc, char **argv)
   //the program ends and closes everything
 
   bool bSaveFigures = false;
+  TString tSaveFileType = "pdf";  //Needs to be pdf for systematics to be transparent!
+
   bool bDrawStatOnly = false;
   bool bLamKchCombined = false;
 
@@ -650,14 +653,6 @@ int main(int argc, char **argv)
   IncludeResidualsType tIncResType = kInclude3Residuals;
   ResPrimMaxDecayType tResPrimMaxDecayType = k10fm;
 
-  TString tSaveFileType = "pdf";  //Needs to be pdf for systematics to be transparent!
-//  TString tSaveDir = "/home/jesse/Analysis/Presentations/AliFemto/20180627/Figures/";
-  TString tSaveDir = "/home/jesse/Analysis/FemtoAnalysis/ProcessData/LednickyFitter/Systematics/";
-
-/*
-  TString tSystematicsFileLocation_LamKch = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_20171227/Systematics/_MomResCrctn_NonFlatBgdCrctn%s%s_UsingXiDataAndCoulombOnly/FinalFitSystematics_wFitRangeSys_MomResCrctn_NonFlatBgdCrctn%s%s_UsingXiDataAndCoulombOnly_cLamcKch.txt", cIncludeResidualsTypeTags[tIncResType], cResPrimMaxDecayTypeTags[tResPrimMaxDecayType], cIncludeResidualsTypeTags[tIncResType], cResPrimMaxDecayTypeTags[tResPrimMaxDecayType]);
-  TString tSystematicsFileLocation_LamK0 = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamK0_20171227/Systematics/_MomResCrctn_NonFlatBgdCrctn%s%s_UsingXiDataAndCoulombOnly/FinalFitSystematics_wFitRangeSys_MomResCrctn_NonFlatBgdCrctn%s%s_UsingXiDataAndCoulombOnly_cLamK0.txt", cIncludeResidualsTypeTags[tIncResType], cResPrimMaxDecayTypeTags[tResPrimMaxDecayType], cIncludeResidualsTypeTags[tIncResType], cResPrimMaxDecayTypeTags[tResPrimMaxDecayType]);
-*/
 
   TString tFitInfoTString_LamKch = FitValuesLatexTableHelperWriter::GetFitInfoTStringFromTwoLetterID_LamKch("Ea", tIncResType, tResPrimMaxDecayType);
 //  TString tFitInfoTString_LamK0 = FitValuesLatexTableHelperWriter::GetFitInfoTStringFromTwoLetterID_LamK0("Aa", tIncResType, tResPrimMaxDecayType);
@@ -670,6 +665,8 @@ int main(int argc, char **argv)
   TString tSystematicsFileLocation_LamKch = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_%s/%s/Systematics/FinalFitSystematics_wFitRangeSys%s_cLamcKch.txt", tResultsDate.Data(), tFitInfoTString_LamKch.Data(), tFitInfoTString_LamKch.Data());
   TString tSystematicsFileLocation_LamK0 = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamK0_%s/%s/Systematics/FinalFitSystematics_wFitRangeSys%s_cLamK0.txt", tResultsDate.Data(), tFitInfoTString_LamK0.Data(), tFitInfoTString_LamK0.Data());
 
+  TString tSaveDirBase_LamKch = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_%s/%s/Comparisons/", tResultsDate.Data(), tFitInfoTString_LamKch.Data());
+  TString tSaveDirBase_LamK0 = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamK0_%s/%s/Comparisons/", tResultsDate.Data(), tFitInfoTString_LamK0.Data());
   //--------------------------------------------------------------------------
 
   vector<TString> tStatOnlyTags = {"", "_StatOnly"};
@@ -701,8 +698,8 @@ int main(int argc, char **argv)
                                                         FitValWriterInfo(kLamK0, tFileLocation_LamK0, tResultsDate, tFitInfoTString_LamK0_3Res_LinrBgd_10fm, 
                                                                          "#LambdaK^{0}_{S}: Single #lambda, Linr. Bgd (Suppress Markers)", tColorLamK0, 20, tMarkerSize)};
   tFVWIVec = tFVWIVec_Comp3An_3Res_10fm;
-  tCanNameMod = TString("_Comp3An_3Res_10fm");
-
+//  tCanNameMod = TString("_Comp3An_3Res_10fm");
+  tCanNameMod = TString("_Comp3An");
 
 
   //--------------------------------------------------------------------------
@@ -733,8 +730,8 @@ int main(int argc, char **argv)
 //  tFVWIVec = tFVWIVec_CompFreevsFixedlam_SepR;
 //  tCanNameMod = TString("_CompFreevsFixedlam_SepR");
 
-//  tFVWIVec = tFVWIVec_CompFreevsFixedlam_SepR_Seplam;
-//  tCanNameMod = TString("_CompFreevsFixedlam_SepR_Seplam");
+  tFVWIVec = tFVWIVec_CompFreevsFixedlam_SepR_Seplam;
+  tCanNameMod = TString("_CompFreevsFixedlam_SepR_Seplam");
 
 //  tFVWIVec = tFVWIVec_CompSharesvsSepR;
 //  tCanNameMod = TString("_CompSharedvsSepR");
@@ -755,7 +752,15 @@ int main(int argc, char **argv)
 
   if(bSaveFigures)
   {
-    tCanAll->SaveAs(TString::Format("%s%s%s.%s", tSaveDir.Data(), tCanAll->GetName(), tStatOnlyTags[bDrawStatOnly].Data(), tSaveFileType.Data()));
+    TString tSaveDirMod = TString::Format("LAMKCH%s_vs_LAMK0%s/", tFitInfoTString_LamKch.Data(), tFitInfoTString_LamK0.Data());
+
+    TString tSaveDir_LamKch = TString::Format("%s%s", tSaveDirBase_LamKch.Data(), tSaveDirMod.Data());
+    TString tSaveDir_LamK0 = TString::Format("%s%s", tSaveDirBase_LamK0.Data(), tSaveDirMod.Data());
+      gSystem->mkdir(tSaveDir_LamKch);
+      gSystem->mkdir(tSaveDir_LamK0);
+
+    tCanAll->SaveAs(TString::Format("%s%s%s.%s", tSaveDir_LamKch.Data(), tCanAll->GetName(), tStatOnlyTags[bDrawStatOnly].Data(), tSaveFileType.Data()));
+    tCanAll->SaveAs(TString::Format("%s%s%s.%s", tSaveDir_LamK0.Data(), tCanAll->GetName(), tStatOnlyTags[bDrawStatOnly].Data(), tSaveFileType.Data()));
   }
 
 

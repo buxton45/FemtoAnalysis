@@ -1,5 +1,7 @@
 #include "DrawmTScaling.h"
 #include "CompareFittingMethods.h"
+#include "FitValuesLatexTableHelperWriter.h"
+#include "FitValuesWriterwSysErrs.h"
 
 
 //Note:  &aDataPointsWithErrors will have a collection of data points with associated errors
@@ -78,95 +80,16 @@ void DrawPoints(TString aName,
 
 }
 
-//___________________________________________________________________________________
-vector<double> GetSingleFitRadiusInfo(const FitInfo &aFitInfo, CentralityType aCentType=k0010)
-{
-  vector<double> tReturnVec(3);
-  double tRadius, tRadiusStatErr, tRadiusSysErr;
-
-  tRadius = aFitInfo.radiusVec[aCentType];
-  tRadiusStatErr = aFitInfo.radiusStatErrVec[aCentType];
-  tRadiusSysErr = aFitInfo.radiusSysErrVec[aCentType];
-
-  tReturnVec[0] = tRadius;
-  tReturnVec[1] = tRadiusStatErr;
-  tReturnVec[2] = tRadiusSysErr;
-
-  return tReturnVec;
-}
-
-//___________________________________________________________________________________
-td1dVec GetMeanRadiusInfo(vector<FitInfo> &aFitInfoVec, CentralityType aCentType, IncludeResType aIncludeResType=kInclude10ResAnd3Res, IncludeD0Type aIncludeD0Type=kFreeAndFixedD0)
-{
-  assert(aCentType != kMB);
-
-  td2dVec tRadiusVec;
-  for(unsigned int i=0; i<aFitInfoVec.size(); i++)
-  {
-    if(!IncludeFitInfoInMeanCalculation(aFitInfoVec[i], aIncludeResType, aIncludeD0Type)) continue;
-
-    tRadiusVec.push_back(vector<double>{aFitInfoVec[i].radiusVec[aCentType], aFitInfoVec[i].radiusStatErrVec[aCentType], aFitInfoVec[i].radiusSysErrVec[aCentType]});
-  }
-
-  td1dVec tReturnVec = GetMean(tRadiusVec);
-  return tReturnVec;
-}
 
 
 //___________________________________________________________________________________
-vector<double> GetPlotRadiusInfo(AnalysisType aAnType, CentralityType aCentType, IncludeResType aIncludeResType, IncludeD0Type aIncludeD0Type)
+vector<double> GetPlotRadiusInfo(TString aMasterFileLocation, TString aSystematicsFileLocation, TString aFitInfoTString, AnalysisType aAnType, CentralityType aCentType)
 {
-  td1dVec tReturnRadiusInfo;
-
-  //--------------------------------
-  if(aIncludeResType==kIncludeNoRes) //Signifies QM results
-  {
-    if(aAnType==kLamKchP) tReturnRadiusInfo = GetSingleFitRadiusInfo(tFitInfoQM_LamKchP, aCentType);
-    else if(aAnType==kLamKchM) tReturnRadiusInfo = GetSingleFitRadiusInfo(tFitInfoQM_LamKchM, aCentType);
-    else if(aAnType==kLamK0) tReturnRadiusInfo = GetSingleFitRadiusInfo(tFitInfoQM_LamK0, aCentType);
-    else assert(0);
-
-    return tReturnRadiusInfo;
-  }
-  //--------------------------------
-  vector<FitInfo> aFitInfoVec = GetFitInfoVec(aAnType, aIncludeResType, aIncludeD0Type);
-  //--------------------------------
-  if(aIncludeResType==kInclude10ResAnd3Res || aIncludeD0Type==kFreeAndFixedD0)  //In this case, should be calculating an average
-  {
-    tReturnRadiusInfo = GetMeanRadiusInfo(aFitInfoVec, aCentType, aIncludeResType, aIncludeD0Type);
-  }
-  else
-  {
-    assert(!(aIncludeResType==kInclude10ResAnd3Res));
-    assert(aIncludeResType == aFitInfoVec[0].resType);
-
-    assert(!(aIncludeD0Type==kFreeAndFixedD0));
-    assert(aIncludeD0Type == aFitInfoVec[0].d0Type);
-
-    tReturnRadiusInfo = GetSingleFitRadiusInfo(aFitInfoVec[0], aCentType);
-  }
-
+  FitParameter* tFitParam = FitValuesWriterwSysErrs::GetFitParameterSys(aMasterFileLocation, aSystematicsFileLocation, aFitInfoTString, aAnType, aCentType, kRadius);
+  td1dVec tReturnRadiusInfo = td1dVec{tFitParam->GetFitValue(), tFitParam->GetFitValueError(), tFitParam->GetFitValueSysError()};
   return tReturnRadiusInfo;
 }
 
-//___________________________________________________________________________________
-DrawAcrossAnalysesInfo GetDrawingInfo(IncludeResType aIncludeResType, IncludeD0Type aIncludeD0Type)
-{
-  //TODO Not sure why I cant just declare DrawAcrossAnalysesInfo tReturnDrawingInfo
-  // and why I can't simply assign (in for loop) tReturnDrawingInfo = tDrawAcrossAnalysesInfoVec[i]
-  //This method is OK because no pointers in struct, so compiler constructed copy constructor works fine
-
-  DrawAcrossAnalysesInfo tReturnDrawingInfo = DrawAcrossAnalysesInfo(tDrawAcrossAnalysesInfoVec[0]);
-  for(unsigned int i=0; i<tDrawAcrossAnalysesInfoVec.size(); i++)
-  {
-    if(tDrawAcrossAnalysesInfoVec[i].incResType == aIncludeResType &&
-       tDrawAcrossAnalysesInfoVec[i].incD0Type == aIncludeD0Type)
-    {
-      tReturnDrawingInfo = DrawAcrossAnalysesInfo(tDrawAcrossAnalysesInfoVec[i]);
-    }
-  }
-  return tReturnDrawingInfo;
-}
 
 //_________________________________________________________________________________________________________________________
 //*************************************************************************************************************************
@@ -183,6 +106,62 @@ int main(int argc, char **argv)
 
 //=========Macro generated from canvas: canmtcomb/canmtcomb
 //=========  (Fri May  8 11:29:01 2015) by ROOT version5.34/26
+
+  TString tResultsDate = "20180505";
+
+  bool bSaveImage = false;
+  IncludeResidualsType tIncResType = kInclude3Residuals;
+  ResPrimMaxDecayType tResPrimMaxDecayType = k10fm;
+
+  TString tSaveFileType = "pdf";  //Needs to be pdf for systematics to be transparent!
+//  TString tSaveDir = "/home/jesse/Analysis/Presentations/AliFemto/20180627/Figures/";
+  TString tSaveDir = "/home/jesse/Analysis/FemtoAnalysis/ProcessData/LednickyFitter/Systematics/";
+  TString tSaveName = TString::Format("%smTscaling", tSaveDir.Data());
+
+  TString tFitInfoTString_LamKch = FitValuesLatexTableHelperWriter::GetFitInfoTStringFromTwoLetterID_LamKch("Ea", tIncResType, tResPrimMaxDecayType);
+//  TString tFitInfoTString_LamK0 = FitValuesLatexTableHelperWriter::GetFitInfoTStringFromTwoLetterID_LamK0("Aa", tIncResType, tResPrimMaxDecayType);
+  TString tFitInfoTString_LamK0 = FitValuesLatexTableHelperWriter::GetFitInfoTStringFromTwoLetterID_LamK0("Ab", tIncResType, tResPrimMaxDecayType);
+
+  cout << "tFitInfoTString_LamKch = " << tFitInfoTString_LamKch << endl << endl;
+  cout << "tFitInfoTString_LamK0 = " << tFitInfoTString_LamK0 << endl << endl;
+
+  TString tMasterFileLocation_LamKch = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_%s/MasterFitResults_%s.txt", tResultsDate.Data(), tResultsDate.Data());
+  TString tMasterFileLocation_LamK0 = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamK0_%s/MasterFitResults_%s.txt", tResultsDate.Data(), tResultsDate.Data());
+
+
+  TString tSystematicsFileLocation_LamKch = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_%s/%s/Systematics/FinalFitSystematics_wFitRangeSys%s_cLamcKch.txt", tResultsDate.Data(), tFitInfoTString_LamKch.Data(), tFitInfoTString_LamKch.Data());
+  TString tSystematicsFileLocation_LamK0 = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamK0_%s/%s/Systematics/FinalFitSystematics_wFitRangeSys%s_cLamK0.txt", tResultsDate.Data(), tFitInfoTString_LamK0.Data(), tFitInfoTString_LamK0.Data());
+
+
+/*
+  TString tSystematicsFileLocation_LamKch = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_20171227/Systematics/_MomResCrctn_NonFlatBgdCrctn%s%s_UsingXiDataAndCoulombOnly/FinalFitSystematics_wFitRangeSys_MomResCrctn_NonFlatBgdCrctn%s%s_UsingXiDataAndCoulombOnly_cLamcKch.txt", cIncludeResidualsTypeTags[tIncResType], cResPrimMaxDecayTypeTags[tResPrimMaxDecayType], cIncludeResidualsTypeTags[tIncResType], cResPrimMaxDecayTypeTags[tResPrimMaxDecayType]);
+
+  TString tSystematicsFileLocation_LamK0 = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamK0_20171227/Systematics/_MomResCrctn_NonFlatBgdCrctn%s%s_UsingXiDataAndCoulombOnly/FinalFitSystematics_wFitRangeSys_MomResCrctn_NonFlatBgdCrctn%s%s_UsingXiDataAndCoulombOnly_cLamK0.txt", cIncludeResidualsTypeTags[tIncResType], cResPrimMaxDecayTypeTags[tResPrimMaxDecayType], cIncludeResidualsTypeTags[tIncResType], cResPrimMaxDecayTypeTags[tResPrimMaxDecayType]);
+*/
+
+
+
+  TString tCanNameMod, tLegInfo;
+  if(tIncResType==kIncludeNoResiduals)
+  {
+    tCanNameMod = TString("_NoRes");
+    tLegInfo = TString("No Res.");
+  }
+  else if(tIncResType==kInclude3Residuals)
+  {
+    tCanNameMod = TString("_3Res");
+    tLegInfo = TString("3 Res.");
+  }
+  else if(tIncResType==kInclude10Residuals)
+  {
+    tCanNameMod = TString("_10Res");
+    tLegInfo = TString("10 Res.");
+  }
+  else assert(0);
+
+  bool bLamKchCombined = false;
+  if(tFitInfoTString_LamKch.Contains("Dualie")) bLamKchCombined = true;
+
   bool bRunAveragedKchPKchM = false;
 
   bool bUseMinvCalculation = true;
@@ -191,36 +170,12 @@ int main(int argc, char **argv)
   bool bMakeOthersTransparent = true;
   bool bOutlinePoints = true;
 
-//  bool bResultsWithResiduals = true;
-  bool bSaveImage = false;
-
-  IncludeResType tIncludeResType;
-    tIncludeResType = kInclude10ResAnd3Res;
-    //tIncludeResType = kInclude10ResOnly;
-    //tIncludeResType = kInclude3ResOnly;
-
-  IncludeD0Type tIncludeD0Type;
-    tIncludeD0Type = kFreeAndFixedD0;
-    //tIncludeD0Type = kFreeD0Only;
-    //tIncludeD0Type = kFixedD0Only;
-
-  bool bDrawQM = false;
-  if(bDrawQM)
-  {
-    tIncludeResType = kIncludeNoRes;
-    tIncludeD0Type = kFreeD0Only;
-  }
 
   bool bDrawJaiAndHans = false;
-
-  DrawAcrossAnalysesInfo tDrawingInfo = GetDrawingInfo(tIncludeResType, tIncludeD0Type);
 
   //------------------------------------------------------
 
   assert(!(bUseMinvCalculation && bUseReducedMassCalculation));
-
-//  TString tSaveName = "./mTscaling";
-  TString tSaveName = "/home/jesse/Analysis/Presentations/PWGCF/LamKPaperProposal/ALICEMiniWeek_20180115/Figures/mTscaling";
 
   if(bRunAveragedKchPKchM) tSaveName += TString("Averaged");
 
@@ -229,9 +184,11 @@ int main(int argc, char **argv)
 
   if(bOutlinePoints) tSaveName += TString("_OutlinedPoints");
   if(bMakeOthersTransparent) tSaveName += TString("_OthersTransparent");
-//  if(bResultsWithResiduals) tSaveName += TString("_WithResiduals");
-  tSaveName += tDrawingInfo.saveDescriptor;
-  tSaveName += TString(".pdf");
+
+  if(bDrawJaiAndHans) tSaveName += TString("_wJaiAndHans");
+
+  tSaveName += tCanNameMod;
+  tSaveName += TString::Format(".%s", tSaveFileType.Data());
   
   Int_t red = kRed;
   Int_t redT = TColor::GetColorTransparent(red,0.2);
@@ -323,7 +280,7 @@ int main(int argc, char **argv)
   if(bUseMinvCalculation) tLamK00010mT = 0.25*(1.603+1.604+1.603+1.602);  //m_inv
   if(bUseReducedMassCalculation) tLamK00010mT = 0.25*(1.395+1.396+1.396+1.395);  //m_red
   vector<double> RInfo_LamK0_0010;
-  RInfo_LamK0_0010 = GetPlotRadiusInfo(kLamK0, k0010, tIncludeResType, tIncludeD0Type);
+  RInfo_LamK0_0010 = GetPlotRadiusInfo(tMasterFileLocation_LamK0, tSystematicsFileLocation_LamK0, tFitInfoTString_LamK0, kLamK0, k0010);
   double tLamK00010R = RInfo_LamK0_0010[0];
   double tLamK00010Rerr = RInfo_LamK0_0010[1];
   double tLamK00010RerrSys = RInfo_LamK0_0010[2];
@@ -332,7 +289,7 @@ int main(int argc, char **argv)
   if(bUseMinvCalculation) tLamK01030mT = 0.25*(1.588+1.588+1.589+1.587);  //m_inv
   if(bUseReducedMassCalculation) tLamK01030mT = 0.25*(1.377+1.377+1.378+1.375);  //m_red
   vector<double> RInfo_LamK0_1030;
-  RInfo_LamK0_1030 = GetPlotRadiusInfo(kLamK0, k1030, tIncludeResType, tIncludeD0Type);
+  RInfo_LamK0_1030 = GetPlotRadiusInfo(tMasterFileLocation_LamK0, tSystematicsFileLocation_LamK0, tFitInfoTString_LamK0, kLamK0, k1030);
   double tLamK01030R = RInfo_LamK0_1030[0];
   double tLamK01030Rerr = RInfo_LamK0_1030[1];
   double tLamK01030RerrSys = RInfo_LamK0_1030[2];
@@ -341,7 +298,7 @@ int main(int argc, char **argv)
   if(bUseMinvCalculation) tLamK03050mT = 0.25*(1.548+1.546+1.549+1.546);  //m_inv
   if(bUseReducedMassCalculation) tLamK03050mT = 0.25*(1.331+1.328+1.331+1.327);  //m_red
   vector<double> RInfo_LamK0_3050;
-  RInfo_LamK0_3050 = GetPlotRadiusInfo(kLamK0, k3050, tIncludeResType, tIncludeD0Type);
+  RInfo_LamK0_3050 = GetPlotRadiusInfo(tMasterFileLocation_LamK0, tSystematicsFileLocation_LamK0, tFitInfoTString_LamK0, kLamK0, k3050);
   double tLamK03050R = RInfo_LamK0_3050[0];
   double tLamK03050Rerr = RInfo_LamK0_3050[1];
   double tLamK03050RerrSys = RInfo_LamK0_3050[2];
@@ -351,7 +308,7 @@ int main(int argc, char **argv)
   if(bUseMinvCalculation) tLamKchP0010mT = 0.25*(1.439+1.438+1.442+1.437); //m_inv
   if(bUseReducedMassCalculation) tLamKchP0010mT = 0.25*(1.203+1.200+1.206+1.201); //m_red
   vector<double> RInfo_LamKchP_0010;
-  RInfo_LamKchP_0010 = GetPlotRadiusInfo(kLamKchP, k0010, tIncludeResType, tIncludeD0Type);
+  RInfo_LamKchP_0010 = GetPlotRadiusInfo(tMasterFileLocation_LamKch, tSystematicsFileLocation_LamKch, tFitInfoTString_LamKch, kLamKchP, k0010);
   double tLamKchP0010R = RInfo_LamKchP_0010[0];
   double tLamKchP0010Rerr = RInfo_LamKchP_0010[1];
   double tLamKchP0010RerrSys = RInfo_LamKchP_0010[2];
@@ -360,7 +317,7 @@ int main(int argc, char **argv)
   if(bUseMinvCalculation) tLamKchP1030mT = 0.25*(1.427+1.423+1.431+1.425); //m_inv
   if(bUseReducedMassCalculation) tLamKchP1030mT = 0.25*(1.188+1.182+1.192+1.184); //m_red
   vector<double> RInfo_LamKchP_1030;
-  RInfo_LamKchP_1030 = GetPlotRadiusInfo(kLamKchP, k1030, tIncludeResType, tIncludeD0Type);
+  RInfo_LamKchP_1030 = GetPlotRadiusInfo(tMasterFileLocation_LamKch, tSystematicsFileLocation_LamKch, tFitInfoTString_LamKch, kLamKchP, k1030);
   double tLamKchP1030R = RInfo_LamKchP_1030[0];
   double tLamKchP1030Rerr = RInfo_LamKchP_1030[1];
   double tLamKchP1030RerrSys = RInfo_LamKchP_1030[2];
@@ -369,7 +326,7 @@ int main(int argc, char **argv)
   if(bUseMinvCalculation) tLamKchP3050mT = 0.25*(1.390+1.382+1.395+1.385); //m_inv
   if(bUseReducedMassCalculation) tLamKchP3050mT = 0.25*(1.144+1.134+1.149+1.136); //m_red
   vector<double> RInfo_LamKchP_3050;
-  RInfo_LamKchP_3050 = GetPlotRadiusInfo(kLamKchP, k3050, tIncludeResType, tIncludeD0Type);
+  RInfo_LamKchP_3050 = GetPlotRadiusInfo(tMasterFileLocation_LamKch, tSystematicsFileLocation_LamKch, tFitInfoTString_LamKch, kLamKchP, k3050);
   double tLamKchP3050R = RInfo_LamKchP_3050[0];
   double tLamKchP3050Rerr = RInfo_LamKchP_3050[1];
   double tLamKchP3050RerrSys = RInfo_LamKchP_3050[2];
@@ -379,7 +336,7 @@ int main(int argc, char **argv)
   if(bUseMinvCalculation) tLamKchM0010mT = 0.25*(1.441+1.439+1.442+1.440); //m_inv
   if(bUseReducedMassCalculation) tLamKchM0010mT = 0.25*(1.204+1.202+1.205+1.204); //m_red
   vector<double> RInfo_LamKchM_0010;
-  RInfo_LamKchM_0010 = GetPlotRadiusInfo(kLamKchM, k0010, tIncludeResType, tIncludeD0Type);
+  RInfo_LamKchM_0010 = GetPlotRadiusInfo(tMasterFileLocation_LamKch, tSystematicsFileLocation_LamKch, tFitInfoTString_LamKch, kLamKchM, k0010);
   double tLamKchM0010R = RInfo_LamKchM_0010[0];
   double tLamKchM0010Rerr = RInfo_LamKchM_0010[1];
   double tLamKchM0010RerrSys = RInfo_LamKchM_0010[2];
@@ -388,7 +345,7 @@ int main(int argc, char **argv)
   if(bUseMinvCalculation) tLamKchM1030mT = 0.25*(1.426+1.426+1.428+1.429); //m_inv
   if(bUseReducedMassCalculation) tLamKchM1030mT = 0.25*(1.187+1.187+1.189+1.190); //m_red
   vector<double> RInfo_LamKchM_1030;
-  RInfo_LamKchM_1030 = GetPlotRadiusInfo(kLamKchM, k1030, tIncludeResType, tIncludeD0Type);
+  RInfo_LamKchM_1030 = GetPlotRadiusInfo(tMasterFileLocation_LamKch, tSystematicsFileLocation_LamKch, tFitInfoTString_LamKch, kLamKchM, k1030);
   double tLamKchM1030R = RInfo_LamKchM_1030[0];
   double tLamKchM1030Rerr = RInfo_LamKchM_1030[1];
   double tLamKchM1030RerrSys = RInfo_LamKchM_1030[2];
@@ -397,7 +354,7 @@ int main(int argc, char **argv)
   if(bUseMinvCalculation) tLamKchM3050mT = 0.25*(1.387+1.389+1.389+1.392); //m_inv
   if(bUseReducedMassCalculation) tLamKchM3050mT = 0.25*(1.139+1.143+1.141+1.146); //m_red
   vector<double> RInfo_LamKchM_3050;
-  RInfo_LamKchM_3050 = GetPlotRadiusInfo(kLamKchM, k3050, tIncludeResType, tIncludeD0Type);
+  RInfo_LamKchM_3050 = GetPlotRadiusInfo(tMasterFileLocation_LamKch, tSystematicsFileLocation_LamKch, tFitInfoTString_LamKch, kLamKchM, k3050);
   double tLamKchM3050R = RInfo_LamKchM_3050[0];
   double tLamKchM3050Rerr = RInfo_LamKchM_3050[1];
   double tLamKchM3050RerrSys = RInfo_LamKchM_3050[2];
@@ -418,6 +375,30 @@ int main(int argc, char **argv)
   double tLamKchAvg3050R = 0.5*(tLamKchP3050R+tLamKchM3050R);
   double tLamKchAvg3050Rerr = sqrt(pow(0.5*tLamKchP3050Rerr,2)+pow(0.5*tLamKchM3050Rerr,2));
   double tLamKchAvg3050RerrSys = sqrt(pow(0.5*tLamKchP3050RerrSys,2)+pow(0.5*tLamKchM3050RerrSys,2));
+
+//------------------------------------------------------------------------------------------- 
+//cout values so there's no confusion
+cout << "RInfo_LamK0_0010 = " << RInfo_LamK0_0010[0] << " +- " << RInfo_LamK0_0010[1] << " +- " << RInfo_LamK0_0010[2] << endl;
+cout << "RInfo_LamK0_1030 = " << RInfo_LamK0_1030[0] << " +- " << RInfo_LamK0_1030[1] << " +- " << RInfo_LamK0_1030[2] << endl;
+cout << "RInfo_LamK0_3050 = " << RInfo_LamK0_3050[0] << " +- " << RInfo_LamK0_3050[1] << " +- " << RInfo_LamK0_3050[2] << endl;
+cout << endl << endl;
+
+cout << "RInfo_LamKchP_0010 = " << RInfo_LamKchP_0010[0] << " +- " << RInfo_LamKchP_0010[1] << " +- " << RInfo_LamKchP_0010[2] << endl;
+cout << "RInfo_LamKchP_1030 = " << RInfo_LamKchP_1030[0] << " +- " << RInfo_LamKchP_1030[1] << " +- " << RInfo_LamKchP_1030[2] << endl;
+cout << "RInfo_LamKchP_3050 = " << RInfo_LamKchP_3050[0] << " +- " << RInfo_LamKchP_3050[1] << " +- " << RInfo_LamKchP_3050[2] << endl;
+cout << endl << endl;
+
+cout << "RInfo_LamKchM_0010 = " << RInfo_LamKchM_0010[0] << " +- " << RInfo_LamKchM_0010[1] << " +- " << RInfo_LamKchM_0010[2] << endl;
+cout << "RInfo_LamKchM_1030 = " << RInfo_LamKchM_1030[0] << " +- " << RInfo_LamKchM_1030[1] << " +- " << RInfo_LamKchM_1030[2] << endl;
+cout << "RInfo_LamKchM_3050 = " << RInfo_LamKchM_3050[0] << " +- " << RInfo_LamKchM_3050[1] << " +- " << RInfo_LamKchM_3050[2] << endl;
+cout << endl << endl;
+
+cout << "tLamKchAvg0010R = " << tLamKchAvg0010R << " +- " << tLamKchAvg0010Rerr << " +- " << tLamKchAvg0010RerrSys << endl;
+cout << "tLamKchAvg1030R = " << tLamKchAvg1030R << " +- " << tLamKchAvg1030Rerr << " +- " << tLamKchAvg1030RerrSys << endl;
+cout << "tLamKchAvg3050R = " << tLamKchAvg3050R << " +- " << tLamKchAvg3050Rerr << " +- " << tLamKchAvg3050RerrSys << endl;
+
+
+//------------------------------------------------------------------------------------------- 
 
 
 //---------------------------------- Draw Legend -------------------------------------------- 
@@ -461,18 +442,32 @@ int main(int argc, char **argv)
     marker->DrawMarker(1.66,6.4);
   
     //------- Column 2 ----------------------
+    if(!bLamKchCombined)
+    {
+      tex->DrawLatex(1.8,8.2,"#LambdaK^{+}");
+      marker->SetMarkerStyle(tMarkerStyleLamKchP); //LamK+
+      marker->DrawMarker(1.95,8.2);
   
-    tex->DrawLatex(1.8,8.2,"#LambdaK^{+}");
-    marker->SetMarkerStyle(tMarkerStyleLamKchP); //LamK+
-    marker->DrawMarker(1.95,8.2);
-  
-    tex->DrawLatex(1.8,7.6,"#LambdaK^{-}");
-    marker->SetMarkerStyle(tMarkerStyleLamKchM); //LamK-
-    marker->DrawMarker(1.95,7.6);
-  
-    tex->DrawLatex(1.8,7.0,"#LambdaK^{0}_{S}");
-    marker->SetMarkerStyle(tMarkerStyleLamK0); //LamK0
-    marker->DrawMarker(1.95,7.0);
+      tex->DrawLatex(1.8,7.6,"#LambdaK^{-}");
+      marker->SetMarkerStyle(tMarkerStyleLamKchM); //LamK-
+      marker->DrawMarker(1.95,7.6);
+
+      tex->DrawLatex(1.8,7.0,"#LambdaK^{0}_{S}");
+      marker->SetMarkerStyle(tMarkerStyleLamK0); //LamK0
+      marker->DrawMarker(1.95,7.0);
+    }  
+    else
+    {
+      tex->DrawLatex(1.8,7.9,"#LambdaK^{#pm}");
+      marker->SetMarkerStyle(tMarkerStyleLamKchP); //LamKpm
+      marker->DrawMarker(1.95,7.9);
+
+      tex->DrawLatex(1.8,7.3,"#LambdaK^{0}_{S}");
+      marker->SetMarkerStyle(tMarkerStyleLamK0); //LamK0
+      marker->DrawMarker(1.95,7.3);
+    }
+
+
   
   
   
@@ -668,23 +663,26 @@ int main(int argc, char **argv)
     DrawPoints("GraphLamKchP3050",tLamKchP3050Sys,tLamKchP3050Stat,myBlueT,myBlue,tMarkerStyleLamKchP,tMarkerSize,tMarkerStyleLamKchPo);
 
 //---------------------------------------- Lambda-KchM --------------------------------------
-    if(!bOutlinePoints) tMarkerStyleLamKchMo=0;
-    //----- 0-10% Lambda-K0 -----
-    td2dVec tLamKchM0010Sys = {{tLamKchM0010mT,0.015,tLamKchM0010R,tLamKchM0010RerrSys}};
-    td2dVec tLamKchM0010Stat = {{tLamKchM0010mT,0.,tLamKchM0010R,tLamKchM0010Rerr}};
-    DrawPoints("GraphLamKchM0010",tLamKchM0010Sys,tLamKchM0010Stat,myRedT,myRed,tMarkerStyleLamKchM,tMarkerSize,tMarkerStyleLamKchMo);
+    if(!bLamKchCombined)
+    {
+      if(!bOutlinePoints) tMarkerStyleLamKchMo=0;
+      //----- 0-10% Lambda-K0 -----
+      td2dVec tLamKchM0010Sys = {{tLamKchM0010mT,0.015,tLamKchM0010R,tLamKchM0010RerrSys}};
+      td2dVec tLamKchM0010Stat = {{tLamKchM0010mT,0.,tLamKchM0010R,tLamKchM0010Rerr}};
+      DrawPoints("GraphLamKchM0010",tLamKchM0010Sys,tLamKchM0010Stat,myRedT,myRed,tMarkerStyleLamKchM,tMarkerSize,tMarkerStyleLamKchMo);
 
 
-    //----- 10-30% Lambda-K0 -----
-    td2dVec tLamKchM1030Sys = {{tLamKchM1030mT,0.015,tLamKchM1030R,tLamKchM1030RerrSys}};
-    td2dVec tLamKchM1030Stat = {{tLamKchM1030mT,0.,tLamKchM1030R,tLamKchM1030Rerr}};
-    DrawPoints("GraphLamKchM1030",tLamKchM1030Sys,tLamKchM1030Stat,myGreenT,myGreen,tMarkerStyleLamKchM,tMarkerSize,tMarkerStyleLamKchMo);
+      //----- 10-30% Lambda-K0 -----
+      td2dVec tLamKchM1030Sys = {{tLamKchM1030mT,0.015,tLamKchM1030R,tLamKchM1030RerrSys}};
+      td2dVec tLamKchM1030Stat = {{tLamKchM1030mT,0.,tLamKchM1030R,tLamKchM1030Rerr}};
+      DrawPoints("GraphLamKchM1030",tLamKchM1030Sys,tLamKchM1030Stat,myGreenT,myGreen,tMarkerStyleLamKchM,tMarkerSize,tMarkerStyleLamKchMo);
 
 
-    //----- 30-50% Lambda-K0 -----
-    td2dVec tLamKchM3050Sys = {{tLamKchM3050mT,0.015,tLamKchM3050R,tLamKchM3050RerrSys}};
-    td2dVec tLamKchM3050Stat = {{tLamKchM3050mT,0.,tLamKchM3050R,tLamKchM3050Rerr}};
-    DrawPoints("GraphLamKchM3050",tLamKchM3050Sys,tLamKchM3050Stat,myBlueT,myBlue,tMarkerStyleLamKchM,tMarkerSize,tMarkerStyleLamKchMo);
+      //----- 30-50% Lambda-K0 -----
+      td2dVec tLamKchM3050Sys = {{tLamKchM3050mT,0.015,tLamKchM3050R,tLamKchM3050RerrSys}};
+      td2dVec tLamKchM3050Stat = {{tLamKchM3050mT,0.,tLamKchM3050R,tLamKchM3050Rerr}};
+      DrawPoints("GraphLamKchM3050",tLamKchM3050Sys,tLamKchM3050Stat,myBlueT,myBlue,tMarkerStyleLamKchM,tMarkerSize,tMarkerStyleLamKchMo);
+    }
   }
   else /*if(bRunAveragedKchPKchM)*/
   {
@@ -720,9 +718,9 @@ int main(int argc, char **argv)
   tMarker->SetMarkerStyle(20);
   tMarker->SetMarkerColor(kBlack);
 
-  tTex->DrawLatex(0.35, 2., tDrawingInfo.descriptor);
-  tMarker->SetMarkerStyle(tDrawingInfo.markerStyle);
-  tMarker->DrawMarker(0.3, 2.);
+  tTex->DrawLatex(0.35, 2., tLegInfo);
+//  tMarker->SetMarkerStyle(tDrawingInfo.markerStyle);
+//  tMarker->DrawMarker(0.3, 2.);
 
 //-------------------------------------------------------------------------------
   if(bDrawJaiAndHans)
