@@ -114,9 +114,7 @@ int main(int argc, char **argv)
   ResPrimMaxDecayType tResPrimMaxDecayType = k10fm;
 
   TString tSaveFileType = "pdf";  //Needs to be pdf for systematics to be transparent!
-//  TString tSaveDir = "/home/jesse/Analysis/Presentations/AliFemto/20180627/Figures/";
-  TString tSaveDir = "/home/jesse/Analysis/FemtoAnalysis/ProcessData/LednickyFitter/Systematics/";
-  TString tSaveName = TString::Format("%smTscaling", tSaveDir.Data());
+  TString tSaveName = "mTscaling";
 
   TString tFitInfoTString_LamKch = FitValuesLatexTableHelperWriter::GetFitInfoTStringFromTwoLetterID_LamKch("Ea", tIncResType, tResPrimMaxDecayType);
 //  TString tFitInfoTString_LamK0 = FitValuesLatexTableHelperWriter::GetFitInfoTStringFromTwoLetterID_LamK0("Aa", tIncResType, tResPrimMaxDecayType);
@@ -132,13 +130,14 @@ int main(int argc, char **argv)
   TString tSystematicsFileLocation_LamKch = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_%s/%s/Systematics/FinalFitSystematics_wFitRangeSys%s_cLamcKch.txt", tResultsDate.Data(), tFitInfoTString_LamKch.Data(), tFitInfoTString_LamKch.Data());
   TString tSystematicsFileLocation_LamK0 = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamK0_%s/%s/Systematics/FinalFitSystematics_wFitRangeSys%s_cLamK0.txt", tResultsDate.Data(), tFitInfoTString_LamK0.Data(), tFitInfoTString_LamK0.Data());
 
-
 /*
   TString tSystematicsFileLocation_LamKch = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_20171227/Systematics/_MomResCrctn_NonFlatBgdCrctn%s%s_UsingXiDataAndCoulombOnly/FinalFitSystematics_wFitRangeSys_MomResCrctn_NonFlatBgdCrctn%s%s_UsingXiDataAndCoulombOnly_cLamcKch.txt", cIncludeResidualsTypeTags[tIncResType], cResPrimMaxDecayTypeTags[tResPrimMaxDecayType], cIncludeResidualsTypeTags[tIncResType], cResPrimMaxDecayTypeTags[tResPrimMaxDecayType]);
 
   TString tSystematicsFileLocation_LamK0 = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamK0_20171227/Systematics/_MomResCrctn_NonFlatBgdCrctn%s%s_UsingXiDataAndCoulombOnly/FinalFitSystematics_wFitRangeSys_MomResCrctn_NonFlatBgdCrctn%s%s_UsingXiDataAndCoulombOnly_cLamK0.txt", cIncludeResidualsTypeTags[tIncResType], cResPrimMaxDecayTypeTags[tResPrimMaxDecayType], cIncludeResidualsTypeTags[tIncResType], cResPrimMaxDecayTypeTags[tResPrimMaxDecayType]);
 */
 
+  TString tSaveDirBase_LamKch = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_%s/%s/Comparisons/", tResultsDate.Data(), tFitInfoTString_LamKch.Data());
+  TString tSaveDirBase_LamK0 = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamK0_%s/%s/Comparisons/", tResultsDate.Data(), tFitInfoTString_LamK0.Data());
 
 
   TString tCanNameMod, tLegInfo;
@@ -777,8 +776,18 @@ cout << "tLamKchAvg3050R = " << tLamKchAvg3050R << " +- " << tLamKchAvg3050Rerr 
   }
 
 //---------------------------- Save file ----------------------------------------------------
-  if(bSaveImage) canmtcomb->SaveAs(tSaveName);
+  if(bSaveImage) 
+  {
+    TString tSaveDirMod = TString::Format("LAMKCH%s_vs_LAMK0%s/", tFitInfoTString_LamKch.Data(), tFitInfoTString_LamK0.Data());
 
+    TString tSaveDir_LamKch = TString::Format("%s%s", tSaveDirBase_LamKch.Data(), tSaveDirMod.Data());
+    TString tSaveDir_LamK0 = TString::Format("%s%s", tSaveDirBase_LamK0.Data(), tSaveDirMod.Data());
+      gSystem->mkdir(tSaveDir_LamKch, kTRUE);
+      gSystem->mkdir(tSaveDir_LamK0, kTRUE);
+
+    canmtcomb->SaveAs(TString::Format("%s%s", tSaveDir_LamKch.Data(), tSaveName.Data()));
+    canmtcomb->SaveAs(TString::Format("%s%s", tSaveDir_LamK0.Data(), tSaveName.Data()));
+  }
 
 //-------------------------------------------------------------------------------
   theApp->Run(kTRUE); //Run the TApp to pause the code.

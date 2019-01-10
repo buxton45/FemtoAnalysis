@@ -670,6 +670,7 @@ int main(int argc, char **argv)
   //--------------------------------------------------------------------------
 
   vector<TString> tStatOnlyTags = {"", "_StatOnly"};
+  vector<TString> tResidualsTags = {"No Residuals (Suppress Markers)", "10 Residuals (Suppress Markers)", "3 Residuals (Suppress Markers)"};
 
   vector<FitValWriterInfo> tFVWIVec;
   TString tCanNameMod = "";
@@ -677,14 +678,14 @@ int main(int argc, char **argv)
   //--------------------------------------------------------------------------
 
   TString tFitInfoTString_LamKch_3Res_PolyBgd_10fm = FitValuesWriter::BuildFitInfoTString(true, true, kPolynomial, 
-                                                                                         kInclude3Residuals, k10fm, 
+                                                                                         tIncResType, tResPrimMaxDecayType, 
                                                                                          kUseXiDataAndCoulombOnlyInterp, false, 
                                                                                          false, false, false, false, false, 
                                                                                          true, false, false, true, 
                                                                                          true, true);
 
   TString tFitInfoTString_LamK0_3Res_LinrBgd_10fm = FitValuesWriter::BuildFitInfoTString(true, true, kLinear, 
-                                                                                    kInclude3Residuals, k10fm, 
+                                                                                    tIncResType, tResPrimMaxDecayType, 
                                                                                     kUseXiDataAndCoulombOnlyInterp, false, 
                                                                                     false, false, false, false, false, 
                                                                                     false, true, false, false, 
@@ -692,7 +693,7 @@ int main(int argc, char **argv)
 
 
   vector<FitValWriterInfo> tFVWIVec_Comp3An_3Res_10fm = {FitValWriterInfo(kLamKchP, tFileLocation_LamKch, tResultsDate, tFitInfoTString_LamKch_3Res_PolyBgd_10fm, 
-                                                                         "3 Residuals (Suppress Markers)", tColorLamKchP, 20, tMarkerSize), 
+                                                                         tResidualsTags[tIncResType], tColorLamKchP, 20, tMarkerSize), 
                                                         FitValWriterInfo(kLamKchM, tFileLocation_LamKch, tResultsDate, tFitInfoTString_LamKch_3Res_PolyBgd_10fm, 
                                                                          "#LambdaK^{#pm}: Share R and #lambda, Poly. Bgd (Suppress Markers)", tColorLamKchM, 20, tMarkerSize), 
                                                         FitValWriterInfo(kLamK0, tFileLocation_LamK0, tResultsDate, tFitInfoTString_LamK0_3Res_LinrBgd_10fm, 
@@ -730,8 +731,8 @@ int main(int argc, char **argv)
 //  tFVWIVec = tFVWIVec_CompFreevsFixedlam_SepR;
 //  tCanNameMod = TString("_CompFreevsFixedlam_SepR");
 
-  tFVWIVec = tFVWIVec_CompFreevsFixedlam_SepR_Seplam;
-  tCanNameMod = TString("_CompFreevsFixedlam_SepR_Seplam");
+//  tFVWIVec = tFVWIVec_CompFreevsFixedlam_SepR_Seplam;
+//  tCanNameMod = TString("_CompFreevsFixedlam_SepR_Seplam");
 
 //  tFVWIVec = tFVWIVec_CompSharesvsSepR;
 //  tCanNameMod = TString("_CompSharedvsSepR");
@@ -756,8 +757,8 @@ int main(int argc, char **argv)
 
     TString tSaveDir_LamKch = TString::Format("%s%s", tSaveDirBase_LamKch.Data(), tSaveDirMod.Data());
     TString tSaveDir_LamK0 = TString::Format("%s%s", tSaveDirBase_LamK0.Data(), tSaveDirMod.Data());
-      gSystem->mkdir(tSaveDir_LamKch);
-      gSystem->mkdir(tSaveDir_LamK0);
+      gSystem->mkdir(tSaveDir_LamKch, kTRUE);
+      gSystem->mkdir(tSaveDir_LamK0, kTRUE);
 
     tCanAll->SaveAs(TString::Format("%s%s%s.%s", tSaveDir_LamKch.Data(), tCanAll->GetName(), tStatOnlyTags[bDrawStatOnly].Data(), tSaveFileType.Data()));
     tCanAll->SaveAs(TString::Format("%s%s%s.%s", tSaveDir_LamK0.Data(), tCanAll->GetName(), tStatOnlyTags[bDrawStatOnly].Data(), tSaveFileType.Data()));
