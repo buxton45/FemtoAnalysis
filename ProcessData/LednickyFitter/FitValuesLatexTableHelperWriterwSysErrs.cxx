@@ -239,7 +239,7 @@ void FitValuesLatexTableHelperWriterwSysErrs::WriteSingleLatexTableHelper(TStrin
 
   TString tTableSaveDir = TString::Format("%s%s/Tables/", tResultsBaseDir.Data(), aFitInfoTString.Data());
     gSystem->mkdir(tTableSaveDir);
-  TString tTableSaveLocation = TString::Format("%sTableHelper.tex", tTableSaveDir.Data());
+  TString tTableSaveLocation = TString::Format("%sTableHelper%s.tex", tTableSaveDir.Data(), tPairDesc.Data());
 
 
   std::ofstream tOut;

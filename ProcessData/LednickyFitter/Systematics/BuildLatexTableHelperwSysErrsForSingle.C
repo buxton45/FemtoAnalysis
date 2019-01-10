@@ -22,6 +22,7 @@ int main(int argc, char **argv)
 
   TString tResultsDate = "20180505";
   AnalysisType tAnType = kLamKchP;
+  bool bUseDefaults = true;
   //-----
 
   bool ApplyMomResCorrection = true;
@@ -49,6 +50,69 @@ int main(int argc, char **argv)
   bool tDualieShareRadii = true;
 
   if(tAnType==kLamK0) tIsDualie=false;
+
+
+
+  //**************** DEFAULTS *****************************************
+  if(bUseDefaults)
+  {
+    if(tAnType==kLamKchP)
+    {
+      ApplyMomResCorrection = true;
+      ApplyNonFlatBackgroundCorrection = true;
+      tNonFlatBgdFitType = kPolynomial;
+
+      tIncludeResidualsType = kInclude3Residuals; 
+      tResPrimMaxDecayType = k10fm;
+
+      tChargedResidualsType = kUseXiDataAndCoulombOnlyInterp;
+      FixD0 = false;
+
+      bUseStavCf=false;
+      FixAllLambdaTo1 = false;
+      FixAllNormTo1 = false;
+      FixRadii = false;
+      FixAllScattParams = false;
+
+      tShareLambdaParams = true;
+      tAllShareSingleLambdaParam = false;
+      UsemTScalingOfResidualRadii = false;
+      tIsDualie=true;
+
+      tDualieShareLambda = true;
+      tDualieShareRadii = true;
+    }
+
+    else if(tAnType==kLamK0)
+    {
+      ApplyMomResCorrection = true;
+      ApplyNonFlatBackgroundCorrection = true;
+      tNonFlatBgdFitType = kLinear;
+
+      tIncludeResidualsType = kInclude3Residuals; 
+      tResPrimMaxDecayType = k10fm;
+
+      tChargedResidualsType = kUseXiDataAndCoulombOnlyInterp;
+      FixD0 = false;
+
+      bUseStavCf=false;
+      FixAllLambdaTo1 = false;
+      FixAllNormTo1 = false;
+      FixRadii = false;
+      FixAllScattParams = false;
+
+      tShareLambdaParams = false;
+      tAllShareSingleLambdaParam = true;
+      UsemTScalingOfResidualRadii = false;
+      tIsDualie=false;
+
+      tDualieShareLambda = true;
+      tDualieShareRadii = true;
+    }
+
+    else assert(0);
+  }
+  //*******************************************************************
 
 
 

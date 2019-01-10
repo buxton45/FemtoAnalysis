@@ -1,0 +1,408 @@
+%%% NOTE: If I want to run this standalone, uncomment out lines below
+%%%       But lines must be commented out to run within larger project
+\begin{comment}
+\makeatletter
+\def\input@path{{/home/jesse/Analysis/FemtoAnalysis/AnalysisNotes/}}
+\makeatother
+
+\documentclass[ALICE,manyauthors]{ALICE_analysis_notes}
+
+\usepackage{MyStyle}
+\usepackage{chngpage}  % for adjustwidth
+\usepackage{boldline}  % to make lines in table bold
+                       % V{<factor>} vertical rule in \begin{tabular} command
+                       % also \clinB{<spec>}{<factor>} and \hlineB{<factor>}
+\usepackage{arrayjobx} % To use the array structures stored in FitResults_cLamcKch_20180505.tex   
+\end{comment}  
+
+\input{SampleTableHelper_cLamcKch.tex}
+\input{SampleTableHelper_cLamK0.tex}
+
+
+\begin{document}
+\pagestyle{empty}
+
+%\pagestyle{empty}
+%\begin{landscape}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%          LamK0             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%% LamK0, polynomial background, single lambda parameter
+\begin{table}[htbp]
+ \centering
+ \renewcommand{\arraystretch}{1.25}
+ \resizebox{\paperwidth}{!}{
+ \begin{tabular}{|c|c|c|c|c|c|c|}
+  \multicolumn{7}{c}{Fit Results \LamALamKs} \\
+  \hline
+  \multirow{2}{*}{System} & \multirow{2}{*}{Centrality} & \multicolumn{5}{c|}{Fit Parameters} \\
+  \cline{3-7}
+   & & $\lambda$ & $R$ & $\mathbb{R}f_{0}$ & $\mathbb{I}f_{0}$ & $d_{0}$ \\
+  \hline  
+  \multirow{3}{*}{\LamKs \& \ALamKs}  
+     & 0-10\%
+     & \multirow{3}{*}{\ArrLamKs(1) $\pm$ \ArrLamKs(2) (stat.) $\pm$ \ArrLamKs(3) (sys.)}    %Lambda (LamK0 & ALamK0 AllCent)
+     & \ArrLamKs(4) $\pm$ \ArrLamKs(5) (stat.) $\pm$ \ArrLamKs(6) (sys.)                     %Radius (LamK0 & ALamK0 0010)
+     & \multirow{3}{*}{\ArrLamKs(19) $\pm$ \ArrLamKs(20) (stat.) $\pm$ \ArrLamKs(21) (sys.)}   %Ref0   (LamK0 & ALamK0)
+     & \multirow{3}{*}{\ArrLamKs(22) $\pm$ \ArrLamKs(23) (stat.) $\pm$ \ArrLamKs(24) (sys.)}    %Imf0   (LamK0 & ALamK0)
+     & \multirow{3}{*}{\ArrLamKs(25) $\pm$ \ArrLamKs(26) (stat.) $\pm$ \ArrLamKs(27) (sys.)} \\ %d0     (LamK0 & ALamK0)
+   
+     & 10-30\%
+     & & \ArrLamKs(10) $\pm$ \ArrLamKs(11) (stat.) $\pm$ \ArrLamKs(12) (sys.)                   %Radius (LamK0 & ALamK0 1030)
+     & & & \\
+   
+     & 30-50\%
+     & & \ArrLamKs(16) $\pm$ \ArrLamKs(17) (stat.) $\pm$ \ArrLamKs(18) (sys.)                   %Radius (LamK0 & ALamK0 3050)
+     & & & \\
+   \hline
+ \end{tabular}}
+ \caption[Fit Results \LamALamKs, with 3 residual correlations included]{Fit Results \LamALamKs, with 3 residual correlations included. 
+ Each pair is fit simultaneously with its conjugate (ie. \LamKs with \ALamKs) across all centralities (0-10\%, 10-30\%, 30-50\%), for a total of 6 simultaneous analyses in the fit.
+ A single $\lambda$ parameter is shared amongst all.
+ Each analysis has a unique normalization parameter.
+ The radii are shared between analyses of like centrality, as these should have similar source sizes.
+ The scattering parameters ($\mathbb{R}f_{0}$, $\mathbb{I}f_{0}$, $d_{0}$) are shared amongst all.
+ The background is modeled by a (6$^{\mathrm{th}}$-)degree polynomial fit to THERMINATOR simulation.
+ The fit is done on the data with only statistical error bars.
+ The errors marked as ``stat." are those returned by MINUIT.
+ The errors marked as ``sys." are those which result from my systematic analysis (as outlined in Section \ref{SystematicErrors}).}
+ \label{tab:FitResultsLamK0_3Res}
+\end{table}  
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%          LamKch             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%% LamKch, polynomial background, unique radii and unique lambda
+\begin{comment}
+\clearpage
+\begin{table}[htbp]
+ \centering
+ \renewcommand{\arraystretch}{1.25}
+ \resizebox{\paperwidth}{!}{
+ \begin{tabular}{|c|c|c|c|c|c|c|c|}
+  \multicolumn{8}{c}{Fit Results \LamALamKpm} \\
+  \hline
+  \multirow{2}{*}{System} & \multirow{2}{*}{Centrality} & \multirow{2}{*}{Pair Type} & \multicolumn{5}{c|}{Fit Parameters} \\
+  \cline{4-8}
+   & & & $\lambda$ & $R$ & $\mathbb{R}f_{0}$ & $\mathbb{I}f_{0}$ & $d_{0}$ \\
+  \hline  
+  \multirow{6}{*}{\LamKchP \& \ALamKchM}  
+   & \multirow{2}{*}{0-10\%} 
+     & \LamKchP
+     & \ArrLamKchP(1) $\pm$ \ArrLamKchP(2) (stat.) $\pm$ \ArrLamKchP(3) (sys.)                     %Lambda (LamKchP 0010)
+     & \multirow{2}{*}{\ArrLamKchP(4) $\pm$ \ArrLamKchP(5) (stat.) $\pm$ \ArrLamKchP(6) (sys.)}    %Radius (LamKchP & ALamKchM 0010)
+     & \multirow{6}{*}{\ArrLamKchP(19) $\pm$ \ArrLamKchP(20) (stat.) $\pm$ \ArrLamKchP(21) (sys.)}   %Ref0   (LamKchP & ALamKchM)
+     & \multirow{6}{*}{\ArrLamKchP(22) $\pm$ \ArrLamKchP(23) (stat.) $\pm$ \ArrLamKchP(24) (sys.)}    %Imf0   (LamKchP & ALamKchM)
+     & \multirow{6}{*}{\ArrLamKchP(25) $\pm$ \ArrLamKchP(26) (stat.) $\pm$ \ArrLamKchP(27) (sys.)} \\ %d0     (LamKchP & ALamKchM)
+     
+     & & \ALamKchM 
+     & \ArrALamKchM(1) $\pm$ \ArrALamKchM(2) (stat.) $\pm$ \ArrALamKchM(3) (sys.)                     %Lambda (ALamKchM 0010)
+     & & & & \\          
+   \cline{2-5}
+   
+   & \multirow{2}{*}{10-30\%}
+     & \LamKchP
+     & \ArrLamKchP(7) $\pm$ \ArrLamKchP(8) (stat.) $\pm$ \ArrLamKchP(9) (sys.)                     %Lambda (LamKchP 1030)
+     & \multirow{2}{*}{\ArrLamKchP(10) $\pm$ \ArrLamKchP(11) (stat.) $\pm$ \ArrLamKchP(12) (sys.)}    %Radius (LamKchP & ALamKchM 1030) 
+     & & & \\
+             
+     & & \ALamKchM 
+     & \ArrALamKchM(7) $\pm$ \ArrALamKchM(8) (stat.) $\pm$ \ArrALamKchM(9) (sys.)                     %Lambda (ALamKchM 1030)
+     & & & & \\  
+   \cline{2-5}
+   
+   & \multirow{2}{*}{30-50\%}
+     & \LamKchP
+     & \ArrLamKchP(13) $\pm$ \ArrLamKchP(14) (stat.) $\pm$ \ArrLamKchP(15) (sys.)                     %Lambda (LamKchP 3050)
+     & \multirow{2}{*}{\ArrLamKchP(16) $\pm$ \ArrLamKchP(17) (stat.) $\pm$ \ArrLamKchP(18) (sys.)}    %Radius (LamKchP & ALamKchM 3050)
+     & & & \\
+             
+     & & \ALamKchM
+     & \ArrALamKchM(13) $\pm$ \ArrALamKchM(14) (stat.) $\pm$ \ArrALamKchM(15) (sys.)                     %Lambda (ALamKchM 3050)
+     & & & & \\  
+   \hline
+   \hline
+  \multirow{6}{*}{\LamKchM \& \ALamKchP}  
+   & \multirow{2}{*}{0-10\%} 
+     & \LamKchM
+     & \ArrLamKchM(1) $\pm$ \ArrLamKchM(2) (stat.) $\pm$ \ArrLamKchM(3) (sys.)                      %Lambda (LamKchM 0010)
+     & \multirow{2}{*}{\ArrLamKchM(4) $\pm$ \ArrLamKchM(5) (stat.) $\pm$ \ArrLamKchM(6) (sys.)}     %Radius (LamKchM & ALamKchP 0010)
+     & \multirow{6}{*}{\ArrLamKchM(19) $\pm$ \ArrLamKchM(20) (stat.) $\pm$ \ArrLamKchM(21) (sys.)}     %Ref0   (LamKchM & ALamKchP)
+     & \multirow{6}{*}{\ArrLamKchM(22) $\pm$ \ArrLamKchM(23) (stat.) $\pm$ \ArrLamKchM(24) (sys.)}     %Imf0   (LamKchM & ALamKchP)
+     & \multirow{6}{*}{\ArrLamKchM(25) $\pm$ \ArrLamKchM(26) (stat.) $\pm$ \ArrLamKchM(27) (sys.)} \\ %d0     (LamKchM & ALamKchP)
+     
+     & & \ALamKchP 
+     & \ArrALamKchP(1) $\pm$ \ArrALamKchP(2) (stat.) $\pm$ \ArrALamKchP(3) (sys.)                      %Lambda (ALamKchP 0010)
+     & & & & \\          
+   \cline{2-5}
+   
+   & \multirow{2}{*}{10-30\%}
+     & \LamKchM
+     & \ArrLamKchM(7) $\pm$ \ArrLamKchM(8) (stat.) $\pm$ \ArrLamKchM(9) (sys.)                      %Lambda (LamKchM 1030) 
+     & \multirow{2}{*}{\ArrLamKchM(10) $\pm$ \ArrLamKchM(11) (stat.) $\pm$ \ArrLamKchM(12) (sys.)}     %Radius (LamKchM & ALamKchP 1030)
+     & & & \\
+             
+     & & \ALamKchP 
+     & \ArrALamKchP(7) $\pm$ \ArrALamKchP(8) (stat.) $\pm$ \ArrALamKchP(9) (sys.)                      %Lambda (ALamKchP 1030)
+     & & & & \\  
+   \cline{2-5}
+   
+   & \multirow{2}{*}{30-50\%}
+     & \LamKchM
+     & \ArrLamKchM(13) $\pm$ \ArrLamKchM(14) (stat.) $\pm$ \ArrLamKchM(15) (sys.)                      %Lambda (LamKchM 3050) 
+     & \multirow{2}{*}{\ArrLamKchM(16) $\pm$ \ArrLamKchM(17) (stat.) $\pm$ \ArrLamKchM(18) (sys.)}     %Radius (LamKchM & ALamKchP 3050)
+     & & & \\
+             
+     & & \ALamKchP 
+     & \ArrALamKchP(13) $\pm$ \ArrALamKchP(14) (stat.) $\pm$ \ArrALamKchP(15) (sys.)                      %Lambda (ALamKchP 3050)
+     & & & & \\     
+   \hline
+ \end{tabular}}
+ \caption[Fit Results \LamALamKpm, with 3 residual correlations included]{Fit Results \LamALamKpm, with 3 residual correlations included.
+ Each pair is fit simultaneously with its conjugate (ie. \LamKchP with \ALamKchM and \LamKchM with \ALamKchP) across all centralities (0-10\%, 10-30\%, 30-50\%), for a total of 6 simultaneous analyses in the fit.
+ Each analysis has a unique $\lambda$ and normalization parameter.
+ The radii are shared between analyses of like centrality, as these should have similar source sizes.
+ The scattering parameters ($\mathbb{R}f_{0}$, $\mathbb{I}f_{0}$, $d_{0}$) are shared amongst all.
+ The background is modeled by a (6$^{\mathrm{th}}$-)degree polynomial fit to THERMINATOR simulation.
+ The fit is done on the data with only statistical error bars.
+ The errors marked as ``stat." are those returned by MINUIT.
+ The errors marked as ``sys." are those which result from my systematic analysis (as outlined in Section \ref{SystematicErrors}).}
+ \label{tab:FitResultsLamKch_3Res}
+\end{table}  
+\end{comment}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%% LamKch, polynomial background, unique radii and share lamconj
+\begin{comment}
+\clearpage
+\begin{table}[htbp]
+ \centering
+ \renewcommand{\arraystretch}{1.25}
+ \resizebox{\paperwidth}{!}{
+ \begin{tabular}{|c|c|c|c|c|c|c|}
+  \multicolumn{7}{c}{Fit Results \LamALamKpm} \\
+  \hline
+  \multirow{2}{*}{System} & \multirow{2}{*}{Centrality} & \multicolumn{5}{c|}{Fit Parameters} \\
+  \cline{3-7}
+   & & $\lambda$ & $R$ & $\mathbb{R}f_{0}$ & $\mathbb{I}f_{0}$ & $d_{0}$ \\
+  \hline  
+  \multirow{6}{*}{\LamKchP \& \ALamKchM}  
+   & \multirow{2}{*}{0-10\%} 
+     & \multirow{2}{*}{\ArrLamKchP(1) $\pm$ \ArrLamKchP(2) (stat.) $\pm$ \ArrLamKchP(3) (sys.)}    %Lambda (LamKchP 0010)
+     & \multirow{2}{*}{\ArrLamKchP(4) $\pm$ \ArrLamKchP(5) (stat.) $\pm$ \ArrLamKchP(6) (sys.)}    %Radius (LamKchP & ALamKchM 0010)
+     & \multirow{6}{*}{\ArrLamKchP(19) $\pm$ \ArrLamKchP(20) (stat.) $\pm$ \ArrLamKchP(21) (sys.)}   %Ref0   (LamKchP & ALamKchM)
+     & \multirow{6}{*}{\ArrLamKchP(22) $\pm$ \ArrLamKchP(23) (stat.) $\pm$ \ArrLamKchP(24) (sys.)}    %Imf0   (LamKchP & ALamKchM)
+     & \multirow{6}{*}{\ArrLamKchP(25) $\pm$ \ArrLamKchP(26) (stat.) $\pm$ \ArrLamKchP(27) (sys.)} \\ %d0     (LamKchP & ALamKchM)
+     
+     & & & & & & \\          
+   \cline{2-4}
+   
+   & \multirow{2}{*}{10-30\%}
+     & \multirow{2}{*}{\ArrLamKchP(7) $\pm$ \ArrLamKchP(8) (stat.) $\pm$ \ArrLamKchP(9) (sys.)}       %Lambda (LamKchP 1030)
+     & \multirow{2}{*}{\ArrLamKchP(10) $\pm$ \ArrLamKchP(11) (stat.) $\pm$ \ArrLamKchP(12) (sys.)}    %Radius (LamKchP & ALamKchM 1030) 
+     & & & \\
+             
+     & & & & & & \\  
+   \cline{2-4}
+   
+   & \multirow{2}{*}{30-50\%}
+     & \multirow{2}{*}{\ArrLamKchP(13) $\pm$ \ArrLamKchP(14) (stat.) $\pm$ \ArrLamKchP(15) (sys.)}    %Lambda (LamKchP 3050)
+     & \multirow{2}{*}{\ArrLamKchP(16) $\pm$ \ArrLamKchP(17) (stat.) $\pm$ \ArrLamKchP(18) (sys.)}    %Radius (LamKchP & ALamKchM 3050)
+     & & & \\
+             
+     & & & & & & \\  
+   \hline
+   \hline
+  \multirow{6}{*}{\LamKchM \& \ALamKchP}  
+   & \multirow{2}{*}{0-10\%} 
+     & \multirow{2}{*}{\ArrLamKchM(1) $\pm$ \ArrLamKchM(2) (stat.) $\pm$ \ArrLamKchM(3) (sys.)}     %Lambda (LamKchM 0010)
+     & \multirow{2}{*}{\ArrLamKchM(4) $\pm$ \ArrLamKchM(5) (stat.) $\pm$ \ArrLamKchM(6) (sys.)}     %Radius (LamKchM & ALamKchP 0010)
+     & \multirow{6}{*}{\ArrLamKchM(19) $\pm$ \ArrLamKchM(20) (stat.) $\pm$ \ArrLamKchM(21) (sys.)}     %Ref0   (LamKchM & ALamKchP)
+     & \multirow{6}{*}{\ArrLamKchM(22) $\pm$ \ArrLamKchM(23) (stat.) $\pm$ \ArrLamKchM(24) (sys.)}     %Imf0   (LamKchM & ALamKchP)
+     & \multirow{6}{*}{\ArrLamKchM(25) $\pm$ \ArrLamKchM(26) (stat.) $\pm$ \ArrLamKchM(27) (sys.)} \\ %d0     (LamKchM & ALamKchP)
+     
+     & & & & & & \\          
+   \cline{2-4}
+   
+   & \multirow{2}{*}{10-30\%}
+     & \multirow{2}{*}{\ArrLamKchM(7) $\pm$ \ArrLamKchM(8) (stat.) $\pm$ \ArrLamKchM(9) (sys.)}        %Lambda (LamKchM 1030) 
+     & \multirow{2}{*}{\ArrLamKchM(10) $\pm$ \ArrLamKchM(11) (stat.) $\pm$ \ArrLamKchM(12) (sys.)}     %Radius (LamKchM & ALamKchP 1030)
+     & & & \\
+             
+     & & & & & & \\  
+   \cline{2-4}
+   
+   & \multirow{2}{*}{30-50\%}
+     & \multirow{2}{*}{\ArrLamKchM(13) $\pm$ \ArrLamKchM(14) (stat.) $\pm$ \ArrLamKchM(15) (sys.)}     %Lambda (LamKchM 3050) 
+     & \multirow{2}{*}{\ArrLamKchM(16) $\pm$ \ArrLamKchM(17) (stat.) $\pm$ \ArrLamKchM(18) (sys.)}     %Radius (LamKchM & ALamKchP 3050)
+     & & & \\
+             
+     & & & & & & \\     
+   \hline
+ \end{tabular}}
+ \caption[Fit Results \LamALamKpm, with 3 residual correlations included]{Fit Results \LamALamKpm, with 3 residual correlations included.
+ Each pair is fit simultaneously with its conjugate (ie. \LamKchP with \ALamKchM and \LamKchM with \ALamKchP) across all centralities (0-10\%, 10-30\%, 30-50\%), for a total of 6 simultaneous analyses in the fit.
+ A $\lambda$ parameter is shared between a pair and its conjugate for each centrality.
+ Each analysis has a unique normalization parameter.
+ The radii are shared between analyses of like centrality, as these should have similar source sizes.
+ The scattering parameters ($\mathbb{R}f_{0}$, $\mathbb{I}f_{0}$, $d_{0}$) are shared amongst all.
+ The background is modeled by a (6$^{\mathrm{th}}$-)degree polynomial fit to THERMINATOR simulation.
+ The fit is done on the data with only statistical error bars.
+ The errors marked as ``stat." are those returned by MINUIT.
+ The errors marked as ``sys." are those which result from my systematic analysis (as outlined in Section \ref{SystematicErrors}).}
+ \label{tab:FitResultsLamKch_3Res}
+\end{table}  
+\end{comment}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%% LamKch, polynomial background, share radii and single lambda
+%\begin{comment}
+\begin{table}[htbp]
+ \centering
+ \renewcommand{\arraystretch}{1.25}
+ \resizebox{\paperwidth}{!}{
+ \begin{tabular}{|c|c|c|c|c|c|c|}
+  \multicolumn{7}{c}{Fit Results \LamALamKpm} \\
+  \hline
+  \multirow{2}{*}{System} & \multirow{2}{*}{Centrality} & \multicolumn{5}{c|}{Fit Parameters} \\
+  \cline{3-7}
+   & & $\lambda$ & $R$ & $\mathbb{R}f_{0}$ & $\mathbb{I}f_{0}$ & $d_{0}$ \\
+  \hline  
+  \multirow{3}{*}{\LamKchP \& \ALamKchM}  
+   & \multirow{2}{*}{0-10\%} 
+     & \multirow{2}{*}{\ArrLamKchP(1) $\pm$ \ArrLamKchP(2) (stat.) $\pm$ \ArrLamKchP(3) (sys.)}    %Lambda (LamKchP 0010)
+     & \multirow{2}{*}{\ArrLamKchP(4) $\pm$ \ArrLamKchP(5) (stat.) $\pm$ \ArrLamKchP(6) (sys.)}    %Radius (LamKchP & ALamKchM 0010)
+     & \multirow{3}{*}{\ArrLamKchP(19) $\pm$ \ArrLamKchP(20) (stat.) $\pm$ \ArrLamKchP(21) (sys.)}   %Ref0   (LamKchP & ALamKchM)
+     & \multirow{3}{*}{\ArrLamKchP(22) $\pm$ \ArrLamKchP(23) (stat.) $\pm$ \ArrLamKchP(24) (sys.)}    %Imf0   (LamKchP & ALamKchM)
+     & \multirow{3}{*}{\ArrLamKchP(25) $\pm$ \ArrLamKchP(26) (stat.) $\pm$ \ArrLamKchP(27) (sys.)} \\ %d0     (LamKchP & ALamKchM)
+     
+     & & & & & & \\          
+   \cline{2-4}
+   
+   & \multirow{2}{*}{10-30\%}
+     & \multirow{2}{*}{\ArrLamKchP(7) $\pm$ \ArrLamKchP(8) (stat.) $\pm$ \ArrLamKchP(9) (sys.)}       %Lambda (LamKchP 1030)
+     & \multirow{2}{*}{\ArrLamKchP(10) $\pm$ \ArrLamKchP(11) (stat.) $\pm$ \ArrLamKchP(12) (sys.)}    %Radius (LamKchP & ALamKchM 1030) 
+     & & & \\
+   \clineB{1-1}{4.0} 
+   \clineB{5-7}{4.0}            
+  \multirow{3}{*}{\LamKchP \& \ALamKchM} 
+   & & & 
+     & \multirow{3}{*}{\ArrLamKchM(19) $\pm$ \ArrLamKchM(20) (stat.) $\pm$ \ArrLamKchM(21) (sys.)}     %Ref0   (LamKchM & ALamKchP)
+     & \multirow{3}{*}{\ArrLamKchM(22) $\pm$ \ArrLamKchM(23) (stat.) $\pm$ \ArrLamKchM(24) (sys.)}     %Imf0   (LamKchM & ALamKchP)
+     & \multirow{3}{*}{\ArrLamKchM(25) $\pm$ \ArrLamKchM(26) (stat.) $\pm$ \ArrLamKchM(27) (sys.)} \\ %d0     (LamKchM & ALamKchP)
+   \cline{2-4}
+   
+   & \multirow{2}{*}{30-50\%}
+     & \multirow{2}{*}{\ArrLamKchP(13) $\pm$ \ArrLamKchP(14) (stat.) $\pm$ \ArrLamKchP(15) (sys.)}    %Lambda (LamKchP 3050)
+     & \multirow{2}{*}{\ArrLamKchP(16) $\pm$ \ArrLamKchP(17) (stat.) $\pm$ \ArrLamKchP(18) (sys.)}    %Radius (LamKchP & ALamKchM 3050)
+     & & & \\
+             
+     & & & & & & \\  
+   \hline
+ \end{tabular}}
+ \caption[Fit Results \LamALamKpm, with 3 residual correlations included]{Fit Results \LamALamKpm, with 3 residual correlations included.
+ All \LamKpm analyses are fit simultaneously across all centralities (0-10\%, 10-30\%, 30-50\%).
+ Scattering parameters ($\mathbb{R}f_{0}$, $\mathbb{I}f_{0}$, $d_{0}$) are shared between pair-conjugate systems (i.e. a parameter set describing the \LamKchP \& \ALamKchM system, and a separate set describing the \LamKchM \& \ALamKchP system).
+ For each centrality, a radius and $\lambda$ parameters are shared between all pairs (\LamKchP, \ALamKchM, \LamKchM, \ALamKchP).
+ Each analysis has a unique normalization parameter.
+ The background is modeled by a (6$^{\mathrm{th}}$-)degree polynomial fit to THERMINATOR simulation.
+ The fit is done on the data with only statistical error bars.
+ The errors marked as ``stat." are those returned by MINUIT.
+ The errors marked as ``sys." are those which result from my systematic analysis (as outlined in Section \ref{SystematicErrors}).}
+ \label{tab:FitResultsLamKch_3Res}
+\end{table}
+%\end{comment}
+
+  
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%% LamKch, polynomial background, share radii, share lamconj
+\begin{comment}
+%\clearpage
+\begin{table}[htbp]
+ \centering
+ \renewcommand{\arraystretch}{1.25}
+ \resizebox{\paperwidth}{!}{
+ \begin{tabular}{|c|c|c|c|c|c|c|}
+  \multicolumn{7}{c}{Fit Results \LamALamKpm} \\
+  \hline
+  \multirow{2}{*}{System} & \multirow{2}{*}{Centrality} & \multicolumn{5}{c|}{Fit Parameters} \\
+  \cline{3-7}
+   & & $\lambda$ & $R$ & $\mathbb{R}f_{0}$ & $\mathbb{I}f_{0}$ & $d_{0}$ \\
+  \hline  
+  \multirow{6}{*}{\LamKchP \& \ALamKchM}  
+   & \multirow{2}{*}{0-10\%} 
+     & \multirow{2}{*}{\ArrLamKchP(1) $\pm$ \ArrLamKchP(2) (stat.) $\pm$ \ArrLamKchP(3) (sys.)}    %Lambda (LamKchP 0010)
+     & \multirow{2}{*}{\ArrLamKchP(4) $\pm$ \ArrLamKchP(5) (stat.) $\pm$ \ArrLamKchP(6) (sys.)}    %Radius (LamKchP & ALamKchM 0010)
+     & \multirow{6}{*}{\ArrLamKchP(19) $\pm$ \ArrLamKchP(20) (stat.) $\pm$ \ArrLamKchP(21) (sys.)}   %Ref0   (LamKchP & ALamKchM)
+     & \multirow{6}{*}{\ArrLamKchP(22) $\pm$ \ArrLamKchP(23) (stat.) $\pm$ \ArrLamKchP(24) (sys.)}    %Imf0   (LamKchP & ALamKchM)
+     & \multirow{6}{*}{\ArrLamKchP(25) $\pm$ \ArrLamKchP(26) (stat.) $\pm$ \ArrLamKchP(27) (sys.)} \\ %d0     (LamKchP & ALamKchM)
+     
+     & & & & & & \\          
+   \cline{2-4}
+   
+   & \multirow{2}{*}{10-30\%}
+     & \multirow{2}{*}{\ArrLamKchP(7) $\pm$ \ArrLamKchP(8) (stat.) $\pm$ \ArrLamKchP(9) (sys.)}       %Lambda (LamKchP 1030)
+     & \multirow{2}{*}{\ArrLamKchP(10) $\pm$ \ArrLamKchP(11) (stat.) $\pm$ \ArrLamKchP(12) (sys.)}    %Radius (LamKchP & ALamKchM 1030) 
+     & & & \\
+             
+     & & & & & & \\  
+   \cline{2-4}
+   
+   & \multirow{2}{*}{30-50\%}
+
+     & \multirow{2}{*}{\ArrLamKchP(13) $\pm$ \ArrLamKchP(14) (stat.) $\pm$ \ArrLamKchP(15) (sys.)}    %Lambda (LamKchP 3050)
+     & \multirow{2}{*}{\ArrLamKchP(16) $\pm$ \ArrLamKchP(17) (stat.) $\pm$ \ArrLamKchP(18) (sys.)}    %Radius (LamKchP & ALamKchM 3050)
+     & & & \\
+             
+     & & & & & & \\  
+   \hline
+   \hline
+  \multirow{6}{*}{\LamKchM \& \ALamKchP}  
+   & \multirow{2}{*}{0-10\%} 
+     & \multirow{2}{*}{\ArrLamKchM(1) $\pm$ \ArrLamKchM(2) (stat.) $\pm$ \ArrLamKchM(3) (sys.)}     %Lambda (LamKchM 0010)
+     & \multirow{2}{*}{\ArrLamKchM(4) $\pm$ \ArrLamKchM(5) (stat.) $\pm$ \ArrLamKchM(6) (sys.)}     %Radius (LamKchM & ALamKchP 0010)
+     & \multirow{6}{*}{\ArrLamKchM(19) $\pm$ \ArrLamKchM(20) (stat.) $\pm$ \ArrLamKchM(21) (sys.)}     %Ref0   (LamKchM & ALamKchP)
+     & \multirow{6}{*}{\ArrLamKchM(22) $\pm$ \ArrLamKchM(23) (stat.) $\pm$ \ArrLamKchM(24) (sys.)}     %Imf0   (LamKchM & ALamKchP)
+     & \multirow{6}{*}{\ArrLamKchM(25) $\pm$ \ArrLamKchM(26) (stat.) $\pm$ \ArrLamKchM(27) (sys.)} \\ %d0     (LamKchM & ALamKchP)
+     
+     & & & & & & \\          
+   \cline{2-4}
+   
+   & \multirow{2}{*}{10-30\%}
+     & \multirow{2}{*}{\ArrLamKchM(7) $\pm$ \ArrLamKchM(8) (stat.) $\pm$ \ArrLamKchM(9) (sys.)}        %Lambda (LamKchM 1030) 
+     & \multirow{2}{*}{\ArrLamKchM(10) $\pm$ \ArrLamKchM(11) (stat.) $\pm$ \ArrLamKchM(12) (sys.)}     %Radius (LamKchM & ALamKchP 1030)
+     & & & \\
+             
+     & & & & & & \\  
+   \cline{2-4}
+   
+   & \multirow{2}{*}{30-50\%}
+     & \multirow{2}{*}{\ArrLamKchM(13) $\pm$ \ArrLamKchM(14) (stat.) $\pm$ \ArrLamKchM(15) (sys.)}     %Lambda (LamKchM 3050) 
+     & \multirow{2}{*}{\ArrLamKchM(16) $\pm$ \ArrLamKchM(17) (stat.) $\pm$ \ArrLamKchM(18) (sys.)}     %Radius (LamKchM & ALamKchP 3050)
+     & & & \\
+             
+     & & & & & & \\     
+   \hline
+ \end{tabular}}
+ \caption[Fit Results \LamALamKpm, with 3 residual correlations included]{Fit Results \LamALamKpm, with 3 residual correlations included.
+ All \LamKpm analyses are fit simultaneously across all centralities (0-10\%, 10-30\%, 30-50\%).
+ Scattering parameters ($\mathbb{R}f_{0}$, $\mathbb{I}f_{0}$, $d_{0}$) are shared between pair-conjugate systems (i.e. a parameter set describing the \LamKchP \& \ALamKchM system, and a separate set describing the \LamKchM \& \ALamKchP system).
+ For each centrality, a radius parameter is shared between all pairs (\LamKchP, \ALamKchM, \LamKchM, \ALamKchP), and a $\lambda$ parameter is shared between a pair and its conjugate.
+ Each analysis has a unique normalization parameter.
+ The background is modeled by a (6$^{\mathrm{th}}$-)degree polynomial fit to THERMINATOR simulation.
+ The fit is done on the data with only statistical error bars.
+ The errors marked as ``stat." are those returned by MINUIT.
+ The errors marked as ``sys." are those which result from my systematic analysis (as outlined in Section \ref{SystematicErrors}).}
+ \label{tab:FitResultsLamKch_3Res}
+\end{table}  
+\end{comment}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%\end{landscape}
+%\pagestyle{plain}
+
+
+\end{document}

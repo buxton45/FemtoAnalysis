@@ -1,0 +1,35 @@
+%%% NOTE: If I want to run this standalone, uncomment out lines below
+%%%       But lines must be commented out to run within larger project
+%\begin{comment}
+\makeatletter
+\def\input@path{{/home/jesse/Analysis/FemtoAnalysis/AnalysisNotes/}}
+\makeatother
+
+\documentclass[ALICE,manyauthors]{ALICE_analysis_notes}
+
+\usepackage{MyStyle}
+\usepackage{chngpage}  % for adjustwidth
+\usepackage{boldline}  % to make lines in table bold
+                       % V{<factor>} vertical rule in \begin{tabular} command
+                       % also \clinB{<spec>}{<factor>} and \hlineB{<factor>}
+\usepackage{arrayjobx} % To use the array structures stored in FitResults_cLamcKch_20180505.tex   
+%\end{comment}  
+
+
+\begin{document}
+\pagestyle{empty}
+
+\pagestyle{empty}
+\begin{landscape}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%     TABLES!!!!!     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subfile{SampleSingleTableTemplate_cLamK0.tex}
+\subfile{SampleSingleTableTemplate_cLamcKch.tex}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\end{landscape}
+\pagestyle{plain}
+
+
+\end{document}

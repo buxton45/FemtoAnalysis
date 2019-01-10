@@ -308,6 +308,8 @@ int main(int argc, char **argv)
   else t3dDescriptor=aCfDescriptor;
 
   TString tHistName3d = TString::Format("PairSource3d_osl%s%s", t3dDescriptor.Data(), cAnalysisBaseTags[tAnType]);
+//  TString tHistName3d = TString::Format("TrueRosl%s%s", t3dDescriptor.Data(), cAnalysisBaseTags[tAnType]);
+//  TString tHistName3d = TString::Format("SimpleRosl%s%s", t3dDescriptor.Data(), cAnalysisBaseTags[tAnType]);
 
   if(tAnType==kKchPKchP || tAnType==kK0K0 || tAnType==kLamLam) bCombineConjugates = false;
   if(tFileNameBase.Contains("PairOnly")) bCombineConjugates = false;
