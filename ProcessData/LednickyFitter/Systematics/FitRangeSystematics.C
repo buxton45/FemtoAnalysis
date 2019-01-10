@@ -15,7 +15,7 @@ int main(int argc, char **argv)
   FitGeneratorType tFitGeneratorType = kPairwConj;
 
   bool tShareLambdaParameters = false;
-  bool tAllShareSingleLambdaParam = false;
+  bool tAllShareSingleLambdaParam = true;
 
   bool ApplyMomResCorrection = true;
   bool ApplyNonFlatBackgroundCorrection = true;

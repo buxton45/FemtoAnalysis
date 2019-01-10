@@ -19,7 +19,7 @@ int main(int argc, char **argv)
   CentralityType tCentralityType = kMB;
   FitGeneratorType tFitGeneratorType = kPairwConj;
   bool tShareLambdaParameters = false;
-  bool tAllShareSingleLambdaParam = false;
+  bool tAllShareSingleLambdaParam = true;
 
   bool ApplyMomResCorrection = true;
   bool ApplyNonFlatBackgroundCorrection = true;

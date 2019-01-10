@@ -1,0 +1,79 @@
+%%% NOTE: If I want to run this standalone, uncomment out lines below
+%%%       But lines must be commented out to run within larger project
+\begin{comment}
+\makeatletter
+\def\input@path{{/home/jesse/Analysis/FemtoAnalysis/AnalysisNotes/}}
+\makeatother
+
+\documentclass[ALICE,manyauthors]{ALICE_analysis_notes}
+
+\usepackage{MyStyle}
+\usepackage{chngpage}  % for adjustwidth
+\usepackage{boldline}  % to make lines in table bold
+                       % V{<factor>} vertical rule in \begin{tabular} command
+                       % also \clinB{<spec>}{<factor>} and \hlineB{<factor>}
+\usepackage{arrayjobx} % To use the array structures stored in FitResults_cLamcKch_20180505.tex   
+\end{comment}  
+
+%%%% UPDATE ME FOR EACH FILE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+\input{/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamK0_20180505/_MomResCrctn_NonFlatBgdCrctnLinear_NoRes_SingleLamParam/Tables/TableHelper_cLamK0.tex}
+%!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+\begin{document}
+\pagestyle{empty}
+
+%\pagestyle{empty}
+%\begin{landscape}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%          LamK0             %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%% LamK0, polynomial background, single lambda parameter
+\begin{table}[htbp]
+ \centering
+ \renewcommand{\arraystretch}{1.25}
+ \resizebox{\paperwidth}{!}{
+ \begin{tabular}{|c|c|c|c|c|c|c|}
+  \multicolumn{7}{c}{Fit Results \LamALamKs} \\
+  \hline
+  \multirow{2}{*}{System} & \multirow{2}{*}{Centrality} & \multicolumn{5}{c|}{Fit Parameters} \\
+  \cline{3-7}
+   & & $\lambda$ & $R$ & $\mathbb{R}f_{0}$ & $\mathbb{I}f_{0}$ & $d_{0}$ \\
+  \hline  
+  \multirow{3}{*}{\LamKs \& \ALamKs}  
+     & 0-10\%
+     & \multirow{3}{*}{\ArrLamKs(1) $\pm$ \ArrLamKs(2) (stat.) $\pm$ \ArrLamKs(3) (sys.)}    %Lambda (LamK0 & ALamK0 AllCent)
+     & \ArrLamKs(4) $\pm$ \ArrLamKs(5) (stat.) $\pm$ \ArrLamKs(6) (sys.)                     %Radius (LamK0 & ALamK0 0010)
+     & \multirow{3}{*}{\ArrLamKs(19) $\pm$ \ArrLamKs(20) (stat.) $\pm$ \ArrLamKs(21) (sys.)}   %Ref0   (LamK0 & ALamK0)
+     & \multirow{3}{*}{\ArrLamKs(22) $\pm$ \ArrLamKs(23) (stat.) $\pm$ \ArrLamKs(24) (sys.)}    %Imf0   (LamK0 & ALamK0)
+     & \multirow{3}{*}{\ArrLamKs(25) $\pm$ \ArrLamKs(26) (stat.) $\pm$ \ArrLamKs(27) (sys.)} \\ %d0     (LamK0 & ALamK0)
+   
+     & 10-30\%
+     & & \ArrLamKs(10) $\pm$ \ArrLamKs(11) (stat.) $\pm$ \ArrLamKs(12) (sys.)                   %Radius (LamK0 & ALamK0 1030)
+     & & & \\
+   
+     & 30-50\%
+     & & \ArrLamKs(16) $\pm$ \ArrLamKs(17) (stat.) $\pm$ \ArrLamKs(18) (sys.)                   %Radius (LamK0 & ALamK0 3050)
+     & & & \\
+   \hline
+ \end{tabular}}
+ \caption[Fit Results \LamALamKs, with no residual correlations included]{Fit Results \LamALamKs, with no residual correlations included. 
+ Each pair is fit simultaneously with its conjugate (ie. \LamKs with \ALamKs) across all centralities (0-10\%, 10-30\%, 30-50\%), for a total of 6 simultaneous analyses in the fit.
+ A single $\lambda$ parameter is shared amongst all.
+ Each analysis has a unique normalization parameter.
+ The radii are shared between analyses of like centrality, as these should have similar source sizes.
+ The scattering parameters ($\mathbb{R}f_{0}$, $\mathbb{I}f_{0}$, $d_{0}$) are shared amongst all.
+ The background is fit with a linear form in the range 0.6 $<$ \kstar $<$ 0.9 GeV/$c$.
+ The fit is done on the data with only statistical error bars.
+ The errors marked as ``stat." are those returned by MINUIT.
+ The errors marked as ``sys." are those which result from my systematic analysis (as outlined in Section \ref{SystematicErrors}).}
+ \label{tab:FitResultsLamK0_3Res}
+\end{table}  
+
+%\end{landscape}
+%\pagestyle{plain}
+
+
+\end{document}
