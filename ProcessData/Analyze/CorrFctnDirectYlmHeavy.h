@@ -14,12 +14,17 @@ class CorrFctnDirectYlmHeavy{
 
   TH1D* GetYlmCfnHist(YlmComponent aComponent, int al, int am);
 
+  //inline
+  vector<CorrFctnDirectYlmLite*> GetYlmCfLiteCollection() const;
+
  private:
   vector<CorrFctnDirectYlmLite*> fYlmCfLiteCollection;
 
 
   
 };
+
+inline vector<CorrFctnDirectYlmLite*> CorrFctnDirectYlmHeavy::GetYlmCfLiteCollection() const {return fYlmCfLiteCollection;}
 
 #endif
 

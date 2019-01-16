@@ -141,6 +141,12 @@ void Draw1DSourceProjwFit(TPad* aPad, TH3* a3DoslHist, TString aComponent, doubl
 {
   assert(aComponent.EqualTo("Out") || aComponent.EqualTo("Side") || aComponent.EqualTo("Long"));
 
+  gStyle->SetOptTitle(0);
+  gStyle->SetOptStat(0);
+
+  aPad->SetRightMargin(0.025);
+  aPad->SetTopMargin(0.050);
+
   int tBinProjLow, tBinProjHigh;
   if(aProjLow==-100. && aProjHigh==-100.)
   {
@@ -160,19 +166,22 @@ void Draw1DSourceProjwFit(TPad* aPad, TH3* a3DoslHist, TString aComponent, doubl
   {
     t1DSource = a3DoslHist->ProjectionX("Out", tBinProjLow, tBinProjHigh, tBinProjLow, tBinProjHigh);
       t1DSource->SetTitle("PairSource_Out");
-      t1DSource->GetXaxis()->SetTitle("R_{Out}(fm)");
+      t1DSource->GetXaxis()->SetTitle("r*_{Out}(fm)");
+      t1DSource->GetYaxis()->SetTitle("dN/dr*_{Out}");
   }
   else if(aComponent.EqualTo("Side"))
   {
     t1DSource = a3DoslHist->ProjectionY("Side", tBinProjLow, tBinProjHigh, tBinProjLow, tBinProjHigh);
       t1DSource->SetTitle("PairSource_Side");
-      t1DSource->GetXaxis()->SetTitle("R_{Side}(fm)");
+      t1DSource->GetXaxis()->SetTitle("r*_{Side}(fm)");
+      t1DSource->GetYaxis()->SetTitle("dN/dr*_{Side}");
   }
   else if(aComponent.EqualTo("Long"))
   {
     t1DSource = a3DoslHist->ProjectionZ("Long", tBinProjLow, tBinProjHigh, tBinProjLow, tBinProjHigh);
     t1DSource->SetTitle("PairSource_Long");
-    t1DSource->GetXaxis()->SetTitle("R_{Long}(fm)");
+    t1DSource->GetXaxis()->SetTitle("r*_{Long}(fm)");
+      t1DSource->GetYaxis()->SetTitle("dN/dr*_{Long}");
   }
   else assert(0);
 
@@ -180,15 +189,34 @@ void Draw1DSourceProjwFit(TPad* aPad, TH3* a3DoslHist, TString aComponent, doubl
   t1DSource->SetMarkerSize(0.75);
   t1DSource->SetMarkerColor(kBlack);
 
+  t1DSource->GetXaxis()->SetTitleOffset(0.9);
+  t1DSource->GetXaxis()->SetTitleSize(0.05);
+
+  t1DSource->GetYaxis()->SetTitleOffset(0.9);
+  t1DSource->GetYaxis()->SetTitleSize(0.05);
+
   //-----------------------------------------------------------
   TString tMuName = TString::Format("#mu_{%s}", aComponent.Data());
   TString tSigmaName = TString::Format("R_{%s}", aComponent.Data());
+
+  if(fabs(t1DSource->GetBinCenter(t1DSource->GetMaximumBin())) > 0.5)
+  {
+    aGaussFitMax += t1DSource->GetBinCenter(t1DSource->GetMaximumBin());
+    aGaussFitMin += t1DSource->GetBinCenter(t1DSource->GetMaximumBin());
+  }
+
   DrawHistwGaussFit(aPad, t1DSource, aGaussFitMin, aGaussFitMax, tMuName, tSigmaName);
 }
 
 //________________________________________________________________________________________________________________
 void Draw1DCfwFit(TPad* aPad, AnalysisType aAnType, TH1* aThermCf, double aFitMax=0.3, bool aFixLambda=false)
 {
+  gStyle->SetOptTitle(0);
+  gStyle->SetOptStat(0);
+
+  aPad->SetRightMargin(0.025);
+  aPad->SetTopMargin(0.050);
+
   double tRef0, tImf0, td0;
   if(aAnType == kLamKchP || aAnType == kKchPKchP || aAnType == kK0K0 || aAnType == kLamLam)
   {
@@ -229,6 +257,15 @@ void Draw1DCfwFit(TPad* aPad, AnalysisType aAnType, TH1* aThermCf, double aFitMa
   //-----------------------------------------------------------
   aThermCf->GetXaxis()->SetRangeUser(0., 0.5);
   aThermCf->GetYaxis()->SetRangeUser(0.80, 1.02);
+
+  aThermCf->GetXaxis()->SetTitle("#it{k}* (GeV/#it{c})");
+  aThermCf->GetYaxis()->SetTitle("#it{C}(#it{k}*)");
+
+  aThermCf->GetXaxis()->SetTitleOffset(0.9);
+  aThermCf->GetXaxis()->SetTitleSize(0.05);
+
+  aThermCf->GetYaxis()->SetTitleOffset(0.9);
+  aThermCf->GetYaxis()->SetTitleSize(0.05);
 
   aPad->cd();
 
@@ -271,7 +308,7 @@ int main(int argc, char **argv)
   bool bDrawDeltaT = true;
   bool bDraw2DHists = false;
   bool bSaveFigures = false;
-  TString tSaveDir = "/home/jesse/Analysis/Presentations/GroupMeetings/20190108/Figures/";
+  TString tSaveDir = "/home/jesse/Analysis/Presentations/AliFemto/20190116/Figures/";
 
   int tRebin=1;
   double tMinNorm = /*0.80*//*0.80*/0.32;
@@ -357,12 +394,35 @@ int main(int argc, char **argv)
     TCanvas* tCanDeltaT = new TCanvas(tCanDeltaTName, tCanDeltaTName); 
     tCanDeltaT->cd();
 
-    tDeltaTHist->GetXaxis()->SetTitle("#Deltat_{PRF}");
+    tDeltaTHist->GetXaxis()->SetTitle("#Deltat* (fm/#it{c})");
+    tDeltaTHist->GetYaxis()->SetTitle("dN/#Deltat*");
+
+    tDeltaTHist->GetXaxis()->SetTitleOffset(0.9);
+    tDeltaTHist->GetXaxis()->SetTitleSize(0.05);
+
+    tDeltaTHist->GetYaxis()->SetTitleOffset(0.9);
+    tDeltaTHist->GetYaxis()->SetTitleSize(0.05);
 
     TString tMuName = "#mu_{#Deltat}";
     TString tSigmaName = "#Deltat";
 
-    DrawHistwGaussFit((TPad*)tCanDeltaT->cd(), tDeltaTHist, -20., 20., tMuName, tSigmaName);
+    double tGaussFitMin = -20.;
+    double tGaussFitMax = 20.;
+    if(fabs(tDeltaTHist->GetBinCenter(tDeltaTHist->GetMaximumBin())) > 0.5)
+    {
+      tGaussFitMax += tDeltaTHist->GetBinCenter(tDeltaTHist->GetMaximumBin());
+      tGaussFitMin += tDeltaTHist->GetBinCenter(tDeltaTHist->GetMaximumBin());
+    }
+  
+    DrawHistwGaussFit((TPad*)tCanDeltaT->cd(), tDeltaTHist, tGaussFitMin, tGaussFitMax, tMuName, tSigmaName);
+
+    //Draw line at delta_t*=0
+    TLine* tLine = new TLine(0., 0., 0., tDeltaTHist->GetMaximum());
+      tLine->SetLineColor(kBlack);
+      tLine->SetLineStyle(1);
+      tLine->SetLineWidth(2);
+      tLine->Draw();
+
     if(bSaveFigures) tCanDeltaT->SaveAs(TString::Format("%s%s_FromFile%s.eps", tSaveDir.Data(), tCanDeltaTName.Data(), tFileNameBase.Data()));
   }
 
