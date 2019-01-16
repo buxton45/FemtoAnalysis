@@ -33,7 +33,6 @@ int main(int argc, char **argv)
   bool bBuild3dHists = false;
   bool bBuildPairSourcewmTInfo = false;
   bool bBuildCfYlm = false;
-  bool bBuildAliFemtoCfYlm = false;
 
   bool bBuildMixedEventNumerators = false;
   int tNEventsToMix = 5;
@@ -119,7 +118,6 @@ int main(int argc, char **argv)
 
   tSimpleThermAnalysis->SetBuildCorrelationFunctions(bBuildCorrelationFunctions, bBuild3dHists, bBuildPairSourcewmTInfo);
   tSimpleThermAnalysis->SetBuildCfYlm(bBuildCfYlm);
-  tSimpleThermAnalysis->SetBuildAliFemtoCfYlm(bBuildAliFemtoCfYlm);
   tSimpleThermAnalysis->SetBuildMixedEventNumerators(bBuildMixedEventNumerators);
   tSimpleThermAnalysis->SetUnitWeightCfNums(bUnitWeightCfNums);
   tSimpleThermAnalysis->SetWeightCfsWithParentInteraction(bWeightCfsWithParentInteraction);

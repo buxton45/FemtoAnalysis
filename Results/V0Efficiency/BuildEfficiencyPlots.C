@@ -42,6 +42,7 @@ TString GetBinLabelsv2(int aBin)
   else if(aBin==11) return TString("Other(1)");
   else if(aBin==12) return TString("Other(2)");
   else if(aBin==13) return TString("Other(1+2)");
+  else if(aBin==14) return TString("Fake");
   else assert(0);
 
   return TString("");
@@ -163,15 +164,33 @@ void SetAllAttributesInList(TList* aHistList)
 
 }
 
+//________________________________________________________________________________________________________________
+TH1F* GetPrettyVersionOfHist(TH1F* aHist, vector<int> &aBinsToInclude)
+{
+  TH1F* tPrettyHist = new TH1F(TString::Format("%s_Pretty", aHist->GetName()), 
+                               TString::Format("%s_Pretty", aHist->GetTitle()), 
+                               aBinsToInclude.size(), 0, aBinsToInclude.size());
+
+  for(unsigned int i=0; i<aBinsToInclude.size(); i++)
+  {
+    tPrettyHist->GetXaxis()->SetBinLabel(i+1, aHist->GetXaxis()->GetBinLabel(aBinsToInclude[i]));
+    tPrettyHist->SetBinContent(i+1, aHist->GetBinContent(aBinsToInclude[i]));
+    if(aBinsToInclude[i]==13) tPrettyHist->GetXaxis()->SetBinLabel(i+1, "Other");  //Set bin label to "Other" instead of "Other(1+2)"
+  }
+
+  SetAttributes(tPrettyHist, aHist->GetMarkerColor(), aHist->GetMarkerStyle());
+  return tPrettyHist;
+}
+
 
 //________________________________________________________________________________________________________________
-void DrawMCTruths(TPad* aPad, TList* aHistList, bool aDrawV0Finder=false, bool aDrawK0s=false, TString aTitle="")
+void DrawMCTruths(TPad* aPad, TList* aHistList, double aMaxDecayLength, IncludeResidualsType aIncResType, bool aDrawV0Finder=false, bool aDrawK0s=false, TString aTitle="", bool aDrawPretty=false)
 {
   aPad->cd();
   aPad->SetLogy();
 
   gStyle->SetOptStat(0);
-//  gStyle->SetOptTitle(0);
+  if(aDrawPretty) gStyle->SetOptTitle(0); 
 
   SetAllAttributesInList(aHistList);
   ((TH1F*)aHistList->At(0))->Draw("AXIS");
@@ -194,7 +213,30 @@ void DrawMCTruths(TPad* aPad, TList* aHistList, bool aDrawV0Finder=false, bool a
   //---------------------
 
   tHistOG_Lam->SetTitle(TString::Format("%s_MCTruths", aTitle.Data()));
-  tHistOG_Lam->GetYaxis()->SetRangeUser(100, 1000000000);
+
+  //_________________________________________________________
+  if(aDrawPretty)
+  {
+    vector<int> tBinsToInclude;
+    if     (aIncResType==kInclude3Residuals)  tBinsToInclude = vector<int>{2, 3, 4, 5, 13, 14};
+    else if(aIncResType==kInclude10Residuals) tBinsToInclude = vector<int>{2, 3, 4, 5, 6, 7, 8, 13, 14};
+    else assert(0); 
+
+    tHistOG_Lam = GetPrettyVersionOfHist(tHistOG_Lam, tBinsToInclude);
+    tHistV0_Lam = GetPrettyVersionOfHist(tHistV0_Lam, tBinsToInclude);
+    tHistPost_Lam = GetPrettyVersionOfHist(tHistPost_Lam, tBinsToInclude);
+
+    tHistOG_ALam = GetPrettyVersionOfHist(tHistOG_ALam, tBinsToInclude);
+    tHistV0_ALam = GetPrettyVersionOfHist(tHistV0_ALam, tBinsToInclude);
+    tHistPost_ALam = GetPrettyVersionOfHist(tHistPost_ALam, tBinsToInclude);
+
+    tHistOG_K0s = GetPrettyVersionOfHist(tHistOG_K0s, tBinsToInclude);
+    tHistV0_K0s = GetPrettyVersionOfHist(tHistV0_K0s, tBinsToInclude);
+    tHistPost_K0s = GetPrettyVersionOfHist(tHistPost_K0s, tBinsToInclude);
+  }
+  //_________________________________________________________
+  if(aDrawPretty) tHistOG_Lam->GetYaxis()->SetRangeUser(1000, 1000000000);
+  else            tHistOG_Lam->GetYaxis()->SetRangeUser(100, 1000000000);
   tHistOG_Lam->GetXaxis()->SetLabelSize(0.05);
 
   //-----Lam
@@ -287,7 +329,7 @@ vector<double> GetAllRecoEff(TList* aHistList, TString aV0Name="Lam")
   TString tBinName="";
   double tRecoEff=-1.;
   vector<double> tReturnVec(0);
-  for(int i=1; i<=13; i++)
+  for(int i=1; i<=14; i++)
   {
     tBinName = GetBinLabelsv2(i);
     tRecoEff = GetRecoEff(aHistList, aV0Name, tBinName);
@@ -299,12 +341,13 @@ vector<double> GetAllRecoEff(TList* aHistList, TString aV0Name="Lam")
 
 
 //________________________________________________________________________________________________________________
-void DrawRecoEffs(TPad* aPad, TList* aHistList, bool aDrawK0s=false, bool aDrawLegend=true, TString aTitle="")
+void DrawRecoEffs(TPad* aPad, TList* aHistList, double aMaxDecayLength, IncludeResidualsType aIncResType, bool aDrawK0s=false, bool aDrawLegend=true, TString aTitle="", bool aDrawPretty=false)
 {
   aPad->cd();
 
   gStyle->SetOptStat(0);
-//  gStyle->SetOptTitle(0);
+  if(aDrawPretty) gStyle->SetOptTitle(0);
+
   gStyle->SetPaintTextFormat("0.3f");  //For precision of values printed with ->Draw("TEXT")
 
   //---------------------------
@@ -338,8 +381,40 @@ void DrawRecoEffs(TPad* aPad, TList* aHistList, bool aDrawK0s=false, bool aDrawL
   }
   //---------------------------
   tRecoHist_Lam->SetTitle(TString::Format("%s_RecoEffs", aTitle.Data()));
+
+  //_________________________________________________________
+  if(aDrawPretty)
+  {
+    vector<int> tBinsToInclude;
+    if     (aIncResType==kInclude3Residuals)  tBinsToInclude = vector<int>{2, 3, 4, 5, 13};
+    else if(aIncResType==kInclude10Residuals) tBinsToInclude = vector<int>{2, 3, 4, 5, 6, 7, 8, 13};
+    else assert(0); 
+
+    tRecoHist_Lam = GetPrettyVersionOfHist(tRecoHist_Lam, tBinsToInclude);
+    tRecoHist_ALam = GetPrettyVersionOfHist(tRecoHist_ALam, tBinsToInclude);
+    tRecoHist_K0s = GetPrettyVersionOfHist(tRecoHist_K0s, tBinsToInclude);
+  }
+  //_________________________________________________________
+
   tRecoHist_Lam->GetYaxis()->SetRangeUser(0.0, 0.3);
   tRecoHist_Lam->GetXaxis()->SetLabelSize(0.05);
+
+  //Change the size of the values printed above the bins
+  tRecoHist_Lam->SetMarkerSize(1.5);
+  tRecoHist_ALam->SetMarkerSize(1.5);
+  if(aDrawPretty==true)
+  {
+    if(aIncResType==kInclude3Residuals)
+    {
+      tRecoHist_Lam->SetMarkerSize(2.0);
+      tRecoHist_ALam->SetMarkerSize(2.0);
+    }
+    if(aIncResType==kInclude10Residuals)
+    {
+      tRecoHist_Lam->SetMarkerSize(1.75);
+      tRecoHist_ALam->SetMarkerSize(1.75);
+    }
+  }
 
   tRecoHist_Lam->Draw("HTEXT25");
   tRecoHist_ALam->Draw("HTEXT25same");
@@ -359,9 +434,11 @@ void DrawRecoEffs(TPad* aPad, TList* aHistList, bool aDrawK0s=false, bool aDrawL
 
 
 //________________________________________________________________________________________________________________
-TCanvas* DrawMCTruthsAndRecoEffs(TList* aHistList, bool aDrawV0Finder=false, bool aDrawK0s=false, bool aVertical=true, TString aTitle="")
+TCanvas* DrawMCTruthsAndRecoEffs(TList* aHistList, double aMaxDecayLength, IncludeResidualsType aIncResType, bool aDrawV0Finder=false, bool aDrawK0s=false, bool aVertical=true, TString aTitle="", bool aDrawPretty=false)
 {
   TString tCanName = TString::Format("tCanTruthsAndEffs_%s", aTitle.Data());
+  if(aDrawV0Finder) tCanName += TString("_wV0Finder");
+  if(aDrawPretty) tCanName += TString("_Pretty");
   TCanvas* tCan;
   TPad *tPad1, *tPad2;
 
@@ -388,21 +465,11 @@ TCanvas* DrawMCTruthsAndRecoEffs(TList* aHistList, bool aDrawV0Finder=false, boo
 
   //-----------------------------
 
-  DrawMCTruths(tPad1, aHistList, aDrawV0Finder, aDrawK0s, aTitle);
-  DrawRecoEffs(tPad2, aHistList, aDrawK0s, true, aTitle);
+  DrawMCTruths(tPad1, aHistList, aMaxDecayLength, aIncResType, aDrawV0Finder, aDrawK0s, aTitle, aDrawPretty);
+  DrawRecoEffs(tPad2, aHistList, aMaxDecayLength, aIncResType, aDrawK0s, true, aTitle, aDrawPretty);
 
   return tCan;
 }
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -515,7 +582,7 @@ TH1F* BuildMCTruthFromParticleOrigin(TH1F* aParticleOriginHist, double aMaxDecay
 
   //-----------------------------------------------------
 
-  TH1F* tReturnHist = new TH1F(tReturnName, tReturnName, 13, 0, 13);
+  TH1F* tReturnHist = new TH1F(tReturnName, tReturnName, 14, 0, 14);
 
 
   for(int i=1; i<=tReturnHist->GetNbinsX(); i++) tReturnHist->GetXaxis()->SetBinLabel(i, GetBinLabelsv2(i));
@@ -548,16 +615,23 @@ TList* BuildNewTListFromParticleOrigins(TList* aList, double aMaxDecayLength, In
   TList* tReturnList = new TList();
 
   vector<TString> tBaseNameVec{"fParticleOriginOfOriginalParticles", "fParticleOriginOfV0FinderParticles", "fParticleOriginOfReconstructedParticles"};
+  vector<TString> tMCTruthBaseNameVec{"fMCTruthOfOriginalParticles", "fMCTruthOfV0FinderParticles", "fMCTruthOfReconstructedParticles"}; //only used to grab the number of fakes in reconstructed
   vector<TString> tPartNameVec{"Lam", "ALam", "K0s"};
 
   TH1F* tTempPOHist = nullptr;
   TH1F* tTempMCTruthHist = nullptr;
+  TH1F* tTempMCTruthNaive = nullptr;  //MCTruth histogram taken from file, NOT BUILT, only used to grab the number of fakes in reconstructed
   for(int iBaseName=0; iBaseName<tBaseNameVec.size(); iBaseName++)
   {
-    for(int iPartName=0.; iPartName<tPartNameVec.size(); iPartName++)
+    for(int iPartName=0.; iPartName<tPartNameVec.size(); iPartName++) 
     {
       tTempPOHist = GetHist(aList, tBaseNameVec[iBaseName], tPartNameVec[iPartName]);
       tTempMCTruthHist = BuildMCTruthFromParticleOrigin(tTempPOHist, aMaxDecayLength, aIncResType);
+      //Grab "Fake" information from tTempMCTruthNaive and set in tTempMCTruthHist
+      //-----------
+      tTempMCTruthNaive = GetHist(aList, tMCTruthBaseNameVec[iBaseName], tPartNameVec[iPartName]);
+      tTempMCTruthHist->SetBinContent(14, tTempMCTruthNaive->GetBinContent(12));
+      //-----------
       tReturnList->Add((TH1F*)tTempMCTruthHist->Clone());
     }
   }
@@ -583,20 +657,21 @@ int main(int argc, char **argv)
   TString tBaseDirLocation = "/home/jesse/Analysis/FemtoAnalysis/Results/V0Efficiency/";
 
   TString tResultDate = "20181024";
-  bool tWithInjected = true;
+  bool tWithInjected = false;
   bool t12a17a = true;
 
   bool tDrawV0Finder=false;
   bool tDrawK0s=false;
   bool tVertical=false;
 
+  bool tDrawPretty = false;
 
   double aMaxDecayLength = 10.;
   IncludeResidualsType aIncResType = kInclude3Residuals;
 
 
 
-  bool tSave = false;
+  bool tSave = false; 
   TString tSaveDir = TString::Format("%s%s/", tBaseDirLocation.Data(), tResultDate.Data());
 
 //-----------------------------------------------------------------------------
@@ -604,7 +679,7 @@ int main(int argc, char **argv)
   vector<TString> tInjTags = {"woInjected", "wInjected"};
   vector<TString> tDatasetTags = {"_Lhc12a17d", ""};
 
-  TString tTitle = TString::Format("%s%s_Built%s_MaxDecay%0.1f", tInjTags[tWithInjected].Data(), tDatasetTags[t12a17a].Data(), cIncludeResidualsTypeTags[aIncResType], aMaxDecayLength);
+  TString tTitle = TString::Format("%s%s_Built%s_MaxDecay%0.0f", tInjTags[tWithInjected].Data(), tDatasetTags[t12a17a].Data(), cIncludeResidualsTypeTags[aIncResType], aMaxDecayLength);
 
   TString tFileLocationMinus = TString::Format("%s%s/AnalysisResults_FemtoMinus_%s%s.root", tBaseDirLocation.Data(), tResultDate.Data(), tInjTags[tWithInjected].Data(), tDatasetTags[t12a17a].Data());
   TString tFileLocationPlus = TString::Format("%s%s/AnalysisResults_FemtoPlus_%s%s.root", tBaseDirLocation.Data(), tResultDate.Data(), tInjTags[tWithInjected].Data(), tDatasetTags[t12a17a].Data());
@@ -632,7 +707,7 @@ tTestMCTruth->Draw();
 
 
 
-  TCanvas* tCan = DrawMCTruthsAndRecoEffs(tNewList, false, false, false, tTitle);
+  TCanvas* tCan = DrawMCTruthsAndRecoEffs(tNewList, aMaxDecayLength, aIncResType, tDrawV0Finder, tDrawK0s, tVertical, tTitle, tDrawPretty);
   if(tSave)
   {
     tCan->SaveAs(TString::Format("%s%s.pdf", tSaveDir.Data(), tCan->GetName()));

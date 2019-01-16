@@ -55,7 +55,6 @@ public:
   void SetBuildTransformMatrices(bool aBuild);
   void SetBuildCorrelationFunctions(bool aBuild, bool aBuild3dHists=false, bool aBuildPairSourcewmTInfo=false);
   void SetBuildCfYlm(bool aSet);
-  void SetBuildAliFemtoCfYlm(bool aSet);
   void SetBuildMixedEventNumerators(bool aBuild);
   void SetUnitWeightCfNums(bool aSet);
   void SetWeightCfsWithParentInteraction(bool aSet);
@@ -113,7 +112,6 @@ private:
   bool fBuild3dHists;
   bool fBuildPairSourcewmTInfo;
   bool fBuildCfYlm;
-  bool fBuildAliFemtoCfYlm;
   bool fBuildMixedEventNumerators;
   bool fUnitWeightCfNums;
   bool fWeightCfsWithParentInteraction;

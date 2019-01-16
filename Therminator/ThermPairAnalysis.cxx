@@ -109,10 +109,7 @@ ThermPairAnalysis::ThermPairAnalysis(AnalysisType aAnType) :
   fPairSource2d_mT2vR2PRF(nullptr),
 
   fBuildCfYlm(false),
-  fCfYlm(nullptr),
-
-  fBuildAliFemtoCfYlm(false),
-  fAliFemtoCfYlm(nullptr)
+  fCfYlm(nullptr)
 
 {
   SetPartTypes();
@@ -183,8 +180,6 @@ ThermPairAnalysis::~ThermPairAnalysis()
   delete fPairSource2d_mT2vR2PRF;
 
   delete fCfYlm;
-
-  delete fAliFemtoCfYlm;
 }
 
 
@@ -684,21 +679,6 @@ void ThermPairAnalysis::SetBuildCfYlm(bool aSet)
     fCfYlm = new CorrFctnDirectYlm(tName.Data(), tMaxl, fNumFull->GetNbinsX(), fNumFull->GetXaxis()->GetXmin(), fNumFull->GetXaxis()->GetXmax());
   }
 }
-
-//________________________________________________________________________________________________________________
-void ThermPairAnalysis::SetBuildAliFemtoCfYlm(bool aSet)
-{
-  fBuildAliFemtoCfYlm = aSet;
-  if(fBuildAliFemtoCfYlm) 
-  {
-    assert(fBuildCorrelationFunctions);
-
-    TString tName = TString::Format("AliFemtoDirectYlmCf_%s", cAnalysisBaseTags[fAnalysisType]);
-    int tMaxl=2;
-    fAliFemtoCfYlm = new AliFemtoCorrFctnDirectYlm(tName.Data(), tMaxl, fNumFull->GetNbinsX(), fNumFull->GetXaxis()->GetXmin(), fNumFull->GetXaxis()->GetXmax(), false);
-  }
-}
-
 
 //________________________________________________________________________________________________________________
 void ThermPairAnalysis::InitiatePairFractionsAndParentsMatrix()
@@ -1905,12 +1885,6 @@ void ThermPairAnalysis::FillCorrelations(const ThermParticle &aParticle1, const 
     else               fCfYlm->AddMixedPair(tKStar3Vec.X(), tKStar3Vec.Y(), tKStar3Vec.Z(), tWeight);
   }
 
-  if(fBuildAliFemtoCfYlm)
-  {
-    if(aFillNumerator) fAliFemtoCfYlm->AddRealPair(tKStar3Vec.X(), tKStar3Vec.Y(), tKStar3Vec.Z(), tWeight);
-    else               fAliFemtoCfYlm->AddMixedPair(tKStar3Vec.X(), tKStar3Vec.Y(), tKStar3Vec.Z(), tWeight);
-  }
-
   if(aFillNumerator)
   {
     if(fBuild3dHists) fPairSource3d->Fill(tParentIndex1, tParentIndex2, tRStar);
@@ -2542,12 +2516,6 @@ void ThermPairAnalysis::SaveAllCorrelationFunctions(TFile *aFile)
   {
     fCfYlm->Finish();
     fCfYlm->Write();
-  }
-
-  if(fBuildAliFemtoCfYlm) 
-  {
-    fAliFemtoCfYlm->Finish();
-    fAliFemtoCfYlm->Write();
   }
 
 }

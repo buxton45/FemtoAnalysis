@@ -49,7 +49,6 @@ SimpleThermAnalysis::SimpleThermAnalysis(FitGeneratorType aFitGenType, bool aBui
   fBuild3dHists(false),
   fBuildPairSourcewmTInfo(false),
   fBuildCfYlm(false),
-  fBuildAliFemtoCfYlm(false),
   fBuildMixedEventNumerators(false),
   fUnitWeightCfNums(false),
   fWeightCfsWithParentInteraction(false),
@@ -170,7 +169,6 @@ void SimpleThermAnalysis::SaveAll()
     if(fDrawRStarFromGaussian) fCorrelationFunctionsSaveName += TString("_DrawRStarFromGaussian");
     if(fBuildPairSourcewmTInfo) fCorrelationFunctionsSaveName += TString("_BuildPairSourcewmTInfo");
     if(fBuildCfYlm) fCorrelationFunctionsSaveName += TString("_BuildCfYlm");
-    if(fBuildAliFemtoCfYlm) fCorrelationFunctionsSaveName += TString("_BuildAliFemtoCfYlm");
 
     if(fFitGenType==kPair)     fCorrelationFunctionsSaveName += TString("_PairOnly");
     if(fFitGenType==kConjPair) fCorrelationFunctionsSaveName += TString("_ConjPairOnly");
@@ -443,19 +441,6 @@ void SimpleThermAnalysis::SetBuildCfYlm(bool aSet)
   if(fBuildOtherPairs)
   {
     for(unsigned int iOP=0; iOP<fOtherPairAnalysisVec.size(); iOP++) fOtherPairAnalysisVec[iOP]->SetBuildCfYlm(aSet);
-  }
-}
-
-//________________________________________________________________________________________________________________
-void SimpleThermAnalysis::SetBuildAliFemtoCfYlm(bool aSet)
-{
-  fBuildAliFemtoCfYlm = aSet;
-  if(fBuildAliFemtoCfYlm) assert(fBuildCorrelationFunctions);
-
-  for(unsigned int iP=0; iP<fPairAnalysisVec.size(); iP++) fPairAnalysisVec[iP]->SetBuildAliFemtoCfYlm(aSet);
-  if(fBuildOtherPairs)
-  {
-    for(unsigned int iOP=0; iOP<fOtherPairAnalysisVec.size(); iOP++) fOtherPairAnalysisVec[iOP]->SetBuildAliFemtoCfYlm(aSet);
   }
 }
 

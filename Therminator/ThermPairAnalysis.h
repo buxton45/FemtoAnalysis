@@ -29,7 +29,6 @@ class ThermEvent;
 class ThermChargedResidual;
 
 #include "CorrFctnDirectYlm.h"
-#include "AliFemtoCorrFctnDirectYlm.h"
 
 using namespace std;
 
@@ -48,7 +47,6 @@ public:
   void InitiateCorrelations();
   void SetBuildCorrelationFunctions(bool aBuild, bool aBuild3dHists=false, bool aBuildPairSourcewmTInfo=false);
   void SetBuildCfYlm(bool aSet);
-  void SetBuildAliFemtoCfYlm(bool aSet);
 
   void InitiatePairFractionsAndParentsMatrix();
   void SetBuildPairFractions(bool aBuild);
@@ -270,9 +268,6 @@ private:
 
   bool fBuildCfYlm;
   CorrFctnDirectYlm* fCfYlm;
-
-  bool fBuildAliFemtoCfYlm;
-  AliFemtoCorrFctnDirectYlm* fAliFemtoCfYlm;
 
 #ifdef __ROOT__
   ClassDef(ThermPairAnalysis, 1)
