@@ -2,6 +2,7 @@
 #include <iomanip>
 
 #include "TApplication.h"
+#include "TSystem.h"
 
 using std::cout;
 using std::endl;
@@ -36,8 +37,8 @@ void DrawSHCfComponent(TPad* aPad, Analysis* aAnaly, YlmComponent aComponent, in
   }
   else
   {
-    tYLow = -0.03;
-    tYHigh = 0.03;
+    tYLow = -0.02;
+    tYHigh = 0.02;
   }
 
   //--------------------------------------------------------------
@@ -97,8 +98,8 @@ void DrawSHCfComponent(TPad* aPad, Analysis* aAnaly, Analysis* aConjAnaly, YlmCo
   }
   else
   {
-    tYLow = -0.03;
-    tYHigh = 0.03;
+    tYLow = -0.02;
+    tYHigh = 0.02;
   }
 
   //--------------------------------------------------------------
@@ -204,7 +205,7 @@ void DrawSHCfThermComponent(TPad* aPad, CorrFctnDirectYlmTherm* aCfYlmThermAn, C
 TCanvas* DrawFirstSixComponents(Analysis* aAnaly, Analysis* aConjAnaly, YlmComponent aComponent, int aRebin)
 {
   vector<TString> tRealOrImag{"Re", "Im"};
-  TString tCanName = TString::Format("CanCfYlm%sFirstSixComps_%s%s", tRealOrImag[aComponent].Data(), cAnalysisBaseTags[aAnaly->GetAnalysisType()], cCentralityTags[aAnaly->GetCentralityType()]);
+  TString tCanName = TString::Format("CanCfYlm%sFirstSixComps_%s%s%s", tRealOrImag[aComponent].Data(), cAnalysisBaseTags[aAnaly->GetAnalysisType()], cAnalysisBaseTags[aConjAnaly->GetAnalysisType()], cCentralityTags[aAnaly->GetCentralityType()]);
   TCanvas *tReturnCan = new TCanvas(tCanName, tCanName);
   tReturnCan->Divide(3,3);
 
@@ -249,10 +250,11 @@ int main(int argc, char **argv)
   bool bDrawThermCfs = true;
   bool bDrawFirstSix = true;
   bool bSaveFigures = false;
+  TString tSaveFileType = "pdf";
 
   int tl = 1;
   int tm = 1;
-  YlmComponent tComponent = kYlmReal;
+//  YlmComponent tComponent = kYlmReal;
 
   double tMinNorm=0.32;
   double tMaxNorm=0.40;
@@ -269,8 +271,10 @@ int main(int argc, char **argv)
   TString tDirectoryBase = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_%s_%s/",tGeneralAnTypeName.Data(),tResultsDate.Data());
   TString tFileLocationBase = TString::Format("%sResults_%s_%s",tDirectoryBase.Data(),tGeneralAnTypeName.Data(),tResultsDate.Data());
 
-//  TString tSaveDirectoryBase = tDirectoryBase;
-  TString tSaveDirectoryBase = "/home/jesse/Analysis/Presentations/AliFemto/20190116/Figures/";
+  TString tSaveDirectoryBase = TString::Format("%sSphericalHarmonics/%s/", tDirectoryBase.Data(), cAnalysisBaseTags[tAnType]);
+//  TString tSaveDirectoryBase = "/home/jesse/Analysis/Presentations/AliFemto/20190116/Figures/";
+
+  if(bSaveFigures) gSystem->mkdir(tSaveDirectoryBase, true);
 //-----------------------------------------------------------------------------
 
   Analysis* tAnaly0010 = new Analysis(tFileLocationBase, tAnType, k0010, tAnRunType, 2, "", false);
@@ -291,14 +295,14 @@ int main(int argc, char **argv)
     tCanAll = new TCanvas(tCanNameAll, tCanNameAll);
     tCanAll->Divide(2, 3);
 
-    DrawSHCfComponent((TPad*)tCanAll->cd(1), tAnaly0010, tComponent, 0, 0, tRebin);
-    DrawSHCfComponent((TPad*)tCanAll->cd(2), tAnaly0010, tComponent, 1, 1, tRebin);
+    DrawSHCfComponent((TPad*)tCanAll->cd(1), tAnaly0010, kYlmReal, 0, 0, tRebin);
+    DrawSHCfComponent((TPad*)tCanAll->cd(2), tAnaly0010, kYlmReal, 1, 1, tRebin);
 
-    DrawSHCfComponent((TPad*)tCanAll->cd(3), tAnaly1030, tComponent, 0, 0, tRebin);
-    DrawSHCfComponent((TPad*)tCanAll->cd(4), tAnaly1030, tComponent, 1, 1, tRebin);
+    DrawSHCfComponent((TPad*)tCanAll->cd(3), tAnaly1030, kYlmReal, 0, 0, tRebin);
+    DrawSHCfComponent((TPad*)tCanAll->cd(4), tAnaly1030, kYlmReal, 1, 1, tRebin);
 
-    DrawSHCfComponent((TPad*)tCanAll->cd(5), tAnaly3050, tComponent, 0, 0, tRebin);
-    DrawSHCfComponent((TPad*)tCanAll->cd(6), tAnaly3050, tComponent, 1, 1, tRebin);
+    DrawSHCfComponent((TPad*)tCanAll->cd(5), tAnaly3050, kYlmReal, 0, 0, tRebin);
+    DrawSHCfComponent((TPad*)tCanAll->cd(6), tAnaly3050, kYlmReal, 1, 1, tRebin);
 
     //----------
 
@@ -306,8 +310,8 @@ int main(int argc, char **argv)
     tCan0010 = new TCanvas(tCanName0010, tCanName0010);
     tCan0010->Divide(2, 1);
 
-    DrawSHCfComponent((TPad*)tCan0010->cd(1), tAnaly0010, tComponent, 0, 0, tRebin);
-    DrawSHCfComponent((TPad*)tCan0010->cd(2), tAnaly0010, tComponent, 1, 1, tRebin);
+    DrawSHCfComponent((TPad*)tCan0010->cd(1), tAnaly0010, kYlmReal, 0, 0, tRebin);
+    DrawSHCfComponent((TPad*)tCan0010->cd(2), tAnaly0010, kYlmReal, 1, 1, tRebin);
   }
   else
   {
@@ -315,14 +319,14 @@ int main(int argc, char **argv)
     tCanAll = new TCanvas(tCanNameAll, tCanNameAll);
     tCanAll->Divide(2, 3);
 
-    DrawSHCfComponent((TPad*)tCanAll->cd(1), tAnaly0010, tConjAnaly0010, tComponent, 0, 0, tRebin);
-    DrawSHCfComponent((TPad*)tCanAll->cd(2), tAnaly0010, tConjAnaly0010, tComponent, 1, 1, tRebin);
+    DrawSHCfComponent((TPad*)tCanAll->cd(1), tAnaly0010, tConjAnaly0010, kYlmReal, 0, 0, tRebin);
+    DrawSHCfComponent((TPad*)tCanAll->cd(2), tAnaly0010, tConjAnaly0010, kYlmReal, 1, 1, tRebin);
 
-    DrawSHCfComponent((TPad*)tCanAll->cd(3), tAnaly1030, tConjAnaly1030, tComponent, 0, 0, tRebin);
-    DrawSHCfComponent((TPad*)tCanAll->cd(4), tAnaly1030, tConjAnaly1030, tComponent, 1, 1, tRebin);
+    DrawSHCfComponent((TPad*)tCanAll->cd(3), tAnaly1030, tConjAnaly1030, kYlmReal, 0, 0, tRebin);
+    DrawSHCfComponent((TPad*)tCanAll->cd(4), tAnaly1030, tConjAnaly1030, kYlmReal, 1, 1, tRebin);
 
-    DrawSHCfComponent((TPad*)tCanAll->cd(5), tAnaly3050, tConjAnaly3050, tComponent, 0, 0, tRebin);
-    DrawSHCfComponent((TPad*)tCanAll->cd(6), tAnaly3050, tConjAnaly3050, tComponent, 1, 1, tRebin);
+    DrawSHCfComponent((TPad*)tCanAll->cd(5), tAnaly3050, tConjAnaly3050, kYlmReal, 0, 0, tRebin);
+    DrawSHCfComponent((TPad*)tCanAll->cd(6), tAnaly3050, tConjAnaly3050, kYlmReal, 1, 1, tRebin);
 
     //----------
 
@@ -330,8 +334,8 @@ int main(int argc, char **argv)
     tCan0010 = new TCanvas(tCanName0010, tCanName0010);
     tCan0010->Divide(2, 1);
 
-    DrawSHCfComponent((TPad*)tCan0010->cd(1), tAnaly0010, tConjAnaly0010, tComponent, 0, 0, tRebin);
-    DrawSHCfComponent((TPad*)tCan0010->cd(2), tAnaly0010, tConjAnaly0010, tComponent, 1, 1, tRebin);
+    DrawSHCfComponent((TPad*)tCan0010->cd(1), tAnaly0010, tConjAnaly0010, kYlmReal, 0, 0, tRebin);
+    DrawSHCfComponent((TPad*)tCan0010->cd(2), tAnaly0010, tConjAnaly0010, kYlmReal, 1, 1, tRebin);
   }
 
   if(bDrawThermCfs)
@@ -352,19 +356,19 @@ int main(int argc, char **argv)
 
     if(!bCombineConjugates)
     {
-      DrawSHCfThermComponent((TPad*)tCanAll->cd(1), tCfYlmThermAn, tComponent, 0, 0, 29, kOrange);
-      DrawSHCfThermComponent((TPad*)tCanAll->cd(2), tCfYlmThermAn, tComponent, 1, 1, 29, kOrange);
+      DrawSHCfThermComponent((TPad*)tCanAll->cd(1), tCfYlmThermAn, kYlmReal, 0, 0, 29, kOrange);
+      DrawSHCfThermComponent((TPad*)tCanAll->cd(2), tCfYlmThermAn, kYlmReal, 1, 1, 29, kOrange);
       //----------
-      DrawSHCfThermComponent((TPad*)tCan0010->cd(1), tCfYlmThermAn, tComponent, 0, 0, 29, kOrange);
-      DrawSHCfThermComponent((TPad*)tCan0010->cd(2), tCfYlmThermAn, tComponent, 1, 1, 29, kOrange);
+      DrawSHCfThermComponent((TPad*)tCan0010->cd(1), tCfYlmThermAn, kYlmReal, 0, 0, 29, kOrange);
+      DrawSHCfThermComponent((TPad*)tCan0010->cd(2), tCfYlmThermAn, kYlmReal, 1, 1, 29, kOrange);
     }
     else
     {
-      DrawSHCfThermComponent((TPad*)tCanAll->cd(1), tCfYlmThermAn, tCfYlmThermConjAn, tComponent, 0, 0, 29, kOrange);
-      DrawSHCfThermComponent((TPad*)tCanAll->cd(2), tCfYlmThermAn, tCfYlmThermConjAn, tComponent, 1, 1, 29, kOrange);
+      DrawSHCfThermComponent((TPad*)tCanAll->cd(1), tCfYlmThermAn, tCfYlmThermConjAn, kYlmReal, 0, 0, 29, kOrange);
+      DrawSHCfThermComponent((TPad*)tCanAll->cd(2), tCfYlmThermAn, tCfYlmThermConjAn, kYlmReal, 1, 1, 29, kOrange);
       //----------
-      DrawSHCfThermComponent((TPad*)tCan0010->cd(1), tCfYlmThermAn, tCfYlmThermConjAn, tComponent, 0, 0, 29, kOrange);
-      DrawSHCfThermComponent((TPad*)tCan0010->cd(2), tCfYlmThermAn, tCfYlmThermConjAn, tComponent, 1, 1, 29, kOrange);
+      DrawSHCfThermComponent((TPad*)tCan0010->cd(1), tCfYlmThermAn, tCfYlmThermConjAn, kYlmReal, 0, 0, 29, kOrange);
+      DrawSHCfThermComponent((TPad*)tCan0010->cd(2), tCfYlmThermAn, tCfYlmThermConjAn, kYlmReal, 1, 1, 29, kOrange);
     }
   }
 
@@ -375,8 +379,8 @@ int main(int argc, char **argv)
     TCanvas* tCanFirstSixImag = DrawFirstSixComponents(tAnaly0010, tConjAnaly0010, kYlmImag, tRebin);
     if(bSaveFigures)
     {
-      tCanFirstSixReal->SaveAs(TString::Format("%s%s.eps", tSaveDirectoryBase.Data(), tCanFirstSixReal->GetName()));
-      tCanFirstSixImag->SaveAs(TString::Format("%s%s.eps", tSaveDirectoryBase.Data(), tCanFirstSixImag->GetName()));
+      tCanFirstSixReal->SaveAs(TString::Format("%s%s.%s", tSaveDirectoryBase.Data(), tCanFirstSixReal->GetName(), tSaveFileType.Data()));
+      tCanFirstSixImag->SaveAs(TString::Format("%s%s.%s", tSaveDirectoryBase.Data(), tCanFirstSixImag->GetName(), tSaveFileType.Data()));
     }
   }
 
@@ -384,8 +388,8 @@ int main(int argc, char **argv)
 
   if(bSaveFigures)
   {
-    tCanAll->SaveAs(TString::Format("%s%s.eps", tSaveDirectoryBase.Data(), tCanNameAll.Data()));
-    tCan0010->SaveAs(TString::Format("%s%s.eps", tSaveDirectoryBase.Data(), tCanName0010.Data()));
+    tCanAll->SaveAs(TString::Format("%s%s.%s", tSaveDirectoryBase.Data(), tCanNameAll.Data(), tSaveFileType.Data()));
+    tCan0010->SaveAs(TString::Format("%s%s.%s", tSaveDirectoryBase.Data(), tCanName0010.Data(), tSaveFileType.Data()));
   }
 
 /*

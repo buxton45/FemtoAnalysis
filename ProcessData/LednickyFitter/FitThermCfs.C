@@ -98,13 +98,13 @@ TF1* FitwGauss(TH1* aHist, double aMinFit=0., double aMaxFit=50.)
 
 
 //________________________________________________________________________________________________________________
-void DrawHistwGaussFit(TPad* aPad, TH1* aHist, double aGaussFitMin, double aGaussFitMax, TString aMuName="#mu_{Out}", TString aSigmaName="R_{Out}")
+void DrawHistwGaussFit(TPad* aPad, TH1* aHist, double aGaussFitMin, double aGaussFitMax, TString aMuName="#mu_{Out}", TString aSigmaName="R_{Out}", bool aDrawTextOnRight=false)
 {
   TF1* tGaussFit = FitwGauss(aHist, aGaussFitMin, aGaussFitMax);
 
   aPad->cd();
-  aHist->Draw();
-  tGaussFit->Draw("same");
+  aHist->DrawCopy();
+  tGaussFit->DrawCopy("same");
 
   //----- Draw lines to show fit range -----
   TLine* tLineMin = new TLine(aGaussFitMin, 0., aGaussFitMin, 0.25*aHist->GetMaximum());
@@ -119,7 +119,9 @@ void DrawHistwGaussFit(TPad* aPad, TH1* aHist, double aGaussFitMin, double aGaus
   tLineMax->Draw();
   //----------------------------------------
 
-  TPaveText* tText = new TPaveText(0.15, 0.50, 0.40, 0.85, "NDC");
+  TPaveText* tText;
+  if(aDrawTextOnRight) tText = new TPaveText(0.55, 0.50, 0.85, 0.80, "NDC");
+  else                 tText = new TPaveText(0.15, 0.50, 0.40, 0.85, "NDC");
     tText->SetFillColor(0);
     tText->SetBorderSize(0);
     tText->SetTextColor(kRed);
@@ -140,6 +142,37 @@ void DrawHistwGaussFit(TPad* aPad, TH1* aHist, double aGaussFitMin, double aGaus
 void Draw1DSourceProjwFit(TPad* aPad, TH3* a3DoslHist, TString aComponent, double aGaussFitMin=-20., double aGaussFitMax=20., double aProjLow=-100, double aProjHigh=-100)
 {
   assert(aComponent.EqualTo("Out") || aComponent.EqualTo("Side") || aComponent.EqualTo("Long"));
+
+  int tHistType=-1;
+  TString tAxisBaseNameOut, tAxisBaseNameSide, tAxisBaseNameLong;
+  bool bDrawTextOnRight = false;
+  if     (TString(a3DoslHist->GetName()).Contains("PairSource3d_osl")) 
+  {
+    tHistType=0;
+
+    tAxisBaseNameOut  = "r*_{Out}";
+    tAxisBaseNameSide = "r*_{Side}";
+    tAxisBaseNameLong = "r*_{Long}";
+  }
+  else if(TString(a3DoslHist->GetName()).Contains("TrueRosl")) 
+  {
+    tHistType=1;
+    aGaussFitMin=0.;
+    bDrawTextOnRight = true;
+
+    tAxisBaseNameOut  = "#sqrt{#LT(#tilde{r}_{Out}-#beta_{T}#tilde{t})^{2}#GT}";
+    tAxisBaseNameSide = "#sqrt{#LT#tilde{r}_{Side}^{2}#GT}";
+    tAxisBaseNameLong = "#sqrt{#LT(#tilde{r}_{Long}-#beta_{l}#tilde{t})^{2}#GT}";
+  }
+  else if(TString(a3DoslHist->GetName()).Contains("SimpleRosl")) 
+  {
+    tHistType=2;
+
+    tAxisBaseNameOut  = "#LTr*_{Out}#GT";
+    tAxisBaseNameSide = "#LTr*_{Side}#GT";
+    tAxisBaseNameLong = "#LTr*_{Long}#GT";
+  }
+  else;
 
   gStyle->SetOptTitle(0);
   gStyle->SetOptStat(0);
@@ -166,22 +199,22 @@ void Draw1DSourceProjwFit(TPad* aPad, TH3* a3DoslHist, TString aComponent, doubl
   {
     t1DSource = a3DoslHist->ProjectionX("Out", tBinProjLow, tBinProjHigh, tBinProjLow, tBinProjHigh);
       t1DSource->SetTitle("PairSource_Out");
-      t1DSource->GetXaxis()->SetTitle("r*_{Out}(fm)");
-      t1DSource->GetYaxis()->SetTitle("dN/dr*_{Out}");
+      t1DSource->GetXaxis()->SetTitle(TString::Format("%s(fm)", tAxisBaseNameOut.Data()));
+      t1DSource->GetYaxis()->SetTitle(TString::Format("dN/d%s", tAxisBaseNameOut.Data()));
   }
   else if(aComponent.EqualTo("Side"))
   {
     t1DSource = a3DoslHist->ProjectionY("Side", tBinProjLow, tBinProjHigh, tBinProjLow, tBinProjHigh);
       t1DSource->SetTitle("PairSource_Side");
-      t1DSource->GetXaxis()->SetTitle("r*_{Side}(fm)");
-      t1DSource->GetYaxis()->SetTitle("dN/dr*_{Side}");
+      t1DSource->GetXaxis()->SetTitle(TString::Format("%s(fm)", tAxisBaseNameSide.Data()));
+      t1DSource->GetYaxis()->SetTitle(TString::Format("dN/d%s", tAxisBaseNameSide.Data()));
   }
   else if(aComponent.EqualTo("Long"))
   {
     t1DSource = a3DoslHist->ProjectionZ("Long", tBinProjLow, tBinProjHigh, tBinProjLow, tBinProjHigh);
     t1DSource->SetTitle("PairSource_Long");
-    t1DSource->GetXaxis()->SetTitle("r*_{Long}(fm)");
-      t1DSource->GetYaxis()->SetTitle("dN/dr*_{Long}");
+    t1DSource->GetXaxis()->SetTitle(TString::Format("%s(fm)", tAxisBaseNameLong.Data()));
+    t1DSource->GetYaxis()->SetTitle(TString::Format("dN/d%s", tAxisBaseNameLong.Data()));
   }
   else assert(0);
 
@@ -195,17 +228,31 @@ void Draw1DSourceProjwFit(TPad* aPad, TH3* a3DoslHist, TString aComponent, doubl
   t1DSource->GetYaxis()->SetTitleOffset(0.9);
   t1DSource->GetYaxis()->SetTitleSize(0.05);
 
+  if(tHistType==1)
+  {
+    t1DSource->GetXaxis()->SetTitleOffset(1.35);
+    t1DSource->GetXaxis()->SetTitleSize(0.03);
+
+    t1DSource->GetYaxis()->SetTitleOffset(1.25);
+    t1DSource->GetYaxis()->SetTitleSize(0.0375);
+
+    t1DSource->GetXaxis()->SetRangeUser(0., 50.);
+  }
+
   //-----------------------------------------------------------
   TString tMuName = TString::Format("#mu_{%s}", aComponent.Data());
   TString tSigmaName = TString::Format("R_{%s}", aComponent.Data());
 
-  if(fabs(t1DSource->GetBinCenter(t1DSource->GetMaximumBin())) > 0.5)
+  if(tHistType!=1)
   {
-    aGaussFitMax += t1DSource->GetBinCenter(t1DSource->GetMaximumBin());
-    aGaussFitMin += t1DSource->GetBinCenter(t1DSource->GetMaximumBin());
+    if(fabs(t1DSource->GetBinCenter(t1DSource->GetMaximumBin())) > 0.5)
+    {
+      aGaussFitMax += t1DSource->GetBinCenter(t1DSource->GetMaximumBin());
+      aGaussFitMin += t1DSource->GetBinCenter(t1DSource->GetMaximumBin());
+    }
   }
 
-  DrawHistwGaussFit(aPad, t1DSource, aGaussFitMin, aGaussFitMax, tMuName, tSigmaName);
+  DrawHistwGaussFit(aPad, t1DSource, aGaussFitMin, aGaussFitMax, tMuName, tSigmaName, bDrawTextOnRight);
 }
 
 //________________________________________________________________________________________________________________
@@ -269,7 +316,7 @@ void Draw1DCfwFit(TPad* aPad, AnalysisType aAnType, TH1* aThermCf, double aFitMa
 
   aPad->cd();
 
-  aThermCf->Draw();
+  aThermCf->DrawCopy();
   tFitFcn->Draw("same");
 
   TPaveText* tText = new TPaveText(0.50, 0.15, 0.85, 0.60, "NDC");
@@ -305,10 +352,14 @@ int main(int argc, char **argv)
   if(tAnType==kLamKchM) gRejectPoints=true;
 
   bool bCombineConjugates = true;
-  bool bDrawDeltaT = true;
+  bool bDrawDeltaT = false;
   bool bDraw2DHists = false;
+  bool bDrawCompareMuOuts = false;
   bool bSaveFigures = false;
-  TString tSaveDir = "/home/jesse/Analysis/Presentations/AliFemto/20190116/Figures/";
+  TString tSaveFileType = "pdf";
+//  TString tSaveDir = "/home/jesse/Analysis/Presentations/GroupMeetings/20190117/Figures/";
+  TString tSaveDir = TString::Format("/home/jesse/Analysis/FemtoAnalysis/AnalysisNotes/7_ResultsAndDiscussion/7.1_ResultsLamK/7.1.5_ResultsLamK_DiscussionOfmTScaling/ThermPlots/%s/", cAnalysisBaseTags[tAnType]);
+  if(bSaveFigures) gSystem->mkdir(tSaveDir, true);
 
   int tRebin=1;
   double tMinNorm = /*0.80*//*0.80*/0.32;
@@ -323,10 +374,11 @@ int main(int argc, char **argv)
 //  TString tFileNameBase = "CorrelationFunctions_wOtherPairs_DrawRStarFromGaussian_cLamcKchMuOut6_cLamK0MuOut1";
 
 //  TString tFileNameBase = "CorrelationFunctions_wOtherPairs_DrawRStarFromGaussian_BuildCfYlm_cLamcKchMuOut3_cLamK0MuOut3_KchPKchPR538";
-  TString tFileNameBase = "CorrelationFunctions_wOtherPairs_BuildCfYlm";
+//  TString tFileNameBase = "CorrelationFunctions_wOtherPairs_BuildCfYlm";
 //  TString tFileNameBase = "CorrelationFunctions_DrawRStarFromGaussian_BuildCfYlm_cLamcKchMuOut1_cLamK0MuOut1";
 //  TString tFileNameBase = "CorrelationFunctions_DrawRStarFromGaussian_BuildCfYlm_cLamcKchMuOut6_cLamK0MuOut6";
 
+  TString tFileNameBase = "CorrelationFunctions_wOtherPairs";
 
   TString tFileNameModifier = "";
 //  TString tFileNameModifier = "_WeightParentsInteraction";
@@ -377,8 +429,8 @@ int main(int argc, char **argv)
   Draw1DSourceProjwFit((TPad*)tCanCfwSource->cd(3), tTest3d, "Side", tGaussFitMin, tGaussFitMax, tProjLow, tProjHigh);
   Draw1DSourceProjwFit((TPad*)tCanCfwSource->cd(4), tTest3d, "Long", tGaussFitMin, tGaussFitMax, tProjLow, tProjHigh);
 
-//  if(bSaveFigures) tCanCfwSource->SaveAs(TString::Format("%s%s_%s_%s.eps", tSaveDir.Data(), tFileNameBase.Data(), aCfDescriptor.Data(), cAnalysisBaseTags[tAnType]));
-  if(bSaveFigures) tCanCfwSource->SaveAs(TString::Format("%s%s_FromFile%s.eps", tSaveDir.Data(), tCanCfwSourceName.Data(), tFileNameBase.Data()));
+//  if(bSaveFigures) tCanCfwSource->SaveAs(TString::Format("%s%s_%s_%s.%s", tSaveDir.Data(), tFileNameBase.Data(), aCfDescriptor.Data(), cAnalysisBaseTags[tAnType], tSaveFileType.Data()));
+  if(bSaveFigures) tCanCfwSource->SaveAs(TString::Format("%s%s_3dHist%s_FromFile%s.%s", tSaveDir.Data(), tCanCfwSourceName.Data(), tHistName3d.Data(), tFileNameBase.Data(), tSaveFileType.Data()));
   //-------------------------------------------------------------------------------
 
   if(tFileNameBase.Contains("DrawRStarFromGaussian")) bDrawDeltaT=false;
@@ -423,7 +475,7 @@ int main(int argc, char **argv)
       tLine->SetLineWidth(2);
       tLine->Draw();
 
-    if(bSaveFigures) tCanDeltaT->SaveAs(TString::Format("%s%s_FromFile%s.eps", tSaveDir.Data(), tCanDeltaTName.Data(), tFileNameBase.Data()));
+    if(bSaveFigures) tCanDeltaT->SaveAs(TString::Format("%s%s_FromFile%s.%s", tSaveDir.Data(), tCanDeltaTName.Data(), tFileNameBase.Data(), tSaveFileType.Data()));
   }
 
   //-------------------------------------------------------------------------------
@@ -450,16 +502,73 @@ int main(int argc, char **argv)
     tCan2DHists->Divide(1,3);
 
     tCan2DHists->cd(1);
-    tSourceSO->Draw("colz");
+    tSourceSO->DrawCopy("colz");
 
     tCan2DHists->cd(2);
-    tSourceLO->Draw("colz");
+    tSourceLO->DrawCopy("colz");
 
     tCan2DHists->cd(3);
-    tSourceLS->Draw("colz");
+    tSourceLS->DrawCopy("colz");
   }
 
 
+  //-------------------------------------------------------------------------------
+
+  if(bDrawCompareMuOuts)
+  {
+    TString tFileNameBase_Mu1 = "CorrelationFunctions_DrawRStarFromGaussian_BuildCfYlm_cLamcKchMuOut1_cLamK0MuOut1";
+    TString tFileNameBase_Mu3 = "CorrelationFunctions_wOtherPairs_DrawRStarFromGaussian_BuildCfYlm_cLamcKchMuOut3_cLamK0MuOut3_KchPKchPR538";
+    TString tFileNameBase_Mu6 = "CorrelationFunctions_DrawRStarFromGaussian_BuildCfYlm_cLamcKchMuOut6_cLamK0MuOut6";
+
+    //-----
+    TString tFileName_Mu1 = TString::Format("%s%s.root", tFileNameBase_Mu1.Data(), tFileNameModifier.Data());
+    TString tFileName_Mu3 = TString::Format("%s%s.root", tFileNameBase_Mu3.Data(), tFileNameModifier.Data());
+    TString tFileName_Mu6 = TString::Format("%s%s.root", tFileNameBase_Mu6.Data(), tFileNameModifier.Data());
+
+    //-----
+    TString tFileLocation_Mu1 = TString::Format("%s%s", tFileDir.Data(), tFileName_Mu1.Data());
+    TString tFileLocation_Mu3 = TString::Format("%s%s", tFileDir.Data(), tFileName_Mu3.Data());
+    TString tFileLocation_Mu6 = TString::Format("%s%s", tFileDir.Data(), tFileName_Mu6.Data());
+
+    //--------------------------------------------
+
+
+    //ThermCf already knows the default directory, so it only needs the name of the file, not the complete path
+    TH1* tThermCf_Mu1 = ThermCf::GetThermCf(tFileName_Mu1, aCfDescriptor, tAnType, tImpactParam, bCombineConjugates, kMe, tRebin, tMinNorm, tMaxNorm);
+    TH3* tTest3d_Mu1 = GetThermHist3d(tFileLocation_Mu1, tHistName3d);
+
+    TH1* tThermCf_Mu3 = ThermCf::GetThermCf(tFileName_Mu3, aCfDescriptor, tAnType, tImpactParam, bCombineConjugates, kMe, tRebin, tMinNorm, tMaxNorm);
+    TH3* tTest3d_Mu3 = GetThermHist3d(tFileLocation_Mu3, tHistName3d);
+
+
+    TH1* tThermCf_Mu6 = ThermCf::GetThermCf(tFileName_Mu6, aCfDescriptor, tAnType, tImpactParam, bCombineConjugates, kMe, tRebin, tMinNorm, tMaxNorm);
+    TH3* tTest3d_Mu6 = GetThermHist3d(tFileLocation_Mu6, tHistName3d);
+
+
+    //--------------------------------------------
+
+    TString tCanCompMusName = TString::Format("CanCompMus_%s_%s", aCfDescriptor.Data(), cAnalysisBaseTags[tAnType]);
+    TCanvas* tCanCompMus = new TCanvas(tCanCompMusName, tCanCompMusName);
+
+    tCanCompMus->Divide(2,3);
+
+
+
+
+    Draw1DCfwFit((TPad*)tCanCompMus->cd(1), tAnType, tThermCf_Mu1, tKStarFitMax, tFixLambdaInFit);
+    Draw1DSourceProjwFit((TPad*)tCanCompMus->cd(2), tTest3d_Mu1, "Out", tGaussFitMin, tGaussFitMax, tProjLow, tProjHigh);
+
+    Draw1DCfwFit((TPad*)tCanCompMus->cd(3), tAnType, tThermCf_Mu3, tKStarFitMax, tFixLambdaInFit);
+    Draw1DSourceProjwFit((TPad*)tCanCompMus->cd(4), tTest3d_Mu3, "Out", tGaussFitMin, tGaussFitMax, tProjLow, tProjHigh);
+
+    Draw1DCfwFit((TPad*)tCanCompMus->cd(5), tAnType, tThermCf_Mu6, tKStarFitMax, tFixLambdaInFit);
+    Draw1DSourceProjwFit((TPad*)tCanCompMus->cd(6), tTest3d_Mu6, "Out", tGaussFitMin, tGaussFitMax, tProjLow, tProjHigh);
+
+
+    if(bSaveFigures) tCanCompMus->SaveAs(TString::Format("%s%s_3dHist%s.%s", tSaveDir.Data(), tCanCompMusName.Data(), tHistName3d.Data(), tSaveFileType.Data()));
+
+
+  }
 
 //-------------------------------------------------------------------------------
   theApp->Run(kTRUE); //Run the TApp to pause the code.
