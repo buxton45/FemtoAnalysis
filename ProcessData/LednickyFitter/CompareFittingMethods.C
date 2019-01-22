@@ -638,7 +638,7 @@ int main(int argc, char **argv)
 
   bool bSaveFigures = false;
   TString tSaveFileType = "pdf";
-  TString tSaveDir = "/home/jesse/Analysis/Presentations/AlicePhysicsWeek/20181025/Figures/";
+  TString tSaveDir = "/home/jesse/Analysis/FemtoAnalysis/AnalysisNotes/7_ResultsAndDiscussion/Figures/New/";
 
   vector<FitValWriterInfo> tFVWIVec;
   TString tCanNameMod = "";

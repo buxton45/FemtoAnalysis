@@ -388,9 +388,9 @@ FitGeneratorAndDraw* FitSystematicAnalysis::BuildFitGenerator(AnalysisRunType aR
   //----- Set appropriate parameter start values, and limits, to keep fitter from accidentally doing something crazy
   assert(fCentralityType==kMB);  //This will fail otherwise
 
-  SetRadiusStartValues(tFitGenerator);
-  SetLambdaStartValues(tFitGenerator);  
-  SetScattParamStartValues(tFitGenerator);
+//  SetRadiusStartValues(tFitGenerator);
+//  SetLambdaStartValues(tFitGenerator);  
+//  SetScattParamStartValues(tFitGenerator);
   //----------------------------------------------------------------------------------------------------------------
 
   return tFitGenerator;
