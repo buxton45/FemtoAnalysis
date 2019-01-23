@@ -40,7 +40,7 @@ int main(int argc, char **argv)
 
   //--Sharing lambda
   bool tShareLambdaParams = false;          //If true, only share lambda parameters across like-centralities
-  bool tAllShareSingleLambdaParam = false;
+  bool tAllShareSingleLambdaParam = true;
 
   //--Corrections
   bool ApplyMomResCorrection = true;
@@ -87,7 +87,7 @@ int main(int argc, char **argv)
 
   if(tAnType==kLamK0)
   {
-    tAllShareSingleLambdaParam = true;
+//    tAllShareSingleLambdaParam = true;
     UnboundLambda = false;
     aLambdaMin = 0.4;  //TODO currently, if tIncludeResidualsType = kIncludeNoResiduals, this does nothing
     aLambdaMax = 0.6;  //TODO "                                                                          "

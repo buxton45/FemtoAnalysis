@@ -25,7 +25,7 @@ CFLAGS = $(shell root-config --cflags) -Wall -std=c++11 -I${ANALYZE_DIR} -I${LED
 
 MY_LIBS = $(addprefix build/, FitParameter.o FitChi2Histograms.o BackgroundFitter.o FitPartialAnalysis.o FitPairAnalysis.o FitSharedAnalyses.o MathematicaSession.o WaveFunction.o ChargedResidualCf.o SimpleChargedResidualCf.o NeutralResidualCf.o ResidualCollection.o LednickyFitter.o FitValuesWriter.o FitValuesLatexTableHelperWriter.o FitValuesWriterwSysErrs.o FitValuesLatexTableHelperWriterwSysErrs.o FitGenerator.o FitGeneratorAndDraw.o DualieFitGenerator.o ThermCf.o CfLite.o CfHeavy.o Types.o Types_LambdaValues.o Types_FitParamValues.o Types_ThermBgdParams.o Types_SysFileInfo.o Faddeeva.o FitSystematicAnalysis.o DualieFitSystematicAnalysis.o CanvasPartition.o)
 
-BINARIES = runSingleSystematics runAllSystematics runRead runFindOutliers runFitRange runNonFlatBgdSys runTest runBuildLatexTableHelperwSysErrs runBuildLatexTableHelperwSysErrsForSingle runCompareFittingMethodsv2wSysErrs runSingleDualieSystematics runAllDualieSystematics runFitRangeDualie runNonFlatBgdDualieSys
+BINARIES = runSingleSystematics runAllSystematics runRead runFindOutliers runFitRange runNonFlatBgdSys runTest runBuildLatexTableHelperwSysErrs runBuildLatexTableHelperwSysErrsForSingle runCompareFittingMethodswSysErrs runCompareFittingMethodswSysErrsForAnNote runSingleDualieSystematics runAllDualieSystematics runFitRangeDualie runNonFlatBgdDualieSys
 
 all: $(BINARIES)
 
@@ -56,8 +56,11 @@ runBuildLatexTableHelperwSysErrsForSingle: ${MY_LIBS} BuildLatexTableHelperwSysE
 runTest: ${MY_LIBS} test.C
 	g++ test.C ${MY_LIBS} -I${INCDIR} -o runTest -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS)
 
-runCompareFittingMethodsv2wSysErrs: ${MY_LIBS} CompareFittingMethodsv2wSysErrs.C
-	g++ CompareFittingMethodsv2wSysErrs.C ${MY_LIBS} -I${INCDIR} -o runCompareFittingMethodsv2wSysErrs -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS)
+runCompareFittingMethodswSysErrs: ${MY_LIBS} CompareFittingMethodswSysErrs.C
+	g++ CompareFittingMethodswSysErrs.C ${MY_LIBS} -I${INCDIR} -o runCompareFittingMethodswSysErrs -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS)
+
+runCompareFittingMethodswSysErrsForAnNote: ${MY_LIBS} CompareFittingMethodswSysErrsForAnNote.C
+	g++ CompareFittingMethodswSysErrsForAnNote.C ${MY_LIBS} -I${INCDIR} -o runCompareFittingMethodswSysErrsForAnNote -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS)
 
 runSingleDualieSystematics: ${MY_LIBS} BuildSingleCutDualieSystematics.C
 	g++ BuildSingleCutDualieSystematics.C ${MY_LIBS} -I${INCDIR} -o runSingleDualieSystematics -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS)

@@ -17,7 +17,7 @@ Residual correlations are important in an analysis when three criteria are met \
 
 \begin{figure}[h]
   \centering
-  \includegraphics[width=\textwidth]{5_Fitting/Figures/ResidualCartoons_p3.pdf}
+  \includegraphics[width=\textwidth]{/home/jesse/Analysis/FemtoAnalysis/AnalysisNotes/5_Fitting/Figures/ResidualCartoons_p3.pdf}
   \caption[Residual Contributions Cartoon]{A schematic representation of the contributions to the finally measured data from the primary correlation, residual correlations, and fake pairs.}
   \label{fig:ResidualsCartoon}
 \end{figure}
@@ -69,19 +69,19 @@ $C_{\Sigma^{0}K^{+}}(k^{*}_{\Sigma^{0}K^{+}})$ is the $\Sigma^{0}$K$^{+}$ correl
   %%----start of first subfigure---  
   \subfloat[Transform matrix for $\Sigma$K$^{+}$ pairs into $\Lambda$K$^{+}$]{
     \label{fig:TransformMatricesLamKchP:a}
-    \includegraphics[width=0.49\textwidth]{5_Fitting/Figures/fSigToLamKchPTransform.pdf}}%\\
+    \includegraphics[width=0.49\textwidth]{/home/jesse/Analysis/FemtoAnalysis/AnalysisNotes/5_Fitting/Figures/fSigToLamKchPTransform.pdf}}
   %%----start of second subfigure---
   \subfloat[Transform matrix for $\Xi^{-}$K$^{+}$ pairs into $\Lambda$K$^{+}$]{
     \label{fig:TransformMatricesLamKchP:b}
-    \includegraphics[width=0.49\textwidth]{5_Fitting/Figures/fXiCToLamKchPTransform.pdf}} \\
+    \includegraphics[width=0.49\textwidth]{/home/jesse/Analysis/FemtoAnalysis/AnalysisNotes/5_Fitting/Figures/fXiCToLamKchPTransform.pdf}}  \\
   %%----start of third subfigure---
   \subfloat[Transform matrix for $\Xi^{0}$K$^{+}$ pairs into $\Lambda$K$^{+}$]{
     \label{fig:TransformMatricesLamKchP:c}
-    \includegraphics[width=0.49\textwidth]{5_Fitting/Figures/fXi0ToLamKchPTransform.pdf}}
+    \includegraphics[width=0.49\textwidth]{/home/jesse/Analysis/FemtoAnalysis/AnalysisNotes/5_Fitting/Figures/fXi0ToLamKchPTransform.pdf}}
   %%----start of fourth subfigure---
   \subfloat[Transform matrix for $\Omega^{-}$K$^{+}$ pairs into $\Lambda$K$^{+}$]{
     \label{fig:TransformMatricesLamKchP:d}
-    \includegraphics[width=0.49\textwidth]{5_Fitting/Figures/fOmegaToLamKchPTransform.pdf}} \\                   
+    \includegraphics[width=0.49\textwidth]{/home/jesse/Analysis/FemtoAnalysis/AnalysisNotes/5_Fitting/Figures/fOmegaToLamKchPTransform.pdf}} \\                   
   %%----overall caption----
   \caption[Sample Transform Matrices for \LamKchP Analysis]{Sample Transform Matrices generated with THERMINATOR for \LamKchP Analysis}
   \label{fig:TransformMatricesLamKchP}
@@ -93,32 +93,42 @@ $C_{\Sigma^{0}K^{+}}(k^{*}_{\Sigma^{0}K^{+}})$ is the $\Sigma^{0}$K$^{+}$ correl
   %%----start of first subfigure---
   \subfloat[Transform matrix for $\bar{\Sigma}$K$^{+}$ pairs into $\bar{\Lambda}$K$^{+}$]{
     \label{fig:TransformMatricesALamKchP:a}
-    \includegraphics[width=0.49\textwidth]{5_Fitting/Figures/fASigToALamKchPTransform.pdf}}
+    \includegraphics[width=0.49\textwidth]{/home/jesse/Analysis/FemtoAnalysis/AnalysisNotes/5_Fitting/Figures/fASigToALamKchPTransform.pdf}}
   %%----start of second subfigure---
   \subfloat[Transform matrix for $\bar{\Xi}^{+}$K$^{+}$ pairs into $\bar{\Lambda}$K$^{+}$]{
     \label{fig:TransformMatricesALamKchP:b}
-    \includegraphics[width=0.49\textwidth]{5_Fitting/Figures/fAXiCToALamKchPTransform.pdf}} \\
+    \includegraphics[width=0.49\textwidth]{/home/jesse/Analysis/FemtoAnalysis/AnalysisNotes/5_Fitting/Figures/fAXiCToALamKchPTransform.pdf}} \\
   %%----start of third subfigure---
   \subfloat[Transform matrix for $\bar{\Xi}^{0}$K$^{+}$ pairs into $\bar{\Lambda}$K$^{+}$]{
     \label{fig:TransformMatricesALamKchP:c}
-    \includegraphics[width=0.49\textwidth]{5_Fitting/Figures/fAXi0ToALamKchPTransform.pdf}}
+    \includegraphics[width=0.49\textwidth]{/home/jesse/Analysis/FemtoAnalysis/AnalysisNotes/5_Fitting/Figures/fAXi0ToALamKchPTransform.pdf}}
   %%----start of fourth subfigure---
   \subfloat[Transform matrix for $\bar{\Omega}^{+}$K$^{+}$ pairs into $\bar{\Lambda}$K$^{+}$]{
     \label{fig:TransformMatricesALamKchP:d}
-    \includegraphics[width=0.49\textwidth]{5_Fitting/Figures/fAOmegaToALamKchPTransform.pdf}}                    
+    \includegraphics[width=0.49\textwidth]{/home/jesse/Analysis/FemtoAnalysis/AnalysisNotes/5_Fitting/Figures/fAOmegaToALamKchPTransform.pdf}}                    
   %%----overall caption----
   \caption[Sample Transform Matrices for \ALamKchP Analysis]{Sample Transform Matrices generated with THERMINATOR for \ALamKchP Analysis}
   \label{fig:TransformMatricesALamKchP}
 \end{figure}
 
 
-So, in practice, we model the correlation function of the parents (ex. $\Sigma^{0}$\KchP), and run the correlation function through the appropriate transform matrix to determine the contribution to the daughter correlation function (ex. \LamKchP).  A few questions still remain.  First, what $\lambda$ values should be used in the above equation?  One option would be to leave all of these $\lambda$-parameters free during the fit process.  However, this would introduce a huge number of new parameters into the fitter, and would make the fit results less trustworthy.  The $\lambda$ parameters roughly dictate the strength of the parent contribution to the daughter pair.  Additionally, as found in \cite{Salzwedel:2241303}, the reconstruction efficiency for primary $\Lambda$ particles is nearly equal to that of $\Lambda$ particles originating from $\Sigma$, $\Sigma^{*}$, $\Xi^{0}$, $\Xi^{-}$, and $\Omega$ hyperons.  Therefore, the $\lambda$ parameter for parent system AB can be estimated using THERMINATOR as the total number of $\Lambda$K pairs originating from AB (N$_{AB}$) divided by the total number of $\Lambda$K pairs (N$_{Total}$):
+So, in practice, we model the correlation function of the parents (ex. $\Sigma^{0}$\KchP), and run the correlation function through the appropriate transform matrix to determine the contribution to the daughter correlation function (ex. \LamKchP).  A few questions still remain.  First, what $\lambda$ values should be used in the above equation?  One option would be to leave all of these $\lambda$-parameters free during the fit process.  However, this would introduce a huge number of new parameters into the fitter, and would make the fit results less trustworthy.  The $\lambda$ parameters roughly dictate the strength of the parent contribution to the daughter pair.  Additionally, as found in \cite{Salzwedel:2241303}, the reconstruction efficiency for primary $\Lambda$ particles is nearly equal to that of $\Lambda$ particles originating from $\Sigma$, $\Sigma^{*}$, $\Xi^{0}$, $\Xi^{-}$, and $\Omega$ hyperons.  Therefore, the $\lambda$ parameter for parent system AB can be estimated as the total number of $\Lambda$K pairs in our experimental sample originating from AB (N$_{AB}$) divided by the total number of $\Lambda$K pairs (N$_{Total}$):
 
 \begin{equation}
 \lambda_{AB} = \frac{N_{AB}}{N_{Total}}
 \end{equation}
 
-Note, for our study, we consider a particle to be primary if its parent has a proper decay length of $<$ 4 fm.
+The particle yields can be estimated using THERMINATOR simulation, while the reconstruction efficiencies ($RE_{AB}$) are estimated with MC HIJING data (Fig. \ref{fig:RecoEffs}), which has been run through GEANT to simulate the detector response.  Thus, the $\lambda$ parameters are estimated as:
+
+\begin{equation}
+\lambda_{AB} = \frac{N_{AB}}{N_{Total}} = \frac{N_{AB}^{\scaleto{THERM}{3pt}}RE_{AB}^{\scaleto{HIJING}{3pt}}}{\sum\limits_{ij} N_{ij}^{\scaleto{THERM}{3pt}}RE_{ij}^{\scaleto{HIJING}{3pt}}}
+\end{equation}
+
+Note, for our study, when including three residual contributors, we consider a particle to be primary if its parent has a proper decay length of $c\tau <$ 10 fm.
+When including ten residual contributors, we must reduce this number to $c\tau <$ 4 fm for consistency.
+Moving to ten contributors, we introduce feed-down from $\Sigma^{*}$ and K$^{*}$ resonances, with proper decay lengths of $c\tau \approx$ 5 fm and $c\tau \approx$ 4 fm, respectively.
+As these are considered non-primary for the case of ten contributors, so must any resonance with $c\tau >$ 4 fm.
+
 The $\lambda$ values used can be found in Table \ref{tab:LambdaValues_All}, for the case of both three and ten residual contributors.  In the table, we also list the $\lambda$ values used for ``Other'' and ``Fakes''.  The ``Other'' category contains pairs which are not primary, and which do not originate from the (3 or 10) residual pairs included in the fit.  The ``Fakes'' category represents pairs that are mistakingly identified as \LamK.  To estimate this $\lambda_{\mathrm{Fakes}}$ value, we assumed that the number of fake pairs was equal to the total number of pairs multiplied by the \Lam purity (i.e. assuming perfect purity for the kaons); or, more simply, $\lambda_{\mathrm{Fakes}}$ = 1.0 - Purity(\Lam).  For both of these contributors (``Other'' and ``Fakes''), we assume that these correlations average to unity, and therefore do not contribute to the final correlation function.
 
 
@@ -139,7 +149,7 @@ The $\lambda$ values used can be found in Table \ref{tab:LambdaValues_All}, for 
 
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% ResPrimMaxDecayType = 10fm, with reconstruction efficiency %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \pagestyle{empty}
 \begin{landscape}
 
@@ -152,46 +162,46 @@ The $\lambda$ values used can be found in Table \ref{tab:LambdaValues_All}, for 
   \hline
   \textbf{Pair System} & \textbf{$\lambda$ value} & \textbf{Pair System} & \textbf{$\lambda$ value} & \textbf{Pair System} & \textbf{$\lambda$ value} & \textbf{Pair System} & \textbf{$\lambda$ value} & \textbf{Pair System} & \textbf{$\lambda$ value} & \textbf{Pair System} & \textbf{$\lambda$ value} \\
   \hlineB{3.0}
-  \multicolumn{12}{|c|}{3 Residuals} \\
+  \multicolumn{12}{|c|}{3 Residuals (Max Parent $c\tau_{\mathrm{decay}}$ = 10 fm)} \\
   \hlineB{3.0}
-  $\Lambda$K$^{+}$ & 0.488 & $\bar{\Lambda}$K$^{-}$ & 0.488 & $\Lambda$K$^{-}$ & 0.487 & $\bar{\Lambda}$K$^{+}$ & 0.489 & $\Lambda$K$^{0}_{\mathrm{S}}$ & 0.505 & $\bar{\Lambda}$K$^{0}_{\mathrm{S}}$ & 0.507 \\
+  $\Lambda$K$^{+}$ & 0.527 & $\bar{\Lambda}$K$^{-}$ & 0.526 & $\Lambda$K$^{-}$ & 0.526 & $\bar{\Lambda}$K$^{+}$ & 0.527 & $\Lambda$K$^{0}_{\mathrm{S}}$ & 0.543 & $\bar{\Lambda}$K$^{0}_{\mathrm{S}}$ & 0.544 \\
   
-  $\Sigma^{0}$K$^{+}$ & 0.103 & $\bar{\Sigma}^{0}$K$^{-}$ & 0.102 & $\Sigma^{0}$K$^{-}$ & 0.102 & $\bar{\Sigma}^{0}$K$^{+}$ & 0.102 & $\Sigma^{0}$K$^{0}_{\mathrm{S}}$ & 0.112 & $\bar{\Sigma}^{0}$K$^{0}_{\mathrm{S}}$ & 0.111 \\
+  $\Sigma^{0}$K$^{+}$ & 0.111 & $\bar{\Sigma}^{0}$K$^{-}$ & 0.110 & $\Sigma^{0}$K$^{-}$ & 0.110 & $\bar{\Sigma}^{0}$K$^{+}$ & 0.111 & $\Sigma^{0}$K$^{0}_{\mathrm{S}}$ & 0.120 & $\bar{\Sigma}^{0}$K$^{0}_{\mathrm{S}}$ & 0.120 \\
   
-  $\Xi^{0}$K$^{+}$ & 0.046 & $\bar{\Xi}^{0}$K$^{-}$ & 0.040 & $\Xi^{0}$K$^{-}$ & 0.046 & $\bar{\Xi}^{0}$K$^{+}$ & 0.041 & $\Xi^{0}$K$^{0}_{\mathrm{S}}$ & 0.050 & $\bar{\Xi}^{0}$K$^{0}_{\mathrm{S}}$ & 0.044 \\
+  $\Xi^{0}$K$^{+}$ & 0.039 & $\bar{\Xi}^{0}$K$^{-}$ & 0.035 & $\Xi^{0}$K$^{-}$ & 0.038 & $\bar{\Xi}^{0}$K$^{+}$ & 0.036 & $\Xi^{0}$K$^{0}_{\mathrm{S}}$ & 0.042 & $\bar{\Xi}^{0}$K$^{0}_{\mathrm{S}}$ & 0.039 \\
   
-  $\Xi^{-}$K$^{+}$ & 0.063 & $\bar{\Xi}^{+}$K$^{-}$ & 0.056 & $\Xi^{-}$K$^{-}$ & 0.062 & $\bar{\Xi}^{+}$K$^{+}$ & 0.057 & $\Xi^{-}$K$^{0}_{\mathrm{S}}$ & 0.068 & $\bar{\Xi}^{+}$K$^{0}_{\mathrm{S}}$ & 0.062 \\
+  $\Xi^{-}$K$^{+}$ & 0.050 & $\bar{\Xi}^{+}$K$^{-}$ & 0.046 & $\Xi^{-}$K$^{-}$ & 0.050 & $\bar{\Xi}^{+}$K$^{+}$ & 0.046 & $\Xi^{-}$K$^{0}_{\mathrm{S}}$ & 0.054 & $\bar{\Xi}^{+}$K$^{0}_{\mathrm{S}}$ & 0.050 \\
   
-  Other & 0.252 & Other & 0.261 & Other & 0.255 & Other & 0.259 & Other & 0.217 & Other & 0.222 \\
+  Other & 0.226 & Other & 0.235 & Other & 0.228 & Other & 0.233 & Other & 0.194 & Other & 0.199 \\
   
   Fakes & 0.048 & Fakes & 0.048 & Fakes & 0.048 & Fakes & 0.048 & Fakes & 0.048 & Fakes & 0.048 \\
   
   \hlineB{3.0}  
-  \multicolumn{12}{|c|}{10 Residuals} \\
+  \multicolumn{12}{|c|}{10 Residuals (Max Parent $c\tau_{\mathrm{decay}}$ = 4 fm)} \\
   \hlineB{3.0}
-  $\Lambda$K$^{+}$ & 0.317 & $\bar{\Lambda}$K$^{-}$ & 0.319 & $\Lambda$K$^{-}$ & 0.317 & $\bar{\Lambda}$K$^{+}$ & 0.318 & $\Lambda$K$^{0}_{\mathrm{S}}$ & 0.342 & $\bar{\Lambda}$K$^{0}_{\mathrm{S}}$ & 0.344 \\
+  $\Lambda$K$^{+}$ & 0.180 & $\bar{\Lambda}$K$^{-}$ & 0.180 & $\Lambda$K$^{-}$ & 0.179 & $\bar{\Lambda}$K$^{+}$ & 0.181 & $\Lambda$K$^{0}_{\mathrm{S}}$ & 0.192 & $\bar{\Lambda}$K$^{0}_{\mathrm{S}}$ & 0.193 \\
   
-  $\Sigma^{0}$K$^{+}$ & 0.105 & $\bar{\Sigma}^{0}$K$^{-}$ & 0.105 & $\Sigma^{0}$K$^{-}$ & 0.104 & $\bar{\Sigma}^{0}$K$^{+}$ & 0.106 & $\Sigma^{0}$K$^{0}_{\mathrm{S}}$ & 0.113 & $\bar{\Sigma}^{0}$K$^{0}_{\mathrm{S}}$ & 0.114 \\
+  $\Sigma^{0}$K$^{+}$ & 0.116 & $\bar{\Sigma}^{0}$K$^{-}$ & 0.114 & $\Sigma^{0}$K$^{-}$ & 0.115 & $\bar{\Sigma}^{0}$K$^{+}$ & 0.116 & $\Sigma^{0}$K$^{0}_{\mathrm{S}}$ & 0.125 & $\bar{\Sigma}^{0}$K$^{0}_{\mathrm{S}}$ & 0.124 \\
   
-  $\Xi^{0}$K$^{+}$ & 0.047 & $\bar{\Xi}^{0}$K$^{-}$ & 0.042 & $\Xi^{0}$K$^{-}$ & 0.047 & $\bar{\Xi}^{0}$K$^{+}$ & 0.042 & $\Xi^{0}$K$^{0}_{\mathrm{S}}$ & 0.051 & $\bar{\Xi}^{0}$K$^{0}_{\mathrm{S}}$ & 0.045 \\
+  $\Xi^{0}$K$^{+}$ & 0.040 & $\bar{\Xi}^{0}$K$^{-}$ & 0.037 & $\Xi^{0}$K$^{-}$ & 0.040 & $\bar{\Xi}^{0}$K$^{+}$ & 0.037 & $\Xi^{0}$K$^{0}_{\mathrm{S}}$ & 0.043 & $\bar{\Xi}^{0}$K$^{0}_{\mathrm{S}}$ & 0.040 \\
   
-  $\Xi^{-}$K$^{+}$ & 0.064 & $\bar{\Xi}^{+}$K$^{-}$ & 0.058 & $\Xi^{-}$K$^{-}$ & 0.063 & $\bar{\Xi}^{+}$K$^{+}$ & 0.059 & $\Xi^{-}$K$^{0}_{\mathrm{S}}$ & 0.069 & $\bar{\Xi}^{+}$K$^{0}_{\mathrm{S}}$ & 0.063 \\
+  $\Xi^{-}$K$^{+}$ & 0.052 & $\bar{\Xi}^{+}$K$^{-}$ & 0.047 & $\Xi^{-}$K$^{-}$ & 0.052 & $\bar{\Xi}^{+}$K$^{+}$ & 0.048 & $\Xi^{-}$K$^{0}_{\mathrm{S}}$ & 0.056 & $\bar{\Xi}^{+}$K$^{0}_{\mathrm{S}}$ & 0.052 \\
   
-  $\Sigma^{*+}$K$^{+}$ & 0.049 & $\bar{\Sigma}^{*-}$K$^{-}$ & 0.047 & $\Sigma^{*+}$K$^{-}$ & 0.048 & $\bar{\Sigma}^{*-}$K$^{+}$ & 0.048 & $\Sigma^{*+}$K$^{0}_{\mathrm{S}}$ & 0.052 & $\bar{\Sigma}^{*-}$K$^{0}_{\mathrm{S}}$ & 0.051 \\
+  $\Sigma^{*+}$K$^{+}$ & 0.054 & $\bar{\Sigma}^{*-}$K$^{-}$ & 0.051 & $\Sigma^{*+}$K$^{-}$ & 0.053 & $\bar{\Sigma}^{*-}$K$^{+}$ & 0.051 & $\Sigma^{*+}$K$^{0}_{\mathrm{S}}$ & 0.058 & $\bar{\Sigma}^{*-}$K$^{0}_{\mathrm{S}}$ & 0.055 \\
   
-  $\Sigma^{*-}$K$^{+}$ & 0.044 & $\bar{\Sigma}^{*+}$K$^{-}$ & 0.046 & $\Sigma^{*-}$K$^{-}$ & 0.044 & $\bar{\Sigma}^{*+}$K$^{+}$ & 0.047 & $\Sigma^{*-}$K$^{0}_{\mathrm{S}}$ & 0.047 & $\bar{\Sigma}^{*+}$K$^{0}_{\mathrm{S}}$ & 0.050 \\
+  $\Sigma^{*-}$K$^{+}$ & 0.048 & $\bar{\Sigma}^{*+}$K$^{-}$ & 0.050 & $\Sigma^{*-}$K$^{-}$ & 0.048 & $\bar{\Sigma}^{*+}$K$^{+}$ & 0.050 & $\Sigma^{*-}$K$^{0}_{\mathrm{S}}$ & 0.052 & $\bar{\Sigma}^{*+}$K$^{0}_{\mathrm{S}}$ & 0.054 \\
   
-  $\Sigma^{*0}$K$^{+}$ & 0.044 & $\bar{\Sigma}^{*0}$K$^{-}$ & 0.041 & $\Sigma^{*0}$K$^{-}$ & 0.044 & $\bar{\Sigma}^{*0}$K$^{+}$ & 0.042 & $\Sigma^{*0}$K$^{0}_{\mathrm{S}}$ & 0.047 & $\bar{\Sigma}^{*0}$K$^{0}_{\mathrm{S}}$ & 0.045 \\
+  $\Sigma^{*0}$K$^{+}$ & 0.048 & $\bar{\Sigma}^{*0}$K$^{-}$ & 0.045 & $\Sigma^{*0}$K$^{-}$ & 0.048 & $\bar{\Sigma}^{*0}$K$^{+}$ & 0.045 & $\Sigma^{*0}$K$^{0}_{\mathrm{S}}$ & 0.052 & $\bar{\Sigma}^{*0}$K$^{0}_{\mathrm{S}}$ & 0.048 \\
   
-  $\Lambda$K$^{*0}$ & 0.041 & $\bar{\Lambda}\bar{\mathrm{K}}^{*0}$ & 0.042 & $\Lambda\bar{\mathrm{K}}^{*0}$ & 0.041 & $\bar{\Lambda}$K$^{*0}$ & 0.042 & $\Lambda$K$^{*0}$ & 0.020 & $\bar{\Lambda}$K$^{*0}$ & 0.020 \\
+  $\Lambda$K$^{*0}$ & 0.046 & $\bar{\Lambda}\bar{\mathrm{K}}^{*0}$ & 0.047 & $\Lambda\bar{\mathrm{K}}^{*0}$ & 0.046 & $\bar{\Lambda}$K$^{*0}$ & 0.047 & $\Lambda$K$^{*0}$ & 0.022 & $\bar{\Lambda}$K$^{*0}$ & 0.022 \\
   
-  $\Sigma^{0}$K$^{*0}$ & 0.037 & $\bar{\Sigma}^{0}\bar{\mathrm{K}}^{*0}$ & 0.037 & $\Sigma^{0}\bar{\mathrm{K}}^{*0}$ & 0.037 & $\bar{\Sigma}^{0}$K$^{*0}$ & 0.037 & $\Sigma^{0}$K$^{*0}$ & 0.017 & $\bar{\Sigma}^{0}$K$^{*0}$ & 0.018 \\
+  $\Sigma^{0}$K$^{*0}$ & 0.041 & $\bar{\Sigma}^{0}\bar{\mathrm{K}}^{*0}$ & 0.041 & $\Sigma^{0}\bar{\mathrm{K}}^{*0}$ & 0.041 & $\bar{\Sigma}^{0}$K$^{*0}$ & 0.041 & $\Sigma^{0}$K$^{*0}$ & 0.019 & $\bar{\Sigma}^{0}$K$^{*0}$ & 0.019 \\
   
-  $\Xi^{0}$K$^{*0}$ & 0.017 & $\bar{\Xi}^{0}\bar{\mathrm{K}}^{*0}$ & 0.015 & $\Xi^{0}\bar{\mathrm{K}}^{*0}$ & 0.017 & $\bar{\Xi}^{0}$K$^{*0}$ & 0.015 & $\Xi^{0}$K$^{*0}$ & 0.008 & $\bar{\Xi}^{0}$K$^{*0}$ & 0.007 \\
+  $\Xi^{0}$K$^{*0}$ & 0.014 & $\bar{\Xi}^{0}\bar{\mathrm{K}}^{*0}$ & 0.013 & $\Xi^{0}\bar{\mathrm{K}}^{*0}$ & 0.014 & $\bar{\Xi}^{0}$K$^{*0}$ & 0.013 & $\Xi^{0}$K$^{*0}$ & 0.007 & $\bar{\Xi}^{0}$K$^{*0}$ & 0.006 \\
   
-  $\Xi^{-}$K$^{*0}$ & 0.022 & $\bar{\Xi}^{+}\bar{\mathrm{K}}^{*0}$ & 0.021 & $\Xi^{-}\bar{\mathrm{K}}^{*0}$ & 0.022 & $\bar{\Xi}^{+}$K$^{*0}$ & 0.021 & $\Xi^{-}$K$^{*0}$ & 0.011 & $\bar{\Xi}^{+}$K$^{*0}$ & 0.010 \\
+  $\Xi^{-}$K$^{*0}$ & 0.018 & $\bar{\Xi}^{+}\bar{\mathrm{K}}^{*0}$ & 0.017 & $\Xi^{-}\bar{\mathrm{K}}^{*0}$ & 0.018 & $\bar{\Xi}^{+}$K$^{*0}$ & 0.017 & $\Xi^{-}$K$^{*0}$ & 0.009 & $\bar{\Xi}^{+}$K$^{*0}$ & 0.008 \\
   
-  Other & 0.166 & Other & 0.174 & Other & 0.169 & Other & 0.171 & Other & 0.176 & Other & 0.181 \\
+  Other & 0.295 & Other & 0.310 & Other & 0.299 & Other & 0.307 & Other & 0.318 & Other & 0.330 \\
   
   Fakes & 0.048 & Fakes & 0.048 & Fakes & 0.048 & Fakes & 0.048 & Fakes & 0.048 & Fakes & 0.048 \\
   
@@ -210,7 +220,7 @@ The $\lambda$ values used can be found in Table \ref{tab:LambdaValues_All}, for 
 
 Now, the remaining question is how do we model the parent correlation functions?  In an ideal world, we would simply look up the parent interaction in some table, and input this into our Lednicky equation (for the case of one or more charge neutral particle in the pair), or run it through the CoulombFitter machinery described in Sec.\ref{ModelCascadeKaon}.  Unfortunately, the world in which we live is not perfect, such a table does not exists, and little is know about the interaction between the residual pairs in this study.  One solution would be to introduce a set of scattering parameters and radii for each residual system.  However, as was the case of the $\lambda$-parameters above, this would introduce a large number of additional fit parameters, and would make our fitter too unconstrained and would yield untrustworthy results.  The second option, which is adopted in this analysis, is to assume all residual pairs have the same source size as the daughter pair, and all Coulomb-neutral residual pairs also share the same scattering parameters as the daughter pair (the case of charged pairs, such as \XiKpm or $\Sigma^{*\pm}$\Kpm, will be described below).
 
-Concerning the radii of the residual parent pairs, it was suggested that these should be set to smaller values than those of the daughter pair.  In the interest of minimizing the number of parameters in the fitter, we tested this by introducing an \mt-scaling of the parents' radii.  The motivation for this scaling comes from the approximate \mt-scaling of the radii observed in \ref{fig:mTScalingOfRadii}.  To achieve this scaling, we assume the radii follow an inverse-square-root distribution: $R_{AB} = \alpha m_{\mathrm{T}}^{-1/2}$.  Then, it follows that we should scale the parent radii as:
+Concerning the radii of the residual parent pairs, it was suggested that these should be set to smaller values than those of the daughter pair.  In the interest of minimizing the number of parameters in the fitter, we tested this by introducing an \mt-scaling of the parents' radii.  The motivation for this scaling comes from the approximate \mt-scaling of the radii observed in \ref{fig:mTScalingOfRadii_3Res}.  To achieve this scaling, we assume the radii follow an inverse-square-root distribution: $R_{AB} = \alpha m_{\mathrm{T}}^{-1/2}$.  Then, it follows that we should scale the parent radii as:
 
 \begin{equation}
 R_{AB} = R_{\Lambda K}\left(\frac{m_{\mathrm{T},AB}}{m_{\mathrm{T},\Lambda K}}\right)^{-1/2}
@@ -225,7 +235,7 @@ Two examples of how very different transform matrices can alter a correlation fu
 
 \begin{figure}[h]
   \centering
-  \includegraphics[width=\textwidth]{5_Fitting/Figures/Residuals_LamKchP_0010_Sig0KchP_MomResCrctn_NonFlatBgdCrctn_10Res_PrimMaxDecay4fm_UsingXiDataAndCoulombOnly.pdf}
+  \includegraphics[width=\textwidth]{/home/jesse/Analysis/FemtoAnalysis/AnalysisNotes/5_Fitting/Figures/Residuals_LamKchP_0010_Sig0KchP_MomResCrctn_NonFlatBgdCrctn_10Res_PrimMaxDecay4fm_UsingXiDataAndCoulombOnly.pdf}
   \caption[$\Sigma^{0}$K$^{+}$ Transform]{$\Sigma^{0}$K$^{+}$ Transform.  These figures were taken using parameter values obtained from fits to the data.  In the top left corner of the figures, the input correlation function (closed symbols) is shown together with the output, transformed, correlation function (open symbols).  In the bottom left, the transformed correlation is shown by itself.  The right two plots in each figure show the transform matrix without (top right) and with (bottom right) a log-scale on the z-axis.}
   \label{fig:Sig0KchPtoLamKchPTransform}
 \end{figure}
@@ -233,7 +243,7 @@ Two examples of how very different transform matrices can alter a correlation fu
 
 \begin{figure}[h]
   \centering
-  \includegraphics[width=\textwidth]{5_Fitting/Figures/Residuals_LamKchP_0010_LamKSt0_MomResCrctn_NonFlatBgdCrctn_10Res_PrimMaxDecay4fm_UsingXiDataAndCoulombOnly.pdf}
+  \includegraphics[width=\textwidth]{/home/jesse/Analysis/FemtoAnalysis/AnalysisNotes/5_Fitting/Figures/Residuals_LamKchP_0010_LamKSt0_MomResCrctn_NonFlatBgdCrctn_10Res_PrimMaxDecay4fm_UsingXiDataAndCoulombOnly.pdf}
   \caption[$\Lambda\mathrm{K^{*0}}$ Transform]{$\Lambda\mathrm{K^{*0}}$ Transform.  These figures were taken using parameter values obtained from fits to the data.  In the top left corner of the figures, the input correlation function (closed symbols) is shown together with the output, transformed, correlation function (open symbols).  In the bottom left, the transformed correlation is shown by itself.  The right two plots in each figure show the transform matrix without (top right) and with (bottom right) a log-scale on the z-axis.}
   \label{fig:LamKSt0toLamKchPTransform}
 \end{figure}
