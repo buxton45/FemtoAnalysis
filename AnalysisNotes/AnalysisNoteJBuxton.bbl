@@ -44,6 +44,12 @@ A~Kisiel.
   non-femtoscopic correlations.
 \newblock {\em Acta Physica Polonica B}, 48:717, 04 2017.
 
+\bibitem{Adam:2015vja}
+Jaroslav Adam et~al.
+\newblock {One-dimensional pion, kaon, and proton femtoscopy in Pb-Pb
+  collisions at $\sqrt{s_{\rm {NN}}}$ =2.76 TeV}.
+\newblock {\em Phys. Rev.}, C92(5):054908, 2015.
+
 \bibitem{Liu:2006xja}
 Yan-Rui Liu and Shi-Lin Zhu.
 \newblock {Meson-baryon scattering lengths in HB chi PT}.
@@ -54,11 +60,5 @@ Maxim Mai, Peter~C. Bruns, Bastian Kubis, and Ulf-G. Meissner.
 \newblock {Aspects of meson-baryon scattering in three and two-flavor chiral
   perturbation theory}.
 \newblock {\em Phys. Rev.}, D80:094006, 2009.
-
-\bibitem{Adam:2015vja}
-Jaroslav Adam et~al.
-\newblock {One-dimensional pion, kaon, and proton femtoscopy in Pb-Pb
-  collisions at $\sqrt{s_{\rm {NN}}}$ =2.76 TeV}.
-\newblock {\em Phys. Rev.}, C92(5):054908, 2015.
 
 \end{thebibliography}
