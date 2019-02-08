@@ -7,54 +7,6 @@
 The following cuts were used to select good \LamALam candidates:
 
 \begin{enumerate}
- \item Daughter Particle Cuts
- \begin{enumerate}
-  \item{Cuts Common to Both Daughters}
-  \begin{enumerate}
-   \item $|\eta| < 0.8$
-   \item SetTPCnclsDaughters(80)
-   \item SetStatusDaughters(AliESDtrack::kTPCrefit)
-   \item DCA $\pi$p Daughters $<$ 0.4 cm
-  \end{enumerate}
-  \item Pion Specific Daughter Cuts 
-  \begin{enumerate}
-   \item $p_{\mathrm{T}} > 0.16$ GeV/\textit{c}
-   \item DCA to prim vertex $>$ 0.3 cm
-   \item TPC and TOF N$\sigma$ Cuts
-   \begin{enumerate}
-    \item $p <$ 0.5 GeV/\textit{c} : N$\sigma_{\mathrm{TPC}} <$ 3
-    \item $p >$ 0.5 GeV/\textit{c} :
-    \begin{itemize}
-     \item if TOF \& TPC available: N$\sigma_{\mathrm{TPC}} <$ 3 \& N$\sigma_{\mathrm{TOF}} <$ 3
-     \item else N$\sigma_{\mathrm{TPC}} <$ 3
-    \end{itemize}
-   \end{enumerate}
-  \end{enumerate}
-  \item Proton Specific Daughter Cuts
-  \begin{enumerate}
-   \item $p_{\mathrm{T}} > $ 0.5($p$) [0.3($\bar{p}$)] GeV/\textit{c}
-   \item DCA to prim vertex $>$ 0.1 cm
-   \item TPC and TOF N$\sigma$ Cuts
-   \begin{enumerate}
-    \item $p <$ 0.8 GeV/\textit{c} : N$\sigma_{\mathrm{TPC}} <$ 3
-    \item $p >$ 0.8 GeV/\textit{c} :
-    \begin{itemize}
-     \item if TOF \& TPC available: N$\sigma_{\mathrm{TPC}} <$ 3 \& N$\sigma_{\mathrm{TOF}} <$ 3
-     \item else N$\sigma_{\mathrm{TPC}} <$ 3
-    \end{itemize}
-   \end{enumerate}   
-  \end{enumerate}
- \end{enumerate}
- \item V0 Cuts
- \begin{enumerate}
-  \item $|\eta| < 0.8$
-  \item $p_{\mathrm{T}} > 0.4$ GeV/\textit{c}
-  \item $|m_{\mathrm{inv}} - m_{\mathrm{PDG}}| <$ 3.8 MeV
-  \item DCA to prim. vertex $<$ 0.5 cm
-  \item Cosine of pointing angle $>$ 0.9993
-  \item OnFlyStatus = false
-  \item Decay Length $<$ 60 cm
- \end{enumerate}
  \item Shared Daughter Cut for V0 Collection
  \begin{itemize}
   \item Iterate through V0 collection to ensure that no daughter is used in more than one V0 candidate
@@ -94,9 +46,9 @@ The following cuts were used to select good \LamALam candidates:
    \hline
    \multicolumn{3}{l|}{$|\eta|$} &  $< 0.8$ \\
    \hline
-   \multicolumn{3}{l|}{SetTPCnclsDaughters} & (80) \\
+   \multicolumn{3}{l|}{Number of clusters in the TPC} & $>$ 80 \\
    \hline
-   \multicolumn{3}{l|}{SetStatusDaughters} & (AliESDtrack::kTPCrefit) \\
+   \multicolumn{3}{l|}{Daughter status} & kTPCrefit \\
    \hline
    \multicolumn{3}{l|}{DCA $\pi$p Daughters} & $<$ 0.4 cm \\
    \hline

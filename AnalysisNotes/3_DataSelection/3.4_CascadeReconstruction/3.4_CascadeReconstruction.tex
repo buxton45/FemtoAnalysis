@@ -1,4 +1,4 @@
-\documentclass[../AnalysisNoteJBuxton.tex]{subfiles}
+\documentclass[/home/jesse/Analysis/FemtoAnalysis/AnalysisNotes/AnalysisNoteJBuxton.tex]{subfiles}
 \begin{document}
 
 \subsection{$\Xi$ Reconstruction}
@@ -10,59 +10,7 @@ The reconstruction of $\Xi$ particles is one level above V0 reconstruction.  V0 
 
 The following cuts were used to select good $\Xi^{-}$ ($\bar{\Xi}^{+}$) candidates:
 
-\begin{enumerate}
- \item V0 Daughter Reconstruction
- \begin{enumerate}
-  \item V0 Daughter Particle Cuts
-   \begin{enumerate}
-    \item{Cuts Common to Both Daughters}
-    \begin{enumerate}
-     \item $|\eta| < 0.8$
-     \item SetTPCnclsDaughters(80)
-     \item SetStatusDaughters(AliESDtrack::kTPCrefic)
-     \item SetMaxDcaV0Daughters(0.4)
-    \end{enumerate}
-    \item Pion Specific Daughter Cuts 
-    \begin{enumerate}
-     \item $p_{T} > 0.16$
-     \item DCA to prim vertex $>$ 0.3
-    \end{enumerate}
-    \item Proton Specific Daughter Cuts
-    \begin{enumerate}
-     \item $p_{T} > $ 0.5($p$) [0.3($\bar{p}$)] GeV/\textit{c}
-     \item DCA to prim vertex $>$ 0.1 
-    \end{enumerate}
-   \end{enumerate}
-  \item V0 Cuts  
-  \begin{enumerate}
-   \item $|\eta| < 0.8$
-   \item $p_{T} > 0.4$ GeV/\textit{c}
-   \item $|m_{inv} - m_{PDG}| <$ 3.8 MeV
-   \item DCA to prim. vertex $>$ 0.2 cm   
-   \item Cosine of pointing angle to $\Xi$ decay vertex $>$ 0.9993
-   \item OnFlyStatus = false
-   \item Decay Length $<$ 60 cm
-   \item The misidentification cuts described in Section \ref{LambdaReconstruction} are utilized 
-  \end{enumerate} 
- \end{enumerate}
- \item Bachelor $\pi$ Cuts
- \begin{enumerate}
-  \item $|\eta| < 0.8$
-  \item $p_{T} < 100$ GeV/\textit{c}
-  \item DCA to prim vertex $>$ 0.1 cm
-  \item SetTPCnclsDaughters(70)
-  \item SetStatusDaughters(AliESDtrack::kTPCrefic)
- \end{enumerate}
- \item $\Xi$ Cuts
- \begin{enumerate}
-  \item $|\eta| < 0.8$
-  \item $0.8 < p_{T} < 100$ GeV/\textit{c}
-  \item $|m_{inv} - m_{PDG}| <$ 3.0 MeV
-  \item DCA to prim. vertex $<$ 0.3 cm
-  \item Cosine of pointing angle $>$ 0.9992
- \end{enumerate}
- 
- 
+\begin{enumerate} 
  \item Shared Daughter Cut for $\Xi$ Collection
  \begin{itemize}
   \item Iterate through $\Xi$ collection to ensure that no daughter is used in more than one $\Xi$ candidate
@@ -72,14 +20,86 @@ The following cuts were used to select good $\Xi^{-}$ ($\bar{\Xi}^{+}$) candidat
 \end{enumerate}
 
 
+\begin{table}[htbp]
+ \centering 
+%  \renewcommand{\arraystretch}{1.5}
+  \begin{tabular}{lc|c|l}
+   \hline  
+   \multicolumn{4}{c}{\textbf{$\Xi$ selection}} \\
+   \hline
+   \multicolumn{3}{l|}{$|\eta|$} & $< 0.8$ \\
+   \hline
+   \multicolumn{3}{l|}{$p_{\mathrm{T}}$} & $> 0.8$ GeV/\textit{c} \\
+   \hline
+   \multicolumn{3}{l|}{$|m_{\mathrm{inv}} - m_{\mathrm{PDG}}|$} & $< 3.0$ MeV \\ 
+   \hline
+   \multicolumn{3}{l|}{DCA to prim. vertex} & $<$ 0.3 cm \\
+   \hline
+   \multicolumn{3}{l|}{Cosine of pointing angle} & $>$ 0.9992 \\
+   \hline
+   
+   \multicolumn{4}{c}{\textbf{\Lam daughter cuts}} \\
+   \hline
+   \multicolumn{3}{l|}{DCA to prim. vertex} & $>$ 0.2 cm \\
+   \hline
+   \multicolumn{3}{l|}{Cosine of pointing angle} & $>$ 0.0 \\
+   \hline
+   \multicolumn{3}{l|}{Cosine of pointing angle to $\Xi$ decay vertex} & $>$ 0.9993 \\
+   \hline
+   \multicolumn{3}{l|}{OnFlyStatus} & false \\
+   \hline
+   \multicolumn{4}{l}{All other \Lam and corresponding ($\pi$ and p) daughter cuts are} \\ 
+   \multicolumn{4}{l}{same as in primary \Lam selection, and can be found in Sec. \ref{LambdaReconstruction}} \\
+   \hline
+   
+   \multicolumn{4}{c}{\textbf{Bachelor $\boldsymbol\pi$ cuts}} \\
+   \hline
+   \multicolumn{3}{l|}{$|\eta|$} &  $< 0.8$ \\
+   \hline
+   \multicolumn{3}{l|}{$p_{\mathrm{T}}$} & $> 0.0$ GeV/\textit{c} \\
+   \hline
+   \multicolumn{3}{l|}{DCA to prim. vertex} & $>$ 0.1 cm \\
+   \hline
+   \multicolumn{3}{l|}{Number of clusters in the TPC} & $>$ 70 \\
+   \hline
+   \multicolumn{3}{l|}{Daughter status} & kTPCrefit \\
+   \hline
+   \multicolumn{4}{l}{TPC and TOF N$\sigma$ Cuts} \\
+   \hline
+    & \multicolumn{1}{c}{$p <$ 0.5 GeV/\textit{c}} &  & N$\sigma_{\mathrm{TPC}} <$ 3 \\
+   \hline
+    & \multirow{2}{*}{$p >$ 0.5 GeV/\textit{c}} &  if TOF \& TPC available & N$\sigma_{\mathrm{TPC}} <$ 3 \& N$\sigma_{\mathrm{TOF}} <$ 3 \\
+   \cline{3-4}
+    & & else & N$\sigma_{\mathrm{TOF}} <$ 3 \\
+   \hline
+  \end{tabular}
+% \end{minipage}
+ \caption{\Lam selection}
+ \label{tab:XiCuts} 
+\end{table}
 
 
-\begin{figure}[h]
+
+
+
+\begin{figure}[h!]
   \centering
-  \includegraphics[width=0.5\textwidth]{3_DataSelection/Figures/XiCuts.pdf}
-  \caption[$\Xi$ Reconstruction]{$\Xi$ Reconstruction}
+  %%----start of first subfigure---  
+  \subfloat[$\Xi^{-}$ reconstruction.]{
+    \label{fig:XiReconstruction:a}
+    \includegraphics[width=0.49\textwidth]{3_DataSelection/Figures/XiReconstruction.pdf}}
+  %%----start of second subfigure---
+  \subfloat[$\Xi^{-}$ daughter reconstruction.]{
+    \label{fig:XiReconstruction:b}
+    \includegraphics[width=0.49\textwidth]{3_DataSelection/Figures/XiReconstruction_V0Cuts.pdf}}
+  %%----overall caption----
+  \caption[$\Xi$ Reconstruction]{(Left) $\Xi^{-}$ reconstruction (DCA to primary vertex for $\Xi^{-}$ not shown).  (Right) $\Xi^{-}$ daughter reconstruction.}
   \label{fig:XiReconstruction}
 \end{figure}
+
+
+
+
 
 The purity of our $\Xi$ and $\bar{\Xi}$ collections are calculated just as those of our V0 collections \ref{V0Selection}.
 Figure \ref{fig:XiPurity}, which is used to calculate the purity, shows the \minv distribution of our $\Xi$($\bar{\Xi}$) candidates just before the final \minv cut.  Currently, we have Purity($\Xi^{-}$) $\approx$ 90\% and Purity($\bar{\Xi}^{+}$) $\approx$ 92\%.

@@ -1,4 +1,4 @@
-\documentclass[../AnalysisNoteJBuxton.tex]{subfiles}
+\documentclass[/home/jesse/Analysis/FemtoAnalysis/AnalysisNotes/AnalysisNoteJBuxton.tex]{subfiles}
 \begin{document}
 
 \subsubsection{\texorpdfstring{$\rm K^{0}_{S}$}{TEXT} Reconstruction}
@@ -7,35 +7,6 @@
 The following cuts were used to select good \Ks candidates:
 
 \begin{enumerate}
- \item{Pion Daughter Cuts}
- \begin{enumerate}
-  \item $|\eta| < 0.8$
-  \item SetTPCnclsDaughters(80)
-  \item SetStatusDaughters(AliESDtrack::kTPCrefic)
-  \item DCA $\pi^{+}\pi^{-}$ Daughters $<$ 0.3 cm
-  \item $p_{\mathrm{T}} >$ 0.15 GeV/\textit{c}
-  \item DCA to prim vertex $>$ 0.3 cm
-   \item TPC and TOF N$\sigma$ Cuts
-   \begin{enumerate}
-    \item $p <$ 0.5 GeV/\textit{c} : N$\sigma_{\mathrm{TPC}} <$ 3
-    \item $p >$ 0.5 GeV/\textit{c} :
-    \begin{itemize}
-     \item if TOF \& TPC available: N$\sigma_{\mathrm{TPC}} <$ 3 \& N$\sigma_{\mathrm{TOF}} <$ 3
-     \item else N$\sigma_{\mathrm{TPC}} <$ 3
-    \end{itemize}
-   \end{enumerate}  
- \end{enumerate}
-
- \item \Ks Cuts
- \begin{enumerate}
-  \item $|\eta| < 0.8$
-  \item $p_{\mathrm{T}} > 0.2$ GeV/\textit{c}
-  \item $m_{\mathrm{PDG}}-13.677 \ \mathrm{MeV} < m_{\mathrm{inv}} < m_{\mathrm{PDG}} + 2.0323 \ \mathrm{MeV}$
-  \item DCA to prim. vertex $<$ 0.3 cm
-  \item Cosine of pointing angle $>$ 0.9993
-  \item OnFlyStatus = false
-  \item Decay Length $<$ 30 cm
- \end{enumerate}  
  \item Shared Daughter Cut for V0 Collection
  \begin{itemize}
   \item Iterate through V0 collection to ensure that no daughter is used in more than one V0 candidate
@@ -74,9 +45,9 @@ The following cuts were used to select good \Ks candidates:
    \hline
    \multicolumn{3}{l|}{$|\eta|$} &  $< 0.8$ \\
    \hline
-   \multicolumn{3}{l|}{SetTPCnclsDaughters} & (80) \\
+   \multicolumn{3}{l|}{Number of clusters in TPC} & $>$ 80 \\
    \hline
-   \multicolumn{3}{l|}{SetStatusDaughters} & (AliESDtrack::kTPCrefit) \\
+   \multicolumn{3}{l|}{Daughter Status} & kTPCrefit \\
    \hline
    \multicolumn{3}{l|}{DCA $\pi^{+}\pi^{-}$ Daughters} & $<$ 0.3 cm \\
    \hline
