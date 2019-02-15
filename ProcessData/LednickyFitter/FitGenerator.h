@@ -26,6 +26,7 @@ class CanvasPartition;
 
 class FitGenerator {
 friend class DualieFitGenerator;  //So DualieFitGenerator can access private FitGenerator members/functions
+friend class TripleFitGenerator;  //So TripleFitGenerator can access private FitGenerator members/functions
 
 public:
   FitGenerator(TString aFileLocationBase, TString aFileLocationBaseMC, AnalysisType aAnalysisType, const vector<CentralityType> &aCentralityTypes, AnalysisRunType aRunType=kTrain, int aNPartialAnalysis=2, FitGeneratorType aGeneratorType=kPairwConj, bool aShareLambdaParams=false, bool aAllShareSingleLambdaParam=false, TString aDirNameModifier="", bool aUseStavCf=false);

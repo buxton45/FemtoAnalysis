@@ -1570,7 +1570,7 @@ void LednickyFitter::ExistsSaveLocationBase()
 //________________________________________________________________________________________________________________
 void LednickyFitter::SetNonFlatBgdFitType(NonFlatBgdFitType aNonFlatBgdFitType) 
 {
-  for(int i=0; i<fNonFlatBgdFitTypes.size(); i++) fNonFlatBgdFitTypes[i] = aNonFlatBgdFitType;
+  for(unsigned int i=0; i<fNonFlatBgdFitTypes.size(); i++) fNonFlatBgdFitTypes[i] = aNonFlatBgdFitType;
 }
 
 //________________________________________________________________________________________________________________

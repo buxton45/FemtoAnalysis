@@ -646,7 +646,7 @@ double FitSharedAnalyses::GetMaxBgdFit()
 //________________________________________________________________________________________________________________
 void FitSharedAnalyses::SetNonFlatBgdFitType(NonFlatBgdFitType aFitType) 
 {
-  for(int i=0; i<fNonFlatBgdFitTypes.size(); i++) fNonFlatBgdFitTypes[i] = aFitType;
+  for(unsigned int i=0; i<fNonFlatBgdFitTypes.size(); i++) fNonFlatBgdFitTypes[i] = aFitType;
 }
 
 //________________________________________________________________________________________________________________
@@ -678,7 +678,7 @@ void FitSharedAnalyses::SetNonFlatBgdFitTypes(vector<NonFlatBgdFitType> &aNonFla
 NonFlatBgdFitType FitSharedAnalyses::GetNonFlatBgdFitType() 
 {
   //In this case, all should be of same type
-  for(int i=1; i<fNonFlatBgdFitTypes.size(); i++) assert(fNonFlatBgdFitTypes[i]==fNonFlatBgdFitTypes[i-1]);
+  for(unsigned int i=1; i<fNonFlatBgdFitTypes.size(); i++) assert(fNonFlatBgdFitTypes[i]==fNonFlatBgdFitTypes[i-1]);
   return fNonFlatBgdFitTypes[0];
 }
 
