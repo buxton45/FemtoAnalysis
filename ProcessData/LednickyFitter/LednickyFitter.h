@@ -63,18 +63,34 @@ public:
   LednickyFitter(AnalysisType aAnalysisType, double aMaxBuildKStar = 0.3, double aKStarBinWidth=0.01);  //Currently, just used for CoulombFitter::CoulombFitter(AnalysisType aAnalysisType, double aMaxFitKStar)
   virtual ~LednickyFitter();
 
+  //----------
+  static void AppendNonFlatBgdFitTypeInfo(TString &aSaveName, vector<NonFlatBgdFitType> &aNonFlatBgdFitTypes);
+
   static void AppendFitInfo(TString &aSaveName, bool aApplyMomResCorrection, bool aApplyNonFlatBackgroundCorrection, IncludeResidualsType aIncludeResidualsType, 
                             ResPrimMaxDecayType aResPrimMaxDecayType=k5fm, ChargedResidualsType aChargedResidualsType=kUseXiDataAndCoulombOnlyInterp, bool aFixD0=false);
+
+  static void AppendFitInfo(TString &aSaveName, bool aApplyMomResCorrection, bool aApplyNonFlatBackgroundCorrection, vector<NonFlatBgdFitType> &aNonFlatBgdFitTypes, 
+                            IncludeResidualsType aIncludeResidualsType, ResPrimMaxDecayType aResPrimMaxDecayType=k5fm, 
+                            ChargedResidualsType aChargedResidualsType=kUseXiDataAndCoulombOnlyInterp, bool aFixD0=false);
   static void AppendFitInfo(TString &aSaveName, bool aApplyMomResCorrection, bool aApplyNonFlatBackgroundCorrection, NonFlatBgdFitType aNonFlatBgdFitType, 
                             IncludeResidualsType aIncludeResidualsType, ResPrimMaxDecayType aResPrimMaxDecayType=k5fm, 
                             ChargedResidualsType aChargedResidualsType=kUseXiDataAndCoulombOnlyInterp, bool aFixD0=false);
+
   void AppendFitInfo(TString &aSaveName);
+
+  static TString BuildSaveNameModifier(bool aApplyMomResCorrection, bool aApplyNonFlatBackgroundCorrection, vector<NonFlatBgdFitType> &aNonFlatBgdFitTypes, 
+                                       IncludeResidualsType aIncludeResidualsType, ResPrimMaxDecayType aResPrimMaxDecayType=k4fm, 
+                                       ChargedResidualsType aChargedResidualsType=kUseXiDataAndCoulombOnlyInterp, bool aFixD0=false,
+                                       bool aUseStavCf=false, bool aFixAllLambdaTo1=false, bool aFixAllNormTo1=false, bool aFixRadii=false, bool aFixAllScattParams=false, 
+                                       bool aShareLambdaParams=false, bool aAllShareSingleLambdaParam=false, bool aUsemTScalingOfResidualRadii=false, bool aIsDualie=false,
+                                       bool aDualieShareLambda=false, bool aDualieShareRadii=false);
   static TString BuildSaveNameModifier(bool aApplyMomResCorrection, bool aApplyNonFlatBackgroundCorrection, NonFlatBgdFitType aNonFlatBgdFitType, 
                                        IncludeResidualsType aIncludeResidualsType, ResPrimMaxDecayType aResPrimMaxDecayType=k4fm, 
                                        ChargedResidualsType aChargedResidualsType=kUseXiDataAndCoulombOnlyInterp, bool aFixD0=false,
                                        bool aUseStavCf=false, bool aFixAllLambdaTo1=false, bool aFixAllNormTo1=false, bool aFixRadii=false, bool aFixAllScattParams=false, 
                                        bool aShareLambdaParams=false, bool aAllShareSingleLambdaParam=false, bool aUsemTScalingOfResidualRadii=false, bool aIsDualie=false,
                                        bool aDualieShareLambda=false, bool aDualieShareRadii=false);
+  //----------
 
   static void PrintCurrentParamValues(int aNpar, double* aPar);
   static double GetChi2Value(int aKStarBin, TH1* aCfToFit, double* aPar);
@@ -118,11 +134,14 @@ public:
   void SetSaveLocationBase(TString aBase, TString aSaveNameModifier="");
   void ExistsSaveLocationBase();
 
+  void SetNonFlatBgdFitType(NonFlatBgdFitType aNonFlatBgdFitType);
+  void SetNonFlatBgdFitType(AnalysisType aAnType, NonFlatBgdFitType aFitType);
+  void SetNonFlatBgdFitTypes(vector<NonFlatBgdFitType> &aNonFlatBgdFitTypes);
+
   //inline (i.e. simple) functions
   FitSharedAnalyses* GetFitSharedAnalyses();
 
   void SetApplyNonFlatBackgroundCorrection(bool aApply);
-  void SetNonFlatBgdFitType(NonFlatBgdFitType aNonFlatBgdFitType);
   void SetApplyMomResCorrection(bool aApplyMomResCorrection);
   virtual void SetIncludeResidualCorrelationsType(IncludeResidualsType aIncludeResidualsType);
   void SetChargedResidualsType(ChargedResidualsType aChargedResidualsType);
@@ -173,7 +192,8 @@ protected:
 
   bool fResidualsInitiated;
   bool fReturnPrimaryWithResidualsToAnalyses;
-  NonFlatBgdFitType fNonFlatBgdFitType;
+  vector<NonFlatBgdFitType> fNonFlatBgdFitTypes;  //vector of six elements, one type for each LamK0, ALamK0, LamKchP, ALamKchM, LamKchM, ALamKchP
+                                                  //default = kLinear for all
 
   bool fUsemTScalingOfResidualRadii;
   double fmTScalingPowerOfResidualRadii;
@@ -205,7 +225,6 @@ protected:
 inline FitSharedAnalyses* LednickyFitter::GetFitSharedAnalyses() {return fFitSharedAnalyses;}
 
 inline void LednickyFitter::SetApplyNonFlatBackgroundCorrection(bool aApply) {fApplyNonFlatBackgroundCorrection = aApply;}
-inline void LednickyFitter::SetNonFlatBgdFitType(NonFlatBgdFitType aNonFlatBgdFitType) {fNonFlatBgdFitType = aNonFlatBgdFitType;}
 inline void LednickyFitter::SetApplyMomResCorrection(bool aApplyMomResCorrection) {fApplyMomResCorrection = aApplyMomResCorrection;}
 inline void LednickyFitter::SetIncludeResidualCorrelationsType(IncludeResidualsType aIncludeResidualsType) {fIncludeResidualsType = aIncludeResidualsType;}
 inline void LednickyFitter::SetChargedResidualsType(ChargedResidualsType aChargedResidualsType) {fChargedResidualsType = aChargedResidualsType;}

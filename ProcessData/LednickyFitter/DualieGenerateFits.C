@@ -159,15 +159,20 @@ int main(int argc, char **argv)
   TString tSaveDirectoryBase = tDirectoryBase;
 
   TString tLocationMasterFitResults = TString::Format("%sMasterFitResults_%s.txt", tDirectoryBase.Data(), tResultsDate.Data());
-  TString tSystematicsFileLocation = TString::Format("%sSystematics/", tDirectoryBase.Data());
 
 //-----------------------------------------------------------------------------
 
   TString tSaveNameModifier = LednickyFitter::BuildSaveNameModifier(ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, tNonFlatBgdFitType, tIncludeResidualsType, tResPrimMaxDecayType, tChargedResidualsType, FixD0, bUseStavCf, FixAllLambdaTo1, FixAllNormTo1, FixRadii, FixAllScattParams, tShareLambdaParams, tAllShareSingleLambdaParam, UsemTScalingOfResidualRadii, true, tDualieShareLambda, tDualieShareRadii);
 
-  tSystematicsFileLocation += TString::Format("%s/FinalFitSystematics_wFitRangeSys%s", tSaveNameModifier.Data(), tSaveNameModifier.Data());
-  if(tAnType==kLamK0 || tAnType==kALamK0) tSystematicsFileLocation += TString("_cLamK0.txt");
-  else if(tAnType==kLamKchP || tAnType==kALamKchM || tAnType==kLamKchM || tAnType==kALamKchP) tSystematicsFileLocation += TString("_cLamcKch.txt");
+  TString tSystematicsFileLocation;
+  if(tAnType==kLamK0 || tAnType==kALamK0)
+  {
+    tSystematicsFileLocation = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamK0_%s/%s/Systematics/FinalFitSystematics_wFitRangeSys%s_cLamK0.txt", tResultsDate.Data(), tSaveNameModifier.Data(), tSaveNameModifier.Data());
+  }
+  else if(tAnType==kLamKchP || tAnType==kALamKchM || tAnType==kLamKchM || tAnType==kALamKchP)
+  {
+    tSystematicsFileLocation = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_%s/%s/Systematics/FinalFitSystematics_wFitRangeSys%s_cLamcKch.txt", tResultsDate.Data(), tSaveNameModifier.Data(), tSaveNameModifier.Data());
+  }
   else assert(0);
 
   bool bExistsCurrentSysFile;

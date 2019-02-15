@@ -66,7 +66,7 @@ public:
 
   void CreateMinuitParameter(FitParameter* aParam);
 
-  void CreateBackgroundParams(NonFlatBgdFitType aNonFlatBgdType, bool aShareAmongstPairs, bool aShareAmongstPartials);
+  void CreateBackgroundParams(vector<NonFlatBgdFitType> &aNonFlatBgdTypes, bool aShareAmongstPairs, bool aShareAmongstPartials);
   void CreateMinuitParameters();
 
   void ReturnFitParametersToAnalyses();
@@ -76,6 +76,13 @@ public:
 
   double GetMinBgdFit();
   double GetMaxBgdFit();
+
+  void SetNonFlatBgdFitType(NonFlatBgdFitType aFitType);
+  void SetNonFlatBgdFitType(AnalysisType aAnType, NonFlatBgdFitType aFitType);
+  void SetNonFlatBgdFitTypes(vector<NonFlatBgdFitType> &aNonFlatBgdFitTypes);
+  vector<NonFlatBgdFitType> GetNonFlatBgdFitTypes();
+  NonFlatBgdFitType GetNonFlatBgdFitType();
+  NonFlatBgdFitType GetNonFlatBgdFitType(AnalysisType aAnType);
 
   //inline (i.e. simple) functions
 
@@ -87,8 +94,6 @@ public:
   void SetApplyNonFlatBackgroundCorrection(bool aApply);
   bool GetApplyNonFlatBackgroundCorrection();
 
-  void SetNonFlatBgdFitType(NonFlatBgdFitType aFitType);
-  NonFlatBgdFitType GetNonFlatBgdFitType();
   void SetUseNewBgdTreatment(bool aUse);
   bool UsingNewBgdTreatment();
 
@@ -125,7 +130,8 @@ private:
   TMinuit* fMinuit;
   FitType fFitType; //kChi2PML = default, or kChi2;
   bool fApplyNonFlatBackgroundCorrection;
-  NonFlatBgdFitType fNonFlatBgdFitType; //kLinear = default
+  vector<NonFlatBgdFitType> fNonFlatBgdFitTypes;  //vector of six elements, one type for each LamK0, ALamK0, LamKchP, ALamKchM, LamKchM, ALamKchP
+                                                  //default = kLinear for all
   bool fUseNewBgdTreatment;
   int fNFitPairAnalysis;
 
@@ -161,8 +167,6 @@ inline FitType FitSharedAnalyses::GetFitType() {return fFitType;}
 inline void FitSharedAnalyses::SetApplyNonFlatBackgroundCorrection(bool aApply) {fApplyNonFlatBackgroundCorrection = aApply;}
 inline bool FitSharedAnalyses::GetApplyNonFlatBackgroundCorrection() {return fApplyNonFlatBackgroundCorrection;}
 
-inline void FitSharedAnalyses::SetNonFlatBgdFitType(NonFlatBgdFitType aFitType) {fNonFlatBgdFitType = aFitType;}
-inline NonFlatBgdFitType FitSharedAnalyses::GetNonFlatBgdFitType() {return fNonFlatBgdFitType;}
 inline void FitSharedAnalyses::SetUseNewBgdTreatment(bool aUse) {fUseNewBgdTreatment = aUse;}
 inline bool FitSharedAnalyses::UsingNewBgdTreatment() {return fUseNewBgdTreatment;}
 

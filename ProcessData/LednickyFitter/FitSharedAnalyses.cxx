@@ -20,7 +20,7 @@ FitSharedAnalyses::FitSharedAnalyses(vector<FitPairAnalysis*> &aVecOfFitPairAnal
   fMinuit(0),
   fFitType(kChi2PML),
   fApplyNonFlatBackgroundCorrection(false),
-  fNonFlatBgdFitType(kLinear),
+  fNonFlatBgdFitTypes(0),
   fUseNewBgdTreatment(false),
   fNFitPairAnalysis(aVecOfFitPairAnalyses.size()),
   fNFitParamsPerAnalysis(0),
@@ -51,6 +51,7 @@ FitSharedAnalyses::FitSharedAnalyses(vector<FitPairAnalysis*> &aVecOfFitPairAnal
 
   fMinuit = new TMinuit(50);
   fFitChi2Histograms = new FitChi2Histograms();
+  for(int i=0; i<=(int)kALamKchP; i++) fNonFlatBgdFitTypes.push_back(kLinear);
 }
 
 
@@ -60,7 +61,7 @@ FitSharedAnalyses::FitSharedAnalyses(vector<FitPairAnalysis*> &aVecOfFitPairAnal
   fMinuit(0),
   fFitType(kChi2PML),
   fApplyNonFlatBackgroundCorrection(false),
-  fNonFlatBgdFitType(kLinear),
+  fNonFlatBgdFitTypes(0),
   fUseNewBgdTreatment(false),
   fNFitPairAnalysis(aVecOfFitPairAnalyses.size()),
   fNFitParamsPerAnalysis(0),
@@ -91,6 +92,7 @@ FitSharedAnalyses::FitSharedAnalyses(vector<FitPairAnalysis*> &aVecOfFitPairAnal
 
   fMinuit = new TMinuit(50);
   fFitChi2Histograms = new FitChi2Histograms();
+  for(int i=0; i<=(int)kALamKchP; i++) fNonFlatBgdFitTypes.push_back(kLinear);
 }
 
 
@@ -456,14 +458,18 @@ void FitSharedAnalyses::CreateMinuitParameter(FitParameter* aParam)
 
 
 //________________________________________________________________________________________________________________
-void FitSharedAnalyses::CreateBackgroundParams(NonFlatBgdFitType aNonFlatBgdType, bool aShareAmongstPairs, bool aShareAmongstPartials)
+void FitSharedAnalyses::CreateBackgroundParams(vector<NonFlatBgdFitType> &aNonFlatBgdTypes, bool aShareAmongstPairs, bool aShareAmongstPartials)
 {
+  //Note: NewBgdTreatment means fitting background parameters simultaneously with the fit parameters
+  //      I tried this out, but the old method of fixing background first is probably best
   assert(fUseNewBgdTreatment);
   if(aShareAmongstPairs) assert(aShareAmongstPartials);
 
+  NonFlatBgdFitType tNonFlatBgdType;
   for(unsigned int i=0; i<fNFitPairAnalysis; i++)
   {
-    fFitPairAnalysisCollection[i]->InitializeBackgroundParams(aNonFlatBgdType, aShareAmongstPartials);
+    tNonFlatBgdType = aNonFlatBgdTypes[fFitPairAnalysisCollection[i]->GetAnalysisType()];
+    fFitPairAnalysisCollection[i]->InitializeBackgroundParams(tNonFlatBgdType, aShareAmongstPartials);
     if(aShareAmongstPartials) assert(fFitPairAnalysisCollection[i]->Get2dBgdParameters().size()==1);
   }
 
@@ -543,7 +549,7 @@ void FitSharedAnalyses::CreateMinuitParameters()
   }
 
 
-  if(fUseNewBgdTreatment) CreateBackgroundParams(fNonFlatBgdFitType, true, true);
+  if(fUseNewBgdTreatment) CreateBackgroundParams(fNonFlatBgdFitTypes, true, true);
 
 
   //--Create all of the normalization parameters
@@ -637,9 +643,56 @@ double FitSharedAnalyses::GetMaxBgdFit()
   return fFitPairAnalysisCollection[0]->GetMaxBgdFit();
 }
 
+//________________________________________________________________________________________________________________
+void FitSharedAnalyses::SetNonFlatBgdFitType(NonFlatBgdFitType aFitType) 
+{
+  for(int i=0; i<fNonFlatBgdFitTypes.size(); i++) fNonFlatBgdFitTypes[i] = aFitType;
+}
 
+//________________________________________________________________________________________________________________
+void FitSharedAnalyses::SetNonFlatBgdFitType(AnalysisType aAnType, NonFlatBgdFitType aFitType) 
+{
+  //This will set all (A)LamK0, or all (A)LamKchP(M), as they should probably be the same
+  if(aAnType==kLamK0 || aAnType==kALamK0)
+  {
+    fNonFlatBgdFitTypes[kLamK0]  = aFitType;
+    fNonFlatBgdFitTypes[kALamK0] = aFitType;
+  }
+  else if(aAnType==kLamKchP || aAnType==kALamKchM || aAnType==kLamKchM || aAnType==kALamKchP)
+  {
+    fNonFlatBgdFitTypes[kLamKchP]  = aFitType;
+    fNonFlatBgdFitTypes[kALamKchM] = aFitType;
+    fNonFlatBgdFitTypes[kLamKchM]  = aFitType;
+    fNonFlatBgdFitTypes[kALamKchP] = aFitType;
+  }
+  else assert(0); 
+}
 
+//________________________________________________________________________________________________________________
+void FitSharedAnalyses::SetNonFlatBgdFitTypes(vector<NonFlatBgdFitType> &aNonFlatBgdFitTypes)
+{
+  fNonFlatBgdFitTypes = aNonFlatBgdFitTypes;
+}
 
+//________________________________________________________________________________________________________________
+NonFlatBgdFitType FitSharedAnalyses::GetNonFlatBgdFitType() 
+{
+  //In this case, all should be of same type
+  for(int i=1; i<fNonFlatBgdFitTypes.size(); i++) assert(fNonFlatBgdFitTypes[i]==fNonFlatBgdFitTypes[i-1]);
+  return fNonFlatBgdFitTypes[0];
+}
+
+//________________________________________________________________________________________________________________
+vector<NonFlatBgdFitType> FitSharedAnalyses::GetNonFlatBgdFitTypes() 
+{
+  return fNonFlatBgdFitTypes;
+}
+
+//________________________________________________________________________________________________________________
+NonFlatBgdFitType FitSharedAnalyses::GetNonFlatBgdFitType(AnalysisType aAnType) 
+{
+  return fNonFlatBgdFitTypes[aAnType];
+}
 
 
 

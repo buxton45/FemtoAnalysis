@@ -51,7 +51,7 @@ LednickyFitter::LednickyFitter(FitSharedAnalyses* aFitSharedAnalyses, double aMa
 
   fResidualsInitiated(false),
   fReturnPrimaryWithResidualsToAnalyses(false),
-  fNonFlatBgdFitType(kLinear),
+  fNonFlatBgdFitTypes(0),
 
   fUsemTScalingOfResidualRadii(false),
   fmTScalingPowerOfResidualRadii(-0.5),
@@ -69,6 +69,7 @@ LednickyFitter::LednickyFitter(FitSharedAnalyses* aFitSharedAnalyses, double aMa
 {
   int tNFitPartialAnalysis = fFitSharedAnalyses->GetFitPairAnalysis(0)->GetNFitPartialAnalysis();
   fCorrectedFitVecs.resize(fNAnalyses, td2dVec(tNFitPartialAnalysis));
+  for(int i=0; i<=(int)kALamKchP; i++) fNonFlatBgdFitTypes.push_back(kLinear);
 }
 
 //________________________________________________________________________________________________________________
@@ -101,7 +102,7 @@ LednickyFitter::LednickyFitter(AnalysisType aAnalysisType, double aMaxBuildKStar
 
   fResidualsInitiated(false),
   fReturnPrimaryWithResidualsToAnalyses(false),
-  fNonFlatBgdFitType(kLinear),
+  fNonFlatBgdFitTypes(0),
 
   fUsemTScalingOfResidualRadii(false),
   fmTScalingPowerOfResidualRadii(-0.5),
@@ -121,6 +122,7 @@ LednickyFitter::LednickyFitter(AnalysisType aAnalysisType, double aMaxBuildKStar
 
   fNbinsXToFit = std::round(fMaxFitKStar/fKStarBinWidth);
   fNbinsXToBuild = fNbinsXToFit;
+  for(int i=0; i<=(int)kALamKchP; i++) fNonFlatBgdFitTypes.push_back(kLinear);
 }
 
 
@@ -129,6 +131,30 @@ LednickyFitter::~LednickyFitter()
 {
   cout << "LednickyFitter object is being deleted!!!" << endl;
 }
+
+//________________________________________________________________________________________________________________
+void LednickyFitter::AppendNonFlatBgdFitTypeInfo(TString &aSaveName, vector<NonFlatBgdFitType> &aNonFlatBgdFitTypes)
+{
+  if(aNonFlatBgdFitTypes.size()==1) aSaveName += cNonFlatBgdFitTypeTags[aNonFlatBgdFitTypes[0]];
+  else
+  {
+    //First, if they're all the same, then only append single descriptor
+    bool tAllSame=true;
+    for(int i=1; i<aNonFlatBgdFitTypes.size(); i++)
+    {
+      if(aNonFlatBgdFitTypes[i] != aNonFlatBgdFitTypes[i-1]) tAllSame=false;
+    }
+    if(tAllSame) aSaveName += cNonFlatBgdFitTypeTags[aNonFlatBgdFitTypes[0]];
+    else
+    {
+      //Should make sure all (A)LamK0 are of same type, and all (A)LamKchP(M) are of same type
+      assert(aNonFlatBgdFitTypes[kLamK0]==aNonFlatBgdFitTypes[kALamK0]);
+      for(int i=(int)kLamKchP+1; i<=(int)kALamKchP; i++) assert(aNonFlatBgdFitTypes[i] == aNonFlatBgdFitTypes[i-1]);
+      aSaveName += TString::Format("LamK0%sLamKch%s", cNonFlatBgdFitTypeTags[aNonFlatBgdFitTypes[kLamK0]], cNonFlatBgdFitTypeTags[aNonFlatBgdFitTypes[kLamKchP]]);
+    }
+  }
+}
+
 
 //________________________________________________________________________________________________________________
 void LednickyFitter::AppendFitInfo(TString &aSaveName, bool aApplyMomResCorrection, bool aApplyNonFlatBackgroundCorrection, 
@@ -147,14 +173,14 @@ void LednickyFitter::AppendFitInfo(TString &aSaveName, bool aApplyMomResCorrecti
 }
 
 //________________________________________________________________________________________________________________
-void LednickyFitter::AppendFitInfo(TString &aSaveName, bool aApplyMomResCorrection, bool aApplyNonFlatBackgroundCorrection, NonFlatBgdFitType aNonFlatBgdFitType, 
+void LednickyFitter::AppendFitInfo(TString &aSaveName, bool aApplyMomResCorrection, bool aApplyNonFlatBackgroundCorrection, vector<NonFlatBgdFitType> &aNonFlatBgdFitTypes, 
                                    IncludeResidualsType aIncludeResidualsType, ResPrimMaxDecayType aResPrimMaxDecayType, ChargedResidualsType aChargedResidualsType, bool aFixD0)
 {
   if(aApplyMomResCorrection) aSaveName += TString("_MomResCrctn");
   if(aApplyNonFlatBackgroundCorrection)
   {
     aSaveName += TString("_NonFlatBgdCrctn");
-    aSaveName += cNonFlatBgdFitTypeTags[aNonFlatBgdFitType];
+    AppendNonFlatBgdFitTypeInfo(aSaveName, aNonFlatBgdFitTypes);
   }
 
   aSaveName += cIncludeResidualsTypeTags[aIncludeResidualsType];
@@ -165,6 +191,15 @@ void LednickyFitter::AppendFitInfo(TString &aSaveName, bool aApplyMomResCorrecti
   }
   if(aFixD0) aSaveName += TString("_FixedD0");
 }
+//________________________________________________________________________________________________________________
+void LednickyFitter::AppendFitInfo(TString &aSaveName, bool aApplyMomResCorrection, bool aApplyNonFlatBackgroundCorrection, NonFlatBgdFitType aNonFlatBgdFitType, 
+                                   IncludeResidualsType aIncludeResidualsType, ResPrimMaxDecayType aResPrimMaxDecayType, ChargedResidualsType aChargedResidualsType, bool aFixD0)
+{
+  vector<NonFlatBgdFitType> tNonFlatBgdFitTypes{aNonFlatBgdFitType};
+  AppendFitInfo(aSaveName, aApplyMomResCorrection, aApplyNonFlatBackgroundCorrection, tNonFlatBgdFitTypes, 
+                aIncludeResidualsType, aResPrimMaxDecayType, aChargedResidualsType, aFixD0);
+}
+
 
 //________________________________________________________________________________________________________________
 void LednickyFitter::AppendFitInfo(TString &aSaveName)
@@ -172,14 +207,14 @@ void LednickyFitter::AppendFitInfo(TString &aSaveName)
   bool tFixD0 = false;
   if(fFitSharedAnalyses->GetFitPairAnalysis(0)->GetFitParameter(kd0)->IsFixed()) tFixD0 = true;
 
-  AppendFitInfo(aSaveName, fApplyMomResCorrection, fApplyNonFlatBackgroundCorrection, fNonFlatBgdFitType, 
+  AppendFitInfo(aSaveName, fApplyMomResCorrection, fApplyNonFlatBackgroundCorrection, fNonFlatBgdFitTypes, 
                 fIncludeResidualsType, fResPrimMaxDecayType, fChargedResidualsType, tFixD0);
 
 }
 
 
 //________________________________________________________________________________________________________________
-TString LednickyFitter::BuildSaveNameModifier(bool aApplyMomResCorrection, bool aApplyNonFlatBackgroundCorrection, NonFlatBgdFitType aNonFlatBgdFitType, 
+TString LednickyFitter::BuildSaveNameModifier(bool aApplyMomResCorrection, bool aApplyNonFlatBackgroundCorrection, vector<NonFlatBgdFitType> &aNonFlatBgdFitTypes, 
                                               IncludeResidualsType aIncludeResidualsType, ResPrimMaxDecayType aResPrimMaxDecayType, 
                                               ChargedResidualsType aChargedResidualsType, bool aFixD0,
                                               bool aUseStavCf, bool aFixAllLambdaTo1, bool aFixAllNormTo1, bool aFixRadii, bool aFixAllScattParams, 
@@ -187,7 +222,7 @@ TString LednickyFitter::BuildSaveNameModifier(bool aApplyMomResCorrection, bool 
                                               bool aDualieShareLambda, bool aDualieShareRadii)
 {
   TString tReturnTString = "";
-  LednickyFitter::AppendFitInfo(tReturnTString, aApplyMomResCorrection, aApplyNonFlatBackgroundCorrection, aNonFlatBgdFitType, 
+  LednickyFitter::AppendFitInfo(tReturnTString, aApplyMomResCorrection, aApplyNonFlatBackgroundCorrection, aNonFlatBgdFitTypes, 
                                 aIncludeResidualsType, aResPrimMaxDecayType, aChargedResidualsType, aFixD0);
 
   if(aUseStavCf)                                      tReturnTString += TString("_StavCf");
@@ -208,6 +243,24 @@ TString LednickyFitter::BuildSaveNameModifier(bool aApplyMomResCorrection, bool 
 
   return tReturnTString;
 }
+//________________________________________________________________________________________________________________
+TString LednickyFitter::BuildSaveNameModifier(bool aApplyMomResCorrection, bool aApplyNonFlatBackgroundCorrection, NonFlatBgdFitType aNonFlatBgdFitType, 
+                                              IncludeResidualsType aIncludeResidualsType, ResPrimMaxDecayType aResPrimMaxDecayType, 
+                                              ChargedResidualsType aChargedResidualsType, bool aFixD0,
+                                              bool aUseStavCf, bool aFixAllLambdaTo1, bool aFixAllNormTo1, bool aFixRadii, bool aFixAllScattParams, 
+                                              bool aShareLambdaParams, bool aAllShareSingleLambdaParam, bool aUsemTScalingOfResidualRadii, bool aIsDualie,
+                                              bool aDualieShareLambda, bool aDualieShareRadii)
+{
+  vector<NonFlatBgdFitType> tNonFlatBgdFitTypes{aNonFlatBgdFitType};
+  return BuildSaveNameModifier(aApplyMomResCorrection, aApplyNonFlatBackgroundCorrection, tNonFlatBgdFitTypes, 
+                               aIncludeResidualsType, aResPrimMaxDecayType, 
+                               aChargedResidualsType, aFixD0,
+                               aUseStavCf, aFixAllLambdaTo1, aFixAllNormTo1, aFixRadii, aFixAllScattParams, 
+                               aShareLambdaParams, aAllShareSingleLambdaParam, aUsemTScalingOfResidualRadii, aIsDualie,
+                               aDualieShareLambda, aDualieShareRadii);
+}
+
+
 
 //________________________________________________________________________________________________________________
 void LednickyFitter::PrintCurrentParamValues(int aNpar, double* aPar)
@@ -254,10 +307,11 @@ double LednickyFitter::GetPmlValue(double aNumContent, double aDenContent, doubl
 void LednickyFitter::ApplyNewNonFlatBackgroundCorrection(vector<double> &aCf, vector<double> &aKStarBinCenters, FitPartialAnalysis* aPartAn, double *par)
 {
   vector<FitParameter*> tBgdParams = aPartAn->GetBgdParameters();
-  if     (fNonFlatBgdFitType==kLinear)      assert(tBgdParams.size()==2);
-  else if(fNonFlatBgdFitType==kQuadratic)   assert(tBgdParams.size()==3);
-  else if(fNonFlatBgdFitType==kGaussian)    assert(tBgdParams.size()==4);
-  else if(fNonFlatBgdFitType==kPolynomial)  assert(tBgdParams.size()==7);
+  NonFlatBgdFitType tNonFlatBgdFitType = fNonFlatBgdFitTypes[aPartAn->GetAnalysisType()];
+  if     (tNonFlatBgdFitType==kLinear)      assert(tBgdParams.size()==2);
+  else if(tNonFlatBgdFitType==kQuadratic)   assert(tBgdParams.size()==3);
+  else if(tNonFlatBgdFitType==kGaussian)    assert(tBgdParams.size()==4);
+  else if(tNonFlatBgdFitType==kPolynomial)  assert(tBgdParams.size()==7);
   else assert(0);
 
   td1dVec tMinuitParams(0);
@@ -273,10 +327,10 @@ void LednickyFitter::ApplyNewNonFlatBackgroundCorrection(vector<double> &aCf, ve
   for(int ix=0; ix<fNbinsXToBuild; ix++)
   {
     x[0] = aKStarBinCenters[ix];
-    if(fNonFlatBgdFitType==kLinear)           tNonFlatBgd = BackgroundFitter::FitFunctionLinear(x, tMinuitParams.data());
-    else if(fNonFlatBgdFitType==kQuadratic)   tNonFlatBgd = BackgroundFitter::FitFunctionQuadratic(x, tMinuitParams.data());
-    else if(fNonFlatBgdFitType==kGaussian)    tNonFlatBgd = BackgroundFitter::FitFunctionGaussian(x, tMinuitParams.data());
-    else if(fNonFlatBgdFitType==kPolynomial)  tNonFlatBgd = BackgroundFitter::FitFunctionPolynomial(x, tMinuitParams.data());
+    if(tNonFlatBgdFitType==kLinear)           tNonFlatBgd = BackgroundFitter::FitFunctionLinear(x, tMinuitParams.data());
+    else if(tNonFlatBgdFitType==kQuadratic)   tNonFlatBgd = BackgroundFitter::FitFunctionQuadratic(x, tMinuitParams.data());
+    else if(tNonFlatBgdFitType==kGaussian)    tNonFlatBgd = BackgroundFitter::FitFunctionGaussian(x, tMinuitParams.data());
+    else if(tNonFlatBgdFitType==kPolynomial)  tNonFlatBgd = BackgroundFitter::FitFunctionPolynomial(x, tMinuitParams.data());
     else assert(0);
 
     aCf[ix] = aCf[ix]*tNonFlatBgd;
@@ -365,6 +419,7 @@ void LednickyFitter::CalculateFitFunction(int &npar, double &chi2, double *par)
   fNpFitsVec.resize(fNAnalyses);
   for(unsigned int i=0; i<fNpFitsVec.size(); i++) {fNpFitsVec[i] = 0.;}
 
+  NonFlatBgdFitType tNonFlatBgdFitType;
   for(int iAnaly=0; iAnaly<fNAnalyses; iAnaly++)
   {
     FitPairAnalysis* tFitPairAnalysis = fFitSharedAnalyses->GetFitPairAnalysis(iAnaly);
@@ -395,6 +450,7 @@ void LednickyFitter::CalculateFitFunction(int &npar, double &chi2, double *par)
       int td0MinuitParamNumber = tFitPartialAnalysis->GetFitParameter(kd0)->GetMinuitParamNumber();
       int tNormMinuitParamNumber = tFitPartialAnalysis->GetFitNormParameter()->GetMinuitParamNumber();
 
+      tNonFlatBgdFitType = fNonFlatBgdFitTypes[tFitPartialAnalysis->GetAnalysisType()];
 
       assert(tNFitParams == 6);
       //NOTE: CANNOT use sizeof(tPar)/sizeof(tPar[0]) trick here becasue tPar is pointer
@@ -451,13 +507,13 @@ void LednickyFitter::CalculateFitFunction(int &npar, double &chi2, double *par)
       else tCorrectedFitCfContent = tFitCfContent;
 
       bool tNormalizeBgdFitToCf=true;
-      if(fApplyNonFlatBackgroundCorrection && fNonFlatBgdFitType != kDivideByTherm)
+      if(fApplyNonFlatBackgroundCorrection && tNonFlatBgdFitType != kDivideByTherm)
       {
         if(!fFitSharedAnalyses->UsingNewBgdTreatment())
         {
           //I thought using PairAnalysis, when BgdFitType != kLinear, would help stabilize things, but it doesn't seem to help all that much.
           //  Things have been stabilized with other tweaks.
-          TF1* tNonFlatBgd = tFitPartialAnalysis->GetNonFlatBackground(fNonFlatBgdFitType, fFitSharedAnalyses->GetFitType(), tNormalizeBgdFitToCf);
+          TF1* tNonFlatBgd = tFitPartialAnalysis->GetNonFlatBackground(tNonFlatBgdFitType, fFitSharedAnalyses->GetFitType(), tNormalizeBgdFitToCf);
           ApplyNonFlatBackgroundCorrection(tCorrectedFitCfContent, fKStarBinCenters, tNonFlatBgd);
         }
         else ApplyNewNonFlatBackgroundCorrection(tCorrectedFitCfContent, fKStarBinCenters, tFitPartialAnalysis, par);
@@ -731,15 +787,14 @@ void LednickyFitter::InitializeFitter(int aNbinsXToBuild)
     }
   }
 
-  if(fNonFlatBgdFitType==kDivideByTherm)
+  //Implement DivideCfByTherm if necessary
+  for(int iAnaly=0; iAnaly<fNAnalyses; iAnaly++)
   {
-    for(int iAnaly=0; iAnaly<fNAnalyses; iAnaly++)
+    if(fNonFlatBgdFitTypes[fFitSharedAnalyses->GetFitPairAnalysis(iAnaly)->GetAnalysisType()] == kDivideByTherm)
     {
       fFitSharedAnalyses->GetFitPairAnalysis(iAnaly)->DivideCfByThermBgd();
     }
   }
-
-
 }
 
 
@@ -1512,4 +1567,34 @@ void LednickyFitter::ExistsSaveLocationBase()
 
 }
 
+//________________________________________________________________________________________________________________
+void LednickyFitter::SetNonFlatBgdFitType(NonFlatBgdFitType aNonFlatBgdFitType) 
+{
+  for(int i=0; i<fNonFlatBgdFitTypes.size(); i++) fNonFlatBgdFitTypes[i] = aNonFlatBgdFitType;
+}
+
+//________________________________________________________________________________________________________________
+void LednickyFitter::SetNonFlatBgdFitType(AnalysisType aAnType, NonFlatBgdFitType aFitType) 
+{
+  //This will set all (A)LamK0, or all (A)LamKchP(M), as they should probably be the same
+  if(aAnType==kLamK0 || aAnType==kALamK0)
+  {
+    fNonFlatBgdFitTypes[kLamK0]  = aFitType;
+    fNonFlatBgdFitTypes[kALamK0] = aFitType;
+  }
+  else if(aAnType==kLamKchP || aAnType==kALamKchM || aAnType==kLamKchM || aAnType==kALamKchP)
+  {
+    fNonFlatBgdFitTypes[kLamKchP]  = aFitType;
+    fNonFlatBgdFitTypes[kALamKchM] = aFitType;
+    fNonFlatBgdFitTypes[kLamKchM]  = aFitType;
+    fNonFlatBgdFitTypes[kALamKchP] = aFitType;
+  }
+  else assert(0); 
+}
+
+//________________________________________________________________________________________________________________
+void LednickyFitter::SetNonFlatBgdFitTypes(vector<NonFlatBgdFitType> &aNonFlatBgdFitTypes)
+{
+  fNonFlatBgdFitTypes = aNonFlatBgdFitTypes;
+}
 
