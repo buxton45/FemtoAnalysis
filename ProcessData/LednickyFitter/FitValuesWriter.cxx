@@ -40,6 +40,21 @@ TString FitValuesWriter::BuildFitInfoTString(bool aApplyMomResCorrection, bool a
                                              aDualieShareLambda, aDualieShareRadii);
 }
 
+//________________________________________________________________________________________________________________
+TString FitValuesWriter::BuildFitInfoTString(bool aApplyMomResCorrection, bool aApplyNonFlatBackgroundCorrection, vector<NonFlatBgdFitType> &aNonFlatBgdFitTypes, 
+                                             IncludeResidualsType aIncludeResidualsType, ResPrimMaxDecayType aResPrimMaxDecayType, 
+                                             ChargedResidualsType aChargedResidualsType, bool aFixD0,
+                                             bool aUseStavCf, bool aFixAllLambdaTo1, bool aFixAllNormTo1, bool aFixRadii, bool aFixAllScattParams, 
+                                             bool aShareLambdaParams, bool aAllShareSingleLambdaParam, bool aUsemTScalingOfResidualRadii, bool aIsDualie, 
+                                             bool aDualieShareLambda, bool aDualieShareRadii)
+{
+  return LednickyFitter::BuildSaveNameModifier(aApplyMomResCorrection, aApplyNonFlatBackgroundCorrection, aNonFlatBgdFitTypes, 
+                                             aIncludeResidualsType, aResPrimMaxDecayType, aChargedResidualsType, aFixD0,
+                                             aUseStavCf, aFixAllLambdaTo1, aFixAllNormTo1, aFixRadii, aFixAllScattParams, 
+                                             aShareLambdaParams, aAllShareSingleLambdaParam, aUsemTScalingOfResidualRadii, aIsDualie, 
+                                             aDualieShareLambda, aDualieShareRadii);
+}
+
 
 //________________________________________________________________________________________________________________
 TString FitValuesWriter::GetFitInfoTString(TString aLine)

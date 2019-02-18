@@ -49,6 +49,13 @@ public:
                                      bool aShareLambdaParams=false, bool aAllShareSingleLambdaParam=false, bool aUsemTScalingOfResidualRadii=false, bool aIsDualie=false, 
                                      bool aDualieShareLambda=false, bool aDualieShareRadii=false);
 
+  static TString BuildFitInfoTString(bool aApplyMomResCorrection, bool aApplyNonFlatBackgroundCorrection, vector<NonFlatBgdFitType> &aNonFlatBgdFitTypes, 
+                                     IncludeResidualsType aIncludeResidualsType, ResPrimMaxDecayType aResPrimMaxDecayType=k4fm, 
+                                     ChargedResidualsType aChargedResidualsType=kUseXiDataAndCoulombOnlyInterp, bool aFixD0=false,
+                                     bool aUseStavCf=false, bool aFixAllLambdaTo1=false, bool aFixAllNormTo1=false, bool aFixRadii=false, bool aFixAllScattParams=false, 
+                                     bool aShareLambdaParams=false, bool aAllShareSingleLambdaParam=false, bool aUsemTScalingOfResidualRadii=false, bool aIsDualie=false, 
+                                     bool aDualieShareLambda=false, bool aDualieShareRadii=false);
+
   static TString GetFitInfoTString(TString aLine);
   static AnalysisType GetAnalysisType(TString aLine);
   static CentralityType GetCentralityType(TString aLine);

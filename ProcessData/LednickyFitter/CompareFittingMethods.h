@@ -43,8 +43,9 @@ struct FitValWriterInfo
   int markerStyle;
   double markerSize;
   bool lamKchCombined;
+  bool allLamKCombined;
 
-  FitValWriterInfo(AnalysisType aAnType, TString aMasterFileLocation, TString aResultsDate, TString aFitInfoTString, TString aLegendDescriptor, int aMarkerColor, int aMarkerStyle, double aMarkerSize, bool aLamKchCombined)
+  FitValWriterInfo(AnalysisType aAnType, TString aMasterFileLocation, TString aResultsDate, TString aFitInfoTString, TString aLegendDescriptor, int aMarkerColor, int aMarkerStyle, double aMarkerSize, bool aLamKchCombined, bool aAllLamKCombined=false)
   {
     analysisType       = aAnType;
 
@@ -57,6 +58,7 @@ struct FitValWriterInfo
     markerStyle        = aMarkerStyle;
     markerSize         = aMarkerSize;
     lamKchCombined     = aLamKchCombined;
+    allLamKCombined    = aAllLamKCombined;
   }
 };
 
@@ -791,7 +793,7 @@ _MomResCrctn_NonFlatBgdCrctnLinear_3Res_PrimMaxDecay4fm_UsingXiDataAndCoulombOnl
 
 //**************************************************************************************************************************************************************************
   extern void DrawAnalysisStamps(TPad* aPad, vector<AnalysisType> &aAnTypes, double aStartX, double aStartY, double aIncrementX, double aIncrementY, double aTextSize=0.04, int aMarkerStyle=20);
-  extern void DrawAnalysisAndConjStamps(TPad* aPad, vector<AnalysisType> &aAnTypes, double aStartX, double aStartY, double aIncrementX, double aIncrementY, double aSecondColumnShiftX, double aTextSize=0.04, int aMarkerStyle=20, int aConjMarkerStyle=24, bool aLamKchCombined=false, bool aLamKchSeparate=true);
+  extern void DrawAnalysisAndConjStamps(TPad* aPad, vector<AnalysisType> &aAnTypes, double aStartX, double aStartY, double aIncrementX, double aIncrementY, double aSecondColumnShiftX, double aTextSize=0.04, int aMarkerStyle=20, int aConjMarkerStyle=24, bool aLamKchCombined=false, bool aLamKchSeparate=true, bool aAllLamKCombined=false);
   extern void DrawFixedRadiiStamps(TPad* aPad, double aStartX, double aStartY, double aIncrementX, double aIncrementY, double aTextSize=0.04, int aMarkerStyle=20);
   extern void SetupReF0vsImF0Axes(TPad* aPad, double aMinReF0=-2., double aMaxReF0=1., double aMinImF0=0., double aMaxImF0=1.5);
   extern void SetupReF0vsImF0AndD0Axes(TPad* aPadReF0vsImF0, TPad* aPadD0, 

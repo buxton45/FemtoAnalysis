@@ -56,7 +56,7 @@ void DrawAnalysisStamps(TPad* aPad, vector<AnalysisType> &aAnTypes, double aStar
 }
 
 //_________________________________________________________________________________________________________________________________
-void DrawAnalysisAndConjStamps(TPad* aPad, vector<AnalysisType> &aAnTypes, double aStartX, double aStartY, double aIncrementX, double aIncrementY, double aSecondColumnShiftX, double aTextSize, int aMarkerStyle, int aConjMarkerStyle, bool aLamKchCombined, bool aLamKchSeparate)
+void DrawAnalysisAndConjStamps(TPad* aPad, vector<AnalysisType> &aAnTypes, double aStartX, double aStartY, double aIncrementX, double aIncrementY, double aSecondColumnShiftX, double aTextSize, int aMarkerStyle, int aConjMarkerStyle, bool aLamKchCombined, bool aLamKchSeparate, bool aAllLamKCombined)
 {
   aPad->cd();
 
@@ -93,6 +93,22 @@ void DrawAnalysisAndConjStamps(TPad* aPad, vector<AnalysisType> &aAnTypes, doubl
 
 
   int iTex = 0;
+  //----------
+  if(aAllLamKCombined)
+  {
+    if(!aLamKchSeparate)
+    {
+      bIncLamKchP = false;
+      bIncLamKchM = false;
+    }
+
+    tMarker->SetMarkerStyle(aMarkerStyle);
+    tTex->DrawLatex(aStartX, aStartY-iTex*aIncrementY, "All #LambdaK");
+    tMarker->SetMarkerColor(kGreen);
+    tMarker->DrawMarker(aStartX-aIncrementX, aStartY-iTex*aIncrementY);
+
+    iTex++;
+  }
   //----------
   if(aLamKchCombined)
   {
@@ -520,9 +536,12 @@ TCanvas* CompareLambdavsRadius(vector<FitValWriterInfo> &aFitValWriterInfo, Cent
 
   //Figure out if we have only LamKchP and LamKchM separately, only LamKchP and LamKchM combined, or both
   bool tLamKchCombined=false, tLamKchSeparate=false;
+  bool tAllLamKCombined=false, tAllLamKCombinedDrawn=false;
   for(unsigned int iAn=0; iAn<aFitValWriterInfo.size(); iAn++)
   {
+    if(aFitValWriterInfo[iAn].allLamKCombined) tAllLamKCombined=true;
     if(aFitValWriterInfo[iAn].analysisType==kLamK0 || aFitValWriterInfo[iAn].analysisType==kALamK0) continue;
+
     if(aFitValWriterInfo[iAn].lamKchCombined) tLamKchCombined=true;
     else tLamKchSeparate=true;
   }
@@ -532,7 +551,16 @@ TCanvas* CompareLambdavsRadius(vector<FitValWriterInfo> &aFitValWriterInfo, Cent
   TString tLegDesc;
   for(unsigned int iAn=0; iAn<aFitValWriterInfo.size(); iAn++)
   {
-    if(!aFitValWriterInfo[iAn].lamKchCombined || aFitValWriterInfo[iAn].analysisType==kLamK0)
+    if(aFitValWriterInfo[iAn].allLamKCombined)
+    {
+      int tColor = kGreen;
+      if(!tAllLamKCombinedDrawn)
+      {
+        FitValuesWriter::DrawLambdavsRadiusGraphStat((TPad*)tReturnCan, aFitValWriterInfo[iAn].masterFileLocation, aFitValWriterInfo[iAn].fitInfoTString, aFitValWriterInfo[iAn].analysisType, aCentType, tColor, aFitValWriterInfo[iAn].markerStyle, aFitValWriterInfo[iAn].markerSize, tDrawOption);
+        tAllLamKCombinedDrawn=true;
+      }
+    }
+    else if(!aFitValWriterInfo[iAn].lamKchCombined || aFitValWriterInfo[iAn].analysisType==kLamK0)
     {
       FitValuesWriter::DrawLambdavsRadiusGraphStat((TPad*)tReturnCan, aFitValWriterInfo[iAn].masterFileLocation, aFitValWriterInfo[iAn].fitInfoTString, aFitValWriterInfo[iAn].analysisType, aCentType, aFitValWriterInfo[iAn].markerColor, aFitValWriterInfo[iAn].markerStyle, aFitValWriterInfo[iAn].markerSize, tDrawOption);
       tAnTypes.push_back(aFitValWriterInfo[iAn].analysisType);
@@ -586,7 +614,7 @@ TCanvas* CompareLambdavsRadius(vector<FitValWriterInfo> &aFitValWriterInfo, Cent
   double tTextSizeStamp = 0.04;
   int tMarkerStyleStamp = 21;
   int tConjMarkerStyleStamp = 25;
-  if(!aSuppressAnStamps) DrawAnalysisAndConjStamps((TPad*)tReturnCan, tAnTypes, tStartXStamp, tStartYStamp, tIncrementXStamp, tIncrementYStamp, tSecondColumnShiftX, tTextSizeStamp, tMarkerStyleStamp, tConjMarkerStyleStamp, tLamKchCombined, tLamKchSeparate);
+  if(!aSuppressAnStamps) DrawAnalysisAndConjStamps((TPad*)tReturnCan, tAnTypes, tStartXStamp, tStartYStamp, tIncrementXStamp, tIncrementYStamp, tSecondColumnShiftX, tTextSizeStamp, tMarkerStyleStamp, tConjMarkerStyleStamp, tLamKchCombined, tLamKchSeparate, tAllLamKCombined);
 
   return tReturnCan;
 }
