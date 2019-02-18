@@ -20,6 +20,7 @@ SimulatedLednickyCf::SimulatedLednickyCf(double aKStarBinSize, double aMaxBuildK
   fMaxBuildKStar(aMaxBuildKStar),
 
   fCurrentRadius(1.),
+  fCurrentMuOut(0.),
   fPair3dVec(0)
 {
   BuildPair3dVec(fNPairsPerKStarBin, fKStarBinSize);
@@ -63,9 +64,10 @@ void SimulatedLednickyCf::BuildPair3dVec(int aNPairsPerKStarBin, double aBinSize
 
   //Create the source Gaussians
   double tRoot2 = sqrt(2.);  //need this scale to get 4 on denominator of exp in normal dist instead of 2
-  double tRadius = 4.0;
+  double tRadius = 1.0;
   fCurrentRadius = tRadius;
-  std::normal_distribution<double> tROutSource(4.,tRoot2*tRadius); 
+  fCurrentMuOut = 0.;
+  std::normal_distribution<double> tROutSource(0.,tRoot2*tRadius);
   std::normal_distribution<double> tRSideSource(0.,tRoot2*tRadius);
   std::normal_distribution<double> tRLongSource(0.,tRoot2*tRadius);
 
@@ -120,6 +122,7 @@ void SimulatedLednickyCf::UpdatePairRadiusParameter(double aNewRadius, double aM
 
   double tScaleFactor = aNewRadius/fCurrentRadius;
   fCurrentRadius = aNewRadius;
+  fCurrentMuOut = aMuOut;
 
 //TODO Make sure I am grabbing from correct tBin.  Must work even when I rebin things
   for(int iKStarBin=0; iKStarBin<(int)fPair3dVec.size(); iKStarBin++)
@@ -130,7 +133,7 @@ void SimulatedLednickyCf::UpdatePairRadiusParameter(double aNewRadius, double aM
         fPair3dVec[iKStarBin][iPair][5] *= tScaleFactor;  //RLong
 
         //I think correct procedure here should be to rescale first, then shift
-        fPair3dVec[iKStarBin][iPair][3] = aNewRadius*fPair3dVec[iKStarBin][iPair][6] + aMuOut;
+        fPair3dVec[iKStarBin][iPair][3] = aNewRadius*fPair3dVec[iKStarBin][iPair][6] + fCurrentMuOut;
     }
   }
 }
@@ -208,7 +211,11 @@ double SimulatedLednickyCf::GetFitCfContent(double aKStarMagMin,/* double aKStar
   // par[5] = norm
   // par[6] = muOut
 
-//  if(abs(par[1]-fCurrentRadius) > std::numeric_limits< double >::min()) UpdatePairRadiusParameter(par[1], par[6]);
+  if(abs(par[1]-fCurrentRadius) > std::numeric_limits< double >::min() ||
+     abs(par[6]-fCurrentMuOut) > std::numeric_limits< double >::min()) 
+  {
+    UpdatePairRadiusParameter(par[1], par[6]); 
+  }
 
   //TODO make this general
   //This is messing up around aKStarMagMin = 0.29, or bin 57/58

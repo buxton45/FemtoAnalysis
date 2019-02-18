@@ -12,6 +12,7 @@
 
 #include "ThermCf.h"
 #include "FitPartialAnalysis.h"
+#include "NumIntLednickyCf.h"
 
 bool gRejectPoints=false;
 double tRejectOmegaLow = 0.19;
@@ -336,6 +337,80 @@ void Draw1DCfwFit(TPad* aPad, AnalysisType aAnType, TH1* aThermCf, double aFitMa
 }
 
 
+//________________________________________________________________________________________________________________
+TH1D* BuildNumIntCf(NumIntLednickyCf* aNumIntLedCf, TString aName, vector<double> &aKStarBinCenters, double* aParams)
+{
+  double tNBins = aKStarBinCenters.size();
+  double tKStarBinSize = aKStarBinCenters[1]-aKStarBinCenters[0];
+
+  TH1D* tReturnCf = new TH1D(aName, aName, tNBins, 0., tNBins*tKStarBinSize);
+
+  double tNorm = aParams[5];
+  for(int i=0; i<tNBins; i++)
+  {
+    tReturnCf->SetBinContent(i+1, tNorm*aNumIntLedCf->GetFitCfContent(aKStarBinCenters[i], aParams));
+  }
+  return tReturnCf;
+}
+
+//________________________________________________________________________________________________________________
+void DrawNumIntCf(TPad* aPad, AnalysisType aAnType, double aRadius=5.0, double aMuOut=6.0, double aNorm=1.0)
+{
+  int tIntType = 2;
+  int tNCalls = 50000;
+  double tMaxIntRadius = 100.;
+
+  double tKStarBinSize = 0.01;
+  int tNBins = 50;
+  vector<double> tKStarBinCenters;
+  for(int i=0; i<tNBins; i++) tKStarBinCenters.push_back((i+0.5)*tKStarBinSize);
+
+  NumIntLednickyCf* tNumIntLedCf = new NumIntLednickyCf(tIntType, tNCalls, tMaxIntRadius);
+
+  double tLambda = 1.0;
+  double tRef0, tImf0, td0;
+  if(aAnType == kLamKchP || aAnType == kKchPKchP || aAnType == kK0K0 || aAnType == kLamLam)
+  {
+    tRef0 = -1.16;
+    tImf0 = 0.51;
+    td0 = 1.08;
+  }
+  else if(aAnType == kLamKchM)
+  {
+    tRef0 = 0.41;
+    tImf0 = 0.47;
+    td0 = -4.89;
+  }
+  else if(aAnType == kLamK0)
+  {
+    tRef0 = -0.41;
+    tImf0 = 0.20;
+    td0 = 2.08;
+  }
+  else assert(0);
+
+  double tParams[7] = {tLambda, aRadius, tRef0, tImf0, td0, aNorm, aMuOut};
+  TH1D* tCf_NumInt = BuildNumIntCf(tNumIntLedCf, TString("tCf_NumInt"), tKStarBinCenters, tParams);
+  tCf_NumInt->SetLineColor(kCyan+1);
+  tCf_NumInt->SetLineStyle(2);
+  tCf_NumInt->SetLineWidth(2);
+
+  aPad->cd();
+  tCf_NumInt->Draw("lsame");
+
+  //---------------------------------
+  TPaveText* tText = new TPaveText(0.35, 0.40, 0.50, 0.60, "NDC");
+    tText->SetFillColor(0);
+    tText->SetBorderSize(0);
+    tText->SetTextColor(kCyan+1);
+    tText->SetTextAlign(12);
+    tText->AddText("Num. Int.");
+    tText->AddText(TString::Format("R_{OSL} = %0.1f", aRadius));
+    tText->AddText(TString::Format("#mu_{O} = %0.1f", aMuOut));
+    tText->Draw();
+
+}
+
 
 //________________________________________________________________________________________________________________
 //****************************************************************************************************************
@@ -355,6 +430,7 @@ int main(int argc, char **argv)
   bool bDrawDeltaT = false;
   bool bDraw2DHists = false;
   bool bDrawCompareMuOuts = false;
+  bool bDrawNumIntCf = false;
   bool bSaveFigures = false;
   TString tSaveFileType = "pdf";
 //  TString tSaveDir = "/home/jesse/Analysis/Presentations/GroupMeetings/20190117/Figures/";
@@ -424,6 +500,16 @@ int main(int argc, char **argv)
 
 
   Draw1DCfwFit((TPad*)tCanCfwSource->cd(1), tAnType, tThermCf, tKStarFitMax, tFixLambdaInFit);
+  if(bDrawNumIntCf) 
+  {
+    double tIntRadius = 5.0;
+    double tIntMuOut = 6.0;
+    double tNorm = 1.0;
+    if     (tFileNameBase.Contains("KchMuOut1")) {tIntMuOut=1.; tNorm=1.001;}
+    else if(tFileNameBase.Contains("KchMuOut3")) {tIntMuOut=3.; tNorm=1.001;}
+    else if(tFileNameBase.Contains("KchMuOut6")) {tIntMuOut=6.; tNorm=1.002;}
+    DrawNumIntCf((TPad*)tCanCfwSource->cd(1), tAnType, tIntRadius, tIntMuOut, tNorm);
+  }
 
   Draw1DSourceProjwFit((TPad*)tCanCfwSource->cd(2), tTest3d, "Out", tGaussFitMin, tGaussFitMax, tProjLow, tProjHigh);
   Draw1DSourceProjwFit((TPad*)tCanCfwSource->cd(3), tTest3d, "Side", tGaussFitMin, tGaussFitMax, tProjLow, tProjHigh);

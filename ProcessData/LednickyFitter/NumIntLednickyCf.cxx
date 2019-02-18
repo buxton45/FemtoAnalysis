@@ -60,7 +60,7 @@ double NumIntLednickyCf::FunctionToIntegrate(double *k, size_t dim, void *params
   double tWfSq = norm(tWf);
 
 //  double tRealF = k[0]*k[0]*sin(k[1])*tA*exp(-tr*tr/(4*tR0*tR0))*tWfSq;
-  double tRealF = k[0]*k[0]*sin(k[1])*tAPrime*exp(-pow((trO-tParams[5]), 2)/(4*tR0*tR0))*exp(-trS*trS/(4*tR0*tR0))*exp(-trL*trL/(4*tR0*tR0))*tWfSq;
+  double tRealF = k[0]*k[0]*sin(k[1])*sin(k[3])*tAPrime*exp(-pow((trO-tParams[5]), 2)/(4*tR0*tR0))*exp(-trS*trS/(4*tR0*tR0))*exp(-trL*trL/(4*tR0*tR0))*tWfSq;
 
   return tRealF;
 

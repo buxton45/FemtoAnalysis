@@ -63,6 +63,7 @@ protected:
   double fMaxBuildKStar;
 
   double fCurrentRadius;
+  double fCurrentMuOut;
 
   td3dVec fPair3dVec;  // 1 2dVec for each k* bin
                        // 1 1dVec for each particle = [KStarOut, KStarSide, KStarLong, RStarOut, RStarSide, RStarLong]
