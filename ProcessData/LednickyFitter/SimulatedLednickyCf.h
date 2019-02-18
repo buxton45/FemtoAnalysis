@@ -1,5 +1,4 @@
 // file SimulatedLednickyCf.h
-//TODO Better to use NumIntLednickyCf!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 #ifndef SIMULATEDLEDNICKYCF_H
 #define SIMULATEDLEDNICKYCF_H
