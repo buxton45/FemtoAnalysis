@@ -63,9 +63,9 @@ void SimulatedLednickyCf::BuildPair3dVec(int aNPairsPerKStarBin, double aBinSize
 
   //Create the source Gaussians
   double tRoot2 = sqrt(2.);  //need this scale to get 4 on denominator of exp in normal dist instead of 2
-  double tRadius = 1.0;
+  double tRadius = 4.0;
   fCurrentRadius = tRadius;
-  std::normal_distribution<double> tROutSource(0.,tRoot2*tRadius);
+  std::normal_distribution<double> tROutSource(4.,tRoot2*tRadius); 
   std::normal_distribution<double> tRSideSource(0.,tRoot2*tRadius);
   std::normal_distribution<double> tRLongSource(0.,tRoot2*tRadius);
 
@@ -81,7 +81,7 @@ void SimulatedLednickyCf::BuildPair3dVec(int aNPairsPerKStarBin, double aBinSize
   for(int iKStarBin=0; iKStarBin<tNBinsKStar; iKStarBin++)
   {
     tKStarMagMin = iKStarBin*tBinSize;
-    if(iKStarBin==0) tKStarMagMin=0.004;  //TODO here and in ChargedResidualCf
+//    if(iKStarBin==0) tKStarMagMin=0.004;  //TODO here and in ChargedResidualCf
     tKStarMagMax = (iKStarBin+1)*tBinSize;
     tTemp2dVec.clear();
     for(int iPair=0; iPair<fNPairsPerKStarBin; iPair++)
@@ -208,12 +208,13 @@ double SimulatedLednickyCf::GetFitCfContent(double aKStarMagMin,/* double aKStar
   // par[5] = norm
   // par[6] = muOut
 
-  if(abs(par[1]-fCurrentRadius) > std::numeric_limits< double >::min()) UpdatePairRadiusParameter(par[1], par[6]);
+//  if(abs(par[1]-fCurrentRadius) > std::numeric_limits< double >::min()) UpdatePairRadiusParameter(par[1], par[6]);
 
   //TODO make this general
   //This is messing up around aKStarMagMin = 0.29, or bin 57/58
   //Probably fixed with use of std::round, but need to double check
-  int tBin = std::round(aKStarMagMin/fKStarBinSize);
+//  int tBin = std::round(aKStarMagMin/fKStarBinSize);
+  int tBin = std::floor(aKStarMagMin/fKStarBinSize);
 
   //KStarOut  = fPair3dVec[tBin][i][0]
   //KStarSide = fPair3dVec[tBin][i][1]

@@ -36,7 +36,7 @@ int main(int argc, char **argv)
   tFullTimer.Start();
 //-----------------------------------------------------------------------------
   int tIntType = 2;
-  int tNCalls = 500000;
+  int tNCalls = 50000;
   double tMaxIntRadius = 100.;
 
   NumIntLednickyCf* tNumIntLedCf = new NumIntLednickyCf(tIntType, tNCalls, tMaxIntRadius);
@@ -82,9 +82,11 @@ int main(int argc, char **argv)
 
   SimulatedLednickyCf* tSimLedCf = new SimulatedLednickyCf(tKStarBinSize, tNBins*tKStarBinSize, 50000);
   TH1D* tCf_SimLedCf = new TH1D("tCf_SimLedCf", "tCf_SimLedCf", tNBins, 0., tNBins*tKStarBinSize);
+  TH1D* tCf_SimLedCf2a = new TH1D("tCf_SimLedCf2a", "tCf_SimLedCf2a", tNBins, 0., tNBins*tKStarBinSize);
   for(int i=0; i<tNBins; i++)
   {
-    tCf_SimLedCf->SetBinContent(i+1, tSimLedCf->GetFitCfContent(tKStarBinCenters[i]-tKStarBinSize/2, tParams1));
+//    tCf_SimLedCf->SetBinContent(i+1, tSimLedCf->GetFitCfContent(tKStarBinCenters[i], tParams1));
+    tCf_SimLedCf2a->SetBinContent(i+1, tSimLedCf->GetFitCfContent(tKStarBinCenters[i], tParams2a));
   }  
 
 
@@ -94,16 +96,17 @@ int main(int argc, char **argv)
   tCf_NumInt2b->SetLineColor(kGreen);
   tCf_NumInt2c->SetLineColor(kViolet);
   tCf_SimLedCf->SetLineColor(kOrange);
+  tCf_SimLedCf2a->SetLineColor(kCyan);
 
   TCanvas* tCan = new TCanvas("tCan", "tCan");
   tCan->cd();
   tCf_LedEq->Draw();
-  tCf_NumInt1->Draw("same");
+//  tCf_NumInt1->Draw("same");
   tCf_NumInt2a->Draw("same");
-  tCf_NumInt2b->Draw("same");
-  tCf_NumInt2c->Draw("same");
-  tCf_SimLedCf->Draw("same");
-
+//  tCf_NumInt2b->Draw("same");
+//  tCf_NumInt2c->Draw("same");
+//  tCf_SimLedCf->Draw("same");
+  tCf_SimLedCf2a->Draw("same");
 
 
 

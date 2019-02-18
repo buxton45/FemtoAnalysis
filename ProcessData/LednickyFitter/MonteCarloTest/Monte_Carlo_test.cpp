@@ -182,24 +182,25 @@ main (void)
 {
   double exact;
   double result, error;		// result and error
-/*
+
   int tNdim = 5;
   double xl[tNdim] = { 0, 0, 0, 0, 0};
   double xu[tNdim] = { 1000, M_PI, 2*M_PI, M_PI, 2*M_PI};
-*/
+
   double tKStar = 0.1;
   double tRadius = 5.0;
   double tRef0 = -0.5;
   double tImf0 = 0.5;
   double td0 = 0.0;
-  double tParams[5] = {tKStar, tRadius, tRef0, tImf0, td0};
+  double tMuOut = 0.;
+  double tParams[6] = {tKStar, tRadius, tRef0, tImf0, td0, tMuOut};
 
   exact = LednickyEq(tKStar, tRadius, tRef0, tImf0, td0);
-
+/*
   int tNdim = 3;
   double xl[tNdim] = { 0, 0, 0};
   double xu[tNdim] = { 100, M_PI, 2*M_PI};
-
+*/
   const gsl_rng_type *T;
   gsl_rng *r;
 
@@ -266,15 +267,17 @@ g (double *k, size_t dim, void *params)
 }
 */
 
-/*
+
 double
 g (double *k, size_t dim, void *params)
 {
+  double *tParams = (double*)params;
+
   double hbarc = 0.197327;
 
-  double tR0 = 5.0;
+  double tR0 = tParams[1];
 
-  double tkStar = 0.1;
+  double tkStar = tParams[0];
   tkStar /= hbarc;
 
   double tkO = tkStar*sin(k[3])*cos(k[4]);
@@ -282,6 +285,7 @@ g (double *k, size_t dim, void *params)
   double tkL = tkStar*cos(k[3]);
 
   double tA = 1.0/(pow((4*M_PI), 1.5)*tR0*tR0*tR0);
+  double tAPrime = tA/(4*M_PI);  //because integrating over all kstar angles!
 
   double trO = k[0]*sin(k[1])*cos(k[2]);
   double trS = k[0]*sin(k[1])*sin(k[2]);
@@ -291,20 +295,20 @@ g (double *k, size_t dim, void *params)
   complex<double> tImI = complex<double>(0., 1.);
   double tkDotr = tkO*trO + tkS*trS + tkL*trL;
 
-  std::complex<double> f0 (0.5,0.5);
-  double d0=0.;
+  std::complex<double> f0 (tParams[2],tParams[3]);
+  double d0=tParams[4];
   std::complex<double> ScattAmp = pow( (1./f0) + 0.5*d0*tkStar*tkStar - tImI*tkStar,-1);
 
   std::complex<double> tWf = exp(-tImI*tkDotr)+(ScattAmp/tr)*exp(tImI*tkStar*tr);
   double tWfSq = norm(tWf);
 
-  double tRealF = k[0]*k[0]*sin(k[1])*tkStar*tkStar*sin(k[3])*tA*exp(-tr*tr/(4*tR0*tR0))*tWfSq;
+  double tRealF = k[0]*k[0]*sin(k[1])*sin(k[3])*tAPrime*exp(-pow((trO-tParams[5]), 2)/(4*tR0*tR0))*exp(-trS*trS/(4*tR0*tR0))*exp(-trL*trL/(4*tR0*tR0))*tWfSq;
 
   return tRealF;
 }
-*/
 
 
+/*
 double
 g (double *k, size_t dim, void *params)
 {
@@ -339,11 +343,11 @@ g (double *k, size_t dim, void *params)
   double tWfSq = norm(tWf);
 
 //  double tRealF = k[0]*k[0]*sin(k[1])*tA*exp(-tr*tr/(4*tR0*tR0))*tWfSq;
-  double tRealF = k[0]*k[0]*sin(k[1])*tA*exp(-trO*trO/(4*tR0*tR0))*exp(-trS*trS/(4*tR0*tR0))*exp(-trL*trL/(4*tR0*tR0))*tWfSq;
+  double tRealF = k[0]*k[0]*sin(k[1])*tA*exp(-pow((trO-tParams[5]), 2)/(4*tR0*tR0))*exp(-trS*trS/(4*tR0*tR0))*exp(-trL*trL/(4*tR0*tR0))*tWfSq;
 
   return tRealF;
 }
-
+*/
 
 
 /*

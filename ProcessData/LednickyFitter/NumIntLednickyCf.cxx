@@ -37,11 +37,12 @@ double NumIntLednickyCf::FunctionToIntegrate(double *k, size_t dim, void *params
   double tkStar = tParams[0];
   tkStar /= hbarc;
 
-  double tkO = tkStar;
-  double tkS = 0;
-  double tkL = 0;
+  double tkO = tkStar*sin(k[3])*cos(k[4]);
+  double tkS = tkStar*sin(k[3])*sin(k[4]);
+  double tkL = tkStar*cos(k[3]);
 
   double tA = 1.0/(pow((4*M_PI), 1.5)*tR0*tR0*tR0);
+  double tAPrime = tA/(4*M_PI);  //because integrating over all kstar angles!
 
   double trO = k[0]*sin(k[1])*cos(k[2]);
   double trS = k[0]*sin(k[1])*sin(k[2]);
@@ -59,7 +60,7 @@ double NumIntLednickyCf::FunctionToIntegrate(double *k, size_t dim, void *params
   double tWfSq = norm(tWf);
 
 //  double tRealF = k[0]*k[0]*sin(k[1])*tA*exp(-tr*tr/(4*tR0*tR0))*tWfSq;
-  double tRealF = k[0]*k[0]*sin(k[1])*tA*exp(-pow((trO-tParams[5]), 2)/(4*tR0*tR0))*exp(-trS*trS/(4*tR0*tR0))*exp(-trL*trL/(4*tR0*tR0))*tWfSq;
+  double tRealF = k[0]*k[0]*sin(k[1])*tAPrime*exp(-pow((trO-tParams[5]), 2)/(4*tR0*tR0))*exp(-trS*trS/(4*tR0*tR0))*exp(-trL*trL/(4*tR0*tR0))*tWfSq;
 
   return tRealF;
 
@@ -111,9 +112,9 @@ double NumIntLednickyCf::GetFitCfContent(double aKStar, double *par)
 
   double tParams[6] = {aKStar, par[1], par[2], par[3], par[4], par[6]};
 
-  int tNdim = 3;
-  double xl[tNdim] = { 0, 0, 0};
-  double xu[tNdim] = { fMaxIntRadius, M_PI, 2*M_PI};
+  int tNdim = 5;
+  double xl[tNdim] = { 0, 0, 0, 0, 0};
+  double xu[tNdim] = { fMaxIntRadius, M_PI, 2*M_PI, M_PI, 2*M_PI};
 
   const gsl_rng_type *T;
   gsl_rng *r;
