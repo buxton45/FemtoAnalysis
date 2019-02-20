@@ -1,50 +1,48 @@
-This is BibTeX, Version 0.99d (TeX Live 2015/Debian)
-Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
+This is BibTeX, Version 0.99d (TeX Live 2017/Debian)
+Capacity: max_strings=100000, hash_size=100000, hash_prime=85009
 The top-level auxiliary file: LamKPublication.aux
 The style file: utphys.bst
 Database file #1: LamK_bibfile.bib
-Warning--entry type for "Salzwedel:2241303" isn't style-file defined
---line 101 of file LamK_bibfile.bib
 Warning--empty title in Lednicky:82
 You've used 22 entries,
             2328 wiz_defined-function locations,
-            776 strings with 8871 characters,
-and the built_in function-call counts, 7482 in all, are:
-= -- 795
+            777 strings with 8807 characters,
+and the built_in function-call counts, 7536 in all, are:
+= -- 796
 > -- 209
 < -- 0
 + -- 78
 - -- 56
-* -- 691
-:= -- 851
-add.period$ -- 42
+* -- 696
+:= -- 855
+add.period$ -- 40
 call.type$ -- 22
-change.case$ -- 27
+change.case$ -- 25
 chr.to.int$ -- 0
 cite$ -- 23
-duplicate$ -- 421
-empty$ -- 708
+duplicate$ -- 431
+empty$ -- 711
 format.name$ -- 56
-if$ -- 1975
+if$ -- 1991
 int.to.chr$ -- 0
 int.to.str$ -- 22
-missing$ -- 83
-newline$ -- 102
+missing$ -- 87
+newline$ -- 101
 num.names$ -- 22
-pop$ -- 108
+pop$ -- 106
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 0
-skip$ -- 331
+skip$ -- 338
 stack$ -- 0
-substring$ -- 362
-swap$ -- 230
+substring$ -- 368
+swap$ -- 237
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
 type$ -- 0
 warning$ -- 1
-while$ -- 51
+while$ -- 52
 width$ -- 24
-write$ -- 191
-(There were 2 warnings)
+write$ -- 188
+(There was 1 warning)

@@ -73,8 +73,8 @@ A.~Akindinov {\em et~al.}, ``{Performance of the ALICE Time-Of-Flight detector
 %%CITATION = EPHJP,128,44;%%.
 
 \bibitem{PhysRevD.44.3501}
-X.-N. Wang and M.~Gyulassy, ``hijing: A monte carlo model for multiple jet
-  production in $\mathrm{pp}$, $\mathrm{pA}$, and $\mathrm{AA}$ collisions,''
+X.-N. Wang and M.~Gyulassy, ``{hijing: A Monte Carlo model for multiple jet
+  production in $\mathrm{pp}$, $\mathrm{pA}$, and $\mathrm{AA}$ collisions},''
   \href{http://dx.doi.org/10.1103/PhysRevD.44.3501}{{\em Phys. Rev. D}
   {\bfseries 44} (Dec, 1991) 3501--3516}.
   \url{https://link.aps.org/doi/10.1103/PhysRevD.44.3501}.
@@ -105,6 +105,10 @@ S.~Pratt, T.~Csorgo, and J.~Zimanyi, ``{Detailed predictions for two pion
   C42} (1990) 2646--2652}.
 %%CITATION = PHRVA,C42,2646;%%.
 
+\bibitem{Stavinskiy04}
+A.~Stavinskiy {\em et~al.}, ``{Some new aspects of femtoscopy at high
+  energy},'' {\em Nukleonika} {\bfseries 49 (Supplement 2)} (2004) S23.
+
 \bibitem{Kisiel:2014mma}
 A.~Kisiel, H.~Zbroszczyk, and M.~Szymański, ``{Extracting baryon-antibaryon
   strong interaction potentials from p$\bar{\Lambda}$ femtoscopic correlation
@@ -120,11 +124,6 @@ M.~Chojnacki, A.~Kisiel, W.~Florkowski, and W.~Broniowski, ``{THERMINATOR 2:
   Commun.} {\bfseries 183} (2012) 746--773},
 \href{http://arxiv.org/abs/1102.0273}{{\ttfamily arXiv:1102.0273 [nucl-th]}}.
 %%CITATION = ARXIV:1102.0273;%%.
-
-\bibitem{Salzwedel:2241303}
-J.~Salzwedel and T.~Humanic, ``{Lambda femtoscopy in $\sqrt{s_{NN}}=2.76$ TeV
-  Pb-Pb collisions at ALICE},'' Jan, 2017.
-\newblock \url{http://cds.cern.ch/record/2241303}. Presented 15 Dec 2016.
 
 \bibitem{Kisiel:2017}
 A.~Kisiel, ``Non-identical particle correlation analysis in the presence of

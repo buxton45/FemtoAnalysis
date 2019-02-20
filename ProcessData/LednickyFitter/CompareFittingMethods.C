@@ -13,8 +13,9 @@ int main(int argc, char **argv)
   bool bDrawPredictions = false;
 
   bool bSaveFigures = false;
-  TString tSaveFileType = "pdf";
-  TString tSaveDir = "/home/jesse/Analysis/FemtoAnalysis/AnalysisNotes/7_ResultsAndDiscussion/Figures/New/";
+  TString tSaveFileType = "eps";
+//  TString tSaveDir = "/home/jesse/Analysis/FemtoAnalysis/AnalysisNotes/7_ResultsAndDiscussion/Figures/New/";
+  TString tSaveDir = "/home/jesse/Analysis/Presentations/GroupMeetings/20190221/Figures/";
 
   vector<FitValWriterInfo> tFVWIVec;
   TString tCanNameMod = "";

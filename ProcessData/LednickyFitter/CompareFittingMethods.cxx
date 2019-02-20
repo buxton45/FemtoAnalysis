@@ -539,7 +539,7 @@ TCanvas* CompareLambdavsRadius(vector<FitValWriterInfo> &aFitValWriterInfo, Cent
   bool tAllLamKCombined=false, tAllLamKCombinedDrawn=false;
   for(unsigned int iAn=0; iAn<aFitValWriterInfo.size(); iAn++)
   {
-    if(aFitValWriterInfo[iAn].allLamKCombined) tAllLamKCombined=true;
+    if(aFitValWriterInfo[iAn].allLamKCombined) {tAllLamKCombined=true; continue;}
     if(aFitValWriterInfo[iAn].analysisType==kLamK0 || aFitValWriterInfo[iAn].analysisType==kALamK0) continue;
 
     if(aFitValWriterInfo[iAn].lamKchCombined) tLamKchCombined=true;
