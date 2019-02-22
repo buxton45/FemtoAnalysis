@@ -18,9 +18,9 @@ class FitGeneratorAndDraw;
 class TripleFitGenerator {
 
 public:
-  TripleFitGenerator(TString aFileLocationBase_LamKch, TString aFileLocationBaseMC_LamKch, TString aFileLocationBase_LamK0, TString aFileLocationBaseMC_LamK0, const vector<CentralityType> &aCentralityTypes, AnalysisRunType aRunType=kTrain, int aNPartialAnalysis=2, FitGeneratorType aGeneratorType=kPairwConj, bool aShareLambdaParams=false, bool aAllShareSingleLambdaParam=false, TString aDirNameModifier="", bool aUseStavCf=false);
+  TripleFitGenerator(TString aFileLocationBase_LamKch, TString aFileLocationBaseMC_LamKch, TString aFileLocationBase_LamK0, TString aFileLocationBaseMC_LamK0, const vector<CentralityType> &aCentralityTypes, AnalysisRunType aRunType_LamKch=kTrain, AnalysisRunType aRunType_LamK0=kTrain, int aNPartialAnalysis=2, FitGeneratorType aGeneratorType=kPairwConj, bool aShareLambdaParams=false, bool aAllShareSingleLambdaParam=false, TString aDirNameModifier_LamKch="", TString aDirNameModifier_LamK0="", bool aUseStavCf=false);
 
-  TripleFitGenerator(TString aFileLocationBase_LamKch, TString aFileLocationBaseMC_LamKch, TString aFileLocationBase_LamK0, TString aFileLocationBaseMC_LamK0, CentralityType aCentralityType=kMB, AnalysisRunType aRunType=kTrain, int aNPartialAnalysis=2, FitGeneratorType aGeneratorType=kPairwConj, bool aShareLambdaParams=false, bool aAllShareSingleLambdaParam=false, TString aDirNameModifier="", bool aUseStavCf=false);
+  TripleFitGenerator(TString aFileLocationBase_LamKch, TString aFileLocationBaseMC_LamKch, TString aFileLocationBase_LamK0, TString aFileLocationBaseMC_LamK0, CentralityType aCentralityType=kMB, AnalysisRunType aRunType_LamKch=kTrain, AnalysisRunType aRunType_LamK0=kTrain, int aNPartialAnalysis=2, FitGeneratorType aGeneratorType=kPairwConj, bool aShareLambdaParams=false, bool aAllShareSingleLambdaParam=false, TString aDirNameModifier_LamKch="", TString aDirNameModifier_LamK0="", bool aUseStavCf=false);
 
   TripleFitGenerator(FitGeneratorAndDraw* aFitGen1, FitGeneratorAndDraw* aFitGen2);
 

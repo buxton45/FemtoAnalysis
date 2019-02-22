@@ -40,7 +40,7 @@ int main(int argc, char **argv)
   //********************************************************************
 
   //--Rarely change---------------------
-  AnalysisRunType tAnRunType = kTrain;
+  AnalysisRunType tAnRunType_LamKch = kTrain, tAnRunType_LamK0 = kTrain;
   int tNPartialAnalysis = 2;
   CentralityType tCentType = kMB/*k0010*/;
   FitGeneratorType tGenType = kPairwConj;
@@ -174,7 +174,7 @@ int main(int argc, char **argv)
   if(!bExistsCurrentSysFile_LamK0) cout << "WARNING!!!!!!!!!!!!!!!!!!!!!" << endl << "!bExistsCurrentSysFile, so syst. errs. on fit parameters not precisely accurate" << endl << endl;
 //-----------------------------------------------------------------------------
 
-  TripleFitGenerator* tTriple = new TripleFitGenerator(tFileLocationBase_LamKch, tFileLocationBaseMC_LamKch, tFileLocationBase_LamK0, tFileLocationBaseMC_LamK0, tCentType, tAnRunType, tNPartialAnalysis, tGenType, tShareLambdaParams, tAllShareSingleLambdaParam, "", bUseStavCf);
+  TripleFitGenerator* tTriple = new TripleFitGenerator(tFileLocationBase_LamKch, tFileLocationBaseMC_LamKch, tFileLocationBase_LamK0, tFileLocationBaseMC_LamK0, tCentType, tAnRunType_LamKch, tAnRunType_LamK0, tNPartialAnalysis, tGenType, tShareLambdaParams, tAllShareSingleLambdaParam, "", bUseStavCf);
   tTriple->SetSaveLocationBase(tSaveDirectoryBase_LamKch, tSaveDirectoryBase_LamK0,tSaveNameModifier);
   tTriple->SetSaveFileType(tSaveFileType);
 

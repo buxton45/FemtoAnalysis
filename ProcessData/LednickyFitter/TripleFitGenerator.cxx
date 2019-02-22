@@ -23,7 +23,7 @@ void GlobalFCN3(Int_t &npar, Double_t *gin, Double_t &f, Double_t *par, Int_t if
 
 
 //________________________________________________________________________________________________________________
-TripleFitGenerator::TripleFitGenerator(TString aFileLocationBase_LamKch, TString aFileLocationBaseMC_LamKch, TString aFileLocationBase_LamK0, TString aFileLocationBaseMC_LamK0, const vector<CentralityType> &aCentralityTypes, AnalysisRunType aRunType, int aNPartialAnalysis, FitGeneratorType aGeneratorType, bool aShareLambdaParams, bool aAllShareSingleLambdaParam, TString aDirNameModifier, bool aUseStavCf) :
+TripleFitGenerator::TripleFitGenerator(TString aFileLocationBase_LamKch, TString aFileLocationBaseMC_LamKch, TString aFileLocationBase_LamK0, TString aFileLocationBaseMC_LamK0, const vector<CentralityType> &aCentralityTypes, AnalysisRunType aRunType_LamKch, AnalysisRunType aRunType_LamK0, int aNPartialAnalysis, FitGeneratorType aGeneratorType, bool aShareLambdaParams, bool aAllShareSingleLambdaParam, TString aDirNameModifier_LamKch, TString aDirNameModifier_LamK0, bool aUseStavCf) :
   fFitGen1(nullptr),
   fFitGen2(nullptr),
   fFitGen3(nullptr),
@@ -37,15 +37,15 @@ TripleFitGenerator::TripleFitGenerator(TString aFileLocationBase_LamKch, TString
 
   fMasterMinuitFitParametersMatrix(0)
 {
-  fFitGen1 = new FitGeneratorAndDraw(aFileLocationBase_LamKch, aFileLocationBaseMC_LamKch, kLamKchP, aCentralityTypes, aRunType, aNPartialAnalysis, kPairwConj, aShareLambdaParams, aAllShareSingleLambdaParam, aDirNameModifier, aUseStavCf);
-  fFitGen2 = new FitGeneratorAndDraw(aFileLocationBase_LamKch, aFileLocationBaseMC_LamKch, kLamKchM, aCentralityTypes, aRunType, aNPartialAnalysis, kPairwConj, aShareLambdaParams, aAllShareSingleLambdaParam, aDirNameModifier, aUseStavCf);
-  fFitGen3 = new FitGeneratorAndDraw(aFileLocationBase_LamK0, aFileLocationBaseMC_LamK0, kLamK0, aCentralityTypes, aRunType, aNPartialAnalysis, kPairwConj, aShareLambdaParams, aAllShareSingleLambdaParam, aDirNameModifier, aUseStavCf);
+  fFitGen1 = new FitGeneratorAndDraw(aFileLocationBase_LamKch, aFileLocationBaseMC_LamKch, kLamKchP, aCentralityTypes, aRunType_LamKch, aNPartialAnalysis, kPairwConj, aShareLambdaParams, aAllShareSingleLambdaParam, aDirNameModifier_LamKch, aUseStavCf);
+  fFitGen2 = new FitGeneratorAndDraw(aFileLocationBase_LamKch, aFileLocationBaseMC_LamKch, kLamKchM, aCentralityTypes, aRunType_LamKch, aNPartialAnalysis, kPairwConj, aShareLambdaParams, aAllShareSingleLambdaParam, aDirNameModifier_LamKch, aUseStavCf);
+  fFitGen3 = new FitGeneratorAndDraw(aFileLocationBase_LamK0, aFileLocationBaseMC_LamK0, kLamK0, aCentralityTypes, aRunType_LamK0, aNPartialAnalysis, kPairwConj, aShareLambdaParams, aAllShareSingleLambdaParam, aDirNameModifier_LamK0, aUseStavCf);
 
 }
 
 
 //________________________________________________________________________________________________________________
-TripleFitGenerator::TripleFitGenerator(TString aFileLocationBase_LamKch, TString aFileLocationBaseMC_LamKch, TString aFileLocationBase_LamK0, TString aFileLocationBaseMC_LamK0, CentralityType aCentralityType, AnalysisRunType aRunType, int aNPartialAnalysis, FitGeneratorType aGeneratorType, bool aShareLambdaParams, bool aAllShareSingleLambdaParam, TString aDirNameModifier, bool aUseStavCf) :
+TripleFitGenerator::TripleFitGenerator(TString aFileLocationBase_LamKch, TString aFileLocationBaseMC_LamKch, TString aFileLocationBase_LamK0, TString aFileLocationBaseMC_LamK0, CentralityType aCentralityType, AnalysisRunType aRunType_LamKch, AnalysisRunType aRunType_LamK0, int aNPartialAnalysis, FitGeneratorType aGeneratorType, bool aShareLambdaParams, bool aAllShareSingleLambdaParam, TString aDirNameModifier_LamKch, TString aDirNameModifier_LamK0, bool aUseStavCf) :
   fFitGen1(nullptr),
   fFitGen2(nullptr),
   fFitGen3(nullptr),
@@ -59,9 +59,9 @@ TripleFitGenerator::TripleFitGenerator(TString aFileLocationBase_LamKch, TString
 
   fMasterMinuitFitParametersMatrix(0)
 {
-  fFitGen1 = new FitGeneratorAndDraw(aFileLocationBase_LamKch, aFileLocationBaseMC_LamKch, kLamKchP, aCentralityType, aRunType, aNPartialAnalysis, kPairwConj, aShareLambdaParams, aAllShareSingleLambdaParam, aDirNameModifier, aUseStavCf);
-  fFitGen2 = new FitGeneratorAndDraw(aFileLocationBase_LamKch, aFileLocationBaseMC_LamKch, kLamKchM, aCentralityType, aRunType, aNPartialAnalysis, kPairwConj, aShareLambdaParams, aAllShareSingleLambdaParam, aDirNameModifier, aUseStavCf);
-  fFitGen3 = new FitGeneratorAndDraw(aFileLocationBase_LamK0, aFileLocationBaseMC_LamK0, kLamK0, aCentralityType, aRunType, aNPartialAnalysis, kPairwConj, aShareLambdaParams, aAllShareSingleLambdaParam, aDirNameModifier, aUseStavCf);
+  fFitGen1 = new FitGeneratorAndDraw(aFileLocationBase_LamKch, aFileLocationBaseMC_LamKch, kLamKchP, aCentralityType, aRunType_LamKch, aNPartialAnalysis, kPairwConj, aShareLambdaParams, aAllShareSingleLambdaParam, aDirNameModifier_LamKch, aUseStavCf);
+  fFitGen2 = new FitGeneratorAndDraw(aFileLocationBase_LamKch, aFileLocationBaseMC_LamKch, kLamKchM, aCentralityType, aRunType_LamKch, aNPartialAnalysis, kPairwConj, aShareLambdaParams, aAllShareSingleLambdaParam, aDirNameModifier_LamKch, aUseStavCf);
+  fFitGen3 = new FitGeneratorAndDraw(aFileLocationBase_LamK0, aFileLocationBaseMC_LamK0, kLamK0, aCentralityType, aRunType_LamK0, aNPartialAnalysis, kPairwConj, aShareLambdaParams, aAllShareSingleLambdaParam, aDirNameModifier_LamK0, aUseStavCf);
 
 }
 

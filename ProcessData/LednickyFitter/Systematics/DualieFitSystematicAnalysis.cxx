@@ -90,7 +90,7 @@ DualieFitSystematicAnalysis::DualieFitSystematicAnalysis(TString aFileLocationBa
   fDirNameModifierBase2 = "";
   fModifierValues2 = vector<double> (0);
 
-  *this = DualieFitSystematicAnalysis(aFileLocationBase, aFileLocationBaseMC, aAnalysisType, aDirNameModifierBase1, aModifierValues1, fDirNameModifierBase2, fModifierValues2, aCentralityType, aGeneratorType, aShareLambdaParams, aAllShareSingleLambdaParam);
+  *this = DualieFitSystematicAnalysis(aFileLocationBase, aFileLocationBaseMC, aAnalysisType, aDirNameModifierBase1, aModifierValues1, fDirNameModifierBase2, fModifierValues2, aCentralityType, aGeneratorType, aShareLambdaParams, aAllShareSingleLambdaParam, aDualieShareLambda, aDualieShareRadii);
 }
 
 //________________________________________________________________________________________________________________
@@ -131,7 +131,7 @@ DualieFitSystematicAnalysis::DualieFitSystematicAnalysis(TString aFileLocationBa
   fDirNameModifierBase2 = "";
   fModifierValues2 = vector<double> (0);
 
-  *this = DualieFitSystematicAnalysis(aFileLocationBase, aFileLocationBaseMC, aAnalysisType, fDirNameModifierBase1, fModifierValues1, fDirNameModifierBase2, fModifierValues2, aCentralityType, aGeneratorType, aShareLambdaParams, aAllShareSingleLambdaParam);
+  *this = DualieFitSystematicAnalysis(aFileLocationBase, aFileLocationBaseMC, aAnalysisType, fDirNameModifierBase1, fModifierValues1, fDirNameModifierBase2, fModifierValues2, aCentralityType, aGeneratorType, aShareLambdaParams, aAllShareSingleLambdaParam, aDualieShareLambda, aDualieShareRadii);
 }
 
 
@@ -359,7 +359,7 @@ void DualieFitSystematicAnalysis::SetLambdaStartValues(DualieFitGenerator* aFitG
     //----------------------------
     td1dVec tLamStartValues_LamKchM(6);
 
-    tLamStartValues_LamKchM[0] = FitValuesWriter::GetFitParameter(tMasterFileLocation, tFitInfoTString, kLamKchP, k0010, kLambda)->GetFitValue();
+    tLamStartValues_LamKchM[0] = FitValuesWriter::GetFitParameter(tMasterFileLocation, tFitInfoTString, kLamKchM, k0010, kLambda)->GetFitValue();
     tLamStartValues_LamKchM[1] = FitValuesWriter::GetFitParameter(tMasterFileLocation, tFitInfoTString, kALamKchP, k0010, kLambda)->GetFitValue();
 
     tLamStartValues_LamKchM[2] = FitValuesWriter::GetFitParameter(tMasterFileLocation, tFitInfoTString, kLamKchM, k1030, kLambda)->GetFitValue();

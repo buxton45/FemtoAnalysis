@@ -23,9 +23,9 @@ CFLAGS = $(shell root-config --cflags) -Wall -std=c++11 -I${ANALYZE_DIR} -I${LED
 #IFLAGS = -I$(ROOTSYS)/include
 #.PHONY: clean
 
-MY_LIBS = $(addprefix build/, FitParameter.o FitChi2Histograms.o BackgroundFitter.o FitPartialAnalysis.o FitPairAnalysis.o FitSharedAnalyses.o MathematicaSession.o WaveFunction.o ChargedResidualCf.o SimpleChargedResidualCf.o NeutralResidualCf.o ResidualCollection.o LednickyFitter.o FitValuesWriter.o FitValuesLatexTableHelperWriter.o FitValuesWriterwSysErrs.o FitValuesLatexTableHelperWriterwSysErrs.o FitGenerator.o FitGeneratorAndDraw.o DualieFitGenerator.o ThermCf.o CfLite.o CfHeavy.o Types.o Types_LambdaValues.o Types_FitParamValues.o Types_ThermBgdParams.o Types_SysFileInfo.o Faddeeva.o FitSystematicAnalysis.o DualieFitSystematicAnalysis.o CanvasPartition.o)
+MY_LIBS = $(addprefix build/, FitParameter.o FitChi2Histograms.o BackgroundFitter.o FitPartialAnalysis.o FitPairAnalysis.o FitSharedAnalyses.o MathematicaSession.o WaveFunction.o ChargedResidualCf.o SimpleChargedResidualCf.o NeutralResidualCf.o ResidualCollection.o LednickyFitter.o FitValuesWriter.o FitValuesLatexTableHelperWriter.o FitValuesWriterwSysErrs.o FitValuesLatexTableHelperWriterwSysErrs.o FitGenerator.o FitGeneratorAndDraw.o DualieFitGenerator.o ThermCf.o CfLite.o CfHeavy.o Types.o Types_LambdaValues.o Types_FitParamValues.o Types_ThermBgdParams.o Types_SysFileInfo.o Faddeeva.o FitSystematicAnalysis.o DualieFitSystematicAnalysis.o TripleFitGenerator.o TripleFitSystematicAnalysis.o CanvasPartition.o)
 
-BINARIES = runSingleSystematics runAllSystematics runRead runFindOutliers runFitRange runNonFlatBgdSys runTest runBuildLatexTableHelperwSysErrs runBuildLatexTableHelperwSysErrsForSingle runCompareFittingMethodswSysErrs runCompareFittingMethodswSysErrsForAnNote runSingleDualieSystematics runAllDualieSystematics runFitRangeDualie runNonFlatBgdDualieSys
+BINARIES = runSingleSystematics runAllSystematics runRead runFindOutliers runFitRange runNonFlatBgdSys runTest runBuildLatexTableHelperwSysErrs runBuildLatexTableHelperwSysErrsForSingle runCompareFittingMethodswSysErrs runCompareFittingMethodswSysErrsForAnNote runSingleDualieSystematics runAllDualieSystematics runFitRangeDualie runNonFlatBgdDualieSys runSingleTripleSystematics runAllTripleSystematics
 
 all: $(BINARIES)
 
@@ -73,6 +73,12 @@ runFitRangeDualie: ${MY_LIBS} FitRangeDualieSystematics.C
 
 runNonFlatBgdDualieSys: ${MY_LIBS} NonFlatBgdFitTypeDualieSystematics.C
 	g++ NonFlatBgdFitTypeDualieSystematics.C ${MY_LIBS} -I${INCDIR} -o runNonFlatBgdDualieSys -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS)
+
+runSingleTripleSystematics: ${MY_LIBS} BuildSingleCutTripleSystematics.C
+	g++ BuildSingleCutTripleSystematics.C ${MY_LIBS} -I${INCDIR} -o runSingleTripleSystematics -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS)
+
+runAllTripleSystematics: ${MY_LIBS} BuildAllCutsTripleSystematics.C
+	g++ BuildAllCutsTripleSystematics.C ${MY_LIBS} -I${INCDIR} -o runAllTripleSystematics -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS)
 
 build/%.o: ${ANALYZE_DIR}/%.cxx ${ANALYZE_DIR}/%.h
 	g++ -c $< $(CFLAGS) -o $@
