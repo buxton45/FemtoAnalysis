@@ -25,7 +25,7 @@ CFLAGS = $(shell gsl-config --cflags) $(shell root-config --cflags) -Wall -std=c
 
 MY_LIBS = $(addprefix build/, FitParameter.o FitChi2Histograms.o BackgroundFitter.o FitPartialAnalysis.o FitPairAnalysis.o FitSharedAnalyses.o MathematicaSession.o WaveFunction.o ChargedResidualCf.o SimpleChargedResidualCf.o NeutralResidualCf.o ResidualCollection.o SimpleLednickyFitter.o LednickyFitter.o FitValuesWriter.o FitValuesLatexTableHelperWriter.o FitValuesWriterwSysErrs.o FitValuesLatexTableHelperWriterwSysErrs.o FitGenerator.o FitGeneratorAndDraw.o DualieFitGenerator.o TripleFitGenerator.o ThermCf.o CfLite.o CfHeavy.o Types.o Types_LambdaValues.o Types_FitParamValues.o Types_ThermBgdParams.o AnalysisInfo.o Faddeeva.o CanvasPartition.o SimulatedLednickyCf.o NumIntLednickyCf.o)
 
-BINARIES = runLamKchP runLamKchPTest runCompareKchFix2 runFits runTest runGenerator runDualieGenerator runTripleGenerator runCompareTwoAnalyses runCompareThreeAnalyses runCompareMixedcLamcKch runScattParamValues runLamKchPvsKchM runPlotAll runSimpleLednicky runCompareFittingMethods runmTScaling runCompareBackgrounds runCpaFit runFitThermCfs runDrawNumIntLednickyCf
+BINARIES = runLamKchP runLamKchPTest runCompareKchFix2 runFits runTest runGenerator runDualieGenerator runTripleGenerator runCompareTwoAnalyses runCompareThreeAnalyses runCompareMixedcLamcKch runScattParamValues runLamKchPvsKchM runPlotAll runSimpleLednicky runCompareFittingMethods runmTScaling runmTScalingTempTriple runCompareBackgrounds runCpaFit runFitThermCfs runDrawNumIntLednickyCf
 
 all: $(BINARIES)
 
@@ -79,6 +79,9 @@ runCompareFittingMethods: ${MY_LIBS} CompareFittingMethods.C
 
 runmTScaling: ${MY_LIBS} DrawmTScaling.C
 	g++ DrawmTScaling.C ${MY_LIBS} -I${INCDIR} -o runmTScaling -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS)
+
+runmTScalingTempTriple: ${MY_LIBS} DrawmTScalingTempTriple.C
+	g++ DrawmTScalingTempTriple.C ${MY_LIBS} -I${INCDIR} -o runmTScalingTempTriple -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS)
 
 runCompareBackgrounds: ${MY_LIBS} CompareBackgrounds.C
 	g++ CompareBackgrounds.C ${MY_LIBS} -I${INCDIR} -o runCompareBackgrounds -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS)

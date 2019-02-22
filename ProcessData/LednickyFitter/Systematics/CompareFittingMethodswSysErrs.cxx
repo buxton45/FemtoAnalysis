@@ -102,13 +102,16 @@ TCanvas* CompareImF0vsReF0(vector<FitValWriterInfo> &aFitValWriterInfo, TString 
   {
     tPadReF0vsImF0->cd();
 
+    int tPredColor1 = kCyan;
+    int tPredColor2 = kMagenta;
+
     TGraphAsymmErrors *tGr_0607100_Set1 = new TGraphAsymmErrors(1);
       tGr_0607100_Set1->SetPoint(0, 0.17, 0.34);
       tGr_0607100_Set1->SetPointError(0, 0.06, 0.06, 0.00, 0.00);
       tGr_0607100_Set1->SetMarkerStyle(39);
       tGr_0607100_Set1->SetMarkerSize(1.5);
-      tGr_0607100_Set1->SetMarkerColor(kGreen+2);
-      tGr_0607100_Set1->SetLineColor(kGreen+2);
+      tGr_0607100_Set1->SetMarkerColor(tPredColor1);
+      tGr_0607100_Set1->SetLineColor(tPredColor1);
       tGr_0607100_Set1->Draw("pzsame");
 
     TGraphAsymmErrors *tGr_0607100_Set2 = new TGraphAsymmErrors(1);
@@ -116,8 +119,8 @@ TCanvas* CompareImF0vsReF0(vector<FitValWriterInfo> &aFitValWriterInfo, TString 
       tGr_0607100_Set2->SetPointError(0, 0.06, 0.06, 0.00, 0.00);
       tGr_0607100_Set2->SetMarkerStyle(37);
       tGr_0607100_Set2->SetMarkerSize(1.5);
-      tGr_0607100_Set2->SetMarkerColor(kGreen+2);
-      tGr_0607100_Set2->SetLineColor(kGreen+2);
+      tGr_0607100_Set2->SetMarkerColor(tPredColor1);
+      tGr_0607100_Set2->SetLineColor(tPredColor1);
       tGr_0607100_Set2->Draw("pzsame");
 
   //-----------
@@ -127,8 +130,8 @@ TCanvas* CompareImF0vsReF0(vector<FitValWriterInfo> &aFitValWriterInfo, TString 
       tGr_PhysRevD_KLam->SetPointError(0, 0.56, 0.55, 0.00, 0.00);
       tGr_PhysRevD_KLam->SetMarkerStyle(29);
       tGr_PhysRevD_KLam->SetMarkerSize(1.5);
-      tGr_PhysRevD_KLam->SetMarkerColor(kOrange);
-      tGr_PhysRevD_KLam->SetLineColor(kOrange);
+      tGr_PhysRevD_KLam->SetMarkerColor(tPredColor2);
+      tGr_PhysRevD_KLam->SetLineColor(tPredColor2);
       tGr_PhysRevD_KLam->Draw("pzsame");
 
     TGraphAsymmErrors *tGr_PhysRevD_AKLam = new TGraphAsymmErrors(1);
@@ -136,8 +139,8 @@ TCanvas* CompareImF0vsReF0(vector<FitValWriterInfo> &aFitValWriterInfo, TString 
       tGr_PhysRevD_AKLam->SetPointError(0, 0.56, 0.55, 0.00, 0.00);
       tGr_PhysRevD_AKLam->SetMarkerStyle(30);
       tGr_PhysRevD_AKLam->SetMarkerSize(1.5);
-      tGr_PhysRevD_AKLam->SetMarkerColor(kOrange);
-      tGr_PhysRevD_AKLam->SetLineColor(kOrange);
+      tGr_PhysRevD_AKLam->SetMarkerColor(tPredColor2);
+      tGr_PhysRevD_AKLam->SetLineColor(tPredColor2);
       tGr_PhysRevD_AKLam->Draw("pzsame");
 
     TLegend* tLegPredictions = new TLegend(0.825, 0.725, 0.975, 0.875);
@@ -279,6 +282,107 @@ TCanvas* CompareLambdavsRadius(vector<FitValWriterInfo> &aFitValWriterInfo, TStr
 }
 
 
+//TODO Written super quickly, so real janky, should probably rewrite
+//_________________________________________________________________________________________________________________________________
+TCanvas* CompareLambdavsRadiusAll(vector<FitValWriterInfo> &aFitValWriterInfo, TString aSystematicsFileLocation_LamKch, TString aSystematicsFileLocation_LamK0, TString aCanNameMod, bool aSuppressDescs, bool aSuppressAnStamps, bool aDrawStatOnly)
+{
+  TString tCanBaseName = TString::Format("CompareLambdavsRadiusAllwSys%s", aCanNameMod.Data());
+  TString tCanName = tCanBaseName;
+
+  TCanvas* tReturnCan = new TCanvas(tCanName, tCanName);
+  tReturnCan->cd();
+  gStyle->SetOptStat(0);
+  gStyle->SetOptTitle(0);
+
+  //------------------------------------------------------
+  double tStartX = 1.0;
+  double tStartY = 2.3;
+  double tIncrementX = 0.20;
+  double tIncrementY = 0.25;
+  double tTextSize = 0.05;
+
+  SetupRadiusvsLambdaAxes((TPad*)tReturnCan);
+
+  TLatex* tTex = new TLatex();
+  tTex->SetTextAlign(12);
+  tTex->SetLineWidth(2);
+  tTex->SetTextFont(42);
+  tTex->SetTextSize(tTextSize);
+
+  const Size_t tDescriptorMarkerSize=1.6;
+  TMarker *tMarker = new TMarker();
+  tMarker->SetMarkerSize(tDescriptorMarkerSize);
+  tMarker->SetMarkerStyle(20);
+  tMarker->SetMarkerColor(kBlack);
+
+  //------------------------------------------------------
+
+  int iTex = 0;
+  TString aSystematicsFileLocation;
+  bool bSuppressMarkers = false;
+  TString tLegDesc;
+  vector<int> tColors{kRed, kGreen+2, kBlue};
+  aSystematicsFileLocation = aSystematicsFileLocation_LamKch;  //Until new sys. generated, just use old ones from LamKch
+  for(int i=0; i<3; i++)
+  {
+    FitValuesWriterwSysErrs::DrawLambdavsRadiusGraph((TPad*)tReturnCan, aFitValWriterInfo[0].masterFileLocation, aSystematicsFileLocation, aFitValWriterInfo[0].fitInfoTString, aFitValWriterInfo[0].analysisType, static_cast<CentralityType>(i), tColors[i], aFitValWriterInfo[0].markerStyle, aFitValWriterInfo[0].markerSize, "epsame", "e2same", aDrawStatOnly);
+
+    tLegDesc = cPrettyCentralityTags[i];
+
+    tTex->DrawLatex(tStartX, tStartY-iTex*tIncrementY, tLegDesc);
+    tMarker->SetMarkerStyle(aFitValWriterInfo[0].markerStyle);
+    tMarker->SetMarkerColor(tColors[i]);
+    tMarker->DrawMarker(tStartX-tIncrementX, tStartY-iTex*tIncrementY);
+
+    iTex++;
+  }
+
+  //------------------------------------------------------
+
+  tTex->SetTextFont(42);
+  tTex->SetTextSize(0.06);
+//  tTex->DrawLatex(0.5, 2.3, cPrettyCentralityTags[aCentType]);
+
+  //------------------------------------------------------
+
+  double tStartXStamp = 0.7;
+  double tStartYStamp = 2.1;
+  double tIncrementXStamp = 0.125;
+  double tIncrementYStamp = 0.15;
+  double tSecondColumnShiftX = 1.0;
+  double tTextSizeStamp = 0.04;
+  int tMarkerStyleStamp = 21;
+  int tConjMarkerStyleStamp = 25;
+
+  //--------------------------------------
+/*
+  TLatex* tTex = new TLatex();
+  tTex->SetTextAlign(12);
+  tTex->SetLineWidth(2);
+  tTex->SetTextFont(42);
+  tTex->SetTextSize(aTextSize);
+
+  const Size_t tMarkerSize=1.6;
+  TMarker *tMarker = new TMarker();
+  tMarker->SetMarkerSize(tMarkerSize);
+
+  tMarker->SetMarkerStyle(aMarkerStyle);
+  tTex->DrawLatex(aStartX, aStartY-iTex*aIncrementY, cPrettyCentralityTags[0]);
+  tMarker->SetMarkerColor(kGreen);
+  tMarker->DrawMarker(aStartX-aIncrementX, aStartY-iTex*aIncrementY);
+  iTex++;
+
+  tMarker->SetMarkerStyle(aMarkerStyle);
+  tTex->DrawLatex(aStartX, aStartY-iTex*aIncrementY, cPrettyCentralityTags[0]);
+  tMarker->SetMarkerColor(kGreen);
+  tMarker->DrawMarker(aStartX-aIncrementX, aStartY-iTex*aIncrementY);
+  iTex++;
+*/
+
+  return tReturnCan;
+}
+
+
 
 //_________________________________________________________________________________________________________________________________
 TCanvas* CompareAll(vector<FitValWriterInfo> &aFitValWriterInfo, TString aSystematicsFileLocation_LamKch, TString aSystematicsFileLocation_LamK0, bool aDrawPredictions, TString aCanNameMod, bool aDrawStatOnly)
@@ -311,6 +415,36 @@ TCanvas* CompareAll(vector<FitValWriterInfo> &aFitValWriterInfo, TString aSystem
   delete tCanLamvsR0010;
   delete tCanLamvsR1030;
   delete tCanLamvsR3050;
+  //--------------------
+  return tReturnCan;
+}
+
+
+//_________________________________________________________________________________________________________________________________
+TCanvas* CompareAll2Panel(vector<FitValWriterInfo> &aFitValWriterInfo, TString aSystematicsFileLocation_LamKch, TString aSystematicsFileLocation_LamK0, bool aDrawPredictions, TString aCanNameMod, bool aDrawStatOnly)
+{
+  TCanvas *tReturnCan, *tCanImF0vsReF0, *tCanLamvsR;
+
+  TString tSubCanNameMod = TString::Format("%sForAll", aCanNameMod.Data());
+  tCanImF0vsReF0 = CompareImF0vsReF0(aFitValWriterInfo, aSystematicsFileLocation_LamKch, aSystematicsFileLocation_LamK0, aDrawPredictions, tSubCanNameMod, false, false, aDrawStatOnly);
+  tCanLamvsR = CompareLambdavsRadiusAll(aFitValWriterInfo, aSystematicsFileLocation_LamKch, aSystematicsFileLocation_LamK0, tSubCanNameMod, true, false, aDrawStatOnly);
+
+
+  vector<TString> twPredVec{"", "_wPredictions"};
+  TString tCanBaseName = TString::Format("CompareAll2PanelScattParamswSys%s%s", twPredVec[aDrawPredictions].Data(), aCanNameMod.Data());
+  TString tCanName = tCanBaseName;
+
+  tReturnCan = new TCanvas(tCanName, tCanName, 1400, 500);
+  tReturnCan->Divide(2, 1, 0.001, 0.001);
+  tReturnCan->cd(1);
+  tCanImF0vsReF0->DrawClonePad();
+  tReturnCan->cd(2);
+  tCanLamvsR->DrawClonePad();
+
+
+  //--------------------
+  delete tCanImF0vsReF0;
+  delete tCanLamvsR;
   //--------------------
   return tReturnCan;
 }

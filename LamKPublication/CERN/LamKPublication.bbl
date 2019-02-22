@@ -105,10 +105,6 @@ S.~Pratt, T.~Csorgo, and J.~Zimanyi, ``{Detailed predictions for two pion
   C42} (1990) 2646--2652}.
 %%CITATION = PHRVA,C42,2646;%%.
 
-\bibitem{Stavinskiy04}
-A.~Stavinskiy {\em et~al.}, ``{Some new aspects of femtoscopy at high
-  energy},'' {\em Nukleonika} {\bfseries 49 (Supplement 2)} (2004) S23.
-
 \bibitem{Kisiel:2014mma}
 A.~Kisiel, H.~Zbroszczyk, and M.~Szymański, ``{Extracting baryon-antibaryon
   strong interaction potentials from p$\bar{\Lambda}$ femtoscopic correlation
@@ -146,6 +142,10 @@ M.~Mai, P.~C. Bruns, B.~Kubis, and U.-G. Meissner, ``{Aspects of meson-baryon
   {\bfseries D80} (2009) 094006},
 \href{http://arxiv.org/abs/0905.2810}{{\ttfamily arXiv:0905.2810 [hep-ph]}}.
 %%CITATION = ARXIV:0905.2810;%%.
+
+\bibitem{Stavinskiy04}
+A.~Stavinskiy {\em et~al.}, ``{Some new aspects of femtoscopy at high
+  energy},'' {\em Nukleonika} {\bfseries 49 (Supplement 2)} (2004) S23.
 
 \bibitem{Lednicky:2005tb}
 R.~Lednicky, ``{Finite-size effects on two-particle production in continuous

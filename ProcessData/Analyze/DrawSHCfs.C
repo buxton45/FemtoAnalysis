@@ -388,8 +388,10 @@ int main(int argc, char **argv)
 
   if(bSaveFigures)
   {
-    tCanAll->SaveAs(TString::Format("%s%s.%s", tSaveDirectoryBase.Data(), tCanNameAll.Data(), tSaveFileType.Data()));
-    tCan0010->SaveAs(TString::Format("%s%s.%s", tSaveDirectoryBase.Data(), tCanName0010.Data(), tSaveFileType.Data()));
+    vector<TString> twThermTagVec{TString(""), TString("_wTherm")};
+
+    tCanAll->SaveAs(TString::Format("%s%s%s.%s", tSaveDirectoryBase.Data(), tCanNameAll.Data(), twThermTagVec[bDrawThermCfs].Data(), tSaveFileType.Data()));
+    tCan0010->SaveAs(TString::Format("%s%s%s.%s", tSaveDirectoryBase.Data(), tCanName0010.Data(), twThermTagVec[bDrawThermCfs].Data(), tSaveFileType.Data()));
   }
 
 /*

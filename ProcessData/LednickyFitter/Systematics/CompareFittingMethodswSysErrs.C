@@ -67,11 +67,38 @@ int main(int argc, char **argv)
                                                                          "#LambdaK^{#pm}: Share R and #lambda, Poly. Bgd (Suppress Markers)", tColorLamKchM, 20, tMarkerSize, bLamKchCombined), 
                                                         FitValWriterInfo(kLamK0, tFileLocation_LamK0, tResultsDate, tFitInfoTString_LamK0_3Res_LinrBgd_10fm, 
                                                                          "#LambdaK^{0}_{S}: Single #lambda, Linr. Bgd (Suppress Markers)", tColorLamK0, 20, tMarkerSize, false)};
-  tFVWIVec = tFVWIVec_Comp3An_3Res_10fm;
+//  tFVWIVec = tFVWIVec_Comp3An_3Res_10fm;
 //  tCanNameMod = TString("_Comp3An_3Res_10fm");
-  tCanNameMod = TString("_Comp3An");
+//  tCanNameMod = TString("_Comp3An");
 
 
+  //--------------------------------------------------------------------------
+//TRIPLE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+  vector<NonFlatBgdFitType> tNonFlatBgdFitTypes{kLinear, kLinear,
+                                                kPolynomial, kPolynomial, kPolynomial, kPolynomial};
+
+  TString tFitInfoTString_3Res_10fm_Triple_LamK0LinearLamKchPoly = FitValuesWriter::BuildFitInfoTString(true, true, tNonFlatBgdFitTypes, 
+                                                                                         kInclude3Residuals, k10fm, 
+                                                                                         kUseXiDataAndCoulombOnlyInterp, false, 
+                                                                                         false, false, false, false, false, 
+                                                                                         true, false, false, true, 
+                                                                                         true, true);
+
+
+  vector<FitValWriterInfo> tFVWIVec_Comp3An_Triple = {
+                                                                 FitValWriterInfo(kLamKchP, tFileLocation_LamKch, tResultsDate, tFitInfoTString_3Res_10fm_Triple_LamK0LinearLamKchPoly, 
+                                                                                 "#LambdaK^{#pm} and #LambdaK^{0}_{S} fit together", tColorLamKchP, 20, tMarkerSize, false, true), 
+                                                                 FitValWriterInfo(kLamKchM, tFileLocation_LamKch, tResultsDate, tFitInfoTString_3Res_10fm_Triple_LamK0LinearLamKchPoly, 
+                                                                                 "#LambdaK^{#pm} and #LambdaK^{0}_{S} fit together", tColorLamKchM, 20, tMarkerSize, false, true), 
+                                                                 FitValWriterInfo(kLamK0, tFileLocation_LamK0, tResultsDate, tFitInfoTString_3Res_10fm_Triple_LamK0LinearLamKchPoly, 
+                                                                                 "#LambdaK^{#pm} and #LambdaK^{0}_{S} fit together", tColorLamK0, 20, tMarkerSize, false, true)};
+
+  tFVWIVec = tFVWIVec_Comp3An_Triple;
+  tCanNameMod = TString("_Comp3An_Triple");
+
+  TCanvas* tCanAll2Panel = CompareAll2Panel(tFVWIVec, tSystematicsFileLocation_LamKch, tSystematicsFileLocation_LamK0, bDrawPredictions, tCanNameMod, bDrawStatOnly);
+//  tCanAll2Panel->SaveAs("Comp3An_Triple.pdf");
   //--------------------------------------------------------------------------
 
 //  tFVWIVec = tFVWIVec_CompNumRes_ShareR_PolyBgd;
