@@ -76,6 +76,9 @@ int main(int argc, char **argv)
     else if(tCutInt < 0) tGeneralAnTypeModified = "cLamK0";
     else assert(0);
 
+    cout << "+++++++++++++++++++++++++++++++++++++++++++++++++++++++ ";
+    cout << "tCutInt = " << tCutInt;
+    cout << " +++++++++++++++++++++++++++++++++++++++++++++++++++++++ " << endl << endl;
     SystematicsFileInfo tFileInfo = GetFileInfo_LamK(tCutInt, tParentResultsDate);
       TString tResultsDate = tFileInfo.resultsDate;
       TString tDirNameModifierBase1 = tFileInfo.dirNameModifierBase1;

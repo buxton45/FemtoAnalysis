@@ -22,6 +22,7 @@ public:
 
   static void WriteLatexTableHelperEntryForSingle(ostream &aOut, TString aMasterFileLocation, TString aSystematicsFileLocation, AnalysisType aAnType, TString aFitInfoTString);
   static void WriteSingleLatexTableHelper(TString aResultsDate, AnalysisType aAnType, TString aFitInfoTString);
+  static void WriteSingleLatexTableHelperTriple(TString aResultsDate, TString aFitInfoTString);
 
   //inline (i.e. simple) functions
 

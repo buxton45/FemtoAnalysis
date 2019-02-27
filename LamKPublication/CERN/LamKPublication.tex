@@ -77,7 +77,7 @@
 \usepackage{color}	%May be necessary for colored links
 \usepackage{hyperref}
 \usepackage{lineno}
-%\linenumbers
+\linenumbers
 
 \usepackage{multirow}
 \usepackage{boldline}  % to make lines in table bold
@@ -689,7 +689,6 @@ In order to obtain correct results, it is desirable for our particle collections
 In practice, this is impossible to achieve; many of our particles are not primary, but originate as decay products from other resonances.
 Some of our \Lam hyperons decay from $\Sigma^{0}$, $\Xi^{0}$, $\Xi^{-}$ and $\Sigma^{*(+,-,0)}(1385)$ parents, and some of our K mesons decay from K$^{*(+,-,0)}(892)$ parents.
 In these decays, the daughter carries away a momentum very similar to that of its parent.
-
 As a result, the correlations between the particles in the daughter pair will be sensitive to, and dependent upon, the interaction between the parents.
 In effect, the correlation between the parents will be visible, although smeared out, in the daughters' signal.
 We call this a residual correlation resulting from feed-down.  
@@ -757,7 +756,7 @@ Unfortunately, the world in which we live is not perfect, such a table does not 
 Additionally, introducing a unique set of scattering parameters and radii for each residual system would introduce a large number of additional fit parameters, for which we do not have many constraints, and would cause our fitter to be too unconstrained and yield untrustworthy results. 
 For this analysis, we assume all residual pairs have the same source size as the daughter pair.
 Furthermore, we assume Coulomb-neutral residual pairs share the same scattering parameters as the daughter pair.
-Therefore, for Coulomb-neutral pairs, such as \LamK, $\Sigma^{0}$K, and $\Xi^{0}$K, $C_{ij}(k^{*}_{ij})$ is calculated from Eqn. \ref{eqn:LednickyEqn}, with the help of Eqn. \ref{eqn:CFSI}; $C_{ij}(k^{*}_{\Lambda\mathrm{K}})$ is then obtained by transforming $C_{ij}(k^{*}_{ij})$ with Eq. \ref{eqn:ResidualsTransform}.  
+Therefore, for Coulomb-neutral pairs, such as $\Sigma^{0}$K, and $\Xi^{0}$K, $C_{ij}(k^{*}_{ij})$ is calculated from Eqn. \ref{eqn:LednickyEqn}, with the help of Eqn. \ref{eqn:CFSI}; $C_{ij}(k^{*}_{\Lambda\mathrm{K}})$ is then obtained by transforming $C_{ij}(k^{*}_{ij})$ with Eq. \ref{eqn:ResidualsTransform}, using the appropriate transform matrix.  
 
 For residual pairs affected by both the strong and Coulomb interactions, things are a bit more complicated.
 This is due to the fact that, for the case of both strong and Coulomb interaction, we no longer have a nice analytical form with which to fit.
@@ -915,7 +914,9 @@ Similarly, the fit parameters extracted from all of these correlation functions 
 As with the systematic errors on the data, this was performed for all varied cut values.
 Additionally, a systematic analysis was done on our fit method through varying our \kstar fit range, as well as varying our modeling of the non-femtoscopic background.
 Our choice of \kstar fit range was varied by $\pm$ 25\%. 
-To study the contribution of this choice to our systematic errors, we also fit the background in the data, excluding any contribution from THERMINATOR simulation, with a linear, quadratic, and Gaussian form. 
+As previously stated, the non-femtoscopic backgrounds are modeled using the THERMINATOR 2 simulation for the \LamKpm analyses, and with a linear form for the \LamKs system.
+To study the contribution of this choice to our systematic errors, we modeled the backgrounds of all of our systems by fitting to the data with a with a linear, quadratic, and Gaussian form.
+Additionally, we modeled the backgrounds of all systems with a polynomial fit to the THERMINATOR simulation, scaled to match the data. 
 The resulting uncertainties in the extracted parameter sets were combined with our uncertainties arising from our particle and pair cuts.
 
 

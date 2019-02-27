@@ -262,5 +262,35 @@ void FitValuesLatexTableHelperWriterwSysErrs::WriteSingleLatexTableHelper(TStrin
   tOut.close();
 }
 
+//________________________________________________________________________________________________________________
+void FitValuesLatexTableHelperWriterwSysErrs::WriteSingleLatexTableHelperTriple(TString aResultsDate, TString aFitInfoTString)
+{
+  TString tResultsBaseDir_LamKch = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_%s/", aResultsDate.Data());
+  TString tMasterFileLocation_LamKch = TString::Format("%sMasterFitResults_%s.txt", tResultsBaseDir_LamKch.Data(), aResultsDate.Data());
 
+  TString tResultsBaseDir_LamK0 = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamK0_%s/", aResultsDate.Data());
+  TString tMasterFileLocation_LamK0 = TString::Format("%sMasterFitResults_%s.txt", tResultsBaseDir_LamK0.Data(), aResultsDate.Data());
+
+  TString tSystematicsFileLocation = TString::Format("%s%s/Systematics/FinalFitSystematics_wFitRangeSys%s.txt", tResultsBaseDir_LamKch.Data(), aFitInfoTString.Data(), aFitInfoTString.Data());
+
+  TString tTableSaveDir = TString::Format("%s%s/Tables/", tResultsBaseDir_LamKch.Data(), aFitInfoTString.Data());
+    gSystem->mkdir(tTableSaveDir);
+  TString tTableSaveLocation = TString::Format("%sTableHelperTriple.tex", tTableSaveDir.Data());
+
+
+  std::ofstream tOut;
+  tOut.open(tTableSaveLocation);
+
+
+  WriteLatexTableHelperEntryForSingle(tOut, tMasterFileLocation_LamKch, tSystematicsFileLocation, kLamKchP,  aFitInfoTString);
+  WriteLatexTableHelperEntryForSingle(tOut, tMasterFileLocation_LamKch, tSystematicsFileLocation, kALamKchM, aFitInfoTString);
+  WriteLatexTableHelperEntryForSingle(tOut, tMasterFileLocation_LamKch, tSystematicsFileLocation, kLamKchM,  aFitInfoTString);
+  WriteLatexTableHelperEntryForSingle(tOut, tMasterFileLocation_LamKch, tSystematicsFileLocation, kALamKchP, aFitInfoTString);
+
+  WriteLatexTableHelperEntryForSingle(tOut, tMasterFileLocation_LamK0, tSystematicsFileLocation, kLamK0,   aFitInfoTString);
+  WriteLatexTableHelperEntryForSingle(tOut, tMasterFileLocation_LamK0, tSystematicsFileLocation, kALamK0,  aFitInfoTString);
+
+
+  tOut.close();
+}
 

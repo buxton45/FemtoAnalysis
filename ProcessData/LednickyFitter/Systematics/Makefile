@@ -25,7 +25,7 @@ CFLAGS = $(shell root-config --cflags) -Wall -std=c++11 -I${ANALYZE_DIR} -I${LED
 
 MY_LIBS = $(addprefix build/, FitParameter.o FitChi2Histograms.o BackgroundFitter.o FitPartialAnalysis.o FitPairAnalysis.o FitSharedAnalyses.o MathematicaSession.o WaveFunction.o ChargedResidualCf.o SimpleChargedResidualCf.o NeutralResidualCf.o ResidualCollection.o LednickyFitter.o FitValuesWriter.o FitValuesLatexTableHelperWriter.o FitValuesWriterwSysErrs.o FitValuesLatexTableHelperWriterwSysErrs.o FitGenerator.o FitGeneratorAndDraw.o DualieFitGenerator.o ThermCf.o CfLite.o CfHeavy.o Types.o Types_LambdaValues.o Types_FitParamValues.o Types_ThermBgdParams.o Types_SysFileInfo.o Faddeeva.o FitSystematicAnalysis.o DualieFitSystematicAnalysis.o TripleFitGenerator.o TripleFitSystematicAnalysis.o CanvasPartition.o)
 
-BINARIES = runSingleSystematics runAllSystematics runRead runFindOutliers runFitRange runNonFlatBgdSys runTest runBuildLatexTableHelperwSysErrs runBuildLatexTableHelperwSysErrsForSingle runCompareFittingMethodswSysErrs runCompareFittingMethodswSysErrsForAnNote runSingleDualieSystematics runAllDualieSystematics runFitRangeDualie runNonFlatBgdDualieSys runSingleTripleSystematics runAllTripleSystematics
+BINARIES = runSingleSystematics runAllSystematics runRead runFindOutliers runFitRange runNonFlatBgdSys runTest runBuildLatexTableHelperwSysErrs runBuildLatexTableHelperwSysErrsForSingle runBuildLatexTableHelperwSysErrsForSingleTriple runCompareFittingMethodswSysErrs runCompareFittingMethodswSysErrsForAnNote runDrawFinalResultswSysErrsTriple runSingleDualieSystematics runAllDualieSystematics runFitRangeDualie runNonFlatBgdDualieSys runSingleTripleSystematics runAllTripleSystematics runFitRangeTriple runNonFlatBgdTripleSys runReadTriple
 
 all: $(BINARIES)
 
@@ -53,6 +53,9 @@ runBuildLatexTableHelperwSysErrs: ${MY_LIBS} BuildLatexTableHelperwSysErrs.C
 runBuildLatexTableHelperwSysErrsForSingle: ${MY_LIBS} BuildLatexTableHelperwSysErrsForSingle.C
 	g++ BuildLatexTableHelperwSysErrsForSingle.C ${MY_LIBS} -I${INCDIR} -o runBuildLatexTableHelperwSysErrsForSingle -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS)
 
+runBuildLatexTableHelperwSysErrsForSingleTriple: ${MY_LIBS} BuildLatexTableHelperwSysErrsForSingleTriple.C
+	g++ BuildLatexTableHelperwSysErrsForSingleTriple.C ${MY_LIBS} -I${INCDIR} -o runBuildLatexTableHelperwSysErrsForSingleTriple -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS)
+
 runTest: ${MY_LIBS} test.C
 	g++ test.C ${MY_LIBS} -I${INCDIR} -o runTest -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS)
 
@@ -61,6 +64,9 @@ runCompareFittingMethodswSysErrs: ${MY_LIBS} CompareFittingMethodswSysErrs.C
 
 runCompareFittingMethodswSysErrsForAnNote: ${MY_LIBS} CompareFittingMethodswSysErrsForAnNote.C
 	g++ CompareFittingMethodswSysErrsForAnNote.C ${MY_LIBS} -I${INCDIR} -o runCompareFittingMethodswSysErrsForAnNote -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS)
+
+runDrawFinalResultswSysErrsTriple: ${MY_LIBS} DrawFinalResultswSysErrsTriple.C
+	g++ DrawFinalResultswSysErrsTriple.C ${MY_LIBS} -I${INCDIR} -o runDrawFinalResultswSysErrsTriple -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS)
 
 runSingleDualieSystematics: ${MY_LIBS} BuildSingleCutDualieSystematics.C
 	g++ BuildSingleCutDualieSystematics.C ${MY_LIBS} -I${INCDIR} -o runSingleDualieSystematics -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS)
@@ -79,6 +85,15 @@ runSingleTripleSystematics: ${MY_LIBS} BuildSingleCutTripleSystematics.C
 
 runAllTripleSystematics: ${MY_LIBS} BuildAllCutsTripleSystematics.C
 	g++ BuildAllCutsTripleSystematics.C ${MY_LIBS} -I${INCDIR} -o runAllTripleSystematics -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS)
+
+runFitRangeTriple: ${MY_LIBS} FitRangeTripleSystematics.C
+	g++ FitRangeTripleSystematics.C ${MY_LIBS} -I${INCDIR} -o runFitRangeTriple -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS)
+
+runNonFlatBgdTripleSys: ${MY_LIBS} NonFlatBgdFitTypeTripleSystematics.C
+	g++ NonFlatBgdFitTypeTripleSystematics.C ${MY_LIBS} -I${INCDIR} -o runNonFlatBgdTripleSys -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS)
+
+runReadTriple: ${MY_LIBS} ReadSystematicFitResultsTriple.C
+	g++ ReadSystematicFitResultsTriple.C ${MY_LIBS} -I${INCDIR} -o runReadTriple -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS)
 
 build/%.o: ${ANALYZE_DIR}/%.cxx ${ANALYZE_DIR}/%.h
 	g++ -c $< $(CFLAGS) -o $@

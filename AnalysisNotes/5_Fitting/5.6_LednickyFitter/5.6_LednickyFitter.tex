@@ -17,60 +17,36 @@ Instead, a log-likelihood fit function of the following form is used \cite{Lisa:
 \end{equation}
 
 where $A$ is the experimental signal distribution (numerator), $B$ is the experimental background distribution (denominator), and $C$ is the theoretical fit correlation function.
+Therefore, we use Eq. \ref{eqn:Chi2PML} as the statistic quantifying the quality of the fit.
+The parameters of the fit are: $\lambda$, $R$, $f_{0}$ ($\Re f_{0}$ and $\Im f_{0}$ separately), $d_{0}$, and normalization $N$.
 
-The LednickyFitter uses Equations \ref{eqn:LednickyEqn} -- \ref{eqn:CFSI} to build the theoretical fit, and Equation \ref{eqn:Chi2PML} as the statistic quantifying the quality of the fit.
-The parameters to be varied by MINUIT are: $\lambda$, $R$, $f_{0}$ ($\mathbb{R}f_{0}$ and $\mathbb{I}f_{0}$ separately), $d_{0}$, and normalization $N$.
-The fitter currently includes methods to correct for momentum resolution and a non-flat background.
-These corrections are applied to the fit function, the data is never touched.
-The fitter is able to share parameters between different analyses and fit all simultaneously.  
+With our procedure, we are able to share parameters between different analyses and fit all simultaneously.
+A given pair and its conjugate (e.g. \LamKchP and \ALamKchM) always share scattering parameters ($\Re f_{0}$, $\Im f_{0}$, $d_{0}$).
+However, the three distinct analyses (\LamKchP, \LamKchM, and \LamKs) are assumed to have scattering parameters unique from each other.
+We assume the pair emission source for a given centrality class is similar between all analyses; therefore, for each centrality, all \LamK analyses share a common radius parameter.
+We assume the same is true for the overall normalization $\lambda$ parameters in Eq. \ref{eqn:CfwRes}.
+Finally, each correlation function has a unique normalization parameter.
 
-In a typical fit, a given pair is fit with its conjugate (ex. $\Lambda$K$^{+}$ with $\bar{\Lambda}$K$^{-}$) across all centralities (0-10\%, 10-30\%, 30-50\%), for a total of 6 simultaneous analyses.
-Each analysis has a unique $\lambda$ and normalization parameter.
-The radii are shared between analyses of like centrality, as these should have similar source sizes.
-The scattering parameters ($\mathbb{R}f_{0}$, $\mathbb{I}f_{0}$, $d_{0}$) are shared amongst all.
-
-Initially, we left open the possibility for the \LamKchPALamKchM and \LamKchMALamKchP systems to have different source radii.  After always finding these two be consistent, we decided to join the radii parameters between these systems.  So, now, in a typical fit of our \LamKpm data, all \LamKpm analyses (\LamKchP, \ALamKchM, \LamKchM, \ALamKchP) are fit simultaneously across all centralities.  Scattering parameters are shared between pair-conjugate systems (i.e. a parameter set describing the \LamKchP \& \ALamKchM system, and a separate set describing the \LamKchM \& \ALamKchP system).  For each centrality, a radius and $\lambda$ parameters are shared amongst all pairs.  Each analysis has a unique normalization parameter.
-
-In the case of fitting with residuals, the $\lambda_{Fit}$ parameter serves as an overall normalization shared by all contributors, such that Eqn \ref{eqn:Residuals} becomes:
-
-\begin{equation}
-\begin{array}{r@{}l}
-    C_{measured}(k^{*}_{\Lambda K}) &{}= 1 + \sum\limits_{i}\lambda_{i}'[C_{i}(k^{*}_{\Lambda K})-1]\\[15pt]
-    \lambda_{i}' &{}= \lambda_{Fit}\lambda_{i} \\[10pt]
-    \sum\limits_{i}\lambda_{i}' &{}=  \lambda_{Fit}\sum\limits_{i}\lambda_{i} = \lambda_{Fit}
-\end{array}
-\label{eqn:ResidualsvLambdaNorm}
-\end{equation}
-
-where $\lambda_{i}$ is obtained from THERMINATOR, as explained in Section \ref{ResidualCorrelations}, and whose values are presented in Table \ref{tab:LambdaValues_All}.  For Coulomb-neutral pairs, such as $\Lambda$K, $\Sigma^{0}$K, and $\Xi^{0}$K, $C_{i}(k^{*}_{\Lambda K})$ is calculated from Eqn. \ref{eqn:LednickyEqn}, with the help of Eqn. \ref{eqn:CFSI}.  For those residual pairs which include a Coulomb interaction, $C_{i}(k^{*}_{\Lambda K})$ is either calculated using the CoulombFitter method (Sections \ref{ModelCascadeKaon} and \ref{CoulombFitter}) with no strong interaction, or by using the $\Xi^{\mathrm{ch}}\mathrm{K^{ch}}$ data directly.  Unless otherwise stated, the $\Xi^{\mathrm{ch}}\mathrm{K^{ch}}$ residual contribution is modeled using the experimental $\Xi^{\mathrm{ch}}\mathrm{K^{ch}}$ data, and all other charged contributors (ex. $\Sigma^{*\mathrm{ch}}\mathrm{K^{ch}}$) are modeled using the CoulombFitter technique with no strong interaction contribution.
+All correlation functions were normalized in the range 0.32 $< k^{*} <$ 0.40 GeV/c, and fit in the range 0.0 $< k^{*} <$ 0.30 GeV/c.
+For the \LamKchM analysis, the region 0.19 $< k^{*} <$ 0.23 GeV/$c$ was excluded from the fit to exclude the bump caused by the $\Omega^{-}$ resonance.
+For each pair system, we account for contributions from three residual contributors, as discussed in Sec. \ref{ResidualCorrelations}, and whose individual $\lambda$ values are listed in Table \ref{tab:LambdaValues_All} (the cases of zero and ten residual contributors were also investigated, but the case of three contributors was deemed most reasonable).
+We account for effects of finite track momentum resolution, as outlined in Sec. \ref{MomentumResolutionCorrections}.
+The non-femtoscopic backgrounds are modeled using the THERMINATOR 2 simulation for the \LamKpm analyses, and with a linear form for the \LamKs system, as described in Sec. \ref{NonFlatBackground}.
+In general, corrections are applied to the fit function, the raw data is never touched.
 
 To summarize, the complete fit function is constructed as follows:
-
 \begin{enumerate}
- \item The uncorrected, primary, correlation function, $C_{\Lambda K}$(\ktrue), is constructed using Eq. \ref{eqn:ResidualsvLambdaNorm} (with the help of Eqns. \ref{eqn:LednickyEqn} and \ref{eqn:CFSI})
- \item If residuals are included:
+ \item The uncorrected, primary, correlation function, $C_{\Lambda\mathrm{K}}$(\ktrue), is constructed using Eqns. \ref{eqn:LednickyEqn} and \ref{eqn:CFSI}
+ \item The correlation functions describing the parent systems which contribute residually are obtained using:
  \begin{itemize}
-  \item the parent correlation functions are obtained using:
-  \begin{itemize}
-   \item Eq. \ref{eqn:ResidualsvLambdaNorm} (with the help of Eqns. \ref{eqn:LednickyEqn} and \ref{eqn:CFSI}) for the case of Coulomb-neutral pairs
-   \item \XiKpm experimental data for \XiKpm contributions
-   \item a Coulomb-only curve, with the help of Secs. \ref{ModelCascadeKaon} and \ref{CoulombFitter}, for pairs including the Coulomb interaction 
-  \end{itemize} 
- \item the contribution to the \LamK correlation function is found by running the parent correlation function through the appropriate transform, via Eq.\ref{eqn:ResidualsFull} 
+  \item Eqns. \ref{eqn:LednickyEqn} and \ref{eqn:CFSI} for the case of Coulomb-neutral pairs
+  \item \XiKpm experimental data for \XiKpm contributions
+  \item a Coulomb-only curve, with the help of Appendix \ref{App:CoulombFitter}, for other pairs including the Coulomb interaction 
  \end{itemize} 
- \item The primary and residual correlations are combined, via Eq.\ref{eqn:Residuals}, to form $C'_{Fit}$(\ktrue)
- \begin{itemize}
-  \item in the case of no residual contributions included in the fit, $\lambda_{i}$ = $\lambda_{\Lambda\mathrm{K}}$ in Eq. \ref{eqn:ResidualsvLambdaNorm} is set equal to 1.  Then, the extracted $\lambda_{Fit}$ parameter should be roughly equal to the pair purity
-  \item when residuals are included, the $\lambda_{i}$ values are presented in Table \ref{tab:LambdaValues_All}
- \end{itemize} 
- \item The correlation function is corrected to account for momentum resolution effects using Eq. \ref{eqn:MomResCorrection}
- \begin{itemize}
-  \item $C'_{fit}(k^{*}_{Rec}) = \dfrac{\sum\limits_{k^{*}_{True}}M_{k^{*}_{Rec},k^{*}_{True}}C'_{fit}(k^{*}_{True})}{\sum\limits_{k^{*}_{True}}M_{k^{*}_{Rec},k^{*}_{True}}}$
- \end{itemize}
- \item Finally, the non-flat background correction is applied, and the final fit function is obtained
- \begin{itemize}
-  \item $C_{Fit}(k^{*}_{Rec}) = C'_{Fit}(k^{*}_{Rec})*F_{Bgd}(k^{*}_{Rec})$
- \end{itemize}
+ \item The residual contributions to the \LamK correlation function is found by running each parent correlation function through the appropriate transform matrix, via Eq.\ref{eqn:ResidualsTransform}
+ \item The primary and residual correlations are combined, via Eq.\ref{eqn:Residuals} with Tab. \ref{tab:LambdaValues_All}, to form $C'_{Fit}$(\ktrue)
+ \item The correlation function is corrected to account for momentum resolution effects using Eq. \ref{eqn:MomResCorrection}, to obtain $C'_{\mathrm{Fit}}(k^{*}_{\mathrm{Rec}})$
+ \item Finally, the non-flat background correction, $F_{\mathrm{Bgd}}(k^{*}_{\mathrm{Rec}})$ is applied, and the final fit function is obtained, $C_{\mathrm{Fit}}(k^{*}_{\mathrm{Rec}}) = C'_{\mathrm{Fit}}(k^{*}_{\mathrm{Rec}})*F_{\mathrm{Bgd}}(k^{*}_{\mathrm{Rec}})$
 \end{enumerate}
 
 Figures \ref{fig:LamK0wConjFits_NoRes}, \ref{fig:LamKchPwConjFits_NoRes}, and \ref{fig:LamKchMwConjFits_NoRes} (\ref{fig:LamK0wConjFits_3Res}, \ref{fig:LamKchPwConjFits_3Res}, and \ref{fig:LamKchMwConjFits_3Res}, or \ref{fig:LamK0wConjFits_10Res}, \ref{fig:LamKchPwConjFits_10Res}, and \ref{fig:LamKchMwConjFits_10Res}), in Section \ref{ResultsAndDiscussion}, show experimental data with fits for all studied centralities for \LamKsALamKs, \LamKchPALamKchM, and \LamKchMALamKchP, respectively.  In the figures, the black solid line represents the ``raw" fit, i.e. not corrected for momentum resolution effects nor non-flat background.  The green line shows the fit to the non-flat background.  The purple points show the fit after momentum resolution, non-flat background, and residual correlations (if applicable) corrections have been applied.  The extracted fit values with uncertainties are also printed on the figures.

@@ -61,7 +61,7 @@ TripleFitSystematicAnalysis::TripleFitSystematicAnalysis(TString aFileLocationBa
   if(!fDirNameModifierBase2.IsNull()) assert(fModifierValues1.size() == fModifierValues2.size());
   fNonFlatBgdFitTypes = vector<NonFlatBgdFitType>{fNonFlatBgdFitType_LamK0, fNonFlatBgdFitType_LamK0, 
                                                   fNonFlatBgdFitType_LamKch, fNonFlatBgdFitType_LamKch, fNonFlatBgdFitType_LamKch, fNonFlatBgdFitType_LamKch};
-  assert(fGeneralAnTypeModified.EqualTo("cLamcKch") || fGeneralAnTypeModified.EqualTo("cLamK0"));
+  assert(fGeneralAnTypeModified.EqualTo("cLamcKch") || fGeneralAnTypeModified.EqualTo("cLamK0") || fGeneralAnTypeModified.IsNull());
 }
 
 
@@ -114,6 +114,62 @@ TripleFitSystematicAnalysis::TripleFitSystematicAnalysis(TString aFileLocationBa
                                       aFileLocationBase_LamK0, aFileLocationBaseMC_LamK0,
                                       aGeneralAnTypeModified, 
                                       aDirNameModifierBase1, aModifierValues1, 
+                                      fDirNameModifierBase2, fModifierValues2, 
+                                      aCentralityType, aGeneratorType, 
+                                      aShareLambdaParams, aAllShareSingleLambdaParam, aDualieShareLambda, aDualieShareRadii);
+}
+
+//________________________________________________________________________________________________________________
+TripleFitSystematicAnalysis::TripleFitSystematicAnalysis(TString aFileLocationBase_LamKch, TString aFileLocationBaseMC_LamKch, 
+                                                         TString aFileLocationBase_LamK0, TString aFileLocationBaseMC_LamK0,
+                                                         TString aGeneralAnTypeModified,
+                                                         CentralityType aCentralityType, FitGeneratorType aGeneratorType, 
+                                                         bool aShareLambdaParams, bool aAllShareSingleLambdaParam, bool aDualieShareLambda, bool aDualieShareRadii) :
+  fFileLocationBase_LamKch(aFileLocationBase_LamKch),
+  fFileLocationBaseMC_LamKch(aFileLocationBaseMC_LamKch),
+  fFileLocationBase_LamK0(aFileLocationBase_LamK0),
+  fFileLocationBaseMC_LamK0(aFileLocationBaseMC_LamK0),
+
+  fCentralityType(aCentralityType),
+  fFitGeneratorType(aGeneratorType),
+
+  fShareLambdaParams(aShareLambdaParams),
+  fAllShareSingleLambdaParam(aAllShareSingleLambdaParam),
+  fDualieShareLambda(aDualieShareLambda),
+  fDualieShareRadii(aDualieShareRadii), 
+
+  fApplyNonFlatBackgroundCorrection(false),
+  fNonFlatBgdFitType_LamKch(kLinear),
+  fNonFlatBgdFitType_LamK0(kLinear),
+  fNonFlatBgdFitTypes(0),
+  fApplyMomResCorrection(false),
+
+  fIncludeResidualsType(kIncludeNoResiduals),
+  fChargedResidualsType(kUseXiDataAndCoulombOnlyInterp),
+  fResPrimMaxDecayType(k5fm),
+
+  fFixD0(false),
+
+  fSaveDirectory(""),
+
+  fGeneralAnTypeModified(aGeneralAnTypeModified),
+  fDirNameModifierBase1(0),
+  fDirNameModifierBase2(0),
+
+  fModifierValues1(0),
+  fModifierValues2(0)
+
+{
+  fDirNameModifierBase1 = "";
+  fDirNameModifierBase2 = "";
+
+  fModifierValues1 = vector<double> (0);
+  fModifierValues2 = vector<double> (0);
+
+  *this = TripleFitSystematicAnalysis(aFileLocationBase_LamKch, aFileLocationBaseMC_LamKch, 
+                                      aFileLocationBase_LamK0, aFileLocationBaseMC_LamK0,
+                                      aGeneralAnTypeModified, 
+                                      fDirNameModifierBase1, fModifierValues1, 
                                       fDirNameModifierBase2, fModifierValues2, 
                                       aCentralityType, aGeneratorType, 
                                       aShareLambdaParams, aAllShareSingleLambdaParam, aDualieShareLambda, aDualieShareRadii);
@@ -404,7 +460,7 @@ TripleFitGenerator* TripleFitSystematicAnalysis::BuildTripleFitGenerator(Analysi
   tTripleFitGenerator->SetApplyNonFlatBackgroundCorrection(fApplyNonFlatBackgroundCorrection);
   tTripleFitGenerator->SetNonFlatBgdFitTypes(aNonFlatBgdFitTypes[kLamKchP], aNonFlatBgdFitTypes[kLamK0]);
   tTripleFitGenerator->SetApplyMomResCorrection(fApplyMomResCorrection);
-  if(fIncludeResidualsType != kIncludeNoResiduals) tTripleFitGenerator->SetIncludeResidualCorrelationsType(fIncludeResidualsType, 0.60, 1.1);
+  if(fIncludeResidualsType != kIncludeNoResiduals) tTripleFitGenerator->SetIncludeResidualCorrelationsType(fIncludeResidualsType, 0.60, 1.5);
   else tTripleFitGenerator->SetIncludeResidualCorrelationsType(fIncludeResidualsType, 0.1, 1.0);
 
   tTripleFitGenerator->SetChargedResidualsType(fChargedResidualsType);
@@ -559,7 +615,7 @@ void TripleFitSystematicAnalysis::RunVaryFitRange(bool aSaveImages, bool aWriteT
     tTripleFitGenerator->SetAllRadiiLimits(1., 10.);
     //TODO these should already be set in BuildTripleFitGenerator
     if(fIncludeResidualsType == kIncludeNoResiduals) tTripleFitGenerator->SetAllLambdaParamLimits(0.1, 1.);
-    else tTripleFitGenerator->SetAllLambdaParamLimits(0.6, 1.1);
+    else tTripleFitGenerator->SetAllLambdaParamLimits(0.6, 1.5);
 
     tTripleFitGenerator->DoFit(fDualieShareLambda, fDualieShareRadii, tRangeVec[i]);
 
@@ -674,7 +730,7 @@ void TripleFitSystematicAnalysis::RunVaryNonFlatBackgroundFit(bool aSaveImages, 
 
     // TODO already in place in TripleFitSystematicAnalysis::BuildTripleFitGenerator?
     if(fIncludeResidualsType == kIncludeNoResiduals) tTripleFitGenerator->SetAllLambdaParamLimits(0.1, 1.0);
-    else tTripleFitGenerator->SetAllLambdaParamLimits(0.6, 1.1);
+    else tTripleFitGenerator->SetAllLambdaParamLimits(0.6, 1.5);
 
     tTripleFitGenerator->SetAllRadiiLimits(1., 10.);  //NOTE: This does nothing when fIncludeResidualsType != kIncludeNoResiduals && fChargedResidualsType != kUseXiDataForAll,
                                                 //      as, in that case, FitGenerator hardwires limits [1., 12] to stay within interpolation regime

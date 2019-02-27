@@ -42,9 +42,8 @@ More specifically, these backgrounds result from mixing events with unlike event
 As explained in \cite{Kisiel:2017}, when elliptic flow is present, all particles are more likely to be emitted in a specific direction (in-plane), as opposed to a perpendicular direction.  
 Therefore, the difference in momenta for pairs of particles tends to be smaller, compared to the case of no flow.  
 In the case of mixed-event pairs, the two events used do not share an event-plane, and therefore there is no collimation effect in the pairs from flow.  
-As a result, pairs with larger momentum are more likely when mixed-events are used, causing the correlation function to be observed below unity.  
-In general, a dip below unity, at a given $k^{*}$, means it is more probable to find a pair at that $k^{*}$ when the daughters are taken from mixed-events, as compared to when they are taken from the same event.
-
+As a result, pairs with larger momentum are more likely when mixed-events are used (in the denominator of the correlation function), causing the correlation function to dip below unity.  
+In general, the observation of the correlation function below unity, at a given \kstar, means it is more probable to find a pair at that $k^{*}$ when the daughters are taken from mixed-events, as compared to when they are taken from the same event.
 This same reasoning suggests that the background should lead to an enhancement at low-$k^{*}$.  
 The enhancement at high-$k^{*}$ ($k^{*} \gtrsim$ 1.5 GeV/$c$) does not result from the collective flow of the system.  
 We are not certain what causes this enhancement, but typical suspects are jet-like correlations and resonance decays.
@@ -54,11 +53,17 @@ First, the low-$k^{*}$ region ($k^{*} \lesssim 0.3$ GeV/$c$) contains the femtos
 The intermediate-$k^{*}$ region (0.3 $\lesssim k^{*} \lesssim$ 1.5 GeV/$c$) contains a suppression from the background.  
 Finally, the high-$k^{*}$ region ($k^{*} \gtrsim$ 1.5 GeV/$c$) contains an enhancement with unknown origin.
 
+The issue here is that we need to know the behavior of the non-femtoscopic background in the low-\kstar region, but we only cleanly observe it in the region further out where there is no femtoscopic signal.
+Unfortunately, we cannot simply rotate each event to artificially align their event-planes and rid ourselves of this mixing effect, as our azimuthal angle acceptance is not perfectly uniform, and we have only finite event-plane resolution.
+With better resolution, one could simply bin events in $\Psi_{\mathrm{EP}}$ and only mix events within a given bin.
+We pursued this direction, and observed a slight decrease in the background; however, going to finer binning, we saw no additional reduction in the background, signaling that we had reached the limits dictated by the resolution.
+In the end, we are forced to model the background to include it into our fit.
+
 THERMINATOR 2 simulation has been shown to reproduce the background features in a $\pi$K analysis \cite{Kisiel:2017}.  
-As the background effect can be attributed mainly to elliptic flow, which is a global feature of the system, we suspected THERMINATOR 2 could also, at least qualitatively, describe our backgrounds.  
-After ensuring each simulated event received a random event-plane angle ($\Psi_{\mathrm{EP}}$)\footnote{default was for all events to share a common event plane}, we found THERMINATOR 2 did a good job of describing our data qualitatively, and, in many cases, quantitatively.  
+After issuing each simulated event a random $\Psi_{\mathrm{EP}}$\footnote{default was for all events to share a common event plane}, we found THERMINATOR 2 did an exceptional job of describing our data.  
+Furthermore, the simulation showed the non-femtoscopic background affects the correlation function as a separable scale factor (Fig \ref{fig:THERMCfBgdDecomposition}, discussed below).
 Figure \ref{fig:BgdswTHERM} shows the THERMINATOR 2 simulation (gold) together with experimental data (red, blue, or black).  
-The figure also shows a 6$^{th}$-order polynomial fit to the simulation (gold), as well as the fit polynomial scaled to match the data (red, blue, black).  
+The figure also shows a 6$^{th}$-order polynomial fit to the simulation (gold), as well as the fit polynomial scaled to match the data (red, blue, black).
 
 
 \begin{figure}[h!]
@@ -106,9 +111,24 @@ The main point of Fig. \ref{fig:THERMCfBgdDecomposition} is that the black point
   Cf w/o Bgd = \dfrac{Cf w. Bgd}{Bgd} \to C_{theory} = \dfrac{C_{exp}}{F_{Bgd}} \to C_{exp} = C_{theory}\cdot F_{Bgd}
   \label{eq:BgdDecomp}
 \end{equation}
-
-As shown and described in Fig \ref{fig:THERMCfBgdDecomposition} and Eq. \ref{eq:BgdDecomp}, THERMINATOR 2 simulation shows the non-femtoscopic background affects the correlation function as a separable scale factor.  
+i.e. THERMINATOR 2 simulation shows the non-femtoscopic background affects the correlation function as a separable scale factor.  
 We expect this behavior to be roughly the same in the experimental data.
+
+The description by THERMINATOR 2 of the non-femtoscopic backgrounds in the \LamKpm systems is remarkable, and can be used in a quantitative fashion to help fit the data.
+More specifically, the non-femtoscopic backgrounds were modeled by (6$^{\mathrm{th}}$-)order polynomial fits to THERMINATOR 2 simulation for the \LamKpm analyses; one polynomial for each centrality class.
+The form of each polynomial was set before use with the experimental data, by fitting to the THERMINATOR 2 simulation, shown in Fig. \ref{fig:BgdswTHERM}.
+At the time of the fit, the polynomial used to correct each correlation function could only be adjust by a simple scale factor to best match the data.
+
+The description of the \LamKs is good at a qualitative level, but not quantitatively good enough to be utilized in our fit.
+As such, we use a linear form to model the background in the \LamKs system.
+The background for each correlation function was fixed before use in the signal region by fitting a linear form to the region $0.6 < k^{*} < 0.9$ GeV/$c$.
+In all cases, the non-femtoscopic background correction was applied as a scale factor.
+
+An alternative approach to treating the non-femtoscopic background is to instead attempt to eliminate it.
+The background may be effectively reduced by forming the reference distribution ($B(k^{*})$) with the ``Stavinskiy method".
+With the Stavinskiy method, mixed-event pairs are not used for the reference distribution; instead, same-event pseudo-pairs, formed by rotating one particle in a real pair by 180$^\circ$ in the transverse plane, are used.  
+This rotation rids the pairs of any femtoscopic correlation, while maintaining correlations due to elliptic flow (and other suitably symmetric contributors).
+The effect on our \LamK correlation functions can be seen in the appendix, in Sec. \ref{StavCfConstruction}.
 
 Figure \ref{fig:BgdRedMethodsTHERM} demonstrates the use of the Stavinskiy method with THERMINATOR 2.  
 In the figure, unit weights were used for all numerators, so no femtoscopic signal is included, only background effects.  

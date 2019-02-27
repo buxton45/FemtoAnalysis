@@ -149,29 +149,19 @@ int main(int argc, char **argv)
 
   TString tSaveNameModifier = LednickyFitter::BuildSaveNameModifier(ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, tNonFlatBgdFitTypes, tIncludeResidualsType, tResPrimMaxDecayType, tChargedResidualsType, FixD0, bUseStavCf, FixAllLambdaTo1, FixAllNormTo1, FixRadii, FixAllScattParams, tShareLambdaParams, tAllShareSingleLambdaParam, UsemTScalingOfResidualRadii, true, tTripleShareLambda, tTripleShareRadii);
 
-  TString tSystematicsFileLocation_LamKch = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_%s/%s/Systematics/FinalFitSystematics_wFitRangeSys%s_cLamcKch.txt", tResultsDate.Data(), tSaveNameModifier.Data(), tSaveNameModifier.Data());
-
-  TString tSystematicsFileLocation_LamK0 = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamK0_%s/%s/Systematics/FinalFitSystematics_wFitRangeSys%s_cLamK0.txt", tResultsDate.Data(), tSaveNameModifier.Data(), tSaveNameModifier.Data());
+  //For Triple analyses, systematics only currently stored in LamKch directory
+  TString tSystematicsFileLocation = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_%s/%s/Systematics/FinalFitSystematics_wFitRangeSys%s.txt", tResultsDate.Data(), tSaveNameModifier.Data(), tSaveNameModifier.Data());
 
 
 //-----------------------------------------------------------------------------
-  bool bExistsCurrentSysFile_LamKch;
-  ifstream tFileIn_LamKch;
-  tFileIn_LamKch.open(tSystematicsFileLocation_LamKch);
-  if(tFileIn_LamKch) bExistsCurrentSysFile_LamKch=true;
-  else bExistsCurrentSysFile_LamKch = false;
-  tFileIn_LamKch.close();
-  if(!bExistsCurrentSysFile_LamKch) cout << "WARNING!!!!!!!!!!!!!!!!!!!!!" << endl << "!bExistsCurrentSysFile, so syst. errs. on fit parameters not precisely accurate" << endl << endl;
+  bool bExistsCurrentSysFile;
+  ifstream tFileIn;
+  tFileIn.open(tSystematicsFileLocation);
+  if(tFileIn) bExistsCurrentSysFile=true;
+  else bExistsCurrentSysFile = false;
+  tFileIn.close();
+  if(!bExistsCurrentSysFile) cout << "WARNING!!!!!!!!!!!!!!!!!!!!!" << endl << "!bExistsCurrentSysFile, so syst. errs. on fit parameters not precisely accurate" << endl << endl;
 
-  //-----
-
-  bool bExistsCurrentSysFile_LamK0;
-  ifstream tFileIn_LamK0;
-  tFileIn_LamK0.open(tSystematicsFileLocation_LamK0);
-  if(tFileIn_LamK0) bExistsCurrentSysFile_LamK0=true;
-  else bExistsCurrentSysFile_LamK0 = false;
-  tFileIn_LamK0.close();
-  if(!bExistsCurrentSysFile_LamK0) cout << "WARNING!!!!!!!!!!!!!!!!!!!!!" << endl << "!bExistsCurrentSysFile, so syst. errs. on fit parameters not precisely accurate" << endl << endl;
 //-----------------------------------------------------------------------------
 
   TripleFitGenerator* tTriple = new TripleFitGenerator(tFileLocationBase_LamKch, tFileLocationBaseMC_LamKch, tFileLocationBase_LamK0, tFileLocationBaseMC_LamK0, tCentType, tAnRunType_LamKch, tAnRunType_LamK0, tNPartialAnalysis, tGenType, tShareLambdaParams, tAllShareSingleLambdaParam, "", bUseStavCf);
@@ -188,7 +178,7 @@ int main(int argc, char **argv)
   tTriple->SetChargedResidualsType(tChargedResidualsType);
   tTriple->SetResPrimMaxDecayType(tResPrimMaxDecayType);
   tTriple->SetMasterFileLocation(tLocationMasterFitResults_LamKch, tLocationMasterFitResults_LamK0);
-  if(bExistsCurrentSysFile_LamKch && bExistsCurrentSysFile_LamK0) tTriple->SetSystematicsFileLocation(tSystematicsFileLocation_LamKch, tSystematicsFileLocation_LamK0);
+  if(bExistsCurrentSysFile) tTriple->SetSystematicsFileLocation(tSystematicsFileLocation, tSystematicsFileLocation);
 /*
   if(FixRadii) 
   {
@@ -271,7 +261,7 @@ int main(int argc, char **argv)
     TObjArray* tCanPrimwFitsAndResidual;
     TObjArray* tAllResWithTransMatrices;
 
-    bool aOutputCheckCorrectedCf = true;
+    bool aOutputCheckCorrectedCf = false;
     bool aZoomResiduals = true;
     TObjArray* tAllSingleKStarCfwFitAndResiduals;
     TObjArray* tAllSingleKStarCfwFitAndResiduals_FemtoMinus;

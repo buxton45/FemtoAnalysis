@@ -144,7 +144,7 @@ void LednickyFitter::AppendNonFlatBgdFitTypeInfo(TString &aSaveName, vector<NonF
     {
       if(aNonFlatBgdFitTypes[i] != aNonFlatBgdFitTypes[i-1]) tAllSame=false;
     }
-    if(tAllSame) aSaveName += cNonFlatBgdFitTypeTags[aNonFlatBgdFitTypes[0]];
+    if(tAllSame) aSaveName += TString::Format("LamK0LamKch%s", cNonFlatBgdFitTypeTags[aNonFlatBgdFitTypes[0]]);
     else
     {
       //Should make sure all (A)LamK0 are of same type, and all (A)LamKchP(M) are of same type

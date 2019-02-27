@@ -4,13 +4,19 @@
 \section{Systematic Errors}
 \label{SystematicErrors}
 
-In order to understand my systematic uncertainties, the analysis code was run many times using slightly different values for a number of important cuts, and the results were compared.  To quantify the systematic errors on the data, all correlation functions built using all varied cut values were bin-by-bin averaged, and the resulting variance of each bin was taken as the systematic error.  The cuts which were utilized in this study are presented in Sections \ref{SysErrsLamK0:ParticleAndPairCuts} ($\Lambda$K$^{0}_{S}$) and \ref{SysErrsLamKch:ParticleAndPairCuts} ($\Lambda$K$^{\pm}$).
-
+In order to understand the systematic uncertainties of our data, the analysis code was run many times using slightly different values for a number of important cuts, and the results were compared.  
+To quantify the systematic errors on the data, all correlation functions built using all varied cut values were bin-by-bin averaged, and the resulting variance of each bin was taken as the systematic error.  
+The cuts included in the systematic study, as well as the values used in the variations, are shown in Tab. \ref{tab:LamK0sSystematics} (\LamKs) and Tab. \ref{tab:LamKchSystematics} (\LamKpm).  
+Note, the central value corresponds to that used in the analysis.
 
 Similarly, the fit parameters extracted from all of these correlation functions were averaged, and the resulting variances were taken as the systematic errors for the fit parameters.
 As with the systematic errors on the data, this was performed for all varied cut values.
-Additionally, a systematic analysis was done on our fit method (which, for now, just includes our choice of fit range and functional form used to model the non-femtoscopic background).
-These two sources of uncertainty were combined in quadrature to obtain the final systematic uncertainties on the extracted fit parameters.
+Additionally, a systematic analysis was done on our fit method through varying our \kstar fit range, as well as varying our modeling of the non-femtoscopic background.
+Our choice of \kstar fit range was varied by $\pm$ 25\%. 
+As previously stated, the non-femtoscopic backgrounds are modeled using the THERMINATOR 2 simulation for the \LamKpm analyses, and with a linear form for the \LamKs system.
+To study the contribution of this choice to our systematic errors, we modeled the backgrounds of all of our systems by fitting to the data with a with a linear, quadratic, and Gaussian form.
+Additionally, we modeled the backgrounds of all systems with a polynomial fit to the THERMINATOR simulation, scaled to match the data. 
+The resulting uncertainties in the extracted parameter sets were combined with our uncertainties arising from our particle and pair cuts.
 
 
 \subfile{6_SystematicErrors/6.1_SysErrsLamK0/6.1_SysErrsLamK0.tex}

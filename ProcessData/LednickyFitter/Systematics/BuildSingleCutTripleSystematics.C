@@ -54,10 +54,10 @@ int main(int argc, char **argv)
   bool bWriteToFile = true;
   bool bSaveImages = true;
 
-  TString tGeneralAnTypeModified = "cLamcKch";
-//  TString tGeneralAnTypeModified = "cLamK0";
-  int tCut = 11;
-  if(tGeneralAnTypeModified.EqualTo("cLamK0")) tCut *= 1;
+//  TString tGeneralAnTypeModified = "cLamcKch";
+  TString tGeneralAnTypeModified = "cLamK0";
+  int tCut = 10;
+  if(tGeneralAnTypeModified.EqualTo("cLamK0")) tCut *= -1;
 
   SystematicsFileInfo tFileInfo = GetFileInfo_LamK(tCut, tParentResultsDate);
     TString tResultsDate = tFileInfo.resultsDate;

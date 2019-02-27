@@ -4,15 +4,16 @@
 \subsection{Residual Correlations}
 \label{ResidualCorrelations}
 
-The purpose of this analysis is to study both the interaction, and the scale of the emitting source, of the pairs.
-In order to obtain correct results, it is important for our particle collections to consist of primary particles.
-In practice, this is difficult to achieve for our \Lam and \ALam collections.
-Many of our \Lam particles are not primary, but originate as decay products from other hyperons, including $\Sigma^{0}$, $\Xi^{0}$, $\Xi^{-}$ and $\Sigma^{*(+,-,0)}(1385)$.  Additionally, many of our K particles are not primary, but decay from K$^{*(+,-,0)}(892)$ parents.
-In these decays, the daughter \Lam or \Ks carries away a momentum very similar to that of its parent.
-As a result, the correlation function between a secondary $\Lambda$ and, for instance, a K$^{+}$  will be sensitive to, and dependent upon, the interaction between the parent of the $\Lambda$ and the K$^{+}$.
-In effect, the correlation between the parent of the $\Lambda$ and the K$^{+}$ (ex. $\Sigma^{0}$K$^{+}$) will be visible, although smeared out, in the $\Lambda$K$^{+}$ data; we call this a residual correlation resulting from feed-down.
+The purpose of this analysis is study the interaction and scale of the emitting source of the primary \LamK pairs.
+In order to obtain correct results, it is desirable for our particle collections to consist of primary particles.
+In practice, this is impossible to achieve; many of our particles are not primary, but originate as decay products from other resonances.
+Some of our \Lam hyperons decay from $\Sigma^{0}$, $\Xi^{0}$, $\Xi^{-}$ and $\Sigma^{*(+,-,0)}(1385)$ parents, and some of our K mesons decay from K$^{*(+,-,0)}(892)$ parents.
+In these decays, the daughter carries away a momentum very similar to that of its parent.
+As a result, the correlations between the particles in the daughter pair will be sensitive to, and dependent upon, the interaction between the parents.
+In effect, the correlation between the parents will be visible, although smeared out, in the daughters' signal.
+We call this a residual correlation resulting from feed-down.  
 The contributions from the primary correlation, residual correlations, and fake pairs on the finally measure data is shown schematically in Figure \ref{fig:ResidualsCartoon}.
-Residual correlations are important in an analysis when three criteria are met \cite{Kisiel:2014mma}: i) the parent correlation signal is large, ii) a large fraction of pairs in the sample originate from the particular parent system, and iii) the decay momenta are comparable to the expected correlation width in \textit{k}*. 
+Residual correlations are important in an analysis when three criteria are met \cite{Kisiel:2014mma}: i) the parent correlation signal is large, ii) a large fraction of pairs in the sample originate from the particular parent system, and iii) the decay momenta are comparable to the expected correlation width in \kstar. 
 
 
 \begin{figure}[h]
@@ -23,57 +24,50 @@ Residual correlations are important in an analysis when three criteria are met \
 \end{figure}
 
 
-
 As it is difficult for us to eliminate these residual correlations in our analyses, we must attempt to account for them in our fit.
-To achieve this, we will simultaneously fit the data for both the primary correlation function and the residual correlations.  For example, in the simple case of a $\Lambda$K$^{+}$ analysis with residuals arising solely from $\Sigma^{0}$K$^{+}$ feed-down:
+The genuine \LamK correlation function may be combined with the contributions from residual feed-down and misidentified particles to obtain the final, measured correlation function:
+
+
+\begin{eqnarray}
+\label{eqn:Residuals} 
+ C_{\mathrm{measured}}(k^{*}_{\Lambda\mathrm{K}}) &=& 1 + \lambda'_{\Lambda\mathrm{K}}[C_{\Lambda\mathrm{K}}(k^{*}_{\Lambda\mathrm{K}}) - 1] + \sum\limits_{i,j}  \lambda'_{ij}[C_{ij}(k^{*}_{\Lambda\mathrm{K}})-1] \\
+ \lambda_{ij}' &=& \lambda_{\mathrm{Fit}}\lambda_{ij} \notag \\
+ \sum\limits_{i,j}\lambda_{ij}' &=&  \lambda_{\mathrm{Fit}}\sum\limits_{i,j}\lambda_{ij} = \lambda_{\mathrm{Fit}} \notag
+\label{eqn:CfwRes} 
+\end{eqnarray}
+
+where the \LamK term represents the genuine \LamK correlation, and the $i$, $j$ terms denote the contributions from residual feed-down and possible impurities.
+More specifically, $C_{ij}(k^{*}_{\Lambda\mathrm{K}})$ is the correlation function between parents of particle species $i$ and $j$, expressed in the basis of the relative momentum of the observed daughter \LamK pairs.  
+The $\lambda$ parameters serve as weight dictating the strength of the parent contribution to the daughter pair, and are normalized to unity.
+The individual $\lambda_{ij}$ are fixed (and whose values can be found in Table \ref{tab:LambdaValues_All}), but the parameter $\lambda_{\mathrm{Fit}}$ is left free.
+The $\lambda_{\mathrm{Fit}}$ parameter serves as an overall normalization shared by all contributors.
+
+In order to obtain the parent correlation function expressed in the relative momentum of the daughter pair, one must use a transform matrix.
+The transform matrix describes the decay kinematics of the parent system into the daughter, and maps the \kstar of the parent pair onto that of the daughter.
+Using this matrix, the transformed residual correlation function can be obtained:
+
 
 \begin{equation}
-\begin{array}{l}
-\vspace{4mm}
- C_{measured}(k^{*}_{\Lambda K^{+}}) = 1 + \lambda_{\Lambda K^{+}}[C_{\Lambda K^{+}}(k^{*}_{\Lambda K^{+}})-1] + \lambda_{\Sigma^{0}K^{+}}[C_{\Sigma^{0}K^{+}}(k^{*}_{\Lambda K^{+}})-1] \\
-\vspace{2mm}
-  ~~~~~C_{\Sigma^{0}K^{+}}(k^{*}_{\Lambda K^{+}}) \equiv \frac{\sum\limits_{k^{*}_{\Sigma^{0}K^{+}}} C_{\Sigma^{0}K^{+}}\left(k^{*}_{\Sigma^{0}K^{+}}\right) T\left(k^{*}_{\Sigma^{0}K^{+}},k^{*}_{\Lambda K^{+}}\right)}{\sum\limits_{k^{*}_{\Sigma^{0}K^{+}}} T\left(k^{*}_{\Sigma^{0}K^{+}},k^{*}_{\Lambda K^{+}}\right)}
-\end{array} 
-\label{eqn:SimpleResiduals}
-\end{equation}
-
-$C_{\Sigma^{0}K^{+}}(k^{*}_{\Sigma^{0}K^{+}})$ is the $\Sigma^{0}$K$^{+}$ correlation function from, for instance, Equation \ref{eqn:LednickyEqn}, and $T$ is the transform matrix generated with THERMINATOR.  The transform matrix is formed for a given parent pair, AB, by taking all $\Lambda$K pairs originating from AB, calculating the relative momentum of the parents (\textit{k}*$_{AB}$) and daughters (\textit{k}*$_{\Lambda K}$), and filling a two-dimensional histogram with the values. The transform matrix is essentially an unnormalized probability distribution mapping the \textit{k}* of the parent pair to that of the daughter pair when one or both parents decay.  An example of such transform matrices can be found in Figures \ref{fig:TransformMatricesLamKchP} and \ref{fig:TransformMatricesALamKchP}.
-
-  The above equation can be easily extended to include feed-down from more sources:
-
-\begin{equation}
-\begin{array}{l}
-\vspace{4mm}
-\begin{split}
- C_{measured}(k^{*}_{\Lambda K}) & = 1 + \lambda_{\Lambda K}[C_{\Lambda K}(k^{*}_{\Lambda K})-1] + \lambda_{\Sigma^{0}K}[C_{\Sigma^{0}K}(k^{*}_{\Lambda K})-1] + ... \\ &
- + \lambda_{P_{1}P_{2}}[C_{P_{1}P_{2}}(k^{*}_{\Lambda K})-1] + \lambda_{other}[C_{other}(k^{*}_{\Lambda K})-1] 
-\end{split}
-\\
-\vspace{2mm}
-  ~~~~~C_{P_{1}P_{2}}(k^{*}_{\Lambda K}) \equiv \frac{\sum\limits_{k^{*}_{P_{1}P_{2}}} C_{P_{1}P_{2}}\left(k^{*}_{P_{1}P_{2}}\right) T\left(k^{*}_{P_{1}P_{2}},k^{*}_{\Lambda K}\right)}{\sum\limits_{k^{*}_{P_{1}P_{2}}} T\left(k^{*}_{P_{1}P_{2}},k^{*}_{\Lambda K}\right)}
-\end{array} 
-\label{eqn:ResidualsFull}
-\end{equation}
-
-  Or, more compactly:
-
-\begin{equation}
- C_{measured}(k^{*}_{\Lambda K}) = 1 + \sum\limits_{i}  \lambda_{i}[C_{i}(k^{*}_{\Lambda K})-1]
-\label{eqn:Residuals}
+  C_{ij}(k^{*}_{\Lambda\mathrm{K}}) \equiv \frac{\sum\limits_{k^{*}_{ij}} C_{ij}\left(k^{*}_{ij}\right) T\left(k^{*}_{ij},k^{*}_{\Lambda\mathrm{K}}\right)}{\sum\limits_{k^{*}_{ij}} T\left(k^{*}_{ij},k^{*}_{\Lambda\mathrm{K}}\right)}
+\label{eqn:ResidualsTransform}
 \end{equation}
 
 
+The transform matrix is generated with the THERMINATOR 2 \cite{Chojnacki:2011hb} simulation. 
+It is formed for a given parent pair, $ij$, by taking all \LamK pairs originating from $ij$, calculating the relative momentum of the parents ($k^{*}_{ij}$) and daughters ($k^{*}_{\Lambda\mathrm{K}}$), and filling a two-dimensional histogram with the values. 
+The transform matrix is essentially an unnormalized probability distribution mapping the \kstar of the parent pair to that of the daughter pair when one or both parents decay.
+An example of such transform matrices can be found in Figures \ref{fig:TransformMatricesLamKchP} and \ref{fig:TransformMatricesALamKchP}.
 
 \begin{figure}[h!]
   \centering
   %%----start of first subfigure---  
   \subfloat[Transform matrix for $\Sigma$K$^{+}$ pairs into $\Lambda$K$^{+}$]{
     \label{fig:TransformMatricesLamKchP:a}
-    \includegraphics[width=0.49\textwidth]{/home/jesse/Analysis/FemtoAnalysis/AnalysisNotes/5_Fitting/Figures/fSigToLamKchPTransform.pdf}}
+    \includegraphics[width=0.49\textwidth]{/home/jesse/Analysis/FemtoAnalysis/AnalysisNotes/5_Fitting/Figures/fSigToLamKchPTransform.pdf}}%\\
   %%----start of second subfigure---
   \subfloat[Transform matrix for $\Xi^{-}$K$^{+}$ pairs into $\Lambda$K$^{+}$]{
     \label{fig:TransformMatricesLamKchP:b}
-    \includegraphics[width=0.49\textwidth]{/home/jesse/Analysis/FemtoAnalysis/AnalysisNotes/5_Fitting/Figures/fXiCToLamKchPTransform.pdf}}  \\
+    \includegraphics[width=0.49\textwidth]{/home/jesse/Analysis/FemtoAnalysis/AnalysisNotes/5_Fitting/Figures/fXiCToLamKchPTransform.pdf}} \\
   %%----start of third subfigure---
   \subfloat[Transform matrix for $\Xi^{0}$K$^{+}$ pairs into $\Lambda$K$^{+}$]{
     \label{fig:TransformMatricesLamKchP:c}
@@ -112,25 +106,26 @@ $C_{\Sigma^{0}K^{+}}(k^{*}_{\Sigma^{0}K^{+}})$ is the $\Sigma^{0}$K$^{+}$ correl
 \end{figure}
 
 
-So, in practice, we model the correlation function of the parents (ex. $\Sigma^{0}$\KchP), and run the correlation function through the appropriate transform matrix to determine the contribution to the daughter correlation function (ex. \LamKchP).  A few questions still remain.  First, what $\lambda$ values should be used in the above equation?  One option would be to leave all of these $\lambda$-parameters free during the fit process.  However, this would introduce a huge number of new parameters into the fitter, and would make the fit results less trustworthy.  The $\lambda$ parameters roughly dictate the strength of the parent contribution to the daughter pair.  Additionally, as found in \cite{Salzwedel:2241303}, the reconstruction efficiency for primary $\Lambda$ particles is nearly equal to that of $\Lambda$ particles originating from $\Sigma$, $\Sigma^{*}$, $\Xi^{0}$, $\Xi^{-}$, and $\Omega$ hyperons.  Therefore, the $\lambda$ parameter for parent system AB can be estimated as the total number of $\Lambda$K pairs in our experimental sample originating from AB (N$_{AB}$) divided by the total number of $\Lambda$K pairs (N$_{Total}$):
+Femtoscopic analyses are sensitive to the pair emission structure at kinetic freeze-out.
+Therefore, in the eyes of femtoscopy, any particle born from a resonance decay before last rescattering is seen as primary.
+For our study, when including three residual contributors, we consider a particle to be primary if its parent has a proper decay length of $c\tau <$ 10 fm.
+When including ten residual contributors, we must reduce this number to $c\tau <$ 4 fm for consistency.
+Moving to ten contributors, we introduce feed-down from $\Sigma^{*}$ and K$^{*}$ resonances, with proper decay lengths of $c\tau \approx$ 5 fm and $c\tau \approx$ 4 fm, respectively.
+As these are considered non-primary for the case of ten contributors, so must any resonance with $c\tau >$ 4 fm.
+
+ 
+As previously stated, the $\lambda$ parameters dictate the strength of the parent contribution to the daughter pair.  
+Therefore, the $\lambda$ parameter for parent system AB can be estimated as the total number of $\Lambda$K pairs in our experimental sample originating from AB (N$_{AB}$) divided by the total number of $\Lambda$K pairs (N$_{Total}$):
 
 \begin{equation}
 \lambda_{AB} = \frac{N_{AB}}{N_{Total}}
 \end{equation}
 
-The particle yields can be estimated using THERMINATOR simulation, while the reconstruction efficiencies ($RE_{AB}$) are estimated with MC HIJING data (Fig. \ref{fig:RecoEffs}), which has been run through GEANT to simulate the detector response.  Thus, the $\lambda$ parameters are estimated as:
+The particle yields can be estimated using THERMINATOR 2 simulation ($N_{ij}^{\scaleto{THERM}{3pt}}$), while the reconstruction efficiencies ($RE_{ij}$) are estimated with MC HIJING data, which has been run through GEANT to simulate the detector response (Fig. \ref{fig:RecoEffs}).  Thus, the $\lambda$ parameters are estimated as:
 
 \begin{equation}
 \lambda_{AB} = \frac{N_{AB}}{N_{Total}} = \frac{N_{AB}^{\scaleto{THERM}{3pt}}RE_{AB}^{\scaleto{HIJING}{3pt}}}{\sum\limits_{ij} N_{ij}^{\scaleto{THERM}{3pt}}RE_{ij}^{\scaleto{HIJING}{3pt}}}
 \end{equation}
-
-Note, for our study, when including three residual contributors, we consider a particle to be primary if its parent has a proper decay length of $c\tau <$ 10 fm.
-When including ten residual contributors, we must reduce this number to $c\tau <$ 4 fm for consistency.
-Moving to ten contributors, we introduce feed-down from $\Sigma^{*}$ and K$^{*}$ resonances, with proper decay lengths of $c\tau \approx$ 5 fm and $c\tau \approx$ 4 fm, respectively.
-As these are considered non-primary for the case of ten contributors, so must any resonance with $c\tau >$ 4 fm.
-
-The $\lambda$ values used can be found in Table \ref{tab:LambdaValues_All}, for the case of both three and ten residual contributors.  In the table, we also list the $\lambda$ values used for ``Other'' and ``Fakes''.  The ``Other'' category contains pairs which are not primary, and which do not originate from the (3 or 10) residual pairs included in the fit.  The ``Fakes'' category represents pairs that are mistakingly identified as \LamK.  To estimate this $\lambda_{\mathrm{Fakes}}$ value, we assumed that the number of fake pairs was equal to the total number of pairs multiplied by the \Lam purity (i.e. assuming perfect purity for the kaons); or, more simply, $\lambda_{\mathrm{Fakes}}$ = 1.0 - Purity(\Lam).  For both of these contributors (``Other'' and ``Fakes''), we assume that these correlations average to unity, and therefore do not contribute to the final correlation function.
-
 
 \begin{figure}[h!]
   \centering
@@ -147,7 +142,7 @@ The $\lambda$ values used can be found in Table \ref{tab:LambdaValues_All}, for 
   \label{fig:RecoEffs}
 \end{figure}
 
-
+The $\lambda$ values used can be found in Table \ref{tab:LambdaValues_All}, for the case of both three and ten residual contributors.  In the table, we also list the $\lambda$ values used for ``Other'' and ``Fakes''.  The ``Other'' category contains pairs which are not primary, and which do not originate from the (3 or 10) residual pairs included in the fit.  The ``Fakes'' category represents pairs that are mistakenly identified as \LamK.  To estimate this $\lambda_{\mathrm{Fakes}}$ value, we assumed that the number of fake pairs was equal to the total number of pairs multiplied by the \Lam purity (i.e. assuming perfect purity for the kaons); or, more simply, $\lambda_{\mathrm{Fakes}}$ = 1.0 - Purity(\Lam).  For both of these contributors (``Other'' and ``Fakes''), we assume that these correlations average to unity, and therefore do not contribute to the final correlation function.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \pagestyle{empty}
@@ -213,25 +208,42 @@ The $\lambda$ values used can be found in Table \ref{tab:LambdaValues_All}, for 
 
 \end{landscape}
 \pagestyle{plain}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 
+In practice, we model the correlation function of the parents (ex. $\Sigma^{0}$\KchP), and run the correlation function through the appropriate transform matrix to determine the contribution to the daughter correlation function (ex. \LamKchP).  
+In an ideal world, we would simply look up the parent interaction in some table, and input this into our model, and form the parent correlation function, $C_{ij}$, through the Lednicky equation (for the case of one or more charge neutral particle in the pair), or via the CoulombFitter machinery described in Sec.\ref{ModelCascadeKaon}.  
+Unfortunately, the world in which we live is not perfect, such a table does not exists, and little is know about the interaction between the particles in the residual pairs of this study. 
+Additionally, introducing a unique set of scattering parameters and radii for each residual system would introduce a large number of additional fit parameters, for which we do not have many constraints, and would cause our fitter to be too unconstrained and yield untrustworthy results. 
+Therefore, for this analysis, we assume all residual pairs have the same source size as the daughter pair.
+Furthermore, we assume Coulomb-neutral residual pairs share the same scattering parameters as the daughter pair.
+Therefore, for Coulomb-neutral pairs, such as $\Sigma^{0}$K, and $\Xi^{0}$K, $C_{ij}(k^{*}_{ij})$ is calculated from Eqn. \ref{eqn:LednickyEqn}, with the help of Eqn. \ref{eqn:CFSI}; $C_{ij}(k^{*}_{\Lambda\mathrm{K}})$ is then obtained by transforming $C_{ij}(k^{*}_{ij})$ with Eq. \ref{eqn:ResidualsTransform}, using the appropriate transform matrix.  
 
+For residual pairs affected by both the strong and Coulomb interactions, things are a bit more complicated.
+This is due to the fact that, for the case of both strong and Coulomb interaction, we no longer have a nice analytical form with which to fit.
+Generating a correlation function including both is also time consuming, as described further in Sec.\ref{ModelCascadeKaon}.
+This increase in formation time is not an issue in generating single correlation functions, however, it does become a problem when including the method in the fit process, where thousands of generated correlation functions are needed (the parallelization of the process across a large number of GPU cores, to drastically decrease run-time, is currently underway).
+Therefore, when modeling \XiKpm residual correlations, we use the experimental \XiKpm data; in this case, there is no need to make any assumptions about scattering parameters or source sizes. 
+The downside is that, especially in the 30-50\% centrality bin, the statistics are low and error bars large.  
+For the other cases, we assume the strong interaction is negligible, and generate the parent correlation assuming a Coulomb-only scenario (see Sec.\ref{ModelCascadeKaon} for more details).
+This approximation is well justified here as a Coulomb-only description of the system describes, reasonably well, the broad features of the $\Xi^{\mathrm{ch}}$K$^{\mathrm{ch}}$ correlation; the strong interaction is necessary for the fine details.  
+However, as these correlations are run through a transform matrix, which largely flattens out and fine details, a Coulomb-only description should be sufficient.  
 
-Now, the remaining question is how do we model the parent correlation functions?  In an ideal world, we would simply look up the parent interaction in some table, and input this into our Lednicky equation (for the case of one or more charge neutral particle in the pair), or run it through the CoulombFitter machinery described in Sec.\ref{ModelCascadeKaon}.  Unfortunately, the world in which we live is not perfect, such a table does not exists, and little is know about the interaction between the residual pairs in this study.  One solution would be to introduce a set of scattering parameters and radii for each residual system.  However, as was the case of the $\lambda$-parameters above, this would introduce a large number of additional fit parameters, and would make our fitter too unconstrained and would yield untrustworthy results.  The second option, which is adopted in this analysis, is to assume all residual pairs have the same source size as the daughter pair, and all Coulomb-neutral residual pairs also share the same scattering parameters as the daughter pair (the case of charged pairs, such as \XiKpm or $\Sigma^{*\pm}$\Kpm, will be described below).
+In practice, the Coulomb-only scenario is achieved by first building a large number of Coulomb-only correlations for various radii and $\lambda$ parameter values, and interpolating from this grid during the fitting process.
+This allows us to generate the correlations functions with the speed needed to converge on fit results within a reasonable amount of time.  
+We find consistent results between using the $\Xi$K data and the Coulomb-only interpolation method.  
+When quantifying the \XiKpm residual contribution, the experimental \XiKpm data is always used.  
+When the number of residual pairs used is increased to 10, so that contributors such as $\Sigma^{*+}$K$^{-}$ enter the picture, the Coulomb-only interpolation method is used.  
+In other words, the $\Xi$K experimental data is only used to model the $\Xi$K residual contribution, all other charged pairs are treated with the Coulomb-only interpolation method.
 
-Concerning the radii of the residual parent pairs, it was suggested that these should be set to smaller values than those of the daughter pair.  In the interest of minimizing the number of parameters in the fitter, we tested this by introducing an \mt-scaling of the parents' radii.  The motivation for this scaling comes from the approximate \mt-scaling of the radii observed in \ref{fig:mTScalingOfRadii_3Res}.  To achieve this scaling, we assume the radii follow an inverse-square-root distribution: $R_{AB} = \alpha m_{\mathrm{T}}^{-1/2}$.  Then, it follows that we should scale the parent radii as:
-
-\begin{equation}
-R_{AB} = R_{\Lambda K}\left(\frac{m_{\mathrm{T},AB}}{m_{\mathrm{T},\Lambda K}}\right)^{-1/2}
-\label{eqn:mtscaling}
-\end{equation}
-
-The values of \mt for each pair system were taken from THERMINATOR.  As the fitter dances around parameter space and selects a new radius for the \LamK system, the radii of the residuals is simply the \LamK radius scaled by the appropriate factor, given above (Eq.\ref{eqn:mtscaling}).  In the end, this scaling factor made no significant difference in our fit results, so this complication is excluded from our final results.  Note that this is not surprising, as the most extreme scaling factor was, in the case of using 10 residual systems, between $\Lambda$K+ with $m_{\mathrm{T},\Lambda K+} \approx$ 1.4 GeV/$c^{2}$ and $\Xi^{-}$K$^{*0}$ with $m_{\mathrm{T},\Xi^{-} K^{*0}} \approx$ 1.8 GeV/$c^{2}$, resulting in a scale factor of $\approx$ 0.9.
-
-Now, as hinted above, accounting for charged residuals adds a complication in that they necessitate the inclusion of the CoulombFitter (described in Sec. \ref{CoulombFitter}) into the process.  The complication of combining the two fitters is not troubling; however, the substantial increase in the fitting time is (the parallelization of the CoulombFitter across a large number of GPU cores, to drastically decrease run-time, is currently underway).  We have two solutions to bypass such a large increase in run time.  First, we can use our experimental $\Xi^{\mathrm{ch}}$K$^{\mathrm{ch}}$ data to represent all charged parent pair system.  In this case, there is no need to make any assumption about scattering parameters or source sizes, as we already have the experimental data.  The downside is that, especially in the 30-50\% centrality bin, the statistics are low and error bars large.  Alternatively, we can assume the strong interaction is negligible in the charged residual, and generate the parent correlation function given radius and $\lambda$ parameters.  We find in our $\Xi^{\mathrm{ch}}$K$^{\mathrm{ch}}$ study that a Coulomb-only description of the system describes, reasonably well, the broad features of the correlation.  The strong interaction is necessary for the fine details.  However, as these correlations are run through a transform matrix, which largely flattens out and fine details, a Coulomb-only description should be sufficient.  In practice, this Coulomb-only scenario is achieved by first building a large number of Coulomb-only correlations for various radii and $\lambda$ parameter values, and interpolating from this grid during the fitting process.  We find consistent results between using the $\Xi$K data and the Coulomb-only interpolation method.  When quantifying the \XiKpm residual contribution, the experimental \XiKpm data is always used.  When the number of residual pairs used is increased to 10, so that contributors such as $\Sigma^{*+}$K$^{-}$ enter the picture, the Coulomb-only interpolation method is used.  In other words, the $\Xi$K experimental data is only used to model the $\Xi$K residual contribution, all other charged pairs are treated with the Coulomb-only interpolation method.
-
-Two examples of how very different transform matrices can alter a correlation function are shown in Figures \ref{fig:Sig0KchPtoLamKchPTransform} and \ref{fig:LamKSt0toLamKchPTransform} below.  These figures were taken using parameter values obtained from fits to the data.  In the top left corner of the figures, the input correlation function (closed symbols) is shown together with the output, transformed, correlation function (open symbols).  In the bottom left, the transformed correlation is shown by itself (with zoomed y-axis).  This is especially helpful when the $\lambda$ parameter is very small, in which case the contribution in the top left can look flat, but the zoomed in view in the bottom left shows the structure.  The right two plots in each figure show the transform matrix without (top right) and with (bottom right) a log-scale on the z-axis.  Note, more examples of these transforms can be found in Sec. \ref{AdditionalFigures}.
+Two examples of how very different transform matrices can alter a correlation function are shown in Figures \ref{fig:Sig0KchPtoLamKchPTransform} and \ref{fig:LamKSt0toLamKchPTransform} below.  
+These figures were taken using parameter values obtained from fits to the data.  
+In the top left corner of the figures, the input correlation function (closed symbols) is shown together with the output, transformed, correlation function (open symbols).  
+In the bottom left, the transformed correlation is shown by itself (with zoomed y-axis).  
+This is especially helpful when the $\lambda$ parameter is very small, in which case the contribution in the top left can look flat, but the zoomed in view in the bottom left shows the structure.  
+The right two plots in each figure show the transform matrix without (top right) and with (bottom right) a log-scale on the z-axis.  
+Note, more examples of these transforms can be found in Sec. \ref{AdditionalFigures}.
 
 \begin{figure}[h]
   \centering
@@ -247,6 +259,17 @@ Two examples of how very different transform matrices can alter a correlation fu
   \caption[$\Lambda\mathrm{K^{*0}}$ Transform]{$\Lambda\mathrm{K^{*0}}$ Transform.  These figures were taken using parameter values obtained from fits to the data.  In the top left corner of the figures, the input correlation function (closed symbols) is shown together with the output, transformed, correlation function (open symbols).  In the bottom left, the transformed correlation is shown by itself.  The right two plots in each figure show the transform matrix without (top right) and with (bottom right) a log-scale on the z-axis.}
   \label{fig:LamKSt0toLamKchPTransform}
 \end{figure}
+
+
+
+Concerning the radii of the residual parent pairs, it was suggested that these should be set to smaller values than those of the daughter pair.  In the interest of minimizing the number of parameters in the fitter, we tested this by introducing an \mt-scaling of the parents' radii.  The motivation for this scaling comes from the approximate \mt-scaling of the radii observed in \ref{fig:mTScalingOfRadii_3Res}.  To achieve this scaling, we assume the radii follow an inverse-square-root distribution: $R_{AB} = \alpha m_{\mathrm{T}}^{-1/2}$.  Then, it follows that we should scale the parent radii as:
+
+\begin{equation}
+R_{AB} = R_{\Lambda K}\left(\frac{m_{\mathrm{T},AB}}{m_{\mathrm{T},\Lambda K}}\right)^{-1/2}
+\label{eqn:mtscaling}
+\end{equation}
+
+The values of \mt for each pair system were taken from THERMINATOR.  As the fitter dances around parameter space and selects a new radius for the \LamK system, the radii of the residuals is simply the \LamK radius scaled by the appropriate factor, given above (Eq.\ref{eqn:mtscaling}).  In the end, this scaling factor made no significant difference in our fit results, so this complication is excluded from our final results.  Note that this is not surprising, as the most extreme scaling factor was, in the case of using 10 residual systems, between $\Lambda$K+ with $m_{\mathrm{T},\Lambda K+} \approx$ 1.4 GeV/$c^{2}$ and $\Xi^{-}$K$^{*0}$ with $m_{\mathrm{T},\Xi^{-} K^{*0}} \approx$ 1.8 GeV/$c^{2}$, resulting in a scale factor of $\approx$ 0.9.
 
 \clearpage
 

@@ -33,6 +33,12 @@ public:
                               CentralityType aCentralityType=kMB, FitGeneratorType aGeneratorType=kPairwConj, 
                               bool aShareLambdaParams=false, bool aAllShareSingleLambdaParam=false, bool aDualieShareLambda=true, bool aDualieShareRadii=true);
 
+  TripleFitSystematicAnalysis(TString aFileLocationBase_LamKch, TString aFileLocationBaseMC_LamKch, 
+                              TString aFileLocationBase_LamK0, TString aFileLocationBaseMC_LamK0,
+                              TString aGeneralAnTypeModified,
+                              CentralityType aCentralityType=kMB, FitGeneratorType aGeneratorType=kPairwConj, 
+                              bool aShareLambdaParams=false, bool aAllShareSingleLambdaParam=false, bool aDualieShareLambda=true, bool aDualieShareRadii=true);
+
 
   virtual ~TripleFitSystematicAnalysis();
   TString GetCutValues(int aIndex);
