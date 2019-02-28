@@ -88,7 +88,7 @@ int main(int argc, char **argv)
   ResPrimMaxDecayType tResPrimMaxDecayType = k10fm;
 
   //--Bound lambda
-  bool UnboundLambda = false;
+  bool UnboundLambda = true;
   double aLambdaMin=0.6, aLambdaMax=1.1;
   if(UnboundLambda) {aLambdaMin=0.; aLambdaMax=0.;}
 
