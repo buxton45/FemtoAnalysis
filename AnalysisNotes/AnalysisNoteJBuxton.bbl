@@ -4,6 +4,11 @@
 R.~Lednicky and V.~L. Lyuboshitz.
 \newblock {\em Sov. J. Nucl. Phys.}, 35:770, 1982.
 
+\bibitem{Patrignani:2016xqp}
+C.~Patrignani et~al.
+\newblock {Review of Particle Physics}.
+\newblock {\em Chin. Phys.}, C40(10):100001, 2016.
+
 \bibitem{Lisa:2005dd}
 Michael~Annan Lisa, Scott Pratt, Ron Soltz, and Urs Wiedemann.
 \newblock {Femtoscopy in relativistic heavy ion collisions}.
@@ -32,11 +37,10 @@ Adam Kisiel, Hanna Zbroszczyk, and Maciej Szymański.
   p$\bar{\Lambda}$ femtoscopic correlation functions}.
 \newblock {\em Phys. Rev.}, C89(5):054916, 2014.
 
-\bibitem{Salzwedel:2241303}
-Jai Salzwedel and Thomas Humanic.
-\newblock {Lambda femtoscopy in $\sqrt{s_{NN}}=2.76$ TeV Pb-Pb collisions at
-  ALICE}, Jan 2017.
-\newblock Presented 15 Dec 2016.
+\bibitem{Chojnacki:2011hb}
+Mikolaj Chojnacki, Adam Kisiel, Wojciech Florkowski, and Wojciech Broniowski.
+\newblock {THERMINATOR 2: THERMal heavy IoN generATOR 2}.
+\newblock {\em Comput. Phys. Commun.}, 183:746--773, 2012.
 
 \bibitem{Kisiel:2017}
 A~Kisiel.
