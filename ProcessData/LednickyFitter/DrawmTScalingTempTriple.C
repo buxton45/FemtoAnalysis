@@ -146,7 +146,7 @@ int main(int argc, char **argv)
   TString tResultsDate = "20180505";
 
   bool bSaveImage = false;
-  bool bDrawJaiAndHans = false;
+  bool bDrawJaiAndHans = true;
   bool bMakeOthersTransparent = true;
   bool bOutlinePoints = true;
 

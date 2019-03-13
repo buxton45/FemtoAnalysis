@@ -11,13 +11,15 @@ int main(int argc, char **argv)
   //This allows the user a chance to look at and manipulate a TBrowser before
   //the program ends and closes everything
 
-  bool bSaveFigures = true;
+  bool bSaveFigures = false;
   TString tSaveFileType = "pdf";  //Needs to be pdf for systematics to be transparent!
 
   vector<TString> tStatOnlyTags = {"", "_StatOnly"};
+  vector<TString> tVerticalTags = {"", "_Vertical"};
 
   bool bDrawStatOnly = false;
   bool bDrawPredictions = true;
+  bool bDrawVertical = false;
 
   IncludeResidualsType tIncResType = kInclude3Residuals;
   ResPrimMaxDecayType tResPrimMaxDecayType = k10fm;
@@ -58,8 +60,8 @@ int main(int argc, char **argv)
   TString tSaveDirBase = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_%s/%s/Comparisons/", tResultsDate.Data(), tFitInfoTString.Data());
 
 
-  TCanvas* tCanAll2Panel = CompareAll2Panel(tFVWIVec, tSystematicsFileLocation, tSystematicsFileLocation, bDrawPredictions, tCanNameMod, bDrawStatOnly);
-  if(bSaveFigures) tCanAll2Panel->SaveAs(TString::Format("%sFinalResults_Comp3An.pdf", tSaveDirBase.Data()));
+  TCanvas* tCanAll2Panel = CompareAll2Panel(tFVWIVec, tSystematicsFileLocation, tSystematicsFileLocation, bDrawPredictions, tCanNameMod, bDrawStatOnly, bDrawVertical);
+  if(bSaveFigures) tCanAll2Panel->SaveAs(TString::Format("%sFinalResults_Comp3An%s%s.pdf", tSaveDirBase.Data(), tStatOnlyTags[bDrawStatOnly].Data(), tVerticalTags[bDrawVertical].Data()));
 
 
 

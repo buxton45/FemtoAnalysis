@@ -1,94 +1,18 @@
 \documentclass[/home/jesse/Analysis/FemtoAnalysis/AnalysisNotes/AnalysisNoteJBuxton.tex]{subfiles}
 \begin{document}
 
-\subsection{\texorpdfstring{K$^{\pm}$}{TEXT} Track Selection}
+\section{\texorpdfstring{K$^{\pm}$}{TEXT} Track Selection}
 \label{KchTrackSelection}
 
-Charged kaons are identified using the AliFemtoESDTrackCutNSigmaFilter class.  The specific cuts used in this analysis are as follows:
+Charged kaons are identified using the AliFemtoESDTrackCutNSigmaFilter class.
+The single-particle selection criteria used to select charged kaon candidates are summarized in Tables \ref{tab:KchCuts} and \ref{tab:KchCuts_MisID}.
+\Kpm track detection utilized both TPC and TOF detectors, and tracks within the range 0.14 $<$ \pt $<$ 1.5 GeV/$c$ were accepted.
+As we are interested in primary particles originating from the primary vertex, to reduce the number of secondaries (for instance, charged particles produced in the detector material, particles from weak decays, etc.) in our sample, we established a maximum cut on the distance-of-closest-approach (DCA) of the track the the primary vertex.
+This restriction is realized by imposing a DCA cut in both the transverse and beam directions.
 
- \begin{table}[htbp]
- \begin{adjustwidth}{-1in}{-1in}
- \centering
-%  \renewcommand{\arraystretch}{1.5}
-  \begin{tabular}{lc|c|l}
-%   \hline  
-   \multicolumn{4}{c}{\textbf{\Kpm selection}} \\
-   \hline
-   \multicolumn{4}{l}{\textbf{Kinematic range}} \\
-   \hline
-   \multicolumn{3}{l|}{$|\eta|$} & $< 0.8$ \\
-   \hline
-   \multicolumn{3}{l|}{$p_{\mathrm{T}}$} & 0.14 $< p_{\mathrm{T}} < 1.5$ GeV/\textit{c} \\
-   \hline
-   \multicolumn{4}{l}{\textbf{Track quality and selection}} \\
-   \hline
-   \multicolumn{3}{l|}{FilterBit} & 7 \\
-   \hline
-   \multicolumn{3}{l|}{Number of clusters in the TPC} & $>$ 80 \\
-   \hline
-   \multicolumn{3}{l|}{$\chi^{2}/N_{DOF}$ for ITS clusters} & $<$ 3.0 \\
-   \hline
-   \multicolumn{3}{l|}{$\chi^{2}/N_{DOF}$ for TPC clusters} & $<$ 4.0 \\
-   \hline   
-   \multicolumn{3}{l|}{XY impact parameter} & $<$ 2.4 cm \\
-   \hline
-   \multicolumn{3}{l|}{Z impact parameter} & $<$ 3.0 cm \\
-   \hline
-   \multicolumn{3}{l|}{Remove particles with any kink labels} & true \\
-   \hline
-   \multicolumn{3}{l|}{N$\sigma$ to primary vertex} & $<$ 3.0 \\
-   \hline   
-   \multicolumn{4}{l}{\textbf{K$^{\pm}$ identification}} \\
-   \hline
-   \multicolumn{4}{l}{PID Probabilities} \\
-   \hline
-    & \multicolumn{2}{l|}{K} & $>$ 0.2 \\
-   \hline
-    & \multicolumn{2}{l|}{$\pi$} & $<$ 0.1 \\
-   \hline
-    & \multicolumn{2}{l|}{$\mu$} & $<$ 0.8 \\
-   \hline
-    & \multicolumn{2}{l|}{p} & $<$ 0.1 \\
-   \hline
-   \multicolumn{3}{l|}{Most probable particle type} & Kaon (fMostProbable=3) \\
-   \hline
-   
-   \multicolumn{4}{l}{TPC and TOF N$\sigma$ Cuts} \\
-   \cline{2-4}
-    & \multicolumn{1}{l}{$p <$ 0.4 GeV/\textit{c}} &  & N$_{\sigma \mathrm{K,TPC}} <$ 2 \\
-   \cline{2-4}
-    & \multicolumn{1}{l}{0.4 $< p <$ 0.45 GeV/\textit{c}} & & N$_{\sigma \mathrm{K,TPC}} <$ 1 \\
-   \cline{2-4}     
-    & \multicolumn{1}{l}{0.45 $< p <$ 0.80 GeV/\textit{c}} & & N$_{\sigma \mathrm{K,TPC}} <$ 3 \& N$_{\sigma \mathrm{K,TOF}} <$ 2 \\ 
-   \cline{2-4}
-    & \multicolumn{1}{l}{0.80 $< p <$ 1.0 GeV/\textit{c}} & & N$_{\sigma \mathrm{K,TPC}} <$ 3 \& N$_{\sigma \mathrm{K,TOF}} <$ 1.5 \\ 
-   \cline{2-4}
-    & \multicolumn{1}{l}{$p >$ 1.0 GeV/\textit{c}} & & N$_{\sigma \mathrm{K,TPC}} <$ 3 \& N$_{\sigma \mathrm{K,TOF}} <$ 1 \\ 
-   \hline
-   \multicolumn{4}{l}{\textbf{Misidentification cuts}} \\
-   \hline
-   \multicolumn{3}{l|}{Electron Rejection} & Reject if N$_{\sigma e^{-},\mathrm{TPC}} < $ 3 \\
-   \hline
-   \multicolumn{4}{l}{Pion Rejection:  Reject if:} \\
-   \hline
-   \multirow{3}{*}{$p <$ 0.65 GeV/\textit{c}} & if TOF and TPC available & \multicolumn{1}{c}{} & N$_{\sigma \pi,\mathrm{TPC}} <$ 3 \& N$_{\sigma \pi,\mathrm{TOF}} <$ 3 \\
-   \cline{2-4}
-    & \multirow{2}{*}{else} & $p <$ 0.5 GeV/\textit{c} & N$_{\sigma \pi,\mathrm{TPC}} <$ 3 \\
-   \cline{3-4}
-    &  & 0.5 $< p <$ 0.65 GeV/\textit{c} & N$_{\sigma \pi,\mathrm{TPC}} <$ 2 \\
-   \cline{2-4}
-   \multicolumn{3}{l|}{0.65 $< p <$ 1.5 GeV/\textit{c}} & N$_{\sigma \pi,\mathrm{TPC}} <$ 5 \& N$_{\sigma \pi,\mathrm{TOF}} <$ 3 \\
-   \cline{2-4}
-   \multicolumn{3}{l|}{$p >$ 1.5 GeV/\textit{c}} & N$_{\sigma \pi,\mathrm{TPC}} <$ 5 \& N$_{\sigma \pi,\mathrm{TOF}} <$ 2 \\
-   \hline
-  \end{tabular}
-% \end{minipage}
- \caption{\Kpm selection}
- \label{tab:KchCuts} 
- \end{adjustwidth}
-\end{table}
- 
- 
+PID was performed using both the TPC and TOF detectors via the $\mathrm{N}\sigma$ method.  
+Additionally, we include methods to reduce the contamination in our \Kpm samples from electrons and pions.  
+The specifics for these cuts are contained in Table \ref{tab:KchCuts}.
 
 The purity of the \Kpm collections was estimated using the HIJING MC data, for which the true identity of each reconstructed K$^{\pm}$ particle is known.  Therefore, the purity may be estimated as:
 
@@ -98,5 +22,195 @@ The purity of the \Kpm collections was estimated using the HIJING MC data, for w
 \end{equation}
 
 Purity(K$^{+}$) $\approx$ Purity(K$^{-}$) $\approx$ 97\%
+
+\begin{comment} 
+ \begin{table}[htbp]
+ \begin{adjustwidth}{-1in}{-1in}
+ \centering
+%  \renewcommand{\arraystretch}{1.5}
+  \begin{tabular}{lc|c|l}
+%   \hline  
+   \multicolumn{4}{c}{\textbf{\Kpm selection}} \\
+   \hlineB{3.0}
+   \multicolumn{4}{l}{\textbf{Kinematic range}} \\
+   \hlineB{3.0}
+   \multicolumn{3}{l|}{$|\eta|$} & $< 0.8$ \\
+   \hline
+   \multicolumn{3}{l|}{$p_{\mathrm{T}}$} & 0.14 $< p_{\mathrm{T}} < 1.5$ GeV/\textit{c} \\
+   
+   \hlineB{3.0}
+   \multicolumn{4}{l}{\textbf{Track quality and selection}} \\
+   \hlineB{3.0}
+   \multicolumn{3}{l|}{FilterBit} & 7 \\
+   \hline
+   \multicolumn{3}{l|}{Number of clusters in the TPC} & $>$ 80 \\
+   \hline
+   \multicolumn{3}{l|}{$\chi^{2}/N_{DOF}$ for (ITS, TPC) clusters} & $<$ (3.0, 4.0) \\
+   \hline   
+   \multicolumn{3}{l|}{DCA to primary vertex (XY, Z)} & $<$ (2.4, 3.0) cm \\
+   \hline
+   \multicolumn{3}{l|}{Remove particles with any kink labels} & true \\
+   \hline
+   \multicolumn{3}{l|}{N$\sigma$ to primary vertex} & $<$ 3.0 \\
+   
+   \hlineB{3.0}   
+   \multicolumn{4}{l}{\textbf{K$^{\pm}$ identification}} \\
+   \hlineB{3.0}
+   \multicolumn{4}{l}{PID Probabilities} \\
+   \hline
+    & \multicolumn{2}{l|}{K} & $>$ 0.2 \\
+   \hline
+    & \multicolumn{2}{l|}{($\pi$, $\mu$, p)} & $<$ (0.1, 0.8, 0.1) \\
+   \hline
+   \multicolumn{3}{l|}{Most probable particle type (fMostProbable =)} & Kaon (3) \\
+   \hline
+   
+   \multicolumn{4}{l}{TPC and TOF N$\sigma$ Cuts} \\
+   \cline{2-4}
+    & \multicolumn{1}{l}{$p <$ 0.4 GeV/\textit{c}} &  & N$_{\sigma \mathrm{K,TPC}} <$ 2 \\
+   \cline{2-4}
+    & \multicolumn{1}{l}{0.4 $< p <$ 0.45 GeV/\textit{c}} & & N$_{\sigma \mathrm{K,TPC}} <$ 1 \\
+   \cline{2-4}     
+    & \multicolumn{1}{l}{\multirow{2}{*}{0.45 $< p <$ 0.80 GeV/\textit{c}}} & & N$_{\sigma \mathrm{K,TPC}} <$ 3 \\ 
+   \multicolumn{3}{c|}{} & N$_{\sigma \mathrm{K,TOF}} <$ 2 \\
+   \cline{2-4}
+    & \multicolumn{1}{l}{\multirow{2}{*}{0.80 $< p <$ 1.0 GeV/\textit{c}}} & & N$_{\sigma \mathrm{K,TPC}} <$ 3 \\
+   \multicolumn{3}{c|}{} & N$_{\sigma \mathrm{K,TOF}} <$ 1.5 \\  
+   \cline{2-4}
+    & \multicolumn{1}{l}{\multirow{2}{*}{$p >$ 1.0 GeV/\textit{c}}} & & N$_{\sigma \mathrm{K,TPC}} <$ 3 \\ 
+   \multicolumn{3}{c|}{} & N$_{\sigma \mathrm{K,TOF}} <$ 1 \\ 
+   
+   \hlineB{3.0}
+   \multicolumn{4}{l}{\textbf{Misidentification cuts}} \\
+   \hlineB{3.0}
+   \multicolumn{3}{l|}{Electron Rejection: Reject if} & N$_{\sigma e^{-},\mathrm{TPC}} < $ 3 \\
+   \hline
+   
+   \multicolumn{4}{l}{Pion Rejection:~~~~~ Reject if:} \\
+   \hline
+   \multicolumn{1}{l|}{\multirow{4}{*}{$p <$ 0.65 GeV/\textit{c}}} & \multirow{2}{*}{TOF and TPC available} & \multicolumn{1}{c}{} & N$_{\sigma \pi,\mathrm{TPC}} <$ 3 \\
+   \multicolumn{1}{c|}{} & \multicolumn{1}{c|}{} & \multicolumn{1}{c}{} & N$_{\sigma \pi,\mathrm{TOF}} <$ 3 \\
+   \cline{2-4}
+   \multicolumn{1}{c|}{\multirow{2}{*}{}} & \multicolumn{1}{c|}{\multirow{2}{*}{Only TPC available}} & $p <$ 0.5 GeV/\textit{c} & N$_{\sigma \pi,\mathrm{TPC}} <$ 3 \\
+   \cline{3-4}
+   \multicolumn{1}{c|}{} &  & 0.5 $< p <$ 0.65 GeV/\textit{c} & N$_{\sigma \pi,\mathrm{TPC}} <$ 2 \\
+   \cline{1-4}
+   \multicolumn{1}{l|}{\multirow{2}{*}{0.65 $< p <$ 1.5 GeV/\textit{c}}} & \multicolumn{2}{c}{} & N$_{\sigma \pi,\mathrm{TPC}} <$ 5 \\
+   \multicolumn{1}{c|}{} & \multicolumn{2}{l}{} & N$_{\sigma \pi,\mathrm{TOF}} <$ 3 \\
+   \cline{1-4}
+   \multicolumn{1}{l|}{\multirow{2}{*}{$p >$ 1.5 GeV/\textit{c}}} & \multicolumn{2}{c}{} & N$_{\sigma \pi,\mathrm{TPC}} <$ 5 \\
+   \multicolumn{1}{c|}{} & \multicolumn{2}{l}{} & N$_{\sigma \pi,\mathrm{TOF}} <$ 2 \\
+   \hline
+  \end{tabular}
+% \end{minipage}
+ \caption[\Kpm selection]{\Kpm selection}
+ \label{tab:KchCuts} 
+ \end{adjustwidth}
+\end{table}
+
+\end{comment}
+ 
+ 
+ 
+\begin{landscape}
+
+ \begin{table}[htbp]
+% \begin{adjustwidth}{-1in}{-1in}
+ \centering
+%  \renewcommand{\arraystretch}{1.5}
+  \begin{tabular}{lc|c|l}
+%   \hline  
+   \multicolumn{4}{c}{\textbf{\Kpm selection}} \\
+   \hlineB{3.0}
+   \multicolumn{4}{l}{\textbf{Kinematic range}} \\
+   \hlineB{3.0}
+   \multicolumn{3}{l|}{$|\eta|$} & $< 0.8$ \\
+   \hline
+   \multicolumn{3}{l|}{$p_{\mathrm{T}}$} & 0.14 $< p_{\mathrm{T}} < 1.5$ GeV/\textit{c} \\
+   
+   \hlineB{3.0}
+   \multicolumn{4}{l}{\textbf{Track quality and selection}} \\
+   \hlineB{3.0}
+   \multicolumn{3}{l|}{FilterBit} & 7 \\
+   \hline
+   \multicolumn{3}{l|}{Number of clusters in the TPC} & $>$ 80 \\
+   \hline
+   \multicolumn{3}{l|}{$\chi^{2}/N_{DOF}$ for (ITS, TPC) clusters} & $<$ (3.0, 4.0) \\
+   \hline   
+   \multicolumn{3}{l|}{DCA to primary vertex (XY, Z)} & $<$ (2.4, 3.0) cm \\
+   \hline
+   \multicolumn{3}{l|}{Remove particles with any kink labels} & true \\
+   \hline
+   \multicolumn{3}{l|}{N$\sigma$ to primary vertex} & $<$ 3.0 \\
+   
+   \hlineB{3.0}   
+   \multicolumn{4}{l}{\textbf{K$^{\pm}$ identification}} \\
+   \hlineB{3.0}
+   \multicolumn{4}{l}{PID Probabilities} \\
+   \hline
+    & \multicolumn{2}{l|}{K} & $>$ 0.2 \\
+   \hline
+    & \multicolumn{2}{l|}{($\pi$, $\mu$, p)} & $<$ (0.1, 0.8, 0.1) \\
+   \hline
+   \multicolumn{3}{l|}{Most probable particle type (fMostProbable =)} & Kaon (3) \\
+   \hline
+   
+   \multicolumn{4}{l}{TPC and TOF N$\sigma$ Cuts} \\
+   \cline{2-4}
+    & \multicolumn{1}{l}{$p <$ 0.4 GeV/\textit{c}} &  & N$_{\sigma \mathrm{K,TPC}} <$ 2 \\
+   \cline{2-4}
+    & \multicolumn{1}{l}{0.4 $< p <$ 0.45 GeV/\textit{c}} & & N$_{\sigma \mathrm{K,TPC}} <$ 1 \\
+   \cline{2-4}     
+    & \multicolumn{1}{l}{\multirow{2}{*}{0.45 $< p <$ 0.80 GeV/\textit{c}}} & & N$_{\sigma \mathrm{K,TPC}} <$ 3 \\ 
+   \multicolumn{3}{c|}{} & N$_{\sigma \mathrm{K,TOF}} <$ 2 \\
+   \cline{2-4}
+    & \multicolumn{1}{l}{\multirow{2}{*}{0.80 $< p <$ 1.0 GeV/\textit{c}}} & & N$_{\sigma \mathrm{K,TPC}} <$ 3 \\
+   \multicolumn{3}{c|}{} & N$_{\sigma \mathrm{K,TOF}} <$ 1.5 \\  
+   \cline{2-4}
+    & \multicolumn{1}{l}{\multirow{2}{*}{$p >$ 1.0 GeV/\textit{c}}} & & N$_{\sigma \mathrm{K,TPC}} <$ 3 \\ 
+   \multicolumn{3}{c|}{} & N$_{\sigma \mathrm{K,TOF}} <$ 1 \\ 
+   \hline
+  \end{tabular}
+% \end{minipage}
+ \caption[\Kpm selection]{\Kpm selection}
+ \label{tab:KchCuts} 
+% \end{adjustwidth}
+\end{table}
+
+
+ \begin{table}[htbp]
+% \begin{adjustwidth}{-1in}{-1in}
+ \centering
+%  \renewcommand{\arraystretch}{1.5}
+  \begin{tabular}{lc|c|l}
+%   \hline  
+   \multicolumn{4}{c}{\textbf{\Kpm selection - Misidentification Cuts}} \\
+   \hlineB{3.0}
+   \multicolumn{3}{l|}{Electron Rejection: Reject if} & N$_{\sigma e^{-},\mathrm{TPC}} < $ 3 \\
+   \hline
+   
+   \multicolumn{4}{l}{Pion Rejection:~~~~~ Reject if:} \\
+   \hline
+   \multicolumn{1}{l|}{\multirow{4}{*}{$p <$ 0.65 GeV/\textit{c}}} & \multirow{2}{*}{TOF and TPC available} & \multicolumn{1}{c}{} & N$_{\sigma \pi,\mathrm{TPC}} <$ 3 \\
+   \multicolumn{1}{c|}{} & \multicolumn{1}{c|}{} & \multicolumn{1}{c}{} & N$_{\sigma \pi,\mathrm{TOF}} <$ 3 \\
+   \cline{2-4}
+   \multicolumn{1}{c|}{\multirow{2}{*}{}} & \multicolumn{1}{c|}{\multirow{2}{*}{Only TPC available}} & $p <$ 0.5 GeV/\textit{c} & N$_{\sigma \pi,\mathrm{TPC}} <$ 3 \\
+   \cline{3-4}
+   \multicolumn{1}{c|}{} &  & 0.5 $< p <$ 0.65 GeV/\textit{c} & N$_{\sigma \pi,\mathrm{TPC}} <$ 2 \\
+   \cline{1-4}
+   \multicolumn{1}{l|}{\multirow{2}{*}{0.65 $< p <$ 1.5 GeV/\textit{c}}} & \multicolumn{2}{c}{} & N$_{\sigma \pi,\mathrm{TPC}} <$ 5 \\
+   \multicolumn{1}{c|}{} & \multicolumn{2}{l}{} & N$_{\sigma \pi,\mathrm{TOF}} <$ 3 \\
+   \cline{1-4}
+   \multicolumn{1}{l|}{\multirow{2}{*}{$p >$ 1.5 GeV/\textit{c}}} & \multicolumn{2}{c}{} & N$_{\sigma \pi,\mathrm{TPC}} <$ 5 \\
+   \multicolumn{1}{c|}{} & \multicolumn{2}{l}{} & N$_{\sigma \pi,\mathrm{TOF}} <$ 2 \\
+   \hline
+  \end{tabular}
+% \end{minipage}
+ \caption[\Kpm selection - misidentification cuts]{\Kpm selection - misidentification cuts}
+ \label{tab:KchCuts_MisID} 
+% \end{adjustwidth}
+\end{table}
+
+\end{landscape} 
 
 \end{document}

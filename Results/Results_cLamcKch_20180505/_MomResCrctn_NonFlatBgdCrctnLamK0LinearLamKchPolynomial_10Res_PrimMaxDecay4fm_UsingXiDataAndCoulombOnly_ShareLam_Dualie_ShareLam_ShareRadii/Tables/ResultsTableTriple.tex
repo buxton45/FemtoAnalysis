@@ -1,0 +1,88 @@
+%%% NOTE: If I want to run this standalone, uncomment out lines below
+%%%       But lines must be commented out to run within larger project
+\begin{comment}
+\makeatletter
+\def\input@path{{/home/jesse/Analysis/FemtoAnalysis/AnalysisNotes/}}
+\makeatother
+
+\documentclass[ALICE,manyauthors]{ALICE_analysis_notes}
+
+\usepackage{MyStyle}
+\usepackage{chngpage}  % for adjustwidth
+\usepackage{boldline}  % to make lines in table bold
+                       % V{<factor>} vertical rule in \begin{tabular} command
+                       % also \clinB{<spec>}{<factor>} and \hlineB{<factor>}
+\usepackage{arrayjobx} % To use the array structures stored in FitResults_cLamcKch_20180505.tex   
+\end{comment}  
+
+
+%%%% UPDATE ME FOR EACH FILE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+\input{/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_20180505/_MomResCrctn_NonFlatBgdCrctnLamK0LinearLamKchPolynomial_10Res_PrimMaxDecay4fm_UsingXiDataAndCoulombOnly_ShareLam_Dualie_ShareLam_ShareRadii/Tables/TableHelperTriple.tex}
+%!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+\begin{document}
+%\pagestyle{empty}
+
+%\pagestyle{empty}
+%\begin{landscape}
+
+
+
+\begin{table}[htbp]
+ \centering
+ \renewcommand{\arraystretch}{1.25}
+ \resizebox{\paperwidth}{!}{
+ \begin{tabular}{|c|c|cV{8.0}c|c|c|c|}
+  \multicolumn{7}{c}{Fit Results \LamK} \\
+  \hline
+  \multirow{2}{*}{Centrality} & \multirow{2}{*}{$\lambda$} & \multirow{2}{*}{$R$} & \multirow{2}{*}{System} & \multirow{2}{*}{$\Re f_{0}$} & \multirow{2}{*}{$\Im f_{0}$} & \multirow{2}{*}{$d_{0}$} \\
+   & & & & & & \\
+  \clineB{1-7}{4.0}  
+   \multirow{2}{*}{0-10\%} 
+     & \multirow{2}{*}{\ArrLamKchP(1) $\pm$ \ArrLamKchP(2) (stat.) $\pm$ \ArrLamKchP(3) (sys.)}    %Lambda (LamKchP 0010)
+     & \multirow{2}{*}{\ArrLamKchP(4) $\pm$ \ArrLamKchP(5) (stat.) $\pm$ \ArrLamKchP(6) (sys.)}    %Radius (LamKchP & ALamKchM 0010)
+     & \multirow{2}{*}{\LamKchP \& \ALamKchM} 
+     & \multirow{2}{*}{\ArrLamKchP(19) $\pm$ \ArrLamKchP(20) (stat.) $\pm$ \ArrLamKchP(21) (sys.)}   %Ref0   (LamKchP & ALamKchM)
+     & \multirow{2}{*}{\ArrLamKchP(22) $\pm$ \ArrLamKchP(23) (stat.) $\pm$ \ArrLamKchP(24) (sys.)}    %Imf0   (LamKchP & ALamKchM)
+     & \multirow{2}{*}{\ArrLamKchP(25) $\pm$ \ArrLamKchP(26) (stat.) $\pm$ \ArrLamKchP(27) (sys.)} \\ %d0     (LamKchP & ALamKchM)
+     
+     & & & & & & \\          
+   \hline
+   
+   \multirow{2}{*}{10-30\%}
+     & \multirow{2}{*}{\ArrLamKchP(7) $\pm$ \ArrLamKchP(8) (stat.) $\pm$ \ArrLamKchP(9) (sys.)}       %Lambda (LamKchP 1030)
+     & \multirow{2}{*}{\ArrLamKchP(10) $\pm$ \ArrLamKchP(11) (stat.) $\pm$ \ArrLamKchP(12) (sys.)}    %Radius (LamKchP & ALamKchM 1030) 
+     & \multirow{2}{*}{\LamKchM \& \ALamKchP} 
+     & \multirow{2}{*}{\ArrLamKchM(19) $\pm$ \ArrLamKchM(20) (stat.) $\pm$ \ArrLamKchM(21) (sys.)}   %Ref0   (LamKchM & ALamKchP)
+     & \multirow{2}{*}{\ArrLamKchM(22) $\pm$ \ArrLamKchM(23) (stat.) $\pm$ \ArrLamKchM(24) (sys.)}    %Imf0   (LamKchM & ALamKchP)
+     & \multirow{2}{*}{\ArrLamKchM(25) $\pm$ \ArrLamKchM(26) (stat.) $\pm$ \ArrLamKchM(27) (sys.)} \\ %d0     (LamKchM & ALamKchP)     
+     & & & & & & \\  
+   \hline           
+   
+   \multirow{2}{*}{30-50\%}
+     & \multirow{2}{*}{\ArrLamKchP(13) $\pm$ \ArrLamKchP(14) (stat.) $\pm$ \ArrLamKchP(15) (sys.)}    %Lambda (LamKchP 3050)
+     & \multirow{2}{*}{\ArrLamKchP(16) $\pm$ \ArrLamKchP(17) (stat.) $\pm$ \ArrLamKchP(18) (sys.)}    %Radius (LamKchP & ALamKchM 3050)
+     & \multirow{2}{*}{\LamKs \& \ALamKs} 
+     & \multirow{2}{*}{\ArrLamKs(19) $\pm$ \ArrLamKs(20) (stat.) $\pm$ \ArrLamKs(21) (sys.)}   %Ref0   (LamKchM & ALamKchP)
+     & \multirow{2}{*}{\ArrLamKs(22) $\pm$ \ArrLamKs(23) (stat.) $\pm$ \ArrLamKs(24) (sys.)}    %Imf0   (LamKchM & ALamKchP)
+     & \multirow{2}{*}{\ArrLamKs(25) $\pm$ \ArrLamKs(26) (stat.) $\pm$ \ArrLamKs(27) (sys.)} \\ %d0     (LamKchM & ALamKchP)     
+     & & & & & & \\  
+   \hline
+ \end{tabular}}
+ \caption[Fit Results \LamK, with 10 residual correlations included]{
+ Fit Results \LamK, with 10 residual correlations included.
+ The fit procedure is as described in the text.
+ The fit is done on the data with only statistical error bars.
+ The errors marked as ``stat." are those returned by MINUIT.
+ The errors marked as ``sys." are those which result from my systematic analysis (as outlined in Section \ref{SystematicErrors}).
+ }
+ \label{tab:FitResultsLamK_10Res}
+\end{table}
+  
+
+
+%\end{landscape}
+%\pagestyle{plain}
+
+
+\end{document}

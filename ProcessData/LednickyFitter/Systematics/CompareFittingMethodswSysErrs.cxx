@@ -421,7 +421,7 @@ TCanvas* CompareAll(vector<FitValWriterInfo> &aFitValWriterInfo, TString aSystem
 
 
 //_________________________________________________________________________________________________________________________________
-TCanvas* CompareAll2Panel(vector<FitValWriterInfo> &aFitValWriterInfo, TString aSystematicsFileLocation_LamKch, TString aSystematicsFileLocation_LamK0, bool aDrawPredictions, TString aCanNameMod, bool aDrawStatOnly)
+TCanvas* CompareAll2Panel(vector<FitValWriterInfo> &aFitValWriterInfo, TString aSystematicsFileLocation_LamKch, TString aSystematicsFileLocation_LamK0, bool aDrawPredictions, TString aCanNameMod, bool aDrawStatOnly, bool aDrawVertical)
 {
   TCanvas *tReturnCan, *tCanImF0vsReF0, *tCanLamvsR;
 
@@ -433,9 +433,18 @@ TCanvas* CompareAll2Panel(vector<FitValWriterInfo> &aFitValWriterInfo, TString a
   vector<TString> twPredVec{"", "_wPredictions"};
   TString tCanBaseName = TString::Format("CompareAll2PanelScattParamswSys%s%s", twPredVec[aDrawPredictions].Data(), aCanNameMod.Data());
   TString tCanName = tCanBaseName;
+  if(aDrawVertical) tCanName += TString("_Vertical");
 
-  tReturnCan = new TCanvas(tCanName, tCanName, 1400, 500);
-  tReturnCan->Divide(2, 1, 0.001, 0.001);
+  if(!aDrawVertical) 
+  {
+    tReturnCan = new TCanvas(tCanName, tCanName, 1400, 500);
+    tReturnCan->Divide(2, 1, 0.001, 0.001);
+  }
+  else
+  {
+    tReturnCan = new TCanvas(tCanName, tCanName, 700, 1000);
+    tReturnCan->Divide(1, 2, 0.001, 0.001);
+  }
   tReturnCan->cd(1);
   tCanImF0vsReF0->DrawClonePad();
   tReturnCan->cd(2);
