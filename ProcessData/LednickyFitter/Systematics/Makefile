@@ -25,7 +25,7 @@ CFLAGS = $(shell root-config --cflags) -Wall -std=c++11 -I${ANALYZE_DIR} -I${LED
 
 MY_LIBS = $(addprefix build/, FitParameter.o FitChi2Histograms.o BackgroundFitter.o FitPartialAnalysis.o FitPairAnalysis.o FitSharedAnalyses.o MathematicaSession.o WaveFunction.o ChargedResidualCf.o SimpleChargedResidualCf.o NeutralResidualCf.o ResidualCollection.o LednickyFitter.o FitValuesWriter.o FitValuesLatexTableHelperWriter.o FitValuesWriterwSysErrs.o FitValuesLatexTableHelperWriterwSysErrs.o FitGenerator.o FitGeneratorAndDraw.o DualieFitGenerator.o ThermCf.o CfLite.o CfHeavy.o Types.o Types_LambdaValues.o Types_FitParamValues.o Types_ThermBgdParams.o Types_SysFileInfo.o Faddeeva.o FitSystematicAnalysis.o DualieFitSystematicAnalysis.o TripleFitGenerator.o TripleFitSystematicAnalysis.o CanvasPartition.o)
 
-BINARIES = runSingleSystematics runAllSystematics runRead runFindOutliers runFitRange runNonFlatBgdSys runTest runBuildLatexTableHelperwSysErrs runBuildLatexTableHelperwSysErrsForSingle runBuildLatexTableHelperwSysErrsForSingleTriple runCompareFittingMethodswSysErrs runCompareFittingMethodswSysErrsForAnNote runDrawFinalResultswSysErrsTriple runSingleDualieSystematics runAllDualieSystematics runFitRangeDualie runNonFlatBgdDualieSys runSingleTripleSystematics runAllTripleSystematics runFitRangeTriple runNonFlatBgdTripleSys runReadTriple
+BINARIES = runSingleSystematics runAllSystematics runRead runFindOutliers runFitRange runNonFlatBgdSys runTest runBuildLatexTableHelperwSysErrs runBuildLatexTableHelperwSysErrsForSingle runBuildLatexTableHelperwSysErrsForSingleTriple runCompareFittingMethodswSysErrs runCompareFittingMethodswSysErrsForAnNote runSingleDualieSystematics runAllDualieSystematics runFitRangeDualie runNonFlatBgdDualieSys runSingleTripleSystematics runAllTripleSystematics runFitRangeTriple runNonFlatBgdTripleSys runReadTriple
 
 all: $(BINARIES)
 
@@ -64,9 +64,6 @@ runCompareFittingMethodswSysErrs: ${MY_LIBS} CompareFittingMethodswSysErrs.C
 
 runCompareFittingMethodswSysErrsForAnNote: ${MY_LIBS} CompareFittingMethodswSysErrsForAnNote.C
 	g++ CompareFittingMethodswSysErrsForAnNote.C ${MY_LIBS} -I${INCDIR} -o runCompareFittingMethodswSysErrsForAnNote -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS)
-
-runDrawFinalResultswSysErrsTriple: ${MY_LIBS} DrawFinalResultswSysErrsTriple.C
-	g++ DrawFinalResultswSysErrsTriple.C ${MY_LIBS} -I${INCDIR} -o runDrawFinalResultswSysErrsTriple -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS)
 
 runSingleDualieSystematics: ${MY_LIBS} BuildSingleCutDualieSystematics.C
 	g++ BuildSingleCutDualieSystematics.C ${MY_LIBS} -I${INCDIR} -o runSingleDualieSystematics -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS)

@@ -281,6 +281,136 @@ TCanvas* CompareLambdavsRadius(vector<FitValWriterInfo> &aFitValWriterInfo, TStr
   return tReturnCan;
 }
 
+//_________________________________________________________________________________________________________________________________
+TCanvas* CompareLambdavsRadiusTweak(vector<FitValWriterInfo> &aFitValWriterInfo, TString aSystematicsFileLocation_LamKch, TString aSystematicsFileLocation_LamK0, CentralityType aCentType, TString aCanNameMod, bool aSuppressDescs, bool aSuppressAnStamps, bool aDrawStatOnly)
+{
+  TString tCanBaseName = TString::Format("CompareLambdavsRadiuswSys%s%s", aCanNameMod.Data(), cCentralityTags[aCentType]);
+  TString tCanName = tCanBaseName;
+
+  TCanvas* tReturnCan = new TCanvas(tCanName, tCanName);
+  tReturnCan->cd();
+  gStyle->SetOptStat(0);
+  gStyle->SetOptTitle(0);
+
+  //------------------------------------------------------
+  double tStartX = 5.8;
+  double tStartY = 0.50;
+  double tIncrementX = 0.14;
+  double tIncrementY = 0.11;
+  double tTextSize = 0.03;
+
+  SetupRadiusvsLambdaAxes((TPad*)tReturnCan);
+
+  TLatex* tTex = new TLatex();
+  tTex->SetTextAlign(12);
+  tTex->SetLineWidth(2);
+  tTex->SetTextFont(42);
+  tTex->SetTextSize(tTextSize);
+
+  const Size_t tDescriptorMarkerSize=1.6;
+  TMarker *tMarker = new TMarker();
+  tMarker->SetMarkerSize(tDescriptorMarkerSize);
+  tMarker->SetMarkerStyle(20);
+  tMarker->SetMarkerColor(kBlack);
+
+  //------------------------------------------------------
+  //I don't want to repeat entries in the legend
+  //  For instance, without the "used" check, "3 Res., Poly Bgd" would be printed for LamKchP and LamKchM (and LamK0 if it is included)
+  vector<TString> tUsedDescriptors(0);
+  vector<int> tUsedMarkerStyles(0);
+  vector<AnalysisType> tAnTypes(0);
+
+  //Figure out if we have only LamKchP and LamKchM separately, only LamKchP and LamKchM combined, or both
+  bool tLamKchCombined=false, tLamKchSeparate=false;
+  bool tAllLamKCombined=false, tAllLamKCombinedDrawn=false;
+  vector<TString> tAllLamKCombined_FitInfoTStringVec(0);
+  for(unsigned int iAn=0; iAn<aFitValWriterInfo.size(); iAn++)
+  {
+    if(aFitValWriterInfo[iAn].allLamKCombined) {tAllLamKCombined=true; continue;}
+    if(aFitValWriterInfo[iAn].analysisType==kLamK0 || aFitValWriterInfo[iAn].analysisType==kALamK0) continue;
+
+    if(aFitValWriterInfo[iAn].lamKchCombined) tLamKchCombined=true;
+    else tLamKchSeparate=true;
+  }
+
+  int iTex = 0;
+  TString aSystematicsFileLocation;
+  bool bSuppressMarkers = false;
+  TString tLegDesc;
+  for(unsigned int iAn=0; iAn<aFitValWriterInfo.size(); iAn++)
+  {
+    if     (aFitValWriterInfo[iAn].analysisType==kLamKchP || aFitValWriterInfo[iAn].analysisType==kALamKchM
+         || aFitValWriterInfo[iAn].analysisType==kLamKchM || aFitValWriterInfo[iAn].analysisType==kALamKchP) aSystematicsFileLocation = aSystematicsFileLocation_LamKch;
+    else if(aFitValWriterInfo[iAn].analysisType==kLamK0 || aFitValWriterInfo[iAn].analysisType==kALamK0) aSystematicsFileLocation = aSystematicsFileLocation_LamK0;
+    else assert(0);
+
+    if(aFitValWriterInfo[iAn].allLamKCombined)
+    {
+      int tColor = kGreen;
+      tAllLamKCombinedDrawn = false;
+      for(int i=0; i<tAllLamKCombined_FitInfoTStringVec.size(); i++) if(tAllLamKCombined_FitInfoTStringVec[i].EqualTo(aFitValWriterInfo[iAn].fitInfoTString)) tAllLamKCombinedDrawn=true;
+      if(!tAllLamKCombinedDrawn)
+      {
+        FitValuesWriterwSysErrs::DrawLambdavsRadiusGraph((TPad*)tReturnCan, aFitValWriterInfo[iAn].masterFileLocation, aSystematicsFileLocation, aFitValWriterInfo[iAn].fitInfoTString, aFitValWriterInfo[iAn].analysisType, aCentType, tColor, aFitValWriterInfo[iAn].markerStyle, aFitValWriterInfo[iAn].markerSize, "epsame", "e2same", aDrawStatOnly);
+        tAllLamKCombined_FitInfoTStringVec.push_back(aFitValWriterInfo[iAn].fitInfoTString);
+      }
+    }
+    else if(!aFitValWriterInfo[iAn].lamKchCombined || aFitValWriterInfo[iAn].analysisType==kLamK0)
+    {
+      FitValuesWriterwSysErrs::DrawLambdavsRadiusGraph((TPad*)tReturnCan, aFitValWriterInfo[iAn].masterFileLocation, aSystematicsFileLocation, aFitValWriterInfo[iAn].fitInfoTString, aFitValWriterInfo[iAn].analysisType, aCentType, aFitValWriterInfo[iAn].markerColor, aFitValWriterInfo[iAn].markerStyle, aFitValWriterInfo[iAn].markerSize, "epsame", "e2same", aDrawStatOnly);
+      tAnTypes.push_back(aFitValWriterInfo[iAn].analysisType);
+    }
+    else
+    {
+      //If LamKch are combined, draw only LamKchP, and draw it with purple.  Also alter the legend entry to be LamKpm
+      if(aFitValWriterInfo[iAn].analysisType==kLamKchP)
+      {
+        int tColor = kViolet;
+        FitValuesWriterwSysErrs::DrawLambdavsRadiusGraph((TPad*)tReturnCan, aFitValWriterInfo[iAn].masterFileLocation, aSystematicsFileLocation, aFitValWriterInfo[iAn].fitInfoTString, aFitValWriterInfo[iAn].analysisType, aCentType, tColor, aFitValWriterInfo[iAn].markerStyle, aFitValWriterInfo[iAn].markerSize, "epsame", "e2same", aDrawStatOnly);
+        tAnTypes.push_back(aFitValWriterInfo[iAn].analysisType);
+      }
+    }
+
+    if(!DescriptorAlreadyIncluded(tUsedDescriptors, tUsedMarkerStyles, aFitValWriterInfo[iAn].legendDescriptor, aFitValWriterInfo[iAn].markerStyle) && !aSuppressDescs)
+    {
+      if(aFitValWriterInfo[iAn].legendDescriptor.Contains("Suppress Markers")) bSuppressMarkers=true;
+      else bSuppressMarkers=false;
+
+      tLegDesc = StripSuppressMarkersFlat(aFitValWriterInfo[iAn].legendDescriptor);
+
+      if(tLegDesc.Contains("d_{0}")) tTex->DrawLatex(tStartX, tStartY-iTex*tIncrementY-0.1*tIncrementY, tLegDesc);
+      else tTex->DrawLatex(tStartX, tStartY-iTex*tIncrementY, tLegDesc);
+      if(!bSuppressMarkers)
+      {
+        tMarker->SetMarkerStyle(aFitValWriterInfo[iAn].markerStyle);
+        tMarker->DrawMarker(tStartX-tIncrementX, tStartY-iTex*tIncrementY);
+      }
+      iTex++;
+    }
+
+  }
+  //------------------------------------------------------
+
+  tTex->SetTextFont(42);
+  tTex->SetTextSize(0.06);
+  tTex->DrawLatex(0.5, 2.3, cPrettyCentralityTags[aCentType]);
+
+  //------------------------------------------------------
+
+  double tStartXStamp = 0.7;
+  double tStartYStamp = 2.1;
+  double tIncrementXStamp = 0.125;
+  double tIncrementYStamp = 0.15;
+  double tSecondColumnShiftX = 1.0;
+  double tTextSizeStamp = 0.04;
+  int tMarkerStyleStamp = 21;
+  int tConjMarkerStyleStamp = 25;
+  if(!aSuppressAnStamps) DrawAnalysisAndConjStamps((TPad*)tReturnCan, tAnTypes, tStartXStamp, tStartYStamp, tIncrementXStamp, tIncrementYStamp, tSecondColumnShiftX, tTextSizeStamp, tMarkerStyleStamp, tConjMarkerStyleStamp, tLamKchCombined, tLamKchSeparate, tAllLamKCombined);
+
+  return tReturnCan;
+}
+
+
 
 //TODO Written super quickly, so real janky, should probably rewrite
 //_________________________________________________________________________________________________________________________________
@@ -419,6 +549,40 @@ TCanvas* CompareAll(vector<FitValWriterInfo> &aFitValWriterInfo, TString aSystem
   return tReturnCan;
 }
 
+//_________________________________________________________________________________________________________________________________
+TCanvas* CompareAllTweak(vector<FitValWriterInfo> &aFitValWriterInfo, TString aSystematicsFileLocation_LamKch, TString aSystematicsFileLocation_LamK0, bool aDrawPredictions, TString aCanNameMod, bool aDrawStatOnly)
+{
+  TCanvas *tReturnCan, *tCanImF0vsReF0, *tCanLamvsR0010, *tCanLamvsR1030, *tCanLamvsR3050;
+
+  TString tSubCanNameMod = TString::Format("%sForAll", aCanNameMod.Data());
+  tCanImF0vsReF0 = CompareImF0vsReF0(aFitValWriterInfo, aSystematicsFileLocation_LamKch, aSystematicsFileLocation_LamK0, aDrawPredictions, tSubCanNameMod, false, false, aDrawStatOnly);
+  tCanLamvsR0010 = CompareLambdavsRadiusTweak(aFitValWriterInfo, aSystematicsFileLocation_LamKch, aSystematicsFileLocation_LamK0, k0010, tSubCanNameMod, true, false, aDrawStatOnly);
+  tCanLamvsR1030 = CompareLambdavsRadiusTweak(aFitValWriterInfo, aSystematicsFileLocation_LamKch, aSystematicsFileLocation_LamK0, k1030, tSubCanNameMod, true, true, aDrawStatOnly);
+  tCanLamvsR3050 = CompareLambdavsRadiusTweak(aFitValWriterInfo, aSystematicsFileLocation_LamKch, aSystematicsFileLocation_LamK0, k3050, tSubCanNameMod, true, true, aDrawStatOnly);
+
+  vector<TString> twPredVec{"", "_wPredictions"};
+  TString tCanBaseName = TString::Format("CompareAllScattParamswSys%s%s", twPredVec[aDrawPredictions].Data(), aCanNameMod.Data());
+  TString tCanName = tCanBaseName;
+
+  tReturnCan = new TCanvas(tCanName, tCanName, 1400, 1000);
+  tReturnCan->Divide(2, 2, 0.001, 0.001);
+  tReturnCan->cd(1);
+  tCanImF0vsReF0->DrawClonePad();
+  tReturnCan->cd(2);
+  tCanLamvsR0010->DrawClonePad();
+  tReturnCan->cd(3);
+  tCanLamvsR1030->DrawClonePad();
+  tReturnCan->cd(4);
+  tCanLamvsR3050->DrawClonePad();
+
+  //--------------------
+  delete tCanImF0vsReF0;
+  delete tCanLamvsR0010;
+  delete tCanLamvsR1030;
+  delete tCanLamvsR3050;
+  //--------------------
+  return tReturnCan;
+}
 
 //_________________________________________________________________________________________________________________________________
 TCanvas* CompareAll2Panel(vector<FitValWriterInfo> &aFitValWriterInfo, TString aSystematicsFileLocation_LamKch, TString aSystematicsFileLocation_LamK0, bool aDrawPredictions, TString aCanNameMod, bool aDrawStatOnly, bool aDrawVertical)

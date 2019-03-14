@@ -74,6 +74,7 @@ int main(int argc, char **argv)
   //--Corrections
   bool ApplyMomResCorrection = true;
   bool ApplyNonFlatBackgroundCorrection = true;
+  if(bUseStavCf) ApplyNonFlatBackgroundCorrection = false;
   NonFlatBgdFitType tNonFlatBgdFitType_LamKch = kPolynomial;
   NonFlatBgdFitType tNonFlatBgdFitType_LamK0  = kLinear;
   vector<NonFlatBgdFitType> tNonFlatBgdFitTypes{tNonFlatBgdFitType_LamK0, tNonFlatBgdFitType_LamK0, 
@@ -164,7 +165,7 @@ int main(int argc, char **argv)
 
 //-----------------------------------------------------------------------------
 
-  TripleFitGenerator* tTriple = new TripleFitGenerator(tFileLocationBase_LamKch, tFileLocationBaseMC_LamKch, tFileLocationBase_LamK0, tFileLocationBaseMC_LamK0, tCentType, tAnRunType_LamKch, tAnRunType_LamK0, tNPartialAnalysis, tGenType, tShareLambdaParams, tAllShareSingleLambdaParam, "", bUseStavCf);
+  TripleFitGenerator* tTriple = new TripleFitGenerator(tFileLocationBase_LamKch, tFileLocationBaseMC_LamKch, tFileLocationBase_LamK0, tFileLocationBaseMC_LamK0, tCentType, tAnRunType_LamKch, tAnRunType_LamK0, tNPartialAnalysis, tGenType, tShareLambdaParams, tAllShareSingleLambdaParam, "", "", bUseStavCf);
   tTriple->SetSaveLocationBase(tSaveDirectoryBase_LamKch, tSaveDirectoryBase_LamK0,tSaveNameModifier);
   tTriple->SetSaveFileType(tSaveFileType);
 
@@ -198,7 +199,7 @@ int main(int argc, char **argv)
   if(FixAllNormTo1) tTriple->SetFixNormParams(FixAllNormTo1);
   if(UsemTScalingOfResidualRadii) tTriple->SetUsemTScalingOfResidualRadii(UsemTScalingOfResidualRadii, mTScalingPowerOfResidualRadii);
 
-
+/*
   if(ApplyNonFlatBackgroundCorrection && tNonFlatBgdFitType_LamKch != kLinear)
   {
 //    tTriple->SetKStarMinMaxNorm(kLamKchP, 0.5,0.6);
@@ -215,7 +216,7 @@ int main(int argc, char **argv)
 
     if(tIncludeResidualsType == kIncludeNoResiduals) tTriple->SetAllLambdaParamLimits(0.1,1.0);
   }
-
+*/
 
 
 //  if(tNonFlatBgdFitType==kPolynomial) tTriple->SetMinMaxBgdFit(0.3, 1.99);
