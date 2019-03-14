@@ -104,7 +104,7 @@ void DrawAnalysisAndConjStamps(TPad* aPad, vector<AnalysisType> &aAnTypes, doubl
 
     tMarker->SetMarkerStyle(aMarkerStyle);
     tTex->DrawLatex(aStartX, aStartY-iTex*aIncrementY, "All #LambdaK");
-    tMarker->SetMarkerColor(kGreen);
+    tMarker->SetMarkerColor(kOrange+1);
     tMarker->DrawMarker(aStartX-aIncrementX, aStartY-iTex*aIncrementY);
 
     iTex++;
@@ -366,10 +366,11 @@ TCanvas* CompareImF0vsReF0(vector<FitValWriterInfo> &aFitValWriterInfo, bool aDr
 
   //------------------------------------------------------
   double tStartX = -1.;
+  if(aDrawPredictions) tStartX = -1.35;
   double tStartY = 1.4;
   double tIncrementX = 0.075;
   double tIncrementY = 0.10;
-  double tTextSize = 0.03;
+  double tTextSize = 0.035;
 
   TLatex* tTex = new TLatex();
   tTex->SetTextAlign(12);
@@ -431,13 +432,16 @@ TCanvas* CompareImF0vsReF0(vector<FitValWriterInfo> &aFitValWriterInfo, bool aDr
   {
     tPadReF0vsImF0->cd();
 
+    int tPredColor1 = kCyan;
+    int tPredColor2 = kMagenta;
+
     TGraphAsymmErrors *tGr_0607100_Set1 = new TGraphAsymmErrors(1);
       tGr_0607100_Set1->SetPoint(0, 0.17, 0.34);
       tGr_0607100_Set1->SetPointError(0, 0.06, 0.06, 0.00, 0.00);
       tGr_0607100_Set1->SetMarkerStyle(39);
       tGr_0607100_Set1->SetMarkerSize(1.5);
-      tGr_0607100_Set1->SetMarkerColor(kGreen+2);
-      tGr_0607100_Set1->SetLineColor(kGreen+2);
+      tGr_0607100_Set1->SetMarkerColor(tPredColor1);
+      tGr_0607100_Set1->SetLineColor(tPredColor1);
       tGr_0607100_Set1->Draw("pzsame");
 
     TGraphAsymmErrors *tGr_0607100_Set2 = new TGraphAsymmErrors(1);
@@ -445,8 +449,8 @@ TCanvas* CompareImF0vsReF0(vector<FitValWriterInfo> &aFitValWriterInfo, bool aDr
       tGr_0607100_Set2->SetPointError(0, 0.06, 0.06, 0.00, 0.00);
       tGr_0607100_Set2->SetMarkerStyle(37);
       tGr_0607100_Set2->SetMarkerSize(1.5);
-      tGr_0607100_Set2->SetMarkerColor(kGreen+2);
-      tGr_0607100_Set2->SetLineColor(kGreen+2);
+      tGr_0607100_Set2->SetMarkerColor(tPredColor1);
+      tGr_0607100_Set2->SetLineColor(tPredColor1);
       tGr_0607100_Set2->Draw("pzsame");
 
   //-----------
@@ -456,8 +460,8 @@ TCanvas* CompareImF0vsReF0(vector<FitValWriterInfo> &aFitValWriterInfo, bool aDr
       tGr_PhysRevD_KLam->SetPointError(0, 0.56, 0.55, 0.00, 0.00);
       tGr_PhysRevD_KLam->SetMarkerStyle(29);
       tGr_PhysRevD_KLam->SetMarkerSize(1.5);
-      tGr_PhysRevD_KLam->SetMarkerColor(kOrange);
-      tGr_PhysRevD_KLam->SetLineColor(kOrange);
+      tGr_PhysRevD_KLam->SetMarkerColor(tPredColor2);
+      tGr_PhysRevD_KLam->SetLineColor(tPredColor2);
       tGr_PhysRevD_KLam->Draw("pzsame");
 
     TGraphAsymmErrors *tGr_PhysRevD_AKLam = new TGraphAsymmErrors(1);
@@ -465,22 +469,23 @@ TCanvas* CompareImF0vsReF0(vector<FitValWriterInfo> &aFitValWriterInfo, bool aDr
       tGr_PhysRevD_AKLam->SetPointError(0, 0.56, 0.55, 0.00, 0.00);
       tGr_PhysRevD_AKLam->SetMarkerStyle(30);
       tGr_PhysRevD_AKLam->SetMarkerSize(1.5);
-      tGr_PhysRevD_AKLam->SetMarkerColor(kOrange);
-      tGr_PhysRevD_AKLam->SetLineColor(kOrange);
+      tGr_PhysRevD_AKLam->SetMarkerColor(tPredColor2);
+      tGr_PhysRevD_AKLam->SetLineColor(tPredColor2);
       tGr_PhysRevD_AKLam->Draw("pzsame");
 
-    TLegend* tLegPredictions = new TLegend(0.825, 0.725, 0.975, 0.875);
+    TLegend* tLegPredictions = new TLegend(0.60, 0.725, 0.975, 0.875);
       tLegPredictions->SetLineWidth(0);
-      tLegPredictions->AddEntry(tGr_0607100_Set1, "[1] Set 1", "p");
-      tLegPredictions->AddEntry(tGr_0607100_Set2, "[1] Set 2", "p");
-      tLegPredictions->AddEntry(tGr_PhysRevD_KLam, "[2] K#Lambda", "p");
-      tLegPredictions->AddEntry(tGr_PhysRevD_AKLam, "[2] #bar{K}#Lambda", "p");
+      tLegPredictions->AddEntry(tGr_0607100_Set1, "[A] Set 1: K#Lambda = #bar{K}#Lambda", "p");
+      tLegPredictions->AddEntry(tGr_0607100_Set2, "[A] Set 2: K#Lambda = #bar{K}#Lambda", "p");
+      tLegPredictions->AddEntry(tGr_PhysRevD_KLam, "[B] K#Lambda", "p");
+      tLegPredictions->AddEntry(tGr_PhysRevD_AKLam, "[B] #bar{K}#Lambda", "p");
     tLegPredictions->Draw();
   }
 
   //------------------------------------------------------
 
   double tStartXStamp = -1.75;
+  if(aDrawPredictions) tStartXStamp = -1.85;
   double tStartYStamp = 1.4;
   double tIncrementXStamp = 0.05;
   double tIncrementYStamp = 0.10;
@@ -553,7 +558,7 @@ TCanvas* CompareLambdavsRadius(vector<FitValWriterInfo> &aFitValWriterInfo, Cent
   {
     if(aFitValWriterInfo[iAn].allLamKCombined)
     {
-      int tColor = kGreen;
+      int tColor = kOrange+1;
       if(!tAllLamKCombinedDrawn)
       {
         FitValuesWriter::DrawLambdavsRadiusGraphStat((TPad*)tReturnCan, aFitValWriterInfo[iAn].masterFileLocation, aFitValWriterInfo[iAn].fitInfoTString, aFitValWriterInfo[iAn].analysisType, aCentType, tColor, aFitValWriterInfo[iAn].markerStyle, aFitValWriterInfo[iAn].markerSize, tDrawOption);

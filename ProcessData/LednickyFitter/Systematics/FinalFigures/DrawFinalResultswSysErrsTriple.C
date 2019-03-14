@@ -61,7 +61,7 @@ int main(int argc, char **argv)
 
 
   TCanvas* tCanAll2Panel = CompareAll2Panel(tFVWIVec, tSystematicsFileLocation, tSystematicsFileLocation, bDrawPredictions, tCanNameMod, bDrawStatOnly, bDrawVertical);
-  if(bSaveFigures) tCanAll2Panel->SaveAs(TString::Format("%sFinalResults_Comp3An%s%s.pdf", tSaveDirBase.Data(), tStatOnlyTags[bDrawStatOnly].Data(), tVerticalTags[bDrawVertical].Data()));
+  if(bSaveFigures) tCanAll2Panel->SaveAs(TString::Format("%sFinalResults_Comp3An%s%s.%s", tSaveDirBase.Data(), tStatOnlyTags[bDrawStatOnly].Data(), tVerticalTags[bDrawVertical].Data(), tSaveFileType.Data()));
 
 
 

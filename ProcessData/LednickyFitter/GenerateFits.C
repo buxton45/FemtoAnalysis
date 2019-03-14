@@ -45,6 +45,7 @@ int main(int argc, char **argv)
   //--Corrections
   bool ApplyMomResCorrection = true;
   bool ApplyNonFlatBackgroundCorrection = true;
+  if(bUseStavCf) ApplyNonFlatBackgroundCorrection = false;
   NonFlatBgdFitType tNonFlatBgdFitType = kLinear;
     if(tNonFlatBgdFitType==kDivideByTherm)
     {

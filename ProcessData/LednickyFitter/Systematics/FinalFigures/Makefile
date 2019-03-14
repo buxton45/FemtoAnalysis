@@ -26,7 +26,7 @@ CFLAGS = $(shell root-config --cflags) -Wall -std=c++11 -I${ANALYZE_DIR} -I${LED
 
 MY_LIBS = $(addprefix build/, FitParameter.o FitChi2Histograms.o BackgroundFitter.o FitPartialAnalysis.o FitPairAnalysis.o FitSharedAnalyses.o MathematicaSession.o WaveFunction.o ChargedResidualCf.o SimpleChargedResidualCf.o NeutralResidualCf.o ResidualCollection.o LednickyFitter.o FitValuesWriter.o FitValuesLatexTableHelperWriter.o FitValuesWriterwSysErrs.o FitValuesLatexTableHelperWriterwSysErrs.o FitGenerator.o FitGeneratorAndDraw.o DualieFitGenerator.o ThermCf.o CfLite.o CfHeavy.o Types.o Types_LambdaValues.o Types_FitParamValues.o Types_ThermBgdParams.o Types_SysFileInfo.o Faddeeva.o FitSystematicAnalysis.o DualieFitSystematicAnalysis.o TripleFitGenerator.o TripleFitSystematicAnalysis.o CanvasPartition.o)
 
-BINARIES = runDrawFinalResultswSysErrsTriple runmTScalingTriple runDrawTripleComparisons
+BINARIES = runDrawFinalResultswSysErrsTriple runmTScalingTriple runComparisonsTriple
 
 all: $(BINARIES)
 
@@ -36,8 +36,8 @@ runDrawFinalResultswSysErrsTriple: ${MY_LIBS} DrawFinalResultswSysErrsTriple.C
 runmTScalingTriple: ${MY_LIBS} DrawmTScalingTriple.C
 	g++ DrawmTScalingTriple.C ${MY_LIBS} -I${INCDIR} -o runmTScalingTriple -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS)
 
-runDrawTripleComparisons: ${MY_LIBS} DrawTripleComparisons.C
-	g++ DrawTripleComparisons.C ${MY_LIBS} -I${INCDIR} -o runDrawTripleComparisons -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS)
+runComparisonsTriple: ${MY_LIBS} DrawComparisonsTriple.C
+	g++ DrawComparisonsTriple.C ${MY_LIBS} -I${INCDIR} -o runComparisonsTriple -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS)
 
 build/%.o: ${ANALYZE_DIR}/%.cxx ${ANALYZE_DIR}/%.h
 	g++ -c $< $(CFLAGS) -o $@

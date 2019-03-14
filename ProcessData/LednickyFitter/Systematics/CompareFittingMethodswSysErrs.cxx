@@ -31,10 +31,11 @@ TCanvas* CompareImF0vsReF0(vector<FitValWriterInfo> &aFitValWriterInfo, TString 
 
   //------------------------------------------------------
   double tStartX = -1.;
+  if(aDrawPredictions) tStartX = -1.35;
   double tStartY = 1.4;
   double tIncrementX = 0.075;
   double tIncrementY = 0.10;
-  double tTextSize = 0.03;
+  double tTextSize = 0.035;
 
   TLatex* tTex = new TLatex();
   tTex->SetTextAlign(12);
@@ -143,18 +144,19 @@ TCanvas* CompareImF0vsReF0(vector<FitValWriterInfo> &aFitValWriterInfo, TString 
       tGr_PhysRevD_AKLam->SetLineColor(tPredColor2);
       tGr_PhysRevD_AKLam->Draw("pzsame");
 
-    TLegend* tLegPredictions = new TLegend(0.825, 0.725, 0.975, 0.875);
+    TLegend* tLegPredictions = new TLegend(0.60, 0.725, 0.975, 0.875);
       tLegPredictions->SetLineWidth(0);
-      tLegPredictions->AddEntry(tGr_0607100_Set1, "[1] Set 1", "p");
-      tLegPredictions->AddEntry(tGr_0607100_Set2, "[1] Set 2", "p");
-      tLegPredictions->AddEntry(tGr_PhysRevD_KLam, "[2] K#Lambda", "p");
-      tLegPredictions->AddEntry(tGr_PhysRevD_AKLam, "[2] #bar{K}#Lambda", "p");
+      tLegPredictions->AddEntry(tGr_0607100_Set1, "[A] Set 1: K#Lambda = #bar{K}#Lambda", "p");
+      tLegPredictions->AddEntry(tGr_0607100_Set2, "[A] Set 2: K#Lambda = #bar{K}#Lambda", "p");
+      tLegPredictions->AddEntry(tGr_PhysRevD_KLam, "[B] K#Lambda", "p");
+      tLegPredictions->AddEntry(tGr_PhysRevD_AKLam, "[B] #bar{K}#Lambda", "p");
     tLegPredictions->Draw();
   }
 
   //------------------------------------------------------
 
   double tStartXStamp = -1.75;
+  if(aDrawPredictions) tStartXStamp = -1.85;
   double tStartYStamp = 1.4;
   double tIncrementXStamp = 0.05;
   double tIncrementYStamp = 0.10;
@@ -346,7 +348,7 @@ TCanvas* CompareLambdavsRadiusTweak(vector<FitValWriterInfo> &aFitValWriterInfo,
 
     if(aFitValWriterInfo[iAn].allLamKCombined)
     {
-      int tColor = kGreen;
+      int tColor = kOrange+1;
       tAllLamKCombinedDrawn = false;
       for(int i=0; i<tAllLamKCombined_FitInfoTStringVec.size(); i++) if(tAllLamKCombined_FitInfoTStringVec[i].EqualTo(aFitValWriterInfo[iAn].fitInfoTString)) tAllLamKCombinedDrawn=true;
       if(!tAllLamKCombinedDrawn)

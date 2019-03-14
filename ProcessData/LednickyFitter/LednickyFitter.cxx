@@ -225,7 +225,10 @@ TString LednickyFitter::BuildSaveNameModifier(bool aApplyMomResCorrection, bool 
   LednickyFitter::AppendFitInfo(tReturnTString, aApplyMomResCorrection, aApplyNonFlatBackgroundCorrection, aNonFlatBgdFitTypes, 
                                 aIncludeResidualsType, aResPrimMaxDecayType, aChargedResidualsType, aFixD0);
 
-  if(aUseStavCf)                                      tReturnTString += TString("_StavCf");
+  if(aUseStavCf && aNonFlatBgdFitTypes.size()>1)      tReturnTString += TString("_StavCfTriple");          //Need to designate triple because won't be in nonflatbgd description
+                                                                                                           //bc with Stav method, there should be no bgd included in fit
+  else if(aUseStavCf)                                 tReturnTString += TString("_StavCf");
+
   if(aFixAllLambdaTo1)                                tReturnTString += TString("_FixAllLambdaTo1");
   if(aFixAllNormTo1)                                  tReturnTString += TString("_FixAllNormTo1");
   if(aFixRadii)                                       tReturnTString += TString("_FixedRadii");
