@@ -32,7 +32,7 @@ void SetDataPoints(TGraphAsymmErrors* aGraph, td2dVec &aDataPointsWithErrors, bo
 //___________________________________________________________________________________
 void DrawPoints(TString aName, 
                 td2dVec &aDataPointsWithSysErrors, td2dVec &aDataPointsWithStatErrors, 
-                int aMarkerColorSys, int aMarkerColorStat, int aMarkerStyle, Size_t aMarkerSize, int aMarkerOutlineStyle=0)
+                int aMarkerColorSys, int aMarkerColorStat, int aMarkerStyle, Size_t aMarkerSize, int aMarkerOutlineStyle=0, bool aDrawSys=true)
 {
   //First, make sure there are equal number systematic and statistical data points
   assert(aDataPointsWithSysErrors.size() == aDataPointsWithStatErrors.size());
@@ -43,16 +43,19 @@ void DrawPoints(TString aName,
   for(unsigned int i=1; i<tNDataPoints; i++) assert(aDataPointsWithSysErrors[i-1].size() == aDataPointsWithSysErrors[i].size());
   for(unsigned int i=1; i<tNDataPoints; i++) assert(aDataPointsWithStatErrors[i-1].size() == aDataPointsWithStatErrors[i].size());
 
+  TGraphAsymmErrors* tGr;
   //----------------------- Draw systematic error boxes first -------------------------------------------------
-  TGraphAsymmErrors* tGr = new TGraphAsymmErrors(tNDataPoints);
-  tGr->SetName(aName+TString("Sys"));
-  tGr->SetFillColor(aMarkerColorSys);
-  tGr->SetFillStyle(1000);
-  tGr->SetLineColor(0);
-  tGr->SetLineWidth(0);
-  SetDataPoints(tGr, aDataPointsWithSysErrors);
-  tGr->Draw("e2");
-
+  if(aDrawSys)
+  {
+    tGr = new TGraphAsymmErrors(tNDataPoints);
+    tGr->SetName(aName+TString("Sys"));
+    tGr->SetFillColor(aMarkerColorSys);
+    tGr->SetFillStyle(1000);
+    tGr->SetLineColor(0);
+    tGr->SetLineWidth(0);
+    SetDataPoints(tGr, aDataPointsWithSysErrors);
+    tGr->Draw("e2");
+  }
 
   //----------------------- Draw points with statistical errors -------------------------------------------------
   tGr = new TGraphAsymmErrors(tNDataPoints);
@@ -149,6 +152,7 @@ int main(int argc, char **argv)
   bool bDrawJaiAndHans = true;
   bool bMakeOthersTransparent = true;
   bool bOutlinePoints = true;
+  bool bDrawSysErrs = true;
 
 
   IncludeResidualsType tIncResType = kInclude3Residuals;
@@ -171,9 +175,22 @@ int main(int argc, char **argv)
                                                                                                       true, false, false, true, 
                                                                                                       true, true);
 
-  TString tSystematicsFileLocation = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_%s/%s/Systematics/FinalFitSystematics_wFitRangeSys%s.txt", tResultsDate.Data(), tFitInfoTString.Data(), tFitInfoTString.Data());
+  //For case of bDrawSysErrs = false, still need to grab any systematic error bars
+  //Just easier to implement this way with pre existing functionality
+  TString tResultsDate_Defualt = "20180505";
+  TString tFitInfoTString_Default = 
+                                                                 FitValuesWriter::BuildFitInfoTString(true, true, tNonFlatBgdFitTypes, 
+                                                                                                      kInclude3Residuals, k10fm, 
+                                                                                                      kUseXiDataAndCoulombOnlyInterp, false, 
+                                                                                                      false, false, false, false, false, 
+                                                                                                      true, false, false, true, 
+                                                                                                      true, true);
+  TString tSystematicsFileLocation = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_%s/%s/Systematics/FinalFitSystematics_wFitRangeSys%s.txt", tResultsDate_Defualt.Data(), tFitInfoTString_Default.Data(), tFitInfoTString_Default.Data());
+  if(bDrawSysErrs)
+  {
+    tSystematicsFileLocation = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_%s/%s/Systematics/FinalFitSystematics_wFitRangeSys%s.txt", tResultsDate.Data(), tFitInfoTString.Data(), tFitInfoTString.Data());
+  }
   TString tSaveDirBase = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_%s/%s/Comparisons/", tResultsDate.Data(), tFitInfoTString.Data());
-
 
   cout << "tFitInfoTString = " << tFitInfoTString << endl << endl;
 
@@ -501,19 +518,19 @@ cout << endl << endl;
     //----- 0-10% Lambda-K0 -----
     td2dVec tLamK0010Sys = {{tLamK0010mT,0.015,tLamK0010R,tLamK0010RerrSys}};
     td2dVec tLamK0010Stat = {{tLamK0010mT,0.,tLamK0010R,tLamK0010Rerr}};
-    DrawPoints("GraphLamK0010",tLamK0010Sys,tLamK0010Stat,myRedT,myRed,tMarkerStyleLamK,tMarkerSize,tMarkerStyleLamKo);
+    DrawPoints("GraphLamK0010",tLamK0010Sys,tLamK0010Stat,myRedT,myRed,tMarkerStyleLamK,tMarkerSize,tMarkerStyleLamKo,bDrawSysErrs);
 
 
     //----- 10-30% Lambda-K0 -----
     td2dVec tLamK1030Sys = {{tLamK1030mT,0.015,tLamK1030R,tLamK1030RerrSys}};
     td2dVec tLamK1030Stat = {{tLamK1030mT,0.,tLamK1030R,tLamK1030Rerr}};
-    DrawPoints("GraphLamK1030",tLamK1030Sys,tLamK1030Stat,myGreenT,myGreen,tMarkerStyleLamK,tMarkerSize,tMarkerStyleLamKo);
+    DrawPoints("GraphLamK1030",tLamK1030Sys,tLamK1030Stat,myGreenT,myGreen,tMarkerStyleLamK,tMarkerSize,tMarkerStyleLamKo,bDrawSysErrs);
 
 
     //----- 30-50% Lambda-K0 -----
     td2dVec tLamK3050Sys = {{tLamK3050mT,0.015,tLamK3050R,tLamK3050RerrSys}};
     td2dVec tLamK3050Stat = {{tLamK3050mT,0.,tLamK3050R,tLamK3050Rerr}};
-    DrawPoints("GraphLamK3050",tLamK3050Sys,tLamK3050Stat,myBlueT,myBlue,tMarkerStyleLamK,tMarkerSize,tMarkerStyleLamKo);
+    DrawPoints("GraphLamK3050",tLamK3050Sys,tLamK3050Stat,myBlueT,myBlue,tMarkerStyleLamK,tMarkerSize,tMarkerStyleLamKo,bDrawSysErrs);
 
 
 //-------------------------------------------------------------------------------

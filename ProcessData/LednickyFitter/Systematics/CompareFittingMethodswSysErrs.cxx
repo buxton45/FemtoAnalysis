@@ -2,7 +2,7 @@
 
 
 //_________________________________________________________________________________________________________________________________
-TCanvas* CompareImF0vsReF0(vector<FitValWriterInfo> &aFitValWriterInfo, TString aSystematicsFileLocation_LamKch, TString aSystematicsFileLocation_LamK0, bool aDrawPredictions, TString aCanNameMod, bool aSuppressDescs, bool aSuppressAnStamps, bool aDrawStatOnly)
+TCanvas* CompareImF0vsReF0(vector<FitValWriterInfo> &aFitValWriterInfo, TString aSystematicsFileLocation_LamKch, TString aSystematicsFileLocation_LamK0, bool aDrawPredictions, TString aCanNameMod, bool aSuppressDescs, bool aSuppressAnStamps, bool aDrawStatOnly, bool aDrawCircleStamps)
 {
   CentralityType tCentType = k0010;  //Doesn't matter which centrality chosen, because all share same scattering parameters
 
@@ -162,6 +162,7 @@ TCanvas* CompareImF0vsReF0(vector<FitValWriterInfo> &aFitValWriterInfo, TString 
   double tIncrementYStamp = 0.10;
   double tTextSizeStamp = 0.04;
   int tMarkerStyleStamp = 21;
+  if(aDrawCircleStamps) tMarkerStyleStamp = 20;
   if(!aSuppressAnStamps) DrawAnalysisStamps((TPad*)tPadReF0vsImF0, tAnTypes, tStartXStamp, tStartYStamp, tIncrementXStamp, tIncrementYStamp, tTextSizeStamp, tMarkerStyleStamp);
 
 
@@ -471,45 +472,6 @@ TCanvas* CompareLambdavsRadiusAll(vector<FitValWriterInfo> &aFitValWriterInfo, T
 
   //------------------------------------------------------
 
-  tTex->SetTextFont(42);
-  tTex->SetTextSize(0.06);
-//  tTex->DrawLatex(0.5, 2.3, cPrettyCentralityTags[aCentType]);
-
-  //------------------------------------------------------
-
-  double tStartXStamp = 0.7;
-  double tStartYStamp = 2.1;
-  double tIncrementXStamp = 0.125;
-  double tIncrementYStamp = 0.15;
-  double tSecondColumnShiftX = 1.0;
-  double tTextSizeStamp = 0.04;
-  int tMarkerStyleStamp = 21;
-  int tConjMarkerStyleStamp = 25;
-
-  //--------------------------------------
-/*
-  TLatex* tTex = new TLatex();
-  tTex->SetTextAlign(12);
-  tTex->SetLineWidth(2);
-  tTex->SetTextFont(42);
-  tTex->SetTextSize(aTextSize);
-
-  const Size_t tMarkerSize=1.6;
-  TMarker *tMarker = new TMarker();
-  tMarker->SetMarkerSize(tMarkerSize);
-
-  tMarker->SetMarkerStyle(aMarkerStyle);
-  tTex->DrawLatex(aStartX, aStartY-iTex*aIncrementY, cPrettyCentralityTags[0]);
-  tMarker->SetMarkerColor(kGreen);
-  tMarker->DrawMarker(aStartX-aIncrementX, aStartY-iTex*aIncrementY);
-  iTex++;
-
-  tMarker->SetMarkerStyle(aMarkerStyle);
-  tTex->DrawLatex(aStartX, aStartY-iTex*aIncrementY, cPrettyCentralityTags[0]);
-  tMarker->SetMarkerColor(kGreen);
-  tMarker->DrawMarker(aStartX-aIncrementX, aStartY-iTex*aIncrementY);
-  iTex++;
-*/
 
   return tReturnCan;
 }
@@ -592,7 +554,7 @@ TCanvas* CompareAll2Panel(vector<FitValWriterInfo> &aFitValWriterInfo, TString a
   TCanvas *tReturnCan, *tCanImF0vsReF0, *tCanLamvsR;
 
   TString tSubCanNameMod = TString::Format("%sForAll", aCanNameMod.Data());
-  tCanImF0vsReF0 = CompareImF0vsReF0(aFitValWriterInfo, aSystematicsFileLocation_LamKch, aSystematicsFileLocation_LamK0, aDrawPredictions, tSubCanNameMod, false, false, aDrawStatOnly);
+  tCanImF0vsReF0 = CompareImF0vsReF0(aFitValWriterInfo, aSystematicsFileLocation_LamKch, aSystematicsFileLocation_LamK0, aDrawPredictions, tSubCanNameMod, false, false, aDrawStatOnly, true);
   tCanLamvsR = CompareLambdavsRadiusAll(aFitValWriterInfo, aSystematicsFileLocation_LamKch, aSystematicsFileLocation_LamK0, tSubCanNameMod, true, false, aDrawStatOnly);
 
 

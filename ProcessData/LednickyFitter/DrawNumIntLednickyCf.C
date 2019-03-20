@@ -101,24 +101,24 @@ int main(int argc, char **argv)
 
   //-----------------------------------------------------------------------------
   double tLambda = 1.12*0.527;
-  double tRadius1 = 6.33;
-  double tRef0   = -0.66;
-  double tImf0   = 0.58;
-  double td0     = 0.77;  
+  double tRadius1 = 6.24;
+  double tRef0   = -0.49;
+  double tImf0   = 0.42;
+  double td0     = -0.55;  
   double tNorm   = 1.0;
   double tMuOut1  = 0.0;
 
   if(tAnType==kLamKchP)
   {
-    tRef0   = -0.66;
-    tImf0   = 0.58;
-    td0     = 0.77;  
+    tRef0   = -0.49;
+    tImf0   = 0.42;
+    td0     = -0.55;  
   }
   else if(tAnType==kLamKchM)
   {
-    tRef0   = 0.35;
-    tImf0   = 0.44;
-    td0     = 0.77;
+    tRef0   = 0.19;
+    tImf0   = 0.29;
+    td0     = -7.80;
   }
 
   double tParams1[7] = {tLambda, tRadius1, tRef0, tImf0, td0, tNorm, tMuOut1};
@@ -148,21 +148,21 @@ int main(int argc, char **argv)
     tCf_LedEq->SetBinContent(i+1, FitPartialAnalysis::LednickyEq(x, tParams1));
   }
   tCf_LedEq->GetYaxis()->SetRangeUser(0.86, 1.07);
-  tCf_LedEq->SetMarkerStyle(20);
+  tCf_LedEq->SetMarkerStyle(24);
   tCf_LedEq->SetMarkerSize(0.75);
-  tCf_LedEq->SetMarkerColor(kBlack);
-  tCf_LedEq->SetLineColor(kBlack);
+  tCf_LedEq->SetMarkerColor(kMagenta);
+  tCf_LedEq->SetLineColor(kMagenta);
 
   tCf_LedEq->GetXaxis()->SetRangeUser(aMinX, aMaxX);
   tCf_LedEq->GetYaxis()->SetRangeUser(aMinY, aMaxY);
   //-------------------------
-  TH1D* tCf_NumInt1 = BuildNumIntCf(tNumIntLedCf, TString("tCf_NumInt1"), tKStarBinCenters, tParams1, kBlack, 24);
+  TH1D* tCf_NumInt1 = BuildNumIntCf(tNumIntLedCf, TString("tCf_NumInt1"), tKStarBinCenters, tParams1, kBlack, 20);
 
-  TH1D* tCf_NumInt2a = BuildNumIntCf(tNumIntLedCf, TString("tCf_NumInt2a"), tKStarBinCenters, tParams2[0].data(), tColors2Vec[0], 21);
-  TH1D* tCf_NumInt2b = BuildNumIntCf(tNumIntLedCf, TString("tCf_NumInt2b"), tKStarBinCenters, tParams2[1].data(), tColors2Vec[1], 21);
-  TH1D* tCf_NumInt2c = BuildNumIntCf(tNumIntLedCf, TString("tCf_NumInt2c"), tKStarBinCenters, tParams2[2].data(), tColors2Vec[2], 21);
-  TH1D* tCf_NumInt2d = BuildNumIntCf(tNumIntLedCf, TString("tCf_NumInt2d"), tKStarBinCenters, tParams2[3].data(), tColors2Vec[3], 21);
-  TH1D* tCf_NumInt2e = BuildNumIntCf(tNumIntLedCf, TString("tCf_NumInt2e"), tKStarBinCenters, tParams2[4].data(), tColors2Vec[4], 21);
+  TH1D* tCf_NumInt2a = BuildNumIntCf(tNumIntLedCf, TString("tCf_NumInt2a"), tKStarBinCenters, tParams2[0].data(), tColors2Vec[0], 22);
+  TH1D* tCf_NumInt2b = BuildNumIntCf(tNumIntLedCf, TString("tCf_NumInt2b"), tKStarBinCenters, tParams2[1].data(), tColors2Vec[1], 22);
+  TH1D* tCf_NumInt2c = BuildNumIntCf(tNumIntLedCf, TString("tCf_NumInt2c"), tKStarBinCenters, tParams2[2].data(), tColors2Vec[2], 22);
+  TH1D* tCf_NumInt2d = BuildNumIntCf(tNumIntLedCf, TString("tCf_NumInt2d"), tKStarBinCenters, tParams2[3].data(), tColors2Vec[3], 22);
+  TH1D* tCf_NumInt2e = BuildNumIntCf(tNumIntLedCf, TString("tCf_NumInt2e"), tKStarBinCenters, tParams2[4].data(), tColors2Vec[4], 22);
   //-------------------------
 
   TCanvas* tCan = new TCanvas("tCan", "tCan");

@@ -45,11 +45,11 @@ int main(int argc, char **argv)
 
   vector<FitValWriterInfo> tFVWIVec_Comp3An_Triple = {
                                                                  FitValWriterInfo(kLamKchP, tFileLocation_LamKch, tResultsDate, tFitInfoTString, 
-                                                                                 "#LambdaK^{#pm} and #LambdaK^{0}_{S} fit together", tColorLamKchP, 20, tMarkerSize, false, true), 
+                                                                                 " (Suppress Markers)", tColorLamKchP, 20, tMarkerSize, false, true), 
                                                                  FitValWriterInfo(kLamKchM, tFileLocation_LamKch, tResultsDate, tFitInfoTString, 
-                                                                                 "#LambdaK^{#pm} and #LambdaK^{0}_{S} fit together", tColorLamKchM, 20, tMarkerSize, false, true), 
+                                                                                 " (Suppress Markers)", tColorLamKchM, 20, tMarkerSize, false, true), 
                                                                  FitValWriterInfo(kLamK0, tFileLocation_LamK0, tResultsDate, tFitInfoTString, 
-                                                                                 "#LambdaK^{#pm} and #LambdaK^{0}_{S} fit together", tColorLamK0, 20, tMarkerSize, false, true)};
+                                                                                 " (Suppress Markers)", tColorLamK0, 20, tMarkerSize, false, true)};
 
   vector<FitValWriterInfo> tFVWIVec = tFVWIVec_Comp3An_Triple;
   TString tCanNameMod = TString("_Comp3An_Triple");

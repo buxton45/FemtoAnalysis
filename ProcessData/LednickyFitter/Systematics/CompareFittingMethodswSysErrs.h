@@ -7,7 +7,7 @@
 #include "CompareFittingMethods.cxx"
 
 
-  extern TCanvas* CompareImF0vsReF0(vector<FitValWriterInfo> &aFitValWriterInfo, TString aSystematicsFileLocation_LamKch, TString aSystematicsFileLocation_LamK0, bool aDrawPredictions=false, TString aCanNameMod="", bool aSuppressDescs=false, bool aSuppressAnStamps=false, bool aDrawStatOnly=false);
+  extern TCanvas* CompareImF0vsReF0(vector<FitValWriterInfo> &aFitValWriterInfo, TString aSystematicsFileLocation_LamKch, TString aSystematicsFileLocation_LamK0, bool aDrawPredictions=false, TString aCanNameMod="", bool aSuppressDescs=false, bool aSuppressAnStamps=false, bool aDrawStatOnly=false, bool aDrawCircleStamps=false);
   extern TCanvas* CompareLambdavsRadius(vector<FitValWriterInfo> &aFitValWriterInfo, TString aSystematicsFileLocation_LamKch, TString aSystematicsFileLocation_LamK0, CentralityType aCentType, TString aCanNameMod="", bool aSuppressDescs=false, bool aSuppressAnStamps=false, bool aDrawStatOnly=false);
   extern TCanvas* CompareLambdavsRadiusTweak(vector<FitValWriterInfo> &aFitValWriterInfo, TString aSystematicsFileLocation_LamKch, TString aSystematicsFileLocation_LamK0, CentralityType aCentType, TString aCanNameMod="", bool aSuppressDescs=false, bool aSuppressAnStamps=false, bool aDrawStatOnly=false);
   extern TCanvas* CompareLambdavsRadiusAll(vector<FitValWriterInfo> &aFitValWriterInfo, TString aSystematicsFileLocation_LamKch, TString aSystematicsFileLocation_LamK0, TString aCanNameMod, bool aSuppressDescs, bool aSuppressAnStamps, bool aDrawStatOnly);
