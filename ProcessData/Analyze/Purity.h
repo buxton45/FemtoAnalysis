@@ -26,6 +26,7 @@
 #include "TMath.h"
 #include "TVectorD.h"
 #include "TLegend.h"
+#include "TGaxis.h"
 
 using std::cout;
 using std::endl;
@@ -46,8 +47,8 @@ public:
                          //different from CombineCfs(= weighted average)
 
   void CalculatePurity();
-  void DrawPurity(TPad* aPad, bool aZoomBg=false);
-  void DrawPurityAndBgd(TPad* aPad);
+  void DrawPurity(TPad* aPad, bool aZoomBg=false, bool aPrintPurity=false, double aPadScaleX=1., double aPadScaleY=1.);
+  void DrawPurityAndBgd(TPad* aPad, bool aPrintPurity=true);
 
 
   void AddHisto(TH1* aHisto);

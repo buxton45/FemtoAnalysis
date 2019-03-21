@@ -37,7 +37,8 @@ int main(int argc, char **argv)
 //-----------------------------------------------------------------------------
 
 //  TString tResultsDate = "20161027";
-  TString tResultsDate = "20171227";
+//  TString tResultsDate = "20171227";
+  TString tResultsDate = "20180505";
 
   AnalysisType tAnType = kLamK0;
   AnalysisType tConjAnType = kALamK0;
@@ -50,6 +51,8 @@ int main(int argc, char **argv)
   bool bSaveFile = false;
 
   bool bContainsPurity = true;
+  bool bPrintPurity = true;
+
   bool bContainsKStarCfs = false;
   bool bContainsAvgSepCfs = false;
 
@@ -75,7 +78,7 @@ int main(int argc, char **argv)
   TString tFileLocationBaseMC = TString::Format("%sResults_%sMC_%s",tDirectoryBase.Data(),tGeneralAnTypeName.Data(),tResultsDate.Data());
   //TODO PreTrain results with MCd?
 
-  TString tSaveDirectoryBase = "/home/jesse/Analysis/Presentations/PWGCF/LamKPaperProposal/ALICE_MiniWeek_20180117/Figures/";
+  TString tSaveDirectoryBase = "/home/jesse/Analysis/FemtoAnalysis/AnalysisNotes/3_DataSelection/Figures/";
 //  TString tSaveDirectoryBase = tDirectoryBase;
 
   TFile *mySaveFile;
@@ -317,25 +320,47 @@ int main(int argc, char **argv)
 
   if(bContainsPurity)
   {
+    vector<TString> tPrintPurText{"", "_wPrintPurity"};
+
     LamK0->BuildPurityCollection();
     ALamK0->BuildPurityCollection();
 
     TCanvas* canPurity = new TCanvas("canPurity","canPurity");
     canPurity->Divide(2,1);
 
-    LamK0->DrawAllPurityHistos((TPad*)canPurity->cd(1));
-    ALamK0->DrawAllPurityHistos((TPad*)canPurity->cd(2));
+    LamK0->DrawAllPurityHistos((TPad*)canPurity->cd(1), bPrintPurity);
+    ALamK0->DrawAllPurityHistos((TPad*)canPurity->cd(2), bPrintPurity);
+
+    TCanvas* canPurityLam = new TCanvas("canPurityLam", "canPurityLam");
+    LamK0->DrawPurityHisto(0, canPurityLam, bPrintPurity);
+
+    TCanvas* canPurityK0 = new TCanvas("canPurityK0", "canPurityK0");
+    LamK0->DrawPurityHisto(1, canPurityK0, bPrintPurity);
+
+    TCanvas* canPurityALam = new TCanvas("canPurityALam", "canPurityALam");
+    ALamK0->DrawPurityHisto(0, canPurityALam, bPrintPurity);
 
     if(bSaveFigures)
     {
-      TString aName = "cLamK0Purity.eps";
+      TString aName = TString::Format("cLamK0Purity%s.pdf", tPrintPurText[bPrintPurity].Data());
       canPurity->SaveAs(tSaveDirectoryBase+aName);
 
-      TString aName2 = "LamPurity_LamK0.eps";
+/*
+      TString aName2 = TString::Format("LamPurity%s_LamK0.pdf", tPrintPurText[bPrintPurity].Data());
       canPurity->cd(1)->cd(1)->SaveAs(tSaveDirectoryBase+aName2);
 
-      TString aName3 = "K0Purity_LamK0.eps";
+      TString aName3 = TString::Format("K0Purity%s_LamK0.pdf", tPrintPurText[bPrintPurity].Data());
       canPurity->cd(1)->cd(2)->SaveAs(tSaveDirectoryBase+aName3);
+*/
+
+      TString aNameLam = TString::Format("LamPurity%s_LamK0.pdf", tPrintPurText[bPrintPurity].Data());
+      canPurityLam->SaveAs(tSaveDirectoryBase+aNameLam);
+
+      TString aNameK0  = TString::Format("K0Purity%s_LamK0.pdf", tPrintPurText[bPrintPurity].Data());
+      canPurityK0->SaveAs(tSaveDirectoryBase+aNameK0);
+
+      TString aNameALam = TString::Format("ALamPurity%s_ALamK0.pdf", tPrintPurText[bPrintPurity].Data());
+      canPurityALam->SaveAs(tSaveDirectoryBase+aNameALam);
     }
 
   }

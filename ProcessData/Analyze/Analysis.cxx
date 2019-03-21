@@ -2050,10 +2050,14 @@ void Analysis::BuildPurityCollection()
 
 }
 
-
+//________________________________________________________________________________________________________________
+void Analysis::DrawPurityHisto(int aPartInt, TPad* aPad, bool aPrintPurity)
+{
+  fPurityCollection[aPartInt]->DrawPurityAndBgd(aPad, aPrintPurity);
+}
 
 //________________________________________________________________________________________________________________
-void Analysis::DrawAllPurityHistos(TPad* aPad)
+void Analysis::DrawAllPurityHistos(TPad* aPad, bool aPrintPurity)
 {
   int tNPurityHistos = fPurityCollection.size();
 
@@ -2061,7 +2065,7 @@ void Analysis::DrawAllPurityHistos(TPad* aPad)
 
   for(int i=0; i<tNPurityHistos; i++)
   {
-    fPurityCollection[i]->DrawPurityAndBgd((TPad*)aPad->cd(i+1));
+    fPurityCollection[i]->DrawPurityAndBgd((TPad*)aPad->cd(i+1), aPrintPurity);
   }
 
 }

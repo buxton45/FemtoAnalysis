@@ -118,7 +118,8 @@ public:
   void DrawAvgSepCowSailHeavyCfs(DaughterPairType aDaughterPairType, TPad* aPad);
   //-----
   void BuildPurityCollection();
-  void DrawAllPurityHistos(TPad* aPad);
+  void DrawPurityHisto(int aPartInt, TPad* aPad, bool aPrintPurity=true);
+  void DrawAllPurityHistos(TPad* aPad, bool aPrintPurity=true);
   double GetPurity(ParticleType aV0Type);
   TH1* GetCombinedPurityHisto(ParticleType aV0Type);
   Purity* GetPurityObject(ParticleType aV0Type);

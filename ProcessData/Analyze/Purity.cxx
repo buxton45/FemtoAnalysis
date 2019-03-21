@@ -82,8 +82,8 @@ Purity::Purity(TString aCombinedPurityName, ParticleType aParticleType, vector<T
     fBgFitHigh[0] = 0.536;
     fBgFitHigh[1] = fPurityHistos[0]->GetBinLowEdge(fPurityHistos[0]->GetNbinsX()+1);
 
-    fROI[0] = KaonMass-0.013677;
-    fROI[1] = KaonMass+0.020323;
+    fROI[0] = KaonMass-0.017614;
+    fROI[1] = KaonMass+0.017386;
   }
 
   if( (fParticleType == kXi) || (fParticleType == kAXi) )
@@ -215,8 +215,10 @@ void Purity::CalculatePurity()
 
 
 //________________________________________________________________________________________________________________
-void Purity::DrawPurity(TPad *aPad, bool aZoomBg)
+void Purity::DrawPurity(TPad *aPad, bool aZoomBg, bool aPrintPurity, double aPadScaleX, double aPadScaleY)
 {
+  TGaxis::SetMaxDigits(3);
+
   TF1* fitBgd = (TF1*)fPurityFitInfo->At(0);
     fitBgd->SetLineColor(4);
   //-----
@@ -232,14 +234,29 @@ void Purity::DrawPurity(TPad *aPad, bool aZoomBg)
 
   TLine *lROImin, *lROImax, *lBgFitLowMin, *lBgFitLowMax, *lBgFitHighMin, *lBgFitHighMax;
 
+  TH1* tCombinedPurity = (TH1*)fCombinedPurity->Clone("tCombinedPuirty");
+
+  tCombinedPurity->GetXaxis()->SetTitle("#it{m}_{inv} (GeV/#it{c}^{2})");
+  tCombinedPurity->SetLabelSize(0.06*(aPadScaleY/aPadScaleX), "x");
+  tCombinedPurity->SetTitleSize(0.075*(aPadScaleY/aPadScaleX), "x");
+  tCombinedPurity->GetXaxis()->SetTitleOffset(0.375*(aPadScaleY/aPadScaleX));
+  tCombinedPurity->GetXaxis()->SetTickLength(0.06*(aPadScaleY/aPadScaleX));
+  tCombinedPurity->GetXaxis()->SetNdivisions(510);
+
+  tCombinedPurity->GetYaxis()->SetTitle("dN/d#it{m}_{inv}");
+  tCombinedPurity->SetLabelSize(0.06*aPadScaleY, "y");
+  tCombinedPurity->SetTitleSize(0.085*aPadScaleY, "y");
+  tCombinedPurity->GetYaxis()->SetTitleOffset(0.50*aPadScaleY);
+  tCombinedPurity->GetYaxis()->SetTickLength(0.04*aPadScaleY);
+  if(aZoomBg) tCombinedPurity->GetYaxis()->SetTickLength(0.03*aPadScaleY);
+  tCombinedPurity->GetYaxis()->SetNdivisions(505);
+
   if(!aZoomBg)
   {
-    fCombinedPurity->GetXaxis()->SetTitle("M_{inv} (GeV/c^{2})");
-    fCombinedPurity->GetYaxis()->SetTitle("dN/dM_{inv}");
-    fCombinedPurity->SetLabelSize(0.04, "xy");
-    fCombinedPurity->SetTitleSize(0.04, "xy");
+    tCombinedPurity->GetXaxis()->SetTitle("");
+    tCombinedPurity->SetLabelSize(0.0, "x");
 
-    double tHistoMaxValue = fCombinedPurity->GetMaximum();
+    double tHistoMaxValue = tCombinedPurity->GetMaximum();
     lROImin = new TLine((*vROI)(0),0,(*vROI)(0),tHistoMaxValue);
     lROImax = new TLine((*vROI)(1),0,(*vROI)(1),tHistoMaxValue);
     //-----
@@ -252,16 +269,16 @@ void Purity::DrawPurity(TPad *aPad, bool aZoomBg)
 
   if(aZoomBg)
   {
-    fCombinedPurity->GetXaxis()->SetTitle("");
-    fCombinedPurity->GetYaxis()->SetTitle("");
-    fCombinedPurity->SetLabelSize(0.08, "xy");
+    tCombinedPurity->GetYaxis()->SetNdivisions(303);
 
-    fCombinedPurity->GetXaxis()->SetRange(fCombinedPurity->FindBin((*vBgFitLow)(0)),fCombinedPurity->FindBin((*vBgFitLow)(1)));
-      double tMaxLow = fCombinedPurity->GetMaximum();
-      double tMinLow = fCombinedPurity->GetMinimum();
-    fCombinedPurity->GetXaxis()->SetRange(fCombinedPurity->FindBin((*vBgFitHigh)(0)),fCombinedPurity->FindBin((*vBgFitHigh)(1))-1);
-      double tMaxHigh = fCombinedPurity->GetMaximum();
-      double tMinHigh = fCombinedPurity->GetMinimum();
+    tCombinedPurity->GetYaxis()->SetTitle("");
+
+    tCombinedPurity->GetXaxis()->SetRange(tCombinedPurity->FindBin((*vBgFitLow)(0)),tCombinedPurity->FindBin((*vBgFitLow)(1)));
+      double tMaxLow = tCombinedPurity->GetMaximum();
+      double tMinLow = tCombinedPurity->GetMinimum();
+    tCombinedPurity->GetXaxis()->SetRange(tCombinedPurity->FindBin((*vBgFitHigh)(0)),tCombinedPurity->FindBin((*vBgFitHigh)(1))-1);
+      double tMaxHigh = tCombinedPurity->GetMaximum();
+      double tMinHigh = tCombinedPurity->GetMinimum();
     double tMaxBg;
       if(tMaxLow>tMaxHigh) tMaxBg = tMaxLow;
       else tMaxBg = tMaxHigh;
@@ -276,8 +293,8 @@ void Purity::DrawPurity(TPad *aPad, bool aZoomBg)
     tMaxBg+=tRangeBg/10.;
     tMinBg-=tRangeBg/10.;
 
-    fCombinedPurity->GetXaxis()->SetRange(1,fCombinedPurity->GetNbinsX());
-    fCombinedPurity->GetYaxis()->SetRangeUser(tMinBg,tMaxBg);
+    tCombinedPurity->GetXaxis()->SetRange(1,tCombinedPurity->GetNbinsX());
+    tCombinedPurity->GetYaxis()->SetRangeUser(tMinBg,tMaxBg);
     //--------------------------------------------------------------------------------------------
     lROImin = new TLine((*vROI)(0),tMinBg,(*vROI)(0),tMaxBg);
     lROImax = new TLine((*vROI)(1),tMinBg,(*vROI)(1),tMaxBg);
@@ -291,8 +308,8 @@ void Purity::DrawPurity(TPad *aPad, bool aZoomBg)
 
 
   //--------------------------------------------------------------------------------------------
-  fCombinedPurity->SetLineColor(1);
-  fCombinedPurity->SetLineWidth(2);
+  tCombinedPurity->SetLineColor(1);
+  tCombinedPurity->SetLineWidth(2);
 
   lROImin->SetLineColor(3);
   lROImax->SetLineColor(3);
@@ -310,7 +327,7 @@ void Purity::DrawPurity(TPad *aPad, bool aZoomBg)
   gStyle->SetOptTitle(0);
   gStyle->SetOptFit(0);
 
-  fCombinedPurity->DrawCopy("Ehist");
+  tCombinedPurity->DrawCopy("Ehist");
   fitBgd->Draw("same");
   lROImin->Draw();
   lROImax->Draw();
@@ -322,25 +339,39 @@ void Purity::DrawPurity(TPad *aPad, bool aZoomBg)
   if(!aZoomBg)
   {
     double purity = (*vInfo)(3);
-    TPaveText *myText = new TPaveText(0.12,0.65,0.42,0.85,"NDC");
-    myText->SetFillColor(0);
-    myText->SetBorderSize(1);
-    myText->AddText(TString::Format("%s Purity = %0.2f%%",cRootParticleTags[fParticleType],100*purity));
-    myText->Draw();
-
     double tSig = (*vInfo)(2);
     double tSigpBgd = (*vInfo)(1);
-    TPaveText *myText2 = new TPaveText(0.15,0.54,0.35,0.64,"NDC");
-    myText2->SetFillColor(0);
-    myText2->SetBorderSize(0);
-    myText2->SetTextAlign(33);
-    myText2->AddText(TString::Format("Sig     = %0.3e",tSig));
-    myText2->AddText(TString::Format("Sig+Bgd = %0.3e",tSigpBgd));
-    myText2->Draw();
+    if(aPrintPurity)
+    {
+      TPaveText *myText = new TPaveText(0.15,0.65,0.42,0.875,"NDC");
+      myText->SetFillColor(0);
+      myText->SetBorderSize(1);
+      myText->AddText(TString::Format("%s Purity = %0.2f%%",cRootParticleTags[fParticleType],100*purity));
+      myText->Draw();
 
-    TLegend *tLeg = new TLegend(0.65,0.50,0.89,0.89);
+      TPaveText *myText2 = new TPaveText(0.15,0.49,0.42,0.64,"NDC");
+      myText2->SetFillColor(0);
+      myText2->SetBorderSize(0);
+      myText2->SetTextAlign(33);
+      myText2->AddText(TString::Format("Sig     = %0.3e",tSig));
+      myText2->AddText(TString::Format("Sig+Bgd = %0.3e",tSigpBgd));
+      myText2->Draw();
+    }
+    else
+    {
+      TPaveText *myText2 = new TPaveText(0.15,0.50,0.45,0.875,"NDC");
+      myText2->SetFillColor(0);
+      myText2->SetBorderSize(0);
+      myText2->SetTextAlign(33);
+      myText2->AddText(TString::Format("Sig     = %0.3e",tSig));
+      myText2->AddText(TString::Format("Sig+Bgd = %0.3e",tSigpBgd));
+      myText2->AddText("");
+      myText2->Draw();
+    }
+
+    TLegend *tLeg = new TLegend(0.65,0.30,0.925,0.875); 
       tLeg->SetFillColor(0);
-      tLeg->AddEntry(fCombinedPurity, "Data", "lp");
+      tLeg->AddEntry(tCombinedPurity, "Data", "lp");
       tLeg->AddEntry(fitBgd, "Fit to background", "l");
       tLeg->AddEntry(lROImin, "Accepted window", "l");
       tLeg->AddEntry(lBgFitLowMin, "Bkg fit window", "l");
@@ -351,18 +382,27 @@ void Purity::DrawPurity(TPad *aPad, bool aZoomBg)
 
 
 //________________________________________________________________________________________________________________
-void Purity::DrawPurityAndBgd(TPad* aPad)
+void Purity::DrawPurityAndBgd(TPad* aPad, bool aPrintPurity)
 {
   aPad->cd();
   //aPad->Divide(1,2);
 
   TPad *tPad1 = new TPad("tPad1","tPad1",0.0,0.3,1.0,1.0);
+    tPad1->SetTopMargin(0.10);
+    tPad1->SetBottomMargin(0.025);
+    tPad1->SetRightMargin(0.05);
   tPad1->Draw();
   TPad *tPad2 = new TPad("tPad2","tPad2",0.0,0.0,1.0,0.3);
+    tPad2->SetTopMargin(0.20);
+    tPad2->SetBottomMargin(0.35);
+    tPad2->SetRightMargin(0.05);
   tPad2->Draw();
 
-  DrawPurity(tPad1,false);
-  DrawPurity(tPad2,true);  
+  double tPad2XScale = tPad1->GetAbsWNDC()/tPad2->GetAbsWNDC();
+  double tPad2YScale = tPad1->GetAbsHNDC()/tPad2->GetAbsHNDC();
+
+  DrawPurity(tPad1, false, aPrintPurity);
+  DrawPurity(tPad2, true, aPrintPurity, tPad2XScale, tPad2YScale);  
 }
 
 
