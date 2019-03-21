@@ -33,8 +33,11 @@ A.~Kisiel, M.~Gałażyn, and P.~Bożek, ``{Pion, kaon, and proton femtoscopy in
 %%CITATION = ARXIV:1409.4571;%%.
 
 \bibitem{Lednicky:82}
-R.~Lednicky and V.~L. Lyuboshitz {\em Sov. J. Nucl. Phys.} {\bfseries 35}
-  (1982) 770.
+R.~Lednicky and V.~L. Lyuboshits, ``{Final State Interaction Effect on Pairing
+  Correlations Between Particles with Small Relative Momenta},'' {\em Sov. J.
+  Nucl. Phys.} {\bfseries 35} (1982) 770.
+[Yad. Fiz.35,1316(1981)].
+%%CITATION = SJNCA,35,770;%%.
 
 \bibitem{1748-0221-3-08-S08002}
 {\bfseries ALICE} Collaboration, K.~Aamodt {\em et~al.}, ``The alice experiment
@@ -73,7 +76,7 @@ A.~Akindinov {\em et~al.}, ``{Performance of the ALICE Time-Of-Flight detector
 %%CITATION = EPHJP,128,44;%%.
 
 \bibitem{PhysRevD.44.3501}
-X.-N. Wang and M.~Gyulassy, ``{hijing: A Monte Carlo model for multiple jet
+X.-N. Wang and M.~Gyulassy, ``{HIJING: A Monte Carlo model for multiple jet
   production in $\mathrm{pp}$, $\mathrm{pA}$, and $\mathrm{AA}$ collisions},''
   \href{http://dx.doi.org/10.1103/PhysRevD.44.3501}{{\em Phys. Rev. D}
   {\bfseries 44} (Dec, 1991) 3501--3516}.

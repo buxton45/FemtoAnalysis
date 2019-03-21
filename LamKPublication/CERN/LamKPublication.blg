@@ -3,33 +3,32 @@ Capacity: max_strings=100000, hash_size=100000, hash_prime=85009
 The top-level auxiliary file: LamKPublication.aux
 The style file: utphys.bst
 Database file #1: LamK_bibfile.bib
-Warning--empty title in Lednicky:82
 You've used 22 entries,
             2328 wiz_defined-function locations,
-            777 strings with 8807 characters,
-and the built_in function-call counts, 7536 in all, are:
-= -- 796
+            780 strings with 8963 characters,
+and the built_in function-call counts, 7572 in all, are:
+= -- 807
 > -- 209
 < -- 0
 + -- 78
 - -- 56
-* -- 696
-:= -- 855
-add.period$ -- 40
+* -- 698
+:= -- 860
+add.period$ -- 42
 call.type$ -- 22
-change.case$ -- 25
+change.case$ -- 26
 chr.to.int$ -- 0
-cite$ -- 23
-duplicate$ -- 431
-empty$ -- 711
+cite$ -- 22
+duplicate$ -- 432
+empty$ -- 712
 format.name$ -- 56
-if$ -- 1991
+if$ -- 2003
 int.to.chr$ -- 0
 int.to.str$ -- 22
 missing$ -- 87
-newline$ -- 101
+newline$ -- 103
 num.names$ -- 22
-pop$ -- 106
+pop$ -- 104
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 0
@@ -41,8 +40,7 @@ text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
 type$ -- 0
-warning$ -- 1
+warning$ -- 0
 while$ -- 52
 width$ -- 24
-write$ -- 188
-(There was 1 warning)
+write$ -- 191
