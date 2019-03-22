@@ -26,6 +26,7 @@
 #include "TGraphAsymmErrors.h"
 #include "TLatex.h"
 #include "TColor.h"
+#include "TLatex.h"
 
 using std::cout;
 using std::cin;
@@ -59,13 +60,15 @@ public:
   void SetupOptStat(int aNx, int aNy, double aStatX, double aStatY, double aStatW, double aStatH);
   TPaveText* SetupTPaveText(TString aText, int aNx, int aNy, double aTextXmin=0.75, double aTextYmin=0.75, double aTextWidth=0.15, double aTextHeight=0.10, double aTextFont=63, double aTextSize=15);
   void AddPadPaveText(TPaveText* aText, int aNx, int aNy);
+  void AddPadPaveLatex(TLatex* aText, int aNx, int aNy);
   void SetupTLegend(TString aText, int aNx, int aNy, double aTextXmin=0.75, double aTextYmin=0.75, double aTextWidth=0.15, double aTextHeight=0.10, int aNColumns=1);
   void AddLegendEntry(int aNx, int aNy, const TObject *tObj, const char *label="", Option_t *option="lpf", int tLegNumInPad=0);
 
   void DrawInPad(int aNx, int aNy);
   void DrawAll();
 
-  void DrawXaxisTitle(TString aTitle, int aTextFont=43, int aTextSize=25, double aXLow=0.315, double aYLow=0.03);
+  void DrawXaxisTitle(TString aTitle, int aTextFont=43, int aTextSize=25, double aYLow=0.03);
+  void DrawXaxisTitle(TString aTitle, int aTextFont, int aTextSize, double aXLow, double aYLow);
   void DrawYaxisTitle(TString aTitle, int aTextFont=43, int aTextSize=25, double aXLow=0.05, double aYLow=0.35);
 
   TCanvas* GetCanvas();
@@ -97,6 +100,7 @@ protected:
   vector<vector<TString> > fGraphsDrawOptions;
   TObjArray* fPadPaveTexts;
   TObjArray* fPadLegends;
+  TObjArray* fPadLatexs;
 
   td2dTPadVec fPadArray;
   float** fXScaleFactors;

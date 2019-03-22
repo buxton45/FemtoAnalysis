@@ -953,7 +953,7 @@ int main(int argc, char **argv)
 //-----------------------------------------------------------------------------
 //  TString tResultsDate = "20161027";
 //  TString tResultsDate = "20171220_onFlyStatusFalse";
-  TString tResultsDate = "20180307";
+  TString tResultsDate = "20180505";
 //  TString tResultsDate = "20171227_LHC10h";
 //  TString tResultsDate = "20180104_useIsProbableElectronMethodTrue";
 //  TString tResultsDate = "20180104_useIsProbableElectronMethodFalse";
@@ -963,6 +963,7 @@ int main(int argc, char **argv)
 //  CentralityType tCentType = k0010;  //TODO
   CentralityType tCentType = kMB;
   FitGeneratorType tGenType = kPairwConj;
+  int aRebin=1;
 
   bool bDrawEPBinningComparison = false;
 
@@ -985,6 +986,13 @@ int main(int argc, char **argv)
   FitGenerator* tLamKchP = new FitGenerator(tFileLocationBase_cLamcKch, tFileLocationBaseMC_cLamcKch, kLamKchP, tCentType, tAnRunType, tNPartialAnalysis, tGenType);
   FitGenerator* tLamKchM = new FitGenerator(tFileLocationBase_cLamcKch, tFileLocationBaseMC_cLamcKch, kLamKchM, tCentType, tAnRunType, tNPartialAnalysis, tGenType);
   FitGenerator* tLamK0 =   new FitGenerator(tFileLocationBase_cLamK0,   tFileLocationBaseMC_cLamK0,   kLamK0,   tCentType, tAnRunType, tNPartialAnalysis, tGenType);
+
+  if(aRebin != 1)
+  {
+    for(int i=0; i<tLamKchP->GetNAnalyses(); i++) tLamKchP->GetKStarCfHeavy(i)->Rebin(aRebin);
+    for(int i=0; i<tLamKchM->GetNAnalyses(); i++) tLamKchM->GetKStarCfHeavy(i)->Rebin(aRebin);
+    for(int i=0; i<tLamK0->GetNAnalyses(); i++) tLamK0->GetKStarCfHeavy(i)->Rebin(aRebin);
+  }
 
 //-------------------------------------------------------------------------------
 
@@ -1131,7 +1139,9 @@ int main(int argc, char **argv)
 
   if(bSaveCfsToRootFile)
   {
-    TString tSaveFileName = TString::Format("%sQuickDataCfs_%s.root", tRootFilesSaveDir.Data(), tResultsDate.Data());
+    TString tSaveFileName;
+    if(aRebin==1) tSaveFileName = TString::Format("%sQuickDataCfs_%s.root", tRootFilesSaveDir.Data(), tResultsDate.Data());
+    else          tSaveFileName = TString::Format("%sQuickDataCfs_%s_Rebin%d.root", tRootFilesSaveDir.Data(), tResultsDate.Data(), aRebin);
     TFile *tSaveFile = new TFile(tSaveFileName, "RECREATE");
     assert(tSaveFile->IsOpen());
 

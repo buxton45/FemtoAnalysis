@@ -784,25 +784,19 @@ As such, we use a linear form to model the background in the \LamKs system.
 The background for each correlation function was fixed before use in the signal region by fitting a linear form to the region $0.6 < k^{*} < 0.9$ GeV/$c$.
 In all cases, the non-femtoscopic background correction was applied as a scale factor.
 
-
-\begin{figure}[h!]
+\begin{figure}[h]
   \centering
-  %%----start of first subfigure---  
-  \subfigure[\LamKchP]{
-    \label{fig:BgdswTHERM:a}
-    \includegraphics[width=0.30\textwidth]{/home/jesse/Analysis/FemtoAnalysis/AnalysisNotes/5_Fitting/Figures/BgdwFitOnly_RandomEPs_NumWeight1_PrimaryOnly_LamKchPwConj_0010_1030_3050.pdf}}
-  %%----start of second subfigure---
-  \subfigure[\LamKchM]{
-    \label{fig:BgdswTHERM:b}
-    \includegraphics[width=0.30\textwidth]{/home/jesse/Analysis/FemtoAnalysis/AnalysisNotes/5_Fitting/Figures/BgdwFitOnly_RandomEPs_NumWeight1_PrimaryOnly_LamKchMwConj_0010_1030_3050.pdf}}
-  %%----start of third subfigure---
-  \subfigure[\LamKs]{
-    \label{fig:BgdswTHERM:c}
-    \includegraphics[width=0.30\textwidth]{/home/jesse/Analysis/FemtoAnalysis/AnalysisNotes/5_Fitting/Figures/BgdwFitOnly_RandomEPs_NumWeight1_PrimaryOnly_LamK0wConj_0010_1030_3050.pdf}}    
-  %%----overall caption----
-  \caption[Backgrounds with THERMINATOR]{THERMINATOR 2 simulation (gold) together with experimental data (red, blue, or black).  The left column shows results for \LamKchP (\ref{fig:BgdswTHERM:a}), middle for \LamKchM (\ref{fig:BgdswTHERM:b}), and right for \LamKs (\ref{fig:BgdswTHERM:c}).  A 6$^{th}$-order polynomial fit to the simulation is shown as a solid gold line, and whose fit parameters are printed on the lower left of each plot.  This polynomial is scaled to match the experimental data; the value of this scale is printed in the lower left corner of each plot.  The polynomial fit with scale factor applied is drawn in a color matching the experimental data (red, blue, black).}
+  \includegraphics[width=\textwidth]{/home/jesse/Analysis/FemtoAnalysis/AnalysisNotes/5_Fitting/5.5_NonFlatBackground/Figures/BgdwFitOnly_RandomEPs_NumWeight1_PrimaryOnly_AllAnwConj_1030_3050.pdf}
+  \caption[Backgrounds with THERMINATOR 2]
+  {
+  THERMINATOR 2 simulation (gold) together with experimental data (red, blue, or black).  
+  Results are shown for \LamKchP (left), \LamKchM (middle), and \LamKs (right).
+  A 6$^{th}$-order polynomial fit to the simulation is shown as a solid gold line.  
+  This polynomial is scaled to match the experimental data.  
+  The polynomial fit with scale factor applied is drawn in a color matching the experimental data (red, blue, black).
+  }
   \label{fig:BgdswTHERM}
-\end{figure}
+\end{figure} 
 
 
 An alternative approach to treating the non-femtoscopic background is to instead attempt to eliminate it.
@@ -950,21 +944,23 @@ The fits were corrected for finite momentum resolution effects, non-femtoscopic 
 In Fig. \ref{fig:LamKFits_3Res}, lines represent statistical errors, while boxes represent systematic errors.  The black solid curve shows the primary (\LamK) contribution to the fit, the green curve shows the fit to the non-femtoscopic background, and the purple curve shows the final fit after all corrections have been applied.
 The extracted fit values with uncertainties are printed as (fit value) $\pm$ (statistical uncertainty) $\pm$ (systematic uncertainty).
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{comment}
 \begin{figure}[htp]
   \centering
   %%----start of first subfigure---
   \subfigure[\LamKchPALamKchM]{
     \label{fig:LamKFits_3Res:a}
-    \includegraphics[width=0.49\linewidth]{\ResultsDirBaseLamKch\SaveNameModLamKch/canKStarCfwFitsLamKchPwConj_0010_1030_3050\SaveNameModLamKch.pdf}}
+    \includegraphics[width=0.49\linewidth]{\ResultsDirBaseLamKch\SaveNameModLamKch/canKStarCfwFitsLamKchPwConj_0010_1030_3050_LabelLines\SaveNameModLamKch.pdf}}
   %%----start of second subfigure---  
   \subfigure[\LamKchMALamKchP]{
     \label{fig:LamKFits_3Res:b}
-    \includegraphics[width=0.49\linewidth]{\ResultsDirBaseLamKch\SaveNameModLamKch/canKStarCfwFitsLamKchMwConj_0010_1030_3050\SaveNameModLamKch.pdf}}
+    \includegraphics[width=0.49\linewidth]{\ResultsDirBaseLamKch\SaveNameModLamKch/canKStarCfwFitsLamKchMwConj_0010_1030_3050_LabelLines\SaveNameModLamKch.pdf}}
   \\  
   %%----start of third subfigure---  
   \subfigure[\LamKsALamKs]{
     \label{fig:LamKFits_3Res:c}
-    \includegraphics[width=0.49\linewidth]{\ResultsDirBaseLamKs\SaveNameModLamKs/canKStarCfwFitsLamK0wConj_0010_1030_3050\SaveNameModLamKs.pdf}}    
+    \includegraphics[width=0.49\linewidth]{\ResultsDirBaseLamKs\SaveNameModLamKs/canKStarCfwFitsLamK0wConj_0010_1030_3050_LabelLines\SaveNameModLamKs.pdf}}    
   %%----overall caption----
   \caption{Fits, with 3 residual correlations included, for all \LamK analyses across all studied centralities (0-10\%, 10-30\%, and 30-50\%).
  The lines represent the statistical errors, while the boxes represent the systematic errors.
@@ -974,11 +970,63 @@ The extracted fit values with uncertainties are printed as (fit value) $\pm$ (st
  The extracted fit values with uncertainties are printed.}  
   \label{fig:LamKFits_3Res}
 \end{figure}
+\end{comment}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{figure}[h]
   \centering
-  \includegraphics[width=\textwidth]{./Comp3An_Triple.pdf}
-  \caption[Extracted Scattering Parameters]{Extracted scattering parameters for all of our $\Lambda$K systems.  [Left]: $\Im f_{0}$ vs. $\Re f_{0}$, together with $d_{0}$ to the right.  [Right]: $\lambda$ vs. Radius for the studied centrality bins (0-10\%, 10-30\%, 30-50\%).  The green \cite{Liu:2006xja} and yellow \cite{Mai:2009ce} points show theoretical predictions made using chiral perturbation theory.}
+  \includegraphics[width=\textwidth]{\ResultsDirBaseLamKch\SaveNameModLamKch/canKStarCfwFitsLamKchPwConj_0010_1030_3050_LabelLines\SaveNameModLamKch.pdf}
+  \caption[\LamKchPALamKchM data with fits]
+  {
+  Fit results, with 3 residual correlations included, for the \LamKchP and \ALamKchM data.
+  The \LamKchP data is shown in the left column, the \ALamKchM in the right, and the rows differentiate the different centrality bins (0-10\% in the top, 10-30\% in the middle, and 30-50\% in the bottom).
+  See text for further details.
+  }
+  \label{fig:LamKchPwConjFits_3Res}
+\end{figure}
+
+
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\linewidth]{\ResultsDirBaseLamKch\SaveNameModLamKch/canKStarCfwFitsLamKchMwConj_0010_1030_3050_LabelLines\SaveNameModLamKch.pdf}
+  \caption[\LamKchMALamKchP data with fits]
+  {
+  Fit results, with 3 residual correlations included, for the \LamKchM and \ALamKchP data.
+  The \LamKchM data is shown in the left column, the \ALamKchP in the right, and the rows differentiate the different centrality bins (0-10\% in the top, 10-30\% in the middle, and 30-50\% in the bottom).
+ See text for further details.
+ }
+  \label{fig:LamKchMwConjFits_3Res}
+\end{figure}
+
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\linewidth]{\ResultsDirBaseLamKs\SaveNameModLamKs/canKStarCfwFitsLamK0wConj_0010_1030_3050_LabelLines\SaveNameModLamKs.pdf}
+  \caption[\LamALamKs data with fits]
+  {
+  Fit results, with 3 residual correlations included, for the \LamKs and \ALamKs data.
+  The \LamKs data is shown in the left column, the \ALamKs in the right, and the rows differentiate the different centrality bins (0-10\% in the top, 10-30\% in the middle, and 30-50\% in the bottom).
+ See text for further details.
+ }
+  \label{fig:LamK0wConjFits_3Res}
+\end{figure}
+
+
+
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=\textwidth]{\ResultsDirBaseLamKch\SaveNameModLamKch/Comparisons/FinalResults_Comp3An.pdf}
+  \caption[Extracted Scattering Parameters]
+  {
+  Extracted fit parameters for the case of 3 residual contributors for all of our \LamK systems.  
+  [Left]: $\Im f_{0}$ vs. $\Re f_{0}$, together with $d_{0}$ to the right.  
+  [Right]: $\lambda$ vs. Radius for the 0-10\% (blue), 10-30\% (green), and 30-50\% (red) centrality bins.  
+  In the fit, all \LamK systems share common radii.
+  The color scheme used in the panel are to be consistent with those in Fig. \ref{fig:mTScalingOfRadii_3Res}.
+  The cyan ([A] = Ref. \cite{Liu:2006xja}) and magenta ([B] = Ref. \cite{Mai:2009ce}) points show theoretical predictions made using chiral perturbation theory.
+  }
   \label{fig:ScattParams_3Res}
 \end{figure}
 

@@ -299,6 +299,63 @@ void FitGeneratorAndDraw::AddTextCorrectionInfo(CanvasPartition *aCanPart, int a
 }
 
 //________________________________________________________________________________________________________________
+void FitGeneratorAndDraw::AddColoredLinesLabels(CanvasPartition *aCanPart, int aNx, int aNy, bool aZoomROP)
+{
+  aCanPart->GetPad(aNx, aNy)->cd();
+
+  int tColorCorrectFit = kMagenta+1;
+  int tColorNonFlatBgd = kGreen+2;
+
+  TLatex* tTex = new TLatex();
+  tTex->SetTextAlign(12);
+  tTex->SetLineWidth(2);
+  tTex->SetTextFont(42);
+  tTex->SetTextSize(0.125);
+
+  double tYText1 = 0.97;
+  double tXText1 = 0.15;
+
+  double tYText2 = 0.93;
+  double tXText2 = 0.15;
+
+  double tYText3 = 0.89;
+  double tXText3 = 0.15;
+
+  double tLineWidth = 0.025;
+  double tSpaceBetween = 0.015;
+
+  if(!aZoomROP)
+  {
+    tXText1 = 0.50;
+    tXText2 = 0.50;
+    tXText3 = 0.50;
+
+    tLineWidth = 0.075;
+    tSpaceBetween = 0.045;
+  }
+
+  TLine* tLine;
+
+  tTex->DrawLatex(tXText1, tYText1, "Primary #LambdaK");
+  tLine = new TLine(tXText1-tSpaceBetween-tLineWidth, tYText1, tXText1-tSpaceBetween, tYText1);
+  tLine->SetLineColor(kBlack);
+  tLine->SetLineWidth(2);
+  tLine->Draw();
+  
+  tTex->DrawLatex(tXText2, tYText2, "Non-femto. bgd.");
+  tLine = new TLine(tXText2-tSpaceBetween-tLineWidth, tYText2, tXText2-tSpaceBetween, tYText2);
+  tLine->SetLineColor(tColorNonFlatBgd);
+  tLine->SetLineWidth(2);
+  tLine->Draw();
+
+  tTex->DrawLatex(tXText3, tYText3, "Full fit");
+  tLine = new TLine(tXText3-tSpaceBetween-tLineWidth, tYText3, tXText3-tSpaceBetween, tYText3);
+  tLine->SetLineColor(tColorCorrectFit);
+  tLine->SetLineWidth(2);
+  tLine->Draw();
+}
+
+//________________________________________________________________________________________________________________
 void FitGeneratorAndDraw::DrawSingleKStarCf(TPad* aPad, int aPairAnNumber, double aYmin, double aYmax, double aXmin, double aXmax, int aMarkerColor, TString aOption, int aMarkerStyle)
 {
   aPad->cd();
@@ -754,7 +811,7 @@ void FitGeneratorAndDraw::BuildKStarCfswFitsPanel(CanvasPartition* aCanPart, int
 
 
 //________________________________________________________________________________________________________________
-CanvasPartition* FitGeneratorAndDraw::BuildKStarCfswFitsCanvasPartition(TString aCanvasBaseName, bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, NonFlatBgdFitType aNonFlatBgdFitType, bool aDrawSysErrors, bool aZoomROP, bool aSuppressFitInfoOutput)
+CanvasPartition* FitGeneratorAndDraw::BuildKStarCfswFitsCanvasPartition(TString aCanvasBaseName, bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, NonFlatBgdFitType aNonFlatBgdFitType, bool aDrawSysErrors, bool aZoomROP, bool aSuppressFitInfoOutput, bool aLabelLines)
 {
   TString tCanvasName = aCanvasBaseName;
   if(fGeneratorType==kPairwConj) tCanvasName += TString(cAnalysisBaseTags[fPairType]) + TString("wConj");
@@ -764,6 +821,7 @@ CanvasPartition* FitGeneratorAndDraw::BuildKStarCfswFitsCanvasPartition(TString 
 
   for(unsigned int i=0; i<fCentralityTypes.size(); i++) tCanvasName += TString(cCentralityTags[fCentralityTypes[i]]);
   if(!aZoomROP) tCanvasName += TString("UnZoomed");
+  if(aLabelLines) tCanvasName += TString("_LabelLines");
 
   int tNx=0, tNy=0;
   if(fNAnalyses == 6) {tNx=2; tNy=3;}
@@ -816,7 +874,7 @@ CanvasPartition* FitGeneratorAndDraw::BuildKStarCfswFitsCanvasPartition(TString 
       {
         TString tTextAlicePrelim = TString("ALICE Preliminary");
         //TPaveText* tAlicePrelim = tCanPart->SetupTPaveText(tTextAlicePrelim,i,j,0.30,0.85,0.40,0.10,43,15);
-        TPaveText* tAlicePrelim = tCanPart->SetupTPaveText(tTextAlicePrelim,i,j,0.175,0.825,0.40,0.10,43,15);
+        TPaveText* tAlicePrelim = tCanPart->SetupTPaveText(tTextAlicePrelim,i,j,0.075,0.825,0.40,0.10,43,15);
         tCanPart->AddPadPaveText(tAlicePrelim,i,j);
       }
 
@@ -841,6 +899,7 @@ CanvasPartition* FitGeneratorAndDraw::BuildKStarCfswFitsCanvasPartition(TString 
       bool bDrawAll = false;
       if(i==0 && j==0) bDrawAll = true;
       if(!aSuppressFitInfoOutput) CreateParamFinalValuesText(tAnType, tCanPart,i,j,(TF1*)fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetPrimaryFit(),tSysErrors,0.73,0.09,0.25,0.53,43,12.0,bDrawAll);
+
 /*
       bool bDrawText1 = true;
       bool bDrawText2 = false;
@@ -856,14 +915,20 @@ CanvasPartition* FitGeneratorAndDraw::BuildKStarCfswFitsCanvasPartition(TString 
   tCanPart->DrawXaxisTitle("#it{k}* (GeV/#it{c})");
   tCanPart->DrawYaxisTitle("#it{C}(#it{k}*)",43,25,0.05,0.85);
 
+  if(aLabelLines)
+  {
+    assert(aSuppressFitInfoOutput);  //Not enough room for everyone!
+    AddColoredLinesLabels(tCanPart, 0, 0, aZoomROP);
+  }
+
   return tCanPart;
 }
 
 //________________________________________________________________________________________________________________
-TCanvas* FitGeneratorAndDraw::DrawKStarCfswFits(bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, NonFlatBgdFitType aNonFlatBgdFitType, bool aSaveImage, bool aDrawSysErrors, bool aZoomROP)
+TCanvas* FitGeneratorAndDraw::DrawKStarCfswFits(bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, NonFlatBgdFitType aNonFlatBgdFitType, bool aSaveImage, bool aDrawSysErrors, bool aZoomROP, bool aSuppressFitInfoOutput, bool aLabelLines)
 {
   TString tCanvasBaseName = "canKStarCfwFits";
-  CanvasPartition* tCanPart = BuildKStarCfswFitsCanvasPartition(tCanvasBaseName, aMomResCorrectFit, aNonFlatBgdCorrectFit, aNonFlatBgdFitType, aDrawSysErrors, aZoomROP);
+  CanvasPartition* tCanPart = BuildKStarCfswFitsCanvasPartition(tCanvasBaseName, aMomResCorrectFit, aNonFlatBgdCorrectFit, aNonFlatBgdFitType, aDrawSysErrors, aZoomROP, aSuppressFitInfoOutput, aLabelLines);
 
   if(aSaveImage)
   {

@@ -114,6 +114,10 @@ int main(int argc, char **argv)
 
   bool bDrawSysErrs = false;
 
+  bool tSuppressFitInfoOutput=false;
+  bool tLabelLines=false;
+  if(tLabelLines) tSuppressFitInfoOutput=true;
+
 //-----------------------------------------------------------------------------
   if(tShareLambdaParams==false && tDualieShareLambda==true)
   {
@@ -258,8 +262,8 @@ int main(int argc, char **argv)
     if(bWriteToMasterFitValuesFile) tDualie->WriteToMasterFitValuesFile(tLocationMasterFitResults, tResultsDate);
 
 //    TObjArray* tKStarwFitsCan = tDualie->DrawKStarCfswFits(ApplyMomResCorrection,ApplyNonFlatBackgroundCorrection,tNonFlatBgdFitType,SaveImages,bDrawSysErrs,bZoomROP);
-    TObjArray* tKStarwFitsCan_Zoom = tDualie->DrawKStarCfswFits(ApplyMomResCorrection,ApplyNonFlatBackgroundCorrection,tNonFlatBgdFitType,SaveImages,bDrawSysErrs,true);
-    TObjArray* tKStarwFitsCan_UnZoom = tDualie->DrawKStarCfswFits(ApplyMomResCorrection,ApplyNonFlatBackgroundCorrection,tNonFlatBgdFitType,SaveImages,bDrawSysErrs,false);
+    TObjArray* tKStarwFitsCan_Zoom = tDualie->DrawKStarCfswFits(ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, tNonFlatBgdFitType, SaveImages, bDrawSysErrs, true, tSuppressFitInfoOutput, tLabelLines);
+    TObjArray* tKStarwFitsCan_UnZoom = tDualie->DrawKStarCfswFits(ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, tNonFlatBgdFitType, SaveImages, bDrawSysErrs, false, tSuppressFitInfoOutput, tLabelLines);
 
     if(bDrawPartAn)
     {

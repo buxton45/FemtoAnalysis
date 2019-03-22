@@ -112,6 +112,10 @@ int main(int argc, char **argv)
 
   bool bDrawSysErrs = false;
 
+  bool tSuppressFitInfoOutput=false;
+  bool tLabelLines=false;
+  if(tLabelLines) tSuppressFitInfoOutput=true;
+
 //-----------------------------------------------------------------------------
   if(tShareLambdaParams==false && tTripleShareLambda==true)
   {
@@ -244,8 +248,8 @@ int main(int argc, char **argv)
     if(bWriteToMasterFitValuesFile) tTriple->WriteToMasterFitValuesFile(tLocationMasterFitResults_LamKch, tLocationMasterFitResults_LamK0, tResultsDate);
 
 //    TObjArray* tKStarwFitsCan = tTriple->DrawKStarCfswFits(ApplyMomResCorrection,ApplyNonFlatBackgroundCorrection,tNonFlatBgdFitTypes,SaveImages,bDrawSysErrs,bZoomROP);
-    TObjArray* tKStarwFitsCan_Zoom = tTriple->DrawKStarCfswFits(ApplyMomResCorrection,ApplyNonFlatBackgroundCorrection,tNonFlatBgdFitTypes,SaveImages,bDrawSysErrs,true);
-    TObjArray* tKStarwFitsCan_UnZoom = tTriple->DrawKStarCfswFits(ApplyMomResCorrection,ApplyNonFlatBackgroundCorrection,tNonFlatBgdFitTypes,SaveImages,bDrawSysErrs,false);
+    TObjArray* tKStarwFitsCan_Zoom = tTriple->DrawKStarCfswFits(ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, tNonFlatBgdFitTypes, SaveImages, bDrawSysErrs, true, tSuppressFitInfoOutput, tLabelLines);
+    TObjArray* tKStarwFitsCan_UnZoom = tTriple->DrawKStarCfswFits(ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, tNonFlatBgdFitTypes, SaveImages, bDrawSysErrs, false, tSuppressFitInfoOutput, tLabelLines);
 
     if(bDrawPartAn)
     {

@@ -296,12 +296,12 @@ TObjArray* TripleFitGenerator::DrawKStarCfswFits_PartAn(BFieldType aBFieldType, 
 }
 
 //________________________________________________________________________________________________________________
-TObjArray* TripleFitGenerator::DrawKStarCfswFits(bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, vector<NonFlatBgdFitType> &aNonFlatBgdFitTypes, bool aSaveImage, bool aDrawSysErrors, bool aZoomROP)
+TObjArray* TripleFitGenerator::DrawKStarCfswFits(bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, vector<NonFlatBgdFitType> &aNonFlatBgdFitTypes, bool aSaveImage, bool aDrawSysErrors, bool aZoomROP, bool aSuppressFitInfoOutput, bool aLabelLines)
 {
   TObjArray* tReturnArray = new TObjArray();
-  tReturnArray->Add((TCanvas*)fFitGen1->DrawKStarCfswFits(aMomResCorrectFit, aNonFlatBgdCorrectFit, aNonFlatBgdFitTypes[kLamKchP], aSaveImage, aDrawSysErrors, aZoomROP));
-  tReturnArray->Add((TCanvas*)fFitGen2->DrawKStarCfswFits(aMomResCorrectFit, aNonFlatBgdCorrectFit, aNonFlatBgdFitTypes[kLamKchM], aSaveImage, aDrawSysErrors, aZoomROP));
-  tReturnArray->Add((TCanvas*)fFitGen3->DrawKStarCfswFits(aMomResCorrectFit, aNonFlatBgdCorrectFit, aNonFlatBgdFitTypes[kLamK0], aSaveImage, aDrawSysErrors, aZoomROP));
+  tReturnArray->Add((TCanvas*)fFitGen1->DrawKStarCfswFits(aMomResCorrectFit, aNonFlatBgdCorrectFit, aNonFlatBgdFitTypes[kLamKchP], aSaveImage, aDrawSysErrors, aZoomROP, aSuppressFitInfoOutput, aLabelLines));
+  tReturnArray->Add((TCanvas*)fFitGen2->DrawKStarCfswFits(aMomResCorrectFit, aNonFlatBgdCorrectFit, aNonFlatBgdFitTypes[kLamKchM], aSaveImage, aDrawSysErrors, aZoomROP, aSuppressFitInfoOutput, aLabelLines));
+  tReturnArray->Add((TCanvas*)fFitGen3->DrawKStarCfswFits(aMomResCorrectFit, aNonFlatBgdCorrectFit, aNonFlatBgdFitTypes[kLamK0], aSaveImage, aDrawSysErrors, aZoomROP, aSuppressFitInfoOutput, aLabelLines));
   return tReturnArray;
 }
 

@@ -283,12 +283,12 @@ int main(int argc, char **argv)
   tCanPart->DrawAll();
   if(!bStretchCanvas)
   {
-    tCanPart->DrawXaxisTitle("#it{k}* (GeV/#it{c})", 43, 30, 0.315, 0.03);
+    tCanPart->DrawXaxisTitle("#it{k}* (GeV/#it{c})", 43, 30);
     tCanPart->DrawYaxisTitle("#it{C}(#it{k}*)",43, 30, 0.05, 0.85);
   }
   else
   {
-    tCanPart->DrawXaxisTitle("#it{k}* (GeV/#it{c})", 43, 50, 0.315, 0.03);
+    tCanPart->DrawXaxisTitle("#it{k}* (GeV/#it{c})", 43, 50);
     tCanPart->DrawYaxisTitle("#it{C}(#it{k}*)",43, 50, 0.05, 0.75);
   }
   //-------------------------------------------------------------

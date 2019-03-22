@@ -37,6 +37,7 @@ CanvasPartition::CanvasPartition(TString aCanvasName, int aNx, int aNy, double a
   fGraphsDrawOptions(aNx*aNy),
   fPadPaveTexts(0),
   fPadLegends(0),
+  fPadLatexs(0),
 
   fPadArray(0),
 
@@ -56,6 +57,8 @@ CanvasPartition::CanvasPartition(TString aCanvasName, int aNx, int aNy, double a
     fPadPaveTexts->SetName("PaveTextsCollection");
   fPadLegends = new TObjArray();
     fPadLegends->SetName("LegendsCollection");
+  fPadLatexs = new TObjArray();
+    fPadLatexs->SetName("PaveLatexsCollection");
 
   for(int i=0; i<aNx*aNy; i++)
   {
@@ -70,6 +73,10 @@ CanvasPartition::CanvasPartition(TString aCanvasName, int aNx, int aNy, double a
     TObjArray* tTemp3 = new TObjArray();
     tTemp3->SetName(TString::Format("Legend_%d",i));
     fPadLegends->Add(tTemp3);
+
+    TObjArray* tTemp4 = new TObjArray();
+    tTemp4->SetName(TString::Format("PaveLatexs_%d",i));
+    fPadLatexs->Add(tTemp2);
   }
 
 }
@@ -307,6 +314,13 @@ void CanvasPartition::AddPadPaveText(TPaveText* aText, int aNx, int aNy)
 }
 
 //________________________________________________________________________________________________________________
+void CanvasPartition::AddPadPaveLatex(TLatex* aText, int aNx, int aNy)
+{
+  int tPosition = aNx + aNy*fNx;
+  ((TObjArray*)fPadLatexs->At(tPosition))->Add(aText);
+}
+
+//________________________________________________________________________________________________________________
 void CanvasPartition::SetupTLegend(TString aHeader, int aNx, int aNy, double aTextXmin, double aTextYmin, double aTextWidth, double aTextHeight, int aNColumns)
 {
   float tLeftMargin = fPadArray[aNx][aNy]->GetLeftMargin();
@@ -394,6 +408,9 @@ void CanvasPartition::DrawInPad(int aNx, int aNy)
   TObjArray* tLegends = (TObjArray*)fPadLegends->At(tPosition);
   for(int i=0; i<tLegends->GetEntries(); i++) tLegends->At(i)->Draw();
 
+  TObjArray* tPaveLatexs = (TObjArray*)fPadLatexs->At(tPosition);
+  for(int i=0; i<tPaveLatexs->GetEntries(); i++) tPaveLatexs->At(i)->Draw();
+
   if(fDrawUnityLine)
   {
     double tXaxisRangeLow;
@@ -422,6 +439,19 @@ void CanvasPartition::DrawAll()
 
 
 //________________________________________________________________________________________________________________
+void CanvasPartition::DrawXaxisTitle(TString aTitle, int aTextFont, int aTextSize, double aYLow)
+{
+  fCanvas->cd(0);
+
+  TLatex *tXax = new TLatex(0.315,aYLow,aTitle);
+  tXax->SetTextFont(aTextFont);
+  tXax->SetTextSize(aTextSize);
+  tXax->SetTextAlign(10);
+//  tXax->Draw();
+  tXax->DrawLatex(0.9-tXax->GetXsize(),aYLow,aTitle);
+}
+
+//________________________________________________________________________________________________________________
 void CanvasPartition::DrawXaxisTitle(TString aTitle, int aTextFont, int aTextSize, double aXLow, double aYLow)
 {
   fCanvas->cd(0);
@@ -431,7 +461,7 @@ void CanvasPartition::DrawXaxisTitle(TString aTitle, int aTextFont, int aTextSiz
   tXax->SetTextSize(aTextSize);
   tXax->SetTextAlign(10);
 //  tXax->Draw();
-  tXax->DrawLatex(0.9-tXax->GetXsize(),aYLow,aTitle);
+  tXax->DrawLatex(aXLow,aYLow,aTitle);
 }
 
 //________________________________________________________________________________________________________________

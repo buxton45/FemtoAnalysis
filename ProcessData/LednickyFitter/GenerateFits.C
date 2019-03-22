@@ -84,6 +84,10 @@ int main(int argc, char **argv)
 
   bool bDrawSysErrs = false;
 
+  bool tSuppressFitInfoOutput=false;
+  bool tLabelLines=false;
+  if(tLabelLines) tSuppressFitInfoOutput=true;
+
 //-----------------------------------------------------------------------------
 
   if(tAnType==kLamK0)
@@ -227,8 +231,8 @@ int main(int argc, char **argv)
     if(bWriteToMasterFitValuesFile) tLamKchP->WriteToMasterFitValuesFile(tLocationMasterFitResults, tResultsDate);
 
 //    TCanvas* tKStarwFitsCan = tLamKchP->DrawKStarCfswFits(ApplyMomResCorrection,ApplyNonFlatBackgroundCorrection,tNonFlatBgdFitType,SaveImages,bDrawSysErrs,bZoomROP);
-    TCanvas* tKStarwFitsCan_Zoom = tLamKchP->DrawKStarCfswFits(ApplyMomResCorrection,ApplyNonFlatBackgroundCorrection,tNonFlatBgdFitType,SaveImages,bDrawSysErrs,true);
-    TCanvas* tKStarwFitsCan_UnZoom = tLamKchP->DrawKStarCfswFits(ApplyMomResCorrection,ApplyNonFlatBackgroundCorrection,tNonFlatBgdFitType,SaveImages,bDrawSysErrs,false);
+    TCanvas* tKStarwFitsCan_Zoom = tLamKchP->DrawKStarCfswFits(ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, tNonFlatBgdFitType, SaveImages, bDrawSysErrs, true, tSuppressFitInfoOutput, tLabelLines);
+    TCanvas* tKStarwFitsCan_UnZoom = tLamKchP->DrawKStarCfswFits(ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, tNonFlatBgdFitType, SaveImages, bDrawSysErrs, false, tSuppressFitInfoOutput, tLabelLines);
 
     if(bDrawPartAn)
     {

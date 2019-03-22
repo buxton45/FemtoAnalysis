@@ -264,7 +264,7 @@ int main(int argc, char **argv)
     tCanPart->SetDrawUnityLine(true);
     tCanPart->DrawAll();
 
-    tCanPart->DrawXaxisTitle("#it{k}* (GeV/#it{c})", 43, 50, 0.315, 0.03);
+    tCanPart->DrawXaxisTitle("#it{k}* (GeV/#it{c})", 43, 50);
     tCanPart->DrawYaxisTitle("#it{C}(#it{k}*)",43, 50, 0.05, 0.75);
 
     if(bSaveImage)
