@@ -1,4 +1,4 @@
-\documentclass[../AnalysisNoteJBuxton.tex]{subfiles}
+\documentclass[/home/jesse/Analysis/FemtoAnalysis/AnalysisNotes/AnalysisNoteJBuxton.tex]{subfiles}
 \begin{document}
 
 \subsection{Coulomb Fitter}
@@ -66,6 +66,6 @@ In summary, for a given k$^{*}$ bin, we must draw $N_{pairs} \sim 10^{4}$ pairs,
 
 After all pairs for a given \kstar bin are simulated and wave-functions obtained, the results are averaged to give the fit result.
 
-Construction of the wave-functions, Equation \ref{eqn:CoulombWaveFcn}, involves a number of complex functions not included in standard C++ or ROOT libraries (namely, $h(\eta$), $\tilde{G}(\rho,\eta)$), and $F(-i\eta,1,i\xi)$.  These functions were even difficult to find and implement from elsewhere.  Our solution was to embed a Mathematica kernel into our C++ code to evaluate these functions.  However, having Mathematica work on-the-fly with the fitter was far too time consuming (fitter would have taken days, maybe weeks to finish).  Our solution was to use Mathematica to create matrices representing these functions for different parameter values.  During fitting, these matrices were then interpolated and the results used to build the wave-functions.  This method decreased the running time dramatically, and we are not able to generate results in under $\sim$ 1 hour. This process will be explained in more detail in future versions of the note.
+Construction of the wave-functions, Equation \ref{eqn:CoulombWaveFcn}, involves a number of complex functions not included in standard C++ or ROOT libraries (namely, $h(\eta$), $\tilde{G}(\rho,\eta)$), and $F(-i\eta,1,i\xi)$.  These functions were even difficult to find and implement from elsewhere.  Our solution was to embed a Mathematica kernel into our C++ code to evaluate these functions.  However, having Mathematica work on-the-fly with the fitter was far too time consuming (fitter would have taken days, maybe weeks to finish).  Our solution was to use Mathematica to create matrices representing these functions for different parameter values.  During fitting, these matrices were then interpolated and the results used to build the wave-functions.  This method decreased the running time dramatically, and we are now able to generate results in under $\sim$ 1 hour. This process will be explained in more detail in future versions of the note.
 
 \end{document}

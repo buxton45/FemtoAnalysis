@@ -153,6 +153,7 @@ int main(int argc, char **argv)
   bool bMakeOthersTransparent = true;
   bool bOutlinePoints = true;
   bool bDrawSysErrs = true;
+  bool bStripResStamp = false;
 
 
   IncludeResidualsType tIncResType = kInclude3Residuals;
@@ -227,6 +228,7 @@ int main(int argc, char **argv)
   if(bDrawJaiAndHans) tSaveName += TString("_wJaiAndHans");
 
   tSaveName += tCanNameMod;
+  if(bStripResStamp) tSaveName += TString("_NoResStamp");
   tSaveName += TString::Format(".%s", tSaveFileType.Data());
   
   Int_t red = kRed;
@@ -545,7 +547,7 @@ cout << endl << endl;
   tMarker->SetMarkerStyle(20);
   tMarker->SetMarkerColor(kBlack);
 
-  tTex->DrawLatex(0.35, 2., tLegInfo);
+  if(!bStripResStamp) tTex->DrawLatex(0.35, 2., tLegInfo);
 //  tMarker->SetMarkerStyle(tDrawingInfo.markerStyle);
 //  tMarker->DrawMarker(0.3, 2.);
 

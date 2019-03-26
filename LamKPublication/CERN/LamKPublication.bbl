@@ -9,29 +9,6 @@ M.~A. Lisa, S.~Pratt, R.~Soltz, and U.~Wiedemann, ``{Femtoscopy in relativistic
   [nucl-ex]}}.
 %%CITATION = NUCL-EX/0505014;%%.
 
-\bibitem{Adam:2015vja}
-{\bfseries ALICE} Collaboration, J.~Adam {\em et~al.}, ``{One-dimensional pion,
-  kaon, and proton femtoscopy in Pb-Pb collisions at $\sqrt{s_{\rm {NN}}}$
-  =2.76 TeV},'' \href{http://dx.doi.org/10.1103/PhysRevC.92.054908}{{\em Phys.
-  Rev.} {\bfseries C92} no.~5, (2015) 054908},
-\href{http://arxiv.org/abs/1506.07884}{{\ttfamily arXiv:1506.07884 [nucl-ex]}}.
-%%CITATION = ARXIV:1506.07884;%%.
-
-\bibitem{Akkelin:1995gh}
-S.~V. Akkelin and {\relax Yu}.~M. Sinyukov, ``{The HBT interferometry of
-  expanding sources},''
-\href{http://dx.doi.org/10.1016/0370-2693(95)00765-D}{{\em Phys. Lett.}
-  {\bfseries B356} (1995) 525--530}.
-%%CITATION = PHLTA,B356,525;%%.
-
-\bibitem{Kisiel:2014upa}
-A.~Kisiel, M.~Gałażyn, and P.~Bożek, ``{Pion, kaon, and proton femtoscopy in
-  Pb--Pb collisions at $\sqrt{s_{\rm NN}}$=2.76 TeV modeled in (3+1)D
-  hydrodynamics},'' \href{http://dx.doi.org/10.1103/PhysRevC.90.064914}{{\em
-  Phys. Rev.} {\bfseries C90} no.~6, (2014) 064914},
-\href{http://arxiv.org/abs/1409.4571}{{\ttfamily arXiv:1409.4571 [nucl-th]}}.
-%%CITATION = ARXIV:1409.4571;%%.
-
 \bibitem{Lednicky:82}
 R.~Lednicky and V.~L. Lyuboshits, ``{Final State Interaction Effect on Pairing
   Correlations Between Particles with Small Relative Momenta},'' {\em Sov. J.
@@ -59,6 +36,12 @@ J.~{Alme} {\em et~al.}, ``{The ALICE TPC, a large 3-dimensional tracking device
   A} {\bfseries 622} (2010) 316--367},
   \href{http://arxiv.org/abs/1001.1950}{{\ttfamily arXiv:1001.1950
   [physics.ins-det]}}.
+
+\bibitem{0954-3899-41-8-087002}
+B.~A. et~al and T.~A. Collaboration, ``{Technical Design Report for the Upgrade
+  of the ALICE Inner Tracking System},'' {\em Journal of Physics G: Nuclear and
+  Particle Physics} {\bfseries 41} no.~8, (2014) 087002.
+  \url{http://stacks.iop.org/0954-3899/41/i=8/a=087002}.
 
 \bibitem{Abelev:2014ffa}
 {\bfseries ALICE} Collaboration, B.~B. Abelev {\em et~al.}, ``{Performance of
@@ -108,13 +91,20 @@ S.~Pratt, T.~Csorgo, and J.~Zimanyi, ``{Detailed predictions for two pion
   C42} (1990) 2646--2652}.
 %%CITATION = PHRVA,C42,2646;%%.
 
-\bibitem{Kisiel:2014mma}
-A.~Kisiel, H.~Zbroszczyk, and M.~Szymański, ``{Extracting baryon-antibaryon
-  strong interaction potentials from p$\bar{\Lambda}$ femtoscopic correlation
-  functions},'' \href{http://dx.doi.org/10.1103/PhysRevC.89.054916}{{\em Phys.
-  Rev.} {\bfseries C89} no.~5, (2014) 054916},
-\href{http://arxiv.org/abs/1403.0433}{{\ttfamily arXiv:1403.0433 [nucl-th]}}.
-%%CITATION = ARXIV:1403.0433;%%.
+\bibitem{Akkelin:1995gh}
+S.~V. Akkelin and {\relax Yu}.~M. Sinyukov, ``{The HBT interferometry of
+  expanding sources},''
+\href{http://dx.doi.org/10.1016/0370-2693(95)00765-D}{{\em Phys. Lett.}
+  {\bfseries B356} (1995) 525--530}.
+%%CITATION = PHLTA,B356,525;%%.
+
+\bibitem{Kopylov:1974th}
+G.~I. Kopylov, ``{Like particle correlations as a tool to study the multiple
+  production mechanism},''
+  \href{http://dx.doi.org/10.1016/0370-2693(74)90263-9}{{\em Phys. Lett.}
+  {\bfseries B50} (1974) 472--474}.
+[,39(1974)].
+%%CITATION = PHLTA,B50,472;%%.
 
 \bibitem{Chojnacki:2011hb}
 M.~Chojnacki, A.~Kisiel, W.~Florkowski, and W.~Broniowski, ``{THERMINATOR 2:
@@ -145,6 +135,31 @@ M.~Mai, P.~C. Bruns, B.~Kubis, and U.-G. Meissner, ``{Aspects of meson-baryon
   {\bfseries D80} (2009) 094006},
 \href{http://arxiv.org/abs/0905.2810}{{\ttfamily arXiv:0905.2810 [hep-ph]}}.
 %%CITATION = ARXIV:0905.2810;%%.
+
+\bibitem{Adam:2015vja}
+{\bfseries ALICE} Collaboration, J.~Adam {\em et~al.}, ``{One-dimensional pion,
+  kaon, and proton femtoscopy in Pb-Pb collisions at $\sqrt{s_{\rm {NN}}}$
+  =2.76 TeV},'' \href{http://dx.doi.org/10.1103/PhysRevC.92.054908}{{\em Phys.
+  Rev.} {\bfseries C92} no.~5, (2015) 054908},
+\href{http://arxiv.org/abs/1506.07884}{{\ttfamily arXiv:1506.07884 [nucl-ex]}}.
+%%CITATION = ARXIV:1506.07884;%%.
+
+\bibitem{Kisiel:2014upa}
+A.~Kisiel, M.~Gałażyn, and P.~Bożek, ``{Pion, kaon, and proton femtoscopy in
+  Pb--Pb collisions at $\sqrt{s_{\rm NN}}$=2.76 TeV modeled in (3+1)D
+  hydrodynamics},'' \href{http://dx.doi.org/10.1103/PhysRevC.90.064914}{{\em
+  Phys. Rev.} {\bfseries C90} no.~6, (2014) 064914},
+\href{http://arxiv.org/abs/1409.4571}{{\ttfamily arXiv:1409.4571 [nucl-th]}}.
+%%CITATION = ARXIV:1409.4571;%%.
+
+\bibitem{Retiere:2003kf}
+F.~Retiere and M.~A. Lisa, ``{Observable implications of geometrical and
+  dynamical aspects of freeze out in heavy ion collisions},''
+  \href{http://dx.doi.org/10.1103/PhysRevC.70.044907}{{\em Phys. Rev.}
+  {\bfseries C70} (2004) 044907},
+\href{http://arxiv.org/abs/nucl-th/0312024}{{\ttfamily arXiv:nucl-th/0312024
+  [nucl-th]}}.
+%%CITATION = NUCL-TH/0312024;%%.
 
 \bibitem{Stavinskiy04}
 A.~Stavinskiy {\em et~al.}, ``{Some new aspects of femtoscopy at high

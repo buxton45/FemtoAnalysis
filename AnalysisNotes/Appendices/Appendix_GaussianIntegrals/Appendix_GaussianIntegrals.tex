@@ -1,0 +1,263 @@
+\documentclass[/home/jesse/Analysis/FemtoAnalysis/AnalysisNotes/AnalysisNoteJBuxton.tex]{subfiles}
+\begin{document}
+
+\section{Useful Gaussian Integrals}
+\label{App:GaussInt}
+
+\subsection{Simple univariate Gaussian integral}
+
+\begin{equation}
+\begin{aligned}
+I &= \int_{-\infty}^{\infty}e^{-x^{2}/2\sigma^{2}}dx \\
+\rightarrow I^{2} &= \int_{-\infty}^{\infty}e^{-x^{2}/2\sigma^{2}}dx\int_{-\infty}^{\infty}e^{-y^{2}/2\sigma^{2}}dy = \int_{-\infty}^{\infty}\int_{-\infty}^{\infty}e^{-(x^{2}+y^{2})/2\sigma^{2}}dxdy \\
+&= \int_{0}^{\infty}\int_{0}^{2\pi}e^{-r^{2}/2\sigma^{2}}rdrd\theta = -2\pi\sigma^{2}\int_{0}^{\infty}e^{-r^{2}/2\sigma^{2}}\frac{-r}{\sigma^{2}}dr = 2\pi\sigma^{2} \\
+\Rightarrow I &= \sigma\sqrt{2\pi}
+\end{aligned}
+\label{eqn:Gauss1D}
+\end{equation}
+
+This also implies 
+\begin{equation}
+\begin{aligned}
+\int_{-\infty}^{\infty}e^{-(x-\mu)^{2}/2\sigma^{2}}dx = \sigma\sqrt{2\pi}
+\end{aligned}
+\end{equation}
+
+This can be shown by making the substitution $x \rightarrow x-\mu$; but, intuitively this makes sense, as the area under a Gaussian curve does not depend on where the curve is located.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{comment}
+While here, I might as well show that the integral of a Gaussian preceded by an positive integer value of $x$ may easily be solved by simply taking the differential with respect to $\sigma^{2}$ on both sides.  The derivation is more transparent if I make the substitution $\sigma^{-2} = a$, and differentiate with respect to $a$.  In which case, the above integral becomes
+
+\begin{equation}
+I = \int_{-\infty}^{\infty} e^{-\frac{1}{2}ax^{2}} = a^{-1/2}\sqrt{2\pi}
+\end{equation}
+
+Now, differentiating, I get
+\begin{equation}
+\begin{aligned}
+\frac{dI}{da} &= -\frac{1}{2}\int_{-\infty}^{\infty} x^{2}e^{-\frac{1}{2}ax^{2}} = \frac{d}{da} \left[ a^{-1/2}\sqrt{2\pi} \right] = -&\frac{1}{2}a^{-3/2}\sqrt{2\pi} \\
+&\Rightarrow \int_{-\infty}^{\infty} x^{2}e^{-\frac{1}{2}ax^{2}} = a^{-3/2}\sqrt{2\pi} \\
+\frac{d^{2}I}{da^{2}} &= -\frac{1}{2}\int_{-\infty}^{\infty} x^{4}e^{-\frac{1}{2}ax^{2}} = -\frac{3}{2}a^{-5/2}\sqrt{2\pi} \\
+&\Rightarrow \int_{-\infty}^{\infty} x^{4}e^{-\frac{1}{2}ax^{2}} = 3a^{-5/2}\sqrt{2\pi}
+\end{aligned}
+\end{equation}
+
+
+Now, the trend is obvious, and I may write
+\begin{equation}
+\begin{aligned}
+\int_{-\infty}^{\infty}x^{2n}e^{-\frac{1}{2}ax^{2}} = (2n-1)!!\sqrt{2\pi}a^{-(2n+1)/2}
+\end{aligned}
+\end{equation}
+
+which can be simplified by noting:
+\begin{equation}
+\begin{aligned}
+(2n-1)!!& = (2n-1)(2n-3)(2n-5)... \\
+(2n)! &= (2n)(2n-1)(2n-2)(2n-3)..1 \\
+n! &= n(n-1)(n-2)(n-3)... \\
+\Rightarrow 2^{n}n! &= (2n)(2n-2)(2n-4)(2n-6)... \\
+\Rightarrow (2n-1)!! &= \frac{2n!}{2^{n}n!}
+\end{aligned}
+\end{equation}
+
+Therefore, we arrive at our simplified result
+\begin{equation}
+\begin{aligned}
+\int_{-\infty}^{\infty}x^{2n}e^{-\frac{1}{2}ax^{2}} = \frac{2n!}{2^{n}n!}\sqrt{2\pi}a^{-(2n+1)/2}
+\end{aligned}
+\end{equation}
+
+Note that $\int_{-\infty}^{\infty}x^{2n-1}e^{-\frac{1}{2}ax^{2}} = 0$ because the integrand is odd.
+\end{comment}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\subsection{Product of two univariate Gaussian integrals}
+\label{app:ProdTwoGauss}
+
+\begin{equation}
+\begin{aligned}
+f(x) &= \frac{1}{\sigma_{f}\sqrt{2\pi}}\exp \left[ -\frac{(x-\mu_{f})^{2}}{2\sigma_{f}^{2}} \right] \\
+g(x) &= \frac{1}{\sigma_{g}\sqrt{2\pi}}\exp \left[ -\frac{(x-\mu_{g})^{2}}{2\sigma_{g}^{2}} \right] \\
+\Rightarrow f(x)g(x) &= \frac{1}{2\pi\sigma_{f}\sigma_{g}}\exp \left[ -\frac{(x-\mu_{f})^{2}}{2\sigma_{f}^{2}} -\frac{(x-\mu_{g})^{2}}{2\sigma_{g}^{2}} \right] \\
+&\equiv \frac{1}{2\pi\sigma_{f}\sigma_{g}}\exp[-\beta]
+\end{aligned}
+\label{eqn:ProdGauss1}
+\end{equation}
+
+\vspace{10mm}
+
+\begin{equation}
+\begin{aligned}
+\beta &= \frac{(x-\mu_{f})^{2}}{2\sigma_{f}^{2}} + \frac{(x-\mu_{g})^{2}}{2\sigma_{g}^{2}} \\
+&= \frac{2\sigma_{g}^{2}[x^{2} - 2\mu_{f}x + \mu_{f}^{2}] + 2\sigma_{f}^{2}[x^{2} - 2\mu_{g}x + \mu_{g}^{2}]}{4\sigma_{f}^{2}\sigma_{g}^{2}} \\
+&= \frac{(\sigma_{f}^{2} + \sigma_{g}^{2})x^{2} - 2(\mu_{f}\sigma_{g}^{2} + \mu_{g}\sigma_{f}^{2})x + \mu_{f}^{2}\sigma_{g}^{2} + \mu_{g}\sigma_{f}^{2}}{2\sigma_{f}^{2}\sigma_{g}^{2}} \\
+&= \frac{x^{2} - 2\frac{\mu_{f}\sigma_{g}^{2} + \mu_{g}\sigma_{f}^{2}}{\sigma_{f}^{2} + \sigma_{g}^{2}}x + \frac{\mu_{f}^{2}\sigma_{g}^{2} + \mu_{g}^{2}\sigma_{f}^{2}}{\sigma_{f}^{2} + \sigma_{g}^{2}}}{2\frac{\sigma_{f}^{2}\sigma_{g}^{2}}{\sigma_{f}^{2} + \sigma_{g}^{2}}} \\
+\mathrm{Define} : \alpha &\equiv \frac{\mu_{f}\sigma_{g}^{2} + \mu_{g}\sigma_{f}^{2}}{\sigma_{f}^{2} + \sigma_{g}^{2}} \\
+\Rightarrow \beta &= \frac{(x^{2} - 2\alpha x + \alpha^{2}) - \alpha^{2} + \frac{\mu_{f}^{2}\sigma_{g}^{2} + \mu_{g}^{2}\sigma_{f}^{2}}{\sigma_{f}^{2} + \sigma_{g}^{2}}}{2 \frac{\sigma_{f}^{2}\sigma_{g}^{2}}{\sigma_{f}^{2} + \sigma_{g}^{2}}}
+\end{aligned}
+\label{eqn:ProdGauss2}
+\end{equation}
+
+\vspace{10mm}
+
+
+\begin{equation}
+\begin{aligned}
+\frac{\mu_{f}^{2}\sigma_{g}^{2} + \mu_{g}^{2}\sigma_{f}^{2}}{\sigma_{f}^{2} + \sigma_{g}^{2}} - \alpha^{2} &= \frac{\mu_{f}^{2}\sigma_{g}^{2} + \mu_{g}^{2}\sigma_{f}^{2}}{\sigma_{f}^{2} + \sigma_{g}^{2}}  - \left( \frac{\mu_{f}\sigma_{g}^{2} + \mu_{g}\sigma_{f}^{2}}{\sigma_{f}^{2} + \sigma_{g}^{2}} \right)^{2} \\
+&= \frac{1}{(\sigma_{f}^{2} + \sigma_{g}^{2})^{2}} \left[ (\mu_{f}^{2}\sigma_{g}^{2} + \mu_{g}^{2}\sigma_{f}^{2})(\sigma_{f}^{2} + \sigma_{g}^{2}) - (\mu_{f}\sigma_{g}^{2} + \mu_{g}\sigma_{f}^{2})^{2} \right] \\
+&= \frac{1}{(\sigma_{f}^{2} + \sigma_{g}^{2})^{2}}\left[ \mu_{f}^{2}\sigma_{f}^{2}\sigma_{g}^{2} + \mu_{g}^{2}\sigma_{f}^{2}\sigma_{g}^{2} + \mu_{f}^{2}\sigma_{g}^{4} + \mu_{g}^{2}\sigma_{f}^{4} - ...\right. \\
+&~~~~~~~~~~~~~~~ - \left. \mu_{f}^{2}\sigma_{g}^{4} - \mu_{g}^{2}\sigma_{f}^{4} - 2\mu_{f}\mu_{g}\sigma_{f}^{2}\sigma_{g}^{2} \right] \\
+&= \frac{\sigma_{f}^{2}\sigma_{g}^{2}}{(\sigma_{f}^{2} + \sigma_{g}^{2})^{2}}\left[ \mu_{f}^{2} - 2\mu_{f}\mu_{g} + \mu_{g}^{2} \right] \\
+&= \frac{\sigma_{f}^{2}\sigma_{g}^{2}}{(\sigma_{f}^{2} + \sigma_{g}^{2})^{2}}(\mu_{f}-\mu_{g})^{2}
+\end{aligned}
+\label{eqn:ProdGauss3}
+\end{equation}
+
+\vspace{10mm}
+
+\begin{equation}
+\begin{aligned}
+\beta &= \frac{(x^{2} - 2\alpha x + \alpha^{2}) - \alpha^{2} + \frac{\mu_{f}^{2}\sigma_{g}^{2} + \mu_{g}^{2}\sigma_{f}^{2}}{\sigma_{f}^{2} + \sigma_{g}^{2}}}{2 \frac{\sigma_{f}^{2}\sigma_{g}^{2}}{\sigma_{f}^{2} + \sigma_{g}^{2}}} \\
+&= \frac{(x-\alpha)^{2} + \frac{\sigma_{f}^{2}\sigma_{g}^{2}}{(\sigma_{f}^{2} + \sigma_{g}^{2})^{2}}(\mu_{f}-\mu_{g})^{2}}{2\frac{\sigma_{f}^{2}\sigma_{g}^{2}}{\sigma_{f}^{2}+\sigma_{g}^{2}}} \\
+\mathrm{Define} : \gamma^{2} &= \frac{\sigma_{f}^{2}\sigma_{g}^{2}}{\sigma_{f}^{2}+\sigma_{g}^{2}} \\
+\beta &= \frac{(x-\alpha)^{2}}{2\gamma^{2}} + \frac{(\mu_{f}-\mu_{g})^{2}}{2(\sigma_{f}^{2}+\sigma_{g}^{2})}
+\end{aligned}
+\label{eqn:ProdGauss4}
+\end{equation}
+
+\vspace{10mm}
+
+\begin{equation}
+\begin{aligned}
+f(x)g(x) &= \frac{1}{2\pi\sigma_{f}\sigma_{g}}e^{-\beta} = \frac{1}{2\pi\sigma_{f}\sigma_{g}}\exp \left[ -\frac{(x-\alpha)^{2}}{2\gamma^{2}} \right] \exp \left[ \frac{(\mu_{f}-\mu_{g})^{2}}{2(\sigma_{f}^{2}+\sigma_{g}^{2})} \right] \\
+&= \frac{1}{\sigma_{f}\sigma_{g}}\gamma\sqrt{(\sigma_{f}^{2}+\sigma_{g}^{2})} \times \frac{1}{\gamma\sqrt{2\pi}}\exp \left[ -\frac{(x-\alpha)^{2}}{2\gamma^{2}} \right] \times ... \\
+&~~~\times \frac{1}{\sqrt{(\sigma_{f}^{2}+\sigma_{g}^{2})}\sqrt{2\pi}}\exp \left[ \frac{(\mu_{f}-\mu_{g})^{2}}{2(\sigma_{f}^{2}+\sigma_{g}^{2})} \right] \\
+\Rightarrow f(x)g(x) &= \frac{1}{\gamma\sqrt{2\pi}}\exp \left[ -\frac{(x-\alpha)^{2}}{2\gamma^{2}} \right]S_{fg} \\
+S_{fg} &= \frac{\gamma\sqrt{(\sigma_{f}^{2}+\sigma_{g}^{2})}}{\sigma_{f}\sigma_{g}} \frac{1}{\sqrt{(\sigma_{f}^{2}+\sigma_{g}^{2})}\sqrt{2\pi}}\exp \left[ -\frac{(\mu_{f}-\mu_{g})^{2}}{2(\sigma_{f}^{2}+\sigma_{g}^{2})} \right] \\
+&= \frac{1}{\sqrt{2\pi(\sigma_{f}^{2}+\sigma_{g}^{2})}}\exp \left[ -\frac{(\mu_{f}-\mu_{g})^{2}}{2(\sigma_{f}^{2}+\sigma_{g}^{2})} \right]
+\end{aligned}
+\label{eqn:ProdGauss5}
+\end{equation}
+
+\vspace{10mm}
+
+\begin{equation}
+\begin{aligned}
+\int_{-\infty}^{\infty}f(x)g(x)dx &= \frac{S_{fg}}{\gamma\sqrt{2\pi}}\int_{-\infty}^{\infty}\exp \left[ -\frac{(x-\alpha)^{2}}{2\gamma^{2}} \right] = S_{fg} \\
+&= \frac{1}{\sqrt{2\pi(\sigma_{f}^{2}+\sigma_{g}^{2})}}\exp \left[ -\frac{(\mu_{f}-\mu_{g})^{2}}{2(\sigma_{f}^{2}+\sigma_{g}^{2})} \right]
+\end{aligned}
+\label{eqn:ProdGauss6}
+\end{equation}
+
+
+\subsection{Univariate Gaussian with linear term in exponential}
+
+
+\begin{equation}
+\begin{aligned}
+I = \int_{-\infty}^{\infty}\exp\left[ -\frac{x^{2}}{2\sigma^{2}} + Jx \right]
+\end{aligned}
+\end{equation}
+
+Just as above, the idea is to complete the square
+
+\begin{equation}
+\begin{aligned}
+\frac{x^{2}}{2\sigma^{2}} - Jx &= \frac{1}{2\sigma^{2}} \left[ x^{2} - 2\sigma^{2}Jx + (\sigma^{2}J)^{2} - (\sigma^{2}J)^{2} \right] \\
+&= \frac{1}{2\sigma^{2}} \left( x - \sigma^{2}J \right)^{2} - \frac{1}{2\sigma^{2}}(\sigma^{2}J)^{2} =  \frac{\left( x - \sigma^{2}J \right)^{2}}{2\sigma^{2}} - \frac{(\sigma J)^{2}}{2}
+\end{aligned}
+\end{equation}
+
+Therefore, I find:
+\begin{equation}
+\begin{aligned}
+I &= \int_{-\infty}^{\infty}\exp\left[ -\frac{x^{2}}{2\sigma^{2}} + Jx \right] = \int_{-\infty}^{\infty}\exp\left[ \frac{\left( x - \sigma^{2}J \right)^{2}}{2\sigma^{2}} - \frac{(\sigma J)^{2}}{2} \right]  \\
+&= \sigma\sqrt{2\pi}\exp \left[ \frac{(\sigma J)^{2}}{2} \right]
+\end{aligned}
+\end{equation}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{comment}
+\subsection{Multivariate Gaussian with linear term in exponential}
+
+\begin{equation}
+\begin{aligned}
+I = \int_{-\infty}^{\infty}\exp\left[ -\frac{1}{2}\mathbf{x}^{T}\mathbf{B}\mathbf{x} + \mathbf{J}^{T}\mathbf{x} \right]
+\end{aligned}
+\end{equation}
+
+where $\mathbf{x}^{T}$ is a row vector, $\mathbf{x}$ a column vector, $\mathbf{B}$ a symmetric, non-singular (???) $n \times n$ matrix, and $\mathbf{J}$ a vector with constant elements.
+Now, introduce a diagonalizing matrix $\mathbf{R}$, such that $\mathbf{R}^{-1}\mathbf{B}\mathbf{R}$ is a diagonal matrix $\mathbf{D}$.
+Also, $\mathbf{R}\mathbf{R}^{T} = \mathbf{R}^{T}\mathbf{R} = 1$.
+The ortogonoality of $\mathbf{R}$ ($\mathbf{R}^{T} = \mathbf{R}^{-1}$) implies $|\mathbf{R}| \equiv \mathrm{det}[\mathbf{R}] = \pm 1$.
+Using this, I can change variables
+
+\begin{equation}
+\begin{aligned}
+\mathbf{x} = \mathbf{R}\mathbf{y} \\
+d\mathbf{x} = \mathbf{R}d\mathbf{y} \\
+dx_{1}dx_{2}... = |\mathbf{R}|dy_{1}dy_{2}...
+\end{aligned}
+\end{equation}
+
+Using the transformation, I have
+
+\begin{equation}
+\begin{aligned}
+-\frac{1}{2}\mathbf{x}^{T}\mathbf{B}\mathbf{x} + \mathbf{J}^{T}\mathbf{x} \rightarrow -\frac{1}{2}\mathbf{y}^{T}\mathbf{R}^{T}\mathbf{B}\mathbf{R}\mathbf{y} + \mathbf{J}^{T}\mathbf{R}\mathbf{y} = -\frac{1}{2}\mathbf{y}^{T}\mathbf{D}\mathbf{y} + \mathbf{J}^{T}\mathbf{R}\mathbf{y}
+\end{aligned}
+\end{equation}
+
+To make this less abstract, it is helpful to expand the expression out:
+\begin{equation}
+\begin{aligned}
+&-\frac{1}{2}\mathbf{y}^{T}\mathbf{D}\mathbf{y} + \mathbf{J}^{T}\mathbf{R}\mathbf{y} = \\
+&= -\frac{1}{2}(d_{1}y_{1}^{2} + d_{2}y_{2}^{2} + ... + d_{n}y_{n}^{2}) + J_{\alpha}R_{\alpha1}y_{1} + J_{\alpha}R_{\alpha2}y_{2} + ... + J_{\alpha}R_{\alpha2}y_{2}
+\end{aligned}
+\end{equation}
+
+where, repeated indices $\alpha$ are summed over.
+Just as above, the technique here is to complete the square.
+However, this procedure is slightly different in that we complete the square for each $y_{i}$
+For a term $i$, we have 
+\begin{equation}
+\begin{aligned}
+\frac{1}{2}d_{i}y_{i}^{2} - J_{\alpha}R_{\alpha i}y_{i} &= \frac{1}{2}d_{i} \left[ y_{i}^{2} - \frac{2J_{\alpha}R_{\alpha i}y_{i}}{d_{i}} + \left( \frac{J_{\alpha}R_{\alpha i}}{d_{i}}  \right)^{2} - \left( \frac{J_{\alpha}R_{\alpha i}}{d_{i}}  \right)^{2} \right] \\
+&= \frac{1}{2}d_{i}\left( y_{i} - \frac{J_{\alpha}R_{\alpha i}}{d_{i}} \right)^{2} - \frac{(J_{\alpha}R_{\alpha i})^{2}}{2d_{i}}
+\end{aligned}
+\end{equation}
+
+
+However, we need to remember that we are working with matrices, so I will write things out in a more suggestive way, noting that the transpose of a number is simply that number (or, if you want, the transpose of a 1x1 matrix is that matrix)
+
+\begin{equation}
+\begin{aligned}
+&\frac{1}{2}y_{i}^{T}d_{i}y_{i} - J_{\alpha}R_{\alpha i}y_{i} = \\
+&= \frac{1}{2}d_{i}^{T}y_{i}y_{i} - d_{i}d_{i}^{-1}J_{\alpha}R_{\alpha i}y_{i} \\
+&= \frac{1}{2}d_{i}\left[ y_{i}y_{i} - 2d_{i}^{-1}J_{\alpha}R_{\alpha i}y_{i} \right] \\
+&= \frac{1}{2}d_{i}\left[ y_{i}y_{i} - 2d_{i}^{-1}J_{\alpha}R_{\alpha i}y_{i} + (d_{i}^{-1}J_{\alpha}R_{\alpha i})^{2} - (d_{i}^{-1}J_{\alpha}R_{\alpha i})^{2} \right] \\
+&= \frac{1}{2}d_{i}\left[ (y_{i} - d_{i}^{-1}J_{\alpha}R_{\alpha i})^{2} \right] - \frac{1}{2}d_{i}(d_{i}^{-1}J_{\alpha}R_{\alpha i})^{2} \\
+&= \frac{1}{2}d_{i}\left[ (y_{i} - d_{i}^{-1}J_{\alpha}R_{\alpha i})^{2} \right] - \frac{1}{2}d_{i}(d_{i}^{-1}J_{\alpha}R_{\alpha i})(d_{i}^{-1}J_{\beta}R_{\beta i}) \\
+&= \frac{1}{2}d_{i}\left[ (y_{i} - d_{i}^{-1}J_{\alpha}R_{\alpha i})^{2} \right] - \frac{1}{2}J_{\alpha}R_{\alpha i}d_{i}^{-1}J_{\beta}R_{\beta i} \\
+&= \frac{1}{2}d_{i}\left[ (y_{i} - d_{i}^{-1}J_{\alpha}R_{\alpha i})^{2} \right] - \frac{1}{2}J_{\alpha}R_{\alpha i}d_{i}^{-1}R_{i \beta}^{T}J_{\beta}^{T} \\
+&= \frac{1}{2}d_{i}\left[ (y_{i} - d_{i}^{-1}J_{\alpha}R_{\alpha i})^{2} \right] - \frac{1}{2}J_{\alpha}R_{\alpha i}(R_{ik}^{-1}B_{kl}^{-1}R_{li})R_{i \beta}^{T}J_{\beta}^{T} \\
+&= \frac{1}{2}d_{i}\left[ (y_{i} - d_{i}^{-1}J_{\alpha}R_{\alpha i})^{2} \right] - \frac{1}{2}J_{\alpha}B_{kl}^{-1}J_{\beta}^{T}
+\end{aligned}
+\end{equation}
+
+
+Therefore, we have
+
+\begin{equation}
+\begin{aligned}
+-\frac{1}{2}\mathbf{y}^{T}\mathbf{D}\mathbf{y} + \mathbf{J}^{T}\mathbf{R}\mathbf{y} = 
+\end{aligned}
+\end{equation}
+\end{comment}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\end{document}

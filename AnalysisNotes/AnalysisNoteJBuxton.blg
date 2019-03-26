@@ -3,46 +3,44 @@ Capacity: max_strings=100000, hash_size=100000, hash_prime=85009
 The top-level auxiliary file: AnalysisNoteJBuxton.aux
 The style file: unsrt.bst
 Database file #1: bibfile.bib
-Warning--empty title in Lednicky:82
-You've used 12 entries,
+You've used 16 entries,
             1791 wiz_defined-function locations,
-            538 strings with 5407 characters,
-and the built_in function-call counts, 2644 in all, are:
-= -- 227
-> -- 108
+            569 strings with 6209 characters,
+and the built_in function-call counts, 3515 in all, are:
+= -- 309
+> -- 138
 < -- 0
-+ -- 41
-- -- 29
-* -- 196
-:= -- 443
-add.period$ -- 35
-call.type$ -- 12
-change.case$ -- 11
++ -- 53
+- -- 37
+* -- 250
+:= -- 589
+add.period$ -- 50
+call.type$ -- 16
+change.case$ -- 16
 chr.to.int$ -- 0
-cite$ -- 13
-duplicate$ -- 108
-empty$ -- 267
-format.name$ -- 29
-if$ -- 578
+cite$ -- 16
+duplicate$ -- 144
+empty$ -- 355
+format.name$ -- 37
+if$ -- 772
 int.to.chr$ -- 0
-int.to.str$ -- 12
-missing$ -- 12
-newline$ -- 62
-num.names$ -- 12
-pop$ -- 13
+int.to.str$ -- 16
+missing$ -- 16
+newline$ -- 85
+num.names$ -- 16
+pop$ -- 14
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 0
-skip$ -- 39
+skip$ -- 52
 stack$ -- 0
-substring$ -- 213
-swap$ -- 12
+substring$ -- 285
+swap$ -- 16
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
 type$ -- 0
-warning$ -- 1
-while$ -- 24
-width$ -- 14
-write$ -- 132
-(There was 1 warning)
+warning$ -- 0
+while$ -- 32
+width$ -- 18
+write$ -- 182

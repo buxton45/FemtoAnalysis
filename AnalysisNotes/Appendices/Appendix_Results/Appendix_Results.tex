@@ -1,0 +1,52 @@
+\documentclass[/home/jesse/Analysis/FemtoAnalysis/AnalysisNotes/AnalysisNoteJBuxton.tex]{subfiles}
+\begin{document}
+
+\section{Results: \LamKs and \LamKpm (Additional Figures)}
+\label{App_Results}
+
+This appendix presents fit results obtained using different methods and variations of our fit procedure.
+The purpose here is to offer a more in depth and transparent look at how the various assumptions made for our final fit procedure affect our results.
+For all cases, the interesting result remains of the \LamKchP system exhibiting a negative $\Re f_{0}$, the \LamKchM positive, and the \LamKs system somewhere between.
+
+For our final results, we have chosen to include three residual contributors, as this best matches the experimental situation.
+These three contributors include: ($\Sigma^{0}\mathrm{K}$, $\Xi^{0}\mathrm{K}$, $\Xi^{-}\mathrm{K}$) $\rightarrow \Lambda\mathrm{K}$.
+Moving to ten contributors, we additionally include feed-down from ($\Sigma^{* (+,-,0)}\mathrm{K}^{*0}$, $\Lambda\mathrm{K}^{*0}$, $\Sigma^{0}\mathrm{K}^{*0}$, $\Xi^{0}\mathrm{K}^{*0}$, $\Xi^{-}\mathrm{K}^{*0}$) $\rightarrow \Lambda\mathrm{K}$.
+As stated in Sec. \ref{ResidualCorrelations}, femtoscopic analyses are sensitive to the pair emission structure at kinetic freeze-out, therefore any particle born from a resonance decaying before last rescattering is seen as primary.
+The $\Sigma^{*}$ and $\mathrm{K}^{*}$ resonances have proper decay lengths $c\tau \approx$ 5 fm and 4 fm, respectively.
+Although some of these will decay after, we expect that most will decay before kinetic freeze-out.
+Therefore, it is best to treat $\Lambda$ and $\mathrm{K}$ particles originating from these resonances as primary, and therefore include only three residual contributors in our fit procedure.
+However, it is still interesting to observe how these additional sources of residuals would affect our fit results, as the actual situation lies somewhere between the two cases (although, weighted much more towards the three residuals case).
+For a more precise treatment (not warranted here, when considering all of the approximations in the measurement), one should estimate the number of $\Sigma^{*}$ and $\mathrm{K}^{*}$ resonances decaying after kinetic freeze-out, and use this information to adjust the $\lambda$ parameters.
+
+
+In Appendix \ref{App_ResultsLamK_FitMethComp} we present summary plots demonstrating the effect on the extracted fit parameter sets of utilizing the different fit techniques.
+The comparisons include the effect of using different numbers of residual contributors, fixing the overall $\lambda_{\mathrm{Fit}}$ parameter compared to allowing it to be free, fitting a correlation function built with the Stavinskiy method compared to the normal construction method, sharing radii among all \LamK systems compared to sharing radii between only the \LamKpm systems, and using the experimental $\Xi^{-}$\Kpm data compared to modeling it with a Coulomb-only curve for use in the residuals treatment.
+
+The final three subsections include a more thorough look into utilizing three (App. \ref{App_ResultsLamK_3Res}), ten (App. \ref{App_ResultsLamK_10Res}), and no (App. \ref{App_ResultsLamK_NoRes}) residual contributors in the fit routine.
+These subsections match closely the structure of Sec. \ref{ResultsLamK}, where we presented the final results for our \LamK study.
+Each begins with a summary plot compactly showing the extracted fit parameters, and each contains figures showing the fit plotted on top of the experimental data.
+Different from Sec. \ref{ResultsLamK}, the correlations are shown out to $\sim$ 1 GeV/$c$ (instead of $\sim$ 0.3 GeV/$c$), to show both the signal region and the non-femtoscopic background. 
+Furthermore, Appendices \ref{App_ResultsLamK_3Res} and \ref{App_ResultsLamK_10Res} contain figures showing the final fit with the components describing the different residual contributions, on top of the experimental data.
+
+As with the results presented in Sec. \ref{ResultsLamK}, unless otherwise noted, the following hold true:
+All correlation functions were normalized in the range 0.32 $< k^{*} <$ 0.40 GeV/c, and fit in the range 0.0 $< k^{*} <$ 0.30 GeV/c.
+For the \LamKchM and \ALamKchP analyses, the region 0.19 $< k^{*} <$ 0.23 GeV/$c$ was excluded from the fit to exclude the bump caused by the $\Omega^{-}$ resonance.
+The non-femtoscopic backgrounds for the \LamKchP and \LamKchM systems were modeled by a (6$^{\mathrm{th}}$-)order polynomial fit to THERMINATOR simulation, while those for the \LamKs were fit with a simple linear form.
+All analyses were fit simultaneously across all centralities, with a single radius and normalization $\lambda_{\mathrm{Fit}}$ parameter for each centrality bin.
+Scattering parameters ($\Re f_{0}$, $\Im f_{0}$, $d_{0}$) were shared between pair-conjugate systems, but assumed unique between the different \LamK charge combinations (i.e. a parameter set describing the \LamKchP \& \ALamKchM system, a second set describing the \LamKchM \& \ALamKchP system, and a third for the \LamKs \& \ALamKs system).
+Each correlation function received a unique normalization parameter.
+The fits were corrected for finite momentum resolution effects, non-femtoscopic backgrounds, and residual correlations resulting from the feed-down from resonances.
+Lines and boxes on the experimental data represent statistical and systematic errors, respectively.
+
+In the figures showing experimental correlation functions with fits, the black solid curve represents the primary (\LamK) correlation's contribution to the fit.
+The green line shows the fit to the non-flat background.  
+The purple points show the fit after all residual contributions have been included, and momentum resolution and non-flat background corrections have been applied.
+The extracted fit values with uncertainties are printed as (fit value) $\pm$ (statistical uncertainty) $\pm$ (systematic uncertainty).
+
+\subfile{/home/jesse/Analysis/FemtoAnalysis/AnalysisNotes/Appendices/Appendix_Results/App_ResultsLamK_FitMethodComparisons/App_ResultsLamK_FitMethodComparisons.tex}
+\subfile{/home/jesse/Analysis/FemtoAnalysis/AnalysisNotes/Appendices/Appendix_Results/App_ResultsLamK_3Res/App_ResultsLamK_3Res.tex}
+\subfile{/home/jesse/Analysis/FemtoAnalysis/AnalysisNotes/Appendices/Appendix_Results/App_ResultsLamK_10Res/App_ResultsLamK_10Res.tex}
+\subfile{/home/jesse/Analysis/FemtoAnalysis/AnalysisNotes/Appendices/Appendix_Results/App_ResultsLamK_NoRes/App_ResultsLamK_NoRes.tex}
+
+
+\end{document}

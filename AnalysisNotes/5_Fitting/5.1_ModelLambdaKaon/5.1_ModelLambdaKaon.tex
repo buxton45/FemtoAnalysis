@@ -1,45 +1,210 @@
-\documentclass[../AnalysisNoteJBuxton.tex]{subfiles}
+\documentclass[/home/jesse/Analysis/FemtoAnalysis/AnalysisNotes/AnalysisNoteJBuxton.tex]{subfiles}
 \begin{document}
 
 \subsection{Model: \LamKs, \LamKpm, $\Xi^{-}$\Ks}
 \label{ModelLambdaKaon}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection*{Strong Interaction Only}
+\label{StrongIntOnly}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{comment}
+The Bethe-Salpeter(?) amplitude for interacting particles is given by
+
+\begin{equation}
+\psi = e^{-iP(x_{1}+x_{2})/2}\left( e^{-ikr} + \phi_{p_{1}p_{2}}(r) \right)
+\label{eqn:TempEq1}
+\end{equation}
+where $\phi_{p_{1}p_{2}}(r)$ describes the FSI of the particles. 
+More specifically,  $\phi_{p_{1}p_{2}}(r)$ can be calculated as:
+
+\begin{equation}
+\begin{aligned}
+\phi_{p_{1}p_{2}}(x) = \frac{8\pi\sqrt{p^{2}}}{(2\pi)^{4}i}e^{ipx}\int \frac{e^{-i\kappa x}f(p_{1}, p_{2}, \kappa, 2p-\kappa)}{(\kappa^{2}-m_{1}^{2})((2p-\kappa)^2 - m_{2}^{2})}d^{4}\kappa
+\end{aligned}
+\end{equation}
+
+
+Range of potential smaller than r $\rightarrow$ $f(p_{1}, p_{2}, \kappa, 2p-\kappa) \approx f(k^{*})$, and we can pull it out of the integral.
+
+\begin{equation}
+\begin{aligned}
+\phi_{p_{1}p_{2}}(x) = f(k^{*}) \Phi_{p_{1}p_{2}}(x)
+\end{aligned}
+\end{equation}
+
+In the effective range approximation, $f(k^{*})$ is of the form:
+
+\begin{equation}
+\begin{aligned}
+f(k^{*}) = \left( \frac{1}{f_{0}} + \frac{1}{2}d_{0}k^{*2} - ik^{*} \right)^{-1}
+\end{aligned}
+\label{eqn:ScatteringParam}
+\end{equation}
+
+
+
+Furthermore, for $k* << m$,  and particles emitted at same time in the PRF, $\Phi_{p_{1}p_{2}}(x)$ reduces to
+\begin{equation}
+\begin{aligned}
+\Phi_{p_{1}p_{2}}(x) = \frac{e^{ik^{*}r^{*}}}{r^{*}}
+\end{aligned}
+\label{eqn:PhiP1P2SphericalWave}
+\end{equation}
+\end{comment}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+For the case of interacting particles, the non-symmetrized two-particle wave-function, $\psi$, may be written as \cite{Lednicky:82}
+\begin{equation}
+\psi = e^{-iP(x_{1}+x_{2})/2}\left( e^{-ikr} + \phi_{p_{1}p_{2}}(r) \right)
+\label{eqn:TempEq1}
+\end{equation}
+where $\phi_{p_{1}p_{2}}(r)$ describes the final state interactions (FSI) of the particles. 
+Assuming that the range of the interaction potential is smaller than the distance between the emission points, $\phi_{p_{1}p_{2}}(r)$ may be expressed as 
+\begin{equation}
+\begin{aligned}
+\phi_{p_{1}p_{2}}(x) = f(k^{*}) \Phi_{p_{1}p_{2}}(x)
+\end{aligned}
+\end{equation}
+where, in the effective range approximation, $f(k^{*})$ is of the form
+\begin{equation}
+\begin{aligned}
+f(k^{*}) = \left( \frac{1}{f_{0}} + \frac{1}{2}d_{0}k^{*2} - ik^{*} \right)^{-1}
+\end{aligned}
+\label{eqn:ScatteringParam}
+\end{equation}
+Furthermore, if we assume the magnitude of the momentum difference is much smaller than the mass of the particles ($k* \ll m$), and that the particles are emitted at the same time in the pair rest frame, $\Phi_{p_{1}p_{2}}(x)$ reduces to
+\begin{equation}
+\begin{aligned}
+\Phi_{p_{1}p_{2}}(x) = \frac{e^{ik^{*}r^{*}}}{r^{*}}
+\end{aligned}
+\label{eqn:PhiP1P2SphericalWave}
+\end{equation}
+In other words, $\Phi_{p_{1}p_{2}}(x)$ is a diverging spherical wave.
+Therefore, we have $\psi_{p_{1}p_{2}} = e^{-ikr} + \phi_{p_{1}p_{2}}(r)$, where $\phi_{p_{1}p_{2}}(r)$ is independent of the directions of the vectors $\boldsymbol k^{*}$ and $\boldsymbol r$ \cite{Lednicky:1995vk}.
+
+
+Assuming the final state interactions are independent of the spin state, for identical interacting particles,
+
+\begin{equation}
+\begin{aligned}
+|\Psi|^{2} &= 1 + g_{0}\cos(2kx) + g_{i}\left\lbrace|\phi_{p_{1}p_{2}}(r)|^{2} + 2\Re[\phi_{p_{1}p_{2}}(r)]\cos(kx)\right\rbrace
+\end{aligned}
+\label{eqn:IntIdPart_SpinIndependent}
+\end{equation} 
+where $g_{0} = (-1)^{2j}/(2j+1)$ and $g_{i} = 1+g_{0}$.
+
+For non-identical interacting particles, where we need not worry about the symmetrization of the wave function, we have:
+
+\begin{equation}
+\begin{aligned}
+|\Psi_{p_{1}p_{2}}|^{2} &= 1 + |f(k^{*})\Phi_{p_{1}p_{2}}|^{2} + e^{ikx}f(k^{*})\Phi_{p_{1}p_{2}} + e^{-ikx}\tilde{f}(k^{*})\tilde{\Phi}_{p_{1}p_{2}} \\
+&= 1 + |f(k^{*})\Phi_{p_{1}p_{2}}|^{2} + 2\Re[f(k^{*})\Phi_{p_{1}p_{2}}]\cos(kx) - 2\Im[f(k^{*})\Phi_{p_{1}p_{2}}]\sin(kx)
+\end{aligned}
+\label{eqn:IntNonIdPart_SpinIndependent}
+\end{equation}
+
+
+
+If we allow the interaction, and therefore the two-particle wave function, to depend on the summary spin of the system (but not on the spin projections), things change slightly.
+Instead of grouping all odd and even summary spins together, as was done in deriving Eqns. \ref{eqn:IntIdPart_SpinIndependent} and \ref{eqn:IntNonIdPart_SpinIndependent}, we need to keep track of their individual contributions, as their wave functions will be different.
+When combining all of the various states with different summary spin $S$, they must be combined with a weight factor $\rho_{S}$, the normalized emission probability for such a state ($\sum_{S}\rho_{s} = 1$).
+In this case, we find 
+
+\begin{equation}
+\begin{aligned}
+|\Psi|^{2} &= 1 + \left(\sum_{S=even}\rho_{S} - \sum_{S=odd}\rho_{S} \right)\cos(2kx) + ... \\
+&~~~+ 2\sum_{S=even}\rho_{S}\left\lbrace |\phi^{S}_{p_{1}p_{2}}(r)|^{2} + 2\Re[\phi^{S}_{p_{1}p_{2}}(r)]\cos(kx) \right\rbrace \\
+&= 1 + g_{0}^{\prime}\cos(2kx) + 2\sum_{S=even}\rho_{S}\left\lbrace |\phi^{S}_{p_{1}p_{2}}(r)|^{2} + 2\Re[\phi^{S}_{p_{1}p_{2}}(r)]\cos(kx) \right\rbrace
+\end{aligned}
+\end{equation}
+where $g_{0}^{\prime} = \sum_{S=even}\rho_{S} - \sum_{S=odd}\rho_{S}$.
+In the case of unpolarized emission for identical particle pairs, $\rho_{s} = (2S+1)/(2j+1)^{2}$, and we have $g_{0}^{\prime} = g_{0} = (-1)^{2j}/(2j+1)$.
+
+The case of interacting non-identical particles can be written down immediately from Eq. \ref{eqn:IntNonIdPart_SpinIndependent}
+
+\begin{equation}
+\begin{aligned}
+|\Psi_{p_{1}p_{2}}|^{2} &= \sum_{S}\rho_{s}\left\lbrace 1 + |\phi^{S}_{p_{1}p_{2}}|^{2} + 2\Re[\phi^{S}_{p_{1}p_{2}}]\cos(kx) - 2\Im[\phi^{S}_{p_{1}p_{2}}]\sin(kx) \right\rbrace
+\end{aligned}
+\label{eqn:IntNonIdPart}
+\end{equation}
+where, for the case of unpolarized emission, $\rho_{s} = (2S+1)/[(2j_{1}+1)(2j_{2}+1)]$.
+
+
+Now, up to this point, we have discussed only the wave-functions.
+Within femtoscopy, this essentially amounts to assuming point-like sources.
+In the more realistic scenario, the correlation function should be averaged over the space-time distribution of particle sources.
 The two-particle relative momentum correlation function may be written theoretically by the Koonin-Pratt equation \cite{Koonin:1977fh, Pratt:1990zq}:
 
 \begin{equation}
  C(\mathbf{k^{*}}) = \int S(\mathbf{r^{*}})|\Psi_{\mathbf{k^{*}}}(\mathbf{r^{*}})|^{2}d^{3}\mathbf{r^{*}}
 \label{eqn:KooninPrattEqn}
 \end{equation}
-
 where $S(\mathbf{r^{*}})$ is the pair source distribution, $\Psi_{\mathbf{k^{*}}}(\mathbf{r^{*}})$ is the two-particle wave-function, and \kstar is the momentum of one particle in the pair rest frame.  
-In the absence of Coulomb effects, and assuming a spherically Gaussian source of width $R$, and s-wave scattering, the 1D femtoscopic correlation function can be calculated analytically using:
+In the case on one-dimensional analyses, a spherically symmetric Gaussian pair emission source in the PRF with size $R_{\mathrm{inv}}$ is often assumed:
+
+\begin{equation}
+\begin{aligned}
+S(x) \propto \exp\left[ -\frac{r^{2}}{4R_{\mathrm{inv}}^{2}}\right]
+\end{aligned}
+\label{eqn:Gaussian1D}
+\end{equation}
+In the case of identical particles, where the Gaussian offsets are zero and the single particle sources are obviously described by the same radii, the two-particle source is related by a factor $\sqrt{2}$ to the single particle sizes. 
+
+As a side note, a more realistic source would allow for different radii in the out, side and long directions.
+Furthermore, for non-identical particle femtoscopy, each single-particle source should be given a unique offset in the out direction.
+In such a case, the pair emission source would be
+\begin{equation}
+\begin{aligned}
+S_{AB}(\mathbf{r}) &\propto \int \exp\left(-\frac{(r_{a, out}-\mu_{a, out})^{2}}{2R^{2}_{a, out}} - \frac{r^{2}_{a, side}}{2R^{2}_{a, side}} - \frac{r^{2}_{a, long}}{2R^{2}_{a, long}} \right) \times ... \\
+&~~~~~\times \exp\left(-\frac{(r_{b, out}-\mu_{b, out})^{2}}{2R^{2}_{b, out}} - \frac{r^{2}_{b, side}}{2R^{2}_{b, side}} - \frac{r^{2}_{b, long}}{2R^{2}_{b, long}} \right) \\
+&~~~~~\times \delta(r_{out}-r_{a,out}+r_{b,out})dr_{a,out}dr_{b,out} \\
+&~~~~~\times \delta(r_{side}-r_{a,side}+r_{b,side})dr_{a,side}dr_{b,side} \\
+&~~~~~\times \delta(r_{long}-r_{a,long}+r_{b,long})dr_{a,long}dr_{b,long}
+\end{aligned}
+\label{eqn:SingleGaussSourceWithShift}
+\end{equation}
+Using the results from Appendix \ref{app:ProdTwoGauss}, we find
+\begin{equation}
+\begin{aligned}
+S_{AB}(\mathbf{r}) &\propto \exp\left(-\frac{[r_{out}-(\mu_{a, out}-\mu_{b, out})]^{2}}{2(R_{a,out}^{2}+R_{b,out}^{2})}\right) \times ... \\
+&~~~~\times \exp\left(-\frac{r_{side}^{2}}{2(R_{a,side}^{2}+R_{b,side}^{2})}\right) \times ... \\
+&~~~~\times \exp\left(-\frac{r_{long}^{2}}{2(R_{a,long}^{2}+R_{b,long}^{2})}\right)
+\end{aligned}
+\label{eqn:PairGaussSourceWithShift}
+\end{equation}
+which demonstrates $\mu_{ab, out} = \mu_{a, out}-\mu_{b, out}$, and $R_{ab, i}^{2} = R_{a, i}^{2} + R_{b, i}^{2}$ \cite{Kisiel:2009eh}.
+
+Returning back to our treatment of a one dimensional femtoscopic study with a spherically symmetric source of width $R$ (Eq. \ref{eqn:Gaussian1D}).
+In the absence of Coulomb effects, with the assumptions and approximations used above (including unpolarized emission), the 1D femtoscopic correlation function can be calculated analytically as
 
 \begin{equation}
  C(k^{*}) = 1 + C_{QI}(k^{*}) + C_{FSI}(k^{*})
 \label{eqn:LednickyEqn}
 \end{equation}
-
 $C_{QI}$ describes plane-wave quantum interference:
 
 \begin{equation}
  C_{QI}(k^{*}) = \alpha\exp(-4k^{*2}R^{2})
 \label{eqn:CQI}
 \end{equation}
-
-where $\alpha = (-1)^{2j}/(2j+1)$ for identical particles with spin j, and $\alpha = 0$ for non-identical particles.  For all analyses presented in this note, $\alpha = 0$.  $C_{FSI}$ describes the s-wave strong final state interaction between the particles:
+where $\alpha = (-1)^{2j}/(2j+1)$ (i.e. $= g_{0}$) for identical particles with spin j, and $\alpha = 0$ for non-identical particles.  For all analyses presented in this note, $\alpha = 0$.  $C_{FSI}$ describes the s-wave strong final state interaction between the particles:
 
 \begin{equation}
-\begin{array}{l}
-\vspace{2mm}  %%space between C_{FSI}(k^{*}) and f(k^{*})
-  C_{FSI}(k^{*}) = (1+\alpha)[\frac{1}{2}|\frac{f(k^{*})}{R}|^2(1-\frac{d_{0}}{2\sqrt{\pi}R})+\frac{2\mathbb{R}f(k^{*})}{\sqrt{\pi}R}F_{1}(2k^{*}R)-\frac{\mathbb{I}f(k^{*})}{R}F_{2}(2k^{*}R)] \\
-\vspace{2mm}  %%space after f(k^{*})  
-  ~~~~~f(k^{*}) = (\frac{1}{f_{0}}+\frac{1}{2}d_{0}k^{*2}-ik^{*})^{-1};~~~
-  F_{1}(z) = \int_{0}^{z} \frac{e^{x^{2}-z^{2}}}{z}dx;~~~
-  F_{2}(z) = \frac{1-e^{-z^{2}}}{z}
-\end{array}  
+\begin{aligned}
+C_{FSI}(k^{*}) &= \sum_{S}\rho_{S}\left[\frac{1}{2}\left|\frac{f^{S}(k^{*})}{R}\right|^2\left(1-\frac{d^{S}_{0}}{2\sqrt{\pi}R}\right)+\frac{2\Re f^{S}(k^{*})}{\sqrt{\pi}R}F_{1}(2k^{*}R)-\frac{\Im f^{S}(k^{*})}{R}F_{2}(2k^{*}R)\right]
+\end{aligned}  
 \label{eqn:CFSI}
 \end{equation}
-
+where $\rho_{s} = (2S+1)/[(2j_{1}+1)(2j_{2}+1)]$ and
+\begin{equation}
+\begin{aligned}
+F_{1}(z) &= \int_{0}^{z} \frac{e^{x^{2}-z^{2}}}{z}dx \qquad \qquad F_{2}(z) &= \frac{1-e^{-z^{2}}}{z}
+\end{aligned}  
+\label{eqn:CFSI2}
+\end{equation}
 where $R$ is the source size, $f(k^{*})$ is the s-wave scattering amplitude, $f_{0}$ is the complex scattering length, and $d_{0}$ is the effective range of the interaction.
 
 An additional parameter $\lambda$ is typically included in the femtoscopic fit function to account for the purity of the pair sample.  In the case of no residual correlations (to be discussed in Section \ref{ResidualCorrelations}), the fit function becomes:
@@ -48,5 +213,8 @@ An additional parameter $\lambda$ is typically included in the femtoscopic fit f
  C(k^{*}) = 1 + \lambda[C_{QI}(k^{*}) + C_{FSI}(k^{*})]
 \label{eqn:LednickyEqnwLambda}
 \end{equation}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 
 \end{document}

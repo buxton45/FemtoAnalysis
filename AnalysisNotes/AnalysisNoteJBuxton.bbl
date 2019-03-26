@@ -1,8 +1,11 @@
 \begin{thebibliography}{10}
 
 \bibitem{Lednicky:82}
-R.~Lednicky and V.~L. Lyuboshitz.
+R.~Lednicky and V.~L. Lyuboshits.
+\newblock {Final State Interaction Effect on Pairing Correlations Between
+  Particles with Small Relative Momenta}.
 \newblock {\em Sov. J. Nucl. Phys.}, 35:770, 1982.
+\newblock [Yad. Fiz.35,1316(1981)].
 
 \bibitem{Patrignani:2016xqp}
 C.~Patrignani et~al.
@@ -14,6 +17,19 @@ Michael~Annan Lisa, Scott Pratt, Ron Soltz, and Urs Wiedemann.
 \newblock {Femtoscopy in relativistic heavy ion collisions}.
 \newblock {\em Ann. Rev. Nucl. Part. Sci.}, 55:357--402, 2005.
 
+\bibitem{Kopylov:1974th}
+G.~I. Kopylov.
+\newblock {Like particle correlations as a tool to study the multiple
+  production mechanism}.
+\newblock {\em Phys. Lett.}, B50:472--474, 1974.
+\newblock [,39(1974)].
+
+\bibitem{Lednicky:1995vk}
+R.~Lednicky, V.~L. Lyuboshits, B.~Erazmus, and D.~Nouais.
+\newblock {How to measure which sort of particles was emitted earlier and which
+  later}.
+\newblock {\em Phys. Lett.}, B373:30--34, 1996.
+
 \bibitem{Koonin:1977fh}
 S.~E. Koonin.
 \newblock {Proton Pictures of High-Energy Nuclear Collisions}.
@@ -24,6 +40,12 @@ S.~Pratt, T.~Csorgo, and J.~Zimanyi.
 \newblock {Detailed predictions for two pion correlations in ultrarelativistic
   heavy ion collisions}.
 \newblock {\em Phys. Rev.}, C42:2646--2652, 1990.
+
+\bibitem{Kisiel:2009eh}
+Adam Kisiel.
+\newblock {Non-identical particle femtoscopy at s(NN)**(1/2) = 200-AGeV in
+  hydrodynamics with statistical hadronization}.
+\newblock {\em Phys. Rev.}, C81:064906, 2010.
 
 \bibitem{Lednicky:2005tb}
 Richard Lednicky.
@@ -64,5 +86,11 @@ Maxim Mai, Peter~C. Bruns, Bastian Kubis, and Ulf-G. Meissner.
 \newblock {Aspects of meson-baryon scattering in three and two-flavor chiral
   perturbation theory}.
 \newblock {\em Phys. Rev.}, D80:094006, 2009.
+
+\bibitem{Retiere:2003kf}
+Fabrice Retiere and Michael~Annan Lisa.
+\newblock {Observable implications of geometrical and dynamical aspects of
+  freeze out in heavy ion collisions}.
+\newblock {\em Phys. Rev.}, C70:044907, 2004.
 
 \end{thebibliography}

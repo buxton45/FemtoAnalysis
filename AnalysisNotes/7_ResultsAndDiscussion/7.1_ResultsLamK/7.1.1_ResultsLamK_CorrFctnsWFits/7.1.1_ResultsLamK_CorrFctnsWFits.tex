@@ -1,0 +1,72 @@
+\documentclass[/home/jesse/Analysis/FemtoAnalysis/AnalysisNotes/AnalysisNoteJBuxton.tex]{subfiles}
+
+\renewcommand{\NonFlatBgdLamKch}{_NonFlatBgdCrctnLamK0LinearLamKchPolynomial}
+\renewcommand{\NonFlatBgdLamKs}{_NonFlatBgdCrctnLamK0LinearLamKchPolynomial}
+
+\renewcommand{\ResNum}{_3Res}
+\renewcommand{\PrimMaxDecay}{_PrimMaxDecay10fm}
+
+\renewcommand{\SaveNameModLamKch}{\MomRes\NonFlatBgdLamKch\ResNum\PrimMaxDecay\ResMethod\ParamFixAndShareLamKch}
+\renewcommand{\SaveNameModLamKs}{\MomRes\NonFlatBgdLamKs\ResNum\PrimMaxDecay\ResMethod\ParamFixAndShareLamKch}
+
+\begin{document}
+
+\subsubsection{Correlation functions with fits}
+\label{ResultsLamK_CorrFctnsWFits}
+
+Figures \ref{fig:LamKchPwConjFits_3Res}, \ref{fig:LamKchMwConjFits_3Res}, and \ref{fig:LamK0wConjFits_3Res} show the experimental correlation functions with fits, assuming 3 residual contributors, for all \LamK systems (\LamKchP, \LamKchM, and \LamKs, respectively) in all studied centralities.
+The parameter sets extracted from the fits can be found in Table \ref{tab:FitResultsLamK_3Res}.
+Figures with a wider range in \kstar, showing better the non-femtoscopic background, may be found in Appendix \ref{App_Results}.
+Also contained in Appendix \ref{App_Results} are plots demonstrating the contributions from the residuals, as well as results assuming 10 and no residual contributors.
+
+In Figures \ref{fig:LamKchPwConjFits_3Res} - \ref{fig:LamK0wConjFits_3Res}, the pair system (e.g. \LamKchP) data is shown in the left column, and the conjugate pair system (e.g. \ALamKchM) in the right
+The rows differentiate the different centrality bins (0-10\% in the top, 10-30\% in the middle, and 30-50\% in the bottom).
+The lines on the data represent the statistical errors, while the boxes represent the systematic errors.  
+The fit procedure is as described in the text; in short, all systems are fit simultaneously with shared radii, while each [\LamKchP, \LamKchM, \LamKs] maintains a unique set of scattering parameters.
+The black solid line represents the primary \LamK component of the fit.  
+The green line shows the fit to the non-flat background.
+The purple points show the fit after all residuals' contributions have been included, and momentum resolution and non-flat background corrections have been applied.
+The extracted fit values with uncertainties are printed in the top left panel of each figure.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=\textwidth]{\ResultsDirBaseLamKch\SaveNameModLamKch/canKStarCfwFitsLamKchPwConj_0010_1030_3050\SaveNameModLamKch.pdf}
+  \caption[\LamKchPALamKchM data with fits]
+  {
+  Fit results, with 3 residual correlations included, for the \LamKchP and \ALamKchM data.
+  The \LamKchP data is shown in the left column, the \ALamKchM in the right, and the rows differentiate the different centrality bins (0-10\% in the top, 10-30\% in the middle, and 30-50\% in the bottom).
+  See text for further details.
+  }
+  \label{fig:LamKchPwConjFits_3Res}
+\end{figure}
+
+
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\linewidth]{\ResultsDirBaseLamKch\SaveNameModLamKch/canKStarCfwFitsLamKchMwConj_0010_1030_3050\SaveNameModLamKch.pdf}
+  \caption[\LamKchMALamKchP data with fits]
+  {
+  Fit results, with 3 residual correlations included, for the \LamKchM and \ALamKchP data.
+  The \LamKchM data is shown in the left column, the \ALamKchP in the right, and the rows differentiate the different centrality bins (0-10\% in the top, 10-30\% in the middle, and 30-50\% in the bottom).
+ See text for further details.
+ }
+  \label{fig:LamKchMwConjFits_3Res}
+\end{figure}
+
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\linewidth]{\ResultsDirBaseLamKs\SaveNameModLamKs/canKStarCfwFitsLamK0wConj_0010_1030_3050\SaveNameModLamKs.pdf}
+  \caption[\LamALamKs data with fits]
+  {
+  Fit results, with 3 residual correlations included, for the \LamKs and \ALamKs data.
+  The \LamKs data is shown in the left column, the \ALamKs in the right, and the rows differentiate the different centrality bins (0-10\% in the top, 10-30\% in the middle, and 30-50\% in the bottom).
+ See text for further details.
+ }
+  \label{fig:LamK0wConjFits_3Res}
+\end{figure}
+
+\clearpage
+
+\end{document}
