@@ -48,6 +48,7 @@ public:
   void CombineCfs();
   void CombineCfs(TString aReturnName, TString aReturnTitle);
   void Rebin(int aRebinFactor);
+  void Rebin(int aNGroups, vector<double> &aGroups);
   void Rebin(int aRebinFactor, double aMinNorm, double aMaxNorm);
 
   void AddCfLite(CfLite* aCfLite);

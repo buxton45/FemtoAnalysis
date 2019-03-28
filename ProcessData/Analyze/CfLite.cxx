@@ -169,6 +169,15 @@ void CfLite::Rebin(int aRebinFactor)
   Rebin(aRebinFactor, fMinNorm, fMaxNorm);
 }
 //________________________________________________________________________________________________________________
+void CfLite::Rebin(int aNGroups, vector<double> &aGroups)
+{
+  fNum = fNum->Rebin(aNGroups, TString::Format("%s_CustomRebin", fNum->GetName()), aGroups.data());
+  fDen = fDen->Rebin(aNGroups, TString::Format("%s_CustomRebin", fDen->GetName()), aGroups.data());
+
+  BuildCf(fMinNorm, fMaxNorm);
+}
+
+//________________________________________________________________________________________________________________
 void CfLite::Rebin(int aRebinFactor, double aMinNorm, double aMaxNorm)
 {
   fNum->Rebin(aRebinFactor);

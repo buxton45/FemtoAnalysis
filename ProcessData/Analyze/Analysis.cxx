@@ -2376,4 +2376,17 @@ TH1D* Analysis::GetYlmCfnHist(YlmComponent aComponent, int al, int am, int aRebi
   return fCfYlmHeavy->GetYlmCfnHist(aComponent, al, am);
 }
 
+//________________________________________________________________________________________________________________
+double Analysis::GetNParticles(int aPart)
+{
+  double tTotal = 0.;
+  for(int iAnaly=0; iAnaly<fNPartialAnalysis; iAnaly++) 
+  {
+    tTotal += fPartialAnalysisCollection[iAnaly]->GetNParticles(aPart);
+  }
+  return tTotal;
+}
+
+
+
 

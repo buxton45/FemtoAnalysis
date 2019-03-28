@@ -232,11 +232,11 @@ void SetupReF0vsImF0AndD0Axes(TPad* aPadReF0vsImF0, TPad* aPadD0,
   tTrash1->GetXaxis()->SetRangeUser(aMinReF0, aMaxReF0);
   tTrash1->GetYaxis()->SetRangeUser(aMinImF0, aMaxImF0);
 
-  tTrash1->GetXaxis()->SetTitle("Re[f_{0}]");
+  tTrash1->GetXaxis()->SetTitle("#Rgothicf_{0} (fm)");
   tTrash1->GetXaxis()->SetTitleOffset(1.15);
   tTrash1->GetXaxis()->SetTitleSize(0.04);
 
-  tTrash1->GetYaxis()->SetTitle("Im[f_{0}]");
+  tTrash1->GetYaxis()->SetTitle("#Jgothicf_{0} (fm)");
   tTrash1->GetYaxis()->SetTitleOffset(1.15);
   tTrash1->GetYaxis()->SetTitleSize(0.04);
 
@@ -252,9 +252,9 @@ void SetupReF0vsImF0AndD0Axes(TPad* aPadReF0vsImF0, TPad* aPadD0,
   tTrash2->GetYaxis()->SetLabelSize(tScale*tTrash1->GetYaxis()->GetLabelSize());
   tTrash2->GetYaxis()->SetLabelOffset(0.05);
 
-  tTrash2->GetYaxis()->SetTitle("d_{0}");
+  tTrash2->GetYaxis()->SetTitle("d_{0} (fm)");
   tTrash2->GetYaxis()->SetTitleSize(tScale*tTrash1->GetYaxis()->GetTitleSize());
-  tTrash2->GetYaxis()->SetTitleOffset(0.75);
+  tTrash2->GetYaxis()->SetTitleOffset(0.80);
   tTrash2->GetYaxis()->RotateTitle(true);
   tTrash2->GetYaxis()->SetTickLength(0.025*tScale);
 
@@ -276,7 +276,7 @@ void SetupRadiusvsLambdaAxes(TPad* aPad, double aMinR, double aMaxR, double aMin
   tTrash->GetXaxis()->SetRangeUser(aMinR, aMaxR);
   tTrash->GetYaxis()->SetRangeUser(aMinLam, aMaxLam);
 
-  tTrash->GetXaxis()->SetTitle("Radius");
+  tTrash->GetXaxis()->SetTitle("#it{R}_{inv} (fm)");
   tTrash->GetXaxis()->SetTitleOffset(0.8);
   tTrash->GetXaxis()->SetTitleSize(0.05);
 

@@ -1111,14 +1111,24 @@ TH1D* PartialAnalysis::GetYlmHist(YlmComponent aComponent, YlmHistType aHistType
   return fCfYlmLite->GetYlmHist(aComponent, aHistType, al, am);
 }
 
+//________________________________________________________________________________________________________________
+double PartialAnalysis::GetNParticles(int aPart)
+{
+  ParticleType tPartType = fParticleTypes[aPart];
+  TString tHistName;
+  if(tPartType==kLam || tPartType==kALam || tPartType==kK0 || tPartType==kXi || tPartType==kAXi)
+  {
+    tHistName = TString::Format("LambdaMass_%s_Pass", cParticleTags[tPartType]);
+  }
+  else if(tPartType==kKchP || tPartType==kKchM)
+  {
+    tHistName = TString::Format("YPt_%s_Pass", cParticleTags[tPartType]);
+  }
+  else assert(0);
 
-
-
-
-
-
-
-
+  TH1* tHist = Get1dHisto(tHistName,tHistName);
+  return tHist->GetEntries();
+}
 
 
 

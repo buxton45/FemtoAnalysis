@@ -142,6 +142,8 @@ public:
   CorrFctnDirectYlmHeavy* GetYlmCfHeavy(int aRebin=1);
   TH1D* GetYlmCfnHist(YlmComponent aComponent, int al, int am, int aRebin=1);
 
+  double GetNParticles(int aPart); //aPart = 0 or 1
+
   //inline
   TString GetAnalysisName();
   AnalysisType GetAnalysisType();

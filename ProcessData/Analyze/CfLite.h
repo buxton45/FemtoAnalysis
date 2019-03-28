@@ -49,6 +49,7 @@ public:
   void BuildCf(TString aName, TString aTitle, double aMinNorm, double aMaxNorm);
 
   void Rebin(int aRebinFactor);
+  void Rebin(int aNGroups, vector<double> &aGroups);
   void Rebin(int aRebinFactor, double aMinNorm, double aMaxNorm);
 
   void BuildCfwErrorsByHand();

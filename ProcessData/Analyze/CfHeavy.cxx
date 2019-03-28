@@ -182,6 +182,19 @@ void CfHeavy::Rebin(int aRebinFactor)
 }
 
 //________________________________________________________________________________________________________________
+void CfHeavy::Rebin(int aNGroups, vector<double> &aGroups)
+{
+  for(unsigned int i=0; i<fCfLiteCollection.size(); i++)
+  {
+    fCfLiteCollection[i]->Rebin(aNGroups,aGroups);
+  }
+
+  //refresh the results
+  CombineCfs();
+}
+
+
+//________________________________________________________________________________________________________________
 void CfHeavy::Rebin(int aRebinFactor, double aMinNorm, double aMaxNorm)
 {
   fMinNorm = aMinNorm;
@@ -193,7 +206,7 @@ void CfHeavy::Rebin(int aRebinFactor, double aMinNorm, double aMaxNorm)
   }
 
   //refresh the results
-  CombineCfs();
+  CombineCfs(TString::Format("%s_CustomRebin", fHeavyCf->GetName()), TString::Format("%s_CustomRebin", fHeavyCf->GetTitle()));
 }
 
 

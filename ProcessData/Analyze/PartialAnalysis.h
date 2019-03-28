@@ -111,6 +111,8 @@ public:
   CorrFctnDirectYlmLite* GetYlmCfLite(int aRebin=1);
   TH1D* GetYlmHist(YlmComponent aComponent, YlmHistType aHistType, int al, int am, int aRebin=1);
 
+  double GetNParticles(int aPart); //aPart = 0 or 1
+
   //inline
   AnalysisType GetAnalysisType();
   BFieldType GetBFieldType();
