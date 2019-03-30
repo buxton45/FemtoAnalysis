@@ -47,7 +47,7 @@ public:
   //Begin 2D TObjArray*--------------------------------------
   virtual TObjArray* DrawAllResiduals(bool aSaveImage=false);
 
-  virtual TObjArray* DrawAllResidualsWithTransformMatrices(bool aSaveImage=false);
+  virtual TObjArray* DrawAllResidualsWithTransformMatrices(bool aSaveImage=false, bool aDrawv2=false);
 
   virtual TObjArray* DrawAllSingleKStarCfwFitAndResiduals_PartAn(BFieldType aBFieldType, bool aDrawData, bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, vector<NonFlatBgdFitType> &aNonFlatBgdFitTypes, bool aSaveImage=false, bool aZoomROP=true, bool aOutputCheckCorrectedCf=false);
 

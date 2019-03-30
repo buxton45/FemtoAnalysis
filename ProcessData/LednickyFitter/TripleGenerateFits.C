@@ -108,6 +108,7 @@ int main(int argc, char **argv)
   //--Plotting options
   bool bZoomROP = false;
   bool bDrawResiduals = false;
+  bool bDrawResv2 = true;
   bool bDrawPartAn = false;
 
   bool bDrawSysErrs = false;
@@ -279,7 +280,7 @@ int main(int argc, char **argv)
 
       tCanPrimwFitsAndResidual = tTriple->DrawKStarCfswFitsAndResiduals(ApplyMomResCorrection,ApplyNonFlatBackgroundCorrection,tNonFlatBgdFitTypes,SaveImages,bDrawSysErrs,bZoomROP,aZoomResiduals);
 
-      tAllResWithTransMatrices = tTriple->DrawAllResidualsWithTransformMatrices(SaveImages);
+      tAllResWithTransMatrices = tTriple->DrawAllResidualsWithTransformMatrices(SaveImages, bDrawResv2);
 
       bool bDrawData = false;
 

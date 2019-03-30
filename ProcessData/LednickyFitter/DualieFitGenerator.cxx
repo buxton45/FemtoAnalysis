@@ -283,11 +283,11 @@ TObjArray* DualieFitGenerator::DrawAllResiduals(bool aSaveImage)
 }
 
 //________________________________________________________________________________________________________________
-TObjArray* DualieFitGenerator::DrawAllResidualsWithTransformMatrices(bool aSaveImage)
+TObjArray* DualieFitGenerator::DrawAllResidualsWithTransformMatrices(bool aSaveImage, bool aDrawv2)
 {
   TObjArray* tReturnArray = new TObjArray();
-  tReturnArray->Add((TObjArray*)fFitGen1->DrawAllResidualsWithTransformMatrices(aSaveImage));
-  tReturnArray->Add((TObjArray*)fFitGen2->DrawAllResidualsWithTransformMatrices(aSaveImage));
+  tReturnArray->Add((TObjArray*)fFitGen1->DrawAllResidualsWithTransformMatrices(aSaveImage, aDrawv2));
+  tReturnArray->Add((TObjArray*)fFitGen2->DrawAllResidualsWithTransformMatrices(aSaveImage, aDrawv2));
   return tReturnArray;
 }
 

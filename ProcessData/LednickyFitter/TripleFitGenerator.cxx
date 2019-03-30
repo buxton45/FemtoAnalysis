@@ -316,12 +316,12 @@ TObjArray* TripleFitGenerator::DrawAllResiduals(bool aSaveImage)
 }
 
 //________________________________________________________________________________________________________________
-TObjArray* TripleFitGenerator::DrawAllResidualsWithTransformMatrices(bool aSaveImage)
+TObjArray* TripleFitGenerator::DrawAllResidualsWithTransformMatrices(bool aSaveImage, bool aDrawv2)
 {
   TObjArray* tReturnArray = new TObjArray();
-  tReturnArray->Add((TObjArray*)fFitGen1->DrawAllResidualsWithTransformMatrices(aSaveImage));
-  tReturnArray->Add((TObjArray*)fFitGen2->DrawAllResidualsWithTransformMatrices(aSaveImage));
-  tReturnArray->Add((TObjArray*)fFitGen3->DrawAllResidualsWithTransformMatrices(aSaveImage));
+  tReturnArray->Add((TObjArray*)fFitGen1->DrawAllResidualsWithTransformMatrices(aSaveImage, aDrawv2));
+  tReturnArray->Add((TObjArray*)fFitGen2->DrawAllResidualsWithTransformMatrices(aSaveImage, aDrawv2));
+  tReturnArray->Add((TObjArray*)fFitGen3->DrawAllResidualsWithTransformMatrices(aSaveImage, aDrawv2));
   return tReturnArray;
 }
 

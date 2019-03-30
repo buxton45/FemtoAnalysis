@@ -53,8 +53,10 @@ public:
 
   template <typename T>
   TCanvas* GetResidualsWithTransformMatrices(int aAnalysisNumber, T& aResidual, td1dVec &aParamsOverall, int aOffset=0);
-  virtual TObjArray* DrawResidualsWithTransformMatrices(int aAnalysisNumber, bool aSaveImage=false);
-  virtual TObjArray* DrawAllResidualsWithTransformMatrices(bool aSaveImage=false);
+  template <typename T>
+  TCanvas* GetResidualsWithTransformMatricesv2(int aAnalysisNumber, T& aResidual, td1dVec &aParamsOverall, int aOffset=0);
+  virtual TObjArray* DrawResidualsWithTransformMatrices(int aAnalysisNumber, bool aSaveImage=false, bool aDrawv2=false);
+  virtual TObjArray* DrawAllResidualsWithTransformMatrices(bool aSaveImage=false, bool aDrawv2=false);
 
   void CheckCorrectedCf_PartAn(int aAnalysisNumber, BFieldType aBFieldType, bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, NonFlatBgdFitType aNonFlatBgdFitType);
   virtual TCanvas* DrawSingleKStarCfwFitAndResiduals_PartAn(int aAnalysisNumber, BFieldType aBFieldType, bool aDrawData, bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, NonFlatBgdFitType aNonFlatBgdFitType, bool aSaveImage=false, bool aZoomROP=true, bool aOutputCheckCorrectedCf=false);
