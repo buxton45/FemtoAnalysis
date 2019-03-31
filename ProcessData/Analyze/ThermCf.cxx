@@ -10,7 +10,7 @@ ClassImp(ThermCf)
 
 
 //________________________________________________________________________________________________________________
-ThermCf::ThermCf(TString aFileName, TString aCfDescriptor, AnalysisType aAnalysisType, CentralityType aCentralityType, bool aCombineConj, ThermEventsType aThermEventsType, int aRebin, double aMinNorm, double aMaxNorm, bool aUseStavCf) : 
+ThermCf::ThermCf(TString aFileName, TString aCfDescriptor, AnalysisType aAnalysisType, CentralityType aCentralityType, bool aCombineConj, ThermEventsType aThermEventsType, int aRebin, double aMinNorm, double aMaxNorm, bool aUseStavCf, bool aCombineImpactParams, int aImpactParam) : 
   fFileName(aFileName),
   fCfDescriptor(aCfDescriptor),
 
@@ -21,8 +21,8 @@ ThermCf::ThermCf(TString aFileName, TString aCfDescriptor, AnalysisType aAnalysi
   fCombineLamKchPM(false),
   fThermEventsType(aThermEventsType), 
 
-  fCombineImpactParams(true),
-  fImpactParam(-1),
+  fCombineImpactParams(aCombineImpactParams),
+  fImpactParam(aImpactParam),
 
   fRebin(aRebin),
   fMinNorm(aMinNorm),

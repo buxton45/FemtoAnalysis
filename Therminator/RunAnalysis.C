@@ -50,6 +50,11 @@ int main(int argc, char **argv)
   bool bBuildArtificialV3Signal = false;
   int tV3InclusionProb1 = 25;  //NOTE: A value of -1 turns entire V2 signal into V3
 
+  bool bBuildArtificialV2Signal = false;
+  int tV2InclusionProb1 = -1;  //NOTE: A value of -1 means 100%
+
+  bool bKillFlowSignals=false;
+
   double tMaxPrimaryDecayLength = -1; 
 //  double tMaxPrimaryDecayLength = 4.01; 
 
@@ -104,6 +109,22 @@ int main(int argc, char **argv)
     tCorrelationFunctionsSaveName += TString::Format("_ArtificialV3Signal%d", tV3InclusionProb1);
     tFlowSaveName += TString::Format("_ArtificialV3Signal%d", tV3InclusionProb1);
   }
+  if(bBuildArtificialV2Signal)
+  {
+    tMatricesSaveFileName += TString::Format("_ArtificialV2Signal%d", tV2InclusionProb1);
+    tPairFractionSaveName += TString::Format("_ArtificialV2Signal%d", tV2InclusionProb1);
+    tSingleParticlesSaveName += TString::Format("_ArtificialV2Signal%d", tV2InclusionProb1);
+    tCorrelationFunctionsSaveName += TString::Format("_ArtificialV2Signal%d", tV2InclusionProb1);
+    tFlowSaveName += TString::Format("_ArtificialV2Signal%d", tV2InclusionProb1);
+  }
+  if(bKillFlowSignals)
+  {
+    tMatricesSaveFileName += TString("_KillFlowSignals");
+    tPairFractionSaveName += TString("_KillFlowSignals");
+    tSingleParticlesSaveName += TString("_KillFlowSignals");
+    tCorrelationFunctionsSaveName += TString("_KillFlowSignals");
+    tFlowSaveName += TString("_KillFlowSignals");
+  }
 
   if(bUnitWeightCfNums) tCorrelationFunctionsSaveName += TString("_NumWeight1");
   if(bBuildOtherPairs) tCorrelationFunctionsSaveName += TString("_wOtherPairs");
@@ -136,6 +157,8 @@ int main(int argc, char **argv)
   tSimpleThermAnalysis->SetCheckCoECoM(bCheckCoECoM);
   tSimpleThermAnalysis->SetRotateEventsByRandomAzimuthalAngles(bRotateEventsByRandomAzimuthalAngles);
   tSimpleThermAnalysis->SetBuildArtificialV3Signal(bBuildArtificialV3Signal, tV3InclusionProb1);
+  tSimpleThermAnalysis->SetBuildArtificialV2Signal(bBuildArtificialV2Signal, tV2InclusionProb1);
+  tSimpleThermAnalysis->SetKillFlowSignals(bKillFlowSignals);
 
   tSimpleThermAnalysis->ProcessAll();
 

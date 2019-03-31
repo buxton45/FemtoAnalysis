@@ -341,6 +341,116 @@
                                                                                  "Sim. #Xi in Residual", tColorLamK0, 24, aMarkerSize, false, true)};
 
   //--------------------------------------------------------------------------
+  vector<FitValWriterInfo> tFVWIVec_FreevFixR_FreeLam = {
+                                                                 FitValWriterInfo(kLamKchP, tFileLocation_LamKch, tResultsDate, 
+                                                                                  FitValuesWriter::BuildFitInfoTString(true, true, tNonFlatBgdFitTypesStd, 
+                                                                                                                       kInclude3Residuals, k10fm, 
+                                                                                                                       kUseXiDataAndCoulombOnlyInterp, false, 
+                                                                                                                       false, false, false, false, false, 
+                                                                                                                       true, false, false, true, 
+                                                                                                                       true, true), 
+                                                                                 "Free #it{R}_{inv}", tColorLamKchP, 20, aMarkerSize, false, true), 
+                                                                 FitValWriterInfo(kLamKchP, tFileLocation_LamKch, tResultsDate, 
+                                                                                  FitValuesWriter::BuildFitInfoTString(true, true, tNonFlatBgdFitTypesStd, 
+                                                                                                                       kInclude3Residuals, k10fm, 
+                                                                                                                       kUseXiDataAndCoulombOnlyInterp, false, 
+                                                                                                                       false, false, false, true, false, 
+                                                                                                                       true, false, false, true, 
+                                                                                                                       true, true), 
+                                                                                 "Fixed #it{R}_{inv}", tColorLamKchP, 24, aMarkerSize, false, true), 
+
+
+                                                                 FitValWriterInfo(kLamKchM, tFileLocation_LamKch, tResultsDate,
+                                                                                  FitValuesWriter::BuildFitInfoTString(true, true, tNonFlatBgdFitTypesStd, 
+                                                                                                                       kInclude3Residuals, k10fm, 
+                                                                                                                       kUseXiDataAndCoulombOnlyInterp, false, 
+                                                                                                                       false, false, false, false, false, 
+                                                                                                                       true, false, false, true, 
+                                                                                                                       true, true), 
+                                                                                 "Free #it{R}_{inv}", tColorLamKchM, 20, aMarkerSize, false, true), 
+                                                                 FitValWriterInfo(kLamKchM, tFileLocation_LamKch, tResultsDate,
+                                                                                  FitValuesWriter::BuildFitInfoTString(true, true, tNonFlatBgdFitTypesStd, 
+                                                                                                                       kInclude3Residuals, k10fm, 
+                                                                                                                       kUseXiDataAndCoulombOnlyInterp, false, 
+                                                                                                                       false, false, false, true, false, 
+                                                                                                                       true, false, false, true, 
+                                                                                                                       true, true), 
+                                                                                 "Fixed #it{R}_{inv}", tColorLamKchM, 24, aMarkerSize, false, true), 
+
+
+                                                                 FitValWriterInfo(kLamK0, tFileLocation_LamK0, tResultsDate, 
+                                                                                  FitValuesWriter::BuildFitInfoTString(true, true, tNonFlatBgdFitTypesStd, 
+                                                                                                                       kInclude3Residuals, k10fm, 
+                                                                                                                       kUseXiDataAndCoulombOnlyInterp, false, 
+                                                                                                                       false, false, false, false, false, 
+                                                                                                                       true, false, false, true, 
+                                                                                                                       true, true), 
+                                                                                 "Free #it{R}_{inv}", tColorLamK0, 20, aMarkerSize, false, true),
+                                                                 FitValWriterInfo(kLamK0, tFileLocation_LamK0, tResultsDate, 
+                                                                                  FitValuesWriter::BuildFitInfoTString(true, true, tNonFlatBgdFitTypesStd, 
+                                                                                                                       kInclude3Residuals, k10fm, 
+                                                                                                                       kUseXiDataAndCoulombOnlyInterp, false, 
+                                                                                                                       false, false, false, true, false, 
+                                                                                                                       true, false, false, true, 
+                                                                                                                       true, true), 
+                                                                                 "Fixed #it{R}_{inv}", tColorLamK0, 24, aMarkerSize, false, true)};
+
+  //--------------------------------------------------------------------------
+  vector<FitValWriterInfo> tFVWIVec_FreevFixR_FixLam = {
+                                                                 FitValWriterInfo(kLamKchP, tFileLocation_LamKch, tResultsDate, 
+                                                                                  FitValuesWriter::BuildFitInfoTString(true, true, tNonFlatBgdFitTypesStd, 
+                                                                                                                       kInclude3Residuals, k10fm, 
+                                                                                                                       kUseXiDataAndCoulombOnlyInterp, false, 
+                                                                                                                       false, true, false, false, false, 
+                                                                                                                       true, false, false, true, 
+                                                                                                                       true, true), 
+                                                                                 "Free #it{R}_{inv} (#lambda=1)", tColorLamKchP, 20, aMarkerSize, false, true), 
+                                                                 FitValWriterInfo(kLamKchP, tFileLocation_LamKch, tResultsDate, 
+                                                                                  FitValuesWriter::BuildFitInfoTString(true, true, tNonFlatBgdFitTypesStd, 
+                                                                                                                       kInclude3Residuals, k10fm, 
+                                                                                                                       kUseXiDataAndCoulombOnlyInterp, false, 
+                                                                                                                       false, true, false, true, false, 
+                                                                                                                       true, false, false, true, 
+                                                                                                                       true, true), 
+                                                                                 "Fixed #it{R}_{inv} (#lambda=1)", tColorLamKchP, 24, aMarkerSize, false, true), 
+
+
+                                                                 FitValWriterInfo(kLamKchM, tFileLocation_LamKch, tResultsDate,
+                                                                                  FitValuesWriter::BuildFitInfoTString(true, true, tNonFlatBgdFitTypesStd, 
+                                                                                                                       kInclude3Residuals, k10fm, 
+                                                                                                                       kUseXiDataAndCoulombOnlyInterp, false, 
+                                                                                                                       false, true, false, false, false, 
+                                                                                                                       true, false, false, true, 
+                                                                                                                       true, true), 
+                                                                                 "Free #it{R}_{inv} (#lambda=1)", tColorLamKchM, 20, aMarkerSize, false, true), 
+                                                                 FitValWriterInfo(kLamKchM, tFileLocation_LamKch, tResultsDate,
+                                                                                  FitValuesWriter::BuildFitInfoTString(true, true, tNonFlatBgdFitTypesStd, 
+                                                                                                                       kInclude3Residuals, k10fm, 
+                                                                                                                       kUseXiDataAndCoulombOnlyInterp, false, 
+                                                                                                                       false, true, false, true, false, 
+                                                                                                                       true, false, false, true, 
+                                                                                                                       true, true), 
+                                                                                 "Fixed #it{R}_{inv} (#lambda=1)", tColorLamKchM, 24, aMarkerSize, false, true), 
+
+
+                                                                 FitValWriterInfo(kLamK0, tFileLocation_LamK0, tResultsDate, 
+                                                                                  FitValuesWriter::BuildFitInfoTString(true, true, tNonFlatBgdFitTypesStd, 
+                                                                                                                       kInclude3Residuals, k10fm, 
+                                                                                                                       kUseXiDataAndCoulombOnlyInterp, false, 
+                                                                                                                       false, true, false, false, false, 
+                                                                                                                       true, false, false, true, 
+                                                                                                                       true, true), 
+                                                                                 "Free #it{R}_{inv} (#lambda=1)", tColorLamK0, 20, aMarkerSize, false, true),
+                                                                 FitValWriterInfo(kLamK0, tFileLocation_LamK0, tResultsDate, 
+                                                                                  FitValuesWriter::BuildFitInfoTString(true, true, tNonFlatBgdFitTypesStd, 
+                                                                                                                       kInclude3Residuals, k10fm, 
+                                                                                                                       kUseXiDataAndCoulombOnlyInterp, false, 
+                                                                                                                       false, true, false, true, false, 
+                                                                                                                       true, false, false, true, 
+                                                                                                                       true, true), 
+                                                                                 "Fixed #it{R}_{inv} (#lambda=1)", tColorLamK0, 24, aMarkerSize, false, true)};
+
+  //--------------------------------------------------------------------------
 
 
 //---------------------------------------------------------------------------------------------------------------------------------
@@ -377,6 +487,8 @@ List of FVWIVecs for convenience
   vector<FitValWriterInfo> tFVWIVec_NormvStav
   vector<FitValWriterInfo> tFVWIVec_SharevSepR
   vector<FitValWriterInfo> tFVWIVec_ExpvSimXi
+  vector<FitValWriterInfo> tFVWIVec_FreevFixR_FreeLam
+  vector<FitValWriterInfo> tFVWIVec_FreevFixR_FixLam
 */
 
 
@@ -385,6 +497,8 @@ List of FVWIVecs for convenience
 //  vector<FitValWriterInfo> tFVWIVec = tFVWIVec_NormvStav;          TString tCanNameMod = TString("_NormvStav");
 //  vector<FitValWriterInfo> tFVWIVec = tFVWIVec_SharevSepR;         TString tCanNameMod = TString("_SharevSepR");
 //  vector<FitValWriterInfo> tFVWIVec = tFVWIVec_ExpvSimXi;          TString tCanNameMod = TString("_ExpvSimXi");
+//  vector<FitValWriterInfo> tFVWIVec = tFVWIVec_FreevFixR_FreeLam;          TString tCanNameMod = TString("_FreevFixR_FreeLam");
+//  vector<FitValWriterInfo> tFVWIVec = tFVWIVec_FreevFixR_FixLam;          TString tCanNameMod = TString("_FreevFixR_FixLam");
 
   TCanvas* tCanAll = CompareAllTweak(tFVWIVec, tSystematicsFileLocation, tSystematicsFileLocation, bDrawPredictions, tCanNameMod, bDrawStatOnly);
   if(bSaveFigures) tCanAll->SaveAs(TString::Format("%sComparisons%s%s.%s", tSaveDirBase.Data(), tCanNameMod.Data(), tStatOnlyTags[bDrawStatOnly].Data(), tSaveFileType.Data()));

@@ -81,12 +81,16 @@ public:
   void BuildArtificialV3SignalInCollection(int aV3InclusionProb1, double aPsi3, TF1* aDist, vector<ThermV0Particle> &aCollection);  //NOTE: This kills v2 signal and builds v3 signal
   void BuildArtificialV3Signal(int aV3InclusionProb1=25, bool aRotateEventsByRandAzAngles=false);  //NOTE: This kills v2 signal and builds v3 signal
 
+  void BuildArtificialV2Signal(int aV2InclusionProb1=-1, bool aRotateEventsByRandAzAngles=false);
+
   //inline stuff
   void SetEventID(unsigned int aEventID);
   unsigned int GetEventID() const;
   vector<ThermParticle> GetAllParticlesCollection() const;
 
 private:
+  std::default_random_engine fGenerator;
+
   unsigned int fEventID;
 
   vector<ThermParticle> fAllParticlesCollection;

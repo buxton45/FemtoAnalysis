@@ -13,6 +13,8 @@ ClassImp(SimpleThermAnalysis)
 
 //________________________________________________________________________________________________________________
 SimpleThermAnalysis::SimpleThermAnalysis(FitGeneratorType aFitGenType, bool aBuildOtherPairs, bool aBuildSingleParticleAnalyses, bool aPerformFlowAnalysis) :
+  fGenerator(std::chrono::system_clock::now().time_since_epoch().count()),
+
   fFitGenType(aFitGenType),
   fBuildOtherPairs(aBuildOtherPairs),
   fBuildSingleParticleAnalyses(aBuildSingleParticleAnalyses),
@@ -63,7 +65,9 @@ SimpleThermAnalysis::SimpleThermAnalysis(FitGeneratorType aFitGenType, bool aBui
 
   fCheckCoECoM(false),
   fRotateEventsByRandAzAngles(false),
-  fArtificialV3Info(0,-1)
+  fArtificialV3Info(0,-1),
+  fArtificialV2Info(0,-1),
+  fKillFlowSignals(false)
 
 {
   if(fFitGenType==kPair || fFitGenType==kPairwConj)
@@ -215,6 +219,8 @@ vector<ThermEvent> SimpleThermAnalysis::ExtractEventsFromRootFile(TString aFileL
   unsigned int tEventID;
   ThermEvent tThermEvent;
 
+  if(fArtificialV3Info.first || fArtificialV2Info.first) assert(!(fArtificialV3Info.first && fArtificialV2Info.first));
+  if(fKillFlowSignals) assert(!(fArtificialV3Info.first) && !(fArtificialV2Info.first));
   for(int i=0; i<tParticleBranch->GetEntries(); i++)
   {
     tParticleBranch->GetEntry(i);
@@ -224,6 +230,7 @@ vector<ThermEvent> SimpleThermAnalysis::ExtractEventsFromRootFile(TString aFileL
     if(tParticleEntry->eventid != tEventID)
     {
       if(fArtificialV3Info.first) tThermEvent.BuildArtificialV3Signal(fArtificialV3Info.second, fRotateEventsByRandAzAngles);
+      if(fArtificialV2Info.first) tThermEvent.BuildArtificialV2Signal(fArtificialV2Info.second, fRotateEventsByRandAzAngles);
       if(fRotateEventsByRandAzAngles) tThermEvent.RotateAllParticlesByRandomAzimuthalAngle(false);
       tThermEvent.MatchDaughtersWithFathers();
       if(fCheckCoECoM) tThermEvent.CheckCoECoM();
@@ -236,12 +243,13 @@ vector<ThermEvent> SimpleThermAnalysis::ExtractEventsFromRootFile(TString aFileL
       tNEvents++;
       tEventID = tParticleEntry->eventid;
     }
-
+    if(fKillFlowSignals) MakeRandomEmissionAngle(tParticleEntry);
     tThermEvent.PushBackThermParticle(tParticleEntry);
     if(tThermEvent.IsDaughterOfInterest(tParticleEntry)) tThermEvent.PushBackThermDaughterOfInterest(tParticleEntry);
     if(tThermEvent.IsParticleOfInterest(tParticleEntry)) tThermEvent.PushBackThermParticleOfInterest(tParticleEntry);
   }
   if(fArtificialV3Info.first) tThermEvent.BuildArtificialV3Signal(fArtificialV3Info.second, fRotateEventsByRandAzAngles);
+  if(fArtificialV2Info.first) tThermEvent.BuildArtificialV2Signal(fArtificialV2Info.second, fRotateEventsByRandAzAngles);
   if(fRotateEventsByRandAzAngles) tThermEvent.RotateAllParticlesByRandomAzimuthalAngle(false);
   tThermEvent.MatchDaughtersWithFathers();
   if(fCheckCoECoM) tThermEvent.CheckCoECoM();
@@ -517,7 +525,14 @@ void SimpleThermAnalysis::SetMaxPrimaryDecayLength(double aMax)
   }
 }
 
+//________________________________________________________________________________________________________________
+void SimpleThermAnalysis::MakeRandomEmissionAngle(ParticleCoor *aParticle)
+{
+  std::uniform_real_distribution<double> tUnityDistribution(0.,1.);
+  double tU = tUnityDistribution(fGenerator);
+  double tRandAngle = 2.*TMath::Pi()*tU; //azimuthal angle
 
-
+  aParticle->TransformRotateZ(-tRandAngle);
+}
 
 

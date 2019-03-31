@@ -185,6 +185,11 @@ int main(int argc, char **argv)
   tTriple->SetResPrimMaxDecayType(tResPrimMaxDecayType);
   tTriple->SetMasterFileLocation(tLocationMasterFitResults_LamKch, tLocationMasterFitResults_LamK0);
   if(bExistsCurrentSysFile) tTriple->SetSystematicsFileLocation(tSystematicsFileLocation, tSystematicsFileLocation);
+
+  if(FixRadii) 
+  {
+    tTriple->SetRadiusLimits({{4.13, 4.13}, {3.34, 3.34}, {2.59, 2.59}});
+  }
 /*
   if(FixRadii) 
   {

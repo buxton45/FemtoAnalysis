@@ -51,7 +51,7 @@ class ThermCf {
 public:
 
   //Constructor, destructor, copy constructor, assignment operator
-  ThermCf(TString aFileName, TString aCfDescriptor, AnalysisType aAnalysisType, CentralityType aCentralityType, bool aCombineConj, ThermEventsType aThermEventsType, int aRebin, double aMinNorm, double aMaxNorm, bool aUseStavCf=false);
+  ThermCf(TString aFileName, TString aCfDescriptor, AnalysisType aAnalysisType, CentralityType aCentralityType, bool aCombineConj, ThermEventsType aThermEventsType, int aRebin, double aMinNorm, double aMaxNorm, bool aUseStavCf=false, bool aCombineImpactParams=true, int aImpactParam=-1);
   virtual ~ThermCf();
 
   static void SetStyleAndColor(TH1* aHist, int aMarkerStyle, int aColor, double aMarkerSize=0.75);

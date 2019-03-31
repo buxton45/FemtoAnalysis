@@ -63,6 +63,8 @@ public:
 
   void SetMaxPrimaryDecayLength(double aMax);
 
+  void MakeRandomEmissionAngle(ParticleCoor *aParticle);
+
   //-- inline
   void SetNEventsToMix(int aNEventsToMix);
 
@@ -76,8 +78,12 @@ public:
   void SetCheckCoECoM(bool aCheck=true);
   void SetRotateEventsByRandomAzimuthalAngles(bool aRotate=true);
   void SetBuildArtificialV3Signal(bool aBuild=true, int aV3InclusionProb1=25);  //NOTE: This kills v2 signal and creates v3 signal
+  void SetBuildArtificialV2Signal(bool aBuild=true, int aV2InclusionProb1=-1); 
+  void SetKillFlowSignals(bool aKill);
 
 private:
+  std::default_random_engine fGenerator;
+
   FitGeneratorType fFitGenType;
   bool fBuildOtherPairs;
   bool fBuildSingleParticleAnalyses;
@@ -127,8 +133,8 @@ private:
   bool fCheckCoECoM;
   bool fRotateEventsByRandAzAngles;
   std::pair <int, int> fArtificialV3Info;
-
-
+  std::pair <int, int> fArtificialV2Info;
+  bool fKillFlowSignals;
 
 #ifdef __ROOT__
   ClassDef(SimpleThermAnalysis, 1)
@@ -147,5 +153,6 @@ inline void SimpleThermAnalysis::SetFlowAnalysisSaveName(TString aSaveName) {if(
 inline void SimpleThermAnalysis::SetCheckCoECoM(bool aCheck) {fCheckCoECoM = aCheck;}
 inline void SimpleThermAnalysis::SetRotateEventsByRandomAzimuthalAngles(bool aRotate) {fRotateEventsByRandAzAngles = aRotate;}
 inline void SimpleThermAnalysis::SetBuildArtificialV3Signal(bool aBuild, int aV3InclusionProb1) {fArtificialV3Info=std::make_pair((int)aBuild, aV3InclusionProb1);}
-
+inline void SimpleThermAnalysis::SetBuildArtificialV2Signal(bool aBuild, int aV2InclusionProb1) {fArtificialV2Info=std::make_pair((int)aBuild, aV2InclusionProb1);}
+inline void SimpleThermAnalysis::SetKillFlowSignals(bool aKill) {fKillFlowSignals = aKill;}
 #endif
