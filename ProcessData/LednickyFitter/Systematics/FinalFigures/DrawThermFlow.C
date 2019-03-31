@@ -1,3 +1,5 @@
+//From file in Therminator directory of same name
+
 #include <iostream>
 #include <iomanip>
 #include <math.h>
@@ -19,6 +21,26 @@
 #include "TLegendEntry.h"
 
 #include "PIDMapping.h"
+
+//________________________________________________________________________________________________________________
+void PrintInfo(TPad* aPad, TString aOverallDescriptor, double aTextSize=0.04, double aX1=0.2, double aY1=1.05, double aX2=1.2, double aY2=1.05)
+{
+  aPad->cd();
+
+  TLatex* tTex = new TLatex();
+  tTex->SetTextAlign(12);
+  tTex->SetLineWidth(2);
+  tTex->SetTextFont(42);
+  tTex->SetTextSize(aTextSize);
+
+  tTex->DrawLatex(aX1, aY1, "THERMINATOR");
+  tTex->DrawLatex(aX2, aY2, aOverallDescriptor);
+
+  //For CompareBackgroundReductionMethods when using ArtificialV3Signal-1
+  //tTex->DrawLatex(0.3, 3.05, "THERMINATOR");
+  //tTex->DrawLatex(1.2, 3.05, aOverallDescriptor);
+
+}
 
 //________________________________________________________________________________________________________________
 TGraphErrors* GetFlowGraph(TString aFileLocation, int aPID, bool aV2=true)
@@ -74,6 +96,7 @@ int main(int argc, char **argv)
 
 
   bool bSaveFigures = false;
+  TString tSaveFileType = "pdf";
 
   int tPIDUnIdent = 0;
   int tPIDK0s = 311;
@@ -82,15 +105,17 @@ int main(int argc, char **argv)
 
   int tImpactParam = 8;
   int tV3InclusionProb1 = 25;
-  bool bDrawUnIdentOnly = false;
+  bool bDrawUnIdentOnlyV2 = false;
+  bool bDrawUnIdentOnlyV3 = true;
 
-  vector<TString> tUnIdentOnlyTag = {"", "_UnIdentOnly"};
+  vector<TString> tUnIdentOnlyTagV2 = {"", "_UnIdentOnlyV2"};
+  vector<TString> tUnIdentOnlyTagV3 = {"", "_UnIdentOnlyV3"};
 
-  TString tFileName = TString::Format("FlowGraphs_ArtificialV3Signal%d", tV3InclusionProb1);
-//  TString tFileName = TString("FlowGraphs_RandomEPs");
+//  TString tFileName = TString::Format("FlowGraphs_ArtificialV3Signal%d", tV3InclusionProb1);
+  TString tFileName = TString("FlowGraphs_RandomEPs");
   TString tFileLocation = TString::Format("/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b%d/%s.root", tImpactParam, tFileName.Data());
 
-  TString tSaveDir = "/home/jesse/Analysis/Presentations/AliFemto/20180627/Figures/Flow/";
+  TString tSaveDir = "/home/jesse/Analysis/FemtoAnalysis/AnalysisNotes/5_Fitting/5.5_NonFlatBackground/Figures/";
 
   //-------------------------------------------------------------------------------------
 
@@ -107,7 +132,7 @@ int main(int argc, char **argv)
   double tXLow = 0.;
   double tXHigh = 3.;
   double tYLow = -0.04;
-  double tYHigh = 0.34;
+  double tYHigh = 0.42;
   tGraphv2_UnIdent->GetXaxis()->SetLimits(tXLow, tXHigh);
   tGraphv2_UnIdent->GetYaxis()->SetRangeUser(tYLow, tYHigh);
 
@@ -131,7 +156,7 @@ int main(int argc, char **argv)
 
 
   tGraphv2_UnIdent->Draw("AP");
-  if(!bDrawUnIdentOnly)
+  if(!bDrawUnIdentOnlyV2)
   {
     tGraphv2_K0s->Draw("Psame");
     tGraphv2_Kch->Draw("Psame");
@@ -140,7 +165,7 @@ int main(int argc, char **argv)
   }
 
   tGraphv3_UnIdent->Draw("Psame");  
-  if(!bDrawUnIdentOnly)
+  if(!bDrawUnIdentOnlyV3)
   {
     tGraphv3_K0s->Draw("Psame");
     tGraphv3_Kch->Draw("Psame");
@@ -149,16 +174,19 @@ int main(int argc, char **argv)
   }
 
   //------------------------
-  TLegend* tLeg1 = new TLegend(0.175, 0.625, 0.335, 0.95, "#it{v}_{2}", "NDC");
+  TLegend* tLeg1;
+  if(bDrawUnIdentOnlyV2) tLeg1 = new TLegend(0.175, 0.77, 0.335, 0.90, "#it{v}_{2}", "NDC");
+  else                   tLeg1 = new TLegend(0.175, 0.575, 0.335, 0.90, "#it{v}_{2}", "NDC");
   tLeg1->SetFillColor(0);
   //tLeg1->SetBorderSize(0);
   tLeg1->SetTextAlign(22);
+  tLeg1->SetTextSize(0.045);
     tLeg1->AddEntry(tGraphv2_UnIdent, "Unident.", "p");
-    if(!bDrawUnIdentOnly)
+    if(!bDrawUnIdentOnlyV2)
     {
       tLeg1->AddEntry(tGraphv2_K0s, GetParticleNamev2(tPIDK0s), "p");
-      tLeg1->AddEntry(tGraphv2_Kch, GetParticleNamev2(tPIDKch), "p");
-      tLeg1->AddEntry(tGraphv2_Lam, GetParticleNamev2(tPIDLam), "p");
+      tLeg1->AddEntry(tGraphv2_Kch, "K^{#pm}", "p");
+      tLeg1->AddEntry(tGraphv2_Lam, "#Lambda+#bar{#Lambda}", "p");
     }
   TLegendEntry *tHeader1 = (TLegendEntry*)tLeg1->GetListOfPrimitives()->First();
     tHeader1->SetTextSize(0.065);
@@ -167,16 +195,19 @@ int main(int argc, char **argv)
 
   //------------------------
 
-  TLegend* tLeg2 = new TLegend(0.335, 0.625, 0.495, 0.95, "v_{3}", "NDC");
+  TLegend* tLeg2;
+  if(bDrawUnIdentOnlyV3) tLeg2 = new TLegend(0.335, 0.77, 0.495, 0.90, "#it{v}_{3}", "NDC");
+  else                   tLeg2 = new TLegend(0.335, 0.575, 0.495, 0.90, "#it{v}_{3}", "NDC");
   tLeg2->SetFillColor(0);
   //tLeg2->SetBorderSize(0);
   tLeg2->SetTextAlign(22);
+  tLeg2->SetTextSize(0.045);
     tLeg2->AddEntry(tGraphv3_UnIdent, "Unident.", "p");
-    if(!bDrawUnIdentOnly)
+    if(!bDrawUnIdentOnlyV3)
     {
       tLeg2->AddEntry(tGraphv3_K0s, GetParticleNamev2(tPIDK0s), "p");
-      tLeg2->AddEntry(tGraphv3_Kch, GetParticleNamev2(tPIDKch), "p");
-      tLeg2->AddEntry(tGraphv3_Lam, GetParticleNamev2(tPIDLam), "p");
+      tLeg2->AddEntry(tGraphv3_Kch, "K^{#pm}", "p");
+      tLeg2->AddEntry(tGraphv3_Lam, "#Lambda+#bar{#Lambda}", "p");
     }
   TLegendEntry *tHeader2 = (TLegendEntry*)tLeg2->GetListOfPrimitives()->First();
     tHeader2->SetTextSize(0.065);
@@ -184,8 +215,19 @@ int main(int argc, char **argv)
   tLeg2->Draw();
 
   //---------------------------------------
+  TString tOverallDescriptor = TString::Format("b=%d fm", tImpactParam);
 
-  if(bSaveFigures) tFlowCan->SaveAs(TString::Format("%s%s_b%d%s.eps", tSaveDir.Data(), tFileName.Data(), tImpactParam, tUnIdentOnlyTag[bDrawUnIdentOnly].Data()));
+  double tInfX1 = 1.5;
+  double tInfY1 = 0.37;
+
+  double tInfX2 = 1.5;
+  double tInfY2 = 0.33;
+
+  PrintInfo((TPad*)tFlowCan, tOverallDescriptor, 0.05, tInfX1, tInfY1, tInfX2, tInfY2);
+
+  //---------------------------------------
+
+  if(bSaveFigures) tFlowCan->SaveAs(TString::Format("%s%s_b%d%s%s.%s", tSaveDir.Data(), tFileName.Data(), tImpactParam, tUnIdentOnlyTagV2[bDrawUnIdentOnlyV2].Data(), tUnIdentOnlyTagV3[bDrawUnIdentOnlyV3].Data(), tSaveFileType.Data()));
 
 //-------------------------------------------------------------------------------
 

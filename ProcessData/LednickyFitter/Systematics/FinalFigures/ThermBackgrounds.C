@@ -1666,7 +1666,7 @@ int main(int argc, char **argv)
   {
     if(bDrawAllCentralities) tCanCompareAnalyses = CompareAnalyses_AllCent(tCfDescriptor, tSingleFileName, bCombineConjugates, tEventsType, tRebin, tMinNorm, tMaxNorm, bUseStavCf);
     else tCanCompareAnalyses = CompareAnalyses(tCfDescriptor, tSingleFileName, tImpactParam, bCombineConjugates, bCombineImpactParams, tEventsType, tRebin, tMinNorm, tMaxNorm, bUseStavCf);
-    if(bSaveFigures) tCanCompareAnalyses->SaveAs(TString::Format("%s%s.%s", tSaveFileBase.Data(), tCanCompareAnalyses->GetName(), tSaveFileType.Data()));
+    if(bSaveFigures) tCanCompareAnalyses->SaveAs(TString::Format("%s%s.%s", tSaveDir.Data(), tCanCompareAnalyses->GetName(), tSaveFileType.Data()));
   }
 
 

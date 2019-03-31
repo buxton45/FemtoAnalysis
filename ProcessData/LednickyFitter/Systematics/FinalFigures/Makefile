@@ -26,9 +26,9 @@ CFLAGS = $(shell gsl-config --cflags) $(shell root-config --cflags) -Wall -std=c
 #IFLAGS = -I$(ROOTSYS)/include
 #.PHONY: clean
 
-MY_LIBS = $(addprefix build/, FitParameter.o FitChi2Histograms.o BackgroundFitter.o FitPartialAnalysis.o FitPairAnalysis.o FitSharedAnalyses.o MathematicaSession.o WaveFunction.o ChargedResidualCf.o SimpleChargedResidualCf.o NeutralResidualCf.o ResidualCollection.o LednickyFitter.o FitValuesWriter.o FitValuesLatexTableHelperWriter.o FitValuesWriterwSysErrs.o FitValuesLatexTableHelperWriterwSysErrs.o FitGenerator.o FitGeneratorAndDraw.o DualieFitGenerator.o ThermCf.o CfLite.o CfHeavy.o Types.o Types_LambdaValues.o Types_FitParamValues.o Types_ThermBgdParams.o Types_SysFileInfo.o Faddeeva.o FitSystematicAnalysis.o DualieFitSystematicAnalysis.o TripleFitGenerator.o TripleFitSystematicAnalysis.o CanvasPartition.o Cf2dLite.o Cf2dHeavy.o AnalysisInfo.o Purity.o PartialAnalysis.o Analysis.o DataAndModel.o SystematicAnalysis.o SpherHarmonics.o CorrFctnDirectYlm.o CorrFctnDirectYlmLite.o CorrFctnDirectYlmHeavy.o CorrFctnDirectYlmTherm.o SuperpositionFitBgd.o)
+MY_LIBS = $(addprefix build/, FitParameter.o FitChi2Histograms.o BackgroundFitter.o FitPartialAnalysis.o FitPairAnalysis.o FitSharedAnalyses.o MathematicaSession.o WaveFunction.o ChargedResidualCf.o SimpleChargedResidualCf.o NeutralResidualCf.o ResidualCollection.o LednickyFitter.o FitValuesWriter.o FitValuesLatexTableHelperWriter.o FitValuesWriterwSysErrs.o FitValuesLatexTableHelperWriterwSysErrs.o FitGenerator.o FitGeneratorAndDraw.o DualieFitGenerator.o ThermCf.o CfLite.o CfHeavy.o Types.o Types_LambdaValues.o Types_FitParamValues.o Types_ThermBgdParams.o Types_SysFileInfo.o Faddeeva.o FitSystematicAnalysis.o DualieFitSystematicAnalysis.o TripleFitGenerator.o TripleFitSystematicAnalysis.o CanvasPartition.o Cf2dLite.o Cf2dHeavy.o AnalysisInfo.o Purity.o PartialAnalysis.o Analysis.o DataAndModel.o SystematicAnalysis.o SpherHarmonics.o CorrFctnDirectYlm.o CorrFctnDirectYlmLite.o CorrFctnDirectYlmHeavy.o CorrFctnDirectYlmTherm.o SuperpositionFitBgd.o PIDMapping.o)
 
-BINARIES = runDrawFinalResultswSysErrsTriple runmTScalingTriple runComparisonsTriple runPurity runThermBgds runThermBgdsCompFlow runAvgSepXiKch runAvgSepLamK runStavMethComp runGetTotCollSizes
+BINARIES = runDrawFinalResultswSysErrsTriple runmTScalingTriple runComparisonsTriple runPurity runThermBgds runThermBgdsCompFlow runThermFlow runAvgSepXiKch runAvgSepLamK runStavMethComp runGetTotCollSizes
 
 all: $(BINARIES)
 
@@ -49,6 +49,9 @@ runThermBgds: ${MY_LIBS} ThermBackgrounds.C
 
 runThermBgdsCompFlow: ${MY_LIBS} ThermBgdsCompareFlow.C
 	g++ ThermBgdsCompareFlow.C ${MY_LIBS} -I${INCDIR} -o runThermBgdsCompFlow -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS)
+
+runThermFlow: ${MY_LIBS} DrawThermFlow.C
+	g++ DrawThermFlow.C ${MY_LIBS} -I${INCDIR} -o runThermFlow -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS)
 
 runAvgSepXiKch: ${MY_LIBS} AvgSepXiKch.C
 	g++ AvgSepXiKch.C ${MY_LIBS} -I${INCDIR} -o runAvgSepXiKch -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS)
