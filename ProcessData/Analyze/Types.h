@@ -335,6 +335,11 @@ kXiCKSt0=40, kAXiCAKSt0=41, kXiCAKSt0=42, kAXiCKSt0=43
   extern const char* cModelKStarTrueVsRecMixedBaseTag;
   extern const char* cModelKStarTrueVsRecRotMixedBaseTag;
 
+  extern const char* cModelKStarTrueVsRecSameBaseTag_Grid;
+  extern const char* cModelKStarTrueVsRecRotSameBaseTag_Grid;
+  extern const char* cModelKStarTrueVsRecMixedBaseTag_Grid;
+  extern const char* cModelKStarTrueVsRecRotMixedBaseTag_Grid;
+
     //
 
   extern const char* cLambdaPurityTag;

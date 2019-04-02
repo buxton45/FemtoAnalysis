@@ -28,7 +28,7 @@ CFLAGS = $(shell gsl-config --cflags) $(shell root-config --cflags) -Wall -std=c
 
 MY_LIBS = $(addprefix build/, FitParameter.o FitChi2Histograms.o BackgroundFitter.o FitPartialAnalysis.o FitPairAnalysis.o FitSharedAnalyses.o MathematicaSession.o WaveFunction.o ChargedResidualCf.o SimpleChargedResidualCf.o NeutralResidualCf.o ResidualCollection.o LednickyFitter.o FitValuesWriter.o FitValuesLatexTableHelperWriter.o FitValuesWriterwSysErrs.o FitValuesLatexTableHelperWriterwSysErrs.o FitGenerator.o FitGeneratorAndDraw.o DualieFitGenerator.o ThermCf.o CfLite.o CfHeavy.o Types.o Types_LambdaValues.o Types_FitParamValues.o Types_ThermBgdParams.o Types_SysFileInfo.o Faddeeva.o FitSystematicAnalysis.o DualieFitSystematicAnalysis.o TripleFitGenerator.o TripleFitSystematicAnalysis.o CanvasPartition.o Cf2dLite.o Cf2dHeavy.o AnalysisInfo.o Purity.o PartialAnalysis.o Analysis.o DataAndModel.o SystematicAnalysis.o SpherHarmonics.o CorrFctnDirectYlm.o CorrFctnDirectYlmLite.o CorrFctnDirectYlmHeavy.o CorrFctnDirectYlmTherm.o SuperpositionFitBgd.o PIDMapping.o)
 
-BINARIES = runDrawFinalResultswSysErrsTriple runmTScalingTriple runComparisonsTriple runPurity runThermBgds runThermBgdsCompFlow runThermFlow runAvgSepXiKch runAvgSepLamK runStavMethComp runGetTotCollSizes runCompLamK runPlotAllFitsCentral
+BINARIES = runDrawFinalResultswSysErrsTriple runmTScalingTriple runComparisonsTriple runPurity runBuildMomResMatrix runThermBgds runThermBgdsCompFlow runThermFlow runAvgSepXiKch runAvgSepLamK runStavMethComp runGetTotCollSizes runCompLamK runPlotAllFitsCentral
 
 all: $(BINARIES)
 
@@ -43,6 +43,9 @@ runComparisonsTriple: ${MY_LIBS} DrawComparisonsTriple.C
 
 runPurity: ${MY_LIBS} BuildPurityPlots.C
 	g++ BuildPurityPlots.C ${MY_LIBS} -I${INCDIR} -o runPurity -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS)
+
+runBuildMomResMatrix: ${MY_LIBS} BuildMomResMatrix.C
+	g++ BuildMomResMatrix.C ${MY_LIBS} -I${INCDIR} -o runBuildMomResMatrix -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS)
 
 runThermBgds: ${MY_LIBS} ThermBackgrounds.C
 	g++ ThermBackgrounds.C ${MY_LIBS} -I${INCDIR} -o runThermBgds -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS)

@@ -96,10 +96,10 @@ int main(int argc, char **argv)
 //-----------------------------------------------------------------------------
 
   TString FileLocationBaseMC = "~/Analysis/FemtoAnalysis/Results/Results_cLamcKch_AsRcMC_KchAndLamFix2_20160229/Results_cLamcKch_AsRcMC_KchAndLamFix2_20160229";
-  Analysis* LamKchPMC = new Analysis(FileLocationBaseMC,kLamKchP,k0010);
-  Analysis* ALamKchPMC = new Analysis(FileLocationBaseMC,kALamKchP,k0010);
-  Analysis* LamKchMMC = new Analysis(FileLocationBaseMC,kLamKchM,k0010);
-  Analysis* ALamKchMMC = new Analysis(FileLocationBaseMC,kALamKchM,k0010);
+  Analysis* LamKchPMC = new Analysis(FileLocationBaseMC,kLamKchP,k0010,kGrid,5);
+  Analysis* ALamKchPMC = new Analysis(FileLocationBaseMC,kALamKchP,k0010,kGrid,5);
+  Analysis* LamKchMMC = new Analysis(FileLocationBaseMC,kLamKchM,k0010,kGrid,5);
+  Analysis* ALamKchMMC = new Analysis(FileLocationBaseMC,kALamKchM,k0010,kGrid,5);
 /*
   TString FileLocationBaseMCd = "~/Analysis/FemtoAnalysis/Results/Results_cLamcKch_AsRcMCd_KchAndLamFix2_20160229/Results_cLamcKch_AsRcMCd_KchAndLamFix2_20160229";
   Analysis* LamKchPMCd = new Analysis(FileLocationBaseMCd,kLamKchP,k0010);
@@ -311,6 +311,7 @@ int main(int argc, char **argv)
   tLamKchPCorrected->Divide(LamKchPRec);
   tLamKchPCorrected->Draw();
 //-------------------------------------------------------------------------------
+  cout << "DONE" << endl;
   theApp->Run(kTRUE); //Run the TApp to pause the code.
   // Select "Exit ROOT" from Canvas "File" menu to exit
   // and execute the next statements.

@@ -368,16 +368,16 @@ const char* cModelKStarCfNumFakeBaseTag = "NumFakeKStarModelCf_";
 const char* cModelKStarCfNumFakeIdealBaseTag = "NumFakeIdealKStarModelCf_";
 
 //const char* cModelKStarTrueVsRecBaseTag = "QgenQrecKStarModelCf_";
-/*
-const char* cModelKStarTrueVsRecSameBaseTag = "fKTrueKRecSameKStarModelCf_";
-const char* cModelKStarTrueVsRecRotSameBaseTag = "fKTrueKRecRotSameKStarModelCf_";
-const char* cModelKStarTrueVsRecMixedBaseTag = "fKTrueKRecMixedKStarModelCf_";
-const char* cModelKStarTrueVsRecRotMixedBaseTag = "fKTrueKRecRotMixedKStarModelCf_";
-*/
+
 const char* cModelKStarTrueVsRecSameBaseTag = "KTrueVsKRecSameKStarModelCf_";
 const char* cModelKStarTrueVsRecRotSameBaseTag = "KTrueVsKRecRotSameKStarModelCf_";
 const char* cModelKStarTrueVsRecMixedBaseTag = "KTrueVsKRecMixedKStarModelCf_";
 const char* cModelKStarTrueVsRecRotMixedBaseTag = "KTrueVsKRecRotMixedKStarModelCf_";
+
+const char* cModelKStarTrueVsRecSameBaseTag_Grid = "fKTrueKRecSameKStarModelCf_";
+const char* cModelKStarTrueVsRecRotSameBaseTag_Grid = "fKTrueKRecRotSameKStarModelCf_";
+const char* cModelKStarTrueVsRecMixedBaseTag_Grid = "fKTrueKRecMixedKStarModelCf_";
+const char* cModelKStarTrueVsRecRotMixedBaseTag_Grid = "fKTrueKRecRotMixedKStarModelCf_";
 
   //
 

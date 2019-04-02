@@ -620,28 +620,32 @@ void PartialAnalysis::BuildModelKStarTrueVsRec(KStarTrueVsRecType aType)
 
   switch(aType) {
   case kSame:
-    tName = cModelKStarTrueVsRecSameBaseTag;
+    if(fAnalysisRunType==kGrid) tName = cModelKStarTrueVsRecSameBaseTag_Grid;
+    else                        tName = cModelKStarTrueVsRecSameBaseTag;
       tName += fAnalysisBaseTag;
     tNewName = tName + fBFieldTag;
     fModelKStarTrueVsRecSame = Get2dHisto(tName,tNewName);
     break;
 
   case kRotSame:
-    tName = cModelKStarTrueVsRecRotSameBaseTag;
+    if(fAnalysisRunType==kGrid) tName = cModelKStarTrueVsRecRotSameBaseTag_Grid;
+    else                        tName = cModelKStarTrueVsRecRotSameBaseTag;
       tName += fAnalysisBaseTag;
     tNewName = tName + fBFieldTag;
     fModelKStarTrueVsRecRotSame = Get2dHisto(tName,tNewName);
     break;
 
   case kMixed:
-    tName = cModelKStarTrueVsRecMixedBaseTag;
+    if(fAnalysisRunType==kGrid) tName = cModelKStarTrueVsRecMixedBaseTag_Grid;
+    else                        tName = cModelKStarTrueVsRecMixedBaseTag;
       tName += fAnalysisBaseTag;
     tNewName = tName + fBFieldTag;
     fModelKStarTrueVsRecMixed = Get2dHisto(tName,tNewName);
     break;
 
   case kRotMixed:
-    tName = cModelKStarTrueVsRecRotMixedBaseTag;
+    if(fAnalysisRunType==kGrid) tName = cModelKStarTrueVsRecRotMixedBaseTag_Grid;
+    else                        tName = cModelKStarTrueVsRecRotMixedBaseTag;
       tName += fAnalysisBaseTag;
     tNewName = tName + fBFieldTag;
     fModelKStarTrueVsRecRotMixed = Get2dHisto(tName,tNewName);

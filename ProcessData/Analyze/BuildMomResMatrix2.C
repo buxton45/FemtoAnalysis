@@ -99,10 +99,10 @@ int main(int argc, char **argv)
   //the program ends and closes everything
 //-----------------------------------------------------------------------------
   TString FileLocationBase = "~/Analysis/FemtoAnalysis/Results/Results_cLamcKch_AsRc_KchAndLamFix2_20160229/Results_cLamcKch_AsRc_KchAndLamFix2_20160229";
-    Analysis* LamKchP = new Analysis(FileLocationBase,kLamKchP,k0010);
+    Analysis* LamKchP = new Analysis(FileLocationBase,kLamKchP,k0010,kGrid,5);
 
   TString FileLocationBaseMC = "~/Analysis/FemtoAnalysis/Results/Results_cLamcKch_AsRcMC_KchAndLamFix2_20160229/Results_cLamcKch_AsRcMC_KchAndLamFix2_20160229";
-    Analysis* LamKchPMCTot = new Analysis(FileLocationBaseMC,kLamKchP,k0010);
+    Analysis* LamKchPMCTot = new Analysis(FileLocationBaseMC,kLamKchP,k0010,kGrid,5);
 //-----------------------------------------------------------------------------
 
   LamKchP->BuildKStarHeavyCf();

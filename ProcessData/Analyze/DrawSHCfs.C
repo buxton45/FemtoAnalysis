@@ -331,7 +331,7 @@ int main(int argc, char **argv)
     //----------
 
     tCanName0010 = TString::Format("CanCfYlmReC00C11_%s%s_0010", cAnalysisBaseTags[tAnType], cAnalysisBaseTags[tConjAnType]);
-    tCan0010 = new TCanvas(tCanName0010, tCanName0010);
+    tCan0010 = new TCanvas(tCanName0010, tCanName0010, 1400, 500);
     tCan0010->Divide(2, 1);
 
     DrawSHCfComponent((TPad*)tCan0010->cd(1), tAnaly0010, tConjAnaly0010, kYlmReal, 0, 0, tRebin);
