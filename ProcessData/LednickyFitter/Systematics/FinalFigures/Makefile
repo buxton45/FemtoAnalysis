@@ -28,7 +28,7 @@ CFLAGS = $(shell gsl-config --cflags) $(shell root-config --cflags) -Wall -std=c
 
 MY_LIBS = $(addprefix build/, FitParameter.o FitChi2Histograms.o BackgroundFitter.o FitPartialAnalysis.o FitPairAnalysis.o FitSharedAnalyses.o MathematicaSession.o WaveFunction.o ChargedResidualCf.o SimpleChargedResidualCf.o NeutralResidualCf.o ResidualCollection.o LednickyFitter.o FitValuesWriter.o FitValuesLatexTableHelperWriter.o FitValuesWriterwSysErrs.o FitValuesLatexTableHelperWriterwSysErrs.o FitGenerator.o FitGeneratorAndDraw.o DualieFitGenerator.o ThermCf.o CfLite.o CfHeavy.o Types.o Types_LambdaValues.o Types_FitParamValues.o Types_ThermBgdParams.o Types_SysFileInfo.o Faddeeva.o FitSystematicAnalysis.o DualieFitSystematicAnalysis.o TripleFitGenerator.o TripleFitSystematicAnalysis.o CanvasPartition.o Cf2dLite.o Cf2dHeavy.o AnalysisInfo.o Purity.o PartialAnalysis.o Analysis.o DataAndModel.o SystematicAnalysis.o SpherHarmonics.o CorrFctnDirectYlm.o CorrFctnDirectYlmLite.o CorrFctnDirectYlmHeavy.o CorrFctnDirectYlmTherm.o SuperpositionFitBgd.o PIDMapping.o)
 
-BINARIES = runDrawFinalResultswSysErrsTriple runmTScalingTriple runComparisonsTriple runPurity runThermBgds runThermBgdsCompFlow runThermFlow runAvgSepXiKch runAvgSepLamK runStavMethComp runGetTotCollSizes
+BINARIES = runDrawFinalResultswSysErrsTriple runmTScalingTriple runComparisonsTriple runPurity runThermBgds runThermBgdsCompFlow runThermFlow runAvgSepXiKch runAvgSepLamK runStavMethComp runGetTotCollSizes runCompLamK runPlotAllFitsCentral
 
 all: $(BINARIES)
 
@@ -64,6 +64,12 @@ runStavMethComp: ${MY_LIBS} StavMethodComparisons.C
 
 runGetTotCollSizes: ${MY_LIBS} GetTotalCollectionSizes.C
 	g++ GetTotalCollectionSizes.C ${MY_LIBS} -I${INCDIR} -o runGetTotCollSizes -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS)
+
+runCompLamK: ${MY_LIBS} CompareLamKchPKchMK0s.C
+	g++ CompareLamKchPKchMK0s.C ${MY_LIBS} -I${INCDIR} -o runCompLamK -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS)
+
+runPlotAllFitsCentral: ${MY_LIBS} PlotAllFitsCentral.C
+	g++ PlotAllFitsCentral.C ${MY_LIBS} -I${INCDIR} -o runPlotAllFitsCentral -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS)
 
 build/%.o: ${ANALYZE_DIR}/%.cxx ${ANALYZE_DIR}/%.h
 	g++ -c $< $(CFLAGS) -o $@

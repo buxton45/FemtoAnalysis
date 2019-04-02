@@ -9,7 +9,7 @@ class CanvasPartition;
 
 
 //________________________________________________________________________________________________________________
-TCanvas* DrawKStarCfs(FitGenerator* aFG1, FitGenerator* aFG2, FitGenerator* aFG3, bool aZoom=false, TString aCanNameModifier="")
+TCanvas* DrawKStarCfs(FitGenerator* aFG1, FitGenerator* aFG2, FitGenerator* aFG3, bool aZoomX=false, bool aZoomY=false, TString aCanNameModifier="")
 {
   AnalysisType aAnType = aFG1->GetFitSharedAnalyses()->GetFitPairAnalysis(0)->GetAnalysisType();
   AnalysisType aConjType = aFG1->GetFitSharedAnalyses()->GetFitPairAnalysis(1)->GetAnalysisType();
@@ -21,7 +21,8 @@ TCanvas* DrawKStarCfs(FitGenerator* aFG1, FitGenerator* aFG2, FitGenerator* aFG3
   //-------------------------
 
   TString tCanvasName = TString("canKStarCfs");
-  if(aZoom) tCanvasName += TString("Zoom");
+  if(aZoomX) tCanvasName += TString("ZoomX");
+  if(aZoomY) tCanvasName += TString("ZoomY");
   tCanvasName += TString(cAnalysisBaseTags[aAnType]);
   if(tConjIncluded) tCanvasName += TString("wConj");
   tCanvasName += aCanNameModifier;
@@ -32,10 +33,15 @@ TCanvas* DrawKStarCfs(FitGenerator* aFG1, FitGenerator* aFG2, FitGenerator* aFG3
   double tXLow = -0.02;
 //  double tXHigh = 0.99;
   double tXHigh = aFG1->GetKStarCf(0)->GetXaxis()->GetBinUpEdge(aFG1->GetKStarCf(0)->GetNbinsX())-0.01;
-  if(aZoom) tXHigh = 0.329;
+  if(aZoomX) tXHigh = 0.329;
 
   double tYLow = 0.86;
   double tYHigh = 1.07;
+  if(aZoomY)
+  {
+    tYLow = 0.951;
+    tYHigh = 1.029;
+  }
   CanvasPartition* tCanPart = new CanvasPartition(tCanvasName,tNx,tNy,tXLow,tXHigh,tYLow,tYHigh,0.12,0.05,0.13,0.05);
   if(!tConjIncluded) tCanPart->GetCanvas()->SetCanvasSize(350,500);
 
@@ -99,7 +105,8 @@ TCanvas* DrawKStarCfs(FitGenerator* aFG1, FitGenerator* aFG2, FitGenerator* aFG3
 
       if(i==0 && j==0)
       {
-        tCanPart->SetupTLegend("", 0, 0, 0.20, 0.05, 0.60, 0.50);
+        if(aZoomY) tCanPart->SetupTLegend("", 0, 0, 0.20, 0.05, 0.60, 0.45);
+        else       tCanPart->SetupTLegend("", 0, 0, 0.20, 0.05, 0.60, 0.50);
         tCanPart->AddLegendEntry(0, 0, (TH1*)tCanPart->GetGraphsInPad(0,0)->At(0), "Normal: Num/Den", "p");
         tCanPart->AddLegendEntry(0, 0, (TH1*)tCanPart->GetGraphsInPad(0,0)->At(1), "Correct Stav.", "p");
         tCanPart->AddLegendEntry(0, 0, (TH1*)tCanPart->GetGraphsInPad(0,0)->At(2), "Incorrect Stav.", "p");
@@ -146,7 +153,7 @@ int main(int argc, char **argv)
   bool aCustomRebin = true;
   if(aCustomRebin) aRebin=2;  //Just want it to be != 1, so markers will be resized
 
-  AnalysisType tAnType = kLamKchM;
+  AnalysisType tAnType = kLamKchP;
   AnalysisRunType tAnRunType = kTrain;
   int tNPartialAnalysis = 2;
   CentralityType tCentType = kMB;  //TODO
@@ -211,7 +218,8 @@ int main(int argc, char **argv)
     for(int i=0; i<tLamKchP3->GetNAnalyses(); i++) tLamKchP3->GetKStarCfHeavy(i)->Rebin(aRebin);
   }
   //-----------------------------------------------------------------------------
-  bool bZoom = false;
+  bool bZoomX = false;
+  bool bZoomY = false;
   bool bDrawKStarCfs = true;
 
   //-----------------------------------------------------------------------------
@@ -225,7 +233,7 @@ int main(int argc, char **argv)
   //-----------------------------------------------------------------------------
   if(bDrawKStarCfs)
   {
-    TCanvas* tCan = DrawKStarCfs(tLamKchP1, tLamKchP2, tLamKchP3, bZoom, tCanNameModifier);
+    TCanvas* tCan = DrawKStarCfs(tLamKchP1, tLamKchP2, tLamKchP3, bZoomX, bZoomY, tCanNameModifier);
     if(SaveImages) tCan->SaveAs(TString::Format("%s%s.%s", tSaveDir.Data(), tCan->GetName(), tSaveFileType.Data()));
   }
 
