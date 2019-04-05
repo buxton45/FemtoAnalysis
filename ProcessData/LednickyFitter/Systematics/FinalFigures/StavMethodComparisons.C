@@ -117,7 +117,7 @@ TCanvas* DrawKStarCfs(FitGenerator* aFG1, FitGenerator* aFG2, FitGenerator* aFG3
   tCanPart->SetDrawUnityLine(true);
   tCanPart->DrawAll();
   tCanPart->DrawXaxisTitle("#it{k}* (GeV/#it{c})");
-  if(tConjIncluded) tCanPart->DrawYaxisTitle("C(k*)",43,25,0.05,0.75);
+  if(tConjIncluded) tCanPart->DrawYaxisTitle("#it{C}(#it{k}*)",43,25,0.05,0.75);
   else tCanPart->DrawYaxisTitle("#it{C}(#it{k}*)",43,25,0.075,0.875);
 
   return tCanPart->GetCanvas();

@@ -12,7 +12,7 @@ int main(int argc, char **argv)
   //the program ends and closes everything
 
   bool bSaveFigures = false;
-  TString tSaveFileType = "pdf";  //Needs to be pdf for systematics to be transparent!
+  TString tSaveFileType = "eps";  //Needs to be pdf for systematics to be transparent!
 
   vector<TString> tStatOnlyTags = {"", "_StatOnly"};
   vector<TString> tVerticalTags = {"", "_Vertical"};
@@ -60,8 +60,9 @@ int main(int argc, char **argv)
   TString tSaveDirBase = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_%s/%s/Comparisons/", tResultsDate.Data(), tFitInfoTString.Data());
 
 
+  vector<TString> twPredVec{"_woPredictions", ""};
   TCanvas* tCanAll2Panel = CompareAll2Panel(tFVWIVec, tSystematicsFileLocation, tSystematicsFileLocation, bDrawPredictions, tCanNameMod, bDrawStatOnly, bDrawVertical);
-  if(bSaveFigures) tCanAll2Panel->SaveAs(TString::Format("%sFinalResults_Comp3An%s%s.%s", tSaveDirBase.Data(), tStatOnlyTags[bDrawStatOnly].Data(), tVerticalTags[bDrawVertical].Data(), tSaveFileType.Data()));
+  if(bSaveFigures) tCanAll2Panel->SaveAs(TString::Format("%sFinalResults_Comp3An%s%s%s.%s", tSaveDirBase.Data(), twPredVec[bDrawPredictions].Data(), tStatOnlyTags[bDrawStatOnly].Data(), tVerticalTags[bDrawVertical].Data(), tSaveFileType.Data()));
 
 
 
