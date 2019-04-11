@@ -194,9 +194,9 @@ void PrintFitParams(TPad* aPad, TF1* aFit, double aTextSize=0.035, int aColor=80
   tPar5 = aFit->GetParameter(5);
   tPar6 = aFit->GetParameter(6);
 
-  tTex->DrawLatex(0.15, 0.92, TString::Format("#color[%i]{Bgd} = %0.3f + %0.3fx + %0.3fx^{2} + ..." , aColor, tPar0, tPar1, tPar2));
-  tTex->DrawLatex(0.30, 0.91, TString::Format("... + %0.3fx^{3} + %0.3fx^{4} + ..." , tPar3, tPar4));
-  tTex->DrawLatex(0.30, 0.90, TString::Format("... + %0.3fx^{5} + %0.3fx^{6} + ..." , tPar5, tPar6));
+  tTex->DrawLatex(0.15, 0.92, TString::Format("#color[%i]{Bgd} = %0.3f + %0.3fx + %0.3fx^{2}" , aColor, tPar0, tPar1, tPar2));
+  tTex->DrawLatex(0.30, 0.91, TString::Format("+ %0.3fx^{3} + %0.3fx^{4}" , tPar3, tPar4));
+  tTex->DrawLatex(0.30, 0.90, TString::Format("+ %0.3fx^{5} + %0.3fx^{6}" , tPar5, tPar6));
 }
 
 
@@ -1640,7 +1640,7 @@ int main(int argc, char **argv)
   if(bCompareWithAndWithoutBgd)
   {
     tCanCfs = CompareCfWithAndWithoutBgd(tCfDescriptor, tAnType, tImpactParam, bCombineConjugates, bCombineImpactParams, tEventsType, tRebin, tMinNorm, tMaxNorm, bUseStavCf);
-    if(bSaveFigures) tCanCfs->SaveAs(TString::Format("%s%s.%s", tSaveFileBase.Data(), tCanCfs->GetName(), tSaveFileType.Data()));
+    if(bSaveFigures) tCanCfs->SaveAs(TString::Format("%s%s.%s", tSaveDir.Data(), tCanCfs->GetName(), tSaveFileType.Data()));
   }
 
   if(bDrawBgdwFitOnly)
