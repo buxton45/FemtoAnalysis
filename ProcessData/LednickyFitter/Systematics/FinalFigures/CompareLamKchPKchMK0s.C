@@ -8,6 +8,22 @@ class FitGenerator;
 #include "CanvasPartition.h"
 class CanvasPartition;
 
+//________________________________________________________________________________________________________________
+CfHeavy* CombineTwoHeavyCfs(CfHeavy *aCf1, CfHeavy* aCf2)
+{
+  TString aReturnCfName = TString::Format("%s_and_%s", aCf1->GetHeavyCfName().Data(), aCf2->GetHeavyCfName().Data());
+
+  vector<CfLite*> tCfLiteColl1 = aCf1->GetCfLiteCollection();
+  vector<CfLite*> tCfLiteColl2 = aCf2->GetCfLiteCollection();
+
+  vector<CfLite*> tReturnCfLiteColl(0);
+  for(int i=0; i<tCfLiteColl1.size(); i++) tReturnCfLiteColl.push_back(tCfLiteColl1[i]);
+  for(int i=0; i<tCfLiteColl2.size(); i++) tReturnCfLiteColl.push_back(tCfLiteColl2[i]);
+
+  CfHeavy* tReturnCf = new CfHeavy(aReturnCfName, aReturnCfName, tReturnCfLiteColl, 0.32, 0.40);
+  return tReturnCf;
+}
+
 
 //________________________________________________________________________________________________________________
 TCanvas* DrawAllKStarCfs(FitGenerator* aFG1, FitGenerator* aFG2, FitGenerator* aFG3, bool aZoom=false, TString aCanNameModifier="")
@@ -30,7 +46,7 @@ TCanvas* DrawAllKStarCfs(FitGenerator* aFG1, FitGenerator* aFG2, FitGenerator* a
 
   int tMarkerStyle1 = 20;
   int tMarkerStyle2 = 20;
-  int tMarkerStyle3 = 24;
+  int tMarkerStyle3 = 20;
 
   int tMarkerColor1 = kRed+1;
   int tMarkerColor2 = kBlue+1;
@@ -46,21 +62,8 @@ TCanvas* DrawAllKStarCfs(FitGenerator* aFG1, FitGenerator* aFG2, FitGenerator* a
       tAnalysisNumber = j*tNx + i;
 
       TH1* tHist1 = (TH1*)aFG1->GetKStarCf(tAnalysisNumber);
-        tHist1->SetMarkerStyle(tMarkerStyle1);
-        tHist1->SetMarkerColor(tMarkerColor1);
-        tHist1->SetLineColor(tMarkerColor1);
-
       TH1* tHist2 = (TH1*)aFG2->GetKStarCf(tAnalysisNumber);
-        tHist2->SetMarkerStyle(tMarkerStyle2);
-        tHist2->SetMarkerColor(tMarkerColor2);
-        tHist2->SetLineColor(tMarkerColor2);
-
       TH1* tHist3 = (TH1*)aFG3->GetKStarCf(tAnalysisNumber);
-        tHist3->SetMarkerStyle(tMarkerStyle3);
-        tHist3->SetMarkerColor(tMarkerColor3);
-        tHist3->SetLineColor(tMarkerColor3);
-
-
 
       tCanPart->AddGraph(i, j, tHist1, "", tMarkerStyle1, tMarkerColor1, tMarkerSize, "ex0");
       tCanPart->AddGraph(i, j, tHist2, "", tMarkerStyle2, tMarkerColor2, tMarkerSize, "ex0same");
@@ -74,9 +77,8 @@ TCanvas* DrawAllKStarCfs(FitGenerator* aFG1, FitGenerator* aFG2, FitGenerator* a
 
 
       CentralityType aCentType = aFG1->GetFitSharedAnalyses()->GetFitPairAnalysis(tAnalysisNumber)->GetCentralityType();
-      TLatex* tTex = new TLatex(0.25, 1.05, cPrettyCentralityTags[aCentType]);
-
-      tCanPart->AddPadPaveLatex(tTex, i, j);
+      TPaveText* tText = tCanPart->SetupTPaveText(cPrettyCentralityTags[aCentType], i, j, 0.75, 0.80, 0.15, 0.10, 63, 15);
+      tCanPart->AddPadPaveText(tText, i, j);
     }
   }
 
@@ -88,6 +90,395 @@ TCanvas* DrawAllKStarCfs(FitGenerator* aFG1, FitGenerator* aFG2, FitGenerator* a
   return tCanPart->GetCanvas();
 }
 
+//________________________________________________________________________________________________________________
+TCanvas* DrawAllKStarCfs_CombineConj(FitGenerator* aFG1, FitGenerator* aFG2, FitGenerator* aFG3, bool aZoom=false, TString aCanNameModifier="")
+{
+  TString tCanvasName = TString("canKStarCfsAll_CombineConj");
+  if(aZoom) tCanvasName += TString("Zoom");
+  tCanvasName += aCanNameModifier;
+
+  int tNx=1, tNy=3;
+
+  double tXLow = -0.02;
+  double tXHigh = 0.99;
+  if(aZoom) tXHigh = 0.329;
+
+  double tYLow = 0.86;
+  double tYHigh = 1.07;
+
+  CanvasPartition* tCanPart = new CanvasPartition(tCanvasName,tNx,tNy,tXLow,tXHigh,tYLow,tYHigh,0.12,0.0025,0.05,0.0025);
+  tCanPart->SetDrawOptStat(false);
+  tCanPart->GetCanvas()->SetCanvasSize(700, 1500);
+
+  int tMarkerStyle1 = 20;
+  int tMarkerStyle2 = 20;
+  int tMarkerStyle3 = 20;
+
+  int tMarkerColor1 = kRed+1;
+  int tMarkerColor2 = kBlue+1;
+  int tMarkerColor3 = kBlack;
+
+  double tMarkerSize = 0.75;
+
+  int tAnalysisNumberA=0, tAnalysisNumberB=0;
+  for(int j=0; j<tNy; j++)
+  {
+
+    tAnalysisNumberA = 2*j;
+    tAnalysisNumberB = 2*j + 1;
+
+    CfHeavy* tCfHeavy1a = aFG1->GetKStarCfHeavy(tAnalysisNumberA);
+    CfHeavy* tCfHeavy1b = aFG1->GetKStarCfHeavy(tAnalysisNumberB);
+    CfHeavy* tCfHeavy1 = CombineTwoHeavyCfs(tCfHeavy1a, tCfHeavy1b);
+    TH1* tHist1 = tCfHeavy1->GetHeavyCfClone();
+
+    CfHeavy* tCfHeavy2a = aFG2->GetKStarCfHeavy(tAnalysisNumberA);
+    CfHeavy* tCfHeavy2b = aFG2->GetKStarCfHeavy(tAnalysisNumberB);
+    CfHeavy* tCfHeavy2 = CombineTwoHeavyCfs(tCfHeavy2a, tCfHeavy2b);
+    TH1* tHist2 = tCfHeavy2->GetHeavyCfClone();
+
+    CfHeavy* tCfHeavy3a = aFG3->GetKStarCfHeavy(tAnalysisNumberA);
+    CfHeavy* tCfHeavy3b = aFG3->GetKStarCfHeavy(tAnalysisNumberB);
+    CfHeavy* tCfHeavy3 = CombineTwoHeavyCfs(tCfHeavy3a, tCfHeavy3b);
+    TH1* tHist3 = tCfHeavy3->GetHeavyCfClone();
+
+
+
+    tCanPart->AddGraph(0, j, tHist1, "", tMarkerStyle1, tMarkerColor1, tMarkerSize, "ex0");
+    tCanPart->AddGraph(0, j, tHist2, "", tMarkerStyle2, tMarkerColor2, tMarkerSize, "ex0same");
+    tCanPart->AddGraph(0, j, tHist3, "", tMarkerStyle3, tMarkerColor3, tMarkerSize, "ex0same");
+
+    TString tText1 = TString::Format("%s & %s", cAnalysisRootTags[aFG1->GetFitSharedAnalyses()->GetFitPairAnalysis(tAnalysisNumberA)->GetAnalysisType()], 
+                                                cAnalysisRootTags[aFG1->GetFitSharedAnalyses()->GetFitPairAnalysis(tAnalysisNumberB)->GetAnalysisType()]);
+
+    TString tText2 = TString::Format("%s & %s", cAnalysisRootTags[aFG2->GetFitSharedAnalyses()->GetFitPairAnalysis(tAnalysisNumberA)->GetAnalysisType()], 
+                                                cAnalysisRootTags[aFG2->GetFitSharedAnalyses()->GetFitPairAnalysis(tAnalysisNumberB)->GetAnalysisType()]);
+
+    TString tText3 = TString::Format("%s & %s", cAnalysisRootTags[aFG3->GetFitSharedAnalyses()->GetFitPairAnalysis(tAnalysisNumberA)->GetAnalysisType()], 
+                                                cAnalysisRootTags[aFG3->GetFitSharedAnalyses()->GetFitPairAnalysis(tAnalysisNumberB)->GetAnalysisType()]);
+
+
+    tCanPart->SetupTLegend("", 0, j, 0.75, 0.15, 0.20, 0.35);
+    tCanPart->AddLegendEntry(0, j, tHist1, tText1.Data(), "p");
+    tCanPart->AddLegendEntry(0, j, tHist2, tText2.Data(), "p");
+    tCanPart->AddLegendEntry(0, j, tHist3, tText3.Data(), "p");
+
+
+    assert(aFG1->GetFitSharedAnalyses()->GetFitPairAnalysis(tAnalysisNumberA)->GetCentralityType() == aFG1->GetFitSharedAnalyses()->GetFitPairAnalysis(tAnalysisNumberB)->GetCentralityType());
+    CentralityType aCentType = aFG1->GetFitSharedAnalyses()->GetFitPairAnalysis(tAnalysisNumberA)->GetCentralityType();
+    TPaveText* tText = tCanPart->SetupTPaveText(cPrettyCentralityTags[aCentType], 0, j, 0.75, 0.80, 0.20, 0.15, 63, 25);
+    tCanPart->AddPadPaveText(tText, 0, j);
+  }
+
+  tCanPart->SetDrawUnityLine(true);
+  tCanPart->DrawAll();
+
+  tCanPart->DrawXaxisTitle("#it{k}* (GeV/#it{c})");
+  tCanPart->DrawYaxisTitle("#it{C}(#it{k}*)",43,25,0.05,0.90);
+
+  return tCanPart->GetCanvas();
+}
+
+
+//________________________________________________________________________________________________________________
+TCanvas* DrawAvgLamKchvsK0(FitGenerator* aFG1, FitGenerator* aFG2, FitGenerator* aFG3, bool aZoom=false, TString aCanNameModifier="")
+{
+  TString tCanvasName = TString("canAvgLamKchvsK0All");
+  if(aZoom) tCanvasName += TString("Zoom");
+  tCanvasName += aCanNameModifier;
+
+  int tNx=2, tNy=3;
+
+  double tXLow = -0.02;
+  double tXHigh = 0.99;
+  if(aZoom) tXHigh = 0.329;
+
+  double tYLow = 0.86;
+  double tYHigh = 1.07;
+
+  CanvasPartition* tCanPart = new CanvasPartition(tCanvasName,tNx,tNy,tXLow,tXHigh,tYLow,tYHigh,0.12,0.0025,0.13,0.0025);
+  tCanPart->SetDrawOptStat(false);
+
+  int tMarkerStyleAvg = 20;
+  int tMarkerStyle3 = 20;
+
+  int tMarkerColorAvg = kMagenta;
+  int tMarkerColor3 = kBlack;
+
+  double tMarkerSize = 0.75;
+
+  int tAnalysisNumber=0;
+  for(int j=0; j<tNy; j++)
+  {
+    for(int i=0; i<tNx; i++)
+    {
+      tAnalysisNumber = j*tNx + i;
+
+      CfHeavy* tCfHeavy1 = aFG1->GetKStarCfHeavy(tAnalysisNumber);
+      CfHeavy* tCfHeavy2 = aFG2->GetKStarCfHeavy(tAnalysisNumber);
+      CfHeavy* tCfHeavyAvg = CombineTwoHeavyCfs(tCfHeavy1, tCfHeavy2);
+      TH1* tHistAvg = tCfHeavyAvg->GetHeavyCfClone();
+
+      TH1* tHist3 = (TH1*)aFG3->GetKStarCf(tAnalysisNumber);
+
+      tCanPart->AddGraph(i, j, tHistAvg, "", tMarkerStyleAvg, tMarkerColorAvg, tMarkerSize, "ex0");
+      tCanPart->AddGraph(i, j, tHist3, "", tMarkerStyle3, tMarkerColor3, tMarkerSize, "ex0same");
+
+      TString tTextAvg = TString::Format("%s + %s", cAnalysisRootTags[aFG1->GetFitSharedAnalyses()->GetFitPairAnalysis(tAnalysisNumber)->GetAnalysisType()], 
+                                                    cAnalysisRootTags[aFG2->GetFitSharedAnalyses()->GetFitPairAnalysis(tAnalysisNumber)->GetAnalysisType()]);
+
+      tCanPart->SetupTLegend("", i, j, 0.75, 0.15, 0.20, 0.35);
+      tCanPart->AddLegendEntry(i, j, tHistAvg, tTextAvg.Data(), "p");
+      tCanPart->AddLegendEntry(i, j, tHist3, cAnalysisRootTags[aFG3->GetFitSharedAnalyses()->GetFitPairAnalysis(tAnalysisNumber)->GetAnalysisType()], "p");
+
+
+      CentralityType aCentType = aFG1->GetFitSharedAnalyses()->GetFitPairAnalysis(tAnalysisNumber)->GetCentralityType();
+      TPaveText* tText = tCanPart->SetupTPaveText(cPrettyCentralityTags[aCentType], i, j, 0.75, 0.80, 0.15, 0.10, 63, 15);
+      tCanPart->AddPadPaveText(tText, i, j);
+    }
+  }
+
+  tCanPart->SetDrawUnityLine(true);
+  tCanPart->DrawAll();
+  tCanPart->DrawXaxisTitle("#it{k}* (GeV/#it{c})");
+  tCanPart->DrawYaxisTitle("#it{C}(#it{k}*)",43,25,0.05,0.85);
+
+  return tCanPart->GetCanvas();
+}
+
+//________________________________________________________________________________________________________________
+TCanvas* DrawAvgLamKchvsK0_CombineConj(FitGenerator* aFG1, FitGenerator* aFG2, FitGenerator* aFG3, bool aZoom=false, TString aCanNameModifier="")
+{
+  TString tCanvasName = TString("canAvgLamKchvsK0All_CombineConj");
+  if(aZoom) tCanvasName += TString("Zoom");
+  tCanvasName += aCanNameModifier;
+
+  int tNx=1, tNy=3;
+
+  double tXLow = -0.02;
+  double tXHigh = 0.99;
+  if(aZoom) tXHigh = 0.329;
+
+  double tYLow = 0.86;
+  double tYHigh = 1.07;
+
+  CanvasPartition* tCanPart = new CanvasPartition(tCanvasName,tNx,tNy,tXLow,tXHigh,tYLow,tYHigh,0.12,0.0025,0.05,0.0025);
+  tCanPart->SetDrawOptStat(false);
+  tCanPart->GetCanvas()->SetCanvasSize(700, 1500);
+
+  int tMarkerStyleAvg = 20;
+  int tMarkerStyle3 = 20;
+
+  int tMarkerColorAvg = kMagenta;
+  int tMarkerColor3 = kBlack;
+
+  double tMarkerSize = 0.75;
+
+  int tAnalysisNumberA=0, tAnalysisNumberB=0;
+  for(int j=0; j<tNy; j++)
+  {
+
+    tAnalysisNumberA = 2*j;
+    tAnalysisNumberB = 2*j + 1;
+
+    CfHeavy* tCfHeavy1a = aFG1->GetKStarCfHeavy(tAnalysisNumberA);
+    CfHeavy* tCfHeavy1b = aFG1->GetKStarCfHeavy(tAnalysisNumberB);
+    CfHeavy* tCfHeavy1 = CombineTwoHeavyCfs(tCfHeavy1a, tCfHeavy1b);
+
+    CfHeavy* tCfHeavy2a = aFG2->GetKStarCfHeavy(tAnalysisNumberA);
+    CfHeavy* tCfHeavy2b = aFG2->GetKStarCfHeavy(tAnalysisNumberB);
+    CfHeavy* tCfHeavy2 = CombineTwoHeavyCfs(tCfHeavy2a, tCfHeavy2b);
+
+    CfHeavy* tCfHeavyAvg = CombineTwoHeavyCfs(tCfHeavy1, tCfHeavy2);
+    TH1* tHistAvg = tCfHeavyAvg->GetHeavyCfClone();
+
+
+    CfHeavy* tCfHeavy3a = aFG3->GetKStarCfHeavy(tAnalysisNumberA);
+    CfHeavy* tCfHeavy3b = aFG3->GetKStarCfHeavy(tAnalysisNumberB);
+    CfHeavy* tCfHeavy3 = CombineTwoHeavyCfs(tCfHeavy3a, tCfHeavy3b);
+    TH1* tHist3 = tCfHeavy3->GetHeavyCfClone();
+
+    tCanPart->AddGraph(0, j, tHistAvg, "", tMarkerStyleAvg, tMarkerColorAvg, tMarkerSize, "ex0");
+    tCanPart->AddGraph(0, j, tHist3, "", tMarkerStyle3, tMarkerColor3, tMarkerSize, "ex0same");
+
+    TString tText1 = TString::Format("%s & %s", cAnalysisRootTags[aFG1->GetFitSharedAnalyses()->GetFitPairAnalysis(tAnalysisNumberA)->GetAnalysisType()], 
+                                                cAnalysisRootTags[aFG1->GetFitSharedAnalyses()->GetFitPairAnalysis(tAnalysisNumberB)->GetAnalysisType()]);
+
+    TString tText2 = TString::Format("%s & %s", cAnalysisRootTags[aFG2->GetFitSharedAnalyses()->GetFitPairAnalysis(tAnalysisNumberA)->GetAnalysisType()], 
+                                                cAnalysisRootTags[aFG2->GetFitSharedAnalyses()->GetFitPairAnalysis(tAnalysisNumberB)->GetAnalysisType()]);
+
+    TString tTextAvg = TString::Format("(%s) + (%s)", tText1.Data(), tText2.Data());
+
+    TString tText3 = TString::Format("%s & %s", cAnalysisRootTags[aFG3->GetFitSharedAnalyses()->GetFitPairAnalysis(tAnalysisNumberA)->GetAnalysisType()], 
+                                                cAnalysisRootTags[aFG3->GetFitSharedAnalyses()->GetFitPairAnalysis(tAnalysisNumberB)->GetAnalysisType()]);
+
+
+    tCanPart->SetupTLegend("", 0, j, 0.50, 0.15, 0.45, 0.35);
+    tCanPart->AddLegendEntry(0, j, tHistAvg, tTextAvg.Data(), "p");
+    tCanPart->AddLegendEntry(0, j, tHist3, tText3.Data(), "p");
+
+
+    assert(aFG1->GetFitSharedAnalyses()->GetFitPairAnalysis(tAnalysisNumberA)->GetCentralityType() == aFG1->GetFitSharedAnalyses()->GetFitPairAnalysis(tAnalysisNumberB)->GetCentralityType());
+    CentralityType aCentType = aFG1->GetFitSharedAnalyses()->GetFitPairAnalysis(tAnalysisNumberA)->GetCentralityType();
+    TPaveText* tText = tCanPart->SetupTPaveText(cPrettyCentralityTags[aCentType], 0, j, 0.75, 0.80, 0.20, 0.15, 63, 25);
+    tCanPart->AddPadPaveText(tText, 0, j);
+
+
+  }
+
+  tCanPart->SetDrawUnityLine(true);
+  tCanPart->DrawAll();
+  tCanPart->DrawXaxisTitle("#it{k}* (GeV/#it{c})");
+  tCanPart->DrawYaxisTitle("#it{C}(#it{k}*)",43,25,0.05,0.90);
+
+  return tCanPart->GetCanvas();
+}
+
+//________________________________________________________________________________________________________________
+TCanvas* DrawAllKStarCfsAndAvgLamKchvsK0_CombineConj(FitGenerator* aFG1, FitGenerator* aFG2, FitGenerator* aFG3, bool aZoom=false, TString aCanNameModifier="")
+{
+  TString tCanvasName = TString("canKStarCfsAllAndAvgLamKchvsK0_CombineConj");
+  if(aZoom) tCanvasName += TString("Zoom");
+  tCanvasName += aCanNameModifier;
+
+  int tNx=2, tNy=3;
+
+  double tXLow = -0.02;
+  double tXHigh = 0.99;
+  if(aZoom) tXHigh = 0.329;
+
+  double tYLow = 0.86;
+  double tYHigh = 1.07;
+
+  CanvasPartition* tCanPart = new CanvasPartition(tCanvasName,tNx,tNy,tXLow,tXHigh,tYLow,tYHigh,0.12,0.0025,0.13,0.0025);
+  tCanPart->SetDrawOptStat(false);
+
+  int tMarkerStyle1 = 20;
+  int tMarkerStyle2 = 20;
+  int tMarkerStyle3 = 20;
+  int tMarkerStyleAvg = 20;
+
+  int tMarkerColor1 = kRed+1;
+  int tMarkerColor2 = kBlue+1;
+  int tMarkerColor3 = kBlack;
+  int tMarkerColorAvg = kMagenta;
+
+  double tMarkerSize = 0.75;
+
+
+  //------------------------------------------------------------------------------------------------------
+  int tAnalysisNumberA=0, tAnalysisNumberB=0;
+  for(int j=0; j<tNy; j++)
+  {
+
+    tAnalysisNumberA = 2*j;
+    tAnalysisNumberB = 2*j + 1;
+
+    CfHeavy* tCfHeavy1a = aFG1->GetKStarCfHeavy(tAnalysisNumberA);
+    CfHeavy* tCfHeavy1b = aFG1->GetKStarCfHeavy(tAnalysisNumberB);
+    CfHeavy* tCfHeavy1 = CombineTwoHeavyCfs(tCfHeavy1a, tCfHeavy1b);
+    TH1* tHist1 = tCfHeavy1->GetHeavyCfClone();
+
+    CfHeavy* tCfHeavy2a = aFG2->GetKStarCfHeavy(tAnalysisNumberA);
+    CfHeavy* tCfHeavy2b = aFG2->GetKStarCfHeavy(tAnalysisNumberB);
+    CfHeavy* tCfHeavy2 = CombineTwoHeavyCfs(tCfHeavy2a, tCfHeavy2b);
+    TH1* tHist2 = tCfHeavy2->GetHeavyCfClone();
+
+    CfHeavy* tCfHeavy3a = aFG3->GetKStarCfHeavy(tAnalysisNumberA);
+    CfHeavy* tCfHeavy3b = aFG3->GetKStarCfHeavy(tAnalysisNumberB);
+    CfHeavy* tCfHeavy3 = CombineTwoHeavyCfs(tCfHeavy3a, tCfHeavy3b);
+    TH1* tHist3 = tCfHeavy3->GetHeavyCfClone();
+
+
+
+    tCanPart->AddGraph(0, j, tHist1, "", tMarkerStyle1, tMarkerColor1, tMarkerSize, "ex0");
+    tCanPart->AddGraph(0, j, tHist2, "", tMarkerStyle2, tMarkerColor2, tMarkerSize, "ex0same");
+    tCanPart->AddGraph(0, j, tHist3, "", tMarkerStyle3, tMarkerColor3, tMarkerSize, "ex0same");
+
+    TString tText1 = TString::Format("%s & %s", cAnalysisRootTags[aFG1->GetFitSharedAnalyses()->GetFitPairAnalysis(tAnalysisNumberA)->GetAnalysisType()], 
+                                                cAnalysisRootTags[aFG1->GetFitSharedAnalyses()->GetFitPairAnalysis(tAnalysisNumberB)->GetAnalysisType()]);
+
+    TString tText2 = TString::Format("%s & %s", cAnalysisRootTags[aFG2->GetFitSharedAnalyses()->GetFitPairAnalysis(tAnalysisNumberA)->GetAnalysisType()], 
+                                                cAnalysisRootTags[aFG2->GetFitSharedAnalyses()->GetFitPairAnalysis(tAnalysisNumberB)->GetAnalysisType()]);
+
+    TString tText3 = TString::Format("%s & %s", cAnalysisRootTags[aFG3->GetFitSharedAnalyses()->GetFitPairAnalysis(tAnalysisNumberA)->GetAnalysisType()], 
+                                                cAnalysisRootTags[aFG3->GetFitSharedAnalyses()->GetFitPairAnalysis(tAnalysisNumberB)->GetAnalysisType()]);
+
+
+    tCanPart->SetupTLegend("", 0, j, 0.75, 0.15, 0.20, 0.35);
+    tCanPart->AddLegendEntry(0, j, tHist1, tText1.Data(), "p");
+    tCanPart->AddLegendEntry(0, j, tHist2, tText2.Data(), "p");
+    tCanPart->AddLegendEntry(0, j, tHist3, tText3.Data(), "p");
+
+
+    assert(aFG1->GetFitSharedAnalyses()->GetFitPairAnalysis(tAnalysisNumberA)->GetCentralityType() == aFG1->GetFitSharedAnalyses()->GetFitPairAnalysis(tAnalysisNumberB)->GetCentralityType());
+    CentralityType aCentType = aFG1->GetFitSharedAnalyses()->GetFitPairAnalysis(tAnalysisNumberA)->GetCentralityType();
+    TPaveText* tText = tCanPart->SetupTPaveText(cPrettyCentralityTags[aCentType], 0, j, 0.75, 0.80, 0.15, 0.10, 63, 15);
+    tCanPart->AddPadPaveText(tText, 0, j);
+  }
+
+
+  //------------------------------------------------------------------------------------------------------
+  for(int j=0; j<tNy; j++)
+  {
+
+    tAnalysisNumberA = 2*j;
+    tAnalysisNumberB = 2*j + 1;
+
+    CfHeavy* tCfHeavy1a = aFG1->GetKStarCfHeavy(tAnalysisNumberA);
+    CfHeavy* tCfHeavy1b = aFG1->GetKStarCfHeavy(tAnalysisNumberB);
+    CfHeavy* tCfHeavy1 = CombineTwoHeavyCfs(tCfHeavy1a, tCfHeavy1b);
+
+    CfHeavy* tCfHeavy2a = aFG2->GetKStarCfHeavy(tAnalysisNumberA);
+    CfHeavy* tCfHeavy2b = aFG2->GetKStarCfHeavy(tAnalysisNumberB);
+    CfHeavy* tCfHeavy2 = CombineTwoHeavyCfs(tCfHeavy2a, tCfHeavy2b);
+
+    CfHeavy* tCfHeavyAvg = CombineTwoHeavyCfs(tCfHeavy1, tCfHeavy2);
+    TH1* tHistAvg = tCfHeavyAvg->GetHeavyCfClone();
+
+
+    CfHeavy* tCfHeavy3a = aFG3->GetKStarCfHeavy(tAnalysisNumberA);
+    CfHeavy* tCfHeavy3b = aFG3->GetKStarCfHeavy(tAnalysisNumberB);
+    CfHeavy* tCfHeavy3 = CombineTwoHeavyCfs(tCfHeavy3a, tCfHeavy3b);
+    TH1* tHist3 = tCfHeavy3->GetHeavyCfClone();
+
+    tCanPart->AddGraph(1, j, tHistAvg, "", tMarkerStyleAvg, tMarkerColorAvg, tMarkerSize, "ex0");
+    tCanPart->AddGraph(1, j, tHist3, "", tMarkerStyle3, tMarkerColor3, tMarkerSize, "ex0same");
+
+    TString tText1 = TString::Format("%s & %s", cAnalysisRootTags[aFG1->GetFitSharedAnalyses()->GetFitPairAnalysis(tAnalysisNumberA)->GetAnalysisType()], 
+                                                cAnalysisRootTags[aFG1->GetFitSharedAnalyses()->GetFitPairAnalysis(tAnalysisNumberB)->GetAnalysisType()]);
+
+    TString tText2 = TString::Format("%s & %s", cAnalysisRootTags[aFG2->GetFitSharedAnalyses()->GetFitPairAnalysis(tAnalysisNumberA)->GetAnalysisType()], 
+                                                cAnalysisRootTags[aFG2->GetFitSharedAnalyses()->GetFitPairAnalysis(tAnalysisNumberB)->GetAnalysisType()]);
+
+    TString tTextAvg = TString::Format("(%s) + (%s)", tText1.Data(), tText2.Data());
+
+    TString tText3 = TString::Format("%s & %s", cAnalysisRootTags[aFG3->GetFitSharedAnalyses()->GetFitPairAnalysis(tAnalysisNumberA)->GetAnalysisType()], 
+                                                cAnalysisRootTags[aFG3->GetFitSharedAnalyses()->GetFitPairAnalysis(tAnalysisNumberB)->GetAnalysisType()]);
+
+
+    tCanPart->SetupTLegend("", 1, j, 0.40, 0.15, 0.55, 0.35);
+    tCanPart->AddLegendEntry(1, j, tHistAvg, tTextAvg.Data(), "p");
+    tCanPart->AddLegendEntry(1, j, tHist3, tText3.Data(), "p");
+
+
+    assert(aFG1->GetFitSharedAnalyses()->GetFitPairAnalysis(tAnalysisNumberA)->GetCentralityType() == aFG1->GetFitSharedAnalyses()->GetFitPairAnalysis(tAnalysisNumberB)->GetCentralityType());
+    CentralityType aCentType = aFG1->GetFitSharedAnalyses()->GetFitPairAnalysis(tAnalysisNumberA)->GetCentralityType();
+    TPaveText* tText = tCanPart->SetupTPaveText(cPrettyCentralityTags[aCentType], 1, j, 0.75, 0.80, 0.15, 0.10, 63, 15);
+    tCanPart->AddPadPaveText(tText, 1, j);
+
+  }
+
+
+
+  tCanPart->SetDrawUnityLine(true);
+  tCanPart->DrawAll();
+
+  tCanPart->DrawXaxisTitle("#it{k}* (GeV/#it{c})");
+  tCanPart->DrawYaxisTitle("#it{C}(#it{k}*)",43,25,0.05,0.85);
+
+  return tCanPart->GetCanvas();
+}
 
 
 //________________________________________________________________________________________________________________
@@ -338,7 +729,15 @@ int main(int argc, char **argv)
   //-----------------------------------------------------------------------------
   bool bZoom = true;
   bool bDrawKStarCfs = false;
-  bool bDrawAllKStarCfs = true;
+
+  bool bDrawAllKStarCfs = false;
+  bool bDrawAllKStarCfs_CombineConj = false;
+
+  bool bDrawAvgLamKchvsK0 = false;
+  bool bDrawAvgLamKchvsK0_CombineConj = false;
+
+  bool bDrawAllKStarCfsAndAvgLamKchvsK0_CombineConj = true;
+
   bool bDrawKStarCfsFocusBackground = false;
   //-----------------------------------------------------------------------------
   TString tCanNameModifier = TString("_LamKchPKchMK0");
@@ -349,11 +748,38 @@ int main(int argc, char **argv)
     TCanvas* tCan = DrawKStarCfs(tLamKchP1, tLamKchP2, tLamKchP3, bZoom, tCanNameModifier);
     if(SaveImages) tCan->SaveAs(TString::Format("%s%s.pdf", tSaveDir.Data(), tCan->GetName()));
   }
+
   if(bDrawAllKStarCfs)
   {
     TCanvas* tCanAll = DrawAllKStarCfs(tLamKchP1, tLamKchP2, tLamKchP3, bZoom, tCanNameModifier);
     if(SaveImages) tCanAll->SaveAs(TString::Format("%s%s.pdf", tSaveDir.Data(), tCanAll->GetName()));
   }
+  if(bDrawAllKStarCfs_CombineConj)
+  {
+    TCanvas* tCanAll_CombineConj = DrawAllKStarCfs_CombineConj(tLamKchP1, tLamKchP2, tLamKchP3, bZoom, tCanNameModifier);
+    if(SaveImages) tCanAll_CombineConj->SaveAs(TString::Format("%s%s.pdf", tSaveDir.Data(), tCanAll_CombineConj->GetName()));
+  }
+
+  if(bDrawAvgLamKchvsK0)
+  {
+    TCanvas* tCanAvgLamKchvsK0 = DrawAvgLamKchvsK0(tLamKchP1, tLamKchP2, tLamKchP3, bZoom, tCanNameModifier);
+    if(SaveImages) tCanAvgLamKchvsK0->SaveAs(TString::Format("%s%s.pdf", tSaveDir.Data(), tCanAvgLamKchvsK0->GetName()));
+  }
+  if(bDrawAvgLamKchvsK0_CombineConj)
+  {
+    TCanvas* tCanDrawAvgLamKchvsK0_CombineConj = DrawAvgLamKchvsK0_CombineConj(tLamKchP1, tLamKchP2, tLamKchP3, bZoom, tCanNameModifier);
+    if(SaveImages) tCanDrawAvgLamKchvsK0_CombineConj->SaveAs(TString::Format("%s%s.pdf", tSaveDir.Data(), tCanDrawAvgLamKchvsK0_CombineConj->GetName()));
+  }
+
+
+  if(bDrawAllKStarCfsAndAvgLamKchvsK0_CombineConj)
+  {
+    TCanvas* tCanDrawAllKStarCfsAndAvgLamKchvsK0_CombineConj = DrawAllKStarCfsAndAvgLamKchvsK0_CombineConj(tLamKchP1, tLamKchP2, tLamKchP3, bZoom, tCanNameModifier);
+    if(SaveImages) tCanDrawAllKStarCfsAndAvgLamKchvsK0_CombineConj->SaveAs(TString::Format("%s%s.pdf", tSaveDir.Data(), tCanDrawAllKStarCfsAndAvgLamKchvsK0_CombineConj->GetName()));
+  }
+
+
+
   if(bDrawKStarCfsFocusBackground)
   {
     TCanvas* tCanBgd = DrawKStarCfsFocusBackground(tLamKchP1, tLamKchP2, tLamKchP3, tCanNameModifier);
