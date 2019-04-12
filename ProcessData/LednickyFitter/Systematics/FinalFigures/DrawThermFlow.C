@@ -104,16 +104,18 @@ int main(int argc, char **argv)
   int tPIDLam = 3122;
 
   int tImpactParam = 8;
-  int tV3InclusionProb1 = 25;
   bool bDrawUnIdentOnlyV2 = false;
+  bool bDrawV3 = true;
   bool bDrawUnIdentOnlyV3 = true;
+
+  if(!bDrawV3) bDrawUnIdentOnlyV3=false;  //Just so _UnIdentOnlyV3 tag won't be included in save name
 
   vector<TString> tUnIdentOnlyTagV2 = {"", "_UnIdentOnlyV2"};
   vector<TString> tUnIdentOnlyTagV3 = {"", "_UnIdentOnlyV3"};
 
-//  TString tFileName = TString::Format("FlowGraphs_ArtificialV3Signal%d", tV3InclusionProb1);
   TString tFileName = TString("FlowGraphs_RandomEPs");
   TString tFileLocation = TString::Format("/home/jesse/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b%d/%s.root", tImpactParam, tFileName.Data());
+  if(!bDrawV3) tFileName += TString("_V2Only");
 
   TString tSaveDir = "/home/jesse/Analysis/FemtoAnalysis/AnalysisNotes/5_Fitting/5.5_NonFlatBackground/Figures/";
 
@@ -141,7 +143,8 @@ int main(int argc, char **argv)
     tGraphv2_UnIdent->GetXaxis()->SetTitleOffset(0.96);
     tGraphv2_UnIdent->GetXaxis()->SetLabelSize(0.045);
 
-  tGraphv2_UnIdent->GetYaxis()->SetTitle("#it{v}_{n}{EP}");
+  if(bDrawV3) tGraphv2_UnIdent->GetYaxis()->SetTitle("#it{v}_{n}{EP}");
+  else        tGraphv2_UnIdent->GetYaxis()->SetTitle("#it{v}_{2}{EP}");
     tGraphv2_UnIdent->GetYaxis()->SetTitleSize(0.075);
     tGraphv2_UnIdent->GetYaxis()->SetTitleOffset(0.80);
     tGraphv2_UnIdent->GetYaxis()->SetLabelSize(0.045);
@@ -164,13 +167,16 @@ int main(int argc, char **argv)
     tGraphv2_UnIdent->Draw("Psame");
   }
 
-  tGraphv3_UnIdent->Draw("Psame");  
-  if(!bDrawUnIdentOnlyV3)
+  if(bDrawV3)
   {
-    tGraphv3_K0s->Draw("Psame");
-    tGraphv3_Kch->Draw("Psame");
-    tGraphv3_Lam->Draw("Psame");
-    tGraphv3_UnIdent->Draw("Psame");
+    tGraphv3_UnIdent->Draw("Psame");  
+    if(!bDrawUnIdentOnlyV3)
+    {
+      tGraphv3_K0s->Draw("Psame");
+      tGraphv3_Kch->Draw("Psame");
+      tGraphv3_Lam->Draw("Psame");
+      tGraphv3_UnIdent->Draw("Psame");
+    }
   }
 
   //------------------------
@@ -194,26 +200,27 @@ int main(int argc, char **argv)
   tLeg1->Draw();
 
   //------------------------
-
-  TLegend* tLeg2;
-  if(bDrawUnIdentOnlyV3) tLeg2 = new TLegend(0.335, 0.77, 0.495, 0.90, "#it{v}_{3}", "NDC");
-  else                   tLeg2 = new TLegend(0.335, 0.575, 0.495, 0.90, "#it{v}_{3}", "NDC");
-  tLeg2->SetFillColor(0);
-  //tLeg2->SetBorderSize(0);
-  tLeg2->SetTextAlign(22);
-  tLeg2->SetTextSize(0.045);
-    tLeg2->AddEntry(tGraphv3_UnIdent, "Unident.", "p");
-    if(!bDrawUnIdentOnlyV3)
-    {
-      tLeg2->AddEntry(tGraphv3_K0s, GetParticleNamev2(tPIDK0s), "p");
-      tLeg2->AddEntry(tGraphv3_Kch, "K^{#pm}", "p");
-      tLeg2->AddEntry(tGraphv3_Lam, "#Lambda+#bar{#Lambda}", "p");
-    }
-  TLegendEntry *tHeader2 = (TLegendEntry*)tLeg2->GetListOfPrimitives()->First();
-    tHeader2->SetTextSize(0.065);
-    tHeader2->SetTextFont(62);
-  tLeg2->Draw();
-
+  if(bDrawV3)
+  {
+    TLegend* tLeg2;
+    if(bDrawUnIdentOnlyV3) tLeg2 = new TLegend(0.335, 0.77, 0.495, 0.90, "#it{v}_{3}", "NDC");
+    else                   tLeg2 = new TLegend(0.335, 0.575, 0.495, 0.90, "#it{v}_{3}", "NDC");
+    tLeg2->SetFillColor(0);
+    //tLeg2->SetBorderSize(0);
+    tLeg2->SetTextAlign(22);
+    tLeg2->SetTextSize(0.045);
+      tLeg2->AddEntry(tGraphv3_UnIdent, "Unident.", "p");
+      if(!bDrawUnIdentOnlyV3)
+      {
+        tLeg2->AddEntry(tGraphv3_K0s, GetParticleNamev2(tPIDK0s), "p");
+        tLeg2->AddEntry(tGraphv3_Kch, "K^{#pm}", "p");
+        tLeg2->AddEntry(tGraphv3_Lam, "#Lambda+#bar{#Lambda}", "p");
+      }
+    TLegendEntry *tHeader2 = (TLegendEntry*)tLeg2->GetListOfPrimitives()->First();
+      tHeader2->SetTextSize(0.065);
+      tHeader2->SetTextFont(62);
+    tLeg2->Draw();
+  }
   //---------------------------------------
   TString tOverallDescriptor = TString::Format("b=%d fm", tImpactParam);
 

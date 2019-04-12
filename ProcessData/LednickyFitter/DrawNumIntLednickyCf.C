@@ -4,6 +4,7 @@
 #include "SimulatedLednickyCf.h"
 
 #include "TLegend.h"
+#include "TLegendEntry.h"
 
 //________________________________________________________________________________________________________________
 TH1D* BuildNumIntCf(NumIntLednickyCf* aNumIntLedCf, TString aName, vector<double> &aKStarBinCenters, double* aParams, int aColor=kBlack, int aMarkerStyle=20)
@@ -68,8 +69,10 @@ int main(int argc, char **argv)
   bool bDrawSimLedCfs=false;
 
   bool bSaveFigures = false;
-  TString tSaveFileType = "eps";
-  TString tSaveDir = "/home/jesse/Analysis/Presentations/GroupMeetings/20190221/Figures/";
+  TString tSaveFileType = "pdf";
+//  TString tSaveDir = "/home/jesse/Analysis/Presentations/GroupMeetings/20190221/Figures/";
+  TString tSaveDir = "/home/jesse/Analysis/FemtoAnalysis/AnalysisNotes/7_ResultsAndDiscussion/7.1_ResultsLamK/7.1.2_ResultsLamK_DiscussionOfmTScaling/OtherFigures/";
+
 
   double aMinX = 0.0;
   double aMaxX = 0.30;
@@ -79,13 +82,13 @@ int main(int argc, char **argv)
 
   if(tAnType==kLamKchP)
   {
-    aMinY = 0.89;
-    aMaxY = 1.01;
+    aMinY = 0.915;
+    aMaxY = 1.005;
   }
   else if(tAnType==kLamKchM)
   {
-     aMinY = 0.98;
-     aMaxY = 1.05;
+     aMinY = 0.9825;
+     aMaxY = 1.0275;
   }
 
   int tIntType = 2;
@@ -155,6 +158,25 @@ int main(int argc, char **argv)
 
   tCf_LedEq->GetXaxis()->SetRangeUser(aMinX, aMaxX);
   tCf_LedEq->GetYaxis()->SetRangeUser(aMinY, aMaxY);
+
+  tCf_LedEq->GetXaxis()->SetTitle("#it{k}* (GeV/#it{c})");
+    tCf_LedEq->GetXaxis()->SetTitleSize(0.065);
+    tCf_LedEq->GetXaxis()->SetTitleOffset(1.00);
+    tCf_LedEq->GetXaxis()->SetLabelSize(0.05);
+
+  tCf_LedEq->GetYaxis()->SetTitle("#it{C}(#it{k}*)");
+  if(tAnType==kLamKchP)
+  {
+    tCf_LedEq->GetYaxis()->SetTitleSize(0.075);
+    tCf_LedEq->GetYaxis()->SetTitleOffset(0.80);
+    tCf_LedEq->GetYaxis()->SetLabelSize(0.05);
+  }
+  else if(tAnType==kLamKchM)
+  {
+    tCf_LedEq->GetYaxis()->SetTitleSize(0.075);
+    tCf_LedEq->GetYaxis()->SetTitleOffset(1.0);
+    tCf_LedEq->GetYaxis()->SetLabelSize(0.05);
+  }
   //-------------------------
   TH1D* tCf_NumInt1 = BuildNumIntCf(tNumIntLedCf, TString("tCf_NumInt1"), tKStarBinCenters, tParams1, kBlack, 20);
 
@@ -166,7 +188,13 @@ int main(int argc, char **argv)
   //-------------------------
 
   TCanvas* tCan = new TCanvas("tCan", "tCan");
+  tCan->SetTopMargin(0.025);
+  tCan->SetRightMargin(0.025);
+  tCan->SetBottomMargin(0.15);
+  if(tAnType==kLamKchP)      tCan->SetLeftMargin(0.125);
+  else if(tAnType==kLamKchM) tCan->SetLeftMargin(0.15);
   tCan->cd();
+
   tCf_LedEq->Draw("p");
   tCf_NumInt1->Draw("lpsame");
   tCf_NumInt2a->Draw("lpsame");
@@ -186,25 +214,68 @@ int main(int argc, char **argv)
   }
 
   //-------------------------------------------------------------------------------
+  double tTextSize = 0.040;
+  TLegend *tLeg1, *tLeg2, *tLeg3;
+  if(tAnType==kLamKchP)
+  {
+    tLeg1 = new TLegend(0.40, 0.75, 0.85, 0.825, "", "NDC");  
+    tLeg2 = new TLegend(0.40, 0.50, 0.60, 0.70, "", "NDC");  
+    tLeg3 = new TLegend(0.70, 0.35, 0.90, 0.70, "", "NDC");  
+  }
+  else if(tAnType==kLamKchM)
+  {
+    tLeg1 = new TLegend(0.40, 0.90, 0.85, 0.95, "", "NDC");  
+    tLeg2 = new TLegend(0.40, 0.65, 0.60, 0.85, "", "NDC");  
+    tLeg3 = new TLegend(0.70, 0.50, 0.90, 0.85, "", "NDC");  
+  }
 
-  TLegend* tLeg = new TLegend(0.50, 0.15, 0.85, 0.60, "", "NDC");
-    tLeg->SetFillColor(0);
-    tLeg->SetBorderSize(0);
+    tLeg1->SetFillColor(0);
+    tLeg1->SetBorderSize(0);
+    tLeg1->SetTextSize(tTextSize);
+    tLeg1->SetTextAlign(21);
 
-    tLeg->AddEntry((TObject*)0, TString::Format("Re[f0] = %0.2f, Im[f0] = %0.2f, d0 = %0.2f", tRef0, tImf0, td0), "");
-    tLeg->AddEntry((TObject*)0, TString::Format("R = %0.2f", tRadius1), "");
-    tLeg->AddEntry(tCf_LedEq, "Lednicky Eq.", "p");
-    tLeg->AddEntry(tCf_NumInt1, "Num. Int.", "p");
+    tLeg2->SetFillColor(0);
+    tLeg2->SetBorderSize(0);
+    tLeg2->SetTextSize(tTextSize);
 
-    tLeg->AddEntry((TObject*)0, TString::Format("R = %0.2f", tRadius2), "");
-    tLeg->AddEntry(tCf_NumInt2e, TString::Format("#mu_{O} = %0.1f", tMuOut2e), "p");
-    tLeg->AddEntry(tCf_NumInt2d, TString::Format("#mu_{O} = %0.1f", tMuOut2d), "p");
-    tLeg->AddEntry(tCf_NumInt2c, TString::Format("#mu_{O} = %0.1f", tMuOut2c), "p");
-    tLeg->AddEntry(tCf_NumInt2b, TString::Format("#mu_{O} = %0.1f", tMuOut2b), "p");
-    tLeg->AddEntry(tCf_NumInt2a, TString::Format("#mu_{O} = %0.1f", tMuOut2a), "p");
+    tLeg3->SetFillColor(0);
+    tLeg3->SetBorderSize(0);
+    tLeg3->SetTextSize(tTextSize);
 
-  tLeg->Draw();
+    //------------------------------
+    tLeg1->AddEntry((TObject*)0, TString::Format("#Rgothicf_{0} = %0.2f fm, #Jgothicf_{0} = %0.2f fm, d_{0} = %0.2f fm", tRef0, tImf0, td0), "");
 
+    tLeg2->AddEntry((TObject*)0, TString::Format("R = %0.2f fm", tRadius1), "");
+    tLeg2->AddEntry((TObject*)0, "#mu_{O} = 0.0 fm", "");
+    tLeg2->AddEntry(tCf_LedEq, "Lednicky Eq.", "p");
+    tLeg2->AddEntry(tCf_NumInt1, "Num. Int.", "p");
+
+    tLeg3->AddEntry((TObject*)0, TString::Format("R = %0.2f fm", tRadius2), "");
+    tLeg3->AddEntry((TObject*)0, "Num. Int.", "");
+    tLeg3->AddEntry(tCf_NumInt2e, TString::Format("#mu_{O} = %0.1f fm", tMuOut2e), "p");
+    tLeg3->AddEntry(tCf_NumInt2d, TString::Format("#mu_{O} = %0.1f fm", tMuOut2d), "p");
+    tLeg3->AddEntry(tCf_NumInt2c, TString::Format("#mu_{O} = %0.1f fm", tMuOut2c), "p");
+    tLeg3->AddEntry(tCf_NumInt2b, TString::Format("#mu_{O} = %0.1f fm", tMuOut2b), "p");
+    tLeg3->AddEntry(tCf_NumInt2a, TString::Format("#mu_{O} = %0.1f fm", tMuOut2a), "p");
+
+
+  TLegendEntry *tLegEntry;
+  tLegEntry = (TLegendEntry*)tLeg1->GetListOfPrimitives()->First();
+    tLegEntry->SetTextFont(62);
+
+  tLegEntry = (TLegendEntry*)tLeg2->GetListOfPrimitives()->First();
+    tLegEntry->SetTextFont(62);
+  tLegEntry = (TLegendEntry*)tLeg2->GetListOfPrimitives()->At(1);
+    tLegEntry->SetTextFont(62);
+
+  tLegEntry = (TLegendEntry*)tLeg3->GetListOfPrimitives()->First();
+    tLegEntry->SetTextFont(62);
+  tLegEntry = (TLegendEntry*)tLeg3->GetListOfPrimitives()->At(1);
+    tLegEntry->SetTextFont(62);
+
+  tLeg1->Draw();
+  tLeg2->Draw();
+  tLeg3->Draw();
 
   //-----------------------------------
   if(bSaveFigures)
