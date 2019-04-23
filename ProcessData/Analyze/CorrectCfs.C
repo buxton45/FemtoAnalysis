@@ -80,15 +80,15 @@ int main(int argc, char **argv)
 //-----------------------------------------------------------------------------
 
 
-  Analysis* LamKchP = new Analysis(FileLocationBase,kLamKchP,k0010);
-  Analysis* LamKchPMC = new Analysis(FileLocationBaseMC,kLamKchP,k0010);
+  Analysis* LamKchP = new Analysis(FileLocationBase,kLamKchP,k0010,kGrid,5);
+  Analysis* LamKchPMC = new Analysis(FileLocationBaseMC,kLamKchP,k0010,kGrid,5);
 //  Analysis* LamKchPMCd = new Analysis(FileLocationBaseMCd,kLamKchP,k0010);
 //  Analysis* LamKchPMCTot = CombineMCAnalyses(LamKchPMC,LamKchPMCd,"LamKchPMCTot_0010");
 //  DataAndModel* tDataAndModel = new DataAndModel(LamKchP,LamKchPMCTot,0.32,0.40,2);
   DataAndModel* tDataAndModel = new DataAndModel(LamKchP,LamKchPMC,0.32,0.40,2);
 
-  Analysis* LamKchP2 = new Analysis(FileLocationBase,kLamKchP,k0010);
-  Analysis* LamKchPMCFine = new Analysis(FileLocationBaseMCFine,kLamKchP,k0010);
+  Analysis* LamKchP2 = new Analysis(FileLocationBase,kLamKchP,k0010,kGrid,5);
+  Analysis* LamKchPMCFine = new Analysis(FileLocationBaseMCFine,kLamKchP,k0010,kGrid,5);
   DataAndModel* tDataAndModelFine = new DataAndModel(LamKchP2,LamKchPMCFine,0.32,0.40,1);
 
 /*
@@ -133,15 +133,15 @@ int main(int argc, char **argv)
 //--**!!--**!!--**!!--**!!--**!!--**!!--**!!--**!!--**!!--**!!--**!!--**!!--**!!
 //-----------------------------------------------------------------------------
 
-  bool bDrawMatrices = true;
+  bool bDrawMatrices = false;
   bool bCompareMatrices = false;
   bool bDrawCorrectionFactors = false;
   bool bDrawCorrectedCfs = false;
-  bool bCompareFine = false;
+  bool bCompareFine = true;
 
   bool bSaveFigures = false;
 //  TString tSaveFiguresLocation = "~/Analysis/Presentations/Group Meetings/20160317/";
-  TString tSaveFiguresLocation = "~/Analysis/Presentations/AliFemto/20160330/";
+  TString tSaveFiguresLocation = "/home/jesse/Analysis/FemtoAnalysis/AnalysisNotes/5_Fitting/Figures/";
 
   if(bDrawMatrices)
   {
@@ -311,21 +311,28 @@ int main(int argc, char **argv)
     tCanAllCorrections->cd();
     gStyle->SetOptStat(0);
     gStyle->SetOptTitle(0);
+    tCanAllCorrections->SetTopMargin(0.025);
+    tCanAllCorrections->SetRightMargin(0.025);
+    tCanAllCorrections->SetBottomMargin(0.15);
+    tCanAllCorrections->SetLeftMargin(0.155);
+
 
     tCfCorrectionwMatrix->GetXaxis()->SetRangeUser(0.,0.1);
     tCfCorrectionwMatrix->GetYaxis()->SetRangeUser(0.996,1.001);
 
     TAxis* xax1 = tCfCorrectionwMatrix->GetXaxis();
-      xax1->SetTitle("k* (GeV/c)");
-      xax1->SetTitleSize(0.04);
+      xax1->SetTitle("#it{k}* (GeV/#it{c})");
+      xax1->SetTitleSize(0.065);
       xax1->SetTitleOffset(1.0);
 //      xax1->CenterTitle();
+      xax1->SetLabelSize(0.045);
 
     TAxis* yax1 = tCfCorrectionwMatrix->GetYaxis();
-      yax1->SetTitle("C(k*_{true})/C(k*_{rec})");
-      yax1->SetTitleSize(0.04);
-      yax1->SetTitleOffset(1.3);
+      yax1->SetTitle("#it{C}(#it{k}*)");
+      yax1->SetTitleSize(0.075);
+      yax1->SetTitleOffset(1.05);
 //      yax1->CenterTitle();
+      yax1->SetLabelSize(0.045);
 
     tCfCorrectionwMatrix->DrawCopy();
     tFakeCorrectionHist->DrawCopy("same");
@@ -334,14 +341,14 @@ int main(int argc, char **argv)
 
     tCfCorrectionwMatrix->DrawCopy("same");
 
-    TLegend *tLeg = new TLegend(0.55,0.15,0.85,0.50);
+    TLegend *tLeg = new TLegend(0.55,0.20,0.85,0.55);
       tLeg->SetHeader("Correction Factors");
       tLeg->AddEntry((TObject*)0, "Course Binning", "");
-      tLeg->AddEntry(tFakeCorrectionHist,"TwoCFs","p");
+      tLeg->AddEntry(tFakeCorrectionHist,"Ratio","p");
       tLeg->AddEntry(tCfCorrectionwMatrix,"Matrix","p");
       tLeg->AddEntry((TObject*)0, "Fine Binning", "");
-      tLeg->AddEntry(tFakeCorrectionHistFine,"TwoCFsFine","p");
-      tLeg->AddEntry(tCfCorrectionwMatrixFine,"MatrixFine","p");
+      tLeg->AddEntry(tFakeCorrectionHistFine,"Ratio (Fine)","p");
+      tLeg->AddEntry(tCfCorrectionwMatrixFine,"Matrix (Fine)","p");
     TLegendEntry* tHeader0 = (TLegendEntry*)tLeg->GetListOfPrimitives()->At(0);
       tHeader0->SetTextFont(20);
       tHeader0->SetTextSize(0.045);
@@ -358,14 +365,14 @@ int main(int argc, char **argv)
     line->SetLineColor(14);
     line->Draw();
 
-    TPaveText* text1 = new TPaveText(0.73,0.80,0.90,0.90,"NDC");
+    TPaveText* text1 = new TPaveText(0.80,0.85,0.95,0.95,"NDC");
       text1->SetFillColor(0);
       text1->SetTextSize(0.05);
       text1->AddText(TString(cAnalysisRootTags[tDataAndModel->GetAnalysisType()]));
       text1->SetBorderSize(1);
       text1->Draw();
 
-    if(bSaveFigures) tCanAllCorrections->SaveAs(tSaveFiguresLocation+"CorrectionFactors_CompareFine_"+TString(cAnalysisBaseTags[tDataAndModel->GetAnalysisType()])+".eps");
+    if(bSaveFigures) tCanAllCorrections->SaveAs(tSaveFiguresLocation+"CorrectionFactors_CompareFine_"+TString(cAnalysisBaseTags[tDataAndModel->GetAnalysisType()])+".pdf");
 
   }
 
