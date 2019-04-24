@@ -68,7 +68,8 @@ Purity::Purity(TString aCombinedPurityName, ParticleType aParticleType, vector<T
     fBgFitLow[1] = 1.102;
 
     fBgFitHigh[0] = 1.130;
-    fBgFitHigh[1] = fPurityHistos[0]->GetBinLowEdge(fPurityHistos[0]->GetNbinsX()+1);
+//    fBgFitHigh[1] = fPurityHistos[0]->GetBinLowEdge(fPurityHistos[0]->GetNbinsX()+1);
+    fBgFitHigh[1] = fPurityHistos[0]->GetBinLowEdge(fPurityHistos[0]->GetNbinsX()+-1);
 
     fROI[0] = LambdaMass-0.0038;
     fROI[1] = LambdaMass+0.0038;
@@ -76,11 +77,13 @@ Purity::Purity(TString aCombinedPurityName, ParticleType aParticleType, vector<T
 
   if( fParticleType == kK0 )
   {
-    fBgFitLow[0] = fPurityHistos[0]->GetBinLowEdge(1);
+//    fBgFitLow[0] = fPurityHistos[0]->GetBinLowEdge(1);
+    fBgFitLow[0] = fPurityHistos[0]->GetBinLowEdge(3);
     fBgFitLow[1] = 0.452;
 
     fBgFitHigh[0] = 0.536;
-    fBgFitHigh[1] = fPurityHistos[0]->GetBinLowEdge(fPurityHistos[0]->GetNbinsX()+1);
+//    fBgFitHigh[1] = fPurityHistos[0]->GetBinLowEdge(fPurityHistos[0]->GetNbinsX()+1);
+    fBgFitHigh[1] = fPurityHistos[0]->GetBinLowEdge(fPurityHistos[0]->GetNbinsX()-1);
 
     fROI[0] = KaonMass-0.017614;
     fROI[1] = KaonMass+0.017386;
@@ -221,6 +224,8 @@ void Purity::DrawPurity(TPad *aPad, bool aZoomBg, bool aPrintPurity, double aPad
 
   TF1* fitBgd = (TF1*)fPurityFitInfo->At(0);
     fitBgd->SetLineColor(4);
+    fitBgd->SetLineStyle(5);
+    fitBgd->SetLineWidth(2);
   //-----
   TVectorD* vInfo = (TVectorD*)fPurityFitInfo->At(1);
   //-----
@@ -257,14 +262,18 @@ void Purity::DrawPurity(TPad *aPad, bool aZoomBg, bool aPrintPurity, double aPad
     tCombinedPurity->SetLabelSize(0.0, "x");
 
     double tHistoMaxValue = tCombinedPurity->GetMaximum();
-    lROImin = new TLine((*vROI)(0),0,(*vROI)(0),tHistoMaxValue);
-    lROImax = new TLine((*vROI)(1),0,(*vROI)(1),tHistoMaxValue);
+    double tMaxVertLines;
+    tMaxVertLines = tHistoMaxValue;
+    if( (fParticleType == kLam) || (fParticleType == kALam) ) tMaxVertLines = 5000000;
+    if( fParticleType == kK0 )                                tMaxVertLines = 9000000;
+    lROImin = new TLine((*vROI)(0),0,(*vROI)(0),tMaxVertLines);
+    lROImax = new TLine((*vROI)(1),0,(*vROI)(1),tMaxVertLines);
     //-----
-    lBgFitLowMin = new TLine((*vBgFitLow)(0),0,(*vBgFitLow)(0),tHistoMaxValue);
-    lBgFitLowMax = new TLine((*vBgFitLow)(1),0,(*vBgFitLow)(1),tHistoMaxValue);
+    lBgFitLowMin = new TLine((*vBgFitLow)(0),0,(*vBgFitLow)(0),tMaxVertLines);
+    lBgFitLowMax = new TLine((*vBgFitLow)(1),0,(*vBgFitLow)(1),tMaxVertLines);
     //-----
-    lBgFitHighMin = new TLine((*vBgFitHigh)(0),0,(*vBgFitHigh)(0),tHistoMaxValue);
-    lBgFitHighMax = new TLine((*vBgFitHigh)(1),0,(*vBgFitHigh)(1),tHistoMaxValue);
+    lBgFitHighMin = new TLine((*vBgFitHigh)(0),0,(*vBgFitHigh)(0),tMaxVertLines);
+    lBgFitHighMax = new TLine((*vBgFitHigh)(1),0,(*vBgFitHigh)(1),tMaxVertLines);
   }
 
   if(aZoomBg)
@@ -290,11 +299,14 @@ void Purity::DrawPurity(TPad *aPad, bool aZoomBg, bool aPrintPurity, double aPad
     //--Extend the y-range that I plot
 
     double tRangeBg = tMaxBg-tMinBg;
-    tMaxBg+=tRangeBg/10.;
-    tMinBg-=tRangeBg/10.;
+    //tMaxBg+=tRangeBg/10.;
+    //tMinBg-=tRangeBg/10.;
+
+    double tMaxYAx = tMaxBg + tRangeBg/10.;
+    double tMinYAx = tMinBg - tRangeBg/10.;
 
     tCombinedPurity->GetXaxis()->SetRange(1,tCombinedPurity->GetNbinsX());
-    tCombinedPurity->GetYaxis()->SetRangeUser(tMinBg,tMaxBg);
+    tCombinedPurity->GetYaxis()->SetRangeUser(tMinBg,tMaxYAx);
     //--------------------------------------------------------------------------------------------
     lROImin = new TLine((*vROI)(0),tMinBg,(*vROI)(0),tMaxBg);
     lROImax = new TLine((*vROI)(1),tMinBg,(*vROI)(1),tMaxBg);
@@ -313,12 +325,24 @@ void Purity::DrawPurity(TPad *aPad, bool aZoomBg, bool aPrintPurity, double aPad
 
   lROImin->SetLineColor(3);
   lROImax->SetLineColor(3);
+    lROImin->SetLineStyle(7);
+    lROImax->SetLineStyle(7);
+    lROImin->SetLineWidth(2);
+    lROImax->SetLineWidth(2);
 
   lBgFitLowMin->SetLineColor(2);
   lBgFitLowMax->SetLineColor(2);
+    lBgFitLowMin->SetLineStyle(3);
+    lBgFitLowMax->SetLineStyle(3);
+    lBgFitLowMin->SetLineWidth(2);
+    lBgFitLowMax->SetLineWidth(2);
 
   lBgFitHighMin->SetLineColor(2);
   lBgFitHighMax->SetLineColor(2);
+    lBgFitHighMin->SetLineStyle(3);
+    lBgFitHighMax->SetLineStyle(3);
+    lBgFitHighMin->SetLineWidth(2);
+    lBgFitHighMax->SetLineWidth(2);
 
 
   //--------------------------------------------------------------------------------------------
@@ -359,17 +383,27 @@ void Purity::DrawPurity(TPad *aPad, bool aZoomBg, bool aPrintPurity, double aPad
     }
     else
     {
-      TPaveText *myText2 = new TPaveText(0.15,0.50,0.45,0.875,"NDC");
+      TPaveText *myText2 = new TPaveText(0.15,0.35,0.40,0.65,"NDC");
       myText2->SetFillColor(0);
       myText2->SetBorderSize(0);
       myText2->SetTextAlign(33);
+      myText2->SetTextFont(42);
       myText2->AddText(TString::Format("Sig     = %0.3e",tSig));
       myText2->AddText(TString::Format("Sig+Bgd = %0.3e",tSigpBgd));
       myText2->AddText("");
       myText2->Draw();
     }
 
-    TLegend *tLeg = new TLegend(0.65,0.30,0.925,0.875); 
+      TPaveText *myText3 = new TPaveText(0.125,0.675,0.50,0.825,"NDC");
+      myText3->SetFillColor(0);
+      myText3->SetBorderSize(0);
+      myText3->SetTextAlign(22);
+      myText3->SetTextFont(42);
+      myText3->AddText(TString("ALICE Pb-Pb #sqrt{#it{s}_{NN}} = 2.76 TeV"));
+      myText3->AddText("");
+      myText3->Draw();
+
+    TLegend *tLeg = new TLegend(0.65,0.50,0.925,0.875); 
       tLeg->SetFillColor(0);
       tLeg->AddEntry(tCombinedPurity, "Data", "lp");
       tLeg->AddEntry(fitBgd, "Fit to background", "l");

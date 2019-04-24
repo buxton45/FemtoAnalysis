@@ -47,7 +47,7 @@ int main(int argc, char **argv)
   bool bSaveFigures = false;
   TString tSaveFileType = "pdf";
 
-  bool bPrintPurity = true;
+  bool bPrintPurity = false;
 //-----------------------------------------------------------------------------
 
   TString tGeneralAnTypeName;
@@ -59,7 +59,8 @@ int main(int argc, char **argv)
   TString tDirectoryBase = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_%s_%s/",tGeneralAnTypeName.Data(),tResultsDate.Data());
   TString tFileLocationBase = TString::Format("%sResults_%s_%s",tDirectoryBase.Data(),tGeneralAnTypeName.Data(),tResultsDate.Data());
 
-  TString tSaveDirectoryBase = "/home/jesse/Analysis/FemtoAnalysis/AnalysisNotes/3_DataSelection/Figures/";
+//  TString tSaveDirectoryBase = "/home/jesse/Analysis/FemtoAnalysis/AnalysisNotes/3_DataSelection/Figures/";
+  TString tSaveDirectoryBase = "/home/jesse/Analysis/FemtoAnalysis/LamKPublication/Figures/PDF/";
 
   //-----Data
   Analysis* LamK0 = new Analysis(tFileLocationBase,tAnType,tCentType);

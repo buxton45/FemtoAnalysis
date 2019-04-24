@@ -678,7 +678,8 @@ CanvasPartition* FitGeneratorAndDraw::BuildKStarCfswFitsCanvasPartition_PartAn(B
 
       if(i==0 && j==0)
       {
-        TString tTextAlicePrelim = TString("ALICE Preliminary");
+//        TString tTextAlicePrelim = TString("ALICE Preliminary");
+        TString tTextAlicePrelim = TString("ALICE");
         TPaveText* tAlicePrelim = tCanPart->SetupTPaveText(tTextAlicePrelim,i,j,0.05,0.825,0.40,0.10,43,15);
         tCanPart->AddPadPaveText(tAlicePrelim,i,j);
       }
@@ -753,8 +754,10 @@ void FitGeneratorAndDraw::BuildKStarCfswFitsPanel(CanvasPartition* aCanPart, int
     if(!fSharedAn->UsingNewBgdTreatment()) tNonFlatBgd = (TF1*)fSharedAn->GetFitPairAnalysis(aAnalysisNumber)->GetNonFlatBackground(aNonFlatBgdFitType, fSharedAn->GetFitType(), true, true);
     else tNonFlatBgd = (TF1*)fSharedAn->GetFitPairAnalysis(aAnalysisNumber)->GetNewNonFlatBackground(aNonFlatBgdFitType, true);  //TODO second argument should be set automatically
   }
+  tNonFlatBgd->SetLineStyle(7);
 
   TF1* tPrimaryFit = (TF1*)fSharedAn->GetFitPairAnalysis(aAnalysisNumber)->GetPrimaryFit();
+  tPrimaryFit->SetLineStyle(3);
 
 //TODO currently GetCorrectedFitHistv2 is the method which can also include residuals in the fit
 //  TH1* tCorrectedFitHisto = (TH1*)fSharedAn->GetFitPairAnalysis(aAnalysisNumber)->GetCorrectedFitHisto(aMomResCorrectFit,aNonFlatBgdCorrectFit,false,aNonFlatBgdFitType);
@@ -872,7 +875,8 @@ CanvasPartition* FitGeneratorAndDraw::BuildKStarCfswFitsCanvasPartition(TString 
 
       if(i==0 && j==0)
       {
-        TString tTextAlicePrelim = TString("ALICE Preliminary");
+//        TString tTextAlicePrelim = TString("ALICE Preliminary");
+        TString tTextAlicePrelim = TString("ALICE");
         //TPaveText* tAlicePrelim = tCanPart->SetupTPaveText(tTextAlicePrelim,i,j,0.30,0.85,0.40,0.10,43,15);
         TPaveText* tAlicePrelim = tCanPart->SetupTPaveText(tTextAlicePrelim,i,j,0.075,0.825,0.40,0.10,43,15);
         tCanPart->AddPadPaveText(tAlicePrelim,i,j);
@@ -1716,7 +1720,8 @@ TCanvas* FitGeneratorAndDraw::DrawSingleKStarCfwFitAndResiduals_PartAn(int aAnal
   tCanPart->AddPadPaveText(tCombined,0,0);
 
 
-  TString tTextAlicePrelim = TString("ALICE Preliminary");
+//  TString tTextAlicePrelim = TString("ALICE Preliminary");
+  TString tTextAlicePrelim = TString("ALICE");
   TPaveText* tAlicePrelim = tCanPart->SetupTPaveText(tTextAlicePrelim,0,0,0.05,0.875,0.40,0.10,43,15);
   tCanPart->AddPadPaveText(tAlicePrelim,0,0);
 

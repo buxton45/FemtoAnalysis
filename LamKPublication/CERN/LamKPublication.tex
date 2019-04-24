@@ -404,7 +404,7 @@ The \Lam and \ALam purities are estimated to be 95\%, and that of the \Ks is 98\
    \hline
    \multicolumn{3}{l|}{$|\eta|$} & $< 0.8$ \\
    \hline
-   \multicolumn{3}{l|}{$|m_{\mathrm{inv}} - m_{\mathrm{PDG}}|$} & $< 17$ MeV/$c^{2}$ \\
+   \multicolumn{3}{l|}{$|m_{\mathrm{inv}} - m_{\mathrm{PDG}}|$} & $< 17.5$ MeV/$c^{2}$ \\
    \hline
    \multicolumn{3}{l|}{DCA to primary vertex} & $<$ 0.3 cm \\
    \hline
@@ -514,9 +514,6 @@ Typically, $B(k^{*})$ is obtained by forming mixed-event pairs \cite{Kopylov:197
 Other techniques exist; most notably, one may use same-event pairs after rotating one particle in the pair by 180$^\circ$ in the transverse plane (see Sec. \ref{NonFlatBackground} and App. \ref{App:StavMethod} for more details).
 For this analysis, the typical mixed-event method is utilized, and each event is mixed with $\rm N_{mix} =$ 5 others for the reference distribution construction.
 In order to mix only similar events, events are binned both in primary vertex location (2 cm bin width) and in centrality (5\% bin width), and only events within a given bin are mixed; i.e. only events of like centrality and of like primary vertex location are mixed.
-After the event binning, a vertex correction is applied to each event, in which the primary vertex position is subtracted from the TPC track positions for each particle in the event.
-Subsequently, the tracks in an event are all measured relative to the event vertex, instead of the center of the TPC.
-This effectively gives each event the same primary vertex position, which is important for the implementation of the average separation cut in mixed-event pairs.
 
 This analysis presents correlation functions for three centrality bins (0--10\%, 10--30\%, and 30--50\%), and is pair transverse momentum ($k_{\mathrm{T}} = \frac{1}{2}|\mathbf{p}_{\mathrm{T,1}}+\mathbf{p}_{\mathrm{T,2}}|$) integrated (i.e. not binned in $k_{\mathrm{T}}$) due to limited statistics.
 The $k_{\mathrm{T}}$-dependence of the three \LamK combinations is comparable, so an integrated analysis is acceptable.
@@ -528,21 +525,14 @@ These are kept separate during the fitting process, and are combined using a wei
 
 
 In the absence of the Coulomb interaction, the correlation function can be described analytically with a model derived by Lednick\'y and Lyuboshitz \cite{Lednicky:82}.
-Within the model, the (non-symmetrized) two-particle wave function is expressed as a superposition of a plane wave and diverging spherical wave:
-\begin{equation}
-\begin{aligned}
-\Psi^{S}(\mathbf{k}^{*}, \mathbf{r}^{*}) = e^{-i\mathbf{k}^{*} \cdot \mathbf{r}^{*}} + f^{S}(k^{*})\frac{e^{ik^{*}r^{*}}}{r^{*}}
-\end{aligned}  
-\label{eqn:NonSymmPsi}
-\end{equation}
-In the effective range approximation, the complex s-wave scattering amplitude, $f^{S}(k^{*})$, with $S$ denoting the total spin of the particular pair, is of the form
+Within the model, the (non-symmetrized) two-particle wave function is expressed as a superposition of a plane wave and diverging spherical wave, and the complex scattering amplitude, $f^{S}(k^{*})$, is evaluated via the effective range approximation
 \begin{equation}
 \begin{aligned}
 f^{S}(k^{*}) = \left( \frac{1}{f^{S}_{0}} + \frac{1}{2}d^{S}_{0}k^{*2} - ik^{*} \right)^{-1}
 \end{aligned}
 \label{eqn:ScatteringParam}
 \end{equation}
-where $f^{S}_{0}$ is the complex s-wave scattering length, and $d^{S}_{0}$ is the effective range of the interaction.
+where $f^{S}_{0}$ is the complex s-wave scattering length, $d^{S}_{0}$ is the effective range of the interaction, and $S$ denotes the total spin of the particular pair.
 A spherically symmetric Gaussian distribution with radius $R_{\mathrm{inv}}$  is assumed for the pair emission source in the PRF.
 With these assumptions, utilizing the Koonin-Pratt equation (Eq. \ref{eqn:KooninPrattEqn}), the correlation function for non-identical particle pairs with at least one uncharged member is given by \cite{Lednicky:82}
 
@@ -553,13 +543,7 @@ C(k^{*})_{\mathrm{Lednick\acute{y}}} &= 1 + \sum_{S}\rho_{S}\left[\frac{1}{2}\le
 \label{eqn:LednickyEqn}
 \end{equation}
 
-where $\Re f^{S}(k^{*})$ and $\Im f^{S}(k^{*})$ denote the real and imaginary parts of the complex scattering length, respectively, and $F_{1}$ and $F_{2}$ are the analytic functions
-\begin{equation}
-F_{1}(z) = \int_{0}^{z} \frac{e^{x^{2}-z^{2}}}{z}dx; \qquad
-F_{2}(z) = \frac{1-e^{-z^{2}}}{z}.
-\label{eqn:CFSI2}
-\end{equation}
-
+where $\Re f^{S}(k^{*})$ and $\Im f^{S}(k^{*})$ denote the real and imaginary parts of the complex scattering length, respectively, and $F_{1}$ and $F_{2}$ are the analytic functions.
 The weight factor, $\rho_{S}$ is the normalized emission probability for a state of total spin $S$; in the assumed case of unpolarized emission, $\rho_{S} = (2S+1)/[(2j_{1}+1)(2j_{2}+1)]$, where $j_{1,2}$ are the spins of the particles in the pair.
 The \Lam hyperon is spin-1/2 and K mesons are spin-0, so the \LamK system only has one possible total spin state $S$, and therefore $C(k^{*})$ in Eq. \ref{eqn:LednickyEqn} has only a single term.
 In the following, the $S$ superscript is dropped from all scattering parameters.
@@ -578,12 +562,14 @@ The contribution from fake pairs, which contain a misidentified member, is assum
 
 
 The finally measured correlation function is a combination of the genuine \LamK correlation with contributions from residual feed-down and misidentified particles
-\begin{eqnarray}
+\begin{equation}
+\begin{aligned}
 \label{eqn:CfwRes} 
- C_{\mathrm{measured}}(k^{*}_{\Lambda\mathrm{K}}) &=& 1 + \lambda'_{\Lambda\mathrm{K}}[C_{\Lambda\mathrm{K}}(k^{*}_{\Lambda\mathrm{K}}) - 1] + \sum\limits_{i,j}  \lambda'_{ij}[C_{ij}(k^{*}_{\Lambda\mathrm{K}})-1] \\
- \lambda_{ij}' &=& \lambda_{\mathrm{Fit}}\lambda_{ij} \notag \\
- \sum\limits_{i,j}\lambda_{ij}' &=&  \lambda_{\mathrm{Fit}}\sum\limits_{i,j}\lambda_{ij} = \lambda_{\mathrm{Fit}} \notag
-\end{eqnarray}
+ C_{\mathrm{measured}}(k^{*}_{\Lambda\mathrm{K}}) &= 1 + \lambda'_{\Lambda\mathrm{K}}[C_{\Lambda\mathrm{K}}(k^{*}_{\Lambda\mathrm{K}}) - 1] + \sum\limits_{i,j}  \lambda'_{ij}[C_{ij}(k^{*}_{\Lambda\mathrm{K}})-1] \\
+ \lambda_{ij}' &= \lambda_{\mathrm{Fit}}\lambda_{ij} \\
+ \sum\limits_{i,j}\lambda_{ij}' &=  \lambda_{\mathrm{Fit}}\sum\limits_{i,j}\lambda_{ij} = \lambda_{\mathrm{Fit}}
+\end{aligned} 
+\end{equation}
 where the \LamK term represents the genuine \LamK correlation, and the $ij$ terms denote the contributions from residual feed-down and possible impurities.
 More specifically, $C_{ij}(k^{*}_{\Lambda\mathrm{K}})$ is the correlation function between parents of particle species $i$ and $j$, expressed in terms of the relative momentum of the observed daughter \LamK pairs.  
 The $\lambda_{ij}$ parameters serve as weights dictating the relative strength of the parent contribution to the daughter pair, and are normalized to unity (i.e. $\sum_{ij} \lambda_{ij} = 1$, where $ij$ includes also the primary \LamK component).
@@ -639,17 +625,14 @@ It is formed for a given parent pair, $ij$, by taking all \LamK pairs originatin
 The transform matrix is essentially an unnormalized probability distribution mapping the \kstar of the parent pair to that of the daughter pair when one or both parents decay.
  
 As previously stated, the $\lambda$ parameters dictate the strength of the parent contribution to the daughter pair.  
-Therefore, the $\lambda$ parameter for parent system AB can be estimated as the total number of $\Lambda$K pairs in our experimental sample originating from AB (N$_{AB}$) divided by the total number of $\Lambda$K pairs (N$_{Total}$):
-\begin{equation}
-\lambda_{AB} = \frac{N_{AB}}{N_{Total}}
-\end{equation}
+Therefore, the $\lambda$ parameter for parent system $ij$ can be estimated as the total number of \LamK pairs in our experimental sample originating from $ij$ ($N_{ij}$) divided by the total number of \LamK pairs ($N_{\mathrm{Total}}$).
 The number of \LamK pairs originating from each source involves not only the raw yields for each, but also the corresponding experimental reconstruction efficiencies.
 The reconstruction efficiencies ($RE_{ij}$) are estimated with MC HIJING data, which has been run through GEANT to simulate the detector response.
 HIJING events are generated from a superposition of PYTHIA p-p collisions, and lack the strangeness saturation of a fully thermalized medium.
 As a result, HIJING is unreliable in providing the yields needed for this analysis, and, instead, the yields are estimated with the THERMINATOR 2 simulation ($N_{ij}^{\scaleto{THERM}{3pt}}$).
 The $\lambda$ parameters are then estimated as
 \begin{equation}
-\lambda_{AB} = \frac{N_{AB}}{N_{Total}} = \frac{N_{AB}^{\scaleto{THERM}{3pt}}RE_{AB}^{\scaleto{HIJING}{3pt}}}{\sum\limits_{ij} N_{ij}^{\scaleto{THERM}{3pt}}RE_{ij}^{\scaleto{HIJING}{3pt}}}
+\lambda_{ij} = \frac{N_{ij}}{N_{\mathrm{Total}}} = \frac{N_{ij}^{\scaleto{THERM}{3pt}}RE_{ij}^{\scaleto{HIJING}{3pt}}}{\sum\limits_{\alpha\beta} N_{\alpha\beta}^{\scaleto{THERM}{3pt}}RE_{\alpha\beta}^{\scaleto{HIJING}{3pt}}}
 \end{equation}
 
 Femtoscopic analyses are sensitive to the pair emission structure at kinetic freeze-out.
@@ -695,17 +678,11 @@ Equation \ref{eqn:MomResCorrection} describes that, for a given \krec bin, the o
 A significant non-femtoscopic, non-flat, background is observed in all of the studied \LamK correlations at large \kstar.  
 This background increases with decreasing centrality, is the same amongst all \LamKpm pairs, and is more pronounced in the \LamKs system.
 This difference in \LamKpm and \LamKs backgrounds is due mainly to the difference in kinematic cuts.  
-
-It is suggested that this background effect is due primarily to particle collimation associated with elliptic flow \cite{Kisiel:2017}.  
-More specifically, these backgrounds result from mixing events with unlike event-plane angles ($\Psi_{\textrm{EP}}$).  
-As explained in \cite{Kisiel:2017}, when elliptic flow is present, all particles are more likely to be emitted in a specific direction (in-plane), as opposed to a perpendicular direction.  
-Therefore, the difference in momenta for pairs of particles tends to be smaller, compared to the case of no flow.  
-In the case of mixed-event pairs, the two events used do not share an event-plane, and therefore there is no collimation effect in the pairs from flow.  
-As a result, pairs with larger momentum are more likely when mixed-events are used (in the denominator of the correlation function), causing the correlation function to dip below unity.  
-This same reasoning suggests that the background should lead to an enhancement at low-\kstar. 
+It is suggested that this background effect is due primarily to particle collimation associated with elliptic flow , and result from mixing events with unlike event-plane angles \cite{Kisiel:2017}.  
+The argument also suggests that the background should lead to an enhancement at low-\kstar. 
 An attempt was made to decrease this background through the binning of events in $\Psi_{\mathrm{EP}}$, but only a small reduction in the signal was achieved due to the limited event-plane resolution.
 
-THERMINATOR 2 simulation has been shown to reproduce the background features in a $\pi$K analysis \cite{Kisiel:2017}.  
+The THERMINATOR 2 simulation has been shown to reproduce the background features in a $\pi$K analysis \cite{Kisiel:2017}.  
 Figure \ref{fig:BgdswTHERM} shows the THERMINATOR 2 simulation (green) together with experimental data (red, blue, black).  
 The figure also shows a 6$^{th}$-order polynomial fit to the simulation (green), as well as the fit polynomial scaled to match the data (red, blue, black).
 
@@ -723,9 +700,9 @@ In all cases, the non-femtoscopic background correction was applied as a scale f
   \includegraphics[width=\textwidth]{/home/jesse/Analysis/FemtoAnalysis/AnalysisNotes/5_Fitting/5.5_NonFlatBackground/Figures/BgdwFitOnly_RandomEPs_NumWeight1_PrimaryOnly_AllAnwConj_1030_3050.pdf}
   \caption[Backgrounds with THERMINATOR 2]
   {
-  THERMINATOR 2 simulation (green) together with experimental data (red, blue, or black).  
+  THERMINATOR 2 simulation (green) together with experimental data (red, blue, black).  
   Results are shown for \LamKchP (left), \LamKchM (middle), and \LamKs (right).
-  A 6$^{th}$-order polynomial fit to the simulation is shown as a solid green line.  
+  A $6^{\mathrm{th}}$-order polynomial fit to the simulation is shown as a solid green line.  
   This polynomial is scaled to match the experimental data.  
   The polynomial fit with scale factor applied is drawn in a color matching the experimental data (red, blue, black).
   }
@@ -745,15 +722,7 @@ The effect on the \LamKchP correlation functions can be seen in the appendix, in
 
 
 A simple $\chi^{2}$ test is inappropriate for fitting correlation functions, as the ratio two Poisson distributions does not result in a Poisson distribution.
-Instead, a log-likelihood fit function of the following form is used \cite{Lisa:2005dd}:
-
-\begin{equation}
- \chi^{2}_{PML} = -2\left[A\ln\left(\frac{C(A+B)}{A(C+1)}\right) + B\ln\left(\frac{A+B}{B(C+1)}\right)\right]
-\label{eqn:Chi2PML}
-\end{equation}
-
-where $A$ is the experimental signal distribution (numerator), $B$ is the experimental reference distribution (denominator), and $C$ is the theoretical fit correlation function.
-Therefore, Eq. \ref{eqn:Chi2PML} is used as the statistic quantifying the quality of the fit.
+Instead, a log-likelihood fit function is used as the statistic quantifying the quality of the fit \cite{Lisa:2005dd}.
 The parameters of the fit are: $\lambda_{\mathrm{Fit}}$, $R$, $f_{0}$ ($\Re f_{0}$ and $\Im f_{0}$ separately), $d_{0}$, and normalization $N$.
 
 For the fit, a given pair and its conjugate (e.g. \LamKchP and \ALamKchM) share scattering parameters ($\Re f_{0}$, $\Im f_{0}$, $d_{0}$), and the three distinct analyses (\LamKchP, \LamKchM, and \LamKs) are assumed to have scattering parameters unique from each other.
@@ -868,13 +837,12 @@ The resulting uncertainties in the extracted parameter sets were combined with t
 \label{sec:Results}
 
 Figures \ref{fig:LamKchPwConjFits_3Res}--\ref{fig:LamK0wConjFits_3Res} show the \LamK data with fits for all studied centrality bins (0--10\%, 10--30\%, and 30--50\%). 
-All analyses were fit simultaneously across all centralities, with a single radius and normalization $\lambda$ parameter for each centrality bin.
+All analyses were fit simultaneously across all centralities, with a single radius and normalization $\lambda_{\mathrm{Fit}}$ parameter for each centrality bin.
 Scattering parameters ($\Re f_{0}$, $\Im f_{0}$, $d_{0}$) were shared between pair-conjugate systems, but assumed unique between the different \LamK charge combinations (i.e. a parameter set describing the \LamKchP \& \ALamKchM system, a second set describing the \LamKchM \& \ALamKchP system, and a third for the \LamKs \& \ALamKs system).
 Each correlation function received a unique normalization parameter.
 The fits were corrected for finite momentum resolution effects, non-femtoscopic backgrounds, and residual correlations resulting from the feed-down from resonances.
 In Figs. \ref{fig:LamKchPwConjFits_3Res}--\ref{fig:LamK0wConjFits_3Res}, lines represent statistical errors, while boxes represent systematic errors.  
 The black solid curve shows the primary (\LamK) contribution to the fit (i.e. $1 + \lambda'_{\Lambda\mathrm{K}}C_{\Lambda\mathrm{K}}(k^{*}_{\Lambda\mathrm{K}})$ in Eq. \ref{eqn:CfwRes}), the green curve shows the fit to the non-femtoscopic background (with a polynomial fit to the THERMINATOR 2 simulation for the \LamKpm systems, and a linear form fit to the data for the \LamKs), and the purple curve shows the final fit after all corrections have been applied.
-The extracted fit values with uncertainties are printed as (fit value) $\pm$ (statistical uncertainty) $\pm$ (systematic uncertainty).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{comment}
@@ -1016,7 +984,6 @@ In the case of identical particle femtoscopy, the pair source is comprised of tw
 Thus, the identical particle pair source radii naturally follow the single particle source \mt-scaling in a simple manner.
 
 When dealing with non-identical particles, the pair emission source, which is measured by femtoscopy, is the superposition of two single-particle sources.
-In general, each single-particle source will have its own size, shape, and space-time position within the produced medium, which is unique from its paired partner.
 The hydrodynamic nature of the medium produces the approximate \mt-scaling with respect to these single-particle sources, not the pair sources.
 More specifically, the hydrodynamic response of the system confines higher-\mt particles to smaller homogeneity regions, also pushes their average emission points further in the ``out" direction \cite{Retiere:2003kf}.
 Therefore, it is expected that the \Lam source is both smaller in size and further out in the fireball than that of the kaons.

@@ -713,6 +713,7 @@ TCanvas* BuildBgdwFitPanel(CanvasPartition* aCanPart, int tColumn, int tRow, TSt
 
   tBgdFitDraw->SetLineColor(tCf->GetLineColor());
   tBgdFitDraw->SetLineWidth(1.0);
+  tBgdFitDraw->SetLineStyle(7);
   tBgdFitDraw->SetRange(0., aMaxBgdFit);
 
   //---------------------------------------------------------------
@@ -753,7 +754,7 @@ TCanvas* BuildBgdwFitPanel(CanvasPartition* aCanPart, int tColumn, int tRow, TSt
 
   //---------------------------------------------------------------------------------------------------------
   TString tSysInfoTString = TString::Format("%s  %s", cAnalysisRootTags[aAnType], cPrettyCentralityTags[tCentTypeData]);
-  TPaveText* tSysInfoPaveText = aCanPart->SetupTPaveText(tSysInfoTString, tColumn, tRow, 0.35, 0.825, 0.30, 0.125, 63, 40);
+  TPaveText* tSysInfoPaveText = aCanPart->SetupTPaveText(tSysInfoTString, tColumn, tRow, 0.60, 0.85, 0.325, 0.125, 63, 40);
   aCanPart->AddPadPaveText(tSysInfoPaveText, tColumn, tRow);
 
   //---------------------------------------------------------------------------------------------------------
@@ -798,9 +799,16 @@ TCanvas* BuildBgdwFitPanel(CanvasPartition* aCanPart, int tColumn, int tRow, TSt
   if(tRow==0)
   {
     if(!aZoomY) aCanPart->SetupTLegend("", tColumn, tRow, 0.55, 0.15, 0.35, 0.15);
-    else        aCanPart->SetupTLegend("", tColumn, tRow, 0.20, 0.10, 0.60, 0.30);
-    aCanPart->AddLegendEntry(tColumn, tRow, tCf, tDescriptor.Data(), "lp");
-    aCanPart->AddLegendEntry(tColumn, tRow, tData, TString::Format("Data (%s)", cPrettyCentralityTags[tCentTypeData]), "lp");
+    else        aCanPart->SetupTLegend("", tColumn, tRow, 0.20, 0.575, 0.60, 0.225);
+    aCanPart->AddLegendEntry(tColumn, tRow, tCf, tDescriptor.Data(), "p");
+    aCanPart->AddLegendEntry(tColumn, tRow, tData, TString::Format("Data (%s)", cPrettyCentralityTags[tCentTypeData]), "p");
+  }
+
+  if(tRow==0 && tColumn==0)
+  {
+    TString tAliceInfo = TString("ALICE Pb-Pb #sqrt{#it{s}_{NN}} = 2.76 TeV");
+    TPaveText* tAliceInfoText = aCanPart->SetupTPaveText(tAliceInfo, tColumn, tRow, 0.175, 0.05, 0.65, 0.125, 43, 40);
+    aCanPart->AddPadPaveText(tAliceInfoText, tColumn, tRow);
   }
 }
 
@@ -919,6 +927,9 @@ TCanvas* DrawBgdwFit_AllCentAllAnv2(TString aCfDescriptor, TString aFileNameCfs,
 
       tTempHist->GetYaxis()->SetLabelSize(3.25*tTempHist->GetYaxis()->GetLabelSize());
       tTempHist->GetYaxis()->SetLabelOffset(5.0*tTempHist->GetYaxis()->GetLabelOffset());
+
+      if(j==0) tTempHist->GetYaxis()->SetRangeUser(0.9865, 1.015);
+      if(j==1) tTempHist->GetYaxis()->SetRangeUser(0.975, 1.015);
     }
 
   }
