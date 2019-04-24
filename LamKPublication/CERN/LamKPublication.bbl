@@ -10,9 +10,9 @@ M.~A. Lisa, S.~Pratt, R.~Soltz, and U.~Wiedemann, ``{Femtoscopy in relativistic
 %%CITATION = NUCL-EX/0505014;%%.
 
 \bibitem{Lednicky:82}
-R.~Lednicky and V.~L. Lyuboshits, ``{Final State Interaction Effect on Pairing
-  Correlations Between Particles with Small Relative Momenta},'' {\em Sov. J.
-  Nucl. Phys.} {\bfseries 35} (1982) 770.
+R.~Lednick\'y and V.~L. Lyuboshits, ``{Final State Interaction Effect on
+  Pairing Correlations Between Particles with Small Relative Momenta},'' {\em
+  Sov. J. Nucl. Phys.} {\bfseries 35} (1982) 770.
 [Yad. Fiz.35,1316(1981)].
 %%CITATION = SJNCA,35,770;%%.
 
@@ -91,13 +91,6 @@ S.~Pratt, T.~Csorgo, and J.~Zimanyi, ``{Detailed predictions for two pion
   C42} (1990) 2646--2652}.
 %%CITATION = PHRVA,C42,2646;%%.
 
-\bibitem{Akkelin:1995gh}
-S.~V. Akkelin and {\relax Yu}.~M. Sinyukov, ``{The HBT interferometry of
-  expanding sources},''
-\href{http://dx.doi.org/10.1016/0370-2693(95)00765-D}{{\em Phys. Lett.}
-  {\bfseries B356} (1995) 525--530}.
-%%CITATION = PHLTA,B356,525;%%.
-
 \bibitem{Kopylov:1974th}
 G.~I. Kopylov, ``{Like particle correlations as a tool to study the multiple
   production mechanism},''
@@ -144,6 +137,13 @@ M.~Mai, P.~C. Bruns, B.~Kubis, and U.-G. Meissner, ``{Aspects of meson-baryon
 \href{http://arxiv.org/abs/1506.07884}{{\ttfamily arXiv:1506.07884 [nucl-ex]}}.
 %%CITATION = ARXIV:1506.07884;%%.
 
+\bibitem{Akkelin:1995gh}
+S.~V. Akkelin and {\relax Yu}.~M. Sinyukov, ``{The HBT interferometry of
+  expanding sources},''
+\href{http://dx.doi.org/10.1016/0370-2693(95)00765-D}{{\em Phys. Lett.}
+  {\bfseries B356} (1995) 525--530}.
+%%CITATION = PHLTA,B356,525;%%.
+
 \bibitem{Kisiel:2014upa}
 A.~Kisiel, M.~Gałażyn, and P.~Bożek, ``{Pion, kaon, and proton femtoscopy in
   Pb--Pb collisions at $\sqrt{s_{\rm NN}}$=2.76 TeV modeled in (3+1)D
@@ -166,7 +166,7 @@ A.~Stavinskiy {\em et~al.}, ``{Some new aspects of femtoscopy at high
   energy},'' {\em Nukleonika} {\bfseries 49 (Supplement 2)} (2004) S23.
 
 \bibitem{Lednicky:2005tb}
-R.~Lednicky, ``{Finite-size effects on two-particle production in continuous
+R.~Lednick\'y, ``{Finite-size effects on two-particle production in continuous
   and discrete spectrum},''
   \href{http://dx.doi.org/10.1134/S1063779609030034}{{\em Phys. Part. Nucl.}
   {\bfseries 40} (2009) 307--352},
