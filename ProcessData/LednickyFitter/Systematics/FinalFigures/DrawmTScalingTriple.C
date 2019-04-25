@@ -149,11 +149,11 @@ int main(int argc, char **argv)
   TString tResultsDate = "20180505";
 
   bool bSaveImage = false;
-  bool bDrawJaiAndHans = true;
+  bool bDrawJaiAndHans = false;
   bool bMakeOthersTransparent = true;
   bool bOutlinePoints = true;
   bool bDrawSysErrs = true;
-  bool bStripResStamp = false;
+  bool bStripResStamp = true;
 
 
   IncludeResidualsType tIncResType = kInclude3Residuals;
@@ -383,69 +383,6 @@ cout << endl << endl;
 
 //------------------------------------------------------------------------------------------- 
 
-
-//---------------------------------- Draw Legend -------------------------------------------- 
-
-    TLatex *   tex = new TLatex(1.375,9.4,"Pb-Pb #sqrt{#it{s}_{NN}} = 2.76 TeV");
-    tex->SetTextFont(42);
-    tex->SetTextSize(0.044);
-    tex->SetLineWidth(2);
-    tex->Draw();
-//    tex->DrawLatex(0.85,9.4,"ALICE Preliminary");
-    tex = new TLatex();
-    tex->SetTextAlign(12);
-    tex->SetTextFont(42);
-    tex->SetTextSize(0.04);
-    tex->SetLineWidth(2);
-
-
-    // species text and markers
-    TMarker *marker = new TMarker();
-    marker->SetMarkerSize(tMarkerSize);
-  
-    tex->DrawLatex(1.5,8.8,"#pi^{#pm}#pi^{#pm}");
-    marker->SetMarkerStyle(28);//pions
-    marker->DrawMarker(1.66,8.8);
-  
-    tex->DrawLatex(1.5,8.2,"K^{#pm}K^{#pm}");
-    marker->SetMarkerStyle(25);//Kch
-    marker->DrawMarker(1.66,8.2);
-  
-    tex->DrawLatex(1.5,7.6,"K_{S}^{0}K_{S}^{0}");
-    marker->SetMarkerStyle(27);//K0s
-    marker->DrawMarker(1.66,7.6);
-  
-    tex->DrawLatex(1.5,7.0,"#bar{p}#bar{p}");
-    marker->SetMarkerStyle(5);// antiprotons
-    marker->DrawMarker(1.66,7.0);
-  
-    tex->DrawLatex(1.5,6.4,"pp");
-    marker->SetMarkerStyle(24);//protons
-    marker->DrawMarker(1.66,6.4);
-  
-    //------- Column 2 ----------------------
-    tex->DrawLatex(1.8,7.9,"#LambdaK");
-    marker->SetMarkerStyle(tMarkerStyleLamK);
-    marker->DrawMarker(1.95,7.9);
-
-
-    // centralities
-    TLine line;
-    line.SetLineWidth(2);
-    line.SetLineColor(myRed);
-    line.DrawLine(1.12,8.7,1.22,8.7);
-    line.SetLineColor(myGreen);
-    line.DrawLine(1.12,8.1,1.22,8.1);
-    line.SetLineColor(myBlue);
-    line.DrawLine(1.12,7.5,1.22,7.5);
-    tex->DrawLatex(0.9,8.7,"0-10%");
-    tex->DrawLatex(0.9,8.1,"10-30%");
-    tex->DrawLatex(0.9,7.5,"30-50%");
-
-
-
-
-
 //-------------------------------------------------------------------------------------------
 //----------------------------- ALICE DATA --------------------------------------------------
 //-------------------------------------------------------------------------------------------
@@ -580,8 +517,21 @@ cout << endl << endl;
     DrawPoints("GraphPLam3050", tPLam3050Sys, tPLam3050Stat, myBlueT, myBlue, tMarkerStylePLam, tMarkerSize);
 
 
-    //----------------------------------------------------
-    TLatex* tex = new TLatex();
+    //---------------------------------------------------
+
+  }
+
+
+
+//---------------------------------- Draw Legend -------------------------------------------- 
+
+    TLatex *   tex = new TLatex(1.175,9.4,"ALICE Pb-Pb #sqrt{#it{s}_{NN}} = 2.76 TeV");
+    tex->SetTextFont(42);
+    tex->SetTextSize(0.044);
+    tex->SetLineWidth(2);
+    tex->Draw();
+//    tex->DrawLatex(0.85,9.4,"ALICE Preliminary");
+    tex = new TLatex();
     tex->SetTextAlign(12);
     tex->SetTextFont(42);
     tex->SetTextSize(0.04);
@@ -591,19 +541,83 @@ cout << endl << endl;
     // species text and markers
     TMarker *marker = new TMarker();
     marker->SetMarkerSize(tMarkerSize);
+  
+    double tX1Text = 1.6;
+    double tTextMarkerSep1 = 0.16;
+    double tX2Text = 1.95;
+    double tTextMarkerSep2 = 0.15;
+    double tY1Text = 8.8;
+    double tY1Sep = 0.6;
 
-    tex->DrawLatex(2.05, 8.2, "p#Lambda");
-    marker->SetMarkerStyle(tMarkerStylePLam);
-    marker->DrawMarker(2.175, 8.2);
+    double tShiftX = 0.;
+    if(!bDrawJaiAndHans)
+    {
+      tShiftX = 0.1;
+      tX1Text += tShiftX;
+    }
 
-    tex->DrawLatex(2.05, 7.6, "#Lambda#Lambda");
-    marker->SetMarkerStyle(tMarkerStyleLamLam);
-    marker->DrawMarker(2.175, 7.6);
+    tex->DrawLatex(tX1Text, tY1Text-0*tY1Sep, "#pi^{#pm}#pi^{#pm}");
+    marker->SetMarkerStyle(28);//pions
+    marker->DrawMarker(tX1Text+tTextMarkerSep1, tY1Text-0*tY1Sep);
+  
+    tex->DrawLatex(tX1Text, tY1Text-1*tY1Sep, "K^{#pm}K^{#pm}");
+    marker->SetMarkerStyle(25);//Kch
+    marker->DrawMarker(tX1Text+tTextMarkerSep1, tY1Text-1*tY1Sep);
+  
+    tex->DrawLatex(tX1Text, tY1Text-2*tY1Sep, "K_{S}^{0}K_{S}^{0}");
+    marker->SetMarkerStyle(27);//K0s
+    marker->DrawMarker(tX1Text+tTextMarkerSep1, tY1Text-2*tY1Sep);
+  
+    tex->DrawLatex(tX1Text, tY1Text-3*tY1Sep, "#bar{p}#bar{p}");
+    marker->SetMarkerStyle(5);// antiprotons
+    marker->DrawMarker(tX1Text+tTextMarkerSep1, tY1Text-3*tY1Sep);
+  
+    tex->DrawLatex(tX1Text, tY1Text-4*tY1Sep, "pp");
+    marker->SetMarkerStyle(24);//protons
+    marker->DrawMarker(tX1Text+tTextMarkerSep1, tY1Text-4*tY1Sep);
 
-    tex->DrawLatex(2.05, 7.0, "#Lambda#bar{#Lambda}");
-    marker->SetMarkerStyle(tMarkerStyleLamALam);
-    marker->DrawMarker(2.175, 7.0);
-  }
+
+    if(!bDrawJaiAndHans)
+    {
+      tex->DrawLatex(tX1Text, tY1Text-5*tY1Sep, "#LambdaK");
+      marker->SetMarkerStyle(tMarkerStyleLamK);
+      marker->DrawMarker(tX1Text+tTextMarkerSep1, tY1Text-5*tY1Sep);
+    }
+  
+    else
+    {
+      //------- Column 2 ----------------------
+      tex->DrawLatex(tX2Text, tY1Text-0*tY1Sep, "#LambdaK");
+      marker->SetMarkerStyle(tMarkerStyleLamK);
+      marker->DrawMarker(tX2Text+tTextMarkerSep2, tY1Text-0*tY1Sep);
+
+      tex->DrawLatex(tX2Text, tY1Text-1*tY1Sep, "p#Lambda");
+      marker->SetMarkerStyle(tMarkerStylePLam);
+      marker->DrawMarker(tX2Text+tTextMarkerSep2, tY1Text-1*tY1Sep);
+
+      tex->DrawLatex(tX2Text, tY1Text-2*tY1Sep, "#Lambda#Lambda");
+      marker->SetMarkerStyle(tMarkerStyleLamLam);
+      marker->DrawMarker(tX2Text+tTextMarkerSep2, tY1Text-2*tY1Sep);
+
+      tex->DrawLatex(tX2Text, tY1Text-3*tY1Sep, "#Lambda#bar{#Lambda}");
+      marker->SetMarkerStyle(tMarkerStyleLamALam);
+      marker->DrawMarker(tX2Text+tTextMarkerSep2, tY1Text-3*tY1Sep);
+    }
+
+
+    // centralities
+    TLine line;
+    line.SetLineWidth(2);
+    line.SetLineColor(myRed);
+    line.DrawLine(1.32+tShiftX, tY1Text-0.1-0*tY1Sep, 1.42+tShiftX, tY1Text-0.1-0*tY1Sep);
+    line.SetLineColor(myGreen);
+    line.DrawLine(1.32+tShiftX, tY1Text-0.1-1*tY1Sep, 1.42+tShiftX, tY1Text-0.1-1*tY1Sep);
+    line.SetLineColor(myBlue);
+    line.DrawLine(1.32+tShiftX, tY1Text-0.1-2*tY1Sep, 1.42+tShiftX, tY1Text-0.1-2*tY1Sep);
+
+    tex->DrawLatex(1.1+tShiftX, tY1Text-0.1-0*tY1Sep, "0-10%");
+    tex->DrawLatex(1.1+tShiftX, tY1Text-0.1-1*tY1Sep, "10-30%");
+    tex->DrawLatex(1.1+tShiftX, tY1Text-0.1-2*tY1Sep, "30-50%");
 
 //---------------------------- Save file ----------------------------------------------------
   if(bSaveImage) 

@@ -12,7 +12,7 @@ int main(int argc, char **argv)
   //the program ends and closes everything
 
   bool bSaveFigures = false;
-  TString tSaveFileType = "eps";  //Needs to be pdf for systematics to be transparent!
+  TString tSaveFileType = "pdf";  //Needs to be pdf for systematics to be transparent!
 
   vector<TString> tStatOnlyTags = {"", "_StatOnly"};
   vector<TString> tVerticalTags = {"", "_Vertical"};
@@ -47,9 +47,9 @@ int main(int argc, char **argv)
                                                                  FitValWriterInfo(kLamKchP, tFileLocation_LamKch, tResultsDate, tFitInfoTString, 
                                                                                  " (Suppress Markers)", tColorLamKchP, 20, tMarkerSize, false, true), 
                                                                  FitValWriterInfo(kLamKchM, tFileLocation_LamKch, tResultsDate, tFitInfoTString, 
-                                                                                 " (Suppress Markers)", tColorLamKchM, 20, tMarkerSize, false, true), 
+                                                                                 " (Suppress Markers)", tColorLamKchM, 21, tMarkerSize, false, true), 
                                                                  FitValWriterInfo(kLamK0, tFileLocation_LamK0, tResultsDate, tFitInfoTString, 
-                                                                                 " (Suppress Markers)", tColorLamK0, 20, tMarkerSize, false, true)};
+                                                                                 " (Suppress Markers)", tColorLamK0, 22, tMarkerSize, false, true)};
 
   vector<FitValWriterInfo> tFVWIVec = tFVWIVec_Comp3An_Triple;
   TString tCanNameMod = TString("_Comp3An_Triple");

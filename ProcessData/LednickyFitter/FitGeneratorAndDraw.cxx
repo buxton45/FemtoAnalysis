@@ -860,57 +860,26 @@ CanvasPartition* FitGeneratorAndDraw::BuildKStarCfswFitsCanvasPartition(TString 
       BuildKStarCfswFitsPanel(tCanPart, tAnalysisNumber, i, j, aMomResCorrectFit, aNonFlatBgdCorrectFit, aNonFlatBgdFitType, aDrawSysErrors, aZoomROP);
 
       TString tTextAnType = TString(cAnalysisRootTags[tAnType]);
-      //TPaveText* tAnTypeName = tCanPart->SetupTPaveText(tTextAnType,i,j,0.89,0.85,0.05);
-      //TPaveText* tAnTypeName = tCanPart->SetupTPaveText(tTextAnType,i,j,0.715,0.825,0.05);
-      //tCanPart->AddPadPaveText(tAnTypeName,i,j);
-
       TString tTextCentrality = TString(cPrettyCentralityTags[tCentType]);
-      //TPaveText* tCentralityName = tCanPart->SetupTPaveText(tTextCentrality,i,j,0.12,0.85,0.075);
-      //TPaveText* tCentralityName = tCanPart->SetupTPaveText(tTextCentrality,i,j,0.865,0.825,0.075);
-      //tCanPart->AddPadPaveText(tCentralityName,i,j);
 
       TString tCombinedText = tTextAnType + TString("  ") +  tTextCentrality;
       TPaveText* tCombined = tCanPart->SetupTPaveText(tCombinedText,i,j,0.70,0.825,0.15,0.10,63,20);;
       tCanPart->AddPadPaveText(tCombined,i,j);
 
-      if(i==0 && j==0)
+      if(i==(tNx-1) && j==(tNy-1))
       {
-//        TString tTextAlicePrelim = TString("ALICE Preliminary");
-        TString tTextAlicePrelim = TString("ALICE");
-        //TPaveText* tAlicePrelim = tCanPart->SetupTPaveText(tTextAlicePrelim,i,j,0.30,0.85,0.40,0.10,43,15);
-        TPaveText* tAlicePrelim = tCanPart->SetupTPaveText(tTextAlicePrelim,i,j,0.075,0.825,0.40,0.10,43,15);
-        tCanPart->AddPadPaveText(tAlicePrelim,i,j);
-      }
-
-      if(i==1 && j==0)
-      {
-        TString tTextSysInfo = TString("Pb-Pb #sqrt{#it{s}_{NN}} = 2.76 TeV");
-        //TPaveText* tSysInfo = tCanPart->SetupTPaveText(tTextSysInfo,i,j,0.30,0.85,0.40,0.10,43,15);
-        TPaveText* tSysInfo = tCanPart->SetupTPaveText(tTextSysInfo,i,j,0.125,0.825,0.40,0.10,43,15);
+        TString tTextSysInfo = TString("ALICE Pb-Pb #sqrt{#it{s}_{NN}} = 2.76 TeV");
+        TPaveText* tSysInfo = tCanPart->SetupTPaveText(tTextSysInfo,i,j,0.20,0.125,0.725,0.15,43,17);
         tCanPart->AddPadPaveText(tSysInfo,i,j);
       }
-/*
-      if(aZoomROP) CreateParamInitValuesText(tCanPart,i,j,0.35,0.20,0.10,0.40,43,9);
-      else CreateParamInitValuesText(tCanPart,i,j,0.25,0.20,0.15,0.45,43,10);
-      AddTextCorrectionInfo(tCanPart,i,j,aMomResCorrectFit,aNonFlatBgdCorrectFit,0.25,0.08,0.15,0.10,43,7.5);
-*/
+
       td1dVec tSysErrors;
       if(fMasterFileLocation.IsNull() || fSystematicsFileLocation.IsNull()) tSysErrors = GetSystErrs(fIncludeResidualsType, tAnType, tCentType);
       else tSysErrors = GetSystErrs(fMasterFileLocation, fSystematicsFileLocation, fSaveNameModifier, tAnType, tCentType);
 
-//      bool bDrawAll = true;
-
       bool bDrawAll = false;
       if(i==0 && j==0) bDrawAll = true;
       if(!aSuppressFitInfoOutput) CreateParamFinalValuesText(tAnType, tCanPart,i,j,(TF1*)fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetPrimaryFit(),tSysErrors,0.73,0.09,0.25,0.53,43,12.0,bDrawAll);
-
-/*
-      bool bDrawText1 = true;
-      bool bDrawText2 = false;
-      if(j==0 && i==0) bDrawText2 = true;
-//      CreateParamFinalValuesTextTwoColumns(tCanPart,i,j,(TF1*)fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetPrimaryFit(),tSysErrors,0.24,0.15,0.25,0.25,bDrawText1,0.74,0.10,0.25,0.50,bDrawText2,43,11);
-      CreateParamFinalValuesTextTwoColumns(tCanPart,i,j,(TF1*)fSharedAn->GetFitPairAnalysis(tAnalysisNumber)->GetPrimaryFit(),tSysErrors,0.74,0.15,0.25,0.25,bDrawText1,0.37,0.10,0.25,0.50,bDrawText2,43,11);
-*/
     }
   }
 

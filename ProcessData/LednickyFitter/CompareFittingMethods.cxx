@@ -56,6 +56,63 @@ void DrawAnalysisStamps(TPad* aPad, vector<AnalysisType> &aAnTypes, double aStar
 }
 
 //_________________________________________________________________________________________________________________________________
+void DrawAnalysisStamps(TPad* aPad, vector<AnalysisType> &aAnTypes, double aStartX, double aStartY, double aIncrementX, double aIncrementY, double aTextSize, vector<int> &aMarkerStyles)
+{
+  aPad->cd();
+
+  TLatex* tTex = new TLatex();
+  tTex->SetTextAlign(12);
+  tTex->SetLineWidth(2);
+  tTex->SetTextFont(42);
+  tTex->SetTextSize(aTextSize);
+
+  const Size_t tMarkerSize=1.6;
+  TMarker *tMarker = new TMarker();
+  tMarker->SetMarkerSize(tMarkerSize);
+
+  bool bIncLamKchP=false;
+  bool bIncLamKchM=false;
+  bool bIncLamK0=false;
+  for(unsigned int i=0; i<aAnTypes.size(); i++)
+  {
+    if     (aAnTypes[i]==kLamKchP) bIncLamKchP=true;
+    else if(aAnTypes[i]==kLamKchM) bIncLamKchM=true;
+    else if(aAnTypes[i]==kLamK0) bIncLamK0=true;
+  }
+
+
+
+  int iTex = 0;
+
+  if(bIncLamKchP)
+  {
+    tTex->DrawLatex(aStartX, aStartY-iTex*aIncrementY, cAnalysisRootTags[kLamKchP]);
+    tMarker->SetMarkerColor(kRed+1);
+    tMarker->SetMarkerStyle(aMarkerStyles[iTex]);
+    tMarker->DrawMarker(aStartX-aIncrementX, aStartY-iTex*aIncrementY);
+    iTex++;
+  }
+
+  if(bIncLamKchM)
+  {
+    tTex->DrawLatex(aStartX, aStartY-iTex*aIncrementY, cAnalysisRootTags[kLamKchM]);
+    tMarker->SetMarkerColor(kBlue+1);
+    tMarker->SetMarkerStyle(aMarkerStyles[iTex]);
+    tMarker->DrawMarker(aStartX-aIncrementX, aStartY-iTex*aIncrementY);
+    iTex++;
+  }
+
+  if(bIncLamK0)
+  {
+    tTex->DrawLatex(aStartX, aStartY-iTex*aIncrementY, cAnalysisRootTags[kLamK0]);
+    tMarker->SetMarkerColor(kBlack);
+    tMarker->SetMarkerStyle(aMarkerStyles[iTex]);
+    tMarker->DrawMarker(aStartX-aIncrementX, aStartY-iTex*aIncrementY);
+    iTex++;
+  }
+}
+
+//_________________________________________________________________________________________________________________________________
 void DrawAnalysisAndConjStamps(TPad* aPad, vector<AnalysisType> &aAnTypes, double aStartX, double aStartY, double aIncrementX, double aIncrementY, double aSecondColumnShiftX, double aTextSize, int aMarkerStyle, int aConjMarkerStyle, bool aLamKchCombined, bool aLamKchSeparate, bool aAllLamKCombined)
 {
   aPad->cd();

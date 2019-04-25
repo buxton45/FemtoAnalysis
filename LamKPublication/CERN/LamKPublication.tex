@@ -554,11 +554,11 @@ In the following, the $S$ superscript is dropped from all scattering parameters.
 The purpose of this analysis is study the interaction and scale of the emitting source of the primary \LamK pairs.
 However, in practice some of the selected particles originate as decay products from other resonances, and some of the final pairs contain a misidentified member.
 In both cases, these contribute to the finally observed correlation function, and obscure its relation to the primary \LamK system.
+The contributions from fake pairs, which contain at least one misidentified member, are assumed to average to unity, in which case they simply attenuate the femtoscopic signal.
 Those pairs whose members originate as daughters from resonances carry information about the parent system.
 In effect, the correlation between the parents will be visible, although smeared out, in the daughters' signal.
 This is termed a residual correlation resulting from feed-down.  
 For this analysis, a portion of the selected \Lam hyperons decay from $\Sigma^{0}$, $\Xi^{0}$, $\Xi^{-}$ and $\Sigma^{*(+,-,0)}(1385)$ parents, and some of the K mesons decay from K$^{*(+,-,0)}(892)$ parents.
-The contribution from fake pairs, which contain a misidentified member, is assumed to average to unity, in which case it leads to an attenuation of the femtoscopic signal.
 
 
 The finally measured correlation function is a combination of the genuine \LamK correlation with contributions from residual feed-down and misidentified particles
@@ -623,6 +623,78 @@ Using this matrix, the transformed residual correlation function can be obtained
 The transform matrix is generated with the THERMINATOR 2 \cite{Chojnacki:2011hb} simulation. 
 It is formed for a given parent pair, $ij$, by taking all \LamK pairs originating from $ij$, calculating the relative momentum of the parents ($k^{*}_{ij}$) and daughters ($k^{*}_{\Lambda\mathrm{K}}$), and filling a two-dimensional histogram with the values. 
 The transform matrix is essentially an unnormalized probability distribution mapping the \kstar of the parent pair to that of the daughter pair when one or both parents decay.
+
+Femtoscopic analyses are sensitive to the pair emission structure at kinetic freeze-out.
+Therefore, in the eyes of femtoscopy, any particle born from a resonance decay before last rescattering is seen as primary.
+For this study, a particle is considered to be primary if its parent has a proper decay length of $c\tau <$ 10 fm. 
+With this selection, residual contributions from $\Sigma^{0}$, $\Xi^{0}$, $\Xi^{-}$ must be accounted for in the fit.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%From dissertation
+\begin{comment}
+We can group the types of pairs contributing to our finally observed correlation functions into three broad categories: primary pairs, residual contributors, and other pairs.
+The primary pairs are the pairs of interest whose signal we want to measure.
+The residual contributors and other pairs muddle the finally observed signal.
+
+Femtoscopic analyses are sensitive to the pair emission structure at kinetic freeze-out.
+Therefore, in the eyes of femtoscopy, any particle born from a resonance decay before last rescattering is seen as primary.
+Within the THERMINATOR 2 simulation, we find that, aside from those which are primary, our \Lam hyperons and K mesons decay from a a large number of resonances ($\sim$50 \Lam parent species, and $\sim$70 K parent species).
+From the $\sim$3500 possible contributors feeding down into our \LamK system, only 10 individual pairs contribute significantly.
+These ten are: $\Sigma^{0}$K, $\Xi^{-}$K, $\Xi^{0}$K, $\Sigma^{*+}$K, $\Sigma^{*-}$K, $\Sigma^{*0}$K, $\Lambda\mathrm{K}^{*}$, $\Sigma^{0}\mathrm{K}^{*}$, $\Xi^{-}\mathrm{K}^{*}$, $\Xi^{0}\mathrm{K}^{*}$.
+However, it is important to remember that THERMINATOR 2 does not include a hadronic rescattering phase, and therefore models more closely the case of free streaming after chemical freeze-out.
+As previously stated, femtoscopy is sensitive to the source after kinetic freeze-out, so care needs to be taken in deciding which pairs will contribute to the experimental correlation functions.
+It is clear that the first three, which decay by the electromagnetic or weak interaction, need to be included in our treatment of residual correlation effects.
+These three, with a decay length of $\sim$10$^{4}$ fm for the $\Sigma^{0}$ and decay lengths on the order of centimeters ($\sim$10$^{13}$ fm) for $\Xi^{-}$ and $\Xi^{0}$, will survive until after last hadronic rescattering to affect the finally observed \LamK correlation function.
+For the remaining seven, which decay via the strong interaction, the situation is not as clear; the $\Sigma^{*}$ and $\mathrm{K}^{*}$ have proper decay lengths $c\tau \approx$ 5 fm and 4 fm, respectively.
+Although some of the $\Sigma^{*}$ and $\mathrm{K}^{*}$ will decay after kinetic freeze-out, we expect that most will decay before.
+Therefore, in the eyes of femtoscopy, most of the \LamK pairs originating from $\Sigma^{*}$K and $\Lambda\mathrm{K}^{*}$ are primary.
+
+
+With the arguments presented above, out of the ten top parent systems feeding down into our final \LamK pairs (as estimated with THERMINATOR 2), we expect residual effects to survive from only three, the $\Sigma^{0}$K, $\Xi^{-}$K, $\Xi^{0}$K systems.
+Therefore, we include only these three in our final fit algorithm, and assume the other seven contribute to our primary pair samples.
+However, as mentioned above, within the THERMINATOR 2 simulation there are still $\sim$3490 parent systems which feed-down into the final \LamK pairs.
+Some of these parent systems will decay to \LamK pairs before kinetic freeze-out, and should be treated as primary, but others will not.
+For these remaining possible contributors, we use the proper decay length of the parents to judge whether or not the daughter pair should be treated as primary.
+More specifically, if both parents in the pair have a proper decay length $\tau < \tau_{\mathrm{max}}$, then the daughter pair is considered primary; for our final results, we have chosen $c\tau_{\mathrm{max}} = 10$ fm.
+If either parent has $\tau > \tau_{\mathrm{max}}$, the daughter pair contributes to the ``Other" category when calculating $\lambda$ parameters.
+This ``Other" category contains pairs which are not considered primary, and which do not originate from the three residual contributor systems included in the fit.
+For this hodgepodge of pair systems, all with different two-particle interactions and single-particle source distributions, we assume the net correlation effect averages to unity.
+
+The choice of $c\tau_{\mathrm{max}} = 10$ fm is somewhat arbitrary, and (as long as $c\tau_{\mathrm{max}} \geq 6$ fm, described below) the exact value used makes little difference on the final results.
+The choice shifts pairs between the ``Primary" and ``Other" groups, as is demonstrated in Table \ref{tab:LambdaValues_VarycTau}, where $\lambda_{\mathrm{Primary}}$ and $\lambda_{\mathrm{Other}}$ are shown for $c\tau_{\mathrm{max}} =$ 6, 10, and 100 fm.
+The majority of parents contributing to our \Lam and K samples decay via the strong interaction with proper decay lengths less than a few fm, and whose daughters should always be considered primary.
+The notable exceptions with proper decay lengths above a few fm, aside from the previously described $\Sigma^{*}$ and $\mathrm{K}^{*}$, are: $\phi(1020)$, $\Lambda(1520)$, $\Lambda(1670)$, $\Xi(1690)$, $\Xi(1820)$, $\Xi(2030)$ (the $\phi$ decay length is $\sim$50 fm, and the others are all below 15 fm).
+None of these contribute substantially to our \LamK population, so changing the exact value of $c\tau_{\mathrm{max}}$ will not drastically change our $\lambda$ parameters.
+One final exception is the $\Omega^{-}$, which decays weakly on the order of a few cm.
+Decaying long after kinetic freeze-out, the $\Omega^{-}$ contributes a residual signal to our \LamK pairs; however, the number of \Lam originating from the $\Omega^{-}$ is an order of magnitude below the $\Sigma^{0}$, $\Xi^{-}$, and $\Xi^{0}$ contributions, and we ignore the $\Omega^{-}$ in our treatment of the residuals (i.e. pairs with a \Lam originating from an $\Omega^{-}$ are sorted into the ``Other" category).
+
+\begin{table}[htbp]
+ \centering
+ \renewcommand{\arraystretch}{1.2}
+ \begin{tabular}{|c|c|c|}
+  \hlineB{3.0}
+  $c\tau_{\mathrm{max}}$ (fm) & Primary & Other \\
+  \hlineB{3.0}
+  6 & 0.502 & 0.250 \\
+  10 & 0.527 & 0.226 \\
+  100 & 0.565 & 0.189 \\  
+  \hlineB{3.0}
+ \end{tabular}
+ \caption[``Primary" and ``Other" $\lambda$ values from THERMINATOR 2 and HIJING: $c\tau_{\mathrm{max}} = 6, 10, 100$ fm (3 residual contributors)]
+ {
+ ``Primary" and ``Other" $\lambda$ values for the \LamKchP correlation functions for the cases $c\tau_{\mathrm{max}} = 6, 10, 100$ fm, in which three residual contributors are included.
+ The other $\lambda$ parameters are not shown, as they do not change for the different value of $c\tau_{\mathrm{max}}$ in the table.
+ The sum of $\lambda_{\mathrm{Primary}}$ and $\lambda_{\mathrm{Other}}$ is not exactly the same in each case due to the difference reconstruction efficiencies between the two groups (see Fig.\ \ref{fig:RecoEffs}).
+ }
+ \label{tab:LambdaValues_VarycTau}
+\end{table}
+
+
+As described above, as long as $c\tau_{\mathrm{max}}$ is chosen $\geq 6$ fm, the resultant $\lambda$ parameters, and ultimately our finally extracted fit values, do not change drastically.
+The value $c\tau_{\mathrm{max}} = 6$ fm serves as a type of threshold because any choice above that value maintains the daughters of $\Sigma^{*}$ and $\mathrm{K}^{*}$ parents in the primary category. 
+Physically, choosing $c\tau_{\mathrm{max}}$ above 6 fm is reasonable; however, it is also interesting to assume the $\Sigma^{*}$ and $\mathrm{K}^{*}$ survive until after last rescattering and to study the effect of their inclusion in our fit procedure.
+Results from such a procedure is shown in Appendix \ref{App_ResultsLamK_10Res}, where we lowered the value of $c\tau_{\mathrm{max}}$ to 4 fm and included contributions from $\Sigma^{*+}$K, $\Sigma^{*-}$K, $\Sigma^{*0}$K, $\Lambda\mathrm{K}^{*}$, $\Sigma^{0}\mathrm{K}^{*}$, $\Xi^{-}\mathrm{K}^{*}$, $\Xi^{0}\mathrm{K}^{*}$ in our treatment of the residuals.
+\end{comment}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
  
 As previously stated, the $\lambda$ parameters dictate the strength of the parent contribution to the daughter pair.  
 Therefore, the $\lambda$ parameter for parent system $ij$ can be estimated as the total number of \LamK pairs in our experimental sample originating from $ij$ ($N_{ij}$) divided by the total number of \LamK pairs ($N_{\mathrm{Total}}$).
@@ -635,10 +707,7 @@ The $\lambda$ parameters are then estimated as
 \lambda_{ij} = \frac{N_{ij}}{N_{\mathrm{Total}}} = \frac{N_{ij}^{\scaleto{THERM}{3pt}}RE_{ij}^{\scaleto{HIJING}{3pt}}}{\sum\limits_{\alpha\beta} N_{\alpha\beta}^{\scaleto{THERM}{3pt}}RE_{\alpha\beta}^{\scaleto{HIJING}{3pt}}}
 \end{equation}
 
-Femtoscopic analyses are sensitive to the pair emission structure at kinetic freeze-out.
-Therefore, in the eyes of femtoscopy, any particle born from a resonance decay before last rescattering is seen as primary.
-For this study, a particle is considered to be primary if its parent has a proper decay length of $c\tau <$ 10 fm. 
-With this selection, residual contributions from $\Sigma^{0}$, $\Xi^{0}$, $\Xi^{-}$ must be accounted for in the fit.
+
 The $\lambda$ values used can be found in Table \ref{tab:LambdaValues_3Res}, which also included values for ``Other'' and ``Fakes''.  
 The ``Other'' category contains pairs which are not considered primary, and which do not originate from the residual contributors accounted for in the fit.  
 The ``Fakes'' category represents pairs that are mistakenly identified as \LamK.  

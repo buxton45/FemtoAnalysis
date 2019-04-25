@@ -448,6 +448,7 @@ TCanvas* CompareLambdavsRadiusAll(vector<FitValWriterInfo> &aFitValWriterInfo, T
   tMarker->SetMarkerStyle(20);
   tMarker->SetMarkerColor(kBlack);
 
+  vector<int> tMarkerStyles{20, 21, 22};
   //------------------------------------------------------
 
   int iTex = 0;
@@ -458,12 +459,12 @@ TCanvas* CompareLambdavsRadiusAll(vector<FitValWriterInfo> &aFitValWriterInfo, T
   aSystematicsFileLocation = aSystematicsFileLocation_LamKch;  //Until new sys. generated, just use old ones from LamKch
   for(int i=0; i<3; i++)
   {
-    FitValuesWriterwSysErrs::DrawLambdavsRadiusGraph((TPad*)tReturnCan, aFitValWriterInfo[0].masterFileLocation, aSystematicsFileLocation, aFitValWriterInfo[0].fitInfoTString, aFitValWriterInfo[0].analysisType, static_cast<CentralityType>(i), tColors[i], aFitValWriterInfo[0].markerStyle, aFitValWriterInfo[0].markerSize, "epsame", "e2same", aDrawStatOnly);
+    FitValuesWriterwSysErrs::DrawLambdavsRadiusGraph((TPad*)tReturnCan, aFitValWriterInfo[0].masterFileLocation, aSystematicsFileLocation, aFitValWriterInfo[0].fitInfoTString, aFitValWriterInfo[0].analysisType, static_cast<CentralityType>(i), tColors[i], tMarkerStyles[i], aFitValWriterInfo[0].markerSize, "epsame", "e2same", aDrawStatOnly);
 
     tLegDesc = cPrettyCentralityTags[i];
 
     tTex->DrawLatex(tStartX, tStartY-iTex*tIncrementY, tLegDesc);
-    tMarker->SetMarkerStyle(aFitValWriterInfo[0].markerStyle);
+    tMarker->SetMarkerStyle(tMarkerStyles[i]);
     tMarker->SetMarkerColor(tColors[i]);
     tMarker->DrawMarker(tStartX-tIncrementX, tStartY-iTex*tIncrementY);
 
@@ -471,7 +472,9 @@ TCanvas* CompareLambdavsRadiusAll(vector<FitValWriterInfo> &aFitValWriterInfo, T
   }
 
   //------------------------------------------------------
-
+  tTex->SetTextSize(0.05);
+  tTex->DrawLatex(3.5, tStartY, TString("ALICE Pb-Pb #sqrt{#it{s}_{NN}} = 2.76 TeV"));
+  //------------------------------------------------------
 
   return tReturnCan;
 }
@@ -554,9 +557,21 @@ TCanvas* CompareAll2Panel(vector<FitValWriterInfo> &aFitValWriterInfo, TString a
   TCanvas *tReturnCan, *tCanImF0vsReF0, *tCanLamvsR;
 
   TString tSubCanNameMod = TString::Format("%sForAll", aCanNameMod.Data());
-  tCanImF0vsReF0 = CompareImF0vsReF0(aFitValWriterInfo, aSystematicsFileLocation_LamKch, aSystematicsFileLocation_LamK0, aDrawPredictions, tSubCanNameMod, false, false, aDrawStatOnly, true);
+  tCanImF0vsReF0 = CompareImF0vsReF0(aFitValWriterInfo, aSystematicsFileLocation_LamKch, aSystematicsFileLocation_LamK0, aDrawPredictions, tSubCanNameMod, false, true, aDrawStatOnly, true);
   tCanLamvsR = CompareLambdavsRadiusAll(aFitValWriterInfo, aSystematicsFileLocation_LamKch, aSystematicsFileLocation_LamK0, tSubCanNameMod, true, false, aDrawStatOnly);
 
+  assert(aFitValWriterInfo.size()==3);
+  vector<AnalysisType> tAnTypes{kLamKchP, kLamKchM, kLamK0};
+  vector<int> tMarkerStyles{aFitValWriterInfo[0].markerStyle, aFitValWriterInfo[1].markerStyle, aFitValWriterInfo[2].markerStyle};
+    double tStartXStamp = -1.75;
+    if(aDrawPredictions) tStartXStamp = -1.75;
+    double tStartYStamp = 1.4;
+    double tIncrementXStamp = 0.075;
+    double tIncrementYStamp = 0.125;
+    double tTextSizeStamp = 0.045;
+  TString tPadName = TString::Format("tPadReF0vsImF0%s", tCanImF0vsReF0->GetName());
+  TPad* tTestPad = (TPad*)tCanImF0vsReF0->GetPrimitive(tPadName);
+  DrawAnalysisStamps(tTestPad, tAnTypes, tStartXStamp, tStartYStamp, tIncrementXStamp, tIncrementYStamp, tTextSizeStamp, tMarkerStyles);
 
   vector<TString> twPredVec{"", "_wPredictions"};
   TString tCanBaseName = TString::Format("CompareAll2PanelScattParamswSys%s%s", twPredVec[aDrawPredictions].Data(), aCanNameMod.Data());
