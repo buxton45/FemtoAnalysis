@@ -80,16 +80,19 @@ void DrawSHCfComponent(TPad* aPad, Analysis* aAnaly, YlmComponent aComponent, in
 }
 
 //_________________________________________________________________________________________
-void DrawSHCfComponent(TPad* aPad, Analysis* aAnaly, Analysis* aConjAnaly, YlmComponent aComponent, int al, int am, int aRebin/*, double aMinNorm=0.32, double aMaxNorm=0.40, int aRebin=2*/)
+void DrawSHCfComponent(TPad* aPad, Analysis* aAnaly, Analysis* aConjAnaly, YlmComponent aComponent, int al, int am, int aRebin/*, double aMinNorm=0.32, double aMaxNorm=0.40, int aRebin=2*/, bool aPrintAliceInfo=false)
 {
   aPad->cd();
-  aPad->SetLeftMargin(0.15);
-  aPad->SetRightMargin(0.025);
+
+  aPad->SetTopMargin(0.025);
+  aPad->SetBottomMargin(0.125);
+  aPad->SetLeftMargin(0.125);
+  aPad->SetRightMargin(0.0125);
 
   gStyle->SetOptStat(0);
   gStyle->SetOptTitle(0);
 
-  double tXLow=0., tXHigh=0.3;
+  double tXLow=0., tXHigh=0.329;
   double tYLow, tYHigh;
   if(al==0 && am==0)
   {
@@ -98,7 +101,7 @@ void DrawSHCfComponent(TPad* aPad, Analysis* aAnaly, Analysis* aConjAnaly, YlmCo
   }
   else
   {
-    tYLow = -0.02;
+    tYLow = -0.018;
     tYHigh = 0.02;
   }
 
@@ -144,19 +147,37 @@ void DrawSHCfComponent(TPad* aPad, Analysis* aAnaly, Analysis* aConjAnaly, YlmCo
   tSHCf->SetLineColor(tColor);
 
   tSHCf->GetXaxis()->SetTitle("#it{k}* (GeV/#it{c})");
+  tSHCf->GetXaxis()->SetTitleOffset(1.05);
+  tSHCf->GetXaxis()->SetTitleSize(0.06);
+  tSHCf->GetXaxis()->SetLabelSize(0.040);
+  tSHCf->GetXaxis()->SetNdivisions(505);
+
   tSHCf->GetYaxis()->SetTitle(TString::Format("%s#it{C}_{%d%d}(#it{k}*)", tReImVec[(int)aComponent].Data(), al, am));
+  tSHCf->GetYaxis()->SetTitleOffset(1.0);
+  tSHCf->GetYaxis()->SetTitleSize(0.065);
+  tSHCf->GetYaxis()->SetLabelSize(0.040);
+  tSHCf->GetYaxis()->SetNdivisions(505);
 
   tSHCf->Draw();
 
   //--------------------------------------------------------------
 
-  TPaveText* tText = new TPaveText(0.60, 0.70, 0.85, 0.85, "NDC");
+  TPaveText* tText = new TPaveText(0.70, 0.80, 0.95, 0.95, "NDC");
     tText->SetFillColor(0);
     tText->SetBorderSize(0);
     tText->SetTextColor(tColor);
     tText->AddText(TString::Format("%s & %s", cAnalysisRootTags[aAnaly->GetAnalysisType()], cAnalysisRootTags[aConjAnaly->GetAnalysisType()]));
     tText->AddText(TString::Format("%sC_{%d%d} (%s)", tReImVec[(int)aComponent].Data(), al, am, cPrettyCentralityTags[aAnaly->GetCentralityType()]));
   tText->Draw();
+
+  if(aPrintAliceInfo && al==0 && am==0)
+  {
+    TLatex *   tex = new TLatex(0.125,0.88,"ALICE Pb-Pb #sqrt{#it{s}_{NN}} = 2.76 TeV");
+    tex->SetTextFont(42);
+    tex->SetTextSize(0.055);
+    tex->SetLineWidth(2);
+    tex->Draw();
+  }
 
 }
 
@@ -247,8 +268,8 @@ int main(int argc, char **argv)
   else                     tConjAnType = static_cast<AnalysisType>((int)tAnType-1);
 
   bool bCombineConjugates = true;
-  bool bDrawThermCfs = true;
-  bool bDrawFirstSix = true;
+  bool bDrawThermCfs = false;
+  bool bDrawFirstSix = false;
   bool bSaveFigures = false;
   TString tSaveFileType = "pdf";
 
@@ -334,7 +355,7 @@ int main(int argc, char **argv)
     tCan0010 = new TCanvas(tCanName0010, tCanName0010, 1400, 500);
     tCan0010->Divide(2, 1);
 
-    DrawSHCfComponent((TPad*)tCan0010->cd(1), tAnaly0010, tConjAnaly0010, kYlmReal, 0, 0, tRebin);
+    DrawSHCfComponent((TPad*)tCan0010->cd(1), tAnaly0010, tConjAnaly0010, kYlmReal, 0, 0, tRebin, true);
     DrawSHCfComponent((TPad*)tCan0010->cd(2), tAnaly0010, tConjAnaly0010, kYlmReal, 1, 1, tRebin);
   }
 
