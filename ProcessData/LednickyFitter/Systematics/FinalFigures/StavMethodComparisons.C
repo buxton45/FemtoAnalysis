@@ -181,14 +181,6 @@ TCanvas* DrawKStarCfs_OnlyTwo(FitGenerator* aFG1, FitGenerator* aFG2, bool aZoom
 
   tMarkerColor2 = kGreen+1;
 
-/*
-  if     (aAnType==kLamK0 || aAnType==kALamK0)     tMarkerColor1 = kBlack;
-  else if(aAnType==kLamKchP || aAnType==kALamKchM) tMarkerColor1 = kRed;
-  else if(aAnType==kLamKchM || aAnType==kALamKchP) tMarkerColor1 = kBlue;
-  else tMarkerColor1=1;
-  tMarkerColor2 = kCyan+1;
-*/
-
   for(int j=0; j<tNy; j++)
   {
     for(int i=0; i<tNx; i++)
@@ -242,6 +234,140 @@ TCanvas* DrawKStarCfs_OnlyTwo(FitGenerator* aFG1, FitGenerator* aFG2, bool aZoom
 }
 
 
+
+//________________________________________________________________________________________________________________
+CfHeavy* CombineTwoHeavyCfs(CfHeavy *aCf1, CfHeavy* aCf2)
+{
+  TString aReturnCfName = TString::Format("%s_and_%s", aCf1->GetHeavyCfName().Data(), aCf2->GetHeavyCfName().Data());
+
+  vector<CfLite*> tCfLiteColl1 = aCf1->GetCfLiteCollection();
+  vector<CfLite*> tCfLiteColl2 = aCf2->GetCfLiteCollection();
+
+  vector<CfLite*> tReturnCfLiteColl(0);
+  for(int i=0; i<tCfLiteColl1.size(); i++) tReturnCfLiteColl.push_back(tCfLiteColl1[i]);
+  for(int i=0; i<tCfLiteColl2.size(); i++) tReturnCfLiteColl.push_back(tCfLiteColl2[i]);
+
+  CfHeavy* tReturnCf = new CfHeavy(aReturnCfName, aReturnCfName, tReturnCfLiteColl, 0.32, 0.40);
+  return tReturnCf;
+}
+
+//________________________________________________________________________________________________________________
+TCanvas* DrawKStarCfs_OnlyTwo_CombConj(FitGenerator* aFG1, FitGenerator* aFG2, bool aZoomX=false, bool aZoomY=false, TString aCanNameModifier="")
+{
+  AnalysisType aAnType = aFG1->GetFitSharedAnalyses()->GetFitPairAnalysis(0)->GetAnalysisType();
+  AnalysisType aConjType = aFG1->GetFitSharedAnalyses()->GetFitPairAnalysis(1)->GetAnalysisType();
+
+  //-------------------------
+  int tNAnlyses = aFG1->GetFitSharedAnalyses()->GetNFitPairAnalysis();  //NOTE: this macro designed for 3 or 6 pair analyses!
+  bool tConjIncluded = true;
+  if(tNAnlyses%2 != 0) tConjIncluded=false;
+  assert(tConjIncluded);
+  //-------------------------
+
+  TString tCanvasName = TString("canKStarCfs");
+  if(aZoomX) tCanvasName += TString("ZoomX");
+  if(aZoomY) tCanvasName += TString("ZoomY");
+  tCanvasName += TString(cAnalysisBaseTags[aAnType]);
+  tCanvasName += TString("CombConj");
+  tCanvasName += aCanNameModifier;
+
+  int tNx=1, tNy=3;
+
+  double tXLow = -0.075;
+//  double tXHigh = 0.99;
+  double tXHigh = aFG1->GetKStarCf(0)->GetXaxis()->GetBinUpEdge(aFG1->GetKStarCf(0)->GetNbinsX()-2)-0.01;
+  if(aZoomX) tXHigh = 0.329;
+
+  double tYLow = 0.86;
+  double tYHigh = 1.07;
+  if(aZoomY)
+  {
+    tYLow = 0.951;
+    tYHigh = 1.029;
+  }
+  CanvasPartition* tCanPart = new CanvasPartition(tCanvasName,tNx,tNy,tXLow,tXHigh,tYLow,tYHigh,0.175,0.0125,0.10,0.0125);
+  tCanPart->GetCanvas()->SetCanvasSize(350,500);
+
+  int tAnalysisNumberA=0, tAnalysisNumberB=0;
+
+  int tMarkerStyle1 = 20;
+  int tMarkerStyle2 = 24;
+
+  int tMarkerColor1 = 1;
+  int tMarkerColor2 = 1;
+
+
+  double tMarkerSize = 0.5;
+  if(aCanNameModifier.Contains("Rebin")) tMarkerSize = 0.75;
+
+  if     (aAnType==kLamK0 || aAnType==kALamK0)     {tMarkerColor1 = kBlack; tMarkerColor2 = kGray+2;}
+  else if(aAnType==kLamKchP || aAnType==kALamKchM) {tMarkerColor1 = kRed;   tMarkerColor2 = kRed+2;}
+  else if(aAnType==kLamKchM || aAnType==kALamKchP) {tMarkerColor1 = kBlue;  tMarkerColor2 = kBlue+2;}
+  else {tMarkerColor1=1; tMarkerColor2=1;}
+
+  tMarkerColor2 = kGreen+1;
+
+  for(int j=0; j<tNy; j++)
+  {
+    tAnalysisNumberA = 2*j;
+    tAnalysisNumberB = tAnalysisNumberA+1;
+
+    aAnType = aFG1->GetFitSharedAnalyses()->GetFitPairAnalysis(tAnalysisNumberA)->GetAnalysisType();
+    aConjType = aFG1->GetFitSharedAnalyses()->GetFitPairAnalysis(tAnalysisNumberB)->GetAnalysisType();
+    //---------------------------------------------------------------------------------------------------------
+    CfHeavy* tCfHeavy1A = aFG1->GetKStarCfHeavy(tAnalysisNumberA);
+    CfHeavy* tCfHeavy1B = aFG1->GetKStarCfHeavy(tAnalysisNumberB);
+    CfHeavy* tCfHeavy1 = CombineTwoHeavyCfs(tCfHeavy1A, tCfHeavy1B);
+
+    CfHeavy* tCfHeavy2A = aFG2->GetKStarCfHeavy(tAnalysisNumberA);
+    CfHeavy* tCfHeavy2B = aFG2->GetKStarCfHeavy(tAnalysisNumberB);
+    CfHeavy* tCfHeavy2 = CombineTwoHeavyCfs(tCfHeavy2A, tCfHeavy2B);
+
+
+    tCanPart->AddGraph(0,j,(TH1*)tCfHeavy1->GetHeavyCfClone(),"",tMarkerStyle1,tMarkerColor1,tMarkerSize);
+    tCanPart->AddGraph(0,j,(TH1*)tCfHeavy2->GetHeavyCfClone(),"",tMarkerStyle2,tMarkerColor2,tMarkerSize);
+
+    tCanPart->AddGraph(0,j,(TH1*)tCfHeavy2->GetHeavyCfClone(),"",tMarkerStyle2,tMarkerColor2,tMarkerSize);
+
+    TString tTextAnTypeA, tTextAnTypeB;
+    tTextAnTypeA = TString(cAnalysisRootTags[aAnType]);
+    tTextAnTypeB = TString(cAnalysisRootTags[aConjType]);
+    TString tTextAnType = TString::Format("%s & %s", tTextAnTypeA.Data(), tTextAnTypeB.Data());
+
+    TPaveText* tAnTypeName = tCanPart->SetupTPaveText(tTextAnType,0,j,0.7,0.85);
+    tCanPart->AddPadPaveText(tAnTypeName,0,j);
+
+    CentralityType tCentType = aFG1->GetSharedAn()->GetFitPairAnalysis(tAnalysisNumberA)->GetCentralityType();
+    assert(aFG1->GetSharedAn()->GetFitPairAnalysis(tAnalysisNumberA)->GetCentralityType() ==
+           aFG1->GetSharedAn()->GetFitPairAnalysis(tAnalysisNumberB)->GetCentralityType());
+
+    TString tTextCentrality = TString(cPrettyCentralityTags[tCentType]);
+    TPaveText* tCentralityName = tCanPart->SetupTPaveText(tTextCentrality,0,j,0.10,0.85);
+    tCanPart->AddPadPaveText(tCentralityName,0,j);
+
+    if(j==0)
+    {
+      if(aZoomY) tCanPart->SetupTLegend("", 0, 0, 0.20, 0.05, 0.60, 0.45);
+      else       tCanPart->SetupTLegend("", 0, 0, 0.20, 0.05, 0.60, 0.50);
+      tCanPart->AddLegendEntry(0, 0, (TH1*)tCanPart->GetGraphsInPad(0,0)->At(0), "Normal: Num/Den", "p");
+      tCanPart->AddLegendEntry(0, 0, (TH1*)tCanPart->GetGraphsInPad(0,0)->At(1), "Stavinskiy", "p");
+    }
+
+    if(j==2)
+    {
+      TString tTextSysInfo = TString("ALICE Pb-Pb #sqrt{#it{s}_{NN}} = 2.76 TeV");
+      TPaveText* tSysInfo = tCanPart->SetupTPaveText(tTextSysInfo,0,j,0.20,0.125,0.725,0.15,43,17);
+      tCanPart->AddPadPaveText(tSysInfo,0,j);
+    }
+  }
+
+  tCanPart->SetDrawUnityLine(true);
+  tCanPart->DrawAll();
+  tCanPart->DrawXaxisTitle("#it{k}* (GeV/#it{c})",43,20,0.020);
+  tCanPart->DrawYaxisTitle("#it{C}(#it{k}*)",43,25,0.070,0.875);
+
+  return tCanPart->GetCanvas();
+}
 
 
 
@@ -341,7 +467,8 @@ int main(int argc, char **argv)
   bool bZoomX = false;
   bool bZoomY = false;
   bool bDrawKStarCfs = true;
-  bool bDrawKStarCfs_OnlyTwo = true;
+  bool bDrawKStarCfs_OnlyTwo = false;
+  bool bDrawKStarCfs_OnlyTwo_CombConj = false;
 
   //-----------------------------------------------------------------------------
   vector<TString> tUseStavCfTags = {"", "StavCf"};
@@ -371,6 +498,11 @@ int main(int argc, char **argv)
     if(SaveImages) tCan_OnlyTwo->SaveAs(TString::Format("%s%s.%s", tSaveDir_OnlyTwo.Data(), tCan_OnlyTwo->GetName(), tSaveFileType.Data()));
   }
 
+  if(bDrawKStarCfs_OnlyTwo_CombConj)
+  {
+    TCanvas* tCan_OnlyTwo_CombConj = DrawKStarCfs_OnlyTwo_CombConj(tLamKchP1, tLamKchP2, bZoomX, bZoomY, tCanNameModifier_OnlyTwo);
+    if(SaveImages) tCan_OnlyTwo_CombConj->SaveAs(TString::Format("%s%s.%s", tSaveDir_OnlyTwo.Data(), tCan_OnlyTwo_CombConj->GetName(), tSaveFileType.Data()));
+  }
 
 
 //-------------------------------------------------------------------------------

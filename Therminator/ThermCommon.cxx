@@ -118,14 +118,16 @@ void PrintLambdaValues(TPad* aPad, TH1D* aHisto)
 
 
 //________________________________________________________________________________________________________________
-void DrawPairFractions(TPad* aPad, TH1D* aHisto, bool aSave, TString aSaveName)
+void DrawPairFractions(TPad* aPad, TH1D* aHisto, bool aSave, TString aSaveName, double aPairPurity)
 {
   aPad->cd();
   gStyle->SetOptStat(0);
 
+  double tNFakeMultFactor = (1.0 - aPairPurity)/aPairPurity;
+
   double tNCounts = 0.;
   for(int i=1; i<=12; i++) tNCounts += aHisto->GetBinContent(i);
-  double tNFakes = 0.05*tNCounts;
+  double tNFakes = tNFakeMultFactor*tNCounts;
   aHisto->SetBinContent(13, tNFakes);
 
   aHisto->GetXaxis()->SetTitle("Parent System");

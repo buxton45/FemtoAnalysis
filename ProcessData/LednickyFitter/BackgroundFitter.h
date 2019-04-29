@@ -44,6 +44,7 @@ public:
   static double NormalizedFitFunctionQuadratic(double *x, double *par);
   static double NormalizedFitFunctionGaussian(double *x, double *par);
   static double NormalizedFitFunctionPolynomial(double *x, double *par);
+  static double NormalizedFitFunctionPolynomialwithOffset(double *x, double *par);
   //--------------------------------------------------------------------
   //These are used in FitPairAnalysis
   static double AddTwoFitFunctionsLinear(double *x, double *par);
@@ -55,6 +56,7 @@ public:
   static double AddTwoNormalizedFitFunctionsQuadratic(double *x, double *par);
   static double AddTwoNormalizedFitFunctionsGaussian(double *x, double *par);
   static double AddTwoNormalizedFitFunctionsPolynomial(double *x, double *par);
+  static double AddTwoNormalizedFitFunctionsPolynomialwithOffset(double *x, double *par);
   //--------------------------------------------------------------------
 
   static double GetPmlValue(double aNumContent, double aDenContent, double aCfContent);

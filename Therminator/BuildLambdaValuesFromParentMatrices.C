@@ -133,6 +133,9 @@ int main(int argc, char **argv)
   IncludeResidualsType tIncResType = kInclude3Residuals;
   bool tApplyRecoEff=true;
 
+  double aPairPurity_LamKch = 0.95*0.97/*0.95*/;
+  double aPairPurity_LamK0  = 0.95*0.98/*0.95*/;
+
   int tImpactParam = 2;
 
   TString tDirectory = TString::Format("~/Analysis/ReducedTherminator2Events/lhyqid3v_LHCPbPb_2760_b%d/", tImpactParam);
@@ -174,14 +177,14 @@ int main(int argc, char **argv)
   TCanvas* tCan_ALamK = new TCanvas("tCan_ALamK0", "tCan_ALamK0");
   //------------------------------------------------------------------------------
 
-  DrawPairFractions((TPad*)tCan_LamKchP, tPairFractions_LamKchP, bSaveImages, tSaveDirectory+TString("/Figures/LamKchP/LamValuesFromParentsMatrix_LamKchP"));
-  DrawPairFractions((TPad*)tCan_ALamKchM, tPairFractions_ALamKchM, bSaveImages, tSaveDirectory+TString("/Figures/ALamKchM/LamValuesFromParentsMatrix_ALamKchM"));
+  DrawPairFractions((TPad*)tCan_LamKchP, tPairFractions_LamKchP, bSaveImages, tSaveDirectory+TString("/Figures/LamKchP/LamValuesFromParentsMatrix_LamKchP"), aPairPurity_LamKch);
+  DrawPairFractions((TPad*)tCan_ALamKchM, tPairFractions_ALamKchM, bSaveImages, tSaveDirectory+TString("/Figures/ALamKchM/LamValuesFromParentsMatrix_ALamKchM"), aPairPurity_LamKch);
 
-  DrawPairFractions((TPad*)tCan_LamKchM, tPairFractions_LamKchM, bSaveImages, tSaveDirectory+TString("/Figures/LamKchM/LamValuesFromParentsMatrix_LamKchM"));
-  DrawPairFractions((TPad*)tCan_ALamKchP, tPairFractions_ALamKchP, bSaveImages, tSaveDirectory+TString("/Figures/ALamKchP/LamValuesFromParentsMatrix_ALamKchP"));
+  DrawPairFractions((TPad*)tCan_LamKchM, tPairFractions_LamKchM, bSaveImages, tSaveDirectory+TString("/Figures/LamKchM/LamValuesFromParentsMatrix_LamKchM"), aPairPurity_LamKch);
+  DrawPairFractions((TPad*)tCan_ALamKchP, tPairFractions_ALamKchP, bSaveImages, tSaveDirectory+TString("/Figures/ALamKchP/LamValuesFromParentsMatrix_ALamKchP"), aPairPurity_LamKch);
 
-  DrawPairFractions((TPad*)tCan_LamK0, tPairFractions_LamK0, bSaveImages, tSaveDirectory+TString("/Figures/LamK0/LamValuesFromParentsMatrix_LamK0"));
-  DrawPairFractions((TPad*)tCan_ALamK, tPairFractions_ALamK0, bSaveImages, tSaveDirectory+TString("/Figures/ALamK0/LamValuesFromParentsMatrix_ALamK0"));
+  DrawPairFractions((TPad*)tCan_LamK0, tPairFractions_LamK0, bSaveImages, tSaveDirectory+TString("/Figures/LamK0/LamValuesFromParentsMatrix_LamK0"), aPairPurity_LamK0);
+  DrawPairFractions((TPad*)tCan_ALamK, tPairFractions_ALamK0, bSaveImages, tSaveDirectory+TString("/Figures/ALamK0/LamValuesFromParentsMatrix_ALamK0"), aPairPurity_LamK0);
 
 //-------------------------------------------------------------------------------
   theApp->Run(kTRUE); //Run the TApp to pause the code.

@@ -577,8 +577,11 @@ TF1* FitPairAnalysis::GetNonFlatBackground_CombinePartialFits(NonFlatBgdFitType 
     }
     else if(aBgdFitType == kPolynomial)
     {
-      assert(tNParsTotal==18);
-      fNonFlatBackground = new TF1(tReturnName, BackgroundFitter::AddTwoNormalizedFitFunctionsPolynomial, 0., fMaxBgdBuild, tNParsTotal);
+//      assert(tNParsTotal==18);
+//      fNonFlatBackground = new TF1(tReturnName, BackgroundFitter::AddTwoNormalizedFitFunctionsPolynomial, 0., fMaxBgdBuild, tNParsTotal);
+      if(tNParsTotal==18)      fNonFlatBackground = new TF1(tReturnName, BackgroundFitter::AddTwoNormalizedFitFunctionsPolynomial, 0., fMaxBgdBuild, tNParsTotal);
+      else if(tNParsTotal==20) fNonFlatBackground = new TF1(tReturnName, BackgroundFitter::AddTwoNormalizedFitFunctionsPolynomialwithOffset, 0., fMaxBgdBuild, tNParsTotal);
+      else assert(0);
     }
     else assert(0);
   }

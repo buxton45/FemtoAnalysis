@@ -103,13 +103,14 @@ TCanvas* CompareImF0vsReF0(vector<FitValWriterInfo> &aFitValWriterInfo, TString 
   {
     tPadReF0vsImF0->cd();
 
-    int tPredColor1 = kCyan;
+    int tPredColor1 = kCyan+1;
     int tPredColor2 = kMagenta;
 
     TGraphAsymmErrors *tGr_0607100_Set1 = new TGraphAsymmErrors(1);
       tGr_0607100_Set1->SetPoint(0, 0.17, 0.34);
       tGr_0607100_Set1->SetPointError(0, 0.06, 0.06, 0.00, 0.00);
-      tGr_0607100_Set1->SetMarkerStyle(39);
+//      tGr_0607100_Set1->SetMarkerStyle(39);
+      tGr_0607100_Set1->SetMarkerStyle(34);
       tGr_0607100_Set1->SetMarkerSize(1.5);
       tGr_0607100_Set1->SetMarkerColor(tPredColor1);
       tGr_0607100_Set1->SetLineColor(tPredColor1);
@@ -118,7 +119,8 @@ TCanvas* CompareImF0vsReF0(vector<FitValWriterInfo> &aFitValWriterInfo, TString 
     TGraphAsymmErrors *tGr_0607100_Set2 = new TGraphAsymmErrors(1);
       tGr_0607100_Set2->SetPoint(0, 0.09, 0.34);
       tGr_0607100_Set2->SetPointError(0, 0.06, 0.06, 0.00, 0.00);
-      tGr_0607100_Set2->SetMarkerStyle(37);
+//      tGr_0607100_Set2->SetMarkerStyle(37);
+      tGr_0607100_Set2->SetMarkerStyle(28);
       tGr_0607100_Set2->SetMarkerSize(1.5);
       tGr_0607100_Set2->SetMarkerColor(tPredColor1);
       tGr_0607100_Set2->SetLineColor(tPredColor1);
@@ -129,7 +131,8 @@ TCanvas* CompareImF0vsReF0(vector<FitValWriterInfo> &aFitValWriterInfo, TString 
     TGraphAsymmErrors *tGr_PhysRevD_KLam = new TGraphAsymmErrors(1);
       tGr_PhysRevD_KLam->SetPoint(0, 0.19, 0.14);
       tGr_PhysRevD_KLam->SetPointError(0, 0.56, 0.55, 0.00, 0.00);
-      tGr_PhysRevD_KLam->SetMarkerStyle(29);
+//      tGr_PhysRevD_KLam->SetMarkerStyle(29);
+      tGr_PhysRevD_KLam->SetMarkerStyle(47);
       tGr_PhysRevD_KLam->SetMarkerSize(1.5);
       tGr_PhysRevD_KLam->SetMarkerColor(tPredColor2);
       tGr_PhysRevD_KLam->SetLineColor(tPredColor2);
@@ -138,7 +141,8 @@ TCanvas* CompareImF0vsReF0(vector<FitValWriterInfo> &aFitValWriterInfo, TString 
     TGraphAsymmErrors *tGr_PhysRevD_AKLam = new TGraphAsymmErrors(1);
       tGr_PhysRevD_AKLam->SetPoint(0, 0.04, 0.18);
       tGr_PhysRevD_AKLam->SetPointError(0, 0.56, 0.55, 0.00, 0.00);
-      tGr_PhysRevD_AKLam->SetMarkerStyle(30);
+//      tGr_PhysRevD_AKLam->SetMarkerStyle(30);
+      tGr_PhysRevD_AKLam->SetMarkerStyle(46);
       tGr_PhysRevD_AKLam->SetMarkerSize(1.5);
       tGr_PhysRevD_AKLam->SetMarkerColor(tPredColor2);
       tGr_PhysRevD_AKLam->SetLineColor(tPredColor2);

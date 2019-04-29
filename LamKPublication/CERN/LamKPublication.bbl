@@ -10,7 +10,7 @@ M.~A. Lisa, S.~Pratt, R.~Soltz, and U.~Wiedemann, ``{Femtoscopy in relativistic
 %%CITATION = NUCL-EX/0505014;%%.
 
 \bibitem{Lednicky:82}
-R.~Lednick\'y and V.~L. Lyuboshits, ``{Final State Interaction Effect on
+R.~Lednick\'y and V.~L. Lyuboshitz, ``{Final State Interaction Effect on
   Pairing Correlations Between Particles with Small Relative Momenta},'' {\em
   Sov. J. Nucl. Phys.} {\bfseries 35} (1982) 770.
 [Yad. Fiz.35,1316(1981)].
@@ -160,6 +160,14 @@ F.~Retiere and M.~A. Lisa, ``{Observable implications of geometrical and
 \href{http://arxiv.org/abs/nucl-th/0312024}{{\ttfamily arXiv:nucl-th/0312024
   [nucl-th]}}.
 %%CITATION = NUCL-TH/0312024;%%.
+
+\bibitem{Kisiel:2009eh}
+A.~Kisiel, ``{Non-identical particle femtoscopy at $\sqrt{s_{\mathrm{NN}}}$ =
+  200 GeV in hydrodynamics with statistical hadronization},''
+  \href{http://dx.doi.org/10.1103/PhysRevC.81.064906}{{\em Phys. Rev.}
+  {\bfseries C81} (2010) 064906},
+\href{http://arxiv.org/abs/0909.5349}{{\ttfamily arXiv:0909.5349 [nucl-th]}}.
+%%CITATION = ARXIV:0909.5349;%%.
 
 \bibitem{Stavinskiy04}
 A.~Stavinskiy {\em et~al.}, ``{Some new aspects of femtoscopy at high

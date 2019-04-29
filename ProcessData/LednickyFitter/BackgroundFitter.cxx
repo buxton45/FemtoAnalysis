@@ -215,7 +215,12 @@ double BackgroundFitter::NormalizedFitFunctionPolynomial(double *x, double *par)
   //8 parameters
   return par[7]*FitFunctionPolynomial(x, par);
 }
-
+//________________________________________________________________________________________________________________
+double BackgroundFitter::NormalizedFitFunctionPolynomialwithOffset(double *x, double *par)
+{
+  //8 parameters
+  return par[7]*FitFunctionPolynomial(x, par) + par[8];
+}
 
 
 //________________________________________________________________________________________________________________
@@ -347,6 +352,22 @@ double BackgroundFitter::AddTwoNormalizedFitFunctionsPolynomial(double *x, doubl
 
   double tNormPoly1 = NormalizedFitFunctionPolynomial(x, tParsNormPoly1.data());
   double tNormPoly2 = NormalizedFitFunctionPolynomial(x, tParsNormPoly2.data());
+
+  return (tNumCounts1*tNormPoly1 + tNumCounts2*tNormPoly2)/(tNumCounts1+tNumCounts2);
+}
+//________________________________________________________________________________________________________________
+double BackgroundFitter::AddTwoNormalizedFitFunctionsPolynomialwithOffset(double *x, double *par)
+{
+  //18 parameters
+  //Num counts are par[9] and par[19]
+  td1dVec tParsNormPoly1{par[0], par[1], par[2], par[3], par[4], par[5], par[6], par[7], par[8]};
+  double tNumCounts1 = par[9];
+
+  td1dVec tParsNormPoly2{par[10], par[11], par[12], par[13], par[14], par[15], par[16], par[17], par[18]};
+  double tNumCounts2 = par[19];
+
+  double tNormPoly1 = NormalizedFitFunctionPolynomialwithOffset(x, tParsNormPoly1.data());
+  double tNormPoly2 = NormalizedFitFunctionPolynomialwithOffset(x, tParsNormPoly2.data());
 
   return (tNumCounts1*tNormPoly1 + tNumCounts2*tNormPoly2)/(tNumCounts1+tNumCounts2);
 }

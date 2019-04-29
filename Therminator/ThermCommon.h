@@ -46,7 +46,7 @@ extern void SetXAxisLabels(AnalysisType aAnType, TH1D* aHist);
 //-----------------------------------------------------------
 
 extern void PrintLambdaValues(TPad* aPad, TH1D* aHisto);
-extern void DrawPairFractions(TPad* aPad, TH1D* aHisto, bool aSave=false, TString aSaveName = "");
+extern void DrawPairFractions(TPad* aPad, TH1D* aHisto, bool aSave=false, TString aSaveName = "", double aPairPurity=0.95);
 
 //-----------------------------------------------------------
 
