@@ -735,12 +735,13 @@ TCanvas* BuildBgdwFitPanel(CanvasPartition* aCanPart, int tColumn, int tRow, TSt
   cout << "Fitting call(1) from: DrawBgdwFit" << endl;
   TF1 *tBgdFit, *tBgdFitDraw;
   int tPower = 6;
-  tBgdFit = FitBackground(tCf, tPower, 0., aMaxBgdFit);
+  
   if((aAnType==kLamKchP || aAnType==kALamKchM || aAnType==kLamKchM || aAnType==kALamKchP) && aAvgLamKchPMFit)
   {
     tCf = ThermCf::GetLamKchPMCombinedThermCfs(aFileNameCfs, aCfDescriptor, tCentType, aEventsType, aRebin, aMinNorm, aMaxNorm, 20, kBlack, aUseStavCf);
     tBgdFit = GetLamKchPMBgdFit(aCfDescriptor, aFileNameCfs, aImpactParam, aEventsType, aRebin, aMinNorm, aMaxNorm, aMaxBgdFit, aUseStavCf);
   }
+  else tBgdFit = FitBackground(tCf, tPower, 0., aMaxBgdFit);
   cout << "**************************************************" << endl;
   if(aAnType==kLamKchM || aAnType==kALamKchP) //Want to draw fit function without gaping gap where Omega peak omitted
   {
@@ -1703,6 +1704,7 @@ int main(int argc, char **argv)
   {
     tRebin=4;
     bool aAvgLamKchPMFit = true;
+
     if(bDrawAllCentralities) tCanBgdwFit = DrawBgdwFit_AllCent(tCfDescriptor, tSingleFileName, tAnType, bCombineConjugates, tEventsType, tRebin, tMinNorm, tMaxNorm, tMaxBgdFit, bUseStavCf);
     else tCanBgdwFit = DrawBgdwFit(tCfDescriptor, tSingleFileName, tAnType, tImpactParam, bCombineConjugates, bCombineImpactParams, tEventsType, tRebin, tMinNorm, tMaxNorm, tMaxBgdFit, bUseStavCf);
 

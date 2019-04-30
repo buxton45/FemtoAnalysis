@@ -9,6 +9,30 @@ M.~A. Lisa, S.~Pratt, R.~Soltz, and U.~Wiedemann, ``{Femtoscopy in relativistic
   [nucl-ex]}}.
 %%CITATION = NUCL-EX/0505014;%%.
 
+\bibitem{Humphrey:1962zz}
+W.~E. Humphrey and R.~R. Ross, ``{Low-Energy Interactions of K- Mesons in
+  Hydrogen},''
+\href{http://dx.doi.org/10.1103/PhysRev.127.1305}{{\em Phys. Rev.} {\bfseries
+  127} (1962) 1305--1323}.
+%%CITATION = PHRVA,127,1305;%%.
+
+\bibitem{Hadjimichef:2002xe}
+D.~Hadjimichef, J.~Haidenbauer, and G.~Krein, ``{Short range repulsion and
+  isospin dependence in the KN system},''
+  \href{http://dx.doi.org/10.1103/PhysRevC.66.055214}{{\em Phys. Rev.}
+  {\bfseries C66} (2002) 055214},
+\href{http://arxiv.org/abs/nucl-th/0209026}{{\ttfamily arXiv:nucl-th/0209026
+  [nucl-th]}}.
+%%CITATION = NUCL-TH/0209026;%%.
+
+\bibitem{Ikeda:2012au}
+Y.~Ikeda, T.~Hyodo, and W.~Weise, ``{Chiral SU(3) theory of antikaon-nucleon
+  interactions with improved threshold constraints},''
+  \href{http://dx.doi.org/10.1016/j.nuclphysa.2012.01.029}{{\em Nucl. Phys.}
+  {\bfseries A881} (2012) 98--114},
+\href{http://arxiv.org/abs/1201.6549}{{\ttfamily arXiv:1201.6549 [nucl-th]}}.
+%%CITATION = ARXIV:1201.6549;%%.
+
 \bibitem{Lednicky:82}
 R.~Lednick\'y and V.~L. Lyuboshitz, ``{Final State Interaction Effect on
   Pairing Correlations Between Particles with Small Relative Momenta},'' {\em
@@ -70,6 +94,14 @@ R.~Brun, F.~Bruyant, F.~Carminati, S.~Giani, M.~Maire, A.~McPherson,
   G.~Patrick, and L.~Urban,
 ``{GEANT Detector Description and Simulation Tool},''.
 %%CITATION = CERN-W5013;%%.
+
+\bibitem{Acharya:2017qtq}
+{\bfseries ALICE} Collaboration, S.~Acharya {\em et~al.}, ``{Kaon femtoscopy in
+  Pb-Pb collisions at $\sqrt{s_{\rm{NN}}}$ = 2.76 TeV},''
+  \href{http://dx.doi.org/10.1103/PhysRevC.96.064613}{{\em Phys. Rev.}
+  {\bfseries C96} no.~6, (2017) 064613},
+\href{http://arxiv.org/abs/1709.01731}{{\ttfamily arXiv:1709.01731 [nucl-ex]}}.
+%%CITATION = ARXIV:1709.01731;%%.
 
 \bibitem{Patrignani:2016xqp}
 {\bfseries Particle Data Group} Collaboration, C.~Patrignani {\em et~al.},

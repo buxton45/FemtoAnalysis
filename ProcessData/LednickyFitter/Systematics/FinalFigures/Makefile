@@ -28,7 +28,7 @@ CFLAGS = $(shell gsl-config --cflags) $(shell root-config --cflags) -Wall -std=c
 
 MY_LIBS = $(addprefix build/, FitParameter.o FitChi2Histograms.o BackgroundFitter.o FitPartialAnalysis.o FitPairAnalysis.o FitSharedAnalyses.o MathematicaSession.o WaveFunction.o ChargedResidualCf.o SimpleChargedResidualCf.o NeutralResidualCf.o ResidualCollection.o LednickyFitter.o FitValuesWriter.o FitValuesLatexTableHelperWriter.o FitValuesWriterwSysErrs.o FitValuesLatexTableHelperWriterwSysErrs.o FitGenerator.o FitGeneratorAndDraw.o DualieFitGenerator.o ThermCf.o CfLite.o CfHeavy.o Types.o Types_LambdaValues.o Types_FitParamValues.o Types_ThermBgdParams.o Types_SysFileInfo.o Faddeeva.o FitSystematicAnalysis.o DualieFitSystematicAnalysis.o TripleFitGenerator.o TripleFitSystematicAnalysis.o CanvasPartition.o Cf2dLite.o Cf2dHeavy.o AnalysisInfo.o Purity.o PartialAnalysis.o Analysis.o DataAndModel.o SystematicAnalysis.o SpherHarmonics.o CorrFctnDirectYlm.o CorrFctnDirectYlmLite.o CorrFctnDirectYlmHeavy.o CorrFctnDirectYlmTherm.o SuperpositionFitBgd.o PIDMapping.o)
 
-BINARIES = runDrawFinalResultswSysErrsTriple runmTScalingTriple runComparisonsTriple runPurity runBuildMomResMatrix runThermBgds runThermBgdsCompFlow runThermFlow runAvgSepXiKch runAvgSepLamK runStavMethComp runGetTotCollSizes runCompLamK runPlotAllFitsCentral
+BINARIES = runDrawFinalResultswSysErrsTriple runmTScalingTriple runmTScalingTriplev2 runComparisonsTriple runPurity runBuildMomResMatrix runThermBgds runThermBgdsCompFlow runThermFlow runAvgSepXiKch runAvgSepLamK runStavMethComp runGetTotCollSizes runCompLamK runPlotAllFitsCentral
 
 all: $(BINARIES)
 
@@ -37,6 +37,9 @@ runDrawFinalResultswSysErrsTriple: ${MY_LIBS} DrawFinalResultswSysErrsTriple.C
 
 runmTScalingTriple: ${MY_LIBS} DrawmTScalingTriple.C
 	g++ DrawmTScalingTriple.C ${MY_LIBS} -I${INCDIR} -o runmTScalingTriple -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS)
+
+runmTScalingTriplev2: ${MY_LIBS} DrawmTScalingTriplev2.C
+	g++ DrawmTScalingTriplev2.C ${MY_LIBS} -I${INCDIR} -o runmTScalingTriplev2 -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS)
 
 runComparisonsTriple: ${MY_LIBS} DrawComparisonsTriple.C
 	g++ DrawComparisonsTriple.C ${MY_LIBS} -I${INCDIR} -o runComparisonsTriple -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS)

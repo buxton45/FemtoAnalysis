@@ -340,18 +340,21 @@ void FitGeneratorAndDraw::AddColoredLinesLabels(CanvasPartition *aCanPart, int a
   tLine = new TLine(tXText1-tSpaceBetween-tLineWidth, tYText1, tXText1-tSpaceBetween, tYText1);
   tLine->SetLineColor(kBlack);
   tLine->SetLineWidth(2);
+  tLine->SetLineStyle(3);
   tLine->Draw();
   
   tTex->DrawLatex(tXText2, tYText2, "Non-femto. bgd.");
   tLine = new TLine(tXText2-tSpaceBetween-tLineWidth, tYText2, tXText2-tSpaceBetween, tYText2);
   tLine->SetLineColor(tColorNonFlatBgd);
   tLine->SetLineWidth(2);
+  tLine->SetLineStyle(7);
   tLine->Draw();
 
   tTex->DrawLatex(tXText3, tYText3, "Full fit");
   tLine = new TLine(tXText3-tSpaceBetween-tLineWidth, tYText3, tXText3-tSpaceBetween, tYText3);
   tLine->SetLineColor(tColorCorrectFit);
   tLine->SetLineWidth(2);
+  tLine->SetLineStyle(1);
   tLine->Draw();
 }
 

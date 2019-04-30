@@ -125,10 +125,8 @@
 The first measurements of the scattering parameters of $\Lambda$K pairs in all three charge combinations ($\Lambda$K$^{+}$, $\Lambda$K$^{-}$, and $\Lambda\mathrm{K^{0}_{S}}$) are presented.
 The measurements are achieved through a femtoscopic analysis of $\Lambda$K correlations in Pb-Pb collisions at $\sqrt{s_{\mathrm{NN}}}$ = 2.76 TeV from ALICE at the LHC.  
 The femtoscopic correlations result from strong final-state interactions, and are fit with a parametrization allowing for both the characterization of the pair emission source and the measurement of the scattering parameters for the particle pairs.
-The fit assumes a common radius and $\lambda_{\mathrm{Fit}}$ parameter for each centrality bin, shared across all \LamK pair systems.
 Extensive studies with the THERMINATOR 2 event generator allow for the description of the non-femtoscopic background, resulting mainly from collective effects, with unprecedented precision.
 Furthermore, this model together with HIJING simulations are used to account for contributions from residual correlations induced by feed-down from resonances.
-In the experimental data, a striking difference is observed in pairs with low relative momenta ($k^{*}\lesssim$ 100 MeV) between the $\Lambda$K$^{+}$ and $\Lambda$K$^{-}$ correlations, and the $\Lambda\mathrm{K^{0}_{S}}$ system exhibits features between the two.
 The $\Lambda$K$^{+}$ system exhibits a negative real component of the scattering parameter ($\Re f_{0}$), while those of the $\Lambda$K$^{-}$ and $\Lambda\mathrm{K^{0}_{S}}$ are positive, although the magnitude of that of the $\Lambda\mathrm{K^{0}_{S}}$ is smaller than that of the $\Lambda$K$^{-}$.
 The results suggest an effect arising from different quark-antiquark interactions between the pairs ($\rm s\bar{s}$ in $\Lambda$K$^{+}$ and $\rm u\bar{u}$ in $\Lambda$K$^{-}$), or from different net strangeness for each system (S=0 for $\Lambda$K$^{+}$, and S=$-2$ for $\Lambda$K$^{-}$).
 Finally, the $\Lambda$K systems exhibit source radii larger than expected from extrapolation from identical particle femtoscopic studies.
@@ -156,7 +154,7 @@ Calculations within Quantum Chromodynamics (QCD), the theory of the strong inter
 The \LamK analysis presented offers low energy QCD measurements, which fall into the non-perturbative regime of QCD.
 Therefore, the \LamK measurements not only give insight into the strong interaction, they will also help guide future QCD calculations.
 This study is also particularly interesting, as the \LamK scattering parameters are not known, and therefore the behavior of the system cannot be predicted beforehand.
-Scattering parameters for similar systems are also very limited; past studies of kaon-proton scattering revealed the strong force is attractive in the K$^{-}$p interaction, and repulsive in that of the K$^{+}$p.
+Scattering parameters for similar systems are also very limited; past studies of kaon-proton scattering revealed the strong force is attractive in the K$^{-}$p interaction, and repulsive in that of the K$^{+}$p \cite{Humphrey:1962zz, Hadjimichef:2002xe, Ikeda:2012au}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{comment}
@@ -222,63 +220,69 @@ The $N_{\sigma}$ cuts become tighter with increasing momentum to reduce contamin
 Additional methods are included to reduce the contamination in the \Kpm samples from the electrons and pions.  
 The specifics for these cuts are contained in Table \ref{tab:KchCuts}.
 The purity of the \Kpm collections, $P_{\mathrm{K}^{\pm}}$, was estimated to be approximately 97\% from a Monte-Carlo (MC) study based on HIJING \cite{PhysRevD.44.3501} simulations using GEANT3 \cite{Brun:1994aa} to model particle transport through the ALICE detectors. 
+For a more detailed estimate of the \Kpm purity from an analysis employing similar cuts, see Ref.\ \cite{Acharya:2017qtq}.
+
 
 \begin{table}[htbp]
  \centering
-%  \renewcommand{\arraystretch}{1.5}
-  \begin{tabular}{lc|c|l}
+  \renewcommand{\arraystretch}{1.05}
+  \begin{tabular}{lcc|c|l}
    \hline  
-   \multicolumn{4}{c}{\textbf{\Kpm selection}} \\
+   \multicolumn{5}{c}{\textbf{\Kpm selection}} \\
    \hline
-   \multicolumn{3}{l|}{Transverse momentum $p_{\mathrm{T}}$} & 0.14 $< p_{\mathrm{T}} < 1.5$ GeV/\textit{c} \\
+   \multicolumn{4}{l|}{Transverse momentum $p_{\mathrm{T}}$} & 0.14 $< p_{\mathrm{T}} < 1.5$ GeV/\textit{c} \\
    \hline
-   \multicolumn{3}{l|}{$|\eta|$} & $< 0.8$ \\
+   \multicolumn{4}{l|}{$|\eta|$} & $< 0.8$ \\
    \hline
-   \multicolumn{3}{l|}{Transverse DCA to primary vertex} & $<$ 2.4 cm \\
+   \multicolumn{4}{l|}{Transverse DCA to primary vertex} & $<$ 2.4 cm \\
    \hline
-   \multicolumn{3}{l|}{Longitudinal DCA to primary vertex} & $<$ 3.0 cm \\
+   \multicolumn{4}{l|}{Longitudinal DCA to primary vertex} & $<$ 3.0 cm \\
    \hline
 
-   TPC and TOF $N_{\sigma}$ Cuts & \multicolumn{3}{c}{} \\
-   \cline{2-4}
-    & \multicolumn{1}{l}{$p <$ 0.4 GeV/\textit{c}} &  & $N_{\sigma \mathrm{K,TPC}} <$ 2 \\
-   \cline{2-4}
-    & \multicolumn{1}{l}{0.4 $< p <$ 0.45 GeV/\textit{c}} & & $N_{\sigma \mathrm{K,TPC}} <$ 1 \\
-   \cline{2-4}     
-    & \multicolumn{1}{l}{0.45 $< p <$ 0.80 GeV/\textit{c}} & & $N_{\sigma \mathrm{K,TPC}} <$ 3 \\ 
-   \multicolumn{3}{c|}{} & $N_{\sigma \mathrm{K,TOF}} <$ 2 \\
-   \cline{2-4}
-    & \multicolumn{1}{l}{0.80 $< p <$ 1.0 GeV/\textit{c}} & & $N_{\sigma \mathrm{K,TPC}} <$ 3 \\
-   \multicolumn{3}{c|}{} & $N_{\sigma \mathrm{K,TOF}} <$ 1.5 \\  
-   \cline{2-4}
-    & \multicolumn{1}{l}{$p >$ 1.0 GeV/\textit{c}} & & $N_{\sigma \mathrm{K,TPC}} <$ 3 \\
-   \multicolumn{3}{c|}{} & $N_{\sigma \mathrm{K,TOF}} <$ 1 \\  
-   \hline
-   \multicolumn{3}{l|}{\multirow{3}{*}{Electron Rejection: Reject if all satisfied}} & $N_{\sigma e^{-},\mathrm{TPC}} < $ 3 \\
-   \multicolumn{3}{c|}{} & $N_{\sigma e^{-},\mathrm{TPC}} < N_{\sigma K^{\pm},\mathrm{TPC}}$ \\
-   \multicolumn{3}{c|}{} & $N_{\sigma e^{-},\mathrm{TOF}} < N_{\sigma K^{\pm},\mathrm{TOF}}$ \\
+   \multicolumn{5}{l}{TPC and TOF $N_{\sigma}$ Cuts} \\
+   \cline{2-5}
+    & \multicolumn{2}{l}{$p <$ 0.4 GeV/\textit{c}} &  & $N_{\sigma \mathrm{K,TPC}} <$ 2 \\
+   \cline{2-5}
+    & \multicolumn{2}{l}{0.4 $\leq p <$ 0.45 GeV/\textit{c}} & & $N_{\sigma \mathrm{K,TPC}} <$ 1 \\
+   \cline{2-5}     
+    & \multicolumn{2}{l}{\multirow{2}{*}{0.45 $\leq p <$ 0.80 GeV/\textit{c}}} & & $N_{\sigma \mathrm{K,TPC}} <$ 3 \\ 
+   \multicolumn{4}{c|}{} & $N_{\sigma \mathrm{K,TOF}} <$ 2 \\
+   \cline{2-5}
+    & \multicolumn{2}{l}{\multirow{2}{*}{0.80 $\leq p <$ 1.0 GeV/\textit{c}}} & & $N_{\sigma \mathrm{K,TPC}} <$ 3 \\
+   \multicolumn{4}{c|}{} & $N_{\sigma \mathrm{K,TOF}} <$ 1.5 \\  
+   \cline{2-5}
+    & \multicolumn{2}{l}{\multirow{2}{*}{$p \geq$ 1.0 GeV/\textit{c}}} & & $N_{\sigma \mathrm{K,TPC}} <$ 3 \\
+   \multicolumn{4}{c|}{} & $N_{\sigma \mathrm{K,TOF}} <$ 1 \\  
    \hline
    
-   \multicolumn{4}{l}{Pion Rejection:  Reject if:} \\
-   %\cline{1-1}
-   \multirow{4}{*}{$p <$ 0.65 GeV/\textit{c}} & \multicolumn{1}{l}{TOF and TPC available} & \multicolumn{1}{c|}{} & $N_{\sigma \pi,\mathrm{TPC}} <$ 3 \\
-   \multicolumn{3}{c|}{} & $N_{\sigma \pi,\mathrm{TOF}} <$ 3 \\
-   \cline{2-4}
-    & \multirow{2}{*}{Only TPC available} & $p <$ 0.5 GeV/\textit{c} & $N_{\sigma \pi,\mathrm{TPC}} <$ 3 \\
-   \cline{3-4}
-    &  & 0.5 $< p <$ 0.65 GeV/\textit{c} & $N_{\sigma \pi,\mathrm{TPC}} <$ 2 \\
-   \cline{2-4}
-   \multicolumn{3}{l|}{\multirow{2}{*}{0.65 $< p <$ 1.5 GeV/\textit{c}}} & $N_{\sigma \pi,\mathrm{TPC}} <$ 5 \\
-    & \multicolumn{2}{c|}{} & $N_{\sigma \pi,\mathrm{TOF}} <$ 3 \\
-   \cline{2-4}
-   \multicolumn{3}{l|}{\multirow{2}{*}{$p >$ 1.5 GeV/\textit{c}}} & $N_{\sigma \pi,\mathrm{TPC}} <$ 5 \\
-    & \multicolumn{2}{c|}{} & $N_{\sigma \pi,\mathrm{TOF}} <$ 2 \\
+   \multicolumn{4}{l|}{\multirow{3}{*}{Electron Rejection: Reject if all satisfied}} & $N_{\sigma e^{-},\mathrm{TPC}} < $ 3 \\
+   \multicolumn{4}{c|}{} & $N_{\sigma e^{-},\mathrm{TPC}} < N_{\sigma K^{\pm},\mathrm{TPC}}$ \\
+   \multicolumn{4}{c|}{} & $N_{\sigma e^{-},\mathrm{TOF}} < N_{\sigma K^{\pm},\mathrm{TOF}}$ \\
+   \hline
+   
+   \multicolumn{5}{l}{Pion Rejection:  Reject if:} \\
+   \cline{2-5}
+   \multirow{4}{*}{} & \multirow{4}{*}{$p <$ 0.65 GeV/\textit{c}} & \multicolumn{1}{l}{\multirow{2}{*}{TOF and TPC available}} & \multicolumn{1}{c|}{} & $N_{\sigma \pi,\mathrm{TPC}} <$ 3 \\
+   \multicolumn{4}{c|}{} & $N_{\sigma \pi,\mathrm{TOF}} <$ 3 \\
+   \cline{3-5}
+   \multicolumn{2}{c}{} & \multicolumn{1}{l|}{\multirow{2}{*}{Only TPC available}} & $p <$ 0.5 GeV/\textit{c} & $N_{\sigma \pi,\mathrm{TPC}} <$ 3 \\
+   \cline{4-5}
+   \multicolumn{3}{c|}{} & 0.5 $\leq p <$ 0.65 GeV/\textit{c} & $N_{\sigma \pi,\mathrm{TPC}} <$ 2 \\
+   \cline{2-5}
+    & \multicolumn{3}{l|}{\multirow{2}{*}{0.65 $\leq p <$ 1.5 GeV/\textit{c}}} & $N_{\sigma \pi,\mathrm{TPC}} <$ 5 \\
+    \multicolumn{4}{c|}{} & $N_{\sigma \pi,\mathrm{TOF}} <$ 3 \\
+   \cline{2-5}
+    & \multicolumn{3}{l|}{\multirow{2}{*}{$p \geq$ 1.5 GeV/\textit{c}}} & $N_{\sigma \pi,\mathrm{TPC}} <$ 5 \\
+    \multicolumn{4}{c|}{} & $N_{\sigma \pi,\mathrm{TOF}} <$ 2 \\
    \hline
   \end{tabular}
 % \end{minipage}
  \caption{\Kpm selection}
  \label{tab:KchCuts} 
 \end{table}
+
+
+
 
 
 \subsection{\Vz selection}
@@ -326,7 +330,7 @@ The \Lam and \ALam purities are estimated to be $P_{\Lambda(\overline{\Lambda})}
 
 \begin{table}[htbp]
  \centering 
-%  \renewcommand{\arraystretch}{1.5}
+  \renewcommand{\arraystretch}{1.05}
   \begin{tabular}{lc|c|l}
    \hline  
    \multicolumn{4}{c}{\textbf{\Lam selection}} \\
@@ -335,7 +339,7 @@ The \Lam and \ALam purities are estimated to be $P_{\Lambda(\overline{\Lambda})}
    \hline
    \multicolumn{3}{l|}{$|\eta|$} & $< 0.8$ \\
    \hline
-   \multicolumn{3}{l|}{$|m_{\mathrm{inv}} - m_{\mathrm{PDG}}|$} & $< 3.8$ MeV/$c^{2}$ \\ 
+   \multicolumn{3}{l|}{Invariant mass} & $|m_{\mathrm{\mathrm{p}\pi}} - m_{\mathrm{PDG}}| < 3.8$ MeV/$c^{2}$ \\ 
    \hline
    \multicolumn{3}{l|}{DCA to primary vertex} & $<$ 0.5 cm \\
    \hline
@@ -360,10 +364,10 @@ The \Lam and \ALam purities are estimated to be $P_{\Lambda(\overline{\Lambda})}
    \multicolumn{3}{l|}{DCA to primary vertex} & $>$ 0.3 cm \\
    \hline
    \multicolumn{4}{l}{TPC and TOF $N_{\sigma}$ Cuts} \\
-%   \cline{2-4}
+   \cline{2-4}
     & \multicolumn{1}{c}{$p <$ 0.5 GeV/\textit{c}} &  & $N_{\sigma_{\mathrm{TPC}}} <$ 3 \\
    \cline{2-4}
-    & \multicolumn{1}{c}{\multirow{3}{*}{$p >$ 0.5 GeV/\textit{c}}} &  \multirow{2}{*}{TOF \& TPC available} & $N_{\sigma_{\mathrm{TPC}}} <$ 3 \\
+    & \multicolumn{1}{c}{\multirow{3}{*}{$p \geq$ 0.5 GeV/\textit{c}}} &  \multirow{2}{*}{TOF \& TPC available} & $N_{\sigma_{\mathrm{TPC}}} <$ 3 \\
     & \multicolumn{2}{c|}{} & $N_{\sigma_{\mathrm{TOF}}} <$ 3 \\
    \cline{3-4}
     & \multicolumn{1}{c}{} & Only TPC available & $N_{\sigma_{\mathrm{TPC}}} <$ 3 \\
@@ -380,7 +384,7 @@ The \Lam and \ALam purities are estimated to be $P_{\Lambda(\overline{\Lambda})}
    \cline{2-4}
     & \multicolumn{1}{c}{$p <$ 0.8 GeV/\textit{c}} & & $N_{\sigma_{\mathrm{TPC}}} <$ 3 \\
    \cline{2-4}
-    & \multicolumn{1}{c}{\multirow{3}{*}{$p >$ 0.8 GeV/\textit{c}}} &  \multirow{2}{*}{TOF \& TPC available} & $N_{\sigma_{\mathrm{TPC}}} <$ 3 \\
+    & \multicolumn{1}{c}{\multirow{3}{*}{$p \geq$ 0.8 GeV/\textit{c}}} &  \multirow{2}{*}{TOF \& TPC available} & $N_{\sigma_{\mathrm{TPC}}} <$ 3 \\
     & \multicolumn{2}{c|}{} & $N_{\sigma_{\mathrm{TOF}}} <$ 3 \\
    \cline{3-4}
     & \multicolumn{1}{c}{} & Only TPC available & $N_{\sigma_{\mathrm{TPC}}} <$ 3 \\
@@ -395,7 +399,7 @@ The \Lam and \ALam purities are estimated to be $P_{\Lambda(\overline{\Lambda})}
 
 \begin{table}[htbp]
  \centering
-%  \renewcommand{\arraystretch}{1.5}
+  \renewcommand{\arraystretch}{1.05}
   \begin{tabular}{lc|c|l}
    \hline  
    \multicolumn{4}{c}{\textbf{\Ks selection}} \\
@@ -404,7 +408,7 @@ The \Lam and \ALam purities are estimated to be $P_{\Lambda(\overline{\Lambda})}
    \hline
    \multicolumn{3}{l|}{$|\eta|$} & $< 0.8$ \\
    \hline
-   \multicolumn{3}{l|}{$|m_{\mathrm{inv}} - m_{\mathrm{PDG}}|$} & $< 17.5$ MeV/$c^{2}$ \\
+   \multicolumn{3}{l|}{Invariant mass} & $0.480 < m_{\mathrm{\pi^{+}\pi^{-}}} < 0.515$ GeV/$c^{2}$ \\
    \hline
    \multicolumn{3}{l|}{DCA to primary vertex} & $<$ 0.3 cm \\
    \hline
@@ -425,10 +429,10 @@ The \Lam and \ALam purities are estimated to be $P_{\Lambda(\overline{\Lambda})}
    \multicolumn{3}{l|}{DCA to primary vertex} & $>$ 0.3 cm \\
    \hline
    \multicolumn{4}{l}{TPC and TOF $N_{\sigma}$ Cuts} \\
-%   \cline{2-4}
+   \cline{2-4}
     & \multicolumn{1}{c}{$p <$ 0.5 GeV/\textit{c}} &  & $N_{\sigma_{\mathrm{TPC}}} <$ 3 \\
    \cline{2-4}
-    & \multicolumn{1}{c}{\multirow{3}{*}{$p >$ 0.5 GeV/\textit{c}}} &  \multirow{2}{*}{TOF \& TPC available} & $N_{\sigma_{\mathrm{TPC}}} <$ 3 \\
+    & \multicolumn{1}{c}{\multirow{3}{*}{$p \geq$ 0.5 GeV/\textit{c}}} &  \multirow{2}{*}{TOF \& TPC available} & $N_{\sigma_{\mathrm{TPC}}} <$ 3 \\
     & \multicolumn{2}{c|}{} & $N_{\sigma_{\mathrm{TOF}}} <$ 3 \\
    \cline{3-4}
     & \multicolumn{1}{c}{} & Only TPC available & $N_{\sigma_{\mathrm{TPC}}} <$ 3 \\
@@ -453,7 +457,11 @@ The \Lam and \ALam purities are estimated to be $P_{\Lambda(\overline{\Lambda})}
     \label{fig:Purity:b}
     \includegraphics[width=0.49\linewidth]{/home/jesse/Analysis/FemtoAnalysis/LamKPublication/Figures/PDF/K0Purity_LamK0.pdf}}
   %%----overall caption----
-  \caption{Invariant mass (\minv) distribution of p$\pi^{+}$ pairs showing the \Lam peak \ref{fig:Purity:a}, and of $\pi^{+}\pi^{-}$ pairs showing the \Ks peak \ref{fig:Purity:b}, for \Vz candidates.  The bottom panels are zoomed to show the background with fit.  The vertical green lines represent the \minv cuts used in the analyses, the red vertical lines delineate the region over which the background was fit, and the blue line shows the background fit.}  
+  \caption{
+  (Color online) Invariant mass (\minv) distribution of p$\pi^{+}$ pairs showing the \Lam peak \ref{fig:Purity:a}, and of $\pi^{+}\pi^{-}$ pairs showing the \Ks peak \ref{fig:Purity:b}, for \Vz candidates.  
+  The bottom panels are zoomed to show the background with fit.  
+  The vertical dashed lines represent the \minv cuts used in the analyses, the vertical dotted lines delineate the region over which the background was fit, and the dash-dotted line shows the background fit.
+  }  
   \label{fig:Purity}
 \end{figure}
 
@@ -698,8 +706,8 @@ The argument also suggests that the background should lead to an enhancement at 
 An attempt was made to decrease this background through the binning of events in $\Psi_{\mathrm{EP}}$, but only a small reduction in the signal was achieved due to the limited event-plane resolution.
 
 The THERMINATOR 2 simulation has been shown to reproduce the background features in a $\pi$K analysis \cite{Kisiel:2017}.  
-Figure \ref{fig:BgdswTHERM} shows the THERMINATOR 2 simulation (green) together with experimental data (red, blue, black).  
-The figure also shows a 6$^{th}$-order polynomial fit to the simulation (green), as well as the fit polynomial scaled to match the data (red, blue, black).
+Figure \ref{fig:BgdswTHERM} shows the THERMINATOR 2 simulation (open triangles) together with experimental data (closed circles).  
+The figure also shows a 6$^{\mathrm{th}}$-order polynomial fit to the simulation (dashed curves), as well as the fit polynomial scaled to match the data (solid curves).
 
 The description by THERMINATOR 2 of the non-femtoscopic backgrounds in the \LamKpm systems is remarkable, and can be used in a quantitative fashion to help fit the data.
 More specifically, the non-femtoscopic backgrounds were modeled by (6$^{\mathrm{th}}$-order) polynomial fits to THERMINATOR 2 simulation for the \LamKpm analyses; one polynomial for each centrality class.
@@ -715,11 +723,11 @@ In all cases, the non-femtoscopic background correction was applied as a scale f
   \includegraphics[width=\textwidth]{/home/jesse/Analysis/FemtoAnalysis/AnalysisNotes/5_Fitting/5.5_NonFlatBackground/Figures/BgdwFitOnly_RandomEPs_NumWeight1_PrimaryOnly_AllAnwConj_1030_3050.pdf}
   \caption[Backgrounds with THERMINATOR 2]
   {
-  THERMINATOR 2 simulation (green) together with experimental data (red, blue, black).  
+  (Color online) THERMINATOR 2 simulation (open triangles) together with experimental data (closed circles).  
   Results are shown for \LamKchP (left), \LamKchM (middle), and \LamKs (right).
-  A $6^{\mathrm{th}}$-order polynomial fit to the simulation is shown as a solid green line.  
+  A $6^{\mathrm{th}}$-order polynomial fit to the simulation is shown as a dashed curve.  
   This polynomial is scaled to match the experimental data.  
-  The polynomial fit with scale factor applied is drawn in a color matching the experimental data (red, blue, black).
+  The polynomial fit with scale factor applied is drawn as a solid curve.
   }
   \label{fig:BgdswTHERM}
 \end{figure} 
@@ -857,7 +865,7 @@ Scattering parameters ($\Re f_{0}$, $\Im f_{0}$, $d_{0}$) were shared between pa
 Each correlation function received a unique normalization parameter.
 The fits were corrected for finite momentum resolution effects, non-femtoscopic backgrounds, and residual correlations resulting from the feed-down from resonances.
 In Figs.\ \ref{fig:LamKchPwConjFits_3Res}--\ref{fig:LamK0wConjFits_3Res}, lines represent statistical errors, while boxes represent systematic errors.  
-The black solid curve shows the primary (\LamK) contribution to the fit (i.e. $1 + \lambda'_{\Lambda\mathrm{K}}C_{\Lambda\mathrm{K}}(k^{*}_{\Lambda\mathrm{K}})$ in Eq.\ \ref{eqn:CfwRes}), the green curve shows the fit to the non-femtoscopic background (with a polynomial fit to the THERMINATOR 2 simulation for the \LamKpm systems, and a linear form fit to the data for the \LamKs), and the purple curve shows the final fit after all corrections have been applied.
+The dotted curve shows the primary (\LamK) contribution to the fit (i.e. $1 + \lambda'_{\Lambda\mathrm{K}}C_{\Lambda\mathrm{K}}(k^{*}_{\Lambda\mathrm{K}})$ in Eq.\ \ref{eqn:CfwRes}), the dashed curve shows the fit to the non-femtoscopic background (with a polynomial fit to the THERMINATOR 2 simulation for the \LamKpm systems, and a linear form fit to the data for the \LamKs), and the solid curve shows the final fit after all corrections have been applied.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{comment}
@@ -893,7 +901,7 @@ The black solid curve shows the primary (\LamK) contribution to the fit (i.e. $1
   \includegraphics[width=\textwidth]{\ResultsDirBaseLamKch\SaveNameModLamKch/canKStarCfwFitsLamKchPwConj_0010_1030_3050_LabelLines\SaveNameModLamKch.pdf}
   \caption[\LamKchPALamKchM data with fits]
   {
-  Fit results for the \LamKchP and \ALamKchM data.
+  (Color online) Fit results for the \LamKchP and \ALamKchM data.
   The \LamKchP data is shown in the left column, the \ALamKchM in the right, and the rows differentiate the different centrality bins (0--10\% in the top, 10--30\% in the middle, and 30--50\% in the bottom).
   See text for further details.
   }
@@ -907,7 +915,7 @@ The black solid curve shows the primary (\LamK) contribution to the fit (i.e. $1
   \includegraphics[width=\linewidth]{\ResultsDirBaseLamKch\SaveNameModLamKch/canKStarCfwFitsLamKchMwConj_0010_1030_3050_LabelLines\SaveNameModLamKch.pdf}
   \caption[\LamKchMALamKchP data with fits]
   {
-  Fit results for the \LamKchM and \ALamKchP data.
+  (Color online) Fit results for the \LamKchM and \ALamKchP data.
   The \LamKchM data is shown in the left column, the \ALamKchP in the right, and the rows differentiate the different centrality bins (0--10\% in the top, 10--30\% in the middle, and 30--50\% in the bottom).
  See text for further details.
  }
@@ -920,7 +928,7 @@ The black solid curve shows the primary (\LamK) contribution to the fit (i.e. $1
   \includegraphics[width=\linewidth]{\ResultsDirBaseLamKs\SaveNameModLamKs/canKStarCfwFitsLamK0wConj_0010_1030_3050_LabelLines\SaveNameModLamKs.pdf}
   \caption[\LamALamKs data with fits]
   {
-  Fit results for the \LamKs and \ALamKs data.
+  (Color online) Fit results for the \LamKs and \ALamKs data.
   The \LamKs data is shown in the left column, the \ALamKs in the right, and the rows differentiate the different centrality bins (0--10\% in the top, 10--30\% in the middle, and 30--50\% in the bottom).
  See text for further details.
  }
@@ -935,12 +943,11 @@ The black solid curve shows the primary (\LamK) contribution to the fit (i.e. $1
   \includegraphics[width=\textwidth]{\ResultsDirBaseLamKch\SaveNameModLamKch/Comparisons/FinalResults_Comp3An.pdf}
   \caption[Extracted Scattering Parameters]
   {
-  Extracted fit parameters for all of the \LamK systems.  
-  [Left]: $\Im f_{0}$ vs. $\Re f_{0}$, together with $d_{0}$ to the right.  
-  [Right]: $\lambda$ vs. Radius for the 0--10\% (blue), 10--30\% (green), and 30--50\% (red) centrality bins.  
+  (Color online) Extracted fit parameters for all of the \LamK systems.  
+  [Left]: $\Im f_{0}$ vs. $\Re f_{0}$, together with $d_{0}$ to the right for the \LamKchP (circles), \LamKchM (squares) and \LamKs (triangles) systems.  
+  [Right]: $\lambda$ vs. Radius for the 0--10\% (circles), 10--30\% (squares), and 30--50\% (triangles) centrality bins.  
   In the fit, all \LamK systems share common radii.
-  The color scheme used in the panel are to be consistent with those in Fig.\ \ref{fig:mTScalingOfRadii_3Res}.
-  The teal ([A] = Ref.\ \cite{Liu:2006xja}) and magenta ([B] = Ref.\ \cite{Mai:2009ce}) points show theoretical predictions made using chiral perturbation theory.
+  The cross ([A] = Ref.\ \cite{Liu:2006xja}) and X symbols ([B] = Ref.\ \cite{Mai:2009ce}) points show theoretical predictions made using chiral perturbation theory.
   }
   \label{fig:ScattParams_3Res}
 \end{figure}
@@ -956,7 +963,7 @@ More interestingly, the results show that the \LamKchP and \LamKchM systems diff
 The $\Re f_{0}$ extracted for the \LamKs system is positive, and within errors of that of the \LamKchM. 
 The real part of the scattering length describes the effect of the strong interaction, making the difference in these systems quite intriguing.
 A positive $\Re(f_{0})$ (\LamKchM, \LamKs) signifies that the effect of the strong force is attractive, while a negative $\Re(f_{0})$ (\LamKchP) signifies a repulsion.
-Past studies of kaon-proton scattering found the K$^{-}$-p interaction to be attractive, and that of the K$^{+}$-p to be repulsive.
+Past studies of kaon-proton scattering found the K$^{-}$-p interaction to be attractive, and that of the K$^{+}$-p to be repulsive \cite{Humphrey:1962zz, Hadjimichef:2002xe, Ikeda:2012au}.
 With respect to the kaons, this is similar to the current finding of an attractive \Lam-\KchM interaction and a repulsive \Lam-\KchP interaction.
 This difference could be due to an effect arising from different quark-antiquark interactions between the pairs ($\rm s\bar{s}$ in \LamKchP, $\rm u\bar{u}$ in \LamKchM).
 A related explanation could be that the effect is due to the different net strangeness for each system.
@@ -967,7 +974,8 @@ A related explanation could be that the effect is due to the different net stran
   \includegraphics[width=0.75\textwidth]{\ResultsDirBaseLamKch\SaveNameModLamKch/Comparisons/mTscaling_MinvCalc_OutlinedPoints_OthersTransparent_3Res_NoResStamp.pdf}
   \caption[\mt Scaling of Radii: 3 Residuals in Fit]
   {
-  Extracted fit $R_{\mathrm{inv}}$ parameters as a function of pair transverse mass (\mt) for various pair systems over several centralities. The ALICE published data \cite{Adam:2015vja} is shown with transparent, open symbols.
+  (Color online) Extracted fit $R_{\mathrm{inv}}$ parameters as a function of pair transverse mass (\mt) for various pair systems over several centralities. 
+  The ALICE published data \cite{Adam:2015vja} is shown with transparent, open symbols.
   }
   \label{fig:mTScalingOfRadii_3Res}
 \end{figure}
@@ -1023,9 +1031,12 @@ Larger effective radii are also found to result from inserting a Gaussian source
 \begin{figure}[h!]
   \centering
   \includegraphics[width=0.8\textwidth]{\ResultsDirBase Results_cLamcKch_20181205/SphericalHarmonics/LamKchP/CanCfYlmReC00C11_LamKchPALamKchM_0010.pdf}
-  \caption[\LamKchP $C_{00}$ and $\Re C_{11}$ Spherical Harmonic Components (0--10\%)]{$C_{00}$ (left) and $\Re C_{11}$ (right) components of a spherical harmonic decomposition of the \LamKchP correlation function for the 0--10\% centrality bin.  
+  \caption[\LamKchP $C_{00}$ and $\Re C_{11}$ Spherical Harmonic Components (0--10\%)]
+  {
+  (Color online) $C_{00}$ (left) and $\Re C_{11}$ (right) components of a spherical harmonic decomposition of the \LamKchP correlation function for the 0--10\% centrality bin.  
 The $C_{00}$ component is similar to the 1D correlation functions typically studied, and probes the overall size of the source.
-The $\Re C_{11}$ component probes the asymmetry in the system; a non-zero value reveals the asymmetry}
+The $\Re C_{11}$ component probes the asymmetry in the system; a non-zero value reveals the asymmetry
+  }
   \label{fig:LamKchP_ReC00C11_0010}
 \end{figure}
 
@@ -1163,7 +1174,11 @@ The figure shows the Stavinskiy method does a very good job of ridding the \LamK
 \begin{figure}[h!]
   \centering
   \includegraphics[width=\textwidth]{/home/jesse/Analysis/FemtoAnalysis/AnalysisNotes/4_CorrelationFunctions/Figures/OnlyTwo/canKStarCfsLamKchPwConj_20180505vs20180505StavCf_CustomRebin.pdf}
-  \caption[\LamKchP Stavinskiy Correlation Functions]{\LamKchPALamKchM correlation functions built using the Stavinskiy method for 0--10\%, 10--30\%, and 30--50\% centralities.  Closed symbols represent correlations built using the normal mixed-event reference distribution, while open symbols represent correlations formed using the Stavinskiy same-event pseudo-pairs as a reference.}
+  \caption[\LamKchP Stavinskiy Correlation Functions]
+  {
+  \LamKchPALamKchM correlation functions built using the Stavinskiy method for 0--10\%, 10--30\%, and 30--50\% centralities.  
+  Closed (red) symbols represent correlations built using the normal mixed-event reference distribution, while open (green) symbols represent correlations formed using the Stavinskiy same-event pseudo-pairs as a reference.
+  }
   \label{fig:StavCfs_Correct_LamKchP}
 \end{figure}
 \end{comment}
@@ -1172,7 +1187,10 @@ The figure shows the Stavinskiy method does a very good job of ridding the \LamK
 \begin{figure}[h!]
   \centering
   \includegraphics[width=0.667\textwidth]{/home/jesse/Analysis/FemtoAnalysis/AnalysisNotes/4_CorrelationFunctions/Figures/OnlyTwo/canKStarCfsLamKchPCombConj_20180505vs20180505StavCf_CustomRebin.pdf}
-  \caption[\LamKchP Stavinskiy Correlation Functions]{\LamKchPALamKchM correlation functions built using the Stavinskiy method for 0--10\%, 10--30\%, and 30--50\% centralities.  Closed symbols represent correlations built using the normal mixed-event reference distribution, while open symbols represent correlations formed using the Stavinskiy same-event pseudo-pairs as a reference.}
+  \caption[\LamKchP Stavinskiy Correlation Functions]
+  {
+  (Color online) \LamKchPALamKchM correlation functions built using the Stavinskiy method for 0--10\%, 10--30\%, and 30--50\% centralities.  Closed symbols represent correlations built using the normal mixed-event reference distribution, while open symbols represent correlations formed using the Stavinskiy same-event pseudo-pairs as a reference.
+  }
   \label{fig:StavCfs_Correct_LamKchP}
 \end{figure} 
 
@@ -1285,7 +1303,10 @@ The figure demonstrates that as the separation $\mu_{out}$ increases, so do the 
     \label{fig:LamKchP_StdThermSources_Temporal}
     \includegraphics[width=0.60\linewidth]{/home/jesse/Analysis/FemtoAnalysis/AnalysisNotes/7_ResultsAndDiscussion/7.1_ResultsLamK/7.1.2_ResultsLamK_DiscussionOfmTScaling/ThermPlots/LamKchP/CanDeltaT_Full_LamKchP_FromFileCorrelationFunctions_wOtherPairs_BuildCfYlm.pdf}}  
   %%----overall caption----
-  \caption[Extracted Radius and Pair Sources from THERMINATOR 2]{Extracted radius when performing a simple fit on simulation from THERMINATOR 2, along with the spatio-temporal characteristics generated by the simulation.}
+  \caption[Extracted Radius and Pair Sources from THERMINATOR 2]
+  {
+  (Color online) Extracted radius when performing a simple fit on simulation from THERMINATOR 2, along with the spatio-temporal characteristics generated by the simulation.
+  }
   \label{fig:LamKchP_StdThermSources}
 \end{figure}
 
@@ -1296,7 +1317,7 @@ The figure demonstrates that as the separation $\mu_{out}$ increases, so do the 
   \includegraphics[width=\textwidth]{/home/jesse/Analysis/FemtoAnalysis/AnalysisNotes/7_ResultsAndDiscussion/7.1_ResultsLamK/7.1.2_ResultsLamK_DiscussionOfmTScaling/ThermPlots/LamKchP/CanCompMus_Full_LamKchP_3dHistPairSource3d_oslLamKchP.pdf}
   \caption[Varying $\mu_{\mathrm{Out}}$ with THERMINATOR 2]
   {
-  Probing the effect of varying the source shift in the outward direction, $\mu_{\mathrm{Out}}$, within the THERMINATOR 2 framework.  
+  (Color online) Probing the effect of varying the source shift in the outward direction, $\mu_{\mathrm{Out}}$, within the THERMINATOR 2 framework.  
   To achieve this, particle pairs are formed from the simulation, but with altered spatial characteristics achieved by drawing the out, side, and long components from pre-determined Gaussian distributions.  
   The plots on the left show fits resulting from the sources (in the out direction) shown on the right.  
   The sources in the side and long directions are not shown, and are both Gaussians of width 5 fm centered at the origin for all cases.  
