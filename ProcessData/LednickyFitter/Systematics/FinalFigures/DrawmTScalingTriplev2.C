@@ -150,7 +150,7 @@ int main(int argc, char **argv)
 
   bool bSaveImage = false;
   bool bMakeOthersTransparent = true;
-  bool bOutlinePoints = true;
+  bool bOutlinePoints = false;  //Should always be false since I'm using both open and closed symbols
   bool bDrawSysErrs = true;
   bool bStripResStamp = true;
 
@@ -256,8 +256,16 @@ int main(int argc, char **argv)
   const Int_t myBlueT = TColor::GetColorTransparent(blue,0.3);
 
 
-  const int tMarkerStyleLamK = 21;
-  int tMarkerStyleLamKo = 25;
+  const int tMarkerStyleLamK_0010 = 47;
+  int tMarkerStyleLamKo_0010 = 0;
+
+  const int tMarkerStyleLamK_1030 = 46;
+  int tMarkerStyleLamKo_1030 = 0;
+
+  const int tMarkerStyleLamK_3050 = 5;
+  int tMarkerStyleLamKo_3050 = 0;
+
+
   const Size_t tMarkerSize=1.6;
 
 //----------------------- Set up canvas and axes --------------------------------------------
@@ -390,81 +398,102 @@ cout << endl << endl;
 //           aDataPointsWithErrors[i].size() == 6 ==> aDataPointsWithErrors[i] = [aX, aXerrLow, aXerrHigh, aY, aYerrLow, aYerrHigh]
 
 //---------------------------- Protons ------------------------------------------------------
+  double tMarkerStylePP_0010 = 20;
+  double tMarkerStylePP_1030 = 24;
+  double tMarkerStylePP_3050 = 31;
+
   //----- 0-10% -----
-  DrawPoints("GraphPP0010",tPP0010Sys,tPP0010Stat,redT,red,20,tMarkerSize);
+  DrawPoints("GraphPP0010",tPP0010Sys,tPP0010Stat,redT,red,tMarkerStylePP_0010,tMarkerSize);
 
   //----- 10-30% -----
-  DrawPoints("GraphPP1030",tPP1030Sys,tPP1030Stat,greenT,green,24,tMarkerSize);
+  DrawPoints("GraphPP1030",tPP1030Sys,tPP1030Stat,greenT,green,tMarkerStylePP_1030,tMarkerSize);
   
   //----- 30-50% -----
-  DrawPoints("GraphPP3050",tPP3050Sys,tPP3050Stat,blueT,blue,31,tMarkerSize);
+  DrawPoints("GraphPP3050",tPP3050Sys,tPP3050Stat,blueT,blue,tMarkerStylePP_3050,tMarkerSize);
 
   
 //------------------------- Anti-Protons ----------------------------------------------------
+  double tMarkerStyleAPAP_0010 = 22;
+  double tMarkerStyleAPAP_1030 = 26;
+  double tMarkerStyleAPAP_3050 = 33;
   //----- 0-10% -----
-  DrawPoints("GraphAPAP0010",tAPAP0010Sys,tAPAP0010Stat,redT,red,22,tMarkerSize);
+  DrawPoints("GraphAPAP0010",tAPAP0010Sys,tAPAP0010Stat,redT,red,tMarkerStyleAPAP_0010,tMarkerSize);
   
   //----- 10-30% -----
-  DrawPoints("GraphAPAP1030",tAPAP1030Sys,tAPAP1030Stat,greenT,green,26,tMarkerSize);
+  DrawPoints("GraphAPAP1030",tAPAP1030Sys,tAPAP1030Stat,greenT,green,tMarkerStyleAPAP_1030,tMarkerSize);
 
   //----- 30-50% -----
-  DrawPoints("GraphAPAP3050",tAPAP3050Sys,tAPAP3050Stat,blueT,blue,33,tMarkerSize);
+  DrawPoints("GraphAPAP3050",tAPAP3050Sys,tAPAP3050Stat,blueT,blue,tMarkerStyleAPAP_3050,tMarkerSize);
 
   
-//------------------------ K0s-K0s ----------------------------------------------------------  
+//------------------------ K0s-K0s ---------------------------------------------------------- 
+  double tMarkerStyleK0sK0s_0010 = 23;
+  double tMarkerStyleK0sK0s_1030 = 32;
+  double tMarkerStyleK0sK0s_3050 = 27; 
   //----- 0-10% -----
-  DrawPoints("GraphK0sK0s0010",tK0sK0s0010Sys,tK0sK0s0010Stat,redT,red,23,tMarkerSize);
+  DrawPoints("GraphK0sK0s0010",tK0sK0s0010Sys,tK0sK0s0010Stat,redT,red,tMarkerStyleK0sK0s_0010,tMarkerSize);
 
   //----- 10-30% -----   
-  DrawPoints("GraphK0sK0s1030",tK0sK0s1030Sys,tK0sK0s1030Stat,greenT,green,32,tMarkerSize);
+  DrawPoints("GraphK0sK0s1030",tK0sK0s1030Sys,tK0sK0s1030Stat,greenT,green,tMarkerStyleK0sK0s_1030,tMarkerSize);
 
   //----- 30-50% -----
-  DrawPoints("GraphK0sK0s3050",tK0sK0s3050Sys,tK0sK0s3050Stat,blueT,blue,27,tMarkerSize);
+  DrawPoints("GraphK0sK0s3050",tK0sK0s3050Sys,tK0sK0s3050Stat,blueT,blue,tMarkerStyleK0sK0s_3050,tMarkerSize);
 
 
 //----------------------------- Kch-Kch -----------------------------------------------------  
+  double tMarkerStyleKchKch_0010 = 21;
+  double tMarkerStyleKchKch_1030 = 25;
+  double tMarkerStyleKchKch_3050 = 29;
   //----- 0-10% -----
-  DrawPoints("GraphKchKch0010",tKchKch0010Sys,tKchKch0010Stat,redT,red,21,tMarkerSize);
+  DrawPoints("GraphKchKch0010",tKchKch0010Sys,tKchKch0010Stat,redT,red,tMarkerStyleKchKch_0010,tMarkerSize);
   
   //----- 10-30% -----
-  DrawPoints("GraphKchKch1030",tKchKch1030Sys,tKchKch1030Stat,greenT,green,25,tMarkerSize);
+  DrawPoints("GraphKchKch1030",tKchKch1030Sys,tKchKch1030Stat,greenT,green,tMarkerStyleKchKch_1030,tMarkerSize);
 
   //----- 30-50% -----
-  DrawPoints("GraphKchKch3050",tKchKch3050Sys,tKchKch3050Stat,blueT,blue,29,tMarkerSize);
+  DrawPoints("GraphKchKch3050",tKchKch3050Sys,tKchKch3050Stat,blueT,blue,tMarkerStyleKchKch_3050,tMarkerSize);
 
   
 //------------------------------ Pi-Pi ------------------------------------------------------
+  double tMarkerStylePiPi_0010 = 34;
+  double tMarkerStylePiPi_1030 = 28;
+  double tMarkerStylePiPi_3050 = 30;
   //----- 0-10% -----
-  DrawPoints("GraphPiPi0010",tPiPi0010Sys,tPiPi0010Stat,redT,red,34,tMarkerSize);
+  DrawPoints("GraphPiPi0010",tPiPi0010Sys,tPiPi0010Stat,redT,red,tMarkerStylePiPi_0010,tMarkerSize);
 
   //----- 10-30% -----
-  DrawPoints("GraphPiPi1030",tPiPi1030Sys,tPiPi1030Stat,greenT,green,28,tMarkerSize);
+  DrawPoints("GraphPiPi1030",tPiPi1030Sys,tPiPi1030Stat,greenT,green,tMarkerStylePiPi_1030,tMarkerSize);
 
   //----- 30-50% -----
-  DrawPoints("GraphPiPi3050",tPiPi3050Sys,tPiPi3050Stat,blueT,blue,30,tMarkerSize);
+  DrawPoints("GraphPiPi3050",tPiPi3050Sys,tPiPi3050Stat,blueT,blue,tMarkerStylePiPi_3050,tMarkerSize);
 
   
 //-------------------------------------------------------------------------------------------
 //-----------------------------------Draw my points -----------------------------------------
 //-------------------------------------------------------------------------------------------
 //---------------------------------------- Lambda-K --------------------------------------
-    if(!bOutlinePoints) tMarkerStyleLamKo=0;
+    if(!bOutlinePoints)
+    {
+      tMarkerStyleLamKo_0010=0;
+      tMarkerStyleLamKo_1030=0;
+      tMarkerStyleLamKo_3050=0;
+    }
     //----- 0-10% Lambda-K0 -----
     td2dVec tLamK0010Sys = {{tLamK0010mT,0.015,tLamK0010R,tLamK0010RerrSys}};
     td2dVec tLamK0010Stat = {{tLamK0010mT,0.,tLamK0010R,tLamK0010Rerr}};
-    DrawPoints("GraphLamK0010",tLamK0010Sys,tLamK0010Stat,myRedT,myRed,tMarkerStyleLamK,tMarkerSize,tMarkerStyleLamKo,bDrawSysErrs);
+    DrawPoints("GraphLamK0010",tLamK0010Sys,tLamK0010Stat,myRedT,myRed,tMarkerStyleLamK_0010,tMarkerSize,tMarkerStyleLamKo_0010,bDrawSysErrs);
 
 
     //----- 10-30% Lambda-K0 -----
     td2dVec tLamK1030Sys = {{tLamK1030mT,0.015,tLamK1030R,tLamK1030RerrSys}};
     td2dVec tLamK1030Stat = {{tLamK1030mT,0.,tLamK1030R,tLamK1030Rerr}};
-    DrawPoints("GraphLamK1030",tLamK1030Sys,tLamK1030Stat,myGreenT,myGreen,tMarkerStyleLamK,tMarkerSize,tMarkerStyleLamKo,bDrawSysErrs);
+    DrawPoints("GraphLamK1030",tLamK1030Sys,tLamK1030Stat,myGreenT,myGreen,tMarkerStyleLamK_1030,tMarkerSize,tMarkerStyleLamKo_1030,bDrawSysErrs);
 
 
     //----- 30-50% Lambda-K0 -----
     td2dVec tLamK3050Sys = {{tLamK3050mT,0.015,tLamK3050R,tLamK3050RerrSys}};
     td2dVec tLamK3050Stat = {{tLamK3050mT,0.,tLamK3050R,tLamK3050Rerr}};
-    DrawPoints("GraphLamK3050",tLamK3050Sys,tLamK3050Stat,myBlueT,myBlue,tMarkerStyleLamK,tMarkerSize,tMarkerStyleLamKo,bDrawSysErrs);
+    DrawPoints("GraphLamK3050",tLamK3050Sys,tLamK3050Stat,myBlueT,myBlue,tMarkerStyleLamK_3050,tMarkerSize,tMarkerStyleLamKo_3050,bDrawSysErrs);
 
 
 //-------------------------------------------------------------------------------
@@ -487,12 +516,12 @@ cout << endl << endl;
 
 //---------------------------------- Draw Legend -------------------------------------------- 
 
-    TLatex *   tex = new TLatex(1.175,9.4,"ALICE Pb-Pb #sqrt{#it{s}_{NN}} = 2.76 TeV");
+    TLatex *   tex = new TLatex(0.275,1.75,"ALICE Pb-Pb #sqrt{#it{s}_{NN}} = 2.76 TeV");
     tex->SetTextFont(42);
     tex->SetTextSize(0.044);
     tex->SetLineWidth(2);
-//    tex->Draw();
-//    tex->DrawLatex(0.85,9.4,"ALICE Preliminary");
+    tex->Draw();
+
     tex = new TLatex();
     tex->SetTextAlign(12);
     tex->SetTextFont(42);
@@ -504,42 +533,132 @@ cout << endl << endl;
     TMarker *marker = new TMarker();
     marker->SetMarkerSize(tMarkerSize);
   
-    double tX1Text = 1.0;
-    double tTextMarkerSep1 = 0.16;
-    double tX2Text = 1.95;
-    double tTextMarkerSep2 = 0.15;
+    double tXSysText = 1.0;
+    double tXMarkers0010 = 1.20;
+    double tXMarkers1030 = 1.45;
+    double tXMarkers3050 = 1.70;
+
     double tY1Text = 9.0;
     double tY1Sep = 0.6;
 
-    double tShiftX = 0.;
-    tShiftX = 0.1;
-    tX1Text += tShiftX;
+    double tYTextCent = 9.6;
+    double tXTextCent0010 = 1.16;
+    double tXTextCent1030 = 1.385;
+    double tXTextCent3050 = 1.635;
 
-    tex->DrawLatex(tX1Text, tY1Text-0*tY1Sep, "#pi^{#pm}#pi^{#pm}");
-    marker->SetMarkerStyle(28);//pions
-    marker->DrawMarker(tX1Text+tTextMarkerSep1, tY1Text-0*tY1Sep);
+    //-----------------------------
+    double tXShift = 0.125;
+    double tYShift = 0.0;
+
+    tXSysText     += tXShift;
+    tXMarkers0010 += tXShift;
+    tXMarkers1030 += tXShift;
+    tXMarkers3050 += tXShift;
+
+    tXTextCent0010 += tXShift;
+    tXTextCent1030 += tXShift;
+    tXTextCent3050 += tXShift;
+
+    tY1Text    += tYShift;
+    tYTextCent += tYShift;
+
+    //-----------------------------
+
+    tex->DrawLatex(tXTextCent0010, tYTextCent, "0-10%");
+    tex->DrawLatex(tXTextCent1030, tYTextCent, "10-30%");
+    tex->DrawLatex(tXTextCent3050, tYTextCent, "30-50%");
+
+    //-----
+    tex->DrawLatex(tXSysText, tY1Text-0*tY1Sep, "#pi^{#pm}#pi^{#pm}");
+
+    marker->SetMarkerStyle(tMarkerStylePiPi_0010);//pions 0010
+    marker->SetMarkerColor(myRed);
+    marker->DrawMarker(tXMarkers0010, tY1Text-0*tY1Sep);
+
+    marker->SetMarkerStyle(tMarkerStylePiPi_1030);//pions 1030
+    marker->SetMarkerColor(myGreen);
+    marker->DrawMarker(tXMarkers1030, tY1Text-0*tY1Sep);
+
+    marker->SetMarkerStyle(tMarkerStylePiPi_3050);//pions 3050
+    marker->SetMarkerColor(myBlue);
+    marker->DrawMarker(tXMarkers3050, tY1Text-0*tY1Sep);
   
-    tex->DrawLatex(tX1Text, tY1Text-1*tY1Sep, "K^{#pm}K^{#pm}");
-    marker->SetMarkerStyle(25);//Kch
-    marker->DrawMarker(tX1Text+tTextMarkerSep1, tY1Text-1*tY1Sep);
+    //-----
+    tex->DrawLatex(tXSysText, tY1Text-1*tY1Sep, "K^{#pm}K^{#pm}");
+
+    marker->SetMarkerStyle(tMarkerStyleKchKch_0010);//Kch 0010
+    marker->SetMarkerColor(myRed);
+    marker->DrawMarker(tXMarkers0010, tY1Text-1*tY1Sep);
+
+    marker->SetMarkerStyle(tMarkerStyleKchKch_1030);//Kch 1030
+    marker->SetMarkerColor(myGreen);
+    marker->DrawMarker(tXMarkers1030, tY1Text-1*tY1Sep);
+
+    marker->SetMarkerStyle(tMarkerStyleKchKch_3050);//Kch 3050
+    marker->SetMarkerColor(myBlue);
+    marker->DrawMarker(tXMarkers3050, tY1Text-1*tY1Sep);
   
-    tex->DrawLatex(tX1Text, tY1Text-2*tY1Sep, "K_{S}^{0}K_{S}^{0}");
-    marker->SetMarkerStyle(27);//K0s
-    marker->DrawMarker(tX1Text+tTextMarkerSep1, tY1Text-2*tY1Sep);
+    //-----
+    tex->DrawLatex(tXSysText, tY1Text-2*tY1Sep, "K_{S}^{0}K_{S}^{0}");
+
+    marker->SetMarkerStyle(tMarkerStyleK0sK0s_0010);//K0s 0010
+    marker->SetMarkerColor(myRed);
+    marker->DrawMarker(tXMarkers0010, tY1Text-2*tY1Sep);
+
+    marker->SetMarkerStyle(tMarkerStyleK0sK0s_1030);//K0s 1030
+    marker->SetMarkerColor(myGreen);
+    marker->DrawMarker(tXMarkers1030, tY1Text-2*tY1Sep);
+
+    marker->SetMarkerStyle(tMarkerStyleK0sK0s_3050);//K0s 3050
+    marker->SetMarkerColor(myBlue);
+    marker->DrawMarker(tXMarkers3050, tY1Text-2*tY1Sep);
   
-    tex->DrawLatex(tX1Text, tY1Text-3*tY1Sep, "#bar{p}#bar{p}");
-    marker->SetMarkerStyle(5);// antiprotons
-    marker->DrawMarker(tX1Text+tTextMarkerSep1, tY1Text-3*tY1Sep);
+    //-----
+    tex->DrawLatex(tXSysText, tY1Text-3*tY1Sep, "#bar{p}#bar{p}");
+
+    marker->SetMarkerStyle(tMarkerStyleAPAP_0010);// antiprotons 0010
+    marker->SetMarkerColor(myRed);
+    marker->DrawMarker(tXMarkers0010, tY1Text-3*tY1Sep);
+
+    marker->SetMarkerStyle(tMarkerStyleAPAP_1030);// antiprotons 1030
+    marker->SetMarkerColor(myGreen);
+    marker->DrawMarker(tXMarkers1030, tY1Text-3*tY1Sep);
+
+    marker->SetMarkerStyle(tMarkerStyleAPAP_3050);// antiprotons 3050
+    marker->SetMarkerColor(myBlue);
+    marker->DrawMarker(tXMarkers3050, tY1Text-3*tY1Sep);
   
-    tex->DrawLatex(tX1Text, tY1Text-4*tY1Sep, "pp");
-    marker->SetMarkerStyle(24);//protons
-    marker->DrawMarker(tX1Text+tTextMarkerSep1, tY1Text-4*tY1Sep);
+    //-----
+    tex->DrawLatex(tXSysText, tY1Text-4*tY1Sep, "pp");
+
+    marker->SetMarkerStyle(tMarkerStylePP_0010);//protons 0010
+    marker->SetMarkerColor(myRed);
+    marker->DrawMarker(tXMarkers0010, tY1Text-4*tY1Sep);
+
+    marker->SetMarkerStyle(tMarkerStylePP_1030);//protons 1030
+    marker->SetMarkerColor(myGreen);
+    marker->DrawMarker(tXMarkers1030, tY1Text-4*tY1Sep);
+
+    marker->SetMarkerStyle(tMarkerStylePP_3050);//protons 3050
+    marker->SetMarkerColor(myBlue);
+    marker->DrawMarker(tXMarkers3050, tY1Text-4*tY1Sep);
 
 
+    //-----
 
-    tex->DrawLatex(tX1Text, tY1Text-5*tY1Sep, "#LambdaK");
-    marker->SetMarkerStyle(tMarkerStyleLamK);
-    marker->DrawMarker(tX1Text+tTextMarkerSep1, tY1Text-5*tY1Sep);
+    tex->DrawLatex(tXSysText, tY1Text-5*tY1Sep, "#LambdaK");
+
+    marker->SetMarkerStyle(tMarkerStyleLamK_0010);// 0010
+    marker->SetMarkerColor(myRed);
+    marker->DrawMarker(tXMarkers0010, tY1Text-5*tY1Sep);
+
+    marker->SetMarkerStyle(tMarkerStyleLamK_1030);// 1030
+    marker->SetMarkerColor(myGreen);
+    marker->DrawMarker(tXMarkers1030, tY1Text-5*tY1Sep);
+
+    marker->SetMarkerStyle(tMarkerStyleLamK_3050);// 3050
+    marker->SetMarkerColor(myBlue);
+    marker->DrawMarker(tXMarkers3050, tY1Text-5*tY1Sep);
 
 /*
     // centralities

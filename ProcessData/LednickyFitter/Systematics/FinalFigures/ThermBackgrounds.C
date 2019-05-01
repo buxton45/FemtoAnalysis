@@ -644,7 +644,7 @@ TCanvas* DrawBgdwFit(TString aCfDescriptor, TString aFileNameCfs, AnalysisType a
 //  cout << "Fitting call(2) from: DrawBgdwFit" << endl;
   TF1 *tBgdFitData, *tBgdFitDataDraw;
 //  tBgdFitData = FitBackgroundwNorm(tBgdFit, tData, tPower, 0.6, 0.9);
-  tBgdFitData = FitBackgroundwNormAndOffset(tBgdFit, tData, tPower, 0.45, 0.80);
+  tBgdFitData = FitBackgroundwNormAndOffset(tBgdFit, tData, tPower, 0.32, 0.80);
 //  cout << "**************************************************" << endl;
   if(aAnType==kLamKchM || aAnType==kALamKchP) //Want to draw fit function without gaping gap where Omega peak omitted
   {
@@ -716,7 +716,8 @@ TCanvas* BuildBgdwFitPanel(CanvasPartition* aCanPart, int tColumn, int tRow, TSt
   //-------------------------------------------------
   AnalysisType tConjAnType = GetConjAnType(aAnType);
   //-------------------------------------------------
-  TString tDescriptor = "THERM. Bgd (w. Fit)";
+//  TString tDescriptor = "THERM. Bgd (w. Fit)";
+  TString tDescriptor = "THERM. Bgd.";
 
   TString tOverallDescriptor = cAnalysisRootTags[aAnType];
   if(aCombineConjugates) tOverallDescriptor += TString::Format(" & %s", cAnalysisRootTags[tConjAnType]);
@@ -768,7 +769,7 @@ TCanvas* BuildBgdwFitPanel(CanvasPartition* aCanPart, int tColumn, int tRow, TSt
 //  cout << "Fitting call(2) from: DrawBgdwFit" << endl;
   TF1 *tBgdFitData, *tBgdFitDataDraw;
 //  tBgdFitData = FitBackgroundwNorm(tBgdFit, tData, tPower, 0.6, 0.9);
-  tBgdFitData = FitBackgroundwNormAndOffset(tBgdFit, tData, tPower, 0.45, 0.80);
+  tBgdFitData = FitBackgroundwNormAndOffset(tBgdFit, tData, tPower, 0.32, 0.80);
 //  cout << "**************************************************" << endl;
   if(aAnType==kLamKchM || aAnType==kALamKchP) //Want to draw fit function without gaping gap where Omega peak omitted
   {
@@ -841,9 +842,9 @@ TCanvas* BuildBgdwFitPanel(CanvasPartition* aCanPart, int tColumn, int tRow, TSt
   if(tRow==0)
   {
     if(!aZoomY) aCanPart->SetupTLegend("", tColumn, tRow, 0.55, 0.15, 0.35, 0.15);
-    else        aCanPart->SetupTLegend("", tColumn, tRow, 0.20, 0.575, 0.60, 0.225);
+    else        aCanPart->SetupTLegend("", tColumn, tRow, 0.50, 0.575, 0.45, 0.225);
     aCanPart->AddLegendEntry(tColumn, tRow, tCf, tDescriptor.Data(), "p");
-    aCanPart->AddLegendEntry(tColumn, tRow, tData, TString::Format("Data (%s)", cPrettyCentralityTags[tCentTypeData]), "p");
+    aCanPart->AddLegendEntry(tColumn, tRow, tData, "Data", "p");
   }
 
   if(tRow==0 && tColumn==0)
@@ -1703,7 +1704,7 @@ int main(int argc, char **argv)
   if(bDrawBgdwFitOnly)
   {
     tRebin=4;
-    bool aAvgLamKchPMFit = true;
+    bool aAvgLamKchPMFit = false;
 
     if(bDrawAllCentralities) tCanBgdwFit = DrawBgdwFit_AllCent(tCfDescriptor, tSingleFileName, tAnType, bCombineConjugates, tEventsType, tRebin, tMinNorm, tMaxNorm, tMaxBgdFit, bUseStavCf);
     else tCanBgdwFit = DrawBgdwFit(tCfDescriptor, tSingleFileName, tAnType, tImpactParam, bCombineConjugates, bCombineImpactParams, tEventsType, tRebin, tMinNorm, tMaxNorm, tMaxBgdFit, bUseStavCf);

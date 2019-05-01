@@ -76,7 +76,7 @@ int main(int argc, char **argv)
   bool ApplyNonFlatBackgroundCorrection = true;
   if(bUseStavCf) ApplyNonFlatBackgroundCorrection = false;
   NonFlatBgdFitType tNonFlatBgdFitType_LamKch = kPolynomial;
-  NonFlatBgdFitType tNonFlatBgdFitType_LamK0  = kPolynomial;
+  NonFlatBgdFitType tNonFlatBgdFitType_LamK0  = kLinear;
   vector<NonFlatBgdFitType> tNonFlatBgdFitTypes{tNonFlatBgdFitType_LamK0, tNonFlatBgdFitType_LamK0, 
                                                 tNonFlatBgdFitType_LamKch, tNonFlatBgdFitType_LamKch, tNonFlatBgdFitType_LamKch, tNonFlatBgdFitType_LamKch};
 
@@ -209,8 +209,8 @@ int main(int argc, char **argv)
   if(FixAllNormTo1) tTriple->SetFixNormParams(FixAllNormTo1);
   if(UsemTScalingOfResidualRadii) tTriple->SetUsemTScalingOfResidualRadii(UsemTScalingOfResidualRadii, mTScalingPowerOfResidualRadii);
 
-tTriple->SetMinMaxBgdFit(kLamKchP, 0.45, 0.80);
-tTriple->SetMinMaxBgdFit(kLamK0, 0.45, 0.80);
+  if(ApplyNonFlatBackgroundCorrection && tNonFlatBgdFitType_LamKch == kPolynomial) tTriple->SetMinMaxBgdFit(kLamKchP, 0.32, 0.80);
+  if(ApplyNonFlatBackgroundCorrection && tNonFlatBgdFitType_LamK0 == kPolynomial)  tTriple->SetMinMaxBgdFit(kLamK0, 0.32, 0.80);
 
 /*
   if(ApplyNonFlatBackgroundCorrection && tNonFlatBgdFitType_LamKch != kLinear)
