@@ -8,8 +8,12 @@
 
 \newcommand{\MomRes}{_MomResCrctn}%{}
 
-\newcommand{\NonFlatBgdLamKch}{_NonFlatBgdCrctnLamK0LinearLamKchPolynomial}
-\newcommand{\NonFlatBgdLamKs}{_NonFlatBgdCrctnLamK0LinearLamKchPolynomial}
+%\newcommand{\NonFlatBgdLamKch}{_NonFlatBgdCrctnLamK0LinearLamKchPolynomial}
+%\newcommand{\NonFlatBgdLamKs}{_NonFlatBgdCrctnLamK0LinearLamKchPolynomial}
+
+\newcommand{\NonFlatBgdLamKch}{_NonFlatBgdCrctnLamK0LamKchPolynomial}
+\newcommand{\NonFlatBgdLamKs}{_NonFlatBgdCrctnLamK0LamKchPolynomial}
+
 
 \newcommand{\ResNum}{_3Res}
 \newcommand{\PrimMaxDecay}{_PrimMaxDecay10fm}
@@ -32,7 +36,7 @@
 
 \newcommand{\Lam}{$\Lambda$\xspace}
 \newcommand{\ALam}{$\bar{\Lambda}$\xspace}
-\newcommand{\LamALam}{$\Lambda$($\bar{\Lambda}$)\xspace}
+\newcommand{\LamALam}{$\Lambda$ ($\bar{\Lambda}$)\xspace}
 
 \newcommand{\KchP}{$\mathrm{K^{+}}$\xspace}
 \newcommand{\KchM}{$\mathrm{K^{-}}$\xspace}
@@ -46,11 +50,11 @@
 
 \newcommand{\LamKchP}{$\Lambda\mathrm{K^{+}}$\xspace}
 \newcommand{\ALamKchM}{$\bar{\Lambda}\mathrm{K^{-}}$\xspace}
-\newcommand{\LamKchPALamKchM}{$\Lambda\mathrm{K^{+}}$($\bar{\Lambda}\mathrm{K^{-}}$)\xspace}
+\newcommand{\LamKchPALamKchM}{$\Lambda\mathrm{K^{+}}$ ($\bar{\Lambda}\mathrm{K^{-}}$)\xspace}
 
 \newcommand{\LamKchM}{$\Lambda\mathrm{K^{-}}$\xspace}
 \newcommand{\ALamKchP}{$\bar{\Lambda}\mathrm{K^{+}}$\xspace}
-\newcommand{\LamKchMALamKchP}{$\Lambda\mathrm{K^{-}}$($\bar{\Lambda}\mathrm{K^{+}}$)\xspace}
+\newcommand{\LamKchMALamKchP}{$\Lambda\mathrm{K^{-}}$ ($\bar{\Lambda}\mathrm{K^{+}}$)\xspace}
 
 \newcommand{\LamKpm}{$\Lambda\mathrm{K^{\pm}}$\xspace}
 \newcommand{\ALamKpm}{$\bar{\Lambda}\mathrm{K^{\pm}}$\xspace}
@@ -59,7 +63,7 @@
 
 \newcommand{\LamKs}{$\Lambda\mathrm{K^{0}_{S}}$\xspace}
 \newcommand{\ALamKs}{$\bar{\Lambda}\mathrm{K^{0}_{S}}$\xspace}
-\newcommand{\LamKsALamKs}{$\Lambda\mathrm{K^{0}_{S}}$($\bar{\Lambda}\mathrm{K^{0}_{S}}$)\xspace}
+\newcommand{\LamKsALamKs}{$\Lambda\mathrm{K^{0}_{S}}$ ($\bar{\Lambda}\mathrm{K^{0}_{S}}$)\xspace}
 \newcommand{\LamALamKs}{$\Lambda$($\bar{\Lambda}$)$\mathrm{K^{0}_{S}}$\xspace}
 
 \newcommand{\XiKchP}{$\Xi^{-}\mathrm{K^{+}}$\xspace}
@@ -518,9 +522,9 @@ The normalization parameter is chosen such that the mean value of the correlatio
 
 
 In practice, $A(k^{*})$ is constructed by binning in \kstar pairs from the same event.
-Typically, $B(k^{*})$ is obtained by forming mixed-event pairs \cite{Kopylov:1974th}, i.e. particles from a given event are paired with particles from $\rm N_{mix}$ other events, and these pairs are then binned in \kstar.
+Typically, $B(k^{*})$ is obtained using mixed-event pairs \cite{Kopylov:1974th}, i.e. particles from a given event are paired with those from another event.
 Other techniques exist; most notably, one may use same-event pairs after rotating one particle in the pair by 180$^\circ$ in the transverse plane (see Sec.\ \ref{NonFlatBackground} and App. \ref{App:StavMethod} for more details).
-For this analysis, the typical mixed-event method is utilized, and each event is mixed with $\rm N_{mix} =$ 5 others for the reference distribution construction.
+For this analysis, the typical mixed-event method is utilized, and each event is mixed with five others for the reference distribution construction.
 In order to mix only similar events, events are binned both in primary vertex location (2 cm bin width) and in centrality (5\% bin width), and only events within a given bin are mixed; i.e. only events of like centrality and of like primary vertex location are mixed.
 
 This analysis presents correlation functions for three centrality bins (0--10\%, 10--30\%, and 30--50\%), and is pair transverse momentum ($k_{\mathrm{T}} = \frac{1}{2}|\mathbf{p}_{\mathrm{T,1}}+\mathbf{p}_{\mathrm{T,2}}|$) integrated (i.e. not binned in $k_{\mathrm{T}}$) due to limited statistics.
@@ -566,10 +570,7 @@ The contributions from fake pairs, which contain at least one misidentified memb
 Those pairs whose members originate as daughters from resonances carry information about the parent system.
 In effect, the correlation between the parents will be visible, although smeared out, in the daughters' signal.
 This is termed a residual correlation resulting from feed-down.  
-In this analysis, the main source of redidual correlations results from \Lam hyperons which have decayed from $\Sigma^{0}$, $\Xi^{0}$, and $\Xi^{-}$ parents.
-
-
-
+As described in the following, the main sources of residual correlations in the \LamK systems result from \Lam hyperons which have decayed from $\Sigma^{0}$, $\Xi^{0}$, and $\Xi^{-}$ parents.
 
 The finally measured correlation function is a combination of the genuine \LamK correlation with contributions from residual feed-down and misidentified particles
 \begin{equation}
@@ -641,7 +642,8 @@ However, the simulation does not include a hadronic rescattering phase, and not 
 The systems resulting from electromagnetic or weak decays ($\Sigma^{0}$, $\Xi^{-}$, and $\Xi^{0}$) will survive long after kinetic freeze-out, and will contribute residual signals to the \LamK correlation functions.
 The majority of the remaining contributors decay via the strong interaction with proper decay lengths less than a few fm, and whose daughters should always be considered primary.
 The proper decay length of the parent is used to judge whether or not the daughter is treated as primary.
-A decay product is considered primary if its parent has a proper decay length of $c\tau <$ 10 fm.
+A decay product is considered primary if its parent has a mean proper lifetime $\tau$ satisfying $c\tau <$ 10 fm.
+Changing $c\tau$ only moderately affects the $\lambda_{ij}$ parameters, and the effect is included the estimation of the systematic uncertainties.
 In order for a pair to be considered primary, both particles in the pair must be considered primary. 
 If either parent has $\tau > \tau_{\mathrm{max}}$, the daughter pair contributes to the ``Other" category when calculating $\lambda$ parameters.
 For this hodgepodge of pair systems, all with different two-particle interactions and single-particle source distributions, we assume the net correlation effect averages to unity.
@@ -655,10 +657,7 @@ The number of \LamK pairs originating from each source involves not only the raw
 The reconstruction efficiencies ($RE_{ij}$) are estimated with MC HIJING data, which has been run through GEANT to simulate the detector response.
 HIJING events are generated from a superposition of PYTHIA p-p collisions, and lack the strangeness saturation of a fully thermalized medium.
 As a result, HIJING is unreliable in providing the yields needed for this analysis, and, instead, the yields are estimated with the THERMINATOR 2 simulation ($N_{ij}^{\scaleto{THERM}{3pt}}$).
-The $\lambda$ parameters are then estimated as
-\begin{equation}
-\lambda_{ij} = \frac{N_{ij}}{N_{\mathrm{Total}}} = \frac{N_{ij}^{\scaleto{THERM}{3pt}}RE_{ij}^{\scaleto{HIJING}{3pt}}}{\sum\limits_{\alpha\beta} N_{\alpha\beta}^{\scaleto{THERM}{3pt}}RE_{\alpha\beta}^{\scaleto{HIJING}{3pt}}}
-\end{equation}
+The number of \LamK pairs is then estimated as the product of the yield with the reconstruction efficiency, $N_{ij} = N_{ij}^{\scaleto{THERM}{3pt}}RE_{ij}^{\scaleto{HIJING}{3pt}}$.
 
 
 The $\lambda$ values used can be found in Table \ref{tab:LambdaValues_3Res}, which also included values for ``Other'' and ``Fakes''.  
@@ -698,21 +697,23 @@ Equation \ref{eqn:MomResCorrection} describes that, for a given \krec bin, the o
 \subsection{Non-Femtoscopic Background}
 \label{NonFlatBackground}
 
-A significant non-femtoscopic, non-flat, background is observed in all of the studied \LamK correlations at large \kstar.  
+A significant non-femtoscopic, non-flat, background is observed in all of the studied \LamK correlations.  
 This background increases with decreasing centrality, is the same amongst all \LamKpm pairs, and is more pronounced in the \LamKs system.
 This difference in \LamKpm and \LamKs backgrounds is due mainly to the difference in kinematic cuts.  
 It is suggested that this background effect is due primarily to particle collimation associated with elliptic flow , and result from mixing events with unlike event-plane angles \cite{Kisiel:2017}.  
 The argument also suggests that the background should lead to an enhancement at low-\kstar. 
 An attempt was made to decrease this background through the binning of events in $\Psi_{\mathrm{EP}}$, but only a small reduction in the signal was achieved due to the limited event-plane resolution.
 
-The THERMINATOR 2 simulation has been shown to reproduce the background features in a $\pi$K analysis \cite{Kisiel:2017}.  
+The THERMINATOR 2 simulation has been shown to reproduce the background features in a $\pi$K analysis \cite{Kisiel:2017}. 
+The simulation does not include any final-state effects, but they can be introduced by weighting the numerator pairs with the modulus squared of the appropriate two-particle wave-function when building the signal distributions. 
+For the present purpose, only the behavior of the non-femtoscopic background is desired, and unit weights are used.
 Figure \ref{fig:BgdswTHERM} shows the THERMINATOR 2 simulation (open triangles) together with experimental data (closed circles).  
 The figure also shows a 6$^{\mathrm{th}}$-order polynomial fit to the simulation (dashed curves), as well as the fit polynomial scaled to match the data (solid curves).
 
 The description by THERMINATOR 2 of the non-femtoscopic backgrounds in the \LamKpm systems is remarkable, and can be used in a quantitative fashion to help fit the data.
 More specifically, the non-femtoscopic backgrounds were modeled by (6$^{\mathrm{th}}$-order) polynomial fits to THERMINATOR 2 simulation for the \LamKpm analyses; one polynomial for each centrality class.
 The form of each polynomial was set before use with the experimental data, by fitting to the THERMINATOR 2 simulation, shown in Fig.\ \ref{fig:BgdswTHERM}.
-At the time of the fit, the polynomial used to correct each correlation function could only be adjust by a simple scale factor to best match the data.
+The extracted polynomial is adjusted to best describe the data by introducing a scale factor and a vertical shift, both of which are determined by fitting to data in the region $0.32 < k^{*} < 0.80$ GeV/$c$; during the fit of the low-\kstar signal region, the background is fixed.
 The description of the \LamKs is good at a qualitative level, but not quantitatively good enough to be utilized in the fit.
 As such, a linear form is used to model the background in the \LamKs system.
 The background for each correlation function was fixed before use in the signal region by fitting a linear form to the region $0.6 < k^{*} < 0.9$ GeV/$c$.
@@ -791,37 +792,39 @@ To study the contribution of this choice to our systematic errors, the backgroun
 Additionally, the backgrounds of all systems were modeled with a polynomial fit to the THERMINATOR simulation, scaled to match the data. 
 The resulting uncertainties in the extracted parameter sets were combined with the uncertainties arising from the particle and pair cuts.
 
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{comment}
 \begin{table}[htbp]
  \centering 
   \renewcommand{\arraystretch}{1.2}
-  \begin{tabular}{c|c}
+  \begin{tabular}{|l|r|}
    \multicolumn{2}{c}{\LamKs systematics} \\
    \hline  
-   DCA \LamALam & 4, 5, 6 mm \\
+   DCA to PV \LamALam & $<$ [0.4, 0.5, 0.6] cm \\
    \hline
-   DCA \Ks & 2, 3, 4 mm \\
+   DCA to PV \Ks & $<$ [0.2, 0.3, 0.4] cm \\
    \hline
-   DCA \LamALam Daughters & 3, 4, 5 mm \\
+   DCA \LamALam Daughters & $<$ [0.3, 0.4, 0.5] cm \\
    \hline
-   DCA \Ks Daughters & 2, 3, 4 mm \\
+   DCA \Ks Daughters & $<$ [0.2, 0.3, 0.4] cm \\
    \hline
-   \LamALam Cosine of Pointing Angle & 0.9992, 0.9993, 0.9994 \\
+   $\cos(\theta_{PA})$ \LamALam to PV & $>$ [0.9992, 0.9993, 0.9994] \\
    \hline
-   \Ks Cosine of Pointing Angle & 0.9992, 0.9993, 0.9994 \\
+   $\cos(\theta_{PA})$ \Ks to PV & $>$ [0.9992, 0.9993, 0.9994] \\
    \hline
-   DCA to Primary Vertex of p($\bar{\mathrm{p}}$) Daughter of \LamALam & 0.5, 1, 2 mm \\
+   DCA to PV of $\mathrm{p}\,(\bar{\mathrm{p}})$ Daughter of \LamALam & $>$ [0.05, 0.1, 0.2] cm \\
    \hline
-   DCA to Primary Vertex of $\pi^{-}$($\pi^{+}$) Daughter of \LamALam &  2, 3, 4 mm \\ 
+   DCA to PV of $\pi^{-}$($\pi^{+}$) Daughter of \LamALam & $>$ [0.2, 0.3, 0.4] cm \\ 
    \hline
-   DCA to Primary Vertex of $\pi^{+}$ Daughter of \Ks & 2, 3, 4 mm \\
+   DCA to PV of $\pi^{+}$ Daughter of \Ks & $>$ [0.2, 0.3, 0.4] cm \\
    \hline
-   DCA to Primary Vertex of $\pi^{-}$ Daughter of \Ks & 2, 3, 4 mm \\
+   DCA to PV of $\pi^{-}$ Daughter of \Ks & $>$ [0.2, 0.3, 0.4] cm \\
    \hline
-   Average Separation of Like-Charge Daughters & 5, 6, 7 cm \\
+   $\overline{\Delta\mathbf{r}}$ of Like-Charge Daughters & $>$ [5, 6, 7] cm \\
    \hline
   \end{tabular}
- \caption{\LamKs systematics}
+% \end{minipage}
+ \caption[\LamKs systematics]{\LamKs systematics. In the table, the shorthand used is as follows: $PA$ = pointing angle; PV = primary vertex; DCA = distance of closest approach; $\overline{\Delta\mathbf{r}}$ = average separation}
  \label{tab:LamK0sSystematics} 
 \end{table}
 
@@ -829,29 +832,101 @@ The resulting uncertainties in the extracted parameter sets were combined with t
 \begin{table}[htbp]
  \centering 
   \renewcommand{\arraystretch}{1.2}
-  \begin{tabular}{c|c}
+  \begin{tabular}{|l|r|}
    \multicolumn{2}{c}{\LamKpm systematics} \\
    \hline  
-   DCA \LamALam & 4, 5, 6 mm \\
+   DCA \LamALam to PV & $<$ [0.4, 0.5, 0.6] cm \\
    \hline
-   DCA \LamALam Daughters & 3, 4, 5 mm \\
+   DCA \LamALam Daughters & $<$ [0.3, 0.4, 0.5] cm \\
    \hline
-   \LamALam Cosine of Pointing Angle & 0.9992, 0.9993, 0.9994 \\
+   $\cos(\theta_{PA})$ \LamALam to PV & $>$ [0.9992, 0.9993, 0.9994] \\
    \hline
-   DCA to Primary Vertex of p($\bar{\mathrm{p}}$) Daughter of \LamALam &  0.5, 1, 2 mm \\
+   DCA to PV of $\mathrm{p}\,(\bar{\mathrm{p}})$ Daughter of \LamALam &  $>$ [0.05, 0.1, 0.2] cm \\
    \hline
-   DCA to Primary Vertex of $\pi^{-}$($\pi^{+}$) Daughter of \LamALam &  2, 3, 4 mm  \\
+   DCA to PV of $\pi^{-}$($\pi^{+}$) Daughter of \LamALam & $>$ [0.2, 0.3, 0.4] cm  \\
    \hline
-   Average Separation of \LamALam Daughter with Same Charge as \Kpm & 7, 8, 9 cm \\
+   $\overline{\Delta\mathbf{r}}$ of \LamALam Daughter with Same Charge as \Kpm & $>$ [7, 8, 9] cm \\
    \hline
-   Max. DCA to Primary Vertex in Transverse Plane of \Kpm & 1.92, 2.4, 2.88 \\
+   DCA to PV in Transverse Plane of \Kpm & $<$ [1.92, 2.4, 2.88] cm \\
    \hline
-   Max. DCA to Primary Vertex in Longitudinal Direction of \Kpm & 2.4, 3.0, 3.6 \\
+   DCA to PV in Longitudinal Direction of \Kpm & $<$ [2.4, 3.0, 3.6] cm \\
    \hline
   \end{tabular}
- \caption{\LamKpm systematics}
+% \end{minipage}
+ \caption[\LamKpm systematics]{\LamKpm systematics. In the table, the shorthand used is as follows: $PA$ = pointing angle; PV = primary vertex; DCA = distance of closest approach; $\overline{\Delta\mathbf{r}}$ = average separation.}
  \label{tab:LamKchSystematics} 
 \end{table}
+\end{comment}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+
+
+\begin{table}[htbp]
+ \centering 
+  \renewcommand{\arraystretch}{1.2}
+  \begin{tabular}{l|r}
+   \hlineB{3.0} 
+   \multicolumn{2}{c}{\textbf{\LamKs systematics}} \\
+   \hlineB{3.0}  
+   DCA to PV \LamALam & $<$ [0.4, 0.5, 0.6] cm \\
+   \hline
+   DCA to PV \Ks & $<$ [0.2, 0.3, 0.4] cm \\
+   \hline
+   DCA \LamALam Daughters & $<$ [0.3, 0.4, 0.5] cm \\
+   \hline
+   DCA \Ks Daughters & $<$ [0.2, 0.3, 0.4] cm \\
+   \hline
+   $\cos(\theta_{PA})$ \LamALam to PV & $>$ [0.9992, 0.9993, 0.9994] \\
+   \hline
+   $\cos(\theta_{PA})$ \Ks to PV & $>$ [0.9992, 0.9993, 0.9994] \\
+   \hline
+   DCA to PV of $\mathrm{p}\,(\bar{\mathrm{p}})$ Daughter of \LamALam & $>$ [0.05, 0.1, 0.2] cm \\
+   \hline
+   DCA to PV of $\pi^{-}$($\pi^{+}$) Daughter of \LamALam & $>$ [0.2, 0.3, 0.4] cm \\ 
+   \hline
+   DCA to PV of $\pi^{+}$ Daughter of \Ks & $>$ [0.2, 0.3, 0.4] cm \\
+   \hline
+   DCA to PV of $\pi^{-}$ Daughter of \Ks & $>$ [0.2, 0.3, 0.4] cm \\
+   \hline
+   $\overline{\Delta\mathbf{r}}$ of Like-Charge Daughters & $>$ [5, 6, 7] cm \\
+   
+   \hlineB{3.0} 
+   \multicolumn{2}{c}{\textbf{\LamKpm systematics}} \\
+   \hlineB{3.0}  
+   DCA \LamALam to PV & $<$ [0.4, 0.5, 0.6] cm \\ 
+   \hline
+   DCA \LamALam Daughters & $<$ [0.3, 0.4, 0.5] cm \\
+   \hline
+   $\cos(\theta_{PA})$ \LamALam to PV & $>$ [0.9992, 0.9993, 0.9994] \\
+   \hline
+   DCA to PV of $\mathrm{p}\,(\bar{\mathrm{p}})$ Daughter of \LamALam &  $>$ [0.05, 0.1, 0.2] cm \\
+   \hline
+   DCA to PV of $\pi^{-}$($\pi^{+}$) Daughter of \LamALam & $>$ [0.2, 0.3, 0.4] cm  \\
+   \hline
+   $\overline{\Delta\mathbf{r}}$ of \LamALam Daughter with Same Charge as \Kpm & $>$ [7, 8, 9] cm \\
+   \hline
+   DCA to PV in Transverse Plane of \Kpm & $<$ [1.92, 2.4, 2.88] cm \\
+   \hline
+   DCA to PV in Longitudinal Direction of \Kpm & $<$ [2.4, 3.0, 3.6] cm \\
+   \hline   
+   
+  \end{tabular}
+% \end{minipage}
+ \caption[\LamK systematics]{\LamK systematics. In the table, the shorthand used is as follows: $PA$ = pointing angle; PV = primary vertex; DCA = distance of closest approach; $\overline{\Delta\mathbf{r}}$ = average separation}
+ \label{tab:LamKSystematics} 
+\end{table}
+
+
+
+
+
+
+
+
+
 
 
 
