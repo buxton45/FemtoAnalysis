@@ -756,8 +756,9 @@ void FitGeneratorAndDraw::BuildKStarCfswFitsPanel(CanvasPartition* aCanPart, int
   {
     if(!fSharedAn->UsingNewBgdTreatment()) tNonFlatBgd = (TF1*)fSharedAn->GetFitPairAnalysis(aAnalysisNumber)->GetNonFlatBackground(aNonFlatBgdFitType, fSharedAn->GetFitType(), true, true);
     else tNonFlatBgd = (TF1*)fSharedAn->GetFitPairAnalysis(aAnalysisNumber)->GetNewNonFlatBackground(aNonFlatBgdFitType, true);  //TODO second argument should be set automatically
+
+    tNonFlatBgd->SetLineStyle(7);
   }
-  tNonFlatBgd->SetLineStyle(7);
 
   TF1* tPrimaryFit = (TF1*)fSharedAn->GetFitPairAnalysis(aAnalysisNumber)->GetPrimaryFit();
   tPrimaryFit->SetLineStyle(3);

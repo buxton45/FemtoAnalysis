@@ -221,7 +221,7 @@ TGraphAsymmErrors* FitValuesWriterwSysErrs::GetD0GraphSys(TString aMasterFileLoc
   FitParameter* tFitParamD0 = GetFitParameterSys(aMasterFileLocation, aSystematicsFileLocation, aFitInfoTString, aAnType, aCentType, kd0);
 
   tReturnGr->SetPoint(0, aXOffset, tFitParamD0->GetFitValue());
-  tReturnGr->SetPointError(0, 0.05, 0.05, tFitParamD0->GetFitValueError(), tFitParamD0->GetFitValueError());
+  tReturnGr->SetPointError(0, 0.05, 0.05, tFitParamD0->GetFitValueSysError(), tFitParamD0->GetFitValueSysError());
   return tReturnGr;
 }
 
