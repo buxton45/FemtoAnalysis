@@ -472,6 +472,9 @@ TripleFitGenerator* TripleFitSystematicAnalysis::BuildTripleFitGenerator(Analysi
   SetRadiusStartValues(tTripleFitGenerator);
   SetLambdaStartValues(tTripleFitGenerator);  
   SetScattParamStartValues(tTripleFitGenerator);
+
+  if(aNonFlatBgdFitTypes[kLamKchP]==kPolynomial) tTripleFitGenerator->SetMinMaxBgdFit(kLamKchP, 0.32, 0.80);
+  if(aNonFlatBgdFitTypes[kLamK0]  ==kPolynomial) tTripleFitGenerator->SetMinMaxBgdFit(kLamK0, 0.32, 0.80);
   //----------------------------------------------------------------------------------------------------------------
 
   return tTripleFitGenerator;
