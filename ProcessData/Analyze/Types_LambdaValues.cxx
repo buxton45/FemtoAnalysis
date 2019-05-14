@@ -79,13 +79,20 @@ const double cAnalysisLambdaFactors_NoRes_MaxPrimDecay100[85] = {
 0.,0.,0.,0.,0.
 };
 
+const double cAnalysisLambdaFactors_NoRes_MaxPrimDecay15[85] = {
+0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
+0.,0.,0.,0.,0.
+};
 
-const double *cAnalysisLambdaFactors_NoRes[6] = {cAnalysisLambdaFactors_NoRes_MaxPrimDecay0, 
+
+const double *cAnalysisLambdaFactors_NoRes[7] = {cAnalysisLambdaFactors_NoRes_MaxPrimDecay0, 
                                                  cAnalysisLambdaFactors_NoRes_MaxPrimDecay4,
                                                  cAnalysisLambdaFactors_NoRes_MaxPrimDecay5,
                                                  cAnalysisLambdaFactors_NoRes_MaxPrimDecay6,
                                                  cAnalysisLambdaFactors_NoRes_MaxPrimDecay10,
-                                                 cAnalysisLambdaFactors_NoRes_MaxPrimDecay100};
+                                                 cAnalysisLambdaFactors_NoRes_MaxPrimDecay100,
+                                                 cAnalysisLambdaFactors_NoRes_MaxPrimDecay15};
 
 //----------------------------------------------------------------------------------------------------------------
 //****************************************************************************************************************
@@ -317,13 +324,51 @@ const double cAnalysisLambdaFactors_10Res_MaxPrimDecay100[85] = {
 /*kResXiCKSt0ToLamK0=*/  0.008, /*kResAXiCAKSt0ToALamK0=*/  0.008
 };
 
+//------------ WHEN INCLUDING ALL 10 RESIDUALS and MaxDecayLengthPrimary=15 ------------------------------------//
+const double cAnalysisLambdaFactors_10Res_MaxPrimDecay15[85] = {
+/*kLamK0=*/   0.365,   /*kALamK0=*/   0.368,
+/*kLamKchP=*/ 0.336,   /*kALamKchM=*/ 0.339,  /*kLamKchM=*/ 0.337, /*kALamKchP=*/ 0.338,
+/*kXiKchP=*/  1.000,   /*kAXiKchM=*/  1.000,  /*kXiKchM=*/  1.000, /*kAXiKchP=*/  1.000,
+/*kXiK0=*/    1.000,   /*kAXiK0=*/    1.000,
+/*kLamLam=*/  1.000,   /*kALamALam=*/ 1.000,  /*kLamALam=*/ 1.000,
+/*kLamPiP=*/  1.000,   /*kALamPiM=*/  1.000,  /*kLamPiM=*/  1.000, /*kALamPiP=*/  1.000,
 
-const double *cAnalysisLambdaFactors_10Res[6] = {cAnalysisLambdaFactors_10Res_MaxPrimDecay0, 
+//----- Residual Types -----
+/*kResSig0KchP=*/   0.109, /*kResASig0KchM=*/   0.109, /*kResSig0KchM=*/   0.108, /*kResASig0KchP=*/  0.110,
+/*kResXi0KchP=*/    0.038, /*kResAXi0KchM=*/    0.035, /*kResXi0KchM=*/    0.037, /*kResAXi0KchP=*/   0.035,
+/*kResXiCKchP=*/    0.049, /*kResAXiCKchM=*/    0.045, /*kResXiCKchM=*/    0.048, /*kResAXiCKchP=*/   0.045,
+/*kResOmegaKchP=*/  0.000, /*kResAOmegaKchM=*/  0.000, /*kResOmegaKchM=*/  0.000, /*kResAOmegaKchP=*/ 0.000,
+/*kResSigStPKchP=*/ 0.050, /*kResASigStMKchM=*/ 0.048, /*kResSigStPKchM=*/ 0.050, /*kResASigStMKchP=*/ 0.049,
+/*kResSigStMKchP=*/ 0.045, /*kResASigStPKchM=*/ 0.047, /*kResSigStMKchM=*/ 0.045, /*kResASigStPKchP=*/ 0.048,
+/*kResSigSt0KchP=*/ 0.045, /*kResASigSt0KchM=*/ 0.042, /*kResSigSt0KchM=*/ 0.045, /*kResASigSt0KchP=*/ 0.043,
+
+/*kResLamKSt0=*/  0.043, /*kResALamAKSt0=*/  0.044, /*kResLamAKSt0=*/  0.043, /*kResALamKSt0=*/  0.044,
+/*kResSig0KSt0=*/ 0.038, /*kResASig0AKSt0=*/ 0.039, /*kResSig0AKSt0=*/ 0.038, /*kResASig0KSt0=*/ 0.039,
+/*kResXi0KSt0=*/  0.013, /*kResAXi0AKSt0=*/  0.012, /*kResXi0AKSt0=*/  0.013, /*kResAXi0KSt0=*/  0.012,
+/*kResXiCKSt0=*/  0.017, /*kResAXiCAKSt0=*/  0.016, /*kResXiCAKSt0=*/  0.017, /*kResAXiCKSt0=*/  0.016,
+
+/*kResSig0K0=*/   0.118, /*kResASig0K0=*/   0.119,
+/*kResXi0K0=*/    0.041, /*kResAXi0K0=*/    0.038,
+/*kResXiCK0=*/    0.053, /*kResAXiCK0=*/    0.049,
+/*kResOmegaK0=*/  0.000, /*kResAOmegaK0=*/  0.000,
+/*kResSigStPK0=*/ 0.055, /*kResASigStMK0=*/ 0.053,
+/*kResSigStMK0=*/ 0.049, /*kResASigStPK0=*/ 0.052,
+/*kResSigSt0K0=*/ 0.049, /*kResASigSt0K0=*/ 0.046,
+
+/*kResLamKSt0ToLamK0=*/  0.021, /*kResALamAKSt0ToALamK0=*/  0.021,
+/*kResSig0KSt0ToLamK0=*/ 0.018, /*kResASig0AKSt0ToALamK0=*/ 0.018,
+/*kResXi0KSt0ToLamK0=*/  0.006, /*kResAXi0AKSt0ToALamK0=*/  0.006,
+/*kResXiCKSt0ToLamK0=*/  0.008, /*kResAXiCAKSt0ToALamK0=*/  0.008
+};
+
+
+const double *cAnalysisLambdaFactors_10Res[7] = {cAnalysisLambdaFactors_10Res_MaxPrimDecay0, 
                                                  cAnalysisLambdaFactors_10Res_MaxPrimDecay4, 
                                                  cAnalysisLambdaFactors_10Res_MaxPrimDecay5, 
                                                  cAnalysisLambdaFactors_10Res_MaxPrimDecay6, 
                                                  cAnalysisLambdaFactors_10Res_MaxPrimDecay10, 
-                                                 cAnalysisLambdaFactors_10Res_MaxPrimDecay100};
+                                                 cAnalysisLambdaFactors_10Res_MaxPrimDecay100,
+                                                 cAnalysisLambdaFactors_10Res_MaxPrimDecay15};
 
 //----------------------------------------------------------------------------------------------------------------
 //****************************************************************************************************************
@@ -556,13 +601,51 @@ const double cAnalysisLambdaFactors_3Res_MaxPrimDecay100[85] = {
 /*kResXiCKSt0ToLamK0=*/  0.000, /*kResAXiCAKSt0ToALamK0=*/  0.000
 };
 
+//------------ WHEN INCLUDING 3 RESIDUALS and MaxDecayLengthPrimary=15 ------------------------------------//
+const double cAnalysisLambdaFactors_3Res_MaxPrimDecay15[85] = {
+/*kLamK0=*/   0.537,   /*kALamK0=*/   0.538,
+/*kLamKchP=*/ 0.516,   /*kALamKchM=*/ 0.515,  /*kLamKchM=*/ 0.515, /*kALamKchP=*/ 0.516,
+/*kXiKchP=*/  1.000,   /*kAXiKchM=*/  1.000,  /*kXiKchM=*/  1.000, /*kAXiKchP=*/  1.000,
+/*kXiK0=*/    1.000,   /*kAXiK0=*/    1.000,
+/*kLamLam=*/  1.000,   /*kALamALam=*/ 1.000,  /*kLamALam=*/ 1.000,
+/*kLamPiP=*/  1.000,   /*kALamPiM=*/  1.000,  /*kLamPiM=*/  1.000, /*kALamPiP=*/  1.000,
 
-const double *cAnalysisLambdaFactors_3Res[6] = {cAnalysisLambdaFactors_3Res_MaxPrimDecay0, 
+//----- Residual Types -----
+/*kResSig0KchP=*/   0.108, /*kResASig0KchM=*/   0.107, /*kResSig0KchM=*/   0.107, /*kResASig0KchP=*/  0.107,
+/*kResXi0KchP=*/    0.037, /*kResAXi0KchM=*/    0.034, /*kResXi0KchM=*/    0.037, /*kResAXi0KchP=*/   0.035,
+/*kResXiCKchP=*/    0.048, /*kResAXiCKchM=*/    0.044, /*kResXiCKchM=*/    0.048, /*kResAXiCKchP=*/   0.045,
+/*kResOmegaKchP=*/  0.000, /*kResAOmegaKchM=*/  0.000, /*kResOmegaKchM=*/  0.000, /*kResAOmegaKchP=*/ 0.000,
+/*kResSigStPKchP=*/ 0.000, /*kResASigStMKchM=*/ 0.000, /*kResSigStPKchM=*/ 0.000, /*kResASigStMKchP=*/ 0.000,
+/*kResSigStMKchP=*/ 0.000, /*kResASigStPKchM=*/ 0.000, /*kResSigStMKchM=*/ 0.000, /*kResASigStPKchP=*/ 0.000,
+/*kResSigSt0KchP=*/ 0.000, /*kResASigSt0KchM=*/ 0.000, /*kResSigSt0KchM=*/ 0.000, /*kResASigSt0KchP=*/ 0.000,
+
+/*kResLamKSt0=*/  0.000, /*kResALamAKSt0=*/  0.000, /*kResLamAKSt0=*/  0.000, /*kResALamKSt0=*/  0.000,
+/*kResSig0KSt0=*/ 0.000, /*kResASig0AKSt0=*/ 0.000, /*kResSig0AKSt0=*/ 0.000, /*kResASig0KSt0=*/ 0.000,
+/*kResXi0KSt0=*/  0.000, /*kResAXi0AKSt0=*/  0.000, /*kResXi0AKSt0=*/  0.000, /*kResAXi0KSt0=*/  0.000,
+/*kResXiCKSt0=*/  0.000, /*kResAXiCAKSt0=*/  0.000, /*kResXiCAKSt0=*/  0.000, /*kResAXiCKSt0=*/  0.000,
+
+/*kResSig0K0=*/   0.117, /*kResASig0K0=*/   0.117,
+/*kResXi0K0=*/    0.041, /*kResAXi0K0=*/    0.038,
+/*kResXiCK0=*/    0.053, /*kResAXiCK0=*/    0.049,
+/*kResOmegaK0=*/  0.000, /*kResAOmegaK0=*/  0.000,
+/*kResSigStPK0=*/ 0.000, /*kResASigStMK0=*/ 0.000,
+/*kResSigStMK0=*/ 0.000, /*kResASigStPK0=*/ 0.000,
+/*kResSigSt0K0=*/ 0.000, /*kResASigSt0K0=*/ 0.000,
+
+/*kResLamKSt0ToLamK0=*/  0.000, /*kResALamAKSt0ToALamK0=*/  0.000,
+/*kResSig0KSt0ToLamK0=*/ 0.000, /*kResASig0AKSt0ToALamK0=*/ 0.000,
+/*kResXi0KSt0ToLamK0=*/  0.000, /*kResAXi0AKSt0ToALamK0=*/  0.000,
+/*kResXiCKSt0ToLamK0=*/  0.000, /*kResAXiCAKSt0ToALamK0=*/  0.000
+};
+
+
+const double *cAnalysisLambdaFactors_3Res[7] = {cAnalysisLambdaFactors_3Res_MaxPrimDecay0, 
                                                 cAnalysisLambdaFactors_3Res_MaxPrimDecay4, 
                                                 cAnalysisLambdaFactors_3Res_MaxPrimDecay5, 
                                                 cAnalysisLambdaFactors_3Res_MaxPrimDecay6, 
                                                 cAnalysisLambdaFactors_3Res_MaxPrimDecay10, 
-                                                cAnalysisLambdaFactors_3Res_MaxPrimDecay100};
+                                                cAnalysisLambdaFactors_3Res_MaxPrimDecay100,
+                                                cAnalysisLambdaFactors_3Res_MaxPrimDecay15};
 
 
 //----------------------------------------------------------------------------------------------------------------

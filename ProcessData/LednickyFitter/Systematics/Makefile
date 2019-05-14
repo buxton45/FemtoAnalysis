@@ -25,7 +25,7 @@ CFLAGS = $(shell root-config --cflags) -Wall -std=c++11 -I${ANALYZE_DIR} -I${LED
 
 MY_LIBS = $(addprefix build/, FitParameter.o FitChi2Histograms.o BackgroundFitter.o FitPartialAnalysis.o FitPairAnalysis.o FitSharedAnalyses.o MathematicaSession.o WaveFunction.o ChargedResidualCf.o SimpleChargedResidualCf.o NeutralResidualCf.o ResidualCollection.o LednickyFitter.o FitValuesWriter.o FitValuesLatexTableHelperWriter.o FitValuesWriterwSysErrs.o FitValuesLatexTableHelperWriterwSysErrs.o FitGenerator.o FitGeneratorAndDraw.o DualieFitGenerator.o ThermCf.o CfLite.o CfHeavy.o Types.o Types_LambdaValues.o Types_FitParamValues.o Types_ThermBgdParams.o Types_SysFileInfo.o Faddeeva.o FitSystematicAnalysis.o DualieFitSystematicAnalysis.o TripleFitGenerator.o TripleFitSystematicAnalysis.o CanvasPartition.o)
 
-BINARIES = runSingleSystematics runAllSystematics runRead runFindOutliers runFitRange runNonFlatBgdSys runTest runBuildLatexTableHelperwSysErrs runBuildLatexTableHelperwSysErrsForSingle runBuildLatexTableHelperwSysErrsForSingleTriple runCompareFittingMethodswSysErrs runCompareFittingMethodswSysErrsForAnNote runSingleDualieSystematics runAllDualieSystematics runFitRangeDualie runNonFlatBgdDualieSys runSingleTripleSystematics runAllTripleSystematics runFitRangeTriple runNonFlatBgdTripleSys runReadTriple
+BINARIES = runSingleSystematics runAllSystematics runRead runFindOutliers runFitRange runNonFlatBgdSys runTest runBuildLatexTableHelperwSysErrs runBuildLatexTableHelperwSysErrsForSingle runBuildLatexTableHelperwSysErrsForSingleTriple runCompareFittingMethodswSysErrs runCompareFittingMethodswSysErrsForAnNote runSingleDualieSystematics runAllDualieSystematics runFitRangeDualie runNonFlatBgdDualieSys runSingleTripleSystematics runAllTripleSystematics runFitRangeTriple runNonFlatBgdTripleSys runResPrimMaxDecayTypeTripleSys runReadTriple
 
 all: $(BINARIES)
 
@@ -88,6 +88,9 @@ runFitRangeTriple: ${MY_LIBS} FitRangeTripleSystematics.C
 
 runNonFlatBgdTripleSys: ${MY_LIBS} NonFlatBgdFitTypeTripleSystematics.C
 	g++ NonFlatBgdFitTypeTripleSystematics.C ${MY_LIBS} -I${INCDIR} -o runNonFlatBgdTripleSys -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS)
+
+runResPrimMaxDecayTypeTripleSys: ${MY_LIBS} ResPrimMaxDecayTypeTripleSystematics.C
+	g++ ResPrimMaxDecayTypeTripleSystematics.C ${MY_LIBS} -I${INCDIR} -o runResPrimMaxDecayTypeTripleSys -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS)
 
 runReadTriple: ${MY_LIBS} ReadSystematicFitResultsTriple.C
 	g++ ReadSystematicFitResultsTriple.C ${MY_LIBS} -I${INCDIR} -o runReadTriple -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS)

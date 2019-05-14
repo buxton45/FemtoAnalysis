@@ -57,6 +57,7 @@ public:
   void RunAllFits(bool aSaveImages=false, bool aWriteToTxtFile=false);
   void RunVaryFitRange(bool aSaveImages=false, bool aWriteToTxtFile=false, double aMaxKStar1=0.225, double aMaxKStar2=0.300, double aMaxKStar3=0.375);
   void RunVaryNonFlatBackgroundFit(bool aSaveImages=false, bool aWriteToTxtFile=false);
+  void RunVaryResPrimMaxDecayType(bool aSaveImages=false, bool aWriteToTxtFile=false);
 
   //inline
   void SetApplyNonFlatBackgroundCorrection(bool aApply);

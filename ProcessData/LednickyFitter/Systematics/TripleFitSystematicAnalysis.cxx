@@ -816,3 +816,111 @@ void TripleFitSystematicAnalysis::RunVaryNonFlatBackgroundFit(bool aSaveImages, 
   }
 }
 
+
+//________________________________________________________________________________________________________________
+void TripleFitSystematicAnalysis::RunVaryResPrimMaxDecayType(bool aSaveImages, bool aWriteToTxtFile)
+{
+  // 1=LamKchP;  2=LamKchM;  3=LamK0
+
+  assert(fModifierValues1.size()==0);  //this is not intended for use with various modifier values, but for the final analysis
+  assert(fIncludeResidualsType != kIncludeNoResiduals);
+  int tNFitTypeValues = 4;
+  vector<int> tFitTypeVec = {3, 4, 6}; //k6fm, k10fm, k15fm
+
+  vector<vector<TString> > tText2dVector1(0);
+  vector<vector<TString> > tText2dVector2(0);
+  vector<vector<TString> > tText2dVector3(0);
+
+  TString tSpecificSaveDirectory;
+  if(aSaveImages || aWriteToTxtFile)
+  {
+    tSpecificSaveDirectory = fSaveDirectory;
+    AppendFitInfo(tSpecificSaveDirectory);
+    tSpecificSaveDirectory += TString("/Systematics/");
+    gSystem->mkdir(tSpecificSaveDirectory, true);
+  }
+
+  bool tZoomROP=false;
+  for(int i=0; i<tNFitTypeValues; i++)
+  {
+    fResPrimMaxDecayType = static_cast<ResPrimMaxDecayType>(tFitTypeVec[i]);
+    TripleFitGenerator* tTripleFitGenerator = BuildTripleFitGenerator(kTrain, "", fNonFlatBgdFitTypes);
+
+    tTripleFitGenerator->SetAllRadiiLimits(1., 10.);  //NOTE: This does nothing when fIncludeResidualsType != kIncludeNoResiduals && fChargedResidualsType != kUseXiDataForAll,
+                                                //      as, in that case, FitGenerator hardwires limits [1., 12] to stay within interpolation regime
+    //--------------------------------
+
+    tTripleFitGenerator->DoFit(fDualieShareLambda, fDualieShareRadii);
+
+    TString tRangeValue = TString::Format("ResPrimMaxDecayType = %d",tFitTypeVec[i]);
+
+    vector<TString> tFitParamsVec1 = tTripleFitGenerator->GetFitGen1()->GetAllFitParametersTStringVector();
+    tFitParamsVec1.insert(tFitParamsVec1.begin(),tRangeValue);
+    tText2dVector1.push_back(tFitParamsVec1);
+
+    vector<TString> tFitParamsVec2 = tTripleFitGenerator->GetFitGen2()->GetAllFitParametersTStringVector();
+    tFitParamsVec2.insert(tFitParamsVec2.begin(),tRangeValue);
+    tText2dVector2.push_back(tFitParamsVec2);
+
+    vector<TString> tFitParamsVec3 = tTripleFitGenerator->GetFitGen3()->GetAllFitParametersTStringVector();
+    tFitParamsVec3.insert(tFitParamsVec3.begin(),tRangeValue);
+    tText2dVector3.push_back(tFitParamsVec3);
+
+    TObjArray* tKStarwFitsCans = tTripleFitGenerator->DrawKStarCfswFits(fApplyMomResCorrection,fApplyNonFlatBackgroundCorrection,fNonFlatBgdFitTypes,false,false, tZoomROP);
+    if(aSaveImages)
+    {
+      assert(tKStarwFitsCans->GetEntries()==3);
+
+      TString tImageSaveName1 = TString::Format("%s%s_FitType_%d.pdf", tSpecificSaveDirectory.Data(), tKStarwFitsCans->At(0)->GetTitle(), tFitTypeVec[i]);
+      TString tImageSaveName2 = TString::Format("%s%s_FitType_%d.pdf", tSpecificSaveDirectory.Data(), tKStarwFitsCans->At(1)->GetTitle(), tFitTypeVec[i]);
+      TString tImageSaveName3 = TString::Format("%s%s_FitType_%d.pdf", tSpecificSaveDirectory.Data(), tKStarwFitsCans->At(2)->GetTitle(), tFitTypeVec[i]);
+
+
+      tKStarwFitsCans->At(0)->SaveAs(tImageSaveName1);
+      tKStarwFitsCans->At(1)->SaveAs(tImageSaveName2);
+      tKStarwFitsCans->At(2)->SaveAs(tImageSaveName3);
+    }
+    delete tTripleFitGenerator;
+  }
+
+  if(!aWriteToTxtFile) 
+  {
+    PrintText2dVec(tText2dVector1, std::cout, tNFitTypeValues);
+    PrintText2dVec(tText2dVector2, std::cout, tNFitTypeValues);
+    PrintText2dVec(tText2dVector3, std::cout, tNFitTypeValues);
+  }
+  else
+  {
+    AnalysisType tAnTyp1 = kLamKchP;
+    TString tOutputFileName1 = TString::Format("%sCfFitValues_VaryResPrimMaxDecayType_%s%s.txt", tSpecificSaveDirectory.Data(), cAnalysisBaseTags[tAnTyp1], cCentralityTags[fCentralityType]);
+    std::ofstream tOutputFile1;
+    tOutputFile1.open(tOutputFileName1);
+
+    PrintText2dVec(tText2dVector1, tOutputFile1, tNFitTypeValues);
+
+    tOutputFile1.close();
+
+    //----------
+
+    AnalysisType tAnTyp2 = kLamKchM;
+    TString tOutputFileName2 = TString::Format("%sCfFitValues_VaryResPrimMaxDecayType_%s%s.txt", tSpecificSaveDirectory.Data(), cAnalysisBaseTags[tAnTyp2], cCentralityTags[fCentralityType]);
+    std::ofstream tOutputFile2;
+    tOutputFile2.open(tOutputFileName2);
+
+    PrintText2dVec(tText2dVector2, tOutputFile2, tNFitTypeValues);
+
+    tOutputFile2.close();
+
+    //----------
+
+    AnalysisType tAnTyp3 = kLamK0;
+    TString tOutputFileName3 = TString::Format("%sCfFitValues_VaryResPrimMaxDecayType_%s%s.txt", tSpecificSaveDirectory.Data(), cAnalysisBaseTags[tAnTyp3], cCentralityTags[fCentralityType]);
+    std::ofstream tOutputFile3;
+    tOutputFile3.open(tOutputFileName3);
+
+    PrintText2dVec(tText2dVector3, tOutputFile3, tNFitTypeValues);
+
+    tOutputFile3.close();
+  }
+}
+

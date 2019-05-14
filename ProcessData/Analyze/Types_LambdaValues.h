@@ -22,9 +22,10 @@ using namespace std;
   extern const double cAnalysisLambdaFactors_NoRes_MaxPrimDecay6[85];
   extern const double cAnalysisLambdaFactors_NoRes_MaxPrimDecay10[85];
   extern const double cAnalysisLambdaFactors_NoRes_MaxPrimDecay100[85];
+  extern const double cAnalysisLambdaFactors_NoRes_MaxPrimDecay15[85];
 
   //Index with enum ResPrimMaxDecayType
-  extern const double *cAnalysisLambdaFactors_NoRes[6];
+  extern const double *cAnalysisLambdaFactors_NoRes[7];
 
   //-----------------------------------
 
@@ -34,9 +35,10 @@ using namespace std;
   extern const double cAnalysisLambdaFactors_10Res_MaxPrimDecay6[85];
   extern const double cAnalysisLambdaFactors_10Res_MaxPrimDecay10[85];
   extern const double cAnalysisLambdaFactors_10Res_MaxPrimDecay100[85];
+  extern const double cAnalysisLambdaFactors_10Res_MaxPrimDecay15[85];
 
   //Index with enum ResPrimMaxDecayType
-  extern const double *cAnalysisLambdaFactors_10Res[6];
+  extern const double *cAnalysisLambdaFactors_10Res[7];
 
   //-----------------------------------
 
@@ -47,9 +49,10 @@ using namespace std;
   extern const double cAnalysisLambdaFactors_3Res_MaxPrimDecay6[85];
   extern const double cAnalysisLambdaFactors_3Res_MaxPrimDecay10[85];
   extern const double cAnalysisLambdaFactors_3Res_MaxPrimDecay100[85];
+  extern const double cAnalysisLambdaFactors_3Res_MaxPrimDecay15[85];
 
   //Index with enum ResPrimMaxDecayType
-  extern const double *cAnalysisLambdaFactors_3Res[6];
+  extern const double *cAnalysisLambdaFactors_3Res[7];
 
   //-----------------------------------
 

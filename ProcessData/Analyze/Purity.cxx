@@ -150,20 +150,20 @@ double Purity::FitFunctionGaussianPlusPoly(double *x, double *par)
 //________________________________________________________________________________________________________________
 double Purity::FitFunctionTwoGaussianPlusLinear(double *x, double *par)
 {
-  //9 parameters
+  //10 parameters
   double tBgd =    par[0] + par[1]*x[0];
   double tGauss1 =  par[2]*exp(-0.5*(pow((x[0]-par[3])/par[4],2.0))) + par[5];
-  double tGauss2 =  par[6]*exp(-0.5*(pow((x[0]-par[3])/par[7],2.0))) + par[8];
+  double tGauss2 =  par[6]*exp(-0.5*(pow((x[0]-par[7])/par[8],2.0))) + par[9];
 
   return tBgd+tGauss1+tGauss2;
 }
 //________________________________________________________________________________________________________________
 double Purity::FitFunctionTwoGaussianPlusPoly(double *x, double *par)
 {
-  //12 parameters
+  //13 parameters
   double tBgd =    par[0] + par[1]*x[0] + par[2]*pow(x[0],2) + par[3]*pow(x[0],3) + par[4]*pow(x[0],4);
   double tGauss1 =  par[5]*exp(-0.5*(pow((x[0]-par[6])/par[7],2.0))) + par[8];
-  double tGauss2 =  par[9]*exp(-0.5*(pow((x[0]-par[6])/par[10],2.0))) + par[11];
+  double tGauss2 =  par[9]*exp(-0.5*(pow((x[0]-par[10])/par[11],2.0))) + par[12];
 
   return tBgd+tGauss1+tGauss2;
 }
@@ -479,6 +479,8 @@ void Purity::DrawPurityAndBgd(TPad* aPad, bool aPrintPurity)
 //________________________________________________________________________________________________________________
 TF1* Purity::GetFullFit(int aType)
 {
+  cout << "GetFullFit(" << aType << ") for fCombinedPurityName = " << fCombinedPurityName << endl;
+
   TF1* fitBgd = (TF1*)fPurityFitInfo->At(0);
   TVectorD* vBgFitLow = (TVectorD*)fPurityFitInfo->At(3);
   TVectorD* vBgFitHigh = (TVectorD*)fPurityFitInfo->At(4);
@@ -498,7 +500,7 @@ TF1* Purity::GetFullFit(int aType)
 
     fitBgdPlusSignal->SetParameter(3, 0.0);
 
-    tCombinedPurity->Fit("fitBgdPlusSignal","0q", "", (*vBgFitLow)(1), (*vBgFitHigh)(0));
+    tCombinedPurity->Fit("fitBgdPlusSignal","0ML", "", (*vBgFitLow)(1), (*vBgFitHigh)(0));
   }
 
   else if(aType==1)
@@ -513,41 +515,44 @@ TF1* Purity::GetFullFit(int aType)
 
     fitBgdPlusSignal->SetParameter(5, tCombinedPurity->GetMaximum());
     fitBgdPlusSignal->SetParameter(6, tCombinedPurity->GetBinCenter(tCombinedPurity->GetMaximumBin()));
-    fitBgdPlusSignal->SetParameter(7, 0.01);
+    fitBgdPlusSignal->SetParameter(7, 0.001);
     fitBgdPlusSignal->SetParLimits(7, 0., 0.5);
 
     fitBgdPlusSignal->FixParameter(8, 0.);
 
     fitBgdPlusSignal->SetParLimits(6, 0.9*tCombinedPurity->GetBinCenter(tCombinedPurity->GetMaximumBin()), 1.1*tCombinedPurity->GetBinCenter(tCombinedPurity->GetMaximumBin()));
 
-    tCombinedPurity->Fit("fitBgdPlusSignal","0q", "", (*vBgFitLow)(1), (*vBgFitHigh)(0));
+    tCombinedPurity->Fit("fitBgdPlusSignal","0ML", "", (*vBgFitLow)(0), (*vBgFitHigh)(1));
   }
 
   else if(aType==2)
   {
-    fitBgdPlusSignal = new TF1("fitBgdPlusSignal", FitFunctionTwoGaussianPlusLinear, tCombinedPurity->GetBinLowEdge(1), tCombinedPurity->GetBinLowEdge(tCombinedPurity->GetNbinsX()+1), 9);
+    fitBgdPlusSignal = new TF1("fitBgdPlusSignal", FitFunctionTwoGaussianPlusLinear, tCombinedPurity->GetBinLowEdge(1), tCombinedPurity->GetBinLowEdge(tCombinedPurity->GetNbinsX()+1), 10);
 
     fitBgdPlusSignal->SetParameter(0, fitBgd->GetParameter(0));
     fitBgdPlusSignal->SetParameter(1, fitBgd->GetParameter(1));
 
     fitBgdPlusSignal->SetParameter(2, tCombinedPurity->GetMaximum());
     fitBgdPlusSignal->SetParameter(3, tCombinedPurity->GetBinCenter(tCombinedPurity->GetMaximumBin()));
-    fitBgdPlusSignal->SetParameter(4, 0.01);
+    fitBgdPlusSignal->SetParameter(4, 0.001);
     fitBgdPlusSignal->SetParLimits(4, 0., 0.5);
     fitBgdPlusSignal->FixParameter(5, 0.0);
 
-    fitBgdPlusSignal->SetParLimits(3, 0.9*tCombinedPurity->GetBinCenter(tCombinedPurity->GetMaximumBin()), 1.1*tCombinedPurity->GetBinCenter(tCombinedPurity->GetMaximumBin()));
-
     fitBgdPlusSignal->SetParameter(6, 0.1*tCombinedPurity->GetMaximum());
-    fitBgdPlusSignal->SetParameter(7, 0.025);
-    fitBgdPlusSignal->FixParameter(8, 0.);
+    fitBgdPlusSignal->SetParameter(7, tCombinedPurity->GetBinCenter(tCombinedPurity->GetMaximumBin()));
+    fitBgdPlusSignal->SetParameter(8, 0.005);
+    fitBgdPlusSignal->SetParLimits(8, 0., 0.5);
+    fitBgdPlusSignal->FixParameter(9, 0.);
 
-    tCombinedPurity->Fit("fitBgdPlusSignal","0q", "", (*vBgFitLow)(1), (*vBgFitHigh)(0));
+    fitBgdPlusSignal->SetParLimits(3, 0.99*tCombinedPurity->GetBinCenter(tCombinedPurity->GetMaximumBin()), 1.01*tCombinedPurity->GetBinCenter(tCombinedPurity->GetMaximumBin()));
+    fitBgdPlusSignal->SetParLimits(7, 0.99*tCombinedPurity->GetBinCenter(tCombinedPurity->GetMaximumBin()), 1.01*tCombinedPurity->GetBinCenter(tCombinedPurity->GetMaximumBin()));
+
+    tCombinedPurity->Fit("fitBgdPlusSignal","0ML", "", (*vBgFitLow)(1), (*vBgFitHigh)(0));
   }
 
   else if(aType==3) 
   {
-    fitBgdPlusSignal = new TF1("fitBgdPlusSignal", FitFunctionTwoGaussianPlusPoly, tCombinedPurity->GetBinLowEdge(1), tCombinedPurity->GetBinLowEdge(tCombinedPurity->GetNbinsX()+1), 12);
+    fitBgdPlusSignal = new TF1("fitBgdPlusSignal", FitFunctionTwoGaussianPlusPoly, tCombinedPurity->GetBinLowEdge(1), tCombinedPurity->GetBinLowEdge(tCombinedPurity->GetNbinsX()+1), 13);
 
     fitBgdPlusSignal->FixParameter(0, fitBgd->GetParameter(0));
     fitBgdPlusSignal->FixParameter(1, fitBgd->GetParameter(1));
@@ -557,25 +562,41 @@ TF1* Purity::GetFullFit(int aType)
 
     fitBgdPlusSignal->SetParameter(5, tCombinedPurity->GetMaximum());
     fitBgdPlusSignal->SetParameter(6, tCombinedPurity->GetBinCenter(tCombinedPurity->GetMaximumBin()));
-    fitBgdPlusSignal->SetParameter(7, 0.01);
+    fitBgdPlusSignal->SetParameter(7, 0.001);
     fitBgdPlusSignal->SetParLimits(7, 0., 0.5);
 
     fitBgdPlusSignal->FixParameter(8, 0.);
 
-    fitBgdPlusSignal->SetParLimits(6, 0.9*tCombinedPurity->GetBinCenter(tCombinedPurity->GetMaximumBin()), 1.1*tCombinedPurity->GetBinCenter(tCombinedPurity->GetMaximumBin()));
 
     fitBgdPlusSignal->SetParameter(9, 0.1*tCombinedPurity->GetMaximum());
-    fitBgdPlusSignal->SetParameter(10, 0.025);
-    fitBgdPlusSignal->FixParameter(11, 0.);
+    fitBgdPlusSignal->SetParameter(10, tCombinedPurity->GetBinCenter(tCombinedPurity->GetMaximumBin()));
+    fitBgdPlusSignal->SetParameter(11, 0.005);
+    fitBgdPlusSignal->SetParLimits(11, 0., 0.5);
+    fitBgdPlusSignal->FixParameter(12, 0.);
 
-    tCombinedPurity->Fit("fitBgdPlusSignal","0", "", (*vBgFitLow)(1), (*vBgFitHigh)(0));
+
+    fitBgdPlusSignal->SetParLimits(10, 0.99*tCombinedPurity->GetBinCenter(tCombinedPurity->GetMaximumBin()), 1.01*tCombinedPurity->GetBinCenter(tCombinedPurity->GetMaximumBin()));
+    fitBgdPlusSignal->SetParLimits(6, 0.99*tCombinedPurity->GetBinCenter(tCombinedPurity->GetMaximumBin()), 1.01*tCombinedPurity->GetBinCenter(tCombinedPurity->GetMaximumBin()));
+
+    tCombinedPurity->Fit("fitBgdPlusSignal","0ML", "", (*vBgFitLow)(0), (*vBgFitHigh)(1));
   }
 
   else assert(0);
 
   return fitBgdPlusSignal;
 }
+/*
+//________________________________________________________________________________________________________________
+double Purity::FitFunctionTwoGaussianPlusPoly(double *x, double *par)
+{
+  //12 parameters
+  double tBgd =    par[0] + par[1]*x[0] + par[2]*pow(x[0],2) + par[3]*pow(x[0],3) + par[4]*pow(x[0],4);
+  double tGauss1 =  par[5]*exp(-0.5*(pow((x[0]-par[6])/par[7],2.0))) + par[8];
+  double tGauss2 =  par[9]*exp(-0.5*(pow((x[0]-par[10])/par[11],2.0))) + par[12];
 
+  return tBgd+tGauss1+tGauss2;
+}
+*/
 
 //________________________________________________________________________________________________________________
 void Purity::CalculateResolution(int aTypeOfFit)
@@ -654,11 +675,12 @@ void Purity::DrawResolution(TPad *aPad, int aTypeOfFit, bool aZoomBg, double aPa
     //tMaxBg+=tRangeBg/10.;
     //tMinBg-=tRangeBg/10.;
 
-    double tMaxYAx = tMaxBg + tRangeBg/10.;
+//    double tMaxYAx = tMaxBg + tRangeBg/10.;
+    double tMaxYAx = tMaxBg + tRangeBg;
     double tMinYAx = tMinBg - tRangeBg/10.;
 
     tCombinedPurity->GetXaxis()->SetRange(1,tCombinedPurity->GetNbinsX());
-    tCombinedPurity->GetYaxis()->SetRangeUser(tMinBg,tMaxYAx);
+    tCombinedPurity->GetYaxis()->SetRangeUser(tMinYAx,tMaxYAx);
     //--------------------------------------------------------------------------------------------
   }
 
@@ -693,13 +715,13 @@ void Purity::DrawResolution(TPad *aPad, int aTypeOfFit, bool aZoomBg, double aPa
     }
     else if(aTypeOfFit==2)
     {
-      tMu = fitFull->GetParameter(3);
-      tSigma = fitFull->GetParameter(4);
+      tMu = 0.5*(fitFull->GetParameter(3) + fitFull->GetParameter(7));
+      tSigma = 0.5*(fitFull->GetParameter(4) + fitFull->GetParameter(8));
     }
     else if(aTypeOfFit==3)
     {
-      tMu = fitFull->GetParameter(6);
-      tSigma = fitFull->GetParameter(7);
+      tMu = 0.5*(fitFull->GetParameter(6) + fitFull->GetParameter(10));
+      tSigma = 0.5*(fitFull->GetParameter(7) + fitFull->GetParameter(11));
     }
     else assert(0);
     tMu*=1000;

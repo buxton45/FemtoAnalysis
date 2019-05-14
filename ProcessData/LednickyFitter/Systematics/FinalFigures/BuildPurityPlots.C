@@ -47,11 +47,11 @@ int main(int argc, char **argv)
   bool bSaveFigures = false;
   TString tSaveFileType = "pdf";
 
-  bool bDrawPurity = false;
+  bool bDrawPurity = true;
   bool bPrintPurity = false;
 
-  bool bDrawResolutions = true;
-  int aResFitType = 1;
+  bool bDrawResolutions = false;
+  int aResFitType = 3;
 //-----------------------------------------------------------------------------
 
   TString tGeneralAnTypeName;
@@ -125,6 +125,12 @@ int main(int argc, char **argv)
 
     LamK0->DrawAllResolutionHistos((TPad*)canReso->cd(1), aResFitType);
     ALamK0->DrawAllResolutionHistos((TPad*)canReso->cd(2), aResFitType);
+
+    if(bSaveFigures)
+    {
+      TString aNameReso = TString::Format("cLamK0Resolution_FitType%d.%s", aResFitType, tSaveFileType.Data());
+      canReso->SaveAs(tSaveDirectoryBase+aNameReso);
+    }
   }
 
 //-------------------------------------------------------------------------------

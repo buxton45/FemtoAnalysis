@@ -75,7 +75,7 @@ int main(int argc, char **argv)
 
   tTripleFitSysAn->SetFixD0(FixD0);
 
-  tTripleFitSysAn->RunVaryNonFlatBackgroundFit(bSaveImages, bWriteToFile);
+  tTripleFitSysAn->RunVaryResPrimMaxDecayType(bSaveImages, bWriteToFile);
 
 cout << "DONE" << endl;
 if(bPlayCompletionBeep) system("( speaker-test -t sine -f 1000 )& pid=$! ; sleep 0.5s ; kill -9 $pid");

@@ -288,6 +288,7 @@ void ReadAllCutSys(TString aSystematicsDirectory, td4dVec &aAllCutSysToFill, Ana
   TString tParentResultsDate;
   if     (aSystematicsDirectory.Contains("20161027")) tParentResultsDate = TString("20161027");
   else if(aSystematicsDirectory.Contains("20180505")) tParentResultsDate = TString("20180505");
+  else if(aSystematicsDirectory.Contains("20190319")) tParentResultsDate = TString("20190319");
   else assert(0);
 
   assert(aAnType==kLamK0 || aAnType==kLamKchP || aAnType==kLamKchM);
@@ -366,7 +367,7 @@ void ReadAllCutSys(TString aSystematicsDirectory, td4dVec &aAllCutSysToFill, Ana
 
 
 //----------------------------------------------------------------------
-void ReadFitRangeAndNonFlatBgdSys(TString aResultsDirectory, td4dVec &aAllFitSysToFill, AnalysisType aAnType, CentralityType aCentType, TString aFitInfoTString, bool aRunOldQMNaming)
+void ReadFitRangeAndNonFlatBgdSys(TString aResultsDirectory, td4dVec &aAllFitSysToFill, AnalysisType aAnType, CentralityType aCentType, TString aFitInfoTString, bool aRunOldQMNaming, bool aIncludeVaryResPrimMaxDecayType)
 {
   //----------------------------------------------
   cout << endl;
@@ -377,6 +378,7 @@ void ReadFitRangeAndNonFlatBgdSys(TString aResultsDirectory, td4dVec &aAllFitSys
 
   TString tFileLocationFitRangeSys;
   TString tFileLocationNonFlatBgdSys;
+  TString tFileLocationVaryResPrimMaxDecayType = TString("");
   if(aRunOldQMNaming)
   {
     tFileLocationFitRangeSys = TString::Format("%sCfFitValues_VaryMaxFitKStar_%s_MomResCrctn_NonFlatBgdCrctn.txt", aResultsDirectory.Data(), cAnalysisBaseTags[aAnType]);
@@ -389,13 +391,17 @@ void ReadFitRangeAndNonFlatBgdSys(TString aResultsDirectory, td4dVec &aAllFitSys
                                                cAnalysisBaseTags[aAnType], cCentralityTags[aCentType]);
     tFileLocationNonFlatBgdSys = TString::Format("%sCfFitValues_VaryNonFlatBgdFitType_%s%s.txt", tFileLocationBase_FitRangeAndNonFlat.Data(), 
                                                  cAnalysisBaseTags[aAnType], cCentralityTags[aCentType]);
+    tFileLocationVaryResPrimMaxDecayType = TString::Format("%sCfFitValues_VaryResPrimMaxDecayType_%s%s.txt", tFileLocationBase_FitRangeAndNonFlat.Data(), 
+                                                 cAnalysisBaseTags[aAnType], cCentralityTags[aCentType]);
   }
 
   ReadFile(tFileLocationFitRangeSys, aAllFitSysToFill);
   ReadFile(tFileLocationNonFlatBgdSys, aAllFitSysToFill, 4);
+  if(aIncludeVaryResPrimMaxDecayType) ReadFile(tFileLocationVaryResPrimMaxDecayType, aAllFitSysToFill);
 
   cout << "Read file " << tFileLocationFitRangeSys << endl;
   cout << "Read file " << tFileLocationNonFlatBgdSys << endl;
+  if(aIncludeVaryResPrimMaxDecayType) cout << "Read file " << tFileLocationVaryResPrimMaxDecayType << endl;
 }
 
 
@@ -415,9 +421,11 @@ int main(int argc, char **argv)
   bool bRunOldQMNaming = false;
 
   CentralityType tCentralityType = kMB;  //Probably should always be kMB
-  bool bIncludeFitRangeSys = true;
-  bool bWriteToFile = true;
 
+  bool bIncludeFitRangeSys = true;
+  bool bIncludeVaryResPrimMaxDecayType=false;
+
+  bool bWriteToFile = true;
 
   bool bUseStavCf=false;
 
@@ -507,9 +515,9 @@ int main(int argc, char **argv)
     td4dVec tAllFitSys(0);
       tAllFitSys.resize(tNAnalysisTypes, td3dVec(tNCentralityTypes, td2dVec(tNParameterTypes, td1dVec(0))));
 
-    ReadFitRangeAndNonFlatBgdSys(tResultsDirectory, tAllFitSys, kLamKchP, tCentralityType, tFitInfoTString, bRunOldQMNaming);
-    ReadFitRangeAndNonFlatBgdSys(tResultsDirectory, tAllFitSys, kLamKchM, tCentralityType, tFitInfoTString, bRunOldQMNaming);
-    ReadFitRangeAndNonFlatBgdSys(tResultsDirectory, tAllFitSys, kLamK0, tCentralityType, tFitInfoTString, bRunOldQMNaming);
+    ReadFitRangeAndNonFlatBgdSys(tResultsDirectory, tAllFitSys, kLamKchP, tCentralityType, tFitInfoTString, bRunOldQMNaming, bIncludeVaryResPrimMaxDecayType);
+    ReadFitRangeAndNonFlatBgdSys(tResultsDirectory, tAllFitSys, kLamKchM, tCentralityType, tFitInfoTString, bRunOldQMNaming, bIncludeVaryResPrimMaxDecayType);
+    ReadFitRangeAndNonFlatBgdSys(tResultsDirectory, tAllFitSys, kLamK0, tCentralityType, tFitInfoTString, bRunOldQMNaming, bIncludeVaryResPrimMaxDecayType);
 
     td4dVec tFinalFitSysVec = ReduceCutsVector(tAllFitSys);
     tFinalVec = CombineCutSyswFitSys(tFinalCutSysVec,tFinalFitSysVec);
