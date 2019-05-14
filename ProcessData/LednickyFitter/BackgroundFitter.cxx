@@ -66,7 +66,8 @@ BackgroundFitter::BackgroundFitter(TH1* aNum, TH1* aDen, TH1* aCf, NonFlatBgdFit
       fMinuit->mnparm(0, "Par0", 0.0001, 0.0001, 0., 0., tErrFlg);
       fMinuit->mnparm(1, "Par1", 0., 0.1, 0., 0., tErrFlg);
 //      fMinuit->mnparm(1, "Par1", 0., 0.01, -0.05, 0.05, tErrFlg);
-      fMinuit->mnparm(2, "Par2", 0.5, 0.01, 0., 0., tErrFlg);
+      fMinuit->mnparm(2, "Par2", 0.5, 0.01, 0., 1., tErrFlg);
+//      fMinuit->mnparm(2, "Par2", 0.5, 0.01, 0., 0., tErrFlg);
       fMinuit->mnparm(3, "Par3", fScale, 0.1, 0., 0., tErrFlg);
 
       fMinuit->FixParameter(1);

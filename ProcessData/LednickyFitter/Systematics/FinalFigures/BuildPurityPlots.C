@@ -47,7 +47,11 @@ int main(int argc, char **argv)
   bool bSaveFigures = false;
   TString tSaveFileType = "pdf";
 
+  bool bDrawPurity = false;
   bool bPrintPurity = false;
+
+  bool bDrawResolutions = true;
+  int aResFitType = 1;
 //-----------------------------------------------------------------------------
 
   TString tGeneralAnTypeName;
@@ -72,45 +76,56 @@ int main(int argc, char **argv)
   LamK0->BuildPurityCollection();
   ALamK0->BuildPurityCollection();
 
-  TCanvas* canPurity = new TCanvas("canPurity","canPurity");
-  canPurity->Divide(2,1);
-
-  LamK0->DrawAllPurityHistos((TPad*)canPurity->cd(1), bPrintPurity);
-  ALamK0->DrawAllPurityHistos((TPad*)canPurity->cd(2), bPrintPurity);
-
-  TCanvas* canPurityLam = new TCanvas("canPurityLam", "canPurityLam");
-  LamK0->DrawPurityHisto(0, canPurityLam, bPrintPurity);
-
-  TCanvas* canPurityK0 = new TCanvas("canPurityK0", "canPurityK0");
-  LamK0->DrawPurityHisto(1, canPurityK0, bPrintPurity);
-
-  TCanvas* canPurityALam = new TCanvas("canPurityALam", "canPurityALam");
-  ALamK0->DrawPurityHisto(0, canPurityALam, bPrintPurity);
-
-  if(bSaveFigures)
+  if(bDrawPurity)
   {
-    TString aName = TString::Format("cLamK0Purity%s.%s", tPrintPurText[bPrintPurity].Data(), tSaveFileType.Data());
-    canPurity->SaveAs(tSaveDirectoryBase+aName);
+    TCanvas* canPurity = new TCanvas("canPurity","canPurity");
+    canPurity->Divide(2,1);
+
+    LamK0->DrawAllPurityHistos((TPad*)canPurity->cd(1), bPrintPurity);
+    ALamK0->DrawAllPurityHistos((TPad*)canPurity->cd(2), bPrintPurity);
+
+    TCanvas* canPurityLam = new TCanvas("canPurityLam", "canPurityLam");
+    LamK0->DrawPurityHisto(0, canPurityLam, bPrintPurity);
+
+    TCanvas* canPurityK0 = new TCanvas("canPurityK0", "canPurityK0");
+    LamK0->DrawPurityHisto(1, canPurityK0, bPrintPurity);
+
+    TCanvas* canPurityALam = new TCanvas("canPurityALam", "canPurityALam");
+    ALamK0->DrawPurityHisto(0, canPurityALam, bPrintPurity);
+
+    if(bSaveFigures)
+    {
+      TString aName = TString::Format("cLamK0Purity%s.%s", tPrintPurText[bPrintPurity].Data(), tSaveFileType.Data());
+      canPurity->SaveAs(tSaveDirectoryBase+aName);
 
 /*
-    TString aName2 = TString::Format("LamPurity%s_LamK0.%s", tPrintPurText[bPrintPurity].Data(), tSaveFileType.Data());
-    canPurity->cd(1)->cd(1)->SaveAs(tSaveDirectoryBase+aName2);
+      TString aName2 = TString::Format("LamPurity%s_LamK0.%s", tPrintPurText[bPrintPurity].Data(), tSaveFileType.Data());
+      canPurity->cd(1)->cd(1)->SaveAs(tSaveDirectoryBase+aName2);
 
-    TString aName3 = TString::Format("K0Purity%s_LamK0.%s", tPrintPurText[bPrintPurity].Data(), tSaveFileType.Data());
-    canPurity->cd(1)->cd(2)->SaveAs(tSaveDirectoryBase+aName3);
+      TString aName3 = TString::Format("K0Purity%s_LamK0.%s", tPrintPurText[bPrintPurity].Data(), tSaveFileType.Data());
+      canPurity->cd(1)->cd(2)->SaveAs(tSaveDirectoryBase+aName3);
 */
 
-    TString aNameLam = TString::Format("LamPurity%s_LamK0.%s", tPrintPurText[bPrintPurity].Data(), tSaveFileType.Data());
-    canPurityLam->SaveAs(tSaveDirectoryBase+aNameLam);
+      TString aNameLam = TString::Format("LamPurity%s_LamK0.%s", tPrintPurText[bPrintPurity].Data(), tSaveFileType.Data());
+      canPurityLam->SaveAs(tSaveDirectoryBase+aNameLam);
+  
+      TString aNameK0  = TString::Format("K0Purity%s_LamK0.%s", tPrintPurText[bPrintPurity].Data(), tSaveFileType.Data());
+      canPurityK0->SaveAs(tSaveDirectoryBase+aNameK0);
 
-    TString aNameK0  = TString::Format("K0Purity%s_LamK0.%s", tPrintPurText[bPrintPurity].Data(), tSaveFileType.Data());
-    canPurityK0->SaveAs(tSaveDirectoryBase+aNameK0);
-
-    TString aNameALam = TString::Format("ALamPurity%s_ALamK0.%s", tPrintPurText[bPrintPurity].Data(), tSaveFileType.Data());
-    canPurityALam->SaveAs(tSaveDirectoryBase+aNameALam);
+      TString aNameALam = TString::Format("ALamPurity%s_ALamK0.%s", tPrintPurText[bPrintPurity].Data(), tSaveFileType.Data());
+      canPurityALam->SaveAs(tSaveDirectoryBase+aNameALam);
+    }
   }
 
+  if(bDrawResolutions)
+  {
+    TString tCanResoName = TString::Format("canReso_FitType%d", aResFitType);
+    TCanvas* canReso = new TCanvas(tCanResoName, tCanResoName);
+    canReso->Divide(2,1);
 
+    LamK0->DrawAllResolutionHistos((TPad*)canReso->cd(1), aResFitType);
+    ALamK0->DrawAllResolutionHistos((TPad*)canReso->cd(2), aResFitType);
+  }
 
 //-------------------------------------------------------------------------------
   theApp->Run(kTRUE); //Run the TApp to pause the code.

@@ -2128,6 +2128,26 @@ Purity* Analysis::GetPurityObject(ParticleType aV0Type)
   return tReturnPurity;
 }
 
+//________________________________________________________________________________________________________________
+void Analysis::DrawResolutionHisto(int aPartInt, TPad* aPad, int aTypeOfFit)
+{
+  fPurityCollection[aPartInt]->DrawResolutionAndBgd(aPad, aTypeOfFit);
+}
+
+//________________________________________________________________________________________________________________
+void Analysis::DrawAllResolutionHistos(TPad* aPad, int aTypeOfFit)
+{
+  int tNPurityHistos = fPurityCollection.size();
+
+  aPad->Divide(1,tNPurityHistos);
+
+  for(int i=0; i<tNPurityHistos; i++)
+  {
+    fPurityCollection[i]->DrawResolutionAndBgd((TPad*)aPad->cd(i+1), aTypeOfFit);
+  }
+
+}
+
 
 //________________________________________________________________________________________________________________
 void Analysis::OutputPassFailInfo()

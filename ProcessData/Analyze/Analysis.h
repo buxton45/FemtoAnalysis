@@ -124,6 +124,9 @@ public:
   TH1* GetCombinedPurityHisto(ParticleType aV0Type);
   Purity* GetPurityObject(ParticleType aV0Type);
 
+  void DrawResolutionHisto(int aPartInt, TPad* aPad, int aTypeOfFit);
+  void DrawAllResolutionHistos(TPad* aPad, int aTypeOfFit);
+
   void OutputPassFailInfo();
 
   void DrawPart1MassFail(TPad* aPad, bool aDrawWideRangeToo=false);

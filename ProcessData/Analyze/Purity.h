@@ -46,10 +46,19 @@ public:
   void CombineHistos();  //simple addition of histograms
                          //different from CombineCfs(= weighted average)
 
+  static double FitFunctionGaussian(double *x, double *par);
+  static double FitFunctionGaussianPlusPoly(double *x, double *par);
+  static double FitFunctionTwoGaussianPlusLinear(double *x, double *par);
+  static double FitFunctionTwoGaussianPlusPoly(double *x, double *par);
+
   void CalculatePurity();
   void DrawPurity(TPad* aPad, bool aZoomBg=false, bool aPrintPurity=false, double aPadScaleX=1., double aPadScaleY=1.);
   void DrawPurityAndBgd(TPad* aPad, bool aPrintPurity=true);
 
+  TF1* GetFullFit(int aType);
+  void CalculateResolution(int aTypeOfFit);
+  void DrawResolution(TPad* aPad, int aTypeOfFit, bool aZoomBg=false, double aPadScaleX=1., double aPadScaleY=1.);
+  void DrawResolutionAndBgd(TPad* aPad, int aTypeOfFit);
 
   void AddHisto(TH1* aHisto);
 

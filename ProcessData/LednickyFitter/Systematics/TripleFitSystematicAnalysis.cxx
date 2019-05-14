@@ -282,6 +282,7 @@ void TripleFitSystematicAnalysis::SetRadiusStartValues(TripleFitGenerator* aFitG
   TString tParentResultsDate = "";
   if     (fSaveDirectory.Contains("20161027")) tParentResultsDate = TString("20161027");
   else if(fSaveDirectory.Contains("20180505")) tParentResultsDate = TString("20180505");
+  else if(fSaveDirectory.Contains("20190319")) tParentResultsDate = TString("20190319");
   else assert(0);
 
   TString tMasterFileLocation_LamKch = "";
@@ -318,6 +319,7 @@ void TripleFitSystematicAnalysis::SetLambdaStartValues(TripleFitGenerator* aFitG
   TString tParentResultsDate = "";
   if     (fSaveDirectory.Contains("20161027")) tParentResultsDate = TString("20161027");
   else if(fSaveDirectory.Contains("20180505")) tParentResultsDate = TString("20180505");
+  else if(fSaveDirectory.Contains("20190319")) tParentResultsDate = TString("20190319");
   else assert(0);
 
   TString tMasterFileLocation_LamKch = "", tMasterFileLocation_LamK0 = "";
@@ -415,6 +417,7 @@ void TripleFitSystematicAnalysis::SetScattParamStartValues(TripleFitGenerator* a
   TString tParentResultsDate = "";
   if     (fSaveDirectory.Contains("20161027")) tParentResultsDate = TString("20161027");
   else if(fSaveDirectory.Contains("20180505")) tParentResultsDate = TString("20180505");
+  else if(fSaveDirectory.Contains("20190319")) tParentResultsDate = TString("20190319");
   else assert(0);
 
   TString tMasterFileLocation_LamKch = "", tMasterFileLocation_LamK0 = "";

@@ -16,7 +16,7 @@ int main(int argc, char **argv)
 
   bool bPlayCompletionBeep = true;
 //-----------------------------------------------------------------------------
-  TString tResultsDate = "20180505";  //Parent analysis these systematics are to accompany
+  TString tResultsDate = "20190319";  //Parent analysis these systematics are to accompany
 
   CentralityType tCentralityType = kMB;
   FitGeneratorType tFitGeneratorType = kPairwConj;
@@ -30,7 +30,7 @@ int main(int argc, char **argv)
   bool ApplyMomResCorrection = true;
   bool ApplyNonFlatBackgroundCorrection = true;
   NonFlatBgdFitType tNonFlatBgdFitType_LamKch = kPolynomial;
-  NonFlatBgdFitType tNonFlatBgdFitType_LamK0  = kLinear;
+  NonFlatBgdFitType tNonFlatBgdFitType_LamK0  = kPolynomial;
 
   IncludeResidualsType tIncludeResidualsType = kInclude3Residuals; 
   ChargedResidualsType tChargedResidualsType = kUseXiDataAndCoulombOnlyInterp;

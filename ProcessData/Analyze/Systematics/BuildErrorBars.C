@@ -47,7 +47,10 @@ int main(int argc, char **argv)
 
   bool bPlayCompletionBeep = true;
 //-----------------------------------------------------------------------------
-  TString tParentResultsDate = "20180505";  //Parent analysis these systematics are to accompany
+  TString tParentResultsDate = "20190319";  //Parent analysis these systematics are to accompany
+
+  AnalysisRunType tAnRunType = kTrain;
+  int tNPartialAnalysis = 2;
 
   AnalysisType tAnType = kLamKchP;
   CentralityType tCentType = k0010;
@@ -136,7 +139,7 @@ int main(int argc, char **argv)
   tCfAvgWithErrors->Draw();
 
 //-------------------------------------------------------------------------------
-  Analysis* tSaveAnalysis = new Analysis(tFileLocationBase_Save,tAnType,tCentType);
+  Analysis* tSaveAnalysis = new Analysis(tFileLocationBase_Save, tAnType, tCentType, tAnRunType, tNPartialAnalysis, TString(""), false);
     tSaveAnalysis->BuildKStarHeavyCf(0.32,0.4,2);
   TH1* tCfwErrorsFull = tSaveAnalysis->GetKStarHeavyCf()->GetHeavyCfClone();
   TString tCfwErrorsTitle = TString(cAnalysisRootTags[tAnType])+TString(cCentralityTags[tCentType])+TString("_wSysErrors");
