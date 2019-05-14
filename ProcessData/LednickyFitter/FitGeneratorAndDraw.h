@@ -70,6 +70,9 @@ public:
   virtual TCanvas* DrawModelKStarCfs(bool aSaveImage=false);  //TODO add option to choose true, fake, no weight, etc.
 
 
+  static CfHeavy* CombineTwoHeavyCfs(CfHeavy *aCf1, CfHeavy* aCf2);
+  static TH1* CombineTwoHists(TH1* aHist1, TH1* aHist2, double aNorm1, double aNorm2);
+  virtual void BuildKStarCfswFitsPanel_CombineConj(CanvasPartition* aCanPart, CentralityType aCentType, int tColumn, int tRow, bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, NonFlatBgdFitType aNonFlatBgdFitType, bool aDrawSysErrors, bool aDrawDataOnTop);
 
   //inline 
 

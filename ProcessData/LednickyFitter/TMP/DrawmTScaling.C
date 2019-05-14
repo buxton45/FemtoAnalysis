@@ -1,6 +1,4 @@
 #include "DrawmTScaling.h"
-#include "CompareFittingMethods.h"
-
 
 //Note:  &aDataPointsWithErrors will have a collection of data points with associated errors
 //       aDataPointsWithErrors.size() will give the number of data points to be plotted
@@ -30,7 +28,7 @@ void SetDataPoints(TGraphAsymmErrors* aGraph, td2dVec &aDataPointsWithErrors, bo
 //___________________________________________________________________________________
 void DrawPoints(TString aName, 
                 td2dVec &aDataPointsWithSysErrors, td2dVec &aDataPointsWithStatErrors, 
-                int aMarkerColorSys, int aMarkerColorStat, int aMarkerStyle, Size_t aMarkerSize, int aMarkerOutlineStyle=0)
+                int aMarkerColorSys, int aMarkerColorStat, int aMarkerStyle, Size_t aMarkerSize, int aMarkerOutlineStyle=0, bool aDrawSys=true)
 {
   //First, make sure there are equal number systematic and statistical data points
   assert(aDataPointsWithSysErrors.size() == aDataPointsWithStatErrors.size());
@@ -41,16 +39,19 @@ void DrawPoints(TString aName,
   for(unsigned int i=1; i<tNDataPoints; i++) assert(aDataPointsWithSysErrors[i-1].size() == aDataPointsWithSysErrors[i].size());
   for(unsigned int i=1; i<tNDataPoints; i++) assert(aDataPointsWithStatErrors[i-1].size() == aDataPointsWithStatErrors[i].size());
 
+  TGraphAsymmErrors* tGr;
   //----------------------- Draw systematic error boxes first -------------------------------------------------
-  TGraphAsymmErrors* tGr = new TGraphAsymmErrors(tNDataPoints);
-  tGr->SetName(aName+TString("Sys"));
-  tGr->SetFillColor(aMarkerColorSys);
-  tGr->SetFillStyle(1000);
-  tGr->SetLineColor(0);
-  tGr->SetLineWidth(0);
-  SetDataPoints(tGr, aDataPointsWithSysErrors);
-  tGr->Draw("e2");
-
+  if(aDrawSys)
+  {
+    tGr = new TGraphAsymmErrors(tNDataPoints);
+    tGr->SetName(aName+TString("Sys"));
+    tGr->SetFillColor(aMarkerColorSys);
+    tGr->SetFillStyle(1000);
+    tGr->SetLineColor(0);
+    tGr->SetLineWidth(0);
+    SetDataPoints(tGr, aDataPointsWithSysErrors);
+    tGr->Draw("e2");
+  }
 
   //----------------------- Draw points with statistical errors -------------------------------------------------
   tGr = new TGraphAsymmErrors(tNDataPoints);
@@ -78,95 +79,6 @@ void DrawPoints(TString aName,
 
 }
 
-//___________________________________________________________________________________
-vector<double> GetSingleFitRadiusInfo(const FitInfo &aFitInfo, CentralityType aCentType=k0010)
-{
-  vector<double> tReturnVec(3);
-  double tRadius, tRadiusStatErr, tRadiusSysErr;
-
-  tRadius = aFitInfo.radiusVec[aCentType];
-  tRadiusStatErr = aFitInfo.radiusStatErrVec[aCentType];
-  tRadiusSysErr = aFitInfo.radiusSysErrVec[aCentType];
-
-  tReturnVec[0] = tRadius;
-  tReturnVec[1] = tRadiusStatErr;
-  tReturnVec[2] = tRadiusSysErr;
-
-  return tReturnVec;
-}
-
-//___________________________________________________________________________________
-td1dVec GetMeanRadiusInfo(vector<FitInfo> &aFitInfoVec, CentralityType aCentType, IncludeResType aIncludeResType=kInclude10ResAnd3Res, IncludeD0Type aIncludeD0Type=kFreeAndFixedD0)
-{
-  assert(aCentType != kMB);
-
-  td2dVec tRadiusVec;
-  for(unsigned int i=0; i<aFitInfoVec.size(); i++)
-  {
-    if(!IncludeFitInfoInMeanCalculation(aFitInfoVec[i], aIncludeResType, aIncludeD0Type)) continue;
-
-    tRadiusVec.push_back(vector<double>{aFitInfoVec[i].radiusVec[aCentType], aFitInfoVec[i].radiusStatErrVec[aCentType], aFitInfoVec[i].radiusSysErrVec[aCentType]});
-  }
-
-  td1dVec tReturnVec = GetMean(tRadiusVec);
-  return tReturnVec;
-}
-
-
-//___________________________________________________________________________________
-vector<double> GetPlotRadiusInfo(AnalysisType aAnType, CentralityType aCentType, IncludeResType aIncludeResType, IncludeD0Type aIncludeD0Type)
-{
-  td1dVec tReturnRadiusInfo;
-
-  //--------------------------------
-  if(aIncludeResType==kIncludeNoRes) //Signifies QM results
-  {
-    if(aAnType==kLamKchP) tReturnRadiusInfo = GetSingleFitRadiusInfo(tFitInfoQM_LamKchP, aCentType);
-    else if(aAnType==kLamKchM) tReturnRadiusInfo = GetSingleFitRadiusInfo(tFitInfoQM_LamKchM, aCentType);
-    else if(aAnType==kLamK0) tReturnRadiusInfo = GetSingleFitRadiusInfo(tFitInfoQM_LamK0, aCentType);
-    else assert(0);
-
-    return tReturnRadiusInfo;
-  }
-  //--------------------------------
-  vector<FitInfo> aFitInfoVec = GetFitInfoVec(aAnType, aIncludeResType, aIncludeD0Type);
-  //--------------------------------
-  if(aIncludeResType==kInclude10ResAnd3Res || aIncludeD0Type==kFreeAndFixedD0)  //In this case, should be calculating an average
-  {
-    tReturnRadiusInfo = GetMeanRadiusInfo(aFitInfoVec, aCentType, aIncludeResType, aIncludeD0Type);
-  }
-  else
-  {
-    assert(!(aIncludeResType==kInclude10ResAnd3Res));
-    assert(aIncludeResType == aFitInfoVec[0].resType);
-
-    assert(!(aIncludeD0Type==kFreeAndFixedD0));
-    assert(aIncludeD0Type == aFitInfoVec[0].d0Type);
-
-    tReturnRadiusInfo = GetSingleFitRadiusInfo(aFitInfoVec[0], aCentType);
-  }
-
-  return tReturnRadiusInfo;
-}
-
-//___________________________________________________________________________________
-DrawAcrossAnalysesInfo GetDrawingInfo(IncludeResType aIncludeResType, IncludeD0Type aIncludeD0Type)
-{
-  //TODO Not sure why I cant just declare DrawAcrossAnalysesInfo tReturnDrawingInfo
-  // and why I can't simply assign (in for loop) tReturnDrawingInfo = tDrawAcrossAnalysesInfoVec[i]
-  //This method is OK because no pointers in struct, so compiler constructed copy constructor works fine
-
-  DrawAcrossAnalysesInfo tReturnDrawingInfo = DrawAcrossAnalysesInfo(tDrawAcrossAnalysesInfoVec[0]);
-  for(unsigned int i=0; i<tDrawAcrossAnalysesInfoVec.size(); i++)
-  {
-    if(tDrawAcrossAnalysesInfoVec[i].incResType == aIncludeResType &&
-       tDrawAcrossAnalysesInfoVec[i].incD0Type == aIncludeD0Type)
-    {
-      tReturnDrawingInfo = DrawAcrossAnalysesInfo(tDrawAcrossAnalysesInfoVec[i]);
-    }
-  }
-  return tReturnDrawingInfo;
-}
 
 //_________________________________________________________________________________________________________________________
 //*************************************************************************************************************************
@@ -183,55 +95,6 @@ int main(int argc, char **argv)
 
 //=========Macro generated from canvas: canmtcomb/canmtcomb
 //=========  (Fri May  8 11:29:01 2015) by ROOT version5.34/26
-  bool bRunAveragedKchPKchM = false;
-
-  bool bUseMinvCalculation = true;
-  bool bUseReducedMassCalculation = false;
-
-  bool bMakeOthersTransparent = true;
-  bool bOutlinePoints = true;
-
-//  bool bResultsWithResiduals = true;
-  bool bSaveImage = false;
-
-  IncludeResType tIncludeResType;
-    tIncludeResType = kInclude10ResAnd3Res;
-    //tIncludeResType = kInclude10ResOnly;
-    //tIncludeResType = kInclude3ResOnly;
-
-  IncludeD0Type tIncludeD0Type;
-    tIncludeD0Type = kFreeAndFixedD0;
-    //tIncludeD0Type = kFreeD0Only;
-    //tIncludeD0Type = kFixedD0Only;
-
-  bool bDrawQM = false;
-  if(bDrawQM)
-  {
-    tIncludeResType = kIncludeNoRes;
-    tIncludeD0Type = kFreeD0Only;
-  }
-
-  bool bDrawJaiAndHans = false;
-
-  DrawAcrossAnalysesInfo tDrawingInfo = GetDrawingInfo(tIncludeResType, tIncludeD0Type);
-
-  //------------------------------------------------------
-
-  assert(!(bUseMinvCalculation && bUseReducedMassCalculation));
-
-//  TString tSaveName = "./mTscaling";
-  TString tSaveName = "/home/jesse/Analysis/Presentations/PWGCF/LamKPaperProposal/ALICEMiniWeek_20180115/Figures/mTscaling";
-
-  if(bRunAveragedKchPKchM) tSaveName += TString("Averaged");
-
-  if(bUseMinvCalculation) tSaveName += TString("_MinvCalc");
-  if(bUseReducedMassCalculation) tSaveName += TString("_RedMassCal");
-
-  if(bOutlinePoints) tSaveName += TString("_OutlinedPoints");
-  if(bMakeOthersTransparent) tSaveName += TString("_OthersTransparent");
-//  if(bResultsWithResiduals) tSaveName += TString("_WithResiduals");
-  tSaveName += tDrawingInfo.saveDescriptor;
-  tSaveName += TString(".pdf");
   
   Int_t red = kRed;
   Int_t redT = TColor::GetColorTransparent(red,0.2);
@@ -239,36 +102,7 @@ int main(int argc, char **argv)
   Int_t greenT = TColor::GetColorTransparent(green,0.2);
   Int_t blue = kBlue;
   Int_t blueT = TColor::GetColorTransparent(blue,0.2);
-  
-  if(bMakeOthersTransparent)
-  {
-    red = TColor::GetColorTransparent(red,0.4);
-    redT = TColor::GetColorTransparent(red,0.2);
 
-    green = TColor::GetColorTransparent(green,0.4);
-    greenT = TColor::GetColorTransparent(green,0.2);
-
-    blue = TColor::GetColorTransparent(blue,0.4);
-    blueT = TColor::GetColorTransparent(blue,0.2);
-  }
-
-  const Int_t myRed = kRed;
-  const Int_t myGreen = kGreen+2;
-  const Int_t myBlue = kBlue;
-
-  const Int_t myRedT = TColor::GetColorTransparent(red,0.3);
-  const Int_t myGreenT = TColor::GetColorTransparent(green,0.3);
-  const Int_t myBlueT = TColor::GetColorTransparent(blue,0.3);
-
-  const int tMarkerStyleLamK0 = 29;
-  const int tMarkerStyleLamKchP = 21;
-  const int tMarkerStyleLamKchM = 33;
-  const int tMarkerStyleLamKchAvg = 20;
-
-  int tMarkerStyleLamK0o = 30;
-  int tMarkerStyleLamKchPo = 25;
-  int tMarkerStyleLamKchMo = 27;
-  int tMarkerStyleLamKchAvgo = 24;
 
   const Size_t tMarkerSize=1.6;
 
@@ -288,9 +122,7 @@ int main(int argc, char **argv)
   canmtcomb->SetFrameBorderMode(0);
   canmtcomb->SetFrameBorderMode(0);
    
-  TH1D *ramka;
-  if(!bDrawJaiAndHans) ramka = new TH1D("ramka","",100,0.2,1.99);
-  else ramka = new TH1D("ramka","",100,0.2,2.24);
+  TH1D *ramka = new TH1D("ramka","",100,0.2,1.99);
   ramka->SetMinimum(1.15);
   ramka->SetMaximum(9.99);
   ramka->SetStats(0);
@@ -317,243 +149,8 @@ int main(int argc, char **argv)
   ramka->GetZaxis()->SetTitleFont(42);
   ramka->Draw("");
 
-//--- NOTE: Drawing of my points saved until last, so they are drawn on top -----------------
-//---------------------------------------- Lambda-K0 ----------------------------------------
-  double tLamK00010mT = 0.25*(1.583+1.585+1.584+1.583);  //m_avg
-  if(bUseMinvCalculation) tLamK00010mT = 0.25*(1.603+1.604+1.603+1.602);  //m_inv
-  if(bUseReducedMassCalculation) tLamK00010mT = 0.25*(1.395+1.396+1.396+1.395);  //m_red
-  vector<double> RInfo_LamK0_0010;
-  RInfo_LamK0_0010 = GetPlotRadiusInfo(kLamK0, k0010, tIncludeResType, tIncludeD0Type);
-  double tLamK00010R = RInfo_LamK0_0010[0];
-  double tLamK00010Rerr = RInfo_LamK0_0010[1];
-  double tLamK00010RerrSys = RInfo_LamK0_0010[2];
 
-  double tLamK01030mT = 0.25*(1.568+1.568+1.569+1.567);  //m_avg
-  if(bUseMinvCalculation) tLamK01030mT = 0.25*(1.588+1.588+1.589+1.587);  //m_inv
-  if(bUseReducedMassCalculation) tLamK01030mT = 0.25*(1.377+1.377+1.378+1.375);  //m_red
-  vector<double> RInfo_LamK0_1030;
-  RInfo_LamK0_1030 = GetPlotRadiusInfo(kLamK0, k1030, tIncludeResType, tIncludeD0Type);
-  double tLamK01030R = RInfo_LamK0_1030[0];
-  double tLamK01030Rerr = RInfo_LamK0_1030[1];
-  double tLamK01030RerrSys = RInfo_LamK0_1030[2];
-
-  double tLamK03050mT = 0.25*(1.528+1.526+1.528+1.525);  //m_avg
-  if(bUseMinvCalculation) tLamK03050mT = 0.25*(1.548+1.546+1.549+1.546);  //m_inv
-  if(bUseReducedMassCalculation) tLamK03050mT = 0.25*(1.331+1.328+1.331+1.327);  //m_red
-  vector<double> RInfo_LamK0_3050;
-  RInfo_LamK0_3050 = GetPlotRadiusInfo(kLamK0, k3050, tIncludeResType, tIncludeD0Type);
-  double tLamK03050R = RInfo_LamK0_3050[0];
-  double tLamK03050Rerr = RInfo_LamK0_3050[1];
-  double tLamK03050RerrSys = RInfo_LamK0_3050[2];
-
-//---------------------------------------- Lambda-KchP --------------------------------------
-  double tLamKchP0010mT = 0.25*(1.417+1.416+1.420+1.416); //m_avg
-  if(bUseMinvCalculation) tLamKchP0010mT = 0.25*(1.439+1.438+1.442+1.437); //m_inv
-  if(bUseReducedMassCalculation) tLamKchP0010mT = 0.25*(1.203+1.200+1.206+1.201); //m_red
-  vector<double> RInfo_LamKchP_0010;
-  RInfo_LamKchP_0010 = GetPlotRadiusInfo(kLamKchP, k0010, tIncludeResType, tIncludeD0Type);
-  double tLamKchP0010R = RInfo_LamKchP_0010[0];
-  double tLamKchP0010Rerr = RInfo_LamKchP_0010[1];
-  double tLamKchP0010RerrSys = RInfo_LamKchP_0010[2];
-
-  double tLamKchP1030mT = 0.25*(1.405+1.401+1.409+1.402); //m_avg
-  if(bUseMinvCalculation) tLamKchP1030mT = 0.25*(1.427+1.423+1.431+1.425); //m_inv
-  if(bUseReducedMassCalculation) tLamKchP1030mT = 0.25*(1.188+1.182+1.192+1.184); //m_red
-  vector<double> RInfo_LamKchP_1030;
-  RInfo_LamKchP_1030 = GetPlotRadiusInfo(kLamKchP, k1030, tIncludeResType, tIncludeD0Type);
-  double tLamKchP1030R = RInfo_LamKchP_1030[0];
-  double tLamKchP1030Rerr = RInfo_LamKchP_1030[1];
-  double tLamKchP1030RerrSys = RInfo_LamKchP_1030[2];
-
-  double tLamKchP3050mT = 0.25*(1.368+1.360+1.372+1.362); //m_avg
-  if(bUseMinvCalculation) tLamKchP3050mT = 0.25*(1.390+1.382+1.395+1.385); //m_inv
-  if(bUseReducedMassCalculation) tLamKchP3050mT = 0.25*(1.144+1.134+1.149+1.136); //m_red
-  vector<double> RInfo_LamKchP_3050;
-  RInfo_LamKchP_3050 = GetPlotRadiusInfo(kLamKchP, k3050, tIncludeResType, tIncludeD0Type);
-  double tLamKchP3050R = RInfo_LamKchP_3050[0];
-  double tLamKchP3050Rerr = RInfo_LamKchP_3050[1];
-  double tLamKchP3050RerrSys = RInfo_LamKchP_3050[2];
-
-//---------------------------------------- Lambda-KchM --------------------------------------
-  double tLamKchM0010mT = 0.25*(1.419+1.417+1.420+1.419); //m_avg
-  if(bUseMinvCalculation) tLamKchM0010mT = 0.25*(1.441+1.439+1.442+1.440); //m_inv
-  if(bUseReducedMassCalculation) tLamKchM0010mT = 0.25*(1.204+1.202+1.205+1.204); //m_red
-  vector<double> RInfo_LamKchM_0010;
-  RInfo_LamKchM_0010 = GetPlotRadiusInfo(kLamKchM, k0010, tIncludeResType, tIncludeD0Type);
-  double tLamKchM0010R = RInfo_LamKchM_0010[0];
-  double tLamKchM0010Rerr = RInfo_LamKchM_0010[1];
-  double tLamKchM0010RerrSys = RInfo_LamKchM_0010[2];
-
-  double tLamKchM1030mT = 0.25*(1.404+1.404+1.407+1.407); //m_avg
-  if(bUseMinvCalculation) tLamKchM1030mT = 0.25*(1.426+1.426+1.428+1.429); //m_inv
-  if(bUseReducedMassCalculation) tLamKchM1030mT = 0.25*(1.187+1.187+1.189+1.190); //m_red
-  vector<double> RInfo_LamKchM_1030;
-  RInfo_LamKchM_1030 = GetPlotRadiusInfo(kLamKchM, k1030, tIncludeResType, tIncludeD0Type);
-  double tLamKchM1030R = RInfo_LamKchM_1030[0];
-  double tLamKchM1030Rerr = RInfo_LamKchM_1030[1];
-  double tLamKchM1030RerrSys = RInfo_LamKchM_1030[2];
-
-  double tLamKchM3050mT = 0.25*(1.364+1.367+1.366+1.370); //m_avg
-  if(bUseMinvCalculation) tLamKchM3050mT = 0.25*(1.387+1.389+1.389+1.392); //m_inv
-  if(bUseReducedMassCalculation) tLamKchM3050mT = 0.25*(1.139+1.143+1.141+1.146); //m_red
-  vector<double> RInfo_LamKchM_3050;
-  RInfo_LamKchM_3050 = GetPlotRadiusInfo(kLamKchM, k3050, tIncludeResType, tIncludeD0Type);
-  double tLamKchM3050R = RInfo_LamKchM_3050[0];
-  double tLamKchM3050Rerr = RInfo_LamKchM_3050[1];
-  double tLamKchM3050RerrSys = RInfo_LamKchM_3050[2];
-
-
-//-------------------------------- Average Lam-KchP and LamKchM -----------------------------
-  double tLamKchAvg0010mT = 0.5*(tLamKchP0010mT+tLamKchM0010mT);
-  double tLamKchAvg0010R = 0.5*(tLamKchP0010R+tLamKchM0010R);
-  double tLamKchAvg0010Rerr = sqrt(pow(0.5*tLamKchP0010Rerr,2)+pow(0.5*tLamKchM0010Rerr,2));
-  double tLamKchAvg0010RerrSys = sqrt(pow(0.5*tLamKchP0010RerrSys,2)+pow(0.5*tLamKchM0010RerrSys,2));
-
-  double tLamKchAvg1030mT = 0.5*(tLamKchP1030mT+tLamKchM1030mT);
-  double tLamKchAvg1030R = 0.5*(tLamKchP1030R+tLamKchM1030R);
-  double tLamKchAvg1030Rerr = sqrt(pow(0.5*tLamKchP1030Rerr,2)+pow(0.5*tLamKchM1030Rerr,2));
-  double tLamKchAvg1030RerrSys = sqrt(pow(0.5*tLamKchP1030RerrSys,2)+pow(0.5*tLamKchM1030RerrSys,2));
-
-  double tLamKchAvg3050mT = 0.5*(tLamKchP3050mT+tLamKchM3050mT);
-  double tLamKchAvg3050R = 0.5*(tLamKchP3050R+tLamKchM3050R);
-  double tLamKchAvg3050Rerr = sqrt(pow(0.5*tLamKchP3050Rerr,2)+pow(0.5*tLamKchM3050Rerr,2));
-  double tLamKchAvg3050RerrSys = sqrt(pow(0.5*tLamKchP3050RerrSys,2)+pow(0.5*tLamKchM3050RerrSys,2));
-
-
-//---------------------------------- Draw Legend -------------------------------------------- 
-  if(!bRunAveragedKchPKchM)
-  {
-    TLatex *   tex = new TLatex(1.375,9.4,"Pb-Pb #sqrt{#it{s}_{NN}} = 2.76 TeV");
-    tex->SetTextFont(42);
-    tex->SetTextSize(0.044);
-    tex->SetLineWidth(2);
-    tex->Draw();
-//    tex->DrawLatex(0.85,9.4,"ALICE Preliminary");
-    tex = new TLatex();
-    tex->SetTextAlign(12);
-    tex->SetTextFont(42);
-    tex->SetTextSize(0.04);
-    tex->SetLineWidth(2);
-
-
-    // species text and markers
-    TMarker *marker = new TMarker();
-    marker->SetMarkerSize(tMarkerSize);
-  
-    tex->DrawLatex(1.5,8.8,"#pi^{#pm}#pi^{#pm}");
-    marker->SetMarkerStyle(28);//pions
-    marker->DrawMarker(1.66,8.8);
-  
-    tex->DrawLatex(1.5,8.2,"K^{#pm}K^{#pm}");
-    marker->SetMarkerStyle(25);//Kch
-    marker->DrawMarker(1.66,8.2);
-  
-    tex->DrawLatex(1.5,7.6,"K_{S}^{0}K_{S}^{0}");
-    marker->SetMarkerStyle(27);//K0s
-    marker->DrawMarker(1.66,7.6);
-  
-    tex->DrawLatex(1.5,7.0,"#bar{p}#bar{p}");
-    marker->SetMarkerStyle(5);// antiprotons
-    marker->DrawMarker(1.66,7.0);
-  
-    tex->DrawLatex(1.5,6.4,"pp");
-    marker->SetMarkerStyle(24);//protons
-    marker->DrawMarker(1.66,6.4);
-  
-    //------- Column 2 ----------------------
-  
-    tex->DrawLatex(1.8,8.2,"#LambdaK^{+}");
-    marker->SetMarkerStyle(tMarkerStyleLamKchP); //LamK+
-    marker->DrawMarker(1.95,8.2);
-  
-    tex->DrawLatex(1.8,7.6,"#LambdaK^{-}");
-    marker->SetMarkerStyle(tMarkerStyleLamKchM); //LamK-
-    marker->DrawMarker(1.95,7.6);
-  
-    tex->DrawLatex(1.8,7.0,"#LambdaK^{0}_{S}");
-    marker->SetMarkerStyle(tMarkerStyleLamK0); //LamK0
-    marker->DrawMarker(1.95,7.0);
-  
-  
-  
-    // centralities
-    TLine line;
-    line.SetLineWidth(2);
-    line.SetLineColor(myRed);
-    line.DrawLine(1.12,8.7,1.22,8.7);
-    line.SetLineColor(myGreen);
-    line.DrawLine(1.12,8.1,1.22,8.1);
-    line.SetLineColor(myBlue);
-    line.DrawLine(1.12,7.5,1.22,7.5);
-    tex->DrawLatex(0.9,8.7,"0-10%");
-    tex->DrawLatex(0.9,8.1,"10-30%");
-    tex->DrawLatex(0.9,7.5,"30-50%");
-  }
-
-  else /*if(bRunAveragedKchPKchM)*/
-  {
-    TLatex *   tex = new TLatex(1.10,9.4,"ALICE Pb-Pb #sqrt{#it{s}_{NN}} = 2.76 TeV");
-    tex->SetTextFont(42);
-    tex->SetTextSize(0.044);
-    tex->SetLineWidth(2);
-    tex->Draw();
-    tex = new TLatex();
-    tex->SetTextAlign(12);
-    tex->SetTextFont(42);
-    tex->SetTextSize(0.04);
-    tex->SetLineWidth(2);
-
-
-    // species text and markers
-    TMarker *marker = new TMarker();
-    marker->SetMarkerSize(tMarkerSize);
-  
-    tex->DrawLatex(1.3,8.8,"#pi^{#pm}#pi^{#pm}");
-    marker->SetMarkerStyle(28);//pions
-    marker->DrawMarker(1.46,8.8);
-  
-    tex->DrawLatex(1.3,8.2,"K^{#pm}K^{#pm}");
-    marker->SetMarkerStyle(25);//Kch
-    marker->DrawMarker(1.46,8.2);
-  
-    tex->DrawLatex(1.3,7.6,"K_{S}^{0}K_{S}^{0}");
-    marker->SetMarkerStyle(27);//K0s
-    marker->DrawMarker(1.46,7.6);
-  
-    tex->DrawLatex(1.3,7.0,"#bar{p}#bar{p}");
-    marker->SetMarkerStyle(5);// antiprotons
-    marker->DrawMarker(1.46,7.0);
-  
-    tex->DrawLatex(1.3,6.4,"pp");
-    marker->SetMarkerStyle(24);//protons
-    marker->DrawMarker(1.46,6.4);
-  
-    //------- Column 2 ----------------------
-  
-     tex->DrawLatex(1.57,7.9,"#LT#LambdaK^{+}+#LambdaK^{-}#GT");
-     marker->SetMarkerStyle(tMarkerStyleLamKchAvg); //AvgLamK+LamK-
-     marker->DrawMarker(1.9,7.9);
-  
-    tex->DrawLatex(1.65,7.1,"#LambdaK^{0}_{S}");
-    marker->SetMarkerStyle(tMarkerStyleLamK0); //LamK0
-    marker->DrawMarker(1.9,7.0);
-  
-  
-  
-    // centralities
-    TLine line;
-    line.SetLineWidth(2);
-    line.SetLineColor(myRed);
-    line.DrawLine(1.07,8.7,1.17,8.7);
-    line.SetLineColor(myGreen);
-    line.DrawLine(1.07,8.1,1.17,8.1);
-    line.SetLineColor(myBlue);
-    line.DrawLine(1.07,7.5,1.17,7.5);
-    tex->DrawLatex(0.85,8.7,"0-10%");
-    tex->DrawLatex(0.85,8.1,"10-30%");
-    tex->DrawLatex(0.85,7.5,"30-50%");
-  }
-
+//------------------------------------------------------------------------------------------- 
 
 //-------------------------------------------------------------------------------------------
 //----------------------------- ALICE DATA --------------------------------------------------
@@ -567,146 +164,74 @@ int main(int argc, char **argv)
 //           aDataPointsWithErrors[i].size() == 6 ==> aDataPointsWithErrors[i] = [aX, aXerrLow, aXerrHigh, aY, aYerrLow, aYerrHigh]
 
 //---------------------------- Protons ------------------------------------------------------
+  double tMarkerStylePP_0010 = 20;
+  double tMarkerStylePP_1030 = 24;
+  double tMarkerStylePP_3050 = 31;
+
   //----- 0-10% -----
-  DrawPoints("GraphPP0010",tPP0010Sys,tPP0010Stat,redT,red,tMarkerStylePP,tMarkerSize);
+  DrawPoints("GraphPP0010",tPP0010Sys,tPP0010Stat,redT,red,tMarkerStylePP_0010,tMarkerSize);
 
   //----- 10-30% -----
-  DrawPoints("GraphPP1030",tPP1030Sys,tPP1030Stat,greenT,green,tMarkerStylePP,tMarkerSize);
+  DrawPoints("GraphPP1030",tPP1030Sys,tPP1030Stat,greenT,green,tMarkerStylePP_1030,tMarkerSize);
   
   //----- 30-50% -----
-  DrawPoints("GraphPP3050",tPP3050Sys,tPP3050Stat,blueT,blue,tMarkerStylePP,tMarkerSize);
+  DrawPoints("GraphPP3050",tPP3050Sys,tPP3050Stat,blueT,blue,tMarkerStylePP_3050,tMarkerSize);
 
   
 //------------------------- Anti-Protons ----------------------------------------------------
+  double tMarkerStyleAPAP_0010 = 22;
+  double tMarkerStyleAPAP_1030 = 26;
+  double tMarkerStyleAPAP_3050 = 33;
   //----- 0-10% -----
-  DrawPoints("GraphAPAP0010",tAPAP0010Sys,tAPAP0010Stat,redT,red,tMarkerStyleAPAP,tMarkerSize);
+  DrawPoints("GraphAPAP0010",tAPAP0010Sys,tAPAP0010Stat,redT,red,tMarkerStyleAPAP_0010,tMarkerSize);
   
   //----- 10-30% -----
-  DrawPoints("GraphAPAP1030",tAPAP1030Sys,tAPAP1030Stat,greenT,green,tMarkerStyleAPAP,tMarkerSize);
+  DrawPoints("GraphAPAP1030",tAPAP1030Sys,tAPAP1030Stat,greenT,green,tMarkerStyleAPAP_1030,tMarkerSize);
 
   //----- 30-50% -----
-  DrawPoints("GraphAPAP3050",tAPAP3050Sys,tAPAP3050Stat,blueT,blue,tMarkerStyleAPAP,tMarkerSize);
+  DrawPoints("GraphAPAP3050",tAPAP3050Sys,tAPAP3050Stat,blueT,blue,tMarkerStyleAPAP_3050,tMarkerSize);
 
   
-//------------------------ K0s-K0s ----------------------------------------------------------  
+//------------------------ K0s-K0s ---------------------------------------------------------- 
+  double tMarkerStyleK0sK0s_0010 = 23;
+  double tMarkerStyleK0sK0s_1030 = 32;
+  double tMarkerStyleK0sK0s_3050 = 27; 
   //----- 0-10% -----
-  DrawPoints("GraphK0sK0s0010",tK0sK0s0010Sys,tK0sK0s0010Stat,redT,red,tMarkerStyleK0sK0s,tMarkerSize);
+  DrawPoints("GraphK0sK0s0010",tK0sK0s0010Sys,tK0sK0s0010Stat,redT,red,tMarkerStyleK0sK0s_0010,tMarkerSize);
 
   //----- 10-30% -----   
-  DrawPoints("GraphK0sK0s1030",tK0sK0s1030Sys,tK0sK0s1030Stat,greenT,green,tMarkerStyleK0sK0s,tMarkerSize);
+  DrawPoints("GraphK0sK0s1030",tK0sK0s1030Sys,tK0sK0s1030Stat,greenT,green,tMarkerStyleK0sK0s_1030,tMarkerSize);
 
   //----- 30-50% -----
-  DrawPoints("GraphK0sK0s3050",tK0sK0s3050Sys,tK0sK0s3050Stat,blueT,blue,tMarkerStyleK0sK0s,tMarkerSize);
+  DrawPoints("GraphK0sK0s3050",tK0sK0s3050Sys,tK0sK0s3050Stat,blueT,blue,tMarkerStyleK0sK0s_3050,tMarkerSize);
 
 
 //----------------------------- Kch-Kch -----------------------------------------------------  
+  double tMarkerStyleKchKch_0010 = 21;
+  double tMarkerStyleKchKch_1030 = 25;
+  double tMarkerStyleKchKch_3050 = 29;
   //----- 0-10% -----
-  DrawPoints("GraphKchKch0010",tKchKch0010Sys,tKchKch0010Stat,redT,red,tMarkerStyleKchKch,tMarkerSize);
+  DrawPoints("GraphKchKch0010",tKchKch0010Sys,tKchKch0010Stat,redT,red,tMarkerStyleKchKch_0010,tMarkerSize);
   
   //----- 10-30% -----
-  DrawPoints("GraphKchKch1030",tKchKch1030Sys,tKchKch1030Stat,greenT,green,tMarkerStyleKchKch,tMarkerSize);
+  DrawPoints("GraphKchKch1030",tKchKch1030Sys,tKchKch1030Stat,greenT,green,tMarkerStyleKchKch_1030,tMarkerSize);
 
   //----- 30-50% -----
-  DrawPoints("GraphKchKch3050",tKchKch3050Sys,tKchKch3050Stat,blueT,blue,tMarkerStyleKchKch,tMarkerSize);
+  DrawPoints("GraphKchKch3050",tKchKch3050Sys,tKchKch3050Stat,blueT,blue,tMarkerStyleKchKch_3050,tMarkerSize);
 
   
 //------------------------------ Pi-Pi ------------------------------------------------------
+  double tMarkerStylePiPi_0010 = 34;
+  double tMarkerStylePiPi_1030 = 28;
+  double tMarkerStylePiPi_3050 = 30;
   //----- 0-10% -----
-  DrawPoints("GraphPiPi0010",tPiPi0010Sys,tPiPi0010Stat,redT,red,tMarkerStylePiPi,tMarkerSize);
+  DrawPoints("GraphPiPi0010",tPiPi0010Sys,tPiPi0010Stat,redT,red,tMarkerStylePiPi_0010,tMarkerSize);
 
   //----- 10-30% -----
-  DrawPoints("GraphPiPi1030",tPiPi1030Sys,tPiPi1030Stat,greenT,green,tMarkerStylePiPi,tMarkerSize);
+  DrawPoints("GraphPiPi1030",tPiPi1030Sys,tPiPi1030Stat,greenT,green,tMarkerStylePiPi_1030,tMarkerSize);
 
   //----- 30-50% -----
-  DrawPoints("GraphPiPi3050",tPiPi3050Sys,tPiPi3050Stat,blueT,blue,tMarkerStylePiPi,tMarkerSize);
-
-  
-//-------------------------------------------------------------------------------------------
-//-----------------------------------Draw my points -----------------------------------------
-//-------------------------------------------------------------------------------------------
-
-//---------------------------------------- Lambda-K0 ----------------------------------------
-  if(!bOutlinePoints) tMarkerStyleLamK0o=0;
-  //----- 0-10% Lambda-K0 -----
-  td2dVec tLamK00010Sys = {{tLamK00010mT,0.015,tLamK00010R,tLamK00010RerrSys}};
-  td2dVec tLamK00010Stat = {{tLamK00010mT,0.,tLamK00010R,tLamK00010Rerr}};
-  DrawPoints("GraphLamK00010",tLamK00010Sys,tLamK00010Stat,myRedT,myRed,tMarkerStyleLamK0,tMarkerSize,tMarkerStyleLamK0o);
-
-
-  //----- 10-30% Lambda-K0 -----
-  td2dVec tLamK01030Sys = {{tLamK01030mT,0.015,tLamK01030R,tLamK01030RerrSys}};
-  td2dVec tLamK01030Stat = {{tLamK01030mT,0.,tLamK01030R,tLamK01030Rerr}};
-  DrawPoints("GraphLamK01030",tLamK01030Sys,tLamK01030Stat,myGreenT,myGreen,tMarkerStyleLamK0,tMarkerSize,tMarkerStyleLamK0o);
-
-
-  //----- 30-50% Lambda-K0 -----
-  td2dVec tLamK03050Sys = {{tLamK03050mT,0.015,tLamK03050R,tLamK03050RerrSys}};
-  td2dVec tLamK03050Stat = {{tLamK03050mT,0.,tLamK03050R,tLamK03050Rerr}};
-  DrawPoints("GraphLamK03050",tLamK03050Sys,tLamK03050Stat,myBlueT,myBlue,tMarkerStyleLamK0,tMarkerSize,tMarkerStyleLamK0o);
-
-
-
-  if(!bRunAveragedKchPKchM)
-  {
-//---------------------------------------- Lambda-KchP --------------------------------------
-    if(!bOutlinePoints) tMarkerStyleLamKchPo=0;
-    //----- 0-10% Lambda-K0 -----
-    td2dVec tLamKchP0010Sys = {{tLamKchP0010mT,0.015,tLamKchP0010R,tLamKchP0010RerrSys}};
-    td2dVec tLamKchP0010Stat = {{tLamKchP0010mT,0.,tLamKchP0010R,tLamKchP0010Rerr}};
-    DrawPoints("GraphLamKchP0010",tLamKchP0010Sys,tLamKchP0010Stat,myRedT,myRed,tMarkerStyleLamKchP,tMarkerSize,tMarkerStyleLamKchPo);
-
-
-    //----- 10-30% Lambda-K0 -----
-    td2dVec tLamKchP1030Sys = {{tLamKchP1030mT,0.015,tLamKchP1030R,tLamKchP1030RerrSys}};
-    td2dVec tLamKchP1030Stat = {{tLamKchP1030mT,0.,tLamKchP1030R,tLamKchP1030Rerr}};
-    DrawPoints("GraphLamKchP1030",tLamKchP1030Sys,tLamKchP1030Stat,myGreenT,myGreen,tMarkerStyleLamKchP,tMarkerSize,tMarkerStyleLamKchPo);
-
-
-    //----- 30-50% Lambda-K0 -----
-    td2dVec tLamKchP3050Sys = {{tLamKchP3050mT,0.015,tLamKchP3050R,tLamKchP3050RerrSys}};
-    td2dVec tLamKchP3050Stat = {{tLamKchP3050mT,0.,tLamKchP3050R,tLamKchP3050Rerr}};
-    DrawPoints("GraphLamKchP3050",tLamKchP3050Sys,tLamKchP3050Stat,myBlueT,myBlue,tMarkerStyleLamKchP,tMarkerSize,tMarkerStyleLamKchPo);
-
-//---------------------------------------- Lambda-KchM --------------------------------------
-    if(!bOutlinePoints) tMarkerStyleLamKchMo=0;
-    //----- 0-10% Lambda-K0 -----
-    td2dVec tLamKchM0010Sys = {{tLamKchM0010mT,0.015,tLamKchM0010R,tLamKchM0010RerrSys}};
-    td2dVec tLamKchM0010Stat = {{tLamKchM0010mT,0.,tLamKchM0010R,tLamKchM0010Rerr}};
-    DrawPoints("GraphLamKchM0010",tLamKchM0010Sys,tLamKchM0010Stat,myRedT,myRed,tMarkerStyleLamKchM,tMarkerSize,tMarkerStyleLamKchMo);
-
-
-    //----- 10-30% Lambda-K0 -----
-    td2dVec tLamKchM1030Sys = {{tLamKchM1030mT,0.015,tLamKchM1030R,tLamKchM1030RerrSys}};
-    td2dVec tLamKchM1030Stat = {{tLamKchM1030mT,0.,tLamKchM1030R,tLamKchM1030Rerr}};
-    DrawPoints("GraphLamKchM1030",tLamKchM1030Sys,tLamKchM1030Stat,myGreenT,myGreen,tMarkerStyleLamKchM,tMarkerSize,tMarkerStyleLamKchMo);
-
-
-    //----- 30-50% Lambda-K0 -----
-    td2dVec tLamKchM3050Sys = {{tLamKchM3050mT,0.015,tLamKchM3050R,tLamKchM3050RerrSys}};
-    td2dVec tLamKchM3050Stat = {{tLamKchM3050mT,0.,tLamKchM3050R,tLamKchM3050Rerr}};
-    DrawPoints("GraphLamKchM3050",tLamKchM3050Sys,tLamKchM3050Stat,myBlueT,myBlue,tMarkerStyleLamKchM,tMarkerSize,tMarkerStyleLamKchMo);
-  }
-  else /*if(bRunAveragedKchPKchM)*/
-  {
-//-------------------------------- Average Lam-KchP and LamKchM -----------------------------
-    if(!bOutlinePoints) tMarkerStyleLamKchAvgo=0;
-    //----- 0-10% Lambda-K0 -----
-    td2dVec tLamKchAvg0010Sys = {{tLamKchAvg0010mT,0.015,tLamKchAvg0010R,tLamKchAvg0010RerrSys}};
-    td2dVec tLamKchAvg0010Stat = {{tLamKchAvg0010mT,0.,tLamKchAvg0010R,tLamKchAvg0010Rerr}};
-    DrawPoints("GraphLamKchAvg0010",tLamKchAvg0010Sys,tLamKchAvg0010Stat,myRedT,myRed,tMarkerStyleLamKchAvg,tMarkerSize,tMarkerStyleLamKchAvgo);
-
-
-    //----- 10-30% Lambda-K0 -----
-    td2dVec tLamKchAvg1030Sys = {{tLamKchAvg1030mT,0.015,tLamKchAvg1030R,tLamKchAvg1030RerrSys}};
-    td2dVec tLamKchAvg1030Stat = {{tLamKchAvg1030mT,0.,tLamKchAvg1030R,tLamKchAvg1030Rerr}};
-    DrawPoints("GraphLamKchAvg1030",tLamKchAvg1030Sys,tLamKchAvg1030Stat,myGreenT,myGreen,tMarkerStyleLamKchAvg,tMarkerSize,tMarkerStyleLamKchAvgo);
-
-
-    //----- 30-50% Lambda-K0 -----
-    td2dVec tLamKchAvg3050Sys = {{tLamKchAvg3050mT,0.015,tLamKchAvg3050R,tLamKchAvg3050RerrSys}};
-    td2dVec tLamKchAvg3050Stat = {{tLamKchAvg3050mT,0.,tLamKchAvg3050R,tLamKchAvg3050Rerr}};
-    DrawPoints("GraphLamKchAvg3050",tLamKchAvg3050Sys,tLamKchAvg3050Stat,myBlueT,myBlue,tMarkerStyleLamKchAvg,tMarkerSize,tMarkerStyleLamKchAvgo);
-  }
+  DrawPoints("GraphPiPi3050",tPiPi3050Sys,tPiPi3050Stat,blueT,blue,tMarkerStylePiPi_3050,tMarkerSize);
 
 //-------------------------------------------------------------------------------
   TLatex* tTex = new TLatex();
@@ -720,41 +245,16 @@ int main(int argc, char **argv)
   tMarker->SetMarkerStyle(20);
   tMarker->SetMarkerColor(kBlack);
 
-  tTex->DrawLatex(0.35, 2., tDrawingInfo.descriptor);
-  tMarker->SetMarkerStyle(tDrawingInfo.markerStyle);
-  tMarker->DrawMarker(0.3, 2.);
 
-//-------------------------------------------------------------------------------
-  if(bDrawJaiAndHans)
-  {
-    //---- LamLam --------------
-    //----- 0-10% -----
-    DrawPoints("GraphLamLam0010", tLamLam0010Sys, tLamLam0010Stat, myRedT, myRed, tMarkerStyleLamLam, tMarkerSize);
-    //----- 10-30% -----
-    DrawPoints("GraphLamLam1030", tLamLam1030Sys, tLamLam1030Stat, myGreenT, myGreen, tMarkerStyleLamLam, tMarkerSize);
-    //----- 30-50% -----
-    DrawPoints("GraphLamLam3050", tLamLam3050Sys, tLamLam3050Stat, myBlueT, myBlue, tMarkerStyleLamLam, tMarkerSize);
+//---------------------------------- Draw Legend -------------------------------------------- 
 
-    //---- LamALam --------------
-    //----- 0-10% -----
-    DrawPoints("GraphLamALam0010", tLamALam0010Sys, tLamALam0010Stat, myRedT, myRed, tMarkerStyleLamALam, tMarkerSize);
-    //----- 10-30% -----
-    DrawPoints("GraphLamALam1030", tLamALam1030Sys, tLamALam1030Stat, myGreenT, myGreen, tMarkerStyleLamALam, tMarkerSize);
-    //----- 30-50% -----
-    DrawPoints("GraphLamALam3050", tLamALam3050Sys, tLamALam3050Stat, myBlueT, myBlue, tMarkerStyleLamALam, tMarkerSize);
+    TLatex *   tex = new TLatex(0.275,1.75,"ALICE Pb-Pb #sqrt{#it{s}_{NN}} = 2.76 TeV");
+    tex->SetTextFont(42);
+    tex->SetTextSize(0.044);
+    tex->SetLineWidth(2);
+    tex->Draw();
 
-
-    //---- PLam --------------
-    //----- 0-10% -----
-    DrawPoints("GraphPLam0010", tPLam0010Sys, tPLam0010Stat, myRedT, myRed, tMarkerStylePLam, tMarkerSize);
-    //----- 10-30% -----
-    DrawPoints("GraphPLam1030", tPLam1030Sys, tPLam1030Stat, myGreenT, myGreen, tMarkerStylePLam, tMarkerSize);
-    //----- 30-50% -----
-    DrawPoints("GraphPLam3050", tPLam3050Sys, tPLam3050Stat, myBlueT, myBlue, tMarkerStylePLam, tMarkerSize);
-
-
-    //----------------------------------------------------
-    TLatex* tex = new TLatex();
+    tex = new TLatex();
     tex->SetTextAlign(12);
     tex->SetTextFont(42);
     tex->SetTextSize(0.04);
@@ -764,22 +264,117 @@ int main(int argc, char **argv)
     // species text and markers
     TMarker *marker = new TMarker();
     marker->SetMarkerSize(tMarkerSize);
+  
+    double tXSysText = 1.0;
+    double tXMarkers0010 = 1.20;
+    double tXMarkers1030 = 1.45;
+    double tXMarkers3050 = 1.70;
 
-    tex->DrawLatex(2.05, 8.2, "p#Lambda");
-    marker->SetMarkerStyle(tMarkerStylePLam);
-    marker->DrawMarker(2.175, 8.2);
+    double tY1Text = 9.0;
+    double tY1Sep = 0.6;
 
-    tex->DrawLatex(2.05, 7.6, "#Lambda#Lambda");
-    marker->SetMarkerStyle(tMarkerStyleLamLam);
-    marker->DrawMarker(2.175, 7.6);
+    double tYTextCent = 9.6;
+    double tXTextCent0010 = 1.16;
+    double tXTextCent1030 = 1.385;
+    double tXTextCent3050 = 1.635;
 
-    tex->DrawLatex(2.05, 7.0, "#Lambda#bar{#Lambda}");
-    marker->SetMarkerStyle(tMarkerStyleLamALam);
-    marker->DrawMarker(2.175, 7.0);
-  }
+    //-----------------------------
+    double tXShift = 0.125;
+    double tYShift = 0.0;
 
-//---------------------------- Save file ----------------------------------------------------
-  if(bSaveImage) canmtcomb->SaveAs(tSaveName);
+    tXSysText     += tXShift;
+    tXMarkers0010 += tXShift;
+    tXMarkers1030 += tXShift;
+    tXMarkers3050 += tXShift;
+
+    tXTextCent0010 += tXShift;
+    tXTextCent1030 += tXShift;
+    tXTextCent3050 += tXShift;
+
+    tY1Text    += tYShift;
+    tYTextCent += tYShift;
+
+    //-----------------------------
+
+    tex->DrawLatex(tXTextCent0010, tYTextCent, "0-10%");
+    tex->DrawLatex(tXTextCent1030, tYTextCent, "10-30%");
+    tex->DrawLatex(tXTextCent3050, tYTextCent, "30-50%");
+
+    //-----
+    tex->DrawLatex(tXSysText, tY1Text-0*tY1Sep, "#pi^{#pm}#pi^{#pm}");
+
+    marker->SetMarkerStyle(tMarkerStylePiPi_0010);//pions 0010
+    marker->SetMarkerColor(red);
+    marker->DrawMarker(tXMarkers0010, tY1Text-0*tY1Sep);
+
+    marker->SetMarkerStyle(tMarkerStylePiPi_1030);//pions 1030
+    marker->SetMarkerColor(green);
+    marker->DrawMarker(tXMarkers1030, tY1Text-0*tY1Sep);
+
+    marker->SetMarkerStyle(tMarkerStylePiPi_3050);//pions 3050
+    marker->SetMarkerColor(blue);
+    marker->DrawMarker(tXMarkers3050, tY1Text-0*tY1Sep);
+  
+    //-----
+    tex->DrawLatex(tXSysText, tY1Text-1*tY1Sep, "K^{#pm}K^{#pm}");
+
+    marker->SetMarkerStyle(tMarkerStyleKchKch_0010);//Kch 0010
+    marker->SetMarkerColor(red);
+    marker->DrawMarker(tXMarkers0010, tY1Text-1*tY1Sep);
+
+    marker->SetMarkerStyle(tMarkerStyleKchKch_1030);//Kch 1030
+    marker->SetMarkerColor(green);
+    marker->DrawMarker(tXMarkers1030, tY1Text-1*tY1Sep);
+
+    marker->SetMarkerStyle(tMarkerStyleKchKch_3050);//Kch 3050
+    marker->SetMarkerColor(blue);
+    marker->DrawMarker(tXMarkers3050, tY1Text-1*tY1Sep);
+  
+    //-----
+    tex->DrawLatex(tXSysText, tY1Text-2*tY1Sep, "K_{S}^{0}K_{S}^{0}");
+
+    marker->SetMarkerStyle(tMarkerStyleK0sK0s_0010);//K0s 0010
+    marker->SetMarkerColor(red);
+    marker->DrawMarker(tXMarkers0010, tY1Text-2*tY1Sep);
+
+    marker->SetMarkerStyle(tMarkerStyleK0sK0s_1030);//K0s 1030
+    marker->SetMarkerColor(green);
+    marker->DrawMarker(tXMarkers1030, tY1Text-2*tY1Sep);
+
+    marker->SetMarkerStyle(tMarkerStyleK0sK0s_3050);//K0s 3050
+    marker->SetMarkerColor(blue);
+    marker->DrawMarker(tXMarkers3050, tY1Text-2*tY1Sep);
+  
+    //-----
+    tex->DrawLatex(tXSysText, tY1Text-3*tY1Sep, "#bar{p}#bar{p}");
+
+    marker->SetMarkerStyle(tMarkerStyleAPAP_0010);// antiprotons 0010
+    marker->SetMarkerColor(red);
+    marker->DrawMarker(tXMarkers0010, tY1Text-3*tY1Sep);
+
+    marker->SetMarkerStyle(tMarkerStyleAPAP_1030);// antiprotons 1030
+    marker->SetMarkerColor(green);
+    marker->DrawMarker(tXMarkers1030, tY1Text-3*tY1Sep);
+
+    marker->SetMarkerStyle(tMarkerStyleAPAP_3050);// antiprotons 3050
+    marker->SetMarkerColor(blue);
+    marker->DrawMarker(tXMarkers3050, tY1Text-3*tY1Sep);
+  
+    //-----
+    tex->DrawLatex(tXSysText, tY1Text-4*tY1Sep, "pp");
+
+    marker->SetMarkerStyle(tMarkerStylePP_0010);//protons 0010
+    marker->SetMarkerColor(red);
+    marker->DrawMarker(tXMarkers0010, tY1Text-4*tY1Sep);
+
+    marker->SetMarkerStyle(tMarkerStylePP_1030);//protons 1030
+    marker->SetMarkerColor(green);
+    marker->DrawMarker(tXMarkers1030, tY1Text-4*tY1Sep);
+
+    marker->SetMarkerStyle(tMarkerStylePP_3050);//protons 3050
+    marker->SetMarkerColor(blue);
+    marker->DrawMarker(tXMarkers3050, tY1Text-4*tY1Sep);
+
 
 
 //-------------------------------------------------------------------------------

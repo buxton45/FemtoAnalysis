@@ -824,7 +824,7 @@ void TripleFitSystematicAnalysis::RunVaryResPrimMaxDecayType(bool aSaveImages, b
 
   assert(fModifierValues1.size()==0);  //this is not intended for use with various modifier values, but for the final analysis
   assert(fIncludeResidualsType != kIncludeNoResiduals);
-  int tNFitTypeValues = 4;
+  int tNFitTypeValues = 3;
   vector<int> tFitTypeVec = {3, 4, 6}; //k6fm, k10fm, k15fm
 
   vector<vector<TString> > tText2dVector1(0);

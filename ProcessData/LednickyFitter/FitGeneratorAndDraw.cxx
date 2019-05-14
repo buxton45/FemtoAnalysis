@@ -2229,7 +2229,110 @@ TCanvas* FitGeneratorAndDraw::DrawModelKStarCfs(bool aSaveImage)
   return tCanPart->GetCanvas();
 }
 
+//________________________________________________________________________________________________________________
+CfHeavy* FitGeneratorAndDraw::CombineTwoHeavyCfs(CfHeavy *aCf1, CfHeavy* aCf2)
+{
+  TString aReturnCfName = TString::Format("%s_and_%s", aCf1->GetHeavyCfName().Data(), aCf2->GetHeavyCfName().Data());
 
+  vector<CfLite*> tCfLiteColl1 = aCf1->GetCfLiteCollection();
+  vector<CfLite*> tCfLiteColl2 = aCf2->GetCfLiteCollection();
+
+  vector<CfLite*> tReturnCfLiteColl(0);
+  for(int i=0; i<tCfLiteColl1.size(); i++) tReturnCfLiteColl.push_back(tCfLiteColl1[i]);
+  for(int i=0; i<tCfLiteColl2.size(); i++) tReturnCfLiteColl.push_back(tCfLiteColl2[i]);
+
+  CfHeavy* tReturnCf = new CfHeavy(aReturnCfName, aReturnCfName, tReturnCfLiteColl, 0.32, 0.40);
+  return tReturnCf;
+}
+
+//________________________________________________________________________________________________________________
+TH1* FitGeneratorAndDraw::CombineTwoHists(TH1* aHist1, TH1* aHist2, double aNorm1, double aNorm2)
+{
+  TString aReturnName = TString::Format("%s_and_%s", aHist1->GetName(), aHist2->GetName());
+  TH1* tReturnHist = aHist1->Clone(aReturnName);
+    tReturnHist->Scale(aNorm1);
+  tReturnHist->Add(aHist2, aNorm2);
+  tReturnHist->Scale(1./(aNorm1+aNorm2));
+
+  return tReturnHist;
+}
+
+//________________________________________________________________________________________________________________
+void FitGeneratorAndDraw::BuildKStarCfswFitsPanel_CombineConj(CanvasPartition* aCanPart, CentralityType aCentType, int tColumn, int tRow, bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, NonFlatBgdFitType aNonFlatBgdFitType, bool aDrawSysErrors, bool aDrawDataOnTop)
+{
+  assert(fNAnalyses == 6);
+
+  int tColor, tColorTransparent;
+  int tAnNumber = static_cast<int>(aCentType);
+  int tConjAnNumber = tAnNumber+1;
+
+  AnalysisType tAnType = fSharedAn->GetFitPairAnalysis(tAnNumber)->GetAnalysisType();
+  AnalysisType tConjAnType = fSharedAn->GetFitPairAnalysis(tConjAnNumber)->GetAnalysisType();
+
+  assert(fSharedAn->GetFitPairAnalysis(tAnNumber)->GetCentralityType() == fSharedAn->GetFitPairAnalysis(tConjAnNumber)->GetCentralityType());
+
+  if(tAnType==kLamK0 || tAnType==kALamK0) tColor=kBlack;
+  else if(tAnType==kLamKchP || tAnType==kALamKchM) tColor=kRed+1;
+  else if(tAnType==kLamKchM || tAnType==kALamKchP) tColor=kBlue+1;
+  else tColor=1;
+
+  tColorTransparent = TColor::GetColorTransparent(tColor,0.2);
+
+  int tColorCorrectFit = kMagenta+1;
+  int tColorNonFlatBgd = kGreen+2;
+  //---------------------------------------------------------------------------------------------------------
+  CfHeavy* tCfHeavyData_An   = (CfHeavy*)fSharedAn->GetKStarCfHeavy(tAnNumber);
+  CfHeavy* tCfHeavyData_Conj = (CfHeavy*)fSharedAn->GetKStarCfHeavy(tConjAnNumber);
+  CfHeavy* tCfHeavyData = CombineTwoHeavyCfs(tCfHeavyData_An, tCfHeavyData_Conj);
+
+  TF1 *tNonFlatBgd_An, *tNonFlatBgd_Conj;
+  TH1 *tNonFlatBgdHist_An, *tNonFlatBgdHist_Conj;
+  if(fApplyNonFlatBackgroundCorrection)
+  {
+    assert(!fSharedAn->UsingNewBgdTreatment());
+    tNonFlatBgd_An   = (TF1*)fSharedAn->GetFitPairAnalysis(tAnNumber)->GetNonFlatBackground(aNonFlatBgdFitType, fSharedAn->GetFitType(), true, true);
+    tNonFlatBgd_Conj = (TF1*)fSharedAn->GetFitPairAnalysis(tConjAnNumber)->GetNonFlatBackground(aNonFlatBgdFitType, fSharedAn->GetFitType(), true, true);
+
+//    tNonFlatBgd->SetLineStyle(7);
+
+    tNonFlatBgdHist_An   = tNonFlatBgd_An->GetHistogram();
+    tNonFlatBgdHist_Conj = tNonFlatBgd_Conj->GetHistogram();
+  }
+
+  TF1* tPrimaryFit_An     = (TF1*)fSharedAn->GetFitPairAnalysis(tAnNumber)->GetPrimaryFit();
+  TF1* tPrimaryFit_ConjAn = (TF1*)fSharedAn->GetFitPairAnalysis(tConjAnNumber)->GetPrimaryFit();
+//  tPrimaryFit->SetLineStyle(3);
+  TH1* tPrimaryFitHist_An   = tPrimaryFit_An->GetHistogram();
+  TH1* tPrimaryFitHist_Conj = tPrimaryFit_Conj->GetHistogram();
+
+  TH1* tCorrectedFitHisto_An   = fSharedAn->GetFitPairAnalysis(tAnNumber)->GetCorrectedFitHistv2();
+  TH1* tCorrectedFitHisto_Conj = fSharedAn->GetFitPairAnalysis(tConjAnNumber)->GetCorrectedFitHistv2();
+//    tCorrectedFitHisto->SetLineWidth(2);
+
+  //Include the Cf with statistical errors, and make sure the binning is the same as the fitted Cf ----------
+  TH1 *tCfwSysErrs_An, *tCfwSysErrs_Conj;
+  if(aDrawSysErrors)
+  {
+    tCfwSysErrs_An   = (TH1*)fSharedAn->GetFitPairAnalysis(tAnNumber)->GetCfwSysErrors();
+    tCfwSysErrs_Conj = (TH1*)fSharedAn->GetFitPairAnalysis(tConjAnNumber)->GetCfwSysErrors();
+      //tCfwSysErrs->SetFillColor(tColorTransparent);
+      //tCfwSysErrs->SetFillStyle(1000);
+      //tCfwSysErrs->SetLineColor(0);
+      //tCfwSysErrs->SetLineWidth(0);
+  }
+
+  //---------------------------------------------------------------------------------------------------------
+//  if(aDrawSysErrors) assert(tCfwSysErrs->GetBinWidth(1) == tCfData->GetBinWidth(1));
+  //---------------------------------------------------------------------------------------------------------
+/*
+  aCanPart->AddGraph(tColumn,tRow,tCfData,"",20,tColor,0.5,"ex0");  //ex0 suppresses the error along x
+  if(fApplyNonFlatBackgroundCorrection) aCanPart->AddGraph(tColumn,tRow,tNonFlatBgd,"",20,tColorNonFlatBgd);
+  aCanPart->AddGraph(tColumn,tRow,tPrimaryFit,"");
+  aCanPart->AddGraph(tColumn,tRow,tCorrectedFitHisto,"",20,tColorCorrectFit,0.5,"lsame");
+  if(aDrawSysErrors) aCanPart->AddGraph(tColumn,tRow,tCfwSysErrs,"",20,tColorTransparent,0.5,"e2psame");
+  if(aDrawDataOnTop) aCanPart->AddGraph(tColumn,tRow,tCfData,"",20,tColor,0.5,"ex0same");  //draw again so data on top
+*/
+}
 
 
 
