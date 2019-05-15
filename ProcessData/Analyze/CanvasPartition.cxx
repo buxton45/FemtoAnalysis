@@ -396,7 +396,9 @@ void CanvasPartition::DrawInPad(int aNx, int aNy)
   while(tGraphObj = tNextGraph())
   {
     if(tCounter==0) tGraphObj->Draw("AXIS"+fGraphsDrawOptions[tPosition][tCounter]);
-    if(fGraphsDrawOptions[tPosition][tCounter] == TString("lsame")) ((TH1*)tGraphObj)->GetXaxis()->SetRange(1,((TH1*)tGraphObj)->GetNbinsX());  //TODO work-around so stupid 
+//    if(fGraphsDrawOptions[tPosition][tCounter] == TString("lsame")) ((TH1*)tGraphObj)->GetXaxis()->SetRange(1,((TH1*)tGraphObj)->GetNbinsX());  //TODO work-around so stupid 
+//                                                                                                                                                //underflow is not drawn
+    if(fGraphsDrawOptions[tPosition][tCounter].Contains(TString("lsame"))) ((TH1*)tGraphObj)->GetXaxis()->SetRange(1,((TH1*)tGraphObj)->GetNbinsX());  //TODO work-around so stupid 
                                                                                                                                                 //underflow is not drawn
     tGraphObj->Draw(fGraphsDrawOptions[tPosition][tCounter]);
     tCounter++;

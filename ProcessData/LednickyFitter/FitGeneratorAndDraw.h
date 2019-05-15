@@ -72,7 +72,9 @@ public:
 
   static CfHeavy* CombineTwoHeavyCfs(CfHeavy *aCf1, CfHeavy* aCf2);
   static TH1* CombineTwoHists(TH1* aHist1, TH1* aHist2, double aNorm1, double aNorm2);
-  virtual void BuildKStarCfswFitsPanel_CombineConj(CanvasPartition* aCanPart, CentralityType aCentType, int tColumn, int tRow, bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, NonFlatBgdFitType aNonFlatBgdFitType, bool aDrawSysErrors, bool aDrawDataOnTop);
+  virtual void BuildKStarCfswFitsPanel_CombineConj(CanvasPartition* aCanPart, int aAnNumber, int aConjAnNumber, int tColumn, int tRow, bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, NonFlatBgdFitType aNonFlatBgdFitType, bool aDrawSysErrors, bool aDrawDataOnTop);
+  virtual CanvasPartition* BuildKStarCfswFitsCanvasPartition_CombineConj(TString aCanvasBaseName, bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, NonFlatBgdFitType aNonFlatBgdFitType=kLinear, bool aDrawSysErrors=true, bool aZoomROP=true, bool aSuppressFitInfoOutput=false, bool aLabelLines=false);
+  virtual TCanvas* DrawKStarCfswFits_CombineConj(bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, NonFlatBgdFitType aNonFlatBgdFitType=kLinear, bool aSaveImage=false, bool aDrawSysErrors=true, bool aZoomROP=true, bool aSuppressFitInfoOutput=false, bool aLabelLines=false);
 
   //inline 
 

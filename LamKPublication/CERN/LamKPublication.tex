@@ -914,43 +914,16 @@ The resulting uncertainties in the extracted parameter sets were combined with t
 \section{Results}
 \label{sec:Results}
 
-Figures \ref{fig:LamKchPwConjFits_3Res}--\ref{fig:LamK0wConjFits_3Res} show the \LamK data with fits for all studied centrality bins (0--10\%, 10--30\%, and 30--50\%). 
+Figure \ref{fig:LamKFits_3Res} shows the \LamK data with fits for all studied centrality bins (0--10\%, 10--30\%, and 30--50\%). 
 All six \LamK systems (\LamKchP, \ALamKchM, \LamKchM, \ALamKchP, \LamKs, \ALamKs) are fit simultaneously across all centralities, with a single radius and normalization $\lambda_{\mathrm{Fit}}$ parameter for each centrality bin.
 Scattering parameters ($\Re f_{0}$, $\Im f_{0}$, $d_{0}$) are shared between pair-conjugate systems, but assumed unique between the different \LamK charge combinations (i.e. a parameter set describing the \LamKchP \& \ALamKchM system, a second set describing the \LamKchM \& \ALamKchP system, and a third for the \LamKs \& \ALamKs system).
 Each correlation function receives a unique normalization parameter.
 The fits are corrected for finite momentum resolution effects, non-femtoscopic backgrounds, and residual correlations resulting from the feed-down from resonances.
-In Figs.\ \ref{fig:LamKchPwConjFits_3Res}--\ref{fig:LamK0wConjFits_3Res}, lines represent statistical errors, while boxes represent systematic errors.  
+In Fig.\ \ref{fig:LamKFits_3Res}, lines represent statistical errors, while boxes represent systematic errors.  
 The dotted curve shows the primary (\LamK) contribution to the fit (i.e. $1 + \lambda'_{\Lambda\mathrm{K}}C_{\Lambda\mathrm{K}}(k^{*}_{\Lambda\mathrm{K}})$ in Eq.\ \ref{eqn:CfwRes}), the dashed curve shows the fit to the non-femtoscopic background, and the solid curve shows the final fit after all corrections have been applied.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{comment}
-\begin{figure}[htp]
-  \centering
-  %%----start of first subfigure---
-  \subfigure[\LamKchPALamKchM]{
-    \label{fig:LamKFits_3Res:a}
-    \includegraphics[width=0.49\linewidth]{\ResultsDirBaseLamKch\SaveNameModLamKch/canKStarCfwFitsLamKchPwConj_0010_1030_3050_LabelLines\SaveNameModLamKch.pdf}}
-  %%----start of second subfigure---  
-  \subfigure[\LamKchMALamKchP]{
-    \label{fig:LamKFits_3Res:b}
-    \includegraphics[width=0.49\linewidth]{\ResultsDirBaseLamKch\SaveNameModLamKch/canKStarCfwFitsLamKchMwConj_0010_1030_3050_LabelLines\SaveNameModLamKch.pdf}}
-  \\  
-  %%----start of third subfigure---  
-  \subfigure[\LamKsALamKs]{
-    \label{fig:LamKFits_3Res:c}
-    \includegraphics[width=0.49\linewidth]{\ResultsDirBaseLamKs\SaveNameModLamKs/canKStarCfwFitsLamK0wConj_0010_1030_3050_LabelLines\SaveNameModLamKs.pdf}}    
-  %%----overall caption----
-  \caption{Fits, with 3 residual correlations included, for all \LamK analyses across all studied centralities (0--10\%, 10--30\%, and 30--50\%).
- The lines represent the statistical errors, while the boxes represent the systematic errors.
- The black solid line represents the primary (\LamK) correlation's contribution to the fit.  
- The green line shows the fit to the non-flat background.
- The purple points show the fit after all residuals' contributions have been included, and momentum resolution and non-flat background corrections have been applied.
- The extracted fit values with uncertainties are printed.}  
-  \label{fig:LamKFits_3Res}
-\end{figure}
-\end{comment}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 \begin{figure}[h]
   \centering
   \includegraphics[width=\textwidth]{\ResultsDirBaseLamKch\SaveNameModLamKch/canKStarCfwFitsLamKchPwConj_0010_1030_3050_LabelLines\SaveNameModLamKch.pdf}
@@ -989,7 +962,23 @@ The dotted curve shows the primary (\LamK) contribution to the fit (i.e. $1 + \l
  }
   \label{fig:LamK0wConjFits_3Res}
 \end{figure}
+\end{comment}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+
+\begin{figure}[h!]
+  \centering
+%  \includegraphics[width=\linewidth]{\ResultsDirBaseLamKs\SaveNameModLamKs/canKStarCfwFits_CombineConj_AllAn.pdf}
+  \includegraphics[width=\linewidth]{\ResultsDirBaseLamKch\SaveNameModLamKch/canKStarCfwFits_CombineConj_AllAn_LabelLines.pdf}
+  \caption[\LamK data with fits]
+  {
+  (Color online) Fit results for the \LamK data, with pair and conjugate combined.
+  The \LamKchP$\oplus$\ALamKchM data is shown in the left column, the \LamKchM$\oplus$\ALamKchP in the middle, and the \LamKs$\oplus$\ALamKs in the right. 
+  Rows differentiate the different centrality bins (0--10\% in the top, 10--30\% in the middle, and 30--50\% in the bottom).
+  See text for further details.
+ }
+  \label{fig:LamKFits_3Res}
+\end{figure}
 
 
 

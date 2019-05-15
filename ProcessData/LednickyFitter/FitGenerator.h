@@ -114,6 +114,7 @@ public:
   void SetUsemTScalingOfResidualRadii(bool aUse=true, double aPower=-0.5);
 
   void SetSaveFileType(TString aType);
+  TString GetSaveFileType();
 
   int GetNAnalyses();
   FitGeneratorType GetGeneratorType();
@@ -216,6 +217,7 @@ inline void FitGenerator::SetResPrimMaxDecayType(ResPrimMaxDecayType aResPrimMax
 inline void FitGenerator::SetUsemTScalingOfResidualRadii(bool aUse, double aPower) {fUsemTScalingOfResidualRadii = aUse; fmTScalingPowerOfResidualRadii = aPower;}
 
 inline void FitGenerator::SetSaveFileType(TString aType) {fSaveFileType = aType;}
+inline TString FitGenerator::GetSaveFileType() {return fSaveFileType;}
 
 inline int FitGenerator::GetNAnalyses() {return fNAnalyses;}
 inline FitGeneratorType FitGenerator::GetGeneratorType() {return fGeneratorType;}

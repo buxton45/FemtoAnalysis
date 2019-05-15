@@ -65,6 +65,8 @@ public:
 
   void DivideCfByThermBgd(TH1* aThermBgd);
 
+  double GetTotalNumScale();
+
   //inline-----------------------
   TH1* GetHeavyCf();
   TH1* GetHeavyCfClone();

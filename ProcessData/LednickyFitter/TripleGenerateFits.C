@@ -260,6 +260,9 @@ int main(int argc, char **argv)
     TObjArray* tKStarwFitsCan_Zoom = tTriple->DrawKStarCfswFits(ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, tNonFlatBgdFitTypes, SaveImages, bDrawSysErrs, true, tSuppressFitInfoOutput, tLabelLines);
     TObjArray* tKStarwFitsCan_UnZoom = tTriple->DrawKStarCfswFits(ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, tNonFlatBgdFitTypes, SaveImages, bDrawSysErrs, false, tSuppressFitInfoOutput, tLabelLines);
 
+    TCanvas* tKStarwFitsCan_CombineConj_AllAn_Zoom = tTriple->DrawKStarCfswFits_CombineConj_AllAn(ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, tNonFlatBgdFitTypes, SaveImages, bDrawSysErrs, true, tSuppressFitInfoOutput, tLabelLines);
+    TCanvas* tKStarwFitsCan_CombineConj_AllAn_UnZoom = tTriple->DrawKStarCfswFits_CombineConj_AllAn(ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, tNonFlatBgdFitTypes, SaveImages, bDrawSysErrs, false, tSuppressFitInfoOutput, tLabelLines);
+
     if(bDrawPartAn)
     {
       TObjArray* tKStarwFitsCan_FemtoMinus = tTriple->DrawKStarCfswFits_PartAn(kFemtoMinus,ApplyMomResCorrection,ApplyNonFlatBackgroundCorrection,tNonFlatBgdFitTypes,SaveImages,bZoomROP);

@@ -41,6 +41,9 @@ CfLite::CfLite(TString aName, TString aTitle, TH1* aNum, TH1* aDen, double aMinN
 
 {
 
+  assert(aNum->GetBinWidth(1)==aDen->GetBinWidth(1));
+  assert(aNum->GetNbinsX()==aDen->GetNbinsX());
+
   BuildCf(fCfName,fCfTitle,fMinNorm,fMaxNorm);
 
   fNum->SetDirectory(0);

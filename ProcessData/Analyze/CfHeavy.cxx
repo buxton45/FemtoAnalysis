@@ -121,25 +121,12 @@ void CfHeavy::CombineCfs(TString aReturnName, TString aReturnTitle)
   int tCounter = 0;
   double tTempScale = 0.;
 
-/*
-  int tMinNormBin = 0;
-  int tMaxNormBin = 0;
-*/
-
-
   fHeavyCf = (TH1*)fCfLiteCollection[0]->Cf()->Clone(aReturnName);
 
   //-----Check to see if Sumw2 has already been classed, and if not, call it
   if(!fHeavyCf->GetSumw2N()) {fHeavyCf->Sumw2();}
 
   fHeavyCf->SetTitle(aReturnTitle);
-
-/*
-  tMinNormBin = fCfLiteCollection[0]->Num()->FindBin(fMinNorm);
-  tMaxNormBin = fCfLiteCollection[0]->Num()->FindBin(fMaxNorm);
-
-  tTempScale = fCfLiteCollection[0]->Num()->Integral(tMinNormBin,tMaxNormBin);
-*/
   tTempScale = fCfLiteCollection[0]->GetNumScale();
 
   tScale += tTempScale;
@@ -149,12 +136,9 @@ void CfHeavy::CombineCfs(TString aReturnName, TString aReturnTitle)
 
   for(unsigned int i=1; i<fCfLiteCollection.size(); i++)
   {
-/*
-    tMinNormBin = fCfLiteCollection[i]->Num()->FindBin(fMinNorm);
-    tMaxNormBin = fCfLiteCollection[i]->Num()->FindBin(fMaxNorm);
-    
-    tTempScale = fCfLiteCollection[i]->Num()->Integral(tMinNormBin,tMaxNormBin);
-*/
+    assert(fCfLiteCollection[0]->Num()->GetBinWidth(1)==fCfLiteCollection[i]->Num()->GetBinWidth(1));
+    assert(fCfLiteCollection[0]->Num()->GetNbinsX()==fCfLiteCollection[i]->Num()->GetNbinsX());
+
     tTempScale = fCfLiteCollection[i]->GetNumScale();
   
     fHeavyCf->Add(fCfLiteCollection[i]->Cf(),tTempScale);
@@ -376,5 +360,16 @@ void CfHeavy::DivideCfByThermBgd(TH1* aThermBgd)
   assert(aThermBgd->GetNbinsX() == fHeavyCf->GetNbinsX());
   fHeavyCf->Divide(aThermBgd);
 }
+
+
+
+//________________________________________________________________________________________________________________
+double CfHeavy::GetTotalNumScale()
+{
+  double tTotalScale = 0.;
+  for(unsigned int i=0; i<fCfLiteCollection.size(); i++) tTotalScale += fCfLiteCollection[i]->GetNumScale();
+  return tTotalScale;
+}
+
 
 

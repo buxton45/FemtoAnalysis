@@ -58,6 +58,8 @@ public:
 
   virtual TObjArray* DrawModelKStarCfs(bool aSaveImage=false);
 
+  virtual CanvasPartition* BuildKStarCfswFitsCanvasPartition_CombineConj_AllAn(TString aCanvasBaseName, bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, vector<NonFlatBgdFitType> &aNonFlatBgdFitTypes, bool aDrawSysErrors=true, bool aZoomROP=true, bool aSuppressFitInfoOutput=false, bool aLabelLines=false);
+  virtual TCanvas* DrawKStarCfswFits_CombineConj_AllAn(bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, vector<NonFlatBgdFitType> &aNonFlatBgdFitTypes, bool aSaveImage=false, bool aDrawSysErrors=true, bool aZoomROP=true, bool aSuppressFitInfoOutput=false, bool aLabelLines=false);
 
 //-------inline
   void SetRadiusStartValue(double aRad, int aIndex=0);
