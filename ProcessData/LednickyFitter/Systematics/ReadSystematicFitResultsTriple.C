@@ -423,7 +423,7 @@ int main(int argc, char **argv)
   CentralityType tCentralityType = kMB;  //Probably should always be kMB
 
   bool bIncludeFitRangeSys = true;
-  bool bIncludeVaryResPrimMaxDecayType=false;
+  bool bIncludeVaryResPrimMaxDecayType=true;
 
   bool bWriteToFile = true;
 
@@ -440,7 +440,7 @@ int main(int argc, char **argv)
   bool ApplyMomResCorrection = true;
   bool ApplyNonFlatBackgroundCorrection = true;
   NonFlatBgdFitType tNonFlatBgdFitType_cLamcKch = kPolynomial;
-  NonFlatBgdFitType tNonFlatBgdFitType_cLamK0 = kLinear;
+  NonFlatBgdFitType tNonFlatBgdFitType_cLamK0 = kPolynomial;
   vector<NonFlatBgdFitType> tNonFlatBgdFitTypes{tNonFlatBgdFitType_cLamK0, tNonFlatBgdFitType_cLamK0,
                                                 tNonFlatBgdFitType_cLamcKch, tNonFlatBgdFitType_cLamcKch, tNonFlatBgdFitType_cLamcKch, tNonFlatBgdFitType_cLamcKch};
 
