@@ -196,7 +196,8 @@ int main(int argc, char **argv)
   if(ApplyNonFlatBackgroundCorrection && tNonFlatBgdFitType != kLinear)
   {
 //    tLamKchP->SetKStarMinMaxNorm(0.5,0.6);
-    if((tAnType==kLamK0 || tAnType==kALamK0) && tNonFlatBgdFitType==kPolynomial) tLamKchP->SetMinMaxBgdFit(0.20, 0.40);  //THERMINATOR does not fit shape as well for LamK0
+//    if((tAnType==kLamK0 || tAnType==kALamK0) && tNonFlatBgdFitType==kPolynomial) tLamKchP->SetMinMaxBgdFit(0.20, 0.40);  //THERMINATOR does not fit shape as well for LamK0
+    if(tNonFlatBgdFitType==kPolynomial) tLamKchP->SetMinMaxBgdFit(0.32, 0.80);
     else tLamKchP->SetMinMaxBgdFit(0.45, 0.95);
     tLamKchP->SetAllRadiiLimits(1., 10.);
 
