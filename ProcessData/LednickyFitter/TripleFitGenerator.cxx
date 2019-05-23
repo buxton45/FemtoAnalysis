@@ -272,6 +272,15 @@ void TripleFitGenerator::ReturnNecessaryInfoToFitGenerators()
   fFitGen3->fLednickyFitter = fMasterLednickyFitter;
 }
 
+//________________________________________________________________________________________________________________
+TCanvas* TripleFitGenerator::GenerateContourPlots(int aNPoints, const vector<double> &aParams, const vector<double> &aErrVals, TString aSaveNameModifier, bool aFixAllOthers, bool aShareLambda, bool aShareRadii, double aMaxFitKStar)
+{
+  InitializeGenerator(aShareLambda, aShareRadii, aMaxFitKStar);
+  GlobalFitter3 = fMasterLednickyFitter;
+  TCanvas* tReturnCan = fMasterLednickyFitter->GenerateContourPlots(aNPoints, aParams, aErrVals, aSaveNameModifier, aFixAllOthers);
+  return tReturnCan;
+}
+
 
 //******************************************* DRAWING ************************************************************
 

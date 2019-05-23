@@ -34,6 +34,8 @@ public:
   void DoFit(bool aShareLambda, bool aShareRadii=true, double aMaxFitKStar=0.3);
   void ReturnNecessaryInfoToFitGenerators();  //This isn't needed for the fitting process, just for drawing
 
+  TCanvas* GenerateContourPlots(int aNPoints, const vector<double> &aParams, const vector<double> &aErrVals={4,1}, TString aSaveNameModifier="", bool aFixAllOthers=false, bool aShareLambda=true, bool aShareRadii=true, double aMaxFitKStar=0.3);  //1=1sigma, 4=2sigma
+
   void WriteToMasterFitValuesFile(TString aFileLocation_LamKch, TString aFileLocation_LamK0, TString aResultsDate);
 
 

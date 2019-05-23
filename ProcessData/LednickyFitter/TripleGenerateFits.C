@@ -49,6 +49,7 @@ int main(int argc, char **argv)
 
   //*****************************************
   bool bDoFit = true;
+  bool bGenerateContours = false;
 
   TString tResultsDate = "20180505";
 
@@ -209,8 +210,14 @@ int main(int argc, char **argv)
   if(FixAllNormTo1) tTriple->SetFixNormParams(FixAllNormTo1);
   if(UsemTScalingOfResidualRadii) tTriple->SetUsemTScalingOfResidualRadii(UsemTScalingOfResidualRadii, mTScalingPowerOfResidualRadii);
 
-  if(ApplyNonFlatBackgroundCorrection && tNonFlatBgdFitType_LamKch == kPolynomial) tTriple->SetMinMaxBgdFit(kLamKchP, 0.32, 0.80);
-  if(ApplyNonFlatBackgroundCorrection && tNonFlatBgdFitType_LamK0 == kPolynomial)  tTriple->SetMinMaxBgdFit(kLamK0, 0.32, 0.80);
+//  if(ApplyNonFlatBackgroundCorrection && tNonFlatBgdFitType_LamKch == kPolynomial) tTriple->SetMinMaxBgdFit(kLamKchP, 0.32, 0.80);
+//  if(ApplyNonFlatBackgroundCorrection && tNonFlatBgdFitType_LamK0 == kPolynomial)  tTriple->SetMinMaxBgdFit(kLamK0, 0.32, 0.80);
+  if(ApplyNonFlatBackgroundCorrection && tNonFlatBgdFitType_LamKch == kPolynomial && tNonFlatBgdFitType_LamK0 == kPolynomial) 
+  {
+    tTriple->SetMinMaxBgdFit(kLamKchP, 0.32, 0.80);
+    tTriple->SetMinMaxBgdFit(kLamK0, 0.32, 0.80);
+  }
+
 
 /*
   if(ApplyNonFlatBackgroundCorrection && tNonFlatBgdFitType_LamKch != kLinear)
@@ -307,7 +314,14 @@ int main(int argc, char **argv)
   }
 
 
+//-------------------------------------------------------------------------------
 
+  if(bGenerateContours)
+  {
+    bool bFixAllOthers = false;
+    tTriple->GenerateContourPlots(10, {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14}, {4, 1}, "_All", bFixAllOthers, tTripleShareLambda, tTripleShareRadii, tMaxFitKStar);
+
+  }
 
 
 //-------------------------------------------------------------------------------
