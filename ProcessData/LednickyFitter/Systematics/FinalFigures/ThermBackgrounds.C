@@ -849,8 +849,14 @@ TCanvas* BuildBgdwFitPanel(CanvasPartition* aCanPart, int tColumn, int tRow, TSt
 
   if(tRow==0 && tColumn==0)
   {
-    TString tAliceInfo = TString("ALICE Pb-Pb #sqrt{#it{s}_{NN}} = 2.76 TeV");
-    TPaveText* tAliceInfoText = aCanPart->SetupTPaveText(tAliceInfo, tColumn, tRow, 0.175, 0.05, 0.65, 0.125, 43, 40);
+    TString tAliceInfo = TString("ALICE Preliminary");
+    TPaveText* tAliceInfoText = aCanPart->SetupTPaveText(tAliceInfo, tColumn, tRow, 0.25, 0.05, 0.65, 0.125, 43, 40, 12);
+    aCanPart->AddPadPaveText(tAliceInfoText, tColumn, tRow);
+  }
+  if(tRow==0 && tColumn==1)
+  {
+    TString tAliceInfo = TString("Pb-Pb #sqrt{#it{s}_{NN}} = 2.76 TeV");
+    TPaveText* tAliceInfoText = aCanPart->SetupTPaveText(tAliceInfo, tColumn, tRow, 0.195, 0.05, 0.65, 0.125, 43, 40, 12);
     aCanPart->AddPadPaveText(tAliceInfoText, tColumn, tRow);
   }
 }
@@ -993,6 +999,79 @@ TCanvas* DrawBgdwFit_AllCentAllAnv2(TString aCfDescriptor, TString aFileNameCfs,
 
 
 
+//________________________________________________________________________________________________________________
+TCanvas* DrawBgdwFit_SingleCentAllAnv2(CentralityType aCentType, TString aCfDescriptor, TString aFileNameCfs, bool aCombineConjugates, ThermEventsType aEventsType, int aRebin, double aMinNorm, double aMaxNorm, double aMaxBgdFit=3.0, bool aAvgLamKchPMFit=false, bool aUseStavCf=false)
+{
+  bool tCombineImpactParams = true; //Should always be true here
+  bool aZoomY=true;
+//-------------------------------------------------------------------------------
+  TString tCanBgdwFitName = "BgdwFitOnly";
+
+  if(aFileNameCfs.Contains("_RandomEPs_NumWeight1")) tCanBgdwFitName += TString("_RandomEPs_NumWeight1");
+  else if(aFileNameCfs.Contains("_RandomEPs")) tCanBgdwFitName += TString("_RandomEPs");
+  else tCanBgdwFitName += TString("");
+
+  tCanBgdwFitName += TString::Format("_%s_", aCfDescriptor.Data());
+  tCanBgdwFitName += TString("AllAn");
+
+  if(aCombineConjugates) tCanBgdwFitName += TString("wConj");
+  tCanBgdwFitName += TString(cCentralityTags[aCentType]);
+
+  if(aAvgLamKchPMFit) tCanBgdwFitName += TString("_AvgLamKchPMFit");
+
+//-------------------------------------------------------------------------------
+  int tNx=3;
+  int tNy=1;
+  double tXLow = -0.04;
+//  double tXHigh = aMaxBgdFit-0.02;
+  double tXHigh = 1.68;
+  double tYLow = 0.955;
+  double tYHigh = 1.01999;
+
+  CanvasPartition* tCanPart = new CanvasPartition(tCanBgdwFitName,tNx,tNy,tXLow,tXHigh,tYLow,tYHigh,0.075,0.0025,0.15,0.0025);
+  tCanPart->SetDrawOptStat(false);
+  tCanPart->GetCanvas()->SetCanvasSize(2100, 500);
+
+  int tImpParam = 0;
+  if(aCentType==k0010) tImpParam=3;
+  else if(aCentType==k1030) tImpParam = 5;
+  else if(aCentType==k3050) tImpParam = 8;
+  else assert(0);
+
+  BuildBgdwFitPanel(tCanPart, 0, 0, aCfDescriptor, aFileNameCfs, kLamKchP, tImpParam, aCombineConjugates, tCombineImpactParams, aEventsType, aRebin, aMinNorm, aMaxNorm, aMaxBgdFit, aAvgLamKchPMFit, aUseStavCf, aZoomY);
+
+  BuildBgdwFitPanel(tCanPart, 1, 0, aCfDescriptor, aFileNameCfs, kLamKchM, tImpParam, aCombineConjugates, tCombineImpactParams, aEventsType, aRebin, aMinNorm, aMaxNorm, aMaxBgdFit, aAvgLamKchPMFit, aUseStavCf, aZoomY);
+
+  BuildBgdwFitPanel(tCanPart, 2, 0, aCfDescriptor, aFileNameCfs, kLamK0, tImpParam, aCombineConjugates, tCombineImpactParams, aEventsType, aRebin, aMinNorm, aMaxNorm, aMaxBgdFit, aAvgLamKchPMFit, aUseStavCf, aZoomY);
+
+
+  //----- Increase label size on axes
+  for(int j=0; j<tNy; j++)
+  {
+    for(int i=0; i<tNx; i++)
+    {
+      TH1* tTempHist = (TH1*)(tCanPart->GetGraphsInPad(i,j)->At(0));
+
+      tTempHist->GetXaxis()->SetLabelSize(2.1*tTempHist->GetXaxis()->GetLabelSize());
+      tTempHist->GetXaxis()->SetLabelOffset(0.25*tTempHist->GetXaxis()->GetLabelOffset());
+
+      tTempHist->GetYaxis()->SetLabelSize(2.25*tTempHist->GetYaxis()->GetLabelSize());
+      tTempHist->GetYaxis()->SetLabelOffset(2.5*tTempHist->GetYaxis()->GetLabelOffset());
+
+      if(aCentType==k0010) tTempHist->GetYaxis()->SetRangeUser(0.9865, 1.015);
+      if(aCentType==k1030) tTempHist->GetYaxis()->SetRangeUser(0.975, 1.015);
+    }
+
+  }
+
+  //------------------
+  tCanPart->SetDrawUnityLine(true);
+  tCanPart->DrawAll();
+  tCanPart->DrawXaxisTitle("#it{k}* (GeV/#it{c})", 43, 60, 0.825, 0.01); //Note, changing xaxis low (=0.315) does nothing
+  tCanPart->DrawYaxisTitle("#it{C}(#it{k}*)", 43, 75, 0.035, 0.65);
+
+  return tCanPart->GetCanvas();
+}
 
 
 
@@ -1670,7 +1749,7 @@ int main(int argc, char **argv)
 
   bool bDrawAllCentralities = false;
 
-  bool bSaveFigures = false;
+  bool bSaveFigures = true;
   TString tSaveFileType = "pdf";
 
   int tRebin=2;  //NOTE: tRebin for bDrawBgdwFitOnly in block below
@@ -1693,7 +1772,7 @@ int main(int argc, char **argv)
   TString tSaveFileBase = tSaveDir + TString::Format("%s/", cAnalysisBaseTags[tAnType]);
 
 
-  TCanvas *tCanCfs, *tCanBgdwFit, *tCanBgdwFitv2, *tCanBgdwFitAllCentAllAnv2, *tCanCompareAnalyses, *tCanLamKchPMBgdwFit, *tCanDataVsTherm, *tCanCompBgdRedMethods;
+  TCanvas *tCanCfs, *tCanBgdwFit, *tCanBgdwFitv2, *tCanBgdwFitAllCentAllAnv2, *tCanCompareAnalyses, *tCanLamKchPMBgdwFit, *tCanDataVsTherm, *tCanCompBgdRedMethods, *tCanBgdwFitSingleCentAllAn0010, *tCanBgdwFitSingleCentAllAn1030, *tCanBgdwFitSingleCentAllAn3050;
 
   if(bCompareWithAndWithoutBgd)
   {
@@ -1712,11 +1791,24 @@ int main(int argc, char **argv)
     tCanBgdwFitv2 = DrawBgdwFit_AllCentv2(tCfDescriptor, tSingleFileName, tAnType, bCombineConjugates, tEventsType, tRebin, tMinNorm, tMaxNorm, tMaxBgdFit, aAvgLamKchPMFit, bUseStavCf);
     tCanBgdwFitAllCentAllAnv2 = DrawBgdwFit_AllCentAllAnv2(tCfDescriptor, tSingleFileName, bCombineConjugates, tEventsType, tRebin, tMinNorm, tMaxNorm, tMaxBgdFit, aAvgLamKchPMFit, bUseStavCf);
 
+
+
+    tCanBgdwFitSingleCentAllAn0010 = DrawBgdwFit_SingleCentAllAnv2(k0010, tCfDescriptor, tSingleFileName, bCombineConjugates, tEventsType, tRebin, tMinNorm, tMaxNorm, tMaxBgdFit, aAvgLamKchPMFit, bUseStavCf);
+
+    tCanBgdwFitSingleCentAllAn1030 = DrawBgdwFit_SingleCentAllAnv2(k1030, tCfDescriptor, tSingleFileName, bCombineConjugates, tEventsType, tRebin, tMinNorm, tMaxNorm, tMaxBgdFit, aAvgLamKchPMFit, bUseStavCf);
+
+    tCanBgdwFitSingleCentAllAn3050 = DrawBgdwFit_SingleCentAllAnv2(k3050, tCfDescriptor, tSingleFileName, bCombineConjugates, tEventsType, tRebin, tMinNorm, tMaxNorm, tMaxBgdFit, aAvgLamKchPMFit, bUseStavCf);
+
+
     if(bSaveFigures)
     {
       tCanBgdwFit->SaveAs(TString::Format("%s%s.%s", tSaveDir.Data(), tCanBgdwFit->GetName(), tSaveFileType.Data()));
       tCanBgdwFitv2->SaveAs(TString::Format("%s%s.%s", tSaveDir.Data(), tCanBgdwFitv2->GetName(), tSaveFileType.Data()));
       tCanBgdwFitAllCentAllAnv2->SaveAs(TString::Format("%s%s.%s", tSaveDir.Data(), tCanBgdwFitAllCentAllAnv2->GetName(), tSaveFileType.Data()));
+
+      tCanBgdwFitSingleCentAllAn0010->SaveAs(TString::Format("%s%s.%s", tSaveDir.Data(), tCanBgdwFitSingleCentAllAn0010->GetName(), tSaveFileType.Data()));
+      tCanBgdwFitSingleCentAllAn1030->SaveAs(TString::Format("%s%s.%s", tSaveDir.Data(), tCanBgdwFitSingleCentAllAn1030->GetName(), tSaveFileType.Data()));
+      tCanBgdwFitSingleCentAllAn3050->SaveAs(TString::Format("%s%s.%s", tSaveDir.Data(), tCanBgdwFitSingleCentAllAn3050->GetName(), tSaveFileType.Data()));
     }
   }
 

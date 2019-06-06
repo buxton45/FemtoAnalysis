@@ -621,6 +621,19 @@ CanvasPartition* TripleFitGenerator::BuildKStarCfswFitsCanvasPartition_CombineCo
   fFitGen2->BuildKStarCfswFitsPanel_CombineConj(tCanPart, tAnalysisNumberA, tAnalysisNumberB, tNx2, tNy2, aMomResCorrectFit, aNonFlatBgdCorrectFit, aNonFlatBgdFitTypes[tAnType1], aDrawSysErrors, aZoomROP);
   fFitGen3->BuildKStarCfswFitsPanel_CombineConj(tCanPart, tAnalysisNumberA, tAnalysisNumberB, tNx3, tNy3, aMomResCorrectFit, aNonFlatBgdCorrectFit, aNonFlatBgdFitTypes[tAnType1], aDrawSysErrors, aZoomROP);
 
+  //------------------------------ Change marker size
+  for(int i=0; i<tNx; i++)
+  {
+    for(int j=0; j<tNy; j++)
+    {
+      for(int iGr=0; iGr<tCanPart->GetGraphsInPad(i, j)->GetEntries(); iGr++)
+      {
+        ((TH1*)tCanPart->GetGraphsInPad(tNx1, tNy1)->At(iGr))->SetMarkerSize(1.0);
+      }
+    }
+  }
+
+
   //------------------------------
 
   TString tCombinedText1 = TString::Format("%s#scale[0.5]{ }#oplus#scale[0.5]{ }%s  %s", cAnalysisRootTags[tAnType1], cAnalysisRootTags[tConjType1], cPrettyCentralityTags[tCentType]);
@@ -711,21 +724,22 @@ CanvasPartition* TripleFitGenerator::BuildKStarCfswFitsCanvasPartition_CombineCo
   tCanPart->AddPadPaveText(tSysInfo2,tNx3, tNy3);
 
 
-  ((TH1*)tCanPart->GetGraphsInPad(tNx1, tNy1)->At(0))->GetXaxis()->SetLabelSize(1.25*((TH1*)tCanPart->GetGraphsInPad(tNx1, tNy1)->At(0))->GetXaxis()->GetLabelSize());
-  ((TH1*)tCanPart->GetGraphsInPad(tNx1, tNy1)->At(0))->GetYaxis()->SetLabelSize(1.25*((TH1*)tCanPart->GetGraphsInPad(tNx1, tNy1)->At(0))->GetYaxis()->GetLabelSize());
+  ((TH1*)tCanPart->GetGraphsInPad(tNx1, tNy1)->At(0))->GetXaxis()->SetLabelSize(1.75*((TH1*)tCanPart->GetGraphsInPad(tNx1, tNy1)->At(0))->GetXaxis()->GetLabelSize());
+  ((TH1*)tCanPart->GetGraphsInPad(tNx1, tNy1)->At(0))->GetYaxis()->SetLabelSize(1.75*((TH1*)tCanPart->GetGraphsInPad(tNx1, tNy1)->At(0))->GetYaxis()->GetLabelSize());
 
-  ((TH1*)tCanPart->GetGraphsInPad(tNx2, tNy2)->At(0))->GetXaxis()->SetLabelSize(1.25*((TH1*)tCanPart->GetGraphsInPad(tNx2, tNy2)->At(0))->GetXaxis()->GetLabelSize());
-  ((TH1*)tCanPart->GetGraphsInPad(tNx2, tNy2)->At(0))->GetYaxis()->SetLabelSize(1.25*((TH1*)tCanPart->GetGraphsInPad(tNx2, tNy2)->At(0))->GetYaxis()->GetLabelSize());
+  ((TH1*)tCanPart->GetGraphsInPad(tNx2, tNy2)->At(0))->GetXaxis()->SetLabelSize(1.75*((TH1*)tCanPart->GetGraphsInPad(tNx2, tNy2)->At(0))->GetXaxis()->GetLabelSize());
+  ((TH1*)tCanPart->GetGraphsInPad(tNx2, tNy2)->At(0))->GetYaxis()->SetLabelSize(1.75*((TH1*)tCanPart->GetGraphsInPad(tNx2, tNy2)->At(0))->GetYaxis()->GetLabelSize());
 
-  ((TH1*)tCanPart->GetGraphsInPad(tNx3, tNy3)->At(0))->GetXaxis()->SetLabelSize(1.25*((TH1*)tCanPart->GetGraphsInPad(tNx3, tNy3)->At(0))->GetXaxis()->GetLabelSize());
-  ((TH1*)tCanPart->GetGraphsInPad(tNx3, tNy3)->At(0))->GetYaxis()->SetLabelSize(1.25*((TH1*)tCanPart->GetGraphsInPad(tNx3, tNy3)->At(0))->GetYaxis()->GetLabelSize());
+  ((TH1*)tCanPart->GetGraphsInPad(tNx3, tNy3)->At(0))->GetXaxis()->SetLabelSize(1.75*((TH1*)tCanPart->GetGraphsInPad(tNx3, tNy3)->At(0))->GetXaxis()->GetLabelSize());
+  ((TH1*)tCanPart->GetGraphsInPad(tNx3, tNy3)->At(0))->GetYaxis()->SetLabelSize(1.75*((TH1*)tCanPart->GetGraphsInPad(tNx3, tNy3)->At(0))->GetYaxis()->GetLabelSize());
 
 
 
   tCanPart->SetDrawUnityLine(true);
   tCanPart->DrawAll();
-  tCanPart->DrawXaxisTitle("#it{k}* (GeV/#it{c})", 43, 35, 0.015);
-  tCanPart->DrawYaxisTitle("#it{C}(#it{k}*)", 43, 35, 0.035, 0.825); 
+  tCanPart->DrawXaxisTitle("#it{k}* (GeV/#it{c})", 43, 55, 0.010);
+  tCanPart->DrawYaxisTitle("#it{C}(#it{k}*)", 43, 55, 0.025, 0.70); 
+ 
 
 
   if(aLabelLines)
@@ -792,6 +806,19 @@ CanvasPartition* TripleFitGenerator::BuildKStarCfsCanvasPartition_CombineConj(TS
   fFitGen2->BuildKStarCfsPanel_CombineConj(tCanPart, tAnalysisNumberA, tAnalysisNumberB, tNx2, tNy2, aDrawSysErrors, aZoomROP);
   fFitGen3->BuildKStarCfsPanel_CombineConj(tCanPart, tAnalysisNumberA, tAnalysisNumberB, tNx3, tNy3, aDrawSysErrors, aZoomROP);
 
+  //------------------------------ Change marker size
+  for(int i=0; i<tNx; i++)
+  {
+    for(int j=0; j<tNy; j++)
+    {
+      for(int iGr=0; iGr<tCanPart->GetGraphsInPad(i, j)->GetEntries(); iGr++)
+      {
+        ((TH1*)tCanPart->GetGraphsInPad(tNx1, tNy1)->At(iGr))->SetMarkerSize(1.0);
+      }
+    }
+  }
+
+
   //------------------------------
 
   TString tCombinedText1 = TString::Format("%s#scale[0.5]{ }#oplus#scale[0.5]{ }%s  %s", cAnalysisRootTags[tAnType1], cAnalysisRootTags[tConjType1], cPrettyCentralityTags[tCentType]);
@@ -822,21 +849,21 @@ CanvasPartition* TripleFitGenerator::BuildKStarCfsCanvasPartition_CombineConj(TS
   TPaveText* tSysInfo2 = tCanPart->SetupTPaveText(tTextSysInfo2, tNx3, tNy3, 0.15, 0.075, 0.725, 0.15, 43, 35, 12);
   tCanPart->AddPadPaveText(tSysInfo2,tNx3, tNy3);
 
-  ((TH1*)tCanPart->GetGraphsInPad(tNx1, tNy1)->At(0))->GetXaxis()->SetLabelSize(1.25*((TH1*)tCanPart->GetGraphsInPad(tNx1, tNy1)->At(0))->GetXaxis()->GetLabelSize());
-  ((TH1*)tCanPart->GetGraphsInPad(tNx1, tNy1)->At(0))->GetYaxis()->SetLabelSize(1.25*((TH1*)tCanPart->GetGraphsInPad(tNx1, tNy1)->At(0))->GetYaxis()->GetLabelSize());
+  ((TH1*)tCanPart->GetGraphsInPad(tNx1, tNy1)->At(0))->GetXaxis()->SetLabelSize(1.75*((TH1*)tCanPart->GetGraphsInPad(tNx1, tNy1)->At(0))->GetXaxis()->GetLabelSize());
+  ((TH1*)tCanPart->GetGraphsInPad(tNx1, tNy1)->At(0))->GetYaxis()->SetLabelSize(1.75*((TH1*)tCanPart->GetGraphsInPad(tNx1, tNy1)->At(0))->GetYaxis()->GetLabelSize());
 
-  ((TH1*)tCanPart->GetGraphsInPad(tNx2, tNy2)->At(0))->GetXaxis()->SetLabelSize(1.25*((TH1*)tCanPart->GetGraphsInPad(tNx2, tNy2)->At(0))->GetXaxis()->GetLabelSize());
-  ((TH1*)tCanPart->GetGraphsInPad(tNx2, tNy2)->At(0))->GetYaxis()->SetLabelSize(1.25*((TH1*)tCanPart->GetGraphsInPad(tNx2, tNy2)->At(0))->GetYaxis()->GetLabelSize());
+  ((TH1*)tCanPart->GetGraphsInPad(tNx2, tNy2)->At(0))->GetXaxis()->SetLabelSize(1.75*((TH1*)tCanPart->GetGraphsInPad(tNx2, tNy2)->At(0))->GetXaxis()->GetLabelSize());
+  ((TH1*)tCanPart->GetGraphsInPad(tNx2, tNy2)->At(0))->GetYaxis()->SetLabelSize(1.75*((TH1*)tCanPart->GetGraphsInPad(tNx2, tNy2)->At(0))->GetYaxis()->GetLabelSize());
 
-  ((TH1*)tCanPart->GetGraphsInPad(tNx3, tNy3)->At(0))->GetXaxis()->SetLabelSize(1.25*((TH1*)tCanPart->GetGraphsInPad(tNx3, tNy3)->At(0))->GetXaxis()->GetLabelSize());
-  ((TH1*)tCanPart->GetGraphsInPad(tNx3, tNy3)->At(0))->GetYaxis()->SetLabelSize(1.25*((TH1*)tCanPart->GetGraphsInPad(tNx3, tNy3)->At(0))->GetYaxis()->GetLabelSize());
+  ((TH1*)tCanPart->GetGraphsInPad(tNx3, tNy3)->At(0))->GetXaxis()->SetLabelSize(1.75*((TH1*)tCanPart->GetGraphsInPad(tNx3, tNy3)->At(0))->GetXaxis()->GetLabelSize());
+  ((TH1*)tCanPart->GetGraphsInPad(tNx3, tNy3)->At(0))->GetYaxis()->SetLabelSize(1.75*((TH1*)tCanPart->GetGraphsInPad(tNx3, tNy3)->At(0))->GetYaxis()->GetLabelSize());
 
 
 
   tCanPart->SetDrawUnityLine(true);
   tCanPart->DrawAll();
-  tCanPart->DrawXaxisTitle("#it{k}* (GeV/#it{c})", 43, 35, 0.015);
-  tCanPart->DrawYaxisTitle("#it{C}(#it{k}*)", 43, 35, 0.035, 0.825); 
+  tCanPart->DrawXaxisTitle("#it{k}* (GeV/#it{c})", 43, 55, 0.010);
+  tCanPart->DrawYaxisTitle("#it{C}(#it{k}*)", 43, 55, 0.025, 0.70); 
 
   return tCanPart;
 }
