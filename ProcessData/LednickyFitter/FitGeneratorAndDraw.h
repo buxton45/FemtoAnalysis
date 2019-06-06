@@ -29,7 +29,7 @@ public:
   void CreateParamFinalValuesText(AnalysisType aAnType, CanvasPartition *aCanPart, int aNx, int aNy, TF1* aFit, const td1dVec &aSysErrors, double aTextXmin=0.75, double aTextYmin=0.75, double aTextWidth=0.15, double aTextHeight=0.10, double aTextFont=63, double aTextSize=15, bool aDrawAll=true);
   void CreateParamFinalValuesTextTwoColumns(CanvasPartition *aCanPart, int aNx, int aNy, TF1* aFit, const td1dVec &aSysErrors, double aText1Xmin=0.75, double aText1Ymin=0.75, double aText1Width=0.15, double aText1Height=0.10, bool aDrawText1=true, double aText2Xmin=0.50, double aText2Ymin=0.75, double aText2Width=0.15, double aText2Height=0.10, bool aDrawText2=true, double aTextFont=63, double aTextSize=15);
   void AddTextCorrectionInfo(CanvasPartition *aCanPart, int aNx, int aNy, bool aMomResCorrect, bool aNonFlatCorrect, double aTextXmin=0.75, double aTextYmin=0.75, double aTextWidth=0.15, double aTextHeight=0.10, double aTextFont=63, double aTextSize=15);
-  void AddColoredLinesLabels(CanvasPartition *aCanPart, int aNx, int aNy, bool aZoomROP=true);
+  void AddColoredLinesLabels(CanvasPartition *aCanPart, int aNx, int aNy, bool aZoomROP=true, double aScaleFactor=1.);
 
   void DrawSingleKStarCf(TPad* aPad, int aPairAnNumber, double aYmin=0.9, double aYmax=1.1, double aXmin=0.0, double aXmax=0.5, int aMarkerColor=1, TString aOption = "", int aMarkerStyle=20);
   void DrawSingleKStarCfwFit(TPad* aPad, int aPairAnNumber, double aYmin=0.9, double aYmax=1.1, double aXmin=0.0, double aXmax=0.5, int aMarkerColor=1, TString aOption = "", int aMarkerStyle=20);
@@ -75,6 +75,8 @@ public:
   virtual void BuildKStarCfswFitsPanel_CombineConj(CanvasPartition* aCanPart, int aAnNumber, int aConjAnNumber, int tColumn, int tRow, bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, NonFlatBgdFitType aNonFlatBgdFitType, bool aDrawSysErrors, bool aDrawDataOnTop);
   virtual CanvasPartition* BuildKStarCfswFitsCanvasPartition_CombineConj(TString aCanvasBaseName, bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, NonFlatBgdFitType aNonFlatBgdFitType=kLinear, bool aDrawSysErrors=true, bool aZoomROP=true, bool aSuppressFitInfoOutput=false, bool aLabelLines=false);
   virtual TCanvas* DrawKStarCfswFits_CombineConj(bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, NonFlatBgdFitType aNonFlatBgdFitType=kLinear, bool aSaveImage=false, bool aDrawSysErrors=true, bool aZoomROP=true, bool aSuppressFitInfoOutput=false, bool aLabelLines=false);
+
+  virtual void BuildKStarCfsPanel_CombineConj(CanvasPartition* aCanPart, int aAnNumber, int aConjAnNumber, int tColumn, int tRow, bool aDrawSysErrors, bool aDrawDataOnTop);
 
   //inline 
 

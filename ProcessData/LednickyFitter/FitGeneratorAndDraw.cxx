@@ -299,7 +299,7 @@ void FitGeneratorAndDraw::AddTextCorrectionInfo(CanvasPartition *aCanPart, int a
 }
 
 //________________________________________________________________________________________________________________
-void FitGeneratorAndDraw::AddColoredLinesLabels(CanvasPartition *aCanPart, int aNx, int aNy, bool aZoomROP)
+void FitGeneratorAndDraw::AddColoredLinesLabels(CanvasPartition *aCanPart, int aNx, int aNy, bool aZoomROP, double aScaleFactor)
 {
   aCanPart->GetPad(aNx, aNy)->cd();
 
@@ -336,21 +336,21 @@ void FitGeneratorAndDraw::AddColoredLinesLabels(CanvasPartition *aCanPart, int a
 
   TLine* tLine;
 
-  tTex->DrawLatex(tXText1, tYText1, "Primary #LambdaK");
+  tTex->DrawLatex(tXText1, tYText1, TString::Format("#scale[%f]{Primary #LambdaK}", aScaleFactor));
   tLine = new TLine(tXText1-tSpaceBetween-tLineWidth, tYText1, tXText1-tSpaceBetween, tYText1);
   tLine->SetLineColor(kBlack);
   tLine->SetLineWidth(2);
   tLine->SetLineStyle(3);
   tLine->Draw();
   
-  tTex->DrawLatex(tXText2, tYText2, "Non-femto. bgd.");
+  tTex->DrawLatex(tXText2, tYText2, TString::Format("#scale[%f]{Non-femto. bgd.}", aScaleFactor));
   tLine = new TLine(tXText2-tSpaceBetween-tLineWidth, tYText2, tXText2-tSpaceBetween, tYText2);
   tLine->SetLineColor(tColorNonFlatBgd);
   tLine->SetLineWidth(2);
   tLine->SetLineStyle(7);
   tLine->Draw();
 
-  tTex->DrawLatex(tXText3, tYText3, "Full fit");
+  tTex->DrawLatex(tXText3, tYText3, TString::Format("#scale[%f]{Full fit}", aScaleFactor));
   tLine = new TLine(tXText3-tSpaceBetween-tLineWidth, tYText3, tXText3-tSpaceBetween, tYText3);
   tLine->SetLineColor(tColorCorrectFit);
   tLine->SetLineWidth(2);
@@ -2454,6 +2454,58 @@ TCanvas* FitGeneratorAndDraw::DrawKStarCfswFits_CombineConj(bool aMomResCorrectF
   }
 
   return tCanPart->GetCanvas();
+}
+
+
+//________________________________________________________________________________________________________________
+void FitGeneratorAndDraw::BuildKStarCfsPanel_CombineConj(CanvasPartition* aCanPart, int aAnNumber, int aConjAnNumber, int tColumn, int tRow, bool aDrawSysErrors, bool aDrawDataOnTop)
+{
+  assert(fNAnalyses == 6);
+
+  int tColor, tColorTransparent;
+
+  AnalysisType tAnType = fSharedAn->GetFitPairAnalysis(aAnNumber)->GetAnalysisType();
+  AnalysisType tConjAnType = fSharedAn->GetFitPairAnalysis(aConjAnNumber)->GetAnalysisType();
+
+  assert(fSharedAn->GetFitPairAnalysis(aAnNumber)->GetCentralityType() == fSharedAn->GetFitPairAnalysis(aConjAnNumber)->GetCentralityType());
+
+  if(tAnType==kLamK0 || tAnType==kALamK0) tColor=kBlack;
+  else if(tAnType==kLamKchP || tAnType==kALamKchM) tColor=kRed+1;
+  else if(tAnType==kLamKchM || tAnType==kALamKchP) tColor=kBlue+1;
+  else tColor=1;
+
+  tColorTransparent = TColor::GetColorTransparent(tColor,0.2);
+
+  //---------------------------------------------------------------------------------------------------------
+  CfHeavy* tCfHeavyData_An   = (CfHeavy*)fSharedAn->GetKStarCfHeavy(aAnNumber);
+  CfHeavy* tCfHeavyData_Conj = (CfHeavy*)fSharedAn->GetKStarCfHeavy(aConjAnNumber);
+  CfHeavy* tCfHeavyData      = CombineTwoHeavyCfs(tCfHeavyData_An, tCfHeavyData_Conj);
+  TH1* tCfData               = tCfHeavyData->GetHeavyCfClone();
+
+
+  //TODO tCfHeavyData_An->GetTotalNumScale() or FitGeneratorAndDraw::GetWeightedAnalysisNorm(aAnNumber)???
+  double tNorm_An   = tCfHeavyData_An->GetTotalNumScale();
+  double tNorm_Conj = tCfHeavyData_Conj->GetTotalNumScale();
+
+  //Include the Cf with statistical errors, and make sure the binning is the same as the fitted Cf ----------
+  TH1 *tCfwSysErrs_An, *tCfwSysErrs_Conj, *tCfwSysErrs;
+  if(aDrawSysErrors)
+  {
+    tCfwSysErrs_An   = (TH1*)fSharedAn->GetFitPairAnalysis(aAnNumber)->GetCfwSysErrors();
+    tCfwSysErrs_Conj = (TH1*)fSharedAn->GetFitPairAnalysis(aConjAnNumber)->GetCfwSysErrors();
+    tCfwSysErrs = CombineTwoHists(tCfwSysErrs_An, tCfwSysErrs_Conj, tNorm_An, tNorm_Conj);
+      tCfwSysErrs->SetFillColor(tColorTransparent);
+      tCfwSysErrs->SetFillStyle(1000);
+      tCfwSysErrs->SetLineColor(0);
+      tCfwSysErrs->SetLineWidth(0);
+  }
+
+  //---------------------------------------------------------------------------------------------------------
+  if(aDrawSysErrors) assert(tCfwSysErrs->GetBinWidth(1) == tCfData->GetBinWidth(1));
+  //---------------------------------------------------------------------------------------------------------
+  aCanPart->AddGraph(tColumn,tRow,tCfData,"",20,tColor,0.5,"ex0");  //ex0 suppresses the error along x
+  if(aDrawSysErrors) aCanPart->AddGraph(tColumn, tRow, tCfwSysErrs, "", 20, tColorTransparent, 0.5, "e2psame");
+  if(aDrawDataOnTop) aCanPart->AddGraph(tColumn, tRow, tCfData, "", 20, tColor, 0.5, "ex0same");  //draw again so data on top
 }
 
 

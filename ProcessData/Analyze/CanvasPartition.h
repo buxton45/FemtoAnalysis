@@ -59,7 +59,7 @@ public:
   float** GetScaleFactors(AxisType aAxisType, td2dTPadVec &fPadArray, int Nx, int Ny);
 
   void SetupOptStat(int aNx, int aNy, double aStatX, double aStatY, double aStatW, double aStatH);
-  TPaveText* SetupTPaveText(TString aText, int aNx, int aNy, double aTextXmin=0.75, double aTextYmin=0.75, double aTextWidth=0.15, double aTextHeight=0.10, double aTextFont=63, double aTextSize=15);
+  TPaveText* SetupTPaveText(TString aText, int aNx, int aNy, double aTextXmin=0.75, double aTextYmin=0.75, double aTextWidth=0.15, double aTextHeight=0.10, double aTextFont=63, double aTextSize=15, int aTextAlign=22);
   void AddPadPaveText(TPaveText* aText, int aNx, int aNy);
   void AddPadPaveLatex(TLatex* aText, int aNx, int aNy);
   void SetupTLegend(TString aText, int aNx, int aNy, double aTextXmin=0.75, double aTextYmin=0.75, double aTextWidth=0.15, double aTextHeight=0.10, int aNColumns=1);

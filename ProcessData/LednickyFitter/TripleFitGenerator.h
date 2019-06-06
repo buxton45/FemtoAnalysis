@@ -63,6 +63,11 @@ public:
   virtual CanvasPartition* BuildKStarCfswFitsCanvasPartition_CombineConj_AllAn(TString aCanvasBaseName, bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, vector<NonFlatBgdFitType> &aNonFlatBgdFitTypes, bool aDrawSysErrors=true, bool aZoomROP=true, bool aSuppressFitInfoOutput=false, bool aLabelLines=false);
   virtual TCanvas* DrawKStarCfswFits_CombineConj_AllAn(bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, vector<NonFlatBgdFitType> &aNonFlatBgdFitTypes, bool aSaveImage=false, bool aDrawSysErrors=true, bool aZoomROP=true, bool aSuppressFitInfoOutput=false, bool aLabelLines=false);
 
+  virtual CanvasPartition* BuildKStarCfswFitsCanvasPartition_CombineConj(TString aCanvasBaseName, CentralityType aCentType, bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, vector<NonFlatBgdFitType> &aNonFlatBgdFitTypes, bool aDrawSysErrors=true, bool aZoomROP=true, bool aSuppressFitInfoOutput=false, bool aLabelLines=false);
+  virtual CanvasPartition* BuildKStarCfsCanvasPartition_CombineConj(TString aCanvasBaseName, CentralityType aCentType, bool aDrawSysErrors=true, bool aZoomROP=true);
+  virtual TCanvas* DrawKStarCfswFits_CombineConj(CentralityType aCentType, bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, vector<NonFlatBgdFitType> &aNonFlatBgdFitTypes, bool aSaveImage=false, bool aDrawSysErrors=true, bool aZoomROP=true, bool aSuppressFitInfoOutput=false, bool aLabelLines=false);
+  virtual TCanvas* DrawKStarCfs_CombineConj(CentralityType aCentType, bool aSaveImage=false, bool aDrawSysErrors=true, bool aZoomROP=true);
+
 //-------inline
   void SetRadiusStartValue(double aRad, int aIndex=0);
   void SetRadiusStartValues(const vector<double> &aStartValues);

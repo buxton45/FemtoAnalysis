@@ -51,7 +51,8 @@ int main(int argc, char **argv)
   bool bDoFit = true;
   bool bGenerateContours = false;
 
-  TString tResultsDate = "20180505";
+//  TString tResultsDate = "20180505";
+  TString tResultsDate = "20190319";
 
   double tMaxFitKStar=0.3;
 
@@ -77,7 +78,7 @@ int main(int argc, char **argv)
   bool ApplyNonFlatBackgroundCorrection = true;
   if(bUseStavCf) ApplyNonFlatBackgroundCorrection = false;
   NonFlatBgdFitType tNonFlatBgdFitType_LamKch = kPolynomial;
-  NonFlatBgdFitType tNonFlatBgdFitType_LamK0  = kLinear;
+  NonFlatBgdFitType tNonFlatBgdFitType_LamK0  = kPolynomial;
   vector<NonFlatBgdFitType> tNonFlatBgdFitTypes{tNonFlatBgdFitType_LamK0, tNonFlatBgdFitType_LamK0, 
                                                 tNonFlatBgdFitType_LamKch, tNonFlatBgdFitType_LamKch, tNonFlatBgdFitType_LamKch, tNonFlatBgdFitType_LamKch};
 
@@ -117,6 +118,7 @@ int main(int argc, char **argv)
   bool tSuppressFitInfoOutput=false;
   bool tLabelLines=false;
   if(tLabelLines) tSuppressFitInfoOutput=true;
+  bool bDrawNewSQM = true;
 
 //-----------------------------------------------------------------------------
   if(tShareLambdaParams==false && tTripleShareLambda==true)
@@ -311,6 +313,25 @@ int main(int argc, char **argv)
       }
     }
 
+  //-------------------------------------
+    if(bDrawNewSQM)
+    {
+      TCanvas *tKStarwFitsCan_CombineConj_Zoom, *tKStarwFitsCan_CombineConj_UnZoom, *tKStarCan_CombineConj_Zoom, *tKStarCan_CombineConj_UnZoom;
+      tSuppressFitInfoOutput=true;
+      tLabelLines = true;
+
+      for(int i=0; i<3; i++)
+      {
+        CentralityType tCentType = static_cast<CentralityType>(i);
+
+        tKStarwFitsCan_CombineConj_Zoom =   tTriple->DrawKStarCfswFits_CombineConj(tCentType, ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, tNonFlatBgdFitTypes, SaveImages, bDrawSysErrs, true, tSuppressFitInfoOutput, tLabelLines);
+        tKStarwFitsCan_CombineConj_UnZoom = tTriple->DrawKStarCfswFits_CombineConj(tCentType, ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, tNonFlatBgdFitTypes, SaveImages, bDrawSysErrs, false, tSuppressFitInfoOutput, tLabelLines);
+
+        tKStarCan_CombineConj_Zoom =   tTriple->DrawKStarCfs_CombineConj(tCentType, SaveImages, bDrawSysErrs, true);
+        tKStarCan_CombineConj_UnZoom = tTriple->DrawKStarCfs_CombineConj(tCentType, SaveImages, bDrawSysErrs, false);
+      }
+
+    }
   }
 
 

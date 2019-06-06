@@ -275,7 +275,7 @@ void CanvasPartition::SetupOptStat(int aNx, int aNy, double aStatX, double aStat
 
 
 //________________________________________________________________________________________________________________
-TPaveText* CanvasPartition::SetupTPaveText(TString aText, int aNx, int aNy, double aTextXmin, double aTextYmin, double aTextWidth, double aTextHeight, double aTextFont, double aTextSize)
+TPaveText* CanvasPartition::SetupTPaveText(TString aText, int aNx, int aNy, double aTextXmin, double aTextYmin, double aTextWidth, double aTextHeight, double aTextFont, double aTextSize, int aTextAlign)
 {
   float tLeftMargin = fPadArray[aNx][aNy]->GetLeftMargin();
   float tRightMargin = fPadArray[aNx][aNy]->GetRightMargin();
@@ -298,7 +298,7 @@ TPaveText* CanvasPartition::SetupTPaveText(TString aText, int aNx, int aNy, doub
   TPaveText* returnText = new TPaveText(tNormalizedTextXmin,tNormalizedTextYmin,tNormalizedTextXmax,tNormalizedTextYmax,"NDC");
     returnText->SetFillColor(0);
     returnText->SetBorderSize(0);
-    returnText->SetTextAlign(22);
+    returnText->SetTextAlign(aTextAlign);
     returnText->SetTextFont(aTextFont);
     returnText->SetTextSize(aTextSize);
     if(!aText.IsNull()) returnText->AddText(aText);
