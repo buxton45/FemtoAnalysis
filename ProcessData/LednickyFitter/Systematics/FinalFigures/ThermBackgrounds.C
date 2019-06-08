@@ -20,6 +20,7 @@ class ThermCf;
 class SuperpositionFitBgd;
 
 #include "CanvasPartition.h"
+#include "FitGeneratorAndDraw.h"
 
 
 //GLOBAL!!!!!!!!!!!!!!!
@@ -331,6 +332,76 @@ TH1D* GetQuickData(AnalysisType aAnType, CentralityType aCentType, bool aCombine
   return tReturnHist;
 }
 
+
+//________________________________________________________________________________________________________________
+TObjArray* GetSlowDataWithSysErrs(AnalysisType aAnType, CentralityType aCentType, bool aCombineConjugates, TString aResultsData="20190319", int aRebin=1)
+{
+  assert(aAnType==kLamK0 || aAnType==kLamKchP || aAnType==kLamKchM);
+
+  TString tDirectoryBase_LamK, tFileLocationBase_LamK, tFileLocationBaseMC_LamK;
+
+  if(aAnType==kLamK0 || aAnType==kALamK0)
+  {
+    tDirectoryBase_LamK = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamK0_%s/",aResultsData.Data());
+    tFileLocationBase_LamK = TString::Format("%sResults_cLamK0_%s",tDirectoryBase_LamK.Data(),aResultsData.Data());
+    tFileLocationBaseMC_LamK = TString::Format("%sResults_cLamK0MC_%s",tDirectoryBase_LamK.Data(),aResultsData.Data());
+  }
+  else if(aAnType==kLamKchP || aAnType==kALamKchM
+        ||aAnType==kLamKchM || aAnType==kALamKchP)
+  {
+    tDirectoryBase_LamK = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_%s/",aResultsData.Data());
+    tFileLocationBase_LamK = TString::Format("%sResults_cLamcKch_%s",tDirectoryBase_LamK.Data(),aResultsData.Data());
+    tFileLocationBaseMC_LamK = TString::Format("%sResults_cLamcKchMC_%s",tDirectoryBase_LamK.Data(),aResultsData.Data());
+  }
+  else assert(0);
+
+  FitGeneratorAndDraw* tFG = new FitGeneratorAndDraw(tFileLocationBase_LamK, tFileLocationBaseMC_LamK, aAnType, kMB);
+
+  CfHeavy* tCfHeavyAn   = tFG->GetKStarCfHeavy(2*aCentType);
+  CfHeavy* tCfHeavyConj = tFG->GetKStarCfHeavy(2*aCentType+1);
+
+  TH1* tCfwSysErrsAn   = tFG->GetSharedAn()->GetFitPairAnalysis(2*aCentType)->GetCfwSysErrors();
+  TH1* tCfwSysErrsConj = tFG->GetSharedAn()->GetFitPairAnalysis(2*aCentType+1)->GetCfwSysErrors();
+
+  if(aRebin != 1)
+  {
+    tCfHeavyAn->Rebin(aRebin);
+    tCfHeavyConj->Rebin(aRebin);
+
+    if(!tCfwSysErrsAn->GetSumw2N()) tCfwSysErrsAn->Sumw2();
+    if(!tCfwSysErrsConj->GetSumw2N()) tCfwSysErrsConj->Sumw2();
+    tCfwSysErrsAn->Rebin(aRebin);
+    tCfwSysErrsConj->Rebin(aRebin);
+
+    //Technically not rebinned correctly, so data probably slight differ
+    assert(tCfwSysErrsAn->GetNbinsX() == tCfHeavyAn->GetHeavyCf()->GetNbinsX());
+    for(int i=1; i<=tCfwSysErrsAn->GetNbinsX(); i++)
+    {
+      tCfwSysErrsAn->SetBinContent(i, tCfHeavyAn->GetHeavyCf()->GetBinContent(i));
+      tCfwSysErrsConj->SetBinContent(i, tCfHeavyConj->GetHeavyCf()->GetBinContent(i));
+    }
+  }
+
+  TH1 *tReturnHistStat, *tReturnHistSys;
+  if(!aCombineConjugates)
+  {
+    tReturnHistStat = (TH1D*)tCfHeavyAn->GetHeavyCfClone();
+    tReturnHistSys  = tCfwSysErrsAn;
+  }
+  else
+  {
+    CfHeavy* tCfHeavyCombined = FitGeneratorAndDraw::CombineTwoHeavyCfs(tCfHeavyAn, tCfHeavyConj);
+    tReturnHistStat = tCfHeavyCombined->GetHeavyCfClone();
+
+    tReturnHistSys = FitGeneratorAndDraw::CombineTwoHists(tCfwSysErrsAn, tCfwSysErrsConj, tCfHeavyAn->GetTotalNumScale(), tCfHeavyConj->GetTotalNumScale());
+  }
+
+  TObjArray* tReturnArray = new TObjArray();
+  tReturnArray->Add(tReturnHistStat);
+  tReturnArray->Add(tReturnHistSys);
+
+  return tReturnArray;
+}
 
 //________________________________________________________________________________________________________________
 double GetChi2Value(TH1D* aData, TF1* aFit, double aMin, double aMax)
@@ -705,7 +776,7 @@ TF1* GetLamKchPMBgdFit(TString aCfDescriptor, TString aFileNameCfs, int aImpactP
 }
 
 //________________________________________________________________________________________________________________
-TCanvas* BuildBgdwFitPanel(CanvasPartition* aCanPart, int tColumn, int tRow, TString aCfDescriptor, TString aFileNameCfs, AnalysisType aAnType, int aImpactParam, bool aCombineConjugates, bool aCombineImpactParams, ThermEventsType aEventsType, int aRebin, double aMinNorm, double aMaxNorm, double aMaxBgdFit=3.0, bool aAvgLamKchPMFit=false, bool aUseStavCf=false, bool aZoomY=false)
+TCanvas* BuildBgdwFitPanel(CanvasPartition* aCanPart, int tColumn, int tRow, TString aCfDescriptor, TString aFileNameCfs, AnalysisType aAnType, int aImpactParam, bool aCombineConjugates, bool aCombineImpactParams, ThermEventsType aEventsType, int aRebin, double aMinNorm, double aMaxNorm, double aMaxBgdFit=3.0, bool aAvgLamKchPMFit=false, bool aUseStavCf=false, bool aZoomY=false, bool aShiftText=false)
 {
   if(aAnType==kLamKchM || aAnType==kALamKchP) gRejectOmegaTherm=true;
   else gRejectOmegaTherm=false;
@@ -753,7 +824,7 @@ TCanvas* BuildBgdwFitPanel(CanvasPartition* aCanPart, int tColumn, int tRow, TSt
   else tBgdFitDraw = tBgdFit;
 
   tBgdFitDraw->SetLineColor(tCf->GetLineColor());
-  tBgdFitDraw->SetLineWidth(1.0);
+  tBgdFitDraw->SetLineWidth(2.0);
   tBgdFitDraw->SetLineStyle(7);
   tBgdFitDraw->SetRange(0., aMaxBgdFit);
 
@@ -762,8 +833,15 @@ TCanvas* BuildBgdwFitPanel(CanvasPartition* aCanPart, int tColumn, int tRow, TSt
 
   CentralityType tCentTypeData = GetCentralityType(aImpactParam);
 
-  TH1D* tData = GetQuickData(aAnType, tCentTypeData, aCombineConjugates, "20180505", aRebin);
-  ThermCf::SetStyleAndColor(tData, 20, GetColor(aAnType));
+//  TH1D* tData = GetQuickData(aAnType, tCentTypeData, aCombineConjugates, "20180505", aRebin);
+//  ThermCf::SetStyleAndColor(tData, 20, GetColor(aAnType));
+
+  TObjArray* tDataStatAndSys = GetSlowDataWithSysErrs(aAnType, tCentTypeData, aCombineConjugates, "20190319", aRebin);
+  TH1D* tData = (TH1D*)tDataStatAndSys->At(0);
+    ThermCf::SetStyleAndColor(tData, 20, GetColor(aAnType));
+  TH1D* tDataSys = (TH1D*)tDataStatAndSys->At(1);
+    ThermCf::SetStyleAndColor(tDataSys, 20, TColor::GetColorTransparent(GetColor(aAnType), 0.2));
+
 
 //  cout << "**************************************************" << endl;
 //  cout << "Fitting call(2) from: DrawBgdwFit" << endl;
@@ -781,7 +859,7 @@ TCanvas* BuildBgdwFitPanel(CanvasPartition* aCanPart, int tColumn, int tRow, TSt
   else tBgdFitDataDraw = tBgdFitData;
 
   tBgdFitDataDraw->SetLineColor(tData->GetLineColor());
-  tBgdFitDataDraw->SetLineWidth(1.0);
+  tBgdFitDataDraw->SetLineWidth(2.0);
   tBgdFitDataDraw->SetRange(0., aMaxBgdFit);
 
   //---------------------------------------------------------------------------------------------------------
@@ -789,15 +867,19 @@ TCanvas* BuildBgdwFitPanel(CanvasPartition* aCanPart, int tColumn, int tRow, TSt
   double tMarkerSize = 2.0;
   aCanPart->AddGraph(tColumn, tRow, tCf, "", tMarkerStyle, tColor, tMarkerSize, "ex0");  //ex0 suppresses the error along x
   aCanPart->AddGraph(tColumn, tRow, tBgdFitDraw, "", 20, tColor);
+  aCanPart->AddGraph(tColumn, tRow, tDataSys, "", 20, TColor::GetColorTransparent(GetColor(aAnType), 0.2), tMarkerSize, "e2psame");
   aCanPart->AddGraph(tColumn, tRow, tData, "", 20, GetColor(aAnType), tMarkerSize, "ex0same");
   aCanPart->AddGraph(tColumn, tRow, tBgdFitDataDraw, "", 20, GetColor(aAnType));
 
   aCanPart->AddGraph(tColumn, tRow, tCf, "", tMarkerStyle, tColor, tMarkerSize, "ex0same");  //draw again so on top
+  aCanPart->AddGraph(tColumn, tRow, tBgdFitDraw, "", 20, tColor);
   aCanPart->AddGraph(tColumn, tRow, tBgdFitDataDraw, "", 20, GetColor(aAnType));
 
   //---------------------------------------------------------------------------------------------------------
   TString tSysInfoTString = TString::Format("%s  %s", cAnalysisRootTags[aAnType], cPrettyCentralityTags[tCentTypeData]);
-  TPaveText* tSysInfoPaveText = aCanPart->SetupTPaveText(tSysInfoTString, tColumn, tRow, 0.60, 0.85, 0.325, 0.125, 63, 40);
+  TPaveText* tSysInfoPaveText;
+  if(aShiftText) tSysInfoPaveText = aCanPart->SetupTPaveText(tSysInfoTString, tColumn, tRow, 0.475, 0.85, 0.325, 0.125, 63, 40);
+  else           tSysInfoPaveText = aCanPart->SetupTPaveText(tSysInfoTString, tColumn, tRow, 0.60, 0.85, 0.325, 0.125, 63, 40);
   aCanPart->AddPadPaveText(tSysInfoPaveText, tColumn, tRow);
 
   //---------------------------------------------------------------------------------------------------------
@@ -841,22 +923,30 @@ TCanvas* BuildBgdwFitPanel(CanvasPartition* aCanPart, int tColumn, int tRow, TSt
   //---------------------------------------------------------------------------------------------------------
   if(tRow==0)
   {
-    if(!aZoomY) aCanPart->SetupTLegend("", tColumn, tRow, 0.55, 0.15, 0.35, 0.15);
-    else        aCanPart->SetupTLegend("", tColumn, tRow, 0.50, 0.575, 0.45, 0.225);
+    if(aShiftText)
+    {
+      if(!aZoomY) aCanPart->SetupTLegend("", tColumn, tRow, 0.425, 0.15, 0.35, 0.15);
+      else        aCanPart->SetupTLegend("", tColumn, tRow, 0.375, 0.575, 0.45, 0.225);
+    }
+    else
+    {
+      if(!aZoomY) aCanPart->SetupTLegend("", tColumn, tRow, 0.55, 0.15, 0.35, 0.15);
+      else        aCanPart->SetupTLegend("", tColumn, tRow, 0.50, 0.575, 0.45, 0.225);
+    }
     aCanPart->AddLegendEntry(tColumn, tRow, tCf, tDescriptor.Data(), "p");
     aCanPart->AddLegendEntry(tColumn, tRow, tData, "Data", "p");
   }
 
-  if(tRow==0 && tColumn==0)
+  if(tRow==(aCanPart->GetNy()-1) && tColumn==0)
   {
     TString tAliceInfo = TString("ALICE Preliminary");
     TPaveText* tAliceInfoText = aCanPart->SetupTPaveText(tAliceInfo, tColumn, tRow, 0.25, 0.05, 0.65, 0.125, 43, 40, 12);
     aCanPart->AddPadPaveText(tAliceInfoText, tColumn, tRow);
   }
-  if(tRow==0 && tColumn==1)
+  if(tRow==(aCanPart->GetNy()-1) && tColumn==1)
   {
     TString tAliceInfo = TString("Pb-Pb #sqrt{#it{s}_{NN}} = 2.76 TeV");
-    TPaveText* tAliceInfoText = aCanPart->SetupTPaveText(tAliceInfo, tColumn, tRow, 0.195, 0.05, 0.65, 0.125, 43, 40, 12);
+    TPaveText* tAliceInfoText = aCanPart->SetupTPaveText(tAliceInfo, tColumn, tRow, 0.175, 0.05, 0.65, 0.125, 43, 40, 12);
     aCanPart->AddPadPaveText(tAliceInfoText, tColumn, tRow);
   }
 }
@@ -950,7 +1040,7 @@ TCanvas* DrawBgdwFit_AllCentAllAnv2(TString aCfDescriptor, TString aFileNameCfs,
 //  double tXHigh = aMaxBgdFit-0.02;
   double tXHigh = 1.68;
   double tYLow = 0.955;
-  double tYHigh = 1.015;
+  double tYHigh = 1.01999;
 
   CanvasPartition* tCanPart = new CanvasPartition(tCanBgdwFitName,tNx,tNy,tXLow,tXHigh,tYLow,tYHigh,0.12,0.0025,0.125,0.0025);
   tCanPart->SetDrawOptStat(false);
@@ -1038,11 +1128,20 @@ TCanvas* DrawBgdwFit_SingleCentAllAnv2(CentralityType aCentType, TString aCfDesc
   else if(aCentType==k3050) tImpParam = 8;
   else assert(0);
 
-  BuildBgdwFitPanel(tCanPart, 0, 0, aCfDescriptor, aFileNameCfs, kLamKchP, tImpParam, aCombineConjugates, tCombineImpactParams, aEventsType, aRebin, aMinNorm, aMaxNorm, aMaxBgdFit, aAvgLamKchPMFit, aUseStavCf, aZoomY);
+  BuildBgdwFitPanel(tCanPart, 0, 0, aCfDescriptor, aFileNameCfs, kLamKchP, tImpParam, aCombineConjugates, tCombineImpactParams, aEventsType, aRebin, aMinNorm, aMaxNorm, aMaxBgdFit, aAvgLamKchPMFit, aUseStavCf, aZoomY, true);
 
-  BuildBgdwFitPanel(tCanPart, 1, 0, aCfDescriptor, aFileNameCfs, kLamKchM, tImpParam, aCombineConjugates, tCombineImpactParams, aEventsType, aRebin, aMinNorm, aMaxNorm, aMaxBgdFit, aAvgLamKchPMFit, aUseStavCf, aZoomY);
+  BuildBgdwFitPanel(tCanPart, 1, 0, aCfDescriptor, aFileNameCfs, kLamKchM, tImpParam, aCombineConjugates, tCombineImpactParams, aEventsType, aRebin, aMinNorm, aMaxNorm, aMaxBgdFit, aAvgLamKchPMFit, aUseStavCf, aZoomY, true);
 
-  BuildBgdwFitPanel(tCanPart, 2, 0, aCfDescriptor, aFileNameCfs, kLamK0, tImpParam, aCombineConjugates, tCombineImpactParams, aEventsType, aRebin, aMinNorm, aMaxNorm, aMaxBgdFit, aAvgLamKchPMFit, aUseStavCf, aZoomY);
+  BuildBgdwFitPanel(tCanPart, 2, 0, aCfDescriptor, aFileNameCfs, kLamK0, tImpParam, aCombineConjugates, tCombineImpactParams, aEventsType, aRebin, aMinNorm, aMaxNorm, aMaxBgdFit, aAvgLamKchPMFit, aUseStavCf, aZoomY, true);
+
+  TObjArray* tPadLegends = tCanPart->GetPadLegends();
+  for(int i=0; i<tPadLegends->GetEntries(); i++)
+  {
+    for(int j=0; j<((TObjArray*)tPadLegends->At(i))->GetEntries(); j++)
+    {
+      ((TLegend*)((TObjArray*)tPadLegends->At(i))->At(j))->SetFillStyle(0);
+    }
+  }
 
 
   //----- Increase label size on axes
@@ -1065,7 +1164,7 @@ TCanvas* DrawBgdwFit_SingleCentAllAnv2(CentralityType aCentType, TString aCfDesc
   }
 
   //------------------
-  tCanPart->SetDrawUnityLine(true);
+  tCanPart->SetDrawUnityLine(false);
   tCanPart->DrawAll();
   tCanPart->DrawXaxisTitle("#it{k}* (GeV/#it{c})", 43, 60, 0.825, 0.01); //Note, changing xaxis low (=0.315) does nothing
   tCanPart->DrawYaxisTitle("#it{C}(#it{k}*)", 43, 75, 0.035, 0.65);
@@ -1749,7 +1848,7 @@ int main(int argc, char **argv)
 
   bool bDrawAllCentralities = false;
 
-  bool bSaveFigures = true;
+  bool bSaveFigures = false;
   TString tSaveFileType = "pdf";
 
   int tRebin=2;  //NOTE: tRebin for bDrawBgdwFitOnly in block below

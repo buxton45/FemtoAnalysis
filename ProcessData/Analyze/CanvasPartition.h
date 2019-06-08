@@ -86,6 +86,10 @@ public:
 
   vector<double> GetAxesRanges();
 
+  TObjArray* GetPadLegends();
+  int GetNx();
+  int GetNy();
+
 protected:
   bool fDrawUnityLine;
   bool fDrawOptStat;
@@ -127,6 +131,10 @@ inline void CanvasPartition::AppendGraphDrawOption(int aPadNx, int aPadNy, int a
 inline void CanvasPartition::ReplaceGraphDrawOption(int aPadNx, int aPadNy, int aGraphNum, TString aOption) {fGraphsDrawOptions[aPadNx + aPadNy*fNx][aGraphNum] = aOption;}
 
 inline vector<double> CanvasPartition::GetAxesRanges() {return vector<double>{fXaxisRangeLow, fXaxisRangeHigh, fYaxisRangeLow, fYaxisRangeHigh};}
+
+inline TObjArray* CanvasPartition::GetPadLegends() {return fPadLegends;}
+inline int CanvasPartition::GetNx() {return fNx;}
+inline int CanvasPartition::GetNy() {return fNy;}
 
 //________________________________________________________________________________________________________________
 template<typename T>

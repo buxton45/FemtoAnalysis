@@ -628,7 +628,7 @@ CanvasPartition* TripleFitGenerator::BuildKStarCfswFitsCanvasPartition_CombineCo
     {
       for(int iGr=0; iGr<tCanPart->GetGraphsInPad(i, j)->GetEntries(); iGr++)
       {
-        ((TH1*)tCanPart->GetGraphsInPad(tNx1, tNy1)->At(iGr))->SetMarkerSize(1.0);
+        ((TH1*)tCanPart->GetGraphsInPad(i, j)->At(iGr))->SetMarkerSize(1.5);
       }
     }
   }
@@ -813,7 +813,7 @@ CanvasPartition* TripleFitGenerator::BuildKStarCfsCanvasPartition_CombineConj(TS
     {
       for(int iGr=0; iGr<tCanPart->GetGraphsInPad(i, j)->GetEntries(); iGr++)
       {
-        ((TH1*)tCanPart->GetGraphsInPad(tNx1, tNy1)->At(iGr))->SetMarkerSize(1.0);
+        ((TH1*)tCanPart->GetGraphsInPad(i, j)->At(iGr))->SetMarkerSize(1.5);
       }
     }
   }
