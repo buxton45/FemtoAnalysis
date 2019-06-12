@@ -824,7 +824,7 @@ TCanvas* BuildBgdwFitPanel(CanvasPartition* aCanPart, int tColumn, int tRow, TSt
   else tBgdFitDraw = tBgdFit;
 
   tBgdFitDraw->SetLineColor(tCf->GetLineColor());
-  tBgdFitDraw->SetLineWidth(2.0);
+  tBgdFitDraw->SetLineWidth(3.0);
   tBgdFitDraw->SetLineStyle(7);
   tBgdFitDraw->SetRange(0., aMaxBgdFit);
 
@@ -832,9 +832,11 @@ TCanvas* BuildBgdwFitPanel(CanvasPartition* aCanPart, int tColumn, int tRow, TSt
 
 
   CentralityType tCentTypeData = GetCentralityType(aImpactParam);
-
-//  TH1D* tData = GetQuickData(aAnType, tCentTypeData, aCombineConjugates, "20180505", aRebin);
-//  ThermCf::SetStyleAndColor(tData, 20, GetColor(aAnType));
+/*
+  TH1D* tData = GetQuickData(aAnType, tCentTypeData, aCombineConjugates, "20180505", aRebin);
+  ThermCf::SetStyleAndColor(tData, 20, GetColor(aAnType));
+  TH1D* tDataSys = (TH1D*)tData->Clone("tDataSys");
+*/
 
   TObjArray* tDataStatAndSys = GetSlowDataWithSysErrs(aAnType, tCentTypeData, aCombineConjugates, "20190319", aRebin);
   TH1D* tData = (TH1D*)tDataStatAndSys->At(0);
@@ -859,27 +861,28 @@ TCanvas* BuildBgdwFitPanel(CanvasPartition* aCanPart, int tColumn, int tRow, TSt
   else tBgdFitDataDraw = tBgdFitData;
 
   tBgdFitDataDraw->SetLineColor(tData->GetLineColor());
-  tBgdFitDataDraw->SetLineWidth(2.0);
+  tBgdFitDataDraw->SetLineWidth(3.0);
   tBgdFitDataDraw->SetRange(0., aMaxBgdFit);
 
   //---------------------------------------------------------------------------------------------------------
 
   double tMarkerSize = 2.0;
   aCanPart->AddGraph(tColumn, tRow, tCf, "", tMarkerStyle, tColor, tMarkerSize, "ex0");  //ex0 suppresses the error along x
-  aCanPart->AddGraph(tColumn, tRow, tBgdFitDraw, "", 20, tColor);
+  aCanPart->AddGraph(tColumn, tRow, tBgdFitDraw, "", 20, tColor, tMarkerSize, "same l");
   aCanPart->AddGraph(tColumn, tRow, tDataSys, "", 20, TColor::GetColorTransparent(GetColor(aAnType), 0.2), tMarkerSize, "e2psame");
   aCanPart->AddGraph(tColumn, tRow, tData, "", 20, GetColor(aAnType), tMarkerSize, "ex0same");
-  aCanPart->AddGraph(tColumn, tRow, tBgdFitDataDraw, "", 20, GetColor(aAnType));
+  aCanPart->AddGraph(tColumn, tRow, tBgdFitDataDraw, "", 20, GetColor(aAnType), tMarkerSize, "same l");
 
   aCanPart->AddGraph(tColumn, tRow, tCf, "", tMarkerStyle, tColor, tMarkerSize, "ex0same");  //draw again so on top
-  aCanPart->AddGraph(tColumn, tRow, tBgdFitDraw, "", 20, tColor);
-  aCanPart->AddGraph(tColumn, tRow, tBgdFitDataDraw, "", 20, GetColor(aAnType));
+  aCanPart->AddGraph(tColumn, tRow, tBgdFitDraw, "", 20, tColor, tMarkerSize, "same l");
+  aCanPart->AddGraph(tColumn, tRow, tBgdFitDataDraw, "", 20, GetColor(aAnType), tMarkerSize, "same l");
 
   //---------------------------------------------------------------------------------------------------------
-  TString tSysInfoTString = TString::Format("%s  %s", cAnalysisRootTags[aAnType], cPrettyCentralityTags[tCentTypeData]);
+  TString tSysInfoTString;
+  if(aCombineConjugates) tSysInfoTString = TString::Format("%s#scale[0.5]{ }#oplus#scale[0.5]{ }%s,  %s", cAnalysisRootTags[aAnType], cAnalysisRootTags[aAnType+1], cPrettyCentralityTags[tCentTypeData]);
+  else                   tSysInfoTString = TString::Format("%s,  %s", cAnalysisRootTags[aAnType], cPrettyCentralityTags[tCentTypeData]);
   TPaveText* tSysInfoPaveText;
-  if(aShiftText) tSysInfoPaveText = aCanPart->SetupTPaveText(tSysInfoTString, tColumn, tRow, 0.475, 0.85, 0.325, 0.125, 63, 40);
-  else           tSysInfoPaveText = aCanPart->SetupTPaveText(tSysInfoTString, tColumn, tRow, 0.60, 0.85, 0.325, 0.125, 63, 40);
+  tSysInfoPaveText = aCanPart->SetupTPaveText(tSysInfoTString, tColumn, tRow, 0.175, 0.80, 0.80, 0.195, 63, 55);
   aCanPart->AddPadPaveText(tSysInfoPaveText, tColumn, tRow);
 
   //---------------------------------------------------------------------------------------------------------
@@ -925,30 +928,31 @@ TCanvas* BuildBgdwFitPanel(CanvasPartition* aCanPart, int tColumn, int tRow, TSt
   {
     if(aShiftText)
     {
-      if(!aZoomY) aCanPart->SetupTLegend("", tColumn, tRow, 0.425, 0.15, 0.35, 0.15);
-      else        aCanPart->SetupTLegend("", tColumn, tRow, 0.375, 0.575, 0.45, 0.225);
+      if(!aZoomY) aCanPart->SetupTLegend("", tColumn, tRow, 0.425, 0.15, 0.35, 0.15, 1, true);
+      else        aCanPart->SetupTLegend("", tColumn, tRow, 0.30, 0.495, 0.575, 0.30, 1, true);
     }
     else
     {
-      if(!aZoomY) aCanPart->SetupTLegend("", tColumn, tRow, 0.55, 0.15, 0.35, 0.15);
-      else        aCanPart->SetupTLegend("", tColumn, tRow, 0.50, 0.575, 0.45, 0.225);
+      if(!aZoomY) aCanPart->SetupTLegend("", tColumn, tRow, 0.55, 0.15, 0.35, 0.15, 1, true);
+      else        aCanPart->SetupTLegend("", tColumn, tRow, 0.30, 0.495, 0.65, 0.325, 1, true);
     }
     aCanPart->AddLegendEntry(tColumn, tRow, tCf, tDescriptor.Data(), "p");
-    aCanPart->AddLegendEntry(tColumn, tRow, tData, "Data", "p");
+    aCanPart->AddLegendEntry(tColumn, tRow, tData, "ALICE", "p");
   }
 
   if(tRow==(aCanPart->GetNy()-1) && tColumn==0)
   {
     TString tAliceInfo = TString("ALICE Preliminary");
-    TPaveText* tAliceInfoText = aCanPart->SetupTPaveText(tAliceInfo, tColumn, tRow, 0.25, 0.05, 0.65, 0.125, 43, 40, 12);
+    TPaveText* tAliceInfoText = aCanPart->SetupTPaveText(tAliceInfo, tColumn, tRow, 0.0, 0.025, 1.0, 0.20, 43, 55, 22, true);
     aCanPart->AddPadPaveText(tAliceInfoText, tColumn, tRow);
   }
   if(tRow==(aCanPart->GetNy()-1) && tColumn==1)
   {
     TString tAliceInfo = TString("Pb-Pb #sqrt{#it{s}_{NN}} = 2.76 TeV");
-    TPaveText* tAliceInfoText = aCanPart->SetupTPaveText(tAliceInfo, tColumn, tRow, 0.175, 0.05, 0.65, 0.125, 43, 40, 12);
+    TPaveText* tAliceInfoText = aCanPart->SetupTPaveText(tAliceInfo, tColumn, tRow, 0.0, 0.025, 1.0, 0.20, 43, 55, 22, true);
     aCanPart->AddPadPaveText(tAliceInfoText, tColumn, tRow);
   }
+
 }
 
 
@@ -1039,10 +1043,10 @@ TCanvas* DrawBgdwFit_AllCentAllAnv2(TString aCfDescriptor, TString aFileNameCfs,
   double tXLow = -0.04;
 //  double tXHigh = aMaxBgdFit-0.02;
   double tXHigh = 1.68;
-  double tYLow = 0.955;
+  double tYLow = 0.9525;
   double tYHigh = 1.01999;
 
-  CanvasPartition* tCanPart = new CanvasPartition(tCanBgdwFitName,tNx,tNy,tXLow,tXHigh,tYLow,tYHigh,0.12,0.0025,0.125,0.0025);
+  CanvasPartition* tCanPart = new CanvasPartition(tCanBgdwFitName,tNx,tNy,tXLow,tXHigh,tYLow,tYHigh,0.11,0.0025,0.10,0.0025);
   tCanPart->SetDrawOptStat(false);
   tCanPart->GetCanvas()->SetCanvasSize(2100, 1500);
 
@@ -1071,8 +1075,8 @@ TCanvas* DrawBgdwFit_AllCentAllAnv2(TString aCfDescriptor, TString aFileNameCfs,
       tTempHist->GetYaxis()->SetLabelSize(3.25*tTempHist->GetYaxis()->GetLabelSize());
       tTempHist->GetYaxis()->SetLabelOffset(5.0*tTempHist->GetYaxis()->GetLabelOffset());
 
-      if(j==0) tTempHist->GetYaxis()->SetRangeUser(0.9865, 1.015);
-      if(j==1) tTempHist->GetYaxis()->SetRangeUser(0.975, 1.015);
+      if(j==0) tTempHist->GetYaxis()->SetRangeUser(0.9875, 1.015);
+      if(j==1) tTempHist->GetYaxis()->SetRangeUser(0.975, 1.018);
     }
 
   }
@@ -1081,7 +1085,7 @@ TCanvas* DrawBgdwFit_AllCentAllAnv2(TString aCfDescriptor, TString aFileNameCfs,
   tCanPart->SetDrawUnityLine(true);
   tCanPart->DrawAll();
   tCanPart->DrawXaxisTitle("#it{k}* (GeV/#it{c})", 43, 75, 0.825, 0.01); //Note, changing xaxis low (=0.315) does nothing
-  tCanPart->DrawYaxisTitle("#it{C}(#it{k}*)", 43, 100, 0.06, 0.825);
+  tCanPart->DrawYaxisTitle("#it{C}(#it{k}*)", 43, 75, 0.045, 0.85);
 
   return tCanPart->GetCanvas();
 }
@@ -1133,16 +1137,6 @@ TCanvas* DrawBgdwFit_SingleCentAllAnv2(CentralityType aCentType, TString aCfDesc
   BuildBgdwFitPanel(tCanPart, 1, 0, aCfDescriptor, aFileNameCfs, kLamKchM, tImpParam, aCombineConjugates, tCombineImpactParams, aEventsType, aRebin, aMinNorm, aMaxNorm, aMaxBgdFit, aAvgLamKchPMFit, aUseStavCf, aZoomY, true);
 
   BuildBgdwFitPanel(tCanPart, 2, 0, aCfDescriptor, aFileNameCfs, kLamK0, tImpParam, aCombineConjugates, tCombineImpactParams, aEventsType, aRebin, aMinNorm, aMaxNorm, aMaxBgdFit, aAvgLamKchPMFit, aUseStavCf, aZoomY, true);
-
-  TObjArray* tPadLegends = tCanPart->GetPadLegends();
-  for(int i=0; i<tPadLegends->GetEntries(); i++)
-  {
-    for(int j=0; j<((TObjArray*)tPadLegends->At(i))->GetEntries(); j++)
-    {
-      ((TLegend*)((TObjArray*)tPadLegends->At(i))->At(j))->SetFillStyle(0);
-    }
-  }
-
 
   //----- Increase label size on axes
   for(int j=0; j<tNy; j++)
@@ -1889,7 +1883,6 @@ int main(int argc, char **argv)
 
     tCanBgdwFitv2 = DrawBgdwFit_AllCentv2(tCfDescriptor, tSingleFileName, tAnType, bCombineConjugates, tEventsType, tRebin, tMinNorm, tMaxNorm, tMaxBgdFit, aAvgLamKchPMFit, bUseStavCf);
     tCanBgdwFitAllCentAllAnv2 = DrawBgdwFit_AllCentAllAnv2(tCfDescriptor, tSingleFileName, bCombineConjugates, tEventsType, tRebin, tMinNorm, tMaxNorm, tMaxBgdFit, aAvgLamKchPMFit, bUseStavCf);
-
 
 
     tCanBgdwFitSingleCentAllAn0010 = DrawBgdwFit_SingleCentAllAnv2(k0010, tCfDescriptor, tSingleFileName, bCombineConjugates, tEventsType, tRebin, tMinNorm, tMaxNorm, tMaxBgdFit, aAvgLamKchPMFit, bUseStavCf);

@@ -12,16 +12,24 @@ TCanvas* CompareImF0vsReF0(vector<FitValWriterInfo> &aFitValWriterInfo, TString 
 
   TCanvas* tReturnCan = new TCanvas(tCanName, tCanName);
   tReturnCan->cd();
+  tReturnCan->SetTopMargin(0.01);
+  tReturnCan->SetBottomMargin(0.125);
+  tReturnCan->SetLeftMargin(0.125);
 
   TPad* tPadReF0vsImF0 = new TPad(TString::Format("tPadReF0vsImF0%s", tCanName.Data()), TString::Format("tPadReF0vsImF0%s", tCanName.Data()), 
                                   0.0, 0.0, 0.8, 1.0);
   tPadReF0vsImF0->SetRightMargin(0.01);
+  tPadReF0vsImF0->SetTopMargin(0.01);
+  tPadReF0vsImF0->SetBottomMargin(0.125);
+  tPadReF0vsImF0->SetLeftMargin(0.125);
   tPadReF0vsImF0->Draw();
 
   TPad* tPadD0 = new TPad(TString::Format("tPadD0%s", tCanName.Data()), TString::Format("tPadD0%s", tCanName.Data()), 
                           0.8, 0.0, 1.0, 1.0);
-  tPadD0->SetRightMargin(0.4);
+  tPadD0->SetRightMargin(0.5);
   tPadD0->SetLeftMargin(0.);
+  tPadD0->SetTopMargin(0.01);
+  tPadD0->SetBottomMargin(0.125);
   tPadD0->Draw();
 
   gStyle->SetOptStat(0);
@@ -148,7 +156,7 @@ TCanvas* CompareImF0vsReF0(vector<FitValWriterInfo> &aFitValWriterInfo, TString 
       tGr_PhysRevD_AKLam->SetLineColor(tPredColor2);
       tGr_PhysRevD_AKLam->Draw("pzsame");
 
-    TLegend* tLegPredictions = new TLegend(0.60, 0.725, 0.975, 0.875);
+    TLegend* tLegPredictions = new TLegend(0.60, 0.725, 0.975, 0.975);
       tLegPredictions->SetLineWidth(0);
       tLegPredictions->AddEntry(tGr_0607100_Set1, "[A] Set 1: K#Lambda = #bar{K}#Lambda", "p");
       tLegPredictions->AddEntry(tGr_0607100_Set2, "[A] Set 2: K#Lambda = #bar{K}#Lambda", "p");
@@ -192,7 +200,7 @@ TCanvas* CompareLambdavsRadius(vector<FitValWriterInfo> &aFitValWriterInfo, TStr
   double tIncrementY = 0.11;
   double tTextSize = 0.03;
 
-  SetupRadiusvsLambdaAxes((TPad*)tReturnCan);
+  SetupRadiusvsLambdaAxes((TPad*)tReturnCan, 2.5, 8., 0.4, 1.49);
 
   TLatex* tTex = new TLatex();
   tTex->SetTextAlign(12);
@@ -306,7 +314,7 @@ TCanvas* CompareLambdavsRadiusTweak(vector<FitValWriterInfo> &aFitValWriterInfo,
   double tIncrementY = 0.11;
   double tTextSize = 0.03;
 
-  SetupRadiusvsLambdaAxes((TPad*)tReturnCan);
+  SetupRadiusvsLambdaAxes((TPad*)tReturnCan, 2.5, 8., 0.4, 1.49);
 
   TLatex* tTex = new TLatex();
   tTex->SetTextAlign(12);
@@ -428,17 +436,20 @@ TCanvas* CompareLambdavsRadiusAll(vector<FitValWriterInfo> &aFitValWriterInfo, T
 
   TCanvas* tReturnCan = new TCanvas(tCanName, tCanName);
   tReturnCan->cd();
+  tReturnCan->SetTopMargin(0.01);
+  tReturnCan->SetBottomMargin(0.125);
+  tReturnCan->SetRightMargin(0.01);
   gStyle->SetOptStat(0);
   gStyle->SetOptTitle(0);
 
   //------------------------------------------------------
-  double tStartX = 1.0;
-  double tStartY = 2.3;
+  double tStartX = 3.5;
+  double tStartY = 1.40;
   double tIncrementX = 0.20;
-  double tIncrementY = 0.25;
+  double tIncrementY = 0.1;
   double tTextSize = 0.05;
 
-  SetupRadiusvsLambdaAxes((TPad*)tReturnCan);
+  SetupRadiusvsLambdaAxes((TPad*)tReturnCan, 2.5, 8., 0.4, 1.49);
 
   TLatex* tTex = new TLatex();
   tTex->SetTextAlign(12);
@@ -452,7 +463,7 @@ TCanvas* CompareLambdavsRadiusAll(vector<FitValWriterInfo> &aFitValWriterInfo, T
   tMarker->SetMarkerStyle(20);
   tMarker->SetMarkerColor(kBlack);
 
-  vector<int> tMarkerStyles{20, 21, 22};
+  vector<int> tMarkerStyles{20, 21, 29};
   //------------------------------------------------------
 
   int iTex = 0;
@@ -477,7 +488,10 @@ TCanvas* CompareLambdavsRadiusAll(vector<FitValWriterInfo> &aFitValWriterInfo, T
 
   //------------------------------------------------------
   tTex->SetTextSize(0.05);
-  tTex->DrawLatex(3.5, tStartY, TString("ALICE Pb-Pb #sqrt{#it{s}_{NN}} = 2.76 TeV"));
+//  tTex->DrawLatex(3.5, tStartY, TString("ALICE Pb-Pb #sqrt{#it{s}_{NN}} = 2.76 TeV"));
+
+  tTex->DrawLatex(3.0, 0.5, TString("ALICE Preliminary"));
+  tTex->DrawLatex(5.3, 0.5, TString("Pb-Pb #sqrt{#it{s}_{NN}} = 2.76 TeV"));
   //------------------------------------------------------
 
   return tReturnCan;
@@ -565,7 +579,7 @@ TCanvas* CompareAll2Panel(vector<FitValWriterInfo> &aFitValWriterInfo, TString a
   tCanLamvsR = CompareLambdavsRadiusAll(aFitValWriterInfo, aSystematicsFileLocation_LamKch, aSystematicsFileLocation_LamK0, tSubCanNameMod, true, false, aDrawStatOnly);
 
   assert(aFitValWriterInfo.size()==3);
-  vector<AnalysisType> tAnTypes{kLamKchP, kLamKchM, kLamK0};
+//  vector<AnalysisType> tAnTypes{kLamKchP, kLamKchM, kLamK0};
   vector<int> tMarkerStyles{aFitValWriterInfo[0].markerStyle, aFitValWriterInfo[1].markerStyle, aFitValWriterInfo[2].markerStyle};
     double tStartXStamp = -1.75;
     if(aDrawPredictions) tStartXStamp = -1.75;
@@ -575,7 +589,14 @@ TCanvas* CompareAll2Panel(vector<FitValWriterInfo> &aFitValWriterInfo, TString a
     double tTextSizeStamp = 0.045;
   TString tPadName = TString::Format("tPadReF0vsImF0%s", tCanImF0vsReF0->GetName());
   TPad* tTestPad = (TPad*)tCanImF0vsReF0->GetPrimitive(tPadName);
-  DrawAnalysisStamps(tTestPad, tAnTypes, tStartXStamp, tStartYStamp, tIncrementXStamp, tIncrementYStamp, tTextSizeStamp, tMarkerStyles);
+//  DrawAnalysisStamps(tTestPad, tAnTypes, tStartXStamp, tStartYStamp, tIncrementXStamp, tIncrementYStamp, tTextSizeStamp, tMarkerStyles);
+
+  TString tSysTypeText1 = TString::Format("%s#scale[0.5]{ }#oplus#scale[0.5]{ }%s", cAnalysisRootTags[kLamKchP], cAnalysisRootTags[kALamKchM]);
+  TString tSysTypeText2 = TString::Format("%s#scale[0.5]{ }#oplus#scale[0.5]{ }%s", cAnalysisRootTags[kLamKchM], cAnalysisRootTags[kALamKchP]);
+  TString tSysTypeText3 = TString::Format("%s#scale[0.5]{ }#oplus#scale[0.5]{ }%s", cAnalysisRootTags[kLamK0], cAnalysisRootTags[kALamK0]);
+  vector<TString> tSysTexts{tSysTypeText1, tSysTypeText2, tSysTypeText3};
+  vector<int> tColors{kRed+1, kBlue+1, kBlack};
+  DrawAnalysisStamps(tTestPad, tSysTexts, tStartXStamp, tStartYStamp, tIncrementXStamp, tIncrementYStamp, tTextSizeStamp, tMarkerStyles, tColors);
 
   vector<TString> twPredVec{"", "_wPredictions"};
   TString tCanBaseName = TString::Format("CompareAll2PanelScattParamswSys%s%s", twPredVec[aDrawPredictions].Data(), aCanNameMod.Data());
@@ -585,7 +606,7 @@ TCanvas* CompareAll2Panel(vector<FitValWriterInfo> &aFitValWriterInfo, TString a
   if(!aDrawVertical) 
   {
     tReturnCan = new TCanvas(tCanName, tCanName, 1400, 500);
-    tReturnCan->Divide(2, 1, 0.001, 0.001);
+    tReturnCan->Divide(2, 1, 0.01, 0.001);
   }
   else
   {

@@ -275,7 +275,7 @@ void CanvasPartition::SetupOptStat(int aNx, int aNy, double aStatX, double aStat
 
 
 //________________________________________________________________________________________________________________
-TPaveText* CanvasPartition::SetupTPaveText(TString aText, int aNx, int aNy, double aTextXmin, double aTextYmin, double aTextWidth, double aTextHeight, double aTextFont, double aTextSize, int aTextAlign)
+TPaveText* CanvasPartition::SetupTPaveText(TString aText, int aNx, int aNy, double aTextXmin, double aTextYmin, double aTextWidth, double aTextHeight, double aTextFont, double aTextSize, int aTextAlign, bool aTransBgd)
 {
   float tLeftMargin = fPadArray[aNx][aNy]->GetLeftMargin();
   float tRightMargin = fPadArray[aNx][aNy]->GetRightMargin();
@@ -303,6 +303,8 @@ TPaveText* CanvasPartition::SetupTPaveText(TString aText, int aNx, int aNy, doub
     returnText->SetTextSize(aTextSize);
     if(!aText.IsNull()) returnText->AddText(aText);
 
+  if(aTransBgd) returnText->SetFillStyle(0);
+
   return returnText;
 }
 
@@ -321,7 +323,7 @@ void CanvasPartition::AddPadPaveLatex(TLatex* aText, int aNx, int aNy)
 }
 
 //________________________________________________________________________________________________________________
-void CanvasPartition::SetupTLegend(TString aHeader, int aNx, int aNy, double aTextXmin, double aTextYmin, double aTextWidth, double aTextHeight, int aNColumns)
+void CanvasPartition::SetupTLegend(TString aHeader, int aNx, int aNy, double aTextXmin, double aTextYmin, double aTextWidth, double aTextHeight, int aNColumns, bool aTransBgd)
 {
   float tLeftMargin = fPadArray[aNx][aNy]->GetLeftMargin();
   float tRightMargin = fPadArray[aNx][aNy]->GetRightMargin();
@@ -348,6 +350,7 @@ void CanvasPartition::SetupTLegend(TString aHeader, int aNx, int aNy, double aTe
     tLeg->SetTextAlign(22);
     if(!aHeader.IsNull()) tLeg->SetHeader(aHeader);
 
+  if(aTransBgd) tLeg->SetFillStyle(0);
   //------------------------------------
   int tPosition = aNx + aNy*fNx;
   ((TObjArray*)fPadLegends->At(tPosition))->Add(tLeg);

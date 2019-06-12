@@ -31,7 +31,7 @@ int main(int argc, char **argv)
   //--------------------------------------------------------------------------
 //TRIPLE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-  vector<NonFlatBgdFitType> tNonFlatBgdFitTypes{kLinear, kLinear,
+  vector<NonFlatBgdFitType> tNonFlatBgdFitTypes{kPolynomial, kPolynomial,
                                                 kPolynomial, kPolynomial, kPolynomial, kPolynomial};
 
   TString tFitInfoTString = 
@@ -49,7 +49,7 @@ int main(int argc, char **argv)
                                                                  FitValWriterInfo(kLamKchM, tFileLocation_LamKch, tResultsDate, tFitInfoTString, 
                                                                                  " (Suppress Markers)", tColorLamKchM, 21, tMarkerSize, false, true), 
                                                                  FitValWriterInfo(kLamK0, tFileLocation_LamK0, tResultsDate, tFitInfoTString, 
-                                                                                 " (Suppress Markers)", tColorLamK0, 22, tMarkerSize, false, true)};
+                                                                                 " (Suppress Markers)", tColorLamK0, 29, tMarkerSize, false, true)};
 
   vector<FitValWriterInfo> tFVWIVec = tFVWIVec_Comp3An_Triple;
   TString tCanNameMod = TString("_Comp3An_Triple");

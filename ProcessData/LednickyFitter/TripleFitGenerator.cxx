@@ -439,18 +439,39 @@ CanvasPartition* TripleFitGenerator::BuildKStarCfswFitsCanvasPartition_CombineCo
     fFitGen3->BuildKStarCfswFitsPanel_CombineConj(tCanPart, tAnalysisNumberA, tAnalysisNumberB, 2, j, aMomResCorrectFit, aNonFlatBgdCorrectFit, aNonFlatBgdFitTypes[tAnType1], aDrawSysErrors, aZoomROP);
 
     //------------------------------
+    double tTextSize = 25;
+    if(aZoomROP) tTextSize = 28;
 
-    TString tCombinedText1 = TString::Format("%s#scale[0.5]{ }#oplus#scale[0.5]{ }%s  %s", cAnalysisRootTags[tAnType1], cAnalysisRootTags[tConjType1], cPrettyCentralityTags[tCentType]);
-    TPaveText* tCombined1 = tCanPart->SetupTPaveText(tCombinedText1, 0, j, 0.60, 0.835, 0.15, 0.10, 63, 20);;
-    tCanPart->AddPadPaveText(tCombined1, 0, j);
+    double tTextPosY = 0.75;
+    if(aZoomROP) tTextPosY = 0.725;
 
-    TString tCombinedText2 = TString::Format("%s#scale[0.5]{ }#oplus#scale[0.5]{ }%s  %s", cAnalysisRootTags[tAnType2], cAnalysisRootTags[tConjType2], cPrettyCentralityTags[tCentType]);
-    TPaveText* tCombined2 = tCanPart->SetupTPaveText(tCombinedText2, 1, j, 0.60, 0.835, 0.15, 0.10, 63, 20);;
-    tCanPart->AddPadPaveText(tCombined2, 1, j);
+    TString tSysTypeText1 = TString::Format("%s#scale[0.5]{ }#oplus#scale[0.5]{ }%s", cAnalysisRootTags[tAnType1], cAnalysisRootTags[tConjType1]);
+    TPaveText* tSysType1 = tCanPart->SetupTPaveText(tSysTypeText1, 0, j, 0.15, tTextPosY, 0.25, 0.15, 63, tTextSize, 21, true);
+    tCanPart->AddPadPaveText(tSysType1, 0, j);
 
-    TString tCombinedText3 = TString::Format("%s#scale[0.5]{ }#oplus#scale[0.5]{ }%s  %s", cAnalysisRootTags[tAnType3], cAnalysisRootTags[tConjType3], cPrettyCentralityTags[tCentType]);
-    TPaveText* tCombined3 = tCanPart->SetupTPaveText(tCombinedText3, 2, j, 0.60, 0.835, 0.15, 0.10, 63, 20);;
-    tCanPart->AddPadPaveText(tCombined3, 2, j);
+    TString tCentTypeText1 = TString::Format("%s", cPrettyCentralityTags[tCentType]);
+    TPaveText* tCentType1 = tCanPart->SetupTPaveText(tCentTypeText1, 0, j, 0.775, tTextPosY, 0.10, 0.15, 63, tTextSize, 21, true);
+    tCanPart->AddPadPaveText(tCentType1, 0, j);
+
+    //-----
+
+    TString tSysTypeText2 = TString::Format("%s#scale[0.5]{ }#oplus#scale[0.5]{ }%s", cAnalysisRootTags[tAnType2], cAnalysisRootTags[tConjType2]);
+    TPaveText* tSysType2 = tCanPart->SetupTPaveText(tSysTypeText2, 1, j, 0.15, tTextPosY, 0.25, 0.15, 63, tTextSize, 21, true);
+    tCanPart->AddPadPaveText(tSysType2, 1, j);
+
+    TString tCentTypeText2 = TString::Format("%s", cPrettyCentralityTags[tCentType]);
+    TPaveText* tCentType2 = tCanPart->SetupTPaveText(tCentTypeText2, 1, j, 0.775, tTextPosY, 0.10, 0.15, 63, tTextSize, 21, true);
+    tCanPart->AddPadPaveText(tCentType2, 1, j);
+
+    //-----
+
+    TString tSysTypeText3 = TString::Format("%s#scale[0.5]{ }#oplus#scale[0.5]{ }%s", cAnalysisRootTags[tAnType3], cAnalysisRootTags[tConjType3]);
+    TPaveText* tSysType3 = tCanPart->SetupTPaveText(tSysTypeText3, 2, j, 0.15, (tTextPosY-0.025), 0.25, 0.15, 63, tTextSize, 21, true);
+    tCanPart->AddPadPaveText(tSysType3, 2, j);
+
+    TString tCentTypeText3 = TString::Format("%s", cPrettyCentralityTags[tCentType]);
+    TPaveText* tCentType3 = tCanPart->SetupTPaveText(tCentTypeText3, 2, j, 0.775, (tTextPosY-0.025), 0.10, 0.15, 63, tTextSize, 21, true);
+    tCanPart->AddPadPaveText(tCentType3, 2, j);
 
     //------------------------------
 
@@ -516,11 +537,22 @@ CanvasPartition* TripleFitGenerator::BuildKStarCfswFitsCanvasPartition_CombineCo
 
     if(j==(tNy-1))
     {
+/*
       TString tTextSysInfo = TString("ALICE Pb-Pb #sqrt{#it{s}_{NN}} = 2.76 TeV");
       TPaveText* tSysInfo = tCanPart->SetupTPaveText(tTextSysInfo,2,j,0.20,0.125,0.725,0.15,43,17);
       tCanPart->AddPadPaveText(tSysInfo,2,j);
+*/
+
+    TString tTextSysInfo1 = TString("ALICE Preliminary");
+    TPaveText* tSysInfo1 = tCanPart->SetupTPaveText(tTextSysInfo1, 1, j, 0.0, 0.10, 1., 0.15, 43, 25, 22, true);
+    tCanPart->AddPadPaveText(tSysInfo1,1, j);
+
+    TString tTextSysInfo2 = TString("Pb-Pb #sqrt{#it{s}_{NN}} = 2.76 TeV");
+    TPaveText* tSysInfo2 = tCanPart->SetupTPaveText(tTextSysInfo2, 2, j, 0.0, 0.10, 1., 0.15, 43, 25, 22, true);
+    tCanPart->AddPadPaveText(tSysInfo2,2, j);
     }
 
+    //----------
     ((TH1*)tCanPart->GetGraphsInPad(0,j)->At(0))->GetXaxis()->SetLabelSize(1.25*((TH1*)tCanPart->GetGraphsInPad(0,j)->At(0))->GetXaxis()->GetLabelSize());
     ((TH1*)tCanPart->GetGraphsInPad(0,j)->At(0))->GetYaxis()->SetLabelSize(1.25*((TH1*)tCanPart->GetGraphsInPad(0,j)->At(0))->GetYaxis()->GetLabelSize());
 
@@ -529,6 +561,14 @@ CanvasPartition* TripleFitGenerator::BuildKStarCfswFitsCanvasPartition_CombineCo
 
     ((TH1*)tCanPart->GetGraphsInPad(2,j)->At(0))->GetXaxis()->SetLabelSize(1.25*((TH1*)tCanPart->GetGraphsInPad(2,j)->At(0))->GetXaxis()->GetLabelSize());
     ((TH1*)tCanPart->GetGraphsInPad(2,j)->At(0))->GetYaxis()->SetLabelSize(1.25*((TH1*)tCanPart->GetGraphsInPad(2,j)->At(0))->GetYaxis()->GetLabelSize());
+
+    //----------
+
+    ((TH1*)tCanPart->GetGraphsInPad(0,j)->At(0))->GetYaxis()->SetLabelOffset(2.0*((TH1*)tCanPart->GetGraphsInPad(0,j)->At(0))->GetYaxis()->GetLabelOffset());
+
+    ((TH1*)tCanPart->GetGraphsInPad(1,j)->At(0))->GetYaxis()->SetLabelOffset(2.0*((TH1*)tCanPart->GetGraphsInPad(1,j)->At(0))->GetYaxis()->GetLabelOffset());
+
+    ((TH1*)tCanPart->GetGraphsInPad(2,j)->At(0))->GetYaxis()->SetLabelOffset(2.0*((TH1*)tCanPart->GetGraphsInPad(2,j)->At(0))->GetYaxis()->GetLabelOffset());
   }
 
 
@@ -635,18 +675,44 @@ CanvasPartition* TripleFitGenerator::BuildKStarCfswFitsCanvasPartition_CombineCo
 
 
   //------------------------------
+  double tTextSize = 60;
+  if(aZoomROP) tTextSize = 60;
 
-  TString tCombinedText1 = TString::Format("%s#scale[0.5]{ }#oplus#scale[0.5]{ }%s  %s", cAnalysisRootTags[tAnType1], cAnalysisRootTags[tConjType1], cPrettyCentralityTags[tCentType]);
-  TPaveText* tCombined1 = tCanPart->SetupTPaveText(tCombinedText1, tNx1, tNy1, 0.60, 0.835, 0.15, 0.10, 63, 40);;
-  tCanPart->AddPadPaveText(tCombined1, tNx1, tNy1);
+  double tTextPosY = 0.775;
+  if(aZoomROP) tTextPosY = 0.775;
 
-  TString tCombinedText2 = TString::Format("%s#scale[0.5]{ }#oplus#scale[0.5]{ }%s  %s", cAnalysisRootTags[tAnType2], cAnalysisRootTags[tConjType2], cPrettyCentralityTags[tCentType]);
-  TPaveText* tCombined2 = tCanPart->SetupTPaveText(tCombinedText2, tNx2, tNy2, 0.60, 0.835, 0.15, 0.10, 63, 40);;
-  tCanPart->AddPadPaveText(tCombined2, tNx2, tNy2);
+  TString tSysTypeText1 = TString::Format("%s#scale[0.5]{ }#oplus#scale[0.5]{ }%s", cAnalysisRootTags[tAnType1], cAnalysisRootTags[tConjType1]);
+  TPaveText* tSysType1 = tCanPart->SetupTPaveText(tSysTypeText1, tNx1, tNy1, 0.20, tTextPosY, 0.25, 0.15, 63, tTextSize, 21, true);
+  tCanPart->AddPadPaveText(tSysType1, tNx1, tNy1);
 
-  TString tCombinedText3 = TString::Format("%s#scale[0.5]{ }#oplus#scale[0.5]{ }%s  %s", cAnalysisRootTags[tAnType3], cAnalysisRootTags[tConjType3], cPrettyCentralityTags[tCentType]);
-  TPaveText* tCombined3 = tCanPart->SetupTPaveText(tCombinedText3, tNx3, tNy3, 0.60, 0.835, 0.15, 0.10, 63, 40);;
-  tCanPart->AddPadPaveText(tCombined3, tNx3, tNy3);
+  TString tCentTypeText1 = TString::Format("%s", cPrettyCentralityTags[tCentType]);
+  TPaveText* tCentType1 = tCanPart->SetupTPaveText(tCentTypeText1, tNx1, tNy1, 0.775, tTextPosY, 0.10, 0.15, 63, tTextSize, 21, true);
+  tCanPart->AddPadPaveText(tCentType1, tNx1, tNy1);
+
+    //-----
+
+  TString tSysTypeText2 = TString::Format("%s#scale[0.5]{ }#oplus#scale[0.5]{ }%s", cAnalysisRootTags[tAnType2], cAnalysisRootTags[tConjType2]);
+  TPaveText* tSysType2 = tCanPart->SetupTPaveText(tSysTypeText2, tNx2, tNy2, 0.20, tTextPosY, 0.25, 0.15, 63, tTextSize, 21, true);
+  tCanPart->AddPadPaveText(tSysType2, tNx2, tNy2);
+
+  TString tCentTypeText2 = TString::Format("%s", cPrettyCentralityTags[tCentType]);
+  TPaveText* tCentType2 = tCanPart->SetupTPaveText(tCentTypeText2, tNx2, tNy2, 0.775, tTextPosY, 0.10, 0.15, 63, tTextSize, 21, true);
+  tCanPart->AddPadPaveText(tCentType2, tNx2, tNy2);
+
+    //-----
+
+  TString tSysTypeText3 = TString::Format("%s#scale[0.5]{ }#oplus#scale[0.5]{ }%s", cAnalysisRootTags[tAnType3], cAnalysisRootTags[tConjType3]);
+  TPaveText* tSysType3 = tCanPart->SetupTPaveText(tSysTypeText3, tNx3, tNy3, 0.20, (tTextPosY-0.025), 0.25, 0.15, 63, tTextSize, 21, true);
+  tCanPart->AddPadPaveText(tSysType3, tNx3, tNy3);
+
+  TString tCentTypeText3 = TString::Format("%s", cPrettyCentralityTags[tCentType]);
+  TPaveText* tCentType3 = tCanPart->SetupTPaveText(tCentTypeText3, tNx3, tNy3, 0.775, (tTextPosY-0.025), 0.10, 0.15, 63, tTextSize, 21, true);
+  tCanPart->AddPadPaveText(tCentType3, tNx3, tNy3);
+
+    //------------------------------
+
+
+
 
   //------------------------------
 
@@ -716,23 +782,30 @@ CanvasPartition* TripleFitGenerator::BuildKStarCfswFitsCanvasPartition_CombineCo
 */
 
   TString tTextSysInfo1 = TString("ALICE Preliminary");
-  TPaveText* tSysInfo1 = tCanPart->SetupTPaveText(tTextSysInfo1, tNx3, tNy3, 0.15, 0.225, 0.725, 0.15, 43, 35, 12);
-  tCanPart->AddPadPaveText(tSysInfo1,tNx3, tNy3);
+  TPaveText* tSysInfo1 = tCanPart->SetupTPaveText(tTextSysInfo1, tNx3, tNy3, 0.0, 0.10, 1., 0.15, 43, 50, 22, true);
+  tCanPart->AddPadPaveText(tSysInfo1,tNx2, tNy2);
 
   TString tTextSysInfo2 = TString("Pb-Pb #sqrt{#it{s}_{NN}} = 2.76 TeV");
-  TPaveText* tSysInfo2 = tCanPart->SetupTPaveText(tTextSysInfo2, tNx3, tNy3, 0.15, 0.075, 0.725, 0.15, 43, 35, 12);
+  TPaveText* tSysInfo2 = tCanPart->SetupTPaveText(tTextSysInfo2, tNx3, tNy3, 0.0, 0.10, 1., 0.15, 43, 50, 22, true);
   tCanPart->AddPadPaveText(tSysInfo2,tNx3, tNy3);
 
+  //------------
+  ((TH1*)tCanPart->GetGraphsInPad(tNx1, tNy1)->At(0))->GetXaxis()->SetLabelSize(2.0*((TH1*)tCanPart->GetGraphsInPad(tNx1, tNy1)->At(0))->GetXaxis()->GetLabelSize());
+  ((TH1*)tCanPart->GetGraphsInPad(tNx1, tNy1)->At(0))->GetYaxis()->SetLabelSize(2.0*((TH1*)tCanPart->GetGraphsInPad(tNx1, tNy1)->At(0))->GetYaxis()->GetLabelSize());
 
-  ((TH1*)tCanPart->GetGraphsInPad(tNx1, tNy1)->At(0))->GetXaxis()->SetLabelSize(1.75*((TH1*)tCanPart->GetGraphsInPad(tNx1, tNy1)->At(0))->GetXaxis()->GetLabelSize());
-  ((TH1*)tCanPart->GetGraphsInPad(tNx1, tNy1)->At(0))->GetYaxis()->SetLabelSize(1.75*((TH1*)tCanPart->GetGraphsInPad(tNx1, tNy1)->At(0))->GetYaxis()->GetLabelSize());
+  ((TH1*)tCanPart->GetGraphsInPad(tNx2, tNy2)->At(0))->GetXaxis()->SetLabelSize(2.0*((TH1*)tCanPart->GetGraphsInPad(tNx2, tNy2)->At(0))->GetXaxis()->GetLabelSize());
+  ((TH1*)tCanPart->GetGraphsInPad(tNx2, tNy2)->At(0))->GetYaxis()->SetLabelSize(2.0*((TH1*)tCanPart->GetGraphsInPad(tNx2, tNy2)->At(0))->GetYaxis()->GetLabelSize());
 
-  ((TH1*)tCanPart->GetGraphsInPad(tNx2, tNy2)->At(0))->GetXaxis()->SetLabelSize(1.75*((TH1*)tCanPart->GetGraphsInPad(tNx2, tNy2)->At(0))->GetXaxis()->GetLabelSize());
-  ((TH1*)tCanPart->GetGraphsInPad(tNx2, tNy2)->At(0))->GetYaxis()->SetLabelSize(1.75*((TH1*)tCanPart->GetGraphsInPad(tNx2, tNy2)->At(0))->GetYaxis()->GetLabelSize());
+  ((TH1*)tCanPart->GetGraphsInPad(tNx3, tNy3)->At(0))->GetXaxis()->SetLabelSize(2.0*((TH1*)tCanPart->GetGraphsInPad(tNx3, tNy3)->At(0))->GetXaxis()->GetLabelSize());
+  ((TH1*)tCanPart->GetGraphsInPad(tNx3, tNy3)->At(0))->GetYaxis()->SetLabelSize(2.0*((TH1*)tCanPart->GetGraphsInPad(tNx3, tNy3)->At(0))->GetYaxis()->GetLabelSize());
 
-  ((TH1*)tCanPart->GetGraphsInPad(tNx3, tNy3)->At(0))->GetXaxis()->SetLabelSize(1.75*((TH1*)tCanPart->GetGraphsInPad(tNx3, tNy3)->At(0))->GetXaxis()->GetLabelSize());
-  ((TH1*)tCanPart->GetGraphsInPad(tNx3, tNy3)->At(0))->GetYaxis()->SetLabelSize(1.75*((TH1*)tCanPart->GetGraphsInPad(tNx3, tNy3)->At(0))->GetYaxis()->GetLabelSize());
+  //------------
 
+  ((TH1*)tCanPart->GetGraphsInPad(tNx1, tNy1)->At(0))->GetYaxis()->SetLabelOffset(2.0*((TH1*)tCanPart->GetGraphsInPad(tNx1, tNy1)->At(0))->GetYaxis()->GetLabelOffset());
+
+  ((TH1*)tCanPart->GetGraphsInPad(tNx2, tNy2)->At(0))->GetYaxis()->SetLabelOffset(2.0*((TH1*)tCanPart->GetGraphsInPad(tNx2, tNy2)->At(0))->GetYaxis()->GetLabelOffset());
+
+  ((TH1*)tCanPart->GetGraphsInPad(tNx3, tNy3)->At(0))->GetYaxis()->SetLabelOffset(2.0*((TH1*)tCanPart->GetGraphsInPad(tNx3, tNy3)->At(0))->GetYaxis()->GetLabelOffset());
 
 
   tCanPart->SetDrawUnityLine(true);

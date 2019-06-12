@@ -59,10 +59,10 @@ public:
   float** GetScaleFactors(AxisType aAxisType, td2dTPadVec &fPadArray, int Nx, int Ny);
 
   void SetupOptStat(int aNx, int aNy, double aStatX, double aStatY, double aStatW, double aStatH);
-  TPaveText* SetupTPaveText(TString aText, int aNx, int aNy, double aTextXmin=0.75, double aTextYmin=0.75, double aTextWidth=0.15, double aTextHeight=0.10, double aTextFont=63, double aTextSize=15, int aTextAlign=22);
+  TPaveText* SetupTPaveText(TString aText, int aNx, int aNy, double aTextXmin=0.75, double aTextYmin=0.75, double aTextWidth=0.15, double aTextHeight=0.10, double aTextFont=63, double aTextSize=15, int aTextAlign=22, bool aTransBgd=false);
   void AddPadPaveText(TPaveText* aText, int aNx, int aNy);
   void AddPadPaveLatex(TLatex* aText, int aNx, int aNy);
-  void SetupTLegend(TString aText, int aNx, int aNy, double aTextXmin=0.75, double aTextYmin=0.75, double aTextWidth=0.15, double aTextHeight=0.10, int aNColumns=1);
+  void SetupTLegend(TString aText, int aNx, int aNy, double aTextXmin=0.75, double aTextYmin=0.75, double aTextWidth=0.15, double aTextHeight=0.10, int aNColumns=1, bool aTransBgd=false);
   void AddLegendEntry(int aNx, int aNy, const TObject *tObj, const char *label="", Option_t *option="lpf", int tLegNumInPad=0);
 
   void DrawInPad(int aNx, int aNy);
@@ -87,6 +87,7 @@ public:
   vector<double> GetAxesRanges();
 
   TObjArray* GetPadLegends();
+  TObjArray* GetPadPaveTexts();
   int GetNx();
   int GetNy();
 
@@ -133,6 +134,7 @@ inline void CanvasPartition::ReplaceGraphDrawOption(int aPadNx, int aPadNy, int 
 inline vector<double> CanvasPartition::GetAxesRanges() {return vector<double>{fXaxisRangeLow, fXaxisRangeHigh, fYaxisRangeLow, fYaxisRangeHigh};}
 
 inline TObjArray* CanvasPartition::GetPadLegends() {return fPadLegends;}
+inline TObjArray* CanvasPartition::GetPadPaveTexts() {return fPadPaveTexts;}
 inline int CanvasPartition::GetNx() {return fNx;}
 inline int CanvasPartition::GetNy() {return fNy;}
 

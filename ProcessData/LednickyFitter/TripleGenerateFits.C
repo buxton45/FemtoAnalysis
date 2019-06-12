@@ -327,8 +327,8 @@ int main(int argc, char **argv)
         tKStarwFitsCan_CombineConj_Zoom =   tTriple->DrawKStarCfswFits_CombineConj(tCentType, ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, tNonFlatBgdFitTypes, SaveImages, bDrawSysErrs, true, tSuppressFitInfoOutput, tLabelLines);
         tKStarwFitsCan_CombineConj_UnZoom = tTriple->DrawKStarCfswFits_CombineConj(tCentType, ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, tNonFlatBgdFitTypes, SaveImages, bDrawSysErrs, false, tSuppressFitInfoOutput, tLabelLines);
 
-        tKStarCan_CombineConj_Zoom =   tTriple->DrawKStarCfs_CombineConj(tCentType, SaveImages, bDrawSysErrs, true);
-        tKStarCan_CombineConj_UnZoom = tTriple->DrawKStarCfs_CombineConj(tCentType, SaveImages, bDrawSysErrs, false);
+//        tKStarCan_CombineConj_Zoom =   tTriple->DrawKStarCfs_CombineConj(tCentType, SaveImages, bDrawSysErrs, true);
+//        tKStarCan_CombineConj_UnZoom = tTriple->DrawKStarCfs_CombineConj(tCentType, SaveImages, bDrawSysErrs, false);
       }
 
     }

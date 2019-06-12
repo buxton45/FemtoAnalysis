@@ -102,7 +102,7 @@ const char* const cAnalysisBaseTags[87] = {
 
 const char* const cAnalysisRootTags[87] = {
 "#LambdaK^{0}_{S}", "#bar{#Lambda}K^{0}_{S}", 
-"#LambdaK+", "#bar{#Lambda}K-", "#LambdaK-", "#bar{#Lambda}K+", 
+"#LambdaK^{#plus}", "#bar{#Lambda}K^{#minus}", "#LambdaK^{#minus}", "#bar{#Lambda}K^{#plus}", 
 "#Xi-K+", "#bar{#Xi}+K-", "#Xi-K-", "#bar{#Xi}+K+",
 "#XiK^{0}_{S}", "#bar{#Xi}K^{0}_{S}", 
 "#Lambda#Lambda", "#bar{#Lambda}#bar{#Lambda}", "#Lambda#bar{#Lambda}", 

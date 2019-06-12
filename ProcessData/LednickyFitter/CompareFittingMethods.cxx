@@ -113,6 +113,35 @@ void DrawAnalysisStamps(TPad* aPad, vector<AnalysisType> &aAnTypes, double aStar
 }
 
 //_________________________________________________________________________________________________________________________________
+void DrawAnalysisStamps(TPad* aPad, vector<TString> &aAnTexts, double aStartX, double aStartY, double aIncrementX, double aIncrementY, double aTextSize, vector<int> &aMarkerStyles, vector<int> &aMarkerColors)
+{
+  aPad->cd();
+
+  TLatex* tTex = new TLatex();
+  tTex->SetTextAlign(12);
+  tTex->SetLineWidth(2);
+  tTex->SetTextFont(42);
+  tTex->SetTextSize(aTextSize);
+
+  const Size_t tMarkerSize=1.6;
+  TMarker *tMarker = new TMarker();
+  tMarker->SetMarkerSize(tMarkerSize);
+
+  assert(aAnTexts.size()==aMarkerStyles.size());
+  assert(aAnTexts.size()==aMarkerColors.size());
+
+  int iTex = 0;
+  for(int i=0; i<aAnTexts.size(); i++)
+  {
+    tTex->DrawLatex(aStartX, aStartY-iTex*aIncrementY, aAnTexts[i]);
+    tMarker->SetMarkerColor(aMarkerColors[i]);
+    tMarker->SetMarkerStyle(aMarkerStyles[i]);
+    tMarker->DrawMarker(aStartX-aIncrementX, aStartY-iTex*aIncrementY);
+    iTex++;
+  }
+}
+
+//_________________________________________________________________________________________________________________________________
 void DrawAnalysisAndConjStamps(TPad* aPad, vector<AnalysisType> &aAnTypes, double aStartX, double aStartY, double aIncrementX, double aIncrementY, double aSecondColumnShiftX, double aTextSize, int aMarkerStyle, int aConjMarkerStyle, bool aLamKchCombined, bool aLamKchSeparate, bool aAllLamKCombined)
 {
   aPad->cd();
@@ -271,8 +300,8 @@ void SetupReF0vsImF0Axes(TPad* aPad, double aMinReF0, double aMaxReF0, double aM
   tTrash->GetXaxis()->SetRangeUser(aMinReF0, aMaxReF0);
   tTrash->GetYaxis()->SetRangeUser(aMinImF0, aMaxImF0);
 
-  tTrash->GetXaxis()->SetTitle("Re[f_{0}]");
-  tTrash->GetYaxis()->SetTitle("Im[f_{0}]");
+  tTrash->GetXaxis()->SetTitle("Re[#it{f}_{0}]");
+  tTrash->GetYaxis()->SetTitle("Im[#it{f}_{0}]");
 
   tTrash->DrawCopy("axis");
   tTrash->Delete();
@@ -289,13 +318,15 @@ void SetupReF0vsImF0AndD0Axes(TPad* aPadReF0vsImF0, TPad* aPadD0,
   tTrash1->GetXaxis()->SetRangeUser(aMinReF0, aMaxReF0);
   tTrash1->GetYaxis()->SetRangeUser(aMinImF0, aMaxImF0);
 
-  tTrash1->GetXaxis()->SetTitle("#Rgothicf_{0} (fm)");
-  tTrash1->GetXaxis()->SetTitleOffset(1.15);
-  tTrash1->GetXaxis()->SetTitleSize(0.04);
+  tTrash1->GetXaxis()->SetTitle("#Rgothic#it{f}_{0} (fm)");
+  tTrash1->GetXaxis()->SetTitleOffset(1.0);
+  tTrash1->GetXaxis()->SetTitleSize(0.06);
+  tTrash1->GetXaxis()->SetLabelSize(1.25*tTrash1->GetXaxis()->GetLabelSize());
 
-  tTrash1->GetYaxis()->SetTitle("#Jgothicf_{0} (fm)");
-  tTrash1->GetYaxis()->SetTitleOffset(1.15);
-  tTrash1->GetYaxis()->SetTitleSize(0.04);
+  tTrash1->GetYaxis()->SetTitle("#Jgothic#it{f}_{0} (fm)");
+  tTrash1->GetYaxis()->SetTitleOffset(1.0);
+  tTrash1->GetYaxis()->SetTitleSize(0.06);
+  tTrash1->GetYaxis()->SetLabelSize(1.25*tTrash1->GetYaxis()->GetLabelSize());
 
   tTrash1->DrawCopy("axis");
 
@@ -309,9 +340,9 @@ void SetupReF0vsImF0AndD0Axes(TPad* aPadReF0vsImF0, TPad* aPadD0,
   tTrash2->GetYaxis()->SetLabelSize(tScale*tTrash1->GetYaxis()->GetLabelSize());
   tTrash2->GetYaxis()->SetLabelOffset(0.05);
 
-  tTrash2->GetYaxis()->SetTitle("d_{0} (fm)");
+  tTrash2->GetYaxis()->SetTitle("#it{d}_{0} (fm)");
   tTrash2->GetYaxis()->SetTitleSize(tScale*tTrash1->GetYaxis()->GetTitleSize());
-  tTrash2->GetYaxis()->SetTitleOffset(0.80);
+  tTrash2->GetYaxis()->SetTitleOffset(0.90);
   tTrash2->GetYaxis()->RotateTitle(true);
   tTrash2->GetYaxis()->SetTickLength(0.025*tScale);
 
@@ -334,12 +365,14 @@ void SetupRadiusvsLambdaAxes(TPad* aPad, double aMinR, double aMaxR, double aMin
   tTrash->GetYaxis()->SetRangeUser(aMinLam, aMaxLam);
 
   tTrash->GetXaxis()->SetTitle("#it{R}_{inv} (fm)");
-  tTrash->GetXaxis()->SetTitleOffset(0.8);
-  tTrash->GetXaxis()->SetTitleSize(0.05);
+  tTrash->GetXaxis()->SetTitleOffset(1.0);
+  tTrash->GetXaxis()->SetTitleSize(0.06);
+  tTrash->GetXaxis()->SetLabelSize(1.25*tTrash->GetXaxis()->GetLabelSize());
 
   tTrash->GetYaxis()->SetTitle("#lambda");
   tTrash->GetYaxis()->SetTitleOffset(0.65);
   tTrash->GetYaxis()->SetTitleSize(0.07);
+  tTrash->GetYaxis()->SetLabelSize(1.25*tTrash->GetYaxis()->GetLabelSize()); 
 
   tTrash->DrawCopy("axis");
   tTrash->Delete();
@@ -471,7 +504,7 @@ TCanvas* CompareImF0vsReF0(vector<FitValWriterInfo> &aFitValWriterInfo, bool aDr
 
       tLegDesc = StripSuppressMarkersFlat(aFitValWriterInfo[iAn].legendDescriptor);
 
-      if(tLegDesc.Contains("d_{0}")) tTex->DrawLatex(tStartX, tStartY-iTex*tIncrementY-0.1*tIncrementY, tLegDesc);
+      if(tLegDesc.Contains("#it{d}_{0}")) tTex->DrawLatex(tStartX, tStartY-iTex*tIncrementY-0.1*tIncrementY, tLegDesc);
       else tTex->DrawLatex(tStartX, tStartY-iTex*tIncrementY, tLegDesc);
       if(!bSuppressMarkers)
       {
@@ -649,7 +682,7 @@ TCanvas* CompareLambdavsRadius(vector<FitValWriterInfo> &aFitValWriterInfo, Cent
 
       tLegDesc = StripSuppressMarkersFlat(aFitValWriterInfo[iAn].legendDescriptor);
 
-      if(tLegDesc.Contains("d_{0}")) tTex->DrawLatex(tStartX, tStartY-iTex*tIncrementY-0.1*tIncrementY, tLegDesc);
+      if(tLegDesc.Contains("#it{d}_{0}")) tTex->DrawLatex(tStartX, tStartY-iTex*tIncrementY-0.1*tIncrementY, tLegDesc);
       else tTex->DrawLatex(tStartX, tStartY-iTex*tIncrementY, tLegDesc);
       if(!bSuppressMarkers)
       {
