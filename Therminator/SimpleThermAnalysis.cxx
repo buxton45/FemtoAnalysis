@@ -27,6 +27,7 @@ SimpleThermAnalysis::SimpleThermAnalysis(FitGeneratorType aFitGenType, bool aBui
   fPairFractionsSaveName("/home/jesse/Analysis/ReducedTherminator2Events/test/testPairFractionsv2.root"),
   fTransformMatricesSaveName("/home/jesse/Analysis/ReducedTherminator2Events/test/testTransformMatricesv2.root"),
   fCorrelationFunctionsSaveName("/home/jesse/Analysis/ReducedTherminator2Events/test/testCorrelationFunctions.root"),
+  fCfSaveNameSourceMod(""),
   fSingleParticlesSaveName("/home/jesse/Analysis/ReducedTherminator2Events/test/testSingleParticleAnalysesv2.root"),
 
   fFileNameCollection(0),
@@ -170,7 +171,11 @@ void SimpleThermAnalysis::SaveAll()
     if(fBuildMixedEventNumerators) fCorrelationFunctionsSaveName += TString::Format("_%iMixedEvNum", fNEventsToMix);
     if(fWeightCfsWithParentInteraction) fCorrelationFunctionsSaveName += TString("_WeightParentsInteraction");
     if(fOnlyWeightLongDecayParents) fCorrelationFunctionsSaveName += TString("_OnlyWeightLongDecayParents");
-    if(fDrawRStarFromGaussian) fCorrelationFunctionsSaveName += TString("_DrawRStarFromGaussian");
+    if(fDrawRStarFromGaussian) 
+    {
+      fCorrelationFunctionsSaveName += TString("_DrawRStarFromGaussian");
+      fCorrelationFunctionsSaveName += fCfSaveNameSourceMod;
+    }
     if(fBuildPairSourcewmTInfo) fCorrelationFunctionsSaveName += TString("_BuildPairSourcewmTInfo");
     if(fBuildCfYlm) fCorrelationFunctionsSaveName += TString("_BuildCfYlm");
 
@@ -510,6 +515,18 @@ void SimpleThermAnalysis::SetDrawRStarFromGaussian(bool aSet)
   {
     for(unsigned int iOP=0; iOP<fOtherPairAnalysisVec.size(); iOP++) fOtherPairAnalysisVec[iOP]->SetDrawRStarFromGaussian(aSet);
   }
+}
+
+//________________________________________________________________________________________________________________
+void SimpleThermAnalysis::SetGaussSourceInfoAllLamK(double aROut,  double aRSide,  double aRLong,
+                                                    double aMuOut, double aMuSide, double aMuLong)
+{
+  for(unsigned int iP=0; iP<fPairAnalysisVec.size(); iP++) fPairAnalysisVec[iP]->SetGaussSourceInfo(aROut,  aRSide,  aRLong,
+                                                                                                    aMuOut, aMuSide, aMuLong);
+  if(fDrawRStarFromGaussian) fCfSaveNameSourceMod += TString::Format("_%.1f_%.1f_%.1f_%.1f_%.1f_%.1f", 
+                                                                              aROut,  aRSide,  aRLong,
+                                                                              aMuOut, aMuSide, aMuLong);
+
 }
 
 

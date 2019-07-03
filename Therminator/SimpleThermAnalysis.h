@@ -60,6 +60,8 @@ public:
   void SetWeightCfsWithParentInteraction(bool aSet);
   void SetOnlyWeightLongDecayParents(bool aSet);
   void SetDrawRStarFromGaussian(bool aSet);
+  void SetGaussSourceInfoAllLamK(double aROut,  double aRSide,  double aRLong,
+                                 double aMuOut, double aMuSide, double aMuLong);
 
   void SetMaxPrimaryDecayLength(double aMax);
 
@@ -95,6 +97,7 @@ private:
   TString fPairFractionsSaveName;
   TString fTransformMatricesSaveName;
   TString fCorrelationFunctionsSaveName;
+  TString fCfSaveNameSourceMod;
   TString fSingleParticlesSaveName;
 
   vector<TString> fFileNameCollection;

@@ -253,6 +253,36 @@ kXiCKSt0=40, kAXiCAKSt0=41, kXiCAKSt0=42, kAXiCKSt0=43
   };
 
 //------------------
+  struct GaussSourceInfo
+  {
+    double rOut,  rSide,  rLong;
+    double muOut, muSide, muLong;
+
+    GaussSourceInfo(double arOut,  double arSide,  double arLong,
+                    double amuOut, double amuSide, double amuLong)
+    {
+      rOut  = arOut;
+      rSide = arSide;
+      rLong = arLong;
+
+      muOut  = amuOut;
+      muSide = amuSide;
+      muLong = amuLong;
+    }
+
+    GaussSourceInfo()
+    {
+      rOut  = 5.;
+      rSide = 5.;
+      rLong = 5.;
+
+      muOut  = 0.;
+      muSide = 0.;
+      muLong = 0.;
+    }
+  };
+
+//------------------
   struct ParamOwnerInfo
   {
     AnalysisType analysisType;

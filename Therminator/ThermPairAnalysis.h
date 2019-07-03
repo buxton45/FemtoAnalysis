@@ -41,6 +41,9 @@ public:
   static vector<ParticlePDGType> GetPartTypes(AnalysisType aAnType);
   void SetPartTypes();
 
+  void SetStdScattParams();
+  void SetScattParams(double aReF0, double aImF0, double aD0);
+
   void InitiateTransformMatrices();
   void SetBuildTransformMatrices(bool aBuild);
 
@@ -105,7 +108,11 @@ public:
   TVector3 GetKStar3Vec_RotatePar2(const TLorentzVector &p1, const TLorentzVector &p2);
   TVector3 GetKStar3Vec_RotatePar2(const ThermParticle &tPart1, const ThermParticle &tPart2);
 
-  TVector3 DrawRStar3VecFromGaussian(double tROut, double tMuOut, double tRSide, double tMuSide, double tRLong, double tMuLong);
+  void SetStdGaussSourceInfo();
+  void SetGaussSourceInfo(double aROut,  double aRSide,  double aRLong,
+                          double aMuOut, double aMuSide, double aMuLong);
+  TVector3 DrawRStar3VecFromGaussian(double tROut,  double tRSide,  double tRLong, 
+                                     double tMuOut, double tMuSide, double tMuLong);
   TVector3 DrawRStar3VecFromGaussian();
 
   TLorentzVector GetRStar4Vec(const TLorentzVector &p1, const TLorentzVector &x1, const TLorentzVector &p2, const TLorentzVector &x2);
@@ -150,6 +157,7 @@ public:
   void BuildCorrelationFunctionsParticleV0(const ThermEvent &aEvent, const vector<ThermEvent> &aMixingEventsCollection);
   void BuildCorrelationFunctionsV0V0(const ThermEvent &aEvent, const vector<ThermEvent> &aMixingEventsCollection);
 
+  TH1D* BuildInfoHistogram();
   TH1* BuildFinalCf(TH1* aNum, TH1* aDen, TString aName);
   void SaveAllCorrelationFunctions(TFile *aFile);
 
@@ -210,7 +218,10 @@ private:
   bool fWeightCfsWithParentInteraction;
   bool fOnlyWeightLongDecayParents;
 
+  td1dVec fScattParamInfo;  //{ReF0, ImF0, D0}
+
   bool fDrawRStarFromGaussian;
+  GaussSourceInfo fGaussSourceInfo;
 
   TH3* fPairSource3d;
   TH3* fNum3d;

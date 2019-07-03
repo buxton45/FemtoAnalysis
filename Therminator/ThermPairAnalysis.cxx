@@ -50,7 +50,10 @@ ThermPairAnalysis::ThermPairAnalysis(AnalysisType aAnType) :
   fWeightCfsWithParentInteraction(false),
   fOnlyWeightLongDecayParents(false),
 
+  fScattParamInfo(0),
+
   fDrawRStarFromGaussian(false),
+  fGaussSourceInfo(),
 
   fBuildPairSourcewmTInfo(false),
 
@@ -113,6 +116,8 @@ ThermPairAnalysis::ThermPairAnalysis(AnalysisType aAnType) :
 
 {
   SetPartTypes();
+  SetStdGaussSourceInfo();
+  SetStdScattParams();
 }
 
 
@@ -268,6 +273,25 @@ void ThermPairAnalysis::SetPartTypes()
   vector<ParticlePDGType> tTempVec = GetPartTypes(fAnalysisType);
   fPartType1 = tTempVec[0];
   fPartType2 = tTempVec[1];
+}
+
+//________________________________________________________________________________________________________________
+void ThermPairAnalysis::SetStdScattParams()
+{
+
+  if(fAnalysisType==kLamKchP || fAnalysisType==kALamKchM)      {fScattParamInfo = vector<double>{-0.60, 0.51, 0.83};}
+  else if(fAnalysisType==kLamKchM || fAnalysisType==kALamKchP) {fScattParamInfo = vector<double>{0.27, 0.40, -5.23};}
+  else if(fAnalysisType==kLamK0 || fAnalysisType==kALamK0)     {fScattParamInfo = vector<double>{0.10, 0.58, -1.85};}
+  else if(fAnalysisType==kKchPKchP || fAnalysisType==kK0K0 
+          || fAnalysisType==kLamLam)                           {fScattParamInfo = vector<double>{-0.60, 0.51, 0.83};}
+  else assert(0);
+}
+
+
+//________________________________________________________________________________________________________________
+void ThermPairAnalysis::SetScattParams(double aReF0, double aImF0, double aD0)
+{
+  fScattParamInfo = vector<double>{aReF0, aImF0, aD0};
 }
 
 
@@ -1416,47 +1440,23 @@ TVector3 ThermPairAnalysis::GetKStar3Vec_RotatePar2(const ThermParticle &tPart1,
   return GetKStar3Vec_RotatePar2(p1, p2);
 }
 
-//________________________________________________________________________________________________________________
-TVector3 ThermPairAnalysis::DrawRStar3VecFromGaussian(double tROut, double tMuOut, double tRSide, double tMuSide, double tRLong, double tMuLong)
-{
-  //Create the source Gaussians
-  double tRoot2 = sqrt(2.);  //need this scale to get 4 on denominator of exp in normal dist instead of 2
-
-//  unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
-//  std::default_random_engine generator (seed);  //std::clock() is seed
-  std::normal_distribution<double> tROutSource(tMuOut,tRoot2*tROut);
-  std::normal_distribution<double> tRSideSource(tMuSide,tRoot2*tRSide);
-  std::normal_distribution<double> tRLongSource(tMuLong,tRoot2*tRLong);
-
-  return TVector3(tROutSource(fGenerator),tRSideSource(fGenerator),tRLongSource(fGenerator));
-}
 
 //________________________________________________________________________________________________________________
-TVector3 ThermPairAnalysis::DrawRStar3VecFromGaussian()
+void ThermPairAnalysis::SetStdGaussSourceInfo()
 {
   double tROut, tMuOut, tRSide, tMuSide, tRLong, tMuLong;
 
   tROut = 5.;
-  tMuOut = 0.;
-
   tRSide = 5.;
-  tMuSide = 0.;
-
   tRLong = 5.;
+
+  tMuOut = 0.;
+  tMuSide = 0.;
   tMuLong = 0.;
 
-  if(fAnalysisType==kLamKchP || fAnalysisType==kALamKchM)
-  {
-    tMuOut = 3.;
-  }
-  else if(fAnalysisType==kLamKchM || fAnalysisType==kALamKchP)
-  {
-    tMuOut = 3.;
-  }
-  else if(fAnalysisType==kLamK0 || fAnalysisType==kALamK0)
-  {
-    tMuOut = 3.;
-  }
+  if(fAnalysisType==kLamKchP || fAnalysisType==kALamKchM)      tMuOut = 3.;
+  else if(fAnalysisType==kLamKchM || fAnalysisType==kALamKchP) tMuOut = 3.;
+  else if(fAnalysisType==kLamK0 || fAnalysisType==kALamK0)     tMuOut = 3.;
   else if(fAnalysisType==kKchPKchP)
   {
     tROut = 5.;
@@ -1477,7 +1477,40 @@ TVector3 ThermPairAnalysis::DrawRStar3VecFromGaussian()
   }
   else assert(0);
 
-  return DrawRStar3VecFromGaussian(tROut, tMuOut, tRSide, tMuSide, tRLong, tMuLong);
+  fGaussSourceInfo = GaussSourceInfo(tROut, tRSide, tRLong, tMuOut, tMuSide, tMuLong);
+}
+
+
+//________________________________________________________________________________________________________________
+void ThermPairAnalysis::SetGaussSourceInfo(double aROut,  double aRSide,  double aRLong,
+                                           double aMuOut, double aMuSide, double aMuLong)
+{
+  fGaussSourceInfo = GaussSourceInfo(aROut, aRSide, aRLong, aMuOut, aMuSide, aMuLong);
+}
+
+
+
+//________________________________________________________________________________________________________________
+TVector3 ThermPairAnalysis::DrawRStar3VecFromGaussian(double tROut,  double tRSide,  double tRLong,
+                                                      double tMuOut, double tMuSide, double tMuLong)
+{
+  //Create the source Gaussians
+  double tRoot2 = sqrt(2.);  //need this scale to get 4 on denominator of exp in normal dist instead of 2
+
+//  unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+//  std::default_random_engine generator (seed);  //std::clock() is seed
+  std::normal_distribution<double> tROutSource(tMuOut,tRoot2*tROut);
+  std::normal_distribution<double> tRSideSource(tMuSide,tRoot2*tRSide);
+  std::normal_distribution<double> tRLongSource(tMuLong,tRoot2*tRLong);
+
+  return TVector3(tROutSource(fGenerator),tRSideSource(fGenerator),tRLongSource(fGenerator));
+}
+
+//________________________________________________________________________________________________________________
+TVector3 ThermPairAnalysis::DrawRStar3VecFromGaussian()
+{
+  return DrawRStar3VecFromGaussian(fGaussSourceInfo.rOut,  fGaussSourceInfo.rSide,  fGaussSourceInfo.rLong, 
+                                   fGaussSourceInfo.muOut, fGaussSourceInfo.muSide, fGaussSourceInfo.muLong);
 }
 
 
@@ -2411,6 +2444,39 @@ void ThermPairAnalysis::BuildCorrelationFunctionsV0V0(const ThermEvent &aEvent, 
   }
 }
 
+//________________________________________________________________________________________________________________
+TH1D* ThermPairAnalysis::BuildInfoHistogram()
+{
+  TH1D* tReturnHist = new TH1D(TString::Format("InfoHist_%s", cAnalysisBaseTags[fAnalysisType]),
+                               TString::Format("InfoHist_%s", cAnalysisBaseTags[fAnalysisType]), 
+                               10, 0., 10.);
+
+  tReturnHist->Fill(0.5, fScattParamInfo[0]);
+  tReturnHist->Fill(1.5, fScattParamInfo[1]);
+  tReturnHist->Fill(2.5, fScattParamInfo[2]);
+    tReturnHist->GetXaxis()->SetBinLabel(1, "ReF0");
+    tReturnHist->GetXaxis()->SetBinLabel(2, "ImF0");
+    tReturnHist->GetXaxis()->SetBinLabel(3, "D0");
+
+  if(fDrawRStarFromGaussian)
+  {
+    tReturnHist->Fill(3.5, fGaussSourceInfo.rOut);
+    tReturnHist->Fill(4.5, fGaussSourceInfo.rSide);
+    tReturnHist->Fill(5.5, fGaussSourceInfo.rLong);
+      tReturnHist->GetXaxis()->SetBinLabel(4, "ROut");
+      tReturnHist->GetXaxis()->SetBinLabel(5, "RSide");
+      tReturnHist->GetXaxis()->SetBinLabel(6, "RLong");
+
+    tReturnHist->Fill(6.5, fGaussSourceInfo.muOut);
+    tReturnHist->Fill(7.5, fGaussSourceInfo.muSide);
+    tReturnHist->Fill(8.5, fGaussSourceInfo.muLong);
+      tReturnHist->GetXaxis()->SetBinLabel(7, "MuOut");
+      tReturnHist->GetXaxis()->SetBinLabel(8, "MuSide");
+      tReturnHist->GetXaxis()->SetBinLabel(9, "MuLong");
+  }
+
+  return tReturnHist;
+}
 
 //________________________________________________________________________________________________________________
 TH1* ThermPairAnalysis::BuildFinalCf(TH1* aNum, TH1* aDen, TString aName)
@@ -2445,6 +2511,9 @@ TH1* ThermPairAnalysis::BuildFinalCf(TH1* aNum, TH1* aDen, TString aName)
 void ThermPairAnalysis::SaveAllCorrelationFunctions(TFile *aFile)
 {
   assert(aFile->IsOpen());
+
+  TH1D* tInfoHist = BuildInfoHistogram();
+  tInfoHist->Write();
 
   if(fBuild3dHists) 
   {

@@ -18,7 +18,7 @@ int main(int argc, char **argv)
 
 //-----------------------------------------------------------------------------
   FitGeneratorType tFitGenType = kPairwConj;
-  bool bBuildOtherPairs=true;
+  bool bBuildOtherPairs=false;
   bool bBuildSingleParticleAnalyses = false;
   bool bPerformFlowAnalysis = false;
 
@@ -32,7 +32,7 @@ int main(int argc, char **argv)
   bool bBuildCorrelationFunctions = true;
   bool bBuild3dHists = false;
   bool bBuildPairSourcewmTInfo = false;
-  bool bBuildCfYlm = false;
+  bool bBuildCfYlm = true;
 
   bool bBuildMixedEventNumerators = false;
   int tNEventsToMix = 5;
@@ -41,7 +41,9 @@ int main(int argc, char **argv)
   bool bWeightCfsWithParentInteraction = false;
   bool bOnlyWeightLongDecayParents = false;
 
-  bool bDrawRStarFromGaussian = false;
+  bool bDrawRStarFromGaussian = true;
+  td1dVec tGaussSourceInfoAllLamK{5.0, 5.0, 5.0,
+                                  3.0, 0.0, 0.0};
 
   bool bCheckCoECoM = false;
   bool bRotateEventsByRandomAzimuthalAngles = false;
@@ -144,6 +146,8 @@ int main(int argc, char **argv)
   tSimpleThermAnalysis->SetWeightCfsWithParentInteraction(bWeightCfsWithParentInteraction);
   tSimpleThermAnalysis->SetOnlyWeightLongDecayParents(bOnlyWeightLongDecayParents);
   tSimpleThermAnalysis->SetDrawRStarFromGaussian(bDrawRStarFromGaussian);
+  tSimpleThermAnalysis->SetGaussSourceInfoAllLamK(tGaussSourceInfoAllLamK[0], tGaussSourceInfoAllLamK[1], tGaussSourceInfoAllLamK[2], 
+                                                  tGaussSourceInfoAllLamK[3], tGaussSourceInfoAllLamK[4], tGaussSourceInfoAllLamK[5]);
   tSimpleThermAnalysis->SetNEventsToMix(tNEventsToMix);
 
   tSimpleThermAnalysis->SetEventsDirectory(tEventsDirectory);
