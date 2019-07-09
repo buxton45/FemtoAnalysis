@@ -268,21 +268,21 @@ void Draw1DCfwFit(TPad* aPad, AnalysisType aAnType, TH1* aThermCf, double aFitMa
   double tRef0, tImf0, td0;
   if(aAnType == kLamKchP || aAnType == kKchPKchP || aAnType == kK0K0 || aAnType == kLamLam)
   {
-    tRef0 = -1.16;
+    tRef0 = -0.60;
     tImf0 = 0.51;
-    td0 = 1.08;
+    td0 = 0.83;
   }
   else if(aAnType == kLamKchM)
   {
-    tRef0 = 0.41;
-    tImf0 = 0.47;
-    td0 = -4.89;
+    tRef0 = 0.27;
+    tImf0 = 0.40;
+    td0 = -5.23;
   }
   else if(aAnType == kLamK0)
   {
-    tRef0 = -0.41;
-    tImf0 = 0.20;
-    td0 = 2.08;
+    tRef0 = 0.10;
+    tImf0 = 0.58;
+    td0 = -1.85;
   }
   else assert(0);
 
@@ -371,21 +371,21 @@ void DrawNumIntCf(TPad* aPad, AnalysisType aAnType, double aRadius=5.0, double a
   double tRef0, tImf0, td0;
   if(aAnType == kLamKchP || aAnType == kKchPKchP || aAnType == kK0K0 || aAnType == kLamLam)
   {
-    tRef0 = -1.16;
+    tRef0 = -0.60;
     tImf0 = 0.51;
-    td0 = 1.08;
+    td0 = 0.83;
   }
   else if(aAnType == kLamKchM)
   {
-    tRef0 = 0.41;
-    tImf0 = 0.47;
-    td0 = -4.89;
+    tRef0 = 0.27;
+    tImf0 = 0.40;
+    td0 = -5.23;
   }
   else if(aAnType == kLamK0)
   {
-    tRef0 = -0.41;
-    tImf0 = 0.20;
-    td0 = 2.08;
+    tRef0 = 0.10;
+    tImf0 = 0.58;
+    td0 = -1.85;
   }
   else assert(0);
 
@@ -454,7 +454,7 @@ int main(int argc, char **argv)
 //  TString tFileNameBase = "CorrelationFunctions_DrawRStarFromGaussian_BuildCfYlm_cLamcKchMuOut1_cLamK0MuOut1";
 //  TString tFileNameBase = "CorrelationFunctions_DrawRStarFromGaussian_BuildCfYlm_cLamcKchMuOut6_cLamK0MuOut6";
 
-  TString tFileNameBase = "CorrelationFunctions_wOtherPairs";
+  TString tFileNameBase = "CorrelationFunctions_DrawRStarFromGaussian_5.0_5.0_5.0_1.0_0.0_0.0_BuildCfYlm";
 
   TString tFileNameModifier = "";
 //  TString tFileNameModifier = "_WeightParentsInteraction";
