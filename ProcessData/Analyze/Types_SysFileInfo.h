@@ -17,6 +17,7 @@ using namespace std;
 
 #include "Types_SysFileInfo_20161027.h"
 #include "Types_SysFileInfo_20180505.h"
+#include "Types_SysFileInfo_20181205.h"
 #include "Types_SysFileInfo_20190319.h"
 
 //----------------------------------------------------

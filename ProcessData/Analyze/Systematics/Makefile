@@ -12,7 +12,7 @@ CFLAGS = $(shell gsl-config --cflags) $(shell root-config --cflags) -Wall -std=c
 
 MY_LIBS = $(addprefix build/, CfLite.o CfHeavy.o Cf2dLite.o Cf2dHeavy.o Types.o Types_SysFileInfo.o Purity.o PartialAnalysis.o Analysis.o DataAndModel.o PlotPartners.o PlotPartnersLamKch.o PlotPartnersLamK0.o SystematicAnalysis.o CanvasPartition.o SpherHarmonics.o CorrFctnDirectYlm.o CorrFctnDirectYlmLite.o CorrFctnDirectYlmHeavy.o CorrFctnDirectYlmTherm.o ThermCf.o)
 
-BINARIES = runSingleSys runAllSysLamK0 runAllSysLamKch runAllSysXiKch runCompare runBuildErrorBars runBuildErrorBarsXiKch runBuildLeadingErrorContributors
+BINARIES = runSingleSys runAllSysLamK0 runAllSysLamKch runAllSysXiKch runCompare runBuildErrorBars runBuildErrorBarsYlm runBuildErrorBarsXiKch runBuildLeadingErrorContributors
 
 all: $(BINARIES)
 
@@ -33,6 +33,9 @@ runCompare: ${MY_LIBS} CompareDiffFitResults.C
 
 runBuildErrorBars: ${MY_LIBS} BuildErrorBars.C
 	g++ BuildErrorBars.C ${MY_LIBS} -o runBuildErrorBars $(LIBS) $(CFLAGS)
+
+runBuildErrorBarsYlm: ${MY_LIBS} BuildErrorBarsYlm.C
+	g++ BuildErrorBarsYlm.C ${MY_LIBS} -o runBuildErrorBarsYlm $(LIBS) $(CFLAGS)
 
 runBuildErrorBarsXiKch: ${MY_LIBS} BuildErrorBarsXiKch.C
 	g++ BuildErrorBarsXiKch.C ${MY_LIBS} -o runBuildErrorBarsXiKch $(LIBS) $(CFLAGS)

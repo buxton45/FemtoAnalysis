@@ -45,8 +45,11 @@ public:
   void DrawAll();
   void DrawAllDiffs(bool aDrawFits=false, DiffHistFitType aFitType=kExpDecay, bool aFixOffsetParam=false, bool aSaveImages=false);
 
+  td1dVec GetKStarBinningInfo();  //returns {nbins, min, max}
   td2dVec GetAllCfValues();
 
+  td1dVec GetYlmKStarBinningInfo(YlmComponent aComponent, int al, int am, int aRebin=1);  //returns {nbins, min, max}
+  td2dVec GetAllYlmCfValues(YlmComponent aComponent, int al, int am, int aRebin=1);
 
   void SetSaveDirectory(TString aDirectory);
   int GetNAnalyses();

@@ -290,7 +290,11 @@ void Draw1DCfwFit(TPad* aPad, AnalysisType aAnType, TH1* aThermCf, double aFitMa
   TString tFitName = TString::Format("tFitFcn_%s", cAnalysisBaseTags[aAnType]);
   TF1* tFitFcn = new TF1(tFitName, LednickyEqWithNorm,0.,0.5,tNFitParams+1);
     if(aFixLambda) tFitFcn->FixParameter(0, 1.);
-    else           tFitFcn->SetParameter(0, 1.);
+    else
+    {
+      tFitFcn->SetParameter(0, 1.);
+      tFitFcn->SetParLimits(0, 0., 1.);
+    }
 
     tFitFcn->SetParameter(1, 5.);
 
@@ -298,7 +302,7 @@ void Draw1DCfwFit(TPad* aPad, AnalysisType aAnType, TH1* aThermCf, double aFitMa
     tFitFcn->FixParameter(3, tImf0);
     tFitFcn->FixParameter(4, td0);
 
-    tFitFcn->SetParameter(5, 1.);
+    tFitFcn->FixParameter(5, 1.);
 
   aThermCf->Fit(tFitName, "0", "", 0.0, aFitMax);
 
@@ -442,8 +446,8 @@ int main(int argc, char **argv)
   double tMaxNorm = /*0.99*//*0.99*/0.40;
 
   int tImpactParam = 2;
-  TString aCfDescriptor = "Full";
-//  TString aCfDescriptor = "PrimaryOnly";
+//  TString aCfDescriptor = "Full";
+  TString aCfDescriptor = "PrimaryOnly";
 
 //  TString tFileNameBase = "CorrelationFunctions_wOtherPairs";
 //  TString tFileNameBase = "CorrelationFunctions_wOtherPairs_DrawRStarFromGaussian_LamKchPMuOut3_LamKchMMuOut6";

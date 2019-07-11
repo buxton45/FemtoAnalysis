@@ -1679,11 +1679,15 @@ complex<double> ThermPairAnalysis::GetStrongOnlyWaveFunction(const TVector3 &aKS
   else if(fAnalysisType==kLamK0 || fAnalysisType==kALamK0) tF0 = complex<double>(-0.25,0.25);
   else assert(0);
 */
+/*
   if(fAnalysisType==kLamKchP || fAnalysisType==kALamKchM)      {tF0 = complex<double>(-1.16, 0.51); tD0 = 1.08;}
   else if(fAnalysisType==kLamKchM || fAnalysisType==kALamKchP) {tF0 = complex<double>(0.41, 0.47); tD0 = -4.89;}
   else if(fAnalysisType==kLamK0 || fAnalysisType==kALamK0)     {tF0 = complex<double>(-0.41, 0.20); tD0 = 2.08;}
   else if(fAnalysisType==kKchPKchP || fAnalysisType==kK0K0 || fAnalysisType==kLamLam)      {tF0 = complex<double>(-1.16, 0.51); tD0 = 1.08;}
   else assert(0);
+*/
+  tF0 = complex<double>(fScattParamInfo[0], fScattParamInfo[1]);
+  tD0 = fScattParamInfo[2];
 
   double tKdotR = aKStar3Vec.Dot(tRStar3Vec);
     tKdotR /= hbarc;

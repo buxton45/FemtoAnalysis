@@ -355,6 +355,30 @@ void SystematicAnalysis::DrawAllDiffs(bool aDrawFits, DiffHistFitType aFitType, 
   if(aSaveImages) tReturnCan->SaveAs(fSaveDirectory+tCanTitle+TString(".pdf"));
 }
 
+//________________________________________________________________________________________________________________
+td1dVec SystematicAnalysis::GetKStarBinningInfo()
+{
+  double tNbins, tMin, tMax;
+  int tNAnalyses = (int)fAnalyses.size();
+  for(int iAn=0; iAn<tNAnalyses; iAn++)
+  {
+    if(iAn==0)
+    {
+      tNbins = fAnalyses[iAn].GetKStarHeavyCf()->GetHeavyCfClone()->GetNbinsX();
+      tMin   = fAnalyses[iAn].GetKStarHeavyCf()->GetHeavyCfClone()->GetBinLowEdge(1);
+      tMax   = fAnalyses[iAn].GetKStarHeavyCf()->GetHeavyCfClone()->GetBinLowEdge(tNbins+1);
+    }
+    else
+    {
+      assert(tNbins == fAnalyses[iAn].GetKStarHeavyCf()->GetHeavyCfClone()->GetNbinsX());
+      assert(tMin   == fAnalyses[iAn].GetKStarHeavyCf()->GetHeavyCfClone()->GetBinLowEdge(1));
+      assert(tMax   == fAnalyses[iAn].GetKStarHeavyCf()->GetHeavyCfClone()->GetBinLowEdge(tNbins+1));
+    }
+  }
+
+  return vector<double>{tNbins, tMin, tMax};
+}
+
 
 //________________________________________________________________________________________________________________
 td2dVec SystematicAnalysis::GetAllCfValues()
@@ -371,6 +395,51 @@ td2dVec SystematicAnalysis::GetAllCfValues()
     {
       if(iBin==1) assert(fAnalyses[iAn].GetKStarHeavyCf()->GetHeavyCfClone()->GetNbinsX() == tNBins);
       tTempVec.push_back(fAnalyses[iAn].GetKStarHeavyCf()->GetHeavyCfClone()->GetBinContent(iBin));
+    }
+    tReturnVec.push_back(tTempVec);
+  }
+  return tReturnVec;
+}
+
+//________________________________________________________________________________________________________________
+td1dVec SystematicAnalysis::GetYlmKStarBinningInfo(YlmComponent aComponent, int al, int am, int aRebin)
+{
+  double tNbins, tMin, tMax;
+  int tNAnalyses = (int)fAnalyses.size();
+  for(int iAn=0; iAn<tNAnalyses; iAn++)
+  {
+    if(iAn==0)
+    {
+      tNbins = fAnalyses[iAn].GetYlmCfnHist(aComponent, al, am, aRebin)->GetNbinsX();
+      tMin   = fAnalyses[iAn].GetYlmCfnHist(aComponent, al, am, aRebin)->GetBinLowEdge(1);
+      tMax   = fAnalyses[iAn].GetYlmCfnHist(aComponent, al, am, aRebin)->GetBinLowEdge(tNbins+1);
+    }
+    else
+    {
+      assert(tNbins == fAnalyses[iAn].GetYlmCfnHist(aComponent, al, am, aRebin)->GetNbinsX());
+      assert(tMin   == fAnalyses[iAn].GetYlmCfnHist(aComponent, al, am, aRebin)->GetBinLowEdge(1));
+      assert(tMax   == fAnalyses[iAn].GetYlmCfnHist(aComponent, al, am, aRebin)->GetBinLowEdge(tNbins+1));
+    }
+  }
+
+  return vector<double>{tNbins, tMin, tMax};
+}
+
+//________________________________________________________________________________________________________________
+td2dVec SystematicAnalysis::GetAllYlmCfValues(YlmComponent aComponent, int al, int am, int aRebin)
+{
+  int tNBins = fAnalyses[0].GetYlmCfnHist(aComponent, al, am, aRebin)->GetNbinsX();
+  int tNAnalyses = (int)fAnalyses.size();
+
+  td2dVec tReturnVec(0);
+
+  for(int iBin=1; iBin<=tNBins; iBin++)
+  {
+    td1dVec tTempVec(0);
+    for(int iAn=0; iAn<tNAnalyses; iAn++)
+    {
+      if(iBin==1) assert(fAnalyses[iAn].GetYlmCfnHist(aComponent, al, am, aRebin)->GetNbinsX() == tNBins);
+      tTempVec.push_back(fAnalyses[iAn].GetYlmCfnHist(aComponent, al, am, aRebin)->GetBinContent(iBin));
     }
     tReturnVec.push_back(tTempVec);
   }
