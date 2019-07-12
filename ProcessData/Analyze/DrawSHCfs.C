@@ -18,8 +18,47 @@ class Analysis;
 
 
 
+//________________________________________________________________________________________________________________
+TH1D* CombineTwoHists(TH1D* aHist1, TH1D* aHist2, double aNorm1, double aNorm2)
+{
+  TString aReturnName = TString::Format("%s_and_%s", aHist1->GetName(), aHist2->GetName());
+
+  if(!aHist1->GetSumw2N()) aHist1->Sumw2();
+  if(!aHist2->GetSumw2N()) aHist2->Sumw2();
+
+  TH1D* tReturnHist = (TH1D*)aHist1->Clone(aReturnName);
+    tReturnHist->Scale(aNorm1);
+  tReturnHist->Add(aHist2, aNorm2);
+  tReturnHist->Scale(1./(aNorm1+aNorm2));
+
+  return tReturnHist;
+}
+
+//________________________________________________________________________________________________________________
+TH1D* GetYlmCfwSysErrors(TString aDate, AnalysisType aAnalysisType, CentralityType aCentralityType, YlmComponent aComponent, int al, int am)
+{
+  vector<TString> tReImVec{"Re", "Im"};
+
+  TString tGenAnType;
+  if(aAnalysisType==kLamKchP || aAnalysisType==kALamKchM || aAnalysisType==kLamKchM || aAnalysisType==kALamKchP) tGenAnType = TString("cLamcKch");
+  else if(aAnalysisType==kLamK0 || aAnalysisType==kALamK0) tGenAnType = TString("cLamK0");
+  else assert(0);
+  TString tDirName = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_%s_%s/", tGenAnType.Data(), aDate.Data());
+
+  TString tFileLocation = TString::Format("%sSystematicResults_%s%s_%s.root",tDirName.Data(),cAnalysisBaseTags[aAnalysisType],cCentralityTags[aCentralityType],aDate.Data());
+  TString tHistName = TString::Format("%s%s_%sC%d%d_wSysErrors", cAnalysisRootTags[aAnalysisType], cCentralityTags[aCentralityType], tReImVec[aComponent].Data(), al, am);
+
+  TFile tFile(tFileLocation);
+  TH1D* tReturnHist = (TH1D*)tFile.Get(tHistName);
+  assert(tReturnHist);
+    tReturnHist->SetDirectory(0);
+
+  return tReturnHist;
+}
+
+
 //_________________________________________________________________________________________
-void DrawSHCfComponent(TPad* aPad, Analysis* aAnaly, YlmComponent aComponent, int al, int am, int aRebin/*, double aMinNorm=0.32, double aMaxNorm=0.40, int aRebin=2*/)
+void DrawSHCfComponent(TPad* aPad, Analysis* aAnaly, YlmComponent aComponent, int al, int am, int aRebin, bool aDrawSysErrs=false/*, double aMinNorm=0.32, double aMaxNorm=0.40, int aRebin=2*/)
 {
   aPad->cd();
   aPad->SetLeftMargin(0.15);
@@ -50,6 +89,7 @@ void DrawSHCfComponent(TPad* aPad, Analysis* aAnaly, YlmComponent aComponent, in
   else if(aAnaly->GetAnalysisType()==kLamKchM || aAnaly->GetAnalysisType()==kALamKchP) tColor=kBlue+1;
   else tColor = kGray;
 
+  int tColorTransparent = TColor::GetColorTransparent(tColor,0.2);
   //--------------------------------------------------------------
 //  TH1D* tTestCfn = tAnaly0010->GetYlmCfnHist(kYlmReal, 1, 1); 
 
@@ -77,10 +117,25 @@ void DrawSHCfComponent(TPad* aPad, Analysis* aAnaly, YlmComponent aComponent, in
     tText->AddText(TString::Format("%sC_{%d%d} (%s)", tReImVec[(int)aComponent].Data(), al, am, cPrettyCentralityTags[aAnaly->GetCentralityType()]));
   tText->Draw();
 
+  //--------------------------------------------------------------
+  if(aDrawSysErrs)
+  {
+    TH1D* tSHCfwSysErrs = GetYlmCfwSysErrors(TString("20181205"), aAnaly->GetAnalysisType(), aAnaly->GetCentralityType(), aComponent, al, am);
+    //TODO for some reason, 0-10% data does not match perfectly
+    for(int i=1; i<tSHCfwSysErrs->GetNbinsX()+1; i++) tSHCfwSysErrs->SetBinContent(i, tSHCf->GetBinContent(i));
+
+      tSHCfwSysErrs->SetFillColor(tColorTransparent);
+      tSHCfwSysErrs->SetFillStyle(1000);
+      tSHCfwSysErrs->SetLineColor(0);
+      tSHCfwSysErrs->SetLineWidth(0);
+
+      tSHCfwSysErrs->Draw("e2psame");
+  }
+
 }
 
 //_________________________________________________________________________________________
-void DrawSHCfComponent(TPad* aPad, Analysis* aAnaly, Analysis* aConjAnaly, YlmComponent aComponent, int al, int am, int aRebin/*, double aMinNorm=0.32, double aMaxNorm=0.40, int aRebin=2*/, bool aPrintAliceInfo=false)
+void DrawSHCfComponent(TPad* aPad, Analysis* aAnaly, Analysis* aConjAnaly, YlmComponent aComponent, int al, int am, int aRebin, bool aDrawSysErrs=false/*, double aMinNorm=0.32, double aMaxNorm=0.40, int aRebin=2*/, bool aPrintAliceInfo=false)
 {
   aPad->cd();
 
@@ -114,6 +169,7 @@ void DrawSHCfComponent(TPad* aPad, Analysis* aAnaly, Analysis* aConjAnaly, YlmCo
   else if(aAnaly->GetAnalysisType()==kLamKchM || aAnaly->GetAnalysisType()==kALamKchP) tColor=kBlue+1;
   else tColor = kGray;
 
+  int tColorTransparent = TColor::GetColorTransparent(tColor,0.2);
   //--------------------------------------------------------------
   vector<CorrFctnDirectYlmLite*> tYlmLiteCollAn = aAnaly->GetYlmCfHeavy(aRebin)->GetYlmCfLiteCollection();
   vector<CorrFctnDirectYlmLite*> tYlmLiteCollConjAn = aConjAnaly->GetYlmCfHeavy(aRebin)->GetYlmCfLiteCollection();
@@ -177,6 +233,26 @@ void DrawSHCfComponent(TPad* aPad, Analysis* aAnaly, Analysis* aConjAnaly, YlmCo
     tex->SetTextSize(0.055);
     tex->SetLineWidth(2);
     tex->Draw();
+  }
+
+  //--------------------------------------------------------------
+  if(aDrawSysErrs)
+  {
+    TH1D* tSHCfwSysErrs_An = GetYlmCfwSysErrors(TString("20181205"), aAnaly->GetAnalysisType(), aAnaly->GetCentralityType(), aComponent, al, am);
+    TH1D* tSHCfwSysErrs_Conj = GetYlmCfwSysErrors(TString("20181205"), aConjAnaly->GetAnalysisType(), aConjAnaly->GetCentralityType(), aComponent, al, am);
+
+    assert(tYlmLiteCollAn.size()==2);
+    TH1D* tSHCfwSysErrs = CombineTwoHists(tSHCfwSysErrs_An, tSHCfwSysErrs_Conj, tYlmLiteCollAn[0]->GetNumScale(), tYlmLiteCollAn[1]->GetNumScale());
+
+    //TODO for some reason, 0-10% data does not match perfectly
+    for(int i=1; i<tSHCfwSysErrs->GetNbinsX()+1; i++) tSHCfwSysErrs->SetBinContent(i, tSHCf->GetBinContent(i));
+
+      tSHCfwSysErrs->SetFillColor(tColorTransparent);
+      tSHCfwSysErrs->SetFillStyle(1000);
+      tSHCfwSysErrs->SetLineColor(0);
+      tSHCfwSysErrs->SetLineWidth(0);
+
+      tSHCfwSysErrs->Draw("e2psame");
   }
 
 }
@@ -270,6 +346,7 @@ int main(int argc, char **argv)
   bool bCombineConjugates = true;
   bool bDrawThermCfs = false;
   bool bDrawFirstSix = false;
+  bool bDrawSysErrs = true;
   bool bSaveFigures = false;
   TString tSaveFileType = "pdf";
 
@@ -316,14 +393,14 @@ int main(int argc, char **argv)
     tCanAll = new TCanvas(tCanNameAll, tCanNameAll);
     tCanAll->Divide(2, 3);
 
-    DrawSHCfComponent((TPad*)tCanAll->cd(1), tAnaly0010, kYlmReal, 0, 0, tRebin);
-    DrawSHCfComponent((TPad*)tCanAll->cd(2), tAnaly0010, kYlmReal, 1, 1, tRebin);
+    DrawSHCfComponent((TPad*)tCanAll->cd(1), tAnaly0010, kYlmReal, 0, 0, tRebin, bDrawSysErrs);
+    DrawSHCfComponent((TPad*)tCanAll->cd(2), tAnaly0010, kYlmReal, 1, 1, tRebin, bDrawSysErrs);
 
-    DrawSHCfComponent((TPad*)tCanAll->cd(3), tAnaly1030, kYlmReal, 0, 0, tRebin);
-    DrawSHCfComponent((TPad*)tCanAll->cd(4), tAnaly1030, kYlmReal, 1, 1, tRebin);
+    DrawSHCfComponent((TPad*)tCanAll->cd(3), tAnaly1030, kYlmReal, 0, 0, tRebin, bDrawSysErrs);
+    DrawSHCfComponent((TPad*)tCanAll->cd(4), tAnaly1030, kYlmReal, 1, 1, tRebin, bDrawSysErrs);
 
-    DrawSHCfComponent((TPad*)tCanAll->cd(5), tAnaly3050, kYlmReal, 0, 0, tRebin);
-    DrawSHCfComponent((TPad*)tCanAll->cd(6), tAnaly3050, kYlmReal, 1, 1, tRebin);
+    DrawSHCfComponent((TPad*)tCanAll->cd(5), tAnaly3050, kYlmReal, 0, 0, tRebin, bDrawSysErrs);
+    DrawSHCfComponent((TPad*)tCanAll->cd(6), tAnaly3050, kYlmReal, 1, 1, tRebin, bDrawSysErrs);
 
     //----------
 
@@ -331,8 +408,8 @@ int main(int argc, char **argv)
     tCan0010 = new TCanvas(tCanName0010, tCanName0010);
     tCan0010->Divide(2, 1);
 
-    DrawSHCfComponent((TPad*)tCan0010->cd(1), tAnaly0010, kYlmReal, 0, 0, tRebin);
-    DrawSHCfComponent((TPad*)tCan0010->cd(2), tAnaly0010, kYlmReal, 1, 1, tRebin);
+    DrawSHCfComponent((TPad*)tCan0010->cd(1), tAnaly0010, kYlmReal, 0, 0, tRebin, bDrawSysErrs);
+    DrawSHCfComponent((TPad*)tCan0010->cd(2), tAnaly0010, kYlmReal, 1, 1, tRebin, bDrawSysErrs);
   }
   else
   {
@@ -340,14 +417,14 @@ int main(int argc, char **argv)
     tCanAll = new TCanvas(tCanNameAll, tCanNameAll);
     tCanAll->Divide(2, 3);
 
-    DrawSHCfComponent((TPad*)tCanAll->cd(1), tAnaly0010, tConjAnaly0010, kYlmReal, 0, 0, tRebin);
-    DrawSHCfComponent((TPad*)tCanAll->cd(2), tAnaly0010, tConjAnaly0010, kYlmReal, 1, 1, tRebin);
+    DrawSHCfComponent((TPad*)tCanAll->cd(1), tAnaly0010, tConjAnaly0010, kYlmReal, 0, 0, tRebin, bDrawSysErrs);
+    DrawSHCfComponent((TPad*)tCanAll->cd(2), tAnaly0010, tConjAnaly0010, kYlmReal, 1, 1, tRebin, bDrawSysErrs);
 
-    DrawSHCfComponent((TPad*)tCanAll->cd(3), tAnaly1030, tConjAnaly1030, kYlmReal, 0, 0, tRebin);
-    DrawSHCfComponent((TPad*)tCanAll->cd(4), tAnaly1030, tConjAnaly1030, kYlmReal, 1, 1, tRebin);
+    DrawSHCfComponent((TPad*)tCanAll->cd(3), tAnaly1030, tConjAnaly1030, kYlmReal, 0, 0, tRebin, bDrawSysErrs);
+    DrawSHCfComponent((TPad*)tCanAll->cd(4), tAnaly1030, tConjAnaly1030, kYlmReal, 1, 1, tRebin, bDrawSysErrs);
 
-    DrawSHCfComponent((TPad*)tCanAll->cd(5), tAnaly3050, tConjAnaly3050, kYlmReal, 0, 0, tRebin);
-    DrawSHCfComponent((TPad*)tCanAll->cd(6), tAnaly3050, tConjAnaly3050, kYlmReal, 1, 1, tRebin);
+    DrawSHCfComponent((TPad*)tCanAll->cd(5), tAnaly3050, tConjAnaly3050, kYlmReal, 0, 0, tRebin, bDrawSysErrs);
+    DrawSHCfComponent((TPad*)tCanAll->cd(6), tAnaly3050, tConjAnaly3050, kYlmReal, 1, 1, tRebin, bDrawSysErrs);
 
     //----------
 
@@ -355,8 +432,8 @@ int main(int argc, char **argv)
     tCan0010 = new TCanvas(tCanName0010, tCanName0010, 1400, 500);
     tCan0010->Divide(2, 1);
 
-    DrawSHCfComponent((TPad*)tCan0010->cd(1), tAnaly0010, tConjAnaly0010, kYlmReal, 0, 0, tRebin, true);
-    DrawSHCfComponent((TPad*)tCan0010->cd(2), tAnaly0010, tConjAnaly0010, kYlmReal, 1, 1, tRebin);
+    DrawSHCfComponent((TPad*)tCan0010->cd(1), tAnaly0010, tConjAnaly0010, kYlmReal, 0, 0, tRebin, bDrawSysErrs);
+    DrawSHCfComponent((TPad*)tCan0010->cd(2), tAnaly0010, tConjAnaly0010, kYlmReal, 1, 1, tRebin, bDrawSysErrs);
   }
 
   if(bDrawThermCfs)

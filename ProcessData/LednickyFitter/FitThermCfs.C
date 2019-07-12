@@ -433,7 +433,7 @@ int main(int argc, char **argv)
   bool bCombineConjugates = true;
   bool bDrawDeltaT = false;
   bool bDraw2DHists = false;
-  bool bDrawCompareMuOuts = false;
+  bool bDrawCompareMuOuts = true;
   bool bDrawNumIntCf = false;
   bool bSaveFigures = false;
   TString tSaveFileType = "pdf";
@@ -446,8 +446,8 @@ int main(int argc, char **argv)
   double tMaxNorm = /*0.99*//*0.99*/0.40;
 
   int tImpactParam = 2;
-//  TString aCfDescriptor = "Full";
-  TString aCfDescriptor = "PrimaryOnly";
+  TString aCfDescriptor = "Full";
+//  TString aCfDescriptor = "PrimaryOnly";
 
 //  TString tFileNameBase = "CorrelationFunctions_wOtherPairs";
 //  TString tFileNameBase = "CorrelationFunctions_wOtherPairs_DrawRStarFromGaussian_LamKchPMuOut3_LamKchMMuOut6";
@@ -606,16 +606,19 @@ int main(int argc, char **argv)
 
   if(bDrawCompareMuOuts)
   {
-    TString tFileNameBase_Mu1 = "CorrelationFunctions_DrawRStarFromGaussian_BuildCfYlm_cLamcKchMuOut1_cLamK0MuOut1";
-    TString tFileNameBase_Mu3 = "CorrelationFunctions_wOtherPairs_DrawRStarFromGaussian_BuildCfYlm_cLamcKchMuOut3_cLamK0MuOut3_KchPKchPR538";
-    TString tFileNameBase_Mu6 = "CorrelationFunctions_DrawRStarFromGaussian_BuildCfYlm_cLamcKchMuOut6_cLamK0MuOut6";
+    TString tFileNameBase_Mu0 = "CorrelationFunctions_DrawRStarFromGaussian_5.0_5.0_5.0_0.0_0.0_0.0_BuildCfYlm";
+    TString tFileNameBase_Mu1 = "CorrelationFunctions_DrawRStarFromGaussian_5.0_5.0_5.0_1.0_0.0_0.0_BuildCfYlm";
+    TString tFileNameBase_Mu3 = "CorrelationFunctions_DrawRStarFromGaussian_5.0_5.0_5.0_3.0_0.0_0.0_BuildCfYlm";
+    TString tFileNameBase_Mu6 = "CorrelationFunctions_DrawRStarFromGaussian_5.0_5.0_5.0_6.0_0.0_0.0_BuildCfYlm";
 
     //-----
+    TString tFileName_Mu0 = TString::Format("%s%s.root", tFileNameBase_Mu0.Data(), tFileNameModifier.Data());
     TString tFileName_Mu1 = TString::Format("%s%s.root", tFileNameBase_Mu1.Data(), tFileNameModifier.Data());
     TString tFileName_Mu3 = TString::Format("%s%s.root", tFileNameBase_Mu3.Data(), tFileNameModifier.Data());
     TString tFileName_Mu6 = TString::Format("%s%s.root", tFileNameBase_Mu6.Data(), tFileNameModifier.Data());
 
     //-----
+    TString tFileLocation_Mu0 = TString::Format("%s%s", tFileDir.Data(), tFileName_Mu0.Data());
     TString tFileLocation_Mu1 = TString::Format("%s%s", tFileDir.Data(), tFileName_Mu1.Data());
     TString tFileLocation_Mu3 = TString::Format("%s%s", tFileDir.Data(), tFileName_Mu3.Data());
     TString tFileLocation_Mu6 = TString::Format("%s%s", tFileDir.Data(), tFileName_Mu6.Data());
@@ -624,6 +627,9 @@ int main(int argc, char **argv)
 
 
     //ThermCf already knows the default directory, so it only needs the name of the file, not the complete path
+    TH1* tThermCf_Mu0 = ThermCf::GetThermCf(tFileName_Mu0, aCfDescriptor, tAnType, tImpactParam, bCombineConjugates, kMe, tRebin, tMinNorm, tMaxNorm);
+    TH3* tTest3d_Mu0 = GetThermHist3d(tFileLocation_Mu0, tHistName3d);
+
     TH1* tThermCf_Mu1 = ThermCf::GetThermCf(tFileName_Mu1, aCfDescriptor, tAnType, tImpactParam, bCombineConjugates, kMe, tRebin, tMinNorm, tMaxNorm);
     TH3* tTest3d_Mu1 = GetThermHist3d(tFileLocation_Mu1, tHistName3d);
 
@@ -640,24 +646,59 @@ int main(int argc, char **argv)
     TString tCanCompMusName = TString::Format("CanCompMus_%s_%s", aCfDescriptor.Data(), cAnalysisBaseTags[tAnType]);
     TCanvas* tCanCompMus = new TCanvas(tCanCompMusName, tCanCompMusName);
 
-    tCanCompMus->Divide(2,3);
+/*
+    tCanCompMus->Divide(2,4);
 
+    Draw1DCfwFit((TPad*)tCanCompMus->cd(1), tAnType, tThermCf_Mu0, tKStarFitMax, tFixLambdaInFit);
+    Draw1DSourceProjwFit((TPad*)tCanCompMus->cd(2), tTest3d_Mu0, "Out", tGaussFitMin, tGaussFitMax, tProjLow, tProjHigh);
 
+    Draw1DCfwFit((TPad*)tCanCompMus->cd(3), tAnType, tThermCf_Mu1, tKStarFitMax, tFixLambdaInFit);
+    Draw1DSourceProjwFit((TPad*)tCanCompMus->cd(4), tTest3d_Mu1, "Out", tGaussFitMin, tGaussFitMax, tProjLow, tProjHigh);
 
+    Draw1DCfwFit((TPad*)tCanCompMus->cd(5), tAnType, tThermCf_Mu3, tKStarFitMax, tFixLambdaInFit);
+    Draw1DSourceProjwFit((TPad*)tCanCompMus->cd(6), tTest3d_Mu3, "Out", tGaussFitMin, tGaussFitMax, tProjLow, tProjHigh);
 
-    Draw1DCfwFit((TPad*)tCanCompMus->cd(1), tAnType, tThermCf_Mu1, tKStarFitMax, tFixLambdaInFit);
-    Draw1DSourceProjwFit((TPad*)tCanCompMus->cd(2), tTest3d_Mu1, "Out", tGaussFitMin, tGaussFitMax, tProjLow, tProjHigh);
+    Draw1DCfwFit((TPad*)tCanCompMus->cd(7), tAnType, tThermCf_Mu6, tKStarFitMax, tFixLambdaInFit);
+    Draw1DSourceProjwFit((TPad*)tCanCompMus->cd(8), tTest3d_Mu6, "Out", tGaussFitMin, tGaussFitMax, tProjLow, tProjHigh);
+*/
 
+    tCanCompMus->Divide(2,2);
+
+    Draw1DCfwFit((TPad*)tCanCompMus->cd(1), tAnType, tThermCf_Mu0, tKStarFitMax, tFixLambdaInFit);
+    Draw1DCfwFit((TPad*)tCanCompMus->cd(2), tAnType, tThermCf_Mu1, tKStarFitMax, tFixLambdaInFit);
     Draw1DCfwFit((TPad*)tCanCompMus->cd(3), tAnType, tThermCf_Mu3, tKStarFitMax, tFixLambdaInFit);
-    Draw1DSourceProjwFit((TPad*)tCanCompMus->cd(4), tTest3d_Mu3, "Out", tGaussFitMin, tGaussFitMax, tProjLow, tProjHigh);
-
-    Draw1DCfwFit((TPad*)tCanCompMus->cd(5), tAnType, tThermCf_Mu6, tKStarFitMax, tFixLambdaInFit);
-    Draw1DSourceProjwFit((TPad*)tCanCompMus->cd(6), tTest3d_Mu6, "Out", tGaussFitMin, tGaussFitMax, tProjLow, tProjHigh);
+    Draw1DCfwFit((TPad*)tCanCompMus->cd(4), tAnType, tThermCf_Mu6, tKStarFitMax, tFixLambdaInFit);
 
 
     if(bSaveFigures) tCanCompMus->SaveAs(TString::Format("%s%s_3dHist%s.%s", tSaveDir.Data(), tCanCompMusName.Data(), tHistName3d.Data(), tSaveFileType.Data()));
 
 
+    //--------------------------------------------
+    TString tCanCompMusNoFitsName = TString::Format("CanCompMusNoFits_%s_%s", aCfDescriptor.Data(), cAnalysisBaseTags[tAnType]);
+    TCanvas* tCanCompMusNoFits = new TCanvas(tCanCompMusNoFitsName, tCanCompMusNoFitsName);
+    tCanCompMusNoFits->cd();
+
+    tThermCf_Mu0->SetMarkerColor(kBlack);
+    tThermCf_Mu0->SetLineColor(kBlack);
+    tThermCf_Mu0->SetMarkerStyle(20);
+
+    tThermCf_Mu1->SetMarkerColor(kBlue);
+    tThermCf_Mu1->SetLineColor(kBlue);
+    tThermCf_Mu1->SetMarkerStyle(20);
+
+    tThermCf_Mu3->SetMarkerColor(kGreen);
+    tThermCf_Mu3->SetLineColor(kGreen);
+    tThermCf_Mu3->SetMarkerStyle(20);
+
+    tThermCf_Mu6->SetMarkerColor(kRed);
+    tThermCf_Mu6->SetLineColor(kRed);
+    tThermCf_Mu6->SetMarkerStyle(20);
+
+
+    tThermCf_Mu0->Draw();
+    tThermCf_Mu1->Draw("same");
+    tThermCf_Mu3->Draw("same");
+    tThermCf_Mu6->Draw("same");
   }
 
 //-------------------------------------------------------------------------------
