@@ -46,7 +46,7 @@ int main(int argc, char **argv)
                                   3.0, 0.0, 0.0};
 
   bool bCheckCoECoM = false;
-  bool bRotateEventsByRandomAzimuthalAngles = false;
+  bool bRotateEventsByRandomAzimuthalAngles = true;
   bool bOnlyRunOverJaiEvents = false;
 
   bool bBuildArtificialV3Signal = false;
