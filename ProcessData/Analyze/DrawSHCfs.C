@@ -390,6 +390,7 @@ int main(int argc, char **argv)
   if(!bCombineConjugates)
   {
     tCanNameAll = TString::Format("CanCfYlmReC00C11_%s_All", cAnalysisBaseTags[tAnType]);
+    if(bDrawSysErrs) tCanNameAll += TString("_wSysErr");
     tCanAll = new TCanvas(tCanNameAll, tCanNameAll);
     tCanAll->Divide(2, 3);
 
@@ -405,6 +406,7 @@ int main(int argc, char **argv)
     //----------
 
     tCanName0010 = TString::Format("CanCfYlmReC00C11_%s_0010", cAnalysisBaseTags[tAnType]);
+    if(bDrawSysErrs) tCanName0010 += TString("_wSysErr");
     tCan0010 = new TCanvas(tCanName0010, tCanName0010);
     tCan0010->Divide(2, 1);
 
@@ -414,6 +416,7 @@ int main(int argc, char **argv)
   else
   {
     tCanNameAll = TString::Format("CanCfYlmReC00C11_%s%s_All", cAnalysisBaseTags[tAnType], cAnalysisBaseTags[tConjAnType]);
+    if(bDrawSysErrs) tCanNameAll += TString("_wSysErr");
     tCanAll = new TCanvas(tCanNameAll, tCanNameAll);
     tCanAll->Divide(2, 3);
 
@@ -429,6 +432,7 @@ int main(int argc, char **argv)
     //----------
 
     tCanName0010 = TString::Format("CanCfYlmReC00C11_%s%s_0010", cAnalysisBaseTags[tAnType], cAnalysisBaseTags[tConjAnType]);
+    if(bDrawSysErrs) tCanName0010 += TString("_wSysErr");
     tCan0010 = new TCanvas(tCanName0010, tCanName0010, 1400, 500);
     tCan0010->Divide(2, 1);
 

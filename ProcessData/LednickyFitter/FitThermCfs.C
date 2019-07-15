@@ -13,6 +13,7 @@
 #include "ThermCf.h"
 #include "FitPartialAnalysis.h"
 #include "NumIntLednickyCf.h"
+#include "CanvasPartition.h"
 
 bool gRejectPoints=false;
 double tRejectOmegaLow = 0.19;
@@ -302,7 +303,7 @@ void Draw1DCfwFit(TPad* aPad, AnalysisType aAnType, TH1* aThermCf, double aFitMa
     tFitFcn->FixParameter(3, tImf0);
     tFitFcn->FixParameter(4, td0);
 
-    tFitFcn->FixParameter(5, 1.);
+    tFitFcn->SetParameter(5, 1.);
 
   aThermCf->Fit(tFitName, "0", "", 0.0, aFitMax);
 
@@ -323,7 +324,7 @@ void Draw1DCfwFit(TPad* aPad, AnalysisType aAnType, TH1* aThermCf, double aFitMa
 
   aThermCf->DrawCopy();
   tFitFcn->Draw("same");
-
+/*
   TPaveText* tText = new TPaveText(0.50, 0.15, 0.85, 0.60, "NDC");
     tText->SetFillColor(0);
     tText->SetBorderSize(0);
@@ -336,8 +337,126 @@ void Draw1DCfwFit(TPad* aPad, AnalysisType aAnType, TH1* aThermCf, double aFitMa
     tText->AddText(TString::Format("Im[f0] = %0.3f", tFitFcn->GetParameter(3)));
     tText->AddText(TString::Format("d0 = %0.3f", tFitFcn->GetParameter(4)));
     tText->AddText(TString::Format("Norm = %0.3f", tFitFcn->GetParameter(5)));
+*/
 
-    tText->Draw();
+  TPaveText* tText1 = new TPaveText(0.50, 0.15, 0.60, 0.60, "NDC");
+    tText1->SetFillColor(0);
+    tText1->SetBorderSize(0);
+    tText1->SetTextColor(kBlack);
+    tText1->SetTextAlign(21);
+//    tText1->AddText("Lednicky Fit");
+    tText1->AddText("#lambda");
+    tText1->AddText("#it{R}_{inv}");
+    tText1->AddText("#Rgothic#it{f}_{0}");
+    tText1->AddText("#Jgothic#it{f}_{0}");
+    tText1->AddText("#it{d}_{0}");
+
+    tText1->Draw();
+
+
+  TPaveText* tText2 = new TPaveText(0.60, 0.15, 0.85, 0.60, "NDC");
+    tText2->SetFillColor(0);
+    tText2->SetBorderSize(0);
+    tText2->SetTextColor(kBlack);
+    tText2->SetTextAlign(11);
+//    tText2->AddText("Lednicky Fit");
+    tText2->AddText(TString::Format(" = % 0.2f", tFitFcn->GetParameter(0)));
+    tText2->AddText(TString::Format(" = % 0.2f fm", tFitFcn->GetParameter(1)));
+    tText2->AddText(TString::Format(" = % 0.2f fm", tFitFcn->GetParameter(2)));
+    tText2->AddText(TString::Format(" = % 0.2f fm", tFitFcn->GetParameter(3)));
+    tText2->AddText(TString::Format(" = % 0.2f fm", tFitFcn->GetParameter(4)));
+
+    tText2->Draw();
+}
+
+//________________________________________________________________________________________________________________
+void Add1DCfwFitToCanPart(CanvasPartition* aCanPart, int aNx, int aNy, AnalysisType aAnType, TH1* aThermCf, double aFitMax=0.3, bool aFixLambda=false, int aMuOut=0, bool aCombConj=false)
+{
+  double tRef0, tImf0, td0;
+  if(aAnType == kLamKchP || aAnType == kKchPKchP || aAnType == kK0K0 || aAnType == kLamLam)
+  {
+    tRef0 = -0.60;
+    tImf0 = 0.51;
+    td0 = 0.83;
+  }
+  else if(aAnType == kLamKchM)
+  {
+    tRef0 = 0.27;
+    tImf0 = 0.40;
+    td0 = -5.23;
+  }
+  else if(aAnType == kLamK0)
+  {
+    tRef0 = 0.10;
+    tImf0 = 0.58;
+    td0 = -1.85;
+  }
+  else assert(0);
+
+  int tNFitParams = 5;
+  TString tFitName = TString::Format("tFitFcn_%s", cAnalysisBaseTags[aAnType]);
+  TF1* tFitFcn = new TF1(tFitName, LednickyEqWithNorm,0.,0.5,tNFitParams+1);
+    if(aFixLambda) tFitFcn->FixParameter(0, 1.);
+    else
+    {
+      tFitFcn->SetParameter(0, 1.);
+      tFitFcn->SetParLimits(0, 0., 1.);
+    }
+
+    tFitFcn->SetParameter(1, 5.);
+
+    tFitFcn->FixParameter(2, tRef0);
+    tFitFcn->FixParameter(3, tImf0);
+    tFitFcn->FixParameter(4, td0);
+
+    tFitFcn->SetParameter(5, 1.);
+
+  aThermCf->Fit(tFitName, "0", "", 0.0, aFitMax);
+
+  //-----------------------------------------------------------
+
+
+  aCanPart->AddGraph(aNx, aNy, aThermCf, "", 20, kBlack, 1.0, "ex0");
+  aCanPart->AddGraph(aNx, aNy, tFitFcn, "", 20, kMagenta+1, 1.0, "HIST samel");
+
+  TPaveText* tText1 = aCanPart->SetupTPaveText("", aNx, aNy, 0.50, 0.05, 0.10, 0.55, 43, 17);
+  //TPaveText* tText1 = new TPaveText(0.50, 0.15, 0.60, 0.60, "NDC");
+    tText1->SetFillColor(0);
+    tText1->SetBorderSize(0);
+    tText1->SetTextColor(kBlack);
+    tText1->SetTextAlign(21);
+    tText1->AddText("#lambda");
+    tText1->AddText("#it{R}_{inv}");
+    tText1->AddText("#Rgothic#it{f}_{0}");
+    tText1->AddText("#Jgothic#it{f}_{0}");
+    tText1->AddText("#it{d}_{0}");
+
+  TPaveText* tText2 = aCanPart->SetupTPaveText("", aNx, aNy, 0.60, 0.05, 0.25, 0.55, 43, 17);
+//  TPaveText* tText2 = new TPaveText(0.60, 0.15, 0.85, 0.60, "NDC");
+    tText2->SetFillColor(0);
+    tText2->SetBorderSize(0);
+    tText2->SetTextColor(kBlack);
+    tText2->SetTextAlign(11);
+    tText2->AddText(TString::Format(" = % 0.2f", tFitFcn->GetParameter(0)));
+    tText2->AddText(TString::Format(" = % 0.2f fm", tFitFcn->GetParameter(1)));
+    tText2->AddText(TString::Format(" = % 0.2f fm", tFitFcn->GetParameter(2)));
+    tText2->AddText(TString::Format(" = % 0.2f fm", tFitFcn->GetParameter(3)));
+    tText2->AddText(TString::Format(" = % 0.2f fm", tFitFcn->GetParameter(4)));
+
+  TPaveText* tText3;
+  if(!aCombConj) tText3 = aCanPart->SetupTPaveText(cAnalysisRootTags[aAnType], aNx, aNy, 0.05, 0.85, 0.20, 0.15, 63, 25, 13, true);
+  else           tText3 = aCanPart->SetupTPaveText(TString::Format("%s#scale[0.5]{ }#oplus#scale[0.5]{ }%s", cAnalysisRootTags[aAnType], cAnalysisRootTags[aAnType+1]), 
+                                                   aNx, aNy, 0.05, 0.85, 0.50, 0.15, 63, 25, 13, true);
+    tText3->SetTextColor(kBlack);
+
+  TPaveText* tText4 = aCanPart->SetupTPaveText(TString::Format("#it{#mu}_{out} = %d fm", aMuOut), aNx, aNy, 0.60, 0.85, 0.30, 0.15, 43, 25, 13, true);
+    tText4->SetTextColor(kBlack);
+
+
+  aCanPart->AddPadPaveText(tText1, aNx, aNy);
+  aCanPart->AddPadPaveText(tText2, aNx, aNy);
+  aCanPart->AddPadPaveText(tText3, aNx, aNy);
+  aCanPart->AddPadPaveText(tText4, aNx, aNy);
 }
 
 
@@ -671,7 +790,31 @@ int main(int argc, char **argv)
 
 
     if(bSaveFigures) tCanCompMus->SaveAs(TString::Format("%s%s_3dHist%s.%s", tSaveDir.Data(), tCanCompMusName.Data(), tHistName3d.Data(), tSaveFileType.Data()));
+    //--------------------------------------------
+    int tNx=2, tNy=2;
+/*
+    double tXLow = -0.02;
+    double tXHigh = 0.99;
+    double tYLow = 0.86;
+    double tYHigh = 1.07;
+*/
+    double tXLow = -0.02;
+    double tXHigh = 0.329;
+    double tYLow = 0.82;
+    double tYHigh = 1.07;
 
+    TString tCanPartCompMusName = TString::Format("CanPartCompMus_%s_%s", aCfDescriptor.Data(), cAnalysisBaseTags[tAnType]);
+    CanvasPartition* tCanPart = new CanvasPartition(tCanPartCompMusName,tNx,tNy,tXLow,tXHigh,tYLow,tYHigh,0.12,0.0025,0.13,0.0025);
+    tCanPart->SetDrawOptStat(false);
+
+    Add1DCfwFitToCanPart(tCanPart, 0, 0, tAnType, (TH1*)tThermCf_Mu0->Clone(), tKStarFitMax, tFixLambdaInFit, 0, true);
+    Add1DCfwFitToCanPart(tCanPart, 1, 0, tAnType, (TH1*)tThermCf_Mu1->Clone(), tKStarFitMax, tFixLambdaInFit, 1, true);
+    Add1DCfwFitToCanPart(tCanPart, 0, 1, tAnType, (TH1*)tThermCf_Mu3->Clone(), tKStarFitMax, tFixLambdaInFit, 3, true);
+    Add1DCfwFitToCanPart(tCanPart, 1, 1, tAnType, (TH1*)tThermCf_Mu6->Clone(), tKStarFitMax, tFixLambdaInFit, 6, true);
+
+    tCanPart->DrawAll();
+    tCanPart->DrawXaxisTitle("#it{k}* (GeV/#it{c})");
+    tCanPart->DrawYaxisTitle("#it{C}(#it{k}*)",43,25,0.05,0.85);
 
     //--------------------------------------------
     TString tCanCompMusNoFitsName = TString::Format("CanCompMusNoFits_%s_%s", aCfDescriptor.Data(), cAnalysisBaseTags[tAnType]);

@@ -11,7 +11,7 @@ CFLAGS = $(shell gsl-config --cflags) $(shell root-config --cflags) -Wall -std=c
 
 MY_LIBS = $(addprefix build/, CfLite.o CfHeavy.o Cf2dLite.o Cf2dHeavy.o Types.o AnalysisInfo.o Purity.o PartialAnalysis.o Analysis.o DataAndModel.o PlotPartners.o PlotPartnersLamKch.o PlotPartnersLamK0.o SystematicAnalysis.o CanvasPartition.o SpherHarmonics.o CorrFctnDirectYlm.o CorrFctnDirectYlmLite.o CorrFctnDirectYlmHeavy.o CorrFctnDirectYlmTherm.o ThermCf.o)
 
-BINARIES = runBuildcLamcKch runBuildcLamK0 runBuildcXicKch runBuildcXiK0 runBuildcLamcLam runCombineConjugatesLamKch runCombineConjugatesLamK0 runCombineConjugatesXiKch runBuildMomResMatrix runBuildMomResMatrix2 runCompareFixes runCorrectCfs runTest runV0PurityBgdEstimator runDrawMCCfs runDrawAMPTCfs runBuildCf runDrawSHCf runDrawSHCfTherm runDrawSHCfTherm_CompThree runTestPersonal
+BINARIES = runBuildcLamcKch runBuildcLamK0 runBuildcXicKch runBuildcXiK0 runBuildcLamcLam runCombineConjugatesLamKch runCombineConjugatesLamK0 runCombineConjugatesXiKch runBuildMomResMatrix runBuildMomResMatrix2 runCompareFixes runCorrectCfs runTest runV0PurityBgdEstimator runDrawMCCfs runDrawAMPTCfs runBuildCf runDrawSHCf runDrawSHCfTherm runDrawSHCfTherm_CompFour runTestPersonal
 
 all: $(BINARIES)
 
@@ -72,8 +72,8 @@ runDrawSHCf: ${MY_LIBS} DrawSHCfs.C
 runDrawSHCfTherm: ${MY_LIBS} DrawSHCfsTherm.C
 	g++ DrawSHCfsTherm.C ${MY_LIBS} -o runDrawSHCfTherm $(LIBS) $(CFLAGS)
 
-runDrawSHCfTherm_CompThree: ${MY_LIBS} DrawSHCfsTherm_CompareThree.C
-	g++ DrawSHCfsTherm_CompareThree.C ${MY_LIBS} -o runDrawSHCfTherm_CompThree $(LIBS) $(CFLAGS)
+runDrawSHCfTherm_CompFour: ${MY_LIBS} DrawSHCfsTherm_CompareFour.C
+	g++ DrawSHCfsTherm_CompareFour.C ${MY_LIBS} -o runDrawSHCfTherm_CompFour $(LIBS) $(CFLAGS)
 
 runTestPersonal: ${MY_LIBS} TestPersonal.C
 	g++ TestPersonal.C ${MY_LIBS} -o runTestPersonal $(LIBS) $(CFLAGS)

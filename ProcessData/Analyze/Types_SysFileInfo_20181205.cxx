@@ -55,7 +55,7 @@ const SystematicsFileInfo gInfoLamKch10_20181205 = SystematicsFileInfo("20190710
                                                                        "", {}, 
                                                                        true);
 
-const SystematicsFileInfo gInfoLamKch11_20181205 = SystematicsFileInfo("20190706", 
+const SystematicsFileInfo gInfoLamKch11_20181205 = SystematicsFileInfo("20190711", 
                                                                        "_minAvgSepTrackPos_", {7.0, 8.0, 9.0}, 
                                                                        "", {}, 
                                                                        true);
