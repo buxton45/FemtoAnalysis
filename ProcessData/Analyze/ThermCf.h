@@ -101,6 +101,8 @@ public:
   void SetUseStavCf(bool aUse);
   void SetSpecificImpactParam(int aImpactParam, bool aCombineImpactParams=true);
 
+  bool GetCombineConjugates();
+
 private:
   TString fFileName;
   TString fCfDescriptor;
@@ -152,5 +154,7 @@ inline void ThermCf::SetMaxNorm(double aMax) {fMaxNorm=aMax; BuildThermCf();}
 
 inline void ThermCf::SetUseStavCf(bool aUse) {fUseStavCf = aUse; BuildThermCf();}
 inline void ThermCf::SetSpecificImpactParam(int aImpactParam, bool aCombineImpactParams) {fImpactParam=aImpactParam; fCombineImpactParams=aCombineImpactParams; BuildThermCf();}
+
+inline bool ThermCf::GetCombineConjugates() {return fCombineConjugates;}
 
 #endif
