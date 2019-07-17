@@ -84,7 +84,8 @@ PartialAnalysis::PartialAnalysis(TString aFileLocation, TString aAnalysisName, A
 
   fPart1MassFail(0),
 
-  fCfYlmLite(nullptr)
+  fCfYlmLite(nullptr),
+  fStavCf(nullptr)
 
 
 {
@@ -1132,6 +1133,31 @@ double PartialAnalysis::GetNParticles(int aPart)
 
   TH1* tHist = Get1dHisto(tHistName,tHistName);
   return tHist->GetEntries();
+}
+
+
+//________________________________________________________________________________________________________________
+void PartialAnalysis::BuildStavCf(double aMinNorm, double aMaxNorm)
+{
+  TString tNumName = cKStarCfBaseTagNum + fAnalysisBaseTag;
+  TString tNewNumName = tNumName + fBFieldTag;
+  TH1* tNum = Get1dHisto(tNumName,tNewNumName);
+
+  TString tDenName = cKStarCfBaseTagNumRotatePar2 + fAnalysisBaseTag;
+  TString tNewDenName = tDenName + fBFieldTag;
+  TH1* tDen = Get1dHisto(tDenName,tNewDenName);
+
+  TString tCfBaseName = "StavCf_";
+  TString tCfName = tCfBaseName + fAnalysisBaseTag + fBFieldTag;
+  fStavCf = new CfLite(tCfName,tCfName,tNum,tDen,aMinNorm,aMaxNorm);
+
+}
+
+//________________________________________________________________________________________________________________
+CfLite* PartialAnalysis::GetStavCf()
+{
+  if(!fStavCf) BuildStavCf();
+  return fStavCf;
 }
 
 

@@ -48,6 +48,7 @@ int main(int argc, char **argv)
   bool bPlayCompletionBeep = true;
 //-----------------------------------------------------------------------------
   TString tParentResultsDate = "20190319";  //Parent analysis these systematics are to accompany
+  bool aBuildStavCfs = true;
 
   AnalysisRunType tAnRunType = kTrain;
   int tNPartialAnalysis = 2;
@@ -66,6 +67,7 @@ int main(int argc, char **argv)
   TString tFileLocationBase_Save = tDirectoryBase_Save + TString::Format("Results_%s_%s",tGeneralAnTypeName.Data(),tParentResultsDate.Data());
 
   td2dVec tAllCfValues(0);
+  td2dVec tAllStavCfValues(0);
 
   int tMaxCut;
   if(tAnType==kLamK0 || tAnType==kALamK0) tMaxCut = 17;
@@ -73,6 +75,7 @@ int main(int argc, char **argv)
   else assert(0);
 
   td1dVec tKStarBinningInfo;
+  td1dVec tStavBinningInfo;
   double tNbinsKStar=-1., tKStarMin=-1., tKStarMax=-1.;
   for(int iCut=1; iCut<=tMaxCut; iCut++)
   {
@@ -113,6 +116,7 @@ int main(int argc, char **argv)
     tFileLocationBaseMC += tResultsDate;
 
     SystematicAnalysis* tSysAn = new SystematicAnalysis(tFileLocationBase, static_cast<AnalysisType>(tAnType), static_cast<CentralityType>(tCentType), tDirNameModifierBase1, tModifierValues1, tDirNameModifierBase2, tModifierValues2);
+    //----------------------------------------------------
     tKStarBinningInfo = tSysAn->GetKStarBinningInfo();
     if(iCut==1)
     {
@@ -126,15 +130,38 @@ int main(int argc, char **argv)
       assert(tKStarMin  ==tKStarBinningInfo[1]);
       assert(tKStarMax  ==tKStarBinningInfo[2]);
     }
-
+    if(aBuildStavCfs) 
+    {
+      tSysAn->BuildStavHeavyCfs();
+      tStavBinningInfo = tSysAn->GetStavBinningInfo();
+      for(int i=0; i<tKStarBinningInfo.size(); i++)
+      {
+        assert(tKStarBinningInfo[i]==tStavBinningInfo[i]);
+      }
+    }
+    //----------------------------------------------------
     td2dVec tCfValues = tSysAn->GetAllCfValues();
     if(iCut==1) tAllCfValues = tCfValues;
     else AddToCfValuesVector(tCfValues,tAllCfValues);
+    //----------------------------------------------------
+    td2dVec tStavCfValues(0);
+    if(aBuildStavCfs)
+    {
+      tStavCfValues = tSysAn->GetAllStavCfValues();
+      if(iCut==1) tAllStavCfValues = tStavCfValues;
+      else AddToCfValuesVector(tStavCfValues,tAllStavCfValues);
+    }
+    //----------------------------------------------------
   }
 
+  //------------------------------------------------------
   td1dVec tAvgsVec(0);
   td1dVec tErrorsVec(0);
   BuildErrorsAndAverageVectors(tAllCfValues,tErrorsVec,tAvgsVec);
+  //------------------------------------------------------
+  td1dVec tAvgsVecStav(0);
+  td1dVec tErrorsVecStav(0);
+  if(aBuildStavCfs) BuildErrorsAndAverageVectors(tAllStavCfValues,tErrorsVecStav,tAvgsVecStav);
 /*
   TH1F* tCfAvgWithErrors = new TH1F("tCfAvgWithErrors","tCfAvgWithErrors",tAvgsVec.size(),0.,1.);
   for(unsigned int i=0; i<tAvgsVec.size(); i++)
@@ -197,11 +224,42 @@ int main(int argc, char **argv)
     tCan2->cd();
   tCfwErrors->Draw();
 
+//-------------------------------------------------------------------------------
+  TH1* tStavCfwErrors;
+  if(aBuildStavCfs)
+  {
+    tSaveAnalysis->BuildStavHeavyCf(0.32,0.4,2);
+    tStavCfwErrors = tSaveAnalysis->GetStavHeavyCf()->GetHeavyCfClone();
+    TString tStavCfwErrorsTitle = TString("StavCf_") + TString(cAnalysisRootTags[tAnType])+TString(cCentralityTags[tCentType])+TString("_wSysErrors");
+    TString tStavCfwErrorsName =  TString("StavCf_") + TString(cAnalysisBaseTags[tAnType])+TString(cCentralityTags[tCentType])+TString("_wSysErrors");
+
+    assert(tStavCfwErrors->GetNbinsX()                 ==tNbinsKStar);
+    assert(tStavCfwErrors->GetBinLowEdge(1)            ==tKStarMin);
+    assert(tStavCfwErrors->GetBinLowEdge(tNbinsKStar+1)==tKStarMax);
+  
+    tStavCfwErrors->SetTitle(tStavCfwErrorsTitle);
+    tStavCfwErrors->SetName(tStavCfwErrorsName);
+
+    assert(tStavCfwErrors->GetNbinsX() == (int)tErrorsVecStav.size());
+    for(int i=0; i<tStavCfwErrors->GetNbinsX(); i++)
+    {
+      tStavCfwErrors->SetBinError(i+1,tErrorsVecStav[i]);
+    }
+
+
+    TCanvas* tCan3 = new TCanvas("tCan3","tCan3");
+      tCan3->cd();
+    tStavCfwErrors->Draw();
+  }
+
+//-------------------------------------------------------------------------------
+
   if(tSaveFile)
   {
     TString tFileName = tDirectoryBase_Save + TString::Format("SystematicResults_%s%s_%s.root",cAnalysisBaseTags[tAnType],cCentralityTags[tCentType],tParentResultsDate.Data());
     TFile *tSaveFile = new TFile(tFileName, "RECREATE");
     tCfwErrors->Write();
+    if(aBuildStavCfs) tStavCfwErrors->Write();
     tSaveFile->Close();
   }
 

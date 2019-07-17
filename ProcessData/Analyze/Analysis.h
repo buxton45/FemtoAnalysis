@@ -147,6 +147,9 @@ public:
 
   double GetNParticles(int aPart); //aPart = 0 or 1
 
+  void BuildStavHeavyCf(double aMinNorm=0.32, double aMaxNorm=0.4, int aRebin=1);
+  CfHeavy* GetStavHeavyCf(int aRebin=1);
+
   //inline
   TString GetAnalysisName();
   AnalysisType GetAnalysisType();
@@ -279,6 +282,8 @@ private:
   TH1* fPart1MassFail;
 
   CorrFctnDirectYlmHeavy* fCfYlmHeavy;
+
+  CfHeavy *fStavHeavyCf;
 
 #ifdef __ROOT__
   ClassDef(Analysis, 1)

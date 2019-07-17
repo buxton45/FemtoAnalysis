@@ -211,7 +211,8 @@ Analysis::Analysis(TString aAnalysisName, vector<PartialAnalysis*> &aPartialAnal
 
   fPart1MassFail(0),
 
-  fCfYlmHeavy(nullptr)
+  fCfYlmHeavy(nullptr),
+  fStavHeavyCf(nullptr)
 
 
 {
@@ -334,7 +335,8 @@ Analysis::Analysis(TString aFileLocationBase, AnalysisType aAnalysisType, Centra
  
   fPart1MassFail(0),
 
-  fCfYlmHeavy(nullptr)
+  fCfYlmHeavy(nullptr),
+  fStavHeavyCf(nullptr)
 
 {
 
@@ -2407,6 +2409,33 @@ double Analysis::GetNParticles(int aPart)
   return tTotal;
 }
 
+//________________________________________________________________________________________________________________
+void Analysis::BuildStavHeavyCf(double aMinNorm, double aMaxNorm, int aRebin)
+{
+  vector<CfLite*> tTempCfLiteCollection;
 
+  for(int iAnaly=0; iAnaly<fNPartialAnalysis; iAnaly++)
+  {
+    //first, make sure everything is updated
+    fPartialAnalysisCollection[iAnaly]->GetStavCf()->Rebin(aRebin,aMinNorm,aMaxNorm);  //CfLite::Rebin calls BuildCf
+    tTempCfLiteCollection.push_back(fPartialAnalysisCollection[iAnaly]->GetStavCf());
+  }
+
+  TString tCfBaseName = "StavHeavyCf_";
+  TString tCfName = tCfBaseName + cAnalysisBaseTags[fAnalysisType] + cCentralityTags[fCentralityType];
+
+  TString tTitle = TString("StavCf") + TString(cRootParticleTags[fParticleTypes[0]]) + TString(cRootParticleTags[fParticleTypes[1]]);
+
+  fStavHeavyCf = new CfHeavy(tCfName,tTitle,tTempCfLiteCollection,aMinNorm,aMaxNorm);
+
+}
+
+
+//________________________________________________________________________________________________________________
+CfHeavy* Analysis::GetStavHeavyCf(int aRebin)
+{
+  if(!fStavHeavyCf) BuildStavHeavyCf(aRebin);
+  return fStavHeavyCf;
+}
 
 

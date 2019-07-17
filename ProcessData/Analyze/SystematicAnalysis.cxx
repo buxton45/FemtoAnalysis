@@ -447,3 +447,60 @@ td2dVec SystematicAnalysis::GetAllYlmCfValues(YlmComponent aComponent, int al, i
 }
 
 
+//________________________________________________________________________________________________________________
+void SystematicAnalysis::BuildStavHeavyCfs(double aMinNorm, double aMaxNorm, int aRebin)
+{
+  for(unsigned int i=0; i<fModifierValues1.size(); i++)
+  {
+    fAnalyses[i].BuildStavHeavyCf(aMinNorm, aMaxNorm, aRebin);
+  }
+}
+
+
+//________________________________________________________________________________________________________________
+td1dVec SystematicAnalysis::GetStavBinningInfo()
+{
+  double tNbins, tMin, tMax;
+  int tNAnalyses = (int)fAnalyses.size();
+  for(int iAn=0; iAn<tNAnalyses; iAn++)
+  {
+    if(iAn==0)
+    {
+      tNbins = fAnalyses[iAn].GetStavHeavyCf()->GetHeavyCfClone()->GetNbinsX();
+      tMin   = fAnalyses[iAn].GetStavHeavyCf()->GetHeavyCfClone()->GetBinLowEdge(1);
+      tMax   = fAnalyses[iAn].GetStavHeavyCf()->GetHeavyCfClone()->GetBinLowEdge(tNbins+1);
+    }
+    else
+    {
+      assert(tNbins == fAnalyses[iAn].GetStavHeavyCf()->GetHeavyCfClone()->GetNbinsX());
+      assert(tMin   == fAnalyses[iAn].GetStavHeavyCf()->GetHeavyCfClone()->GetBinLowEdge(1));
+      assert(tMax   == fAnalyses[iAn].GetStavHeavyCf()->GetHeavyCfClone()->GetBinLowEdge(tNbins+1));
+    }
+  }
+
+  return vector<double>{tNbins, tMin, tMax};
+}
+
+
+//________________________________________________________________________________________________________________
+td2dVec SystematicAnalysis::GetAllStavCfValues()
+{
+  int tNBins = fAnalyses[0].GetStavHeavyCf()->GetHeavyCfClone()->GetNbinsX();
+  int tNAnalyses = (int)fAnalyses.size();
+
+  td2dVec tReturnVec(0);
+
+  for(int iBin=1; iBin<=tNBins; iBin++)
+  {
+    td1dVec tTempVec(0);
+    for(int iAn=0; iAn<tNAnalyses; iAn++)
+    {
+      if(iBin==1) assert(fAnalyses[iAn].GetStavHeavyCf()->GetHeavyCfClone()->GetNbinsX() == tNBins);
+      tTempVec.push_back(fAnalyses[iAn].GetStavHeavyCf()->GetHeavyCfClone()->GetBinContent(iBin)); 
+    }
+    tReturnVec.push_back(tTempVec);
+  }
+  return tReturnVec;
+}
+
+

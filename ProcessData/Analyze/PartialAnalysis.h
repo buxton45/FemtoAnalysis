@@ -113,6 +113,9 @@ public:
 
   double GetNParticles(int aPart); //aPart = 0 or 1
 
+  void BuildStavCf(double aMinNorm=0.32, double aMaxNorm=0.4);
+  CfLite* GetStavCf();
+
   //inline
   AnalysisType GetAnalysisType();
   BFieldType GetBFieldType();
@@ -225,7 +228,7 @@ private:
 
   CorrFctnDirectYlmLite* fCfYlmLite;
 
-
+  CfLite* fStavCf;
 
 
 #ifdef __ROOT__
@@ -277,7 +280,6 @@ inline double PartialAnalysis::GetNPart2Fail() {return fNPart2Fail;}
 inline double PartialAnalysis::GetNKStarNumEntries() {return fNKStarNumEntries;}
 
 inline TH1* PartialAnalysis::GetPart1MassFail() {return fPart1MassFail;}
-
 
 #endif
 

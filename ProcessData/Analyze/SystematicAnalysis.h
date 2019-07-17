@@ -51,6 +51,10 @@ public:
   td1dVec GetYlmKStarBinningInfo(YlmComponent aComponent, int al, int am, int aRebin=1);  //returns {nbins, min, max}
   td2dVec GetAllYlmCfValues(YlmComponent aComponent, int al, int am, int aRebin=1);
 
+  void BuildStavHeavyCfs(double aMinNorm=0.32, double aMaxNorm=0.4, int aRebin=2);
+  td1dVec GetStavBinningInfo();  //returns {nbins, min, max}
+  td2dVec GetAllStavCfValues();
+
   void SetSaveDirectory(TString aDirectory);
   int GetNAnalyses();
 protected:

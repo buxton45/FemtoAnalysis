@@ -1101,7 +1101,7 @@ int main(int argc, char **argv)
   bool bSaveFigures = false;
   TString tSaveFileType = "pdf";
 //  TString tSaveDir = "/home/jesse/Analysis/Presentations/GroupMeetings/20190117/Figures/";
-  TString tSaveDir = TString::Format("/home/jesse/Analysis/FemtoAnalysis/AnalysisNotes/7_ResultsAndDiscussion/7.1_ResultsLamK/7.1.5_ResultsLamK_DiscussionOfmTScaling/ThermPlots/%s/", cAnalysisBaseTags[tAnType]);
+  TString tSaveDir = TString::Format("/home/jesse/Analysis/FemtoAnalysis/AnalysisNotes/7_ResultsAndDiscussion/7.1_ResultsLamK/7.1.2_ResultsLamK_DiscussionOfmTScaling/ThermPlots/%s/", cAnalysisBaseTags[tAnType]);
   if(bSaveFigures) gSystem->mkdir(tSaveDir, true);
 
   int tRebin=1;
