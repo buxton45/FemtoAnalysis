@@ -84,15 +84,19 @@ TH1* DrawDataSHCfComponent(TPad* aPad, Analysis* aAnaly, YlmComponent aComponent
   tSHCf->SetMarkerColor(tColor);
   tSHCf->SetLineColor(tColor);
 
-  tSHCf->Draw("same");
+  tSHCf->Draw("ex0same");
 
   //--------------------------------------------------------------
 
-  if(aPrintAliceInfo && al==0 && am==0)
+  if(aPrintAliceInfo)
   {
-    TLatex *   tex = new TLatex(0.02,0.805,"ALICE Pb-Pb #sqrt{#it{s}_{NN}} = 2.76 TeV");
+    double tXLow = 0.02;
+    double tYLow = 0.805;
+    if(al!=0 || am!=0) tYLow = -0.025;
+
+    TLatex *   tex = new TLatex(tXLow,tYLow,"ALICE Pb-Pb #sqrt{#it{s}_{NN}} = 2.76 TeV");
     tex->SetTextFont(42);
-    tex->SetTextSize(0.055);
+    tex->SetTextSize(0.06);
     tex->SetLineWidth(2);
     tex->Draw();
   }
@@ -154,15 +158,19 @@ TH1* DrawDataSHCfComponent(TPad* aPad, Analysis* aAnaly, Analysis* aConjAnaly, Y
   tSHCf->SetMarkerColor(tColor);
   tSHCf->SetLineColor(tColor);
 
-  tSHCf->Draw("same");
+  tSHCf->Draw("ex0same");
 
   //--------------------------------------------------------------
 
-  if(aPrintAliceInfo && al==0 && am==0)
+  if(aPrintAliceInfo)
   {
-    TLatex *   tex = new TLatex(0.02,0.805,"ALICE Pb-Pb #sqrt{#it{s}_{NN}} = 2.76 TeV");
+    double tXLow = 0.02;
+    double tYLow = 0.805;
+    if(al!=0 || am!=0) tYLow = -0.025;
+
+    TLatex *   tex = new TLatex(tXLow,tYLow,"ALICE Pb-Pb #sqrt{#it{s}_{NN}} = 2.76 TeV");
     tex->SetTextFont(42);
-    tex->SetTextSize(0.055);
+    tex->SetTextSize(0.06);
     tex->SetLineWidth(2);
     tex->Draw();
   }
@@ -251,7 +259,7 @@ TH1* DrawSHCfThermComponent(TPad* aPad, CorrFctnDirectYlmTherm* aCfYlmTherm, Ylm
   tSHCf->GetYaxis()->SetTitle(TString::Format("%s#it{C}_{%d%d}(#it{k}*)", tReImVec[(int)aComponent].Data(), al, am));
 
   //--------------------------------------------------------------
-  tSHCf->Draw("same");
+  tSHCf->Draw("ex0same");
   return tSHCf;
 }
 
@@ -270,16 +278,16 @@ TObjArray* DrawFourSHCfThermComponents(TPad* aPad, CorrFctnDirectYlmTherm* aCfYl
   //--------------------------------------------------------------
   double tMarkerSize = 1.0;
 
-  int tMarkerStyle0 = 24;
-  int tColor0 = kBlack;
+  int tMarkerStyle0 = 21;
+  int tColor0 = kMagenta;
 
-  int tMarkerStyle1 = 22;
+  int tMarkerStyle1 = 25;
   int tColor1 = kBlue;
 
-  int tMarkerStyle2 = 25;
+  int tMarkerStyle2 = 34;
   int tColor2 = kGreen;
 
-  int tMarkerStyle3 = 34;
+  int tMarkerStyle3 = 28;
   int tColor3 = kOrange;
 
 
@@ -379,7 +387,7 @@ TH1* DrawSHCfThermComponent_CombConj(TPad* aPad, CorrFctnDirectYlmTherm* aCfYlmT
 
 
   //--------------------------------------------------------------
-  tSHCf->Draw("same");
+  tSHCf->Draw("ex0same");
   return tSHCf;
 }
 
@@ -400,16 +408,16 @@ TObjArray* DrawFourSHCfThermComponents_CombConj(TPad* aPad, CorrFctnDirectYlmThe
   //--------------------------------------------------------------
   double tMarkerSize = 1.0;
 
-  int tMarkerStyle0 = 24;
-  int tColor0 = kBlack;
+  int tMarkerStyle0 = 21;
+  int tColor0 = kMagenta;
 
-  int tMarkerStyle1 = 22;
+  int tMarkerStyle1 = 25;
   int tColor1 = kBlue;
 
-  int tMarkerStyle2 = 25;
+  int tMarkerStyle2 = 34;
   int tColor2 = kGreen;
 
-  int tMarkerStyle3 = 34;
+  int tMarkerStyle3 = 28;
   int tColor3 = kOrange;
 
 
@@ -420,24 +428,25 @@ TObjArray* DrawFourSHCfThermComponents_CombConj(TPad* aPad, CorrFctnDirectYlmThe
   TH1D* tSHCf3 = (TH1D*)DrawSHCfThermComponent_CombConj(aPad, aCfYlmTherm3a, aCfYlmTherm3b, aComponent, al, am, tMarkerStyle3, tColor3);
   //--------------------------------------------------------------
 
-  if(aDrawText)
-  {
-    TLatex* tTex = new TLatex();
-    tTex->SetTextAlign(11);
-    tTex->SetLineWidth(2);
-    tTex->SetTextFont(42);
-    tTex->SetTextSize(0.070);
+  
 
-    double tText1X = 0.0175;
-    double tText2X = 0.21;
+  TLatex* tTex = new TLatex();
+  tTex->SetTextAlign(11);
+  tTex->SetLineWidth(2);
+  tTex->SetTextFont(42);
+  tTex->SetTextSize(0.070);
 
-    double tTextY = 1.035;
+  double tText1X = 0.0175;
+  double tText2X = 0.21;
 
-    if(al==1 && am==1) tTextY = 0.0051;
+  double tTextY = 1.035;
 
-    tTex->DrawLatex(tText1X, tTextY, TString::Format("%s#it{C}_{%d%d} (#it{b} = %d fm)", tReImVec[(int)aComponent].Data(), al, am, aCfYlmTherm0a->GetImpactParam()));
-    tTex->DrawLatex(tText2X, tTextY, TString::Format("%s#scale[0.5]{ }#oplus#scale[0.5]{ }%s", cAnalysisRootTags[aCfYlmTherm0a->GetAnalysisType()], cAnalysisRootTags[aCfYlmTherm0b->GetAnalysisType()]));
-  }
+  if(al==1 && am==1) tTextY = 0.0051;
+
+  //tTex->DrawLatex(tText1X, tTextY, TString::Format("%s#it{C}_{%d%d} (#it{b} = %d fm)", tReImVec[(int)aComponent].Data(), al, am, aCfYlmTherm0a->GetImpactParam()));
+  tTex->DrawLatex(tText1X, tTextY, TString::Format("%s#it{C}_{%d%d}", tReImVec[(int)aComponent].Data(), al, am));
+  if(aDrawText) tTex->DrawLatex(tText2X, tTextY, TString::Format("%s#scale[0.5]{ }#oplus#scale[0.5]{ }%s", cAnalysisRootTags[aCfYlmTherm0a->GetAnalysisType()], cAnalysisRootTags[aCfYlmTherm0b->GetAnalysisType()]));
+
 
   //--------------------------------------------------------------
 
@@ -467,46 +476,94 @@ TObjArray* DrawFourSHCfThermComponents_CombConj(TPad* aPad, CorrFctnDirectYlmThe
 }
 
 //_________________________________________________________________________________________
-void DrawFourSHCfThermComponentsWithData_CombConj(TPad* aPad, CorrFctnDirectYlmTherm* aCfYlmTherm0a,CorrFctnDirectYlmTherm* aCfYlmTherm0b, CorrFctnDirectYlmTherm* aCfYlmTherm1a,CorrFctnDirectYlmTherm* aCfYlmTherm1b, CorrFctnDirectYlmTherm* aCfYlmTherm2a, CorrFctnDirectYlmTherm* aCfYlmTherm2b, CorrFctnDirectYlmTherm* aCfYlmTherm3a, CorrFctnDirectYlmTherm* aCfYlmTherm3b, Analysis* aAnaly, Analysis* aConjAnaly, YlmComponent aComponent, int al, int am, int aRebin, bool aDrawSysErrs=false, bool aPrintAliceInfo=false)
+void DrawFourSHCfThermComponentsWithData_CombConj(TPad* aPad, CorrFctnDirectYlmTherm* aCfYlmTherm0a,CorrFctnDirectYlmTherm* aCfYlmTherm0b, CorrFctnDirectYlmTherm* aCfYlmTherm1a,CorrFctnDirectYlmTherm* aCfYlmTherm1b, CorrFctnDirectYlmTherm* aCfYlmTherm2a, CorrFctnDirectYlmTherm* aCfYlmTherm2b, CorrFctnDirectYlmTherm* aCfYlmTherm3a, CorrFctnDirectYlmTherm* aCfYlmTherm3b, Analysis* aAnaly, Analysis* aConjAnaly, YlmComponent aComponent, int al, int am, int aRebin, bool aDrawSysErrs=false, bool aPrintAliceInfo=false, bool aPrintText=true, bool aPrintLegend=true)
 {
   aPad->cd();
-  TObjArray* tThermCfs = DrawFourSHCfThermComponents_CombConj(aPad, aCfYlmTherm0a, aCfYlmTherm0b, aCfYlmTherm1a, aCfYlmTherm1b, aCfYlmTherm2a, aCfYlmTherm2b, aCfYlmTherm3a, aCfYlmTherm3b, aComponent, al, am, true, false);
+  TObjArray* tThermCfs = DrawFourSHCfThermComponents_CombConj(aPad, aCfYlmTherm0a, aCfYlmTherm0b, aCfYlmTherm1a, aCfYlmTherm1b, aCfYlmTherm2a, aCfYlmTherm2b, aCfYlmTherm3a, aCfYlmTherm3b, aComponent, al, am, aPrintText, false);
   TH1* tDataCf = DrawDataSHCfComponent(aPad, aAnaly, aConjAnaly, aComponent, al, am, aRebin, aDrawSysErrs, aPrintAliceInfo);
 
   double tYLeg1Low = 0.60;
   double tYLeg1High = 0.70;
   if(al==1 && am==1)
   {
+    tYLeg1Low -= 0.025;
+    tYLeg1High -= 0.025;
+  }
+  if(aPrintLegend)
+  {
+    TLegend* tLeg1 = new TLegend(0.55, tYLeg1Low, 1.0, tYLeg1High);
+      tLeg1->SetFillColor(0);
+      tLeg1->SetFillStyle(0);
+      tLeg1->SetBorderSize(0);
+      tLeg1->SetTextAlign(12);
+      tLeg1->SetTextSize(0.05);
+    tLeg1->AddEntry(tDataCf, "ALICE (0-10%)", "p");
+    tLeg1->Draw();
+
+    double tYLeg2Low = 0.25;
+    double tYLeg2High = tYLeg1Low;
+
+    TLegend* tLeg2 = new TLegend(0.55, tYLeg2Low, 1.0, tYLeg2High);
+      tLeg2->SetFillColor(0);
+      tLeg2->SetFillStyle(0);
+      tLeg2->SetBorderSize(0);
+      tLeg2->SetTextAlign(12);
+      tLeg2->SetTextSize(0.05);
+    tLeg2->SetHeader("#it{R}_{out} = #it{R}_{side} = #it{R}_{long} = 5 fm");
+    tLeg2->AddEntry((TH1*)tThermCfs->At(0), "#it{#mu}_{out} = 0 fm", "p");
+    tLeg2->AddEntry((TH1*)tThermCfs->At(1), "#it{#mu}_{out} = 1 fm", "p");
+    tLeg2->AddEntry((TH1*)tThermCfs->At(2), "#it{#mu}_{out} = 3 fm", "p");
+    tLeg2->AddEntry((TH1*)tThermCfs->At(3), "#it{#mu}_{out} = 6 fm", "p");
+    tLeg2->Draw();
+  }
+}
+
+//_________________________________________________________________________________________
+void DrawFourSHCfThermComponentsWithDataAndStdTherm_CombConj(TPad* aPad, CorrFctnDirectYlmTherm* aCfYlmTherm0a,CorrFctnDirectYlmTherm* aCfYlmTherm0b, CorrFctnDirectYlmTherm* aCfYlmTherm1a,CorrFctnDirectYlmTherm* aCfYlmTherm1b, CorrFctnDirectYlmTherm* aCfYlmTherm2a, CorrFctnDirectYlmTherm* aCfYlmTherm2b, CorrFctnDirectYlmTherm* aCfYlmTherm3a, CorrFctnDirectYlmTherm* aCfYlmTherm3b, Analysis* aAnaly, Analysis* aConjAnaly, CorrFctnDirectYlmTherm* aCfYlmThermStda,CorrFctnDirectYlmTherm* aCfYlmThermStdb, YlmComponent aComponent, int al, int am, int aRebin, bool aDrawSysErrs=false, bool aPrintAliceInfo=false, bool aPrintText=true, bool aPrintLegend=true)
+{
+  aPad->cd();
+  TObjArray* tThermCfs = DrawFourSHCfThermComponents_CombConj(aPad, aCfYlmTherm0a, aCfYlmTherm0b, aCfYlmTherm1a, aCfYlmTherm1b, aCfYlmTherm2a, aCfYlmTherm2b, aCfYlmTherm3a, aCfYlmTherm3b, aComponent, al, am, aPrintText, false);
+  TH1* tDataCf = DrawDataSHCfComponent(aPad, aAnaly, aConjAnaly, aComponent, al, am, aRebin, aDrawSysErrs, aPrintAliceInfo);
+  TH1D* tSHCfStd = (TH1D*)DrawSHCfThermComponent_CombConj(aPad, aCfYlmThermStda, aCfYlmThermStdb, aComponent, al, am, 24, kBlack);
+
+  double tYLeg1Low = 0.575;
+  double tYLeg1High = 0.725;
+  if(al==1 && am==1)
+  {
     tYLeg1Low -= 0.05;
     tYLeg1High -= 0.05;
   }
-  TLegend* tLeg1 = new TLegend(0.55, tYLeg1Low, 1.0, tYLeg1High);
-    tLeg1->SetFillColor(0);
-    tLeg1->SetFillStyle(0);
-    tLeg1->SetBorderSize(0);
-    tLeg1->SetTextAlign(12);
-    tLeg1->SetTextSize(0.05);
-  tLeg1->AddEntry(tDataCf, "ALICE", "p");
-  tLeg1->Draw();
-
-  double tYLeg2Low = 0.25;
-  double tYLeg2High = tYLeg1Low;
-  if(al==1 && am==1)
+  if(aPrintLegend)
   {
-    tYLeg2Low -= 0.05;
+    TLegend* tLeg1 = new TLegend(0.55, tYLeg1Low, 1.0, tYLeg1High);
+      tLeg1->SetFillColor(0);
+      tLeg1->SetFillStyle(0);
+      tLeg1->SetBorderSize(0);
+      tLeg1->SetTextAlign(12);
+      tLeg1->SetTextSize(0.05);
+    tLeg1->AddEntry(tDataCf, "ALICE (0-10%)", "p");
+    tLeg1->AddEntry(tSHCfStd, "Std. THERM. 2", "p");
+    tLeg1->Draw();
+
+    double tYLeg2Low = 0.25;
+    double tYLeg2High = tYLeg1Low;
+    if(al==1 && am==1)
+    {
+      tYLeg2Low -= 0.05;
+    }
+    TLegend* tLeg2 = new TLegend(0.55, tYLeg2Low, 1.0, tYLeg2High);
+      tLeg2->SetFillColor(0);
+      tLeg2->SetFillStyle(0);
+      tLeg2->SetBorderSize(0);
+      tLeg2->SetTextAlign(12);
+      tLeg2->SetTextSize(0.05);
+    tLeg2->SetHeader("#it{R}_{out} = #it{R}_{side} = #it{R}_{long} = 5 fm");
+    tLeg2->AddEntry((TH1*)tThermCfs->At(0), "#it{#mu}_{out} = 0 fm", "p");
+    tLeg2->AddEntry((TH1*)tThermCfs->At(1), "#it{#mu}_{out} = 1 fm", "p");
+    tLeg2->AddEntry((TH1*)tThermCfs->At(2), "#it{#mu}_{out} = 3 fm", "p");
+    tLeg2->AddEntry((TH1*)tThermCfs->At(3), "#it{#mu}_{out} = 6 fm", "p");
+    tLeg2->Draw();
   }
-  TLegend* tLeg2 = new TLegend(0.55, tYLeg2Low, 1.0, tYLeg2High);
-    tLeg2->SetFillColor(0);
-    tLeg2->SetFillStyle(0);
-    tLeg2->SetBorderSize(0);
-    tLeg2->SetTextAlign(12);
-    tLeg2->SetTextSize(0.05);
-  tLeg2->SetHeader("#it{R}_{out} = #it{R}_{side} = #it{R}_{long} = 5 fm");
-  tLeg2->AddEntry((TH1*)tThermCfs->At(0), "#it{#mu}_{out} = 0 fm", "p");
-  tLeg2->AddEntry((TH1*)tThermCfs->At(1), "#it{#mu}_{out} = 1 fm", "p");
-  tLeg2->AddEntry((TH1*)tThermCfs->At(2), "#it{#mu}_{out} = 3 fm", "p");
-  tLeg2->AddEntry((TH1*)tThermCfs->At(3), "#it{#mu}_{out} = 6 fm", "p");
-  tLeg2->Draw();
 }
 
 
@@ -541,10 +598,15 @@ int main(int argc, char **argv)
 
   bool bCombineConjugates = true;
   bool bIncludeData = true;
-  bool bDrawSysErrs = false;
+  bool bIncludeStdTHERM = false;
+  bool bDrawSysErrs = true;
+  bool bUseRandomEPs = true;
+  vector<TString> tVecUseRandomEPs{"", "_RandomEPs"};
 
   bool bSaveFigures = false;
-  TString tSaveDir = "/home/jesse/Analysis/Presentations/GroupMeetings/20190108/Figures/";
+  TString tSaveFileType = "pdf";
+  //TString tSaveDir = "/home/jesse/Analysis/Presentations/GroupMeetings/20190108/Figures/";
+  TString tSaveDir = TString::Format("/home/jesse/Analysis/FemtoAnalysis/AnalysisNotes/7_ResultsAndDiscussion/7.1_ResultsLamK/7.1.5_ResultsLamK_DiscussionOfmTScaling/ThermPlots/%s/", cAnalysisBaseTags[tAnType]);
 
   int tRebin=2;
   double tMinNorm = /*0.80*//*0.80*/0.32;
@@ -559,10 +621,12 @@ int main(int argc, char **argv)
   int tm = 1;
   YlmComponent tComponent = kYlmReal;
 
-  TString tFileNameBase0 = "CorrelationFunctions_DrawRStarFromGaussian_5.0_5.0_5.0_0.0_0.0_0.0_BuildCfYlm";
-  TString tFileNameBase1 = "CorrelationFunctions_DrawRStarFromGaussian_5.0_5.0_5.0_1.0_0.0_0.0_BuildCfYlm";
-  TString tFileNameBase2 = "CorrelationFunctions_DrawRStarFromGaussian_5.0_5.0_5.0_3.0_0.0_0.0_BuildCfYlm";
-  TString tFileNameBase3 = "CorrelationFunctions_DrawRStarFromGaussian_5.0_5.0_5.0_6.0_0.0_0.0_BuildCfYlm";
+  TString tFileNameBase0 = TString::Format("CorrelationFunctions%s_DrawRStarFromGaussian_5.0_5.0_5.0_0.0_0.0_0.0_BuildCfYlm", tVecUseRandomEPs[bUseRandomEPs].Data());
+  TString tFileNameBase1 = TString::Format("CorrelationFunctions%s_DrawRStarFromGaussian_5.0_5.0_5.0_1.0_0.0_0.0_BuildCfYlm", tVecUseRandomEPs[bUseRandomEPs].Data());
+  TString tFileNameBase2 = TString::Format("CorrelationFunctions%s_DrawRStarFromGaussian_5.0_5.0_5.0_3.0_0.0_0.0_BuildCfYlm", tVecUseRandomEPs[bUseRandomEPs].Data());
+  TString tFileNameBase3 = TString::Format("CorrelationFunctions%s_DrawRStarFromGaussian_5.0_5.0_5.0_6.0_0.0_0.0_BuildCfYlm", tVecUseRandomEPs[bUseRandomEPs].Data());
+
+  TString tFileNameBaseStd = TString::Format("CorrelationFunctions%s_BuildCfYlm", tVecUseRandomEPs[bUseRandomEPs].Data());
 
   TString tFileNameModifier = "";
 
@@ -581,6 +645,9 @@ int main(int argc, char **argv)
 
   TString tFileName3 = TString::Format("%s%s.root", tFileNameBase3.Data(), tFileNameModifier.Data());
   TString tFileLocation3 = TString::Format("%s%s", tFileDir.Data(), tFileName3.Data());
+
+  TString tFileNameStd = TString::Format("%s%s.root", tFileNameBaseStd.Data(), tFileNameModifier.Data());
+  TString tFileLocationStd = TString::Format("%s%s", tFileDir.Data(), tFileNameStd.Data());
 
   if(tAnType==kKchPKchP || tAnType==kK0K0 || tAnType==kLamLam) bCombineConjugates = false;
   if(tFileNameBase0.Contains("PairOnly") || tFileNameBase1.Contains("PairOnly") || 
@@ -611,6 +678,12 @@ int main(int argc, char **argv)
                                                         GetNorm(tFileName3, aCfDescriptor, tConjType, tImpactParam, false, kMe, tRebin, tMinNorm, tMaxNorm));
 
   //--------------------------------------------
+  CorrFctnDirectYlmTherm* tCfYlmThermStda = GetYlmCfTherm(tFileLocationStd, tImpactParam, tAnType, 2, 300, 0., 3., tRebin,
+                                                        GetNorm(tFileNameStd, aCfDescriptor, tAnType, tImpactParam, false, kMe, tRebin, tMinNorm, tMaxNorm));
+  CorrFctnDirectYlmTherm* tCfYlmThermStdb = GetYlmCfTherm(tFileLocationStd, tImpactParam, tConjType, 2, 300, 0., 3., tRebin,
+                                                        GetNorm(tFileNameStd, aCfDescriptor, tConjType, tImpactParam, false, kMe, tRebin, tMinNorm, tMaxNorm));
+
+  //--------------------------------------------
   Analysis *tAnaly0010, *tConjAnaly0010;
   if(bIncludeData)
   {
@@ -629,8 +702,8 @@ int main(int argc, char **argv)
   }
   //--------------------------------------------
   TString tCanC00C11Name;
-  if(!bCombineConjugates) tCanC00C11Name = TString::Format("CanCompThreeThermCfYlmReC00C11_%s_%s", aCfDescriptor.Data(), cAnalysisBaseTags[tAnType]);
-  else tCanC00C11Name = TString::Format("CanCompThreeThermCfYlmReC00C11_%s_%s%s", aCfDescriptor.Data(), cAnalysisBaseTags[tAnType], cAnalysisBaseTags[tConjType]);
+  if(!bCombineConjugates) tCanC00C11Name = TString::Format("CanCompFourThermCfYlmReC00C11_%s%s_%s", aCfDescriptor.Data(), tVecUseRandomEPs[bUseRandomEPs].Data(), cAnalysisBaseTags[tAnType]);
+  else tCanC00C11Name = TString::Format("CanCompFourThermCfYlmReC00C11_%s%s_%s%s", aCfDescriptor.Data(), tVecUseRandomEPs[bUseRandomEPs].Data(), cAnalysisBaseTags[tAnType], cAnalysisBaseTags[tConjType]);
   TCanvas* tCanC00C11 = new TCanvas(tCanC00C11Name, tCanC00C11Name, 1400, 500);
   tCanC00C11->Divide(2,1);
     tCanC00C11->cd(1)->SetTopMargin(0.02);
@@ -653,10 +726,23 @@ int main(int argc, char **argv)
   }
   else
   {
-    if(bIncludeData)
+    if(bIncludeData && bIncludeStdTHERM)
     {
-      DrawFourSHCfThermComponentsWithData_CombConj((TPad*)tCanC00C11->cd(1), tCfYlmTherm0a, tCfYlmTherm0b, tCfYlmTherm1a, tCfYlmTherm1b, tCfYlmTherm2a, tCfYlmTherm2b, tCfYlmTherm3a, tCfYlmTherm3b, tAnaly0010, tConjAnaly0010, tComponent, 0, 0, tRebin, bDrawSysErrs, true);
-      DrawFourSHCfThermComponentsWithData_CombConj((TPad*)tCanC00C11->cd(2), tCfYlmTherm0a, tCfYlmTherm0b, tCfYlmTherm1a, tCfYlmTherm1b, tCfYlmTherm2a, tCfYlmTherm2b, tCfYlmTherm3a, tCfYlmTherm3b, tAnaly0010, tConjAnaly0010, tComponent, 1, 1, tRebin, bDrawSysErrs, true);
+      DrawFourSHCfThermComponentsWithDataAndStdTherm_CombConj((TPad*)tCanC00C11->cd(1), tCfYlmTherm0a, tCfYlmTherm0b, tCfYlmTherm1a, tCfYlmTherm1b, tCfYlmTherm2a, tCfYlmTherm2b, tCfYlmTherm3a, tCfYlmTherm3b, tAnaly0010, tConjAnaly0010, tCfYlmThermStda, tCfYlmThermStdb, tComponent, 0, 0, tRebin, bDrawSysErrs, false, true, true);
+      DrawFourSHCfThermComponentsWithDataAndStdTherm_CombConj((TPad*)tCanC00C11->cd(2), tCfYlmTherm0a, tCfYlmTherm0b, tCfYlmTherm1a, tCfYlmTherm1b, tCfYlmTherm2a, tCfYlmTherm2b, tCfYlmTherm3a, tCfYlmTherm3b, tAnaly0010, tConjAnaly0010, tCfYlmThermStda, tCfYlmThermStdb, tComponent, 1, 1, tRebin, bDrawSysErrs, true, false, false);
+    }
+    else if(bIncludeData)
+    {
+      DrawFourSHCfThermComponentsWithData_CombConj((TPad*)tCanC00C11->cd(1), tCfYlmTherm0a, tCfYlmTherm0b, tCfYlmTherm1a, tCfYlmTherm1b, tCfYlmTherm2a, tCfYlmTherm2b, tCfYlmTherm3a, tCfYlmTherm3b, tAnaly0010, tConjAnaly0010, tComponent, 0, 0, tRebin, bDrawSysErrs, false, true, true);
+      DrawFourSHCfThermComponentsWithData_CombConj((TPad*)tCanC00C11->cd(2), tCfYlmTherm0a, tCfYlmTherm0b, tCfYlmTherm1a, tCfYlmTherm1b, tCfYlmTherm2a, tCfYlmTherm2b, tCfYlmTherm3a, tCfYlmTherm3b, tAnaly0010, tConjAnaly0010, tComponent, 1, 1, tRebin, bDrawSysErrs, true, false, false);
+
+    //----------------------------
+    TString tCanC11Name = TString::Format("CanCompFourThermCfYlmReC11_%s%s_%s%s", aCfDescriptor.Data(), tVecUseRandomEPs[bUseRandomEPs].Data(), cAnalysisBaseTags[tAnType], cAnalysisBaseTags[tConjType]);
+    TCanvas* tCanC11 = new TCanvas(tCanC11Name, tCanC11Name);
+      tCanC11->SetTopMargin(0.02);
+      tCanC11->SetBottomMargin(0.125);
+      DrawFourSHCfThermComponentsWithData_CombConj((TPad*)tCanC11, tCfYlmTherm0a, tCfYlmTherm0b, tCfYlmTherm1a, tCfYlmTherm1b, tCfYlmTherm2a, tCfYlmTherm2b, tCfYlmTherm3a, tCfYlmTherm3b, tAnaly0010, tConjAnaly0010, tComponent, 1, 1, tRebin, bDrawSysErrs, true, true, true);
+      if(bSaveFigures) tCanC11->SaveAs(TString::Format("%s%s.%s", tSaveDir.Data(), tCanC11Name.Data(), tSaveFileType.Data()));
     }
     else
     {
@@ -667,7 +753,7 @@ int main(int argc, char **argv)
 
 
 
-  if(bSaveFigures) tCanC00C11->SaveAs(TString::Format("%s%s.eps", tSaveDir.Data(), tCanC00C11Name.Data()));
+  if(bSaveFigures) tCanC00C11->SaveAs(TString::Format("%s%s.%s", tSaveDir.Data(), tCanC00C11Name.Data(), tSaveFileType.Data()));
 
 //-------------------------------------------------------------------------------
   theApp->Run(kTRUE); //Run the TApp to pause the code.

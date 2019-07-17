@@ -4,6 +4,9 @@
 #include "FitGenerator.h"
 class FitGenerator;
 
+#include "FitGeneratorAndDraw.h"
+class FitGeneratorAndDraw;
+
 #include "CanvasPartition.h"
 class CanvasPartition;
 
@@ -252,7 +255,8 @@ CfHeavy* CombineTwoHeavyCfs(CfHeavy *aCf1, CfHeavy* aCf2)
 }
 
 //________________________________________________________________________________________________________________
-TCanvas* DrawKStarCfs_OnlyTwo_CombConj(FitGenerator* aFG1, FitGenerator* aFG2, bool aZoomX=false, bool aZoomY=false, TString aCanNameModifier="")
+TCanvas* DrawKStarCfs_OnlyTwo_CombConj(FitGenerator* aFG1, FitGenerator* aFG2, bool aZoomX, bool aZoomY, TString aCanNameModifier,
+                                       bool aDrawSysErrors, td1dVec &aCustomBins)
 {
   AnalysisType aAnType = aFG1->GetFitSharedAnalyses()->GetFitPairAnalysis(0)->GetAnalysisType();
   AnalysisType aConjType = aFG1->GetFitSharedAnalyses()->GetFitPairAnalysis(1)->GetAnalysisType();
@@ -298,7 +302,7 @@ TCanvas* DrawKStarCfs_OnlyTwo_CombConj(FitGenerator* aFG1, FitGenerator* aFG2, b
 
 
   double tMarkerSize = 0.5;
-  if(aCanNameModifier.Contains("Rebin")) tMarkerSize = 0.75;
+  //if(aCanNameModifier.Contains("Rebin")) tMarkerSize = 0.75;
 
   if     (aAnType==kLamK0 || aAnType==kALamK0)     {tMarkerColor1 = kBlack; tMarkerColor2 = kGray+2;}
   else if(aAnType==kLamKchP || aAnType==kALamKchM) {tMarkerColor1 = kRed;   tMarkerColor2 = kRed+2;}
@@ -328,6 +332,62 @@ TCanvas* DrawKStarCfs_OnlyTwo_CombConj(FitGenerator* aFG1, FitGenerator* aFG2, b
     tCanPart->AddGraph(0,j,(TH1*)tCfHeavy2->GetHeavyCfClone(),"",tMarkerStyle2,tMarkerColor2,tMarkerSize);
 
     tCanPart->AddGraph(0,j,(TH1*)tCfHeavy2->GetHeavyCfClone(),"",tMarkerStyle2,tMarkerColor2,tMarkerSize);
+
+    //---------------------------------------------------------------------------------------------------------
+    TH1 *tCfwSysErrs_An1, *tCfwSysErrs_Conj1, *tCfwSysErrs1;
+    TH1 *tCfwSysErrs_An2, *tCfwSysErrs_Conj2, *tCfwSysErrs2;
+    if(aDrawSysErrors)
+    {
+      int tColorTransparent1 = TColor::GetColorTransparent(tMarkerColor1,0.2);
+      double tNorm_An1   = tCfHeavy1A->GetTotalNumScale();
+      double tNorm_Conj1 = tCfHeavy1B->GetTotalNumScale();
+      tCfwSysErrs_An1   = (TH1*)aFG1->GetFitSharedAnalyses()->GetFitPairAnalysis(tAnalysisNumberA)->GetCfwSysErrors();
+      tCfwSysErrs_Conj1 = (TH1*)aFG1->GetFitSharedAnalyses()->GetFitPairAnalysis(tAnalysisNumberB)->GetCfwSysErrors();
+      tCfwSysErrs1 = FitGeneratorAndDraw::CombineTwoHists(tCfwSysErrs_An1, tCfwSysErrs_Conj1, tNorm_An1, tNorm_Conj1);
+        tCfwSysErrs1->SetFillColor(tColorTransparent1);
+        tCfwSysErrs1->SetFillStyle(1000);
+        tCfwSysErrs1->SetLineColor(0);
+        tCfwSysErrs1->SetLineWidth(0);
+      if(aCustomBins.size() != 1)
+      {
+        tCfwSysErrs1 = tCfwSysErrs1->Rebin((int)aCustomBins.size()-1, TString::Format("%s_CustomRebin", tCfwSysErrs1->GetName()), aCustomBins.data());
+      }
+      else if(aCustomBins[0] != 1) tCfwSysErrs1->Rebin(aCustomBins[0]);
+
+      for(int iBin=1; iBin<=((TH1*)tCfHeavy1->GetHeavyCfClone())->GetNbinsX(); iBin++)
+      {
+        assert(tCfwSysErrs1->GetBinWidth(iBin) == ((TH1*)tCfHeavy1->GetHeavyCfClone())->GetBinWidth(iBin));
+        tCfwSysErrs1->SetBinContent(iBin, ((TH1*)tCfHeavy1->GetHeavyCfClone())->GetBinContent(iBin));
+      }
+      //---------------------------------
+      int tColorTransparent2 = TColor::GetColorTransparent(tMarkerColor2,0.2);
+      double tNorm_An2   = tCfHeavy2A->GetTotalNumScale();
+      double tNorm_Conj2 = tCfHeavy2B->GetTotalNumScale();
+      tCfwSysErrs_An2   = (TH1*)aFG2->GetFitSharedAnalyses()->GetFitPairAnalysis(tAnalysisNumberA)->GetCfwSysErrors();
+      tCfwSysErrs_Conj2 = (TH1*)aFG2->GetFitSharedAnalyses()->GetFitPairAnalysis(tAnalysisNumberB)->GetCfwSysErrors();
+      tCfwSysErrs2 = FitGeneratorAndDraw::CombineTwoHists(tCfwSysErrs_An2, tCfwSysErrs_Conj2, tNorm_An2, tNorm_Conj2);
+        tCfwSysErrs2->SetFillColor(tColorTransparent2);
+        tCfwSysErrs2->SetFillStyle(1000);
+        tCfwSysErrs2->SetLineColor(0);
+        tCfwSysErrs2->SetLineWidth(0);
+      if(aCustomBins.size() != 1)
+      {
+        tCfwSysErrs2 = tCfwSysErrs2->Rebin((int)aCustomBins.size()-1, TString::Format("%s_CustomRebin", tCfwSysErrs2->GetName()), aCustomBins.data());
+      }
+      else if(aCustomBins[0] != 1) tCfwSysErrs2->Rebin(aCustomBins[0]);
+
+      for(int iBin=1; iBin<=((TH1*)tCfHeavy2->GetHeavyCfClone())->GetNbinsX(); iBin++)
+      {
+        assert(tCfwSysErrs2->GetBinWidth(iBin) == ((TH1*)tCfHeavy2->GetHeavyCfClone())->GetBinWidth(iBin));
+        tCfwSysErrs2->SetBinContent(iBin, ((TH1*)tCfHeavy2->GetHeavyCfClone())->GetBinContent(iBin));
+      }
+      //---------------------------------
+      tCanPart->AddGraph(0,j,tCfwSysErrs1,"",tMarkerStyle1,tColorTransparent1,0.5,"e2psame");
+      tCanPart->AddGraph(0,j,tCfwSysErrs2,"",tMarkerStyle2,tColorTransparent2,0.5,"e2psame");
+    }
+
+    //---------------------------------------------------------------------------------------------------------
+
 
     TString tTextAnTypeA, tTextAnTypeB;
     tTextAnTypeA = TString(cAnalysisRootTags[aAnType]);
@@ -390,8 +450,8 @@ int main(int argc, char **argv)
 //-----------------------------------------------------------------------------
   TString tResultsDate1, tResultsDate2, tResultsDate3;
 
-  tResultsDate1 = "20180505";
-  tResultsDate2 = "20180505";
+  tResultsDate1 = "20190319";
+  tResultsDate2 = "20190319";
   tResultsDate3 = "20180416_IncorrectStav";
 
   int aRebin=2;
@@ -466,9 +526,9 @@ int main(int argc, char **argv)
   //-----------------------------------------------------------------------------
   bool bZoomX = false;
   bool bZoomY = false;
-  bool bDrawKStarCfs = true;
+  bool bDrawKStarCfs = false;
   bool bDrawKStarCfs_OnlyTwo = false;
-  bool bDrawKStarCfs_OnlyTwo_CombConj = false;
+  bool bDrawKStarCfs_OnlyTwo_CombConj = true;
 
   //-----------------------------------------------------------------------------
   vector<TString> tUseStavCfTags = {"", "StavCf"};
@@ -500,7 +560,7 @@ int main(int argc, char **argv)
 
   if(bDrawKStarCfs_OnlyTwo_CombConj)
   {
-    TCanvas* tCan_OnlyTwo_CombConj = DrawKStarCfs_OnlyTwo_CombConj(tLamKchP1, tLamKchP2, bZoomX, bZoomY, tCanNameModifier_OnlyTwo);
+    TCanvas* tCan_OnlyTwo_CombConj = DrawKStarCfs_OnlyTwo_CombConj(tLamKchP1, tLamKchP2, bZoomX, bZoomY, tCanNameModifier_OnlyTwo, true, tCustomBins);
     if(SaveImages) tCan_OnlyTwo_CombConj->SaveAs(TString::Format("%s%s.%s", tSaveDir_OnlyTwo.Data(), tCan_OnlyTwo_CombConj->GetName(), tSaveFileType.Data()));
   }
 

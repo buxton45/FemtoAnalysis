@@ -16,6 +16,8 @@
 #include "FitPartialAnalysis.h"
 #include "NumIntLednickyCf.h"
 #include "CanvasPartition.h"
+#include "CorrFctnDirectYlmTherm.h"
+#include "Analysis.h"
 
 bool gRejectPoints=false;
 double tRejectOmegaLow = 0.19;
@@ -100,6 +102,25 @@ TH3* GetThermHist3d_CombConj(TString aFileLocation, TString aHistName1, TString 
 }
 
 //________________________________________________________________________________________________________________
+CorrFctnDirectYlmTherm* GetYlmCfTherm(TString aFileLocation, int aImpactParam, AnalysisType aAnType, int aMaxl, int aNbins, double aKStarMin, double aKStarMax, int aRebin, double aNumScale=0.)
+{
+  CorrFctnDirectYlmTherm* tCfYlmTherm = new CorrFctnDirectYlmTherm(aFileLocation, aImpactParam, aAnType, aMaxl, aNbins, aKStarMin, aKStarMax, aRebin, aNumScale);
+  return tCfYlmTherm;
+}
+
+//________________________________________________________________________________________________________________
+//ThermCf already knows the default directory, so it only needs the name of the file, not the complete path
+double GetNorm(TString aFileName, TString aCfDescriptor, AnalysisType aAnType, int aImpactParam=2, bool aCombineConj=false, ThermEventsType aEventsType=kMe, int aRebin=2, double aMinNorm=0.32, double aMaxNorm=0.40)
+{
+  TH1* aThermCf = ThermCf::GetThermCf(aFileName, aCfDescriptor, aAnType, aImpactParam, aCombineConj, aEventsType, aRebin, aMinNorm, aMaxNorm, 20, kBlack, false);
+  double tThermCfScale = aThermCf->Integral(aThermCf->FindBin(aMinNorm), aThermCf->FindBin(aMaxNorm));
+
+  return tThermCfScale;
+}
+
+
+
+//________________________________________________________________________________________________________________
 double LednickyEqWithNorm(double *x, double *par)
 {
   if(gRejectPoints && x[0]>tRejectOmegaLow && x[0]<tRejectOmegaHigh)
@@ -153,6 +174,12 @@ TF1* FitwGauss(TH1* aHist, double aMinFit=0., double aMaxFit=50.)
 void DrawHistwGaussFit(TPad* aPad, TH1* aHist, double aGaussFitMin, double aGaussFitMax, TString aMuName="#it{#mu}_{out}", TString aSigmaName="#it{R}_{out}", bool aDrawTextOnRight=false)
 {
   TF1* tGaussFit = FitwGauss(aHist, aGaussFitMin, aGaussFitMax);
+  //tGaussFit->SetLineColor(kGreen+1);
+  tGaussFit->SetLineColor(kBlack);
+  //aHist->SetMarkerColor(kGreen+1);
+  //aHist->SetLineColor(kGreen+1);
+  aHist->SetMarkerStyle(26);
+  aHist->SetMarkerSize(0.5);
 
   aPad->cd();
   aHist->DrawCopy();
@@ -162,11 +189,11 @@ void DrawHistwGaussFit(TPad* aPad, TH1* aHist, double aGaussFitMin, double aGaus
   TLine* tLineMin = new TLine(aGaussFitMin, 0., aGaussFitMin, 0.25*aHist->GetMaximum());
   TLine* tLineMax = new TLine(aGaussFitMax, 0., aGaussFitMax, 0.25*aHist->GetMaximum());
 
-  tLineMin->SetLineColor(TColor::GetColorTransparent(kRed,0.75));
+  //tLineMin->SetLineColor(TColor::GetColorTransparent(kGreen+1,0.75));
   tLineMin->SetLineStyle(2);
   tLineMin->Draw();
 
-  tLineMax->SetLineColor(TColor::GetColorTransparent(kRed,0.75));
+  //tLineMax->SetLineColor(TColor::GetColorTransparent(kGreen+1,0.75));
   tLineMax->SetLineStyle(2);
   tLineMax->Draw();
   //----------------------------------------
@@ -176,13 +203,15 @@ void DrawHistwGaussFit(TPad* aPad, TH1* aHist, double aGaussFitMin, double aGaus
   else                 tText = new TPaveText(0.20, 0.50, 0.45, 0.75, "NDC");
     tText->SetFillColor(0);
     tText->SetBorderSize(0);
-    tText->SetTextColor(kRed);
+    tText->SetTextColor(kBlack);
     tText->SetTextFont(42);
 
     tText->AddText(TString::Format("N*exp#left(- #frac{#left(x-%s#right)^{2}}{4%s^{2}}#right)", aMuName.Data(), aSigmaName.Data()));
     tText->AddText("");
-    tText->AddText(TString::Format("%s = %0.3e", aMuName.Data(), tGaussFit->GetParameter(1)));
-    tText->AddText(TString::Format("%s = %0.3e",   aSigmaName.Data(), tGaussFit->GetParameter(2)));
+//    tText->AddText(TString::Format("%s = %0.3e", aMuName.Data(), tGaussFit->GetParameter(1)));
+//    tText->AddText(TString::Format("%s = %0.3e",   aSigmaName.Data(), tGaussFit->GetParameter(2)));
+    tText->AddText(TString::Format("%s = %0.1e fm", aMuName.Data(), tGaussFit->GetParameter(1)));
+    tText->AddText(TString::Format("%s = %0.1e fm",   aSigmaName.Data(), tGaussFit->GetParameter(2)));
     tText->Draw();
 
 }
@@ -340,7 +369,7 @@ void DrawDeltaT(TPad* aPad, TH1* aDeltaTHist, double aGaussFitMin=-20., double a
 
 
 //________________________________________________________________________________________________________________
-void Draw1DCfwFit(TPad* aPad, ThermCf* aThermCfObj, double aFitMax=0.3, bool aFixLambda=false)
+TH1* Draw1DCfwFit(TPad* aPad, ThermCf* aThermCfObj, double aFitMax=0.3, bool aFixLambda=false, bool aIncludeHeader=false, bool aSuppressFit=false, double aMarkerSize=1.0)
 {
   TH1* tThermCf = (TH1*)aThermCfObj->GetThermCf()->Clone();
   AnalysisType tAnType = aThermCfObj->GetAnalysisType();
@@ -394,7 +423,7 @@ void Draw1DCfwFit(TPad* aPad, ThermCf* aThermCfObj, double aFitMax=0.3, bool aFi
 
   //-----------------------------------------------------------
   tThermCf->GetXaxis()->SetRangeUser(0., 0.329);
-  tThermCf->GetYaxis()->SetRangeUser(0.86, 1.05);
+  tThermCf->GetYaxis()->SetRangeUser(0.85, 1.05);
 
   tThermCf->GetXaxis()->SetTitle("#it{k}* (GeV/#it{c})");
   tThermCf->GetYaxis()->SetTitle("#it{C}(#it{k}*)");
@@ -403,37 +432,59 @@ void Draw1DCfwFit(TPad* aPad, ThermCf* aThermCfObj, double aFitMax=0.3, bool aFi
 
   aPad->cd();
 
-  tThermCf->DrawCopy();
-  tFitFcn->Draw("same");
+  //tThermCf->SetMarkerColor(kGreen+1);
+  //tThermCf->SetLineColor(kGreen+1);
+  tThermCf->SetMarkerStyle(26);
+  tThermCf->SetMarkerSize(aMarkerSize);
+  tThermCf->DrawCopy("ex0");
 
-  TPaveText* tText1 = new TPaveText(0.60, 0.20, 0.70, 0.55, "NDC");
-    tText1->SetFillColor(0);
-    tText1->SetBorderSize(0);
-    tText1->SetTextColor(kBlack);
-    tText1->SetTextFont(42);
-    tText1->SetTextAlign(21);
-    tText1->AddText("#lambda");
-    tText1->AddText("#it{R}_{inv}");
-    tText1->AddText("#Rgothic#it{f}_{0}");
-    tText1->AddText("#Jgothic#it{f}_{0}");
-    tText1->AddText("#it{d}_{0}");
+  tFitFcn->SetLineColor(kBlack);
+  if(!aSuppressFit) tFitFcn->Draw("same");
 
-    tText1->Draw();
+  if(aIncludeHeader)
+  {
+    TPaveText* tText0 = new TPaveText(0.60, 0.55, 0.95, 0.65, "NDC");
+      tText0->SetFillColor(0);
+      tText0->SetBorderSize(0);
+      tText0->SetTextColor(kBlack);
+      tText0->SetTextFont(42);
+      tText0->SetTextAlign(21);
+      tText0->AddText("Fit to THERM. 2");
+
+      tText0->Draw();
+  }
+
+  if(!aSuppressFit)
+  {
+    TPaveText* tText1 = new TPaveText(0.60, 0.20, 0.70, 0.55, "NDC");
+      tText1->SetFillColor(0);
+      tText1->SetBorderSize(0);
+      tText1->SetTextColor(kBlack);
+      tText1->SetTextFont(42);
+      tText1->SetTextAlign(21);
+      tText1->AddText("#lambda");
+      tText1->AddText("#it{R}_{inv}");
+      tText1->AddText("#Rgothic#it{f}_{0}");
+      tText1->AddText("#Jgothic#it{f}_{0}");
+      tText1->AddText("#it{d}_{0}");
+
+      tText1->Draw();
 
 
-  TPaveText* tText2 = new TPaveText(0.70, 0.20, 0.95, 0.55, "NDC");
-    tText2->SetFillColor(0);
-    tText2->SetBorderSize(0);
-    tText2->SetTextColor(kBlack);
-    tText2->SetTextFont(42);
-    tText2->SetTextAlign(11);
-    tText2->AddText(TString::Format(" = % 0.2f", tFitFcn->GetParameter(0)));
-    tText2->AddText(TString::Format(" = % 0.2f fm", tFitFcn->GetParameter(1)));
-    tText2->AddText(TString::Format(" = % 0.2f fm", tFitFcn->GetParameter(2)));
-    tText2->AddText(TString::Format(" = % 0.2f fm", tFitFcn->GetParameter(3)));
-    tText2->AddText(TString::Format(" = % 0.2f fm", tFitFcn->GetParameter(4)));
+    TPaveText* tText2 = new TPaveText(0.70, 0.20, 0.95, 0.55, "NDC");
+      tText2->SetFillColor(0);
+      tText2->SetBorderSize(0);
+      tText2->SetTextColor(kBlack);
+      tText2->SetTextFont(42);
+      tText2->SetTextAlign(11);
+      tText2->AddText(TString::Format(" = % 0.2f", tFitFcn->GetParameter(0)));
+      tText2->AddText(TString::Format(" = % 0.2f fm", tFitFcn->GetParameter(1)));
+      tText2->AddText(TString::Format(" = % 0.2f fm", tFitFcn->GetParameter(2)));
+      tText2->AddText(TString::Format(" = % 0.2f fm", tFitFcn->GetParameter(3)));
+      tText2->AddText(TString::Format(" = % 0.2f fm", tFitFcn->GetParameter(4)));
 
-    tText2->Draw();
+      tText2->Draw();
+  }
 
   TPaveText* tText3;
   if(!tCombConj) tText3 = new TPaveText(0.20, 0.80, 0.40, 0.95, "NDC");
@@ -463,10 +514,11 @@ void Draw1DCfwFit(TPad* aPad, ThermCf* aThermCfObj, double aFitMax=0.3, bool aFi
 
   tText4->Draw();
 */
+  return tThermCf;
 }
 
 //________________________________________________________________________________________________________________
-void Add1DCfwFitToCanPart(CanvasPartition* aCanPart, int aNx, int aNy, ThermCf* aThermCfObj, double aFitMax=0.3, bool aFixLambda=false, int aMuOut=0)
+void Add1DCfwFitToCanPart(CanvasPartition* aCanPart, int aNx, int aNy, ThermCf* aThermCfObj, double aFitMax=0.3, bool aFixLambda=false, int aMuOut=0, bool aSuppressSystemText=false)
 {
   TH1* tThermCf = (TH1*)aThermCfObj->GetThermCf()->Clone();
   AnalysisType tAnType = aThermCfObj->GetAnalysisType();
@@ -516,8 +568,8 @@ void Add1DCfwFitToCanPart(CanvasPartition* aCanPart, int aNx, int aNy, ThermCf* 
   //-----------------------------------------------------------
 
 
-  aCanPart->AddGraph(aNx, aNy, tThermCf, "", 20, kBlack, 1.0, "ex0");
-  aCanPart->AddGraph(aNx, aNy, tFitFcn, "", 20, kMagenta+1, 1.0, "HIST samel");
+  aCanPart->AddGraph(aNx, aNy, tThermCf, "", 26, kBlack, 1.0, "ex0");
+  aCanPart->AddGraph(aNx, aNy, tFitFcn, "", 20, kBlack, 1.0, "HIST samel");
 
   TPaveText* tText1 = aCanPart->SetupTPaveText("", aNx, aNy, 0.50, 0.05, 0.10, 0.55, 43, 17);
     tText1->SetFillColor(0);
@@ -529,6 +581,7 @@ void Add1DCfwFitToCanPart(CanvasPartition* aCanPart, int aNx, int aNy, ThermCf* 
     tText1->AddText("#Rgothic#it{f}_{0}");
     tText1->AddText("#Jgothic#it{f}_{0}");
     tText1->AddText("#it{d}_{0}");
+  aCanPart->AddPadPaveText(tText1, aNx, aNy);
 
   TPaveText* tText2 = aCanPart->SetupTPaveText("", aNx, aNy, 0.60, 0.05, 0.25, 0.55, 43, 17);
     tText2->SetFillColor(0);
@@ -540,20 +593,20 @@ void Add1DCfwFitToCanPart(CanvasPartition* aCanPart, int aNx, int aNy, ThermCf* 
     tText2->AddText(TString::Format(" = % 0.2f fm", tFitFcn->GetParameter(2)));
     tText2->AddText(TString::Format(" = % 0.2f fm", tFitFcn->GetParameter(3)));
     tText2->AddText(TString::Format(" = % 0.2f fm", tFitFcn->GetParameter(4)));
+  aCanPart->AddPadPaveText(tText2, aNx, aNy);
 
-  TPaveText* tText3;
-  if(!tCombConj) tText3 = aCanPart->SetupTPaveText(cAnalysisRootTags[tAnType], aNx, aNy, 0.05, 0.85, 0.20, 0.15, 63, 25, 13, true);
-  else           tText3 = aCanPart->SetupTPaveText(TString::Format("%s#scale[0.5]{ }#oplus#scale[0.5]{ }%s", cAnalysisRootTags[tAnType], cAnalysisRootTags[tAnType+1]), 
-                                                   aNx, aNy, 0.05, 0.85, 0.50, 0.15, 63, 25, 13, true);
-    tText3->SetTextColor(kBlack);
+  if(!aSuppressSystemText)
+  {
+    TPaveText* tText3;
+    if(!tCombConj) tText3 = aCanPart->SetupTPaveText(cAnalysisRootTags[tAnType], aNx, aNy, 0.05, 0.85, 0.20, 0.15, 63, 25, 13, true);
+    else           tText3 = aCanPart->SetupTPaveText(TString::Format("%s#scale[0.5]{ }#oplus#scale[0.5]{ }%s", cAnalysisRootTags[tAnType], cAnalysisRootTags[tAnType+1]), 
+                                                     aNx, aNy, 0.05, 0.85, 0.50, 0.15, 63, 25, 13, true);
+      tText3->SetTextColor(kBlack);
+    aCanPart->AddPadPaveText(tText3, aNx, aNy);
+  }
 
   TPaveText* tText4 = aCanPart->SetupTPaveText(TString::Format("#it{#mu}_{out} = %d fm", aMuOut), aNx, aNy, 0.60, 0.85, 0.30, 0.15, 43, 25, 13, true);
     tText4->SetTextColor(kBlack);
-
-
-  aCanPart->AddPadPaveText(tText1, aNx, aNy);
-  aCanPart->AddPadPaveText(tText2, aNx, aNy);
-  aCanPart->AddPadPaveText(tText3, aNx, aNy);
   aCanPart->AddPadPaveText(tText4, aNx, aNy);
 }
 
@@ -612,6 +665,415 @@ TCanvas* DrawCfwFitAndSourceswDeltaT(TString tCanName, ThermCf* aThermCfObj, TH3
   return tCanCfwSource;
 }
 
+//________________________________________________________________________________________________________________
+TH1* CombineTwoHists(TH1* aHist1, TH1* aHist2, double aNorm1, double aNorm2)
+{
+  TString aReturnName = TString::Format("%s_and_%s", aHist1->GetName(), aHist2->GetName());
+
+  if(!aHist1->GetSumw2N()) aHist1->Sumw2();
+  if(!aHist2->GetSumw2N()) aHist2->Sumw2();
+
+  TH1* tReturnHist = (TH1*)aHist1->Clone(aReturnName);
+    tReturnHist->Scale(aNorm1);
+  tReturnHist->Add(aHist2, aNorm2);
+  tReturnHist->Scale(1./(aNorm1+aNorm2));
+
+  return tReturnHist;
+}
+
+//________________________________________________________________________________________________________________
+TH1D* GetDataYlmCfwSysErrors(TString aDate, AnalysisType aAnalysisType, CentralityType aCentralityType, YlmComponent aComponent, int al, int am)
+{
+  vector<TString> tReImVec{"Re", "Im"};
+
+  TString tGenAnType;
+  if(aAnalysisType==kLamKchP || aAnalysisType==kALamKchM || aAnalysisType==kLamKchM || aAnalysisType==kALamKchP) tGenAnType = TString("cLamcKch");
+  else if(aAnalysisType==kLamK0 || aAnalysisType==kALamK0) tGenAnType = TString("cLamK0");
+  else assert(0);
+  TString tDirName = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_%s_%s/", tGenAnType.Data(), aDate.Data());
+
+  TString tFileLocation = TString::Format("%sSystematicResults_%s%s_%s.root",tDirName.Data(),cAnalysisBaseTags[aAnalysisType],cCentralityTags[aCentralityType],aDate.Data());
+  TString tHistName = TString::Format("%s%s_%sC%d%d_wSysErrors", cAnalysisRootTags[aAnalysisType], cCentralityTags[aCentralityType], tReImVec[aComponent].Data(), al, am);
+
+  TFile tFile(tFileLocation);
+  TH1D* tReturnHist = (TH1D*)tFile.Get(tHistName);
+  assert(tReturnHist);
+    tReturnHist->SetDirectory(0);
+
+  return tReturnHist;
+}
+
+//________________________________________________________________________________________________________________
+TH1D* GetDataCfwSysErrors(TString aDate, AnalysisType aAnalysisType, CentralityType aCentralityType)
+{
+  TString tGenAnType;
+  if(aAnalysisType==kLamKchP || aAnalysisType==kALamKchM || aAnalysisType==kLamKchM || aAnalysisType==kALamKchP) tGenAnType = TString("cLamcKch");
+  else if(aAnalysisType==kLamK0 || aAnalysisType==kALamK0) tGenAnType = TString("cLamK0");
+  else assert(0);
+  TString tDirName = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_%s_%s/", tGenAnType.Data(), aDate.Data());
+
+  TString tFileLocation = TString::Format("%sSystematicResults_%s%s_%s.root",tDirName.Data(),cAnalysisBaseTags[aAnalysisType],cCentralityTags[aCentralityType],aDate.Data());
+  TString tHistName = TString::Format("%s%s_wSysErrors", cAnalysisBaseTags[aAnalysisType], cCentralityTags[aCentralityType]);
+
+  TFile tFile(tFileLocation);
+  TH1D* tReturnHist = (TH1D*)tFile.Get(tHistName);
+  assert(tReturnHist);
+    tReturnHist->SetDirectory(0);
+
+  return tReturnHist;
+}
+
+
+//_________________________________________________________________________________________
+TH1* DrawDataSHCfComponent(TPad* aPad, Analysis* aAnaly, Analysis* aConjAnaly, YlmComponent aComponent, int al, int am, int aRebin, bool aDrawSysErrs=false/*, double aMinNorm=0.32, double aMaxNorm=0.40, int aRebin=2*/, bool aPrintAliceInfo=false, double aMarkerSize=1.0)
+{
+  aPad->cd();
+  int tColor;
+  if(aAnaly->GetAnalysisType()==kLamK0 || aAnaly->GetAnalysisType()==kALamK0) tColor=kBlack;
+  else if(aAnaly->GetAnalysisType()==kLamKchP || aAnaly->GetAnalysisType()==kALamKchM) tColor=kRed+1;
+  else if(aAnaly->GetAnalysisType()==kLamKchM || aAnaly->GetAnalysisType()==kALamKchP) tColor=kBlue+1;
+  else tColor = kGray;
+
+  int tColorTransparent = TColor::GetColorTransparent(tColor,0.2);
+  //--------------------------------------------------------------
+  vector<CorrFctnDirectYlmLite*> tYlmLiteCollAn = aAnaly->GetYlmCfHeavy(aRebin)->GetYlmCfLiteCollection();
+  vector<CorrFctnDirectYlmLite*> tYlmLiteCollConjAn = aConjAnaly->GetYlmCfHeavy(aRebin)->GetYlmCfLiteCollection();
+
+  double tOverallScale = 0.;
+  TH1D* tSHCf = tYlmLiteCollAn[0]->GetYlmHist(aComponent, kYlmCf, al, am);
+  tSHCf->Scale(tYlmLiteCollAn[0]->GetNumScale());
+  tOverallScale += tYlmLiteCollAn[0]->GetNumScale();
+
+  if(!tSHCf->GetSumw2N()) tSHCf->Sumw2();
+
+  for(unsigned int i=1; i<tYlmLiteCollAn.size(); i++)
+  {
+    tSHCf->Add(tYlmLiteCollAn[i]->GetYlmHist(aComponent, kYlmCf, al, am), tYlmLiteCollAn[i]->GetNumScale());
+    tOverallScale += tYlmLiteCollAn[i]->GetNumScale();
+  }
+  for(unsigned int i=0; i<tYlmLiteCollConjAn.size(); i++)
+  {
+    tSHCf->Add(tYlmLiteCollConjAn[i]->GetYlmHist(aComponent, kYlmCf, al, am), tYlmLiteCollConjAn[i]->GetNumScale());
+    tOverallScale += tYlmLiteCollConjAn[i]->GetNumScale();
+  }
+  tSHCf->Scale(1./tOverallScale);
+
+  tSHCf->SetMarkerStyle(20);
+  tSHCf->SetMarkerSize(aMarkerSize);
+  tSHCf->SetMarkerColor(tColor);
+  tSHCf->SetLineColor(tColor);
+
+  tSHCf->Draw("ex0same");
+
+  //--------------------------------------------------------------
+
+  if(aPrintAliceInfo && al==0 && am==0)
+  {
+    TLatex *   tex = new TLatex(0.02,0.805,"ALICE Pb-Pb #sqrt{#it{s}_{NN}} = 2.76 TeV");
+    tex->SetTextFont(42);
+    tex->SetTextSize(0.055);
+    tex->SetLineWidth(2);
+    tex->Draw();
+  }
+
+  //--------------------------------------------------------------
+  if(aDrawSysErrs)
+  {
+    TH1D* tSHCfwSysErrs_An = GetDataYlmCfwSysErrors(TString("20181205"), aAnaly->GetAnalysisType(), aAnaly->GetCentralityType(), aComponent, al, am);
+    TH1D* tSHCfwSysErrs_Conj = GetDataYlmCfwSysErrors(TString("20181205"), aConjAnaly->GetAnalysisType(), aConjAnaly->GetCentralityType(), aComponent, al, am);
+
+    assert(tYlmLiteCollAn.size()==2);
+    TH1D* tSHCfwSysErrs = (TH1D*)CombineTwoHists(tSHCfwSysErrs_An, tSHCfwSysErrs_Conj, tYlmLiteCollAn[0]->GetNumScale(), tYlmLiteCollAn[1]->GetNumScale());
+
+    //TODO for some reason, 0-10% data does not match perfectly
+    for(int i=1; i<tSHCfwSysErrs->GetNbinsX()+1; i++) tSHCfwSysErrs->SetBinContent(i, tSHCf->GetBinContent(i));
+
+      tSHCfwSysErrs->SetFillColor(tColorTransparent);
+      tSHCfwSysErrs->SetFillStyle(1000);
+      tSHCfwSysErrs->SetLineColor(0);
+      tSHCfwSysErrs->SetLineWidth(0);
+
+      tSHCfwSysErrs->Draw("e2psame");
+  }
+  return tSHCf;
+}
+
+//_________________________________________________________________________________________
+TH1* DrawDataCf(TPad* aPad, Analysis* aAnaly, Analysis* aConjAnaly, int aRebin, bool aDrawSysErrs=false/*, double aMinNorm=0.32, double aMaxNorm=0.40, int aRebin=2*/, bool aPrintAliceInfo=false, double aMarkerSize=1.0)
+{
+  aPad->cd();
+  int tColor;
+  if(aAnaly->GetAnalysisType()==kLamK0 || aAnaly->GetAnalysisType()==kALamK0) tColor=kBlack;
+  else if(aAnaly->GetAnalysisType()==kLamKchP || aAnaly->GetAnalysisType()==kALamKchM) tColor=kRed+1;
+  else if(aAnaly->GetAnalysisType()==kLamKchM || aAnaly->GetAnalysisType()==kALamKchP) tColor=kBlue+1;
+  else tColor = kGray;
+
+  int tColorTransparent = TColor::GetColorTransparent(tColor,0.2);
+  //--------------------------------------------------------------
+  aAnaly->BuildKStarHeavyCf(0.32, 0.40, aRebin);
+  aConjAnaly->BuildKStarHeavyCf(0.32, 0.40, aRebin);
+
+
+  vector<CfLite*> tCfLiteCollAn = aAnaly->GetKStarHeavyCf()->GetCfLiteCollection();
+  vector<CfLite*> tCfLiteCollConjAn = aConjAnaly->GetKStarHeavyCf()->GetCfLiteCollection();
+
+  double tOverallScale = 0.;
+  TH1D* tCf = (TH1D*)tCfLiteCollAn[0]->Cf()->Clone();
+  tCf->Scale(tCfLiteCollAn[0]->GetNumScale());
+  tOverallScale += tCfLiteCollAn[0]->GetNumScale();
+
+  if(!tCf->GetSumw2N()) tCf->Sumw2();
+
+  for(unsigned int i=1; i<tCfLiteCollAn.size(); i++)
+  {
+    tCf->Add(tCfLiteCollAn[i]->Cf(), tCfLiteCollAn[i]->GetNumScale());
+    tOverallScale += tCfLiteCollAn[i]->GetNumScale();
+  }
+  for(unsigned int i=0; i<tCfLiteCollConjAn.size(); i++)
+  {
+    tCf->Add(tCfLiteCollConjAn[i]->Cf(), tCfLiteCollConjAn[i]->GetNumScale());
+    tOverallScale += tCfLiteCollConjAn[i]->GetNumScale();
+  }
+  tCf->Scale(1./tOverallScale);
+
+  tCf->SetMarkerStyle(20);
+  tCf->SetMarkerSize(aMarkerSize);
+  tCf->SetMarkerColor(tColor);
+  tCf->SetLineColor(tColor);
+
+  tCf->Draw("ex0same");
+
+  //--------------------------------------------------------------
+
+  if(aPrintAliceInfo)
+  {
+    TLatex *   tex = new TLatex(0.02,0.805,"ALICE Pb-Pb #sqrt{#it{s}_{NN}} = 2.76 TeV");
+    tex->SetTextFont(42);
+    tex->SetTextSize(0.055);
+    tex->SetLineWidth(2);
+    tex->Draw();
+  }
+
+  //--------------------------------------------------------------
+  if(aDrawSysErrs)
+  {
+    TH1D* tCfwSysErrs_An = GetDataCfwSysErrors(TString("20190319"), aAnaly->GetAnalysisType(), aAnaly->GetCentralityType());
+    TH1D* tCfwSysErrs_Conj = GetDataCfwSysErrors(TString("20190319"), aConjAnaly->GetAnalysisType(), aConjAnaly->GetCentralityType());
+
+    assert(tCfLiteCollAn.size()==2);
+    TH1D* tCfwSysErrs = (TH1D*)CombineTwoHists(tCfwSysErrs_An, tCfwSysErrs_Conj, tCfLiteCollAn[0]->GetNumScale(), tCfLiteCollAn[1]->GetNumScale());
+
+    //TODO for some reason, 0-10% data does not match perfectly
+   for(int i=1; i<tCfwSysErrs->GetNbinsX()+1; i++) tCfwSysErrs->SetBinContent(i, tCf->GetBinContent(i));
+
+      tCfwSysErrs->SetFillColor(tColorTransparent);
+      tCfwSysErrs->SetFillStyle(1000);
+      tCfwSysErrs->SetLineColor(0);
+      tCfwSysErrs->SetLineWidth(0);
+
+      tCfwSysErrs->Draw("e2psame");
+  }
+  return tCf;
+}
+
+//________________________________________________________________________________________________________________
+void Draw1DCfwFitAndData(TPad* aPad, ThermCf* aThermCfObj, double aFitMax, bool aFixLambda, Analysis* aAnaly, Analysis* aConjAnaly, int aRebin, bool aDrawSysErrs, bool aPrintAliceInfo, bool aPrintLegend, bool aSuppressFit)
+{
+  double tMarkerSize = 0.75;
+  bool aIncludeHeader=true;
+  if(aSuppressFit) aIncludeHeader=false;
+  TH1* tThermCf = Draw1DCfwFit(aPad, aThermCfObj, aFitMax, aFixLambda, aIncludeHeader, aSuppressFit, tMarkerSize);
+  TH1* tData = DrawDataCf(aPad, aAnaly, aConjAnaly, aRebin, aDrawSysErrs, false, tMarkerSize);
+  tThermCf->Draw("ex0same");
+
+  //--------------------------------
+  if(aPrintLegend)
+  {
+    TLegend* tLeg;
+    if(!aSuppressFit) tLeg = new TLegend(0.30, 0.30, 0.50, 0.50);
+    else              tLeg = new TLegend(0.40, 0.40, 0.60, 0.60);
+      tLeg->SetFillColor(0);
+      tLeg->SetBorderSize(0);
+      tLeg->SetTextAlign(12);
+      tLeg->SetTextSize(0.065);
+    tLeg->AddEntry(tData, "ALICE (0-10%)", "p");
+    tLeg->AddEntry(tThermCf, "THERM. 2 (#it{b} = 2 fm)", "p");
+    tLeg->Draw();
+  }
+  //--------------------------------
+  if(aPrintAliceInfo)
+  {
+    TLatex *   tex = new TLatex(0.05,0.88,"ALICE Pb-Pb #sqrt{#it{s}_{NN}} = 2.76 TeV");
+    tex->SetTextFont(42);
+    tex->SetTextSize(0.075);
+    tex->SetLineWidth(2);
+    tex->Draw();
+  }
+}
+
+//_________________________________________________________________________________________
+TH1* DrawSHCfThermComponent_CombConj(TPad* aPad, CorrFctnDirectYlmTherm* aCfYlmThermA,CorrFctnDirectYlmTherm* aCfYlmThermB, YlmComponent aComponent, int al, int am, int aMarkerStyle=20, int aColor=kBlack, double aMarkerSize=1.0)
+{
+  aPad->cd();
+
+  double tXLow=0., tXHigh=0.3;
+  double tYLow, tYHigh;
+  if(al==0 && am==0)
+  {
+    tYLow = 0.79;
+    tYHigh = 1.07;
+  }
+  else
+  {
+    tYLow = -0.019;
+    tYHigh = 0.013;
+  }
+
+  //--------------------------------------------------------------
+  vector<TString> tReImVec{"#Rgothic", "#Jgothic"};
+  //--------------------------------------------------------------
+
+  TH1D* tSHCfA = (TH1D*)aCfYlmThermA->GetYlmHist(aComponent, kYlmCf, al, am);
+  TH1D* tSHCfB = (TH1D*)aCfYlmThermB->GetYlmHist(aComponent, kYlmCf, al, am);
+  TH1D* tSHCf = (TH1D*)CombineTwoHists(tSHCfA, tSHCfB, aCfYlmThermA->GetNumScale(), aCfYlmThermB->GetNumScale());
+
+  tSHCf->GetXaxis()->SetRangeUser(tXLow, tXHigh);
+  tSHCf->GetYaxis()->SetRangeUser(tYLow, tYHigh);
+
+  tSHCf->GetYaxis()->SetNdivisions(504);
+
+  tSHCf->SetMarkerStyle(aMarkerStyle);
+  tSHCf->SetMarkerSize(aMarkerSize);
+  tSHCf->SetMarkerColor(aColor);
+  tSHCf->SetLineColor(aColor);
+
+  tSHCf->GetXaxis()->SetTitle("#it{k}* (GeV/#it{c})");
+  tSHCf->GetYaxis()->SetTitle(TString::Format("%s#it{C}_{%d%d}(#it{k}*)", tReImVec[(int)aComponent].Data(), al, am));
+
+  SetStandardAxesAttributes(tSHCf);
+
+  //--------------------------------------------------------------
+  //tSHCf->SetMarkerColor(kGreen+1);
+  //tSHCf->SetLineColor(kGreen+1);
+  tSHCf->SetMarkerStyle(26);
+  tSHCf->Draw("ex0same");
+  return tSHCf;
+}
+
+//_________________________________________________________________________________________
+void DrawSHCfThermAndData(TPad* aPad, CorrFctnDirectYlmTherm* aCfYlmThermA,CorrFctnDirectYlmTherm* aCfYlmThermB, Analysis* aAnalySH, Analysis* aConjAnalySH, YlmComponent aComponent, int al, int am, int aRebin, bool aDrawSysErrs=false, bool aPrintAliceInfo=false, bool aPrintLegend=false)
+{
+  double tMarkerSize = 0.75;
+
+  aPad->cd();
+  SetStandardPadMargins(aPad);
+
+  TH1* tSHCfThermComp = DrawSHCfThermComponent_CombConj(aPad, aCfYlmThermA, aCfYlmThermB, kYlmReal, 1, 1, 20, kBlack, tMarkerSize);
+  TH1* tData = DrawDataSHCfComponent(aPad, aAnalySH, aConjAnalySH, kYlmReal, 1, 1, aRebin, aDrawSysErrs, aPrintAliceInfo, tMarkerSize);
+  tSHCfThermComp->Draw("ex0same");
+
+  //--------------------------------
+
+  vector<TString> tReImVec{"#Rgothic", "#Jgothic"};
+
+  TLatex* tTex = new TLatex();
+  tTex->SetTextAlign(11);
+  tTex->SetLineWidth(2);
+  tTex->SetTextFont(42);
+  tTex->SetTextSize(0.090);
+
+  double tText1X = 0.0175;
+  double tTextY = 0.008;
+  tTex->DrawLatex(tText1X, tTextY, TString::Format("%s#it{C}_{%d%d}", tReImVec[(int)aComponent].Data(), al, am));
+
+  if(aPrintAliceInfo)
+  {
+    TLatex *   tex = new TLatex(0.05,-0.016,"ALICE Pb-Pb #sqrt{#it{s}_{NN}} = 2.76 TeV");
+    tex->SetTextFont(42);
+    tex->SetTextSize(0.075);
+    tex->SetLineWidth(2);
+    tex->Draw();
+  }
+
+  //--------------------------------
+  if(aPrintLegend)
+  {
+    TLegend* tLeg = new TLegend(0.60, 0.70, 1.0, 0.90);
+      tLeg->SetFillColor(0);
+      tLeg->SetFillStyle(0);
+      tLeg->SetBorderSize(0);
+      tLeg->SetTextAlign(12);
+      tLeg->SetTextSize(0.065);
+    tLeg->AddEntry(tData, "ALICE", "p");
+    tLeg->AddEntry(tSHCfThermComp, "THERM. 2", "p");
+    tLeg->Draw();
+  }
+
+}
+
+//________________________________________________________________________________________________________________
+TCanvas* DrawCfwFitAndSourceswDeltaTwC11wData(TString tCanName, ThermCf* aThermCfObj, TH3* aSource3d, TH1* aDeltaTHist, double aKStarFitMax, bool aFixLambdaInFit,
+                                              CorrFctnDirectYlmTherm* aCfYlmThermA,CorrFctnDirectYlmTherm* aCfYlmThermB, 
+                                              Analysis* aAnaly, Analysis* aConjAnaly, Analysis* aAnalySH, Analysis* aConjAnalySH, int aRebin, bool aDrawSysErrs=false,
+                                              double aGaussFitMin = -20., double aGaussFitMax = 20., double aProjLow = -100., double aProjHigh = -100., bool aSuppressFit=false)
+{
+  TCanvas* tCanCfwSource = new TCanvas(tCanName, tCanName);
+  tCanCfwSource->SetCanvasSize(700, 750);
+  tCanCfwSource->cd();
+  TPad* tPadCfwFit = new TPad("tPadCfwFit", "tPadCfwFit", 0.0, 0.67, 0.5, 1.0);
+    tPadCfwFit->Draw();
+  TPad* tPadC11 = new TPad("tPadC11", "tPadC11", 0.5, 0.67, 1.0, 1.0);
+    tPadC11->Draw();
+  TPad* tPadRout = new TPad("tPadRout", "tPadRout", 0.0, 0.33, 0.5, 0.67);
+    tPadRout->Draw();
+  TPad* tPadRside = new TPad("tPadRside", "tPadRside", 0.5, 0.33, 1.0, 0.67);
+    tPadRside->Draw();
+  TPad* tPadRlong = new TPad("tPadRlong", "tPadRlong", 0.0, 0.0, 0.5, 0.33);
+    tPadRlong->Draw();
+  TPad* tPadDeltaT = new TPad("tPadDeltaT", "tPadDeltaT", 0.5, 0.0, 1.0, 0.33);
+    tPadDeltaT->Draw();
+
+  //-------------------------
+  bool bPrintAlice1, bPrintLeg1;
+  bool bPrintAlice2, bPrintLeg2;
+  if(aSuppressFit)
+  {
+    bPrintAlice1=true;
+    bPrintLeg1=true;
+
+    bPrintAlice2=false;
+    bPrintLeg2=false;
+  }
+  else
+  {
+    bPrintAlice1=false;
+    bPrintLeg1=false;
+
+    bPrintAlice2=true;
+    bPrintLeg2=true;
+  }
+
+  Draw1DCfwFitAndData(tPadCfwFit, aThermCfObj, aKStarFitMax, aFixLambdaInFit, aAnaly, aConjAnaly, aRebin, aDrawSysErrs, bPrintAlice1, bPrintLeg1, aSuppressFit);
+
+  DrawSHCfThermAndData(tPadC11, aCfYlmThermA, aCfYlmThermB, aAnalySH, aConjAnalySH, kYlmReal, 1, 1, aRebin, aDrawSysErrs, bPrintAlice2, bPrintLeg2);
+
+  Draw1DSourceProjwFit(tPadRout, aSource3d, "out", aGaussFitMin, aGaussFitMax, aProjLow, aProjHigh);
+  Draw1DSourceProjwFit(tPadRside, aSource3d, "side", aGaussFitMin, aGaussFitMax, aProjLow, aProjHigh);
+  Draw1DSourceProjwFit(tPadRlong, aSource3d, "long", aGaussFitMin, aGaussFitMax, aProjLow, aProjHigh);
+
+
+  double tGaussFitMin = aGaussFitMin;
+  double tGaussFitMax = aGaussFitMax;
+  if(fabs(aDeltaTHist->GetBinCenter(aDeltaTHist->GetMaximumBin())) > 0.5)  //If peak off center, shift limits
+  {
+    tGaussFitMax += aDeltaTHist->GetBinCenter(aDeltaTHist->GetMaximumBin());
+    tGaussFitMin += aDeltaTHist->GetBinCenter(aDeltaTHist->GetMaximumBin());
+  } 
+  DrawDeltaT(tPadDeltaT, aDeltaTHist, tGaussFitMin, tGaussFitMax);
+
+  return tCanCfwSource;
+}
+
 
 //________________________________________________________________________________________________________________
 //****************************************************************************************************************
@@ -627,11 +1089,15 @@ int main(int argc, char **argv)
   //the program ends and closes everything
 //-----------------------------------------------------------------------------
   AnalysisType tAnType = kLamKchP;
+  AnalysisType tConjType = static_cast<AnalysisType>(tAnType+1);
   if(tAnType==kLamKchM) gRejectPoints=true;
 
   bool bCombineConjugates = true;
   bool bDrawDeltaT = true;
   bool bDrawCompareMuOuts = true;
+  bool bIncludeData = true;
+  bool bSuppressFit = true;
+
   bool bSaveFigures = false;
   TString tSaveFileType = "pdf";
 //  TString tSaveDir = "/home/jesse/Analysis/Presentations/GroupMeetings/20190117/Figures/";
@@ -686,6 +1152,8 @@ int main(int argc, char **argv)
     tDeltaTHist = GetThermHist1d(tFileLocation, tHistNameDeltaT);
   }
 
+  //--------------------------------------------
+
   double tGaussFitMin = -20.;
   double tGaussFitMax = 20.;
 
@@ -705,14 +1173,59 @@ int main(int argc, char **argv)
   }
   else 
   {
-    tCanCfwSourceName = TString::Format("CanCfwSourceAndDeltaT_%s_%s", aCfDescriptor.Data(), cAnalysisBaseTags[tAnType]);
-    tCanCfwSource = DrawCfwFitAndSourceswDeltaT(tCanCfwSourceName, tThermCfObj, tTest3d, tDeltaTHist, tKStarFitMax, tFixLambdaInFit,
-                                                tGaussFitMin, tGaussFitMax, tProjLow, tProjHigh);
+    if(!bIncludeData)
+    {
+      tCanCfwSourceName = TString::Format("CanCfwSourceAndDeltaT_%s_%s", aCfDescriptor.Data(), cAnalysisBaseTags[tAnType]);
+      tCanCfwSource = DrawCfwFitAndSourceswDeltaT(tCanCfwSourceName, tThermCfObj, tTest3d, tDeltaTHist, tKStarFitMax, tFixLambdaInFit,
+                                                  tGaussFitMin, tGaussFitMax, tProjLow, tProjHigh);
+    }
+    else
+    {
+  
+      CorrFctnDirectYlmTherm* tCfYlmThermStda = GetYlmCfTherm(tFileLocation, tImpactParam, tAnType, 2, 300, 0., 3., tRebin,
+                                                              GetNorm(tFileName, aCfDescriptor, tAnType, tImpactParam, false, kMe, tRebin, tMinNorm, tMaxNorm));
+      CorrFctnDirectYlmTherm* tCfYlmThermStdb = GetYlmCfTherm(tFileLocation, tImpactParam, tConjType, 2, 300, 0., 3., tRebin,
+                                                              GetNorm(tFileName, aCfDescriptor, tConjType, tImpactParam, false, kMe, tRebin, tMinNorm, tMaxNorm));
+
+      //--------------------------------------------
+      Analysis *tAnaly0010, *tConjAnaly0010;
+      Analysis *tAnaly0010SH, *tConjAnaly0010SH;
+
+      TString tResultsDate = "20190319";
+
+      TString tGeneralAnTypeName;
+      if(tAnType==kLamK0 || tAnType==kALamK0) tGeneralAnTypeName = "cLamK0";
+      else if(tAnType==kLamKchP || tAnType==kALamKchM || tAnType==kLamKchM || tAnType==kALamKchP) tGeneralAnTypeName = "cLamcKch";
+      else assert(0);
+
+      TString tDirectoryBase = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_%s_%s/",tGeneralAnTypeName.Data(),tResultsDate.Data());
+      TString tFileLocationBase = TString::Format("%sResults_%s_%s",tDirectoryBase.Data(),tGeneralAnTypeName.Data(),tResultsDate.Data());
+
+      tAnaly0010 = new Analysis(tFileLocationBase, tAnType, k0010, kTrain, 2, "", false);
+      tConjAnaly0010 = new Analysis(tFileLocationBase, tConjType, k0010, kTrain, 2, "", false);
+
+      //-----------------------
+      TString tResultsDateSH = "20181205";
+
+      TString tDirectoryBaseSH = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_%s_%s/",tGeneralAnTypeName.Data(),tResultsDateSH.Data());
+      TString tFileLocationBaseSH = TString::Format("%sResults_%s_%s",tDirectoryBaseSH.Data(),tGeneralAnTypeName.Data(),tResultsDateSH.Data());
+
+      tAnaly0010SH = new Analysis(tFileLocationBaseSH, tAnType, k0010, kTrain, 2, "", false);
+      tConjAnaly0010SH = new Analysis(tFileLocationBaseSH, tConjType, k0010, kTrain, 2, "", false);
+
+      //--------------------------------------------------------------------------------------------------------
+
+      tCanCfwSourceName = TString::Format("CanCfwSourceAndDeltaTwC11wData_%s_%s", aCfDescriptor.Data(), cAnalysisBaseTags[tAnType]);
+      tCanCfwSource = DrawCfwFitAndSourceswDeltaTwC11wData(tCanCfwSourceName, tThermCfObj, tTest3d, tDeltaTHist, tKStarFitMax, tFixLambdaInFit,
+                                                           tCfYlmThermStda, tCfYlmThermStdb,
+                                                           tAnaly0010, tConjAnaly0010, tAnaly0010SH, tConjAnaly0010SH, 2, true,
+                                                           tGaussFitMin, tGaussFitMax, tProjLow, tProjHigh, bSuppressFit);
+    }
   }
 
 
 
-//  if(bSaveFigures) tCanCfwSource->SaveAs(TString::Format("%s%s_%s_%s.%s", tSaveDir.Data(), tFileNameBase.Data(), aCfDescriptor.Data(), cAnalysisBaseTags[tAnType], tSaveFileType.Data()));
+
   if(bSaveFigures) tCanCfwSource->SaveAs(TString::Format("%s%s_3dHist%s_FromFile%s.%s", tSaveDir.Data(), tCanCfwSourceName.Data(), tHistName3d.Data(), tFileNameBase.Data(), tSaveFileType.Data()));
   //-------------------------------------------------------------------------------
 
@@ -771,7 +1284,7 @@ int main(int argc, char **argv)
     Draw1DCfwFit((TPad*)tCanCompMus->cd(4), tThermCfObj_Mu6, tKStarFitMax, tFixLambdaInFit);
 
 
-    if(bSaveFigures) tCanCompMus->SaveAs(TString::Format("%s%s_3dHist%s.%s", tSaveDir.Data(), tCanCompMusName.Data(), tHistName3d.Data(), tSaveFileType.Data()));
+    //if(bSaveFigures) tCanCompMus->SaveAs(TString::Format("%s%s_3dHist%s.%s", tSaveDir.Data(), tCanCompMusName.Data(), tHistName3d.Data(), tSaveFileType.Data()));
     //--------------------------------------------
     int tNx=2, tNy=2;
     double tXLow = -0.02;
@@ -783,15 +1296,16 @@ int main(int argc, char **argv)
     CanvasPartition* tCanPart = new CanvasPartition(tCanPartCompMusName,tNx,tNy,tXLow,tXHigh,tYLow,tYHigh,0.12,0.0025,0.13,0.0025);
     tCanPart->SetDrawOptStat(false);
 
-    Add1DCfwFitToCanPart(tCanPart, 0, 0, tThermCfObj_Mu0, tKStarFitMax, tFixLambdaInFit, 0);
-    Add1DCfwFitToCanPart(tCanPart, 1, 0, tThermCfObj_Mu1, tKStarFitMax, tFixLambdaInFit, 1);
-    Add1DCfwFitToCanPart(tCanPart, 0, 1, tThermCfObj_Mu3, tKStarFitMax, tFixLambdaInFit, 3);
-    Add1DCfwFitToCanPart(tCanPart, 1, 1, tThermCfObj_Mu6, tKStarFitMax, tFixLambdaInFit, 6);
+    Add1DCfwFitToCanPart(tCanPart, 0, 0, tThermCfObj_Mu0, tKStarFitMax, tFixLambdaInFit, 0, false);
+    Add1DCfwFitToCanPart(tCanPart, 1, 0, tThermCfObj_Mu1, tKStarFitMax, tFixLambdaInFit, 1, true);
+    Add1DCfwFitToCanPart(tCanPart, 0, 1, tThermCfObj_Mu3, tKStarFitMax, tFixLambdaInFit, 3, true);
+    Add1DCfwFitToCanPart(tCanPart, 1, 1, tThermCfObj_Mu6, tKStarFitMax, tFixLambdaInFit, 6, true);
 
     tCanPart->DrawAll();
     tCanPart->DrawXaxisTitle("#it{k}* (GeV/#it{c})");
     tCanPart->DrawYaxisTitle("#it{C}(#it{k}*)",43,25,0.05,0.85);
 
+    if(bSaveFigures) tCanPart->GetCanvas()->SaveAs(TString::Format("%s%s_3dHist%s.%s", tSaveDir.Data(), tCanPartCompMusName.Data(), tHistName3d.Data(), tSaveFileType.Data()));
     //--------------------------------------------
     TString tCanCompMusNoFitsName = TString::Format("CanCompMusNoFits_%s_%s", aCfDescriptor.Data(), cAnalysisBaseTags[tAnType]);
     TCanvas* tCanCompMusNoFits = new TCanvas(tCanCompMusNoFitsName, tCanCompMusNoFitsName);
