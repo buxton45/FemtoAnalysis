@@ -1393,6 +1393,25 @@ TH1* FitPairAnalysis::GetCfwSysErrors()
 }
 
 //________________________________________________________________________________________________________________
+TH1* FitPairAnalysis::GetStavCfwSysErrors()
+{
+  TString tDate = fAnalysisDirectoryName;
+    int tLastUnderline = tDate.Last('_');
+    tDate.Remove(0,tLastUnderline);
+    tDate.Remove(tDate.Length()-1);
+
+  TString tFileLocation = TString::Format("%sSystematicResults_%s%s%s.root",fAnalysisDirectoryName.Data(),cAnalysisBaseTags[fAnalysisType],cCentralityTags[fCentralityType],tDate.Data());
+  TString tHistName = TString::Format("StavCf_%s%s_wSysErrors", cAnalysisBaseTags[fAnalysisType], cCentralityTags[fCentralityType]);
+
+  TFile tFile(tFileLocation);
+  TH1* tReturnHist = (TH1*)tFile.Get(tHistName);
+    tReturnHist->SetDirectory(0);
+
+  return tReturnHist;
+}
+
+
+//________________________________________________________________________________________________________________
 td1dVec FitPairAnalysis::GetCorrectedFitVec()
 {
   double tScale = 0.;

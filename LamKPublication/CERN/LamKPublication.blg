@@ -1,46 +1,46 @@
-This is BibTeX, Version 0.99d (TeX Live 2017/Debian)
-Capacity: max_strings=100000, hash_size=100000, hash_prime=85009
+This is BibTeX, Version 0.99d (TeX Live 2015/Debian)
+Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
 The top-level auxiliary file: LamKPublication.aux
 The style file: utphys.bst
 Database file #1: LamK_bibfile.bib
-You've used 29 entries,
+You've used 31 entries,
             2328 wiz_defined-function locations,
-            843 strings with 10546 characters,
-and the built_in function-call counts, 10080 in all, are:
-= -- 1087
-> -- 267
+            862 strings with 11003 characters,
+and the built_in function-call counts, 10807 in all, are:
+= -- 1167
+> -- 279
 < -- 0
-+ -- 100
-- -- 71
-* -- 921
-:= -- 1128
-add.period$ -- 57
-call.type$ -- 29
-change.case$ -- 33
++ -- 105
+- -- 74
+* -- 997
+:= -- 1204
+add.period$ -- 61
+call.type$ -- 31
+change.case$ -- 35
 chr.to.int$ -- 0
-cite$ -- 29
-duplicate$ -- 584
-empty$ -- 946
-format.name$ -- 71
-if$ -- 2680
+cite$ -- 31
+duplicate$ -- 626
+empty$ -- 1018
+format.name$ -- 74
+if$ -- 2874
 int.to.chr$ -- 0
-int.to.str$ -- 29
-missing$ -- 115
-newline$ -- 136
-num.names$ -- 29
-pop$ -- 137
+int.to.str$ -- 31
+missing$ -- 123
+newline$ -- 146
+num.names$ -- 31
+pop$ -- 145
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 0
-skip$ -- 465
+skip$ -- 499
 stack$ -- 0
-substring$ -- 487
-swap$ -- 326
+substring$ -- 527
+swap$ -- 350
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
 type$ -- 0
 warning$ -- 0
-while$ -- 68
-width$ -- 31
-write$ -- 253
+while$ -- 73
+width$ -- 33
+write$ -- 272

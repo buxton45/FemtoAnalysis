@@ -98,6 +98,7 @@ public:
   TH2D* GetTransformMatrix(IncludeResidualsType aIncludeResidualsType, AnalysisType aResidualType, int aRebin=2, TString aFileLocation="");
 
   TH1* GetCfwSysErrors();
+  TH1* GetStavCfwSysErrors();
 
   td1dVec GetCorrectedFitVec();
   TH1F* GetCorrectedFitHistv2(double aMaxDrawKStar=1.0); //TODO

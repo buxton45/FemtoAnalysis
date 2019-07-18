@@ -89,7 +89,7 @@ void DrawSHCfComponent(TPad* aPad, Analysis* aAnaly, YlmComponent aComponent, in
   else if(aAnaly->GetAnalysisType()==kLamKchM || aAnaly->GetAnalysisType()==kALamKchP) tColor=kBlue+1;
   else tColor = kGray;
 
-  int tColorTransparent = TColor::GetColorTransparent(tColor,0.2);
+  int tColorTransparent = TColor::GetColorTransparent(tColor,0.3);
   //--------------------------------------------------------------
 //  TH1D* tTestCfn = tAnaly0010->GetYlmCfnHist(kYlmReal, 1, 1); 
 
@@ -105,7 +105,7 @@ void DrawSHCfComponent(TPad* aPad, Analysis* aAnaly, YlmComponent aComponent, in
   tSHCf->GetXaxis()->SetTitle("#it{k}* (GeV/#it{c})");
   tSHCf->GetYaxis()->SetTitle(TString::Format("%s#it{C}_{%d%d}(#it{k}*)", tReImVec[(int)aComponent].Data(), al, am));
 
-  tSHCf->Draw();
+  tSHCf->Draw("ex0");
 
   //--------------------------------------------------------------
 
@@ -169,7 +169,7 @@ void DrawSHCfComponent(TPad* aPad, Analysis* aAnaly, Analysis* aConjAnaly, YlmCo
   else if(aAnaly->GetAnalysisType()==kLamKchM || aAnaly->GetAnalysisType()==kALamKchP) tColor=kBlue+1;
   else tColor = kGray;
 
-  int tColorTransparent = TColor::GetColorTransparent(tColor,0.2);
+  int tColorTransparent = TColor::GetColorTransparent(tColor,0.3);
   //--------------------------------------------------------------
   vector<CorrFctnDirectYlmLite*> tYlmLiteCollAn = aAnaly->GetYlmCfHeavy(aRebin)->GetYlmCfLiteCollection();
   vector<CorrFctnDirectYlmLite*> tYlmLiteCollConjAn = aConjAnaly->GetYlmCfHeavy(aRebin)->GetYlmCfLiteCollection();
@@ -214,7 +214,7 @@ void DrawSHCfComponent(TPad* aPad, Analysis* aAnaly, Analysis* aConjAnaly, YlmCo
   tSHCf->GetYaxis()->SetLabelSize(0.040);
   tSHCf->GetYaxis()->SetNdivisions(505);
 
-  tSHCf->Draw();
+  tSHCf->Draw("ex0");
 
   //--------------------------------------------------------------
 
@@ -277,7 +277,7 @@ void DrawSHCfThermComponent(TPad* aPad, CorrFctnDirectYlmTherm* aCfYlmTherm, Ylm
   tSHCf->SetMarkerColor(aColor);
   tSHCf->SetLineColor(aColor);
 
-  tSHCf->Draw("same");
+  tSHCf->Draw("ex0same");
 }
 
 //_________________________________________________________________________________________
@@ -295,7 +295,7 @@ void DrawSHCfThermComponent(TPad* aPad, CorrFctnDirectYlmTherm* aCfYlmThermAn, C
   tSHCf->SetMarkerColor(aColor);
   tSHCf->SetLineColor(aColor);
 
-  tSHCf->Draw("same");
+  tSHCf->Draw("ex0same");
 }
 
 //_________________________________________________________________________________________

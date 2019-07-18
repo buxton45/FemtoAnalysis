@@ -155,6 +155,15 @@ A.~Kisiel, H.~Zbroszczyk, and M.~Szymański, ``{Extracting baryon-antibaryon
 \href{http://arxiv.org/abs/1403.0433}{{\ttfamily arXiv:1403.0433 [nucl-th]}}.
 %%CITATION = ARXIV:1403.0433;%%.
 
+\bibitem{Acharya:2018gyz}
+{\bfseries ALICE} Collaboration, S.~Acharya {\em et~al.}, ``{p-p, p-$\Lambda$
+  and $\Lambda$-$\Lambda$ correlations studied via femtoscopy in pp reactions
+  at $\sqrt{s}$ = 7 TeV},''
+  \href{http://dx.doi.org/10.1103/PhysRevC.99.024001}{{\em Phys. Rev.}
+  {\bfseries C99} no.~2, (2019) 024001},
+\href{http://arxiv.org/abs/1805.12455}{{\ttfamily arXiv:1805.12455 [nucl-ex]}}.
+%%CITATION = ARXIV:1805.12455;%%.
+
 \bibitem{Chojnacki:2011hb}
 M.~Chojnacki, A.~Kisiel, W.~Florkowski, and W.~Broniowski, ``{THERMINATOR 2:
   THERMal heavy IoN generATOR 2},''
@@ -212,5 +221,14 @@ A.~Kisiel, ``{Non-identical particle femtoscopy at $\sqrt{s_{\mathrm{NN}}}$ =
 \bibitem{Stavinskiy04}
 A.~Stavinskiy {\em et~al.}, ``{Some new aspects of femtoscopy at high
   energy},'' {\em Nukleonika} {\bfseries 49 (Supplement 2)} (2004) S23.
+
+\bibitem{Lednicky:2005tb}
+R.~Lednick\'y, ``{Finite-size effects on two-particle production in continuous
+  and discrete spectrum},''
+  \href{http://dx.doi.org/10.1134/S1063779609030034}{{\em Phys. Part. Nucl.}
+  {\bfseries 40} (2009) 307--352},
+\href{http://arxiv.org/abs/nucl-th/0501065}{{\ttfamily arXiv:nucl-th/0501065
+  [nucl-th]}}.
+%%CITATION = NUCL-TH/0501065;%%.
 
 \end{thebibliography}\endgroup

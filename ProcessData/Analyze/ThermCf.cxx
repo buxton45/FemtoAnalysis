@@ -426,7 +426,7 @@ void ThermCf::BuildThermCf()
 //________________________________________________________________________________________________________________
 TH1* ThermCf::GetThermCf(int aMarkerStyle, int aColor, double aMarkerSize)
 {
-  BuildThermCf();
+  if(!fThermCfHeavy) BuildThermCf();
   TH1* tReturnHist = fThermCfHeavy->GetHeavyCf();
   SetStyleAndColor(tReturnHist, aMarkerStyle, aColor, aMarkerSize);
   return tReturnHist;

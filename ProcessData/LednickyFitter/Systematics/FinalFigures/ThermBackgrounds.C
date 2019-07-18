@@ -314,6 +314,20 @@ int GetColor(AnalysisType aAnType)
   return tReturnColor;
 }
 
+//________________________________________________________________________________________________________________
+void ScaleCustomRebinnedCf(double aOriginalBinWidth, TH1* aCf, const td1dVec &aCustomBins)
+{
+  assert(aCf->GetNbinsX() == (int)(aCustomBins.size()-1));
+  double tInvScale;
+  for(unsigned int i=1; i<aCustomBins.size(); i++)
+  {
+    tInvScale = (aCustomBins[i]-aCustomBins[i-1])/aOriginalBinWidth;
+    aCf->SetBinContent(i, aCf->GetBinContent(i)/tInvScale);
+    aCf->SetBinError(i, aCf->GetBinError(i)/tInvScale);
+  }
+}
+
+
 
 //________________________________________________________________________________________________________________
 TH1D* GetQuickData(AnalysisType aAnType, CentralityType aCentType, bool aCombineConjugates, TString aResultsData="20180505", int aRebin=1)
@@ -333,6 +347,110 @@ TH1D* GetQuickData(AnalysisType aAnType, CentralityType aCentType, bool aCombine
 }
 
 
+//________________________________________________________________________________________________________________
+TObjArray* GetSlowDataWithSysErrs(AnalysisType aAnType, CentralityType aCentType, bool aCombineConjugates, TString aResultsData, td1dVec &aCustomBins)
+{
+  assert(aAnType==kLamK0 || aAnType==kLamKchP || aAnType==kLamKchM);
+
+  TString tDirectoryBase_LamK, tFileLocationBase_LamK, tFileLocationBaseMC_LamK;
+
+  if(aAnType==kLamK0 || aAnType==kALamK0)
+  {
+    tDirectoryBase_LamK = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamK0_%s/",aResultsData.Data());
+    tFileLocationBase_LamK = TString::Format("%sResults_cLamK0_%s",tDirectoryBase_LamK.Data(),aResultsData.Data());
+    tFileLocationBaseMC_LamK = TString::Format("%sResults_cLamK0MC_%s",tDirectoryBase_LamK.Data(),aResultsData.Data());
+  }
+  else if(aAnType==kLamKchP || aAnType==kALamKchM
+        ||aAnType==kLamKchM || aAnType==kALamKchP)
+  {
+    tDirectoryBase_LamK = TString::Format("/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_%s/",aResultsData.Data());
+    tFileLocationBase_LamK = TString::Format("%sResults_cLamcKch_%s",tDirectoryBase_LamK.Data(),aResultsData.Data());
+    tFileLocationBaseMC_LamK = TString::Format("%sResults_cLamcKchMC_%s",tDirectoryBase_LamK.Data(),aResultsData.Data());
+  }
+  else assert(0);
+
+  FitGeneratorAndDraw* tFG = new FitGeneratorAndDraw(tFileLocationBase_LamK, tFileLocationBaseMC_LamK, aAnType, kMB);
+
+  CfHeavy* tCfHeavyAn   = tFG->GetKStarCfHeavy(2*aCentType);
+  CfHeavy* tCfHeavyConj = tFG->GetKStarCfHeavy(2*aCentType+1);
+
+  TH1* tCfwSysErrsAn   = tFG->GetSharedAn()->GetFitPairAnalysis(2*aCentType)->GetCfwSysErrors();
+  TH1* tCfwSysErrsConj = tFG->GetSharedAn()->GetFitPairAnalysis(2*aCentType+1)->GetCfwSysErrors();
+
+  if(aCustomBins.size() != 1)
+  {
+    tCfHeavyAn->Rebin((int)aCustomBins.size()-1, aCustomBins);
+    tCfHeavyConj->Rebin((int)aCustomBins.size()-1, aCustomBins);
+
+    if(!tCfwSysErrsAn->GetSumw2N()) tCfwSysErrsAn->Sumw2();
+    if(!tCfwSysErrsConj->GetSumw2N()) tCfwSysErrsConj->Sumw2();
+
+    double tOGBinWidthAn = tCfwSysErrsAn->GetBinWidth(1);
+    tCfwSysErrsAn = tCfwSysErrsAn->Rebin((int)aCustomBins.size()-1, TString::Format("%s_CustomRebin", tCfwSysErrsAn->GetName()), aCustomBins.data());
+    ScaleCustomRebinnedCf(tOGBinWidthAn, tCfwSysErrsAn, aCustomBins);
+
+    double tOGBinWidthConj = tCfwSysErrsConj->GetBinWidth(1);
+    tCfwSysErrsConj = tCfwSysErrsConj->Rebin((int)aCustomBins.size()-1, TString::Format("%s_CustomRebin", tCfwSysErrsConj->GetName()), aCustomBins.data());
+    ScaleCustomRebinnedCf(tOGBinWidthConj, tCfwSysErrsConj, aCustomBins);
+  }
+  else if(aCustomBins[0] != 1)
+  {
+    tCfHeavyAn->Rebin(aCustomBins[0]);
+    tCfHeavyConj->Rebin(aCustomBins[0]);
+
+    if(!tCfwSysErrsAn->GetSumw2N()) tCfwSysErrsAn->Sumw2();
+    if(!tCfwSysErrsConj->GetSumw2N()) tCfwSysErrsConj->Sumw2();
+    tCfwSysErrsAn->Rebin(aCustomBins[0]);
+      tCfwSysErrsAn->Scale(1./aCustomBins[0]);
+    tCfwSysErrsConj->Rebin(aCustomBins[0]);
+      tCfwSysErrsConj->Scale(1./aCustomBins[0]);
+  }
+
+  if(aCustomBins.size() != 1 || aCustomBins[0] != 1)
+  {
+    //Technically not rebinned correctly, so data probably slight differ
+    assert(tCfwSysErrsAn->GetNbinsX() == tCfHeavyAn->GetHeavyCf()->GetNbinsX());
+    assert(tCfwSysErrsConj->GetNbinsX() == tCfHeavyConj->GetHeavyCf()->GetNbinsX());
+    assert(tCfwSysErrsAn->GetNbinsX() == tCfwSysErrsConj->GetNbinsX());
+
+    for(int i=1; i<=tCfwSysErrsAn->GetNbinsX(); i++)
+    {
+      assert(tCfwSysErrsAn->GetBinWidth(i) == tCfHeavyAn->GetHeavyCf()->GetBinWidth(i));
+      assert(tCfwSysErrsConj->GetBinWidth(i) == tCfHeavyConj->GetHeavyCf()->GetBinWidth(i));
+      assert(tCfwSysErrsAn->GetBinWidth(i) == tCfwSysErrsConj->GetBinWidth(i));
+
+      double tFracDiffAn = (tCfwSysErrsAn->GetBinContent(i) - tCfHeavyAn->GetHeavyCf()->GetBinContent(i))/tCfHeavyAn->GetHeavyCf()->GetBinContent(i);
+      assert(fabs(tFracDiffAn) < 0.05);
+      double tFracDiffConj = (tCfwSysErrsConj->GetBinContent(i) - tCfHeavyConj->GetHeavyCf()->GetBinContent(i))/tCfHeavyConj->GetHeavyCf()->GetBinContent(i);
+      assert(fabs(tFracDiffConj) < 0.05);
+
+      tCfwSysErrsAn->SetBinContent(i, tCfHeavyAn->GetHeavyCf()->GetBinContent(i));
+      tCfwSysErrsConj->SetBinContent(i, tCfHeavyConj->GetHeavyCf()->GetBinContent(i));
+    }
+  }
+
+  TH1 *tReturnHistStat, *tReturnHistSys;
+  if(!aCombineConjugates)
+  {
+    tReturnHistStat = (TH1D*)tCfHeavyAn->GetHeavyCfClone();
+    tReturnHistSys  = tCfwSysErrsAn;
+  }
+  else
+  {
+    CfHeavy* tCfHeavyCombined = FitGeneratorAndDraw::CombineTwoHeavyCfs(tCfHeavyAn, tCfHeavyConj);
+    tReturnHistStat = tCfHeavyCombined->GetHeavyCfClone();
+
+    tReturnHistSys = FitGeneratorAndDraw::CombineTwoHists(tCfwSysErrsAn, tCfwSysErrsConj, tCfHeavyAn->GetTotalNumScale(), tCfHeavyConj->GetTotalNumScale());
+  }
+
+  TObjArray* tReturnArray = new TObjArray();
+  tReturnArray->Add(tReturnHistStat);
+  tReturnArray->Add(tReturnHistSys);
+
+  return tReturnArray;
+}
+
+/*
 //________________________________________________________________________________________________________________
 TObjArray* GetSlowDataWithSysErrs(AnalysisType aAnType, CentralityType aCentType, bool aCombineConjugates, TString aResultsData="20190319", int aRebin=1)
 {
@@ -371,12 +489,19 @@ TObjArray* GetSlowDataWithSysErrs(AnalysisType aAnType, CentralityType aCentType
     if(!tCfwSysErrsAn->GetSumw2N()) tCfwSysErrsAn->Sumw2();
     if(!tCfwSysErrsConj->GetSumw2N()) tCfwSysErrsConj->Sumw2();
     tCfwSysErrsAn->Rebin(aRebin);
+      tCfwSysErrsAn->Scale(1./aRebin);
     tCfwSysErrsConj->Rebin(aRebin);
+      tCfwSysErrsConj->Scale(1./aRebin);
 
     //Technically not rebinned correctly, so data probably slight differ
     assert(tCfwSysErrsAn->GetNbinsX() == tCfHeavyAn->GetHeavyCf()->GetNbinsX());
     for(int i=1; i<=tCfwSysErrsAn->GetNbinsX(); i++)
     {
+      double tFracDiffAn = (tCfwSysErrsAn->GetBinContent(i) - tCfHeavyAn->GetHeavyCf()->GetBinContent(i))/tCfHeavyAn->GetHeavyCf()->GetBinContent(i);
+      assert(fabs(tFracDiffAn) < 0.05);
+      double tFracDiffConj = (tCfwSysErrsConj->GetBinContent(i) - tCfHeavyConj->GetHeavyCf()->GetBinContent(i))/tCfHeavyConj->GetHeavyCf()->GetBinContent(i);
+      assert(fabs(tFracDiffConj) < 0.05);
+
       tCfwSysErrsAn->SetBinContent(i, tCfHeavyAn->GetHeavyCf()->GetBinContent(i));
       tCfwSysErrsConj->SetBinContent(i, tCfHeavyConj->GetHeavyCf()->GetBinContent(i));
     }
@@ -400,6 +525,15 @@ TObjArray* GetSlowDataWithSysErrs(AnalysisType aAnType, CentralityType aCentType
   tReturnArray->Add(tReturnHistStat);
   tReturnArray->Add(tReturnHistSys);
 
+  return tReturnArray;
+}
+*/
+
+//________________________________________________________________________________________________________________
+TObjArray* GetSlowDataWithSysErrs(AnalysisType aAnType, CentralityType aCentType, bool aCombineConjugates, TString aResultsData="20190319", int aRebin=1)
+{
+  td1dVec tRebinVec{aRebin};
+  TObjArray* tReturnArray = GetSlowDataWithSysErrs(aAnType, aCentType, aCombineConjugates, aResultsData, aRebin);
   return tReturnArray;
 }
 
@@ -874,9 +1008,8 @@ TCanvas* BuildBgdwFitPanel(CanvasPartition* aCanPart, int tColumn, int tRow, TSt
   aCanPart->AddGraph(tColumn, tRow, tBgdFitDataDraw, "", 20, GetColor(aAnType), tMarkerSize, "same l");
 
   aCanPart->AddGraph(tColumn, tRow, tCf, "", tMarkerStyle, tColor, tMarkerSize, "ex0same");  //draw again so on top
-  aCanPart->AddGraph(tColumn, tRow, tBgdFitDraw, "", 20, tColor, tMarkerSize, "same l");
   aCanPart->AddGraph(tColumn, tRow, tBgdFitDataDraw, "", 20, GetColor(aAnType), tMarkerSize, "same l");
-
+  aCanPart->AddGraph(tColumn, tRow, tBgdFitDraw, "", 20, tColor, tMarkerSize, "same l");
   //---------------------------------------------------------------------------------------------------------
   TString tSysInfoTString;
   if(aCombineConjugates) tSysInfoTString = TString::Format("%s#scale[0.5]{ }#oplus#scale[0.5]{ }%s,  %s", cAnalysisRootTags[aAnType], cAnalysisRootTags[aAnType+1], cPrettyCentralityTags[tCentTypeData]);

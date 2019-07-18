@@ -12,6 +12,19 @@ class CanvasPartition;
 
 
 //________________________________________________________________________________________________________________
+void ScaleCustomRebinnedCf(double aOriginalBinWidth, TH1* aCf, const td1dVec &aCustomBins)
+{
+  assert(aCf->GetNbinsX() == (int)(aCustomBins.size()-1));
+  double tInvScale;
+  for(unsigned int i=1; i<aCustomBins.size(); i++)
+  {
+    tInvScale = (aCustomBins[i]-aCustomBins[i-1])/aOriginalBinWidth;
+    aCf->SetBinContent(i, aCf->GetBinContent(i)/tInvScale);
+    aCf->SetBinError(i, aCf->GetBinError(i)/tInvScale);
+  }
+}
+
+//________________________________________________________________________________________________________________
 TCanvas* DrawKStarCfs(FitGenerator* aFG1, FitGenerator* aFG2, FitGenerator* aFG3, bool aZoomX=false, bool aZoomY=false, TString aCanNameModifier="")
 {
   AnalysisType aAnType = aFG1->GetFitSharedAnalyses()->GetFitPairAnalysis(0)->GetAnalysisType();
@@ -247,8 +260,8 @@ CfHeavy* CombineTwoHeavyCfs(CfHeavy *aCf1, CfHeavy* aCf2)
   vector<CfLite*> tCfLiteColl2 = aCf2->GetCfLiteCollection();
 
   vector<CfLite*> tReturnCfLiteColl(0);
-  for(int i=0; i<tCfLiteColl1.size(); i++) tReturnCfLiteColl.push_back(tCfLiteColl1[i]);
-  for(int i=0; i<tCfLiteColl2.size(); i++) tReturnCfLiteColl.push_back(tCfLiteColl2[i]);
+  for(unsigned int i=0; i<tCfLiteColl1.size(); i++) tReturnCfLiteColl.push_back(tCfLiteColl1[i]);
+  for(unsigned int i=0; i<tCfLiteColl2.size(); i++) tReturnCfLiteColl.push_back(tCfLiteColl2[i]);
 
   CfHeavy* tReturnCf = new CfHeavy(aReturnCfName, aReturnCfName, tReturnCfLiteColl, 0.32, 0.40);
   return tReturnCf;
@@ -256,7 +269,7 @@ CfHeavy* CombineTwoHeavyCfs(CfHeavy *aCf1, CfHeavy* aCf2)
 
 //________________________________________________________________________________________________________________
 TCanvas* DrawKStarCfs_OnlyTwo_CombConj(FitGenerator* aFG1, FitGenerator* aFG2, bool aZoomX, bool aZoomY, TString aCanNameModifier,
-                                       bool aDrawSysErrors, td1dVec &aCustomBins)
+                                       bool aDrawSysErrors, const td1dVec &aCustomBins)
 {
   AnalysisType aAnType = aFG1->GetFitSharedAnalyses()->GetFitPairAnalysis(0)->GetAnalysisType();
   AnalysisType aConjType = aFG1->GetFitSharedAnalyses()->GetFitPairAnalysis(1)->GetAnalysisType();
@@ -338,11 +351,21 @@ TCanvas* DrawKStarCfs_OnlyTwo_CombConj(FitGenerator* aFG1, FitGenerator* aFG2, b
     TH1 *tCfwSysErrs_An2, *tCfwSysErrs_Conj2, *tCfwSysErrs2;
     if(aDrawSysErrors)
     {
-      int tColorTransparent1 = TColor::GetColorTransparent(tMarkerColor1,0.2);
+      int tColorTransparent1 = TColor::GetColorTransparent(tMarkerColor1,0.3);
       double tNorm_An1   = tCfHeavy1A->GetTotalNumScale();
       double tNorm_Conj1 = tCfHeavy1B->GetTotalNumScale();
-      tCfwSysErrs_An1   = (TH1*)aFG1->GetFitSharedAnalyses()->GetFitPairAnalysis(tAnalysisNumberA)->GetCfwSysErrors();
-      tCfwSysErrs_Conj1 = (TH1*)aFG1->GetFitSharedAnalyses()->GetFitPairAnalysis(tAnalysisNumberB)->GetCfwSysErrors();
+      assert(aFG1->GetFitSharedAnalyses()->GetFitPairAnalysis(tAnalysisNumberA)->GetUseStavCf() == 
+             aFG1->GetFitSharedAnalyses()->GetFitPairAnalysis(tAnalysisNumberB)->GetUseStavCf());
+      if(!aFG1->GetFitSharedAnalyses()->GetFitPairAnalysis(tAnalysisNumberA)->GetUseStavCf())
+      {
+        tCfwSysErrs_An1   = (TH1*)aFG1->GetFitSharedAnalyses()->GetFitPairAnalysis(tAnalysisNumberA)->GetCfwSysErrors();
+        tCfwSysErrs_Conj1 = (TH1*)aFG1->GetFitSharedAnalyses()->GetFitPairAnalysis(tAnalysisNumberB)->GetCfwSysErrors();
+      }
+      else
+      {
+        tCfwSysErrs_An1   = (TH1*)aFG1->GetFitSharedAnalyses()->GetFitPairAnalysis(tAnalysisNumberA)->GetStavCfwSysErrors();
+        tCfwSysErrs_Conj1 = (TH1*)aFG1->GetFitSharedAnalyses()->GetFitPairAnalysis(tAnalysisNumberB)->GetStavCfwSysErrors();
+      }
       tCfwSysErrs1 = FitGeneratorAndDraw::CombineTwoHists(tCfwSysErrs_An1, tCfwSysErrs_Conj1, tNorm_An1, tNorm_Conj1);
         tCfwSysErrs1->SetFillColor(tColorTransparent1);
         tCfwSysErrs1->SetFillStyle(1000);
@@ -350,21 +373,39 @@ TCanvas* DrawKStarCfs_OnlyTwo_CombConj(FitGenerator* aFG1, FitGenerator* aFG2, b
         tCfwSysErrs1->SetLineWidth(0);
       if(aCustomBins.size() != 1)
       {
+        double tOGBinWidth1 = tCfwSysErrs1->GetBinWidth(1);
         tCfwSysErrs1 = tCfwSysErrs1->Rebin((int)aCustomBins.size()-1, TString::Format("%s_CustomRebin", tCfwSysErrs1->GetName()), aCustomBins.data());
+        ScaleCustomRebinnedCf(tOGBinWidth1, tCfwSysErrs1, aCustomBins);
       }
-      else if(aCustomBins[0] != 1) tCfwSysErrs1->Rebin(aCustomBins[0]);
+      else if(aCustomBins[0] != 1)
+      {
+        tCfwSysErrs1->Rebin(aCustomBins[0]);
+        tCfwSysErrs1->Scale(1./aCustomBins[0]);
+      }
 
       for(int iBin=1; iBin<=((TH1*)tCfHeavy1->GetHeavyCfClone())->GetNbinsX(); iBin++)
       {
         assert(tCfwSysErrs1->GetBinWidth(iBin) == ((TH1*)tCfHeavy1->GetHeavyCfClone())->GetBinWidth(iBin));
+        double tFracDiff1 = (tCfwSysErrs1->GetBinContent(iBin) -  ((TH1*)tCfHeavy1->GetHeavyCfClone())->GetBinContent(iBin))/((TH1*)tCfHeavy1->GetHeavyCfClone())->GetBinContent(iBin);
+        assert(fabs(tFracDiff1) < 0.05);
         tCfwSysErrs1->SetBinContent(iBin, ((TH1*)tCfHeavy1->GetHeavyCfClone())->GetBinContent(iBin));
       }
       //---------------------------------
-      int tColorTransparent2 = TColor::GetColorTransparent(tMarkerColor2,0.2);
+      int tColorTransparent2 = TColor::GetColorTransparent(tMarkerColor2,0.3);
       double tNorm_An2   = tCfHeavy2A->GetTotalNumScale();
       double tNorm_Conj2 = tCfHeavy2B->GetTotalNumScale();
-      tCfwSysErrs_An2   = (TH1*)aFG2->GetFitSharedAnalyses()->GetFitPairAnalysis(tAnalysisNumberA)->GetCfwSysErrors();
-      tCfwSysErrs_Conj2 = (TH1*)aFG2->GetFitSharedAnalyses()->GetFitPairAnalysis(tAnalysisNumberB)->GetCfwSysErrors();
+      assert(aFG2->GetFitSharedAnalyses()->GetFitPairAnalysis(tAnalysisNumberA)->GetUseStavCf() == 
+             aFG2->GetFitSharedAnalyses()->GetFitPairAnalysis(tAnalysisNumberB)->GetUseStavCf());
+      if(!aFG2->GetFitSharedAnalyses()->GetFitPairAnalysis(tAnalysisNumberA)->GetUseStavCf())
+      {
+        tCfwSysErrs_An2   = (TH1*)aFG2->GetFitSharedAnalyses()->GetFitPairAnalysis(tAnalysisNumberA)->GetCfwSysErrors();
+        tCfwSysErrs_Conj2 = (TH1*)aFG2->GetFitSharedAnalyses()->GetFitPairAnalysis(tAnalysisNumberB)->GetCfwSysErrors();
+      }
+      else
+      {
+        tCfwSysErrs_An2   = (TH1*)aFG2->GetFitSharedAnalyses()->GetFitPairAnalysis(tAnalysisNumberA)->GetStavCfwSysErrors();
+        tCfwSysErrs_Conj2 = (TH1*)aFG2->GetFitSharedAnalyses()->GetFitPairAnalysis(tAnalysisNumberB)->GetStavCfwSysErrors();
+      }
       tCfwSysErrs2 = FitGeneratorAndDraw::CombineTwoHists(tCfwSysErrs_An2, tCfwSysErrs_Conj2, tNorm_An2, tNorm_Conj2);
         tCfwSysErrs2->SetFillColor(tColorTransparent2);
         tCfwSysErrs2->SetFillStyle(1000);
@@ -372,13 +413,21 @@ TCanvas* DrawKStarCfs_OnlyTwo_CombConj(FitGenerator* aFG1, FitGenerator* aFG2, b
         tCfwSysErrs2->SetLineWidth(0);
       if(aCustomBins.size() != 1)
       {
+        double tOGBinWidth2 = tCfwSysErrs2->GetBinWidth(1);
         tCfwSysErrs2 = tCfwSysErrs2->Rebin((int)aCustomBins.size()-1, TString::Format("%s_CustomRebin", tCfwSysErrs2->GetName()), aCustomBins.data());
+        ScaleCustomRebinnedCf(tOGBinWidth2, tCfwSysErrs2, aCustomBins);
       }
-      else if(aCustomBins[0] != 1) tCfwSysErrs2->Rebin(aCustomBins[0]);
+      else if(aCustomBins[0] != 1)
+      {
+        tCfwSysErrs2->Rebin(aCustomBins[0]);
+        tCfwSysErrs2->Scale(1./aCustomBins[0]);
+      }
 
       for(int iBin=1; iBin<=((TH1*)tCfHeavy2->GetHeavyCfClone())->GetNbinsX(); iBin++)
       {
         assert(tCfwSysErrs2->GetBinWidth(iBin) == ((TH1*)tCfHeavy2->GetHeavyCfClone())->GetBinWidth(iBin));
+        double tFracDiff2 = (tCfwSysErrs2->GetBinContent(iBin) -  ((TH1*)tCfHeavy2->GetHeavyCfClone())->GetBinContent(iBin))/((TH1*)tCfHeavy2->GetHeavyCfClone())->GetBinContent(iBin);
+        assert(fabs(tFracDiff2) < 0.05);
         tCfwSysErrs2->SetBinContent(iBin, ((TH1*)tCfHeavy2->GetHeavyCfClone())->GetBinContent(iBin));
       }
       //---------------------------------
@@ -517,11 +566,15 @@ int main(int argc, char **argv)
     for(int i=0; i<tLamKchP2->GetNAnalyses(); i++) tLamKchP2->GetKStarCfHeavy(i)->Rebin((int)tCustomBins.size()-1, tCustomBins);
     for(int i=0; i<tLamKchP3->GetNAnalyses(); i++) tLamKchP3->GetKStarCfHeavy(i)->Rebin((int)tCustomBins.size()-1, tCustomBins);
   }
-  else if(aRebin != 1)
+  else
   {
-    for(int i=0; i<tLamKchP1->GetNAnalyses(); i++) tLamKchP1->GetKStarCfHeavy(i)->Rebin(aRebin);
-    for(int i=0; i<tLamKchP2->GetNAnalyses(); i++) tLamKchP2->GetKStarCfHeavy(i)->Rebin(aRebin);
-    for(int i=0; i<tLamKchP3->GetNAnalyses(); i++) tLamKchP3->GetKStarCfHeavy(i)->Rebin(aRebin);
+    tCustomBins = td1dVec{(double)aRebin};
+    if(aRebin != 1)
+    {
+      for(int i=0; i<tLamKchP1->GetNAnalyses(); i++) tLamKchP1->GetKStarCfHeavy(i)->Rebin(aRebin);
+      for(int i=0; i<tLamKchP2->GetNAnalyses(); i++) tLamKchP2->GetKStarCfHeavy(i)->Rebin(aRebin);
+      for(int i=0; i<tLamKchP3->GetNAnalyses(); i++) tLamKchP3->GetKStarCfHeavy(i)->Rebin(aRebin);
+    }
   }
   //-----------------------------------------------------------------------------
   bool bZoomX = false;

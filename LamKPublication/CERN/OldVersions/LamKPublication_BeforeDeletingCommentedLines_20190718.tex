@@ -119,8 +119,7 @@
 
 \begin{document}%
 
-%*************************************************  Title page **********************************************************
-%************************************************************************************************************************
+%%%%%%%%%%%%%%%  Title page %%%%%%%%%%%%%%%%%%%%%%%%
 \begin{titlepage}
 %
 \PHyear{2019 }
@@ -151,8 +150,6 @@ This effect is interpreted as resulting from the separation in space-time of the
 \end{titlepage}
 \setcounter{page}{2}
 
-%************************************************************************************************************************
-%************************************************************************************************************************
 \section{Introduction}
 \label{sec:Introduction}
 
@@ -179,6 +176,22 @@ This study is particularly interesting, as the \LamK scattering parameters are n
 The extracted scattering parameters are compared to predictions obtained in the framework of chiral perturbation theory \cite{Liu:2006xja,Mai:2009ce}; neither predict a repulsive interaction, as observed in the \LamKchP system.
 Scattering parameters for similar systems are also very limited; past studies of kaon-proton scattering revealed the strong force is attractive in the K$^{-}$p interaction, and repulsive in that of the K$^{+}$p \cite{Humphrey:1962zz, Hadjimichef:2002xe, Ikeda:2012au}.
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{comment}
+Femtoscopic analyses of pions, kaons, and protons have revealed a trend of decreasing source radii with increasing transverse mass \cite{Adam:2015vja}, which, for identical particle pairs, is defined as $m_{\mathrm{T}}^{2} = m^{2} + k_{\mathrm{T}}^{2}$, where $k_{\mathrm{T}} = \frac{1}{2}|\mathbf{p}_{\mathrm{T},1} + \mathbf{p}_{\mathrm{T},2}|$.  
+This effect is interpreted as a signature of hydrodynamic flow in the heavy-ion collisions \cite{Akkelin:1995gh}. 
+The exponent for \mt-scaling can be shown analytically to be $-\frac{1}{2}$ for case of a one-dimensional longitudinal hydrodynamic expansion with negligible transverse flow and common freeze-out characteristics, regardless of particle species.
+This has lead to an idea of universal \mt-scaling for different particle species.
+However, it is unclear how the picture changes with significant transverse flow, viscosity corrections, and hadronic rescattering.
+Additionally, the scaling observed in models exists separately for the three-dimensional radii in the Longitudinally Co-Moving System (LCMS), and will at best only be approximate in the Pair Rest Frame (PRF) \cite{Adam:2015vja, Kisiel:2014upa}.
+
+The radii extracted from the femtoscopic study are larger than one would except from naively following the trends set forth in the identical particle analyses.  
+However, when dealing with non-identical particles, such as in the present case with \LamK pairs, one should not necessarily expect the exact same trend. 
+In such cases, the pair emission source, measured through femtoscopy, is the superposition of two single-particle sources, each with its own unique size, shape, and space-time position within the medium.
+Although the single-particle sources should abide by the approximate \mt-scaling, the pair sources generally will not.
+\end{comment}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 This paper presents the first measurements of the scattering parameters of \LamK pairs in all three charge combinations (\LamKchP, \LamKchM, and \LamKs).
 The scattering parameters, along with pair emission source sizes, are extracted with a femtoscopic analysis of \LamK correlations in Pb-Pb collisions at $\sqrt{s_{\mathrm{NN}}}$ = 2.76 TeV from the ALICE experiment at the LHC.  
 These correlations result from strong final-state interactions, and are fit with a parametrization by Lednick\'y and Lyuboshitz \cite{Lednicky:82}.  
@@ -195,8 +208,6 @@ Appendix \ref{App:CoulombFitter} discusses the procedure needed to generate fit 
 In Appendix \ref{App:THERM}, the THERMINATOR 2 event generator is used to demonstrate the effect of increasing the source offset in the ``out" direction ($\mu_{\mathrm{out}}$) on a one-dimensional femtoscopic fit.
 Throughout the text, the pair name is used as shorthand for the pair-conjugate system, which are found to be consistent (e.g. \LamKs, \LamKchP $\oplus$ \ALamKchM is simply \LamKchP).
 
-%************************************************************************************************************************
-%************************************************************************************************************************
 \section{Data Analysis}
 \label{sec:DataAnalysis}
 
@@ -216,7 +227,7 @@ For TOF PID, the particle mass was used to calculate the expected time-of-flight
 For each PID method, a value ($N_{\sigma}$) was assigned to each track denoting the number of standard deviations between the measured track information and calculated values.  
 This procedure was repeated for four ``particle species hypotheses''--- electron, pion, kaon, and proton---, and for each hypothesis a different $N_{\sigma}$ value was obtained per detector.
 
-%************************************************************************************************************************
+
 \subsection{K$^{\pm}$ selection}
 \label{sec:KchSelection}
 The single-particle selection criteria used to select charged kaon candidates are summarized in Table~\ref{tab:KchCuts}.
@@ -291,7 +302,9 @@ For a more detailed estimate of the \Kpm purity from an analysis employing simil
 \end{table}
 
 
-%************************************************************************************************************************
+
+
+
 \subsection{\Vz selection}
 \label{sec:V0Selection}
 
@@ -477,7 +490,7 @@ The \Lam and \ALam purities are estimated to be $P_{\Lambda(\overline{\Lambda})}
 
 
 
-%************************************************************************************************************************
+
 \subsection{Pair Construction}
 \label{PairConstruction}
 
@@ -494,12 +507,10 @@ For the \LamKpm analyses, a minimum average separation cut of 8 cm is enforced b
 The cut values used coincide with the values at which the average separation correlation functions stabilize to unity, signifying the splitting and merging effects are no longer abundant.
 These effects between oppositely charged tracks were found to be negligible, therefore no cuts on unlike-charge tracks are imposed.
 
-%************************************************************************************************************************
-%************************************************************************************************************************
+
 \section{Analysis Methods}
 \label{sec:AnalysisMethods}
 
-%************************************************************************************************************************
 \subsection{Correlation Function}
 \label{sec:CorrelationFunction}
 Two-particle correlation functions are built as the ratio of the covariant two-particle and single-particle spectra:
@@ -537,7 +548,6 @@ The $k_{\mathrm{T}}$-dependence of the three \LamK combinations is comparable, s
 Two opposite magnetic field polarities were applied during the data acquisition, and the correlation functions from each are constructed separately.
 These are kept separate during the fitting process, and are combined using a weighted average when plotting, where the weight is the number of numerator pairs in the normalization range.
 
-%************************************************************************************************************************
 \subsection{Modeling the correlation function}
 \label{sec:ModelingCF}
 
@@ -567,7 +577,6 @@ The weight factor, $\rho_{S}$ is the normalized emission probability for a state
 The \Lam hyperon is spin-1/2 and K mesons are spin-0, so the \LamK system only has one possible total spin state $S$, and therefore $C(k^{*})$ in Eq.\ \ref{eqn:LednickyEqn} has only a single term.
 In the following, the $S$ superscript is dropped from all scattering parameters.
 
-%************************************************************************************************************************
 \subsection{Residual Correlations}
 \label{ResidualCorrelations}
 
@@ -591,7 +600,7 @@ The finally measured correlation function is a combination of the genuine \LamK 
 \end{equation}
 where the \LamK term represents the genuine \LamK correlation, and the $ij$ terms denote the contributions from residual feed-down and impurities.
 More specifically, $C_{ij}(k^{*}_{\Lambda\mathrm{K}})$ is the correlation function of the parent system expressed in terms of the relative momentum of the daughter \LamK pair.  
-The $\lambda_{ij}$ parameters serve as weights dictating the relative strength of each component's contribution to the observed signal, and are normalized to unity (i.e. $\sum_{ij} \lambda_{ij} = 1$, where $ij$ includes also the primary \LamK component) \cite{Kisiel:2014mma, Acharya:2018gyz}.
+The $\lambda_{ij}$ parameters serve as weights dictating the relative strength of each component's contribution to the observed signal, and are normalized to unity (i.e. $\sum_{ij} \lambda_{ij} = 1$, where $ij$ includes also the primary \LamK component).
 The individual $\lambda_{ij}$ are fixed (and whose values can be found in Table \ref{tab:LambdaValues_3Res}), but the parameter $\lambda_{\mathrm{Fit}}$ in Eq.\ \ref{eqn:CfwRes} is left free.
 
 \begin{table}[htbp]
@@ -646,17 +655,6 @@ When modeling \XiKpm residual correlations, the experimental \XiKpm data are use
 Consistent results are found when modeling the \XiKpm system with a Coulomb-only scenario, in which the strong interaction is assumed to be negligible.
 This approximation is well justified as a Coulomb-only description of the system describes, reasonably well, the broad features of the \XiKpm correlation.   
 
-In practice, the contribution of a parent system (e.g. $\Sigma^{0}$\KchP) to the daughter correlation function (e.g. \LamKchP) is determined by modeling the parent system's correlation function and running it through the appropriate transform matrix.
-Since the interactions between these particles are not known, some assumptions must be made.
-When modeling the parent systems, the source radii are assumed to be equal to those of the daughter \LamK systems.
-Furthermore, Coulomb-neutral parent pairs are assumed to share the same scattering parameters as the \LamK daughter pair, and the parent correlation function is modeled using Eq.\ \ref{eqn:LednickyEqn}.
-During the fit process, these source radii and scattering parameters are left free, as described in Sec. \ref{SummarizedFitProcedure}.
-For the \XiKpm parent system, where the constituents interact via both the strong and Coulomb interactions, no analytical expression exists to model the correlation function (see App.\ \ref{App:CoulombFitter}), and the experimental \XiKpm data are used.
-The \XiKpm correlation function is dominated by the contribution from the Coulomb interaction, and consistent final fit results are obtained when modeling \XiKpm the system with a Coulomb-only scenario, in which the strong interaction is assumed to be negligible, instead of using the experimental data.
-
-In such a system, the features of the correlation function are dominated by the contribution from the Coulomb interaction.
-Consistent results are found when using the experimental \XiKpm data and when modeling the system with a Coulomb-only scenario, in which the strong interaction is assumed to be negligible.
-
 The $\lambda_{ij}$ parameters dictate the relative strength of each contribution to the correlation function, and can be estimated using the THERMINATOR 2 and HIJING simulations.
 More specifically, a $\lambda_{ij}$ parameter is estimated as the total number of \LamK pairs in the experimental sample originating from $ij$ ($N_{ij}$) divided by the total number of \LamK pairs ($N_{\mathrm{Total}}$).
 The number of detected \LamK pairs involves both the raw yields and the reconstruction efficiencies.
@@ -690,7 +688,7 @@ More simply, this amounts to $\lambda_{\mathrm{Fakes}} = 1.0-PP_{\Lambda\mathrm{
 The correlations in both of these categories (``Other'' and ``Fakes'') are assumed to average to unity, and pairs in these categories therefore only contribute by attenuating the signal. 
 
 
-%************************************************************************************************************************
+
 \subsection{Momentum Resolution Corrections}
 \label{MomentumResolutionCorrections}
 
@@ -707,7 +705,7 @@ where $M_{k^{*}_{\mathrm{Rec}},k^{*}_{\mathrm{True}}}$ is the response matrix, $
 Equation \ref{eqn:MomResCorrection} describes that, for a given \krec bin, the observed value of $C(k^{*}_{\mathrm{Rec}})$ is a weighted average of all $C(k^{*}_{\mathrm{True}})$ values, where the weights are the normalized number of counts in the \mbox{$[k^{*}_{\mathrm{Rec}}, k^{*}_{\mathrm{True}}]$} bin.
 
 
-%************************************************************************************************************************
+
 \subsection{Non-Femtoscopic Background}
 \label{NonFlatBackground}
 
@@ -752,7 +750,7 @@ With the Stavinskiy method, mixed-event pairs are not used for the reference dis
 This rotation rids the pairs of any femtoscopic correlation, while maintaining correlations due to elliptic flow (and other suitably symmetric contributors).
 The effect on the \LamKchP correlation functions can be seen in the appendix, in Fig.\ \ref{fig:StavCfs_Correct_LamKchP}.
 
-%************************************************************************************************************************
+
 \subsection{Summarized correlation function construction}
 \label{SummarizedFitProcedure}
 
@@ -782,7 +780,6 @@ C_{\mathrm{Fit}}(k^{*}_{\mathrm{Rec}}) = \mathcal{N}\cdot F_{\mathrm{Bgd}}(k^{*}
 where $\mathcal{N}$ is a normalization parameter.
 $C'_{\mathrm{Fit}}(k^{*}_{\mathrm{Rec}})$ includes all components of the correlation function weighted by the appropriate $\lambda_{ij}$ (see Sec.\ \ref{ResidualCorrelations}) parameters and has been corrected for momentum resolution effects (see Sec.\ \ref{MomentumResolutionCorrections}).
 
-%************************************************************************************************************************
 \subsection{Systematic uncertainties}
 \label{SysErrs}
 
@@ -796,6 +793,78 @@ As previously stated, the non-femtoscopic backgrounds are modeled with a polynom
 To study the contribution of this choice to the systematic errors, the backgrounds of all of the systems were modeled by fitting to the data with a linear, quadratic, and Gaussian form.
 Finally, $\tau_{\mathrm{max}}$ was varied from the default value of $\tau_{\mathrm{max}} = 10$ fm/$c$ down to $\tau_{\mathrm{max}} = 6$ fm/$c$ and up to $\tau_{\mathrm{max}} = 15$ fm/$c$.
 The resulting uncertainties in the extracted parameter sets were combined with the uncertainties arising from the particle and pair cuts.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{comment}
+\begin{table}[htbp]
+ \centering 
+  \renewcommand{\arraystretch}{1.2}
+  \begin{tabular}{|l|r|}
+   \multicolumn{2}{c}{\LamKs systematics} \\
+   \hline  
+   DCA to PV \LamALam & $<$ [0.4, 0.5, 0.6] cm \\
+   \hline
+   DCA to PV \Ks & $<$ [0.2, 0.3, 0.4] cm \\
+   \hline
+   DCA \LamALam Daughters & $<$ [0.3, 0.4, 0.5] cm \\
+   \hline
+   DCA \Ks Daughters & $<$ [0.2, 0.3, 0.4] cm \\
+   \hline
+   $\cos(\theta_{PA})$ \LamALam to PV & $>$ [0.9992, 0.9993, 0.9994] \\
+   \hline
+   $\cos(\theta_{PA})$ \Ks to PV & $>$ [0.9992, 0.9993, 0.9994] \\
+   \hline
+   DCA to PV of $\mathrm{p}\,(\overline{\mathrm{p}})$ Daughter of \LamALam & $>$ [0.05, 0.1, 0.2] cm \\
+   \hline
+   DCA to PV of $\pi^{-}$($\pi^{+}$) Daughter of \LamALam & $>$ [0.2, 0.3, 0.4] cm \\ 
+   \hline
+   DCA to PV of $\pi^{+}$ Daughter of \Ks & $>$ [0.2, 0.3, 0.4] cm \\
+   \hline
+   DCA to PV of $\pi^{-}$ Daughter of \Ks & $>$ [0.2, 0.3, 0.4] cm \\
+   \hline
+   $\overline{\Delta\mathbf{r}}$ of Like-Charge Daughters & $>$ [5, 6, 7] cm \\
+   \hline
+  \end{tabular}
+% \end{minipage}
+ \caption[\LamKs systematics]{\LamKs systematics. In the table, the shorthand used is as follows: $PA$ = pointing angle; PV = primary vertex; DCA = distance of closest approach; $\overline{\Delta\mathbf{r}}$ = average separation}
+ \label{tab:LamK0sSystematics} 
+\end{table}
+
+
+\begin{table}[htbp]
+ \centering 
+  \renewcommand{\arraystretch}{1.2}
+  \begin{tabular}{|l|r|}
+   \multicolumn{2}{c}{\LamKpm systematics} \\
+   \hline  
+   DCA \LamALam to PV & $<$ [0.4, 0.5, 0.6] cm \\
+   \hline
+   DCA \LamALam Daughters & $<$ [0.3, 0.4, 0.5] cm \\
+   \hline
+   $\cos(\theta_{PA})$ \LamALam to PV & $>$ [0.9992, 0.9993, 0.9994] \\
+   \hline
+   DCA to PV of $\mathrm{p}\,(\overline{\mathrm{p}})$ Daughter of \LamALam &  $>$ [0.05, 0.1, 0.2] cm \\
+   \hline
+   DCA to PV of $\pi^{-}$($\pi^{+}$) Daughter of \LamALam & $>$ [0.2, 0.3, 0.4] cm  \\
+   \hline
+   $\overline{\Delta\mathbf{r}}$ of \LamALam Daughter with Same Charge as \Kpm & $>$ [7, 8, 9] cm \\
+   \hline
+   DCA to PV in Transverse Plane of \Kpm & $<$ [1.92, 2.4, 2.88] cm \\
+   \hline
+   DCA to PV in Longitudinal Direction of \Kpm & $<$ [2.4, 3.0, 3.6] cm \\
+   \hline
+  \end{tabular}
+% \end{minipage}
+ \caption[\LamKpm systematics]{\LamKpm systematics. In the table, the shorthand used is as follows: $PA$ = pointing angle; PV = primary vertex; DCA = distance of closest approach; $\overline{\Delta\mathbf{r}}$ = average separation.}
+ \label{tab:LamKchSystematics} 
+\end{table}
+\end{comment}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+
 
 \begin{table}[htbp]
  \centering 
@@ -855,8 +924,7 @@ The resulting uncertainties in the extracted parameter sets were combined with t
 
 
 
-%************************************************************************************************************************
-%************************************************************************************************************************
+
 %\clearpage
 \section{Results}
 \label{sec:Results}
@@ -868,6 +936,50 @@ Each correlation function receives a unique normalization parameter.
 The fits are corrected for finite momentum resolution effects, non-femtoscopic backgrounds, and residual correlations resulting from the feed-down from resonances.
 In Fig.\ \ref{fig:LamKFits_3Res}, lines represent statistical errors, while boxes represent systematic errors.  
 The dotted curve shows the primary (\LamK) contribution to the fit (i.e. $1 + \lambda'_{\Lambda\mathrm{K}}C_{\Lambda\mathrm{K}}(k^{*}_{\Lambda\mathrm{K}})$ in Eq.\ \ref{eqn:CfwRes}), the dashed curve shows the fit to the non-femtoscopic background, and the solid curve shows the final fit after all corrections have been applied.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{comment}
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=\textwidth]{\ResultsDirBaseLamKch\SaveNameModLamKch/canKStarCfwFitsLamKchPwConj_0010_1030_3050_LabelLines\SaveNameModLamKch.pdf}
+  \caption[\LamKchPALamKchM data with fits]
+  {
+  (Color online) Fit results for the \LamKchP and \ALamKchM data.
+  The \LamKchP data are shown in the left column, the \ALamKchM in the right, and the rows differentiate the different centrality bins (0--10\% in the top, 10--30\% in the middle, and 30--50\% in the bottom).
+  See text for further details.
+  }
+  \label{fig:LamKchPwConjFits_3Res}
+\end{figure}
+
+
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\linewidth]{\ResultsDirBaseLamKch\SaveNameModLamKch/canKStarCfwFitsLamKchMwConj_0010_1030_3050_LabelLines\SaveNameModLamKch.pdf}
+  \caption[\LamKchMALamKchP data with fits]
+  {
+  (Color online) Fit results for the \LamKchM and \ALamKchP data.
+  The \LamKchM data are shown in the left column, the \ALamKchP in the right, and the rows differentiate the different centrality bins (0--10\% in the top, 10--30\% in the middle, and 30--50\% in the bottom).
+ See text for further details.
+ }
+  \label{fig:LamKchMwConjFits_3Res}
+\end{figure}
+
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\linewidth]{\ResultsDirBaseLamKs\SaveNameModLamKs/canKStarCfwFitsLamK0wConj_0010_1030_3050_LabelLines\SaveNameModLamKs.pdf}
+  \caption[\LamALamKs data with fits]
+  {
+  (Color online) Fit results for the \LamKs and \ALamKs data.
+  The \LamKs data are shown in the left column, the \ALamKs in the right, and the rows differentiate the different centrality bins (0--10\% in the top, 10--30\% in the middle, and 30--50\% in the bottom).
+ See text for further details.
+ }
+  \label{fig:LamK0wConjFits_3Res}
+\end{figure}
+\end{comment}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 
 \begin{figure}[h!]
   \centering
@@ -978,8 +1090,7 @@ The $\Re C_{11}$ component probes the asymmetry in the system; a non-zero value 
   \label{fig:LamKchP_ReC00C11_0010}
 \end{figure}
 
-%************************************************************************************************************************
-%************************************************************************************************************************
+
 \section{Summary}
 \label{sec:Summary}
 
@@ -1020,8 +1131,76 @@ This effect is interpreted as resulting from the separation in space-time of the
 %\input{}               %%%%%%%%%%% put your appendices here
 %
 
-%************************************************************************************************************************
-%************************************************************************************************************************
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{comment}
+\begin{landscape}
+
+\section{$\lambda$ Parameters}
+\label{App:LamParams}
+
+\begin{table}[htbp]
+ \centering
+ \renewcommand{\arraystretch}{1.2}
+ \resizebox{\paperwidth}{!}{
+ \begin{tabular}{|c|cV{5.0}c|cV{5.0}c|cV{5.0}c|cV{5.0}c|cV{5.0}c|c|}
+  \multicolumn{2}{c}{\LamKchP} & \multicolumn{2}{c}{\ALamKchM} & \multicolumn{2}{c}{\LamKchM} & \multicolumn{2}{c}{\ALamKchP} & \multicolumn{2}{c}{\LamKs} & \multicolumn{2}{c}{\ALamKs} \\
+  \hline
+  \textbf{Pair System} & \textbf{$\lambda$ value} & \textbf{Pair System} & \textbf{$\lambda$ value} & \textbf{Pair System} & \textbf{$\lambda$ value} & \textbf{Pair System} & \textbf{$\lambda$ value} & \textbf{Pair System} & \textbf{$\lambda$ value} & \textbf{Pair System} & \textbf{$\lambda$ value} \\
+  \hlineB{3.0}
+  \multicolumn{12}{|c|}{3 Residuals (Max Parent $c\tau_{\mathrm{decay}}$ = 10 fm)} \\
+  \hlineB{3.0}
+  Primary & 0.527 & Primary & 0.526 & Primary & 0.526 & Primary & 0.527 & Primary & 0.543 & Primary & 0.544 \\
+  
+  $\Sigma^{0}$K$^{+}$ & 0.111 & $\overline{\Sigma}^{0}$K$^{-}$ & 0.110 & $\Sigma^{0}$K$^{-}$ & 0.110 & $\overline{\Sigma}^{0}$K$^{+}$ & 0.111 & $\Sigma^{0}$K$^{0}_{\mathrm{S}}$ & 0.120 & $\overline{\Sigma}^{0}$K$^{0}_{\mathrm{S}}$ & 0.120 \\
+  
+  $\Xi^{0}$K$^{+}$ & 0.039 & $\overline{\Xi}^{0}$K$^{-}$ & 0.035 & $\Xi^{0}$K$^{-}$ & 0.038 & $\overline{\Xi}^{0}$K$^{+}$ & 0.036 & $\Xi^{0}$K$^{0}_{\mathrm{S}}$ & 0.042 & $\overline{\Xi}^{0}$K$^{0}_{\mathrm{S}}$ & 0.039 \\
+  
+  $\Xi^{-}$K$^{+}$ & 0.050 & $\overline{\Xi}^{+}$K$^{-}$ & 0.046 & $\Xi^{-}$K$^{-}$ & 0.050 & $\overline{\Xi}^{+}$K$^{+}$ & 0.046 & $\Xi^{-}$K$^{0}_{\mathrm{S}}$ & 0.054 & $\overline{\Xi}^{+}$K$^{0}_{\mathrm{S}}$ & 0.050 \\
+  
+  Other & 0.226 & Other & 0.235 & Other & 0.228 & Other & 0.233 & Other & 0.194 & Other & 0.199 \\
+  
+  Fakes & 0.048 & Fakes & 0.048 & Fakes & 0.048 & Fakes & 0.048 & Fakes & 0.048 & Fakes & 0.048 \\
+  
+  \hlineB{3.0}  
+  \multicolumn{12}{|c|}{10 Residuals (Max Parent $c\tau_{\mathrm{decay}}$ = 4 fm)} \\
+  \hlineB{3.0}
+  Primary & 0.180 & Primary & 0.180 & Primary & 0.179 & Primary & 0.181 & Primary & 0.192 & Primary & 0.193 \\
+  
+  $\Sigma^{0}$K$^{+}$ & 0.116 & $\overline{\Sigma}^{0}$K$^{-}$ & 0.114 & $\Sigma^{0}$K$^{-}$ & 0.115 & $\overline{\Sigma}^{0}$K$^{+}$ & 0.116 & $\Sigma^{0}$K$^{0}_{\mathrm{S}}$ & 0.125 & $\overline{\Sigma}^{0}$K$^{0}_{\mathrm{S}}$ & 0.124 \\
+  
+  $\Xi^{0}$K$^{+}$ & 0.040 & $\overline{\Xi}^{0}$K$^{-}$ & 0.037 & $\Xi^{0}$K$^{-}$ & 0.040 & $\overline{\Xi}^{0}$K$^{+}$ & 0.037 & $\Xi^{0}$K$^{0}_{\mathrm{S}}$ & 0.043 & $\overline{\Xi}^{0}$K$^{0}_{\mathrm{S}}$ & 0.040 \\
+  
+  $\Xi^{-}$K$^{+}$ & 0.052 & $\overline{\Xi}^{+}$K$^{-}$ & 0.047 & $\Xi^{-}$K$^{-}$ & 0.052 & $\overline{\Xi}^{+}$K$^{+}$ & 0.048 & $\Xi^{-}$K$^{0}_{\mathrm{S}}$ & 0.056 & $\overline{\Xi}^{+}$K$^{0}_{\mathrm{S}}$ & 0.052 \\
+  
+  $\Sigma^{*+}$K$^{+}$ & 0.054 & $\overline{\Sigma}^{*-}$K$^{-}$ & 0.051 & $\Sigma^{*+}$K$^{-}$ & 0.053 & $\overline{\Sigma}^{*-}$K$^{+}$ & 0.051 & $\Sigma^{*+}$K$^{0}_{\mathrm{S}}$ & 0.058 & $\overline{\Sigma}^{*-}$K$^{0}_{\mathrm{S}}$ & 0.055 \\
+  
+  $\Sigma^{*-}$K$^{+}$ & 0.048 & $\overline{\Sigma}^{*+}$K$^{-}$ & 0.050 & $\Sigma^{*-}$K$^{-}$ & 0.048 & $\overline{\Sigma}^{*+}$K$^{+}$ & 0.050 & $\Sigma^{*-}$K$^{0}_{\mathrm{S}}$ & 0.052 & $\overline{\Sigma}^{*+}$K$^{0}_{\mathrm{S}}$ & 0.054 \\
+  
+  $\Sigma^{*0}$K$^{+}$ & 0.048 & $\overline{\Sigma}^{*0}$K$^{-}$ & 0.045 & $\Sigma^{*0}$K$^{-}$ & 0.048 & $\overline{\Sigma}^{*0}$K$^{+}$ & 0.045 & $\Sigma^{*0}$K$^{0}_{\mathrm{S}}$ & 0.052 & $\overline{\Sigma}^{*0}$K$^{0}_{\mathrm{S}}$ & 0.048 \\
+  
+  $\Lambda$K$^{*0}$ & 0.046 & $\overline{\Lambda}\overline{\mathrm{K}}^{*0}$ & 0.047 & $\Lambda\overline{\mathrm{K}}^{*0}$ & 0.046 & $\overline{\Lambda}$K$^{*0}$ & 0.047 & $\Lambda$K$^{*0}$ & 0.022 & $\overline{\Lambda}$K$^{*0}$ & 0.022 \\
+  
+  $\Sigma^{0}$K$^{*0}$ & 0.041 & $\overline{\Sigma}^{0}\overline{\mathrm{K}}^{*0}$ & 0.041 & $\Sigma^{0}\overline{\mathrm{K}}^{*0}$ & 0.041 & $\overline{\Sigma}^{0}$K$^{*0}$ & 0.041 & $\Sigma^{0}$K$^{*0}$ & 0.019 & $\overline{\Sigma}^{0}$K$^{*0}$ & 0.019 \\
+  
+  $\Xi^{0}$K$^{*0}$ & 0.014 & $\overline{\Xi}^{0}\overline{\mathrm{K}}^{*0}$ & 0.013 & $\Xi^{0}\overline{\mathrm{K}}^{*0}$ & 0.014 & $\overline{\Xi}^{0}$K$^{*0}$ & 0.013 & $\Xi^{0}$K$^{*0}$ & 0.007 & $\overline{\Xi}^{0}$K$^{*0}$ & 0.006 \\
+  
+  $\Xi^{-}$K$^{*0}$ & 0.018 & $\overline{\Xi}^{+}\overline{\mathrm{K}}^{*0}$ & 0.017 & $\Xi^{-}\overline{\mathrm{K}}^{*0}$ & 0.018 & $\overline{\Xi}^{+}$K$^{*0}$ & 0.017 & $\Xi^{-}$K$^{*0}$ & 0.009 & $\overline{\Xi}^{+}$K$^{*0}$ & 0.008 \\
+  
+  Other & 0.295 & Other & 0.310 & Other & 0.299 & Other & 0.307 & Other & 0.318 & Other & 0.330 \\
+  
+  Fakes & 0.048 & Fakes & 0.048 & Fakes & 0.048 & Fakes & 0.048 & Fakes & 0.048 & Fakes & 0.048 \\
+  
+  \hlineB{3.0}
+ \end{tabular}}
+ \caption{$\lambda$ values for the individual components of the \LamK correlation functions for the case of 3 and 10 residual contributions.}
+ \label{tab:LambdaValues_All}
+\end{table}
+
+\end{landscape}
+\end{comment}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
 \section{Stavinskiy Reference Method}
 \label{App:StavMethod}
 
@@ -1036,6 +1215,21 @@ Care needs to be taken in treating the pseudo-pairs exactly like the real pairs;
 The results of correctly implementing such a procedure are shown in Figure \ref{fig:StavCfs_Correct_LamKchP}.  
 The figure shows the Stavinskiy method does a very good job of ridding the \LamKchP correlations of their non-femtoscopic backgrounds.  
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{comment}
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{/home/jesse/Analysis/FemtoAnalysis/AnalysisNotes/4_CorrelationFunctions/Figures/OnlyTwo/canKStarCfsLamKchPwConj_20180505vs20180505StavCf_CustomRebin.pdf}
+  \caption[\LamKchP Stavinskiy Correlation Functions]
+  {
+  \LamKchPALamKchM correlation functions built using the Stavinskiy method for 0--10\%, 10--30\%, and 30--50\% centralities.  
+  Closed (red) symbols represent correlations built using the normal mixed-event reference distribution, while open (green) symbols represent correlations formed using the Stavinskiy same-event pseudo-pairs as a reference.
+  }
+  \label{fig:StavCfs_Correct_LamKchP}
+\end{figure}
+\end{comment}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \begin{figure}[h!]
   \centering
   \includegraphics[width=0.667\textwidth]{/home/jesse/Analysis/FemtoAnalysis/AnalysisNotes/4_CorrelationFunctions/Figures/OnlyTwo/canKStarCfsLamKchPCombConj_20190319vs20190319StavCf_CustomRebin.pdf}
@@ -1048,8 +1242,7 @@ The figure shows the Stavinskiy method does a very good job of ridding the \LamK
 
 
 
-%************************************************************************************************************************
-%************************************************************************************************************************
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Strong and Coulomb Fitter}
 \label{App:CoulombFitter}
 
@@ -1081,10 +1274,31 @@ In this case, the $\lambda$ parameter may be included as:
 To build a fit function for a system including both strong and Coulomb interactions two related options were considered. 
 The first option was to numerically integrate Eq.\ \ref{eqn:KooninPrattEqn}.  
 The second option was to simulate a large sample of particle pairs, calculate the wave function describing the interaction, and average to obtain the integral in Eq.\ \ref{eqn:KooninPrattEqn}. 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-%************************************************************************************************************************
-%************************************************************************************************************************
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{comment}
+\section{Spherical Harmonic Decomposition}
+\label{app:SphericalHarmonics}
+
+
+In Fig.\ \ref{fig:LamKchP_ReC00C11_0010} results are shown for the $C_{00}$ and $\Re C_{11}$ components from the spherical decomposition of our \LamKchP system in the 0--10\% centrality bin.
+As seen in the figure, the $C_{00}$ signal is similar to that observed in the one-dimensional study.
+The $\Re C_{11}$ component shows a clear deviation from zero, and the negative value signifies that the \Lam particles are, on average, emitted further out and/or earlier than the K mesons.
+
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=0.8\textwidth]{\ResultsDirBase Results_cLamcKch_20181205/SphericalHarmonics/LamKchP/CanCfYlmReC00C11_LamKchPALamKchM_0010.pdf}
+  \caption[\LamKchP $C_{00}$ and $\Re C_{11}$ Spherical Harmonic Components (0--10\%)]{$C_{00}$ (left) and $\Re C_{11}$ (right) components of a spherical harmonic decomposition of the \LamKchP correlation function for the 0--10\% centrality bin.  
+The $C_{00}$ component is similar to the 1D correlation functions typically studied, and probes the overall size of the source.
+The $\Re C_{11}$ component probes the asymmetry in the system; a non-zero value reveals the asymmetry}
+  \label{fig:LamKchP_ReC00C11_0010}
+\end{figure}
+\end{comment}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \section{Relative Emission Shifts with THERMINATOR 2}
 \label{App:THERM}
 
@@ -1148,8 +1362,7 @@ The figure demonstrates that as the separation $\mu_{\mathrm{out}}$ increases, s
 \clearpage
 
 
-%************************************************************************************************************************
-%************************************************************************************************************************
+
 \section{The ALICE Collaboration}
 \label{app:collab}
 %\input{authorlist-preprint.tex}  %%%%%%% done by webmaster team

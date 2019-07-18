@@ -786,7 +786,12 @@ TH1* DrawDataSHCfComponent(TPad* aPad, Analysis* aAnaly, Analysis* aConjAnaly, Y
     TH1D* tSHCfwSysErrs = (TH1D*)CombineTwoHists(tSHCfwSysErrs_An, tSHCfwSysErrs_Conj, tYlmLiteCollAn[0]->GetNumScale(), tYlmLiteCollAn[1]->GetNumScale());
 
     //TODO for some reason, 0-10% data does not match perfectly
-    for(int i=1; i<tSHCfwSysErrs->GetNbinsX()+1; i++) tSHCfwSysErrs->SetBinContent(i, tSHCf->GetBinContent(i));
+    for(int i=1; i<tSHCfwSysErrs->GetNbinsX()+1; i++) 
+    {
+      double tFracDiff = (tSHCfwSysErrs->GetBinContent(i) - tSHCf->GetBinContent(i))/tSHCf->GetBinContent(i);
+      assert(fabs(tFracDiff) < 0.05);
+      tSHCfwSysErrs->SetBinContent(i, tSHCf->GetBinContent(i));
+    }
 
       tSHCfwSysErrs->SetFillColor(tColorTransparent);
       tSHCfwSysErrs->SetFillStyle(1000);
@@ -864,7 +869,12 @@ TH1* DrawDataCf(TPad* aPad, Analysis* aAnaly, Analysis* aConjAnaly, int aRebin, 
     TH1D* tCfwSysErrs = (TH1D*)CombineTwoHists(tCfwSysErrs_An, tCfwSysErrs_Conj, tCfLiteCollAn[0]->GetNumScale(), tCfLiteCollAn[1]->GetNumScale());
 
     //TODO for some reason, 0-10% data does not match perfectly
-   for(int i=1; i<tCfwSysErrs->GetNbinsX()+1; i++) tCfwSysErrs->SetBinContent(i, tCf->GetBinContent(i));
+    for(int i=1; i<tCfwSysErrs->GetNbinsX()+1; i++) 
+    {
+      double tFracDiff = (tCfwSysErrs->GetBinContent(i) - tCf->GetBinContent(i))/tCf->GetBinContent(i);
+      assert(fabs(tFracDiff) < 0.05);
+      tCfwSysErrs->SetBinContent(i, tCf->GetBinContent(i));
+    }
 
       tCfwSysErrs->SetFillColor(tColorTransparent);
       tCfwSysErrs->SetFillStyle(1000);
