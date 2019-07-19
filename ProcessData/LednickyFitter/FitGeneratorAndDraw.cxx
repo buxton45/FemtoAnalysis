@@ -2342,15 +2342,17 @@ void FitGeneratorAndDraw::BuildKStarCfswFitsPanel_CombineConj(CanvasPartition* a
       tCfwSysErrs->SetLineWidth(0);
   }
 
+  //double tMarkerSize = 0.5;
+  double tMarkerSize = 0.75;
   //---------------------------------------------------------------------------------------------------------
   if(aDrawSysErrors) assert(tCfwSysErrs->GetBinWidth(1) == tCfData->GetBinWidth(1));
   //---------------------------------------------------------------------------------------------------------
-  aCanPart->AddGraph(tColumn,tRow,tCfData,"",20,tColor,0.5,"ex0");  //ex0 suppresses the error along x
-  if(fApplyNonFlatBackgroundCorrection) aCanPart->AddGraph(tColumn, tRow, tNonFlatBgd, "", 20, tColorNonFlatBgd, 0.5, "HIST lsame");
+  aCanPart->AddGraph(tColumn,tRow,tCfData,"",20,tColor,tMarkerSize,"ex0");  //ex0 suppresses the error along x
+  if(fApplyNonFlatBackgroundCorrection) aCanPart->AddGraph(tColumn, tRow, tNonFlatBgd, "", 20, tColorNonFlatBgd, tMarkerSize, "HIST lsame");
   aCanPart->AddGraph(tColumn, tRow, tPrimaryFit, "", 20, 1, 0., "HIST lsame");
-  aCanPart->AddGraph(tColumn,tRow,tCorrectedFitHisto, "", 20, tColorCorrectFit, 0.5, "lsame");
-  if(aDrawSysErrors) aCanPart->AddGraph(tColumn, tRow, tCfwSysErrs, "", 20, tColorTransparent, 0.5, "e2psame");
-  if(aDrawDataOnTop) aCanPart->AddGraph(tColumn, tRow, tCfData, "", 20, tColor, 0.5, "ex0same");  //draw again so data on top
+  aCanPart->AddGraph(tColumn,tRow,tCorrectedFitHisto, "", 20, tColorCorrectFit, tMarkerSize, "lsame");
+  if(aDrawSysErrors) aCanPart->AddGraph(tColumn, tRow, tCfwSysErrs, "", 20, tColorTransparent, tMarkerSize, "e2psame");
+  if(aDrawDataOnTop) aCanPart->AddGraph(tColumn, tRow, tCfData, "", 20, tColor, tMarkerSize, "ex0same");  //draw again so data on top
 }
 
 

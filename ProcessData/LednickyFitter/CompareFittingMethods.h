@@ -134,9 +134,13 @@ _MomResCrctn_NonFlatBgdCrctnLinear_3Res_PrimMaxDecay4fm_UsingXiDataAndCoulombOnl
 //*********************************************************************************************************************************
 //---------------------------------------------------------------------------------------------------------------------------------
 
-  TString tFileLocation_LamKch = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_20180505/MasterFitResults_20180505.txt";
-  TString tFileLocation_LamK0 = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamK0_20180505/MasterFitResults_20180505.txt";
-  TString tResultsDate = "20180505";
+  //TString tFileLocation_LamKch = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_20180505/MasterFitResults_20180505.txt";
+  //TString tFileLocation_LamK0 = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamK0_20180505/MasterFitResults_20180505.txt";
+  //TString tResultsDate = "20180505";
+
+  TString tFileLocation_LamKch = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamcKch_20190319/MasterFitResults_20190319.txt";
+  TString tFileLocation_LamK0 = "/home/jesse/Analysis/FemtoAnalysis/Results/Results_cLamK0_20190319/MasterFitResults_20190319.txt";
+  TString tResultsDate = "20190319";
 
   int tColorLamK0   = kBlack;
   int tColorLamKchP = kRed+1;

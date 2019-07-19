@@ -783,13 +783,17 @@ TH1* DrawDataSHCfComponent(TPad* aPad, Analysis* aAnaly, Analysis* aConjAnaly, Y
     TH1D* tSHCfwSysErrs_Conj = GetDataYlmCfwSysErrors(TString("20181205"), aConjAnaly->GetAnalysisType(), aConjAnaly->GetCentralityType(), aComponent, al, am);
 
     assert(tYlmLiteCollAn.size()==2);
-    TH1D* tSHCfwSysErrs = (TH1D*)CombineTwoHists(tSHCfwSysErrs_An, tSHCfwSysErrs_Conj, tYlmLiteCollAn[0]->GetNumScale(), tYlmLiteCollAn[1]->GetNumScale());
+    TH1D* tSHCfwSysErrs = (TH1D*)CombineTwoHists(tSHCfwSysErrs_An, tSHCfwSysErrs_Conj, 
+                                                 tYlmLiteCollAn[0]->GetNumScale()+tYlmLiteCollAn[1]->GetNumScale(),
+                                                 tYlmLiteCollConjAn[0]->GetNumScale()+tYlmLiteCollConjAn[1]->GetNumScale());
 
-    //TODO for some reason, 0-10% data does not match perfectly
+
     for(int i=1; i<tSHCfwSysErrs->GetNbinsX()+1; i++) 
     {
+      assert(tSHCfwSysErrs->GetBinWidth(i)==tSHCf->GetBinWidth(i));
       double tFracDiff = (tSHCfwSysErrs->GetBinContent(i) - tSHCf->GetBinContent(i))/tSHCf->GetBinContent(i);
-      assert(fabs(tFracDiff) < 0.05);
+      assert(fabs(tFracDiff) < 0.025);
+
       tSHCfwSysErrs->SetBinContent(i, tSHCf->GetBinContent(i));
     }
 
@@ -866,13 +870,16 @@ TH1* DrawDataCf(TPad* aPad, Analysis* aAnaly, Analysis* aConjAnaly, int aRebin, 
     TH1D* tCfwSysErrs_Conj = GetDataCfwSysErrors(TString("20190319"), aConjAnaly->GetAnalysisType(), aConjAnaly->GetCentralityType());
 
     assert(tCfLiteCollAn.size()==2);
-    TH1D* tCfwSysErrs = (TH1D*)CombineTwoHists(tCfwSysErrs_An, tCfwSysErrs_Conj, tCfLiteCollAn[0]->GetNumScale(), tCfLiteCollAn[1]->GetNumScale());
+    TH1D* tCfwSysErrs = (TH1D*)CombineTwoHists(tCfwSysErrs_An, tCfwSysErrs_Conj, 
+                                               tCfLiteCollAn[0]->GetNumScale()+tCfLiteCollAn[1]->GetNumScale(),
+                                               tCfLiteCollConjAn[0]->GetNumScale()+tCfLiteCollConjAn[1]->GetNumScale());
 
-    //TODO for some reason, 0-10% data does not match perfectly
     for(int i=1; i<tCfwSysErrs->GetNbinsX()+1; i++) 
     {
+      assert(tCfwSysErrs->GetBinWidth(i)==tCf->GetBinWidth(i));
       double tFracDiff = (tCfwSysErrs->GetBinContent(i) - tCf->GetBinContent(i))/tCf->GetBinContent(i);
-      assert(fabs(tFracDiff) < 0.05);
+      assert(fabs(tFracDiff) < 0.025);
+
       tCfwSysErrs->SetBinContent(i, tCf->GetBinContent(i));
     }
 

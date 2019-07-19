@@ -107,7 +107,15 @@ TH1* DrawDataSHCfComponent(TPad* aPad, Analysis* aAnaly, YlmComponent aComponent
   {
     TH1D* tSHCfwSysErrs = GetDataYlmCfwSysErrors(TString("20181205"), aAnaly->GetAnalysisType(), aAnaly->GetCentralityType(), aComponent, al, am);
     //TODO for some reason, 0-10% data does not match perfectly
-    for(int i=1; i<tSHCfwSysErrs->GetNbinsX()+1; i++) tSHCfwSysErrs->SetBinContent(i, tSHCf->GetBinContent(i));
+    for(int i=1; i<tSHCfwSysErrs->GetNbinsX()+1; i++) 
+    {
+      assert(tSHCfwSysErrs->GetBinWidth(i)==tSHCf->GetBinWidth(i));
+      double tFracDiffConj = (tSHCfwSysErrs->GetBinContent(i) - tSHCf->GetBinContent(i))/tSHCf->GetBinContent(i);
+      assert(fabs(tFracDiffConj) < 0.025);
+
+
+      tSHCfwSysErrs->SetBinContent(i, tSHCf->GetBinContent(i));
+    }
 
       tSHCfwSysErrs->SetFillColor(tColorTransparent);
       tSHCfwSysErrs->SetFillStyle(1000);
@@ -182,10 +190,19 @@ TH1* DrawDataSHCfComponent(TPad* aPad, Analysis* aAnaly, Analysis* aConjAnaly, Y
     TH1D* tSHCfwSysErrs_Conj = GetDataYlmCfwSysErrors(TString("20181205"), aConjAnaly->GetAnalysisType(), aConjAnaly->GetCentralityType(), aComponent, al, am);
 
     assert(tYlmLiteCollAn.size()==2);
-    TH1D* tSHCfwSysErrs = (TH1D*)CombineTwoHists(tSHCfwSysErrs_An, tSHCfwSysErrs_Conj, tYlmLiteCollAn[0]->GetNumScale(), tYlmLiteCollAn[1]->GetNumScale());
+    TH1D* tSHCfwSysErrs = (TH1D*)CombineTwoHists(tSHCfwSysErrs_An, tSHCfwSysErrs_Conj, 
+                                                 tYlmLiteCollAn[0]->GetNumScale()+tYlmLiteCollAn[1]->GetNumScale(),
+                                                 tYlmLiteCollConjAn[0]->GetNumScale()+tYlmLiteCollConjAn[1]->GetNumScale());
 
     //TODO for some reason, 0-10% data does not match perfectly
-    for(int i=1; i<tSHCfwSysErrs->GetNbinsX()+1; i++) tSHCfwSysErrs->SetBinContent(i, tSHCf->GetBinContent(i));
+    for(int i=1; i<tSHCfwSysErrs->GetNbinsX()+1; i++) 
+    {
+      assert(tSHCfwSysErrs->GetBinWidth(i)==tSHCf->GetBinWidth(i));
+      double tFracDiff = (tSHCfwSysErrs->GetBinContent(i) - tSHCf->GetBinContent(i))/tSHCf->GetBinContent(i);
+      assert(fabs(tFracDiff) < 0.025);
+
+      tSHCfwSysErrs->SetBinContent(i, tSHCf->GetBinContent(i));
+    }
 
       tSHCfwSysErrs->SetFillColor(tColorTransparent);
       tSHCfwSysErrs->SetFillStyle(1000);

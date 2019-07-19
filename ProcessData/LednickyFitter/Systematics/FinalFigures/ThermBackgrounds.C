@@ -978,7 +978,7 @@ TCanvas* BuildBgdwFitPanel(CanvasPartition* aCanPart, int tColumn, int tRow, TSt
 
   tBgdFitDraw->SetLineColor(tCf->GetLineColor());
   tBgdFitDraw->SetLineWidth(2.0);
-  tBgdFitDraw->SetLineStyle(7);
+  tBgdFitDraw->SetLineStyle(2);
   tBgdFitDraw->SetRange(0., aMaxBgdFit);
 
   //---------------------------------------------------------------
@@ -995,7 +995,14 @@ TCanvas* BuildBgdwFitPanel(CanvasPartition* aCanPart, int tColumn, int tRow, TSt
   TH1D* tData = (TH1D*)tDataStatAndSys->At(0);
     ThermCf::SetStyleAndColor(tData, 20, GetColor(aAnType));
   TH1D* tDataSys = (TH1D*)tDataStatAndSys->At(1);
-    ThermCf::SetStyleAndColor(tDataSys, 20, TColor::GetColorTransparent(GetColor(aAnType), 0.2));
+
+
+  //Set proper attributes for drawing systematics
+  ThermCf::SetStyleAndColor(tDataSys, 20, TColor::GetColorTransparent(GetColor(aAnType), 0.2));
+  tDataSys->SetFillColor(TColor::GetColorTransparent(GetColor(aAnType), 0.2));
+  tDataSys->SetFillStyle(1000);
+  tDataSys->SetLineColor(0);
+  tDataSys->SetLineWidth(0);
 
 
 //  cout << "**************************************************" << endl;
@@ -1034,7 +1041,7 @@ TCanvas* BuildBgdwFitPanel(CanvasPartition* aCanPart, int tColumn, int tRow, TSt
   if(aCombineConjugates) tSysInfoTString = TString::Format("%s#scale[0.5]{ }#oplus#scale[0.5]{ }%s,  %s", cAnalysisRootTags[aAnType], cAnalysisRootTags[aAnType+1], cPrettyCentralityTags[tCentTypeData]);
   else                   tSysInfoTString = TString::Format("%s,  %s", cAnalysisRootTags[aAnType], cPrettyCentralityTags[tCentTypeData]);
   TPaveText* tSysInfoPaveText;
-  tSysInfoPaveText = aCanPart->SetupTPaveText(tSysInfoTString, tColumn, tRow, 0.175, 0.80, 0.80, 0.195, 63, 55);
+  tSysInfoPaveText = aCanPart->SetupTPaveText(tSysInfoTString, tColumn, tRow, 0.175, 0.80, 0.80, 0.195, 63, 55, 22, true);
   aCanPart->AddPadPaveText(tSysInfoPaveText, tColumn, tRow);
 
   //---------------------------------------------------------------------------------------------------------
@@ -1169,7 +1176,7 @@ TCanvas* BuildBgdwFitPanel(CanvasPartition* aCanPart, int tColumn, int tRow, TSt
 
   tBgdFitDraw->SetLineColor(tCf->GetLineColor());
   tBgdFitDraw->SetLineWidth(2.0);
-  tBgdFitDraw->SetLineStyle(7);
+  tBgdFitDraw->SetLineStyle(2);
   tBgdFitDraw->SetRange(0., aMaxBgdFit);
 
   //---------------------------------------------------------------
@@ -1194,7 +1201,14 @@ TCanvas* BuildBgdwFitPanel(CanvasPartition* aCanPart, int tColumn, int tRow, TSt
   TH1D* tData = (TH1D*)tDataStatAndSys->At(0);
     ThermCf::SetStyleAndColor(tData, 20, GetColor(aAnType));
   TH1D* tDataSys = (TH1D*)tDataStatAndSys->At(1);
-    ThermCf::SetStyleAndColor(tDataSys, 20, TColor::GetColorTransparent(GetColor(aAnType), 0.2));
+
+
+  //Set proper attributes for drawing systematics
+  ThermCf::SetStyleAndColor(tDataSys, 20, TColor::GetColorTransparent(GetColor(aAnType), 0.2));
+  tDataSys->SetFillColor(TColor::GetColorTransparent(GetColor(aAnType), 0.2));
+  tDataSys->SetFillStyle(1000);
+  tDataSys->SetLineColor(0);
+  tDataSys->SetLineWidth(0);
 
 
 //  cout << "**************************************************" << endl;
@@ -1233,7 +1247,7 @@ TCanvas* BuildBgdwFitPanel(CanvasPartition* aCanPart, int tColumn, int tRow, TSt
   if(aCombineConjugates) tSysInfoTString = TString::Format("%s#scale[0.5]{ }#oplus#scale[0.5]{ }%s,  %s", cAnalysisRootTags[aAnType], cAnalysisRootTags[aAnType+1], cPrettyCentralityTags[tCentTypeData]);
   else                   tSysInfoTString = TString::Format("%s,  %s", cAnalysisRootTags[aAnType], cPrettyCentralityTags[tCentTypeData]);
   TPaveText* tSysInfoPaveText;
-  tSysInfoPaveText = aCanPart->SetupTPaveText(tSysInfoTString, tColumn, tRow, 0.175, 0.80, 0.80, 0.195, 63, 55);
+  tSysInfoPaveText = aCanPart->SetupTPaveText(tSysInfoTString, tColumn, tRow, 0.175, 0.80, 0.80, 0.195, 63, 55, 22, true);
   aCanPart->AddPadPaveText(tSysInfoPaveText, tColumn, tRow);
 
   //---------------------------------------------------------------------------------------------------------
@@ -2314,6 +2328,7 @@ int main(int argc, char **argv)
                                1.60, 1.70, 1.80, 1.90, 2.00};
 
     tCanBgdwFitAllCentAllAnv2 = DrawBgdwFit_AllCentAllAnv2(tCfDescriptor, tSingleFileName, bCombineConjugates, tEventsType, tCustomBins, tMinNorm, tMaxNorm, tMaxBgdFit, aAvgLamKchPMFit, bUseStavCf);
+
     //------------------------------------------
     tCanBgdwFitSingleCentAllAn0010 = DrawBgdwFit_SingleCentAllAnv2(k0010, tCfDescriptor, tSingleFileName, bCombineConjugates, tEventsType, tRebin, tMinNorm, tMaxNorm, tMaxBgdFit, aAvgLamKchPMFit, bUseStavCf);
 

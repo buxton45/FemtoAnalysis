@@ -113,12 +113,12 @@ int main(int argc, char **argv)
   bool bDrawResv2 = true;
   bool bDrawPartAn = false;
 
-  bool bDrawSysErrs = false;
+  bool bDrawSysErrs = true;
 
   bool tSuppressFitInfoOutput=false;
-  bool tLabelLines=false;
+  bool tLabelLines=true;
   if(tLabelLines) tSuppressFitInfoOutput=true;
-  bool bDrawNewSQM = true;
+  bool bDrawNewSQM = false;
 
 //-----------------------------------------------------------------------------
   if(tShareLambdaParams==false && tTripleShareLambda==true)

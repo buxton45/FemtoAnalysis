@@ -369,7 +369,7 @@ void SetupRadiusvsLambdaAxes(TPad* aPad, double aMinR, double aMaxR, double aMin
   tTrash->GetXaxis()->SetTitleSize(0.06);
   tTrash->GetXaxis()->SetLabelSize(1.25*tTrash->GetXaxis()->GetLabelSize());
 
-  tTrash->GetYaxis()->SetTitle("#lambda");
+  tTrash->GetYaxis()->SetTitle("#it{#lambda}_{Fit}");
   tTrash->GetYaxis()->SetTitleOffset(0.65);
   tTrash->GetYaxis()->SetTitleSize(0.07);
   tTrash->GetYaxis()->SetLabelSize(1.25*tTrash->GetYaxis()->GetLabelSize()); 
