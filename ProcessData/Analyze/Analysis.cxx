@@ -2376,7 +2376,7 @@ TCanvas* Analysis::DrawKchdEdx(ParticleType aKchType, bool aLogz)
 //________________________________________________________________________________________________________________
 void Analysis::BuildYlmCfHeavy(int aRebin)
 {
-  vector<CorrFctnDirectYlmLite*> tTempCfLiteColl;
+  vector<CorrFctnDirectYlmLite*> tTempCfLiteColl(0);
   for(int iAnaly=0; iAnaly<fNPartialAnalysis; iAnaly++) 
   {
     tTempCfLiteColl.push_back(fPartialAnalysisCollection[iAnaly]->GetYlmCfLite(aRebin));

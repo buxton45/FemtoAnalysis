@@ -141,7 +141,7 @@ void CfHeavy::CombineCfs(TString aReturnName, TString aReturnTitle)
 
     tTempScale = fCfLiteCollection[i]->GetNumScale();
   
-    fHeavyCf->Add(fCfLiteCollection[i]->Cf(),tTempScale);
+    fHeavyCf->Add((TH1*)fCfLiteCollection[i]->Cf()->Clone(),tTempScale);
 
     tScale += tTempScale;
     tCounter++;
@@ -240,7 +240,7 @@ TObjArray* CfHeavy::GetCfCollection()
 
   for(unsigned int i=0; i<fCfLiteCollection.size(); i++)
   {
-    ReturnCollection->Add(fCfLiteCollection[i]->Cf());
+    ReturnCollection->Add(fCfLiteCollection[i]->Cf()->Clone());
   }
 
   return ReturnCollection;

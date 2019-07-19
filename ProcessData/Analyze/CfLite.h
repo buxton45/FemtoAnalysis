@@ -92,10 +92,10 @@ private:
 inline TString CfLite::CfName() {return fCfName;}
 inline TString CfLite::CfTitle() {return fCfTitle;}
 
-inline TH1* CfLite::Num() {return fNum;}
-inline TH1* CfLite::Den() {return fDen;}
-inline TH1* CfLite::Cf() {return fCf;}
-inline TH1* CfLite::CfwErrorsByHand() {return fCfwErrorsByHand;}
+inline TH1* CfLite::Num() {return (TH1*)fNum->Clone();}
+inline TH1* CfLite::Den() {return (TH1*)fDen->Clone();}
+inline TH1* CfLite::Cf() {return (TH1*)fCf->Clone();}
+inline TH1* CfLite::CfwErrorsByHand() {return (TH1*)fCfwErrorsByHand->Clone();}
 
 inline double CfLite::GetMinNorm() {return fMinNorm;}
 inline double CfLite::GetMaxNorm() {return fMaxNorm;}

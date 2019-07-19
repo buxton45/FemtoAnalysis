@@ -104,9 +104,9 @@ private:
 };
 
 
-inline TH1* CfHeavy::GetHeavyCf() {return fHeavyCf;}
+inline TH1* CfHeavy::GetHeavyCf() {return (TH1*)fHeavyCf->Clone();}
 inline TH1* CfHeavy::GetHeavyCfClone() {return (TH1*)fHeavyCf->Clone();}
-inline TH1* CfHeavy::GetHeavyCfwErrorsByHand() {return fHeavyCfwErrorsByHand;}
+inline TH1* CfHeavy::GetHeavyCfwErrorsByHand() {return (TH1*)fHeavyCfwErrorsByHand->Clone();}
 
 inline double CfHeavy::GetMinNorm() {return fMinNorm;}
 inline double CfHeavy::GetMaxNorm() {return fMaxNorm;}

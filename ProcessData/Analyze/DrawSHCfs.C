@@ -122,7 +122,14 @@ void DrawSHCfComponent(TPad* aPad, Analysis* aAnaly, YlmComponent aComponent, in
   {
     TH1D* tSHCfwSysErrs = GetYlmCfwSysErrors(TString("20181205"), aAnaly->GetAnalysisType(), aAnaly->GetCentralityType(), aComponent, al, am);
     //TODO for some reason, 0-10% data does not match perfectly
-    for(int i=1; i<tSHCfwSysErrs->GetNbinsX()+1; i++) tSHCfwSysErrs->SetBinContent(i, tSHCf->GetBinContent(i));
+    for(int i=1; i<tSHCfwSysErrs->GetNbinsX()+1; i++) 
+    {
+      assert(tSHCfwSysErrs->GetBinWidth(i)==tSHCf->GetBinWidth(i));
+      double tFracDiffConj = (tSHCfwSysErrs->GetBinContent(i) - tSHCf->GetBinContent(i))/tSHCf->GetBinContent(i);
+      assert(fabs(tFracDiffConj) < 0.05);
+
+      tSHCfwSysErrs->SetBinContent(i, tSHCf->GetBinContent(i));
+    }
 
       tSHCfwSysErrs->SetFillColor(tColorTransparent);
       tSHCfwSysErrs->SetFillStyle(1000);
@@ -245,7 +252,14 @@ void DrawSHCfComponent(TPad* aPad, Analysis* aAnaly, Analysis* aConjAnaly, YlmCo
     TH1D* tSHCfwSysErrs = CombineTwoHists(tSHCfwSysErrs_An, tSHCfwSysErrs_Conj, tYlmLiteCollAn[0]->GetNumScale(), tYlmLiteCollAn[1]->GetNumScale());
 
     //TODO for some reason, 0-10% data does not match perfectly
-    for(int i=1; i<tSHCfwSysErrs->GetNbinsX()+1; i++) tSHCfwSysErrs->SetBinContent(i, tSHCf->GetBinContent(i));
+    for(int i=1; i<tSHCfwSysErrs->GetNbinsX()+1; i++) 
+    {
+      assert(tSHCfwSysErrs->GetBinWidth(i)==tSHCf->GetBinWidth(i));
+      double tFracDiffConj = (tSHCfwSysErrs->GetBinContent(i) - tSHCf->GetBinContent(i))/tSHCf->GetBinContent(i);
+      assert(fabs(tFracDiffConj) < 0.05);
+
+      tSHCfwSysErrs->SetBinContent(i, tSHCf->GetBinContent(i));
+    }
 
       tSHCfwSysErrs->SetFillColor(tColorTransparent);
       tSHCfwSysErrs->SetFillStyle(1000);
@@ -394,6 +408,7 @@ int main(int argc, char **argv)
     tCanAll = new TCanvas(tCanNameAll, tCanNameAll);
     tCanAll->Divide(2, 3);
 
+    cout << "BUILDING LARGE 6 PANEL FIGURE" << endl;
     DrawSHCfComponent((TPad*)tCanAll->cd(1), tAnaly0010, kYlmReal, 0, 0, tRebin, bDrawSysErrs);
     DrawSHCfComponent((TPad*)tCanAll->cd(2), tAnaly0010, kYlmReal, 1, 1, tRebin, bDrawSysErrs);
 
@@ -410,6 +425,7 @@ int main(int argc, char **argv)
     tCan0010 = new TCanvas(tCanName0010, tCanName0010);
     tCan0010->Divide(2, 1);
 
+    cout << "BUILDING SMALL 2 PANEL FIGURE" << endl;
     DrawSHCfComponent((TPad*)tCan0010->cd(1), tAnaly0010, kYlmReal, 0, 0, tRebin, bDrawSysErrs);
     DrawSHCfComponent((TPad*)tCan0010->cd(2), tAnaly0010, kYlmReal, 1, 1, tRebin, bDrawSysErrs);
   }

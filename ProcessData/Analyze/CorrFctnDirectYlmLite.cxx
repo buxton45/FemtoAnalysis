@@ -297,14 +297,14 @@ void CorrFctnDirectYlmLite::ReadFromDir(int aRebin)
 //________________________________________________________________________________________________________________
 TH1D* CorrFctnDirectYlmLite::GetYlmHist(YlmComponent aComponent, YlmHistType aHistType, int al, int am)
 {
-  if     (aComponent==kYlmReal && aHistType==kYlmNum) return GetNumRealHist(al, am);
-  else if(aComponent==kYlmImag && aHistType==kYlmNum) return GetNumImagHist(al, am);
+  if     (aComponent==kYlmReal && aHistType==kYlmNum) return (TH1D*)GetNumRealHist(al, am)->Clone();
+  else if(aComponent==kYlmImag && aHistType==kYlmNum) return (TH1D*)GetNumImagHist(al, am)->Clone();
 
-  else if(aComponent==kYlmReal && aHistType==kYlmDen) return GetDenRealHist(al, am);
-  else if(aComponent==kYlmImag && aHistType==kYlmDen) return GetDenImagHist(al, am);
+  else if(aComponent==kYlmReal && aHistType==kYlmDen) return (TH1D*)GetDenRealHist(al, am)->Clone();
+  else if(aComponent==kYlmImag && aHistType==kYlmDen) return (TH1D*)GetDenImagHist(al, am)->Clone();
 
-  else if(aComponent==kYlmReal && aHistType==kYlmCf) return GetCfnRealHist(al, am);
-  else if(aComponent==kYlmImag && aHistType==kYlmCf) return GetCfnImagHist(al, am);
+  else if(aComponent==kYlmReal && aHistType==kYlmCf) return (TH1D*)GetCfnRealHist(al, am)->Clone();
+  else if(aComponent==kYlmImag && aHistType==kYlmCf) return (TH1D*)GetCfnImagHist(al, am)->Clone();
   else assert(0);
 
   return nullptr;

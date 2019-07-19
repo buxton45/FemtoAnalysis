@@ -2265,14 +2265,14 @@ int CorrFctnDirectYlm::GetIndexForLM(int el, int em)
 TH1D *CorrFctnDirectYlm::GetNumRealHist(int el, int em)
 {
   if (GetIndexForLM(el, em)>=0)
-    return numsreal[GetIndexForLM(el, em)];
+    return (TH1D*)numsreal[GetIndexForLM(el, em)]->Clone();
   else
     return 0;
 }
 TH1D *CorrFctnDirectYlm::GetNumImagHist(int el, int em)
 {
   if (GetIndexForLM(el, em)>=0)
-    return numsimag[GetIndexForLM(el, em)];
+    return (TH1D*)numsimag[GetIndexForLM(el, em)]->Clone();
   else
     return 0;
 }
@@ -2280,14 +2280,14 @@ TH1D *CorrFctnDirectYlm::GetNumImagHist(int el, int em)
 TH1D *CorrFctnDirectYlm::GetDenRealHist(int el, int em)
 {
   if (GetIndexForLM(el, em)>=0)
-    return densreal[GetIndexForLM(el, em)];
+    return (TH1D*)densreal[GetIndexForLM(el, em)]->Clone();
   else
     return 0;
 }
 TH1D *CorrFctnDirectYlm::GetDenImagHist(int el, int em)
 {
   if (GetIndexForLM(el, em)>=0)
-    return densimag[GetIndexForLM(el, em)];
+    return (TH1D*)densimag[GetIndexForLM(el, em)]->Clone();
   else
     return 0;
 }
@@ -2295,14 +2295,14 @@ TH1D *CorrFctnDirectYlm::GetDenImagHist(int el, int em)
 TH1D *CorrFctnDirectYlm::GetCfnRealHist(int el, int em)
 {
   if (GetIndexForLM(el, em)>=0)
-    return cfctreal[GetIndexForLM(el, em)];
+    return (TH1D*)cfctreal[GetIndexForLM(el, em)]->Clone();
   else
     return 0;
 }
 TH1D *CorrFctnDirectYlm::GetCfnImagHist(int el, int em)
 {
   if (GetIndexForLM(el, em)>=0)
-    return cfctimag[GetIndexForLM(el, em)];
+    return (TH1D*)cfctimag[GetIndexForLM(el, em)]->Clone();
   else
     return 0;
 }
