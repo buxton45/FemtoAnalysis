@@ -3,44 +3,44 @@ Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
 The top-level auxiliary file: LamKPublication.aux
 The style file: utphys.bst
 Database file #1: LamK_bibfile.bib
-You've used 31 entries,
+You've used 32 entries,
             2328 wiz_defined-function locations,
-            862 strings with 11003 characters,
-and the built_in function-call counts, 10807 in all, are:
-= -- 1167
-> -- 279
+            872 strings with 11232 characters,
+and the built_in function-call counts, 11196 in all, are:
+= -- 1209
+> -- 287
 < -- 0
-+ -- 105
-- -- 74
-* -- 997
-:= -- 1204
-add.period$ -- 61
-call.type$ -- 31
-change.case$ -- 35
++ -- 108
+- -- 76
+* -- 1040
+:= -- 1247
+add.period$ -- 63
+call.type$ -- 32
+change.case$ -- 36
 chr.to.int$ -- 0
-cite$ -- 31
-duplicate$ -- 626
-empty$ -- 1018
-format.name$ -- 74
-if$ -- 2874
+cite$ -- 32
+duplicate$ -- 645
+empty$ -- 1057
+format.name$ -- 76
+if$ -- 2976
 int.to.chr$ -- 0
-int.to.str$ -- 31
-missing$ -- 123
-newline$ -- 146
-num.names$ -- 31
-pop$ -- 145
+int.to.str$ -- 32
+missing$ -- 127
+newline$ -- 151
+num.names$ -- 32
+pop$ -- 148
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 0
-skip$ -- 499
+skip$ -- 514
 stack$ -- 0
-substring$ -- 527
-swap$ -- 350
+substring$ -- 555
+swap$ -- 360
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
 type$ -- 0
 warning$ -- 0
-while$ -- 73
-width$ -- 33
-write$ -- 272
+while$ -- 76
+width$ -- 34
+write$ -- 282
