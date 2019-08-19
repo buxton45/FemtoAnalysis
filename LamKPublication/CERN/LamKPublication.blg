@@ -5,28 +5,28 @@ The style file: utphys.bst
 Database file #1: LamK_bibfile.bib
 You've used 32 entries,
             2328 wiz_defined-function locations,
-            872 strings with 11232 characters,
-and the built_in function-call counts, 11196 in all, are:
-= -- 1209
+            872 strings with 11177 characters,
+and the built_in function-call counts, 11216 in all, are:
+= -- 1210
 > -- 287
 < -- 0
 + -- 108
 - -- 76
-* -- 1040
-:= -- 1247
+* -- 1047
+:= -- 1248
 add.period$ -- 63
 call.type$ -- 32
-change.case$ -- 36
+change.case$ -- 38
 chr.to.int$ -- 0
 cite$ -- 32
-duplicate$ -- 645
-empty$ -- 1057
+duplicate$ -- 646
+empty$ -- 1058
 format.name$ -- 76
-if$ -- 2976
+if$ -- 2978
 int.to.chr$ -- 0
 int.to.str$ -- 32
 missing$ -- 127
-newline$ -- 151
+newline$ -- 153
 num.names$ -- 32
 pop$ -- 148
 preamble$ -- 1
@@ -35,7 +35,7 @@ quote$ -- 0
 skip$ -- 514
 stack$ -- 0
 substring$ -- 555
-swap$ -- 360
+swap$ -- 362
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
@@ -43,4 +43,4 @@ type$ -- 0
 warning$ -- 0
 while$ -- 76
 width$ -- 34
-write$ -- 282
+write$ -- 283

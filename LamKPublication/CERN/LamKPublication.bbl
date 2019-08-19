@@ -56,10 +56,12 @@ R.~Lednick\'y and V.~L. Lyuboshitz, ``{Final State Interaction Effect on
 [Yad. Fiz.35,1316(1981)].
 %%CITATION = SJNCA,35,770;%%.
 
-\bibitem{1748-0221-3-08-S08002}
-{\bfseries ALICE} Collaboration, K.~Aamodt {\em et~al.}, ``The alice experiment
-  at the cern lhc,'' {\em JINST} {\bfseries 3} (2008) S08002.
-  \url{http://stacks.iop.org/1748-0221/3/i=08/a=S08002}.
+\bibitem{Aamodt:2008zz}
+{\bfseries ALICE} Collaboration, K.~Aamodt {\em et~al.}, ``{The ALICE
+  experiment at the CERN LHC},''
+\href{http://dx.doi.org/10.1088/1748-0221/3/08/S08002}{{\em JINST} {\bfseries
+  3} (2008) S08002}.
+%%CITATION = JINST,3,S08002;%%.
 
 \bibitem{Abelev:2013qoq}
 {\bfseries ALICE} Collaboration, B.~Abelev {\em et~al.}, ``{Centrality
@@ -77,11 +79,12 @@ J.~{Alme} {\em et~al.}, ``{The ALICE TPC, a large 3-dimensional tracking device
   \href{http://arxiv.org/abs/1001.1950}{{\ttfamily arXiv:1001.1950
   [physics.ins-det]}}.
 
-\bibitem{0954-3899-41-8-087002}
-B.~A. et~al and T.~A. Collaboration, ``{Technical Design Report for the Upgrade
-  of the ALICE Inner Tracking System},'' {\em Journal of Physics G: Nuclear and
-  Particle Physics} {\bfseries 41} no.~8, (2014) 087002.
-  \url{http://stacks.iop.org/0954-3899/41/i=8/a=087002}.
+\bibitem{Abelevetal:2014dna}
+{\bfseries ALICE} Collaboration, B.~Abelev {\em et~al.}, ``{Technical Design
+  Report for the Upgrade of the ALICE Inner Tracking System},''
+\href{http://dx.doi.org/10.1088/0954-3899/41/8/087002}{{\em J. Phys.}
+  {\bfseries G41} (2014) 087002}.
+%%CITATION = JPAGA,G41,087002;%%.
 
 \bibitem{Abelev:2014ffa}
 {\bfseries ALICE} Collaboration, B.~B. Abelev {\em et~al.}, ``{Performance of
@@ -119,12 +122,12 @@ R.~Brun, F.~Bruyant, F.~Carminati, S.~Giani, M.~Maire, A.~McPherson,
 \href{http://arxiv.org/abs/1709.01731}{{\ttfamily arXiv:1709.01731 [nucl-ex]}}.
 %%CITATION = ARXIV:1709.01731;%%.
 
-\bibitem{Patrignani:2016xqp}
-{\bfseries Particle Data Group} Collaboration, C.~Patrignani {\em et~al.},
-  ``{Review of Particle Physics},''
-\href{http://dx.doi.org/10.1088/1674-1137/40/10/100001}{{\em Chin. Phys.}
-  {\bfseries C40} no.~10, (2016) 100001}.
-%%CITATION = CHPHD,C40,100001;%%.
+\bibitem{PhysRevD.98.030001}
+{\bfseries Particle Data Group} Collaboration, M.~Tanabashi {\em et~al.},
+  ``Review of particle physics,''
+  \href{http://dx.doi.org/10.1103/PhysRevD.98.030001}{{\em Phys. Rev. D}
+  {\bfseries 98} (Aug, 2018) 030001}.
+  \url{https://link.aps.org/doi/10.1103/PhysRevD.98.030001}.
 
 \bibitem{Koonin:1977fh}
 S.~E. Koonin, ``{Proton Pictures of High-Energy Nuclear Collisions},''

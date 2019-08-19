@@ -12,6 +12,7 @@
 #include "TLegend.h"
 #include "TF1.h"
 #include "TLatex.h"
+#include "TLegendEntry.h"
 
 #include "ThermCf.h"
 class ThermCf;
@@ -929,7 +930,7 @@ TF1* GetLamKchPMBgdFit(TString aCfDescriptor, TString aFileNameCfs, int aImpactP
 }
 
 //________________________________________________________________________________________________________________
-TCanvas* BuildBgdwFitPanel(CanvasPartition* aCanPart, int tColumn, int tRow, TString aCfDescriptor, TString aFileNameCfs, AnalysisType aAnType, int aImpactParam, bool aCombineConjugates, bool aCombineImpactParams, ThermEventsType aEventsType, int aRebin, double aMinNorm, double aMaxNorm, double aMaxBgdFit=3.0, bool aAvgLamKchPMFit=false, bool aUseStavCf=false, bool aZoomY=false, bool aShiftText=false)
+void BuildBgdwFitPanel(CanvasPartition* aCanPart, int tColumn, int tRow, TString aCfDescriptor, TString aFileNameCfs, AnalysisType aAnType, int aImpactParam, bool aCombineConjugates, bool aCombineImpactParams, ThermEventsType aEventsType, int aRebin, double aMinNorm, double aMaxNorm, double aMaxBgdFit=3.0, bool aAvgLamKchPMFit=false, bool aUseStavCf=false, bool aZoomY=false, bool aShiftText=false)
 {
   if(aAnType==kLamKchM || aAnType==kALamKchP) gRejectOmegaTherm=true;
   else gRejectOmegaTherm=false;
@@ -1113,9 +1114,9 @@ TCanvas* BuildBgdwFitPanel(CanvasPartition* aCanPart, int tColumn, int tRow, TSt
   }
 
 }
-
+/*
 //________________________________________________________________________________________________________________
-TCanvas* BuildBgdwFitPanel(CanvasPartition* aCanPart, int tColumn, int tRow, TString aCfDescriptor, TString aFileNameCfs, AnalysisType aAnType, int aImpactParam, bool aCombineConjugates, bool aCombineImpactParams, ThermEventsType aEventsType, td1dVec &aCustomBins, double aMinNorm, double aMaxNorm, double aMaxBgdFit=3.0, bool aAvgLamKchPMFit=false, bool aUseStavCf=false, bool aZoomY=false, bool aShiftText=false)
+void BuildBgdwFitPanel(CanvasPartition* aCanPart, int tColumn, int tRow, TString aCfDescriptor, TString aFileNameCfs, AnalysisType aAnType, int aImpactParam, bool aCombineConjugates, bool aCombineImpactParams, ThermEventsType aEventsType, td1dVec &aCustomBins, double aMinNorm, double aMaxNorm, double aMaxBgdFit=3.0, bool aAvgLamKchPMFit=false, bool aUseStavCf=false, bool aZoomY=false, bool aShiftText=false)
 {
   if(aAnType==kLamKchM || aAnType==kALamKchP) gRejectOmegaTherm=true;
   else gRejectOmegaTherm=false;
@@ -1183,19 +1184,19 @@ TCanvas* BuildBgdwFitPanel(CanvasPartition* aCanPart, int tColumn, int tRow, TSt
 
 
   CentralityType tCentTypeData = GetCentralityType(aImpactParam);
-/*
-  TH1D* tData = GetQuickData(aAnType, tCentTypeData, aCombineConjugates, "20180505", 1);
-  ThermCf::SetStyleAndColor(tData, 20, GetColor(aAnType));
-  TH1D* tDataSys = (TH1D*)tData->Clone("tDataSys");
 
-  double tOGBinWidth = tData->GetBinWidth(1);
-  tData = (TH1D*)tData->Rebin((int)aCustomBins.size()-1, TString::Format("%s_CustomRebin", tData->GetName()), aCustomBins.data());
-  ScaleCustomRebinnedCf(tOGBinWidth, tData, aCustomBins);
+//  TH1D* tData = GetQuickData(aAnType, tCentTypeData, aCombineConjugates, "20180505", 1);
+//  ThermCf::SetStyleAndColor(tData, 20, GetColor(aAnType));
+//  TH1D* tDataSys = (TH1D*)tData->Clone("tDataSys");
 
-  double tOGBinWidthSys = tDataSys->GetBinWidth(1);
-  tDataSys = (TH1D*)tDataSys->Rebin((int)aCustomBins.size()-1, TString::Format("%s_CustomRebin", tDataSys->GetName()), aCustomBins.data());
-  ScaleCustomRebinnedCf(tOGBinWidthSys, tDataSys, aCustomBins);
-*/
+//  double tOGBinWidth = tData->GetBinWidth(1);
+//  tData = (TH1D*)tData->Rebin((int)aCustomBins.size()-1, TString::Format("%s_CustomRebin", tData->GetName()), aCustomBins.data());
+//  ScaleCustomRebinnedCf(tOGBinWidth, tData, aCustomBins);
+
+//  double tOGBinWidthSys = tDataSys->GetBinWidth(1);
+//  tDataSys = (TH1D*)tDataSys->Rebin((int)aCustomBins.size()-1, TString::Format("%s_CustomRebin", tDataSys->GetName()), aCustomBins.data());
+//  ScaleCustomRebinnedCf(tOGBinWidthSys, tDataSys, aCustomBins);
+
 
   TObjArray* tDataStatAndSys = GetSlowDataWithSysErrs(aAnType, tCentTypeData, aCombineConjugates, "20190319", aCustomBins);
   TH1D* tData = (TH1D*)tDataStatAndSys->At(0);
@@ -1319,6 +1320,226 @@ TCanvas* BuildBgdwFitPanel(CanvasPartition* aCanPart, int tColumn, int tRow, TSt
   }
 
 }
+*/
+
+//________________________________________________________________________________________________________________
+void BuildBgdwFitPanel(CanvasPartition* aCanPart, int tColumn, int tRow, TString aCfDescriptor, TString aFileNameCfs, AnalysisType aAnType, int aImpactParam, bool aCombineConjugates, bool aCombineImpactParams, ThermEventsType aEventsType, td1dVec &aCustomBins, double aMinNorm, double aMaxNorm, double aMaxBgdFit=3.0, bool aAvgLamKchPMFit=false, bool aUseStavCf=false, bool aZoomY=false, bool aShiftText=false)
+{
+  if(aAnType==kLamKchM || aAnType==kALamKchP) gRejectOmegaTherm=true;
+  else gRejectOmegaTherm=false;
+  if(aCfDescriptor.EqualTo("PrimaryOnly") || aCfDescriptor.EqualTo("PrimaryAndShortDecays")) gRejectOmegaTherm=false;  //In this case, Omega peak not present
+  //-------------------------------------------------
+  CentralityType tCentType=kMB;
+  if(aCombineImpactParams) tCentType = GetCentralityType(aImpactParam);
+  //-------------------------------------------------
+  AnalysisType tConjAnType = GetConjAnType(aAnType);
+  //-------------------------------------------------
+//  TString tDescriptor = "THERM. Bgd (w. Fit)";
+  TString tDescriptor = "THERM. Bgd.";
+
+  TString tOverallDescriptor = cAnalysisRootTags[aAnType];
+  if(aCombineConjugates) tOverallDescriptor += TString::Format(" & %s", cAnalysisRootTags[tConjAnType]);
+  if(!aCombineImpactParams) tOverallDescriptor += TString::Format(" (b=%d)", aImpactParam);
+  else tOverallDescriptor += TString::Format(" (%s)", cPrettyCentralityTags[tCentType]);
+
+  int tMarkerStyle = 25;
+  int tColor = kGreen+1;
+
+  //--------------------------------------------
+  //aCustomBins will only go out to 2 GeV/c for the experimental data, but the THERM data go out to 3 GeV/c
+  assert(aCustomBins[aCustomBins.size()-1]==2.00);
+  td1dVec aCustomBinsLong(aCustomBins.size());
+  for(int i=0; i<aCustomBins.size(); i++) aCustomBinsLong[i]=aCustomBins[i];
+  for(int i=1; i<=10; i++) aCustomBinsLong.push_back(aCustomBins[aCustomBins.size()-1] + 0.10*i);
+  assert(aCustomBinsLong[aCustomBinsLong.size()-1]==3.00);
+
+  //--------------------------------------------
+  ThermCf* tThermCf = new ThermCf(aFileNameCfs, aCfDescriptor, aAnType, GetCentralityType(aImpactParam), aCombineConjugates, aEventsType, 1, aMinNorm, aMaxNorm, aUseStavCf);
+  if(!aCombineImpactParams) tThermCf->SetSpecificImpactParam(aImpactParam, aCombineImpactParams);
+  CfHeavy* tThermCfHeavy = tThermCf->GetThermCfHeavy();
+  tThermCfHeavy->Rebin((int)aCustomBinsLong.size()-1, aCustomBinsLong);
+  TH1* tCf = tThermCfHeavy->GetHeavyCfClone();
+//-------------------------------------------------------------------------------
+  cout << "**************************************************" << endl;
+  cout << "Fitting call(1) from: DrawBgdwFit" << endl;
+  TF1 *tBgdFit, *tBgdFitDraw;
+  int tPower = 6;
+  
+  if((aAnType==kLamKchP || aAnType==kALamKchM || aAnType==kLamKchM || aAnType==kALamKchP) && aAvgLamKchPMFit)
+  {
+    tThermCfHeavy = ThermCf::GetLamKchPMCombinedThermCfsHeavy(aFileNameCfs, aCfDescriptor, tCentType, aEventsType, 1, aMinNorm, aMaxNorm, aUseStavCf);
+    tThermCfHeavy->Rebin((int)aCustomBinsLong.size()-1, aCustomBinsLong);
+    tCf = tThermCfHeavy->GetHeavyCfClone();
+    tBgdFit = GetLamKchPMBgdFit(aCfDescriptor, tCf, aMaxBgdFit);
+  }
+  else tBgdFit = FitBackground(tCf, tPower, 0., aMaxBgdFit);
+  cout << "**************************************************" << endl;
+  if(aAnType==kLamKchM || aAnType==kALamKchP) //Want to draw fit function without gaping gap where Omega peak omitted
+  {
+    gRejectOmegaTherm=false;
+    tBgdFitDraw = new TF1(tBgdFit->GetName()+TString("_Draw"), FitFunctionPolynomial, 0., 3., 7);
+    for(int i=0; i<tBgdFit->GetNpar(); i++) tBgdFitDraw->SetParameter(i, tBgdFit->GetParameter(i));
+  }
+  else tBgdFitDraw = tBgdFit;
+
+  tBgdFitDraw->SetLineColor(tCf->GetLineColor());
+  tBgdFitDraw->SetLineWidth(2.0);
+  tBgdFitDraw->SetLineStyle(2);
+  tBgdFitDraw->SetRange(0., aMaxBgdFit);
+
+  //---------------------------------------------------------------
+
+
+  CentralityType tCentTypeData = GetCentralityType(aImpactParam);
+/*
+  TH1D* tData = GetQuickData(aAnType, tCentTypeData, aCombineConjugates, "20180505", 1);
+  ThermCf::SetStyleAndColor(tData, 20, GetColor(aAnType));
+  TH1D* tDataSys = (TH1D*)tData->Clone("tDataSys");
+
+  double tOGBinWidth = tData->GetBinWidth(1);
+  tData = (TH1D*)tData->Rebin((int)aCustomBins.size()-1, TString::Format("%s_CustomRebin", tData->GetName()), aCustomBins.data());
+  ScaleCustomRebinnedCf(tOGBinWidth, tData, aCustomBins);
+
+  double tOGBinWidthSys = tDataSys->GetBinWidth(1);
+  tDataSys = (TH1D*)tDataSys->Rebin((int)aCustomBins.size()-1, TString::Format("%s_CustomRebin", tDataSys->GetName()), aCustomBins.data());
+  ScaleCustomRebinnedCf(tOGBinWidthSys, tDataSys, aCustomBins);
+*/
+
+  TObjArray* tDataStatAndSys = GetSlowDataWithSysErrs(aAnType, tCentTypeData, aCombineConjugates, "20190319", aCustomBins);
+  TH1D* tData = (TH1D*)tDataStatAndSys->At(0);
+    ThermCf::SetStyleAndColor(tData, 20, GetColor(aAnType));
+  TH1D* tDataSys = (TH1D*)tDataStatAndSys->At(1);
+
+
+  //Set proper attributes for drawing systematics
+  ThermCf::SetStyleAndColor(tDataSys, 20, TColor::GetColorTransparent(GetColor(aAnType), 0.2));
+  tDataSys->SetFillColor(TColor::GetColorTransparent(GetColor(aAnType), 0.2));
+  tDataSys->SetFillStyle(1000);
+  tDataSys->SetLineColor(0);
+  tDataSys->SetLineWidth(0);
+
+
+//  cout << "**************************************************" << endl;
+//  cout << "Fitting call(2) from: DrawBgdwFit" << endl;
+  TF1 *tBgdFitData, *tBgdFitDataDraw;
+//  tBgdFitData = FitBackgroundwNorm(tBgdFit, tData, tPower, 0.6, 0.9);
+  tBgdFitData = FitBackgroundwNormAndOffset(tBgdFit, tData, tPower, 0.32, 0.80);
+//  cout << "**************************************************" << endl;
+  if(aAnType==kLamKchM || aAnType==kALamKchP) //Want to draw fit function without gaping gap where Omega peak omitted
+  {
+    gRejectOmegaTherm=false;
+//    tBgdFitDataDraw = new TF1(tBgdFitData->GetName()+TString("_Draw"), FitFunctionPolynomialwNorm, 0., 3., 8);
+    tBgdFitDataDraw = new TF1(tBgdFitData->GetName()+TString("_Draw"), FitFunctionPolynomialwNormAndOffset, 0., 3., 9);
+    for(int i=0; i<tBgdFitData->GetNpar(); i++) tBgdFitDataDraw->SetParameter(i, tBgdFitData->GetParameter(i));
+  }
+  else tBgdFitDataDraw = tBgdFitData;
+
+  tBgdFitDataDraw->SetLineColor(tData->GetLineColor());
+  tBgdFitDataDraw->SetLineWidth(2.0);
+  tBgdFitDataDraw->SetRange(0., aMaxBgdFit);
+
+  //---------------------------------------------------------------------------------------------------------
+
+  double tMarkerSize = 2.0;
+  aCanPart->AddGraph(tColumn, tRow, tCf, "", tMarkerStyle, tColor, tMarkerSize, "ex0");  //ex0 suppresses the error along x
+  aCanPart->AddGraph(tColumn, tRow, tBgdFitDraw, "", 20, tColor, tMarkerSize, "same l");
+  aCanPart->AddGraph(tColumn, tRow, tDataSys, "", 20, TColor::GetColorTransparent(GetColor(aAnType), 0.2), tMarkerSize, "e2psame");
+  aCanPart->AddGraph(tColumn, tRow, tData, "", 20, GetColor(aAnType), tMarkerSize, "ex0same");
+  aCanPart->AddGraph(tColumn, tRow, tBgdFitDataDraw, "", 20, GetColor(aAnType), tMarkerSize, "same l");
+
+  aCanPart->AddGraph(tColumn, tRow, tCf, "", tMarkerStyle, tColor, tMarkerSize, "ex0same");  //draw again so on top
+  aCanPart->AddGraph(tColumn, tRow, tBgdFitDataDraw, "", 20, GetColor(aAnType), tMarkerSize, "same l");
+  aCanPart->AddGraph(tColumn, tRow, tBgdFitDraw, "", 20, tColor, tMarkerSize, "same l");
+  //---------------------------------------------------------------------------------------------------------
+
+  TString tSysInfoTString;
+  if(aCombineConjugates) tSysInfoTString = TString::Format("%s#scale[0.5]{ }#oplus#scale[0.5]{ }%s,  %s", cAnalysisRootTags[aAnType], cAnalysisRootTags[aAnType+1], cPrettyCentralityTags[tCentTypeData]);
+  else                   tSysInfoTString = TString::Format("%s,  %s", cAnalysisRootTags[aAnType], cPrettyCentralityTags[tCentTypeData]);
+  TPaveText* tSysInfoPaveText;
+  tSysInfoPaveText = aCanPart->SetupTPaveText(tSysInfoTString, tColumn, tRow, 0.175, 0.80, 0.80, 0.195, 43, 40, 31, true);
+  aCanPart->AddPadPaveText(tSysInfoPaveText, tColumn, tRow);
+
+
+  //---------------------------------------------------------------------------------------------------------
+  if(!aZoomY)
+  {
+    double tPar0, tPar1, tPar2, tPar3, tPar4, tPar5, tPar6;
+    tPar0 = tBgdFitDraw->GetParameter(0);
+    tPar1 = tBgdFitDraw->GetParameter(1);
+    tPar2 = tBgdFitDraw->GetParameter(2);
+    tPar3 = tBgdFitDraw->GetParameter(3);
+    tPar4 = tBgdFitDraw->GetParameter(4);
+    tPar5 = tBgdFitDraw->GetParameter(5);
+    tPar6 = tBgdFitDraw->GetParameter(6);
+
+    double tScaleX = aCanPart->GetXScaleFactor(tColumn, tRow);
+    double tScaleY = aCanPart->GetYScaleFactor(tColumn, tRow);
+    double tTexSize = 0.035*(tScaleY/tScaleX);
+    TLatex* tTex1 = new TLatex(0.15, 0.92, TString::Format("#color[%i]{Bgd} = %0.3f + %0.3fx + %0.3fx^{2} + ...", tColor, tPar0, tPar1, tPar2));
+    TLatex* tTex2 = new TLatex(0.30, 0.91, TString::Format("... + %0.3fx^{3} + %0.3fx^{4} + ..." , tPar3, tPar4));
+    TLatex* tTex3 = new TLatex(0.30, 0.90, TString::Format("... + %0.3fx^{5} + %0.3fx^{6} + ..." , tPar5, tPar6));
+
+    tTex1->SetTextAlign(12);
+    tTex1->SetLineWidth(2);
+    tTex1->SetTextFont(42);
+    tTex1->SetTextSize(tTexSize);
+
+    tTex2->SetTextAlign(12);
+    tTex2->SetLineWidth(2);
+    tTex2->SetTextFont(42);
+    tTex2->SetTextSize(tTexSize);
+
+    tTex3->SetTextAlign(12);
+    tTex3->SetLineWidth(2);
+    tTex3->SetTextFont(42);
+    tTex3->SetTextSize(tTexSize);
+
+    aCanPart->AddPadPaveLatex(tTex1, tColumn, tRow);
+    aCanPart->AddPadPaveLatex(tTex2, tColumn, tRow);
+    aCanPart->AddPadPaveLatex(tTex3, tColumn, tRow);
+  }
+  //---------------------------------------------------------------------------------------------------------
+  if(tRow==0)
+  {
+    int tNColumns=1;
+    if(aShiftText)
+    {
+      if(!aZoomY) aCanPart->SetupTLegend("", tColumn, tRow, 0.425, 0.15, 0.35, 0.15, tNColumns, true);
+      else        aCanPart->SetupTLegend("", tColumn, tRow, 0.30, 0.495, 0.575, 0.30, tNColumns, true);
+    }
+    else
+    {
+      if(!aZoomY) aCanPart->SetupTLegend("", tColumn, tRow, 0.55, 0.15, 0.35, 0.15, tNColumns, true);
+      else        aCanPart->SetupTLegend("", tColumn, tRow, 0.30, 0.475, 0.65, 0.375, tNColumns, true);
+    }
+    aCanPart->AddLegendEntry(tColumn, tRow, tData, "ALICE, stat. errors", "PE");
+    aCanPart->AddLegendEntry(tColumn, tRow, tDataSys, "syst. errors", "F");
+    aCanPart->AddLegendEntry(tColumn, tRow, tBgdFitDataDraw, "ALICE Bgd. Fit", "L");   
+    aCanPart->AddLegendEntry(tColumn, tRow, tCf, tDescriptor.Data(), "p");
+    aCanPart->AddLegendEntry(tColumn, tRow, tBgdFitDraw, "THERM. Bgd. Fit", "L"); 
+               
+  }
+
+  if(tRow==(aCanPart->GetNy()-1) && tColumn==0)
+  {
+    TString tAliceInfo = TString("ALICE");
+    TPaveText* tAliceInfoText = aCanPart->SetupTPaveText(tAliceInfo, tColumn, tRow, 0.0, 0.025, 1.0, 0.20, 43, 55, 22, true);
+    aCanPart->AddPadPaveText(tAliceInfoText, tColumn, tRow);
+  }
+  if(tRow==(aCanPart->GetNy()-1) && tColumn==1)
+  {
+    TString tAliceInfo = TString("Pb-Pb #sqrt{#it{s}_{NN}} = 2.76 TeV");
+    TPaveText* tAliceInfoText = aCanPart->SetupTPaveText(tAliceInfo, tColumn, tRow, 0.0, 0.025, 1.0, 0.20, 43, 55, 22, true);
+    aCanPart->AddPadPaveText(tAliceInfoText, tColumn, tRow);
+  }
+  
+  
+
+
+
+}
+
+
 
 //________________________________________________________________________________________________________________
 TCanvas* DrawBgdwFit_AllCentv2(TString aCfDescriptor, TString aFileNameCfs, AnalysisType aAnType, bool aCombineConjugates, ThermEventsType aEventsType, int aRebin, double aMinNorm, double aMaxNorm, double aMaxBgdFit=3.0, bool aAvgLamKchPMFit=false, bool aUseStavCf=false)
@@ -2330,6 +2551,7 @@ int main(int argc, char **argv)
     tCanBgdwFitAllCentAllAnv2 = DrawBgdwFit_AllCentAllAnv2(tCfDescriptor, tSingleFileName, bCombineConjugates, tEventsType, tCustomBins, tMinNorm, tMaxNorm, tMaxBgdFit, aAvgLamKchPMFit, bUseStavCf);
 
     //------------------------------------------
+
     tCanBgdwFitSingleCentAllAn0010 = DrawBgdwFit_SingleCentAllAnv2(k0010, tCfDescriptor, tSingleFileName, bCombineConjugates, tEventsType, tRebin, tMinNorm, tMaxNorm, tMaxBgdFit, aAvgLamKchPMFit, bUseStavCf);
 
     tCanBgdwFitSingleCentAllAn1030 = DrawBgdwFit_SingleCentAllAnv2(k1030, tCfDescriptor, tSingleFileName, bCombineConjugates, tEventsType, tRebin, tMinNorm, tMaxNorm, tMaxBgdFit, aAvgLamKchPMFit, bUseStavCf);
