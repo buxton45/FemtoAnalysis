@@ -142,7 +142,7 @@ void DrawSHCfComponent(TPad* aPad, Analysis* aAnaly, YlmComponent aComponent, in
 }
 
 //_________________________________________________________________________________________
-void DrawSHCfComponent(TPad* aPad, Analysis* aAnaly, Analysis* aConjAnaly, YlmComponent aComponent, int al, int am, int aRebin, bool aDrawSysErrs=false/*, double aMinNorm=0.32, double aMaxNorm=0.40, int aRebin=2*/, bool aPrintAliceInfo=false)
+void DrawSHCfComponent(TPad* aPad, Analysis* aAnaly, Analysis* aConjAnaly, YlmComponent aComponent, int al, int am, int aRebin, bool aDrawSysErrs=false/*, double aMinNorm=0.32, double aMaxNorm=0.40, int aRebin=2*/, bool aPrintAliceInfo=false, double aMarkerSize=0.75)
 {
   aPad->cd();
 
@@ -165,6 +165,10 @@ void DrawSHCfComponent(TPad* aPad, Analysis* aAnaly, Analysis* aConjAnaly, YlmCo
   {
     tYLow = -0.018;
     tYHigh = 0.02;
+    if(aAnaly->GetAnalysisType()==kLamKchP && aAnaly->GetCentralityType()==k0010)
+    {
+      tYHigh = 0.0045;
+    }
   }
 
   //--------------------------------------------------------------
@@ -205,7 +209,7 @@ void DrawSHCfComponent(TPad* aPad, Analysis* aAnaly, Analysis* aConjAnaly, YlmCo
   tSHCf->GetYaxis()->SetRangeUser(tYLow, tYHigh);
 
   tSHCf->SetMarkerStyle(20);
-  tSHCf->SetMarkerSize(0.75);
+  tSHCf->SetMarkerSize(aMarkerSize);
   tSHCf->SetMarkerColor(tColor);
   tSHCf->SetLineColor(tColor);
 
@@ -224,20 +228,35 @@ void DrawSHCfComponent(TPad* aPad, Analysis* aAnaly, Analysis* aConjAnaly, YlmCo
   tSHCf->Draw("ex0");
 
   //--------------------------------------------------------------
-
+/*
   TPaveText* tText = new TPaveText(0.70, 0.80, 0.95, 0.95, "NDC");
     tText->SetFillColor(0);
     tText->SetBorderSize(0);
     tText->SetTextColor(tColor);
-    tText->AddText(TString::Format("%s & %s", cAnalysisRootTags[aAnaly->GetAnalysisType()], cAnalysisRootTags[aConjAnaly->GetAnalysisType()]));
+    tText->AddText(TString::Format("%s#scale[0.5]{ }#oplus#scale[0.5]{ }%s", cAnalysisRootTags[aAnaly->GetAnalysisType()], cAnalysisRootTags[aConjAnaly->GetAnalysisType()]));
     tText->AddText(TString::Format("%sC_{%d%d} (%s)", tReImVec[(int)aComponent].Data(), al, am, cPrettyCentralityTags[aAnaly->GetCentralityType()]));
   tText->Draw();
+*/
+
+  TString tTextSys = TString::Format("%s#scale[0.5]{ }#oplus#scale[0.5]{ }%s", 
+                                     cAnalysisRootTags[aAnaly->GetAnalysisType()], 
+                                     cAnalysisRootTags[aConjAnaly->GetAnalysisType()]);
+  TString tCfAndCentInfo = TString::Format("%sC_{%d%d} (%s)", tReImVec[(int)aComponent].Data(), al, am, cPrettyCentralityTags[aAnaly->GetCentralityType()]);
+
+//  TLegend* tLeg = new TLegend(0.50, 0.175, 0.95, 0.475, tCfAndCentInfo.Data());
+  TLegend* tLeg = new TLegend(0.60, 0.275, 0.95, 0.475, tCfAndCentInfo.Data());
+    tLeg->SetFillColor(0);
+    tLeg->SetBorderSize(0);
+    tLeg->SetTextAlign(22);
+    tLeg->SetFillStyle(0);
+//  tLeg->AddEntry(tSHCf, TString::Format("%s, stat. errors", tTextSys.Data()), "PE");
+  tLeg->AddEntry(tSHCf, tTextSys.Data(), "P");
 
   if(aPrintAliceInfo && al==0 && am==0)
   {
-    TLatex *   tex = new TLatex(0.125,0.88,"ALICE Pb-Pb #sqrt{#it{s}_{NN}} = 2.76 TeV");
+    TLatex *   tex = new TLatex(0.02,1.05,"ALICE Pb-Pb #sqrt{#it{s}_{NN}} = 2.76 TeV");
     tex->SetTextFont(42);
-    tex->SetTextSize(0.055);
+    tex->SetTextSize(0.060);
     tex->SetLineWidth(2);
     tex->Draw();
   }
@@ -268,8 +287,11 @@ void DrawSHCfComponent(TPad* aPad, Analysis* aAnaly, Analysis* aConjAnaly, YlmCo
       tSHCfwSysErrs->SetLineWidth(0);
 
       tSHCfwSysErrs->Draw("e2psame");
+
+      //tLeg->AddEntry(tSHCfwSysErrs, "syst. errors", "F");
   }
 
+  tLeg->Draw();
 }
 
 
@@ -453,8 +475,8 @@ int main(int argc, char **argv)
     tCan0010 = new TCanvas(tCanName0010, tCanName0010, 1400, 500);
     tCan0010->Divide(2, 1);
 
-    DrawSHCfComponent((TPad*)tCan0010->cd(1), tAnaly0010, tConjAnaly0010, kYlmReal, 0, 0, tRebin, bDrawSysErrs);
-    DrawSHCfComponent((TPad*)tCan0010->cd(2), tAnaly0010, tConjAnaly0010, kYlmReal, 1, 1, tRebin, bDrawSysErrs);
+    DrawSHCfComponent((TPad*)tCan0010->cd(1), tAnaly0010, tConjAnaly0010, kYlmReal, 0, 0, tRebin, bDrawSysErrs, true, 1.0);
+    DrawSHCfComponent((TPad*)tCan0010->cd(2), tAnaly0010, tConjAnaly0010, kYlmReal, 1, 1, tRebin, bDrawSysErrs, true, 1.0);
   }
 
   if(bDrawThermCfs)

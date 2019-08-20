@@ -79,8 +79,8 @@ TCanvas* CompareImF0vsReF0(vector<FitValWriterInfo> &aFitValWriterInfo, TString 
     else if(aFitValWriterInfo[iAn].analysisType==kLamK0 || aFitValWriterInfo[iAn].analysisType==kALamK0) aSystematicsFileLocation = aSystematicsFileLocation_LamK0;
     else assert(0);
 
-    FitValuesWriterwSysErrs::DrawImF0vsReF0Graph(tPadReF0vsImF0, aFitValWriterInfo[iAn].masterFileLocation, aSystematicsFileLocation, aFitValWriterInfo[iAn].fitInfoTString, aFitValWriterInfo[iAn].analysisType, tCentType, aFitValWriterInfo[iAn].markerColor, aFitValWriterInfo[iAn].markerStyle, aFitValWriterInfo[iAn].markerSize, "epsame", "e2same", aDrawStatOnly);
-    FitValuesWriterwSysErrs::DrawD0Graph(tPadD0, aFitValWriterInfo[iAn].masterFileLocation, aSystematicsFileLocation, aFitValWriterInfo[iAn].fitInfoTString, aFitValWriterInfo[iAn].analysisType, tCentType, (iD0Inc+1)*tIncrementSize, aFitValWriterInfo[iAn].markerColor, aFitValWriterInfo[iAn].markerStyle, aFitValWriterInfo[iAn].markerSize, "epsame", "e2same", aDrawStatOnly);
+    FitValuesWriterwSysErrs::DrawImF0vsReF0Graph(tPadReF0vsImF0, aFitValWriterInfo[iAn].masterFileLocation, aSystematicsFileLocation, aFitValWriterInfo[iAn].fitInfoTString, aFitValWriterInfo[iAn].analysisType, tCentType, aFitValWriterInfo[iAn].markerColor, aFitValWriterInfo[iAn].markerStyle, aFitValWriterInfo[iAn].markerSize, "epzsame", "e2same", aDrawStatOnly);
+    FitValuesWriterwSysErrs::DrawD0Graph(tPadD0, aFitValWriterInfo[iAn].masterFileLocation, aSystematicsFileLocation, aFitValWriterInfo[iAn].fitInfoTString, aFitValWriterInfo[iAn].analysisType, tCentType, (iD0Inc+1)*tIncrementSize, aFitValWriterInfo[iAn].markerColor, aFitValWriterInfo[iAn].markerStyle, aFitValWriterInfo[iAn].markerSize, "epzsame", "e2same", aDrawStatOnly);
     tAnTypes.push_back(aFitValWriterInfo[iAn].analysisType);
 
     if(!DescriptorAlreadyIncluded(tUsedDescriptors, tUsedMarkerStyles, aFitValWriterInfo[iAn].legendDescriptor, aFitValWriterInfo[iAn].markerStyle) && !aSuppressDescs)
@@ -158,10 +158,16 @@ TCanvas* CompareImF0vsReF0(vector<FitValWriterInfo> &aFitValWriterInfo, TString 
 
     TLegend* tLegPredictions = new TLegend(0.60, 0.725, 0.975, 0.975);
       tLegPredictions->SetLineWidth(0);
+/*
       tLegPredictions->AddEntry(tGr_0607100_Set1, "[A] Set 1: K#Lambda = #bar{K}#Lambda", "p");
       tLegPredictions->AddEntry(tGr_0607100_Set2, "[A] Set 2: K#Lambda = #bar{K}#Lambda", "p");
       tLegPredictions->AddEntry(tGr_PhysRevD_KLam, "[B] K#Lambda", "p");
       tLegPredictions->AddEntry(tGr_PhysRevD_AKLam, "[B] #bar{K}#Lambda", "p");
+*/
+      tLegPredictions->AddEntry(tGr_0607100_Set1, "[2] Set 1: K#Lambda = #bar{K}#Lambda", "p");
+      tLegPredictions->AddEntry(tGr_0607100_Set2, "[2] Set 2: K#Lambda = #bar{K}#Lambda", "p");
+      tLegPredictions->AddEntry(tGr_PhysRevD_KLam, "[3] K#Lambda", "p");
+      tLegPredictions->AddEntry(tGr_PhysRevD_AKLam, "[3] #bar{K}#Lambda", "p");
     tLegPredictions->Draw();
   }
 
@@ -474,7 +480,7 @@ TCanvas* CompareLambdavsRadiusAll(vector<FitValWriterInfo> &aFitValWriterInfo, T
   aSystematicsFileLocation = aSystematicsFileLocation_LamKch;  //Until new sys. generated, just use old ones from LamKch
   for(int i=0; i<3; i++)
   {
-    FitValuesWriterwSysErrs::DrawLambdavsRadiusGraph((TPad*)tReturnCan, aFitValWriterInfo[0].masterFileLocation, aSystematicsFileLocation, aFitValWriterInfo[0].fitInfoTString, aFitValWriterInfo[0].analysisType, static_cast<CentralityType>(i), tColors[i], tMarkerStyles[i], aFitValWriterInfo[0].markerSize, "epsame", "e2same", aDrawStatOnly);
+    FitValuesWriterwSysErrs::DrawLambdavsRadiusGraph((TPad*)tReturnCan, aFitValWriterInfo[0].masterFileLocation, aSystematicsFileLocation, aFitValWriterInfo[0].fitInfoTString, aFitValWriterInfo[0].analysisType, static_cast<CentralityType>(i), tColors[i], tMarkerStyles[i], aFitValWriterInfo[0].markerSize, "epzsame", "e2same", aDrawStatOnly);
 
     tLegDesc = cPrettyCentralityTags[i];
 
@@ -488,10 +494,10 @@ TCanvas* CompareLambdavsRadiusAll(vector<FitValWriterInfo> &aFitValWriterInfo, T
 
   //------------------------------------------------------
   tTex->SetTextSize(0.05);
-//  tTex->DrawLatex(3.5, tStartY, TString("ALICE Pb-Pb #sqrt{#it{s}_{NN}} = 2.76 TeV"));
+  tTex->DrawLatex(4.8, 0.5, TString("ALICE Pb-Pb #sqrt{#it{s}_{NN}} = 2.76 TeV"));
 
-  tTex->DrawLatex(3.0, 0.5, TString("ALICE Preliminary"));
-  tTex->DrawLatex(5.3, 0.5, TString("Pb-Pb #sqrt{#it{s}_{NN}} = 2.76 TeV"));
+//  tTex->DrawLatex(3.0, 0.5, TString("ALICE Preliminary"));
+//  tTex->DrawLatex(5.3, 0.5, TString("Pb-Pb #sqrt{#it{s}_{NN}} = 2.76 TeV"));
   //------------------------------------------------------
 
   return tReturnCan;

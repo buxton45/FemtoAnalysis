@@ -178,7 +178,7 @@ void DrawHistwGaussFit(TPad* aPad, TH1* aHist, double aGaussFitMin, double aGaus
   tGaussFit->SetLineColor(kBlack);
   //aHist->SetMarkerColor(kGreen+1);
   //aHist->SetLineColor(kGreen+1);
-  aHist->SetMarkerStyle(26);
+  aHist->SetMarkerStyle(25);
   aHist->SetMarkerSize(0.5);
 
   aPad->cd();
@@ -198,6 +198,7 @@ void DrawHistwGaussFit(TPad* aPad, TH1* aHist, double aGaussFitMin, double aGaus
   tLineMax->Draw();
   //----------------------------------------
 
+/*
   TPaveText* tText;
   if(aDrawTextOnRight) tText = new TPaveText(0.55, 0.50, 0.85, 0.80, "NDC");
   else                 tText = new TPaveText(0.20, 0.50, 0.45, 0.75, "NDC");
@@ -208,11 +209,23 @@ void DrawHistwGaussFit(TPad* aPad, TH1* aHist, double aGaussFitMin, double aGaus
 
     tText->AddText(TString::Format("N*exp#left(- #frac{#left(x-%s#right)^{2}}{4%s^{2}}#right)", aMuName.Data(), aSigmaName.Data()));
     tText->AddText("");
-//    tText->AddText(TString::Format("%s = %0.3e", aMuName.Data(), tGaussFit->GetParameter(1)));
-//    tText->AddText(TString::Format("%s = %0.3e",   aSigmaName.Data(), tGaussFit->GetParameter(2)));
     tText->AddText(TString::Format("%s = %0.1e fm", aMuName.Data(), tGaussFit->GetParameter(1)));
     tText->AddText(TString::Format("%s = %0.1e fm",   aSigmaName.Data(), tGaussFit->GetParameter(2)));
     tText->Draw();
+*/
+  TLegend* tLeg;
+  if(aDrawTextOnRight) tLeg = new TLegend(0.55, 0.50, 0.85, 0.80);
+  else                 tLeg = new TLegend(0.175, 0.55, 0.475, 0.90);
+    tLeg->SetFillColor(0);
+    tLeg->SetFillStyle(0);
+    tLeg->SetBorderSize(0);
+    tLeg->SetTextColor(kBlack);
+
+    tLeg->AddEntry(aHist, "THERM. 2", "p");
+    tLeg->AddEntry(tGaussFit, "Gauss. Fit", "l");
+    tLeg->AddEntry((TObject*)0, TString::Format("%s = %0.1e fm", aMuName.Data(), tGaussFit->GetParameter(1)), "");
+    tLeg->AddEntry((TObject*)0, TString::Format("%s = %0.1e fm",   aSigmaName.Data(), tGaussFit->GetParameter(2)), "");
+    tLeg->Draw();
 
 }
 
@@ -276,21 +289,21 @@ void Draw1DSourceProjwFit(TPad* aPad, TH3* a3DoslHist, TString aComponent, doubl
     t1DSource = a3DoslHist->ProjectionX("out", tBinProjLow, tBinProjHigh, tBinProjLow, tBinProjHigh);
       t1DSource->SetTitle("PairSource_Out");
       t1DSource->GetXaxis()->SetTitle(TString::Format("%s (fm)", tAxisBaseNameOut.Data()));
-      t1DSource->GetYaxis()->SetTitle(TString::Format("dN/d%s", tAxisBaseNameOut.Data()));
+      t1DSource->GetYaxis()->SetTitle(TString::Format("d#it{N}/d%s", tAxisBaseNameOut.Data()));
   }
   else if(aComponent.EqualTo("side"))
   {
     t1DSource = a3DoslHist->ProjectionY("side", tBinProjLow, tBinProjHigh, tBinProjLow, tBinProjHigh);
       t1DSource->SetTitle("PairSource_Side");
       t1DSource->GetXaxis()->SetTitle(TString::Format("%s(fm)", tAxisBaseNameSide.Data()));
-      t1DSource->GetYaxis()->SetTitle(TString::Format("dN/d%s", tAxisBaseNameSide.Data()));
+      t1DSource->GetYaxis()->SetTitle(TString::Format("d#it{N}/d%s", tAxisBaseNameSide.Data()));
   }
   else if(aComponent.EqualTo("long"))
   {
     t1DSource = a3DoslHist->ProjectionZ("long", tBinProjLow, tBinProjHigh, tBinProjLow, tBinProjHigh);
     t1DSource->SetTitle("PairSource_Long");
     t1DSource->GetXaxis()->SetTitle(TString::Format("%s(fm)", tAxisBaseNameLong.Data()));
-    t1DSource->GetYaxis()->SetTitle(TString::Format("dN/d%s", tAxisBaseNameLong.Data()));
+    t1DSource->GetYaxis()->SetTitle(TString::Format("d#it{N}/d%s", tAxisBaseNameLong.Data()));
   }
   else assert(0);
 
@@ -339,7 +352,7 @@ void DrawDeltaT(TPad* aPad, TH1* aDeltaTHist, double aGaussFitMin=-20., double a
   aDeltaTHist->SetMarkerColor(kBlack);
 
   aDeltaTHist->GetXaxis()->SetTitle("#Deltat* (fm/#it{c})");
-  aDeltaTHist->GetYaxis()->SetTitle("dN/#Deltat*");
+  aDeltaTHist->GetYaxis()->SetTitle("d#it{N}/#Delta#it{t}*");
 
   SetStandardAxesAttributes(aDeltaTHist);
 
@@ -434,7 +447,7 @@ TH1* Draw1DCfwFit(TPad* aPad, ThermCf* aThermCfObj, double aFitMax=0.3, bool aFi
 
   //tThermCf->SetMarkerColor(kGreen+1);
   //tThermCf->SetLineColor(kGreen+1);
-  tThermCf->SetMarkerStyle(26);
+  tThermCf->SetMarkerStyle(25);
   tThermCf->SetMarkerSize(aMarkerSize);
   tThermCf->DrawCopy("ex0");
 
@@ -568,10 +581,21 @@ void Add1DCfwFitToCanPart(CanvasPartition* aCanPart, int aNx, int aNy, ThermCf* 
   //-----------------------------------------------------------
 
 
-  aCanPart->AddGraph(aNx, aNy, tThermCf, "", 26, kBlack, 1.0, "ex0");
+  aCanPart->AddGraph(aNx, aNy, tThermCf, "", 25, kBlack, 1.0, "ex0");
   aCanPart->AddGraph(aNx, aNy, tFitFcn, "", 20, kBlack, 1.0, "HIST samel");
 
-  TPaveText* tText1 = aCanPart->SetupTPaveText("", aNx, aNy, 0.50, 0.05, 0.10, 0.55, 43, 17);
+
+  aCanPart->SetupTLegend("", aNx, aNy, 0.50, 0.05, 0.40, 0.575, 1, true);
+  aCanPart->AddLegendEntry(aNx, aNy, tThermCf, "THERM. 2", "p");
+  aCanPart->AddLegendEntry(aNx, aNy, tFitFcn, "Fit", "l");
+  aCanPart->AddLegendEntry(aNx, aNy, (TObject*)0, TString::Format("#lambda = % 0.2f", tFitFcn->GetParameter(0)), "");
+  aCanPart->AddLegendEntry(aNx, aNy, (TObject*)0, TString::Format("#it{R}_{inv } = % 0.2f fm", tFitFcn->GetParameter(1)), "");
+  aCanPart->AddLegendEntry(aNx, aNy, (TObject*)0, TString::Format("#Rgothic#it{f}_{0  } = % 0.2f fm", tFitFcn->GetParameter(2)), "");
+  aCanPart->AddLegendEntry(aNx, aNy, (TObject*)0, TString::Format("#Jgothic#it{f}_{0  } = % 0.2f fm", tFitFcn->GetParameter(3)), "");
+  aCanPart->AddLegendEntry(aNx, aNy, (TObject*)0, TString::Format("#it{d}_{0   } = % 0.2f fm", tFitFcn->GetParameter(4)), "");
+
+/*
+  TPaveText* tText1 = aCanPart->SetupTPaveText("", aNx, aNy, 0.50, 0.05, 0.10, 0.55, 43, 15);
     tText1->SetFillColor(0);
     tText1->SetBorderSize(0);
     tText1->SetTextColor(kBlack);
@@ -583,7 +607,7 @@ void Add1DCfwFitToCanPart(CanvasPartition* aCanPart, int aNx, int aNy, ThermCf* 
     tText1->AddText("#it{d}_{0}");
   aCanPart->AddPadPaveText(tText1, aNx, aNy);
 
-  TPaveText* tText2 = aCanPart->SetupTPaveText("", aNx, aNy, 0.60, 0.05, 0.25, 0.55, 43, 17);
+  TPaveText* tText2 = aCanPart->SetupTPaveText("", aNx, aNy, 0.60, 0.05, 0.25, 0.55, 43, 15);
     tText2->SetFillColor(0);
     tText2->SetBorderSize(0);
     tText2->SetTextColor(kBlack);
@@ -594,6 +618,7 @@ void Add1DCfwFitToCanPart(CanvasPartition* aCanPart, int aNx, int aNy, ThermCf* 
     tText2->AddText(TString::Format(" = % 0.2f fm", tFitFcn->GetParameter(3)));
     tText2->AddText(TString::Format(" = % 0.2f fm", tFitFcn->GetParameter(4)));
   aCanPart->AddPadPaveText(tText2, aNx, aNy);
+*/
 
   if(!aSuppressSystemText)
   {
@@ -603,6 +628,10 @@ void Add1DCfwFitToCanPart(CanvasPartition* aCanPart, int aNx, int aNy, ThermCf* 
                                                      aNx, aNy, 0.05, 0.85, 0.50, 0.15, 63, 25, 13, true);
       tText3->SetTextColor(kBlack);
     aCanPart->AddPadPaveText(tText3, aNx, aNy);
+
+    TPaveText* tText5 = aCanPart->SetupTPaveText("THERMINATOR 2", aNx, aNy, 0.075, 0.05, 0.35, 0.15, 43, 17, 13, true);
+      tText5->SetTextColor(kBlack);
+    aCanPart->AddPadPaveText(tText5, aNx, aNy);
   }
 
   TPaveText* tText4 = aCanPart->SetupTPaveText(TString::Format("#it{#mu}_{out} = %d fm", aMuOut), aNx, aNy, 0.60, 0.85, 0.30, 0.15, 43, 25, 13, true);
@@ -920,7 +949,7 @@ void Draw1DCfwFitAndData(TPad* aPad, ThermCf* aThermCfObj, double aFitMax, bool 
   //--------------------------------
   if(aPrintAliceInfo)
   {
-    TLatex *   tex = new TLatex(0.05,0.88,"ALICE Pb-Pb #sqrt{#it{s}_{NN}} = 2.76 TeV");
+    TLatex *   tex = new TLatex(0.05,0.87,"ALICE Pb-Pb #sqrt{#it{s}_{NN}} = 2.76 TeV");
     tex->SetTextFont(42);
     tex->SetTextSize(0.075);
     tex->SetLineWidth(2);
@@ -972,7 +1001,7 @@ TH1* DrawSHCfThermComponent_CombConj(TPad* aPad, CorrFctnDirectYlmTherm* aCfYlmT
   //--------------------------------------------------------------
   //tSHCf->SetMarkerColor(kGreen+1);
   //tSHCf->SetLineColor(kGreen+1);
-  tSHCf->SetMarkerStyle(26);
+  tSHCf->SetMarkerStyle(25);
   tSHCf->Draw("ex0same");
   return tSHCf;
 }
@@ -1087,6 +1116,28 @@ TCanvas* DrawCfwFitAndSourceswDeltaTwC11wData(TString tCanName, ThermCf* aThermC
     tGaussFitMin += aDeltaTHist->GetBinCenter(aDeltaTHist->GetMaximumBin());
   } 
   DrawDeltaT(tPadDeltaT, aDeltaTHist, tGaussFitMin, tGaussFitMax);
+
+  //--------------
+  TLatex* tPanelLetters = new TLatex();
+  tPanelLetters->SetTextAlign(11);
+  tPanelLetters->SetLineWidth(2);
+  tPanelLetters->SetTextFont(62);
+  tPanelLetters->SetTextSize(0.090);
+
+  double tXLett=0.90;
+  double tYLett=0.825;
+  tPadCfwFit->cd();
+  tPanelLetters->DrawLatexNDC(tXLett, tYLett, "a.");
+  tPadC11->cd();
+  tPanelLetters->DrawLatexNDC(tXLett, tYLett, "b.");
+  tPadRout->cd();
+  tPanelLetters->DrawLatexNDC(tXLett, tYLett, "c.");
+  tPadRside->cd();
+  tPanelLetters->DrawLatexNDC(tXLett, tYLett, "d.");
+  tPadRlong->cd();
+  tPanelLetters->DrawLatexNDC(tXLett, tYLett, "e.");
+  tPadDeltaT->cd();
+  tPanelLetters->DrawLatexNDC(tXLett, tYLett, "f.");
 
   return tCanCfwSource;
 }

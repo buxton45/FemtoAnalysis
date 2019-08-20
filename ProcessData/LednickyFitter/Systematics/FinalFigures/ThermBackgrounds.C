@@ -1410,7 +1410,6 @@ void BuildBgdwFitPanel(CanvasPartition* aCanPart, int tColumn, int tRow, TString
     ThermCf::SetStyleAndColor(tData, 20, GetColor(aAnType));
   TH1D* tDataSys = (TH1D*)tDataStatAndSys->At(1);
 
-
   //Set proper attributes for drawing systematics
   ThermCf::SetStyleAndColor(tDataSys, 20, TColor::GetColorTransparent(GetColor(aAnType), 0.2));
   tDataSys->SetFillColor(TColor::GetColorTransparent(GetColor(aAnType), 0.2));
@@ -1510,10 +1509,17 @@ void BuildBgdwFitPanel(CanvasPartition* aCanPart, int tColumn, int tRow, TString
     else
     {
       if(!aZoomY) aCanPart->SetupTLegend("", tColumn, tRow, 0.55, 0.15, 0.35, 0.15, tNColumns, true);
-      else        aCanPart->SetupTLegend("", tColumn, tRow, 0.30, 0.475, 0.65, 0.375, tNColumns, true);
+//      else        aCanPart->SetupTLegend("", tColumn, tRow, 0.30, 0.475, 0.65, 0.375, tNColumns, true);
+      else        aCanPart->SetupTLegend("", tColumn, tRow, 0.30, 0.50, 0.65, 0.35, tNColumns, true);
     }
+/*
     aCanPart->AddLegendEntry(tColumn, tRow, tData, "ALICE, stat. errors", "PE");
     aCanPart->AddLegendEntry(tColumn, tRow, tDataSys, "syst. errors", "F");
+    aCanPart->AddLegendEntry(tColumn, tRow, tBgdFitDataDraw, "ALICE Bgd. Fit", "L");   
+    aCanPart->AddLegendEntry(tColumn, tRow, tCf, tDescriptor.Data(), "p");
+    aCanPart->AddLegendEntry(tColumn, tRow, tBgdFitDraw, "THERM. Bgd. Fit", "L"); 
+*/
+    aCanPart->AddLegendEntry(tColumn, tRow, tData, "ALICE", "P");
     aCanPart->AddLegendEntry(tColumn, tRow, tBgdFitDataDraw, "ALICE Bgd. Fit", "L");   
     aCanPart->AddLegendEntry(tColumn, tRow, tCf, tDescriptor.Data(), "p");
     aCanPart->AddLegendEntry(tColumn, tRow, tBgdFitDraw, "THERM. Bgd. Fit", "L"); 
@@ -2541,6 +2547,7 @@ int main(int argc, char **argv)
     else tCanBgdwFit = DrawBgdwFit(tCfDescriptor, tSingleFileName, tAnType, tImpactParam, bCombineConjugates, bCombineImpactParams, tEventsType, tRebin, tMinNorm, tMaxNorm, tMaxBgdFit, bUseStavCf);
 
     tCanBgdwFitv2 = DrawBgdwFit_AllCentv2(tCfDescriptor, tSingleFileName, tAnType, bCombineConjugates, tEventsType, tRebin, tMinNorm, tMaxNorm, tMaxBgdFit, aAvgLamKchPMFit, bUseStavCf);
+
     //------------------------------------------
 //    tCanBgdwFitAllCentAllAnv2 = DrawBgdwFit_AllCentAllAnv2(tCfDescriptor, tSingleFileName, bCombineConjugates, tEventsType, tRebin, tMinNorm, tMaxNorm, tMaxBgdFit, aAvgLamKchPMFit, bUseStavCf);
 
