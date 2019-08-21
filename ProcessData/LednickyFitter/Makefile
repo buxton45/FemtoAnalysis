@@ -25,7 +25,7 @@ CFLAGS = $(shell gsl-config --cflags) $(shell root-config --cflags) -Wall -std=c
 
 MY_LIBS = $(addprefix build/, FitParameter.o FitChi2Histograms.o BackgroundFitter.o FitPartialAnalysis.o FitPairAnalysis.o FitSharedAnalyses.o MathematicaSession.o WaveFunction.o ChargedResidualCf.o SimpleChargedResidualCf.o NeutralResidualCf.o ResidualCollection.o SimpleLednickyFitter.o LednickyFitter.o FitValuesWriter.o FitValuesLatexTableHelperWriter.o FitValuesWriterwSysErrs.o FitValuesLatexTableHelperWriterwSysErrs.o FitGenerator.o FitGeneratorAndDraw.o DualieFitGenerator.o TripleFitGenerator.o ThermCf.o CfLite.o CfHeavy.o Types.o Types_LambdaValues.o Types_FitParamValues.o Types_ThermBgdParams.o AnalysisInfo.o Faddeeva.o CanvasPartition.o SimulatedLednickyCf.o NumIntLednickyCf.o)
 
-BINARIES = runLamKchP runLamKchPTest runCompareKchFix2 runFits runTest runGenerator runDualieGenerator runTripleGenerator runCompareTwoAnalyses runCompareThreeAnalyses runCompareMixedcLamcKch runScattParamValues runLamKchPvsKchM runPlotAll runSimpleLednicky runCompareFittingMethods runmTScaling runCompareBackgrounds runCompareEPBinning runCpaFit runFitThermCfs runDrawNumIntLednickyCf
+BINARIES = runLamKchP runLamKchPTest runCompareKchFix2 runFits runTest runGenerator runDualieGenerator runTripleGenerator runCompareTwoAnalyses runCompareThreeAnalyses runCompareMixedcLamcKch runScattParamValues runLamKchPvsKchM runPlotAll runSimpleLednicky runCompareFittingMethods runmTScaling runCompareBackgrounds runCompareEPBinning runCpaFit runFitThermCfs runDrawNumIntLednickyCf runDrawDataWithFinalFitTriple
 
 all: $(BINARIES)
 
@@ -94,6 +94,9 @@ runFitThermCfs: ${MY_LIBS} FitThermCfs.C
 
 runDrawNumIntLednickyCf: ${MY_LIBS} DrawNumIntLednickyCf.C
 	g++ DrawNumIntLednickyCf.C ${MY_LIBS} -I${INCDIR} -o runDrawNumIntLednickyCf -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS)
+	
+runDrawDataWithFinalFitTriple: ${MY_LIBS} DrawDataWithFinalFitTriple.C
+	g++ DrawDataWithFinalFitTriple.C ${MY_LIBS} -I${INCDIR} -o runDrawDataWithFinalFitTriple -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS)
 
 build/%.o: ${ANALYZE_DIR}/%.cxx ${ANALYZE_DIR}/%.h
 	g++ -c $< $(CFLAGS) -o $@

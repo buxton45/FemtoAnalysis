@@ -359,6 +359,79 @@ void FitGeneratorAndDraw::AddColoredLinesLabels(CanvasPartition *aCanPart, int a
 }
 
 //________________________________________________________________________________________________________________
+void FitGeneratorAndDraw::AddColoredLinesLabelsAndData(CanvasPartition *aCanPart, int aNx, int aNy, bool aZoomROP, double aScaleFactor)
+{
+  aCanPart->GetPad(aNx, aNy)->cd();
+
+  int tColorCorrectFit = kMagenta+1;
+  int tColorNonFlatBgd = kGreen+2;
+
+  TLatex* tTex = new TLatex();
+  tTex->SetTextAlign(12);
+  tTex->SetLineWidth(2);
+  tTex->SetTextFont(42);
+  tTex->SetTextSize(0.125);
+  
+  double tYText0 = 0.975;
+  double tXText0 = 0.15;
+
+  double tYText1 = 0.94;
+  double tXText1 = 0.15;
+
+  double tYText2 = 0.9125;
+  double tXText2 = 0.15;
+
+  double tYText3 = 0.885;
+  double tXText3 = 0.15;
+  
+
+
+  double tLineWidth = 0.025;
+  double tSpaceBetween = 0.015;
+
+  if(!aZoomROP)
+  {
+    tXText0 = 0.50;
+    tXText1 = 0.50;
+    tXText2 = 0.50;
+    tXText3 = 0.50;
+
+    tLineWidth = 0.075;
+    tSpaceBetween = 0.045;
+  }
+
+  TLine* tLine;
+  
+  tTex->DrawLatex(tXText0, tYText0, TString::Format("ALICE #scale[%f]{#LambdaK#scale[0.5]{ }#oplus#scale[0.5]{ }#bar{#LambdaK}}", aScaleFactor));  
+  TMarker *tMarker = new TMarker();
+  tMarker->SetMarkerSize(1.0);
+  tMarker->SetMarkerStyle(20);
+  tMarker->SetMarkerColor(kBlack);
+  tMarker->DrawMarker(tXText0-tSpaceBetween-(tLineWidth/2), tYText0);
+
+  tTex->DrawLatex(tXText1, tYText1, TString::Format("#scale[%f]{Primary fit comp.}", aScaleFactor));
+  tLine = new TLine(tXText1-tSpaceBetween-tLineWidth, tYText1, tXText1-tSpaceBetween, tYText1);
+  tLine->SetLineColor(kBlack);
+  tLine->SetLineWidth(2);
+  tLine->SetLineStyle(3);
+  tLine->Draw();
+  
+  tTex->DrawLatex(tXText2, tYText2, TString::Format("#scale[%f]{Non-femto. bgd.}", aScaleFactor));
+  tLine = new TLine(tXText2-tSpaceBetween-tLineWidth, tYText2, tXText2-tSpaceBetween, tYText2);
+  tLine->SetLineColor(tColorNonFlatBgd);
+  tLine->SetLineWidth(2);
+  tLine->SetLineStyle(7);
+  tLine->Draw();
+
+  tTex->DrawLatex(tXText3, tYText3, TString::Format("#scale[%f]{Full fit}", aScaleFactor));
+  tLine = new TLine(tXText3-tSpaceBetween-tLineWidth, tYText3, tXText3-tSpaceBetween, tYText3);
+  tLine->SetLineColor(tColorCorrectFit);
+  tLine->SetLineWidth(2);
+  tLine->SetLineStyle(1);
+  tLine->Draw();
+}
+
+//________________________________________________________________________________________________________________
 void FitGeneratorAndDraw::DrawSingleKStarCf(TPad* aPad, int aPairAnNumber, double aYmin, double aYmax, double aXmin, double aXmax, int aMarkerColor, TString aOption, int aMarkerStyle)
 {
   aPad->cd();

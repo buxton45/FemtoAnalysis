@@ -416,7 +416,7 @@ int main(int argc, char **argv)
   //This allows the user a chance to look at and manipulate a TBrowser before
   //the program ends and closes everything
 //-----------------------------------------------------------------------------
-  TString tParentResultsDate = "20180505";  //Parent analysis these systematics are to accompany
+  TString tParentResultsDate = "20190319";  //Parent analysis these systematics are to accompany
 
   bool bRunOldQMNaming = false;
 
@@ -545,8 +545,8 @@ int main(int argc, char **argv)
 
     PrintFinalVec(tFinalVec, tOutput);
       cout << "****************** Output LamKch info to file: " << tOutputName << endl;
-    PrintFinalVec(tFinalVec, tOutput);
-      cout << "****************** Output LamK0 info to file: " << tOutputName << endl;
+    //PrintFinalVec(tFinalVec, tOutput);
+    //  cout << "****************** Output LamK0 info to file: " << tOutputName << endl;
 
     tOutput.close();
   }

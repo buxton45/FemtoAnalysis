@@ -256,7 +256,7 @@ void FitGenerator::SetUseLimits(vector<FitParameter> &aVec, bool aUse)
 }
 
 //________________________________________________________________________________________________________________
-void FitGenerator::SetRadiusStartValue(double aRad, int aIndex)
+void FitGenerator::SetRadiusStartValue(double aRad, int aIndex, bool aIsFixed)
 {
   if(fRadiusFitParams.size()==1) aIndex=0;  //in case, for instance, I want to run k1030 or k3050 by itself
   if(aIndex >= (int)fRadiusFitParams.size())  //if, for instance, I want to run k0010 with k3050
@@ -270,12 +270,17 @@ void FitGenerator::SetRadiusStartValue(double aRad, int aIndex)
   }
   assert(aIndex < (int)fRadiusFitParams.size());
   fRadiusFitParams[aIndex].SetStartValue(aRad);
+  fRadiusFitParams[aIndex].SetFixed(aIsFixed);  
 }
 //________________________________________________________________________________________________________________
-void FitGenerator::SetRadiusStartValues(const vector<double> &aStartValues)
+void FitGenerator::SetRadiusStartValues(const vector<double> &aStartValues, bool aAreFixed)
 {
   assert(aStartValues.size() == fRadiusFitParams.size());
-  for(unsigned int i=0; i<fRadiusFitParams.size(); i++) fRadiusFitParams[i].SetStartValue(aStartValues[i]);
+  for(unsigned int i=0; i<fRadiusFitParams.size(); i++) 
+  {
+    fRadiusFitParams[i].SetStartValue(aStartValues[i]);
+    fRadiusFitParams[i].SetFixed(aAreFixed);
+  }
 }
 
 

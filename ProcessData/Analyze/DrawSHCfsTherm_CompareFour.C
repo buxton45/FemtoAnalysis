@@ -296,13 +296,13 @@ TObjArray* DrawFourSHCfThermComponents(TPad* aPad, CorrFctnDirectYlmTherm* aCfYl
   double tMarkerSize = 1.0;
 
   int tMarkerStyle0 = 21;
-  int tColor0 = kMagenta;
+  int tColor0 = kMagenta+2;
 
   int tMarkerStyle1 = 25;
   int tColor1 = kBlue;
 
   int tMarkerStyle2 = 34;
-  int tColor2 = kGreen;
+  int tColor2 = kGreen+2;
 
   int tMarkerStyle3 = 28;
   int tColor3 = kOrange;
@@ -426,13 +426,13 @@ TObjArray* DrawFourSHCfThermComponents_CombConj(TPad* aPad, CorrFctnDirectYlmThe
   double tMarkerSize = 1.0;
 
   int tMarkerStyle0 = 21;
-  int tColor0 = kMagenta;
+  int tColor0 = kMagenta+2;
 
   int tMarkerStyle1 = 25;
   int tColor1 = kBlue;
 
   int tMarkerStyle2 = 34;
-  int tColor2 = kGreen;
+  int tColor2 = kGreen+2;
 
   int tMarkerStyle3 = 28;
   int tColor3 = kOrange;

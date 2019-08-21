@@ -69,14 +69,15 @@ public:
   virtual TCanvas* DrawKStarCfs_CombineConj(CentralityType aCentType, bool aSaveImage=false, bool aDrawSysErrors=true, bool aZoomROP=true);
 
 //-------inline
-  void SetRadiusStartValue(double aRad, int aIndex=0);
-  void SetRadiusStartValues(const vector<double> &aStartValues);
+  void SetRadiusStartValue(double aRad, int aIndex=0, bool aIsFixed=false);
+  void SetRadiusStartValues(const vector<double> &aStartValues, bool aAreFixed=false);
   void SetRadiusLimits(double aMin, double aMax, int aIndex=0);  //set for particular R parameter
   void SetRadiusLimits(const td2dVec &aMinMax2dVec);  //set unique values for each R parameter
   void SetAllRadiiLimits(double aMin, double aMax);
 
   void SetScattParamStartValue(double aVal, ParameterType aParamType, bool aIsFixed=false);
   void SetScattParamStartValues(double aReF0, double aImF0, double aD0, bool aAreFixed=false);
+  void SetScattParamStartValues(AnalysisType aAnType, double aReF0, double aImF0, double aD0, bool aAreFixed=false);
   void SetScattParamLimits(double aMin, double aMax, ParameterType aParamType);
   void SetScattParamLimits(const td2dVec &aMinMax2dVec);
 
@@ -112,6 +113,9 @@ public:
 
   void SetMasterFileLocation(TString aLocation_LamKch, TString aLocation_LamK0);
   void SetSystematicsFileLocation(TString aLocation_LamKch, TString aLocation_LamK0);
+  
+  LednickyFitter* GetMasterLednickyFitter();
+  FitSharedAnalyses* GetMasterSharedAn();
 
 protected:
 
@@ -135,14 +139,21 @@ protected:
 };
 
 
-inline void TripleFitGenerator::SetRadiusStartValue(double aRad, int aIndex) {fFitGen1->SetRadiusStartValue(aRad, aIndex); fFitGen2->SetRadiusStartValue(aRad, aIndex); fFitGen3->SetRadiusStartValue(aRad, aIndex);}
-inline void TripleFitGenerator::SetRadiusStartValues(const vector<double> &aStartValues) {fFitGen1->SetRadiusStartValues(aStartValues); fFitGen2->SetRadiusStartValues(aStartValues); fFitGen3->SetRadiusStartValues(aStartValues);}
+inline void TripleFitGenerator::SetRadiusStartValue(double aRad, int aIndex, bool aIsFixed) {fFitGen1->SetRadiusStartValue(aRad, aIndex, aIsFixed); fFitGen2->SetRadiusStartValue(aRad, aIndex, aIsFixed); fFitGen3->SetRadiusStartValue(aRad, aIndex, aIsFixed);}
+inline void TripleFitGenerator::SetRadiusStartValues(const vector<double> &aStartValues, bool aAreFixed) {fFitGen1->SetRadiusStartValues(aStartValues, aAreFixed); fFitGen2->SetRadiusStartValues(aStartValues, aAreFixed); fFitGen3->SetRadiusStartValues(aStartValues, aAreFixed);}
 inline void TripleFitGenerator::SetRadiusLimits(double aMin, double aMax, int aIndex) {fFitGen1->SetRadiusLimits(aMin, aMax, aIndex); fFitGen2->SetRadiusLimits(aMin, aMax, aIndex); fFitGen3->SetRadiusLimits(aMin, aMax, aIndex);}
 inline void TripleFitGenerator::SetRadiusLimits(const td2dVec &aMinMax2dVec) {fFitGen1->SetRadiusLimits(aMinMax2dVec); fFitGen2->SetRadiusLimits(aMinMax2dVec); fFitGen3->SetRadiusLimits(aMinMax2dVec);}
 inline void TripleFitGenerator::SetAllRadiiLimits(double aMin, double aMax) {fFitGen1->SetAllRadiiLimits(aMin, aMax); fFitGen2->SetAllRadiiLimits(aMin, aMax); fFitGen3->SetAllRadiiLimits(aMin, aMax);}
 
 inline void TripleFitGenerator::SetScattParamStartValue(double aVal, ParameterType aParamType, bool aIsFixed) {fFitGen1->SetScattParamStartValue(aVal, aParamType, aIsFixed); fFitGen2->SetScattParamStartValue(aVal, aParamType, aIsFixed); fFitGen3->SetScattParamStartValue(aVal, aParamType, aIsFixed);}
 inline void TripleFitGenerator::SetScattParamStartValues(double aReF0, double aImF0, double aD0, bool aAreFixed) {fFitGen1->SetScattParamStartValues(aReF0, aImF0, aD0, aAreFixed); fFitGen2->SetScattParamStartValues(aReF0, aImF0, aD0, aAreFixed); fFitGen3->SetScattParamStartValues(aReF0, aImF0, aD0, aAreFixed);}
+inline void TripleFitGenerator::SetScattParamStartValues(AnalysisType aAnType, double aReF0, double aImF0, double aD0, bool aAreFixed) 
+{
+  if     (aAnType==kLamKchP || aAnType==kALamKchM) fFitGen1->SetScattParamStartValues(aReF0, aImF0, aD0, aAreFixed); 
+  else if(aAnType==kLamKchM || aAnType==kALamKchP) fFitGen2->SetScattParamStartValues(aReF0, aImF0, aD0, aAreFixed); 
+  else if(aAnType==kLamK0 || aAnType==kALamK0)     fFitGen3->SetScattParamStartValues(aReF0, aImF0, aD0, aAreFixed);
+  else assert(0);
+}
 inline void TripleFitGenerator::SetScattParamLimits(double aMin, double aMax, ParameterType aParamType) {fFitGen1->SetScattParamLimits(aMin, aMax, aParamType); fFitGen2->SetScattParamLimits(aMin, aMax, aParamType); fFitGen3->SetScattParamLimits(aMin, aMax, aParamType);}
 inline void TripleFitGenerator::SetScattParamLimits(const td2dVec &aMinMax2dVec) {fFitGen1->SetScattParamLimits(aMinMax2dVec); fFitGen2->SetScattParamLimits(aMinMax2dVec); fFitGen3->SetScattParamLimits(aMinMax2dVec);}
 
@@ -185,6 +196,10 @@ inline FitGeneratorAndDraw* TripleFitGenerator::GetFitGen3() {return fFitGen3;}
 
 inline void TripleFitGenerator::SetMasterFileLocation(TString aLocation_LamKch, TString aLocation_LamK0) {fFitGen1->SetMasterFileLocation(aLocation_LamKch); fFitGen2->SetMasterFileLocation(aLocation_LamKch); fFitGen3->SetMasterFileLocation(aLocation_LamK0);}
 inline void TripleFitGenerator::SetSystematicsFileLocation(TString aLocation_LamKch, TString aLocation_LamK0) {fFitGen1->SetSystematicsFileLocation(aLocation_LamKch); fFitGen2->SetSystematicsFileLocation(aLocation_LamKch); fFitGen3->SetSystematicsFileLocation(aLocation_LamK0);}
+
+inline LednickyFitter* TripleFitGenerator::GetMasterLednickyFitter() {return fMasterLednickyFitter;}
+inline FitSharedAnalyses* TripleFitGenerator::GetMasterSharedAn() {return fMasterSharedAn;}
+
 #endif
 
 

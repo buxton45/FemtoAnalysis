@@ -441,7 +441,7 @@ TCanvas* DrawKStarCfs_OnlyTwo_CombConj(FitGenerator* aFG1, FitGenerator* aFG2, b
     TString tTextAnTypeA, tTextAnTypeB;
     tTextAnTypeA = TString(cAnalysisRootTags[aAnType]);
     tTextAnTypeB = TString(cAnalysisRootTags[aConjType]);
-    TString tTextAnType = TString::Format("%s & %s", tTextAnTypeA.Data(), tTextAnTypeB.Data());
+    TString tTextAnType = TString::Format("%s#scale[0.5]{ }#oplus#scale[0.5]{ }%s", tTextAnTypeA.Data(), tTextAnTypeB.Data());
 
     TPaveText* tAnTypeName = tCanPart->SetupTPaveText(tTextAnType,0,j,0.7,0.85);
     tCanPart->AddPadPaveText(tAnTypeName,0,j);

@@ -38,8 +38,8 @@ public:
 
   void SetUseLimits(vector<FitParameter> &aVec, bool aUse);  //Internal use only
 
-  void SetRadiusStartValue(double aRad, int aIndex=0);
-  void SetRadiusStartValues(const vector<double> &aStartValues);
+  void SetRadiusStartValue(double aRad, int aIndex=0, bool aIsFixed=false);
+  void SetRadiusStartValues(const vector<double> &aStartValues, bool aAreFixed=false);
   void SetRadiusLimits(double aMin, double aMax, int aIndex=0);  //set for particular R parameter
   void SetRadiusLimits(const td2dVec &aMinMax2dVec);  //set unique values for each R parameter
   void SetAllRadiiLimits(double aMin, double aMax);

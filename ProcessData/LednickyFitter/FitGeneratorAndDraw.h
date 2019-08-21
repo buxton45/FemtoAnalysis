@@ -9,6 +9,7 @@
 
 #include "FitGenerator.h"
 #include "FitValuesWriterwSysErrs.h"
+#include "TMarker.h"
 
 class FitGeneratorAndDraw : public FitGenerator {
 
@@ -30,6 +31,7 @@ public:
   void CreateParamFinalValuesTextTwoColumns(CanvasPartition *aCanPart, int aNx, int aNy, TF1* aFit, const td1dVec &aSysErrors, double aText1Xmin=0.75, double aText1Ymin=0.75, double aText1Width=0.15, double aText1Height=0.10, bool aDrawText1=true, double aText2Xmin=0.50, double aText2Ymin=0.75, double aText2Width=0.15, double aText2Height=0.10, bool aDrawText2=true, double aTextFont=63, double aTextSize=15);
   void AddTextCorrectionInfo(CanvasPartition *aCanPart, int aNx, int aNy, bool aMomResCorrect, bool aNonFlatCorrect, double aTextXmin=0.75, double aTextYmin=0.75, double aTextWidth=0.15, double aTextHeight=0.10, double aTextFont=63, double aTextSize=15);
   void AddColoredLinesLabels(CanvasPartition *aCanPart, int aNx, int aNy, bool aZoomROP=true, double aScaleFactor=1.);
+  void AddColoredLinesLabelsAndData(CanvasPartition *aCanPart, int aNx, int aNy, bool aZoomROP=true, double aScaleFactor=1.);
 
   void DrawSingleKStarCf(TPad* aPad, int aPairAnNumber, double aYmin=0.9, double aYmax=1.1, double aXmin=0.0, double aXmax=0.5, int aMarkerColor=1, TString aOption = "", int aMarkerStyle=20);
   void DrawSingleKStarCfwFit(TPad* aPad, int aPairAnNumber, double aYmin=0.9, double aYmax=1.1, double aXmin=0.0, double aXmax=0.5, int aMarkerColor=1, TString aOption = "", int aMarkerStyle=20);

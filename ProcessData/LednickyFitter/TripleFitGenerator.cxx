@@ -542,13 +542,14 @@ CanvasPartition* TripleFitGenerator::BuildKStarCfswFitsCanvasPartition_CombineCo
       TPaveText* tSysInfo = tCanPart->SetupTPaveText(tTextSysInfo,2,j,0.20,0.125,0.725,0.15,43,17);
       tCanPart->AddPadPaveText(tSysInfo,2,j);
 */
-
-    TString tTextSysInfo1 = TString("ALICE Preliminary");
+/*
+    TString tTextSysInfo1 = TString("ALICE");
     TPaveText* tSysInfo1 = tCanPart->SetupTPaveText(tTextSysInfo1, 1, j, 0.0, 0.10, 1., 0.15, 43, 25, 22, true);
     tCanPart->AddPadPaveText(tSysInfo1,1, j);
+*/
 
-    TString tTextSysInfo2 = TString("Pb-Pb #sqrt{#it{s}_{NN}} = 2.76 TeV");
-    TPaveText* tSysInfo2 = tCanPart->SetupTPaveText(tTextSysInfo2, 2, j, 0.0, 0.10, 1., 0.15, 43, 25, 22, true);
+    TString tTextSysInfo2 = TString("ALICE Pb-Pb #sqrt{#it{s}_{NN}} = 2.76 TeV");
+    TPaveText* tSysInfo2 = tCanPart->SetupTPaveText(tTextSysInfo2, 2, j, 0.0, 0.10, 1., 0.15, 43, 20, 22, true);
     tCanPart->AddPadPaveText(tSysInfo2,2, j);
     }
 
@@ -581,7 +582,8 @@ CanvasPartition* TripleFitGenerator::BuildKStarCfswFitsCanvasPartition_CombineCo
   if(aLabelLines)
   {
     assert(aSuppressFitInfoOutput);  //Not enough room for everyone!
-    fFitGen1->AddColoredLinesLabels(tCanPart, 0, 0, aZoomROP);
+//    fFitGen1->AddColoredLinesLabels(tCanPart, 0, 0, aZoomROP);
+    fFitGen1->AddColoredLinesLabelsAndData(tCanPart, 0, 0, aZoomROP);
   }
 
   return tCanPart;
