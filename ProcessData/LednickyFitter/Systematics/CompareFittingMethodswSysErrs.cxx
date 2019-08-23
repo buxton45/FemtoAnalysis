@@ -164,10 +164,10 @@ TCanvas* CompareImF0vsReF0(vector<FitValWriterInfo> &aFitValWriterInfo, TString 
       tLegPredictions->AddEntry(tGr_PhysRevD_KLam, "[B] K#Lambda", "p");
       tLegPredictions->AddEntry(tGr_PhysRevD_AKLam, "[B] #bar{K}#Lambda", "p");
 */
-      tLegPredictions->AddEntry(tGr_0607100_Set1, "[2] Set 1: K#Lambda = #bar{K}#Lambda", "p");
-      tLegPredictions->AddEntry(tGr_0607100_Set2, "[2] Set 2: K#Lambda = #bar{K}#Lambda", "p");
-      tLegPredictions->AddEntry(tGr_PhysRevD_KLam, "[3] K#Lambda", "p");
-      tLegPredictions->AddEntry(tGr_PhysRevD_AKLam, "[3] #bar{K}#Lambda", "p");
+      tLegPredictions->AddEntry(tGr_0607100_Set1, "[10] Set 1: K#Lambda = #bar{K}#Lambda", "p");
+      tLegPredictions->AddEntry(tGr_0607100_Set2, "[10] Set 2: K#Lambda = #bar{K}#Lambda", "p");
+      tLegPredictions->AddEntry(tGr_PhysRevD_KLam, "[11] K#Lambda", "p");
+      tLegPredictions->AddEntry(tGr_PhysRevD_AKLam, "[11] #bar{K}#Lambda", "p");
     tLegPredictions->Draw();
   }
 

@@ -20,12 +20,65 @@ M.~A. Lisa and S.~Pratt,
 \newblock
 %%CITATION = ARXIV:0811.1352;%%.
 
+\bibitem{Lednicky:1995vk}
+R.~Lednicky, V.~L. Lyuboshits, B.~Erazmus, and D.~Nouais, ``{How to measure
+  which sort of particles was emitted earlier and which later},''
+\href{http://dx.doi.org/10.1016/0370-2693(96)00124-4}{{\em Phys. Lett.}
+  {\bfseries B373} (1996) 30--34}.
+%%CITATION = PHLTA,B373,30;%%.
+
+\bibitem{Voloshin:1997jh}
+S.~Voloshin, R.~Lednicky, S.~Panitkin, and N.~Xu, ``{Relative space-time
+  asymmetries in pion and nucleon production in noncentral nucleus-nucleus
+  collisions at high-energies},''
+  \href{http://dx.doi.org/10.1103/PhysRevLett.79.4766}{{\em Phys. Rev. Lett.}
+  {\bfseries 79} (1997) 4766--4769},
+\href{http://arxiv.org/abs/nucl-th/9708044}{{\ttfamily arXiv:nucl-th/9708044
+  [nucl-th]}}.
+%%CITATION = NUCL-TH/9708044;%%.
+
+\bibitem{Lednicky:2001qv}
+R.~Lednicky, ``{Femtoscopy with unlike particles},'' in {\em {International
+  Workshop on the Physics of the Quark Gluon Plasma Palaiseau, France,
+  September 4-7, 2001}}.
+\newblock 2001.
+\newblock
+\href{http://arxiv.org/abs/nucl-th/0112011}{{\ttfamily arXiv:nucl-th/0112011
+  [nucl-th]}}.
+\newblock
+%%CITATION = NUCL-TH/0112011;%%.
+
+\bibitem{Retiere:2003kf}
+F.~Retiere and M.~A. Lisa, ``{Observable implications of geometrical and
+  dynamical aspects of freeze out in heavy ion collisions},''
+  \href{http://dx.doi.org/10.1103/PhysRevC.70.044907}{{\em Phys. Rev.}
+  {\bfseries C70} (2004) 044907},
+\href{http://arxiv.org/abs/nucl-th/0312024}{{\ttfamily arXiv:nucl-th/0312024
+  [nucl-th]}}.
+%%CITATION = NUCL-TH/0312024;%%.
+
+\bibitem{Makhlin:1987gm}
+A.~N. Makhlin and {\relax Yu}.~M. Sinyukov, ``{Hydrodynamics of Hadron Matter
+  Under Pion Interferometric Microscope},''
+  \href{http://dx.doi.org/10.1007/BF01560393}{{\em Z. Phys.} {\bfseries C39}
+  (1988) 69}.
+[,238(1987)].
+%%CITATION = ZEPYA,C39,69;%%.
+
 \bibitem{Akkelin:1995gh}
 S.~V. Akkelin and {\relax Yu}.~M. Sinyukov, ``{The HBT interferometry of
   expanding sources},''
 \href{http://dx.doi.org/10.1016/0370-2693(95)00765-D}{{\em Phys. Lett.}
   {\bfseries B356} (1995) 525--530}.
 %%CITATION = PHLTA,B356,525;%%.
+
+\bibitem{Kisiel:2009eh}
+A.~Kisiel, ``{Non-identical particle femtoscopy at $\sqrt{s_{\mathrm{NN}}}$ =
+  200 GeV in hydrodynamics with statistical hadronization},''
+  \href{http://dx.doi.org/10.1103/PhysRevC.81.064906}{{\em Phys. Rev.}
+  {\bfseries C81} (2010) 064906},
+\href{http://arxiv.org/abs/0909.5349}{{\ttfamily arXiv:0909.5349 [nucl-th]}}.
+%%CITATION = ARXIV:0909.5349;%%.
 
 \bibitem{Liu:2006xja}
 Y.-R. Liu and S.-L. Zhu, ``{Meson-baryon scattering lengths in HB$\chi$PT},''
@@ -214,23 +267,6 @@ A.~Kisiel, M.~Gałażyn, and P.~Bożek, ``{Pion, kaon, and proton femtoscopy in
   Phys. Rev.} {\bfseries C90} no.~6, (2014) 064914},
 \href{http://arxiv.org/abs/1409.4571}{{\ttfamily arXiv:1409.4571 [nucl-th]}}.
 %%CITATION = ARXIV:1409.4571;%%.
-
-\bibitem{Retiere:2003kf}
-F.~Retiere and M.~A. Lisa, ``{Observable implications of geometrical and
-  dynamical aspects of freeze out in heavy ion collisions},''
-  \href{http://dx.doi.org/10.1103/PhysRevC.70.044907}{{\em Phys. Rev.}
-  {\bfseries C70} (2004) 044907},
-\href{http://arxiv.org/abs/nucl-th/0312024}{{\ttfamily arXiv:nucl-th/0312024
-  [nucl-th]}}.
-%%CITATION = NUCL-TH/0312024;%%.
-
-\bibitem{Kisiel:2009eh}
-A.~Kisiel, ``{Non-identical particle femtoscopy at $\sqrt{s_{\mathrm{NN}}}$ =
-  200 GeV in hydrodynamics with statistical hadronization},''
-  \href{http://dx.doi.org/10.1103/PhysRevC.81.064906}{{\em Phys. Rev.}
-  {\bfseries C81} (2010) 064906},
-\href{http://arxiv.org/abs/0909.5349}{{\ttfamily arXiv:0909.5349 [nucl-th]}}.
-%%CITATION = ARXIV:0909.5349;%%.
 
 \bibitem{Stavinskiy04}
 A.~Stavinskiy {\em et~al.}, ``{Some new aspects of femtoscopy at high
