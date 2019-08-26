@@ -1,42 +1,42 @@
-This is BibTeX, Version 0.99d (TeX Live 2015/Debian)
-Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
+This is BibTeX, Version 0.99d (TeX Live 2017/Debian)
+Capacity: max_strings=100000, hash_size=100000, hash_prime=85009
 The top-level auxiliary file: LamKPublication.aux
 The style file: utphys.bst
 Database file #1: LamK_bibfile.bib
 Warning--empty publisher in Lisa:2008gf
 You've used 37 entries,
             2328 wiz_defined-function locations,
-            919 strings with 12405 characters,
-and the built_in function-call counts, 12840 in all, are:
-= -- 1375
+            923 strings with 12522 characters,
+and the built_in function-call counts, 12945 in all, are:
+= -- 1392
 > -- 339
 < -- 0
 + -- 127
 - -- 90
-* -- 1195
-:= -- 1447
-add.period$ -- 78
+* -- 1205
+:= -- 1458
+add.period$ -- 81
 call.type$ -- 37
-change.case$ -- 43
+change.case$ -- 42
 chr.to.int$ -- 0
 cite$ -- 38
-duplicate$ -- 737
-empty$ -- 1236
+duplicate$ -- 744
+empty$ -- 1251
 format.name$ -- 90
-if$ -- 3398
+if$ -- 3429
 int.to.chr$ -- 0
 int.to.str$ -- 37
-missing$ -- 141
-newline$ -- 184
+missing$ -- 140
+newline$ -- 185
 num.names$ -- 39
-pop$ -- 184
+pop$ -- 185
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 0
-skip$ -- 556
+skip$ -- 557
 stack$ -- 0
 substring$ -- 615
-swap$ -- 391
+swap$ -- 393
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
@@ -44,5 +44,5 @@ type$ -- 0
 warning$ -- 1
 while$ -- 87
 width$ -- 39
-write$ -- 335
+write$ -- 343
 (There was 1 warning)

@@ -179,11 +179,14 @@ X.-N. Wang and M.~Gyulassy, ``{HIJING: A Monte Carlo model for multiple jet
   {\bfseries 44} (Dec, 1991) 3501--3516}.
   \url{https://link.aps.org/doi/10.1103/PhysRevD.44.3501}.
 
-\bibitem{Brun:1994aa}
+\bibitem{Brun:1082634}
 R.~Brun, F.~Bruyant, F.~Carminati, S.~Giani, M.~Maire, A.~McPherson,
   G.~Patrick, and L.~Urban,
-``{GEANT Detector Description and Simulation Tool},''.
-%%CITATION = CERN-W5013;%%.
+  \href{http://dx.doi.org/10.17181/CERN.MUHF.DMJ1}{{\em {GEANT: Detector
+  Description and Simulation Tool; Oct 1994}}}.
+\newblock CERN Program Library. CERN, Geneva, 1993.
+\newblock \url{https://cds.cern.ch/record/1082634}.
+\newblock Long Writeup W5013.
 
 \bibitem{Acharya:2017qtq}
 {\bfseries ALICE} Collaboration, S.~Acharya {\em et~al.}, ``{Kaon femtoscopy in
@@ -216,9 +219,8 @@ S.~Pratt, T.~Csorgo, and J.~Zimanyi, ``{Detailed predictions for two pion
 \bibitem{Kopylov:1974th}
 G.~I. Kopylov, ``{Like particle correlations as a tool to study the multiple
   production mechanism},''
-  \href{http://dx.doi.org/10.1016/0370-2693(74)90263-9}{{\em Phys. Lett.}
+\href{http://dx.doi.org/10.1016/0370-2693(74)90263-9}{{\em Phys. Lett.}
   {\bfseries B50} (1974) 472--474}.
-[,39(1974)].
 %%CITATION = PHLTA,B50,472;%%.
 
 \bibitem{Kisiel:2014mma}
@@ -271,6 +273,7 @@ A.~Kisiel, M.~Gałażyn, and P.~Bożek, ``{Pion, kaon, and proton femtoscopy in
 \bibitem{Stavinskiy04}
 A.~Stavinskiy {\em et~al.}, ``{Some new aspects of femtoscopy at high
   energy},'' {\em Nukleonika} {\bfseries 49 (Supplement 2)} (2004) S23.
+  \url{http://www.nukleonika.pl/www/back/full/vol49_2004/v49s2p023f.pdf}.
 
 \bibitem{Aamodt:2011mr}
 {\bfseries ALICE} Collaboration, K.~Aamodt {\em et~al.}, ``{Two-pion
