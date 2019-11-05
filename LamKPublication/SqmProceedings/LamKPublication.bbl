@@ -1,0 +1,109 @@
+\begin{thebibliography}{10}
+\providecommand{\url}[1]{\texttt{#1}}
+\providecommand{\urlprefix}{URL }
+
+\bibitem{Lisa:2005dd}
+Lisa, M.A., Pratt, S., Soltz, R., Wiedemann, U.: {Femtoscopy in relativistic
+  heavy ion collisions}. Ann. Rev. Nucl. Part. Sci.  55,  357--402 (2005)
+
+\bibitem{Lisa:2008gf}
+Lisa, M.A., Pratt, S.: {Femtoscopically Probing the Freeze-out Configuration in
+  Heavy Ion Collisions}. In: Stock, R. (ed.) Relativistic Heavy Ion Physics
+  (2010)
+
+\bibitem{Lednicky:82}
+Lednick\'y, R., Lyuboshitz, V.L.: {Final State Interaction Effect on Pairing
+  Correlations Between Particles with Small Relative Momenta}. Sov. J. Nucl.
+  Phys.  35,  770 (1982), [Yad. Fiz.35,1316(1981)]
+
+\bibitem{Aamodt:2008zz}
+Aamodt, K., et~al.: {The ALICE experiment at the CERN LHC}. JINST  3,  S08002
+  (2008)
+
+\bibitem{2010NIMPA.622..316A}
+{Alme}, J., et~al.: {The ALICE TPC, a large 3-dimensional tracking device with
+  fast readout for ultra-high multiplicity events}. Nucl. Instrum. Meth. A
+  622,  316--367 (2010)
+
+\bibitem{Abelevetal:2014dna}
+Abelev, B., et~al.: {Technical Design Report for the Upgrade of the ALICE Inner
+  Tracking System}. J. Phys.  G41,  087002 (2014)
+
+\bibitem{Abelev:2014ffa}
+Abelev, B.B., et~al.: {Performance of the ALICE Experiment at the CERN LHC}.
+  Int. J. Mod. Phys.  A29,  1430044 (2014)
+
+\bibitem{Akindinov:2013tea}
+Akindinov, A., et~al.: {Performance of the ALICE Time-Of-Flight detector at the
+  LHC}. Eur. Phys. J. Plus  128, ~44 (2013)
+
+\bibitem{PhysRevD.44.3501}
+Wang, X.N., Gyulassy, M.: {HIJING: A Monte Carlo model for multiple jet
+  production in $\mathrm{pp}$, $\mathrm{pA}$, and $\mathrm{AA}$ collisions}.
+  Phys. Rev. D  44,  3501--3516 (Dec 1991),
+  \url{https://link.aps.org/doi/10.1103/PhysRevD.44.3501}
+
+\bibitem{Brun:1082634}
+Brun, R., Bruyant, F., Carminati, F., Giani, S., Maire, M., McPherson, A.,
+  Patrick, G., Urban, L.: {GEANT: Detector Description and Simulation Tool; Oct
+  1994}. CERN Program Library, CERN, Geneva (1993),
+  \url{https://cds.cern.ch/record/1082634}, long Writeup W5013
+
+\bibitem{Acharya:2017qtq}
+Acharya, S., et~al.: {Kaon femtoscopy in Pb-Pb collisions at
+  $\sqrt{s_{\rm{NN}}}$ = 2.76 TeV}. Phys. Rev.  C96(6),  064613 (2017)
+
+\bibitem{Koonin:1977fh}
+Koonin, S.E.: {Proton Pictures of High-Energy Nuclear Collisions}. Phys. Lett.
+  B70,  43--47 (1977)
+
+\bibitem{Pratt:1990zq}
+Pratt, S., Csorgo, T., Zimanyi, J.: {Detailed predictions for two pion
+  correlations in ultrarelativistic heavy ion collisions}. Phys. Rev.  C42,
+  2646--2652 (1990)
+
+\bibitem{Kopylov:1974th}
+Kopylov, G.I.: {Like particle correlations as a tool to study the multiple
+  production mechanism}. Phys. Lett.  B50,  472--474 (1974)
+
+\bibitem{Kisiel:2014mma}
+Kisiel, A., Zbroszczyk, H., Szymański, M.: {Extracting baryon-antibaryon
+  strong interaction potentials from p$\bar{\Lambda}$ femtoscopic correlation
+  functions}. Phys. Rev.  C89(5),  054916 (2014)
+
+\bibitem{Acharya:2018gyz}
+Acharya, S., et~al.: {p-p, p-$\Lambda$ and $\Lambda$-$\Lambda$ correlations
+  studied via femtoscopy in pp reactions at $\sqrt{s}$ = 7 TeV}. Phys. Rev.
+  C99(2),  024001 (2019)
+
+\bibitem{Chojnacki:2011hb}
+Chojnacki, M., Kisiel, A., Florkowski, W., Broniowski, W.: {THERMINATOR 2:
+  THERMal heavy IoN generATOR 2}. Comput. Phys. Commun.  183,  746--773 (2012)
+
+\bibitem{Kisiel:2017}
+Kisiel, A.: Non-identical particle correlation analysis in the presence of
+  non-femtoscopic correlations. Acta Physica Polonica B  48,  717 (04 2017)
+
+\bibitem{Liu:2006xja}
+Liu, Y.R., Zhu, S.L.: {Meson-baryon scattering lengths in HB$\chi$PT}. Phys.
+  Rev.  D75,  034003 (2007)
+
+\bibitem{Mai:2009ce}
+Mai, M., Bruns, P.C., Kubis, B., Meissner, U.G.: {Aspects of meson-baryon
+  scattering in three and two-flavor chiral perturbation theory}. Phys. Rev.
+  D80,  094006 (2009)
+
+\bibitem{Humphrey:1962zz}
+Humphrey, W.E., Ross, R.R.: {Low-Energy Interactions of K- Mesons in Hydrogen}.
+  Phys. Rev.  127,  1305--1323 (1962)
+
+\bibitem{Hadjimichef:2002xe}
+Hadjimichef, D., Haidenbauer, J., Krein, G.: {Short range repulsion and isospin
+  dependence in the KN system}. Phys. Rev.  C66,  055214 (2002)
+
+\bibitem{Ikeda:2012au}
+Ikeda, Y., Hyodo, T., Weise, W.: {Chiral SU(3) theory of antikaon-nucleon
+  interactions with improved threshold constraints}. Nucl. Phys.  A881,
+  98--114 (2012)
+
+\end{thebibliography}
