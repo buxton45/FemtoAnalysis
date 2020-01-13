@@ -1,0 +1,40 @@
+\begin{thebibliography}{1}
+\providecommand{\url}[1]{{#1}}
+\providecommand{\urlprefix}{URL }
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{DOI \discretionary{}{}{}#1}\else
+  \providecommand{\doi}{DOI \discretionary{}{}{}\begingroup
+  \urlstyle{rm}\Url}\fi
+
+\bibitem{Lisa:2005dd}
+M.A. Lisa, S.~Pratt, R.~Soltz, U.~Wiedemann, Ann. Rev. Nucl. Part. Sci.
+  \textbf{55} (2005)
+
+\bibitem{Kopylov:1974th}
+G.I. Kopylov, Phys. Lett. \textbf{B50}, 472 (1974)
+
+\bibitem{Lednicky:82}
+R.~Lednick\'y, V.L. Lyuboshitz, Sov. J. Nucl. Phys. \textbf{35}, 770 (1982)
+
+\bibitem{Kisiel:2014mma}
+A.~Kisiel, H.~Zbroszczyk, M.~Szymański, Phys. Rev. \textbf{C89}(5), 054916
+  (2014)
+
+\bibitem{Acharya:2018gyz}
+S.~Acharya, et~al., Phys. Rev. \textbf{C99}(2), 024001 (2019)
+
+\bibitem{Chojnacki:2011hb}
+M.~Chojnacki, A.~Kisiel, W.~Florkowski, W.~Broniowski, Comput. Phys. Commun.
+  \textbf{183}, 746 (2012)
+
+\bibitem{Kisiel:2017}
+A.~Kisiel, Acta Physica Polonica B \textbf{48}, 717 (2017)
+
+\bibitem{Liu:2006xja}
+Y.R. Liu, S.L. Zhu, Phys. Rev. \textbf{D75}, 034003 (2007)
+
+\bibitem{Mai:2009ce}
+M.~Mai, P.C. Bruns, B.~Kubis, U.G. Meissner, Phys. Rev. \textbf{D80}, 094006
+  (2009)
+
+\end{thebibliography}

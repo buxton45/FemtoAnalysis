@@ -629,14 +629,27 @@ void Purity::DrawResolution(TPad *aPad, int aTypeOfFit, bool aZoomBg, double aPa
   tCombinedPurity->SetLineColor(1);
   tCombinedPurity->SetLineWidth(2);
 
-  tCombinedPurity->GetXaxis()->SetTitle("#it{m}_{inv} (GeV/#it{c}^{2})");
+  //tCombinedPurity->GetXaxis()->SetTitle("#it{m}_{inv} (GeV/#it{c}^{2})");
+  TString tXaxTitle = "#it{m}";
+  if( (fParticleType == kLam) 
+   || (fParticleType == kALam) ) tXaxTitle.Append("_{p#pi}");
+  else if(fParticleType == kK0)  tXaxTitle.Append("_{#pi#pi}");
+  else assert(0);
+  tXaxTitle.Append(" (GeV/#it{c}^{2})");
+  tCombinedPurity->GetXaxis()->SetTitle(tXaxTitle);
   tCombinedPurity->SetLabelSize(0.06*(aPadScaleY/aPadScaleX), "x");
   tCombinedPurity->SetTitleSize(0.075*(aPadScaleY/aPadScaleX), "x");
   tCombinedPurity->GetXaxis()->SetTitleOffset(0.375*(aPadScaleY/aPadScaleX));
   tCombinedPurity->GetXaxis()->SetTickLength(0.06*(aPadScaleY/aPadScaleX));
   tCombinedPurity->GetXaxis()->SetNdivisions(510);
 
-  tCombinedPurity->GetYaxis()->SetTitle("dN/d#it{m}_{inv}");
+  //tCombinedPurity->GetYaxis()->SetTitle("dN/d#it{m}_{inv}");
+  TString tYaxTitle = "dN/d#it{m}";
+  if( (fParticleType == kLam) 
+   || (fParticleType == kALam) ) tYaxTitle.Append("_{p#pi}");
+  else if(fParticleType == kK0)  tYaxTitle.Append("_{#pi#pi}");
+  else assert(0);
+  tCombinedPurity->GetYaxis()->SetTitle(tYaxTitle);
   tCombinedPurity->SetLabelSize(0.06*aPadScaleY, "y");
   tCombinedPurity->SetTitleSize(0.085*aPadScaleY, "y");
   tCombinedPurity->GetYaxis()->SetTitleOffset(0.50*aPadScaleY);
