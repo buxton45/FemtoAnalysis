@@ -146,10 +146,10 @@ void DrawSHCfComponent(TPad* aPad, Analysis* aAnaly, Analysis* aConjAnaly, YlmCo
 {
   aPad->cd();
 
-  aPad->SetTopMargin(0.025);
-  aPad->SetBottomMargin(0.125);
-  aPad->SetLeftMargin(0.125);
-  aPad->SetRightMargin(0.0125);
+  aPad->SetTopMargin(0.02);
+  aPad->SetBottomMargin(0.15);
+  aPad->SetLeftMargin(0.15);
+  aPad->SetRightMargin(0.02);
 
   gStyle->SetOptStat(0);
   gStyle->SetOptTitle(0);
@@ -174,6 +174,7 @@ void DrawSHCfComponent(TPad* aPad, Analysis* aAnaly, Analysis* aConjAnaly, YlmCo
   //--------------------------------------------------------------
 
   vector<TString> tReImVec{"#Rgothic", "#Jgothic"};
+  if(al==0 && am==0) tReImVec = vector<TString>{"", ""};
   int tColor;
   if(aAnaly->GetAnalysisType()==kLamK0 || aAnaly->GetAnalysisType()==kALamK0) tColor=kBlack;
   else if(aAnaly->GetAnalysisType()==kLamKchP || aAnaly->GetAnalysisType()==kALamKchM) tColor=kRed+1;
@@ -214,15 +215,18 @@ void DrawSHCfComponent(TPad* aPad, Analysis* aAnaly, Analysis* aConjAnaly, YlmCo
   tSHCf->SetLineColor(tColor);
 
   tSHCf->GetXaxis()->SetTitle("#it{k}* (GeV/#it{c})");
-  tSHCf->GetXaxis()->SetTitleOffset(1.05);
-  tSHCf->GetXaxis()->SetTitleSize(0.06);
-  tSHCf->GetXaxis()->SetLabelSize(0.040);
+  tSHCf->GetXaxis()->SetTitleOffset(1.02);
+  tSHCf->GetXaxis()->SetTitleSize(0.07);
+  tSHCf->GetXaxis()->SetLabelSize(0.06);
+  tSHCf->GetXaxis()->SetLabelOffset(0.01);  
   tSHCf->GetXaxis()->SetNdivisions(505);
 
   tSHCf->GetYaxis()->SetTitle(TString::Format("%s#it{C}_{%d%d}(#it{k}*)", tReImVec[(int)aComponent].Data(), al, am));
-  tSHCf->GetYaxis()->SetTitleOffset(1.0);
-  tSHCf->GetYaxis()->SetTitleSize(0.065);
-  tSHCf->GetYaxis()->SetLabelSize(0.040);
+  tSHCf->GetYaxis()->SetTitleOffset(1.125);
+  if(am==1 && al==1) tSHCf->GetYaxis()->SetTitleOffset(0.9);
+  tSHCf->GetYaxis()->SetTitleSize(0.07);
+  tSHCf->GetYaxis()->SetLabelSize(0.06);
+  tSHCf->GetYaxis()->SetLabelOffset(0.0125);  
   tSHCf->GetYaxis()->SetNdivisions(505);
 
   tSHCf->Draw("ex0");
@@ -241,7 +245,7 @@ void DrawSHCfComponent(TPad* aPad, Analysis* aAnaly, Analysis* aConjAnaly, YlmCo
   TString tTextSys = TString::Format("%s#scale[0.5]{ }#oplus#scale[0.5]{ }%s", 
                                      cAnalysisRootTags[aAnaly->GetAnalysisType()], 
                                      cAnalysisRootTags[aConjAnaly->GetAnalysisType()]);
-  TString tCfAndCentInfo = TString::Format("%sC_{%d%d} (%s)", tReImVec[(int)aComponent].Data(), al, am, cPrettyCentralityTags[aAnaly->GetCentralityType()]);
+  TString tCfAndCentInfo = TString::Format("%s#it{C}_{%d%d} (%s)", tReImVec[(int)aComponent].Data(), al, am, cPrettyCentralityTags[aAnaly->GetCentralityType()]);
 
 //  TLegend* tLeg = new TLegend(0.50, 0.175, 0.95, 0.475, tCfAndCentInfo.Data());
   TLegend* tLeg = new TLegend(0.60, 0.275, 0.95, 0.475, tCfAndCentInfo.Data());
@@ -249,14 +253,15 @@ void DrawSHCfComponent(TPad* aPad, Analysis* aAnaly, Analysis* aConjAnaly, YlmCo
     tLeg->SetBorderSize(0);
     tLeg->SetTextAlign(22);
     tLeg->SetFillStyle(0);
+    tLeg->SetTextSize(0.07);    
 //  tLeg->AddEntry(tSHCf, TString::Format("%s, stat. errors", tTextSys.Data()), "PE");
   tLeg->AddEntry(tSHCf, tTextSys.Data(), "P");
 
   if(aPrintAliceInfo && al==0 && am==0)
   {
-    TLatex *   tex = new TLatex(0.02,1.05,"ALICE Pb-Pb #sqrt{#it{s}_{NN}} = 2.76 TeV");
+    TLatex *   tex = new TLatex(0.02,1.04,"ALICE Pb-Pb #sqrt{#it{s}_{NN}} = 2.76 TeV");
     tex->SetTextFont(42);
-    tex->SetTextSize(0.060);
+    tex->SetTextSize(0.070);
     tex->SetLineWidth(2);
     tex->Draw();
   }

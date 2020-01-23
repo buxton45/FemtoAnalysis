@@ -259,6 +259,7 @@ TH1* DrawSHCfThermComponent(TPad* aPad, CorrFctnDirectYlmTherm* aCfYlmTherm, Ylm
 
   //--------------------------------------------------------------
   vector<TString> tReImVec{"#Rgothic", "#Jgothic"};
+  if(al==0 && am==0) tReImVec = vector<TString>{"", ""};
   //--------------------------------------------------------------
   double tMarkerSize = 1.0;
   //--------------------------------------------------------------
@@ -292,6 +293,7 @@ TObjArray* DrawFourSHCfThermComponents(TPad* aPad, CorrFctnDirectYlmTherm* aCfYl
 
   //--------------------------------------------------------------
   vector<TString> tReImVec{"#Rgothic", "#Jgothic"};
+  if(al==0 && am==0) tReImVec = vector<TString>{"", ""};
   //--------------------------------------------------------------
   double tMarkerSize = 1.0;
 
@@ -376,6 +378,7 @@ TH1* DrawSHCfThermComponent_CombConj(TPad* aPad, CorrFctnDirectYlmTherm* aCfYlmT
 
   //--------------------------------------------------------------
   vector<TString> tReImVec{"#Rgothic", "#Jgothic"};
+  if(al==0 && am==0) tReImVec = vector<TString>{"", ""};
   //--------------------------------------------------------------
   double tMarkerSize = 1.0;
   //--------------------------------------------------------------
@@ -394,14 +397,20 @@ TH1* DrawSHCfThermComponent_CombConj(TPad* aPad, CorrFctnDirectYlmTherm* aCfYlmT
 
   tSHCf->GetXaxis()->SetTitle("#it{k}* (GeV/#it{c})");
   tSHCf->GetXaxis()->SetTitleSize(0.070);
-  tSHCf->GetXaxis()->SetTitleOffset(0.9);
-  tSHCf->GetXaxis()->SetLabelSize(0.045);
+  tSHCf->GetXaxis()->SetTitleOffset(1.05);
+  tSHCf->GetXaxis()->SetLabelSize(0.05);
+  tSHCf->GetXaxis()->SetLabelOffset(0.01);  
 
   tSHCf->GetYaxis()->SetTitle(TString::Format("%s#it{C}_{%d%d}(#it{k}*)", tReImVec[(int)aComponent].Data(), al, am));
   tSHCf->GetYaxis()->SetTitleSize(0.070);
-  tSHCf->GetYaxis()->SetTitleOffset(1.0);
-  tSHCf->GetYaxis()->SetLabelSize(0.045);
-
+  tSHCf->GetYaxis()->SetTitleOffset(1.05);
+  if(al==1 && am==1) 
+  {
+    aPad->SetLeftMargin(0.175);
+    tSHCf->GetYaxis()->SetTitleOffset(1.175);
+  }  
+  tSHCf->GetYaxis()->SetLabelSize(0.05);
+  tSHCf->GetYaxis()->SetLabelOffset(0.0125);
 
   //--------------------------------------------------------------
   tSHCf->Draw("ex0same");
@@ -413,6 +422,7 @@ TObjArray* DrawFourSHCfThermComponents_CombConj(TPad* aPad, CorrFctnDirectYlmThe
 {
   //--------------------------------------------------------------
   vector<TString> tReImVec{"#Rgothic", "#Jgothic"};
+  if(al==0 && am==0) tReImVec = vector<TString>{"", ""};
   //--------------------------------------------------------------
 
   aPad->cd();
@@ -725,8 +735,8 @@ int main(int argc, char **argv)
   tCanC00C11->Divide(2,1);
     tCanC00C11->cd(1)->SetTopMargin(0.02);
     tCanC00C11->cd(2)->SetTopMargin(0.02);
-    tCanC00C11->cd(1)->SetBottomMargin(0.125);
-    tCanC00C11->cd(2)->SetBottomMargin(0.125);
+    tCanC00C11->cd(1)->SetBottomMargin(0.15);
+    tCanC00C11->cd(2)->SetBottomMargin(0.15);
 
   if(!bCombineConjugates)
   {

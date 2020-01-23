@@ -48,7 +48,7 @@ int main(int argc, char **argv)
   TString tSaveFileType = "pdf";
 
   bool bDrawPurity = true;
-  bool bPrintPurity = false;
+  bool bPrintPurity = true;
 
   bool bDrawResolutions = false;
   int aResFitType = 3;

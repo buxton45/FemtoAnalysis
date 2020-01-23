@@ -146,7 +146,7 @@ int main(int argc, char **argv)
 //=========Macro generated from canvas: canmtcomb/canmtcomb
 //=========  (Fri May  8 11:29:01 2015) by ROOT version5.34/26
 
-  TString tResultsDate = "20180505";
+  TString tResultsDate = "20190319";
 
   bool bSaveImage = false;
   bool bMakeOthersTransparent = true;
@@ -159,12 +159,12 @@ int main(int argc, char **argv)
   ResPrimMaxDecayType tResPrimMaxDecayType = k10fm;
 
   TString tSaveFileType = "pdf";  //Needs to be pdf for systematics to be transparent!
-  TString tSaveName = "mTscaling_MinvCalcv2";
+  TString tSaveName = "mTscaling_MinvCalcv3";
 
 
 //TRIPLE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-  vector<NonFlatBgdFitType> tNonFlatBgdFitTypes{kLinear, kLinear,
+  vector<NonFlatBgdFitType> tNonFlatBgdFitTypes{kPolynomial, kPolynomial,
                                                 kPolynomial, kPolynomial, kPolynomial, kPolynomial};
 
   TString tFitInfoTString = 
@@ -285,8 +285,8 @@ int main(int argc, char **argv)
   canmtcomb->SetFrameBorderMode(0);
    
   TH1D *ramka = new TH1D("ramka","",100,0.2,1.99);
-  ramka->SetMinimum(1.15);
-  ramka->SetMaximum(9.99);
+  ramka->SetMinimum(0.25);
+  ramka->SetMaximum(11.99);
   ramka->SetStats(0);
 
   ramka->GetXaxis()->SetTitle("#LT#it{m}_{T}#GT (GeV/#it{c}^{2})");
@@ -521,9 +521,9 @@ cout << endl << endl;
 
 //---------------------------------- Draw Legend -------------------------------------------- 
 
-    TLatex *   tex = new TLatex(0.275,1.75,"ALICE Pb-Pb #sqrt{#it{s}_{NN}} = 2.76 TeV");
+    TLatex *   tex = new TLatex(0.25,1.05,"ALICE Pb-Pb #sqrt{#it{s}_{NN}} = 2.76 TeV");
     tex->SetTextFont(42);
-    tex->SetTextSize(0.045);
+    tex->SetTextSize(0.06);
     tex->SetLineWidth(2);
     tex->Draw();
 
@@ -538,22 +538,22 @@ cout << endl << endl;
     TMarker *marker = new TMarker();
     marker->SetMarkerSize(tMarkerSize);
   
-    double tXSysText = 1.0;
-    double tXMarkers0010 = 1.20;
-    double tXMarkers1030 = 1.45;
-    double tXMarkers3050 = 1.70;
+    double tXSysText = 0.95;
+    double tXMarkers0010 = 1.15;
+    double tXMarkers1030 = 1.40;
+    double tXMarkers3050 = 1.65;
 
     double tY1Text = 9.0;
-    double tY1Sep = 0.6;
+    double tY1Sep = 0.72; 
 
     double tYTextCent = 9.6;
-    double tXTextCent0010 = 1.16;
-    double tXTextCent1030 = 1.385;
-    double tXTextCent3050 = 1.635;
+    double tXTextCent0010 = 1.10;
+    double tXTextCent1030 = 1.335;
+    double tXTextCent3050 = 1.585;
 
     //-----------------------------
     double tXShift = 0.125;
-    double tYShift = 0.0;
+    double tYShift = 1.85;
 
     tXSysText     += tXShift;
     tXMarkers0010 += tXShift;

@@ -501,12 +501,12 @@ TH1* Draw1DCfwFit(TPad* aPad, ThermCf* aThermCfObj, double aFitMax=0.3, bool aFi
 
   TPaveText* tText3;
   if(!tCombConj) tText3 = new TPaveText(0.20, 0.80, 0.40, 0.95, "NDC");
-  else           tText3 = new TPaveText(0.20, 0.80, 0.70, 0.95, "NDC");
+  else           tText3 = new TPaveText(0.20, 0.85, 0.45, 0.925, "NDC");
     tText3->SetFillColor(0);
     tText3->SetFillStyle(0);
     tText3->SetBorderSize(0);
     tText3->SetTextColor(kBlack);
-    tText3->SetTextFont(63);
+    tText3->SetTextFont(43);
     tText3->SetTextSize(25);
     tText3->SetTextAlign(13);
   if(!tCombConj) tText3->AddText(cAnalysisRootTags[tAnType]);
@@ -623,9 +623,9 @@ void Add1DCfwFitToCanPart(CanvasPartition* aCanPart, int aNx, int aNy, ThermCf* 
   if(!aSuppressSystemText)
   {
     TPaveText* tText3;
-    if(!tCombConj) tText3 = aCanPart->SetupTPaveText(cAnalysisRootTags[tAnType], aNx, aNy, 0.05, 0.85, 0.20, 0.15, 63, 25, 13, true);
+    if(!tCombConj) tText3 = aCanPart->SetupTPaveText(cAnalysisRootTags[tAnType], aNx, aNy, 0.05, 0.85, 0.20, 0.15, 43, 25, 13, true);
     else           tText3 = aCanPart->SetupTPaveText(TString::Format("%s#scale[0.5]{ }#oplus#scale[0.5]{ }%s", cAnalysisRootTags[tAnType], cAnalysisRootTags[tAnType+1]), 
-                                                     aNx, aNy, 0.05, 0.85, 0.50, 0.15, 63, 25, 13, true);
+                                                     aNx, aNy, 0.05, 0.85, 0.50, 0.15, 43, 25, 13, true);
       tText3->SetTextColor(kBlack);
     aCanPart->AddPadPaveText(tText3, aNx, aNy);
 
@@ -949,9 +949,9 @@ void Draw1DCfwFitAndData(TPad* aPad, ThermCf* aThermCfObj, double aFitMax, bool 
   //--------------------------------
   if(aPrintAliceInfo)
   {
-    TLatex *   tex = new TLatex(0.05,0.87,"ALICE Pb-Pb #sqrt{#it{s}_{NN}} = 2.76 TeV");
+    TLatex *   tex = new TLatex(0.04,0.87,"ALICE Pb-Pb #sqrt{#it{s}_{NN}} = 2.76 TeV");
     tex->SetTextFont(42);
-    tex->SetTextSize(0.075);
+    tex->SetTextSize(0.07);
     tex->SetLineWidth(2);
     tex->Draw();
   }
@@ -1361,17 +1361,36 @@ int main(int argc, char **argv)
     double tYHigh = 1.07;
 
     TString tCanPartCompMusName = TString::Format("CanPartCompMus_%s_%s", aCfDescriptor.Data(), cAnalysisBaseTags[tAnType]);
-    CanvasPartition* tCanPart = new CanvasPartition(tCanPartCompMusName,tNx,tNy,tXLow,tXHigh,tYLow,tYHigh,0.12,0.0025,0.13,0.0025);
+    CanvasPartition* tCanPart = new CanvasPartition(tCanPartCompMusName,tNx,tNy,tXLow,tXHigh,tYLow,tYHigh,0.15,0.02,0.15,0.02);
     tCanPart->SetDrawOptStat(false);
 
     Add1DCfwFitToCanPart(tCanPart, 0, 0, tThermCfObj_Mu0, tKStarFitMax, tFixLambdaInFit, 0, false);
     Add1DCfwFitToCanPart(tCanPart, 1, 0, tThermCfObj_Mu1, tKStarFitMax, tFixLambdaInFit, 1, true);
     Add1DCfwFitToCanPart(tCanPart, 0, 1, tThermCfObj_Mu3, tKStarFitMax, tFixLambdaInFit, 3, true);
     Add1DCfwFitToCanPart(tCanPart, 1, 1, tThermCfObj_Mu6, tKStarFitMax, tFixLambdaInFit, 6, true);
+    
+    //----------
+    double tLabelScaleX = 1.5;
+    double tLabelScaleY = 1.5;
+    
+    double tLabelOffsetScaleX = 2.0;
+    double tLabelOffsetScaleY = 2.0;
+    
+    for(int i=0; i<2; i++)
+    {
+      for(int j=0; j<2; j++)
+      {
+        ((TH1*)tCanPart->GetGraphsInPad(i,j)->At(0))->GetXaxis()->SetLabelSize(tLabelScaleX*((TH1*)tCanPart->GetGraphsInPad(i,j)->At(0))->GetXaxis()->GetLabelSize());
+        ((TH1*)tCanPart->GetGraphsInPad(i,j)->At(0))->GetYaxis()->SetLabelSize(tLabelScaleY*((TH1*)tCanPart->GetGraphsInPad(i,j)->At(0))->GetYaxis()->GetLabelSize());
+      
+        ((TH1*)tCanPart->GetGraphsInPad(i,j)->At(0))->GetXaxis()->SetLabelOffset(tLabelOffsetScaleX*((TH1*)tCanPart->GetGraphsInPad(i,j)->At(0))->GetXaxis()->GetLabelOffset());    
+        ((TH1*)tCanPart->GetGraphsInPad(i,j)->At(0))->GetYaxis()->SetLabelOffset(tLabelOffsetScaleY*((TH1*)tCanPart->GetGraphsInPad(i,j)->At(0))->GetYaxis()->GetLabelOffset());
+      }
+    }
 
     tCanPart->DrawAll();
-    tCanPart->DrawXaxisTitle("#it{k}* (GeV/#it{c})");
-    tCanPart->DrawYaxisTitle("#it{C}(#it{k}*)",43,25,0.05,0.85);
+    tCanPart->DrawXaxisTitle("#it{k}* (GeV/#it{c})", 43, 35, 0.725, 0.020); //Note, changing xaxis low (=0.315) does nothing
+    tCanPart->DrawYaxisTitle("#it{C}(#it{k}*)", 43, 35, 0.05, 0.80);
 
     if(bSaveFigures) tCanPart->GetCanvas()->SaveAs(TString::Format("%s%s_3dHist%s.%s", tSaveDir.Data(), tCanPartCompMusName.Data(), tHistName3d.Data(), tSaveFileType.Data()));
     //--------------------------------------------

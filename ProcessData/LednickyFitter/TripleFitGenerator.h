@@ -31,7 +31,8 @@ public:
   void CreateMinuitParameters(bool aShareLambda, bool aShareRadii=true);
 
   void InitializeGenerator(bool aShareLambda, bool aShareRadii=true, double aMaxFitKStar=0.3);  //Called withith DoFit
-  void DoFit(bool aShareLambda, bool aShareRadii=true, double aMaxFitKStar=0.3);
+  void DoFit(bool aShareLambda, bool aShareRadii=true, double aMaxFitKStar=0.3, bool aOutputCorrCoeffFile=false);
+  void DoFitOnce(bool aShareLambda, bool aShareRadii=true, double aMaxFitKStar=0.3);    //Just to generate plots, not to do actual fitting
   void ReturnNecessaryInfoToFitGenerators();  //This isn't needed for the fitting process, just for drawing
 
   TCanvas* GenerateContourPlots(int aNPoints, const vector<double> &aParams, const vector<double> &aErrVals={4,1}, TString aSaveNameModifier="", bool aFixAllOthers=false, bool aShareLambda=true, bool aShareRadii=true, double aMaxFitKStar=0.3);  //1=1sigma, 4=2sigma

@@ -1351,6 +1351,10 @@ void BuildBgdwFitPanel(CanvasPartition* aCanPart, int tColumn, int tRow, TString
   td1dVec aCustomBinsLong(aCustomBins.size());
   for(int i=0; i<aCustomBins.size(); i++) aCustomBinsLong[i]=aCustomBins[i];
   for(int i=1; i<=10; i++) aCustomBinsLong.push_back(aCustomBins[aCustomBins.size()-1] + 0.10*i);
+  
+  //If LamK0 and PrimaryAndShortDecays, combine the first two bins because the error bars are really big
+  if((aAnType==kLamK0 || aAnType==kALamK0) && aCfDescriptor.EqualTo("PrimaryAndShortDecays")) aCustomBinsLong.erase(aCustomBinsLong.begin()+1);
+  
   assert(aCustomBinsLong[aCustomBinsLong.size()-1]==3.00);
 
   //--------------------------------------------
@@ -1452,10 +1456,10 @@ void BuildBgdwFitPanel(CanvasPartition* aCanPart, int tColumn, int tRow, TString
   //---------------------------------------------------------------------------------------------------------
 
   TString tSysInfoTString;
-  if(aCombineConjugates) tSysInfoTString = TString::Format("%s#scale[0.5]{ }#oplus#scale[0.5]{ }%s,  %s", cAnalysisRootTags[aAnType], cAnalysisRootTags[aAnType+1], cPrettyCentralityTags[tCentTypeData]);
+  if(aCombineConjugates) tSysInfoTString = TString::Format("%s#scale[0.5]{ }#oplus#scale[0.5]{ }%s   %s", cAnalysisRootTags[aAnType], cAnalysisRootTags[aAnType+1], cPrettyCentralityTags[tCentTypeData]);
   else                   tSysInfoTString = TString::Format("%s,  %s", cAnalysisRootTags[aAnType], cPrettyCentralityTags[tCentTypeData]);
   TPaveText* tSysInfoPaveText;
-  tSysInfoPaveText = aCanPart->SetupTPaveText(tSysInfoTString, tColumn, tRow, 0.175, 0.80, 0.80, 0.195, 43, 40, 31, true);
+  tSysInfoPaveText = aCanPart->SetupTPaveText(tSysInfoTString, tColumn, tRow, 0.175, 0.775, 0.80, 0.195, 43, 50, 31, true);
   aCanPart->AddPadPaveText(tSysInfoPaveText, tColumn, tRow);
 
 
@@ -1510,7 +1514,7 @@ void BuildBgdwFitPanel(CanvasPartition* aCanPart, int tColumn, int tRow, TString
     {
       if(!aZoomY) aCanPart->SetupTLegend("", tColumn, tRow, 0.55, 0.15, 0.35, 0.15, tNColumns, true);
 //      else        aCanPart->SetupTLegend("", tColumn, tRow, 0.30, 0.475, 0.65, 0.375, tNColumns, true);
-      else        aCanPart->SetupTLegend("", tColumn, tRow, 0.30, 0.50, 0.65, 0.35, tNColumns, true);
+      else        aCanPart->SetupTLegend("", tColumn, tRow, 0.25, 0.35, 0.70, 0.45, tNColumns, true);
     }
 /*
     aCanPart->AddLegendEntry(tColumn, tRow, tData, "ALICE, stat. errors", "PE");
@@ -1520,7 +1524,7 @@ void BuildBgdwFitPanel(CanvasPartition* aCanPart, int tColumn, int tRow, TString
     aCanPart->AddLegendEntry(tColumn, tRow, tBgdFitDraw, "THERM. Bgd. Fit", "L"); 
 */
     aCanPart->AddLegendEntry(tColumn, tRow, tData, "ALICE", "P");
-    aCanPart->AddLegendEntry(tColumn, tRow, tBgdFitDataDraw, "ALICE Bgd. Fit", "L");   
+    aCanPart->AddLegendEntry(tColumn, tRow, tBgdFitDataDraw, "Scaled Bgd. Fit", "L");   
     aCanPart->AddLegendEntry(tColumn, tRow, tCf, tDescriptor.Data(), "p");
     aCanPart->AddLegendEntry(tColumn, tRow, tBgdFitDraw, "THERM. Bgd. Fit", "L"); 
                
@@ -1742,6 +1746,20 @@ TCanvas* DrawBgdwFit_AllCentAllAnv2(TString aCfDescriptor, TString aFileNameCfs,
 
       if(j==0) tTempHist->GetYaxis()->SetRangeUser(0.9875, 1.015);
       if(j==1) tTempHist->GetYaxis()->SetRangeUser(0.975, 1.018);
+      
+      if(aCfDescriptor.EqualTo("Full"))
+      {
+        if(j==0) tTempHist->GetYaxis()->SetRangeUser(0.9875, 1.0325);
+        if(j==1) tTempHist->GetYaxis()->SetRangeUser(0.975, 1.01999);
+        if(j==2) tTempHist->GetYaxis()->SetRangeUser(0.9475, 1.034999);
+      }            
+      
+      if(aCfDescriptor.EqualTo("PrimaryAndShortDecays"))
+      {
+        if(j==0) tTempHist->GetYaxis()->SetRangeUser(0.9875, 1.0325);
+        if(j==1) tTempHist->GetYaxis()->SetRangeUser(0.975, 1.01999);
+        if(j==2) tTempHist->GetYaxis()->SetRangeUser(0.9475, 1.034999);
+      }      
     }
 
   }
@@ -2542,11 +2560,12 @@ int main(int argc, char **argv)
   {
     tRebin=4;
     bool aAvgLamKchPMFit = false;
-
+/*
     if(bDrawAllCentralities) tCanBgdwFit = DrawBgdwFit_AllCent(tCfDescriptor, tSingleFileName, tAnType, bCombineConjugates, tEventsType, tRebin, tMinNorm, tMaxNorm, tMaxBgdFit, bUseStavCf);
     else tCanBgdwFit = DrawBgdwFit(tCfDescriptor, tSingleFileName, tAnType, tImpactParam, bCombineConjugates, bCombineImpactParams, tEventsType, tRebin, tMinNorm, tMaxNorm, tMaxBgdFit, bUseStavCf);
 
     tCanBgdwFitv2 = DrawBgdwFit_AllCentv2(tCfDescriptor, tSingleFileName, tAnType, bCombineConjugates, tEventsType, tRebin, tMinNorm, tMaxNorm, tMaxBgdFit, aAvgLamKchPMFit, bUseStavCf);
+*/
 
     //------------------------------------------
 //    tCanBgdwFitAllCentAllAnv2 = DrawBgdwFit_AllCentAllAnv2(tCfDescriptor, tSingleFileName, bCombineConjugates, tEventsType, tRebin, tMinNorm, tMaxNorm, tMaxBgdFit, aAvgLamKchPMFit, bUseStavCf);
@@ -2558,23 +2577,26 @@ int main(int argc, char **argv)
     tCanBgdwFitAllCentAllAnv2 = DrawBgdwFit_AllCentAllAnv2(tCfDescriptor, tSingleFileName, bCombineConjugates, tEventsType, tCustomBins, tMinNorm, tMaxNorm, tMaxBgdFit, aAvgLamKchPMFit, bUseStavCf);
 
     //------------------------------------------
-
+/*
     tCanBgdwFitSingleCentAllAn0010 = DrawBgdwFit_SingleCentAllAnv2(k0010, tCfDescriptor, tSingleFileName, bCombineConjugates, tEventsType, tRebin, tMinNorm, tMaxNorm, tMaxBgdFit, aAvgLamKchPMFit, bUseStavCf);
 
     tCanBgdwFitSingleCentAllAn1030 = DrawBgdwFit_SingleCentAllAnv2(k1030, tCfDescriptor, tSingleFileName, bCombineConjugates, tEventsType, tRebin, tMinNorm, tMaxNorm, tMaxBgdFit, aAvgLamKchPMFit, bUseStavCf);
 
     tCanBgdwFitSingleCentAllAn3050 = DrawBgdwFit_SingleCentAllAnv2(k3050, tCfDescriptor, tSingleFileName, bCombineConjugates, tEventsType, tRebin, tMinNorm, tMaxNorm, tMaxBgdFit, aAvgLamKchPMFit, bUseStavCf);
-
+*/
 
     if(bSaveFigures)
     {
+/*    
       tCanBgdwFit->SaveAs(TString::Format("%s%s.%s", tSaveDir.Data(), tCanBgdwFit->GetName(), tSaveFileType.Data()));
       tCanBgdwFitv2->SaveAs(TString::Format("%s%s.%s", tSaveDir.Data(), tCanBgdwFitv2->GetName(), tSaveFileType.Data()));
+*/      
       tCanBgdwFitAllCentAllAnv2->SaveAs(TString::Format("%s%s.%s", tSaveDir.Data(), tCanBgdwFitAllCentAllAnv2->GetName(), tSaveFileType.Data()));
-
+/*
       tCanBgdwFitSingleCentAllAn0010->SaveAs(TString::Format("%s%s.%s", tSaveDir.Data(), tCanBgdwFitSingleCentAllAn0010->GetName(), tSaveFileType.Data()));
       tCanBgdwFitSingleCentAllAn1030->SaveAs(TString::Format("%s%s.%s", tSaveDir.Data(), tCanBgdwFitSingleCentAllAn1030->GetName(), tSaveFileType.Data()));
       tCanBgdwFitSingleCentAllAn3050->SaveAs(TString::Format("%s%s.%s", tSaveDir.Data(), tCanBgdwFitSingleCentAllAn3050->GetName(), tSaveFileType.Data()));
+*/      
     }
   }
 

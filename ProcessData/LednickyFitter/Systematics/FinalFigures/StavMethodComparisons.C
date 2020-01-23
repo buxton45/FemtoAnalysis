@@ -457,7 +457,7 @@ TCanvas* DrawKStarCfs_OnlyTwo_CombConj(FitGenerator* aFG1, FitGenerator* aFG2, b
     if(j==0)
     {
       if(aZoomY) tCanPart->SetupTLegend("", 0, 0, 0.20, 0.05, 0.60, 0.45);
-      else       tCanPart->SetupTLegend("", 0, 0, 0.20, 0.05, 0.60, 0.50);
+      else       tCanPart->SetupTLegend("", 0, 0, 0.20, 0.15, 0.60, 0.35);
       tCanPart->AddLegendEntry(0, 0, (TH1*)tCanPart->GetGraphsInPad(0,0)->At(0), "Normal: Num/Den", "p");
       tCanPart->AddLegendEntry(0, 0, (TH1*)tCanPart->GetGraphsInPad(0,0)->At(1), "Stavinskiy", "p");
     }
@@ -465,14 +465,27 @@ TCanvas* DrawKStarCfs_OnlyTwo_CombConj(FitGenerator* aFG1, FitGenerator* aFG2, b
     if(j==2)
     {
       TString tTextSysInfo = TString("ALICE Pb-Pb #sqrt{#it{s}_{NN}} = 2.76 TeV");
-      TPaveText* tSysInfo = tCanPart->SetupTPaveText(tTextSysInfo,0,j,0.20,0.125,0.725,0.15,43,17);
+      TPaveText* tSysInfo = tCanPart->SetupTPaveText(tTextSysInfo,0,j,0.15,0.125,0.725,0.15,43,15);
       tCanPart->AddPadPaveText(tSysInfo,0,j);
     }
   }
+  
+  //-----------------------------------------
+    double tLabelOffsetScaleX = 5.0;
+    double tLabelOffsetScaleY = 2.0;
+    ((TH1*)tCanPart->GetGraphsInPad(0,0)->At(0))->GetXaxis()->SetLabelOffset(tLabelOffsetScaleX*((TH1*)tCanPart->GetGraphsInPad(0,0)->At(0))->GetXaxis()->GetLabelOffset());    
+    ((TH1*)tCanPart->GetGraphsInPad(0,0)->At(0))->GetYaxis()->SetLabelOffset(tLabelOffsetScaleY*((TH1*)tCanPart->GetGraphsInPad(0,0)->At(0))->GetYaxis()->GetLabelOffset());
+
+    ((TH1*)tCanPart->GetGraphsInPad(0,1)->At(0))->GetXaxis()->SetLabelOffset(tLabelOffsetScaleX*((TH1*)tCanPart->GetGraphsInPad(0,1)->At(0))->GetXaxis()->GetLabelOffset());
+    ((TH1*)tCanPart->GetGraphsInPad(0,1)->At(0))->GetYaxis()->SetLabelOffset(tLabelOffsetScaleY*((TH1*)tCanPart->GetGraphsInPad(0,1)->At(0))->GetYaxis()->GetLabelOffset());
+
+    ((TH1*)tCanPart->GetGraphsInPad(0,2)->At(0))->GetXaxis()->SetLabelOffset(tLabelOffsetScaleX*((TH1*)tCanPart->GetGraphsInPad(0,2)->At(0))->GetXaxis()->GetLabelOffset());
+    ((TH1*)tCanPart->GetGraphsInPad(0,2)->At(0))->GetYaxis()->SetLabelOffset(tLabelOffsetScaleY*((TH1*)tCanPart->GetGraphsInPad(0,2)->At(0))->GetYaxis()->GetLabelOffset());  
+  //-----------------------------------------
 
   tCanPart->SetDrawUnityLine(true);
   tCanPart->DrawAll();
-  tCanPart->DrawXaxisTitle("#it{k}* (GeV/#it{c})",43,20,0.020);
+  tCanPart->DrawXaxisTitle("#it{k}* (GeV/#it{c})",43,20,0.015);
   tCanPart->DrawYaxisTitle("#it{C}(#it{k}*)",43,25,0.070,0.875);
 
   return tCanPart->GetCanvas();

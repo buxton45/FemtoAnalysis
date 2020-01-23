@@ -101,7 +101,7 @@ void FitGeneratorAndDraw::CreateParamInitValuesText(CanvasPartition *aCanPart, i
   tText->SetTextAlign(33);
 
 //  tText->GetLine(0)->SetTextSize(0.08);
-  tText->GetLine(0)->SetTextFont(63);
+  tText->GetLine(0)->SetTextFont(43);
   aCanPart->AddPadPaveText(tText,aNx,aNy);
 }
 
@@ -152,7 +152,7 @@ void FitGeneratorAndDraw::CreateParamFinalValuesText(CanvasPartition *aCanPart, 
   tText->SetTextAlign(33);
 
 //  tText->GetLine(0)->SetTextSize(0.08);
-  tText->GetLine(0)->SetTextFont(63);
+  tText->GetLine(0)->SetTextFont(43);
   aCanPart->AddPadPaveText(tText,aNx,aNy);
 }
 
@@ -221,7 +221,7 @@ void FitGeneratorAndDraw::CreateParamFinalValuesText(AnalysisType aAnType, Canva
   tText->SetTextAlign(33);
 
 //  tText->GetLine(0)->SetTextSize(0.08);
-//  tText->GetLine(0)->SetTextFont(63);
+//  tText->GetLine(0)->SetTextFont(43);
   aCanPart->AddPadPaveText(tText,aNx,aNy);
 
   //--------------------------------
@@ -405,6 +405,80 @@ void FitGeneratorAndDraw::AddColoredLinesLabelsAndData(CanvasPartition *aCanPart
   tTex->DrawLatex(tXText0, tYText0, TString::Format("ALICE #scale[%f]{#LambdaK#scale[0.5]{ }#oplus#scale[0.5]{ }#bar{#LambdaK}}", aScaleFactor));  
   TMarker *tMarker = new TMarker();
   tMarker->SetMarkerSize(1.0);
+  tMarker->SetMarkerStyle(20);
+  tMarker->SetMarkerColor(kBlack);
+  tMarker->DrawMarker(tXText0-tSpaceBetween-(tLineWidth/2), tYText0);
+
+  tTex->DrawLatex(tXText1, tYText1, TString::Format("#scale[%f]{Primary fit comp.}", aScaleFactor));
+  tLine = new TLine(tXText1-tSpaceBetween-tLineWidth, tYText1, tXText1-tSpaceBetween, tYText1);
+  tLine->SetLineColor(kBlack);
+  tLine->SetLineWidth(2);
+  tLine->SetLineStyle(3);
+  tLine->Draw();
+  
+  tTex->DrawLatex(tXText2, tYText2, TString::Format("#scale[%f]{Non-femto. bgd.}", aScaleFactor));
+  tLine = new TLine(tXText2-tSpaceBetween-tLineWidth, tYText2, tXText2-tSpaceBetween, tYText2);
+  tLine->SetLineColor(tColorNonFlatBgd);
+  tLine->SetLineWidth(2);
+  tLine->SetLineStyle(7);
+  tLine->Draw();
+
+  tTex->DrawLatex(tXText3, tYText3, TString::Format("#scale[%f]{Full fit}", aScaleFactor));
+  tLine = new TLine(tXText3-tSpaceBetween-tLineWidth, tYText3, tXText3-tSpaceBetween, tYText3);
+  tLine->SetLineColor(tColorCorrectFit);
+  tLine->SetLineWidth(2);
+  tLine->SetLineStyle(1);
+  tLine->Draw();
+}
+
+
+//________________________________________________________________________________________________________________
+void FitGeneratorAndDraw::AddColoredLinesLabelsAndDatav2(CanvasPartition *aCanPart, int aNx, int aNy, bool aZoomROP, double aScaleFactor)
+{
+  aCanPart->GetPad(aNx, aNy)->cd();
+
+  int tColorCorrectFit = kMagenta+1;
+  int tColorNonFlatBgd = kGreen+2;
+
+  TLatex* tTex = new TLatex();
+  tTex->SetTextAlign(12);
+  tTex->SetLineWidth(2);
+  tTex->SetTextFont(43);
+  tTex->SetTextSize(50);
+  
+  double tYText0 = 0.975;
+  double tXText0 = 0.125;
+
+  double tYText1 = 0.93;
+  double tXText1 = 0.125;
+
+  double tYText2 = 0.8925;
+  double tXText2 = 0.125;
+
+  double tYText3 = 0.855;
+  double tXText3 = 0.125;
+  
+
+
+  double tLineWidth = 0.025;
+  double tSpaceBetween = 0.015;
+
+  if(!aZoomROP)
+  {
+    tXText0 = 0.50;
+    tXText1 = 0.50;
+    tXText2 = 0.50;
+    tXText3 = 0.50;
+
+    tLineWidth = 0.075;
+    tSpaceBetween = 0.045;
+  }
+
+  TLine* tLine;
+  
+  tTex->DrawLatex(tXText0, tYText0, TString::Format("ALICE #scale[%f]{#LambdaK#scale[0.5]{ }#oplus#scale[0.5]{ }#bar{#LambdaK}}", aScaleFactor));  
+  TMarker *tMarker = new TMarker();
+  tMarker->SetMarkerSize(1.5);
   tMarker->SetMarkerStyle(20);
   tMarker->SetMarkerColor(kBlack);
   tMarker->DrawMarker(tXText0-tSpaceBetween-(tLineWidth/2), tYText0);
@@ -749,7 +823,7 @@ CanvasPartition* FitGeneratorAndDraw::BuildKStarCfswFitsCanvasPartition_PartAn(B
       TString tTextBField = TString(cBFieldTags[aBFieldType]);
 
       TString tCombinedText = TString::Format("%s  %s%s", tTextAnType.Data(), tTextCentrality.Data(), tTextBField.Data());
-      TPaveText* tCombined = tCanPart->SetupTPaveText(tCombinedText,i,j,0.65,0.825,0.15,0.10,63,13);
+      TPaveText* tCombined = tCanPart->SetupTPaveText(tCombinedText,i,j,0.65,0.825,0.15,0.10,43,13);
       tCanPart->AddPadPaveText(tCombined,i,j);
 
       if(i==0 && j==0)
@@ -940,7 +1014,7 @@ CanvasPartition* FitGeneratorAndDraw::BuildKStarCfswFitsCanvasPartition(TString 
       TString tTextCentrality = TString(cPrettyCentralityTags[tCentType]);
 
       TString tCombinedText = tTextAnType + TString("  ") +  tTextCentrality;
-      TPaveText* tCombined = tCanPart->SetupTPaveText(tCombinedText,i,j,0.70,0.825,0.15,0.10,63,20);;
+      TPaveText* tCombined = tCanPart->SetupTPaveText(tCombinedText,i,j,0.70,0.825,0.15,0.10,43,20);;
       tCanPart->AddPadPaveText(tCombined,i,j);
 
       if(i==(tNx-1) && j==(tNy-1))
@@ -1772,7 +1846,7 @@ TCanvas* FitGeneratorAndDraw::DrawSingleKStarCfwFitAndResiduals_PartAn(int aAnal
   TString tTextBField = TString(cBFieldTags[aBFieldType]);
 
   TString tCombinedText = TString::Format("%s  %s%s", tTextAnType.Data(), tTextCentrality.Data(), tTextBField.Data());
-  TPaveText* tCombined = tCanPart->SetupTPaveText(tCombinedText,0,0,0.65,0.875,0.15,0.10,63,13);
+  TPaveText* tCombined = tCanPart->SetupTPaveText(tCombinedText,0,0,0.65,0.875,0.15,0.10,43,13);
   tCanPart->AddPadPaveText(tCombined,0,0);
 
 
@@ -2051,7 +2125,7 @@ TCanvas* FitGeneratorAndDraw::DrawSingleKStarCfwFitAndResiduals(int aAnalysisNum
   TString tTextCentrality = TString(cPrettyCentralityTags[tCentType]);
 
   TString tCombinedText = tTextAnType + TString("  ") +  tTextCentrality;
-  TPaveText* tCombined = tCanPart->SetupTPaveText(tCombinedText,0,0,0.70,0.875,0.15,0.10,63,25);
+  TPaveText* tCombined = tCanPart->SetupTPaveText(tCombinedText,0,0,0.70,0.875,0.15,0.10,43,25);
   tCanPart->AddPadPaveText(tCombined,0,0);
 
 /*
@@ -2473,7 +2547,7 @@ CanvasPartition* FitGeneratorAndDraw::BuildKStarCfswFitsCanvasPartition_CombineC
     BuildKStarCfswFitsPanel_CombineConj(tCanPart, tAnalysisNumberA, tAnalysisNumberB, 0, j, aMomResCorrectFit, aNonFlatBgdCorrectFit, aNonFlatBgdFitType, aDrawSysErrors, aZoomROP);
 
     TString tCombinedText = TString::Format("%s#scale[0.5]{ }#oplus#scale[0.5]{ }%s  %s", cAnalysisRootTags[tAnType], cAnalysisRootTags[tConjType], cPrettyCentralityTags[tCentType]);
-    TPaveText* tCombined = tCanPart->SetupTPaveText(tCombinedText,0,j,0.70,0.825,0.15,0.10,63,20);;
+    TPaveText* tCombined = tCanPart->SetupTPaveText(tCombinedText,0,j,0.70,0.825,0.15,0.10,43,20);
     tCanPart->AddPadPaveText(tCombined,0,j);
 
     if(j==(tNy-1))

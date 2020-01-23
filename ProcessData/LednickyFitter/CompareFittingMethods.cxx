@@ -319,14 +319,16 @@ void SetupReF0vsImF0AndD0Axes(TPad* aPadReF0vsImF0, TPad* aPadD0,
   tTrash1->GetYaxis()->SetRangeUser(aMinImF0, aMaxImF0);
 
   tTrash1->GetXaxis()->SetTitle("#Rgothic#it{f}_{0} (fm)");
-  tTrash1->GetXaxis()->SetTitleOffset(1.0);
-  tTrash1->GetXaxis()->SetTitleSize(0.06);
-  tTrash1->GetXaxis()->SetLabelSize(1.25*tTrash1->GetXaxis()->GetLabelSize());
+  tTrash1->GetXaxis()->SetTitleOffset(1.02);
+  tTrash1->GetXaxis()->SetTitleSize(0.07);
+  tTrash1->GetXaxis()->SetLabelSize(0.06);
+  tTrash1->GetXaxis()->SetLabelOffset(0.01);
 
   tTrash1->GetYaxis()->SetTitle("#Jgothic#it{f}_{0} (fm)");
-  tTrash1->GetYaxis()->SetTitleOffset(1.0);
-  tTrash1->GetYaxis()->SetTitleSize(0.06);
-  tTrash1->GetYaxis()->SetLabelSize(1.25*tTrash1->GetYaxis()->GetLabelSize());
+  tTrash1->GetYaxis()->SetTitleOffset(1.05);
+  tTrash1->GetYaxis()->SetTitleSize(0.07);
+  tTrash1->GetYaxis()->SetLabelSize(0.06);
+  tTrash1->GetYaxis()->SetLabelOffset(0.0125);
 
   tTrash1->DrawCopy("axis");
 
@@ -337,11 +339,11 @@ void SetupReF0vsImF0AndD0Axes(TPad* aPadReF0vsImF0, TPad* aPadD0,
   tTrash2->GetYaxis()->SetRangeUser(aMinD0, aMaxD0);
 
   double tScale = aPadReF0vsImF0->GetAbsWNDC()/aPadD0->GetAbsWNDC();
-  tTrash2->GetYaxis()->SetLabelSize(tScale*tTrash1->GetYaxis()->GetLabelSize());
+  tTrash2->GetYaxis()->SetLabelSize(0.9*tScale*tTrash1->GetYaxis()->GetLabelSize());
   tTrash2->GetYaxis()->SetLabelOffset(0.05);
 
   tTrash2->GetYaxis()->SetTitle("#it{d}_{0} (fm)");
-  tTrash2->GetYaxis()->SetTitleSize(tScale*tTrash1->GetYaxis()->GetTitleSize());
+  tTrash2->GetYaxis()->SetTitleSize(0.9*tScale*tTrash1->GetYaxis()->GetTitleSize());
   tTrash2->GetYaxis()->SetTitleOffset(0.90);
   tTrash2->GetYaxis()->RotateTitle(true);
   tTrash2->GetYaxis()->SetTickLength(0.025*tScale);
@@ -365,18 +367,22 @@ void SetupRadiusvsLambdaAxes(TPad* aPad, double aMinR, double aMaxR, double aMin
   tTrash->GetYaxis()->SetRangeUser(aMinLam, aMaxLam);
 
   tTrash->GetXaxis()->SetTitle("#it{R}_{inv} (fm)");
-  tTrash->GetXaxis()->SetTitleOffset(1.0);
-  tTrash->GetXaxis()->SetTitleSize(0.06);
-  tTrash->GetXaxis()->SetLabelSize(1.25*tTrash->GetXaxis()->GetLabelSize());
+  tTrash->GetXaxis()->SetTitleOffset(1.02);
+  tTrash->GetXaxis()->SetTitleSize(0.07);
+  tTrash->GetXaxis()->SetLabelSize(0.06);
+  tTrash->GetXaxis()->SetLabelOffset(0.01);
 
   tTrash->GetYaxis()->SetTitle("#it{#lambda}_{Fit}");
-  tTrash->GetYaxis()->SetTitleOffset(0.65);
+  tTrash->GetYaxis()->SetTitleOffset(1.05);
   tTrash->GetYaxis()->SetTitleSize(0.07);
-  tTrash->GetYaxis()->SetLabelSize(1.25*tTrash->GetYaxis()->GetLabelSize()); 
+  tTrash->GetYaxis()->SetLabelSize(0.06); 
+  tTrash->GetYaxis()->SetLabelOffset(0.015);  
 
   tTrash->DrawCopy("axis");
   tTrash->Delete();
 }
+
+
 
 //_________________________________________________________________________________________________________________________________
 bool MarkerStylesConsistent(int aMarkerStyle1, int aMarkerStyle2)

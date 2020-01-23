@@ -23,7 +23,7 @@ int main(int argc, char **argv)
 
   IncludeResidualsType tIncResType = kInclude3Residuals;
   ResPrimMaxDecayType tResPrimMaxDecayType = k10fm;
-
+  double tMarkerSize=1.75;
 
 
 

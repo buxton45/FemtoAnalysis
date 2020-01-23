@@ -142,7 +142,7 @@ TCanvas* DrawAll(vector<LednickyFitter*> &aFitters, td2dVec &aParamsSysErrs, Inc
       TString tTextCentrality = TString(cPrettyCentralityTags[aFitters[j]->GetFitSharedAnalyses()->GetFitPairAnalysis(i)->GetCentralityType()]);
 
       TString tCombinedText = tTextAnType + TString("  ") +  tTextCentrality;
-      TPaveText* tCombined = tCanPart->SetupTPaveText(tCombinedText,i,j,0.70,0.825,0.15,0.10,63,20);
+      TPaveText* tCombined = tCanPart->SetupTPaveText(tCombinedText,i,j,0.70,0.825,0.15,0.10,43,20);
       tCanPart->AddPadPaveText(tCombined,i,j);
 /*
       if(i==0 && j==0)

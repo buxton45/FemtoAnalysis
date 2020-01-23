@@ -50,6 +50,7 @@ int main(int argc, char **argv)
   //*****************************************
   bool bDoFit = true;
   bool bGenerateContours = false;
+  bool tOutputCorrCoeffFile=false;
 
 //  TString tResultsDate = "20180505";
   TString tResultsDate = "20190319";
@@ -64,6 +65,7 @@ int main(int argc, char **argv)
   TString tSaveFileType = "pdf";
   bool bWriteToMasterFitValuesFile = false;
   bool SaveImagesInRootFile = false;
+
 
   //--Sharing lambda
   bool tShareLambdaParams = true;          //If true, only share lambda parameters across like-centralities
@@ -262,7 +264,7 @@ int main(int argc, char **argv)
 //-------------------------------------------------------------------------------
   if(bDoFit)
   {
-    tTriple->DoFit(tTripleShareLambda, tTripleShareRadii, tMaxFitKStar);
+    tTriple->DoFit(tTripleShareLambda, tTripleShareRadii, tMaxFitKStar, tOutputCorrCoeffFile);
     if(bWriteToMasterFitValuesFile) tTriple->WriteToMasterFitValuesFile(tLocationMasterFitResults_LamKch, tLocationMasterFitResults_LamK0, tResultsDate);
 
 //    TObjArray* tKStarwFitsCan = tTriple->DrawKStarCfswFits(ApplyMomResCorrection,ApplyNonFlatBackgroundCorrection,tNonFlatBgdFitTypes,SaveImages,bDrawSysErrs,bZoomROP);

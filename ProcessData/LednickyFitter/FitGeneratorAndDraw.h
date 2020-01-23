@@ -32,6 +32,7 @@ public:
   void AddTextCorrectionInfo(CanvasPartition *aCanPart, int aNx, int aNy, bool aMomResCorrect, bool aNonFlatCorrect, double aTextXmin=0.75, double aTextYmin=0.75, double aTextWidth=0.15, double aTextHeight=0.10, double aTextFont=63, double aTextSize=15);
   void AddColoredLinesLabels(CanvasPartition *aCanPart, int aNx, int aNy, bool aZoomROP=true, double aScaleFactor=1.);
   void AddColoredLinesLabelsAndData(CanvasPartition *aCanPart, int aNx, int aNy, bool aZoomROP=true, double aScaleFactor=1.);
+  void AddColoredLinesLabelsAndDatav2(CanvasPartition *aCanPart, int aNx, int aNy, bool aZoomROP=true, double aScaleFactor=1.);  
 
   void DrawSingleKStarCf(TPad* aPad, int aPairAnNumber, double aYmin=0.9, double aYmax=1.1, double aXmin=0.0, double aXmax=0.5, int aMarkerColor=1, TString aOption = "", int aMarkerStyle=20);
   void DrawSingleKStarCfwFit(TPad* aPad, int aPairAnNumber, double aYmin=0.9, double aYmax=1.1, double aXmin=0.0, double aXmax=0.5, int aMarkerColor=1, TString aOption = "", int aMarkerStyle=20);

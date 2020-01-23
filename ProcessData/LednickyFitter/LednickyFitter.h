@@ -112,6 +112,7 @@ public:
   void InitializeFitter(int aNbinsXToBuild=-1);  //Called within DoFit
   TString BuildParamCorrCoeffOutputFile(TString aFileBaseName, TString aFileType);
   void DoFit(bool aOutputCorrCoeffFile=false);
+  void DoFitOnce();  //Just to generate plots, not to do actual fitting
   void Finalize();  //Send things back to analyses, etc.
 
 

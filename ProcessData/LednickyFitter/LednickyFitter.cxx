@@ -879,6 +879,13 @@ void LednickyFitter::DoFit(bool aOutputCorrCoeffFile)
   Finalize();
 }
 
+//________________________________________________________________________________________________________________
+void LednickyFitter::DoFitOnce()
+{
+  InitializeFitter();
+  Finalize();
+}
+
 
 //________________________________________________________________________________________________________________
 void LednickyFitter::Finalize()

@@ -12,24 +12,24 @@ TCanvas* CompareImF0vsReF0(vector<FitValWriterInfo> &aFitValWriterInfo, TString 
 
   TCanvas* tReturnCan = new TCanvas(tCanName, tCanName);
   tReturnCan->cd();
-  tReturnCan->SetTopMargin(0.01);
-  tReturnCan->SetBottomMargin(0.125);
-  tReturnCan->SetLeftMargin(0.125);
+  tReturnCan->SetTopMargin(0.02);
+  tReturnCan->SetBottomMargin(0.15);
+  tReturnCan->SetLeftMargin(0.15);
 
   TPad* tPadReF0vsImF0 = new TPad(TString::Format("tPadReF0vsImF0%s", tCanName.Data()), TString::Format("tPadReF0vsImF0%s", tCanName.Data()), 
                                   0.0, 0.0, 0.8, 1.0);
-  tPadReF0vsImF0->SetRightMargin(0.01);
-  tPadReF0vsImF0->SetTopMargin(0.01);
-  tPadReF0vsImF0->SetBottomMargin(0.125);
-  tPadReF0vsImF0->SetLeftMargin(0.125);
+  tPadReF0vsImF0->SetRightMargin(0.02);
+  tPadReF0vsImF0->SetTopMargin(0.02);
+  tPadReF0vsImF0->SetBottomMargin(0.15);
+  tPadReF0vsImF0->SetLeftMargin(0.15);
   tPadReF0vsImF0->Draw();
 
   TPad* tPadD0 = new TPad(TString::Format("tPadD0%s", tCanName.Data()), TString::Format("tPadD0%s", tCanName.Data()), 
                           0.8, 0.0, 1.0, 1.0);
-  tPadD0->SetRightMargin(0.5);
+  tPadD0->SetRightMargin(0.6);
   tPadD0->SetLeftMargin(0.);
-  tPadD0->SetTopMargin(0.01);
-  tPadD0->SetBottomMargin(0.125);
+  tPadD0->SetTopMargin(0.02);
+  tPadD0->SetBottomMargin(0.15);
   tPadD0->Draw();
 
   gStyle->SetOptStat(0);
@@ -156,7 +156,7 @@ TCanvas* CompareImF0vsReF0(vector<FitValWriterInfo> &aFitValWriterInfo, TString 
       tGr_PhysRevD_AKLam->SetLineColor(tPredColor2);
       tGr_PhysRevD_AKLam->Draw("pzsame");
 
-    TLegend* tLegPredictions = new TLegend(0.60, 0.725, 0.975, 0.975);
+    TLegend* tLegPredictions = new TLegend(0.50, 0.625, 0.95, 0.975);
       tLegPredictions->SetLineWidth(0);
 /*
       tLegPredictions->AddEntry(tGr_0607100_Set1, "[A] Set 1: K#Lambda = #bar{K}#Lambda", "p");
@@ -442,9 +442,10 @@ TCanvas* CompareLambdavsRadiusAll(vector<FitValWriterInfo> &aFitValWriterInfo, T
 
   TCanvas* tReturnCan = new TCanvas(tCanName, tCanName);
   tReturnCan->cd();
-  tReturnCan->SetTopMargin(0.01);
-  tReturnCan->SetBottomMargin(0.125);
-  tReturnCan->SetRightMargin(0.01);
+  tReturnCan->SetTopMargin(0.02);
+  tReturnCan->SetBottomMargin(0.15);
+  tReturnCan->SetRightMargin(0.02);
+  tReturnCan->SetLeftMargin(0.15);
   gStyle->SetOptStat(0);
   gStyle->SetOptTitle(0);
 
@@ -453,7 +454,7 @@ TCanvas* CompareLambdavsRadiusAll(vector<FitValWriterInfo> &aFitValWriterInfo, T
   double tStartY = 1.40;
   double tIncrementX = 0.20;
   double tIncrementY = 0.1;
-  double tTextSize = 0.05;
+  double tTextSize = 0.06;
 
   SetupRadiusvsLambdaAxes((TPad*)tReturnCan, 2.5, 8., 0.4, 1.49);
 
@@ -463,7 +464,7 @@ TCanvas* CompareLambdavsRadiusAll(vector<FitValWriterInfo> &aFitValWriterInfo, T
   tTex->SetTextFont(42);
   tTex->SetTextSize(tTextSize);
 
-  const Size_t tDescriptorMarkerSize=1.6;
+  const Size_t tDescriptorMarkerSize=1.75;
   TMarker *tMarker = new TMarker();
   tMarker->SetMarkerSize(tDescriptorMarkerSize);
   tMarker->SetMarkerStyle(20);
@@ -493,8 +494,8 @@ TCanvas* CompareLambdavsRadiusAll(vector<FitValWriterInfo> &aFitValWriterInfo, T
   }
 
   //------------------------------------------------------
-  tTex->SetTextSize(0.05);
-  tTex->DrawLatex(4.8, 0.5, TString("ALICE Pb-Pb #sqrt{#it{s}_{NN}} = 2.76 TeV"));
+  tTex->SetTextSize(0.06);
+  tTex->DrawLatex(4.25, 0.5, TString("ALICE Pb-Pb #sqrt{#it{s}_{NN}} = 2.76 TeV"));
 
 //  tTex->DrawLatex(3.0, 0.5, TString("ALICE Preliminary"));
 //  tTex->DrawLatex(5.3, 0.5, TString("Pb-Pb #sqrt{#it{s}_{NN}} = 2.76 TeV"));
@@ -588,11 +589,11 @@ TCanvas* CompareAll2Panel(vector<FitValWriterInfo> &aFitValWriterInfo, TString a
 //  vector<AnalysisType> tAnTypes{kLamKchP, kLamKchM, kLamK0};
   vector<int> tMarkerStyles{aFitValWriterInfo[0].markerStyle, aFitValWriterInfo[1].markerStyle, aFitValWriterInfo[2].markerStyle};
     double tStartXStamp = -1.75;
-    if(aDrawPredictions) tStartXStamp = -1.75;
+    if(aDrawPredictions) tStartXStamp = -1.8;
     double tStartYStamp = 1.4;
     double tIncrementXStamp = 0.075;
-    double tIncrementYStamp = 0.125;
-    double tTextSizeStamp = 0.045;
+    double tIncrementYStamp = 0.175;
+    double tTextSizeStamp = 0.060;
   TString tPadName = TString::Format("tPadReF0vsImF0%s", tCanImF0vsReF0->GetName());
   TPad* tTestPad = (TPad*)tCanImF0vsReF0->GetPrimitive(tPadName);
 //  DrawAnalysisStamps(tTestPad, tAnTypes, tStartXStamp, tStartYStamp, tIncrementXStamp, tIncrementYStamp, tTextSizeStamp, tMarkerStyles);
