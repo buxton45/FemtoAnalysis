@@ -482,5 +482,16 @@ void CanvasPartition::DrawYaxisTitle(TString aTitle, int aTextFont, int aTextSiz
   tYax->Draw();
 }
 
+//________________________________________________________________________________________________________________
+void CanvasPartition::SetAllTicks(int aTickx, int aTicky)
+{
+  for(unsigned int i=0; i<fPadArray.size(); i++)
+  {
+    for(unsigned int j=0; j<fPadArray[i].size(); j++)
+    {
+      fPadArray[i][j]->SetTicks(aTickx, aTicky);
+    }
+  }
 
+}
 

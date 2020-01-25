@@ -1459,7 +1459,7 @@ void BuildBgdwFitPanel(CanvasPartition* aCanPart, int tColumn, int tRow, TString
   if(aCombineConjugates) tSysInfoTString = TString::Format("%s#scale[0.5]{ }#oplus#scale[0.5]{ }%s   %s", cAnalysisRootTags[aAnType], cAnalysisRootTags[aAnType+1], cPrettyCentralityTags[tCentTypeData]);
   else                   tSysInfoTString = TString::Format("%s,  %s", cAnalysisRootTags[aAnType], cPrettyCentralityTags[tCentTypeData]);
   TPaveText* tSysInfoPaveText;
-  tSysInfoPaveText = aCanPart->SetupTPaveText(tSysInfoTString, tColumn, tRow, 0.175, 0.775, 0.80, 0.195, 43, 50, 31, true);
+  tSysInfoPaveText = aCanPart->SetupTPaveText(tSysInfoTString, tColumn, tRow, 0.175, 0.725, 0.80, 0.195, 43, 55, 31, true);
   aCanPart->AddPadPaveText(tSysInfoPaveText, tColumn, tRow);
 
 
@@ -1514,7 +1514,7 @@ void BuildBgdwFitPanel(CanvasPartition* aCanPart, int tColumn, int tRow, TString
     {
       if(!aZoomY) aCanPart->SetupTLegend("", tColumn, tRow, 0.55, 0.15, 0.35, 0.15, tNColumns, true);
 //      else        aCanPart->SetupTLegend("", tColumn, tRow, 0.30, 0.475, 0.65, 0.375, tNColumns, true);
-      else        aCanPart->SetupTLegend("", tColumn, tRow, 0.25, 0.35, 0.70, 0.45, tNColumns, true);
+      else        aCanPart->SetupTLegend("", tColumn, tRow, 0.24, 0.325, 0.70, 0.45, tNColumns, true);  //MOST USED OPTION
     }
 /*
     aCanPart->AddLegendEntry(tColumn, tRow, tData, "ALICE, stat. errors", "PE");
@@ -1643,6 +1643,7 @@ TCanvas* DrawBgdwFit_AllCentAllAnv2(TString aCfDescriptor, TString aFileNameCfs,
   CanvasPartition* tCanPart = new CanvasPartition(tCanBgdwFitName,tNx,tNy,tXLow,tXHigh,tYLow,tYHigh,0.11,0.0025,0.10,0.0025);
   tCanPart->SetDrawOptStat(false);
   tCanPart->GetCanvas()->SetCanvasSize(2100, 1500);
+  tCanPart->SetAllTicks(1,1);
 
   BuildBgdwFitPanel(tCanPart, 0, 0, aCfDescriptor, aFileNameCfs, kLamKchP, 3, aCombineConjugates, tCombineImpactParams, aEventsType, aRebin, aMinNorm, aMaxNorm, aMaxBgdFit, aAvgLamKchPMFit, aUseStavCf, aZoomY);
   BuildBgdwFitPanel(tCanPart, 0, 1, aCfDescriptor, aFileNameCfs, kLamKchP, 5, aCombineConjugates, tCombineImpactParams, aEventsType, aRebin, aMinNorm, aMaxNorm, aMaxBgdFit, aAvgLamKchPMFit, aUseStavCf, aZoomY);
@@ -1718,6 +1719,7 @@ TCanvas* DrawBgdwFit_AllCentAllAnv2(TString aCfDescriptor, TString aFileNameCfs,
   CanvasPartition* tCanPart = new CanvasPartition(tCanBgdwFitName,tNx,tNy,tXLow,tXHigh,tYLow,tYHigh,0.11,0.0025,0.10,0.0025);
   tCanPart->SetDrawOptStat(false);
   tCanPart->GetCanvas()->SetCanvasSize(2100, 1500);
+  tCanPart->SetAllTicks(1,1);  
 
   BuildBgdwFitPanel(tCanPart, 0, 0, aCfDescriptor, aFileNameCfs, kLamKchP, 3, aCombineConjugates, tCombineImpactParams, aEventsType, aCustomBins, aMinNorm, aMaxNorm, aMaxBgdFit, aAvgLamKchPMFit, aUseStavCf, aZoomY);
   BuildBgdwFitPanel(tCanPart, 0, 1, aCfDescriptor, aFileNameCfs, kLamKchP, 5, aCombineConjugates, tCombineImpactParams, aEventsType, aCustomBins, aMinNorm, aMaxNorm, aMaxBgdFit, aAvgLamKchPMFit, aUseStavCf, aZoomY);

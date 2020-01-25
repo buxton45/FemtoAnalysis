@@ -304,6 +304,7 @@ TCanvas* DrawKStarCfs_OnlyTwo_CombConj(FitGenerator* aFG1, FitGenerator* aFG2, b
   }
   CanvasPartition* tCanPart = new CanvasPartition(tCanvasName,tNx,tNy,tXLow,tXHigh,tYLow,tYHigh,0.175,0.0125,0.10,0.0125);
   tCanPart->GetCanvas()->SetCanvasSize(350,500);
+  tCanPart->SetAllTicks(1,1);
 
   int tAnalysisNumberA=0, tAnalysisNumberB=0;
 
@@ -443,7 +444,7 @@ TCanvas* DrawKStarCfs_OnlyTwo_CombConj(FitGenerator* aFG1, FitGenerator* aFG2, b
     tTextAnTypeB = TString(cAnalysisRootTags[aConjType]);
     TString tTextAnType = TString::Format("%s#scale[0.5]{ }#oplus#scale[0.5]{ }%s", tTextAnTypeA.Data(), tTextAnTypeB.Data());
 
-    TPaveText* tAnTypeName = tCanPart->SetupTPaveText(tTextAnType,0,j,0.7,0.85);
+    TPaveText* tAnTypeName = tCanPart->SetupTPaveText(tTextAnType, 0, j, 0.65, 0.775, 0.20, 0.15, 43, 18);
     tCanPart->AddPadPaveText(tAnTypeName,0,j);
 
     CentralityType tCentType = aFG1->GetSharedAn()->GetFitPairAnalysis(tAnalysisNumberA)->GetCentralityType();
@@ -451,7 +452,7 @@ TCanvas* DrawKStarCfs_OnlyTwo_CombConj(FitGenerator* aFG1, FitGenerator* aFG2, b
            aFG1->GetSharedAn()->GetFitPairAnalysis(tAnalysisNumberB)->GetCentralityType());
 
     TString tTextCentrality = TString(cPrettyCentralityTags[tCentType]);
-    TPaveText* tCentralityName = tCanPart->SetupTPaveText(tTextCentrality,0,j,0.10,0.85);
+    TPaveText* tCentralityName = tCanPart->SetupTPaveText(tTextCentrality, 0, j, 0.10, 0.765, 0.20, 0.15, 43, 18);
     tCanPart->AddPadPaveText(tCentralityName,0,j);
 
     if(j==0)
@@ -465,7 +466,7 @@ TCanvas* DrawKStarCfs_OnlyTwo_CombConj(FitGenerator* aFG1, FitGenerator* aFG2, b
     if(j==2)
     {
       TString tTextSysInfo = TString("ALICE Pb-Pb #sqrt{#it{s}_{NN}} = 2.76 TeV");
-      TPaveText* tSysInfo = tCanPart->SetupTPaveText(tTextSysInfo,0,j,0.15,0.125,0.725,0.15,43,15);
+      TPaveText* tSysInfo = tCanPart->SetupTPaveText(tTextSysInfo,0,j,0.15,0.125,0.725,0.15,43,17);
       tCanPart->AddPadPaveText(tSysInfo,0,j);
     }
   }

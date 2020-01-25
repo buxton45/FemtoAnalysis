@@ -71,6 +71,8 @@ public:
   void DrawXaxisTitle(TString aTitle, int aTextFont=43, int aTextSize=25, double aYLow=0.03);
   void DrawXaxisTitle(TString aTitle, int aTextFont, int aTextSize, double aXLow, double aYLow);
   void DrawYaxisTitle(TString aTitle, int aTextFont=43, int aTextSize=25, double aXLow=0.05, double aYLow=0.35);
+  
+  void SetAllTicks(int aTickx, int aTicky);
 
   TCanvas* GetCanvas();
   TPad* GetPad(int aNx, int aNy);

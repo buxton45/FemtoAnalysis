@@ -479,6 +479,8 @@ int main(int argc, char **argv)
     if(bDrawSysErrs) tCanName0010 += TString("_wSysErr");
     tCan0010 = new TCanvas(tCanName0010, tCanName0010, 1400, 500);
     tCan0010->Divide(2, 1);
+    ((TPad*)tCan0010->cd(1))->SetTicks(1,1);
+    ((TPad*)tCan0010->cd(2))->SetTicks(1,1);
 
     DrawSHCfComponent((TPad*)tCan0010->cd(1), tAnaly0010, tConjAnaly0010, kYlmReal, 0, 0, tRebin, bDrawSysErrs, true, 1.0);
     DrawSHCfComponent((TPad*)tCan0010->cd(2), tAnaly0010, tConjAnaly0010, kYlmReal, 1, 1, tRebin, bDrawSysErrs, true, 1.0);

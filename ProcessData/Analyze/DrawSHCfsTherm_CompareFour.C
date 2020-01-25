@@ -174,11 +174,11 @@ TH1* DrawDataSHCfComponent(TPad* aPad, Analysis* aAnaly, Analysis* aConjAnaly, Y
   {
     double tXLow = 0.02;
     double tYLow = 0.805;
-    if(al!=0 || am!=0) tYLow = -0.025;
+    if(al!=0 || am!=0) tYLow = -0.024;
 
     TLatex *   tex = new TLatex(tXLow,tYLow,"ALICE Pb-Pb #sqrt{#it{s}_{NN}} = 2.76 TeV");
     tex->SetTextFont(42);
-    tex->SetTextSize(0.06);
+    tex->SetTextSize(0.065);
     tex->SetLineWidth(2);
     tex->Draw();
   }
@@ -461,14 +461,14 @@ TObjArray* DrawFourSHCfThermComponents_CombConj(TPad* aPad, CorrFctnDirectYlmThe
   tTex->SetTextAlign(11);
   tTex->SetLineWidth(2);
   tTex->SetTextFont(42);
-  tTex->SetTextSize(0.070);
+  tTex->SetTextSize(0.0875);
 
   double tText1X = 0.0175;
-  double tText2X = 0.21;
+  double tText2X = 0.19;
 
-  double tTextY = 1.035;
+  double tTextY = 1.025;
 
-  if(al==1 && am==1) tTextY = 0.0051;
+  if(al==1 && am==1) tTextY = 0.0049;
 
   //tTex->DrawLatex(tText1X, tTextY, TString::Format("%s#it{C}_{%d%d} (#it{b} = %d fm)", tReImVec[(int)aComponent].Data(), al, am, aCfYlmTherm0a->GetImpactParam()));
   tTex->DrawLatex(tText1X, tTextY, TString::Format("%s#it{C}_{%d%d}", tReImVec[(int)aComponent].Data(), al, am));
@@ -518,24 +518,24 @@ void DrawFourSHCfThermComponentsWithData_CombConj(TPad* aPad, CorrFctnDirectYlmT
   }
   if(aPrintLegend)
   {
-    TLegend* tLeg1 = new TLegend(0.55, tYLeg1Low, 1.0, tYLeg1High);
+    TLegend* tLeg1 = new TLegend(0.45, tYLeg1Low, 1.0, tYLeg1High);
       tLeg1->SetFillColor(0);
       tLeg1->SetFillStyle(0);
       tLeg1->SetBorderSize(0);
       tLeg1->SetTextAlign(12);
-      tLeg1->SetTextSize(0.05);
+      tLeg1->SetTextSize(0.06);
     tLeg1->AddEntry(tDataCf, "ALICE (0-10%)", "p");
     tLeg1->Draw();
 
-    double tYLeg2Low = 0.25;
+    double tYLeg2Low = 0.20;
     double tYLeg2High = tYLeg1Low;
 
-    TLegend* tLeg2 = new TLegend(0.55, tYLeg2Low, 1.0, tYLeg2High);
+    TLegend* tLeg2 = new TLegend(0.45, tYLeg2Low, 1.0, tYLeg2High);
       tLeg2->SetFillColor(0);
       tLeg2->SetFillStyle(0);
       tLeg2->SetBorderSize(0);
       tLeg2->SetTextAlign(12);
-      tLeg2->SetTextSize(0.05);
+      tLeg2->SetTextSize(0.06);
     tLeg2->SetHeader("#it{R}_{out} = #it{R}_{side} = #it{R}_{long} = 5 fm");
     tLeg2->AddEntry((TH1*)tThermCfs->At(0), "#it{#mu}_{out} = 0 fm", "p");
     tLeg2->AddEntry((TH1*)tThermCfs->At(1), "#it{#mu}_{out} = 1 fm", "p");
@@ -630,7 +630,7 @@ int main(int argc, char **argv)
   bool bUseRandomEPs = true;
   vector<TString> tVecUseRandomEPs{"", "_RandomEPs"};
 
-  bool bSaveFigures = false;
+  bool bSaveFigures = false; 
   TString tSaveFileType = "pdf";
   //TString tSaveDir = "/home/jesse/Analysis/Presentations/GroupMeetings/20190108/Figures/";
   TString tSaveDir = TString::Format("/home/jesse/Analysis/FemtoAnalysis/AnalysisNotes/7_ResultsAndDiscussion/7.1_ResultsLamK/7.1.2_ResultsLamK_DiscussionOfmTScaling/ThermPlots/%s/", cAnalysisBaseTags[tAnType]);
@@ -737,6 +737,8 @@ int main(int argc, char **argv)
     tCanC00C11->cd(2)->SetTopMargin(0.02);
     tCanC00C11->cd(1)->SetBottomMargin(0.15);
     tCanC00C11->cd(2)->SetBottomMargin(0.15);
+    ((TPad*)tCanC00C11->cd(1))->SetTicks(1,1);
+    ((TPad*)tCanC00C11->cd(2))->SetTicks(1,1);
 
   if(!bCombineConjugates)
   {

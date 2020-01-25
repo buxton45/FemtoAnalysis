@@ -283,10 +283,11 @@ int main(int argc, char **argv)
   canmtcomb->SetFrameFillColor(0);
   canmtcomb->SetFrameBorderMode(0);
   canmtcomb->SetFrameBorderMode(0);
+  canmtcomb->SetTicks(1,1);
    
   TH1D *ramka = new TH1D("ramka","",100,0.2,1.99);
   ramka->SetMinimum(0.25);
-  ramka->SetMaximum(11.99);
+  ramka->SetMaximum(12.5);
   ramka->SetStats(0);
 
   ramka->GetXaxis()->SetTitle("#LT#it{m}_{T}#GT (GeV/#it{c}^{2})");
@@ -553,7 +554,7 @@ cout << endl << endl;
 
     //-----------------------------
     double tXShift = 0.125;
-    double tYShift = 1.85;
+    double tYShift = 1.95;
 
     tXSysText     += tXShift;
     tXMarkers0010 += tXShift;

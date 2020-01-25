@@ -432,6 +432,7 @@ CanvasPartition* TripleFitGenerator::BuildKStarCfswFitsCanvasPartition_CombineCo
   CanvasPartition* tCanPart = new CanvasPartition(tCanvasName,tNx,tNy,tXLow,tXHigh,tYLow,tYHigh,0.11,0.0025,0.10,0.0025);
   tCanPart->SetDrawOptStat(false);
   tCanPart->GetCanvas()->SetCanvasSize(2100, 1500);
+  tCanPart->SetAllTicks(1,1);
 
   int tAnalysisNumberA=0, tAnalysisNumberB=0;
   for(int j=0; j<tNy; j++)
@@ -567,10 +568,18 @@ CanvasPartition* TripleFitGenerator::BuildKStarCfswFitsCanvasPartition_CombineCo
     TPaveText* tSysInfo1 = tCanPart->SetupTPaveText(tTextSysInfo1, 1, j, 0.0, 0.10, 1., 0.15, 43, 25, 22, true);
     tCanPart->AddPadPaveText(tSysInfo1,1, j);
 */
-
+/*
     TString tTextSysInfo2 = TString("ALICE Pb-Pb #sqrt{#it{s}_{NN}} = 2.76 TeV");
     TPaveText* tSysInfo2 = tCanPart->SetupTPaveText(tTextSysInfo2, 1, j, 0.0, 0.10, 1., 0.15, 43, 45, 22, true);
     tCanPart->AddPadPaveText(tSysInfo2,1, j);
+    */
+    TString tTextSysInfo = TString("ALICE");
+    TPaveText* tSysInfo = tCanPart->SetupTPaveText(tTextSysInfo, 0, j, 0.0, 0.10, 1., 0.15, 43, 57, 22, true);
+    tCanPart->AddPadPaveText(tSysInfo,0, j);
+   
+    TString tTextSysInfo2 = TString("Pb-Pb #sqrt{#it{s}_{NN}} = 2.76 TeV");
+    TPaveText* tSysInfo2 = tCanPart->SetupTPaveText(tTextSysInfo2, 1, j, 0.0, 0.10, 1., 0.15, 43, 57, 22, true);
+    tCanPart->AddPadPaveText(tSysInfo2,1, j);        
     }
 
     //----------
@@ -619,8 +628,8 @@ CanvasPartition* TripleFitGenerator::BuildKStarCfswFitsCanvasPartition_CombineCo
 
   tCanPart->SetDrawUnityLine(true);
   tCanPart->DrawAll();
-  tCanPart->DrawXaxisTitle("#it{k}* (GeV/#it{c})", 43, 75, 0.825, 0.01); //Note, changing xaxis low (=0.315) does nothing
-  tCanPart->DrawYaxisTitle("#it{C}(#it{k}*)", 43, 75, 0.045, 0.85); 
+  tCanPart->DrawXaxisTitle("#it{k}* (GeV/#it{c})", 43, 75, 0.825, 0.005); //Note, changing xaxis low (=0.315) does nothing
+  tCanPart->DrawYaxisTitle("#it{C}(#it{k}*)", 43, 75, 0.05, 0.875); 
 
 
   if(aLabelLines)

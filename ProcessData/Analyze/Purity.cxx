@@ -257,6 +257,7 @@ void Purity::DrawPurity(TPad *aPad, bool aZoomBg, bool aPrintPurity, double aPad
 {
   TGaxis::SetMaxDigits(3);
   int tLineWidth = 4;
+  aPad->SetTicks(1,1);
 
   TF1* fitBgd = (TF1*)fPurityFitInfo->At(0);
     fitBgd->SetLineColor(4);
@@ -304,8 +305,8 @@ void Purity::DrawPurity(TPad *aPad, bool aZoomBg, bool aPrintPurity, double aPad
   tCombinedPurity->SetTitleSize(0.10*aPadScaleY, "y");
   tCombinedPurity->GetYaxis()->SetTitleOffset(0.55*aPadScaleY);
   tCombinedPurity->GetYaxis()->SetLabelOffset(0.0075*aPadScaleY);    
-  tCombinedPurity->GetYaxis()->SetTickLength(0.04*aPadScaleY);
-  if(aZoomBg) tCombinedPurity->GetYaxis()->SetTickLength(0.03*aPadScaleY);
+  tCombinedPurity->GetYaxis()->SetTickLength(0.03*aPadScaleY);
+  //if(aZoomBg) tCombinedPurity->GetYaxis()->SetTickLength(0.03*aPadScaleY);
   tCombinedPurity->GetYaxis()->SetNdivisions(505);
 
   if(!aZoomBg)
@@ -316,8 +317,8 @@ void Purity::DrawPurity(TPad *aPad, bool aZoomBg, bool aPrintPurity, double aPad
     double tHistoMaxValue = tCombinedPurity->GetMaximum();    
     double tMaxVertLines;
     tMaxVertLines = tHistoMaxValue;
-    if( (fParticleType == kLam) || (fParticleType == kALam) ) tMaxVertLines = 5000000;
-    if( fParticleType == kK0 )                                tMaxVertLines = 9000000;
+    if( (fParticleType == kLam) || (fParticleType == kALam) ) tMaxVertLines = 4000000;
+    if( fParticleType == kK0 )                                tMaxVertLines = 7200000;
     lROImin = new TLine((*vROI)(0),0,(*vROI)(0),tMaxVertLines);
     lROImax = new TLine((*vROI)(1),0,(*vROI)(1),tMaxVertLines);
     //-----
@@ -363,20 +364,20 @@ void Purity::DrawPurity(TPad *aPad, bool aZoomBg, bool aPrintPurity, double aPad
     tCombinedPurity->GetXaxis()->SetRange(1,tCombinedPurity->GetNbinsX());
     tCombinedPurity->GetYaxis()->SetRangeUser(tMinYAx,tMaxYAx);
     //--------------------------------------------------------------------------------------------
-    lROImin = new TLine((*vROI)(0),tMinBg,(*vROI)(0),tMaxBg);
-    lROImax = new TLine((*vROI)(1),tMinBg,(*vROI)(1),tMaxBg);
+    lROImin = new TLine((*vROI)(0),tMinYAx,(*vROI)(0),tMaxYAx);
+    lROImax = new TLine((*vROI)(1),tMinYAx,(*vROI)(1),tMaxYAx);
     //-----
-    lBgFitLowMin = new TLine((*vBgFitLow)(0),tMinBg,(*vBgFitLow)(0),tMaxBg);
-    lBgFitLowMax = new TLine((*vBgFitLow)(1),tMinBg,(*vBgFitLow)(1),tMaxBg);
+    lBgFitLowMin = new TLine((*vBgFitLow)(0),tMinYAx,(*vBgFitLow)(0),tMaxYAx);
+    lBgFitLowMax = new TLine((*vBgFitLow)(1),tMinYAx,(*vBgFitLow)(1),tMaxYAx);
     //-----
-    lBgFitHighMin = new TLine((*vBgFitHigh)(0),tMinBg,(*vBgFitHigh)(0),tMaxBg);
-    lBgFitHighMax = new TLine((*vBgFitHigh)(1),tMinBg,(*vBgFitHigh)(1),tMaxBg);
+    lBgFitHighMin = new TLine((*vBgFitHigh)(0),tMinYAx,(*vBgFitHigh)(0),tMaxYAx);
+    lBgFitHighMax = new TLine((*vBgFitHigh)(1),tMinYAx,(*vBgFitHigh)(1),tMaxYAx);
   }
 
 
   //--------------------------------------------------------------------------------------------
   tCombinedPurity->SetLineColor(1);
-  tCombinedPurity->SetLineWidth(tLineWidth);
+  tCombinedPurity->SetLineWidth(tLineWidth/2);
 
   lROImin->SetLineColor(3);
   lROImax->SetLineColor(3);
@@ -406,7 +407,8 @@ void Purity::DrawPurity(TPad *aPad, bool aZoomBg, bool aPrintPurity, double aPad
   gStyle->SetOptTitle(0);
   gStyle->SetOptFit(0);
 
-  tCombinedPurity->DrawCopy("Ephist");
+  //tCombinedPurity->DrawCopy("Ephist");
+  tCombinedPurity->DrawCopy("hist");
   fitBgd->Draw("same");
   lROImin->Draw();
   lROImax->Draw();
@@ -435,7 +437,7 @@ void Purity::DrawPurity(TPad *aPad, bool aZoomBg, bool aPrintPurity, double aPad
     }
     
     TPaveText *myText3;
-      if(aPrintPurity) myText3 = new TPaveText(0.15,0.50,0.475,0.85,"NDC");
+      if(aPrintPurity) myText3 = new TPaveText(0.15,0.45,0.475,0.80,"NDC");
       else             myText3 = new TPaveText(0.15,0.65,0.475,0.85,"NDC");
       myText3->SetFillColor(0);
       myText3->SetBorderSize(0);
@@ -449,10 +451,12 @@ void Purity::DrawPurity(TPad *aPad, bool aZoomBg, bool aPrintPurity, double aPad
       if(aPrintPurity) myText3->AddText(TString::Format("%s Purity = %0.1f%%",cRootParticleTags[fParticleType],100*purity));
       myText3->Draw();
 
-    TLegend *tLeg = new TLegend(0.60,0.425,0.925,0.875); 
+    TLegend *tLeg = new TLegend(0.60,0.375,0.925,0.825); 
       tLeg->SetFillColor(0);
+      tLeg->SetFillStyle(0);
       tLeg->SetBorderSize(0);
-      tLeg->AddEntry(tCombinedPurity, TString::Format("%s candidates", cRootParticleTags[fParticleType]), "p");
+      //tLeg->AddEntry(tCombinedPurity, TString::Format("%s candidates", cRootParticleTags[fParticleType]), "p");
+      tLeg->AddEntry(tCombinedPurity, TString::Format("%s candidates", cRootParticleTags[fParticleType]), "l");      
       tLeg->AddEntry(fitBgd, "Fit to background", "l");
       tLeg->AddEntry(lROImin, "Accepted window", "l");
       tLeg->AddEntry(lBgFitLowMin, "Bkg fit window", "l");

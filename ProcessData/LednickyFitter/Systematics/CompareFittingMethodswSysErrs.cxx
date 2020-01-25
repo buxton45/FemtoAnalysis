@@ -22,6 +22,7 @@ TCanvas* CompareImF0vsReF0(vector<FitValWriterInfo> &aFitValWriterInfo, TString 
   tPadReF0vsImF0->SetTopMargin(0.02);
   tPadReF0vsImF0->SetBottomMargin(0.15);
   tPadReF0vsImF0->SetLeftMargin(0.15);
+  tPadReF0vsImF0->SetTicks(1,1);  
   tPadReF0vsImF0->Draw();
 
   TPad* tPadD0 = new TPad(TString::Format("tPadD0%s", tCanName.Data()), TString::Format("tPadD0%s", tCanName.Data()), 
@@ -30,6 +31,7 @@ TCanvas* CompareImF0vsReF0(vector<FitValWriterInfo> &aFitValWriterInfo, TString 
   tPadD0->SetLeftMargin(0.);
   tPadD0->SetTopMargin(0.02);
   tPadD0->SetBottomMargin(0.15);
+  tPadD0->SetTicks(1,1);  
   tPadD0->Draw();
 
   gStyle->SetOptStat(0);
@@ -156,8 +158,9 @@ TCanvas* CompareImF0vsReF0(vector<FitValWriterInfo> &aFitValWriterInfo, TString 
       tGr_PhysRevD_AKLam->SetLineColor(tPredColor2);
       tGr_PhysRevD_AKLam->Draw("pzsame");
 
-    TLegend* tLegPredictions = new TLegend(0.50, 0.625, 0.95, 0.975);
+    TLegend* tLegPredictions = new TLegend(0.475, 0.625, 0.925, 0.95);
       tLegPredictions->SetLineWidth(0);
+      tLegPredictions->SetFillStyle(0);
 /*
       tLegPredictions->AddEntry(tGr_0607100_Set1, "[A] Set 1: K#Lambda = #bar{K}#Lambda", "p");
       tLegPredictions->AddEntry(tGr_0607100_Set2, "[A] Set 2: K#Lambda = #bar{K}#Lambda", "p");
@@ -446,12 +449,13 @@ TCanvas* CompareLambdavsRadiusAll(vector<FitValWriterInfo> &aFitValWriterInfo, T
   tReturnCan->SetBottomMargin(0.15);
   tReturnCan->SetRightMargin(0.02);
   tReturnCan->SetLeftMargin(0.15);
+  tReturnCan->SetTicks(1,1);
   gStyle->SetOptStat(0);
   gStyle->SetOptTitle(0);
 
   //------------------------------------------------------
-  double tStartX = 3.5;
-  double tStartY = 1.40;
+  double tStartX = 3.2;
+  double tStartY = 1.375;
   double tIncrementX = 0.20;
   double tIncrementY = 0.1;
   double tTextSize = 0.06;
@@ -590,7 +594,7 @@ TCanvas* CompareAll2Panel(vector<FitValWriterInfo> &aFitValWriterInfo, TString a
   vector<int> tMarkerStyles{aFitValWriterInfo[0].markerStyle, aFitValWriterInfo[1].markerStyle, aFitValWriterInfo[2].markerStyle};
     double tStartXStamp = -1.75;
     if(aDrawPredictions) tStartXStamp = -1.8;
-    double tStartYStamp = 1.4;
+    double tStartYStamp = 1.35;
     double tIncrementXStamp = 0.075;
     double tIncrementYStamp = 0.175;
     double tTextSizeStamp = 0.060;

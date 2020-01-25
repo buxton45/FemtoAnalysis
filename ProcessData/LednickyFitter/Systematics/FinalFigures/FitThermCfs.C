@@ -28,21 +28,21 @@ void SetStandardPadMargins(TPad* aPad)
 {
   aPad->SetRightMargin(0.025);
   aPad->SetTopMargin(0.0750);
-  aPad->SetLeftMargin(0.15);
-  aPad->SetBottomMargin(0.16);
+  aPad->SetLeftMargin(0.20);
+  aPad->SetBottomMargin(0.20);
 }
 
 //________________________________________________________________________________________________________________
 void SetStandardAxesAttributes(TH1* aHist)
 {
-  aHist->GetXaxis()->SetTitleOffset(1.1);
-  aHist->GetXaxis()->SetTitleSize(0.065);
-  aHist->GetXaxis()->SetLabelSize(0.05);
+  aHist->GetXaxis()->SetTitleOffset(1.08);
+  aHist->GetXaxis()->SetTitleSize(0.08);
+  aHist->GetXaxis()->SetLabelSize(0.055);
   aHist->GetXaxis()->SetLabelOffset(0.015);
 
   aHist->GetYaxis()->SetTitleOffset(1.05);
-  aHist->GetYaxis()->SetTitleSize(0.065);
-  aHist->GetYaxis()->SetLabelSize(0.05);
+  aHist->GetYaxis()->SetTitleSize(0.08);
+  aHist->GetYaxis()->SetLabelSize(0.055);
   aHist->GetYaxis()->SetLabelOffset(0.0075);
 }
 
@@ -213,9 +213,12 @@ void DrawHistwGaussFit(TPad* aPad, TH1* aHist, double aGaussFitMin, double aGaus
     tText->AddText(TString::Format("%s = %0.1e fm",   aSigmaName.Data(), tGaussFit->GetParameter(2)));
     tText->Draw();
 */
+
+
+/*
   TLegend* tLeg;
   if(aDrawTextOnRight) tLeg = new TLegend(0.55, 0.50, 0.85, 0.80);
-  else                 tLeg = new TLegend(0.175, 0.55, 0.475, 0.90);
+  else                 tLeg = new TLegend(0.225, 0.55, 0.525, 0.90);
     tLeg->SetFillColor(0);
     tLeg->SetFillStyle(0);
     tLeg->SetBorderSize(0);
@@ -226,7 +229,30 @@ void DrawHistwGaussFit(TPad* aPad, TH1* aHist, double aGaussFitMin, double aGaus
     tLeg->AddEntry((TObject*)0, TString::Format("%s = %0.1e fm", aMuName.Data(), tGaussFit->GetParameter(1)), "");
     tLeg->AddEntry((TObject*)0, TString::Format("%s = %0.1e fm",   aSigmaName.Data(), tGaussFit->GetParameter(2)), "");
     tLeg->Draw();
+*/    
 
+  TLegend *tLeg1, *tLeg2;
+  tLeg1 = new TLegend(0.235, 0.725, 0.535, 0.90);
+    tLeg1->SetFillColor(0);
+    tLeg1->SetFillStyle(0);
+    tLeg1->SetBorderSize(0);
+    tLeg1->SetTextColor(kBlack);
+    tLeg1->SetTextSize(0.055);    
+    tLeg1->AddEntry(aHist, "THERM. 2", "p");
+    tLeg1->AddEntry(tGaussFit, "Gauss. Fit", "l");
+    
+    
+  tLeg2 = new TLegend(0.175, 0.55, 0.475, 0.725);
+    tLeg2->SetFillColor(0);
+    tLeg2->SetFillStyle(0);
+    tLeg2->SetBorderSize(0);
+    tLeg2->SetTextColor(kBlack);
+    tLeg2->SetTextSize(0.0475);        
+    tLeg2->AddEntry((TObject*)0, TString::Format("%s = %0.1e fm", aMuName.Data(), tGaussFit->GetParameter(1)), "");
+    tLeg2->AddEntry((TObject*)0, TString::Format("%s = %0.1e fm",   aSigmaName.Data(), tGaussFit->GetParameter(2)), "");
+    
+    tLeg1->Draw();
+    tLeg2->Draw();    
 }
 
 //________________________________________________________________________________________________________________
@@ -501,13 +527,13 @@ TH1* Draw1DCfwFit(TPad* aPad, ThermCf* aThermCfObj, double aFitMax=0.3, bool aFi
 
   TPaveText* tText3;
   if(!tCombConj) tText3 = new TPaveText(0.20, 0.80, 0.40, 0.95, "NDC");
-  else           tText3 = new TPaveText(0.20, 0.85, 0.45, 0.925, "NDC");
+  else           tText3 = new TPaveText(0.225, 0.875, 0.55, 0.925, "NDC");
     tText3->SetFillColor(0);
     tText3->SetFillStyle(0);
     tText3->SetBorderSize(0);
     tText3->SetTextColor(kBlack);
     tText3->SetTextFont(43);
-    tText3->SetTextSize(25);
+    tText3->SetTextSize(45);
     tText3->SetTextAlign(13);
   if(!tCombConj) tText3->AddText(cAnalysisRootTags[tAnType]);
   else           tText3->AddText(TString::Format("%s#scale[0.5]{ }#oplus#scale[0.5]{ }%s", cAnalysisRootTags[tAnType], cAnalysisRootTags[tAnType+1]));
@@ -623,7 +649,7 @@ void Add1DCfwFitToCanPart(CanvasPartition* aCanPart, int aNx, int aNy, ThermCf* 
   if(!aSuppressSystemText)
   {
     TPaveText* tText3;
-    if(!tCombConj) tText3 = aCanPart->SetupTPaveText(cAnalysisRootTags[tAnType], aNx, aNy, 0.05, 0.85, 0.20, 0.15, 43, 25, 13, true);
+    if(!tCombConj) tText3 = aCanPart->SetupTPaveText(cAnalysisRootTags[tAnType], aNx, aNy, 0.05, 0.875, 0.20, 0.15, 43, 25, 13, true);
     else           tText3 = aCanPart->SetupTPaveText(TString::Format("%s#scale[0.5]{ }#oplus#scale[0.5]{ }%s", cAnalysisRootTags[tAnType], cAnalysisRootTags[tAnType+1]), 
                                                      aNx, aNy, 0.05, 0.85, 0.50, 0.15, 43, 25, 13, true);
       tText3->SetTextColor(kBlack);
@@ -634,7 +660,7 @@ void Add1DCfwFitToCanPart(CanvasPartition* aCanPart, int aNx, int aNy, ThermCf* 
     aCanPart->AddPadPaveText(tText5, aNx, aNy);
   }
 
-  TPaveText* tText4 = aCanPart->SetupTPaveText(TString::Format("#it{#mu}_{out} = %d fm", aMuOut), aNx, aNy, 0.60, 0.85, 0.30, 0.15, 43, 25, 13, true);
+  TPaveText* tText4 = aCanPart->SetupTPaveText(TString::Format("#it{#mu}_{out} = %d fm", aMuOut), aNx, aNy, 0.525, 0.85, 0.30, 0.15, 43, 25, 13, true);
     tText4->SetTextColor(kBlack);
   aCanPart->AddPadPaveText(tText4, aNx, aNy);
 }
@@ -1064,19 +1090,25 @@ TCanvas* DrawCfwFitAndSourceswDeltaTwC11wData(TString tCanName, ThermCf* aThermC
                                               double aGaussFitMin = -20., double aGaussFitMax = 20., double aProjLow = -100., double aProjHigh = -100., bool aSuppressFit=false)
 {
   TCanvas* tCanCfwSource = new TCanvas(tCanName, tCanName);
-  tCanCfwSource->SetCanvasSize(700, 750);
+  tCanCfwSource->SetCanvasSize(1400, 1500);
   tCanCfwSource->cd();
   TPad* tPadCfwFit = new TPad("tPadCfwFit", "tPadCfwFit", 0.0, 0.67, 0.5, 1.0);
+    tPadCfwFit->SetTicks(1,1);  
     tPadCfwFit->Draw();
   TPad* tPadC11 = new TPad("tPadC11", "tPadC11", 0.5, 0.67, 1.0, 1.0);
+    tPadC11->SetTicks(1,1);
     tPadC11->Draw();
   TPad* tPadRout = new TPad("tPadRout", "tPadRout", 0.0, 0.33, 0.5, 0.67);
+    tPadRout->SetTicks(1,1);
     tPadRout->Draw();
   TPad* tPadRside = new TPad("tPadRside", "tPadRside", 0.5, 0.33, 1.0, 0.67);
+    tPadRside->SetTicks(1,1);
     tPadRside->Draw();
   TPad* tPadRlong = new TPad("tPadRlong", "tPadRlong", 0.0, 0.0, 0.5, 0.33);
+    tPadRlong->SetTicks(1,1);
     tPadRlong->Draw();
   TPad* tPadDeltaT = new TPad("tPadDeltaT", "tPadDeltaT", 0.5, 0.0, 1.0, 0.33);
+    tPadDeltaT->SetTicks(1,1);
     tPadDeltaT->Draw();
 
   //-------------------------
@@ -1124,8 +1156,8 @@ TCanvas* DrawCfwFitAndSourceswDeltaTwC11wData(TString tCanName, ThermCf* aThermC
   tPanelLetters->SetTextFont(62);
   tPanelLetters->SetTextSize(0.090);
 
-  double tXLett=0.90;
-  double tYLett=0.825;
+  double tXLett=0.85;
+  double tYLett=0.80;
   tPadCfwFit->cd();
   tPanelLetters->DrawLatexNDC(tXLett, tYLett, "a.");
   tPadC11->cd();
@@ -1363,6 +1395,7 @@ int main(int argc, char **argv)
     TString tCanPartCompMusName = TString::Format("CanPartCompMus_%s_%s", aCfDescriptor.Data(), cAnalysisBaseTags[tAnType]);
     CanvasPartition* tCanPart = new CanvasPartition(tCanPartCompMusName,tNx,tNy,tXLow,tXHigh,tYLow,tYHigh,0.15,0.02,0.15,0.02);
     tCanPart->SetDrawOptStat(false);
+    tCanPart->SetAllTicks(1,1);
 
     Add1DCfwFitToCanPart(tCanPart, 0, 0, tThermCfObj_Mu0, tKStarFitMax, tFixLambdaInFit, 0, false);
     Add1DCfwFitToCanPart(tCanPart, 1, 0, tThermCfObj_Mu1, tKStarFitMax, tFixLambdaInFit, 1, true);
