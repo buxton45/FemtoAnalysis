@@ -12,7 +12,7 @@ CFLAGS = $(shell gsl-config --cflags) $(shell root-config --cflags) -Wall -std=c
 
 MY_LIBS = $(addprefix build/, CfLite.o CfHeavy.o Cf2dLite.o Cf2dHeavy.o Types.o Types_SysFileInfo.o Purity.o PartialAnalysis.o Analysis.o DataAndModel.o PlotPartners.o PlotPartnersLamKch.o PlotPartnersLamK0.o SystematicAnalysis.o CanvasPartition.o SpherHarmonics.o CorrFctnDirectYlm.o CorrFctnDirectYlmLite.o CorrFctnDirectYlmHeavy.o CorrFctnDirectYlmTherm.o ThermCf.o)
 
-BINARIES = runSingleSys runAllSysLamK0 runAllSysLamKch runAllSysXiKch runCompare runBuildErrorBars runBuildErrorBarsYlm runBuildErrorBarsXiKch runBuildLeadingErrorContributors
+BINARIES = runSingleSys runAllSysLamK0 runAllSysLamKch runAllSysXiKch runCompare runBuildErrorBars runBuildErrorBarsYlm runBuildErrorBarsXiKch runBuildLeadingErrorContributors runBuildRelativeContributions
 
 all: $(BINARIES)
 
@@ -42,6 +42,9 @@ runBuildErrorBarsXiKch: ${MY_LIBS} BuildErrorBarsXiKch.C
 
 runBuildLeadingErrorContributors: ${MY_LIBS} BuildLeadingErrorContributors.C
 	g++ BuildLeadingErrorContributors.C ${MY_LIBS} -o runBuildLeadingErrorContributors $(LIBS) $(CFLAGS)
+	
+runBuildRelativeContributions: ${MY_LIBS} BuildRelativeContributions.C
+	g++ BuildRelativeContributions.C ${MY_LIBS} -o runBuildRelativeContributions $(LIBS) $(CFLAGS)	
 
 build/%.o: ${ANALYZE_DIR}/%.cxx ${ANALYZE_DIR}/%.h
 	g++ -c $< $(CFLAGS) -o $@

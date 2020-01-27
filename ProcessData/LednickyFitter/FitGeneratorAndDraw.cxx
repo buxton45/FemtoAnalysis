@@ -343,7 +343,8 @@ void FitGeneratorAndDraw::AddColoredLinesLabels(CanvasPartition *aCanPart, int a
   tLine->SetLineStyle(3);
   tLine->Draw();
   
-  tTex->DrawLatex(tXText2, tYText2, TString::Format("#scale[%f]{Non-femto. bgd.}", aScaleFactor));
+//  tTex->DrawLatex(tXText2, tYText2, TString::Format("#scale[%f]{Non-femto. bgd.}", aScaleFactor));
+  tTex->DrawLatex(tXText2, tYText2, TString::Format("#scale[%f]{Scaled Bgd. Fit}", aScaleFactor));  
   tLine = new TLine(tXText2-tSpaceBetween-tLineWidth, tYText2, tXText2-tSpaceBetween, tYText2);
   tLine->SetLineColor(tColorNonFlatBgd);
   tLine->SetLineWidth(2);
@@ -373,16 +374,16 @@ void FitGeneratorAndDraw::AddColoredLinesLabelsAndData(CanvasPartition *aCanPart
   tTex->SetTextSize(0.125);
   
   double tYText0 = 0.975;
-  double tXText0 = 0.15;
+  double tXText0 = 0.14;
 
   double tYText1 = 0.94;
-  double tXText1 = 0.15;
+  double tXText1 = 0.14;
 
   double tYText2 = 0.9125;
-  double tXText2 = 0.15;
+  double tXText2 = 0.14;
 
   double tYText3 = 0.885;
-  double tXText3 = 0.15;
+  double tXText3 = 0.14;
   
 
 
@@ -416,7 +417,8 @@ void FitGeneratorAndDraw::AddColoredLinesLabelsAndData(CanvasPartition *aCanPart
   tLine->SetLineStyle(3);
   tLine->Draw();
   
-  tTex->DrawLatex(tXText2, tYText2, TString::Format("#scale[%f]{Non-femto. bgd.}", aScaleFactor));
+//  tTex->DrawLatex(tXText2, tYText2, TString::Format("#scale[%f]{Non-femto. bgd.}", aScaleFactor));
+  tTex->DrawLatex(tXText2, tYText2, TString::Format("#scale[%f]{Scaled Bgd. Fit}", aScaleFactor));  
   tLine = new TLine(tXText2-tSpaceBetween-tLineWidth, tYText2, tXText2-tSpaceBetween, tYText2);
   tLine->SetLineColor(tColorNonFlatBgd);
   tLine->SetLineWidth(2);
@@ -447,16 +449,16 @@ void FitGeneratorAndDraw::AddColoredLinesLabelsAndDatav2(CanvasPartition *aCanPa
   tTex->SetTextSize(50);
   
   double tYText0 = 0.975;
-  double tXText0 = 0.125;
+  double tXText0 = 0.115;
 
   double tYText1 = 0.93;
-  double tXText1 = 0.125;
+  double tXText1 = 0.115;
 
   double tYText2 = 0.8925;
-  double tXText2 = 0.125;
+  double tXText2 = 0.115;
 
   double tYText3 = 0.855;
-  double tXText3 = 0.125;
+  double tXText3 = 0.115;
   
 
 
@@ -490,7 +492,8 @@ void FitGeneratorAndDraw::AddColoredLinesLabelsAndDatav2(CanvasPartition *aCanPa
   tLine->SetLineStyle(3);
   tLine->Draw();
   
-  tTex->DrawLatex(tXText2, tYText2, TString::Format("#scale[%f]{Non-femto. bgd.}", aScaleFactor));
+//  tTex->DrawLatex(tXText2, tYText2, TString::Format("#scale[%f]{Non-femto. bgd.}", aScaleFactor));
+  tTex->DrawLatex(tXText2, tYText2, TString::Format("#scale[%f]{Scaled Bgd. Fit}", aScaleFactor));
   tLine = new TLine(tXText2-tSpaceBetween-tLineWidth, tYText2, tXText2-tSpaceBetween, tYText2);
   tLine->SetLineColor(tColorNonFlatBgd);
   tLine->SetLineWidth(2);
