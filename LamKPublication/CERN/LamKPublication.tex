@@ -194,16 +194,16 @@ Throughout the text, the pair name is used as shorthand for the pair-conjugate s
 \label{sec:DataAnalysis}
 
 This work reports on the analysis of Pb--Pb collisions at $\sqrt{s_{\mathrm{NN}}}$ = 2.76 TeV produced by the LHC and measured by the ALICE experiment~\cite{Aamodt:2008zz} in 2011.
-Approximately 40 million combined central, semi-central, and minimum bias events were analyzed.
-The events were classified according to their centrality percentiles determined using the measured amplitudes in the V0 detectors~\cite{Abelev:2013qoq}.  
-In order for an event to be included in the analysis, the $z$ position of the reconstructed event vertex must be within 10 cm of the center of the ALICE detector. 
+Approximately 40 million events were analyzed, which were classified according to their centrality percentiles determined using the measured amplitudes in the V0 detectors~\cite{Abelev:2013qoq}.  
+In order for an event to be included in the analysis, the position of the reconstructed event vertex must be within 10 cm of the center of the ALICE detector along the beam axis. 
 
 Charged particle tracking was performed using the Time Projection Chamber (TPC)~\cite{2010NIMPA.622..316A} and the Inner Tracking System (ITS)~\cite{Abelevetal:2014dna}.  
 The ITS allows for high spatial resolution in determining the primary (collision) vertex.
 The determination of the momenta of the tracks was performed using tracks reconstructed with the TPC only and constrained to the primary vertex.
+Tracks were selected from the central pseudorapidity region, $|\eta| < 0.8$.
 A minimum requirement of 80 reconstructed TPC clusters was imposed, the purpose of which is to ensure both the quality of the track and good transverse momentum (\pt) resolution at large momenta, as well as to reject fake tracks.
 
-Particle identification (PID) for reconstructed tracks was carried out using both the TPC and Time-Of-Flight (TOF) detectors~\cite{Abelev:2014ffa, Akindinov:2013tea} in the pseudorapidity range $|\eta| < 0.8$.  
+Particle identification (PID) for reconstructed tracks was carried out using both the TPC and Time-Of-Flight (TOF) detectors~\cite{Abelev:2014ffa, Akindinov:2013tea}.  
 For TPC PID, a parametrized Bethe-Bloch formula was used to calculate the specific energy loss $\langle \mathrm{d}E/\mathrm{d}x \rangle$ in the detector expected for a particle with a given mass and momentum.  
 For TOF PID, the particle mass was used to calculate the expected time of flight as a function of track length and momentum.  
 For each PID method, a value ($N_{\sigma}$) was assigned to each track denoting the number of standard deviations between the measured track information and calculated values.  
@@ -219,7 +219,7 @@ This is realized by imposing a restriction on the DCA in both the transverse and
 
 Particle identification was performed using both the TPC and TOF detectors via the $N_{\sigma}$ method. 
 The $N_{\sigma}$ selection criteria become tighter with increasing momentum to reduce contamination within the samples, as the \Kpm signals begin to overlap more significantly with those from other particles, particularly e$^{\pm}$ and $\pi^{\pm}$.
-Additional methods are included to reduce the contamination in the \Kpm samples from electrons and pions.  
+Rejection procedures are included to reduce the contamination in the \Kpm samples from electrons and pions.  
 The specifics for the \Kpm selection are contained in Table~\ref{tab:KchCuts}.
 The purity of the \Kpm collections, $P_{\mathrm{K}^{\pm}}$, was estimated to be approximately 97\% from a Monte-Carlo (MC) study based on HIJING~\cite{PhysRevD.44.3501} simulations using GEANT3~\cite{Brun:1082634} to model particle transport through the ALICE detectors. 
 For a more detailed estimate of the \Kpm purity from an analysis employing similar methods, see~\cite{Acharya:2017qtq}.
@@ -468,9 +468,9 @@ The \Lam and \ALam purities are estimated to be $P_{\Lambda(\overline{\Lambda})}
     \includegraphics[width=0.49\linewidth]{/home/jesse/Analysis/FemtoAnalysis/LamKPublication/Figures/PDF/K0Purity_wPrintPurity_LamK0.pdf}}
   %%----overall caption----
   \caption{
-  (Color online) Invariant mass (\minv) distribution in the 0--10\% centrality interval of (a) p$\pi^{+}$ pairs showing the \Lam peak, and of (b) $\pi^{+}\pi^{-}$ pairs showing the \Ks peak, for \Vz candidates.  
+  (Color online) Invariant mass distributions in the 0--10\% centrality interval of (a) p$\pi^{+}$ pairs showing the \Lam peak, and of (b) $\pi^{+}\pi^{-}$ pairs showing the \Ks peak, for \Vz candidates.  
   The bottom panels are zoomed to show the background with fit.  
-  The vertical dashed lines represent the \minv restrictions used in the analyses, the vertical dotted lines delineate the region over which the background was fit, and the dash-dotted line shows the background fit.
+  The vertical dashed (green) lines represent the selection restrictions used in the analyses, the vertical dotted (red) lines delineate the region over which the background was fit, and the dash-dotted (blue) line shows the background fit.
   }  
   \label{fig:Purity}
 \end{figure}
@@ -493,8 +493,7 @@ The purpose of the average separation constraint is to remove splitting and merg
 The average separation between two tracks is calculated using their spatial separation as determined at several points throughout the TPC (every 20 cm radially from 85 cm to 245 cm).
 For the \LamKs analysis, which involves two \Vz particles, a minimum average separation constraint of 6 cm between the like-charge daughters in the pairs is imposed (for example, between the p daughter of the \Lam and the $\pi^{+}$ daughter of the \Ks).
 For the \LamKpm analyses, a minimum average separation constraint of 8 cm is enforced between the \Kpm and the \Lam daughter sharing the same charge (for example, in the \LamKchP analysis, between the p daughter of the \Lam and the \KchP).
-The constraint values used coincide with the values at which the average separation correlation functions stabilize to unity, signifying the splitting and merging effects are no longer abundant.
-These effects between oppositely charged tracks were found to be negligible, therefore no constraints on unlike-charge tracks are imposed.
+Splitting and merging effects between oppositely charged tracks were found to be negligible, therefore no constraints on unlike-charge tracks are imposed.
 
 %************************************************************************************************************************
 %************************************************************************************************************************
@@ -505,9 +504,9 @@ These effects between oppositely charged tracks were found to be negligible, the
 \subsection{Correlation function}
 \label{sec:CorrelationFunction}
 The two-particle correlation function for particles $a$ and $b$, $C_{ab}(\vec{\mathrm{p}}_{a},\vec{\mathrm{p}}_{b})$, is defined as the ratio of the probability of simultaneously measuring two particles with momenta $p_{a}$ and $p_{b}$, to the product of the single-particle probabilities.
-These probabilities are directly related to the covariant two-particle spectrum, $E_{a}E_{b}\frac{dN_{ab}}{d^{3}p_{a}d^{3}p_{b}}$, and the single-particle spectra, $E_{a(b)}\frac{dN_{a(b)}}{d^{3}p_{a(b)}}$, and the correlation function may be written
+These probabilities are directly related to the covariant two-particle spectrum, $E_{a}E_{b}\frac{d^{6}N_{ab}}{d^{3}p_{a}d^{3}p_{b}}$, and the single-particle spectra, $E_{a(b)}\frac{d^{3}N_{a(b)}}{d^{3}p_{a(b)}}$, and the correlation function may be written
 \begin{equation}
-  C_{ab}(\vec{\mathrm{p}}_{a},\vec{\mathrm{p}}_{b}) = \frac{E_{a}E_{b}\frac{dN_{ab}}{d^{3}p_{a}d^{3}p_{b}}}{\big( E_{a}\frac{dN_{a}}{d^{3}p_{a}} \big) \big( E_{b}\frac{dN_{b}}{d^{3}p_{b}} \big)},
+  C_{ab}(\vec{\mathrm{p}}_{a},\vec{\mathrm{p}}_{b}) = \frac{E_{a}E_{b}\frac{d^{6}N_{ab}}{d^{3}p_{a}d^{3}p_{b}}}{\big( E_{a}\frac{d^{3}N_{a}}{d^{3}p_{a}} \big) \big( E_{b}\frac{d^{3}N_{b}}{d^{3}p_{b}} \big)},
 \label{eqn:CfRatioSpectra}
 \end{equation}
 where $N_{ab}$ is the yield of particle pairs, $E_{a(b)}$ is the energy, $p_{a(b)}$ is the three-momentum, and $N_{a(b)}$ is the yield of particles $a(b)$.
@@ -1156,7 +1155,7 @@ Additionally, the figure shows a nonzero temporal shift, $\mu_{\Delta t} \approx
   (a) the one-dimensional correlation function from THERMINATOR 2 together with the experimental data.
   (b) the $\Re C_{11}$ component of a spherical harmonic decomposition of the THERMINATOR 2 simulation together with the experimental data.
   The other four panels show the source distribution from the simulation in the (c) out, (d) side, and (e) long directions, as well as (f) the temporal characteristics, all in the PRF.
-  The source distributions have all been fitted with a Gaussian form, the results of which are printed within the respective plots.
+  The source distributions have all been fitted with a Gaussian form over the regions contained within the dashed lines, the results of which are printed within the respective plots.
   }
   \label{fig:LamKchP_StdThermSources}
 \end{figure}
