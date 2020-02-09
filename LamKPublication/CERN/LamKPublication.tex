@@ -573,17 +573,17 @@ In the following, the $S$ superscript is dropped from all scattering parameters.
 The purpose of this analysis is to study the interaction and scale of the emitting source of the primary \LamK pairs.
 However, in practice some of the selected particles originate as decay products from other resonances, and some of the final pairs contain a misidentified member.
 In both cases, these contribute to the observed correlation function, and obscure its relation to the primary \LamK system.
-The contributions from fake pairs, which contain at least one misidentified member, are assumed to average to unity, in which case they simply attenuate the femtoscopic signal.
-Pairs whose members originate as daughters from resonances carry information about the parent system.
+The net contribution from fake pairs, which contain at least one misidentified member, is taken to average to unity, in which case they simply attenuate the femtoscopic signal.
+Pairs in which at least one member originates from a resonance decay (e.g., \LamKchP from $\Sigma^{0}$\KchP) carry information about the parent system.
 In effect, the correlation between the parents will be visible, although smeared out, in the daughters' signal.
 This is termed a residual correlation resulting from feed-down.  
-As described in the following, the main sources of residual correlations in the \LamK systems result from \Lam hyperons which have decayed from $\Sigma^{0}$, $\Xi^{0}$, and $\Xi^{-}$ parents.
+As described in the following, the main sources of residual correlations in the \LamK systems result from \Lam hyperons which have decayed from $\Sigma^{0}$, $\Xi^{0}$, and $\Xi^{-}$ parents. 
 
 The measured correlation function is a combination of the genuine \LamK correlation with contributions from resonances and impurities~\cite{Kisiel:2014mma},
 \begin{equation}
 \begin{aligned}
 \label{eqn:CfwRes} 
- C_{\mathrm{measured}}(k^{*}_{\Lambda\mathrm{K}}) &= 1 + \lambda'_{\Lambda\mathrm{K}}[C_{\Lambda\mathrm{K}}(k^{*}_{\Lambda\mathrm{K}}) - 1] + \sum\limits_{ij}  \lambda'_{ij}[C_{ij}(k^{*}_{\Lambda\mathrm{K}})-1], \\
+ C_{\mathrm{measured}}(k^{*}_{\Lambda\mathrm{K}}) &= 1 + \sum\limits_{ij}  \lambda'_{ij}[C_{ij}(k^{*}_{\Lambda\mathrm{K}})-1], \\
 \end{aligned} 
 \end{equation}
 with
@@ -594,7 +594,7 @@ with
  \sum\limits_{ij}\lambda_{ij}' &=  \lambda_{\mathrm{Fit}}\sum\limits_{ij}\lambda_{ij} = \lambda_{\mathrm{Fit}},
 \end{aligned} 
 \end{equation}
-where the \LamK term represents the genuine \LamK correlation, and the $ij$ terms denote the contributions from residual feed-down and impurities.
+where the $ij$ terms include the primary \LamK contribution together with the contributions from residual feed-down and impurities.
 More specifically, $C_{ij}(k^{*}_{\Lambda\mathrm{K}})$ is the correlation function of the parent system expressed in terms of the relative momentum of the daughter \LamK pair.  
 The $\lambda_{ij}$ parameters serve as weights dictating the relative strength of each component's contribution to the observed signal, and are normalized to unity (i.e., $\sum_{ij} \lambda_{ij} = 1$, where $ij$ includes also the primary \LamK component)~\cite{Kisiel:2014mma, Acharya:2018gyz}.
 The individual $\lambda_{ij}$ are fixed (and whose values can be found in Table~\ref{tab:LambdaValues_3Res}), but the parameter $\lambda_{\mathrm{Fit}}$ in Eq.~\ref{eqn:CfwRes} is left free.
@@ -614,13 +614,14 @@ When modeling the parent systems, the source radii are assumed to be equal to th
 Furthermore, Coulomb-neutral parent pairs are assumed to share the same scattering parameters as the \LamK daughter pair, and the parent correlation function is modeled using Eq.~\ref{eqn:LednickyEqn}.
 During the fit process, these source radii and scattering parameters are left free, as described in Sec.~\ref{SummarizedFitProcedure}.
 For the \XiKpm parent system, where the constituents interact via both the strong and Coulomb interactions, no analytical expression exists to model the correlation function (see App.~\ref{App:CoulombFitter}), and the experimental \XiKpm data are used.
-The \XiKpm correlation function is dominated by the contribution from the Coulomb interaction, and consistent final fit results are obtained when modeling the \XiKpm system with a Coulomb-only scenario, in which the strong interaction is assumed to be negligible, instead of using the experimental data.
+However, the \XiKpm correlation function is dominated by the contribution from the Coulomb interaction, and may be sufficiently modeled with a Coulomb-only scenario (in which the strong interaction is assumed to be negligible) for this analysis, to yield consistent results.
 
 
 
 The $\lambda_{ij}$ parameters dictate the relative strength of each contribution to the correlation function, and can be estimated using the THERMINATOR 2 and HIJING simulations.
 More specifically, a $\lambda_{ij}$ parameter is estimated as the total number of \LamK pairs in the sample originating from source $ij$ ($N_{ij}$) divided by the total number of \LamK pairs.
 For a given \LamK source, the number of detected pairs depends on both the raw yield and the reconstruction efficiency.
+The relevant reconstruction efficiencies are those of the daughters under study, not of the parent particles; e.g., when determining the contribution of the \XiKchP system to the \LamKchP correlation function, the reconstruction efficiency of the $\Xi^{-}$ is not relevant, but that of the secondary \Lam originating from a $\Xi^{-}$ decay is. 
 The reconstruction efficiencies ($RE_{ij}$) are estimated with HIJING simulations using GEANT3 to model particle transport through the detector.
 HIJING events are generated from a superposition of PYTHIA pp collisions, and lack the strangeness saturation of a fully thermalized medium.
 As a result, HIJING is unreliable in providing the yields needed for this analysis, and, instead, the yields are estimated with the THERMINATOR 2 simulation ($N_{ij}^{\scaleto{THERM}{3pt}}$).
@@ -633,16 +634,16 @@ Finally, the $\lambda_{ij}$ are estimated as
 
 Femtoscopic analyses are sensitive to the pair emission structure at kinetic freeze-out.
 Therefore, within femtoscopy, any particle which originates from a resonance decay before last rescattering is considered primary.
-The THERMINATOR 2 simulation shows that, aside from primaries, the \Lam hyperons and K mesons decay from a large number of resonances ($\sim$50 \Lam parent species, and $\sim$70 K parent species), and the most significant contributing pair systems are $\Sigma^{0}$K, $\Xi^{-}$K, $\Xi^{0}$K, $\Sigma^{*+}$K, $\Sigma^{*-}$K, $\Sigma^{*0}$K, $\Lambda\mathrm{K}^{*}$, $\Sigma^{0}\mathrm{K}^{*}$, $\Xi^{-}\mathrm{K}^{*}$, and $\Xi^{0}\mathrm{K}^{*}$.
+The THERMINATOR 2 simulation shows that the \Lam hyperons and K mesons decay from a large number of resonances ($\sim$50 \Lam parent species, and $\sim$70 K parent species), and the most significant contributing pair systems are $\Sigma^{0}$K, $\Xi^{-}$K, $\Xi^{0}$K, $\Sigma^{*+}$K, $\Sigma^{*-}$K, $\Sigma^{*0}$K, $\Lambda\mathrm{K}^{*}$, $\Sigma^{0}\mathrm{K}^{*}$, $\Xi^{-}\mathrm{K}^{*}$, and $\Xi^{0}\mathrm{K}^{*}$.
 However, the simulation does not include a hadronic rescattering phase, and not all of the aforementioned pair systems will survive until kinetic freeze-out.
 The systems resulting from electromagnetic or weak decays ($\Sigma^{0}$, $\Xi^{-}$, and $\Xi^{0}$) will survive long after kinetic freeze-out, and will contribute residual signals to the \LamK correlation functions.
 The majority of the remaining contributors decay via the strong interaction with mean proper lifetimes less than a few fm/$c$, and whose daughters should always be considered primary.
 The mean proper lifetime of the parent is used to judge whether or not the daughter is treated as primary.
-A decay product is considered primary if its parent has a mean proper lifetime $\tau$ satisfying $c\tau <$ 10 fm.
-Changing $c\tau$ only moderately affects the $\lambda_{ij}$ parameters, and the effect is included in the estimation of the systematic uncertainties.
+A decay product is considered primary if its parent has a mean proper lifetime $\tau$ satisfying $\tau < \tau_{\mathrm{max}}$, where $c\tau_{\mathrm{max}} =$ 10 fm for this analysis.
+Changing $\tau_{\mathrm{max}}$ only moderately affects the $\lambda_{ij}$ parameters, and the effect is included in the estimation of the systematic uncertainties.
 In order for a pair to be considered primary, both particles in the pair must be considered primary. 
-If either parent has $\tau > \tau_{\mathrm{max}}$, the daughter pair contributes to the ``Other" category when calculating $\lambda$ parameters.
-For this mixture of pair systems, all with different two-particle interactions and single-particle source distributions, the net correlation effect is assumed to average to unity.
+If either parent has $\tau > \tau_{\mathrm{max}}$, the daughter pair contributes to the ``Other" category when calculating $\lambda_{ij}$ parameters.
+For this mixture of pair systems, all with different two-particle interactions and single-particle source distributions, the net correlation effect is taken to average to unity.
 
 
 Residual contributions from $\Sigma^{0}$, $\Xi^{0}$, $\Xi^{-}$ are accounted for in the fit.
@@ -652,47 +653,6 @@ The ``Fakes'' category represents pairs that are mistakenly identified as \LamK.
 To estimate the $\lambda_{\mathrm{Fakes}}$ value, the number of fake pairs is assumed to be equal to the total number of simulated pairs multiplied by $(1-PP_{\Lambda\mathrm{K}})/PP_{\Lambda\mathrm{K}}$, where $PP_{\Lambda\mathrm{K}}$ is the \LamK pair purity, estimated as the product of the two single-particle purities ($PP_{\Lambda\mathrm{K}} = P_{\Lambda}P_{\mathrm{K}}$).
 More simply, this amounts to $\lambda_{\mathrm{Fakes}} = 1-PP_{\Lambda\mathrm{K}}$.
 The correlations in both of these categories (``Other'' and ``Fakes'') are assumed to average to unity, and pairs in these categories therefore only contribute by attenuating the signal. 
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{comment}
-\begin{table}[htbp] 
- \centering
- \caption{Weight parameters ($\lambda_{ij}$) for the individual components of the \LamK correlation functions}
- \renewcommand{\arraystretch}{1.2}
-
- \begin{tabular}{c|cV{4.0}c|cV{4.0}c|cV{4.0}c|c}
-  \multicolumn{2}{c}{\LamKchP} & \multicolumn{2}{c}{\ALamKchM} & \multicolumn{2}{c}{\LamKchM} & \multicolumn{2}{c}{\ALamKchP} \\
-  \hlineB{3.0}
-  \textbf{Source} & \textbf{$\lambda$ value} & \textbf{Source} & \textbf{$\lambda$ value} & \textbf{Source} & \textbf{$\lambda$ value} & \textbf{Source} & \textbf{$\lambda$ value} \\
-  \hlineB{3.0}
-  Primary & 0.527 & Primary & 0.526 & Primary & 0.526 & Primary & 0.527 \\
-  $\Sigma^{0}$K$^{+}$ & 0.111 & $\overline{\Sigma}^{0}$K$^{-}$ & 0.110 & $\Sigma^{0}$K$^{-}$ & 0.110 & $\overline{\Sigma}^{0}$K$^{+}$ & 0.111 \\  
-  $\Xi^{0}$K$^{+}$ & 0.039 & $\overline{\Xi}^{0}$K$^{-}$ & 0.035 & $\Xi^{0}$K$^{-}$ & 0.038 & $\overline{\Xi}^{0}$K$^{+}$ & 0.036 \\  
-  $\Xi^{-}$K$^{+}$ & 0.050 & $\overline{\Xi}^{+}$K$^{-}$ & 0.046 & $\Xi^{-}$K$^{-}$ & 0.050 & $\overline{\Xi}^{+}$K$^{+}$ & 0.046 \\  
-  Other & 0.226 & Other & 0.235 & Other & 0.228 & Other & 0.233 \\  
-  Fakes & 0.048 & Fakes & 0.048 & Fakes & 0.048 & Fakes & 0.048 \\
-  \hlineB{3.0}
-  
-  \multicolumn{8}{c}{} \\
-
-  \multicolumn{2}{c}{} & \multicolumn{2}{c}{\LamKs} & \multicolumn{2}{c}{\ALamKs} & \multicolumn{2}{c}{} \\ 
-  \clineB{3-6}{3.0}
-  %\multicolumn{2}{c|}{} & \textbf{Source} & \textbf{$\lambda$ value} & \textbf{Source} & \multicolumn{1}{c|}{\textbf{$\lambda$ value}} & \multicolumn{2}{c}{} \\
-  \multicolumn{2}{c}{} & \textbf{Source} & \textbf{$\lambda$ value} & \textbf{Source} & \multicolumn{1}{c}{\textbf{$\lambda$ value}} & \multicolumn{2}{c}{} \\
-  \clineB{3-6}{3.0}
-  \multicolumn{2}{c}{} & Primary & 0.543 & Primary & \multicolumn{1}{c}{0.544} & \multicolumn{2}{c}{} \\  
-  \multicolumn{2}{c}{} & $\Sigma^{0}$K$^{0}_{\mathrm{S}}$ & 0.120 & $\overline{\Sigma}^{0}$K$^{0}_{\mathrm{S}}$ & \multicolumn{1}{c}{0.120} & \multicolumn{2}{c}{} \\  
-  \multicolumn{2}{c}{} & $\Xi^{0}$K$^{0}_{\mathrm{S}}$ & 0.042 & $\overline{\Xi}^{0}$K$^{0}_{\mathrm{S}}$ & \multicolumn{1}{c}{0.039} & \multicolumn{2}{c}{} \\  
-  \multicolumn{2}{c}{} & $\Xi^{-}$K$^{0}_{\mathrm{S}}$ & 0.054 & $\overline{\Xi}^{+}$K$^{0}_{\mathrm{S}}$ & \multicolumn{1}{c}{0.050} & \multicolumn{2}{c}{} \\  
-  \multicolumn{2}{c}{} & Other & 0.194 & Other & \multicolumn{1}{c}{0.199} & \multicolumn{2}{c}{} \\  
-  \multicolumn{2}{c}{} & Fakes & 0.048 & Fakes & \multicolumn{1}{c}{0.048} & \multicolumn{2}{c}{} \\
-  \clineB{3-6}{3.0} 
- \end{tabular}
- %\caption{$\lambda$ values for the individual components of the \LamK correlation functions.}
- \label{tab:LambdaValues_3Res}
-\end{table}
-\end{comment}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{table}[htbp] 
  \centering
@@ -704,12 +664,12 @@ The correlations in both of these categories (``Other'' and ``Fakes'') are assum
   \clineB{1-2}{3.0} \clineB{4-5}{3.0} \clineB{7-8}{3.0} \clineB{10-11}{3.0}
   Source & $\lambda$ value & \multicolumn{1}{c}{} & Source & $\lambda$ value & \multicolumn{1}{c}{} & Source & $\lambda$ value & \multicolumn{1}{c}{} & Source & $\lambda$ value \\
   \clineB{1-2}{3.0} \clineB{4-5}{3.0} \clineB{7-8}{3.0} \clineB{10-11}{3.0}
-  Primary & 0.527 & \multicolumn{1}{c}{} & Primary & 0.526 & \multicolumn{1}{c}{} & Primary & 0.526 & \multicolumn{1}{c}{} & Primary & 0.527 \\
-  $\Sigma^{0}$K$^{+}$ & 0.111 & \multicolumn{1}{c}{} & $\overline{\Sigma}^{0}$K$^{-}$ & 0.110 & \multicolumn{1}{c}{} & $\Sigma^{0}$K$^{-}$ & 0.110 & \multicolumn{1}{c}{} & $\overline{\Sigma}^{0}$K$^{+}$ & 0.111 \\  
-  $\Xi^{0}$K$^{+}$ & 0.039 & \multicolumn{1}{c}{} & $\overline{\Xi}^{0}$K$^{-}$ & 0.035 & \multicolumn{1}{c}{} & $\Xi^{0}$K$^{-}$ & 0.038 & \multicolumn{1}{c}{} & $\overline{\Xi}^{0}$K$^{+}$ & 0.036 \\  
-  $\Xi^{-}$K$^{+}$ & 0.050 & \multicolumn{1}{c}{} & $\overline{\Xi}^{+}$K$^{-}$ & 0.046 & \multicolumn{1}{c}{} & $\Xi^{-}$K$^{-}$ & 0.050 & \multicolumn{1}{c}{} & $\overline{\Xi}^{+}$K$^{+}$ & 0.046 \\  
-  Other & 0.226 & \multicolumn{1}{c}{} & Other & 0.235 & \multicolumn{1}{c}{} & Other & 0.228 & \multicolumn{1}{c}{} & Other & 0.233 \\  
-  Fakes & 0.048 & \multicolumn{1}{c}{} & Fakes & 0.048 & \multicolumn{1}{c}{} & Fakes & 0.048 & \multicolumn{1}{c}{} & Fakes & 0.048 \\
+  Primary & 0.509 & \multicolumn{1}{c}{} & Primary & 0.509 & \multicolumn{1}{c}{} & Primary & 0.509 & \multicolumn{1}{c}{} & Primary & 0.510 \\
+  $\Sigma^{0}$K$^{+}$ & 0.108 & \multicolumn{1}{c}{} & $\overline{\Sigma}^{0}$K$^{-}$ & 0.107 & \multicolumn{1}{c}{} & $\Sigma^{0}$K$^{-}$ & 0.107 & \multicolumn{1}{c}{} & $\overline{\Sigma}^{0}$K$^{+}$ & 0.108 \\  
+  $\Xi^{0}$K$^{+}$ & 0.037 & \multicolumn{1}{c}{} & $\overline{\Xi}^{0}$K$^{-}$ & 0.034 & \multicolumn{1}{c}{} & $\Xi^{0}$K$^{-}$ & 0.037 & \multicolumn{1}{c}{} & $\overline{\Xi}^{0}$K$^{+}$ & 0.035 \\  
+  $\Xi^{-}$K$^{+}$ & 0.048 & \multicolumn{1}{c}{} & $\overline{\Xi}^{+}$K$^{-}$ & 0.044 & \multicolumn{1}{c}{} & $\Xi^{-}$K$^{-}$ & 0.048 & \multicolumn{1}{c}{} & $\overline{\Xi}^{+}$K$^{+}$ & 0.045 \\  
+  Other & 0.218 & \multicolumn{1}{c}{} & Other & 0.228 & \multicolumn{1}{c}{} & Other & 0.221 & \multicolumn{1}{c}{} & Other & 0.225 \\  
+  Fakes & 0.079 & \multicolumn{1}{c}{} & Fakes & 0.079 & \multicolumn{1}{c}{} & Fakes & 0.079 & \multicolumn{1}{c}{} & Fakes & 0.079 \\
   \cline{1-2} \cline{4-5} \cline{7-8} \cline{10-11}
   
   \multicolumn{11}{c}{} \\
@@ -718,12 +678,12 @@ The correlations in both of these categories (``Other'' and ``Fakes'') are assum
   \clineB{4-5}{3.0} \clineB{7-8}{3.0}
   \multicolumn{3}{c}{} & Source & $\lambda$ value & \multicolumn{1}{c}{} & Source & \multicolumn{1}{c}{$\lambda$ value} & \multicolumn{3}{c}{} \\
   \clineB{4-5}{3.0} \clineB{7-8}{3.0}
-  \multicolumn{3}{c}{} & Primary & 0.543 & \multicolumn{1}{c}{} & Primary & \multicolumn{1}{c}{0.544} & \multicolumn{3}{c}{} \\  
-  \multicolumn{3}{c}{} & $\Sigma^{0}$K$^{0}_{\mathrm{S}}$ & 0.120 & \multicolumn{1}{c}{} & $\overline{\Sigma}^{0}$K$^{0}_{\mathrm{S}}$ & \multicolumn{1}{c}{0.120} & \multicolumn{3}{c}{} \\  
-  \multicolumn{3}{c}{} & $\Xi^{0}$K$^{0}_{\mathrm{S}}$ & 0.042 & \multicolumn{1}{c}{} & $\overline{\Xi}^{0}$K$^{0}_{\mathrm{S}}$ & \multicolumn{1}{c}{0.039} & \multicolumn{3}{c}{} \\  
-  \multicolumn{3}{c}{} & $\Xi^{-}$K$^{0}_{\mathrm{S}}$ & 0.054 & \multicolumn{1}{c}{} & $\overline{\Xi}^{+}$K$^{0}_{\mathrm{S}}$ & \multicolumn{1}{c}{0.050} & \multicolumn{3}{c}{} \\  
-  \multicolumn{3}{c}{} & Other & 0.194 & \multicolumn{1}{c}{} & Other & \multicolumn{1}{c}{0.199} & \multicolumn{3}{c}{} \\  
-  \multicolumn{3}{c}{} & Fakes & 0.048 & \multicolumn{1}{c}{} & Fakes & \multicolumn{1}{c}{0.048} & \multicolumn{3}{c}{} \\
+  \multicolumn{3}{c}{} & Primary & 0.531 & \multicolumn{1}{c}{} & Primary & \multicolumn{1}{c}{0.532} & \multicolumn{3}{c}{} \\  
+  \multicolumn{3}{c}{} & $\Sigma^{0}$K$^{0}_{\mathrm{S}}$ & 0.118 & \multicolumn{1}{c}{} & $\overline{\Sigma}^{0}$K$^{0}_{\mathrm{S}}$ & \multicolumn{1}{c}{0.118} & \multicolumn{3}{c}{} \\  
+  \multicolumn{3}{c}{} & $\Xi^{0}$K$^{0}_{\mathrm{S}}$ & 0.041 & \multicolumn{1}{c}{} & $\overline{\Xi}^{0}$K$^{0}_{\mathrm{S}}$ & \multicolumn{1}{c}{0.038} & \multicolumn{3}{c}{} \\  
+  \multicolumn{3}{c}{} & $\Xi^{-}$K$^{0}_{\mathrm{S}}$ & 0.053 & \multicolumn{1}{c}{} & $\overline{\Xi}^{+}$K$^{0}_{\mathrm{S}}$ & \multicolumn{1}{c}{0.049} & \multicolumn{3}{c}{} \\  
+  \multicolumn{3}{c}{} & Other & 0.189 & \multicolumn{1}{c}{} & Other & \multicolumn{1}{c}{0.195} & \multicolumn{3}{c}{} \\  
+  \multicolumn{3}{c}{} & Fakes & 0.069 & \multicolumn{1}{c}{} & Fakes & \multicolumn{1}{c}{0.069} & \multicolumn{3}{c}{} \\
   \cline{4-5} \cline{7-8}
  \end{tabular}
  %\caption{$\lambda$ values for the individual components of the \LamK correlation functions.}
@@ -739,7 +699,7 @@ Finite track momentum resolution causes the reconstructed relative momentum (\kr
 This is accounted for through the use of a response matrix generated with HIJING simulations.
 With this approach, the resolution correction is applied on-the-fly during the fitting process by propagating the theoretical (fit) correlation function through the response matrix, according to
 \begin{equation}
-  C_{\mathrm{fit}}(k^{*}_{\mathrm{Rec}}) = \dfrac{\sum\limits_{k^{*}_{\mathrm{True}}}M_{k^{*}_{\mathrm{Rec}},k^{*}_{\mathrm{True}}}C_{\mathrm{fit}}(k^{*}_{\mathrm{True}})}{\sum\limits_{k^{*}_{\mathrm{True}}}M_{k^{*}_{\mathrm{Rec}},k^{*}_{\mathrm{True}}}},
+  C(k^{*}_{\mathrm{Rec}}) = \dfrac{\sum\limits_{k^{*}_{\mathrm{True}}}M_{k^{*}_{\mathrm{Rec}},k^{*}_{\mathrm{True}}}C(k^{*}_{\mathrm{True}})}{\sum\limits_{k^{*}_{\mathrm{True}}}M_{k^{*}_{\mathrm{Rec}},k^{*}_{\mathrm{True}}}},
 \label{eqn:MomResCorrection}
 \end{equation}
 where $M_{k^{*}_{\mathrm{Rec}},k^{*}_{\mathrm{True}}}$ is the response matrix, $C_{\mathrm{fit}}(k^{*}_{\mathrm{True}})$ is the fit as a function of \ktrue, and the denominator normalizes the result.
@@ -755,7 +715,7 @@ The effect produces the observed suppression at intermediate \kstar, and should 
 The behavior of the non-femtoscopic background is needed in the low \kstar femtoscopic signal region, but an isolated view of it is only possible outside of such a region.
 
 The THERMINATOR 2 simulation has been shown to reproduce the background features in a $\pi$K analysis~\cite{Kisiel:2017}. 
-The simulation does not include any final-state effects, but they can be introduced by weighting the numerator pairs with the modulus squared of the appropriate two-particle wave-function when building the signal distributions. 
+The simulation does not include any final-state effects, but they can be introduced by weighting the pairs in the signal distribution with the modulus squared of the appropriate two-particle wave-function when building the signal distributions. 
 For the present purpose, only the behavior of the non-femtoscopic background is desired, and unit weights are used.
 Figure~\ref{fig:BgdswTHERM} shows the THERMINATOR 2 simulation together with experimental data.  
 The figure also shows a 6$^{\mathrm{th}}$-order polynomial fit to the simulation, as well as the fit polynomial scaled to match the data.
@@ -772,7 +732,7 @@ The extracted polynomial is adjusted to best describe the experimental data by i
 F_{\scaleto{Bgd}{6pt}}(k^{*}) = \alpha\cdot F_{\scaleto{THERM.\; Bgd}{6pt}}(k^{*}) + \beta,
 \end{equation}
 where $\alpha$ and $\beta$ are determined by fitting to the data in the region $0.32 < k^{*} < 0.80$ GeV/$c$; during the fit of the low-\kstar signal region, the background is fixed.
-In all cases, the non-femtoscopic background correction was applied as a scale factor.
+In all cases, the non-femtoscopic background correction was applied as a multiplicative factor to the correlation function during the fitting process.
 
 
 \begin{figure}[h]
@@ -815,9 +775,9 @@ A log-likelihood fit function is used as the statistic quantifying the quality o
 
 The complete fit function is constructed as follows.
 The uncorrected, primary, correlation function, $C_{\Lambda\mathrm{K}}(k^{*}_{\mathrm{\Lambda K,\,True}})$, is constructed using Eq.~\ref{eqn:LednickyEqn}.
-The correlation functions describing the parent systems which contribute residually, $C_{ij}(k^{*}_{ij,\,\mathrm{True}})$, are obtained using Eq.~\ref{eqn:LednickyEqn} for Coulomb-neutral pairs or experimental data for \XiKpm contributions.
+The correlation functions describing the parent systems which contribute via residual correlations, $C_{ij}(k^{*}_{ij,\,\mathrm{True}})$, are obtained using Eq.~\ref{eqn:LednickyEqn} for Coulomb-neutral pairs or experimental data for \XiKpm contributions.
 The residual contributions are then found by running each parent correlation function through the appropriate transform matrix, via Eq.~\ref{eqn:ResidualsTransform}.
-The primary and residual correlations are combined, via Eq.~\ref{eqn:CfwRes} with Tab.~\ref{tab:LambdaValues_3Res}, to form $C'_{Fit}$(\ktrue).
+The primary and residual correlations are combined, via Eq.~\ref{eqn:CfwRes} with Tab.~\ref{tab:LambdaValues_3Res}, to form $C'_{\mathrm{Fit}}$(\ktrue).
 Corrections are applied to account for momentum resolution effects using Eq.~\ref{eqn:MomResCorrection}, to obtain $C'_{\mathrm{Fit}}(k^{*}_{\mathrm{Rec}})$.
 Finally, the non-femtoscopic background correction, $F_{\mathrm{Bgd}}(k^{*}_{\mathrm{Rec}})$, is applied and the final fit function is obtained,
 \begin{equation}
@@ -831,8 +791,6 @@ $C'_{\mathrm{Fit}}(k^{*}_{\mathrm{Rec}})$ includes all components of the correla
 \label{SysErrs}
 
 To estimate the systematic uncertainties in the analysis, the selection criteria were varied, and correlation functions and fit results were obtained for each variation.
-The selection criteria included in the systematic study, as well as the values used in the variations, are shown in Tab.~\ref{tab:LamKSystematics}.  
-Note that, in each case, the central value corresponds to that used in the analysis.
 To quantify the systematic uncertainties on the data, the correlation functions from each variation of the selection criteria were averaged, and the standard deviations were calculated for each data point.
 The systematic uncertainties of the correlation functions were set to these calculated standard deviations.
 
@@ -843,64 +801,7 @@ The choice of \kstar fit range was varied by $\pm$ 25\%.
 In addition to modeling with a polynomial fit to the THERMINATOR 2 simulation, the backgrounds of all of the systems were modeled by fitting to the data with a linear, quadratic, and Gaussian form.
 Finally, $\tau_{\mathrm{max}}$ was varied from the default value of $\tau_{\mathrm{max}} = 10$ fm/$c$ down to $\tau_{\mathrm{max}} = 6$ fm/$c$ and up to $\tau_{\mathrm{max}} = 15$ fm/$c$.
 The resulting uncertainties in the extracted parameter sets were combined with the uncertainties arising from the variations of the selection criteria.
-
-\begin{table}[htbp]
- \centering 
- \caption[\LamK systematics]{Selection parameter variation for the study of systematic uncertainties in the analysis. In the table, the shorthand used is as follows: PA~=~pointing angle; PV~=~primary vertex; DCA~=~distance of closest approach; $\overline{\Delta\mathbf{r}}$~=~average separation}
-  \renewcommand{\arraystretch}{1.2}
-  \begin{tabular}{l|r}
-   \hlineB{3.0} 
-   \multicolumn{2}{c}{\LamKs} \\
-   \hlineB{3.0}  
-   DCA to PV \LamALam & $<$ [0.4, 0.5, 0.6] cm \\
-   \hline
-   DCA to PV \Ks & $<$ [0.2, 0.3, 0.4] cm \\
-   \hline
-   DCA \LamALam Daughters & $<$ [0.3, 0.4, 0.5] cm \\
-   \hline
-   DCA \Ks Daughters & $<$ [0.2, 0.3, 0.4] cm \\
-   \hline
-   $\cos(\theta_{\mathrm{PA}})$ \LamALam to PV & $>$ [0.9992, 0.9993, 0.9994] \\
-   \hline
-   $\cos(\theta_{\mathrm{PA}})$ \Ks to PV & $>$ [0.9992, 0.9993, 0.9994] \\
-   \hline
-   DCA to PV of $\mathrm{p}\,(\overline{\mathrm{p}})$ Daughter of \LamALam & $>$ [0.05, 0.1, 0.2] cm \\
-   \hline
-   DCA to PV of $\pi^{-}$($\pi^{+}$) Daughter of \LamALam & $>$ [0.2, 0.3, 0.4] cm \\ 
-   \hline
-   DCA to PV of $\pi^{+}$ Daughter of \Ks & $>$ [0.2, 0.3, 0.4] cm \\
-   \hline
-   DCA to PV of $\pi^{-}$ Daughter of \Ks & $>$ [0.2, 0.3, 0.4] cm \\
-   \hline
-   $\overline{\Delta\mathbf{r}}$ of Like-Charge Daughters & $>$ [5, 6, 7] cm \\
-   
-   \hlineB{3.0} 
-   \multicolumn{2}{c}{\LamKpm} \\
-   \hlineB{3.0}  
-   DCA \LamALam to PV & $<$ [0.4, 0.5, 0.6] cm \\ 
-   \hline
-   DCA \LamALam Daughters & $<$ [0.3, 0.4, 0.5] cm \\
-   \hline
-   $\cos(\theta_{\mathrm{PA}})$ \LamALam to PV & $>$ [0.9992, 0.9993, 0.9994] \\
-   \hline
-   DCA to PV of $\mathrm{p}\,(\overline{\mathrm{p}})$ Daughter of \LamALam &  $>$ [0.05, 0.1, 0.2] cm \\
-   \hline
-   DCA to PV of $\pi^{-}$($\pi^{+}$) Daughter of \LamALam & $>$ [0.2, 0.3, 0.4] cm  \\
-   \hline
-   $\overline{\Delta\mathbf{r}}$ of \LamALam Daughter with Same Charge as \Kpm & $>$ [7, 8, 9] cm \\
-   \hline
-   DCA to PV in Transverse Plane of \Kpm & $<$ [1.92, 2.4, 2.88] cm \\
-   \hline
-   DCA to PV in Longitudinal Direction of \Kpm & $<$ [2.4, 3.0, 3.6] cm \\
-   \hline   
-   
-  \end{tabular}
-% \end{minipage}
- %\caption[\LamK systematics]{\LamK systematics. In the table, the shorthand used is as follows: $PA$ = pointing angle; PV = primary vertex; DCA = distance of closest approach; $\overline{\Delta\mathbf{r}}$ = average separation}
- \label{tab:LamKSystematics} 
-\end{table}
-
-
+The systematic uncertainties of the extracted parameters sets are due primarily to the fit method variations, i.e., the selection criteria do not contribute significantly.
 
 
 %************************************************************************************************************************
@@ -954,6 +855,7 @@ More interestingly, the results show that the \LamKchP and \LamKchM systems diff
 The $\Re f_{0}$ extracted for the \LamKs system is positive, and within uncertainties of that of \LamKchM. 
 The real part of the scattering length describes the effect of the strong interaction: a positive $\Re(f_{0})$ signifies that the interaction is attractive, while a negative $\Re(f_{0})$ signifies a repulsive interaction, as is the usual convention in femtoscopy.
 Therefore, the femtoscopic signals from this analysis demonstrate that the strong interaction acts repulsively in the \LamKchP system, and acts attractively in the \LamKchM and \LamKs systems.
+Finally, the results indicate that the effective range of the interaction, $d_{0}$, is positive in the \LamKchP system and negative in the \LamKchM and \LamKs systems.
 
 In Fig.~\ref{fig:ScattParams_3Res} (left), the predictions of~\cite{Liu:2006xja} do not distinguish the K\Lam and K\ALam interactions and results are shown for two different parameter sets, whereas~\cite{Mai:2009ce} offers unique K\Lam and $\overline{\mathrm{K}}$\Lam scattering parameters for a single parameter set. 
 In all cases, the predicted scattering parameters have both positive real and imaginary components, which is clearly inconsistent with the \LamKchP system.
@@ -994,8 +896,9 @@ It was found that~\cite{Kisiel:2014upa}, even in the presence of global \mt-scal
 These kinematic effects, resulting from the transformation from LCMS to PRF, cause smaller masses to exhibit larger $R_{\mathrm{inv}}$~\cite{Adam:2015vja} (explaining, for instance, why the pion radii are systematically higher than kaon radii at the same approximate \mt).
 
 It is clear from the results in Fig.~\ref{fig:mTScalingOfRadii_3Res} that the \LamK systems do not conform to the approximate \mt-scaling of the identical particle pair source sizes.
-The hydrodynamic nature of the medium produces the approximate \mt-scaling with respect to the single-particle sources, not the pair sources.
-Furthermore, the hydrodynamic response not only confines higher-\mt particles to smaller homogeneity regions, it also pushes their average emission points further in the ``out" direction~\cite{Retiere:2003kf}, in a coordinate system chosen according to the out-side-long prescription (where the ``long" axis is parallel to the beam, ``out" is parallel to the total transverse momentum of the pair, and ``side" is orthogonal to both).
+There are two important consequences of the hydrodynamic nature of the system to consider when interpreting non-identical femtoscopic results.
+First, the hydrodynamic response of the medium produces the approximate \mt-scaling with respect to the single-particle sources.
+Second, this response confines higher-\mt particles to smaller homogeneity regions and pushes their average emission points further in the ``out" direction~\cite{Retiere:2003kf} in a coordinate system chosen according to the out-side-long prescription (where the ``long" axis is parallel to the beam, ``out" is parallel to the total transverse momentum of the pair, and ``side" is orthogonal to both).
 For identical particle studies, in which the pair source is comprised of two identical single particle sources commonly affected by the space-time shift, the femtoscopic radii naturally follow the \mt-scaling trend.
 However, for the case of non-identical particles, the pair emission source is a superposition of two unique single-particle sources, which are affected differently by the hydrodynamic response of the system.
 Therefore, the \Lam and K sources differ both in size and space--time location, leading to an ``emission asymmetry", with the \Lam source both smaller in size and further out in the fireball than that of the kaons.
