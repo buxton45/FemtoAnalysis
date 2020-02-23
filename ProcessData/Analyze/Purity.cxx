@@ -459,7 +459,7 @@ void Purity::DrawPurity(TPad *aPad, bool aZoomBg, bool aPrintPurity, double aPad
       tLeg->AddEntry(tCombinedPurity, TString::Format("%s candidates", cRootParticleTags[fParticleType]), "l");      
       tLeg->AddEntry(fitBgd, "Fit to background", "l");
       tLeg->AddEntry(lROImin, "Accepted window", "l");
-      tLeg->AddEntry(lBgFitLowMin, "Bkg fit window", "l");
+      tLeg->AddEntry(lBgFitLowMin, "Bgd. fit window", "l");
       tLeg->Draw();
   }
 }
