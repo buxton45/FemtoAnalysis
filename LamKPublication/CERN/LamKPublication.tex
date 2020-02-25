@@ -156,7 +156,7 @@ This effect is interpreted as resulting from the separation in space--time of th
 \section{Introduction}
 \label{sec:Introduction}
 
-Femtoscopy is an experimental method used to study the space--time characteristics of the particle emitting sources in relativistic particle collisions~\cite{Lisa:2005dd}.  
+Femtoscopy is an experimental method used to study the space--time characteristics of the particle emitting sources in relativistic particle collisions~\cite{Lisa:2005dd, Kopylov:1972qw}.  
 With this method, two- (or many-) particle relative-momentum correlation functions are used to connect the final-state momentum distributions to the space--time distributions of particle emission at freeze-out.  
 The correlation functions are sensitive to quantum statistics, as well as strong and Coulomb final-state interactions (FSI).  
 Current femtoscopic studies are able to extract the size, shape, and orientation of the pair emission regions, as well as offer estimates of the total time to reach kinetic decoupling and the duration of particle emission~\cite{Lisa:2005dd, Lisa:2008gf}.
@@ -206,8 +206,9 @@ A minimum requirement of 80 reconstructed TPC clusters was imposed, the purpose 
 Particle identification (PID) for reconstructed tracks was carried out using both the TPC and Time-Of-Flight (TOF) detectors~\cite{Abelev:2014ffa, Akindinov:2013tea}.  
 For TPC PID, a parametrized Bethe-Bloch formula was used to calculate the specific energy loss $\langle \mathrm{d}E/\mathrm{d}x \rangle$ in the detector expected for a particle with a given mass and momentum.  
 For TOF PID, the particle mass was used to calculate the expected time of flight as a function of track length and momentum.  
-For each PID method, a value ($N_{\sigma}$) was assigned to each track denoting the number of standard deviations between the measured track information and calculated values.  
-This procedure was applied for four particle species hypotheses--- electron, pion, kaon, and proton--- and for each hypothesis a different $N_{\sigma}$ value was obtained per detector.
+For each PID method, a value ($N_{\sigma}$) was assigned to each track denoting the number of standard deviations between the measured track and the expected signal at a given momentum for a particular hypothesis particle species.  
+This procedure was applied for each track assuming four different particle species hypotheses--- electron, pion, kaon, and proton--- and for each hypothesis a different $N_{\sigma}$ value was obtained per detector.
+These $N_{\sigma}$ values were used to identify primary \Kpm mesons, $\pi$ and p daughters of \Lam hyperons, and $\pi$ daughters of \Ks mesons, as well as to reject misidentified particles within each aforementioned sample.  
 
 %************************************************************************************************************************
 \subsection{K$^{\pm}$ selection}
@@ -503,10 +504,10 @@ Splitting and merging effects between oppositely charged tracks were found to be
 %************************************************************************************************************************
 \subsection{Correlation function}
 \label{sec:CorrelationFunction}
-The two-particle correlation function for particles $a$ and $b$, $C_{ab}(\vec{\mathrm{p}}_{a},\vec{\mathrm{p}}_{b})$, is defined as the ratio of the probability of simultaneously measuring two particles with momenta $p_{a}$ and $p_{b}$, to the product of the single-particle probabilities.
+The two-particle correlation function for particles $a$ and $b$, $C_{ab}(\mathbf{p}_{a},\mathbf{p}_{b})$, is defined as the ratio of the probability of simultaneously measuring two particles with momenta $\mathbf{p}_{a}$ and $\mathbf{p}_{b}$, to the product of the single-particle probabilities.
 These probabilities are directly related to the covariant two-particle spectrum, $E_{a}E_{b}\frac{d^{6}N_{ab}}{d^{3}p_{a}d^{3}p_{b}}$, and the single-particle spectra, $E_{a(b)}\frac{d^{3}N_{a(b)}}{d^{3}p_{a(b)}}$, and the correlation function may be written
 \begin{equation}
-  C_{ab}(\vec{\mathrm{p}}_{a},\vec{\mathrm{p}}_{b}) = \frac{E_{a}E_{b}\frac{d^{6}N_{ab}}{d^{3}p_{a}d^{3}p_{b}}}{\big( E_{a}\frac{d^{3}N_{a}}{d^{3}p_{a}} \big) \big( E_{b}\frac{d^{3}N_{b}}{d^{3}p_{b}} \big)},
+  C_{ab}(\mathbf{p}_{a},\mathbf{p}_{b}) = \frac{E_{a}E_{b}\frac{d^{6}N_{ab}}{d^{3}p_{a}d^{3}p_{b}}}{\big( E_{a}\frac{d^{3}N_{a}}{d^{3}p_{a}} \big) \big( E_{b}\frac{d^{3}N_{b}}{d^{3}p_{b}} \big)},
 \label{eqn:CfRatioSpectra}
 \end{equation}
 where $N_{ab}$ is the yield of particle pairs, $E_{a(b)}$ is the energy, $p_{a(b)}$ is the three-momentum, and $N_{a(b)}$ is the yield of particles $a(b)$.
@@ -515,7 +516,7 @@ Theoretically, the correlation function may be expressed as in the Koonin-Pratt 
  C(\mathbf{k^{*}}) = \int S_{\mathbf{P}}(\mathbf{r^{*}})|\Psi_{\mathbf{k^{*}}}(\mathbf{r^{*}})|^{2}d^{3}\mathbf{r^{*}},
 \label{eqn:KooninPrattEqn}
 \end{equation}
-where $\mathbf{k}^{*}$ is the relative momentum of the pair (defined as $\mathbf{k}^{*} = \frac{1}{2}|\mathbf{p}_{1}^{*}-\mathbf{p}_{2}^{*}|$, where $\mathbf{p}_{1}^{*}$ and $\mathbf{p}_{2}^{*}$ are the momenta of the two particles) in the pair rest frame (PRF), $\mathbf{r}^{*}$ is the relative separation in the same frame, $\mathbf{P}$ is the total pair momentum, $S_{\mathbf{P}}(\mathbf{r^{*}})$ is the pair source distribution, and $\Psi_{\mathbf{k^{*}}}(\mathbf{r^{*}})$ is the two-particle wave-function.
+where $\mathbf{k}^{*}$ is the relative momentum of the pair (defined as $\mathbf{k}^{*} = \frac{1}{2}|\mathbf{p}_{a}^{*}-\mathbf{p}_{b}^{*}|$, where $\mathbf{p}_{a}^{*}$ and $\mathbf{p}_{b}^{*}$ are the momenta of the two particles) in the pair rest frame (PRF, denoted with an asterisk $^{*}$), $\mathbf{r}^{*}$ is the relative separation in the same frame, $\mathbf{P}$ is the total pair momentum, $S_{\mathbf{P}}(\mathbf{r^{*}})$ is the pair source distribution, and $\Psi_{\mathbf{k^{*}}}(\mathbf{r^{*}})$ is the two-particle wave-function.
 
 In practice, the correlation function is formed experimentally as
 \begin{equation}
@@ -527,8 +528,7 @@ The reference distribution is used to divide out the phase-space effects, leavin
 The normalization parameter is chosen such that the mean value of the correlation function equals unity for \kstar $\in$ [0.32, 0.4] GeV/$c$.
 The signal distribution is the same-event distribution of particle pairs.
 The reference distribution, $B(k^{*})$, is obtained using mixed-event pairs~\cite{Kopylov:1974th}, i.e., particles from a given event are paired with those from another event.
-Other techniques exist; most notably, one may use same-event pairs after rotating one particle in the pair by 180$^\circ$ in the transverse plane (see Sec.~\ref{NonFlatBackground} and App.~\ref{App:StavMethod} for more details).
-For this analysis, each event is mixed with five others for the reference distribution construction.
+For this analysis, each event is combined with five others for the reference distribution construction.
 To be included in the mixing pool, an event must contain at least one particle of each type from the pair of interest (e.g., for the \LamKs analysis, an accepted event must contain at least one \Lam and at least one \Ks).
 In order to mix similar events, only those of like centrality (within 5\%) and of like primary vertex position (within 2 cm) are combined.
 
@@ -569,7 +569,7 @@ In the following, the $S$ superscript is dropped from all scattering parameters.
 \label{ResidualCorrelations}
 
 The purpose of this analysis is to study the interaction and scale of the emitting source of the primary \LamK pairs.
-However, in practice some of the selected particles originate as products from other decaying particles, and some of the final pairs contain a misidentified member.
+However, in practice some of the selected particles originate as products from other decaying particles after kinetic freeze-out (secondary particles), and some of the final pairs contain a misidentified member.
 In both cases, these contribute to the observed correlation function, and obscure its relation to the primary \LamK system.
 The net contribution from fake pairs, which contain at least one misidentified member, is taken to average to unity, in which case they simply attenuate the femtoscopic signal.
 Pairs in which at least one member originates from a particle decay (e.g., \LamKchP from $\Sigma^{0}$\KchP) carry information about the parent system.
@@ -647,9 +647,8 @@ For this mixture of pair systems, all with different two-particle interactions a
 Residual contributions from $\Sigma^{0}$, $\Xi^{0}$, $\Xi^{-}$ are accounted for in the fit.
 The $\lambda_{ij}$ values used can be found in Table~\ref{tab:LambdaValues_3Res}, which also includes values for ``Other'' and ``Fakes''.  
 The ``Other'' category contains pairs which are not considered primary, and which do not originate from the residual contributors accounted for in the fit.  
-The ``Fakes'' category represents pairs that are mistakenly identified as \LamK.  
-To estimate the $\lambda_{\mathrm{Fakes}}$ value, the number of fake pairs is assumed to be equal to the total number of simulated pairs multiplied by $(1-PP_{\Lambda\mathrm{K}})/PP_{\Lambda\mathrm{K}}$, where $PP_{\Lambda\mathrm{K}}$ is the \LamK pair purity, estimated as the product of the two single-particle purities ($PP_{\Lambda\mathrm{K}} = P_{\Lambda}P_{\mathrm{K}}$).
-More simply, this amounts to $\lambda_{\mathrm{Fakes}} = 1-PP_{\Lambda\mathrm{K}}$.
+The ``Fakes'' category represents pairs that are mistakenly identified as \LamK.
+The corresponding $\lambda_{\mathrm{Fakes}}$ is calculated as $\lambda_{\mathrm{Fakes}} = 1-PP_{\Lambda\mathrm{K}}$, where $PP_{\Lambda\mathrm{K}}$ is the \LamK pair purity, estimated as the product of the two single-particle purities ($PP_{\Lambda\mathrm{K}} = P_{\Lambda}P_{\mathrm{K}}$).
 The correlations in both of these categories (``Other'' and ``Fakes'') are assumed to average to unity, and pairs in these categories therefore only contribute by attenuating the signal. 
 
 \begin{table}[htbp] 
@@ -749,10 +748,10 @@ In all cases, the non-femtoscopic background correction was applied as a multipl
 
 
 An alternative approach to treating the non-femtoscopic background is to instead attempt to eliminate it.
-The background may be effectively reduced by forming the reference distribution ($B(k^{*})$) with the ``Stavinskiy method".
-With the Stavinskiy method, mixed-event pairs are not used for the reference distribution; instead, same-event pseudo-pairs, formed by rotating one particle in a real pair by 180$^\circ$ in the transverse plane, are used.  
+The background can be effectively reduced by forming the reference distribution ($B(k^{*})$) with the ``Stavinskiy method".
+With this method, mixed-event pairs are not used for the reference distribution; instead, same-event pseudo-pairs, formed by rotating one particle in a real pair by 180$^\circ$ in the transverse plane, are used.  
 This rotation rids the pairs of any femtoscopic correlation, while maintaining correlations due to elliptic flow (and other suitably symmetric contributors).
-The flattening effect of the method on the \LamKchP correlation functions can be seen in the appendix, in Fig.~\ref{fig:StavCfs_Correct_LamKchP}.
+The flattening effect of the method on the \LamKchP correlation functions can be seen in the Appendix~\ref{App:StavMethod}.
 
 %************************************************************************************************************************
 \subsection{Summarized correlation function construction}

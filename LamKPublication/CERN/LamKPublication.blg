@@ -4,45 +4,45 @@ The top-level auxiliary file: LamKPublication.aux
 The style file: utphys.bst
 Database file #1: LamK_bibfile.bib
 Warning--empty publisher in Lisa:2008gf
-You've used 40 entries,
+You've used 41 entries,
             2395 wiz_defined-function locations,
-            961 strings with 13384 characters,
-and the built_in function-call counts, 9012 in all, are:
-= -- 853
-> -- 375
+            969 strings with 13571 characters,
+and the built_in function-call counts, 9209 in all, are:
+= -- 873
+> -- 383
 < -- 0
-+ -- 140
-- -- 100
-* -- 1167
-:= -- 1208
-add.period$ -- 87
-call.type$ -- 40
-change.case$ -- 47
++ -- 143
+- -- 102
+* -- 1184
+:= -- 1235
+add.period$ -- 89
+call.type$ -- 41
+change.case$ -- 48
 chr.to.int$ -- 0
-cite$ -- 41
-duplicate$ -- 454
-empty$ -- 978
-format.name$ -- 100
-if$ -- 2217
+cite$ -- 42
+duplicate$ -- 465
+empty$ -- 1000
+format.name$ -- 102
+if$ -- 2268
 int.to.chr$ -- 0
-int.to.str$ -- 40
-missing$ -- 152
-newline$ -- 198
-num.names$ -- 42
-pop$ -- 177
+int.to.str$ -- 41
+missing$ -- 156
+newline$ -- 203
+num.names$ -- 43
+pop$ -- 182
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 0
-skip$ -- 65
+skip$ -- 67
 stack$ -- 0
 substring$ -- 0
-swap$ -- 77
+swap$ -- 78
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
 type$ -- 0
 warning$ -- 1
-while$ -- 41
-width$ -- 42
-write$ -- 369
+while$ -- 42
+width$ -- 43
+write$ -- 377
 (There was 1 warning)
