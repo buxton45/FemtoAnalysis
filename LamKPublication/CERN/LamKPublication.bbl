@@ -59,14 +59,14 @@ A.~Kisiel, ``{Non-identical particle femtoscopy at $\sqrt{s_{\mathrm{NN}}}$ =
 %%CITATION = ARXIV:0909.5349;%%.
 
 \bibitem{Lednicky:1995vk}
-R.~Lednicky, V.~L. Lyuboshits, B.~Erazmus, and D.~Nouais, ``{How to measure
+R.~Lednick\'y, V.~L. Lyuboshitz, B.~Erazmus, and D.~Nouais, ``{How to measure
   which sort of particles was emitted earlier and which later}'',
 \href{http://dx.doi.org/10.1016/0370-2693(96)00124-4}{{\em Phys. Lett. B}
   {\bfseries 373} (1996) }.
 %%CITATION = PHLTA,B373,30;%%.
 
 \bibitem{Voloshin:1997jh}
-S.~Voloshin, R.~Lednicky, S.~Panitkin, and N.~Xu, ``{Relative space-time
+S.~Voloshin, R.~Lednick\'y, S.~Panitkin, and N.~Xu, ``{Relative space-time
   asymmetries in pion and nucleon production in noncentral nucleus-nucleus
   collisions at high-energies}'',
   \href{http://dx.doi.org/10.1103/PhysRevLett.79.4766}{{\em Phys. Rev. Lett.}
@@ -76,7 +76,7 @@ S.~Voloshin, R.~Lednicky, S.~Panitkin, and N.~Xu, ``{Relative space-time
 %%CITATION = NUCL-TH/9708044;%%.
 
 \bibitem{Lednicky:2001qv}
-R.~Lednicky, ``{Femtoscopy with unlike particles}'', in {\em {International
+R.~Lednick\'y, ``{Femtoscopy with unlike particles}'', in {\em {International
   Workshop on the Physics of the Quark Gluon Plasma Palaiseau, France,
   September 4-7, 2001}}.
 \newblock 2001.
@@ -163,8 +163,8 @@ J.~{Alme} {\em et~al.}, ``{The ALICE TPC, a large 3-dimensional tracking device
 %%CITATION = JPAGA,G41,087002;%%.
 
 \bibitem{Abelev:2014ffa}
-{\bfseries ALICE} Collaboration, B.~B. Abelev {\em et~al.}, ``{Performance of
-  the ALICE Experiment at the CERN LHC}'',
+{\bfseries ALICE} Collaboration, B.~Abelev {\em et~al.}, ``{Performance of the
+  ALICE Experiment at the CERN LHC}'',
   \href{http://dx.doi.org/10.1142/S0217751X14300440}{{\em Int. J. Mod. Phys. A}
   {\bfseries 29} (2014) },
 \href{http://arxiv.org/abs/1402.4476}{{\ttfamily arXiv:1402.4476 [nucl-ex]}}.
@@ -276,7 +276,7 @@ A.~Kisiel, M.~Gałażyn, and P.~Bożek, ``{Pion, kaon, and proton femtoscopy in
 %%CITATION = ARXIV:1409.4571;%%.
 
 \bibitem{Chajecki:2008vg}
-Z.~Chajecki and M.~Lisa, ``{Global Conservation Laws and Femtoscopy of Small
+Z.~Chajecki and M.~A. Lisa, ``{Global Conservation Laws and Femtoscopy of Small
   Systems}'', \href{http://dx.doi.org/10.1103/PhysRevC.78.064903}{{\em Phys.
   Rev. C} {\bfseries 78} (2008) },
 \href{http://arxiv.org/abs/0803.0022}{{\ttfamily arXiv:0803.0022 [nucl-th]}}.
