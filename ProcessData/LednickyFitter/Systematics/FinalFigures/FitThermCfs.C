@@ -1159,17 +1159,17 @@ TCanvas* DrawCfwFitAndSourceswDeltaTwC11wData(TString tCanName, ThermCf* aThermC
   double tXLett=0.85;
   double tYLett=0.80;
   tPadCfwFit->cd();
-  tPanelLetters->DrawLatexNDC(tXLett, tYLett, "a.");
+  tPanelLetters->DrawLatexNDC(tXLett, tYLett, "(a)");
   tPadC11->cd();
-  tPanelLetters->DrawLatexNDC(tXLett, tYLett, "b.");
+  tPanelLetters->DrawLatexNDC(tXLett, tYLett, "(b)");
   tPadRout->cd();
-  tPanelLetters->DrawLatexNDC(tXLett, tYLett, "c.");
+  tPanelLetters->DrawLatexNDC(tXLett, tYLett, "(c)");
   tPadRside->cd();
-  tPanelLetters->DrawLatexNDC(tXLett, tYLett, "d.");
+  tPanelLetters->DrawLatexNDC(tXLett, tYLett, "(d)");
   tPadRlong->cd();
-  tPanelLetters->DrawLatexNDC(tXLett, tYLett, "e.");
+  tPanelLetters->DrawLatexNDC(tXLett, tYLett, "(e)");
   tPadDeltaT->cd();
-  tPanelLetters->DrawLatexNDC(tXLett, tYLett, "f.");
+  tPanelLetters->DrawLatexNDC(tXLett, tYLett, "(f)");
 
   return tCanCfwSource;
 }

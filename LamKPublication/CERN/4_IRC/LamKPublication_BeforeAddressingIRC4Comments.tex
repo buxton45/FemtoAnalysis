@@ -162,7 +162,7 @@ Femtoscopy is an experimental method used to study the space--time characteristi
 With this method, two- (or many-) particle relative-momentum correlation functions are used to connect the final-state momentum distributions to the space--time distributions of particle emission at freeze-out.  
 The correlation functions are sensitive to quantum statistics, as well as strong and Coulomb final-state interactions (FSI).  
 Current femtoscopic studies are able to extract the size, shape, and orientation of the pair emission regions, as well as offer estimates of the total time to reach kinetic decoupling and the duration of particle emission~\cite{Lisa:2005dd, Lisa:2008gf}.
-The momentum and species dependence of femtoscopic measurements affirms the collective nature of the hot and dense matter created in heavy-ion collisions~\cite{Makhlin:1987gm, Akkelin:1995gh, Retiere:2003kf, Kisiel:2009eh}.
+The momentum and species dependence of femtoscopic measurements affirm the collective nature of the hot and dense matter created in heavy-ion collisions~\cite{Makhlin:1987gm, Akkelin:1995gh, Retiere:2003kf, Kisiel:2009eh}.
 Non-identical particle analyses additionally allow for the measurement of the space--time separation of the single particle source regions~\cite{Lednicky:1995vk, Voloshin:1997jh, Lednicky:2001qv, Retiere:2003kf}.
 
 In addition to characterizing the source region, femtoscopy allows one to extract nuclear scattering parameters, many of which are difficult or impossible to measure otherwise.  
@@ -337,7 +337,7 @@ If a daughter is found to be shared among \Vz candidates in a given collection, 
 This procedure ensures unique single-particle collections before particle pairs are constructed; the elimination of shared daughters between the particles within each pair is described below in Sec.~\ref{PairConstruction}.
 The resulting invariant mass distributions for \Lam and \Ks collections in the 0--10\% centrality interval are shown in Fig.~\ref{fig:Purity}.
 For the purity estimations, the background signal is extracted by fitting the \minv distribution with a $4^{\mathrm{th}}$-order polynomial outside of the mass peak and assuming the distribution to continue smoothly beneath the mass peak.
-The \Lam and \ALam purities are estimated to be $P_{\Lambda(\overline{\Lambda})} \approx 96\%$, and that of the \Ks is $P_{\mathrm{K^{0}_{S}}} \approx 98\%$.
+The \Lam and \ALam purities are estimated to be $P_{\Lambda(\overline{\Lambda})} \approx 95\%$, and that of the \Ks is $P_{\mathrm{K^{0}_{S}}} \approx 98\%$.
 
 \begin{table}[htbp]
  \centering 
@@ -345,7 +345,7 @@ The \Lam and \ALam purities are estimated to be $P_{\Lambda(\overline{\Lambda})}
   \renewcommand{\arraystretch}{1.05}
   \begin{tabular}{lc|c|l}
    \hlineB{3.0}  
-   \multicolumn{4}{c}{\Lam [$\overline{\Lambda}$] selection} \\
+   \multicolumn{4}{c}{\Lam selection} \\
    \hlineB{3.0}
    \multicolumn{3}{l|}{Transverse momentum $p_{\mathrm{T}}$} & $> 0.4$ GeV/\textit{c} \\
    \hline
@@ -471,7 +471,7 @@ The \Lam and \ALam purities are estimated to be $P_{\Lambda(\overline{\Lambda})}
     \includegraphics[width=0.49\linewidth]{/home/jesse/Analysis/FemtoAnalysis/LamKPublication/Figures/PDF/K0Purity_wPrintPurity_LamK0.pdf}}
   %%----overall caption----
   \caption{
-  (Color online) Invariant mass distributions in the 0--10\% centrality interval of (a) p$\uppi^{-}$ pairs showing the \Lam peak, and of (b) $\uppi^{+}\uppi^{-}$ pairs showing the \Ks peak, for \Vz candidates.  
+  (Color online) Invariant mass distributions in the 0--10\% centrality interval of (a) p$\uppi^{+}$ pairs showing the \Lam peak, and of (b) $\uppi^{+}\uppi^{-}$ pairs showing the \Ks peak, for \Vz candidates.  
   The bottom panels are zoomed to show the background with fit.  
   The vertical dashed (green) lines represent the selection restrictions used in the analyses, the vertical dotted (red) lines delineate the region over which the background was fit, and the dash-dotted (blue) line shows the background fit.
   }  
@@ -506,16 +506,16 @@ Splitting and merging effects between oppositely charged tracks were found to be
 %************************************************************************************************************************
 \subsection{Correlation function}
 \label{sec:CorrelationFunction}
-The correlation function for particles $a$ and $b$, $C_{ab}(\mathbf{p}_{a},\mathbf{p}_{b})$, is defined as the ratio of the probability of simultaneously measuring two particles with momenta $\mathbf{p}_{a}$ and $\mathbf{p}_{b}$, to the product of the single-particle probabilities.
-These probabilities are directly related to the covariant two-particle spectrum, $E_{a}E_{b}\frac{\mathrm{d}^{6}N_{ab}}{\mathrm{d}^{3}p_{a}\mathrm{d}^{3}p_{b}}$, and the single-particle spectra, $E_{a(b)}\frac{\mathrm{d}^{3}N_{a(b)}}{\mathrm{d}^{3}p_{a(b)}}$, and the correlation function may be written
+The two-particle correlation function for particles $a$ and $b$, $C_{ab}(\mathbf{p}_{a},\mathbf{p}_{b})$, is defined as the ratio of the probability of simultaneously measuring two particles with momenta $\mathbf{p}_{a}$ and $\mathbf{p}_{b}$, to the product of the single-particle probabilities.
+These probabilities are directly related to the covariant two-particle spectrum, $E_{a}E_{b}\frac{d^{6}N_{ab}}{d^{3}p_{a}d^{3}p_{b}}$, and the single-particle spectra, $E_{a(b)}\frac{d^{3}N_{a(b)}}{d^{3}p_{a(b)}}$, and the correlation function may be written
 \begin{equation}
-  C_{ab}(\mathbf{p}_{a},\mathbf{p}_{b}) = \frac{E_{a}E_{b}\frac{\mathrm{d}^{6}N_{ab}}{\mathrm{d}^{3}p_{a}\mathrm{d}^{3}p_{b}}}{\big( E_{a}\frac{\mathrm{d}^{3}N_{a}}{\mathrm{d}^{3}p_{a}} \big) \big( E_{b}\frac{\mathrm{d}^{3}N_{b}}{\mathrm{d}^{3}p_{b}} \big)},
+  C_{ab}(\mathbf{p}_{a},\mathbf{p}_{b}) = \frac{E_{a}E_{b}\frac{d^{6}N_{ab}}{d^{3}p_{a}d^{3}p_{b}}}{\big( E_{a}\frac{d^{3}N_{a}}{d^{3}p_{a}} \big) \big( E_{b}\frac{d^{3}N_{b}}{d^{3}p_{b}} \big)},
 \label{eqn:CfRatioSpectra}
 \end{equation}
 where $N_{ab}$ is the yield of particle pairs, $E_{a(b)}$ is the energy, $p_{a(b)}$ is the three-momentum, and $N_{a(b)}$ is the yield of particles $a(b)$.
 Theoretically, the correlation function may be expressed as in the Koonin-Pratt equation~\cite{Koonin:1977fh, Pratt:1990zq},
 \begin{equation}
- C(\mathbf{k^{*}}) = \int S_{\mathbf{P}}(\mathbf{r^{*}})|\Psi_{\mathbf{k^{*}}}(\mathbf{r^{*}})|^{2}\mathrm{d}^{3}r^{*},
+ C(\mathbf{k^{*}}) = \int S_{\mathbf{P}}(\mathbf{r^{*}})|\Psi_{\mathbf{k^{*}}}(\mathbf{r^{*}})|^{2}d^{3}\mathbf{r^{*}},
 \label{eqn:KooninPrattEqn}
 \end{equation}
 where $\mathbf{k}^{*}$ is the relative momentum of the pair (defined as $\mathbf{k}^{*} = \frac{1}{2}|\mathbf{p}_{a}^{*}-\mathbf{p}_{b}^{*}|$, where $\mathbf{p}_{a}^{*}$ and $\mathbf{p}_{b}^{*}$ are the momenta of the two particles) in the pair rest frame (PRF, denoted with an asterisk $^{*}$), $\mathbf{r}^{*}$ is the relative separation in the same frame, $\mathbf{P}$ is the total pair momentum, $S_{\mathbf{P}}(\mathbf{r^{*}})$ is the pair source distribution, and $\Psi_{\mathbf{k^{*}}}(\mathbf{r^{*}})$ is the two-particle wave-function.
@@ -750,7 +750,7 @@ In all cases, the non-femtoscopic background correction was applied as a multipl
 
 
 An alternative approach to treating the non-femtoscopic background is to instead attempt to eliminate it.
-The background can be effectively reduced by forming the reference distribution ($B(k^{*})$) with the ``Stavinskiy method" (see Appendix~\ref{App:StavMethod} for details).
+The background can be effectively reduced by forming the reference distribution ($B(k^{*})$) with the ``Stavinskiy method".
 With this method, mixed-event pairs are not used for the reference distribution; instead, same-event pseudo-pairs, formed by rotating one particle in a real pair by 180$^\circ$ in the transverse plane, are used.  
 This rotation rids the pairs of any femtoscopic correlation, while maintaining correlations due to elliptic flow (and other suitably symmetric contributors).
 The flattening effect of the method on the \LamKchP correlation functions can be seen in the Appendix~\ref{App:StavMethod}.
@@ -1021,7 +1021,7 @@ where the ``h-function", $h(\eta$), is expressed through the digamma function, $
 \end{equation} 
 In this case, the $\lambda$ parameter may be included as
 \begin{equation}
- C(\mathbf{k^{*}}) = (1 - \lambda) + \lambda\int S(\mathbf{r^{*}})|\Psi^{S}_{\mathbf{k^{*}}}(\mathbf{r^{*}})|^{2}\mathrm{d}^{3}r^{*}.
+ C(\mathbf{k^{*}}) = (1 - \lambda) + \lambda\int S(\mathbf{r^{*}})|\Psi^{S}_{\mathbf{k^{*}}}(\mathbf{r^{*}})|^{2}d^{3}\mathbf{r^{*}}.
 \label{eqn:GenCfEqnwLambda}
 \end{equation}
 To build a fit function for a system including both strong and Coulomb interactions two related options were considered. 

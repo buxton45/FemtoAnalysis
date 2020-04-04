@@ -60,18 +60,18 @@ void FitValuesLatexTableHelperWriterwSysErrs::WriteLatexTableHelperEntry(ostream
   aOut << TString::Format("\\newarray\\%s%s", aTwoLetterID.Data(), tAnalysisTag.Data()) << endl;
   aOut << TString::Format("\\readarray{%s%s}{", aTwoLetterID.Data(), tAnalysisTag.Data()) << endl;
 
-  aOut << TString::Format("                       %0.2f & %0.2f & %0.2f & ", tPar_lam0010->GetFitValue(), tPar_lam0010->GetFitValueError(), tPar_lam0010->GetFitValueSysError()) << endl;
-  aOut << TString::Format("                       %0.2f & %0.2f & %0.2f & ", tPar_R0010->GetFitValue(), tPar_R0010->GetFitValueError(), tPar_R0010->GetFitValueSysError()) << endl;
+  aOut << TString::Format("                       %s & %0.2f & %0.2f & ", tPar_lam0010->GetFitValueStringForLatex().c_str(), tPar_lam0010->GetFitValueError(), tPar_lam0010->GetFitValueSysError()) << endl;
+  aOut << TString::Format("                       %s & %0.2f & %0.2f & ", tPar_R0010->GetFitValueStringForLatex().c_str(), tPar_R0010->GetFitValueError(), tPar_R0010->GetFitValueSysError()) << endl;
 
-  aOut << TString::Format("                       %0.2f & %0.2f & %0.2f & ", tPar_lam1030->GetFitValue(), tPar_lam1030->GetFitValueError(), tPar_lam1030->GetFitValueSysError()) << endl;
-  aOut << TString::Format("                       %0.2f & %0.2f & %0.2f & ", tPar_R1030->GetFitValue(), tPar_R1030->GetFitValueError(), tPar_R1030->GetFitValueSysError()) << endl;
+  aOut << TString::Format("                       %s & %0.2f & %0.2f & ", tPar_lam1030->GetFitValueStringForLatex().c_str(), tPar_lam1030->GetFitValueError(), tPar_lam1030->GetFitValueSysError()) << endl;
+  aOut << TString::Format("                       %s & %0.2f & %0.2f & ", tPar_R1030->GetFitValueStringForLatex().c_str(), tPar_R1030->GetFitValueError(), tPar_R1030->GetFitValueSysError()) << endl;
 
-  aOut << TString::Format("                       %0.2f & %0.2f & %0.2f & ", tPar_lam3050->GetFitValue(), tPar_lam3050->GetFitValueError(), tPar_lam3050->GetFitValueSysError()) << endl;
-  aOut << TString::Format("                       %0.2f & %0.2f & %0.2f & ", tPar_R3050->GetFitValue(), tPar_R3050->GetFitValueError(), tPar_R3050->GetFitValueSysError()) << endl;
+  aOut << TString::Format("                       %s & %0.2f & %0.2f & ", tPar_lam3050->GetFitValueStringForLatex().c_str(), tPar_lam3050->GetFitValueError(), tPar_lam3050->GetFitValueSysError()) << endl;
+  aOut << TString::Format("                       %s & %0.2f & %0.2f & ", tPar_R3050->GetFitValueStringForLatex().c_str(), tPar_R3050->GetFitValueError(), tPar_R3050->GetFitValueSysError()) << endl;
 
-  aOut << TString::Format("                       %0.2f & %0.2f & %0.2f & ", tPar_Ref0->GetFitValue(), tPar_Ref0->GetFitValueError(), tPar_Ref0->GetFitValueSysError()) << endl;
-  aOut << TString::Format("                       %0.2f & %0.2f & %0.2f & ", tPar_Imf0->GetFitValue(), tPar_Imf0->GetFitValueError(), tPar_Imf0->GetFitValueSysError()) << endl;
-  aOut << TString::Format("                       %0.2f & %0.2f & %0.2f}", tPar_d0->GetFitValue(), tPar_d0->GetFitValueError(), tPar_d0->GetFitValueSysError()) << endl << endl;
+  aOut << TString::Format("                       %s & %0.2f & %0.2f & ", tPar_Ref0->GetFitValueStringForLatex().c_str(), tPar_Ref0->GetFitValueError(), tPar_Ref0->GetFitValueSysError()) << endl;
+  aOut << TString::Format("                       %s & %0.2f & %0.2f & ", tPar_Imf0->GetFitValueStringForLatex().c_str(), tPar_Imf0->GetFitValueError(), tPar_Imf0->GetFitValueSysError()) << endl;
+  aOut << TString::Format("                       %s & %0.2f & %0.2f}", tPar_d0->GetFitValueStringForLatex().c_str(), tPar_d0->GetFitValueError(), tPar_d0->GetFitValueSysError()) << endl << endl;
 
 
 }
@@ -206,18 +206,18 @@ void FitValuesLatexTableHelperWriterwSysErrs::WriteLatexTableHelperEntryForSingl
   aOut << TString::Format("\\newarray\\Arr%s", tAnalysisTag.Data()) << endl;
   aOut << TString::Format("\\readarray{Arr%s}{", tAnalysisTag.Data()) << endl;
 
-  aOut << TString::Format("                       %0.2f & %0.2f & %0.2f & ", tPar_lam0010->GetFitValue(), tPar_lam0010->GetFitValueError(), tPar_lam0010->GetFitValueSysError()) << endl;
-  aOut << TString::Format("                       %0.2f & %0.2f & %0.2f & ", tPar_R0010->GetFitValue(), tPar_R0010->GetFitValueError(), tPar_R0010->GetFitValueSysError()) << endl;
+  aOut << TString::Format("                       %s & %0.2f & %0.2f & ", tPar_lam0010->GetFitValueStringForLatex().c_str(), tPar_lam0010->GetFitValueError(), tPar_lam0010->GetFitValueSysError()) << endl;
+  aOut << TString::Format("                       %s & %0.2f & %0.2f & ", tPar_R0010->GetFitValueStringForLatex().c_str(), tPar_R0010->GetFitValueError(), tPar_R0010->GetFitValueSysError()) << endl;
 
-  aOut << TString::Format("                       %0.2f & %0.2f & %0.2f & ", tPar_lam1030->GetFitValue(), tPar_lam1030->GetFitValueError(), tPar_lam1030->GetFitValueSysError()) << endl;
-  aOut << TString::Format("                       %0.2f & %0.2f & %0.2f & ", tPar_R1030->GetFitValue(), tPar_R1030->GetFitValueError(), tPar_R1030->GetFitValueSysError()) << endl;
+  aOut << TString::Format("                       %s & %0.2f & %0.2f & ", tPar_lam1030->GetFitValueStringForLatex().c_str(), tPar_lam1030->GetFitValueError(), tPar_lam1030->GetFitValueSysError()) << endl;
+  aOut << TString::Format("                       %s & %0.2f & %0.2f & ", tPar_R1030->GetFitValueStringForLatex().c_str(), tPar_R1030->GetFitValueError(), tPar_R1030->GetFitValueSysError()) << endl;
 
-  aOut << TString::Format("                       %0.2f & %0.2f & %0.2f & ", tPar_lam3050->GetFitValue(), tPar_lam3050->GetFitValueError(), tPar_lam3050->GetFitValueSysError()) << endl;
-  aOut << TString::Format("                       %0.2f & %0.2f & %0.2f & ", tPar_R3050->GetFitValue(), tPar_R3050->GetFitValueError(), tPar_R3050->GetFitValueSysError()) << endl;
+  aOut << TString::Format("                       %s & %0.2f & %0.2f & ", tPar_lam3050->GetFitValueStringForLatex().c_str(), tPar_lam3050->GetFitValueError(), tPar_lam3050->GetFitValueSysError()) << endl;
+  aOut << TString::Format("                       %s & %0.2f & %0.2f & ", tPar_R3050->GetFitValueStringForLatex().c_str(), tPar_R3050->GetFitValueError(), tPar_R3050->GetFitValueSysError()) << endl;
 
-  aOut << TString::Format("                       %0.2f & %0.2f & %0.2f & ", tPar_Ref0->GetFitValue(), tPar_Ref0->GetFitValueError(), tPar_Ref0->GetFitValueSysError()) << endl;
-  aOut << TString::Format("                       %0.2f & %0.2f & %0.2f & ", tPar_Imf0->GetFitValue(), tPar_Imf0->GetFitValueError(), tPar_Imf0->GetFitValueSysError()) << endl;
-  aOut << TString::Format("                       %0.2f & %0.2f & %0.2f}", tPar_d0->GetFitValue(), tPar_d0->GetFitValueError(), tPar_d0->GetFitValueSysError()) << endl << endl;
+  aOut << TString::Format("                       %s & %0.2f & %0.2f & ", tPar_Ref0->GetFitValueStringForLatex().c_str(), tPar_Ref0->GetFitValueError(), tPar_Ref0->GetFitValueSysError()) << endl;
+  aOut << TString::Format("                       %s & %0.2f & %0.2f & ", tPar_Imf0->GetFitValueStringForLatex().c_str(), tPar_Imf0->GetFitValueError(), tPar_Imf0->GetFitValueSysError()) << endl;
+  aOut << TString::Format("                       %s & %0.2f & %0.2f}", tPar_d0->GetFitValueStringForLatex().c_str(), tPar_d0->GetFitValueError(), tPar_d0->GetFitValueSysError()) << endl << endl;
 
 
 }

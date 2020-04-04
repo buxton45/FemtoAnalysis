@@ -20,14 +20,14 @@ int main(int argc, char **argv)
   //the program ends and closes everything
 //-----------------------------------------------------------------------------
 
-  TString tResultsDate = "20180505";
+  TString tResultsDate = "20190319";
   bool bUseDefaults = true;
   //-----
 
   bool ApplyMomResCorrection = true;
   bool ApplyNonFlatBackgroundCorrection = true;
   NonFlatBgdFitType tNonFlatBgdFitType_LamKch = kPolynomial;
-  NonFlatBgdFitType tNonFlatBgdFitType_LamK0  = kLinear;
+  NonFlatBgdFitType tNonFlatBgdFitType_LamK0  = kPolynomial;
   vector<NonFlatBgdFitType> tNonFlatBgdFitTypes{tNonFlatBgdFitType_LamK0, tNonFlatBgdFitType_LamK0, 
                                                 tNonFlatBgdFitType_LamKch, tNonFlatBgdFitType_LamKch, tNonFlatBgdFitType_LamKch, tNonFlatBgdFitType_LamKch};
 
