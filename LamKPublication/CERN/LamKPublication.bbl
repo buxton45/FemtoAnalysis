@@ -75,17 +75,6 @@ S.~Voloshin, R.~Lednick\'y, S.~Panitkin, and N.~Xu, ``{Relative space-time
   [nucl-th]}}.
 %%CITATION = NUCL-TH/9708044;%%.
 
-\bibitem{Lednicky:2001qv}
-R.~Lednick\'y, ``{Femtoscopy with unlike particles}'', in {\em {International
-  Workshop on the Physics of the Quark Gluon Plasma Palaiseau, France,
-  September 4-7, 2001}}.
-\newblock 2001.
-\newblock
-\href{http://arxiv.org/abs/nucl-th/0112011}{{\ttfamily arXiv:nucl-th/0112011
-  [nucl-th]}}.
-\newblock
-%%CITATION = NUCL-TH/0112011;%%.
-
 \bibitem{Liu:2006xja}
 Y.-R. Liu and S.-L. Zhu, ``{Meson-baryon scattering lengths in HB$\chi$PT}'',
   \href{http://dx.doi.org/10.1103/PhysRevD.75.034003}{{\em Phys. Rev. D}
@@ -259,6 +248,19 @@ A.~Kisiel, ``Non-identical particle correlation analysis in the presence of
   \href{http://dx.doi.org/10.5506/APhysPolB.48.717}{{\em Acta Physica Polonica
   B} {\bfseries 48} (04, 2017) }.
 
+\bibitem{Stavinskiy04}
+A.~Stavinskiy {\em et~al.}, ``{Some new aspects of femtoscopy at high
+  energy}'', {\em Nukleonika} {\bfseries 49 (Supplement 2)} (2004) .
+  \url{http://www.nukleonika.pl/www/back/full/vol49_2004/v49s2p023f.pdf}.
+
+\bibitem{PhysRevD.82.052001}
+{\bfseries ALICE Collaboration} Collaboration, K.~Aamodt {\em et~al.},
+  ``Two-pion bose-einstein correlations in $pp$ collisions at
+  $\sqrt{s}=900\text{ }\text{ }\mathrm{GeV}$'',
+  \href{http://dx.doi.org/10.1103/PhysRevD.82.052001}{{\em Phys. Rev. D}
+  {\bfseries 82} (Sep, 2010) }.
+  \url{https://link.aps.org/doi/10.1103/PhysRevD.82.052001}.
+
 \bibitem{Adam:2015vja}
 {\bfseries ALICE} Collaboration, J.~Adam {\em et~al.}, ``{One-dimensional pion,
   kaon, and proton femtoscopy in Pb-Pb collisions at $\sqrt{s_{\rm {NN}}}$
@@ -297,11 +299,6 @@ A.~Kisiel and D.~A. Brown, ``{Efficient and robust calculation of femtoscopic
   {\bfseries 80} (2009) },
 \href{http://arxiv.org/abs/0901.3527}{{\ttfamily arXiv:0901.3527 [nucl-th]}}.
 %%CITATION = ARXIV:0901.3527;%%.
-
-\bibitem{Stavinskiy04}
-A.~Stavinskiy {\em et~al.}, ``{Some new aspects of femtoscopy at high
-  energy}'', {\em Nukleonika} {\bfseries 49 (Supplement 2)} (2004) .
-  \url{http://www.nukleonika.pl/www/back/full/vol49_2004/v49s2p023f.pdf}.
 
 \bibitem{Aamodt:2011mr}
 {\bfseries ALICE} Collaboration, K.~Aamodt {\em et~al.}, ``{Two-pion

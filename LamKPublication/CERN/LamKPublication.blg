@@ -6,37 +6,37 @@ Database file #1: LamK_bibfile.bib
 Warning--empty publisher in Lisa:2008gf
 You've used 41 entries,
             2395 wiz_defined-function locations,
-            968 strings with 13551 characters,
-and the built_in function-call counts, 9209 in all, are:
-= -- 873
-> -- 383
+            969 strings with 13562 characters,
+and the built_in function-call counts, 9166 in all, are:
+= -- 868
+> -- 387
 < -- 0
-+ -- 143
-- -- 102
-* -- 1184
-:= -- 1235
-add.period$ -- 89
++ -- 144
+- -- 103
+* -- 1195
+:= -- 1233
+add.period$ -- 87
 call.type$ -- 41
-change.case$ -- 48
+change.case$ -- 50
 chr.to.int$ -- 0
 cite$ -- 42
-duplicate$ -- 465
-empty$ -- 1000
-format.name$ -- 102
-if$ -- 2268
+duplicate$ -- 456
+empty$ -- 984
+format.name$ -- 103
+if$ -- 2253
 int.to.chr$ -- 0
 int.to.str$ -- 41
-missing$ -- 156
-newline$ -- 203
+missing$ -- 159
+newline$ -- 198
 num.names$ -- 43
-pop$ -- 182
+pop$ -- 174
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 0
-skip$ -- 67
+skip$ -- 66
 stack$ -- 0
 substring$ -- 0
-swap$ -- 78
+swap$ -- 79
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
@@ -44,5 +44,5 @@ type$ -- 0
 warning$ -- 1
 while$ -- 42
 width$ -- 43
-write$ -- 377
+write$ -- 373
 (There was 1 warning)
