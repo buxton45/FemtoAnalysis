@@ -2503,6 +2503,12 @@ void FitGeneratorAndDraw::BuildKStarCfswFitsPanel_CombineConj(CanvasPartition* a
   aCanPart->AddGraph(tColumn,tRow,tCorrectedFitHisto, "", 20, tColorCorrectFit, tMarkerSize, "lsame");
   if(aDrawSysErrors) aCanPart->AddGraph(tColumn, tRow, tCfwSysErrs, "", 20, tColorTransparent, tMarkerSize, "e2psame");
   if(aDrawDataOnTop) aCanPart->AddGraph(tColumn, tRow, tCfData, "", 20, tColor, tMarkerSize, "ex0same");  //draw again so data on top
+  
+/*
+  FILE* tOutput = stdout;
+  double tXAxisHigh = aCanPart->GetAxesRanges()[1];
+  HistInfoPrinter::PrintHistInfowStatAndSyst(tCfData, tCfwSysErrs, tOutput, 0., tXAxisHigh);
+*/  
 }
 
 

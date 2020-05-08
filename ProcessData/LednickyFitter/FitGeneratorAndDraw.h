@@ -10,6 +10,7 @@
 #include "FitGenerator.h"
 #include "FitValuesWriterwSysErrs.h"
 #include "TMarker.h"
+#include "HistInfoPrinter.h"
 
 class FitGeneratorAndDraw : public FitGenerator {
 
