@@ -22,7 +22,7 @@ class SuperpositionFitBgd;
 
 #include "CanvasPartition.h"
 #include "FitGeneratorAndDraw.h"
-
+#include "HistInfoPrinter.h"
 
 //GLOBAL!!!!!!!!!!!!!!!
 SuperpositionFitBgd *GlobalSupBgdFitter = NULL;
@@ -1545,7 +1545,12 @@ void BuildBgdwFitPanel(CanvasPartition* aCanPart, int tColumn, int tRow, TString
   
   
 
-
+/*
+  FILE* tOutput = stdout;
+  double tXAxisHigh = aCanPart->GetAxesRanges()[1];
+  HistInfoPrinter::PrintHistInfowStatAndSystYAML(tData, tDataSys, tOutput, 0., tXAxisHigh);
+  HistInfoPrinter::PrintHistInfoYAML(tCf, tOutput, 0., tXAxisHigh);  
+*/
 
 }
 

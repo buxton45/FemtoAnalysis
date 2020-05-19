@@ -41,8 +41,12 @@ public:
   virtual ~HistInfoPrinter();
 
   static bool AreApproxEqual(double aVal1, double aVal2, double aPrecision=0.000001);
+  
   static void PrintHistInfo(TH1* aHist, FILE* aOutput, double aXAxisLow=0., double aXAxisHigh=0.);
-  static void PrintHistInfowStatAndSyst(TH1* aHistStat, TH1* aHistSyst, FILE* aOutput, double aXAxisLow=0., double aXAxisHigh=0.);  
+  static void PrintHistInfoYAML(TH1* aHist, FILE* aOutput, double aXAxisLow=0., double aXAxisHigh=0.);  
+  
+  static void PrintHistInfowStatAndSyst(TH1* aHistStat, TH1* aHistSyst, FILE* aOutput, double aXAxisLow=0., double aXAxisHigh=0.);
+  static void PrintHistInfowStatAndSystYAML(TH1* aHistStat, TH1* aHistSyst, FILE* aOutput, double aXAxisLow=0., double aXAxisHigh=0.);    
 
 
 protected:

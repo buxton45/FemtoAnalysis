@@ -1,0 +1,879 @@
+additional_resources: []
+comment: |
+  The first measurements of the scattering parameters of $\Lambda$K pairs in all three charge combinations ($\Lambda$K$^{+}$, $\Lambda$K$^{-}$, and $\Lambda\mathrm{K^{0}_{S}}$) are presented.
+  The results are achieved through a femtoscopic analysis of $\Lambda$K correlations in Pb--Pb collisions at $\sqrt{s_{\mathrm{NN}}}$ = 2.76 TeV recorded by ALICE at the LHC.  
+  The femtoscopic correlations result from strong final-state interactions, and are fit with a parametrization allowing for both the characterization of the pair emission source and the measurement of the scattering parameters for the particle pairs.
+  Extensive studies with the THERMINATOR 2 event generator provide a good description of the non-femtoscopic background, which results mainly from collective effects, with unprecedented precision.
+  Furthermore, together with HIJING simulations, this model is used to account for contributions from residual correlations induced by feed-down from particle decays.
+  The extracted scattering parameters indicate that the strong force is repulsive in the $\Lambda\mathrm{K^{+}}$ interaction and attractive in the $\Lambda\mathrm{K^{-}}$ and $\Lambda\mathrm{K^{0}_{S}}$ interactions.
+  The results suggest an effect arising either from different quark--antiquark interactions between the pairs ($\rm s\overline{s}$ in $\Lambda$K$^{+}$ and $\rm u\overline{u}$ in $\Lambda$K$^{-}$) or from different net strangeness for each system (S=0 for $\Lambda$K$^{+}$, and S=$-2$ for $\Lambda$K$^{-}$).
+  Finally, the $\Lambda$K systems exhibit source radii larger than expected from extrapolation from identical particle femtoscopic studies.
+  This effect is interpreted as resulting from the separation in space--time of the single-particle $\Lambda$ and K source distributions.
+---
+data_file: Fig1a.yaml
+description: Invariant mass distributions in the 0--10\% centrality interval of (a) p$\uppi^{-}$ pairs showing the $\Lambda$ peak for V$^{0}$ candidates.
+keywords:
+- name: reactions
+  values: [PB PB --> LAMBDA KAON X]
+- name: observables
+  values: [CORR]
+- name: cmenergies
+  values: [2760.0]
+location: Data from Figure 1a
+name: Figure 1a
+---
+data_file: Fig1b.yaml
+description: Invariant mass distributions in the 0--10\% centrality interval of $\uppi^{+}\uppi^{-}$ pairs showing the $\mathrm{K^{0}_{S}}$ peak for V$^{0}$ candidates.  
+keywords:
+- name: reactions
+  values: [PB PB --> LAMBDA KAON X]
+- name: observables
+  values: [CORR]
+- name: cmenergies
+  values: [2760.0]
+location: Data from Figure 1b
+name: Figure 1b
+---
+data_file: Fig2a_ALICE.yaml
+description: Measured correlation function for the $\Lambda\mathrm{K^{+}}\oplus\overline{\Lambda}\mathrm{K^{-}}$ system in the 0--10\% centrality interval.
+keywords:
+- name: reactions
+  values: [PB PB --> LAMBDA KAON X]
+- name: observables
+  values: [CORR]
+- name: cmenergies
+  values: [2760.0]
+location: ALICE data from Figure 2a
+name: Figure 2a ALICE
+---
+data_file: Fig2a_THERM.yaml
+description: THERMINATOR 2 simulation correlation function for the $\Lambda\mathrm{K^{+}}\oplus\overline{\Lambda}\mathrm{K^{-}}$ system in the 0--10\% centrality interval.
+keywords:
+- name: reactions
+  values: [PB PB --> LAMBDA KAON X]
+- name: observables
+  values: [CORR]
+- name: cmenergies
+  values: [2760.0]
+location: THERMINATOR 2 simulation data from Figure 2a
+name: Figure 2a THERM
+---
+data_file: Fig2b_ALICE.yaml
+description: Measured correlation function for the $\Lambda\mathrm{K^{-}}\oplus\overline{\Lambda}\mathrm{K^{+}}$ system in the 0--10\% centrality interval.
+keywords:
+- name: reactions
+  values: [PB PB --> LAMBDA KAON X]
+- name: observables
+  values: [CORR]
+- name: cmenergies
+  values: [2760.0]
+location: ALICE data from Figure 2b
+name: Figure 2b ALICE
+---
+data_file: Fig2b_THERM.yaml
+description: THERMINATOR 2 simulation correlation function for the $\Lambda\mathrm{K^{-}}\oplus\overline{\Lambda}\mathrm{K^{+}}$ system in the 0--10\% centrality interval.
+keywords:
+- name: reactions
+  values: [PB PB --> LAMBDA KAON X]
+- name: observables
+  values: [CORR]
+- name: cmenergies
+  values: [2760.0]
+location: THERMINATOR 2 simulation data from Figure 2b
+name: Figure 2b THERM
+---
+data_file: Fig2c_ALICE.yaml
+description: Measured correlation function for the $\Lambda\mathrm{K^{0}_{S}}\oplus\overline{\Lambda}\mathrm{K^{0}_{S}}$ system in the 0--10\% centrality interval.
+keywords:
+- name: reactions
+  values: [PB PB --> LAMBDA KAON X]
+- name: observables
+  values: [CORR]
+- name: cmenergies
+  values: [2760.0]
+location: ALICE data from Figure 2c
+name: Figure 2c ALICE
+---
+data_file: Fig2c_THERM.yaml
+description: THERMINATOR 2 simulation correlation function for the $\Lambda\mathrm{K^{0}_{S}}\oplus\overline{\Lambda}\mathrm{K^{0}_{S}}$ system in the 0--10\% centrality interval.
+keywords:
+- name: reactions
+  values: [PB PB --> LAMBDA KAON X]
+- name: observables
+  values: [CORR]
+- name: cmenergies
+  values: [2760.0]
+location: THERMINATOR 2 simulation data from Figure 2c
+name: Figure 2c THERM
+---
+data_file: Fig2d_ALICE.yaml
+description: Measured correlation function for the $\Lambda\mathrm{K^{+}}\oplus\overline{\Lambda}\mathrm{K^{-}}$ system in the 10--30\% centrality interval.
+keywords:
+- name: reactions
+  values: [PB PB --> LAMBDA KAON X]
+- name: observables
+  values: [CORR]
+- name: cmenergies
+  values: [2760.0]
+location: ALICE data from Figure 2d
+name: Figure 2d ALICE
+---
+data_file: Fig2d_THERM.yaml
+description: THERMINATOR 2 simulation correlation function for the $\Lambda\mathrm{K^{+}}\oplus\overline{\Lambda}\mathrm{K^{-}}$ system in the 10--30\% centrality interval.
+keywords:
+- name: reactions
+  values: [PB PB --> LAMBDA KAON X]
+- name: observables
+  values: [CORR]
+- name: cmenergies
+  values: [2760.0]
+location: THERMINATOR 2 simulation data from Figure 2d
+name: Figure 2d THERM
+---
+data_file: Fig2e_ALICE.yaml
+description: Measured correlation function for the $\Lambda\mathrm{K^{-}}\oplus\overline{\Lambda}\mathrm{K^{+}}$ system in the 10--30\% centrality interval.
+keywords:
+- name: reactions
+  values: [PB PB --> LAMBDA KAON X]
+- name: observables
+  values: [CORR]
+- name: cmenergies
+  values: [2760.0]
+location: ALICE data from Figure 2e
+name: Figure 2e ALICE
+---
+data_file: Fig2e_THERM.yaml
+description: THERMINATOR 2 simulation correlation function for the $\Lambda\mathrm{K^{-}}\oplus\overline{\Lambda}\mathrm{K^{+}}$ system in the 10--30\% centrality interval.
+keywords:
+- name: reactions
+  values: [PB PB --> LAMBDA KAON X]
+- name: observables
+  values: [CORR]
+- name: cmenergies
+  values: [2760.0]
+location: THERMINATOR 2 simulation data from Figure 2e
+name: Figure 2e THERM
+---
+data_file: Fig2f_ALICE.yaml
+description: Measured correlation function for the $\Lambda\mathrm{K^{0}_{S}}\oplus\overline{\Lambda}\mathrm{K^{0}_{S}}$ system in the 10--30\% centrality interval.
+keywords:
+- name: reactions
+  values: [PB PB --> LAMBDA KAON X]
+- name: observables
+  values: [CORR]
+- name: cmenergies
+  values: [2760.0]
+location: ALICE data from Figure 2f
+name: Figure 2f ALICE
+---
+data_file: Fig2f_THERM.yaml
+description: THERMINATOR 2 simulation correlation function for the $\Lambda\mathrm{K^{0}_{S}}\oplus\overline{\Lambda}\mathrm{K^{0}_{S}}$ system in the 10--30\% centrality interval.
+keywords:
+- name: reactions
+  values: [PB PB --> LAMBDA KAON X]
+- name: observables
+  values: [CORR]
+- name: cmenergies
+  values: [2760.0]
+location: THERMINATOR 2 simulation data from Figure 2f
+name: Figure 2f THERM
+---
+data_file: Fig2g_ALICE.yaml
+description: Measured correlation function for the $\Lambda\mathrm{K^{+}}\oplus\overline{\Lambda}\mathrm{K^{-}}$ system in the 30--50\% centrality interval.
+keywords:
+- name: reactions
+  values: [PB PB --> LAMBDA KAON X]
+- name: observables
+  values: [CORR]
+- name: cmenergies
+  values: [2760.0]
+location: ALICE data from Figure 2g
+name: Figure 2g ALICE
+---
+data_file: Fig2g_THERM.yaml
+description: THERMINATOR 2 simulation correlation function for the $\Lambda\mathrm{K^{+}}\oplus\overline{\Lambda}\mathrm{K^{-}}$ system in the 30--50\% centrality interval.
+keywords:
+- name: reactions
+  values: [PB PB --> LAMBDA KAON X]
+- name: observables
+  values: [CORR]
+- name: cmenergies
+  values: [2760.0]
+location: THERMINATOR 2 simulation data from Figure 2g
+name: Figure 2g THERM
+---
+data_file: Fig2h_ALICE.yaml
+description: Measured correlation function for the $\Lambda\mathrm{K^{-}}\oplus\overline{\Lambda}\mathrm{K^{+}}$ system in the 30--50\% centrality interval.
+keywords:
+- name: reactions
+  values: [PB PB --> LAMBDA KAON X]
+- name: observables
+  values: [CORR]
+- name: cmenergies
+  values: [2760.0]
+location: ALICE data from Figure 2h
+name: Figure 2h ALICE
+---
+data_file: Fig2h_THERM.yaml
+description: THERMINATOR 2 simulation correlation function for the $\Lambda\mathrm{K^{-}}\oplus\overline{\Lambda}\mathrm{K^{+}}$ system in the 30--50\% centrality interval.
+keywords:
+- name: reactions
+  values: [PB PB --> LAMBDA KAON X]
+- name: observables
+  values: [CORR]
+- name: cmenergies
+  values: [2760.0]
+location: THERMINATOR 2 simulation data from Figure 2h
+name: Figure 2h THERM
+---
+data_file: Fig2i_ALICE.yaml
+description: Measured correlation function for the $\Lambda\mathrm{K^{0}_{S}}\oplus\overline{\Lambda}\mathrm{K^{0}_{S}}$ system in the 30--50\% centrality interval.
+keywords:
+- name: reactions
+  values: [PB PB --> LAMBDA KAON X]
+- name: observables
+  values: [CORR]
+- name: cmenergies
+  values: [2760.0]
+location: ALICE data from Figure 2i
+name: Figure 2i ALICE
+---
+data_file: Fig2i_THERM.yaml
+description: THERMINATOR 2 simulation correlation function for the $\Lambda\mathrm{K^{0}_{S}}\oplus\overline{\Lambda}\mathrm{K^{0}_{S}}$ system in the 30--50\% centrality interval.
+keywords:
+- name: reactions
+  values: [PB PB --> LAMBDA KAON X]
+- name: observables
+  values: [CORR]
+- name: cmenergies
+  values: [2760.0]
+location: THERMINATOR 2 simulation data from Figure 2i
+name: Figure 2i THERM
+---
+data_file: Fig3a.yaml
+description: Measured correlation function for the $\Lambda\mathrm{K^{+}}\oplus\overline{\Lambda}\mathrm{K^{-}}$ system in the 0--10\% centrality interval.
+keywords:
+- name: reactions
+  values: [PB PB --> LAMBDA KAON X]
+- name: observables
+  values: [CORR]
+- name: cmenergies
+  values: [2760.0]
+location: Data from Figure 3a
+name: Figure 3a
+---
+data_file: Fig3b.yaml
+description: Measured correlation function for the $\Lambda\mathrm{K^{-}}\oplus\overline{\Lambda}\mathrm{K^{+}}$ system in the 0--10\% centrality interval.
+keywords:
+- name: reactions
+  values: [PB PB --> LAMBDA KAON X]
+- name: observables
+  values: [CORR]
+- name: cmenergies
+  values: [2760.0]
+location: Data from Figure 3b
+name: Figure 3b
+---
+data_file: Fig3c.yaml
+description: Measured correlation function for the $\Lambda\mathrm{K^{0}_{S}}\oplus\overline{\Lambda}\mathrm{K^{0}_{S}}$ system in the 0--10\% centrality interval.
+keywords:
+- name: reactions
+  values: [PB PB --> LAMBDA KAON X]
+- name: observables
+  values: [CORR]
+- name: cmenergies
+  values: [2760.0]
+location: Data from Figure 3c
+name: Figure 3c
+---
+data_file: Fig3d.yaml
+description: Measured correlation function for the $\Lambda\mathrm{K^{+}}\oplus\overline{\Lambda}\mathrm{K^{-}}$ system in the 10--30\% centrality interval.
+keywords:
+- name: reactions
+  values: [PB PB --> LAMBDA KAON X]
+- name: observables
+  values: [CORR]
+- name: cmenergies
+  values: [2760.0]
+location: Data from Figure 3d
+name: Figure 3d
+---
+data_file: Fig3e.yaml
+description: Measured correlation function for the $\Lambda\mathrm{K^{-}}\oplus\overline{\Lambda}\mathrm{K^{+}}$ system in the 10--30\% centrality interval.
+keywords:
+- name: reactions
+  values: [PB PB --> LAMBDA KAON X]
+- name: observables
+  values: [CORR]
+- name: cmenergies
+  values: [2760.0]
+location: Data from Figure 3e
+name: Figure 3e
+---
+data_file: Fig3f.yaml
+description: Measured correlation function for the $\Lambda\mathrm{K^{0}_{S}}\oplus\overline{\Lambda}\mathrm{K^{0}_{S}}$ system in the 10--30\% centrality interval.
+keywords:
+- name: reactions
+  values: [PB PB --> LAMBDA KAON X]
+- name: observables
+  values: [CORR]
+- name: cmenergies
+  values: [2760.0]
+location: Data from Figure 3f
+name: Figure 3f
+---
+data_file: Fig3g.yaml
+description: Measured correlation function for the $\Lambda\mathrm{K^{+}}\oplus\overline{\Lambda}\mathrm{K^{-}}$ system in the 30--50\% centrality interval.
+keywords:
+- name: reactions
+  values: [PB PB --> LAMBDA KAON X]
+- name: observables
+  values: [CORR]
+- name: cmenergies
+  values: [2760.0]
+location: Data from Figure 3g
+name: Figure 3g
+---
+data_file: Fig3h.yaml
+description: Measured correlation function for the $\Lambda\mathrm{K^{-}}\oplus\overline{\Lambda}\mathrm{K^{+}}$ system in the 30--50\% centrality interval.
+keywords:
+- name: reactions
+  values: [PB PB --> LAMBDA KAON X]
+- name: observables
+  values: [CORR]
+- name: cmenergies
+  values: [2760.0]
+location: Data from Figure 3h
+name: Figure 3h
+---
+data_file: Fig3i.yaml
+description: Measured correlation function for the $\Lambda\mathrm{K^{0}_{S}}\oplus\overline{\Lambda}\mathrm{K^{0}_{S}}$ system in the 30--50\% centrality interval.
+keywords:
+- name: reactions
+  values: [PB PB --> LAMBDA KAON X]
+- name: observables
+  values: [CORR]
+- name: cmenergies
+  values: [2760.0]
+location: Data from Figure 3i
+name: Figure 3i
+---
+data_file: Fig4a_left_LamK0.yaml
+description: Extracted imaginary and real components of the complex scattering length, $\Im f_{0}$ and $\Re f_{0}$, for the $\Lambda\mathrm{K^{0}_{S}}$ system.
+keywords:
+- name: reactions
+  values: [PB PB --> LAMBDA KAON X]
+- name: observables
+  values: [CORR]
+- name: cmenergies
+  values: [2760.0]
+location: LamKs results from the left panel of Figure 4a
+name: Figure 4a left LamKs
+---
+data_file: Fig4a_left_LamKchM.yaml
+description: Extracted imaginary and real components of the complex scattering length, $\Im f_{0}$ and $\Re f_{0}$, for the $\Lambda\mathrm{K^{-}}$ system.
+keywords:
+- name: reactions
+  values: [PB PB --> LAMBDA KAON X]
+- name: observables
+  values: [CORR]
+- name: cmenergies
+  values: [2760.0]
+location: LamKchM results from the left panel of Figure 4a
+name: Figure 4a left LamKchM
+---
+data_file: Fig4a_left_LamKchP.yaml
+description: Extracted imaginary and real components of the complex scattering length, $\Im f_{0}$ and $\Re f_{0}$, for the $\Lambda\mathrm{K^{+}}$ system.
+keywords:
+- name: reactions
+  values: [PB PB --> LAMBDA KAON X]
+- name: observables
+  values: [CORR]
+- name: cmenergies
+  values: [2760.0]
+location: LamKchP results from the left panel of Figure 4a
+name: Figure 4a left LamKchP
+---
+data_file: Fig4a_right_LamK0.yaml
+description: Extracted effective range of the interaction, $d_{0}$,  for the $\Lambda\mathrm{K^{0}_{S}}$ system.
+keywords:
+- name: reactions
+  values: [PB PB --> LAMBDA KAON X]
+- name: observables
+  values: [CORR]
+- name: cmenergies
+  values: [2760.0]
+location: LamKs results from the right panel of Figure 4a
+name: Figure 4a right LamKs
+---
+data_file: Fig4a_right_LamKchM.yaml
+description: Extracted effective range of the interaction, $d_{0}$,  for the $\Lambda\mathrm{K^{-}}$ system.
+keywords:
+- name: reactions
+  values: [PB PB --> LAMBDA KAON X]
+- name: observables
+  values: [CORR]
+- name: cmenergies
+  values: [2760.0]
+location: LamKchM results from the right panel of Figure 4a
+name: Figure 4a right LamKchM
+---
+data_file: Fig4a_right_LamKchP.yaml
+description: Extracted effective range of the interaction, $d_{0}$,  for the $\Lambda\mathrm{K^{+}}$ system.
+keywords:
+- name: reactions
+  values: [PB PB --> LAMBDA KAON X]
+- name: observables
+  values: [CORR]
+- name: cmenergies
+  values: [2760.0]
+location: LamKchP results from the right panel of Figure 4a
+name: Figure 4a right LamKchP
+---
+data_file: Fig4b_0010.yaml
+description: The extracted $\lambda_{\mathrm{Fit}}$ and radius parameter for the $\Lambda$K system in the 0--10\% centrality interval.
+keywords:
+- name: reactions
+  values: [PB PB --> LAMBDA KAON X]
+- name: observables
+  values: [CORR]
+- name: cmenergies
+  values: [2760.0]
+location: Results for 0--10\% centrality from Figure 4b
+name: Figure 4b 0010
+---
+data_file: Fig4b_1030.yaml
+description: The extracted $\lambda_{\mathrm{Fit}}$ and radius parameter for the $\Lambda$K system in the 10--30\% centrality interval.
+keywords:
+- name: reactions
+  values: [PB PB --> LAMBDA KAON X]
+- name: observables
+  values: [CORR]
+- name: cmenergies
+  values: [2760.0]
+location: Results for 10--30\% centrality from Figure 4b
+name: Figure 4b 1030
+---
+data_file: Fig4b_3050.yaml
+description: The extracted $\lambda_{\mathrm{Fit}}$ and radius parameter for the $\Lambda$K system in the 30--50\% centrality interval.
+keywords:
+- name: reactions
+  values: [PB PB --> LAMBDA KAON X]
+- name: observables
+  values: [CORR]
+- name: cmenergies
+  values: [2760.0]
+location: Results for 30--50\% centrality from Figure 4b
+name: Figure 4b 3050
+---
+data_file: Fig5_0010.yaml
+description: Extracted fit $R_{\mathrm{inv}}$ parameters as a function of pair transverse mass ($m_{\mathrm{T}}$) for the $\Lambda$K system in the 0--10\% centrality interval.
+keywords:
+- name: reactions
+  values: [PB PB --> LAMBDA KAON X]
+- name: observables
+  values: [CORR]
+- name: cmenergies
+  values: [2760.0]
+location: Results for 0--10\% centrality from Figure 5
+name: Figure 5 0010
+---
+data_file: Fig5_1030.yaml
+description: Extracted fit $R_{\mathrm{inv}}$ parameters as a function of pair transverse mass ($m_{\mathrm{T}}$) for the $\Lambda$K system in the 10--30\% centrality interval.
+keywords:
+- name: reactions
+  values: [PB PB --> LAMBDA KAON X]
+- name: observables
+  values: [CORR]
+- name: cmenergies
+  values: [2760.0]
+location: Results for 10--30\% centrality from Figure 5
+name: Figure 5 1030
+---
+data_file: Fig5_3050.yaml
+description: Extracted fit $R_{\mathrm{inv}}$ parameters as a function of pair transverse mass ($m_{\mathrm{T}}$) for the $\Lambda$K system in the 30--50\% centrality interval.
+keywords:
+- name: reactions
+  values: [PB PB --> LAMBDA KAON X]
+- name: observables
+  values: [CORR]
+- name: cmenergies
+  values: [2760.0]
+location: Results for 30--50\% centrality from Figure 5
+name: Figure 5 3050
+---
+data_file: Fig6a.yaml
+description: Spherical harmonics component $C_{00}$ of the $\Lambda\mathrm{K^{+}}$ correlation function for the 0--10\% centrality interval.
+keywords:
+- name: reactions
+  values: [PB PB --> LAMBDA KAON X]
+- name: observables
+  values: [CORR]
+- name: cmenergies
+  values: [2760.0]
+location: Data from Figure 6a
+name: Figure 6a
+---
+data_file: Fig6b.yaml
+description: Spherical harmonics component $\Re C_{11}$ of the $\Lambda\mathrm{K^{+}}$ correlation function for the 0--10\% centrality interval.
+keywords:
+- name: reactions
+  values: [PB PB --> LAMBDA KAON X]
+- name: observables
+  values: [CORR]
+- name: cmenergies
+  values: [2760.0]
+location: Data from Figure 6b
+name: Figure 6b
+---
+data_file: FigA1a_Normal.yaml
+description: Correlation functions for the $\Lambda\mathrm{K^{+}}\oplus\overline{\Lambda}\mathrm{K^{-}}$ system built using the normal mixed-event reference distribution for the 0--10\% centrality interval.
+keywords:
+- name: reactions
+  values: [PB PB --> LAMBDA KAON X]
+- name: observables
+  values: [CORR]
+- name: cmenergies
+  values: [2760.0]
+location: Data from Figure A1a (normal)
+name: Figure A1a Normal
+---
+data_file: FigA1a_Stavinskiy.yaml
+description: Correlation functions for the $\Lambda\mathrm{K^{+}}\oplus\overline{\Lambda}\mathrm{K^{-}}$ system built using the Stavinskiy method for the 0--10\% centrality interval.
+keywords:
+- name: reactions
+  values: [PB PB --> LAMBDA KAON X]
+- name: observables
+  values: [CORR]
+- name: cmenergies
+  values: [2760.0]
+location: Data from Figure A1a (Stavinskiy)
+name: Figure A1a Stavinskiy
+---
+data_file: FigA1b_Normal.yaml
+description: Correlation functions for the $\Lambda\mathrm{K^{+}}\oplus\overline{\Lambda}\mathrm{K^{-}}$ system built using the normal mixed-event reference distribution for the 10--30\% centrality interval.
+keywords:
+- name: reactions
+  values: [PB PB --> LAMBDA KAON X]
+- name: observables
+  values: [CORR]
+- name: cmenergies
+  values: [2760.0]
+location: Data from Figure A1b (normal)
+name: Figure A1b Normal
+---
+data_file: FigA1b_Stavinskiy.yaml
+description: Correlation functions for the $\Lambda\mathrm{K^{+}}\oplus\overline{\Lambda}\mathrm{K^{-}}$ system built using the Stavinskiy method for the 10--30\% centrality interval.
+keywords:
+- name: reactions
+  values: [PB PB --> LAMBDA KAON X]
+- name: observables
+  values: [CORR]
+- name: cmenergies
+  values: [2760.0]
+location: Data from Figure A1b (Stavinskiy)
+name: Figure A1b Stavinskiy
+---
+data_file: FigA1c_Normal.yaml
+description: Correlation functions for the $\Lambda\mathrm{K^{+}}\oplus\overline{\Lambda}\mathrm{K^{-}}$ system built using the normal mixed-event reference distribution for the 30--50\% centrality interval.
+keywords:
+- name: reactions
+  values: [PB PB --> LAMBDA KAON X]
+- name: observables
+  values: [CORR]
+- name: cmenergies
+  values: [2760.0]
+location: Data from Figure A1c (normal)
+name: Figure A1c Normal
+---
+data_file: FigA1c_Stavinskiy.yaml
+description: Correlation functions for the $\Lambda\mathrm{K^{+}}\oplus\overline{\Lambda}\mathrm{K^{-}}$ system built using the Stavinskiy method for the 30--50\% centrality interval.
+keywords:
+- name: reactions
+  values: [PB PB --> LAMBDA KAON X]
+- name: observables
+  values: [CORR]
+- name: cmenergies
+  values: [2760.0]
+location: Data from Figure A1c (Stavinskiy)
+name: Figure A1c Stavinskiy
+---
+data_file: FigC1a_ALICE.yaml
+description: One-dimensional $\Lambda\mathrm{K^{+}}\oplus\overline{\Lambda}\mathrm{K^{-}}$ correlation function for the experimental data in the 0--10\% centrality interval.
+keywords:
+- name: reactions
+  values: [PB PB --> LAMBDA KAON X]
+- name: observables
+  values: [CORR]
+- name: cmenergies
+  values: [2760.0]
+location: ALICE data from Figure C1a
+name: Figure C1a ALICE
+---
+data_file: FigC1a_THERM.yaml
+description: One-dimensional $\Lambda\mathrm{K^{+}}\oplus\overline{\Lambda}\mathrm{K^{-}}$ correlation function for the THERMINATOR 2 simulation with impact parameter b = 2 fm.
+keywords:
+- name: reactions
+  values: [PB PB --> LAMBDA KAON X]
+- name: observables
+  values: [CORR]
+- name: cmenergies
+  values: [2760.0]
+location: THERMINATOR 2 simulation data from Figure C1a
+name: Figure C1a THERM
+---
+data_file: FigC1b_ALICE.yaml
+description: $\Re C_{11}$ component of a spherical harmonic decomposition for the experimental data in the 0--10\% centrality interval.
+keywords:
+- name: reactions
+  values: [PB PB --> LAMBDA KAON X]
+- name: observables
+  values: [CORR]
+- name: cmenergies
+  values: [2760.0]
+location: ALICE data from Figure C1b
+name: Figure C1b ALICE
+---
+data_file: FigC1b_THERM.yaml
+description: $\Re C_{11}$ component of a spherical harmonic decomposition for the THERMINATOR 2 simulation with impact parameter b = 2 fm.
+keywords:
+- name: reactions
+  values: [PB PB --> LAMBDA KAON X]
+- name: observables
+  values: [CORR]
+- name: cmenergies
+  values: [2760.0]
+location: THERMINATOR 2 simulation data from Figure C1b
+name: Figure C1b THERM
+---
+data_file: FigC1c.yaml
+description: The pair source distribution from the THERMINATOR 2 simulation in the out direction.
+keywords:
+- name: reactions
+  values: [PB PB --> LAMBDA KAON X]
+- name: observables
+  values: [CORR]
+- name: cmenergies
+  values: [2760.0]
+location: Data from Figure C1c
+name: Figure C1c
+---
+data_file: FigC1d.yaml
+description: The pair source distribution from the THERMINATOR 2 simulation in the side direction.
+keywords:
+- name: reactions
+  values: [PB PB --> LAMBDA KAON X]
+- name: observables
+  values: [CORR]
+- name: cmenergies
+  values: [2760.0]
+location: Data from Figure C1d
+name: Figure C1d
+---
+data_file: FigC1e.yaml
+description: The pair source distribution from the THERMINATOR 2 simulation in the long direction.
+keywords:
+- name: reactions
+  values: [PB PB --> LAMBDA KAON X]
+- name: observables
+  values: [CORR]
+- name: cmenergies
+  values: [2760.0]
+location: Data from Figure C1e
+name: Figure C1e
+---
+data_file: FigC1f.yaml
+description: The temporal characteristics of the pair source distribution from the THERMINATOR 2 simulation.
+keywords:
+- name: reactions
+  values: [PB PB --> LAMBDA KAON X]
+- name: observables
+  values: [CORR]
+- name: cmenergies
+  values: [2760.0]
+location: Data from Figure C1f
+name: Figure C1f
+---
+data_file: FigC2a.yaml
+description: Probing the effect of varying the source shift in the outward direction, $\mu_{\mathrm{out}}$, within the THERMINATOR 2 framework.  
+  To achieve this, particle pairs are formed from the simulation, but with altered spatial characteristics achieved by drawing the out, side, and long components from predetermined Gaussian distributions.  
+  The sources in all three directions are Gaussians of width 5 fm.
+  The distributions used for the side and long direction are centered at the origin, while the shift in the outward direction, $\mu_{\mathrm{out}}$, is varied.
+  THERMINATOR 2 simulated correlation functions with $\mu_{\mathrm{out}} = 0$ fm.
+keywords:
+- name: reactions
+  values: [PB PB --> LAMBDA KAON X]
+- name: observables
+  values: [CORR]
+- name: cmenergies
+  values: [2760.0]
+location: Data from Figure C2a
+name: Figure C2a
+---
+data_file: FigC2b.yaml
+description: Probing the effect of varying the source shift in the outward direction, $\mu_{\mathrm{out}}$, within the THERMINATOR 2 framework.  
+  To achieve this, particle pairs are formed from the simulation, but with altered spatial characteristics achieved by drawing the out, side, and long components from predetermined Gaussian distributions.  
+  The sources in all three directions are Gaussians of width 5 fm.
+  The distributions used for the side and long direction are centered at the origin, while the shift in the outward direction, $\mu_{\mathrm{out}}$, is varied.
+  THERMINATOR 2 simulated correlation functions with $\mu_{\mathrm{out}} = 1$ fm.
+keywords:
+- name: reactions
+  values: [PB PB --> LAMBDA KAON X]
+- name: observables
+  values: [CORR]
+- name: cmenergies
+  values: [2760.0]
+location: Data from Figure C2b
+name: Figure C2b
+---
+data_file: FigC2c.yaml
+description: Probing the effect of varying the source shift in the outward direction, $\mu_{\mathrm{out}}$, within the THERMINATOR 2 framework.  
+  To achieve this, particle pairs are formed from the simulation, but with altered spatial characteristics achieved by drawing the out, side, and long components from predetermined Gaussian distributions.  
+  The sources in all three directions are Gaussians of width 5 fm.
+  The distributions used for the side and long direction are centered at the origin, while the shift in the outward direction, $\mu_{\mathrm{out}}$, is varied.
+  THERMINATOR 2 simulated correlation functions with $\mu_{\mathrm{out}} = 3$ fm.
+keywords:
+- name: reactions
+  values: [PB PB --> LAMBDA KAON X]
+- name: observables
+  values: [CORR]
+- name: cmenergies
+  values: [2760.0]
+location: Data from Figure C2c
+name: Figure C2c
+---
+data_file: FigC2d.yaml
+description: Probing the effect of varying the source shift in the outward direction, $\mu_{\mathrm{out}}$, within the THERMINATOR 2 framework.  
+  To achieve this, particle pairs are formed from the simulation, but with altered spatial characteristics achieved by drawing the out, side, and long components from predetermined Gaussian distributions.  
+  The sources in all three directions are Gaussians of width 5 fm.
+  The distributions used for the side and long direction are centered at the origin, while the shift in the outward direction, $\mu_{\mathrm{out}}$, is varied.
+  THERMINATOR 2 simulated correlation functions with $\mu_{\mathrm{out}} = 6$ fm.
+keywords:
+- name: reactions
+  values: [PB PB --> LAMBDA KAON X]
+- name: observables
+  values: [CORR]
+- name: cmenergies
+  values: [2760.0]
+location: Data from Figure C2d
+name: Figure C2d
+---
+data_file: FigC3a_ALICE.yaml
+description: Spherical harmonics component $C_{00}$ of the $\Lambda\mathrm{K^{+}}$ correlation function for the 0--10\% centrality interval.
+keywords:
+- name: reactions
+  values: [PB PB --> LAMBDA KAON X]
+- name: observables
+  values: [CORR]
+- name: cmenergies
+  values: [2760.0]
+location: ALICE data from Figure C3a
+name: Figure C3a ALICE
+---
+data_file: FigC3a_THERM_muOut0.yaml
+description: Spherical harmonics component $C_{00}$ of the $\Lambda\mathrm{K^{+}}$ correlation function from the THERMINATOR 2 simulation implemented with a shift $\mu_{\mathrm{out}} = 0$ fm in the outward direction.
+keywords:
+- name: reactions
+  values: [PB PB --> LAMBDA KAON X]
+- name: observables
+  values: [CORR]
+- name: cmenergies
+  values: [2760.0]
+location: THERMINATOR 2 simulation with a shift $\mu_{\mathrm{out}} = 0$ fm from Figure C3a
+name: Figure C3a THERM muOut0
+---
+data_file: FigC3a_THERM_muOut1.yaml
+description: Spherical harmonics component $C_{00}$ of the $\Lambda\mathrm{K^{+}}$ correlation function from the THERMINATOR 2 simulation implemented with a shift $\mu_{\mathrm{out}} = 1$ fm in the outward direction.
+keywords:
+- name: reactions
+  values: [PB PB --> LAMBDA KAON X]
+- name: observables
+  values: [CORR]
+- name: cmenergies
+  values: [2760.0]
+location: THERMINATOR 2 simulation with a shift $\mu_{\mathrm{out}} = 1$ fm from Figure C3a
+name: Figure C3a THERM muOut1
+---
+data_file: FigC3a_THERM_muOut3.yaml
+description: Spherical harmonics component $C_{00}$ of the $\Lambda\mathrm{K^{+}}$ correlation function from the THERMINATOR 2 simulation implemented with a shift $\mu_{\mathrm{out}} = 3$ fm in the outward direction.
+keywords:
+- name: reactions
+  values: [PB PB --> LAMBDA KAON X]
+- name: observables
+  values: [CORR]
+- name: cmenergies
+  values: [2760.0]
+location: THERMINATOR 2 simulation with a shift $\mu_{\mathrm{out}} = 3$ fm from Figure C3a
+name: Figure C3a THERM muOut3
+---
+data_file: FigC3a_THERM_muOut6.yaml
+description: Spherical harmonics component $C_{00}$ of the $\Lambda\mathrm{K^{+}}$ correlation function from the THERMINATOR 2 simulation implemented with a shift $\mu_{\mathrm{out}} = 6$ fm in the outward direction.
+keywords:
+- name: reactions
+  values: [PB PB --> LAMBDA KAON X]
+- name: observables
+  values: [CORR]
+- name: cmenergies
+  values: [2760.0]
+location: THERMINATOR 2 simulation with a shift $\mu_{\mathrm{out}} = 6$ fm from Figure C3a
+name: Figure C3a THERM muOut6
+---
+data_file: FigC3b_ALICE.yaml
+description: Spherical harmonics component $\Re C_{11}$ of the $\Lambda\mathrm{K^{+}}$ correlation function for the 0--10\% centrality interval.
+keywords:
+- name: reactions
+  values: [PB PB --> LAMBDA KAON X]
+- name: observables
+  values: [CORR]
+- name: cmenergies
+  values: [2760.0]
+location: ALICE data from Figure C3b
+name: Figure C3b ALICE
+---
+data_file: FigC3b_THERM_muOut0.yaml
+description: Spherical harmonics component $\Re C_{11}$ of the $\Lambda\mathrm{K^{+}}$ correlation function from the THERMINATOR 2 simulation implemented with a shift $\mu_{\mathrm{out}} = 0$ fm in the outward direction.
+keywords:
+- name: reactions
+  values: [PB PB --> LAMBDA KAON X]
+- name: observables
+  values: [CORR]
+- name: cmenergies
+  values: [2760.0]
+location: THERMINATOR 2 simulation with a shift $\mu_{\mathrm{out}} = 0$ fm from Figure C3b
+name: Figure C3b THERM muOut0
+---
+data_file: FigC3b_THERM_muOut1.yaml
+description: Spherical harmonics component $\Re C_{11}$ of the $\Lambda\mathrm{K^{+}}$ correlation function from the THERMINATOR 2 simulation implemented with a shift $\mu_{\mathrm{out}} = 1$ fm in the outward direction.
+keywords:
+- name: reactions
+  values: [PB PB --> LAMBDA KAON X]
+- name: observables
+  values: [CORR]
+- name: cmenergies
+  values: [2760.0]
+location: THERMINATOR 2 simulation with a shift $\mu_{\mathrm{out}} = 1$ fm from Figure C3b
+name: Figure C3b THERM muOut1
+---
+data_file: FigC3b_THERM_muOut3.yaml
+description: Spherical harmonics component $\Re C_{11}$ of the $\Lambda\mathrm{K^{+}}$ correlation function from the THERMINATOR 2 simulation implemented with a shift $\mu_{\mathrm{out}} = 3$ fm in the outward direction.
+keywords:
+- name: reactions
+  values: [PB PB --> LAMBDA KAON X]
+- name: observables
+  values: [CORR]
+- name: cmenergies
+  values: [2760.0]
+location: THERMINATOR 2 simulation with a shift $\mu_{\mathrm{out}} = 3$ fm from Figure C3b
+name: Figure C3b THERM muOut3
+---
+data_file: FigC3b_THERM_muOut6.yaml
+description: Spherical harmonics component $\Re C_{11}$ of the $\Lambda\mathrm{K^{+}}$ correlation function from the THERMINATOR 2 simulation implemented with a shift $\mu_{\mathrm{out}} = 6$ fm in the outward direction.
+keywords:
+- name: reactions
+  values: [PB PB --> LAMBDA KAON X]
+- name: observables
+  values: [CORR]
+- name: cmenergies
+  values: [2760.0]
+location: THERMINATOR 2 simulation with a shift $\mu_{\mathrm{out}} = 6$ fm from Figure C3b
+name: Figure C3b THERM muOut6

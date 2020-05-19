@@ -1,0 +1,68 @@
+\input{./ResultsTable/TableHelperTriple.tex}
+\begin{document}
+
+\begin{table}[htbp]
+ \centering
+ \caption{
+ Extracted fit parameters.
+ The uncertainties marked as ``stat." are those returned by MINUIT, and those marked as ``syst." result from the systematic analysis.
+ }
+ \resizebox{\columnwidth}{!}{
+ \renewcommand{\arraystretch}{1.3}
+ \begin{tabular}{c|c|c|c}
+  \clineB{1-3}{3.0}
+  Centrality & $\lambda_{\mathrm{Fit}}$ & \multicolumn{1}{c}{$R_{\mathrm{inv}}$} & \multicolumn{1}{c}{} \\
+  \clineB{1-3}{3.0}  
+   0--10\%
+     & \ArrLamKchP(1) $\pm$ \ArrLamKchP(2) (stat.) $\pm$ \ArrLamKchP(3) (syst.)    %Lambda (LamKchP 0010)
+     & \multicolumn{1}{c}{\ArrLamKchP(4) $\pm$ \ArrLamKchP(5) (stat.) $\pm$ \ArrLamKchP(6) (syst.)}    %Radius (LamKchP & ALamKchM 0010)
+     & \multicolumn{1}{c}{} \\    
+   \cline{1-3}
+   
+   10--30\%
+     & \ArrLamKchP(7) $\pm$ \ArrLamKchP(8) (stat.) $\pm$ \ArrLamKchP(9) (syst.)      %Lambda (LamKchP 1030)
+     & \multicolumn{1}{c}{\ArrLamKchP(10) $\pm$ \ArrLamKchP(11) (stat.) $\pm$ \ArrLamKchP(12) (syst.)}    %Radius (LamKchP & ALamKchM 1030)    
+     & \multicolumn{1}{c}{} \\  
+   \cline{1-3}           
+   
+   30--50\%
+     & \ArrLamKchP(13) $\pm$ \ArrLamKchP(14) (stat.) $\pm$ \ArrLamKchP(15) (syst.)    %Lambda (LamKchP 3050)
+     & \multicolumn{1}{c}{\ArrLamKchP(16) $\pm$ \ArrLamKchP(17) (stat.) $\pm$ \ArrLamKchP(18) (syst.)}    %Radius (LamKchP & ALamKchM 3050)   
+     & \multicolumn{1}{c}{} \\  
+   %\clineB{1-3}{6.0}
+   \cline{1-3}
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+   \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} \\
+   %\hlineB{6.0}
+   \hlineB{3.0}
+  System & $\Re f_{0}$ & $\Im f_{0}$ & $d_{0}$ \\
+  \clineB{1-4}{3.0}  
+   \LamKchP $\oplus$ \ALamKchM 
+     & \ArrLamKchP(19) $\pm$ \ArrLamKchP(20) (stat.) $\pm$ \ArrLamKchP(21) (syst.)   %Ref0   (LamKchP & ALamKchM)
+     & \ArrLamKchP(22) $\pm$ \ArrLamKchP(23) (stat.) $\pm$ \ArrLamKchP(24) (syst.)    %Imf0   (LamKchP & ALamKchM)
+     & \ArrLamKchP(25) $\pm$ \ArrLamKchP(26) (stat.) $\pm$ \ArrLamKchP(27) (syst.) \\ %d0     (LamKchP & ALamKchM)
+     
+   \hline
+   
+   \LamKchM $\oplus$ \ALamKchP
+     & \ArrLamKchM(19) $\pm$ \ArrLamKchM(20) (stat.) $\pm$ \ArrLamKchM(21) (syst.)   %Ref0   (LamKchM & ALamKchP)
+     & \ArrLamKchM(22) $\pm$ \ArrLamKchM(23) (stat.) $\pm$ \ArrLamKchM(24) (syst.)    %Imf0   (LamKchM & ALamKchP)
+     & \ArrLamKchM(25) $\pm$ \ArrLamKchM(26) (stat.) $\pm$ \ArrLamKchM(27) (syst.) \\ %d0     (LamKchM & ALamKchP)     
+   \hline           
+   
+   \LamKs $\oplus$ \ALamKs
+     & \ArrLamKs(19) $\pm$ \ArrLamKs(20) (stat.) $\pm$ \ArrLamKs(21) (syst.)   %Ref0   (LamKchM & ALamKchP)
+     & \ArrLamKs(22) $\pm$ \ArrLamKs(23) (stat.) $\pm$ \ArrLamKs(24) (syst.)    %Imf0   (LamKchM & ALamKchP)
+     & \ArrLamKs(25) $\pm$ \ArrLamKs(26) (stat.) $\pm$ \ArrLamKs(27) (syst.) \\ %d0     (LamKchM & ALamKchP)     
+   \hline   
+     
+ \end{tabular}
+ }
+ %\caption{
+ %Extracted fit parameters.
+ %The uncertainties marked as ``stat." are those returned by MINUIT, and those marked as ``syst." result from the systematic analysis.
+ %}
+ \label{tab:FitResultsLamK_3Res}
+\end{table}
+
+\end{document}

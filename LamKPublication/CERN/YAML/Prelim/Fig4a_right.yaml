@@ -1,0 +1,24 @@
+name: 'Fig4a_right_LamK0.yaml'
+independent_variables:
+- header: {}
+  values:
+  - {value: 0.25}
+  - {value: 0.50}
+  - {value: 0.75}
+dependent_variables:
+- header: {name: d_0 (fm), units: fm}
+  qualifiers:
+  - {name: SQRT(S_NN), units: GeV, value: '2760.0'}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.47}
+    - {label: sys, symerror: 1.23}
+    value: 0.83
+  - errors:
+    - {label: stat, symerror: 2.13}
+    - {label: sys, symerror: 4.80}
+    value: -5.23
+  - errors:
+    - {label: stat, symerror: 1.71}
+    - {label: sys, symerror: 2.77}
+    value: -1.85

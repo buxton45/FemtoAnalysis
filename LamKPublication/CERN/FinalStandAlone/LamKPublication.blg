@@ -1,0 +1,48 @@
+This is BibTeX, Version 0.99d (TeX Live 2015/Debian)
+Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
+The top-level auxiliary file: LamKPublication.aux
+The style file: utphys.bst
+Database file #1: LamK_bibfile.bib
+Warning--empty publisher in Lisa:2008gf
+You've used 42 entries,
+            2395 wiz_defined-function locations,
+            979 strings with 13825 characters,
+and the built_in function-call counts, 9374 in all, are:
+= -- 889
+> -- 395
+< -- 0
++ -- 147
+- -- 105
+* -- 1223
+:= -- 1261
+add.period$ -- 89
+call.type$ -- 42
+change.case$ -- 53
+chr.to.int$ -- 0
+cite$ -- 43
+duplicate$ -- 466
+empty$ -- 1005
+format.name$ -- 105
+if$ -- 2304
+int.to.chr$ -- 0
+int.to.str$ -- 42
+missing$ -- 163
+newline$ -- 201
+num.names$ -- 44
+pop$ -- 177
+preamble$ -- 1
+purify$ -- 0
+quote$ -- 0
+skip$ -- 68
+stack$ -- 0
+substring$ -- 0
+swap$ -- 81
+text.length$ -- 0
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 0
+warning$ -- 1
+while$ -- 43
+width$ -- 44
+write$ -- 382
+(There was 1 warning)

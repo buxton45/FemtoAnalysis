@@ -20,6 +20,8 @@
 #include "Analysis.h"
 class Analysis;
 
+#include "HistInfoPrinter.h"
+
 using std::cout;
 using std::endl;
 using std::vector;
@@ -65,7 +67,7 @@ TH1D* GetDataYlmCfwSysErrors(TString aDate, AnalysisType aAnalysisType, Centrali
 
 
 //_________________________________________________________________________________________
-TH1* DrawDataSHCfComponent(TPad* aPad, Analysis* aAnaly, YlmComponent aComponent, int al, int am, int aRebin, bool aDrawSysErrs=false/*, double aMinNorm=0.32, double aMaxNorm=0.40, int aRebin=2*/, bool aPrintAliceInfo=false)
+TObjArray* DrawDataSHCfComponent(TPad* aPad, Analysis* aAnaly, YlmComponent aComponent, int al, int am, int aRebin, bool aDrawSysErrs=false/*, double aMinNorm=0.32, double aMaxNorm=0.40, int aRebin=2*/, bool aPrintAliceInfo=false)
 {
   aPad->cd();
   int tColor;
@@ -86,6 +88,8 @@ TH1* DrawDataSHCfComponent(TPad* aPad, Analysis* aAnaly, YlmComponent aComponent
 
   tSHCf->Draw("ex0same");
 
+  TObjArray* tReturnArray = new TObjArray();
+  tReturnArray->Add(tSHCf);
   //--------------------------------------------------------------
 
   if(aPrintAliceInfo)
@@ -123,12 +127,14 @@ TH1* DrawDataSHCfComponent(TPad* aPad, Analysis* aAnaly, YlmComponent aComponent
       tSHCfwSysErrs->SetLineWidth(0);
 
       tSHCfwSysErrs->Draw("e2psame");
+      
+      tReturnArray->Add(tSHCfwSysErrs);
   }
-  return tSHCf;
+  return tReturnArray;
 }
 
 //_________________________________________________________________________________________
-TH1* DrawDataSHCfComponent(TPad* aPad, Analysis* aAnaly, Analysis* aConjAnaly, YlmComponent aComponent, int al, int am, int aRebin, bool aDrawSysErrs=false/*, double aMinNorm=0.32, double aMaxNorm=0.40, int aRebin=2*/, bool aPrintAliceInfo=false)
+TObjArray* DrawDataSHCfComponent(TPad* aPad, Analysis* aAnaly, Analysis* aConjAnaly, YlmComponent aComponent, int al, int am, int aRebin, bool aDrawSysErrs=false/*, double aMinNorm=0.32, double aMaxNorm=0.40, int aRebin=2*/, bool aPrintAliceInfo=false)
 {
   aPad->cd();
   int tColor;
@@ -168,6 +174,8 @@ TH1* DrawDataSHCfComponent(TPad* aPad, Analysis* aAnaly, Analysis* aConjAnaly, Y
 
   tSHCf->Draw("ex0same");
 
+  TObjArray* tReturnArray = new TObjArray();
+  tReturnArray->Add(tSHCf);
   //--------------------------------------------------------------
 
   if(aPrintAliceInfo)
@@ -210,8 +218,10 @@ TH1* DrawDataSHCfComponent(TPad* aPad, Analysis* aAnaly, Analysis* aConjAnaly, Y
       tSHCfwSysErrs->SetLineWidth(0);
 
       tSHCfwSysErrs->Draw("e2psame");
+      
+      tReturnArray->Add(tSHCfwSysErrs);
   }
-  return tSHCf;
+  return tReturnArray;
 }
 
 //________________________________________________________________________________________________________________
@@ -342,7 +352,7 @@ void DrawFourSHCfThermComponentsWithData(TPad* aPad, CorrFctnDirectYlmTherm* aCf
 {
   aPad->cd();
   TObjArray* tThermCfs = DrawFourSHCfThermComponents(aPad, aCfYlmTherm0, aCfYlmTherm1, aCfYlmTherm2, aCfYlmTherm3, aComponent, al, am, true);
-  TH1* tDataCf = DrawDataSHCfComponent(aPad, aAnaly, aComponent, al, am, aRebin, aDrawSysErrs, aPrintAliceInfo);
+  TObjArray* tDataCf = DrawDataSHCfComponent(aPad, aAnaly, aComponent, al, am, aRebin, aDrawSysErrs, aPrintAliceInfo);
 
   TLegend* tLeg = new TLegend(0.50, 0.25, 0.95, 0.70);
     tLeg->SetFillColor(0);
@@ -353,7 +363,7 @@ void DrawFourSHCfThermComponentsWithData(TPad* aPad, CorrFctnDirectYlmTherm* aCf
   tLeg->AddEntry((TH1*)tThermCfs->At(1), "#it{#mu}_{out} = 1 fm", "p");
   tLeg->AddEntry((TH1*)tThermCfs->At(2), "#it{#mu}_{out} = 3 fm", "p");
   tLeg->AddEntry((TH1*)tThermCfs->At(3), "#it{#mu}_{out} = 6 fm", "p");
-  tLeg->AddEntry(tDataCf, "ALICE", "p");
+  tLeg->AddEntry((TH1*)tDataCf->At(0), "ALICE", "p");
 
   tLeg->Draw();
 }
@@ -507,7 +517,7 @@ void DrawFourSHCfThermComponentsWithData_CombConj(TPad* aPad, CorrFctnDirectYlmT
 {
   aPad->cd();
   TObjArray* tThermCfs = DrawFourSHCfThermComponents_CombConj(aPad, aCfYlmTherm0a, aCfYlmTherm0b, aCfYlmTherm1a, aCfYlmTherm1b, aCfYlmTherm2a, aCfYlmTherm2b, aCfYlmTherm3a, aCfYlmTherm3b, aComponent, al, am, aPrintText, false);
-  TH1* tDataCf = DrawDataSHCfComponent(aPad, aAnaly, aConjAnaly, aComponent, al, am, aRebin, aDrawSysErrs, aPrintAliceInfo);
+  TObjArray* tDataCf = DrawDataSHCfComponent(aPad, aAnaly, aConjAnaly, aComponent, al, am, aRebin, aDrawSysErrs, aPrintAliceInfo);
 
   double tYLeg1Low = 0.60;
   double tYLeg1High = 0.70;
@@ -524,7 +534,7 @@ void DrawFourSHCfThermComponentsWithData_CombConj(TPad* aPad, CorrFctnDirectYlmT
       tLeg1->SetBorderSize(0);
       tLeg1->SetTextAlign(12);
       tLeg1->SetTextSize(0.06);
-    tLeg1->AddEntry(tDataCf, "ALICE (0-10%)", "p");
+    tLeg1->AddEntry((TH1*)tDataCf->At(0), "ALICE (0-10%)", "p");
     tLeg1->Draw();
 
     double tYLeg2Low = 0.20;
@@ -543,6 +553,22 @@ void DrawFourSHCfThermComponentsWithData_CombConj(TPad* aPad, CorrFctnDirectYlmT
     tLeg2->AddEntry((TH1*)tThermCfs->At(3), "#it{#mu}_{out} = 6 fm", "p");
     tLeg2->Draw();
   }
+  
+/*
+  FILE* tOutput = stdout;
+  cout << "al = " << al << endl;
+  cout << "am = " << am << endl;
+  
+  cout << "Real Data------------------------" << endl;
+  HistInfoPrinter::PrintHistInfowStatAndSystYAML((TH1*)tDataCf->At(0), (TH1*)tDataCf->At(1), tOutput, 0., 0.3);      
+  
+  cout << "Various Mus" << endl;
+  for(int i=0; i<tThermCfs->GetEntries(); i++)
+  {
+    cout << "i = " << i << "------------------" << endl;
+    HistInfoPrinter::PrintHistInfoYAML((TH1*)tThermCfs->At(i), tOutput, 0., 0.3);  
+  }      
+*/ 
 }
 
 //_________________________________________________________________________________________
@@ -550,7 +576,7 @@ void DrawFourSHCfThermComponentsWithDataAndStdTherm_CombConj(TPad* aPad, CorrFct
 {
   aPad->cd();
   TObjArray* tThermCfs = DrawFourSHCfThermComponents_CombConj(aPad, aCfYlmTherm0a, aCfYlmTherm0b, aCfYlmTherm1a, aCfYlmTherm1b, aCfYlmTherm2a, aCfYlmTherm2b, aCfYlmTherm3a, aCfYlmTherm3b, aComponent, al, am, aPrintText, false);
-  TH1* tDataCf = DrawDataSHCfComponent(aPad, aAnaly, aConjAnaly, aComponent, al, am, aRebin, aDrawSysErrs, aPrintAliceInfo);
+  TObjArray* tDataCf = DrawDataSHCfComponent(aPad, aAnaly, aConjAnaly, aComponent, al, am, aRebin, aDrawSysErrs, aPrintAliceInfo);
   TH1D* tSHCfStd = (TH1D*)DrawSHCfThermComponent_CombConj(aPad, aCfYlmThermStda, aCfYlmThermStdb, aComponent, al, am, 24, kBlack);
 
   double tYLeg1Low = 0.575;
@@ -568,7 +594,7 @@ void DrawFourSHCfThermComponentsWithDataAndStdTherm_CombConj(TPad* aPad, CorrFct
       tLeg1->SetBorderSize(0);
       tLeg1->SetTextAlign(12);
       tLeg1->SetTextSize(0.05);
-    tLeg1->AddEntry(tDataCf, "ALICE (0-10%)", "p");
+    tLeg1->AddEntry((TH1*)tDataCf->At(0), "ALICE (0-10%)", "p");
     tLeg1->AddEntry(tSHCfStd, "Std. THERM. 2", "p");
     tLeg1->Draw();
 

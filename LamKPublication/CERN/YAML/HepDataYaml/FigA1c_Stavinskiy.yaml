@@ -1,0 +1,274 @@
+name: 'FigA1c_Stavinskiy.yaml'
+independent_variables:
+- header: {name: k* (GeV/c), units: GeV/c}
+  values:
+  - {value: 0.0100}
+  - {value: 0.0300}
+  - {value: 0.0500}
+  - {value: 0.0700}
+  - {value: 0.0900}
+  - {value: 0.1100}
+  - {value: 0.1300}
+  - {value: 0.1500}
+  - {value: 0.1700}
+  - {value: 0.1900}
+  - {value: 0.2100}
+  - {value: 0.2300}
+  - {value: 0.2500}
+  - {value: 0.2700}
+  - {value: 0.2900}
+  - {value: 0.3100}
+  - {value: 0.3300}
+  - {value: 0.3500}
+  - {value: 0.3700}
+  - {value: 0.3900}
+  - {value: 0.4100}
+  - {value: 0.4300}
+  - {value: 0.4500}
+  - {value: 0.4700}
+  - {value: 0.4900}
+  - {value: 0.5250}
+  - {value: 0.5750}
+  - {value: 0.6250}
+  - {value: 0.6750}
+  - {value: 0.7250}
+  - {value: 0.7750}
+  - {value: 0.8250}
+  - {value: 0.8750}
+  - {value: 0.9250}
+  - {value: 0.9750}
+  - {value: 1.0250}
+  - {value: 1.0750}
+  - {value: 1.1250}
+  - {value: 1.1750}
+  - {value: 1.2250}
+  - {value: 1.2750}
+  - {value: 1.3250}
+  - {value: 1.3750}
+  - {value: 1.4250}
+  - {value: 1.4750}
+  - {value: 1.5250}
+  - {value: 1.5750}
+  - {value: 1.6250}
+  - {value: 1.6750}
+  - {value: 1.7250}
+  - {value: 1.7750}
+  - {value: 1.8250}
+  - {value: 1.8750}
+dependent_variables:
+- header: {name: C(k*)}
+  qualifiers:
+  - {name: SQRT(S_NN), units: GeV, value: '2760.0'}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.025575}
+    - {label: sys, symerror: 0.005879}
+    value: 0.877216
+  - errors:
+    - {label: stat, symerror: 0.010154}
+    - {label: sys, symerror: 0.001941}
+    value: 0.940374
+  - errors:
+    - {label: stat, symerror: 0.006223}
+    - {label: sys, symerror: 0.001198}
+    value: 0.965709
+  - errors:
+    - {label: stat, symerror: 0.004553}
+    - {label: sys, symerror: 0.001020}
+    value: 0.984120
+  - errors:
+    - {label: stat, symerror: 0.003560}
+    - {label: sys, symerror: 0.000619}
+    value: 0.983640
+  - errors:
+    - {label: stat, symerror: 0.002969}
+    - {label: sys, symerror: 0.000547}
+    value: 0.996061
+  - errors:
+    - {label: stat, symerror: 0.002557}
+    - {label: sys, symerror: 0.000532}
+    value: 0.997185
+  - errors:
+    - {label: stat, symerror: 0.002262}
+    - {label: sys, symerror: 0.000403}
+    value: 0.998543
+  - errors:
+    - {label: stat, symerror: 0.002044}
+    - {label: sys, symerror: 0.000322}
+    value: 1.000477
+  - errors:
+    - {label: stat, symerror: 0.001874}
+    - {label: sys, symerror: 0.000408}
+    value: 0.997358
+  - errors:
+    - {label: stat, symerror: 0.001744}
+    - {label: sys, symerror: 0.000340}
+    value: 0.998190
+  - errors:
+    - {label: stat, symerror: 0.001641}
+    - {label: sys, symerror: 0.000319}
+    value: 0.997962
+  - errors:
+    - {label: stat, symerror: 0.001565}
+    - {label: sys, symerror: 0.000255}
+    value: 1.000818
+  - errors:
+    - {label: stat, symerror: 0.001494}
+    - {label: sys, symerror: 0.000335}
+    value: 0.997910
+  - errors:
+    - {label: stat, symerror: 0.001445}
+    - {label: sys, symerror: 0.000267}
+    value: 1.001003
+  - errors:
+    - {label: stat, symerror: 0.001399}
+    - {label: sys, symerror: 0.000259}
+    value: 1.000616
+  - errors:
+    - {label: stat, symerror: 0.001364}
+    - {label: sys, symerror: 0.000254}
+    value: 1.001693
+  - errors:
+    - {label: stat, symerror: 0.001331}
+    - {label: sys, symerror: 0.000231}
+    value: 1.000838
+  - errors:
+    - {label: stat, symerror: 0.001302}
+    - {label: sys, symerror: 0.000195}
+    value: 1.000175
+  - errors:
+    - {label: stat, symerror: 0.001276}
+    - {label: sys, symerror: 0.000205}
+    value: 0.998086
+  - errors:
+    - {label: stat, symerror: 0.001257}
+    - {label: sys, symerror: 0.000191}
+    value: 0.999512
+  - errors:
+    - {label: stat, symerror: 0.001240}
+    - {label: sys, symerror: 0.000291}
+    value: 1.001477
+  - errors:
+    - {label: stat, symerror: 0.001215}
+    - {label: sys, symerror: 0.000242}
+    value: 0.995330
+  - errors:
+    - {label: stat, symerror: 0.001202}
+    - {label: sys, symerror: 0.000232}
+    value: 0.996919
+  - errors:
+    - {label: stat, symerror: 0.001187}
+    - {label: sys, symerror: 0.000262}
+    value: 0.995579
+  - errors:
+    - {label: stat, symerror: 0.000738}
+    - {label: sys, symerror: 0.000138}
+    value: 0.995146
+  - errors:
+    - {label: stat, symerror: 0.000724}
+    - {label: sys, symerror: 0.000180}
+    value: 0.994911
+  - errors:
+    - {label: stat, symerror: 0.000716}
+    - {label: sys, symerror: 0.000146}
+    value: 0.994449
+  - errors:
+    - {label: stat, symerror: 0.000712}
+    - {label: sys, symerror: 0.000174}
+    value: 0.994760
+  - errors:
+    - {label: stat, symerror: 0.000713}
+    - {label: sys, symerror: 0.000174}
+    value: 0.994156
+  - errors:
+    - {label: stat, symerror: 0.000716}
+    - {label: sys, symerror: 0.000182}
+    value: 0.992455
+  - errors:
+    - {label: stat, symerror: 0.000725}
+    - {label: sys, symerror: 0.000159}
+    value: 0.992283
+  - errors:
+    - {label: stat, symerror: 0.000738}
+    - {label: sys, symerror: 0.000168}
+    value: 0.992924
+  - errors:
+    - {label: stat, symerror: 0.000754}
+    - {label: sys, symerror: 0.000175}
+    value: 0.992827
+  - errors:
+    - {label: stat, symerror: 0.000775}
+    - {label: sys, symerror: 0.000191}
+    value: 0.993817
+  - errors:
+    - {label: stat, symerror: 0.000800}
+    - {label: sys, symerror: 0.000193}
+    value: 0.995574
+  - errors:
+    - {label: stat, symerror: 0.000826}
+    - {label: sys, symerror: 0.000204}
+    value: 0.993171
+  - errors:
+    - {label: stat, symerror: 0.000861}
+    - {label: sys, symerror: 0.000226}
+    value: 0.994918
+  - errors:
+    - {label: stat, symerror: 0.000902}
+    - {label: sys, symerror: 0.000235}
+    value: 0.995065
+  - errors:
+    - {label: stat, symerror: 0.000949}
+    - {label: sys, symerror: 0.000218}
+    value: 0.996094
+  - errors:
+    - {label: stat, symerror: 0.001001}
+    - {label: sys, symerror: 0.000250}
+    value: 0.994495
+  - errors:
+    - {label: stat, symerror: 0.001067}
+    - {label: sys, symerror: 0.000254}
+    value: 0.997521
+  - errors:
+    - {label: stat, symerror: 0.001136}
+    - {label: sys, symerror: 0.000255}
+    value: 0.994378
+  - errors:
+    - {label: stat, symerror: 0.001218}
+    - {label: sys, symerror: 0.000260}
+    value: 0.992870
+  - errors:
+    - {label: stat, symerror: 0.001317}
+    - {label: sys, symerror: 0.000285}
+    value: 0.995280
+  - errors:
+    - {label: stat, symerror: 0.001426}
+    - {label: sys, symerror: 0.000297}
+    value: 0.994335
+  - errors:
+    - {label: stat, symerror: 0.001550}
+    - {label: sys, symerror: 0.000304}
+    value: 0.992710
+  - errors:
+    - {label: stat, symerror: 0.001697}
+    - {label: sys, symerror: 0.000304}
+    value: 0.994010
+  - errors:
+    - {label: stat, symerror: 0.001862}
+    - {label: sys, symerror: 0.000375}
+    value: 0.993059
+  - errors:
+    - {label: stat, symerror: 0.002052}
+    - {label: sys, symerror: 0.000355}
+    value: 0.994104
+  - errors:
+    - {label: stat, symerror: 0.002260}
+    - {label: sys, symerror: 0.000480}
+    value: 0.990745
+  - errors:
+    - {label: stat, symerror: 0.002504}
+    - {label: sys, symerror: 0.000411}
+    value: 0.988598
+  - errors:
+    - {label: stat, symerror: 0.002790}
+    - {label: sys, symerror: 0.000535}
+    value: 0.989554

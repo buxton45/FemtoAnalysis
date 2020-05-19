@@ -28,6 +28,8 @@ using std::vector;
 #include "Analysis.h"
 class Analysis;
 
+#include "HistInfoPrinter.h"
+
 int main(int argc, char **argv) 
 {
   TApplication* theApp = new TApplication("App", &argc, argv);
@@ -52,6 +54,8 @@ int main(int argc, char **argv)
 
   bool bDrawResolutions = false;
   int aResFitType = 3;
+  
+  bool aOutputYAML = true;
 //-----------------------------------------------------------------------------
 
   TString tGeneralAnTypeName;
@@ -92,6 +96,14 @@ int main(int argc, char **argv)
 
     TCanvas* canPurityALam = new TCanvas("canPurityALam", "canPurityALam");
     ALamK0->DrawPurityHisto(0, canPurityALam, bPrintPurity);
+    
+    if(aOutputYAML)
+    {
+      FILE* tOutput = stdout;
+      HistInfoPrinter::PrintHistInfoYAML((TH1*)LamK0->GetPurityCollection()[0]->GetCombinedPurity()->Clone(), tOutput);
+      HistInfoPrinter::PrintHistInfoYAML((TH1*)LamK0->GetPurityCollection()[1]->GetCombinedPurity()->Clone(), tOutput);
+      HistInfoPrinter::PrintHistInfoYAML((TH1*)ALamK0->GetPurityCollection()[0]->GetCombinedPurity()->Clone(), tOutput);      
+    }
 
     if(bSaveFigures)
     {

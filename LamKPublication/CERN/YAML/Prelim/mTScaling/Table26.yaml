@@ -1,0 +1,28 @@
+dependent_variables:
+- header: {name: '$R_{\rm inv}$'}
+  qualifiers:
+  - {name: SQRT(S)/NUCLEON, units: GeV, value: '2760.0'}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.207}
+    - {label: sys, symerror: 0.137}
+    value: 5.174
+  - errors:
+    - {label: stat, symerror: 0.152}
+    - {label: sys, symerror: 0.138}
+    value: 4.69
+  - errors:
+    - {label: stat, symerror: 0.136}
+    - {label: sys, symerror: 0.12}
+    value: 4.123
+  - errors:
+    - {label: stat, symerror: 0.11}
+    - {label: sys, symerror: 0.139}
+    value: 3.785
+independent_variables:
+- header: {name: '<$m_{\rm T}$> (GeV/c$^2$)'}
+  values:
+  - {value: 0.69139}
+  - {value: 0.858848}
+  - {value: 1.02841}
+  - {value: 1.28985}

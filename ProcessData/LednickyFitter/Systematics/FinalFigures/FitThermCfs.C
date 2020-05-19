@@ -18,6 +18,7 @@
 #include "CanvasPartition.h"
 #include "CorrFctnDirectYlmTherm.h"
 #include "Analysis.h"
+#include "HistInfoPrinter.h"
 
 bool gRejectPoints=false;
 double tRejectOmegaLow = 0.19;
@@ -362,6 +363,11 @@ void Draw1DSourceProjwFit(TPad* aPad, TH3* a3DoslHist, TString aComponent, doubl
     }
   }
   DrawHistwGaussFit(aPad, t1DSource, aGaussFitMin, aGaussFitMax, tMuName, tSigmaName, bDrawTextOnRight);
+  
+/*
+  FILE* tOutput = stdout;
+  HistInfoPrinter::PrintHistInfoYAML(t1DSource, tOutput, -50, 50);      
+*/
 }
 
 
@@ -378,7 +384,7 @@ void DrawDeltaT(TPad* aPad, TH1* aDeltaTHist, double aGaussFitMin=-20., double a
   aDeltaTHist->SetMarkerColor(kBlack);
 
   aDeltaTHist->GetXaxis()->SetTitle("#Deltat* (fm/#it{c})");
-  aDeltaTHist->GetYaxis()->SetTitle("d#it{N}/#Delta#it{t}*");
+  aDeltaTHist->GetYaxis()->SetTitle("d#it{N}/d#Delta#it{t}*");
 
   SetStandardAxesAttributes(aDeltaTHist);
 
@@ -402,6 +408,10 @@ void DrawDeltaT(TPad* aPad, TH1* aDeltaTHist, double aGaussFitMin=-20., double a
     tLine->SetLineWidth(2);
     tLine->Draw();
 
+/*
+  FILE* tOutput = stdout;
+  HistInfoPrinter::PrintHistInfoYAML(aDeltaTHist, tOutput, -100, 100);      
+*/
 }
 
 
@@ -780,7 +790,7 @@ TH1D* GetDataCfwSysErrors(TString aDate, AnalysisType aAnalysisType, CentralityT
 
 
 //_________________________________________________________________________________________
-TH1* DrawDataSHCfComponent(TPad* aPad, Analysis* aAnaly, Analysis* aConjAnaly, YlmComponent aComponent, int al, int am, int aRebin, bool aDrawSysErrs=false/*, double aMinNorm=0.32, double aMaxNorm=0.40, int aRebin=2*/, bool aPrintAliceInfo=false, double aMarkerSize=1.0)
+TObjArray* DrawDataSHCfComponent(TPad* aPad, Analysis* aAnaly, Analysis* aConjAnaly, YlmComponent aComponent, int al, int am, int aRebin, bool aDrawSysErrs=false/*, double aMinNorm=0.32, double aMaxNorm=0.40, int aRebin=2*/, bool aPrintAliceInfo=false, double aMarkerSize=1.0)
 {
   aPad->cd();
   int tColor;
@@ -820,6 +830,9 @@ TH1* DrawDataSHCfComponent(TPad* aPad, Analysis* aAnaly, Analysis* aConjAnaly, Y
 
   tSHCf->Draw("ex0same");
 
+
+  TObjArray *tReturnArray = new TObjArray();
+  tReturnArray->Add(tSHCf);
   //--------------------------------------------------------------
 
   if(aPrintAliceInfo && al==0 && am==0)
@@ -858,12 +871,14 @@ TH1* DrawDataSHCfComponent(TPad* aPad, Analysis* aAnaly, Analysis* aConjAnaly, Y
       tSHCfwSysErrs->SetLineWidth(0);
 
       tSHCfwSysErrs->Draw("e2psame");
+      
+      tReturnArray->Add(tSHCfwSysErrs);
   }
-  return tSHCf;
+  return tReturnArray;
 }
 
 //_________________________________________________________________________________________
-TH1* DrawDataCf(TPad* aPad, Analysis* aAnaly, Analysis* aConjAnaly, int aRebin, bool aDrawSysErrs=false/*, double aMinNorm=0.32, double aMaxNorm=0.40, int aRebin=2*/, bool aPrintAliceInfo=false, double aMarkerSize=1.0)
+TObjArray* DrawDataCf(TPad* aPad, Analysis* aAnaly, Analysis* aConjAnaly, int aRebin, bool aDrawSysErrs=false/*, double aMinNorm=0.32, double aMaxNorm=0.40, int aRebin=2*/, bool aPrintAliceInfo=false, double aMarkerSize=1.0)
 {
   aPad->cd();
   int tColor;
@@ -907,6 +922,9 @@ TH1* DrawDataCf(TPad* aPad, Analysis* aAnaly, Analysis* aConjAnaly, int aRebin, 
 
   tCf->Draw("ex0same");
 
+
+  TObjArray* tReturnArray = new TObjArray();
+  tReturnArray->Add(tCf);
   //--------------------------------------------------------------
 
   if(aPrintAliceInfo)
@@ -944,8 +962,10 @@ TH1* DrawDataCf(TPad* aPad, Analysis* aAnaly, Analysis* aConjAnaly, int aRebin, 
       tCfwSysErrs->SetLineWidth(0);
 
       tCfwSysErrs->Draw("e2psame");
+      
+      tReturnArray->Add(tCfwSysErrs);     
   }
-  return tCf;
+  return tReturnArray;
 }
 
 //________________________________________________________________________________________________________________
@@ -955,7 +975,7 @@ void Draw1DCfwFitAndData(TPad* aPad, ThermCf* aThermCfObj, double aFitMax, bool 
   bool aIncludeHeader=true;
   if(aSuppressFit) aIncludeHeader=false;
   TH1* tThermCf = Draw1DCfwFit(aPad, aThermCfObj, aFitMax, aFixLambda, aIncludeHeader, aSuppressFit, tMarkerSize);
-  TH1* tData = DrawDataCf(aPad, aAnaly, aConjAnaly, aRebin, aDrawSysErrs, false, tMarkerSize);
+  TObjArray* tData = DrawDataCf(aPad, aAnaly, aConjAnaly, aRebin, aDrawSysErrs, false, tMarkerSize);
   tThermCf->Draw("ex0same");
 
   //--------------------------------
@@ -968,7 +988,7 @@ void Draw1DCfwFitAndData(TPad* aPad, ThermCf* aThermCfObj, double aFitMax, bool 
       tLeg->SetBorderSize(0);
       tLeg->SetTextAlign(12);
       tLeg->SetTextSize(0.065);
-    tLeg->AddEntry(tData, "ALICE (0-10%)", "p");
+    tLeg->AddEntry((TH1*)tData->At(0), "ALICE (0-10%)", "p");
     tLeg->AddEntry(tThermCf, "THERM. 2 (#it{b} = 2 fm)", "p");
     tLeg->Draw();
   }
@@ -981,6 +1001,12 @@ void Draw1DCfwFitAndData(TPad* aPad, ThermCf* aThermCfObj, double aFitMax, bool 
     tex->SetLineWidth(2);
     tex->Draw();
   }
+  
+/*
+  FILE* tOutput = stdout;
+  HistInfoPrinter::PrintHistInfowStatAndSystYAML((TH1*)tData->At(0), (TH1*)tData->At(1), tOutput, 0., 0.329);
+  HistInfoPrinter::PrintHistInfoYAML((TH1*)aThermCfObj->GetThermCf()->Clone(), tOutput, 0., 0.329);      
+*/  
 }
 
 //_________________________________________________________________________________________
@@ -1041,7 +1067,7 @@ void DrawSHCfThermAndData(TPad* aPad, CorrFctnDirectYlmTherm* aCfYlmThermA,CorrF
   SetStandardPadMargins(aPad);
 
   TH1* tSHCfThermComp = DrawSHCfThermComponent_CombConj(aPad, aCfYlmThermA, aCfYlmThermB, kYlmReal, 1, 1, 20, kBlack, tMarkerSize);
-  TH1* tData = DrawDataSHCfComponent(aPad, aAnalySH, aConjAnalySH, kYlmReal, 1, 1, aRebin, aDrawSysErrs, aPrintAliceInfo, tMarkerSize);
+  TObjArray* tData = DrawDataSHCfComponent(aPad, aAnalySH, aConjAnalySH, kYlmReal, 1, 1, aRebin, aDrawSysErrs, aPrintAliceInfo, tMarkerSize);
   tSHCfThermComp->Draw("ex0same");
 
   //--------------------------------
@@ -1076,11 +1102,17 @@ void DrawSHCfThermAndData(TPad* aPad, CorrFctnDirectYlmTherm* aCfYlmThermA,CorrF
       tLeg->SetBorderSize(0);
       tLeg->SetTextAlign(12);
       tLeg->SetTextSize(0.065);
-    tLeg->AddEntry(tData, "ALICE", "p");
+    tLeg->AddEntry((TH1*)tData->At(0), "ALICE", "p");
     tLeg->AddEntry(tSHCfThermComp, "THERM. 2", "p");
     tLeg->Draw();
   }
 
+
+/*
+  FILE* tOutput = stdout;
+  HistInfoPrinter::PrintHistInfowStatAndSystYAML((TH1*)tData->At(0), (TH1*)tData->At(1), tOutput, 0., 0.329);
+  HistInfoPrinter::PrintHistInfoYAML(tSHCfThermComp, tOutput, 0., 0.329);      
+*/ 
 }
 
 //________________________________________________________________________________________________________________
@@ -1400,7 +1432,23 @@ int main(int argc, char **argv)
     Add1DCfwFitToCanPart(tCanPart, 0, 0, tThermCfObj_Mu0, tKStarFitMax, tFixLambdaInFit, 0, false);
     Add1DCfwFitToCanPart(tCanPart, 1, 0, tThermCfObj_Mu1, tKStarFitMax, tFixLambdaInFit, 1, true);
     Add1DCfwFitToCanPart(tCanPart, 0, 1, tThermCfObj_Mu3, tKStarFitMax, tFixLambdaInFit, 3, true);
-    Add1DCfwFitToCanPart(tCanPart, 1, 1, tThermCfObj_Mu6, tKStarFitMax, tFixLambdaInFit, 6, true);
+    Add1DCfwFitToCanPart(tCanPart, 1, 1, tThermCfObj_Mu6, tKStarFitMax, tFixLambdaInFit, 6, true); 
+
+/*
+  FILE* tOutput = stdout;
+  
+  cout << "Mu0------------------" << endl;
+  HistInfoPrinter::PrintHistInfoYAML((TH1*)tThermCfObj_Mu0->GetThermCf()->Clone() , tOutput, 0., tXHigh);      
+  
+  cout << "Mu1------------------" << endl;
+  HistInfoPrinter::PrintHistInfoYAML((TH1*)tThermCfObj_Mu1->GetThermCf()->Clone() , tOutput, 0., tXHigh);  
+  
+  cout << "Mu3------------------" << endl;
+  HistInfoPrinter::PrintHistInfoYAML((TH1*)tThermCfObj_Mu3->GetThermCf()->Clone() , tOutput, 0., tXHigh);  
+  
+  cout << "Mu6------------------" << endl;
+  HistInfoPrinter::PrintHistInfoYAML((TH1*)tThermCfObj_Mu6->GetThermCf()->Clone() , tOutput, 0., tXHigh);        
+*/
     
     //----------
     double tLabelScaleX = 1.5;

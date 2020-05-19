@@ -1,0 +1,17 @@
+name: 'Fig4a_left_LamKchM.yaml'
+independent_variables:
+- header: {name: Re f_0 (fm), units: fm}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.12}
+    - {label: sys, symerror: 0.07}
+    value: 0.27
+dependent_variables:
+- header: {name: Im f_0 (fm), units: fm}
+  qualifiers:
+  - {name: SQRT(S_NN), units: GeV, value: '2760.0'}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.11}
+    - {label: sys, symerror: 0.07}
+    value: 0.40

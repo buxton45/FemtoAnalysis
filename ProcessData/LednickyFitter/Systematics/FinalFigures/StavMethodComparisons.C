@@ -10,6 +10,7 @@ class FitGeneratorAndDraw;
 #include "CanvasPartition.h"
 class CanvasPartition;
 
+#include "HistInfoPrinter.h"
 
 //________________________________________________________________________________________________________________
 void ScaleCustomRebinnedCf(double aOriginalBinWidth, TH1* aCf, const td1dVec &aCustomBins)
@@ -434,6 +435,13 @@ TCanvas* DrawKStarCfs_OnlyTwo_CombConj(FitGenerator* aFG1, FitGenerator* aFG2, b
       //---------------------------------
       tCanPart->AddGraph(0,j,tCfwSysErrs1,"",tMarkerStyle1,tColorTransparent1,0.5,"e2psame");
       tCanPart->AddGraph(0,j,tCfwSysErrs2,"",tMarkerStyle2,tColorTransparent2,0.5,"e2psame");
+      
+      /*
+      FILE* tOutput = stdout;
+      double tXAxisHigh = tCanPart->GetAxesRanges()[1];
+      HistInfoPrinter::PrintHistInfowStatAndSystYAML((TH1*)tCfHeavy1->GetHeavyCfClone(), tCfwSysErrs1, tOutput, 0., tXAxisHigh);
+      HistInfoPrinter::PrintHistInfowStatAndSystYAML((TH1*)tCfHeavy2->GetHeavyCfClone(), tCfwSysErrs2, tOutput, 0., tXAxisHigh);      
+      */
     }
 
     //---------------------------------------------------------------------------------------------------------

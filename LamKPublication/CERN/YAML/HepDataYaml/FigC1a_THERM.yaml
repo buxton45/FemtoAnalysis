@@ -1,0 +1,141 @@
+name: 'FigC1a_THERM.yaml'
+independent_variables:
+- header: {name: k* (GeV/c), units: GeV/c}
+  values:
+  - {value: 0.0050}
+  - {value: 0.0150}
+  - {value: 0.0250}
+  - {value: 0.0350}
+  - {value: 0.0450}
+  - {value: 0.0550}
+  - {value: 0.0650}
+  - {value: 0.0750}
+  - {value: 0.0850}
+  - {value: 0.0950}
+  - {value: 0.1050}
+  - {value: 0.1150}
+  - {value: 0.1250}
+  - {value: 0.1350}
+  - {value: 0.1450}
+  - {value: 0.1550}
+  - {value: 0.1650}
+  - {value: 0.1750}
+  - {value: 0.1850}
+  - {value: 0.1950}
+  - {value: 0.2050}
+  - {value: 0.2150}
+  - {value: 0.2250}
+  - {value: 0.2350}
+  - {value: 0.2450}
+  - {value: 0.2550}
+  - {value: 0.2650}
+  - {value: 0.2750}
+  - {value: 0.2850}
+  - {value: 0.2950}
+  - {value: 0.3050}
+  - {value: 0.3150}
+  - {value: 0.3250}
+dependent_variables:
+- header: {name: C(k*)}
+  qualifiers:
+  - {name: SQRT(S_NN), units: GeV, value: '2760.0'}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.025029}
+    value: 0.932851
+  - errors:
+    - {label: stat, symerror: 0.009442}
+    value: 0.926136
+  - errors:
+    - {label: stat, symerror: 0.005840}
+    value: 0.940456
+  - errors:
+    - {label: stat, symerror: 0.004297}
+    value: 0.961921
+  - errors:
+    - {label: stat, symerror: 0.003366}
+    value: 0.962715
+  - errors:
+    - {label: stat, symerror: 0.002813}
+    value: 0.979471
+  - errors:
+    - {label: stat, symerror: 0.002410}
+    value: 0.986101
+  - errors:
+    - {label: stat, symerror: 0.002112}
+    value: 0.991520
+  - errors:
+    - {label: stat, symerror: 0.001892}
+    value: 0.992324
+  - errors:
+    - {label: stat, symerror: 0.001703}
+    value: 0.994101
+  - errors:
+    - {label: stat, symerror: 0.001550}
+    value: 0.993158
+  - errors:
+    - {label: stat, symerror: 0.001434}
+    value: 0.996992
+  - errors:
+    - {label: stat, symerror: 0.001331}
+    value: 0.995304
+  - errors:
+    - {label: stat, symerror: 0.001248}
+    value: 0.997268
+  - errors:
+    - {label: stat, symerror: 0.001175}
+    value: 0.998257
+  - errors:
+    - {label: stat, symerror: 0.001113}
+    value: 0.999103
+  - errors:
+    - {label: stat, symerror: 0.001059}
+    value: 1.000806
+  - errors:
+    - {label: stat, symerror: 0.001010}
+    value: 0.999909
+  - errors:
+    - {label: stat, symerror: 0.000968}
+    value: 0.998600
+  - errors:
+    - {label: stat, symerror: 0.000931}
+    value: 0.997518
+  - errors:
+    - {label: stat, symerror: 0.000898}
+    value: 0.998914
+  - errors:
+    - {label: stat, symerror: 0.000869}
+    value: 1.000784
+  - errors:
+    - {label: stat, symerror: 0.000842}
+    value: 1.000641
+  - errors:
+    - {label: stat, symerror: 0.000818}
+    value: 1.000088
+  - errors:
+    - {label: stat, symerror: 0.000797}
+    value: 1.000676
+  - errors:
+    - {label: stat, symerror: 0.000778}
+    value: 1.000862
+  - errors:
+    - {label: stat, symerror: 0.000760}
+    value: 1.000187
+  - errors:
+    - {label: stat, symerror: 0.000745}
+    value: 1.000803
+  - errors:
+    - {label: stat, symerror: 0.000730}
+    value: 1.001584
+  - errors:
+    - {label: stat, symerror: 0.000716}
+    value: 0.999309
+  - errors:
+    - {label: stat, symerror: 0.000704}
+    value: 1.000126
+  - errors:
+    - {label: stat, symerror: 0.000693}
+    value: 0.999502
+  - errors:
+    - {label: stat, symerror: 0.000684}
+    value: 1.000050

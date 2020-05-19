@@ -15,7 +15,7 @@ class PartialAnalysis;
 class Analysis;
 
 #include "CorrFctnDirectYlmTherm.h"
-
+#include "HistInfoPrinter.h"
 
 
 //________________________________________________________________________________________________________________
@@ -294,6 +294,12 @@ void DrawSHCfComponent(TPad* aPad, Analysis* aAnaly, Analysis* aConjAnaly, YlmCo
       tSHCfwSysErrs->Draw("e2psame");
 
       //tLeg->AddEntry(tSHCfwSysErrs, "syst. errors", "F");
+      
+/*
+      FILE* tOutput = stdout;
+      HistInfoPrinter::PrintHistInfowStatAndSystYAML(tSHCf, tSHCfwSysErrs, tOutput, tXLow, tXHigh);
+*/      
+      
   }
 
   tLeg->Draw();

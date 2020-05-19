@@ -2507,8 +2507,8 @@ void FitGeneratorAndDraw::BuildKStarCfswFitsPanel_CombineConj(CanvasPartition* a
 /*
   FILE* tOutput = stdout;
   double tXAxisHigh = aCanPart->GetAxesRanges()[1];
-  HistInfoPrinter::PrintHistInfowStatAndSyst(tCfData, tCfwSysErrs, tOutput, 0., tXAxisHigh);
-*/  
+  HistInfoPrinter::PrintHistInfowStatAndSystYAML(tCfData, tCfwSysErrs, tOutput, 0., tXAxisHigh);
+*/
 }
 
 
