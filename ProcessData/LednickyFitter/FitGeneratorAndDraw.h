@@ -76,11 +76,14 @@ public:
 
   static CfHeavy* CombineTwoHeavyCfs(CfHeavy *aCf1, CfHeavy* aCf2);
   static TH1* CombineTwoHists(TH1* aHist1, TH1* aHist2, double aNorm1, double aNorm2);
-  virtual void BuildKStarCfswFitsPanel_CombineConj(CanvasPartition* aCanPart, int aAnNumber, int aConjAnNumber, int tColumn, int tRow, bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, NonFlatBgdFitType aNonFlatBgdFitType, bool aDrawSysErrors, bool aDrawDataOnTop);
-  virtual CanvasPartition* BuildKStarCfswFitsCanvasPartition_CombineConj(TString aCanvasBaseName, bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, NonFlatBgdFitType aNonFlatBgdFitType=kLinear, bool aDrawSysErrors=true, bool aZoomROP=true, bool aSuppressFitInfoOutput=false, bool aLabelLines=false);
+  virtual void BuildKStarCfswFitsPanel_CombineConj(CanvasPartition* aCanPart, int aAnNumber, int aConjAnNumber, int tColumn, int tRow, bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, NonFlatBgdFitType aNonFlatBgdFitType, bool aDrawSysErrors, bool aDrawDataOnTop, bool aDrawErrBands);
+  virtual CanvasPartition* BuildKStarCfswFitsCanvasPartition_CombineConj(TString aCanvasBaseName, bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, NonFlatBgdFitType aNonFlatBgdFitType=kLinear, bool aDrawSysErrors=true, bool aZoomROP=true, bool aSuppressFitInfoOutput=false, bool aLabelLines=false, bool aDrawErrBands=false);
   virtual TCanvas* DrawKStarCfswFits_CombineConj(bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, NonFlatBgdFitType aNonFlatBgdFitType=kLinear, bool aSaveImage=false, bool aDrawSysErrors=true, bool aZoomROP=true, bool aSuppressFitInfoOutput=false, bool aLabelLines=false);
 
   virtual void BuildKStarCfsPanel_CombineConj(CanvasPartition* aCanPart, int aAnNumber, int aConjAnNumber, int tColumn, int tRow, bool aDrawSysErrors, bool aDrawDataOnTop);
+  
+  virtual td2dVec GetParamsMinMaxForErrBands(AnalysisType aAnType, TF1* aFit, const td1dVec &aSysErrors);
+  virtual td3dVec GetParamsMinMaxForErrBands_FINALRESULTSONLY();
 
   //inline 
 

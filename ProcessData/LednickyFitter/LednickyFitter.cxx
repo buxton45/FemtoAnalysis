@@ -873,6 +873,13 @@ void LednickyFitter::DoFit(bool aOutputCorrCoeffFile)
     gSystem->RedirectOutput(tParamCorrOutputName, "w");
     fMinuit->mnexcm("SHO COR", arglist ,2,fErrFlg);
     gSystem->RedirectOutput(0);
+    
+    //--------- Covariance (i.e. error) matrix also
+    TString tCovMatrxOutputName = BuildParamCorrCoeffOutputFile("CovarianceMatrix", "txt");
+    gSystem->RedirectOutput(tCovMatrxOutputName, "w");
+    fMinuit->mnexcm("SHO COV", arglist ,2,fErrFlg);
+    gSystem->RedirectOutput(0);    
+    
   }
   //---------------------------------
 
@@ -1607,4 +1614,128 @@ void LednickyFitter::SetNonFlatBgdFitTypes(vector<NonFlatBgdFitType> &aNonFlatBg
 {
   fNonFlatBgdFitTypes = aNonFlatBgdFitTypes;
 }
+
+
+
+//________________________________________________________________________________________________________________
+void LednickyFitter::CalculateFitFunction_forErrBands(int &npar, double &chi2, double *par)
+{
+  if(fVerbose) PrintCurrentParamValues(fFitSharedAnalyses->GetNMinuitParams(),par);
+  //---------------------------------------------------------
+
+  int tNFitParPerAnalysis = 5;
+
+  vector<double> tPrimaryFitCfContent(fNbinsXToBuild,0.);
+  vector<double> tNumContent(fNbinsXToBuild,0.);
+  vector<double> tDenContent(fNbinsXToBuild,0.);
+
+  NonFlatBgdFitType tNonFlatBgdFitType;
+  for(int iAnaly=0; iAnaly<fNAnalyses; iAnaly++)
+  {
+    FitPairAnalysis* tFitPairAnalysis = fFitSharedAnalyses->GetFitPairAnalysis(iAnaly);
+    TH2* tMomResMatrix = NULL;
+    if(fApplyMomResCorrection)
+    {
+      tMomResMatrix = tFitPairAnalysis->GetModelKStarTrueVsRecMixed();
+      assert(tMomResMatrix);
+    }
+
+    int tNFitPartialAnalysis = tFitPairAnalysis->GetNFitPartialAnalysis();
+    for(int iPartAn=0; iPartAn<tNFitPartialAnalysis; iPartAn++)
+    {
+      FitPartialAnalysis* tFitPartialAnalysis = tFitPairAnalysis->GetFitPartialAnalysis(iPartAn);
+      CfLite* tKStarCfLite = tFitPartialAnalysis->GetKStarCfLite();
+
+      TH1* tNum = tKStarCfLite->Num();
+      TH1* tDen = tKStarCfLite->Den();
+      TH1* tCf = tKStarCfLite->Cf();
+
+      int tNFitParams = tFitPartialAnalysis->GetNFitParams() +1;  //the +1 accounts for the normalization parameter
+      assert(tNFitParams = tNFitParPerAnalysis+1);
+
+      int tLambdaMinuitParamNumber = tFitPartialAnalysis->GetFitParameter(kLambda)->GetMinuitParamNumber();
+      int tRadiusMinuitParamNumber = tFitPartialAnalysis->GetFitParameter(kRadius)->GetMinuitParamNumber();
+      int tRef0MinuitParamNumber = tFitPartialAnalysis->GetFitParameter(kRef0)->GetMinuitParamNumber();
+      int tImf0MinuitParamNumber = tFitPartialAnalysis->GetFitParameter(kImf0)->GetMinuitParamNumber();
+      int td0MinuitParamNumber = tFitPartialAnalysis->GetFitParameter(kd0)->GetMinuitParamNumber();
+      int tNormMinuitParamNumber = tFitPartialAnalysis->GetFitNormParameter()->GetMinuitParamNumber();
+
+      tNonFlatBgdFitType = fNonFlatBgdFitTypes[tFitPartialAnalysis->GetAnalysisType()];
+
+      assert(tNFitParams == 6);
+      //NOTE: CANNOT use sizeof(tPar)/sizeof(tPar[0]) trick here becasue tPar is pointer
+      double *tParPrim = new double[tNFitParams];
+
+
+//      if(fIncludeResidualsType != kIncludeNoResiduals) tParPrim[0] = cAnalysisLambdaFactors[tFitPairAnalysis->GetAnalysisType()]*par[tLambdaMinuitParamNumber];
+      if(fIncludeResidualsType != kIncludeNoResiduals) tParPrim[0] = cAnalysisLambdaFactorsArr[fIncludeResidualsType][fResPrimMaxDecayType][tFitPairAnalysis->GetAnalysisType()]*par[tLambdaMinuitParamNumber];
+      else tParPrim[0] = par[tLambdaMinuitParamNumber];
+      tParPrim[1] = par[tRadiusMinuitParamNumber];
+      tParPrim[2] = par[tRef0MinuitParamNumber];
+      tParPrim[3] = par[tImf0MinuitParamNumber];
+      tParPrim[4] = par[td0MinuitParamNumber];
+      tParPrim[5] = par[tNormMinuitParamNumber];
+
+      for(int i=0; i<tNFitParams; i++)  //assure all parameters exist
+      {
+        if(std::isnan(tParPrim[i])) {cout <<"CRASH:  In CalculateFitFunction, a tParPrim elemement " << i << " DNE!!!!!" << endl;}
+        assert(!std::isnan(tParPrim[i]));
+      }
+
+      double x[1];
+
+      vector<double> tFitCfContent;
+      vector<double> tCorrectedFitCfContent;
+
+      for(int ix=1; ix <= fNbinsXToBuild; ix++)
+      {
+        x[0] = fKStarBinCenters[ix-1];
+
+        tNumContent[ix-1] = tNum->GetBinContent(ix);
+        tDenContent[ix-1] = tDen->GetBinContent(ix);
+
+        tPrimaryFitCfContent[ix-1] = FitPartialAnalysis::LednickyEq(x,tParPrim);
+      }
+
+      if(fIncludeResidualsType != kIncludeNoResiduals) 
+      {
+        double *tParOverall = new double[tNFitParams];
+        tParOverall[0] = par[tLambdaMinuitParamNumber];
+        tParOverall[1] = par[tRadiusMinuitParamNumber];
+        tParOverall[2] = par[tRef0MinuitParamNumber];
+        tParOverall[3] = par[tImf0MinuitParamNumber];
+        tParOverall[4] = par[td0MinuitParamNumber];
+        tParOverall[5] = par[tNormMinuitParamNumber];
+        tFitCfContent = GetFitCfIncludingResiduals(tFitPairAnalysis, tPrimaryFitCfContent, tParOverall);
+        delete[] tParOverall;
+      }
+      else tFitCfContent = tPrimaryFitCfContent;
+
+
+      if(fApplyMomResCorrection) tCorrectedFitCfContent = ApplyMomResCorrection(tFitCfContent, fKStarBinCenters, tMomResMatrix);
+      else tCorrectedFitCfContent = tFitCfContent;
+
+      bool tNormalizeBgdFitToCf=true;
+      if(fApplyNonFlatBackgroundCorrection && tNonFlatBgdFitType != kDivideByTherm)
+      {
+        if(!fFitSharedAnalyses->UsingNewBgdTreatment())
+        {
+          //I thought using PairAnalysis, when BgdFitType != kLinear, would help stabilize things, but it doesn't seem to help all that much.
+          //  Things have been stabilized with other tweaks.
+          TF1* tNonFlatBgd = tFitPartialAnalysis->GetNonFlatBackground(tNonFlatBgdFitType, fFitSharedAnalyses->GetFitType(), tNormalizeBgdFitToCf);
+          ApplyNonFlatBackgroundCorrection(tCorrectedFitCfContent, fKStarBinCenters, tNonFlatBgd);
+        }
+        else ApplyNewNonFlatBackgroundCorrection(tCorrectedFitCfContent, fKStarBinCenters, tFitPartialAnalysis, par);
+      }
+
+      ApplyNormalization(tParPrim[5], tCorrectedFitCfContent);
+      fFitSharedAnalyses->GetFitPairAnalysis(iAnaly)->GetFitPartialAnalysis(iPartAn)->SetCorrectedFitVec_MinErrBand(tCorrectedFitCfContent);
+      fFitSharedAnalyses->GetFitPairAnalysis(iAnaly)->GetFitPartialAnalysis(iPartAn)->SetCorrectedFitVec_MaxErrBand(tCorrectedFitCfContent);
+
+      delete[] tParPrim;
+    }
+  }
+}
+
+
 

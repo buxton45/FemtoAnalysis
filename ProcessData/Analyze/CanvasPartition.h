@@ -92,6 +92,8 @@ public:
   TObjArray* GetPadPaveTexts();
   int GetNx();
   int GetNy();
+  
+  vector<TString> GetGraphsDrawOptionsInPad(int aNx, int aNy);
 
 protected:
   bool fDrawUnityLine;
@@ -139,6 +141,8 @@ inline TObjArray* CanvasPartition::GetPadLegends() {return fPadLegends;}
 inline TObjArray* CanvasPartition::GetPadPaveTexts() {return fPadPaveTexts;}
 inline int CanvasPartition::GetNx() {return fNx;}
 inline int CanvasPartition::GetNy() {return fNy;}
+
+inline vector<TString> CanvasPartition::GetGraphsDrawOptionsInPad(int aNx, int aNy) {return fGraphsDrawOptions[aNx + aNy*fNx];}
 
 //________________________________________________________________________________________________________________
 template<typename T>

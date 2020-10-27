@@ -1,0 +1,94 @@
+%%% NOTE: If I want to run this standalone, uncomment out lines below
+%%%       But lines must be commented out to run within larger project
+%\begin{comment}
+\makeatletter
+\def\input@path{{/home/jesse/Analysis/FemtoAnalysis/AnalysisNotes/}}
+\makeatother
+
+\documentclass[ALICE,manyauthors]{ALICE_analysis_notes}
+
+\usepackage{MyStyle}
+\usepackage{chngpage}  % for adjustwidth
+\usepackage{boldline}  % to make lines in table bold
+                       % V{<factor>} vertical rule in \begin{tabular} command
+                       % also \clinB{<spec>}{<factor>} and \hlineB{<factor>}
+\usepackage{arrayjobx} % To use the array structures stored in FitResults_cLamcKch_20180505.tex   
+%\end{comment}  
+
+
+%%%% UPDATE ME FOR EACH FILE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+%!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+\begin{document}
+
+
+%%%%%%%%%%%%%%%%%%%%%%Single rows.  For multi rows, see below
+%\begin{comment}
+\begin{table}[htbp]
+ \centering
+ \caption{
+ Extracted fit parameters utilizing the Stavinskiy method.
+ }
+ \resizebox{\columnwidth}{!}{
+ \renewcommand{\arraystretch}{1.3}
+ \begin{tabular}{c|c|c|c}
+  \clineB{1-3}{3.0}
+  Centrality & $\lambda_{\mathrm{Fit}}$ & \multicolumn{1}{c}{$R_{\mathrm{inv}}$} & \multicolumn{1}{c}{} \\
+  \clineB{1-3}{3.0}  
+   0--10\%
+     & 1.38 $\pm$ 0.39 (stat.) $\pm$ 0.24 (syst.)    %Lambda (LamKchP 0010)
+     & \multicolumn{1}{c}{5.33 $\pm$ 0.59 (stat.) $\pm$ 0.81 (syst.)}    %Radius (LamKchP & ALamKchM 0010)
+     & \multicolumn{1}{c}{} \\    
+   \cline{1-3}
+   
+   10--30\%
+     & 0.96 $\pm$ 0.29 (stat.) $\pm$ 0.27 (syst.)      %Lambda (LamKchP 1030)
+     & \multicolumn{1}{c}{3.85 $\pm$ 0.46 (stat.) $\pm$ 0.60 (syst.)}    %Radius (LamKchP & ALamKchM 1030)    
+     & \multicolumn{1}{c}{} \\  
+   \cline{1-3}           
+   
+   30--50\%
+     & 1.16 $\pm$ 0.36 (stat.) $\pm$ 0.57 (syst.)    %Lambda (LamKchP 3050)
+     & \multicolumn{1}{c}{3.21 $\pm$ 0.41 (stat.) $\pm$ 0.38 (syst.)}    %Radius (LamKchP & ALamKchM 3050)   
+     & \multicolumn{1}{c}{} \\  
+   %\clineB{1-3}{6.0}
+   \cline{1-3}
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+   \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} \\
+   %\hlineB{6.0}
+   \hlineB{3.0}
+  System & $\Re f_{0}$ & $\Im f_{0}$ & $d_{0}$ \\
+  \clineB{1-4}{3.0}  
+   \LamKchP $\oplus$ \ALamKchM 
+     & -0.37 $\pm$ 0.11 (stat.) $\pm$ 0.36 (syst.)   %Ref0   (LamKchP & ALamKchM)
+     & 0.27 $\pm$ 0.10 (stat.) $\pm$ 0.23 (syst.)    %Imf0   (LamKchP & ALamKchM)
+     & -7.80 $\pm$ 3.84 (stat.) $\pm$ 0.53 (syst.) \\ %d0     (LamKchP & ALamKchM)
+     
+   \hline
+   
+   \LamKchM $\oplus$ \ALamKchP
+     & 0.15 $\pm$ 0.07 (stat.) $\pm$ 0.14 (syst.)   %Ref0   (LamKchM & ALamKchP)
+     & 0.23 $\pm$ 0.08 (stat.) $\pm$ 0.11 (syst.)    %Imf0   (LamKchM & ALamKchP)
+     & 9.55 $\pm$ 4.30 (stat.) $\pm$ 1.33 (syst.) \\ %d0     (LamKchM & ALamKchP)     
+   \hline           
+   
+   \LamKs $\oplus$ \ALamKs
+     & -0.05 $\pm$ 0.08 (stat.) $\pm$ 0.16 (syst.)   %Ref0   (LamKchM & ALamKchP)
+     & 0.27 $\pm$ 0.09 (stat.) $\pm$ 0.13 (syst.)    %Imf0   (LamKchM & ALamKchP)
+     & -17.04 $\pm$ 8.25 (stat.) $\pm$ 0.62 (syst.) \\ %d0     (LamKchM & ALamKchP)     
+   \hline   
+   
+   
+ \end{tabular}
+ }
+ %\caption{
+ %Extracted fit parameters.
+ %The uncertainties marked as ``stat." are those returned by MINUIT, and those marked as ``syst." result from the systematic analysis.
+ %}
+ \label{tab:FitResultsLamK_3Res}
+\end{table}
+%\end{comment}
+
+
+\end{document}

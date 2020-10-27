@@ -3,10 +3,12 @@ Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
 The top-level auxiliary file: LamKPublication.aux
 The style file: utphys.bst
 Database file #1: LamK_bibfile.bib
+Warning--I'm ignoring Kisiel:2014upa's extra "pages" field
+--line 425 of file LamK_bibfile.bib
 Warning--empty publisher in Lisa:2008gf
 You've used 42 entries,
             2395 wiz_defined-function locations,
-            979 strings with 13825 characters,
+            980 strings with 13900 characters,
 and the built_in function-call counts, 9374 in all, are:
 = -- 889
 > -- 395
@@ -45,4 +47,4 @@ warning$ -- 1
 while$ -- 43
 width$ -- 44
 write$ -- 382
-(There was 1 warning)
+(There were 2 warnings)

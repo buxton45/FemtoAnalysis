@@ -69,6 +69,9 @@ FitPartialAnalysis::FitPartialAnalysis(TString aFileLocation, TString aAnalysisN
   fNonFlatBackground(nullptr),
   fThermNonFlatBgd(nullptr),
   fCorrectedFitVec(0),
+  
+  fCorrectedFitVec_MinErrBand(0), 
+  fCorrectedFitVec_MaxErrBand(0), 
 
   fUseStavCf(aUseStavCf)
 {
@@ -216,6 +219,9 @@ FitPartialAnalysis::FitPartialAnalysis(TString aFileLocation, TString aFileLocat
   fNonFlatBackground(nullptr),
   fThermNonFlatBgd(nullptr),
   fCorrectedFitVec(0),
+  
+  fCorrectedFitVec_MinErrBand(0), 
+  fCorrectedFitVec_MaxErrBand(0), 
 
   fUseStavCf(aUseStavCf)
 {
@@ -950,3 +956,35 @@ CfLite* FitPartialAnalysis::GetModelKStarCfFakeIdeal(double aKStarMinNorm, doubl
 
   return fModelKStarCfFakeIdeal;
 }
+
+
+//________________________________________________________________________________________________________________
+void FitPartialAnalysis::SetCorrectedFitVec_MinErrBand(td1dVec &aVec)
+{
+  if(fCorrectedFitVec_MinErrBand.size()==0) fCorrectedFitVec_MinErrBand = aVec;
+  else
+  {
+    assert(fCorrectedFitVec_MinErrBand.size() == aVec.size());
+    for(unsigned int i=0; i<fCorrectedFitVec_MinErrBand.size(); i++)
+    {
+      fCorrectedFitVec_MinErrBand[i] = (fCorrectedFitVec_MinErrBand[i] < aVec[i]) ?  fCorrectedFitVec_MinErrBand[i] : aVec[i];
+    }
+  }
+
+}
+
+
+//________________________________________________________________________________________________________________
+void FitPartialAnalysis::SetCorrectedFitVec_MaxErrBand(td1dVec &aVec)
+{
+  if(fCorrectedFitVec_MaxErrBand.size()==0) fCorrectedFitVec_MaxErrBand = aVec;
+  else
+  {
+    assert(fCorrectedFitVec_MaxErrBand.size() == aVec.size());  
+    for(unsigned int i=0; i<fCorrectedFitVec_MaxErrBand.size(); i++)
+    {
+      fCorrectedFitVec_MaxErrBand[i] = (fCorrectedFitVec_MaxErrBand[i] > aVec[i]) ?  fCorrectedFitVec_MaxErrBand[i] : aVec[i];
+    }
+  }
+}
+

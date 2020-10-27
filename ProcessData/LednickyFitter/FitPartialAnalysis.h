@@ -120,6 +120,9 @@ public:
   CfLite* GetModelKStarCfFake(double aKStarMinNorm, double aKStarMaxNorm, int aRebin=1);
   CfLite* GetModelKStarCfFakeIdeal(double aKStarMinNorm, double aKStarMaxNorm, int aRebin=1);
 
+  void SetCorrectedFitVec_MinErrBand(td1dVec &aVec);
+  void SetCorrectedFitVec_MaxErrBand(td1dVec &aVec);
+
   //inline (i.e. simple) functions
   AnalysisType GetAnalysisType();
   BFieldType GetBFieldType();
@@ -162,6 +165,8 @@ public:
 
   void SetCorrectedFitVec(td1dVec &aVec);
   td1dVec GetCorrectedFitVec();
+  
+  td1dVec GetCorrectedFitVec_ErrBand(bool aIsMin);
 
   TF1* GetPrimaryFit();
 
@@ -209,6 +214,9 @@ private:
   TF1* fNonFlatBackground;
   ThermCf* fThermNonFlatBgd;
   td1dVec fCorrectedFitVec;
+  
+  td1dVec fCorrectedFitVec_MinErrBand;
+  td1dVec fCorrectedFitVec_MaxErrBand;
 
   bool fUseStavCf;
 
@@ -260,6 +268,13 @@ inline TH2* FitPartialAnalysis::GetModelKStarTrueVsRecMixed() {return fModelKSta
 
 inline void FitPartialAnalysis::SetCorrectedFitVec(td1dVec &aVec) {fCorrectedFitVec = aVec;}
 inline td1dVec FitPartialAnalysis::GetCorrectedFitVec() {return fCorrectedFitVec;}
+
+inline td1dVec FitPartialAnalysis::GetCorrectedFitVec_ErrBand(bool aIsMin) 
+{
+  if(aIsMin) return fCorrectedFitVec_MinErrBand;
+  else return fCorrectedFitVec_MaxErrBand;
+}
+
 
 inline TF1* FitPartialAnalysis::GetPrimaryFit() {return fPrimaryFit;}
 
