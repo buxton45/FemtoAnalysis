@@ -51,6 +51,8 @@ int main(int argc, char **argv)
 
   bool bDrawPurity = true;
   bool bPrintPurity = true;
+  bool bPutYExponentInLabel = true;
+  TString tExponentToPrint="10^{6}";
 
   bool bDrawResolutions = false;
   int aResFitType = 3;
@@ -85,17 +87,17 @@ int main(int argc, char **argv)
     TCanvas* canPurity = new TCanvas("canPurity","canPurity");
     canPurity->Divide(2,1);
 
-    LamK0->DrawAllPurityHistos((TPad*)canPurity->cd(1), bPrintPurity);
-    ALamK0->DrawAllPurityHistos((TPad*)canPurity->cd(2), bPrintPurity);
+    LamK0->DrawAllPurityHistos((TPad*)canPurity->cd(1), bPrintPurity, bPutYExponentInLabel, tExponentToPrint);
+    ALamK0->DrawAllPurityHistos((TPad*)canPurity->cd(2), bPrintPurity, bPutYExponentInLabel, tExponentToPrint);
 
     TCanvas* canPurityLam = new TCanvas("canPurityLam", "canPurityLam");
-    LamK0->DrawPurityHisto(0, canPurityLam, bPrintPurity);
+    LamK0->DrawPurityHisto(0, canPurityLam, bPrintPurity, bPutYExponentInLabel, tExponentToPrint);
 
     TCanvas* canPurityK0 = new TCanvas("canPurityK0", "canPurityK0");
-    LamK0->DrawPurityHisto(1, canPurityK0, bPrintPurity);
+    LamK0->DrawPurityHisto(1, canPurityK0, bPrintPurity, bPutYExponentInLabel, tExponentToPrint);
 
     TCanvas* canPurityALam = new TCanvas("canPurityALam", "canPurityALam");
-    ALamK0->DrawPurityHisto(0, canPurityALam, bPrintPurity);
+    ALamK0->DrawPurityHisto(0, canPurityALam, bPrintPurity, bPutYExponentInLabel, tExponentToPrint);
     
     if(aOutputYAML)
     {

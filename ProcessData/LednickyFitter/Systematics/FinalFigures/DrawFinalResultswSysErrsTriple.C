@@ -11,7 +11,7 @@ int main(int argc, char **argv)
   //This allows the user a chance to look at and manipulate a TBrowser before
   //the program ends and closes everything
 
-  bool bSaveFigures = false;
+  bool bSaveFigures = true;
   TString tSaveFileType = "pdf";  //Needs to be pdf for systematics to be transparent!
 
   vector<TString> tStatOnlyTags = {"", "_StatOnly"};
@@ -64,7 +64,12 @@ int main(int argc, char **argv)
   TCanvas* tCanAll2Panel = CompareAll2Panel(tFVWIVec, tSystematicsFileLocation, tSystematicsFileLocation, bDrawPredictions, tCanNameMod, bDrawStatOnly, bDrawVertical);
   if(bSaveFigures) tCanAll2Panel->SaveAs(TString::Format("%sFinalResults_Comp3An%s%s%s.%s", tSaveDirBase.Data(), twPredVec[bDrawPredictions].Data(), tStatOnlyTags[bDrawStatOnly].Data(), tVerticalTags[bDrawVertical].Data(), tSaveFileType.Data()));
 
-
+  vector<TCanvas*> tCanAll2Panel_separate = CompareAll2Panel_separate(tFVWIVec, tSystematicsFileLocation, tSystematicsFileLocation, bDrawPredictions, tCanNameMod, bDrawStatOnly);
+  if(bSaveFigures)
+  {
+    tCanAll2Panel_separate[0]->SaveAs(TString::Format("%sFinalResults_Comp3An%s%s_ImF0vsReF0.%s", tSaveDirBase.Data(), twPredVec[bDrawPredictions].Data(), tStatOnlyTags[bDrawStatOnly].Data(), tSaveFileType.Data()));
+    tCanAll2Panel_separate[1]->SaveAs(TString::Format("%sFinalResults_Comp3An%s%s_LamvsR.%s", tSaveDirBase.Data(), twPredVec[bDrawPredictions].Data(), tStatOnlyTags[bDrawStatOnly].Data(), tSaveFileType.Data()));
+  }
 
 //-------------------------------------------------------------------------------
   theApp->Run(kTRUE); //Run the TApp to pause the code.

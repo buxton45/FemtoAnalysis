@@ -501,6 +501,44 @@ CanvasPartition* TripleFitGenerator::BuildKStarCfswFitsCanvasPartition_CombineCo
     tCanPart->AddPadPaveText(tCentType3, 2, j);
 
     //------------------------------
+    //For Phys Rev C final draft
+    TLatex* tLaText;
+
+    double tXLett_LaTex=0.01;
+    double tYLett_LaTex=1.085;
+    bool tIsNDC_LaTex=false;    
+    
+    int tTextAlign_LaTex = 11;
+    double tLineWidth_LaTex=2;
+    int tTextFont_LaTex = 62;
+    double tTextSize_LaTex = 0.10;
+    double tScaleFactor_LaTex = 1.0;
+    
+    int tPosition;
+    assert(tCanPart->GetNx()*tCanPart->GetNy()==9);
+    vector<TString> tLatexts{TString("(a)"), TString("(b)"), TString("(c)"), 
+                             TString("(d)"), TString("(e)"), TString("(f)"), 
+                             TString("(g)"), TString("(h)"), TString("(i)")};
+    
+    
+    tScaleFactor_LaTex = tCanPart->GetYScaleFactor(0, j);
+    tPosition = 0 + j*tCanPart->GetNx();
+    tLaText = CanvasPartition::BuildTLatex(tLatexts[tPosition], tXLett_LaTex, tYLett_LaTex, tTextAlign_LaTex, tLineWidth_LaTex, tTextFont_LaTex, tTextSize_LaTex, tScaleFactor_LaTex, tIsNDC_LaTex);
+    tCanPart->AddPadPaveLatex(tLaText, 0, j);
+    
+    tScaleFactor_LaTex = tCanPart->GetYScaleFactor(1, j);
+    tPosition = 1 + j*tCanPart->GetNx();
+    tLaText = CanvasPartition::BuildTLatex(tLatexts[tPosition], tXLett_LaTex, tYLett_LaTex, tTextAlign_LaTex, tLineWidth_LaTex, tTextFont_LaTex, tTextSize_LaTex, tScaleFactor_LaTex, tIsNDC_LaTex);
+    tCanPart->AddPadPaveLatex(tLaText, 1, j);
+    
+    tScaleFactor_LaTex = tCanPart->GetYScaleFactor(2, j);
+    tPosition = 2 + j*tCanPart->GetNx();
+    tLaText = CanvasPartition::BuildTLatex(tLatexts[tPosition], tXLett_LaTex, tYLett_LaTex, tTextAlign_LaTex, tLineWidth_LaTex, tTextFont_LaTex, tTextSize_LaTex, tScaleFactor_LaTex, tIsNDC_LaTex);
+    tCanPart->AddPadPaveLatex(tLaText, 2, j);
+    
+    
+    
+    //------------------------------
 
     TString tMasterFileLocation1      = fFitGen1->GetMasterFileLocation();
     TString tSystematicsFileLocation1 = fFitGen1->GetSystematicsFileLocation();

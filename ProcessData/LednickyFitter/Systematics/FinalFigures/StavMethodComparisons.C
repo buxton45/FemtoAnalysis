@@ -269,7 +269,7 @@ CfHeavy* CombineTwoHeavyCfs(CfHeavy *aCf1, CfHeavy* aCf2)
 }
 
 //________________________________________________________________________________________________________________
-TCanvas* DrawKStarCfs_OnlyTwo_CombConj(FitGenerator* aFG1, FitGenerator* aFG2, bool aZoomX, bool aZoomY, TString aCanNameModifier,
+CanvasPartition* DrawKStarCfs_OnlyTwo_CombConj(FitGenerator* aFG1, FitGenerator* aFG2, bool aZoomX, bool aZoomY, TString aCanNameModifier,
                                        bool aDrawSysErrors, const td1dVec &aCustomBins)
 {
   AnalysisType aAnType = aFG1->GetFitSharedAnalyses()->GetFitPairAnalysis(0)->GetAnalysisType();
@@ -297,7 +297,7 @@ TCanvas* DrawKStarCfs_OnlyTwo_CombConj(FitGenerator* aFG1, FitGenerator* aFG2, b
   if(aZoomX) tXHigh = 0.329;
 
   double tYLow = 0.86;
-  double tYHigh = 1.07;
+  double tYHigh = 1.09;
   if(aZoomY)
   {
     tYLow = 0.951;
@@ -452,7 +452,7 @@ TCanvas* DrawKStarCfs_OnlyTwo_CombConj(FitGenerator* aFG1, FitGenerator* aFG2, b
     tTextAnTypeB = TString(cAnalysisRootTags[aConjType]);
     TString tTextAnType = TString::Format("%s#scale[0.5]{ }#oplus#scale[0.5]{ }%s", tTextAnTypeA.Data(), tTextAnTypeB.Data());
 
-    TPaveText* tAnTypeName = tCanPart->SetupTPaveText(tTextAnType, 0, j, 0.65, 0.775, 0.20, 0.15, 43, 18);
+    TPaveText* tAnTypeName = tCanPart->SetupTPaveText(tTextAnType, 0, j, 0.59, 0.775, 0.20, 0.15, 43, 25);
     tCanPart->AddPadPaveText(tAnTypeName,0,j);
 
     CentralityType tCentType = aFG1->GetSharedAn()->GetFitPairAnalysis(tAnalysisNumberA)->GetCentralityType();
@@ -460,44 +460,77 @@ TCanvas* DrawKStarCfs_OnlyTwo_CombConj(FitGenerator* aFG1, FitGenerator* aFG2, b
            aFG1->GetSharedAn()->GetFitPairAnalysis(tAnalysisNumberB)->GetCentralityType());
 
     TString tTextCentrality = TString(cPrettyCentralityTags[tCentType]);
-    TPaveText* tCentralityName = tCanPart->SetupTPaveText(tTextCentrality, 0, j, 0.10, 0.765, 0.20, 0.15, 43, 18);
+    TPaveText* tCentralityName = tCanPart->SetupTPaveText(tTextCentrality, 0, j, 0.14, 0.75, 0.20, 0.15, 43, 25);
     tCanPart->AddPadPaveText(tCentralityName,0,j);
 
     if(j==0)
     {
       if(aZoomY) tCanPart->SetupTLegend("", 0, 0, 0.20, 0.05, 0.60, 0.45);
-      else       tCanPart->SetupTLegend("", 0, 0, 0.20, 0.15, 0.60, 0.35);
+      else       tCanPart->SetupTLegend("", 0, 0, 0.10, 0.15, 0.80, 0.35);
       tCanPart->AddLegendEntry(0, 0, (TH1*)tCanPart->GetGraphsInPad(0,0)->At(0), "Normal: Num/Den", "p");
       tCanPart->AddLegendEntry(0, 0, (TH1*)tCanPart->GetGraphsInPad(0,0)->At(1), "Stavinskiy", "p");
+
+      TObjArray* tLegArray = ((TObjArray*)tCanPart->GetPadLegends()->At(0));
+      ((TLegend*)tLegArray->At(0))->SetTextAlign(12);
     }
 
     if(j==2)
     {
       TString tTextSysInfo = TString("ALICE Pb-Pb #sqrt{#it{s}_{NN}} = 2.76 TeV");
-      TPaveText* tSysInfo = tCanPart->SetupTPaveText(tTextSysInfo,0,j,0.15,0.125,0.725,0.15,43,17);
+      TPaveText* tSysInfo = tCanPart->SetupTPaveText(tTextSysInfo,0,j,0.14,0.175,0.725,0.15,43,17);
       tCanPart->AddPadPaveText(tSysInfo,0,j);
     }
   }
   
   //-----------------------------------------
-    double tLabelOffsetScaleX = 5.0;
-    double tLabelOffsetScaleY = 2.0;
-    ((TH1*)tCanPart->GetGraphsInPad(0,0)->At(0))->GetXaxis()->SetLabelOffset(tLabelOffsetScaleX*((TH1*)tCanPart->GetGraphsInPad(0,0)->At(0))->GetXaxis()->GetLabelOffset());    
-    ((TH1*)tCanPart->GetGraphsInPad(0,0)->At(0))->GetYaxis()->SetLabelOffset(tLabelOffsetScaleY*((TH1*)tCanPart->GetGraphsInPad(0,0)->At(0))->GetYaxis()->GetLabelOffset());
+  double tLabelOffsetScaleX = 5.0;
+  double tLabelOffsetScaleY = 2.0;
+  ((TH1*)tCanPart->GetGraphsInPad(0,0)->At(0))->GetXaxis()->SetLabelOffset(tLabelOffsetScaleX*((TH1*)tCanPart->GetGraphsInPad(0,0)->At(0))->GetXaxis()->GetLabelOffset());    
+  ((TH1*)tCanPart->GetGraphsInPad(0,0)->At(0))->GetYaxis()->SetLabelOffset(tLabelOffsetScaleY*((TH1*)tCanPart->GetGraphsInPad(0,0)->At(0))->GetYaxis()->GetLabelOffset());
 
-    ((TH1*)tCanPart->GetGraphsInPad(0,1)->At(0))->GetXaxis()->SetLabelOffset(tLabelOffsetScaleX*((TH1*)tCanPart->GetGraphsInPad(0,1)->At(0))->GetXaxis()->GetLabelOffset());
-    ((TH1*)tCanPart->GetGraphsInPad(0,1)->At(0))->GetYaxis()->SetLabelOffset(tLabelOffsetScaleY*((TH1*)tCanPart->GetGraphsInPad(0,1)->At(0))->GetYaxis()->GetLabelOffset());
+  ((TH1*)tCanPart->GetGraphsInPad(0,1)->At(0))->GetXaxis()->SetLabelOffset(tLabelOffsetScaleX*((TH1*)tCanPart->GetGraphsInPad(0,1)->At(0))->GetXaxis()->GetLabelOffset());
+  ((TH1*)tCanPart->GetGraphsInPad(0,1)->At(0))->GetYaxis()->SetLabelOffset(tLabelOffsetScaleY*((TH1*)tCanPart->GetGraphsInPad(0,1)->At(0))->GetYaxis()->GetLabelOffset());
 
-    ((TH1*)tCanPart->GetGraphsInPad(0,2)->At(0))->GetXaxis()->SetLabelOffset(tLabelOffsetScaleX*((TH1*)tCanPart->GetGraphsInPad(0,2)->At(0))->GetXaxis()->GetLabelOffset());
-    ((TH1*)tCanPart->GetGraphsInPad(0,2)->At(0))->GetYaxis()->SetLabelOffset(tLabelOffsetScaleY*((TH1*)tCanPart->GetGraphsInPad(0,2)->At(0))->GetYaxis()->GetLabelOffset());  
+  ((TH1*)tCanPart->GetGraphsInPad(0,2)->At(0))->GetXaxis()->SetLabelOffset(tLabelOffsetScaleX*((TH1*)tCanPart->GetGraphsInPad(0,2)->At(0))->GetXaxis()->GetLabelOffset());
+  ((TH1*)tCanPart->GetGraphsInPad(0,2)->At(0))->GetYaxis()->SetLabelOffset(tLabelOffsetScaleY*((TH1*)tCanPart->GetGraphsInPad(0,2)->At(0))->GetYaxis()->GetLabelOffset());  
   //-----------------------------------------
+  
+  //------ For Phys Rev C final
+  TLatex* tLaText;
+
+  double tXLett_LaTex=0.10;
+  double tYLett_LaTex=0.875;
+  bool tIsNDC_LaTex=false;    
+  
+  int tTextAlign_LaTex = 11;
+  double tLineWidth_LaTex=2;
+  int tTextFont_LaTex = 62;
+  double tTextSize_LaTex = 0.125;
+  double tScaleFactor_LaTex = 1.0;
+  
+  
+  tScaleFactor_LaTex = tCanPart->GetYScaleFactor(0, 0);
+  tLaText = CanvasPartition::BuildTLatex(TString("(a)"), tXLett_LaTex, tYLett_LaTex, tTextAlign_LaTex, tLineWidth_LaTex, tTextFont_LaTex, tTextSize_LaTex, tScaleFactor_LaTex, tIsNDC_LaTex);
+  tCanPart->AddPadPaveLatex(tLaText, 0, 0);
+  
+  tScaleFactor_LaTex = tCanPart->GetYScaleFactor(0, 1);
+  tLaText = CanvasPartition::BuildTLatex(TString("(b)"), tXLett_LaTex, tYLett_LaTex, tTextAlign_LaTex, tLineWidth_LaTex, tTextFont_LaTex, tTextSize_LaTex, tScaleFactor_LaTex, tIsNDC_LaTex);
+  tCanPart->AddPadPaveLatex(tLaText, 0, 1);
+  
+  tScaleFactor_LaTex = tCanPart->GetYScaleFactor(0, 2);
+  tLaText = CanvasPartition::BuildTLatex(TString("(c)"), tXLett_LaTex, tYLett_LaTex, tTextAlign_LaTex, tLineWidth_LaTex, tTextFont_LaTex, tTextSize_LaTex, tScaleFactor_LaTex, tIsNDC_LaTex);
+  tCanPart->AddPadPaveLatex(tLaText, 0, 2);  
+  //---------------------------------------
+  
+  
+  
 
   tCanPart->SetDrawUnityLine(true);
   tCanPart->DrawAll();
   tCanPart->DrawXaxisTitle("#it{k}* (GeV/#it{c})",43,20,0.015);
   tCanPart->DrawYaxisTitle("#it{C}(#it{k}*)",43,25,0.070,0.875);
 
-  return tCanPart->GetCanvas();
+  return tCanPart;
 }
 
 
@@ -635,7 +668,8 @@ int main(int argc, char **argv)
 
   if(bDrawKStarCfs_OnlyTwo_CombConj)
   {
-    TCanvas* tCan_OnlyTwo_CombConj = DrawKStarCfs_OnlyTwo_CombConj(tLamKchP1, tLamKchP2, bZoomX, bZoomY, tCanNameModifier_OnlyTwo, true, tCustomBins);
+    CanvasPartition* tCanPart_OnlyTwo_CombConj = DrawKStarCfs_OnlyTwo_CombConj(tLamKchP1, tLamKchP2, bZoomX, bZoomY, tCanNameModifier_OnlyTwo, true, tCustomBins);
+    TCanvas* tCan_OnlyTwo_CombConj = tCanPart_OnlyTwo_CombConj->GetCanvas();
     if(SaveImages) tCan_OnlyTwo_CombConj->SaveAs(TString::Format("%s%s.%s", tSaveDir_OnlyTwo.Data(), tCan_OnlyTwo_CombConj->GetName(), tSaveFileType.Data()));
   }
 

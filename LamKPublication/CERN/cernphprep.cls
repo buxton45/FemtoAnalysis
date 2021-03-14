@@ -204,7 +204,7 @@
 \renewcommand\appendix{\par
   \setcounter{section}{0}%
   \setcounter{subsection}{0}%
-  \setcounter{figure}{0}%
+  %\setcounter{figure}{0}%
   \setcounter{table}{0}%
   \setcounter{equation}{0}%
   \gdef\thesection{\@Alph\c@section}%
@@ -213,8 +213,8 @@
   \@addtoreset {equation}{section}%
   \gdef\thetable{\@Alph\c@section.\@arabic\c@table}%
   \@addtoreset {table}{section}%
-  \gdef\thefigure{\@Alph\c@section.\@arabic\c@figure}%
-  \@addtoreset {figure}{section}%
+  %\gdef\thefigure{\@Alph\c@section.\@arabic\c@figure}%
+  %\@addtoreset {figure}{section}%
 }
 
 % 

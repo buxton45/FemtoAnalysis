@@ -27,6 +27,7 @@
 #include "TVectorD.h"
 #include "TLegend.h"
 #include "TGaxis.h"
+#include "TLatex.h"
 
 using std::cout;
 using std::endl;
@@ -52,8 +53,11 @@ public:
   static double FitFunctionTwoGaussianPlusPoly(double *x, double *par);
 
   void CalculatePurity();
-  void DrawPurity(TPad* aPad, bool aZoomBg=false, bool aPrintPurity=false, double aPadScaleX=1., double aPadScaleY=1.);
-  void DrawPurityAndBgd(TPad* aPad, bool aPrintPurity=true);
+  void DrawPurity(TPad* aPad, bool aZoomBg=false, bool aPrintPurity=false, 
+                  bool aPutYExponentInLabel=false, TString aExponentToPrint="10^{6}", 
+                  double aPadScaleX=1., double aPadScaleY=1.);
+  void DrawPurityAndBgd(TPad* aPad, bool aPrintPurity=true, 
+                        bool aPutYExponentInLabel=false, TString aExponentToPrint="10^{6}");
 
   TF1* GetFullFit(int aType);
   void CalculateResolution(int aTypeOfFit);
