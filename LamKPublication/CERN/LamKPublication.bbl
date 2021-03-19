@@ -28,8 +28,8 @@ M.~A. Lisa and S.~Pratt,
 %%CITATION = ARXIV:0811.1352;%%.
 
 \bibitem{Makhlin:1987gm}
-A.~N. Makhlin and {\relax Yu}.~M. Sinyukov, ``{Hydrodynamics of hadron matter
-  under pion interferometric microscope}'',
+A.~N. Makhlin and {\relax Yu}.~M. Sinyukov, ``{The hydrodynamics of hadron
+  matter under a pion interferometric microscope}'',
 \href{http://dx.doi.org/10.1007/BF01560393}{{\em Z. Phys. C} {\bfseries 39}
   (1988) }.
 %%CITATION = ZEPYA,C39,69;%%.
@@ -42,7 +42,7 @@ S.~V. Akkelin and {\relax Yu}.~M. Sinyukov, ``{The HBT-interferometry of
 %%CITATION = PHLTA,B356,525;%%.
 
 \bibitem{Retiere:2003kf}
-F.~Retiere and M.~A. Lisa, ``{Observable implications of geometrical and
+F.~Ret\`iere and M.~A. Lisa, ``{Observable implications of geometrical and
   dynamical aspects of freeze out in heavy ion collisions}'',
   \href{http://dx.doi.org/10.1103/PhysRevC.70.044907}{{\em Phys. Rev. C}
   {\bfseries 70} (2004) },
@@ -68,7 +68,7 @@ R.~Lednick\'y, V.~L. Lyuboshitz, B.~Erazmus, and D.~Nouais, ``{How to measure
 \bibitem{Voloshin:1997jh}
 S.~Voloshin, R.~Lednick\'y, S.~Panitkin, and N.~Xu, ``{Relative space-time
   asymmetries in pion and nucleon production in noncentral nucleus-nucleus
-  collisions at high-energies}'',
+  collisions at high energies}'',
   \href{http://dx.doi.org/10.1103/PhysRevLett.79.4766}{{\em Phys. Rev. Lett.}
   {\bfseries 79} (1997) },
 \href{http://arxiv.org/abs/nucl-th/9708044}{{\ttfamily arXiv:nucl-th/9708044
@@ -84,10 +84,10 @@ Y.-R. Liu and S.-L. Zhu, ``{Meson-baryon scattering lengths in HB$\chi$PT}'',
 %%CITATION = HEP-PH/0607100;%%.
 
 \bibitem{Mai:2009ce}
-M.~Mai, P.~C. Bruns, B.~Kubis, and U.-G. Meissner, ``{Aspects of meson-baryon
-  scattering in three- and two-flavor chiral perturbation theory}'',
-  \href{http://dx.doi.org/10.1103/PhysRevD.80.094006}{{\em Phys. Rev. D}
-  {\bfseries 80} (2009) },
+M.~Mai, P.~C. Bruns, B.~Kubis, and U.-G. Mei{\ss}ner, ``{Aspects of
+  meson-baryon scattering in three- and two-flavor chiral perturbation
+  theory}'', \href{http://dx.doi.org/10.1103/PhysRevD.80.094006}{{\em Phys.
+  Rev. D} {\bfseries 80} (2009) },
 \href{http://arxiv.org/abs/0905.2810}{{\ttfamily arXiv:0905.2810 [hep-ph]}}.
 %%CITATION = ARXIV:0905.2810;%%.
 
@@ -219,8 +219,8 @@ S.~E. Koonin, ``{Proton pictures of high-energy nuclear collisions}'',
 %%CITATION = PHLTA,B70,43;%%.
 
 \bibitem{Pratt:1990zq}
-S.~Pratt, T.~Csorgo, and J.~Zimanyi, ``{Detailed predictions for two-pion
-  correlations in ultrarelativistic heavy-ion collisions}'',
+S.~Pratt, T.~Cs{\"o}rg\H{o}, and J.~Zim\'anyi, ``{Detailed predictions for
+  two-pion correlations in ultrarelativistic heavy-ion collisions}'',
 \href{http://dx.doi.org/10.1103/PhysRevC.42.2646}{{\em Phys. Rev. C} {\bfseries
   42} (1990) }.
 %%CITATION = PHRVA,C42,2646;%%.
@@ -233,7 +233,7 @@ G.~I. Kopylov, ``{Like particle correlations as a tool to study the multiple
 %%CITATION = PHLTA,B50,472;%%.
 
 \bibitem{Kisiel:2014mma}
-A.~Kisiel, H.~Zbroszczyk, and M.~Szymański, ``{Extracting baryon-antibaryon
+A.~Kisiel, H.~Zbroszczyk, and M.~Szyma\'nski, ``{Extracting baryon-antibaryon
   strong-interaction potentials from p$\overline{\Lambda}$ femtoscopic
   correlation functions}'',
   \href{http://dx.doi.org/10.1103/PhysRevC.89.054916}{{\em Phys. Rev. C}
@@ -242,9 +242,9 @@ A.~Kisiel, H.~Zbroszczyk, and M.~Szymański, ``{Extracting baryon-antibaryon
 %%CITATION = ARXIV:1403.0433;%%.
 
 \bibitem{Acharya:2018gyz}
-{\bfseries ALICE} Collaboration, S.~Acharya {\em et~al.}, ``{p-p, p-$\Lambda$,
-  and $\Lambda$-$\Lambda$ correlations studied via femtoscopy in pp reactions
-  at $\sqrt{s}$ = 7 TeV}'',
+{\bfseries ALICE} Collaboration, S.~Acharya {\em et~al.}, ``{p--p,
+  p--$\Lambda$, and $\Lambda$--$\Lambda$ correlations studied via femtoscopy in
+  pp reactions at $\sqrt{s}$ = 7 TeV}'',
   \href{http://dx.doi.org/10.1103/PhysRevC.99.024001}{{\em Phys. Rev. C}
   {\bfseries 99} no.~2, (2019) },
 \href{http://arxiv.org/abs/1805.12455}{{\ttfamily arXiv:1805.12455 [nucl-ex]}}.
@@ -277,17 +277,18 @@ A.~Stavinskiy {\em et~al.}, ``{Some new aspects of femtoscopy at high
 %%CITATION = ARXIV:1506.07884;%%.
 
 \bibitem{Kisiel:2014upa}
-A.~Kisiel, M.~Gałażyn, and P.~Bożek, ``{Pion, kaon, and proton femtoscopy in
-  Pb--Pb collisions at $\sqrt{s_{\rm NN}}=2.76$ TeV modeled in (3+1)D
-  hydrodynamics}'', \href{http://dx.doi.org/10.1103/PhysRevC.90.064914}{{\em
-  Phys. Rev. C} {\bfseries 90} no.~6, (2014) },
+A.~Kisiel, M.~Ga\l{}a\.{z}yn, and P.~Bo\.{z}ek, ``{Pion, kaon, and proton
+  femtoscopy in Pb--Pb collisions at $\sqrt{s_{\rm NN}}=2.76$ TeV modeled in
+  (3+1)D hydrodynamics}'',
+  \href{http://dx.doi.org/10.1103/PhysRevC.90.064914}{{\em Phys. Rev. C}
+  {\bfseries 90} no.~6, (2014) },
 \href{http://arxiv.org/abs/1409.4571}{{\ttfamily arXiv:1409.4571 [nucl-th]}}.
 %%CITATION = ARXIV:1409.4571;%%.
 
 \bibitem{Chajecki:2008vg}
-Z.~Chajecki and M.~A. Lisa, ``{Global conservation laws and femtoscopy of small
-  systems}'', \href{http://dx.doi.org/10.1103/PhysRevC.78.064903}{{\em Phys.
-  Rev. C} {\bfseries 78} (2008) },
+Z.~Chaj\c{e}cki and M.~A. Lisa, ``{Global conservation laws and femtoscopy of
+  small systems}'', \href{http://dx.doi.org/10.1103/PhysRevC.78.064903}{{\em
+  Phys. Rev. C} {\bfseries 78} (2008) },
 \href{http://arxiv.org/abs/0803.0022}{{\ttfamily arXiv:0803.0022 [nucl-th]}}.
 %%CITATION = ARXIV:0803.0022;%%.
 

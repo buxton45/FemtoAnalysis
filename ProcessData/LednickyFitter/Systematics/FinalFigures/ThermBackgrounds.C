@@ -1459,7 +1459,7 @@ void BuildBgdwFitPanel(CanvasPartition* aCanPart, int tColumn, int tRow, TString
   if(aCombineConjugates) tSysInfoTString = TString::Format("%s#scale[0.5]{ }#oplus#scale[0.5]{ }%s   %s", cAnalysisRootTags[aAnType], cAnalysisRootTags[aAnType+1], cPrettyCentralityTags[tCentTypeData]);
   else                   tSysInfoTString = TString::Format("%s,  %s", cAnalysisRootTags[aAnType], cPrettyCentralityTags[tCentTypeData]);
   TPaveText* tSysInfoPaveText;
-  tSysInfoPaveText = aCanPart->SetupTPaveText(tSysInfoTString, tColumn, tRow, 0.175, 0.725, 0.80, 0.195, 43, 55, 31, true);
+  tSysInfoPaveText = aCanPart->SetupTPaveText(tSysInfoTString, tColumn, tRow, 0.185, 0.735, 0.80, 0.195, 43, 55, 31, true);
   aCanPart->AddPadPaveText(tSysInfoPaveText, tColumn, tRow);
 
 
@@ -1514,7 +1514,7 @@ void BuildBgdwFitPanel(CanvasPartition* aCanPart, int tColumn, int tRow, TString
     {
       if(!aZoomY) aCanPart->SetupTLegend("", tColumn, tRow, 0.55, 0.15, 0.35, 0.15, tNColumns, true);
 //      else        aCanPart->SetupTLegend("", tColumn, tRow, 0.30, 0.475, 0.65, 0.375, tNColumns, true);
-      else        aCanPart->SetupTLegend("", tColumn, tRow, 0.24, 0.325, 0.70, 0.45, tNColumns, true);  //MOST USED OPTION
+      else        aCanPart->SetupTLegend("", tColumn, tRow, 0.24, 0.35, 0.70, 0.45, tNColumns, true);  //MOST USED OPTION
     }
 /*
     aCanPart->AddLegendEntry(tColumn, tRow, tData, "ALICE, stat. errors", "PE");
@@ -1527,22 +1527,32 @@ void BuildBgdwFitPanel(CanvasPartition* aCanPart, int tColumn, int tRow, TString
     aCanPart->AddLegendEntry(tColumn, tRow, tBgdFitDataDraw, "Scaled Bgd. Fit", "L");   
     aCanPart->AddLegendEntry(tColumn, tRow, tCf, tDescriptor.Data(), "p");
     aCanPart->AddLegendEntry(tColumn, tRow, tBgdFitDraw, "THERM. Bgd. Fit", "L"); 
+    
+    TObjArray* tLegArray = ((TObjArray*)aCanPart->GetPadLegends()->At(tColumn + tRow*3));
+    ((TLegend*)tLegArray->At(0))->SetTextAlign(12);
                
   }
 
   if(tRow==(aCanPart->GetNy()-1) && tColumn==0)
   {
     TString tAliceInfo = TString("ALICE");
-    TPaveText* tAliceInfoText = aCanPart->SetupTPaveText(tAliceInfo, tColumn, tRow, 0.0, 0.025, 1.0, 0.20, 43, 55, 22, true);
+    TPaveText* tAliceInfoText = aCanPart->SetupTPaveText(tAliceInfo, tColumn, tRow, 0.0, 0.135, 1.0, 0.20, 43, 55, 22, true);
     aCanPart->AddPadPaveText(tAliceInfoText, tColumn, tRow);
   }
   if(tRow==(aCanPart->GetNy()-1) && tColumn==1)
   {
     TString tAliceInfo = TString("Pb-Pb #sqrt{#it{s}_{NN}} = 2.76 TeV");
-    TPaveText* tAliceInfoText = aCanPart->SetupTPaveText(tAliceInfo, tColumn, tRow, 0.0, 0.025, 1.0, 0.20, 43, 55, 22, true);
+    TPaveText* tAliceInfoText = aCanPart->SetupTPaveText(tAliceInfo, tColumn, tRow, 0.0, 0.135, 1.0, 0.20, 43, 55, 22, true);
     aCanPart->AddPadPaveText(tAliceInfoText, tColumn, tRow);
   }
   
+  //---------------------------------------------------------------------------------------------------------
+  // Label panels with letters for PRC
+  vector<TString> tLetters{"(a)", "(b)", "(c)", "(d)", "(e)", "(f)", "(g)", "(h)", "(i)"};
+  int tLettIdx = tColumn + 3*tRow;
+  TString tLetter = tLetters[tLettIdx];
+  TPaveText* tLetterPT = aCanPart->SetupTPaveText(tLetter, tColumn, tRow, 0.75, 0.060, 0.20, 0.20, 63, 50, 33, true);
+  aCanPart->AddPadPaveText(tLetterPT, tColumn, tRow);
   
 
 /*
@@ -1643,7 +1653,7 @@ TCanvas* DrawBgdwFit_AllCentAllAnv2(TString aCfDescriptor, TString aFileNameCfs,
 //  double tXHigh = aMaxBgdFit-0.02;
   double tXHigh = 1.68;
   double tYLow = 0.9525;
-  double tYHigh = 1.01999;
+  double tYHigh = 1.01999; 
 
   CanvasPartition* tCanPart = new CanvasPartition(tCanBgdwFitName,tNx,tNy,tXLow,tXHigh,tYLow,tYHigh,0.11,0.0025,0.10,0.0025);
   tCanPart->SetDrawOptStat(false);
@@ -1718,7 +1728,9 @@ TCanvas* DrawBgdwFit_AllCentAllAnv2(TString aCfDescriptor, TString aFileNameCfs,
   double tXLow = -0.04;
 //  double tXHigh = aMaxBgdFit-0.02;
   double tXHigh = 1.68;
-  double tYLow = 0.9525;
+  //double tYLow = 0.9525;
+  //double tYLow = 0.945;
+  double tYLow = 0.928;
   double tYHigh = 1.01999;
 
   CanvasPartition* tCanPart = new CanvasPartition(tCanBgdwFitName,tNx,tNy,tXLow,tXHigh,tYLow,tYHigh,0.11,0.0025,0.10,0.0025);
@@ -1739,32 +1751,41 @@ TCanvas* DrawBgdwFit_AllCentAllAnv2(TString aCfDescriptor, TString aFileNameCfs,
   BuildBgdwFitPanel(tCanPart, 2, 2, aCfDescriptor, aFileNameCfs, kLamK0, 8, aCombineConjugates, tCombineImpactParams, aEventsType, aCustomBins, aMinNorm, aMaxNorm, aMaxBgdFit, aAvgLamKchPMFit, aUseStavCf, aZoomY);
 
   //----- Increase label size on axes
+  double tLabelScaleX = 3.5;
+  double tLabelScaleY = 3.5;
+  
+  double tLabelOffsetScaleX = 2.0;
+  double tLabelOffsetScaleY = 2.0;
   for(int j=0; j<tNy; j++)
   {
     for(int i=0; i<tNx; i++)
     {
       TH1* tTempHist = (TH1*)(tCanPart->GetGraphsInPad(i,j)->At(0));
 
-      tTempHist->GetXaxis()->SetLabelSize(3.25*tTempHist->GetXaxis()->GetLabelSize());
-      tTempHist->GetXaxis()->SetLabelOffset(2.5*tTempHist->GetXaxis()->GetLabelOffset());
+      tTempHist->GetXaxis()->SetLabelSize(tLabelScaleX*tTempHist->GetXaxis()->GetLabelSize());
+      tTempHist->GetXaxis()->SetLabelOffset(tLabelOffsetScaleX*tTempHist->GetXaxis()->GetLabelOffset());
 
-      tTempHist->GetYaxis()->SetLabelSize(3.25*tTempHist->GetYaxis()->GetLabelSize());
-      tTempHist->GetYaxis()->SetLabelOffset(5.0*tTempHist->GetYaxis()->GetLabelOffset());
+      tTempHist->GetYaxis()->SetLabelSize(tLabelScaleY*tTempHist->GetYaxis()->GetLabelSize());
+      tTempHist->GetYaxis()->SetLabelOffset(tLabelOffsetScaleY*tTempHist->GetYaxis()->GetLabelOffset());
 
-      if(j==0) tTempHist->GetYaxis()->SetRangeUser(0.9875, 1.015);
-      if(j==1) tTempHist->GetYaxis()->SetRangeUser(0.975, 1.018);
+      if(j==0) tTempHist->GetYaxis()->SetRangeUser(0.9825, 1.015);
+      if(j==1) tTempHist->GetYaxis()->SetRangeUser(0.9725, 1.018);
       
       if(aCfDescriptor.EqualTo("Full"))
       {
-        if(j==0) tTempHist->GetYaxis()->SetRangeUser(0.9875, 1.0325);
-        if(j==1) tTempHist->GetYaxis()->SetRangeUser(0.975, 1.01999);
-        if(j==2) tTempHist->GetYaxis()->SetRangeUser(0.9475, 1.034999);
+        if(j==0) 
+        {
+          tTempHist->GetYaxis()->SetRangeUser(0.9825, 1.0375);
+          //((TH1*)tCanPart->GetGraphsInPad(0,0)->At(0))->GetYaxis()->SetNdivisions(510);
+        }
+        if(j==1) tTempHist->GetYaxis()->SetRangeUser(0.9725, 1.02499);
+        if(j==2) tTempHist->GetYaxis()->SetRangeUser(0.9475, 1.039);
       }            
       
       if(aCfDescriptor.EqualTo("PrimaryAndShortDecays"))
       {
-        if(j==0) tTempHist->GetYaxis()->SetRangeUser(0.9875, 1.0325);
-        if(j==1) tTempHist->GetYaxis()->SetRangeUser(0.975, 1.01999);
+        if(j==0) tTempHist->GetYaxis()->SetRangeUser(0.9825, 1.0325);
+        if(j==1) tTempHist->GetYaxis()->SetRangeUser(0.9725, 1.01999);
         if(j==2) tTempHist->GetYaxis()->SetRangeUser(0.9475, 1.034999);
       }      
     }

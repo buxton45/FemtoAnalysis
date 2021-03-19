@@ -233,7 +233,7 @@ G.~I. Kopylov, ``{Like particle correlations as a tool to study the multiple
 %%CITATION = PHLTA,B50,472;%%.
 
 \bibitem{Kisiel:2014mma}
-A.~Kisiel, H.~Zbroszczyk, and M.~Szymański, ``{Extracting baryon-antibaryon
+A.~Kisiel, H.~Zbroszczyk, and M.~Szyma\'nski, ``{Extracting baryon-antibaryon
   strong-interaction potentials from p$\overline{\Lambda}$ femtoscopic
   correlation functions}'',
   \href{http://dx.doi.org/10.1103/PhysRevC.89.054916}{{\em Phys. Rev. C}
@@ -262,11 +262,10 @@ A.~Stavinskiy {\em et~al.}, ``{Some new aspects of femtoscopy at high
   \url{http://www.nukleonika.pl/www/back/full/vol49_2004/v49s2p023f.pdf}.
 
 \bibitem{PhysRevD.82.052001}
-{\bfseries ALICE Collaboration} Collaboration, K.~Aamodt {\em et~al.},
-  ``{Two-pion Bose-Einstein correlations in pp collisions at
-  $\sqrt{s}=900\text{ }\text{ }\mathrm{GeV}$}'',
-  \href{http://dx.doi.org/10.1103/PhysRevD.82.052001}{{\em Phys. Rev. D}
-  {\bfseries 82} (Sep, 2010) }.
+{\bfseries ALICE} Collaboration, K.~Aamodt {\em et~al.}, ``{Two-pion
+  Bose-Einstein correlations in pp collisions at $\sqrt{s}=900\text{ }\text{
+  }\mathrm{GeV}$}'', \href{http://dx.doi.org/10.1103/PhysRevD.82.052001}{{\em
+  Phys. Rev. D} {\bfseries 82} (Sep, 2010) }.
   \url{https://link.aps.org/doi/10.1103/PhysRevD.82.052001}.
 
 \bibitem{Adam:2015vja}
@@ -278,10 +277,11 @@ A.~Stavinskiy {\em et~al.}, ``{Some new aspects of femtoscopy at high
 %%CITATION = ARXIV:1506.07884;%%.
 
 \bibitem{Kisiel:2014upa}
-A.~Kisiel, M.~Gałażyn, and P.~Bożek, ``{Pion, kaon, and proton femtoscopy in
-  Pb--Pb collisions at $\sqrt{s_{\rm NN}}=2.76$ TeV modeled in (3+1)D
-  hydrodynamics}'', \href{http://dx.doi.org/10.1103/PhysRevC.90.064914}{{\em
-  Phys. Rev. C} {\bfseries 90} no.~6, (2014) },
+A.~Kisiel, M.~Ga\l{}a\.{z}yn, and P.~Bo\.{z}ek, ``{Pion, kaon, and proton
+  femtoscopy in Pb--Pb collisions at $\sqrt{s_{\rm NN}}=2.76$ TeV modeled in
+  (3+1)D hydrodynamics}'',
+  \href{http://dx.doi.org/10.1103/PhysRevC.90.064914}{{\em Phys. Rev. C}
+  {\bfseries 90} no.~6, (2014) },
 \href{http://arxiv.org/abs/1409.4571}{{\ttfamily arXiv:1409.4571 [nucl-th]}}.
 %%CITATION = ARXIV:1409.4571;%%.
 
@@ -307,6 +307,13 @@ A.~Kisiel and D.~A. Brown, ``{Efficient and robust calculation of femtoscopic
   {\bfseries 80} (2009) },
 \href{http://arxiv.org/abs/0901.3527}{{\ttfamily arXiv:0901.3527 [nucl-th]}}.
 %%CITATION = ARXIV:0901.3527;%%.
+
+\bibitem{JAMES1975343}
+F.~James and M.~Roos, ``Minuit - a system for function minimization and
+  analysis of the parameter errors and correlations'',
+  \href{http://dx.doi.org/https://doi.org/10.1016/0010-4655(75)90039-9}{{\em
+  Computer Physics Communications} {\bfseries 10} no.~6, (1975) }.
+  \url{http://www.sciencedirect.com/science/article/pii/0010465575900399}.
 
 \bibitem{Aamodt:2011mr}
 {\bfseries ALICE} Collaboration, K.~Aamodt {\em et~al.}, ``{Two-pion

@@ -422,8 +422,10 @@ CanvasPartition* TripleFitGenerator::BuildKStarCfswFitsCanvasPartition_CombineCo
   double tXHigh = 0.99;
   //double tYLow = 0.86;
   //double tYHigh = 1.07;
-  double tYLow = 0.83;
-  double tYHigh = 1.09;
+//  double tYLow = 0.83;
+//  double tYHigh = 1.09;
+  double tYLow = 0.76;
+  double tYHigh = 1.15;  
   if(aZoomROP)
   {
     tXLow = -0.02;
@@ -504,8 +506,8 @@ CanvasPartition* TripleFitGenerator::BuildKStarCfswFitsCanvasPartition_CombineCo
     //For Phys Rev C final draft
     TLatex* tLaText;
 
-    double tXLett_LaTex=0.01;
-    double tYLett_LaTex=1.085;
+    double tXLett_LaTex=0.28;
+    double tYLett_LaTex=0.795;
     bool tIsNDC_LaTex=false;    
     
     int tTextAlign_LaTex = 11;
@@ -618,11 +620,11 @@ CanvasPartition* TripleFitGenerator::BuildKStarCfswFitsCanvasPartition_CombineCo
     tCanPart->AddPadPaveText(tSysInfo2,1, j);
     */
     TString tTextSysInfo = TString("ALICE");
-    TPaveText* tSysInfo = tCanPart->SetupTPaveText(tTextSysInfo, 0, j, 0.0, 0.10, 1., 0.15, 43, 57, 22, true);
+    TPaveText* tSysInfo = tCanPart->SetupTPaveText(tTextSysInfo, 0, j, 0.0, 0.20, 1., 0.15, 43, 57, 22, true);
     tCanPart->AddPadPaveText(tSysInfo,0, j);
    
     TString tTextSysInfo2 = TString("Pb-Pb #sqrt{#it{s}_{NN}} = 2.76 TeV");
-    TPaveText* tSysInfo2 = tCanPart->SetupTPaveText(tTextSysInfo2, 1, j, 0.0, 0.10, 1., 0.15, 43, 57, 22, true);
+    TPaveText* tSysInfo2 = tCanPart->SetupTPaveText(tTextSysInfo2, 1, j, 0.0, 0.20, 1., 0.15, 43, 57, 22, true);
     tCanPart->AddPadPaveText(tSysInfo2,1, j);        
     }
 

@@ -462,7 +462,7 @@ void Purity::DrawPurity(TPad *aPad, bool aZoomBg, bool aPrintPurity, bool aPutYE
     }
     
     TPaveText *myText3;
-      if(aPrintPurity) myText3 = new TPaveText(0.145,0.375,0.495,0.725,"NDC");
+      if(aPrintPurity) myText3 = new TPaveText(0.162,0.273,0.443,0.73,"NDC");
       else             myText3 = new TPaveText(0.15,0.65,0.475,0.85,"NDC");
       myText3->SetFillColor(0);
       myText3->SetBorderSize(0);
@@ -471,9 +471,15 @@ void Purity::DrawPurity(TPad *aPad, bool aZoomBg, bool aPrintPurity, bool aPutYE
       myText3->SetFillStyle(0);
       //myText3->AddText(TString("ALICE Pb-Pb #sqrt{#it{s}_{NN}} = 2.76 TeV"));
       //myText3->AddText("");
+      /*
       if(fCombinedPurityName.Contains("_0010")) myText3->AddText(TString("ALICE  0-10%"));
       else                                      myText3->AddText(TString("ALICE"));
       myText3->AddText(TString("Pb-Pb #sqrt{#it{s}_{NN}} = 2.76 TeV"));
+      */
+      myText3->AddText(TString("ALICE"));
+      if(fCombinedPurityName.Contains("_0010")) myText3->AddText(TString("Pb-Pb  0-10%"));
+      else                                      myText3->AddText(TString("ALICE"));
+      myText3->AddText(TString("#sqrt{#it{s}_{NN}} = 2.76 TeV"));
       //if(aPrintPurity) myText3->AddText(TString::Format("%s Purity = %0.1f%%",cRootParticleTags[fParticleType],100*purity));
       if(aPrintPurity) myText3->AddText(TString::Format("Purity = %0.1f%%",100*purity));
       myText3->Draw();

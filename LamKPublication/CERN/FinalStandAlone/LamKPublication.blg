@@ -6,45 +6,45 @@ Database file #1: LamK_bibfile.bib
 Warning--I'm ignoring Kisiel:2014upa's extra "pages" field
 --line 425 of file LamK_bibfile.bib
 Warning--empty publisher in Lisa:2008gf
-You've used 42 entries,
+You've used 43 entries,
             2395 wiz_defined-function locations,
-            980 strings with 13900 characters,
-and the built_in function-call counts, 9374 in all, are:
-= -- 889
-> -- 395
+            989 strings with 14186 characters,
+and the built_in function-call counts, 9574 in all, are:
+= -- 909
+> -- 403
 < -- 0
-+ -- 147
-- -- 105
-* -- 1223
-:= -- 1261
-add.period$ -- 89
-call.type$ -- 42
-change.case$ -- 53
++ -- 150
+- -- 107
+* -- 1248
+:= -- 1288
+add.period$ -- 91
+call.type$ -- 43
+change.case$ -- 54
 chr.to.int$ -- 0
-cite$ -- 43
-duplicate$ -- 466
-empty$ -- 1005
-format.name$ -- 105
-if$ -- 2304
+cite$ -- 44
+duplicate$ -- 476
+empty$ -- 1026
+format.name$ -- 107
+if$ -- 2354
 int.to.chr$ -- 0
-int.to.str$ -- 42
-missing$ -- 163
-newline$ -- 201
-num.names$ -- 44
-pop$ -- 177
+int.to.str$ -- 43
+missing$ -- 167
+newline$ -- 204
+num.names$ -- 45
+pop$ -- 181
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 0
-skip$ -- 68
+skip$ -- 70
 stack$ -- 0
 substring$ -- 0
-swap$ -- 81
+swap$ -- 83
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
 type$ -- 0
 warning$ -- 1
-while$ -- 43
-width$ -- 44
-write$ -- 382
+while$ -- 44
+width$ -- 45
+write$ -- 390
 (There were 2 warnings)

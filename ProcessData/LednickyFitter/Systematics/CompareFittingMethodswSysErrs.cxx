@@ -13,15 +13,15 @@ TCanvas* CompareImF0vsReF0(vector<FitValWriterInfo> &aFitValWriterInfo, TString 
   TCanvas* tReturnCan = new TCanvas(tCanName, tCanName);
   tReturnCan->cd();
   tReturnCan->SetTopMargin(0.02);
-  tReturnCan->SetBottomMargin(0.15);
-  tReturnCan->SetLeftMargin(0.15);
+  tReturnCan->SetBottomMargin(0.175);
+  tReturnCan->SetLeftMargin(0.175);
 
   TPad* tPadReF0vsImF0 = new TPad(TString::Format("tPadReF0vsImF0%s", tCanName.Data()), TString::Format("tPadReF0vsImF0%s", tCanName.Data()), 
                                   0.0, 0.0, 0.8, 1.0);
   tPadReF0vsImF0->SetRightMargin(0.02);
   tPadReF0vsImF0->SetTopMargin(0.02);
-  tPadReF0vsImF0->SetBottomMargin(0.15);
-  tPadReF0vsImF0->SetLeftMargin(0.15);
+  tPadReF0vsImF0->SetBottomMargin(0.175);
+  tPadReF0vsImF0->SetLeftMargin(0.175);
   tPadReF0vsImF0->SetTicks(1,1);  
   tPadReF0vsImF0->Draw();
 
@@ -30,7 +30,7 @@ TCanvas* CompareImF0vsReF0(vector<FitValWriterInfo> &aFitValWriterInfo, TString 
   tPadD0->SetRightMargin(0.6);
   tPadD0->SetLeftMargin(0.);
   tPadD0->SetTopMargin(0.02);
-  tPadD0->SetBottomMargin(0.15);
+  tPadD0->SetBottomMargin(0.175);
   tPadD0->SetTicks(1,1);  
   tPadD0->Draw();
 
@@ -192,14 +192,14 @@ TCanvas* CompareImF0vsReF0(vector<FitValWriterInfo> &aFitValWriterInfo, TString 
   //------ For Phys Rev C final
   TLatex* tLaText;
 
-  double tXLett_LaTex=0.20;
-  double tYLett_LaTex=0.225;
+  double tXLett_LaTex=0.2125;
+  double tYLett_LaTex=0.24;
   bool tIsNDC_LaTex=true;    
   
   int tTextAlign_LaTex = 11;
   double tLineWidth_LaTex=2;
   int tTextFont_LaTex = 62;
-  double tTextSize_LaTex = 0.10;
+  double tTextSize_LaTex = 0.085;
   double tScaleFactor_LaTex = 1.0;
 
   tLaText = CanvasPartition::BuildTLatex(TString("(a)"), tXLett_LaTex, tYLett_LaTex, tTextAlign_LaTex, tLineWidth_LaTex, tTextFont_LaTex, tTextSize_LaTex, tScaleFactor_LaTex, tIsNDC_LaTex);
@@ -464,9 +464,9 @@ TCanvas* CompareLambdavsRadiusAll(vector<FitValWriterInfo> &aFitValWriterInfo, T
   TCanvas* tReturnCan = new TCanvas(tCanName, tCanName);
   tReturnCan->cd();
   tReturnCan->SetTopMargin(0.02);
-  tReturnCan->SetBottomMargin(0.15);
+  tReturnCan->SetBottomMargin(0.175);
   tReturnCan->SetRightMargin(0.02);
-  tReturnCan->SetLeftMargin(0.15);
+  tReturnCan->SetLeftMargin(0.175);
   tReturnCan->SetTicks(1,1);
   gStyle->SetOptStat(0);
   gStyle->SetOptTitle(0);
@@ -517,7 +517,7 @@ TCanvas* CompareLambdavsRadiusAll(vector<FitValWriterInfo> &aFitValWriterInfo, T
 
   //------------------------------------------------------
   tTex->SetTextSize(0.075);
-  tTex->DrawLatex(3.55, 0.51, TString("ALICE Pb-Pb #sqrt{#it{s}_{NN}} = 2.76 TeV"));
+  tTex->DrawLatex(3.40, 0.51, TString("ALICE Pb-Pb #sqrt{#it{s}_{NN}} = 2.76 TeV"));
 
 //  tTex->DrawLatex(3.0, 0.5, TString("ALICE Preliminary"));
 //  tTex->DrawLatex(5.3, 0.5, TString("Pb-Pb #sqrt{#it{s}_{NN}} = 2.76 TeV"));
@@ -525,14 +525,14 @@ TCanvas* CompareLambdavsRadiusAll(vector<FitValWriterInfo> &aFitValWriterInfo, T
   //------ For Phys Rev C final
   TLatex* tLaText;
 
-  double tXLett_LaTex=0.20;
-  double tYLett_LaTex=0.225;
+  double tXLett_LaTex=0.2125;
+  double tYLett_LaTex=0.24;
   bool tIsNDC_LaTex=true;    
   
   int tTextAlign_LaTex = 11;
   double tLineWidth_LaTex=2;
   int tTextFont_LaTex = 62;
-  double tTextSize_LaTex = 0.10;
+  double tTextSize_LaTex = 0.085;
   double tScaleFactor_LaTex = 1.0;
 
   tLaText = CanvasPartition::BuildTLatex(TString("(b)"), tXLett_LaTex, tYLett_LaTex, tTextAlign_LaTex, tLineWidth_LaTex, tTextFont_LaTex, tTextSize_LaTex, tScaleFactor_LaTex, tIsNDC_LaTex);

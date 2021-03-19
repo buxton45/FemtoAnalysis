@@ -306,16 +306,6 @@ The positive and negative daughter tracks are combined to form the \Vz candidate
 To select primary candidates, the impact parameter with respect to the primary vertex is used as a selection criterion for each \Vz.
 Furthermore, a restriction is imposed on the pointing angle, $\theta_{\mathrm{PA}}$, between the \Vz momentum and the vector pointing from the primary vertex to the secondary \Vz decay vertex, which is achieved by appointing a minimum value on $\cos(\theta_{\mathrm{PA}})$ (``Cosine of pointing angle'' in Tables~\ref{tab:LamCuts} and~\ref{tab:K0sCuts}).
 
-\begin{comment}
-In order to remove the contamination to the \LamALam and \Ks samples due to misidentification of the protons and pions for each \Vz, the mass assuming different identities (\Lam, \ALam, \Ks)\footnote[1]
-{
-For the misidentification cuts, the mass assuming \Ks hypothesis ($m_{\mathrm{inv,~ K^{0}_{S}~ hyp.}}$) is calculated assuming $\uppi^{+}\uppi^{-}$ daughters, the mass assuming \Lam hypothesis ($m_{\mathrm{inv,~ \Lambda~ hyp.}}$) is calculated assuming p$\uppi^{-}$ daughters, and the mass assuming \ALam hypothesis ($m_{\mathrm{inv,~ \overline{\Lambda}~ hyp.}}$) is calculated assuming $\overline{\mathrm{p}}\uppi^{+}$ daughters. 
-Additionally, $m_{\mathrm{PDG,\,K^{0}_{S}}}$ and $m_{\mathrm{PDG,\,\Lambda(\overline{\Lambda})}}$ denote the particle masses of the \Ks and \LamALam, respectively, as recorded by the Particle Data Group~\cite{PhysRevD.98.030001}.
-}
-is calculated and utilized in a set of misidentification cuts.
-For \LamALam selection, a candidate is assumed to be misidentified and is rejected if all of the following criteria are satisfied:
-\end{comment}
-
 In order to remove the contamination to the \LamALam and \Ks samples due to misidentification of the protons and pions for each \Vz, the mass assuming different identities (\Lam, \ALam, and \Ks hypotheses) is calculated and utilized in a misidentification procedure.
 The \Ks hypothesis ($m_{\mathrm{inv,~ K^{0}_{S}~ hyp.}}$) is calculated assuming $\uppi^{+}\uppi^{-}$ daughters, the \Lam hypothesis ($m_{\mathrm{inv,~ \Lambda~ hyp.}}$) assumes p$\uppi^{-}$ daughters, and the \ALam hypothesis ($m_{\mathrm{inv,~ \overline{\Lambda}~ hyp.}}$) assumes $\overline{\mathrm{p}}\uppi^{+}$ daughters. 
 In the misidentification methods, the calculated masses are compared to the corresponding particle masses of the \Ks and \LamALam, $m_{\mathrm{PDG,\,K^{0}_{S}}}$ and $m_{\mathrm{PDG,\,\Lambda(\overline{\Lambda})}}$ respectively, as recorded by the Particle Data Group~\cite{PhysRevD.98.030001}.
@@ -835,23 +825,6 @@ The figure demonstrates that the final fit function is similar to the primary \L
   \label{fig:LamKFits_3Res}
 \end{figure}
 
-\begin{comment}
-\begin{figure}[h]
-  \centering
-  \includegraphics[width=\textwidth]{\ResultsDirBaseLamKch\SaveNameModLamKch/Comparisons/FinalResults_Comp3An.pdf}
-  \caption[Extracted Scattering Parameters]
-  {
-  (Color online) Extracted fit parameters for all of the \LamK systems.
-  In the figures, lines represent statistical uncertainties, while boxes represent systematic uncertainties.  
-  (Left) The scattering parameters, $\Im f_{0}$ and $\Re f_{0}$, together with $d_{0}$ to the right, for the \LamKchP (circles), \LamKchM (squares) and \LamKs (stars) systems.  
-  (Right) The $\lambda_{\mathrm{Fit}}$ and radius parameters for the 0--10\% (circles), 10--30\% (squares), and 30--50\% (stars) centrality intervals.  
-  In the fit, all \LamK systems share common radii.
-  The cross~\cite{Liu:2006xja} and X~\cite{Mai:2009ce} points show theoretical predictions made using chiral perturbation theory.
-  }
-  \label{fig:ScattParams_3Res} 
-\end{figure}
-\end{comment}
-
 \begin{figure}[htp]
   \centering
   %%----start of first subfigure---
@@ -944,21 +917,6 @@ This conclusion is supported by the results obtained from the THERMINATOR 2 mode
 Furthermore, this emission asymmetry effect can inflate the radii extracted with the one-dimensional Lednick\'y model, which assumes a spherically symmetric source with no offsets (i.e., $R_{\mathrm{out}} = R_{\mathrm{side}} = R_{\mathrm{long}}$ and $\mu_{\mathrm{out}} = \mu_{\mathrm{side}} = \mu_{\mathrm{long}} = 0$).
 This effect is demonstrated in Appendix~\ref{App:THERM} using the THERMINATOR 2 simulation.
 In Fig.~\ref{fig:mTScalingOfRadii_3Res}, the largest violation of the \mt-scaling for the \LamK system is observed for the 0--10\% centrality interval, in which one expects the largest emission asymmetry.
-
-\begin{comment}
-\begin{figure}[h!]
-  \centering
-  \includegraphics[width=\textwidth]{\ResultsDirBase Results_cLamcKch_20181205/SphericalHarmonics/LamKchP/CanCfYlmReC00C11_LamKchPALamKchM_0010_wSysErr.pdf}
-  \caption[\LamKchP $C_{00}$ and $\Re C_{11}$ Spherical Harmonic Components (0--10\%)]
-  {
-  (Color online) Spherical harmonics components $C_{00}$ (left) and $\Re C_{11}$ (right) of the \LamKchP correlation function for the 0--10\% centrality interval.  
-  Statistical (lines) and systematic (boxes) uncertainties are shown.
-The $C_{00}$ component is similar to the one-dimensional correlation functions typically studied, and probes the overall size of the source.
-The $\Re C_{11}$ component probes the asymmetry in the system; a non-zero value reveals the asymmetry.
-  }
-  \label{fig:LamKchP_ReC00C11_0010}
-\end{figure}
-\end{comment}
 
 \begin{figure}[htp]
   \centering
@@ -1153,16 +1111,22 @@ The figures shows that as $\mu_{\mathrm{out}}$ increases, so does the magnitude 
   \label{fig:LamKchP_ThermSources_VaryMuOut}
 \end{figure}
 
-
-
-\begin{figure}[h]
+\begin{figure}[htp]
   \centering
-  \includegraphics[width=\textwidth]{/home/jesse/Analysis/FemtoAnalysis/AnalysisNotes/7_ResultsAndDiscussion/7.1_ResultsLamK/7.1.2_ResultsLamK_DiscussionOfmTScaling/ThermPlots/LamKchP/CanCompFourThermCfYlmReC00C11_Full_RandomEPs_LamKchPALamKchM.pdf}
+  %%----start of first subfigure---
+  \subfigure{
+    \label{fig:LamKchP_ThermSources_VaryMuOut_SH:a}
+    \includegraphics[width=0.49\linewidth]{/home/jesse/Analysis/FemtoAnalysis/AnalysisNotes/7_ResultsAndDiscussion/7.1_ResultsLamK/7.1.2_ResultsLamK_DiscussionOfmTScaling/ThermPlots/LamKchP/CanCompFourThermCfYlmC00_Full_RandomEPs_LamKchPALamKchM.pdf}}
+  %%----start of second subfigure---  
+  \subfigure{
+    \label{fig:LamKchP_ThermSources_VaryMuOut_SH:b}
+    \includegraphics[width=0.49\linewidth]{/home/jesse/Analysis/FemtoAnalysis/AnalysisNotes/7_ResultsAndDiscussion/7.1_ResultsLamK/7.1.2_ResultsLamK_DiscussionOfmTScaling/ThermPlots/LamKchP/CanCompFourThermCfYlmReC11_Full_RandomEPs_LamKchPALamKchM.pdf}}
+  %%----overall caption----
   \caption[\LamKchP $C_{00}$ and $\Re C_{11}$ Spherical Harmonic Components (0--10\%) with THERMINATOR 2 ($b = 2$ fm]
   {
   (Color online) Spherical harmonics components (left) $C_{00}$ and (right) $\Re C_{11}$ of the \LamKchP correlation function for the 0--10\% centrality interval shown with results from the THERMINATOR 2 simulation implemented with different shifts in the outward direction, $\mu_{\mathrm{out}}$, as described in the text.
   Statistical (lines) and systematic (boxes) uncertainties are shown for the experimental data.
-  }
+  }  
   \label{fig:LamKchP_ThermSources_VaryMuOut_SH}
 \end{figure}
 

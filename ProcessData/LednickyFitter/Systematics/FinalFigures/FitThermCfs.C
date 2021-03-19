@@ -1083,11 +1083,11 @@ void Draw1DCfwFitAndData(TPad* aPad, ThermCf* aThermCfObj, double aFitMax, bool 
   {
     TLegend* tLeg;
     if(!aSuppressFit) tLeg = new TLegend(0.30, 0.30, 0.50, 0.50);
-    else              tLeg = new TLegend(0.40, 0.40, 0.60, 0.60);
+    else              tLeg = new TLegend(0.357, 0.40, 0.557, 0.60);
       tLeg->SetFillColor(0);
       tLeg->SetBorderSize(0);
       tLeg->SetTextAlign(12);
-      tLeg->SetTextSize(0.065);
+      tLeg->SetTextSize(0.08);
     tLeg->AddEntry((TH1*)tData->At(0), "ALICE (0-10%)", "p");
     tLeg->AddEntry(tThermCf, "THERM. 2 (#it{b} = 2 fm)", "p");
     tLeg->Draw();
@@ -1095,9 +1095,9 @@ void Draw1DCfwFitAndData(TPad* aPad, ThermCf* aThermCfObj, double aFitMax, bool 
   //--------------------------------
   if(aPrintAliceInfo)
   {
-    TLatex *   tex = new TLatex(0.04,0.87,"ALICE Pb-Pb #sqrt{#it{s}_{NN}} = 2.76 TeV");
+    TLatex *   tex = new TLatex(0.012,0.87,"ALICE Pb-Pb #sqrt{#it{s}_{NN}} = 2.76 TeV");
     tex->SetTextFont(42);
-    tex->SetTextSize(0.07);
+    tex->SetTextSize(0.08);
     tex->SetLineWidth(2);
     tex->Draw();
   }

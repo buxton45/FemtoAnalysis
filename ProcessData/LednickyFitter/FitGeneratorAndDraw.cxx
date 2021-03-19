@@ -448,16 +448,16 @@ void FitGeneratorAndDraw::AddColoredLinesLabelsAndDatav2(CanvasPartition *aCanPa
   tTex->SetTextFont(43);
   tTex->SetTextSize(50);
   
-  double tYText0 = 0.975;
+  double tYText0 = 0.954;
   double tXText0 = 0.115;
 
-  double tYText1 = 0.93;
+  double tYText1 = 0.90;
   double tXText1 = 0.115;
 
-  double tYText2 = 0.8925;
+  double tYText2 = 0.855;
   double tXText2 = 0.115;
 
-  double tYText3 = 0.855;
+  double tYText3 = 0.81;
   double tXText3 = 0.115;
   
 

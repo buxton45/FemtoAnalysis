@@ -11,7 +11,7 @@ int main(int argc, char **argv)
   //This allows the user a chance to look at and manipulate a TBrowser before
   //the program ends and closes everything
 
-  bool bSaveFigures = true;
+  bool bSaveFigures = false;
   TString tSaveFileType = "pdf";  //Needs to be pdf for systematics to be transparent!
 
   vector<TString> tStatOnlyTags = {"", "_StatOnly"};
