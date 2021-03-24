@@ -54,10 +54,10 @@ public:
 
   void CalculatePurity();
   void DrawPurity(TPad* aPad, bool aZoomBg=false, bool aPrintPurity=false, 
-                  bool aPutYExponentInLabel=false, TString aExponentToPrint="10^{6}", 
-                  double aPadScaleX=1., double aPadScaleY=1.);
+                  bool aPutYExponentInLabel=false, TString aExponentToPrint="10^{6}", bool aSuppressYAxTitle=false, 
+                  double aPadScaleX=1., double aPadScaleY=1., bool aScaleByBinWidth=true);
   void DrawPurityAndBgd(TPad* aPad, bool aPrintPurity=true, 
-                        bool aPutYExponentInLabel=false, TString aExponentToPrint="10^{6}");
+                        bool aPutYExponentInLabel=false, TString aExponentToPrint="10^{6}", bool aScaleByBinWidth=true);
 
   TF1* GetFullFit(int aType);
   void CalculateResolution(int aTypeOfFit);

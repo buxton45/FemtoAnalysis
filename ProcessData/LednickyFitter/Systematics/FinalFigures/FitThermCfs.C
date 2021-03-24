@@ -185,7 +185,7 @@ TF1* FitwGauss(TH1* aHist, double aMinFit=0., double aMaxFit=50.)
 
 
 //________________________________________________________________________________________________________________
-void DrawHistwGaussFit(TPad* aPad, TH1* aHist, double aGaussFitMin, double aGaussFitMax, TString aMuName="#it{#mu}_{out}", TString aSigmaName="#it{R}_{out}", bool aDrawTextOnRight=false)
+void DrawHistwGaussFit(TPad* aPad, TH1* aHist, double aGaussFitMin, double aGaussFitMax, TString aMuName="#it{#mu}_{out}", TString aSigmaName="#it{R}_{out}", bool aDrawTextOnRight=false, int aRebin=2)
 {
   TF1* tGaussFit = FitwGauss(aHist, aGaussFitMin, aGaussFitMax);
   //tGaussFit->SetLineColor(kGreen+1);
@@ -199,8 +199,12 @@ void DrawHistwGaussFit(TPad* aPad, TH1* aHist, double aGaussFitMin, double aGaus
   aHist->SetMarkerSize(1.0);
 
   aPad->cd();
-  aHist->Rebin(2);
-  aHist->Scale(0.5);
+  if(aRebin != 1)
+  {
+    aHist->Rebin(aRebin);
+    //aHist->Scale(1.0/aRebin);
+    tGaussFit->SetParameter(0, aRebin*tGaussFit->GetParameter(0));
+  }
   aHist->DrawCopy();
   tGaussFit->DrawCopy("same");
 
@@ -282,7 +286,7 @@ void Draw1DSourceProjwFit(TPad* aPad, TH3* a3DoslHist, TString aComponent, doubl
   if(aPutYExponentInLabel==false) aExponentToPrint="";
   else
   {
-    if(!aExponentToPrint.EndsWith(" ")) aExponentToPrint += TString(" ");
+    //if(!aExponentToPrint.EndsWith(" ")) aExponentToPrint += TString(" ");
     //Remove x10^6 from above the plot by moving it way out of the figure...
     TGaxis::SetExponentOffset(-10.0, 10.0, "y");
   }
@@ -342,21 +346,25 @@ void Draw1DSourceProjwFit(TPad* aPad, TH3* a3DoslHist, TString aComponent, doubl
     t1DSource = a3DoslHist->ProjectionX("out", tBinProjLow, tBinProjHigh, tBinProjLow, tBinProjHigh);
       t1DSource->SetTitle("PairSource_Out");
       t1DSource->GetXaxis()->SetTitle(TString::Format("%s (fm)", tAxisBaseNameOut.Data()));
-      t1DSource->GetYaxis()->SetTitle(TString::Format("%sd#it{N}/d%s", aExponentToPrint.Data(), tAxisBaseNameOut.Data()));
+      //t1DSource->GetYaxis()->SetTitle(TString::Format("%sd#it{N}/d%s", aExponentToPrint.Data(), tAxisBaseNameOut.Data()));
+      //t1DSource->GetYaxis()->SetTitle(TString::Format("d#it{N}/d%s #left(%s fm^{-1}#right)", tAxisBaseNameOut.Data(), aExponentToPrint.Data()));
+      t1DSource->GetYaxis()->SetTitle(TString::Format("d#it{N}/d%s (%s fm^{-1}#scale[0.5]{ })", tAxisBaseNameOut.Data(), aExponentToPrint.Data()));
   }
   else if(aComponent.EqualTo("side"))
   {
     t1DSource = a3DoslHist->ProjectionY("side", tBinProjLow, tBinProjHigh, tBinProjLow, tBinProjHigh);
       t1DSource->SetTitle("PairSource_Side");
       t1DSource->GetXaxis()->SetTitle(TString::Format("%s(fm)", tAxisBaseNameSide.Data()));
-      t1DSource->GetYaxis()->SetTitle(TString::Format("%sd#it{N}/d%s", aExponentToPrint.Data(), tAxisBaseNameSide.Data()));
+      //t1DSource->GetYaxis()->SetTitle(TString::Format("%sd#it{N}/d%s", aExponentToPrint.Data(), tAxisBaseNameSide.Data()));
+      t1DSource->GetYaxis()->SetTitle(TString::Format("d#it{N}/d%s (%s fm^{-1}#scale[0.5]{ })", tAxisBaseNameSide.Data(), aExponentToPrint.Data()));
   }
   else if(aComponent.EqualTo("long"))
   {
     t1DSource = a3DoslHist->ProjectionZ("long", tBinProjLow, tBinProjHigh, tBinProjLow, tBinProjHigh);
     t1DSource->SetTitle("PairSource_Long");
     t1DSource->GetXaxis()->SetTitle(TString::Format("%s(fm)", tAxisBaseNameLong.Data()));
-    t1DSource->GetYaxis()->SetTitle(TString::Format("%sd#it{N}/d%s", aExponentToPrint.Data(), tAxisBaseNameLong.Data()));
+    //t1DSource->GetYaxis()->SetTitle(TString::Format("%sd#it{N}/d%s", aExponentToPrint.Data(), tAxisBaseNameLong.Data()));
+    t1DSource->GetYaxis()->SetTitle(TString::Format("d#it{N}/d%s (%s fm^{-1}#scale[0.5]{ })", tAxisBaseNameLong.Data(), aExponentToPrint.Data()));
   }
   else assert(0);
 
@@ -414,7 +422,7 @@ void DrawDeltaT(TPad* aPad, TH1* aDeltaTHist, double aGaussFitMin=-20., double a
   if(aPutYExponentInLabel==false) aExponentToPrint="";
   else
   {
-    if(!aExponentToPrint.EndsWith(" ")) aExponentToPrint += TString(" ");
+    //if(!aExponentToPrint.EndsWith(" ")) aExponentToPrint += TString(" ");
     //Remove x10^6 from above the plot by moving it way out of the figure...
     TGaxis::SetExponentOffset(-10.0, 10.0, "y");
   }
@@ -425,13 +433,14 @@ void DrawDeltaT(TPad* aPad, TH1* aDeltaTHist, double aGaussFitMin=-20., double a
   aDeltaTHist->SetMarkerStyle(20);
   aDeltaTHist->SetMarkerSize(0.75);
   aDeltaTHist->SetMarkerColor(kBlack);
-  
-  aDeltaTHist->GetXaxis()->SetRangeUser(-99, 99);
+
 
   aDeltaTHist->GetXaxis()->SetTitle("#Deltat* (fm/#it{c})");
-  aDeltaTHist->GetYaxis()->SetTitle(TString::Format("%sd#it{N}/d#Delta#it{t}*", aExponentToPrint.Data()));
+  //aDeltaTHist->GetYaxis()->SetTitle(TString::Format("%sd#it{N}/d#Delta#it{t}*", aExponentToPrint.Data()));
+  aDeltaTHist->GetYaxis()->SetTitle(TString::Format("d#it{N}/d#Delta#it{t}* (%s fm^{-1}#it{c})", aExponentToPrint.Data()));
 
   SetStandardAxesAttributes(aDeltaTHist);
+  aDeltaTHist->GetYaxis()->SetTitleOffset(0.95);
   aDeltaTHist->GetXaxis()->SetNdivisions(504);
   aDeltaTHist->GetYaxis()->SetNdivisions(506);
 
@@ -447,8 +456,9 @@ void DrawDeltaT(TPad* aPad, TH1* aDeltaTHist, double aGaussFitMin=-20., double a
     tGaussFitMax += aDeltaTHist->GetBinCenter(aDeltaTHist->GetMaximumBin());
     tGaussFitMin += aDeltaTHist->GetBinCenter(aDeltaTHist->GetMaximumBin());
   }
-  
-  DrawHistwGaussFit(aPad, aDeltaTHist, tGaussFitMin, tGaussFitMax, tMuName, tSigmaName);
+  aDeltaTHist->GetXaxis()->SetRangeUser(-99, 99);
+  //aDeltaTHist->GetXaxis()->SetRangeUser(-85, 85); 
+  DrawHistwGaussFit(aPad, aDeltaTHist, tGaussFitMin, tGaussFitMax, tMuName, tSigmaName, false, 1);
 
   //Draw line at delta_t*=0
   TLine* tLine = new TLine(0., 0., 0., aDeltaTHist->GetMaximum());
@@ -1231,7 +1241,7 @@ TCanvas* DrawCfwFitAndSourceswDeltaTwC11wData(TString tCanName, ThermCf* aThermC
   if(aPutYExponentInLabel==false) aExponentToPrint="";
   else
   {
-    if(!aExponentToPrint.EndsWith(" ")) aExponentToPrint += TString(" ");
+    //if(!aExponentToPrint.EndsWith(" ")) aExponentToPrint += TString(" ");
     //Remove x10^6 from above the plot by moving it way out of the figure...
     TGaxis::SetExponentOffset(-10.0, 10.0, "y");
   }

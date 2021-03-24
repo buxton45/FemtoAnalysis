@@ -30,6 +30,11 @@ double PurityBgFitFunction(double *x, double *par)
   return par[0] + par[1]*x[0] + par[2]*pow(x[0],2) + par[3]*pow(x[0],3) + par[4]*pow(x[0],4);
 }
 
+double ScaledPurityBgFitFunction(double *x, double *par)
+{  
+  return par[5]*PurityBgFitFunction(x, par);
+}
+
 
 
 
@@ -253,7 +258,7 @@ void Purity::CalculatePurity()
 
 
 //________________________________________________________________________________________________________________
-void Purity::DrawPurity(TPad *aPad, bool aZoomBg, bool aPrintPurity, bool aPutYExponentInLabel, TString aExponentToPrint, double aPadScaleX, double aPadScaleY)
+void Purity::DrawPurity(TPad *aPad, bool aZoomBg, bool aPrintPurity, bool aPutYExponentInLabel, TString aExponentToPrint, bool aSuppressYAxTitle, double aPadScaleX, double aPadScaleY, bool aScaleByBinWidth)
 {
   if(aPutYExponentInLabel==false) aExponentToPrint="";
   else
@@ -302,16 +307,38 @@ void Purity::DrawPurity(TPad *aPad, bool aZoomBg, bool aPrintPurity, bool aPutYE
   tCombinedPurity->GetXaxis()->SetTickLength(0.06*(aPadScaleY/aPadScaleX));
   tCombinedPurity->GetXaxis()->SetNdivisions(510);
 
-  //tCombinedPurity->GetYaxis()->SetTitle("dN/d#it{m}_{inv}");
-  TString tYaxTitle = TString::Format("%sdN/d#it{m}", aExponentToPrint.Data());
-  if( (fParticleType == kLam) 
-   || (fParticleType == kALam) ) tYaxTitle.Append("_{p#pi}");
-  else if(fParticleType == kK0)  tYaxTitle.Append("_{#pi#pi}");
-  else assert(0);
-  tCombinedPurity->GetYaxis()->SetTitle(tYaxTitle);
+  if(aScaleByBinWidth)
+  {
+    TF1* scaledFitBgd = new TF1(fitBgd->GetName(), ScaledPurityBgFitFunction, tCombinedPurity->GetBinLowEdge(1),tCombinedPurity->GetBinLowEdge(tCombinedPurity->GetNbinsX()+1),6);
+    for(unsigned int i=0; i<fitBgd->GetNpar(); i++) scaledFitBgd->SetParameter(i, fitBgd->GetParameter(i));
+    scaledFitBgd->SetParameter(5, 1.0/(1000*tCombinedPurity->GetBinWidth(1)));
+    fitBgd = scaledFitBgd;
+    fitBgd->SetLineColor(4);
+    fitBgd->SetLineStyle(5);
+    fitBgd->SetLineWidth(tLineWidth);
+  
+    tCombinedPurity->Scale(1.0/(1000*tCombinedPurity->GetBinWidth(1)));
+    //tCombinedPurity->GetYaxis()->SetTitle("dN/d#it{m}_{inv}");
+    TString tYaxTitle = TString("dN/d#it{m}");
+    if( (fParticleType == kLam) 
+     || (fParticleType == kALam) ) tYaxTitle.Append("_{p#pi}");
+    else if(fParticleType == kK0)  tYaxTitle.Append("_{#pi#pi}");
+    else assert(0);
+    tYaxTitle.Append(TString::Format(" (%sMeV^{-1}#it{c}^{2}#scale[0.5]{ })", aExponentToPrint.Data()));
+    tCombinedPurity->GetYaxis()->SetTitle(tYaxTitle);
+    if(aSuppressYAxTitle) tCombinedPurity->SetTitleSize(0.0, "y");
+    else tCombinedPurity->SetTitleSize(0.0975*aPadScaleY, "y");
+    tCombinedPurity->GetYaxis()->SetTitleOffset(0.575*aPadScaleY);
+  }
+  else
+  {
+    TString tYaxTitle = TString::Format("%sCounts/(%.1f MeV/#it{c}^{2}#scale[0.5]{ })", aExponentToPrint.Data(), 1000*tCombinedPurity->GetBinWidth(1));
+    tCombinedPurity->GetYaxis()->SetTitle(tYaxTitle);
+    if(aSuppressYAxTitle) tCombinedPurity->SetTitleSize(0.0, "y");
+    else tCombinedPurity->SetTitleSize(0.0895*aPadScaleY, "y");
+    tCombinedPurity->GetYaxis()->SetTitleOffset(0.65*aPadScaleY);
+  }
   tCombinedPurity->SetLabelSize(0.075*aPadScaleY, "y");
-  tCombinedPurity->SetTitleSize(0.115*aPadScaleY, "y");
-  tCombinedPurity->GetYaxis()->SetTitleOffset(0.475*aPadScaleY);
   tCombinedPurity->GetYaxis()->SetLabelOffset(0.0075*aPadScaleY);    
   tCombinedPurity->GetYaxis()->SetTickLength(0.03*aPadScaleY);
   //if(aZoomBg) tCombinedPurity->GetYaxis()->SetTickLength(0.03*aPadScaleY);
@@ -327,6 +354,7 @@ void Purity::DrawPurity(TPad *aPad, bool aZoomBg, bool aPrintPurity, bool aPutYE
     tMaxVertLines = tHistoMaxValue;
     if( (fParticleType == kLam) || (fParticleType == kALam) ) tMaxVertLines = 3000000;
     if( fParticleType == kK0 )                                tMaxVertLines = 5400000;
+    if(aScaleByBinWidth) tMaxVertLines /= (1000*tCombinedPurity->GetBinWidth(1));
     lROImin = new TLine((*vROI)(0),0,(*vROI)(0),tMaxVertLines);
     lROImax = new TLine((*vROI)(1),0,(*vROI)(1),tMaxVertLines);
     //-----
@@ -370,7 +398,7 @@ void Purity::DrawPurity(TPad *aPad, bool aZoomBg, bool aPrintPurity, bool aPutYE
     double tMinYAx = tMinBg - tRangeBg/5.;
 
     // CHANGES FOR PHYS REV C
-    if(fParticleType == kLam)
+    if( (fParticleType == kLam) || (fParticleType == kALam) )
     {
       //Using automation above gives 140346, 260793
       tMinYAx = 120000;
@@ -383,6 +411,16 @@ void Purity::DrawPurity(TPad *aPad, bool aZoomBg, bool aPrintPurity, bool aPutYE
       tMinYAx = 72500;
       tMaxYAx = 200000;
       tCombinedPurity->GetYaxis()->SetNdivisions(202);
+    }
+    if(aScaleByBinWidth)
+    {
+      tMinYAx /= (1000*tCombinedPurity->GetBinWidth(1));
+      tMaxYAx /= (1000*tCombinedPurity->GetBinWidth(1));
+      if(fParticleType == kK0)
+      {
+        tMinYAx = 50000;
+        tMaxYAx = 150000;     
+      }
     }
 
 
@@ -462,7 +500,7 @@ void Purity::DrawPurity(TPad *aPad, bool aZoomBg, bool aPrintPurity, bool aPutYE
     }
     
     TPaveText *myText3;
-      if(aPrintPurity) myText3 = new TPaveText(0.162,0.273,0.443,0.73,"NDC");
+      if(aPrintPurity) myText3 = new TPaveText(0.135,0.273,0.415,0.73,"NDC");
       else             myText3 = new TPaveText(0.15,0.65,0.475,0.85,"NDC");
       myText3->SetFillColor(0);
       myText3->SetBorderSize(0);
@@ -488,6 +526,7 @@ void Purity::DrawPurity(TPad *aPad, bool aZoomBg, bool aPrintPurity, bool aPutYE
       tLeg->SetFillColor(0);
       tLeg->SetFillStyle(0);
       tLeg->SetBorderSize(0);
+      tLeg->SetTextSize(0.0775);
       //tLeg->AddEntry(tCombinedPurity, TString::Format("%s candidates", cRootParticleTags[fParticleType]), "p");
       tLeg->AddEntry(tCombinedPurity, TString::Format("%s candidates", cRootParticleTags[fParticleType]), "l");   
       tLeg->AddEntry(lBgFitLowMin, "Bgd. fit window", "l");   
@@ -506,7 +545,7 @@ void Purity::DrawPurity(TPad *aPad, bool aZoomBg, bool aPrintPurity, bool aPutYE
 
         //double tXLett=0.855;
         //double tYLett=0.765;
-        double tXLett=0.175;
+        double tXLett=0.125;
         double tYLett=0.765;
         if(fParticleType == kLam)
         {
@@ -517,36 +556,62 @@ void Purity::DrawPurity(TPad *aPad, bool aZoomBg, bool aPrintPurity, bool aPutYE
           tPanelLetters->DrawLatexNDC(tXLett, tYLett, "(b)");
         }
         else assert(0);
-      }      
+      }
   }
 }
 
 
 
 //________________________________________________________________________________________________________________
-void Purity::DrawPurityAndBgd(TPad* aPad, bool aPrintPurity, bool aPutYExponentInLabel, TString aExponentToPrint)
+void Purity::DrawPurityAndBgd(TPad* aPad, bool aPrintPurity, bool aPutYExponentInLabel, TString aExponentToPrint, bool aScaleByBinWidth)
 {
   aPad->cd();
   //aPad->Divide(1,2);
 
-  TPad *tPad1 = new TPad("tPad1","tPad1",0.0,0.3,1.0,1.0);
+  TPad *tPad1 = new TPad("tPad1","tPad1",0.075,0.3,1.0,1.0);
     tPad1->SetTopMargin(0.10);
     tPad1->SetBottomMargin(0.050);
-    tPad1->SetLeftMargin(0.125);    
+    tPad1->SetLeftMargin(0.085);    
     tPad1->SetRightMargin(0.05);
   tPad1->Draw();
-  TPad *tPad2 = new TPad("tPad2","tPad2",0.0,0.0,1.0,0.3);
+  TPad *tPad2 = new TPad("tPad2","tPad2",0.075,0.0,1.0,0.3);
     tPad2->SetTopMargin(0.075);
     tPad2->SetBottomMargin(0.55);
-    tPad2->SetLeftMargin(0.125);        
+    tPad2->SetLeftMargin(0.085);        
     tPad2->SetRightMargin(0.05);
   tPad2->Draw();
 
   double tPad2XScale = tPad1->GetAbsWNDC()/tPad2->GetAbsWNDC();
   double tPad2YScale = tPad1->GetAbsHNDC()/tPad2->GetAbsHNDC();
 
-  DrawPurity(tPad1, false, aPrintPurity, aPutYExponentInLabel, aExponentToPrint);
-  DrawPurity(tPad2, true, aPrintPurity, aPutYExponentInLabel, aExponentToPrint, tPad2XScale, tPad2YScale);  
+  DrawPurity(tPad1, false, aPrintPurity, aPutYExponentInLabel, aExponentToPrint, true, 1, 1, aScaleByBinWidth);
+  DrawPurity(tPad2, true, aPrintPurity, aPutYExponentInLabel, aExponentToPrint, true, tPad2XScale, tPad2YScale, aScaleByBinWidth);  
+  //------------- Y axis title ---------------------------------------
+  TString tYaxTitle;
+  if(!aScaleByBinWidth) tYaxTitle = TString::Format("%s#scale[0.5]{ }Counts/(%.1f MeV/#it{c}^{2}#scale[0.5]{ })", aExponentToPrint.Data(), 1000*fCombinedPurity->GetBinWidth(1));
+  else
+  {
+    tYaxTitle = TString("dN/d#it{m}");
+    if( (fParticleType == kLam) 
+     || (fParticleType == kALam) ) tYaxTitle.Append("_{p#pi}");
+    else if(fParticleType == kK0)  tYaxTitle.Append("_{#pi#pi}");
+    else assert(0);
+    tYaxTitle.Append(TString::Format(" (%s#scale[0.5]{ }MeV^{-1}#it{c}^{2}#scale[0.5]{ })", aExponentToPrint.Data()));
+  }
+  
+  TLatex* tLaText;
+  if(fParticleType == kK0) tLaText = new TLatex(0.065, 0.205, tYaxTitle);
+  else                     tLaText = new TLatex(0.075, 0.205, tYaxTitle);
+  tLaText->SetTextAlign(11);
+  tLaText->SetLineWidth(2);
+  tLaText->SetTextFont(42);
+  if(aScaleByBinWidth) tLaText->SetTextSize(0.08);
+  else tLaText->SetTextSize(0.075);
+  tLaText->SetNDC(true);
+  tLaText->SetTextAngle(90);
+  tLaText->SetTextAlign(10);
+  aPad->cd();
+  tLaText->Draw();
 }
 
 
