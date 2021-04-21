@@ -230,49 +230,63 @@ The specifics for the \Kpm selection are contained in Table~\ref{tab:KchCuts}.
 The purity of the \Kpm collections, $P_{\mathrm{K}^{\pm}}$, was estimated to be approximately 97\% from a Monte-Carlo (MC) study based on HIJING~\cite{PhysRevD.44.3501} simulations using GEANT3~\cite{Brun:1082634} to model particle transport through the ALICE detectors. 
 For a more detailed estimate of the \Kpm purity from an analysis employing similar methods, see~\cite{Acharya:2017qtq}.
 
+
 \begin{table}[htbp]
  \centering
  \caption{Selection criteria for \Kpm mesons}
-  \begin{tabular}{llll}
+  \renewcommand{\arraystretch}{1.05}
+  \begin{tabular}{lcc|c|l}
+   \hlineB{3.0}  
+   \multicolumn{5}{c}{\Kpm selection} \\
+   \hlineB{3.0}
+   \multicolumn{4}{l|}{Transverse momentum $p_{\mathrm{T}}$} & 0.14 $< p_{\mathrm{T}} < 1.5$ GeV/\textit{c} \\
    \hline
-   \hline 
-   \multicolumn{4}{c}{\Kpm selection} \\
+   \multicolumn{4}{l|}{$|\eta|$} & $< 0.8$ \\
    \hline
-   Transverse momentum $p_{\mathrm{T}}$ & 0.14 $< p_{\mathrm{T}} < 1.5$ GeV/\textit{c} \\
-   $|\eta|$ & $< 0.8$ \\
-   Transverse DCA to primary vertex & $<$ 2.4 cm \\
-   Longitudinal DCA to primary vertex & $<$ 3.0 cm \\
+   \multicolumn{4}{l|}{Transverse DCA to primary vertex} & $<$ 2.4 cm \\
+   \hline
+   \multicolumn{4}{l|}{Longitudinal DCA to primary vertex} & $<$ 3.0 cm \\
+   \hline
 
-   TPC and TOF $N_{\sigma}$ \\
-   \quad $p <$ 0.4 GeV/\textit{c} & $N_{\sigma \mathrm{K,TPC}} <$ 2 \\
-   \quad 0.4 $\leq p <$ 0.45 GeV/\textit{c} & $N_{\sigma \mathrm{K,TPC}} <$ 1 \\    
-   \quad 0.45 $\leq p <$ 0.80 GeV/\textit{c} & $N_{\sigma \mathrm{K,TPC}} <$ 3 \\ 
-   {} & $N_{\sigma \mathrm{K,TOF}} <$ 2 \\
-   \quad 0.80 $\leq p <$ 1.0 GeV/\textit{c} & $N_{\sigma \mathrm{K,TPC}} <$ 3 \\
-   {} & $N_{\sigma \mathrm{K,TOF}} <$ 1.5 \\  
-   \quad $p \geq$ 1.0 GeV/\textit{c} & $N_{\sigma \mathrm{K,TPC}} <$ 3 \\
-   {} & $N_{\sigma \mathrm{K,TOF}} <$ 1 \\  
+   \multicolumn{5}{l}{TPC and TOF $N_{\sigma}$} \\
+   \cline{2-5}
+    & \multicolumn{2}{l}{$p <$ 0.4 GeV/\textit{c}} &  & $N_{\sigma \mathrm{K,TPC}} <$ 2 \\
+   \cline{2-5}
+    & \multicolumn{2}{l}{0.4 $\leq p <$ 0.45 GeV/\textit{c}} & & $N_{\sigma \mathrm{K,TPC}} <$ 1 \\
+   \cline{2-5}     
+    & \multicolumn{2}{l}{\multirow{2}{*}{0.45 $\leq p <$ 0.80 GeV/\textit{c}}} & & $N_{\sigma \mathrm{K,TPC}} <$ 3 \\ 
+   \multicolumn{4}{c|}{} & $N_{\sigma \mathrm{K,TOF}} <$ 2 \\
+   \cline{2-5}
+    & \multicolumn{2}{l}{\multirow{2}{*}{0.80 $\leq p <$ 1.0 GeV/\textit{c}}} & & $N_{\sigma \mathrm{K,TPC}} <$ 3 \\
+   \multicolumn{4}{c|}{} & $N_{\sigma \mathrm{K,TOF}} <$ 1.5 \\  
+   \cline{2-5}
+    & \multicolumn{2}{l}{\multirow{2}{*}{$p \geq$ 1.0 GeV/\textit{c}}} & & $N_{\sigma \mathrm{K,TPC}} <$ 3 \\
+   \multicolumn{4}{c|}{} & $N_{\sigma \mathrm{K,TOF}} <$ 1 \\  
    \hline
    
-   Electron rejection: reject if all satisfied \\
-   \quad $N_{\sigma\mathrm{e},\mathrm{TPC}} < $ 3 \\
-   \quad $N_{\sigma\mathrm{e},\mathrm{TPC}} < N_{\sigma\mathrm{K},\mathrm{TPC}}$ \\
-   \quad $N_{\sigma\mathrm{e},\mathrm{TOF}} < N_{\sigma\mathrm{K},\mathrm{TOF}}$ \\
+   \multicolumn{4}{l|}{\multirow{3}{*}{Electron rejection: reject if all satisfied}} & $N_{\sigma\mathrm{e},\mathrm{TPC}} < $ 3 \\
+   \multicolumn{4}{c|}{} & $N_{\sigma\mathrm{e},\mathrm{TPC}} < N_{\sigma\mathrm{K},\mathrm{TPC}}$ \\
+   \multicolumn{4}{c|}{} & $N_{\sigma\mathrm{e},\mathrm{TOF}} < N_{\sigma\mathrm{K},\mathrm{TOF}}$ \\
    \hline
    
-   Pion rejection:  reject if: \\
-   \quad $p <$ 0.65 GeV/\textit{c} & TOF and TPC available & {} & $N_{\sigma \uppi,\mathrm{TPC}} <$ 3 \\
-   {} & {} & {} & $N_{\sigma \uppi,\mathrm{TOF}} <$ 3 \\
-
-   {} & Only TPC available & $p <$ 0.5 GeV/\textit{c} & $N_{\sigma \uppi,\mathrm{TPC}} <$ 3 \\
-   {} & {} & 0.5 $\leq p <$ 0.65 GeV/\textit{c} & $N_{\sigma \uppi,\mathrm{TPC}} <$ 2 \\
-   \quad 0.65 $\leq p <$ 1.5 GeV/\textit{c} & $N_{\sigma \uppi,\mathrm{TPC}} <$ 5 \\
-   {} & $N_{\sigma \uppi,\mathrm{TOF}} <$ 3 \\
-   \quad $p \geq$ 1.5 GeV/\textit{c} & $N_{\sigma \uppi,\mathrm{TPC}} <$ 5 \\
-   {} & $N_{\sigma \uppi,\mathrm{TOF}} <$ 2 \\
-   \hline
+   \multicolumn{5}{l}{Pion rejection:  reject if:} \\
+   \cline{2-5}
+   \multirow{4}{*}{} & \multirow{4}{*}{$p <$ 0.65 GeV/\textit{c}} & \multicolumn{1}{l}{\multirow{2}{*}{TOF and TPC available}} & \multicolumn{1}{c|}{} & $N_{\sigma \uppi,\mathrm{TPC}} <$ 3 \\
+   \multicolumn{4}{c|}{} & $N_{\sigma \uppi,\mathrm{TOF}} <$ 3 \\
+   \cline{3-5}
+   \multicolumn{2}{c}{} & \multicolumn{1}{l|}{\multirow{2}{*}{Only TPC available}} & $p <$ 0.5 GeV/\textit{c} & $N_{\sigma \uppi,\mathrm{TPC}} <$ 3 \\
+   \cline{4-5}
+   \multicolumn{3}{c|}{} & 0.5 $\leq p <$ 0.65 GeV/\textit{c} & $N_{\sigma \uppi,\mathrm{TPC}} <$ 2 \\
+   \cline{2-5}
+    & \multicolumn{3}{l|}{\multirow{2}{*}{0.65 $\leq p <$ 1.5 GeV/\textit{c}}} & $N_{\sigma \uppi,\mathrm{TPC}} <$ 5 \\
+    \multicolumn{4}{c|}{} & $N_{\sigma \uppi,\mathrm{TOF}} <$ 3 \\
+   \cline{2-5}
+    & \multicolumn{3}{l|}{\multirow{2}{*}{$p \geq$ 1.5 GeV/\textit{c}}} & $N_{\sigma \uppi,\mathrm{TPC}} <$ 5 \\
+    \multicolumn{4}{c|}{} & $N_{\sigma \uppi,\mathrm{TOF}} <$ 2 \\
    \hline
   \end{tabular}
+% \end{minipage}
+ %\caption{Charged kaon (\Kpm) selection criteria}
  \label{tab:KchCuts} 
 \end{table}
 
@@ -318,50 +332,71 @@ The resulting invariant mass distributions for \Lam and \Ks collections in the 0
 For the purity estimations, the background signal is extracted by fitting the \minv distribution with a fourth-order polynomial outside of the mass peak and assuming the distribution to continue smoothly beneath the mass peak.
 The \Lam and \ALam purities are estimated to be $P_{\Lambda(\overline{\Lambda})} \approx 96\%$, and that of the \Ks is $P_{\mathrm{K^{0}_{S}}} \approx 98\%$.
 
-
 \begin{table}[htbp]
  \centering 
  \caption{Selection criteria for \Lam and \ALam hyperons}
-  \begin{tabular}{lll}
+  \renewcommand{\arraystretch}{1.05}
+  \begin{tabular}{lc|c|l}
+   \hlineB{3.0}  
+   \multicolumn{4}{c}{\Lam [$\overline{\Lambda}$] selection} \\
+   \hlineB{3.0}
+   \multicolumn{3}{l|}{Transverse momentum $p_{\mathrm{T}}$} & $> 0.4$ GeV/\textit{c} \\
    \hline
-   \hline  
-   \multicolumn{3}{c}{\Lam [$\overline{\Lambda}$] selection} \\
+   \multicolumn{3}{l|}{$|\eta|$} & $< 0.8$ \\
    \hline
-   Transverse momentum $p_{\mathrm{T}}$ & $> 0.4$ GeV/\textit{c} \\
-   $|\eta|$ & $< 0.8$ \\
-   Invariant mass & $|m_{\mathrm{\mathrm{p}\uppi}} - m_{\mathrm{PDG}}| < 3.8$ MeV/$c^{2}$ \\ 
-   DCA to primary vertex & $<$ 0.5 cm \\
-   Cosine of pointing angle & $>$ 0.9993 \\
-   Decay length & $<$ 60 cm \\
+   \multicolumn{3}{l|}{Invariant mass} & $|m_{\mathrm{\mathrm{p}\uppi}} - m_{\mathrm{PDG}}| < 3.8$ MeV/$c^{2}$ \\ 
    \hline
-      
-   \multicolumn{3}{c}{$\uppi$ and p daughter criteria} \\
-   $|\eta|$ &  $< 0.8$ \\
-   DCA $\uppi$p daughters & $<$ 0.4 cm \\
+   \multicolumn{3}{l|}{DCA to primary vertex} & $<$ 0.5 cm \\
    \hline
-     
-   \multicolumn{3}{c}{$\uppi$-specific} \\
-   $p_{\mathrm{T}}$ & $> 0.16$ GeV/\textit{c} \\
-   DCA to primary vertex & $>$ 0.3 cm \\
-   TPC and TOF $N_{\sigma}$ \\
-   \quad $p <$ 0.5 GeV/\textit{c} & $N_{\sigma, \mathrm{TPC}} <$ 3 \\
-   \quad $p \geq$ 0.5 GeV/\textit{c} &  TOF \& TPC available & $N_{\sigma, \mathrm{TPC}} <$ 3 \\
-   {} & {} & $N_{\sigma, \mathrm{TOF}} <$ 3 \\
-   {} & Only TPC available & $N_{\sigma, \mathrm{TPC}} <$ 3 \\
+   \multicolumn{3}{l|}{Cosine of pointing angle} & $>$ 0.9993 \\
+   \hline
+   \multicolumn{3}{l|}{Decay length} & $<$ 60 cm \\
    \hline
    
    
-   \multicolumn{3}{c}{p-specific} \\
-   $p_{\mathrm{T}}$ & $ > $ 0.5(p) [0.3($\overline{\mathrm{p}}$)] GeV/\textit{c} \\
-   DCA to primary vertex & $>$ 0.1 cm \\
-   TPC and TOF $N_{\sigma}$ \\
-   \quad $p <$ 0.8 GeV/\textit{c} & $N_{\sigma, \mathrm{TPC}} <$ 3 \\
-   \quad $p \geq$ 0.8 GeV/\textit{c} &  TOF \& TPC available & $N_{\sigma, \mathrm{TPC}} <$ 3 \\
-   {} & {} & $N_{\sigma, \mathrm{TOF}} <$ 3 \\
-   {} & Only TPC available & $N_{\sigma, \mathrm{TPC}} <$ 3 \\
+   \multicolumn{4}{c}{$\uppi$ and p daughter criteria} \\
    \hline
-   \hline 
+   \multicolumn{3}{l|}{$|\eta|$} &  $< 0.8$ \\
+   \hline
+   \multicolumn{3}{l|}{DCA $\uppi$p daughters} & $<$ 0.4 cm \\
+   \hline
+   
+   
+   \multicolumn{4}{c}{$\uppi$-specific} \\
+   \hline
+   \multicolumn{3}{l|}{$p_{\mathrm{T}}$} & $> 0.16$ GeV/\textit{c} \\
+   \hline
+   \multicolumn{3}{l|}{DCA to primary vertex} & $>$ 0.3 cm \\
+   \hline
+   \multicolumn{4}{l}{TPC and TOF $N_{\sigma}$} \\
+   \cline{2-4}
+    & \multicolumn{1}{c}{$p <$ 0.5 GeV/\textit{c}} &  & $N_{\sigma, \mathrm{TPC}} <$ 3 \\
+   \cline{2-4}
+    & \multicolumn{1}{c}{\multirow{3}{*}{$p \geq$ 0.5 GeV/\textit{c}}} &  \multirow{2}{*}{TOF \& TPC available} & $N_{\sigma, \mathrm{TPC}} <$ 3 \\
+    & \multicolumn{2}{c|}{} & $N_{\sigma, \mathrm{TOF}} <$ 3 \\
+   \cline{3-4}
+    & \multicolumn{1}{c}{} & Only TPC available & $N_{\sigma, \mathrm{TPC}} <$ 3 \\
+   \hline
+   
+   
+   \multicolumn{4}{c}{p-specific} \\
+   \hline
+   \multicolumn{3}{l|}{$p_{\mathrm{T}}$} & $ > $ 0.5(p) [0.3($\overline{\mathrm{p}}$)] GeV/\textit{c} \\
+   \hline
+   \multicolumn{3}{l|}{DCA to primary vertex} & $>$ 0.1 cm \\
+   \hline
+   \multicolumn{4}{l}{TPC and TOF $N_{\sigma}$} \\
+   \cline{2-4}
+    & \multicolumn{1}{c}{$p <$ 0.8 GeV/\textit{c}} & & $N_{\sigma, \mathrm{TPC}} <$ 3 \\
+   \cline{2-4}
+    & \multicolumn{1}{c}{\multirow{3}{*}{$p \geq$ 0.8 GeV/\textit{c}}} &  \multirow{2}{*}{TOF \& TPC available} & $N_{\sigma, \mathrm{TPC}} <$ 3 \\
+    & \multicolumn{2}{c|}{} & $N_{\sigma, \mathrm{TOF}} <$ 3 \\
+   \cline{3-4}
+    & \multicolumn{1}{c}{} & Only TPC available & $N_{\sigma, \mathrm{TPC}} <$ 3 \\
+   \hline   
   \end{tabular}
+% \end{minipage}
+ %\caption{\Lam selection}
  \label{tab:LamCuts} 
 \end{table}
 
@@ -370,34 +405,52 @@ The \Lam and \ALam purities are estimated to be $P_{\Lambda(\overline{\Lambda})}
 \begin{table}[htbp]
  \centering
  \caption{Selection criteria for \Ks mesons}
-  \begin{tabular}{lll}
+  \renewcommand{\arraystretch}{1.05}
+  \begin{tabular}{lc|c|l}
+   \hlineB{3.0}  
+   \multicolumn{4}{c}{\Ks selection} \\
+   \hlineB{3.0}
+   \multicolumn{3}{l|}{Transverse momentum $p_{\mathrm{T}}$} & $> 0.2$ GeV/\textit{c} \\
    \hline
+   \multicolumn{3}{l|}{$|\eta|$} & $< 0.8$ \\
    \hline
-   \multicolumn{3}{c}{\Ks selection} \\
+   \multicolumn{3}{l|}{Invariant mass} & $0.480 < m_{\mathrm{\uppi^{+}\uppi^{-}}} < 0.515$ GeV/$c^{2}$ \\
    \hline
-   Transverse momentum $p_{\mathrm{T}}$ & $> 0.2$ GeV/\textit{c} \\
-   $|\eta|$ & $< 0.8$ \\
-   Invariant mass & $0.480 < m_{\mathrm{\uppi^{+}\uppi^{-}}} < 0.515$ GeV/$c^{2}$ \\
-   DCA to primary vertex & $<$ 0.3 cm \\
-   Cosine of pointing angle & $>$ 0.9993 \\
-   Decay length & $<$ 30 cm \\
+   \multicolumn{3}{l|}{DCA to primary vertex} & $<$ 0.3 cm \\
    \hline
-        
-   \multicolumn{3}{c}{$\uppi^{\pm}$ daughter criteria} \\
-   $p_{\mathrm{T}}$ & $>$ 0.15 GeV/\textit{c} \\
-   $|\eta|$ &  $< 0.8$ \\
-   DCA $\uppi^{+}\uppi^{-}$ daughters & $<$ 0.3 cm \\
-   DCA to primary vertex & $>$ 0.3 cm \\
-   TPC and TOF $N_{\sigma}$ \\
-   \quad $p <$ 0.5 GeV/\textit{c} & $N_{\sigma, \mathrm{TPC}} <$ 3 \\
-   \quad $p \geq$ 0.5 GeV/\textit{c} &  TOF \& TPC available & $N_{\sigma, \mathrm{TPC}} <$ 3 \\
-   {} & {} & $N_{\sigma, \mathrm{TOF}} <$ 3 \\
-   {} & Only TPC available & $N_{\sigma, \mathrm{TPC}} <$ 3 \\
+   \multicolumn{3}{l|}{Cosine of pointing angle} & $>$ 0.9993 \\
    \hline
+   \multicolumn{3}{l|}{Decay length} & $<$ 30 cm \\
    \hline
+      
+   
+   \multicolumn{4}{c}{$\uppi^{\pm}$ daughter criteria} \\
+   \hline
+   \multicolumn{3}{l|}{$p_{\mathrm{T}}$} & $>$ 0.15 GeV/\textit{c} \\
+   \hline
+   \multicolumn{3}{l|}{$|\eta|$} &  $< 0.8$ \\
+   \hline
+   \multicolumn{3}{l|}{DCA $\uppi^{+}\uppi^{-}$ daughters} & $<$ 0.3 cm \\
+   \hline
+   \multicolumn{3}{l|}{DCA to primary vertex} & $>$ 0.3 cm \\
+   \hline
+   \multicolumn{4}{l}{TPC and TOF $N_{\sigma}$} \\
+   \cline{2-4}
+    & \multicolumn{1}{c}{$p <$ 0.5 GeV/\textit{c}} &  & $N_{\sigma, \mathrm{TPC}} <$ 3 \\
+   \cline{2-4}
+    & \multicolumn{1}{c}{\multirow{3}{*}{$p \geq$ 0.5 GeV/\textit{c}}} &  \multirow{2}{*}{TOF \& TPC available} & $N_{\sigma, \mathrm{TPC}} <$ 3 \\
+    & \multicolumn{2}{c|}{} & $N_{\sigma, \mathrm{TOF}} <$ 3 \\
+   \cline{3-4}
+    & \multicolumn{1}{c}{} & Only TPC available & $N_{\sigma, \mathrm{TPC}} <$ 3 \\
+   \hline   
   \end{tabular}
+% \end{minipage}
+ %\caption{\Ks selection}
  \label{tab:K0sCuts} 
 \end{table}
+
+
+
 
 \begin{figure}[htp]
   \centering
@@ -596,35 +649,36 @@ The correlations in both of these categories (``Other'' and ``Fakes'') are assum
 \begin{table}[htbp] 
  \centering
  \caption{Weight parameters ($\lambda_{ij}$) for the individual components of the \LamK correlation functions}
- \begin{tabular}{cc c cc c cc c cc}
-  \hline
-  \hline
+ \renewcommand{\arraystretch}{1.2}
+
+ \begin{tabular}{c|c c c|c c c|c c c|c}
   \multicolumn{2}{c}{\LamKchP} & \multicolumn{1}{c}{} & \multicolumn{2}{c}{\ALamKchM} & \multicolumn{1}{c}{} & \multicolumn{2}{c}{\LamKchM} & \multicolumn{1}{c}{} & \multicolumn{2}{c}{\ALamKchP} \\
-  \cline{1-2} \cline{4-5} \cline{7-8} \cline{10-11}
+  \clineB{1-2}{3.0} \clineB{4-5}{3.0} \clineB{7-8}{3.0} \clineB{10-11}{3.0}
   Source & $\lambda$ value & \multicolumn{1}{c}{} & Source & $\lambda$ value & \multicolumn{1}{c}{} & Source & $\lambda$ value & \multicolumn{1}{c}{} & Source & $\lambda$ value \\
-  \cline{1-2} \cline{4-5} \cline{7-8} \cline{10-11}
+  \clineB{1-2}{3.0} \clineB{4-5}{3.0} \clineB{7-8}{3.0} \clineB{10-11}{3.0}
   Primary & 0.509 & \multicolumn{1}{c}{} & Primary & 0.509 & \multicolumn{1}{c}{} & Primary & 0.509 & \multicolumn{1}{c}{} & Primary & 0.510 \\
   $\Sigma^{0}$K$^{+}$ & 0.108 & \multicolumn{1}{c}{} & $\overline{\Sigma}^{0}$K$^{-}$ & 0.107 & \multicolumn{1}{c}{} & $\Sigma^{0}$K$^{-}$ & 0.107 & \multicolumn{1}{c}{} & $\overline{\Sigma}^{0}$K$^{+}$ & 0.108 \\  
   $\Xi^{0}$K$^{+}$ & 0.037 & \multicolumn{1}{c}{} & $\overline{\Xi}^{0}$K$^{-}$ & 0.034 & \multicolumn{1}{c}{} & $\Xi^{0}$K$^{-}$ & 0.037 & \multicolumn{1}{c}{} & $\overline{\Xi}^{0}$K$^{+}$ & 0.035 \\  
   $\Xi^{-}$K$^{+}$ & 0.048 & \multicolumn{1}{c}{} & $\overline{\Xi}^{+}$K$^{-}$ & 0.044 & \multicolumn{1}{c}{} & $\Xi^{-}$K$^{-}$ & 0.048 & \multicolumn{1}{c}{} & $\overline{\Xi}^{+}$K$^{+}$ & 0.045 \\  
   Other & 0.218 & \multicolumn{1}{c}{} & Other & 0.228 & \multicolumn{1}{c}{} & Other & 0.221 & \multicolumn{1}{c}{} & Other & 0.225 \\  
   Fakes & 0.079 & \multicolumn{1}{c}{} & Fakes & 0.079 & \multicolumn{1}{c}{} & Fakes & 0.079 & \multicolumn{1}{c}{} & Fakes & 0.079 \\
+  \cline{1-2} \cline{4-5} \cline{7-8} \cline{10-11}
   
   \multicolumn{11}{c}{} \\
 
   \multicolumn{3}{c}{} & \multicolumn{2}{c}{\LamKs} & \multicolumn{1}{c}{} & \multicolumn{2}{c}{\ALamKs} & \multicolumn{3}{c}{} \\ 
-  \cline{4-5} \cline{7-8}
+  \clineB{4-5}{3.0} \clineB{7-8}{3.0}
   \multicolumn{3}{c}{} & Source & $\lambda$ value & \multicolumn{1}{c}{} & Source & \multicolumn{1}{c}{$\lambda$ value} & \multicolumn{3}{c}{} \\
-  \cline{4-5} \cline{7-8}
+  \clineB{4-5}{3.0} \clineB{7-8}{3.0}
   \multicolumn{3}{c}{} & Primary & 0.531 & \multicolumn{1}{c}{} & Primary & \multicolumn{1}{c}{0.532} & \multicolumn{3}{c}{} \\  
   \multicolumn{3}{c}{} & $\Sigma^{0}$K$^{0}_{\mathrm{S}}$ & 0.118 & \multicolumn{1}{c}{} & $\overline{\Sigma}^{0}$K$^{0}_{\mathrm{S}}$ & \multicolumn{1}{c}{0.118} & \multicolumn{3}{c}{} \\  
   \multicolumn{3}{c}{} & $\Xi^{0}$K$^{0}_{\mathrm{S}}$ & 0.041 & \multicolumn{1}{c}{} & $\overline{\Xi}^{0}$K$^{0}_{\mathrm{S}}$ & \multicolumn{1}{c}{0.038} & \multicolumn{3}{c}{} \\  
   \multicolumn{3}{c}{} & $\Xi^{-}$K$^{0}_{\mathrm{S}}$ & 0.053 & \multicolumn{1}{c}{} & $\overline{\Xi}^{+}$K$^{0}_{\mathrm{S}}$ & \multicolumn{1}{c}{0.049} & \multicolumn{3}{c}{} \\  
   \multicolumn{3}{c}{} & Other & 0.189 & \multicolumn{1}{c}{} & Other & \multicolumn{1}{c}{0.195} & \multicolumn{3}{c}{} \\  
   \multicolumn{3}{c}{} & Fakes & 0.069 & \multicolumn{1}{c}{} & Fakes & \multicolumn{1}{c}{0.069} & \multicolumn{3}{c}{} \\
-  \hline
-  \hline
+  \cline{4-5} \cline{7-8}
  \end{tabular}
+ %\caption{$\lambda$ values for the individual components of the \LamK correlation functions.}
  \label{tab:LambdaValues_3Res}
 \end{table}
 
