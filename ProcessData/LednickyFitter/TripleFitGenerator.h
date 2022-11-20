@@ -61,13 +61,18 @@ public:
 
   virtual TObjArray* DrawModelKStarCfs(bool aSaveImage=false);
 
-  virtual CanvasPartition* BuildKStarCfswFitsCanvasPartition_CombineConj_AllAn(TString aCanvasBaseName, bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, vector<NonFlatBgdFitType> &aNonFlatBgdFitTypes, bool aDrawSysErrors=true, bool aZoomROP=true, bool aSuppressFitInfoOutput=false, bool aLabelLines=false);
-  virtual TCanvas* DrawKStarCfswFits_CombineConj_AllAn(bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, vector<NonFlatBgdFitType> &aNonFlatBgdFitTypes, bool aSaveImage=false, bool aDrawSysErrors=true, bool aZoomROP=true, bool aSuppressFitInfoOutput=false, bool aLabelLines=false);
+  virtual CanvasPartition* BuildKStarCfswFitsCanvasPartition_CombineConj_AllAn(TString aCanvasBaseName, bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, vector<NonFlatBgdFitType> &aNonFlatBgdFitTypes, bool aDrawSysErrors=true, bool aZoomROP=true, bool aSuppressFitInfoOutput=false, bool aLabelLines=false, bool aDrawErrBands=false);
+  virtual TCanvas* DrawKStarCfswFits_CombineConj_AllAn(bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, vector<NonFlatBgdFitType> &aNonFlatBgdFitTypes, bool aSaveImage=false, bool aDrawSysErrors=true, bool aZoomROP=true, bool aSuppressFitInfoOutput=false, bool aLabelLines=false, bool aDrawErrBands=false);
 
   virtual CanvasPartition* BuildKStarCfswFitsCanvasPartition_CombineConj(TString aCanvasBaseName, CentralityType aCentType, bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, vector<NonFlatBgdFitType> &aNonFlatBgdFitTypes, bool aDrawSysErrors=true, bool aZoomROP=true, bool aSuppressFitInfoOutput=false, bool aLabelLines=false);
   virtual CanvasPartition* BuildKStarCfsCanvasPartition_CombineConj(TString aCanvasBaseName, CentralityType aCentType, bool aDrawSysErrors=true, bool aZoomROP=true);
   virtual TCanvas* DrawKStarCfswFits_CombineConj(CentralityType aCentType, bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, vector<NonFlatBgdFitType> &aNonFlatBgdFitTypes, bool aSaveImage=false, bool aDrawSysErrors=true, bool aZoomROP=true, bool aSuppressFitInfoOutput=false, bool aLabelLines=false);
   virtual TCanvas* DrawKStarCfs_CombineConj(CentralityType aCentType, bool aSaveImage=false, bool aDrawSysErrors=true, bool aZoomROP=true);
+  
+  td2dVec GetParamsMinMaxForErrBands_FINALRESULTSONLY(AnalysisType aAnType);
+  static td2dVec FormAllPossibleCombos(td2dVec &aVec);
+  void BuildFitErrBands_FINALRESULTSONLY(AnalysisType aAnType);
+  void BuildFitErrBands_FINALRESULTSONLY();
 
 //-------inline
   void SetRadiusStartValue(double aRad, int aIndex=0, bool aIsFixed=false);

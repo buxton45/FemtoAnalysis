@@ -61,7 +61,12 @@ public:
   void SetupOptStat(int aNx, int aNy, double aStatX, double aStatY, double aStatW, double aStatH);
   TPaveText* SetupTPaveText(TString aText, int aNx, int aNy, double aTextXmin=0.75, double aTextYmin=0.75, double aTextWidth=0.15, double aTextHeight=0.10, double aTextFont=43, double aTextSize=15, int aTextAlign=22, bool aTransBgd=false);
   void AddPadPaveText(TPaveText* aText, int aNx, int aNy);
+  
+  static TLatex* BuildTLatex(TString aString, double aXPos, double aYPos, 
+                             int aTextAlign=11, double aLineWidth=2, int aTextFont=62, 
+                             double aTextSize=0.090, double aScaleFactor=1.0, bool aIsNDC=true);
   void AddPadPaveLatex(TLatex* aText, int aNx, int aNy);
+  
   void SetupTLegend(TString aText, int aNx, int aNy, double aTextXmin=0.75, double aTextYmin=0.75, double aTextWidth=0.15, double aTextHeight=0.10, int aNColumns=1, bool aTransBgd=false);
   void AddLegendEntry(int aNx, int aNy, const TObject *tObj, const char *label="", Option_t *option="lpf", int tLegNumInPad=0);
 
@@ -92,6 +97,8 @@ public:
   TObjArray* GetPadPaveTexts();
   int GetNx();
   int GetNy();
+  
+  vector<TString> GetGraphsDrawOptionsInPad(int aNx, int aNy);
 
 protected:
   bool fDrawUnityLine;
@@ -139,6 +146,8 @@ inline TObjArray* CanvasPartition::GetPadLegends() {return fPadLegends;}
 inline TObjArray* CanvasPartition::GetPadPaveTexts() {return fPadPaveTexts;}
 inline int CanvasPartition::GetNx() {return fNx;}
 inline int CanvasPartition::GetNy() {return fNy;}
+
+inline vector<TString> CanvasPartition::GetGraphsDrawOptionsInPad(int aNx, int aNy) {return fGraphsDrawOptions[aNx + aNy*fNx];}
 
 //________________________________________________________________________________________________________________
 template<typename T>

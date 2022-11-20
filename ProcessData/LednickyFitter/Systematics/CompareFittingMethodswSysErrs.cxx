@@ -1,5 +1,5 @@
 #include "CompareFittingMethodswSysErrs.h"
-
+#include "CanvasPartition.h"
 
 //_________________________________________________________________________________________________________________________________
 TCanvas* CompareImF0vsReF0(vector<FitValWriterInfo> &aFitValWriterInfo, TString aSystematicsFileLocation_LamKch, TString aSystematicsFileLocation_LamK0, bool aDrawPredictions, TString aCanNameMod, bool aSuppressDescs, bool aSuppressAnStamps, bool aDrawStatOnly, bool aDrawCircleStamps)
@@ -13,15 +13,15 @@ TCanvas* CompareImF0vsReF0(vector<FitValWriterInfo> &aFitValWriterInfo, TString 
   TCanvas* tReturnCan = new TCanvas(tCanName, tCanName);
   tReturnCan->cd();
   tReturnCan->SetTopMargin(0.02);
-  tReturnCan->SetBottomMargin(0.15);
-  tReturnCan->SetLeftMargin(0.15);
+  tReturnCan->SetBottomMargin(0.175);
+  tReturnCan->SetLeftMargin(0.175);
 
   TPad* tPadReF0vsImF0 = new TPad(TString::Format("tPadReF0vsImF0%s", tCanName.Data()), TString::Format("tPadReF0vsImF0%s", tCanName.Data()), 
                                   0.0, 0.0, 0.8, 1.0);
   tPadReF0vsImF0->SetRightMargin(0.02);
   tPadReF0vsImF0->SetTopMargin(0.02);
-  tPadReF0vsImF0->SetBottomMargin(0.15);
-  tPadReF0vsImF0->SetLeftMargin(0.15);
+  tPadReF0vsImF0->SetBottomMargin(0.175);
+  tPadReF0vsImF0->SetLeftMargin(0.175);
   tPadReF0vsImF0->SetTicks(1,1);  
   tPadReF0vsImF0->Draw();
 
@@ -30,7 +30,7 @@ TCanvas* CompareImF0vsReF0(vector<FitValWriterInfo> &aFitValWriterInfo, TString 
   tPadD0->SetRightMargin(0.6);
   tPadD0->SetLeftMargin(0.);
   tPadD0->SetTopMargin(0.02);
-  tPadD0->SetBottomMargin(0.15);
+  tPadD0->SetBottomMargin(0.175);
   tPadD0->SetTicks(1,1);  
   tPadD0->Draw();
 
@@ -45,7 +45,7 @@ TCanvas* CompareImF0vsReF0(vector<FitValWriterInfo> &aFitValWriterInfo, TString 
   double tStartY = 1.4;
   double tIncrementX = 0.075;
   double tIncrementY = 0.10;
-  double tTextSize = 0.035;
+  double tTextSize = 0.0575;
 
   TLatex* tTex = new TLatex();
   tTex->SetTextAlign(12);
@@ -158,7 +158,7 @@ TCanvas* CompareImF0vsReF0(vector<FitValWriterInfo> &aFitValWriterInfo, TString 
       tGr_PhysRevD_AKLam->SetLineColor(tPredColor2);
       tGr_PhysRevD_AKLam->Draw("pzsame");
 
-    TLegend* tLegPredictions = new TLegend(0.475, 0.625, 0.925, 0.95);
+    TLegend* tLegPredictions = new TLegend(0.525, 0.625, 0.85, 0.95);
       tLegPredictions->SetLineWidth(0);
       tLegPredictions->SetFillStyle(0);
 /*
@@ -167,10 +167,13 @@ TCanvas* CompareImF0vsReF0(vector<FitValWriterInfo> &aFitValWriterInfo, TString 
       tLegPredictions->AddEntry(tGr_PhysRevD_KLam, "[B] K#Lambda", "p");
       tLegPredictions->AddEntry(tGr_PhysRevD_AKLam, "[B] #bar{K}#Lambda", "p");
 */
-      tLegPredictions->AddEntry(tGr_0607100_Set1, "[10] Set 1: K#Lambda = #bar{K}#Lambda", "p");
-      tLegPredictions->AddEntry(tGr_0607100_Set2, "[10] Set 2: K#Lambda = #bar{K}#Lambda", "p");
+      //tLegPredictions->AddEntry(tGr_0607100_Set1, "[10] Set 1: K#Lambda = #bar{K}#Lambda", "p");
+      //tLegPredictions->AddEntry(tGr_0607100_Set2, "[10] Set 2: K#Lambda = #bar{K}#Lambda", "p");
+      tLegPredictions->AddEntry(tGr_0607100_Set1, "[10] I:  K#Lambda = #bar{K}#Lambda", "p");
+      tLegPredictions->AddEntry(tGr_0607100_Set2, "[10] II: K#Lambda = #bar{K}#Lambda", "p");
       tLegPredictions->AddEntry(tGr_PhysRevD_KLam, "[11] K#Lambda", "p");
       tLegPredictions->AddEntry(tGr_PhysRevD_AKLam, "[11] #bar{K}#Lambda", "p");
+    tLegPredictions->SetTextSize(0.0625);
     tLegPredictions->Draw();
   }
 
@@ -186,7 +189,22 @@ TCanvas* CompareImF0vsReF0(vector<FitValWriterInfo> &aFitValWriterInfo, TString 
   if(aDrawCircleStamps) tMarkerStyleStamp = 20;
   if(!aSuppressAnStamps) DrawAnalysisStamps((TPad*)tPadReF0vsImF0, tAnTypes, tStartXStamp, tStartYStamp, tIncrementXStamp, tIncrementYStamp, tTextSizeStamp, tMarkerStyleStamp);
 
+  //------ For Phys Rev C final
+  TLatex* tLaText;
 
+  double tXLett_LaTex=0.2125;
+  double tYLett_LaTex=0.24;
+  bool tIsNDC_LaTex=true;    
+  
+  int tTextAlign_LaTex = 11;
+  double tLineWidth_LaTex=2;
+  int tTextFont_LaTex = 62;
+  double tTextSize_LaTex = 0.085;
+  double tScaleFactor_LaTex = 1.0;
+
+  tLaText = CanvasPartition::BuildTLatex(TString("(a)"), tXLett_LaTex, tYLett_LaTex, tTextAlign_LaTex, tLineWidth_LaTex, tTextFont_LaTex, tTextSize_LaTex, tScaleFactor_LaTex, tIsNDC_LaTex);
+  tPadReF0vsImF0->cd();
+  tLaText->Draw();
 
   return tReturnCan;
 }
@@ -321,7 +339,7 @@ TCanvas* CompareLambdavsRadiusTweak(vector<FitValWriterInfo> &aFitValWriterInfo,
   double tStartY = 0.50;
   double tIncrementX = 0.14;
   double tIncrementY = 0.11;
-  double tTextSize = 0.03;
+  double tTextSize = 0.0575;
 
   SetupRadiusvsLambdaAxes((TPad*)tReturnCan, 2.5, 8., 0.4, 1.49);
 
@@ -446,19 +464,19 @@ TCanvas* CompareLambdavsRadiusAll(vector<FitValWriterInfo> &aFitValWriterInfo, T
   TCanvas* tReturnCan = new TCanvas(tCanName, tCanName);
   tReturnCan->cd();
   tReturnCan->SetTopMargin(0.02);
-  tReturnCan->SetBottomMargin(0.15);
+  tReturnCan->SetBottomMargin(0.175);
   tReturnCan->SetRightMargin(0.02);
-  tReturnCan->SetLeftMargin(0.15);
+  tReturnCan->SetLeftMargin(0.175);
   tReturnCan->SetTicks(1,1);
   gStyle->SetOptStat(0);
   gStyle->SetOptTitle(0);
 
   //------------------------------------------------------
   double tStartX = 3.2;
-  double tStartY = 1.375;
+  double tStartY = 1.40;
   double tIncrementX = 0.20;
   double tIncrementY = 0.1;
-  double tTextSize = 0.06;
+  double tTextSize = 0.070;
 
   SetupRadiusvsLambdaAxes((TPad*)tReturnCan, 2.5, 8., 0.4, 1.49);
 
@@ -498,12 +516,28 @@ TCanvas* CompareLambdavsRadiusAll(vector<FitValWriterInfo> &aFitValWriterInfo, T
   }
 
   //------------------------------------------------------
-  tTex->SetTextSize(0.06);
-  tTex->DrawLatex(4.25, 0.5, TString("ALICE Pb-Pb #sqrt{#it{s}_{NN}} = 2.76 TeV"));
+  tTex->SetTextSize(0.075);
+  tTex->DrawLatex(3.40, 0.51, TString("ALICE Pb-Pb #sqrt{#it{s}_{NN}} = 2.76 TeV"));
 
 //  tTex->DrawLatex(3.0, 0.5, TString("ALICE Preliminary"));
 //  tTex->DrawLatex(5.3, 0.5, TString("Pb-Pb #sqrt{#it{s}_{NN}} = 2.76 TeV"));
   //------------------------------------------------------
+  //------ For Phys Rev C final
+  TLatex* tLaText;
+
+  double tXLett_LaTex=0.2125;
+  double tYLett_LaTex=0.24;
+  bool tIsNDC_LaTex=true;    
+  
+  int tTextAlign_LaTex = 11;
+  double tLineWidth_LaTex=2;
+  int tTextFont_LaTex = 62;
+  double tTextSize_LaTex = 0.085;
+  double tScaleFactor_LaTex = 1.0;
+
+  tLaText = CanvasPartition::BuildTLatex(TString("(b)"), tXLett_LaTex, tYLett_LaTex, tTextAlign_LaTex, tLineWidth_LaTex, tTextFont_LaTex, tTextSize_LaTex, tScaleFactor_LaTex, tIsNDC_LaTex);
+  tReturnCan->cd();
+  tLaText->Draw();
 
   return tReturnCan;
 }
@@ -635,5 +669,38 @@ TCanvas* CompareAll2Panel(vector<FitValWriterInfo> &aFitValWriterInfo, TString a
   delete tCanLamvsR;
   //--------------------
   return tReturnCan;
+}
+
+//_________________________________________________________________________________________________________________________________
+vector<TCanvas*> CompareAll2Panel_separate(vector<FitValWriterInfo> &aFitValWriterInfo, TString aSystematicsFileLocation_LamKch, TString aSystematicsFileLocation_LamK0, bool aDrawPredictions, TString aCanNameMod, bool aDrawStatOnly)
+{
+  TCanvas *tCanImF0vsReF0, *tCanLamvsR;
+
+  TString tSubCanNameMod = TString::Format("%sForAll", aCanNameMod.Data());
+  tCanImF0vsReF0 = CompareImF0vsReF0(aFitValWriterInfo, aSystematicsFileLocation_LamKch, aSystematicsFileLocation_LamK0, aDrawPredictions, tSubCanNameMod, false, true, aDrawStatOnly, true);
+  tCanLamvsR = CompareLambdavsRadiusAll(aFitValWriterInfo, aSystematicsFileLocation_LamKch, aSystematicsFileLocation_LamK0, tSubCanNameMod, true, false, aDrawStatOnly);
+
+  assert(aFitValWriterInfo.size()==3);
+//  vector<AnalysisType> tAnTypes{kLamKchP, kLamKchM, kLamK0};
+  vector<int> tMarkerStyles{aFitValWriterInfo[0].markerStyle, aFitValWriterInfo[1].markerStyle, aFitValWriterInfo[2].markerStyle};
+    double tStartXStamp = -1.75;
+    if(aDrawPredictions) tStartXStamp = -1.8;
+    double tStartYStamp = 1.35;
+    double tIncrementXStamp = 0.075;
+    double tIncrementYStamp = 0.20;
+    double tTextSizeStamp = 0.075;
+  TString tPadName = TString::Format("tPadReF0vsImF0%s", tCanImF0vsReF0->GetName());
+  TPad* tTestPad = (TPad*)tCanImF0vsReF0->GetPrimitive(tPadName);
+//  DrawAnalysisStamps(tTestPad, tAnTypes, tStartXStamp, tStartYStamp, tIncrementXStamp, tIncrementYStamp, tTextSizeStamp, tMarkerStyles);
+
+  TString tSysTypeText1 = TString::Format("%s#scale[0.5]{ }#oplus#scale[0.5]{ }%s", cAnalysisRootTags[kLamKchP], cAnalysisRootTags[kALamKchM]);
+  TString tSysTypeText2 = TString::Format("%s#scale[0.5]{ }#oplus#scale[0.5]{ }%s", cAnalysisRootTags[kLamKchM], cAnalysisRootTags[kALamKchP]);
+  TString tSysTypeText3 = TString::Format("%s#scale[0.5]{ }#oplus#scale[0.5]{ }%s", cAnalysisRootTags[kLamK0], cAnalysisRootTags[kALamK0]);
+  vector<TString> tSysTexts{tSysTypeText1, tSysTypeText2, tSysTypeText3};
+  vector<int> tColors{kRed+1, kBlue+1, kBlack};
+  DrawAnalysisStamps(tTestPad, tSysTexts, tStartXStamp, tStartYStamp, tIncrementXStamp, tIncrementYStamp, tTextSizeStamp, tMarkerStyles, tColors);
+  //--------------------
+  vector<TCanvas*> tReturnVec{tCanImF0vsReF0, tCanLamvsR};
+  return tReturnVec;
 }
 

@@ -71,6 +71,7 @@ public:
 
   void SetFitValue(double aFitValue);
   double GetFitValue();
+  std::string GetFitValueStringForLatex(int aNDecPlaces=2);//%0.2f
 
   void SetFitValueError(double aFitValueError);
   double GetFitValueError();
@@ -139,6 +140,17 @@ inline double FitParameter::GetStepSize() {return fStepSize;}
 
 inline void FitParameter::SetFitValue(double aFitValue) {fFitValue = aFitValue;}
 inline double FitParameter::GetFitValue() {return fFitValue;}
+inline std::string FitParameter::GetFitValueStringForLatex(int aNDecPlaces)
+{
+  double tValRounded = round(fFitValue*pow(10, aNDecPlaces))/pow(10, aNDecPlaces);
+
+  std::string tReturnString;
+  if(tValRounded >= 0.) tReturnString = std::to_string(tValRounded);
+  else tReturnString = std::string("$-$")+std::to_string(fabs(tValRounded));
+  
+  tReturnString.erase(tReturnString.find('.')+1+aNDecPlaces, std::string::npos);
+  return tReturnString;
+}
 
 inline void FitParameter::SetFitValueError(double aFitValueError) {fFitValueError = aFitValueError;}
 inline double FitParameter::GetFitValueError() {return fFitValueError;}

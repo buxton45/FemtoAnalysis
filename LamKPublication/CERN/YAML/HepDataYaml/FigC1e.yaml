@@ -1,0 +1,814 @@
+name: 'FigC1e.yaml'
+independent_variables:
+- header: {name: r*_long (fm), units: fm}
+  values:
+  - {value: -49.7500}
+  - {value: -49.2500}
+  - {value: -48.7500}
+  - {value: -48.2500}
+  - {value: -47.7500}
+  - {value: -47.2500}
+  - {value: -46.7500}
+  - {value: -46.2500}
+  - {value: -45.7500}
+  - {value: -45.2500}
+  - {value: -44.7500}
+  - {value: -44.2500}
+  - {value: -43.7500}
+  - {value: -43.2500}
+  - {value: -42.7500}
+  - {value: -42.2500}
+  - {value: -41.7500}
+  - {value: -41.2500}
+  - {value: -40.7500}
+  - {value: -40.2500}
+  - {value: -39.7500}
+  - {value: -39.2500}
+  - {value: -38.7500}
+  - {value: -38.2500}
+  - {value: -37.7500}
+  - {value: -37.2500}
+  - {value: -36.7500}
+  - {value: -36.2500}
+  - {value: -35.7500}
+  - {value: -35.2500}
+  - {value: -34.7500}
+  - {value: -34.2500}
+  - {value: -33.7500}
+  - {value: -33.2500}
+  - {value: -32.7500}
+  - {value: -32.2500}
+  - {value: -31.7500}
+  - {value: -31.2500}
+  - {value: -30.7500}
+  - {value: -30.2500}
+  - {value: -29.7500}
+  - {value: -29.2500}
+  - {value: -28.7500}
+  - {value: -28.2500}
+  - {value: -27.7500}
+  - {value: -27.2500}
+  - {value: -26.7500}
+  - {value: -26.2500}
+  - {value: -25.7500}
+  - {value: -25.2500}
+  - {value: -24.7500}
+  - {value: -24.2500}
+  - {value: -23.7500}
+  - {value: -23.2500}
+  - {value: -22.7500}
+  - {value: -22.2500}
+  - {value: -21.7500}
+  - {value: -21.2500}
+  - {value: -20.7500}
+  - {value: -20.2500}
+  - {value: -19.7500}
+  - {value: -19.2500}
+  - {value: -18.7500}
+  - {value: -18.2500}
+  - {value: -17.7500}
+  - {value: -17.2500}
+  - {value: -16.7500}
+  - {value: -16.2500}
+  - {value: -15.7500}
+  - {value: -15.2500}
+  - {value: -14.7500}
+  - {value: -14.2500}
+  - {value: -13.7500}
+  - {value: -13.2500}
+  - {value: -12.7500}
+  - {value: -12.2500}
+  - {value: -11.7500}
+  - {value: -11.2500}
+  - {value: -10.7500}
+  - {value: -10.2500}
+  - {value: -9.7500}
+  - {value: -9.2500}
+  - {value: -8.7500}
+  - {value: -8.2500}
+  - {value: -7.7500}
+  - {value: -7.2500}
+  - {value: -6.7500}
+  - {value: -6.2500}
+  - {value: -5.7500}
+  - {value: -5.2500}
+  - {value: -4.7500}
+  - {value: -4.2500}
+  - {value: -3.7500}
+  - {value: -3.2500}
+  - {value: -2.7500}
+  - {value: -2.2500}
+  - {value: -1.7500}
+  - {value: -1.2500}
+  - {value: -0.7500}
+  - {value: -0.2500}
+  - {value: 0.2500}
+  - {value: 0.7500}
+  - {value: 1.2500}
+  - {value: 1.7500}
+  - {value: 2.2500}
+  - {value: 2.7500}
+  - {value: 3.2500}
+  - {value: 3.7500}
+  - {value: 4.2500}
+  - {value: 4.7500}
+  - {value: 5.2500}
+  - {value: 5.7500}
+  - {value: 6.2500}
+  - {value: 6.7500}
+  - {value: 7.2500}
+  - {value: 7.7500}
+  - {value: 8.2500}
+  - {value: 8.7500}
+  - {value: 9.2500}
+  - {value: 9.7500}
+  - {value: 10.2500}
+  - {value: 10.7500}
+  - {value: 11.2500}
+  - {value: 11.7500}
+  - {value: 12.2500}
+  - {value: 12.7500}
+  - {value: 13.2500}
+  - {value: 13.7500}
+  - {value: 14.2500}
+  - {value: 14.7500}
+  - {value: 15.2500}
+  - {value: 15.7500}
+  - {value: 16.2500}
+  - {value: 16.7500}
+  - {value: 17.2500}
+  - {value: 17.7500}
+  - {value: 18.2500}
+  - {value: 18.7500}
+  - {value: 19.2500}
+  - {value: 19.7500}
+  - {value: 20.2500}
+  - {value: 20.7500}
+  - {value: 21.2500}
+  - {value: 21.7500}
+  - {value: 22.2500}
+  - {value: 22.7500}
+  - {value: 23.2500}
+  - {value: 23.7500}
+  - {value: 24.2500}
+  - {value: 24.7500}
+  - {value: 25.2500}
+  - {value: 25.7500}
+  - {value: 26.2500}
+  - {value: 26.7500}
+  - {value: 27.2500}
+  - {value: 27.7500}
+  - {value: 28.2500}
+  - {value: 28.7500}
+  - {value: 29.2500}
+  - {value: 29.7500}
+  - {value: 30.2500}
+  - {value: 30.7500}
+  - {value: 31.2500}
+  - {value: 31.7500}
+  - {value: 32.2500}
+  - {value: 32.7500}
+  - {value: 33.2500}
+  - {value: 33.7500}
+  - {value: 34.2500}
+  - {value: 34.7500}
+  - {value: 35.2500}
+  - {value: 35.7500}
+  - {value: 36.2500}
+  - {value: 36.7500}
+  - {value: 37.2500}
+  - {value: 37.7500}
+  - {value: 38.2500}
+  - {value: 38.7500}
+  - {value: 39.2500}
+  - {value: 39.7500}
+  - {value: 40.2500}
+  - {value: 40.7500}
+  - {value: 41.2500}
+  - {value: 41.7500}
+  - {value: 42.2500}
+  - {value: 42.7500}
+  - {value: 43.2500}
+  - {value: 43.7500}
+  - {value: 44.2500}
+  - {value: 44.7500}
+  - {value: 45.2500}
+  - {value: 45.7500}
+  - {value: 46.2500}
+  - {value: 46.7500}
+  - {value: 47.2500}
+  - {value: 47.7500}
+  - {value: 48.2500}
+  - {value: 48.7500}
+  - {value: 49.2500}
+  - {value: 49.7500}
+  - {value: 50.2500}
+dependent_variables:
+- header: {name: dN/dr*_long}
+  qualifiers:
+  - {name: SQRT(S_NN), units: GeV, value: '2760.0'}
+  values:
+  - errors:
+    - {label: stat, symerror: 45.166359}
+    value: 2040.000000
+  - errors:
+    - {label: stat, symerror: 44.855323}
+    value: 2012.000000
+  - errors:
+    - {label: stat, symerror: 45.793013}
+    value: 2097.000000
+  - errors:
+    - {label: stat, symerror: 46.989360}
+    value: 2208.000000
+  - errors:
+    - {label: stat, symerror: 45.738387}
+    value: 2092.000000
+  - errors:
+    - {label: stat, symerror: 46.540305}
+    value: 2166.000000
+  - errors:
+    - {label: stat, symerror: 47.655010}
+    value: 2271.000000
+  - errors:
+    - {label: stat, symerror: 47.339202}
+    value: 2241.000000
+  - errors:
+    - {label: stat, symerror: 46.162756}
+    value: 2131.000000
+  - errors:
+    - {label: stat, symerror: 46.432747}
+    value: 2156.000000
+  - errors:
+    - {label: stat, symerror: 47.864392}
+    value: 2291.000000
+  - errors:
+    - {label: stat, symerror: 47.791213}
+    value: 2284.000000
+  - errors:
+    - {label: stat, symerror: 48.826222}
+    value: 2384.000000
+  - errors:
+    - {label: stat, symerror: 48.342528}
+    value: 2337.000000
+  - errors:
+    - {label: stat, symerror: 48.579831}
+    value: 2360.000000
+  - errors:
+    - {label: stat, symerror: 49.091751}
+    value: 2410.000000
+  - errors:
+    - {label: stat, symerror: 50.179677}
+    value: 2518.000000
+  - errors:
+    - {label: stat, symerror: 49.829710}
+    value: 2483.000000
+  - errors:
+    - {label: stat, symerror: 50.744458}
+    value: 2575.000000
+  - errors:
+    - {label: stat, symerror: 50.517324}
+    value: 2552.000000
+  - errors:
+    - {label: stat, symerror: 51.380930}
+    value: 2640.000000
+  - errors:
+    - {label: stat, symerror: 51.117512}
+    value: 2613.000000
+  - errors:
+    - {label: stat, symerror: 52.287666}
+    value: 2734.000000
+  - errors:
+    - {label: stat, symerror: 53.244718}
+    value: 2835.000000
+  - errors:
+    - {label: stat, symerror: 52.440442}
+    value: 2750.000000
+  - errors:
+    - {label: stat, symerror: 53.018865}
+    value: 2811.000000
+  - errors:
+    - {label: stat, symerror: 54.277067}
+    value: 2946.000000
+  - errors:
+    - {label: stat, symerror: 54.359912}
+    value: 2955.000000
+  - errors:
+    - {label: stat, symerror: 55.668663}
+    value: 3099.000000
+  - errors:
+    - {label: stat, symerror: 56.559703}
+    value: 3199.000000
+  - errors:
+    - {label: stat, symerror: 57.801384}
+    value: 3341.000000
+  - errors:
+    - {label: stat, symerror: 57.584720}
+    value: 3316.000000
+  - errors:
+    - {label: stat, symerror: 57.879185}
+    value: 3350.000000
+  - errors:
+    - {label: stat, symerror: 59.312731}
+    value: 3518.000000
+  - errors:
+    - {label: stat, symerror: 60.448325}
+    value: 3654.000000
+  - errors:
+    - {label: stat, symerror: 61.245408}
+    value: 3751.000000
+  - errors:
+    - {label: stat, symerror: 61.579217}
+    value: 3792.000000
+  - errors:
+    - {label: stat, symerror: 62.193247}
+    value: 3868.000000
+  - errors:
+    - {label: stat, symerror: 64.505814}
+    value: 4161.000000
+  - errors:
+    - {label: stat, symerror: 65.673435}
+    value: 4313.000000
+  - errors:
+    - {label: stat, symerror: 66.858059}
+    value: 4470.000000
+  - errors:
+    - {label: stat, symerror: 68.789534}
+    value: 4732.000000
+  - errors:
+    - {label: stat, symerror: 69.878466}
+    value: 4883.000000
+  - errors:
+    - {label: stat, symerror: 72.076348}
+    value: 5195.000000
+  - errors:
+    - {label: stat, symerror: 72.339477}
+    value: 5233.000000
+  - errors:
+    - {label: stat, symerror: 75.531450}
+    value: 5705.000000
+  - errors:
+    - {label: stat, symerror: 76.387172}
+    value: 5835.000000
+  - errors:
+    - {label: stat, symerror: 78.924014}
+    value: 6229.000000
+  - errors:
+    - {label: stat, symerror: 81.406388}
+    value: 6627.000000
+  - errors:
+    - {label: stat, symerror: 83.988094}
+    value: 7054.000000
+  - errors:
+    - {label: stat, symerror: 87.068938}
+    value: 7581.000000
+  - errors:
+    - {label: stat, symerror: 90.614568}
+    value: 8211.000000
+  - errors:
+    - {label: stat, symerror: 93.305948}
+    value: 8706.000000
+  - errors:
+    - {label: stat, symerror: 97.293371}
+    value: 9466.000000
+  - errors:
+    - {label: stat, symerror: 100.458947}
+    value: 10092.000000
+  - errors:
+    - {label: stat, symerror: 104.345580}
+    value: 10888.000000
+  - errors:
+    - {label: stat, symerror: 109.096288}
+    value: 11902.000000
+  - errors:
+    - {label: stat, symerror: 113.815640}
+    value: 12954.000000
+  - errors:
+    - {label: stat, symerror: 119.628592}
+    value: 14311.000000
+  - errors:
+    - {label: stat, symerror: 124.294006}
+    value: 15449.000000
+  - errors:
+    - {label: stat, symerror: 129.869165}
+    value: 16866.000000
+  - errors:
+    - {label: stat, symerror: 136.246101}
+    value: 18563.000000
+  - errors:
+    - {label: stat, symerror: 143.345736}
+    value: 20548.000000
+  - errors:
+    - {label: stat, symerror: 149.479096}
+    value: 22344.000000
+  - errors:
+    - {label: stat, symerror: 158.009493}
+    value: 24967.000000
+  - errors:
+    - {label: stat, symerror: 166.150534}
+    value: 27606.000000
+  - errors:
+    - {label: stat, symerror: 174.879959}
+    value: 30583.000000
+  - errors:
+    - {label: stat, symerror: 184.843177}
+    value: 34167.000000
+  - errors:
+    - {label: stat, symerror: 193.773063}
+    value: 37548.000000
+  - errors:
+    - {label: stat, symerror: 204.078416}
+    value: 41648.000000
+  - errors:
+    - {label: stat, symerror: 216.457848}
+    value: 46854.000000
+  - errors:
+    - {label: stat, symerror: 228.010965}
+    value: 51989.000000
+  - errors:
+    - {label: stat, symerror: 241.785028}
+    value: 58460.000000
+  - errors:
+    - {label: stat, symerror: 255.810477}
+    value: 65439.000000
+  - errors:
+    - {label: stat, symerror: 267.867505}
+    value: 71753.000000
+  - errors:
+    - {label: stat, symerror: 282.915182}
+    value: 80041.000000
+  - errors:
+    - {label: stat, symerror: 299.628103}
+    value: 89777.000000
+  - errors:
+    - {label: stat, symerror: 315.892387}
+    value: 99788.000000
+  - errors:
+    - {label: stat, symerror: 332.840803}
+    value: 110783.000000
+  - errors:
+    - {label: stat, symerror: 351.718638}
+    value: 123706.000000
+  - errors:
+    - {label: stat, symerror: 370.501012}
+    value: 137271.000000
+  - errors:
+    - {label: stat, symerror: 390.927103}
+    value: 152824.000000
+  - errors:
+    - {label: stat, symerror: 412.129834}
+    value: 169851.000000
+  - errors:
+    - {label: stat, symerror: 432.338987}
+    value: 186917.000000
+  - errors:
+    - {label: stat, symerror: 453.496417}
+    value: 205659.000000
+  - errors:
+    - {label: stat, symerror: 476.935006}
+    value: 227467.000000
+  - errors:
+    - {label: stat, symerror: 498.219831}
+    value: 248223.000000
+  - errors:
+    - {label: stat, symerror: 522.421286}
+    value: 272924.000000
+  - errors:
+    - {label: stat, symerror: 544.375789}
+    value: 296345.000000
+  - errors:
+    - {label: stat, symerror: 567.012346}
+    value: 321503.000000
+  - errors:
+    - {label: stat, symerror: 589.487065}
+    value: 347495.000000
+  - errors:
+    - {label: stat, symerror: 612.142957}
+    value: 374719.000000
+  - errors:
+    - {label: stat, symerror: 631.807724}
+    value: 399181.000000
+  - errors:
+    - {label: stat, symerror: 651.664791}
+    value: 424667.000000
+  - errors:
+    - {label: stat, symerror: 669.783547}
+    value: 448610.000000
+  - errors:
+    - {label: stat, symerror: 685.222592}
+    value: 469530.000000
+  - errors:
+    - {label: stat, symerror: 698.501969}
+    value: 487905.000000
+  - errors:
+    - {label: stat, symerror: 709.418071}
+    value: 503274.000000
+  - errors:
+    - {label: stat, symerror: 716.499826}
+    value: 513372.000000
+  - errors:
+    - {label: stat, symerror: 720.034721}
+    value: 518450.000000
+  - errors:
+    - {label: stat, symerror: 724.008287}
+    value: 524188.000000
+  - errors:
+    - {label: stat, symerror: 716.438413}
+    value: 513284.000000
+  - errors:
+    - {label: stat, symerror: 708.794046}
+    value: 502389.000000
+  - errors:
+    - {label: stat, symerror: 699.133035}
+    value: 488787.000000
+  - errors:
+    - {label: stat, symerror: 686.693527}
+    value: 471548.000000
+  - errors:
+    - {label: stat, symerror: 669.949998}
+    value: 448833.000000
+  - errors:
+    - {label: stat, symerror: 651.246497}
+    value: 424122.000000
+  - errors:
+    - {label: stat, symerror: 632.234925}
+    value: 399721.000000
+  - errors:
+    - {label: stat, symerror: 611.745045}
+    value: 374232.000000
+  - errors:
+    - {label: stat, symerror: 589.603256}
+    value: 347632.000000
+  - errors:
+    - {label: stat, symerror: 567.613425}
+    value: 322185.000000
+  - errors:
+    - {label: stat, symerror: 544.607198}
+    value: 296597.000000
+  - errors:
+    - {label: stat, symerror: 522.204941}
+    value: 272698.000000
+  - errors:
+    - {label: stat, symerror: 499.492743}
+    value: 249493.000000
+  - errors:
+    - {label: stat, symerror: 475.084203}
+    value: 225705.000000
+  - errors:
+    - {label: stat, symerror: 453.538312}
+    value: 205697.000000
+  - errors:
+    - {label: stat, symerror: 432.181675}
+    value: 186781.000000
+  - errors:
+    - {label: stat, symerror: 411.987864}
+    value: 169734.000000
+  - errors:
+    - {label: stat, symerror: 390.877219}
+    value: 152785.000000
+  - errors:
+    - {label: stat, symerror: 370.923173}
+    value: 137584.000000
+  - errors:
+    - {label: stat, symerror: 350.829018}
+    value: 123081.000000
+  - errors:
+    - {label: stat, symerror: 333.934125}
+    value: 111512.000000
+  - errors:
+    - {label: stat, symerror: 316.578584}
+    value: 100222.000000
+  - errors:
+    - {label: stat, symerror: 298.889612}
+    value: 89335.000000
+  - errors:
+    - {label: stat, symerror: 283.947178}
+    value: 80626.000000
+  - errors:
+    - {label: stat, symerror: 268.065291}
+    value: 71859.000000
+  - errors:
+    - {label: stat, symerror: 254.361947}
+    value: 64700.000000
+  - errors:
+    - {label: stat, symerror: 240.220732}
+    value: 57706.000000
+  - errors:
+    - {label: stat, symerror: 227.872772}
+    value: 51926.000000
+  - errors:
+    - {label: stat, symerror: 215.668727}
+    value: 46513.000000
+  - errors:
+    - {label: stat, symerror: 204.514058}
+    value: 41826.000000
+  - errors:
+    - {label: stat, symerror: 193.398552}
+    value: 37403.000000
+  - errors:
+    - {label: stat, symerror: 183.880396}
+    value: 33812.000000
+  - errors:
+    - {label: stat, symerror: 174.714052}
+    value: 30525.000000
+  - errors:
+    - {label: stat, symerror: 165.571737}
+    value: 27414.000000
+  - errors:
+    - {label: stat, symerror: 157.442053}
+    value: 24788.000000
+  - errors:
+    - {label: stat, symerror: 150.409441}
+    value: 22623.000000
+  - errors:
+    - {label: stat, symerror: 142.842571}
+    value: 20404.000000
+  - errors:
+    - {label: stat, symerror: 136.003676}
+    value: 18497.000000
+  - errors:
+    - {label: stat, symerror: 130.364873}
+    value: 16995.000000
+  - errors:
+    - {label: stat, symerror: 123.442294}
+    value: 15238.000000
+  - errors:
+    - {label: stat, symerror: 118.785521}
+    value: 14110.000000
+  - errors:
+    - {label: stat, symerror: 113.366662}
+    value: 12852.000000
+  - errors:
+    - {label: stat, symerror: 109.045862}
+    value: 11891.000000
+  - errors:
+    - {label: stat, symerror: 105.042848}
+    value: 11034.000000
+  - errors:
+    - {label: stat, symerror: 100.498756}
+    value: 10100.000000
+  - errors:
+    - {label: stat, symerror: 96.052069}
+    value: 9226.000000
+  - errors:
+    - {label: stat, symerror: 93.616238}
+    value: 8764.000000
+  - errors:
+    - {label: stat, symerror: 90.282889}
+    value: 8151.000000
+  - errors:
+    - {label: stat, symerror: 87.304066}
+    value: 7622.000000
+  - errors:
+    - {label: stat, symerror: 83.492515}
+    value: 6971.000000
+  - errors:
+    - {label: stat, symerror: 81.012345}
+    value: 6563.000000
+  - errors:
+    - {label: stat, symerror: 78.993671}
+    value: 6240.000000
+  - errors:
+    - {label: stat, symerror: 77.103826}
+    value: 5945.000000
+  - errors:
+    - {label: stat, symerror: 74.363970}
+    value: 5530.000000
+  - errors:
+    - {label: stat, symerror: 73.972968}
+    value: 5472.000000
+  - errors:
+    - {label: stat, symerror: 71.056316}
+    value: 5049.000000
+  - errors:
+    - {label: stat, symerror: 69.130312}
+    value: 4779.000000
+  - errors:
+    - {label: stat, symerror: 68.124885}
+    value: 4641.000000
+  - errors:
+    - {label: stat, symerror: 67.786429}
+    value: 4595.000000
+  - errors:
+    - {label: stat, symerror: 65.099923}
+    value: 4238.000000
+  - errors:
+    - {label: stat, symerror: 63.874878}
+    value: 4080.000000
+  - errors:
+    - {label: stat, symerror: 63.608176}
+    value: 4046.000000
+  - errors:
+    - {label: stat, symerror: 61.000000}
+    value: 3721.000000
+  - errors:
+    - {label: stat, symerror: 61.032778}
+    value: 3725.000000
+  - errors:
+    - {label: stat, symerror: 59.707621}
+    value: 3565.000000
+  - errors:
+    - {label: stat, symerror: 59.236813}
+    value: 3509.000000
+  - errors:
+    - {label: stat, symerror: 58.412327}
+    value: 3412.000000
+  - errors:
+    - {label: stat, symerror: 57.784081}
+    value: 3339.000000
+  - errors:
+    - {label: stat, symerror: 57.489129}
+    value: 3305.000000
+  - errors:
+    - {label: stat, symerror: 55.740470}
+    value: 3107.000000
+  - errors:
+    - {label: stat, symerror: 55.407581}
+    value: 3070.000000
+  - errors:
+    - {label: stat, symerror: 53.935146}
+    value: 2909.000000
+  - errors:
+    - {label: stat, symerror: 54.055527}
+    value: 2922.000000
+  - errors:
+    - {label: stat, symerror: 53.478968}
+    value: 2860.000000
+  - errors:
+    - {label: stat, symerror: 53.990740}
+    value: 2915.000000
+  - errors:
+    - {label: stat, symerror: 53.244718}
+    value: 2835.000000
+  - errors:
+    - {label: stat, symerror: 52.009614}
+    value: 2705.000000
+  - errors:
+    - {label: stat, symerror: 52.019227}
+    value: 2706.000000
+  - errors:
+    - {label: stat, symerror: 51.419841}
+    value: 2644.000000
+  - errors:
+    - {label: stat, symerror: 50.901866}
+    value: 2591.000000
+  - errors:
+    - {label: stat, symerror: 51.264022}
+    value: 2628.000000
+  - errors:
+    - {label: stat, symerror: 49.829710}
+    value: 2483.000000
+  - errors:
+    - {label: stat, symerror: 49.879856}
+    value: 2488.000000
+  - errors:
+    - {label: stat, symerror: 47.979162}
+    value: 2302.000000
+  - errors:
+    - {label: stat, symerror: 49.132474}
+    value: 2414.000000
+  - errors:
+    - {label: stat, symerror: 48.795492}
+    value: 2381.000000
+  - errors:
+    - {label: stat, symerror: 48.000000}
+    value: 2304.000000
+  - errors:
+    - {label: stat, symerror: 46.765372}
+    value: 2187.000000
+  - errors:
+    - {label: stat, symerror: 47.602521}
+    value: 2266.000000
+  - errors:
+    - {label: stat, symerror: 47.644517}
+    value: 2270.000000
+  - errors:
+    - {label: stat, symerror: 47.254629}
+    value: 2233.000000
+  - errors:
+    - {label: stat, symerror: 46.701178}
+    value: 2181.000000
+  - errors:
+    - {label: stat, symerror: 46.733286}
+    value: 2184.000000
+  - errors:
+    - {label: stat, symerror: 46.754679}
+    value: 2186.000000
+  - errors:
+    - {label: stat, symerror: 45.847574}
+    value: 2102.000000
+  - errors:
+    - {label: stat, symerror: 44.508426}
+    value: 1981.000000
+  - errors:
+    - {label: stat, symerror: 45.978256}
+    value: 2114.000000
+  - errors:
+    - {label: stat, symerror: 45.155288}
+    value: 2039.000000
+  - errors:
+    - {label: stat, symerror: 44.844175}
+    value: 2011.000000
+  - errors:
+    - {label: stat, symerror: 2655.020716}
+    value: 7049135.000000
+

@@ -1,0 +1,145 @@
+Mu6------------------
+aHist->GetName() = CfHeavy_LamKchP_ALamKchM
+aHist->GetTitle() = CfHeavy_LamKchP_ALamKchM
+independent_variables:
+- header: {}
+  values:
+  - {value: 0.0050}
+  - {value: 0.0150}
+  - {value: 0.0250}
+  - {value: 0.0350}
+  - {value: 0.0450}
+  - {value: 0.0550}
+  - {value: 0.0650}
+  - {value: 0.0750}
+  - {value: 0.0850}
+  - {value: 0.0950}
+  - {value: 0.1050}
+  - {value: 0.1150}
+  - {value: 0.1250}
+  - {value: 0.1350}
+  - {value: 0.1450}
+  - {value: 0.1550}
+  - {value: 0.1650}
+  - {value: 0.1750}
+  - {value: 0.1850}
+  - {value: 0.1950}
+  - {value: 0.2050}
+  - {value: 0.2150}
+  - {value: 0.2250}
+  - {value: 0.2350}
+  - {value: 0.2450}
+  - {value: 0.2550}
+  - {value: 0.2650}
+  - {value: 0.2750}
+  - {value: 0.2850}
+  - {value: 0.2950}
+  - {value: 0.3050}
+  - {value: 0.3150}
+  - {value: 0.3250}
+dependent_variables:
+- header: {}
+  qualifiers:
+  - {name: , units: , value: ''}
+  - {name: , units: , value: ''}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.023615}
+    value: 0.882193
+  - errors:
+    - {label: stat, symerror: 0.009055}
+    value: 0.889305
+  - errors:
+    - {label: stat, symerror: 0.005711}
+    value: 0.920164
+  - errors:
+    - {label: stat, symerror: 0.004248}
+    value: 0.952275
+  - errors:
+    - {label: stat, symerror: 0.003347}
+    value: 0.956324
+  - errors:
+    - {label: stat, symerror: 0.002803}
+    value: 0.974645
+  - errors:
+    - {label: stat, symerror: 0.002401}
+    value: 0.981050
+  - errors:
+    - {label: stat, symerror: 0.002105}
+    value: 0.987275
+  - errors:
+    - {label: stat, symerror: 0.001894}
+    value: 0.987990
+  - errors:
+    - {label: stat, symerror: 0.001694}
+    value: 0.989341
+  - errors:
+    - {label: stat, symerror: 0.001545}
+    value: 0.989125
+  - errors:
+    - {label: stat, symerror: 0.001430}
+    value: 0.993106
+  - errors:
+    - {label: stat, symerror: 0.001328}
+    value: 0.991579
+  - errors:
+    - {label: stat, symerror: 0.001243}
+    value: 0.993544
+  - errors:
+    - {label: stat, symerror: 0.001172}
+    value: 0.995103
+  - errors:
+    - {label: stat, symerror: 0.001111}
+    value: 0.996305
+  - errors:
+    - {label: stat, symerror: 0.001058}
+    value: 0.998471
+  - errors:
+    - {label: stat, symerror: 0.001010}
+    value: 0.997416
+  - errors:
+    - {label: stat, symerror: 0.000966}
+    value: 0.996073
+  - errors:
+    - {label: stat, symerror: 0.000928}
+    value: 0.995171
+  - errors:
+    - {label: stat, symerror: 0.000897}
+    value: 0.996745
+  - errors:
+    - {label: stat, symerror: 0.000870}
+    value: 0.999161
+  - errors:
+    - {label: stat, symerror: 0.000842}
+    value: 0.998946
+  - errors:
+    - {label: stat, symerror: 0.000818}
+    value: 0.998682
+  - errors:
+    - {label: stat, symerror: 0.000797}
+    value: 0.999169
+  - errors:
+    - {label: stat, symerror: 0.000804}
+    value: 0.999839
+  - errors:
+    - {label: stat, symerror: 0.000760}
+    value: 0.999162
+  - errors:
+    - {label: stat, symerror: 0.000748}
+    value: 0.999921
+  - errors:
+    - {label: stat, symerror: 0.000731}
+    value: 1.000825
+  - errors:
+    - {label: stat, symerror: 0.000716}
+    value: 0.998458
+  - errors:
+    - {label: stat, symerror: 0.000705}
+    value: 0.999524
+  - errors:
+    - {label: stat, symerror: 0.000697}
+    value: 0.999076
+  - errors:
+    - {label: stat, symerror: 0.000690}
+    value: 0.999822
+

@@ -1,0 +1,17 @@
+name: 'Fig4b_1030.yaml'
+independent_variables:
+- header: {name: R_inv (fm), units: fm}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.51}
+    - {label: sys, symerror: 0.45}
+    value: 4.50
+dependent_variables:
+- header: {name: lambda_Fit}
+  qualifiers:
+  - {name: SQRT(S_NN), units: GeV, value: '2760.0'}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.18}
+    - {label: sys, symerror: 0.16}
+    value: 0.82

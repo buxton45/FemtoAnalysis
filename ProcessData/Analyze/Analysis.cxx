@@ -2053,13 +2053,13 @@ void Analysis::BuildPurityCollection()
 }
 
 //________________________________________________________________________________________________________________
-void Analysis::DrawPurityHisto(int aPartInt, TPad* aPad, bool aPrintPurity)
+void Analysis::DrawPurityHisto(int aPartInt, TPad* aPad, bool aPrintPurity, bool aPutYExponentInLabel, TString aExponentToPrint)
 {
-  fPurityCollection[aPartInt]->DrawPurityAndBgd(aPad, aPrintPurity);
+  fPurityCollection[aPartInt]->DrawPurityAndBgd(aPad, aPrintPurity, aPutYExponentInLabel, aExponentToPrint);
 }
 
 //________________________________________________________________________________________________________________
-void Analysis::DrawAllPurityHistos(TPad* aPad, bool aPrintPurity)
+void Analysis::DrawAllPurityHistos(TPad* aPad, bool aPrintPurity, bool aPutYExponentInLabel, TString aExponentToPrint)
 {
   int tNPurityHistos = fPurityCollection.size();
 
@@ -2067,7 +2067,7 @@ void Analysis::DrawAllPurityHistos(TPad* aPad, bool aPrintPurity)
 
   for(int i=0; i<tNPurityHistos; i++)
   {
-    fPurityCollection[i]->DrawPurityAndBgd((TPad*)aPad->cd(i+1), aPrintPurity);
+    fPurityCollection[i]->DrawPurityAndBgd((TPad*)aPad->cd(i+1), aPrintPurity, aPutYExponentInLabel, aExponentToPrint);
   }
 
 }

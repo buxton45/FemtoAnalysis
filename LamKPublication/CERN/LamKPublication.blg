@@ -3,46 +3,48 @@ Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
 The top-level auxiliary file: LamKPublication.aux
 The style file: utphys.bst
 Database file #1: LamK_bibfile.bib
+Warning--I'm ignoring Kisiel:2014upa's extra "pages" field
+--line 425 of file LamK_bibfile.bib
 Warning--empty publisher in Lisa:2008gf
-You've used 40 entries,
-            2328 wiz_defined-function locations,
-            951 strings with 13318 characters,
-and the built_in function-call counts, 14039 in all, are:
-= -- 1508
-> -- 375
+You've used 43 entries,
+            2395 wiz_defined-function locations,
+            989 strings with 14214 characters,
+and the built_in function-call counts, 9574 in all, are:
+= -- 909
+> -- 403
 < -- 0
-+ -- 140
-- -- 100
-* -- 1306
-:= -- 1577
-add.period$ -- 87
-call.type$ -- 40
-change.case$ -- 47
++ -- 150
+- -- 107
+* -- 1248
+:= -- 1288
+add.period$ -- 91
+call.type$ -- 43
+change.case$ -- 54
 chr.to.int$ -- 0
-cite$ -- 41
-duplicate$ -- 812
-empty$ -- 1346
-format.name$ -- 100
-if$ -- 3720
+cite$ -- 44
+duplicate$ -- 476
+empty$ -- 1026
+format.name$ -- 107
+if$ -- 2354
 int.to.chr$ -- 0
-int.to.str$ -- 40
-missing$ -- 152
-newline$ -- 198
-num.names$ -- 42
-pop$ -- 200
+int.to.str$ -- 43
+missing$ -- 167
+newline$ -- 204
+num.names$ -- 45
+pop$ -- 181
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 0
-skip$ -- 616
+skip$ -- 70
 stack$ -- 0
-substring$ -- 651
-swap$ -- 435
+substring$ -- 0
+swap$ -- 83
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
 type$ -- 0
 warning$ -- 1
-while$ -- 93
-width$ -- 42
-write$ -- 369
-(There was 1 warning)
+while$ -- 44
+width$ -- 45
+write$ -- 390
+(There were 2 warnings)

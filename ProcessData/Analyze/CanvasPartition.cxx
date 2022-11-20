@@ -316,6 +316,20 @@ void CanvasPartition::AddPadPaveText(TPaveText* aText, int aNx, int aNy)
 }
 
 //________________________________________________________________________________________________________________
+TLatex* CanvasPartition::BuildTLatex(TString aString, double aXPos, double aYPos, 
+                                     int aTextAlign, double aLineWidth, int aTextFont, 
+                                     double aTextSize, double aScaleFactor, bool aIsNDC)
+{
+  TLatex* tLaText = new TLatex(aXPos, aYPos, aString);
+  tLaText->SetTextAlign(aTextAlign);
+  tLaText->SetLineWidth(aLineWidth);
+  tLaText->SetTextFont(aTextFont);
+  tLaText->SetTextSize(aScaleFactor*aTextSize);
+  tLaText->SetNDC(aIsNDC);
+  return tLaText;
+}
+
+//________________________________________________________________________________________________________________
 void CanvasPartition::AddPadPaveLatex(TLatex* aText, int aNx, int aNy)
 {
   int tPosition = aNx + aNy*fNx;

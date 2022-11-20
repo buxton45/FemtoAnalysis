@@ -1478,3 +1478,60 @@ void FitPairAnalysis::InitiateResidualCollection(td1dVec &aKStarBinCenters, Incl
   fResidualCollection->SetRadiusFactorForSigStResiduals(tSigStRadiusFactor);
 }
 
+//________________________________________________________________________________________________________________
+td1dVec FitPairAnalysis::GetCorrectedFitVec_ErrBand(bool aIsMin)
+{
+  double tScale = 0.;
+  double tTempScale = 0.;
+
+  td1dVec tReturnVec = fFitPartialAnalysisCollection[0]->GetCorrectedFitVec_ErrBand(aIsMin);
+  tTempScale = fFitPartialAnalysisCollection[0]->GetKStarNumScale();
+  tScale += tTempScale;
+  for(unsigned int j=0; j<tReturnVec.size(); j++) tReturnVec[j] *= tTempScale;
+
+  for(int i=1; i<fNFitPartialAnalysis; i++)
+  {
+    tTempScale = fFitPartialAnalysisCollection[i]->GetKStarNumScale();
+    tScale += tTempScale;
+    assert(tReturnVec.size() == fFitPartialAnalysisCollection[i]->GetCorrectedFitVec_ErrBand(aIsMin).size());
+    for(unsigned int j=0; j<tReturnVec.size(); j++)
+    {
+      tReturnVec[j] = tReturnVec[j] + tTempScale*fFitPartialAnalysisCollection[i]->GetCorrectedFitVec_ErrBand(aIsMin)[j];
+    }
+  }
+
+  for(unsigned int j=0; j<tReturnVec.size(); j++) tReturnVec[j] /= tScale;
+
+  return tReturnVec;
+}
+
+
+//________________________________________________________________________________________________________________
+TH1F* FitPairAnalysis::GetCorrectedFitHistv2_ErrBand(bool aIsMin, double aMaxDrawKStar)
+{
+  int tNbinsXToFit = fKStarCfHeavy->GetHeavyCf()->FindBin(aMaxDrawKStar-0.0000001);  //-0.0000001 ensures we don't overshoot our desired bin, since xup excluded in TH1
+                                                                                     // i.e., if given aMaxDrawKStar=1.0 (with binsize=0.1), without subtraction, this 
+                                                                                     // would return 101 instead of 100
+  double tKStarMin = fKStarCfHeavy->GetHeavyCf()->GetBinLowEdge(1);
+  double tKStarMax = fKStarCfHeavy->GetHeavyCf()->GetBinLowEdge(tNbinsXToFit+1);
+
+  td1dVec tCorrectedFitVec = GetCorrectedFitVec_ErrBand(aIsMin);
+
+  TString tTitle = "testCorrectedFitHist";
+  tTitle =+ TString(cAnalysisBaseTags[fAnalysisType]);
+  tTitle =+ TString(cAnalysisBaseTags[fCentralityType]);
+  if(aIsMin) tTitle += "_MinErrBand";
+  else       tTitle += "_MaxErrBand";
+  TH1F* tCorrectedFitHist = new TH1F(tTitle,tTitle,tNbinsXToFit,tKStarMin,tKStarMax);
+
+//TODO make sure bins (and bin widths) match up correctly
+  for(int i=1; i<=tNbinsXToFit; i++)
+  {
+    tCorrectedFitHist->SetBinContent(i, tCorrectedFitVec[i-1]);
+    tCorrectedFitHist->SetBinError(i,0.);
+  }
+
+  return tCorrectedFitHist;
+}
+
+

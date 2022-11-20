@@ -118,8 +118,8 @@ public:
   void DrawAvgSepCowSailHeavyCfs(DaughterPairType aDaughterPairType, TPad* aPad);
   //-----
   void BuildPurityCollection();
-  void DrawPurityHisto(int aPartInt, TPad* aPad, bool aPrintPurity=true);
-  void DrawAllPurityHistos(TPad* aPad, bool aPrintPurity=true);
+  void DrawPurityHisto(int aPartInt, TPad* aPad, bool aPrintPurity=true, bool aPutYExponentInLabel=false, TString aExponentToPrint="10^{6}");
+  void DrawAllPurityHistos(TPad* aPad, bool aPrintPurity=true, bool aPutYExponentInLabel=false, TString aExponentToPrint="10^{6}");
   double GetPurity(ParticleType aV0Type);
   TH1* GetCombinedPurityHisto(ParticleType aV0Type);
   Purity* GetPurityObject(ParticleType aV0Type);

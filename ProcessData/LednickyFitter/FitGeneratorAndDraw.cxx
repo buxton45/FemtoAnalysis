@@ -448,16 +448,16 @@ void FitGeneratorAndDraw::AddColoredLinesLabelsAndDatav2(CanvasPartition *aCanPa
   tTex->SetTextFont(43);
   tTex->SetTextSize(50);
   
-  double tYText0 = 0.975;
+  double tYText0 = 0.954;
   double tXText0 = 0.115;
 
-  double tYText1 = 0.93;
+  double tYText1 = 0.90;
   double tXText1 = 0.115;
 
-  double tYText2 = 0.8925;
+  double tYText2 = 0.855;
   double tXText2 = 0.115;
 
-  double tYText3 = 0.855;
+  double tYText3 = 0.81;
   double tXText3 = 0.115;
   
 
@@ -2422,7 +2422,7 @@ TH1* FitGeneratorAndDraw::CombineTwoHists(TH1* aHist1, TH1* aHist2, double aNorm
 }
 
 //________________________________________________________________________________________________________________
-void FitGeneratorAndDraw::BuildKStarCfswFitsPanel_CombineConj(CanvasPartition* aCanPart, int aAnNumber, int aConjAnNumber, int tColumn, int tRow, bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, NonFlatBgdFitType aNonFlatBgdFitType, bool aDrawSysErrors, bool aDrawDataOnTop)
+void FitGeneratorAndDraw::BuildKStarCfswFitsPanel_CombineConj(CanvasPartition* aCanPart, int aAnNumber, int aConjAnNumber, int tColumn, int tRow, bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, NonFlatBgdFitType aNonFlatBgdFitType, bool aDrawSysErrors, bool aDrawDataOnTop, bool aDrawErrBands)
 {
   assert(fNAnalyses == 6);
 
@@ -2438,7 +2438,8 @@ void FitGeneratorAndDraw::BuildKStarCfswFitsPanel_CombineConj(CanvasPartition* a
   else if(tAnType==kLamKchM || tAnType==kALamKchP) tColor=kBlue+1;
   else tColor=1;
 
-  tColorTransparent = TColor::GetColorTransparent(tColor,0.2);
+  //tColorTransparent = TColor::GetColorTransparent(tColor,0.2);
+  tColorTransparent = TColor::GetColorTransparent(tColor,0.4);
 
   int tColorCorrectFit = kMagenta+1;
   int tColorNonFlatBgd = kGreen+2;
@@ -2502,12 +2503,58 @@ void FitGeneratorAndDraw::BuildKStarCfswFitsPanel_CombineConj(CanvasPartition* a
   aCanPart->AddGraph(tColumn, tRow, tPrimaryFit, "", 20, 1, 0., "HIST lsame");
   aCanPart->AddGraph(tColumn,tRow,tCorrectedFitHisto, "", 20, tColorCorrectFit, tMarkerSize, "lsame");
   if(aDrawSysErrors) aCanPart->AddGraph(tColumn, tRow, tCfwSysErrs, "", 20, tColorTransparent, tMarkerSize, "e2psame");
+  
+  if(aDrawErrBands)
+  {
+    TH1* tCorrectedFitErrBandMax_An   = fSharedAn->GetFitPairAnalysis(aAnNumber)->GetCorrectedFitHistv2_ErrBand(false);
+    TH1* tCorrectedFitErrBandMax_Conj = fSharedAn->GetFitPairAnalysis(aConjAnNumber)->GetCorrectedFitHistv2_ErrBand(false);
+    TH1* tCorrectedFitErrBandMax      = CombineTwoHists(tCorrectedFitErrBandMax_An, tCorrectedFitErrBandMax_Conj, tNorm_An, tNorm_Conj);
+      //tCorrectedFitErrBandMax->SetLineWidth(2);
+    //aCanPart->AddGraph(tColumn,tRow,tCorrectedFitErrBandMax, "", 20, tColorCorrectFit, tMarkerSize, "lsame");
+      
+    TH1* tCorrectedFitErrBandMin_An   = fSharedAn->GetFitPairAnalysis(aAnNumber)->GetCorrectedFitHistv2_ErrBand(true);
+    TH1* tCorrectedFitErrBandMin_Conj = fSharedAn->GetFitPairAnalysis(aConjAnNumber)->GetCorrectedFitHistv2_ErrBand(true);
+    TH1* tCorrectedFitErrBandMin      = CombineTwoHists(tCorrectedFitErrBandMin_An, tCorrectedFitErrBandMin_Conj, tNorm_An, tNorm_Conj);
+      //tCorrectedFitErrBandMin->SetLineWidth(2);
+    //aCanPart->AddGraph(tColumn,tRow,tCorrectedFitErrBandMin, "", 20, tColorCorrectFit, tMarkerSize, "lsame");
+    
+    assert(tCorrectedFitHisto->GetNbinsX() == tCorrectedFitErrBandMax->GetNbinsX());
+    assert(tCorrectedFitHisto->GetNbinsX() == tCorrectedFitErrBandMin->GetNbinsX());
+    vector<double> tXVals(0), tYVals(0), tEXL(0), tEXH(0), tEYL(0), tEYH(0);
+    for(unsigned int i=1; i<=tCorrectedFitHisto->GetNbinsX(); i++)
+    {
+      tXVals.push_back(tCorrectedFitHisto->GetBinCenter(i));
+      tYVals.push_back(tCorrectedFitHisto->GetBinContent(i));
+      tEXL.push_back(0.);
+      tEXH.push_back(0.);
+      tEYL.push_back(tCorrectedFitHisto->GetBinContent(i)-tCorrectedFitErrBandMin->GetBinContent(i));
+      tEYH.push_back(tCorrectedFitErrBandMax->GetBinContent(i)-tCorrectedFitHisto->GetBinContent(i));
+    }
+    TGraphAsymmErrors* tCorrectedFitwErrBands = new TGraphAsymmErrors(tXVals.size(), tXVals.data(), tYVals.data(), tEXL.data(), tEXH.data(), tEYL.data(), tEYH.data());
+      tCorrectedFitwErrBands->SetLineWidth(0);
+      tCorrectedFitwErrBands->SetMarkerSize(0.0);
+      tCorrectedFitwErrBands->SetFillColor(TColor::GetColorTransparent(tColorCorrectFit,0.2));
+      tCorrectedFitwErrBands->SetFillStyle(1000);
+      tCorrectedFitwErrBands->SetLineColor(0);
+
+
+    aCanPart->AddGraph(tColumn,tRow,tCorrectedFitwErrBands, "", 20, TColor::GetColorTransparent(tColorCorrectFit,0.2), tMarkerSize, "3 same");
+  }
+  
+  
+  
   if(aDrawDataOnTop) aCanPart->AddGraph(tColumn, tRow, tCfData, "", 20, tColor, tMarkerSize, "ex0same");  //draw again so data on top
+  
+/*
+  FILE* tOutput = stdout;
+  double tXAxisHigh = aCanPart->GetAxesRanges()[1];
+  HistInfoPrinter::PrintHistInfowStatAndSystYAML(tCfData, tCfwSysErrs, tOutput, 0., tXAxisHigh);
+*/
 }
 
 
 //________________________________________________________________________________________________________________
-CanvasPartition* FitGeneratorAndDraw::BuildKStarCfswFitsCanvasPartition_CombineConj(TString aCanvasBaseName, bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, NonFlatBgdFitType aNonFlatBgdFitType, bool aDrawSysErrors, bool aZoomROP, bool aSuppressFitInfoOutput, bool aLabelLines)
+CanvasPartition* FitGeneratorAndDraw::BuildKStarCfswFitsCanvasPartition_CombineConj(TString aCanvasBaseName, bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, NonFlatBgdFitType aNonFlatBgdFitType, bool aDrawSysErrors, bool aZoomROP, bool aSuppressFitInfoOutput, bool aLabelLines, bool aDrawErrBands)
 {
   assert(fNAnalyses == 6);
 
@@ -2547,7 +2594,7 @@ CanvasPartition* FitGeneratorAndDraw::BuildKStarCfswFitsCanvasPartition_CombineC
     CentralityType tCentType = fSharedAn->GetFitPairAnalysis(tAnalysisNumberA)->GetCentralityType();
     assert(tCentType == fSharedAn->GetFitPairAnalysis(tAnalysisNumberB)->GetCentralityType());
 
-    BuildKStarCfswFitsPanel_CombineConj(tCanPart, tAnalysisNumberA, tAnalysisNumberB, 0, j, aMomResCorrectFit, aNonFlatBgdCorrectFit, aNonFlatBgdFitType, aDrawSysErrors, aZoomROP);
+    BuildKStarCfswFitsPanel_CombineConj(tCanPart, tAnalysisNumberA, tAnalysisNumberB, 0, j, aMomResCorrectFit, aNonFlatBgdCorrectFit, aNonFlatBgdFitType, aDrawSysErrors, aZoomROP, aDrawErrBands);
 
     TString tCombinedText = TString::Format("%s#scale[0.5]{ }#oplus#scale[0.5]{ }%s  %s", cAnalysisRootTags[tAnType], cAnalysisRootTags[tConjType], cPrettyCentralityTags[tCentType]);
     TPaveText* tCombined = tCanPart->SetupTPaveText(tCombinedText,0,j,0.70,0.825,0.15,0.10,43,20);
@@ -2661,4 +2708,80 @@ void FitGeneratorAndDraw::BuildKStarCfsPanel_CombineConj(CanvasPartition* aCanPa
 }
 
 
+//________________________________________________________________________________________________________________
+td2dVec FitGeneratorAndDraw::GetParamsMinMaxForErrBands(AnalysisType aAnType, TF1* aFit, const td1dVec &aSysErrors)
+{
+  double tLambda, tRadius, tReF0, tImF0, tD0;
+  double tLambdaStat, tRadiusStat, tReF0Stat, tImF0Stat, tD0Stat;
+  double tLambdaSyst, tRadiusSyst, tReF0Syst, tImF0Syst, tD0Syst;
+
+  tLambda = aFit->GetParameter(0);
+  if(fIncludeResidualsType != kIncludeNoResiduals) tLambda /= cAnalysisLambdaFactorsArr[fIncludeResidualsType][fResPrimMaxDecayType][aAnType];
+  tRadius = aFit->GetParameter(1);
+  tReF0 = aFit->GetParameter(2);
+  tImF0 = aFit->GetParameter(3);
+  tD0 = aFit->GetParameter(4);
+
+  tLambdaStat = aFit->GetParError(0);
+  if(fIncludeResidualsType != kIncludeNoResiduals) tLambdaStat /= cAnalysisLambdaFactorsArr[fIncludeResidualsType][fResPrimMaxDecayType][aAnType];
+  tRadiusStat = aFit->GetParError(1);
+  tReF0Stat = aFit->GetParError(2);
+  tImF0Stat = aFit->GetParError(3);
+  tD0Stat = aFit->GetParError(4);
+  
+  tLambdaSyst = aSysErrors[0];
+  tRadiusSyst = aSysErrors[1];
+  tReF0Syst = aSysErrors[2];
+  tImF0Syst = aSysErrors[3];      
+  tD0Syst = aSysErrors[4];
+  //-----------------------------------------------------------------
+  td2dVec tReturnVec(5);
+  tReturnVec[0] = td1dVec{tLambda-tLambdaStat-tLambdaSyst, tLambda+tLambdaStat+tLambdaSyst};
+  tReturnVec[1] = td1dVec{tRadius-tRadiusStat-tRadiusSyst, tRadius+tRadiusStat+tRadiusSyst};
+  tReturnVec[2] = td1dVec{tReF0-tReF0Stat-tReF0Syst,       tReF0+tReF0Stat+tReF0Syst};
+  tReturnVec[3] = td1dVec{tImF0-tImF0Stat-tImF0Syst,       tImF0+tImF0Stat+tImF0Syst};
+  tReturnVec[4] = td1dVec{tD0-tD0Stat-tD0Syst,             tD0+tD0Stat+tD0Syst};
+  return tReturnVec;
+
+}
+
+
+//________________________________________________________________________________________________________________
+td3dVec FitGeneratorAndDraw::GetParamsMinMaxForErrBands_FINALRESULTSONLY()
+{
+  td3dVec tReturnVec(0);
+
+  assert(fNAnalyses == 6);
+  int tNx=1, tNy=3;
+
+  int tAnalysisNumberA=0, tAnalysisNumberB=0;
+  for(int j=0; j<tNy; j++)
+  {
+    tAnalysisNumberA = 2*j;
+    tAnalysisNumberB = tAnalysisNumberA+1;
+
+    AnalysisType tAnType   = fSharedAn->GetFitPairAnalysis(tAnalysisNumberA)->GetAnalysisType();
+    AnalysisType tConjType = fSharedAn->GetFitPairAnalysis(tAnalysisNumberB)->GetAnalysisType();
+
+    CentralityType tCentType = fSharedAn->GetFitPairAnalysis(tAnalysisNumberA)->GetCentralityType();
+    assert(tCentType == fSharedAn->GetFitPairAnalysis(tAnalysisNumberB)->GetCentralityType());
+
+    td1dVec tSysErrors;
+    if(fMasterFileLocation.IsNull() || fSystematicsFileLocation.IsNull()) 
+    {
+      cout << "WARNING: fMasterFileLocation.IsNull() || fSystematicsFileLocation.IsNull()" << endl << "Continue?" << endl;
+      int tResponse;
+      cin >> tResponse;
+      assert(tResponse);
+
+      tSysErrors = GetSystErrs(fIncludeResidualsType, tAnType, tCentType);
+    }
+    else tSysErrors = GetSystErrs(fMasterFileLocation, fSystematicsFileLocation, fSaveNameModifier, tAnType, tCentType);
+
+
+    tReturnVec.push_back(GetParamsMinMaxForErrBands(tAnType, (TF1*)fSharedAn->GetFitPairAnalysis(tAnalysisNumberA)->GetPrimaryFit(), tSysErrors));
+  }
+
+  return tReturnVec;
+}
 

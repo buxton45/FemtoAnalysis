@@ -1,0 +1,101 @@
+name: 'Fig2b_THERM.yaml'
+independent_variables:
+- header: {name: k* (GeV/c), units: GeV/c}
+  values:
+  - {value: 0.0200}
+  - {value: 0.0600}
+  - {value: 0.1000}
+  - {value: 0.1400}
+  - {value: 0.1800}
+  - {value: 0.2200}
+  - {value: 0.2600}
+  - {value: 0.3000}
+  - {value: 0.3400}
+  - {value: 0.3800}
+  - {value: 0.4500}
+  - {value: 0.5500}
+  - {value: 0.6500}
+  - {value: 0.7500}
+  - {value: 0.8500}
+  - {value: 0.9500}
+  - {value: 1.0500}
+  - {value: 1.1500}
+  - {value: 1.2500}
+  - {value: 1.3500}
+  - {value: 1.4500}
+  - {value: 1.5500}
+  - {value: 1.6500}
+dependent_variables:
+- header: {name: C(k*)}
+  qualifiers:
+  - {name: SQRT(S_NN), units: GeV, value: '2760.0'}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.002933}
+    value: 1.016455
+  - errors:
+    - {label: stat, symerror: 0.001124}
+    value: 1.009487
+  - errors:
+    - {label: stat, symerror: 0.000700}
+    value: 1.002486
+  - errors:
+    - {label: stat, symerror: 0.000522}
+    value: 1.002747
+  - errors:
+    - {label: stat, symerror: 0.000426}
+    value: 1.001723
+  - errors:
+    - {label: stat, symerror: 0.000370}
+    value: 1.008359
+  - errors:
+    - {label: stat, symerror: 0.000332}
+    value: 1.001591
+  - errors:
+    - {label: stat, symerror: 0.000306}
+    value: 1.000573
+  - errors:
+    - {label: stat, symerror: 0.000289}
+    value: 1.000398
+  - errors:
+    - {label: stat, symerror: 0.000276}
+    value: 0.999894
+  - errors:
+    - {label: stat, symerror: 0.000166}
+    value: 0.999907
+  - errors:
+    - {label: stat, symerror: 0.000158}
+    value: 0.998354
+  - errors:
+    - {label: stat, symerror: 0.000154}
+    value: 0.997072
+  - errors:
+    - {label: stat, symerror: 0.000153}
+    value: 0.996079
+  - errors:
+    - {label: stat, symerror: 0.000155}
+    value: 0.995882
+  - errors:
+    - {label: stat, symerror: 0.000161}
+    value: 0.995236
+  - errors:
+    - {label: stat, symerror: 0.000170}
+    value: 0.995163
+  - errors:
+    - {label: stat, symerror: 0.000184}
+    value: 0.995618
+  - errors:
+    - {label: stat, symerror: 0.000204}
+    value: 0.996368
+  - errors:
+    - {label: stat, symerror: 0.000230}
+    value: 0.996798
+  - errors:
+    - {label: stat, symerror: 0.000265}
+    value: 0.997431
+  - errors:
+    - {label: stat, symerror: 0.000311}
+    value: 0.998464
+  - errors:
+    - {label: stat, symerror: 0.000372}
+    value: 1.000461

@@ -116,6 +116,23 @@ void PrintLambdaValues(TPad* aPad, TH1D* aHisto)
   returnText->Draw();
 }
 
+//________________________________________________________________________________________________________________
+void PrintLambdaValuesv2(TPad* aPad, TH1D* aHistoFracs)
+{
+  aPad->cd();
+  TPaveText* returnText = new TPaveText(0.65,0.25,0.85,0.85,"NDC");
+    returnText->SetFillColor(0);
+    returnText->SetBorderSize(0);
+    returnText->SetTextAlign(22);
+    returnText->SetTextFont(63);
+    returnText->SetTextSize(10);
+
+  returnText->AddText("Estimated #lambda Values");
+  for(int i=1; i<=13; i++) returnText->AddText(TString(aHistoFracs->GetXaxis()->GetBinLabel(i)) + TString::Format(" = %0.5f #pm %0.5f", aHistoFracs->GetBinContent(i), aHistoFracs->GetBinError(i)));
+
+  returnText->Draw();
+}
+
 
 //________________________________________________________________________________________________________________
 void DrawPairFractions(TPad* aPad, TH1D* aHisto, bool aSave, TString aSaveName, double aPairPurity)
@@ -139,6 +156,56 @@ void DrawPairFractions(TPad* aPad, TH1D* aHisto, bool aSave, TString aSaveName, 
   aHisto->Draw("HIST");
 
   PrintLambdaValues(aPad,aHisto);
+
+  if(aSave) aPad->SaveAs(aSaveName+TString(".eps"));
+}
+
+//________________________________________________________________________________________________________________
+void DrawPairFractionsv2(TPad* aPad, TH1D* aHisto, bool aSave, TString aSaveName, double aPairPurity)
+{
+  aPad->cd();
+  gStyle->SetOptStat(0);
+
+  double tNFakeMultFactor = (1.0 - aPairPurity)/aPairPurity;
+
+  double tNCounts = 0.;
+  for(int i=1; i<=12; i++) tNCounts += aHisto->GetBinContent(i);
+  double tNFakes = tNFakeMultFactor*tNCounts;
+  aHisto->SetBinContent(13, tNFakes);
+
+  aHisto->GetXaxis()->SetTitle("Parent System");
+  aHisto->GetYaxis()->SetTitle("Counts");
+
+  aHisto->GetXaxis()->SetTitleOffset(1.25);
+  aHisto->GetYaxis()->SetTitleOffset(1.5);
+
+  //aHisto->Draw("HIST");
+  
+  TH1D* tHistoFracs = (TH1D*)aHisto->Clone(TString::Format("%s_Frac", aHisto->GetName()));  
+  double tTotal = 0.;
+  for(int i=1; i<=13; i++) tTotal += aHisto->GetBinContent(i);
+  for(int i=1; i<=13; i++) tHistoFracs->SetBinContent(i, aHisto->GetBinContent(i)/tTotal);  
+
+  for(unsigned int i=1; i<=tHistoFracs->GetNbinsX(); i++)
+  {
+    double tF = tHistoFracs->GetBinContent(i);
+    if(tF==0) tHistoFracs->SetBinError(i, 0);
+    else
+    {
+      double tA = aHisto->GetBinContent(i);
+      double tErrA = sqrt(tA);
+
+      double tB = tTotal;
+      double tErrB = sqrt(tB);
+    
+      double tErr = tF*sqrt(pow(tErrA/tA, 2) + pow(tErrB/tB, 2));
+      //double tErr = tErrA/tB;      
+      tHistoFracs->SetBinError(i, tErr);
+    }
+  }
+  cout << endl << endl;  
+  tHistoFracs->Draw("Hist");
+  PrintLambdaValuesv2(aPad,tHistoFracs);
 
   if(aSave) aPad->SaveAs(aSaveName+TString(".eps"));
 }

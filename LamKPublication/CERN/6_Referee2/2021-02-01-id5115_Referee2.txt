@@ -1,0 +1,48 @@
+PROBLEMS WITH MANUSCRIPT:
+
+In reviewing the figures of your paper, we note that the following
+changes would be needed in order for your figures to conform to the
+style of the Physical Review.  Please check all figures for the
+following problems and make appropriate changes in the text of the
+paper itself wherever needed for consistency.
+
+Please list Figures A.1, C.1, C.2, C.3 as Figs. 7, 8, 9, 10.
+
+Figure(s) [1-4, 6, 7, 9]
+         Figure sublabels should be printed on the figures.  The
+         preferred form is lowercase letters in parentheses:  (a),
+         (b), etc.
+
+Figure(s) [1, 8]
+         Please rearrange power of 10 in axis label for clarity:  Either
+         (i) place the power of 10 as a factor, without parentheses, in
+         front of the axis label quantity, changing the sign of the power
+         as needed; or (ii) incorporate the power of 10 in the topmost
+         or rightmost number on the scale.  Please refer to the URL
+         https://journals.aps.org/authors/axis-labels-and-scales-on-graphs-h18
+         for a pictorial representation of the preferred forms for
+         axis labels.
+
+Figure(s) [Please check all and amend where necessary]
+          Please increase the font size (axis labels, axis scale
+          values, legend, etc.). Please ensure that all lettering is
+          2 mm or larger (1.5 mm for superscripts and subscripts)
+          after scaling to the final publication size. Note that
+          the column width is 8.6 cm (twice that amount plus gutter
+          for extra wide figures).
+
+----------------------------------------------------------------------
+Second Report of the Referee -- CT10695/Acharya
+----------------------------------------------------------------------
+
+The authors have considered the previous criticism and the paper
+should be published.
+
+However, before printing the authors should check the list of
+references.
+
+a) all page numbers are missing (may be a problem of bibtex/biber?)
+
+b) in Ref. 31 the name of the third author is wrongly spelled
+
+c) also in Ref 37 the authors are misspelled

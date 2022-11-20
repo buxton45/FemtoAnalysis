@@ -1,0 +1,14 @@
+name: 'Fig4a_right.yaml'
+independent_variables:
+- header: {}
+  values:
+  - {value: 0.75}
+dependent_variables:
+- header: {name: d_0 (fm), units: fm}
+  qualifiers:
+  - {name: SQRT(S_NN), units: GeV, value: '2760.0'}
+  values:
+  - errors:
+    - {label: stat, symerror: 1.71}
+    - {label: sys, symerror: 2.77}
+    value: -1.85

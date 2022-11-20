@@ -319,14 +319,14 @@ void SetupReF0vsImF0AndD0Axes(TPad* aPadReF0vsImF0, TPad* aPadD0,
   tTrash1->GetYaxis()->SetRangeUser(aMinImF0, aMaxImF0);
 
   tTrash1->GetXaxis()->SetTitle("#Rgothic#it{f}_{0} (fm)");
-  tTrash1->GetXaxis()->SetTitleOffset(1.02);
-  tTrash1->GetXaxis()->SetTitleSize(0.07);
+  tTrash1->GetXaxis()->SetTitleOffset(0.95);
+  tTrash1->GetXaxis()->SetTitleSize(0.085);
   tTrash1->GetXaxis()->SetLabelSize(0.06);
   tTrash1->GetXaxis()->SetLabelOffset(0.01);
 
   tTrash1->GetYaxis()->SetTitle("#Jgothic#it{f}_{0} (fm)");
-  tTrash1->GetYaxis()->SetTitleOffset(1.05);
-  tTrash1->GetYaxis()->SetTitleSize(0.07);
+  tTrash1->GetYaxis()->SetTitleOffset(0.95);
+  tTrash1->GetYaxis()->SetTitleSize(0.085);
   tTrash1->GetYaxis()->SetLabelSize(0.06);
   tTrash1->GetYaxis()->SetLabelOffset(0.0125);
 
@@ -367,14 +367,14 @@ void SetupRadiusvsLambdaAxes(TPad* aPad, double aMinR, double aMaxR, double aMin
   tTrash->GetYaxis()->SetRangeUser(aMinLam, aMaxLam);
 
   tTrash->GetXaxis()->SetTitle("#it{R}_{inv} (fm)");
-  tTrash->GetXaxis()->SetTitleOffset(1.02);
-  tTrash->GetXaxis()->SetTitleSize(0.07);
+  tTrash->GetXaxis()->SetTitleOffset(0.95);
+  tTrash->GetXaxis()->SetTitleSize(0.085);
   tTrash->GetXaxis()->SetLabelSize(0.06);
   tTrash->GetXaxis()->SetLabelOffset(0.01);
 
   tTrash->GetYaxis()->SetTitle("#it{#lambda}_{Fit}");
-  tTrash->GetYaxis()->SetTitleOffset(1.05);
-  tTrash->GetYaxis()->SetTitleSize(0.07);
+  tTrash->GetYaxis()->SetTitleOffset(0.75);
+  tTrash->GetYaxis()->SetTitleSize(0.10);
   tTrash->GetYaxis()->SetLabelSize(0.06); 
   tTrash->GetYaxis()->SetLabelOffset(0.015);  
 

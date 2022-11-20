@@ -18,10 +18,24 @@
 #include "CanvasPartition.h"
 #include "CorrFctnDirectYlmTherm.h"
 #include "Analysis.h"
+#include "HistInfoPrinter.h"
 
 bool gRejectPoints=false;
 double tRejectOmegaLow = 0.19;
 double tRejectOmegaHigh = 0.24;
+
+
+//________________________________________________________________________________________________________________
+TLatex* BuildTLatex(TString aString, double aXPos, double aYPos, int aTextAlign=11, double aLineWidth=2, int aTextFont=62, double aTextSize=0.090, double aScaleFactor=1.0, bool aIsNDC=true)
+{
+  TLatex* tLaText = new TLatex(aXPos, aYPos, aString);
+  tLaText->SetTextAlign(aTextAlign);
+  tLaText->SetLineWidth(aLineWidth);
+  tLaText->SetTextFont(aTextFont);
+  tLaText->SetTextSize(aScaleFactor*aTextSize);
+  tLaText->SetNDC(aIsNDC);
+  return tLaText;
+}
 
 //________________________________________________________________________________________________________________
 void SetStandardPadMargins(TPad* aPad)
@@ -35,14 +49,14 @@ void SetStandardPadMargins(TPad* aPad)
 //________________________________________________________________________________________________________________
 void SetStandardAxesAttributes(TH1* aHist)
 {
-  aHist->GetXaxis()->SetTitleOffset(1.08);
-  aHist->GetXaxis()->SetTitleSize(0.08);
-  aHist->GetXaxis()->SetLabelSize(0.055);
+  aHist->GetXaxis()->SetTitleOffset(1.05);
+  aHist->GetXaxis()->SetTitleSize(0.09);
+  aHist->GetXaxis()->SetLabelSize(0.075);
   aHist->GetXaxis()->SetLabelOffset(0.015);
 
-  aHist->GetYaxis()->SetTitleOffset(1.05);
-  aHist->GetYaxis()->SetTitleSize(0.08);
-  aHist->GetYaxis()->SetLabelSize(0.055);
+  aHist->GetYaxis()->SetTitleOffset(1.08);
+  aHist->GetYaxis()->SetTitleSize(0.09);
+  aHist->GetYaxis()->SetLabelSize(0.075);
   aHist->GetYaxis()->SetLabelOffset(0.0075);
 }
 
@@ -171,23 +185,32 @@ TF1* FitwGauss(TH1* aHist, double aMinFit=0., double aMaxFit=50.)
 
 
 //________________________________________________________________________________________________________________
-void DrawHistwGaussFit(TPad* aPad, TH1* aHist, double aGaussFitMin, double aGaussFitMax, TString aMuName="#it{#mu}_{out}", TString aSigmaName="#it{R}_{out}", bool aDrawTextOnRight=false)
+void DrawHistwGaussFit(TPad* aPad, TH1* aHist, double aGaussFitMin, double aGaussFitMax, TString aMuName="#it{#mu}_{out}", TString aSigmaName="#it{R}_{out}", bool aDrawTextOnRight=false, int aRebin=2)
 {
   TF1* tGaussFit = FitwGauss(aHist, aGaussFitMin, aGaussFitMax);
   //tGaussFit->SetLineColor(kGreen+1);
   tGaussFit->SetLineColor(kBlack);
+  tGaussFit->SetLineWidth(1);
+  
   //aHist->SetMarkerColor(kGreen+1);
   //aHist->SetLineColor(kGreen+1);
   aHist->SetMarkerStyle(25);
-  aHist->SetMarkerSize(0.5);
+  //aHist->SetMarkerSize(0.5);
+  aHist->SetMarkerSize(1.0);
 
   aPad->cd();
+  if(aRebin != 1)
+  {
+    aHist->Rebin(aRebin);
+    //aHist->Scale(1.0/aRebin);
+    tGaussFit->SetParameter(0, aRebin*tGaussFit->GetParameter(0));
+  }
   aHist->DrawCopy();
   tGaussFit->DrawCopy("same");
 
   //----- Draw lines to show fit range -----
-  TLine* tLineMin = new TLine(aGaussFitMin, 0., aGaussFitMin, 0.25*aHist->GetMaximum());
-  TLine* tLineMax = new TLine(aGaussFitMax, 0., aGaussFitMax, 0.25*aHist->GetMaximum());
+  TLine* tLineMin = new TLine(aGaussFitMin, 0., aGaussFitMin, 0.40*aHist->GetMaximum());
+  TLine* tLineMax = new TLine(aGaussFitMax, 0., aGaussFitMax, 0.40*aHist->GetMaximum());
 
   //tLineMin->SetLineColor(TColor::GetColorTransparent(kGreen+1,0.75));
   tLineMin->SetLineStyle(2);
@@ -232,22 +255,22 @@ void DrawHistwGaussFit(TPad* aPad, TH1* aHist, double aGaussFitMin, double aGaus
 */    
 
   TLegend *tLeg1, *tLeg2;
-  tLeg1 = new TLegend(0.235, 0.725, 0.535, 0.90);
+  tLeg1 = new TLegend(0.235, 0.725, 0.535, 0.875);
     tLeg1->SetFillColor(0);
     tLeg1->SetFillStyle(0);
     tLeg1->SetBorderSize(0);
     tLeg1->SetTextColor(kBlack);
-    tLeg1->SetTextSize(0.055);    
+    tLeg1->SetTextSize(0.0625);    
     tLeg1->AddEntry(aHist, "THERM. 2", "p");
     tLeg1->AddEntry(tGaussFit, "Gauss. Fit", "l");
     
     
-  tLeg2 = new TLegend(0.175, 0.55, 0.475, 0.725);
+  tLeg2 = new TLegend(0.160, 0.550, 0.490, 0.700);
     tLeg2->SetFillColor(0);
     tLeg2->SetFillStyle(0);
     tLeg2->SetBorderSize(0);
     tLeg2->SetTextColor(kBlack);
-    tLeg2->SetTextSize(0.0475);        
+    tLeg2->SetTextSize(0.0575);        
     tLeg2->AddEntry((TObject*)0, TString::Format("%s = %0.1e fm", aMuName.Data(), tGaussFit->GetParameter(1)), "");
     tLeg2->AddEntry((TObject*)0, TString::Format("%s = %0.1e fm",   aSigmaName.Data(), tGaussFit->GetParameter(2)), "");
     
@@ -256,9 +279,17 @@ void DrawHistwGaussFit(TPad* aPad, TH1* aHist, double aGaussFitMin, double aGaus
 }
 
 //________________________________________________________________________________________________________________
-void Draw1DSourceProjwFit(TPad* aPad, TH3* a3DoslHist, TString aComponent, double aGaussFitMin=-20., double aGaussFitMax=20., double aProjLow=-100, double aProjHigh=-100)
+void Draw1DSourceProjwFit(TPad* aPad, TH3* a3DoslHist, TString aComponent, double aGaussFitMin=-20., double aGaussFitMax=20., double aProjLow=-100, double aProjHigh=-100, 
+                          bool aPutYExponentInLabel=false, TString aExponentToPrint="10^{3}")
 {
   assert(aComponent.EqualTo("out") || aComponent.EqualTo("side") || aComponent.EqualTo("long"));
+  if(aPutYExponentInLabel==false) aExponentToPrint="";
+  else
+  {
+    //if(!aExponentToPrint.EndsWith(" ")) aExponentToPrint += TString(" ");
+    //Remove x10^6 from above the plot by moving it way out of the figure...
+    TGaxis::SetExponentOffset(-10.0, 10.0, "y");
+  }
 
   int tHistType=-1;
   TString tAxisBaseNameOut, tAxisBaseNameSide, tAxisBaseNameLong;
@@ -267,9 +298,9 @@ void Draw1DSourceProjwFit(TPad* aPad, TH3* a3DoslHist, TString aComponent, doubl
   {
     tHistType=0;
 
-    tAxisBaseNameOut  = "#it{r}*_{out}";
-    tAxisBaseNameSide = "#it{r}*_{side}";
-    tAxisBaseNameLong = "#it{r}*_{long}";
+    tAxisBaseNameOut  = "#it{r*}_{out}";
+    tAxisBaseNameSide = "#it{r*}_{side}";
+    tAxisBaseNameLong = "#it{r*}_{long}";
   }
   else if(TString(a3DoslHist->GetName()).Contains("TrueRosl")) 
   {
@@ -315,21 +346,25 @@ void Draw1DSourceProjwFit(TPad* aPad, TH3* a3DoslHist, TString aComponent, doubl
     t1DSource = a3DoslHist->ProjectionX("out", tBinProjLow, tBinProjHigh, tBinProjLow, tBinProjHigh);
       t1DSource->SetTitle("PairSource_Out");
       t1DSource->GetXaxis()->SetTitle(TString::Format("%s (fm)", tAxisBaseNameOut.Data()));
-      t1DSource->GetYaxis()->SetTitle(TString::Format("d#it{N}/d%s", tAxisBaseNameOut.Data()));
+      //t1DSource->GetYaxis()->SetTitle(TString::Format("%sd#it{N}/d%s", aExponentToPrint.Data(), tAxisBaseNameOut.Data()));
+      //t1DSource->GetYaxis()->SetTitle(TString::Format("d#it{N}/d%s #left(%s fm^{-1}#right)", tAxisBaseNameOut.Data(), aExponentToPrint.Data()));
+      t1DSource->GetYaxis()->SetTitle(TString::Format("d#it{N}/d%s (%s fm^{-1}#scale[0.5]{ })", tAxisBaseNameOut.Data(), aExponentToPrint.Data()));
   }
   else if(aComponent.EqualTo("side"))
   {
     t1DSource = a3DoslHist->ProjectionY("side", tBinProjLow, tBinProjHigh, tBinProjLow, tBinProjHigh);
       t1DSource->SetTitle("PairSource_Side");
       t1DSource->GetXaxis()->SetTitle(TString::Format("%s(fm)", tAxisBaseNameSide.Data()));
-      t1DSource->GetYaxis()->SetTitle(TString::Format("d#it{N}/d%s", tAxisBaseNameSide.Data()));
+      //t1DSource->GetYaxis()->SetTitle(TString::Format("%sd#it{N}/d%s", aExponentToPrint.Data(), tAxisBaseNameSide.Data()));
+      t1DSource->GetYaxis()->SetTitle(TString::Format("d#it{N}/d%s (%s fm^{-1}#scale[0.5]{ })", tAxisBaseNameSide.Data(), aExponentToPrint.Data()));
   }
   else if(aComponent.EqualTo("long"))
   {
     t1DSource = a3DoslHist->ProjectionZ("long", tBinProjLow, tBinProjHigh, tBinProjLow, tBinProjHigh);
     t1DSource->SetTitle("PairSource_Long");
     t1DSource->GetXaxis()->SetTitle(TString::Format("%s(fm)", tAxisBaseNameLong.Data()));
-    t1DSource->GetYaxis()->SetTitle(TString::Format("d#it{N}/d%s", tAxisBaseNameLong.Data()));
+    //t1DSource->GetYaxis()->SetTitle(TString::Format("%sd#it{N}/d%s", aExponentToPrint.Data(), tAxisBaseNameLong.Data()));
+    t1DSource->GetYaxis()->SetTitle(TString::Format("d#it{N}/d%s (%s fm^{-1}#scale[0.5]{ })", tAxisBaseNameLong.Data(), aExponentToPrint.Data()));
   }
   else assert(0);
 
@@ -348,10 +383,14 @@ void Draw1DSourceProjwFit(TPad* aPad, TH3* a3DoslHist, TString aComponent, doubl
 
     t1DSource->GetXaxis()->SetRangeUser(0., 50.);
   }
+  t1DSource->GetXaxis()->SetNdivisions(505);
+  t1DSource->GetYaxis()->SetNdivisions(506);
 
   //-----------------------------------------------------------
-  TString tMuName = TString::Format("#it{#mu}_{%s}", aComponent.Data());
-  TString tSigmaName = TString::Format("#it{R}_{%s}", aComponent.Data());
+  //TString tMuName = TString::Format("#it{#mu}_{%s}", aComponent.Data());
+  //TString tSigmaName = TString::Format("#it{R}_{%s}", aComponent.Data());
+  TString tMuName = TString("#it{#mu}");
+  TString tSigmaName = TString("#it{R}");
 
   if(tHistType!=1)
   {
@@ -362,14 +401,32 @@ void Draw1DSourceProjwFit(TPad* aPad, TH3* a3DoslHist, TString aComponent, doubl
     }
   }
   DrawHistwGaussFit(aPad, t1DSource, aGaussFitMin, aGaussFitMax, tMuName, tSigmaName, bDrawTextOnRight);
+  
+/*
+  FILE* tOutput = stdout;
+  HistInfoPrinter::PrintHistInfoYAML(t1DSource, tOutput, -50, 50);      
+*/
 }
-
-
-
+/*
+    TLatex *   tex = new TLatex(0.02,0.805,"ALICE Pb-Pb #sqrt{#it{s}_{NN}} = 2.76 TeV");
+    tex->SetTextFont(42);
+    tex->SetTextSize(0.055);
+    tex->SetLineWidth(2);
+    tex->Draw();
+*/
 
 //________________________________________________________________________________________________________________
-void DrawDeltaT(TPad* aPad, TH1* aDeltaTHist, double aGaussFitMin=-20., double aGaussFitMax=20.)
+void DrawDeltaT(TPad* aPad, TH1* aDeltaTHist, double aGaussFitMin=-20., double aGaussFitMax=20., 
+                bool aPutYExponentInLabel=false, TString aExponentToPrint="10^{3}")
 {
+  if(aPutYExponentInLabel==false) aExponentToPrint="";
+  else
+  {
+    //if(!aExponentToPrint.EndsWith(" ")) aExponentToPrint += TString(" ");
+    //Remove x10^6 from above the plot by moving it way out of the figure...
+    TGaxis::SetExponentOffset(-10.0, 10.0, "y");
+  }
+
   aPad->cd();
   SetStandardPadMargins(aPad);
 
@@ -377,12 +434,19 @@ void DrawDeltaT(TPad* aPad, TH1* aDeltaTHist, double aGaussFitMin=-20., double a
   aDeltaTHist->SetMarkerSize(0.75);
   aDeltaTHist->SetMarkerColor(kBlack);
 
+
   aDeltaTHist->GetXaxis()->SetTitle("#Deltat* (fm/#it{c})");
-  aDeltaTHist->GetYaxis()->SetTitle("d#it{N}/#Delta#it{t}*");
+  //aDeltaTHist->GetYaxis()->SetTitle(TString::Format("%sd#it{N}/d#Delta#it{t}*", aExponentToPrint.Data()));
+  aDeltaTHist->GetYaxis()->SetTitle(TString::Format("d#it{N}/d#Delta#it{t}* (%s fm^{-1}#it{c})", aExponentToPrint.Data()));
 
   SetStandardAxesAttributes(aDeltaTHist);
+  aDeltaTHist->GetYaxis()->SetTitleOffset(0.95);
+  aDeltaTHist->GetXaxis()->SetNdivisions(504);
+  aDeltaTHist->GetYaxis()->SetNdivisions(506);
 
-  TString tMuName = "#it{#mu}_{#Delta#it{t}}";
+//  TString tMuName = "#it{#mu}_{#Delta#it{t}}";
+//  TString tSigmaName = "#Delta#it{t}";
+  TString tMuName = "#it{#mu}";
   TString tSigmaName = "#Delta#it{t}";
 
   double tGaussFitMin = -20.;
@@ -392,8 +456,9 @@ void DrawDeltaT(TPad* aPad, TH1* aDeltaTHist, double aGaussFitMin=-20., double a
     tGaussFitMax += aDeltaTHist->GetBinCenter(aDeltaTHist->GetMaximumBin());
     tGaussFitMin += aDeltaTHist->GetBinCenter(aDeltaTHist->GetMaximumBin());
   }
-  
-  DrawHistwGaussFit(aPad, aDeltaTHist, tGaussFitMin, tGaussFitMax, tMuName, tSigmaName);
+  aDeltaTHist->GetXaxis()->SetRangeUser(-99, 99);
+  //aDeltaTHist->GetXaxis()->SetRangeUser(-85, 85); 
+  DrawHistwGaussFit(aPad, aDeltaTHist, tGaussFitMin, tGaussFitMax, tMuName, tSigmaName, false, 1);
 
   //Draw line at delta_t*=0
   TLine* tLine = new TLine(0., 0., 0., aDeltaTHist->GetMaximum());
@@ -402,6 +467,10 @@ void DrawDeltaT(TPad* aPad, TH1* aDeltaTHist, double aGaussFitMin=-20., double a
     tLine->SetLineWidth(2);
     tLine->Draw();
 
+/*
+  FILE* tOutput = stdout;
+  HistInfoPrinter::PrintHistInfoYAML(aDeltaTHist, tOutput, -100, 100);      
+*/
 }
 
 
@@ -462,12 +531,14 @@ TH1* Draw1DCfwFit(TPad* aPad, ThermCf* aThermCfObj, double aFitMax=0.3, bool aFi
 
   //-----------------------------------------------------------
   tThermCf->GetXaxis()->SetRangeUser(0., 0.329);
-  tThermCf->GetYaxis()->SetRangeUser(0.85, 1.05);
+  tThermCf->GetYaxis()->SetRangeUser(0.851, 1.05);
 
   tThermCf->GetXaxis()->SetTitle("#it{k}* (GeV/#it{c})");
   tThermCf->GetYaxis()->SetTitle("#it{C}(#it{k}*)");
 
   SetStandardAxesAttributes(tThermCf);
+  tThermCf->GetXaxis()->SetNdivisions(504);
+  tThermCf->GetYaxis()->SetNdivisions(505);
 
   aPad->cd();
 
@@ -557,7 +628,7 @@ TH1* Draw1DCfwFit(TPad* aPad, ThermCf* aThermCfObj, double aFitMax=0.3, bool aFi
 }
 
 //________________________________________________________________________________________________________________
-void Add1DCfwFitToCanPart(CanvasPartition* aCanPart, int aNx, int aNy, ThermCf* aThermCfObj, double aFitMax=0.3, bool aFixLambda=false, int aMuOut=0, bool aSuppressSystemText=false)
+void Add1DCfwFitToCanPart(CanvasPartition* aCanPart, int aNx, int aNy, ThermCf* aThermCfObj, double aFitMax=0.3, bool aFixLambda=false, int aMuOut=0, bool aSuppressSystemText=false, bool aSuppressThermText=false)
 {
   TH1* tThermCf = (TH1*)aThermCfObj->GetThermCf()->Clone();
   AnalysisType tAnType = aThermCfObj->GetAnalysisType();
@@ -611,14 +682,59 @@ void Add1DCfwFitToCanPart(CanvasPartition* aCanPart, int aNx, int aNy, ThermCf* 
   aCanPart->AddGraph(aNx, aNy, tFitFcn, "", 20, kBlack, 1.0, "HIST samel");
 
 
-  aCanPart->SetupTLegend("", aNx, aNy, 0.50, 0.05, 0.40, 0.575, 1, true);
+  //aCanPart->SetupTLegend("", aNx, aNy, 0.50, 0.40, 0.40, 0.225, 1, true);
+  aCanPart->SetupTLegend("", aNx, aNy, 0.30, 0.475, 0.65, 0.225, 2, true);
   aCanPart->AddLegendEntry(aNx, aNy, tThermCf, "THERM. 2", "p");
   aCanPart->AddLegendEntry(aNx, aNy, tFitFcn, "Fit", "l");
-  aCanPart->AddLegendEntry(aNx, aNy, (TObject*)0, TString::Format("#lambda = % 0.2f", tFitFcn->GetParameter(0)), "");
-  aCanPart->AddLegendEntry(aNx, aNy, (TObject*)0, TString::Format("#it{R}_{inv } = % 0.2f fm", tFitFcn->GetParameter(1)), "");
-  aCanPart->AddLegendEntry(aNx, aNy, (TObject*)0, TString::Format("#Rgothic#it{f}_{0  } = % 0.2f fm", tFitFcn->GetParameter(2)), "");
-  aCanPart->AddLegendEntry(aNx, aNy, (TObject*)0, TString::Format("#Jgothic#it{f}_{0  } = % 0.2f fm", tFitFcn->GetParameter(3)), "");
-  aCanPart->AddLegendEntry(aNx, aNy, (TObject*)0, TString::Format("#it{d}_{0   } = % 0.2f fm", tFitFcn->GetParameter(4)), "");
+  //aCanPart->AddLegendEntry(aNx, aNy, (TObject*)0, TString::Format("#lambda = % 0.2f", tFitFcn->GetParameter(0)), "");
+  //aCanPart->AddLegendEntry(aNx, aNy, (TObject*)0, TString::Format("#it{R}_{inv } = % 0.2f fm", tFitFcn->GetParameter(1)), "");
+  //aCanPart->AddLegendEntry(aNx, aNy, (TObject*)0, TString::Format("#Rgothic#it{f}_{0  } = % 0.2f fm", tFitFcn->GetParameter(2)), "");
+  //aCanPart->AddLegendEntry(aNx, aNy, (TObject*)0, TString::Format("#Jgothic#it{f}_{0  } = % 0.2f fm", tFitFcn->GetParameter(3)), "");
+  //aCanPart->AddLegendEntry(aNx, aNy, (TObject*)0, TString::Format("#it{d}_{0   } = % 0.2f fm", tFitFcn->GetParameter(4)), "");
+  
+  TLatex* tLaText;
+  //double tXLett=0.85;
+  //double tYLett=0.80;
+  //bool tIsNDC=true;
+  
+  double tXLett_L = 0.045;
+  double tXLett_R = 0.20;
+  
+  double tYLett1 = 0.91;
+  double tYLett2 = 0.88;
+  double tYLett3 = 0.85;
+ 
+  double tYLett_L1 = 0.91;
+  double tYLett_L2 = 0.88;   
+  //double tYLett_L1 = 0.895;
+  //double tYLett_L2 = 0.865; 
+
+  
+  bool tIsNDC=false;    
+  
+  int tTextAlign = 11;
+  double tLineWidth=2;
+  int tTextFont = 42;
+  double tTextSize = 0.0825;
+  double tScaleFactor = 1.0;
+
+  tScaleFactor = aCanPart->GetYScaleFactor(aNx, aNy);
+  
+  tLaText = BuildTLatex(TString::Format("    #lambda = % 0.2f", tFitFcn->GetParameter(0)), tXLett_L, tYLett_L1, tTextAlign, tLineWidth, tTextFont, tTextSize, tScaleFactor, tIsNDC);
+  aCanPart->AddPadPaveLatex(tLaText, aNx, aNy);
+  
+  tLaText = BuildTLatex(TString::Format("#it{R}_{inv } = % 0.2f fm", tFitFcn->GetParameter(1)), tXLett_L, tYLett_L2, tTextAlign, tLineWidth, tTextFont, tTextSize, tScaleFactor, tIsNDC);
+  aCanPart->AddPadPaveLatex(tLaText, aNx, aNy);
+  
+  tLaText = BuildTLatex(TString::Format("#Rgothic#it{f}_{0  } = % 0.2f fm", tFitFcn->GetParameter(2)), tXLett_R, tYLett1, tTextAlign, tLineWidth, tTextFont, tTextSize, tScaleFactor, tIsNDC);
+  aCanPart->AddPadPaveLatex(tLaText, aNx, aNy);
+  
+  tLaText = BuildTLatex(TString::Format("#Jgothic#it{f}_{0  }  = % 0.2f fm", tFitFcn->GetParameter(3)), tXLett_R, tYLett2, tTextAlign, tLineWidth, tTextFont, tTextSize, tScaleFactor, tIsNDC);
+  aCanPart->AddPadPaveLatex(tLaText, aNx, aNy);
+  
+  tLaText = BuildTLatex(TString::Format("#it{d}_{0    }  = % 0.2f fm", tFitFcn->GetParameter(4)), tXLett_R, tYLett3, tTextAlign, tLineWidth, tTextFont, tTextSize, tScaleFactor, tIsNDC);
+  aCanPart->AddPadPaveLatex(tLaText, aNx, aNy);
+  
 
 /*
   TPaveText* tText1 = aCanPart->SetupTPaveText("", aNx, aNy, 0.50, 0.05, 0.10, 0.55, 43, 15);
@@ -651,16 +767,19 @@ void Add1DCfwFitToCanPart(CanvasPartition* aCanPart, int aNx, int aNy, ThermCf* 
     TPaveText* tText3;
     if(!tCombConj) tText3 = aCanPart->SetupTPaveText(cAnalysisRootTags[tAnType], aNx, aNy, 0.05, 0.875, 0.20, 0.15, 43, 25, 13, true);
     else           tText3 = aCanPart->SetupTPaveText(TString::Format("%s#scale[0.5]{ }#oplus#scale[0.5]{ }%s", cAnalysisRootTags[tAnType], cAnalysisRootTags[tAnType+1]), 
-                                                     aNx, aNy, 0.05, 0.85, 0.50, 0.15, 43, 25, 13, true);
+                                                     aNx, aNy, 0.05, 0.875, 0.50, 0.15, 43, 25, 13, true);
       tText3->SetTextColor(kBlack);
     aCanPart->AddPadPaveText(tText3, aNx, aNy);
-
-    TPaveText* tText5 = aCanPart->SetupTPaveText("THERMINATOR 2", aNx, aNy, 0.075, 0.05, 0.35, 0.15, 43, 17, 13, true);
-      tText5->SetTextColor(kBlack);
-    aCanPart->AddPadPaveText(tText5, aNx, aNy);
   }
+  if(!aSuppressThermText)
+  {
+    TPaveText* tText5 = aCanPart->SetupTPaveText("THERMINATOR 2", aNx, aNy, 0.05, 0.825, 0.35, 0.15, 43, 17, 13, true);
+      tText5->SetTextColor(kBlack);
+    aCanPart->AddPadPaveText(tText5, aNx, aNy);  
+  }
+  
 
-  TPaveText* tText4 = aCanPart->SetupTPaveText(TString::Format("#it{#mu}_{out} = %d fm", aMuOut), aNx, aNy, 0.525, 0.85, 0.30, 0.15, 43, 25, 13, true);
+  TPaveText* tText4 = aCanPart->SetupTPaveText(TString::Format("#it{#mu}_{out} = %d fm", aMuOut), aNx, aNy, 0.60, 0.85, 0.30, 0.15, 43, 21, 13, true);
     tText4->SetTextColor(kBlack);
   aCanPart->AddPadPaveText(tText4, aNx, aNy);
 }
@@ -780,7 +899,7 @@ TH1D* GetDataCfwSysErrors(TString aDate, AnalysisType aAnalysisType, CentralityT
 
 
 //_________________________________________________________________________________________
-TH1* DrawDataSHCfComponent(TPad* aPad, Analysis* aAnaly, Analysis* aConjAnaly, YlmComponent aComponent, int al, int am, int aRebin, bool aDrawSysErrs=false/*, double aMinNorm=0.32, double aMaxNorm=0.40, int aRebin=2*/, bool aPrintAliceInfo=false, double aMarkerSize=1.0)
+TObjArray* DrawDataSHCfComponent(TPad* aPad, Analysis* aAnaly, Analysis* aConjAnaly, YlmComponent aComponent, int al, int am, int aRebin, bool aDrawSysErrs=false/*, double aMinNorm=0.32, double aMaxNorm=0.40, int aRebin=2*/, bool aPrintAliceInfo=false, double aMarkerSize=1.0)
 {
   aPad->cd();
   int tColor;
@@ -820,6 +939,9 @@ TH1* DrawDataSHCfComponent(TPad* aPad, Analysis* aAnaly, Analysis* aConjAnaly, Y
 
   tSHCf->Draw("ex0same");
 
+
+  TObjArray *tReturnArray = new TObjArray();
+  tReturnArray->Add(tSHCf);
   //--------------------------------------------------------------
 
   if(aPrintAliceInfo && al==0 && am==0)
@@ -858,12 +980,14 @@ TH1* DrawDataSHCfComponent(TPad* aPad, Analysis* aAnaly, Analysis* aConjAnaly, Y
       tSHCfwSysErrs->SetLineWidth(0);
 
       tSHCfwSysErrs->Draw("e2psame");
+      
+      tReturnArray->Add(tSHCfwSysErrs);
   }
-  return tSHCf;
+  return tReturnArray;
 }
 
 //_________________________________________________________________________________________
-TH1* DrawDataCf(TPad* aPad, Analysis* aAnaly, Analysis* aConjAnaly, int aRebin, bool aDrawSysErrs=false/*, double aMinNorm=0.32, double aMaxNorm=0.40, int aRebin=2*/, bool aPrintAliceInfo=false, double aMarkerSize=1.0)
+TObjArray* DrawDataCf(TPad* aPad, Analysis* aAnaly, Analysis* aConjAnaly, int aRebin, bool aDrawSysErrs=false/*, double aMinNorm=0.32, double aMaxNorm=0.40, int aRebin=2*/, bool aPrintAliceInfo=false, double aMarkerSize=1.0)
 {
   aPad->cd();
   int tColor;
@@ -907,6 +1031,9 @@ TH1* DrawDataCf(TPad* aPad, Analysis* aAnaly, Analysis* aConjAnaly, int aRebin, 
 
   tCf->Draw("ex0same");
 
+
+  TObjArray* tReturnArray = new TObjArray();
+  tReturnArray->Add(tCf);
   //--------------------------------------------------------------
 
   if(aPrintAliceInfo)
@@ -944,18 +1071,21 @@ TH1* DrawDataCf(TPad* aPad, Analysis* aAnaly, Analysis* aConjAnaly, int aRebin, 
       tCfwSysErrs->SetLineWidth(0);
 
       tCfwSysErrs->Draw("e2psame");
+      
+      tReturnArray->Add(tCfwSysErrs);     
   }
-  return tCf;
+  return tReturnArray;
 }
 
 //________________________________________________________________________________________________________________
 void Draw1DCfwFitAndData(TPad* aPad, ThermCf* aThermCfObj, double aFitMax, bool aFixLambda, Analysis* aAnaly, Analysis* aConjAnaly, int aRebin, bool aDrawSysErrs, bool aPrintAliceInfo, bool aPrintLegend, bool aSuppressFit)
 {
-  double tMarkerSize = 0.75;
+  //double tMarkerSize = 0.75;
+  double tMarkerSize = 1.0;
   bool aIncludeHeader=true;
   if(aSuppressFit) aIncludeHeader=false;
   TH1* tThermCf = Draw1DCfwFit(aPad, aThermCfObj, aFitMax, aFixLambda, aIncludeHeader, aSuppressFit, tMarkerSize);
-  TH1* tData = DrawDataCf(aPad, aAnaly, aConjAnaly, aRebin, aDrawSysErrs, false, tMarkerSize);
+  TObjArray* tData = DrawDataCf(aPad, aAnaly, aConjAnaly, aRebin, aDrawSysErrs, false, tMarkerSize);
   tThermCf->Draw("ex0same");
 
   //--------------------------------
@@ -963,24 +1093,30 @@ void Draw1DCfwFitAndData(TPad* aPad, ThermCf* aThermCfObj, double aFitMax, bool 
   {
     TLegend* tLeg;
     if(!aSuppressFit) tLeg = new TLegend(0.30, 0.30, 0.50, 0.50);
-    else              tLeg = new TLegend(0.40, 0.40, 0.60, 0.60);
+    else              tLeg = new TLegend(0.357, 0.40, 0.557, 0.60);
       tLeg->SetFillColor(0);
       tLeg->SetBorderSize(0);
       tLeg->SetTextAlign(12);
-      tLeg->SetTextSize(0.065);
-    tLeg->AddEntry(tData, "ALICE (0-10%)", "p");
+      tLeg->SetTextSize(0.08);
+    tLeg->AddEntry((TH1*)tData->At(0), "ALICE (0-10%)", "p");
     tLeg->AddEntry(tThermCf, "THERM. 2 (#it{b} = 2 fm)", "p");
     tLeg->Draw();
   }
   //--------------------------------
   if(aPrintAliceInfo)
   {
-    TLatex *   tex = new TLatex(0.04,0.87,"ALICE Pb-Pb #sqrt{#it{s}_{NN}} = 2.76 TeV");
+    TLatex *   tex = new TLatex(0.012,0.87,"ALICE Pb-Pb #sqrt{#it{s}_{NN}} = 2.76 TeV");
     tex->SetTextFont(42);
-    tex->SetTextSize(0.07);
+    tex->SetTextSize(0.08);
     tex->SetLineWidth(2);
     tex->Draw();
   }
+  
+/*
+  FILE* tOutput = stdout;
+  HistInfoPrinter::PrintHistInfowStatAndSystYAML((TH1*)tData->At(0), (TH1*)tData->At(1), tOutput, 0., 0.329);
+  HistInfoPrinter::PrintHistInfoYAML((TH1*)aThermCfObj->GetThermCf()->Clone(), tOutput, 0., 0.329);      
+*/  
 }
 
 //_________________________________________________________________________________________
@@ -1023,6 +1159,11 @@ TH1* DrawSHCfThermComponent_CombConj(TPad* aPad, CorrFctnDirectYlmTherm* aCfYlmT
   tSHCf->GetYaxis()->SetTitle(TString::Format("%s#it{C}_{%d%d}(#it{k}*)", tReImVec[(int)aComponent].Data(), al, am));
 
   SetStandardAxesAttributes(tSHCf);
+  tSHCf->GetXaxis()->SetNdivisions(504);
+  tSHCf->GetYaxis()->SetNdivisions(505);
+  
+  tSHCf->GetXaxis()->SetRangeUser(0., 0.329);
+
 
   //--------------------------------------------------------------
   //tSHCf->SetMarkerColor(kGreen+1);
@@ -1035,13 +1176,14 @@ TH1* DrawSHCfThermComponent_CombConj(TPad* aPad, CorrFctnDirectYlmTherm* aCfYlmT
 //_________________________________________________________________________________________
 void DrawSHCfThermAndData(TPad* aPad, CorrFctnDirectYlmTherm* aCfYlmThermA,CorrFctnDirectYlmTherm* aCfYlmThermB, Analysis* aAnalySH, Analysis* aConjAnalySH, YlmComponent aComponent, int al, int am, int aRebin, bool aDrawSysErrs=false, bool aPrintAliceInfo=false, bool aPrintLegend=false)
 {
-  double tMarkerSize = 0.75;
+  //double tMarkerSize = 0.75;
+  double tMarkerSize = 1.0;
 
   aPad->cd();
   SetStandardPadMargins(aPad);
 
   TH1* tSHCfThermComp = DrawSHCfThermComponent_CombConj(aPad, aCfYlmThermA, aCfYlmThermB, kYlmReal, 1, 1, 20, kBlack, tMarkerSize);
-  TH1* tData = DrawDataSHCfComponent(aPad, aAnalySH, aConjAnalySH, kYlmReal, 1, 1, aRebin, aDrawSysErrs, aPrintAliceInfo, tMarkerSize);
+  TObjArray* tData = DrawDataSHCfComponent(aPad, aAnalySH, aConjAnalySH, kYlmReal, 1, 1, aRebin, aDrawSysErrs, aPrintAliceInfo, tMarkerSize);
   tSHCfThermComp->Draw("ex0same");
 
   //--------------------------------
@@ -1076,19 +1218,34 @@ void DrawSHCfThermAndData(TPad* aPad, CorrFctnDirectYlmTherm* aCfYlmThermA,CorrF
       tLeg->SetBorderSize(0);
       tLeg->SetTextAlign(12);
       tLeg->SetTextSize(0.065);
-    tLeg->AddEntry(tData, "ALICE", "p");
+    tLeg->AddEntry((TH1*)tData->At(0), "ALICE", "p");
     tLeg->AddEntry(tSHCfThermComp, "THERM. 2", "p");
     tLeg->Draw();
   }
 
+
+/*
+  FILE* tOutput = stdout;
+  HistInfoPrinter::PrintHistInfowStatAndSystYAML((TH1*)tData->At(0), (TH1*)tData->At(1), tOutput, 0., 0.329);
+  HistInfoPrinter::PrintHistInfoYAML(tSHCfThermComp, tOutput, 0., 0.329);      
+*/ 
 }
 
 //________________________________________________________________________________________________________________
 TCanvas* DrawCfwFitAndSourceswDeltaTwC11wData(TString tCanName, ThermCf* aThermCfObj, TH3* aSource3d, TH1* aDeltaTHist, double aKStarFitMax, bool aFixLambdaInFit,
                                               CorrFctnDirectYlmTherm* aCfYlmThermA,CorrFctnDirectYlmTherm* aCfYlmThermB, 
                                               Analysis* aAnaly, Analysis* aConjAnaly, Analysis* aAnalySH, Analysis* aConjAnalySH, int aRebin, bool aDrawSysErrs=false,
-                                              double aGaussFitMin = -20., double aGaussFitMax = 20., double aProjLow = -100., double aProjHigh = -100., bool aSuppressFit=false)
+                                              double aGaussFitMin = -20., double aGaussFitMax = 20., double aProjLow = -100., double aProjHigh = -100., bool aSuppressFit=false, 
+                                              bool aPutYExponentInLabel=false, TString aExponentToPrint="10^{3}")
 {
+  if(aPutYExponentInLabel==false) aExponentToPrint="";
+  else
+  {
+    //if(!aExponentToPrint.EndsWith(" ")) aExponentToPrint += TString(" ");
+    //Remove x10^6 from above the plot by moving it way out of the figure...
+    TGaxis::SetExponentOffset(-10.0, 10.0, "y");
+  }
+
   TCanvas* tCanCfwSource = new TCanvas(tCanName, tCanName);
   tCanCfwSource->SetCanvasSize(1400, 1500);
   tCanCfwSource->cd();
@@ -1135,9 +1292,9 @@ TCanvas* DrawCfwFitAndSourceswDeltaTwC11wData(TString tCanName, ThermCf* aThermC
 
   DrawSHCfThermAndData(tPadC11, aCfYlmThermA, aCfYlmThermB, aAnalySH, aConjAnalySH, kYlmReal, 1, 1, aRebin, aDrawSysErrs, bPrintAlice2, bPrintLeg2);
 
-  Draw1DSourceProjwFit(tPadRout, aSource3d, "out", aGaussFitMin, aGaussFitMax, aProjLow, aProjHigh);
-  Draw1DSourceProjwFit(tPadRside, aSource3d, "side", aGaussFitMin, aGaussFitMax, aProjLow, aProjHigh);
-  Draw1DSourceProjwFit(tPadRlong, aSource3d, "long", aGaussFitMin, aGaussFitMax, aProjLow, aProjHigh);
+  Draw1DSourceProjwFit(tPadRout, aSource3d, "out", aGaussFitMin, aGaussFitMax, aProjLow, aProjHigh, aPutYExponentInLabel, aExponentToPrint);
+  Draw1DSourceProjwFit(tPadRside, aSource3d, "side", aGaussFitMin, aGaussFitMax, aProjLow, aProjHigh, aPutYExponentInLabel, aExponentToPrint);
+  Draw1DSourceProjwFit(tPadRlong, aSource3d, "long", aGaussFitMin, aGaussFitMax, aProjLow, aProjHigh, aPutYExponentInLabel, aExponentToPrint);
 
 
   double tGaussFitMin = aGaussFitMin;
@@ -1147,7 +1304,7 @@ TCanvas* DrawCfwFitAndSourceswDeltaTwC11wData(TString tCanName, ThermCf* aThermC
     tGaussFitMax += aDeltaTHist->GetBinCenter(aDeltaTHist->GetMaximumBin());
     tGaussFitMin += aDeltaTHist->GetBinCenter(aDeltaTHist->GetMaximumBin());
   } 
-  DrawDeltaT(tPadDeltaT, aDeltaTHist, tGaussFitMin, tGaussFitMax);
+  DrawDeltaT(tPadDeltaT, aDeltaTHist, tGaussFitMin, tGaussFitMax, aPutYExponentInLabel, aExponentToPrint);
 
   //--------------
   TLatex* tPanelLetters = new TLatex();
@@ -1159,20 +1316,23 @@ TCanvas* DrawCfwFitAndSourceswDeltaTwC11wData(TString tCanName, ThermCf* aThermC
   double tXLett=0.85;
   double tYLett=0.80;
   tPadCfwFit->cd();
-  tPanelLetters->DrawLatexNDC(tXLett, tYLett, "a.");
+  tPanelLetters->DrawLatexNDC(tXLett, tYLett, "(a)");
   tPadC11->cd();
-  tPanelLetters->DrawLatexNDC(tXLett, tYLett, "b.");
+  tPanelLetters->DrawLatexNDC(tXLett, tYLett, "(b)");
   tPadRout->cd();
-  tPanelLetters->DrawLatexNDC(tXLett, tYLett, "c.");
+  tPanelLetters->DrawLatexNDC(tXLett, tYLett, "(c)");
   tPadRside->cd();
-  tPanelLetters->DrawLatexNDC(tXLett, tYLett, "d.");
+  tPanelLetters->DrawLatexNDC(tXLett, tYLett, "(d)");
   tPadRlong->cd();
-  tPanelLetters->DrawLatexNDC(tXLett, tYLett, "e.");
+  tPanelLetters->DrawLatexNDC(tXLett, tYLett, "(e)");
   tPadDeltaT->cd();
-  tPanelLetters->DrawLatexNDC(tXLett, tYLett, "f.");
+  tPanelLetters->DrawLatexNDC(tXLett, tYLett, "(f)");
 
   return tCanCfwSource;
 }
+
+
+
 
 
 //________________________________________________________________________________________________________________
@@ -1197,6 +1357,9 @@ int main(int argc, char **argv)
   bool bDrawCompareMuOuts = true;
   bool bIncludeData = true;
   bool bSuppressFit = true;
+  
+  bool bPutYExponentInLabel=true;
+  TString tExponentToPrint="10^{3}";
 
   bool bSaveFigures = false;
   TString tSaveFileType = "pdf";
@@ -1319,7 +1482,8 @@ int main(int argc, char **argv)
       tCanCfwSource = DrawCfwFitAndSourceswDeltaTwC11wData(tCanCfwSourceName, tThermCfObj, tTest3d, tDeltaTHist, tKStarFitMax, tFixLambdaInFit,
                                                            tCfYlmThermStda, tCfYlmThermStdb,
                                                            tAnaly0010, tConjAnaly0010, tAnaly0010SH, tConjAnaly0010SH, 2, true,
-                                                           tGaussFitMin, tGaussFitMax, tProjLow, tProjHigh, bSuppressFit);
+                                                           tGaussFitMin, tGaussFitMax, tProjLow, tProjHigh, bSuppressFit, 
+                                                           bPutYExponentInLabel, tExponentToPrint);
     }
   }
 
@@ -1388,19 +1552,64 @@ int main(int argc, char **argv)
     //--------------------------------------------
     int tNx=2, tNy=2;
     double tXLow = -0.02;
-    double tXHigh = 0.329;
-    double tYLow = 0.82;
+    double tXHigh = 0.349;
+    double tYLow = 0.805;
     double tYHigh = 1.07;
 
     TString tCanPartCompMusName = TString::Format("CanPartCompMus_%s_%s", aCfDescriptor.Data(), cAnalysisBaseTags[tAnType]);
     CanvasPartition* tCanPart = new CanvasPartition(tCanPartCompMusName,tNx,tNy,tXLow,tXHigh,tYLow,tYHigh,0.15,0.02,0.15,0.02);
     tCanPart->SetDrawOptStat(false);
     tCanPart->SetAllTicks(1,1);
+    
+    TLatex* tLaText;
+    //double tXLett=0.85;
+    //double tYLett=0.80;
+    //bool tIsNDC=true;
 
-    Add1DCfwFitToCanPart(tCanPart, 0, 0, tThermCfObj_Mu0, tKStarFitMax, tFixLambdaInFit, 0, false);
-    Add1DCfwFitToCanPart(tCanPart, 1, 0, tThermCfObj_Mu1, tKStarFitMax, tFixLambdaInFit, 1, true);
-    Add1DCfwFitToCanPart(tCanPart, 0, 1, tThermCfObj_Mu3, tKStarFitMax, tFixLambdaInFit, 3, true);
-    Add1DCfwFitToCanPart(tCanPart, 1, 1, tThermCfObj_Mu6, tKStarFitMax, tFixLambdaInFit, 6, true);
+    double tXLett=0.015;
+    double tYLett=0.825;
+    bool tIsNDC=false;    
+    
+    int tTextAlign = 11;
+    double tLineWidth=2;
+    int tTextFont = 62;
+    double tTextSize = 0.125;
+    double tScaleFactor = 1.0;
+
+    Add1DCfwFitToCanPart(tCanPart, 0, 0, tThermCfObj_Mu0, tKStarFitMax, tFixLambdaInFit, 0, false, true);
+    tScaleFactor = tCanPart->GetYScaleFactor(0,0);
+    tLaText = BuildTLatex(TString("(a)"), tXLett, tYLett, tTextAlign, tLineWidth, tTextFont, tTextSize, tScaleFactor, tIsNDC);
+    tCanPart->AddPadPaveLatex(tLaText, 0, 0);
+    
+    Add1DCfwFitToCanPart(tCanPart, 1, 0, tThermCfObj_Mu1, tKStarFitMax, tFixLambdaInFit, 1, true, false);
+    tScaleFactor = tCanPart->GetYScaleFactor(1,0);
+    tLaText = BuildTLatex(TString("(b)"), tXLett, tYLett, tTextAlign, tLineWidth, tTextFont, tTextSize, tScaleFactor, tIsNDC);
+    tCanPart->AddPadPaveLatex(tLaText, 1, 0);
+    
+    Add1DCfwFitToCanPart(tCanPart, 0, 1, tThermCfObj_Mu3, tKStarFitMax, tFixLambdaInFit, 3, true, true);
+    tScaleFactor = tCanPart->GetYScaleFactor(0,1);
+    tLaText = BuildTLatex(TString("(c)"), tXLett, tYLett, tTextAlign, tLineWidth, tTextFont, tTextSize, tScaleFactor, tIsNDC);
+    tCanPart->AddPadPaveLatex(tLaText, 0, 1);    
+    
+    Add1DCfwFitToCanPart(tCanPart, 1, 1, tThermCfObj_Mu6, tKStarFitMax, tFixLambdaInFit, 6, true, true); 
+    tScaleFactor = tCanPart->GetYScaleFactor(1,1);
+    tLaText = BuildTLatex(TString("(d)"), tXLett, tYLett, tTextAlign, tLineWidth, tTextFont, tTextSize, tScaleFactor, tIsNDC);
+    tCanPart->AddPadPaveLatex(tLaText, 1, 1);
+/*
+  FILE* tOutput = stdout;
+  
+  cout << "Mu0------------------" << endl;
+  HistInfoPrinter::PrintHistInfoYAML((TH1*)tThermCfObj_Mu0->GetThermCf()->Clone() , tOutput, 0., tXHigh);      
+  
+  cout << "Mu1------------------" << endl;
+  HistInfoPrinter::PrintHistInfoYAML((TH1*)tThermCfObj_Mu1->GetThermCf()->Clone() , tOutput, 0., tXHigh);  
+  
+  cout << "Mu3------------------" << endl;
+  HistInfoPrinter::PrintHistInfoYAML((TH1*)tThermCfObj_Mu3->GetThermCf()->Clone() , tOutput, 0., tXHigh);  
+  
+  cout << "Mu6------------------" << endl;
+  HistInfoPrinter::PrintHistInfoYAML((TH1*)tThermCfObj_Mu6->GetThermCf()->Clone() , tOutput, 0., tXHigh);        
+*/
     
     //----------
     double tLabelScaleX = 1.5;
@@ -1423,7 +1632,7 @@ int main(int argc, char **argv)
 
     tCanPart->DrawAll();
     tCanPart->DrawXaxisTitle("#it{k}* (GeV/#it{c})", 43, 35, 0.725, 0.020); //Note, changing xaxis low (=0.315) does nothing
-    tCanPart->DrawYaxisTitle("#it{C}(#it{k}*)", 43, 35, 0.05, 0.80);
+    tCanPart->DrawYaxisTitle("#it{C}(#it{k}*)", 43, 35, 0.075, 0.80);
 
     if(bSaveFigures) tCanPart->GetCanvas()->SaveAs(TString::Format("%s%s_3dHist%s.%s", tSaveDir.Data(), tCanPartCompMusName.Data(), tHistName3d.Data(), tSaveFileType.Data()));
     //--------------------------------------------

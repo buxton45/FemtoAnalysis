@@ -138,6 +138,8 @@ public:
   void SetNonFlatBgdFitType(NonFlatBgdFitType aNonFlatBgdFitType);
   void SetNonFlatBgdFitType(AnalysisType aAnType, NonFlatBgdFitType aFitType);
   void SetNonFlatBgdFitTypes(vector<NonFlatBgdFitType> &aNonFlatBgdFitTypes);
+  
+  void CalculateFitFunction_forErrBands(int &npar, double &chi2, double *par);
 
   //inline (i.e. simple) functions
   FitSharedAnalyses* GetFitSharedAnalyses();

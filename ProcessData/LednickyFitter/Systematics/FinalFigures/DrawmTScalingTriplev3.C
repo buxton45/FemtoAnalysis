@@ -286,8 +286,8 @@ int main(int argc, char **argv)
   canmtcomb->SetTicks(1,1);
    
   TH1D *ramka = new TH1D("ramka","",100,0.2,1.99);
-  ramka->SetMinimum(0.25);
-  ramka->SetMaximum(12.5);
+  ramka->SetMinimum(0.1);
+  ramka->SetMaximum(14.5);
   ramka->SetStats(0);
 
   ramka->GetXaxis()->SetTitle("#LT#it{m}_{T}#GT (GeV/#it{c}^{2})");
@@ -522,16 +522,16 @@ cout << endl << endl;
 
 //---------------------------------- Draw Legend -------------------------------------------- 
 
-    TLatex *   tex = new TLatex(0.25,1.05,"ALICE Pb-Pb #sqrt{#it{s}_{NN}} = 2.76 TeV");
+    TLatex *   tex = new TLatex(0.242,0.805,"ALICE Pb-Pb #sqrt{#it{s}_{NN}} = 2.76 TeV");
     tex->SetTextFont(42);
-    tex->SetTextSize(0.06);
+    tex->SetTextSize(0.0675);
     tex->SetLineWidth(2);
     tex->Draw();
 
     tex = new TLatex();
     tex->SetTextAlign(12);
     tex->SetTextFont(42);
-    tex->SetTextSize(0.04);
+    tex->SetTextSize(0.055);
     tex->SetLineWidth(2);
 
 
@@ -539,22 +539,22 @@ cout << endl << endl;
     TMarker *marker = new TMarker();
     marker->SetMarkerSize(tMarkerSize);
   
-    double tXSysText = 0.95;
-    double tXMarkers0010 = 1.15;
-    double tXMarkers1030 = 1.40;
-    double tXMarkers3050 = 1.65;
+    double tXSysText = 0.90;
+    double tXMarkers0010 = 1.175;
+    double tXMarkers1030 = 1.475;
+    double tXMarkers3050 = 1.785;
 
-    double tY1Text = 9.0;
-    double tY1Sep = 0.72; 
+    double tY1Text = 12.5;
+    double tY1Sep = 1.0; 
 
-    double tYTextCent = 9.6;
-    double tXTextCent0010 = 1.10;
-    double tXTextCent1030 = 1.335;
-    double tXTextCent3050 = 1.585;
+    double tYTextCent = 13.5;
+    double tXTextCent0010 = 1.095;
+    double tXTextCent1030 = 1.365;
+    double tXTextCent3050 = 1.685;
 
     //-----------------------------
-    double tXShift = 0.125;
-    double tYShift = 1.95;
+    double tXShift = 0.025;
+    double tYShift = 0.0;
 
     tXSysText     += tXShift;
     tXMarkers0010 += tXShift;
@@ -590,7 +590,7 @@ cout << endl << endl;
     marker->DrawMarker(tXMarkers3050, tY1Text-0*tY1Sep);
   
     //-----
-    tex->DrawLatex(tXSysText, tY1Text-1*tY1Sep, "K^{#pm}K^{#pm}");
+    tex->DrawLatex(tXSysText, tY1Text-1*tY1Sep+0.1, "K^{#pm}K^{#pm}");
 
     marker->SetMarkerStyle(tMarkerStyleKchKch_0010);//Kch 0010
     marker->SetMarkerColor(myRed);

@@ -405,7 +405,7 @@ void TripleFitGenerator::WriteToMasterFitValuesFile(TString aFileLocation_LamKch
 
 
 //________________________________________________________________________________________________________________
-CanvasPartition* TripleFitGenerator::BuildKStarCfswFitsCanvasPartition_CombineConj_AllAn(TString aCanvasBaseName, bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, vector<NonFlatBgdFitType> &aNonFlatBgdFitTypes, bool aDrawSysErrors, bool aZoomROP, bool aSuppressFitInfoOutput, bool aLabelLines)
+CanvasPartition* TripleFitGenerator::BuildKStarCfswFitsCanvasPartition_CombineConj_AllAn(TString aCanvasBaseName, bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, vector<NonFlatBgdFitType> &aNonFlatBgdFitTypes, bool aDrawSysErrors, bool aZoomROP, bool aSuppressFitInfoOutput, bool aLabelLines, bool aDrawErrBands)
 {
   assert(fFitGen1->GetNAnalyses() == 6);
   assert(fFitGen2->GetNAnalyses() == 6);
@@ -414,6 +414,7 @@ CanvasPartition* TripleFitGenerator::BuildKStarCfswFitsCanvasPartition_CombineCo
   TString tCanvasName = aCanvasBaseName;
   if(!aZoomROP) tCanvasName += TString("UnZoomed");
   if(aLabelLines) tCanvasName += TString("_LabelLines");
+  if(aDrawErrBands) tCanvasName += TString("_wErrBands");
 
   int tNx=3, tNy=3;
 
@@ -421,12 +422,19 @@ CanvasPartition* TripleFitGenerator::BuildKStarCfswFitsCanvasPartition_CombineCo
   double tXHigh = 0.99;
   //double tYLow = 0.86;
   //double tYHigh = 1.07;
-  double tYLow = 0.83;
-  double tYHigh = 1.09;
+//  double tYLow = 0.83;
+//  double tYHigh = 1.09;
+  double tYLow = 0.76;
+  double tYHigh = 1.15;  
   if(aZoomROP)
   {
     tXLow = -0.02;
     tXHigh = 0.329;
+  }
+  if(aDrawErrBands)
+  {
+    tYLow = 0.76;
+    tYHigh = 1.15;
   }
 
   CanvasPartition* tCanPart = new CanvasPartition(tCanvasName,tNx,tNy,tXLow,tXHigh,tYLow,tYHigh,0.11,0.0025,0.10,0.0025);
@@ -455,9 +463,9 @@ CanvasPartition* TripleFitGenerator::BuildKStarCfswFitsCanvasPartition_CombineCo
 
     //------------------------------
 
-    fFitGen1->BuildKStarCfswFitsPanel_CombineConj(tCanPart, tAnalysisNumberA, tAnalysisNumberB, 0, j, aMomResCorrectFit, aNonFlatBgdCorrectFit, aNonFlatBgdFitTypes[tAnType1], aDrawSysErrors, aZoomROP);
-    fFitGen2->BuildKStarCfswFitsPanel_CombineConj(tCanPart, tAnalysisNumberA, tAnalysisNumberB, 1, j, aMomResCorrectFit, aNonFlatBgdCorrectFit, aNonFlatBgdFitTypes[tAnType1], aDrawSysErrors, aZoomROP);
-    fFitGen3->BuildKStarCfswFitsPanel_CombineConj(tCanPart, tAnalysisNumberA, tAnalysisNumberB, 2, j, aMomResCorrectFit, aNonFlatBgdCorrectFit, aNonFlatBgdFitTypes[tAnType1], aDrawSysErrors, aZoomROP);
+    fFitGen1->BuildKStarCfswFitsPanel_CombineConj(tCanPart, tAnalysisNumberA, tAnalysisNumberB, 0, j, aMomResCorrectFit, aNonFlatBgdCorrectFit, aNonFlatBgdFitTypes[tAnType1], aDrawSysErrors, aZoomROP, aDrawErrBands);
+    fFitGen2->BuildKStarCfswFitsPanel_CombineConj(tCanPart, tAnalysisNumberA, tAnalysisNumberB, 1, j, aMomResCorrectFit, aNonFlatBgdCorrectFit, aNonFlatBgdFitTypes[tAnType1], aDrawSysErrors, aZoomROP, aDrawErrBands);
+    fFitGen3->BuildKStarCfswFitsPanel_CombineConj(tCanPart, tAnalysisNumberA, tAnalysisNumberB, 2, j, aMomResCorrectFit, aNonFlatBgdCorrectFit, aNonFlatBgdFitTypes[tAnType1], aDrawSysErrors, aZoomROP, aDrawErrBands);
 
     //------------------------------
     double tTextSize = 50;
@@ -494,6 +502,44 @@ CanvasPartition* TripleFitGenerator::BuildKStarCfswFitsCanvasPartition_CombineCo
     TPaveText* tCentType3 = tCanPart->SetupTPaveText(tCentTypeText3, 2, j, 0.75, (tTextPosY-0.025), 0.10, 0.15, 43, tTextSize, 21, true);
     tCanPart->AddPadPaveText(tCentType3, 2, j);
 
+    //------------------------------
+    //For Phys Rev C final draft
+    TLatex* tLaText;
+
+    double tXLett_LaTex=0.28;
+    double tYLett_LaTex=0.795;
+    bool tIsNDC_LaTex=false;    
+    
+    int tTextAlign_LaTex = 11;
+    double tLineWidth_LaTex=2;
+    int tTextFont_LaTex = 62;
+    double tTextSize_LaTex = 0.10;
+    double tScaleFactor_LaTex = 1.0;
+    
+    int tPosition;
+    assert(tCanPart->GetNx()*tCanPart->GetNy()==9);
+    vector<TString> tLatexts{TString("(a)"), TString("(b)"), TString("(c)"), 
+                             TString("(d)"), TString("(e)"), TString("(f)"), 
+                             TString("(g)"), TString("(h)"), TString("(i)")};
+    
+    
+    tScaleFactor_LaTex = tCanPart->GetYScaleFactor(0, j);
+    tPosition = 0 + j*tCanPart->GetNx();
+    tLaText = CanvasPartition::BuildTLatex(tLatexts[tPosition], tXLett_LaTex, tYLett_LaTex, tTextAlign_LaTex, tLineWidth_LaTex, tTextFont_LaTex, tTextSize_LaTex, tScaleFactor_LaTex, tIsNDC_LaTex);
+    tCanPart->AddPadPaveLatex(tLaText, 0, j);
+    
+    tScaleFactor_LaTex = tCanPart->GetYScaleFactor(1, j);
+    tPosition = 1 + j*tCanPart->GetNx();
+    tLaText = CanvasPartition::BuildTLatex(tLatexts[tPosition], tXLett_LaTex, tYLett_LaTex, tTextAlign_LaTex, tLineWidth_LaTex, tTextFont_LaTex, tTextSize_LaTex, tScaleFactor_LaTex, tIsNDC_LaTex);
+    tCanPart->AddPadPaveLatex(tLaText, 1, j);
+    
+    tScaleFactor_LaTex = tCanPart->GetYScaleFactor(2, j);
+    tPosition = 2 + j*tCanPart->GetNx();
+    tLaText = CanvasPartition::BuildTLatex(tLatexts[tPosition], tXLett_LaTex, tYLett_LaTex, tTextAlign_LaTex, tLineWidth_LaTex, tTextFont_LaTex, tTextSize_LaTex, tScaleFactor_LaTex, tIsNDC_LaTex);
+    tCanPart->AddPadPaveLatex(tLaText, 2, j);
+    
+    
+    
     //------------------------------
 
     TString tMasterFileLocation1      = fFitGen1->GetMasterFileLocation();
@@ -574,11 +620,11 @@ CanvasPartition* TripleFitGenerator::BuildKStarCfswFitsCanvasPartition_CombineCo
     tCanPart->AddPadPaveText(tSysInfo2,1, j);
     */
     TString tTextSysInfo = TString("ALICE");
-    TPaveText* tSysInfo = tCanPart->SetupTPaveText(tTextSysInfo, 0, j, 0.0, 0.10, 1., 0.15, 43, 57, 22, true);
+    TPaveText* tSysInfo = tCanPart->SetupTPaveText(tTextSysInfo, 0, j, 0.0, 0.20, 1., 0.15, 43, 57, 22, true);
     tCanPart->AddPadPaveText(tSysInfo,0, j);
    
     TString tTextSysInfo2 = TString("Pb-Pb #sqrt{#it{s}_{NN}} = 2.76 TeV");
-    TPaveText* tSysInfo2 = tCanPart->SetupTPaveText(tTextSysInfo2, 1, j, 0.0, 0.10, 1., 0.15, 43, 57, 22, true);
+    TPaveText* tSysInfo2 = tCanPart->SetupTPaveText(tTextSysInfo2, 1, j, 0.0, 0.20, 1., 0.15, 43, 57, 22, true);
     tCanPart->AddPadPaveText(tSysInfo2,1, j);        
     }
 
@@ -605,24 +651,29 @@ CanvasPartition* TripleFitGenerator::BuildKStarCfswFitsCanvasPartition_CombineCo
 
     ((TH1*)tCanPart->GetGraphsInPad(2,j)->At(0))->GetXaxis()->SetLabelOffset(tLabelOffsetScaleX*((TH1*)tCanPart->GetGraphsInPad(2,j)->At(0))->GetXaxis()->GetLabelOffset());
     ((TH1*)tCanPart->GetGraphsInPad(2,j)->At(0))->GetYaxis()->SetLabelOffset(tLabelOffsetScaleY*((TH1*)tCanPart->GetGraphsInPad(2,j)->At(0))->GetYaxis()->GetLabelOffset());
-    
-    //---------------------------------
-    //Since pads are much larger now, increase the width of the lines and size of markers
-    for(int iGr=0; iGr<tCanPart->GetGraphsInPad(0,j)->GetEntries(); iGr++) 
+  }
+
+  //------------------------------ Change marker size
+  //Since pads are much larger now, increase the width of the lines and size of markers
+  //However, if I blindly increase the line width of all, the error bar lines become too fat, so I must do so only for TF1* objects
+  //Obnoxiously, I cast everything as TH1 (don't remember why, but probably there was a reason), 
+  //  so cannot simply check the typeid and I need to check the drawing options instead!
+  double tMarkerSize = 1.75;
+  double tLineWidth = 2.0;
+  for(int i=0; i<tNx; i++)
+  {
+    for(int j=0; j<tNy; j++)
     {
-      ((TH1*)tCanPart->GetGraphsInPad(0,j)->At(iGr))->SetLineWidth(2);
-      ((TH1*)tCanPart->GetGraphsInPad(0,j)->At(iGr))->SetMarkerSize(1.75);      
-    }    
-    for(int iGr=0; iGr<tCanPart->GetGraphsInPad(1,j)->GetEntries(); iGr++) 
-    {
-      ((TH1*)tCanPart->GetGraphsInPad(1,j)->At(iGr))->SetLineWidth(2);
-      ((TH1*)tCanPart->GetGraphsInPad(1,j)->At(iGr))->SetMarkerSize(1.75);
+      vector<TString> tGraphsDrawOptionsInPad = tCanPart->GetGraphsDrawOptionsInPad(i,j);
+      for(int iGr=0; iGr<tCanPart->GetGraphsInPad(i, j)->GetEntries(); iGr++)
+      {
+
+        if(tGraphsDrawOptionsInPad[iGr].Contains("ex0"))  tLineWidth = 1.0;
+        else                                              tLineWidth = 2.0;
+        ((TH1*)tCanPart->GetGraphsInPad(i, j)->At(iGr))->SetLineWidth(tLineWidth);
+        ((TH1*)tCanPart->GetGraphsInPad(i, j)->At(iGr))->SetMarkerSize(tMarkerSize);
+      }
     }
-    for(int iGr=0; iGr<tCanPart->GetGraphsInPad(2,j)->GetEntries(); iGr++) 
-    {
-      ((TH1*)tCanPart->GetGraphsInPad(2,j)->At(iGr))->SetLineWidth(2); 
-      ((TH1*)tCanPart->GetGraphsInPad(2,j)->At(iGr))->SetMarkerSize(1.75);    
-    }   
   }
 
 
@@ -643,10 +694,10 @@ CanvasPartition* TripleFitGenerator::BuildKStarCfswFitsCanvasPartition_CombineCo
 }
 
 //________________________________________________________________________________________________________________
-TCanvas* TripleFitGenerator::DrawKStarCfswFits_CombineConj_AllAn(bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, vector<NonFlatBgdFitType> &aNonFlatBgdFitTypes, bool aSaveImage, bool aDrawSysErrors, bool aZoomROP, bool aSuppressFitInfoOutput, bool aLabelLines)
+TCanvas* TripleFitGenerator::DrawKStarCfswFits_CombineConj_AllAn(bool aMomResCorrectFit, bool aNonFlatBgdCorrectFit, vector<NonFlatBgdFitType> &aNonFlatBgdFitTypes, bool aSaveImage, bool aDrawSysErrors, bool aZoomROP, bool aSuppressFitInfoOutput, bool aLabelLines, bool aDrawErrBands)
 {
   TString tCanvasBaseName = "canKStarCfwFits_CombineConj_AllAn";
-  CanvasPartition* tCanPart = BuildKStarCfswFitsCanvasPartition_CombineConj_AllAn(tCanvasBaseName, aMomResCorrectFit, aNonFlatBgdCorrectFit, aNonFlatBgdFitTypes, aDrawSysErrors, aZoomROP, aSuppressFitInfoOutput, aLabelLines);
+  CanvasPartition* tCanPart = BuildKStarCfswFitsCanvasPartition_CombineConj_AllAn(tCanvasBaseName, aMomResCorrectFit, aNonFlatBgdCorrectFit, aNonFlatBgdFitTypes, aDrawSysErrors, aZoomROP, aSuppressFitInfoOutput, aLabelLines, aDrawErrBands);
 
   if(aSaveImage)
   {
@@ -712,9 +763,9 @@ CanvasPartition* TripleFitGenerator::BuildKStarCfswFitsCanvasPartition_CombineCo
   int tNx2 =      1, tNy2 =      0;
   int tNx3 =      2, tNy3 =      0;
 
-  fFitGen1->BuildKStarCfswFitsPanel_CombineConj(tCanPart, tAnalysisNumberA, tAnalysisNumberB, tNx1, tNy1, aMomResCorrectFit, aNonFlatBgdCorrectFit, aNonFlatBgdFitTypes[tAnType1], aDrawSysErrors, aZoomROP);
-  fFitGen2->BuildKStarCfswFitsPanel_CombineConj(tCanPart, tAnalysisNumberA, tAnalysisNumberB, tNx2, tNy2, aMomResCorrectFit, aNonFlatBgdCorrectFit, aNonFlatBgdFitTypes[tAnType1], aDrawSysErrors, aZoomROP);
-  fFitGen3->BuildKStarCfswFitsPanel_CombineConj(tCanPart, tAnalysisNumberA, tAnalysisNumberB, tNx3, tNy3, aMomResCorrectFit, aNonFlatBgdCorrectFit, aNonFlatBgdFitTypes[tAnType1], aDrawSysErrors, aZoomROP);
+  fFitGen1->BuildKStarCfswFitsPanel_CombineConj(tCanPart, tAnalysisNumberA, tAnalysisNumberB, tNx1, tNy1, aMomResCorrectFit, aNonFlatBgdCorrectFit, aNonFlatBgdFitTypes[tAnType1], aDrawSysErrors, aZoomROP, false);
+  fFitGen2->BuildKStarCfswFitsPanel_CombineConj(tCanPart, tAnalysisNumberA, tAnalysisNumberB, tNx2, tNy2, aMomResCorrectFit, aNonFlatBgdCorrectFit, aNonFlatBgdFitTypes[tAnType1], aDrawSysErrors, aZoomROP, false);
+  fFitGen3->BuildKStarCfswFitsPanel_CombineConj(tCanPart, tAnalysisNumberA, tAnalysisNumberB, tNx3, tNy3, aMomResCorrectFit, aNonFlatBgdCorrectFit, aNonFlatBgdFitTypes[tAnType1], aDrawSysErrors, aZoomROP, false);
 
   //------------------------------ Change marker size
   for(int i=0; i<tNx; i++)
@@ -1026,6 +1077,137 @@ TCanvas* TripleFitGenerator::DrawKStarCfs_CombineConj(CentralityType aCentType, 
   }
 
   return tCanPart->GetCanvas();
+}
+
+
+//________________________________________________________________________________________________________________
+td2dVec TripleFitGenerator::GetParamsMinMaxForErrBands_FINALRESULTSONLY(AnalysisType aAnType)
+{
+  assert(aAnType==kLamKchP || aAnType==kLamKchM || aAnType==kLamK0);
+
+  td1dVec tMinParams = fMasterLednickyFitter->GetMinParams();
+  assert(tMinParams.size()==51);
+  
+  td3dVec tParamsMinMax_LamKchP = fFitGen1->GetParamsMinMaxForErrBands_FINALRESULTSONLY();
+  td3dVec tParamsMinMax_LamKchM = fFitGen2->GetParamsMinMaxForErrBands_FINALRESULTSONLY();
+  td3dVec tParamsMinMax_LamK0   = fFitGen3->GetParamsMinMaxForErrBands_FINALRESULTSONLY();
+  
+  td2dVec tReturnVec(tMinParams.size());
+  
+  //Lambda params, take from LamKchP0010, 1030, and 3050
+  tReturnVec[0] = tParamsMinMax_LamKchP[0][0];
+  tReturnVec[1] = tParamsMinMax_LamKchP[1][0];
+  tReturnVec[2] = tParamsMinMax_LamKchP[2][0];
+
+  //Radius params, take from LamKchP0010, 1030, and 3050  
+  tReturnVec[3] = tParamsMinMax_LamKchP[0][1];
+  tReturnVec[4] = tParamsMinMax_LamKchP[1][1];
+  tReturnVec[5] = tParamsMinMax_LamKchP[2][1];
+  
+  //Ref0, taken from LamKchP0010, LamKchM0010, and LamK00010
+  //Imf0, taken from LamKchP0010, LamKchM0010, and LamK00010
+  //d0, taken from LamKchP0010, LamKchM0010, and LamK00010
+  for(unsigned int i=6; i<15; i++)
+  {
+    tReturnVec[i] = vector<double>{tMinParams[i]};
+  }
+  if(aAnType==kLamKchP)
+  {
+    tReturnVec[6] = tParamsMinMax_LamKchP[0][2];
+    tReturnVec[9] =  tParamsMinMax_LamKchP[0][3];
+    tReturnVec[12] = tParamsMinMax_LamKchP[0][4];
+
+  }
+  else if(aAnType==kLamKchM)
+  {
+    tReturnVec[7] = tParamsMinMax_LamKchM[0][2];
+    tReturnVec[10] = tParamsMinMax_LamKchM[0][3];
+    tReturnVec[13] = tParamsMinMax_LamKchM[0][4];
+  }
+  else if(aAnType==kLamK0)
+  {
+    tReturnVec[8] = tParamsMinMax_LamK0[0][2];
+    tReturnVec[11] = tParamsMinMax_LamK0[0][3];
+    tReturnVec[14] = tParamsMinMax_LamK0[0][4];  
+  }
+  else assert(0);
+  
+
+  
+  for(unsigned int i=15; i<tMinParams.size(); i++)
+  {
+    tReturnVec[i] = vector<double>{tMinParams[i]};
+  }
+  return tReturnVec;
+}
+
+
+
+//________________________________________________________________________________________________________________
+td2dVec TripleFitGenerator::FormAllPossibleCombos(td2dVec &aVec)
+{
+  td2dVec tReturnVec(0);
+
+  vector<vector<double>::iterator> it;
+  for(unsigned int i=0; i<aVec.size(); i++)
+  {
+    it.push_back(aVec[i].begin());
+  }
+  unsigned int K = aVec.size();
+  while (it[0] != aVec[0].end()) {
+  // process the pointed-to elements
+
+  td1dVec tNewCombo(0);
+  for(unsigned int i=0; i<aVec.size(); i++) 
+  {
+    tNewCombo.push_back(*it[i]);
+  }
+  tReturnVec.push_back(tNewCombo);
+  
+  
+  // the following increments the "odometer" by 1
+  ++it[K-1];
+  for (int i = K-1; (i > 0) && (it[i] == aVec[i].end()); --i) {
+    it[i] = aVec[i].begin();
+    ++it[i-1];
+    }
+  }
+  return tReturnVec;
+}
+
+
+//________________________________________________________________________________________________________________
+void TripleFitGenerator::BuildFitErrBands_FINALRESULTSONLY(AnalysisType aAnType)
+{
+  cout << "aAnType = "  << aAnType << endl;
+  td2dVec tParamsMinMax = GetParamsMinMaxForErrBands_FINALRESULTSONLY(aAnType);
+  
+  for(unsigned int i=0; i<tParamsMinMax.size(); i++)
+  {
+    cout << endl << endl << "i = " << i << endl;
+    for(unsigned int j=0; j<tParamsMinMax[i].size(); j++) cout << tParamsMinMax[i][j] << endl;
+  }
+  
+  td2dVec tAllParamsCombos = FormAllPossibleCombos(tParamsMinMax);
+  cout << "tAllParamsCombos.size() = " << tAllParamsCombos.size() << endl;
+  
+  int tNpar=51;
+  double tChi2 = 0.;
+  
+  for(unsigned int i=0; i<tAllParamsCombos.size(); i++) 
+  {
+    assert(tAllParamsCombos[i].size()==tNpar);
+    fMasterLednickyFitter->CalculateFitFunction_forErrBands(tNpar, tChi2, tAllParamsCombos[i].data());
+  }
+}
+
+
+//________________________________________________________________________________________________________________
+void TripleFitGenerator::BuildFitErrBands_FINALRESULTSONLY()
+{
+  BuildFitErrBands_FINALRESULTSONLY(kLamKchP);
+  BuildFitErrBands_FINALRESULTSONLY(kLamKchM);
+  BuildFitErrBands_FINALRESULTSONLY(kLamK0);
 }
 
 

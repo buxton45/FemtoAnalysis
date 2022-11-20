@@ -116,6 +116,7 @@ int main(int argc, char **argv)
   bool bDrawPartAn = false;
 
   bool bDrawSysErrs = true;
+  bool bDrawBands = true;
 
   bool tSuppressFitInfoOutput=false;
   bool tLabelLines=true;
@@ -266,13 +267,15 @@ int main(int argc, char **argv)
   {
     tTriple->DoFit(tTripleShareLambda, tTripleShareRadii, tMaxFitKStar, tOutputCorrCoeffFile);
     if(bWriteToMasterFitValuesFile) tTriple->WriteToMasterFitValuesFile(tLocationMasterFitResults_LamKch, tLocationMasterFitResults_LamK0, tResultsDate);
+    
+    if(bDrawBands) tTriple->BuildFitErrBands_FINALRESULTSONLY();
 
 //    TObjArray* tKStarwFitsCan = tTriple->DrawKStarCfswFits(ApplyMomResCorrection,ApplyNonFlatBackgroundCorrection,tNonFlatBgdFitTypes,SaveImages,bDrawSysErrs,bZoomROP);
     TObjArray* tKStarwFitsCan_Zoom = tTriple->DrawKStarCfswFits(ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, tNonFlatBgdFitTypes, SaveImages, bDrawSysErrs, true, tSuppressFitInfoOutput, tLabelLines);
     TObjArray* tKStarwFitsCan_UnZoom = tTriple->DrawKStarCfswFits(ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, tNonFlatBgdFitTypes, SaveImages, bDrawSysErrs, false, tSuppressFitInfoOutput, tLabelLines);
 
-    TCanvas* tKStarwFitsCan_CombineConj_AllAn_Zoom = tTriple->DrawKStarCfswFits_CombineConj_AllAn(ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, tNonFlatBgdFitTypes, SaveImages, bDrawSysErrs, true, tSuppressFitInfoOutput, tLabelLines);
-    TCanvas* tKStarwFitsCan_CombineConj_AllAn_UnZoom = tTriple->DrawKStarCfswFits_CombineConj_AllAn(ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, tNonFlatBgdFitTypes, SaveImages, bDrawSysErrs, false, tSuppressFitInfoOutput, tLabelLines);
+    TCanvas* tKStarwFitsCan_CombineConj_AllAn_Zoom = tTriple->DrawKStarCfswFits_CombineConj_AllAn(ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, tNonFlatBgdFitTypes, SaveImages, bDrawSysErrs, true, tSuppressFitInfoOutput, tLabelLines, bDrawBands);
+    TCanvas* tKStarwFitsCan_CombineConj_AllAn_UnZoom = tTriple->DrawKStarCfswFits_CombineConj_AllAn(ApplyMomResCorrection, ApplyNonFlatBackgroundCorrection, tNonFlatBgdFitTypes, SaveImages, bDrawSysErrs, false, tSuppressFitInfoOutput, tLabelLines, bDrawBands);
 
     if(bDrawPartAn)
     {

@@ -1,0 +1,61 @@
+----------------------------------------------------------------------
+Report of the Referee -- CT10695/Acharya
+----------------------------------------------------------------------
+
+The manuscript of the ALICE Collaborations presents an attempt to
+extract the K-Lambda interactions from two-body correlation functions
+measured on Pb-Pb collisions. The analysis follows essentially the
+line of correlation studies of identical particles. The main
+experimental result is presented in Fig. 3. The analysis is
+interesting and should clearly be published. It seems, however, that
+the manuscripts has been written in a Letter format, thus leaving
+several detailed discussions on particular systematic uncertainties
+caused by the assumptions made in the analysis (e.g. identical,
+spherical sources etc.) aside.
+
+1. The systematic uncertainties discussed very briefly in section 3.7.
+refer to rather obvious sensitivities to cuts and normalization
+regions. To judge the sensitivity of the data to the extracted fit
+parameters, it would be helpful to see a corresponding error bands in
+e.g. Fig. 3. Inspecting for example the data in the Lambda-K0 case, an
+upward bend at very low relative momenta seems not always obvious.
+
+2. The thermal background in Fig. 2 has rather large statistical
+uncertainties in the relevant low relative momentum region. It also
+seems that the fit (dashed green line) does not always follow the data
+at very low momenta. This, however, is the region which is most
+relevant to extract the interaction parameters (see Fig. 3). Is the
+sixth-order polynomial fit somehow constrained at low momenta?
+
+3. I suggest, that the authors present an error matrix of the deduced
+fit parameters.
+
+4. In the abstract, the Lammbda-K0 interaction is mentioned to be
+attractive. Is that also true, if systematic and statistical
+uncertainties are combined?
+
+5. Re-scattering and secondary absorption may be different for baryons
+and antibaryons. Can’t that be checked by more detailed simulations?
+
+Minor points:
+
+• The reference to THERMINATOR2 should be mentioned, when it is first
+mentioned in the text.
+
+• Fig. 3: boxes are hardly visible in the figure.
+
+• Fig 4: the meaning of the error bars and the shaded areas are not
+clear. Neither in the text referring to Fig. 4 nor in the figure
+caption the meaning of these errors is mentioned.
+
+• References: some special characters should be checked and corrected
+(e.g. Ref. 30 and 37)
+
+• Fig. C2: the rise of the fit at k* = 0 GeV/c should be explained.
+
+• Fig. C2: there seem to be related non-statistical modulations in the
+correlation functions at e.g. 0.16GeV/c. What is the reason for that?
+
+• Appendix A nicely illustrates the Stavinskiy method. What are the
+consequences for the extracted interaction parameters?
+

@@ -1,0 +1,96 @@
+\documentclass[ALICE,manyauthors]{cernphprep}
+\usepackage[comma,square,numbers,sort&compress]{natbib}
+\usepackage{hyperref}
+\usepackage{lineno}
+\usepackage{xspace}
+\linenumbers
+\begin{document}
+\input{commands.tex}
+
+%%%%%%%%%%%%%%%  Title page %%%%%%%%%%%%%%%%%%%%%%%%
+\begin{titlepage}
+% the dates below correspond to CERN approval
+% please don't touch: EB chairs will take care
+\PHyear{XXXX}       % required, will be obtained from CERN
+\PHnumber{XXX}      % required, will be obtained from CERN
+\PHdate{Day Month}  % required, will be obtained from CERN
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%% Put your own title + short title here:
+\title{Put the full title here}
+\ShortTitle{Put a short title here in case the long title is too long}   % appears on left page headers
+
+%%% Do not change the next lines
+\Collaboration{ALICE Collaboration\thanks{See Appendix~\ref{app:collab} for the list of collaboration members}}
+\ShortAuthor{ALICE Collaboration} % appears on right page headers, do not change
+
+\begin{abstract}
+This is a dummy document showing the layout of a CERN PH preprint for ALICE with the full authorlist and acknowledgments. 
+
+
+\end{abstract}
+\end{titlepage}
+
+\setcounter{page}{2} %please do not remove this line
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% begin main text
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Introduction} 
+
+This is where you should put the body of your paper. You should feel free to structure it into separate files if you want. Please keep in mind the following recommendations and suggestions: 
+
+\begin{itemize}
+\item If in doubt about editing guidelines and recommendations, please refer to the Editorial Board guidelines that can be found at~\cite{EBGuidelineEditing}.
+\item Bibtex is strongly preferred and can be used in overleaf without troubles. This is an example~\cite{Acharya:2018ckj} that is already formatted as expected.
+\item In case you intend to cite existing ALICE papers using bibtex, please note that all ALICE papers can be conveniently found in bibtex format at~\cite{ALICEpubpapers}.
+\item Citing web pages is strongly discouraged: if there is a technical, peer-reviewed publication, you should cite that instead. However, if you must, the correct formatting for a web page is this one~\cite{CERNpage}; note that it is mandatory to add the date when the website was accessed.  
+\item Please note that a set of standard latex newcommands was defined as part of this template that you may want to use. It contains regularly used expressions and formulae typeset following the ALICE standards, such as \pt, \kzero, \fivenn, \etarange{0.8} and \avdndeta.
+\item Please add figures with short, simple filenames to the `figures' folder in the overleaf project. An example figure can be found in Fig.~\ref{fig:example}. 
+\end{itemize}
+
+Should you have any questions, suggestions or comments, please do not hesitate to write a message to:  \href{mailto:alice-editorial-board-chair@cern.ch}{alice-editorial-board-chair@cern.ch}. 
+
+\begin{figure}[tb]
+    \begin{center}
+    \includegraphics[width = 0.25\textwidth]{figures/example.pdf}
+    \end{center}
+    \caption{This is an example figure.}
+    \label{fig:example}
+\end{figure}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% end main text 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%% acknowledgements - handled by EB chairs 
+\newenvironment{acknowledgement}{\relax}{\relax}
+\begin{acknowledgement}
+\section*{Acknowledgements}
+% add specific acknowledgements here 
+% ...but please don't remove the line below: funding agencies
+% will be acknowledged with a custom tex file handled by EB chairs after Collab Round 2
+%\input{acknowledgements.tex}
+\end{acknowledgement}
+
+%%%%%%%% Bibliography 
+\bibliographystyle{utphys}   % Remember we use title in the biblio
+\bibliography{bibliography}
+%\input {bibliography.tex}  
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Appendices: yours (if any) + authorlist
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+\appendix
+
+%
+%\input{} % put your appendices here (if any)
+%
+
+%%%%% Authorlist - please do not touch: handled by EB chairs 
+\section{The ALICE Collaboration}
+\label{app:collab}
+%\input{authorlist-preprint.tex}  
+\end{document}

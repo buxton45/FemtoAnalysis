@@ -26,9 +26,9 @@ CFLAGS = $(shell gsl-config --cflags) $(shell root-config --cflags) -Wall -std=c
 #IFLAGS = -I$(ROOTSYS)/include
 #.PHONY: clean
 
-MY_LIBS = $(addprefix build/, FitParameter.o FitChi2Histograms.o BackgroundFitter.o FitPartialAnalysis.o FitPairAnalysis.o FitSharedAnalyses.o MathematicaSession.o WaveFunction.o ChargedResidualCf.o SimpleChargedResidualCf.o NeutralResidualCf.o ResidualCollection.o LednickyFitter.o FitValuesWriter.o FitValuesLatexTableHelperWriter.o FitValuesWriterwSysErrs.o FitValuesLatexTableHelperWriterwSysErrs.o FitGenerator.o FitGeneratorAndDraw.o DualieFitGenerator.o ThermCf.o CfLite.o CfHeavy.o Types.o Types_LambdaValues.o Types_FitParamValues.o Types_ThermBgdParams.o Types_SysFileInfo.o Faddeeva.o FitSystematicAnalysis.o DualieFitSystematicAnalysis.o TripleFitGenerator.o TripleFitSystematicAnalysis.o CanvasPartition.o Cf2dLite.o Cf2dHeavy.o AnalysisInfo.o Purity.o PartialAnalysis.o Analysis.o DataAndModel.o SystematicAnalysis.o SpherHarmonics.o CorrFctnDirectYlm.o CorrFctnDirectYlmLite.o CorrFctnDirectYlmHeavy.o CorrFctnDirectYlmTherm.o SuperpositionFitBgd.o PIDMapping.o NumIntLednickyCf.o)
+MY_LIBS = $(addprefix build/, FitParameter.o FitChi2Histograms.o BackgroundFitter.o FitPartialAnalysis.o FitPairAnalysis.o FitSharedAnalyses.o MathematicaSession.o WaveFunction.o ChargedResidualCf.o SimpleChargedResidualCf.o NeutralResidualCf.o ResidualCollection.o LednickyFitter.o FitValuesWriter.o FitValuesLatexTableHelperWriter.o FitValuesWriterwSysErrs.o FitValuesLatexTableHelperWriterwSysErrs.o FitGenerator.o FitGeneratorAndDraw.o DualieFitGenerator.o ThermCf.o CfLite.o CfHeavy.o Types.o Types_LambdaValues.o Types_FitParamValues.o Types_ThermBgdParams.o Types_SysFileInfo.o Faddeeva.o FitSystematicAnalysis.o DualieFitSystematicAnalysis.o TripleFitGenerator.o TripleFitSystematicAnalysis.o CanvasPartition.o Cf2dLite.o Cf2dHeavy.o AnalysisInfo.o Purity.o PartialAnalysis.o Analysis.o DataAndModel.o SystematicAnalysis.o SpherHarmonics.o CorrFctnDirectYlm.o CorrFctnDirectYlmLite.o CorrFctnDirectYlmHeavy.o CorrFctnDirectYlmTherm.o SuperpositionFitBgd.o PIDMapping.o NumIntLednickyCf.o HistInfoPrinter.o)
 
-BINARIES = runDrawFinalResultswSysErrsTriple runmTScalingTriple runmTScalingTriplev2 runmTScalingTriplev3 runComparisonsTriple runPurity runBuildMomResMatrix runThermBgds runThermBgdsCompFlow runThermFlow runAvgSepXiKch runAvgSepLamK runStavMethComp runGetTotCollSizes runCompLamK runPlotAllFitsCentral runPlotAllFitsTriple runFitThermCfs
+BINARIES = runDrawFinalResultswSysErrsTriple runmTScalingTriple runmTScalingTriplev2 runmTScalingTriplev3 runComparisonsTriple runPurity runBuildMomResMatrix runThermBgds runThermBgdsCompFlow runThermFlow runAvgSepXiKch runAvgSepLamK runStavMethComp runGetTotCollSizes runCompLamK runPlotAllFitsCentral runPlotAllFitsTriple runPlotAllFitsTriplewErrorBands runFitThermCfs
 
 all: $(BINARIES)
 
@@ -83,6 +83,9 @@ runPlotAllFitsCentral: ${MY_LIBS} PlotAllFitsCentral.C
 	
 runPlotAllFitsTriple: ${MY_LIBS} PlotAllFitsTriple.C
 	g++ PlotAllFitsTriple.C ${MY_LIBS} -I${INCDIR} -o runPlotAllFitsTriple -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS)
+	
+runPlotAllFitsTriplewErrorBands: ${MY_LIBS} PlotAllFitsTriplewErrorBands.C
+	g++ PlotAllFitsTriplewErrorBands.C ${MY_LIBS} -I${INCDIR} -o runPlotAllFitsTriplewErrorBands -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS)
 
 runFitThermCfs: ${MY_LIBS} FitThermCfs.C
 	g++ FitThermCfs.C ${MY_LIBS} -I${INCDIR} -o runFitThermCfs -L${LIBDIR} -l${WSTPLIB} ${EXTRALIBS} $(LIBS) $(CFLAGS)

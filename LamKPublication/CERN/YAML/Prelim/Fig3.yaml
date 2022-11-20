@@ -1,0 +1,2049 @@
+aHistStat->GetName() = KStarHeavyCf_LamKchP_0010_and_KStarHeavyCf_ALamKchM_0010
+aHistStat->GetTitle() = KStarHeavyCf_LamKchP_0010_and_KStarHeavyCf_ALamKchM_0010
+aHistSyst->GetName() = LamKchP_0010_wSysErrors_and_ALamKchM_0010_wSysErrors
+aHistSyst->GetTitle() = #LambdaK^{#plus}_0010_wSysErrors
+independent_variables:
+- header: {}
+  values:
+  - {value: 0.0050}
+  - {value: 0.0150}
+  - {value: 0.0250}
+  - {value: 0.0350}
+  - {value: 0.0450}
+  - {value: 0.0550}
+  - {value: 0.0650}
+  - {value: 0.0750}
+  - {value: 0.0850}
+  - {value: 0.0950}
+  - {value: 0.1050}
+  - {value: 0.1150}
+  - {value: 0.1250}
+  - {value: 0.1350}
+  - {value: 0.1450}
+  - {value: 0.1550}
+  - {value: 0.1650}
+  - {value: 0.1750}
+  - {value: 0.1850}
+  - {value: 0.1950}
+  - {value: 0.2050}
+  - {value: 0.2150}
+  - {value: 0.2250}
+  - {value: 0.2350}
+  - {value: 0.2450}
+  - {value: 0.2550}
+  - {value: 0.2650}
+  - {value: 0.2750}
+  - {value: 0.2850}
+  - {value: 0.2950}
+  - {value: 0.3050}
+  - {value: 0.3150}
+  - {value: 0.3250}
+dependent_variables:
+- header: {}
+  qualifiers:
+  - {name: , units: , value: ''}
+  - {name: , units: , value: ''}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.011433}
+    - {label: sys, symerror: 0.001868}
+    value: 0.911269
+  - errors:
+    - {label: stat, symerror: 0.004370}
+    - {label: sys, symerror: 0.000992}
+    value: 0.941217
+  - errors:
+    - {label: stat, symerror: 0.002655}
+    - {label: sys, symerror: 0.000617}
+    value: 0.960012
+  - errors:
+    - {label: stat, symerror: 0.001893}
+    - {label: sys, symerror: 0.000448}
+    value: 0.968744
+  - errors:
+    - {label: stat, symerror: 0.001474}
+    - {label: sys, symerror: 0.000303}
+    value: 0.978694
+  - errors:
+    - {label: stat, symerror: 0.001208}
+    - {label: sys, symerror: 0.000238}
+    value: 0.983504
+  - errors:
+    - {label: stat, symerror: 0.001025}
+    - {label: sys, symerror: 0.000181}
+    value: 0.987620
+  - errors:
+    - {label: stat, symerror: 0.000891}
+    - {label: sys, symerror: 0.000191}
+    value: 0.990064
+  - errors:
+    - {label: stat, symerror: 0.000789}
+    - {label: sys, symerror: 0.000153}
+    value: 0.991901
+  - errors:
+    - {label: stat, symerror: 0.000709}
+    - {label: sys, symerror: 0.000151}
+    value: 0.993575
+  - errors:
+    - {label: stat, symerror: 0.000645}
+    - {label: sys, symerror: 0.000116}
+    value: 0.995385
+  - errors:
+    - {label: stat, symerror: 0.000592}
+    - {label: sys, symerror: 0.000131}
+    value: 0.995411
+  - errors:
+    - {label: stat, symerror: 0.000549}
+    - {label: sys, symerror: 0.000110}
+    value: 0.997442
+  - errors:
+    - {label: stat, symerror: 0.000513}
+    - {label: sys, symerror: 0.000144}
+    value: 0.997646
+  - errors:
+    - {label: stat, symerror: 0.000482}
+    - {label: sys, symerror: 0.000096}
+    value: 0.997689
+  - errors:
+    - {label: stat, symerror: 0.000455}
+    - {label: sys, symerror: 0.000100}
+    value: 0.997902
+  - errors:
+    - {label: stat, symerror: 0.000432}
+    - {label: sys, symerror: 0.000076}
+    value: 0.997546
+  - errors:
+    - {label: stat, symerror: 0.000413}
+    - {label: sys, symerror: 0.000106}
+    value: 0.998642
+  - errors:
+    - {label: stat, symerror: 0.000395}
+    - {label: sys, symerror: 0.000087}
+    value: 0.998878
+  - errors:
+    - {label: stat, symerror: 0.000380}
+    - {label: sys, symerror: 0.000059}
+    value: 0.999289
+  - errors:
+    - {label: stat, symerror: 0.000367}
+    - {label: sys, symerror: 0.000090}
+    value: 0.998997
+  - errors:
+    - {label: stat, symerror: 0.000355}
+    - {label: sys, symerror: 0.000062}
+    value: 0.999401
+  - errors:
+    - {label: stat, symerror: 0.000344}
+    - {label: sys, symerror: 0.000063}
+    value: 0.999363
+  - errors:
+    - {label: stat, symerror: 0.000334}
+    - {label: sys, symerror: 0.000074}
+    value: 0.999016
+  - errors:
+    - {label: stat, symerror: 0.000326}
+    - {label: sys, symerror: 0.000059}
+    value: 0.999548
+  - errors:
+    - {label: stat, symerror: 0.000318}
+    - {label: sys, symerror: 0.000063}
+    value: 0.999207
+  - errors:
+    - {label: stat, symerror: 0.000311}
+    - {label: sys, symerror: 0.000070}
+    value: 0.999684
+  - errors:
+    - {label: stat, symerror: 0.000305}
+    - {label: sys, symerror: 0.000066}
+    value: 1.000027
+  - errors:
+    - {label: stat, symerror: 0.000300}
+    - {label: sys, symerror: 0.000065}
+    value: 1.000189
+  - errors:
+    - {label: stat, symerror: 0.000294}
+    - {label: sys, symerror: 0.000065}
+    value: 0.999991
+  - errors:
+    - {label: stat, symerror: 0.000290}
+    - {label: sys, symerror: 0.000057}
+    value: 0.999923
+  - errors:
+    - {label: stat, symerror: 0.000285}
+    - {label: sys, symerror: 0.000054}
+    value: 1.000083
+  - errors:
+    - {label: stat, symerror: 0.000281}
+    - {label: sys, symerror: 0.000043}
+    value: 1.000025
+
+
+-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**
+Getting NonFlatBackground for pair analysis LamKchM_0010
+	 Using method FitPairAnalysis::GetNonFlatBackground_CombinePartialFits
+PairPar[0] = 1.00286
+PairPar[1] = 0
+PairPar[2] = -0.029936
+PairPar[3] = 0.0252473
+PairPar[4] = 0.00134525
+PairPar[5] = -0.00610047
+PairPar[6] = 0.00146731
+PairPar[7] = 0.67523
+PairPar[8] = 0.324718
+PairPar[9] = 2.90349e+07
+PairPar[10] = 1.00286
+PairPar[11] = 0
+PairPar[12] = -0.029936
+PairPar[13] = 0.0252473
+PairPar[14] = 0.00134525
+PairPar[15] = -0.00610047
+PairPar[16] = 0.00146731
+PairPar[17] = 0.69169
+PairPar[18] = 0.308334
+PairPar[19] = 3.83327e+07
+
+
+-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**
+Getting NonFlatBackground for pair analysis ALamKchP_0010
+	 Using method FitPairAnalysis::GetNonFlatBackground_CombinePartialFits
+PairPar[0] = 1.00286
+PairPar[1] = 0
+PairPar[2] = -0.029936
+PairPar[3] = 0.0252473
+PairPar[4] = 0.00134525
+PairPar[5] = -0.00610047
+PairPar[6] = 0.00146731
+PairPar[7] = 0.663059
+PairPar[8] = 0.336858
+PairPar[9] = 3.01816e+07
+PairPar[10] = 1.00286
+PairPar[11] = 0
+PairPar[12] = -0.029936
+PairPar[13] = 0.0252473
+PairPar[14] = 0.00134525
+PairPar[15] = -0.00610047
+PairPar[16] = 0.00146731
+PairPar[17] = 0.616754
+PairPar[18] = 0.383189
+PairPar[19] = 3.98394e+07
+Warning in <TROOT::Append>: Replacing existing TH1: Func (Potential memory leak).
+Warning in <TROOT::Append>: Replacing existing TH1: Func (Potential memory leak).
+Warning in <TROOT::Append>: Replacing existing TH1: Func (Potential memory leak).
+Warning in <TROOT::Append>: Replacing existing TH1: Func (Potential memory leak).
+Warning in <TROOT::Append>: Replacing existing TH1: LamK0 (Potential memory leak).
+Warning in <TROOT::Append>: Replacing existing TH1: LamK0 (Potential memory leak).
+aHistStat->GetName() = KStarHeavyCf_LamKchM_0010_and_KStarHeavyCf_ALamKchP_0010
+aHistStat->GetTitle() = KStarHeavyCf_LamKchM_0010_and_KStarHeavyCf_ALamKchP_0010
+aHistSyst->GetName() = LamKchM_0010_wSysErrors_and_ALamKchP_0010_wSysErrors
+aHistSyst->GetTitle() = #LambdaK^{#minus}_0010_wSysErrors
+independent_variables:
+- header: {}
+  values:
+  - {value: 0.0050}
+  - {value: 0.0150}
+  - {value: 0.0250}
+  - {value: 0.0350}
+  - {value: 0.0450}
+  - {value: 0.0550}
+  - {value: 0.0650}
+  - {value: 0.0750}
+  - {value: 0.0850}
+  - {value: 0.0950}
+  - {value: 0.1050}
+  - {value: 0.1150}
+  - {value: 0.1250}
+  - {value: 0.1350}
+  - {value: 0.1450}
+  - {value: 0.1550}
+  - {value: 0.1650}
+  - {value: 0.1750}
+  - {value: 0.1850}
+  - {value: 0.1950}
+  - {value: 0.2050}
+  - {value: 0.2150}
+  - {value: 0.2250}
+  - {value: 0.2350}
+  - {value: 0.2450}
+  - {value: 0.2550}
+  - {value: 0.2650}
+  - {value: 0.2750}
+  - {value: 0.2850}
+  - {value: 0.2950}
+  - {value: 0.3050}
+  - {value: 0.3150}
+  - {value: 0.3250}
+dependent_variables:
+- header: {}
+  qualifiers:
+  - {name: , units: , value: ''}
+  - {name: , units: , value: ''}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.011039}
+    - {label: sys, symerror: 0.001713}
+    value: 0.991396
+  - errors:
+    - {label: stat, symerror: 0.004169}
+    - {label: sys, symerror: 0.000913}
+    value: 0.992672
+  - errors:
+    - {label: stat, symerror: 0.002527}
+    - {label: sys, symerror: 0.000424}
+    value: 0.986074
+  - errors:
+    - {label: stat, symerror: 0.001814}
+    - {label: sys, symerror: 0.000422}
+    value: 0.983970
+  - errors:
+    - {label: stat, symerror: 0.001420}
+    - {label: sys, symerror: 0.000266}
+    value: 0.985546
+  - errors:
+    - {label: stat, symerror: 0.001172}
+    - {label: sys, symerror: 0.000139}
+    value: 0.990162
+  - errors:
+    - {label: stat, symerror: 0.000999}
+    - {label: sys, symerror: 0.000169}
+    value: 0.992187
+  - errors:
+    - {label: stat, symerror: 0.000874}
+    - {label: sys, symerror: 0.000149}
+    value: 0.995830
+  - errors:
+    - {label: stat, symerror: 0.000776}
+    - {label: sys, symerror: 0.000151}
+    value: 0.994658
+  - errors:
+    - {label: stat, symerror: 0.000700}
+    - {label: sys, symerror: 0.000127}
+    value: 0.995679
+  - errors:
+    - {label: stat, symerror: 0.000639}
+    - {label: sys, symerror: 0.000109}
+    value: 0.996624
+  - errors:
+    - {label: stat, symerror: 0.000588}
+    - {label: sys, symerror: 0.000112}
+    value: 0.996843
+  - errors:
+    - {label: stat, symerror: 0.000546}
+    - {label: sys, symerror: 0.000092}
+    value: 0.997613
+  - errors:
+    - {label: stat, symerror: 0.000511}
+    - {label: sys, symerror: 0.000109}
+    value: 0.998227
+  - errors:
+    - {label: stat, symerror: 0.000481}
+    - {label: sys, symerror: 0.000088}
+    value: 0.998423
+  - errors:
+    - {label: stat, symerror: 0.000455}
+    - {label: sys, symerror: 0.000070}
+    value: 0.999216
+  - errors:
+    - {label: stat, symerror: 0.000432}
+    - {label: sys, symerror: 0.000095}
+    value: 0.999428
+  - errors:
+    - {label: stat, symerror: 0.000413}
+    - {label: sys, symerror: 0.000102}
+    value: 0.999065
+  - errors:
+    - {label: stat, symerror: 0.000395}
+    - {label: sys, symerror: 0.000054}
+    value: 0.999739
+  - errors:
+    - {label: stat, symerror: 0.000380}
+    - {label: sys, symerror: 0.000061}
+    value: 1.000660
+  - errors:
+    - {label: stat, symerror: 0.000368}
+    - {label: sys, symerror: 0.000091}
+    value: 1.006534
+  - errors:
+    - {label: stat, symerror: 0.000356}
+    - {label: sys, symerror: 0.000090}
+    value: 1.005491
+  - errors:
+    - {label: stat, symerror: 0.000344}
+    - {label: sys, symerror: 0.000088}
+    value: 0.999736
+  - errors:
+    - {label: stat, symerror: 0.000335}
+    - {label: sys, symerror: 0.000066}
+    value: 1.001210
+  - errors:
+    - {label: stat, symerror: 0.000326}
+    - {label: sys, symerror: 0.000072}
+    value: 1.001331
+  - errors:
+    - {label: stat, symerror: 0.000318}
+    - {label: sys, symerror: 0.000071}
+    value: 1.000720
+  - errors:
+    - {label: stat, symerror: 0.000311}
+    - {label: sys, symerror: 0.000050}
+    value: 1.000153
+  - errors:
+    - {label: stat, symerror: 0.000305}
+    - {label: sys, symerror: 0.000042}
+    value: 1.000779
+  - errors:
+    - {label: stat, symerror: 0.000300}
+    - {label: sys, symerror: 0.000061}
+    value: 1.000813
+  - errors:
+    - {label: stat, symerror: 0.000294}
+    - {label: sys, symerror: 0.000062}
+    value: 1.000778
+  - errors:
+    - {label: stat, symerror: 0.000290}
+    - {label: sys, symerror: 0.000046}
+    value: 1.000068
+  - errors:
+    - {label: stat, symerror: 0.000286}
+    - {label: sys, symerror: 0.000059}
+    value: 1.000608
+  - errors:
+    - {label: stat, symerror: 0.000282}
+    - {label: sys, symerror: 0.000050}
+    value: 1.000252
+
+
+-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**
+Getting NonFlatBackground for pair analysis LamK0_0010
+	 Using method FitPairAnalysis::GetNonFlatBackground_CombinePartialFits
+PairPar[0] = 1.00424
+PairPar[1] = 0
+PairPar[2] = -0.0504627
+PairPar[3] = 0.0767446
+PairPar[4] = -0.0582251
+PairPar[5] = 0.0248907
+PairPar[6] = -0.00444368
+PairPar[7] = 0.820509
+PairPar[8] = 0.179301
+PairPar[9] = 7.5862e+06
+PairPar[10] = 1.00424
+PairPar[11] = 0
+PairPar[12] = -0.0504627
+PairPar[13] = 0.0767446
+PairPar[14] = -0.0582251
+PairPar[15] = 0.0248907
+PairPar[16] = -0.00444368
+PairPar[17] = 0.763406
+PairPar[18] = 0.236746
+PairPar[19] = 1.00683e+07
+
+
+-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**
+Getting NonFlatBackground for pair analysis ALamK0_0010
+	 Using method FitPairAnalysis::GetNonFlatBackground_CombinePartialFits
+PairPar[0] = 1.00424
+PairPar[1] = 0
+PairPar[2] = -0.0504627
+PairPar[3] = 0.0767446
+PairPar[4] = -0.0582251
+PairPar[5] = 0.0248907
+PairPar[6] = -0.00444368
+PairPar[7] = 0.855643
+PairPar[8] = 0.144355
+PairPar[9] = 7.35687e+06
+PairPar[10] = 1.00424
+PairPar[11] = 0
+PairPar[12] = -0.0504627
+PairPar[13] = 0.0767446
+PairPar[14] = -0.0582251
+PairPar[15] = 0.0248907
+PairPar[16] = -0.00444368
+PairPar[17] = 0.962245
+PairPar[18] = 0.0373299
+PairPar[19] = 9.78787e+06
+Warning in <TROOT::Append>: Replacing existing TH1: Func (Potential memory leak).
+Warning in <TROOT::Append>: Replacing existing TH1: Func (Potential memory leak).
+Warning in <TROOT::Append>: Replacing existing TH1: Func (Potential memory leak).
+Warning in <TROOT::Append>: Replacing existing TH1: Func (Potential memory leak).
+Warning in <TROOT::Append>: Replacing existing TH1: LamK0 (Potential memory leak).
+Warning in <TROOT::Append>: Replacing existing TH1: LamK0 (Potential memory leak).
+aHistStat->GetName() = KStarHeavyCf_LamK0_0010_and_KStarHeavyCf_ALamK0_0010
+aHistStat->GetTitle() = KStarHeavyCf_LamK0_0010_and_KStarHeavyCf_ALamK0_0010
+aHistSyst->GetName() = LamK0_0010_wSysErrors_and_ALamK0_0010_wSysErrors
+aHistSyst->GetTitle() = #LambdaK^{0}_{S}_0010_wSysErrors
+independent_variables:
+- header: {}
+  values:
+  - {value: 0.0050}
+  - {value: 0.0150}
+  - {value: 0.0250}
+  - {value: 0.0350}
+  - {value: 0.0450}
+  - {value: 0.0550}
+  - {value: 0.0650}
+  - {value: 0.0750}
+  - {value: 0.0850}
+  - {value: 0.0950}
+  - {value: 0.1050}
+  - {value: 0.1150}
+  - {value: 0.1250}
+  - {value: 0.1350}
+  - {value: 0.1450}
+  - {value: 0.1550}
+  - {value: 0.1650}
+  - {value: 0.1750}
+  - {value: 0.1850}
+  - {value: 0.1950}
+  - {value: 0.2050}
+  - {value: 0.2150}
+  - {value: 0.2250}
+  - {value: 0.2350}
+  - {value: 0.2450}
+  - {value: 0.2550}
+  - {value: 0.2650}
+  - {value: 0.2750}
+  - {value: 0.2850}
+  - {value: 0.2950}
+  - {value: 0.3050}
+  - {value: 0.3150}
+  - {value: 0.3250}
+dependent_variables:
+- header: {}
+  qualifiers:
+  - {name: , units: , value: ''}
+  - {name: , units: , value: ''}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.022709}
+    - {label: sys, symerror: 0.003968}
+    value: 0.937212
+  - errors:
+    - {label: stat, symerror: 0.008780}
+    - {label: sys, symerror: 0.001367}
+    value: 0.975271
+  - errors:
+    - {label: stat, symerror: 0.005294}
+    - {label: sys, symerror: 0.001151}
+    value: 0.967828
+  - errors:
+    - {label: stat, symerror: 0.003825}
+    - {label: sys, symerror: 0.000731}
+    value: 0.975037
+  - errors:
+    - {label: stat, symerror: 0.003003}
+    - {label: sys, symerror: 0.000544}
+    value: 0.983255
+  - errors:
+    - {label: stat, symerror: 0.002467}
+    - {label: sys, symerror: 0.000457}
+    value: 0.984489
+  - errors:
+    - {label: stat, symerror: 0.002105}
+    - {label: sys, symerror: 0.000558}
+    value: 0.989625
+  - errors:
+    - {label: stat, symerror: 0.001837}
+    - {label: sys, symerror: 0.000388}
+    value: 0.992443
+  - errors:
+    - {label: stat, symerror: 0.001630}
+    - {label: sys, symerror: 0.000266}
+    value: 0.992140
+  - errors:
+    - {label: stat, symerror: 0.001469}
+    - {label: sys, symerror: 0.000308}
+    value: 0.994044
+  - errors:
+    - {label: stat, symerror: 0.001340}
+    - {label: sys, symerror: 0.000276}
+    value: 0.997119
+  - errors:
+    - {label: stat, symerror: 0.001233}
+    - {label: sys, symerror: 0.000273}
+    value: 0.996958
+  - errors:
+    - {label: stat, symerror: 0.001144}
+    - {label: sys, symerror: 0.000226}
+    value: 0.997967
+  - errors:
+    - {label: stat, symerror: 0.001069}
+    - {label: sys, symerror: 0.000232}
+    value: 0.999408
+  - errors:
+    - {label: stat, symerror: 0.001004}
+    - {label: sys, symerror: 0.000191}
+    value: 0.998061
+  - errors:
+    - {label: stat, symerror: 0.000948}
+    - {label: sys, symerror: 0.000235}
+    value: 0.998806
+  - errors:
+    - {label: stat, symerror: 0.000899}
+    - {label: sys, symerror: 0.000190}
+    value: 0.997850
+  - errors:
+    - {label: stat, symerror: 0.000857}
+    - {label: sys, symerror: 0.000178}
+    value: 0.998989
+  - errors:
+    - {label: stat, symerror: 0.000820}
+    - {label: sys, symerror: 0.000169}
+    value: 0.998884
+  - errors:
+    - {label: stat, symerror: 0.000787}
+    - {label: sys, symerror: 0.000159}
+    value: 0.998993
+  - errors:
+    - {label: stat, symerror: 0.000758}
+    - {label: sys, symerror: 0.000192}
+    value: 0.999647
+  - errors:
+    - {label: stat, symerror: 0.000731}
+    - {label: sys, symerror: 0.000125}
+    value: 0.998632
+  - errors:
+    - {label: stat, symerror: 0.000708}
+    - {label: sys, symerror: 0.000124}
+    value: 1.000871
+  - errors:
+    - {label: stat, symerror: 0.000686}
+    - {label: sys, symerror: 0.000100}
+    value: 1.000106
+  - errors:
+    - {label: stat, symerror: 0.000667}
+    - {label: sys, symerror: 0.000134}
+    value: 1.000302
+  - errors:
+    - {label: stat, symerror: 0.000650}
+    - {label: sys, symerror: 0.000131}
+    value: 0.999717
+  - errors:
+    - {label: stat, symerror: 0.000633}
+    - {label: sys, symerror: 0.000160}
+    value: 0.999042
+  - errors:
+    - {label: stat, symerror: 0.000619}
+    - {label: sys, symerror: 0.000120}
+    value: 0.999372
+  - errors:
+    - {label: stat, symerror: 0.000606}
+    - {label: sys, symerror: 0.000090}
+    value: 0.999646
+  - errors:
+    - {label: stat, symerror: 0.000594}
+    - {label: sys, symerror: 0.000127}
+    value: 1.000442
+  - errors:
+    - {label: stat, symerror: 0.000583}
+    - {label: sys, symerror: 0.000160}
+    value: 0.999637
+  - errors:
+    - {label: stat, symerror: 0.000573}
+    - {label: sys, symerror: 0.000115}
+    value: 1.000080
+  - errors:
+    - {label: stat, symerror: 0.000564}
+    - {label: sys, symerror: 0.000120}
+    value: 0.999542
+
+
+-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**
+Getting NonFlatBackground for pair analysis LamKchP_1030
+	 Using method FitPairAnalysis::GetNonFlatBackground_CombinePartialFits
+PairPar[0] = 1.00672
+PairPar[1] = 0
+PairPar[2] = -0.048703
+PairPar[3] = -0.024352
+PairPar[4] = 0.105851
+PairPar[5] = -0.0650326
+PairPar[6] = 0.0122673
+PairPar[7] = 0.771499
+PairPar[8] = 0.228463
+PairPar[9] = 7.18703e+06
+PairPar[10] = 1.00672
+PairPar[11] = 0
+PairPar[12] = -0.048703
+PairPar[13] = -0.024352
+PairPar[14] = 0.105851
+PairPar[15] = -0.0650326
+PairPar[16] = 0.0122673
+PairPar[17] = 0.836673
+PairPar[18] = 0.163474
+PairPar[19] = 8.40984e+06
+
+
+-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**
+Getting NonFlatBackground for pair analysis ALamKchM_1030
+	 Using method FitPairAnalysis::GetNonFlatBackground_CombinePartialFits
+PairPar[0] = 1.00672
+PairPar[1] = 0
+PairPar[2] = -0.048703
+PairPar[3] = -0.024352
+PairPar[4] = 0.105851
+PairPar[5] = -0.0650326
+PairPar[6] = 0.0122673
+PairPar[7] = 0.819442
+PairPar[8] = 0.180377
+PairPar[9] = 6.54064e+06
+PairPar[10] = 1.00672
+PairPar[11] = 0
+PairPar[12] = -0.048703
+PairPar[13] = -0.024352
+PairPar[14] = 0.105851
+PairPar[15] = -0.0650326
+PairPar[16] = 0.0122673
+PairPar[17] = 0.779742
+PairPar[18] = 0.220276
+PairPar[19] = 7.58742e+06
+Warning in <TROOT::Append>: Replacing existing TH1: Func (Potential memory leak).
+Warning in <TROOT::Append>: Replacing existing TH1: Func (Potential memory leak).
+Warning in <TROOT::Append>: Replacing existing TH1: Func (Potential memory leak).
+Warning in <TROOT::Append>: Replacing existing TH1: Func (Potential memory leak).
+Warning in <TROOT::Append>: Replacing existing TH1: ALamK0 (Potential memory leak).
+aHistStat->GetName() = KStarHeavyCf_LamKchP_1030_and_KStarHeavyCf_ALamKchM_1030
+aHistStat->GetTitle() = KStarHeavyCf_LamKchP_1030_and_KStarHeavyCf_ALamKchM_1030
+aHistSyst->GetName() = LamKchP_1030_wSysErrors_and_ALamKchM_1030_wSysErrors
+aHistSyst->GetTitle() = #LambdaK^{#plus}_1030_wSysErrors
+independent_variables:
+- header: {}
+  values:
+  - {value: 0.0050}
+  - {value: 0.0150}
+  - {value: 0.0250}
+  - {value: 0.0350}
+  - {value: 0.0450}
+  - {value: 0.0550}
+  - {value: 0.0650}
+  - {value: 0.0750}
+  - {value: 0.0850}
+  - {value: 0.0950}
+  - {value: 0.1050}
+  - {value: 0.1150}
+  - {value: 0.1250}
+  - {value: 0.1350}
+  - {value: 0.1450}
+  - {value: 0.1550}
+  - {value: 0.1650}
+  - {value: 0.1750}
+  - {value: 0.1850}
+  - {value: 0.1950}
+  - {value: 0.2050}
+  - {value: 0.2150}
+  - {value: 0.2250}
+  - {value: 0.2350}
+  - {value: 0.2450}
+  - {value: 0.2550}
+  - {value: 0.2650}
+  - {value: 0.2750}
+  - {value: 0.2850}
+  - {value: 0.2950}
+  - {value: 0.3050}
+  - {value: 0.3150}
+  - {value: 0.3250}
+dependent_variables:
+- header: {}
+  qualifiers:
+  - {name: , units: , value: ''}
+  - {name: , units: , value: ''}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.024170}
+    - {label: sys, symerror: 0.004800}
+    value: 0.874223
+  - errors:
+    - {label: stat, symerror: 0.009388}
+    - {label: sys, symerror: 0.001888}
+    value: 0.941950
+  - errors:
+    - {label: stat, symerror: 0.005658}
+    - {label: sys, symerror: 0.001523}
+    value: 0.941997
+  - errors:
+    - {label: stat, symerror: 0.004067}
+    - {label: sys, symerror: 0.001052}
+    value: 0.960424
+  - errors:
+    - {label: stat, symerror: 0.003184}
+    - {label: sys, symerror: 0.000717}
+    value: 0.977223
+  - errors:
+    - {label: stat, symerror: 0.002604}
+    - {label: sys, symerror: 0.000502}
+    value: 0.977960
+  - errors:
+    - {label: stat, symerror: 0.002222}
+    - {label: sys, symerror: 0.000474}
+    value: 0.990702
+  - errors:
+    - {label: stat, symerror: 0.001930}
+    - {label: sys, symerror: 0.000449}
+    value: 0.991094
+  - errors:
+    - {label: stat, symerror: 0.001709}
+    - {label: sys, symerror: 0.000348}
+    value: 0.992308
+  - errors:
+    - {label: stat, symerror: 0.001537}
+    - {label: sys, symerror: 0.000264}
+    value: 0.995922
+  - errors:
+    - {label: stat, symerror: 0.001395}
+    - {label: sys, symerror: 0.000252}
+    value: 0.995465
+  - errors:
+    - {label: stat, symerror: 0.001284}
+    - {label: sys, symerror: 0.000340}
+    value: 0.999275
+  - errors:
+    - {label: stat, symerror: 0.001189}
+    - {label: sys, symerror: 0.000273}
+    value: 0.997713
+  - errors:
+    - {label: stat, symerror: 0.001113}
+    - {label: sys, symerror: 0.000147}
+    value: 1.001868
+  - errors:
+    - {label: stat, symerror: 0.001045}
+    - {label: sys, symerror: 0.000164}
+    value: 1.000106
+  - errors:
+    - {label: stat, symerror: 0.000988}
+    - {label: sys, symerror: 0.000201}
+    value: 1.000316
+  - errors:
+    - {label: stat, symerror: 0.000940}
+    - {label: sys, symerror: 0.000170}
+    value: 1.003063
+  - errors:
+    - {label: stat, symerror: 0.000895}
+    - {label: sys, symerror: 0.000204}
+    value: 1.000978
+  - errors:
+    - {label: stat, symerror: 0.000857}
+    - {label: sys, symerror: 0.000214}
+    value: 1.000892
+  - errors:
+    - {label: stat, symerror: 0.000825}
+    - {label: sys, symerror: 0.000101}
+    value: 1.001966
+  - errors:
+    - {label: stat, symerror: 0.000795}
+    - {label: sys, symerror: 0.000166}
+    value: 1.001437
+  - errors:
+    - {label: stat, symerror: 0.000770}
+    - {label: sys, symerror: 0.000144}
+    value: 1.002446
+  - errors:
+    - {label: stat, symerror: 0.000746}
+    - {label: sys, symerror: 0.000165}
+    value: 1.001281
+  - errors:
+    - {label: stat, symerror: 0.000726}
+    - {label: sys, symerror: 0.000169}
+    value: 1.002304
+  - errors:
+    - {label: stat, symerror: 0.000707}
+    - {label: sys, symerror: 0.000109}
+    value: 1.001612
+  - errors:
+    - {label: stat, symerror: 0.000690}
+    - {label: sys, symerror: 0.000105}
+    value: 1.000725
+  - errors:
+    - {label: stat, symerror: 0.000675}
+    - {label: sys, symerror: 0.000223}
+    value: 1.001200
+  - errors:
+    - {label: stat, symerror: 0.000662}
+    - {label: sys, symerror: 0.000200}
+    value: 1.002210
+  - errors:
+    - {label: stat, symerror: 0.000649}
+    - {label: sys, symerror: 0.000137}
+    value: 1.002016
+  - errors:
+    - {label: stat, symerror: 0.000638}
+    - {label: sys, symerror: 0.000118}
+    value: 1.001365
+  - errors:
+    - {label: stat, symerror: 0.000627}
+    - {label: sys, symerror: 0.000147}
+    value: 1.000582
+  - errors:
+    - {label: stat, symerror: 0.000619}
+    - {label: sys, symerror: 0.000128}
+    value: 1.001948
+  - errors:
+    - {label: stat, symerror: 0.000609}
+    - {label: sys, symerror: 0.000112}
+    value: 1.000139
+
+
+-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**
+Getting NonFlatBackground for pair analysis LamKchM_1030
+	 Using method FitPairAnalysis::GetNonFlatBackground_CombinePartialFits
+PairPar[0] = 1.00674
+PairPar[1] = 0
+PairPar[2] = -0.0604435
+PairPar[3] = 0.00438327
+PairPar[4] = 0.0788429
+PairPar[5] = -0.0539717
+PairPar[6] = 0.0106357
+PairPar[7] = 0.750509
+PairPar[8] = 0.24964
+PairPar[9] = 6.70742e+06
+PairPar[10] = 1.00674
+PairPar[11] = 0
+PairPar[12] = -0.0604435
+PairPar[13] = 0.00438327
+PairPar[14] = 0.0788429
+PairPar[15] = -0.0539717
+PairPar[16] = 0.0106357
+PairPar[17] = 0.762305
+PairPar[18] = 0.237854
+PairPar[19] = 7.8349e+06
+
+
+-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**
+Getting NonFlatBackground for pair analysis ALamKchP_1030
+	 Using method FitPairAnalysis::GetNonFlatBackground_CombinePartialFits
+PairPar[0] = 1.00674
+PairPar[1] = 0
+PairPar[2] = -0.0604435
+PairPar[3] = 0.00438327
+PairPar[4] = 0.0788429
+PairPar[5] = -0.0539717
+PairPar[6] = 0.0106357
+PairPar[7] = 0.770732
+PairPar[8] = 0.228857
+PairPar[9] = 6.98157e+06
+PairPar[10] = 1.00674
+PairPar[11] = 0
+PairPar[12] = -0.0604435
+PairPar[13] = 0.00438327
+PairPar[14] = 0.0788429
+PairPar[15] = -0.0539717
+PairPar[16] = 0.0106357
+PairPar[17] = 0.766482
+PairPar[18] = 0.23354
+PairPar[19] = 8.12334e+06
+Warning in <TROOT::Append>: Replacing existing TH1: Func (Potential memory leak).
+Warning in <TROOT::Append>: Replacing existing TH1: Func (Potential memory leak).
+Warning in <TROOT::Append>: Replacing existing TH1: Func (Potential memory leak).
+Warning in <TROOT::Append>: Replacing existing TH1: Func (Potential memory leak).
+Warning in <TROOT::Append>: Replacing existing TH1: ALamK0 (Potential memory leak).
+Warning in <TROOT::Append>: Replacing existing TH1: ALamK0 (Potential memory leak).
+aHistStat->GetName() = KStarHeavyCf_LamKchM_1030_and_KStarHeavyCf_ALamKchP_1030
+aHistStat->GetTitle() = KStarHeavyCf_LamKchM_1030_and_KStarHeavyCf_ALamKchP_1030
+aHistSyst->GetName() = LamKchM_1030_wSysErrors_and_ALamKchP_1030_wSysErrors
+aHistSyst->GetTitle() = #LambdaK^{#minus}_1030_wSysErrors
+independent_variables:
+- header: {}
+  values:
+  - {value: 0.0050}
+  - {value: 0.0150}
+  - {value: 0.0250}
+  - {value: 0.0350}
+  - {value: 0.0450}
+  - {value: 0.0550}
+  - {value: 0.0650}
+  - {value: 0.0750}
+  - {value: 0.0850}
+  - {value: 0.0950}
+  - {value: 0.1050}
+  - {value: 0.1150}
+  - {value: 0.1250}
+  - {value: 0.1350}
+  - {value: 0.1450}
+  - {value: 0.1550}
+  - {value: 0.1650}
+  - {value: 0.1750}
+  - {value: 0.1850}
+  - {value: 0.1950}
+  - {value: 0.2050}
+  - {value: 0.2150}
+  - {value: 0.2250}
+  - {value: 0.2350}
+  - {value: 0.2450}
+  - {value: 0.2550}
+  - {value: 0.2650}
+  - {value: 0.2750}
+  - {value: 0.2850}
+  - {value: 0.2950}
+  - {value: 0.3050}
+  - {value: 0.3150}
+  - {value: 0.3250}
+dependent_variables:
+- header: {}
+  qualifiers:
+  - {name: , units: , value: ''}
+  - {name: , units: , value: ''}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.024293}
+    - {label: sys, symerror: 0.006492}
+    value: 1.034392
+  - errors:
+    - {label: stat, symerror: 0.009074}
+    - {label: sys, symerror: 0.002056}
+    value: 1.004809
+  - errors:
+    - {label: stat, symerror: 0.005515}
+    - {label: sys, symerror: 0.001214}
+    value: 0.999207
+  - errors:
+    - {label: stat, symerror: 0.003929}
+    - {label: sys, symerror: 0.000921}
+    value: 0.984031
+  - errors:
+    - {label: stat, symerror: 0.003082}
+    - {label: sys, symerror: 0.000586}
+    value: 0.989044
+  - errors:
+    - {label: stat, symerror: 0.002536}
+    - {label: sys, symerror: 0.000329}
+    value: 0.987580
+  - errors:
+    - {label: stat, symerror: 0.002167}
+    - {label: sys, symerror: 0.000456}
+    value: 0.994770
+  - errors:
+    - {label: stat, symerror: 0.001895}
+    - {label: sys, symerror: 0.000346}
+    value: 0.998222
+  - errors:
+    - {label: stat, symerror: 0.001681}
+    - {label: sys, symerror: 0.000308}
+    value: 0.995674
+  - errors:
+    - {label: stat, symerror: 0.001516}
+    - {label: sys, symerror: 0.000370}
+    value: 0.996241
+  - errors:
+    - {label: stat, symerror: 0.001385}
+    - {label: sys, symerror: 0.000262}
+    value: 0.998884
+  - errors:
+    - {label: stat, symerror: 0.001276}
+    - {label: sys, symerror: 0.000244}
+    value: 0.999024
+  - errors:
+    - {label: stat, symerror: 0.001185}
+    - {label: sys, symerror: 0.000204}
+    value: 0.999190
+  - errors:
+    - {label: stat, symerror: 0.001109}
+    - {label: sys, symerror: 0.000242}
+    value: 1.000399
+  - errors:
+    - {label: stat, symerror: 0.001043}
+    - {label: sys, symerror: 0.000141}
+    value: 1.000182
+  - errors:
+    - {label: stat, symerror: 0.000987}
+    - {label: sys, symerror: 0.000205}
+    value: 1.001337
+  - errors:
+    - {label: stat, symerror: 0.000938}
+    - {label: sys, symerror: 0.000249}
+    value: 1.001168
+  - errors:
+    - {label: stat, symerror: 0.000894}
+    - {label: sys, symerror: 0.000225}
+    value: 1.000254
+  - errors:
+    - {label: stat, symerror: 0.000857}
+    - {label: sys, symerror: 0.000169}
+    value: 1.000135
+  - errors:
+    - {label: stat, symerror: 0.000825}
+    - {label: sys, symerror: 0.000196}
+    value: 1.003121
+  - errors:
+    - {label: stat, symerror: 0.000800}
+    - {label: sys, symerror: 0.000219}
+    value: 1.013724
+  - errors:
+    - {label: stat, symerror: 0.000773}
+    - {label: sys, symerror: 0.000140}
+    value: 1.011879
+  - errors:
+    - {label: stat, symerror: 0.000746}
+    - {label: sys, symerror: 0.000117}
+    value: 1.002204
+  - errors:
+    - {label: stat, symerror: 0.000726}
+    - {label: sys, symerror: 0.000144}
+    value: 1.003410
+  - errors:
+    - {label: stat, symerror: 0.000707}
+    - {label: sys, symerror: 0.000102}
+    value: 1.002919
+  - errors:
+    - {label: stat, symerror: 0.000691}
+    - {label: sys, symerror: 0.000202}
+    value: 1.003025
+  - errors:
+    - {label: stat, symerror: 0.000675}
+    - {label: sys, symerror: 0.000112}
+    value: 1.001593
+  - errors:
+    - {label: stat, symerror: 0.000661}
+    - {label: sys, symerror: 0.000116}
+    value: 1.001480
+  - errors:
+    - {label: stat, symerror: 0.000649}
+    - {label: sys, symerror: 0.000127}
+    value: 1.002206
+  - errors:
+    - {label: stat, symerror: 0.000638}
+    - {label: sys, symerror: 0.000147}
+    value: 1.001674
+  - errors:
+    - {label: stat, symerror: 0.000627}
+    - {label: sys, symerror: 0.000113}
+    value: 0.999769
+  - errors:
+    - {label: stat, symerror: 0.000619}
+    - {label: sys, symerror: 0.000097}
+    value: 1.001106
+  - errors:
+    - {label: stat, symerror: 0.000610}
+    - {label: sys, symerror: 0.000101}
+    value: 1.001238
+
+
+-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**
+Getting NonFlatBackground for pair analysis LamK0_1030
+	 Using method FitPairAnalysis::GetNonFlatBackground_CombinePartialFits
+PairPar[0] = 1.00602
+PairPar[1] = 0
+PairPar[2] = -0.0151066
+PairPar[3] = -0.143924
+PairPar[4] = 0.235847
+PairPar[5] = -0.12607
+PairPar[6] = 0.0228824
+PairPar[7] = 1.00337
+PairPar[8] = -0.00273109
+PairPar[9] = 1.87606e+06
+PairPar[10] = 1.00602
+PairPar[11] = 0
+PairPar[12] = -0.0151066
+PairPar[13] = -0.143924
+PairPar[14] = 0.235847
+PairPar[15] = -0.12607
+PairPar[16] = 0.0228824
+PairPar[17] = 0.928364
+PairPar[18] = 0.0712194
+PairPar[19] = 2.19728e+06
+
+
+-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**
+Getting NonFlatBackground for pair analysis ALamK0_1030
+	 Using method FitPairAnalysis::GetNonFlatBackground_CombinePartialFits
+PairPar[0] = 1.00602
+PairPar[1] = 0
+PairPar[2] = -0.0151066
+PairPar[3] = -0.143924
+PairPar[4] = 0.235847
+PairPar[5] = -0.12607
+PairPar[6] = 0.0228824
+PairPar[7] = 1.01525
+PairPar[8] = -0.0161016
+PairPar[9] = 1.82062e+06
+PairPar[10] = 1.00602
+PairPar[11] = 0
+PairPar[12] = -0.0151066
+PairPar[13] = -0.143924
+PairPar[14] = 0.235847
+PairPar[15] = -0.12607
+PairPar[16] = 0.0228824
+PairPar[17] = 1.06824
+PairPar[18] = -0.0684716
+PairPar[19] = 2.12426e+06
+Warning in <TROOT::Append>: Replacing existing TH1: Func (Potential memory leak).
+Warning in <TROOT::Append>: Replacing existing TH1: Func (Potential memory leak).
+Warning in <TROOT::Append>: Replacing existing TH1: Func (Potential memory leak).
+Warning in <TROOT::Append>: Replacing existing TH1: Func (Potential memory leak).
+Warning in <TROOT::Append>: Replacing existing TH1: ALamK0 (Potential memory leak).
+Warning in <TROOT::Append>: Replacing existing TH1: ALamK0 (Potential memory leak).
+aHistStat->GetName() = KStarHeavyCf_LamK0_1030_and_KStarHeavyCf_ALamK0_1030
+aHistStat->GetTitle() = KStarHeavyCf_LamK0_1030_and_KStarHeavyCf_ALamK0_1030
+aHistSyst->GetName() = LamK0_1030_wSysErrors_and_ALamK0_1030_wSysErrors
+aHistSyst->GetTitle() = #LambdaK^{0}_{S}_1030_wSysErrors
+independent_variables:
+- header: {}
+  values:
+  - {value: 0.0050}
+  - {value: 0.0150}
+  - {value: 0.0250}
+  - {value: 0.0350}
+  - {value: 0.0450}
+  - {value: 0.0550}
+  - {value: 0.0650}
+  - {value: 0.0750}
+  - {value: 0.0850}
+  - {value: 0.0950}
+  - {value: 0.1050}
+  - {value: 0.1150}
+  - {value: 0.1250}
+  - {value: 0.1350}
+  - {value: 0.1450}
+  - {value: 0.1550}
+  - {value: 0.1650}
+  - {value: 0.1750}
+  - {value: 0.1850}
+  - {value: 0.1950}
+  - {value: 0.2050}
+  - {value: 0.2150}
+  - {value: 0.2250}
+  - {value: 0.2350}
+  - {value: 0.2450}
+  - {value: 0.2550}
+  - {value: 0.2650}
+  - {value: 0.2750}
+  - {value: 0.2850}
+  - {value: 0.2950}
+  - {value: 0.3050}
+  - {value: 0.3150}
+  - {value: 0.3250}
+dependent_variables:
+- header: {}
+  qualifiers:
+  - {name: , units: , value: ''}
+  - {name: , units: , value: ''}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.048401}
+    - {label: sys, symerror: 0.010827}
+    value: 0.966182
+  - errors:
+    - {label: stat, symerror: 0.018721}
+    - {label: sys, symerror: 0.003720}
+    value: 0.997079
+  - errors:
+    - {label: stat, symerror: 0.011325}
+    - {label: sys, symerror: 0.002745}
+    value: 0.989687
+  - errors:
+    - {label: stat, symerror: 0.008068}
+    - {label: sys, symerror: 0.002549}
+    value: 0.978518
+  - errors:
+    - {label: stat, symerror: 0.006340}
+    - {label: sys, symerror: 0.001386}
+    value: 0.987936
+  - errors:
+    - {label: stat, symerror: 0.005188}
+    - {label: sys, symerror: 0.001403}
+    value: 0.982553
+  - errors:
+    - {label: stat, symerror: 0.004419}
+    - {label: sys, symerror: 0.000833}
+    value: 0.986513
+  - errors:
+    - {label: stat, symerror: 0.003858}
+    - {label: sys, symerror: 0.000739}
+    value: 0.987595
+  - errors:
+    - {label: stat, symerror: 0.003420}
+    - {label: sys, symerror: 0.000740}
+    value: 0.989407
+  - errors:
+    - {label: stat, symerror: 0.003088}
+    - {label: sys, symerror: 0.000848}
+    value: 0.993356
+  - errors:
+    - {label: stat, symerror: 0.002815}
+    - {label: sys, symerror: 0.000616}
+    value: 0.995827
+  - errors:
+    - {label: stat, symerror: 0.002591}
+    - {label: sys, symerror: 0.000587}
+    value: 0.996344
+  - errors:
+    - {label: stat, symerror: 0.002400}
+    - {label: sys, symerror: 0.000512}
+    value: 0.994621
+  - errors:
+    - {label: stat, symerror: 0.002252}
+    - {label: sys, symerror: 0.000462}
+    value: 1.001512
+  - errors:
+    - {label: stat, symerror: 0.002112}
+    - {label: sys, symerror: 0.000655}
+    value: 0.999472
+  - errors:
+    - {label: stat, symerror: 0.001991}
+    - {label: sys, symerror: 0.000407}
+    value: 0.996587
+  - errors:
+    - {label: stat, symerror: 0.001889}
+    - {label: sys, symerror: 0.000459}
+    value: 0.997430
+  - errors:
+    - {label: stat, symerror: 0.001800}
+    - {label: sys, symerror: 0.000355}
+    value: 0.998254
+  - errors:
+    - {label: stat, symerror: 0.001723}
+    - {label: sys, symerror: 0.000267}
+    value: 0.999272
+  - errors:
+    - {label: stat, symerror: 0.001651}
+    - {label: sys, symerror: 0.000418}
+    value: 0.998217
+  - errors:
+    - {label: stat, symerror: 0.001592}
+    - {label: sys, symerror: 0.000337}
+    value: 0.999577
+  - errors:
+    - {label: stat, symerror: 0.001535}
+    - {label: sys, symerror: 0.000305}
+    value: 0.999326
+  - errors:
+    - {label: stat, symerror: 0.001485}
+    - {label: sys, symerror: 0.000255}
+    value: 0.999316
+  - errors:
+    - {label: stat, symerror: 0.001443}
+    - {label: sys, symerror: 0.000328}
+    value: 1.001903
+  - errors:
+    - {label: stat, symerror: 0.001403}
+    - {label: sys, symerror: 0.000307}
+    value: 1.001894
+  - errors:
+    - {label: stat, symerror: 0.001365}
+    - {label: sys, symerror: 0.000277}
+    value: 1.000984
+  - errors:
+    - {label: stat, symerror: 0.001332}
+    - {label: sys, symerror: 0.000306}
+    value: 1.002100
+  - errors:
+    - {label: stat, symerror: 0.001300}
+    - {label: sys, symerror: 0.000269}
+    value: 0.999723
+  - errors:
+    - {label: stat, symerror: 0.001272}
+    - {label: sys, symerror: 0.000306}
+    value: 0.999717
+  - errors:
+    - {label: stat, symerror: 0.001248}
+    - {label: sys, symerror: 0.000280}
+    value: 1.000548
+  - errors:
+    - {label: stat, symerror: 0.001223}
+    - {label: sys, symerror: 0.000317}
+    value: 0.997851
+  - errors:
+    - {label: stat, symerror: 0.001202}
+    - {label: sys, symerror: 0.000345}
+    value: 0.999126
+  - errors:
+    - {label: stat, symerror: 0.001183}
+    - {label: sys, symerror: 0.000213}
+    value: 0.998883
+
+
+-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**
+Getting NonFlatBackground for pair analysis LamKchP_3050
+	 Using method FitPairAnalysis::GetNonFlatBackground_CombinePartialFits
+PairPar[0] = 1.01392
+PairPar[1] = 0
+PairPar[2] = -0.123827
+PairPar[3] = 0.0295157
+PairPar[4] = 0.138819
+PairPar[5] = -0.102316
+PairPar[6] = 0.0209278
+PairPar[7] = 1.04073
+PairPar[8] = -0.0408974
+PairPar[9] = 1.2549e+06
+PairPar[10] = 1.01392
+PairPar[11] = 0
+PairPar[12] = -0.123827
+PairPar[13] = 0.0295157
+PairPar[14] = 0.138819
+PairPar[15] = -0.102316
+PairPar[16] = 0.0209278
+PairPar[17] = 1.0971
+PairPar[18] = -0.0975871
+PairPar[19] = 1.50052e+06
+
+
+-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**
+Getting NonFlatBackground for pair analysis ALamKchM_3050
+	 Using method FitPairAnalysis::GetNonFlatBackground_CombinePartialFits
+PairPar[0] = 1.01392
+PairPar[1] = 0
+PairPar[2] = -0.123827
+PairPar[3] = 0.0295157
+PairPar[4] = 0.138819
+PairPar[5] = -0.102316
+PairPar[6] = 0.0209278
+PairPar[7] = 0.921509
+PairPar[8] = 0.0783336
+PairPar[9] = 1.14517e+06
+PairPar[10] = 1.01392
+PairPar[11] = 0
+PairPar[12] = -0.123827
+PairPar[13] = 0.0295157
+PairPar[14] = 0.138819
+PairPar[15] = -0.102316
+PairPar[16] = 0.0209278
+PairPar[17] = 1.00486
+PairPar[18] = -0.00512691
+PairPar[19] = 1.35544e+06
+Warning in <TROOT::Append>: Replacing existing TH1: Func (Potential memory leak).
+Warning in <TROOT::Append>: Replacing existing TH1: Func (Potential memory leak).
+Warning in <TROOT::Append>: Replacing existing TH1: Func (Potential memory leak).
+Warning in <TROOT::Append>: Replacing existing TH1: Func (Potential memory leak).
+Warning in <TROOT::Append>: Replacing existing TH1: LamKchP (Potential memory leak).
+aHistStat->GetName() = KStarHeavyCf_LamKchP_3050_and_KStarHeavyCf_ALamKchM_3050
+aHistStat->GetTitle() = KStarHeavyCf_LamKchP_3050_and_KStarHeavyCf_ALamKchM_3050
+aHistSyst->GetName() = LamKchP_3050_wSysErrors_and_ALamKchM_3050_wSysErrors
+aHistSyst->GetTitle() = #LambdaK^{#plus}_3050_wSysErrors
+independent_variables:
+- header: {}
+  values:
+  - {value: 0.0050}
+  - {value: 0.0150}
+  - {value: 0.0250}
+  - {value: 0.0350}
+  - {value: 0.0450}
+  - {value: 0.0550}
+  - {value: 0.0650}
+  - {value: 0.0750}
+  - {value: 0.0850}
+  - {value: 0.0950}
+  - {value: 0.1050}
+  - {value: 0.1150}
+  - {value: 0.1250}
+  - {value: 0.1350}
+  - {value: 0.1450}
+  - {value: 0.1550}
+  - {value: 0.1650}
+  - {value: 0.1750}
+  - {value: 0.1850}
+  - {value: 0.1950}
+  - {value: 0.2050}
+  - {value: 0.2150}
+  - {value: 0.2250}
+  - {value: 0.2350}
+  - {value: 0.2450}
+  - {value: 0.2550}
+  - {value: 0.2650}
+  - {value: 0.2750}
+  - {value: 0.2850}
+  - {value: 0.2950}
+  - {value: 0.3050}
+  - {value: 0.3150}
+  - {value: 0.3250}
+dependent_variables:
+- header: {}
+  qualifiers:
+  - {name: , units: , value: ''}
+  - {name: , units: , value: ''}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.056828}
+    - {label: sys, symerror: 0.016371}
+    value: 0.889947
+  - errors:
+    - {label: stat, symerror: 0.021516}
+    - {label: sys, symerror: 0.004792}
+    value: 0.895640
+  - errors:
+    - {label: stat, symerror: 0.013125}
+    - {label: sys, symerror: 0.003090}
+    value: 0.921130
+  - errors:
+    - {label: stat, symerror: 0.009539}
+    - {label: sys, symerror: 0.002468}
+    value: 0.947866
+  - errors:
+    - {label: stat, symerror: 0.007457}
+    - {label: sys, symerror: 0.001133}
+    value: 0.963040
+  - errors:
+    - {label: stat, symerror: 0.006143}
+    - {label: sys, symerror: 0.001499}
+    value: 0.976227
+  - errors:
+    - {label: stat, symerror: 0.005217}
+    - {label: sys, symerror: 0.001204}
+    value: 0.977663
+  - errors:
+    - {label: stat, symerror: 0.004576}
+    - {label: sys, symerror: 0.000719}
+    value: 0.990253
+  - errors:
+    - {label: stat, symerror: 0.004062}
+    - {label: sys, symerror: 0.001080}
+    value: 0.994546
+  - errors:
+    - {label: stat, symerror: 0.003628}
+    - {label: sys, symerror: 0.000786}
+    value: 0.986113
+  - errors:
+    - {label: stat, symerror: 0.003323}
+    - {label: sys, symerror: 0.000679}
+    value: 1.000308
+  - errors:
+    - {label: stat, symerror: 0.003067}
+    - {label: sys, symerror: 0.000696}
+    value: 1.006149
+  - errors:
+    - {label: stat, symerror: 0.002830}
+    - {label: sys, symerror: 0.000566}
+    value: 0.997234
+  - errors:
+    - {label: stat, symerror: 0.002659}
+    - {label: sys, symerror: 0.000793}
+    value: 1.008594
+  - errors:
+    - {label: stat, symerror: 0.002489}
+    - {label: sys, symerror: 0.000609}
+    value: 1.001662
+  - errors:
+    - {label: stat, symerror: 0.002362}
+    - {label: sys, symerror: 0.000472}
+    value: 1.006562
+  - errors:
+    - {label: stat, symerror: 0.002243}
+    - {label: sys, symerror: 0.000507}
+    value: 1.006573
+  - errors:
+    - {label: stat, symerror: 0.002141}
+    - {label: sys, symerror: 0.000351}
+    value: 1.006901
+  - errors:
+    - {label: stat, symerror: 0.002046}
+    - {label: sys, symerror: 0.000430}
+    value: 1.002261
+  - errors:
+    - {label: stat, symerror: 0.001970}
+    - {label: sys, symerror: 0.000356}
+    value: 1.003472
+  - errors:
+    - {label: stat, symerror: 0.001899}
+    - {label: sys, symerror: 0.000429}
+    value: 1.003771
+  - errors:
+    - {label: stat, symerror: 0.001838}
+    - {label: sys, symerror: 0.000334}
+    value: 1.003416
+  - errors:
+    - {label: stat, symerror: 0.001785}
+    - {label: sys, symerror: 0.000306}
+    value: 1.004981
+  - errors:
+    - {label: stat, symerror: 0.001737}
+    - {label: sys, symerror: 0.000426}
+    value: 1.004644
+  - errors:
+    - {label: stat, symerror: 0.001695}
+    - {label: sys, symerror: 0.000287}
+    value: 1.006929
+  - errors:
+    - {label: stat, symerror: 0.001651}
+    - {label: sys, symerror: 0.000359}
+    value: 1.002758
+  - errors:
+    - {label: stat, symerror: 0.001617}
+    - {label: sys, symerror: 0.000372}
+    value: 1.003329
+  - errors:
+    - {label: stat, symerror: 0.001584}
+    - {label: sys, symerror: 0.000482}
+    value: 1.003645
+  - errors:
+    - {label: stat, symerror: 0.001555}
+    - {label: sys, symerror: 0.000341}
+    value: 1.002314
+  - errors:
+    - {label: stat, symerror: 0.001530}
+    - {label: sys, symerror: 0.000345}
+    value: 1.004913
+  - errors:
+    - {label: stat, symerror: 0.001504}
+    - {label: sys, symerror: 0.000241}
+    value: 1.003154
+  - errors:
+    - {label: stat, symerror: 0.001483}
+    - {label: sys, symerror: 0.000249}
+    value: 1.003778
+  - errors:
+    - {label: stat, symerror: 0.001462}
+    - {label: sys, symerror: 0.000256}
+    value: 1.003261
+
+
+-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**
+Getting NonFlatBackground for pair analysis LamKchM_3050
+	 Using method FitPairAnalysis::GetNonFlatBackground_CombinePartialFits
+PairPar[0] = 1.01455
+PairPar[1] = 0
+PairPar[2] = -0.143879
+PairPar[3] = 0.0799408
+PairPar[4] = 0.0873747
+PairPar[5] = -0.0789122
+PairPar[6] = 0.0170109
+PairPar[7] = 0.879184
+PairPar[8] = 0.120284
+PairPar[9] = 1.16844e+06
+PairPar[10] = 1.01455
+PairPar[11] = 0
+PairPar[12] = -0.143879
+PairPar[13] = 0.0799408
+PairPar[14] = 0.0873747
+PairPar[15] = -0.0789122
+PairPar[16] = 0.0170109
+PairPar[17] = 0.971308
+PairPar[18] = 0.0296223
+PairPar[19] = 1.39262e+06
+
+
+-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**
+Getting NonFlatBackground for pair analysis ALamKchP_3050
+	 Using method FitPairAnalysis::GetNonFlatBackground_CombinePartialFits
+PairPar[0] = 1.01455
+PairPar[1] = 0
+PairPar[2] = -0.143879
+PairPar[3] = 0.0799408
+PairPar[4] = 0.0873747
+PairPar[5] = -0.0789122
+PairPar[6] = 0.0170109
+PairPar[7] = 0.828649
+PairPar[8] = 0.171082
+PairPar[9] = 1.21753e+06
+PairPar[10] = 1.01455
+PairPar[11] = 0
+PairPar[12] = -0.143879
+PairPar[13] = 0.0799408
+PairPar[14] = 0.0873747
+PairPar[15] = -0.0789122
+PairPar[16] = 0.0170109
+PairPar[17] = 0.922198
+PairPar[18] = 0.0782096
+PairPar[19] = 1.44738e+06
+Warning in <TROOT::Append>: Replacing existing TH1: Func (Potential memory leak).
+Warning in <TROOT::Append>: Replacing existing TH1: Func (Potential memory leak).
+Warning in <TROOT::Append>: Replacing existing TH1: Func (Potential memory leak).
+Warning in <TROOT::Append>: Replacing existing TH1: Func (Potential memory leak).
+Warning in <TROOT::Append>: Replacing existing TH1: LamKchP (Potential memory leak).
+Warning in <TROOT::Append>: Replacing existing TH1: LamKchP (Potential memory leak).
+aHistStat->GetName() = KStarHeavyCf_LamKchM_3050_and_KStarHeavyCf_ALamKchP_3050
+aHistStat->GetTitle() = KStarHeavyCf_LamKchM_3050_and_KStarHeavyCf_ALamKchP_3050
+aHistSyst->GetName() = LamKchM_3050_wSysErrors_and_ALamKchP_3050_wSysErrors
+aHistSyst->GetTitle() = #LambdaK^{#minus}_3050_wSysErrors
+independent_variables:
+- header: {}
+  values:
+  - {value: 0.0050}
+  - {value: 0.0150}
+  - {value: 0.0250}
+  - {value: 0.0350}
+  - {value: 0.0450}
+  - {value: 0.0550}
+  - {value: 0.0650}
+  - {value: 0.0750}
+  - {value: 0.0850}
+  - {value: 0.0950}
+  - {value: 0.1050}
+  - {value: 0.1150}
+  - {value: 0.1250}
+  - {value: 0.1350}
+  - {value: 0.1450}
+  - {value: 0.1550}
+  - {value: 0.1650}
+  - {value: 0.1750}
+  - {value: 0.1850}
+  - {value: 0.1950}
+  - {value: 0.2050}
+  - {value: 0.2150}
+  - {value: 0.2250}
+  - {value: 0.2350}
+  - {value: 0.2450}
+  - {value: 0.2550}
+  - {value: 0.2650}
+  - {value: 0.2750}
+  - {value: 0.2850}
+  - {value: 0.2950}
+  - {value: 0.3050}
+  - {value: 0.3150}
+  - {value: 0.3250}
+dependent_variables:
+- header: {}
+  qualifiers:
+  - {name: , units: , value: ''}
+  - {name: , units: , value: ''}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.056520}
+    - {label: sys, symerror: 0.010316}
+    value: 0.989070
+  - errors:
+    - {label: stat, symerror: 0.022223}
+    - {label: sys, symerror: 0.004774}
+    value: 1.051191
+  - errors:
+    - {label: stat, symerror: 0.013102}
+    - {label: sys, symerror: 0.002679}
+    value: 1.000799
+  - errors:
+    - {label: stat, symerror: 0.009389}
+    - {label: sys, symerror: 0.001731}
+    value: 0.998074
+  - errors:
+    - {label: stat, symerror: 0.007348}
+    - {label: sys, symerror: 0.001931}
+    value: 0.993629
+  - errors:
+    - {label: stat, symerror: 0.006088}
+    - {label: sys, symerror: 0.001123}
+    value: 1.005522
+  - errors:
+    - {label: stat, symerror: 0.005171}
+    - {label: sys, symerror: 0.000817}
+    value: 1.001670
+  - errors:
+    - {label: stat, symerror: 0.004499}
+    - {label: sys, symerror: 0.001275}
+    value: 0.995565
+  - errors:
+    - {label: stat, symerror: 0.004020}
+    - {label: sys, symerror: 0.000981}
+    value: 1.002554
+  - errors:
+    - {label: stat, symerror: 0.003615}
+    - {label: sys, symerror: 0.000616}
+    value: 0.999580
+  - errors:
+    - {label: stat, symerror: 0.003303}
+    - {label: sys, symerror: 0.000896}
+    value: 1.000646
+  - errors:
+    - {label: stat, symerror: 0.003045}
+    - {label: sys, symerror: 0.000640}
+    value: 1.001312
+  - errors:
+    - {label: stat, symerror: 0.002819}
+    - {label: sys, symerror: 0.000532}
+    value: 0.996800
+  - errors:
+    - {label: stat, symerror: 0.002656}
+    - {label: sys, symerror: 0.000538}
+    value: 1.007860
+  - errors:
+    - {label: stat, symerror: 0.002487}
+    - {label: sys, symerror: 0.000377}
+    value: 0.999996
+  - errors:
+    - {label: stat, symerror: 0.002367}
+    - {label: sys, symerror: 0.000455}
+    value: 1.009639
+  - errors:
+    - {label: stat, symerror: 0.002245}
+    - {label: sys, symerror: 0.000496}
+    value: 1.006007
+  - errors:
+    - {label: stat, symerror: 0.002148}
+    - {label: sys, symerror: 0.000451}
+    value: 1.009040
+  - errors:
+    - {label: stat, symerror: 0.002053}
+    - {label: sys, symerror: 0.000386}
+    value: 1.004107
+  - errors:
+    - {label: stat, symerror: 0.001976}
+    - {label: sys, symerror: 0.000509}
+    value: 1.006860
+  - errors:
+    - {label: stat, symerror: 0.001928}
+    - {label: sys, symerror: 0.000419}
+    value: 1.026714
+  - errors:
+    - {label: stat, symerror: 0.001866}
+    - {label: sys, symerror: 0.000361}
+    value: 1.026636
+  - errors:
+    - {label: stat, symerror: 0.001790}
+    - {label: sys, symerror: 0.000488}
+    value: 1.006068
+  - errors:
+    - {label: stat, symerror: 0.001741}
+    - {label: sys, symerror: 0.000337}
+    value: 1.007221
+  - errors:
+    - {label: stat, symerror: 0.001700}
+    - {label: sys, symerror: 0.000378}
+    value: 1.009922
+  - errors:
+    - {label: stat, symerror: 0.001656}
+    - {label: sys, symerror: 0.000324}
+    value: 1.005760
+  - errors:
+    - {label: stat, symerror: 0.001621}
+    - {label: sys, symerror: 0.000364}
+    value: 1.005991
+  - errors:
+    - {label: stat, symerror: 0.001586}
+    - {label: sys, symerror: 0.000312}
+    value: 1.003265
+  - errors:
+    - {label: stat, symerror: 0.001558}
+    - {label: sys, symerror: 0.000330}
+    value: 1.003518
+  - errors:
+    - {label: stat, symerror: 0.001534}
+    - {label: sys, symerror: 0.000340}
+    value: 1.005510
+  - errors:
+    - {label: stat, symerror: 0.001507}
+    - {label: sys, symerror: 0.000439}
+    value: 1.003286
+  - errors:
+    - {label: stat, symerror: 0.001486}
+    - {label: sys, symerror: 0.000293}
+    value: 1.004067
+  - errors:
+    - {label: stat, symerror: 0.001464}
+    - {label: sys, symerror: 0.000335}
+    value: 1.002163
+
+
+-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**
+Getting NonFlatBackground for pair analysis LamK0_3050
+	 Using method FitPairAnalysis::GetNonFlatBackground_CombinePartialFits
+PairPar[0] = 1.01009
+PairPar[1] = 0
+PairPar[2] = -0.0113034
+PairPar[3] = -0.330205
+PairPar[4] = 0.524592
+PairPar[5] = -0.281582
+PairPar[6] = 0.0515657
+PairPar[7] = 1.12956
+PairPar[8] = -0.129986
+PairPar[9] = 333147
+PairPar[10] = 1.01009
+PairPar[11] = 0
+PairPar[12] = -0.0113034
+PairPar[13] = -0.330205
+PairPar[14] = 0.524592
+PairPar[15] = -0.281582
+PairPar[16] = 0.0515657
+PairPar[17] = 1.22447
+PairPar[18] = -0.225865
+PairPar[19] = 397427
+
+
+-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**-**
+Getting NonFlatBackground for pair analysis ALamK0_3050
+	 Using method FitPairAnalysis::GetNonFlatBackground_CombinePartialFits
+PairPar[0] = 1.01009
+PairPar[1] = 0
+PairPar[2] = -0.0113034
+PairPar[3] = -0.330205
+PairPar[4] = 0.524592
+PairPar[5] = -0.281582
+PairPar[6] = 0.0515657
+PairPar[7] = 1.14638
+PairPar[8] = -0.145356
+PairPar[9] = 323008
+PairPar[10] = 1.01009
+PairPar[11] = 0
+PairPar[12] = -0.0113034
+PairPar[13] = -0.330205
+PairPar[14] = 0.524592
+PairPar[15] = -0.281582
+PairPar[16] = 0.0515657
+PairPar[17] = 1.07624
+PairPar[18] = -0.0770007
+PairPar[19] = 383117
+Warning in <TROOT::Append>: Replacing existing TH1: Func (Potential memory leak).
+Warning in <TROOT::Append>: Replacing existing TH1: Func (Potential memory leak).
+Warning in <TROOT::Append>: Replacing existing TH1: Func (Potential memory leak).
+Warning in <TROOT::Append>: Replacing existing TH1: Func (Potential memory leak).
+Warning in <TROOT::Append>: Replacing existing TH1: LamKchP (Potential memory leak).
+Warning in <TROOT::Append>: Replacing existing TH1: LamKchP (Potential memory leak).
+aHistStat->GetName() = KStarHeavyCf_LamK0_3050_and_KStarHeavyCf_ALamK0_3050
+aHistStat->GetTitle() = KStarHeavyCf_LamK0_3050_and_KStarHeavyCf_ALamK0_3050
+aHistSyst->GetName() = LamK0_3050_wSysErrors_and_ALamK0_3050_wSysErrors
+aHistSyst->GetTitle() = #LambdaK^{0}_{S}_3050_wSysErrors
+independent_variables:
+- header: {}
+  values:
+  - {value: 0.0050}
+  - {value: 0.0150}
+  - {value: 0.0250}
+  - {value: 0.0350}
+  - {value: 0.0450}
+  - {value: 0.0550}
+  - {value: 0.0650}
+  - {value: 0.0750}
+  - {value: 0.0850}
+  - {value: 0.0950}
+  - {value: 0.1050}
+  - {value: 0.1150}
+  - {value: 0.1250}
+  - {value: 0.1350}
+  - {value: 0.1450}
+  - {value: 0.1550}
+  - {value: 0.1650}
+  - {value: 0.1750}
+  - {value: 0.1850}
+  - {value: 0.1950}
+  - {value: 0.2050}
+  - {value: 0.2150}
+  - {value: 0.2250}
+  - {value: 0.2350}
+  - {value: 0.2450}
+  - {value: 0.2550}
+  - {value: 0.2650}
+  - {value: 0.2750}
+  - {value: 0.2850}
+  - {value: 0.2950}
+  - {value: 0.3050}
+  - {value: 0.3150}
+  - {value: 0.3250}
+dependent_variables:
+- header: {}
+  qualifiers:
+  - {name: , units: , value: ''}
+  - {name: , units: , value: ''}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.118160}
+    - {label: sys, symerror: 0.023197}
+    value: 0.960761
+  - errors:
+    - {label: stat, symerror: 0.044812}
+    - {label: sys, symerror: 0.010679}
+    value: 0.986138
+  - errors:
+    - {label: stat, symerror: 0.026673}
+    - {label: sys, symerror: 0.005494}
+    value: 0.966403
+  - errors:
+    - {label: stat, symerror: 0.018990}
+    - {label: sys, symerror: 0.005178}
+    value: 0.953811
+  - errors:
+    - {label: stat, symerror: 0.015012}
+    - {label: sys, symerror: 0.003634}
+    value: 0.975270
+  - errors:
+    - {label: stat, symerror: 0.012218}
+    - {label: sys, symerror: 0.002312}
+    value: 0.958850
+  - errors:
+    - {label: stat, symerror: 0.010419}
+    - {label: sys, symerror: 0.002661}
+    value: 0.966825
+  - errors:
+    - {label: stat, symerror: 0.009225}
+    - {label: sys, symerror: 0.001434}
+    value: 0.990018
+  - errors:
+    - {label: stat, symerror: 0.008168}
+    - {label: sys, symerror: 0.002113}
+    value: 0.989342
+  - errors:
+    - {label: stat, symerror: 0.007377}
+    - {label: sys, symerror: 0.001715}
+    value: 0.995270
+  - errors:
+    - {label: stat, symerror: 0.006735}
+    - {label: sys, symerror: 0.001232}
+    value: 0.999113
+  - errors:
+    - {label: stat, symerror: 0.006152}
+    - {label: sys, symerror: 0.001779}
+    value: 0.988374
+  - errors:
+    - {label: stat, symerror: 0.005751}
+    - {label: sys, symerror: 0.001212}
+    value: 1.003056
+  - errors:
+    - {label: stat, symerror: 0.005352}
+    - {label: sys, symerror: 0.001192}
+    value: 0.994400
+  - errors:
+    - {label: stat, symerror: 0.005034}
+    - {label: sys, symerror: 0.001142}
+    value: 0.998159
+  - errors:
+    - {label: stat, symerror: 0.004775}
+    - {label: sys, symerror: 0.000926}
+    value: 1.002667
+  - errors:
+    - {label: stat, symerror: 0.004516}
+    - {label: sys, symerror: 0.001059}
+    value: 1.001130
+  - errors:
+    - {label: stat, symerror: 0.004326}
+    - {label: sys, symerror: 0.001100}
+    value: 1.010689
+  - errors:
+    - {label: stat, symerror: 0.004116}
+    - {label: sys, symerror: 0.000798}
+    value: 1.002191
+  - errors:
+    - {label: stat, symerror: 0.003946}
+    - {label: sys, symerror: 0.000971}
+    value: 1.000401
+  - errors:
+    - {label: stat, symerror: 0.003800}
+    - {label: sys, symerror: 0.001139}
+    value: 1.000791
+  - errors:
+    - {label: stat, symerror: 0.003676}
+    - {label: sys, symerror: 0.001142}
+    value: 1.004967
+  - errors:
+    - {label: stat, symerror: 0.003561}
+    - {label: sys, symerror: 0.000923}
+    value: 1.007227
+  - errors:
+    - {label: stat, symerror: 0.003447}
+    - {label: sys, symerror: 0.000760}
+    value: 1.005424
+  - errors:
+    - {label: stat, symerror: 0.003342}
+    - {label: sys, symerror: 0.000733}
+    value: 1.000505
+  - errors:
+    - {label: stat, symerror: 0.003262}
+    - {label: sys, symerror: 0.000812}
+    value: 1.004479
+  - errors:
+    - {label: stat, symerror: 0.003176}
+    - {label: sys, symerror: 0.000737}
+    value: 1.000237
+  - errors:
+    - {label: stat, symerror: 0.003116}
+    - {label: sys, symerror: 0.000794}
+    value: 1.007013
+  - errors:
+    - {label: stat, symerror: 0.003038}
+    - {label: sys, symerror: 0.000742}
+    value: 1.001521
+  - errors:
+    - {label: stat, symerror: 0.002983}
+    - {label: sys, symerror: 0.000681}
+    value: 1.004801
+  - errors:
+    - {label: stat, symerror: 0.002928}
+    - {label: sys, symerror: 0.000585}
+    value: 1.003230
+  - errors:
+    - {label: stat, symerror: 0.002881}
+    - {label: sys, symerror: 0.000740}
+    value: 1.007433
+  - errors:
+    - {label: stat, symerror: 0.002830}
+    - {label: sys, symerror: 0.000636}
+    value: 1.003994
+

@@ -1,0 +1,73 @@
+name: 'FigC3b_THERM_muOut0.yaml'
+independent_variables:
+- header: {name: k* (GeV/c), units: GeV/c}
+  values:
+  - {value: 0.0100}
+  - {value: 0.0300}
+  - {value: 0.0500}
+  - {value: 0.0700}
+  - {value: 0.0900}
+  - {value: 0.1100}
+  - {value: 0.1300}
+  - {value: 0.1500}
+  - {value: 0.1700}
+  - {value: 0.1900}
+  - {value: 0.2100}
+  - {value: 0.2300}
+  - {value: 0.2500}
+  - {value: 0.2700}
+  - {value: 0.2900}
+  - {value: 0.3100}
+dependent_variables:
+- header: {name: ReC_11(k*)}
+  qualifiers:
+  - {name: SQRT(S_NN), units: GeV, value: '2760.0'}
+  values:
+  - errors:
+    - {label: stat, symerror: 0.005382}
+    value: -0.005099
+  - errors:
+    - {label: stat, symerror: 0.002186}
+    value: -0.000014
+  - errors:
+    - {label: stat, symerror: 0.001381}
+    value: 0.000367
+  - errors:
+    - {label: stat, symerror: 0.001017}
+    value: -0.000918
+  - errors:
+    - {label: stat, symerror: 0.000805}
+    value: 0.001853
+  - errors:
+    - {label: stat, symerror: 0.000682}
+    value: 0.000168
+  - errors:
+    - {label: stat, symerror: 0.000578}
+    value: 0.000805
+  - errors:
+    - {label: stat, symerror: 0.000510}
+    value: 0.000001
+  - errors:
+    - {label: stat, symerror: 0.000460}
+    value: -0.000026
+  - errors:
+    - {label: stat, symerror: 0.000420}
+    value: 0.000680
+  - errors:
+    - {label: stat, symerror: 0.000389}
+    value: 0.001271
+  - errors:
+    - {label: stat, symerror: 0.000362}
+    value: -0.000193
+  - errors:
+    - {label: stat, symerror: 0.000340}
+    value: 0.000429
+  - errors:
+    - {label: stat, symerror: 0.000322}
+    value: 0.000206
+  - errors:
+    - {label: stat, symerror: 0.000307}
+    value: -0.000278
+  - errors:
+    - {label: stat, symerror: 0.000294}
+    value: 0.000469
